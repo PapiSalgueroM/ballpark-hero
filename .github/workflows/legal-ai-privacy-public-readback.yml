@@ -25,9 +25,12 @@ jobs:
       READBACK_OUT: public-readback-artifacts
       OLD_ENTRY: index-D2fx3gQQ.js
       OLD_DEPLOYMENT: f04638fe-e1f7-445d-9afa-b55c13a7928a
+      SOURCE_SHA: 076091ac870db38b953ddf71d3252cf1ac556782
+      EXPECTED_DEPLOYMENT: 15a10710-f8ea-473d-b084-122e1afff7ed
     steps:
       - uses: actions/checkout@v4
         with:
+          fetch-depth: 0
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
@@ -39,6 +42,7 @@ jobs:
           mkdir "$READBACK_OUT"
           git rev-parse HEAD > "$READBACK_OUT/head.txt"
           git rev-parse 'HEAD^{tree}' > "$READBACK_OUT/tree.txt"
+          git diff --exit-code "$SOURCE_SHA" HEAD -- src public scripts supabase package.json package-lock.json > "$READBACK_OUT/published-source-hold.log"
           sha256sum package.json package-lock.json scripts/auditLive.mjs scripts/lib/liveIndexability.mjs > "$READBACK_OUT/source-before.sha256"
           npm ci > "$READBACK_OUT/install.log" 2>&1
           browser_tools="$RUNNER_TEMP/public-readback-browser"
@@ -138,8 +142,46 @@ jobs:
           const out = path.resolve(process.env.READBACK_OUT);
           const tag = process.env.GITHUB_RUN_ID + '.' + process.env.GITHUB_RUN_ATTEMPT;
           const key = 'cookie-consent-v2';
-          const report = { complete: false, cases: [], pages: [], assets: [], browserRequests: [], locallyFulfilled: [], forbiddenMethods: [] };
+          const report = { complete: false, cases: [], pages: [], assets: [], browserRequests: [], locallyFulfilled: [], localPublicAggregateReads: [], forbiddenMethods: [] };
           const hash = value => createHash('sha256').update(value).digest('hex');
+          function deploymentId(header) {
+            assert.equal(typeof header, 'string');
+            const uuid = '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}';
+            const match = header.match(new RegExp('^(' + uuid + ')$|^psr2\\.(' + uuid + ')\\.[0-9]{10}\\.[A-Za-z0-9_-]{43}$', 'i'));
+            assert(match, 'Deployment header must have the observed bare or signed format');
+            return (match[1] || match[2]).toLowerCase();
+          }
+          function expectedDeployment(header) {
+            const id = deploymentId(header);
+            assert.equal(id, process.env.EXPECTED_DEPLOYMENT, 'Public response must match the requested deployment');
+            return id;
+          }
+          const signedFixture = 'psr2.' + process.env.EXPECTED_DEPLOYMENT + '.1793200847.' + 'A'.repeat(43);
+          assert.equal(expectedDeployment(process.env.EXPECTED_DEPLOYMENT), process.env.EXPECTED_DEPLOYMENT);
+          assert.equal(expectedDeployment(signedFixture), process.env.EXPECTED_DEPLOYMENT);
+          for (const changed of [signedFixture.replace('psr2.', 'other.'), signedFixture.slice(0, -1), signedFixture.replace(process.env.EXPECTED_DEPLOYMENT, process.env.OLD_DEPLOYMENT)]) {
+            assert.notEqual(changed, signedFixture); assert.throws(() => expectedDeployment(changed));
+          }
+          report.deploymentControls = { supportedFormats: 2, changedRejected: 3 };
+          function localAggregateRead(row) {
+            return row.url === 'https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/rpc/most_played_today'
+              && row.method === 'POST' && row.type === 'fetch' && row.navigation === false
+              && row.body === '{"p_min":3,"p_limit":3}';
+          }
+          const aggregateFixture = { url: 'https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/rpc/most_played_today', method: 'POST', type: 'fetch', navigation: false, body: '{"p_min":3,"p_limit":3}' };
+          assert.equal(localAggregateRead(aggregateFixture), true);
+          const aggregateFaults = [
+            { method: 'PUT' }, { url: aggregateFixture.url.replace('most_played_today', 'delete_account') },
+            { url: aggregateFixture.url.replace('flawuiqbvjobmkfkauhw', 'other') }, { url: aggregateFixture.url + '?other=1' },
+            { body: '{"p_min":"3","p_limit":3}' }, { body: '{"p_min":3,"p_limit":4}' },
+            { body: '{"p_min":3,"p_limit":3,"other":1}' }, { body: '{' },
+            { type: 'document' }, { navigation: true }, { body: '{"p_min":3,"p_min":4,"p_limit":3}' },
+          ];
+          for (const fault of aggregateFaults) {
+            const changed = { ...aggregateFixture, ...fault };
+            assert.notDeepEqual(changed, aggregateFixture); assert.equal(localAggregateRead(changed), false);
+          }
+          report.aggregateControls = { fixedLocalFixture: 1, changedRejected: aggregateFaults.length };
           const save = (name, value) => fs.writeFileSync(path.join(out, name), value);
           const cacheBust = route => ORIGIN + route + '?public_readback=' + tag;
           const json = () => save('readback.json', JSON.stringify(report, null, 2) + '\n');
@@ -189,8 +231,7 @@ jobs:
             const home = pages.get('/');
             let entry;
             await cases('deployment header and entry differ from the previous publication', async () => {
-              const deployment = home.headers['x-deployment-id'];
-              assert.match(deployment || '', /^[0-9a-f-]{36}$/i);
+              const deployment = expectedDeployment(home.headers['x-deployment-id']);
               assert.notEqual(deployment, process.env.OLD_DEPLOYMENT);
               const dom = new JSDOM(home.html);
               const entries = [...dom.window.document.querySelectorAll('script[type="module"][src]')].map(node => new URL(node.getAttribute('src'), ORIGIN)).filter(url => /^\/assets\/index-[A-Za-z0-9_-]+\.js$/.test(url.pathname));
@@ -198,7 +239,9 @@ jobs:
               entry = entries[0]; checkedURL(entry);
               assert.notEqual(path.posix.basename(entry.pathname), process.env.OLD_ENTRY);
               const head = await api.head(cacheBust('/'), { maxRedirects: 0, timeout: 30000 });
-              assert.equal(head.status(), 200); assert.equal(head.headers()['x-deployment-id'], deployment);
+              const headHeaders = head.headers(); delete headHeaders['set-cookie'];
+              save('page-home.head.headers.json', JSON.stringify(headHeaders, null, 2) + '\n');
+              assert.equal(head.status(), 200); assert.equal(expectedDeployment(headHeaders['x-deployment-id']), deployment);
               report.deployment = { id: deployment, entry: entry.pathname, previousEntry: process.env.OLD_ENTRY };
             });
             await cases('new entry contains privacy v2 and dynamic account body, and the body asset answers', async () => {
@@ -224,6 +267,10 @@ jobs:
                 const req = route.request(), url = new URL(req.url());
                 const row = { method: req.method(), url: url.origin + url.pathname, type: req.resourceType() };
                 requests.push(row); report.browserRequests.push(row);
+                if (localAggregateRead({ ...row, url: req.url(), navigation: req.isNavigationRequest(), body: req.postData() })) {
+                  report.localPublicAggregateReads.push(row); report.locallyFulfilled.push(row);
+                  return route.fulfill({ status: 200, headers: { 'access-control-allow-origin': ORIGIN }, contentType: 'application/json', body: '[]' });
+                }
                 if (!['GET', 'HEAD'].includes(req.method())) report.forbiddenMethods.push(row);
                 try { checkedURL(url, req.method()); }
                 catch {
@@ -236,6 +283,12 @@ jobs:
                 return route.fulfill({ response });
               });
               return { ctx, requests };
+            }
+            async function closeContext(ctx) {
+              for (const page of ctx.pages()) await page.close();
+              assert.equal(ctx.pages().length, 0, 'Close every page before removing its network guard');
+              await ctx.unrouteAll({ behavior: 'ignoreErrors' });
+              await ctx.close();
             }
             await cases('phone privacy choices start off, reject all persists, and footer choices preserve the decision', async () => {
               const { ctx, requests } = await context();
@@ -272,7 +325,7 @@ jobs:
                 const browserEntry = requests.filter(row => /^\/assets\/index-[A-Za-z0-9_-]+\.js$/.test(new URL(row.url).pathname));
                 assert(browserEntry.length > 0); assert(browserEntry.every(row => new URL(row.url).pathname === entry.pathname), 'Browser and raw readback must use the same entry');
                 report.cases.push({ name: 'home Log In loads lazy body and closes without email or API submission', passed: true });
-              } finally { await ctx.close(); }
+              } finally { await closeContext(ctx); }
             });
             await cases('phone Global Privacy Control disables advertising even after Accept all', async () => {
               const { ctx, requests } = await context(true);
@@ -286,11 +339,11 @@ jobs:
                 assert.equal(saved.advertising, false); assert.equal(saved.analytics, false); assert.equal(requests.filter(vendor).length, 0);
                 await page.getByRole('button', { name: 'Cookie choices', exact: true }).click(); await region(page).waitFor();
                 assert.equal(await ads.isDisabled(), true); await page.screenshot({ path: path.join(out, 'gpc-phone.png'), fullPage: true });
-              } finally { await ctx.close(); }
+              } finally { await closeContext(ctx); }
             });
             assert.equal(report.forbiddenMethods.length, 0, 'No account, report, AI or other submission may be attempted');
             report.complete = true;
-            console.log('PUBLIC READBACK COMPLETE: fixed-host public GET/HEAD only; all other browser requests fulfilled locally; no account or report submission.');
+            console.log('PUBLIC READBACK COMPLETE: remote transport is fixed-host public GET/HEAD only; fixed popularity read and all other backend traffic fulfilled locally; no account or report submission.');
           } catch (error) {
             report.error = { name: error.name, message: error.message, stack: error.stack }; throw error;
           } finally { await browser?.close(); await api.dispose(); json(); }
