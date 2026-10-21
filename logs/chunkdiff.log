@@ -1,0 +1,27 @@
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
++2170	clubManager	290050 -> 292220
++310	WhatsNew	124479 -> 124789
++37	ClubManagerHelp	24245 -> 24282
+-16	usCareerSeasonReview	155799 -> 155783
+-14	index	242961 -> 242947
+-11	MysteryBox	5309 -> 5298
+-10	NhlMyCareer	82949 -> 82939
+-10	soccerDeck	10878 -> 10868
+-9	CareerSeasonReview	4484 -> 4475
+-9	MlbFrontOffice	34164 -> 34155
+-9	NflMyCareer	6945 -> 6936
+-9	SquadDeal	7906 -> 7897
++8	ClubManager	28394 -> 28402
+-8	DraftNightSequence	5151 -> 5143
+-8	NascarChain	4942 -> 4934
+-8	NflBracket	4235 -> 4227
+-7	ConquestNba	15585 -> 15578
+-7	DirtyMoneyDesk	2692 -> 2685
+-7	FrontOffice	36477 -> 36470
+-7	NflGameDay	5437 -> 5430
+-7	TransferPath	11516 -> 11509
+-7	nfl	8810 -> 8803
+-6	CareerRecordsSheet	3008 -> 3002
+-6	CareerStory	3110 -> 3104
+-6	FarewellCard	1481 -> 1475
+chunks compared: 536 and 536; changed 319; net 2233 bytes gz
