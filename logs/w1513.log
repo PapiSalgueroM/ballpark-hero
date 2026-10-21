@@ -1,0 +1,15 @@
+treeWithoutMerge: 30140ce358a81f0857474720a302083c6474f998, c98ef13a without 1ba9f08d; conflicts kept from c98ef13a: scripts/playCmSavePoints.mjs, src/pages/WhatsNew.tsx
+base 30140ce358a81f0857474720a302083c6474f998 (this head without 1ba9f08d), differs in: src/components/BrokenSaveRestore.tsx src/components/club-manager/ClubManagerFarewell.tsx src/components/club-manager/ClubManagerHelp.tsx src/components/club-manager/ClubManagerSeasonSummary.tsx src/components/club-manager/SavePointsDoor.tsx src/components/club-manager/SavePointsScreen.tsx src/components/club-manager/StartOptionsScreen.tsx src/hooks/useClubManager.ts src/lib/cmSavePoints.ts src/lib/cmSavePointsStore.ts src/lib/saveKeeper.ts src/pages/ClubManager.tsx src/test/cmSavePoints.test.ts src/test/cmSavePointsDoor.test.tsx src/test/cmSavePointsHook.test.tsx src/test/cmSavePointsScreen.te
+served on 4174: 200
+/tmp/wt-4174
+The nine routes, base (main 60824a23) against head (gzipped JS):
+  /club-manager                      base 628.1K (643206 B)  head 629.2K (644264 B)  +1058 B (+1.03K)
+  /manager-hot-seat                  base 644.0K (659500 B)  head 644.2K (659617 B)  +117 B (+0.11K)
+  /deadline-day                      base 653.9K (669609 B)  head 654.0K (669727 B)  +118 B (+0.12K)
+  /soccer-career                     base 835.9K (855956 B)  head 836.0K (856068 B)  +112 B (+0.11K)
+  /nba-my-career                     base 577.0K (590807 B)  head 577.1K (590920 B)  +113 B (+0.11K)
+  /nfl-my-career                     base 491.4K (503244 B)  head 491.6K (503361 B)  +117 B (+0.11K)
+  /mlb-my-career                     base 565.1K (578687 B)  head 565.2K (578803 B)  +116 B (+0.11K)
+  /nhl-my-career                     base 567.7K (581317 B)  head 567.8K (581437 B)  +120 B (+0.12K)
+  /champions-league-format-history   base 249.6K (255577 B)  head 249.7K (255691 B)  +114 B (+0.11K)
+weightBJ: done
