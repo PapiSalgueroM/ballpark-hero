@@ -1,0 +1,7 @@
+1) 78 tables read across 155 chains and 14 search source configs (322 dynamic table names and 0 embedded select parts not probed)
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+
+SUPABASE UNREACHABLE (Error: Offline harness blocked fetch to https://flawuiqbvjobmkfkauhw.supabase.co).
+SUPABASE UNREACHABLE. NOTHING WAS CHECKED.
