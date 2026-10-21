@@ -11,13 +11,14 @@
  * eighth inverse's head pin, so the harnesses that check it need these rows taken out first.
  *
  * Round 1519 regenerated the rows by the recipe below, after its engine change (reconcileRetirement and its call
- * in repairCareer, the summary's Continue, retirementReason, the declined suggestion on a retired career). Those
- * hunks are rows here too, so the chain still ends on the same base pins; scripts/simSoccerCareerEndings.mjs
- * section D holds that no seeded career on the default path moves (byte equal to bc79b526).
+ * in repairCareer, the summary's Continue, the declined suggestion on a retired career). Those hunks are rows here
+ * too, so the chain still ends on the same base pins; scripts/simSoccerCareerEndings.mjs section D holds that no
+ * seeded career on the default path moves. The page's new import, retirementReason, lives in its own module
+ * (src/lib/soccerCareerRetirementReason.ts), so a page bundled with the older engine still finds it.
  *
  * Applied IN ORDER to this round's engine they give the base's engine byte for byte (LF):
  *   src/lib/soccerCareerEngine.ts
- *     head sha256 8800b4296f0670b0cab5bfe31c3f63b718d30a96e7cb33d66fbcc6a950d92ca8
+ *     head sha256 90e8fc573532e8388b7d3a745e88550031ceca990e1717b43651ec281ace115a
  *     base sha256 e37b73f25a17e4c63718430365de87cd1d5a001960ba8257ac674834e691dd90
  * (base: git show e814c2de:<file>, origin/main when the round started, whose engine is the eighth
  * inverse's head), so the recordings and the base pins stay as they were taken: an attribution, not a new recording.
@@ -31,7 +32,7 @@ import assert from 'node:assert/strict';
 export const SOCCER_DECK_BASE = 'e814c2def671e07bd6163462dff8ab1230be2000';
 export const SOCCER_DECK_SHA256 = {
   "src/lib/soccerCareerEngine.ts": {
-    "head": "8800b4296f0670b0cab5bfe31c3f63b718d30a96e7cb33d66fbcc6a950d92ca8",
+    "head": "90e8fc573532e8388b7d3a745e88550031ceca990e1717b43651ec281ace115a",
     "base": "e37b73f25a17e4c63718430365de87cd1d5a001960ba8257ac674834e691dd90"
   }
 };
@@ -58,9 +59,6 @@ const EDITS = [
     from: "  const s = { ...prev }; s.pendingSummary = null;\n  /* Round 1519: a retired career goes to its ceremony and its choices (or the screen it already chose),\n     and a stray flag with nothing behind it plays on. This used to send any flag straight to the retired\n     screen, which is the one way a career could end at 26 with no choice (reconcileRetirement says why). */\n  if (s.retired && reconcileRetirement(s)) return s;\n  return advanceToNextPhase(s, clubs);",
     to: "  const s = { ...prev }; s.pendingSummary = null;\n  if (s.retired) { s.phase = \"retired\"; return s; }\n  return advanceToNextPhase(s, clubs);" },
   { name: "engine-7", file: "src/lib/soccerCareerEngine.ts",
-    from: "\n/* Round 1519: a career the game ended says why on the ceremony card, in plain words. The age rules are the\n   only game event that ends one; every other way is the player's own button. Read from the save, so an old\n   save gets its line too and nothing new is written: a retired season row comes only from the age rules and\n   from taking the suggestion, and only the age rules can stand at 45, or at 33 or older under 50 (the\n   suggestion is never offered there, the rules fire first). */\nexport function retirementReason(s: CareerState): string | null {\n  if (!s.retired || s.seasons[s.seasons.length - 1]?.type !== \"retired\") return null;\n  if (s.age >= 45) return \"Forced out at 45, the age limit.\";\n  return s.overall < 50 && s.age >= 33 ? `Forced out at ${s.age}: overall ${s.overall}, the body could not keep up.` : null;\n}\n\nexport function announceFarewellSeason(prev: CareerState, clubs: ClubData[]): CareerState {",
-    to: "\nexport function announceFarewellSeason(prev: CareerState, clubs: ClubData[]): CareerState {" },
-  { name: "engine-8", file: "src/lib/soccerCareerEngine.ts",
     from: "  if (prev.phase !== \"retirement_suggestion\" || prev.retired) {\n    /* Round 1519: a retirement the repair stood up keeps its screen, never retired on Next Season. */\n    if (!s.retired) s.phase = \"playing\";\n    return s;",
     to: "  if (prev.phase !== \"retirement_suggestion\" || prev.retired) {\n    s.phase = \"playing\";\n    return s;" },
 ];
