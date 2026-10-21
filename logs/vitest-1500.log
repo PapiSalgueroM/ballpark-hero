@@ -1,0 +1,60 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstderr[2m | src/test/usCareerHelpRules1104.test.tsx[2m > [22m[2mRound 1104: the changed rules are on the "?" screen[2m > [22m[2mNFL My Career shows slot pay, the kicker rule, the 16 game throwback and the bank, once each
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/usCareerHelpRules1104.test.tsx[2m > [22m[2mRound 1104: the changed rules are on the "?" screen[2m > [22m[2mthe NBA, MLB and NHL pages show the bank line once
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/usCareerHelpRules1104.test.tsx[2m > [22m[2mRound 1104: the changed rules are on the "?" screen[2m > [22m[2mthe NBA, MLB and NHL pages show the bank line once
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/usCareerHelpRules1104.test.tsx[2m > [22m[2mRound 1104: the changed rules are on the "?" screen[2m > [22m[2mthe NBA, MLB and NHL pages show the bank line once
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/usCareerHelpRules1104.test.tsx[2m > [22m[2mRound 1104: the changed rules are on the "?" screen[2m > [22m[2mall four pages show the coaching retirement line once
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/usCareerHelpRules1104.test.tsx[2m > [22m[2mRound 1104: the changed rules are on the "?" screen[2m > [22m[2mall four pages show the coaching retirement line once
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/usCareerHelpRules1104.test.tsx[2m > [22m[2mRound 1104: the changed rules are on the "?" screen[2m > [22m[2mall four pages show the coaching retirement line once
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/usCareerHelpRules1104.test.tsx[2m > [22m[2mRound 1104: the changed rules are on the "?" screen[2m > [22m[2mall four pages show the coaching retirement line once
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/usCareerHelpRules1104.test.tsx[2m > [22m[2mRound 1104: the changed rules are on the "?" screen[2m > [22m[2mall four pages show the dirty money line once
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/usCareerHelpRules1104.test.tsx[2m > [22m[2mRound 1104: the changed rules are on the "?" screen[2m > [22m[2mall four pages show the dirty money line once
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/usCareerHelpRules1104.test.tsx[2m > [22m[2mRound 1104: the changed rules are on the "?" screen[2m > [22m[2mall four pages show the dirty money line once
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/usCareerHelpRules1104.test.tsx[2m > [22m[2mRound 1104: the changed rules are on the "?" screen[2m > [22m[2mall four pages show the dirty money line once
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ [32m✓[39m src/test/usCareerHelpRules1104.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 2167[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1104: the changed rules are on the "?" screen[2m > [22mNFL My Career shows slot pay, the kicker rule, the 16 game throwback and the bank, once each [33m 524[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1104: the changed rules are on the "?" screen[2m > [22mthe NBA, MLB and NHL pages show the bank line once [33m 636[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1104: the changed rules are on the "?" screen[2m > [22mall four pages show the coaching retirement line once [33m 537[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1104: the changed rules are on the "?" screen[2m > [22mall four pages show the dirty money line once [33m 465[2mms[22m[39m
+ [32m✓[39m src/test/usCareerDirtyMoney.test.tsx [2m([22m[2m16 tests[22m[2m)[22m[33m 3290[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1500: deal with dirty money on the real board[2m > [22mnfl: every washer owned, the desk previews, holds a second tap, and Come clean saves exactly the rule [33m 993[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1500: deal with dirty money on the real board[2m > [22mnba: every washer owned, the desk previews, holds a second tap, and Come clean saves exactly the rule [33m 590[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1500: deal with dirty money on the real board[2m > [22mmlb: every washer owned, the desk previews, holds a second tap, and Come clean saves exactly the rule [33m 592[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1500: deal with dirty money on the real board[2m > [22mnhl: every washer owned, the desk previews, holds a second tap, and Come clean saves exactly the rule [33m 565[2mms[22m[39m
+ [32m✓[39m src/lib/careerDirtyMoney.test.ts [2m([22m[2m9 tests[22m[2m)[22m[33m 5763[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1500: every way does exactly what its button prints[2m > [22mthe preview numbers are the applied change, over a grid of money, heat, karma and cash [33m 5747[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[32m30 passed[39m[22m[90m (30)[39m
+[2m   Start at [22m 21:31:00
+[2m   Duration [22m 10.29s[2m (transform 4.42s, setup 376ms, collect 9.91s, tests 11.22s, environment 2.04s, prepare 705ms)[22m
+
