@@ -1,0 +1,3 @@
+hall-nfl exit=0 219s | simCareerHall nfl: all 34 checks green
+hall-nba exit=0 311s | simCareerHall nba: all 34 checks green
+hall-mlb exit=0 327s | simCareerHall mlb: all 34 checks green
