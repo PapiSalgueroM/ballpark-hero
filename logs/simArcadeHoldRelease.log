@@ -1,0 +1,7 @@
+simArcadeHoldRelease: 30 actual board outcomes pass, none skipped.
+simArcadeHoldRelease: both hold buttons and playing surfaces settle once after outside release.
+simArcadeHoldRelease: cancellation and lost capture stop power without creating a shot.
+simArcadeHoldRelease: secondary, right and foreign pointers cannot own or release the hold.
+simArcadeHoldRelease: unmount releases owned capture; keyboard and primary mouse pointer paths hold.
+simArcadeHoldRelease: Hold and Release feedback follows the actual pointer/key charging state.
+simArcadeHoldRelease: owned copies cleaned, original sources held, no backend or vendor calls.

@@ -1,0 +1,38 @@
+#!build
+#!playwright
+simStadiumTycoon: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simStadiumTycoon.mjs
+simTycoonLeague: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonLeague.mjs
+simTycoonAway: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonAway.mjs
+simTycoonAwayMatchdays: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonAwayMatchdays.mjs
+simTycoonSetPiece: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonSetPiece.mjs
+simAllPlayersValue: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simAllPlayersValue.mjs
+simTycoonGear: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonGear.mjs
+simTycoonPackPace: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonPackPace.mjs
+simTycoonHelp: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonHelp.mjs
+simFreeKick: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simFreeKick.mjs
+simFreeKickLab: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simFreeKickLab.mjs
+simFreeKickPractice: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simFreeKickPractice.mjs
+simTycoonClock: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonClock.mjs
+simTycoonGearPage: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonGearPage.mjs
+simTycoonLoads: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonLoads.mjs
+simTycoonPacks: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonPacks.mjs
+simTycoonPitch: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonPitch.mjs
+simTycoonPitchRunner: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonPitchRunner.mjs
+simTycoonRooms: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonRooms.mjs
+simTycoonSaleReview: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonSaleReview.mjs
+simTycoonSeasonReview: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonSeasonReview.mjs
+simTycoonSetPiecePage: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonSetPiecePage.mjs
+simTycoonTicketPolicy: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonTicketPolicy.mjs
+simWonderkid: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simWonderkid.mjs
+simHarnessAnchors: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simHarnessAnchors.mjs
+simStorageWrites: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simStorageWrites.mjs
+simNumberFormatting: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simNumberFormatting.mjs
+simArcadeShotFeedback: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simArcadeShotFeedback.mjs
+simArcadePause: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simArcadePause.mjs
+simArcadeHoldRelease: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simArcadeHoldRelease.mjs
+simNoRivalNames: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simNoRivalNames.mjs
+simTycoonGoalFlight: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" PORT=4181 ONLY=simTycoonGoalFlight node scripts/runAllSims.mjs --browser
+playTycoonGearFit: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" PORT=4182 ONLY=playTycoonGearFit node scripts/runAllSims.mjs --browser
+playTycoonSaleReview1083: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" PORT=4183 ONLY=playTycoonSaleReview1083 node scripts/runAllSims.mjs --browser
+playTycoonSetPieceFit: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" PORT=4184 ONLY=playTycoonSetPieceFit node scripts/runAllSims.mjs --browser
+simSetPiecePresentation: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" PORT=4185 ONLY=simSetPiecePresentation node scripts/runAllSims.mjs --browser
