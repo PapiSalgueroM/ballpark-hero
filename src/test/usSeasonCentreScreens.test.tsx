@@ -125,12 +125,32 @@ const MODELS: Record<string, () => CentreModel> = {
 type Shot = { sha1: string; length: number };
 const shot = (html: string): Shot => ({ sha1: createHash('sha1').update(html).digest('hex'), length: html.length });
 
+/* Round 1517 keeps the historical recording of everything outside its two
+   additive NBA features. The actual court and new help are exercised without
+   projection in nbaCourtRecap1517.test.tsx. NFL uses its original model. */
+function historicalModel(model: CentreModel, sport: string): CentreModel {
+  if (sport !== 'nba') return model;
+  expect(typeof model.sport.pitch, 'the actual NBA model still binds the new court').toBe('function');
+  const added = model.help.examples.filter(example => example.head === 'The court');
+  expect(added, 'only the exact new court example may leave the historical screen').toEqual([{
+    head: 'The court',
+    body: 'Scores update at the end of each quarter. A 24-22 first quarter followed by 31-28 makes it 55-50. The figures are an illustration, not a shot chart or play-by-play. Your points, rebounds and assists appear at the final buzzer.',
+  }]);
+  const oldSport = { ...model.sport };
+  delete oldSport.pitch;
+  return {
+    ...model,
+    sport: oldSport,
+    help: { ...model.help, examples: model.help.examples.filter(example => example !== added[0]) },
+  };
+}
 function screensOf(model: CentreModel, sport: string): Record<string, Shot> {
+  const historical = historicalModel(model, sport);
   const out: Record<string, Shot> = {};
   for (const wide of [true, false]) {
     localStorage.clear();
     resetCareerMomentsForTest();
-    for (const [screen, html] of Object.entries(walk(model, wide))) out[`${sport}|${wide ? 'desktop' : 'phone'}|${screen}`] = shot(html);
+    for (const [screen, html] of Object.entries(walk(historical, wide))) out[`${sport}|${wide ? 'desktop' : 'phone'}|${screen}`] = shot(html);
   }
   return out;
 }

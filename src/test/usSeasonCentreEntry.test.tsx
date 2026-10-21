@@ -248,7 +248,7 @@ describe.each(BOUND)('$name My Career: watching changes nothing', ({ Board, spor
     expect(play.compareDocumentPosition(entry) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     expect(entry.previousElementSibling).toBe(play);
     expect(entry.textContent).not.toMatch(/Play the/);
-    expect(q('[data-week-by-week]')!.getAttribute('aria-label')).toContain('Week by week');
+    expect(q('[data-week-by-week]')!.getAttribute('aria-label')).toContain(sport.slug === 'nba' ? 'Watch games' : 'Week by week');
     expect([...document.querySelectorAll('button')].filter(b => /Play the/.test(b.textContent ?? ''))).toEqual([play]);
     expect(document.activeElement).not.toBe(q('[data-week-by-week]'));
     expect(q('[data-watch-last]')).toBeNull();

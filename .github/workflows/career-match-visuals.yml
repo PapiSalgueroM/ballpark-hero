@@ -57,18 +57,39 @@ jobs:
           import fs from 'node:fs';
           import assert from 'node:assert/strict';
           const report = JSON.parse(fs.readFileSync('career-visuals-artifacts/red.json', 'utf8'));
-          assert.equal(report.numRuntimeErrorTestSuites, 0);
+          assert.equal(report.numFailedTests, 5);
+          assert.equal(report.numTotalTests, 5);
           assert.equal(report.numPendingTests, 0);
           const cases = report.testResults.flatMap(file => file.assertionResults);
           assert.equal(cases.length, 5);
           assert(cases.every(row => row.status === 'failed'));
           for (const row of cases) {
             const failure = row.failureMessages.join('\n');
-            assert.match(failure, /AssertionError|expect\(/);
+            assert.match(failure, /AssertionError|expect(?:\x1b\[[0-9;]*m)*\(/);
             assert.doesNotMatch(failure, /Cannot find|Failed to resolve|SyntaxError|ReferenceError|TypeError|No test suite found/);
             console.log('INTENDED BASELINE RED: ' + row.fullName);
           }
           JS
+      - name: Focused presentation and inherited save integration
+        if: github.ref == 'refs/heads/codex/career-match-visuals'
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          node_modules/.bin/vitest run src/test/nbaCourtRecap1517.test.tsx src/test/fightCareerRingPlayback.test.tsx src/test/usSeasonCentreEntry.test.tsx src/test/usBoardFixture.test.tsx src/test/usSeasonCentreScreens.test.tsx --maxWorkers=1 --reporter=verbose --reporter=json --outputFile.json=career-visuals-artifacts/focused.json > career-visuals-artifacts/focused.log 2>&1
+          cat career-visuals-artifacts/focused.log
+      - name: Actual presentation guards and effective copied faults
+        if: github.ref == 'refs/heads/codex/career-match-visuals'
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          export CAREER_VISUALS_OUT="$PWD/career-visuals-artifacts/controls"
+          export FIGHT_RING_ARTIFACTS="$PWD/career-visuals-artifacts/fight-ring"
+          export FIGHT_RING_CONTROL=all
+          for method in simNbaCourtRecap simFightRingPlayback; do
+            status=0; node "scripts/$method.mjs" > "career-visuals-artifacts/$method.log" 2>&1 || status=$?
+            printf '%s\t%s\n' "$method" "$status" >> career-visuals-artifacts/presentation.tsv
+            cat "career-visuals-artifacts/$method.log"; test "$status" -eq 0
+          done
       - name: Preserve source and evidence
         if: always()
         run: |
@@ -80,6 +101,162 @@ jobs:
         if: always()
         with:
           name: career-visuals-${{ github.run_id }}-${{ github.run_attempt }}
+          path: career-visuals-artifacts/
+          if-no-files-found: error
+          retention-days: 14
+
+  unit_suite:
+    if: github.ref == 'refs/heads/codex/career-match-visuals'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
+    env:
+      SIM_NETWORK: offline
+      TZ: UTC
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Full unit suite partition
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir unit-artifacts
+          git rev-parse HEAD > unit-artifacts/head.txt
+          sha256sum package.json package-lock.json > unit-artifacts/dependencies-before.sha256
+          npm ci > unit-artifacts/install.log 2>&1
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          status=0
+          npm test -- --shard=${{ matrix.shard }}/4 --maxWorkers=2 --reporter=json --outputFile=unit-artifacts/results.json > unit-artifacts/unit.log 2>&1 || status=$?
+          printf '%s\n' "$status" > unit-artifacts/unit.exit
+          tail -n 35 unit-artifacts/unit.log
+          sha256sum --check unit-artifacts/dependencies-before.sha256 > unit-artifacts/dependencies-hold.log
+          git diff --exit-code HEAD -- src scripts public supabase package.json package-lock.json > unit-artifacts/source-hold.log
+          exit "$status"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: career-unit-${{ matrix.shard }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: unit-artifacts/
+          if-no-files-found: error
+          retention-days: 14
+
+  build_browser:
+    if: github.ref == 'refs/heads/codex/career-match-visuals'
+    runs-on: ubuntu-latest
+    timeout-minutes: 70
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      TZ: UTC
+      PRERENDER_ONLY: /nba-my-career,/fight-career
+      SEO_SPLIT_BASE_REF: 076091ac870db38b953ddf71d3252cf1ac556782
+      CAREER_VISUALS_OUT: career-visuals-artifacts/browser
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Source holds and isolated verification tools
+        run: |
+          set -euo pipefail
+          mkdir career-visuals-artifacts
+          out="$PWD/career-visuals-artifacts"
+          git rev-parse HEAD > "$out/head.txt"
+          git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
+          sha256sum package.json package-lock.json > "$out/dependencies-before.sha256"
+          git diff --exit-code 076091ac870db38b953ddf71d3252cf1ac556782 HEAD -- src/lib/nbaMyCareer.ts src/lib/nbaCareerSport.ts src/lib/fightCareer.ts src/lib/fightCareerLife.ts src/lib/fightCareerLifeFlow.ts src/lib/season/core.ts src/lib/season/us.ts src/lib/world* src/lib/clubManager* supabase package.json package-lock.json scripts/sweepWeight.mjs > "$out/engine-dependency-cap-hold.log"
+          npm ci > "$out/install.log" 2>&1
+          browser_tools="$RUNNER_TEMP/career-visuals-browser"
+          npm install --prefix "$browser_tools" --no-save --package-lock=false playwright@1.64.0 > "$out/browser-install.log" 2>&1
+          test ! -e node_modules/playwright; test ! -e node_modules/playwright-core
+          ln -s "$browser_tools/node_modules/playwright" node_modules/playwright
+          ln -s "$browser_tools/node_modules/playwright-core" node_modules/playwright-core
+          node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium > "$out/chromium-install.log" 2>&1
+          python -m pip install fonttools pillow > "$out/python-install.log" 2>&1
+          export FREE_KICK_FONT_CACHE="$RUNNER_TEMP/career-visuals-fonts"
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > "$out/fonts.log" 2>&1
+          echo "FREE_KICK_FONT_CACHE=$FREE_KICK_FONT_CACHE" >> "$GITHUB_ENV"
+      - name: Type check and finish current production snapshots
+        id: build
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$PWD/career-visuals-artifacts"
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$out/types.log" 2>&1
+          node scripts/genSearchKeywords.mjs > "$out/search-keywords.log" 2>&1
+          npm run build:seo > "$out/build.log" 2>&1
+          git diff --binary -- public scripts/data/lastmod.json src/data/searchKeywords.json > "$out/generated.patch"
+          git diff --name-only -- public scripts/data/lastmod.json src/data/searchKeywords.json > "$out/generated-files.txt"
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dist.sha256"
+      - name: Complete a separate unchanged baseline build
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          before="$RUNNER_TEMP/career-visuals-before"
+          mkdir "$before"
+          git archive 076091ac870db38b953ddf71d3252cf1ac556782 | tar -xf - -C "$before"
+          cmp "$before/package-lock.json" package-lock.json
+          ln -s "$GITHUB_WORKSPACE/node_modules" "$before/node_modules"
+          (cd "$before"; npm run build) > career-visuals-artifacts/baseline-build.log 2>&1
+          echo "CAREER_VISUALS_BASELINE_DIR=$before/dist" >> "$GITHUB_ENV"
+      - name: All completed-build readers and unchanged page limits
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$PWD/career-visuals-artifacts"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$out/server.log" 2>&1 &
+          server=$!; trap 'kill "$server" 2>/dev/null || true' EXIT
+          ready=0; for attempt in 1 2 3 4 5; do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then ready=1; break; fi; sleep 1; done; test "$ready" -eq 1
+          failed=0
+          for method in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simSiteSearch simGuideHeadings simLegalPages; do
+            status=0; BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node "scripts/$method.mjs" > "$out/$method.log" 2>&1 || status=$?
+            printf '%s\t%s\n' "$method" "$status" >> "$out/readers.tsv"
+            tail -n 3 "$out/$method.log"; test "$status" -eq 0 || failed=1
+          done
+          status=0; SWEEP_OFFLINE=1 BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node scripts/sweepWeight.mjs > "$out/weights.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/weights.exit"
+          cat "$out/weights.log"; test "$status" -eq 0 || failed=1
+          exit "$failed"
+      - name: Actual phone playback and before versus after saved pixels
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          node scripts/qa/careerMatchVisuals1517.mjs > career-visuals-artifacts/browser.log 2>&1
+          cat career-visuals-artifacts/browser.log
+      - name: Preserve source and completed generated output
+        if: always()
+        run: |
+          set -euo pipefail
+          out="$PWD/career-visuals-artifacts"
+          sha256sum --check "$out/dependencies-before.sha256" > "$out/dependencies-hold.log"
+          git diff --exit-code HEAD -- src scripts supabase package.json package-lock.json .github ':!scripts/data/lastmod.json' ':!src/data/searchKeywords.json' > "$out/source-hold.log"
+          if test -d dist; then tar -czf "$out/dist.tar.gz" -C dist .; fi
+          (cd "$out"; find . -type f ! -name evidence.sha256 -print0 | sort -z | xargs -0 sha256sum) > "$out/evidence.sha256"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: career-build-${{ github.run_id }}-${{ github.run_attempt }}
           path: career-visuals-artifacts/
           if-no-files-found: error
           retention-days: 14
