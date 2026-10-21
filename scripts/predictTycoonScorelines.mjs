@@ -313,3 +313,50 @@ for (const { sp } of SPS) for (const ae of AE_GRID) {
     console.log(`     ${sp} ${String(ae).padStart(2)} ${label.padStart(5)}(Sq${squad}) | ${String(R3).padStart(3)} ${f2(gap).padStart(6)} | ${pct(row.draw)} | ${pct(c1)} ${pct(c2)} -> [${pct(c / 2)}, ${pct(1.5 * c)}] | ${pct(h)} | ${row.inside ? 'yes' : 'NO'}; old band [5.81, 17.44] ${row.oldBandHolds ? 'holds' : 'red'}`);
   }
 }
+
+/* E3. simTycoonAwayMatchdays S5: 60 clubs, division 3 + k % 7, rep k % 3, sixteen
+   away matchdays asked from matchday 0 on mulberry(8800 + k). Fence: win share gap 0.5. */
+const S5 = Array.from({ length: 60 }, (_, k) => {
+  const division = 3 + (k % 7);
+  const lg = T.newLeague(k % 3, division, 0);
+  const n = Math.min(16, T.leagueShape(division).matchdays - 1);
+  const offs = Array.from({ length: n }, (_, j) => lg.clubs[T.yourOpponentIndex({ ...lg, matchday: j })].offset);
+  return { k, division, lg, offs };
+});
+function awayShare(pu, pt) {
+  let w = 0; let all = 0;
+  for (const c of S5) { const roll = mulberry(8800 + c.k); c.offs.forEach((off, j) => { if (playOn(roll, pu(c, off, j), pt(c, off, j)) === 'w') w += 1; all += 1; }); }
+  return w / all;
+}
+{
+  const st = (c, j, squad) => ({ ...T.newTycoon(0), levels: { ...T.newTycoon(0).levels, squad }, league: { ...c.lg, matchday: j }, matchNo: j, bestDivision: c.division });
+  const strong = awayShare((c, off, j) => T.goalChancePerMin(st(c, j, 50)), (c, off, j) => T.oppChancePerMin(st(c, j, 50)));
+  const weak = awayShare((c, off, j) => T.goalChancePerMin(st(c, j, 0)), (c, off, j) => T.oppChancePerMin(st(c, j, 0)));
+  out.fixtures.awayBase = [strong, weak];
+  console.log(`\n   E3 away S5 replay under the BASE lines: Squad 50 wins ${pct(strong)}%, Squad 0 ${pct(weak)}% (compare simTycoonAwayMatchdays S5's note on the same base)`);
+}
+out.fixtures.away = [];
+console.log('   E3 away S5 under the law: SP AE | c = ceil(20 / SP) | re-anchored strong - weak (fence 0.5) | unanchored Squad 50 - Squad 0');
+for (const { sp } of SPS) for (const ae of AE_GRID) {
+  const R = ladder(sp, ae, r0For(sp));
+  const c = Math.ceil(20 / sp);
+  const share = squadOf => awayShare((cl, off) => headU(squadOf(cl) * sp - R[cl.division] - off * OFF), (cl, off) => headT(squadOf(cl) * sp - R[cl.division] - off * OFF));
+  const par = cl => Math.round(R[cl.division] / sp);
+  const strong = share(cl => par(cl) + c); const weak = share(cl => Math.max(0, par(cl) - c));
+  const s50 = share(() => 50); const s0 = share(() => 0);
+  out.fixtures.away.push({ sp, ae, c, strong, weak, s50, s0 });
+  console.log(`     ${sp} ${String(ae).padStart(2)} | ${c} | ${pct(strong)} - ${pct(weak)} = ${(strong - weak).toFixed(3)} ${strong - weak >= 0.5 ? 'green' : 'RED'} | ${pct(s50)} - ${pct(s0)} = ${(s50 - s0).toFixed(3)} ${s50 - s0 >= 0.5 ? 'green' : 'RED'}`);
+}
+
+/* E4. tycoonPacks.test 205: Squad 200 at minute 88 of a fresh ground (the critic's
+   item 22 read it as Squad 0), every roll 0.01: only we may score. */
+{
+  const lg = T.newLeague(0, 0, 0);
+  const off = lg.clubs[T.yourOpponentIndex(lg)].offset;
+  for (const { sp } of SPS) {
+    const r0 = r0For(sp); const gap = 200 * sp - r0 - off * OFF;
+    const ok = headU(gap) > 0.01 && headT(gap) <= 0.01;
+    console.log(`   E4 tycoonPacks.test 205 at SP ${sp}, R0 ${r0}: gap ${f2(gap)}, our minute chance ${headU(gap).toFixed(4)}, theirs ${headT(gap).toFixed(4)}: ${ok ? 'only we score, the test holds' : 'RED'}`);
+  }
+}
+if (replayBroken) { console.error('a replay under the base lines did not reproduce the base measurement, so the replays prove nothing'); process.exit(2); }
