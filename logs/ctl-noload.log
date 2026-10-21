@@ -1,0 +1,159 @@
+NEGATIVE CONTROL ON: noload
+48 places over 5 worlds (now, era2020, era2015, era2010, era2005)
+1) The draw is keyed on the man and never takes a number from the season's stream
+  ok: 14400 draws over 48 places, 0 numbers off Math.random
+  ok: a fresh load of the engine draws every one of them the same
+2) Realistic shares: each league's drawn men are home as often as its real squads are
+   now     premier        England        real men  496  home  25.8% drawn  23.9%  then France 7%, Netherlands 7%, Brazil 5%
+   now     championship   England        real men  338  home  32.8% drawn  34.5%  then Ireland 8%, Denmark 5%, Brazil 3%
+   now     laliga         Spain          real men  374  home  53.2% drawn  53.6%  then Argentina 5%, France 5%, Morocco 3%
+   now     seriea         Italy          real men  440  home  27.3% drawn  26.9%  then France 5%, Spain 5%, Argentina 4%
+   now     bundesliga     Germany        real men  348  home  35.6% drawn  36.1%  then France 7%, Austria 5%, Japan 3%
+   now     ligue1         France         real men  285  home  32.6% drawn  33.5%  then Senegal 6%, Morocco 5%, Belgium 4%
+   now     eredivisie     Netherlands    real men  161  home  37.9% drawn  37.9%  then Germany 5%, Denmark 4%, Belgium 4%
+   now     saudi          Saudi Arabia   real men  117  home   7.7% drawn   6.9%  then Brazil 13%, France 12%, Portugal 11%
+   now     mlsEast        United States  real men  147  home  19.0% drawn  19.7%  then Argentina 11%, Brazil 4%, Spain 4%
+   now     mlsWest        United States  real men  122  home  31.1% drawn  32.1%  then Germany 7%, Colombia 5%, Canada 4%
+   now     primeira       Portugal       real men  166  home  27.1% drawn  25.9%  then Brazil 16%, Spain 8%, Greece 4%
+   now     scottish       Scotland       real men   61  home  19.7% drawn  19.6%  then England 11%, Denmark 7%, Portugal 7%
+   now     superlig       Türkiye        real men  174  home  25.9% drawn  25.8%  then Brazil 6%, Portugal 6%, France 5%
+   now     bundesliga2    Germany        real men   99  home  43.4% drawn  44.4%  then Denmark 7%, Japan 7%, Sweden 4%
+   now     proleague      Belgium        real men  145  home  29.0% drawn  30.3%  then Japan 8%, Cote d'Ivoire 5%, Sweden 5%
+   now     austria        Austria        real men   60  home  45.0% drawn  46.6%  then Germany 8%, Denmark 7%, Bosnia-Herzegovina 5%
+   now     greece         Greece         real men   81  home  12.3% drawn  12.0%  then Argentina 9%, Portugal 6%, Serbia 6%
+   now     denmark        Denmark        real men   62  home  32.3% drawn  30.6%  then Norway 11%, Germany 8%, Iceland 5%
+   now     switzerland    Switzerland    real men   78  home  43.6% drawn  43.8%  then France 9%, DR Congo 5%, Germany 5%
+   now     croatia        Croatia        real men   28  home  64.3% drawn  63.6%  then Bosnia-Herzegovina 7%, Albania 4%, Belgium 4%
+   now     brasileirao    Brazil         real men  267  home  64.8% drawn  66.8%  then Argentina 11%, Colombia 7%, Uruguay 7%
+   now     ligamx         Mexico         real men  164  home  57.9% drawn  57.4%  then Argentina 13%, Uruguay 8%, Colombia 6%
+   now     aleague        Australia      real men  256  home  81.6% drawn  80.9%  then New Zealand 2%, Japan 2%, Scotland 2%
+   now     aleague        New Zealand    real men   43  home  74.4% drawn  74.9%  then Australia 7%, Japan 5%, Chile 2%
+   now     serieb         Italy          real men   78  home  65.4% drawn  64.8%  then France 5%, Norway 3%, Sweden 3%
+   now     ligue2         France         real men   49  home  44.9% drawn  44.0%  then Cote d'Ivoire 6%, Denmark 4%, Malta 4%
+   now     segunda        Spain          real men   48  home  64.6% drawn  65.7%  then Netherlands 6%, Colombia 4%, Angola 2%
+   now     russia         Russia         real men  402  home  66.2% drawn  65.3%  then Brazil 5%, Serbia 2%, Argentina 2%
+   era2020 premier2020    England        real men  442  home  29.9% drawn  29.6%  then Spain 6%, Brazil 6%, France 5%
+   era2020 laliga2020     Spain          real men  329  home  59.0% drawn  59.2%  then Brazil 5%, Argentina 4%, France 4%
+   era2020 seriea2020     Italy          real men  358  home  36.0% drawn  35.6%  then Brazil 4%, Argentina 4%, Spain 4%
+   era2020 bundesliga2020 Germany        real men  325  home  36.9% drawn  35.4%  then France 6%, Austria 6%, Switzerland 6%
+   era2020 ligue12020     France         real men  320  home  39.1% drawn  39.4%  then Brazil 7%, Algeria 4%, Senegal 4%
+   era2015 premier2015    England        real men  441  home  28.3% drawn  28.1%  then France 7%, Spain 7%, Argentina 5%
+   era2015 laliga2015     Spain          real men  355  home  58.9% drawn  58.6%  then Argentina 6%, Portugal 5%, Brazil 4%
+   era2015 seriea2015     Italy          real men  317  home  38.2% drawn  37.9%  then Argentina 8%, Brazil 6%, France 3%
+   era2015 bundesliga2015 Germany        real men  292  home  43.8% drawn  44.5%  then Switzerland 6%, Brazil 4%, Japan 3%
+   era2015 ligue12015     France         real men  253  home  43.9% drawn  44.0%  then Brazil 5%, Senegal 4%, Cote d'Ivoire 4%
+   era2010 premier2010    England        real men  424  home  31.6% drawn  33.1%  then Ireland 6%, France 5%, Argentina 4%
+   era2010 laliga2010     Spain          real men  383  home  59.0% drawn  58.4%  then Argentina 10%, Brazil 5%, Portugal 3%
+   era2010 seriea2010     Italy          real men  314  home  52.9% drawn  53.4%  then Argentina 10%, Brazil 8%, Uruguay 3%
+   era2010 bundesliga2010 Germany        real men  311  home  42.1% drawn  41.6%  then Brazil 6%, Croatia 4%, Austria 3%
+   era2010 ligue12010     France         real men  319  home  48.6% drawn  47.6%  then Senegal 5%, Brazil 4%, Mali 3%
+   era2005 premier2005    England        real men  420  home  35.5% drawn  37.5%  then France 6%, Ireland 6%, Netherlands 4%
+   era2005 laliga2005     Spain          real men  340  home  58.5% drawn  58.5%  then Argentina 10%, Brazil 7%, Uruguay 4%
+   era2005 seriea2005     Italy          real men  294  home  62.6% drawn  61.7%  then Brazil 8%, Argentina 5%, France 3%
+   era2005 bundesliga2005 Germany        real men  332  home  46.7% drawn  46.0%  then Brazil 6%, Croatia 3%, Czech Republic 3%
+   era2005 ligue12005     France         real men  341  home  48.1% drawn  49.2%  then Brazil 6%, Cote d'Ivoire 4%, Senegal 4%
+  ok: 48 counts checked at 2000 draws each (0 under 20 known men left unchecked), worst 2.53 standard errors (now aleague Australia), bound 4
+2b) Ten years on, the market's made up men sit at each league's real home share
+   now     seriea           325 made up men, home  21.5% (real 27.3%)
+   now     laliga           284 made up men, home  48.9% (real 53.2%)
+   now     premier          302 made up men, home  24.8% (real 25.8%)
+   now     ligue1           192 made up men, home  31.8% (real 32.6%)
+   now     bundesliga       244 made up men, home  37.3% (real 35.6%)
+   now     superlig         141 made up men, home  22.7% (real 25.9%)
+   now     brasileirao      221 made up men, home  67.0% (real 64.8%)
+   now     saudi            101 made up men, home   4.0% (real 7.7%)
+   now     championship     269 made up men, home  34.6% (real 32.8%)
+   now     primeira         123 made up men, home  23.6% (real 27.1%)
+   now     ligamx           138 made up men, home  54.3% (real 57.9%)
+   now     russia           330 made up men, home  66.4% (real 66.2%)
+   now     greece            77 made up men, home   7.8% (real 12.3%)
+   now     scottish          53 made up men, home  18.9% (real 19.7%)
+   now     eredivisie       124 made up men, home  47.6% (real 37.9%)
+   now     ligue2            42 made up men, home  42.9% (real 44.9%)
+   now     bundesliga2       79 made up men, home  40.5% (real 43.4%)
+   now     mlsEast          128 made up men, home  18.8% (real 19.0%)
+   now     mlsWest          108 made up men, home  25.0% (real 31.1%)
+   now     denmark           52 made up men, home  26.9% (real 32.3%)
+   now     segunda           42 made up men, home  61.9% (real 64.6%)
+   now     proleague        118 made up men, home  35.6% (real 29.0%)
+   now     serieb            64 made up men, home  70.3% (real 65.4%)
+   now     switzerland       62 made up men, home  41.9% (real 43.6%)
+   now     austria           45 made up men, home  53.3% (real 45.0%)
+   now     aleague          213 made up men, home  78.9% (real 81.6%)
+   era2020 premier2020      295 made up men, home  31.2% (real 29.9%)
+   era2020 bundesliga2020   229 made up men, home  34.5% (real 36.9%)
+   era2020 laliga2020       268 made up men, home  62.7% (real 59.0%)
+   era2020 seriea2020       276 made up men, home  39.9% (real 36.0%)
+   era2020 ligue12020       251 made up men, home  36.3% (real 39.1%)
+   era2015 laliga2015       308 made up men, home  62.0% (real 58.9%)
+   era2015 bundesliga2015   241 made up men, home  41.1% (real 43.8%)
+   era2015 premier2015      353 made up men, home  28.0% (real 28.3%)
+   era2015 seriea2015       263 made up men, home  34.6% (real 38.2%)
+   era2015 ligue12015       210 made up men, home  41.9% (real 43.9%)
+   era2010 laliga2010       322 made up men, home  59.9% (real 59.0%)
+   era2010 seriea2010       275 made up men, home  49.5% (real 52.9%)
+   era2010 ligue12010       267 made up men, home  52.1% (real 48.6%)
+   era2010 bundesliga2010   263 made up men, home  42.6% (real 42.1%)
+  ok: 46 leagues checked ten years on, worst 2.32 standard errors (now seriea), bound 4; 0 made up listings without a country (0 clubs in no league: )
+3) Every made up man carries a country, and no real man is touched
+  ok: 95 careers: 10745 of 10745 made up men carry a country; 59464 real men, none carrying the field, each showing the map's flag
+4) It stays with him: bought, loaned out and back, the summer, released, sold to a club, promoted, reloaded
+   7 tracked men checked after a match
+  ok: Cesar Konate went out on loan and came back as New Zealand
+   7 tracked men checked after a reload
+  ok: Erik Paredes sold to Real Madrid is listed there as New Zealand
+  ok: a released academy boy is in the free agent pool marked made up, still Brazilian
+   6 tracked men checked after the summer
+  ok: 7 men tracked through the moves
+5) An old save gets the same countries twice, and nothing else in it changes
+  FAIL: the moved career, countries stripped: opened with no made up man carrying a country
+  FAIL: the moved career, countries stripped: Andres Brennan (Youth) had Paraguay and reopened as "undefined"
+  FAIL: the moved career, countries stripped: Felix Berg (Youth) had Morocco and reopened as "undefined"
+  FAIL: the moved career, countries stripped: Alfie Reyes (Youth) had Paraguay and reopened as "undefined"
+  FAIL: the moved career, countries stripped: Felix Petrov (Youth) had Wales and reopened as "undefined"
+  FAIL: the moved career, countries stripped: Ondrej Reyes (Youth) had Scotland and reopened as "undefined"
+  FAIL: the moved career, countries stripped: Omar Ferreira (Youth) had Colombia and reopened as "undefined"
+  FAIL: the moved career, countries stripped: Rune Dubois (Youth) had Switzerland and reopened as "undefined"
+  FAIL: the moved career, countries stripped: Nils Vaszary (Youth) had Portugal and reopened as "undefined"
+  FAIL: the moved career, countries stripped: Ezra Ruiz had Japan and reopened as "undefined"
+  FAIL: the moved career, countries stripped: Tadeo Caldeira had England and reopened as "undefined"
+  FAIL: the moved career, countries stripped: Hugo Rossi had Brazil and reopened as "undefined"
+  FAIL: the moved career, countries stripped: Dario Molina had Japan and reopened as "undefined"
+  FAIL: the moved career, countries stripped: Jesper Tavares had France and reopened as "undefined"
+  FAIL: the moved career, countries stripped: Oliwier Salcedo had England and reopened as "undefined"
+  ok: the moved career, countries stripped: 0 of 14 men made at the club got back the very country they had
+  ok: the moved career, countries stripped: 0 made up men given a country, the same on a second open, nothing else changed
+  FAIL: cmBookSaveEvertonFixture: opened with no made up man carrying a country
+  ok: cmBookSaveEvertonFixture: 0 made up men given a country, the same on a second open, nothing else changed
+  FAIL: cmBookSaveHerthaFixture: opened with no made up man carrying a country
+  ok: cmBookSaveHerthaFixture: 0 made up men given a country, the same on a second open, nothing else changed
+  FAIL: cmOldSave1052Fixture: opened with no made up man carrying a country
+  ok: cmOldSave1052Fixture: 0 made up men given a country, the same on a second open, nothing else changed
+  FAIL: cmSecondTierOldSaveFixture: opened with no made up man carrying a country
+  ok: cmSecondTierOldSaveFixture: 0 made up men given a country, the same on a second open, nothing else changed
+6) The board counts exactly the men whose flag is its country
+  ok: 95 careers: the board's count equals the flags; 58 of them count made up men the map alone did not
+   day one country asks issued: 57; 35 of them ask for more men than the map alone counted
+7) The field moves nothing else: 3 seasons a career, the board's old count and no draw at all, draw for draw
+   now Everton: the board's new count leaves it on its path (63682 draws, 63682 with the old count)
+   now Everton: save +120 +231 characters a season end with countries
+   now Málaga: the board's new count moves it from season 3; at the last season end pendingSummary, boardObjectives differ; country ask Spain 11 against Spain 2; budget 29.57 against 29.57, board 0 against 0; 130736 draws against 130736
+   now Málaga: save +321 +418 +523 characters a season end with countries
+   now West Ham: the board's new count moves it from season 3; at the last season end pendingSummary, boardObjectives differ; country ask England 7 against England 2; budget 26.19 against 26.19, board 0 against 0; 122089 draws against 122089
+   now West Ham: save +118 +310 +458 characters a season end with countries
+   now Wellington Phoenix: the board's new count moves it from season 2; at the last season end nothing differ; country ask none against none; budget 29.58 against 29.58, board 94.60000000000002 against 94.60000000000002; 130573 draws against 130573
+   now Wellington Phoenix: save +140 +211 +278 characters a season end with countries
+   era2005 Everton: the board's new count moves it from season 2; at the last season end pendingSummary, boardObjectives differ; country ask England 10 against England 6; budget 26.23 against 26.23, board 0 against 0; 56970 draws against 56970
+   era2005 Everton: save +134 +250 +346 characters a season end with countries
+   era2015 Bournemouth: the board's new count moves it from season 1; at the last season end pendingSummary, boardObjectives differ; country ask England 9 against England 8; budget 11.3 against 11.3, board 0 against 0; 14082 draws against 14082
+   era2015 Bournemouth: save +214 characters a season end with countries
+   now a created club: the board's new count moves it from season 1; at the last season end pendingSummary, boardObjectives differ; country ask England 8 against England 1; budget 19.84 against 19.84, board 0 against 0; 33154 draws against 33154
+   now a created club: save +594 characters a season end with countries
+  ok: 7 of 7 careers play draw for draw and byte for byte the same with countries as without, once stripped
+   the board's count of made up men moved 6 of 7 careers off the old count's path
+7b) The save's growth to season 15
+   Everton, characters added by the countries at each season end: 120 195 335 472 618 626 541 641 630 680 658 808 807 876 817
+  ok: Everton season 15: +817 characters (budget 1500), 54 a season; the save is 207833 characters
+   Málaga, characters added by the countries at each season end: 307 433 531 589 669 710 695 708 692 705 707 725 772 740 799
+  ok: Málaga season 15: +799 characters (budget 1500), 53 a season; the save is 194378 characters
+simCmMadeUpNations: RED, 19 failure(s)
