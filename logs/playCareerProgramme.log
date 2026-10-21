@@ -1,0 +1,124 @@
+FAIL 320-soccer-career: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerProgramme.mjs:37:357
+FAIL 320-soccer-career-wheel: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerProgramme.mjs:37:357
+FAIL 320-soccer-career-counteroffer: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerProgramme.mjs:37:357
+FAIL 320-nfl-my-career: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerProgramme.mjs:37:357
+FAIL 320-nba-my-career: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerProgramme.mjs:37:357
+FAIL 320-mlb-my-career: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerProgramme.mjs:37:357
+FAIL 320-nhl-my-career: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerProgramme.mjs:37:357
+FAIL 390-soccer-career: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerProgramme.mjs:37:357
+FAIL 390-soccer-career-wheel: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerProgramme.mjs:37:357
+FAIL 390-soccer-career-counteroffer: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerProgramme.mjs:37:357
+FAIL 390-nfl-my-career: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerProgramme.mjs:37:357
+FAIL 390-nba-my-career: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerProgramme.mjs:37:357
+FAIL 390-mlb-my-career: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerProgramme.mjs:37:357
+FAIL 390-nhl-my-career: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerProgramme.mjs:37:357
+FAIL 1280-soccer-career: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerProgramme.mjs:37:357
+FAIL 1280-soccer-career-wheel: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerProgramme.mjs:37:357
+FAIL 1280-soccer-career-counteroffer: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerProgramme.mjs:37:357
+FAIL 1280-nfl-my-career: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerProgramme.mjs:37:357
+FAIL 1280-nba-my-career: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerProgramme.mjs:37:357
+FAIL 1280-mlb-my-career: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerProgramme.mjs:37:357
+FAIL 1280-nhl-my-career: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerProgramme.mjs:37:357
+Career programme native: 63 checks, 0/21 completed gameplay journeys
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+
+  assert(report.cases.every(v=>v.ok))
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerProgramme.mjs:193:196 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.22.0
