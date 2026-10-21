@@ -15798,3 +15798,31 @@ Standing claims after Round 400:
   the desktop lane above.
 - Manager arc four, promotion style world editing: Round 310 (cloud lane, 2026-08-28).
   Tweaks item 11 is complete across rounds 303, 308, 309 and 310.
+
+## Codex1401 CLAIM: Soccer Career cash-business copy, 2026-10-17 UTC
+
+Root owns only3strings in src/lib/soccerCareerCorruption.ts event315choice0, own remote workflow, existing actualgenerated WN/sitemap/lastmod and closing docs. Frozen actualI8293c758f4284d21baaa2320383cfd5cb5bd4944. I1334brief636-638 explicitly leaves this leaf to the other lane; I1500excludes Soccer laundering. Currentwholeleaf matchesc2 canonicale936fade/31588B; no active exact-leaf collision. Branchcodex/soccer-cash-choice-copy, managedWTsoccer-cash-choice-copy. Claimdocs committed/pushed before product.
+
+Correct the false purchase/unlock promise to an inquiry, actual My Life > The other list directions, result No purchase made (prior ownership possible). Hold every guard/effect/flag/number/callback/shop/core/page/save/RNG code byte via whole3spaninverse. Alreadyserializedpendinglabels/previews are NOT migrated; no NBA1500/purchase/season functionality claim. No new copy-mirroring test. Existing relevant Life/catalog/currency checks, realtypes, serialWNbuild/all15readers/14strictcurrent829weights and fullsource/offline/tool/font holds remotely, no cap/guard waiver or source borrowing. IownsactiveSCpage/core/economics/competitions, spectator1503/tournaments1509+, joinedrelease/main/publish. No localNode/Python/app/test/build/browser runtime. Onlyappendthisclaim insharedprimary; no primary staging/reset/commit.
+
+## Codex1401 closing: scoped READY PR318
+
+## Codex1401 scoped READY, 2026-10-17 UTC
+
+PR318 corrects three Soccer Career cash-business captions; actual tested5066fe9239d6bfb848e79cade8b62ecacacc2ad9/run39018657286/job117355854956 SUCCESS on I8293. Code stays whole by exact inverse. Eighteen units,40currency pairs,500career normal/effective500career oneoption control,types/serialbuild/all15readers/all14fatalcaps and source/installed/font/dist holds pass. Physical19cf6cf4/semanticdc7b3676 (102/0) close artifact12095692466/a49f504e,4871source/784dist bodies. Actual3generated bodies adopted23d1e0e1; final is3closingdocs beyond that, not docs-only from tested request. Outside source closure and push receipt bind the final head. Existing saved captions are not migrated; no direct315 parity or NBA fix. BIIactualTESTED realmerge, closingdocsseparate, I regenerates joined output. Urgent308 remains independent. Main1ec/release829 and raw liveBQU remain at08:56UTC. BIdmissing alert handed to I, no root gate dispatch. See docs/audits/soccer-cash-choice-1401.md.
+
+
+## Codex1402 CLAIM: Soccer Career cost and payment captions, 2026-10-17 UTC
+
+Root owns exactly3more display strings in src/lib/soccerCareerCorruption.ts, existing own remote workflow adaptation and closing docs. Base225b53b74b61499115a4afefcb2e24f191ab2b62 is finalclosedREADY1401; actualIstill8293 at08:56UTC. Newbranchcodex/soccer-corruption-cost-copy and isolated managedWTsoccer-corruption-cost-copy. The same catalog is explicitly left to the other lane by I1334brief636-638;1500excludesSoccerlaundering. No newcollisionfound, no Ipage/core/shop/economics/save/competition edit. Claimpushedbeforeproduct. Primarysharedanddirty, appendthisclaimonly, neverstage/reset/commitprimary.
+
+325description+choice0consequence must disclose existing40%hiddenmoney plus5%networth;320choice1consequence must state existing one-time2Mdirty/heat25, notrecurringdoubleincome. Whole3spaninverse must recover1401canonical31574B/299485b3; all315copy/callbacks/math/flags/guards/RNGstayheld. Candidateoutside31602B/c7df3ef9 sourceplan1eecd9fc, no newfeatureorcopymirroringtest. Savedpendingcaptionsnotmigrated, no naturalfrequency/directtargetstate/RNG/browserparity or originalNBAreportfix.
+
+Plan: native independent3span/source/publiceffectreview, remoteonly unchanged18preview/callback cases,40currency pairs,default500normal+500oneoption withactualtarget5/collateralretained,realtypes. Normalproductionbuild onheldfresh1401WN snapshot (noSEOinputdelta),all15readers/all14unchangedfatalweights; ALLtrackedsource/validated/source/tool/installed/font/dist/offlineholds, ZEROgenerateddelta. PlainVitebuildtransportmustempty; existingmeterofflineblocksretained. No localNode/Python/app/test/build/browserruntime,cap/guardwaiver,fullsuite,provider,physicalApple,newI/main/liveclaim. Optional1402depends1401andaddsnogateonurgent308orIrelease. Iretainsspectator1503/tournaments1509+/activeSC/core/competitions/main/publish.
+
+
+## Codex1402 closing: scoped READY PR319
+
+## Codex1402 scoped READY, 2026-10-17 UTC
+
+PR319 includes qualified1401/318 plus3cost/payment caption strings; actualTESTED932aaf0a2f18a7ab1b3bbe35582bf1c59962ebcb/run39019968910/job117359661025 SUCCESS on frozen225b. Wholeinverse holds callbacks/math/guards/all315copy. Actual18units/40pairs/500normal+500effectiveoneoption/types/ordinarybuild/all15readers/all14fatalweights/fullholds pass. Physical9d777772/semantic9a2e0d4e (91/0) close artifact12095788837/6b468edd,92payloads/4872source/784dist. ZEROgenerateddelta, request=validatedall4872. Finalonly3closingdocs,4304nondoc exact; outside source closure/push receipt bindfinalhead. BIIactualTESTED932realmerge, closingdocsseparate, Iregenerates actualjoin;318captionsonce. Existing savedcaptions/directtargetparity/NBA/fullsuite/live unclaimed. Urgent308independent; actualIownsactiveSC/core/competition/spectator1503/tournaments1509+/main/publish. Newselected-gatecheckpoint eb7168b1 andBIdmissingrecipe2ce2 handedtoI. See docs/audits/soccer-corruption-cost-copy-1402.md.
