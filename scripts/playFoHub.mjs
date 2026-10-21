@@ -18,6 +18,7 @@
  *      ENGINES=chromium node scripts/playFoHub.mjs
  */
 import pw from './lib/playwrightLoader.mjs';
+import { answerConsent } from './lib/answerConsent.mjs';
 
 const { chromium } = pw;
 const BASE = process.env.BASE ?? process.env.SWEEP_BASE ?? 'http://localhost:4173';
@@ -59,8 +60,7 @@ for (const desk of DESKS) {
 
   await page.goto(`${BASE}${desk.route}`, { waitUntil: 'networkidle' });
   await page.waitForTimeout(1100);
-  const consent = page.locator('button:has-text("Essential only")');
-  if (await consent.count()) { await consent.first().click().catch(() => {}); await page.waitForTimeout(300); }
+  await answerConsent(page); await page.waitForTimeout(300);
   /* Take the first franchise on the pick screen. */
   await page.locator('.grid button').first().click();
   await page.waitForTimeout(900);

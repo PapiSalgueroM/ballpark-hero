@@ -31,6 +31,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import pw from './lib/playwrightLoader.mjs';
+import { answerConsent } from './lib/answerConsent.mjs';
 
 const { chromium } = pw;
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -113,8 +114,7 @@ for (const viewport of [{ width: 390, height: 844 }, { width: 1280, height: 900 
   page.on('response', r => { if (new URL(r.url()).origin !== origin && !/^(data|blob):/.test(r.url())) reached += 1; });
   const settle = async () => {
     await page.waitForTimeout(900);
-    const consent = page.locator('button:has-text("Essential only")');
-    if (await consent.count()) { await consent.first().click().catch(() => {}); await page.waitForTimeout(300); }
+    await answerConsent(page); await page.waitForTimeout(300);
   };
   const overflow = () => page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
 
