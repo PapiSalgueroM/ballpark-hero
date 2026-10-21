@@ -560,6 +560,17 @@
       wholeNext and s2_whole) stand. Written with --part=modern,eras,pure
       --write on the tree itself (line lr-write, 115 lines changed), then
       run green whole on the same runner.
+      Round 1520 (made up men carry a country, CMPlayer.nation, and the
+      board's country ask counts it) took it ONCE, last, on its branch: the
+      tree moves every modern and era save (start, whole and wholeNext in
+      all 47, objectivesNext in 29, objectives and summary in 16, s2_whole
+      in 10, s2_objectives in 6); pure held 48/48. Attribution on a GitHub
+      runner (remote check r1520-s): a copy of the tree with the round taken
+      out by scripts/lib/cmNoMadeUpNations1520.mjs, under CM_RULES_ROOT, is
+      green whole against the file before this retake, so the round is the
+      only cause. Written with --part=modern,eras,pure --write on the tree
+      itself (remote check r1520-y, line digest-write, 218 lines changed),
+      then run green whole on the same runner.
    2. DIGEST, ERAS (hard). The same for every league of every historic era,
       one career each.
    3. DIGEST, PURE (hard). For every modern and era league: the drop count,
