@@ -1,0 +1,7 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simFreeKickRange exit=0 11s | simFreeKickRange: 3914 original source hashes held; copies, bundles and raw reports retained.
+simTycoonDrawResult exit=1 1s | Node.js v24.22.0
+simTycoonGroundGrowth exit=1 3s | Node.js v24.22.0
+simTycoonMoneyDisplay exit=0 17s | Original source holds: 3910; full copies, executable transforms and raw process records retained at /home/runner/work/ballpark-hero/ballpark-hero/tycoon-money-display-art
+qaFreeKickRange exit=0 24s | Free Kick consumer proof PASSED; artifacts retained at /home/runner/work/ballpark-hero/ballpark-hero/free-kick-range-artifacts/native.
+tsc exit=0 68s | 
