@@ -1,36 +1,36 @@
-name: Analytics1445 public intake
+name: Analytics1445 public readback
 on:
   workflow_dispatch:
   push:
-    branches: [codex/analytics1445-public-intake]
+    branches: [codex/analytics1445-public-readback]
 permissions:
   contents: read
   actions: read
 concurrency:
-  group: analytics1445-public-intake-${{ github.sha }}
+  group: analytics1445-public-readback-${{ github.sha }}
   cancel-in-progress: false
 jobs:
   public_operator:
-    if: github.ref == 'refs/heads/codex/analytics1445-public-intake'
+    if: github.ref == 'refs/heads/codex/analytics1445-public-readback'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     defaults:
       run:
         shell: bash
     env:
-      OPERATOR_MODE: intake
-      READBACK_OUT: analytics1445-public-intake-artifacts
+      OPERATOR_MODE: readback
+      READBACK_OUT: analytics1445-public-readback-artifacts
       SOURCE_SHA: 554a3b18641044ec5164bff9acab4d338237078c
       QUALIFIED_BUILD_SHA: 19c907608a31d0cbd454163286d4a6fda7359137
-      INPUT_RUN_ID: 39686101581
-      INPUT_OPERATOR_SHA: 19c907608a31d0cbd454163286d4a6fda7359137
-      INPUT_ARTIFACT_ID: 12386369039
-      INPUT_ZIP_SHA256: f3cb62f8817ec1538e58a1109e5f7c18d83df1ace624fd8ed2e80f89060a5dbe
-      INPUT_WORKFLOW_NAME: Analytics paused status1445
+      INPUT_RUN_ID: 39690909464
+      INPUT_OPERATOR_SHA: fd03a18fd9d420131cc2f40ba74df1bc59d9efc6
+      INPUT_ARTIFACT_ID: 12387923827
+      INPUT_ZIP_SHA256: bc2a76e51a653673d6b2a34075c13d0cbe0cd767d35a00a2fa4700b5c7681a9d
+      INPUT_WORKFLOW_NAME: Analytics1445 public intake
       EXPECTED_DEPLOYMENT: 8873089e-26a7-4095-b517-fde0ded96092
       OBSERVED_ENTRY: /assets/index-gLwQ_4x3.js
-      ASSET_PINS_JSON: REQUIRED_FINAL_READER_THREE_OBSERVED_ROLES_JSON
-      ASSET_PINS_SHA256: REQUIRED_FINAL_READER_EXACT_JSON_64_HEX
+      ASSET_PINS_JSON: '{"entry":{"path":"/assets/index-gLwQ_4x3.js","sha256":"397d2582fb288332afb32b424237c30e2d004723b9379e6931260ee0de38016b"},"cookie":{"path":"/assets/index-gLwQ_4x3.js","sha256":"397d2582fb288332afb32b424237c30e2d004723b9379e6931260ee0de38016b"},"privacy":{"path":"/assets/PrivacyPolicy-Bvg4J1Jq.js","sha256":"83c7d13894a8fb29a9279dc2bd4e2fab0cce24de91e5b861c9912c30ca1d07a3"}}'
+      ASSET_PINS_SHA256: aa960238c3c7911c31db217b1dc993c72e6419abf0e1ee4b770bf5ef5aeb449f
     steps:
       - uses: actions/checkout@v4
         with:
@@ -423,7 +423,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: analytics1445-public-intake-${{ github.run_id }}-${{ github.run_attempt }}
-          path: analytics1445-public-intake-artifacts/
+          name: analytics1445-public-readback-${{ github.run_id }}-${{ github.run_attempt }}
+          path: analytics1445-public-readback-artifacts/
           if-no-files-found: error
           retention-days: 14
