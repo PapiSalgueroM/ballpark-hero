@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+# Release BO: /soccer-career measured 836.0K on its 836K row on 841ea72f (rBOp-pw); is that the base bc79b526 (the other lane's 1442, 1517, 1518) or Round 1516? weight on the head again, then weight-base on bc79b526 built in /tmp/wb and served on 4174 (r1516-c's weight-base recipe)
+weight: SWEEP_OFFLINE=1 ENGINES=chromium node scripts/sweepWeight.mjs > /tmp/w.log 2>&1; s=$?; grep -E "^ +/(|club-manager|soccer-career|manager-hot-seat|deadline-day) " /tmp/w.log | cut -c1-120; tail -1 /tmp/w.log | cut -c1-200; exit $s
+weight-base: git worktree add /tmp/wb bc79b526 >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/wb/node_modules && (cd /tmp/wb && node_modules/.bin/vite build >/dev/null 2>&1) && (nohup node scripts/lib/hostLikeServer.mjs /tmp/wb/dist 4174 >/dev/null 2>&1 &) && sleep 4 && cd /tmp/wb && SWEEP_OFFLINE=1 ENGINES=chromium BASE=http://localhost:4174 SWEEP_BASE=http://localhost:4174 node scripts/sweepWeight.mjs > /tmp/wbase.log 2>&1; s=$?; grep -E "^ +/(|club-manager|soccer-career|manager-hot-seat|deadline-day) " /tmp/wbase.log | cut -c1-120; tail -1 /tmp/wbase.log | cut -c1-200; exit $s
