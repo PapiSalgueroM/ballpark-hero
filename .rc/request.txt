@@ -1,0 +1,15 @@
+simManagerMatchPlans: node scripts/simManagerMatchPlans.mjs
+simManagerHalftimeLineups: node scripts/simManagerHalftimeLineups.mjs
+simManagerLiveLineups: node scripts/simManagerLiveLineups.mjs
+simCmStoppageTime: node scripts/simCmStoppageTime.mjs
+simCmOwnGoals: node scripts/simCmOwnGoals.mjs
+simCmVar: node scripts/simCmVar.mjs
+simCmVarLedger: node scripts/simCmVarLedger.mjs
+simCmSubs: node scripts/simCmSubs.mjs
+simCmQuickSubs: node scripts/simCmQuickSubs.mjs
+simCmQuickLegs: node scripts/simCmQuickLegs.mjs
+simLiveSimMotion: node scripts/simLiveSimMotion.mjs
+simOwnGoalMotion: node scripts/simOwnGoalMotion.mjs
+simPitchRestartContinuity: node scripts/simPitchRestartContinuity.mjs
+simPress: node scripts/simPress.mjs
+simRoles: node scripts/simRoles.mjs
