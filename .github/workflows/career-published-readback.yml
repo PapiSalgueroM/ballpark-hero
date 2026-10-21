@@ -1,0 +1,201 @@
+name: Public published career readback
+on:
+  workflow_dispatch:
+  push:
+    branches: [codex/career-published-readback]
+permissions:
+  contents: read
+concurrency:
+  group: career-published-readback-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  public_readback:
+    if: github.ref == 'refs/heads/codex/career-published-readback'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        shell: bash
+    env:
+      READBACK_OUT: career-published-readback-artifacts
+      SOURCE_SHA: d256101536e943a84cd8a19f23d84fdfdfbf59f9
+      QUALIFIED_BUILD_SHA: 723638895e13e199949cbcc8919ec8ca3d909a26
+      QUALIFIED_RUN_ID: 39642474925
+      EXPECTED_DEPLOYMENT: 6325bddf-f62e-46e1-ae4a-283c292dc852
+      EXPECTED_ENTRY: index-aECAWOi5.js
+      ASSET_PINS_JSON: '{"entry":{"path":"/assets/index-aECAWOi5.js","sha256":"18b9e4471810a9607b511ad4c7143ad299ba929caaef7d472d02f419bfb14db6"},"court":{"path":"/assets/UsSeasonCentre-B9hnO9-w.js","sha256":"3aff9c561bf4f6cd5efc1a940af190f5416aba4507ef9f80c272ead64b1b1320"},"nbaGuide":{"path":"/assets/nba-xpDpOHBF.js","sha256":"fbea17b2e20f20044976a04f32466b368b3ca906ea7b24a40d5fc416ed5d5bac"},"fight":{"path":"/assets/FightCareer-DkcAnqVm.js","sha256":"d56d4aaa17c2512ff0087e2634d03fd6a69a3f402f8d35c16559dc211c8d8262"}}'
+      ASSET_PINS_SHA256: 45ca342a2ae9fa855ca1769ecfcbfe20c09dcbac4365561e593a2c707d32ee93
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Fail closed on unfilled pins and reuse the approved read-only guard
+        run: |
+          set -euo pipefail
+          mkdir "$READBACK_OUT"
+          node <<'JS'
+          const fs = require('node:fs'), assert = require('node:assert/strict'), crypto = require('node:crypto');
+          const hash = body => crypto.createHash('sha256').update(body).digest('hex');
+          for (const key of ['SOURCE_SHA', 'QUALIFIED_BUILD_SHA']) assert.match(process.env[key], /^[a-f0-9]{40}$/);
+          assert.match(process.env.QUALIFIED_RUN_ID, /^[1-9][0-9]+$/);
+          assert.match(process.env.EXPECTED_DEPLOYMENT, /^[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/);
+          assert.match(process.env.EXPECTED_ENTRY, /^index-[A-Za-z0-9_-]+\.js$/);
+          assert.match(process.env.ASSET_PINS_SHA256, /^[a-f0-9]{64}$/);
+          assert.equal(hash(process.env.ASSET_PINS_JSON), process.env.ASSET_PINS_SHA256);
+          const pins = JSON.parse(process.env.ASSET_PINS_JSON);
+          assert.deepEqual(Object.keys(pins).sort(), ['court', 'entry', 'fight', 'nbaGuide']);
+          for (const row of Object.values(pins)) { assert.deepEqual(Object.keys(row).sort(), ['path', 'sha256']); assert.match(row.path, /^\/assets\/[A-Za-z0-9_.-]+\.js$/); assert.match(row.sha256, /^[a-f0-9]{64}$/); }
+          for (const row of Object.values(pins)) for (const other of Object.values(pins)) if (row.path === other.path) assert.equal(row.sha256, other.sha256);
+          assert.equal(pins.entry.path, '/assets/' + process.env.EXPECTED_ENTRY);
+          const source = fs.readFileSync('.github/workflows/legal-ai-privacy-public-readback.yml', 'utf8');
+          const guardPin = '37d187d3bc4659ebfdda5d010fb157972c4c8e797b4bab2b3fc27d20ddfe15cb';
+          const verifyGuard = value => assert.equal(hash(value), guardPin);
+          verifyGuard(source); const changed = source + '\n'; assert.notEqual(changed, source); assert.throws(() => verifyGuard(changed));
+          const start = '          cat > "$READBACK_OUT/read-only.cjs" <<\'JS\'\n', end = '\n          JS\n';
+          assert.equal(source.split(start).length, 2);
+          const rest = source.split(start)[1], finish = rest.indexOf(end); assert(finish > 0, 'Approved guard heredoc has its closing delimiter');
+          let guard = rest.slice(0, finish).replace(/^          /gm, '');
+          assert(guard.trimEnd().endsWith('module.exports = { ORIGIN, checkedURL };'), 'Extract the complete approved guard and nothing after it');
+          const from = guard.indexOf('const paths = new Set('), to = guard.indexOf('function checkedURL(');
+          assert(from >= 0 && to > from && guard.slice(from, to).includes("addPublic('public')"));
+          const sitemap = fs.readFileSync('public/sitemap.xml', 'utf8');
+          const sitemapRoutes = [...new Set([...sitemap.matchAll(/<loc>https?:\/\/[^/]+([^<]*)<\/loc>/g)].map(m => (m[1] || '/').replace(/\/$/, '') || '/'))].filter(route => route !== '/');
+          const count = Math.min(24, sitemapRoutes.length), chromeSample = Array.from({ length: count }, (_, i) => sitemapRoutes[Math.floor(i * sitemapRoutes.length / count)]);
+          assert.equal(count, 24); assert(chromeSample.every(route => /^\/(?:[a-z0-9-]+\/)*[a-z0-9-]+$/.test(route)));
+          const pages = [...new Set(['/', '/nba-my-career', '/fight-career', ...chromeSample])];
+          assert(!pages.includes('/__career_readback_unlisted'));
+          fs.writeFileSync(process.env.READBACK_OUT + '/audit-allowed-pages.json', JSON.stringify({ audited: ['/', '/nba-my-career', '/fight-career'], chromeSample, allowed: pages }, null, 2));
+          guard = guard.slice(0, from) + 'const paths = new Set(' + JSON.stringify(pages) + ');\nconst allowedAssets = new Set(Object.values(JSON.parse(process.env.ASSET_PINS_JSON)).map(row => row.path));\n' + guard.slice(to);
+          const assetLine = guard.split('\n').filter(line => line.trim().startsWith('const asset = ')); assert.equal(assetLine.length, 1);
+          guard = guard.replace(assetLine[0], '  const asset = allowedAssets.has(url.pathname);');
+          const requestLine = "      const response = await native(input, { ...options, maxRedirects: 0, maxRetries: 0 });";
+          assert.equal(guard.split(requestLine).length, 2);
+          guard = guard.replace(requestLine, "        const fresh = checkedURL(typeof input === 'string' || input instanceof URL ? input : input.url(), method);\n        fresh.searchParams.set('career_public_audit', process.env.GITHUB_RUN_ID + '.' + process.env.GITHUB_RUN_ATTEMPT);\n        const response = await native(fresh.href, { ...options, maxRedirects: 0, maxRetries: 0 });");
+          fs.writeFileSync(process.env.READBACK_OUT + '/read-only.cjs', guard);
+          fs.writeFileSync(process.env.READBACK_OUT + '/preparation.json', JSON.stringify({ guardSourceSha256: guardPin, narrowedGuardSha256: hash(guard), changedGuardRejected: 1, assetPinsSha256: hash(process.env.ASSET_PINS_JSON), qualifiedBuild: process.env.QUALIFIED_BUILD_SHA, qualifiedRun: process.env.QUALIFIED_RUN_ID }, null, 2));
+          JS
+          git fetch --no-tags --depth=1 origin "$SOURCE_SHA" > "$READBACK_OUT/source-fetch.log" 2>&1
+          git fetch --no-tags --depth=1 origin "$QUALIFIED_BUILD_SHA" >> "$READBACK_OUT/source-fetch.log" 2>&1
+          git cat-file -e "$SOURCE_SHA^{commit}"
+          git cat-file -e "$QUALIFIED_BUILD_SHA^{commit}"
+          git rev-parse HEAD > "$READBACK_OUT/operator-head.txt"
+          git rev-parse 'HEAD^{tree}' > "$READBACK_OUT/operator-tree.txt"
+          git diff --exit-code "$SOURCE_SHA" HEAD -- src public scripts supabase package.json package-lock.json > "$READBACK_OUT/published-source-hold.log"
+          git diff --exit-code "$QUALIFIED_BUILD_SHA" "$SOURCE_SHA" -- src scripts supabase package.json package-lock.json ':!src/data/searchKeywords.json' ':!scripts/data/lastmod.json' ':!scripts/data/guideHeadingsFrozen.json' > "$READBACK_OUT/qualified-product-source-hold.log"
+          sha256sum .github/workflows/legal-ai-privacy-public-readback.yml package.json package-lock.json scripts/auditLive.mjs scripts/lib/liveIndexability.mjs public/sitemap.xml > "$READBACK_OUT/source-before.sha256"
+      - name: Isolated request tooling without an app build or browser install
+        run: |
+          set -euo pipefail
+          tools="$RUNNER_TEMP/career-public-request-tools"
+          npm install --prefix "$tools" --no-save --package-lock=false playwright@1.64.0 jsdom@20.0.3 > "$READBACK_OUT/tooling.log" 2>&1
+          test ! -e node_modules
+          mkdir node_modules
+          for package in playwright playwright-core jsdom; do ln -s "$tools/node_modules/$package" "node_modules/$package"; done
+          echo "NODE_PATH=$tools/node_modules" >> "$GITHUB_ENV"
+      - name: Read three published pages and four observed published asset roles
+        run: |
+          set -euo pipefail
+          cat > "$READBACK_OUT/readback.cjs" <<'JS'
+          const fs = require('node:fs'), path = require('node:path'), assert = require('node:assert/strict'), { createHash } = require('node:crypto');
+          const { JSDOM } = require('jsdom'), { request } = require('playwright-core'), { ORIGIN, checkedURL } = require('./read-only.cjs');
+          async function main() {
+          const out = process.env.READBACK_OUT, pins = JSON.parse(process.env.ASSET_PINS_JSON), hash = body => createHash('sha256').update(body).digest('hex');
+          const report = { complete: false, source: process.env.SOURCE_SHA, operator: process.env.GITHUB_SHA, run: process.env.GITHUB_RUN_ID, expectedDeployment: process.env.EXPECTED_DEPLOYMENT, expectedEntry: process.env.EXPECTED_ENTRY, qualificationScope: "Published source and observed asset pins; whole CI binary equality is not asserted", observedPinsProvenance: { run: "39648772244", operator: "396cdd8b3a0a122f475fd8728088fb2a9622bc39", artifact: "12368383269", zipSha256: "794feea4085f7e17cb82b23dec86833d61c9a36513dc3f20e6d2c024d8a865bf" }, preparation: JSON.parse(fs.readFileSync(out + '/preparation.json')), pages: [], assets: [] };
+          const save = (name, body) => fs.writeFileSync(path.join(out, name), body), persist = () => save('readback.json', JSON.stringify(report, null, 2) + '\n');
+          const uuid = '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}';
+          function deploymentId(header) {
+            assert.equal(typeof header, 'string');
+            const match = header.match(new RegExp('^(' + uuid + ')$|^psr2\\.(' + uuid + ')\\.[0-9]{10}\\.[A-Za-z0-9_-]{43}$', 'i'));
+            assert(match, 'Deployment header must have the observed bare or signed format');
+            const id = (match[1] || match[2]).toLowerCase(); assert.equal(id, process.env.EXPECTED_DEPLOYMENT); return id;
+          }
+          const expected = process.env.EXPECTED_DEPLOYMENT, signed = 'psr2.' + expected + '.1793200847.' + 'A'.repeat(43), other = '00000000-0000-0000-0000-000000000000';
+          assert.notEqual(expected, other); assert.equal(deploymentId(expected), expected); assert.equal(deploymentId(signed), expected);
+          for (const changed of [signed.replace('psr2.', 'other.'), signed.slice(0, -1), signed.replace(expected, other)]) { assert.notEqual(changed, signed); assert.throws(() => deploymentId(changed)); }
+          const refused = [[ORIGIN + '/', 'POST'], ['https://example.com/', 'GET'], [ORIGIN + '/functions/v1/account-privacy', 'GET'], ['https://name:password@douknowball.com/', 'GET'], [ORIGIN + '/__career_readback_unlisted', 'GET'], [ORIGIN + '/assets/unlisted.js', 'GET']];
+          assert(!Object.values(pins).some(row => row.path === '/assets/unlisted.js'));
+          for (const [url, method] of refused) assert.throws(() => checkedURL(url, method));
+          const verifyAsset = (body, sha256) => assert.equal(hash(body), sha256), control = Buffer.from('source-owned asset fixture');
+          verifyAsset(control, hash(control)); const changedAsset = Buffer.concat([control, Buffer.from('changed')]); assert.notEqual(hash(changedAsset), hash(control)); assert.throws(() => verifyAsset(changedAsset, hash(control)));
+          report.controls = { deploymentFormats: 2, changedDeploymentsRejected: 3, forbiddenTargetsRejected: refused.length, changedAssetRejected: 1 };
+          const api = await request.newContext({ extraHTTPHeaders: { 'User-Agent': 'DoUKnowBall career publication readback' } });
+          const tag = process.env.GITHUB_RUN_ID + '.' + process.env.GITHUB_RUN_ATTEMPT;
+          async function read(route, method, filename) {
+            const response = await api[method](ORIGIN + route + '?career_readback=' + tag, { timeout: 30000, maxRedirects: 0 });
+            assert.equal(response.status(), 200, route + ': HTTP 200 required');
+            const headers = response.headers(); delete headers['set-cookie'];
+            if (!route.startsWith('/assets/') || headers['x-deployment-id']) deploymentId(headers['x-deployment-id']);
+            save(filename + '.headers.json', JSON.stringify(headers, null, 2) + '\n');
+            const body = method === 'get' ? await response.body() : Buffer.alloc(0); if (method === 'get') save(filename, body);
+            return { headers, body };
+          }
+          try {
+            for (const route of ['/', '/nba-my-career', '/fight-career']) {
+              const name = 'page-' + (route.slice(1) || 'home') + '.html', get = await read(route, 'get', name), head = await read(route, 'head', name + '.head');
+              assert.equal(deploymentId(get.headers['x-deployment-id']), deploymentId(head.headers['x-deployment-id']));
+              const dom = new JSDOM(get.body.toString()), doc = dom.window.document;
+              assert.deepEqual([...doc.querySelectorAll('link[rel="canonical"]')].map(node => node.href), [ORIGIN + route]);
+              const entries = [...doc.querySelectorAll('script[type="module"][src]')].map(node => new URL(node.getAttribute('src'), ORIGIN)).filter(url => /^\/assets\/index-[A-Za-z0-9_-]+\.js$/.test(url.pathname));
+              assert.equal(entries.length, 1); checkedURL(entries[0]); assert.equal(entries[0].pathname, pins.entry.path);
+              doc.querySelectorAll('script,style,template').forEach(node => node.remove()); const text = doc.body.textContent.replace(/\s+/g, ' ').trim();
+              if (route === '/fight-career') { assert(text.includes('A new round arrives every 3 seconds.')); assert(text.includes('Next round pauses and reveals one more')); assert(text.includes('Watching never changes the saved fight.')); }
+              dom.window.close(); report.pages.push({ route, status: 200, canonical: ORIGIN + route, entry: entries[0].pathname, sha256: hash(get.body) }); persist();
+            }
+            const bodies = new Map();
+            for (const row of Object.values(pins)) if (!bodies.has(row.path)) { const got = await read(row.path, 'get', path.basename(row.path)); verifyAsset(got.body, row.sha256); bodies.set(row.path, got.body.toString()); report.assets.push({ path: row.path, sha256: hash(got.body) }); persist(); }
+            assert(bodies.get(pins.court.path).includes('data-nba-court')); assert(bodies.get(pins.court.path).includes('Basketball court recap'));
+            assert(bodies.get(pins.nbaGuide.path).includes('Scores update at the end of each quarter.'));
+            assert(bodies.get(pins.fight.path).includes('data-fight-ring')); assert(bodies.get(pins.fight.path).includes('Boxing ring'));
+            assert.equal(report.pages.length, 3); report.complete = true; console.log('CAREER PUBLIC READBACK COMPLETE: exact deployment, three raw pages and pinned published asset bytes; GET/HEAD only.');
+          } catch (error) { report.error = { name: error.name, message: error.message, stack: error.stack }; throw error; }
+          finally { await api.dispose(); persist(); }
+          }
+          main().catch(error => { console.error(error); process.exitCode = 1; });
+          JS
+          export NODE_OPTIONS="--require=$PWD/$READBACK_OUT/read-only.cjs"
+          status=0; node "$READBACK_OUT/readback.cjs" > "$READBACK_OUT/readback.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$READBACK_OUT/readback.exit"
+          cat "$READBACK_OUT/readback.log"; test "$status" -eq 0
+          grep -Fq 'CAREER PUBLIC READBACK COMPLETE:' "$READBACK_OUT/readback.log"
+      - name: Existing live audit with its measured source-owned sitemap sample
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/$READBACK_OUT/read-only.cjs"
+          status=0
+          timeout --signal=TERM --kill-after=15s 3m node scripts/auditLive.mjs / /nba-my-career /fight-career > "$READBACK_OUT/audit-live.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$READBACK_OUT/audit-live.exit"
+          cat "$READBACK_OUT/audit-live.log"
+          test "$status" -eq 0
+          grep -Eq 'shared chrome measured at [0-9]+ readable characters over 24 pages' "$READBACK_OUT/audit-live.log"
+          ! grep -Fq 'thin rule skipped' "$READBACK_OUT/audit-live.log"
+          grep -Fq '3 of 3 answered cleanly, 0 did not.' "$READBACK_OUT/audit-live.log"
+      - name: Effective chrome-only negative control against the same public source
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/$READBACK_OUT/read-only.cjs"
+          status=0
+          AUDIT_CONTROL=thin timeout --signal=TERM --kill-after=15s 3m node scripts/auditLive.mjs / /nba-my-career /fight-career > "$READBACK_OUT/audit-thin-control.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$READBACK_OUT/audit-thin-control.exit"
+          cat "$READBACK_OUT/audit-thin-control.log"
+          test "$status" -eq 1
+          grep -Fq 'Planting' "$READBACK_OUT/audit-thin-control.log"
+          grep -Fq '(CONTROL plant)' "$READBACK_OUT/audit-thin-control.log"
+          grep -Fq '2 of 3 answered cleanly, 1 did not.' "$READBACK_OUT/audit-thin-control.log"
+      - name: Preserve source and evidence hashes
+        if: always()
+        run: |
+          set -euo pipefail
+          if test -f "$READBACK_OUT/source-before.sha256"; then sha256sum --check "$READBACK_OUT/source-before.sha256" > "$READBACK_OUT/source-hold.log"; fi
+          git diff --exit-code HEAD -- src public scripts supabase package.json package-lock.json .github > "$READBACK_OUT/operator-source-hold.log"
+          (cd "$READBACK_OUT"; find . -type f ! -name evidence.sha256 -print0 | sort -z | xargs -0 sha256sum) > "$READBACK_OUT/evidence.sha256"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: career-published-readback-${{ github.run_id }}-${{ github.run_attempt }}
+          path: career-published-readback-artifacts/
+          if-no-files-found: error
+          retention-days: 14
