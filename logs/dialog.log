@@ -1,0 +1,10 @@
+treeWithoutMerge: 4bd17a49e0569422d2bfabfed6a58d7bde6fd81b, e6290123 without 48bb600a; conflicts kept from e6290123: scripts/qa/soccerNewCareerDialogBrowser.mjs
+SOCCER_NEW_CAREER_PARENT_REF 4bd17a49e0569422d2bfabfed6a58d7bde6fd81b (this head without PR277s merge 48bb600a)
+PASS 320: actual New Career dialog and Cancel
+PASS 390: actual New Career dialog and Cancel
+PASS 430: actual New Career dialog and Cancel
+PASS 1440: actual New Career dialog and Cancel
+New Career dialogs: 4/4 actual Cancel flows.
+New Career controls: 2/2 effective full inverses.
+PASS Soccer New Career dialog browser
+[]
