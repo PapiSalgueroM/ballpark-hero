@@ -1,0 +1,3 @@
+hall-nfl: node scripts/simCareerHall.mjs nfl
+hall-nba: node scripts/simCareerHall.mjs nba
+hall-nfl-basedrift: SIM_CONTROL=basedrift SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs nfl

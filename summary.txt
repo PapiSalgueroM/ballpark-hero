@@ -1,0 +1,3 @@
+hall-nfl-basedrift exit=1 105s | simCareerHall nfl CONTROL basedrift: wanted base red and marks green, red [base], FIRED
+hall-nfl exit=0 290s | simCareerHall nfl: all 34 checks green
+hall-nba exit=0 369s | simCareerHall nba: all 34 checks green
