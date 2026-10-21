@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+walk: node .rc/x/walkMorale.mjs
+weight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+weight-base: git worktree add /tmp/wb 2ab9bef153009a3144970e87755225a458ef0c3b >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/wb/node_modules && (cd /tmp/wb && node_modules/.bin/vite build --logLevel error >/dev/null) && (node scripts/lib/hostLikeServer.mjs /tmp/wb/dist 4190 >/dev/null 2>&1 &) && sleep 4 && SWEEP_OFFLINE=1 BASE=http://localhost:4190 SWEEP_BASE=http://localhost:4190 node scripts/sweepWeight.mjs
+simCareerMoments: node scripts/simCareerMoments.mjs
+simMobileChrome: node scripts/simMobileChrome.mjs
+simRevealScroll: node scripts/simRevealScroll.mjs
+simSoccerOpponentLabels: node scripts/simSoccerOpponentLabels.mjs
