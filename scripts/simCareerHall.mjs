@@ -353,6 +353,35 @@
        Each floor is half the smallest of the six.
      base, median credit: TE 110.5 to 113.3, LB 107.9 to 110.8, CB 107.5 to
        111.9, EDGE 107.1 to 110.2 (bands: the range widened by half).
+     ROUND 1530, 19 (a) READ ON THE FLEET. Those bands are six SINGLE run
+       medians widened by half, and six runs undersold one run's spread.
+       Measured on GitHub runners 2026-10-21 on main 2736e054, 48 measuring
+       runs a sport at 2000 careers (the default seed and SIM_SEED 1 to 47):
+       one run's median, mean and deviation, and the runs outside the band:
+       nfl (about 250 careers a position) TE 111.8 and 1.43 (2 of 48), LB
+       110.3 and 1.32 (2), CB 110.2 and 1.67 (0), EDGE 109.1 and 1.62 (3);
+       nba (about 400) PG 20.72 and 0.30 (0), SG 22.47 and 0.30 (8), SF
+       21.80 and 0.32 (2), PF 20.28 and 0.29 (4), C 18.33 and 0.25 (5). The
+       default seed itself read TE 108.8 against 109.17, so the whole nfl run
+       was red on main on healthy code. Pooled over the check fleet (seeds 6
+       to 29, about 6,000 careers a position in football, 9,600 in
+       basketball), the median against its band, and the nearer edge in
+       errors of a pooled median (a run's deviation over the root of 24):
+       TE 112.05 (109.17 to 114.70, 9.1 errors), LB 109.86 (106.43 to 112.28,
+       9.0), CB 109.97 (105.33 to 114.11, 12.2), EDGE 108.97 (105.55 to
+       111.82, 8.6), PG 20.68 (19.45 to 21.74, 17.0), SG 22.46 (21.83 to
+       22.76, 4.8, the least), SF 21.83 (21.21 to 23.24, 9.4), PF 20.25
+       (19.90 to 21.05, 5.8), C 18.28 (17.97 to 18.71, 6.1). Other fleets
+       agree: the even seeds, the odd seeds and seeds 30 to 47, each pooled,
+       read TE 111.3 to 112.3 and SG 22.38 to 22.49. Seven of football's 192
+       one run readings and 19 of basketball's 240 fell outside their bands.
+       Baseball and hockey band no base.
+     Control basedrift lowers football's TE by 4.5 and basketball's PG by
+       1.6, in memory where 19 (a) reads them. Pooled that is TE 107.55 and PG
+       19.08, 5.5 and 6.0 errors under the band, so the fleet must catch it;
+       one seed alone stays inside the band on 4 of the fleet's 24 seeds (TE)
+       and 3 of 24 (PG), so the old one seed check could miss it. The run
+       prints both counts.
      points paid (the legacy is the finished game's score), median on 1 and
        on 2: nfl 293 to 314 and 348 to 372, nba 348 to 362 and 356 to 368,
        mlb 420 to 434 and 424 to 436, nhl 356 to 372 and 360 to 375.
@@ -586,7 +615,7 @@ if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown SIM_CONTROL ${CONTRO
 /* Control basedrift (Round 1530, section 19 (a)): the base position it moves and by how much, in credit
    points. The size is one a single seed's median can miss and the fleet's pooled median cannot: the
    header's Round 1530 block has the measured numbers behind it. Baseball and hockey band no base. */
-const BASE_DRIFT = { nfl: { pos: 'TE', by: -3.5 }, nba: { pos: 'PG', by: -1.4 } };
+const BASE_DRIFT = { nfl: { pos: 'TE', by: -4.5 }, nba: { pos: 'PG', by: -1.6 } };
 if (CONTROL === 'basedrift' && !BASE_DRIFT[SPORT]) { console.error(`simCareerHall ${SPORT}: basedrift refuses to run, the ledger bands no base position in this sport, so there is nothing to move`); process.exit(2); }
 /* Round 1301. The table a career retiring today is read on, by its name in the
    sport's own file: the last entry of its <SPORT>_LEGACY_WEIGHTS map (the NHL's
@@ -1683,10 +1712,10 @@ console.log(`  17 (d) cap: ${capMiss} of ${careers.length} careers off the resta
    one seed. The band (outcome.baseCredit) is the range of six single run
    medians widened by half its width each side, and six runs undersold the
    spread of one run: at 2000 careers one seed's median wanders past that band
-   on healthy code (nfl TE 108.8 against 109.2 on one run, with the seeds
-   around it near the middle). The fleet's 24 seeds pooled (about 48,000
-   careers) read the median of the position itself, which the six runs were
-   measuring, with a fraction of one run's wander; the header has the numbers.
+   on healthy code (the default seed read nfl TE 108.8 against 109.17 on main
+   2736e054). The fleet's 24 seeds pooled (about 48,000 careers) read the
+   median of the position itself, which the six runs were measuring, with
+   about a fifth of one run's wander; the header has the numbers.
    This run's one seed, and how many of the fleet's seeds alone the band
    would have passed, are printed and judge nothing. A run that plays no
    fleet (a measuring run, or a control aimed at another check) does not
