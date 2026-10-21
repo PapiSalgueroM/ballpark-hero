@@ -1,0 +1,5 @@
+mutProofS1: applied with the mark read as the shield
+journeys 190, steps compared 24273, tree journeys whose save carried worldComps 159, evaluations on the live state 24273, 1177 s
+old saves (written by bc79b526): 830 loaded by both engines, 0 gained a watched Champions League at load, 226 did not, 604 already followed one and kept it, 0 gained a Europa League, 0 against the rule
+proofWorldUclFleet: RED, 2 journeys differ from bc79b526 (of 190)
+proof exit 1, differing steps 2 (2 expected), of them not an Arsenal s2-reload saved bytes line 0 (0 expected)
