@@ -1,0 +1,30 @@
+bindAt: scripts/qa/proveManagerSavedDealsPagingFixed.mjs bound
+bindAt: 6465d9aeac1b -> 5ada8244f19f
+bindAt: 5eb5e035832d -> cdac40e6c5d3
+runProver: p310 at 6a99052786714db51f74d0a027cce6ae7b50f1d6 (release BK bound: 4d7797c0d365 with its pinned bases bound to the joined tree)
+    138|     const next = view.queryByRole('button', { name: 'Next deals' });
+    139|     expect(next !== null, 'The next fee page must expose the remaining…
+       |                                                                                         ^
+    140|     const allFees = fees(log), ownFees = fees(log, career.clubName);
+    141|     expect(names(view)).toEqual(allFees.slice(0, 50));
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ RUN  v3.2.7 /tmp/rp-wt-p310
+
+ ✓ src/test/managerSavedDealsPaging.test.tsx > saved Club Manager deal pages > all retained own deals are reachable in newest-first pages 628ms
+ ✓ src/test/managerSavedDealsPaging.test.tsx > saved Club Manager deal pages > fee pages sort the complete retained list and reset safely 592ms
+ ✓ src/test/managerSavedDealsPaging.test.tsx > saved Club Manager deal pages > all clubs keeps the existing first fifty newest saved deals 58ms
+ ✓ src/test/managerSavedDealsPaging.test.tsx > saved Club Manager deal pages > small own histories keep counterparties loan flags and saved gross fees 157ms
+ ✓ src/test/managerSavedDealsPaging.test.tsx > saved Club Manager deal pages > empty single and fifty-row histories keep their boundary states 350ms
+ ✓ src/test/managerSavedDealsPaging.test.tsx > saved Club Manager deal pages > browsing keeps career ledger feedback callbacks and random stream unchanged 176ms
+
+ Test Files  1 passed (1)
+      Tests  6 passed (6)
+   Start at  21:23:42
+   Duration  4.41s (transform 1.37s, setup 68ms, collect 1.77s, tests 1.97s, environment 285ms, prepare 121ms)
+
+JSON report written to /tmp/rp-out-p310/fixed-proof/restored/units.json
+Saved deals paging fixed:6 normal,2 precise original faults plus4 preserves,6 restored;original baseline raw exact;restored raw exact;source held.
+runProver: p310 exit 0

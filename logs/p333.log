@@ -1,0 +1,17 @@
+bindAt: scripts/qa/proveCareerAppearanceSelection.mjs bound
+bindAt: 775564305e9d -> 52419816f54c
+runProver: p333 at 2f8076ad9c80c6d4e99309e5fc3fe8c1b4cecaac (release BK bound: 99154ea3af1b with its pinned bases bound to the joined tree)
+normal: 40 pass, 0 exact semantic faults
+original-inverse: 0 pass, 40 exact semantic faults
+remove-category: 35 pass, 5 exact semantic faults
+remove-skinTone: 35 pass, 5 exact semantic faults
+remove-hairstyle: 35 pass, 5 exact semantic faults
+remove-hairColor: 35 pass, 5 exact semantic faults
+remove-facialHair: 35 pass, 5 exact semantic faults
+remove-boots: 35 pass, 5 exact semantic faults
+remove-accessory: 35 pass, 5 exact semantic faults
+remove-celebration: 35 pass, 5 exact semantic faults
+restored: 40 pass, 0 exact semantic faults
+related-normal: 11 pass, 0 exact semantic faults
+related-restored: 11 pass, 0 exact semantic faults
+runProver: p333 exit 0
