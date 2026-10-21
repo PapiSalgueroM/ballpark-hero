@@ -46,6 +46,12 @@
  *   SC_ENDINGS_CONTROL=farewell26   R4, a farewell year open from 26 (soccerCareerFarewell.ts): B6 goes red.
  *   SC_ENDINGS_CONTROL=ban          a match fixing ban ends the career: B5 and A go red.
  *   SC_ENDINGS_CONTROL=prison       prison ends the career: B5 and A go red.
+ *   SC_ENDINGS_CONTROL=ped          the failed drug test ends the career after its year out row: B5's drug test
+ *                                   ending and play on checks and A go red.
+ *   SC_ENDINGS_CONTROL=pedoff       the drug test is never failed: B5's "drug test happened" goes red.
+ *   SC_ENDINGS_CONTROL=trial        the trial ends the career after its year out row: B5's trial ending and play
+ *                                   on checks and A go red.
+ *   SC_ENDINGS_CONTROL=trialoff     the trial never comes: B5's "trial happened" and A's trial floor go red.
  *   SC_ENDINGS_CONTROL=notail       a lost phase on a chosen after career goes to the end: C goes red.
  *   SC_ENDINGS_CONTROL=youth        a stray retired screen on a youth career goes to playing: C goes red.
  *   SC_ENDINGS_CONTROL=ovr50        the forced line at an overall of 50 (soccerCareerRetirementReason.ts): B3 edges go red.
@@ -87,6 +93,14 @@ const CONTROLS = {
   farewell26: ["  if (!integer(career.age, 30, 44)) return unavailable(", "  if (!integer(career.age, 26, 44)) return unavailable(", FAREWELL],
   ban: ['    if (s.matchFixBanned > 0) {\n      // Skip season entirely, add empty record', '    if (s.matchFixBanned > 0) {\n      return manualRetire(s);\n      // Skip season entirely, add empty record'],
   prison: ['  if ((s.prisonSeasons ?? 0) > 0) {\n    s.prisonSeasons = (s.prisonSeasons ?? 0) - 1;', '  if ((s.prisonSeasons ?? 0) > 0) {\n    return manualRetire(s);\n    s.prisonSeasons = (s.prisonSeasons ?? 0) - 1;'],
+  /* Round 1519 closing check: the drug test and the trial each get an ending control (after the year out
+     row, so B5 still finds the road and its ending and play on checks are the ones that fire) and a control
+     that takes the road away (so B5's "happened" check is seen to fire). */
+  ped: ['      Object.assign(s, recordMentorSeason(s, s.pendingSummary));\n      return s;\n    }\n    if (s.pedSeasonsRemaining === 0) {',
+    '      Object.assign(s, recordMentorSeason(s, s.pendingSummary));\n      return manualRetire(s);\n    }\n    if (s.pedSeasonsRemaining === 0) {'],
+  pedoff: ['    if (Math.random() < 0.20) {\n      // Failed test!', '    if (Math.random() < 0) {\n      // Failed test!'],
+  trial: ['    s.phase = "newspaper";\n    return s;\n  } else if (heat >= 70 && Math.random() < 0.35) {', '    return manualRetire(s);\n  } else if (heat >= 70 && Math.random() < 0.35) {'],
+  trialoff: ['  if (heat >= 90 && Math.random() < 0.5) {', '  if (heat > 100 && Math.random() < 0.5) {'],
   notail: ['c !== "retire" && s[`${c}State` as const] ? `${c}_season` as const : "retired"', '"retired"'],
   youth: ['?.type === "youth" ? "youth" : "playing";\n  }', '?.type === "youth" ? "playing" : "playing";\n  }'],
   ovr50: ['s.overall < 50 && s.age >= 33 ? ', 's.overall <= 50 && s.age >= 33 ? ', REASON],
