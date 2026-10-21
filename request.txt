@@ -1,0 +1,3 @@
+#!serial
+digest-write: node scripts/simCmLeagueRules.mjs --part=modern,eras,pure --write 2>&1 | tail -6; cp scripts/data/cmLeagueRulesDigest.json "$RC_OUT/cmLeagueRulesDigest.json"; node scripts/simCmLeagueRules.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+appeal-pin: node scripts/simManagerAppealIsolation.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
