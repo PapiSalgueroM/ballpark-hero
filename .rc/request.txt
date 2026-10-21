@@ -1,0 +1,2 @@
+#!playwright
+mainDiff: git worktree add /tmp/m3 554a3b18 >/dev/null 2>&1; cd /tmp/m3 && ln -sf "$OLDPWD/node_modules" node_modules && node_modules/.bin/vite build >/dev/null 2>&1 && (node scripts/lib/hostLikeServer.mjs dist 4181 > /tmp/m3srv.log 2>&1 &) && sleep 3 && BASE=http://127.0.0.1:4181 WIDTHS=390 PLAY_WIDTHS=390 node scripts/playCmDifficulty.mjs 2>&1 | grep -v "^ *at " | grep -E "Take the job|ok:|FAIL|playCmDifficulty" | head -8
