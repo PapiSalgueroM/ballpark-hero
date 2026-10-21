@@ -1,0 +1,1 @@
+allmid: mkdir -p /tmp/fm && for k in 0 1 2 3; do SECTION=fleet ARMS=all TIERS=mid SEEDS=16 SHARD=$k/4 OUT_JSON=/tmp/fm/s$k.json node scripts/simCmTactics.mjs > /tmp/fm/log$k.txt 2>&1 & done; wait; tail -n 2 /tmp/fm/log*.txt; mkdir -p "$RC_OUT/fm" && cp /tmp/fm/*.json "$RC_OUT/fm/"; FOLD=/tmp/fm node scripts/simCmTactics.mjs
