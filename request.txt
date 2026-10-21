@@ -1,0 +1,8 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+units: node_modules/.bin/vitest run src/lib/worldOneOffs.test.ts src/lib/worldNights.test.ts src/lib/clubManagerWorldView.test.ts --testTimeout=300000 --hookTimeout=120000
+appeal: node scripts/simManagerAppealIsolation.mjs
+leaguerules: node scripts/simCmLeagueRules.mjs
+oneoff-s0: ONE_OFF_ONLY=0 node scripts/simOneOffCups.mjs
+norival: node scripts/simNoRivalNames.mjs
+trustcopy: node scripts/simTrustCopy.mjs
+anchors: node scripts/simHarnessAnchors.mjs

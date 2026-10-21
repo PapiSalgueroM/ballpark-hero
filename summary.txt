@@ -1,0 +1,8 @@
+units exit=0 7s |    Duration  6.72s (transform 2.93s, setup 281ms, collect 5.32s, tests 4.75s, environment 1.75s, prepare 730ms)
+appeal exit=0 50s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+oneoff-s0 exit=0 1s | simOneOffCups: green, 591 checks (0 s)
+norival exit=0 15s | No rival product names found. 0 findings.
+trustcopy exit=0 1s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+leaguerules exit=0 72s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+tsc exit=0 85s | 
+anchors exit=0 44s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
