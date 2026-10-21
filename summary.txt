@@ -1,0 +1,6 @@
+h-b exit=0 149s | simCareerForm: green
+h-a exit=0 163s | simCareerForm: green
+h-c exit=1 165s | simCareerForm: RED, 1 failure(s)
+e-a exit=1 150s | simCareerForm: RED, 3 failure(s)
+e-b exit=1 159s | simCareerForm: RED, 3 failure(s)
+e-c exit=1 159s | simCareerForm: RED, 4 failure(s)

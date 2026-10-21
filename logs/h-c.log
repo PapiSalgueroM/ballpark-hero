@@ -1,0 +1,6 @@
+4) the natural fleet (house): the round against the same tree without the morale step, same seeds
+   round     400 careers, 9148 seasons, morale 77.8 as the engine reads it: Ballon d'Or 39.00 per 100 careers, league games 22.36, rating 6.75; legacy GOAT 21.3%, LEGEND 17.8%, GREAT 27.3%, SOLID PRO 18.5%, JOURNEYMAN 15.3%
+   no step   400 careers, 9088 seasons, morale 78.3 as the engine reads it: Ballon d'Or 34.00 per 100 careers, league games 22.07, rating 6.74; legacy GOAT 20.5%, LEGEND 16.0%, GREAT 29.3%, SOLID PRO 18.0%, JOURNEYMAN 16.3%
+   shift: Ballon d'Or 5.00 per 100, league games 0.29, rating 0.00; legacy GOAT 0.8, LEGEND 1.8, GREAT -2.0, SOLID PRO 0.5, JOURNEYMAN -1.0 points
+   FAIL the Ballon d'Or rate moved 5.00 per 100 careers, past 4
+simCareerForm: RED, 1 failure(s)
