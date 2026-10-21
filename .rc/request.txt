@@ -1,0 +1,1 @@
+simCmMatchDay: node scripts/simCmMatchDay.mjs
