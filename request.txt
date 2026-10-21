@@ -1,0 +1,4 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/soccerClubSquad.test.ts src/test/soccerPuskasYear1523.test.ts src/test/soccerCareerDevelopment.test.ts src/test/soccerCareerStoryRole.test.ts src/test/soccerEventDeckIntegrity.test.ts --testTimeout=300000 --hookTimeout=120000
+squad: node scripts/simCareerSquad.mjs
+loan: node scripts/simLoanSpell.mjs

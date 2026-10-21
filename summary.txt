@@ -1,0 +1,4 @@
+vitest exit=1 7s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerStoryRole.test.ts,title=src/test/soccerCareerStoryRole.test.ts > Soccer Career reduced man
+loan exit=0 9s | simLoanSpell: green. The bench has a door now, and the door does not lie.
+tsc exit=0 78s | 
+squad exit=1 293s | simCareerSquad: 2220 checks, 1172 failed

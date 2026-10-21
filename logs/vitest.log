@@ -1,0 +1,140 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/soccerCareerStoryRole.test.ts [2m([22m[2m40 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 176[2mms[22m[39m
+   [32m✓[39m Soccer Career reduced manager role[2m > [22mqueues only one next-year plan without changing completed seasons or drawing randomness[32m 16[2mms[22m[39m
+   [32m✓[39m Soccer Career reduced manager role[2m > [22mmakes the actual reloaded New Manager choice queue its stated consequence[32m 25[2mms[22m[39m
+   [32m✓[39m Soccer Career reduced manager role[2m > [22mkeeps proving yourself as the existing physical boost, without a role penalty[32m 7[2mms[22m[39m
+   [32m✓[39m Soccer Career reduced manager role[2m > [22mrejects an unavailable plan: wrong club[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer Career reduced manager role[2m > [22mrejects an unavailable plan: wrong year[32m 5[2mms[22m[39m
+   [32m✓[39m Soccer Career reduced manager role[2m > [22mrejects an unavailable plan: fractional year[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer Career reduced manager role[2m > [22mrejects an unavailable plan: retired[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer Career reduced manager role[2m > [22mrejects an unavailable plan: loan[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer Career reduced manager role[2m > [22mdoes not put the active plan on an earlier or foreign club squad[32m 3[2mms[22m[39m
+   [32m✓[39m Soccer Career reduced manager role[2m > [22mreduces the actual selection before the existing frozen-out limit (0)[32m 4[2mms[22m[39m
+   [32m✓[39m Soccer Career reduced manager role[2m > [22mreduces the actual selection before the existing frozen-out limit (1)[32m 2[2mms[22m[39m
+[31m   [31m×[31m Soccer Career reduced manager role[2m > [22mshows the same role range and explains it separately from the phone[39m[32m 17[2mms[22m[39m
+[31m     → expected 32 to be 31 // Object.is equality[39m
+   [32m✓[39m Soccer Career reduced manager role[2m > [22mtakes a reduced lower bound below the starter-plan line without changing the old band[32m 3[2mms[22m[39m
+   [32m✓[39m Soccer Career reduced manager role[2m > [22mrecords one served plan, consumes it and keeps older rows untouched after reload[32m 8[2mms[22m[39m
+   [32m✓[39m Soccer Career reduced manager role[2m > [22mends an interrupted year without carrying the penalty ({"apps":0})[32m 3[2mms[22m[39m
+   [32m✓[39m Soccer Career reduced manager role[2m > [22mends an interrupted year without carrying the penalty ({"injurySevere":true})[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer Career reduced manager role[2m > [22mends an interrupted year without carrying the penalty ({"club":"BANNED","apps":0})[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer Career reduced manager role[2m > [22mends an interrupted year without carrying the penalty ({"club":"BANNED (PED)","apps":0})[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer Career reduced manager role[2m > [22mends an interrupted year without carrying the penalty ({"club":"PRISON","apps":0})[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer Career reduced manager role[2m > [22mends an interrupted year without carrying the penalty ({"club":"CONVICTED","apps":0})[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer Career reduced manager role[2m > [22mkeeps an earlier year from consuming a future plan and clears a stale plan without inventing an outcome[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer Career reduced manager role[2m > [22mdoes not display a forged served outcome ({"club":"Another Club"})[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer Career reduced manager role[2m > [22mdoes not display a forged served outcome ({"type":"youth"})[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer Career reduced manager role[2m > [22mdoes not display a forged served outcome ({"apps":0})[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer Career reduced manager role[2m > [22mdoes not display a forged served outcome ({"injurySevere":true})[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer Career reduced manager role[2m > [22mcancels actual transfers and loans but keeps same-club extensions[32m 5[2mms[22m[39m
+   [32m✓[39m Soccer Career personal milestone news[2m > [22muses an actual crossing of 100, including an overshoot[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer Career personal milestone news[2m > [22muses an actual crossing of 200, including an overshoot[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer Career personal milestone news[2m > [22muses an actual crossing of 300, including an overshoot[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer Career personal milestone news[2m > [22muses an actual crossing of 500, including an overshoot[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer Career personal milestone news[2m > [22muses the highest crossed mark and excludes academy, jobs, absent years and future rows[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer Career personal milestone news[2m > [22mdoes not repeat an already passed mark or make up missing/ambiguous history[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer Career personal milestone news[2m > [22muses the drawn performance story paper while preserving the critic, input and random stream[32m 13[2mms[22m[39m
+   [32m✓[39m Soccer Career personal milestone news[2m > [22muses an exact senior mark in the truthful legacy Recorded Career Goal Tally slot[32m 7[2mms[22m[39m
+   [32m✓[39m Soccer Career personal milestone news[2m > [22muses an exact senior mark in the truthful legacy Saved Career Goal Total slot[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer Career personal milestone news[2m > [22mpreserves a full critic and key story pair (Won an award)[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer Career personal milestone news[2m > [22mpreserves a full critic and key story pair (GUILTY: prison)[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer Career personal milestone news[2m > [22mpreserves a full critic and key story pair (DONE DEAL: moved clubs)[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer Career personal milestone news[2m > [22mpreserves a full critic and key story pair (Ballon result)[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer Career personal milestone news[2m > [22mcan use spare space without changing an existing key story[32m 4[2mms[22m[39m
+ [31m❯[39m src/test/soccerCareerDevelopment.test.ts [2m([22m[2m36 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 254[2mms[22m[39m
+   [32m✓[39m Soccer Career development selection[2m > [22muses the exact saved rating boundary 7.6[32m 8[2mms[22m[39m
+   [32m✓[39m Soccer Career development selection[2m > [22muses the exact saved rating boundary 10[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer Career development selection[2m > [22muses the exact saved rating boundary 6.4[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer Career development selection[2m > [22muses the exact saved rating boundary 0[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer Career development selection[2m > [22muses the exact saved rating boundary 7.599[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer Career development selection[2m > [22muses the exact saved rating boundary 6.401[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer Career development selection[2m > [22mleaves unavailable or ineligible records neutral ({})[32m 3[2mms[22m[39m
+   [32m✓[39m Soccer Career development selection[2m > [22mleaves unavailable or ineligible records neutral ({"leagueApps":9})[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer Career development selection[2m > [22mleaves unavailable or ineligible records neutral ({"leagueApps":39})[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer Career development selection[2m > [22mleaves unavailable or ineligible records neutral ({"leagueApps":10.5})[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer Career development selection[2m > [22mleaves unavailable or ineligible records neutral ({"rating":null})[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer Career development selection[2m > [22mleaves unavailable or ineligible records neutral ({"rating":null})[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer Career development selection[2m > [22mleaves unavailable or ineligible records neutral ({"rating":-0.1})[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer Career development selection[2m > [22mleaves unavailable or ineligible records neutral ({"rating":10.1})[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer Career development selection[2m > [22mleaves unavailable or ineligible records neutral ({"type":"youth"})[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer Career development selection[2m > [22mleaves unavailable or ineligible records neutral ({"type":"manager"})[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer Career development selection[2m > [22mleaves unavailable or ineligible records neutral ({"club":"Other Club"})[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer Career development selection[2m > [22muses ten and thirty-eight league appearances inclusively[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer Career development selection[2m > [22mrequires the exact prior year and never falls back to an older qualifying row[32m 4[2mms[22m[39m
+   [32m✓[39m Soccer Career development selection[2m > [22mexcludes every saved year-out marker even with plausible stats[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer Career development selection[2m > [22mpreserves all input fields and draws no randomness[32m 9[2mms[22m[39m
+[31m   [31m×[31m Soccer Career development selection[2m > [22mquotes the same form swing and freeze order without changing the base role[39m[32m 18[2mms[22m[39m
+[31m     → expected 36 to be 35 // Object.is equality[39m
+   [32m✓[39m Soccer Career preseason preparation[2m > [22mholds one next-year club plan without immediate growth or input mutation[32m 8[2mms[22m[39m
+   [32m✓[39m Soccer Career preseason preparation[2m > [22mrejects choices outside playing and invalid club or year bindings[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer Career preseason preparation[2m > [22muses the exact workload risk deltas without drawing randomness[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer Career preseason preparation[2m > [22mmaps every playable position to its promised primary skill[32m 0[2mms[22m[39m
+   [32m✓[39m Soccer Career preseason preparation[2m > [22mmodifies only the primary skill once, retaining growth caps and queued training[32m 48[2mms[22m[39m
+   [32m✓[39m Soccer Career preseason preparation[2m > [22mrecords interrupted years without developing or banking an unused plan[32m 24[2mms[22m[39m
+   [32m✓[39m Soccer Career preseason preparation[2m > [22mexpires foreign club or year targets without claiming a completed season[32m 16[2mms[22m[39m
+   [32m✓[39m Soccer Career generated academy mentorship[2m > [22mcreates one deterministic fictional player without a main random draw[32m 11[2mms[22m[39m
+   [32m✓[39m Soccer Career generated academy mentorship[2m > [22mcredits only an actual appended senior row and never the same year twice[32m 19[2mms[22m[39m
+   [32m✓[39m Soccer Career generated academy mentorship[2m > [22mgraduates after three qualifying saved years and retains the finished history[32m 9[2mms[22m[39m
+   [32m✓[39m Soccer Career generated academy mentorship[2m > [22mpauses every interruption while chronological age and saved history advance[32m 7[2mms[22m[39m
+   [32m✓[39m Soccer Career generated academy mentorship[2m > [22mresumes progress after a pause without inventing a credited year[32m 5[2mms[22m[39m
+   [32m✓[39m Soccer Career generated academy mentorship[2m > [22mends immediately on a club move without erasing history or mutating the input[32m 5[2mms[22m[39m
+   [32m✓[39m Soccer Career generated academy mentorship[2m > [22mends active and paused mentoring at retirement without inventing a season[32m 15[2mms[22m[39m
+ [32m✓[39m src/test/soccerEventDeckIntegrity.test.ts [2m([22m[2m21 tests[22m[2m)[22m[32m 66[2mms[22m[39m
+ [32m✓[39m src/test/soccerPuskasYear1523.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 37[2mms[22m[39m
+ [32m✓[39m src/lib/soccerClubSquad.test.ts [2m([22m[2m36 tests[22m[2m)[22m[33m 2480[2mms[22m[39m
+   [33m[2m✓[22m[39m the real squad readers, recorded before Round 1115 touched them[2m > [22mevery real depth chart is what it was [33m 362[2mms[22m[39m
+   [33m[2m✓[22m[39m the living squad[2m > [22mnames the right man as the last one in ahead of him: never himself, always the lowest of his line in the eleven [33m 1057[2mms[22m[39m
+   [33m[2m✓[22m[39m the sheet does not argue with itself[2m > [22mnumbers his own line with him counted on a sheet by role [33m 342[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerCareerDevelopment.test.ts[2m > [22mSoccer Career development selection[2m > [22mquotes the same form swing and freeze order without changing the base role
+[31m[1mAssertionError[22m: expected 36 to be 35 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 35[39m
+[31m+ 36[39m
+
+[36m [2m❯[22m src/test/soccerCareerDevelopment.test.ts:[2m71:30[22m[39m
+    [90m 69| [39m      c[33m.[39mfrozenOut [33m=[39m frozenOut[33m;[39m
+    [90m 70| [39m      const trust = managerTrust(c, at), raw = Math.max(0, Math.min(38…
+    [90m 71| [39m      expect(trust.expected).toBe(frozenOut ? Math.min(8, Math.round(r…
+    [90m   | [39m                             [31m^[39m
+    [90m 72| [39m      [34mexpect[39m(trust[33m.[39minPlans)[33m.[39m[34mtoBe[39m([33m![39mfrozenOut [33m&&[39m trust[33m.[39mband[33m.[39mmin [33m>=[39m [34m20[39m)[33m;[39m
+    [90m 73| [39m      [34mexpect[39m([34mplanLine[39m(trust))[33m.[39m[34mtoContain[39m([32m'league'[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerCareerStoryRole.test.ts[2m > [22mSoccer Career reduced manager role[2m > [22mshows the same role range and explains it separately from the phone
+[31m[1mAssertionError[22m: expected 32 to be 31 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 31[39m
+[31m+ 32[39m
+
+[36m [2m❯[22m src/test/soccerCareerStoryRole.test.ts:[2m96:28[22m[39m
+    [90m 94| [39m       oracle adds it too. The role still takes exactly four off whate…
+    [90m 95| [39m    const expected = Math.max(0, Math.min(38, (trust.band.min + trust.…
+    [90m 96| [39m    [34mexpect[39m(trust[33m.[39mexpected)[33m.[39m[34mtoBe[39m(expected)[33m;[39m
+    [90m   | [39m                           [31m^[39m
+    [90m 97| [39m    [34mexpect[39m(trust[33m.[39mrole)[33m.[39m[34mtoEqual[39m(c[33m.[39mreducedRole)[33m;[39m
+    [90m 98| [39m    expect(planLine(trust)).toContain(`${Math.max(0, Math.min(38, trus…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m3 passed[39m[22m[90m (5)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m134 passed[39m[22m[90m (136)[39m
+[2m   Start at [22m 22:20:31
+[2m   Duration [22m 6.85s[2m (transform 2.52s, setup 638ms, collect 8.50s, tests 3.01s, environment 3.82s, prepare 1.24s)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerDevelopment.test.ts,title=src/test/soccerCareerDevelopment.test.ts > Soccer Career development selection > quotes the same form swing and freeze order without changing the base role,line=71,column=30::AssertionError: expected 36 to be 35 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 35%0A+ 36%0A%0A ❯ src/test/soccerCareerDevelopment.test.ts:71:30%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerStoryRole.test.ts,title=src/test/soccerCareerStoryRole.test.ts > Soccer Career reduced manager role > shows the same role range and explains it separately from the phone,line=96,column=28::AssertionError: expected 32 to be 31 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 31%0A+ 32%0A%0A ❯ src/test/soccerCareerStoryRole.test.ts:96:28%0A%0A
