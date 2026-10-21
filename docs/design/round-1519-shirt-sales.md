@@ -1,0 +1,19 @@
+# Round 1519: Club Manager shirt sales
+
+Anthony forwarded a request for jersey-sales revenue and authorized continued game improvements. Add passive simulated shirt sales to the existing Finances desk. Players should see gross sales, production cost and net money that reaches their transfer kitty. This is an existing career economy feature, with no new game, scoring system, daily mode or shop navigation.
+
+Use existing era-aware club stature and the displayed derived fanMeter. The stored books.fanMood remains gate demand only. Select fictional rates from a bounded remote calibration of current game finances; do not present them as real club merchandise data. No named-player popularity, kit images, real brands, sports inputs, random draws, wall-clock income, price controls or sponsor changes.
+
+A shirt ledger is optional on the existing v1 season books. Old saves keep all current books and receive no historical payment. One existing charged weekly tick records gross and cost and pays only net. Retain tiny earnings as integer pennies; cash settles in the existing 0.01m budget quantum, with pending net carried to the same club's next season. A club move leaves that club's pending money behind. Loading, rendering, projection and season rollover never pay. Night entries are not additional charged weeks. Do not deduplicate using state.week.
+
+The main projection has one net-paid income row with kitty:true. Gross and cost are an explanatory breakdown, never extra cash entries or board-covered costs. Future projections use today's demand and only remaining charged weeks, explicitly labelled estimates. Malformed optional retail data must preserve valid base books and budget, suppress uncertain payment and show unavailable totals. Do not reset an old valid ledger because it has no retail block.
+
+Use the existing finance panel, currency setting and compact layout. Explain the rule and a hand-worked arithmetic example before a player needs to advance. Add the narrow help explanation and a final What's New entry. Keep controls, focus, instructions, no-scroll behavior and the full disclaimer. Check 360/390/432px phones and reduced motion. No new external assets or dependencies.
+
+Owned product paths after the claim: src/lib/clubManagerFinances.ts, src/components/club-manager/FinancesScreen.tsx, only the commercial explanation in src/components/club-manager/ClubManagerHelp.tsx, the matching commercial guide in src/data/gameContent/clubManagement.ts and a final release entry in src/pages/WhatsNew.tsx. Own new outcome tests, measurement/sim/browser proof and workflow. Existing finance harnesses may receive only explicit new-source accounting updates after their unchanged baseline output is retained. Keep every other assertion, control and cap.
+
+Hold the CM engine, hook, page, calendar, fan-meter implementation, hub implementation, real rosters/eras, match results and random stream unchanged. I1516/BO and worldOneOffs.ts, worldNights.ts, simOneOffCups.mjs and playOneOffCups.mjs remain protected. Claim is confined to this finance addition and its proof, not the other CM reports.
+
+Success means actual original outcome assertions fail before product code, exact accounting and old-save/lifecycle tests pass afterwards, effective faults are rejected, baseline comparisons identify intended economy changes, real types/build/readers and all14 unchanged caps pass, and saved phone images are reviewed. All app execution runs on GitHub Actions, offline. No local Node/npm/app parsing, build, tests, sims or browser. No production user, AI/report or database probe. Publish only qualified outputs through a PR and exact host-source/public readback gates.
+
+The broader old audit and Round1441 preservation blocker remain separate and unwaived. This design does not claim implementation or release.

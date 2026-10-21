@@ -1,3 +1,7 @@
+## 2026-10-21: Round 1519 claimed, shirt-sales finance
+
+Root is adding simulated shirt-sales income in the existing Club Manager finance module. Product is unchanged at this claim. Original regression and measured current finances precede rates and implementation. No CM engine, world, BO or real data work is claimed. [Design](design/round-1519-shirt-sales.md), [implementation plan](superpowers/plans/2026-10-21-cm-shirt-sales.md). Career visuals and legal updates below remain live.
+
 ## 2026-10-21: Rounds 1517 and 1518 LIVE
 
 NBA My Career now offers Watch games and an original court in its existing lazy Season Center. Home/away labels, quarter totals, the current score and a played-only hot-quarter cue read revealed saved events. Fight Career now draws an original ring with current-round tactics, landed counts and condition, plus Pause, Play, Next round and Skip. New rounds wait 3000ms. Earlier scorecards are compact, final verdicts stay hidden until completion, and a completed TKO winner stays upright. These figures illustrate aggregate events, not exact possessions or punches. Instructions and worked examples remain available.
