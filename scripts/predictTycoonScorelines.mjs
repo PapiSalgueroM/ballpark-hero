@@ -402,3 +402,82 @@ for (const { sp, from } of SPS) {
   console.log(`   SP ${sp}: knob 3 on the base trajectories picks AE ${best.ae} (pace ${pct(best.w)}% over 15 to 120, nearest 65, ties to the smaller AE, the harder ladder; critic item 18). Step 2a measures it on the head.`);
 }
 out.aePick = AE_PICK;
+
+/* ---------- G. pace's titles per season, minutes 15 to 240 ---------- */
+console.log('\nG) pace titles per season over minutes 15 to 240 (target 0.40 to 0.90), each base season priced at its mean Squad, at the AE part F picked');
+out.titles = {};
+const CAL = BASE.policies.pace.filter(r => r.seed <= 20);
+for (const { sp } of SPS) {
+  const ae = AE_PICK[sp]; const R = ladder(sp, ae, r0For(sp));
+  const shares = []; let baseTitles = 0;
+  for (const r of CAL) for (const [t, div, pos, , sq] of r.seasons) if (t >= 15 && t < 240) { shares.push(titleAt(div, sp * sq - R[div])); if (pos === 1) baseTitles += 1; }
+  const mean = shares.reduce((a, b) => a + b, 0) / shares.length;
+  out.titles[sp] = { ae, mean, seasons: shares.length, base: baseTitles / shares.length };
+  console.log(`   SP ${sp} AE ${ae}: predicted ${mean.toFixed(2)} titles a season over ${shares.length} base seasons (base: ${(baseTitles / shares.length).toFixed(2)}); ladder R0 to R9 = ${R.join(' ')}`);
+}
+
+/* ---------- H. milestones, badges and the first Sell up (critic item 20) ---------- */
+/** pace's watched matches in order: the first twelve as recorded, the rest
+ *  expanded from each season at its mean Squad and the rivals' mean offset. */
+function matchesOf(r) {
+  const seq = [];
+  for (const [t, div, , n, sq] of r.seasons) for (let i = 0; i < n; i += 1) seq.push({ t: t - (n - 1 - i) * 2.1, div, sq, off: 0 });
+  r.early.forEach(([t, div, sq, ok], i) => { if (seq[i]) seq[i] = { t, div, sq, off: ok / 1e5 }; });
+  return seq;
+}
+/** The minute the expected count first reaches `n`, or null. */
+const crossing = (seq, per, n) => { let s = 0; for (const m of seq) { s += per(m); if (s >= n) return m.t; } return null; };
+/** The minute the chance of a run of k wins (draws keep it, a loss ends it) first reaches one half. */
+function streakMedian(seq, k) {
+  let p = new Array(k + 1).fill(0); p[0] = 1;
+  for (const m of seq) {
+    const q = new Array(k + 1).fill(0); q[k] = p[k];
+    for (let s = 0; s < k; s += 1) { q[s + 1] += p[s] * m.r.w; q[s] += p[s] * m.r.d; q[0] += p[s] * m.r.l; }
+    p = q;
+    if (p[k] >= 0.5) return m.t;
+  }
+  return null;
+}
+const ID_RULE = { goals25: ['g', 25], ag25: ['g', 25], ag100: ['g', 100], ag500: ['g', 500], ag2000: ['g', 2000], win1: ['w', 1], aw1: ['w', 1], win10: ['w', 10], aw10: ['w', 10], win50: ['w', 50], aw50: ['w', 50], aw150: ['w', 150], aw400: ['w', 400], streak5: ['s', 5], as5: ['s', 5], as10: ['s', 10] };
+console.log('\nH) Minutes to each goal, win and streak milestone and badge for pace (median of calibration seeds; expected count crossings and the streak chance reaching one half)');
+out.firsts = {};
+for (const { sp } of SPS) {
+  const ae = AE_PICK[sp]; const R = ladder(sp, ae, r0For(sp));
+  const seqs = CAL.map(r => matchesOf(r).map(m => ({ ...m, r: matchAt(sp * m.sq - R[m.div] - m.off * OFF) })));
+  const rows = [];
+  for (const [id, [kind, n]] of Object.entries(ID_RULE)) {
+    const head = median(seqs.map(seq => (kind === 'g' ? crossing(seq, m => m.r.lu, n) : kind === 'w' ? crossing(seq, m => m.r.w, n) : streakMedian(seq, n)) ?? Infinity));
+    const base = median(CAL.map(r => r.firsts?.[id] ?? Infinity));
+    rows.push(`${id} ${f2(base)} -> ${Number.isFinite(head) ? f2(head) : 'not within 300'}`);
+    out.firsts[`${sp}|${id}`] = { base, head };
+  }
+  /* First Sell up, first order: the money rate scales by the streak multiplier
+     (income and the taps that ride it, about 3.1 seconds of income a second for
+     the bot) plus the bonuses in seconds of income; no compounding through
+     earlier purchases, which only the head run measures. Base streak on a timer
+     club equals its match count. Base bonus share bounded by 0 and 4 percent. */
+  const ks = CAL.map((r, i) => {
+    const seq = seqs[i].filter(m => m.t <= r.sellUp);
+    let p = new Array(11).fill(0); p[0] = 1; let lo = 0; let hi = 0;
+    seq.forEach((m, j) => {
+      const e = p.reduce((a, x, s) => a + x * s, 0);
+      const smH = 1 + 0.06 * e; const smB = 1 + 0.06 * Math.min(j, 10);
+      const bH = (5 * m.r.lu + 20 * m.r.w) / 126;
+      lo += (smH / smB) * (3.1 + bH) / (3.1 + 0.04); hi += (smH / smB) * (3.1 + bH) / 3.1;
+      const q = new Array(11).fill(0);
+      for (let s = 0; s <= 10; s += 1) { q[Math.min(10, s + 1)] += p[s] * m.r.w; q[s] += p[s] * m.r.d; q[0] += p[s] * m.r.l; }
+      p = q;
+    });
+    return { lo: lo / seq.length, hi: hi / seq.length, sell: r.sellUp };
+  });
+  const sellLo = median(ks.map(k => k.sell / k.hi)); const sellHi = median(ks.map(k => k.sell / k.lo));
+  out.firsts[`${sp}|sellUp`] = { base: median(CAL.map(r => r.sellUp)), head: [sellLo, sellHi] };
+  console.log(`   SP ${sp} AE ${ae}: ${rows.join('; ')}`);
+  console.log(`     first Sell up: base ${f2(median(CAL.map(r => r.sellUp)))} min; first order head ${f2(sellLo)} to ${f2(sellHi)} min (rate factor ${f2(median(ks.map(k => k.lo)))} to ${f2(median(ks.map(k => k.hi)))})`);
+}
+
+const OUTFILE = arg('--json');
+if (OUTFILE) fs.writeFileSync(OUTFILE, JSON.stringify(out));
+if (process.env.RC_OUT) fs.writeFileSync(path.join(process.env.RC_OUT, 'predicted.json'), JSON.stringify(out));
+fs.rmSync(tmp, { recursive: true, force: true });
+console.log('\npredictTycoonScorelines: done (predictions, not measurements; step 2a measures the head)');
