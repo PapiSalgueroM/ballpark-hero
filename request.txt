@@ -1,0 +1,8 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-cm: node_modules/.bin/vitest run src/lib/clubManager src/test/clubManager src/test/cm --testTimeout=300000 --hookTimeout=120000 2>&1 | tail -8; exit ${PIPESTATUS[0]}
+simCmMadeUpNations: node scripts/simCmMadeUpNations.mjs
+simCmMadeUpNations-base: git worktree add -q /tmp/base bc79b526 && BASE_ROOT=/tmp/base node scripts/simCmMadeUpNations.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simManagerAppealIsolation: node scripts/simManagerAppealIsolation.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+simBoardAsks: node scripts/simBoardAsks.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs

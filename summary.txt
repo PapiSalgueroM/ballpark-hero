@@ -1,0 +1,8 @@
+tsc exit=0 127s | 
+simCmMadeUpNations exit=0 160s | simCmMadeUpNations: green. Made up men carry a country of their own, drawn and kept honestly.
+vitest-cm exit=0 164s |    Duration  163.09s (transform 7.89s, setup 4.87s, collect 39.26s, tests 314.31s, environment 31.42s, prepare 7.18s)
+simManagerAppealIsolation exit=0 48s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+simCmLeagueRules exit=0 66s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+simNoRivalNames exit=0 15s | No rival product names found. 0 findings.
+simCmMadeUpNations-base exit=0 129s | simCmMadeUpNations: green. Made up men carry a country of their own, drawn and kept honestly.
+simBoardAsks exit=0 49s | simBoardAsks: green. Every ask a board makes can be met, and nobody real is quoted.
