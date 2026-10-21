@@ -50,7 +50,7 @@ jobs:
           set -euo pipefail
           export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
           export SIM_OFFLINE_RECEIPT="$PWD/legal-privacy-artifacts/unit.transport"
-          node_modules/.bin/vitest run src/lib/accountPrivacy.test.ts --maxWorkers=1 --minWorkers=1 2>&1 | tee legal-privacy-artifacts/account-privacy-unit.log
+          node_modules/.bin/vitest run --config vitest.account-privacy.config.ts --maxWorkers=1 --minWorkers=1 2>&1 | tee legal-privacy-artifacts/account-privacy-unit.log
           node_modules/.bin/vitest run src/test/consentPurposeGates.test.ts src/test/consentPrivacy1442.test.ts --maxWorkers=1 --minWorkers=1 2>&1 | tee legal-privacy-artifacts/consent-unit.log
           node_modules/.bin/vitest run src/test/cookieConsentStorage.test.tsx src/test/helpConsentFocus.test.tsx src/test/helpDialogFocus.test.tsx src/test/safeStorage.test.ts src/test/safeStorageQuota.test.ts src/test/freshBuildBlockedStorage.test.ts --maxWorkers=1 --minWorkers=1 2>&1 | tee legal-privacy-artifacts/inherited-unit.log
       - name: Isolated browser and font tooling
