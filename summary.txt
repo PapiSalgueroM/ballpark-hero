@@ -1,0 +1,7 @@
+hall-nba-plantbase exit=2 0s | simCareerHall nba CONTROL plantbase: REFUSED, its string is not in the source (not a FIRED)
+hall-nfl-nobase exit=1 4s | simCareerHall nfl CONTROL nobase: wanted base red, red [v2replay,v3replay,base], FIRED
+hall-nfl-plantbase exit=1 4s | simCareerHall nfl CONTROL plantbase: wanted base red, red [v2replay,v3replay,base], FIRED
+hall-mlb-basedrift exit=2 0s | simCareerHall mlb: basedrift refuses to run, the ledger bands no base position in this sport, so there is nothing to move
+hall-mlb-plantbase exit=1 4s | simCareerHall mlb CONTROL plantbase: wanted base red, red [v2replay,v3replay,base,anchors], FIRED
+hall-nhl-plantbase exit=1 2s | simCareerHall nhl CONTROL plantbase: wanted base red, red [v3replay,base,words,hallshare], FIRED
+hall-nfl-statsup exit=1 38s | simCareerHall nfl CONTROL statsup: wanted marks red, red [marks], FIRED
