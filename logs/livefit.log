@@ -1,0 +1,3 @@
+playLiveMatchFit: seed 3208792607 (the walk's own, from its file name). Replay this run with: LIVE_FIT_SEED=3208792607 node scripts/playLiveMatchFit.mjs
+  FAIL: the walk stopped: no save on disk after taking the job
+playLiveMatchFit: 1 failure.

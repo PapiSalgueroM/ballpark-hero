@@ -1,0 +1,7 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+md-walk exit=0 180s | playCmMatchDay: green. 15 walks over 4 saves, every match day screen home side first, whole names on the timeline, a 44 px toggle, the page never moved
+md-walk-ctl exit=0 34s | controls (each must be 1): swap=1 cut=1 jump=1 fullname=1
+livefit exit=1 17s | playLiveMatchFit: 1 failure.
+livefit-ctl exit=1 34s | controls (each must be 1): widelabels=3 digits=3
+hub exit=1 112s | playCmHubLanding: 1 failure(s) (A 8 pass 0 fail, B 63 pass 1 fail, C 112 pass 0 fail, E 65 pass 0 fail, F 9 pass 0 fail)
+fixtures exit=0 93s | playCmLeagueFixtures: green. 6 journeys (EFL Championship, La Liga, Bundesliga at 390 and 1280), one with its list three seconds late and 7 of the review's (two takeovers

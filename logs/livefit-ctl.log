@@ -1,0 +1,3 @@
+widelabels: last: playLiveMatchFit: control widelabels did NOT behave: 1 failures, 0 on its own line, red sections 0, 0 label nodes touched.
+digits: last: playLiveMatchFit: control digits did NOT behave: 1 failures, 0 on its own line, red sections 0, 0 label nodes touched.
+controls (each must be 1): widelabels=3 digits=3
