@@ -1,0 +1,3 @@
+c-flat: CM_TACTICS_CONTROL=flat TIERS=mid SEEDS=4 PAR=1 node scripts/simCmTactics.mjs
+c-helpwords: CM_TACTICS_CONTROL=helpwords node scripts/simCmTactics.mjs
+quick: SECTION=table,styles,balanced node scripts/simCmTactics.mjs
