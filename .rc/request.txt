@@ -1,0 +1,9 @@
+simCareerKeepPlaying: node scripts/simCareerKeepPlaying.mjs
+simCareerAwardsNight: node scripts/simCareerAwardsNight.mjs
+simSoccerDeck: node scripts/simSoccerDeck.mjs
+simCareerNoDeadEnd: node scripts/simCareerNoDeadEnd.mjs
+simSoccerCareer: node scripts/simSoccerCareer.mjs
+simSoccerFarewell: node scripts/simSoccerFarewell.mjs
+simRetirementToManager: node scripts/simRetirementToManager.mjs
+simCareerMoneyAfterRetirement: node scripts/simCareerMoneyAfterRetirement.mjs
+simSoccerCareerSaveRecovery: node scripts/simSoccerCareerSaveRecovery.mjs
