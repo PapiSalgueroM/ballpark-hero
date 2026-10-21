@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+walk1519: node scripts/playSoccerCareerEndings.mjs
+sweepWeight-head: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+weight-base: git worktree add -f .rcbase bc79b526 >/dev/null 2>&1 && (cd .rcbase && ../node_modules/.bin/vite build >/dev/null 2>&1) && (node scripts/lib/hostLikeServer.mjs .rcbase/dist 4180 >/dev/null 2>&1 &) && sleep 4 && SWEEP_OFFLINE=1 BASE=http://localhost:4180 SWEEP_BASE=http://localhost:4180 node scripts/sweepWeight.mjs; echo "weight-base done"; exit 0
