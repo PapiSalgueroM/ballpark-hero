@@ -18,6 +18,7 @@ env:
 
 jobs:
   original_outcomes:
+    if: github.ref == 'refs/heads/codex/cm-shirt-sales-red'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     defaults:
@@ -92,6 +93,7 @@ jobs:
           retention-days: 14
 
   existing_finance_baseline:
+    if: github.ref == 'refs/heads/codex/cm-shirt-sales-red'
     runs-on: ubuntu-latest
     timeout-minutes: 35
     defaults:
@@ -143,6 +145,7 @@ jobs:
           retention-days: 14
 
   rate_measurement:
+    if: github.ref == 'refs/heads/codex/cm-shirt-sales-red'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     defaults:
@@ -196,6 +199,494 @@ jobs:
         if: always()
         with:
           name: shirt-sales-measurement-${{ github.run_id }}-${{ github.run_attempt }}
+          path: shirt-sales-artifacts/
+          if-no-files-found: error
+          retention-days: 14
+
+  current_outcomes:
+    if: github.ref == 'refs/heads/codex/cm-shirt-sales'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        shell: bash
+    env:
+      SOURCE_SHA: ${{ github.sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Hold candidate inputs and install locked dependencies
+        run: |
+          set -euo pipefail
+          mkdir "$SHIRT_OUT"
+          git rev-parse HEAD > "$SHIRT_OUT/head.txt"
+          git rev-parse 'HEAD^{tree}' > "$SHIRT_OUT/tree.txt"
+          git ls-files -z -- src scripts public supabase .github package.json package-lock.json | sort -z | xargs -0 sha256sum > "$SHIRT_OUT/source-before.sha256"
+          npm ci > "$SHIRT_OUT/install.log" 2>&1
+      - name: Real app type gate and all focused outcomes
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$SHIRT_OUT/types.log" 2>&1
+          status=0
+          timeout --signal=TERM --kill-after=10s 8m node_modules/.bin/vitest run src/lib/clubManagerShirtSales.test.ts src/test/clubManagerShirtSalesScreen.test.tsx src/test/clubManagerHubLines.test.ts --maxWorkers=1 --no-file-parallelism --reporter=verbose --reporter=json --outputFile.json="$SHIRT_OUT/focused.json" > "$SHIRT_OUT/focused.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$SHIRT_OUT/focused.exit"
+          cat "$SHIRT_OUT/focused.log"
+          test "$status" -eq 0
+          node <<'JS'
+          const fs = require('node:fs'), assert = require('node:assert/strict');
+          const report = JSON.parse(fs.readFileSync(process.env.SHIRT_OUT + '/focused.json'));
+          const expected = new Map([['src/lib/clubManagerShirtSales.test.ts', 16], ['src/test/clubManagerShirtSalesScreen.test.tsx', 14], ['src/test/clubManagerHubLines.test.ts', 15]]);
+          assert.equal(report.success, true); assert.equal(report.numFailedTests, 0); assert.equal(report.numPendingTests, 0);
+          assert.equal(Number(report.numTodoTests ?? 0), 0); assert.equal(Number(report.numUnhandledErrors ?? 0), 0);
+          assert.equal(report.testResults.length, 3); assert.equal(report.numPassedTests, 45); assert.equal(report.numTotalTests, 45);
+          for (const [file, count] of expected) {
+            const rows = report.testResults.filter(row => row.name.replaceAll('\\', '/').endsWith('/' + file));
+            assert.equal(rows.length, 1, file); assert.equal(rows[0].status, 'passed'); assert.equal(rows[0].assertionResults.length, count);
+            assert(rows[0].assertionResults.every(row => row.status === 'passed'), file + ': every actual case passes');
+          }
+          console.log('SHIRT FOCUSED VERIFIED: 16 library + 14 UI + 15 inherited hub cases; no skips.');
+          JS
+      - name: All actual accounting cases and effective copied faults
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          mkdir "$SHIRT_OUT/sim"
+          for mode in normal no-credit gross-credit drop-pending double-tick backpay hidden-demand night-projection drop-carry unsafe-forecast; do
+            control="$mode"; if test "$mode" = normal; then control=''; fi
+            status=0
+            SOURCE_SHA="$GITHUB_SHA" CM_SHIRT_SALES_CONTROL="$control" ARTIFACT_DIR="$SHIRT_OUT/sim/$mode" timeout --signal=TERM --kill-after=10s 4m node scripts/simCmShirtSales.mjs > "$SHIRT_OUT/sim/$mode.log" 2>&1 || status=$?
+            printf '%s\t%s\n' "$mode" "$status" >> "$SHIRT_OUT/sim/results.tsv"
+            cat "$SHIRT_OUT/sim/$mode.log"
+          done
+          node <<'JS'
+          const fs = require('node:fs'), path = require('node:path'), assert = require('node:assert/strict'), { createHash } = require('node:crypto');
+          const out = path.join(process.env.SHIRT_OUT, 'sim'), hash = value => createHash('sha256').update(value).digest('hex');
+          const source = fs.readFileSync('src/lib/clubManagerFinances.ts', 'utf8').replaceAll('\r\n', '\n');
+          const rows = fs.readFileSync(path.join(out, 'results.tsv'), 'utf8').trim().split('\n').map(line => line.split('\t'));
+          const fault = {
+            'no-credit': ['actual-engine-window-cash', 'SHIRT_ENGINE_WINDOW_CASH', 'if (sale && sale.cashPence > 0) state.budget = round2(state.budget + sale.cashPence / SHIRT_PENCE_PER_M);', 'if (sale && sale.cashPence > 0) state.budget = round2(state.budget + 0 / SHIRT_PENCE_PER_M);'],
+            'gross-credit': ['actual-engine-window-cash', 'SHIRT_ENGINE_WINDOW_CASH', 'if (sale && sale.cashPence > 0) state.budget = round2(state.budget + sale.cashPence / SHIRT_PENCE_PER_M);', 'if (sale && sale.cashPence > 0) state.budget = round2(state.budget + shirtSalesForWeek(state).grossPence / SHIRT_PENCE_PER_M);'],
+            'drop-pending': ['penny-identity', 'SHIRT_PENNY_IDENTITY', 'return ledger.openingPence + ledger.grossPence - ledger.costPence - ledger.paidPence;', 'return 0;'],
+            'double-tick': ['one-counter-per-charge', 'SHIRT_WEEK_COUNT', 'weeks: ledger.weeks + weeks, grossPence:', 'weeks: ledger.weeks + weeks * 2, grossPence:'],
+            backpay: ['legacy-zero-no-backpay', 'SHIRT_LEGACY_ZERO', 'if (value === undefined) return emptyShirtSales();', 'if (value === undefined) return { ...emptyShirtSales(), grossPence: 10_000_000, paidPence: 10_000_000 };'],
+            'hidden-demand': ['displayed-demand-and-era-scale', 'SHIRT_DISPLAYED_DEMAND', 'fanMeter(state).shown / 100', 'booksOf(state).fanMood / 100'],
+            'night-projection': ['charged-weeks-projection', 'SHIRT_PROJECTION_CHARGED_ONLY', 'state.calendar.slice(state.week).filter(entry => !entry.night).length', 'state.calendar.slice(state.week).length'],
+            'drop-carry': ['same-club-carry-and-moves', 'SHIRT_SAME_CLUB_CARRY', 'season: emptyLedger(shirtPendingPence(readShirtSales(career.books.season.shirts) ?? emptyShirtSales())),', 'season: emptyLedger(),'],
+            'unsafe-forecast': ['unsafe-future-keeps-known-paid', 'SHIRT_FORECAST_UNAVAILABLE', 'const retailForecast = retail ? settleShirtSales(retail, quote, retailWeeksLeft) : null;', 'const retailForecast = retail ? { ledger: { ...retail, paidPence: retail.paidPence + Math.floor((shirtPendingPence(retail) + (quote.grossPence - quote.costPence) * retailWeeksLeft) / SHIRT_CASH_PENCE) * SHIRT_CASH_PENCE } } : null;'],
+          };
+          const names = ['normal', ...Object.keys(fault)]; assert.deepEqual(rows.map(row => row[0]), names); assert.equal(new Set(rows.map(row => row[0])).size, 10);
+          const ids = ['penny-identity', 'one-counter-per-charge', 'malformed-and-overflow', 'legacy-zero-no-backpay', 'displayed-demand-and-era-scale', 'small-club-pennies', 'one-net-income-no-board-cost', 'charged-weeks-projection', 'unsafe-future-keeps-known-paid', 'actual-engine-window-cash', 'actual-skipped-night', 'save-load-and-pure-reads', 'same-club-carry-and-moves', 'no-passive-time-or-random-income', 'real-charged-prefixes'];
+          for (const [name, exit] of rows) {
+            const report = JSON.parse(fs.readFileSync(path.join(out, name, 'report.json')));
+            assert.equal(report.source.commit, process.env.GITHUB_SHA); assert.equal(report.observedCases, 15); assert.equal(report.plannedCases, 15);
+            assert.deepEqual(report.cases.map(row => row.id), ids); assert.deepEqual(report.errors, []);
+            assert.equal(report.networkAttempts, 0); assert.equal(report.randomRestored, true); assert.equal(report.clockRestored, true);
+            assert.equal(report.source.unchanged, true); assert.deepEqual(report.source.before, report.source.after);
+            for (const [file, expected] of Object.entries(report.source.before)) assert.equal(hash(fs.readFileSync(file)), expected, file + ': actual held source');
+            assert(Object.keys(report.source.before).length >= 15);
+            assert.equal(hash(fs.readFileSync(path.join(out, name, 'engine.mjs'))), report.source.bundleSha256);
+            if (name === 'normal') {
+              assert.equal(exit, '0'); assert.equal(report.status, 'passed'); assert.equal(report.passedCases, 15); assert.equal(report.failedCases, 0);
+              assert(report.cases.every(row => row.status === 'passed')); assert.equal(report.prefixes.length, 6);
+              assert.deepEqual(report.prefixes.map(row => [row.kind, row.seed]), [['modern', 0], ['modern', 8], ['historical', 0], ['historical', 8], ['custom', 0], ['custom', 8]]);
+              assert(report.prefixes.every(row => row.chargedWeeks === 12 && row.plannedChargedWeeks === 12 && row.immutabilityChecks === row.entries));
+              assert.equal(report.prefixes.reduce((n, row) => n + row.chargedWeeks, 0), 72);
+            } else {
+              const [id, marker, from, to] = fault[name]; assert.equal(exit, '1'); assert.equal(report.status, 'failed'); assert.equal(report.control, name);
+              const target = report.cases.filter(row => row.id === id); assert.equal(target.length, 1); assert.equal(target[0].status, 'failed');
+              assert.equal(typeof target[0].error, 'string'); assert(target[0].error.includes(marker));
+              assert.doesNotMatch(target[0].error, /TypeError|ReferenceError|SyntaxError|Cannot find|SHIRT_(?:SETUP|PRECONDITION)_/);
+              assert.equal(report.fault.detected, true); assert.equal(report.fault.marker, marker); assert.equal(report.fault.replacements, 1);
+              assert.equal(source.split(from).length - 1, 1); const expected = source.replace(from, to); assert.notEqual(expected, source);
+              const copied = fs.readFileSync(path.join(out, name, 'finance-' + name + '.ts'), 'utf8'); assert.equal(copied, expected);
+              assert.equal(hash(source), report.fault.originalHash); assert.equal(hash(copied), report.fault.changedHash);
+            }
+          }
+          console.log('SHIRT SIM VERIFIED: 15 actual cases, 6 prefixes/72 charged weeks, 9 exact copied faults at their intended assertions; held source and zero network.');
+          JS
+      - name: Preserve complete candidate evidence
+        if: always()
+        run: |
+          set -euo pipefail
+          failed=0
+          if test -f "$SHIRT_OUT/source-before.sha256"; then sha256sum --check "$SHIRT_OUT/source-before.sha256" > "$SHIRT_OUT/source-hold.log" 2>&1 || failed=1; fi
+          git diff --exit-code HEAD -- src scripts public supabase package.json package-lock.json .github > "$SHIRT_OUT/operator-source-hold.log" 2>&1 || failed=1
+          (cd "$SHIRT_OUT"; find . -type f ! -name evidence.sha256 -print0 | sort -z | xargs -0 sha256sum) > "$SHIRT_OUT/evidence.sha256"
+          exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: shirt-sales-current-${{ github.run_id }}-${{ github.run_attempt }}
+          path: shirt-sales-artifacts/
+          if-no-files-found: error
+          retention-days: 14
+
+  current_finance:
+    if: github.ref == 'refs/heads/codex/cm-shirt-sales'
+    runs-on: ubuntu-latest
+    timeout-minutes: 105
+    defaults:
+      run:
+        shell: bash
+    env:
+      SOURCE_SHA: ${{ github.sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Hold current finance and all inherited inputs
+        run: |
+          set -euo pipefail
+          mkdir "$SHIRT_OUT"
+          git rev-parse HEAD > "$SHIRT_OUT/head.txt"
+          git ls-files -z -- src scripts public supabase .github package.json package-lock.json | sort -z | xargs -0 sha256sum > "$SHIRT_OUT/source-before.sha256"
+          npm ci > "$SHIRT_OUT/install.log" 2>&1
+      - name: Original and current finance copy assertions with effective control
+        run: |
+          set -euo pipefail
+          mkdir "$SHIRT_OUT/copy-compat"
+          git fetch --no-tags --depth=1 origin e13280c8cdab53a96b6b51071f5570fda8a55113 > "$SHIRT_OUT/copy-compat/baseline-fetch.log" 2>&1
+          before="$RUNNER_TEMP/shirt-copy-original"
+          mkdir "$before"
+          git archive e13280c8cdab53a96b6b51071f5570fda8a55113 | tar -xf - -C "$before"
+          cmp "$before/package-lock.json" package-lock.json
+          ln -s "$GITHUB_WORKSPACE/node_modules" "$before/node_modules"
+          printf '%s\n' e13280c8cdab53a96b6b51071f5570fda8a55113 > "$SHIRT_OUT/copy-compat/baseline-source.txt"
+          echo "SHIRT_COPY_BASELINE=$before" >> "$GITHUB_ENV"
+          export SHIRT_COPY_BASELINE="$before"
+          (cd "$before"; find src scripts public supabase -type f -print0 | sort -z | xargs -0 sha256sum; sha256sum package.json package-lock.json) > "$SHIRT_OUT/copy-compat/baseline-inputs.sha256"
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          for arm in original current; do
+            for mode in normal finance; do
+              control="$mode"; if test "$mode" = normal; then control=''; fi
+              status=0
+              if test "$arm" = original; then
+                (cd "$before"; SOURCE_SHA=e13280c8cdab53a96b6b51071f5570fda8a55113 CM_COPY_ROOT="$before" CM_COPY_CONTROL="$control" timeout --signal=TERM --kill-after=10s 5m node scripts/simCmCopy.mjs --section=5) > "$SHIRT_OUT/copy-compat/$arm-$mode.log" 2>&1 || status=$?
+              else
+                SOURCE_SHA="$GITHUB_SHA" CM_COPY_ROOT="$GITHUB_WORKSPACE" CM_COPY_CONTROL="$control" timeout --signal=TERM --kill-after=10s 5m node scripts/simCmCopy.mjs --section=5 > "$SHIRT_OUT/copy-compat/$arm-$mode.log" 2>&1 || status=$?
+              fi
+              printf '%s\t%s\t%s\n' "$arm" "$mode" "$status" >> "$SHIRT_OUT/copy-compat/results.tsv"
+              cat "$SHIRT_OUT/copy-compat/$arm-$mode.log"
+            done
+          done
+          (cd "$before"; sha256sum --check "$GITHUB_WORKSPACE/$SHIRT_OUT/copy-compat/baseline-inputs.sha256") > "$SHIRT_OUT/copy-compat/baseline-source-hold.log"
+          node <<'JS'
+          const fs = require('node:fs'), assert = require('node:assert/strict');
+          const out = process.env.SHIRT_OUT + '/copy-compat', normalize = value => value.replaceAll('\r\n', '\n');
+          const original = normalize(fs.readFileSync(process.env.SHIRT_COPY_BASELINE + '/scripts/simCmCopy.mjs', 'utf8')), current = normalize(fs.readFileSync('scripts/simCmCopy.mjs', 'utf8'));
+          const from = String.raw`      '              <td className="py-0.5 font-bold text-foreground">Kitty change</td>',`;
+          const to = String.raw`      '              <td className="py-0.5 font-bold text-foreground">{incompleteIncome ? \'Kitty change (known rows)\' : \'Kitty change\'}</td>',`;
+          assert.equal(original.split(from).length - 1, 1); assert.equal(current, original.replace(from, to), 'Only the finance fixed anchor changes; all assertions and broken source stay exact');
+          const rows = fs.readFileSync(out + '/results.tsv', 'utf8').trim().split('\n').map(line => line.split('\t'));
+          assert.deepEqual(rows.map(row => row.slice(0, 2)), [['original', 'normal'], ['original', 'finance'], ['current', 'normal'], ['current', 'finance']]);
+          for (const [arm, mode, code] of rows) {
+            const log = fs.readFileSync(out + '/' + arm + '-' + mode + '.log', 'utf8');
+            assert.doesNotMatch(log, /could not run:|DID NOT FIRE|SyntaxError|ReferenceError|TypeError|Cannot find|ERR_MODULE_NOT_FOUND/);
+            if (mode === 'normal') { assert.equal(code, '0'); assert.match(log, /simCmCopy: green on [^\n]+\. Sections 5: Club Manager says what it means\./); assert.doesNotMatch(log, /^\s*FAIL:/m); }
+            else {
+              assert.equal(code, '1'); assert(log.includes('CONTROL finance: one line of src/components/club-manager/FinancesScreen.tsx rewritten, section 5 must go red'));
+              assert(log.includes('simCmCopy: CONTROL finance FIRED (6 failures, as it must)'));
+              const failures = log.split('\n').filter(line => /^\s*FAIL:/.test(line)); assert.equal(failures.length, 6);
+              for (const tag of ['Liverpool, week 18', 'the same week with a 400m signing', 'a fresh career, week 0']) {
+                assert(failures.some(line => line.trim() === 'FAIL: ' + tag + ': the desk still prints "Season result"'));
+                assert(failures.some(line => line.trim() === 'FAIL: ' + tag + ': the desk has no cover kitty row'));
+              }
+            }
+          }
+          console.log('CM COPY FINANCE VERIFIED: original and current section5 normal pass, both exact six-assertion finance faults fire; only fixed anchor changed.');
+          JS
+      - name: All four current finance and fan harnesses at unchanged defaults
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          unset CM_FINANCES_CONTROL CM_METERS_CONTROL SIM_SEED
+          for name in simFinance simClubManagerFinances simSponsors simClubManagerMeters; do
+            status=0
+            timeout --signal=TERM --kill-after=10s 7m node "scripts/$name.mjs" > "$SHIRT_OUT/$name.log" 2>&1 || status=$?
+            printf '%s\t%s\n' "$name" "$status" >> "$SHIRT_OUT/current-finance.tsv"
+            cat "$SHIRT_OUT/$name.log"
+          done
+          node <<'JS'
+          const fs = require('node:fs'), assert = require('node:assert/strict');
+          const out = process.env.SHIRT_OUT, rows = fs.readFileSync(out + '/current-finance.tsv', 'utf8').trim().split('\n').map(line => line.split('\t'));
+          const markers = new Map([['simFinance', 'ALL FINANCE CHECKS PASSED'], ['simClubManagerFinances', 'simClubManagerFinances: PASS.'], ['simSponsors', 'simSponsors: green.'], ['simClubManagerMeters', 'simClubManagerMeters: PASS.']]);
+          assert.deepEqual(rows.map(row => row[0]), [...markers.keys()]);
+          for (const [name, code] of rows) { assert.equal(code, '0'); const text = fs.readFileSync(out + '/' + name + '.log', 'utf8'); assert(text.includes(markers.get(name))); assert.doesNotMatch(text, /^\s*FAIL:/m); }
+          console.log('CURRENT FINANCE VERIFIED: four complete normal harnesses.');
+          JS
+      - name: All five inherited finance controls at their actual failure messages
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          unset SIM_SEED
+          mkdir "$SHIRT_OUT/finance-controls"
+          for control in leak nosum nogate samplemean gatelevel; do
+            status=0
+            CM_FINANCES_CONTROL="$control" timeout --signal=TERM --kill-after=10s 7m node scripts/simClubManagerFinances.mjs > "$SHIRT_OUT/finance-controls/$control.log" 2>&1 || status=$?
+            printf '%s\t%s\n' "$control" "$status" >> "$SHIRT_OUT/finance-controls/results.tsv"
+            cat "$SHIRT_OUT/finance-controls/$control.log"
+          done
+          node <<'JS'
+          const fs = require('node:fs'), path = require('node:path'), os = require('node:os'), assert = require('node:assert/strict');
+          const out = path.join(process.env.SHIRT_OUT, 'finance-controls'), source = fs.readFileSync('src/lib/clubManagerFinances.ts', 'utf8').replaceAll('\r\n', '\n');
+          const specs = {
+            leak: ['  s.playerWages = round3(s.playerWages + wageBill(state) / 1000);', '  s.playerWages = round3(s.playerWages + wageBill(state) / 1000);\n  state.budget = round2(state.budget - wageBill(state) / 1000);', 'the weekly tick takes wages out of the kitty', /^\s*FAIL: [^\n]+: the kitty moved [^\n]+, the kitty lines say /m],
+            nosum: ["  const incomeProjected = sum(income, 'projected');", "  const incomeProjected = round2(sum(income, 'projected') + 1);", 'the income total is the sum plus one', /^\s*FAIL: [^\n]+: projected income lines sum to [^\n]+, total says /m],
+            nogate: ['  s.homeGames += 1;', '  s.homeGames += 0;', 'the ledger never counts a home gate', /^\s*FAIL: an old save's ledger did not fill \(/m],
+            samplemean: ['  const perHome = (crowd * perFan * gateEdge(state)) / 1e6;', '  const gateSoFar = s.tickets + s.concessions;\n  const perHome = s.homeGames >= 3\n    ? gateSoFar / s.homeGames\n    : (crowd * perFan) / 1e6;', 'the projected gate is the average of the gates banked once three are in', /^\s*FAIL: the projected gate moved [0-9.]+% at the p90 between week 2 and week 5, over the 1% band/m],
+            gatelevel: ['  return Math.round(cappedDrawMean(lo, hi, ticket * ground * fans, CROWD_CAP));', '  return Math.round(cappedDrawMean(lo, hi, ticket * ground * fans, CROWD_CAP) * 1.1);', 'the expected home crowd is inflated by ten percent', /^\s*FAIL: the projected gate is [0-9.]+% off the (?:crowd the engine actually draws at the median, over the 6% band|drawn crowd at the p90, over the 9% band)/m],
+          };
+          const rows = fs.readFileSync(path.join(out, 'results.tsv'), 'utf8').trim().split('\n').map(line => line.split('\t'));
+          assert.deepEqual(rows.map(row => row[0]), Object.keys(specs));
+          for (const [name, code] of rows) {
+            const [from, to, note, message] = specs[name], log = fs.readFileSync(path.join(out, name + '.log'), 'utf8');
+            assert.equal(code, '1', name + ': normal assertion failure, never a timeout'); assert(log.includes('NEGATIVE CONTROL ON: ' + note));
+            assert.match(log, message, name + ': intended existing behavioral assertion'); assert.match(log, /simClubManagerFinances: [1-9][0-9]* failures?/);
+            assert.doesNotMatch(log, /control cannot run|SyntaxError|ReferenceError|TypeError|Cannot find module|ERR_MODULE_NOT_FOUND|Command failed:/);
+            assert.equal(source.split(from).length - 1, 1); const changed = fs.readFileSync(path.join(os.tmpdir(), 'clubManagerFinances.' + name + '.ts'), 'utf8');
+            assert.notEqual(changed, source); assert.equal(changed, source.replace(from, to)); fs.writeFileSync(path.join(out, name + '-changed.ts'), changed);
+          }
+          console.log('CURRENT FINANCE CONTROLS VERIFIED: five actual copied changes rejected by their intended assertions.');
+          JS
+      - name: Preserve complete finance evidence
+        if: always()
+        run: |
+          set -euo pipefail
+          failed=0
+          if test -f "$SHIRT_OUT/source-before.sha256"; then sha256sum --check "$SHIRT_OUT/source-before.sha256" > "$SHIRT_OUT/source-hold.log" 2>&1 || failed=1; fi
+          git diff --exit-code HEAD -- src scripts public supabase package.json package-lock.json .github > "$SHIRT_OUT/operator-source-hold.log" 2>&1 || failed=1
+          (cd "$SHIRT_OUT"; find . -type f ! -name evidence.sha256 -print0 | sort -z | xargs -0 sha256sum) > "$SHIRT_OUT/evidence.sha256"
+          exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: shirt-sales-finance-current-${{ github.run_id }}-${{ github.run_attempt }}
+          path: shirt-sales-artifacts/
+          if-no-files-found: error
+          retention-days: 14
+
+  unit_suite:
+    if: github.ref == 'refs/heads/codex/cm-shirt-sales'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
+    env:
+      SOURCE_SHA: ${{ github.sha }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Full unchanged unit-suite partition
+        run: |
+          set -euo pipefail
+          mkdir "$SHIRT_OUT"
+          git rev-parse HEAD > "$SHIRT_OUT/head.txt"
+          git ls-files -z -- src scripts public supabase .github package.json package-lock.json | sort -z | xargs -0 sha256sum > "$SHIRT_OUT/source-before.sha256"
+          npm ci > "$SHIRT_OUT/install.log" 2>&1
+          for anchor in 56356be9a5d4d310f1759c09ba8e3811a8a05c1b e8b39ccc39f763351d4439c833b853c2e3ed2188 6b7596d2c009802e6c011492ae1cefa8af29c62a 31a4ec01f13dde6ce5614d371f5aa135e08ef8da 2b7dda2951fb9b63e76a2af66970cb682f312105 0c66a55929dfe8d6493a86aa00a28ef0ed2db25d; do
+            git fetch --no-tags --depth=1 origin "$anchor"
+            git cat-file -e "$anchor^{commit}"
+          done > "$SHIRT_OUT/historical-inputs.log" 2>&1
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          status=0
+          npm test -- --shard=${{ matrix.shard }}/4 --maxWorkers=2 --reporter=json --outputFile="$SHIRT_OUT/unit.json" > "$SHIRT_OUT/unit.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$SHIRT_OUT/unit.exit"
+          tail -n 35 "$SHIRT_OUT/unit.log"
+          test "$status" -eq 0
+          node <<'JS'
+          const fs = require('node:fs'), assert = require('node:assert/strict');
+          const report = JSON.parse(fs.readFileSync(process.env.SHIRT_OUT + '/unit.json'));
+          assert.equal(report.success, true); assert.equal(report.numFailedTests, 0); assert.equal(Number(report.numUnhandledErrors ?? 0), 0);
+          assert(report.testResults.length > 0); assert(report.numTotalTests > 0);
+          const cases = report.testResults.flatMap(row => row.assertionResults);
+          assert.equal(cases.filter(row => row.status === 'failed').length, 0);
+          fs.writeFileSync(process.env.SHIRT_OUT + '/unit-literal-counts.json', JSON.stringify({ actualFiles: report.testResults.length, cases: cases.length, passed: cases.filter(row => row.status === 'passed').length, skipped: cases.filter(row => row.status === 'skipped' || row.status === 'pending').length, reporterPending: report.numPendingTests }, null, 2));
+          JS
+      - name: Preserve full unit evidence
+        if: always()
+        run: |
+          set -euo pipefail
+          failed=0
+          if test -f "$SHIRT_OUT/source-before.sha256"; then sha256sum --check "$SHIRT_OUT/source-before.sha256" > "$SHIRT_OUT/source-hold.log" 2>&1 || failed=1; fi
+          git diff --exit-code HEAD -- src scripts public supabase package.json package-lock.json .github > "$SHIRT_OUT/operator-source-hold.log" 2>&1 || failed=1
+          (cd "$SHIRT_OUT"; find . -type f ! -name evidence.sha256 -print0 | sort -z | xargs -0 sha256sum) > "$SHIRT_OUT/evidence.sha256"
+          exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: shirt-sales-unit-${{ matrix.shard }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: shirt-sales-artifacts/
+          if-no-files-found: error
+          retention-days: 14
+
+  build_browser:
+    if: github.ref == 'refs/heads/codex/cm-shirt-sales'
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    defaults:
+      run:
+        shell: bash
+    env:
+      SOURCE_SHA: ${{ github.sha }}
+      CI: '1'
+      ENGINES: chromium
+      PRERENDER_ONLY: /club-manager,/whats-new
+      SEO_SPLIT_BASE_REF: e13280c8cdab53a96b6b51071f5570fda8a55113
+      SHIRT_BROWSER_OUT: shirt-sales-artifacts/browser
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Protected source hold and isolated verification tools
+        run: |
+          set -euo pipefail
+          mkdir "$SHIRT_OUT"
+          out="$PWD/$SHIRT_OUT"
+          git fetch --no-tags --depth=1 origin e13280c8cdab53a96b6b51071f5570fda8a55113 > "$out/baseline-fetch.log" 2>&1
+          git cat-file -e 'e13280c8cdab53a96b6b51071f5570fda8a55113^{commit}'
+          git rev-parse HEAD > "$out/head.txt"
+          git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
+          sha256sum package.json package-lock.json scripts/sweepWeight.mjs > "$out/dependencies-cap-before.sha256"
+          git diff --exit-code e13280c8cdab53a96b6b51071f5570fda8a55113 HEAD -- src scripts supabase package.json package-lock.json ':!src/lib/clubManagerFinances.ts' ':!src/components/club-manager/FinancesScreen.tsx' ':!src/components/club-manager/ClubManagerHelp.tsx' ':!src/data/gameContent/clubManagement.ts' ':!src/pages/WhatsNew.tsx' ':!src/lib/clubManagerShirtSales.test.ts' ':!src/test/clubManagerShirtSalesScreen.test.tsx' ':!scripts/measureCmShirtSalesBaseline.mjs' ':!scripts/simCmShirtSales.mjs' ':!scripts/qa/playCmShirtSales1443.mjs' ':!scripts/simFinance.mjs' ':!scripts/simClubManagerFinances.mjs' ':!scripts/simCmCopy.mjs' ':!src/data/searchKeywords.json' ':!scripts/data/lastmod.json' ':!scripts/data/guideHeadingsFrozen.json' > "$out/protected-original-source-hold.log"
+          git ls-files -z -- src scripts supabase .github package.json package-lock.json | sort -z | while IFS= read -r -d '' file; do
+            case "$file" in scripts/data/lastmod.json|scripts/data/guideHeadingsFrozen.json|src/data/searchKeywords.json) ;; *) sha256sum "$file" ;; esac
+          done > "$out/source-before.sha256"
+          sha256sum scripts/qa/playCmShirtSales1443.mjs > "$out/browser-source-pin.log"
+          npm ci > "$out/install.log" 2>&1
+          browser_tools="$RUNNER_TEMP/shirt-sales-browser"
+          npm install --prefix "$browser_tools" --no-save --package-lock=false playwright@1.64.0 > "$out/browser-install.log" 2>&1
+          test ! -e node_modules/playwright; test ! -e node_modules/playwright-core
+          ln -s "$browser_tools/node_modules/playwright" node_modules/playwright
+          ln -s "$browser_tools/node_modules/playwright-core" node_modules/playwright-core
+          node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium > "$out/chromium-install.log" 2>&1
+          python -m pip install fonttools pillow > "$out/python-install.log" 2>&1
+          export FREE_KICK_FONT_CACHE="$RUNNER_TEMP/shirt-sales-fonts"
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > "$out/fonts.log" 2>&1
+          echo "FREE_KICK_FONT_CACHE=$FREE_KICK_FONT_CACHE" >> "$GITHUB_ENV"
+      - name: Complete current production and SEO output before readers
+        id: build
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$SHIRT_OUT/types.log" 2>&1
+          node scripts/simGuideHeadings.mjs --refresh /club-manager > "$SHIRT_OUT/guide-refresh.log" 2>&1
+          node scripts/genSearchKeywords.mjs > "$SHIRT_OUT/search-keywords.log" 2>&1
+          npm run build:seo > "$SHIRT_OUT/build.log" 2>&1
+          git diff --binary -- public scripts/data/lastmod.json scripts/data/guideHeadingsFrozen.json src/data/searchKeywords.json > "$SHIRT_OUT/generated.patch"
+          git diff --name-only -- public scripts/data/lastmod.json scripts/data/guideHeadingsFrozen.json src/data/searchKeywords.json > "$SHIRT_OUT/generated-files.txt"
+          node <<'JS'
+          const fs = require('node:fs'), assert = require('node:assert/strict');
+          const allowed = new Set(['public/club-manager/index.html', 'public/whats-new/index.html', 'public/sitemap.xml', 'scripts/data/lastmod.json', 'scripts/data/guideHeadingsFrozen.json', 'src/data/searchKeywords.json']);
+          const files = fs.readFileSync(process.env.SHIRT_OUT + '/generated-files.txt', 'utf8').trim().split('\n').filter(Boolean);
+          for (const file of files) assert(allowed.has(file), 'Unexpected generated source: ' + file);
+          JS
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$SHIRT_OUT/dist.sha256"
+      - name: Complete separate unchanged e132 baseline build
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          before="$RUNNER_TEMP/shirt-sales-before"
+          mkdir "$before"
+          git archive e13280c8cdab53a96b6b51071f5570fda8a55113 | tar -xf - -C "$before"
+          cmp "$before/package-lock.json" package-lock.json
+          ln -s "$GITHUB_WORKSPACE/node_modules" "$before/node_modules"
+          (cd "$before"; npm run build) > "$SHIRT_OUT/baseline-build.log" 2>&1
+          find "$before/dist" -type f -print0 | sort -z | xargs -0 sha256sum > "$SHIRT_OUT/baseline-dist.sha256"
+      - name: All 18 completed-build readers and all unchanged page caps
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$SHIRT_OUT/readers-server.log" 2>&1 &
+          server=$!; trap 'kill "$server" 2>/dev/null || true' EXIT
+          ready=0; for attempt in 1 2 3 4 5; do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then ready=1; break; fi; sleep 1; done; test "$ready" -eq 1
+          failed=0
+          for method in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simSiteSearch simGuideHeadings simLegalPages; do
+            status=0; BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node "scripts/$method.mjs" > "$SHIRT_OUT/$method.log" 2>&1 || status=$?
+            printf '%s\t%s\n' "$method" "$status" >> "$SHIRT_OUT/readers.tsv"
+            tail -n 3 "$SHIRT_OUT/$method.log"; test "$status" -eq 0 || failed=1
+          done
+          status=0; SWEEP_OFFLINE=1 BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node scripts/sweepWeight.mjs > "$SHIRT_OUT/weights.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$SHIRT_OUT/weights.exit"
+          cat "$SHIRT_OUT/weights.log"; test "$status" -eq 0 || failed=1
+          test "$(wc -l < "$SHIRT_OUT/readers.tsv")" -eq 18
+          exit "$failed"
+      - name: Actual built CM phone desk with effective faults and restorations
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$SHIRT_OUT/browser-server.log" 2>&1 &
+          server=$!; trap 'kill "$server" 2>/dev/null || true' EXIT
+          ready=0; for attempt in 1 2 3 4 5; do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then ready=1; break; fi; sleep 1; done; test "$ready" -eq 1
+          status=0
+          CI=1 SOURCE_SHA="$GITHUB_SHA" BASE=http://127.0.0.1:4173 SIM_NETWORK=offline SHIRT_BROWSER_OUT="$SHIRT_OUT/browser" timeout --signal=TERM --kill-after=15s 12m node scripts/qa/playCmShirtSales1443.mjs > "$SHIRT_OUT/browser.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$SHIRT_OUT/browser.exit"
+          cat "$SHIRT_OUT/browser.log"; test "$status" -eq 0
+          node <<'JS'
+          const fs = require('node:fs'), path = require('node:path'), assert = require('node:assert/strict'), { createHash } = require('node:crypto');
+          const report = JSON.parse(fs.readFileSync(process.env.SHIRT_OUT + '/browser/report.json'));
+          assert.equal(report.status, 'PASS'); assert.equal(report.source, process.env.GITHUB_SHA); assert.equal(report.actualOutbound, 0);
+          assert.deepEqual(report.declared, { positive: 7, faults: 3, restorations: 3 }); assert.equal(report.cases.length, 13);
+          const positive = report.cases.filter(row => row.status === 'PASS' && !row.restoration), faults = report.cases.filter(row => row.status === 'EXPECTED_REJECTION'), restored = report.cases.filter(row => row.status === 'PASS' && row.restoration);
+          assert.equal(positive.length, 7); assert.equal(faults.length, 3); assert.equal(restored.length, 3);
+          const intended = { omission: 'Shirt card is visible', amount: 'Literal gross amount', overflow: 'Shirt card and page fit the viewport' };
+          for (const [fault, message] of Object.entries(intended)) {
+            const broken = faults.filter(row => row.fault === fault), back = restored.filter(row => row.restoration === fault);
+            assert.equal(broken.length, 1); assert.equal(back.length, 1); assert.equal(broken[0].error.name, 'AssertionError');
+            assert(broken[0].error.message.startsWith(message)); assert.equal(broken[0].intendedRejection, message); assert.equal(broken[0].interceptions, 1);
+          }
+          for (const row of report.cases) { assert.deepEqual(row.errors, []); assert.deepEqual(row.assets, []); assert.equal(row.fulfilledExternal, row.external.length); }
+          for (const row of [...positive, ...restored]) { assert(row.loopbackReads > 0); assert.equal(typeof row.save.fixtureSha256, 'string'); assert.equal(row.save.finalSha256, row.save.baselineSha256); assert(row.screenshots.length > 0); }
+          for (const row of report.holds) assert.equal(createHash('sha256').update(fs.readFileSync(row.file)).digest('hex'), row.sha256, row.file);
+          console.log('SHIRT BROWSER VERIFIED: 7 positives, 3 actual assertion rejections, 3 restorations, held bytes and local-only external fixtures.');
+          JS
+      - name: Preserve complete generated and runtime evidence
+        if: always()
+        run: |
+          set -euo pipefail
+          failed=0
+          if test -f "$SHIRT_OUT/source-before.sha256"; then sha256sum --check "$SHIRT_OUT/source-before.sha256" > "$SHIRT_OUT/source-hold.log" 2>&1 || failed=1; fi
+          if test -f "$SHIRT_OUT/dependencies-cap-before.sha256"; then sha256sum --check "$SHIRT_OUT/dependencies-cap-before.sha256" > "$SHIRT_OUT/dependencies-cap-hold.log" 2>&1 || failed=1; fi
+          git diff --exit-code HEAD -- src scripts supabase package.json package-lock.json .github ':!scripts/data/lastmod.json' ':!scripts/data/guideHeadingsFrozen.json' ':!src/data/searchKeywords.json' > "$SHIRT_OUT/operator-source-hold.log" 2>&1 || failed=1
+          if test -d dist; then tar -czf "$SHIRT_OUT/dist.tar.gz" -C dist .; fi
+          (cd "$SHIRT_OUT"; find . -type f ! -name evidence.sha256 -print0 | sort -z | xargs -0 sha256sum) > "$SHIRT_OUT/evidence.sha256"
+          exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: shirt-sales-build-${{ github.run_id }}-${{ github.run_attempt }}
           path: shirt-sales-artifacts/
           if-no-files-found: error
           retention-days: 14

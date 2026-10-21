@@ -8,7 +8,7 @@
 
 **Tech Stack:** Existing React, TypeScript, Vitest, esbuild harnesses and remote Actions.
 
-**Spec:** docs/design/round-1519-shirt-sales.md
+**Spec:** docs/design/round-1443-shirt-sales.md
 
 ## Global Constraints
 

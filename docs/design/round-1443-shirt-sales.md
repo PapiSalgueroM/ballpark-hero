@@ -1,4 +1,4 @@
-# Round 1519: Club Manager shirt sales
+# Round 1443: Club Manager shirt sales
 
 Anthony forwarded a request for jersey-sales revenue and authorized continued game improvements. Add passive simulated shirt sales to the existing Finances desk. Players should see gross sales, production cost and net money that reaches their transfer kitty. This is an existing career economy feature, with no new game, scoring system, daily mode or shop navigation.
 
@@ -17,3 +17,21 @@ Hold the CM engine, hook, page, calendar, fan-meter implementation, hub implemen
 Success means actual original outcome assertions fail before product code, exact accounting and old-save/lifecycle tests pass afterwards, effective faults are rejected, baseline comparisons identify intended economy changes, real types/build/readers and all14 unchanged caps pass, and saved phone images are reviewed. All app execution runs on GitHub Actions, offline. No local Node/npm/app parsing, build, tests, sims or browser. No production user, AI/report or database probe. Publish only qualified outputs through a PR and exact host-source/public readback gates.
 
 The broader old audit and Round1441 preservation blocker remain separate and unwaived. This design does not claim implementation or release.
+
+## Selected fictional rate and actual original evidence
+
+Original source fb231b8f7aaa36d452198e66831b79b963ccc288 ran on GitHub39655822436. Real types passed and all three exact missing-feature assertions failed after their real engine/desk preconditions, with no setup errors or skips. Unchanged simFinance, simClubManagerFinances, simSponsors and simClubManagerMeters all passed. Original, baseline and measurement ZIPs have12/10/14 evidence hashes, all held.
+
+Pilot3runs/36chargedweeks passed in0.821s; the full8fixture,128run,1536charged-week sample passed in10.972s, with1536 input-immutability checks, zero network attempts and restored RNG/clock. Every run reached its12-week prefix. This is prefix calibration, not a full-season balance claim. Demand snapshots are post-entry displayed readings, so dry rates are estimates until actual tick settlement is verified.
+
+Root chooses trial-low, the smallest measured model: weekly units are floor([1600,600,240,80][era-aware tier minus1] times (0.5 + fanMeter.shown /100)). Gross is units times5000 pennies, production cost is units times2000 pennies; both scale by0.75 in historical eras and round to integer pennies. These are fictional game rates. Net profit is gross minus cost, retained until a whole1000000-penny payout can reach the kitty. No rates or statistics about real clubs' actual shops are claimed.
+
+The calibration and held-out median net/gate ratios were2.036% and2.027%, with p90 3.396% and3.435%. Estimated annual net/opening-board p90 was5.486% and5.957%; middle/high candidates roughly doubled/quadrupled receipts and reached held-out board p90 11.913%/23.827%. All128 low-model runs reached a first payment within the observed12weeks. Pooled first-payment median was2weeks and p90 5; the historical tier4 subgroup p90 was9weeks. Keep that slower subgroup visible in balance evidence. Do not assert maxima or turn these prefixes into a whole-game guarantee.
+
+Worked arithmetic for the desk: if net profit is6000 currency units per club week, two such weeks earn12000, pay10000 and leave2000 pending. Production has already been deducted before this net figure. Missing legacy retail means zero tracked sales with no past payout; malformed retail means unavailable, never a reset of valid base books or a guessed payment.
+
+## Narrow inherited control compatibility
+
+The desk's conditional Kitty change (known rows) label requires the finance fault in scripts/simCmCopy.mjs to anchor that exact new JSX. Only that one fixed-source string changes; its broken result row, assertions, tolerances and failure conditions stay held. The remote finance job must run original section5 normal/control from accepted basee132 and current section5 normal/control before crediting the adapted control. This is a test-target compatibility amendment to the claim, not a change to unrelated copy or staff rules. Original baseline results for the other four finance/fan harnesses remain retained.
+
+The first draft and original proof used1519 before reconciling the other lane's reserved1500 to1549 range. This owned release is Round1443. Historical run IDs, proof commits and fixed seed1519 retain their original meaning.

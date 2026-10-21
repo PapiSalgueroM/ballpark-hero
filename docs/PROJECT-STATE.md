@@ -1,6 +1,8 @@
-## 2026-10-21: Round 1519 claimed, shirt-sales finance
+## 2026-10-21: Round 1443 implementation, awaiting remote verification
 
-Root is adding simulated shirt-sales income in the existing Club Manager finance module. Product is unchanged at this claim. Original regression and measured current finances precede rates and implementation. No CM engine, world, BO or real data work is claimed. [Design](design/round-1519-shirt-sales.md), [implementation plan](superpowers/plans/2026-10-21-cm-shirt-sales.md). Career visuals and legal updates below remain live.
+Club Manager's shirt-sales candidate records simulated gross sales, production cost, paid net profit and pending pennies. Only whole net batches reach the kitty, once per charged club week. Loading gives no backpay, pending carries at the same club and stays behind on a move, and unavailable records preserve existing books and cash. The desk, help and guide show the rule and worked example. Draft PR361 is not qualified or live yet. [Design](design/round-1443-shirt-sales.md), [implementation plan](superpowers/plans/2026-10-21-cm-shirt-sales.md).
+
+Before implementation, actual remote run39655822436 passed real app types and observed all3 exact missing-feature assertions fail after their real engine/desk preconditions, with no setup errors. All4 unchanged finance/fan harnesses passed. Eight fixtures and128 seeded runs reached1536 charged weeks with zero network, restored RNG/clock and input/source holds. The smallest measured fictional rate was selected before product edits; historical tier4 took longer to reach a first payout. These twelve-week prefixes are not a full-season balance guarantee. New accounting, lifecycle, unavailable-estimate, actual-route phone and effective-fault checks await execution. No CM engine, calendar, world, fan/hub implementation, real data, dependency or download-limit change is claimed. The broader audit and old1441 preservation blocker stay open. Career visuals and legal updates below remain live.
 
 ## 2026-10-21: Rounds 1517 and 1518 LIVE
 
