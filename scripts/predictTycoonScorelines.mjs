@@ -212,6 +212,104 @@ for (const { from, sp } of SPS) {
   const relaxed = span(false);
   const lo = Math.min(start, relaxed ? relaxed[0] : start) - 3; const hi = Math.max(start, relaxed ? relaxed[1] : start) + 3;
   for (const row of rows) if (row.r0 >= lo && row.r0 <= hi) console.log(line(row) + (row.r0 === start ? '   <- recipe start' : ''));
-  out.r0[sp] = { start, strict: span(true), relaxed: span(false), rows };
+  out.r0[sp] = { start, strict: span(true), relaxed: span(false), rows: rows.map(r => [r.r0, r.p1, r.g4, r.p30, r.p0, r.g3, r.strict, r.p3, r.g9a, r.p6, r.g9b].map(x => (typeof x === 'number' ? Math.round(x * 1e4) / 1e4 : x))) };
   console.log(`     feasible R0 (season one share >= 0.75 and P(6+ of 10) >= 0.9; sec3 P(green) >= 0.95; sec9 P(green) >= 0.95 both): with the 2 SE term ${JSON.stringify(span(true))}, without it ${JSON.stringify(span(false))}`);
+}
+/** The R0 the later parts read: the recipe's start, clamped into the relaxed interval. */
+const r0For = sp => { const r = out.r0[sp]; return r.relaxed ? Math.max(r.relaxed[0], Math.min(r.relaxed[1], r.start)) : r.start; };
+
+/* ---------- E. the fixed fixtures ---------- */
+/** A base state whose current opponent carries `offset`: the base chance lines
+ *  are read off the bundled lib itself, never retyped here. */
+const stateCache = new Map();
+function stateWith(division, squad, offset, matchNo = 0, baseMatchNo = 0) {
+  const key = `${division}|${squad}|${offset}|${matchNo}|${baseMatchNo}`;
+  if (!stateCache.has(key)) stateCache.set(key, stateWithFresh(division, squad, offset, matchNo, baseMatchNo));
+  return stateCache.get(key);
+}
+function stateWithFresh(division, squad, offset, matchNo, baseMatchNo) {
+  const s = T.newTycoon(0);
+  const lg = T.newLeague(0, division, 0, undefined, baseMatchNo);
+  const clubs = lg.clubs.map(c => ({ ...c }));
+  clubs[T.yourOpponentIndex(lg)].offset = offset;
+  return { ...s, levels: { ...s.levels, squad }, league: { ...lg, clubs }, matchNo };
+}
+const headU = gap => goalLambda(gap, LAW.home) / 90;
+const headT = (gap, f = 0) => (goalLambda(-gap, LAW.away) * (1 - f)) / 90;
+/** One watched match on a roll stream, two rolls a minute, ours then theirs. */
+function playOn(roll, pu, pt) { let gf = 0; let ga = 0; for (let m = 0; m < 90; m += 1) { if (roll() < pu) gf += 1; if (roll() < pt) ga += 1; } return gf > ga ? 'w' : gf === ga ? 'd' : 'l'; }
+const meanSe = xs => { const n = xs.length; const m = xs.reduce((a, b) => a + b, 0) / n; const sd = Math.sqrt(xs.reduce((a, b) => a + (b - m) ** 2, 0) / Math.max(1, n - 1)); return { mean: m, se: sd / Math.sqrt(n) }; };
+let replayBroken = false;
+console.log('\nE) The fixed fixtures (gap = our strength - the division\'s rival strength - the opponent offset x 500). R0 for the ladder: the recipe start clamped into the relaxed interval.');
+out.fixtures = {};
+
+/* E1. Round 586's policy fixture: Squad 40, division 3, opponents from match 70,
+   ten 14 match seasons per arm on rng(seed), first team edge per match from the probe. */
+const P586 = arg('--probe586');
+const probe = P586 && fs.existsSync(P586) ? JSON.parse(fs.readFileSync(P586, 'utf8')) : null;
+function run586(rows, pu, pt) {
+  return rows.map(r => {
+    const wins = {};
+    for (const arm of ['sell', 'hold']) { const roll = mulberry(r.seed); wins[arm] = r[arm].filter(([ok, f]) => playOn(roll, pu(ok), pt(ok, f)) === 'w').length; }
+    return wins;
+  });
+}
+if (!probe) console.log('   E1 586: no --probe586 file given, skipped');
+else {
+  const baseU = ok => T.goalChancePerMin(stateWith(3, 40, ok / 1e5, 70, 70));
+  const baseT = (ok, f) => T.oppChancePerMin(stateWith(3, 40, ok / 1e5, 70, 70), f);
+  for (const set of ['calibration', 'holdout']) {
+    const got = run586(probe[set].rows, baseU, baseT);
+    const sell = meanSe(got.map(g => g.sell)).mean; const hold = meanSe(got.map(g => g.hold)).mean;
+    const off = Math.abs(sell - probe[set].sellWins) + Math.abs(hold - probe[set].holdWins);
+    console.log(`   E1 586 replay under the BASE lines, ${set}: sell ${sell} hold ${hold} against the probe's ${probe[set].sellWins} and ${probe[set].holdWins} (first team edge averaged per match; off by ${off.toFixed(4)})`);
+    if (off > 0.25) replayBroken = true;
+  }
+  out.fixtures.p586 = [];
+  console.log('   E1 586 under the law (rival lambda x (1 - f)): SP AE | R3 gap | cal sell hold effect -> floor (half) | holdout gain +- SE | clears floor | gain > 2 SE');
+  console.log('     (squad 40 is the committed fixture; "par" and "par+6" are what the fixture would read re-anchored to division 3, Squad round(R3 / SP) and that plus ceil(6 / SP) levels)');
+  for (const { sp } of SPS) for (const ae of AE_GRID) {
+    const R3 = ladder(sp, ae, r0For(sp))[3];
+    const par = Math.round(R3 / sp);
+    for (const [label, squad] of [['40', 40], ['par', par], ['par+6', par + Math.ceil(6 / sp)]]) {
+      const gapOf = ok => squad * sp - R3 - (ok / 1e5) * OFF;
+      const cal = run586(probe.calibration.rows, ok => headU(gapOf(ok)), (ok, f) => headT(gapOf(ok), f));
+      const hol = run586(probe.holdout.rows, ok => headU(gapOf(ok)), (ok, f) => headT(gapOf(ok), f));
+      const ce = meanSe(cal.map(g => g.hold - g.sell)); const he = meanSe(hol.map(g => g.hold - g.sell));
+      const sell = meanSe(cal.map(g => g.sell)).mean; const hold = meanSe(cal.map(g => g.hold)).mean;
+      const floor = ce.mean / 2;
+      const row = { sp, ae, R3, squad, label, gap: squad * sp - R3, sell, hold, effect: ce.mean, floor, holdoutGain: he.mean, holdoutSe: he.se, clears: he.mean > floor, hardStopClear: he.mean > 2 * he.se };
+      out.fixtures.p586.push(row);
+      console.log(`     ${sp} ${String(ae).padStart(2)} ${label.padStart(5)}(Sq${squad}) | ${String(R3).padStart(3)} ${f2(row.gap).padStart(6)} | ${f2(sell)} ${f2(hold)} ${f2(ce.mean)} -> ${f2(floor)} | ${f2(he.mean)} +- ${f2(he.se)} | ${row.clears ? 'yes' : 'NO '} | ${row.hardStopClear ? 'yes' : 'NO (R2 HARD STOP)'}`);
+    }
+  }
+}
+
+/* E2. Round 587's set piece band: Squad 40 against newLeague(0, 3, 0, undefined,
+   70)'s matchday 0 opponent, match k on mulberry32(k x 101). A perfect kicker
+   adds one goal to an unchanged stream, so the uplift is the draw share. */
+const comp = T.newLeague(0, 3, 0, undefined, 70);
+const off587 = comp.clubs[T.yourOpponentIndex(comp)].offset;
+function uplift(from, count, pu, pt) { let d = 0; for (let k = from; k < from + count; k += 1) if (playOn(L.mulberry32(k * 101), pu, pt) === 'd') d += 1; return d / count; }
+{
+  const st = stateWith(3, 40, off587, 70, 70);
+  const b = [uplift(1, 2000, T.goalChancePerMin(st), T.oppChancePerMin(st)), uplift(2001, 2000, T.goalChancePerMin(st), T.oppChancePerMin(st)), uplift(4001, 2000, T.goalChancePerMin(st), T.oppChancePerMin(st))];
+  console.log(`\n   E2 587 replay under the BASE lines: calibration ${b[0]} and ${b[1]} (the harness header: 0.1225 and 0.11), holdout ${b[2]}; opponent offset ${off587}`);
+  if (Math.abs(b[0] - 0.1225) > 1e-9 || Math.abs(b[1] - 0.11) > 1e-9) replayBroken = true;
+  out.fixtures.p587base = b;
+}
+out.fixtures.p587 = [];
+console.log('   E2 587 under the law: SP AE squad | R3 gap | expected draw% | replayed cal1 cal2 -> band [0.5c, 1.5c] | holdout | inside');
+for (const { sp } of SPS) for (const ae of AE_GRID) {
+  const R3 = ladder(sp, ae, r0For(sp))[3];
+  const par = Math.round(R3 / sp);
+  for (const [label, squad] of [['40', 40], ['par', par], ['par+6', par + Math.ceil(6 / sp)]]) {
+    const gap = squad * sp - R3 - off587 * OFF;
+    const pu = headU(gap); const pt = headT(gap);
+    const c1 = uplift(1, 2000, pu, pt); const c2 = uplift(2001, 2000, pu, pt); const h = uplift(4001, 2000, pu, pt);
+    const c = (c1 + c2) / 2;
+    const row = { sp, ae, R3, squad, label, gap, draw: matchAt(gap).d, c1, c2, band: [c / 2, (3 * c) / 2], holdout: h, inside: h >= c / 2 && h <= (3 * c) / 2, oldBandHolds: h >= 0.058125 && h <= 0.174375 };
+    out.fixtures.p587.push(row);
+    console.log(`     ${sp} ${String(ae).padStart(2)} ${label.padStart(5)}(Sq${squad}) | ${String(R3).padStart(3)} ${f2(gap).padStart(6)} | ${pct(row.draw)} | ${pct(c1)} ${pct(c2)} -> [${pct(c / 2)}, ${pct(1.5 * c)}] | ${pct(h)} | ${row.inside ? 'yes' : 'NO'}; old band [5.81, 17.44] ${row.oldBandHolds ? 'holds' : 'red'}`);
+  }
 }
