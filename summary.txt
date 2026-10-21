@@ -1,0 +1,3 @@
+build exit=0 36s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+corrupt-after exit=0 132s | playCorruptSaves: green. No broken save traps a long game.
+ctl-everybutton exit=0 132s | playCorruptSaves control everybutton: FIRED. With the report affordance counted as a game action, /hall-of-champions reads as coped and its OFFLINE_ONLY excuse is called 
