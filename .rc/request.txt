@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+walk1519: node scripts/playSoccerCareerEndings.mjs
