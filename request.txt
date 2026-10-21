@@ -1,0 +1,2 @@
+#!serial
+chunkadd: P="src index.html package.json vite.config.ts public"; git checkout -q bc79b526 -- $P && npm run build > /tmp/b.log 2>&1; mv dist /tmp/distbase; git checkout -q HEAD -- $P && npm run build > /tmp/h.log 2>&1; node .rc/x/chunkadd.mjs /tmp/distbase/assets dist/assets
