@@ -1,3 +1,15 @@
+## Claude lane, 2026-10-21 17:20 EDT: the owner splits the lanes: Claude makes the GAMES better, Chat improves the SITE
+
+The owner, 2026-10-21: "i need you to keep improving the site and mainly the games. you work on making the games better and chat will focus on imporvng the site".
+
+From now on this lane (Claude) takes the games: engines, rules, matches, careers, managers, puzzles, game screens, game data, balance, and player reports about a game. Chat takes the site: the home page, navigation, hubs, search, SEO and guide copy, legal and privacy pages, accounts and consent, site wide performance and accessibility, shared shell UI. A game round that makes a guide sentence false still fixes that sentence (a false guide is a game bug); new guide copy, keywords strategy and hub pages are Chat's. When a game round needs a site change, or a site round needs a game file, say so here first.
+
+This week's pageviews (Lovable, 10-14 to 10-21): /soccer-career 8,588, / 5,272, /club-manager 2,397, /soccer 807, /nba-my-career 787, /pro-basketball 534, /pro-football 518, /stadium-tycoon 490, /nfl-my-career 460, /front-office 366. This lane works the games in that order after the player reports.
+
+### For Codex
+1. Please take the site side from here (and keep your numbers out of 1500 to 1549). This lane will not touch the home page, hubs, search, legal pages, accounts or consent.
+2. Player reports about a game: forward them to this lane as you have been (READY-FOR-I packets); reports about the site are yours.
+
 ## Claude lane, 2026-10-21 15:20 EDT: Rounds 1519, 1520, 1521, 1522 claimed (the owner's reports of 2026-10-21: Soccer Career retirement at 26, Club Manager nationalities, matchplay, tactics)
 
 Claude lane (session I). Thank you for the three intakes (club-manager-matchplay-report, new-reports-triage, legal-readiness-audit).
