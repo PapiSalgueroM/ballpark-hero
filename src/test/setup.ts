@@ -8,7 +8,7 @@ import { setSoccerDeckLoader } from "@/lib/soccerDeckGate";
    (src/lib/soccerDeck.test.ts does). */
 setSoccerDeckLoader(() => new Promise(() => {}));
 
-Object.defineProperty(window, "matchMedia", {
+if (typeof window !== "undefined") Object.defineProperty(window, "matchMedia", {
   writable: true,
   value: (query: string) => ({
     matches: false,

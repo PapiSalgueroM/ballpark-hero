@@ -924,7 +924,8 @@
         "Use the five tiles above the offers whenever you like: Inbox for texts from your corner and your family, Rival for his record and the feud, Bank and shop for camp upgrades, Corner for your trainer, manager, morale and fans, and Badges.",
         "Spend 6 weeks of camp across conditioning, power, defence and speed before every fight.",
         "Pick three looks for the night. They cycle through the rounds, so three different ones is a plan and one repeated is a gift.",
-        "Watch it round by round, or turn that off and take the decision straight away.",
+        "The ring shows the latest revealed round: both fighters' tactics, punches landed and condition. The figures illustrate each round, not every punch. A knockdown puts its actual victim down; a technical stoppage can leave the stopped fighter upright.",
+        "A new round arrives every 3 seconds. Pause holds it, Next round pauses and reveals one more, and Play starts a fresh 3-second wait. Skip takes you to the verdict. Earlier scorecards open below the current round. You can also turn playback off before the fight to see the result straight away.",
         "Keep going until the damage, the years or a run of defeats ends it, then read the verdict on your career."
       ],
       "rules": [
@@ -944,6 +945,7 @@
         "Moving up a division makes knockouts more likely, moving down makes them rarer, and either way you start the new division unranked and any belt stays behind. Your rival and the man who last beat you stay in the division you left. For 4 fights after a loss, a rematch clause can turn the middle offer into the man who beat you, and a win is worth up to 4 places, one more with the matchmaker."
       ],
       "example": [
+        "You use Pressure and land 12. Your opponent uses Counter and lands 4. If you score a knockdown, your opponent is the figure that goes down, and the recap names both tactics and counts. Tap Next round to pause on the next recap, then Play when you are ready. Watching never changes the saved fight.",
         "You start as a 21 year old welterweight out-boxer, unranked, and take the tune up. The purse is small and the win moves you one place, but you come out of it almost unmarked.",
         "Three even fights later you are ranked 11 and you have learned the circle: the swarmer in front of you gets boxed, and when he starts switching you give him something else instead of the same jab for ten rounds.",
         "After your ninth fight your rival goes first: he calls you out, you take it, and the middle offer becomes him at 30% more. Then two cards land. Four pounds over: hiring the nutritionist takes 0.02m from the bank, sweating it out leaves you 3 points flatter on the night, and coming in heavy cuts every purse on the table by 15% but leaves you 1 point sharper. You pay the nutritionist. The second card is the hometown hall, 5 more fans for 15% less money, and you stay on the road. With 0.31m in the bank you buy the cut man for 0.05m, and from now on you carry 4% less damage out of every fight.",

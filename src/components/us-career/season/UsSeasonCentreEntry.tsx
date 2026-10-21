@@ -64,6 +64,7 @@ export function UsSeasonCentreEntry({ sport, career, busy, onPlay, played }: {
   const alive = useRef(true);
   useEffect(() => { alive.current = true; return () => { alive.current = false; }; }, []);
   if (!sport.loadSeasonCentre) return null;
+  const watchLabel = sport.slug === 'nba' ? 'Watch games' : 'Week by week';
   const banned = (career.suspendedSeasons ?? 0) > 0;
   const held = banned ? '📺 Nothing to watch this year: you are suspended.' : sport.seasonCentreHeld?.(career.year, career.eraId, { pos: career.pos, team: career.team }) ?? null;
   const press = async (e: MouseEvent<HTMLButtonElement>) => {
@@ -118,10 +119,10 @@ export function UsSeasonCentreEntry({ sport, career, busy, onPlay, played }: {
           disabled={busy}
           aria-busy={loading === 'play' || undefined}
           onClick={press}
-          aria-label={`Week by week: watch the ${career.year} season game by game`}
+          aria-label={`${watchLabel}: watch the ${career.year} season game by game`}
           className="inline-flex min-h-11 items-center gap-2 rounded-full border border-border px-5 py-2.5 text-sm font-bold text-foreground hover:bg-muted/40"
         >
-          {loading === 'play' ? '📺 Loading...' : '📺 Week by week'}
+          {loading === 'play' ? '📺 Loading...' : `📺 ${watchLabel}`}
         </button>
       )}
       {watchLast && (
