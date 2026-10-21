@@ -1,0 +1,27 @@
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+-155799	usCareerSeasonReview-DB-A_kQQ.js	155799 -> 0
++155783	usCareerSeasonReview	0 -> 155783
+-31230	NbaFrontOffice-C_klvD-s.js	31230 -> 0
++31226	NbaFrontOffice	0 -> 31226
+-26563	NhlFrontOffice-CohXOgb-.js	26563 -> 0
++26558	NhlFrontOffice	0 -> 26558
+-24917	ImperialismBoardShared	24917 -> 0
++24917	ImperialismBoardShared-Ddtv-0Vy.js	0 -> 24917
++21854	Profile	0 -> 21854
+-21853	Profile-Clz-7pXH.js	21853 -> 0
++14986	AppearanceBuilder	0 -> 14986
+-14984	AppearanceBuilder-Ba3M-q_u.js	14984 -> 0
+-12034	SeasonReportTabs-MUsLpQ-L.js	12034 -> 0
++12033	SeasonReportTabs	0 -> 12033
+-11810	GuessNflTeam-Cnw4-J4f.js	11810 -> 0
++11805	GuessNflTeam	0 -> 11805
++11098	TransferScreen	0 -> 11098
+-11097	TransferScreen-C	11097 -> 0
+-9858	ListQuiz-BAjA383-.js	9858 -> 0
++9856	ListQuiz	0 -> 9856
+-9715	RankEm-B	9715 -> 0
++9715	RankEm	0 -> 9715
+-9625	DrillBoard	9625 -> 0
++9624	ChampOrNot	0 -> 9624
+-9623	ChampOrNot-sQPDX9M-.js	9623 -> 0
+chunks compared: 537 and 537; changed 408; net 2233 bytes gz
