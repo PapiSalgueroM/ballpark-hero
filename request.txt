@@ -1,0 +1,4 @@
+#!serial
+ledger-head: node scripts/simCmLedgerBound.mjs
+ledger-base: git worktree add -q /tmp/base bc79b526 && ln -s "$PWD/node_modules" /tmp/base/node_modules && cd /tmp/base && node scripts/simCmLedgerBound.mjs
+ledger-head2: node scripts/simCmLedgerBound.mjs

@@ -1,0 +1,3 @@
+ledger-head exit=1 344s | simCmLedgerBound: RED, sections 1 (1)
+ledger-base exit=0 334s | simCmLedgerBound: green, all four sections held
+ledger-head2 exit=0 338s | simCmLedgerBound: green, all four sections held
