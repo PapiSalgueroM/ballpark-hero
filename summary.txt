@@ -1,0 +1,9 @@
+worlducl exit=0 1511s | simWorldUcl: green, 495862 checks, 0 failures
+wu-ctl-a exit=0 2514s | controls (each must be 1): dropnight=1 field32=1 eraformat=1 meinfill=1 meindirect=1 nopens=1 agall=1 locale=1 swaphome=1 edgeswap=1 standweak=1 noholdertop=1 nocustomexi
+wu-ctl-b exit=0 1645s | controls (each must be 1): stream=1 participant=1 form=1 ahead=1 live=1 noseen=1 marks=1 keep=1 noholder=1
+dd-world exit=0 6s | controls (each must be 1): world=1 worlddeadline=1
+unseeded exit=0 151s | simCmUnseededWorld: green. 49 old saves with no deal play byte equal to 64ae66bf (state, draws and saved bytes at every step), 49 with every deal play byte equal to it up
+un-ctl exit=0 465s | controls (each must be 1): guard=1 early=1 never=1 norecord=1 noinverse=1
+vitest-1503 exit=0 5s |    Duration  4.95s (transform 2.39s, setup 249ms, collect 4.94s, tests 3.99s, environment 1.32s, prepare 491ms)
+ucl-family exit=0 114s | simUclSeasonOne exit 0: simUclSeasonOne: all green
+cont-nobridge exit=1 0s | contCmp m3 without the bridge exited 2, not 1
