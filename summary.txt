@@ -1,0 +1,6 @@
+vitest exit=0 8s |    Duration  7.36s (transform 2.88s, setup 83ms, collect 3.32s, tests 2.40s, environment 389ms, prepare 169ms)
+simNoRivalNames exit=0 12s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 41s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+endings exit=0 65s | PASS: no career ends before the age rules without the player, and the pair is reconciled
+simStorageWrites exit=0 4s | simStorageWrites: all green (owed: 12)
+tsc exit=0 72s | 
