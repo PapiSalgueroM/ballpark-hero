@@ -311,8 +311,13 @@ async function nba(view, profile, row) {
   await activate(entry, profile);
   const centre = page.locator('[data-season-centre]'); await centre.waitFor();
   const help = page.locator('[data-season-help]'); await help.waitFor();
-  assert((await help.innerText()).includes('Worked examples'), 'The viewer opens real worked examples before playback');
-  if (row.variant === 'after') assert.match(await help.innerText(), /quarter|court/i, 'The NBA guide explains its new quarter court recap');
+  const exampleHeadings = await help.locator('div').evaluateAll(nodes => nodes.filter(node => node.childElementCount === 0).map(node => (node.textContent || '').replace(/\s+/g, ' ').trim()).filter(text => text === 'Worked examples'));
+  assert.deepEqual(exampleHeadings, ['Worked examples'], 'The viewer opens its real worked-example heading even when CSS renders it uppercase');
+  const guideText = (await help.textContent()).replace(/\s+/g, ' ').trim();
+  assert(guideText.includes('You win 112-104 and put up 31 points, 8 rebounds and 6 assists. Your record goes to 8-4.'), 'The viewer includes the actual worked game example');
+  assert(guideText.includes('Your season card says 25 points a game over 80 games. Add up every game here, divide by 80, and it rounds to 25.'), 'The viewer includes the actual worked averages example');
+  if (row.variant === 'after') assert(guideText.includes('A 24-22 first quarter followed by 31-28 makes it 55-50.'), 'The new court guide includes its actual reconciled quarter example');
+  row.helpExamples = { heading: 'Worked examples', game: true, averages: true, court: row.variant === 'after' };
   await screenshot(page, row, 'instructions');
   await activate(help.getByRole('button', { name: 'Got it', exact: true }), profile);
   assert(await centre.evaluate(el => el.contains(document.activeElement)), 'Closing help restores focus inside the viewer');

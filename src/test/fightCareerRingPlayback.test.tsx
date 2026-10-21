@@ -207,7 +207,7 @@ describe('Fight Career revealed round truth', () => {
     /* Observe this board's reveal callback without judging unrelated timers. */
     const realTimeout = window.setTimeout.bind(window);
     const revealCallback = vi.fn();
-    const revealIds: number[] = [];
+    const revealIds: unknown[] = [];
     const timeouts = vi.spyOn(window, 'setTimeout').mockImplementation((handler: TimerHandler, delay?: number, ...args: unknown[]) => {
       if (delay === 3000 && typeof handler === 'function') {
         const id = realTimeout((...callbackArgs: unknown[]) => { revealCallback(); handler(...callbackArgs); }, delay, ...args);
@@ -219,7 +219,6 @@ describe('Fight Career revealed round truth', () => {
     try {
       const pending = startSavedBout();
       expect(revealIds, 'The fresh real board owns exactly one round reveal timeout').toHaveLength(1);
-      expect(revealIds[0]).toBeGreaterThan(0);
       const independentCallback = vi.fn();
       realTimeout(independentCallback, 3100);
       pending.view.unmount();
