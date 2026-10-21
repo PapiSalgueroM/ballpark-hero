@@ -1,0 +1,6 @@
+headsha exit=0 0s | 841ea72fb Release BO seam: refresh scripts/data/guideHeadingsFrozen.json for /club-manager
+wf286x exit=0 252s | wfrun career-pending-popularity-gates.yml: 8 steps ran, 0 failed
+wf302x exit=1 234s | wfrun career-pending-money-gates.yml: 13 steps ran, 2 failed: Retain generated sitemap and restore its source | Final source and dependency holds
+wf288 exit=0 278s | wfrun career-life-stories.yml: 10 steps ran, 0 failed
+wf289x exit=0 342s | wfrun career-phone-season-budget.yml: 10 steps ran, 0 failed
+wf297x exit=0 342s | wfrun career-phone-state-isolation.yml: 11 steps ran, 0 failed
