@@ -1,0 +1,2 @@
+simCmMadeUpNations: node scripts/simCmMadeUpNations.mjs
+simCmMadeUpNations-base: git worktree add -q /tmp/base bc79b526 && BASE_ROOT=/tmp/base node scripts/simCmMadeUpNations.mjs
