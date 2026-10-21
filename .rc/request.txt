@@ -1,0 +1,2 @@
+#!serial
+difficulty-mark2: git worktree add base-c33 c3309e67 >/dev/null 2>&1; export MARK=1; node .rc/x/mutDiffUsc.mjs && BASE_ROOT=base-c33 SECTION=2 node scripts/simCmDifficulty.mjs; s=$?; git checkout -- scripts; exit $s
