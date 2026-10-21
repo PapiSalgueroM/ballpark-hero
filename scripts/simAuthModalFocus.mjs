@@ -9,7 +9,7 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const control = process.env.AUTH_MODAL_FOCUS_CONTROL || '';
 assert.ok(['', 'nofocus', 'accountonly'].includes(control), 'Unknown account dialog control');
-const sourcePath = path.join(root, 'src/components/auth/AuthModal.tsx');
+const sourcePath = path.join(root, 'src/components/auth/AuthModalBody.tsx');
 const original = await readFile(sourcePath, 'utf8');
 let folder, copy;
 try {
@@ -32,7 +32,7 @@ try {
     folder = await mkdtemp(path.join(base, 'auth-focus-'));
     copy = path.join(folder, 'AuthModal.tsx');
     await writeFile(copy, changed);
-    env.NO_DOUBLE_SWAP = JSON.stringify({ '@/components/auth/AuthModal': copy });
+    env.NO_DOUBLE_SWAP = JSON.stringify({ '@/components/auth/AuthModalBody': copy });
   }
   const run = spawnSync(process.execPath, [path.join(root, 'node_modules/vitest/vitest.mjs'), 'run', 'src/test/authModalFocus.test.tsx', '--reporter=verbose'], { cwd: root, env, encoding: 'utf8', timeout: 120000 });
   const output = `${run.stdout || ''}\n${run.stderr || ''}`;

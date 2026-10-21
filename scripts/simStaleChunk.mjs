@@ -34,8 +34,9 @@
       a reload that was held does not spend the tab's one reload.
    6. (Round 1144 review) the two reloads that sit on every page, a career's
       included, do the same: the update toast's Refresh goes through
-      reloadToRetryChunk, and the footer's Cookie choices retries a waiting
-      save before it reloads. Section 3 also holds that the boundary lets
+      reloadToRetryChunk, and the footer opens Cookie choices without a reload.
+      Withdrawal reloads through the consent module's save and durable-record
+      gate. Section 3 also holds that the boundary lets
       go of held saves before it asks for its reload: by then the game
       that held them is unmounted, and a reload refused for their sake
       protected nothing and left the player on the broken page.
@@ -69,7 +70,9 @@
    1338) takes the page flag out of the listener (section 7 red), flagfirst
    (Round 1338) sets the page flag above the once flag read (section 7 red),
    catchreload (Round 1338) puts CareerStory's old reloading catch back
-   (section 8 red).
+   (section 8 red). Round 1442 adds consentnosave, consentbare,
+   consentblocked and consentdurable, each breaks the withdrawal reload gate
+   (section 6 red).
    Each asserts its anchor exists exactly once first. */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -77,7 +80,7 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_STALE_CHUNK_CONTROL || '';
-const EXPECT = { nolistener: [1], noguard: [2], noprerender: [2], nooffline: [2], nosave: [2, 5], norelease: [3], barenudge: [6], nowait: [7], flagfirst: [7], catchreload: [8] };
+const EXPECT = { nolistener: [1], noguard: [2], noprerender: [2], nooffline: [2], nosave: [2, 5], norelease: [3], barenudge: [6], nowait: [7], flagfirst: [7], catchreload: [8], consentnosave: [6], consentbare: [6], consentblocked: [6], consentdurable: [6] };
 /* Exit 2, never 1: 1 is a control that fired, and a mistyped name must not read as one. */
 if (CONTROL && !(CONTROL in EXPECT)) { console.error('unknown control ' + CONTROL); process.exit(2); }
 
@@ -92,6 +95,8 @@ function rewrite(src, anchor, replacement, why) {
 let fresh = fs.readFileSync(path.join(ROOT, 'src/lib/freshBuild.ts'), 'utf8').replaceAll('\r\n', '\n');
 let boundaryRaw = fs.readFileSync(path.join(ROOT, 'src/components/RouteErrorBoundary.tsx'), 'utf8').replaceAll('\r\n', '\n');
 let nudgeRaw = fs.readFileSync(path.join(ROOT, 'src/components/layout/UpdateNudge.tsx'), 'utf8').replaceAll('\r\n', '\n');
+let consentRaw = fs.readFileSync(path.join(ROOT, 'src/components/CookieConsent.tsx'), 'utf8').replaceAll('\r\n', '\n');
+let preferencesRaw = fs.readFileSync(path.join(ROOT, 'src/lib/consentPreferences.ts'), 'utf8').replaceAll('\r\n', '\n');
 const footer = code(fs.readFileSync(path.join(ROOT, 'src/components/game/Footer.tsx'), 'utf8').replaceAll('\r\n', '\n'));
 const main = code(fs.readFileSync(path.join(ROOT, 'src/main.tsx'), 'utf8').replaceAll('\r\n', '\n'));
 if (CONTROL === 'nolistener') fresh = rewrite(fresh, "window.addEventListener('vite:preloadError', (event: Event) => {", "((event: Event) => {", 'nolistener');
@@ -123,6 +128,10 @@ if (CONTROL === 'nooffline') fresh = rewrite(fresh, '  if (navigator.onLine === 
 /* Round 1144 review: the two controls below edit the boundary and the update toast, in memory like the rest. */
 if (CONTROL === 'norelease') boundaryRaw = rewrite(boundaryRaw, 'const unsaved = !releasePendingSaves();', 'const unsaved = false;', 'norelease');
 if (CONTROL === 'barenudge') nudgeRaw = rewrite(nudgeRaw, 'if (reloadToRetryChunk() || !hasPendingSaves()) return;', 'window.location.reload();', 'barenudge');
+if (CONTROL === 'consentnosave') preferencesRaw = rewrite(preferencesRaw, '  if (!settlePendingSaves()) return false;', '', 'consentnosave');
+if (CONTROL === 'consentbare') consentRaw = rewrite(consentRaw, 'if (canReloadAfterWithdrawal(pendingRevoked.current)) {', 'if (true) {', 'consentbare');
+if (CONTROL === 'consentblocked') preferencesRaw = rewrite(preferencesRaw, "  if (getStorageTrouble() === 'blocked') return false;", '', 'consentblocked');
+if (CONTROL === 'consentdurable') preferencesRaw = rewrite(preferencesRaw, 'parseConsentPreferences(window.localStorage.getItem(CONSENT_KEY))', 'parseConsentPreferences(safeLocalStorage.getItem(CONSENT_KEY))', 'consentdurable');
 /* Round 1338: the page flag, in memory like the rest. */
 if (CONTROL === 'nowait') fresh = rewrite(fresh, 'if (reloadAsked || reloadOnceForStaleChunk())', 'if (reloadOnceForStaleChunk())', 'nowait');
 if (CONTROL === 'flagfirst') {
@@ -132,6 +141,8 @@ if (CONTROL === 'flagfirst') {
 const boundary = code(boundaryRaw);
 const nudge = code(nudgeRaw);
 const freshCode = code(fresh);
+const consent = code(consentRaw);
+const preferences = code(preferencesRaw);
 
 let failures = 0; const red = new Set(); let section = 0;
 const fail = m => { failures++; red.add(section); console.log('   FAIL ' + m); };
@@ -227,21 +238,36 @@ console.log('5) every reload freshBuild makes asks for waiting saves first');
 }
 
 section = 6;
-console.log('6) the reloads on every page (the update toast, the footer) ask for waiting saves first');
+console.log('6) the update toast and consent withdrawal ask for waiting saves before reloading');
 {
-  /* Round 1144 review: these two are mounted on every page, a career's included, and both reloaded
-     bare. The update toast shows at the very moment check() above declines to reload over a refused
-     save, so its Refresh goes through the same guard. The footer's Cookie choices has to work every
-     time (it is how a choice is taken back), so it is not held: the save gets its retry first. */
+  /* Opening preferences keeps the current choice. A withdrawal stops optional
+     services at once, but reload waits for held saves, blocked storage and a
+     durable record that cannot grant the revoked purpose on the next boot. */
   const nudgeBare = /location\.reload\(/.test(nudge);
   const nudgeGuarded = /reloadToRetryChunk\(\)/.test(nudge) && /from ['"]@\/lib\/freshBuild['"]/.test(nudge);
-  const ask = footer.indexOf('settlePendingSaves()');
   const footerReloads = (footer.match(/location\.reload\(/g) ?? []).length;
-  const footerAsks = footerReloads === 1 && ask >= 0 && ask < footer.indexOf('location.reload(');
+  const footerOpens = footerReloads === 0 && /openConsentChoices\(event\.currentTarget\)/.test(footer)
+    && /import\s*\{\s*openConsentChoices\s*\}\s*from ['"]@\/lib\/consentPreferences['"]/.test(footer);
+  const consentReloads = (consent.match(/location\.reload\(/g) ?? []).length;
+  const consentGuarded = consentReloads === 1 && /if \(canReloadAfterWithdrawal\(pendingRevoked\.current\)\) \{\s*window\.location\.reload\(\);/.test(consent)
+    && /import\s*\{[^}]*\bcanReloadAfterWithdrawal\b[^}]*\}\s*from ['"]@\/lib\/consentPreferences['"]/.test(consent);
+  const gate = (preferences.match(/export function canReloadAfterWithdrawal\([^\n]*\n[\s\S]*?\n\}/) ?? [''])[0];
+  const asks = gate.indexOf('if (!settlePendingSaves()) return false;');
+  const blocks = gate.indexOf("if (getStorageTrouble() === 'blocked') return false;");
+  const durable = gate.indexOf('parseConsentPreferences(window.localStorage.getItem(CONSENT_KEY))');
+  const seamImport = /import\s*\{[^}]*\bsettlePendingSaves\b[^}]*\}\s*from ['"]@\/lib\/safeStorage['"]/.test(preferences);
+  const saveSafe = seamImport && asks >= 0 && asks < gate.indexOf('try {');
+  const blockedSafe = blocks >= 0 && blocks < gate.indexOf('try {');
+  const durableSafe = durable > gate.indexOf('try {') && /catch \{ return false; \}/.test(gate)
+    && /return !durable \|\| \(\(!revoked\.advertising \|\| !durable\.advertising\)\s*&& \(!revoked\.analytics \|\| !ANALYTICS_READY \|\| !durable\.analytics\)\);/.test(gate);
   if (nudgeBare) fail('UpdateNudge reloads the page itself: its Refresh would go over a save the browser refused');
   if (!nudgeGuarded) fail('UpdateNudge does not reload through reloadToRetryChunk from freshBuild');
-  if (!footerAsks) fail(`the footer has ${footerReloads} reload call(s) and ${ask < 0 ? 'never asks' : 'asks'} for waiting saves before the first: a refused save would not get its retry`);
-  if (!nudgeBare && nudgeGuarded && footerAsks) ok('the update toast reloads through the shared guard, and the footer retries a waiting save before its reload');
+  if (!footerOpens) fail(`the footer has ${footerReloads} reload call(s), or does not open the shared consent choices`);
+  if (!consentGuarded) fail(`CookieConsent has ${consentReloads} reload call(s), or reloads outside canReloadAfterWithdrawal`);
+  if (!saveSafe) fail('the withdrawal gate does not refuse reload when settlePendingSaves cannot save progress');
+  if (!blockedSafe) fail('the withdrawal gate does not refuse reload while site storage is blocked');
+  if (!durableSafe) fail('the withdrawal gate does not fail closed on the actual native consent record');
+  if (!nudgeBare && nudgeGuarded && footerOpens && consentGuarded && saveSafe && blockedSafe && durableSafe) ok('the footer opens choices; toast and withdrawal reloads protect waiting saves, and withdrawal verifies the durable record');
 }
 
 section = 7;

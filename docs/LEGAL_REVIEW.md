@@ -1,5 +1,7 @@
 # Legal pages review - 2026-07-02
 
+Current operational update, 2026-10-21: the July review and owner decisions below are historical. The current account flow requires a 13+ confirmation. The individual operator and Massachusetts governing-law facts were reconfirmed by the owner. Use the updated access and deletion procedure below, rather than the old name-based procedure. Source changes alone do not establish deployment or legal compliance.
+
 Scope: `src/pages/PrivacyPolicy.tsx` and `src/pages/TermsOfService.tsx`. Only the text content inside these two components was changed. No other files were touched.
 
 ## What was wrong or missing
@@ -64,42 +66,36 @@ Both pages: confirmed valid JSX after edits (all tags balanced, entities intact)
 4. **Data deletion SLA and mechanism.** The pages promise a 30-day response to deletion/access requests via a personal Gmail address (now `douknowball1@gmail.com`). That is functionally fine for a small site today, but the owner should confirm this inbox is actually monitored, and consider a dedicated support address if the site grows.
 5. **Google AdSense / ad-tech disclosure completeness.** This review described AdSense and personalized ads at a level consistent with the existing cookie banner. If the owner later adds any other ad network, analytics tool (e.g., Google Analytics), or third-party SDK, the Privacy Policy's Section 4 list needs a matching addition; this was not preemptively added because no such integration currently exists in the codebase.
 
-## The deletion runbook (added 2026-08-27, Round 304)
+## Account access and deletion procedure (updated 2026-10-21)
 
-The pages promise deletion within 30 days of an email to douknowball1@gmail.com. Until Round 304
-nothing anywhere said HOW, so the promise had no procedure behind it. This is the procedure. Run
-it through the Supabase MCP (SQL authenticated by the session), never through anything the
-browser can reach.
+Keep the existing 30-day access/deletion commitment for requests to douknowball1@gmail.com. Log receipt, verification status, deadline, scope and completion. Escalate unresolved cases before the deadline. Do not claim this document proves that the inbox is monitored, that a request was completed, or that every processor has a known retention period.
 
-Given a request from a signed in user (they must write from the email on the account, or
-otherwise prove control of it):
+### Self-service source and release prerequisites
 
-1. Find the user: `select id from auth.users where email = '<their email>';`
-2. Note their display name and username first, they key the anonymous rows:
-   `select display_name, username from public.profiles where user_id = '<id>';`
-3. Delete the account rows, in this order:
-   - `delete from public.user_best_scores where user_id = '<id>';`
-   - `delete from public.user_game_scores where user_id = '<id>';`
-   - `delete from public.daily_completions where user_id = '<id>';`
-   - `delete from public.user_scores where user_id = '<id>';`
-   - `delete from public.user_preferences where user_id = '<id>';`
-   - `delete from public.profiles where user_id = '<id>';`
-4. The anonymous heartbeat rows in `game_completions` are keyed by display name, not user id.
-   If they ask for those too:
-   `delete from public.game_completions where player_name in ('<display_name>', '<username>');`
-   (This can also catch a different player who happened to type the same name; the row carries
-   nothing else identifying, so over-deleting here is the safe direction.)
-5. Delete the auth user last, via the Supabase dashboard (Authentication, then the user, then
-   Delete) or the admin API. This is what actually kills the login.
-6. Reply to the email confirming what was deleted and when.
+The own-profile account-data card calls `account-privacy`. Release it only after the reviewed migration, edge function and UI are deployed and the security checks pass. The endpoint gets the current user from Supabase Auth on every request. It accepts no client-selected user ID, email, SQL or table name. Export uses an explicit Auth field allowlist and one service-only SQL function with a fixed public-table field allowlist, so it neither exports Auth secrets nor silently loses rows to pagination.
 
-Guest (signed out) requests: their rows are keyed by the generated handle in their own browser
-(`dukb-guest-handle` in localStorage). Tell them the handle to look up (they can read it from
-the leaderboard chip), then run step 4 with it, and tell them clearing site data in their
-browser removes the local half.
+The 15 direct account tables are `bootroom_save`, `daily_badges`, `daily_completions`, `fantasy_draft_votes`, `overrated_votes`, `profiles`, `saved_brackets`, `tier_list_votes`, `transfer_grade_votes`, `user_best_scores`, `user_game_scores`, `user_preferences`, `user_roles`, `user_scores` and the online `user_scores_bak_20260919`. Six Bootroom child tables are included through the user's save IDs: `bootroom_event_log`, `bootroom_facilities`, `bootroom_match`, `bootroom_save_player`, `bootroom_scout_report` and `bootroom_transfer_log`.
 
-The other standing promise, access requests ("what do you have on me"): steps 1, 2 and the
-selects in 3 and 4 answer it, pasted into the reply.
+Deletion requires the exact confirmation `DELETE MY ACCOUNT` and a fresh password sign-in to the same server-verified account. The temporary confirmation session is revoked. The server then uses the hard-delete Auth admin API for that account alone. Database cascades cover all 15 direct tables and six children. The 11 newly added auth-user FKs are initially `NOT VALID`, which preserves historical orphan rows while enforcing new writes. Stale JWTs can remain cryptographically valid after Auth deletion, so the endpoint always performs a current `getUser` lookup, and the FKs prevent the deleted ID from recreating account-linked rows. The three guest-vote tables also restrict a non-null user ID to the caller's own ID.
+
+The final deletion-time check lives in one private Auth DELETE trigger. It locks the Auth parent row, every existing subject role and MFA-factor row, then takes SHARE table locks on Storage objects and buckets before checking current admin access, verified MFA and Storage ownership. The existing role/factor Auth FKs prevent new child inserts while the parent is locked; the child row locks cover role/status-only updates. The fixed private trigger needs narrow definer rights because the Auth database role lacks role/Storage read grants. It uses an empty search path, exposes no arbitrary SQL, and is not a public RPC. Deletion outside Read Committed isolation is refused; that is the catalog-confirmed project default. Storage schema is not altered. Its SHARE locks cover in-flight writes and the deletion transaction, but a future trusted-service upload after deletion remains outside this feature's boundary. Current Storage has no client policies and source has no upload path, so a future upload feature must separately review stale JWT and owner attribution. Conflicting transactions can fail or deadlock and roll back; handle the actual failure through the verified manual path. Do not disable the guard or remove roles, factors or files without a verified request, supported APIs and administrative continuity.
+
+Accounts with admin access, verified MFA, no usable email/password sign-in, or owned Storage objects/buckets need a verified manual case. Any failed authorization, preflight, password confirmation or Auth deletion leaves the endpoint without a successful deletion response. Storage ownership races can still make the Auth API refuse deletion; do not delete table rows first to work around that refusal. The UI clears the password field after each attempt, binds responses to the initiating account, and shows a confirmed deletion with an explicit Log Out next step. It does not automatically clear caches, sign out or navigate, because those actions could affect a different account activated while the response was pending. Browser-only game saves are not erased by account deletion.
+
+### Manual cases and identity verification
+
+1. Record the requested action and verify control of the account using a current authenticated session and supported reauthentication or an account recovery process. A matching From address, display name, username, guest handle, screenshot or claimed UUID alone is not sufficient authority to disclose or delete records. Resolve the verified Auth user ID once and use only that ID for account-linked work. Never paste credentials, tokens, full account exports or unnecessary personal data into the repository, chat, logs or tracking notes.
+2. For account access, use the same fixed export scope after verification. Deliver the result through a channel whose control was verified. Do not send another account's data because its display name matches. A failure or oversized/unavailable response needs an operator case, not a truncated export labeled complete.
+3. For admin accounts, arrange and verify administrative continuity before deletion. For MFA accounts, complete a supported factor challenge or verified recovery. For Storage ownership, identify only the verified subject's objects/buckets using both current `owner_id` and legacy `owner` metadata. Review what is shared and obtain the necessary disposition before removing files through the Storage API. Never delete Storage metadata directly with SQL, and never remove another owner's files to unblock a request.
+4. Once prerequisites and intent are verified, use the supported hard-delete Auth admin operation for the exact subject ID with the reviewed cascades in place. Do not manually delete selected account tables first, and do not use a public arbitrary-SQL RPC. Verify completion using authorized, minimally scoped checks and report the actual outcome. A dropped response alone does not prove completion. The historical `private.r644_soccer_scores_bak` was absent from the 2026-10-21 catalog; only `private.app_secrets` was present there. Recheck metadata before assuming that inventory remains current, without reading secrets.
+
+### Public play records, reports, inboxes and backups
+
+`game_completions` uses player names rather than a verified account key. Do not export or delete those rows automatically by display name, username or guest handle. Name collisions can identify a different player. Ask for independent corroboration that narrows the specific records, disclose only records that can be attributed safely, and explain any records that cannot be reliably linked. Clearing site data on the requester's own device handles local data; warn that this also removes their browser-only progress. Do not clear every localStorage key as part of account deletion.
+
+Bug reports and their free-text context can contain personal data independently of an account. A verified account ID does not automatically establish ownership of every matching report or inbox message. Review narrowly corroborated records and related copies separately, including the report relay, Gmail and FormSubmit where applicable. Do not forward a report merely to process a privacy request. Do not expose other people's content, internal secrets or unverified matching rows.
+
+The online score backup is covered by the fixed export and cascade. Supabase infrastructure backups, other archived copies, Auth audit records and other provider logs, email copies, advertising/analytics data and AI-provider data are separate concerns. Their configured retention, deletion availability and processor contracts were not verified by this source audit. Do not invent a retention period or claim immediate removal from every backup. Track relevant requests and confirmed processor responses, record any legally required restriction or exception, and communicate the actual scope within the existing response deadline. If restoring a backup, reconcile verified completed deletions before serving restored account data. Keep any operational record limited to what is necessary for that reconciliation and handling the request, under an explicitly reviewed retention policy.
 
 ## Real fixture lists in Club Manager (added 2026-10-10, Release AT and Rounds 1184, 1213, 1225)
 

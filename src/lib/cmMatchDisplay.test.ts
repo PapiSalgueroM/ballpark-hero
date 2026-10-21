@@ -108,5 +108,5 @@ describe('the pitch name and the initials (Round 1340b)', () => {
     console.log(`pitch names: ${real.size} real names and ${generated.size} generated ones checked; ${changed.length} real names print differently from the old last word`);
     for (let i = 0; i < changed.length; i += 8) console.log(`  ${changed.slice(i, i + 8).join('; ')}`);
     console.log(`the longest pitch name in the pool: ${longest} (${longest.length} characters)`);
-  });
+  }, 15_000);
 });

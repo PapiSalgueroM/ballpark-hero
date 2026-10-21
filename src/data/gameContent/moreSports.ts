@@ -1886,8 +1886,8 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
         items: ["Pick three looks for the night. They cycle through the rounds, so three different ones is a plan and one repeated is a gift."],
       },
       {
-        heading: "Watching it live before the final verdict",
-        items: ["Watch it round by round, or turn that off and take the decision straight away."],
+        heading: "Watching the ring before the final verdict",
+        items: ["The ring shows the latest revealed round: both fighters' tactics, punches landed and condition. The figures illustrate each round, not every punch. A knockdown puts its actual victim down; a technical stoppage can leave the stopped fighter upright.", "A new round arrives every 3 seconds. Pause holds it, Next round pauses and reveals one more, and Play starts a fresh 3-second wait. Skip takes you to the verdict. Earlier scorecards open below the current round. You can also turn playback off before the fight to see the result straight away."],
         subsections: [
           {
             heading: "What ends a career and reads the verdict",
@@ -1954,6 +1954,10 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
       },
     ],
     exampleSections: [
+      {
+        heading: "Reading a round in the ring",
+        paragraphs: ["You use Pressure and land 12. Your opponent uses Counter and lands 4. If you score a knockdown, your opponent is the figure that goes down, and the recap names both tactics and counts. Tap Next round to pause on the next recap, then Play when you are ready. Watching never changes the saved fight."],
+      },
       {
         heading: "Starting as an unranked welterweight",
         paragraphs: ["You start as a 21 year old welterweight out-boxer, unranked, and take the tune up. The purse is small and the win moves you one place, but you come out of it almost unmarked."],

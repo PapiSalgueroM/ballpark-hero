@@ -42,6 +42,16 @@ const About = () => {
         </div>
 
         <div>
+          <h2 className="text-lg font-semibold text-foreground mb-2">How we use AI</h2>
+          <p>
+            AI tools help with coding, debugging and drafting some text for DoUKnowBall. A person runs the site and remains responsible for what is published. AI output can be wrong and is not proof that a sporting fact is correct.
+          </p>
+          <p className="mt-2">
+            Some games also use AI to check answers, suggest players, rate or analyze lineups, and write fictional season stories. Those outputs can make mistakes. Simulated results and stories are entertainment, not reports or predictions of real events. Our <Link to="/privacy" className="underline hover:text-foreground transition-colors">Privacy Policy</Link> explains what game inputs go to AI services. Please keep personal or confidential information out of game answers.
+          </p>
+        </div>
+
+        <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">What we care about</h2>
           <p>
             Getting the data right comes first. Trivia uses real sporting records, and a grid answer has to match the player's actual career. If something looks wrong, every page has a Report a problem button in the footer so you can send us the page and the detail that needs checking.
