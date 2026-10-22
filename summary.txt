@@ -1,0 +1,7 @@
+headsha exit=0 0s | 53a094c8d1 rc request rBP-trA-main for 3ee0bf6293859740a50654e299232bcd0ff701c3
+simCmVar exit=1 0s | Node.js v24.21.0
+simCmShootoutOrder exit=0 31s | simCmShootoutOrder: all sections passed
+ctl-motion-whistle exit=0 15s | simLiveSimMotion: control whistle turned "the ninetieth minute asks the latest save" red on an assertion (2 failed), as it must.
+simLiveSimMotion exit=0 83s | simLiveSimMotion: green. 56 tests passed (the viewer on real feeds, the pitch part's rules on 200 half feeds and on feeds made by hand, the goal sequence, match mode), an
+simClubManagerSlots exit=0 102s | simClubManagerSlots: all sections green
+simClubManagerBudget exit=1 184s | simClubManagerBudget: 1 FAILURE(S)
