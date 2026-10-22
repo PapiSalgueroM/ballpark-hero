@@ -1,0 +1,4 @@
+oldsave exit=1 48s | oldsave1538: RED, 1 findings
+oldsave-potplus exit=1 49s | oldsave1538: RED, 1 findings
+oldsave-nobank exit=1 48s | oldsave1538: RED, 918 findings
+oldsave-clampdown exit=1 47s | oldsave1538: RED, 7 findings
