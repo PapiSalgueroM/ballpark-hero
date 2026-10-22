@@ -1,0 +1,4 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-lazy: node_modules/.bin/vitest run src/components/front-office/FrontOfficeLazyDesk.test.tsx --testTimeout=300000 --hookTimeout=120000
+vitest-board: node_modules/.bin/vitest run src/components/front-office/FrontOfficeOnePress.test.tsx src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx src/components/front-office-shared/FrontOfficeGmCareer.test.tsx src/test/frontOfficeSaveRecovery.test.tsx --testTimeout=600000 --hookTimeout=120000
+fob-check: node scripts/controlFrontOfficeBoard.mjs check

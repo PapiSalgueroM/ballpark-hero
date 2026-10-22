@@ -1,0 +1,4 @@
+vitest-lazy exit=0 5s |    Duration  4.61s (transform 1.34s, setup 127ms, collect 171ms, tests 2.94s, environment 568ms, prepare 343ms)
+fob-check exit=0 0s | controlFrontOfficeBoard: check passed. Every string of all 50 controls is in the board exactly once.
+vitest-board exit=0 23s |    Duration  21.91s (transform 3.81s, setup 359ms, collect 4.84s, tests 35.58s, environment 1.94s, prepare 541ms)
+tsc exit=0 60s | 
