@@ -1,0 +1,3 @@
+  FAIL: 390x844 control FIRED: cloned floaters overlap 97 percent ("🏁 35 career wins: +2% forever" and "🏁 35 career wins: +2% forever")
+  390x844: {"worst":97,"worstPair":"\"🏁 35 career wins: +2% forever\" and \"🏁 35 career wins: +2% forever\"","seen":["🏁 35 wins +$30.0K","🏁 35 career wins: +2% forever","⚽ 75 goals: +2% forever"],"lines":["🏅 Badge earned: 🏁 35 career wins, +2% income forever","🏅 Badge earned: ⚽ 75 goals, +2% income forever"],"overLine":0,"together":2}
+walkf3 (control pile): 1 failure
