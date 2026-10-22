@@ -1,0 +1,15 @@
+#!serve
+#!playwright
+playLeagueTableFit: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" PORT=4181 ONLY=playLeagueTableFit node scripts/runAllSims.mjs --browser
+playTycoonSetPieceFit: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" PORT=4182 ONLY=playTycoonSetPieceFit node scripts/runAllSims.mjs --browser
+playFirstTeamFit: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" PORT=4183 ONLY=playFirstTeamFit node scripts/runAllSims.mjs --browser
+playTycoonGearFit: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" PORT=4184 ONLY=playTycoonGearFit node scripts/runAllSims.mjs --browser
+playTycoonSaleReview1083: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" PORT=4185 ONLY=playTycoonSaleReview1083 node scripts/runAllSims.mjs --browser
+simTycoonGoalFlight: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" PORT=4186 ONLY=simTycoonGoalFlight node scripts/runAllSims.mjs --browser
+simSetPiecePresentation: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" PORT=4187 ONLY=simSetPiecePresentation node scripts/runAllSims.mjs --browser
+playHomeFold: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" PORT=4188 ONLY=playHomeFold node scripts/runAllSims.mjs --browser
+checkTycoonGroundGrowth: node scripts/qa/tycoonGroundGrowth1094.mjs --prefetch-assets-only && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/checkTycoonGroundGrowth.mjs
+qaFreeKickRange: node scripts/qa/freeKickRange1091.mjs --prefetch-assets-only && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/freeKickRange1091.mjs
+walk: node scripts/playTycoonScorelines.mjs
+walk-crowd: PLAY_SCORELINES_CONTROL=crowd node scripts/playTycoonScorelines.mjs
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
