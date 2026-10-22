@@ -1,0 +1,4 @@
+hub-engaged exit=2 1s | ABORT: the press mark is not in the bundle once
+hub-house exit=2 1s | ABORT: the press mark is not in the bundle once
+save exit=0 26s | PROBE save: green inband=102/0 pinned=300/0 outband=1/197
+save-s77 exit=0 25s | PROBE save: green inband=105/0 pinned=300/0 outband=0/195

@@ -1,0 +1,7 @@
+save probe: 300 saves written by the base engine (4 on the retirement screen), seed 77
+  parsed by this branch as a save: 300 of 300; parsed differently from the base: 0; hub line with undefined or NaN: 0
+  pressed on both trees, one seeded stream, through the season's screens:
+    morale inside 74 to 88: 105 byte identical, 0 not
+    morale pinned at 81:    300 byte identical, 0 not
+    morale outside the band: 0 identical, 195 moved (by design)
+PROBE save: green inband=105/0 pinned=300/0 outband=0/195
