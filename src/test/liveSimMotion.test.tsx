@@ -931,7 +931,7 @@ type Arm1521 = 'defensive' | 'balanced' | 'attacking';
 const ARMS_1521: [Arm1521, number][] = [['defensive', -1], ['balanced', 0], ['attacking', 1]];
 interface BuildArm { possessions: number; forward: number; level: number; back: number; behind: number; behindForward: number; resets: { press: number; switch: number }; unreasoned: number; switchOffenders: number; pressOffenders: number }
 interface Tally1521 {
-  passes: Record<'ground' | 'air' | 'cross' | 'throw', number>; liftedGround: number; flatAerial: number; landOffenders: number;
+  passes: Record<'ground' | 'air' | 'cross' | 'throw' | 'placed', number>; liftedGround: number; flatAerial: number; landOffenders: number;
   shots: Record<'first' | 'second', number>; shotOffenders: number; shotExamples: string[];
   fouls: number; atWhistle: number; cues: number; waited: number; cueOffenders: number; hidden: number; hiddenOffenders: number; named: number; contacts: number; contactOffenders: number;
   cardLines: number; carded: number; cardOffenders: number; statFouls: number; statOffenders: number; foulExamples: string[];
@@ -939,7 +939,7 @@ interface Tally1521 {
 }
 const buildArm = (): BuildArm => ({ possessions: 0, forward: 0, level: 0, back: 0, behind: 0, behindForward: 0, resets: { press: 0, switch: 0 }, unreasoned: 0, switchOffenders: 0, pressOffenders: 0 });
 const tally1521 = (): Tally1521 => ({
-  passes: { ground: 0, air: 0, cross: 0, throw: 0 }, liftedGround: 0, flatAerial: 0, landOffenders: 0,
+  passes: { ground: 0, air: 0, cross: 0, throw: 0, placed: 0 }, liftedGround: 0, flatAerial: 0, landOffenders: 0,
   shots: { first: 0, second: 0 }, shotOffenders: 0, shotExamples: [],
   fouls: 0, atWhistle: 0, cues: 0, waited: 0, cueOffenders: 0, hidden: 0, hiddenOffenders: 0, named: 0, contacts: 0, contactOffenders: 0,
   cardLines: 0, carded: 0, cardOffenders: 0, statFouls: 0, statOffenders: 0, foulExamples: [],
@@ -959,11 +959,12 @@ function replay1521(t: Tally1521, input: PitchInput, live: NonNullable<CareerSta
   for (const beat of plan.entries) {
     const scene: MotionScene<PitchPlaced> = pitchScene(plan, beat.start);
     if (previous) {
-      const kind = scene.flight ?? 'ground';
+      /* A dead ball is fetched or placed, never flown: it carries no flight of its own and is counted apart. */
+      const kind = scene.flight ?? 'placed';
       t.passes[kind as keyof Tally1521['passes']]++;
       const mid = between(previous, scene, 0.5);
-      if (kind === 'ground' && (mid.lift ?? 0) > 0) t.liftedGround++;
-      if (kind !== 'ground' && !((mid.lift ?? 0) > 0.5)) t.flatAerial++;
+      if ((kind === 'ground' || kind === 'placed') && (mid.lift ?? 0) > 0) t.liftedGround++;
+      if (kind !== 'ground' && kind !== 'placed' && !((mid.lift ?? 0) > 0.5)) t.flatAerial++;
       const end = between(previous, scene, 1);
       const holder = [...scene.mine, ...scene.theirs].find(p => p.key === scene.holderKey);
       if ((end.lift ?? 0) > 0 || apart(end.ball, scene.ball) > 1e-6 || (!beat.dead && holder && apart(end.ball, holder) > 3)) t.landOffenders++;
@@ -1504,7 +1505,7 @@ describe('Round 1521: the live match looks like football', () => {
   it('R10: the ball travels with height and lands at its man, and every chance rises and comes down in the right net', () => {
     const m = buildMaterial();
     const passes = (k: keyof Tally1521['passes']) => totals1521(t => t.passes[k]);
-    console.log(`[1521 R10] passes drawn: on the grass ${passes('ground')}, in the air ${passes('air')}, crosses ${passes('cross')}, throws ${passes('throw')}; on the grass but lifted ${totals1521(t => t.liftedGround)}, in the air but never rose ${totals1521(t => t.flatAerial)}, not landing at their man ${totals1521(t => t.landOffenders)}; chances read: first halves ${totals1521(t => t.shots.first)}, second halves ${totals1521(t => t.shots.second)}, offenders ${totals1521(t => t.shotOffenders)}${m.looks.flatMap(t => t.shotExamples).slice(0, 3).map(s => ` | ${s}`).join('')}`);
+    console.log(`[1521 R10] passes drawn: on the grass ${passes('ground')}, in the air ${passes('air')}, crosses ${passes('cross')}, throws ${passes('throw')}, dead balls placed ${passes('placed')}; on the grass but lifted ${totals1521(t => t.liftedGround)}, in the air but never rose ${totals1521(t => t.flatAerial)}, not landing at their man ${totals1521(t => t.landOffenders)}; chances read: first halves ${totals1521(t => t.shots.first)}, second halves ${totals1521(t => t.shots.second)}, offenders ${totals1521(t => t.shotOffenders)}${m.looks.flatMap(t => t.shotExamples).slice(0, 3).map(s => ` | ${s}`).join('')}`);
     for (const k of ['ground', 'air', 'cross', 'throw'] as const) expect(passes(k), k).toBeGreaterThan(R10_FLOOR[k]);
     expect(totals1521(t => t.liftedGround)).toBe(0);
     expect(totals1521(t => t.flatAerial)).toBe(0);

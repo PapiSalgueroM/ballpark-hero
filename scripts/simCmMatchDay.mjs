@@ -45,7 +45,8 @@
         equals the card at MATCHDAY_BASE (the round's files as they were at the base, everything else this tree's),
         with only the board word masked (it now says what the header's meter says); every live frame of a home
         match, and the dressing room alone, reads exactly as at the base but for the pitch labels (masked: section
-        6 reads them); and so does every home and neutral
+        6 reads them) and, since Round 1521, the foul's name over its spot (taken out: liveSimMotion.test reads
+        it); and so does every home and neutral
         Match Centre.
 
    Negative controls (MATCHDAY_CONTROL=...), each asserting its anchor first, printing how often it fired:
@@ -768,7 +769,12 @@ if (dotCounts.frames < 40 || dotCounts.mine < 400 || dotCounts.theirsNamed < 200
 console.log('7) A home or neutral match: the card\'s visible text equals the base\'s, the board word and the pitch labels masked');
 const maskBoard = html => html.replace(/(>Board<\/div><div[^>]*>[\s\S]*?<\/span><\/div><div[^>]*>)[^<]*(<\/div>)/, '$1#$2');
 /* Round 1340b: the pitch labels changed on purpose (surnames, never numbers); section 6 reads them. */
-const maskDots = html => html.replace(/<span class="cm-dot-label[^"]*">(?:[^<]|<!--[^>]*-->|<span\b[^>]*>[^<]*<\/span>)*<\/span>/g, '<span>#</span>');
+/* Round 1521: and the foul's name over its spot ("Foul by Wirtz"), a pitch label the base never drew, on purpose: the
+   round's own tests read it (R11 per whistle, and the viewer's foul at its minute). It is taken out whole. Without
+   this the section went red on 25 screens (r1521-bp), each first differing at that label; with it, see the round's
+   gate for the same run green. */
+const maskDots = html => html.replace(/<span class="cm-dot-label[^"]*">(?:[^<]|<!--[^>]*-->|<span\b[^>]*>[^<]*<\/span>)*<\/span>/g, '<span>#</span>')
+  .replace(/<div data-cm-foul-cue="[^"]*"[^>]*>[\s\S]*?<\/div>/g, '');
 for (const m of matches) {
   if (!homeIsMe(m)) continue;
   const head = visible(maskBoard(m.html));
