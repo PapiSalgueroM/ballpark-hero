@@ -1,0 +1,33 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/rankEmCircuit.test.tsx[2m > [22mRank Em Legends circuit[2m > [22mdeals one completed-career board per sport without exposing the pinned daily[32m 128[2mms[22m[39m
+ [32m✓[39m src/test/rankEmCircuit.test.tsx[2m > [22mRank Em Legends circuit[2m > [22mkeeps editing quiet and locks exactly one valid permutation[32m 15[2mms[22m[39m
+ [32m✓[39m src/test/rankEmCircuit.test.tsx[2m > [22mRank Em Legends circuit[2m > [22mscores actual placements across three explicit reveals with finite advancement[32m 1[2mms[22m[39m
+ [32m✓[39m src/test/rankEmCircuit.test.tsx[2m > [22mRank Em Legends circuit[2m > [22mrejects unreachable phases tampered orders invalid seeds and foreign names[32m 1[2mms[22m[39m
+ [32m✓[39m src/test/rankEmCircuit.test.tsx[2m > [22mRank Em Legends circuit[2m > [22mround trips every reached phase without changing the saved deal at midnight[32m 4[2mms[22m[39m
+ [32m✓[39m src/test/rankEmCircuit.test.tsx[2m > [22mRank Em Legends circuit[2m > [22mhandles unavailable storage without writing partial or invalid state[32m 1[2mms[22m[39m
+ [32m✓[39m src/test/rankEmCircuit.test.tsx[2m > [22mRank Em Legends circuit[2m > [22mshows worked instructions before play and safely reopens circuit rules[33m 387[2mms[22m[39m
+ [32m✓[39m src/test/rankEmCircuit.test.tsx[2m > [22mRank Em Legends circuit[2m > [22mretains factual reveals and earns eight of fifteen through the actual page[33m 743[2mms[22m[39m
+ [32m✓[39m src/test/rankEmCircuit.test.tsx[2m > [22mRank Em Legends circuit[2m > [22mrestores a partial draft a reveal and a finished result through real remounts[33m 770[2mms[22m[39m
+ [32m✓[39m src/test/rankEmCircuit.test.tsx[2m > [22mRank Em Legends circuit[2m > [22mpreserves Daily bytes Unlimited play and circuit drafts when switching modes[33m 451[2mms[22m[39m
+ [32m✓[39m src/test/rankEmCircuit.test.tsx[2m > [22mRank Em Legends circuit[2m > [22maccepts one lock and one advance from same-frame repeated actions[32m 153[2mms[22m[39m
+ [32m✓[39m src/test/rankEmCircuit.test.tsx[2m > [22mRank Em Legends circuit[2m > [22mreviews completed sports and replays without inheriting points or answers[32m 154[2mms[22m[39m
+ [32m✓[39m src/test/rankEmCircuit.test.tsx[2m > [22mRank Em Legends circuit[2m > [22mrecovers from a corrupt circuit without erasing unrelated or daily saves[32m 124[2mms[22m[39m
+ [32m✓[39m src/test/rankEmCircuit.test.tsx[2m > [22mRank Em Legends circuit[2m > [22mpreserves the original daily score save and single completion independently[32m 5[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m14 passed[39m[22m[90m (14)[39m
+[2m   Start at [22m 19:54:22
+[2m   Duration [22m 4.69s[2m (transform 602ms, setup 76ms, collect 935ms, tests 2.94s, environment 335ms, prepare 134ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/rank-em-circuit-artifacts/mounted/normal-report.json
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstderr[2m | src/test/rankEmCircuit.test.tsx[2m > [22m[2mRank Em Legends circuit[2m > [22m[2mshows worked instructions before play and safely reopens circuit rules
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+simRankEmCircuit: fourteen actual model and mounted outcomes pass.
+simRankEmCircuit: seven source inputs held; reports and mutated copies retained.

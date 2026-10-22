@@ -1,0 +1,61 @@
+#!serve
+#!playwright
+# Release BQ, Round 1551 (the 2026 season answers, closing head 28baa759): fix-1551.md's r1551-fix-a (rc-fix-a.txt), which
+# holds fix2-1551.md's r1551-fix2 lines too. due- controls exit 1 (due-bogus exits 2); due-1101 is RED by design until the
+# Record Books say 2026 (APPLY-1551.md). simHallOfChampions, simSchemaNames and simLeaderboardCaps read the database (red on
+# any runner); simWritesAreSent is the runner red since Release BI. simSeasonDue is dated: green before 2026-11-01 only.
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simSeasonDue: node scripts/simSeasonDue.mjs
+due-late: SEASON_DUE_CONTROL=late node scripts/simSeasonDue.mjs
+due-past: SEASON_DUE_CONTROL=past node scripts/simSeasonDue.mjs
+due-early: SEASON_DUE_CONTROL=early node scripts/simSeasonDue.mjs
+due-unfiltered: SEASON_DUE_CONTROL=unfiltered node scripts/simSeasonDue.mjs
+due-nextyear: SEASON_DUE_CONTROL=nextyear node scripts/simSeasonDue.mjs
+due-strip: SEASON_DUE_CONTROL=strip node scripts/simSeasonDue.mjs
+due-unheld: SEASON_DUE_CONTROL=unheld node scripts/simSeasonDue.mjs
+due-nocounts: SEASON_DUE_CONTROL=nocounts node scripts/simSeasonDue.mjs
+due-bogus: SEASON_DUE_CONTROL=bogus node scripts/simSeasonDue.mjs
+due-1031: SEASON_DUE_TODAY=2026-10-31 node scripts/simSeasonDue.mjs
+due-1101: SEASON_DUE_TODAY=2026-11-01 node scripts/simSeasonDue.mjs
+rehearse: npm install --silent --no-save --prefix /tmp/pgl @electric-sql/pglite >/dev/null 2>&1; PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseSeasonRows1551.mjs; s=$?; REHEARSE_CONTROL=noafl PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseSeasonRows1551.mjs; echo "CONTROL noafl exit=$?"; exit $s
+vitest: node_modules/.bin/vitest run src/test/champOrNotReveal.test.tsx src/test/whodTheyBeatReveal.test.tsx src/test/silverwareReveal.test.tsx src/test/rugbyLeagueChallenge.test.tsx src/test/rugbyLeagueReview.test.tsx src/test/rankEmOrder.test.tsx src/test/rankEmCircuit.test.tsx src/test/noDoubleRecord.test.tsx src/test/storageBlockedBoot.test.tsx --testTimeout=300000 --hookTimeout=120000
+walk: node .rc/x/walkFix1551.mjs
+simChampOrNot: node scripts/simChampOrNot.mjs
+simChampOrNotReveal: node scripts/simChampOrNotReveal.mjs
+simSilverwareSort: node scripts/simSilverwareSort.mjs
+simSilverwareReveal: node scripts/simSilverwareReveal.mjs
+simWhodTheyBeat: node scripts/simWhodTheyBeat.mjs
+simWhodTheyBeatReveal: node scripts/simWhodTheyBeatReveal.mjs
+simHallOfChampions: node scripts/simHallOfChampions.mjs
+simRugbyLeagueChallenge: node scripts/simRugbyLeagueChallenge.mjs
+simRugbyLeagueReview: node scripts/simRugbyLeagueReview.mjs
+simRankEmOrder: node scripts/simRankEmOrder.mjs
+simRankEmCircuit: node scripts/simRankEmCircuit.mjs
+simFairPuzzles: node scripts/simFairPuzzles.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simDaily: node scripts/simDaily.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simSingleFooter: node scripts/simSingleFooter.mjs
+simCompletionSlugs: node scripts/simCompletionSlugs.mjs
+simCompletionOnce: node scripts/simCompletionOnce.mjs
+simNoDoubleRecord: node scripts/simNoDoubleRecord.mjs
+simDailyPuzzleContract: node scripts/simDailyPuzzleContract.mjs
+simDailySaveHardening: node scripts/simDailySaveHardening.mjs
+simWritesAreSent: node scripts/simWritesAreSent.mjs
+simSchemaNames: node scripts/simSchemaNames.mjs
+simFetchRetry: node scripts/simFetchRetry.mjs
+simGoogleOnlyReturn: node scripts/simGoogleOnlyReturn.mjs
+simReportRelay: node scripts/simReportRelay.mjs
+simNavbarStatsReads: node scripts/simNavbarStatsReads.mjs
+simLeaderboardCaps: node scripts/simLeaderboardCaps.mjs
+simScoringCoverage: node scripts/simScoringCoverage.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs

@@ -1,0 +1,183 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstderr[2m | src/test/rugbyLeagueChallenge.test.tsx[2m > [22m[2mRugby League actual page play[2m > [22m[2mshows playable rules and a verified example before the first question and reopens them safely
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/rugbyLeagueChallenge.test.tsx[2m > [22m[2mRugby League actual page play[2m > [22m[2mkeeps asynchronous rules focus and derives its example only from eligible records
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/rugbyLeagueChallenge.test.tsx [2m([22m[2m15 tests[22m[2m)[22m[33m 7187[2mms[22m[39m
+   [33m[2m✓[22m[39m Rugby League actual page play[2m > [22mshows playable rules and a verified example before the first question and reopens them safely [33m 528[2mms[22m[39m
+   [33m[2m✓[22m[39m Rugby League actual page play[2m > [22mreveals actual winners until explicit advance and totals the ten calls by category [33m 1257[2mms[22m[39m
+   [33m[2m✓[22m[39m Rugby League actual page play[2m > [22mreplays a new balanced set with no stale points answers or result card [33m 1862[2mms[22m[39m
+   [33m[2m✓[22m[39m Rugby League actual page play[2m > [22mretains pending Daily and Unlimited Hard play while rugby leaves every saved byte alone [33m 351[2mms[22m[39m
+   [33m[2m✓[22m[39m Rugby League actual page play[2m > [22mfinishes and replays rugby without booking or corrupting an earned Daily on reload [33m 1601[2mms[22m[39m
+   [33m[2m✓[22m[39m Rugby League actual page play[2m > [22mrefuses an incomplete record bank and recovers through the actual retry action [33m 799[2mms[22m[39m
+[90mstderr[2m | src/test/rugbyLeagueReview.test.tsx[2m > [22m[2mRugby League completed-call review[2m > [22m[2mexplains separate retry scores before play and blocks actions behind reopened rules
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstdout[2m | src/test/noDoubleRecord.test.tsx[2m > [22m[2mno double record[2m > [22m[2mdiscovers the table
+[22m[39mNO_DOUBLE_CASE {"title":"fight-career","id":"fight-career","shape":"fight","usesMark":true,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"fight-gym","id":"fight-gym","shape":"fight","usesMark":true,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"fight-promoter","id":"fight-promoter","shape":"fight","usesMark":true,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"nfl-my-career","id":"nfl-my-career","shape":"career","usesMark":true,"toggle":false,"coach":true}
+NO_DOUBLE_CASE {"title":"nba-my-career","id":"nba-my-career","shape":"career","usesMark":true,"toggle":false,"coach":true}
+NO_DOUBLE_CASE {"title":"mlb-my-career","id":"mlb-my-career","shape":"career","usesMark":true,"toggle":false,"coach":true}
+NO_DOUBLE_CASE {"title":"nhl-my-career","id":"nhl-my-career","shape":"career","usesMark":true,"toggle":false,"coach":true}
+NO_DOUBLE_CASE {"title":"nfl-higher-lower","id":"nfl-higher-lower","shape":"slug","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"nba-higher-lower","id":"nba-higher-lower","shape":"slug","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"mlb-higher-lower","id":"mlb-higher-lower","shape":"slug","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"hockey-higher-lower","id":"hockey-higher-lower","shape":"slug","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"cfb-higher-lower","id":"cfb-higher-lower","shape":"slug","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"f1-higher-lower","id":"f1-higher-lower","shape":"slug","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"tennis-higher-lower","id":"tennis-higher-lower","shape":"slug","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"golf-higher-lower","id":"golf-higher-lower","shape":"slug","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"afl-higher-lower","id":"afl-higher-lower","shape":"slug","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"ufc","id":"ufc","shape":"slug","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"football-connect-4","id":"football-connect-4","shape":"slug","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"career","id":"career","shape":"slug","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"nba-grid","id":"nba-grid","shape":"toggle","usesMark":false,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"mlb-grid","id":"mlb-grid","shape":"toggle","usesMark":false,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"hockey-grid","id":"hockey-grid","shape":"toggle","usesMark":false,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"cbb-grid","id":"cbb-grid","shape":"toggle","usesMark":false,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"missing-five","id":"missing-five","shape":"toggle","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"missing-nine","id":"missing-nine","shape":"toggle","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"missing-eleven","id":"missing-eleven","shape":"toggle","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"rank-em","id":"rank-em","shape":"toggle","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"puck-detective (give up)","id":"puck-detective","shape":"toggle","usesMark":false,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"puck-detective (solve)","id":"puck-detective","shape":"toggle","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"guess-the-golfer","id":"guess-the-golfer","shape":"toggle","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"champ-or-not","id":"champ-or-not","shape":"restore","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"whod-they-beat","id":"whod-they-beat","shape":"restore","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"silverware-sort","id":"silverware-sort","shape":"restore","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"jeopardy","id":"jeopardy","shape":"restore","usesMark":true,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"ball-iq","id":"ball-iq","shape":"restore","usesMark":true,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"mystery-box","id":"mystery-box","shape":"restore","usesMark":true,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"nfl-career","id":"nfl-career","shape":"restore","usesMark":false,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"career-ladder","id":"career-ladder","shape":"extra","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"transfer-path","id":"transfer-path","shape":"extra","usesMark":true,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"grade-transfer","id":"grade-transfer","shape":"extra","usesMark":true,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"player-stock-market","id":"player-stock-market","shape":"extra","usesMark":true,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"nfl-higher-lower: a round decided is saved before its reveal ends","id":"nfl-higher-lower","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"nba-higher-lower: a round decided is saved before its reveal ends","id":"nba-higher-lower","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"mlb-higher-lower: a round decided is saved before its reveal ends","id":"mlb-higher-lower","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"hockey-higher-lower: a round decided is saved before its reveal ends","id":"hockey-higher-lower","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"cfb-higher-lower: a round decided is saved before its reveal ends","id":"cfb-higher-lower","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"f1-higher-lower: a round decided is saved before its reveal ends","id":"f1-higher-lower","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"tennis-higher-lower: a round decided is saved before its reveal ends","id":"tennis-higher-lower","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"golf-higher-lower: a round decided is saved before its reveal ends","id":"golf-higher-lower","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"afl-higher-lower: a round decided is saved before its reveal ends","id":"afl-higher-lower","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"champ-or-not: a reload inside the final reveal","id":"champ-or-not","shape":"check","usesMark":true,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"whod-they-beat: a reload inside the final reveal","id":"whod-they-beat","shape":"check","usesMark":true,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"silverware-sort: a reload inside the final reveal","id":"silverware-sort","shape":"check","usesMark":true,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"champ-or-not: Unlimited and back inside the final reveal","id":"champ-or-not","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"whod-they-beat: Unlimited and back inside the final reveal","id":"whod-they-beat","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"silverware-sort: Unlimited and back inside the final reveal","id":"silverware-sort","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"champ-or-not: a final pick after midnight ET","id":"champ-or-not","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"whod-they-beat: a final pick after midnight ET","id":"whod-they-beat","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"silverware-sort: a final pick after midnight ET","id":"silverware-sort","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"champ-or-not: the board renders after midnight ET before the final pick","id":"champ-or-not","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"whod-they-beat: the board renders after midnight ET before the final pick","id":"whod-they-beat","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"silverware-sort: the board renders after midnight ET before the final pick","id":"silverware-sort","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"football-grid: a playing save past the limit, read with Unlimited off","id":"football-grid","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"nfl-career: a daily dealt before midnight and solved after it","id":"nfl-career","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"nfl-career: a first clue solve records its clue score","id":"nfl-career","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"nfl-career: the next day in the same tab records once more","id":"nfl-career","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"world-cup-bracket: one record per crowned name","id":"world-cup-bracket","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_TABLE {"rows":41,"fight":3,"career":4,"slug":12,"toggle":11,"restore":7,"extra":4,"checks":26}
+
+[90mstderr[2m | src/test/rankEmCircuit.test.tsx[2m > [22m[2mRank Em Legends circuit[2m > [22m[2mshows worked instructions before play and safely reopens circuit rules
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ [32m✓[39m src/test/rugbyLeagueReview.test.tsx [2m([22m[2m10 tests[22m[2m)[22m[33m 11492[2mms[22m[39m
+   [33m[2m✓[22m[39m Rugby League completed-call review[2m > [22mreviews all ten original choices truths and shared winners in one card [33m 2392[2mms[22m[39m
+   [33m[2m✓[22m[39m Rugby League completed-call review[2m > [22mretries only the original misses and reports a separate corrected total [33m 1083[2mms[22m[39m
+   [33m[2m✓[22m[39m Rugby League completed-call review[2m > [22mresumes the same pending and revealed retry after returning or hiding rugby [33m 1253[2mms[22m[39m
+   [33m[2m✓[22m[39m Rugby League completed-call review[2m > [22maccepts one retry answer and one advance from same-frame repeated inputs [33m 888[2mms[22m[39m
+   [33m[2m✓[22m[39m Rugby League completed-call review[2m > [22moffers review without an empty retry after a perfect original run [33m 859[2mms[22m[39m
+   [33m[2m✓[22m[39m Rugby League completed-call review[2m > [22mstarts an explicit fresh retry and clears review state for another ten [33m 1733[2mms[22m[39m
+   [33m[2m✓[22m[39m Rugby League completed-call review[2m > [22mexplains separate retry scores before play and blocks actions behind reopened rules [33m 1046[2mms[22m[39m
+   [33m[2m✓[22m[39m Rugby League completed-call review[2m > [22mkeeps future claims unavailable before the original ten are complete [33m 960[2mms[22m[39m
+   [33m[2m✓[22m[39m Rugby League completed-call review[2m > [22mkeeps every saved byte and completion unchanged through review and retry [33m 1217[2mms[22m[39m
+ [32m✓[39m src/test/rankEmCircuit.test.tsx [2m([22m[2m14 tests[22m[2m)[22m[33m 4709[2mms[22m[39m
+   [33m[2m✓[22m[39m Rank Em Legends circuit[2m > [22mdeals one completed-career board per sport without exposing the pinned daily [33m 306[2mms[22m[39m
+   [33m[2m✓[22m[39m Rank Em Legends circuit[2m > [22mshows worked instructions before play and safely reopens circuit rules [33m 1032[2mms[22m[39m
+   [33m[2m✓[22m[39m Rank Em Legends circuit[2m > [22mretains factual reveals and earns eight of fifteen through the actual page [33m 748[2mms[22m[39m
+   [33m[2m✓[22m[39m Rank Em Legends circuit[2m > [22mrestores a partial draft a reveal and a finished result through real remounts [33m 1047[2mms[22m[39m
+   [33m[2m✓[22m[39m Rank Em Legends circuit[2m > [22mpreserves Daily bytes Unlimited play and circuit drafts when switching modes [33m 964[2mms[22m[39m
+ [32m✓[39m src/test/rankEmOrder.test.tsx [2m([22m[2m10 tests[22m[2m)[22m[33m 3241[2mms[22m[39m
+   [33m[2m✓[22m[39m Rank Em editable order[2m > [22mkeeps five picks editable and quiet until an exact corrected perfect order is locked [33m 647[2mms[22m[39m
+   [33m[2m✓[22m[39m Rank Em editable order[2m > [22mlocks exact partial and zero daily orders with the original share and one completion [33m 825[2mms[22m[39m
+   [33m[2m✓[22m[39m Rank Em editable order[2m > [22mhands focus to enabled neighbors lock and result and guards owned held keys [33m 616[2mms[22m[39m
+ [32m✓[39m src/test/champOrNotReveal.test.tsx [2m([22m[2m18 tests[22m[2m)[22m[33m 1621[2mms[22m[39m
+   [33m[2m✓[22m[39m Champ or Not readable reveal[2m > [22mthe page retains true feedback and shows its earned score before Next claim [33m 355[2mms[22m[39m
+   [33m[2m✓[22m[39m Champ or Not readable reveal[2m > [22mpreserves deliberate Help Hard mode and Record Books focus during answer feedback [33m 472[2mms[22m[39m
+   [33m[2m✓[22m[39m Champ or Not readable reveal[2m > [22mpage final View results retains the exact mixed score share and single booking [33m 435[2mms[22m[39m
+ [32m✓[39m src/test/whodTheyBeatReveal.test.tsx [2m([22m[2m24 tests[22m[2m)[22m[33m 1531[2mms[22m[39m
+   [33m[2m✓[22m[39m Who would they beat readable reveal[2m > [22mthe actual page keeps true feedback locked and announces earned score before Next final [33m 359[2mms[22m[39m
+   [33m[2m✓[22m[39m Who would they beat readable reveal[2m > [22mthe actual page shows View results after the last pick and keeps the final share and booking exact [33m 467[2mms[22m[39m
+[90mstderr[2m | src/test/storageBlockedBoot.test.tsx[2m > [22m[2mthe storage notice[2m > [22m[2mstorage full: the line is there on the first render of a game page, and the home page asks nothing
+[22m[39mWarning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7044:3)
+
+ [32m✓[39m src/test/storageBlockedBoot.test.tsx [2m([22m[2m20 tests[22m[2m)[22m[33m 745[2mms[22m[39m
+ [32m✓[39m src/test/silverwareReveal.test.tsx [2m([22m[2m10 tests[22m[2m)[22m[33m 2136[2mms[22m[39m
+   [33m[2m✓[22m[39m Silverware deliberate reveal[2m > [22mshows earned rungs and points, focuses manual Next and names the final result action [33m 1522[2mms[22m[39m
+[90mstderr[2m | src/test/noDoubleRecord.test.tsx[2m > [22m[2mno double record[2m > [22m[2mpuck-detective (give up)
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/noDoubleRecord.test.tsx[2m > [22m[2mno double record[2m > [22m[2mpuck-detective (solve)
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/noDoubleRecord.test.tsx[2m > [22m[2mno double record[2m > [22m[2mguess-the-golfer
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/noDoubleRecord.test.tsx[2m > [22m[2mno double record[2m > [22m[2mcareer-ladder
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ [32m✓[39m src/test/noDoubleRecord.test.tsx [2m([22m[2m69 tests[22m[2m)[22m[33m 23179[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mfight-career [33m 777[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mfight-gym [33m 375[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mfight-promoter [33m 437[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mnfl-my-career [33m 1154[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mnba-my-career [33m 900[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mmlb-my-career [33m 860[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mnhl-my-career [33m 820[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mnfl-higher-lower [33m 305[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mufc [33m 435[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mfootball-connect-4 [33m 447[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mcareer [33m 590[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mnba-grid [33m 872[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mmlb-grid [33m 609[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mhockey-grid [33m 773[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mcbb-grid [33m 914[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mmissing-five [33m 548[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mmissing-nine [33m 536[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mmissing-eleven [33m 538[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mrank-em [33m 616[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mpuck-detective (give up) [33m 563[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mpuck-detective (solve) [33m 596[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mguess-the-golfer [33m 551[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mchamp-or-not [33m 568[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mwhod-they-beat [33m 575[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22msilverware-sort [33m 584[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mjeopardy [33m 350[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mball-iq [33m 325[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mmystery-box [33m 331[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mnfl-career [33m 458[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mcareer-ladder [33m 991[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mtransfer-path [33m 407[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mgrade-transfer [33m 324[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mplayer-stock-market [33m 523[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m9 passed[39m[22m[90m (9)[39m
+[2m      Tests [22m [1m[32m190 passed[39m[22m[90m (190)[39m
+[2m   Start at [22m 19:53:08
+[2m   Duration [22m 36.64s[2m (transform 9.82s, setup 1.29s, collect 18.15s, tests 55.84s, environment 5.56s, prepare 1.27s)[22m
+
