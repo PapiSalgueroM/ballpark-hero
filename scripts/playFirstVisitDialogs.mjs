@@ -28,7 +28,11 @@
  *
  * NEGATIVE CONTROL: PLAYFIRST_CONTROL=cover injects a fixed element over every picked button's centre before the hit
  * test. Every route that opened a dialog must then go red. Its last line says FIRED (exit 1), did NOT fire (exit 3),
- * or ABORTED when no route in the run opened a dialog (exit 2).
+ * or ABORTED when no route in the run opened a dialog (exit 2). PLAYFIRST_CONTROL=ratchet lists every walked route
+ * width in EXPECTED_SITE_RED, and every green or dialog free one must then fail: FIRED (exit 1), NOT (3), ABORTED (2).
+ * Measured 2026-10-22 on runners (Round 1536): 399 route widths over 133 routes, 41 routes open a first visit dialog;
+ * before the Round 1536 hardening 9 were red (Stadium Tycoon, Idle Arena, Wonderkid Factory at all three widths),
+ * after it 0, every button at least 37 px above a pending banner; the cover fired on 123 of 123 dialog buttons.
  *
  * Run: BASE=http://localhost:4173 node scripts/playFirstVisitDialogs.mjs   (a served build, see scripts/lib/hostLikeServer.mjs)
  *      ONLY=/stadium-tycoon,/idle-arena scopes it; PLAYFIRST_SHARD=1/3 runs a third of the routes;
@@ -43,7 +47,7 @@ const { chromium } = pw;
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BASE = process.env.BASE ?? process.env.SWEEP_BASE ?? 'http://localhost:4173';
 const CONTROL = process.env.PLAYFIRST_CONTROL || '';
-if (CONTROL && CONTROL !== 'cover') { console.error(`PLAYFIRST_CONTROL=${CONTROL} is not a control this walk knows (cover)`); process.exit(2); }
+if (CONTROL && CONTROL !== 'cover' && CONTROL !== 'ratchet') { console.error(`PLAYFIRST_CONTROL=${CONTROL} is not a control this walk knows (cover, ratchet)`); process.exit(2); }
 const WIDTHS = [[320, 640], [390, 844], [1280, 900]];
 const BANNER = '[role="region"][aria-label="Cookie choices"], [role="dialog"][aria-label="Cookie choices"]';
 
@@ -182,8 +186,11 @@ for (const route of routes) {
 }
 await browser.close();
 
+/* PLAYFIRST_CONTROL=ratchet lists every walked route width as an expected site red, so every green or dialog free
+   line must fail with "remove it from the list": proof the ratchet empties the list rather than hiding a fix. */
+if (CONTROL === 'ratchet') for (const r of results) EXPECTED_SITE_RED[r.key] = 'control';
 const failures = [];
-let expected = 0, none = 0, passed = 0, fired = 0, withButton = 0;
+let expected = 0, none = 0, passed = 0, fired = 0, withButton = 0, ratcheted = 0;
 for (const r of results) {
   const where = `${r.route} ${r.width}x${r.height}`;
   const bannerNote = `banner ${span(r.banner)}${r.bannerInside ? ' (inside the dialog)' : r.pending ? ' (pending)' : ''}`;
@@ -206,7 +213,7 @@ for (const r of results) {
   const note = EXPECTED_SITE_RED[r.key];
   if (note && !r.error) {
     if (state === 'FAIL') { state = 'EXPECTED'; why += ` (site rule, board note ${note})`; }
-    else { why = `listed in EXPECTED_SITE_RED (${note}) but ${state === 'NONE' ? 'no dialog opens now' : 'green now'}: remove it from the list. ${why}`; state = 'FAIL'; }
+    else { why = `listed in EXPECTED_SITE_RED (${note}) but ${state === 'NONE' ? 'no dialog opens now' : 'green now'}: remove it from the list. ${why}`; state = 'FAIL'; ratcheted += 1; }
   }
   r.state = state;
   if (state === 'FAIL') failures.push(`${where}: ${why}`);
@@ -223,6 +230,13 @@ if (CONTROL === 'cover') {
   if (withButton === 0) { console.log('playFirstVisitDialogs control ABORTED: no route in this run opened a dialog with a button, so the cover had nothing to cover'); process.exit(2); }
   if (fired === withButton) { console.log(`playFirstVisitDialogs: PLAYFIRST_CONTROL=cover FIRED. ${fired} of ${withButton} dialog buttons read as covered and the walk is red`); process.exit(1); }
   console.log(`playFirstVisitDialogs: PLAYFIRST_CONTROL=cover did NOT fire on ${withButton - fired} of ${withButton} dialog buttons`);
+  process.exit(3);
+}
+if (CONTROL === 'ratchet') {
+  const judged = results.filter(r => !r.error).length;
+  if (ratcheted === 0) { console.log('playFirstVisitDialogs control ABORTED: no walked route width was green or dialog free, so the ratchet had nothing to catch'); process.exit(2); }
+  if (ratcheted + expected === judged) { console.log(`playFirstVisitDialogs: PLAYFIRST_CONTROL=ratchet FIRED. ${ratcheted} green or dialog free route widths listed as expected reds each failed the walk`); process.exit(1); }
+  console.log(`playFirstVisitDialogs: PLAYFIRST_CONTROL=ratchet did NOT fire: ${judged - ratcheted - expected} of ${judged} route widths escaped it`);
   process.exit(3);
 }
 if (failures.length) {
