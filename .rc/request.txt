@@ -1,0 +1,15 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simTriviaBank: node scripts/simTriviaBank.mjs
+ctl-ties: TRIVIA_CONTROL=ties node scripts/simTriviaBank.mjs
+ctl-namesake: TRIVIA_CONTROL=namesake node scripts/simTriviaBank.mjs
+ctl-tense: TRIVIA_CONTROL=tense node scripts/simTriviaBank.mjs
+ctl-legacy: TRIVIA_CONTROL=legacy node scripts/simTriviaBank.mjs
+seed-b: SIM_SEED=777 TRIVIA_UNLIMITED=3000 node scripts/simTriviaBank.mjs
+seed-c: SIM_SEED=4242 TRIVIA_LADDERS=15000 node scripts/simTriviaBank.mjs
+namesakes-check: node scripts/genMarketNamesakes.mjs --check
+simFaceOff: node scripts/simFaceOff.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simDailyPuzzleContract: node scripts/simDailyPuzzleContract.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simNoDoubleRecord: node scripts/simNoDoubleRecord.mjs
