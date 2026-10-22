@@ -457,10 +457,19 @@ function runDynasty(st, rng, seasons, tag) {
          the schedule decided who got in. Playoff games do not touch the
          records, so the table after the postseason is the one it picked from. */
       const champs = new Set(post.ccgs.map(g => g.winner));
+      /* Round 1554: under the real format the automatic spots are the four
+         champions, the best ranked Group of Five school and Notre Dame if it
+         ranks top 12, all read off the table being picked from. */
       const pick = state => {
         const ranked = cfb.cfbRankings(state).map(t => t.id);
-        const atLarge = ranked.filter(id => !champs.has(id)).slice(0, 7);
-        return ranked.filter(id => champs.has(id) || atLarge.includes(id)).slice(0, 12);
+        const autos = new Set(champs);
+        if (state.format) {
+          const g5 = ranked.find(id => cfb.CFB_SCHOOL_MAP.get(id).conf === 'G5');
+          if (g5) autos.add(g5);
+          for (const id of ranked.slice(0, cfb.CFB_INDEPENDENT_CUT)) if (cfb.CFB_SCHOOL_MAP.get(id).conf === 'IND') autos.add(id);
+        }
+        const atLarge = ranked.filter(id => !autos.has(id)).slice(0, 12 - autos.size);
+        return ranked.filter(id => autos.has(id) || atLarge.includes(id)).slice(0, 12);
       };
       const again = pick(st);
       if (again.join() !== post.field.join()) fail(`season ${st.season}: picking the field again off the same table gave a different field`);
