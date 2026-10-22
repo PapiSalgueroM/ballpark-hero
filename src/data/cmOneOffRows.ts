@@ -53,12 +53,20 @@ export const CM_ONE_OFF_ROWS: readonly OneOffRowTuple[] = [
 /** Round 1514: the editions the ledger dates, [row id, edition year (the season's start year), the edition's date,
  *  its venue for that season, its ground]. The game plays every night on its own calendar: the date places a
  *  'dated' row's night and is printed nowhere; the venue and ground stand for that edition alone (Dortmund hosted
- *  Germany's 2026 one, Lens France's after a draw, Inter Italy's at San Siro). Ledger rows *-e2026. */
-export const CM_ONE_OFF_EDITIONS: readonly (readonly [string, number, string, OneOffVenue, string])[] = [
+ *  Germany's 2026 one, Lens France's after a draw, Inter Italy's at San Siro). Ledger rows *-e2026. Round 1516: an
+ *  optional sixth element plays that edition at a place of its own ('dated': the UEFA Super Cup's 2026 edition, PSG
+ *  against Aston Villa in Salzburg, on the free midweek nearest its date; every later season keeps the row's). */
+export const CM_ONE_OFF_EDITIONS: readonly (readonly [string, number, string, OneOffVenue, string, OneOffPlace?])[] = [
   ['ger-2026', 2026, '2026-08-22', 'w', 'Signal Iduna Park in Dortmund'],
   ['fra-2026', 2026, '2026-08-16', 'w', 'the Stade Bollaert-Delelis in Lens'],
   ['ita-2026', 2026, '2026-12-22', 'c', 'San Siro in Milan'],
+  ['uefa-2026', 2026, '2026-08-12', 'n', 'Stadion Salzburg in Austria', 'dated'],
 ];
+
+/** Round 1516: the 2025-26 Europa League winners, the second club of season one's UEFA Super Cup (the first is
+ *  CM_FINAL_TABLES_2025_26.holders, the Champions League winners). Ledger row uel-2025-26 (UEFA, Paris
+ *  Saint-Germain, the ÖFB). */
+export const CM_ONE_OFF_UEL_WINNER_2025_26 = 'Aston Villa';
 
 /** Round 1514: rows played in their dated editions only; every other season of the save is partial (said on the
  *  tile). Italy: the league champions against the cup's runners up is this edition's announced pairing, never a
@@ -83,7 +91,7 @@ export const CM_ONE_OFF_PARTIAL: string[] = ['eng-2005', 'eng-2010', 'eng-2015',
 
 /** Round 1514: what a played row simplifies or leaves out, said on its card (the brief's partial marks). */
 export const CM_ONE_OFF_MARKS: Readonly<Record<string, string>> = {
-  'uefa-2026': 'UEFA picks the stadium and the date in advance. The game plays it on its own first free midweek after the opening league game.',
+  'uefa-2026': "UEFA picks the stadium and the date in advance. The game plays it on its own midweek: in 2026 the one nearest the real date, after that the first free one after the opening league game.",
   'ger-2026': "The league picks the real ground and either club can bid to host. The game plays it at the champions' ground, apart from 2026's at Dortmund, and on its own date.",
   'fra-2026': 'The league picks the ground, in principle a neutral one. The game plays it on its own date, and the rulebook\'s rarer exceptions are not played here.',
   'ita-2026': 'Only the 2026-27 edition is confirmed, and the game plays it on its own midweek nearest the real date. Later seasons show as not confirmed until the game can stand on them.',

@@ -21,6 +21,9 @@
  * Round 1514, at 390 by 844 and 1280 by 900: (g) a 2026-27 Marseille career in season one: the Super cup tile and
  *       card name the Trophée des Champions, PSG and Lens with why each is in, Lens's ground (the dated edition),
  *       straight to penalties and the row's mark; the UEFA Super Cup tile and card say season one's is not played.
+ *       Round 1516: season one's UEFA Super Cup is played (PSG against Aston Villa): the save is played on until its
+ *       night has passed, and the tile and card give the engine's winner and score, both clubs and why each is in,
+ *       Stadion Salzburg and straight to penalties.
  *   (h) a crafted 2026-27 Chelsea season two in the UEFA Super Cup (an engine with one edit reads Chelsea as last
  *       season's Champions League winners at the rollover; the dist is the real one): the tile says the club is in
  *       it against the Europa League winners, and the card names both, why, the neutral ground and the night.
@@ -335,9 +338,17 @@ async function caseC(browser, size, tag) {
   const g = tape(0x1514a, () => M.cm.startCareer('Marseille')).value;
   const dsc = g.worldComps?.dsc;
   if (!dsc || dsc.skip || dsc.row !== 'fra-2026' || dsc.clubs.join() !== 'PSG,Lens') cannot(`Marseille's season one holds no followed Trophée des Champions of PSG and Lens (${JSON.stringify(dsc)})`);
-  if (g.worldComps?.usc) cannot('a season one save holds a UEFA Super Cup');
-  saves.g = { items: saved(M, g) };
-  console.log('(g) Marseille season one: the Trophée des Champions, PSG v Lens, and no UEFA Super Cup');
+  /* Round 1516: season one's UEFA Super Cup, PSG against Aston Villa (the 2025-26 winners), followed from outside.
+     The save is played on until its night has passed (none when the placer puts it before the first entry), so the
+     walk reads the played result the engine gives. */
+  let gs = g;
+  for (let i = 0; i < 12 && M.cm.oneOffNightsDone(gs, 'usc') < 1 && gs.week < gs.calendar.length; i += 1) gs = tape(0x1516a + i, () => M.cm.playNextEntry(gs, { skipHalftime: true, noCoach: true })).value.state;
+  const gu = gs.worldComps?.usc;
+  const gr = M.cm.evalOneOff(gs, undefined, 'usc');
+  const gf = gr?.fixtures?.[0];
+  if (!gu || gu.skip || gu.clubs.join() !== 'PSG,Aston Villa' || !gr?.done || !gr.winner || !gf) cannot(`Marseille's season one holds no played UEFA Super Cup of PSG and Aston Villa (${JSON.stringify(gu)}, ${gr?.nightsDone ?? 0} nights done)`);
+  saves.g = { items: saved(M, gs), usc: { winner: gr.winner, sub: `${gf.home} ${gf.hg}-${gf.ag} ${gf.away}`, score: `${gf.hg}-${gf.ag}`, pens: !!gf.pens } };
+  console.log(`(g) Marseille season one: the Trophée des Champions, PSG v Lens, and the UEFA Super Cup ${saves.g.usc.sub}${gf.pens ? ' (penalties)' : ''}, won by ${gr.winner}, read after ${gs.week} entries`);
   const USC_OPEN = "    openOneOff(state, { tables: { table: null, cupWinner: null, cupRunnerUp: null, uclWinner: exit(watchHolder), uelWinner: exit(watchUelHolder) }, seasonOne: false }, 'usc');";
   const EU = await engineOf(ROOT, 'walk-usc', { edits: [{ file: 'src/lib/clubManager.ts', from: USC_OPEN, to: USC_OPEN.replace('uclWinner: exit(watchHolder)', 'uclWinner: career.clubName') }] }, cannot);
   const MU = await EU.fresh();
@@ -434,8 +445,10 @@ async function caseG(browser, size, tag) {
     /* Season one's night is the opening slot, so at week 0 the tile already gives the result (Round 1510's rule):
        the two clubs, never another cup. */
     if (!tile.includes('PSG') || !tile.includes('Lens') || /Not confirmed/.test(tile)) finding(where, `the Super cup tile reads "${tile.slice(0, 160)}"`);
+    /* Round 1516: season one's UEFA Super Cup, played: the tile gives the engine's winner and score. */
     const utile = await textOf(page, '[data-cm-world-tile="usc"]');
-    if (!/not played/.test(utile)) finding(where, `the UEFA Super Cup tile reads "${utile.slice(0, 160)}", not that season one's is not played`);
+    const u = saves.g.usc;
+    if (!utile.includes(`Won by ${u.winner}`) || !utile.includes(u.sub)) finding(where, `the UEFA Super Cup tile reads "${utile.slice(0, 160)}", not won by ${u.winner} (${u.sub})`);
     await roundTrip(page, where, async () => {
       await shot(page, `usc-g-card-${tag}`);
       const card = await textOf(page, '[data-cm-super-cup]');
@@ -445,8 +458,12 @@ async function caseG(browser, size, tag) {
     });
     await roundTrip(page, `${where} uefa`, async () => {
       await shot(page, `usc-g-ucard-${tag}`);
-      if (!(await count(page, '[data-cm-super-cup="stub"]'))) finding(where, 'the UEFA Super Cup card is not the season one stub');
-      if (await count(page, '[data-cm-super-cup-match]')) finding(where, 'the UEFA Super Cup stub shows a match');
+      if (await count(page, '[data-cm-super-cup="stub"]')) finding(where, 'the UEFA Super Cup card is a stub, not season one\'s played edition');
+      if ((await count(page, '[data-cm-super-cup-match="played"]')) !== 1) finding(where, 'the UEFA Super Cup card does not show its one played match');
+      const card = await textOf(page, '[data-cm-super-cup]');
+      for (const want of ['UEFA Super Cup', 'PSG', 'Aston Villa', 'Champions League winners last season', 'Europa League winners last season', 'Stadion Salzburg', 'straight to penalties', saves.g.usc.score, `${saves.g.usc.winner} won`]) {
+        if (!card.includes(want)) finding(where, `the UEFA Super Cup card does not say "${want}" (it reads: ${card.slice(0, 220)})`);
+      }
     }, 'usc');
     if (errors.length) finding(where, `page errors: ${errors.slice(0, 2).join(' | ')}`);
   } finally { await ctx.close(); }
