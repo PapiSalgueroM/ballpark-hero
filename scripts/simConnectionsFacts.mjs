@@ -93,7 +93,8 @@ const ballon = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/data/ballonDo
 const awards = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/data/soccerAwardsVerified2026-09.json'), 'utf8'));
 const setOf = names => new Set(names.map(fold));
 const men = ballon.rows.filter(r => r.award_type === 'Men' && r.rank === 1);
-const winnersOf = award => (awards.verifiedAwards.find(a => a.award === award)?.winners ?? []).map(w => w.winner);
+/* knownGaps are winners the sources have decided and the table does not hold yet: still winners. */
+const winnersOf = award => { const a = awards.verifiedAwards.find(x => x.award === award); return [...(a?.winners ?? []), ...(a?.knownGaps ?? [])].map(w => w.winner); };
 const awardLists = {
   ballonDor: { labels: [/^Won the Ballon d'Or$/], members: setOf(men.map(r => r.player_name)) },
   ballonDor2000s: { labels: [/^Won the Ballon d'Or in the 2000s$/], members: setOf(men.filter(r => r.year >= 2000 && r.year <= 2009).map(r => r.player_name)) },
@@ -112,6 +113,7 @@ const soccer = makeSoccerChecker({
   clubSeasonsOf: data.clubSeasonsOf,
   nationalityMaps: [data.NATIONALITY_WORLD_NOW.now, data.e2005, data.e2010, data.e2015, data.e2020],
   awardLists,
+  ledger,
 });
 
 /* ---- measurement (CONN_MEASURE=<file>): every finding, before any baseline ---- */

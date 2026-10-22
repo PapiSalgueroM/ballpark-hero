@@ -46,7 +46,8 @@ const NATIONS = {
   thenetherlands: 'netherlands', holland: 'netherlands',
   ivorycoast: 'cotedivoire', cotedivoire: 'cotedivoire',
   republicofireland: 'ireland', ireland: 'ireland',
-  bosnia: 'bosniaandherzegovina', bosniaandherzegovina: 'bosniaandherzegovina',
+  bosnia: 'bosniaandherzegovina', bosniaandherzegovina: 'bosniaandherzegovina', bosniaherzegovina: 'bosniaandherzegovina',
+  koreasouth: 'southkorea',
   drcongo: 'drcongo', congodr: 'drcongo', democraticrepublicofthecongo: 'drcongo',
   southkorea: 'southkorea', korearepublic: 'southkorea',
   usa: 'unitedstates', unitedstates: 'unitedstates',
@@ -67,8 +68,16 @@ const CLUBS = {
 };
 export const club = s => { const k = fold(s); return CLUBS[k] ?? k; };
 
-/** Builds { criterion, fits } from the site's data and the award lists. */
-export function makeSoccerChecker({ careerPlayers, clubSeasonsOf, nationalityMaps, awardLists }) {
+/** "2025-26" to the career tables' "2025-2026". */
+const longSeason = s => `${s.slice(0, 4)}-${s.slice(0, 2)}${s.slice(5, 7)}`;
+
+/**
+ * Builds { criterion, fits } from the site's data, the award lists and the
+ * round's ledger (scripts/data/connectionsVerified2026-10.json). The ledger
+ * wins over the site's tables wherever it speaks: a man's nation, the clubs
+ * he played for, and whole squads for a season, each on two hosts.
+ */
+export function makeSoccerChecker({ careerPlayers, clubSeasonsOf, nationalityMaps, awardLists, ledger = {} }) {
   const nationsOf = new Map();
   const addNation = (name, n) => {
     if (!n) return;
@@ -80,10 +89,24 @@ export function makeSoccerChecker({ careerPlayers, clubSeasonsOf, nationalityMap
   for (const map of nationalityMaps) for (const [n, c] of Object.entries(map)) addNation(n, c);
 
   const clubsOf = new Map();
+  const seasonsOf = new Map();
   for (const [name, keys] of clubSeasonsOf(careerPlayers)) {
     const set = new Set();
     for (const k of keys.exact) set.add(club(k.slice(0, k.lastIndexOf('::'))));
     clubsOf.set(fold(name), set);
+    seasonsOf.set(fold(name), new Set([...keys.exact].map(k => `${club(k.slice(0, k.lastIndexOf('::')))}::${k.slice(k.lastIndexOf('::') + 2)}`)));
+  }
+
+  /* The ledger's own facts about a man replace the tables' guesses. */
+  const ledgerNation = new Map();
+  const ledgerClubs = new Map();
+  for (const [name, p] of Object.entries(ledger.players ?? {})) {
+    if (p.nation) ledgerNation.set(fold(name), nation(p.nation));
+    if (p.clubs) ledgerClubs.set(fold(name), { clubs: new Set(p.clubs.map(club)), complete: p.clubsComplete === true });
+  }
+  const squads = new Map();
+  for (const sq of Object.values(ledger.squads ?? {})) {
+    squads.set(`${club(sq.club)} ${sq.season}`, sq.sources.map(s => new Set(s.players.map(fold))));
   }
 
   const lookup = (map, name) => {
@@ -98,6 +121,8 @@ export function makeSoccerChecker({ careerPlayers, clubSeasonsOf, nationalityMap
     }
     let m = t.match(/^From (?:the )?(\p{L}[\p{L} .'-]*)$/u);
     if (m) return { kind: 'nation', nation: nation(m[1]) };
+    m = t.match(/^Played for (.+) in ([0-9]{4}-[0-9]{2})$/);
+    if (m) return { kind: 'clubSeason', club: club(m[1]), season: m[2] };
     m = t.match(/^Played for (?:both )?(.+)$/);
     if (m) {
       if (/[()0-9+]/.test(m[1])) return null;
@@ -113,14 +138,30 @@ export function makeSoccerChecker({ careerPlayers, clubSeasonsOf, nationalityMap
       return keysOf(name).some(k => members.has(k));
     }
     if (c.kind === 'nation') {
+      const own = lookup(ledgerNation, name);
+      if (own) return own === c.nation;
       const ns = lookup(nationsOf, name);
       if (!ns) return null;
       return ns.has(c.nation);
     }
     if (c.kind === 'club') {
-      const cs = lookup(clubsOf, name);
-      if (!cs) return null;
-      return c.clubs.every(x => cs.has(x));
+      const own = lookup(ledgerClubs, name);
+      const table = lookup(clubsOf, name);
+      if (!own && !table) return null;
+      const have = new Set([...(own?.clubs ?? []), ...(table ?? [])]);
+      if (c.clubs.every(x => have.has(x))) return true;
+      return own?.complete || (!own && table) ? false : null;
+    }
+    if (c.kind === 'clubSeason') {
+      const lists = squads.get(`${c.club} ${c.season}`);
+      if (lists) {
+        const hits = lists.filter(set => keysOf(name).some(k => set.has(k))).length;
+        if (hits === lists.length) return true;
+        if (hits === 0) return false;
+        return null;
+      }
+      const s = lookup(seasonsOf, name);
+      return s && s.has(`${c.club}::${longSeason(c.season)}`) ? true : null;
     }
     return null;
   }
