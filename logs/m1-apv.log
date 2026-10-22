@@ -1,0 +1,29 @@
+MUTATION APPLIED: goals20 (2 replacement(s))
+Round 586 all players value
+  PASS youth: 334,620 exact youth quotes: rating 30..99 by 0.25, ceiling max(45,ceil(rating))..99, age 15..23, four positions
+  PASS prime: 18920 strict senior age declines at fixed rating and ceiling
+  FAIL empty: watched baseline seed101
++ actual - expected
+
++ '58774f1b25af1c1bdc2b37f6a2ba5442a6a2e8f60dcf98cbcce4b78be366aa6c'
+- 'd079422ffb06fba8587837fa46b3e7eedbcaa66cc021c0d9916430be83b58287'
+
+  PASS edge: 195 rating increments reach the live tick; the away consumer also changes its committed result
+  PASS saves: promotion, birthday quote, decline, retirement, away training, current/frozen V1 saves, malformed repairs, move up and Sell up verified
+  POLICY calibration {"seeds":32,"sellWins":88.3125,"holdWins":89.375,"sellFee":2567.4375,"holdFee":546.75,"sellBudget":25509.625,"holdBudget":22704.96875,"sellSenior":5004.625,"holdSenior":597.65625,"sellRefills":12.0625,"holdRefills":5.65625,"winGainSe":0.27289332371648867}
+  POLICY holdout {"seeds":32,"sellWins":88.0625,"holdWins":88.875,"sellFee":2561.59375,"holdFee":545.53125,"sellBudget":25346.46875,"holdBudget":22479.625,"sellSenior":4895.53125,"holdSenior":592.09375,"sellRefills":12,"holdRefills":5.625,"winGainSe":0.2173776073875789}
+  PASS policy-cash: sell28 budget 25509.6 vs hold33 22705.0; cohort fee advantage 2020.6875, holdout 2016.0625 (floor 1010.34375)
+  PASS policy-wins: 32+32 paired seeds: hold33 gains 1.0625 wins, holdout 0.8125 (floor 0.53125)
+  STAR PACE seed 101: 60 stars, hours 0.425, 1.289, 3.756, 13.386, 58.728, 96.917, 130.175, 159.653, 186.108, 210.117, 232.081, 252.292, 270.964, 288.386, 304.683, 320.164, 334.986, 349.264, 362.956, 376.164, 388.917, 401.286, 413.281, 424.872, 436.181, 447.094, 457.714, 468.033, 478.081, 487.889, 497.447, 506.764, 515.892, 524.775, 533.525, 542.067, 550.331, 558.422, 566.386, 574.183, 581.856, 589.383, 596.750, 603.992, 611.058, 617.992, 624.847, 631.558, 638.189, 644.694, 651.089, 657.397, 663.544, 669.611, 675.592, 681.500, 687.289, 692.997, 698.614, 704.156; packs 3824; checkpoints [{"hours":100,"region":6,"lifetime":2266337,"goal":45000000},{"hours":150,"region":6,"lifetime":28291730,"goal":45000000}]
+  STAR PACE seed 202: 6 stars, hours 0.422, 1.269, 3.808, 13.419, 58.675, 96.933; packs 509; checkpoints []
+  STAR PACE seed 303: 6 stars, hours 0.425, 1.319, 3.783, 13.431, 58.819, 97.075; packs 508; checkpoints []
+  STAR PACE seed 404: 6 stars, hours 0.381, 1.239, 3.744, 13.294, 58.636, 96.894; packs 508; checkpoints []
+  STAR PACE seed 505: 6 stars, hours 0.386, 1.231, 3.753, 13.339, 58.667, 96.967; packs 516; checkpoints []
+  STAR PACE seed 606: 6 stars, hours 0.342, 1.183, 3.692, 13.239, 58.703, 96.939; packs 509; checkpoints []
+  STAR PACE seed 707: 6 stars, hours 0.439, 1.297, 3.803, 13.392, 58.733, 96.947; packs 510; checkpoints []
+  STAR PACE seed 808: 6 stars, hours 0.442, 1.314, 3.825, 13.386, 58.850, 97.072; packs 506; checkpoints []
+  STAR PACE seed 909: 6 stars, hours 0.422, 1.233, 3.772, 13.342, 58.686, 96.933; packs 503; checkpoints []
+  STAR PACE seed 1010: 6 stars, hours 0.442, 1.306, 3.800, 13.378, 58.636, 96.875; packs 507; checkpoints []
+  STAR PACE seed 1111: 6 stars, hours 0.425, 1.242, 3.756, 13.333, 58.708, 97.003; packs 506; checkpoints []
+  STAR PACE seed 1212: 6 stars, hours 0.442, 1.294, 3.806, 13.353, 58.644, 96.861; packs 505; checkpoints []
+  PASS pace: twelve greedy runs reach star 6, median 96.936h (trigger 100h from start); one representative continuation reaches all 60 stars at 704.156h

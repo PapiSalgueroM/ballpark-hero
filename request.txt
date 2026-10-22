@@ -1,0 +1,6 @@
+#!serial
+m1-scorelines: node .rc/x/mut1543.mjs goals20 && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonScorelines.mjs; s=$?; git checkout -- src scripts; exit $s
+m1-apv: node .rc/x/mut1543.mjs goals20 && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simAllPlayersValue.mjs; s=$?; git checkout -- src scripts; exit $s
+m1-setpiece: node .rc/x/mut1543.mjs goals20 && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonSetPiece.mjs; s=$?; git checkout -- src scripts; exit $s
+m2-scorelines: node .rc/x/mut1543.mjs win25 && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonScorelines.mjs; s=$?; git checkout -- src scripts; exit $s
+m2-apv: node .rc/x/mut1543.mjs win25 && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simAllPlayersValue.mjs; s=$?; git checkout -- src scripts; exit $s
