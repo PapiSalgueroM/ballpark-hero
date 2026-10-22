@@ -1,0 +1,7 @@
+#!serial
+old: git worktree add .rc/base 413685149bed816a5c384242aa8c40f412b1d523 >/dev/null 2>&1; node .rc/x/old1534.mjs
+old-basehead: OLD_CONTROL=basehead node .rc/x/old1534.mjs
+old-seeda: OLD_CONTROL=seeda OLD_CAREERS=40 node .rc/x/old1534.mjs
+m-settleafter: node .rc/x/mut.mjs settleafter && node scripts/simUsShopPromises.mjs; s=$?; git checkout -- src scripts; exit $s
+m-settlebeforepay: node .rc/x/mut.mjs settlebeforepay && node scripts/simUsShopPromises.mjs; s=$?; git checkout -- src scripts; exit $s
+clean: git status --short src scripts | wc -l
