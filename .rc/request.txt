@@ -1,0 +1,4 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+form23: SIM_CAREER_FORM_SECTIONS=2,3 node scripts/simCareerForm.mjs
+ctl-pageline: SIM_CAREER_FORM_CONTROL=pageline node scripts/simCareerForm.mjs
+ctl-double: SIM_CAREER_FORM_CONTROL=double node scripts/simCareerForm.mjs
