@@ -1,0 +1,3 @@
+# Release BP attribution on main cedd0239: rc-BNa's proof lines
+proof-part-1514: B1514=${B1514:-92290f81}; node scripts/proofWorldUclFleet.mjs --base $B1514 --fleet participants --coach both --eval --old-saves --strip worldComps.usc --usc-nights-off 2>&1 | tail -6 | cut -c1-250; exit ${PIPESTATUS[0]}
+proof-hoff-1514: B1514=${B1514:-92290f81}; node scripts/proofWorldUclFleet.mjs --base $B1514 --coach both --eval --only Hoffenheim --strip worldComps.dsc+usc --dsc-nights-off 2>&1 | tail -3 | cut -c1-250; exit ${PIPESTATUS[0]}
