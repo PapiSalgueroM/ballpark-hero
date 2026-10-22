@@ -171,13 +171,14 @@ describe('Hall of Champions long play', () => {
     expect(paid, `ten hidden hours paid ${paid.toFixed(0)}, eight hours at the away rate is ${owed.toFixed(0)}`).toBeGreaterThanOrEqual(owed * 0.999);
     expect(s.funds, 'the hidden tab was paid differently from the away rule given the same gaps').toBe(oracle.funds);
     expect(s.awayMs, 'the absence meter did not stop at the cap').toBe(CAP_MS);
+    const meter = s.awayMs;
     setVisible(true);
     watch(CALLBACK_MS);
     const welcome = hook().offlineEarned;
     expect(welcome, 'coming back to the page showed no welcome').not.toBeNull();
     expect(near(welcome!, paid), `the welcome said ${welcome}, the hall was paid ${paid}`).toBeLessThan(1e-9);
     expect(state().awayMs, 'watching again left the absence open').toBe(0);
-    measured(`hidden: 600 wakes a minute apart paid x${(paid / owed).toFixed(6)} of eight hours at the away rate; meter ${s.awayMs} ms; welcome ${welcome!.toExponential(4)}`);
+    measured(`hidden: 600 wakes a minute apart paid x${(paid / owed).toFixed(6)} of eight hours at the away rate; meter ${meter} ms while hidden; welcome ${welcome!.toExponential(4)}`);
   }, TEST_MS);
 
   it('3 three hidden hours and then seven closed are one absence under one eight hour cap', async () => {
