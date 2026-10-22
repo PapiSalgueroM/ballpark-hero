@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+gmcareer: PLAY_GM_CAREER_OUT="$RC_OUT/gmc" node scripts/playGmCareer.mjs
+chunks: (cd dist/assets && for f in *.js; do echo "$(gzip -c "$f" | wc -c) $f"; done | sort -k2 > "$RC_OUT/head-chunks.txt") && git worktree add /tmp/base 6d2d7a7d >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && node_modules/.bin/vite build > /tmp/base-build.log 2>&1) && (cd /tmp/base/dist/assets && for f in *.js; do echo "$(gzip -c "$f" | wc -c) $f"; done | sort -k2 > "$RC_OUT/base-chunks.txt") && wc -l "$RC_OUT/head-chunks.txt" "$RC_OUT/base-chunks.txt"
