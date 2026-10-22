@@ -1,0 +1,26 @@
+bundled in 334 ms
+
+1. LIFT
+  ok   set 0: the fleet told 22800 finals, every game of every season (want 22800)
+  ok   set 0: 45600 of 45600 tellings are a story, not the final alone
+  ok   set 0: every told final tells the same story on this tree as on the base (45600 looked at)
+  set 0: receipt 1748d620ace91475c11bdf8d6868c3ca172b769f
+  ok   set 1: the fleet told 22800 finals, every game of every season (want 22800)
+  ok   set 1: 45600 of 45600 tellings are a story, not the final alone
+  ok   set 1: every told final tells the same story on this tree as on the base (45600 looked at)
+  set 1: receipt 10b7c19eaf0b98af64a2022532ebb98e5dbe3de3
+  ok   set 2: the fleet told 22800 finals, every game of every season (want 22800)
+  ok   set 2: 45600 of 45600 tellings are a story, not the final alone
+  ok   set 2: every told final tells the same story on this tree as on the base (45600 looked at)
+  set 2: receipt b591aaf26e58ca1dfd0894daa875393fed59a62f
+  ok   set 3: the fleet told 22800 finals, every game of every season (want 22800)
+  ok   set 3: 45600 of 45600 tellings are a story, not the final alone
+  ok   set 3: every told final tells the same story on this tree as on the base (45600 looked at)
+  set 3: receipt b4fc7299f550851a2c3a8826a5ce7a50c6a02902
+  ok   set 4: the fleet told 22800 finals, every game of every season (want 22800)
+  ok   set 4: 45600 of 45600 tellings are a story, not the final alone
+  ok   set 4: every told final tells the same story on this tree as on the base (45600 looked at)
+  set 4: receipt 48c1a52b3a9f2294c0a381e70740d9f99d422a96
+
+ran in 22.1 s, seed sets 0, 1, 2, 3, 4, sections 1
+simNflSeasonStats: 15 checks, 0 failed

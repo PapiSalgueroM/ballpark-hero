@@ -1,0 +1,10 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/gameLawNfl.test.ts src/lib/gmGameDay.test.ts src/lib/gmGameDayView.test.ts src/test/usSeasonNfl.test.ts --testTimeout=300000 --hookTimeout=120000
+lift: mkdir -p /tmp/lb1 && git archive c9d18897201aae8528e635f03a877e78eb02ed5c src | tar -x -C /tmp/lb1 && LIFT_BASE=/tmp/lb1 node scripts/simNflSeasonStats.mjs
+liftdrift: mkdir -p /tmp/lb2 && git archive c9d18897201aae8528e635f03a877e78eb02ed5c src | tar -x -C /tmp/lb2 && LIFT_BASE=/tmp/lb2 NFL_STATS_CONTROL=liftdrift node scripts/simNflSeasonStats.mjs
+simGmGameDay: node scripts/simGmGameDay.mjs
+gmgd-unkeyed: GM_GAMEDAY_CONTROL=unkeyed node scripts/simGmGameDay.mjs
+simUsSeasonCentre: node scripts/simUsSeasonCentre.mjs
+usc-oddtd: US_SEASON_CONTROL=oddtd SPORTS=nfl node scripts/simUsSeasonCentre.mjs
+usc-minutes: US_SEASON_CONTROL=minutes SPORTS=nfl node scripts/simUsSeasonCentre.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs

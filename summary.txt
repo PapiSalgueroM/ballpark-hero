@@ -1,0 +1,10 @@
+vitest exit=0 7s |    Duration  6.03s (transform 1.91s, setup 431ms, collect 3.75s, tests 6.09s, environment 2.31s, prepare 845ms)
+lift exit=0 23s | simNflSeasonStats: 15 checks, 0 failed
+liftdrift exit=1 18s | simNflSeasonStats: 15 checks, 5 failed (control liftdrift)
+tsc exit=0 88s | 
+simGmGameDay exit=0 86s | simGmGameDay: 462 checks, 0 failed
+gmgd-unkeyed exit=1 86s | simGmGameDay: 462 checks, 10 failed (control unkeyed)
+usc-oddtd exit=1 7s | simUsSeasonCentre: 59 checks, 1 failed (control oddtd)
+usc-minutes exit=1 6s | simUsSeasonCentre: 59 checks, 1 failed (control minutes)
+simHarnessAnchors exit=0 51s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simUsSeasonCentre exit=0 90s | simUsSeasonCentre: 158 checks, 0 failed

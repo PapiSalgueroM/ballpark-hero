@@ -1,0 +1,27 @@
+bundled in 121 ms (control liftdrift)
+
+1. LIFT
+  ok   set 0: the fleet told 22800 finals, every game of every season (want 22800)
+  ok   set 0: 45600 of 45600 tellings are a story, not the final alone
+  FAIL set 0: every told final tells the same story on this tree as on the base (45600 looked at): 104 broke it, the first: 2026|w8|MIA|LV|20-31 from the home side
+  set 0: receipt 82725094f91d7aa0ddfabea8a3540bea7e1414ab
+  ok   set 1: the fleet told 22800 finals, every game of every season (want 22800)
+  ok   set 1: 45600 of 45600 tellings are a story, not the final alone
+  FAIL set 1: every told final tells the same story on this tree as on the base (45600 looked at): 104 broke it, the first: 2026|w17|LV|CLE|38-21 from the home side
+  set 1: receipt e6e4ee527be9db14fb2082b84c9e200c2506bb29
+  ok   set 2: the fleet told 22800 finals, every game of every season (want 22800)
+  ok   set 2: 45600 of 45600 tellings are a story, not the final alone
+  FAIL set 2: every told final tells the same story on this tree as on the base (45600 looked at): 92 broke it, the first: 2026|w9|SEA|MIN|27-30 from the home side
+  set 2: receipt 3e56957fd312e3f17a4fde5e9ae5103d3d059542
+  ok   set 3: the fleet told 22800 finals, every game of every season (want 22800)
+  ok   set 3: 45600 of 45600 tellings are a story, not the final alone
+  FAIL set 3: every told final tells the same story on this tree as on the base (45600 looked at): 118 broke it, the first: 2026|w3|DET|CHI|36-25 from the home side
+  set 3: receipt 771ae76e0314448aa11195eda85f3c6bce25effe
+  ok   set 4: the fleet told 22800 finals, every game of every season (want 22800)
+  ok   set 4: 45600 of 45600 tellings are a story, not the final alone
+  FAIL set 4: every told final tells the same story on this tree as on the base (45600 looked at): 120 broke it, the first: 2026|w7|ATL|IND|47-30 from the home side
+  set 4: receipt 1519116a37e72affd59e60b165f0392fcbfc99ef
+
+ran in 17.9 s, seed sets 0, 1, 2, 3, 4, sections 1
+control liftdrift: FIRED at section 1 (1 of 1 named checks red on 5 of 5 sets)
+simNflSeasonStats: 15 checks, 5 failed (control liftdrift)
