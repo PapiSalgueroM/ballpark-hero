@@ -1,0 +1,14 @@
+simPhonePanelLifeStories: node scripts/simPhonePanelLifeStories.mjs
+simRevealMoments: node scripts/simRevealMoments.mjs
+simSeasonCentreMotion: node scripts/simSeasonCentreMotion.mjs
+simSoccerAgentReview: node scripts/simSoccerAgentReview.mjs
+simSoccerCareerAmbitions: node scripts/simSoccerCareerAmbitions.mjs
+simSoccerCareerLeagueWorld: node scripts/simSoccerCareerLeagueWorld.mjs
+simSoccerCareerPendingPopularity: node scripts/simSoccerCareerPendingPopularity.mjs
+simSoccerCareerSavedLoan: node scripts/simSoccerCareerSavedLoan.mjs
+simSoccerCurrency: node scripts/simSoccerCurrency.mjs
+simSoccerEventPromises: node scripts/simSoccerEventPromises.mjs
+simSoccerLoanBite: node scripts/simSoccerLoanBite.mjs
+simSoccerPracticeLifecycle: node scripts/simSoccerPracticeLifecycle.mjs
+simSoccerWorldTruth: node scripts/simSoccerWorldTruth.mjs
+simUsCareerSummer: node scripts/simUsCareerSummer.mjs
