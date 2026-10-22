@@ -1,0 +1,7 @@
+fob-resetbutton exit=0 22s | controlFrontOfficeBoard: 1 of 1 control(s) fired, the board tests can fail for each named reason.
+fob-arrivaltitle exit=0 21s | controlFrontOfficeBoard: 1 of 1 control(s) fired, the board tests can fail for each named reason.
+fob-thirdkey exit=0 21s | controlFrontOfficeBoard: 1 of 1 control(s) fired, the board tests can fail for each named reason.
+fob-blank exit=1 22s | controlFrontOfficeBoard: 0 of 1 control(s) fired. NOT FIRED: blank
+m1-deskstale exit=0 20s |    Duration  19.24s (transform 2.37s, setup 243ms, collect 2.79s, tests 27.97s, environment 1.32s, prepare 274ms)
+m2-opendesk exit=0 18s |    Duration  17.97s (transform 1.85s, setup 257ms, collect 1.72s, tests 21.68s, environment 1.33s, prepare 261ms)
+m4-summer exit=1 17s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/FrontOfficeGmCareer.test.tsx,title=src/components/front-office-shared/FrontO
