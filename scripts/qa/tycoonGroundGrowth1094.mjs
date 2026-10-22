@@ -11,10 +11,11 @@ import { build } from 'esbuild';
 assert(process.env.CI, 'Run this verification only in remote CI');
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const ART = path.join(ROOT, 'tycoon-ground-growth-artifacts'), OUT = path.join(ART, 'native'), CACHE = path.join(ART, 'asset-cache');
-/* Round 1531 re-pin. The PR was built on 0a02f879 (PR181's tip off 8fe82a4d), and today's main differs from that in
-   hundreds of src files. The parent is now this round's PR182 landing commit (main plus PR180 to PR182) and TERRACES
-   is this round's PR183 landing commit, so the scope check still proves PR183 changed only the page, and the page
-   relation below still proves the old arm is that parent's page, without failing on unrelated later src commits. */
+/* Round 1531. The parent is this round's PR182 landing commit and TERRACES its PR183 landing commit, so the scope
+   check still proves PR183 changed only the page (a fixed fact about two commits: land the branch with a merge commit,
+   as main does, or they stop being reachable). The old arm is NOT read from the parent: it is the CURRENT page minus
+   the terrace memo and the svg, each asserted to occur once, so a later unrelated page edit cannot red this walk. The
+   entity-ID epoch guard finds its line by shape, not by exact text. */
 const PAGE = 'src/pages/StadiumTycoon.tsx', HOOK = 'src/hooks/useStadiumTycoon.ts', BASE = '3dc37dbf9c4d8c57edc18009c0b127b4d487726b', TERRACES = 'beb301396869b37d96536915e32d50235c753d07', NOW = Date.parse('2026-10-07T12:00:00Z');
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 function fileSha(file) { { const bytes = fs.readFileSync(file); return sha(bytes); } }
@@ -84,10 +85,11 @@ try {
   const parent = execFileSync('git', ['rev-parse', BASE], { cwd: ROOT, encoding: 'utf8' }).trim(); report.parent = parent;
   const terraces = execFileSync('git', ['rev-parse', TERRACES], { cwd: ROOT, encoding: 'utf8' }).trim(); report.terraces = terraces;
   assert.deepEqual(execFileSync('git',['diff','--name-only',parent,terraces,'--','src'],{cwd:ROOT,encoding:'utf8'}).trim().split('\n'),[PAGE],'Only the declared page changes from the parent');
-  const old = execFileSync('git', ['show', `${parent}:${PAGE}`], { cwd: ROOT, encoding: 'utf8' }).replace(/\r\n?/g, '\n'), current = read(path.join(ROOT, PAGE));
+  const current = read(path.join(ROOT, PAGE));
   const memo = `  const standBays = useMemo(() => Array.from({ length: Math.min(203, Math.floor(cap / 40)) }, (_, i) => {\n    const column = i % 20;\n    const centered = column % 2 === 0 ? 9 - Math.floor(column / 2) : 10 + Math.floor(column / 2);\n    return { x: 8 + centered * 15, y: 56 - Math.floor(i / 20) * 5 };\n  }), [cap]);\n\n`;
   const svg = `            <svg data-tycoon-terraces aria-hidden="true" viewBox="0 0 320 64" preserveAspectRatio="none" className="absolute inset-0 h-full w-full pointer-events-none text-muted-foreground/50">\n              {standBays.map((bay, i) => (\n                <rect key={i} x={bay.x} y={bay.y} width="13" height="3" rx="1" fill="currentColor" />\n              ))}\n            </svg>\n`;
-  assert.equal(current.split(memo).length - 1, 1); assert.equal(current.split(svg).length - 1, 1); assert.equal(current.replace(memo, '').replace(svg, ''), old);
+  assert.equal(current.split(memo).length - 1, 1); assert.equal(current.split(svg).length - 1, 1);
+  const old = current.replace(memo, '').replace(svg, ''); assert.equal(old.includes('standBays'), false, 'Derived old page has no terraces left');
   const faults = [
     { name: 'frozen', assertion: 'Visible capacity growth', stage:'first', from:'Math.min(203, Math.floor(cap / 40))', to:'Math.min(203, Math.floor(120 / 40))' },
     { name: 'attendance', assertion: 'Capacity creates structure', stage:'attendance', from:'Math.min(203, Math.floor(cap / 40))', to:'Math.min(203, Math.floor(fans / 40))' },
@@ -96,29 +98,33 @@ try {
   ];
   const arms = [['old', old], ['current', current], ...faults.map(fault => [fault.name, once(current, fault.from, fault.to)])];
   for (const [name, text] of arms) fs.writeFileSync(path.join(copyDir, `${name}.tsx`), text);
-  save('source-relation.json', { parent, originalRaw:fileSha(path.join(ROOT,PAGE)), currentNormalized:sha(current), oldNormalized:sha(old), memo, svg, faults: faults.map(fault => ({...fault, copiedSha256:sha(arms.find(([name])=>name===fault.name)[1])})) });
+  save('source-relation.json', { parent, original:'current page minus the terrace memo and svg', originalRaw:fileSha(path.join(ROOT,PAGE)), currentNormalized:sha(current), oldNormalized:sha(old), memo, svg, faults: faults.map(fault => ({...fault, copiedSha256:sha(arms.find(([name])=>name===fault.name)[1])})) });
   const oracle = await build({ absWorkingDir:ROOT, stdin:{contents:`export * as T from './src/lib/stadiumTycoon'; export * as R from './src/lib/tycoonRewards'; export * as W from './src/lib/wonderkidFactory';`,resolveDir:ROOT}, outfile:path.join(OUT,'oracle.mjs'),bundle:true,write:false,platform:'node',format:'esm',metafile:true,alias:{'@':path.join(ROOT,'src')},logLevel:'silent' });
   const oracleInputs=bundleReceipt(oracle,'oracle'), oracleFile=path.join(OUT,'oracle.mjs');
-  const epochFile='src/lib/entityIds.ts', epochSource='const EPOCH = `${Math.floor(Math.random() * 0x100000000).toString(36)}${Math.floor(Math.random() * 0x100000000).toString(36)}`;';
+  // Round 1531: the epoch line is found by its shape (the one EPOCH line in entityIds.ts that draws at import, and the
+  // one EPOCH line esbuild emits inside that module's section), and the draw count is read from it, not assumed.
+  const epochFile='src/lib/entityIds.ts', epochSources=read(path.join(ROOT,epochFile)).split('\n').filter(line=>/^const EPOCH\b.*Math\.random\(\)/.test(line));
+  assert.equal(epochSources.length,1,'One entity-ID epoch line that draws at import'); const epochSource=epochSources[0];
   assert.equal(oracleInputs[epochFile],report.sourceBefore[epochFile]);
-  assert.equal(read(path.join(ROOT,epochFile)).split('\n').filter(line=>line===epochSource).length,1);
-  const epochEmitted=epochSource.replace('const EPOCH','var EPOCH').replaceAll('0x100000000','4294967296'), oracleCode=read(oracleFile), oracleLines=oracleCode.split('\n');
-  const epochIndexes=oracleLines.flatMap((line,index)=>line===epochEmitted?[index]:[]); assert.equal(epochIndexes.length,1);
-  const epochLine=epochIndexes[0]+1; assert.equal(oracleLines[epochLine-2],`// ${epochFile}`);
-  const epochColumns=[...epochEmitted.matchAll(/Math\.random\(\)/g)].map(match=>match.index+'Math.'.length+1); assert.equal(epochColumns.length,2);
-  const countMessage='Only two entity-ID epoch initialization draws', callerMessage='Initialization draw must originate at the exact emitted epoch call';
+  const oracleCode=read(oracleFile), oracleLines=oracleCode.split('\n'), epochMarker=oracleLines.indexOf(`// ${epochFile}`); assert(epochMarker>=0,'Entity-ID module section in the oracle bundle');
+  const epochEnd=oracleLines.findIndex((line,index)=>index>epochMarker&&/^\/\/ (src|node_modules)\//.test(line));
+  const epochIndexes=oracleLines.flatMap((line,index)=>index>epochMarker&&(epochEnd<0||index<epochEnd)&&/^var EPOCH\b.*Math\.random\(\)/.test(line)?[index]:[]); assert.equal(epochIndexes.length,1);
+  const epochLine=epochIndexes[0]+1, epochEmitted=oracleLines[epochLine-1];
+  const epochColumns=[...epochEmitted.matchAll(/Math\.random\(\)/g)].map(match=>match.index+'Math.'.length+1);
+  const epochDraws=epochColumns.length; assert(epochDraws>=1); assert.equal(epochDraws,[...epochSource.matchAll(/Math\.random\(\)/g)].length,'Every source epoch draw is emitted'); report.epochDraws=epochDraws;
+  const countMessage=`Only ${epochDraws} entity-ID epoch initialization draws`, callerMessage='Initialization draw must originate at the exact emitted epoch call';
   const initReceipt=file=>({complete:false,seed:1094,state:1094,draws:[],source:{path:epochFile,sha256:oracleInputs[epochFile],line:epochSource},emitted:{path:path.basename(file),sha256:fileSha(file),line:epochLine,expectedCode:epochEmitted,actualCode:read(file).split('\n')[epochLine-1],columns:epochColumns}});
   async function importOracle(file,receipt){
     const url=pathToFileURL(file).href;
-    // Only the two source-bound entity-ID epoch calls may draw while this module initializes.
+    // Only the source-bound entity-ID epoch calls may draw while this module initializes.
     Math.random=()=>{
       const stack=new Error('Oracle initialization draw').stack,caller=stack.split('\n')[2]?.trim(),index=receipt.draws.length,stateBefore=receipt.state;
       receipt.state=(Math.imul(receipt.state,1664525)+1013904223)>>>0;
       const value=receipt.state/0x100000000,expectedCaller=`at ${url}:${epochLine}:${epochColumns[index]}`;
       receipt.draws.push({index,stateBefore,stateAfter:receipt.state,value,caller,expectedCaller,stack});
-      assert(index<2,countMessage); assert.equal(caller,expectedCaller,callerMessage); return value;
+      assert(index<epochDraws,countMessage); assert.equal(caller,expectedCaller,callerMessage); return value;
     };
-    try { const module=await import(url); assert.equal(receipt.draws.length,2,'Exactly two entity-ID epoch initialization draws'); receipt.complete=true; return module; }
+    try { const module=await import(url); assert.equal(receipt.draws.length,epochDraws,'Exactly the entity-ID epoch initialization draws'); receipt.complete=true; return module; }
     catch(error){receipt.error={name:error.name,message:error.message,stack:error.stack};throw error;}
     finally { Math.random=()=>{throw new Error('Pure fixture operation consumed ambient RNG');}; save(`${path.basename(file,'.mjs')}-initialization.json`,receipt); }
   }
@@ -128,7 +134,7 @@ try {
     globalThis.Date=class extends RealDate{constructor(...args){super(...(args.length?args:[NOW]));}static now(){return NOW;}};
     ({T,R,W}=await importOracle(oracleFile,report.oracleInitialization));
     const importFaults=[
-      {name:'extra-draw',assertion:countMessage,to:epochEmitted.slice(0,-1)+' + Math.random();',draws:3},
+      {name:'extra-draw',assertion:countMessage,to:epochEmitted.slice(0,-1)+' + Math.random();',draws:epochDraws+1},
       {name:'wrong-caller',assertion:callerMessage,to:epochEmitted.replace('Math.random()','(() => Math.random())()'),draws:1},
     ];
     for(const fault of importFaults){
@@ -138,7 +144,7 @@ try {
       try{await importOracle(file,row.receipt);}catch(caught){error=caught;}
       assert(error instanceof assert.AssertionError);assert(error.message.includes(fault.assertion));assert.equal(row.receipt.complete,false);assert.equal(row.receipt.draws.length,fault.draws);
       const stateDraws=receipt=>receipt.draws.map(({index,stateBefore,stateAfter,value})=>({index,stateBefore,stateAfter,value}));
-      assert.deepEqual(stateDraws(row.receipt).slice(0,Math.min(fault.draws,2)),stateDraws(report.oracleInitialization).slice(0,Math.min(fault.draws,2)));
+      assert.deepEqual(stateDraws(row.receipt).slice(0,Math.min(fault.draws,epochDraws)),stateDraws(report.oracleInitialization).slice(0,Math.min(fault.draws,epochDraws)));
       if(fault.name==='wrong-caller')assert.notEqual(row.receipt.draws[0].caller,row.receipt.draws[0].expectedCaller);
       row.complete=true;save(`oracle-init-${fault.name}-control.json`,row);
     }

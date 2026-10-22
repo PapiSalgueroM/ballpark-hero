@@ -9,7 +9,7 @@ on:
     paths:
       - .github/workflows/tycoon-ground-growth.yml
       - src/pages/StadiumTycoon.tsx
-      - scripts/simTycoonGroundGrowth.mjs
+      - scripts/qa/checkTycoonGroundGrowth.mjs
       - scripts/qa/tycoonGroundGrowth1094.mjs
 
 permissions:
@@ -88,7 +88,7 @@ jobs:
         run: node scripts/qa/tycoonGroundGrowth1094.mjs --prefetch-assets-only 2>&1 | tee tycoon-ground-growth-artifacts/assets.log
       - name: Actual capacity growth and unchanged purchase tap save behavior
         if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.assets.outcome == 'success' }}
-        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" timeout --signal=TERM --kill-after=15s 20m node scripts/simTycoonGroundGrowth.mjs 2>&1 | tee tycoon-ground-growth-artifacts/outcomes.log
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" timeout --signal=TERM --kill-after=15s 20m node scripts/qa/checkTycoonGroundGrowth.mjs 2>&1 | tee tycoon-ground-growth-artifacts/outcomes.log
       - name: Retain native proof promptly
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         uses: actions/upload-artifact@v4
@@ -130,7 +130,7 @@ jobs:
           cmp package-lock.json tycoon-ground-growth-artifacts/dependencies/package-lock.json
           node --input-type=module <<'NODE'
           import fs from 'node:fs'; import assert from 'node:assert/strict'; import { execFileSync } from 'node:child_process'; import { createHash } from 'node:crypto';
-          const allowed=new Set(['src/pages/StadiumTycoon.tsx','scripts/simTycoonGroundGrowth.mjs','scripts/qa/tycoonGroundGrowth1094.mjs','.github/workflows/tycoon-ground-growth.yml','docs/PROJECT-STATE.md']);
+          const allowed=new Set(['src/pages/StadiumTycoon.tsx','scripts/qa/checkTycoonGroundGrowth.mjs','scripts/qa/tycoonGroundGrowth1094.mjs','.github/workflows/tycoon-ground-growth.yml','docs/PROJECT-STATE.md']);
           const changed=execFileSync('git',['diff','--name-only','0a02f879cab6c82fcdb14d19d3b134d907b10f85','HEAD'],{encoding:'utf8'}).trim().split('\n').filter(Boolean);
           assert(changed.length>0); assert(changed.every(file=>allowed.has(file)),JSON.stringify(changed));
           const before=JSON.parse(fs.readFileSync('tycoon-ground-growth-artifacts/installed-before.json'));
