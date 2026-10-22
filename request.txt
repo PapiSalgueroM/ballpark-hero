@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+sweepGames: ENGINES=chromium node scripts/sweepGames.mjs
