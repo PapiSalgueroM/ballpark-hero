@@ -1,0 +1,16 @@
+1) the anchors
+   18 cap anchors, 1 club anchor and 7 restored anchors checked against 199 rows
+2) the smell list
+   199 rows, 204 statuses on record, no duplicate name, no impossible stat
+3) the header date is real
+   checked on 2026-09-12, evidence file present
+4) the marking is wired
+   2 stats unchecked pool wide, 129 cap figures marked, 9 rows marked further, both consumers ask one rule and both pages print it
+5) the pool is big enough for both consumers
+   appearances: 199 usable rows, 17654 legal pairs
+   goals: 182 usable rows, 9582 legal pairs
+   internationalCaps: 198 usable rows, 16206 legal pairs
+6) every row is in exactly one of verified or marked
+   70 verified, 129 marked, 199 rows, publishers behind the marked ones: www.rsssf.org 118, en.wikipedia.org 11
+
+simHigherLower: all sections green

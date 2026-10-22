@@ -1,0 +1,12 @@
+  ok   parse: 24 statements replayed, 2 guard blocks
+  ok   hash: read 1019 rows b38dcee411367a649aaea2c076328138, end 1015 rows 3ec3d6321de5f2da78d997c59a85b269
+  ok   guard: 15 updates and deletes, 6 inserts
+  ok   agree: 1009 verified and corrected rows compared
+  ok   present: 1015 rows expected
+  ok   dropped: 10 dropped rows
+  ok   placeholder: 1015 rows in the end state
+  ok   stray: 6 inserted rows
+  ok   unique: one row per tournament, category, year and edition
+  ok   score: 1017 stored scores kept in the record, scores without a digit are cleared
+  ok   sources: 1025 record rows
+simTennisSlams: 11 checks, 0 failed; end state 1015 rows (record 1015), 1004 verified, 5 corrected, 6 filled, 10 dropped

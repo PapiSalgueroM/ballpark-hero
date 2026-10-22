@@ -1,0 +1,4 @@
+CONTROL onesource: 1 new failure(s), 0 gone, against an untouched run with 0.
+  + [1 sources] golf.Bobby Jones: 1 source(s), two are required
+
+CONTROL onesource: section 1's "sources" check caught the break (1 new) and no other section moved.

@@ -1,0 +1,5 @@
+CONTROL vanishpool: 2 new failure(s), 0 gone, against an untouched run with 0.
+  + [7 missing] pool driver Alain Prost: the file ships no era, a field the game shows
+  + [7 missing] pool driver Alain Prost: the record holds no verified era, a field the game shows
+
+CONTROL vanishpool: section 7's "missing" check caught the break (2 new) and no other section moved.
