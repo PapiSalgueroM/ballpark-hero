@@ -1,0 +1,3 @@
+visible5 exit=0 51s | simTriviaBank: 4 failure(s)
+medium3 exit=0 51s | simTriviaBank: 4 failure(s)
+ramsey exit=0 50s | simTriviaBank: 3 failure(s)

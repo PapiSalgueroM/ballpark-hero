@@ -1,0 +1,31 @@
+probe written, checker names added: Alisson, Otávio, Pablo
+      e.g. notAClub: Which club does Bandile Shandu play for? [Orlando Pirates / Rhode Island FC / FK Pardubice / Unknown]
+      e.g. ties: Ibrahima Konaté 54M / Pablo Barrios 65M / Eduardo Camavinga 54M / Lennart Karl 65M
+   new rules: 5000 ladders, 75000 questions (shirt 14320, club 14648, worth 4737, nationality 14707, position 12739, ballon 13849); worth the most by band easy 3098, medium 1184, hard 455
+   new rules: short ladders 0, ties 0, namesakes 90, present tense 0, not a club offered 0, wrong answer marked 0, unknown template 0, broken options 0
+      e.g. namesake: What nationality is Alisson?
+  FAIL: daily: 90 namesake
+3. 200 unlimited ladders, and 200 single questions at every difficulty (what Swap Question deals) [46.0s]
+   unlimited: 200 ladders, 3000 questions (shirt 573, nationality 621, worth 184, ballon 556, club 590, position 476); worth the most by band easy 125, medium 44, hard 15
+   unlimited: short ladders 0, ties 0, namesakes 3, present tense 0, not a club offered 0, wrong answer marked 0, unknown template 0, broken options 0
+      e.g. namesake: Which of these players plays Attacking Midfield? [Otávio / Emile Smith Rowe / Mika Godts / Randal Kolo Muani]
+   swap: 0 ladders, 3000 questions (club 506, ballon 529, worth 484, position 485, nationality 488, shirt 508); worth the most by band easy 161, medium 173, hard 150
+   swap: short ladders 0, ties 0, namesakes 8, present tense 0, not a club offered 0, wrong answer marked 0, unknown template 0, broken options 0
+      e.g. namesake: What nationality is Alisson?
+  FAIL: unlimited: 3 namesake
+  FAIL: swap: 8 namesake
+4. dates before 2026-10-25 deal exactly what the base generator dealt [47.5s]
+   2026-10-22: 36c088422c3d34a6 (base 36c088422c3d34a6)
+   2026-10-23: 94f0aa2002e3e1d9 (base 94f0aa2002e3e1d9)
+   2026-10-24: 1f6ffa5fd6af80b6 (base 1f6ffa5fd6af80b6)
+5. every band still deals every market question: 500 builds per band and type, new rules against old [47.5s]
+   easy: club 100.0% (was 100.0%), nationality 100.0% (was 100.0%), position 100.0% (was 100.0%), worth 100.0% (was 100.0%); askable names 107 of 109
+   medium: club 100.0% (was 100.0%), nationality 100.0% (was 100.0%), position 100.0% (was 100.0%), worth 100.0% (was 100.0%); askable names 974 of 990
+   hard: club 100.0% (was 100.0%), nationality 100.0% (was 100.0%), position 100.0% (was 100.0%), worth 100.0% (was 100.0%); askable names 4358 of 4397
+6. src/data/marketNamesakes.json is current with scripts/genMarketNamesakes.mjs [50.9s]
+   derived 54 from the saved rows, 0 from a live read; shipped 57
+  FAIL: names on the list nothing derives (typed by hand?): Alisson, Otávio, Pablo
+7. Face Off and the bank read one MIN_RATIO [51.0s]
+   MIN_RATIO 1.04
+
+simTriviaBank: 4 failure(s)
