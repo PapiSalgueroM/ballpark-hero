@@ -1,0 +1,14 @@
+# Release BO publish prep: Club Manager checks on the merged head a853fb54 (the release beside main's published Round 1443 shirt sales), no build
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+units-1516: node_modules/.bin/vitest run src/lib/worldOneOffs.test.ts src/lib/worldNights.test.ts src/lib/clubManagerWorldView.test.ts --testTimeout=300000 --hookTimeout=300000 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+ctl-1516: bad=0; for c in uelpub nouscrow; do ONE_OFF_SEEDS=1,2 ONE_OFF_SEASONS=2 ONE_OFF_COACH=nocoach ONE_OFF_CONTROL=$c node scripts/simOneOffCups.mjs > /tmp/n6-$c.log 2>&1; e=$?; echo "$c exit=$e $(tail -1 /tmp/n6-$c.log | cut -c1-220)"; if [ $e -ne 1 ] || ! tail -1 /tmp/n6-$c.log | grep -q FIRED; then bad=1; fi; done; exit $bad
+simOneOffCups: node scripts/simOneOffCups.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+appeal1081: node scripts/simManagerAppealIsolation.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+leagueRules: node scripts/simCmLeagueRules.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+simCmShirtSales: node scripts/simCmShirtSales.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+simClubManagerFinances: node scripts/simClubManagerFinances.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+simCmCopy: node scripts/simCmCopy.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+simFinance: node scripts/simFinance.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+budget-simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
+budget-simMoney: node scripts/simMoney.mjs > /tmp/mo.log 2>&1; s=$?; grep -E "biggest save|FAIL" /tmp/mo.log | head -6; tail -1 /tmp/mo.log; exit $s
+units-1443: node_modules/.bin/vitest run src/lib/clubManagerShirtSales.test.ts src/test/clubManagerShirtSalesScreen.test.tsx --testTimeout=300000 --hookTimeout=300000 2>&1 | tail -4; exit ${PIPESTATUS[0]}
