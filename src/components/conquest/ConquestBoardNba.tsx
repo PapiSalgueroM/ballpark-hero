@@ -12,7 +12,7 @@ import { useState, useEffect, useRef } from 'react';
 import ConquestActionScene from '@/components/conquest/ConquestActionScene';
 import { useConquestNba, PowerRankEntry } from '@/hooks/useConquestNba';
 import ConquestRegionMap, { useOwnerTakeover, type ConquestBattleView } from './ConquestRegionMap';
-import { NBA_TEAM_MAP, NBA_TEAMS, NBA_CONQUEST_MAP, ConquestFreeAgentCandidateNba, CONQUEST_FREE_AGENCY_POOL_NBA, TEAM_LEGENDS_NBA } from '@/data/conquestDataNba';
+import { NBA_TEAM_MAP, NBA_TEAMS, NBA_CONQUEST_MAP, ConquestFreeAgentCandidateNba, TEAM_LEGENDS_NBA } from '@/data/conquestDataNba';
 import { DIRECTIONS, DIR_LABELS, isLightColor } from '@/data/conquestData';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import ShareButtons from '@/components/game/ShareButtons';
@@ -135,14 +135,17 @@ function PowerRankingsPanel({ rankings }: { rankings: PowerRankEntry[] }) {
   );
 }
 
+// Round 1547: the market is the hook's freeAgencyPool (src/lib/conquestMarket.ts),
+// the players fallen teams left behind, the same rule NFL Conquest's panel uses.
 function FreeAgencyPanel({
-  favoriteTeam, setFavoriteTeam, canSignFreeAgent, signFreeAgencyCandidate, freeAgencyCooldownRemaining,
+  favoriteTeam, setFavoriteTeam, canSignFreeAgent, signFreeAgencyCandidate, freeAgencyCooldownRemaining, pool,
 }: {
   favoriteTeam: string | null;
   setFavoriteTeam: (teamId: string) => void;
   canSignFreeAgent: () => boolean;
   signFreeAgencyCandidate: (candidate: ConquestFreeAgentCandidateNba) => void;
   freeAgencyCooldownRemaining: number;
+  pool: ConquestFreeAgentCandidateNba[];
 }) {
   const canSign = canSignFreeAgent();
   const cooldownLabel = freeAgencyCooldownRemaining > 0
@@ -172,7 +175,7 @@ function FreeAgencyPanel({
           </div>
         ) : (
           <div className="max-h-64 overflow-y-auto space-y-1.5">
-            {CONQUEST_FREE_AGENCY_POOL_NBA.map(candidate => (
+            {pool.map(candidate => (
               <div
                 key={candidate.name}
                 className="flex items-center justify-between gap-2 px-2 py-1.5 rounded-lg border border-border/50 text-[11px]"
@@ -194,6 +197,9 @@ function FreeAgencyPanel({
                 </button>
               </div>
             ))}
+            {pool.length === 0 && (
+              <p className="text-[10px] text-muted-foreground text-center pt-1">Nobody's on the market yet. When a team falls, its players land here.</p>
+            )}
             {!canSign && (
               <p className="text-[10px] text-muted-foreground text-center pt-1">{cooldownLabel}</p>
             )}
@@ -694,10 +700,10 @@ export default function ConquestBoardNba() {
       <Dialog open={game.phase === 'powerup_use' && game.powerupUseType === 'free_agent'} onOpenChange={() => {}}>
         <DialogContent className="max-w-lg bg-card border-border text-foreground overflow-y-auto max-h-[90vh]">
           <DialogHeader>
-            <DialogTitle className="text-center text-lg">✍️ Sign a Free Agent</DialogTitle>
+            <DialogTitle className="text-center text-lg">✍️ Sign a Player</DialogTitle>
           </DialogHeader>
           <p className="text-sm text-muted-foreground text-center mb-2">
-            Choose a player to add to your roster:
+            Pick someone a fallen team left behind, or call a retired great back for one more run:
           </p>
           <div className="space-y-1.5 max-h-80 overflow-y-auto">
             {game.freeAgentList.map(fa => (
@@ -706,8 +712,11 @@ export default function ConquestBoardNba() {
                 onClick={() => game.signFreeAgent(fa.name)}
                 className="w-full px-4 py-2.5 rounded-lg border border-border hover:bg-primary/20 transition-colors text-left text-sm text-foreground flex items-center justify-between gap-2"
               >
-                <span className="font-medium">{fa.name}</span>
-                <span className="text-xs text-muted-foreground">
+                <span className="min-w-0">
+                  <span className="font-medium block truncate">{fa.name}</span>
+                  {fa.lastSeason && <span className="block text-[11px] text-muted-foreground">Retired, last played {fa.lastSeason}</span>}
+                </span>
+                <span className="shrink-0 text-xs text-muted-foreground">
                   {fa.position} · {fa.overall} OVR
                 </span>
               </button>
@@ -726,6 +735,7 @@ export default function ConquestBoardNba() {
         canSignFreeAgent={game.canSignFreeAgent}
         signFreeAgencyCandidate={game.signFreeAgencyCandidate}
         freeAgencyCooldownRemaining={game.freeAgencyCooldownRemaining}
+        pool={game.freeAgencyPool()}
       />
 
       {/* Standings */}

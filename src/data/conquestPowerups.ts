@@ -1,30 +1,51 @@
+/* A name the Sign a Player power up can deal. lastSeason is set only on a
+   retired great, and the dialog prints it beside his name. */
 export interface FreeAgent {
   name: string;
   position: string;
   overall: number;
+  lastSeason?: string;
 }
 
-export const FREE_AGENTS: FreeAgent[] = [
-  { name: 'Stefon Diggs', position: 'WR', overall: 88 },
-  { name: 'Odell Beckham', position: 'WR', overall: 84 },
-  { name: 'Ndamukong Suh', position: 'DT', overall: 82 },
-  { name: 'Adrian Peterson', position: 'RB', overall: 80 },
-  { name: 'Earl Thomas', position: 'S', overall: 82 },
-  { name: 'Eric Berry', position: 'S', overall: 81 },
-  { name: 'Dez Bryant', position: 'WR', overall: 80 },
-  { name: 'Josh Norman', position: 'CB', overall: 79 },
-  { name: "Le'Veon Bell", position: 'RB', overall: 80 },
-  { name: 'Demaryius Thomas', position: 'WR', overall: 78 },
-  { name: 'Marshawn Lynch', position: 'RB', overall: 79 },
-  { name: 'Michael Crabtree', position: 'WR', overall: 77 },
-  { name: 'Reggie Wayne', position: 'WR', overall: 76 },
-  { name: 'Anquan Boldin', position: 'WR', overall: 77 },
-  { name: 'Vernon Davis', position: 'TE', overall: 78 },
-  { name: 'Cordarrelle Patterson', position: 'RB', overall: 78 },
-  { name: 'Golden Tate', position: 'WR', overall: 77 },
-  { name: 'Danny Amendola', position: 'WR', overall: 76 },
-  { name: 'Pierre Garcon', position: 'WR', overall: 76 },
-  { name: 'Torrey Smith', position: 'WR', overall: 75 },
+export interface RetiredGreat {
+  name: string;
+  position: string;
+  overall: number;
+  lastSeason: string;
+}
+
+/* Round 1547: the Sign a Player power up's own pool is retired greats, and it
+   says so. Until this round it was "top free agents" and dealt a man who died
+   in 2021 beside men retired for a decade, and NBA Conquest dealt this same
+   football list onto basketball rosters. Every row here is a man whose
+   retirement and last season two publishers print, recorded with both in
+   scripts/data/conquestPeopleSources2026-10.json; scripts/simConquestPeople.mjs
+   holds the two together and keeps any name on the ledger's deceased list
+   out. No franchise legend (TEAM_LEGENDS, TEAM_LEGENDS_NBA) and nobody on a
+   Conquest roster. The overall is the game's rating, not a claim. */
+export const RETIRED_GREATS_NFL: RetiredGreat[] = [
+  { name: 'Calvin Johnson', position: 'WR', overall: 84, lastSeason: '2015' },
+  { name: 'Luke Kuechly', position: 'LB', overall: 84, lastSeason: '2019' },
+  { name: 'Andrew Luck', position: 'QB', overall: 84, lastSeason: '2018' },
+  { name: 'Troy Polamalu', position: 'S', overall: 82, lastSeason: '2014' },
+  { name: 'Tony Gonzalez', position: 'TE', overall: 82, lastSeason: '2013' },
+  { name: 'Darrelle Revis', position: 'CB', overall: 82, lastSeason: '2017' },
+  { name: 'Charles Woodson', position: 'S', overall: 80, lastSeason: '2015' },
+  { name: 'Vernon Davis', position: 'TE', overall: 78, lastSeason: '2019' },
+  { name: 'Anquan Boldin', position: 'WR', overall: 77, lastSeason: '2016' },
+  { name: 'Reggie Wayne', position: 'WR', overall: 76, lastSeason: '2014' },
+];
+
+export const RETIRED_GREATS_NBA: RetiredGreat[] = [
+  { name: 'Steve Nash', position: 'G', overall: 82, lastSeason: '2013-14' },
+  { name: 'Pau Gasol', position: 'F-C', overall: 82, lastSeason: '2018-19' },
+  { name: 'Paul Pierce', position: 'F', overall: 82, lastSeason: '2016-17' },
+  { name: 'Carmelo Anthony', position: 'F', overall: 82, lastSeason: '2021-22' },
+  { name: 'Yao Ming', position: 'C', overall: 82, lastSeason: '2010-11' },
+  { name: 'Tony Parker', position: 'G', overall: 80, lastSeason: '2018-19' },
+  { name: 'Manu Ginobili', position: 'G', overall: 80, lastSeason: '2017-18' },
+  { name: 'Ray Allen', position: 'G', overall: 80, lastSeason: '2013-14' },
+  { name: 'Derrick Rose', position: 'G', overall: 80, lastSeason: '2023-24' },
 ];
 
 export interface LegendPlayer {
@@ -79,7 +100,7 @@ export interface PowerupDef {
 
 export const POWERUPS: PowerupDef[] = [
   { id: 'invincibility', label: 'Invincibility', icon: '🛡️', description: 'Survive your next loss, keep all states and stay alive.' },
-  { id: 'free_agent', label: 'Free Agent Signing', icon: '✍️', description: 'Sign a top free agent or eliminated player to your roster.' },
+  { id: 'free_agent', label: 'Sign a Player', icon: '✍️', description: 'Sign a player from a fallen team, or call a retired great back for one more run.' },
   { id: 'upgrade', label: 'Upgrade', icon: '⬆️', description: 'Choose a roster player to boost to 99 OVR for your next battle.' },
   { id: 'legend', label: 'All-Time Great', icon: '🐐', description: 'Add your franchise legend at 99 OVR permanently.' },
   { id: 'territory_steal', label: 'Territory Steal', icon: '🗺️', description: 'Claim a bordering enemy state of your choice.' },
