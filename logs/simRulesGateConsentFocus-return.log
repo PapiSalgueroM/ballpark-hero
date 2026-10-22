@@ -1,0 +1,268 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: The input did not match the regular expression /expect\(element\)\.(?:toHaveFocus|toContainElement)/. Input:
+
+'Error: \x1B[2mexpect(\x1B[22m\x1B[31melement\x1B[39m\x1B[2m).toHaveFocus()\x1B[22m\n' +
+  '\n' +
+  'Expected element with focus:\n' +
+  '  \x1B[32m<button\n' +
+  '  aria-label="How to play"\n' +
+  '  class="absolute top-0 right-0 p-2 text-muted-foreground hover:text-primary transition-colors rounded-full hover:bg-surface-2"\n' +
+  '  type="button"\n' +
+  '>\n' +
+  '  <svg\n' +
+  '    class="lucide lucide-circle-help w-5 h-5 md:w-6 md:h-6"\n' +
+  '    fill="none"\n' +
+  '    height="24"\n' +
+  '    stroke="currentColor"\n' +
+  '    stroke-linecap="round"\n' +
+  '    stroke-linejoin="round"\n' +
+  '    stroke-width="2"\n' +
+  '    viewBox="0 0 24 24"\n' +
+  '    width="24"\n' +
+  '    xmlns="http://www.w3.org/2000/svg"\n' +
+  '  >\n' +
+  '    <circle\n' +
+  '      cx="12"\n' +
+  '      cy="12"\n' +
+  '      r="10"\n' +
+  '    />\n' +
+  '    <path\n' +
+  '      d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"\n' +
+  '    />\n' +
+  '    <path\n' +
+  '      d="M12 17h.01"\n' +
+  '    />\n' +
+  '  </svg>\n' +
+  '</button>\x1B[39m\n' +
+  'Received element with focus:\n' +
+  '  \x1B[31m<body\n' +
+  '  style=""\n' +
+  '>\n' +
+  '  <div>\n' +
+  '    <button>\n' +
+  '      Fixture game action\n' +
+  '    </button>\n' +
+  '    <button\n' +
+  '      aria-label="How to play"\n' +
+  '      class="absolute top-0 right-0 p-2 text-muted-foreground hover:text-primary transition-colors rounded-full hover:bg-surface-2"\n' +
+  '      type="button"\n' +
+  '    >\n' +
+  '      <svg\n' +
+  '        class="lucide lucide-circle-help w-5 h-5 md:w-6 md:h-6"\n' +
+  '        fill="none"\n' +
+  '        height="24"\n' +
+  '        stroke="currentColor"\n' +
+  '        stroke-linecap="round"\n' +
+  '        stroke-linejoin="round"\n' +
+  '        stroke-width="2"\n' +
+  '        viewBox="0 0 24 24"\n' +
+  '        width="24"\n' +
+  '        xmlns="http://www.w3.org/2000/svg"\n' +
+  '      >\n' +
+  '        <circle\n' +
+  '          cx="12"\n' +
+  '          cy="12"\n' +
+  '          r="10"\n' +
+  '        />\n' +
+  '        <path\n' +
+  '          d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"\n' +
+  '        />\n' +
+  '        <path\n' +
+  '          d="M12 17h.01"\n' +
+  '        />\n' +
+  '      </svg>\n' +
+  '    </button>\n' +
+  '  </div>\n' +
+  '</body>\x1B[39m\n' +
+  '\n' +
+  'Ignored nodes: comments, script, style\n' +
+  '\x1B[36m<html>\x1B[39m\n' +
+  '  \x1B[36m<head />\x1B[39m\n' +
+  '  \x1B[36m<body\x1B[39m\n' +
+  '    \x1B[33mstyle\x1B[39m=\x1B[32m""\x1B[39m\n' +
+  '  \x1B[36m>\x1B[39m\n' +
+  '    \x1B[36m<div>\x1B[39m\n' +
+  '      \x1B[36m<button>\x1B[39m\n' +
+  '        \x1B[0mFixture game action\x1B[0m\n' +
+  '      \x1B[36m</button>\x1B[39m\n' +
+  '      \x1B[36m<button\x1B[39m\n' +
+  '        \x1B[33maria-label\x1B[39m=\x1B[32m"How to play"\x1B[39m\n' +
+  '        \x1B[33mclass\x1B[39m=\x1B[32m"absolute top-0 right-0 p-2 text-muted-foreground hover:text-primary transition-colors rounded-full hover:bg-surface-2"\x1B[39m\n' +
+  '        \x1B[33mtype\x1B[39m=\x1B[32m"button"\x1B[39m\n' +
+  '      \x1B[36m>\x1B[39m\n' +
+  '        \x1B[36m<svg\x1B[39m\n' +
+  '          \x1B[33mclass\x1B[39m=\x1B[32m"lucide lucide-circle-help w-5 h-5 md:w-6 md:h-6"\x1B[39m\n' +
+  '          \x1B[33mfill\x1B[39m=\x1B[32m"none"\x1B[39m\n' +
+  '          \x1B[33mheight\x1B[39m=\x1B[32m"24"\x1B[39m\n' +
+  '          \x1B[33mstroke\x1B[39m=\x1B[32m"currentColor"\x1B[39m\n' +
+  '          \x1B[33mstroke-linecap\x1B[39m=\x1B[32m"round"\x1B[39m\n' +
+  '          \x1B[33mstroke-linejoin\x1B[39m=\x1B[32m"round"\x1B[39m\n' +
+  '          \x1B[33mstroke-width\x1B[39m=\x1B[32m"2"\x1B[39m\n' +
+  '          \x1B[33mviewBox\x1B[39m=\x1B[32m"0 0 24 24"\x1B[39m\n' +
+  '          \x1B[33mwidth\x1B[39m=\x1B[32m"24"\x1B[39m\n' +
+  '          \x1B[33mxmlns\x1B[39m=\x1B[32m"http://www.w3.org/2000/svg"\x1B[39m\n' +
+  '        \x1B[36m>\x1B[39m\n' +
+  '          \x1B[36m<circle\x1B[39m\n' +
+  '            \x1B[33mcx\x1B[39m=\x1B[32m"12"\x1B[39m\n' +
+  '            \x1B[33mcy\x1B[39m=\x1B[32m"12"\x1B[39m\n' +
+  '            \x1B[33mr\x1B[39m=\x1B[32m"10"\x1B[39m\n' +
+  '          \x1B[36m/>\x1B[39m\n' +
+  '          \x1B[36m<path\x1B[39m\n' +
+  '            \x1B[33md\x1B[39m=\x1B[32m"M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"\x1B[39m\n' +
+  '          \x1B[36m/>\x1B[39m\n' +
+  '          \x1B[36m<path\x1B[39m\n' +
+  '            \x1B[33md\x1B[39m=\x1B[32m"M12 17h.01"\x1B[39m\n' +
+  '          \x1B[36m/>\x1B[39m\n' +
+  '        \x1B[36m</svg>\x1B[39m\n' +
+  '      \x1B[36m</button>\x1B[39m\n' +
+  '    \x1B[36m</div>\x1B[39m\n' +
+  '  \x1B[36m</body>\x1B[39m\n' +
+  '\x1B[36m</html>\x1B[39m\n' +
+  '    at Proxy.expectWrapper (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/expect/dist/index.js:1745:12)\n' +
+  '    at Proxy.<anonymous> (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/expect/dist/index.js:1029:14)\n' +
+  '    at Proxy.toHaveFocus (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/chai/index.js:1686:25)\n' +
+  '    at /home/runner/work/ballpark-hero/ballpark-hero/src/test/rulesGateConsentFocus.test.tsx:109:42\n' +
+  '    at runWithExpensiveErrorDiagnosticsDisabled (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/@testing-library/dom/dist/config.js:47:12)\n' +
+  '    at checkCallback (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/@testing-library/dom/dist/wait-for.js:124:77)\n' +
+  '    at Timeout.checkRealTimersCallback (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/@testing-library/dom/dist/wait-for.js:118:16)\n' +
+  '    at listOnTimeout (node:internal/timers:685:17)\n' +
+  '    at processTimers (node:internal/timers:618:7)'
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simRulesGateConsentFocus.mjs:60:14 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 'Error: \x1B[2mexpect(\x1B[22m\x1B[31melement\x1B[39m\x1B[2m).toHaveFocus()\x1B[22m\n' +
+    '\n' +
+    'Expected element with focus:\n' +
+    '  \x1B[32m<button\n' +
+    '  aria-label="How to play"\n' +
+    '  class="absolute top-0 right-0 p-2 text-muted-foreground hover:text-primary transition-colors rounded-full hover:bg-surface-2"\n' +
+    '  type="button"\n' +
+    '>\n' +
+    '  <svg\n' +
+    '    class="lucide lucide-circle-help w-5 h-5 md:w-6 md:h-6"\n' +
+    '    fill="none"\n' +
+    '    height="24"\n' +
+    '    stroke="currentColor"\n' +
+    '    stroke-linecap="round"\n' +
+    '    stroke-linejoin="round"\n' +
+    '    stroke-width="2"\n' +
+    '    viewBox="0 0 24 24"\n' +
+    '    width="24"\n' +
+    '    xmlns="http://www.w3.org/2000/svg"\n' +
+    '  >\n' +
+    '    <circle\n' +
+    '      cx="12"\n' +
+    '      cy="12"\n' +
+    '      r="10"\n' +
+    '    />\n' +
+    '    <path\n' +
+    '      d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"\n' +
+    '    />\n' +
+    '    <path\n' +
+    '      d="M12 17h.01"\n' +
+    '    />\n' +
+    '  </svg>\n' +
+    '</button>\x1B[39m\n' +
+    'Received element with focus:\n' +
+    '  \x1B[31m<body\n' +
+    '  style=""\n' +
+    '>\n' +
+    '  <div>\n' +
+    '    <button>\n' +
+    '      Fixture game action\n' +
+    '    </button>\n' +
+    '    <button\n' +
+    '      aria-label="How to play"\n' +
+    '      class="absolute top-0 right-0 p-2 text-muted-foreground hover:text-primary transition-colors rounded-full hover:bg-surface-2"\n' +
+    '      type="button"\n' +
+    '    >\n' +
+    '      <svg\n' +
+    '        class="lucide lucide-circle-help w-5 h-5 md:w-6 md:h-6"\n' +
+    '        fill="none"\n' +
+    '        height="24"\n' +
+    '        stroke="currentColor"\n' +
+    '        stroke-linecap="round"\n' +
+    '        stroke-linejoin="round"\n' +
+    '        stroke-width="2"\n' +
+    '        viewBox="0 0 24 24"\n' +
+    '        width="24"\n' +
+    '        xmlns="http://www.w3.org/2000/svg"\n' +
+    '      >\n' +
+    '        <circle\n' +
+    '          cx="12"\n' +
+    '          cy="12"\n' +
+    '          r="10"\n' +
+    '        />\n' +
+    '        <path\n' +
+    '          d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"\n' +
+    '        />\n' +
+    '        <path\n' +
+    '          d="M12 17h.01"\n' +
+    '        />\n' +
+    '      </svg>\n' +
+    '    </button>\n' +
+    '  </div>\n' +
+    '</body>\x1B[39m\n' +
+    '\n' +
+    'Ignored nodes: comments, script, style\n' +
+    '\x1B[36m<html>\x1B[39m\n' +
+    '  \x1B[36m<head />\x1B[39m\n' +
+    '  \x1B[36m<body\x1B[39m\n' +
+    '    \x1B[33mstyle\x1B[39m=\x1B[32m""\x1B[39m\n' +
+    '  \x1B[36m>\x1B[39m\n' +
+    '    \x1B[36m<div>\x1B[39m\n' +
+    '      \x1B[36m<button>\x1B[39m\n' +
+    '        \x1B[0mFixture game action\x1B[0m\n' +
+    '      \x1B[36m</button>\x1B[39m\n' +
+    '      \x1B[36m<button\x1B[39m\n' +
+    '        \x1B[33maria-label\x1B[39m=\x1B[32m"How to play"\x1B[39m\n' +
+    '        \x1B[33mclass\x1B[39m=\x1B[32m"absolute top-0 right-0 p-2 text-muted-foreground hover:text-primary transition-colors rounded-full hover:bg-surface-2"\x1B[39m\n' +
+    '        \x1B[33mtype\x1B[39m=\x1B[32m"button"\x1B[39m\n' +
+    '      \x1B[36m>\x1B[39m\n' +
+    '        \x1B[36m<svg\x1B[39m\n' +
+    '          \x1B[33mclass\x1B[39m=\x1B[32m"lucide lucide-circle-help w-5 h-5 md:w-6 md:h-6"\x1B[39m\n' +
+    '          \x1B[33mfill\x1B[39m=\x1B[32m"none"\x1B[39m\n' +
+    '          \x1B[33mheight\x1B[39m=\x1B[32m"24"\x1B[39m\n' +
+    '          \x1B[33mstroke\x1B[39m=\x1B[32m"currentColor"\x1B[39m\n' +
+    '          \x1B[33mstroke-linecap\x1B[39m=\x1B[32m"round"\x1B[39m\n' +
+    '          \x1B[33mstroke-linejoin\x1B[39m=\x1B[32m"round"\x1B[39m\n' +
+    '          \x1B[33mstroke-width\x1B[39m=\x1B[32m"2"\x1B[39m\n' +
+    '          \x1B[33mviewBox\x1B[39m=\x1B[32m"0 0 24 24"\x1B[39m\n' +
+    '          \x1B[33mwidth\x1B[39m=\x1B[32m"24"\x1B[39m\n' +
+    '          \x1B[33mxmlns\x1B[39m=\x1B[32m"http://www.w3.org/2000/svg"\x1B[39m\n' +
+    '        \x1B[36m>\x1B[39m\n' +
+    '          \x1B[36m<circle\x1B[39m\n' +
+    '            \x1B[33mcx\x1B[39m=\x1B[32m"12"\x1B[39m\n' +
+    '            \x1B[33mcy\x1B[39m=\x1B[32m"12"\x1B[39m\n' +
+    '            \x1B[33mr\x1B[39m=\x1B[32m"10"\x1B[39m\n' +
+    '          \x1B[36m/>\x1B[39m\n' +
+    '          \x1B[36m<path\x1B[39m\n' +
+    '            \x1B[33md\x1B[39m=\x1B[32m"M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"\x1B[39m\n' +
+    '          \x1B[36m/>\x1B[39m\n' +
+    '          \x1B[36m<path\x1B[39m\n' +
+    '            \x1B[33md\x1B[39m=\x1B[32m"M12 17h.01"\x1B[39m\n' +
+    '          \x1B[36m/>\x1B[39m\n' +
+    '        \x1B[36m</svg>\x1B[39m\n' +
+    '      \x1B[36m</button>\x1B[39m\n' +
+    '    \x1B[36m</div>\x1B[39m\n' +
+    '  \x1B[36m</body>\x1B[39m\n' +
+    '\x1B[36m</html>\x1B[39m\n' +
+    '    at Proxy.expectWrapper (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/expect/dist/index.js:1745:12)\n' +
+    '    at Proxy.<anonymous> (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/expect/dist/index.js:1029:14)\n' +
+    '    at Proxy.toHaveFocus (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/chai/index.js:1686:25)\n' +
+    '    at /home/runner/work/ballpark-hero/ballpark-hero/src/test/rulesGateConsentFocus.test.tsx:109:42\n' +
+    '    at runWithExpensiveErrorDiagnosticsDisabled (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/@testing-library/dom/dist/config.js:47:12)\n' +
+    '    at checkCallback (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/@testing-library/dom/dist/wait-for.js:124:77)\n' +
+    '    at Timeout.checkRealTimersCallback (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/@testing-library/dom/dist/wait-for.js:118:16)\n' +
+    '    at listOnTimeout (node:internal/timers:685:17)\n' +
+    '    at processTimers (node:internal/timers:618:7)',
+  expected: /expect\(element\)\.(?:toHaveFocus|toContainElement)/,
+  operator: 'match',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

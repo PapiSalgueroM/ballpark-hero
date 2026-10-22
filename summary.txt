@@ -1,0 +1,10 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playBoxingShowForecast1086 exit=1 0s | Node.js v24.21.0
+playWc2026Reset exit=0 29s | playWc2026Reset: all green
+playWorldUcl exit=0 260s | playWorldUcl: green. Nine saves at three sizes, 93 views measured, every check held; pictures in /home/runner/work/_temp/rc-out/files/shots
+playAdRoutes exit=1 64s | Node.js v24.21.0
+simHelpConsentFocus exit=0 2s | simHelpConsentFocus: real source held, disposable copies cleaned, no vendor requests.
+simHelpConsentFocus-external exit=1 3s | Node.js v24.21.0
+simRulesGateConsentFocus exit=0 2s | simRulesGateConsentFocus: source held, owned copies cleaned, no backend or vendor requests.
+simRulesGateConsentFocus-host exit=1 4s | Node.js v24.21.0
+simRulesGateConsentFocus-return exit=1 5s | Node.js v24.21.0
