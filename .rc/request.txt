@@ -1,0 +1,4 @@
+#!build
+#!playwright
+g2: ONLY=simNbaCareer,simNflCareer,simMlbCareer,simNhlCareer,simCareerRealism,simNbaAwardsSense,simUsCareerWeight,simSeasonReveal,simNflTruth,simUsCareerRecovery,simNflCoachStaffRecovery,simUsCareerPractice,simUsCareerActionConfirm,simCareerInbox,simNoDoubleRecord node scripts/runAllSims.mjs --browser
+g5: ONLY=simCareerHub,simCareerInboxBeats,simCareerRivalryEvents,simExtension,simHomeFront,simRevealMoments,simSessionMarks,simUsCoachCareer,simTycoonGear,simCareerTraining,simUsCareerProspect,simCareerPreDraft,simCareerEntryGuide,simCareerSeasonReview,simCareerDecisionOutcome node scripts/runAllSims.mjs --browser
