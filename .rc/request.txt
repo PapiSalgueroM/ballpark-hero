@@ -1,0 +1,4 @@
+endings-1519: export B1519=41368514; SC_ENDINGS_BASE=${B1519:-cedd0239} node scripts/simSoccerCareerEndings.mjs > /tmp/e19.log 2>&1; s=$?; grep -E "^  base |careers 240|alive at|FAIL" /tmp/e19.log | head -5 | cut -c1-200; tail -1 /tmp/e19.log | cut -c1-200; exit $s
+ls: node scripts/simCareerLeagueSeasons.mjs
+ls-unattributed: SIM_LEAGUE_SEASONS_MORALE= node scripts/simCareerLeagueSeasons.mjs > /tmp/lsu.log 2>&1; s=$?; grep -E "FAIL|cannot be built|section" /tmp/lsu.log | head -14 | cut -c1-260; tail -1 /tmp/lsu.log | cut -c1-200; exit $s
+anchors: node scripts/simHarnessAnchors.mjs
