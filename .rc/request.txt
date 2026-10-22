@@ -1,0 +1,5 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/nbaCourtSelection.test.tsx src/test/lineupValidatorClient.test.tsx --testTimeout=300000 --hookTimeout=120000
+simNbaCourtSelection: node scripts/simNbaCourtSelection.mjs
+simNbaLineupSearch: node scripts/simNbaLineupSearch.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
