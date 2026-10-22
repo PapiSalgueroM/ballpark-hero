@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simHallLongPlay: node scripts/simHallLongPlay.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+ctl-hookvisible: SIM_HALL_CONTROL=hookvisible node scripts/simHallLongPlay.mjs
