@@ -571,6 +571,23 @@
       only cause. Written with --part=modern,eras,pure --write on the tree
       itself (remote check r1520-y, line digest-write, 218 lines changed),
       then run green whole on the same runner.
+      The Round 1520 review's fixer took it once more, on the branch merged
+      with main c1b39364 (20aaf587): a youth pad and a home intake boy are
+      from the club's country, a league that caps its imports draws to the
+      cap's floor, the Welsh and Canadian clubs read their own country, ties
+      sort by code point and a stored country ask is rebased when its men
+      are counted. 47 entries moved (modern 27: whole and wholeNext 27,
+      start 19, objectivesNext 16, objectives and summary 14, s2_whole 10,
+      s2_objectives 7; eras 20: whole and wholeNext 20, objectivesNext 11,
+      start 4, objectives and summary 1); pure held 48/48. Main's shirt
+      sales (b0feca59, clubManagerFinances.ts) had moved it too and left it
+      unretaken on main. Attribution on a GitHub runner (remote check
+      r1520-fx-c): with the three engine files the fixer edited and
+      clubManagerFinances.ts taken back to 5dea4f04 the file before this
+      retake is green whole (line digest-revert-fin); with the three engine
+      files alone taken back it stays red at 47 (digest-revert). Written
+      with --part=modern,eras,pure --write on 20aaf587 itself (r1520-fx-c,
+      line digest-write, 191 lines changed), then run green whole there.
    2. DIGEST, ERAS (hard). The same for every league of every historic era,
       one career each.
    3. DIGEST, PURE (hard). For every modern and era league: the drop count,
