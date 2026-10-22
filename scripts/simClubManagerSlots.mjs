@@ -100,6 +100,15 @@
  *   490,066 / 491,502 / 490,885 (already within 2,616 of the old 495,000). The dupe control leaves 570,310
  *   on the head (551,383 on the base) and fired through the budget check on both. 532,500 sits 25,393 over
  *   the largest healthy total and 37,810 under the control's, the margins the old number was set with.
+ *   Release BP moved BUDGET to 562,500 (GitHub runners, remote checks rBP-trS-bp and rBP-trS-main,
+ *   2026-10-22). Two causes. Main grew after Round 1311 (Round 1443's shirt money among others): on main
+ *   3ee0bf62 the default stream and SIM_SEED 1 to 5 read 531,438 / 530,536 / 533,762 / 530,969 / 533,033 /
+ *   530,829, so SIM_SEED 2 and 4 were already over 532,500 on main and the default stream 1,062 under it.
+ *   Round 1520 then stores a made up man's own country on him (CMPlayer.nation: the squad, the loans and
+ *   the free agent pool of all three careers), about 3,900 to 4,400 more: on the release head 212b9069
+ *   535,303 / 534,872 / 537,624 / 535,022 / 537,211 / 534,992. The dupe control leaves 605,989 there
+ *   (600,853 on main) and fired through the budget check on both. 562,500 sits 24,876 over the largest
+ *   healthy total and 43,489 under the control's, the margins the old number was set with.
  *   section 4 (2026-10-03, default, SIM_SEED 1, 2): the lived in save stands
  *     at season 5, week 19 with 190 / 196 / 191 h2h rows (115,179 / 116,726 /
  *     115,876 characters); the park cuts 1 / 2 / 2 of them, so the lean cut
@@ -130,7 +139,7 @@ const BUNDLE = `${TMP}/bundle.mjs`;
 
 const SWITCHES = Number(process.env.SLOTS_SWITCHES || 20);
 const BUDGET_SEASON = Number(process.env.SLOTS_BUDGET_SEASON || 15);
-const BUDGET = 532_500; // Round 1311, the league's awards on the records: measured healthy 504,692 to 507,107; duplicated career control 570,310 (was 495,000 from Round 1052: healthy 466,396 to 470,019, control 528,801)
+const BUDGET = 562_500; // Release BP, main's growth since Round 1311 and Round 1520's made up countries: measured healthy 534,872 to 537,624; duplicated career control 605,989 (was 532,500 from Round 1311: healthy 504,692 to 507,107, control 570,310; before that 495,000 from Round 1052: healthy 466,396 to 470,019, control 528,801)
 const SAVE_KEY = 'dukb-club-manager-save';
 /* SIM_SEED re-roots every career's stream, to measure the fences on fresh
    samples on purpose. The default is the stream the fences are judged on. */
