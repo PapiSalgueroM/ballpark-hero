@@ -128,7 +128,10 @@ async function scenario(sport, name, driftId) {
 
   const snapshot = async () => (await db.query(`select puzzle_id, sort_order, groups_json from public.${table} order by sort_order`)).rows;
   const before = await snapshot();
-  await db.exec(MIGRATION.replace(/do \$\$[\s\S]*?\$\$;/g, block => (block.includes(`public.${table} `) || block.includes(`public.${table}\n`) ? block : '')));
+  /* this scenario holds one table, so only its block runs (each block names only its own table) */
+  const own = MIGRATION.replace(/do \$\$[\s\S]*?\$\$;/g, block => (block.includes(`public.${table} `) ? block : ''));
+  if (!own.includes(`update public.${table} c`)) fail(`${sport} ${name}: the migration has no block for ${table}`);
+  await db.exec(own);
   const after = await snapshot();
   if (after.length !== before.length) fail(`${sport} ${name}: the table went from ${before.length} rows to ${after.length}`);
   if (!same(after.map(r => [r.puzzle_id, r.sort_order]), before.map(r => [r.puzzle_id, r.sort_order]))) fail(`${sport} ${name}: a puzzle_id or sort_order moved, so the daily deal would reshuffle`);
@@ -147,7 +150,7 @@ async function scenario(sport, name, driftId) {
   const named = new Set(ids(sport));
   for (const b of before) if (!named.has(b.puzzle_id) && !same(afterById.get(b.puzzle_id)?.groups_json, b.groups_json)) fail(`${sport} ${name}: ${b.puzzle_id} is not in the migration and changed`);
   void beforeById;
-  await db.exec(MIGRATION);
+  await db.exec(own);
   if (!same(await snapshot(), after)) fail(`${sport} ${name}: a second run changed the table`);
   console.log(`   ${sport} ${name}: ${before.length} rows, ${poolBefore} valid before and ${poolAfter} after; ${rewritten} rewritten in place${driftId ? `; ${driftId} drifted on purpose and left alone` : ''}`);
 }
