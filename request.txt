@@ -1,0 +1,4 @@
+simCfbDynasty: node scripts/simCfbDynasty.mjs
+simCfbStaff: node scripts/simCfbStaff.mjs
+simCbbStaff: node scripts/simCbbStaff.mjs
+vitest-boards: node_modules/.bin/vitest run src/components/cfb-dynasty src/components/cbb-dynasty src/components/college-dynasty/CollegeSeat.test.tsx --testTimeout=300000 --hookTimeout=120000

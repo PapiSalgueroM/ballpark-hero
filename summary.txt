@@ -1,0 +1,4 @@
+simCfbDynasty exit=0 4s | simCfbDynasty: all green
+vitest-boards exit=0 13s |    Duration  12.42s (transform 739ms, setup 554ms, collect 2.85s, tests 12.61s, environment 2.78s, prepare 791ms)
+simCbbStaff exit=0 20s | simCbbStaff: all green
+simCfbStaff exit=1 65s | simCfbStaff: 211 failure(s)

@@ -1,0 +1,29 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/components/cfb-dynasty/CfbDynastyDepth.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 957[2mms[22m[39m
+   [33m[2m✓[22m[39m CFB Dynasty: the program layer on the board[2m > [22mplays a save from before coordinators existed without adding anything to it [33m 317[2mms[22m[39m
+   [33m[2m✓[22m[39m CFB Dynasty: the program layer on the board[2m > [22mgives a new dynasty its coordinators and a schedule with a strength [33m 344[2mms[22m[39m
+ [32m✓[39m src/components/cbb-dynasty/CbbDynastyDepth.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 1099[2mms[22m[39m
+   [33m[2m✓[22m[39m CBB Dynasty: the program layer on the board[2m > [22mplays a save from before assistant coaches existed without adding anything to it [33m 403[2mms[22m[39m
+ [32m✓[39m src/components/cfb-dynasty/CfbDynastyBoard.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 548[2mms[22m[39m
+   [33m[2m✓[22m[39m CFB Dynasty: the season closes once[2m > [22mdraws the recap again after a reload and does not replay the season [33m 350[2mms[22m[39m
+[90mstdout[2m | src/components/college-dynasty/CollegeSeat.test.tsx[2m > [22m[2mRound 1320: a buyout bid after a big year[2m > [22m[2mcfb: a second dynasty in one mount takes its own bid, though its key matches the first one's
+[22m[39mcfb: the second dynasty's bid came on try 39 at Miami, of 25 programs that can bid
+
+[90mstdout[2m | src/components/college-dynasty/CollegeSeat.test.tsx[2m > [22m[2mRound 1320: a buyout bid after a big year[2m > [22m[2mcbb: a second dynasty in one mount takes its own bid, though its key matches the first one's
+[22m[39mcbb: the second dynasty's bid came on try 1 at Virginia, of 22 programs that can bid
+
+ [32m✓[39m src/components/college-dynasty/CollegeSeat.test.tsx [2m([22m[2m18 tests[22m[2m)[22m[33m 10003[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1320: the athletic director on the college boards[2m > [22mcfb: a new dynasty starts with him, the tile carries the ask, and the card opens and closes [33m 522[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1320: the athletic director on the college boards[2m > [22mcfb: the live line follows the record, and the recap grades the year and moves trust [33m 521[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1320: the athletic director on the college boards[2m > [22mcfb: a block that does not check out loads as an old save, never a crash [33m 318[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1320: the athletic director on the college boards[2m > [22mcfb: Take the job moves him once and opens the new program's trail; Sit the year out plays a season without him [33m 341[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1320: the athletic director on the college boards[2m > [22mcfb: a closed market offers only a new dynasty, and hostile market saves load somewhere sane [33m 331[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1320: a buyout bid after a big year[2m > [22mcfb: a second dynasty in one mount takes its own bid, though its key matches the first one's [33m 6218[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m4 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[32m31 passed[39m[22m[90m (31)[39m
+[2m   Start at [22m 12:52:02
+[2m   Duration [22m 12.42s[2m (transform 739ms, setup 554ms, collect 2.85s, tests 12.61s, environment 2.78s, prepare 791ms)[22m
+
