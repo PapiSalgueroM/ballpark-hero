@@ -1,0 +1,28 @@
+#!serve
+#!playwright
+#!serial
+# Round 1537 proof kit (Connections on a phone, the NBA Front Office roster box's injury line, two focus harnesses).
+# Send from a checkout of r1537-game-screen-fixes (or main after it merges), with the probe as an extra file:
+#   bash /c/Users/antho/dukb-handoff/2026-10-08/rc/rc.sh <name> rc-1537.txt connProbe-1537.mjs
+# (connProbe-1537.mjs sits beside this file; it is sent as .rc/x/connProbe-1537.mjs and never committed.)
+# Expected exit codes: tsc 0, connProbe 0, sweepPhone 0, playFoHub 0, help 0, help-external 0, rules 0, rules-host 0,
+# rules-return 0, simNoRivalNames 0; the controls sweepPhone-noclip-nba 1, sweepPhone-noclip-nhl 1,
+# sweepPhone-counthidden 1, playFoHub-nofloor 1 (read their FAIL lines: they must name the defect, not a crash).
+# The three focus lines run with NO_COLOR unset on purpose: that is the environment the fix is for.
+# Measured on runners: r1537-a (head fe040e19, every line above plus three "before" lines that ran the f01d526b
+# harnesses and exited 1) and r1537-final (head c52cf635: sweepPhone 0, sweepPhone-noclip-nba 1, simNoRivalNames 0).
+# The names in the noclip FAIL lines change with the day's puzzle (Michael Jordan and Kobe Bryant on 2026-10-22).
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+connProbe: ENGINES=chromium node .rc/x/connProbe-1537.mjs
+sweepPhone: ENGINES=chromium node scripts/sweepPhone.mjs
+sweepPhone-noclip-nba: SWEEP_PHONE_CONTROL=noclip ROUTE=/nba-connections ENGINES=chromium node scripts/sweepPhone.mjs
+sweepPhone-noclip-nhl: SWEEP_PHONE_CONTROL=noclip ROUTE=/nhl-connections ENGINES=chromium node scripts/sweepPhone.mjs
+sweepPhone-counthidden: SWEEP_PHONE_CONTROL=counthidden ROUTE=/stadium-tycoon ENGINES=chromium node scripts/sweepPhone.mjs
+playFoHub: ENGINES=chromium node scripts/playFoHub.mjs
+playFoHub-nofloor: PLAY_FO_HUB_CONTROL=nofloor ENGINES=chromium node scripts/playFoHub.mjs
+help: env -u NO_COLOR node scripts/simHelpConsentFocus.mjs
+help-external: env -u NO_COLOR HELP_CONSENT_FOCUS_CONTROL=external node scripts/simHelpConsentFocus.mjs
+rules: env -u NO_COLOR node scripts/simRulesGateConsentFocus.mjs
+rules-host: env -u NO_COLOR RULES_GATE_FOCUS_CONTROL=host node scripts/simRulesGateConsentFocus.mjs
+rules-return: env -u NO_COLOR RULES_GATE_FOCUS_CONTROL=return node scripts/simRulesGateConsentFocus.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
