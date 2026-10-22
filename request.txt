@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simTriviaBank: node scripts/simTriviaBank.mjs
+namesakes-check: node scripts/genMarketNamesakes.mjs --check
+gapcount: node .rc/x/gapcount1552.mjs
+gapprobe: node .rc/x/namesakegap.mjs
+missed: node .rc/x/missed.mjs "$PWD"

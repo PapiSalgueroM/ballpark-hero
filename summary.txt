@@ -1,0 +1,6 @@
+namesakes-check exit=0 0s | src/data/marketNamesakes.json is current: 62 names
+gapcount exit=0 57s | gapcount1552: done
+gapprobe exit=0 0s | not listed, by band: easy 0, medium 0, hard 0
+missed exit=0 0s | names with two positions in one season, in 2 or more seasons: 34 of which NOT on the list: 0
+simTriviaBank exit=0 71s | simTriviaBank: all checks passed
+tsc exit=0 89s | 
