@@ -1,0 +1,66 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/tycoonAway.test.tsx[2m > [22m[2mStadium Tycoon away earnings[2m > [22m[2m1 the loop really runs at the frame cadence a browser gives it
+[22m[39mAWAY| 30s of 16ms frames drove 21 match minutes and earned 135.3 against a header rate of 4.500/s
+
+[90mstdout[2m | src/test/tycoonAway.test.tsx[2m > [22m[2mStadium Tycoon away earnings[2m > [22m[2m2 a closed tab reopened hours later settles on the load path
+[22m[39mAWAY| load path, 3h closed: paid 10800.000s of away time, 0.000s off the wall clock, margin 0.5s
+
+[90mstdout[2m | src/test/tycoonAway.test.tsx[2m > [22m[2mStadium Tycoon away earnings[2m > [22m[2m3 a backgrounded tab settles the hours when it comes back
+[22m[39mAWAY| visibility path, 3h hidden: paid 10800.000s of away time, 0.000s off the wall clock, margin 0.5s
+AWAY| visibility path, 3h hidden: the return frame alone would have paid 0.0, worth 0.0s of away time
+
+[90mstdout[2m | src/test/tycoonAway.test.tsx[2m > [22m[2mStadium Tycoon away earnings[2m > [22m[2m4 the stated cap applies to a backgrounded tab exactly as to a closed one
+[22m[39mAWAY| cap: 20h hidden paid 8.0000h against the stated 8h cap; hidden 65520 and closed 65520 are the same number
+
+[90mstdout[2m | src/test/tycoonAway.test.tsx[2m > [22m[2mStadium Tycoon away earnings[2m > [22m[2m5 time spent playing is never billed back as time away
+[22m[39mAWAY| no double bill: 60s of live play then a tab bounce paid 0 more on top of the 24570 already settled
+
+[90mstdout[2m | src/test/tycoonAway.test.tsx[2m > [22m[2mStadium Tycoon away earnings[2m > [22m[2m6 a quick alt tab is not a trip away
+[22m[39mAWAY| floor: 20s behind another window paid nothing, which is the lib rule that a tab refresh is not a trip away
+
+[90mstdout[2m | src/test/tycoonAway.test.tsx[2m > [22m[2mStadium Tycoon away earnings[2m > [22m[2m8 a hidden tab plays as many away matchdays as a closed one
+[22m[39mAWAY| 3h hidden played 6 away matchdays, 3h closed played 6
+
+ [31m❯[39m src/test/tycoonAway.test.tsx [2m([22m[2m8 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 197[2mms[22m[39m
+   [32m✓[39m Stadium Tycoon away earnings[2m > [22m1 the loop really runs at the frame cadence a browser gives it[32m 39[2mms[22m[39m
+   [32m✓[39m Stadium Tycoon away earnings[2m > [22m2 a closed tab reopened hours later settles on the load path[32m 29[2mms[22m[39m
+   [32m✓[39m Stadium Tycoon away earnings[2m > [22m3 a backgrounded tab settles the hours when it comes back[32m 23[2mms[22m[39m
+   [32m✓[39m Stadium Tycoon away earnings[2m > [22m4 the stated cap applies to a backgrounded tab exactly as to a closed one[32m 28[2mms[22m[39m
+   [32m✓[39m Stadium Tycoon away earnings[2m > [22m5 time spent playing is never billed back as time away[32m 36[2mms[22m[39m
+   [32m✓[39m Stadium Tycoon away earnings[2m > [22m6 a quick alt tab is not a trip away[32m 10[2mms[22m[39m
+[31m   [31m×[31m Stadium Tycoon away earnings[2m > [22m7 a closed tab plays one matchday per AWAY_MATCHDAY_SEC away, and never the final one[39m[32m 15[2mms[22m[39m
+[31m     → 1,680 seconds away played 0 matchdays, the rule says 1: expected +0 to be 1 // Object.is equality[39m
+   [32m✓[39m Stadium Tycoon away earnings[2m > [22m8 a hidden tab plays as many away matchdays as a closed one[32m 17[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/tycoonAway.test.tsx[2m > [22mStadium Tycoon away earnings[2m > [22m7 a closed tab plays one matchday per AWAY_MATCHDAY_SEC away, and never the final one
+[31m[1mAssertionError[22m: 1,680 seconds away played 0 matchdays, the rule says 1: expected +0 to be 1 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 1[39m
+[31m+ 0[39m
+
+[36m [2m❯[22m src/test/tycoonAway.test.tsx:[2m288:93[22m[39m
+    [90m286| [39m      [35mconst[39m r [33m=[39m [34mreopenAfter[39m(seconds[33m,[39m division)[33m;[39m
+    [90m287| [39m      got[33m.[39m[34mpush[39m([32m`[39m[36m${[39mlabel[36m}[39m[32m: [39m[36m${[39mr[33m.[39mplayed[36m}[39m[32m`[39m)[33m;[39m
+    [90m288| [39m      expect(r.played, `${label} away played ${r.played} matchdays, th…
+    [90m   | [39m                                                                                            [31m^[39m
+    [90m289| [39m      expect(r.listed, `${label} away: the away card lists ${r.listed}…
+    [90m290| [39m      expect(r.season, `${label} away turned the season over`).toBe(r.…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m7 passed[39m[22m[90m (8)[39m
+[2m   Start at [22m 08:00:13
+[2m   Duration [22m 1.28s[2m (transform 193ms, setup 68ms, collect 317ms, tests 197ms, environment 296ms, prepare 139ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/tycoonAway.test.tsx,title=src/test/tycoonAway.test.tsx > Stadium Tycoon away earnings > 7 a closed tab plays one matchday per AWAY_MATCHDAY_SEC away%2C and never the final one,line=288,column=93::AssertionError: 1,680 seconds away played 0 matchdays, the rule says 1: expected +0 to be 1 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 1%0A+ 0%0A%0A ❯ src/test/tycoonAway.test.tsx:288:93%0A%0A
+clock1800 tycoonAway exit 1 (want 1, test 7 red)

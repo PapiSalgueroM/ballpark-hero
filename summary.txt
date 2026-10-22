@@ -1,0 +1,3 @@
+clock1800sim exit=1 58s | clock1800 simTycoonAwayMatchdays exit 1 (want 1, S2 red on 1,680 / 1,799 / 7h / 8h)
+clock1800vitest exit=1 2s | clock1800 tycoonAway exit 1 (want 1, test 7 red)
+clock1800help exit=1 18s | clock1800 simTycoonHelp exit 1 (want 1, the 28 minute claim red)
