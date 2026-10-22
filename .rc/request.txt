@@ -1,0 +1,3 @@
+sum6-nfl-head: SIM_SECTIONS=6 SIM_SPORTS=nfl node scripts/simUsCareerSummer.mjs
+sum6-nfl-base: R=$(pwd); git worktree add /tmp/b-s6f 1c7205d059cbcb380ebacaef99ba6751e8c641df > /dev/null 2>&1; ln -sfn $R/node_modules /tmp/b-s6f/node_modules; cd /tmp/b-s6f && SIM_SECTIONS=6 SIM_SPORTS=nfl node scripts/simUsCareerSummer.mjs
+sum6-nba-head: SIM_SECTIONS=6 SIM_SPORTS=nba node scripts/simUsCareerSummer.mjs
