@@ -31,7 +31,7 @@ import type { GmLotteryCardProps } from './GmLotteryCard';
 export type EarnedDraftScreenStage = 'lottery' | 'clock' | 'over';
 
 /** The lottery card's first frame at 390 px wide, so the box the chunk lands in does not jump. */
-export const LOTTERY_CARD_MIN_HEIGHT = 520;
+export const LOTTERY_CARD_MIN_HEIGHT = 553;
 
 /* Module level only (gmLazyPanel.tsx's one rule). */
 const LotteryCard = lazyPart<GmLotteryCardProps>(() => import('./GmLotteryCard'), LOTTERY_CARD_MIN_HEIGHT);

@@ -106,7 +106,7 @@ const realErrors = errors => errors.filter(e => !/supabase|Failed to fetch|CORS|
 let shots = 0;
 async function shot(page, name) {
   shots += 1;
-  await page.screenshot({ path: path.join(OUT, `${name}.jpg`), type: 'jpeg', quality: 45 });
+  await page.screenshot({ path: path.join(OUT, `${CONTROL ? `${CONTROL}-` : ''}${name}.jpg`), type: 'jpeg', quality: 45 });
 }
 async function open(size, save, { reduced = false, holdCard = null, style = '' } = {}) {
   const ctx = await browser.newContext({ viewport: { width: size.w, height: size.h }, ...(reduced ? { reducedMotion: 'reduce' } : {}) });
@@ -231,6 +231,8 @@ if (runs('A') || runs('H')) {
     const head = await page.evaluate(() => { const c = document.querySelector('[data-gm-draft-heading]').cloneNode(true); c.querySelector('[data-gm-draft-chances]')?.remove(); return c.textContent; });
     for (const o of A.mine) say('A', !spoils(head, o), `${size.w}: the heading gives away his pick ${o} before Continue: "${head.slice(0, 120)}"`);
     await inView(page, size, 'Go to the draft');
+    const bytes = () => page.evaluate(k => localStorage.getItem(k)?.length ?? 0, KEY);
+    if (size.w === 390) console.log(`   save bytes at the lottery card: ${await bytes()}`);
     await layout(page, size, 'the card');
     await shot(page, `A-${size.w}-2-card`);
     await page.waitForFunction(() => parseFloat(getComputedStyle(document.querySelector('[data-lottery-headline]')).opacity) > 0.99, null, { timeout: 20000 }).catch(() => {});
@@ -243,6 +245,7 @@ if (runs('A') || runs('H')) {
     say('A', rows.length > 0 && rows[rows.length - 1] === A.mine[0] - 1, `${size.w}: the run's last row is pick ${rows[rows.length - 1]}, one before his ${A.mine[0]}`);
     say('A', (await headingLines(page)).includes(`You are on the clock at ${A.mine[0]}.`), `${size.w}: the heading says he is on the clock at ${A.mine[0]}`);
     await layout(page, size, 'the clock');
+    if (size.w === 390) console.log(`   save bytes on the clock at ${A.mine[0]}: ${await bytes()}`);
     await shot(page, `A-${size.w}-4-clock`);
     if (runs('H')) {
       const before = await stageBox(page);
@@ -358,6 +361,7 @@ if (runs('I')) {
   await goToDraft(page);
   await page.waitForTimeout(1500);
   const text = await page.evaluate(() => document.body.textContent);
+  console.log(`   save bytes on the old draft screen (desk off): ${await page.evaluate(k => localStorage.getItem(k)?.length ?? 0, KEY)}`);
   await shot(page, 'I-390-desk-off');
   say('I', (await page.locator('[data-gm-lottery]').count()) === 0 && (await stage(page)) === null && /You hold/.test(text), 'a desk off save keeps the old draft: no card, the old heading');
   await ctx.close();
