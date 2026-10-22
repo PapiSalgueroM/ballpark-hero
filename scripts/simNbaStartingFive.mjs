@@ -23,8 +23,10 @@
  *      the same careers as season rows, gives both fives the same band in at
  *      least SAME_BAND_FLOOR of deals (it could not tell them apart).
  *   6. The best and worst five equal a brute force over every five, on small
- *      seeded pools with names planted on two teams, plus one fixed deal where
- *      giving a shared name to the first team is wrong.
+ *      seeded pools with names planted on two teams, on correlated deals where
+ *      the same few names lead every dealt team (so a slot can need its fifth
+ *      best man), plus one fixed deal where giving a shared name to the first
+ *      team is wrong.
  *   7. The namesake guard: a record without the franchise is never his, a
  *      name twice on a roster or on two records is held, accents and dots
  *      fold, a suffix never does.
@@ -51,11 +53,15 @@
  *   hitdrift    the hit mark drifts from NBA Stat Line's             section 12
  *   slotflip    "best here" ignores the spin's direction             section 4
  *   gainflip    the per pick closeness ignores the spin's direction  section 4
+ *   fourcands   the five walk keeps four candidates per slot, not five   section 6
  *
  * MEASURED (2026-10-22, here and on a runner alike): section 5, seed 20261022, 300 deals: the best five 100 and the
  * worst 0 on 300 of 300, random fives average 49.7; the old judge rated the best fives 99.0 and the worst 99.0 on
  * average, the same band on 300 of 300. Section 6, seed 7171: 120 extremes on 60 deals, 27 with a planted shared
  * name, all equal to the brute force. Whole run about 2 seconds.
+ * Fix round (2026-10-22): section 6's correlated sets (seeds 71, 83, 97, 60 deals each): 360 extremes, all equal to
+ * the brute force on the head; with fourcands 15 of 360 disagree (5 of 180 at 30 deals, so the deal count was doubled
+ * for headroom). The whole run is about 5 seconds here.
  *
  * Run: node scripts/simNbaStartingFive.mjs
  */
@@ -69,9 +75,10 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..').re
 const LIB = `${ROOT}/src/lib/nbaStartingFiveScore.ts`;
 const CONTROLS = {
   oldjudge: [3, 5], noinvert: [4], greedy: [6], nonamesake: [7], pergame: [3], aiverdict: [10], flatpoints: [10], hitdrift: [12],
-  slotflip: [4], gainflip: [4],
+  slotflip: [4], gainflip: [4], fourcands: [6],
 };
 const LIB_MUTATIONS = {
+  fourcands: ['    return list.slice(0, NBA_FIVE_ROLES.length);', '    return list.slice(0, NBA_FIVE_ROLES.length - 1);'],
   slotflip: ['const slotBest = up ? hi : lo, slotWorst = up ? lo : hi;', 'const slotBest = hi, slotWorst = lo;'],
   gainflip: ['const gainedHere = up ? own.value - lo : hi - own.value;', 'const gainedHere = own.value - lo;'],
   noinvert: ['const gained = up ? yourTotal - worst.total : worst.total - yourTotal;', 'const gained = yourTotal - worst.total;'],
@@ -397,6 +404,26 @@ function bruteForce(pools, c, mode) {
   }
   return best === null ? null : Math.round(best * 10) / 10;
 }
+/* Seed, names in play, roster size: the shape of the run lens's probe1555. */
+const CORRELATED_SETS = [[71, 5, 5], [83, 6, 6], [97, 8, 6]];
+const CORRELATED_DEALS = 60;
+function correlatedDeal(rand, namespace, rosterSize) {
+  const dealtTeams = shuffle(teams.NBA_TEAMS.map(t => t.name), rand).slice(0, 5);
+  return dealtTeams.map(team => {
+    const code = NBA_FIVE_FRANCHISE_CODES[team][0];
+    const idx = new Set();
+    while (idx.size < rosterSize) idx.add(Math.floor(rand() * namespace));
+    const names = [...idx].map(i => [i, `Fixture Corr${i}`]);
+    const roster = names.map(([, n]) => ros(n, POSITIONS[Math.floor(rand() * POSITIONS.length)]));
+    const records = names.map(([i, n]) => {
+      const games = 50 + Math.floor(rand() * 900);
+      const k = (i + 1) * 3 + rand();
+      const per = x => Math.floor((k * x / 25) * games);
+      return rec(n, code, games, { points: per(25), trb: per(12), ast: per(9), stl: per(2), blk: per(2), three_p: Math.floor(k * 100) });
+    });
+    return buildTeamPool(team, roster, records);
+  });
+}
 begin(6, 'the best and worst five equal a brute force over every five');
 {
   let checked = 0, planted = 0, wrong = 0;
@@ -424,6 +451,24 @@ begin(6, 'the best and worst five equal a brute force over every five');
       checked += 1;
     }
   }
+  /* Correlated deals: every dealt team rosters the same few names and the
+     same names lead every team's list, so a slot can need its fifth best man
+     once four better names are taken elsewhere. The planted deals above never
+     reach that case (the fourcands control proves it). */
+  let correlated = 0;
+  for (const [seed, namespace, rosterSize] of CORRELATED_SETS) {
+    const crand = mulberry32(seed);
+    for (let d = 0; d < CORRELATED_DEALS; d++) {
+      const dealt = correlatedDeal(crand, namespace, rosterSize);
+      const c = NBA_FIVE_CHALLENGES[d % NBA_FIVE_CHALLENGES.length];
+      for (const mode of ['max', 'min']) {
+        const fast = extremeFive(dealt, c, mode)?.total ?? null;
+        const slow = bruteForce(dealt, c, mode);
+        if (fast !== slow) { wrong += 1; if (wrong <= 3) fail(`correlated seed ${seed} deal ${d} ${c.key} ${mode}: optimizer ${fast}, brute force ${slow}`); }
+        correlated += 1;
+      }
+    }
+  }
   /* The fixed trap: the first team's best man shares a name with the last
      team's best man, the first team has a strong second option and the last
      team a weak one, so the shared name belongs with the last team. */
@@ -439,7 +484,7 @@ begin(6, 'the best and worst five equal a brute force over every five');
   if (trapBest !== 100) { wrong += 1; fail(`the shared name trap: optimizer found ${trapBest}, the best five is 30 + 10 + 10 + 10 + 40 = 100`); }
   if (wrong > 3) fail(`${wrong} optimizer answers in all disagreed with the brute force`);
   if (planted < 20) fail(`only ${planted} deals carried a planted shared name, too few to test the walk`);
-  console.log(`   ${checked} extremes on ${60} deals (${planted} with a shared name) match the brute force; the shared name trap totals ${trapBest}`);
+  console.log(`   ${checked} extremes on ${60} deals (${planted} with a shared name) and ${correlated} on correlated deals match the brute force; the shared name trap totals ${trapBest}`);
 }
 
 begin(7, 'the namesake guard');
