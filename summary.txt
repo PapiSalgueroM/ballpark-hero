@@ -1,0 +1,15 @@
+vitest-shared exit=0 5s |    Duration  4.53s (transform 799ms, setup 454ms, collect 1.99s, tests 2.49s, environment 3.91s, prepare 1.05s)
+vitest-fo exit=1 21s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeTile.test.tsx,title=src/components/front-office/FrontOfficeTile.test.tsx
+vitest-board exit=1 33s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx,title=src/components/front-office-shared/Fro
+deskhost exit=0 50s | simGmDeskHost: all 10 checks passed on seeds 1,2,3 (4 engines, 3 seasons a seed)
+tsc exit=0 95s | 
+gmreload exit=1 5s | simGmReload: 5 failure(s)
+gmxp exit=0 0s | simGmXp: all checks passed
+nflgmdesk exit=0 27s | simNflGmDesk: all seven checks passed (10 seeds x 10 seasons)
+gmseat exit=0 65s | simGmSeat: all checks passed
+sessionmarks exit=0 0s | simSessionMarks: green. Nine games count the day you play them, none of them invented a score or a streak day to do it.
+anchors exit=0 46s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+fob-check exit=0 0s | controlFrontOfficeBoard: check passed. Every string of all 47 controls is in the board exactly once.
+career exit=0 196s | simGmCareer: all checks passed (nfl)
+rivalnames exit=0 14s | No rival product names found. 0 findings.
+collegeseat exit=0 193s | simCollegeSeat: all sections green (S1 to S9 and SY)

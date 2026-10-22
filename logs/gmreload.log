@@ -1,0 +1,26 @@
+1) The four boards, rendered: a reload on the recap draws the recap again and never replays the season
+   vitest exit 1, 6 failed | 19 passed (25)
+   NFL Front Office: 2 green, 3 red. NFL Front Office: after finishing the season and reloading, hub shown=true, seasonsPlayed 0 -> 0, titles 0 -> 0, league games 512 -> 512, period 17, phase hub -> hub
+  FAIL: NFL Front Office: the REPRO row did not show a reload that keeps the recap and the season count: NFL Front Office: after finishing the season and reloading, hub shown=true, seasonsPlayed 0 -> 0, titles 0 -> 0, league games 512 -> 512, period 17, phase hub -> hub
+  FAIL: NFL Front Office: expected 5 green rows and 0 red, got 2 green and 3 red
+   NFL Front Office, full rosters: 2 green, 3 red. NFL Front Office, full rosters: after finishing the season and reloading, hub shown=true, seasonsPlayed 0 -> 0, titles 0 -> 0, league games 512 -> 512, period 17, phase hub -> hub
+  FAIL: NFL Front Office, full rosters: the REPRO row did not show a reload that keeps the recap and the season count: NFL Front Office, full rosters: after finishing the season and reloading, hub shown=true, seasonsPlayed 0 -> 0, titles 0 -> 0, league games 512 -> 512, period 17, phase hub -> hub
+  FAIL: NFL Front Office, full rosters: expected 5 green rows and 0 red, got 2 green and 3 red
+   NBA Front Office: 5 green, 0 red. NBA Front Office: after finishing the season and reloading, hub shown=false, seasonsPlayed 1 -> 1, titles 0 -> 0, league games 2400 -> 2400, period 20, phase recap -> recap
+   MLB Front Office: 5 green, 0 red. MLB Front Office: after finishing the season and reloading, hub shown=false, seasonsPlayed 1 -> 1, titles 0 -> 0, league games 4860 -> 4860, period 27, phase recap -> recap
+   NHL Front Office: 5 green, 0 red. NHL Front Office: after finishing the season and reloading, hub shown=false, seasonsPlayed 1 -> 1, titles 0 -> 0, league games 2560 -> 2560, period 20, phase recap -> recap
+  FAIL: the board test is red:
+     × src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NFL Front Office: the season closes once > draws the recap again after a reload and does not replay the season 151ms
+       → Unable to find an element with the text: /win the 2026 title/. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+     × src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NFL Front Office: the season closes once > REPRO: what a reload on the recap lets the player do today 121ms
+       → NFL Front Office: after finishing the season and reloading, hub shown=true, seasonsPlayed 0 -> 0, titles 0 -> 0, league games 512 -> 512, period 17, phase hub -> hub: expected +0 to be 1 // Object.is equality
+     × src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NFL Front Office: the season closes once > plays the next season after the draft: the record refuses only the closed one 73ms
+       → Unable to find an element with the text: Go to the draft. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+     × src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NFL Front Office, full rosters: the season closes once > REPRO: what a reload on the recap lets the player do today 137ms
+       → NFL Front Office, full rosters: after finishing the season and reloading, hub shown=true, seasonsPlayed 0 -> 0, titles 0 -> 0, league games 512 -> 512, period 17, phase hub -> hub: expected +0 to be 1 // Object.is equality
+     × src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NFL Front Office, full rosters: the season closes once > draws the recap again after a reload and does not replay the season 75ms
+       → Unable to find an element with the text: /win the 2026 title/. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+     × src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx > NFL Front Office, full rosters: the season closes once > plays the next season after the draft: the record refuses only the closed one 83ms
+       → Unable to find an element with the text: Go to the draft. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+simGmReload: 5 failure(s)
