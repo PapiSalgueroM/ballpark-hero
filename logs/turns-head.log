@@ -1,0 +1,16 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/tycoonBadgeTurns.test.tsx[2m > [22m[2mStadium Tycoon: badges and milestones that land together[2m > [22m[2m1 every milestone and badge of one tick is a floater at once, and no two showing together share a spot
+[22m[39mTURNS| 3 milestones and 2 badges in one tick: y 30 at 0 ms, y 47 at 0 ms, y 30 at 1900 ms, y 47 at 1900 ms, y 30 at 3800 ms
+
+[90mstdout[2m | src/test/tycoonBadgeTurns.test.tsx[2m > [22m[2mStadium Tycoon: badges and milestones that land together[2m > [22m[2m2 the badge line names every badge of that tick, one at a time, in order, then clears
+[22m[39mTURNS| the badge line said 🏁 35 career wins, then ⚽ 75 goals
+
+ [32m✓[39m src/test/tycoonBadgeTurns.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[32m 27[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m   Start at [22m 19:45:40
+[2m   Duration [22m 1.16s[2m (transform 220ms, setup 67ms, collect 332ms, tests 27ms, environment 300ms, prepare 66ms)[22m
+
