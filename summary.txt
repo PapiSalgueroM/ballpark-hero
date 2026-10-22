@@ -1,0 +1,3 @@
+ls exit=0 19s | simCareerLeagueSeasons: all sections green
+truth-unattributed exit=1 41s | simSoccerWorldTruth: 4 FAILURES (section 2: 4)
+truth exit=0 43s | simSoccerWorldTruth: OK, every section green
