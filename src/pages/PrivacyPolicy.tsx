@@ -18,7 +18,7 @@ const PrivacyPolicy = () => {
       </button>
       <h1 className="text-3xl font-bold mb-8">Privacy Policy</h1>
 
-      <p className="text-sm text-muted-foreground mb-6">Last updated: October 21, 2026</p>
+      <p className="text-sm text-muted-foreground mb-6">Last updated: October 22, 2026</p>
 
       <section className="space-y-6 text-sm leading-relaxed text-muted-foreground">
         <div>
@@ -38,6 +38,7 @@ const PrivacyPolicy = () => {
           <p>This site uses browser local storage to save your game progress, best scores, preferences, and UI state, and to remember your optional cookie choices. Local storage data stays on your device and is not transmitted to our servers except as described in Section 1.</p>
           <p className="mt-2">Advertising and Analytics are separate optional purposes, and both start off. Analytics is currently paused, and the banner explains why. <strong>Accept all</strong> enables the optional purposes currently available, <strong>Reject all</strong> keeps them off, and <strong>Save choices</strong> applies your available selections. If your browser sends a <strong>Global Privacy Control</strong> signal, Advertising stays off. You can play the games with optional purposes off. We ask you to choose again after 180 days.</p>
           <p className="mt-2">The <strong>Cookie choices</strong> link in the footer opens your current settings. You can turn Advertising off and choose <strong>Save choices</strong>. Analytics stays off while it is paused. Saving a withdrawal clears the relevant optional cookies our code can access on this site. We normally reload to stop scripts that are already loaded. If your choice cannot be saved or a game has unsaved progress, optional loading stays paused and a notice asks you to refresh when it is safe. This does not erase information already received by a provider or remove cookies controlled by another site or inaccessible to our code. You can also manage cookies and clear stored site data in your browser settings. For requests concerning data already collected, see Section 6.</p>
+          <p className="mt-2">Read our <Link to="/cookie-policy" className="underline hover:text-foreground transition-colors">Cookie Policy</Link> for a focused guide to browser storage and changing your choices.</p>
           <p className="mt-2">Third-party services (such as Google AdSense) use cookies and similar technologies to serve ads. If ads are served on this site, we request non-personalized ads. Those cookies are governed by the third party's own privacy policy, and Section 5 explains what they do.</p>
         </div>
 
@@ -127,7 +128,7 @@ const PrivacyPolicy = () => {
 
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">12. Contact</h2>
-          <p>If you have any questions about this privacy policy, want to request access to or deletion of your data, or have a general concern, please contact us at <a href="mailto:douknowball1@gmail.com" className="underline hover:text-foreground transition-colors">douknowball1@gmail.com</a>. For issues with a specific question or answer in a game, you can also use the "Report" button on that game.</p>
+          <p>DoUKnowBall is operated by Anthony Salguero, an individual. If you have any questions about this privacy policy, want to request access to or deletion of your data, or have a general concern, please contact us at <a href="mailto:douknowball1@gmail.com" className="underline hover:text-foreground transition-colors">douknowball1@gmail.com</a>. For issues with a specific question or answer in a game, you can also use the "Report" button on that game.</p>
         </div>
       </section>
     </div>
