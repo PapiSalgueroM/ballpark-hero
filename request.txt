@@ -1,0 +1,5 @@
+#!serial
+pin-hash: sha256sum src/lib/clubManager.ts src/lib/clubManagerSlots.ts scripts/simClubManagerSlots.mjs scripts/simClubManagerDecisions.mjs
+pin-head: node scripts/simManagerAppealIsolation.mjs
+pin-revert: git checkout 6d2d7a7d -- src/lib/clubManager.ts && node scripts/simManagerAppealIsolation.mjs; s=$?; git checkout HEAD -- src; exit $s
+pin-new: grep -c 985b4214260d1e8235f17111cee62b9b28ac2cc5c7cce04b14429803147747d0 scripts/fixtures/managerAppealIsolation1081/manifest.json && sed -i 's/985b4214260d1e8235f17111cee62b9b28ac2cc5c7cce04b14429803147747d0/8219e9d2f02bde1fdd79492327728c7f90c844921c386e08fd5c09d0ddd5bfbf/' scripts/fixtures/managerAppealIsolation1081/manifest.json && node scripts/simManagerAppealIsolation.mjs; s=$?; git checkout HEAD -- scripts; exit $s

@@ -1,0 +1,4 @@
+pin-hash exit=0 0s | 3383d016a113028328151586b75eab51e6fe59cd8bb2c466137ffcd269a787ca  scripts/simClubManagerDecisions.mjs
+pin-head exit=1 8s | Node.js v24.22.0
+pin-revert exit=1 0s | Node.js v24.22.0
+pin-new exit=0 41s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
