@@ -1,0 +1,219 @@
+name: CM shirt sales public readback
+on:
+  workflow_dispatch:
+  push:
+    branches: [codex/cm-shirt-sales-public-readback]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: cm-shirt-sales-public-readback-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  reader:
+    if: github.ref == 'refs/heads/codex/cm-shirt-sales-public-readback'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    env:
+      OPERATOR_MODE: strict
+      READBACK_OUT: cm-shirt-sales-public-artifacts
+      SOURCE_SHA: c1b393644e00c560a0ca6a5f5dea47e57c252160
+      QUALIFIED_BUILD_SHA: a95cdd9f68fa25a5345ac2370a94ed8730e3a0ec
+      QUALIFIED_RUN_ID: 39696453260
+      QUALIFIED_ARTIFACT_ID: 12391561803
+      QUALIFIED_ZIP_SHA256: dfab379b0baacfa504533739c0eb094d2b57bad2b24056dae4cb5149bdb3d67e
+      EXPECTED_DEPLOYMENT: 54960975-4002-4472-a779-8afc2ce6cf3b
+      CI_ASSET_PINS_JSON: '{"entry":{"path":"/assets/index-n_O3Xw2P.js","sha256":"e615ea1de7d827ae9fd5cc071696891002a6b594b4fd1db876b76453ed85e800"},"clubEngine":{"path":"/assets/clubManager-BIhlEaFz.js","sha256":"de2756f48424645932ad72cae8ad9211198f630461add976682652561c79f181"},"finance":{"path":"/assets/FinancesScreen-CnG1n05f.js","sha256":"5ac0db3e48c2f98fb1c0fd682fec6baef3afa7278b65ca76e39f46ece064191d"},"clubGuide":{"path":"/assets/clubManagement-DAaOtgj7.js","sha256":"376c546d4daa560a448ca321a2b2839d39a2e703c2aab05a17c853a8ed909434"},"updates":{"path":"/assets/WhatsNew-DhX1Dh6l.js","sha256":"216e5b648036acedcc20106f51e5cfa2847e035334b87fd81d84ef7cf7c6fc66"}}'
+      CI_ASSET_PINS_SHA256: 63fdd289af8b1330f73e3c4284f0130e0490279414832d4e8e71f7a01c6a3d5e
+      PRIOR_OPERATOR_SHA: REQUIRED_FOR_INTAKE_OR_READBACK
+      PRIOR_RUN_ID: REQUIRED_FOR_INTAKE_OR_READBACK
+      PRIOR_ARTIFACT_ID: REQUIRED_FOR_INTAKE_OR_READBACK
+      PRIOR_ZIP_SHA256: REQUIRED_FOR_INTAKE_OR_READBACK
+      OBSERVED_ENTRY: REQUIRED_FOR_INTAKE_FROM_RETAINED_STRICT_FAILURE
+      OBSERVED_ASSET_PINS_JSON: REQUIRED_FOR_READBACK_FROM_REVIEWED_INTAKE
+      OBSERVED_ASSET_PINS_SHA256: REQUIRED_FOR_READBACK_EXACT_JSON_BYTES
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Refuse missing pins before metadata or public requests
+        run: |
+          set -euo pipefail
+          mkdir "$READBACK_OUT"
+          git rev-parse HEAD > "$READBACK_OUT/operator-head.txt"
+          git rev-parse 'HEAD^{tree}' > "$READBACK_OUT/operator-tree.txt"
+          printf '%s  %s\n' '91d4043cf26dd109d2d028d030941e0a023f8bcdb08bbf1988bc2ab96abf466d' '.github/operators/cm-shirt-sales-public.mjs' | sha256sum --check
+          node .github/operators/cm-shirt-sales-public.mjs --validate-bindings
+      - name: Bind actual input runs and fresh exact artifacts before public guard
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh api "/repos/PapiSalgueroM/ballpark-hero/actions/runs/$QUALIFIED_RUN_ID" > "$READBACK_OUT/qualified-run.json"
+          gh api "/repos/PapiSalgueroM/ballpark-hero/actions/runs/$QUALIFIED_RUN_ID/artifacts?per_page=100" > "$READBACK_OUT/qualified-artifacts.json"
+          if test "$OPERATOR_MODE" != strict; then
+            gh api "/repos/PapiSalgueroM/ballpark-hero/actions/runs/$PRIOR_RUN_ID" > "$READBACK_OUT/prior-run.json"
+            gh api "/repos/PapiSalgueroM/ballpark-hero/actions/runs/$PRIOR_RUN_ID/artifacts?per_page=100" > "$READBACK_OUT/prior-artifacts.json"
+          fi
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const env=process.env,out=env.READBACK_OUT;
+          for(const kind of env.OPERATOR_MODE==='strict'?['qualified']:['qualified','prior']){
+            const qualified=kind==='qualified',runId=qualified?env.QUALIFIED_RUN_ID:env.PRIOR_RUN_ID,sha=qualified?env.QUALIFIED_BUILD_SHA:env.PRIOR_OPERATOR_SHA,id=qualified?env.QUALIFIED_ARTIFACT_ID:env.PRIOR_ARTIFACT_ID,digest=qualified?env.QUALIFIED_ZIP_SHA256:env.PRIOR_ZIP_SHA256;
+            const r=JSON.parse(fs.readFileSync(out+'/'+kind+'-run.json')),a=JSON.parse(fs.readFileSync(out+'/'+kind+'-artifacts.json'));
+            assert.equal(String(r.id),runId);assert.equal(r.head_sha,sha);assert.equal(r.status,'completed');assert.equal(r.conclusion,qualified||env.OPERATOR_MODE==='readback'?'success':'failure');assert.equal(r.repository.full_name,'PapiSalgueroM/ballpark-hero');assert.equal(r.name,qualified?'Club Manager shirt sales verification':'CM shirt sales public readback');
+            assert(a.total_count>0&&a.total_count<=100);assert.equal(a.artifacts.length,a.total_count);const rows=a.artifacts.filter(x=>String(x.id)===id);assert.equal(rows.length,1);const row=rows[0];assert.equal(row.expired,false);assert.equal(row.digest,'sha256:'+digest);assert.equal(String(row.workflow_run.id),runId);assert.equal(row.workflow_run.head_sha,sha);assert(row.name.startsWith((qualified?'shirt-sales-build-':'cm-shirt-sales-public-')+runId+'-'));
+          }
+          JS
+          gh api "/repos/PapiSalgueroM/ballpark-hero/actions/artifacts/$QUALIFIED_ARTIFACT_ID/zip" > "$READBACK_OUT/qualified.zip"
+          if test "$OPERATOR_MODE" != strict; then gh api "/repos/PapiSalgueroM/ballpark-hero/actions/artifacts/$PRIOR_ARTIFACT_ID/zip" > "$READBACK_OUT/prior.zip";fi
+          python <<'PY'
+          import os,pathlib,zipfile,tarfile,hashlib,json,re,stat
+          env=os.environ;out=pathlib.Path(env['READBACK_OUT']).resolve()
+          def safe(name):
+              p=pathlib.PurePosixPath(name);assert name and not p.is_absolute() and '..' not in p.parts and '\\' not in name and ':' not in name;return p
+          def unpack(kind,wanted):
+              data=(out/(kind+'.zip')).read_bytes();assert hashlib.sha256(data).hexdigest()==wanted;target=out/kind;target.mkdir()
+              with zipfile.ZipFile(out/(kind+'.zip')) as z:
+                  names=set()
+                  for item in z.infolist():
+                      safe(item.filename);assert item.filename not in names;names.add(item.filename);assert not stat.S_ISLNK(item.external_attr>>16)
+                  z.extractall(target)
+              manifest={}
+              for line in (target/'evidence.sha256').read_text().splitlines():
+                  m=re.fullmatch(r'([a-f0-9]{64})  (?:\./)?(.+)',line);assert m;name=str(safe(m[2]));assert name not in manifest and name!='evidence.sha256';manifest[name]=m[1]
+              actual={str(p.relative_to(target)) for p in target.rglob('*') if p.is_file()}-{'evidence.sha256'};assert actual==set(manifest) and actual
+              for name,want in manifest.items():assert hashlib.sha256((target/name).read_bytes()).hexdigest()==want
+              return target,len(manifest)
+          q,n=unpack('qualified',env['QUALIFIED_ZIP_SHA256'])
+          assert (q/'head.txt').read_text().strip()==env['QUALIFIED_BUILD_SHA']
+          assert (q/'generated.patch').is_file() and (q/'generated.patch').stat().st_size==0
+          assert (q/'generated-files.txt').is_file() and (q/'generated-files.txt').stat().st_size==0
+          def inventory(file):
+              rows={}
+              for line in file.read_text().splitlines():
+                  m=re.fullmatch(r'([a-f0-9]{64})  (.+)',line);assert m;name=str(safe(m[2]));assert name not in rows;rows[name]=m[1]
+              assert rows;return rows
+          assert (q/'types.log').stat().st_size==0 and (q/'protected-original-source-hold.log').stat().st_size==0 and (q/'operator-source-hold.log').stat().st_size==0
+          for name in ['generated-output-hold','dist-output-hold','dist-archive','final-holds','browser','weights']:
+              assert (q/(name+'.exit')).read_text().strip()=='0'
+          for before,after in [('generated-source-before.sha256','generated-source-after.sha256'),('dist.sha256','dist-after.sha256')]:
+              inventory(q/before);assert (q/before).read_bytes()==(q/after).read_bytes()
+              assert (q/(before+'.control')).read_bytes()==(q/before).read_bytes()+b'CONTROL_DIFFERENT_INVENTORY_LINE\n'
+              assert (q/(before+'.control.exit')).read_text().strip()=='1'
+          for name in ['generated-source-nonregular-before.txt','generated-source-nonregular-after.txt','dist-nonregular-before.txt','dist-nonregular-after.txt']:
+              assert (q/name).stat().st_size==0
+          for name in ['generated.patch','generated-files.txt']:
+              assert (q/(name+'.nonempty-control')).read_bytes()==b'CONTROL_NONEMPTY_FINAL_GENERATED_OUTPUT\n'
+              assert (q/(name+'.nonempty-control.exit')).read_text().strip()=='1'
+              assert (q/(name+'.nonempty-control.changed.exit')).read_text().strip()=='1'
+          source=inventory(q/'source-before.sha256');dependencies=inventory(q/'dependencies-cap-before.sha256')
+          assert (q/'source-hold.log').read_text().splitlines()==[name+': OK' for name in source]
+          assert (q/'dependencies-cap-hold.log').read_text().splitlines()==[name+': OK' for name in dependencies]
+          readers=[line.split('\t') for line in (q/'readers.tsv').read_text().splitlines()];assert len(readers)==18 and all(len(row)==2 and row[1]=='0' for row in readers)
+          b=json.loads((q/'browser/report.json').read_text());assert b['status']=='PASS' and b['source']==env['QUALIFIED_BUILD_SHA'] and b['actualOutbound']==0 and not b.get('error')
+          assert b['declared']=={'positive':7,'faults':3,'restorations':3} and len(b['cases'])==13
+          positive=[row for row in b['cases'] if row['status']=='PASS' and not row['restoration']]
+          faults=[row for row in b['cases'] if row['status']=='EXPECTED_REJECTION'];restored=[row for row in b['cases'] if row['status']=='PASS' and row['restoration']]
+          assert len(positive)==7 and len(faults)==3 and len(restored)==3
+          for fault,message in {'omission':'Shirt card is visible','amount':'Literal gross amount','overflow':'Shirt card and page fit the viewport'}.items():
+              broken=[row for row in faults if row['fault']==fault];back=[row for row in restored if row['restoration']==fault]
+              assert len(broken)==1 and len(back)==1 and broken[0]['error']['name']=='AssertionError' and broken[0]['error']['message'].startswith(message)
+              assert broken[0]['intendedRejection']==message and broken[0]['interceptions']==1
+          assert len(b['holds'])==12 and len({row['file'] for row in b['holds']})==12
+          for row in b['holds']:
+              assert source[row['file']]==row['sha256'] and row['bytes']>0
+              assert ('CM_SHIRTS_HOLD '+row['sha256']+' '+row['file']) in (q/'browser.log').read_text().splitlines()
+          for row in b['cases']:
+              assert not row['errors'] and not row['assets'] and row['fulfilledExternal']==len(row['external'])
+          for row in positive+restored:
+              assert row['loopbackReads']>0 and re.fullmatch(r'[a-f0-9]{64}',row['save']['fixtureSha256']) and row['save']['finalSha256']==row['save']['baselineSha256']
+              assert row['amountChecks']==3 and len(row['arrivals'])==3 and len(row['geometry'])==2 and row['screenshots']
+              for arrival in row['arrivals']:assert abs(arrival['stable']-arrival['scroll'])<=2 and -.5<=arrival['y']<row['height']-80
+              for geometry in row['geometry']:
+                  assert geometry['configuredWidth']==row['width'] and abs(geometry['width']-row['width'])<=2 and geometry['document']<=row['width']+2 and geometry['card']['left']>=-.5 and geometry['card']['right']<=row['width']+.5 and not geometry['cut']
+                  if row.get('reduced'):assert geometry['animations']==0
+              assert row['controls'] and all(c['width']>=43.5 and c['height']>=43.5 and c['topmost'] for c in row['controls'])
+              for screenshot in row['screenshots']:assert (q/'browser'/str(safe(screenshot))).stat().st_size>1000
+          dest=out/'qualified-dist';dest.mkdir()
+          with tarfile.open(q/'dist.tar.gz') as t:
+              names=set()
+              for item in t.getmembers():
+                  name=str(safe(item.name));assert name not in names;names.add(name);assert item.isdir() or item.isfile()
+              t.extractall(dest,filter='data')
+          manifest={}
+          for line in (q/'dist.sha256').read_text().splitlines():
+              m=re.fullmatch(r'([a-f0-9]{64})  dist/(.+)',line);assert m;name=str(safe(m[2]));assert name not in manifest;manifest[name]=m[1]
+          actual={str(p.relative_to(dest)) for p in dest.rglob('*') if p.is_file()};assert actual==set(manifest) and actual
+          for name,want in manifest.items():assert hashlib.sha256((dest/name).read_bytes()).hexdigest()==want
+          prior_n=None
+          if env['OPERATOR_MODE']!='strict':_,prior_n=unpack('prior',env['PRIOR_ZIP_SHA256'])
+          (out/'input-provenance.json').write_text(json.dumps({'complete':True,'qualifiedManifestFiles':n,'qualifiedDistFiles':len(manifest),'priorManifestFiles':prior_n},indent=2)+'\n')
+          PY
+      - name: Hold actual published source and exact adopted generated patch
+        run: |
+          set -euo pipefail
+          git fetch --no-tags --depth=1 origin "$SOURCE_SHA" > "$READBACK_OUT/source-fetch.log" 2>&1
+          git fetch --no-tags --depth=1 origin "$QUALIFIED_BUILD_SHA" >> "$READBACK_OUT/source-fetch.log" 2>&1
+          git diff --exit-code "$SOURCE_SHA" HEAD -- src scripts public supabase index.html package.json package-lock.json > "$READBACK_OUT/published-source-hold.log"
+          git diff --exit-code "$QUALIFIED_BUILD_SHA" "$SOURCE_SHA" -- src scripts public supabase index.html package.json package-lock.json ':!public/club-manager/index.html' ':!public/whats-new/index.html' ':!public/sitemap.xml' ':!scripts/data/guideHeadingsFrozen.json' ':!scripts/data/lastmod.json' ':!src/data/searchKeywords.json' > "$READBACK_OUT/qualified-source-hold.log"
+          git diff --binary "$QUALIFIED_BUILD_SHA" "$SOURCE_SHA" -- public scripts/data/lastmod.json scripts/data/guideHeadingsFrozen.json src/data/searchKeywords.json > "$READBACK_OUT/adopted-generated.patch"
+          test ! -s "$READBACK_OUT/adopted-generated.patch"
+          cmp "$READBACK_OUT/qualified/generated.patch" "$READBACK_OUT/adopted-generated.patch" > "$READBACK_OUT/generated-patch-hold.log"
+          printf '%s  %s\n' '37d187d3bc4659ebfdda5d010fb157972c4c8e797b4bab2b3fc27d20ddfe15cb' '.github/workflows/legal-ai-privacy-public-readback.yml' '26c387c01ba5cb2a993bf5205228d7b451770eed1c4836d052574c9dc5e3f2de' 'scripts/auditLive.mjs' '133365fa307e7548b4367508a91d2629af24d6cca207e127df294c1a3e23ac40' 'scripts/lib/liveIndexability.mjs' | sha256sum --check > "$READBACK_OUT/approved-readers-hold.log"
+          sha256sum .github/operators/cm-shirt-sales-public.mjs .github/workflows/legal-ai-privacy-public-readback.yml scripts/auditLive.mjs scripts/lib/liveIndexability.mjs package.json package-lock.json public/llms.txt public/robots.txt public/sitemap.xml public/prerender-boot.js > "$READBACK_OUT/source-before.sha256"
+      - name: Isolated pinned readers, no app install, build or browser
+        run: |
+          set -euo pipefail
+          tools="$RUNNER_TEMP/cm-shirt-sales-public-tools"
+          npm install --prefix "$tools" --no-save --package-lock=false playwright@1.64.0 jsdom@20.0.3 es-module-lexer@1.7.0 > "$READBACK_OUT/tools.log" 2>&1
+          test ! -e node_modules;mkdir node_modules
+          for package in playwright playwright-core jsdom es-module-lexer;do ln -s "$tools/node_modules/$package" "node_modules/$package";done
+          echo "NODE_PATH=$tools/node_modules" >> "$GITHUB_ENV"
+          node .github/operators/cm-shirt-sales-public.mjs --prepare
+      - name: Fixed guarded public reads or separately bound observed-role intake
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/$READBACK_OUT/read-only.cjs"
+          status=0;node .github/operators/cm-shirt-sales-public.mjs > "$READBACK_OUT/readback.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$READBACK_OUT/readback.exit"
+          cat "$READBACK_OUT/readback.log";test "$status" -eq 0
+          grep -F 'CM_SHIRT_PUBLIC_RESULT ' "$READBACK_OUT/readback.log"
+      - name: Unchanged3-page audit and actual thin control with24 sample pages
+        if: success() && env.OPERATOR_MODE != 'intake'
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/$READBACK_OUT/read-only.cjs"
+          status=0;timeout --signal=TERM --kill-after=15s 3m node scripts/auditLive.mjs / /club-manager /whats-new > "$READBACK_OUT/audit.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$READBACK_OUT/audit.exit";cat "$READBACK_OUT/audit.log";test "$status" -eq 0
+          grep -Eq 'shared chrome measured at [0-9]+ readable characters over 24 pages' "$READBACK_OUT/audit.log";! grep -Fq 'thin rule skipped' "$READBACK_OUT/audit.log";grep -Fq '3 of 3 answered cleanly, 0 did not.' "$READBACK_OUT/audit.log"
+          status=0;AUDIT_CONTROL=thin timeout --signal=TERM --kill-after=15s 3m node scripts/auditLive.mjs / /club-manager /whats-new > "$READBACK_OUT/audit-thin.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$READBACK_OUT/audit-thin.exit";cat "$READBACK_OUT/audit-thin.log";test "$status" -eq 1
+          grep -Fq 'Planting' "$READBACK_OUT/audit-thin.log";grep -Fq '(CONTROL plant)' "$READBACK_OUT/audit-thin.log";grep -Fq '2 of 3 answered cleanly, 1 did not.' "$READBACK_OUT/audit-thin.log"
+      - name: Hold source and preserve complete evidence, including actual failures
+        if: always()
+        run: |
+          set -euo pipefail
+          mkdir -p "$READBACK_OUT";status=0
+          if test -f "$READBACK_OUT/source-before.sha256";then sha256sum --check "$READBACK_OUT/source-before.sha256" > "$READBACK_OUT/source-hold.log" 2>&1 || status=$?;fi
+          git diff --exit-code HEAD -- src scripts public supabase index.html package.json package-lock.json .github > "$READBACK_OUT/final-repository-hold.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$READBACK_OUT/final-holds.exit"
+          (cd "$READBACK_OUT";find . -type f ! -path './evidence.sha256' -print0 | sort -z | xargs -0 sha256sum) > "$READBACK_OUT/evidence.sha256"
+          exit "$status"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cm-shirt-sales-public-${{ github.run_id }}-${{ github.run_attempt }}
+          path: cm-shirt-sales-public-artifacts/
+          if-no-files-found: error
+          retention-days: 14
