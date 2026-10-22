@@ -1,0 +1,87 @@
+name: Site1446 timer control diagnostic
+on:
+  push:
+    branches: [codex/site1446-timer-control-diagnostic]
+permissions:
+  contents: read
+concurrency:
+  group: site1446-timer-control-diagnostic-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  timer_control:
+    if: github.ref == 'refs/heads/codex/site1446-timer-control-diagnostic'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    defaults:
+      run:
+        shell: bash
+    env:
+      BASE_SOURCE: 19d0bcb030be48bae9d70d5ce139b08997943962
+      CI: '1'
+      SIM_NETWORK: offline
+      TZ: UTC
+      OUT: site1446-timer-control-artifacts
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Exact application and test source, capture copy and raw child evidence
+        run: |
+          set -euo pipefail
+          mkdir "$OUT"
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          git rev-parse HEAD > "$OUT/head.txt"
+          git fetch --no-tags --depth=1 origin "$BASE_SOURCE" > "$OUT/base-fetch.log" 2>&1
+          git diff --exit-code "$BASE_SOURCE" HEAD -- . ':!.github/workflows/site1446-timer-control-diagnostic.yml' > "$OUT/base-source-hold.log"
+          git ls-files -z -- . | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          printf '%s  %s\n' 7a8e6f47cb47b5cb34d174fcf4b93f6678a881552ff73ad81bdf9539be8b6864 scripts/simIdleTimers.mjs e60ff1534307e449ccef598e3b7470dcba58681b82cea4005cec7319f14f9221 scripts/lib/offlineTransport.cjs 284c2d6f298a2662e35692ce6b485f3dd0de2e9ce9c9d2dc059ac3afd3ed0d71 src/test/idleFloaterTimers.test.tsx 12f1b0a1128a8617d44aefc5555090c827817da46504e4e768dc832e0e42439f src/hooks/useOwnedTimeouts.ts > "$OUT/immutable-inputs.sha256"
+          sha256sum --check "$OUT/immutable-inputs.sha256" > "$OUT/immutable-inputs-before.log"
+          npm ci > "$OUT/install.log" 2>&1
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          const source=fs.readFileSync('scripts/simIdleTimers.mjs','utf8');
+          const before="  const text = (r.stdout || '') + (r.stderr || '');";
+          const after=[before,
+            "  const capture = path.join(ROOT, 'site1446-timer-control-artifacts', process.env.TIMER_CAPTURE_CASE);",
+            "  fs.writeFileSync(capture + '.child.log', text);",
+            "  fs.writeFileSync(capture + '.child-process.json', JSON.stringify({status:r.status,signal:r.signal,error:r.error?String(r.error):null,reportExists:fs.existsSync(out)},null,2)+'\\n');",
+            "  if (fs.existsSync(out)) fs.copyFileSync(out, capture + '.child-vitest.json');"].join('\n');
+          assert.equal(source.split(before).length,2);const captured=source.replace(before,after);assert.notEqual(captured,source);assert.equal(captured.split(after).length,2);assert.equal(captured.replace(after,before),source);
+          const sha=s=>createHash('sha256').update(s).digest('hex');assert.equal(sha(source),'7a8e6f47cb47b5cb34d174fcf4b93f6678a881552ff73ad81bdf9539be8b6864');assert.equal(sha(captured),'8ab27a74df8a698e0c60a79eed18efc1aab4bed434f6f40cdfe5587181a26fca');
+          fs.writeFileSync(process.env.OUT+'/simIdleTimers.capture.mjs',captured);
+          fs.writeFileSync(process.env.OUT+'/capture-transform.json',JSON.stringify({source:process.env.GITHUB_SHA,base:process.env.BASE_SOURCE,sourceSha256:sha(source),capturedSha256:sha(captured),wholeInverseExact:true,sameDepthAsScripts:true,diagnosticOnly:true},null,2)+'\n');
+          JS
+          sha256sum "$OUT/simIdleTimers.capture.mjs" > "$OUT/capture-before.sha256"
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$PWD/$OUT/timer.transport";: > "$SIM_OFFLINE_RECEIPT"
+          normal=0;TIMER_CAPTURE_CASE=normal timeout --signal=TERM --kill-after=15s 8m node "$OUT/simIdleTimers.capture.mjs" > "$OUT/normal.log" 2>&1 || normal=$?
+          printf '%s\n' "$normal" > "$OUT/normal.exit"
+          noclear=0;TIMER_CAPTURE_CASE=noclear IDLE_TIMERS_CONTROL=noclear timeout --signal=TERM --kill-after=15s 8m node "$OUT/simIdleTimers.capture.mjs" > "$OUT/noclear.log" 2>&1 || noclear=$?
+          printf '%s\n' "$noclear" > "$OUT/noclear.exit"
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+          test "$normal" -eq 0 && test "$noclear" -eq 0
+      - name: Always retain raw failures, complete source and strict transport evidence
+        if: always()
+        run: |
+          set -euo pipefail
+          mkdir -p "$OUT";failed=0
+          status=0;sha256sum --check "$OUT/source-before.sha256" > "$OUT/source-hold.log" 2>&1 || status=$?;printf '%s\n' "$status" > "$OUT/source-hold.exit";test "$status" -eq 0 || failed=1
+          status=0;git diff --exit-code HEAD -- . > "$OUT/operator-source-hold.log" 2>&1 || status=$?;printf '%s\n' "$status" > "$OUT/operator-source-hold.exit";test "$status" -eq 0 || failed=1
+          status=0;sha256sum --check "$OUT/immutable-inputs.sha256" > "$OUT/immutable-inputs-after.log" 2>&1 || status=$?;printf '%s\n' "$status" > "$OUT/immutable-inputs-hold.exit";test "$status" -eq 0 || failed=1
+          status=0;sha256sum --check "$OUT/capture-before.sha256" > "$OUT/capture-hold.log" 2>&1 || status=$?;printf '%s\n' "$status" > "$OUT/capture-hold.exit";test "$status" -eq 0 || failed=1
+          test -f "$OUT/timer.transport" && test ! -s "$OUT/timer.transport" || failed=1
+          printf '%s\n' "$failed" > "$OUT/final-holds.exit"
+          (cd "$OUT";find . -type f ! -path ./evidence.sha256 -print0 | sort -z | xargs -0 sha256sum) > "$OUT/evidence.sha256"
+          exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: site1446-timer-control-diagnostic-${{ github.run_id }}-${{ github.run_attempt }}
+          path: site1446-timer-control-artifacts/
+          if-no-files-found: error
+          retention-days: 14
