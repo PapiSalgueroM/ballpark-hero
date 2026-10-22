@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+rival: node scripts/simNoRivalNames.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+storage: node scripts/simStorageWrites.mjs
+sa-1: SIM_SEASON_AWARDS_SECTIONS=1 node scripts/simSoccerSeasonAwards.mjs
+sa-2: SIM_SEASON_AWARDS_SECTIONS=2 node scripts/simSoccerSeasonAwards.mjs
+sa-3: SIM_SEASON_AWARDS_SECTIONS=3 node scripts/simSoccerSeasonAwards.mjs
+sa-4: SIM_SEASON_AWARDS_SECTIONS=4 node scripts/simSoccerSeasonAwards.mjs
+sa-56: SIM_SEASON_AWARDS_SECTIONS=5,6 node scripts/simSoccerSeasonAwards.mjs
