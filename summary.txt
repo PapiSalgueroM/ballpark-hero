@@ -1,0 +1,6 @@
+simCareerLeagueFinish exit=0 24s | simCareerLeagueFinish: green. 756 careers, 6048 seasons, 4819 in a verified league; finish and title agree, the ladder holds, the historical stream holds after documented
+simCareerSocialBrands exit=0 40s | ALL SOCIAL AND BRAND CHECKS PASSED
+simCareerLeagueSeasons exit=0 28s | simCareerLeagueSeasons: all sections green
+simCareerAwardsNight exit=1 69s | Node.js v24.22.0
+simCareerProgramme exit=0 78s | Career programme:50 original/compatibility/full product season pairs with exact RNG,240 opted gameplay seasons,21 effective loaded faults,163 unchanged chance outcomes an
+simSoccerDeck exit=0 186s | simSoccerDeck: green. Every section.

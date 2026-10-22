@@ -1,0 +1,37 @@
+1) Soccer Career replays the pre-lift fixture byte for byte
+   Round 1172 attribution: exact copied new-generation, newspaper and ceremony changes restored for the old fixture; current outcomes still checked in sections 2 to 7 and simSoccerAwardReveal
+   life chain attribution: src/lib/soccerCareerContracts.ts, src/lib/soccerCareerLife.ts, src/lib/soccerCareerRealismA.ts read at 4ae7a534 in the attributed bundle
+✘ [ERROR] No matching export in "src/lib/soccerCareerEngine.ts" for import "ownerClubsOnSale"
+
+    src/pages/SoccerCareer.tsx:45:38:
+      45 │ ...Season, endOwnerCareer, ownerClubsOnSale, chooseOwnerPlan, type...
+         ╵                            ~~~~~~~~~~~~~~~~
+
+✘ [ERROR] No matching export in "src/lib/soccerCareerEngine.ts" for import "chooseOwnerPlan"
+
+    src/pages/SoccerCareer.tsx:45:56:
+      45 │ ...reer, ownerClubsOnSale, chooseOwnerPlan, type OwnerState, type ...
+         ╵                            ~~~~~~~~~~~~~~~
+
+/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 2 errors:
+src/pages/SoccerCareer.tsx:45:38: ERROR: No matching export in "src/lib/soccerCareerEngine.ts" for import "ownerClubsOnSale"
+src/pages/SoccerCareer.tsx:45:56: ERROR: No matching export in "src/lib/soccerCareerEngine.ts" for import "chooseOwnerPlan"
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at runOnEndCallbacks (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1315:45)
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:569:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.22.0
