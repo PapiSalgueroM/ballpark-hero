@@ -1,0 +1,3 @@
+setpiece exit=0 18s | setpiece probe: done (27 contradicted reports in 869)
+inplay exit=0 1s | inplay probe: MOVED 12 of 12 (refused 0)
+inplayA exit=0 1s | inplay probe: MOVED 12 of 12 (refused 0)

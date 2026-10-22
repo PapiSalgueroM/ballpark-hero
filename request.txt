@@ -1,0 +1,4 @@
+#!serial
+setpiece: node .rc/x/setpiece.mjs
+inplay: node .rc/x/inplay.mjs
+inplayA: node .rc/x/mut.mjs A && node .rc/x/inplay.mjs; s=$?; git checkout -- src scripts; exit $s

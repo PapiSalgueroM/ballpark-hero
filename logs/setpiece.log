@@ -1,0 +1,5 @@
+matches with a tactics block: 869; their goals 1195, of which penalty, free kick or own goal 173
+matches where every goal against was a penalty, free kick or own goal: 38; of those the block still says some came on the break: 13
+matches where every goal of mine was a penalty, free kick or own goal: 32; of those the block still says some came from wide: 14
+example: {"club":"Brentford","week":47,"opp":[{"m":90,"pen":true,"fk":false,"og":false}],"stats":{"wonHigh":1,"crosses":24,"offsides":2,"breakConceded":1,"wideGoals":3,"legs":5}}
+setpiece probe: done (27 contradicted reports in 869)

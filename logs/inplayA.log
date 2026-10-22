@@ -1,0 +1,4 @@
+MUTATION A APPLIED
+  Brentford 0: before [[0,45,0.8185,0.5115]] after [[0,20,0.8185,0.5115],[20,45,0.8185,0.5115]] log [{"minute":20,"instructions":{"press":0,"tempo":1,"width":1,"line":1}}]
+  Brentford 1: before [[0,45,0.736,0.594]] after [[0,20,0.736,0.594],[20,45,0.736,0.594]] log [{"minute":20,"instructions":{"press":0,"tempo":1,"width":1,"line":1}}]
+inplay probe: MOVED 12 of 12 (refused 0)
