@@ -1,0 +1,4 @@
+simUsSeasonCentre exit=0 74s | simUsSeasonCentre: 158 checks, 0 failed
+simNbaAwardsSense exit=0 87s | simNbaAwardsSense: 164 checks, 0 failed (full size), 86s
+simCareerHall exit=1 1265s | simCareerHall: RED
+simUsCareerSummer exit=0 3049s | simUsCareerSummer: green. Sections 1, 2, 3, 3b, 4, 5, 6, 7, 8, 9, 10, 11, 12 held over 400 careers a sport.
