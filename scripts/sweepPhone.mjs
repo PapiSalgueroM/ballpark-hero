@@ -43,6 +43,18 @@
  * is merely small still fails. SWEEP_PHONE_CONTROL=counthidden turns the
  * exclusion off, and ROUTE=/stadium-tycoon must then go red on the 1px twin.
  *
+ * Round 1537: the overlap check measures the part of a control a finger can
+ * reach, its box cut down by every ancestor that clips its overflow. The case
+ * that found it is the NBA and NHL Connections planning bench, whose twenty
+ * names sit in a 272px scrolling box (Rounds 1002 and 1003, on purpose, so
+ * the receipt and Submit five stay beside the names). The sixth row of names,
+ * scrolled out of that box, sat geometrically under Clear draft and Submit
+ * five, and the sweep failed both routes on two names nobody can touch there:
+ * a tap on Clear draft lands on Clear draft. Tap target size still reads the
+ * whole box, since a name scrolled into view is its full size.
+ * SWEEP_PHONE_CONTROL=noclip measures raw boxes again, and ROUTE=/nba-connections
+ * must then go red on "Paul Pierce over Clear draft".
+ *
  * Run: npm run build, serve dist with scripts/lib/hostLikeServer.mjs, then
  *      ENGINES=chromium node scripts/sweepPhone.mjs
  * A single route can be checked with ROUTE=/club-manager.
@@ -58,11 +70,12 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BASE = process.env.BASE ?? process.env.SWEEP_BASE ?? 'http://localhost:4173';
 
 const CONTROL = process.env.SWEEP_PHONE_CONTROL ?? '';
-if (CONTROL && CONTROL !== 'counthidden') {
-  console.error(`SWEEP_PHONE_CONTROL=${CONTROL} is not a control this sweep knows (counthidden)`);
+if (CONTROL && CONTROL !== 'counthidden' && CONTROL !== 'noclip') {
+  console.error(`SWEEP_PHONE_CONTROL=${CONTROL} is not a control this sweep knows (counthidden, noclip)`);
   process.exit(2);
 }
-if (CONTROL) console.log(`CONTROL ${CONTROL} is on: visually hidden controls are measured like visible ones, so the sweep is SUPPOSED to fail.`);
+if (CONTROL === 'counthidden') console.log(`CONTROL ${CONTROL} is on: visually hidden controls are measured like visible ones, so the sweep is SUPPOSED to fail.`);
+if (CONTROL === 'noclip') console.log(`CONTROL ${CONTROL} is on: controls scrolled out of their box are measured where they would sit, so the sweep is SUPPOSED to fail.`);
 
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
@@ -148,7 +161,7 @@ for (const route of ROUTES) {
   try {
     await page.goto(`${BASE}${route}`, { waitUntil: 'domcontentloaded', timeout: 20000 });
     await page.waitForTimeout(500);
-    metrics = await page.evaluate((countHidden) => {
+    metrics = await page.evaluate(({ countHidden, noClip }) => {
       const doc = document.documentElement;
       const main = document.querySelector('main') ?? document.body;
       const skip = el => el.closest('.dukb-ticker-track') || el.closest('footer') || el.closest('nav');
@@ -160,6 +173,28 @@ for (const route of ROUTES) {
         const cs = getComputedStyle(el);
         if (r.width <= 1 && r.height <= 1 && cs.overflow === 'hidden') return true;
         return cs.clip === 'rect(0px, 0px, 0px, 0px)' || cs.clipPath === 'inset(50%)';
+      };
+      /* Round 1537: the part of a control a finger can reach, its box cut by
+         every ancestor that clips its overflow, or null when none of it shows.
+         A fixed box escapes its ancestors, and an absolute one escapes the
+         static ancestors below its containing block (transforms aside); an
+         inline box clips nothing. See the header. */
+      const reachable = (el, r) => {
+        let left = r.left, top = r.top, right = r.right, bottom = r.bottom;
+        let pos = getComputedStyle(el).position;
+        for (let a = el.parentElement; a && a !== document.body && a !== doc; a = a.parentElement) {
+          if (pos === 'fixed') break;
+          const cs = getComputedStyle(a);
+          if (pos === 'absolute' && cs.position === 'static') continue;
+          if (cs.display !== 'inline' && cs.display !== 'contents') {
+            const b = a.getBoundingClientRect();
+            const cl = b.left + a.clientLeft, ct = b.top + a.clientTop;
+            if (cs.overflowX !== 'visible') { left = Math.max(left, cl); right = Math.min(right, cl + a.clientWidth); }
+            if (cs.overflowY !== 'visible') { top = Math.max(top, ct); bottom = Math.min(bottom, ct + a.clientHeight); }
+          }
+          pos = cs.position;
+        }
+        return right > left && bottom > top ? { x: left, y: top, w: right - left, h: bottom - top } : null;
       };
 
       /* 1. sideways scroll on the document itself */
@@ -202,7 +237,8 @@ for (const route of ROUTES) {
         if (visuallyHidden(el, r)) continue;
         const label = (el.textContent ?? '').trim().slice(0, 22);
         if (r.height < 30 && label.length > 2 && !isProseLink(el)) small.push(`${label} (${Math.round(r.height)}px)`);
-        boxes.push({ label, x: r.x, y: r.y, w: r.width, h: r.height });
+        const reach = noClip ? { x: r.x, y: r.y, w: r.width, h: r.height } : reachable(el, r);
+        if (reach) boxes.push({ label, ...reach });
       }
       for (const el of Array.from(main.querySelectorAll('p, span, div, li, td, th, label'))) {
         if (skip(el)) continue;
@@ -229,7 +265,7 @@ for (const route of ROUTES) {
         }
       }
       return { overflow, culprit, small, tiny, hits, controls: boxes.length };
-    }, CONTROL === 'counthidden');
+    }, { countHidden: CONTROL === 'counthidden', noClip: CONTROL === 'noclip' });
   } catch (e) {
     fail(`${route}: would not load (${String(e).split('\n')[0].slice(0, 90)})`);
     continue;
