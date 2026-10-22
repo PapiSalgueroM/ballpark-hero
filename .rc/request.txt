@@ -1,0 +1,8 @@
+# Release BP triage, trA: the Club Manager reds of rgC, rgR, rgBEb, rgBIc, rgBIe, rgBKc-a, rgBLb, rgBLc, rgBMa, sent to several heads with rcAt.sh to attribute them.
+headsha: git log --oneline -1
+simCmShootoutOrder: node scripts/simCmShootoutOrder.mjs
+simClubManagerSlots: node scripts/simClubManagerSlots.mjs
+simCmVar: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmVar.mjs
+simLiveSimMotion: node scripts/simLiveSimMotion.mjs
+ctl-motion-whistle: LIVE_MOTION_CONTROL=whistle node scripts/simLiveSimMotion.mjs 2>&1 | tee "$TMPDIR/ctl.log"; s=${PIPESTATUS[0]}; [ $s -eq 1 ] && grep -qE 'simLiveSimMotion: control whistle turned ".+" red on an assertion \([1-9][0-9]* failed\), as it must\.' "$TMPDIR/ctl.log"
+simClubManagerBudget: node scripts/simClubManagerBudget.mjs
