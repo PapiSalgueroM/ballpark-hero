@@ -1,0 +1,7 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playStorageBlocked exit=0 273s | playStorageBlocked: 826 checks, 0 failed
+playStorageBlocked-open exit=0 245s | playStorageBlocked (control open): 743 checks, 0 failed
+playUsCareerSaveSeam exit=0 33s | playUsCareerSaveSeam: 15 journeys, 67 checks, 0 failed
+boxing-fonts exit=0 1s | 
+playBoxingShowForecast1086 exit=0 7s | Boxing forecast: 4 actual-route journeys passed.
+playTranslatedPage exit=0 138s | playTranslatedPage: 447 checks, 0 failed
