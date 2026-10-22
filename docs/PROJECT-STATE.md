@@ -19027,3 +19027,9 @@ This child adopts the exact reviewed outputs and one final-phase workflow change
 The Home/three-hub accuracy edits and hosting-cookie disclosures are source-qualified at144557287ecfc3873a4a9563e9fe17ca62a12d8e. Final39788124277 passed all six jobs:9,337PASS/58 explicitSKIP/0FAIL/622files, focused74/29/6 and existing owned controls, browser4+3+3,18 readers,14 unchanged caps, HomeCopy/HubDepth/HomeFold and complete source/output/transport holds. All three generated delta files are present0B and four output controls pass; native798 Tar and8 adopted output identities are admitted.
 
 This child only appends qualification notes to three docs. Publication and live verification remain with I, alongside the earlier merged1447 shared-dialog fix. Analytics stays paused. Provider readiness, rights/provenance, traffic quality, AdSense review and old785/1441 preservation gaps remain separate and unwaived.
+
+## Round1449 Home discovery candidate, 2026-10-22 UTC
+
+Root's `codex/home-discovery-1449` starts from mergedf8a7e7618c2c4ed6f504d0e860d75c759916ce59, with all5,185 physical starting source bodies checked. The candidate changes only the Home H1 values to Free sports games and four directly contradictory comments, retaining the header brand. Actual small-screen, signed-in and768-breakpoint fit is still required before any layout fix or qualification.
+
+Fresh remote measurement, generation, exact permitted-output review/adoption and final six-job qualification remain pending. Existing game/data/save code, old walks, shared CSS and all caps are held. I remains sole publisher. The earlier merged1447/1448 publish-ready handoff is separate; no1449 live, AdSense approval or legal completeness is claimed.

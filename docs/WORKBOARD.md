@@ -16504,3 +16504,9 @@ This child changes only those8 source outputs, one final workflow phase and thes
 Source144557287ecfc3873a4a9563e9fe17ca62a12d8e passed final39788124277 attempt1, all six jobs. Complete native admission79408275f56d04c574416ccfab743ecf6bb074a9c3940da37a2fa9b8b03c31f0 binds actual9,337PASS/58SKIP/0FAIL/622files, focused74/29/6 and owned controls, browser4+3+3, HomeCopy/HubDepth/HomeFold,18 readers/14 unchanged caps, all5185 source rows/outputs and798 Tar bodies. Final patch/list/newfiles are present0B with two nonempty and two inventory controls.
 
 This child appends only three truthful qualification notes. I retains sole publication and live/readback, plus CM/Soccer; J keeps its game lanes. Root does not claim publication, provider/AdSense clearance, game fixes, prior failure waivers or785/1441 preservation clearance. The prior1447 merged3ee publish-ready handoff remains valid.
+
+## Root1449 Home source candidate, 2026-10-22 UTC
+
+Exclusive Root branchcodex/home-discovery-1449 starts atf8a7e7618c2c4ed6f504d0e860d75c759916ce59. Six literal H1/comment hunks are reviewed with whole inverses. Fresh remote evidence must establish actual fonts, fit, signed-in chips, control bounds and supported raw color measurements. Original HomeFold and HomeCopy oracles stay byte-exact; any compatibility adapter is artifact-owned and template-bound.
+
+Generation is limited to Home's index/sitemap/ledger, with all five scoped saved pages BASE-exact. Source/measurement/output review and fresh final qualification still precede any integration. I retains publication and CM/Soccer, J its game lanes. No source candidate is a live, provider, AdSense, rights, traffic or preservation-clearance claim.
