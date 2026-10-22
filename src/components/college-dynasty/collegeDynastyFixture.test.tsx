@@ -37,6 +37,20 @@
  * no st.seat exists and exactly the offer to an older dynasty was removed (it
  * was offered the seat and not given it). The fixture JSON is never recorded
  * again for this.
+ *
+ * RE-RECORDED IN ROUND 1554 (the real season), on purpose and only there. The
+ * behaviour changed by design: a new dynasty plays a slate set at kickoff
+ * (no repeated opponent), Notre Dame is an independent, there is no Group of
+ * Five title game, rivalry week reads a real series first, and CBB's league
+ * table goes by league record. Measured old against new, step by step: every
+ * new dynasty step moves in both sports. The CFB plain save (a save from
+ * before the program layer) keeps its markup and its text on every step of
+ * the old season it is in; only its save hash (the ids the shared minter hands
+ * it), the running draw count and the share carried over from the first
+ * dynasty move, because the slate takes no draw from Math.random, so the
+ * first dynasty's path draws less. Its screen first changes at 'plain: class
+ * closed, layer on', the first season it plays under the real format. The CBB
+ * plain save path matches on every field through its old season.
  */
 import type { ComponentType } from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
