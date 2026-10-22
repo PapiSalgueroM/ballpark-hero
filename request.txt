@@ -1,0 +1,20 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+units: node_modules/.bin/vitest run src/lib/clubManagerTactics.test.ts src/hooks/useClubManager.test.ts --testTimeout=300000 --hookTimeout=120000 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+vitest-cm: node_modules/.bin/vitest run src/lib/clubManager src/test/clubManager src/test/cm src/hooks/useClubManager.test.ts --testTimeout=300000 --hookTimeout=120000 2>&1 | tail -8; exit ${PIPESTATUS[0]}
+quick: SECTION=table,styles,balanced node scripts/simCmTactics.mjs
+c-mirror: CM_TACTICS_CONTROL=mirror node scripts/simCmTactics.mjs
+c-helpwords: CM_TACTICS_CONTROL=helpwords node scripts/simCmTactics.mjs
+mdNew: node scripts/simCmMatchDay.mjs
+walk1522: node scripts/playCmTactics.mjs
+fx-slow: MODE=slow node .rc/x/fx-slowload1522.mjs
+fx-fail: MODE=fail node .rc/x/fx-slowload1522.mjs
+simCmCopy: node scripts/simCmCopy.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+simCmMatchCentre: node scripts/simCmMatchCentre.mjs
+simLiveMatch: node scripts/simLiveMatch.mjs
+bytes-m2: git worktree add .rcbase c1a58e1c >/dev/null 2>&1 && BASE_ROOT=.rcbase SECTION=2 node scripts/simCmDifficulty.mjs 2>&1 | tail -8; exit ${PIPESTATUS[0]}
+nat: node scripts/simCmMadeUpNations.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+simBoardAsks: node scripts/simBoardAsks.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+weight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs 2>&1 | grep -E "^ +/(club-manager|manager-hot-seat|deadline-day|whats-new|soccer-career) |sweepWeight:"; exit ${PIPESTATUS[0]}
