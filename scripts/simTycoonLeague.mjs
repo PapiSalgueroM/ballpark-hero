@@ -441,8 +441,12 @@ function sectionCatchUp(T) {
 function sectionLoader(T) {
   const out = [];
   const roll = mulberry(4242);
-  /* A real climb to a high division, then reloaded with one broken field. */
-  let s = pinned(T, 40);
+  /* A real climb to a high division, then reloaded with one broken field. Round
+     1532: under the scoring law a pinned Squad of 40 (34 law points) stalls at
+     division 2, whose rivals stand at 40, so the climb that reached division 5 or
+     more on the old timer now pins Squad 80 (68 points), which climbs past
+     division 4, the division the 57 win save below would drop it to. */
+  let s = pinned(T, 80);
   const { state: climbed } = playSeasons(T, s, roll, 12, null, 600);
   s = climbed;
   /* A climb stops the tick a season ends, on an all-zero table, where "every

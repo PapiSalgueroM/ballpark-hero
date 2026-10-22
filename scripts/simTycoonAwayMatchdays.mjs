@@ -267,8 +267,14 @@ function sections(T) {
   if (streakFirsts.length < 3) out.S6.push(`only ${streakFirsts.length} streak milestones and badges were found, so this section is not reading the tables`);
   let peaked = 0;
   let lostRun = 0;
+  /* Round 1532: under the scoring law a Squad of 30 to 59 in division 6 (rivals at
+     61 law points) is 10 to 36 points short and never strings five wins together,
+     so this case was never reached. The trips now start 10 to 29 levels above the
+     division's par (8.5 to 24.6 points), where runs of five and of ten happen and
+     some of them end before home, the case the review found. */
+  const par6 = Math.round(T.DIVISIONS[6].rivalStrength / T.SQUAD_POINTS);
   for (let k = 0; k < 400; k += 1) {
-    const s = { ...T.newTycoon(0), levels: { ...T.newTycoon(0).levels, squad: 30 + (k % 30) }, league: T.newLeague(k % 3, 6, k % 5), bestDivision: 6 };
+    const s = { ...T.newTycoon(0), levels: { ...T.newTycoon(0).levels, squad: par6 + 10 + (k % 20) }, league: T.newLeague(k % 3, 6, k % 5), bestDivision: 6 };
     const r = T.playAwayMatchdays(s, 16, mulberry(6600 + k));
     let run = 0;
     let peak = 0;
@@ -396,7 +402,10 @@ function copyLoop(text) {
 }
 const CONTROLS = [
   { name: 'off', why: 'away matchdays never play', build: t => mustReplace(t, PLAYABLE, '  const n = 0;', 'stadiumTycoon.ts'), red: ['S1', 'S2', 'S3', 'S5', 'S6'], green: ['S4'], vRed: [7, 8], vGreen: [1, 2, 3, 4, 5, 6] },
-  { name: 'copy', why: 'the away minutes run a private loop whose opponent reads a different chance', build: copyLoop, red: ['S1'], green: ['S2', 'S3', 'S4', 'S5', 'S6'], vRed: [], vGreen: [1, 2, 3, 4, 5, 6, 7, 8] },
+  /* Round 1532: the private loop adds back the old defence term, levelOf(squad) x
+     0.0008 a minute, which at a Squad 24 levels over par is about six goals a match
+     against, so S5's strong club loses too: S5 joins S1 in this control's red set. */
+  { name: 'copy', why: 'the away minutes run a private loop whose opponent reads a different chance', build: copyLoop, red: ['S1', 'S5'], green: ['S2', 'S3', 'S4', 'S6'], vRed: [], vGreen: [1, 2, 3, 4, 5, 6, 7, 8] },
   { name: 'cash', why: 'away minutes pay their goal and win bonuses', build: t => mustReplace(t, AWAY_MINUTE, 'playMinute(st, roll, events, { pay: true }, edge)', 'stadiumTycoon.ts'), red: ['S3'], green: ['S1', 'S2', 'S4', 'S5', 'S6'], vRed: [3], vGreen: [1, 2, 4, 5, 6, 7, 8] },
   {
     name: 'counter',

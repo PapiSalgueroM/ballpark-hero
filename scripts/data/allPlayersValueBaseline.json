@@ -1717,7 +1717,7 @@
     }
   ],
   "policy": {
-    "fixture": "five seeded Elite pack seniors, age27, followed by local scouting; fixed division3, squad40, opposition starts at match70; ten14-match seasons",
+    "fixture": "five seeded Elite pack seniors, age27, followed by local scouting; fixed division3, squad at division 3's par plus 6 law points (62 under Round 1532's table; it was squad40), opposition starts at match70; ten14-match seasons",
     "calibrationSeeds": "101*i for i=1..32",
     "holdoutSeeds": "101*i for i=33..64",
     "healthy": {
@@ -1735,8 +1735,9 @@
       "holdWins": 68.40625
     },
     "cashGapFloor": 1010.34375,
-    "winsGainFloor": 1.828125,
+    "winsGainFloor": 0.53125,
     "marginReason": "Each floor retains one half of the healthy calibration effect. Removing prime leaves a 367.46875 fee gap from rating decline, below the 1010.34375 floor. Removing edge leaves zero win gain. Independent holdout seeds validate both floors without fitting them again.",
+    "ruling1532": "LEAD RULINGS R2 and S3 of brief-1532, not a measurement dressed as a constant. Under the shared scoring law the first team edge scales the rival's expected goals by (1 - f), and a Squad of 40 sits 12 law points under division 3's rivals, a hopeless side, so the fixture moved to division 3's par plus 6 points (squad 62) and the wins floor was re-derived by its own recipe on the new engine (remote check r1532-b1, 2026-10-21): calibration sell 88.3125 hold 89.375 wins, gain 1.0625, floor half of it 0.53125 (it was 1.828125 at squad 40 on the timer engine, where every match was won); holdout sell 88.0625 hold 88.875, gain 0.8125 with a paired standard error of 0.2174, clear of the floor and of the two standard error hard stop. The cash floor, the fee blocks and the healthy, noprime, flatedge and holdout blocks above it are the Round 586 record at squad 40 on the old engine, unchanged.",
     "holdoutHealthy": {
       "seeds": 32,
       "sellWins": 77.9375,

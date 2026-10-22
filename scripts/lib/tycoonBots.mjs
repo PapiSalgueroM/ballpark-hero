@@ -116,14 +116,14 @@ const TABLE_GEMS = pos => (pos === 1 ? 20 : pos === 2 ? 6 : 0);
  * (src/lib/tycoonRewards.ts 30), credited per watched full time; no ledger is
  * written.
  */
-export function runBot(T, { policy, seed, minutes, dt }) {
+export function runBot(T, { policy, seed, minutes, dt, keepStates = false }) {
   if (!POLICIES.includes(policy) && SQUAD_WEIGHT[policy] === undefined) throw new Error(`unknown policy ${policy}`);
   const roll = mulberry(seed);
   let s = T.newTycoon(0);
   const everyTwo = Math.round(2 / dt);
   const steps = Math.round((minutes * 60) / dt);
   const matches = []; const seasons = []; const promotions = []; const stars = []; const winBonusSec = [];
-  const checkpoints = {}; const firsts = {};
+  const checkpoints = {}; const firsts = {}; const states = {};
   let sellUp = null;
   let acc = { sq: 0, off: 0, gap: 0, mins: 0, gf: 0, ga: 0 };
   const hasGap = typeof T.matchGap === 'function';
@@ -170,6 +170,7 @@ export function runBot(T, { policy, seed, minutes, dt }) {
     if ((step + 1) % everyTwo === 0) s = buyRound(T, s, policy);
     for (const c of cps) {
       if (checkpoints[c] === undefined && t >= c - 1e-9) {
+        if (keepStates) states[c] = s;
         checkpoints[c] = {
           sq: T.levelOf(s, 'squad'), div: T.divisionIndex(s), rep: s.rep, lifetime: s.lifetime, income: T.incomePerSec(s),
           unboosted: unboosted(T, s), streak: s.streak, fanbase: s.fanbase, capacity: T.capacity(s), matches: s.totalMatches ?? 0,
@@ -178,5 +179,5 @@ export function runBot(T, { policy, seed, minutes, dt }) {
       }
     }
   }
-  return { policy, seed, minutes, matches, seasons, promotions, sellUp, stars, checkpoints, winBonusSec, firsts };
+  return { policy, seed, minutes, matches, seasons, promotions, sellUp, stars, checkpoints, winBonusSec, firsts, ...(keepStates ? { states } : {}) };
 }

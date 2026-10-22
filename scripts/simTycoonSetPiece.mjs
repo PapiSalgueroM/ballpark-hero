@@ -245,10 +245,16 @@ try {
       // Measured 2026-09-15 on the unmutated engine: 12.25 and 11.00 points
       // across two 2,000-match batches, mean 11.625. The fixed band gives 50%
       // headroom around that mean. It is never recalibrated by a control run.
-      assert(row.uplift >= 0.058125 && row.uplift <= 0.174375, `win uplift ${row.uplift} is outside the frozen measured band`);
+      // Round 1532, the lead's ruling R3: re-derived by this same recipe on the
+      // scoring law engine at the moved fixture (ruling S3, division 3's par plus 6
+      // law points). Remote check r1532-b1, 2026-10-21: 21.40 and 25.05 points,
+      // mean 23.225, so the band is 11.6125 to 34.8375 (it was 5.8125 to 17.4375);
+      // the holdout read 22.85. The uplift of one perfect goal is exactly the share
+      // of matches that would otherwise end level, and a football match draws.
+      assert(row.uplift >= 0.116125 && row.uplift <= 0.348375, `win uplift ${row.uplift} is outside the frozen measured band`);
       assert.equal(row.goals, row.matches, 'perfect policy did not add exactly one goal per match');
     }
-    return 'two 2,000-match calibration batches and one independent 2,000-match holdout; frozen uplift band 5.8125..17.4375 percentage points';
+    return 'two 2,000-match calibration batches and one independent 2,000-match holdout; frozen uplift band 11.6125..34.8375 percentage points (Round 1532; it was 5.8125..17.4375)';
   });
 
   if (!CONTROL || CONTROL === 'daily') {
