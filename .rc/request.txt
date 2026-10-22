@@ -1,0 +1,12 @@
+simWorldEditor: node scripts/simWorldEditor.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+we-homecountry: SIM_WORLD_EDITOR_CONTROL=homecountry node scripts/simWorldEditor.mjs 2>&1 | grep -E "FAIL|RED|refusing|checks," | head -12; exit ${PIPESTATUS[0]}
+simFreeAgents: node scripts/simFreeAgents.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+simYouthPadding: node scripts/simYouthPadding.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+simAcademy: node scripts/simAcademy.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+simSaveFence: node scripts/simSaveFence.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+simBoard: node scripts/simBoard.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+simBoardObjectives: node scripts/simBoardObjectives.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+simCmOldCareersWorld: node scripts/simCmOldCareersWorld.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+digest-main: git worktree add -q /tmp/m c1b39364 && ln -s "$PWD/node_modules" /tmp/m/node_modules && cd /tmp/m && node scripts/simCmLeagueRules.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+diff2-base: git worktree add -q /tmp/base2 c1b39364 && SECTION=2 BASE_ROOT=/tmp/base2 node scripts/simCmDifficulty.mjs > /tmp/d2.log 2>&1; s=$?; grep -c "differs from the base" /tmp/d2.log; grep -oE "first at key [a-zA-Z]+" /tmp/d2.log | sort | uniq -c; grep -iE "draws" /tmp/d2.log | head -3; tail -1 /tmp/d2.log; exit $s
