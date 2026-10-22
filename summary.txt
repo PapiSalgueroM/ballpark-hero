@@ -1,0 +1,3 @@
+fob-check exit=0 0s | controlFrontOfficeBoard: check passed. Every string of all 44 controls is in the board exactly once.
+vitest-career exit=0 21s |    Duration  20.76s (transform 1.71s, setup 100ms, collect 235ms, tests 19.31s, environment 484ms, prepare 228ms)
+tsc exit=2 73s |     Type 'number' is not assignable to type '1'.
