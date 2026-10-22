@@ -1,0 +1,4 @@
+#!playwright
+#!serial
+rulesMain: git worktree add /tmp/m7 b0feca59 >/dev/null 2>&1; cd /tmp/m7 && ln -sf "$OLDPWD/node_modules" node_modules && node scripts/simCmLeagueRules.mjs 2>&1 | grep -E "differs|failure|passed" | head -6
+weightMain: git worktree add /tmp/m7 b0feca59 >/dev/null 2>&1; cd /tmp/m7 && ln -sf "$OLDPWD/node_modules" node_modules 2>/dev/null; node_modules/.bin/vite build >/dev/null 2>&1 && (node scripts/lib/hostLikeServer.mjs dist 4183 > /tmp/m7srv.log 2>&1 &) && sleep 3 && BASE=http://127.0.0.1:4183 ENGINES=chromium SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs 2>&1 | grep -E "club-manager|hot-seat|deadline|sweepWeight|FAIL" | head -8

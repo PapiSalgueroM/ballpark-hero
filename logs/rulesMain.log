@@ -1,0 +1,6 @@
+  FAIL: modern: now|premier differs in whole, wholeNext, s2_whole
+  FAIL: modern: now|championship differs in whole, wholeNext, s2_whole
+  FAIL: modern: now|laliga differs in whole, wholeNext, s2_whole
+  FAIL: modern: now|seriea differs in whole, wholeNext, s2_whole
+  FAIL: modern: now|bundesliga differs in whole, wholeNext, s2_whole
+  FAIL: modern: now|ligue1 differs in whole, wholeNext, s2_whole

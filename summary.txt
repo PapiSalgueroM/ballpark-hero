@@ -1,0 +1,2 @@
+rulesMain exit=0 60s |   FAIL: modern: now|ligue1 differs in whole, wholeNext, s2_whole
+weightMain exit=0 67s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
