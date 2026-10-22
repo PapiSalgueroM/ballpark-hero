@@ -1,0 +1,151 @@
+name: Consent dialog Original1447
+on:
+  push:
+    branches: [codex/consent-dialog-original-1447]
+permissions:
+  contents: read
+concurrency:
+  group: consent-dialog-original1447-${{ github.ref }}
+  cancel-in-progress: false
+env:
+  BASE_SOURCE: 4b4d99ebd64f50ffb45bca9d8f56fba6b7e4dcee
+  OUT: consent-dialog1447-artifacts
+jobs:
+  original:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Exact Original source and complete application protection
+        run: |
+          set -euo pipefail
+          mkdir "$OUT"
+          test "$GITHUB_REF" = refs/heads/codex/consent-dialog-original-1447
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          [[ "$BASE_SOURCE" =~ ^[a-f0-9]{40}$ ]]
+          git rev-parse HEAD > "$OUT/head.txt"
+          printf '%s\n' original > "$OUT/phase.txt"
+          git fetch --no-tags --depth=1 origin "$BASE_SOURCE" > "$OUT/base-fetch.log" 2>&1
+          git diff --exit-code "$BASE_SOURCE" HEAD -- . ':!docs/ROUND1447.md' ':!docs/PROJECT-STATE.md' ':!docs/WORKBOARD.md' ':!.github/workflows/consent-dialog-original-1447.yml' ':!scripts/qa/playConsentDialogOriginal1447.mjs' > "$OUT/original-product-hold.log"
+          printf '%s  %s\n' ac0672c3cb279cc9926704b5d5ec26d8a16a8b9edb804686e104cb3f69599b63 scripts/qa/playConsentDialogOriginal1447.mjs e60ff1534307e449ccef598e3b7470dcba58681b82cea4005cec7319f14f9221 scripts/lib/offlineTransport.cjs > "$OUT/proof-inputs.sha256"
+          sha256sum --check "$OUT/proof-inputs.sha256" > "$OUT/proof-inputs-initial.log"
+          git ls-files -z -- . | sort -z > "$OUT/tracked-paths-before.bin"
+          xargs -0 sha256sum < "$OUT/tracked-paths-before.bin" > "$OUT/source-before.sha256"
+          find public scripts/data/lastmod.json scripts/data/guideHeadingsFrozen.json src/data/searchKeywords.json ! -type d ! -type f -print > "$OUT/generated-nonregular-before.txt"
+          test ! -s "$OUT/generated-nonregular-before.txt"
+          find public scripts/data/lastmod.json scripts/data/guideHeadingsFrozen.json src/data/searchKeywords.json -type f -print0 | sort -z | xargs -0 sha256sum > "$OUT/generated-before.sha256"
+          sha256sum package.json package-lock.json vitest.config.ts scripts/sweepWeight.mjs scripts/lib/offlineTransport.cjs scripts/lib/hostLikeServer.mjs > "$OUT/dependencies.sha256"
+          npm ci > "$OUT/install.log" 2>&1
+      - name: Isolated Playwright1.64 and exact known font cache
+        run: |
+          set -euo pipefail
+          browser_tools="$RUNNER_TEMP/consent-dialog1447-browser"
+          npm install --prefix "$browser_tools" --no-save --package-lock=false playwright@1.64.0 > "$OUT/browser-install.log" 2>&1
+          test ! -e node_modules/playwright;test ! -e node_modules/playwright-core
+          ln -s "$browser_tools/node_modules/playwright" node_modules/playwright
+          ln -s "$browser_tools/node_modules/playwright-core" node_modules/playwright-core
+          node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium > "$OUT/chromium-install.log" 2>&1
+          export FREE_KICK_FONT_CACHE="$PWD/$OUT/font-cache"
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > "$OUT/fonts.log" 2>&1
+          echo "FREE_KICK_FONT_CACHE=$FREE_KICK_FONT_CACHE" >> "$GITHUB_ENV"
+          echo "FONT_CACHE_MANIFEST_SHA256=$(sha256sum "$FREE_KICK_FONT_CACHE/manifest.json" | cut -d ' ' -f 1)" >> "$GITHUB_ENV"
+          find "$FREE_KICK_FONT_CACHE" -type f -print0 | sort -z | xargs -0 sha256sum > "$OUT/font-inputs.sha256"
+      - name: Real types and completed plain build under unchanged offline guard
+        id: build
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$PWD/$OUT/build.transport";: > "$SIM_OFFLINE_RECEIPT"
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$OUT/types.log" 2>&1
+          timeout --signal=TERM --kill-after=15s 6m npm run build > "$OUT/build.log" 2>&1
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+          find dist ! -type d ! -type f -print > "$OUT/dist-nonregular-before.txt";test ! -s "$OUT/dist-nonregular-before.txt"
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$OUT/dist-before.sha256";test -s "$OUT/dist-before.sha256"
+          for inventory in generated-before.sha256 dist-before.sha256;do
+            cp "$OUT/$inventory" "$OUT/$inventory.control";printf '%s\n' CONTROL_DIFFERENT_INVENTORY_LINE >> "$OUT/$inventory.control"
+            status=0;cmp "$OUT/$inventory" "$OUT/$inventory.control" > "$OUT/$inventory.control.log" 2>&1 || status=$?
+            printf '%s\n' "$status" > "$OUT/$inventory.control.exit";test "$status" -eq 1
+          done
+          tar -czf "$OUT/dist.tar.gz" -C dist .
+      - name: Nine fresh visitor cases with actual owned counts
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$PWD/$OUT/browser.transport";: > "$SIM_OFFLINE_RECEIPT"
+          out="$PWD/$OUT"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$out/server.log" 2>&1 &
+          server=$!;trap 'kill "$server" 2>/dev/null || true' EXIT
+          ready=0;for attempt in 1 2 3 4 5;do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null;then ready=1;break;fi;sleep 1;done;test "$ready" -eq 1
+          status=0;BASE=http://127.0.0.1:4173 SOURCE_SHA="$GITHUB_SHA" CONSENT_DIALOG_OUT="$out/browser" timeout --signal=TERM --kill-after=15s 7m node scripts/qa/playConsentDialogOriginal1447.mjs > "$out/browser.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/browser.exit"
+          STATUS="$status" node --input-type=module > "$out/browser-classification.log" 2>&1 <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          const sha=b=>createHash('sha256').update(b).digest('hex'),dir=process.env.OUT+'/browser/',r=JSON.parse(fs.readFileSync(dir+'report.json','utf8'));
+          assert.equal(Number(process.env.STATUS),1,'DIALOG1447_ADMISSION: only an actual owned Original gap can qualify this diagnostic');
+          assert.equal(r.exit,1);assert.equal(r.source,process.env.GITHUB_SHA);assert.equal(r.phase,'original');assert.equal(r.status,'ORIGINAL_GAPS_OBSERVED');assert.equal(r.complete,true);assert.deepEqual(r.errors,[]);assert.equal(r.plannedCases,9);assert.equal(r.actualContexts,9);assert.equal(r.actualCompleteCases,9);assert.equal(r.cases.length,9);assert.deepEqual(r.unclassifiedCases,[]);
+          assert.equal(r.holds.unchanged,true);assert.deepEqual(r.holds.before,r.holds.after);assert.deepEqual(r.holds.distBefore,r.holds.distAfter);
+          const expected=['stadium-320','stadium-390','stadium-1280','idle-320','idle-390','idle-1280','front-office-320','front-office-390','front-office-1280'];assert.deepEqual(r.cases.map(row=>row.id),expected);
+          const allOwned=[];
+          for(const row of r.cases){
+            assert.equal(row.contextCreated,true);assert.equal(row.complete,true);assert.equal(row.foundation.status,'PASS');assert(['PASS','OBSERVED_FAILURE'].includes(row.status));assert.deepEqual(row.initialStorage,{keys:[],error:null});assert.deepEqual(row.blocked,[]);assert.deepEqual(row.pageErrors,[]);assert.deepEqual(row.consoleErrors,[]);assert.equal(row.observerOverflow,false);for(const key of ['error','finalError','closeError','collectionError','responseError'])assert(!row[key],row.id+': '+key);
+            assert(row.attemptedRequests>0&&row.attemptedRequests<=2048);assert(row.cachedFonts.some(x=>x.resourceType==='stylesheet')&&row.cachedFonts.some(x=>x.resourceType==='font'));assert(row.cssResponses.length>0);
+            for(const css of row.cssResponses){assert.equal(css.status,200);assert.equal(sha(fs.readFileSync(dir+css.file)),css.sha256);}
+            assert.equal(row.bannerLeg.status,'PASS');assert.equal(row.bannerLeg.trustedReject,true);assert.equal(row.bannerLeg.choice.version,2);assert.equal(row.bannerLeg.choice.advertising,false);assert.equal(row.bannerLeg.choice.analytics,false);
+            assert(row.actions.some(x=>x.phase==='answered'&&x.status==='PASS'&&x.trustedClick===true));
+            for(const action of row.actions){assert(['PASS','OBSERVED_FAILURE','NOT_ATTEMPTED'].includes(action.status));if(action.status==='PASS')assert.equal(action.trustedClick,true);if(action.status==='OBSERVED_FAILURE'){assert.equal(action.phase,'pending');assert.equal(action.attempted,true);assert.equal(action.ownedAssertion.name,'AssertionError');assert(action.ownedAssertion.message.startsWith('CONSENT_DIALOG1447_FIXED_BANNER_INTERCEPTION:'));assert.equal(action.error.name,'TimeoutError');assert(/intercepts pointer events/i.test(action.error.message));allOwned.push({caseId:row.id,label:action.label});}}
+            for(const phase of ['opening','settled','answered','completed']){assert(fs.statSync(dir+row.id+'-'+phase+'.png').size>1000);assert(fs.statSync(dir+row.id+'-'+phase+'.html').size>1000);}assert(fs.statSync(dir+row.id+'-observations.json').size>1000);
+          }
+          assert(allOwned.length>=1,'DIALOG1447_ADMISSION: no predetermined failure count, at least one source-owned interception required');assert.equal(r.ownedOutcomes.length,allOwned.length);
+          assert.equal(r.transportPredicateControls.length,6);assert.equal(new Set(r.transportPredicateControls.map(x=>x.name)).size,6);assert(r.transportPredicateControls.every(x=>x.networkAttempted===false&&x.beforeSha256!==x.afterSha256&&x.error.name==='AssertionError'&&x.error.message.startsWith('COOKIE_TRANSPORT:')));
+          assert.equal(r.fontControls.length,18);for(const row of r.cases){const controls=r.fontControls.filter(x=>x.caseId===row.id);assert.deepEqual(controls.map(x=>x.family),['Inter','Space Grotesk']);assert(controls.every(x=>x.beforeSha256!==x.afterSha256&&x.absenceRejectedDespiteCheckTrue===true&&x.networkAttempted===false));}
+          assert.equal(r.classificationControls.length,5*allOwned.length);for(const owned of allOwned){const controls=r.classificationControls.filter(x=>x.caseId===owned.caseId&&x.action===owned.label);assert.deepEqual(controls.map(x=>x.name),['missing-banner-hit','missing-final-banner-hit','different-final-button','wrong-error','dialog-already-closed']);assert(controls.every(x=>x.beforeSha256!==x.afterSha256&&x.classificationRefused===true&&x.networkAttempted===false));}
+          fs.writeFileSync(process.env.OUT+'/original-admission.json',JSON.stringify({complete:true,source:process.env.GITHUB_SHA,phase:'original',status:r.status,actualDriverExit:Number(process.env.STATUS),cases:9,healthyFoundations:9,ownedOutcomes:allOwned.length,ownedCases:r.cases.filter(x=>x.status==='OBSERVED_FAILURE').length,fontControls:r.fontControls.length,classificationControls:r.classificationControls.length,noReproductionOrUnclassifiedAdmitted:false},null,2)+'\n');
+          JS
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+      - name: Always retain exact source, public, completed dist, font and transport holds
+        if: always()
+        run: |
+          set -uo pipefail
+          mkdir -p "$OUT";failed=0
+          status=0;sha256sum --check "$OUT/source-before.sha256" > "$OUT/source-hold.log" 2>&1 || status=$?;printf '%s\n' "$status" > "$OUT/source-hold.exit";test "$status" -eq 0 || failed=1
+          status=0;{
+            git ls-files -z -- . | sort -z > "$OUT/tracked-paths-after.bin" && cmp "$OUT/tracked-paths-before.bin" "$OUT/tracked-paths-after.bin" &&
+            git diff --exit-code HEAD -- . && git ls-files --others --exclude-standard -- . ":!$OUT/**" > "$OUT/source-untracked-after.txt" && test ! -s "$OUT/source-untracked-after.txt"
+          } > "$OUT/operator-source-hold.log" 2>&1 || status=$?;printf '%s\n' "$status" > "$OUT/operator-source-hold.exit";test "$status" -eq 0 || failed=1
+          status=0;{
+            find public scripts/data/lastmod.json scripts/data/guideHeadingsFrozen.json src/data/searchKeywords.json ! -type d ! -type f -print > "$OUT/generated-nonregular-after.txt" && test ! -s "$OUT/generated-nonregular-after.txt" &&
+            find public scripts/data/lastmod.json scripts/data/guideHeadingsFrozen.json src/data/searchKeywords.json -type f -print0 | sort -z | xargs -0 sha256sum > "$OUT/generated-after.sha256" && cmp "$OUT/generated-before.sha256" "$OUT/generated-after.sha256" &&
+            git diff --binary HEAD -- public scripts/data/lastmod.json scripts/data/guideHeadingsFrozen.json src/data/searchKeywords.json > "$OUT/generated.patch" && test ! -s "$OUT/generated.patch" &&
+            git diff --name-only HEAD -- public scripts/data/lastmod.json scripts/data/guideHeadingsFrozen.json src/data/searchKeywords.json > "$OUT/generated-files.txt" && test ! -s "$OUT/generated-files.txt"
+          } > "$OUT/generated-output-hold.log" 2>&1 || status=$?;printf '%s\n' "$status" > "$OUT/generated-output-hold.exit";test "$status" -eq 0 || failed=1
+          status=0;{
+            find dist ! -type d ! -type f -print > "$OUT/dist-nonregular-after.txt" && test ! -s "$OUT/dist-nonregular-after.txt" &&
+            find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$OUT/dist-after.sha256" && cmp "$OUT/dist-before.sha256" "$OUT/dist-after.sha256"
+          } > "$OUT/dist-output-hold.log" 2>&1 || status=$?;printf '%s\n' "$status" > "$OUT/dist-output-hold.exit";test "$status" -eq 0 || failed=1
+          for kind in dependencies proof-inputs font-inputs;do
+            status=0;sha256sum --check "$OUT/$kind.sha256" > "$OUT/$kind-hold.log" 2>&1 || status=$?;printf '%s\n' "$status" > "$OUT/$kind-hold.exit";test "$status" -eq 0 || failed=1
+          done
+          status=0;{
+            test -f "$OUT/build.transport" && test ! -s "$OUT/build.transport" && test -f "$OUT/browser.transport" && test ! -s "$OUT/browser.transport"
+          } > "$OUT/transport-hold.log" 2>&1 || status=$?;printf '%s\n' "$status" > "$OUT/transport-hold.exit";test "$status" -eq 0 || failed=1
+          printf '%s\n' "$failed" > "$OUT/final-holds.exit"
+          (cd "$OUT";find . -type f ! -path ./evidence.sha256 -print0 | sort -z | xargs -0 sha256sum) > "$OUT/evidence.sha256" || failed=1
+          exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: consent-dialog1447-original-${{ github.run_id }}-${{ github.run_attempt }}
+          path: consent-dialog1447-artifacts/
+          if-no-files-found: error
+          retention-days: 14
