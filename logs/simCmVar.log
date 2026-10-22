@@ -1,0 +1,1 @@
+src/lib/clubManagerMeters.ts:50:40: ERROR: No matching export in ".sim-control/cm-var-e43dDe/prior.ts" for import "weighedTrophies"

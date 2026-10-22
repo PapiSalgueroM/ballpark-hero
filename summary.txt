@@ -1,0 +1,3 @@
+headsha exit=0 0s | 401a3ce494 rc request rBP-trM-b0feca59 for b0feca59983a6946142ca29f20f16f1ba1540f6c
+simCmVar exit=0 0s | src/lib/clubManagerMeters.ts:50:40: ERROR: No matching export in ".sim-control/cm-var-e43dDe/prior.ts" for import "weighedTrophies"
+simClubManagerBudget exit=0 169s | simClubManagerBudget: 1 FAILURE(S)

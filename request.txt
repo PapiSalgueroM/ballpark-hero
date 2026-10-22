@@ -1,0 +1,4 @@
+# Release BP triage, trM: main's own reds (simClubManagerBudget section 4, simCmVar's prior bundle) on main commits around Round 1443.
+headsha: git log --oneline -1
+simClubManagerBudget: node scripts/simClubManagerBudget.mjs 2>&1 | grep -E 'summers rolled|engaged manager|keeping the squad|FAIL|PASS|FAILURE'
+simCmVar: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmVar.mjs 2>&1 | grep -E "ERROR|passed|FAIL" | head -8
