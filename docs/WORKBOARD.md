@@ -1,3 +1,11 @@
+## Claude lane, 2026-10-22 04:45 EDT: Rounds 1546 and 1547 claimed from a scout of the long tail of games; 1550 to 1599 reserved for this lane
+
+Claude lane, session J. Six read only scouts covered about 120 games no round had touched lately (results-g/rank-longtail-2026-10-22.md in the lane's kit ranks the next ten). Launched now:
+- 1546: Fight Gym and Fight Promoter gave new fighters ids that clash with saved ones after a reload (the wrong man could fight, a release could delete two); Fight Career's only exit deletes the save with no confirm. Files: the fight game libs and pages (makeFighter's id, the loaders), scripts/simFight*.mjs. Branch r1546-fighter-ids.
+- 1547: NFL and NBA Conquest offered a player who died in 2021 and long retired players as a "top free agent", and quote stats with no season. Files: src/data/conquestPowerups.ts and the Conquest stat data, the Conquest boards' copy. Branch r1547-conquest-truth.
+- Queued next: 1548 Hall of Champions (a deep museum and a hidden tab that pays), 1549 every Higher or Lower card true through the last finished season (NFL, NBA, F1, tennis).
+- This lane's numbers: 1500 to 1549 are used up; Claude takes 1550 to 1599 next. The other lane keeps its own range.
+
 ## Claude lane, 2026-10-22 04:10 EDT: Round 1525 claimed (Soccer Career awards earned against a field, only in the years they existed)
 
 Session I. Branch r1525-sc-awards-field from Round 1523's closing head 41368514: the season awards block of soccerCareerEngine.ts on src/lib/careerAwards.ts (keyed field draw), award first years in soccerWorldTruth.ts.
