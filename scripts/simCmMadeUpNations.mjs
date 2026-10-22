@@ -10,7 +10,8 @@
         share the league's real squads have (within four standard errors), and a world ten years on lists its made
         up market men by league at those shares too.
      3) every made up man carries a country (squads, the free agent pool, the market today and ten years on), and no
-        real man is touched: none carries the field, and his flag is the verified map's.
+        real man is touched: none carries the field, and his flag is the verified map's. A youth pad or a boy of
+        the club's own intake is from the club's country (the review's fix: a minor cannot move abroad).
      4) it stays with him: a bought man keeps the market's country through a loan out and back, the summer, a release
         to the pool and a reload; a man I sell to a club keeps it on that club's market listing (the ledger); a boy a
         scout found abroad keeps the trip's country when promoted, spelt as the verified map spells it.
@@ -26,7 +27,7 @@
 
    NEGATIVE CONTROLS (CM_NATIONS_CONTROL), each must turn its section red, and each refuses to run if its edit finds
    nothing to edit: mainstream (1), flat (2), realtouched (3), nocarry, noledger and nopromote (4), noload (5),
-   askoff (6), leak and bloat (7).
+   askoff (6), leak and bloat (7); added by the review's fixes: awayyouth (3).
 
    Run: node scripts/simCmMadeUpNations.mjs      (BASE_ROOT=/tmp/base for the base comparison; SEASONS, LONG)
    Numbers measured on a runner are in the round's report (results-g/finish-1520.md). */
@@ -60,6 +61,8 @@ const CONTROLS = {
   askoff: [{ file: A, from: '  return squad.filter(p => !p.onLoan && shownNation(eraId, p) === country).length;', to: '  return squad.filter(p => !p.onLoan && p.nation === undefined && shownNation(eraId, p) === country).length;' }],
   leak: [{ file: E, from: '    return nation ? { ...p, nation } : p;', to: '    return nation ? { ...p, nation, morale: 71 } : p;' }],
   bloat: [{ file: N, from: "  if (!count || count.known <= 0 || !count.abroad.length) return home;", to: "  return home.padEnd(400, '.');" }],
+  /* Review fixes. */
+  awayyouth: [{ file: E, from: '  if (local) return place.home;\n', to: '' }],
 };
 if (CONTROL && !CONTROLS[CONTROL]) cannot(`CM_NATIONS_CONTROL=${CONTROL} is not a control this harness knows`);
 /* NONATION is the bridge every kit pinned to an older engine composes (scripts/lib/cmNoMadeUpNations1520.mjs): no
@@ -289,7 +292,7 @@ console.log('2b) Ten years on, the market\'s made up men sit at each league\'s r
 
 console.log('3) Every made up man carries a country, and no real man is touched');
 {
-  let madeUpMen = 0, withNation = 0, realMen = 0;
+  let madeUpMen = 0, withNation = 0, realMen = 0, young = 0, youngAway = 0;
   const bad = [];
   const look = (era, p, where) => {
     if (!p) return;
@@ -306,12 +309,21 @@ console.log('3) Every made up man carries a country, and no real man is touched'
   for (const f of fleet) {
     const s = startOf(m, f);
     for (const p of s.squad) look(f.era, p, `${s.clubName} squad`);
+    /* Review fix: a youth pad or a boy of the club's own intake is from the club's country. */
+    const home = m.cm.careerPlace(s)?.home;
+    for (const p of s.squad.filter(x => x.isYouth || x.academyGrad)) {
+      young += 1;
+      if (p.nation !== home) { youngAway += 1; if (youngAway <= 8) bad.push(`${f.era} ${s.clubName}: youth ${p.name} is "${p.nation}", the club is in ${home}`); }
+    }
     for (const p of s.freeAgents ?? []) look(f.era, p, `${s.clubName} free agents`);
     if (f === fleet[0] || f.custom || fleet.indexOf(f) % 7 === 0) for (const l of m.cm.buildMarket(s)) look(f.era, l, `${s.clubName} market (${l.club})`);
   }
   for (const [era, market] of later) for (const l of market) if (l.nation || !l.generated) look(era, l, `ten years on (${l.club})`);
   for (const b of bad) fail(b);
   if (madeUpMen < 500) fail(`only ${madeUpMen} made up men met, the fleet shrank`);
+  if (young < 50) fail(`only ${young} youth pads met on day one, the youth check proves little`);
+  if (youngAway) fail(`${youngAway} of ${young} youth pads are not from their club's country`);
+  else ok(`${young} youth pads on day one, every one from his club's country`);
   ok(`${fleet.length} careers: ${withNation} of ${madeUpMen} made up men carry a country; ${realMen} real men, none carrying the field, each showing the map's flag`);
 }
 

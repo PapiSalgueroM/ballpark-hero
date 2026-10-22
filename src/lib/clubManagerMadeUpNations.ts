@@ -8,8 +8,8 @@
    How it is drawn: from the country of the club where the save first meets him, at the share of home players the
    real squads of that club's league actually have in this world (counted off the save's own world: its squads and
    its verified map), and otherwise from the countries those squads' foreign players come from, in proportion. A
-   youth pad and a boy of the home academy read the same count. A boy a scout found abroad keeps the country of that
-   scouting trip.
+   youth pad and a boy of the home academy are from the club's own country (madeUpNationAt's local rule). A boy a
+   scout found abroad keeps the country of that scouting trip.
 
    The draw is keyed on his name (keyedRng), so it never touches the season's random stream and the same man always
    lands on the same country, a save from before this round included. Pure: no state, no clock. */

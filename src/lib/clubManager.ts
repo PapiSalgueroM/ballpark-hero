@@ -4760,11 +4760,14 @@ const DRAWN_NATIONS = new Map<string, string>();
 
 /** A made up man's country, drawn where the save first meets him (madeUpNations.ts says how). Undefined when there
     is no place to draw from, or the world's squads have not arrived: nothing is stored then, and the next
-    ensureMadeUpNations draws the same one. */
-export function madeUpNationAt(name: string, place: NationPlace | null, eraId: string | undefined): string | undefined {
+    ensureMadeUpNations draws the same one. `local`: a youth pad or a boy of the club's own intake is from the
+    club's country, since FIFA's transfer rules (RSTP Article 19) bar a minor's move abroad; the foreign boys come
+    through the scouting trips. */
+export function madeUpNationAt(name: string, place: NationPlace | null, eraId: string | undefined, local = false): string | undefined {
   if (!place) return undefined;
   const counts = nationCountsAt(place, eraId);
   if (counts === undefined) return undefined;
+  if (local) return place.home;
   const key = `${eraId}|${place.league}|${place.home}|${name}`;
   if (!DRAWN_NATIONS.has(key)) DRAWN_NATIONS.set(key, drawNation(name, place.home, counts));
   return DRAWN_NATIONS.get(key);
@@ -4786,8 +4789,8 @@ function madeUp(p: CMPlayer): boolean {
     Registered in loadCareer and playNextEntry, and run where men are made (startCareer, startNextSeason). */
 export function ensureMadeUpNations(state: CareerState): void {
   const place = careerPlace(state);
-  const stamp = <T extends { name: string; nation?: string }>(p: T): T => {
-    const nation = p.nation === undefined ? madeUpNationAt(p.name, place, state.eraId) : undefined;
+  const stamp = <T extends { name: string; nation?: string; isYouth?: boolean; academyGrad?: boolean }>(p: T): T => {
+    const nation = p.nation === undefined ? madeUpNationAt(p.name, place, state.eraId, !!(p.isYouth || p.academyGrad)) : undefined;
     return nation ? { ...p, nation } : p;
   };
   if (Array.isArray(state.squad)) state.squad = state.squad.map(p => (madeUp(p) ? stamp(p) : p));
@@ -19377,9 +19380,9 @@ export function promoteProspect(career: CareerState, prospectId: string): Career
     ratingSum: 0,
     contractYears: 4,
   };
-  /* Round 1520: a boy a scout found abroad keeps that trip's country; a boy of the home intake is drawn from the
-     club's own country at its league's share (madeUpNationAt). */
-  const nation = pr.source !== 'Academy' && pr.source ? mapSpelling(pr.source) : madeUpNationAt(pr.name, careerPlace(next), next.eraId);
+  /* Round 1520: a boy a scout found abroad keeps that trip's country; a boy of the home intake is from the club's
+     own country (madeUpNationAt's local rule). */
+  const nation = pr.source !== 'Academy' && pr.source ? mapSpelling(pr.source) : madeUpNationAt(pr.name, careerPlace(next), next.eraId, true);
   if (nation) player.nation = nation;
   player.wage = wageFor(player);
   next.squad = [...next.squad, player];

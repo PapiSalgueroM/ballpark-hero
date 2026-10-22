@@ -67,7 +67,7 @@ describe('it stays with him', () => {
     }
     for (const f of s.freeAgents ?? []) if (f.generated) expect(typeof f.nation).toBe('string');
   });
-  it('a scouted boy keeps his trip\'s country when promoted, a home boy is drawn at home', () => {
+  it('a scouted boy keeps his trip\'s country when promoted, a home boy and every youth pad are from the club\'s country', () => {
     let s: CareerState = startCareer('Everton');
     s.academy!.prospects = [
       { id: 'u1', name: 'Unit Scouted', position: 'CM', age: 17, rating: 58, potential: 80, lowGuess: 70, highGuess: 86, source: 'Turkey', flag: '', fee: 0, season: s.season },
@@ -76,7 +76,11 @@ describe('it stays with him', () => {
     s = promoteProspect(s, 'u1')!;
     s = promoteProspect(s, 'u2')!;
     expect(find(s, 'Unit Scouted')?.nation).toBe('Türkiye');
-    expect(find(s, 'Unit Home')?.nation).toBe(madeUpNationAt('Unit Home', careerPlace(s), s.eraId));
+    expect(find(s, 'Unit Home')?.nation).toBe('England');
+    /* A thin squad (CM_PARTIAL) is padded with youth on day one. */
+    const youth = startCareer('Lincoln City').squad.filter(p => p.isYouth);
+    expect(youth.length).toBeGreaterThan(0);
+    for (const p of youth) expect(p.nation).toBe('England');
   });
   it('bought, loaned out and back, released, reloaded', () => {
     let s: CareerState = { ...startCareer('Everton'), budget: 500 };
