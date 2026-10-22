@@ -21,7 +21,7 @@ concurrency:
 
 env:
   BASE_SOURCE: 6d2d7a7d2cb41d25f9c71c24c848af583e804f6a
-  PHASE: ${{ inputs.phase || (github.ref == 'refs/heads/codex/site-privacy-followup-1446' && 'original' || 'green') }}
+  PHASE: ${{ inputs.phase || (github.ref == 'refs/heads/codex/site-privacy-followup-1446' && 'original' || 'final') }}
   CI: '1'
   SIM_NETWORK: offline
   TZ: UTC
