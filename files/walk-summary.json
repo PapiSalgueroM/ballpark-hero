@@ -1,0 +1,20 @@
+[
+ {
+  "tag": "nba-390-rm",
+  "kick": null,
+  "mid": 30,
+  "midLabelled": 9,
+  "market": 26,
+  "battles": 7,
+  "errors": 0
+ },
+ {
+  "tag": "nba-1280-motion",
+  "kick": null,
+  "mid": 30,
+  "midLabelled": 9,
+  "market": 28,
+  "battles": 6,
+  "errors": 0
+ }
+]
