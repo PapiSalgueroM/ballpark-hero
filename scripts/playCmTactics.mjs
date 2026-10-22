@@ -25,6 +25,7 @@
 import path from 'node:path';
 import pw from './lib/playwrightLoader.mjs';
 import { pageSeedOf, seedPages } from './lib/pageSeed.mjs';
+import { answerConsent } from './lib/answerConsent.mjs';
 
 const { chromium } = pw;
 const BASE = process.env.BASE ?? process.env.SWEEP_BASE ?? 'http://localhost:4173';
@@ -61,13 +62,10 @@ async function newCtx(vp) {
   await seedPages(ctx, SEED);
   return ctx;
 }
-/** The privacy banner, answered the most private way it offers: essential only, or its choices saved as they
-    open (everything optional off). */
+/** The privacy banner, answered the most private way it offers, through the shared helper (Round 1535's
+    scripts/lib/answerConsent.mjs: "Reject all", or "Essential only" on an older build). */
 async function dismissConsent(page) {
-  for (const name of [/^\s*Essential only\s*$/, /^\s*(Reject|Decline)( all)?\s*$/i, /^\s*Save choices\s*$/]) {
-    const b = page.locator('button:visible').filter({ hasText: name });
-    if (await visible(b)) { await b.first().click({ timeout: 4000 }).catch(() => {}); await pause(page, 400); return; }
-  }
+  if ((await answerConsent(page, { wait: 1500 })) === 'rejected') await pause(page, 400);
 }
 /** A fresh start: 2026-27, England, the Premier League, Brentford, Skip the Dugout step, to the hub. */
 async function toHub(ctx) {
@@ -84,8 +82,7 @@ async function toHub(ctx) {
   await pause(page, 700);
   await page.locator('button:has-text("Premier League")').first().click();
   await pause(page, 700);
-  const essential = page.locator('button:has-text("Essential only")');
-  if (await essential.count()) { await essential.click(); await pause(page, 400); }
+  await dismissConsent(page);
   await page.locator('button:has-text("Brentford")').first().click();
   await pause(page, 500);
   await dismissConsent(page);

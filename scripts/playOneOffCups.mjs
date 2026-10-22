@@ -44,6 +44,7 @@ import { execFileSync, spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { engineOf, tape } from './lib/worldUclFleet.mjs';
 import { chromium } from './lib/playwrightLoader.mjs';
+import { answerConsent } from './lib/answerConsent.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.PLAY_ONEOFF_CONTROL || '';
@@ -206,7 +207,7 @@ async function open(browser, items, [w, h]) {
   await page.evaluate(entries => { localStorage.clear(); for (const [k, v] of entries) localStorage.setItem(k, v); }, items);
   await page.goto(`${url}/club-manager`, { waitUntil: 'domcontentloaded', timeout: 60000 });
   await page.waitForLoadState('networkidle', { timeout: 15000 }).catch(() => {});
-  await press(page, page.getByRole('button', { name: /^Essential only$/i }), 1500);
+  await answerConsent(page, { wait: 1500, press: b => press(page, b, 1500) });
   await press(page, page.getByRole('button', { name: 'Resume Career', exact: true }), 5000);
   return { ctx, page, errors };
 }
