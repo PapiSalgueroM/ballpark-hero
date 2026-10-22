@@ -1,0 +1,4 @@
+#!serial
+fetch: python3 .rc/x/fetchTailInputs.py /tmp/tail-inputs
+tails: SC_TAIL_PHASE=fixed SC_TAIL_INPUT=/tmp/tail-inputs SC_TAIL_OUT=/tmp/tail-out NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/soccerCareerSaveTails.mjs; s=$?; node -e "const r=require('/tmp/tail-out/report.json');const o=r.rows.filter(x=>x.id.endsWith('-owner'));console.log('owner rows',o.length,'max stored',Math.max(...o.map(x=>x.stored)),'max original',Math.max(...o.map(x=>x.original)));const m=r.rows.filter(x=>x.id.endsWith('-manager'));console.log('manager max stored',Math.max(...m.map(x=>x.stored)))"; exit $s
+tails-original: SC_TAIL_PHASE=fixed SC_TAIL_CONTROL=original SC_TAIL_INPUT=/tmp/tail-inputs SC_TAIL_OUT=/tmp/tail-ctl NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/soccerCareerSaveTails.mjs
