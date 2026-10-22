@@ -1,0 +1,7 @@
+uscswap exit=1 simOneOffCups: control uscswap FIRED (48 failures, all its own: 1 usc season one: Arsenal (now) seed 1 nocoach: holds Aston Villa and PSG, the 2026 edition's publishers name PSG and Aston Villa)
+italyall exit=1 simOneOffCups: control italyall FIRED (111 failures, all its own: 1 row: Juventus (now) seed 1 nocoach at s1-rollover: holds ita-2026 but ita-2026 is no row of the game)
+nodated exit=1 simOneOffCups: control nodated FIRED (26 failures, all its own: 1 usc season one: Arsenal (now) seed 1 nocoach: the night is 2027-01-06, its edition was 2026-08-12)
+firstedition exit=1 simOneOffCups: control firstedition FIRED (357 failures, all its own: 1 venue: ger-2026: a new career at Augsburg holds unfinished, not a dated edition to read)
+carryseen exit=1 simOneOffCups: control carryseen FIRED (9 failures, all its own: 1 never falls: Chelsea (now) seed 1 nocoach at s1-join: 0 nights shown after 1)
+evalundated exit=1 simOneOffCups: control evalundated FIRED (6 failures, all its own: 1 venue: Augsburg (now) at its start: ger-2026's 2026 edition is played at Bayern Munich's ground, its ledger edition at Borussia Dor
+nocarryusc exit=1 simOneOffCups: control nocarryusc FIRED (17 failures, all its own: 1 never falls: Chelsea (now) seed 1 nocoach at s1-join: 0 UEFA Super Cup nights shown after 1)

@@ -1,0 +1,2 @@
+twopub exit=1 simOneOffCups: control twopub FIRED (1 failures, all its own: ger-2026 decider stands on 1 host (dfl.de), not two publishers)
+pairing exit=1 simOneOffCups: control pairing FIRED (2 failures, all its own: cup-seriea-2025-26: the constant names Roma, the ledger Lazio)

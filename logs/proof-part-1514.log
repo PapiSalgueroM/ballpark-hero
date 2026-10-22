@@ -1,0 +1,6 @@
+  FAIL Real Madrid (now, participant, nocoach, seed 3, 2 seasons) at s1-rolled-reload: an old save loads otherwise, squad: base ...ntial":63,"role":"prospect","lastTen":[]}]... tree ...ntial":63,"role":"prospect","lastTen":[],"nation":"Spain"}]...
+  FAIL Real Madrid (now, participant, nocoach, seed 3, 2 seasons) at s2-reload: an old save loads otherwise, squad: base ...rospect","lastTen":[0,0,0,0,0,0,0,0,0,0]}]... tree ...rospect","lastTen":[0,0,0,0,0,0,0,0,0,0],"nation":"Spain"}]...
+  FAIL Real Madrid (now, participant, nocoach, seed 3, 2 seasons) at step 0 start: the state differs, freeAgents: base ...ed":true,"since":1,"reason":"unattached"},{"name":"Samir Bardhi","position":"LWB... tree ...ed":true,"since":1,"reason":"unattac
+journeys 60, steps compared 6490, tree journeys whose save carried worldComps 29, evaluations on the live state 6490, 406 s
+old saves (written by 92290f81): 180 loaded by both engines, 0 gained a watched Champions League at load, 158 did not, 22 already followed one and kept it, 0 gained a Europa League, 0 against the rule
+proofWorldUclFleet: RED, 240 journeys differ from 92290f81 (of 60)

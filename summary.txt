@@ -1,0 +1,14 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+units-1514 exit=0 11s |    Duration  10.55s (transform 3.69s, setup 907ms, collect 8.00s, tests 11.65s, environment 3.10s, prepare 961ms)
+oc-s2 exit=0 506s | simOneOffCups: green, 6458 checks (506 s)
+oc-s046 exit=0 86s | simOneOffCups: green, 723 checks (85 s)
+ctl0-1514 exit=0 1s | pairing exit=1 simOneOffCups: control pairing FIRED (2 failures, all its own: cup-seriea-2025-26: the constant names Roma, the ledger Lazio)
+ctl1-1514 exit=0 589s | nocarryusc exit=1 simOneOffCups: control nocarryusc FIRED (17 failures, all its own: 1 never falls: Chelsea (now) seed 1 nocoach at s1-join: 0 UEFA Super Cup nights shown
+walk-nousctile exit=0 199s | playOneOffCups: control nousctile FIRED (8 findings of "UEFA Super Cup tile", 8 in all)
+oc-s157 exit=0 1575s | simOneOffCups: green, 248113 checks (1575 s)
+oc-s3 exit=0 1581s | simOneOffCups: green, 15353 checks (1581 s)
+proof-hoff-1514 exit=1 120s | proofWorldUclFleet: RED, 10 journeys differ from 92290f81 (of 10)
+savesize-base-1514 exit=0 96s | simClubManagerSaveSize: all sections green
+dashscan-1514 exit=0 1s | since B1514: added lines with an en or em dash 0, commit message lines with one 0
+proof-part-1514 exit=1 408s | proofWorldUclFleet: RED, 240 journeys differ from 92290f81 (of 60)
+proof-watch-1514 exit=1 939s | proof exit 1, differing journeys 130 (10 expected), of them not Hoffenheim 120 (0 expected)
