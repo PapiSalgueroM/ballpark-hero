@@ -1537,6 +1537,10 @@ describe('The pitch part on real feeds', () => {
    bands are the measured numbers with their headroom, written beside each. */
 const totals1521 = (pick: (t: Tally1521) => number) => sum(buildMaterial().looks.map(pick));
 const R10_FLOOR = { ground: 4000, air: 400, cross: 250, throw: 400 } as const;
+/* The review of 2026-10-22: the share of open play passes that go up (the long ball line, LONG_PASS metres on a 105 by
+   68 pitch) is held in a band, not only by floors, so the round's own two earlier defects (the metres swapped across
+   and along, and the line back at 32) cannot come back green. Measured on a GitHub runner over the five seeds: (to be filled from r1521-fx5). */
+const R10_AIR = { lo: 0.17, hi: 0.255 } as const;
 /* R12, set from the five seeds on a GitHub runner at the shares in scene.ts's BUILD (r1521-sw1, cfgD; the bars sit
    under the least of the five): forward over back at least 2.14 times in every arm (defensive seed 1), all passes
    attacking over defensive 0.035 to 0.082, with a line ahead each step 0.105 to 0.157, resets per possession each
@@ -1556,6 +1560,9 @@ describe('Round 1521: the live match looks like football', () => {
     const q = (p: number) => (metres[Math.floor(p * (metres.length - 1))] ?? NaN).toFixed(1);
     console.log(`[1521 R10] passes drawn: on the grass ${passes('ground')}, in the air ${passes('air')}, crosses ${passes('cross')}, throws ${passes('throw')}, dead balls placed ${passes('placed')}; open play passes in the air ${(passes('air') / Math.max(1, passes('air') + passes('ground'))).toFixed(3)}, their length in metres p25 ${q(0.25)}, p50 ${q(0.5)}, p75 ${q(0.75)}, p90 ${q(0.9)}; on the grass but lifted ${totals1521(t => t.liftedGround)}, in the air but never rose ${totals1521(t => t.flatAerial)}, not landing at their man ${totals1521(t => t.landOffenders)}; chances read: first halves ${totals1521(t => t.shots.first)}, second halves ${totals1521(t => t.shots.second)}, offenders ${totals1521(t => t.shotOffenders)}${m.looks.flatMap(t => t.shotExamples).slice(0, 3).map(s => ` | ${s}`).join('')}`);
     for (const k of ['ground', 'air', 'cross', 'throw'] as const) expect(passes(k), k).toBeGreaterThan(R10_FLOOR[k]);
+    const airShare = (t: Tally1521) => t.passes.air / Math.max(1, t.passes.air + t.passes.ground);
+    console.log(`[1521 R10 air] open play passes in the air per seed ${fixed(m.looks.map(airShare), 3)}, band ${R10_AIR.lo} to ${R10_AIR.hi}`);
+    for (const t of m.looks) { expect(airShare(t)).toBeGreaterThan(R10_AIR.lo); expect(airShare(t)).toBeLessThan(R10_AIR.hi); }
     expect(totals1521(t => t.liftedGround)).toBe(0);
     expect(totals1521(t => t.flatAerial)).toBe(0);
     expect(totals1521(t => t.landOffenders)).toBe(0);
