@@ -588,6 +588,19 @@
       files alone taken back it stays red at 47 (digest-revert). Written
       with --part=modern,eras,pure --write on 20aaf587 itself (r1520-fx-c,
       line digest-write, 191 lines changed), then run green whole there.
+      The closing check's fixer took it again after merging main 6d2d7a7d
+      (Release BO: Round 1516's UEFA Super Cup from season one, and main's
+      own retake 889e1b38 for the shirt sales) as 21f8a5ee, where the merge
+      took main's file. Against main's file 47 entries move (start, whole
+      and wholeNext in all 47, objectivesNext 31, objectives and summary
+      21, s2_whole 10, s2_objectives 7); pure held 48/48. Attribution on a
+      GitHub runner (remote check r1520-cc-dg): the merged head reads 47
+      failures (digest-head); with this round's three engine files
+      (clubManager.ts, clubManagerBoardAsks.ts, clubManagerEras.ts) taken
+      back to 6d2d7a7d main's file is green whole (digest-revert), so the
+      round is the only cause. Written with --part=modern,eras,pure --write
+      on 21f8a5ee itself (line digest-write, 231 lines changed, blob
+      8d27ddb7), then run green whole on the same runner.
    2. DIGEST, ERAS (hard). The same for every league of every historic era,
       one career each.
    3. DIGEST, PURE (hard). For every modern and era league: the drop count,
