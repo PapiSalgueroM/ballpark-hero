@@ -1,0 +1,2121 @@
+MUT APPLIED hookPred in src/hooks/useConquest.ts (anchor seen 1 time(s), first replaced)
+FAIL [3] nfl: the hook's never on market set holds 0 names, the ledger and the legends tables give 42
+FAIL [3] nfl early KC+BUF+PHI: the market offers Derrick Thomas, a retired man, as a free agent
+FAIL [3] nfl early KC+BUF+PHI: the market offers Bruce Smith, a retired man, as a free agent
+FAIL [3] nfl early KC+BUF+PHI: the market offers Reggie White, a retired man, as a free agent
+FAIL [3] nfl early KC+BUF+PHI: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl early KC+BUF+PHI: the market deals 34 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early KC+BUF+PHI: the fallen men in the Sign a Player list are not the best 29 on the market
+FAIL [3] nfl early KC+BUF+PHI: deals Derrick Thomas with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early KC+BUF+PHI: deals Bruce Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early KC+BUF+PHI: deals Reggie White with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early BUF+PHI+BAL: the market offers Bruce Smith, a retired man, as a free agent
+FAIL [3] nfl early BUF+PHI+BAL: the market offers Reggie White, a retired man, as a free agent
+FAIL [3] nfl early BUF+PHI+BAL: the market offers Ray Lewis, a retired man, as a free agent
+FAIL [3] nfl early BUF+PHI+BAL: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl early BUF+PHI+BAL: the market deals 34 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early BUF+PHI+BAL: the fallen men in the Sign a Player list are not the best 29 on the market
+FAIL [3] nfl early BUF+PHI+BAL: deals Bruce Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early BUF+PHI+BAL: deals Reggie White with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early BUF+PHI+BAL: deals Ray Lewis with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early PHI+BAL+SF: the market offers Reggie White, a retired man, as a free agent
+FAIL [3] nfl early PHI+BAL+SF: the market offers Ray Lewis, a retired man, as a free agent
+FAIL [3] nfl early PHI+BAL+SF: the market offers Jerry Rice, a retired man, as a free agent
+FAIL [3] nfl early PHI+BAL+SF: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl early PHI+BAL+SF: the market deals 34 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early PHI+BAL+SF: the fallen men in the Sign a Player list are not the best 29 on the market
+FAIL [3] nfl early PHI+BAL+SF: deals Reggie White with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early PHI+BAL+SF: deals Ray Lewis with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early PHI+BAL+SF: deals Jerry Rice with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early BAL+SF+DAL: the market offers Ray Lewis, a retired man, as a free agent
+FAIL [3] nfl early BAL+SF+DAL: the market offers Jerry Rice, a retired man, as a free agent
+FAIL [3] nfl early BAL+SF+DAL: the market offers Emmitt Smith, a retired man, as a free agent
+FAIL [3] nfl early BAL+SF+DAL: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl early BAL+SF+DAL: the market deals 34 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early BAL+SF+DAL: the fallen men in the Sign a Player list are not the best 29 on the market
+FAIL [3] nfl early BAL+SF+DAL: deals Ray Lewis with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early BAL+SF+DAL: deals Jerry Rice with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early BAL+SF+DAL: deals Emmitt Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early SF+DAL+DET: the market offers Jerry Rice, a retired man, as a free agent
+FAIL [3] nfl early SF+DAL+DET: the market offers Emmitt Smith, a retired man, as a free agent
+FAIL [3] nfl early SF+DAL+DET: the market offers Barry Sanders, a retired man, as a free agent
+FAIL [3] nfl early SF+DAL+DET: the market deals 33 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early SF+DAL+DET: the fallen men in the Sign a Player list are not the best 30 on the market
+FAIL [3] nfl early SF+DAL+DET: deals Jerry Rice with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early SF+DAL+DET: deals Emmitt Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early SF+DAL+DET: deals Barry Sanders with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early DAL+DET+CIN: the market offers Emmitt Smith, a retired man, as a free agent
+FAIL [3] nfl early DAL+DET+CIN: the market offers Barry Sanders, a retired man, as a free agent
+FAIL [3] nfl early DAL+DET+CIN: the market offers Chad Johnson, a retired man, as a free agent
+FAIL [3] nfl early DAL+DET+CIN: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl early DAL+DET+CIN: the market deals 34 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early DAL+DET+CIN: the fallen men in the Sign a Player list are not the best 29 on the market
+FAIL [3] nfl early DAL+DET+CIN: deals Emmitt Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early DAL+DET+CIN: deals Barry Sanders with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early DAL+DET+CIN: deals Chad Johnson with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early DET+CIN+MIA: the market offers Barry Sanders, a retired man, as a free agent
+FAIL [3] nfl early DET+CIN+MIA: the market offers Chad Johnson, a retired man, as a free agent
+FAIL [3] nfl early DET+CIN+MIA: the market offers Dan Marino, a retired man, as a free agent
+FAIL [3] nfl early DET+CIN+MIA: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl early DET+CIN+MIA: the market deals 34 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early DET+CIN+MIA: the fallen men in the Sign a Player list are not the best 29 on the market
+FAIL [3] nfl early DET+CIN+MIA: deals Barry Sanders with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early DET+CIN+MIA: deals Chad Johnson with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early DET+CIN+MIA: deals Dan Marino with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early CIN+MIA+NYJ: the market offers Chad Johnson, a retired man, as a free agent
+FAIL [3] nfl early CIN+MIA+NYJ: the market offers Dan Marino, a retired man, as a free agent
+FAIL [3] nfl early CIN+MIA+NYJ: the market offers Joe Namath, a retired man, as a free agent
+FAIL [3] nfl early CIN+MIA+NYJ: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl early CIN+MIA+NYJ: the market deals 34 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early CIN+MIA+NYJ: the fallen men in the Sign a Player list are not the best 29 on the market
+FAIL [3] nfl early CIN+MIA+NYJ: deals Chad Johnson with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early CIN+MIA+NYJ: deals Dan Marino with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early CIN+MIA+NYJ: deals Joe Namath with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early MIA+NYJ+CLE: the market offers Dan Marino, a retired man, as a free agent
+FAIL [3] nfl early MIA+NYJ+CLE: the market offers Joe Namath, a retired man, as a free agent
+FAIL [3] nfl early MIA+NYJ+CLE: the market offers Jim Brown, a retired man, as a free agent
+FAIL [3] nfl early MIA+NYJ+CLE: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl early MIA+NYJ+CLE: the market deals 34 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early MIA+NYJ+CLE: the fallen men in the Sign a Player list are not the best 29 on the market
+FAIL [3] nfl early MIA+NYJ+CLE: deals Dan Marino with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early MIA+NYJ+CLE: deals Joe Namath with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early MIA+NYJ+CLE: deals Jim Brown with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early NYJ+CLE+PIT: the market offers Joe Namath, a retired man, as a free agent
+FAIL [3] nfl early NYJ+CLE+PIT: the market offers Jim Brown, a retired man, as a free agent
+FAIL [3] nfl early NYJ+CLE+PIT: the market offers Terry Bradshaw, a retired man, as a free agent
+FAIL [3] nfl early NYJ+CLE+PIT: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl early NYJ+CLE+PIT: the market deals 34 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early NYJ+CLE+PIT: the fallen men in the Sign a Player list are not the best 29 on the market
+FAIL [3] nfl early NYJ+CLE+PIT: deals Joe Namath with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early NYJ+CLE+PIT: deals Jim Brown with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early NYJ+CLE+PIT: deals Terry Bradshaw with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early CLE+PIT+HOU: the market offers Jim Brown, a retired man, as a free agent
+FAIL [3] nfl early CLE+PIT+HOU: the market offers Terry Bradshaw, a retired man, as a free agent
+FAIL [3] nfl early CLE+PIT+HOU: the market offers JJ Watt, a retired man, as a free agent
+FAIL [3] nfl early CLE+PIT+HOU: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl early CLE+PIT+HOU: the market deals 34 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early CLE+PIT+HOU: the fallen men in the Sign a Player list are not the best 29 on the market
+FAIL [3] nfl early CLE+PIT+HOU: deals Jim Brown with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early CLE+PIT+HOU: deals Terry Bradshaw with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early CLE+PIT+HOU: deals JJ Watt with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early PIT+HOU+JAX: the market offers Terry Bradshaw, a retired man, as a free agent
+FAIL [3] nfl early PIT+HOU+JAX: the market offers JJ Watt, a retired man, as a free agent
+FAIL [3] nfl early PIT+HOU+JAX: the market offers Tony Boselli, a retired man, as a free agent
+FAIL [3] nfl early PIT+HOU+JAX: the market deals 33 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early PIT+HOU+JAX: the fallen men in the Sign a Player list are not the best 30 on the market
+FAIL [3] nfl early PIT+HOU+JAX: deals Terry Bradshaw with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early PIT+HOU+JAX: deals JJ Watt with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early PIT+HOU+JAX: deals Tony Boselli with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early HOU+JAX+TEN: the market offers JJ Watt, a retired man, as a free agent
+FAIL [3] nfl early HOU+JAX+TEN: the market offers Tony Boselli, a retired man, as a free agent
+FAIL [3] nfl early HOU+JAX+TEN: the market offers Steve McNair, a retired man, as a free agent
+FAIL [3] nfl early HOU+JAX+TEN: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl early HOU+JAX+TEN: the market deals 34 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early HOU+JAX+TEN: the fallen men in the Sign a Player list are not the best 29 on the market
+FAIL [3] nfl early HOU+JAX+TEN: deals JJ Watt with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early HOU+JAX+TEN: deals Tony Boselli with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early HOU+JAX+TEN: deals Steve McNair with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early JAX+TEN+IND: the market offers Tony Boselli, a retired man, as a free agent
+FAIL [3] nfl early JAX+TEN+IND: the market offers Steve McNair, a retired man, as a free agent
+FAIL [3] nfl early JAX+TEN+IND: the market offers Peyton Manning, a retired man, as a free agent
+FAIL [3] nfl early JAX+TEN+IND: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl early JAX+TEN+IND: the market deals 34 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early JAX+TEN+IND: the fallen men in the Sign a Player list are not the best 29 on the market
+FAIL [3] nfl early JAX+TEN+IND: deals Tony Boselli with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early JAX+TEN+IND: deals Steve McNair with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early JAX+TEN+IND: deals Peyton Manning with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early TEN+IND+NE: the market offers Steve McNair, a retired man, as a free agent
+FAIL [3] nfl early TEN+IND+NE: the market offers Peyton Manning, a retired man, as a free agent
+FAIL [3] nfl early TEN+IND+NE: the market offers Tom Brady, a retired man, as a free agent
+FAIL [3] nfl early TEN+IND+NE: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl early TEN+IND+NE: the market deals 34 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early TEN+IND+NE: the fallen men in the Sign a Player list are not the best 29 on the market
+FAIL [3] nfl early TEN+IND+NE: deals Steve McNair with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early TEN+IND+NE: deals Peyton Manning with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early TEN+IND+NE: deals Tom Brady with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early IND+NE+LV: the market offers Peyton Manning, a retired man, as a free agent
+FAIL [3] nfl early IND+NE+LV: the market offers Tom Brady, a retired man, as a free agent
+FAIL [3] nfl early IND+NE+LV: the market offers Bo Jackson, a retired man, as a free agent
+FAIL [3] nfl early IND+NE+LV: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl early IND+NE+LV: the market deals 34 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early IND+NE+LV: the fallen men in the Sign a Player list are not the best 29 on the market
+FAIL [3] nfl early IND+NE+LV: deals Peyton Manning with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early IND+NE+LV: deals Tom Brady with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early IND+NE+LV: deals Bo Jackson with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early NE+LV+DEN: the market offers Tom Brady, a retired man, as a free agent
+FAIL [3] nfl early NE+LV+DEN: the market offers Bo Jackson, a retired man, as a free agent
+FAIL [3] nfl early NE+LV+DEN: the market offers John Elway, a retired man, as a free agent
+FAIL [3] nfl early NE+LV+DEN: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl early NE+LV+DEN: the market deals 34 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early NE+LV+DEN: the fallen men in the Sign a Player list are not the best 29 on the market
+FAIL [3] nfl early NE+LV+DEN: deals Tom Brady with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early NE+LV+DEN: deals Bo Jackson with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early NE+LV+DEN: deals John Elway with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early LV+DEN+LAC: the market offers Bo Jackson, a retired man, as a free agent
+FAIL [3] nfl early LV+DEN+LAC: the market offers John Elway, a retired man, as a free agent
+FAIL [3] nfl early LV+DEN+LAC: the market offers LaDainian Tomlinson, a retired man, as a free agent
+FAIL [3] nfl early LV+DEN+LAC: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl early LV+DEN+LAC: the market deals 34 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early LV+DEN+LAC: the fallen men in the Sign a Player list are not the best 29 on the market
+FAIL [3] nfl early LV+DEN+LAC: deals Bo Jackson with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early LV+DEN+LAC: deals John Elway with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early LV+DEN+LAC: deals LaDainian Tomlinson with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early DEN+LAC+GB: the market offers John Elway, a retired man, as a free agent
+FAIL [3] nfl early DEN+LAC+GB: the market offers LaDainian Tomlinson, a retired man, as a free agent
+FAIL [3] nfl early DEN+LAC+GB: the market offers Brett Favre, a retired man, as a free agent
+FAIL [3] nfl early DEN+LAC+GB: the market deals 33 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early DEN+LAC+GB: the fallen men in the Sign a Player list are not the best 30 on the market
+FAIL [3] nfl early DEN+LAC+GB: deals John Elway with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early DEN+LAC+GB: deals LaDainian Tomlinson with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early DEN+LAC+GB: deals Brett Favre with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early LAC+GB+CHI: the market offers LaDainian Tomlinson, a retired man, as a free agent
+FAIL [3] nfl early LAC+GB+CHI: the market offers Brett Favre, a retired man, as a free agent
+FAIL [3] nfl early LAC+GB+CHI: the market offers Walter Payton, a retired man, as a free agent
+FAIL [3] nfl early LAC+GB+CHI: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl early LAC+GB+CHI: the market deals 34 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early LAC+GB+CHI: the fallen men in the Sign a Player list are not the best 29 on the market
+FAIL [3] nfl early LAC+GB+CHI: deals LaDainian Tomlinson with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early LAC+GB+CHI: deals Brett Favre with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early LAC+GB+CHI: deals Walter Payton with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early GB+CHI+MIN: the market offers Brett Favre, a retired man, as a free agent
+FAIL [3] nfl early GB+CHI+MIN: the market offers Walter Payton, a retired man, as a free agent
+FAIL [3] nfl early GB+CHI+MIN: the market offers Adrian Peterson, a retired man, as a free agent
+FAIL [3] nfl early GB+CHI+MIN: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl early GB+CHI+MIN: the market deals 34 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early GB+CHI+MIN: the fallen men in the Sign a Player list are not the best 29 on the market
+FAIL [3] nfl early GB+CHI+MIN: deals Brett Favre with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early GB+CHI+MIN: deals Walter Payton with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early GB+CHI+MIN: deals Adrian Peterson with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early CHI+MIN+LAR: the market offers Walter Payton, a retired man, as a free agent
+FAIL [3] nfl early CHI+MIN+LAR: the market offers Adrian Peterson, a retired man, as a free agent
+FAIL [3] nfl early CHI+MIN+LAR: the market offers Marshall Faulk, a retired man, as a free agent
+FAIL [3] nfl early CHI+MIN+LAR: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl early CHI+MIN+LAR: the market deals 34 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early CHI+MIN+LAR: the fallen men in the Sign a Player list are not the best 29 on the market
+FAIL [3] nfl early CHI+MIN+LAR: deals Walter Payton with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early CHI+MIN+LAR: deals Adrian Peterson with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early CHI+MIN+LAR: deals Marshall Faulk with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early MIN+LAR+SEA: the market offers Adrian Peterson, a retired man, as a free agent
+FAIL [3] nfl early MIN+LAR+SEA: the market offers Marshall Faulk, a retired man, as a free agent
+FAIL [3] nfl early MIN+LAR+SEA: the market offers Marshawn Lynch, a retired man, as a free agent
+FAIL [3] nfl early MIN+LAR+SEA: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl early MIN+LAR+SEA: the market deals 34 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early MIN+LAR+SEA: the fallen men in the Sign a Player list are not the best 29 on the market
+FAIL [3] nfl early MIN+LAR+SEA: deals Adrian Peterson with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early MIN+LAR+SEA: deals Marshall Faulk with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early MIN+LAR+SEA: deals Marshawn Lynch with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early LAR+SEA+ARI: the market offers Marshall Faulk, a retired man, as a free agent
+FAIL [3] nfl early LAR+SEA+ARI: the market offers Marshawn Lynch, a retired man, as a free agent
+FAIL [3] nfl early LAR+SEA+ARI: the market offers Larry Fitzgerald, a retired man, as a free agent
+FAIL [3] nfl early LAR+SEA+ARI: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl early LAR+SEA+ARI: the market deals 34 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early LAR+SEA+ARI: the fallen men in the Sign a Player list are not the best 29 on the market
+FAIL [3] nfl early LAR+SEA+ARI: deals Marshall Faulk with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early LAR+SEA+ARI: deals Marshawn Lynch with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early LAR+SEA+ARI: deals Larry Fitzgerald with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early SEA+ARI+NO: the market offers Marshawn Lynch, a retired man, as a free agent
+FAIL [3] nfl early SEA+ARI+NO: the market offers Larry Fitzgerald, a retired man, as a free agent
+FAIL [3] nfl early SEA+ARI+NO: the market offers Drew Brees, a retired man, as a free agent
+FAIL [3] nfl early SEA+ARI+NO: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl early SEA+ARI+NO: the market deals 34 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early SEA+ARI+NO: the fallen men in the Sign a Player list are not the best 29 on the market
+FAIL [3] nfl early SEA+ARI+NO: deals Marshawn Lynch with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early SEA+ARI+NO: deals Larry Fitzgerald with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early SEA+ARI+NO: deals Drew Brees with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early ARI+NO+TB: the market offers Larry Fitzgerald, a retired man, as a free agent
+FAIL [3] nfl early ARI+NO+TB: the market offers Drew Brees, a retired man, as a free agent
+FAIL [3] nfl early ARI+NO+TB: the market offers Derrick Brooks, a retired man, as a free agent
+FAIL [3] nfl early ARI+NO+TB: the market deals 33 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early ARI+NO+TB: the fallen men in the Sign a Player list are not the best 30 on the market
+FAIL [3] nfl early ARI+NO+TB: deals Larry Fitzgerald with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early ARI+NO+TB: deals Drew Brees with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early ARI+NO+TB: deals Derrick Brooks with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early NO+TB+ATL: the market offers Drew Brees, a retired man, as a free agent
+FAIL [3] nfl early NO+TB+ATL: the market offers Derrick Brooks, a retired man, as a free agent
+FAIL [3] nfl early NO+TB+ATL: the market offers Julio Jones, a retired man, as a free agent
+FAIL [3] nfl early NO+TB+ATL: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl early NO+TB+ATL: the market deals 34 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early NO+TB+ATL: the fallen men in the Sign a Player list are not the best 29 on the market
+FAIL [3] nfl early NO+TB+ATL: deals Drew Brees with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early NO+TB+ATL: deals Derrick Brooks with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early NO+TB+ATL: deals Julio Jones with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early TB+ATL+CAR: the market offers Derrick Brooks, a retired man, as a free agent
+FAIL [3] nfl early TB+ATL+CAR: the market offers Julio Jones, a retired man, as a free agent
+FAIL [3] nfl early TB+ATL+CAR: the market offers Cam Newton, a retired man, as a free agent
+FAIL [3] nfl early TB+ATL+CAR: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl early TB+ATL+CAR: the market deals 34 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early TB+ATL+CAR: the fallen men in the Sign a Player list are not the best 29 on the market
+FAIL [3] nfl early TB+ATL+CAR: deals Derrick Brooks with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early TB+ATL+CAR: deals Julio Jones with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early TB+ATL+CAR: deals Cam Newton with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early ATL+CAR+NYG: the market offers Julio Jones, a retired man, as a free agent
+FAIL [3] nfl early ATL+CAR+NYG: the market offers Cam Newton, a retired man, as a free agent
+FAIL [3] nfl early ATL+CAR+NYG: the market offers Lawrence Taylor, a retired man, as a free agent
+FAIL [3] nfl early ATL+CAR+NYG: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl early ATL+CAR+NYG: the market deals 34 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early ATL+CAR+NYG: the fallen men in the Sign a Player list are not the best 29 on the market
+FAIL [3] nfl early ATL+CAR+NYG: deals Julio Jones with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early ATL+CAR+NYG: deals Cam Newton with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early ATL+CAR+NYG: deals Lawrence Taylor with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early CAR+NYG+WAS: the market offers Cam Newton, a retired man, as a free agent
+FAIL [3] nfl early CAR+NYG+WAS: the market offers Lawrence Taylor, a retired man, as a free agent
+FAIL [3] nfl early CAR+NYG+WAS: the market offers Darrell Green, a retired man, as a free agent
+FAIL [3] nfl early CAR+NYG+WAS: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl early CAR+NYG+WAS: the market deals 34 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early CAR+NYG+WAS: the fallen men in the Sign a Player list are not the best 29 on the market
+FAIL [3] nfl early CAR+NYG+WAS: deals Cam Newton with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early CAR+NYG+WAS: deals Lawrence Taylor with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early CAR+NYG+WAS: deals Darrell Green with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early NYG+WAS+KC: the market offers Lawrence Taylor, a retired man, as a free agent
+FAIL [3] nfl early NYG+WAS+KC: the market offers Darrell Green, a retired man, as a free agent
+FAIL [3] nfl early NYG+WAS+KC: the market offers Derrick Thomas, a retired man, as a free agent
+FAIL [3] nfl early NYG+WAS+KC: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl early NYG+WAS+KC: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl early NYG+WAS+KC: the market deals 35 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early NYG+WAS+KC: the fallen men in the Sign a Player list are not the best 28 on the market
+FAIL [3] nfl early NYG+WAS+KC: deals Lawrence Taylor with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early NYG+WAS+KC: deals Darrell Green with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early NYG+WAS+KC: deals Derrick Thomas with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early WAS+KC+BUF: the market offers Darrell Green, a retired man, as a free agent
+FAIL [3] nfl early WAS+KC+BUF: the market offers Derrick Thomas, a retired man, as a free agent
+FAIL [3] nfl early WAS+KC+BUF: the market offers Bruce Smith, a retired man, as a free agent
+FAIL [3] nfl early WAS+KC+BUF: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl early WAS+KC+BUF: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl early WAS+KC+BUF: the market deals 35 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early WAS+KC+BUF: the fallen men in the Sign a Player list are not the best 28 on the market
+FAIL [3] nfl early WAS+KC+BUF: deals Darrell Green with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early WAS+KC+BUF: deals Derrick Thomas with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl early WAS+KC+BUF: deals Bruce Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end KC: the market offers Bruce Smith, a retired man, as a free agent
+FAIL [3] nfl end KC: the market offers Reggie White, a retired man, as a free agent
+FAIL [3] nfl end KC: the market offers Ray Lewis, a retired man, as a free agent
+FAIL [3] nfl end KC: the market offers Jerry Rice, a retired man, as a free agent
+FAIL [3] nfl end KC: the market offers Emmitt Smith, a retired man, as a free agent
+FAIL [3] nfl end KC: the market offers Barry Sanders, a retired man, as a free agent
+FAIL [3] nfl end KC: the market offers Chad Johnson, a retired man, as a free agent
+FAIL [3] nfl end KC: the market offers Dan Marino, a retired man, as a free agent
+FAIL [3] nfl end KC: the market offers Joe Namath, a retired man, as a free agent
+FAIL [3] nfl end KC: the market offers Jim Brown, a retired man, as a free agent
+FAIL [3] nfl end KC: the market offers Terry Bradshaw, a retired man, as a free agent
+FAIL [3] nfl end KC: the market offers JJ Watt, a retired man, as a free agent
+FAIL [3] nfl end KC: the market offers Tony Boselli, a retired man, as a free agent
+FAIL [3] nfl end KC: the market offers Steve McNair, a retired man, as a free agent
+FAIL [3] nfl end KC: the market offers Peyton Manning, a retired man, as a free agent
+FAIL [3] nfl end KC: the market offers Tom Brady, a retired man, as a free agent
+FAIL [3] nfl end KC: the market offers Bo Jackson, a retired man, as a free agent
+FAIL [3] nfl end KC: the market offers John Elway, a retired man, as a free agent
+FAIL [3] nfl end KC: the market offers LaDainian Tomlinson, a retired man, as a free agent
+FAIL [3] nfl end KC: the market offers Brett Favre, a retired man, as a free agent
+FAIL [3] nfl end KC: the market offers Walter Payton, a retired man, as a free agent
+FAIL [3] nfl end KC: the market offers Adrian Peterson, a retired man, as a free agent
+FAIL [3] nfl end KC: the market offers Marshall Faulk, a retired man, as a free agent
+FAIL [3] nfl end KC: the market offers Marshawn Lynch, a retired man, as a free agent
+FAIL [3] nfl end KC: the market offers Larry Fitzgerald, a retired man, as a free agent
+FAIL [3] nfl end KC: the market offers Drew Brees, a retired man, as a free agent
+FAIL [3] nfl end KC: the market offers Derrick Brooks, a retired man, as a free agent
+FAIL [3] nfl end KC: the market offers Julio Jones, a retired man, as a free agent
+FAIL [3] nfl end KC: the market offers Cam Newton, a retired man, as a free agent
+FAIL [3] nfl end KC: the market offers Lawrence Taylor, a retired man, as a free agent
+FAIL [3] nfl end KC: the market offers Darrell Green, a retired man, as a free agent
+FAIL [3] nfl end KC: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end KC: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end KC: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end KC: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end KC: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end KC: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end KC: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end KC: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end KC: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end KC: the market deals 350 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end KC: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nfl end KC: deals Bruce Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end KC: deals Reggie White with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end KC: deals Ray Lewis with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end KC: deals Jerry Rice with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end KC: deals Emmitt Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end KC: deals Barry Sanders with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end KC: deals Chad Johnson with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end KC: deals Dan Marino with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end KC: deals Joe Namath with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end KC: deals Jim Brown with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end KC: deals Terry Bradshaw with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end KC: deals JJ Watt with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end KC: deals Tony Boselli with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end KC: deals Steve McNair with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end KC: deals Peyton Manning with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end BUF: the market offers Derrick Thomas, a retired man, as a free agent
+FAIL [3] nfl end BUF: the market offers Reggie White, a retired man, as a free agent
+FAIL [3] nfl end BUF: the market offers Ray Lewis, a retired man, as a free agent
+FAIL [3] nfl end BUF: the market offers Jerry Rice, a retired man, as a free agent
+FAIL [3] nfl end BUF: the market offers Emmitt Smith, a retired man, as a free agent
+FAIL [3] nfl end BUF: the market offers Barry Sanders, a retired man, as a free agent
+FAIL [3] nfl end BUF: the market offers Chad Johnson, a retired man, as a free agent
+FAIL [3] nfl end BUF: the market offers Dan Marino, a retired man, as a free agent
+FAIL [3] nfl end BUF: the market offers Joe Namath, a retired man, as a free agent
+FAIL [3] nfl end BUF: the market offers Jim Brown, a retired man, as a free agent
+FAIL [3] nfl end BUF: the market offers Terry Bradshaw, a retired man, as a free agent
+FAIL [3] nfl end BUF: the market offers JJ Watt, a retired man, as a free agent
+FAIL [3] nfl end BUF: the market offers Tony Boselli, a retired man, as a free agent
+FAIL [3] nfl end BUF: the market offers Steve McNair, a retired man, as a free agent
+FAIL [3] nfl end BUF: the market offers Peyton Manning, a retired man, as a free agent
+FAIL [3] nfl end BUF: the market offers Tom Brady, a retired man, as a free agent
+FAIL [3] nfl end BUF: the market offers Bo Jackson, a retired man, as a free agent
+FAIL [3] nfl end BUF: the market offers John Elway, a retired man, as a free agent
+FAIL [3] nfl end BUF: the market offers LaDainian Tomlinson, a retired man, as a free agent
+FAIL [3] nfl end BUF: the market offers Brett Favre, a retired man, as a free agent
+FAIL [3] nfl end BUF: the market offers Walter Payton, a retired man, as a free agent
+FAIL [3] nfl end BUF: the market offers Adrian Peterson, a retired man, as a free agent
+FAIL [3] nfl end BUF: the market offers Marshall Faulk, a retired man, as a free agent
+FAIL [3] nfl end BUF: the market offers Marshawn Lynch, a retired man, as a free agent
+FAIL [3] nfl end BUF: the market offers Larry Fitzgerald, a retired man, as a free agent
+FAIL [3] nfl end BUF: the market offers Drew Brees, a retired man, as a free agent
+FAIL [3] nfl end BUF: the market offers Derrick Brooks, a retired man, as a free agent
+FAIL [3] nfl end BUF: the market offers Julio Jones, a retired man, as a free agent
+FAIL [3] nfl end BUF: the market offers Cam Newton, a retired man, as a free agent
+FAIL [3] nfl end BUF: the market offers Lawrence Taylor, a retired man, as a free agent
+FAIL [3] nfl end BUF: the market offers Darrell Green, a retired man, as a free agent
+FAIL [3] nfl end BUF: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end BUF: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end BUF: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end BUF: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end BUF: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end BUF: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end BUF: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end BUF: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end BUF: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end BUF: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end BUF: the market deals 351 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end BUF: the fallen men in the Sign a Player list are not the best 20 on the market
+FAIL [3] nfl end BUF: deals Derrick Thomas with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end BUF: deals Reggie White with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end BUF: deals Ray Lewis with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end BUF: deals Jerry Rice with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end BUF: deals Emmitt Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end BUF: deals Barry Sanders with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end BUF: deals Chad Johnson with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end BUF: deals Dan Marino with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end BUF: deals Joe Namath with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end BUF: deals Jim Brown with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end BUF: deals Terry Bradshaw with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end BUF: deals JJ Watt with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end BUF: deals Tony Boselli with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end BUF: deals Steve McNair with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end BUF: deals Peyton Manning with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end PHI: the market offers Derrick Thomas, a retired man, as a free agent
+FAIL [3] nfl end PHI: the market offers Bruce Smith, a retired man, as a free agent
+FAIL [3] nfl end PHI: the market offers Ray Lewis, a retired man, as a free agent
+FAIL [3] nfl end PHI: the market offers Jerry Rice, a retired man, as a free agent
+FAIL [3] nfl end PHI: the market offers Emmitt Smith, a retired man, as a free agent
+FAIL [3] nfl end PHI: the market offers Barry Sanders, a retired man, as a free agent
+FAIL [3] nfl end PHI: the market offers Chad Johnson, a retired man, as a free agent
+FAIL [3] nfl end PHI: the market offers Dan Marino, a retired man, as a free agent
+FAIL [3] nfl end PHI: the market offers Joe Namath, a retired man, as a free agent
+FAIL [3] nfl end PHI: the market offers Jim Brown, a retired man, as a free agent
+FAIL [3] nfl end PHI: the market offers Terry Bradshaw, a retired man, as a free agent
+FAIL [3] nfl end PHI: the market offers JJ Watt, a retired man, as a free agent
+FAIL [3] nfl end PHI: the market offers Tony Boselli, a retired man, as a free agent
+FAIL [3] nfl end PHI: the market offers Steve McNair, a retired man, as a free agent
+FAIL [3] nfl end PHI: the market offers Peyton Manning, a retired man, as a free agent
+FAIL [3] nfl end PHI: the market offers Tom Brady, a retired man, as a free agent
+FAIL [3] nfl end PHI: the market offers Bo Jackson, a retired man, as a free agent
+FAIL [3] nfl end PHI: the market offers John Elway, a retired man, as a free agent
+FAIL [3] nfl end PHI: the market offers LaDainian Tomlinson, a retired man, as a free agent
+FAIL [3] nfl end PHI: the market offers Brett Favre, a retired man, as a free agent
+FAIL [3] nfl end PHI: the market offers Walter Payton, a retired man, as a free agent
+FAIL [3] nfl end PHI: the market offers Adrian Peterson, a retired man, as a free agent
+FAIL [3] nfl end PHI: the market offers Marshall Faulk, a retired man, as a free agent
+FAIL [3] nfl end PHI: the market offers Marshawn Lynch, a retired man, as a free agent
+FAIL [3] nfl end PHI: the market offers Larry Fitzgerald, a retired man, as a free agent
+FAIL [3] nfl end PHI: the market offers Drew Brees, a retired man, as a free agent
+FAIL [3] nfl end PHI: the market offers Derrick Brooks, a retired man, as a free agent
+FAIL [3] nfl end PHI: the market offers Julio Jones, a retired man, as a free agent
+FAIL [3] nfl end PHI: the market offers Cam Newton, a retired man, as a free agent
+FAIL [3] nfl end PHI: the market offers Lawrence Taylor, a retired man, as a free agent
+FAIL [3] nfl end PHI: the market offers Darrell Green, a retired man, as a free agent
+FAIL [3] nfl end PHI: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end PHI: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end PHI: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end PHI: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end PHI: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end PHI: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end PHI: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end PHI: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end PHI: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end PHI: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end PHI: the market deals 351 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end PHI: the fallen men in the Sign a Player list are not the best 20 on the market
+FAIL [3] nfl end PHI: deals Derrick Thomas with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end PHI: deals Bruce Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end PHI: deals Ray Lewis with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end PHI: deals Jerry Rice with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end PHI: deals Emmitt Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end PHI: deals Barry Sanders with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end PHI: deals Chad Johnson with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end PHI: deals Dan Marino with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end PHI: deals Joe Namath with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end PHI: deals Jim Brown with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end PHI: deals Terry Bradshaw with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end PHI: deals JJ Watt with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end PHI: deals Tony Boselli with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end PHI: deals Steve McNair with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end PHI: deals Peyton Manning with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end BAL: the market offers Derrick Thomas, a retired man, as a free agent
+FAIL [3] nfl end BAL: the market offers Bruce Smith, a retired man, as a free agent
+FAIL [3] nfl end BAL: the market offers Reggie White, a retired man, as a free agent
+FAIL [3] nfl end BAL: the market offers Jerry Rice, a retired man, as a free agent
+FAIL [3] nfl end BAL: the market offers Emmitt Smith, a retired man, as a free agent
+FAIL [3] nfl end BAL: the market offers Barry Sanders, a retired man, as a free agent
+FAIL [3] nfl end BAL: the market offers Chad Johnson, a retired man, as a free agent
+FAIL [3] nfl end BAL: the market offers Dan Marino, a retired man, as a free agent
+FAIL [3] nfl end BAL: the market offers Joe Namath, a retired man, as a free agent
+FAIL [3] nfl end BAL: the market offers Jim Brown, a retired man, as a free agent
+FAIL [3] nfl end BAL: the market offers Terry Bradshaw, a retired man, as a free agent
+FAIL [3] nfl end BAL: the market offers JJ Watt, a retired man, as a free agent
+FAIL [3] nfl end BAL: the market offers Tony Boselli, a retired man, as a free agent
+FAIL [3] nfl end BAL: the market offers Steve McNair, a retired man, as a free agent
+FAIL [3] nfl end BAL: the market offers Peyton Manning, a retired man, as a free agent
+FAIL [3] nfl end BAL: the market offers Tom Brady, a retired man, as a free agent
+FAIL [3] nfl end BAL: the market offers Bo Jackson, a retired man, as a free agent
+FAIL [3] nfl end BAL: the market offers John Elway, a retired man, as a free agent
+FAIL [3] nfl end BAL: the market offers LaDainian Tomlinson, a retired man, as a free agent
+FAIL [3] nfl end BAL: the market offers Brett Favre, a retired man, as a free agent
+FAIL [3] nfl end BAL: the market offers Walter Payton, a retired man, as a free agent
+FAIL [3] nfl end BAL: the market offers Adrian Peterson, a retired man, as a free agent
+FAIL [3] nfl end BAL: the market offers Marshall Faulk, a retired man, as a free agent
+FAIL [3] nfl end BAL: the market offers Marshawn Lynch, a retired man, as a free agent
+FAIL [3] nfl end BAL: the market offers Larry Fitzgerald, a retired man, as a free agent
+FAIL [3] nfl end BAL: the market offers Drew Brees, a retired man, as a free agent
+FAIL [3] nfl end BAL: the market offers Derrick Brooks, a retired man, as a free agent
+FAIL [3] nfl end BAL: the market offers Julio Jones, a retired man, as a free agent
+FAIL [3] nfl end BAL: the market offers Cam Newton, a retired man, as a free agent
+FAIL [3] nfl end BAL: the market offers Lawrence Taylor, a retired man, as a free agent
+FAIL [3] nfl end BAL: the market offers Darrell Green, a retired man, as a free agent
+FAIL [3] nfl end BAL: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end BAL: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end BAL: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end BAL: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end BAL: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end BAL: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end BAL: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end BAL: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end BAL: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end BAL: the market deals 350 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end BAL: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nfl end BAL: deals Derrick Thomas with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end BAL: deals Bruce Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end BAL: deals Reggie White with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end BAL: deals Jerry Rice with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end BAL: deals Emmitt Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end BAL: deals Barry Sanders with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end BAL: deals Chad Johnson with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end BAL: deals Dan Marino with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end BAL: deals Joe Namath with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end BAL: deals Jim Brown with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end BAL: deals Terry Bradshaw with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end BAL: deals JJ Watt with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end BAL: deals Tony Boselli with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end BAL: deals Steve McNair with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end BAL: deals Peyton Manning with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end BAL: deals Tom Brady with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end SF: the market offers Derrick Thomas, a retired man, as a free agent
+FAIL [3] nfl end SF: the market offers Bruce Smith, a retired man, as a free agent
+FAIL [3] nfl end SF: the market offers Reggie White, a retired man, as a free agent
+FAIL [3] nfl end SF: the market offers Ray Lewis, a retired man, as a free agent
+FAIL [3] nfl end SF: the market offers Emmitt Smith, a retired man, as a free agent
+FAIL [3] nfl end SF: the market offers Barry Sanders, a retired man, as a free agent
+FAIL [3] nfl end SF: the market offers Chad Johnson, a retired man, as a free agent
+FAIL [3] nfl end SF: the market offers Dan Marino, a retired man, as a free agent
+FAIL [3] nfl end SF: the market offers Joe Namath, a retired man, as a free agent
+FAIL [3] nfl end SF: the market offers Jim Brown, a retired man, as a free agent
+FAIL [3] nfl end SF: the market offers Terry Bradshaw, a retired man, as a free agent
+FAIL [3] nfl end SF: the market offers JJ Watt, a retired man, as a free agent
+FAIL [3] nfl end SF: the market offers Tony Boselli, a retired man, as a free agent
+FAIL [3] nfl end SF: the market offers Steve McNair, a retired man, as a free agent
+FAIL [3] nfl end SF: the market offers Peyton Manning, a retired man, as a free agent
+FAIL [3] nfl end SF: the market offers Tom Brady, a retired man, as a free agent
+FAIL [3] nfl end SF: the market offers Bo Jackson, a retired man, as a free agent
+FAIL [3] nfl end SF: the market offers John Elway, a retired man, as a free agent
+FAIL [3] nfl end SF: the market offers LaDainian Tomlinson, a retired man, as a free agent
+FAIL [3] nfl end SF: the market offers Brett Favre, a retired man, as a free agent
+FAIL [3] nfl end SF: the market offers Walter Payton, a retired man, as a free agent
+FAIL [3] nfl end SF: the market offers Adrian Peterson, a retired man, as a free agent
+FAIL [3] nfl end SF: the market offers Marshall Faulk, a retired man, as a free agent
+FAIL [3] nfl end SF: the market offers Marshawn Lynch, a retired man, as a free agent
+FAIL [3] nfl end SF: the market offers Larry Fitzgerald, a retired man, as a free agent
+FAIL [3] nfl end SF: the market offers Drew Brees, a retired man, as a free agent
+FAIL [3] nfl end SF: the market offers Derrick Brooks, a retired man, as a free agent
+FAIL [3] nfl end SF: the market offers Julio Jones, a retired man, as a free agent
+FAIL [3] nfl end SF: the market offers Cam Newton, a retired man, as a free agent
+FAIL [3] nfl end SF: the market offers Lawrence Taylor, a retired man, as a free agent
+FAIL [3] nfl end SF: the market offers Darrell Green, a retired man, as a free agent
+FAIL [3] nfl end SF: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end SF: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end SF: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end SF: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end SF: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end SF: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end SF: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end SF: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end SF: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end SF: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end SF: the market deals 351 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end SF: the fallen men in the Sign a Player list are not the best 20 on the market
+FAIL [3] nfl end SF: deals Derrick Thomas with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end SF: deals Bruce Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end SF: deals Reggie White with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end SF: deals Ray Lewis with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end SF: deals Emmitt Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end SF: deals Barry Sanders with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end SF: deals Chad Johnson with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end SF: deals Dan Marino with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end SF: deals Joe Namath with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end SF: deals Jim Brown with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end SF: deals Terry Bradshaw with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end SF: deals JJ Watt with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end SF: deals Tony Boselli with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end SF: deals Steve McNair with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end DAL: the market offers Derrick Thomas, a retired man, as a free agent
+FAIL [3] nfl end DAL: the market offers Bruce Smith, a retired man, as a free agent
+FAIL [3] nfl end DAL: the market offers Reggie White, a retired man, as a free agent
+FAIL [3] nfl end DAL: the market offers Ray Lewis, a retired man, as a free agent
+FAIL [3] nfl end DAL: the market offers Jerry Rice, a retired man, as a free agent
+FAIL [3] nfl end DAL: the market offers Barry Sanders, a retired man, as a free agent
+FAIL [3] nfl end DAL: the market offers Chad Johnson, a retired man, as a free agent
+FAIL [3] nfl end DAL: the market offers Dan Marino, a retired man, as a free agent
+FAIL [3] nfl end DAL: the market offers Joe Namath, a retired man, as a free agent
+FAIL [3] nfl end DAL: the market offers Jim Brown, a retired man, as a free agent
+FAIL [3] nfl end DAL: the market offers Terry Bradshaw, a retired man, as a free agent
+FAIL [3] nfl end DAL: the market offers JJ Watt, a retired man, as a free agent
+FAIL [3] nfl end DAL: the market offers Tony Boselli, a retired man, as a free agent
+FAIL [3] nfl end DAL: the market offers Steve McNair, a retired man, as a free agent
+FAIL [3] nfl end DAL: the market offers Peyton Manning, a retired man, as a free agent
+FAIL [3] nfl end DAL: the market offers Tom Brady, a retired man, as a free agent
+FAIL [3] nfl end DAL: the market offers Bo Jackson, a retired man, as a free agent
+FAIL [3] nfl end DAL: the market offers John Elway, a retired man, as a free agent
+FAIL [3] nfl end DAL: the market offers LaDainian Tomlinson, a retired man, as a free agent
+FAIL [3] nfl end DAL: the market offers Brett Favre, a retired man, as a free agent
+FAIL [3] nfl end DAL: the market offers Walter Payton, a retired man, as a free agent
+FAIL [3] nfl end DAL: the market offers Adrian Peterson, a retired man, as a free agent
+FAIL [3] nfl end DAL: the market offers Marshall Faulk, a retired man, as a free agent
+FAIL [3] nfl end DAL: the market offers Marshawn Lynch, a retired man, as a free agent
+FAIL [3] nfl end DAL: the market offers Larry Fitzgerald, a retired man, as a free agent
+FAIL [3] nfl end DAL: the market offers Drew Brees, a retired man, as a free agent
+FAIL [3] nfl end DAL: the market offers Derrick Brooks, a retired man, as a free agent
+FAIL [3] nfl end DAL: the market offers Julio Jones, a retired man, as a free agent
+FAIL [3] nfl end DAL: the market offers Cam Newton, a retired man, as a free agent
+FAIL [3] nfl end DAL: the market offers Lawrence Taylor, a retired man, as a free agent
+FAIL [3] nfl end DAL: the market offers Darrell Green, a retired man, as a free agent
+FAIL [3] nfl end DAL: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end DAL: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end DAL: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end DAL: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end DAL: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end DAL: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end DAL: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end DAL: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end DAL: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end DAL: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end DAL: the market deals 351 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end DAL: the fallen men in the Sign a Player list are not the best 20 on the market
+FAIL [3] nfl end DAL: deals Derrick Thomas with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end DAL: deals Bruce Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end DAL: deals Reggie White with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end DAL: deals Ray Lewis with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end DAL: deals Jerry Rice with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end DAL: deals Barry Sanders with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end DAL: deals Chad Johnson with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end DAL: deals Dan Marino with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end DAL: deals Joe Namath with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end DAL: deals Jim Brown with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end DAL: deals Terry Bradshaw with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end DAL: deals JJ Watt with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end DAL: deals Tony Boselli with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end DAL: deals Steve McNair with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end DET: the market offers Derrick Thomas, a retired man, as a free agent
+FAIL [3] nfl end DET: the market offers Bruce Smith, a retired man, as a free agent
+FAIL [3] nfl end DET: the market offers Reggie White, a retired man, as a free agent
+FAIL [3] nfl end DET: the market offers Ray Lewis, a retired man, as a free agent
+FAIL [3] nfl end DET: the market offers Jerry Rice, a retired man, as a free agent
+FAIL [3] nfl end DET: the market offers Emmitt Smith, a retired man, as a free agent
+FAIL [3] nfl end DET: the market offers Chad Johnson, a retired man, as a free agent
+FAIL [3] nfl end DET: the market offers Dan Marino, a retired man, as a free agent
+FAIL [3] nfl end DET: the market offers Joe Namath, a retired man, as a free agent
+FAIL [3] nfl end DET: the market offers Jim Brown, a retired man, as a free agent
+FAIL [3] nfl end DET: the market offers Terry Bradshaw, a retired man, as a free agent
+FAIL [3] nfl end DET: the market offers JJ Watt, a retired man, as a free agent
+FAIL [3] nfl end DET: the market offers Tony Boselli, a retired man, as a free agent
+FAIL [3] nfl end DET: the market offers Steve McNair, a retired man, as a free agent
+FAIL [3] nfl end DET: the market offers Peyton Manning, a retired man, as a free agent
+FAIL [3] nfl end DET: the market offers Tom Brady, a retired man, as a free agent
+FAIL [3] nfl end DET: the market offers Bo Jackson, a retired man, as a free agent
+FAIL [3] nfl end DET: the market offers John Elway, a retired man, as a free agent
+FAIL [3] nfl end DET: the market offers LaDainian Tomlinson, a retired man, as a free agent
+FAIL [3] nfl end DET: the market offers Brett Favre, a retired man, as a free agent
+FAIL [3] nfl end DET: the market offers Walter Payton, a retired man, as a free agent
+FAIL [3] nfl end DET: the market offers Adrian Peterson, a retired man, as a free agent
+FAIL [3] nfl end DET: the market offers Marshall Faulk, a retired man, as a free agent
+FAIL [3] nfl end DET: the market offers Marshawn Lynch, a retired man, as a free agent
+FAIL [3] nfl end DET: the market offers Larry Fitzgerald, a retired man, as a free agent
+FAIL [3] nfl end DET: the market offers Drew Brees, a retired man, as a free agent
+FAIL [3] nfl end DET: the market offers Derrick Brooks, a retired man, as a free agent
+FAIL [3] nfl end DET: the market offers Julio Jones, a retired man, as a free agent
+FAIL [3] nfl end DET: the market offers Cam Newton, a retired man, as a free agent
+FAIL [3] nfl end DET: the market offers Lawrence Taylor, a retired man, as a free agent
+FAIL [3] nfl end DET: the market offers Darrell Green, a retired man, as a free agent
+FAIL [3] nfl end DET: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end DET: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end DET: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end DET: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end DET: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end DET: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end DET: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end DET: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end DET: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end DET: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end DET: the market deals 351 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end DET: the fallen men in the Sign a Player list are not the best 20 on the market
+FAIL [3] nfl end DET: deals Derrick Thomas with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end DET: deals Bruce Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end DET: deals Reggie White with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end DET: deals Ray Lewis with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end DET: deals Jerry Rice with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end DET: deals Emmitt Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end DET: deals Chad Johnson with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end DET: deals Dan Marino with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end DET: deals Joe Namath with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end DET: deals Jim Brown with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end DET: deals Terry Bradshaw with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end DET: deals JJ Watt with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end DET: deals Tony Boselli with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end DET: deals Steve McNair with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CIN: the market offers Derrick Thomas, a retired man, as a free agent
+FAIL [3] nfl end CIN: the market offers Bruce Smith, a retired man, as a free agent
+FAIL [3] nfl end CIN: the market offers Reggie White, a retired man, as a free agent
+FAIL [3] nfl end CIN: the market offers Ray Lewis, a retired man, as a free agent
+FAIL [3] nfl end CIN: the market offers Jerry Rice, a retired man, as a free agent
+FAIL [3] nfl end CIN: the market offers Emmitt Smith, a retired man, as a free agent
+FAIL [3] nfl end CIN: the market offers Barry Sanders, a retired man, as a free agent
+FAIL [3] nfl end CIN: the market offers Dan Marino, a retired man, as a free agent
+FAIL [3] nfl end CIN: the market offers Joe Namath, a retired man, as a free agent
+FAIL [3] nfl end CIN: the market offers Jim Brown, a retired man, as a free agent
+FAIL [3] nfl end CIN: the market offers Terry Bradshaw, a retired man, as a free agent
+FAIL [3] nfl end CIN: the market offers JJ Watt, a retired man, as a free agent
+FAIL [3] nfl end CIN: the market offers Tony Boselli, a retired man, as a free agent
+FAIL [3] nfl end CIN: the market offers Steve McNair, a retired man, as a free agent
+FAIL [3] nfl end CIN: the market offers Peyton Manning, a retired man, as a free agent
+FAIL [3] nfl end CIN: the market offers Tom Brady, a retired man, as a free agent
+FAIL [3] nfl end CIN: the market offers Bo Jackson, a retired man, as a free agent
+FAIL [3] nfl end CIN: the market offers John Elway, a retired man, as a free agent
+FAIL [3] nfl end CIN: the market offers LaDainian Tomlinson, a retired man, as a free agent
+FAIL [3] nfl end CIN: the market offers Brett Favre, a retired man, as a free agent
+FAIL [3] nfl end CIN: the market offers Walter Payton, a retired man, as a free agent
+FAIL [3] nfl end CIN: the market offers Adrian Peterson, a retired man, as a free agent
+FAIL [3] nfl end CIN: the market offers Marshall Faulk, a retired man, as a free agent
+FAIL [3] nfl end CIN: the market offers Marshawn Lynch, a retired man, as a free agent
+FAIL [3] nfl end CIN: the market offers Larry Fitzgerald, a retired man, as a free agent
+FAIL [3] nfl end CIN: the market offers Drew Brees, a retired man, as a free agent
+FAIL [3] nfl end CIN: the market offers Derrick Brooks, a retired man, as a free agent
+FAIL [3] nfl end CIN: the market offers Julio Jones, a retired man, as a free agent
+FAIL [3] nfl end CIN: the market offers Cam Newton, a retired man, as a free agent
+FAIL [3] nfl end CIN: the market offers Lawrence Taylor, a retired man, as a free agent
+FAIL [3] nfl end CIN: the market offers Darrell Green, a retired man, as a free agent
+FAIL [3] nfl end CIN: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end CIN: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end CIN: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end CIN: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end CIN: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end CIN: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end CIN: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end CIN: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end CIN: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end CIN: the market deals 350 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end CIN: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nfl end CIN: deals Derrick Thomas with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CIN: deals Bruce Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CIN: deals Reggie White with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CIN: deals Ray Lewis with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CIN: deals Jerry Rice with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CIN: deals Emmitt Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CIN: deals Barry Sanders with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CIN: deals Dan Marino with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CIN: deals Joe Namath with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CIN: deals Jim Brown with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CIN: deals Terry Bradshaw with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CIN: deals JJ Watt with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CIN: deals Tony Boselli with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CIN: deals Steve McNair with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CIN: deals Peyton Manning with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CIN: deals Tom Brady with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end MIA: the market offers Derrick Thomas, a retired man, as a free agent
+FAIL [3] nfl end MIA: the market offers Bruce Smith, a retired man, as a free agent
+FAIL [3] nfl end MIA: the market offers Reggie White, a retired man, as a free agent
+FAIL [3] nfl end MIA: the market offers Ray Lewis, a retired man, as a free agent
+FAIL [3] nfl end MIA: the market offers Jerry Rice, a retired man, as a free agent
+FAIL [3] nfl end MIA: the market offers Emmitt Smith, a retired man, as a free agent
+FAIL [3] nfl end MIA: the market offers Barry Sanders, a retired man, as a free agent
+FAIL [3] nfl end MIA: the market offers Chad Johnson, a retired man, as a free agent
+FAIL [3] nfl end MIA: the market offers Joe Namath, a retired man, as a free agent
+FAIL [3] nfl end MIA: the market offers Jim Brown, a retired man, as a free agent
+FAIL [3] nfl end MIA: the market offers Terry Bradshaw, a retired man, as a free agent
+FAIL [3] nfl end MIA: the market offers JJ Watt, a retired man, as a free agent
+FAIL [3] nfl end MIA: the market offers Tony Boselli, a retired man, as a free agent
+FAIL [3] nfl end MIA: the market offers Steve McNair, a retired man, as a free agent
+FAIL [3] nfl end MIA: the market offers Peyton Manning, a retired man, as a free agent
+FAIL [3] nfl end MIA: the market offers Tom Brady, a retired man, as a free agent
+FAIL [3] nfl end MIA: the market offers Bo Jackson, a retired man, as a free agent
+FAIL [3] nfl end MIA: the market offers John Elway, a retired man, as a free agent
+FAIL [3] nfl end MIA: the market offers LaDainian Tomlinson, a retired man, as a free agent
+FAIL [3] nfl end MIA: the market offers Brett Favre, a retired man, as a free agent
+FAIL [3] nfl end MIA: the market offers Walter Payton, a retired man, as a free agent
+FAIL [3] nfl end MIA: the market offers Adrian Peterson, a retired man, as a free agent
+FAIL [3] nfl end MIA: the market offers Marshall Faulk, a retired man, as a free agent
+FAIL [3] nfl end MIA: the market offers Marshawn Lynch, a retired man, as a free agent
+FAIL [3] nfl end MIA: the market offers Larry Fitzgerald, a retired man, as a free agent
+FAIL [3] nfl end MIA: the market offers Drew Brees, a retired man, as a free agent
+FAIL [3] nfl end MIA: the market offers Derrick Brooks, a retired man, as a free agent
+FAIL [3] nfl end MIA: the market offers Julio Jones, a retired man, as a free agent
+FAIL [3] nfl end MIA: the market offers Cam Newton, a retired man, as a free agent
+FAIL [3] nfl end MIA: the market offers Lawrence Taylor, a retired man, as a free agent
+FAIL [3] nfl end MIA: the market offers Darrell Green, a retired man, as a free agent
+FAIL [3] nfl end MIA: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end MIA: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end MIA: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end MIA: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end MIA: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end MIA: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end MIA: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end MIA: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end MIA: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end MIA: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end MIA: the market deals 351 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end MIA: the fallen men in the Sign a Player list are not the best 20 on the market
+FAIL [3] nfl end MIA: deals Derrick Thomas with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end MIA: deals Bruce Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end MIA: deals Reggie White with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end MIA: deals Ray Lewis with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end MIA: deals Jerry Rice with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end MIA: deals Emmitt Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end MIA: deals Barry Sanders with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end MIA: deals Chad Johnson with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end MIA: deals Joe Namath with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end MIA: deals Jim Brown with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end MIA: deals Terry Bradshaw with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end MIA: deals JJ Watt with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end MIA: deals Tony Boselli with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end MIA: deals Steve McNair with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end NYJ: the market offers Derrick Thomas, a retired man, as a free agent
+FAIL [3] nfl end NYJ: the market offers Bruce Smith, a retired man, as a free agent
+FAIL [3] nfl end NYJ: the market offers Reggie White, a retired man, as a free agent
+FAIL [3] nfl end NYJ: the market offers Ray Lewis, a retired man, as a free agent
+FAIL [3] nfl end NYJ: the market offers Jerry Rice, a retired man, as a free agent
+FAIL [3] nfl end NYJ: the market offers Emmitt Smith, a retired man, as a free agent
+FAIL [3] nfl end NYJ: the market offers Barry Sanders, a retired man, as a free agent
+FAIL [3] nfl end NYJ: the market offers Chad Johnson, a retired man, as a free agent
+FAIL [3] nfl end NYJ: the market offers Dan Marino, a retired man, as a free agent
+FAIL [3] nfl end NYJ: the market offers Jim Brown, a retired man, as a free agent
+FAIL [3] nfl end NYJ: the market offers Terry Bradshaw, a retired man, as a free agent
+FAIL [3] nfl end NYJ: the market offers JJ Watt, a retired man, as a free agent
+FAIL [3] nfl end NYJ: the market offers Tony Boselli, a retired man, as a free agent
+FAIL [3] nfl end NYJ: the market offers Steve McNair, a retired man, as a free agent
+FAIL [3] nfl end NYJ: the market offers Peyton Manning, a retired man, as a free agent
+FAIL [3] nfl end NYJ: the market offers Tom Brady, a retired man, as a free agent
+FAIL [3] nfl end NYJ: the market offers Bo Jackson, a retired man, as a free agent
+FAIL [3] nfl end NYJ: the market offers John Elway, a retired man, as a free agent
+FAIL [3] nfl end NYJ: the market offers LaDainian Tomlinson, a retired man, as a free agent
+FAIL [3] nfl end NYJ: the market offers Brett Favre, a retired man, as a free agent
+FAIL [3] nfl end NYJ: the market offers Walter Payton, a retired man, as a free agent
+FAIL [3] nfl end NYJ: the market offers Adrian Peterson, a retired man, as a free agent
+FAIL [3] nfl end NYJ: the market offers Marshall Faulk, a retired man, as a free agent
+FAIL [3] nfl end NYJ: the market offers Marshawn Lynch, a retired man, as a free agent
+FAIL [3] nfl end NYJ: the market offers Larry Fitzgerald, a retired man, as a free agent
+FAIL [3] nfl end NYJ: the market offers Drew Brees, a retired man, as a free agent
+FAIL [3] nfl end NYJ: the market offers Derrick Brooks, a retired man, as a free agent
+FAIL [3] nfl end NYJ: the market offers Julio Jones, a retired man, as a free agent
+FAIL [3] nfl end NYJ: the market offers Cam Newton, a retired man, as a free agent
+FAIL [3] nfl end NYJ: the market offers Lawrence Taylor, a retired man, as a free agent
+FAIL [3] nfl end NYJ: the market offers Darrell Green, a retired man, as a free agent
+FAIL [3] nfl end NYJ: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end NYJ: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end NYJ: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end NYJ: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end NYJ: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end NYJ: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end NYJ: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end NYJ: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end NYJ: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end NYJ: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end NYJ: the market deals 351 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end NYJ: the fallen men in the Sign a Player list are not the best 20 on the market
+FAIL [3] nfl end NYJ: deals Derrick Thomas with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end NYJ: deals Bruce Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end NYJ: deals Reggie White with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end NYJ: deals Ray Lewis with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end NYJ: deals Jerry Rice with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end NYJ: deals Emmitt Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end NYJ: deals Barry Sanders with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end NYJ: deals Chad Johnson with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end NYJ: deals Dan Marino with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end NYJ: deals Jim Brown with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end NYJ: deals Terry Bradshaw with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end NYJ: deals JJ Watt with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end NYJ: deals Tony Boselli with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end NYJ: deals Steve McNair with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CLE: the market offers Derrick Thomas, a retired man, as a free agent
+FAIL [3] nfl end CLE: the market offers Bruce Smith, a retired man, as a free agent
+FAIL [3] nfl end CLE: the market offers Reggie White, a retired man, as a free agent
+FAIL [3] nfl end CLE: the market offers Ray Lewis, a retired man, as a free agent
+FAIL [3] nfl end CLE: the market offers Jerry Rice, a retired man, as a free agent
+FAIL [3] nfl end CLE: the market offers Emmitt Smith, a retired man, as a free agent
+FAIL [3] nfl end CLE: the market offers Barry Sanders, a retired man, as a free agent
+FAIL [3] nfl end CLE: the market offers Chad Johnson, a retired man, as a free agent
+FAIL [3] nfl end CLE: the market offers Dan Marino, a retired man, as a free agent
+FAIL [3] nfl end CLE: the market offers Joe Namath, a retired man, as a free agent
+FAIL [3] nfl end CLE: the market offers Terry Bradshaw, a retired man, as a free agent
+FAIL [3] nfl end CLE: the market offers JJ Watt, a retired man, as a free agent
+FAIL [3] nfl end CLE: the market offers Tony Boselli, a retired man, as a free agent
+FAIL [3] nfl end CLE: the market offers Steve McNair, a retired man, as a free agent
+FAIL [3] nfl end CLE: the market offers Peyton Manning, a retired man, as a free agent
+FAIL [3] nfl end CLE: the market offers Tom Brady, a retired man, as a free agent
+FAIL [3] nfl end CLE: the market offers Bo Jackson, a retired man, as a free agent
+FAIL [3] nfl end CLE: the market offers John Elway, a retired man, as a free agent
+FAIL [3] nfl end CLE: the market offers LaDainian Tomlinson, a retired man, as a free agent
+FAIL [3] nfl end CLE: the market offers Brett Favre, a retired man, as a free agent
+FAIL [3] nfl end CLE: the market offers Walter Payton, a retired man, as a free agent
+FAIL [3] nfl end CLE: the market offers Adrian Peterson, a retired man, as a free agent
+FAIL [3] nfl end CLE: the market offers Marshall Faulk, a retired man, as a free agent
+FAIL [3] nfl end CLE: the market offers Marshawn Lynch, a retired man, as a free agent
+FAIL [3] nfl end CLE: the market offers Larry Fitzgerald, a retired man, as a free agent
+FAIL [3] nfl end CLE: the market offers Drew Brees, a retired man, as a free agent
+FAIL [3] nfl end CLE: the market offers Derrick Brooks, a retired man, as a free agent
+FAIL [3] nfl end CLE: the market offers Julio Jones, a retired man, as a free agent
+FAIL [3] nfl end CLE: the market offers Cam Newton, a retired man, as a free agent
+FAIL [3] nfl end CLE: the market offers Lawrence Taylor, a retired man, as a free agent
+FAIL [3] nfl end CLE: the market offers Darrell Green, a retired man, as a free agent
+FAIL [3] nfl end CLE: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end CLE: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end CLE: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end CLE: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end CLE: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end CLE: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end CLE: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end CLE: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end CLE: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end CLE: the market deals 350 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end CLE: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nfl end CLE: deals Derrick Thomas with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CLE: deals Bruce Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CLE: deals Reggie White with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CLE: deals Ray Lewis with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CLE: deals Jerry Rice with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CLE: deals Emmitt Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CLE: deals Barry Sanders with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CLE: deals Chad Johnson with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CLE: deals Dan Marino with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CLE: deals Joe Namath with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CLE: deals Terry Bradshaw with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CLE: deals JJ Watt with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CLE: deals Tony Boselli with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CLE: deals Steve McNair with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CLE: deals Peyton Manning with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CLE: deals Tom Brady with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end PIT: the market offers Derrick Thomas, a retired man, as a free agent
+FAIL [3] nfl end PIT: the market offers Bruce Smith, a retired man, as a free agent
+FAIL [3] nfl end PIT: the market offers Reggie White, a retired man, as a free agent
+FAIL [3] nfl end PIT: the market offers Ray Lewis, a retired man, as a free agent
+FAIL [3] nfl end PIT: the market offers Jerry Rice, a retired man, as a free agent
+FAIL [3] nfl end PIT: the market offers Emmitt Smith, a retired man, as a free agent
+FAIL [3] nfl end PIT: the market offers Barry Sanders, a retired man, as a free agent
+FAIL [3] nfl end PIT: the market offers Chad Johnson, a retired man, as a free agent
+FAIL [3] nfl end PIT: the market offers Dan Marino, a retired man, as a free agent
+FAIL [3] nfl end PIT: the market offers Joe Namath, a retired man, as a free agent
+FAIL [3] nfl end PIT: the market offers Jim Brown, a retired man, as a free agent
+FAIL [3] nfl end PIT: the market offers JJ Watt, a retired man, as a free agent
+FAIL [3] nfl end PIT: the market offers Tony Boselli, a retired man, as a free agent
+FAIL [3] nfl end PIT: the market offers Steve McNair, a retired man, as a free agent
+FAIL [3] nfl end PIT: the market offers Peyton Manning, a retired man, as a free agent
+FAIL [3] nfl end PIT: the market offers Tom Brady, a retired man, as a free agent
+FAIL [3] nfl end PIT: the market offers Bo Jackson, a retired man, as a free agent
+FAIL [3] nfl end PIT: the market offers John Elway, a retired man, as a free agent
+FAIL [3] nfl end PIT: the market offers LaDainian Tomlinson, a retired man, as a free agent
+FAIL [3] nfl end PIT: the market offers Brett Favre, a retired man, as a free agent
+FAIL [3] nfl end PIT: the market offers Walter Payton, a retired man, as a free agent
+FAIL [3] nfl end PIT: the market offers Adrian Peterson, a retired man, as a free agent
+FAIL [3] nfl end PIT: the market offers Marshall Faulk, a retired man, as a free agent
+FAIL [3] nfl end PIT: the market offers Marshawn Lynch, a retired man, as a free agent
+FAIL [3] nfl end PIT: the market offers Larry Fitzgerald, a retired man, as a free agent
+FAIL [3] nfl end PIT: the market offers Drew Brees, a retired man, as a free agent
+FAIL [3] nfl end PIT: the market offers Derrick Brooks, a retired man, as a free agent
+FAIL [3] nfl end PIT: the market offers Julio Jones, a retired man, as a free agent
+FAIL [3] nfl end PIT: the market offers Cam Newton, a retired man, as a free agent
+FAIL [3] nfl end PIT: the market offers Lawrence Taylor, a retired man, as a free agent
+FAIL [3] nfl end PIT: the market offers Darrell Green, a retired man, as a free agent
+FAIL [3] nfl end PIT: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end PIT: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end PIT: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end PIT: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end PIT: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end PIT: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end PIT: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end PIT: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end PIT: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end PIT: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end PIT: the market deals 351 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end PIT: the fallen men in the Sign a Player list are not the best 20 on the market
+FAIL [3] nfl end PIT: deals Derrick Thomas with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end PIT: deals Bruce Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end PIT: deals Reggie White with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end PIT: deals Ray Lewis with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end PIT: deals Jerry Rice with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end PIT: deals Emmitt Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end PIT: deals Barry Sanders with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end PIT: deals Chad Johnson with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end PIT: deals Dan Marino with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end PIT: deals Joe Namath with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end PIT: deals Jim Brown with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end PIT: deals JJ Watt with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end PIT: deals Tony Boselli with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end PIT: deals Steve McNair with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end PIT: deals Peyton Manning with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end HOU: the market offers Derrick Thomas, a retired man, as a free agent
+FAIL [3] nfl end HOU: the market offers Bruce Smith, a retired man, as a free agent
+FAIL [3] nfl end HOU: the market offers Reggie White, a retired man, as a free agent
+FAIL [3] nfl end HOU: the market offers Ray Lewis, a retired man, as a free agent
+FAIL [3] nfl end HOU: the market offers Jerry Rice, a retired man, as a free agent
+FAIL [3] nfl end HOU: the market offers Emmitt Smith, a retired man, as a free agent
+FAIL [3] nfl end HOU: the market offers Barry Sanders, a retired man, as a free agent
+FAIL [3] nfl end HOU: the market offers Chad Johnson, a retired man, as a free agent
+FAIL [3] nfl end HOU: the market offers Dan Marino, a retired man, as a free agent
+FAIL [3] nfl end HOU: the market offers Joe Namath, a retired man, as a free agent
+FAIL [3] nfl end HOU: the market offers Jim Brown, a retired man, as a free agent
+FAIL [3] nfl end HOU: the market offers Terry Bradshaw, a retired man, as a free agent
+FAIL [3] nfl end HOU: the market offers Tony Boselli, a retired man, as a free agent
+FAIL [3] nfl end HOU: the market offers Steve McNair, a retired man, as a free agent
+FAIL [3] nfl end HOU: the market offers Peyton Manning, a retired man, as a free agent
+FAIL [3] nfl end HOU: the market offers Tom Brady, a retired man, as a free agent
+FAIL [3] nfl end HOU: the market offers Bo Jackson, a retired man, as a free agent
+FAIL [3] nfl end HOU: the market offers John Elway, a retired man, as a free agent
+FAIL [3] nfl end HOU: the market offers LaDainian Tomlinson, a retired man, as a free agent
+FAIL [3] nfl end HOU: the market offers Brett Favre, a retired man, as a free agent
+FAIL [3] nfl end HOU: the market offers Walter Payton, a retired man, as a free agent
+FAIL [3] nfl end HOU: the market offers Adrian Peterson, a retired man, as a free agent
+FAIL [3] nfl end HOU: the market offers Marshall Faulk, a retired man, as a free agent
+FAIL [3] nfl end HOU: the market offers Marshawn Lynch, a retired man, as a free agent
+FAIL [3] nfl end HOU: the market offers Larry Fitzgerald, a retired man, as a free agent
+FAIL [3] nfl end HOU: the market offers Drew Brees, a retired man, as a free agent
+FAIL [3] nfl end HOU: the market offers Derrick Brooks, a retired man, as a free agent
+FAIL [3] nfl end HOU: the market offers Julio Jones, a retired man, as a free agent
+FAIL [3] nfl end HOU: the market offers Cam Newton, a retired man, as a free agent
+FAIL [3] nfl end HOU: the market offers Lawrence Taylor, a retired man, as a free agent
+FAIL [3] nfl end HOU: the market offers Darrell Green, a retired man, as a free agent
+FAIL [3] nfl end HOU: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end HOU: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end HOU: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end HOU: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end HOU: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end HOU: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end HOU: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end HOU: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end HOU: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end HOU: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end HOU: the market deals 351 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end HOU: the fallen men in the Sign a Player list are not the best 20 on the market
+FAIL [3] nfl end HOU: deals Derrick Thomas with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end HOU: deals Bruce Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end HOU: deals Reggie White with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end HOU: deals Ray Lewis with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end HOU: deals Jerry Rice with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end HOU: deals Emmitt Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end HOU: deals Barry Sanders with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end HOU: deals Chad Johnson with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end HOU: deals Dan Marino with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end HOU: deals Joe Namath with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end HOU: deals Jim Brown with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end HOU: deals Terry Bradshaw with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end HOU: deals Tony Boselli with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end HOU: deals Steve McNair with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end JAX: the market offers Derrick Thomas, a retired man, as a free agent
+FAIL [3] nfl end JAX: the market offers Bruce Smith, a retired man, as a free agent
+FAIL [3] nfl end JAX: the market offers Reggie White, a retired man, as a free agent
+FAIL [3] nfl end JAX: the market offers Ray Lewis, a retired man, as a free agent
+FAIL [3] nfl end JAX: the market offers Jerry Rice, a retired man, as a free agent
+FAIL [3] nfl end JAX: the market offers Emmitt Smith, a retired man, as a free agent
+FAIL [3] nfl end JAX: the market offers Barry Sanders, a retired man, as a free agent
+FAIL [3] nfl end JAX: the market offers Chad Johnson, a retired man, as a free agent
+FAIL [3] nfl end JAX: the market offers Dan Marino, a retired man, as a free agent
+FAIL [3] nfl end JAX: the market offers Joe Namath, a retired man, as a free agent
+FAIL [3] nfl end JAX: the market offers Jim Brown, a retired man, as a free agent
+FAIL [3] nfl end JAX: the market offers Terry Bradshaw, a retired man, as a free agent
+FAIL [3] nfl end JAX: the market offers JJ Watt, a retired man, as a free agent
+FAIL [3] nfl end JAX: the market offers Steve McNair, a retired man, as a free agent
+FAIL [3] nfl end JAX: the market offers Peyton Manning, a retired man, as a free agent
+FAIL [3] nfl end JAX: the market offers Tom Brady, a retired man, as a free agent
+FAIL [3] nfl end JAX: the market offers Bo Jackson, a retired man, as a free agent
+FAIL [3] nfl end JAX: the market offers John Elway, a retired man, as a free agent
+FAIL [3] nfl end JAX: the market offers LaDainian Tomlinson, a retired man, as a free agent
+FAIL [3] nfl end JAX: the market offers Brett Favre, a retired man, as a free agent
+FAIL [3] nfl end JAX: the market offers Walter Payton, a retired man, as a free agent
+FAIL [3] nfl end JAX: the market offers Adrian Peterson, a retired man, as a free agent
+FAIL [3] nfl end JAX: the market offers Marshall Faulk, a retired man, as a free agent
+FAIL [3] nfl end JAX: the market offers Marshawn Lynch, a retired man, as a free agent
+FAIL [3] nfl end JAX: the market offers Larry Fitzgerald, a retired man, as a free agent
+FAIL [3] nfl end JAX: the market offers Drew Brees, a retired man, as a free agent
+FAIL [3] nfl end JAX: the market offers Derrick Brooks, a retired man, as a free agent
+FAIL [3] nfl end JAX: the market offers Julio Jones, a retired man, as a free agent
+FAIL [3] nfl end JAX: the market offers Cam Newton, a retired man, as a free agent
+FAIL [3] nfl end JAX: the market offers Lawrence Taylor, a retired man, as a free agent
+FAIL [3] nfl end JAX: the market offers Darrell Green, a retired man, as a free agent
+FAIL [3] nfl end JAX: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end JAX: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end JAX: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end JAX: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end JAX: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end JAX: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end JAX: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end JAX: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end JAX: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end JAX: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end JAX: the market deals 351 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end JAX: the fallen men in the Sign a Player list are not the best 20 on the market
+FAIL [3] nfl end JAX: deals Derrick Thomas with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end JAX: deals Bruce Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end JAX: deals Reggie White with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end JAX: deals Ray Lewis with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end JAX: deals Jerry Rice with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end JAX: deals Emmitt Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end JAX: deals Barry Sanders with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end JAX: deals Chad Johnson with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end JAX: deals Dan Marino with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end JAX: deals Joe Namath with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end JAX: deals Jim Brown with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end JAX: deals Terry Bradshaw with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end JAX: deals JJ Watt with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end JAX: deals Steve McNair with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end TEN: the market offers Derrick Thomas, a retired man, as a free agent
+FAIL [3] nfl end TEN: the market offers Bruce Smith, a retired man, as a free agent
+FAIL [3] nfl end TEN: the market offers Reggie White, a retired man, as a free agent
+FAIL [3] nfl end TEN: the market offers Ray Lewis, a retired man, as a free agent
+FAIL [3] nfl end TEN: the market offers Jerry Rice, a retired man, as a free agent
+FAIL [3] nfl end TEN: the market offers Emmitt Smith, a retired man, as a free agent
+FAIL [3] nfl end TEN: the market offers Barry Sanders, a retired man, as a free agent
+FAIL [3] nfl end TEN: the market offers Chad Johnson, a retired man, as a free agent
+FAIL [3] nfl end TEN: the market offers Dan Marino, a retired man, as a free agent
+FAIL [3] nfl end TEN: the market offers Joe Namath, a retired man, as a free agent
+FAIL [3] nfl end TEN: the market offers Jim Brown, a retired man, as a free agent
+FAIL [3] nfl end TEN: the market offers Terry Bradshaw, a retired man, as a free agent
+FAIL [3] nfl end TEN: the market offers JJ Watt, a retired man, as a free agent
+FAIL [3] nfl end TEN: the market offers Tony Boselli, a retired man, as a free agent
+FAIL [3] nfl end TEN: the market offers Peyton Manning, a retired man, as a free agent
+FAIL [3] nfl end TEN: the market offers Tom Brady, a retired man, as a free agent
+FAIL [3] nfl end TEN: the market offers Bo Jackson, a retired man, as a free agent
+FAIL [3] nfl end TEN: the market offers John Elway, a retired man, as a free agent
+FAIL [3] nfl end TEN: the market offers LaDainian Tomlinson, a retired man, as a free agent
+FAIL [3] nfl end TEN: the market offers Brett Favre, a retired man, as a free agent
+FAIL [3] nfl end TEN: the market offers Walter Payton, a retired man, as a free agent
+FAIL [3] nfl end TEN: the market offers Adrian Peterson, a retired man, as a free agent
+FAIL [3] nfl end TEN: the market offers Marshall Faulk, a retired man, as a free agent
+FAIL [3] nfl end TEN: the market offers Marshawn Lynch, a retired man, as a free agent
+FAIL [3] nfl end TEN: the market offers Larry Fitzgerald, a retired man, as a free agent
+FAIL [3] nfl end TEN: the market offers Drew Brees, a retired man, as a free agent
+FAIL [3] nfl end TEN: the market offers Derrick Brooks, a retired man, as a free agent
+FAIL [3] nfl end TEN: the market offers Julio Jones, a retired man, as a free agent
+FAIL [3] nfl end TEN: the market offers Cam Newton, a retired man, as a free agent
+FAIL [3] nfl end TEN: the market offers Lawrence Taylor, a retired man, as a free agent
+FAIL [3] nfl end TEN: the market offers Darrell Green, a retired man, as a free agent
+FAIL [3] nfl end TEN: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end TEN: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end TEN: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end TEN: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end TEN: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end TEN: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end TEN: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end TEN: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end TEN: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end TEN: the market deals 350 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end TEN: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nfl end TEN: deals Derrick Thomas with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end TEN: deals Bruce Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end TEN: deals Reggie White with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end TEN: deals Ray Lewis with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end TEN: deals Jerry Rice with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end TEN: deals Emmitt Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end TEN: deals Barry Sanders with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end TEN: deals Chad Johnson with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end TEN: deals Dan Marino with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end TEN: deals Joe Namath with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end TEN: deals Jim Brown with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end TEN: deals Terry Bradshaw with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end TEN: deals JJ Watt with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end TEN: deals Tony Boselli with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end TEN: deals Peyton Manning with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end IND: the market offers Derrick Thomas, a retired man, as a free agent
+FAIL [3] nfl end IND: the market offers Bruce Smith, a retired man, as a free agent
+FAIL [3] nfl end IND: the market offers Reggie White, a retired man, as a free agent
+FAIL [3] nfl end IND: the market offers Ray Lewis, a retired man, as a free agent
+FAIL [3] nfl end IND: the market offers Jerry Rice, a retired man, as a free agent
+FAIL [3] nfl end IND: the market offers Emmitt Smith, a retired man, as a free agent
+FAIL [3] nfl end IND: the market offers Barry Sanders, a retired man, as a free agent
+FAIL [3] nfl end IND: the market offers Chad Johnson, a retired man, as a free agent
+FAIL [3] nfl end IND: the market offers Dan Marino, a retired man, as a free agent
+FAIL [3] nfl end IND: the market offers Joe Namath, a retired man, as a free agent
+FAIL [3] nfl end IND: the market offers Jim Brown, a retired man, as a free agent
+FAIL [3] nfl end IND: the market offers Terry Bradshaw, a retired man, as a free agent
+FAIL [3] nfl end IND: the market offers JJ Watt, a retired man, as a free agent
+FAIL [3] nfl end IND: the market offers Tony Boselli, a retired man, as a free agent
+FAIL [3] nfl end IND: the market offers Steve McNair, a retired man, as a free agent
+FAIL [3] nfl end IND: the market offers Tom Brady, a retired man, as a free agent
+FAIL [3] nfl end IND: the market offers Bo Jackson, a retired man, as a free agent
+FAIL [3] nfl end IND: the market offers John Elway, a retired man, as a free agent
+FAIL [3] nfl end IND: the market offers LaDainian Tomlinson, a retired man, as a free agent
+FAIL [3] nfl end IND: the market offers Brett Favre, a retired man, as a free agent
+FAIL [3] nfl end IND: the market offers Walter Payton, a retired man, as a free agent
+FAIL [3] nfl end IND: the market offers Adrian Peterson, a retired man, as a free agent
+FAIL [3] nfl end IND: the market offers Marshall Faulk, a retired man, as a free agent
+FAIL [3] nfl end IND: the market offers Marshawn Lynch, a retired man, as a free agent
+FAIL [3] nfl end IND: the market offers Larry Fitzgerald, a retired man, as a free agent
+FAIL [3] nfl end IND: the market offers Drew Brees, a retired man, as a free agent
+FAIL [3] nfl end IND: the market offers Derrick Brooks, a retired man, as a free agent
+FAIL [3] nfl end IND: the market offers Julio Jones, a retired man, as a free agent
+FAIL [3] nfl end IND: the market offers Cam Newton, a retired man, as a free agent
+FAIL [3] nfl end IND: the market offers Lawrence Taylor, a retired man, as a free agent
+FAIL [3] nfl end IND: the market offers Darrell Green, a retired man, as a free agent
+FAIL [3] nfl end IND: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end IND: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end IND: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end IND: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end IND: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end IND: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end IND: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end IND: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end IND: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end IND: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end IND: the market deals 351 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end IND: the fallen men in the Sign a Player list are not the best 20 on the market
+FAIL [3] nfl end IND: deals Derrick Thomas with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end IND: deals Bruce Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end IND: deals Reggie White with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end IND: deals Ray Lewis with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end IND: deals Jerry Rice with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end IND: deals Emmitt Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end IND: deals Barry Sanders with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end IND: deals Chad Johnson with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end IND: deals Dan Marino with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end IND: deals Joe Namath with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end IND: deals Jim Brown with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end IND: deals Terry Bradshaw with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end IND: deals JJ Watt with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end IND: deals Tony Boselli with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end NE: the market offers Derrick Thomas, a retired man, as a free agent
+FAIL [3] nfl end NE: the market offers Bruce Smith, a retired man, as a free agent
+FAIL [3] nfl end NE: the market offers Reggie White, a retired man, as a free agent
+FAIL [3] nfl end NE: the market offers Ray Lewis, a retired man, as a free agent
+FAIL [3] nfl end NE: the market offers Jerry Rice, a retired man, as a free agent
+FAIL [3] nfl end NE: the market offers Emmitt Smith, a retired man, as a free agent
+FAIL [3] nfl end NE: the market offers Barry Sanders, a retired man, as a free agent
+FAIL [3] nfl end NE: the market offers Chad Johnson, a retired man, as a free agent
+FAIL [3] nfl end NE: the market offers Dan Marino, a retired man, as a free agent
+FAIL [3] nfl end NE: the market offers Joe Namath, a retired man, as a free agent
+FAIL [3] nfl end NE: the market offers Jim Brown, a retired man, as a free agent
+FAIL [3] nfl end NE: the market offers Terry Bradshaw, a retired man, as a free agent
+FAIL [3] nfl end NE: the market offers JJ Watt, a retired man, as a free agent
+FAIL [3] nfl end NE: the market offers Tony Boselli, a retired man, as a free agent
+FAIL [3] nfl end NE: the market offers Steve McNair, a retired man, as a free agent
+FAIL [3] nfl end NE: the market offers Peyton Manning, a retired man, as a free agent
+FAIL [3] nfl end NE: the market offers Bo Jackson, a retired man, as a free agent
+FAIL [3] nfl end NE: the market offers John Elway, a retired man, as a free agent
+FAIL [3] nfl end NE: the market offers LaDainian Tomlinson, a retired man, as a free agent
+FAIL [3] nfl end NE: the market offers Brett Favre, a retired man, as a free agent
+FAIL [3] nfl end NE: the market offers Walter Payton, a retired man, as a free agent
+FAIL [3] nfl end NE: the market offers Adrian Peterson, a retired man, as a free agent
+FAIL [3] nfl end NE: the market offers Marshall Faulk, a retired man, as a free agent
+FAIL [3] nfl end NE: the market offers Marshawn Lynch, a retired man, as a free agent
+FAIL [3] nfl end NE: the market offers Larry Fitzgerald, a retired man, as a free agent
+FAIL [3] nfl end NE: the market offers Drew Brees, a retired man, as a free agent
+FAIL [3] nfl end NE: the market offers Derrick Brooks, a retired man, as a free agent
+FAIL [3] nfl end NE: the market offers Julio Jones, a retired man, as a free agent
+FAIL [3] nfl end NE: the market offers Cam Newton, a retired man, as a free agent
+FAIL [3] nfl end NE: the market offers Lawrence Taylor, a retired man, as a free agent
+FAIL [3] nfl end NE: the market offers Darrell Green, a retired man, as a free agent
+FAIL [3] nfl end NE: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end NE: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end NE: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end NE: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end NE: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end NE: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end NE: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end NE: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end NE: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end NE: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end NE: the market deals 351 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end NE: the fallen men in the Sign a Player list are not the best 20 on the market
+FAIL [3] nfl end NE: deals Derrick Thomas with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end NE: deals Bruce Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end NE: deals Reggie White with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end NE: deals Ray Lewis with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end NE: deals Jerry Rice with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end NE: deals Emmitt Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end NE: deals Barry Sanders with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end NE: deals Chad Johnson with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end NE: deals Dan Marino with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end NE: deals Joe Namath with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end NE: deals Jim Brown with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end NE: deals Terry Bradshaw with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end NE: deals JJ Watt with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end NE: deals Tony Boselli with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end LV: the market offers Derrick Thomas, a retired man, as a free agent
+FAIL [3] nfl end LV: the market offers Bruce Smith, a retired man, as a free agent
+FAIL [3] nfl end LV: the market offers Reggie White, a retired man, as a free agent
+FAIL [3] nfl end LV: the market offers Ray Lewis, a retired man, as a free agent
+FAIL [3] nfl end LV: the market offers Jerry Rice, a retired man, as a free agent
+FAIL [3] nfl end LV: the market offers Emmitt Smith, a retired man, as a free agent
+FAIL [3] nfl end LV: the market offers Barry Sanders, a retired man, as a free agent
+FAIL [3] nfl end LV: the market offers Chad Johnson, a retired man, as a free agent
+FAIL [3] nfl end LV: the market offers Dan Marino, a retired man, as a free agent
+FAIL [3] nfl end LV: the market offers Joe Namath, a retired man, as a free agent
+FAIL [3] nfl end LV: the market offers Jim Brown, a retired man, as a free agent
+FAIL [3] nfl end LV: the market offers Terry Bradshaw, a retired man, as a free agent
+FAIL [3] nfl end LV: the market offers JJ Watt, a retired man, as a free agent
+FAIL [3] nfl end LV: the market offers Tony Boselli, a retired man, as a free agent
+FAIL [3] nfl end LV: the market offers Steve McNair, a retired man, as a free agent
+FAIL [3] nfl end LV: the market offers Peyton Manning, a retired man, as a free agent
+FAIL [3] nfl end LV: the market offers Tom Brady, a retired man, as a free agent
+FAIL [3] nfl end LV: the market offers John Elway, a retired man, as a free agent
+FAIL [3] nfl end LV: the market offers LaDainian Tomlinson, a retired man, as a free agent
+FAIL [3] nfl end LV: the market offers Brett Favre, a retired man, as a free agent
+FAIL [3] nfl end LV: the market offers Walter Payton, a retired man, as a free agent
+FAIL [3] nfl end LV: the market offers Adrian Peterson, a retired man, as a free agent
+FAIL [3] nfl end LV: the market offers Marshall Faulk, a retired man, as a free agent
+FAIL [3] nfl end LV: the market offers Marshawn Lynch, a retired man, as a free agent
+FAIL [3] nfl end LV: the market offers Larry Fitzgerald, a retired man, as a free agent
+FAIL [3] nfl end LV: the market offers Drew Brees, a retired man, as a free agent
+FAIL [3] nfl end LV: the market offers Derrick Brooks, a retired man, as a free agent
+FAIL [3] nfl end LV: the market offers Julio Jones, a retired man, as a free agent
+FAIL [3] nfl end LV: the market offers Cam Newton, a retired man, as a free agent
+FAIL [3] nfl end LV: the market offers Lawrence Taylor, a retired man, as a free agent
+FAIL [3] nfl end LV: the market offers Darrell Green, a retired man, as a free agent
+FAIL [3] nfl end LV: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end LV: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end LV: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end LV: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end LV: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end LV: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end LV: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end LV: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end LV: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end LV: the market deals 350 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end LV: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nfl end LV: deals Derrick Thomas with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end LV: deals Bruce Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end LV: deals Reggie White with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end LV: deals Ray Lewis with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end LV: deals Jerry Rice with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end LV: deals Emmitt Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end LV: deals Barry Sanders with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end LV: deals Chad Johnson with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end LV: deals Dan Marino with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end LV: deals Joe Namath with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end LV: deals Jim Brown with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end LV: deals Terry Bradshaw with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end LV: deals JJ Watt with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end LV: deals Tony Boselli with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end LV: deals Steve McNair with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end DEN: the market offers Derrick Thomas, a retired man, as a free agent
+FAIL [3] nfl end DEN: the market offers Bruce Smith, a retired man, as a free agent
+FAIL [3] nfl end DEN: the market offers Reggie White, a retired man, as a free agent
+FAIL [3] nfl end DEN: the market offers Ray Lewis, a retired man, as a free agent
+FAIL [3] nfl end DEN: the market offers Jerry Rice, a retired man, as a free agent
+FAIL [3] nfl end DEN: the market offers Emmitt Smith, a retired man, as a free agent
+FAIL [3] nfl end DEN: the market offers Barry Sanders, a retired man, as a free agent
+FAIL [3] nfl end DEN: the market offers Chad Johnson, a retired man, as a free agent
+FAIL [3] nfl end DEN: the market offers Dan Marino, a retired man, as a free agent
+FAIL [3] nfl end DEN: the market offers Joe Namath, a retired man, as a free agent
+FAIL [3] nfl end DEN: the market offers Jim Brown, a retired man, as a free agent
+FAIL [3] nfl end DEN: the market offers Terry Bradshaw, a retired man, as a free agent
+FAIL [3] nfl end DEN: the market offers JJ Watt, a retired man, as a free agent
+FAIL [3] nfl end DEN: the market offers Tony Boselli, a retired man, as a free agent
+FAIL [3] nfl end DEN: the market offers Steve McNair, a retired man, as a free agent
+FAIL [3] nfl end DEN: the market offers Peyton Manning, a retired man, as a free agent
+FAIL [3] nfl end DEN: the market offers Tom Brady, a retired man, as a free agent
+FAIL [3] nfl end DEN: the market offers Bo Jackson, a retired man, as a free agent
+FAIL [3] nfl end DEN: the market offers LaDainian Tomlinson, a retired man, as a free agent
+FAIL [3] nfl end DEN: the market offers Brett Favre, a retired man, as a free agent
+FAIL [3] nfl end DEN: the market offers Walter Payton, a retired man, as a free agent
+FAIL [3] nfl end DEN: the market offers Adrian Peterson, a retired man, as a free agent
+FAIL [3] nfl end DEN: the market offers Marshall Faulk, a retired man, as a free agent
+FAIL [3] nfl end DEN: the market offers Marshawn Lynch, a retired man, as a free agent
+FAIL [3] nfl end DEN: the market offers Larry Fitzgerald, a retired man, as a free agent
+FAIL [3] nfl end DEN: the market offers Drew Brees, a retired man, as a free agent
+FAIL [3] nfl end DEN: the market offers Derrick Brooks, a retired man, as a free agent
+FAIL [3] nfl end DEN: the market offers Julio Jones, a retired man, as a free agent
+FAIL [3] nfl end DEN: the market offers Cam Newton, a retired man, as a free agent
+FAIL [3] nfl end DEN: the market offers Lawrence Taylor, a retired man, as a free agent
+FAIL [3] nfl end DEN: the market offers Darrell Green, a retired man, as a free agent
+FAIL [3] nfl end DEN: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end DEN: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end DEN: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end DEN: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end DEN: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end DEN: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end DEN: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end DEN: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end DEN: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end DEN: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end DEN: the market deals 351 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end DEN: the fallen men in the Sign a Player list are not the best 20 on the market
+FAIL [3] nfl end DEN: deals Derrick Thomas with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end DEN: deals Bruce Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end DEN: deals Reggie White with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end DEN: deals Ray Lewis with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end DEN: deals Jerry Rice with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end DEN: deals Emmitt Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end DEN: deals Barry Sanders with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end DEN: deals Chad Johnson with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end DEN: deals Dan Marino with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end DEN: deals Joe Namath with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end DEN: deals Jim Brown with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end DEN: deals Terry Bradshaw with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end DEN: deals JJ Watt with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end DEN: deals Tony Boselli with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end LAC: the market offers Derrick Thomas, a retired man, as a free agent
+FAIL [3] nfl end LAC: the market offers Bruce Smith, a retired man, as a free agent
+FAIL [3] nfl end LAC: the market offers Reggie White, a retired man, as a free agent
+FAIL [3] nfl end LAC: the market offers Ray Lewis, a retired man, as a free agent
+FAIL [3] nfl end LAC: the market offers Jerry Rice, a retired man, as a free agent
+FAIL [3] nfl end LAC: the market offers Emmitt Smith, a retired man, as a free agent
+FAIL [3] nfl end LAC: the market offers Barry Sanders, a retired man, as a free agent
+FAIL [3] nfl end LAC: the market offers Chad Johnson, a retired man, as a free agent
+FAIL [3] nfl end LAC: the market offers Dan Marino, a retired man, as a free agent
+FAIL [3] nfl end LAC: the market offers Joe Namath, a retired man, as a free agent
+FAIL [3] nfl end LAC: the market offers Jim Brown, a retired man, as a free agent
+FAIL [3] nfl end LAC: the market offers Terry Bradshaw, a retired man, as a free agent
+FAIL [3] nfl end LAC: the market offers JJ Watt, a retired man, as a free agent
+FAIL [3] nfl end LAC: the market offers Tony Boselli, a retired man, as a free agent
+FAIL [3] nfl end LAC: the market offers Steve McNair, a retired man, as a free agent
+FAIL [3] nfl end LAC: the market offers Peyton Manning, a retired man, as a free agent
+FAIL [3] nfl end LAC: the market offers Tom Brady, a retired man, as a free agent
+FAIL [3] nfl end LAC: the market offers Bo Jackson, a retired man, as a free agent
+FAIL [3] nfl end LAC: the market offers John Elway, a retired man, as a free agent
+FAIL [3] nfl end LAC: the market offers Brett Favre, a retired man, as a free agent
+FAIL [3] nfl end LAC: the market offers Walter Payton, a retired man, as a free agent
+FAIL [3] nfl end LAC: the market offers Adrian Peterson, a retired man, as a free agent
+FAIL [3] nfl end LAC: the market offers Marshall Faulk, a retired man, as a free agent
+FAIL [3] nfl end LAC: the market offers Marshawn Lynch, a retired man, as a free agent
+FAIL [3] nfl end LAC: the market offers Larry Fitzgerald, a retired man, as a free agent
+FAIL [3] nfl end LAC: the market offers Drew Brees, a retired man, as a free agent
+FAIL [3] nfl end LAC: the market offers Derrick Brooks, a retired man, as a free agent
+FAIL [3] nfl end LAC: the market offers Julio Jones, a retired man, as a free agent
+FAIL [3] nfl end LAC: the market offers Cam Newton, a retired man, as a free agent
+FAIL [3] nfl end LAC: the market offers Lawrence Taylor, a retired man, as a free agent
+FAIL [3] nfl end LAC: the market offers Darrell Green, a retired man, as a free agent
+FAIL [3] nfl end LAC: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end LAC: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end LAC: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end LAC: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end LAC: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end LAC: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end LAC: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end LAC: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end LAC: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end LAC: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end LAC: the market deals 351 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end LAC: the fallen men in the Sign a Player list are not the best 20 on the market
+FAIL [3] nfl end LAC: deals Derrick Thomas with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end LAC: deals Bruce Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end LAC: deals Reggie White with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end LAC: deals Ray Lewis with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end LAC: deals Jerry Rice with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end LAC: deals Emmitt Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end LAC: deals Barry Sanders with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end LAC: deals Chad Johnson with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end LAC: deals Dan Marino with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end LAC: deals Joe Namath with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end LAC: deals Jim Brown with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end LAC: deals Terry Bradshaw with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end LAC: deals JJ Watt with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end LAC: deals Tony Boselli with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end GB: the market offers Derrick Thomas, a retired man, as a free agent
+FAIL [3] nfl end GB: the market offers Bruce Smith, a retired man, as a free agent
+FAIL [3] nfl end GB: the market offers Reggie White, a retired man, as a free agent
+FAIL [3] nfl end GB: the market offers Ray Lewis, a retired man, as a free agent
+FAIL [3] nfl end GB: the market offers Jerry Rice, a retired man, as a free agent
+FAIL [3] nfl end GB: the market offers Emmitt Smith, a retired man, as a free agent
+FAIL [3] nfl end GB: the market offers Barry Sanders, a retired man, as a free agent
+FAIL [3] nfl end GB: the market offers Chad Johnson, a retired man, as a free agent
+FAIL [3] nfl end GB: the market offers Dan Marino, a retired man, as a free agent
+FAIL [3] nfl end GB: the market offers Joe Namath, a retired man, as a free agent
+FAIL [3] nfl end GB: the market offers Jim Brown, a retired man, as a free agent
+FAIL [3] nfl end GB: the market offers Terry Bradshaw, a retired man, as a free agent
+FAIL [3] nfl end GB: the market offers JJ Watt, a retired man, as a free agent
+FAIL [3] nfl end GB: the market offers Tony Boselli, a retired man, as a free agent
+FAIL [3] nfl end GB: the market offers Steve McNair, a retired man, as a free agent
+FAIL [3] nfl end GB: the market offers Peyton Manning, a retired man, as a free agent
+FAIL [3] nfl end GB: the market offers Tom Brady, a retired man, as a free agent
+FAIL [3] nfl end GB: the market offers Bo Jackson, a retired man, as a free agent
+FAIL [3] nfl end GB: the market offers John Elway, a retired man, as a free agent
+FAIL [3] nfl end GB: the market offers LaDainian Tomlinson, a retired man, as a free agent
+FAIL [3] nfl end GB: the market offers Walter Payton, a retired man, as a free agent
+FAIL [3] nfl end GB: the market offers Adrian Peterson, a retired man, as a free agent
+FAIL [3] nfl end GB: the market offers Marshall Faulk, a retired man, as a free agent
+FAIL [3] nfl end GB: the market offers Marshawn Lynch, a retired man, as a free agent
+FAIL [3] nfl end GB: the market offers Larry Fitzgerald, a retired man, as a free agent
+FAIL [3] nfl end GB: the market offers Drew Brees, a retired man, as a free agent
+FAIL [3] nfl end GB: the market offers Derrick Brooks, a retired man, as a free agent
+FAIL [3] nfl end GB: the market offers Julio Jones, a retired man, as a free agent
+FAIL [3] nfl end GB: the market offers Cam Newton, a retired man, as a free agent
+FAIL [3] nfl end GB: the market offers Lawrence Taylor, a retired man, as a free agent
+FAIL [3] nfl end GB: the market offers Darrell Green, a retired man, as a free agent
+FAIL [3] nfl end GB: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end GB: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end GB: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end GB: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end GB: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end GB: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end GB: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end GB: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end GB: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end GB: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end GB: the market deals 351 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end GB: the fallen men in the Sign a Player list are not the best 20 on the market
+FAIL [3] nfl end GB: deals Derrick Thomas with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end GB: deals Bruce Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end GB: deals Reggie White with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end GB: deals Ray Lewis with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end GB: deals Jerry Rice with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end GB: deals Emmitt Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end GB: deals Barry Sanders with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end GB: deals Chad Johnson with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end GB: deals Dan Marino with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end GB: deals Joe Namath with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end GB: deals Jim Brown with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end GB: deals Terry Bradshaw with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end GB: deals JJ Watt with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end GB: deals Tony Boselli with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CHI: the market offers Derrick Thomas, a retired man, as a free agent
+FAIL [3] nfl end CHI: the market offers Bruce Smith, a retired man, as a free agent
+FAIL [3] nfl end CHI: the market offers Reggie White, a retired man, as a free agent
+FAIL [3] nfl end CHI: the market offers Ray Lewis, a retired man, as a free agent
+FAIL [3] nfl end CHI: the market offers Jerry Rice, a retired man, as a free agent
+FAIL [3] nfl end CHI: the market offers Emmitt Smith, a retired man, as a free agent
+FAIL [3] nfl end CHI: the market offers Barry Sanders, a retired man, as a free agent
+FAIL [3] nfl end CHI: the market offers Chad Johnson, a retired man, as a free agent
+FAIL [3] nfl end CHI: the market offers Dan Marino, a retired man, as a free agent
+FAIL [3] nfl end CHI: the market offers Joe Namath, a retired man, as a free agent
+FAIL [3] nfl end CHI: the market offers Jim Brown, a retired man, as a free agent
+FAIL [3] nfl end CHI: the market offers Terry Bradshaw, a retired man, as a free agent
+FAIL [3] nfl end CHI: the market offers JJ Watt, a retired man, as a free agent
+FAIL [3] nfl end CHI: the market offers Tony Boselli, a retired man, as a free agent
+FAIL [3] nfl end CHI: the market offers Steve McNair, a retired man, as a free agent
+FAIL [3] nfl end CHI: the market offers Peyton Manning, a retired man, as a free agent
+FAIL [3] nfl end CHI: the market offers Tom Brady, a retired man, as a free agent
+FAIL [3] nfl end CHI: the market offers Bo Jackson, a retired man, as a free agent
+FAIL [3] nfl end CHI: the market offers John Elway, a retired man, as a free agent
+FAIL [3] nfl end CHI: the market offers LaDainian Tomlinson, a retired man, as a free agent
+FAIL [3] nfl end CHI: the market offers Brett Favre, a retired man, as a free agent
+FAIL [3] nfl end CHI: the market offers Adrian Peterson, a retired man, as a free agent
+FAIL [3] nfl end CHI: the market offers Marshall Faulk, a retired man, as a free agent
+FAIL [3] nfl end CHI: the market offers Marshawn Lynch, a retired man, as a free agent
+FAIL [3] nfl end CHI: the market offers Larry Fitzgerald, a retired man, as a free agent
+FAIL [3] nfl end CHI: the market offers Drew Brees, a retired man, as a free agent
+FAIL [3] nfl end CHI: the market offers Derrick Brooks, a retired man, as a free agent
+FAIL [3] nfl end CHI: the market offers Julio Jones, a retired man, as a free agent
+FAIL [3] nfl end CHI: the market offers Cam Newton, a retired man, as a free agent
+FAIL [3] nfl end CHI: the market offers Lawrence Taylor, a retired man, as a free agent
+FAIL [3] nfl end CHI: the market offers Darrell Green, a retired man, as a free agent
+FAIL [3] nfl end CHI: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end CHI: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end CHI: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end CHI: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end CHI: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end CHI: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end CHI: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end CHI: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end CHI: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end CHI: the market deals 350 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end CHI: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nfl end CHI: deals Derrick Thomas with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CHI: deals Bruce Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CHI: deals Reggie White with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CHI: deals Ray Lewis with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CHI: deals Jerry Rice with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CHI: deals Emmitt Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CHI: deals Barry Sanders with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CHI: deals Chad Johnson with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CHI: deals Dan Marino with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CHI: deals Joe Namath with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CHI: deals Jim Brown with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CHI: deals Terry Bradshaw with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CHI: deals JJ Watt with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CHI: deals Tony Boselli with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CHI: deals Steve McNair with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end MIN: the market offers Derrick Thomas, a retired man, as a free agent
+FAIL [3] nfl end MIN: the market offers Bruce Smith, a retired man, as a free agent
+FAIL [3] nfl end MIN: the market offers Reggie White, a retired man, as a free agent
+FAIL [3] nfl end MIN: the market offers Ray Lewis, a retired man, as a free agent
+FAIL [3] nfl end MIN: the market offers Jerry Rice, a retired man, as a free agent
+FAIL [3] nfl end MIN: the market offers Emmitt Smith, a retired man, as a free agent
+FAIL [3] nfl end MIN: the market offers Barry Sanders, a retired man, as a free agent
+FAIL [3] nfl end MIN: the market offers Chad Johnson, a retired man, as a free agent
+FAIL [3] nfl end MIN: the market offers Dan Marino, a retired man, as a free agent
+FAIL [3] nfl end MIN: the market offers Joe Namath, a retired man, as a free agent
+FAIL [3] nfl end MIN: the market offers Jim Brown, a retired man, as a free agent
+FAIL [3] nfl end MIN: the market offers Terry Bradshaw, a retired man, as a free agent
+FAIL [3] nfl end MIN: the market offers JJ Watt, a retired man, as a free agent
+FAIL [3] nfl end MIN: the market offers Tony Boselli, a retired man, as a free agent
+FAIL [3] nfl end MIN: the market offers Steve McNair, a retired man, as a free agent
+FAIL [3] nfl end MIN: the market offers Peyton Manning, a retired man, as a free agent
+FAIL [3] nfl end MIN: the market offers Tom Brady, a retired man, as a free agent
+FAIL [3] nfl end MIN: the market offers Bo Jackson, a retired man, as a free agent
+FAIL [3] nfl end MIN: the market offers John Elway, a retired man, as a free agent
+FAIL [3] nfl end MIN: the market offers LaDainian Tomlinson, a retired man, as a free agent
+FAIL [3] nfl end MIN: the market offers Brett Favre, a retired man, as a free agent
+FAIL [3] nfl end MIN: the market offers Walter Payton, a retired man, as a free agent
+FAIL [3] nfl end MIN: the market offers Marshall Faulk, a retired man, as a free agent
+FAIL [3] nfl end MIN: the market offers Marshawn Lynch, a retired man, as a free agent
+FAIL [3] nfl end MIN: the market offers Larry Fitzgerald, a retired man, as a free agent
+FAIL [3] nfl end MIN: the market offers Drew Brees, a retired man, as a free agent
+FAIL [3] nfl end MIN: the market offers Derrick Brooks, a retired man, as a free agent
+FAIL [3] nfl end MIN: the market offers Julio Jones, a retired man, as a free agent
+FAIL [3] nfl end MIN: the market offers Cam Newton, a retired man, as a free agent
+FAIL [3] nfl end MIN: the market offers Lawrence Taylor, a retired man, as a free agent
+FAIL [3] nfl end MIN: the market offers Darrell Green, a retired man, as a free agent
+FAIL [3] nfl end MIN: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end MIN: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end MIN: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end MIN: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end MIN: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end MIN: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end MIN: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end MIN: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end MIN: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end MIN: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end MIN: the market deals 351 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end MIN: the fallen men in the Sign a Player list are not the best 20 on the market
+FAIL [3] nfl end MIN: deals Derrick Thomas with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end MIN: deals Bruce Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end MIN: deals Reggie White with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end MIN: deals Ray Lewis with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end MIN: deals Jerry Rice with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end MIN: deals Emmitt Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end MIN: deals Barry Sanders with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end MIN: deals Chad Johnson with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end MIN: deals Dan Marino with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end MIN: deals Joe Namath with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end MIN: deals Jim Brown with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end MIN: deals Terry Bradshaw with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end MIN: deals JJ Watt with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end MIN: deals Tony Boselli with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end LAR: the market offers Derrick Thomas, a retired man, as a free agent
+FAIL [3] nfl end LAR: the market offers Bruce Smith, a retired man, as a free agent
+FAIL [3] nfl end LAR: the market offers Reggie White, a retired man, as a free agent
+FAIL [3] nfl end LAR: the market offers Ray Lewis, a retired man, as a free agent
+FAIL [3] nfl end LAR: the market offers Jerry Rice, a retired man, as a free agent
+FAIL [3] nfl end LAR: the market offers Emmitt Smith, a retired man, as a free agent
+FAIL [3] nfl end LAR: the market offers Barry Sanders, a retired man, as a free agent
+FAIL [3] nfl end LAR: the market offers Chad Johnson, a retired man, as a free agent
+FAIL [3] nfl end LAR: the market offers Dan Marino, a retired man, as a free agent
+FAIL [3] nfl end LAR: the market offers Joe Namath, a retired man, as a free agent
+FAIL [3] nfl end LAR: the market offers Jim Brown, a retired man, as a free agent
+FAIL [3] nfl end LAR: the market offers Terry Bradshaw, a retired man, as a free agent
+FAIL [3] nfl end LAR: the market offers JJ Watt, a retired man, as a free agent
+FAIL [3] nfl end LAR: the market offers Tony Boselli, a retired man, as a free agent
+FAIL [3] nfl end LAR: the market offers Steve McNair, a retired man, as a free agent
+FAIL [3] nfl end LAR: the market offers Peyton Manning, a retired man, as a free agent
+FAIL [3] nfl end LAR: the market offers Tom Brady, a retired man, as a free agent
+FAIL [3] nfl end LAR: the market offers Bo Jackson, a retired man, as a free agent
+FAIL [3] nfl end LAR: the market offers John Elway, a retired man, as a free agent
+FAIL [3] nfl end LAR: the market offers LaDainian Tomlinson, a retired man, as a free agent
+FAIL [3] nfl end LAR: the market offers Brett Favre, a retired man, as a free agent
+FAIL [3] nfl end LAR: the market offers Walter Payton, a retired man, as a free agent
+FAIL [3] nfl end LAR: the market offers Adrian Peterson, a retired man, as a free agent
+FAIL [3] nfl end LAR: the market offers Marshawn Lynch, a retired man, as a free agent
+FAIL [3] nfl end LAR: the market offers Larry Fitzgerald, a retired man, as a free agent
+FAIL [3] nfl end LAR: the market offers Drew Brees, a retired man, as a free agent
+FAIL [3] nfl end LAR: the market offers Derrick Brooks, a retired man, as a free agent
+FAIL [3] nfl end LAR: the market offers Julio Jones, a retired man, as a free agent
+FAIL [3] nfl end LAR: the market offers Cam Newton, a retired man, as a free agent
+FAIL [3] nfl end LAR: the market offers Lawrence Taylor, a retired man, as a free agent
+FAIL [3] nfl end LAR: the market offers Darrell Green, a retired man, as a free agent
+FAIL [3] nfl end LAR: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end LAR: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end LAR: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end LAR: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end LAR: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end LAR: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end LAR: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end LAR: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end LAR: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end LAR: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end LAR: the market deals 351 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end LAR: the fallen men in the Sign a Player list are not the best 20 on the market
+FAIL [3] nfl end LAR: deals Derrick Thomas with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end LAR: deals Bruce Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end LAR: deals Reggie White with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end LAR: deals Ray Lewis with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end LAR: deals Jerry Rice with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end LAR: deals Emmitt Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end LAR: deals Barry Sanders with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end LAR: deals Chad Johnson with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end LAR: deals Dan Marino with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end LAR: deals Joe Namath with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end LAR: deals Jim Brown with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end LAR: deals Terry Bradshaw with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end LAR: deals JJ Watt with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end LAR: deals Tony Boselli with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end SEA: the market offers Derrick Thomas, a retired man, as a free agent
+FAIL [3] nfl end SEA: the market offers Bruce Smith, a retired man, as a free agent
+FAIL [3] nfl end SEA: the market offers Reggie White, a retired man, as a free agent
+FAIL [3] nfl end SEA: the market offers Ray Lewis, a retired man, as a free agent
+FAIL [3] nfl end SEA: the market offers Jerry Rice, a retired man, as a free agent
+FAIL [3] nfl end SEA: the market offers Emmitt Smith, a retired man, as a free agent
+FAIL [3] nfl end SEA: the market offers Barry Sanders, a retired man, as a free agent
+FAIL [3] nfl end SEA: the market offers Chad Johnson, a retired man, as a free agent
+FAIL [3] nfl end SEA: the market offers Dan Marino, a retired man, as a free agent
+FAIL [3] nfl end SEA: the market offers Joe Namath, a retired man, as a free agent
+FAIL [3] nfl end SEA: the market offers Jim Brown, a retired man, as a free agent
+FAIL [3] nfl end SEA: the market offers Terry Bradshaw, a retired man, as a free agent
+FAIL [3] nfl end SEA: the market offers JJ Watt, a retired man, as a free agent
+FAIL [3] nfl end SEA: the market offers Tony Boselli, a retired man, as a free agent
+FAIL [3] nfl end SEA: the market offers Steve McNair, a retired man, as a free agent
+FAIL [3] nfl end SEA: the market offers Peyton Manning, a retired man, as a free agent
+FAIL [3] nfl end SEA: the market offers Tom Brady, a retired man, as a free agent
+FAIL [3] nfl end SEA: the market offers Bo Jackson, a retired man, as a free agent
+FAIL [3] nfl end SEA: the market offers John Elway, a retired man, as a free agent
+FAIL [3] nfl end SEA: the market offers LaDainian Tomlinson, a retired man, as a free agent
+FAIL [3] nfl end SEA: the market offers Brett Favre, a retired man, as a free agent
+FAIL [3] nfl end SEA: the market offers Walter Payton, a retired man, as a free agent
+FAIL [3] nfl end SEA: the market offers Adrian Peterson, a retired man, as a free agent
+FAIL [3] nfl end SEA: the market offers Marshall Faulk, a retired man, as a free agent
+FAIL [3] nfl end SEA: the market offers Larry Fitzgerald, a retired man, as a free agent
+FAIL [3] nfl end SEA: the market offers Drew Brees, a retired man, as a free agent
+FAIL [3] nfl end SEA: the market offers Derrick Brooks, a retired man, as a free agent
+FAIL [3] nfl end SEA: the market offers Julio Jones, a retired man, as a free agent
+FAIL [3] nfl end SEA: the market offers Cam Newton, a retired man, as a free agent
+FAIL [3] nfl end SEA: the market offers Lawrence Taylor, a retired man, as a free agent
+FAIL [3] nfl end SEA: the market offers Darrell Green, a retired man, as a free agent
+FAIL [3] nfl end SEA: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end SEA: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end SEA: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end SEA: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end SEA: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end SEA: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end SEA: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end SEA: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end SEA: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end SEA: the market deals 350 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end SEA: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nfl end SEA: deals Derrick Thomas with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end SEA: deals Bruce Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end SEA: deals Reggie White with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end SEA: deals Ray Lewis with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end SEA: deals Jerry Rice with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end SEA: deals Emmitt Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end SEA: deals Barry Sanders with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end SEA: deals Chad Johnson with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end SEA: deals Dan Marino with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end SEA: deals Joe Namath with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end SEA: deals Jim Brown with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end SEA: deals Terry Bradshaw with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end SEA: deals JJ Watt with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end SEA: deals Tony Boselli with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end SEA: deals Steve McNair with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end ARI: the market offers Derrick Thomas, a retired man, as a free agent
+FAIL [3] nfl end ARI: the market offers Bruce Smith, a retired man, as a free agent
+FAIL [3] nfl end ARI: the market offers Reggie White, a retired man, as a free agent
+FAIL [3] nfl end ARI: the market offers Ray Lewis, a retired man, as a free agent
+FAIL [3] nfl end ARI: the market offers Jerry Rice, a retired man, as a free agent
+FAIL [3] nfl end ARI: the market offers Emmitt Smith, a retired man, as a free agent
+FAIL [3] nfl end ARI: the market offers Barry Sanders, a retired man, as a free agent
+FAIL [3] nfl end ARI: the market offers Chad Johnson, a retired man, as a free agent
+FAIL [3] nfl end ARI: the market offers Dan Marino, a retired man, as a free agent
+FAIL [3] nfl end ARI: the market offers Joe Namath, a retired man, as a free agent
+FAIL [3] nfl end ARI: the market offers Jim Brown, a retired man, as a free agent
+FAIL [3] nfl end ARI: the market offers Terry Bradshaw, a retired man, as a free agent
+FAIL [3] nfl end ARI: the market offers JJ Watt, a retired man, as a free agent
+FAIL [3] nfl end ARI: the market offers Tony Boselli, a retired man, as a free agent
+FAIL [3] nfl end ARI: the market offers Steve McNair, a retired man, as a free agent
+FAIL [3] nfl end ARI: the market offers Peyton Manning, a retired man, as a free agent
+FAIL [3] nfl end ARI: the market offers Tom Brady, a retired man, as a free agent
+FAIL [3] nfl end ARI: the market offers Bo Jackson, a retired man, as a free agent
+FAIL [3] nfl end ARI: the market offers John Elway, a retired man, as a free agent
+FAIL [3] nfl end ARI: the market offers LaDainian Tomlinson, a retired man, as a free agent
+FAIL [3] nfl end ARI: the market offers Brett Favre, a retired man, as a free agent
+FAIL [3] nfl end ARI: the market offers Walter Payton, a retired man, as a free agent
+FAIL [3] nfl end ARI: the market offers Adrian Peterson, a retired man, as a free agent
+FAIL [3] nfl end ARI: the market offers Marshall Faulk, a retired man, as a free agent
+FAIL [3] nfl end ARI: the market offers Marshawn Lynch, a retired man, as a free agent
+FAIL [3] nfl end ARI: the market offers Drew Brees, a retired man, as a free agent
+FAIL [3] nfl end ARI: the market offers Derrick Brooks, a retired man, as a free agent
+FAIL [3] nfl end ARI: the market offers Julio Jones, a retired man, as a free agent
+FAIL [3] nfl end ARI: the market offers Cam Newton, a retired man, as a free agent
+FAIL [3] nfl end ARI: the market offers Lawrence Taylor, a retired man, as a free agent
+FAIL [3] nfl end ARI: the market offers Darrell Green, a retired man, as a free agent
+FAIL [3] nfl end ARI: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end ARI: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end ARI: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end ARI: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end ARI: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end ARI: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end ARI: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end ARI: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end ARI: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end ARI: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end ARI: the market deals 351 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end ARI: the fallen men in the Sign a Player list are not the best 20 on the market
+FAIL [3] nfl end ARI: deals Derrick Thomas with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end ARI: deals Bruce Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end ARI: deals Reggie White with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end ARI: deals Ray Lewis with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end ARI: deals Jerry Rice with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end ARI: deals Emmitt Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end ARI: deals Barry Sanders with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end ARI: deals Chad Johnson with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end ARI: deals Dan Marino with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end ARI: deals Joe Namath with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end ARI: deals Jim Brown with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end ARI: deals Terry Bradshaw with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end ARI: deals JJ Watt with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end ARI: deals Tony Boselli with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end NO: the market offers Derrick Thomas, a retired man, as a free agent
+FAIL [3] nfl end NO: the market offers Bruce Smith, a retired man, as a free agent
+FAIL [3] nfl end NO: the market offers Reggie White, a retired man, as a free agent
+FAIL [3] nfl end NO: the market offers Ray Lewis, a retired man, as a free agent
+FAIL [3] nfl end NO: the market offers Jerry Rice, a retired man, as a free agent
+FAIL [3] nfl end NO: the market offers Emmitt Smith, a retired man, as a free agent
+FAIL [3] nfl end NO: the market offers Barry Sanders, a retired man, as a free agent
+FAIL [3] nfl end NO: the market offers Chad Johnson, a retired man, as a free agent
+FAIL [3] nfl end NO: the market offers Dan Marino, a retired man, as a free agent
+FAIL [3] nfl end NO: the market offers Joe Namath, a retired man, as a free agent
+FAIL [3] nfl end NO: the market offers Jim Brown, a retired man, as a free agent
+FAIL [3] nfl end NO: the market offers Terry Bradshaw, a retired man, as a free agent
+FAIL [3] nfl end NO: the market offers JJ Watt, a retired man, as a free agent
+FAIL [3] nfl end NO: the market offers Tony Boselli, a retired man, as a free agent
+FAIL [3] nfl end NO: the market offers Steve McNair, a retired man, as a free agent
+FAIL [3] nfl end NO: the market offers Peyton Manning, a retired man, as a free agent
+FAIL [3] nfl end NO: the market offers Tom Brady, a retired man, as a free agent
+FAIL [3] nfl end NO: the market offers Bo Jackson, a retired man, as a free agent
+FAIL [3] nfl end NO: the market offers John Elway, a retired man, as a free agent
+FAIL [3] nfl end NO: the market offers LaDainian Tomlinson, a retired man, as a free agent
+FAIL [3] nfl end NO: the market offers Brett Favre, a retired man, as a free agent
+FAIL [3] nfl end NO: the market offers Walter Payton, a retired man, as a free agent
+FAIL [3] nfl end NO: the market offers Adrian Peterson, a retired man, as a free agent
+FAIL [3] nfl end NO: the market offers Marshall Faulk, a retired man, as a free agent
+FAIL [3] nfl end NO: the market offers Marshawn Lynch, a retired man, as a free agent
+FAIL [3] nfl end NO: the market offers Larry Fitzgerald, a retired man, as a free agent
+FAIL [3] nfl end NO: the market offers Derrick Brooks, a retired man, as a free agent
+FAIL [3] nfl end NO: the market offers Julio Jones, a retired man, as a free agent
+FAIL [3] nfl end NO: the market offers Cam Newton, a retired man, as a free agent
+FAIL [3] nfl end NO: the market offers Lawrence Taylor, a retired man, as a free agent
+FAIL [3] nfl end NO: the market offers Darrell Green, a retired man, as a free agent
+FAIL [3] nfl end NO: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end NO: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end NO: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end NO: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end NO: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end NO: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end NO: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end NO: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end NO: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end NO: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end NO: the market deals 351 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end NO: the fallen men in the Sign a Player list are not the best 20 on the market
+FAIL [3] nfl end NO: deals Derrick Thomas with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end NO: deals Bruce Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end NO: deals Reggie White with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end NO: deals Ray Lewis with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end NO: deals Jerry Rice with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end NO: deals Emmitt Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end NO: deals Barry Sanders with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end NO: deals Chad Johnson with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end NO: deals Dan Marino with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end NO: deals Joe Namath with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end NO: deals Jim Brown with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end NO: deals Terry Bradshaw with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end NO: deals JJ Watt with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end NO: deals Tony Boselli with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end TB: the market offers Derrick Thomas, a retired man, as a free agent
+FAIL [3] nfl end TB: the market offers Bruce Smith, a retired man, as a free agent
+FAIL [3] nfl end TB: the market offers Reggie White, a retired man, as a free agent
+FAIL [3] nfl end TB: the market offers Ray Lewis, a retired man, as a free agent
+FAIL [3] nfl end TB: the market offers Jerry Rice, a retired man, as a free agent
+FAIL [3] nfl end TB: the market offers Emmitt Smith, a retired man, as a free agent
+FAIL [3] nfl end TB: the market offers Barry Sanders, a retired man, as a free agent
+FAIL [3] nfl end TB: the market offers Chad Johnson, a retired man, as a free agent
+FAIL [3] nfl end TB: the market offers Dan Marino, a retired man, as a free agent
+FAIL [3] nfl end TB: the market offers Joe Namath, a retired man, as a free agent
+FAIL [3] nfl end TB: the market offers Jim Brown, a retired man, as a free agent
+FAIL [3] nfl end TB: the market offers Terry Bradshaw, a retired man, as a free agent
+FAIL [3] nfl end TB: the market offers JJ Watt, a retired man, as a free agent
+FAIL [3] nfl end TB: the market offers Tony Boselli, a retired man, as a free agent
+FAIL [3] nfl end TB: the market offers Steve McNair, a retired man, as a free agent
+FAIL [3] nfl end TB: the market offers Peyton Manning, a retired man, as a free agent
+FAIL [3] nfl end TB: the market offers Tom Brady, a retired man, as a free agent
+FAIL [3] nfl end TB: the market offers Bo Jackson, a retired man, as a free agent
+FAIL [3] nfl end TB: the market offers John Elway, a retired man, as a free agent
+FAIL [3] nfl end TB: the market offers LaDainian Tomlinson, a retired man, as a free agent
+FAIL [3] nfl end TB: the market offers Brett Favre, a retired man, as a free agent
+FAIL [3] nfl end TB: the market offers Walter Payton, a retired man, as a free agent
+FAIL [3] nfl end TB: the market offers Adrian Peterson, a retired man, as a free agent
+FAIL [3] nfl end TB: the market offers Marshall Faulk, a retired man, as a free agent
+FAIL [3] nfl end TB: the market offers Marshawn Lynch, a retired man, as a free agent
+FAIL [3] nfl end TB: the market offers Larry Fitzgerald, a retired man, as a free agent
+FAIL [3] nfl end TB: the market offers Drew Brees, a retired man, as a free agent
+FAIL [3] nfl end TB: the market offers Julio Jones, a retired man, as a free agent
+FAIL [3] nfl end TB: the market offers Cam Newton, a retired man, as a free agent
+FAIL [3] nfl end TB: the market offers Lawrence Taylor, a retired man, as a free agent
+FAIL [3] nfl end TB: the market offers Darrell Green, a retired man, as a free agent
+FAIL [3] nfl end TB: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end TB: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end TB: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end TB: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end TB: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end TB: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end TB: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end TB: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end TB: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end TB: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end TB: the market deals 351 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end TB: the fallen men in the Sign a Player list are not the best 20 on the market
+FAIL [3] nfl end TB: deals Derrick Thomas with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end TB: deals Bruce Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end TB: deals Reggie White with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end TB: deals Ray Lewis with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end TB: deals Jerry Rice with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end TB: deals Emmitt Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end TB: deals Barry Sanders with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end TB: deals Chad Johnson with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end TB: deals Dan Marino with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end TB: deals Joe Namath with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end TB: deals Jim Brown with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end TB: deals Terry Bradshaw with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end TB: deals JJ Watt with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end TB: deals Tony Boselli with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end ATL: the market offers Derrick Thomas, a retired man, as a free agent
+FAIL [3] nfl end ATL: the market offers Bruce Smith, a retired man, as a free agent
+FAIL [3] nfl end ATL: the market offers Reggie White, a retired man, as a free agent
+FAIL [3] nfl end ATL: the market offers Ray Lewis, a retired man, as a free agent
+FAIL [3] nfl end ATL: the market offers Jerry Rice, a retired man, as a free agent
+FAIL [3] nfl end ATL: the market offers Emmitt Smith, a retired man, as a free agent
+FAIL [3] nfl end ATL: the market offers Barry Sanders, a retired man, as a free agent
+FAIL [3] nfl end ATL: the market offers Chad Johnson, a retired man, as a free agent
+FAIL [3] nfl end ATL: the market offers Dan Marino, a retired man, as a free agent
+FAIL [3] nfl end ATL: the market offers Joe Namath, a retired man, as a free agent
+FAIL [3] nfl end ATL: the market offers Jim Brown, a retired man, as a free agent
+FAIL [3] nfl end ATL: the market offers Terry Bradshaw, a retired man, as a free agent
+FAIL [3] nfl end ATL: the market offers JJ Watt, a retired man, as a free agent
+FAIL [3] nfl end ATL: the market offers Tony Boselli, a retired man, as a free agent
+FAIL [3] nfl end ATL: the market offers Steve McNair, a retired man, as a free agent
+FAIL [3] nfl end ATL: the market offers Peyton Manning, a retired man, as a free agent
+FAIL [3] nfl end ATL: the market offers Tom Brady, a retired man, as a free agent
+FAIL [3] nfl end ATL: the market offers Bo Jackson, a retired man, as a free agent
+FAIL [3] nfl end ATL: the market offers John Elway, a retired man, as a free agent
+FAIL [3] nfl end ATL: the market offers LaDainian Tomlinson, a retired man, as a free agent
+FAIL [3] nfl end ATL: the market offers Brett Favre, a retired man, as a free agent
+FAIL [3] nfl end ATL: the market offers Walter Payton, a retired man, as a free agent
+FAIL [3] nfl end ATL: the market offers Adrian Peterson, a retired man, as a free agent
+FAIL [3] nfl end ATL: the market offers Marshall Faulk, a retired man, as a free agent
+FAIL [3] nfl end ATL: the market offers Marshawn Lynch, a retired man, as a free agent
+FAIL [3] nfl end ATL: the market offers Larry Fitzgerald, a retired man, as a free agent
+FAIL [3] nfl end ATL: the market offers Drew Brees, a retired man, as a free agent
+FAIL [3] nfl end ATL: the market offers Derrick Brooks, a retired man, as a free agent
+FAIL [3] nfl end ATL: the market offers Cam Newton, a retired man, as a free agent
+FAIL [3] nfl end ATL: the market offers Lawrence Taylor, a retired man, as a free agent
+FAIL [3] nfl end ATL: the market offers Darrell Green, a retired man, as a free agent
+FAIL [3] nfl end ATL: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end ATL: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end ATL: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end ATL: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end ATL: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end ATL: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end ATL: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end ATL: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end ATL: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end ATL: the market deals 350 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end ATL: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nfl end ATL: deals Derrick Thomas with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end ATL: deals Bruce Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end ATL: deals Reggie White with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end ATL: deals Ray Lewis with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end ATL: deals Jerry Rice with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end ATL: deals Emmitt Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end ATL: deals Barry Sanders with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end ATL: deals Chad Johnson with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end ATL: deals Dan Marino with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end ATL: deals Joe Namath with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end ATL: deals Jim Brown with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end ATL: deals Terry Bradshaw with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end ATL: deals JJ Watt with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end ATL: deals Tony Boselli with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end ATL: deals Steve McNair with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CAR: the market offers Derrick Thomas, a retired man, as a free agent
+FAIL [3] nfl end CAR: the market offers Bruce Smith, a retired man, as a free agent
+FAIL [3] nfl end CAR: the market offers Reggie White, a retired man, as a free agent
+FAIL [3] nfl end CAR: the market offers Ray Lewis, a retired man, as a free agent
+FAIL [3] nfl end CAR: the market offers Jerry Rice, a retired man, as a free agent
+FAIL [3] nfl end CAR: the market offers Emmitt Smith, a retired man, as a free agent
+FAIL [3] nfl end CAR: the market offers Barry Sanders, a retired man, as a free agent
+FAIL [3] nfl end CAR: the market offers Chad Johnson, a retired man, as a free agent
+FAIL [3] nfl end CAR: the market offers Dan Marino, a retired man, as a free agent
+FAIL [3] nfl end CAR: the market offers Joe Namath, a retired man, as a free agent
+FAIL [3] nfl end CAR: the market offers Jim Brown, a retired man, as a free agent
+FAIL [3] nfl end CAR: the market offers Terry Bradshaw, a retired man, as a free agent
+FAIL [3] nfl end CAR: the market offers JJ Watt, a retired man, as a free agent
+FAIL [3] nfl end CAR: the market offers Tony Boselli, a retired man, as a free agent
+FAIL [3] nfl end CAR: the market offers Steve McNair, a retired man, as a free agent
+FAIL [3] nfl end CAR: the market offers Peyton Manning, a retired man, as a free agent
+FAIL [3] nfl end CAR: the market offers Tom Brady, a retired man, as a free agent
+FAIL [3] nfl end CAR: the market offers Bo Jackson, a retired man, as a free agent
+FAIL [3] nfl end CAR: the market offers John Elway, a retired man, as a free agent
+FAIL [3] nfl end CAR: the market offers LaDainian Tomlinson, a retired man, as a free agent
+FAIL [3] nfl end CAR: the market offers Brett Favre, a retired man, as a free agent
+FAIL [3] nfl end CAR: the market offers Walter Payton, a retired man, as a free agent
+FAIL [3] nfl end CAR: the market offers Adrian Peterson, a retired man, as a free agent
+FAIL [3] nfl end CAR: the market offers Marshall Faulk, a retired man, as a free agent
+FAIL [3] nfl end CAR: the market offers Marshawn Lynch, a retired man, as a free agent
+FAIL [3] nfl end CAR: the market offers Larry Fitzgerald, a retired man, as a free agent
+FAIL [3] nfl end CAR: the market offers Drew Brees, a retired man, as a free agent
+FAIL [3] nfl end CAR: the market offers Derrick Brooks, a retired man, as a free agent
+FAIL [3] nfl end CAR: the market offers Julio Jones, a retired man, as a free agent
+FAIL [3] nfl end CAR: the market offers Lawrence Taylor, a retired man, as a free agent
+FAIL [3] nfl end CAR: the market offers Darrell Green, a retired man, as a free agent
+FAIL [3] nfl end CAR: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end CAR: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end CAR: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end CAR: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end CAR: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end CAR: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end CAR: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end CAR: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end CAR: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end CAR: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end CAR: the market deals 351 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end CAR: the fallen men in the Sign a Player list are not the best 20 on the market
+FAIL [3] nfl end CAR: deals Derrick Thomas with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CAR: deals Bruce Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CAR: deals Reggie White with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CAR: deals Ray Lewis with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CAR: deals Jerry Rice with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CAR: deals Emmitt Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CAR: deals Barry Sanders with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CAR: deals Chad Johnson with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CAR: deals Dan Marino with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CAR: deals Joe Namath with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CAR: deals Jim Brown with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CAR: deals Terry Bradshaw with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CAR: deals JJ Watt with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end CAR: deals Tony Boselli with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end NYG: the market offers Derrick Thomas, a retired man, as a free agent
+FAIL [3] nfl end NYG: the market offers Bruce Smith, a retired man, as a free agent
+FAIL [3] nfl end NYG: the market offers Reggie White, a retired man, as a free agent
+FAIL [3] nfl end NYG: the market offers Ray Lewis, a retired man, as a free agent
+FAIL [3] nfl end NYG: the market offers Jerry Rice, a retired man, as a free agent
+FAIL [3] nfl end NYG: the market offers Emmitt Smith, a retired man, as a free agent
+FAIL [3] nfl end NYG: the market offers Barry Sanders, a retired man, as a free agent
+FAIL [3] nfl end NYG: the market offers Chad Johnson, a retired man, as a free agent
+FAIL [3] nfl end NYG: the market offers Dan Marino, a retired man, as a free agent
+FAIL [3] nfl end NYG: the market offers Joe Namath, a retired man, as a free agent
+FAIL [3] nfl end NYG: the market offers Jim Brown, a retired man, as a free agent
+FAIL [3] nfl end NYG: the market offers Terry Bradshaw, a retired man, as a free agent
+FAIL [3] nfl end NYG: the market offers JJ Watt, a retired man, as a free agent
+FAIL [3] nfl end NYG: the market offers Tony Boselli, a retired man, as a free agent
+FAIL [3] nfl end NYG: the market offers Steve McNair, a retired man, as a free agent
+FAIL [3] nfl end NYG: the market offers Peyton Manning, a retired man, as a free agent
+FAIL [3] nfl end NYG: the market offers Tom Brady, a retired man, as a free agent
+FAIL [3] nfl end NYG: the market offers Bo Jackson, a retired man, as a free agent
+FAIL [3] nfl end NYG: the market offers John Elway, a retired man, as a free agent
+FAIL [3] nfl end NYG: the market offers LaDainian Tomlinson, a retired man, as a free agent
+FAIL [3] nfl end NYG: the market offers Brett Favre, a retired man, as a free agent
+FAIL [3] nfl end NYG: the market offers Walter Payton, a retired man, as a free agent
+FAIL [3] nfl end NYG: the market offers Adrian Peterson, a retired man, as a free agent
+FAIL [3] nfl end NYG: the market offers Marshall Faulk, a retired man, as a free agent
+FAIL [3] nfl end NYG: the market offers Marshawn Lynch, a retired man, as a free agent
+FAIL [3] nfl end NYG: the market offers Larry Fitzgerald, a retired man, as a free agent
+FAIL [3] nfl end NYG: the market offers Drew Brees, a retired man, as a free agent
+FAIL [3] nfl end NYG: the market offers Derrick Brooks, a retired man, as a free agent
+FAIL [3] nfl end NYG: the market offers Julio Jones, a retired man, as a free agent
+FAIL [3] nfl end NYG: the market offers Cam Newton, a retired man, as a free agent
+FAIL [3] nfl end NYG: the market offers Darrell Green, a retired man, as a free agent
+FAIL [3] nfl end NYG: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end NYG: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end NYG: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end NYG: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end NYG: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end NYG: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end NYG: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end NYG: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end NYG: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end NYG: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end NYG: the market deals 351 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end NYG: the fallen men in the Sign a Player list are not the best 20 on the market
+FAIL [3] nfl end NYG: deals Derrick Thomas with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end NYG: deals Bruce Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end NYG: deals Reggie White with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end NYG: deals Ray Lewis with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end NYG: deals Jerry Rice with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end NYG: deals Emmitt Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end NYG: deals Barry Sanders with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end NYG: deals Chad Johnson with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end NYG: deals Dan Marino with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end NYG: deals Joe Namath with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end NYG: deals Jim Brown with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end NYG: deals Terry Bradshaw with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end NYG: deals JJ Watt with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end NYG: deals Tony Boselli with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end WAS: the market offers Derrick Thomas, a retired man, as a free agent
+FAIL [3] nfl end WAS: the market offers Bruce Smith, a retired man, as a free agent
+FAIL [3] nfl end WAS: the market offers Reggie White, a retired man, as a free agent
+FAIL [3] nfl end WAS: the market offers Ray Lewis, a retired man, as a free agent
+FAIL [3] nfl end WAS: the market offers Jerry Rice, a retired man, as a free agent
+FAIL [3] nfl end WAS: the market offers Emmitt Smith, a retired man, as a free agent
+FAIL [3] nfl end WAS: the market offers Barry Sanders, a retired man, as a free agent
+FAIL [3] nfl end WAS: the market offers Chad Johnson, a retired man, as a free agent
+FAIL [3] nfl end WAS: the market offers Dan Marino, a retired man, as a free agent
+FAIL [3] nfl end WAS: the market offers Joe Namath, a retired man, as a free agent
+FAIL [3] nfl end WAS: the market offers Jim Brown, a retired man, as a free agent
+FAIL [3] nfl end WAS: the market offers Terry Bradshaw, a retired man, as a free agent
+FAIL [3] nfl end WAS: the market offers JJ Watt, a retired man, as a free agent
+FAIL [3] nfl end WAS: the market offers Tony Boselli, a retired man, as a free agent
+FAIL [3] nfl end WAS: the market offers Steve McNair, a retired man, as a free agent
+FAIL [3] nfl end WAS: the market offers Peyton Manning, a retired man, as a free agent
+FAIL [3] nfl end WAS: the market offers Tom Brady, a retired man, as a free agent
+FAIL [3] nfl end WAS: the market offers Bo Jackson, a retired man, as a free agent
+FAIL [3] nfl end WAS: the market offers John Elway, a retired man, as a free agent
+FAIL [3] nfl end WAS: the market offers LaDainian Tomlinson, a retired man, as a free agent
+FAIL [3] nfl end WAS: the market offers Brett Favre, a retired man, as a free agent
+FAIL [3] nfl end WAS: the market offers Walter Payton, a retired man, as a free agent
+FAIL [3] nfl end WAS: the market offers Adrian Peterson, a retired man, as a free agent
+FAIL [3] nfl end WAS: the market offers Marshall Faulk, a retired man, as a free agent
+FAIL [3] nfl end WAS: the market offers Marshawn Lynch, a retired man, as a free agent
+FAIL [3] nfl end WAS: the market offers Larry Fitzgerald, a retired man, as a free agent
+FAIL [3] nfl end WAS: the market offers Drew Brees, a retired man, as a free agent
+FAIL [3] nfl end WAS: the market offers Derrick Brooks, a retired man, as a free agent
+FAIL [3] nfl end WAS: the market offers Julio Jones, a retired man, as a free agent
+FAIL [3] nfl end WAS: the market offers Cam Newton, a retired man, as a free agent
+FAIL [3] nfl end WAS: the market offers Lawrence Taylor, a retired man, as a free agent
+FAIL [3] nfl end WAS: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end WAS: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end WAS: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end WAS: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end WAS: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end WAS: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end WAS: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end WAS: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end WAS: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end WAS: the market deals 350 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end WAS: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nfl end WAS: deals Derrick Thomas with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end WAS: deals Bruce Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end WAS: deals Reggie White with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end WAS: deals Ray Lewis with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end WAS: deals Jerry Rice with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end WAS: deals Emmitt Smith with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end WAS: deals Barry Sanders with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end WAS: deals Chad Johnson with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end WAS: deals Dan Marino with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end WAS: deals Joe Namath with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end WAS: deals Jim Brown with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end WAS: deals Terry Bradshaw with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end WAS: deals JJ Watt with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end WAS: deals Tony Boselli with no label, who is on no NFL table or is a retired man
+FAIL [3] nfl end WAS: deals Steve McNair with no label, who is on no NFL table or is a retired man
+FAIL [4] useConquest.ts: the never on market set is not built from TEAM_LEGENDS and RETIRED_GREATS_NFL less the men on a team table
+measured: {"nflGreats":10,"nbaGreats":9,"nflRetired":42,"nflStates":64,"nflDealt":1920,"nflMarket":12308,"nflLabelled":340,"nbaRetired":37,"nbaStates":60,"nbaDealt":1800,"nbaMarket":9596,"nbaLabelled":288,"conquestFilesScanned":32,"nflKeyStats":320,"nflPrinted":146,"nbaKeyStats":300}
+simConquestPeople: FAIL, 2118 of 79414 checks red
