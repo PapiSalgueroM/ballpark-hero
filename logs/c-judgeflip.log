@@ -1,0 +1,21 @@
+NEGATIVE CONTROL ON: judgeflip, a copy of this harness with its judge slipped (/home/runner/work/_temp/t-c-judgeflip/simNbaEarnedDraft-judgeflip-H7D9ho/simNbaEarnedDraft.mjs). Sections 11 must go red and no other.
+   section 1: green
+   section 6: green
+   section 2: green
+   section 3: green
+   section 4: green
+   section 5: green
+   section 8: green
+   section 9: green
+   section 10: green
+   section 11: 12 failures
+  FAIL [11]: S1 at 5 (two): the new arm at 83.25 against 83.00 was judged OUTSIDE, the known answer is PASS
+  FAIL [11]: S1 at 5 (two): the new arm at 82.75 against 83.00 was judged OUTSIDE, the known answer is PASS
+  FAIL [11]: S1 at 5 (two): the new arm at 83.75 against 83.00 was judged PASS, the known answer is OUTSIDE
+  FAIL [11]: S1 at 5 (two): the new arm at 82.25 against 83.00 was judged PASS, the known answer is OUTSIDE
+  FAIL [11]: S2 (two): the new arm at 110.0 against 100.0 was judged OUTSIDE, the known answer is PASS
+  FAIL [11]: S2 (two): the new arm at 90.0 against 100.0 was judged OUTSIDE, the known answer is PASS
+  FAIL [11]: S2 (two): the new arm at 130.0 against 100.0 was judged PASS, the known answer is OUTSIDE
+  FAIL [11]: S2 (two): the new arm at 70.0 against 100.0 was judged PASS, the known answer is OUTSIDE
+   the copy exited 1: simNbaEarnedDraft: RED in section 11.
+simNbaEarnedDraft: CONTROL judgeflip FIRED. Red in section 11 (12 failures).

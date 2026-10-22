@@ -1,0 +1,54 @@
+NEGATIVE CONTROL ON: trustblock. Sections 3 and 8 must go red and no other.
+1) what must not move: the season before the draft, and the desk off fixture
+   1a: 30 seasons to the draft, desk on, every club the user once: league, desk and 315516 draws held to the base 48cb9d4b
+   1b: git diff --quiet 48cb9d4b -- scripts/data/nbaGmDeskFixture.json scripts/simNbaGmDesk.mjs scripts/simNbaDraftCapital.mjs src/lib/nbaGmDesk.ts: exit 0, all equal to the base (printed, not a check)
+6) the class: today's twelve, then the curve, slots plus four, never over 70
+   1500 classes of 64 for 60 slots: today's twelve found in every one, 78000 men after them held to the curve rating by rating (worst 1.41 standard errors, band 4.5)
+   mean true rating by ten slots: 83.05, 71.80, 68.27, 67.94, 67.66, 67.08, 66.84; steps 11.25, 3.53, 0.33, 0.28, 0.58, 0.25
+2) the lottery through the bind: the sixteen off the numbers, drawn every season, the table's chances
+   30 closed seasons, a lottery drawn on 30 (0 with no level records in the field); 20 of them, 10000 keyed lotteries each: 280 club shares, the worst 2.84 standard errors from the table (band 4.5)
+3) the slot is the truth: every pick used once by its holder at its first owner's place
+  FAIL [3]: walk seed 1 season 2 (DEN): round one's head holds a club of the sixteen
+  FAIL [3]: walk seed 1 season 2 (DEN): round one after the lottery puts TOR (0.525) after POR (0.575)
+  FAIL [3]: walk seed 1 season 2 (DEN): round two puts WAS (0.412) after MIL (0.463)
+  FAIL [3]: walk seed 1 season 2 (DEN): the lottery field puts WAS (0.412) after MIL (0.463)
+  FAIL [3]: walk seed 1 season 2 (DEN): slot 13 (UTA's round 1) is used by MIN, the ledger says UTA
+  FAIL [3]: walk seed 1 season 2 (DEN): slot 15 (POR's round 1) is used by CHI, the ledger says POR
+  FAIL [3]: walk seed 1 season 2 (DEN): slot 16 (TOR's round 1) is used by SAC, the ledger says TOR
+  FAIL [3]: walk seed 1 season 2 (DEN): slot 19 (LAL's round 1) is used by LAL, the ledger says UTA
+   30 drafts, 600 picks: 150 of the year's picks moved first (16 his), a club with three or more 30 times, a club with none 30 times; on the clock 12 times; 173 rival rows shown, every one on its club at his scout's read
+4) drawn once: the block survives a round trip, every press, a second open and a swapped table
+   30 nights: each opened twice to the same block, read back after a JSON round trip, unchanged by every press; 30 opened again after Continue and answered as they stood; 10 drafts replayed with the table swapped under the block
+5) the incentive: the worse the finish, the earlier and the better his first selection
+   2700 nights over 30 seasons x 3 classes (450 a band), each club the GM once a class, in 5.7 s
+   new, by finish worst first, his first selection's pick and true rating: 1-5: #4.2 85.0, 6-10: #7.5 82.7, 11-15: #13.1 75.2, 16-20: #17.5 71.2, 21-25: #22.8 70.7, 26-30: #27.9 70.4
+   old, the same clubs today: 1-5: #1.0 85.7, 6-10: #1.0 85.8, 11-15: #1.0 85.8, 16-20: #1.0 85.8, 21-25: #1.0 85.7, 26-30: #1.0 85.8
+   new steps: later by 3.29, 5.61, 4.35, 5.37, 5.11 places (errors 0.28, 0.32, 0.34, 0.26, 0.14); worse by 2.32, 7.46, 3.95, 0.59, 0.28 rating (errors 0.28, 0.38, 0.35, 0.16, 0.08)
+8) the fallback: a block broken mid draft finishes the old way on a valid league
+  FAIL [8]: walk seed 1 season 1 (DEN): a block broken at year is still current
+  FAIL [8]: walk seed 1 season 1 (DEN): Continue ran on a block broken at year
+  FAIL [8]: walk seed 1 season 1 (DEN): a block broken at order is still current
+  FAIL [8]: walk seed 1 season 1 (DEN): Continue ran on a block broken at order
+  FAIL [8]: walk seed 1 season 1 (DEN): a block broken at slot is still current
+  FAIL [8]: walk seed 1 season 1 (DEN): Continue ran on a block broken at slot
+  FAIL [8]: walk seed 1 season 1 (DEN): a block broken at made is still current
+  FAIL [8]: walk seed 1 season 1 (DEN): Continue ran on a block broken at made
+   50 blocks broken mid draft (year, order, a slot, made past the end, seen): never current, no press ran, 50 finished the old way to a valid league
+9) need: a club short at a position leans to it, and never past a better read by more than the weight
+   588 rival choices, 588 of them the rule's man on the engine's grade; none passed a better grade by more than 2; taken when short vs not, in points: G 39.4 (99/489), F 33.2 (230/358), C 33.3 (275/313)
+10) the shared half names no sport; neither library draws from Math.random or carries an address
+   src/lib/gmEarnedDraft.ts: 17 imports, all the lift's; no sport named; neither library draws from Math.random or carries an address
+11) the judge on known answers: the two arm table's verdict on both sides of every edge of every band
+   22 known answers judged over 7 lines (S1 at 5 two, S1 at 10 range, S2 two, S3 print, S4 floor, S6 dead cap, S6 payers two)
+   section 1: green
+   section 6: green
+   section 2: green
+   section 3: 284 failures
+   section 4: green
+   section 5: green
+   section 8: 100 failures
+   section 9: green
+   section 10: green
+   section 11: green
+   10 sections ran (1, 6, 2, 3, 4, 5, 8, 9, 10, 11), 212104 checks
+simNbaEarnedDraft: CONTROL trustblock FIRED. Red in section 3 and 8 (284 and 100 failures).

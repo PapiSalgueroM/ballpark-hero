@@ -1,0 +1,14 @@
+NEGATIVE CONTROL ON: judgefloor, a copy of this harness with its judge slipped (/home/runner/work/_temp/t-c-judgefloor/simNbaEarnedDraft-judgefloor-17VUBy/simNbaEarnedDraft.mjs). Sections 11 must go red and no other.
+   section 1: green
+   section 6: green
+   section 2: green
+   section 3: green
+   section 4: green
+   section 5: green
+   section 8: green
+   section 9: green
+   section 10: green
+   section 11: 1 failures
+  FAIL [11]: S4 (floor): the new arm at 55.0 was judged PASS, the known answer is OUTSIDE
+   the copy exited 1: simNbaEarnedDraft: RED in section 11.
+simNbaEarnedDraft: CONTROL judgefloor FIRED. Red in section 11 (1 failures).
