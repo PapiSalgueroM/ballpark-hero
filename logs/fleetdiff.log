@@ -1,0 +1,14 @@
+base b0feca599 branch 612a7b08f
+FLEET simWonderkid branch_exit=0 main_exit=0 differing_lines=0
+FLEET simStadiumTycoon branch_exit=0 main_exit=0 differing_lines=0
+FLEET simTycoonLeague branch_exit=0 main_exit=0 differing_lines=0
+FLEET simTycoonSetPiece branch_exit=0 main_exit=0 differing_lines=12
+10c10
+< [1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+---
+> [1m[46m RUN [49m[22m [36mv3.2.7 [39m[90mTMP[39m
+12,14c12,14
+<  [32m✓[39m src/test/tycoonSetPieceBoard.test.tsx[2m > [22mone watched-match kick[2m > [22muses the selected shot once, with no daily record or completion[32m 180[2mms[22m[39m
+<  [32m✓[39m src/test/tycoonSetPieceBoard.test.tsx[2m > [22mone watched-match kick[2m > [22mretries only the committed shot after a failed save[32m 77[2mms[22m[39m
+<  [32m✓[39m src/test/tycoonSetPieceBoard.test.tsx[2m > [22mone watched-match kick[2m > [22mcannot shoot after full time, and clearly labels a late rejected result[32m 56[2mms[22m[39m
+FLEETDIFF DONE

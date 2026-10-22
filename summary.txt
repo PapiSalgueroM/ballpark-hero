@@ -1,0 +1,15 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simFreeKickRange exit=0 19s | simFreeKickRange: 3916 original source hashes held; copies, bundles and raw reports retained.
+runAllSims4 exit=1 29s | 1 harness not green.
+simTycoonDrawResult exit=0 10s | 3912 original source holds; copies, transforms and raw process records retained at /home/runner/work/ballpark-hero/ballpark-hero/tycoon-draw-result-artifacts/outcomes.
+simTycoonMoneyDisplay exit=0 21s | Original source holds: 3912; full copies, executable transforms and raw process records retained at /home/runner/work/ballpark-hero/ballpark-hero/tycoon-money-display-art
+qaFreeKickRange exit=0 28s | Free Kick consumer proof PASSED; artifacts retained at /home/runner/work/ballpark-hero/ballpark-hero/free-kick-range-artifacts/native.
+simTycoonGroundGrowth exit=0 90s | Original source, build and actual template font cache stayed byte-identical.
+simStorageWrites exit=0 10s | simStorageWrites: all green (owed: 12)
+tsc exit=0 167s | 
+simNoRivalNames exit=0 35s | No rival product names found. 0 findings.
+simFreeKick exit=0 2s | simFreeKick: green. The corners pay, one button does not, and the keeper is real.
+simHarnessAnchors exit=0 312s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simNumberFormatting exit=0 314s | Number formatting: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/number-formatting-artifacts/outcomes
+walk exit=0 94s | WALK DONE
+fleetdiff exit=0 297s | FLEETDIFF DONE
