@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+walk: node .rc/x/walk.mjs
+oldsave: git worktree add .rcmain c1b393644e00c560a0ca6a5f5dea47e57c252160 >/dev/null 2>&1 && (cd .rcmain && ../node_modules/.bin/vite build --outDir /tmp/maindist > /tmp/mainbuild.log 2>&1; echo "main build exit $?"; tail -2 /tmp/mainbuild.log) && (nohup node scripts/lib/hostLikeServer.mjs /tmp/maindist 4174 > /dev/null 2>&1 &) && sleep 4 && MAIN_BASE=http://localhost:4174 node .rc/x/oldsave.mjs
+oldprobe: git worktree add .rcmain2 c1b393644e00c560a0ca6a5f5dea47e57c252160 >/dev/null 2>&1 && BASE_ROOT=.rcmain2 SEEDS=4 node .rc/x/oldprobe.mjs

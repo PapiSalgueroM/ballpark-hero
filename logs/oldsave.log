@@ -1,0 +1,11 @@
+main build exit 0
+[32m✓ built in 44.20s[39m
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+  ok: main made a save paused at the interval (week 0, 74428 chars)
+  ok: the branch resumes main's save at the interval (stage interval)
+  ok: a high press at the break on main's save is logged at 46 ([{"minute":46,"instructions":{"press":1,"tempo":0,"width":0,"line":0}}])
+    report block: YOUR INSTRUCTIONS Balanced on all four. 46': High press ⚡ They played Gegenpress. Won back in their third 5 Crosses 14 Caught them offside 0 Goals from wide 0 of 1 Conceded on the break 0 of 0 Legs 2 fitness off each man who played
+  ok: the report of the old save names the press taken at the break
+  ok: the old career keeps no standing instructions after the match (live false, instructions undefined)
+  ok: no page errors on the branch ()
+reviewOldSave: all green (6 checks)

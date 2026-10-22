@@ -1,0 +1,86 @@
+
+== 390 reduced motion reduce
+  ok: 390-rm: the help's instructions block reads (1901 chars, no dash)
+    help: 🎛️ Team instructions. Four sit beside the mentality on the Tactics tab: pressing, tempo, width and the defensive line, each on balanced or pushed one way or the other. Balanced on all four is the game exactly as it always played. Everything else buys you something and charges you for it. What each one costs. A high press wins the ball in their half and makes chances early, but it tires the side: more goals against late on, more knocks, and 5 fitness off every man who played. A direct side goes straight over it. A high line squeezes the pitch and catches them offside, and leaves space behind. Direct tempo gives the ball away for better chances, patient play keeps it and takes more, worse shots. Going wide gets crosses in and suits wingers and attacking full backs, and leaves the middle thinner. Read the other dugout. Every club plays a style, and the match preview names it with a line on
+  ok: 390-rm: the save holds the four taps ({"press":1,"tempo":-1,"width":1,"line":1})
+  ok: 390-rm: no instruction tile or line is cut off ()
+  ok: 390-rm: the Tactics tab is no wider than the screen
+  ok: 390-rm: no dash in the picker
+    picker: 🗡️ They play Counter attack. A high line is asking for trouble. Go wide rather than through. PRESSING Stand off Balanced High press Hunt the ball in their half and win it high. Cost: Tires the side: late goals, knocks, heavy legs next week. A direct side goes over it. TEMPO Patient Balanced Direct Keep the ball and work the opening. Cost: More shots but worse ones, and a pressing side punishes a loose pass. WIDTH Narrow Balanced Wide Stretch them and get crosses in. Suits wingers and attacking full backs. Cost: Leaves the middle thinner. DEFENSIVE LINE Deep Balanced High Squeeze the pitch, catch them offside, win territory. Cost: Space in behind: more goals conceded on the break, worst agai
+  ok: 390-rm: the Match Centre names their style (counter: "🗡️ They play Counter attack. They sit deep and break fast. A high line is asking for trouble. Go wide rather than through.")
+  ok: 390-rm: a deep line taken in the first half is logged in play ({"minute":2,"instructions":{"press":1,"tempo":-1,"width":1,"line":-1}})
+  ok: 390-rm: the live sheet fits the screen
+  ok: 390-rm: the dressing room opens on what is in force now (ht:press:1 ht:tempo:-1 ht:width:1 ht:line:-1)
+  ok: 390-rm: the dressing room's tactics fit, nothing cut off ()
+    report block: YOUR INSTRUCTIONS High press, Patient, Wide, High line. 2': High press, Patient, Wide, Deep line. 46': High press, Patient, Narrow, Deep line 🗡️ They played Counter attack. Won back in their third 6 Crosses 16 Caught them offside 1 Goals from wide 0 of 0 Conceded on the break 0 of 1 Legs 5 fitness off each man who played
+  ok: 390-rm: the report's style is the Match Centre's (counter and counter)
+  ok: 390-rm: the "x of y" lines hold x at most y ([[0,0],[0,1]])
+  ok: 390-rm: no dash in the report block
+  note: 390-rm: report leaf labels 2
+  ok: 390-rm: after the match the standing plan is unmoved ({"press":1,"tempo":-1,"width":1,"line":1})
+  ok: 390-rm: no page errors ()
+
+== 390 reduced motion no-preference
+  ok: 390-mo: the help's instructions block reads (1901 chars, no dash)
+    help: 🎛️ Team instructions. Four sit beside the mentality on the Tactics tab: pressing, tempo, width and the defensive line, each on balanced or pushed one way or the other. Balanced on all four is the game exactly as it always played. Everything else buys you something and charges you for it. What each one costs. A high press wins the ball in their half and makes chances early, but it tires the side: more goals against late on, more knocks, and 5 fitness off every man who played. A direct side goes straight over it. A high line squeezes the pitch and catches them offside, and leaves space behind. Direct tempo gives the ball away for better chances, patient play keeps it and takes more, worse shots. Going wide gets crosses in and suits wingers and attacking full backs, and leaves the middle thinner. Read the other dugout. Every club plays a style, and the match preview names it with a line on
+  ok: 390-mo: the save holds the four taps ({"press":1,"tempo":-1,"width":1,"line":1})
+  ok: 390-mo: no instruction tile or line is cut off ()
+  ok: 390-mo: the Tactics tab is no wider than the screen
+  ok: 390-mo: no dash in the picker
+    picker: 🗡️ They play Counter attack. A high line is asking for trouble. Go wide rather than through. PRESSING Stand off Balanced High press Hunt the ball in their half and win it high. Cost: Tires the side: late goals, knocks, heavy legs next week. A direct side goes over it. TEMPO Patient Balanced Direct Keep the ball and work the opening. Cost: More shots but worse ones, and a pressing side punishes a loose pass. WIDTH Narrow Balanced Wide Stretch them and get crosses in. Suits wingers and attacking full backs. Cost: Leaves the middle thinner. DEFENSIVE LINE Deep Balanced High Squeeze the pitch, catch them offside, win territory. Cost: Space in behind: more goals conceded on the break, worst agai
+  ok: 390-mo: the Match Centre names their style (counter: "🗡️ They play Counter attack. They sit deep and break fast. A high line is asking for trouble. Go wide rather than through.")
+  ok: 390-mo: a deep line taken in the first half is logged in play ({"minute":2,"instructions":{"press":1,"tempo":-1,"width":1,"line":-1}})
+  ok: 390-mo: the live sheet fits the screen
+  ok: 390-mo: the dressing room opens on what is in force now (ht:press:1 ht:tempo:-1 ht:width:1 ht:line:-1)
+  ok: 390-mo: the dressing room's tactics fit, nothing cut off ()
+    report block: YOUR INSTRUCTIONS High press, Patient, Wide, High line. 2': High press, Patient, Wide, Deep line. 46': High press, Patient, Narrow, Deep line 🗡️ They played Counter attack. Won back in their third 6 Crosses 16 Caught them offside 1 Goals from wide 0 of 0 Conceded on the break 0 of 1 Legs 5 fitness off each man who played
+  ok: 390-mo: the report's style is the Match Centre's (counter and counter)
+  ok: 390-mo: the "x of y" lines hold x at most y ([[0,0],[0,1]])
+  ok: 390-mo: no dash in the report block
+  note: 390-mo: report leaf labels 2
+  ok: 390-mo: after the match the standing plan is unmoved ({"press":1,"tempo":-1,"width":1,"line":1})
+  ok: 390-mo: no page errors ()
+
+== 1280 reduced motion no-preference
+  ok: 1280-mo: the help's instructions block reads (1901 chars, no dash)
+    help: 🎛️ Team instructions. Four sit beside the mentality on the Tactics tab: pressing, tempo, width and the defensive line, each on balanced or pushed one way or the other. Balanced on all four is the game exactly as it always played. Everything else buys you something and charges you for it. What each one costs. A high press wins the ball in their half and makes chances early, but it tires the side: more goals against late on, more knocks, and 5 fitness off every man who played. A direct side goes straight over it. A high line squeezes the pitch and catches them offside, and leaves space behind. Direct tempo gives the ball away for better chances, patient play keeps it and takes more, worse shots. Going wide gets crosses in and suits wingers and attacking full backs, and leaves the middle thinner. Read the other dugout. Every club plays a style, and the match preview names it with a line on
+  ok: 1280-mo: the save holds the four taps ({"press":1,"tempo":-1,"width":1,"line":1})
+  ok: 1280-mo: no instruction tile or line is cut off ()
+  ok: 1280-mo: the Tactics tab is no wider than the screen
+  ok: 1280-mo: no dash in the picker
+    picker: 🗡️ They play Counter attack. A high line is asking for trouble. Go wide rather than through. PRESSING Stand off Balanced High press Hunt the ball in their half and win it high. Cost: Tires the side: late goals, knocks, heavy legs next week. A direct side goes over it. TEMPO Patient Balanced Direct Keep the ball and work the opening. Cost: More shots but worse ones, and a pressing side punishes a loose pass. WIDTH Narrow Balanced Wide Stretch them and get crosses in. Suits wingers and attacking full backs. Cost: Leaves the middle thinner. DEFENSIVE LINE Deep Balanced High Squeeze the pitch, catch them offside, win territory. Cost: Space in behind: more goals conceded on the break, worst agai
+  ok: 1280-mo: the Match Centre names their style (counter: "🗡️ They play Counter attack. They sit deep and break fast. A high line is asking for trouble. Go wide rather than through.")
+  ok: 1280-mo: a deep line taken in the first half is logged in play ({"minute":2,"instructions":{"press":1,"tempo":-1,"width":1,"line":-1}})
+  ok: 1280-mo: the live sheet fits the screen
+  ok: 1280-mo: the dressing room opens on what is in force now (ht:press:1 ht:tempo:-1 ht:width:1 ht:line:-1)
+  ok: 1280-mo: the dressing room's tactics fit, nothing cut off ()
+    report block: YOUR INSTRUCTIONS High press, Patient, Wide, High line. 2': High press, Patient, Wide, Deep line. 46': High press, Patient, Narrow, Deep line 🗡️ They played Counter attack. Won back in their third 6 Crosses 16 Caught them offside 1 Goals from wide 0 of 0 Conceded on the break 0 of 1 Legs 5 fitness off each man who played
+  ok: 1280-mo: the report's style is the Match Centre's (counter and counter)
+  ok: 1280-mo: the "x of y" lines hold x at most y ([[0,0],[0,1]])
+  ok: 1280-mo: no dash in the report block
+  note: 1280-mo: report leaf labels 2
+  ok: 1280-mo: after the match the standing plan is unmoved ({"press":1,"tempo":-1,"width":1,"line":1})
+  ok: 1280-mo: no page errors ()
+
+== 1280 reduced motion reduce
+  ok: 1280-rm: the help's instructions block reads (1901 chars, no dash)
+    help: 🎛️ Team instructions. Four sit beside the mentality on the Tactics tab: pressing, tempo, width and the defensive line, each on balanced or pushed one way or the other. Balanced on all four is the game exactly as it always played. Everything else buys you something and charges you for it. What each one costs. A high press wins the ball in their half and makes chances early, but it tires the side: more goals against late on, more knocks, and 5 fitness off every man who played. A direct side goes straight over it. A high line squeezes the pitch and catches them offside, and leaves space behind. Direct tempo gives the ball away for better chances, patient play keeps it and takes more, worse shots. Going wide gets crosses in and suits wingers and attacking full backs, and leaves the middle thinner. Read the other dugout. Every club plays a style, and the match preview names it with a line on
+  ok: 1280-rm: the save holds the four taps ({"press":1,"tempo":-1,"width":1,"line":1})
+  ok: 1280-rm: no instruction tile or line is cut off ()
+  ok: 1280-rm: the Tactics tab is no wider than the screen
+  ok: 1280-rm: no dash in the picker
+    picker: 🗡️ They play Counter attack. A high line is asking for trouble. Go wide rather than through. PRESSING Stand off Balanced High press Hunt the ball in their half and win it high. Cost: Tires the side: late goals, knocks, heavy legs next week. A direct side goes over it. TEMPO Patient Balanced Direct Keep the ball and work the opening. Cost: More shots but worse ones, and a pressing side punishes a loose pass. WIDTH Narrow Balanced Wide Stretch them and get crosses in. Suits wingers and attacking full backs. Cost: Leaves the middle thinner. DEFENSIVE LINE Deep Balanced High Squeeze the pitch, catch them offside, win territory. Cost: Space in behind: more goals conceded on the break, worst agai
+  ok: 1280-rm: the Match Centre names their style (counter: "🗡️ They play Counter attack. They sit deep and break fast. A high line is asking for trouble. Go wide rather than through.")
+  ok: 1280-rm: a deep line taken in the first half is logged in play ({"minute":2,"instructions":{"press":1,"tempo":-1,"width":1,"line":-1}})
+  ok: 1280-rm: the live sheet fits the screen
+  ok: 1280-rm: the dressing room opens on what is in force now (ht:press:1 ht:tempo:-1 ht:width:1 ht:line:-1)
+  ok: 1280-rm: the dressing room's tactics fit, nothing cut off ()
+    report block: YOUR INSTRUCTIONS High press, Patient, Wide, High line. 2': High press, Patient, Wide, Deep line. 46': High press, Patient, Narrow, Deep line 🗡️ They played Counter attack. Won back in their third 6 Crosses 16 Caught them offside 1 Goals from wide 0 of 0 Conceded on the break 0 of 1 Legs 5 fitness off each man who played
+  ok: 1280-rm: the report's style is the Match Centre's (counter and counter)
+  ok: 1280-rm: the "x of y" lines hold x at most y ([[0,0],[0,1]])
+  ok: 1280-rm: no dash in the report block
+  note: 1280-rm: report leaf labels 2
+  ok: 1280-rm: after the match the standing plan is unmoved ({"press":1,"tempo":-1,"width":1,"line":1})
+  ok: 1280-rm: no page errors ()
+    motion (running animations): {"390-rm-first":0,"390-rm-second":0,"390-mo-first":0,"390-mo-second":0,"1280-mo-first":0,"1280-mo-second":0,"1280-rm-first":0,"1280-rm-second":0}
+reviewWalk: all green (60 checks)
