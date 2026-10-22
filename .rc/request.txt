@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+playNflTruth: node scripts/playNflTruth.mjs
+careerEntryGuide1031: node scripts/qa/careerEntryGuide1031.mjs
+playUsDirtyMoney: node scripts/playUsDirtyMoney.mjs
+weight-head3: node .rc/x/weight1534.mjs head3
