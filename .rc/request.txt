@@ -1,0 +1,44 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simSportsFacts: node scripts/simSportsFacts.mjs
+simHigherLowerFacts: node scripts/simHigherLowerFacts.mjs
+simF1Champions: node scripts/simF1Champions.mjs
+sf-hlonesource: SPORTS_FACTS_CONTROL=hlonesource node scripts/simSportsFacts.mjs
+sf-hlstale: SPORTS_FACTS_CONTROL=hlstale node scripts/simSportsFacts.mjs
+sf-crossclue: SPORTS_FACTS_CONTROL=crossclue node scripts/simSportsFacts.mjs
+sf-hlcutoff: SPORTS_FACTS_CONTROL=hlcutoff node scripts/simSportsFacts.mjs
+sf-tennisstale: SPORTS_FACTS_CONTROL=tennisstale node scripts/simSportsFacts.mjs
+sf-f1driver: SPORTS_FACTS_CONTROL=f1driver node scripts/simSportsFacts.mjs
+sf-f1pool: SPORTS_FACTS_CONTROL=f1pool node scripts/simSportsFacts.mjs
+sf-vanishpool: SPORTS_FACTS_CONTROL=vanishpool node scripts/simSportsFacts.mjs
+sf-editorial: SPORTS_FACTS_CONTROL=editorial node scripts/simSportsFacts.mjs
+sf-onesource: SPORTS_FACTS_CONTROL=onesource node scripts/simSportsFacts.mjs
+hl-henrystale: HL_FACTS_CONTROL=henrystale node scripts/simHigherLowerFacts.mjs
+hl-apmerge: HL_FACTS_CONTROL=apmerge node scripts/simHigherLowerFacts.mjs
+hl-playeduntil: HL_FACTS_CONTROL=playeduntil node scripts/simHigherLowerFacts.mjs
+hl-durantteam: HL_FACTS_CONTROL=durantteam node scripts/simHigherLowerFacts.mjs
+hl-nflstale: HL_FACTS_CONTROL=nflstale node scripts/simHigherLowerFacts.mjs
+hl-nbastale: HL_FACTS_CONTROL=nbastale node scripts/simHigherLowerFacts.mjs
+hl-tennismerge: HL_FACTS_CONTROL=tennismerge node scripts/simHigherLowerFacts.mjs
+hl-stale: HL_FACTS_CONTROL=stale node scripts/simHigherLowerFacts.mjs
+hl-inversion: HL_FACTS_CONTROL=inversion node scripts/simHigherLowerFacts.mjs
+hl-nolast: HL_FACTS_CONTROL=nolast node scripts/simHigherLowerFacts.mjs
+hl-goalieok: HL_FACTS_CONTROL=goalieok node scripts/simHigherLowerFacts.mjs
+hl-heldfix: HL_FACTS_CONTROL=heldfix node scripts/simHigherLowerFacts.mjs
+hl-mlbstale: HL_FACTS_CONTROL=mlbstale node scripts/simHigherLowerFacts.mjs
+hl-bogus: HL_FACTS_CONTROL=bogus node scripts/simHigherLowerFacts.mjs
+f1-wins: F1_CONTROL=wins node scripts/simF1Champions.mjs
+simFaceOff: node scripts/simFaceOff.mjs
+simFaceOffDeadline: node scripts/simFaceOffDeadline.mjs
+simHigherLowerReveal: node scripts/simHigherLowerReveal.mjs
+simHigherLower: node scripts/simHigherLower.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simDateDraws: node scripts/simDateDraws.mjs
+simDailyStanding: node scripts/simDailyStanding.mjs
+simNbaChainNames: node scripts/simNbaChainNames.mjs
+simResultPillComparison: node scripts/simResultPillComparison.mjs
+simTennisSlams: node scripts/simTennisSlams.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+vitest: node_modules/.bin/vitest run src/test/higherLowerReveal.test.tsx src/test/dailySaveShapes.test.tsx src/test/resultScorePillComparison.test.tsx src/test/faceOffDeadline.test.tsx src/test/dailySaveParity.test.tsx --testTimeout=300000 --hookTimeout=120000
