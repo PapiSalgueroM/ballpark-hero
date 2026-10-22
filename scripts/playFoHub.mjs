@@ -75,11 +75,38 @@ const hubBoxes = desk => [...BOXES.map(([word]) => word), desk.play, ...DESK_BOX
 const tile = (page, word) =>
   page.locator('button:has(div.uppercase)').filter({ hasText: new RegExp(word, 'i') }).first();
 
+/* Round 1537: a doctored save, not a signing. It moves the save's own free agents onto the roster, lowest
+   rated first (the order nbaTipOff fills the manager's club in), until it holds `to` men. Each man keeps his
+   asking salary and no cap room is checked, so this is neither nbaSign (which refuses without room) nor
+   nbaTipOff (which signs each man on the minimum for one year): no player could make exactly this save.
+   Nothing the walk asserts reads salary or room, and a fresh save has no rotation preference or cut ledger
+   to reconcile, so the box it reads is the box that roster size and those injuries draw. */
+const topUp = (page, key, to) => page.evaluate(([key, to]) => {
+  const s = JSON.parse(localStorage.getItem(key));
+  const squad = s.league.teams[s.myTeam].players;
+  const pool = [...s.league.freeAgents].sort((a, b) => a.ovr - b.ovr);
+  while (squad.length < to && pool.length > 0) {
+    const p = pool.shift();
+    s.league.freeAgents.splice(s.league.freeAgents.indexOf(p), 1);
+    squad.push(p);
+  }
+  localStorage.setItem(key, JSON.stringify(s));
+  return { size: squad.length };
+}, [key, to]);
+
+/* Round 1537: the save's round and roster size, for the walk past tip off. */
+const saveState = (page, key) => page.evaluate(key => {
+  const s = JSON.parse(localStorage.getItem(key));
+  return { round: s.league.round, size: s.league.teams[s.myTeam].players.length };
+}, key);
+
 const browser = await chromium.launch();
 
 for (const desk of DESKS) {
   console.log(`${desk.name} front office`);
   const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
+  /* Round 1537: the walk never reaches the live database (the standing rule since 2026-10-02). */
+  await ctx.route(/supabase\.co/, r => r.abort());
   const page = await ctx.newPage();
   const errors = [];
   page.on('pageerror', e => errors.push(String(e)));
@@ -159,8 +186,10 @@ for (const desk of DESKS) {
        keeps the dot lit, by design (simNbaLuxuryTax section 6). The walk went on doctoring its injury onto
        that short roster, so the box rightly read "4 short of the 14 man floor" instead of the star's name.
        It now reads that floor line first, then tops the roster up to the floor from the save's own free
-       agents, lowest rated first, the way a signing moves a man, and plays the injury checks below on a
-       roster the season can start with. Every check below is unchanged. */
+       agents (see topUp for how far that save is from a real signing) and plays the injury checks below on
+       a roster the season can start with. Every check below is unchanged. On the way up it stops one man
+       short and reads that too: a rule that warned only at two or more short passed every check before
+       (the Round 1537 review's "thirteen" mutation). */
     if (desk.floor && CONTROL !== 'nofloor') {
       const count = await page.evaluate(key => {
         const s = JSON.parse(localStorage.getItem(key) ?? 'null');
@@ -171,21 +200,17 @@ for (const desk of DESKS) {
         const st = await shortBox.innerText();
         say(st.includes(`${desk.floor - count} short of the ${desk.floor} man floor`), `${desk.name}: a short roster says so on the box (reads "${st.replace(/\n/g, ' / ')}")`);
         say(await shortBox.locator('span.animate-pulse').count() === 1, `${desk.name}: a short roster lights the box`);
-        const moved = await page.evaluate(([key, floor]) => {
-          const s = JSON.parse(localStorage.getItem(key));
-          const squad = s.league.teams[s.myTeam].players;
-          const pool = [...s.league.freeAgents].sort((a, b) => a.ovr - b.ovr);
-          let n = 0;
-          while (squad.length < floor && pool.length > 0) {
-            const p = pool.shift();
-            s.league.freeAgents.splice(s.league.freeAgents.indexOf(p), 1);
-            squad.push(p);
-            n += 1;
-          }
-          localStorage.setItem(key, JSON.stringify(s));
-          return { n, size: squad.length };
-        }, [desk.key, desk.floor]);
-        say(moved.size === desk.floor, `${desk.name}: the roster is topped up to the ${desk.floor} man floor (${moved.n} free agents signed, ${count} before)`);
+        if (count < desk.floor - 1) {
+          const one = await topUp(page, desk.key, desk.floor - 1);
+          await page.reload({ waitUntil: 'networkidle' });
+          await page.waitForTimeout(1200);
+          const oneBox = tile(page, 'Roster');
+          const ot = await oneBox.innerText();
+          say(one.size === desk.floor - 1 && ot.includes(`1 short of the ${desk.floor} man floor`), `${desk.name}: a roster one short of the floor says so (${one.size} men, reads "${ot.replace(/\n/g, ' / ')}")`);
+          say(await oneBox.locator('span.animate-pulse').count() === 1, `${desk.name}: a roster one short of the floor lights the box`);
+        }
+        const moved = await topUp(page, desk.key, desk.floor);
+        say(moved.size === desk.floor, `${desk.name}: the roster is topped up to the ${desk.floor} man floor (${moved.size - count} free agents moved, ${count} before)`);
         await page.reload({ waitUntil: 'networkidle' });
         await page.waitForTimeout(1200);
       } else {
@@ -227,6 +252,71 @@ for (const desk of DESKS) {
       const fitBox = tile(page, 'Roster');
       say(await fitBox.locator('span.animate-pulse').count() === 0, `${desk.name}: a fit squad puts the dot out`);
       say(/under contract/.test(await fitBox.innerText()), `${desk.name}: a fit squad counts the contracts instead`);
+
+      /* Round 1537 (review): past tip off. The league fills a short roster once, before round 1, and Waive
+         stays open down to the cut floor all season. The board used to pass the tip off floor in every
+         round, so one man waived after round 1 left the box reading "1 short of the 14 man floor. Filled on
+         minimum deals at tip off." for the rest of the season, lit, with a hurt star never named. So: play
+         round 1 through the play box, waive one man through the Roster box, and read the box hurt and fit. */
+      if (desk.floor && CONTROL !== 'nofloor') {
+        const press = async () => {
+          if (await page.locator('[data-gm-press]').count() > 0) {
+            await page.locator('[data-gm-press] button').first().click();
+            await page.waitForTimeout(500);
+          }
+        };
+        const toHub = async () => {
+          const back = page.locator('button:has-text("Hub")');
+          if (await back.count() > 0) { await back.first().click(); await page.waitForTimeout(400); }
+        };
+        await press();
+        await tile(page, desk.play).click();
+        await page.waitForTimeout(500);
+        await page.locator('button:has-text("Play Round")').first().click();
+        await page.waitForTimeout(1500);
+        await press();
+        await toHub();
+        const played = await saveState(page, desk.key);
+        say(played.round === 2 && played.size === desk.floor, `${desk.name}: round 1 is played at the floor (round ${played.round}, ${played.size} men)`);
+        await tile(page, 'Roster').click();
+        await page.waitForTimeout(500);
+        const waives = page.locator('button:has-text("Waive, $"):not([disabled])');
+        const nWaive = await waives.count();
+        if (nWaive > 0) {
+          await waives.nth(nWaive - 1).click();
+          await page.waitForTimeout(300);
+          await page.locator('[data-cut-confirm] button:has-text("Waive him")').first().click();
+          await page.waitForTimeout(500);
+        }
+        await toHub();
+        const cut = await saveState(page, desk.key);
+        say(cut.round === 2 && cut.size === desk.floor - 1, `${desk.name}: one man waived after tip off (${nWaive} Waive buttons, ${cut.size} men at round ${cut.round})`);
+        const hurt2 = await page.evaluate(key => {
+          const s = JSON.parse(localStorage.getItem(key));
+          const squad = s.league.teams[s.myTeam].players;
+          for (const p of squad) p.out = 0;
+          const star = [...squad].sort((a, b) => b.ovr - a.ovr)[0];
+          star.out = 3;
+          localStorage.setItem(key, JSON.stringify(s));
+          return star.name;
+        }, desk.key);
+        await page.reload({ waitUntil: 'networkidle' });
+        await page.waitForTimeout(1200);
+        const lateBox = tile(page, 'Roster');
+        const lt = await lateBox.innerText();
+        say(/1 unavailable/.test(lt) && lt.includes(hurt2) && !/short of/.test(lt), `${desk.name}: after tip off a roster under the floor names ${hurt2} (reads "${lt.replace(/\n/g, ' / ')}")`);
+        say(await lateBox.locator('span.animate-pulse').count() === 1, `${desk.name}: after tip off that injury lights the box`);
+        await page.evaluate(key => {
+          const s = JSON.parse(localStorage.getItem(key));
+          for (const p of s.league.teams[s.myTeam].players) p.out = 0;
+          localStorage.setItem(key, JSON.stringify(s));
+        }, desk.key);
+        await page.reload({ waitUntil: 'networkidle' });
+        await page.waitForTimeout(1200);
+        const lateFit = tile(page, 'Roster');
+        const lf = await lateFit.innerText();
+        say(await lateFit.locator('span.animate-pulse').count() === 0 && /under contract/.test(lf) && !/short of/.test(lf), `${desk.name}: after tip off a fit roster under the floor puts the dot out (reads "${lf.replace(/\n/g, ' / ')}")`);
+      }
     }
   }
 
