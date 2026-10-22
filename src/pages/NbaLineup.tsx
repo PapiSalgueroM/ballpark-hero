@@ -394,7 +394,8 @@ const NbaLineup = () => {
                         <span className="text-xs font-bold text-primary w-7">{p.role}</span>
                         <span className="text-foreground flex-1 min-w-0 truncate">{p.name}</span>
                         <span className="font-bold text-foreground">{fmtStat(p.value)}</span>
-                        <span className="text-[11px] text-muted-foreground w-24 text-right truncate">{p.team}</span>
+                        {/* The nickname: every one is unique and fits the column ("Philadelphia 76ers" did not). */}
+                        <span className="text-[11px] text-muted-foreground w-24 text-right truncate" title={p.team}>{p.team.split(' ').pop()}</span>
                       </div>
                     ))}
                   </div>

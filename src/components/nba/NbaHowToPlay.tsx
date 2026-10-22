@@ -53,6 +53,7 @@ export function NbaHowToPlay({ open, onOpenChange }: NbaHowToPlayProps) {
               <li>• Each player's real <span className="text-orange-400 font-semibold">career number</span> shows on the court, straight from our stat table</li>
               <li>• A <span className="text-primary font-semibold">running total</span> tracks your combined number</li>
               <li>• Every pick needs a career line in our table (careers from 1965-66 on). If we can't find one, pick someone else</li>
+              <li>• Two players who share a name can't be told apart in our table, so neither one counts</li>
               <li>• Steals and blocks only count careers that started in 1973-74 or later, when the league began keeping them</li>
               <li>• Submit and your five is scored out of 100: the best five your teams allowed is 100, the worst is 0</li>
             </ul>
