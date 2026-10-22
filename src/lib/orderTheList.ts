@@ -8,6 +8,10 @@ import { dailyIndex, getTodayET } from '@/lib/dateUtils';
  * 2026-07-22 and confirmed strictly distinct (no ties -> unambiguous order).
  * Coverage note: nhl_player_stats truncates pre-1968 careers, so NHL rounds use
  * only players who debuted 1971 or later.
+ * Round 1551: a round that names a player who is still playing says in its
+ * stat label which season its totals run through ("through 2025-26"), so the
+ * order stays true while his total keeps moving. scripts/simSeasonDue.mjs
+ * fails a round that names anyone not on its retired list without that stamp.
  */
 
 export interface RankItem { name: string; value: number; }
@@ -49,13 +53,18 @@ export const RANK_ROUNDS: RankRound[] = [
     { name: 'Steve Nash', value: 10335 },
     { name: 'Magic Johnson', value: 10141 },
   ], 'nba_player_stats.ast'),
-  R('nba-3pm', 'NBA', 'career three-pointers made', '3PM', [
-    { name: 'Stephen Curry', value: 4242 },
-    { name: 'James Harden', value: 3388 },
+  // Round 1551: three of these five are still playing, so the label carries
+  // the season the totals run through and stays true when Thompson passes
+  // Allen. The 2026-07-22 pull was a few games short for all three; the
+  // values are regular season totals through 2025-26 from the season rows on
+  // Basketball-Reference and ESPN, which agree (checked 2026-10-22).
+  R('nba-3pm', 'NBA', 'career three-pointers made through 2025-26', '3PM', [
+    { name: 'Stephen Curry', value: 4248 },
+    { name: 'James Harden', value: 3390 },
     { name: 'Ray Allen', value: 2973 },
-    { name: 'Klay Thompson', value: 2895 },
+    { name: 'Klay Thompson', value: 2899 },
     { name: 'Reggie Miller', value: 2560 },
-  ], 'nba_player_stats.three_p'),
+  ], 'Basketball-Reference and ESPN regular season rows through 2025-26, checked 2026-10-22'),
   R('nba-reb', 'NBA', 'career rebounds', 'reb', [
     { name: 'Tim Duncan', value: 15091 },
     { name: 'Karl Malone', value: 14968 },
@@ -70,13 +79,16 @@ export const RANK_ROUNDS: RankRound[] = [
     { name: 'Ron Francis', value: 1798 },
     { name: 'Mario Lemieux', value: 1723 },
   ], 'nhl_player_stats.points (all debuted >= 1971)'),
-  R('nhl-goals', 'NHL', 'career goals', 'G', [
-    { name: 'Alex Ovechkin', value: 928 },
+  // Round 1551: Ovechkin is still playing. Regular season goals through
+  // 2025-26 (897 after 2024-25, 32 in 2025-26) on Hockey-Reference and ESPN,
+  // checked 2026-10-22; the 2026-07-22 pull had 928.
+  R('nhl-goals', 'NHL', 'career goals through 2025-26', 'G', [
+    { name: 'Alex Ovechkin', value: 929 },
     { name: 'Wayne Gretzky', value: 894 },
     { name: 'Jaromír Jágr', value: 766 },
     { name: 'Brett Hull', value: 741 },
     { name: 'Steve Yzerman', value: 692 },
-  ], 'nhl_player_stats.goals (all debuted >= 1971)'),
+  ], 'Hockey-Reference and ESPN regular season rows through 2025-26, checked 2026-10-22'),
   R('nhl-ast', 'NHL', 'career assists', 'A', [
     { name: 'Wayne Gretzky', value: 1963 },
     { name: 'Ron Francis', value: 1249 },

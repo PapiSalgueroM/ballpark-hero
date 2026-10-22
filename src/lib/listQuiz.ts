@@ -424,8 +424,9 @@ export const LIST_PUZZLES: ListPuzzleDef[] = [
     // Western Bulldogs rename), the same convention the NBA list uses
     // for the Minneapolis Lakers. Famous counts hold: Essendon, Carlton
     // and Collingwood 16 flags each. simListQuizSources ratchets the
-    // table at exactly 129 rows and pins the counts; when the 2026
-    // grand final is played, the new row and the ratchet move together.
+    // table at exactly 130 rows since Round 1551 added 2026 and pins the
+    // counts; when the 2027 grand final is played, the new row and the
+    // ratchet move together.
     fetch: () => col('afl_premiers', 'premier'),
   },
   {
@@ -458,7 +459,8 @@ export const LIST_PUZZLES: ListPuzzleDef[] = [
     // years carry every medallist, including the 1930 and 2012
     // retrospective awards, and cleanAnswers folds the repeat winners so
     // Bunton, Reynolds, Skilton and Stewart are one answer each.
-    // simListQuizSources ratchets the table at exactly 112 rows and pins
+    // simListQuizSources ratchets the table at exactly 113 rows (Round 1551
+    // added 2026) and pins
     // those four at three medals apiece.
     fetch: () => col('afl_brownlow', 'winner'),
   },
@@ -471,7 +473,8 @@ export const LIST_PUZZLES: ListPuzzleDef[] = [
     // no award in 1997 (the split season) or 2003 (the night was called
     // off), shared in 2014 and 2016. Two-source verified 2026-08-25 against
     // rugbyleagueproject.org and topendsports.com, agreeing on every year.
-    // simListQuizSources ratchets the table at exactly 47 rows and pins
+    // simListQuizSources ratchets the table at exactly 48 rows (Round 1551
+    // added 2026) and pins
     // Thurston at four and Johns at three.
     fetch: () => col('nrl_dally_m', 'winner'),
   },
