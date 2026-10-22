@@ -1,0 +1,3 @@
+bundle exit=0 0s | simLiveSimMotion: the bundle section alone is green. The part is 28842 bytes minified, 12099 gzipped, and carries nothing of Club Manager.
+motion exit=1 49s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/liveSimMotion.test.tsx,title=src/test/liveSimMotion.test.tsx > Round 1521 by hand%2C and through the v
+tsc exit=0 59s | 
