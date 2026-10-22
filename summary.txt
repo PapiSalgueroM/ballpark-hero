@@ -1,0 +1,2 @@
+quick exit=0 84s | simNbaDraftBoard: green.
+redraw exit=1 85s | simNbaDraftBoard control redraw: FIRED, section 3 red with 168 failure(s), the others green.
