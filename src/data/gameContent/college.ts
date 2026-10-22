@@ -755,7 +755,7 @@ export const COLLEGE_CONTENT: GameContentMap = {
         heading: "Twelve teams make the Playoff field",
         items: [
           "The Playoff field is 12: the 4 conference champions, the best ranked Group of Five school, Notre Dame if it ranks in the top 12, and at-larges to fill it, seeded by ranking, byes for the top four.",
-          "Notre Dame plays as an independent, the way it really does: no conference title game, and five ACC opponents a season. The four Group of Five schools are not one conference, so they play no title game either.",
+          "Notre Dame plays as an independent, the way it really does, so it has no conference title game; here it meets five ACC teams a season, the average its real ACC deal sets. The four Group of Five schools are not one conference, so they play no title game either.",
           "On the same record the better resume ranks higher: strength of schedule, the average strength of every opponent actually played, title game included, plus the team's own strength. The at-large spots and the seeds come off that ranking, and the Schedule tab shows your number and where it ranks.",
         ],
       },

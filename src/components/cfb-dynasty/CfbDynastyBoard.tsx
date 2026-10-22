@@ -82,7 +82,7 @@ const chase = (id: string) => {
   const conf = CFB_SCHOOL_MAP.get(id)?.conf ?? '';
   if (LEAGUES.has(conf)) return 'a conference title to defend';
   return conf === 'IND'
-    ? 'no conference to win (Notre Dame is independent, so it is the top 12 or bust)'
+    ? 'no conference to win (Notre Dame is independent: finish top 12 and you are in the Playoff)'
     : 'the Group of Five\'s automatic Playoff spot to chase';
 };
 const rivalryLine = (note: string) => `🔥 Week ${CFB_RIVALRY_ROUND} is rivalry week: ${note}.`;
