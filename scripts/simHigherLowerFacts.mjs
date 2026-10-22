@@ -48,6 +48,9 @@
  *   nflstale    nfl: Tomlinson dropped from 162 to 100                    2, 3
  *   tennismerge tennis: Court counted under one name only, 13 not 24      2, 3
  *   playeduntil the NFL card prints "played until" again                  7
+ *   henrystale  nfl: Henry back to his stale 2024 total of 111            2, 3
+ *   apmerge     nfl rushing yards: the two Adrian Petersons added
+ *               together again (16,204), which beats Frank Gore           2, 3
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -56,13 +59,14 @@ import { loadSport, readSource, rewrite, checkSport } from './lib/higherLowerFen
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.HL_FACTS_CONTROL || '';
-const EXPECT = { stale: [2], inversion: [2, 3], nolast: [4], goalieok: [5], heldfix: [3, 6], nbastale: [2, 3], mlbstale: [2], nflstale: [2, 3], tennismerge: [2, 3], playeduntil: [7] };
+const EXPECT = { stale: [2], inversion: [2, 3], nolast: [4], goalieok: [5], heldfix: [3, 6], nbastale: [2, 3], mlbstale: [2], nflstale: [2, 3], tennismerge: [2, 3], playeduntil: [7], henrystale: [2, 3], apmerge: [2, 3] };
 /* Exit 2, never 1: 1 is a control that fired, and a mistyped name must not read as one. */
 if (CONTROL && !(CONTROL in EXPECT)) {
   console.log(`   FAIL unknown control ${CONTROL} (known: ${Object.keys(EXPECT).join(', ')})`);
   process.exit(2);
 }
 
+const NFL_RECORD = 'scripts/data/nflHigherLowerVerified2026-10.json';
 const SPORTS = [
   {
     key: 'hockey', label: 'NHL Higher or Lower',
@@ -96,14 +100,24 @@ const SPORTS = [
     unverifiedMarker: 'unverified', cannotBeChecked: null,
   },
   {
-    key: 'nfl', label: 'NFL Higher or Lower',
+    key: 'nfl', label: 'NFL Higher or Lower (touchdowns)',
     file: 'src/data/nflHLPlayers.ts', exportName: 'nflHLPlayers',
     metric: 'careerTds', asOf: 'lastSeason',
-    /* nflfastr begins in 1999, so anyone who debuted earlier is held from the
-       file (see the record's heldFromFile reasons), the Howe and Wilt shape. */
-    record: 'scripts/data/nflHigherLowerVerified2026-09.json',
+    /* Round 1549: the official totals through 2025 on two web sources per
+       player, every category, in place of the nflfastr read of 2026-09. */
+    record: NFL_RECORD, recordKey: 'tds',
     unverifiedMarker: 'unverified', cannotBeChecked: null,
   },
+  /* Round 1549: the other five NFL categories, each its own fenced game. They
+     had no record at all, and two of them carried a value that was two men
+     added together (Adrian Peterson's rushing yards, Steve Smith's catches). */
+  ...[['passYds', 'passing yards'], ['passTds', 'passing touchdowns'], ['rushYds', 'rushing yards'], ['recYds', 'receiving yards'], ['recs', 'receptions']].map(([cat, what]) => ({
+    key: `nfl-${cat}`, label: `NFL Higher or Lower (${what})`,
+    file: 'src/data/nflHLCategories.ts', exportName: 'NFL_HL_CATEGORIES', category: cat,
+    metric: 'value', asOf: 'lastSeason',
+    record: NFL_RECORD, recordKey: cat,
+    unverifiedMarker: 'unverified', cannotBeChecked: null,
+  })),
   {
     key: 'tennis', label: 'Tennis Higher or Lower',
     file: 'src/data/tennisHLPlayers.ts', exportName: 'tennisHLPlayers',
@@ -161,6 +175,13 @@ for (const cfg of SPORTS.filter(s => s.record)) {
     } else if (cfg.key === 'nfl' && CONTROL === 'nflstale') {
       /* Tomlinson dropped from the top to the middle of the list, so it reorders. */
       source = rewrite(source, 'careerTds: 162', 'careerTds: 100', 'nflstale drops Tomlinson into the pack');
+    } else if (cfg.key === 'nfl' && CONTROL === 'henrystale') {
+      /* The stale 2024 total that shipped until Round 1549: 111 puts him
+         under Alexander, Gates, Fitzgerald and Peterson again. */
+      source = rewrite(source, "careerTds: 127, lastSeason: 2025", "careerTds: 111, lastSeason: 2025", 'henrystale puts Henry back to 111');
+    } else if (cfg.key === 'nfl-rushYds' && CONTROL === 'apmerge') {
+      /* The two Adrian Petersons added together again, which beat Frank Gore. */
+      source = rewrite(source, "P('Adrian Peterson', 'RB', 'MIN, ARI, DET', 14918,", "P('Adrian Peterson', 'RB', 'MIN, ARI, DET', 16204,", 'apmerge merges the two Adrian Petersons');
     } else if (cfg.key === 'tennis' && CONTROL === 'tennismerge') {
       /* The exact fault the merges guard against: Court counted under one name
          only, 13 instead of 24, which drops her below Graf and Nadal. */
@@ -178,7 +199,12 @@ for (const cfg of SPORTS.filter(s => s.record)) {
     failures++; red.add(1);
     continue;
   }
-  const record = JSON.parse(fs.readFileSync(path.join(ROOT, cfg.record), 'utf8'));
+  const full = JSON.parse(fs.readFileSync(path.join(ROOT, cfg.record), 'utf8'));
+  /* A record that holds several categories hands each its own block, with the
+     record's read date, source and source rule. */
+  const record = cfg.recordKey
+    ? { ...(full.categories?.[cfg.recordKey] ?? {}), read: full.read, source: full.source, perPlayerSources: full.perPlayerSources }
+    : full;
   const r = checkSport(cfg, players, record);
   for (const l of r.lines) console.log(l);
   checks += r.checks; failures += r.failures;

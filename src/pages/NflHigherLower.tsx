@@ -15,8 +15,9 @@ import { cn } from '@/lib/utils';
 /**
  * Multi-stat edition (owner 2026-08-05). Every round rotates through a stat
  * category: TDs scored, passing yards, passing TDs, rushing yards, receiving
- * yards, receptions. All values baked from nflfastr with careers starting
- * 2000+ so nothing is silently truncated.
+ * yards, receptions. Careers start 2000+ so nothing is silently truncated,
+ * and since Round 1549 every value is the official total through the 2025
+ * season, which the card says under the number.
  */
 const NflHigherLower = () => {
   const {

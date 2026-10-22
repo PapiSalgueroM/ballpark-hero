@@ -1,0 +1,1812 @@
+{
+ "about": "NFL Higher or Lower, Round 1549: all six categories (touchdowns scored, passing yards, passing touchdowns, rushing yards, receiving yards, receptions), regular season, every career through the 2025 season. Every value was read on 2026-10-22 from the player's nfl.com career page (minus its 2026 row; ESPN's player page where nfl.com would not render) and from StatMuse (its 2000 to 2025 leaderboards or the player's career page), and the two agreed every time. scripts/simHigherLowerFacts.mjs holds the shipped files to this record.",
+ "read": "2026-10-22",
+ "source": "nfl.com and StatMuse (ESPN for nine players whose nfl.com page would not render), two per value, URLs per player",
+ "perPlayerSources": true,
+ "through": "2025",
+ "note": "Supersedes nflHigherLowerVerified2026-09.json, which held only touchdowns and held them to public.nflfastr_player_stats. That table is play by play derived and differs from the official totals: Drew Brees 80,428 passing yards against an official 80,358, Tom Brady 89,216 and 650 against 89,214 and 649, Larry Fitzgerald 17,524 and 1,430 against 17,492 and 1,432, and a few yards on most careers. Grouped by display name it also merged two men: Adrian Peterson's rushing yards were 16,204 (the official 14,918 plus a Bears back of the same name), which put him ahead of Frank Gore, and Steve Smith's 1,276 catches and 17,368 yards were Steve Smith Sr. plus the Giants receiver (the official 1,031 and 14,731). lastSeason is the last season the player played through 2025; a man who sat out 2025 keeps his 2024.",
+ "categories": {
+  "passYds": {
+   "players": {
+    "Tom Brady": {
+     "points": 89214,
+     "lastSeason": "2022",
+     "src": [
+      "https://www.nfl.com/players/tom-brady/stats/career",
+      "https://www.statmuse.com/nfl/ask/top-50-most-passing-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Drew Brees": {
+     "points": 80358,
+     "lastSeason": "2020",
+     "src": [
+      "https://www.nfl.com/players/drew-brees/stats/career",
+      "https://www.statmuse.com/nfl/ask/top-50-most-passing-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Ben Roethlisberger": {
+     "points": 64088,
+     "lastSeason": "2021",
+     "src": [
+      "https://www.nfl.com/players/ben-roethlisberger/stats/career",
+      "https://www.statmuse.com/nfl/ask/top-50-most-passing-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Philip Rivers": {
+     "points": 63984,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.espn.com/nfl/player/stats/_/id/5529/philip-rivers",
+      "https://www.statmuse.com/nfl/ask/top-50-most-passing-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Aaron Rodgers": {
+     "points": 66274,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/aaron-rodgers/stats/career",
+      "https://www.statmuse.com/nfl/ask/top-50-most-passing-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Matt Ryan": {
+     "points": 62792,
+     "lastSeason": "2022",
+     "src": [
+      "https://www.nfl.com/players/matt-ryan/stats/career",
+      "https://www.statmuse.com/nfl/ask/top-50-most-passing-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Matthew Stafford": {
+     "points": 64516,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/matthew-stafford/stats/career",
+      "https://www.statmuse.com/nfl/ask/top-50-most-passing-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Eli Manning": {
+     "points": 57023,
+     "lastSeason": "2019",
+     "src": [
+      "https://www.nfl.com/players/eli-manning/stats/career",
+      "https://www.statmuse.com/nfl/ask/top-50-most-passing-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Carson Palmer": {
+     "points": 46247,
+     "lastSeason": "2017",
+     "src": [
+      "https://www.nfl.com/players/carson-palmer/stats/career",
+      "https://www.statmuse.com/nfl/ask/top-50-most-passing-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Russell Wilson": {
+     "points": 46966,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.espn.com/nfl/player/stats/_/id/14881/russell-wilson",
+      "https://www.statmuse.com/nfl/ask/top-50-most-passing-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Joe Flacco": {
+     "points": 48176,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/joe-flacco/stats/career",
+      "https://www.statmuse.com/nfl/ask/top-50-most-passing-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Kirk Cousins": {
+     "points": 44700,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/kirk-cousins/stats/career",
+      "https://www.statmuse.com/nfl/ask/top-50-most-passing-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Derek Carr": {
+     "points": 41245,
+     "lastSeason": "2024",
+     "src": [
+      "https://www.nfl.com/players/derek-carr/stats/career",
+      "https://www.statmuse.com/nfl/ask/top-50-most-passing-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Andy Dalton": {
+     "points": 39793,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/andy-dalton/stats/career",
+      "https://www.statmuse.com/nfl/ask/top-50-most-passing-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Jared Goff": {
+     "points": 39622,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/jared-goff/stats/career",
+      "https://www.statmuse.com/nfl/ask/top-50-most-passing-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Ryan Fitzpatrick": {
+     "points": 34990,
+     "lastSeason": "2021",
+     "src": [
+      "https://www.nfl.com/players/ryan-fitzpatrick/stats/career",
+      "https://www.statmuse.com/nfl/ask/top-50-most-passing-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Ryan Tannehill": {
+     "points": 34881,
+     "lastSeason": "2023",
+     "src": [
+      "https://www.nfl.com/players/ryan-tannehill/stats/career",
+      "https://www.statmuse.com/nfl/ask/top-50-most-passing-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Cam Newton": {
+     "points": 32382,
+     "lastSeason": "2021",
+     "src": [
+      "https://www.nfl.com/players/cam-newton/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-passing-yards-from-2000-to-2025-by-players-drafted-after-2010"
+     ]
+    },
+    "Patrick Mahomes": {
+     "points": 35939,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/patrick-mahomes/stats/career",
+      "https://www.statmuse.com/nfl/ask/top-50-most-passing-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Dak Prescott": {
+     "points": 35989,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/dak-prescott/stats/career",
+      "https://www.statmuse.com/nfl/ask/top-50-most-passing-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Josh Allen": {
+     "points": 30102,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.espn.com/nfl/player/stats/_/id/3918298/josh-allen",
+      "https://www.statmuse.com/nfl/ask/most-passing-yards-from-2000-to-2025-by-players-drafted-after-2010"
+     ]
+    },
+    "Baker Mayfield": {
+     "points": 28525,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/baker-mayfield/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-passing-yards-from-2000-to-2025-by-players-drafted-after-2010"
+     ]
+    },
+    "Jameis Winston": {
+     "points": 24792,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/jameis-winston/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-passing-yards-from-2000-to-2025-by-players-drafted-after-2010"
+     ]
+    },
+    "Andrew Luck": {
+     "points": 23671,
+     "lastSeason": "2018",
+     "src": [
+      "https://www.nfl.com/players/andrew-luck/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-passing-yards-from-2000-to-2025-by-players-drafted-after-2010"
+     ]
+    },
+    "Carson Wentz": {
+     "points": 23626,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/carson-wentz/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-passing-yards-from-2000-to-2025-by-players-drafted-after-2010"
+     ]
+    },
+    "Justin Herbert": {
+     "points": 24820,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/justin-herbert/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-passing-yards-from-2000-to-2025-by-players-drafted-after-2010"
+     ]
+    },
+    "Lamar Jackson": {
+     "points": 22608,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/lamar-jackson/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-passing-yards-from-2000-to-2025-by-players-drafted-after-2010"
+     ]
+    },
+    "Kyler Murray": {
+     "points": 20460,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/kyler-murray/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-passing-yards-from-2000-to-2025-by-players-drafted-after-2010"
+     ]
+    },
+    "Geno Smith": {
+     "points": 22168,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/geno-smith/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-passing-yards-from-2000-to-2025-by-players-drafted-after-2010"
+     ]
+    },
+    "Joe Burrow": {
+     "points": 20810,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/joe-burrow/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-passing-yards-from-2000-to-2025-by-players-drafted-after-2010"
+     ]
+    },
+    "Deshaun Watson": {
+     "points": 17904,
+     "lastSeason": "2024",
+     "src": [
+      "https://www.nfl.com/players/deshaun-watson/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-passing-yards-from-2000-to-2025-by-players-drafted-after-2010"
+     ]
+    },
+    "Jay Cutler": {
+     "points": 35133,
+     "lastSeason": "2017",
+     "src": [
+      "https://www.nfl.com/players/jay-cutler/stats/career",
+      "https://www.statmuse.com/nfl/ask/top-50-most-passing-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Tony Romo": {
+     "points": 34183,
+     "lastSeason": "2016",
+     "src": [
+      "https://www.nfl.com/players/tony-romo/stats/career",
+      "https://www.statmuse.com/nfl/ask/tony-romo-career-stats"
+     ]
+    },
+    "Michael Vick": {
+     "points": 22464,
+     "lastSeason": "2015",
+     "src": [
+      "https://www.espn.com/nfl/player/stats/_/id/2549/michael-vick",
+      "https://www.statmuse.com/nfl/ask/michael-vick-career-stats"
+     ]
+    }
+   },
+   "heldFromFile": {},
+   "unverified": []
+  },
+  "passTds": {
+   "players": {
+    "Tom Brady": {
+     "points": 649,
+     "lastSeason": "2022",
+     "src": [
+      "https://www.nfl.com/players/tom-brady/stats/career",
+      "https://www.statmuse.com/nfl/ask/top-50-most-passing-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Drew Brees": {
+     "points": 571,
+     "lastSeason": "2020",
+     "src": [
+      "https://www.nfl.com/players/drew-brees/stats/career",
+      "https://www.statmuse.com/nfl/ask/top-50-most-passing-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Aaron Rodgers": {
+     "points": 527,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/aaron-rodgers/stats/career",
+      "https://www.statmuse.com/nfl/ask/top-50-most-passing-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Philip Rivers": {
+     "points": 425,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.espn.com/nfl/player/stats/_/id/5529/philip-rivers",
+      "https://www.statmuse.com/nfl/ask/top-50-most-passing-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Ben Roethlisberger": {
+     "points": 418,
+     "lastSeason": "2021",
+     "src": [
+      "https://www.nfl.com/players/ben-roethlisberger/stats/career",
+      "https://www.statmuse.com/nfl/ask/top-50-most-passing-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Matt Ryan": {
+     "points": 381,
+     "lastSeason": "2022",
+     "src": [
+      "https://www.nfl.com/players/matt-ryan/stats/career",
+      "https://www.statmuse.com/nfl/ask/top-50-most-passing-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Matthew Stafford": {
+     "points": 423,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/matthew-stafford/stats/career",
+      "https://www.statmuse.com/nfl/ask/top-50-most-passing-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Eli Manning": {
+     "points": 366,
+     "lastSeason": "2019",
+     "src": [
+      "https://www.nfl.com/players/eli-manning/stats/career",
+      "https://www.statmuse.com/nfl/ask/top-50-most-passing-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Russell Wilson": {
+     "points": 353,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.espn.com/nfl/player/stats/_/id/14881/russell-wilson",
+      "https://www.statmuse.com/nfl/ask/top-50-most-passing-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Kirk Cousins": {
+     "points": 298,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/kirk-cousins/stats/career",
+      "https://www.statmuse.com/nfl/ask/top-50-most-passing-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Joe Flacco": {
+     "points": 272,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/joe-flacco/stats/career",
+      "https://www.statmuse.com/nfl/ask/top-50-most-passing-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Derek Carr": {
+     "points": 257,
+     "lastSeason": "2024",
+     "src": [
+      "https://www.nfl.com/players/derek-carr/stats/career",
+      "https://www.statmuse.com/nfl/ask/top-50-most-passing-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Andy Dalton": {
+     "points": 254,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/andy-dalton/stats/career",
+      "https://www.statmuse.com/nfl/ask/top-50-most-passing-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Patrick Mahomes": {
+     "points": 267,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/patrick-mahomes/stats/career",
+      "https://www.statmuse.com/nfl/ask/top-50-most-passing-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Ryan Fitzpatrick": {
+     "points": 223,
+     "lastSeason": "2021",
+     "src": [
+      "https://www.nfl.com/players/ryan-fitzpatrick/stats/career",
+      "https://www.statmuse.com/nfl/ask/top-50-most-passing-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Jared Goff": {
+     "points": 256,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/jared-goff/stats/career",
+      "https://www.statmuse.com/nfl/ask/top-50-most-passing-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Ryan Tannehill": {
+     "points": 216,
+     "lastSeason": "2023",
+     "src": [
+      "https://www.nfl.com/players/ryan-tannehill/stats/career",
+      "https://www.statmuse.com/nfl/ask/top-50-most-passing-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Dak Prescott": {
+     "points": 243,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/dak-prescott/stats/career",
+      "https://www.statmuse.com/nfl/ask/top-50-most-passing-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Josh Allen": {
+     "points": 220,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.espn.com/nfl/player/stats/_/id/3918298/josh-allen",
+      "https://www.statmuse.com/nfl/ask/most-passing-yards-from-2000-to-2025-by-players-drafted-after-2010"
+     ]
+    },
+    "Cam Newton": {
+     "points": 194,
+     "lastSeason": "2021",
+     "src": [
+      "https://www.nfl.com/players/cam-newton/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-passing-yards-from-2000-to-2025-by-players-drafted-after-2010"
+     ]
+    },
+    "Baker Mayfield": {
+     "points": 197,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/baker-mayfield/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-passing-yards-from-2000-to-2025-by-players-drafted-after-2010"
+     ]
+    },
+    "Andrew Luck": {
+     "points": 171,
+     "lastSeason": "2018",
+     "src": [
+      "https://www.nfl.com/players/andrew-luck/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-passing-yards-from-2000-to-2025-by-players-drafted-after-2010"
+     ]
+    },
+    "Lamar Jackson": {
+     "points": 187,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/lamar-jackson/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-passing-yards-from-2000-to-2025-by-players-drafted-after-2010"
+     ]
+    },
+    "Jameis Winston": {
+     "points": 156,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/jameis-winston/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-passing-yards-from-2000-to-2025-by-players-drafted-after-2010"
+     ]
+    },
+    "Carson Wentz": {
+     "points": 159,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/carson-wentz/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-passing-yards-from-2000-to-2025-by-players-drafted-after-2010"
+     ]
+    },
+    "Joe Burrow": {
+     "points": 157,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/joe-burrow/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-passing-yards-from-2000-to-2025-by-players-drafted-after-2010"
+     ]
+    },
+    "Justin Herbert": {
+     "points": 163,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/justin-herbert/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-passing-yards-from-2000-to-2025-by-players-drafted-after-2010"
+     ]
+    },
+    "Deshaun Watson": {
+     "points": 123,
+     "lastSeason": "2024",
+     "src": [
+      "https://www.nfl.com/players/deshaun-watson/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-passing-yards-from-2000-to-2025-by-players-drafted-after-2010"
+     ]
+    },
+    "Kyler Murray": {
+     "points": 121,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/kyler-murray/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-passing-yards-from-2000-to-2025-by-players-drafted-after-2010"
+     ]
+    },
+    "Geno Smith": {
+     "points": 124,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/geno-smith/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-passing-yards-from-2000-to-2025-by-players-drafted-after-2010"
+     ]
+    },
+    "Carson Palmer": {
+     "points": 294,
+     "lastSeason": "2017",
+     "src": [
+      "https://www.nfl.com/players/carson-palmer/stats/career",
+      "https://www.statmuse.com/nfl/ask/top-50-most-passing-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Tony Romo": {
+     "points": 248,
+     "lastSeason": "2016",
+     "src": [
+      "https://www.nfl.com/players/tony-romo/stats/career",
+      "https://www.statmuse.com/nfl/ask/tony-romo-career-stats"
+     ]
+    },
+    "Jay Cutler": {
+     "points": 227,
+     "lastSeason": "2017",
+     "src": [
+      "https://www.nfl.com/players/jay-cutler/stats/career",
+      "https://www.statmuse.com/nfl/ask/top-50-most-passing-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Michael Vick": {
+     "points": 133,
+     "lastSeason": "2015",
+     "src": [
+      "https://www.espn.com/nfl/player/stats/_/id/2549/michael-vick",
+      "https://www.statmuse.com/nfl/ask/michael-vick-career-stats"
+     ]
+    }
+   },
+   "heldFromFile": {},
+   "unverified": []
+  },
+  "rushYds": {
+   "players": {
+    "Adrian Peterson": {
+     "points": 14918,
+     "lastSeason": "2021",
+     "src": [
+      "https://www.nfl.com/players/adrian-peterson/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Frank Gore": {
+     "points": 16000,
+     "lastSeason": "2020",
+     "src": [
+      "https://www.nfl.com/players/frank-gore/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-regular-season"
+     ]
+    },
+    "LaDainian Tomlinson": {
+     "points": 13684,
+     "lastSeason": "2011",
+     "src": [
+      "https://www.nfl.com/players/ladainian-tomlinson/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Steven Jackson": {
+     "points": 11438,
+     "lastSeason": "2015",
+     "src": [
+      "https://www.nfl.com/players/steven-jackson/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-rushing-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Derrick Henry": {
+     "points": 13018,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/derrick-henry/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-regular-season"
+     ]
+    },
+    "LeSean McCoy": {
+     "points": 11102,
+     "lastSeason": "2020",
+     "src": [
+      "https://www.nfl.com/players/lesean-mccoy/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Thomas Jones": {
+     "points": 10591,
+     "lastSeason": "2011",
+     "src": [
+      "https://www.nfl.com/players/thomas-jones/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-rushing-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Jamal Lewis": {
+     "points": 10607,
+     "lastSeason": "2009",
+     "src": [
+      "https://www.nfl.com/players/jamal-lewis/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-rushing-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Marshawn Lynch": {
+     "points": 10413,
+     "lastSeason": "2019",
+     "src": [
+      "https://www.nfl.com/players/marshawn-lynch/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Clinton Portis": {
+     "points": 9923,
+     "lastSeason": "2010",
+     "src": [
+      "https://www.nfl.com/players/clinton-portis/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-rushing-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Matt Forte": {
+     "points": 9796,
+     "lastSeason": "2017",
+     "src": [
+      "https://www.nfl.com/players/matt-forte/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-rushing-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Chris Johnson": {
+     "points": 9651,
+     "lastSeason": "2017",
+     "src": [
+      "https://www.nfl.com/players/chris-johnson/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-rushing-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Shaun Alexander": {
+     "points": 9453,
+     "lastSeason": "2008",
+     "src": [
+      "https://www.nfl.com/players/shaun-alexander/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Ezekiel Elliott": {
+     "points": 9130,
+     "lastSeason": "2024",
+     "src": [
+      "https://www.nfl.com/players/ezekiel-elliott/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Willis McGahee": {
+     "points": 8474,
+     "lastSeason": "2013",
+     "src": [
+      "https://www.nfl.com/players/willis-mcgahee/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-rushing-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Maurice Jones-Drew": {
+     "points": 8167,
+     "lastSeason": "2014",
+     "src": [
+      "https://www.nfl.com/players/maurice-jones-drew/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-rushing-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Mark Ingram": {
+     "points": 8111,
+     "lastSeason": "2022",
+     "src": [
+      "https://www.nfl.com/players/mark-ingram/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-by-players-drafted-after-2010"
+     ]
+    },
+    "DeAngelo Williams": {
+     "points": 8096,
+     "lastSeason": "2016",
+     "src": [
+      "https://www.nfl.com/players/deangelo-williams/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-rushing-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Jamaal Charles": {
+     "points": 7563,
+     "lastSeason": "2018",
+     "src": [
+      "https://www.nfl.com/players/jamaal-charles/stats/career",
+      "https://www.statmuse.com/nfl/ask/jamaal-charles-career-stats"
+     ]
+    },
+    "Joe Mixon": {
+     "points": 7428,
+     "lastSeason": "2024",
+     "src": [
+      "https://www.espn.com/nfl/player/stats/_/id/3116385/joe-mixon",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-by-players-drafted-after-2010"
+     ]
+    },
+    "Michael Turner": {
+     "points": 7338,
+     "lastSeason": "2012",
+     "src": [
+      "https://www.nfl.com/players/michael-turner/stats/career",
+      "https://www.statmuse.com/nfl/ask/michael-turner-career-stats"
+     ]
+    },
+    "Jonathan Stewart": {
+     "points": 7335,
+     "lastSeason": "2018",
+     "src": [
+      "https://www.nfl.com/players/jonathan-stewart/stats/career",
+      "https://www.statmuse.com/nfl/ask/jonathan-stewart-career-stats"
+     ]
+    },
+    "Saquon Barkley": {
+     "points": 8356,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/saquon-barkley/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-by-players-drafted-after-2010"
+     ]
+    },
+    "DeMarco Murray": {
+     "points": 7174,
+     "lastSeason": "2017",
+     "src": [
+      "https://www.nfl.com/players/demarco-murray/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-rushing-yards-from-2000-to-2025-by-players-drafted-after-2010"
+     ]
+    },
+    "Aaron Jones": {
+     "points": 7626,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/aaron-jones/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-by-players-drafted-after-2010"
+     ]
+    },
+    "Josh Jacobs": {
+     "points": 7803,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/josh-jacobs/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-by-players-drafted-after-2010"
+     ]
+    },
+    "Nick Chubb": {
+     "points": 7349,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.espn.com/nfl/player/stats/_/id/3128720/nick-chubb",
+      "https://www.statmuse.com/nfl/ask/most-rushing-yards-from-2000-to-2025-by-players-drafted-after-2010"
+     ]
+    },
+    "Alvin Kamara": {
+     "points": 7250,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/alvin-kamara/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Le'Veon Bell": {
+     "points": 6554,
+     "lastSeason": "2021",
+     "src": [
+      "https://www.nfl.com/players/le-veon-bell/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-rushing-yards-from-2000-to-2025-by-players-drafted-after-2010"
+     ]
+    },
+    "Melvin Gordon": {
+     "points": 6543,
+     "lastSeason": "2023",
+     "src": [
+      "https://www.nfl.com/players/melvin-gordon/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-by-players-drafted-after-2010"
+     ]
+    },
+    "Arian Foster": {
+     "points": 6527,
+     "lastSeason": "2016",
+     "src": [
+      "https://www.nfl.com/players/arian-foster/stats/career",
+      "https://www.statmuse.com/nfl/ask/arian-foster-career-stats"
+     ]
+    }
+   },
+   "heldFromFile": {},
+   "unverified": []
+  },
+  "recYds": {
+   "players": {
+    "Larry Fitzgerald": {
+     "points": 17492,
+     "lastSeason": "2020",
+     "src": [
+      "https://www.nfl.com/players/larry-fitzgerald/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Julio Jones": {
+     "points": 13703,
+     "lastSeason": "2023",
+     "src": [
+      "https://www.nfl.com/players/julio-jones/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-by-players-drafted-after-2010"
+     ]
+    },
+    "Jason Witten": {
+     "points": 13046,
+     "lastSeason": "2020",
+     "src": [
+      "https://www.nfl.com/players/jason-witten/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-receiving-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "DeAndre Hopkins": {
+     "points": 13295,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.espn.com/nfl/player/stats/_/id/15795/deandre-hopkins",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Mike Evans": {
+     "points": 13052,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/mike-evans/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Brandon Marshall": {
+     "points": 12351,
+     "lastSeason": "2018",
+     "src": [
+      "https://www.nfl.com/players/brandon-marshall/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-receiving-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Antonio Brown": {
+     "points": 12291,
+     "lastSeason": "2021",
+     "src": [
+      "https://www.nfl.com/players/antonio-brown/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-receiving-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Travis Kelce": {
+     "points": 13002,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/travis-kelce/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Davante Adams": {
+     "points": 12633,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/davante-adams/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Antonio Gates": {
+     "points": 11841,
+     "lastSeason": "2018",
+     "src": [
+      "https://www.nfl.com/players/antonio-gates/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-regular-season"
+     ]
+    },
+    "DeSean Jackson": {
+     "points": 11263,
+     "lastSeason": "2022",
+     "src": [
+      "https://www.nfl.com/players/desean-jackson/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-receiving-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Keenan Allen": {
+     "points": 12051,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/keenan-allen/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-by-players-drafted-after-2010"
+     ]
+    },
+    "Tyreek Hill": {
+     "points": 11363,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.espn.com/nfl/player/stats/_/id/3116406/tyreek-hill",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-regular-season"
+     ]
+    },
+    "A.J. Green": {
+     "points": 10514,
+     "lastSeason": "2022",
+     "src": [
+      "https://www.nfl.com/players/a-j-green/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-by-players-drafted-after-2010"
+     ]
+    },
+    "Stefon Diggs": {
+     "points": 11504,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/stefon-diggs/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-by-players-drafted-after-2010"
+     ]
+    },
+    "Amari Cooper": {
+     "points": 10033,
+     "lastSeason": "2024",
+     "src": [
+      "https://www.espn.com/nfl/player/stats/_/id/2976499/amari-cooper",
+      "https://www.statmuse.com/nfl/ask/amari-cooper-career-receiving-stats"
+     ]
+    },
+    "T.Y. Hilton": {
+     "points": 9812,
+     "lastSeason": "2022",
+     "src": [
+      "https://www.nfl.com/players/t-y-hilton/stats/career",
+      "https://www.statmuse.com/nfl/ask/t-y-hilton-career-stats"
+     ]
+    },
+    "Demaryius Thomas": {
+     "points": 9763,
+     "lastSeason": "2019",
+     "src": [
+      "https://www.nfl.com/players/demaryius-thomas/stats/career",
+      "https://www.statmuse.com/nfl/ask/demaryius-thomas-career-stats"
+     ]
+    },
+    "Brandin Cooks": {
+     "points": 9811,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/brandin-cooks/stats/career",
+      "https://www.statmuse.com/nfl/ask/brandin-cooks-career-receiving-stats-through-2025-regular-season"
+     ]
+    },
+    "Rob Gronkowski": {
+     "points": 9286,
+     "lastSeason": "2021",
+     "src": [
+      "https://www.nfl.com/players/rob-gronkowski/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Emmanuel Sanders": {
+     "points": 9245,
+     "lastSeason": "2021",
+     "src": [
+      "https://www.nfl.com/players/emmanuel-sanders/stats/career",
+      "https://www.statmuse.com/nfl/ask/emmanuel-sanders-career-stats"
+     ]
+    },
+    "Calvin Johnson": {
+     "points": 11619,
+     "lastSeason": "2015",
+     "src": [
+      "https://www.nfl.com/players/calvin-johnson/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Anquan Boldin": {
+     "points": 13779,
+     "lastSeason": "2016",
+     "src": [
+      "https://www.nfl.com/players/anquan-boldin/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-receiving-yards-from-2000-to-2025-regular-season",
+      "https://www.statmuse.com/nfl/ask/anquan-boldin-career-stats"
+     ]
+    },
+    "Reggie Wayne": {
+     "points": 14345,
+     "lastSeason": "2014",
+     "src": [
+      "https://www.nfl.com/players/reggie-wayne/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-receiving-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Andre Johnson": {
+     "points": 14185,
+     "lastSeason": "2016",
+     "src": [
+      "https://www.nfl.com/players/andre-johnson/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-receiving-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Marques Colston": {
+     "points": 9759,
+     "lastSeason": "2015",
+     "src": [
+      "https://www.nfl.com/players/marques-colston/stats/career",
+      "https://www.statmuse.com/nfl/ask/marques-colston-career-stats"
+     ]
+    },
+    "Roddy White": {
+     "points": 10863,
+     "lastSeason": "2015",
+     "src": [
+      "https://www.nfl.com/players/roddy-white/stats/career",
+      "https://www.statmuse.com/nfl/ask/roddy-white-career-stats"
+     ]
+    },
+    "Wes Welker": {
+     "points": 9924,
+     "lastSeason": "2015",
+     "src": [
+      "https://www.nfl.com/players/wes-welker/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-receptions-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Chad Johnson": {
+     "points": 11059,
+     "lastSeason": "2011",
+     "src": [
+      "https://www.nfl.com/players/chad-johnson/stats/career",
+      "https://www.statmuse.com/nfl/ask/chad-johnson-career-stats"
+     ]
+    },
+    "Santana Moss": {
+     "points": 10283,
+     "lastSeason": "2014",
+     "src": [
+      "https://www.nfl.com/players/santana-moss/stats/career",
+      "https://www.statmuse.com/nfl/ask/santana-moss-career-stats"
+     ]
+    },
+    "Steve Smith Sr.": {
+     "points": 14731,
+     "lastSeason": "2016",
+     "src": [
+      "https://www.nfl.com/players/steve-smith/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-receiving-yards-from-2000-to-2025-regular-season",
+      "https://www.statmuse.com/nfl/ask/steve-smith-sr-career-stats"
+     ]
+    }
+   },
+   "heldFromFile": {},
+   "unverified": []
+  },
+  "recs": {
+   "players": {
+    "Larry Fitzgerald": {
+     "points": 1432,
+     "lastSeason": "2020",
+     "src": [
+      "https://www.nfl.com/players/larry-fitzgerald/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Jason Witten": {
+     "points": 1228,
+     "lastSeason": "2020",
+     "src": [
+      "https://www.nfl.com/players/jason-witten/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-receiving-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Travis Kelce": {
+     "points": 1080,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/travis-kelce/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-regular-season"
+     ]
+    },
+    "DeAndre Hopkins": {
+     "points": 1006,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.espn.com/nfl/player/stats/_/id/15795/deandre-hopkins",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Keenan Allen": {
+     "points": 1055,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/keenan-allen/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-by-players-drafted-after-2010"
+     ]
+    },
+    "Brandon Marshall": {
+     "points": 970,
+     "lastSeason": "2018",
+     "src": [
+      "https://www.nfl.com/players/brandon-marshall/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-receiving-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Davante Adams": {
+     "points": 1017,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/davante-adams/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Antonio Gates": {
+     "points": 955,
+     "lastSeason": "2018",
+     "src": [
+      "https://www.nfl.com/players/antonio-gates/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Antonio Brown": {
+     "points": 928,
+     "lastSeason": "2021",
+     "src": [
+      "https://www.nfl.com/players/antonio-brown/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-receiving-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Julio Jones": {
+     "points": 914,
+     "lastSeason": "2023",
+     "src": [
+      "https://www.nfl.com/players/julio-jones/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-by-players-drafted-after-2010"
+     ]
+    },
+    "Stefon Diggs": {
+     "points": 942,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/stefon-diggs/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-by-players-drafted-after-2010"
+     ]
+    },
+    "Mike Evans": {
+     "points": 866,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/mike-evans/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Tyreek Hill": {
+     "points": 819,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.espn.com/nfl/player/stats/_/id/3116406/tyreek-hill",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Zach Ertz": {
+     "points": 825,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/zach-ertz/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-receptions-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Greg Olsen": {
+     "points": 742,
+     "lastSeason": "2020",
+     "src": [
+      "https://www.nfl.com/players/greg-olsen/stats/career",
+      "https://www.statmuse.com/nfl/ask/greg-olsen-career-stats"
+     ]
+    },
+    "A.J. Green": {
+     "points": 727,
+     "lastSeason": "2022",
+     "src": [
+      "https://www.nfl.com/players/a-j-green/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-by-players-drafted-after-2010"
+     ]
+    },
+    "Demaryius Thomas": {
+     "points": 724,
+     "lastSeason": "2019",
+     "src": [
+      "https://www.nfl.com/players/demaryius-thomas/stats/career",
+      "https://www.statmuse.com/nfl/ask/demaryius-thomas-career-stats"
+     ]
+    },
+    "Jimmy Graham": {
+     "points": 719,
+     "lastSeason": "2023",
+     "src": [
+      "https://www.nfl.com/players/jimmy-graham/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Jarvis Landry": {
+     "points": 713,
+     "lastSeason": "2022",
+     "src": [
+      "https://www.nfl.com/players/jarvis-landry/stats/career",
+      "https://www.statmuse.com/nfl/ask/jarvis-landry-career-stats"
+     ]
+    },
+    "Amari Cooper": {
+     "points": 711,
+     "lastSeason": "2024",
+     "src": [
+      "https://www.espn.com/nfl/player/stats/_/id/2976499/amari-cooper",
+      "https://www.statmuse.com/nfl/ask/amari-cooper-career-receiving-stats"
+     ]
+    },
+    "Brandin Cooks": {
+     "points": 734,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/brandin-cooks/stats/career",
+      "https://www.statmuse.com/nfl/ask/brandin-cooks-career-receiving-stats-through-2025-regular-season"
+     ]
+    },
+    "Emmanuel Sanders": {
+     "points": 704,
+     "lastSeason": "2021",
+     "src": [
+      "https://www.nfl.com/players/emmanuel-sanders/stats/career",
+      "https://www.statmuse.com/nfl/ask/emmanuel-sanders-career-stats"
+     ]
+    },
+    "Steve Smith Sr.": {
+     "points": 1031,
+     "lastSeason": "2016",
+     "src": [
+      "https://www.nfl.com/players/steve-smith/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-receiving-yards-from-2000-to-2025-regular-season",
+      "https://www.statmuse.com/nfl/ask/steve-smith-sr-career-stats"
+     ]
+    },
+    "Anquan Boldin": {
+     "points": 1076,
+     "lastSeason": "2016",
+     "src": [
+      "https://www.nfl.com/players/anquan-boldin/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-receiving-yards-from-2000-to-2025-regular-season",
+      "https://www.statmuse.com/nfl/ask/anquan-boldin-career-stats"
+     ]
+    },
+    "Reggie Wayne": {
+     "points": 1070,
+     "lastSeason": "2014",
+     "src": [
+      "https://www.nfl.com/players/reggie-wayne/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-receiving-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Andre Johnson": {
+     "points": 1062,
+     "lastSeason": "2016",
+     "src": [
+      "https://www.nfl.com/players/andre-johnson/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-receiving-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Calvin Johnson": {
+     "points": 731,
+     "lastSeason": "2015",
+     "src": [
+      "https://www.nfl.com/players/calvin-johnson/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Roddy White": {
+     "points": 808,
+     "lastSeason": "2015",
+     "src": [
+      "https://www.nfl.com/players/roddy-white/stats/career",
+      "https://www.statmuse.com/nfl/ask/roddy-white-career-stats"
+     ]
+    },
+    "Wes Welker": {
+     "points": 903,
+     "lastSeason": "2015",
+     "src": [
+      "https://www.nfl.com/players/wes-welker/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-receptions-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Chad Johnson": {
+     "points": 766,
+     "lastSeason": "2011",
+     "src": [
+      "https://www.nfl.com/players/chad-johnson/stats/career",
+      "https://www.statmuse.com/nfl/ask/chad-johnson-career-stats"
+     ]
+    }
+   },
+   "heldFromFile": {},
+   "unverified": []
+  },
+  "tds": {
+   "players": {
+    "LaDainian Tomlinson": {
+     "points": 162,
+     "lastSeason": "2011",
+     "src": [
+      "https://www.nfl.com/players/ladainian-tomlinson/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Adrian Peterson": {
+     "points": 126,
+     "lastSeason": "2021",
+     "src": [
+      "https://www.nfl.com/players/adrian-peterson/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Larry Fitzgerald": {
+     "points": 121,
+     "lastSeason": "2020",
+     "src": [
+      "https://www.nfl.com/players/larry-fitzgerald/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Antonio Gates": {
+     "points": 116,
+     "lastSeason": "2018",
+     "src": [
+      "https://www.nfl.com/players/antonio-gates/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Shaun Alexander": {
+     "points": 112,
+     "lastSeason": "2008",
+     "src": [
+      "https://www.nfl.com/players/shaun-alexander/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Derrick Henry": {
+     "points": 127,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/derrick-henry/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Mike Evans": {
+     "points": 108,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/mike-evans/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Davante Adams": {
+     "points": 117,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/davante-adams/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Frank Gore": {
+     "points": 99,
+     "lastSeason": "2020",
+     "src": [
+      "https://www.nfl.com/players/frank-gore/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Marshawn Lynch": {
+     "points": 94,
+     "lastSeason": "2019",
+     "src": [
+      "https://www.nfl.com/players/marshawn-lynch/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Rob Gronkowski": {
+     "points": 93,
+     "lastSeason": "2021",
+     "src": [
+      "https://www.nfl.com/players/rob-gronkowski/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Jimmy Graham": {
+     "points": 89,
+     "lastSeason": "2023",
+     "src": [
+      "https://www.nfl.com/players/jimmy-graham/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-regular-season"
+     ]
+    },
+    "LeSean McCoy": {
+     "points": 89,
+     "lastSeason": "2020",
+     "src": [
+      "https://www.nfl.com/players/lesean-mccoy/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Tyreek Hill": {
+     "points": 90,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.espn.com/nfl/player/stats/_/id/3116406/tyreek-hill",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Ezekiel Elliott": {
+     "points": 88,
+     "lastSeason": "2024",
+     "src": [
+      "https://www.nfl.com/players/ezekiel-elliott/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Alvin Kamara": {
+     "points": 86,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/alvin-kamara/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Calvin Johnson": {
+     "points": 84,
+     "lastSeason": "2015",
+     "src": [
+      "https://www.nfl.com/players/calvin-johnson/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Anquan Boldin": {
+     "points": 83,
+     "lastSeason": "2016",
+     "src": [
+      "https://www.nfl.com/players/anquan-boldin/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-receiving-yards-from-2000-to-2025-regular-season",
+      "https://www.statmuse.com/nfl/ask/anquan-boldin-career-stats"
+     ]
+    },
+    "Steve Smith Sr.": {
+     "points": 83,
+     "lastSeason": "2016",
+     "src": [
+      "https://www.nfl.com/players/steve-smith/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-receiving-yards-from-2000-to-2025-regular-season",
+      "https://www.statmuse.com/nfl/ask/steve-smith-sr-career-stats"
+     ]
+    },
+    "Antonio Brown": {
+     "points": 83,
+     "lastSeason": "2021",
+     "src": [
+      "https://www.nfl.com/players/antonio-brown/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-receiving-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "DeAndre Hopkins": {
+     "points": 85,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.espn.com/nfl/player/stats/_/id/15795/deandre-hopkins",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Brandon Marshall": {
+     "points": 83,
+     "lastSeason": "2018",
+     "src": [
+      "https://www.nfl.com/players/brandon-marshall/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-receiving-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Reggie Wayne": {
+     "points": 82,
+     "lastSeason": "2014",
+     "src": [
+      "https://www.nfl.com/players/reggie-wayne/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-receiving-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Christian McCaffrey": {
+     "points": 98,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/christian-mccaffrey/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Clinton Portis": {
+     "points": 80,
+     "lastSeason": "2010",
+     "src": [
+      "https://www.nfl.com/players/clinton-portis/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-rushing-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Todd Gurley": {
+     "points": 79,
+     "lastSeason": "2020",
+     "src": [
+      "https://www.nfl.com/players/todd-gurley/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-by-players-drafted-after-2010"
+     ]
+    },
+    "Travis Kelce": {
+     "points": 84,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/travis-kelce/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Maurice Jones-Drew": {
+     "points": 79,
+     "lastSeason": "2014",
+     "src": [
+      "https://www.nfl.com/players/maurice-jones-drew/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-rushing-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Steven Jackson": {
+     "points": 78,
+     "lastSeason": "2015",
+     "src": [
+      "https://www.nfl.com/players/steven-jackson/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-rushing-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Mark Ingram": {
+     "points": 75,
+     "lastSeason": "2022",
+     "src": [
+      "https://www.nfl.com/players/mark-ingram/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-by-players-drafted-after-2010"
+     ]
+    },
+    "Dez Bryant": {
+     "points": 75,
+     "lastSeason": "2020",
+     "src": [
+      "https://www.nfl.com/players/dez-bryant/stats/career",
+      "https://www.statmuse.com/nfl/ask/dez-bryant-career-stats"
+     ]
+    },
+    "Matt Forte": {
+     "points": 75,
+     "lastSeason": "2017",
+     "src": [
+      "https://www.nfl.com/players/matt-forte/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-rushing-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Jason Witten": {
+     "points": 74,
+     "lastSeason": "2020",
+     "src": [
+      "https://www.nfl.com/players/jason-witten/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-receiving-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Joe Mixon": {
+     "points": 74,
+     "lastSeason": "2024",
+     "src": [
+      "https://www.espn.com/nfl/player/stats/_/id/3116385/joe-mixon",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-by-players-drafted-after-2010"
+     ]
+    },
+    "Austin Ekeler": {
+     "points": 73,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/austin-ekeler/stats/career",
+      "https://www.statmuse.com/nfl/ask/austin-ekeler-career-stats-through-2025-regular-season"
+     ]
+    },
+    "Jordy Nelson": {
+     "points": 72,
+     "lastSeason": "2018",
+     "src": [
+      "https://www.nfl.com/players/jordy-nelson/stats/career",
+      "https://www.statmuse.com/nfl/ask/jordy-nelson-career-stats"
+     ]
+    },
+    "Marques Colston": {
+     "points": 72,
+     "lastSeason": "2015",
+     "src": [
+      "https://www.nfl.com/players/marques-colston/stats/career",
+      "https://www.statmuse.com/nfl/ask/marques-colston-career-stats"
+     ]
+    },
+    "Thomas Jones": {
+     "points": 71,
+     "lastSeason": "2011",
+     "src": [
+      "https://www.nfl.com/players/thomas-jones/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-rushing-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Brian Westbrook": {
+     "points": 71,
+     "lastSeason": "2010",
+     "src": [
+      "https://www.nfl.com/players/brian-westbrook/stats/career",
+      "https://www.statmuse.com/nfl/ask/brian-westbrook-career-stats"
+     ]
+    },
+    "Stefon Diggs": {
+     "points": 75,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/stefon-diggs/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-by-players-drafted-after-2010"
+     ]
+    },
+    "A.J. Green": {
+     "points": 70,
+     "lastSeason": "2022",
+     "src": [
+      "https://www.nfl.com/players/a-j-green/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-by-players-drafted-after-2010"
+     ]
+    },
+    "DeAngelo Williams": {
+     "points": 70,
+     "lastSeason": "2016",
+     "src": [
+      "https://www.nfl.com/players/deangelo-williams/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-rushing-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "James Conner": {
+     "points": 72,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/james-conner/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-by-players-drafted-after-2010"
+     ]
+    },
+    "Willis McGahee": {
+     "points": 70,
+     "lastSeason": "2013",
+     "src": [
+      "https://www.nfl.com/players/willis-mcgahee/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-rushing-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Aaron Jones": {
+     "points": 73,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/aaron-jones/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-by-players-drafted-after-2010"
+     ]
+    },
+    "Andre Johnson": {
+     "points": 70,
+     "lastSeason": "2016",
+     "src": [
+      "https://www.nfl.com/players/andre-johnson/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-receiving-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Melvin Gordon": {
+     "points": 70,
+     "lastSeason": "2023",
+     "src": [
+      "https://www.nfl.com/players/melvin-gordon/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-by-players-drafted-after-2010"
+     ]
+    },
+    "Arian Foster": {
+     "points": 68,
+     "lastSeason": "2016",
+     "src": [
+      "https://www.nfl.com/players/arian-foster/stats/career",
+      "https://www.statmuse.com/nfl/ask/arian-foster-career-stats"
+     ]
+    },
+    "Chad Johnson": {
+     "points": 67,
+     "lastSeason": "2011",
+     "src": [
+      "https://www.nfl.com/players/chad-johnson/stats/career",
+      "https://www.statmuse.com/nfl/ask/chad-johnson-career-stats"
+     ]
+    },
+    "Michael Turner": {
+     "points": 67,
+     "lastSeason": "2012",
+     "src": [
+      "https://www.nfl.com/players/michael-turner/stats/career",
+      "https://www.statmuse.com/nfl/ask/michael-turner-career-stats"
+     ]
+    },
+    "Keenan Allen": {
+     "points": 70,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.nfl.com/players/keenan-allen/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-by-players-drafted-after-2010"
+     ]
+    },
+    "Santana Moss": {
+     "points": 66,
+     "lastSeason": "2014",
+     "src": [
+      "https://www.nfl.com/players/santana-moss/stats/career",
+      "https://www.statmuse.com/nfl/ask/santana-moss-career-stats"
+     ]
+    },
+    "Julio Jones": {
+     "points": 66,
+     "lastSeason": "2023",
+     "src": [
+      "https://www.nfl.com/players/julio-jones/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-scrimmage-touchdowns-from-2000-to-2025-by-players-drafted-after-2010"
+     ]
+    },
+    "Adam Thielen": {
+     "points": 65,
+     "lastSeason": "2025",
+     "src": [
+      "https://www.espn.com/nfl/player/stats/_/id/16460/adam-thielen",
+      "https://www.statmuse.com/nfl/ask/adam-thielen-receiving-touchdowns-by-season"
+     ]
+    },
+    "Jamaal Charles": {
+     "points": 64,
+     "lastSeason": "2018",
+     "src": [
+      "https://www.nfl.com/players/jamaal-charles/stats/career",
+      "https://www.statmuse.com/nfl/ask/jamaal-charles-career-stats"
+     ]
+    },
+    "Plaxico Burress": {
+     "points": 64,
+     "lastSeason": "2012",
+     "src": [
+      "https://www.nfl.com/players/plaxico-burress/stats/career",
+      "https://www.statmuse.com/nfl/ask/plaxico-burress-career-stats"
+     ]
+    },
+    "Chris Johnson": {
+     "points": 64,
+     "lastSeason": "2017",
+     "src": [
+      "https://www.nfl.com/players/chris-johnson/stats/career",
+      "https://www.statmuse.com/nfl/ask/most-rushing-yards-from-2000-to-2025-regular-season"
+     ]
+    },
+    "Amari Cooper": {
+     "points": 64,
+     "lastSeason": "2024",
+     "src": [
+      "https://www.espn.com/nfl/player/stats/_/id/2976499/amari-cooper",
+      "https://www.statmuse.com/nfl/ask/amari-cooper-career-receiving-stats"
+     ]
+    },
+    "Brandon Jacobs": {
+     "points": 64,
+     "lastSeason": "2013",
+     "src": [
+      "https://www.nfl.com/players/brandon-jacobs/stats/career",
+      "https://www.statmuse.com/nfl/ask/brandon-jacobs-career-stats"
+     ]
+    },
+    "Greg Jennings": {
+     "points": 64,
+     "lastSeason": "2015",
+     "src": [
+      "https://www.nfl.com/players/greg-jennings/stats/career",
+      "https://www.statmuse.com/nfl/ask/greg-jennings-career-stats"
+     ]
+    }
+   },
+   "heldFromFile": {},
+   "unverified": []
+  }
+ }
+}

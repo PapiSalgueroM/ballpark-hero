@@ -40,18 +40,27 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { build } from 'esbuild';
 
-/** Load the shipped module the way the game reads it, not as text. */
+/**
+ * Load the shipped module the way the game reads it, not as text. A sport with
+ * a category (Round 1549: the NFL's five stat categories live in one module
+ * that imports the touchdown pool) resolves its '@/' imports for real and
+ * returns that category's players.
+ */
 export async function loadSport(root, cfg, sourceOverride) {
   const source = sourceOverride ?? fs.readFileSync(path.join(root, cfg.file), 'utf8').replaceAll('\r\n', '\n');
   const tmp = path.join(process.env.TEMP || process.env.TMP || root, `hlfence-${cfg.key}-${process.pid}`);
   fs.mkdirSync(tmp, { recursive: true });
   const entry = path.join(tmp, 'entry.ts');
-  fs.writeFileSync(entry, source.replace(/from '@\/[^']*'/g, "from './missing'"), 'utf8');
+  fs.writeFileSync(entry, cfg.category ? source : source.replace(/from '@\/[^']*'/g, "from './missing'"), 'utf8');
   const outfile = path.join(tmp, 'bundle.cjs');
-  await build({ entryPoints: [entry], bundle: true, format: 'cjs', platform: 'node', outfile, logLevel: 'error' });
+  await build({
+    entryPoints: [entry], bundle: true, format: 'cjs', platform: 'node', outfile, logLevel: 'error',
+    ...(cfg.category ? { alias: { '@': path.join(root, 'src') } } : {}),
+  });
   const mod = await import(`file://${outfile}`).then(m => m.default ?? m);
   fs.rmSync(tmp, { recursive: true, force: true });
-  return mod[cfg.exportName];
+  const value = mod[cfg.exportName];
+  return cfg.category ? value?.find(c => c.key === cfg.category)?.players : value;
 }
 
 export function readSource(root, cfg) {
@@ -106,6 +115,16 @@ export function checkSport(cfg, players, record) {
     const overlap = Object.keys(verified).filter(n => UNV.has(n) || n in held);
     if (overlap.length) { fail(`${overlap.join(', ')} is both verified and not`); bad++; }
     if (!record.read || !record.source) { fail('the record does not say when it was read or what from'); bad++; }
+    /* Round 1549: a record read from the web names two sources per player, on
+       two different hosts, neither of them a wiki. */
+    if (record.perPlayerSources) {
+      for (const [name, v] of Object.entries(verified)) {
+        const hosts = (v.src || []).map((u) => { try { return new URL(u).hostname.replace(/^www\./, ''); } catch { return null; } });
+        if (hosts.length < 2 || hosts.some(h => !h)) { fail(`${name} carries ${hosts.length} usable source(s), two are required`); bad++; continue; }
+        if (new Set(hosts).size < 2) { fail(`${name}: every source is on ${hosts[0]}, which is one source twice`); bad++; }
+        if (hosts.some(h => /wiki/.test(h))) { fail(`${name}: a source is Wikipedia or a copy of it`); bad++; }
+      }
+    }
     if (!bad) ok(`${Object.keys(verified).length} verified, ${Object.keys(held).length} held from the file, ${unverified.length} unverified, together exactly the ${names.size} shipped players, read ${record.read} from ${record.source}`);
   }
 
