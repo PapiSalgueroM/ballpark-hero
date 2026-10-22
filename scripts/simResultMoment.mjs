@@ -161,7 +161,6 @@ const OWN_SURFACE = {
   '/cage-clash': 'its own fight result overlay in CageClashBoard, the winner and the method over the cage, then a damage line',
   '/buzzer-beater': 'its own done card in BuzzerBeaterBoard, makes out of ten and points',
   '/stat-detective': 'its own done panel in the page, the guess count out of eight',
-  '/nba-starting-5': 'its own result panel in the page, the verdict on the five',
   '/perfect-lineup-nba': 'its own grade card in GenericLineupBoard, grade, rating and chemistry',
   '/perfect-lineup-nhl': 'its own grade card in GenericLineupBoard, grade, rating and chemistry',
   '/perfect-lineup-f1': 'its own grade card in GenericLineupBoard, grade, rating and chemistry',
