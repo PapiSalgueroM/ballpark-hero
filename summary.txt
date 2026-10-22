@@ -1,0 +1,1 @@
+mutfinal exit=2 54s | playFirstVisitDialogs ABORTED: the planted trip did not draw the full card on 3 lines, so they would measure a smaller card. A PAGE DEFECT until shown otherwise, not the 
