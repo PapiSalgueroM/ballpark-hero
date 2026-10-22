@@ -72,6 +72,25 @@ describe('Fight Career board, hanging them up', () => {
     expect(view.container.textContent).toContain('walked away');
   });
 
+  /* Round 1546 review: an armed confirm used to wait through a whole fight
+     and greet the player back on the hub, the destructive one included. */
+  it('disarms a waiting Retire or Start again when a fight is picked', async () => {
+    const st = careerOf(RETIRE_MIN_FIGHTS, 'Changed Mind');
+    localStorage.setItem(KEY, JSON.stringify({ st, phase: 'hub' }));
+    const view = render(<FightCareerBoard />);
+    await view.findByText('Changed Mind');
+    const offerButton = () => view.getAllByRole('button').find(b => b.textContent?.includes(st.offers[0].opponent.name))!;
+    for (const [arm, armed] of [['Retire', 'Yes, hang them up'], ['Start again', 'Yes, start again']] as const) {
+      fireEvent.click(view.getByRole('button', { name: arm }));
+      expect(view.queryByRole('button', { name: armed })).not.toBeNull();
+      fireEvent.click(offerButton());
+      fireEvent.click(await view.findByRole('button', { name: /Back/ }));
+      await view.findByText('Changed Mind');
+      expect(view.queryByRole('button', { name: armed })).toBeNull();
+    }
+    expect(JSON.parse(localStorage.getItem(KEY)!).st.retired).toBe(false);
+  });
+
   it('asks before starting again, and starting again records nothing', async () => {
     localStorage.setItem(KEY, JSON.stringify({ st: careerOf(4, 'Second Thoughts'), phase: 'hub' }));
     const view = render(<FightCareerBoard />);

@@ -194,6 +194,9 @@ export default function FightCareerBoard() {
   };
 
   const chooseOffer = (o: Offer) => {
+    /* Round 1546 review: leaving the hub disarms a Retire or Start again that
+       was waiting on its second tap, as Fight Gym does when a fight is picked. */
+    setConfirmExit(null);
     setOffer(o);
     if (campDone && st) {
       setCampDone(false);
@@ -230,6 +233,7 @@ export default function FightCareerBoard() {
     setShown(0);
     setCamp({ conditioning: 2, power: 2, defence: 1, speed: 1 });
     setView('main');
+    setConfirmExit(null);
     setPhase(st.retired ? 'retired' : 'hub');
   };
 
@@ -311,7 +315,7 @@ export default function FightCareerBoard() {
                 <div key={p.key} className="flex items-center justify-between gap-2 rounded-md border px-2 py-1.5 text-xs">
                   <div className="min-w-0">
                     <p className="truncate font-semibold">{p.name}</p>
-                    <p className="truncate text-[11px] text-muted-foreground">
+                    <p className="break-words text-[11px] text-muted-foreground">
                       {weightById(p.weight).label} · {p.wins}-{p.losses}{p.draws ? `-${p.draws}` : ''} · {p.titles ? `${p.titles} title win${p.titles > 1 ? 's' : ''}` : 'no belt'}{p.chose ? ' · walked away' : ''}
                     </p>
                   </div>
@@ -407,7 +411,7 @@ export default function FightCareerBoard() {
     return (
       <div className="space-y-4" ref={revealRef}>
         {Header}
-        <LifeTiles st={st} onOpen={setView} />
+        <LifeTiles st={st} onOpen={v => { setConfirmExit(null); setView(v); }} />
         <div>
           <p className="mb-2 text-xs uppercase tracking-wide text-muted-foreground">
             {st.champion ? 'Defend the title' : 'What do you take?'}
@@ -469,18 +473,18 @@ export default function FightCareerBoard() {
             <button
               disabled={!canRetire(st)}
               onClick={() => setConfirmExit(confirmExit === 'retire' ? null : 'retire')}
-              className="min-h-[36px] shrink-0 rounded-md border px-3 py-1.5 text-xs font-medium disabled:opacity-40">
+              className="min-h-[44px] shrink-0 rounded-md border px-3 py-1.5 text-xs font-medium disabled:opacity-40">
               Retire
             </button>
           </div>
           {confirmExit === 'retire' && canRetire(st) && (
             <div className="mt-2 flex gap-2 border-t pt-2">
               <button onClick={retireNow}
-                className="min-h-[40px] flex-1 rounded-md bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground">
+                className="min-h-[44px] flex-1 rounded-md bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground">
                 Yes, hang them up
               </button>
               <button onClick={() => setConfirmExit(null)}
-                className="min-h-[40px] flex-1 rounded-md border px-3 py-1.5 text-xs">
+                className="min-h-[44px] flex-1 rounded-md border px-3 py-1.5 text-xs">
                 Not yet
               </button>
             </div>
