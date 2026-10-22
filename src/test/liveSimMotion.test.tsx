@@ -1526,11 +1526,11 @@ describe('Round 1521: the live match looks like football', () => {
     const fouls = totals1521(t => t.fouls), cues = totals1521(t => t.cues);
     console.log(`[1521 R11] foul lines staged ${fouls}, with their cue ${cues} (${(cues / Math.max(1, fouls)).toFixed(3)}; per seed ${fixed(m.looks.map(t => t.cues / Math.max(1, t.fouls)), 3)}), of them waiting inside their minute ${totals1521(t => t.waited)}, under a stretch that outranks them ${totals1521(t => t.hidden)}, with no such reason ${totals1521(t => t.hiddenOffenders)}; cue offenders ${totals1521(t => t.cueOffenders)}; named on the grass ${totals1521(t => t.named)}, meetings read ${totals1521(t => t.contacts)}, apart ${totals1521(t => t.contactOffenders)}; cards in the feed ${totals1521(t => t.cardLines)}, carded cues ${totals1521(t => t.carded)}, card offenders ${totals1521(t => t.cardOffenders)}; fouls the stats count ${totals1521(t => t.statFouls)} (at the whistle itself ${totals1521(t => t.atWhistle)}), halves where the feed and the stats differ ${totals1521(t => t.statOffenders)}${m.looks.flatMap(t => t.foulExamples).slice(0, 4).map(s => ` | ${s}`).join('')}`);
     expect(fouls).toBeGreaterThan(1500);
-    /* Every foul whose minute has room is whistled on the grass (hiddenOffenders, below); the share that has room is
-       what the chances leave, per seed over R11_CUED. */
+    /* Every foul whose minute has room is whistled on the grass (no hidden offender); the share that has room is what
+       the chances leave, per seed over R11_CUED. */
+    expect(totals1521(t => t.hiddenOffenders)).toBe(0);
     for (const t of m.looks) expect(t.cues / Math.max(1, t.fouls)).toBeGreaterThan(R11_CUED);
     expect(totals1521(t => t.cueOffenders)).toBe(0);
-    expect(totals1521(t => t.hiddenOffenders)).toBe(0);
     expect(totals1521(t => t.named)).toBeGreaterThan(cues / 4);
     expect(totals1521(t => t.contacts)).toBeGreaterThan(cues / 4);
     expect(totals1521(t => t.contactOffenders)).toBe(0);
