@@ -1,0 +1,6 @@
+c-flat: CM_TACTICS_CONTROL=flat node scripts/simCmTactics.mjs
+c-dominant: CM_TACTICS_CONTROL=dominant node scripts/simCmTactics.mjs
+c-nolegs: CM_TACTICS_CONTROL=nolegs node scripts/simCmTactics.mjs
+c-notempo: CM_TACTICS_CONTROL=notempo node scripts/simCmTactics.mjs
+c-nowidth: CM_TACTICS_CONTROL=nowidth node scripts/simCmTactics.mjs
+c-noline: CM_TACTICS_CONTROL=noline node scripts/simCmTactics.mjs
