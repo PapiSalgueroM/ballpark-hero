@@ -1,0 +1,14 @@
+#!serial
+m-window-slate: node .rc/x/mut1554.mjs window && node scripts/simCfbSlate.mjs; s=$?; git checkout -- src scripts; exit $s
+m-window-dyn: node .rc/x/mut1554.mjs window && node scripts/simCfbDynasty.mjs; s=$?; git checkout -- src scripts; exit $s
+m-window-board: node .rc/x/mut1554.mjs window && node scripts/simCollegeDynastyBoard.mjs; s=$?; git checkout -- src scripts; exit $s
+m-window-vitest: node .rc/x/mut1554.mjs window && node_modules/.bin/vitest run src/components/cfb-dynasty src/components/college-dynasty --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
+m-ndsix-slate: node .rc/x/mut1554.mjs ndsix && node scripts/simCfbSlate.mjs; s=$?; git checkout -- src scripts; exit $s
+m-ndsix-guide: node .rc/x/mut1554.mjs ndsix && node scripts/simGuideHeadings.mjs && node scripts/simCfbDynasty.mjs; s=$?; git checkout -- src scripts; exit $s
+m-norepeat-slate: node .rc/x/mut1554.mjs norepeat && node scripts/simCfbSlate.mjs; s=$?; git checkout -- src scripts; exit $s
+m-atlarge7-slate: node .rc/x/mut1554.mjs atlarge7 && node scripts/simCfbSlate.mjs; s=$?; git checkout -- src scripts; exit $s
+m-g5sort-slate: node .rc/x/mut1554.mjs g5sort && node scripts/simCfbSlate.mjs; s=$?; git checkout -- src scripts; exit $s
+m-g5sort-board: node .rc/x/mut1554.mjs g5sort && node scripts/simCollegeDynastyBoard.mjs && node scripts/simCfbStaff.mjs; s=$?; git checkout -- src scripts; exit $s
+m-g5sort-vitest: node .rc/x/mut1554.mjs g5sort && node_modules/.bin/vitest run src/components/cfb-dynasty src/components/college-dynasty --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
+attrib-full: node .rc/x/mut1554.mjs noformat noformatcbb noseries noseriescbb && git show 3ee0bf629:src/components/college-dynasty/collegeDynastyFixture.json > src/components/college-dynasty/collegeDynastyFixture.json && node_modules/.bin/vitest run src/components/college-dynasty/collegeDynastyFixture.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
+attrib-format: node .rc/x/mut1554.mjs noformat noformatcbb && git show 3ee0bf629:src/components/college-dynasty/collegeDynastyFixture.json > src/components/college-dynasty/collegeDynastyFixture.json && node_modules/.bin/vitest run src/components/college-dynasty/collegeDynastyFixture.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s

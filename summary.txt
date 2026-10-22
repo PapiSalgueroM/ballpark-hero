@@ -1,0 +1,13 @@
+m-window-slate exit=0 6s | simCfbSlate: all green
+m-window-dyn exit=0 3s | simCfbDynasty: all green
+m-window-board exit=1 4s | simCollegeDynastyBoard: 2 failure(s)
+m-window-vitest exit=1 9s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/college-dynasty/collegeDynastyFixture.test.tsx,title=src/components/college-dynasty/collegeDynas
+m-ndsix-slate exit=0 5s | simCfbSlate: all green
+m-ndsix-guide exit=0 4s | simCfbDynasty: all green
+m-norepeat-slate exit=1 3s | simCfbSlate: 2 failure(s)
+m-atlarge7-slate exit=1 5s | simCfbSlate: 1 failure(s)
+m-g5sort-slate exit=0 5s | simCfbSlate: all green
+m-g5sort-board exit=1 4s | simCollegeDynastyBoard: 2 failure(s)
+m-g5sort-vitest exit=1 9s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/college-dynasty/collegeDynastyFixture.test.tsx,title=src/components/college-dynasty/collegeDynas
+attrib-full exit=1 4s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/college-dynasty/collegeDynastyFixture.test.tsx,title=src/components/college-dynasty/collegeDynas
+attrib-format exit=1 4s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/college-dynasty/collegeDynastyFixture.test.tsx,title=src/components/college-dynasty/collegeDynas

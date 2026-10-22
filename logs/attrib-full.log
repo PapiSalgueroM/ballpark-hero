@@ -1,0 +1,46 @@
+MUTATION noformat APPLIED to src/lib/cfbDynasty.ts
+MUTATION noformatcbb APPLIED to src/lib/cbbDynasty.ts
+MUTATION noseries APPLIED to src/lib/cfbDynasty.ts
+MUTATION noseriescbb APPLIED to src/lib/cbbDynasty.ts
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/components/college-dynasty/collegeDynastyFixture.test.tsx [2m([22m[2m4 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 2319[2mms[22m[39m
+[31m   [31m×[31m Round 912: both college dynasty boards hold their recorded behaviour[2m > [22mcfb: every step matches the fixture[39m[33m 1343[2mms[22m[39m
+[31m     → expected 'step 0 (pick) differs in html, text\n…' to be '' // Object.is equality[39m
+   [32m✓[39m Round 912: both college dynasty boards hold their recorded behaviour[2m > [22mcfb: the replay ran with the athletic director on, and an old save was offered him and not given him[32m 1[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 912: both college dynasty boards hold their recorded behaviour[2m > [22mcbb: every step matches the fixture [33m 973[2mms[22m[39m
+   [32m✓[39m Round 912: both college dynasty boards hold their recorded behaviour[2m > [22mcbb: the replay ran with the athletic director on, and an old save was offered him and not given him[32m 0[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/components/college-dynasty/collegeDynastyFixture.test.tsx[2m > [22mRound 912: both college dynasty boards hold their recorded behaviour[2m > [22mcfb: every step matches the fixture
+[31m[1mAssertionError[22m: expected 'step 0 (pick) differs in html, text\n…' to be '' // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[31m+ step 0 (pick) differs in html, text[39m
+[31m+   was: Pick your program44 real schools in the post-realignment landscape. Recruit with NIL, survive the conference, make the 12-team Playoff, win the natty, then do it again with a new roster. Classes gradu[39m
+[31m+   now: Pick your program44 real schools in the post-realignment landscape. Recruit with NIL, survive the conference, make the 12-team Playoff, win the natty, then do it again with a new roster. Classes gradu[39m
+[31m+   was info [39m
+[31m+   now info [39m
+
+[36m [2m❯[22m src/components/college-dynasty/collegeDynastyFixture.test.tsx:[2m326:21[22m[39m
+    [90m324| [39m        if (off.length) first = `step ${i} (${a.step}) differs in ${of…
+    [90m325| [39m      }
+    [90m326| [39m      [34mexpect[39m(first)[33m.[39m[34mtoBe[39m([32m''[39m)[33m;[39m
+    [90m   | [39m                    [31m^[39m
+    [90m327| [39m    }, 120_000); /* a full scripted dynasty: 3 s on a quiet machine, 1…
+    [90m328| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m3 passed[39m[22m[90m (4)[39m
+[2m   Start at [22m 14:23:46
+[2m   Duration [22m 3.58s[2m (transform 278ms, setup 68ms, collect 471ms, tests 2.32s, environment 296ms, prepare 154ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/college-dynasty/collegeDynastyFixture.test.tsx,title=src/components/college-dynasty/collegeDynastyFixture.test.tsx > Round 912%3A both college dynasty boards hold their recorded behaviour > cfb%3A every step matches the fixture,line=326,column=21::AssertionError: expected 'step 0 (pick) differs in html, text\n…' to be '' // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A+ step 0 (pick) differs in html, text%0A+   was: Pick your program44 real schools in the post-realignment landscape. Recruit with NIL, survive the conference, make the 12-team Playoff, win the natty, then do it again with a new roster. Classes gradu%0A+   now: Pick your program44 real schools in the post-realignment landscape. Recruit with NIL, survive the conference, make the 12-team Playoff, win the natty, then do it again with a new roster. Classes gradu%0A+   was info %0A+   now info %0A%0A ❯ src/components/college-dynasty/collegeDynastyFixture.test.tsx:326:21%0A%0A
