@@ -1,0 +1,4 @@
+ls-unattributed: SIM_LEAGUE_SEASONS_MORALE= node scripts/simCareerLeagueSeasons.mjs
+deck-unattributed: SIM_SOCCER_DECK_MORALE= SIM_SOCCER_DECK_SECTIONS=2 node scripts/simSoccerDeck.mjs
+form1: SIM_CAREER_FORM_SECTIONS=1 node scripts/simCareerForm.mjs
+ctl-divisor: SIM_CAREER_FORM_CONTROL=divisor node scripts/simCareerForm.mjs
