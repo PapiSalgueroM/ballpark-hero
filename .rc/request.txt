@@ -1,0 +1,5 @@
+#!playwright
+away-head: bash .rc/x/mut.sh a0 4211 - 'node .rc/x/away.mjs'
+away-old: bash .rc/x/mut.sh a1 4212 oldaway 'AWAY_TAG=old node .rc/x/away.mjs'
+m2: bash .rc/x/mut.sh m2 4203 nocap 'ONLY=/stadium-tycoon,/idle-arena,/wonderkid-factory node scripts/playFirstVisitDialogs.mjs'
+m3: bash .rc/x/mut.sh m3 4204 roleback 'ONLY=/stadium-tycoon,/idle-arena,/wonderkid-factory node scripts/playFirstVisitDialogs.mjs'
