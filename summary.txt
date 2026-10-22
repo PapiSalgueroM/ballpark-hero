@@ -1,0 +1,4 @@
+vitest exit=0 4s |    Duration  3.06s (transform 1.37s, setup 297ms, collect 3.33s, tests 253ms, environment 1.06s, prepare 383ms)
+simUsCareerAnnualBenefits exit=0 4s | Career yearly support: fictional offline engine fixtures only, no native UI, full career completion or historical-data validation claim.
+simUsCareerRecovery exit=0 4s | Career recovery: fictional offline engine fixtures, no native UI, full-career completion, medical effect or real sports-stat claim.
+tsc exit=0 55s | 
