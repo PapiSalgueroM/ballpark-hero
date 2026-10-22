@@ -171,7 +171,17 @@ export function GmEarnedDraftScreen({
 
         {open && (
           <div data-gm-draft-help-panel className="absolute inset-0 flex flex-col rounded-2xl border border-border bg-card">
-            {/* Only the words scroll; the way back stays in sight under them. */}
+            {/* The way back sits first, just under the heading's close mark: the panel is as tall as the stage (on
+                the clock that is the run card and his board, taller than a phone), so a button at its foot was
+                under the fold at 390 and at 1280 (review 1540, m1). Only the words scroll, under it. */}
+            <button
+              type="button"
+              data-gm-draft-help-close
+              onClick={() => setHelpOpen(false)}
+              className="mx-3 mb-1 mt-3 min-h-11 shrink-0 rounded-full border border-border bg-secondary/60 px-3 text-sm font-bold text-foreground hover:brightness-110"
+            >
+              Back to the draft
+            </button>
             <div className="min-h-0 flex-1 space-y-2 overflow-y-auto p-3">
               {blocks.map(b => (
                 <div key={b.heading}>
@@ -180,14 +190,6 @@ export function GmEarnedDraftScreen({
                 </div>
               ))}
             </div>
-            <button
-              type="button"
-              data-gm-draft-help-close
-              onClick={() => setHelpOpen(false)}
-              className="mx-3 mb-3 mt-1 min-h-11 shrink-0 rounded-full border border-border bg-secondary/60 px-3 text-sm font-bold text-foreground hover:brightness-110"
-            >
-              Back to the draft
-            </button>
           </div>
         )}
       </div>

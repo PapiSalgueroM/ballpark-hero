@@ -15,7 +15,9 @@
  *   E  reloads at the card (settled, Continue live) and on the clock (the same slot)
  *   F  reduced motion: every tile on its last frame at frame one
  *   G  Continue pressed on frame one
- *   H  the heading "?" opened and closed on the clock: scrollY, the stage's top and its height unchanged
+ *   H  the heading "?" opened and closed on the clock: scrollY, the stage's top and its height unchanged, and with
+ *      the panel open its "Back to the draft" button inside the viewport (review 1540 m1: at the panel's foot it sat
+ *      at y 1224 to 1268 of an 844 px view at 390 and 1204 to 1248 of a 900 px view at 1280)
  *   I  a desk off save keeps the old draft: no card
  *   J  the lazy box: the card's chunk held until the box is measured, then the card's first frame against it
  *   N  no jump (critic 1540 correction 4): after Go to the draft, Continue, each pick and the staff press, the
@@ -29,6 +31,7 @@
  *   spoil   his landed slot written into the heading before Continue: A red
  *   jump    the lazy box's height overridden: J red
  *   fold    the stage pushed below the fold: N red
+ *   backfold the help panel's "Back to the draft" moved back to the panel's foot (CSS order): H red
  * Exit 0 green, 1 red (or a control that fired, read its last line), 2 could not run, 3 a control that did not fire.
  */
 import fs from 'node:fs';
@@ -43,7 +46,7 @@ const OUT = process.env.RC_OUT || path.join(ROOT, '.tmp-fx', 'lottery-walk');
 const KEY = 'nba-front-office-save-v1';
 const SIZES = [{ w: 320, h: 640 }, { w: 390, h: 844 }, { w: 1280, h: 900 }];
 const AT390 = SIZES[1];
-const CONTROLS = { nocard: ['A'], spoil: ['A'], jump: ['J'], fold: ['N'] };
+const CONTROLS = { nocard: ['A'], spoil: ['A'], jump: ['J'], fold: ['N'], backfold: ['H'] };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`playNbaLotteryNight: no control ${CONTROL}`); process.exit(2); }
 const RUN = CONTROL ? new Set(CONTROLS[CONTROL]) : new Set(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'N']);
 const runs = s => RUN.has(s) || (s === 'A' && RUN.has('N'));
@@ -215,7 +218,9 @@ function lotteryClub() {
 if (runs('A') || runs('H')) {
   const A = lotteryClub();
   for (const size of SIZES) {
-    const { ctx, page, errors } = await open(size, A.save, { style: CONTROL === 'fold' ? '[data-gm-draft-stage] { margin-top: 3000px !important; }' : '' });
+    const style = CONTROL === 'fold' ? '[data-gm-draft-stage] { margin-top: 3000px !important; }'
+      : CONTROL === 'backfold' ? '[data-gm-draft-help-close] { order: 9 !important; }' : '';
+    const { ctx, page, errors } = await open(size, A.save, { style });
     const season = A.save.league.season;
     await shot(page, `A-${size.w}-1-recap`);
     await goToDraft(page);
@@ -251,6 +256,11 @@ if (runs('A') || runs('H')) {
       const before = await stageBox(page);
       await press(page, '[data-gm-draft-help]');
       const opened = { ...(await stageBox(page)), panel: await page.locator('[data-gm-draft-help-panel]').count() };
+      const back = await page.evaluate(() => {
+        const r = document.querySelector('[data-gm-draft-help-close]')?.getBoundingClientRect();
+        return r ? { top: Math.round(r.top), bottom: Math.round(r.bottom), view: window.innerHeight } : null;
+      });
+      say('H', back !== null && back.top >= 0 && back.bottom <= back.view, `${size.w}: with the panel open, "Back to the draft" is in view (${JSON.stringify(back)})`);
       await shot(page, `H-${size.w}-help-open`);
       await press(page, '[data-gm-draft-help-close]');
       const after = await stageBox(page);
