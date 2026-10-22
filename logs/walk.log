@@ -1,0 +1,147 @@
+== 390-rm
+  ok: 390-rm: the pick screen lists Notre Dame under Independent
+  ok: 390-rm: UNLV welcome names the Group of Five spot
+  ok: 390-rm: UNLV Play tab names this week's opponent
+  ok: 390-rm: UNLV Play intro says regular season and no conference race
+  NOTE: 390-rm: UNLV ask shown: Rebuild it right: 2 wins
+  ok: 390-rm: UNLV rebuild ask is eased to 2 wins
+  ok: no horizontal scroll on 390-rm UNLV Play
+  ok: 390-rm: UNLV Schedule lists twelve games (found 12)
+  ok: 390-rm: UNLV Schedule has twelve different opponents
+  ok: no horizontal scroll on 390-rm UNLV Schedule
+  NOTE: 390-rm Schedule cut text: Open the athletic director's card.
+  ok: 390-rm: Conferences has the Independent table and the auto spot mark
+  ok: 390-rm: no G5 Championship on Conferences
+  ok: no horizontal scroll on 390-rm UNLV Conferences
+  ok: 390-rm: twelve presses to the recap (pressed 12)
+  390-rm UNLV season one: ?; AD lines: 🔻 Nowhere near the ask. The athletic director stopped returning calls. / Trust upstairs: 32 of 100
+  ok: 390-rm: recap names the Group of Five spot, no G5 title game
+  ok: 390-rm: recap lists the title games
+  ok: no horizontal scroll on 390-rm UNLV recap
+  ok: 390-rm: season two Schedule lists twelve games (found 12)
+  390-rm OSU rivalry line: rivalry week: Michigan, a real rivalry series (The Game).
+  ok: 390-rm: OSU rivalry line names Michigan
+  390-rm OSU week 12: W12 vs Michigan 🔥
+  ok: 390-rm: OSU week 12 is Michigan with the rivalry mark
+  NOTE: 390-rm old save opened, 713 chars
+  ok: 390-rm: the old save opens on week 6
+  ok: 390-rm: the old season keeps the old Play wording
+  ok: 390-rm: the old season has no fixed this-week line
+  390-rm old save rivalry line: rivalry week.
+  ok: no horizontal scroll on 390-rm old Play
+  390-rm old save schedule rows 5
+  ok: 390-rm: the old save lists its five played games
+  ok: no horizontal scroll on 390-rm old Schedule
+  ok: 390-rm: the old season shows no Independent table
+  ok: no horizontal scroll on 390-rm old Conferences
+  ok: 390-rm: the old season needs seven presses (pressed 7)
+  ok: 390-rm: the old season recap keeps five title games
+  390-rm old recap title lines: SEC Championship: Alabama 48-19 / B1G Championship: Ohio State 27-8 / ACC Championship: Clemson 48-10 / B12 Championship: Utah 49-21 / G5 Championship: Boise State 27-24
+  ok: 390-rm: the old save's next season lists twelve games
+  ok: 390-rm: the old save's next season shows Notre Dame independent
+  ok: 390-rm: CBB table shows league (overall) records
+  ok: no horizontal scroll on 390-rm CBB table
+  390-rm old CBB table sample: 2026-27 · Round 5/10 / Record 8-0 / 8-0
+  ok: no horizontal scroll on 390-rm old CBB table
+== 390-mo
+  ok: 390-mo: UNLV welcome names the Group of Five spot
+  ok: 390-mo: UNLV Play tab names this week's opponent
+  ok: 390-mo: UNLV Play intro says regular season and no conference race
+  NOTE: 390-mo: UNLV ask shown: Rebuild it right: 2 wins
+  ok: 390-mo: UNLV rebuild ask is eased to 2 wins
+  ok: no horizontal scroll on 390-mo UNLV Play
+  ok: 390-mo: UNLV Schedule lists twelve games (found 12)
+  ok: 390-mo: UNLV Schedule has twelve different opponents
+  ok: no horizontal scroll on 390-mo UNLV Schedule
+  NOTE: 390-mo Schedule cut text: Open the athletic director's card.
+  ok: 390-mo: Conferences has the Independent table and the auto spot mark
+  ok: 390-mo: no G5 Championship on Conferences
+  ok: no horizontal scroll on 390-mo UNLV Conferences
+  390-mo OSU rivalry line: rivalry week: Michigan, a real rivalry series (The Game).
+  ok: 390-mo: OSU rivalry line names Michigan
+  390-mo OSU week 12: W12 vs Michigan 🔥
+  ok: 390-mo: OSU week 12 is Michigan with the rivalry mark
+  NOTE: 390-mo old save opened, 713 chars
+  ok: 390-mo: the old save opens on week 6
+  ok: 390-mo: the old season keeps the old Play wording
+  ok: 390-mo: the old season has no fixed this-week line
+  390-mo old save rivalry line: rivalry week.
+  ok: no horizontal scroll on 390-mo old Play
+  390-mo old save schedule rows 5
+  ok: 390-mo: the old save lists its five played games
+  ok: no horizontal scroll on 390-mo old Schedule
+  ok: 390-mo: the old season shows no Independent table
+  ok: no horizontal scroll on 390-mo old Conferences
+  ok: 390-mo: CBB table shows league (overall) records
+  ok: no horizontal scroll on 390-mo CBB table
+  390-mo old CBB table sample: 2026-27 · Round 5/10 / Record 8-0 / 8-0
+  ok: no horizontal scroll on 390-mo old CBB table
+== 1280-rm
+  ok: 1280-rm: the pick screen lists Notre Dame under Independent
+  ok: 1280-rm: UNLV welcome names the Group of Five spot
+  ok: 1280-rm: UNLV Play tab names this week's opponent
+  ok: 1280-rm: UNLV Play intro says regular season and no conference race
+  NOTE: 1280-rm: UNLV ask shown: Rebuild it right: 2 wins
+  ok: 1280-rm: UNLV rebuild ask is eased to 2 wins
+  ok: no horizontal scroll on 1280-rm UNLV Play
+  ok: 1280-rm: UNLV Schedule lists twelve games (found 12)
+  ok: 1280-rm: UNLV Schedule has twelve different opponents
+  ok: no horizontal scroll on 1280-rm UNLV Schedule
+  NOTE: 1280-rm Schedule cut text: Open the athletic director's card.
+  ok: 1280-rm: Conferences has the Independent table and the auto spot mark
+  ok: 1280-rm: no G5 Championship on Conferences
+  ok: no horizontal scroll on 1280-rm UNLV Conferences
+  1280-rm OSU rivalry line: rivalry week: Michigan, a real rivalry series (The Game).
+  ok: 1280-rm: OSU rivalry line names Michigan
+  1280-rm OSU week 12: W12 vs Michigan 🔥
+  ok: 1280-rm: OSU week 12 is Michigan with the rivalry mark
+  NOTE: 1280-rm old save opened, 713 chars
+  ok: 1280-rm: the old save opens on week 6
+  ok: 1280-rm: the old season keeps the old Play wording
+  ok: 1280-rm: the old season has no fixed this-week line
+  1280-rm old save rivalry line: rivalry week.
+  ok: no horizontal scroll on 1280-rm old Play
+  1280-rm old save schedule rows 5
+  ok: 1280-rm: the old save lists its five played games
+  ok: no horizontal scroll on 1280-rm old Schedule
+  ok: 1280-rm: the old season shows no Independent table
+  ok: no horizontal scroll on 1280-rm old Conferences
+  ok: 1280-rm: CBB table shows league (overall) records
+  ok: no horizontal scroll on 1280-rm CBB table
+  1280-rm old CBB table sample: 2026-27 · Round 5/10 / Record 8-0 / 8-0
+  ok: no horizontal scroll on 1280-rm old CBB table
+== 1280-mo
+  ok: 1280-mo: UNLV welcome names the Group of Five spot
+  ok: 1280-mo: UNLV Play tab names this week's opponent
+  ok: 1280-mo: UNLV Play intro says regular season and no conference race
+  NOTE: 1280-mo: UNLV ask shown: Rebuild it right: 2 wins
+  ok: 1280-mo: UNLV rebuild ask is eased to 2 wins
+  ok: no horizontal scroll on 1280-mo UNLV Play
+  ok: 1280-mo: UNLV Schedule lists twelve games (found 12)
+  ok: 1280-mo: UNLV Schedule has twelve different opponents
+  ok: no horizontal scroll on 1280-mo UNLV Schedule
+  NOTE: 1280-mo Schedule cut text: Open the athletic director's card.
+  ok: 1280-mo: Conferences has the Independent table and the auto spot mark
+  ok: 1280-mo: no G5 Championship on Conferences
+  ok: no horizontal scroll on 1280-mo UNLV Conferences
+  1280-mo OSU rivalry line: rivalry week: Michigan, a real rivalry series (The Game).
+  ok: 1280-mo: OSU rivalry line names Michigan
+  1280-mo OSU week 12: W12 vs Michigan 🔥
+  ok: 1280-mo: OSU week 12 is Michigan with the rivalry mark
+  NOTE: 1280-mo old save opened, 713 chars
+  ok: 1280-mo: the old save opens on week 6
+  ok: 1280-mo: the old season keeps the old Play wording
+  ok: 1280-mo: the old season has no fixed this-week line
+  1280-mo old save rivalry line: rivalry week.
+  ok: no horizontal scroll on 1280-mo old Play
+  1280-mo old save schedule rows 5
+  ok: 1280-mo: the old save lists its five played games
+  ok: no horizontal scroll on 1280-mo old Schedule
+  ok: 1280-mo: the old season shows no Independent table
+  ok: no horizontal scroll on 1280-mo old Conferences
+  ok: 1280-mo: CBB table shows league (overall) records
+  ok: no horizontal scroll on 1280-mo CBB table
+  1280-mo old CBB table sample: 2026-27 · Round 5/10 / Record 8-0 / 8-0
+  ok: no horizontal scroll on 1280-mo old CBB table
+  ok: no page errors (0)
+walkrev1554: 108 checks, 0 failed
