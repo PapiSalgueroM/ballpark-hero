@@ -1,0 +1,2 @@
+#!playwright
+simWritesAreSent-main: git worktree add -q /tmp/base 3ee0bf629 && ln -s "$PWD/node_modules" /tmp/base/node_modules && cd /tmp/base && node_modules/.bin/vite build --logLevel error && node scripts/simWritesAreSent.mjs
