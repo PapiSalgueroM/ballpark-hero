@@ -1,0 +1,242 @@
+{
+ "rows": [
+  {
+   "width": 390,
+   "morale": 95,
+   "text": "Morale 95: +1 league game, rating +0.1 this season.",
+   "box": {
+    "x": 29,
+    "y": 414.21875,
+    "width": 332,
+    "height": 15
+   },
+   "bar": {
+    "x": 29,
+    "y": 393.21875,
+    "width": 56,
+    "height": 15
+   },
+   "wide": 0
+  },
+  {
+   "width": 390,
+   "morale": 81,
+   "text": "Morale 81: no swing this season.",
+   "box": {
+    "x": 29,
+    "y": 414.21875,
+    "width": 332,
+    "height": 15
+   },
+   "bar": {
+    "x": 29,
+    "y": 393.21875,
+    "width": 56,
+    "height": 15
+   },
+   "wide": 0
+  },
+  {
+   "width": 390,
+   "morale": 40,
+   "text": "Morale 40: -1 league game, rating -0.2 this season.",
+   "box": {
+    "x": 29,
+    "y": 414.21875,
+    "width": 332,
+    "height": 15
+   },
+   "bar": {
+    "x": 29,
+    "y": 393.21875,
+    "width": 56,
+    "height": 15
+   },
+   "wide": 0
+  },
+  {
+   "width": 1280,
+   "morale": 95,
+   "text": "Morale 95: +1 league game, rating +0.1 this season.",
+   "box": {
+    "x": 433,
+    "y": 442,
+    "width": 686,
+    "height": 15
+   },
+   "bar": {
+    "x": 433,
+    "y": 421,
+    "width": 56,
+    "height": 15
+   },
+   "wide": 0
+  },
+  {
+   "width": 1280,
+   "morale": 81,
+   "text": "Morale 81: no swing this season.",
+   "box": {
+    "x": 433,
+    "y": 442,
+    "width": 686,
+    "height": 15
+   },
+   "bar": {
+    "x": 433,
+    "y": 421,
+    "width": 56,
+    "height": 15
+   },
+   "wide": 0
+  },
+  {
+   "width": 1280,
+   "morale": 40,
+   "text": "Morale 40: -1 league game, rating -0.2 this season.",
+   "box": {
+    "x": 433,
+    "y": 442,
+    "width": 686,
+    "height": 15
+   },
+   "bar": {
+    "x": 433,
+    "y": 421,
+    "width": 56,
+    "height": 15
+   },
+   "wide": 0
+  }
+ ],
+ "results": [
+  {
+   "ok": true,
+   "label": "the fixture reached a playing hub (phase playing)"
+  },
+  {
+   "ok": true,
+   "label": "390 morale 95: one morale line on the hub (found 1)"
+  },
+  {
+   "ok": true,
+   "label": "390 morale 95: the line reads \"Morale 95: +1 league game, rating +0.1 this season.\", the helper says \"Morale 95: +1 league game, rating +0.1 this season.\""
+  },
+  {
+   "ok": true,
+   "label": "390 morale 95: no sideways scroll (0px)"
+  },
+  {
+   "ok": true,
+   "label": "390 morale 95: the line sits inside the viewport"
+  },
+  {
+   "ok": true,
+   "label": "390 morale 95: the line sits just under the Morale bar"
+  },
+  {
+   "ok": true,
+   "label": "390 morale 81: one morale line on the hub (found 1)"
+  },
+  {
+   "ok": true,
+   "label": "390 morale 81: the line reads \"Morale 81: no swing this season.\", the helper says \"Morale 81: no swing this season.\""
+  },
+  {
+   "ok": true,
+   "label": "390 morale 81: no sideways scroll (0px)"
+  },
+  {
+   "ok": true,
+   "label": "390 morale 81: the line sits inside the viewport"
+  },
+  {
+   "ok": true,
+   "label": "390 morale 81: the line sits just under the Morale bar"
+  },
+  {
+   "ok": true,
+   "label": "390 morale 40: one morale line on the hub (found 1)"
+  },
+  {
+   "ok": true,
+   "label": "390 morale 40: the line reads \"Morale 40: -1 league game, rating -0.2 this season.\", the helper says \"Morale 40: -1 league game, rating -0.2 this season.\""
+  },
+  {
+   "ok": true,
+   "label": "390 morale 40: no sideways scroll (0px)"
+  },
+  {
+   "ok": true,
+   "label": "390 morale 40: the line sits inside the viewport"
+  },
+  {
+   "ok": true,
+   "label": "390 morale 40: the line sits just under the Morale bar"
+  },
+  {
+   "ok": true,
+   "label": "1280 morale 95: one morale line on the hub (found 1)"
+  },
+  {
+   "ok": true,
+   "label": "1280 morale 95: the line reads \"Morale 95: +1 league game, rating +0.1 this season.\", the helper says \"Morale 95: +1 league game, rating +0.1 this season.\""
+  },
+  {
+   "ok": true,
+   "label": "1280 morale 95: no sideways scroll (0px)"
+  },
+  {
+   "ok": true,
+   "label": "1280 morale 95: the line sits inside the viewport"
+  },
+  {
+   "ok": true,
+   "label": "1280 morale 95: the line sits just under the Morale bar"
+  },
+  {
+   "ok": true,
+   "label": "1280 morale 81: one morale line on the hub (found 1)"
+  },
+  {
+   "ok": true,
+   "label": "1280 morale 81: the line reads \"Morale 81: no swing this season.\", the helper says \"Morale 81: no swing this season.\""
+  },
+  {
+   "ok": true,
+   "label": "1280 morale 81: no sideways scroll (0px)"
+  },
+  {
+   "ok": true,
+   "label": "1280 morale 81: the line sits inside the viewport"
+  },
+  {
+   "ok": true,
+   "label": "1280 morale 81: the line sits just under the Morale bar"
+  },
+  {
+   "ok": true,
+   "label": "1280 morale 40: one morale line on the hub (found 1)"
+  },
+  {
+   "ok": true,
+   "label": "1280 morale 40: the line reads \"Morale 40: -1 league game, rating -0.2 this season.\", the helper says \"Morale 40: -1 league game, rating -0.2 this season.\""
+  },
+  {
+   "ok": true,
+   "label": "1280 morale 40: no sideways scroll (0px)"
+  },
+  {
+   "ok": true,
+   "label": "1280 morale 40: the line sits inside the viewport"
+  },
+  {
+   "ok": true,
+   "label": "1280 morale 40: the line sits just under the Morale bar"
+  },
+  {
+   "ok": true,
+   "label": "no page errors ()"
+  }
+ ]
+}
