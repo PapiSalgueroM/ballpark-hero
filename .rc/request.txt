@@ -1,0 +1,5 @@
+#!playwright
+#!serial
+mut-finalline: bash .rc/x/mutbuild.sh finalline 4191 'ONLY=/stadium-tycoon node scripts/playFirstVisitDialogs.mjs'
+mut-closejump: bash .rc/x/mutbuild.sh closejump 4192 'ONLY=/stadium-tycoon node scripts/playFirstVisitDialogs.mjs'
+mut-closejump-walk: bash .rc/x/mutbuild.sh closejump 4193 'node .rc/x/walk1539.mjs'
