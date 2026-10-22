@@ -5,7 +5,7 @@ import FrontOfficeBoard from '@/components/front-office/FrontOfficeBoard';
 import { GameNav } from '@/components/game/GameNav';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
-import { hostXpHelp } from '@/lib/gmDeskHost';
+import { hostXpHelp } from '@/lib/gmCareerFace'; /* Round 1550: the help's part of the career, not the whole host */
 
 /* Round 1130. A page that has a guide never renders the howToPlay prop below (GameSeoContent keeps it as a
    fallback only), and this page's guide is another round's file this week. So the opening rating rule reaches

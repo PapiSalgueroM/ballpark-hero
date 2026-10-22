@@ -58,15 +58,13 @@ import {
   DEPTH_GROUPS, resetDepth, aiWeeklyMoves, generateDraftClass, injuryPass, nflAiDraftPicks, runOffseason, runPlayoffs, simGame,
   type GmPlayer, type GmTeamState, type LeagueState, type OffseasonNews, type PlayoffRound, type Prospect,
 } from './frontOffice';
-/* Round 1533: the GM's career (the desk host, bound to this board). */
-import {
-  GM_HOST_KEYS, HOST_BLOCK_RULES, hostLastGrade, hostLegacy, hostTakeSeat, isGmSeatBlock,
-  type GmAwayHost, type HostBlockRule, type HostLegacy, type HostXpSource,
-} from './gmDeskHost';
-import type { SeatOffer, SeatSave } from './gmSeat';
-import { nflDeskHost } from './gmDeskHostNfl';
+/* Round 1533: the GM's career (the desk host, bound to this board). Round 1550: only the part every screen reads
+   (gmCareerFace.ts) is imported for its values here; the calls that need the whole host, its adapter and the
+   market (nflLegacy, nflTakeSeat) live in nflGmCareer.ts, which the board fetches when it needs them. */
+import { GM_HOST_KEYS, HOST_BLOCK_RULES, isGmSeatBlock, type HostBlockRule } from './gmCareerFace';
+import type { GmAwayHost, HostXpSource } from './gmDeskHost';
 import { leagueNames } from './foNames';
-import { nflPostseason, type FoSeasonOutcome, type OwnerMandate } from './foOwnerMandate';
+import { nflPostseason, type FoSeasonOutcome } from './foOwnerMandate';
 import type { GmTree } from './gmXp';
 
 /* ------------------------------------------------------------------ */
@@ -670,18 +668,6 @@ export function nflSeasonCounted(phase: string, desk: GmDesk | null): boolean {
   return !(isGmSeatBlock(stored) && stored.career.seasonsOut > 0);
 }
 
-/** The legacy read of the board's save, the record a save older than the seat block stands on. Never writes. */
-export function nflLegacy(league: LeagueState, f: {
-  team: string; seasonsPlayed: number; titles: number; fired: boolean; seasonCounted: boolean;
-  mandate: OwnerMandate | null; rounds: PlayoffRound[]; champion: string;
-}): HostLegacy {
-  const outcome = f.champion ? nflOutcome(league, f.team, f.rounds, f.champion) : null;
-  return hostLegacy(nflDeskHost, league, {
-    team: f.team, seasonsPlayed: f.seasonsPlayed, titles: f.titles, fired: f.fired, seasonCounted: f.seasonCounted,
-    lastGrade: f.seasonCounted ? hostLastGrade(nflDeskHost, league, f.mandate, outcome) : null,
-  });
-}
-
 /**
  * Who owns each block when he changes clubs: the host's two rows (his record
  * and his XP travel with him), then the NFL's three. The re-sign ledger and
@@ -695,32 +681,6 @@ export function nflDeskBlockRules(): HostBlockRule<LeagueState>[] {
     { key: NFL_DESK_KEYS.staff, owner: 'club', fresh: (league, team) => freshStaff(league, team) },
     { key: NFL_DESK_KEYS.picks, owner: 'league' },
   ];
-}
-
-/**
- * Take a job in the same league. MUTATES the league handed in (the board
- * hands a copy), and only once the move is made: null, and the league as it
- * was, when the host refuses (he holds a seat, or that club is not in the
- * feed the market reads today).
- *
- * A save whose desk is off opens it here, on his old club, as the first tap
- * on a desk box would (the arm line said so). Then on the league, and nothing
- * else: the pick lists rebuilt from the ledger when the desk was just opened,
- * and his old club's saved depth chart handed back to automatic (a club with
- * nobody in the chair orders its own depth). A roster, a pick, a standing or a
- * rival's chart: none of it moves.
- */
-export function nflTakeSeat<S extends SeatSave>(
-  league: LeagueState, desk: GmDesk | null, save: S, legacy: HostLegacy, teamId: string, nameOf: (id: string) => string,
-): { save: S; desk: GmDesk; offer: SeatOffer; opened: boolean } | null {
-  const opened = desk === null;
-  const start = desk ?? openNflDesk(league, legacy.team);
-  const r = hostTakeSeat({ host: nflDeskHost, league, desk: start, save, legacy, teamId, nameOf, blocks: nflDeskBlockRules() });
-  if (!r) return null;
-  if (opened) syncNflPicks(league, nflPicksOf(r.desk, league));
-  const old = league.teams[legacy.team];
-  if (old) for (const pos of DEPTH_GROUPS) resetDepth(old, pos);
-  return { ...r, opened };
 }
 
 /**

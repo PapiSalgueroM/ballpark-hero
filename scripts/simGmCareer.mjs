@@ -159,7 +159,11 @@ const begin = (id, title) => { check = id; console.log(`${id}) ${title}`); };
 /* ---- the controls: source rewrites applied at bundle time, never on disk ---- */
 const FILES = {
   host: path.join(ROOT, 'src', 'lib', 'gmDeskHost.ts'),
+  /* Round 1550: the hub boxes and the record reader moved here word for word */
+  face: path.join(ROOT, 'src', 'lib', 'gmCareerFace.ts'),
   desk: path.join(ROOT, 'src', 'lib', 'nflGmDesk.ts'),
+  /* Round 1550: nflTakeSeat and nflLegacy moved here word for word (the board fetches them with the career kit) */
+  career: path.join(ROOT, 'src', 'lib', 'nflGmCareer.ts'),
   seat: path.join(ROOT, 'src', 'lib', 'gmSeat.ts'),
   board: path.join(ROOT, 'src', 'components', 'front-office', 'FrontOfficeBoard.tsx'),
 };
@@ -169,7 +173,7 @@ const EDITS = {
   deskoffblock: ['host', '  if (!i.desk) return out;', '  if (!i.desk) return { ...out, desk: { v: 1, blocks: { seat: 1 } } };'],
   paytwice: ['host', '  if (seat.last !== undefined && f.season <= seat.last) return same;', '  if (false) return same;'],
   lateseat: ['host', 'titles: i.titles, fired: i.fired, seasonCounted: false,', 'titles: i.titles, fired: i.fired, seasonCounted: true,'],
-  emptytile: ['host', "value: 'No more calls',", "value: '',"],
+  emptytile: ['face', "value: 'No more calls',", "value: '',"],
   /* Section 3: Media. The option handed through unchanged at every level; the board's press drawing twice. */
   flatmedia: ['host', '  if (!g || fx.points.media <= 0) return opt;', '  if (!g || fx.points.media <= 9) return opt;'],
   extradraw: ['board', "    const res = applyGmPressChoice(trust, hostPressOption(presser.options[i], hostXpEffects(gm, 'nfl')), Math.random);",
@@ -183,10 +187,10 @@ const EDITS = {
      the old club keeps the depth chart he saved; the summer builds the ask again. */
   staffrides: ['desk', "    { key: NFL_DESK_KEYS.staff, owner: 'club', fresh: (league, team) => freshStaff(league, team) },", "    { key: NFL_DESK_KEYS.staff, owner: 'gm' },"],
   ledgerrides: ['desk', "    { key: NFL_DESK_KEYS.contracts, owner: 'club', fresh: (league, team) => openLedger(league, team) },", "    { key: NFL_DESK_KEYS.contracts, owner: 'gm' },"],
-  rostermove: ['desk', '  const old = league.teams[legacy.team];\n  if (old) for (const pos of DEPTH_GROUPS) resetDepth(old, pos);',
+  rostermove: ['career', '  const old = league.teams[legacy.team];\n  if (old) for (const pos of DEPTH_GROUPS) resetDepth(old, pos);',
     '  const old = league.teams[legacy.team];\n  if (old) for (const pos of DEPTH_GROUPS) resetDepth(old, pos);\n  if (old && league.teams[teamId]) league.teams[teamId].players.push(old.players.pop()!);'],
-  depthstays: ['desk', '  const old = league.teams[legacy.team];\n  if (old) for (const pos of DEPTH_GROUPS) resetDepth(old, pos);', '  const old = league.teams[legacy.team];'],
-  askrebuilt: ['host', '  return stored && stored.season === season ? stored : built;', '  return built;'],
+  depthstays: ['career', '  const old = league.teams[legacy.team];\n  if (old) for (const pos of DEPTH_GROUPS) resetDepth(old, pos);', '  const old = league.teams[legacy.team];'],
+  askrebuilt: ['face', '  return stored && stored.season === season ? stored : built;', '  return built;'],
   /* Section 6: the year out. The last week skipped; the old club named as the summer's user club, so it is not cut;
      his XP not put back; the last call refusal removed; the away draft skipped. */
   halfseason: ['desk', '    periods: () => REGULAR_WEEKS,', '    periods: () => REGULAR_WEEKS - 1,'],
@@ -228,6 +232,7 @@ fs.writeFileSync(ENTRY, `
 export { makeIdMinter } from ${lib('entityIds')};
 export * as E from ${lib('frontOffice')};
 export * as D from ${lib('nflGmDesk')};
+export * as C from ${lib('nflGmCareer')};
 export * as H from ${lib('gmDeskHost')};
 export * as FM from ${lib('foOwnerMandate')};
 export * as SEAT from ${lib('gmSeat')};
@@ -289,7 +294,7 @@ if (CONTROL === 'epoch') {
 }
 const M = createRequire(import.meta.url)(BUNDLE);
 Math.random = realRandom;
-const { E, D, H, FM, FP, SEAT, G, K, S, X, P, isFrontOfficeSave, nflDeskHost, leagueNames, FO_DEPTH, FO_TEAMS } = M;
+const { E, D, C, H, FM, FP, SEAT, G, K, S, X, P, isFrontOfficeSave, nflDeskHost, leagueNames, FO_DEPTH, FO_TEAMS } = M;
 const EPOCH = (() => { const id = M.makeIdMinter('x')(); return id.slice(1, id.lastIndexOf('-')); })();
 const unEpoch = s => s.split(EPOCH).join('E');
 
@@ -795,7 +800,7 @@ function takeChecks(lgAtFiring, old, g, seat, m0, salt) {
     const lgBefore = withoutDepth(lg, old), picksBefore = pickCount(lg), deskBefore = J(desk);
     /* The new club's own blocks, opened on the league as the take reads it (before the old chart goes back). */
     const fresh = D.openNflDesk(clone(lg), offer.teamId);
-    const r = D.nflTakeSeat(lg, desk, save, legacy, offer.teamId, label);
+    const r = C.nflTakeSeat(lg, desk, save, legacy, offer.teamId, label);
     if (!r) { S5.refused++; fail(`${at}: an offer on the table was refused`); continue; }
     S5.takes++;
     ok(J(desk) === deskBefore, `${at}: the desk handed in was changed`);
@@ -1161,7 +1166,7 @@ if (runs('7')) {
       const legacy = H.hostLegacy(host, lg, { team: save.myTeam, seasonsPlayed: save.seasonsPlayed, titles: save.titles, fired: true, seasonCounted: D.nflSeasonCounted('fired', desk) });
       const m = H.hostMarket(host, lg, H.hostSeatOf(desk, legacy), label);
       if (m.offers.length > 0 && ((seed + s) % 2 === 0 || !H.hostCanSitOut(m))) {
-        const r = D.nflTakeSeat(lg, desk, { myTeam: save.myTeam, trust: save.trust, fired: true, mandate: save.mandate, pressTilt: save.pressTilt, seasonTradeLine: save.seasonTradeLine }, legacy, m.offers[0].teamId, label);
+        const r = C.nflTakeSeat(lg, desk, { myTeam: save.myTeam, trust: save.trust, fired: true, mandate: save.mandate, pressTilt: save.pressTilt, seasonTradeLine: save.seasonTradeLine }, legacy, m.offers[0].teamId, label);
         if (!r) { fail(`seed ${seed}: an offer on the table was refused`); break; }
         Object.assign(save, r.save, { phase: 'recap' });
         save.postseason = { ...save.postseason, gradeLine: null };
