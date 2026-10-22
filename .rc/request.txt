@@ -1,0 +1,2 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+tsc-m1: git worktree add /tmp/m1 36c1887a >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/m1/node_modules && cd /tmp/m1 && node_modules/.bin/tsc --noEmit -p tsconfig.app.json
