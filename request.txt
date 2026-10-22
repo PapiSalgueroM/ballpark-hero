@@ -1,0 +1,4 @@
+#!serial
+rec-head: node scripts/recordUsBoardFixture.mjs $RC_OUT/fixture-head.json
+rec-head2: node scripts/recordUsBoardFixture.mjs $RC_OUT/fixture-head2.json
+rec-unwords: node .rc/x/unwords.mjs && node scripts/recordUsBoardFixture.mjs $RC_OUT/fixture-unwords.json; s=$?; git checkout -- src; exit $s
