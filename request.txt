@@ -1,0 +1,3 @@
+rehearse: npm install --prefix /tmp/pgl @electric-sql/pglite >/dev/null 2>&1 && PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseConnections1553.mjs
+rehearse-noguard: npm install --prefix /tmp/pgl2 @electric-sql/pglite >/dev/null 2>&1 && REHEARSE_CONTROL=noguard PGLITE_DIR=/tmp/pgl2 node scripts/qa/rehearseConnections1553.mjs
+simConnectionsFacts: node scripts/simConnectionsFacts.mjs

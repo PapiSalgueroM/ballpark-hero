@@ -1,0 +1,3 @@
+simConnectionsFacts exit=0 1s | simConnectionsFacts: green. Every claim this round checked stands on two hosts and no rebuilt board has a second answer.
+rehearse-noguard exit=1 7s | rehearseConnections1553: 10 failures
+rehearse exit=0 17s | rehearseConnections1553: green. The rows land in place, a drifted row is left alone, and a second run is a no-op.
