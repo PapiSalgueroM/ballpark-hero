@@ -1,0 +1,15 @@
+7) the Skill card: (a) its answer in every sport; (b) 120 careers a set on sets 1538 and 2024 through the summer deal, base arm against head arm
+   FAIL [7] nba skill above the ceiling: rating 83 to 80 (want 83), health 70
+   FAIL [7] nba skill above the ceiling: the line "You were already at your ceiling, so the rating stays at 80." does not say "so the rating stays at 83."
+   nba: (a) 9 cases; fleet 240 careers, 4518 offseasons, 115 parted from the base arm, 27 first at a deal at the ceiling, 2 at the Skill answer and 0 at an answer before a later training card, 86 at a maintenance answer near full health; 67 young Skill answers on the head, 0 of them above the ceiling
+   FAIL [7] nfl skill above the ceiling: rating 83 to 80 (want 83), health 70
+   FAIL [7] nfl skill above the ceiling: the line "You were already at your ceiling, so the rating stays at 80." does not say "so the rating stays at 83."
+   nfl: (a) 9 cases; fleet 240 careers, 3823 offseasons, 109 parted from the base arm, 6 first at a deal at the ceiling, 0 at the Skill answer and 0 at an answer before a later training card, 103 at a maintenance answer near full health; 34 young Skill answers on the head, 0 of them above the ceiling
+   FAIL [7] mlb skill above the ceiling: rating 83 to 80 (want 83), health 70
+   FAIL [7] mlb skill above the ceiling: the line "You were already at your ceiling, so the rating stays at 80." does not say "so the rating stays at 83."
+   mlb: (a) 9 cases; fleet 240 careers, 4691 offseasons, 93 parted from the base arm, 23 first at a deal at the ceiling, 0 at the Skill answer and 0 at an answer before a later training card, 70 at a maintenance answer near full health; 52 young Skill answers on the head, 0 of them above the ceiling
+   FAIL [7] nhl skill above the ceiling: rating 83 to 80 (want 83), health 70
+   FAIL [7] nhl skill above the ceiling: the line "You were already at your ceiling, so the rating stays at 80." does not say "so the rating stays at 83."
+   nhl: (a) 9 cases; fleet 240 careers, 4877 offseasons, 127 parted from the base arm, 31 first at a deal at the ceiling, 4 at the Skill answer and 0 at an answer before a later training card, 92 at a maintenance answer near full health; 77 young Skill answers on the head, 0 of them above the ceiling
+   control clampdown: section 7 turned 4 red
+simUsShopPromises: CONTROL clampdown FIRED (red sections 7)
