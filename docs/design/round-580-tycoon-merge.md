@@ -1548,7 +1548,7 @@ are rulings, not measurements dressed as constants.
   25.05 points, centre 23.225, band 11.6125 to 34.8375 (it was 5.8125 to 17.4375,
   centre 11.625); holdout 22.85. At Squad 40 the predictor gave 21.8 and 21.6, a band
   of 10.8 to 32.6. Why the centre moved: one perfect goal turns exactly the matches that
-  would otherwise end level into wins, and a football match draws a fifth of the time.
+  would otherwise end level into wins, and this game's matches draw about a fifth of the time (20.9 percent of pace's watched league matches, S4).
 
 **What this section supersedes.** Section 5's "Match gem pace" table and "What keeps a
 ground honest"; Round 582's "the peak now comes from the division ladder and the ever
@@ -1571,8 +1571,8 @@ other half: no saved club and no club ten levels behind the ladder is walled (30
 win a title within three hours in every division). Meanwhile the Sell up bar fills
 (first Sell up 12.77 minutes, base 13.37; a seller's stars at 21, 42 and 73.5 minutes,
 as on the base), and a sale buys a star worth +50 percent income forever and legacy
-points by the division climbed, so the next ground climbs the same ladder faster: "the
-ladder is faster every run" is literally true. The signal is a title that is getting
+points by the division climbed, so the next ground should climb the same ladder faster, which is what "the
+ladder is faster every run" claims; this round does not measure a second climb (the seller's stars measure the bar, not the climb), so that line rests on the star's +50 percent, not on a run. The signal is a title that is getting
 harder to win while the bar is full, not a title that can never be won.
 
 **Pack prices (brief 3.8 with critic item 10).** Gems follow results, and the match is
@@ -1582,6 +1582,20 @@ applied once: r = the 10th percentile of earned gems at that check's limit visit
 (25) over the base (35), 0.714, every paid price times r rounded down: Scout 30, Club
 100 and Elite 250 became 21, 71 and 178 gems. Green after it (r1532-b4). No gem source
 was added; `GEM_PAY` is untouched.
+
+**The dry spell fence's control (section 5, simTycoonPacks S15), after the review.**
+`DRY_FENCE_MIN` stays 79. Its control `dear` (every pack four times its price) could no
+longer turn it red: the stadium now keeps paying results and titles, and a title is an
+unlock, so the longest stretch sits near 75.7 minutes whatever the packs cost. The S15
+bot copied verbatim, 50 seeds of 40 hours, p90 (remote checks fx1532-p1 and fx1532-p3):
+shipped 33.7; four, six, eight and twelve times the prices 75.5, 75.7, 75.7 and 76.5;
+no pack ever 95.2 with a median of 75.7 (six of fifty runs past the fence, a coin toss).
+On the base the same four times reached 149.2 only because the rivals outgrew the club
+(the Round 582 wall). So `dear` is retired and `wall` (rivals gain 1.8 law points a
+career match, simTycoonScorelines' matchno rewrite) is S15's control: p90 1386 minutes.
+Note for later rounds: S15 no longer sees pack prices (simTycoonPackPace fences those);
+with packs out of reach the title cadence alone holds it about three minutes under the
+fence, so a round that slows titles and gems together should expect S15 to move.
 
 **The economy beside the base record** (S8, calibration medians). Income a second at 30 /
 60 / 120 minutes 17.9K / 25.6K / 41.7K (base 21.2K / 34.4K / 81.0K: shorter streaks,
