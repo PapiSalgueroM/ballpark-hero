@@ -1,0 +1,10 @@
+build exit=0 22s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+norival exit=0 16s | No rival product names found. 0 findings.
+sitesearch exit=0 2s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+anchors exit=0 59s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+storage exit=0 4s | simStorageWrites: all green (owed: 12)
+tsc exit=0 97s | 
+weight exit=0 33s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+cookie-1446 exit=0 30s | COOKIE_POLICY_BROWSER_RESULT {"status":"PASS","phase":"green","originalOutcomes":0,"profiles":4,"faults":3,"restorations":3,"setupErrors":0,"sourceAndDistHeld":true,"actu
+endings-1519 exit=0 68s | PASS: no career ends before the age rules without the player, and the pair is reconciled
+vitest-all exit=0 539s |  Test Files  627 passed | 2 skipped (629)
