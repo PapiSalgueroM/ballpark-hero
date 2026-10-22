@@ -456,7 +456,85 @@ for (const row of BOARDS) {
       expect(readSave(row), 'the second tap starts over').toBeNull();
       expect(screen.getAllByText(row.clubLabel).length, 'the pick screen').toBeGreaterThan(0);
     });
+
+    /* Decision 4's old save rows and the 1223 critic's A5: a career box opens through setGmOpen alone, so looking
+       never switches a desk off save's desk on (controlFrontOfficeBoard lookopens drops the board's filter). */
+    it('looking at Career and GM level on the hub of a save whose desk is off writes nothing', async () => {
+      const { Board } = await freshBoard(row, 16);
+      let view = render(<Board />);
+      clickText(row.clubLabel);
+      await waitFor(() => expect(readSave(row)?.phase).toBe('hub'), { timeout: 120_000 });
+      answerPresser();
+      view.unmount();
+      const s = readSave(row);
+      delete s.gm;
+      localStorage.setItem(row.saveKey, JSON.stringify(s));
+      view = render(<Board />);
+      const before = localStorage.getItem(row.saveKey);
+      await lookAt('Career', '[data-gm-career]');
+      await lookAt('GM level', '[data-gm-xp-desk]');
+      expect(localStorage.getItem(row.saveKey), 'looking wrote nothing to the save').toBe(before);
+      expect(readSave(row).gm, 'the desk is still off').toBeUndefined();
+      view.unmount();
+    });
+
+    it('looking at all three boxes out of work, desk off, writes nothing', async () => {
+      const { Board } = await freshBoard(row, 17);
+      const view = await doomedSave(row, Board);
+      view.unmount();
+      const s = readSave(row);
+      delete s.gm;
+      localStorage.setItem(row.saveKey, JSON.stringify(s));
+      render(<Board />);
+      expect(outScreen(), 'a fired save whose desk is off opens out of work').not.toBeNull();
+      const before = localStorage.getItem(row.saveKey);
+      await lookAt('Job market', '[data-gm-market]');
+      await lookAt('Career', '[data-gm-career]');
+      await lookAt('GM level', '[data-gm-xp-desk]');
+      expect(localStorage.getItem(row.saveKey), 'looking wrote nothing to the save').toBe(before);
+      expect(readSave(row).gm, 'the desk is still off').toBeUndefined();
+    });
+
+    /* The close builds the verdict on the desk as the final week's tick left it (the ref), never on the render's
+       desk from before the press, which would put an approach that ran out back on the desk
+       (controlFrontOfficeBoard deskstale). */
+    it('a staff approach that runs out in the final week is still settled after the close', async () => {
+      const { Board } = await freshBoard(row, 18);
+      let view = render(<Board />);
+      clickText(row.clubLabel);
+      await waitFor(() => expect(readSave(row)?.phase).toBe('hub'), { timeout: 120_000 });
+      answerPresser();
+      view.unmount();
+      const s = readSave(row);
+      const staff = s.gm.blocks.staff.block;
+      const post = Object.keys(staff).find(k => !['v', 'poach', 'matchesLeft', 'hires', 'seasonSpend'].includes(k) && staff[k]);
+      expect(post, 'a seated post').toBeDefined();
+      staff.poach = { postId: post, club: Object.keys(s.league.teams).find(id => id !== s.myTeam), weeksLeft: 1 };
+      s.league.week = 17;
+      localStorage.setItem(row.saveKey, JSON.stringify(s));
+      view = render(<Board />);
+      cutToLimit();
+      openTile('This week');
+      fireEvent.click(buttonNamed('Play the final week + playoffs')!);
+      await waitFor(() => expect(['recap', 'fired']).toContain(readSave(row)?.phase), { timeout: 60_000 });
+      const after = readSave(row).gm.blocks;
+      expect(after.xp, 'the season closed through the desk host').toBeDefined();
+      expect(after.staff.block.poach, 'the approach ran out in the final week').toBeNull();
+      expect(after.staff.block[post!], 'and the man walked').toBeNull();
+      view.unmount();
+    });
   });
+}
+
+/** A career box (by its title, in any desk row on screen) opened, its lazy panel landed, and the bar's Hub tapped. */
+async function lookAt(title: string, landed: string) {
+  const box = Array.from(document.querySelectorAll('[data-gm-desk="tiles"] button'))
+    .find(b => Array.from(b.querySelectorAll('div')).some(dv => (dv.textContent ?? '').trim() === title));
+  if (!box) throw new Error(`no career box titled ${title}`);
+  fireEvent.click(box);
+  await waitFor(() => expect(document.querySelector(landed)).not.toBeNull(), { timeout: 30_000 });
+  backToHub();
+  await waitFor(() => expect(document.querySelector('[data-gm-desk="panel"]')).toBeNull(), { timeout: 30_000 });
 }
 
 /** The safe answer (the first, which never gambles) at a presser on screen, if there is one. */

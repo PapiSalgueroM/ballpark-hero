@@ -60,6 +60,9 @@
  * controls of its career block: the fired recap wired back to the reset that
  * deletes the save (resetbutton) and the arrival recap staging the club he
  * joins' title as his own (arrivaltitle). Every control now runs five files.
+ * Its fix pass added two the review's mutants had survived: a career box
+ * switching a desk off save's desk on by looking (lookopens) and the close
+ * built on the desk from before the final week's staff tick (deskstale).
  *
  * `blank` is this file's own control and is not part of `all`: it rewrites a
  * comment and nothing else, so no test may go red, and the run must say DID
@@ -134,6 +137,10 @@ const T = {
   opDeskOff: [OP, 'GM desk off: one press of the final week ordinary'],
   caFired: [CA, 'fired: the recap offers who is calling and keeps the save'],
   caTake: [CA, 'taking an offer takes two taps'],
+  /* Round 1533's fix pass */
+  caLookHub: [CA, 'looking at Career and GM level on the hub'],
+  caLookOut: [CA, 'looking at all three boxes out of work'],
+  caTick: [CA, 'a staff approach that runs out in the final week'],
 };
 
 const TELL_WEEK = 'const told = games.map(g => nflTell(g, lg.teams, lg.season, nflWhere(lg.week), deskWeek?.edges));';
@@ -201,6 +208,11 @@ const CONTROLS = {
      new club's title as his (no hostArriving gate) */
   resetbutton: ['the fired recap deletes the save again', [["<button onClick={() => setPhase('fired')} className=", '<button onClick={reset} className=']], [T.caFired], [T.ordinary]],
   arrivaltitle: ["the arrival recap stages the new club's title as his", [['const myTitle = champion === myTeam && !arriving;', 'const myTitle = champion === myTeam;']], [T.caTake], [T.ordinary]],
+  /* Round 1533's fix pass (the review's mutants opendesk and deskstale, each green on every test before these): a
+     career box switching a desk off save's desk on by looking; the close built on the render's desk from before the
+     final week's tick */
+  lookopens: ["looking at a career box switches a desk off save's desk on", [['if (key !== null && !gm && league && gmPanelFor(NFL_DESK_PANELS, key)) {', 'if (key !== null && !gm && league) {']], [T.caLookHub, T.caLookOut], [T.caFired]],
+  deskstale: ["the close is built on the desk from before the final week's tick", [['const deskNow = gmLive.current;', 'const deskNow = gm;']], [T.caTick], [T.opDeskOn]],
   blank: ["THIS FILE'S OWN CONTROL: a comment is reworded and nothing else, so nothing may fire", [['setGameLog(null); /* the summer */', 'setGameLog(null); /* the summer, as it was */']], [T.week], []],
 };
 
