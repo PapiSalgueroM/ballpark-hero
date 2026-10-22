@@ -160,12 +160,30 @@ const TACTICS = ['box', 'press', 'counter'];
 /* Which roster slots an action changed, read off what the men are. */
 const changedSlots = (before, after) => after.map((x, i) => (x !== before[i] ? i : -1)).filter(i => i >= 0);
 
+/* Let the newest man go and check exactly he left. */
+function releaseNewest(E, g, t) {
+  const ri = g.roster.length - 1;
+  const keep = g.roster.filter((_, i) => i !== ri).map(print).sort().join('\n');
+  const n = E.gym.releaseFighter(g, g.roster[ri].id);
+  if (!n) return g;
+  t.released += 1;
+  if (n.roster.length !== g.roster.length - 1 || n.roster.map(print).sort().join('\n') !== keep) t.badRelease += 1;
+  return n;
+}
+
 /* One gym week on engine E, acting on the NEWEST man, because after a reload
-   the newest man is the one who can wear an old id. */
-function gymWeek(E, g, week, t) {
+   the newest man is the one who can wear an old id.
+   `fresh` is the first week after a page load, whose men at the door were
+   minted by the fresh module: the week the old rule went wrong. A full gym
+   lets its newest man go to make room and signs the first of them, which is
+   what a player does who signs somebody the day after closing the tab (the
+   first run of this harness signed only into gaps, met a full gym after every
+   reload, and the counter control then broke ids without one wrong man). */
+function gymWeek(E, g, week, t, fresh = false) {
   g = { ...g, money: Math.max(g.money, 3) }; // staged cash: this harness is about who is who, not the books
+  if (fresh && g.roster.length >= 6) g = releaseNewest(E, g, t);
   if (g.roster.length < 6 && g.prospects.length) {
-    const n = E.gym.signProspect(g, g.prospects[week % g.prospects.length].id);
+    const n = E.gym.signProspect(g, g.prospects[fresh ? 0 : week % g.prospects.length].id);
     if (n) { g = n; t.signed += 1; }
   }
   const ti = g.roster.length - 1;
@@ -192,16 +210,7 @@ function gymWeek(E, g, week, t) {
       }
     }
   }
-  if (week % 7 === 0 && g.roster.length >= 3) {
-    const ri = g.roster.length - 1;
-    const keep = g.roster.filter((_, i) => i !== ri).map(print).sort().join('\n');
-    const n = E.gym.releaseFighter(g, g.roster[ri].id);
-    if (n) {
-      t.released += 1;
-      if (n.roster.length !== g.roster.length - 1 || n.roster.map(print).sort().join('\n') !== keep) t.badRelease += 1;
-      g = n;
-    }
-  }
+  if (week % 7 === 0 && g.roster.length >= 3) g = releaseNewest(E, g, t);
   g = E.gym.advanceWeek(g);
   t.weeks += 1;
   if (dupes(gymIds(g)) > 0) t.dupWeeks += 1;
@@ -255,7 +264,7 @@ for (let s = 0; s < GYMS; s += 1) {
       s1.reloads += 1;
     }
     const signedBefore = s1.signed;
-    g = gymWeek(E, g, week, s1);
+    g = gymWeek(E, g, week, s1, week > 30 && week % 6 === 2);
     if (week > 30) s1.signedAfter += s1.signed - signedBefore;
   }
 }
@@ -350,12 +359,12 @@ for (let s = 0; s < GYMS; s += 1) {
   const scratch = gymTally();
   for (let week = 1; week <= 20; week += 1) {
     if (week > 10 && week % 2 === 1) { O = await pageLoad(OLD_BUNDLE); g = roundTrip(g); } // main's load never looked at ids
-    g = gymWeek(O, g, week, scratch);
+    g = gymWeek(O, g, week, scratch, week > 10 && week % 2 === 0);
   }
   let { E, h } = await loadBroken(JSON.stringify(g), 'gym');
   for (let week = 21; week <= 32 && !h.closed; week += 1) {
     if (week % 4 === 1) { E = await pageLoad(NEW_BUNDLE); h = E.gym.sanitizeGym(roundTrip(h)); }
-    h = gymWeek(E, h, week, s3gym);
+    h = gymWeek(E, h, week, s3gym, week % 4 === 2);
   }
 }
 for (let s = 0; s < PROMOS; s += 1) {

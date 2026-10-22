@@ -927,7 +927,7 @@
         "Pick three looks for the night. They cycle through the rounds, so three different ones is a plan and one repeated is a gift.",
         "The ring shows the latest revealed round: both fighters' tactics, punches landed and condition. The figures illustrate each round, not every punch. A knockdown puts its actual victim down; a technical stoppage can leave the stopped fighter upright.",
         "A new round arrives every 3 seconds. Pause holds it, Next round pauses and reveals one more, and Play starts a fresh 3-second wait. Skip takes you to the verdict. Earlier scorecards open below the current round. You can also turn playback off before the fight to see the result straight away.",
-        "Keep going until the damage, the years or a run of defeats ends it, then read the verdict on your career."
+        "Keep going until the damage, the years or a run of defeats ends it, or retire yourself any time after 10 fights, then read the verdict on your career."
       ],
       "rules": [
         "Pressure beats an out-boxer, boxing beats a swarmer, countering beats a slugger, and brawling beats a counter-puncher. It closes into a circle, so no look is simply the best one.",

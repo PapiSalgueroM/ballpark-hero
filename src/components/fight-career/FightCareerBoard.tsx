@@ -10,21 +10,24 @@ import FightRing from '@/components/fight-career/FightRing';
 import {
   WEIGHT_CLASSES, STYLES, TACTICS, weightById,
   legacyOf, ratingOf, effectiveAttrs,
-  conditionTrack,
-  type FightCareerState, type Offer, type BoutResult, type CampPlan, type RoundLog,
+  conditionTrack, canRetire, RETIRE_MIN_FIGHTS, archiveCareer, sanitizePastFighters,
+  type PastFighter, type FightCareerState, type Offer, type BoutResult, type CampPlan, type RoundLog,
   type Tactic, type FightStyle, type WeightId,
 } from '@/lib/fightCareer';
 /* Round 916: the life between fights. The board starts a career, runs a camp
    and takes a fight through the life layer's wrappers, which call the same
    engine functions this file used to call directly. */
 import { lifeSharpness, type FightLife, type TrainerId, type ManagerId } from '@/lib/fightCareerLife';
-import { lifeNewCareer, lifeRunCamp, lifeTakeFight, nextLifeStep, lifeLoadState } from '@/lib/fightCareerLifeFlow';
+import { lifeNewCareer, lifeRunCamp, lifeTakeFight, lifeRetire, nextLifeStep, lifeLoadState } from '@/lib/fightCareerLifeFlow';
 import { fmtBank } from '@/lib/fightCareerMoney';
 import { CornerPicker, LifeStepCard, LifeTiles, LifePanel, type LifeView } from '@/components/fight-career/FightLifePanels';
 
 type Phase = 'setup' | 'hub' | 'camp' | 'plan' | 'fight' | 'result' | 'retired';
 
 const SAVE_KEY = 'fight-career-save-v1';
+/* Round 1546: finished careers, kept under their own key so the v1 save is
+   untouched and starting again does not wipe them. */
+const PAST_KEY = 'fight-career-past-v1';
 const CAMP_WEEKS = 6;
 /* Three seconds leaves time to read a round before the next bell. */
 const ROUND_RECAP_MS = 3000;
@@ -77,6 +80,9 @@ export default function FightCareerBoard() {
   const [campDone, setCampDoneState] = useState(false);
   const campDoneRef = useRef(false);
   const setCampDone = (v: boolean) => { campDoneRef.current = v; setCampDoneState(v); };
+  /* Round 1546: which way out of the hub is waiting on a second tap. */
+  const [confirmExit, setConfirmExit] = useState<'retire' | 'reset' | null>(null);
+  const [past, setPast] = useState<PastFighter[]>([]);
 
   /* Round 916: the gap between fights shows one thing at a time, read off the
      save, so its key is part of what the reveal follows. */
@@ -116,6 +122,29 @@ export default function FightCareerBoard() {
       setPhase(s.st.retired ? 'retired' : s.phase === 'plan' && kept ? 'plan' : s.phase === 'setup' ? 'setup' : 'hub');
     } catch { /* a fresh career is the right fallback */ }
   }, []);
+
+  /* Round 1546: the past fighters, read once after mount (storage is never
+     read during render, so the saved page and the first paint agree). */
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(PAST_KEY);
+      if (raw) setPast(sanitizePastFighters(JSON.parse(raw)));
+    } catch { /* an empty list is the right fallback */ }
+  }, []);
+
+  /* Round 1546: a finished career goes on the list however it ended, and a
+     finished save read back from storage adds nothing it has not already
+     added (archiveCareer keys each career), so a reload cannot list it twice. */
+  useEffect(() => {
+    if (!st?.retired) return;
+    try {
+      const raw = localStorage.getItem(PAST_KEY);
+      const was = raw ? sanitizePastFighters(JSON.parse(raw)) : [];
+      const now = archiveCareer(was, st);
+      if (now !== was) localStorage.setItem(PAST_KEY, JSON.stringify(now));
+      setPast(now);
+    } catch { /* the career itself is still on its save */ }
+  }, [st]);
 
   const persist = useCallback((next: LiveState, ph: Phase, offerId?: string) => {
     setSt(next);
@@ -207,6 +236,18 @@ export default function FightCareerBoard() {
   const reset = () => {
     try { localStorage.removeItem(SAVE_KEY); } catch { /* ignore */ }
     setSt(null); setResult(null); setOffer(null); setShown(0); setView('main'); setPhase('setup'); setCampDone(false);
+    setConfirmExit(null);
+  };
+
+  /* Round 1546: hanging them up. The save keeps the finished career, so a
+     reload lands on the same verdict, and the completion is paid once. */
+  const retireNow = () => {
+    if (!st) return;
+    const next = lifeRetire(st);
+    setConfirmExit(null);
+    if (!next) return;
+    setOffer(null); setView('main'); setCampDone(false);
+    persist(next, 'retired');
   };
 
   const campTotal = camp.conditioning + camp.power + camp.defence + camp.speed;
@@ -261,6 +302,25 @@ export default function FightCareerBoard() {
           className="min-h-[48px] w-full rounded-md bg-primary px-4 py-3 font-semibold text-primary-foreground">
           Turn professional
         </button>
+
+        {past.length > 0 && (
+          <div className="rounded-lg border bg-card p-3">
+            <p className="mb-2 text-xs uppercase tracking-wide text-muted-foreground">Your past fighters</p>
+            <div className="space-y-1.5">
+              {past.map(p => (
+                <div key={p.key} className="flex items-center justify-between gap-2 rounded-md border px-2 py-1.5 text-xs">
+                  <div className="min-w-0">
+                    <p className="truncate font-semibold">{p.name}</p>
+                    <p className="truncate text-[11px] text-muted-foreground">
+                      {weightById(p.weight).label} · {p.wins}-{p.losses}{p.draws ? `-${p.draws}` : ''} · {p.titles ? `${p.titles} title win${p.titles > 1 ? 's' : ''}` : 'no belt'}{p.chose ? ' · walked away' : ''}
+                    </p>
+                  </div>
+                  <span className="shrink-0 text-right text-[11px] font-semibold text-primary">{p.tier}<span className="block font-normal text-muted-foreground">{p.score}/100</span></span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     );
   }
@@ -396,9 +456,58 @@ export default function FightCareerBoard() {
             </div>
           </div>
         )}
-        <button onClick={reset} className="min-h-[44px] w-full rounded-md border px-4 py-2 text-sm text-muted-foreground">
-          Retire and start again
-        </button>
+        <div className="rounded-lg border bg-card p-3">
+          <div className="flex items-start justify-between gap-2">
+            <div className="min-w-0">
+              <p className="text-sm font-semibold">Retire now</p>
+              <p className="text-[11px] text-muted-foreground">
+                {canRetire(st)
+                  ? 'Go out on your own terms. It ends the career here and shows the verdict.'
+                  : `Too early to walk away. You can hang them up after ${RETIRE_MIN_FIGHTS} fights, ${RETIRE_MIN_FIGHTS - st.fightNo} to go.`}
+              </p>
+            </div>
+            <button
+              disabled={!canRetire(st)}
+              onClick={() => setConfirmExit(confirmExit === 'retire' ? null : 'retire')}
+              className="min-h-[36px] shrink-0 rounded-md border px-3 py-1.5 text-xs font-medium disabled:opacity-40">
+              Retire
+            </button>
+          </div>
+          {confirmExit === 'retire' && canRetire(st) && (
+            <div className="mt-2 flex gap-2 border-t pt-2">
+              <button onClick={retireNow}
+                className="min-h-[40px] flex-1 rounded-md bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground">
+                Yes, hang them up
+              </button>
+              <button onClick={() => setConfirmExit(null)}
+                className="min-h-[40px] flex-1 rounded-md border px-3 py-1.5 text-xs">
+                Not yet
+              </button>
+            </div>
+          )}
+        </div>
+        {confirmExit === 'reset' ? (
+          <div className="rounded-lg border border-destructive/50 p-3">
+            <p className="mb-2 text-xs text-muted-foreground">
+              Walk away and start a new fighter? This career is gone for good, with no verdict.
+            </p>
+            <div className="flex gap-2">
+              <button onClick={reset}
+                className="min-h-[44px] flex-1 rounded-md border border-destructive/60 px-3 py-2 text-sm text-destructive">
+                Yes, start again
+              </button>
+              <button onClick={() => setConfirmExit(null)}
+                className="min-h-[44px] flex-1 rounded-md border px-3 py-2 text-sm">
+                Keep this career
+              </button>
+            </div>
+          </div>
+        ) : (
+          <button onClick={() => setConfirmExit('reset')}
+            className="min-h-[44px] w-full rounded-md border px-4 py-2 text-sm text-muted-foreground">
+            Start again
+          </button>
+        )}
       </div>
     );
   }

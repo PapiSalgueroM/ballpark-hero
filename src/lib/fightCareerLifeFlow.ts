@@ -10,7 +10,7 @@
  */
 
 import {
-  newFightCareer, runCamp, takeFight,
+  newFightCareer, runCamp, takeFight, retireByChoice,
   type FightCareerState, type CampPlan, type Tactic, type BoutResult, type Offer,
   type WeightId, type FightStyle,
 } from '@/lib/fightCareer';
@@ -128,6 +128,22 @@ export function lifeTakeFight(st: FightCareerState, offerId: string, tactics: Ta
   fightRivalryTick(next);
   dealLifeCards(next);
   return { state: next, result, offer, takeHome };
+}
+
+/**
+ * Round 1546: he hangs them up himself. The engine's retireByChoice, then the
+ * life closes exactly as it does when the body ends it (the retired branch of
+ * lifeTakeFight above): nothing is left waiting on a career that is over.
+ * Null below the gate.
+ */
+export function lifeRetire(st: FightCareerState): Live | null {
+  const done = retireByChoice(cloneForLife(st));
+  if (!done) return null;
+  const next = cloneForLife(done);
+  next.life.pending = [];
+  next.life.pendingRivalryChoice = null;
+  next.life.pendingRivalryEvent = null;
+  return next;
 }
 
 /* ─────────────────────────── what is waiting ─────────────────────────── */

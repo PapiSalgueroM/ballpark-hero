@@ -767,6 +767,12 @@ export interface FightCareerState {
   earnings: number;
   history: FightLine[];
   retired: boolean;
+  /**
+   * Round 1546: 'choice' when he hung the gloves up himself (retireByChoice).
+   * Absent when the body or the record ended it, and on every save from before
+   * the round, which could only end that way.
+   */
+  retiredBy?: 'choice';
   offers: Offer[];
   camp: CampPlan | null;
   campQuality: number;
@@ -1056,6 +1062,40 @@ export function shouldRetire(st: FightCareerState): boolean {
   return false;
 }
 
+/**
+ * Round 1546: HANGING THEM UP. Until this round a career ended only when
+ * shouldRetire said so, so a champion who wanted to go out on top could not,
+ * and the hub's only exit wiped the save with no verdict. This is the
+ * family's exit shape (canSellGym and sellGym in fightGym.ts, canHandOver and
+ * handOver in fightPromoter.ts): a gate, then the same verdict the body would
+ * have given, read off the same record.
+ *
+ * The gate is a number of fights, as the gym's is weeks and the promoter's is
+ * shows. Below it a short perfect record could be banked before anybody good
+ * was ever met; scripts/simFightCareerRetire.mjs measures that walking out at
+ * the gate scores well under playing a career out, so the gate is a door and
+ * not a trick.
+ */
+export const RETIRE_MIN_FIGHTS = 10;
+
+export function canRetire(st: FightCareerState): boolean {
+  return !st.retired && st.fightNo >= RETIRE_MIN_FIGHTS;
+}
+
+export function retireByChoice(st: FightCareerState): FightCareerState | null {
+  if (!canRetire(st)) return null;
+  const f = st.fighter;
+  return {
+    ...st,
+    retired: true,
+    retiredBy: 'choice',
+    offers: [],
+    camp: null,
+    campQuality: 0.5,
+    log: [`You hang them up after ${st.fightNo} fights, ${f.wins} and ${f.losses}${f.draws ? ` and ${f.draws}` : ''}.`, ...st.log],
+  };
+}
+
 export function legacyOf(st: FightCareerState): LegacyVerdict {
   const f = st.fighter;
   const titleWins = st.history.filter(h => h.title && h.result === 'W').length;
@@ -1105,7 +1145,82 @@ export function legacyOf(st: FightCareerState): LegacyVerdict {
       : f.damage >= 40 ? 'He took his share and walked out on his own feet.'
         : 'He got out clean, which almost nobody does.',
   );
+  /* Round 1546: the score is the record's whatever ended it; this line only says who did. */
+  if (st.retiredBy === 'choice') bullets.push(`He called time himself after ${st.fightNo} fights.`);
   return { score, tier, hof, bullets };
+}
+
+/* ─────────────────────────── past fighters ─────────────────────────── */
+
+/**
+ * Round 1546: one finished career, kept after its save is cleared, so a
+ * returning player sees at setup what he has already done (the gym keeps its
+ * alumni the same way). The board stores the list under its own key, so the
+ * v1 save is untouched and a player from before the round has an empty list.
+ */
+export interface PastFighter {
+  /** The career it came from, so the same retirement is never kept twice. */
+  key: string;
+  name: string;
+  weight: WeightId;
+  wins: number;
+  losses: number;
+  draws: number;
+  kos: number;
+  /** World title wins. */
+  titles: number;
+  defences: number;
+  tier: string;
+  score: number;
+  /** He hung them up himself rather than being stopped by the body or the record. */
+  chose: boolean;
+}
+
+export const PAST_FIGHTERS_MAX = 8;
+
+export function pastFighterOf(st: FightCareerState): PastFighter {
+  const f = st.fighter;
+  const v = legacyOf(st);
+  return {
+    key: `${st.seed >>> 0}:${st.fightNo}:${f.wins}-${f.losses}-${f.draws}:${f.kos}:${st.earnings}`,
+    name: f.name,
+    weight: st.weight,
+    wins: f.wins, losses: f.losses, draws: f.draws, kos: f.kos,
+    titles: st.history.filter(h => h.title && h.result === 'W').length,
+    defences: st.titleDefences,
+    tier: v.tier,
+    score: v.score,
+    chose: st.retiredBy === 'choice',
+  };
+}
+
+/** Newest first. A career already on the list is left where it is, so a reload of a finished save adds nothing. */
+export function archiveCareer(list: PastFighter[], st: FightCareerState): PastFighter[] {
+  if (!st.retired) return list;
+  const entry = pastFighterOf(st);
+  if (list.some(p => p.key === entry.key)) return list;
+  return [entry, ...list].slice(0, PAST_FIGHTERS_MAX);
+}
+
+/** Whatever storage hands back, as a list the setup screen can draw. Anything malformed is dropped. */
+export function sanitizePastFighters(raw: unknown): PastFighter[] {
+  if (!Array.isArray(raw)) return [];
+  const num = (v: unknown) => (typeof v === 'number' && Number.isFinite(v) ? v : null);
+  const out: PastFighter[] = [];
+  for (const r of raw) {
+    if (!r || typeof r !== 'object') continue;
+    const p = r as Record<string, unknown>;
+    const nums = [p.wins, p.losses, p.draws, p.kos, p.titles, p.defences, p.score].map(num);
+    if (typeof p.key !== 'string' || typeof p.name !== 'string' || typeof p.tier !== 'string') continue;
+    if (!WEIGHT_CLASSES.some(w => w.id === p.weight) || nums.some(n => n === null)) continue;
+    const [wins, losses, draws, kos, titles, defences, score] = nums as number[];
+    out.push({
+      key: p.key, name: p.name, weight: p.weight as WeightId, wins, losses, draws, kos, titles, defences,
+      tier: p.tier, score, chose: p.chose === true,
+    });
+    if (out.length >= PAST_FIGHTERS_MAX) break;
+  }
+  return out;
 }
 
 /* ─────────────────────────── the daily ─────────────────────────── */
