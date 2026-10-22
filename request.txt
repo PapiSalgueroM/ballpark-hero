@@ -1,0 +1,4 @@
+#!build
+#!serial
+weigh-head: node .rc/x/weigh1553.mjs head
+weigh-base: git checkout 7f99c27ee -- src/data/connectionsPuzzles.ts src/pages/WhatsNew.tsx && node_modules/.bin/vite build >/dev/null 2>&1 && node .rc/x/weigh1553.mjs base; s=$?; git checkout HEAD -- src/data/connectionsPuzzles.ts src/pages/WhatsNew.tsx; exit $s
