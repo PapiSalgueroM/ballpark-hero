@@ -330,6 +330,14 @@ const ClubManager = () => {
               </div>
             </div>
           )}
+          {/* Round 1522 review: this career's tactics did not load (a dropped connection, or a deploy since the
+              page opened), so no match of it can be played until the page loads them again. */}
+          {g.tacticsFailed && (
+            <div role="alert" data-testid="cm-tactics-failed" className="mb-4 rounded-xl border border-destructive/60 bg-destructive/10 px-4 py-3 text-sm text-foreground">
+              Your tactics did not load, so the next match cannot start yet.{' '}
+              <button type="button" onClick={g.retryTactics} className="font-bold underline">Reload the page</button> to carry on.
+            </div>
+          )}
           {/* Round 1323: another tab has played this career on, so this one
               writes nothing more and covers itself until it is reloaded. */}
           {g.saveMoved && <Suspense fallback={null}><SaveMovedNotice message="This career moved on in another tab. Reload to carry on." /></Suspense>}
