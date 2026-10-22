@@ -1,0 +1,8 @@
+#!serial
+ctl-hookvisible: SIM_HALL_CONTROL=hookvisible node scripts/simHallLongPlay.mjs
+ctl-novisible: SIM_HALL_CONTROL=novisible node scripts/simHallLongPlay.mjs
+ctl-hooknote: SIM_HALL_CONTROL=hooknote node scripts/simHallLongPlay.mjs
+ctl-hookstampnow: SIM_HALL_CONTROL=hookstampnow node scripts/simHallLongPlay.mjs
+ctl-awayafter: SIM_HALL_CONTROL=awayafter node scripts/simHallLongPlay.mjs
+ctl-hookcrash: SIM_HALL_CONTROL=hookcrash node scripts/simHallLongPlay.mjs
+clean-after: test -z "$(git status --porcelain -- src scripts)" && ! ls -d .hall-longplay-* 2>/dev/null && ! test -e dist

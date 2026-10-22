@@ -1,0 +1,4 @@
+4) the real hook on fake timers
+control hookcrash: the hook is a copy with one rewrite
+the hook suite ran 0 tests, not 8
+simHallLongPlay control hookcrash: CRASHED, the hook suite ran 0 tests, not 8; a crash is not a fire, so this control proves nothing

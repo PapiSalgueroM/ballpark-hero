@@ -1,0 +1,12 @@
+4) the real hook on fake timers
+control hooknote: the hook is a copy with one rewrite
+   hooknote: deep: a save holding 3.20e+16 funds and 4.10e+18 career loaded and was written back with 3.2001e+16
+   hooknote: hidden: 600 wakes a minute apart paid x1.000000 of eight hours at the away rate; meter 28800000 ms while hidden; welcome 4.7768e+7
+   hooknote: refused: the bytes were kept aside once, 286 characters
+   hooknote: watched: 240 callbacks paid x1.000000000 of a minute at full rate
+   hooknote: glance: 30 hidden wakes a second apart paid x0.500000 of 30 watched seconds; meter 30000 ms while hidden
+   hooknote: stamp: a save written 40 s after the last callback carries lastSeen 0 ms from it; the reload paid the away rule exactly
+  FAIL: "3 three hidden hours and then seven closed are one absence under one eight hour cap" (red under the control, as it must be): AssertionError: the note on the next visit said x0.6250 of what the whole absence paid: expected 0.37499999999999845 to be less than 1e-9
+  FAIL: "7 nine hidden hours and then two closed days still leave a note that says what the hall took" (red under the control, as it must be): AssertionError: the hidden tab was paid the whole night and the next visit showed no note: expected null not to be null
+   6 of 8 hook tests green
+simHallLongPlay control hooknote: FIRED, 2 failures in section 4 (red is the right answer)
