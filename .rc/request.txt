@@ -1,0 +1,16 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-cm: node_modules/.bin/vitest run src/lib/clubManager*.test.ts src/test/clubManagerDeskCues.test.tsx src/test/clubManagerDifficultyPick.test.tsx src/test/clubManagerEraLoad.test.tsx src/test/clubManagerNoSack.test.tsx src/test/clubManagerRetire.test.tsx src/test/clubManagerSave.test.tsx src/test/clubManagerSaveSize.test.tsx src/test/clubManagerShootoutTile.test.tsx src/test/clubManagerSlots.test.tsx src/test/clubManagerStartWait.test.tsx src/test/clubManagerVarLive.test.tsx src/test/clubManagerVarScreen.test.tsx src/test/clubManagerWorldEditor.test.tsx src/test/cmMinuteLabel.test.ts src/test/cmReportBoardWord.test.tsx src/test/cmSavePointsHook.test.tsx src/test/liveSimMotion.test.tsx src/test/liveSimCelebration.test.tsx src/test/managerHalftimeLineups.test.tsx src/test/managerHalftimeLineupsSubsRule.test.ts src/test/managerLiveLineups.test.ts src/test/managerMatchPlans.test.tsx src/test/managerPenaltyMarkers.test.tsx src/test/managerQuickSimLegs.test.tsx src/test/managerScorerMarks.test.tsx src/test/pitchOwnGoal.test.tsx src/hooks/useClubManager.test.ts --testTimeout=300000 --hookTimeout=120000
+full: node scripts/simCmTactics.mjs
+c-mirror: CM_TACTICS_CONTROL=mirror node scripts/simCmTactics.mjs
+c-helpwords: CM_TACTICS_CONTROL=helpwords node scripts/simCmTactics.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simCmCopy: node scripts/simCmCopy.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+simCmMatchCentre: node scripts/simCmMatchCentre.mjs
+simLiveMatch: node scripts/simLiveMatch.mjs
+bytes: git worktree add .rcbase 6d2d7a7d2cb41d25f9c71c24c848af583e804f6a >/dev/null 2>&1 && BASE_ROOT=.rcbase SECTION=2 node scripts/simCmDifficulty.mjs
+rulesHead: node scripts/simCmLeagueRules.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
