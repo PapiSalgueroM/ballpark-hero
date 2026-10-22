@@ -1,0 +1,20 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-board: node_modules/.bin/vitest run src/components/front-office/FrontOfficeOnePress.test.tsx src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx src/components/front-office-shared/FrontOfficeGmCareer.test.tsx src/test/frontOfficeSaveRecovery.test.tsx src/components/front-office/FrontOfficeLazyDesk.test.tsx --testTimeout=600000 --hookTimeout=120000
+vitest-fo: node_modules/.bin/vitest run src/components/front-office/FrontOfficeCuts.test.tsx src/components/front-office/FrontOfficeDraftCapital.test.tsx src/components/front-office/FrontOfficeFullRoster.test.tsx src/components/front-office/FrontOfficeGameDay.test.tsx src/components/front-office/FrontOfficePostseason.test.tsx src/components/front-office/FrontOfficePromotion.test.tsx src/components/front-office/FrontOfficeRatingEvidence.test.tsx src/components/front-office/FrontOfficeTagDepth.test.tsx src/components/front-office/FrontOfficeTile.test.tsx --testTimeout=600000 --hookTimeout=120000
+vitest-shared: node_modules/.bin/vitest run src/lib/gmDeskHost.test.ts src/components/front-office-shared/GmCareerDesk.test.tsx src/lib/gmXp.test.ts src/lib/gmSeat.test.ts src/lib/collegeSeat.test.ts --testTimeout=300000 --hookTimeout=120000
+lazydesk: node scripts/simFoLazyDesk.mjs
+ctl-eager: SIM_FO_LAZY_DESK_CONTROL=eager node scripts/simFoLazyDesk.mjs
+ctl-hostimport: SIM_FO_LAZY_DESK_CONTROL=hostimport node scripts/simFoLazyDesk.mjs
+ctl-tiertile: SIM_FO_LAZY_DESK_CONTROL=tiertile node scripts/simFoLazyDesk.mjs
+ctl-boxseasons: SIM_FO_LAZY_DESK_CONTROL=boxseasons node scripts/simFoLazyDesk.mjs
+career: node scripts/simGmCareer.mjs
+deskhost: node scripts/simGmDeskHost.mjs
+nflgmdesk: node scripts/simNflGmDesk.mjs
+gmreload: node scripts/simGmReload.mjs
+gmxp: node scripts/simGmXp.mjs
+gmseat: node scripts/simGmSeat.mjs
+collegeseat: node scripts/simCollegeSeat.mjs
+sessionmarks: node scripts/simSessionMarks.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+fob-check: node scripts/controlFrontOfficeBoard.mjs check
+rivalnames: node scripts/simNoRivalNames.mjs
