@@ -1,0 +1,15 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+weight exit=1 28s | sweepWeight: 1 failure
+tsc exit=0 67s | 
+units exit=0 52s |    Duration  51.88s (transform 2.84s, setup 471ms, collect 8.83s, tests 54.70s, environment 2.72s, prepare 811ms)
+quick exit=0 10s | simCmTactics: all green (sections table, styles, balanced)
+walk exit=0 113s | playCmTactics: all green (41 checks)
+simCmMatchDay exit=0 25s | simCmMatchDay: all sections green (918 matches: 462 home, 448 away, 8 neutral)
+simNoRivalNames exit=0 18s | No rival product names found. 0 findings.
+simCmCopy exit=0 37s | simCmCopy: green on this tree. Sections 1, 2, 3, 4, 5: Club Manager says what it means.
+simHarnessAnchors exit=0 55s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simDailyDeals exit=0 4s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+simGuideHeadings exit=0 2s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+simSiteSearch exit=0 1s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+simCmLeagueRules exit=1 53s | simCmLeagueRules: 47 failure(s)
+bytes exit=0 160s | simCmDifficulty: all green (sections 2)

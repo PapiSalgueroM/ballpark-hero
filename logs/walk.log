@@ -1,0 +1,47 @@
+playCmTactics: seed 1896561770 (replay with TACTICS_SEED=1896561770), widths 390, 1280
+
+== 390 by 844
+  ok: 390: the instructions sit in one folded tile ("Balanced on all four")
+  ok: 390: the tab draws four instruction rows, balanced pressed (tab:press:0 tab:tempo:0 tab:width:0 tab:line:0)
+  ok: 390: the save holds a high press and a deep line ({"press":1,"tempo":0,"width":0,"line":-1})
+  ok: 390: the page does not jump on a tap (scrollY 146, 146, 146)
+  ok: 390: the tactics tab is no wider than the screen
+  ok: 390: every instruction tile is at least 28 px tall (28.0)
+  ok: 390: the press row says what it does and what it costs ("Hunt the ball in their half and win it high. Cost: Tires the side: lat...")
+  ok: 390: the folded tile reads the plan after a reload ("High press, Deep line")
+  ok: 390: a reload keeps both on the save and the tab (tab:press:1 tab:tempo:0 tab:width:0 tab:line:-1)
+  ok: 390: the Match Centre names their style ("⚡ They play Gegenpress. They press high and hit you quickly ")
+  ok: 390: tonight's panel opens on the standing plan (ht:press:1 ht:tempo:0 ht:width:0 ht:line:-1)
+  ok: 390: a direct tempo is logged at 46 on top of the plan ({"minute":46,"instructions":{"press":1,"tempo":1,"width":0,"line":-1}})
+  ok: 390: the formation changes for tonight only (live 1, tab 0)
+  ok: 390: the standing plan does not move
+  ok: 390: the dressing room's tactics fit the screen
+  ok: 390: wide play is logged in play ({"minute":48,"instructions":{"press":1,"tempo":1,"width":1,"line":-1}})
+  ok: 390: a duty changes in play (attackingFullBack at slot 1)
+  ok: 390: the change sheet fits the screen
+  ok: 390: a reload in the second half keeps tonight's changes and the viewer
+  ok: 390: the report's instructions block names the day and prints six numbers ("YOUR INSTRUCTIONS High press, Deep line. 46': High press, Direct, Deep line. 48': High pre")
+
+== 1280 by 900
+  ok: 1280: the instructions sit in one folded tile ("Balanced on all four")
+  ok: 1280: the tab draws four instruction rows, balanced pressed (tab:press:0 tab:tempo:0 tab:width:0 tab:line:0)
+  ok: 1280: the save holds a high press and a deep line ({"press":1,"tempo":0,"width":0,"line":-1})
+  ok: 1280: the page does not jump on a tap (scrollY 113, 113, 113)
+  ok: 1280: the tactics tab is no wider than the screen
+  ok: 1280: every instruction tile is at least 28 px tall (28.0)
+  ok: 1280: the press row says what it does and what it costs ("Hunt the ball in their half and win it high. Cost: Tires the side: lat...")
+  ok: 1280: the folded tile reads the plan after a reload ("High press, Deep line")
+  ok: 1280: a reload keeps both on the save and the tab (tab:press:1 tab:tempo:0 tab:width:0 tab:line:-1)
+  ok: 1280: the Match Centre names their style ("⚡ They play Gegenpress. They press high and hit you quickly ")
+  ok: 1280: tonight's panel opens on the standing plan (ht:press:1 ht:tempo:0 ht:width:0 ht:line:-1)
+  ok: 1280: a direct tempo is logged at 46 on top of the plan ({"minute":46,"instructions":{"press":1,"tempo":1,"width":0,"line":-1}})
+  ok: 1280: the formation changes for tonight only (live 1, tab 0)
+  ok: 1280: the standing plan does not move
+  ok: 1280: the dressing room's tactics fit the screen
+  ok: 1280: wide play is logged in play ({"minute":48,"instructions":{"press":1,"tempo":1,"width":1,"line":-1}})
+  ok: 1280: a duty changes in play (attackingFullBack at slot 1)
+  ok: 1280: the change sheet fits the screen
+  ok: 1280: a reload in the second half keeps tonight's changes and the viewer
+  ok: 1280: the report's instructions block names the day and prints six numbers ("YOUR INSTRUCTIONS High press, Deep line. 46': High press, Direct, Deep line. 48': High pre")
+  ok: no page errors ()
+playCmTactics: all green (41 checks)
