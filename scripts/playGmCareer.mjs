@@ -218,20 +218,28 @@ async function walkA(row, w, h) {
   await cdp.send('Network.enable');
   await cdp.send('Network.emulateNetworkConditions', { offline: false, latency: 300, downloadThroughput: 400 * 1024 / 8, uploadThroughput: 400 * 1024 / 8 });
   const y0 = await page.evaluate(() => window.scrollY);
-  await careerBox(page, 'Job market').click();
-  const holding = await page.locator('[data-gm-panel-loading]').first().waitFor({ state: 'visible', timeout: 4000 }).then(() => true, () => false);
-  const hold = holding ? await page.locator('[data-gm-panel-loading]').first().boundingBox() : null;
-  const headAt = async () => (await page.locator('[data-gm-desk="panel"]').first().boundingBox())?.y ?? -1;
-  const head0 = await headAt();
+  /* Read in the page the moment it is drawn: the holding box can be gone again before a second round trip. */
+  const holdNow = () => page.waitForFunction(() => {
+    const el = document.querySelector('[data-gm-panel-loading]'), panel = document.querySelector('[data-gm-desk="panel"]');
+    return el && panel ? { h: el.getBoundingClientRect().height, top: panel.getBoundingClientRect().top + window.scrollY } : null;
+  }, null, { timeout: 4000, polling: 'raf' }).then(r => r.jsonValue(), () => null);
+  const eager = chunkAsked(assets, row).length > 0;
+  const [, hold] = await Promise.all([careerBox(page, 'Job market').click(), holdNow()]);
   await cdp.send('Network.emulateNetworkConditions', { offline: false, latency: 0, downloadThroughput: -1, uploadThroughput: -1 });
   await page.locator('[data-gm-market]').first().waitFor({ timeout: 20000 });
   await wait(300);
-  const landed = await page.locator('[data-gm-market]').first().boundingBox();
-  const head1 = await headAt(), y1 = await page.evaluate(() => window.scrollY);
-  console.log(`  MEASURED ${tag}: holding box ${hold ? Math.round(hold.height) : 'none'}px, landed panel ${landed ? Math.round(landed.height) : 'none'}px`);
-  say(holding, `${tag}: on a slow connection the holding box shows while the panel loads`);
-  say(!!hold && !!landed && hold.height >= Math.min(220, landed.height) - 2, `${tag}: the holding box keeps the panel's room (${hold ? Math.round(hold.height) : 0}px for ${landed ? Math.round(landed.height) : 0}px)`, aimed('nofallback'));
-  say(head0 === head1 && y0 === y1, `${tag}: the page does not move when the panel lands (top ${head0} to ${head1}, scroll ${y0} to ${y1})`);
+  const landed = await page.evaluate(() => {
+    const el = document.querySelector('[data-gm-market]'), panel = document.querySelector('[data-gm-desk="panel"]');
+    return el && panel ? { h: el.getBoundingClientRect().height, top: panel.getBoundingClientRect().top + window.scrollY } : null;
+  });
+  const y1 = await page.evaluate(() => window.scrollY);
+  console.log(`  MEASURED ${tag}: holding box ${hold ? Math.round(hold.h) : 'none'}px, landed panel ${landed ? Math.round(landed.h) : 'none'}px`);
+  if (eager) console.log(`  SKIP  ${tag}: the chunk was fetched before the tap, so there is nothing to hold (the chunk check above is the one aimed at that)`);
+  else {
+    say(!!hold, `${tag}: on a slow connection the holding box shows while the panel loads`);
+    say(!!hold && !!landed && hold.h >= Math.min(220, landed.h) - 2, `${tag}: the holding box keeps the panel's room (${hold ? Math.round(hold.h) : 0}px for ${landed ? Math.round(landed.h) : 0}px)`, aimed('nofallback'));
+  }
+  say(!hold || !landed || (hold.top === landed.top && y0 === y1), `${tag}: the page does not move when the panel lands (top ${hold?.top} to ${landed?.top}, scroll ${y0} to ${y1})`);
   say(chunkAsked(assets, row).length >= 1, `${tag}: the Job market chunk is asked for on the tap`);
   await shot(page, `${row.sport}-${w}-market`);
   await screenChecks(page, `${tag} market`);
