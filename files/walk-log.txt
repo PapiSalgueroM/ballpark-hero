@@ -1,0 +1,5 @@
+
+ISSUES:
+ns-pablo-390: the ladder never showed Question 1 ()
+ns-alisson-390: the ladder never showed Question 1 ()
+ns-alissoncm-1280: the ladder never showed Question 1 ()
