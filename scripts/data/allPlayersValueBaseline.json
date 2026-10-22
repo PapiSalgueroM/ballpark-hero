@@ -2202,5 +2202,5 @@
     ]
   }
 ,
-  "casesRetaken": "Round 1532 (base 77c00798): the shared scoring law and the bonuses in seconds of income change every match on purpose, so the twelve histories were retaken by their legs with scripts/retakeTycoonHistories.mjs; the base tree reproduced all twelve committed hashes first"
+  "casesRetaken": "Round 1532 (base 77c00798): the shared scoring law and the bonuses in seconds of income change every match on purpose, so the twelve histories were retaken by their legs with scripts/retakeTycoonHistories.mjs; the base tree reproduced all twelve committed hashes first. Retaken again on 668bcb49 after the review fixes (remote check fx1532-r): with only src/lib/stadiumTycoon.ts and this file from 00bffb93 the old hashes replay 12 of 12, with only the old file 0 of 12, so the engine change is the one cause"
 }
