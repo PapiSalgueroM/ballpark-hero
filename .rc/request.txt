@@ -1,0 +1,12 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+desk-s1: T=$(mktemp -d); TMPDIR=$T TEMP=$T TMP=$T node scripts/simNbaGmDesk.mjs > $RC_OUT/desk-s1.txt 2>&1; a=$?; grep -E 'sheet floors|draftees up|sheets [(]|^simNbaGmDesk' $RC_OUT/desk-s1.txt | cut -c1-240; exit $a
+desk-s4held: T=$(mktemp -d); TMPDIR=$T TEMP=$T TMP=$T SIM_NBA_GM_DESK_SEEDS=31,32,33,34,35,36,37,38,39,40 node scripts/simNbaGmDesk.mjs > $RC_OUT/desk-s4.txt 2>&1; a=$?; grep -E 'sheet floors|sheets [(]|^simNbaGmDesk' $RC_OUT/desk-s4.txt | cut -c1-240; exit $a
+ctl-fullbird: T=$(mktemp -d); TMPDIR=$T TEMP=$T TMP=$T SIM_NBA_GM_DESK_CONTROL=fullbird node scripts/simNbaGmDesk.mjs > $RC_OUT/ctl-fullbird.txt 2>&1; a=$?; grep -E '^control |^simNbaGmDesk' $RC_OUT/ctl-fullbird.txt | cut -c1-200; exit $a
+ctl-norfa: T=$(mktemp -d); TMPDIR=$T TEMP=$T TMP=$T SIM_NBA_GM_DESK_CONTROL=norfa node scripts/simNbaGmDesk.mjs > $RC_OUT/ctl-norfa.txt 2>&1; a=$?; grep -E '^control |^simNbaGmDesk' $RC_OUT/ctl-norfa.txt | cut -c1-200; exit $a
+ctl-sheetrepick: T=$(mktemp -d); TMPDIR=$T TEMP=$T TMP=$T SIM_NBA_GM_DESK_CONTROL=sheetrepick node scripts/simNbaGmDesk.mjs > $RC_OUT/ctl-sheetrepick.txt 2>&1; a=$?; grep -E '^control |^simNbaGmDesk' $RC_OUT/ctl-sheetrepick.txt | cut -c1-200; exit $a
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs > $RC_OUT/anch.txt 2>&1; a=$?; tail -2 $RC_OUT/anch.txt | cut -c1-200; exit $a
+simNoRivalNames: node scripts/simNoRivalNames.mjs > $RC_OUT/nr.txt 2>&1; a=$?; tail -2 $RC_OUT/nr.txt | cut -c1-200; exit $a
+simStorageWrites: node scripts/simStorageWrites.mjs > $RC_OUT/sw.txt 2>&1; a=$?; tail -2 $RC_OUT/sw.txt | cut -c1-200; exit $a
+engine: git diff --quiet 7a8750ba HEAD -- src/lib/nbaFrontOffice.ts src/lib/gmDraftOrder.ts src/lib/gmDraftNight.ts src/lib/gmLotteryNight.ts src/lib/gmPicks.ts src/data/gmDraftOrder/rules.ts scripts/data/gmDraftOrderSources.json src/lib/draftNight.ts src/lib/lotteryReveal.ts src/components/lottery src/components/front-office-shared/GmLotteryCard.tsx scripts/data/nbaEarnedDraftFixture.json scripts/data/nbaGmDeskFixture.json scripts/simNbaDraftCapital.mjs; a=$?; echo "engine files byte equal to 7a8750ba: exit $a"; exit $a
+diff-fx2: git diff --name-only a862aa7fb HEAD | tr '\n' ' '; echo; git diff --stat a862aa7fb HEAD | tail -1
+dashes: node .rc/x/dashes2.mjs a862aa7fb
