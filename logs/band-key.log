@@ -1,0 +1,13 @@
+MUTATION key applied to src/lib/soccerCareerEngine.ts
+1500 careers, 265520 decisions
+Player of the Year: 1: top 283 of 11607 won 167 (59.0%, model 58.4%); best of each year 28 of 56 | 2: top 224 of 9170 won 35 (15.6%, model 18.1%); best of each year 15 of 56 | 3+: top 185 of 7585 won 1 (0.5%, model 0.6%); best of each year 1 of 56
+Golden Boot: 1: top 533 of 11198 won 234 (43.9%, model 46.4%); best of each year 40 of 56 | 2: top 430 of 9030 won 43 (10.0%, model 9.1%); best of each year 26 of 56 | 3+: -
+Golden Glove: 1: top 53 of 1116 won 51 (96.2%, model 89.5%); best of each year 29 of 43 | 2: top 33 of 700 won 25 (75.8%, model 69.6%); best of each year 18 of 42 | 3+: top 26 of 554 won 3 (11.5%, model 22.0%); best of each year 3 of 43
+Young Player of the Year: 1: top 26 of 1066 won 11 (42.3%, model 64.9%); best of each year 8 of 20 | 2: top 55 of 2264 won 34 (61.8%, model 50.1%); best of each year 6 of 20 | 3+: top 75 of 3079 won 10 (13.3%, model 17.1%); best of each year 3 of 20
+UEFA Player of the Year: 1: top 8 of 89 won 8 (100.0%, model 79.3%); best of each year 11 of 13 | 2: top 1 of 2 won 0 (0.0%, model 2.6%); best of each year 0 of 2 | 3+: -
+Comeback Player of the Year: 1: top 291 of 3200 won 33 (11.3%, model 12.9%); best of each year 15 of 54 | 2: top 187 of 2053 won 2 (1.1%, model 2.4%); best of each year 1 of 54 | 3+: top 135 of 1485 won 0 (0.0%, model 0.3%); best of each year 0 of 52
+Fair Play Award: 1: top 96 of 2007 won 68 (70.8%, model 72.1%); best of each year 31 of 53 | 2: top 78 of 1634 won 26 (33.3%, model 36.3%); best of each year 14 of 53 | 3+: top 69 of 1440 won 2 (2.9%, model 5.3%); best of each year 1 of 54
+co-wins Player of the Year + Young Player of the Year: 6409 seasons eligible for both, 0 and 99 won, both 0 (independent would give 0.00)
+co-wins Player of the Year + Fair Play Award: 5081 seasons eligible for both, 83 and 213 won, both 83 (independent would give 3.48)
+co-wins Player of the Year + UEFA Player of the Year: 91 seasons eligible for both, 5 and 24 won, both 5 (independent would give 1.32)
+bandProbe: done

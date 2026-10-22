@@ -1,0 +1,3 @@
+band exit=0 77s | bandProbe: done
+band-s9 exit=0 79s | bandProbe: done
+band-key exit=0 80s | bandProbe: done
