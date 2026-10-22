@@ -1,0 +1,21 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/components/cfb-dynasty src/components/cbb-dynasty src/components/college-dynasty src/lib/collegeRecruiting.test.ts src/test/cfbRecruitFilters.test.tsx src/lib/gmStaff.test.ts --testTimeout=300000 --hookTimeout=120000
+simCfbSlate: node scripts/simCfbSlate.mjs
+c-random: CFB_SLATE_CONTROL=random node scripts/simCfbSlate.mjs
+simCfbDynasty: node scripts/simCfbDynasty.mjs
+simCfbStaff: node scripts/simCfbStaff.mjs
+staff-c-legacy: CFB_STAFF_CONTROL=legacy node scripts/simCfbStaff.mjs
+simCbbStaff: node scripts/simCbbStaff.mjs
+simCollegeSeat: node scripts/simCollegeSeat.mjs
+simCollegeDynastyBoard: node scripts/simCollegeDynastyBoard.mjs
+board-c-cfbword: COLLEGE_BOARD_CONTROL=cfbword node scripts/simCollegeDynastyBoard.mjs
+simCbbRecruitFilters: node scripts/simCbbRecruitFilters.mjs
+simCfbRecruitFilters: node scripts/simCfbRecruitFilters.mjs
+simCoachCalls: node scripts/simCoachCalls.mjs
+simCollegeGridPage: node scripts/simCollegeGridPage.mjs
+simCollegeRecruiting: node scripts/simCollegeRecruiting.mjs
+simEngineIds: node scripts/simEngineIds.mjs
+simGmStaff: node scripts/simGmStaff.mjs
+simHomeFront: node scripts/simHomeFront.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simAccessibility: node scripts/simAccessibility.mjs
