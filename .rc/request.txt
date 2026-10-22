@@ -1,0 +1,7 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simFreeKick: node scripts/simFreeKick.mjs
+simFreeKick-lowcap: SIM_FREE_KICK_CONTROL=lowcap node scripts/simFreeKick.mjs
+suite4: rm -rf tycoon-draw-result-artifacts tycoon-money-display-artifacts free-kick-range-artifacts; CI=1 ONLY=simFreeKick,simFreeKickRange,simTycoonMoneyDisplay,simTycoonDrawResult node scripts/runAllSims.mjs
+suite4-noci: rm -rf tycoon-draw-result-artifacts tycoon-money-display-artifacts free-kick-range-artifacts; env -u CI -u GITHUB_ACTIONS ONLY=simFreeKickRange,simTycoonMoneyDisplay,simTycoonDrawResult node scripts/runAllSims.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
