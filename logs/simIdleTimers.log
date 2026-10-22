@@ -1,0 +1,6 @@
+A) behaviour: tap three times, unmount, every floater timer cleared
+   Vitest exit 0, 2 of 2 passed, unhandled errors none
+B) source: no floater timer started without useOwnedTimeouts
+   1723 source files read, 0 raw floater timers
+
+simIdleTimers: green. Every idle game floater timer is owned by its page and dies with it.
