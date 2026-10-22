@@ -1,0 +1,18 @@
+  t1-390-rm: button "Skill grind Rating +1 or +2, up to your ceiling"; outcome "YOUR DECISION Summer plan You chose: Skill grind No rating, money, team or status changes to show. Continue"; news shows the line: true; saved ovr 84 health 98
+  t2-390-rm: button "Skill grind Rating +1 or +2, up to your ceiling"; outcome "YOUR DECISION Summer plan You chose: Skill grind OVR 83 → to 84 +1 Continue"; news shows the line: false; saved ovr 84 health 98
+  FAIL t2-390-rm: the News tile does not show "Rating +1, and that is your ceiling."
+  t3-390-rm: button "Skills coach Health +4"; outcome "YOUR DECISION Summer plan You chose: Skills coach No rating, money, team or status changes to show. Continue"; news shows the line: true; saved ovr 77 health 100
+  t4-390-rm: button "Skills coach Health +4"; outcome "YOUR DECISION Summer plan You chose: Skills coach Health 90 → to 94 +4 Continue"; news shows the line: true; saved ovr 77 health 94
+  t1-390-mo: button "Skill grind Rating +1 or +2, up to your ceiling"; outcome "YOUR DECISION Summer plan You chose: Skill grind No rating, money, team or status changes to show. Continue"; news shows the line: true; saved ovr 84 health 98
+  t2-390-mo: button "Skill grind Rating +1 or +2, up to your ceiling"; outcome "YOUR DECISION Summer plan You chose: Skill grind OVR 83 → to 84 +1 Continue"; news shows the line: true; saved ovr 84 health 98
+  t3-390-mo: button "Skills coach Health +4"; outcome "YOUR DECISION Summer plan You chose: Skills coach No rating, money, team or status changes to show. Continue"; news shows the line: true; saved ovr 77 health 100
+  t4-390-mo: button "Skills coach Health +4"; outcome "YOUR DECISION Summer plan You chose: Skills coach Health 90 → to 94 +4 Continue"; news shows the line: true; saved ovr 77 health 94
+  t1-1280-rm: button "Skill grind Rating +1 or +2, up to your ceiling"; outcome "YOUR DECISION Summer plan You chose: Skill grind No rating, money, team or status changes to show. Continue"; news shows the line: true; saved ovr 84 health 98
+  t2-1280-rm: button "Skill grind Rating +1 or +2, up to your ceiling"; outcome "YOUR DECISION Summer plan You chose: Skill grind OVR 83 → to 84 +1 Continue"; news shows the line: true; saved ovr 84 health 98
+  t3-1280-rm: button "Skills coach Health +4"; outcome "YOUR DECISION Summer plan You chose: Skills coach No rating, money, team or status changes to show. Continue"; news shows the line: true; saved ovr 77 health 100
+  t4-1280-rm: button "Skills coach Health +4"; outcome "YOUR DECISION Summer plan You chose: Skills coach Health 90 → to 94 +4 Continue"; news shows the line: true; saved ovr 77 health 94
+  t1-1280-mo: button "Skill grind Rating +1 or +2, up to your ceiling"; outcome "YOUR DECISION Summer plan You chose: Skill grind No rating, money, team or status changes to show. Continue"; news shows the line: true; saved ovr 84 health 98
+  t2-1280-mo: button "Skill grind Rating +1 or +2, up to your ceiling"; outcome "YOUR DECISION Summer plan You chose: Skill grind OVR 83 → to 84 +1 Continue"; news shows the line: true; saved ovr 84 health 98
+  t3-1280-mo: button "Skills coach Health +4"; outcome "YOUR DECISION Summer plan You chose: Skills coach No rating, money, team or status changes to show. Continue"; news shows the line: true; saved ovr 77 health 100
+  t4-1280-mo: button "Skills coach Health +4"; outcome "YOUR DECISION Summer plan You chose: Skills coach Health 90 → to 94 +4 Continue"; news shows the line: true; saved ovr 77 health 94
+walk1538b: red, 1 failures
