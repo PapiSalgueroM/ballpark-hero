@@ -1,0 +1,4 @@
+f-r1-1 exit=0 323s | simNbaEarnedDraft: green.
+f-r1-2 exit=0 335s | simNbaEarnedDraft: green.
+f-r1-0 exit=0 336s | simNbaEarnedDraft: green.
+f-r1-3 exit=0 215s | simNbaEarnedDraft: green.
