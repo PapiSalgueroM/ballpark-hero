@@ -1,0 +1,4 @@
+earned exit=0 28s | simNbaEarnedDraft: green.
+tsc exit=0 108s | 
+fences exit=0 87s | anchors=0 norival=0 storage=0
+earned-ctl exit=0 553s | simNbaEarnedDraft controls: all 31 fired, each in exactly its own sections.

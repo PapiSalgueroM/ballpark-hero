@@ -1,0 +1,4 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+earned: node scripts/simNbaEarnedDraft.mjs
+earned-ctl: SIM_NBA_EARNED_DRAFT_CONTROL=all node scripts/simNbaEarnedDraft.mjs
+fences: node scripts/simHarnessAnchors.mjs; a=$?; node scripts/simNoRivalNames.mjs; b=$?; node scripts/simStorageWrites.mjs; c=$?; echo "anchors=$a norival=$b storage=$c"; exit $((a|b|c))
