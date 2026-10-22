@@ -1,0 +1,4 @@
+#!serial
+visible5: PROBE_NAMES='Alisson|Otávio|Pablo|Pedrinho|Jesús Angulo' node .rc/x/probeMissed.mjs && TRIVIA_UNLIMITED=200 node scripts/simTriviaBankReadProbe.mjs 2>&1 | grep -v '^  FAIL: names on the list' ; rm -f scripts/simTriviaBankReadProbe.mjs; exit 0
+medium3: PROBE_NAMES='Alisson|Otávio|Pablo' node .rc/x/probeMissed.mjs && TRIVIA_UNLIMITED=200 node scripts/simTriviaBankReadProbe.mjs 2>&1 | tail -30 ; rm -f scripts/simTriviaBankReadProbe.mjs; exit 0
+ramsey: PROBE_NAMES='Aaron Ramsey' node .rc/x/probeMissed.mjs && TRIVIA_UNLIMITED=200 node scripts/simTriviaBankReadProbe.mjs 2>&1 | tail -30 ; rm -f scripts/simTriviaBankReadProbe.mjs; exit 0
