@@ -1,0 +1,5 @@
+Leg A: 200 of 200 trips hold (count = min(floor(capped / 1680), playable), first k results and the state after k equal the 1800 lib's); head minus old matchdays: {"0":184,"1":16}
+Leg B immediate at 1800: 900 of 900 returns find the final waiting (100.0%); in ten club divisions 0 of 0; mean away matchdays a return 2.58
+Leg B immediate at 1680: 900 of 900 returns find the final waiting (100.0%); in ten club divisions 0 of 0; mean away matchdays a return 2.58
+Leg B afterFinal at 1800: 900 of 900 returns find the final waiting (100.0%); in ten club divisions 0 of 0; mean away matchdays a return 2.89
+Leg B afterFinal at 1680: 900 of 900 returns find the final waiting (100.0%); in ten club divisions 0 of 0; mean away matchdays a return 2.89
