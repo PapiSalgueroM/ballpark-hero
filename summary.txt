@@ -1,0 +1,14 @@
+tsc exit=0 67s | 
+oldsave-main exit=0 73s | review-oldsave: DIFFERS
+nat exit=0 104s | simCmMadeUpNations: green. Made up men carry a country of their own, drawn and kept honestly.
+oldsave exit=0 71s | review-oldsave: DIFFERS
+oldsave-self exit=0 70s | review-oldsave: DIFFERS
+nat-freeask exit=1 109s | simCmMadeUpNations: RED, 3 failure(s)
+nat-aiswap exit=1 107s | simCmMadeUpNations: RED, 10 failure(s)
+nat-fasign exit=1 108s | simCmMadeUpNations: RED, 2 failure(s)
+simBoardAsks exit=0 49s | simBoardAsks: green. Every ask a board makes can be met, and nobody real is quoted.
+simWorldEditor exit=0 9s | simWorldEditor: 2478 checks, 0 failures
+nat-nocap exit=1 104s | simCmMadeUpNations: RED, 3 failure(s)
+we-homecountry exit=1 9s | simWorldEditor (control homecountry): 2478 checks, 2 failures
+simClubManagerALeague exit=0 7s | simClubManagerALeague: all checks passed
+nat-awayyouth exit=1 95s | simCmMadeUpNations: RED, 9 failure(s)

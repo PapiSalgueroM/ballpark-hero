@@ -1,0 +1,33 @@
+  inbox match Arsenal: base only []; branch only []
+  season differs: now Arsenal: budget, books
+  inbox season Arsenal: base only []; branch only []
+  inbox match Hull City: base only []; branch only []
+  season differs: now Hull City: budget, books
+  inbox season Hull City: base only []; branch only []
+  inbox match West Ham: base only []; branch only []
+  season differs: now West Ham: budget, books
+  inbox season West Ham: base only []; branch only []
+  flip: now Lincoln City: ask "Have 1 player from England in the squad" target 1 England: base onTrack, branch done
+  season differs: now Lincoln City: budget, pendingSummary, boardObjectives, books
+  inbox season Lincoln City: base only []; branch only []
+  summary Lincoln City.objectives: base [{"label":"Stay up. Avoid relegation","hit":true},{"label":"Win your FA Cup Round of 16 tie","hit":false},{"label":"Finish above Bolton Wanderers","hit":true},{"label":"Concede fewer than 70 league goals","hit":false},{" | branch [{"label":"Stay up. Avoid relegation","hit":true},{"label":"Win your FA Cup Round of 16 tie","hit":false},{"label":"Finish above Bolton Wanderers","hit":true},{"label":"Concede fewer than 70 league goals","hit":false},{"
+  season differs: now Real Madrid: budget, books
+  season differs: now Málaga: budget, books
+  season differs: now Inter Milan: budget, books
+  season differs: now Frosinone: budget, books
+  flip: now Elversberg: ask "Have 7 players from Germany in the squad" target 7 Germany: base onTrack, branch done
+  flip: now Excelsior: ask "Have 1 player from Netherlands in the squad" target 1 Netherlands: base onTrack, branch done
+  flip: now Al-Hilal: ask "Have 2 players from Saudi Arabia in the squad" target 2 Saudi Arabia: base onTrack, branch done
+  flip: now Inter Miami: ask "Have 2 players from United States in the squad" target 2 United States: base onTrack, branch done
+  flip: now D.C. United: ask "Have 2 players from United States in the squad" target 2 United States: base onTrack, branch done
+  flip: now Sporting Kansas City: ask "Have 2 players from United States in the squad" target 2 United States: base onTrack, branch done
+  flip: now Nacional: ask "Have 1 player from Portugal in the squad" target 1 Portugal: base onTrack, branch done
+  flip: now Rangers: ask "Have 2 players from Scotland in the squad" target 2 Scotland: base onTrack, branch done
+  flip: now Dundee: ask "Have 1 player from Scotland in the squad" target 1 Scotland: base onTrack, branch done
+  flip: now Erzurumspor: ask "Have 1 player from Türkiye in the squad" target 1 Türkiye: base onTrack, branch done
+  flip: now Wolfsburg: ask "Have 7 players from Germany in the squad" target 7 Germany: base onTrack, branch done
+careers 94; open differs beyond nation 94; after a match 94; after the season 94
+natQuota asks on the base save: 56; graded differently by the branch on load: 41
+differing keys: [["books",94],["match:budget",24],["match:books",94],["boardObjectives",41],["match:boardObjectives",41],["match:inbox",22]]
+season keys: [["budget",94],["books",94],["pendingSummary",41],["boardObjectives",41],["inbox",40]]
+review-oldsave: DIFFERS
