@@ -1,0 +1,11 @@
+unit-lib exit=0 42s |    Duration  41.54s (transform 4.35s, setup 2.39s, collect 16.91s, tests 73.09s, environment 15.96s, prepare 4.10s)
+s0 exit=0 0s | simOneOffCups: green, 591 checks (0 s)
+tsc exit=0 105s | 
+unit-cm exit=0 139s |    Duration  137.91s (transform 7.90s, setup 3.00s, collect 34.29s, tests 238.52s, environment 19.89s, prepare 4.68s)
+lr-head exit=0 57s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+lr-all4 exit=1 56s | lrAttr: states stripped of worldComps.uel before hashing: 89
+lr-write exit=0 82s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+anchors exit=0 43s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+dashscan exit=0 1s | since cedd0239: added lines with an en or em dash 0, commit message lines with one 0
+ucl-s2 exit=0 819s | simWorldUcl: green, 23917 checks, 0 failures
+ucl-savedbytes exit=1 794s | simWorldUcl: control savedbytes FIRED (35 failures, all its own)
