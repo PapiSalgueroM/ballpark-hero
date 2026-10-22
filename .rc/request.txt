@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+landing-bar: SOCCER_LANDING_HEAD_ONLY=1 SECTIONS=bar node scripts/playSoccerLanding.mjs
+probe: node .rc/x/probeInvisibleBuyFix.mjs
+probe2: node .rc/x/probeDoubleTapFix.mjs
+walk: node .rc/x/walkFix1524.mjs
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+simFlagshipWeight: node scripts/simFlagshipWeight.mjs
+playFlagshipLazy: node scripts/playFlagshipLazy.mjs
