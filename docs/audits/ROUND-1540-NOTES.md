@@ -31,12 +31,30 @@ dukb-handoff/2026-10-10/results-g/finish-1540.md.
   walk J's measured headroom in its header. Left: the run card's "On the clock" kicker after the last pick (shared
   card, presenter round) and the lift's "no lower than" (gmLotteryNight.ts, must not touch).
 
+## The lead's ruling on the held major (second fixer, 2026-10-22)
+
+- Done on this branch: gmContracts.ts `nbaRestricted` treats a man this GM drafted, at the end of his first deal
+  whatever its length, as restricted (the full Bird tier is no longer asked; line 302, `norfa`'s anchor, unchanged),
+  with two non wiki sources read 2026-10-22 in its comment; the rules card's rookie scale line now says a second round
+  pick signs a one season deal at the league minimum; nbaSignDraftee's comment says the same.
+- Proven on runners r1540-rule-a and r1540-rule-b (head 82b60919): the old draft path does not move. simNbaGmDesk as
+  committed (sets 1..10, 11..20, 21..30, controls norfa, shortscale, sheetrepick, coinflip), simGmContracts and its
+  seven controls, simGmDeskHost and the NFL, NHL and MLB desks all print byte for byte what 7a8750ba prints.
+- NOT delivered: simNbaGmDesk's desk on replay on the earned night (brief 0 R2). The 115 "is not restricted" failures
+  are gone, but check 2 fails three floors measured on the old desk (sheets 26 / 18 / 17 against 34; gone and full
+  draft copies 7 / 4 / 5 against 11). A STOP for the lead (critic correction 10 c). The harness change, header measured
+  and control `fullbird` (115 failures, check 2 alone), waits on branch r1540-r2-earned-desk. Also found there: on
+  about one stream in twenty a man let go on a sheet is at no club after the summer (the rival's waiver, likely).
+
 ## What a later session must not trust
 
 - A runner summary that says SETUP exit=1 right after a send: the request branch sometimes fires two workflow runs,
   the first is cancelled and publishes that line. Check the Actions API before reading it as a failure.
 - simNbaDraftBoard section 1's fixture is BASE's (7a8750ba). It is never recorded again on a builder's own say.
-- simNbaGmDesk measures the OLD desk on draft night (stale on purpose, until the lead rules on the STOP).
+- simNbaGmDesk measures the OLD desk on draft night (stale on purpose, until the lead re-bands the three sheet floors
+  and merges r1540-r2-earned-desk).
+- A harness copied under another file name walks another stream: seedRandom seeds Math.random from the file name.
+  Numbers from such a copy are a fresh sample, never the committed harness's own.
 
 ## Facts read through for the brief
 
