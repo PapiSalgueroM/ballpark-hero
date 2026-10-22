@@ -1,0 +1,19 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/components/front-office-shared/GmLotteryCard.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 405[2mms[22m[39m
+ [32m✓[39m src/lib/nbaEarnedDraft.test.ts [2m([22m[2m21 tests[22m[2m)[22m[33m 1503[2mms[22m[39m
+   [33m[2m✓[22m[39m the "?" (correction 9)[2m > [22mprints no chance the table cannot compute [33m 354[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1540: the "?" states the league wide knobs, and the chances come before the draw[2m > [22mthe chances are the shared lines on the NBA table and labels, and land in the "?" before the worked example [33m 311[2mms[22m[39m
+ [32m✓[39m src/components/front-office-shared/GmEarnedDraftScreen.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[32m 91[2mms[22m[39m
+ [32m✓[39m src/lib/gmEarnedDraft.test.ts [2m([22m[2m19 tests[22m[2m)[22m[33m 2362[2mms[22m[39m
+   [33m[2m✓[22m[39m lotteryChancesBefore: the lines before the draw cannot give the draw away (correction 1)[2m > [22mhis club seeded 1st, 3rd and 14th, a playoff club, a traded away first, a bought first and two bought firsts [33m 1273[2mms[22m[39m
+   [33m[2m✓[22m[39m lotteryChancesBefore: the lines before the draw cannot give the draw away (correction 1)[2m > [22mcontrol: a variant that adds where his pick landed, or lists held firsts in slot order, tells the keys apart [33m 402[2mms[22m[39m
+ [32m✓[39m src/components/front-office-shared/useGmEarnedDraft.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 43[2mms[22m[39m
+ [32m✓[39m src/components/front-office-shared/DraftNightCard.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 33[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m6 passed[39m[22m[90m (6)[39m
+[2m      Tests [22m [1m[32m58 passed[39m[22m[90m (58)[39m
+[2m   Start at [22m 08:28:59
+[2m   Duration [22m 5.89s[2m (transform 1.21s, setup 886ms, collect 2.80s, tests 4.44s, environment 4.51s, prepare 1.33s)[22m
+

@@ -1,0 +1,6 @@
+vitest exit=0 6s |    Duration  5.89s (transform 1.21s, setup 886ms, collect 2.80s, tests 4.44s, environment 4.51s, prepare 1.33s)
+simGmDraftOrder exit=0 13s | simGmDraftOrder: green. 603427 checks over 10 sections: the order is the league's, the lottery is drawn once on its own stream and saved, and nothing mounts the lift yet.
+simGmDraftOrder-mounted exit=1 12s | simGmDraftOrder: CONTROL mounted FIRED. Red by section 9: 1; every other section green.
+simNoRivalNames exit=0 21s | No rival product names found. 0 findings.
+tsc exit=0 87s | 
+simGmDraftOrder-controls exit=0 301s | simGmDraftOrder controls: all 40 fired, each in exactly its own sections.

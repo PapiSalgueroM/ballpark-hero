@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/components/front-office-shared/GmEarnedDraftScreen.test.tsx src/components/front-office-shared/useGmEarnedDraft.test.tsx src/components/front-office-shared/DraftNightCard.test.tsx src/components/front-office-shared/GmLotteryCard.test.tsx src/lib/gmEarnedDraft.test.ts src/lib/nbaEarnedDraft.test.ts --testTimeout=300000 --hookTimeout=120000
+simGmDraftOrder: node scripts/simGmDraftOrder.mjs
+simGmDraftOrder-mounted: SIM_GM_DRAFT_ORDER_CONTROL=mounted node scripts/simGmDraftOrder.mjs
+simGmDraftOrder-controls: SIM_GM_DRAFT_ORDER_CONTROL=all node scripts/simGmDraftOrder.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
