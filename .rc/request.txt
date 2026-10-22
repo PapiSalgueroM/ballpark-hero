@@ -1,0 +1,12 @@
+# Release BP (brief-BPG decision 5): continuity-1508 and cont-nobridge-1508 DROPPED, they can no longer form: the tree without Round 1508 conflicts after Rounds 1520 and 1522, and Round 1520 rewrote the line mutCont1508 bridges in simManagerWorldContinuity.mjs (rBPg-rBIk2 exit 2 and 2; on main cedd0239 0 and a firing 1, rBPg-mBIk2).
+# Release BI, Round 1508, the serial half (rc-BIk.txt has the rest and the header). Send with x/contCmp1508.sh,
+# x/contNorm1508.mjs and x/mutCont1508.mjs. Serial because cont-nobridge-1508 edits scripts/simManagerWorldContinuity.mjs
+# in the checkout (and restores it).
+# continuity-1508: simManagerWorldContinuity is red on main in two groups (inactive, constructors: CARRIED, owed to its
+# owner), so its exit code is not the check. Round 1508's check is that the log on this tree equals the log on this
+# tree WITHOUT Round 1508 (treeWithoutMerge f1e54e17 67ec9956) once paths and stack line numbers are normalised: it
+# must exit 0 with "contCmp1508: green". cont-nobridge-1508 takes 1508's adoption bridge (cmNoAdoption1508) out of the
+# harness's current arm and must exit 1 with "contCmp1508: RED" (the adoption's ledger shows in the inactive group).
+# held-1508: src and scripts are back to HEAD after the control.
+#!serial
+held-1508: git status --porcelain --untracked-files=no | head -5; git diff --exit-code HEAD -- src scripts && echo "src and scripts held after every line"
