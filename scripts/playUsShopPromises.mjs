@@ -33,6 +33,8 @@ const CONTROL = process.env.PLAY_SHOP_CONTROL || '';
 if (CONTROL && CONTROL !== 'nocall' && CONTROL !== 'nobank') { console.log(`playUsShopPromises: could not run, unknown control ${CONTROL}`); process.exit(2); }
 const DIST = process.env.PLAY_SHOP_DIST || 'dist';
 const OUT = path.resolve(process.env.RC_OUT || path.join(ROOT, '.tmp-fx/play-us-shop'));
+/* A control's pictures carry its name, so a control run after the walk in one request never overwrites the walk's. */
+const SHOT = CONTROL ? `${CONTROL}-` : '';
 fs.mkdirSync(OUT, { recursive: true });
 if (!fs.existsSync(path.join(ROOT, DIST, 'index.html'))) { console.log(`playUsShopPromises: could not run, build ${DIST} first`); process.exit(2); }
 const fixture = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/data/usBoardFixture.json'), 'utf8'));
@@ -91,7 +93,7 @@ function kit(walk, size, page, errors) {
     const m = await page.evaluate(() => ({ sw: document.documentElement.scrollWidth, iw: innerWidth }));
     if (m.sw > m.iw) fail(walk, `${name}: sideways scroll (${m.sw} wide on ${m.iw})`);
     if (errors.length) fail(walk, `${name}: page error ${errors.join(' | ').slice(0, 200)}`);
-    await page.screenshot({ path: path.join(OUT, `${walk}-${size.width}-${String(++n).padStart(2, '0')}-${name}.png`) });
+    await page.screenshot({ path: path.join(OUT, `${SHOT}${walk}-${size.width}-${String(++n).padStart(2, '0')}-${name}.png`) });
   };
   return { tap, check };
 }
@@ -146,7 +148,7 @@ async function walkB(browser, size) {
       if (m.ef < m.df) fail(walk, `${size.width}: the office's effect line is ${m.ef}px, under its description's ${m.df}px`);
       if (m.cut || m.right > m.iw) fail(walk, `${size.width}: the office's effect line is cut`);
     }
-    await card.screenshot({ path: path.join(OUT, `${walk}-${size.width}-office-card.png`) });
+    await card.screenshot({ path: path.join(OUT, `${SHOT}${walk}-${size.width}-office-card.png`) });
     await check('family-aisle');
     await tap(page.getByRole('button', { name: 'Hub', exact: true }).first());
     await play.waitFor();
@@ -169,7 +171,7 @@ async function walkB(browser, size) {
     }
     /* The curtain's lines tick in on a stagger: let them land, then picture the whole card to LOOK at the line. */
     await page.waitForTimeout(3500);
-    await page.locator('[data-season-reveal]').screenshot({ path: path.join(OUT, `${walk}-${size.width}-curtain.png`) });
+    await page.locator('[data-season-reveal]').screenshot({ path: path.join(OUT, `${SHOT}${walk}-${size.width}-curtain.png`) });
     await check('season-played');
   } catch (error) { fail(walk, `${size.width}: ${String(error.message || error).split('\n')[0]}`, 'crash'); } finally { await context.close(); }
 }
@@ -201,15 +203,15 @@ async function walkC(browser, size) {
     const want = Math.round((before.netWorth + BRAND_FEE) * 10000) / 10000;
     notes.push(`c ${size.width}: earnings row ${earned}, Cash row ${cash}, saved Cash ${before.netWorth} to ${after.netWorth} (want ${want})`);
     if (after.netWorth !== want) fail(walk, `${size.width}: the saved Cash is ${after.netWorth}, not ${want}`, 'promise');
-    /* Measured, not judged: where the Cash row sits in the card's own scroll body (the board holds the card to the
-       height of the card it replaced, so a third row can sit below the body's fold; that is the board's, as on base). */
+    /* (d) for the card: the Cash row sits whole inside the card's own scroll body, nothing cut. */
     const fold = await outcome.evaluate(el => {
       const body = el.querySelector('[data-decision-body]'), row = el.querySelector('[data-decision-change="netWorth"]');
       const b = body.getBoundingClientRect(), r = row ? row.getBoundingClientRect() : null;
       return { bodyH: Math.round(b.height), bodySH: body.scrollHeight, rowTop: r ? Math.round(r.top - b.top) : null, rowBottom: r ? Math.round(r.bottom - b.top) : null };
     });
     notes.push(`c ${size.width}: the card's body shows ${fold.bodyH}px of ${fold.bodySH}px; the Cash row sits ${fold.rowTop} to ${fold.rowBottom}px into it`);
-    await outcome.screenshot({ path: path.join(OUT, `${walk}-${size.width}-outcome-card.png`) });
+    if (fold.rowTop !== null && (fold.rowTop < 0 || fold.rowBottom > fold.bodyH)) fail(walk, `${size.width}: the Cash row is cut by the card's body (${fold.rowTop} to ${fold.rowBottom} of ${fold.bodyH}px)`);
+    await outcome.screenshot({ path: path.join(OUT, `${SHOT}${walk}-${size.width}-outcome-card.png`) });
     const m0 = await page.evaluate(() => ({ y: Math.round(scrollY), h: document.documentElement.scrollHeight }));
     await check('outcome');
     await tap(page.locator('[data-decision-continue]'));
