@@ -5,13 +5,14 @@
  * no world seed, and sends a released or expired youth or academy man to the free agent pool marked. Every kit that
  * compares this engine with one pinned from before the round sees those, so this takes them back out of a COPY of the
  * engine and such a kit compares everything else: no country is ever drawn (madeUpNationAt answers undefined, and a
- * promoted scouted boy takes none), the board counts by the verified map alone, a buy carries the mark as before, and
- * the pool gets a man's own generated flag. scripts/simCmMadeUpNations.mjs section 7 (NONATION, the same cut) proves
+ * promoted scouted boy takes none), the board counts by the verified map alone, a buy carries the mark as before,
+ * the pool gets a man's own generated flag, and the Welsh and Canadian clubs the review placed in their own country
+ * read their league's country again. scripts/simCmMadeUpNations.mjs section 7 (NONATION, the same cut) proves
  * the engine with it plays as its base, draw for draw and byte for byte, the made up mark aside; with BASE_ROOT it
  * plays as the base tree itself.
  * Composed by scripts/simManagerWorldContinuity.mjs (its current arm) and scripts/simCmWorldMoves.mjs (every head).
  *
- * EIGHT EDITS in two files, failing closed: each anchor must stand exactly once (line endings read as LF), or nothing
+ * TWELVE EDITS in two files, failing closed: each anchor must stand exactly once (line endings read as LF), or nothing
  * is changed and the caller is told (a thrown error). Any other file comes back as it is.
  *
  *   import { withoutMadeUpNations, BRIDGE_FILES_1520 } from './lib/cmNoMadeUpNations1520.mjs';   (source, file) => source
@@ -32,6 +33,12 @@ export const BRIDGE_EDITS_1520 = [
   [ENGINE, 'an expiry sends his own flag',
     'generated: madeUp(p) || undefined, ...(p.nation ? { nation: p.nation } : {}), since: career.season + 1,',
     'generated: p.generated, since: career.season + 1,'],
+  /* The review's fix: the Welsh and Canadian clubs of the English league and MLS read their own country. */
+  [ENGINE, 'the Welsh Championship clubs read England',
+    "    clubCountry: { 'Cardiff City': 'Wales', 'Swansea City': 'Wales', Wrexham: 'Wales' },\n", ''],
+  [ENGINE, 'Swansea City 2015 reads England', "clubCountry: { 'Swansea City': 'Wales' }, ", ''],
+  [ENGINE, 'the Canadian MLS East clubs read the United States', "    clubCountry: { 'Toronto FC': 'Canada', 'CF Montréal': 'Canada' },\n", ''],
+  [ENGINE, 'Vancouver Whitecaps read the United States', "    clubCountry: { 'Vancouver Whitecaps': 'Canada' },\n", ''],
   [ASKS, 'the map is imported again',
     "import { SQUAD_LIMIT, buildMarket, careerPlace, groupOf, money, shownNation } from '@/lib/clubManager';",
     "import { SQUAD_LIMIT, buildMarket, careerPlace, groupOf, money, shownNation } from '@/lib/clubManager';\nimport { nationalityOf } from '@/data/playerNationalities';"],

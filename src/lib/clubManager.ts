@@ -3578,7 +3578,11 @@ const SUMMER_2020_CLOSE = { y: 2020, m: 10, d: 5 };
 
 export const LEAGUE_RULES: Record<string, LeagueRules> = {
   premier: { nationId: 'england', flag: 'England', cup: 'FA Cup', europe: { ucl: 4, uel: 5, uecl: 6 }, drop: 3, tiebreak: 'gdGf', secondTier: 'championship', ladder: 'top', season: 'autumnSpring' },
+  /* Round 1520 review: Cardiff City, Swansea City and Wrexham are Welsh clubs in the English league (clwbpeldroed.org,
+     2025-01-13, on the Welsh league cup plan naming the Welsh EFL clubs; hayters.com, "Why Wrexham, Swansea and Cardiff
+     could play in Europe"), so their board asks for Welsh players and their made up men are drawn from Wales. */
   championship: {
+    clubCountry: { 'Cardiff City': 'Wales', 'Swansea City': 'Wales', Wrexham: 'Wales' },
     nationId: 'england', flag: 'England', cup: 'FA Cup', europe: null, drop: 3, ladder: 'promotion',
     playoff: { rankUpTo: 8, target: 6, label: 'Make the promotion playoffs' }, season: 'autumnSpring',
     simplified: 'Three go up and three come down in a straight swap; the real promotion playoff is not played.',
@@ -3609,12 +3613,16 @@ export const LEAGUE_RULES: Record<string, LeagueRules> = {
     nationId: 'saudi', flag: 'Saudi Arabia', cup: "King's Cup", europe: null, drop: 3, ladder: 'top', season: 'autumnSpring',
     continental: { label: 'AFC Champions League Elite', rankUpTo: 5, target: 3 },
   },
+  /* Round 1520 review: Toronto FC, CF Montréal and Vancouver Whitecaps are the Canadian clubs of MLS (CBC, "Major
+     League Soccer Canadian teams 2021 schedule"; footballgroundmap.com, "The Canadian teams in the MLS"). */
   mlsEast: {
+    clubCountry: { 'Toronto FC': 'Canada', 'CF Montréal': 'Canada' },
     nationId: 'usa', flag: 'USA', cup: 'U.S. Open Cup', europe: null, drop: 0, ladder: 'playoffs',
     playoff: { rankUpTo: 9, target: 8, label: 'Make the playoffs' }, floorFromBottom: 4, season: 'calendarYear',
     simplified: 'The playoffs are not played; the conference table settles the season.',
   },
   mlsWest: {
+    clubCountry: { 'Vancouver Whitecaps': 'Canada' },
     nationId: 'usa', flag: 'USA', cup: 'U.S. Open Cup', europe: null, drop: 0, ladder: 'playoffs',
     playoff: { rankUpTo: 9, target: 8, label: 'Make the playoffs' }, floorFromBottom: 4, season: 'calendarYear',
     simplified: 'The playoffs are not played; the conference table settles the season.',
@@ -3922,7 +3930,7 @@ export const LEAGUE_RULES: Record<string, LeagueRules> = {
     simplified: 'The real relegation playoff (sixteenth against the 2. Bundesliga\'s third) is not played: two go straight down.',
   },
   ligue12010: { nationId: 'france', flag: 'France', cup: 'Coupe de France', europe: { ucl: 3, uel: 4, uecl: 0 }, drop: 3, ladder: 'top', season: 'autumnSpring' },
-  premier2015: { nationId: 'england', flag: 'England', cup: 'FA Cup', europe: { ucl: 4, uel: 5, uecl: 0 }, drop: 3, tiebreak: 'gdGf', ladder: 'top', season: 'autumnSpring' },
+  premier2015: { clubCountry: { 'Swansea City': 'Wales' }, nationId: 'england', flag: 'England', cup: 'FA Cup', europe: { ucl: 4, uel: 5, uecl: 0 }, drop: 3, tiebreak: 'gdGf', ladder: 'top', season: 'autumnSpring' },
   laliga2015: { nationId: 'spain', flag: 'Spain', cup: 'Copa del Rey', europe: { ucl: 4, uel: 6, uecl: 0 }, drop: 3, tiebreak: 'h2h', ladder: 'top', season: 'autumnSpring' },
   seriea2015: { nationId: 'italy', flag: 'Italy', cup: 'Coppa Italia', europe: { ucl: 3, uel: 5, uecl: 0 }, drop: 3, tiebreak: 'h2h', ladder: 'top', season: 'autumnSpring' },
   /* Round 899: the 2015-16 Bundesliga and Ligue 1, each fact from two
