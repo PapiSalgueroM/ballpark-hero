@@ -147,9 +147,16 @@ const SAVE_KEY = cm.SAVE_KEY;
 if (typeof SAVE[SAVE_KEY] !== 'string') refuse(`the engine saved under ${Object.keys(SAVE).join(', ')}, not under ${SAVE_KEY}`);
 const nameOf = new Map(career.squad.map(p => [p.id, p.name]));
 /* The men who must wear a flag: the squad's players the engine itself gives a country in this
-   world. Derived from the save, so a rebake moves the expectation with the data. */
-const flagged = new Set(career.squad.filter(p => nat.nationalityOf(ERA, p.name) !== null).map(p => p.name));
-if (flagged.size < 11) refuse(`only ${flagged.size} of ${career.squad.length} men in the ${CLUB} squad have a country in ${ERA}, fewer than an eleven: the save cannot prove the flags`);
+   world. Derived from the save, so a rebake moves the expectation with the data.
+   Release BP seam (Round 1520): a made up man (a youth pad, a generated signing) now carries his own country,
+   stored on him, and the squad shows his flag. The engine's one reader for the flag a man shows is shownNation
+   (his own country, else the verified map's), so the set is read through it where the engine has it; on a build
+   from before Round 1520 it is the verified map alone, as before. The floor of eleven still counts only the men
+   whose country comes from the season's nationality file, the file this walk proves is fetched. */
+const countryOf = p => (typeof cm.shownNation === 'function' ? cm.shownNation(ERA, p) : nat.nationalityOf(ERA, p.name));
+const flagged = new Set(career.squad.filter(p => countryOf(p) !== null).map(p => p.name));
+const fromFile = career.squad.filter(p => nat.nationalityOf(ERA, p.name) !== null).length;
+if (fromFile < 11) refuse(`only ${fromFile} of ${career.squad.length} men in the ${CLUB} squad have a country in ${ERA}, fewer than an eleven: the save cannot prove the flags`);
 console.log(`   ${CLUB}, ${career.squad.length} players, ${flagged.size} of them with a country in ${ERA}, save ${(SAVE[SAVE_KEY].length / 1024).toFixed(0)} KB under ${Object.keys(SAVE).length} key(s)`);
 fs.rmSync(TMP, { recursive: true, force: true });
 
