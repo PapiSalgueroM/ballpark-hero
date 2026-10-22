@@ -1,0 +1,4 @@
+m-offsetunit exit=0 281s | MUT offsetunit: simTycoonScorelines=1 simTycoonLeague=0
+m-summit exit=0 281s | MUT summit: simTycoonScorelines=0 simTycoonLeague=1 simStadiumTycoon=0
+m-goalboost exit=0 173s | MUT goalboost: simTycoonScorelines=2
+m-div0 exit=0 281s | MUT div0: simTycoonScorelines=0 simTycoonLeague=0

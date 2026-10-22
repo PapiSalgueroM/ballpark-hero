@@ -1,0 +1,129 @@
+mutation offsetunit: applied once to src/lib/stadiumTycoon.ts
+Round 1532: Stadium Tycoon scorelines at the hook's cadence (dt 0.2s)
+S1) the law, read not restated
+   1085133 chances equal the law at the engine's own gap (Squad 0 to 200, ten divisions, every rival, the edge 0 to 0.40 and NaN, -1, 1, every rival fixture both ways); the rival's chance falls at every step of the edge; the lib imports goalLambda and types neither 0.055 nor 4.2
+S2) the shape
+   28 frozen bodies hash to the base record; 200 matches drew 180 rolls each; 620 other fixtures over 189 matchdays replay on their own stream at 180 rolls; 40 perfect set pieces added no roll
+S3) goals
+   cal 2.563 goals a match (windows 15 to 30 2.557, 30 to 60 2.679, 60 to 120 2.509, 120 to 240 2.604); away matchdays from pace at 30 / 60 / 120 minutes none (the final matchday waits) / 2.64 goals, 84% won of 25 / 2.665 goals, 54.506% won of 233; hold 2.592 goals a match (windows 15 to 30 2.564, 30 to 60 2.575, 60 to 120 2.607, 120 to 240 2.585); away matchdays from pace at 30 / 60 / 120 minutes none (the final matchday waits) / 1.8 goals, 80% won of 5 / 2.862 goals, 60% won of 275
+S4) results
+  FAIL: S4: cal: overinvest won 75.4%, outside 76 to 86
+S5) titles
+   cal 0.79 titles a season; hold 0.819 titles a season; season one won in 40 of 40; title share at gaps 0 / 4 / 8 / 12 / 14 through the engine's own playMinute and playMatchday, 500 seasons a cell: 6 clubs one leg: 0.268 / 0.47 / 0.682 / 0.842 / 0.914; 8 clubs two legs: 0.254 / 0.628 / 0.882 / 0.962 / 0.992; 10 clubs two legs: 0.252 / 0.586 / 0.886 / 0.98 / 0.994
+S6) never 99
+   our chance never passed 0.046667 a minute over 5289 states (highest 0.046667); the exact ceiling wins 98.189% and 98.645% with a rival who never scores; the engine's Squad 200 club with a 0.39 edge wins 98.189%
+S7) bonuses
+   2,000 states: a goal 5 and a win 20 seconds of unboosted income, untouched by Hype and the whistles; a promotion paid 8143 and a Summit title 8143, 120 seconds each; away pay Object.is the base on 52 inputs; cal 20 seeds' last win before two hours paid 20 to 20 seconds of income (base 0.1322); hold 20 seeds' last win before two hours paid 20 to 20 seconds of income (base 0.1322)
+S8) the economy beside the base record (printed, no fence) [78 s]
+   pace first Sell up 12.77 min (base 13.37); over4 14.303 (base 14.77)
+   pace income a second at 30 / 60 / 120 min: 16174.739 (base 21155.507) / 27139.99 (base 34433.314) / 46901.868 (base 81037.765)
+   pace division at 30 / 60 / 120 / 240: 2 (base 2) / 3 (base 3) / 5 (base 6) / 8 (base 9)
+   pace minutes to reach divisions 1 to 9: 10.5, 21, 31.5, 60.9, 119.7, 149.1, 195.3, 235.2, later
+   mean capped streak 15 to 120: pace 4.033, over4 6.109, nosquad 0.444; watched gems an hour: pace 106.943
+   paceSell stars 1 / 2 / 3 at 21 (base 21) / 42 (base 42) / 73.5 (base 73.5) min
+   milestones and badges, pace: win1 4.2 (4.2), win10 27.3 (23.1), win50 161.7 (107.1), goals25 23.17 (9.753), streak5 12.6 (12.6), fans500 7.27 (7.343), fans2k 12.723 (12.903), fans10k 36.25 (32.557), full 13.773 (13.827), allTracks 3.337 (3.337), ag25 23.17 (9.753), ag100 112.537 (27.23), ag500 later (96.11), ag2000 later (later), aw1 4.2 (4.2), aw10 27.3 (23.1), aw50 161.7 (107.1), aw150 later (later), aw400 later (later), as5 12.6 (12.6), as10 42 (23.1)
+   mean matchGap per window, pace: 15 to 30 11.876, 30 to 60 8.821, 60 to 120 6.817, 120 to 240 6.249
+
+control copy: 1 place rewritten in a copy of the lib
+   sections red: S1 (expected S1) [91 s]
+     S1: division 0 Squad 0: our chance 0.015395555555555555 is not the law's 0.015408333333333333
+
+control noscale: 1 place rewritten in a copy of the lib
+   sections red: S1 (expected S1) [104 s]
+     S1: division 0 Squad 0 edge 0.002: the rival's chance 0.013702777777777777 is not the law's 0.013675372222222223
+
+control tworolls: 1 place rewritten in a copy of the lib
+   sections red: S2 (expected S2) [119 s]
+     S2: the body of playMinute moved (61 lines, 60 on the base)
+
+control linear: 3 places rewritten in a copy of the lib
+   sections red: S1 S3 S4 S5 S6 (expected S1 S3 S4 S5 S6) [131 s]
+     S1: division 0 Squad 0: our chance 0.028 is not the law's 0.015408333333333333
+     S3: ctl: pace's watched league matches over minutes 15 to 120 held 14.48 goals, outside 2.5 to 3.0
+     S4: ctl: pace won 99.2% over minutes 15 to 120, outside 55 to 75
+     S5: ctl: pace took 0.975 titles a season over minutes 15 to 240, outside 0.40 to 0.90
+     S6: Squad 15 in division 0 scores at 0.052000000000000005 a minute, past the law's ceiling 0.04666666666666667
+
+control flat: 1 place rewritten in a copy of the lib
+   sections red: S4 S5 (expected S4 S5) [146 s]
+     S4: division 0 Squad 7: the gap reads -1.1500000000000001, the Squad, the division and the rival make 4.8
+     S5: ctl: pace took 0.036 titles a season over minutes 15 to 240, outside 0.40 to 0.90
+
+control matchno: 1 place rewritten in a copy of the lib
+   sections red: S3 S4 S5 (expected S3 S4 S5) [160 s]
+     S3: ctl: pace's watched league matches over minutes 15 to 120 held 3.416 goals, outside 2.5 to 3.0
+     S4: ctl: pace won 8.3% over minutes 15 to 120, outside 55 to 75
+     S5: ctl: pace took 0.033 titles a season over minutes 15 to 240, outside 0.40 to 0.90
+
+control noclamp: 1 place rewritten in a copy of the lib
+   sections red: S1 S6 (expected S1 S6) [173 s]
+     S1: division 0 Squad 65: our chance 0.04917222222222223 is not the law's 0.04666666666666667
+     S6: Squad 65 in division 0 scores at 0.04917222222222223 a minute, past the law's ceiling 0.04666666666666667
+
+control crowd: 4 places rewritten in a copy of the lib
+   sections red: S7 (expected S7) [188 s]
+     S7: state 0: a goal paid 1075, 5 seconds of income is 38872
+
+simTycoonScorelines: 15 checks, 1 failed [188 s]
+Round 582: the Stadium Tycoon league, at the hook's cadence (dt 0.2s)
+1) Promoted if and only if champion
+   22 titles and 22 promotions across 96 seasons; 74 seasons finished below the top and none of those went up
+2) Table integrity
+   60 matchday tables checked: every club played every matchday, points are 3W+D, goals balance, your row matches your match events
+3) Strength decides the title
+   title rate squad 30 100%, squad 0 25% (gap 0.75); neutral arm 30% vs 25% (gap 0.05)
+4) Pace against the first Sell up and the old ladder
+   median first promotion 10.50 min against first Sell up 12.87 min (promotion first in 10/10); before the league: 14.7 and 13.44
+5) No reroll across a reload
+   6 seasons reloaded mid-match finished with tables identical to the runs that never reloaded
+6) Migration from V1 saves
+   251 V1 saves from 0 to 250 home wins loaded into the division their win count reached, everything else as V1 loads it, and each loads back in V1 with its league
+7) Names
+   1470 leagues across 21 reps, 10 divisions and 7 seasons: names unique, short enough, from the bank, never one of 483 real clubs; the picker never offers a taken name
+8) Rebuild still plays the shared calendar
+   rebuildDeck imports the shared calendar, leagueCore imports nothing, 4 of 4 Rebuild harnesses green
+9) No wall: a club that can compete gets promoted in time
+   never promoted in three hours: squad 3 0/30, squad 6 0/30; median first promotion 31.5 and 21.0 min
+10) The loader keeps divisions, refuses doctored leagues, and ties go your way
+   a division 9 league reloads exactly, keeps its division with a bad field, a doctored Summit loads at the career best, an impossible table is refused, a kept name sticks, a dead heat goes your way
+9b) No club is walled: saved clubs and clubs behind the ladder win a title in time
+   save fresh (division 0, Squad 0): 30/30, median 10.5 min; save midGame (division 2, Squad 25): 30/30, median 21.9 min; save preBoardroom (division 2, Squad 25): 30/30, median 21.9 min; save doctored (division 2, Squad 0): 30/30, median 10.5 min; division 1 on arrival, Squad 36 cut to 26: 30/30, median 10.5 min; division 2 on arrival, Squad 53 cut to 43: 30/30, median 10.5 min; division 3 on arrival, Squad 60 cut to 50: 30/30, median 29.4 min; division 4 on arrival, Squad 69 cut to 59: 30/30, median 29.4 min; division 5 on arrival, Squad 73 cut to 63: 30/30, median 29.4 min; division 6 on arrival, Squad 77 cut to 67: 30/30, median 37.8 min; division 7 on arrival, Squad 82 cut to 72: 30/30, median 37.8 min; division 8 on arrival, Squad 84 cut to 74: 30/30, median 75.6 min; division 9 on arrival, Squad 87 cut to 77: 30/30, median 75.6 min
+
+control threshold: a club that did not win the league goes up when its home win count would have promoted it
+   ok, section 1 went red: a club that finished 6 went up
+
+control flat: the squad stops changing either side's scoring chance
+   ok, section 3 went red: a squad of 30 won 30% of titles and a squad of 0 won 25%, a gap of 0.05, under the 0.35 fence
+
+control doubleleg: the bottom divisions play home and away, a 21 minute season
+   ok, section 4 went red: the first promotion comes at a median 21.00 minutes, after the first reachable Sell up at 13.37
+
+control reroll: the other fixtures roll Math.random instead of the league's seeded stream
+   ok, section 5 went red: seed 1: reloading mid-match finished the season with a different table
+
+control spread: the league latch reads the spread save, which always carries a fresh bottom league
+   ok, section 6 went red: 6 home wins loaded into division 0, V1 had it in 1
+
+control globalclimb: opponents are strengthened by the career match count again, the first draft
+   ok, section 9 went red: a club with a squad of 3 never left the bottom league in 22 of 30 three hour runs
+
+control globalclimb: opponents are strengthened by the career match count again, so a club behind the ladder never catches it
+   ok, section 9b went red: save midGame (division 2, Squad 25) won a title in only 0 of the seeds it played, under 27 of 30
+
+control dropdivision: a league that fails a check is rebuilt from the old win count again
+   ok, section 10 went red: a division 9 league with one bad rival name reloaded in division 4
+
+control uncapped: a stored league above the career best is trusted
+   ok, section 10 went red: a save claiming The Summit on a career whose best is the bottom loaded in division 9
+
+control lopsided: a stored table that cannot add up is trusted
+   ok, section 10 went red: a table where every rival lost every match was accepted
+
+control nametie: a dead heat at the top is settled by name again
+   ok, section 10 went red: a dead heat at the top went to a rival on name
+
+simTycoonLeague: green.
+   Only the champion goes up, the tables add up, the squad decides the title, and a reload replays nothing.
+   A new club is promoted before its first Sell up and sooner than the old win count managed.
+   Every older save lands in the division it had earned, no club that can compete is walled in, and all ten controls fired.
+MUT offsetunit: simTycoonScorelines=1 simTycoonLeague=0
