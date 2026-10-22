@@ -1,0 +1,7 @@
+tsc exit=0 105s | 
+tsc-m1 exit=0 106s | 
+simNoRivalNames exit=0 21s | No rival product names found. 0 findings.
+simStorageWrites exit=0 4s | simStorageWrites: all green (owed: 12)
+simSiteSearch exit=0 3s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+simHarnessAnchors exit=0 57s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+vitest-all exit=0 551s |  Test Files  633 passed | 2 skipped (635)
