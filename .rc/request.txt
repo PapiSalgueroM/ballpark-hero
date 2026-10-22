@@ -1,0 +1,11 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+weight: ENGINES=chromium SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+walk: node scripts/playCmTactics.mjs
+units: node_modules/.bin/vitest run src/lib/clubManagerTactics.test.ts src/test/clubManagerSave.test.tsx src/test/managerHalftimeLineups.test.tsx src/test/liveSimMotion.test.tsx --testTimeout=300000 --hookTimeout=120000
+bytes: git worktree add .rcbase 554a3b18 >/dev/null 2>&1 && BASE_ROOT=.rcbase SECTION=2 node scripts/simCmDifficulty.mjs
+quick: SECTION=table,styles,balanced node scripts/simCmTactics.mjs
+simCmMatchDay: node scripts/simCmMatchDay.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
