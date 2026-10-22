@@ -1,0 +1,340 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Only fixed Life may differ from the whole held parent app
++ actual - expected
+... Skipped lines
+
+  '// Soccer Career Simulation Engine v2, Youth Academy + Pro System\n' +
+    '\n' +
+    "import { rollCareerChance, type CareerChanceWheelReceipt } from '@/lib/careerChanceWheel';\n" +
+    "import { CAPTAIN_MIN_AGE, CAPTAIN_MIN_RATING } from '@/lib/captaincy';\n" +
+    "import type { SoccerAgentReview } from './soccerAgentReview';\n" +
+...
+    'import type { PhoneState, WorldSeason } from "./soccerPhone";\n' +
++   '/* Round 1523: morale that plays (src/lib/careerForm.ts). */\n' +
++   'import { dressingRoomApps, soccerMoraleRating } from "./careerForm";\n' +
++   '/* Round 1525: the season awards, won against a field, only in the seasons they were given for. */\n' +
++   'import { soccerAwardWon, type SoccerAwardSeason, type SoccerSeasonAward } from "./soccerSeasonAwards";\n' +
+    '/* Round 134: money stops being a number that only goes up. A savings account,\n' +
+    '   a market of five things whose prices move every season whether you are\n' +
+    '   watching or not, a statement with a limit on it, and the two small things\n' +
+    '   his player does on his own phone. Same shape as the phone: its own random\n' +
+    '   stream, its own bounded slice of the save, repaired lazily. */\n' +
+...
+    '   season simulation reads, and it returns exactly 1.00 on everything for a\n' +
++   '   p'... 534446 more characters
+-   '   player who changed nothing, which is what makes it safe to bolt onto maths\n' +
+-   '   that was balanced before it existed. */\n' +
+-   'import {\n' +
+-   '  buildEffects, safePhysique, safeShape, defaultPhysique, NEUTRAL_EFFECTS,\n' +
+-   '} from "./soccerCareerAttributes";\n' +
+-   'import type { PlayerPhysique, AttrShape, BuildEffects } from "./soccerCareerAttributes";\n' +
+-   'import '... 514194 more characters
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerCareerDocumentaryReview.mjs:78:36
+    at Array.map (<anonymous>)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerCareerDocumentaryReview.mjs:76:28
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: '// Soccer Career Simulation Engine v2, Youth Academy + Pro System\n' +
+    '\n' +
+    "import { rollCareerChance, type CareerChanceWheelReceipt } from '@/lib/careerChanceWheel';\n" +
+    "import { CAPTAIN_MIN_AGE, CAPTAIN_MIN_RATING } from '@/lib/captaincy';\n" +
+    "import type { SoccerAgentReview } from './soccerAgentReview';\n" +
+    "import { serveClubSuspension } from '@/lib/soccerDiscipline';\n" +
+    "import { cancelReducedRole, queueReducedRole, reducedRoleSwing, settleReducedRole, type ReducedRolePlan, type ReducedRoleResult } from './soccerCareerRole';\n" +
+    "import { personalGoalMilestoneNews } from './soccerCareerMilestone';\n" +
+    "import { soccerExtensionQuote, soccerTransferTerms, soccerWageDemand } from '@/lib/soccerCareerContracts';\n" +
+    "import { programmeEffects, prepareSoccerProgramme, settleSoccerProgramme, interruptSoccerProgramme, completeProgrammeLoanBuy, programmePromiseBroken } from './soccerCareerProgramme';\n" +
+    "import type { SoccerProgrammeState, SoccerProgrammeReceipt } from './soccerCareerProgramme';\n" +
+    "import { announceSoccerFarewell, farewellSeasonComplete, readSoccerFarewell, type SoccerFarewellPlan } from './soccerCareerFarewell';\n" +
+    "import { clearTransferBrief, previewTransferBrief, readTransferBrief, storeTransferBriefResult, transferBriefCandidates, type SoccerTransferBrief, type TransferBriefPreview } from './soccerCareerTransferBrief';\n" +
+    "import { prepareLeagueWorld, projectLeagueWorldClubs, recordLeagueWorldSeason, settleLeagueWorld, leagueWorldChampions, clubKeyOf, type CareerLeagueWorld, type LeagueWorldSeason } from './soccerCareerLeagueWorld';\n" +
+    "import { settleCareerAmbition, type CareerSeasonAmbition, type SeasonAmbitionResult } from './soccerCareerAmbitions';\n" +
+    "import { recentClubForm } from './soccerCareerSelection';\n" +
+    "import { applyCareerPreparation, preparationInjuryDelta, settleCareerPreparation, type CareerPreparationPlan, type PreparationResult } from './soccerCareerPreparation';\n" +
+    "import { createCareerMentor, recordMentorSeason, endCareerMentorForMove, endCareerMentorForRetirement, validMentor, type CareerMentor } from './soccerCareerMentor';\n" +
+    "import { settleSoccerPress, type SoccerPressState } from './soccerCareerPress';\n" +
+    "/* Round 546: the competition's real format per season, two source verified and\n" +
+    '   importing nothing, so the knockout ladder and the leg count are read rather\n' +
+    '   than kept as a second hardcoded copy here. */\n' +
+    "import { periodFor, UCL_AWAY_GOALS } from '@/lib/uclFormatHistory';\n" +
+    '/* Round 670 review: the tie rule Club Manager reads its ties by. Imports nothing. */\n' +
+    "import { uclTieOutcome } from '@/lib/uclTieRule';\n" +
+    '/* Round 972: the first stage before the knockouts, and the cup a club outside\n' +
+    '   Europe plays instead of the Champions League. Never imports this engine. */\n' +
+    'import {\n' +
+    '  uclProbit, poissonGoals, UCL_BASE_LAMBDA, UCL_HOME_EDGE, clubCupFor, CONTINENTAL_LADDER,\n' +
+    '  CONTINENTAL_SIMPLIFIED, continentalOpponents, firstStageShape, firstStageOpponentCount,\n' +
+    '  firstStageTarget, solveStageStrength, playFirstStage, isFirstStageResult,\n' +
+    '  type ClubCupId, type FirstStageResult,\n' +
+    "} from './soccerCareerContinental';\n" +
+    "/* Round 1013: the clubs generated from Club Manager's four leagues. The file\n" +
+    "   imports nothing, so Club Manager never enters this page's bundle. */\n" +
+    "import { CAREER_CLUB_POOL } from '@/data/soccerCareerClubPool';\n" +
+    'import {\n' +
+    '  getEraStars, getEraTopClubs, getEraLeagueClubs, getEraUclOpponents,\n' +
+    '  getEraRivalName, adjustClubsForYear, getExtraEvents, rollSeasonInjury,\n' +
+    '  BDOR_WIN_MIN_GOALS, rollPotential, pickPhoneTexts, PHONE_POOL,\n' +
+    '} from "./careerEras";\n' +
+    'import type { PhoneChoiceDef } from "./careerEras";\n' +
+    "import type { SoccerInternationalReturn } from './soccerInternationalReturn';\n" +
+    "/* Round 929: every season's league finish, and the era aware elite rule. */\n" +
+    'import { divisionMove, drawLeagueFinish, eliteInYear, finishZone, leagueKeyInYear, managerLeagueField, MANAGER_FIELD, ordinal } from "./soccerCareerLeague";\n' +
+    '/* Round 1012: real club rivalries, played as league derbies each season. */\n' +
+    'import { resolveSeasonDerbies, applySeasonDerbies, type SeasonDerby } from "./soccerCareerDerby";\n' +
+    'import { cupAssociation, cupChanceFor, cupFor as domesticCupFor, cupTitle, drawCupRun, readCupRun, seasonPerformanceBoost, worldLeagueOf, type CupRun } from "./soccerCareerCup";\n' +
+    '/* Round 130: the phone is a real phone now. Threads, contacts, a relationship\n' +
+    '   that cools when you ignore people, and a sports feed driven by a world model\n' +
+    '   that actually moves players between clubs. All of it lives in soccerPhone so\n' +
+    '   this file only has to call four functions. */\n' +
+    'import {\n' +
+    '  ensurePhone, phoneSeasonTick, phoneReply, phoneOpen, mirrorLegacyMessage,\n' +
+    '  worldSeasonTick, worldClubOf, phoneAppsSwing, takePhoneOffers, unreadThreads,\n' +
+    '} from "./soccerPhone";\n' +
+    'import type { PhoneState, WorldSeason } from "./soccerPhone";\n' +
+    '/* Round 1523: morale that plays (src/lib/careerForm.ts). */\n' +
+    'import { dressingRoomApps, soccerMoraleRating } from "./careerForm";\n' +
+    '/* Round 1525: the season awards, won against a field, only in the seasons they were given for. */\n' +
+    'import { soccerAwardWon, type SoccerAwardSeason, type SoccerSeasonAward } from "./soccerSeasonAwards";\n' +
+    '/* Round 134: money stops being a number that only goes up. A savings account,\n' +
+    '   a market of five things whose prices move every season whether you are\n' +
+    '   watching or not, a statement with a limit on it, and the two small things\n' +
+    '   his player does on his own phone. Same shape as the phone: its own random\n' +
+    '   stream, its own bounded slice of the save, repaired lazily. */\n' +
+    'import {\n' +
+    '  ensureMoney, moneySeasonTick, moneyWealth, moneyAct,\n' +
+    '} from "./soccerMoney";\n' +
+    'import type { MoneyAction, MoneyState } from "./soccerMoney";\n' +
+    '/* Round 521: the Round 80 phone texts and the 2026-08-05 rivalry beats moved\n' +
+    '   into careerInbox.ts and careerRivalryEvents.ts, the same lift careerMoney.ts\n' +
+    "   already proved for the bank. Both wrappers below bind soccer's own fields\n" +
+    '   and keep every export name unchanged; the Round 130 thread system stays\n' +
+    '   exactly where it was, on top of the lifted inbox rather than inside it. */\n' +
+    'import { receiveInboxTexts, answerInboxMessage } from "./careerInbox";\n' +
+    'import type { InboxSport } from "./careerInbox";\n' +
+    'import { rollRivalryEvent, forcedRetirementEvent, applyRivalryEvent as applyRivalryEventShared } from "./careerRivalryEvents";\n' +
+    'import type { RivalryEventDef } from "./careerRivalryEvents";\n' +
+    "/* Round 796: the four rival dilemmas' gate and resolution moved into\n" +
+    "   careerRivalryChoices.ts, the engine the NFL career's rival choices run on.\n" +
+    '   The dilemmas stay four entries in MORAL_DILEMMAS, in the same places, so\n' +
+    '   the trigger draws exactly what it always drew. */\n' +
+    'import { rivalryChoiceOpen, resolveRivalryChoice } from "./careerRivalryChoices";\n' +
+    'import type { RivalryChoiceDef } from "./careerRivalryChoices";\n' +
+    "import { intlName, familyFor } from './intlNames';\n" +
+    '/* Round 258: display only. soccerCurrency imports nothing, so there is no\n' +
+    '   cycle, and every amount inside the engine stays in euros forever. */\n' +
+    "import { localizeMoney } from './soccerCurrency';\n" +
+    "import { managerProfileFromCareer } from './soccerCareerToManager';\n" +
+    '/* Round 273: the manager job market is loaded ON DEMAND and this import is\n' +
+    '   deliberately NOT static. managerJobMarket is 3 KB of its own code and it\n' +
+    '   imports clubManager, which is the biggest file in the repo, and clubManager\n' +
+    '   imports squadDeal which imports footleEnrichment. One static import line\n' +
+    "   here was therefore putting the whole Club Manager engine and Footle's data\n" +
+    '   in front of every Soccer Career player before they could do anything.\n' +
+    '\n' +
+    '   MEASURED on the built site, /soccer-career on a phone at slow 4G: 2,868 KB\n' +
+    '   over 30 requests, of which 731 KB was the managerJobMarket chunk and 139 KB\n' +
+    "   was Footle's enrichment data. Neither is needed until a career reaches the\n" +
+    '   dugout, which is after retirement and which most first sessions never see.\n' +
+    '\n' +
+    '   The market is loaded by loadManagerMarket() below. See refreshManagerOffers\n' +
+    '   for what happens if it somehow is not there yet, and scripts/simFlagshipWeight.mjs\n' +
+    '   for the guard that stops it creeping back in. */\n' +
+    "type ManagerMarket = typeof import('./managerJobMarket');\n" +
+    'let MARKET: ManagerMarket | null = null;\n' +
+    'let MARKET_INFLIGHT: Promise<void> | null = null;\n' +
+    '\n' +
+    '/** True once the job market is in memory and refreshManagerOffers can run. */\n' +
+    'export function managerMarketReady(): boolean { return MARKET !== null; }\n' +
+    '\n' +
+    '/**\n' +
+    ' * Pull the job market in. Safe to call any number of times and from anywhere:\n' +
+    ' * the second call gets the same promise, and a failed load clears itself so a\n' +
+    ' * retry is possible rather than the career being stuck forever.\n' +
+    ' */\n' +
+    'export function loadManagerMarket(): Promise<void> {\n' +
+    '  if (MARKET) return Promise.resolve();\n' +
+    '  if (!MARKET_INFLIGHT) {\n' +
+    "    MARKET_INFLIGHT = import('./managerJobMarket')\n" +
+    '      .then(m => { MARKET = m; })\n' +
+    '      .catch(e => { MARKET_INFLIGHT = null; throw e; });\n' +
+    '  }\n' +
+    '  return MARKET_INFLIGHT;\n' +
+    '}\n' +
+    "import { managerStanding } from './managerOffers';\n" +
+    'import {\n' +
+    '  getLifeEvents, getPriorityLifeEventIds,\n' +
+    '  personalitySponsorMult,\n' +
+    '  agentWageMult, agentIncomeCutRate, agentTransferCutRate,\n' +
+    '} from "./soccerCareerLife";\n' +
+    '/* Round 835: the posts, the brand ladder and the cover offer run on the\n' +
+    '   shared rules in careerSocial.ts and careerBrand.ts; soccerCareerBrand.ts\n' +
+    '   binds them and imports TYPES from here only, so this edge has no cycle. */\n' +
+    'import { applySocialPost, payFocusBoost, seasonFollowerGrowth } from "./careerSocial";\n' +
+    'import type { SocialPostDef } from "./careerSocial";\n' +
+    'import { updateBrandRung, stageCoverOffer, decideCoverOffer, brandSeasonIncome } from "./careerBrand";\n' +
+    'import { SOCCER_SOCIAL, SOCCER_BRAND, SOCCER_FOLLOWER_GROWTH, SPONSORSHIP_TIERS } from "./soccerCareerBrand";\n' +
+    'import type { SponsorshipTier } from "./soccerCareerBrand";\n' +
+    'import type { PlayerAppearance } from "./soccerCareerAppearance";\n' +
+    '/* Round 131: height, weight and the specific attributes under each of the six\n' +
+    '   families. buildEffects turns a build into the handful of multipliers the\n' +
+    '   season simulation reads, and it returns exactly 1.00 on everything for a\n' +
+    '   p'... 534446 more characters,
+  expected: '// Soccer Career Simulation Engine v2, Youth Academy + Pro System\n' +
+    '\n' +
+    "import { rollCareerChance, type CareerChanceWheelReceipt } from '@/lib/careerChanceWheel';\n" +
+    "import { CAPTAIN_MIN_AGE, CAPTAIN_MIN_RATING } from '@/lib/captaincy';\n" +
+    "import type { SoccerAgentReview } from './soccerAgentReview';\n" +
+    "import { serveClubSuspension } from '@/lib/soccerDiscipline';\n" +
+    "import { cancelReducedRole, queueReducedRole, reducedRoleSwing, settleReducedRole, type ReducedRolePlan, type ReducedRoleResult } from './soccerCareerRole';\n" +
+    "import { personalGoalMilestoneNews } from './soccerCareerMilestone';\n" +
+    "import { soccerExtensionQuote, soccerTransferTerms, soccerWageDemand } from '@/lib/soccerCareerContracts';\n" +
+    "import { programmeEffects, prepareSoccerProgramme, settleSoccerProgramme, interruptSoccerProgramme, completeProgrammeLoanBuy, programmePromiseBroken } from './soccerCareerProgramme';\n" +
+    "import type { SoccerProgrammeState, SoccerProgrammeReceipt } from './soccerCareerProgramme';\n" +
+    "import { announceSoccerFarewell, farewellSeasonComplete, readSoccerFarewell, type SoccerFarewellPlan } from './soccerCareerFarewell';\n" +
+    "import { clearTransferBrief, previewTransferBrief, readTransferBrief, storeTransferBriefResult, transferBriefCandidates, type SoccerTransferBrief, type TransferBriefPreview } from './soccerCareerTransferBrief';\n" +
+    "import { prepareLeagueWorld, projectLeagueWorldClubs, recordLeagueWorldSeason, settleLeagueWorld, leagueWorldChampions, clubKeyOf, type CareerLeagueWorld, type LeagueWorldSeason } from './soccerCareerLeagueWorld';\n" +
+    "import { settleCareerAmbition, type CareerSeasonAmbition, type SeasonAmbitionResult } from './soccerCareerAmbitions';\n" +
+    "import { recentClubForm } from './soccerCareerSelection';\n" +
+    "import { applyCareerPreparation, preparationInjuryDelta, settleCareerPreparation, type CareerPreparationPlan, type PreparationResult } from './soccerCareerPreparation';\n" +
+    "import { createCareerMentor, recordMentorSeason, endCareerMentorForMove, endCareerMentorForRetirement, validMentor, type CareerMentor } from './soccerCareerMentor';\n" +
+    "import { settleSoccerPress, type SoccerPressState } from './soccerCareerPress';\n" +
+    "/* Round 546: the competition's real format per season, two source verified and\n" +
+    '   importing nothing, so the knockout ladder and the leg count are read rather\n' +
+    '   than kept as a second hardcoded copy here. */\n' +
+    "import { periodFor, UCL_AWAY_GOALS } from '@/lib/uclFormatHistory';\n" +
+    '/* Round 670 review: the tie rule Club Manager reads its ties by. Imports nothing. */\n' +
+    "import { uclTieOutcome } from '@/lib/uclTieRule';\n" +
+    '/* Round 972: the first stage before the knockouts, and the cup a club outside\n' +
+    '   Europe plays instead of the Champions League. Never imports this engine. */\n' +
+    'import {\n' +
+    '  uclProbit, poissonGoals, UCL_BASE_LAMBDA, UCL_HOME_EDGE, clubCupFor, CONTINENTAL_LADDER,\n' +
+    '  CONTINENTAL_SIMPLIFIED, continentalOpponents, firstStageShape, firstStageOpponentCount,\n' +
+    '  firstStageTarget, solveStageStrength, playFirstStage, isFirstStageResult,\n' +
+    '  type ClubCupId, type FirstStageResult,\n' +
+    "} from './soccerCareerContinental';\n" +
+    "/* Round 1013: the clubs generated from Club Manager's four leagues. The file\n" +
+    "   imports nothing, so Club Manager never enters this page's bundle. */\n" +
+    "import { CAREER_CLUB_POOL } from '@/data/soccerCareerClubPool';\n" +
+    'import {\n' +
+    '  getEraStars, getEraTopClubs, getEraLeagueClubs, getEraUclOpponents,\n' +
+    '  getEraRivalName, adjustClubsForYear, getExtraEvents, rollSeasonInjury,\n' +
+    '  BDOR_WIN_MIN_GOALS, rollPotential, pickPhoneTexts, PHONE_POOL,\n' +
+    '} from "./careerEras";\n' +
+    'import type { PhoneChoiceDef } from "./careerEras";\n' +
+    "import type { SoccerInternationalReturn } from './soccerInternationalReturn';\n" +
+    "/* Round 929: every season's league finish, and the era aware elite rule. */\n" +
+    'import { divisionMove, drawLeagueFinish, eliteInYear, finishZone, leagueKeyInYear, managerLeagueField, MANAGER_FIELD, ordinal } from "./soccerCareerLeague";\n' +
+    '/* Round 1012: real club rivalries, played as league derbies each season. */\n' +
+    'import { resolveSeasonDerbies, applySeasonDerbies, type SeasonDerby } from "./soccerCareerDerby";\n' +
+    'import { cupAssociation, cupChanceFor, cupFor as domesticCupFor, cupTitle, drawCupRun, readCupRun, seasonPerformanceBoost, worldLeagueOf, type CupRun } from "./soccerCareerCup";\n' +
+    '/* Round 130: the phone is a real phone now. Threads, contacts, a relationship\n' +
+    '   that cools when you ignore people, and a sports feed driven by a world model\n' +
+    '   that actually moves players between clubs. All of it lives in soccerPhone so\n' +
+    '   this file only has to call four functions. */\n' +
+    'import {\n' +
+    '  ensurePhone, phoneSeasonTick, phoneReply, phoneOpen, mirrorLegacyMessage,\n' +
+    '  worldSeasonTick, worldClubOf, phoneAppsSwing, takePhoneOffers, unreadThreads,\n' +
+    '} from "./soccerPhone";\n' +
+    'import type { PhoneState, WorldSeason } from "./soccerPhone";\n' +
+    '/* Round 134: money stops being a number that only goes up. A savings account,\n' +
+    '   a market of five things whose prices move every season whether you are\n' +
+    '   watching or not, a statement with a limit on it, and the two small things\n' +
+    '   his player does on his own phone. Same shape as the phone: its own random\n' +
+    '   stream, its own bounded slice of the save, repaired lazily. */\n' +
+    'import {\n' +
+    '  ensureMoney, moneySeasonTick, moneyWealth, moneyAct,\n' +
+    '} from "./soccerMoney";\n' +
+    'import type { MoneyAction, MoneyState } from "./soccerMoney";\n' +
+    '/* Round 521: the Round 80 phone texts and the 2026-08-05 rivalry beats moved\n' +
+    '   into careerInbox.ts and careerRivalryEvents.ts, the same lift careerMoney.ts\n' +
+    "   already proved for the bank. Both wrappers below bind soccer's own fields\n" +
+    '   and keep every export name unchanged; the Round 130 thread system stays\n' +
+    '   exactly where it was, on top of the lifted inbox rather than inside it. */\n' +
+    'import { receiveInboxTexts, answerInboxMessage } from "./careerInbox";\n' +
+    'import type { InboxSport } from "./careerInbox";\n' +
+    'import { rollRivalryEvent, forcedRetirementEvent, applyRivalryEvent as applyRivalryEventShared } from "./careerRivalryEvents";\n' +
+    'import type { RivalryEventDef } from "./careerRivalryEvents";\n' +
+    "/* Round 796: the four rival dilemmas' gate and resolution moved into\n" +
+    "   careerRivalryChoices.ts, the engine the NFL career's rival choices run on.\n" +
+    '   The dilemmas stay four entries in MORAL_DILEMMAS, in the same places, so\n' +
+    '   the trigger draws exactly what it always drew. */\n' +
+    'import { rivalryChoiceOpen, resolveRivalryChoice } from "./careerRivalryChoices";\n' +
+    'import type { RivalryChoiceDef } from "./careerRivalryChoices";\n' +
+    "import { intlName, familyFor } from './intlNames';\n" +
+    '/* Round 258: display only. soccerCurrency imports nothing, so there is no\n' +
+    '   cycle, and every amount inside the engine stays in euros forever. */\n' +
+    "import { localizeMoney } from './soccerCurrency';\n" +
+    "import { managerProfileFromCareer } from './soccerCareerToManager';\n" +
+    '/* Round 273: the manager job market is loaded ON DEMAND and this import is\n' +
+    '   deliberately NOT static. managerJobMarket is 3 KB of its own code and it\n' +
+    '   imports clubManager, which is the biggest file in the repo, and clubManager\n' +
+    '   imports squadDeal which imports footleEnrichment. One static import line\n' +
+    "   here was therefore putting the whole Club Manager engine and Footle's data\n" +
+    '   in front of every Soccer Career player before they could do anything.\n' +
+    '\n' +
+    '   MEASURED on the built site, /soccer-career on a phone at slow 4G: 2,868 KB\n' +
+    '   over 30 requests, of which 731 KB was the managerJobMarket chunk and 139 KB\n' +
+    "   was Footle's enrichment data. Neither is needed until a career reaches the\n" +
+    '   dugout, which is after retirement and which most first sessions never see.\n' +
+    '\n' +
+    '   The market is loaded by loadManagerMarket() below. See refreshManagerOffers\n' +
+    '   for what happens if it somehow is not there yet, and scripts/simFlagshipWeight.mjs\n' +
+    '   for the guard that stops it creeping back in. */\n' +
+    "type ManagerMarket = typeof import('./managerJobMarket');\n" +
+    'let MARKET: ManagerMarket | null = null;\n' +
+    'let MARKET_INFLIGHT: Promise<void> | null = null;\n' +
+    '\n' +
+    '/** True once the job market is in memory and refreshManagerOffers can run. */\n' +
+    'export function managerMarketReady(): boolean { return MARKET !== null; }\n' +
+    '\n' +
+    '/**\n' +
+    ' * Pull the job market in. Safe to call any number of times and from anywhere:\n' +
+    ' * the second call gets the same promise, and a failed load clears itself so a\n' +
+    ' * retry is possible rather than the career being stuck forever.\n' +
+    ' */\n' +
+    'export function loadManagerMarket(): Promise<void> {\n' +
+    '  if (MARKET) return Promise.resolve();\n' +
+    '  if (!MARKET_INFLIGHT) {\n' +
+    "    MARKET_INFLIGHT = import('./managerJobMarket')\n" +
+    '      .then(m => { MARKET = m; })\n' +
+    '      .catch(e => { MARKET_INFLIGHT = null; throw e; });\n' +
+    '  }\n' +
+    '  return MARKET_INFLIGHT;\n' +
+    '}\n' +
+    "import { managerStanding } from './managerOffers';\n" +
+    'import {\n' +
+    '  getLifeEvents, getPriorityLifeEventIds,\n' +
+    '  personalitySponsorMult,\n' +
+    '  agentWageMult, agentIncomeCutRate, agentTransferCutRate,\n' +
+    '} from "./soccerCareerLife";\n' +
+    '/* Round 835: the posts, the brand ladder and the cover offer run on the\n' +
+    '   shared rules in careerSocial.ts and careerBrand.ts; soccerCareerBrand.ts\n' +
+    '   binds them and imports TYPES from here only, so this edge has no cycle. */\n' +
+    'import { applySocialPost, payFocusBoost, seasonFollowerGrowth } from "./careerSocial";\n' +
+    'import type { SocialPostDef } from "./careerSocial";\n' +
+    'import { updateBrandRung, stageCoverOffer, decideCoverOffer, brandSeasonIncome } from "./careerBrand";\n' +
+    'import { SOCCER_SOCIAL, SOCCER_BRAND, SOCCER_FOLLOWER_GROWTH, SPONSORSHIP_TIERS } from "./soccerCareerBrand";\n' +
+    'import type { SponsorshipTier } from "./soccerCareerBrand";\n' +
+    'import type { PlayerAppearance } from "./soccerCareerAppearance";\n' +
+    '/* Round 131: height, weight and the specific attributes under each of the six\n' +
+    '   families. buildEffects turns a build into the handful of multipliers the\n' +
+    '   season simulation reads, and it returns exactly 1.00 on everything for a\n' +
+    '   player who changed nothing, which is what makes it safe to bolt onto maths\n' +
+    '   that was balanced before it existed. */\n' +
+    'import {\n' +
+    '  buildEffects, safePhysique, safeShape, defaultPhysique, NEUTRAL_EFFECTS,\n' +
+    '} from "./soccerCareerAttributes";\n' +
+    'import type { PlayerPhysique, AttrShape, BuildEffects } from "./soccerCareerAttributes";\n' +
+    'import '... 514194 more characters,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
