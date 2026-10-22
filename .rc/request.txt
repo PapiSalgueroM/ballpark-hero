@@ -1,0 +1,9 @@
+#!serial
+attr-base-pair: git checkout e3deb2cb -- src/data/conquestDataNba.ts scripts/data/nbaFoRatingInputs2026.json && node scripts/simNbaOpeningRatingInputs.mjs; s=$?; git checkout HEAD -- src scripts; exit $s
+attr-base-pair-ratings: git checkout e3deb2cb -- src/data/conquestDataNba.ts scripts/data/nbaFoRatingInputs2026.json && node scripts/simNbaOpeningRatings.mjs; s=$?; git checkout HEAD -- src scripts; exit $s
+attr-base-receipt-only: git checkout e3deb2cb -- scripts/data/nbaFoRatingInputs2026.json && node scripts/simNbaOpeningRatingInputs.mjs; s=$?; git checkout HEAD -- src scripts; exit $s
+attr-base-receipt-only-ratings: git checkout e3deb2cb -- scripts/data/nbaFoRatingInputs2026.json && node scripts/simNbaOpeningRatings.mjs; s=$?; git checkout HEAD -- src scripts; exit $s
+attr-head-pair: node scripts/simNbaOpeningRatingInputs.mjs
+attr-hashes: echo "base $(git show e3deb2cb:src/data/conquestDataNba.ts | sha256sum | cut -c1-12) head $(git show HEAD:src/data/conquestDataNba.ts | sha256sum | cut -c1-12) receipt $(grep -o '"sourceSha256": *"[0-9a-f]*"' scripts/data/nbaFoRatingInputs2026.json | head -2 | tr '\n' ' ')"
+attr-file-diff: git diff --stat e3deb2cb HEAD -- src/data/conquestDataNba.ts scripts/data/nbaFoRatingInputs2026.json | tail -3
+clean-after: git status --short | wc -l
