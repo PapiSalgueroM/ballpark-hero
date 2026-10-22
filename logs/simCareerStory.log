@@ -1,0 +1,19 @@
+seed 9741: 24 careers, story 452 bytes a season, 21.3 seasons a career, save mean 59848 bytes
+seed 9741 parts: rest mean 42278 bytes, cup games 1471 bytes a season over 106 seasons, division 541 bytes a season over 104 seasons, ten divisions mean 4489 bytes, award pool mean 4073 bytes
+seed 19741: 24 careers, story 462 bytes a season, 22.1 seasons a career, save mean 64793 bytes
+seed 19741 parts: rest mean 44439 bytes, cup games 1489 bytes a season over 128 seasons, division 536 bytes a season over 146 seasons, ten divisions mean 4493 bytes, award pool mean 4452 bytes
+seed 29741: 24 careers, story 473 bytes a season, 22.8 seasons a career, save mean 66852 bytes
+seed 29741 parts: rest mean 46376 bytes, cup games 1440 bytes a season over 133 seasons, division 530 bytes a season over 154 seasons, ten divisions mean 4487 bytes, award pool mean 4395 bytes
+seed 39741: 24 careers, story 463 bytes a season, 21.8 seasons a career, save mean 65566 bytes
+seed 39741 parts: rest mean 44342 bytes, cup games 1497 bytes a season over 146 seasons, division 529 bytes a season over 147 seasons, ten divisions mean 4489 bytes, award pool mean 4174 bytes
+moves the log check saw: 1155 signings, 30 loans
+careers 96 (4 seeds x 24), story seasons 2113, lines written 14247, kept in the story 14128 plus 119 live
+baseline before Round 974: a finished career could read 119 of 14247 lines (0.8%); now 14247 (100.0%)
+size: story 463 bytes a season, save mean 64265 bytes, median 63247
+parts: rest mean 44359 bytes (the save before the train's parts), cup games 1475 bytes a season over 513 seasons, division 534 bytes a season over 551 seasons, ten divisions mean 4490 bytes, award pool mean 4274 bytes
+check completeness: ok
+check draws: ok
+check size: ok
+check log: ok
+check parts: ok
+simCareerStory: GREEN, 96 careers keep every season's lines in order, draw nothing and stay inside the size bands
