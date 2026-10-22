@@ -28,10 +28,11 @@
  *    neutral pin (same press, same dice) must fit what the line for that morale says, "up to" the step in its
  *    direction; the line the round first shipped (the cap worked out with the hub's phone, which the summer's texts
  *    move at the press) is counted beside it. Control double adds the step a second time and must fail here.
- * 4) The NATURAL fleet, 400 careers to the end, the round against the same tree without the step on the same seeds,
- *    for the house fleet and (SIM_CAREER_FORM_FLEET_KIND=engaged) one that answers every text: the Ballon d'Or
- *    rate, league games, rating and the five legacy tier shares, both blocks printed. A settled head must gain
- *    league games, and every shift stays under its ceiling (the numbers and why they are where they are, at BOUNDS).
+ * 4) The NATURAL fleet, 9,600 careers to the end (split over SIM_CAREER_FORM_WORKERS child processes a side, default
+ *    4), the round against the same tree without the step on the same seeds, for the house fleet and
+ *    (SIM_CAREER_FORM_FLEET_KIND=engaged) one that answers every text: the Ballon d'Or rate, league games, rating and
+ *    the five legacy tier shares, both blocks printed. A settled head must gain league games, and every shift stays
+ *    under its ceiling, set from the measured headroom (the numbers and why they are where they are, at BOUNDS).
  *    Control per10 plays the rejected design (10 morale points a step) and must break the ceilings.
  * 5) The ERA fleet: 240 attacking careers from 1990, 1995, 2000 and 2005 hold no Puskas Award before 2008-09 and
  *    some after it, every award on a season with 15 goals, and in lockstep with an ungated tree the gated one makes
@@ -40,10 +41,10 @@
  *
  * Environment: SIM_CAREER_FORM_BASE (the ref the base arm reads), SIM_CAREER_FORM_SECTIONS (comma separated),
  * SIM_CAREER_FORM_SEED, SIM_CAREER_FORM_PIN_CAREERS, SIM_CAREER_FORM_FLEET, SIM_CAREER_FORM_FLEET_KIND,
- * SIM_CAREER_FORM_ERA. A control runs only its own section.
+ * SIM_CAREER_FORM_ERA, SIM_CAREER_FORM_WORKERS (section 4 child processes a side). A control runs only its own section.
  * Never reads the network. Exit 1 on any failure; the last line says green or red.
  */
-import { execFileSync } from 'node:child_process';
+import { execFileSync, spawn } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -356,21 +357,28 @@ if (runs('3')) {
 }
 
 const TIERS = ['GOAT', 'LEGEND', 'GREAT', 'SOLID PRO', 'JOURNEYMAN'];
-/* Section 4's bounds, per fleet, at 1,200 careers, measured 2026-10-21 (remote checks r1523-m5 and r1523-m6, seeds
-   1523, 2024 and 77). The no step arm's own spread between seed bases (its headroom): house Ballon d'Or 7.0 per 100
-   careers, GOAT 1.4, LEGEND 2.0, GREAT 2.3, SOLID PRO 2.9, JOURNEYMAN 3.0 points; engaged 4.9, 1.2, 1.7, 2.3, 2.3
-   and 1.3. The round's shift, mean of the three seeds (range): house league games +0.30 a season (0.27 to 0.32),
-   rating 0.00, Ballon d'Or +1.4 (-0.4 to 3.3), JOURNEYMAN -3.1 (-5.2 to 0.1), every other tier within 1.4 on
-   average; engaged league +0.94 (0.92 to 0.95), rating +0.12 (0.12 to 0.13), Ballon d'Or +3.6 (2.6 to 5.1), GOAT
-   +1.5, LEGEND +2.2, SOLID PRO -1.7. So the Ballon d'Or rate stays inside its headroom in both fleets, and three of
-   the ten tier rows sit at or just past theirs on average (house JOURNEYMAN, engaged GOAT and LEGEND): morale that
-   plays makes a happy career a little better, which is the point, and the round says so rather than hiding it.
-   The bounds are ceilings the chosen design clears at every seed measured and the rejected one (10 points a step,
-   control per10) does not: at ten the house fleet gained 0.71 league games and the engaged one 1.29 and 0.22 of
-   rating (remote check r1523-var). Ballon d'Or and tiers get a gross move bound (a doubled effect fails). */
+/* Section 4's ceilings, per fleet (review of 2026-10-21: at 1,200 careers the engaged Ballon d'Or bound of 8 went red
+   at 2 of 8 fresh seeds, a coin toss, and a tier bound of 6 sat two to five times past the headroom).
+   MEASURED HEADROOM, the no step arm's own spread between seed bases at 1,200 careers, now over every seed measured
+   (house 7 seeds: 1523, 2024, 77, 9001, 31337, 4242, 606; engaged 11: 1523, 2024, 77, 9001, 31337, 5, 123, 777, 2026,
+   8080, 55555; remote checks r1523-m5, m6, final-a2, run-b and run-b2): house Ballon d'Or 7.0 per 100 careers, GOAT
+   2.9, LEGEND 2.1, GREAT 2.7, SOLID PRO 3.2, JOURNEYMAN 3.0 points; engaged 6.6, 3.2, 5.3, 4.3, 2.9 and 2.5. (The
+   first three seeds alone gave 4.9 to 1.2 for the engaged rows, which is why three rows read as past it.)
+   THE ROUND'S SHIFT, mean over the same seeds (sd of one 1,200 career run): house league games +0.29 (0.04), rating
+   0.00, Ballon d'Or -0.1 (2.7), GOAT -0.1 (1.1), LEGEND +1.4 (0.9), GREAT +0.7 (1.4), SOLID PRO 0.0 (1.3), JOURNEYMAN
+   -1.9 (2.2); engaged league +0.94 (0.07), rating +0.12 (0.01), Ballon d'Or +5.1 (3.0), GOAT +1.8 (1.2), LEGEND +2.0
+   (1.4), GREAT -1.6 (1.6), SOLID PRO -1.5 (1.2), JOURNEYMAN -0.7 (0.8). Every mean is inside its headroom; the
+   nearest are the engaged Ballon d'Or (5.1 of 6.6), house JOURNEYMAN (1.9 of 3.0) and house LEGEND (1.4 of 2.1).
+   THE CHECK. One 1,200 career run is too noisy to hold a row to its headroom (a Ballon d'Or shift's sd is 3), so the
+   fleet is 9,600 careers (FLEET_CAREERS, eight times the noise power, split over worker processes) and each ceiling
+   is the row's headroom and half again, never above the old 8 and 6: the margin keeps every row two and a half sd or
+   more clear at 9,600 careers, and the rejected design (10 points a step, control per10) breaks the league ceiling
+   and the tier rows (at ten the house fleet gained 0.71 league games and six points fewer journeymen, the engaged one
+   1.29 games, 0.22 of rating and 7.5 points fewer solid pros, remote check r1523-var). */
+const FLEET_CAREERS = 9600;
 const BOUNDS = {
-  house: { league: 0.5, rating: 0.06, bdor: 8, tier: 6 },
-  engaged: { league: 1.1, rating: 0.17, bdor: 8, tier: 6 },
+  house: { league: 0.5, rating: 0.06, bdor: 8, GOAT: 4.4, LEGEND: 3.2, GREAT: 4.1, 'SOLID PRO': 4.8, JOURNEYMAN: 4.5 },
+  engaged: { league: 1.1, rating: 0.17, bdor: 8, GOAT: 4.8, LEGEND: 6, GREAT: 6, 'SOLID PRO': 4.4, JOURNEYMAN: 3.8 },
 };
 /* A whole career, Math.random seeded from the career's index. The house fleet never opens the phone; the engaged
    fleet answers every waiting text (its first choice) before each press, which keeps its morale near the top. */
@@ -388,18 +396,50 @@ function wholeCareer(S, i, seedBase, opts, engaged = false) {
   }
   return c;
 }
-function fleetBlock(S, n, seedBase, engaged = false) {
-  let bdor = 0, seasons = 0, league = 0, rating = 0, morale = 0, presses = 0;
-  const tiers = Object.fromEntries(TIERS.map(t => [t, 0]));
-  globalThis.__sfPress = st => { morale += st.morale; presses += 1; };
-  for (let i = 0; i < n; i += 1) {
+function fleetSums(S, n, seedBase, engaged = false, w = 0, W = 1) {
+  const sums = { n: 0, bdor: 0, seasons: 0, league: 0, rating: 0, morale: 0, presses: 0, tiers: Object.fromEntries(TIERS.map(t => [t, 0])) };
+  globalThis.__sfPress = st => { sums.morale += st.morale; sums.presses += 1; };
+  for (let i = w; i < n; i += W) {
     const c = wholeCareer(S, i, seedBase, undefined, engaged);
-    for (const row of c.seasons) if (row.type === 'playing' && row.clubTier < 99) { seasons += 1; league += row.leagueApps ?? row.apps; rating += row.rating; if (row.ballonDor) bdor += 1; }
-    tiers[S.E.calculateLegacy(c).tier] += 1;
+    sums.n += 1;
+    for (const row of c.seasons) if (row.type === 'playing' && row.clubTier < 99) { sums.seasons += 1; sums.league += row.leagueApps ?? row.apps; sums.rating += row.rating; if (row.ballonDor) sums.bdor += 1; }
+    sums.tiers[S.E.calculateLegacy(c).tier] += 1;
   }
   globalThis.__sfPress = null;
-  return { n, bdor: (100 * bdor) / n, seasons, league: league / seasons, rating: rating / seasons, morale: morale / presses,
-    tiers: Object.fromEntries(TIERS.map(t => [t, (100 * tiers[t]) / n])) };
+  return sums;
+}
+const blockOf = list => {
+  const s = list.reduce((a, b) => ({ ...Object.fromEntries(['n', 'bdor', 'seasons', 'league', 'rating', 'morale', 'presses'].map(k => [k, a[k] + b[k]])),
+    tiers: Object.fromEntries(TIERS.map(t => [t, a.tiers[t] + b.tiers[t]])) }));
+  return { n: s.n, bdor: (100 * s.bdor) / s.n, seasons: s.seasons, league: s.league / s.seasons, rating: s.rating / s.seasons, morale: s.morale / s.presses,
+    tiers: Object.fromEntries(TIERS.map(t => [t, (100 * s.tiers[t]) / s.n])) };
+};
+/* The fleet is split over worker processes (SIM_CAREER_FORM_WORKERS a side, default 4, so 8 at once for the two
+   arms): each child plays the careers whose index falls to it, for one arm, and prints its sums on one line. Every
+   career is seeded from its own index, so the split changes nothing but the wall time. */
+const ARM = { off: ['fleet-off', { stepOff: true }], head: ['fleet-head', {}], per10: ['fleet-per10', { per10: true }] };
+async function fleetBlock(arm, n, engaged) {
+  const W = Math.max(1, Number(process.env.SIM_CAREER_FORM_WORKERS || 4));
+  if (W === 1) return blockOf([fleetSums(await soccer(...ARM[arm]), n, SEED, engaged)]);
+  const kids = Array.from({ length: W }, (_, w) => new Promise((resolve, reject) => {
+    const env = { ...process.env, SIM_CAREER_FORM_SLICE: `${arm}:${w}:${W}:${n}:${engaged ? 1 : 0}`, SIM_CAREER_FORM_SECTIONS: '4' };
+    const child = spawn(process.execPath, [fileURLToPath(import.meta.url)], { env, stdio: ['ignore', 'pipe', 'inherit'] });
+    let out = '';
+    child.stdout.on('data', d => { out += d; });
+    child.on('close', code => {
+      const line = out.split('\n').find(l => l.startsWith('SLICE '));
+      if (code === 0 && line) resolve(JSON.parse(line.slice(6)));
+      else reject(new Error(`the ${arm} slice ${w} of ${W} exited ${code}: ${out.slice(-400)}`));
+    });
+  }));
+  return blockOf(await Promise.all(kids));
+}
+if (process.env.SIM_CAREER_FORM_SLICE) {
+  const [arm, w, W, n, engaged] = process.env.SIM_CAREER_FORM_SLICE.split(':');
+  if (!ARM[arm]) { console.log(`ABORT: unknown slice arm ${arm}`); process.exit(1); }
+  const sums = fleetSums(await soccer(`${ARM[arm][0]}-${w}`, ARM[arm][1]), Number(n), SEED, engaged === '1', Number(w), Number(W));
+  console.log(`SLICE ${JSON.stringify(sums)}`);
+  process.exit(0);
 }
 const showBlock = (name, b) => console.log(`   ${name.padEnd(9)} ${b.n} careers, ${b.seasons} seasons, morale ${b.morale.toFixed(1)} as the engine reads it: Ballon d'Or ${f2(b.bdor)} per 100 careers, league games ${f2(b.league)}, rating ${f2(b.rating)}; legacy ${TIERS.map(t => `${t} ${b.tiers[t].toFixed(1)}%`).join(', ')}`);
 
@@ -407,29 +447,28 @@ if (runs('4')) {
   const FLEET = process.env.SIM_CAREER_FORM_FLEET_KIND || 'house';
   if (!['house', 'engaged'].includes(FLEET)) { console.log(`ABORT: unknown SIM_CAREER_FORM_FLEET_KIND ${FLEET}`); process.exit(1); }
   console.log(`4) the natural fleet (${FLEET}): the round against the same tree without the morale step, same seeds`);
-  const N = Number(process.env.SIM_CAREER_FORM_FLEET || 1200);
+  const N = Number(process.env.SIM_CAREER_FORM_FLEET || FLEET_CAREERS);
   const ARMS = process.env.SIM_CAREER_FORM_ARMS || 'both';
-  const off = fleetBlock(await soccer('fleet-off', { stepOff: true }), N, SEED, FLEET === 'engaged');
   if (ARMS === 'off') {
-    showBlock('no step', off);
+    showBlock('no step', await fleetBlock('off', N, FLEET === 'engaged'));
     console.log('   the no step arm alone (SIM_CAREER_FORM_ARMS=off): a headroom reading, nothing asserted');
   } else {
     if (CONTROL === 'per10') console.log('   CONTROL per10: the rejected design, 10 morale points a step, in this tree\'s bundle');
-    const head = fleetBlock(await soccer(CONTROL === 'per10' ? 'fleet-per10' : 'fleet-head', { per10: CONTROL === 'per10' }), N, SEED, FLEET === 'engaged');
+    const [off, head] = await Promise.all([fleetBlock('off', N, FLEET === 'engaged'), fleetBlock(CONTROL === 'per10' ? 'per10' : 'head', N, FLEET === 'engaged')]);
     showBlock('round', head);
     showBlock('no step', off);
     const shift = { bdor: head.bdor - off.bdor, league: head.league - off.league, rating: head.rating - off.rating };
     const tierShift = Object.fromEntries(TIERS.map(t => [t, head.tiers[t] - off.tiers[t]]));
     console.log(`   shift: Ballon d'Or ${f2(shift.bdor)} per 100, league games ${f2(shift.league)}, rating ${f2(shift.rating)}; legacy ${TIERS.map(t => `${t} ${tierShift[t].toFixed(1)}`).join(', ')} points`);
-    if (N >= 1200) {
-      /* Bounds measured at 1,200 careers (see BOUNDS): the designed effect clears them, the rejected design does not. */
+    if (N >= FLEET_CAREERS) {
+      /* Ceilings from the measured headroom, at the fleet size they were set for (see BOUNDS). */
       const BOUND = BOUNDS[FLEET];
       if (!(shift.league > 0)) fail(`league games a season moved ${f2(shift.league)}, so a settled head gained nothing`);
       if (shift.league > BOUND.league) fail(`league games a season moved ${f2(shift.league)}, past ${BOUND.league}`);
       if (Math.abs(shift.rating) > BOUND.rating) fail(`the season rating moved ${f2(shift.rating)}, past ${BOUND.rating}`);
       if (Math.abs(shift.bdor) > BOUND.bdor) fail(`the Ballon d'Or rate moved ${f2(shift.bdor)} per 100 careers, past ${BOUND.bdor}`);
-      for (const t of TIERS) if (Math.abs(tierShift[t]) > BOUND.tier) fail(`the ${t} share moved ${tierShift[t].toFixed(1)} points, past ${BOUND.tier}`);
-    } else console.log(`   ${N} careers is under the 1,200 the bounds were measured at, so the bounds are not asserted`);
+      for (const t of TIERS) if (Math.abs(tierShift[t]) > BOUND[t]) fail(`the ${t} share moved ${tierShift[t].toFixed(1)} points, past ${BOUND[t]}`);
+    } else console.log(`   ${N} careers is under the ${FLEET_CAREERS} the ceilings are set for, so they are not asserted`);
     if (head.seasons < N * 10) fail(`only ${head.seasons} seasons were played`);
   }
 }
