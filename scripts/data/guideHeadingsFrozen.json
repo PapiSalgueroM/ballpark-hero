@@ -2280,11 +2280,11 @@
     },
     "/nba-starting-5": {
       "howToPlay": [
-        "Spin the stat challenge. It might be highest career PPG, lowest career fouls, most championships, tallest lineup, anything from a pool of 13 stats.",
+        "Spin the stat challenge. It might be highest career PPG, lowest career blocks per game, most threes made, anything from a pool of 7 career stats.",
         "Pick one of the five positions: PG, SG, SF, PF or C.",
         "A random NBA team appears. Name a player who suited up for that franchise, picking from the suggestions as you type.",
         "Repeat until all five slots are filled, watching your running stat total.",
-        "Submit the lineup for a verdict: a rating, a headline and a short breakdown."
+        "Submit the lineup for a score out of 100 against the best five your teams allowed."
       ],
       "rules": [
         "Five slots, one random team per pick, drawn from all 30 NBA franchises.",
@@ -2295,7 +2295,7 @@
       ],
       "example": [
         "The wheel says highest career PPG. Your first slot is SG from the Bulls, and you do not overthink Michael Jordan.",
-        "Then it gets rude: PF from the Grizzlies, C from the Hornets. You dig up the best scorers you can remember, submit a total in the high 90s, and the verdict roasts your weakest link."
+        "Then it gets rude: PF from the Grizzlies, C from the Hornets. You dig up the best scorers you can remember, submit a total in the high 90s, and the score shows how far each pick fell short of the best his team allowed."
       ],
       "tips": [
         "Read the direction twice. On a lowest challenge, the stars you love are suddenly poison.",

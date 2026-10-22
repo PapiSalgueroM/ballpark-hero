@@ -6,9 +6,8 @@ import type { NbaFilledSlot, NbaGamePhase, StatChallenge } from '@/types/nba';
 import { NBA_POSITIONS } from '@/types/nba';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { NBA_PLAYER_SOURCE, normalizeName, type PlayerEntity, type PlayerSourceConfig } from '@/lib/playerSearch';
-import { HIT_SCORE } from '@/lib/nbaStatLine';
 import {
-  NBA_FIVE_FRANCHISE_CODES, buildTeamPool, challengeByStat, findPoolEntry, isPositionEligibleForSlot,
+  NBA_FIVE_FRANCHISE_CODES, NBA_FIVE_HIT_SCORE, buildTeamPool, challengeByStat, findPoolEntry, isPositionEligibleForSlot,
   nbaFivePoints, refusalText, scoreFive, valueFor,
   type NbaFiveRecordRow, type NbaFiveRosterRow, type NbaFiveScore, type NbaFiveTeamPool, type NbaFiveValue,
 } from '@/lib/nbaStartingFiveScore';
@@ -374,7 +373,7 @@ export function useNbaLineup() {
     'nba-starting-5',
     phase === 'result' && result !== null,
     result ? nbaFivePoints(result.score) : 0,
-    result && result.score >= HIT_SCORE ? 1 : 0,
+    result && result.score >= NBA_FIVE_HIT_SCORE ? 1 : 0,
   );
 
   return {

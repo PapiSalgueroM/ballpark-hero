@@ -12,7 +12,7 @@ import { NbaHowToPlay } from '@/components/nba/NbaHowToPlay';
 import { cn } from '@/lib/utils';
 import { RotateCcw, Send, Loader2, AlertCircle, Shuffle, HelpCircle } from 'lucide-react';
 import { ResultScreen } from '@/components/game/ResultScreen';
-import { HIT_SCORE } from '@/lib/nbaStatLine';
+import { NBA_FIVE_HIT_SCORE as HIT_SCORE } from '@/lib/nbaStartingFiveScore';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';

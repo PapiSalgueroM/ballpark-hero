@@ -424,6 +424,14 @@ export function scoreFive(
   return { score, yourTotal, best, worst, perPick };
 }
 
+/** A five at or above this counts as a hit (one correct answer on the
+ *  record). It is NBA Stat Line's HIT_SCORE (src/lib/nbaStatLine.ts), held
+ *  here as a number rather than imported because the import split that page's
+ *  lib into a shared chunk every NBA Starting 5 visit then downloaded (2.0K
+ *  gzipped, measured 2026-10-22). simNbaStartingFive section 12 holds the two
+ *  equal. */
+export const NBA_FIVE_HIT_SCORE = 90;
+
 /** Points recorded for a finish: the score on the old 500 scale, so a perfect
  *  five is worth what every finish used to be. */
 export function nbaFivePoints(score: number): number {

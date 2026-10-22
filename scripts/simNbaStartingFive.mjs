@@ -45,8 +45,12 @@
  *   pergame     a career total is shown as if it were per game      section 3
  *   aiverdict   the hook calls the model's edge function again      section 10
  *   flatpoints  every finish records a flat 500 again               section 10
+ *   hitdrift    the hit mark drifts from NBA Stat Line's             section 12
  *
- * MEASURED (2026-10-22, seeds below): see the numbers printed by section 5.
+ * MEASURED (2026-10-22, here and on a runner alike): section 5, seed 20261022, 300 deals: the best five 100 and the
+ * worst 0 on 300 of 300, random fives average 49.7; the old judge rated the best fives 99.0 and the worst 99.0 on
+ * average, the same band on 300 of 300. Section 6, seed 7171: 120 extremes on 60 deals, 27 with a planted shared
+ * name, all equal to the brute force. Whole run about 2 seconds.
  *
  * Run: node scripts/simNbaStartingFive.mjs
  */
@@ -59,13 +63,14 @@ import { buildSync } from 'esbuild';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..').replace(/\\/g, '/');
 const LIB = `${ROOT}/src/lib/nbaStartingFiveScore.ts`;
 const CONTROLS = {
-  oldjudge: [3, 5], noinvert: [4], greedy: [6], nonamesake: [7], pergame: [3], aiverdict: [10], flatpoints: [10],
+  oldjudge: [3, 5], noinvert: [4], greedy: [6], nonamesake: [7], pergame: [3], aiverdict: [10], flatpoints: [10], hitdrift: [12],
 };
 const LIB_MUTATIONS = {
   noinvert: ['const gained = up ? yourTotal - worst.total : worst.total - yourTotal;', 'const gained = yourTotal - worst.total;'],
   greedy: ['        if (!shared(c.key)) break;', '        break;'],
   nonamesake: ['    if (!recordTeamCodes(r).some(c => codes.has(c))) continue;', ''],
   pergame: ['  return { ok: true, value: round1(Number(raw) / games) };', '  return { ok: true, value: round1(Number(raw)) };'],
+  hitdrift: ['export const NBA_FIVE_HIT_SCORE = 90;', 'export const NBA_FIVE_HIT_SCORE = 85;'],
 };
 const CONTROL = process.env.NBA_FIVE_CONTROL || '';
 const abort = m => { console.error(`simNbaStartingFive ABORT: ${m}`); process.exit(2); };
@@ -524,12 +529,15 @@ begin(11, 'every refusal names the player and carries no dash');
   console.log(`   ${n} refusals`);
 }
 
-begin(12, 'points are the score on the old 500 scale');
+begin(12, "points are the score on the old 500 scale, and the hit mark is NBA Stat Line's");
 {
   for (const [s, want] of [[100, 500], [0, 0], [79, 395], [78.6, 395], [-5, 0], [120, 500]]) {
     if (nbaFivePoints(s) !== want) fail(`nbaFivePoints(${s}) = ${nbaFivePoints(s)}, expected ${want}`);
   }
-  console.log('   6 cases');
+  const statLine = fs.readFileSync(`${ROOT}/src/lib/nbaStatLine.ts`, 'utf8').match(/^export const HIT_SCORE = (\d+);/m);
+  if (!statLine) fail("NBA Stat Line's HIT_SCORE line is not where this check reads it");
+  else if (Number(statLine[1]) !== lib.NBA_FIVE_HIT_SCORE) fail(`the hit mark is ${lib.NBA_FIVE_HIT_SCORE}, NBA Stat Line's is ${statLine[1]}`);
+  console.log(`   6 cases; hit mark ${lib.NBA_FIVE_HIT_SCORE}, Stat Line's ${statLine?.[1]}`);
 }
 
 console.log('');
