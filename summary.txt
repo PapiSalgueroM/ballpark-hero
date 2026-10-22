@@ -1,0 +1,6 @@
+sd-base exit=2 0s | treeWithoutMerge: taking the piece out conflicts in src/pages/SoccerCareer.tsx: no honest base
+sd1-5 exit=0 91s | simSoccerDeck: green. Sections 1, 2, 3, 4, 5 only.
+sd6-10 exit=0 179s | simSoccerDeck: green. Sections 6, 7, 8, 9, 10 only.
+vitest-1504 exit=0 4s |    Duration  3.17s (transform 1.61s, setup 78ms, collect 2.00s, tests 152ms, environment 360ms, prepare 216ms)
+sd-ctl exit=0 244s | controls (each must be 1): statmax=1 onefree=1 freetraining=1 noreseed=1 ceiling=1 bindopen=1 pressure=1
+eventdeck exit=0 241s | simEventDeck: green.
