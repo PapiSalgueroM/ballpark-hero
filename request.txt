@@ -1,0 +1,25 @@
+#!serve
+#!playwright
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+playNbaNumbers: node scripts/playNbaNumbers.mjs
+playCareerHub: node scripts/playCareerHub.mjs
+playEra2005: ENGINES=chromium node scripts/playEra2005.mjs
+playEra2010: ENGINES=chromium node scripts/playEra2010.mjs
+playEra2015: ENGINES=chromium node scripts/playEra2015.mjs
+playEra2020: ENGINES=chromium node scripts/playEra2020.mjs
+playNationalities: ENGINES=chromium node scripts/playNationalities.mjs
+playReleaseClause: ENGINES=chromium node scripts/playReleaseClause.mjs
+playSponsors: ENGINES=chromium node scripts/playSponsors.mjs
+playExtension: node scripts/playExtension.mjs
+playFrontOfficeGameDay: node scripts/playFrontOfficeGameDay.mjs
+playNationJob: ENGINES=chromium node scripts/playNationJob.mjs
+playWilderness: ENGINES=chromium node scripts/playWilderness.mjs
+playCmTablesFit: CM_FIT_PART=1 node scripts/playCmTablesFit.mjs
+playCmHubLanding: node scripts/playCmHubLanding.mjs
+playFoHub: ENGINES=chromium node scripts/playFoHub.mjs
+playFoOneRating: ENGINES=chromium node scripts/playFoOneRating.mjs
+playIphone: ENGINES=chromium node scripts/playIphone.mjs
+playCmDifficulty: node scripts/playCmDifficulty.mjs
+playCmNoSack: node scripts/playCmNoSack.mjs
+playCmSavePoints: node scripts/playCmSavePoints.mjs
