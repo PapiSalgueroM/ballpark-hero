@@ -1,7 +1,7 @@
 {
  "about": "NFL Higher or Lower, Round 1549: all six categories (touchdowns scored, passing yards, passing touchdowns, rushing yards, receiving yards, receptions), regular season, every career through the 2025 season. Every value was read on 2026-10-22 from the player's nfl.com career page (minus its 2026 row; ESPN's player page where nfl.com would not render) and from StatMuse (its 2000 to 2025 leaderboards or the player's career page), and the two agreed every time. scripts/simHigherLowerFacts.mjs holds the shipped files to this record.",
  "read": "2026-10-22",
- "source": "nfl.com and StatMuse (ESPN for nine players whose nfl.com page would not render), two per value, URLs per player",
+ "source": "nfl.com and StatMuse (ESPN for ten players whose nfl.com page would not render), two per value, URLs per player",
  "perPlayerSources": true,
  "through": "2025",
  "note": "Supersedes nflHigherLowerVerified2026-09.json, which held only touchdowns and held them to public.nflfastr_player_stats. That table is play by play derived and differs from the official totals: Drew Brees 80,428 passing yards against an official 80,358, Tom Brady 89,216 and 650 against 89,214 and 649, Larry Fitzgerald 17,524 and 1,430 against 17,492 and 1,432, and a few yards on most careers. Grouped by display name it also merged two men: Adrian Peterson's rushing yards were 16,204 (the official 14,918 plus a Bears back of the same name), which put him ahead of Frank Gore, and Steve Smith's 1,276 catches and 17,368 yards were Steve Smith Sr. plus the Giants receiver (the official 1,031 and 14,731). lastSeason is the last season the player played through 2025; a man who sat out 2025 keeps his 2024.",
