@@ -31,12 +31,6 @@ export interface StatChallenge {
 
 export type NbaGamePhase = 'challenge' | 'building' | 'reviewing' | 'result';
 
-export interface NbaAIVerdict {
-  rating: string;
-  headline: string;
-  analysis: string;
-}
-
 export const NBA_POSITIONS: NbaPositionSlot[] = [
   { role: 'PG', label: 'PG' },
   { role: 'SG', label: 'SG' },

@@ -1,11 +1,17 @@
 import { useState, useCallback, useMemo, useEffect } from 'react';
-import { localEvaluateNbaFive } from '@/lib/localLineupEval';
+import { supabase } from '@/integrations/supabase/client';
 import { getRandomNbaTeams, NBA_TEAMS, type NbaTeam } from '@/data/nbaTeams';
 import { getRandomStatChallenge } from '@/data/nbaStats';
-import type { NbaFilledSlot, NbaGamePhase, NbaAIVerdict, StatChallenge, NbaPosition } from '@/types/nba';
+import type { NbaFilledSlot, NbaGamePhase, StatChallenge } from '@/types/nba';
 import { NBA_POSITIONS } from '@/types/nba';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { NBA_PLAYER_SOURCE, normalizeName, type PlayerEntity, type PlayerSourceConfig } from '@/lib/playerSearch';
+import { HIT_SCORE } from '@/lib/nbaStatLine';
+import {
+  NBA_FIVE_FRANCHISE_CODES, buildTeamPool, challengeByStat, findPoolEntry, isPositionEligibleForSlot,
+  nbaFivePoints, refusalText, scoreFive, valueFor,
+  type NbaFiveRecordRow, type NbaFiveRosterRow, type NbaFiveScore, type NbaFiveTeamPool,
+} from '@/lib/nbaStartingFiveScore';
 
 /**
  * NBA player source for the autocomplete/validation layer.
@@ -55,30 +61,57 @@ export function buildTeamFilteredNbaSource(teamName: string): PlayerSourceConfig
   };
 }
 
+/* The slot rule lives in src/lib/nbaStartingFiveScore.ts since Round 1555,
+   so the pick and the best five the score compares against obey one rule. */
+export { isPositionEligibleForSlot };
+
 /**
- * Maps a slot's PG/SG/SF/PF/C role to the DB's coarser position codes
- * (verified distribution on nba_players_extended_v2, 2026-07-02):
- *   G=687, F=592, C=174, G-F=81, F-C=58, C-F=18, F-G=15, NULL=3510 (68%).
- * There is no PG/SG/SF/PF granularity in the source data, so eligibility is
- * necessarily coarse: a Guard fits PG or SG, a Forward fits SF or PF, a
- * Center fits C, and a combo code (G-F/F-G, F-C/C-F) fits either half.
- * A NULL position (the majority of rows, mostly older/historical players)
- * is treated as eligible for every slot rather than excluded, since blocking
- * on missing data would make most of the table unusable for any slot,
- * a worse regression than the AI-only gate this replaces.
+ * Round 1555: what one dealt team allows, read from the record. The roster is
+ * the search source's own rows for the team (so the pool is exactly what the
+ * box can offer), the numbers are nba_player_stats career rows listing the
+ * franchise. Read once per team per visit; a failed read is dropped from the
+ * cache so the next pick tries again. Both reads page like the grid engine,
+ * since PostgREST caps a select at 1000 rows.
  */
-export function isPositionEligibleForSlot(dbPosition: string | null | undefined, slotRole: NbaPosition): boolean {
-  if (!dbPosition) return true;
-  const code = dbPosition.trim().toUpperCase();
-  const codes = code.split('-'); // "G-F" -> ["G", "F"], "F" -> ["F"]
-  const guardSlots: NbaPosition[] = ['PG', 'SG'];
-  const forwardSlots: NbaPosition[] = ['SF', 'PF'];
-  return codes.some((c) => {
-    if (c === 'G') return guardSlots.includes(slotRole);
-    if (c === 'F') return forwardSlots.includes(slotRole);
-    if (c === 'C') return slotRole === 'C';
-    return true; // unrecognized code: do not block entry on it
-  });
+const POOL_PAGE = 1000;
+const poolCache = new Map<string, Promise<NbaFiveTeamPool>>();
+
+async function readPages<T>(page: (from: number) => PromiseLike<{ data: unknown; error: unknown }>): Promise<T[]> {
+  const rows: T[] = [];
+  for (let from = 0; ; from += POOL_PAGE) {
+    const { data, error } = await page(from);
+    if (error || !Array.isArray(data)) throw new Error('record read failed');
+    rows.push(...(data as T[]));
+    if (data.length < POOL_PAGE) return rows;
+  }
+}
+
+export function loadTeamPool(team: string): Promise<NbaFiveTeamPool> {
+  const cached = poolCache.get(team);
+  if (cached) return cached;
+  const codes = NBA_FIVE_FRANCHISE_CODES[team] ?? [];
+  const load = (async () => {
+    if (codes.length === 0) throw new Error(`no franchise codes for ${team}`);
+    const [roster, records] = await Promise.all([
+      readPages<NbaFiveRosterRow>(from => supabase
+        .from('nba_players_extended_v2')
+        .select('first_name, last_name, position')
+        .eq('team', team)
+        .order('player_id', { ascending: true })
+        .range(from, from + POOL_PAGE - 1)),
+      readPages<NbaFiveRecordRow>(from => supabase
+        .from('nba_player_stats')
+        .select('player_name, teams, year_from, games, points, trb, ast, stl, blk, three_p')
+        .or(codes.map(c => `teams.ilike.%${c}%`).join(','))
+        .order('id', { ascending: true })
+        .range(from, from + POOL_PAGE - 1)),
+    ]);
+    if (roster.length === 0 || records.length === 0) throw new Error(`empty record for ${team}`);
+    return buildTeamPool(team, roster, records);
+  })();
+  poolCache.set(team, load);
+  load.catch(() => { if (poolCache.get(team) === load) poolCache.delete(team); });
+  return load;
 }
 
 
@@ -87,7 +120,7 @@ export function useNbaLineup() {
   const [challenge, setChallenge] = useState<StatChallenge | null>(null);
   const [filledSlots, setFilledSlots] = useState<Map<number, NbaFilledSlot>>(new Map());
   const [teamAssignments, setTeamAssignments] = useState<NbaTeam[]>([]);
-  const [verdict, setVerdict] = useState<NbaAIVerdict | null>(null);
+  const [result, setResult] = useState<NbaFiveScore | null>(null);
   const [selectedPosition, setSelectedPosition] = useState<number | null>(null);
   const [isEvaluating, setIsEvaluating] = useState(false);
   const [evaluationError, setEvaluationError] = useState<string | null>(null);
@@ -131,7 +164,7 @@ export function useNbaLineup() {
     setIsStatSpinning(true);
     setTeamAssignments(getRandomNbaTeams(5));
     setFilledSlots(new Map());
-    setVerdict(null);
+    setResult(null);
     setValidationError(null);
     setEvaluationError(null);
     setSelectedPosition(null);
@@ -187,10 +220,12 @@ export function useNbaLineup() {
    * that can disagree with the first. That double-judgment gap is what was
    * producing false negatives on genuinely valid lineups.
    *
-   * The AI evaluate/lookup call is kept only to fetch the challenge stat
-   * value for scoring; it is non-blocking, so if it fails or disagrees the
-   * player is still accepted (a stat lookup failure is not a validity
-   * failure).
+   * Round 1555: his number for the challenge comes from the team's pool (the
+   * record, see loadTeamPool), the same rows the score compares against. A
+   * pick the record cannot number (not in the table, a namesake, steals or
+   * blocks from before they were counted) is refused with the reason, never
+   * filled with a guess, and a failed read refuses the pick with a retry
+   * message rather than filling the slot with nothing (fail closed).
    */
   const submitPlayer = useCallback(
     async (entity: PlayerEntity) => {
@@ -215,49 +250,38 @@ export function useNbaLineup() {
         return;
       }
 
+      const def = challengeByStat(challenge?.stat);
+      if (!def) {
+        setValidationError('This challenge has no record to score. Hit Start Over for a new spin.');
+        return;
+      }
+
       setIsValidating(true);
       setValidationError(null);
 
-      let statValue: number | string | undefined;
-
-      // Non-blocking enrichment: look up the challenge stat value for this
-      // already-validated player. A failure here never rejects the pick.
-      // The lookup itself still sends entity.name (last name, same as what
-      // was matched against the DB during search) plus firstName in case the
-      // edge function wants to disambiguate; only the *display* name changes
-      // in this task, not what gets sent for stat resolution.
+      const teamName = currentTeam.name;
+      let pool: NbaFiveTeamPool;
       try {
-        const resp = await fetch(
-          `${"https://flawuiqbvjobmkfkauhw.supabase.co"}/functions/v1/nba-validate-player`,
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZsYXd1aXFidmpvYm1rZmthdWh3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4NTUwNzYsImV4cCI6MjA5MTQzMTA3Nn0.L8xWIXikPIaXC0XOL-FLOuPQb6idws2NdliARxBgk_Y"}`,
-            },
-            body: JSON.stringify({
-              playerName: fullDisplayName,
-              teamName: currentTeam.name,
-              position: position.role,
-              challengeStat: challenge?.stat,
-            }),
-          }
-        );
-
-        const result = await resp.json();
-        if (result && result.statValue !== undefined && result.statValue !== null) {
-          statValue = result.statValue;
-        }
+        pool = await loadTeamPool(teamName);
       } catch {
-        // Stat lookup is enrichment only; ignore failures.
+        setIsValidating(false);
+        setValidationError(`Couldn't load the record for the ${teamName} right now. Try that pick again in a second.`);
+        return;
+      }
+      const entry = findPoolEntry(pool, fullDisplayName);
+      const numbered = entry ? valueFor(entry, def) : ({ ok: false, reason: 'no-record' } as const);
+      if (!numbered.ok) {
+        setIsValidating(false);
+        setValidationError(refusalText(numbered.reason, fullDisplayName, def));
+        return;
       }
 
       const slot: NbaFilledSlot = {
         ...position,
         playerName: fullDisplayName,
         excludeName: entity.name,
-        assignedTeam: currentTeam.name,
-        statValue,
+        assignedTeam: teamName,
+        statValue: numbered.value,
       };
 
       setFilledSlots((prev) => {
@@ -295,51 +319,39 @@ export function useNbaLineup() {
 
   const evaluateTeam = useCallback(async () => {
     if (filledSlotsArray.length !== 5 || !challenge) return;
+    /* Round 1555: no model, no fallback judge. The five is scored from the
+       same pools its numbers came from, against the best five the dealt
+       teams allowed. Anything that cannot be scored says so and keeps the
+       lineup for another try; it is never given a made up verdict. */
+    const def = challengeByStat(challenge.stat);
     setIsEvaluating(true);
     setEvaluationError(null);
     try {
-      const resp = await fetch(
-        `${"https://flawuiqbvjobmkfkauhw.supabase.co"}/functions/v1/nba-evaluate-lineup`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZsYXd1aXFidmpvYm1rZmthdWh3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4NTUwNzYsImV4cCI6MjA5MTQzMTA3Nn0.L8xWIXikPIaXC0XOL-FLOuPQb6idws2NdliARxBgk_Y"}`,
-          },
-          body: JSON.stringify({ players: filledSlotsArray, challenge }),
-        }
+      if (!def) throw new Error('challenge has no record');
+      const pools = await Promise.all(teamAssignments.slice(0, 5).map(t => loadTeamPool(t.name)));
+      const scored = scoreFive(
+        filledSlotsArray.map(s => ({ team: s.assignedTeam, role: s.role, name: s.playerName })),
+        pools,
+        def,
+        challenge.direction,
       );
-      if (!resp.ok) throw new Error(`Evaluation request failed (${resp.status})`);
-      const data = await resp.json();
-      // Guard against a malformed/empty body so we never land on a blank result.
-      if (!data || typeof data.rating !== 'string') throw new Error('Malformed verdict');
-      setVerdict(data);
+      if (!scored) throw new Error('five could not be scored');
+      setResult(scored);
       setPhase('result');
     } catch (err) {
-      // AI referee down/out of quota -> offline judge so the game still ends
-      // with a real verdict instead of an error state.
       console.error('Evaluation error:', err);
-      try {
-        const local = await localEvaluateNbaFive(
-          filledSlotsArray.map(s => s.playerName),
-          `${challenge.direction === 'highest' ? 'Highest' : 'Lowest'} ${challenge.stat}`,
-        );
-        setVerdict(local);
-        setPhase('result');
-      } catch {
-        setEvaluationError('Could not evaluate your lineup. Please try again.');
-      }
+      setEvaluationError("Couldn't score your five right now. Your picks are saved, try Submit again in a second.");
     } finally {
       setIsEvaluating(false);
     }
-  }, [filledSlotsArray, challenge]);
+  }, [filledSlotsArray, challenge, teamAssignments]);
 
   const resetGame = useCallback(() => {
     setPhase('challenge');
     setChallenge(null);
     setFilledSlots(new Map());
     setTeamAssignments([]);
-    setVerdict(null);
+    setResult(null);
     setValidationError(null);
     setEvaluationError(null);
     setIsStatSpinning(false);
@@ -353,11 +365,19 @@ export function useNbaLineup() {
     }, 100);
   }, []);
 
-  useGameCompletion('nba-starting-5', phase === 'result', verdict ? 500 : 0);
+  /* Round 1555: the points follow the score (0 to 500, a perfect five is
+     worth the flat 500 every finish used to record), and a five at Stat
+     Line's hit mark counts as a correct answer. */
+  useGameCompletion(
+    'nba-starting-5',
+    phase === 'result' && result !== null,
+    result ? nbaFivePoints(result.score) : 0,
+    result && result.score >= HIT_SCORE ? 1 : 0,
+  );
 
   return {
     phase, challenge, selectedPosition, currentTeam, filledSlots, filledSlotsArray,
-    filledCount, verdict, isEvaluating, evaluationError, isValidating, validationError, isStatSpinning,
+    filledCount, result, isEvaluating, evaluationError, isValidating, validationError, isStatSpinning,
     isTeamSpinning, teamAssignments, availablePositions, totalStat, currentTeamSource,
     filledNormalizedNames, startGame, finishStatSpin, beginBuilding, finishTeamSpin, selectPosition,
     rerollTeam, submitPlayer, evaluateTeam, resetGame,

@@ -1,20 +1,11 @@
 import type { StatChallenge } from '@/types/nba';
+import { NBA_FIVE_CHALLENGES } from '@/lib/nbaStartingFiveScore';
 
-const statPool: Omit<StatChallenge, 'direction'>[] = [
-  { stat: 'Career Points Per Game', unit: 'PPG', emoji: '🏀' },
-  { stat: 'Career Assists Per Game', unit: 'APG', emoji: '🎯' },
-  { stat: 'Career Rebounds Per Game', unit: 'RPG', emoji: '📊' },
-  { stat: 'Career Steals Per Game', unit: 'SPG', emoji: '🤏' },
-  { stat: 'Career Blocks Per Game', unit: 'BPG', emoji: '🚫' },
-  { stat: 'Career Three Pointers Made', unit: '3PM', emoji: '🎯' },
-  { stat: 'Championships Won', unit: 'Rings', emoji: '💍' },
-  { stat: 'Career Games Played', unit: 'GP', emoji: '📅' },
-  { stat: 'Career Fouls Per Game', unit: 'FPG', emoji: '😤' },
-  { stat: 'Height', unit: 'inches', emoji: '📏' },
-  { stat: 'Weight', unit: 'lbs', emoji: '⚖️' },
-  { stat: 'Career Minutes Per Game', unit: 'MPG', emoji: '⏱️' },
-  { stat: 'Career Free Throw Percentage', unit: 'FT%', emoji: '🎯' },
-];
+/* Round 1555: the wheel holds only the challenges the record can total (see
+   src/lib/nbaStartingFiveScore.ts). Championships, fouls, height, weight,
+   minutes and FT% left it: nothing on the page could put a real number on
+   them, so a model's say-so was the only judge. */
+const statPool: Omit<StatChallenge, 'direction'>[] = NBA_FIVE_CHALLENGES.map(({ stat, unit, emoji }) => ({ stat, unit, emoji }));
 
 export function getRandomStatChallenge(): StatChallenge {
   const stat = statPool[Math.floor(Math.random() * statPool.length)];

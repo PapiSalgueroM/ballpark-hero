@@ -23,7 +23,7 @@ export function NbaHowToPlay({ open, onOpenChange }: NbaHowToPlayProps) {
           <section>
             <h3 className="font-bold text-foreground mb-2">🎰 The Challenge</h3>
             <p className="text-muted-foreground">
-              Spin for a stat (PPG, RPG, Championships, Height, and more) and a direction:
+              Spin for a career stat (points, assists, rebounds, steals or blocks per game, threes made or games played) and a direction:
               build the <span className="text-green-400 font-semibold">HIGHEST</span> or{' '}
               <span className="text-blue-400 font-semibold">LOWEST</span> combined total.
             </p>
@@ -50,10 +50,22 @@ export function NbaHowToPlay({ open, onOpenChange }: NbaHowToPlayProps) {
           <section>
             <h3 className="font-bold text-foreground mb-2">📊 Stats & Scoring</h3>
             <ul className="space-y-1.5 text-muted-foreground">
-              <li>• Each player's <span className="text-orange-400 font-semibold">career stat</span> shows on the court</li>
+              <li>• Each player's real <span className="text-orange-400 font-semibold">career number</span> shows on the court, straight from our stat table</li>
               <li>• A <span className="text-primary font-semibold">running total</span> tracks your combined number</li>
-              <li>• Fill all 5 spots and an AI rates how well you did</li>
+              <li>• Every pick needs a career line in our table (careers from 1965-66 on). If we can't find one, pick someone else</li>
+              <li>• Steals and blocks only count careers that started in 1973-74 or later, when the league began keeping them</li>
+              <li>• Submit and your five is scored out of 100: the best five your teams allowed is 100, the worst is 0</li>
             </ul>
+          </section>
+
+          <section>
+            <h3 className="font-bold text-foreground mb-2">🧮 Worked Example</h3>
+            <p className="text-muted-foreground">
+              The spin is HIGHEST points per game. Your five adds up to 98.0. Using only players the search offered for your
+              five teams, the best possible five adds up to 120.0 and the worst 0.5. Your score is
+              (98.0 minus 0.5) divided by (120.0 minus 0.5), which is 82 out of 100. On a LOWEST spin it flips: the
+              smallest five your teams allowed is the 100.
+            </p>
           </section>
 
           <section>
