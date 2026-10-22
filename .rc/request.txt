@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+walkf3: node .rc/x/walkf3.mjs
+walkf3-pile: WALKF3_CONTROL=pile node .rc/x/walkf3.mjs
+walkf3-low: WALKF3_CONTROL=low node .rc/x/walkf3.mjs
