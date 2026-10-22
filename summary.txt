@@ -1,0 +1,6 @@
+simNoRivalNames exit=0 25s | No rival product names found. 0 findings.
+simStorageWrites exit=0 4s | simStorageWrites: all green (owed: 12)
+simBrowserHarnessDiscovery exit=0 6s | Retained actual child receipts: .sim-control/browser-discovery-Mtu2gZ/report.json
+nodash exit=1 0s | dash lines in the round and fixer files: 1 (65 files)
+simHarnessAnchors exit=0 63s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 83s | 
