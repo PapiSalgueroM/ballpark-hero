@@ -733,8 +733,19 @@ function census(before, lg, notes, seen, sheetMen, where) {
  * club above fifteen waives its lowest rated man) reaches him first. He must
  * still be there on its terms, the club must end the summer at fifteen (room
  * made by its own rule, not kept over), and the census must find nobody gone.
+ * The copies are written down during the walk and played after it: a copy's
+ * summer mints ids (the engine's minimum men), and ids feed the walk's hashed
+ * draws, so playing them in the walk would move the walk itself.
  */
+const bottomQueue = [];
 function sheetAtTheBottom(lg, team, desk, where) {
+  if (D.nbaContractsOf(desk, lg, team).decisions.some(d => d.season === lg.season && d.kind === 'take-picks')) {
+    bottomQueue.push({ lg: J(lg), desk: J(desk), team, where });
+  }
+}
+function playBottom({ lg: lgJson, desk: deskJson, team, where }) {
+  const lg = JSON.parse(lgJson);
+  const desk = JSON.parse(deskJson);
   const taken = D.nbaContractsOf(desk, lg, team).decisions.filter(d => d.season === lg.season && d.kind === 'take-picks');
   for (const d of taken) {
     const c = JSON.parse(J(lg));
@@ -909,6 +920,9 @@ for (const seed of SEEDS) {
     checkPicks(lg, desk, `${where} summer`);
   }
 }
+
+/* Round 1556: the bottom copies written down on the walk, played now that both walks are done. */
+for (const q of bottomQueue) playBottom(q);
 
 begin('2', 'over ten seasons a seed, no expiring man of yours leaves without a recorded decision, applied as written');
 for (const p of problems.s2) fail(p);
