@@ -1,0 +1,6 @@
+ctl-summerdeal exit=1 12s | simNbaEarnedDraft: CONTROL summerdeal FIRED. Red in section 12 (2075 failures).
+earned exit=0 16s | simNbaEarnedDraft: green.
+ctl-playinmade exit=1 5s | simNbaEarnedDraft: CONTROL playinmade FIRED. Red in section 2 and 3 and 4 and 5 and 8 and 9 and 12 (32 and 32 and 1 and 12 and 1 and 4 and 2 failures).
+ctl-judgeres exit=1 14s | simNbaEarnedDraft: CONTROL judgeres FIRED. Red in section 11 (12 failures).
+ctl-judgepass exit=1 14s | simNbaEarnedDraft: CONTROL judgepass FIRED. Red in section 11 (18 failures).
+ctl-all exit=0 291s | simNbaEarnedDraft controls: all 30 fired, each in exactly its own sections.
