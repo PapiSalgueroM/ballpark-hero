@@ -79,7 +79,12 @@ async function openPage(w, h) {
 
 const readSave = (page, key) => page.evaluate(k => JSON.parse(localStorage.getItem(k) || 'null'), key);
 const writeSave = (page, key, s) => page.evaluate(([k, v]) => localStorage.setItem(k, JSON.stringify(v)), [key, s]);
-const shot = async (page, name) => { if (OUT) await page.screenshot({ path: path.join(OUT, `${name}.png`), fullPage: false }); };
+/* The top of the page, the game part (the guide below it is not this round's), so the pictures stay small. */
+const shot = async (page, name) => {
+  if (!OUT) return;
+  const [w, h] = await page.evaluate(() => [window.innerWidth, Math.min(1500, document.documentElement.scrollHeight)]);
+  await page.screenshot({ path: path.join(OUT, `${name}.png`), fullPage: true, clip: { x: 0, y: 0, width: w, height: h } });
+};
 
 /** Nothing wider than the screen; every control of this round's screens at least 44 px; no text under its floor. */
 async function screenChecks(page, at) {
@@ -260,6 +265,7 @@ async function walkA(row, w, h) {
   say(took.myTeam === ids[0] && took.trust === 60 && took.fired === false && took.phase === 'recap', `${tag}: the second tap takes the job (${took.myTeam}, trust ${took.trust}, ${took.phase})`);
   const recap = await bodyText(page);
   say(recap.includes('You take over the') && await page.locator('[data-verdict-reveal] .cm-confetti').count() === 0, `${tag}: the arrival recap says who he takes over, with no confetti`);
+  await wait(1800); /* the verdict card and the room rise in over about 1.4 s */
   await shot(page, `${row.sport}-${w}-arrival`);
   await answerAndDraft(page, row, tag);
   await shot(page, `${row.sport}-${w}-hub`);
