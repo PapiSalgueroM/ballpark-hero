@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+walkfix: node .rc/x/walkfix1546.mjs
+simResultMoment: node scripts/simResultMoment.mjs
