@@ -299,7 +299,7 @@ console.log('6) the rivalry table: real schools, one row a school, two sources a
   if (rows !== want) fail(`read ${rows} rows from the file but the module exports ${want}: the reader no longer matches the file`);
 }
 
-console.log('7) old saves: a season already under way finishes the old way, the next one is real');
+console.log('7) old saves: a season already under way keeps its old draw and groups (its rivalry week reads the series table already), the next one is real');
 {
   const rng = lehmer(777);
   const st = cfb.initCfb('CLEM', rng, { depth: true });

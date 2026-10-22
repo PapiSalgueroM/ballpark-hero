@@ -202,7 +202,8 @@ export interface CbbState {
   staffWindow?: CbbStaffWindow | null;
   /** Round 1554: 1 once a season has started keeping league records, which
    *  the conference table then goes by. Absent on every older save, which
-   *  finishes the season it is in the old way. */
+   *  finishes the season it is in on the old table (only rivalry night reads
+   *  the real series already: cbbRivalries). */
   format?: number;
 }
 

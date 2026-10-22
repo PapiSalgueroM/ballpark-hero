@@ -23,7 +23,8 @@ import { CFB_RIVALRY_SERIES } from '@/data/collegeRivalries';
  * format), byes for the top four, single elimination to the title.
  *
  * Round 1554, the real season (CfbState.format 1, from the first season that
- * starts after it ships; a season already under way finishes the old way):
+ * starts after it ships; a season already under way keeps its old draw to
+ * the end, though its rivalry week reads the series table below already):
  *   - the whole slate is set at kickoff and no regular season pair repeats
  *     (src/lib/collegeProgram.ts collegeSlate): weeks 1 to 4 out of
  *     conference, weeks 5 to 11 conference play with one non-conference date
@@ -235,7 +236,8 @@ export interface CfbState {
   staffWindow?: CfbStaffWindow | null;
   /** Round 1554: 1 once a season has started under the real format (a fixed
    *  slate, Notre Dame independent, no Group of Five title game). Absent on
-   *  every older save, which finishes the season it is in the old way. */
+   *  every older save, which finishes the season it is in on the old draw
+   *  (only rivalry week reads the real series already: cfbRivalries). */
   format?: number;
   /** Round 1554: this season's whole schedule, built at kickoff. */
   slate?: CfbSlate | null;
