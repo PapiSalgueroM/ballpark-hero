@@ -1,0 +1,20 @@
+diff --git a/src/hooks/useLineupBuilder.ts b/src/hooks/useLineupBuilder.ts
+index 9130c9e67..369487db5 100644
+--- a/src/hooks/useLineupBuilder.ts
++++ b/src/hooks/useLineupBuilder.ts
+@@ -241,6 +241,7 @@ export function useLineupBuilder() {
+         played = await verifiedSecondaries(playerName.trim(), primary);
+       }
+       if (!positionCheck.ok) {
++        setIsValidating(true);
+         played = await verifiedSecondaries(playerName.trim(), primary);
+         if (played.length > 0) {
+           positionCheck = checkLineupPick(
+@@ -257,6 +258,7 @@ export function useLineupBuilder() {
+          reroll, a new formation, a reset). Nothing is said, filled or asked. */
+       if (run !== pickRun.current) return;
+       if (!positionCheck.ok) {
++        setIsValidating(false);
+         setValidationError(positionCheck.reason ?? 'That player does not fit this position.');
+         return;
+       }
