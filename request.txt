@@ -1,0 +1,2 @@
+#!serial
+simGuideHeadings: node scripts/simGuideHeadings.mjs 2>&1 | tail -8; exit ${PIPESTATUS[0]}
