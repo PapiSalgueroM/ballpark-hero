@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-new: node_modules/.bin/vitest run src/components/nba-front-office/NbaEarnedDraft.test.tsx src/lib/nbaEarnedDraft.test.ts src/lib/gmEarnedDraft.test.ts src/components/front-office-shared/GmEarnedDraftScreen.test.tsx src/components/front-office-shared/useGmEarnedDraft.test.tsx src/components/front-office-shared/DraftNightCard.test.tsx --testTimeout=300000 --hookTimeout=120000
+full: SIM_NBA_DRAFT_BOARD_FLEET=full node scripts/simNbaDraftBoard.mjs
+controls: SIM_NBA_DRAFT_BOARD_CONTROL=all node scripts/simNbaDraftBoard.mjs
+simNbaGmDesk: node scripts/simNbaGmDesk.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs

@@ -1,0 +1,6 @@
+vitest-new exit=0 10s |    Duration  8.91s (transform 2.26s, setup 691ms, collect 4.63s, tests 8.93s, environment 4.19s, prepare 1.22s)
+tsc exit=0 112s | 
+simNbaGmDesk exit=0 38s | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+simHarnessAnchors exit=0 66s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+full exit=0 760s | simNbaDraftBoard: green.
+controls exit=1 1788s | simNbaDraftBoard controls: 1 of 12 did not fire as they must (redraw).
