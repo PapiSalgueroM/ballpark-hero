@@ -1,0 +1,5 @@
+simRulesGateConsentFocus host: executable cookie host mutation applied once to a disposable component.
+simRulesGateConsentFocus host: 4 intended actual-outcome assertions fail.
+simRulesGateConsentFocus host: 5 independent outcomes stay green, none skipped.
+simRulesGateConsentFocus host: original trap and seen-per-route instructions baseline both pass.
+simRulesGateConsentFocus: source held, owned copies cleaned, no backend or vendor requests.

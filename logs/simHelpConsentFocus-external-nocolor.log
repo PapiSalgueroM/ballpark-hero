@@ -1,0 +1,8 @@
+simHelpConsentFocus external: five actual focus-scope assertions reject the outside portal; two independent answered-consent and ordinary-banner baselines pass.
+simHelpConsentFocus external: rejected Reject all receives focus inside initial rules and keeps its original consent behavior.
+simHelpConsentFocus external: rejected Accept all receives focus inside initial rules and keeps its original consent behavior.
+simHelpConsentFocus external: rejected keeps its single pending banner reachable when initial help is dismissed.
+simHelpConsentFocus external: rejected reuses the banner and its choices when help is reopened without a decision.
+simHelpConsentFocus external: rejected honors storage choices and restores pending choices within the same open rules.
+simHelpConsentFocus external: answered-consent trapping and the ordinary bottom banner still pass independently.
+simHelpConsentFocus: real source held, disposable copies cleaned, no vendor requests.
