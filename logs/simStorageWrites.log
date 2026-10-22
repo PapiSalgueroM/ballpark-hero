@@ -1,0 +1,4 @@
+           owed: src/hooks/useNhlConnections.ts [state:notesWarning], owner to be named by the lead (low: scratch notes, the daily result has its own save), listed 2026-10-10
+           owed: src/hooks/useGamePicks.ts [write:toggle], owner to be named by the lead (low: a list of pinned games, not a game), listed 2026-10-10
+
+simStorageWrites: all green (owed: 12)
