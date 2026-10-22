@@ -1,0 +1,10 @@
+vitest exit=0 20s |    Duration  19.79s (transform 4.56s, setup 1.75s, collect 13.19s, tests 21.61s, environment 11.19s, prepare 3.04s)
+earned exit=0 27s | simNbaEarnedDraft: green.
+nbadesk exit=0 28s | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+capital exit=0 2s | NBA draft-capital actual29 outcomes, independent baselines, CRLF controls, source holds and owned cleanup completed.
+draftorder exit=0 9s | simGmDraftOrder: green. 603418 checks over 10 sections: the order is the league's, the lottery is drawn once on its own stream and saved, and nothing mounts the lift yet.
+tsc exit=0 87s | 
+anchors exit=0 95s | simDraftNight exit=0 | simDraftNight: green. Every pick the engine made is shown, none is invented, and the run cannot become a wait.
+diffproof exit=0 0s | diffproof-ok
+draftorder-all exit=0 292s | simGmDraftOrder controls: all 40 fired, each in exactly its own sections.
+earned-ctl exit=0 480s | simNbaEarnedDraft controls: all 30 fired, each in exactly its own sections.
