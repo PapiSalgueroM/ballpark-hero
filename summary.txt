@@ -1,0 +1,3 @@
+c-g5sort exit=1 6s | simCfbSlate: 2 failure(s)
+c-source exit=1 7s | simCfbSlate: 1 failure(s)
+slate exit=0 7s | simCfbSlate: all green

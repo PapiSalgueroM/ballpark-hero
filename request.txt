@@ -1,0 +1,3 @@
+slate: node scripts/simCfbSlate.mjs
+c-g5sort: CFB_SLATE_CONTROL=g5sort node scripts/simCfbSlate.mjs
+c-source: CFB_SLATE_CONTROL=source node scripts/simCfbSlate.mjs
