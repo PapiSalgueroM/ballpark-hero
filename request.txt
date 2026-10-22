@@ -1,0 +1,4 @@
+#!serial
+ctl-xpzero: node scripts/controlFrontOfficeBoard.mjs xpzero
+ctl-blank: node scripts/controlFrontOfficeBoard.mjs blank
+ctl-check: node scripts/controlFrontOfficeBoard.mjs check
