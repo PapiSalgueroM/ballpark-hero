@@ -1,0 +1,34 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/gmEarnedDraft.test.ts src/lib/nbaEarnedDraft.test.ts src/components/nba-front-office src/components/front-office-shared src/lib/gmDraftNight.test.ts src/lib/gmDraftOrder.test.ts src/lib/gmLotteryNight.test.ts --testTimeout=300000 --hookTimeout=120000
+earned: node scripts/simNbaEarnedDraft.mjs
+c-touchseason: SIM_NBA_EARNED_DRAFT_CONTROL=touchseason node scripts/simNbaEarnedDraft.mjs
+c-fatclass: SIM_NBA_EARNED_DRAFT_CONTROL=fatclass node scripts/simNbaEarnedDraft.mjs
+c-nocurve: SIM_NBA_EARNED_DRAFT_CONTROL=nocurve node scripts/simNbaEarnedDraft.mjs
+c-flatodds: SIM_NBA_EARNED_DRAFT_CONTROL=flatodds node scripts/simNbaEarnedDraft.mjs
+c-playinmade: SIM_NBA_EARNED_DRAFT_CONTROL=playinmade node scripts/simNbaEarnedDraft.mjs
+c-gmfirst: SIM_NBA_EARNED_DRAFT_CONTROL=gmfirst node scripts/simNbaEarnedDraft.mjs
+c-bestfirst: SIM_NBA_EARNED_DRAFT_CONTROL=bestfirst node scripts/simNbaEarnedDraft.mjs
+c-origholder: SIM_NBA_EARNED_DRAFT_CONTROL=origholder node scripts/simNbaEarnedDraft.mjs
+c-shortclass: SIM_NBA_EARNED_DRAFT_CONTROL=shortclass node scripts/simNbaEarnedDraft.mjs
+c-shownread: SIM_NBA_EARNED_DRAFT_CONTROL=shownread node scripts/simNbaEarnedDraft.mjs
+c-redraw: SIM_NBA_EARNED_DRAFT_CONTROL=redraw node scripts/simNbaEarnedDraft.mjs
+c-reopen: SIM_NBA_EARNED_DRAFT_CONTROL=reopen node scripts/simNbaEarnedDraft.mjs
+c-trustblock: SIM_NBA_EARNED_DRAFT_CONTROL=trustblock node scripts/simNbaEarnedDraft.mjs
+c-noneed: SIM_NBA_EARNED_DRAFT_CONTROL=noneed node scripts/simNbaEarnedDraft.mjs
+c-rivalscout: SIM_NBA_EARNED_DRAFT_CONTROL=rivalscout node scripts/simNbaEarnedDraft.mjs
+c-bigneed: SIM_NBA_EARNED_DRAFT_CONTROL=bigneed node scripts/simNbaEarnedDraft.mjs
+c-sportname: SIM_NBA_EARNED_DRAFT_CONTROL=sportname node scripts/simNbaEarnedDraft.mjs
+c-foreignimport: SIM_NBA_EARNED_DRAFT_CONTROL=foreignimport node scripts/simNbaEarnedDraft.mjs
+c-elevenhead: SIM_NBA_EARNED_DRAFT_CONTROL=elevenhead node scripts/simNbaEarnedDraft.mjs
+c-flatclass: SIM_NBA_EARNED_DRAFT_CONTROL=flatclass node scripts/simNbaEarnedDraft.mjs
+c-judgetwo: SIM_NBA_EARNED_DRAFT_CONTROL=judgetwo node scripts/simNbaEarnedDraft.mjs
+c-judgerange: SIM_NBA_EARNED_DRAFT_CONTROL=judgerange node scripts/simNbaEarnedDraft.mjs
+c-judgefloor: SIM_NBA_EARNED_DRAFT_CONTROL=judgefloor node scripts/simNbaEarnedDraft.mjs
+c-judgecap: SIM_NBA_EARNED_DRAFT_CONTROL=judgecap node scripts/simNbaEarnedDraft.mjs
+c-judgeflip: SIM_NBA_EARNED_DRAFT_CONTROL=judgeflip node scripts/simNbaEarnedDraft.mjs
+nbadesk: node scripts/simNbaGmDesk.mjs
+capital: node scripts/simNbaDraftCapital.mjs
+draftorder: node scripts/simGmDraftOrder.mjs
+draftorder-all: SIM_GM_DRAFT_ORDER_CONTROL=all node scripts/simGmDraftOrder.mjs
+gmxp: node scripts/simGmXp.mjs
+anchors: s=0; for h in simHarnessAnchors simNoRivalNames simInventedNames simEngineIds simGmPicks simDraftNight; do node scripts/$h.mjs > /tmp/a-$h.log 2>&1; e=$?; echo "$h exit=$e | $(tail -1 /tmp/a-$h.log | cut -c1-140)"; [ $e -ne 0 ] && s=1; done; exit $s
