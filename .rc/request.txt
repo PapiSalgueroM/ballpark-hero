@@ -1,0 +1,6 @@
+s1-1: SIM_SEASON_AWARDS_SECTIONS=1 SIM_SEASON_AWARDS_SEED=1 node scripts/simSoccerSeasonAwards.mjs
+s1-2: SIM_SEASON_AWARDS_SECTIONS=1 SIM_SEASON_AWARDS_SEED=2 node scripts/simSoccerSeasonAwards.mjs
+s1-3: SIM_SEASON_AWARDS_SECTIONS=1 SIM_SEASON_AWARDS_SEED=3 node scripts/simSoccerSeasonAwards.mjs
+s1-4: SIM_SEASON_AWARDS_SECTIONS=1 SIM_SEASON_AWARDS_SEED=4 node scripts/simSoccerSeasonAwards.mjs
+s1-5: SIM_SEASON_AWARDS_SECTIONS=1 SIM_SEASON_AWARDS_SEED=5 node scripts/simSoccerSeasonAwards.mjs
+s1-6: SIM_SEASON_AWARDS_SECTIONS=1 SIM_SEASON_AWARDS_SEED=6 node scripts/simSoccerSeasonAwards.mjs
