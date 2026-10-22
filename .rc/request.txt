@@ -1,0 +1,6 @@
+nat-nocap: CM_NATIONS_CONTROL=nocap node scripts/simCmMadeUpNations.mjs 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+nat-freeask: CM_NATIONS_CONTROL=freeask node scripts/simCmMadeUpNations.mjs 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+nat-leak: CM_NATIONS_CONTROL=leak node scripts/simCmMadeUpNations.mjs 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+nat-mainstream: CM_NATIONS_CONTROL=mainstream node scripts/simCmMadeUpNations.mjs 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+nat-awayyouth: CM_NATIONS_CONTROL=awayyouth node scripts/simCmMadeUpNations.mjs 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+we-homecountry: SIM_WORLD_EDITOR_CONTROL=homecountry node scripts/simWorldEditor.mjs 2>&1 | tail -6; exit ${PIPESTATUS[0]}
