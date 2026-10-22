@@ -87,6 +87,7 @@
  *   keepersame   both keepers wear the same shirt                                  the renamed man (the two keepers apart)
  *   pressnone    a man closed down before a reset has nobody on him                R12 (pressure is drawn)
  *   foulwait     a foul is looked for a place at its own instant only              R11 (no foul hidden while its minute had room)
+ *   cueheld      the whistle is gone as soon as the free kick is taken             R11 (held over its spot through the free kick)
  * A control exits 1 when its test went red on an assertion, as it must, and 3 when it did anything else.
  *
  * THE BUNDLE SECTION (clean runs and cmimport): the part must stay a part. src/components/pitch-motion is
@@ -115,7 +116,7 @@ const REVIEW = ['scorelead', 'samecommit', 'crowd', 'turns', 'restartbeat', 'kic
 /* Release AR: the cast a chance started with is held while it plays. */
 const HELD = ['castnow'];
 /* Round 1521. */
-const LOOK = ['flatball', 'groundlob', 'shotflat', 'liftnone', 'foulcue', 'foulpair', 'foulcard', 'foulmeet', 'buildrandom', 'buildflat', 'noreason', 'buildchain', 'lookname', 'looknone', 'keepersame', 'pressnone', 'foulwait'];
+const LOOK = ['flatball', 'groundlob', 'shotflat', 'liftnone', 'foulcue', 'foulpair', 'foulcard', 'foulmeet', 'buildrandom', 'buildflat', 'noreason', 'buildchain', 'lookname', 'looknone', 'keepersame', 'pressnone', 'foulwait', 'cueheld'];
 assert.ok(['', ...OLD, ...NEW, ...REVIEW, ...HELD, ...LOOK].includes(control), 'Unknown live motion control');
 assert.ok(['', 'bundle'].includes(only), 'Unknown LIVE_MOTION_ONLY');
 /* Minified bytes and gzip bytes of the part alone, and the ceiling: each plus a fifth. */
@@ -218,7 +219,7 @@ try {
     if (control === 'flatball') motion = replace(motion, "if (!flight || flight === 'ground') return 0;", 'if (flight || !flight) return 0;');
     if (control === 'shotflat') motion = replace(motion, 'if (flight <= 0) return 0;', 'if (flight <= 2) return 0;');
     if (control === 'groundlob') scene = replace(scene, "LONG_PASS ? 'air' : 'ground';", "LONG_PASS ? 'air' : 'air';");
-    if (control === 'foulcue') scene = replace(scene, 'if (beat.foul && beat.dead && Math.abs(beat.start - beat.foul.at) < 1e-6) {', 'if (beat.foul && beat.dead && false) {');
+    if (control === 'foulcue') scene = replace(scene, '(b?.foul && b.dead && Math.abs(b.start - b.foul.at) < 1e-6 ? b : null)', '(b?.foul && b.dead && false ? b : null)');
     if (control === 'foulpair') scene = replace(scene, 'const by = lists[event.side].find(', 'const by = lists[side].find(');
     if (control === 'foulcard') scene = replace(scene, 'if (card) foul.card = card;', "foul.card = card ?? 'yellow';");
     if (control === 'foulmeet') scene = replace(scene, 'tackler.y = b.y + 3.4; }', 'tackler.y = b.y + 13.4; }');
@@ -235,6 +236,7 @@ try {
     if (control === 'keepersame') viewer = replace(viewer, ' look={looks.get(d.key)} keeperColor={OPP_KEEPER} />', ' look={looks.get(d.key)} />');
     if (control === 'pressnone') scene = replace(scene, 'if (presser && beat.pressed) {', 'if (presser && beat.pressed && false) {');
     if (control === 'foulwait') scene = replace(scene, 'const latest = Math.min(p + 1 - BEAT_SPAN, to - BEAT_SPAN);', 'const latest = p;');
+    if (control === 'cueheld') scene = replace(scene, 'beat.id === `y${before.foul!.order}`', "beat.id === 'none'");
     const componentPath = path.join(folder, 'LiveSimMotion.tsx').replaceAll('\\', '/');
     viewer = replace(viewer, "import { LivePitchPlayer, useLiveSimMotion } from '@/components/club-manager/LiveSimMotion';", "import { LivePitchPlayer, useLiveSimMotion } from './LiveSimMotion';");
     viewer = replace(viewer, "import type { MotionEvent } from '@/components/club-manager/LiveSimMotion';", "import type { MotionEvent } from './LiveSimMotion';");
@@ -281,7 +283,7 @@ try {
     foulcue: 'R11|a foul is seen', foulpair: 'R11', foulcard: 'R11', foulmeet: 'R11',
     buildrandom: 'R12', buildflat: 'R12', noreason: 'R12', buildchain: 'R12',
     lookname: 'R13|a renamed man the same', looknone: 'a renamed man the same', keepersame: 'a renamed man the same',
-    pressnone: 'R12', foulwait: 'R11',
+    pressnone: 'R12', foulwait: 'R11', cueheld: 'R11',
   };
   let passed = 0;
   if (only !== 'bundle' && control !== 'cmimport' && control !== 'bigpart') {

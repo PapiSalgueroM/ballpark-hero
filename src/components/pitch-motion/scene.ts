@@ -710,10 +710,15 @@ export function pitchScene(plan: PitchPlan, clock: number): MotionScene<PitchPla
     const flight = flightInto(plan.entries[index - 1], beat);
     if (flight) scene.flight = flight;
     /* The whistle is drawn only on the stretch that starts at the instant the foul was staged: one cut short at its
-       start by something that outranks it is that foul played through, never a whistle late. */
-    if (beat.foul && beat.dead && Math.abs(beat.start - beat.foul.at) < 1e-6) {
-      scene.cue = { kind: 'foul', at: { x: ball.x, y: ball.y }, order: beat.foul.order, by: beat.foul.by, on: beat.foul.on };
-      if (beat.foul.card) scene.cue.card = beat.foul.card;
+       start by something that outranks it is that foul played through, never a whistle late. It stays over the spot
+       while the free kick is taken (the stretch straight after it), so the moment is there long enough to read: the
+       walk at 390 met the whistle up while the two men were still walking in. */
+    const whistled = (b: PitchBeat | undefined) => (b?.foul && b.dead && Math.abs(b.start - b.foul.at) < 1e-6 ? b : null);
+    const before = plan.entries[index - 1];
+    const whistle = whistled(beat) ?? (before && whistled(before) && beat.id === `y${before.foul!.order}` && Math.abs(before.end - beat.start) < 1e-6 ? before : null);
+    if (whistle?.foul) {
+      scene.cue = { kind: 'foul', at: { x: whistle.anchor.x, y: whistle.anchor.y }, order: whistle.foul.order, by: whistle.foul.by, on: whistle.foul.on };
+      if (whistle.foul.card) scene.cue.card = whistle.foul.card;
     }
   }
   return scene;
