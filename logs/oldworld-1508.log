@@ -1,0 +1,12 @@
+treeWithoutMerge: 3b82668f83a94965459cdb88548e70ea9cab22fe, c8822359 without f1e54e17; conflicts kept from c8822359: scripts/lib/cmWorldSeed1250.mjs, scripts/simCmUnseededWorld.mjs, src/pages/WhatsNew.tsx
+base 3b82668f83a94965459cdb88548e70ea9cab22fe
+simCmOldCareersWorld: BASE 3b82668f (CM_OLD_WORLD_BASE), sections 1, 2
+  pre (Arsenal, now): 20 steps equal to BASE before the summer, 32 after it
+  mid (Bayern Munich, era2015): 18 steps equal to BASE before the summer, 29 after it
+section 1: 2 old saves, 38 steps equal to BASE before the summer, 61 steps after it at 8 checkpoints; deals between two other clubs placed at their buyers: 10 in the summer, 12 in January (64 placements checked); 64 joined rows on the screen; red by check {}
+  pre: 1513 bytes of ledger after January (17 records)
+  pre: the adoption adds 55 bytes to the state (an empty ledger)
+  mid: 1534 bytes of ledger after January (17 records)
+  mid: the adoption adds 59 bytes to the state (an empty ledger)
+section 2: 18 seeded careers, 111 saves, 929805 draws, 30 January windows and 48 deals of mine on the head, 0 red
+simCmOldCareersWorld: green, sections 1, 2 held (82s)

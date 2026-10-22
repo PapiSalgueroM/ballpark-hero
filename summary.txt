@@ -1,0 +1,17 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+vitest-1508 exit=0 12s |    Duration  11.25s (transform 4.81s, setup 506ms, collect 12.01s, tests 7.48s, environment 3.12s, prepare 1.00s)
+bridges-1508 exit=0 0s | cmNoAiMoves1344: all 5 anchors stand once and can be taken out
+tsc-1508 exit=0 169s | 
+vitest-cm-1508 exit=0 236s |    Duration  235.55s (transform 10.43s, setup 7.40s, collect 58.89s, tests 460.39s, environment 46.77s, prepare 10.68s)
+unseeded-1508 exit=1 304s | simCmUnseededWorld: 113 FAILURE(S)
+u-never-1508 exit=3 109s | simCmUnseededWorld: CONTROL never DID NOT FIRE as it must: moved red 3178, the comparison before the rollover red true
+u-noinverse-1508 exit=1 49s | simCmUnseededWorld: CONTROL noinverse FIRED: without the inverse the fresh careers differ from the base (15 of 15)
+u-early-1508 exit=1 231s | simCmUnseededWorld: CONTROL early FIRED: adopted as the save opens, the comparison with BASE before the first summer went red (quiet 49, deals 49 saves)
+oldworld-1508 exit=0 82s | simCmOldCareersWorld: green, sections 1, 2 held (82s)
+ow-never-1508 exit=1 7s | simCmOldCareersWorld: control never FIRED: section 1's moved check red 64 times, the comparison before the summer green (6s)
+ow-early-1508 exit=1 7s | simCmOldCareersWorld: control early FIRED: section 1's comparison before the summer red 2 times (7s)
+u-norecord-1508 exit=3 129s | simCmUnseededWorld: CONTROL norecord DID NOT FIRE as it must: mine red 1232, the comparison before the rollover red true
+walk-1508 exit=0 6s | playCmOldCareersWorld: green, 5 checks held; pictures in /home/runner/work/_temp/rc-out/files/head
+u-guard-1508 exit=3 227s | simCmUnseededWorld: CONTROL guard DID NOT FIRE as it must: deals red true, quiet red true
+walk-never-1508 exit=1 25s | playCmOldCareersWorld: control never FIRED: (b) red
+ow-bridge-1508 exit=1 62s | simCmOldCareersWorld: control bridge FIRED: section 2 red on 18 of 18 seeded careers (62s)
