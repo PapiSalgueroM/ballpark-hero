@@ -1,0 +1,5 @@
+writes-base exit=1 50s | 1 harness not green.
+writes-main exit=1 49s | 1 harness not green.
+natives-base exit=0 160s | {"id":"nfl-QB-1280-mouse-dark","route":"/nfl-my-career","viewport":{"width":1280,"height":720},"steps":[{"stage":"picker","scrollY":0,"innerWidth":1280,"innerHeight":720,
+natives-main exit=1 192s | main natives: 1009 exit 1, 1008 exit 1
+natives-head exit=0 157s | {"id":"nfl-QB-1280-mouse-dark","route":"/nfl-my-career","viewport":{"width":1280,"height":720},"steps":[{"stage":"picker","scrollY":0,"innerWidth":1280,"innerHeight":720,
