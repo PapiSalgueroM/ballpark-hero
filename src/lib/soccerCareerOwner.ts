@@ -12,12 +12,11 @@
      the finish, a title, a promotion and a relegation are read off the table
      and nothing else;
    - before every season he makes one call: where the budget goes. Each of the
-     four has a real effect, on the table strength or on the money. Two cost
-     money that season (the signings' wages, the building work), the academy
-     pays nothing back until the season after, and the debt payment's only
-     price is the season's budget not going anywhere else; no one of them is
-     the right answer every time (scripts/simSoccerOwnerTail.mjs measures all
-     of it over a fleet).
+     four has a real effect, on the table strength or on the money. Three cost
+     money that season (the signings' wages, the building work, the lenders'
+     fee for paying the debt early) and the academy pays nothing back until
+     the season after; no one of them is the right answer every time
+     (scripts/simSoccerOwnerTail.mjs measures all of it over a fleet).
 
    Nothing here touches Math.random: the table is drawn from a stream keyed to
    the save and the season, so the same save plays the same season in any tab
@@ -64,6 +63,8 @@ export const OWNER_EFFECTS = {
   interest: 0.15,
   /** debt: points of edge lost per tier revenue of debt (a club in debt sells) */
   debtDrag: 0.4,
+  /** debt: the lenders' fee for paying early, this season, as a share of what is paid */
+  repayFee: 0.1,
   /** the budget a season, in tier revenues (what a debt payment pays off) */
   budget: 2,
   /** the most levels the academy or the ground can reach */
@@ -119,7 +120,7 @@ export function ownerPlanWords(os: OwnerState, plan: OwnerPlan): { title: string
     return { title: "Grow the ground", line: `The building work costs €${tenth(u * e.stadiumWorks)}M now, then €${tenth(u * e.stadiumYield)}M more every season.` };
   }
   const pay = tenth(Math.min(lv.debt, ownerBudget(os)));
-  return { title: "Pay down the debt", line: `€${pay}M off the €${tenth(lv.debt)}M owed: less interest, and less pressure to sell your best players.` };
+  return { title: "Pay down the debt", line: `€${pay}M off the €${tenth(lv.debt)}M owed: less interest and less pressure to sell, but the lenders take €${tenth(pay * e.repayFee)}M for paying early.` };
 }
 
 /** The club's edge on the table this season, in league points, before or
@@ -317,7 +318,8 @@ export function playOwnerSeason(prev: OwnerState, input: { clubs: readonly ClubD
   const income = tenth(u * (1 + e.stadiumYield * lv.stadium + e.academySales * lv.academy)
     - e.interest * debt
     - (plan === "squad" ? u * e.squadWages : 0)
-    - (plan === "stadium" ? u * e.stadiumWorks : 0));
+    - (plan === "stadium" ? u * e.stadiumWorks : 0)
+    - (plan === "debt" ? e.repayFee * (lv.debt - debt) : 0));
   result += income >= 0 ? ` Income €${income}M.` : ` Loss €${tenth(-income)}M.`;
 
   playing.academy = plan === "youth" ? Math.min(e.maxLevel, lv.academy + 1) : lv.academy;

@@ -19,7 +19,9 @@
  *   3) Each call moves what it says it moves, paired against placing nothing on the same keyed seasons (common
  *      random numbers, so the only difference is the call): Sign players adds points this season and costs wages
  *      now; Fund the academy adds nothing this season, then points and money later; Grow the ground costs money
- *      now, never a point, and pays more over the horizon; Pay down the debt adds points and money at once.
+ *      now, never a point, and pays more over the horizon; Pay down the debt adds points at once and money over
+ *      the horizon, and costs the lenders' fee for paying early this season (its first season pays back less than
+ *      the interest the payment saves; added by the closing check of 2026-10-22, before it the call cost nothing).
  *   4) No dominant choice: over the same fleet, at a 6 season horizon every call beats every other call somewhere
  *      (points or money) by a margin, and at 3, 6 and 10 seasons no call is the best at both.
  *   5) An owner save from before this round (written by the base engine itself) loads, keeps its club and its
@@ -57,7 +59,8 @@
  * saleleague (section 1, the tile's old league, today's label or the list's key, put back), stalekey (section 2,
  * the season dropped from the season's key, so every season of a club replays the last one's rivals), eager
  * (section 0, the owner tail in memory before it is loaded), bands (section 1, three clubs a band), overprice
- * (section 1, a band offered to a man 60M short of its price).
+ * (section 1, a band offered to a man 60M short of its price). Added by the closing check: debtfree (section 3, the
+ * lenders' fee set to 0, so paying the debt down costs nothing again).
  * Options: SIM_OWNER_BASE=<sha> (default: git merge-base HEAD origin/main), SIM_OWNER_SALT=<n> (default 1),
  * SIM_OWNER_ONLY=<sections, e.g. 3,4>.
  */
@@ -95,6 +98,8 @@ const CONTROLS = {
   eager: [{ file: GATE, from: 'let OWNER: OwnerTailModule | null = null;', to: 'import * as EAGER from "./soccerCareerOwner";\nlet OWNER: OwnerTailModule | null = EAGER as unknown as OwnerTailModule;' }],
   bands: [{ file: OWNER, from: 'export const OWNER_PER_BAND = 2;', to: 'export const OWNER_PER_BAND = 3;' }],
   overprice: [{ file: OWNER, from: '    if (!(num(input.netWorth) >= band.price)) continue;', to: '    if (!(num(input.netWorth) + 60 >= band.price)) continue;' }],
+  /* added by the closing check (2026-10-22): the debt payment free again, its fee gone */
+  debtfree: [{ file: OWNER, from: '  repayFee: 0.1,', to: '  repayFee: 0,' }],
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
 
@@ -397,15 +402,15 @@ function fleetState(i) {
 }
 function playFrom(st, first, R) {
   let os = first ? { ...st.os, plan: first } : st.os;
-  let pts = 0, money = 0, pts0 = 0, money0 = 0;
+  let pts = 0, money = 0, pts0 = 0, money0 = 0, debt1 = 0;
   for (let k = 0; k < R; k += 1) {
     const r = O.playOwnerSeason(os, { clubs: CLUBS, year: st.year + k, key: `${st.key}|s${k}` });
     const row = r.os.seasonResults[r.os.seasonResults.length - 1];
     pts += row.playerPts; money += r.income;
-    if (k === 0) { pts0 = row.playerPts; money0 = r.income; }
+    if (k === 0) { pts0 = row.playerPts; money0 = r.income; debt1 = r.os.debt ?? 0; }
     os = r.os;
   }
-  return { pts, money, pts0, money0 };
+  return { pts, money, pts0, money0, debt1 };
 }
 const STATES = (ONLY.has(3) || ONLY.has(4)) ? Array.from({ length: FLEET }, (_, i) => fleetState(i)) : [];
 /** Mean effect of each call against placing nothing, over the states where every call is open (`all`) or where
@@ -413,6 +418,9 @@ const STATES = (ONLY.has(3) || ONLY.has(4)) ? Array.from({ length: FLEET }, (_, 
 function effects(R) {
   const own = Object.fromEntries(PLANS.map(p => [p, { pts: [], money: [], pts0: [], money0: [] }]));
   const all = Object.fromEntries(PLANS.map(p => [p, { pts: [], money: [] }]));
+  /* the debt payment's first season: what it paid off, and how far its money falls short of the interest that
+     payment saves (the lenders' fee, the call's own cost, review 2026-10-22) */
+  const paid = [], short = [];
   for (const st of STATES) {
     const base = playFrom(st, null, R);
     const open = PLANS.filter(p => O.ownerPlanOpen(st.os, p));
@@ -421,12 +429,18 @@ function effects(R) {
       const d = { pts: r.pts - base.pts, money: r.money - base.money, pts0: r.pts0 - base.pts0, money0: r.money0 - base.money0 };
       for (const k of Object.keys(d)) own[p][k].push(d[k]);
       if (open.length === PLANS.length) { all[p].pts.push(d.pts); all[p].money.push(d.money); }
+      if (p === 'debt') {
+        const off = (base.debt1 ?? 0) - r.debt1;
+        paid.push(off);
+        short.push(O.OWNER_EFFECTS.interest * off - d.money0);
+      }
     }
   }
   const m = o => Object.fromEntries(Object.entries(o).map(([k, v]) => [k, mean(v)]));
   return {
     own: Object.fromEntries(PLANS.map(p => [p, { ...m(own[p]), n: own[p].pts.length }])),
     all: Object.fromEntries(PLANS.map(p => [p, { ...m(all[p]), n: all[p].pts.length }])),
+    fee: { paid: mean(paid), short: mean(short), n: paid.length },
   };
 }
 const EFFECTS = {};
@@ -439,6 +453,8 @@ const show = (label, e) => {
   }
 };
 
+/* the debt's bands (review 2026-10-22, the lenders' fee): set from the measured numbers in the header */
+const DEBT_MONEY_6 = 3, DEBT_FEE_SHARE = 0.05;
 if (ONLY.has(3)) {
   console.log('3) Each call moves what it says it moves (against placing nothing, same keyed seasons)');
   const e = EFFECTS[6].own;
@@ -454,7 +470,14 @@ if (ONLY.has(3)) {
   need(e.stadium.pts === 0, `Grow the ground moved the table by ${f2(e.stadium.pts)} points: it never adds a point`);
   need(e.stadium.money >= 5, `Grow the ground adds ${f2(e.stadium.money)}M over 6 seasons (need 5)`);
   need(e.debt.pts0 >= 0.3, `Pay down the debt adds ${f2(e.debt.pts0)} points this season (need 0.3)`);
-  need(e.debt.money0 >= 0.4, `Pay down the debt adds ${f2(e.debt.money0)}M this season (need 0.4)`);
+  need(e.debt.money >= DEBT_MONEY_6, `Pay down the debt adds ${f2(e.debt.money)}M over 6 seasons (need ${DEBT_MONEY_6})`);
+  /* its cost: the lenders' fee for paying early comes off this season's money, so the first season pays back less
+     than the interest the payment saves (before the review it paid back all of it, and the call cost nothing) */
+  const fee = EFFECTS[6].fee;
+  const share = fee.paid > 0 ? fee.short / fee.paid : 0;
+  console.log(`   the debt payment's first season: ${f2(fee.paid)}M paid off on average over ${fee.n} states, its money ${f2(fee.short)}M short of the interest that saves (${f2(100 * share)} percent of the payment)`);
+  need(fee.n >= 200 && fee.paid >= 1, `too few debt payments to read the fee (${fee.n} states, ${f2(fee.paid)}M paid on average)`);
+  need(share >= DEBT_FEE_SHARE, `Pay down the debt costs ${f2(100 * share)} percent of the payment this season (the lenders' fee, need ${100 * DEBT_FEE_SHARE})`);
 }
 
 if (ONLY.has(4)) {
