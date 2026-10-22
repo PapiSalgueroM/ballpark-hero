@@ -5,18 +5,19 @@ Branch `r1321-nba-draft-earned-a`, base `48cb9d4b` (origin/main, Release AY). Wr
 
 ## Where it stands
 
-This run is the brief's split at step (d) (advice 19): steps (a) to (c) are built, pushed and proven on runners,
-with sections 1 to 4, 6, 8, 9 and the sport neutral section 10 on the quick walk, and the OLD arm measured on the
-full fleet. **The NEW arm (section 5, section 7's two arm table, the tuning) is NOT built: it waits for the lead's
-word on the stop lines and the fleet, and the OLD arm's numbers below say two of the lines need that word.**
+2026-10-21 (session J): step (d) is built and measured. origin/main (85a76241) was merged first with no conflict
+and the old gates rerun green on it (runner `r1321-j1`). The NEW arm runs through the libraries' own presses, the
+curve and the two knobs are tuned, section 5 (the incentive) is in the quick lane, and section 7's two arm table
+judges the lead's stop lines of 2026-10-13. **The table is a STOP: see "Step (d)" below.** Before that the round was
+split at step (d) (advice 19) and stopped for the lead's ruling on S4 and S6 (the OLD arm section below).
 
 Nothing in `src` calls the new code but its own tests. No screen, no copy, no What's New, no guide edit.
 
 ## Files
 
 - `src/lib/nbaFrontOffice.ts`: added lines only (0 removed, runner `r1321-b1` line `diffproof`):
-  `NBA_EARNED_CLASS_CURVE` (13 to 30 at 72 to 80, 31 to 45 at 69 to 76, 46 to 70 at 66 to 72, the draft's
-  starting shape, untuned), `nbaEarnedDraftClass`, `NBA_DRAFT_NEED_WEIGHT` (2), `nbaDraftNeed`,
+  `NBA_EARNED_CLASS_CURVE` (TUNED in step (d): 13 to 30 at 67 to 72, 31 to 45 at 66 to 69, 46 to 70 at 66 to 68;
+  the draft's starting shape was 72 to 80, 69 to 76 and 66 to 72), `nbaEarnedDraftClass`, `NBA_DRAFT_NEED_WEIGHT` (2), `nbaDraftNeed`,
   `nbaConsumeDraftRound`, and since the fix pass `nbaEarnedClassSize` (the class size rule, one place, read by the
   class and by the help). No anchor of simNbaDraftCapital is repeated.
 - `src/lib/gmEarnedDraft.ts` (new, sport neutral): `earnedContinue`, `earnedPick`, `earnedByStaff` over any
@@ -29,8 +30,11 @@ Nothing in `src` calls the new code but its own tests. No screen, no copy, no Wh
   `nbaDraftByStaff`, `nbaDraftRun`, `nbaDraftLabel`, `nbaDraftHeading`, `nbaDraftHelp`, plus re-exports for part
   B's board (`nbaEarnedDraftClass`, `draftRulesFor`, `lotteryNight`, `lotteryNightRule`, `ordinal`,
   `slotsLeftFor`, the types, `GmDraftOrderRules` and `GmLotteryRules` among them). `openNbaDraftNight` answers a
-  night already open for the season as it stands (fix pass).
-- `src/lib/gmEarnedDraft.test.ts` (10 tests) and `src/lib/nbaEarnedDraft.test.ts` (14 tests); both reach the lift,
+  night already open for the season as it stands (fix pass). Step (d) adds `NBA_DRAFT_KNOBS`, the class's two
+  knobs of A4 in the host, on a RIVAL's man only and drawing no number: `rivalSecondOnMin: true` (a rival's second
+  round man signs one season at `nbaMinContract`) and `latePot: { from: 13, cap: 66 }` (a rival's man from pick 13
+  on has his ceiling capped at 66, never under his own rating, so he stays the player he was drafted as).
+- `src/lib/gmEarnedDraft.test.ts` (10 tests) and `src/lib/nbaEarnedDraft.test.ts` (15 tests since step (d), which added the knobs test); both reach the lift,
   the pick ledger of gmPicks included, only through gmEarnedDraft's re-exports (`movePicks`, `newLedger`, `pickKey`).
 - `scripts/simNbaEarnedDraft.mjs` (new) and `scripts/data/nbaEarnedDraftFixture.json` (recorded from `48cb9d4b`).
 - `scripts/simGmDraftOrder.mjs`: the two libraries added to `MOUNT_ALLOW`, nothing else.
@@ -40,6 +44,138 @@ Nothing in `src` calls the new code but its own tests. No screen, no copy, no Wh
 
 After a summer the season has rolled, so the `draft` block a night leaves on the desk (about 8 KB: the order and 60
 slots) is never current again. It stays on the save on purpose (advice 25); nobody should "clean" it.
+
+## Step (d), 2026-10-21 (session J): the NEW arm, the tuning, the two arm table. A STOP.
+
+The lines are the lead's of 2026-10-13 (`dukb-handoff/2026-10-10/briefs/lead-rulings-1319-1320-1321.md`), fixed
+before the NEW arm ran: S1 the mean nbaStrength at seasons 5 and 10 within 0.5; S2 men rated 85 or more at season
+10 within 20 percent; S3 the two weakest starts' playoff seasons, seasons 2 to 5, at most 10 points under; S4 (the
+ruling's) the two strongest starts' PLAYOFF seasons, seasons 2 to 10, at most 10 points under, their title share
+printed and never asserted; S5 section 5's rise at every band in every set; S6 (the ruling's) CPU dead money a
+season under 1.0 $M and tax payers a season within 0.5 of the OLD arm. Resolution: the per set differences are the
+replicates, the error of the pooled difference is their sd over root k, under a third of the margin, and the two
+runs within two errors of each other. 12 sets of ten seeds, run twice; nothing needed the fleet to grow.
+
+### The tuning (sets 1 and 2, run 1; each variant minus the OLD arm on the same sets; runners `r1321-j2`, `r1321-j3`)
+
+Every variant draws exactly the numbers the untuned one draws (the knobs only rewrite a signed man). "second" is
+knob (i), a rival's second round man on one season at the minimum; "late" is knob (ii), a rival's man from that
+pick on capped at that ceiling (66 is the class's floor, so he never grows).
+
+| variant | S1 at 5 | S1 at 10 | S2 | S3 | S4 | S6 dead ($M) | S6 payers |
+|---|---|---|---|---|---|---|---|
+| untuned (curve 72-80, 69-76, 66-72; no knob) | +1.87 | +4.07 | +31.9 | -42.5 | -26.1 | 3.90 | +9.62 |
+| k1: second | +1.81 | +4.08 | +32.4 | -41.3 | -27.8 | 1.55 | +8.19 |
+| k2: second, late from 13 at 70 | +0.92 | +2.43 | +4.8 | -32.5 | -16.1 | 1.91 | +2.21 |
+| k3: second, late from 13 at 66 | +0.92 | +2.42 | +5.0 | -33.1 | -13.6 | 1.97 | +2.17 |
+| k4: k3 and curve 68-76, 66-72, 66-69 | +0.50 | +1.54 | +1.9 | -37.5 | -27.2 | 2.43 | +0.27 |
+| **k5: k3 and curve 67-72, 66-69, 66-68 (CHOSEN)** | +0.29 | +1.07 | +3.1 | -38.8 | -30.3 | 2.46 | -0.17 |
+| k6: second, late from pick 1 at 66 (outside knob (ii): not a late pick) | -0.68 | -1.88 | -48.5 | -31.9 | -15.8 | 2.53 | -1.03 |
+
+k5 is committed (`NBA_EARNED_CLASS_CURVE`, `NBA_DRAFT_KNOBS`): it is the variant nearest every line the knobs can
+reach. What the tuning shows: the curve and the late ceiling move S1, S2 and the payers; nothing they can reach
+moves S3, S4, S1 at season 10 or the dead money far enough (why, below).
+
+### The two arm table, 12 sets, two runs (fleet runners `r1321-j4` and `r1321-j5` on 311f2cb0)
+
+Printed by `SIM_NBA_EARNED_DRAFT_COMBINE=<the 48 old and new files> node scripts/simNbaEarnedDraft.mjs` (section 7,
+between TABLE BEGIN and TABLE END; exit 1, "RED in section 7": the STOP). The OLD arm's numbers are the same as
+`r1321-a1`'s on the base 48cb9d4b to the last printed digit, so merging main moved nothing on the old path.
+
+| line | old (run 1 / run 2) | new | new minus old, run by run (error) | band | sets | verdict |
+|---|---|---|---|---|---|---|
+| S1 at 5: mean nbaStrength of the 30 clubs, season 5 tip off | 83.11 / 83.11 | 83.38 / 83.37 | +0.27 (0.01) / +0.26 (0.01) | within 0.50 | 12 / 12 | PASS |
+| S1 at 10: the same, season 10 tip off | 82.20 / 82.19 | 83.23 / 83.23 | +1.03 (0.01) / +1.04 (0.01) | within 0.50 | 12 / 12 | **OUTSIDE by 0.54 (42 errors)** |
+| S2: men rated 85 or more, season 10 tip off | 105.9 / 106.0 | 108.2 / 108.3 | +2.4 (0.3) / +2.3 (0.2) | within 21.2 | 12 / 12 | PASS |
+| S3: two weakest starts' playoff seasons, seasons 2 to 5, per season (n 80 a set) | 81.8 / 80.9 | 47.5 / 45.9 | -34.3 (1.3) / -35.0 (1.4) | at most 10 under | 12 / 12 | **OUTSIDE by 24.6 (17 errors)** |
+| S4: two strongest starts' playoff seasons, seasons 2 to 10, per season (n 180 a set) | 100.0 / 100.0 | 73.2 / 71.9 | -26.8 (1.1) / -28.1 (0.8) | at most 10 under | 12 / 12 | **OUTSIDE by 17.5 (16 errors)** |
+| S6 dead: CPU dead money a season ($M), seasons 2 to 10 (n 540 a set) | 0.13 / 0.13 | 2.49 / 2.49 | (the arm's own) 2.49 (0.02) / 2.49 (0.03) | under 1.00 | 12 / 12 | **OUTSIDE by 1.49 (57 errors)** |
+| S6 payers: tax payers a season, seasons 2 to 10 | 2.29 / 2.29 | 2.08 / 2.07 | -0.21 (0.02) / -0.22 (0.02) | within 0.50 | 12 / 12 | PASS |
+| S5: his first selection later and worse at every band of finish, in every set | flat (pick 1) | 24 of 24 sets | | every set | 24 | PASS |
+
+S4's title share, printed for the lead and never asserted: OLD 78.3 percent of the strong starts' seasons 2 to 10,
+NEW 7.6. Every line is resolved: each error is far under a third of its margin, and the two runs agree within two
+errors on every line, so the fleet did not grow. Four lines are OUTSIDE.
+
+### The controls on a reduced fleet (sets 1 to 4, run 1; advice 20), each miss against its error
+
+Each control's own fleet is `SIM_NBA_EARNED_DRAFT_FLEET=full SIM_NBA_EARNED_DRAFT_CONTROL=<name>` (the new arm only,
+files `new-<name>-...`), judged by a COMBINE with `SIM_NBA_EARNED_DRAFT_VS=new-<name>`, which exits 1 and says FIRED
+when the arm lands outside a line. Both FIRED (exit 1). Errors are over four sets, so wider than the table's.
+
+| control | what it does | outside (miss, in errors) | against the plain new arm |
+|---|---|---|---|
+| fatclass | every man after today's twelve drawn 70 to 87, as the old class | S1 at 5 by 2.31 (189), S1 at 10 by 5.01 (397), S2 by 42.3 (108), S6 payers by 10.98 (366), S6 dead by 0.36 (32), S3 by 1.6 (0.6) | S1 at 10 +5.51 against +1.04, S2 +63.5 against +2.3, payers +11.48 against -0.21 |
+| bestfirst | the order drawn best record first (records swapped) | S3 by 60.0 (33), S4 by 11.9 (7), S5 in all 4 sets, S1 at 10 by 0.37 (13), S6 dead by 1.45 (181) | S3 -70.0 against -34.6; the bottom three back in the sixteen within three seasons 28.2 percent against 84.1 |
+
+So the table can go red for the two reasons it exists to catch: a class too rich for the league (fatclass) and an
+order that does not earn (bestfirst). fatclass's S3 miss (0.6 errors) is not a resolved miss; its S1, S2 and payers
+misses are.
+
+### The arbitrage arm (sets 1 to 4, run 1): a CEILING (advice 24), never a price
+
+A GM who, on opening day of every season, takes the weakest club's first for his own, FORCED (movePicks then
+syncNbaPicks, no club asked): 579 swaps over 240 careers. His first selection moves from pick 20.6 to 3.8 (strong
+starts), 18.1 to 3.8 (middle), 18.4 to 4.1 (weak); the strong starts' titles go from 8.0 to 61.4 percent of seasons
+and their playoff seasons from 74.8 to 99.6; weak starts' playoff seasons 71.5 against 64.3 plain. This is what a
+first is worth at most to a GM who could always get the worst club's: part B and the pricing of a pick by its slot
+(pair 2, out of scope here) must make that trade cost what it is worth, or the earned draft becomes the old
+draft by another door.
+
+### Beside the lines (pooled over every set and run; printed, never asserted)
+
+| | old | new |
+|---|---|---|
+| strong starts: playoff / title seasons / mean wins (seasons 1 to 10) | 99.5 / 71.7 / 64.6 | 74.8 / 8.0 / 44.2 |
+| middle starts: playoff / title / wins | 94.7 / 63.6 / 61.5 | 65.5 / 4.6 / 42.2 |
+| weak starts: playoff / title / wins | 82.6 / 60.3 / 58.7 | 64.3 / 9.0 / 42.1 |
+| his first selection, pick number (strong, middle, weak) | 1.0, 1.0, 1.0 | 20.6, 18.1, 18.4 |
+| his first selection, true rating (strong, middle, weak) | 85.9, 85.9, 85.9 | 73.0, 73.9, 74.8 |
+| the bottom three: in the sixteen within three seasons (percent) | 89.5 | 84.1 |
+| the bottom three: change in win share after three seasons (points) | 18.8 | 15.2 |
+| spread of nbaStrength over the 30 clubs, season 5 / season 10 | 2.11 / 2.75 | 1.29 / 1.37 |
+| the free agent pool's best ten at tip off, seasons 2 to 10 | 78.66 | 77.94 |
+| his own dead money a season ($M), seasons 2 to 10 | 16.03 | 2.15 |
+| men signed on a draft night | 12.0 | 60.0 |
+
+Section 5 on the quick walk (every club the GM in turn, 2,700 nights, the tuned curve): his first selection by
+finish, worst first, is pick 4.2, 7.5, 13.1, 17.4, 22.9, 27.9 at true rating 85.0, 82.6, 75.2, 71.1, 70.5, 70.1,
+against pick 1 at about 85.8 in every band today. The steps past the lottery are small (0.60 and 0.38 rating, errors
+0.14 and 0.07): with the tuned curve a late first is close to a minimum man, which PART B's words must not oversell.
+
+### Why it is a STOP, and what the lead can choose
+
+PASS: S1 at season 5, S2, the payers and S5 (24 of 24 sets). The knobs earn that: the untuned class put 9.6 more
+tax payers a season and 32 more men of 85 or better on the league; tuned, -0.2 and +2.3. OUTSIDE, all resolved:
+
+1. **S3 and S4 measure today's draft's gift to the user, the same artifact the lead ruled on for S4's titles.** In
+   the OLD arm the user picks first in every batch, so every start converges on a dynasty: weak starts make the
+   playoffs in 82.6 percent of seasons and win 60.3 percent of titles, strong starts 99.5 and 71.7. In the NEW arm
+   his club is an ordinary club after season 1 (about 42 to 44 wins at every tier). No variant of the tuning moved
+   S3 better than -31.9 or S4 better than -13.6 (table above): the knobs reach the league, not the user's edge.
+   Choice for the lead: rule S3 and S4 as the title line was ruled (contention protected against a rebuild that
+   cannot climb, not the old dominance). The earned draft's own climb is measured: the bottom three are back in the
+   sixteen within three seasons 84.1 percent of the time (OLD 89.5, where one of them is usually the user).
+2. **S1 at season 10 is +1.04 and the knobs are spent.** Freezing every rival man from pick 13 and the curve at the
+   minimum man's band (k5) leaves +1.0; capping every rival pick from 1 (k6, outside knob (ii), since pick 1 is no
+   late pick) overshoots to -1.9. So the rest comes from today's twelve, the same men in both arms. A reading, not
+   measured on its own: in the OLD arm the user takes two of the best every year and cannot play them all (his own
+   dead money is 16.0 $M a season, he waives to fit fifteen, and the league's spread of strength is 2.75 against
+   1.37), while in the NEW arm the twelve go to twelve clubs and all play and grow. S1 is the mean of all thirty, and
+   nbaWinProb reads the gap between two clubs, so a league one point stronger everywhere moves no game's chance; it
+   moves the league against the free agent pool (its best ten at tip off: 78.7 OLD, 77.9 NEW) and the opening ratings.
+   Choice: accept +1.0 at season 10, or widen knob (ii) to the lottery's later picks (somewhere between pick 1 and
+   13; measure it), or a line on the spread instead.
+3. **S6's dead money is 2.49 $M a season against a band of 1.0.** CPU clubs waive draftees at tip off to fit
+   fifteen. Knob (i) already puts every rival second rounder on one season at the minimum (k1 alone took the dead
+   money from 3.90 to 1.55); the rest is first rounders 13 to 30, who sign the rookie deal of four seasons
+   (nbaProspectToPlayer: years 4, at least 3 $M scaled), which no allowed knob can touch, and the lower the curve
+   the more of them are waived (k1 1.55, k5 2.46). Across 29 CPU clubs 2.49 $M is about 0.09 $M a club a season;
+   the user's own dead money falls from 16.0 $M to 2.2. Choice: raise the band, or allow a third knob (a rival's
+   first rounder from pick 13 on signs a shorter deal), which is the pricing of a pick by its slot that A8 put out of
+   scope.
+
+Nothing here is argued past its line: the four OUTSIDE lines are the STOP, and PART B waits for the lead's word.
 
 ## The OLD arm (today's draft, desk on), 12 sets of ten seeds, two runs (runner `r1321-a1`)
 
@@ -61,7 +197,7 @@ S5 (his first selection by finish band) in the OLD arm is flat at pick 1 in ever
 **The fleet by decision 2's rule: 12 sets** (S3 and S4 both need 12, the floor). One set takes about 57 s on a
 runner (73 s on the owner's PC): a shard of three sets about 170 s.
 
-### What the lead must decide before the NEW arm (STOP)
+### What the lead had to decide before the NEW arm (STOP of 2026-10-12, ruled on 2026-10-13)
 
 1. **The OLD arm is not a level field: the user wins almost everything.** Picking first in every batch, his club
    finishes in the league's top five in 523 of 600 seasons (set 1, run 1), where strong starts won 75.5 percent

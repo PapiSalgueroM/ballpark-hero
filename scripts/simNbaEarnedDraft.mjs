@@ -58,9 +58,10 @@
  *      first selection is the best man left on his scout's read at his first
  *      slot. One class a season for all thirty (common draws). By band of five
  *      places in the season's finish, worst first, its pick number rises and
- *      its true rating falls at every band, each step above 70 percent of the
- *      smallest measured step; the OLD arm (he picks first from a class of 24
- *      or more) is printed beside it, flat.
+ *      its true rating falls at every band, each step above its floor (set
+ *      from measured headroom, see the section's own comment); the OLD arm
+ *      (he picks first from a class of 24 or more) is printed beside it, flat.
+ *      Three classes a season on the quick walk, one on the full walk.
  *   6. THE CLASS. The curve's shape; today's twelve found in every class by
  *      replaying nbaDraftClass on a twin generator; every man after them held
  *      to the curve rating by rating; the mean true rating falls ten slots
@@ -184,7 +185,13 @@
  *       1,131 past 2), bigneed 3 (the constant, 653 off the rule, 440 past 2),
  *       playinmade 4.
  *  10   sportname 1, foreignimport 1.
- *   7   the OLD arm on 12 sets, two runs: see docs/audits/ROUND-1321-NOTES.md.
+ * MEASURED 2026-10-21 (step (d), the tuned curve and knobs, runners r1321-j4 and r1321-j5, and the builder's PC):
+ *   5   2,700 nights over 30 seasons x 3 classes; pick steps 3.29, 5.53, 4.32, 5.49, 5.05 (errors 0.24 to 0.32),
+ *       rating steps 2.42, 7.40, 4.03, 0.60, 0.38 (errors 0.07 to 0.38); gmfirst, bestfirst and playinmade fire
+ *       here; flatodds lands its first step at 2.25 and flatclass its last at 0.13, both clear of the floors.
+ *   6   steps by ten slots on the tuned curve 11.25, 3.53, 0.33, 0.28, 0.58, 0.25 (floor 0.17).
+ *   7   12 sets, two runs, old and new: S1 at 5, S2, S6 payers and S5 PASS; S1 at 10, S3, S4 and S6 dead OUTSIDE
+ *       (the table and why: docs/audits/ROUND-1321-NOTES.md). fatclass and bestfirst FIRED on sets 1 to 4.
  */
 import './lib/seedRandom.mjs';
 import fs from 'node:fs';
@@ -1009,9 +1016,10 @@ open(5);
       NEW[band].n += 1;
       NEW[band].overall += res.onClock.overall;
       NEW[band].trueOvr += best(res.left).trueOvr;
-      if (!bySeason[rep]) bySeason[rep] = blank();
-      bySeason[rep][band].n += 1;
-      bySeason[rep][band].trueOvr += best(res.left).trueOvr;
+      if (!bySeason[si]) bySeason[si] = blank();
+      bySeason[si][band].n += 1;
+      bySeason[si][band].overall += res.onClock.overall;
+      bySeason[si][band].trueOvr += best(res.left).trueOvr;
       const o = JSON.parse(league);
       const capital = X.E.nbaDraftCapital(o.teams[club]) ?? 0;
       const rivals = Object.values(o.teams).filter(t => t.abbr !== club).reduce((s, t) => s + (X.E.nbaDraftCapital(t) ?? 0), 0);
@@ -1029,26 +1037,29 @@ open(5);
   }
   check(incSeasons.length > 0 && nights > 0 && NEW.every(b => b.n > 0), `${nights} nights over ${incSeasons.length} seasons, by band ${NEW.map(b => b.n).join(', ')}`);
   check(refused === 0, `${refused} of ${refused + nights} nights did not open or never put the club on the clock`);
-  /* MEASURED 2026-10-21 on the tuned curve (quick walk, 2,700 nights): the smallest steps are 3.29 places and 0.38
-     rating (error 0.08, the last band, where the tuned curve is nearly flat). RISE_FLOOR is the house rule of
-     simNbaGmDesk, 70 percent of the smallest step. For the rating, 70 percent (0.27) would sit 1.4 errors under the
-     step, a coin toss for any change of draws, so the floor is three errors under it (0.38 - 3 x 0.08), still above
-     zero, which is S5's own line. A retuned curve is remeasured here and both floors move with it. */
-  const RISE_FLOOR = 2.3;
-  const FALL_FLOOR = 0.14;
+  /* MEASURED 2026-10-21 on the tuned curve (quick walk, 2,700 nights, the thirty seasons as replicates): the
+     smallest steps are 3.29 places (error 0.24, the first band) and 0.38 rating (error 0.07, the last band, where
+     the tuned curve is nearly flat). NOT the house rule's 70 percent, on purpose: 70 percent (2.30 and 0.27) sits
+     right where two controls aimed at other sections land (flatodds puts the first step at 2.25, flatclass the last
+     at 0.13), so each would fire here or not on a coin toss. The floors sit clear of both: 1.6 places, about half
+     the smallest step and 7 errors under it (flatodds lands 2.7 of its errors above it), and 0 rating, S5's own
+     line (the smallest step is 5 errors above it; flatclass lands 2.2 of its errors above). gmfirst, bestfirst and
+     playinmade still fire here by a wide margin. A retuned curve is remeasured here and the floors with it. */
+  const RISE_FLOOR = 1.6;
+  const FALL_FLOOR = 0;
   rise.forEach((d, b) => check(d > RISE_FLOOR, `his first selection does not come later from finish ${b * 5 + 1}-${b * 5 + 5} to ${b * 5 + 6}-${b * 5 + 10} (${Number.isFinite(d) ? d.toFixed(2) : d} places, floor ${RISE_FLOOR})`));
   fall.forEach((d, b) => check(d > FALL_FLOOR, `his first selection is not worse from finish ${b * 5 + 1}-${b * 5 + 5} to ${b * 5 + 6}-${b * 5 + 10} (${Number.isFinite(d) ? d.toFixed(2) : d} rating, floor ${FALL_FLOOR})`));
   const row = list => list.map((b, i) => `${i * 5 + 1}-${i * 5 + 5}: #${per(b, 'overall').toFixed(1)} ${per(b, 'trueOvr').toFixed(1)}`).join(', ');
   console.log(`   ${nights} nights over ${incSeasons.length} seasons x ${K} classes (${NEW[0].n} a band), each club the GM once a class, in ${((Date.now() - t0) / 1000).toFixed(1)} s`);
   console.log(`   new, by finish worst first, his first selection's pick and true rating: ${row(NEW)}`);
   console.log(`   old, the same clubs today: ${row(OLD)}`);
-  /* The error of each rating step, the seasons as replicates (each season one class for all thirty clubs). */
-  const stepSe = fall.map((_, b) => {
-    const v = bySeason.filter(x => x && x[b].n && x[b + 1].n).map(x => x[b].trueOvr / x[b].n - x[b + 1].trueOvr / x[b + 1].n);
+  /* The error of each step, the seasons as replicates (a season's classes share its order, so they are one). */
+  const stepSe = (key, sign) => fall.map((_, b) => {
+    const v = bySeason.filter(x => x && x[b].n && x[b + 1].n).map(x => sign * (x[b + 1][key] / x[b + 1].n - x[b][key] / x[b].n));
     const m = v.reduce((a, c) => a + c, 0) / v.length;
     return Math.sqrt(v.reduce((a, c) => a + (c - m) ** 2, 0) / (v.length - 1) / v.length);
   });
-  console.log(`   new steps: later by ${rise.map(d => d.toFixed(2)).join(', ')} places; worse by ${fall.map(d => d.toFixed(2)).join(', ')} rating (errors ${stepSe.map(d => d.toFixed(2)).join(', ')})`);
+  console.log(`   new steps: later by ${rise.map(d => d.toFixed(2)).join(', ')} places (errors ${stepSe('overall', 1).map(d => d.toFixed(2)).join(', ')}); worse by ${fall.map(d => d.toFixed(2)).join(', ')} rating (errors ${stepSe('trueOvr', -1).map(d => d.toFixed(2)).join(', ')})`);
 }
 
 open(8);
