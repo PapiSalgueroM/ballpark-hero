@@ -1,0 +1,73 @@
+walk 390
+  ok   390 first season: the season curtain carries no international line ("none")
+  ok   390 first season: no screen between the curtain and the hub speaks of the national team (none)
+  ok   390: after the first season the save has no intl key
+  note 390 plant 1: planted the 2026 season at 95, age 22, health 98: Part B would call him for the 2027 summer
+  ok   390: loading the planted save writes nothing (byte identical: true)
+  ok   390: the hub of a save Part B would call shows no beat
+  ok   390: the help has no international rule yet (13010 chars)
+  ok   390 planted season: the season curtain carries no international line ("none")
+  ok   390 planted season: no screen between the curtain and the hub speaks of the national team (none)
+  ok   390: after the planted season the save has no intl key
+  note 390 plant 2: planted the 2027 season at 95, age 23, health 98: Part B would call him for the 2028 summer
+  ok   390 second planted season: the season curtain carries no international line ("none")
+  ok   390 second planted season: no screen between the curtain and the hub speaks of the national team (none)
+  ok   390: after the second planted season the save has no intl key (seasons 2026,2027,2028)
+  ok   390: no sideways scroll (0)
+  ok   390: no page errors (clean)
+  ok   390: no request to the live database finished (0)
+walk 390-rm
+  ok   390-rm first season: the season curtain carries no international line ("none")
+  ok   390-rm first season: no screen between the curtain and the hub speaks of the national team (none)
+  ok   390-rm: after the first season the save has no intl key
+  note 390-rm plant 1: planted the 2026 season at 95, age 20, health 100: Part B would call him for the 2027 summer
+  ok   390-rm: loading the planted save writes nothing (byte identical: true)
+  ok   390-rm: the hub of a save Part B would call shows no beat
+  ok   390-rm: the help has no international rule yet (13010 chars)
+  ok   390-rm planted season: the season curtain carries no international line ("none")
+  ok   390-rm planted season: no screen between the curtain and the hub speaks of the national team (none)
+  ok   390-rm: after the planted season the save has no intl key
+  note 390-rm plant 2: planted the 2027 season at 95, age 21, health 100: Part B would call him for the 2028 summer
+  ok   390-rm second planted season: the season curtain carries no international line ("none")
+  ok   390-rm second planted season: no screen between the curtain and the hub speaks of the national team (none)
+  ok   390-rm: after the second planted season the save has no intl key (seasons 2026,2027,2028)
+  ok   390-rm: no sideways scroll (0)
+  ok   390-rm: no page errors (clean)
+  ok   390-rm: no request to the live database finished (0)
+walk 1280
+  ok   1280 first season: the season curtain carries no international line ("none")
+  ok   1280 first season: no screen between the curtain and the hub speaks of the national team (none)
+  ok   1280: after the first season the save has no intl key
+  note 1280 plant 1: planted the 2026 season at 95, age 22, health 100: Part B would call him for the 2027 summer
+  ok   1280: loading the planted save writes nothing (byte identical: true)
+  ok   1280: the hub of a save Part B would call shows no beat
+  ok   1280: the help has no international rule yet (13010 chars)
+  ok   1280 planted season: the season curtain carries no international line ("none")
+  ok   1280 planted season: no screen between the curtain and the hub speaks of the national team (none)
+  ok   1280: after the planted season the save has no intl key
+  note 1280 plant 2: planted the 2027 season at 95, age 23, health 100: Part B would call him for the 2028 summer
+  ok   1280 second planted season: the season curtain carries no international line ("none")
+  ok   1280 second planted season: no screen between the curtain and the hub speaks of the national team (none)
+  ok   1280: after the second planted season the save has no intl key (seasons 2026,2027,2028)
+  ok   1280: no sideways scroll (0)
+  ok   1280: no page errors (clean)
+  ok   1280: no request to the live database finished (0)
+walk 1280-rm
+  ok   1280-rm first season: the season curtain carries no international line ("none")
+  ok   1280-rm first season: no screen between the curtain and the hub speaks of the national team (none)
+  ok   1280-rm: after the first season the save has no intl key
+  note 1280-rm plant 1: planted the 2026 season at 95, age 21, health 100: Part B would call him for the 2027 summer
+  ok   1280-rm: loading the planted save writes nothing (byte identical: true)
+  ok   1280-rm: the hub of a save Part B would call shows no beat
+  ok   1280-rm: the help has no international rule yet (13010 chars)
+  ok   1280-rm planted season: the season curtain carries no international line ("none")
+  ok   1280-rm planted season: no screen between the curtain and the hub speaks of the national team (none)
+  ok   1280-rm: after the planted season the save has no intl key
+  note 1280-rm plant 2: planted the 2027 season at 95, age 22, health 93: Part B would call him for the 2028 summer
+  ok   1280-rm second planted season: the season curtain carries no international line ("none")
+  ok   1280-rm second planted season: no screen between the curtain and the hub speaks of the national team (none)
+  ok   1280-rm: after the second planted season the save has no intl key (seasons 2026,2027,2028)
+  ok   1280-rm: no sideways scroll (0)
+  ok   1280-rm: no page errors (clean)
+  ok   1280-rm: no request to the live database finished (0)
+walk1541: GREEN, 60 checks, 0 failed
