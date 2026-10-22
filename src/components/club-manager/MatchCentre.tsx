@@ -59,7 +59,7 @@ export function MatchCentre({
 }: MatchCentreProps) {
   const f = facts;
   /* Round 1522: the style they play (keyed, no draw), the one the engine reads. */
-  const style = opponentStyle(career, f.opponent);
+  const style = career?.clubStrengths ? opponentStyle(career, f.opponent) : null;
   const venue = f.home === true ? 'Home' : f.home === false ? 'Away' : 'Neutral venue';
   const myPosLabel = f.myPos ? `#${f.myPos}` : null;
   const oppPosLabel = f.oppPos
@@ -121,7 +121,7 @@ export function MatchCentre({
           {venue} · their strength ~{f.oppStrength} · your XI ~{f.myStrength}
         </div>
         {/* Round 1522: how they play, and what tends to work against it. Set your instructions on the Tactics tab. */}
-        {AI_STYLES[style] && (
+        {style && AI_STYLES[style] && (
           <div className="text-[10px] text-foreground mt-1 leading-snug" data-cm-mc-style={style}>
             <span className="font-bold">{AI_STYLES[style].emoji} They play {AI_STYLES[style].label}.</span>{' '}
             <span className="text-muted-foreground">{AI_STYLES[style].blurb} {AI_STYLES[style].read}</span>
