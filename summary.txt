@@ -1,0 +1,4 @@
+simSoccerPracticeLifecycle exit=0 12s | simSoccerPracticeLifecycle: 15 actual outcomes passed.
+simSoccerEventPromises exit=0 22s | simSoccerEventPromises: all sections green
+simSoccerWorldTruth exit=0 65s | simSoccerWorldTruth: OK, every section green
+simSoccerLoanBite exit=0 423s | simSoccerLoanBite PASS
