@@ -36,12 +36,29 @@ export const US_RIVAL_1313_FILES = [
   'src/lib/usSeasonShape.ts',
 ];
 
+/* Round 1523 lifted the morale term of mlbMyCareer.ts and nhlMyCareer.ts into src/lib/careerForm.ts (one import, one
+   call, the same number: scripts/simCareerForm.mjs section 1 replays all four US careers byte identical). Decided
+   again here: those two lines are put back first, each required exactly once, and the file must then still be 1313's
+   closed head, so any other later change is still refused. */
+const LIFT_1523 = {
+  'src/lib/mlbMyCareer.ts': [["import { moraleForm } from './careerForm';\n", ''], ["const form = c.ovr + moraleForm('mlb', c.morale) + ", 'const form = c.ovr + (c.morale - 60) / 12 + ']],
+  'src/lib/nhlMyCareer.ts': [["import { moraleForm } from './careerForm';\n", ''], ["const form = c.ovr + moraleForm('nhl', c.morale) + ", 'const form = c.ovr + (c.morale - 60) / 12 + ']],
+};
+function unlift1523(rel, text) {
+  let out = text;
+  for (const [from, to] of LIFT_1523[rel] ?? []) {
+    assert.equal(out.split(from).length, 2, 'Round 1523: ' + rel + ' must hold its lifted morale line exactly once');
+    out = out.replace(from, () => to);
+  }
+  return out;
+}
+
 const show = (commit, rel) => execFileSync('git', ['show', commit + ':' + rel], { maxBuffer: 64 * 1024 * 1024 }).toString('utf8').replaceAll('\r\n', '\n');
 
 /* contents: the file as read from disk (any line endings). rows: receives rel once per file inverted. */
 export function inverseUsRival1313(rel, contents, rows) {
   if (!US_RIVAL_1313_FILES.includes(rel)) return contents;
-  assert.equal(contents.replaceAll('\r\n', '\n'), show(US_RIVAL_1313_HEAD, rel), 'Release BB: ' + rel + ' is no longer as Round 1313 closed it (' + US_RIVAL_1313_HEAD + '); decide its inverse again in scripts/lib/usRival1313Inverse.mjs');
+  assert.equal(unlift1523(rel, contents.replaceAll('\r\n', '\n')), show(US_RIVAL_1313_HEAD, rel), 'Release BB: ' + rel + ' is no longer as Round 1313 closed it (' + US_RIVAL_1313_HEAD + '); decide its inverse again in scripts/lib/usRival1313Inverse.mjs');
   assert.notEqual(rel, 'src/lib/careerFactBeats.ts', 'Release BB: careerFactBeats.ts is new in Round 1313 and only its own files import it; something else loaded it, so the inverse of 1313 is no longer whole');
   rows.push(rel);
   return show(US_RIVAL_1313_BASE, rel);
