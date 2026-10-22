@@ -34,7 +34,8 @@
  *    (SIM_CAREER_FORM_FLEET_KIND=engaged) one that answers every text: the Ballon d'Or rate, league games, rating and
  *    the five legacy tier shares, both blocks printed. A settled head must gain league games, and every shift stays
  *    under its ceiling, set from the measured headroom (the numbers and why they are where they are, at BOUNDS).
- *    Control per10 plays the rejected design (10 morale points a step) and must break the ceilings.
+ *    Control per10 plays the rejected design (10 morale points a step) and must break the league ceiling; control
+ *    legacy (the round's arm calls a career GOAT from a legacy score of 86) must break the tier rows.
  * 5) The ERA fleet: 240 attacking careers from 1990, 1995, 2000 and 2005 hold no Puskas Award before 2008-09 and
  *    some after it, every award on a season with 15 goals, and in lockstep with an ungated tree the gated one makes
  *    the same draws and keeps the same state where only the ungated one wins early. Measured (r1523-m1): 0 before,
@@ -55,7 +56,7 @@ import { build } from 'esbuild';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BASE = process.env.SIM_CAREER_FORM_BASE || '2ab9bef153009a3144970e87755225a458ef0c3b';
 const CONTROL = process.env.SIM_CAREER_FORM_CONTROL || '';
-const CONTROLS = { divisor: '1', pageline: '2', zero: '3', posttext: '3', double: '3', per10: '4', nogate: '5' };
+const CONTROLS = { divisor: '1', pageline: '2', zero: '3', posttext: '3', double: '3', per10: '4', legacy: '4', nogate: '5' };
 if (CONTROL && !CONTROLS[CONTROL]) { console.log(`ABORT: unknown SIM_CAREER_FORM_CONTROL ${CONTROL}`); process.exit(1); }
 /* A control runs only the section it breaks, unless SIM_CAREER_FORM_SECTIONS names others. */
 const SECTIONS = (process.env.SIM_CAREER_FORM_SECTIONS || (CONTROL ? CONTROLS[CONTROL] : '1,2,3,4,5')).split(',').map(s => s.trim());
@@ -159,6 +160,8 @@ const GATE_LINE = 'if (puskasDrawn && puskasAwardExists(thisYear)) {';
 const PRESS_MARK = 'function generateSeasonStats(state, clubs) {';
 const AT_PRESS = 'const moraleAtPress = (state: CareerState): number => MORALE_AT_PRESS.get(state) ?? state.morale;';
 const APPS_MARK = 'dressingRoomApps(phoneAppsSwing(state), moraleAtPress(state))';
+/* the legacy control's line (section 4) */
+const GOAT_LINE = 'if (score >= 90) return "GOAT";';
 const FORM_IMPORT = 'import { dressingRoomApps, soccerMoraleRating } from "./careerForm";';
 /* The hub line on the page (section 2 reads the wiring) and what a line says (sections 2 and 3 hold it to the step). */
 const PAGE = 'src/pages/SoccerCareer.tsx';
@@ -169,7 +172,7 @@ function sayOf(line) {
   if (!m) return null;
   return m[1] ? { games: (m[2] === 'more' ? 1 : -1) * Number(m[1]), rating: Number(m[3]) } : { games: 0, rating: 0 };
 }
-async function soccer(name, { stepOff = false, noGate = false, postText = false, per10 = false, double = false } = {}) {
+async function soccer(name, { stepOff = false, noGate = false, postText = false, per10 = false, double = false, legacy = false } = {}) {
   const serve = {};
   if (per10) {
     const form = read(FORM), was = 'soccer: { per: 15, neutral: 81 },';
@@ -180,6 +183,11 @@ async function soccer(name, { stepOff = false, noGate = false, postText = false,
     const form = read(FORM);
     if (form.split(STEP_LINE).length !== 2) { console.log(`ABORT: ${FORM} does not hold ${STEP_LINE} once`); process.exit(1); }
     serve[FORM] = form.replace(STEP_LINE, '0');
+  }
+  if (legacy) {
+    const engine = serve[ENGINE] ?? read(ENGINE);
+    if (engine.split(GOAT_LINE).length !== 2) { console.log(`ABORT: ${ENGINE} does not hold ${GOAT_LINE} once`); process.exit(1); }
+    serve[ENGINE] = engine.replace(GOAT_LINE, GOAT_LINE.replace('90', '86'));
   }
   if (noGate) {
     const engine = read(ENGINE);
@@ -381,11 +389,22 @@ const TIERS = ['GOAT', 'LEGEND', 'GREAT', 'SOLID PRO', 'JOURNEYMAN'];
    (1.4), GREAT -1.6 (1.6), SOLID PRO -1.5 (1.2), JOURNEYMAN -0.7 (0.8). Every mean is inside its headroom; the
    nearest are the engaged Ballon d'Or (5.1 of 6.6), house JOURNEYMAN (1.9 of 3.0) and house LEGEND (1.4 of 2.1).
    THE CHECK. One 1,200 career run is too noisy to hold a row to its headroom (a Ballon d'Or shift's sd is 3), so the
-   fleet is 9,600 careers (FLEET_CAREERS, eight times the noise power, split over worker processes) and each ceiling
-   is the row's headroom and half again, never above the old 8 and 6: the margin keeps every row two and a half sd or
-   more clear at 9,600 careers, and the rejected design (10 points a step, control per10) breaks the league ceiling
-   and the tier rows (at ten the house fleet gained 0.71 league games and six points fewer journeymen, the engaged one
-   1.29 games, 0.22 of rating and 7.5 points fewer solid pros, remote check r1523-var). */
+   fleet is 9,600 careers (FLEET_CAREERS, eight times the noise power, split over worker processes; the split changes
+   nothing: 120 careers in one process and in four print the same blocks, remote check r1523-fx-s4a) and each ceiling
+   is the row's headroom and half again, never above the old 8 and 6.
+   MEASURED AT 9,600 CAREERS (remote checks r1523-fx-s4a and r1523-fx-s4b on e408a525, seeds 1523 and 2024), the
+   shift: house league games +0.25 and +0.28, rating 0.00 and 0.00, Ballon d'Or +0.75 and +1.00, GOAT +0.4 and +0.3,
+   LEGEND +1.1 and +1.1, GREAT -0.2 and +0.7, SOLID PRO -0.3 and -0.7, JOURNEYMAN -1.0 and -1.4; engaged league
+   +1.00 and +1.00, rating +0.13 and +0.13, Ballon d'Or +3.14 and +4.84, GOAT +1.5 and +2.0, LEGEND +1.9 and +1.1,
+   GREAT -1.1 and -0.1, SOLID PRO -1.2 and -1.8, JOURNEYMAN -1.1 and -1.2. Every row inside its headroom (and inside
+   the first three seeds' headroom too, but for the engaged GOAT row, 1.75 against 1.2). The nearest ceilings in sd of
+   a 9,600 career shift: engaged Ballon d'Or 3 (4.84 against 8, sd about 1.05), engaged league games 4 (1.00 against
+   1.1, sd about 0.025), house JOURNEYMAN 4 (1.4 against 4.5).
+   CONTROLS at 9,600 (r1523-fx-s4c): per10, the rejected design (10 points a step), breaks the league ceiling in both
+   fleets (house +0.57 past 0.5; engaged +1.41 past 1.1, with rating +0.23 past 0.17 and the Ballon d'Or +8.38 past
+   8) but moves no tier past its ceiling (3.0 points at most; the 400 career readings of r1523-var that said six were
+   noise), so control legacy (the round's arm alone calls a career GOAT from a legacy score of 86) is the one that
+   proves the tier rows can fail. */
 const FLEET_CAREERS = 9600;
 const BOUNDS = {
   house: { league: 0.5, rating: 0.06, bdor: 8, GOAT: 4.4, LEGEND: 3.2, GREAT: 4.1, 'SOLID PRO': 4.8, JOURNEYMAN: 4.5 },
@@ -428,7 +447,10 @@ const blockOf = list => {
 /* The fleet is split over worker processes (SIM_CAREER_FORM_WORKERS a side, default 4, so 8 at once for the two
    arms): each child plays the careers whose index falls to it, for one arm, and prints its sums on one line. Every
    career is seeded from its own index, so the split changes nothing but the wall time. */
-const ARM = { off: ['fleet-off', { stepOff: true }], head: ['fleet-head', {}], per10: ['fleet-per10', { per10: true }] };
+/* Control legacy: the round's arm alone calls a career GOAT from a legacy score of 86, not 90, which moves the tier
+   shares by more than their ceilings: it proves the tier rows can fail, which the rejected design does not show
+   (per10 moves tiers by 3 points at most at 9,600 careers). */
+const ARM = { off: ['fleet-off', { stepOff: true }], head: ['fleet-head', {}], per10: ['fleet-per10', { per10: true }], legacy: ['fleet-legacy', { legacy: true }] };
 async function fleetBlock(arm, n, engaged) {
   const W = Math.max(1, Number(process.env.SIM_CAREER_FORM_WORKERS || 4));
   if (W === 1) return blockOf([fleetSums(await soccer(...ARM[arm]), n, SEED, engaged)]);
@@ -465,7 +487,8 @@ if (runs('4')) {
     console.log('   the no step arm alone (SIM_CAREER_FORM_ARMS=off): a headroom reading, nothing asserted');
   } else {
     if (CONTROL === 'per10') console.log('   CONTROL per10: the rejected design, 10 morale points a step, in this tree\'s bundle');
-    const [off, head] = await Promise.all([fleetBlock('off', N, FLEET === 'engaged'), fleetBlock(CONTROL === 'per10' ? 'per10' : 'head', N, FLEET === 'engaged')]);
+    if (CONTROL === 'legacy') console.log('   CONTROL legacy: the round\'s arm calls a career GOAT from a legacy score of 86');
+    const [off, head] = await Promise.all([fleetBlock('off', N, FLEET === 'engaged'), fleetBlock(['per10', 'legacy'].includes(CONTROL) ? CONTROL : 'head', N, FLEET === 'engaged')]);
     showBlock('round', head);
     showBlock('no step', off);
     const shift = { bdor: head.bdor - off.bdor, league: head.league - off.league, rating: head.rating - off.rating };
