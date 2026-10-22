@@ -10,6 +10,7 @@ import {
   recallLoanedPlayer, releasePlayer, saveCareer, shownNation, startCareer, type CareerState, type MarketPlayer,
 } from '@/lib/clubManager';
 import { nationalityOf } from '@/data/playerNationalities';
+import { askStatus } from '@/lib/clubManagerBoardAsks';
 
 afterEach(() => { vi.restoreAllMocks(); localStorage.clear(); });
 
@@ -113,6 +114,21 @@ describe('an old save', () => {
       opened.push(JSON.stringify(back));
     }
     expect(opened[1]).toBe(opened[0]);
+  });
+  it('keeps a stored country ask wanting as many more men once its made up men are counted', () => {
+    const s = startCareer('Lincoln City');
+    const old = JSON.parse(JSON.stringify(s, (k, v) => (k === 'nation' ? undefined : v))) as CareerState;
+    const byMap = old.squad.filter(p => !p.onLoan && nationalityOf(old.eraId, p.name) === 'England').length;
+    const line = (n: number) => `Have ${n} player${n === 1 ? '' : 's'} from England in the squad`;
+    old.boardObjectives = [...old.boardObjectives.filter(o => o.id !== 'natQuota'), { id: 'natQuota', target: byMap + 1, country: 'England', label: line(byMap + 1) }];
+    localStorage.setItem(SAVE_KEY, JSON.stringify(old));
+    const back = loadCareer()!;
+    const ask = back.boardObjectives.find(o => o.id === 'natQuota')!;
+    const byFlag = back.squad.filter(p => !p.onLoan && shownNation(back.eraId, p) === 'England').length;
+    expect(byFlag).toBeGreaterThan(byMap);
+    expect(ask.target - byFlag).toBe(1);
+    expect(ask.label).toBe(line(ask.target));
+    expect(askStatus(back, ask)).not.toBe('done');
   });
   it('ensureMadeUpNations leaves a man who has one alone and touches no real man', () => {
     const s = startCareer('Everton');

@@ -136,6 +136,27 @@ function fromCountry(squad: CMPlayer[], country: string, eraId: string | undefin
   return squad.filter(p => !p.onLoan && shownNation(eraId, p) === country).length;
 }
 
+const natLabel = (n: number, country: string): string => `Have ${n} player${n === 1 ? '' : 's'} from ${country} in the squad`;
+
+/** Round 1520 review: giving made up men their countries (`stamp`, ensureMadeUpNations) never meets a country ask
+ *  by itself. A stored ask was set at one more than the squad counted then, so where the stamp adds men to that
+ *  count the target rises by as many and the ask still wants exactly as many more men (a save from before the round
+ *  opened with its home youth newly counted and read the ask done with nothing signed). */
+export function keepCountryAsks(state: CareerState, stamp: () => void): void {
+  const asks = Array.isArray(state.boardObjectives) ? state.boardObjectives : [];
+  const count = (o: BoardObjective): number => (o.id === 'natQuota' && o.country ? fromCountry(state.squad ?? [], o.country, state.eraId) : 0);
+  const before = asks.map(count);
+  stamp();
+  let changed = false;
+  const next = asks.map((o, i) => {
+    const target = Math.max(1, o.target + count(o) - before[i]);
+    if (o.id !== 'natQuota' || target === o.target) return o;
+    changed = true;
+    return { ...o, target, label: natLabel(target, o.country!) };
+  });
+  if (changed) state.boardObjectives = next;
+}
+
 /* ================================================================== */
 /* Building the asks                                                  */
 /* ================================================================== */
@@ -188,7 +209,7 @@ export function askCandidates(career: CareerState): AskCandidate[] {
           id: 'natQuota',
           target: n,
           country,
-          label: `Have ${n} player${n === 1 ? '' : 's'} from ${country} in the squad`,
+          label: natLabel(n, country),
         },
       });
     }

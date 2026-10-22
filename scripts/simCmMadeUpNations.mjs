@@ -19,7 +19,8 @@
         scout found abroad keeps the trip's country when promoted, spelt as the verified map spells it.
      5) old saves: a save with every country stripped opens with them back, the same twice, the same as the day each
         home man arrived, and nothing else in it changes (against the engine with the draw switched off); the
-        committed old save fixtures likewise.
+        committed old save fixtures likewise. 5b) the review's fix: a country ask an engine from before the round
+        stored still grades the same on opening and wants as many more men (its target rebased by the men counted).
      6) the board agrees with the flags: a country ask counts exactly the men whose flag is that country.
      7) the field moves nothing else: careers on the engine with the board's count put back (NOASK) and with no
         country drawn at all (NONATION) play draw for draw and byte for byte the same once the field is stripped;
@@ -29,7 +30,7 @@
 
    NEGATIVE CONTROLS (CM_NATIONS_CONTROL), each must turn its section red, and each refuses to run if its edit finds
    nothing to edit: mainstream (1), flat (2), realtouched (3), nocarry, noledger and nopromote (4), noload (5),
-   askoff (6), leak and bloat (7); added by the review's fixes: nocap (2c), awayyouth (3).
+   askoff (6), leak and bloat (7); added by the review's fixes: nocap (2c), awayyouth (3), freeask (5b).
 
    Run: node scripts/simCmMadeUpNations.mjs      (BASE_ROOT=/tmp/base for the base comparison; SEASONS, LONG)
    Numbers measured on a runner are in the round's report (results-g/finish-1520.md). */
@@ -66,6 +67,7 @@ const CONTROLS = {
   /* Review fixes. */
   awayyouth: [{ file: E, from: '  if (local) return place.home;\n', to: '' }],
   nocap: [{ file: E, from: '  if (!cap || !away) return c;', to: '  if (cap || !cap) return c;' }],
+  freeask: [{ file: A, from: '  if (changed) state.boardObjectives = next;', to: '  if (changed && !changed) state.boardObjectives = next;' }],
 };
 if (CONTROL && !CONTROLS[CONTROL]) cannot(`CM_NATIONS_CONTROL=${CONTROL} is not a control this harness knows`);
 /* NONATION is the bridge every kit pinned to an older engine composes (scripts/lib/cmNoMadeUpNations1520.mjs): no
@@ -469,6 +471,10 @@ let moved = null;
 const NATION = new Set(['nation']);
 const MARKS = new Set(['nation', 'generated', 'gen', 'g']);
 const nationsOf = s => [...s.squad, ...(s.loanedOut ?? []).map(l => l.player), ...(s.freeAgents ?? [])].filter(p => p && p.nation).map(p => `${p.name}=${p.nation}`).sort();
+/** A state's JSON with every country ask's target and line taken out, at any depth. */
+const noAskTargets = json => JSON.stringify(JSON.parse(json), function (k, v) {
+  return this && this.id === 'natQuota' && (k === 'target' || k === 'label') ? undefined : v;
+});
 
 console.log('5) An old save gets the same countries twice, and nothing else in it changes');
 {
@@ -496,7 +502,8 @@ console.log('5) An old save gets the same countries twice, and nothing else in i
     const got = nationsOf(a.s);
     if (a.json !== b.json) fail(`${o.tag}: two opens differ, first at key ${firstDiff(a.json, b.json)}`);
     if (!got.length) fail(`${o.tag}: opened with no made up man carrying a country`);
-    const lhs = stripped(a.s, NATION, a.mod), rhs = stripped(z.s, NATION, z.mod);
+    /* A stored country ask's target and line are rebased on opening (section 5b holds them), so they are set aside. */
+    const lhs = noAskTargets(stripped(a.s, NATION, a.mod)), rhs = noAskTargets(stripped(z.s, NATION, z.mod));
     if (lhs !== rhs) fail(`${o.tag}: beyond the countries the open differs from the engine with no draw, first at key ${firstDiff(lhs, rhs)}`);
     if (o.had) {
       /* Every man made at my club (youth, the home intake, the journeymen) gets back exactly the country he had. */
@@ -512,6 +519,47 @@ console.log('5) An old save gets the same countries twice, and nothing else in i
     }
     ok(`${o.tag}: ${got.length} made up men given a country, the same on a second open, nothing else changed`);
   }
+}
+
+console.log('5b) A country ask stored before the round still wants as many more men on opening, and reads the same');
+{
+  /* The review's fix. Day one careers started by the engine from before the round (the base tree with BASE_ROOT, else
+     NONATION, the same cut), saved by it and opened by this one: each stored ask must grade as it did there and still
+     want exactly as many more men, with its line saying its target. */
+  const OLD = B_BASE ?? B_NONATION, old = fresh(OLD);
+  await old.cm.ensureAllEraRosters();
+  const saved = [];
+  for (const f of fleet) {
+    const s = startOf(old, f);
+    const asks = (s.boardObjectives ?? []).filter(o => o.id === 'natQuota' && o.country);
+    if (asks.length) saved.push({ s, asks, raw: rawSave(old, s) });
+  }
+  const head = fresh(HEAD);
+  await head.cm.ensureAllEraRosters();
+  const byMap = (s, o) => s.squad.filter(p => !p.onLoan && head.pn.nationalityOf(s.eraId, p.name) === o.country).length;
+  const byFlag = (s, o) => s.squad.filter(p => !p.onLoan && head.cm.shownNation(s.eraId, p) === o.country).length;
+  let asked = 0, rebased = 0, flipped = 0, drifted = 0, worded = 0;
+  for (const { s, asks, raw } of saved) {
+    const back = reload(head, raw);
+    if (!back) { fail(`${s.eraId ?? 'now'} ${s.clubName}: the old save would not open`); continue; }
+    for (const o of asks) {
+      const now = (back.boardObjectives ?? []).find(x => x.id === 'natQuota' && x.country === o.country);
+      if (!now) { fail(`${s.clubName}: the ask "${o.label}" is gone on opening`); continue; }
+      asked += 1;
+      if (now.target !== o.target) rebased += 1;
+      const was = old.asks.askStatus(s, o), is = head.asks.askStatus(back, now);
+      const wanted = o.target - byMap(s, o), wants = now.target - byFlag(back, now);
+      if (was !== is && ++flipped <= 5) console.log(`   ${s.clubName}: "${o.label}" read ${was} before the round and ${is} on opening, nothing signed`);
+      if (wanted !== wants && ++drifted <= 5) console.log(`   ${s.clubName}: "${o.label}" wanted ${wanted} more men and on opening wants ${wants}`);
+      if (now.label !== `Have ${now.target} player${now.target === 1 ? '' : 's'} from ${now.country} in the squad`) worded += 1;
+    }
+  }
+  if (flipped) fail(`${flipped} of ${asked} stored country asks grade differently on opening`);
+  if (drifted) fail(`${drifted} of ${asked} stored country asks want a different number of men on opening`);
+  if (worded) fail(`${worded} rebased asks carry a line that does not say their target`);
+  if (asked < 20) fail(`only ${asked} stored country asks were opened, the check proves little`);
+  if (rebased < 10) fail(`only ${rebased} stored asks were rebased, the opening hardly counted a made up man`);
+  ok(`${asked} country asks stored by the old engine (${OLD === B_BASE ? 'the base tree' : 'NONATION'}): ${rebased} rebased on opening, every one grading as before and wanting as many more men`);
 }
 
 console.log('6) The board counts exactly the men whose flag is its country');

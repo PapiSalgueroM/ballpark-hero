@@ -137,7 +137,7 @@ import { subsLeagueBase, subsRuleFor, type SubsRule } from '@/lib/clubManagerSub
 export { subsRuleFor, CM_SUBS_PARTIAL } from '@/lib/clubManagerSubsRule';
 /* Round 474: the five specific board asks, built and graded there for the
    same reason the facilities and the books live in their own files. */
-import { BOARD_ASKS_VERSION, askStatus, buildBoardAsks, ensureBoardAsks, isBoardAsk } from '@/lib/clubManagerBoardAsks';
+import { BOARD_ASKS_VERSION, askStatus, buildBoardAsks, ensureBoardAsks, isBoardAsk, keepCountryAsks } from '@/lib/clubManagerBoardAsks';
 /* Round 1335: the board's verdict, its openings, the kitty band and the offer step, a pure module. */
 import { BOARD_FRESH, VERDICT_LINES, fillLeague, kittyAllocation, offerStepOk, openingConfidence, seasonGrade, type SeasonFate } from '@/lib/clubManagerBoardVerdict';
 export { BOARD_FRESH } from '@/lib/clubManagerBoardVerdict';
@@ -4820,7 +4820,8 @@ export function ensureMadeUpNations(state: CareerState): void {
     const nation = p.nation === undefined ? madeUpNationAt(p.name, place, state.eraId, !!(p.isYouth || p.academyGrad)) : undefined;
     return nation ? { ...p, nation } : p;
   };
-  if (Array.isArray(state.squad)) state.squad = state.squad.map(p => (madeUp(p) ? stamp(p) : p));
+  /* Review fix: the stamp never meets a stored country ask by itself (keepCountryAsks). */
+  if (Array.isArray(state.squad)) keepCountryAsks(state, () => { state.squad = state.squad.map(p => (madeUp(p) ? stamp(p) : p)); });
   if (Array.isArray(state.loanedOut)) state.loanedOut = state.loanedOut.map(l => (l?.player && madeUp(l.player) ? { ...l, player: stamp(l.player) } : l));
   if (Array.isArray(state.freeAgents)) state.freeAgents = state.freeAgents.map(f => (f?.generated ? stamp(f) : f));
 }
