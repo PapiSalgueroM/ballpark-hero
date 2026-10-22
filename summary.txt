@@ -1,0 +1,5 @@
+build exit=0 24s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+ownermandate exit=0 25s | ALL OWNER MANDATE WALK CHECKS PASSED
+probe exit=0 26s | focus probe: done
+ctl-wipebutton exit=0 11s | playGmCareer control wipebutton: all 1 guarded checks fired (mutations landed: {"wipebutton":2})
+gmcareer exit=0 217s | playGmCareer: green. 1 board, 3 sizes, four walks each.

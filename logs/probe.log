@@ -1,0 +1,8 @@
+STATE a1-recap-before-draft: {"active":"body \"Skip to main contentLiveLive s\"","focusVisible":false,"skipShown":false,"scrollY":0,"height":10173}
+STATE a2-after-go-to-draft: {"active":"body \"Skip to main contentLiveLive s\"","focusVisible":false,"skipShown":false,"scrollY":443,"height":9898}
+STATE b1-fired-recap: {"active":"body \"Skip to main contentLiveLive s\"","focusVisible":false,"skipShown":false,"scrollY":0,"height":9870}
+STATE b2-after-see-who-is-calling: {"active":"body \"Skip to main contentLiveLive s\"","focusVisible":false,"skipShown":false,"scrollY":185,"height":9595}
+STATE b3-job-market: {"active":"body \"Skip to main contentLiveLive s\"","focusVisible":false,"skipShown":false,"scrollY":185,"height":9340}
+STATE b4-offer-open: {"active":"body \"Skip to main contentLiveLive s\"","focusVisible":false,"skipShown":false,"scrollY":185,"height":9440}
+STATE b5-arrival: {"active":"body \"Skip to main contentLiveLive s\"","focusVisible":false,"skipShown":false,"scrollY":185,"height":10040}
+focus probe: done
