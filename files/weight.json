@@ -1,0 +1,47 @@
+[
+  {
+    "page": "src/pages/CfbDynasty.tsx",
+    "base": {
+      "chunk": 9353,
+      "closure": 300301,
+      "files": 29
+    },
+    "branch": {
+      "chunk": 10512,
+      "closure": 304090,
+      "files": 30
+    },
+    "chunkDelta": 1159,
+    "closureDelta": 3789
+  },
+  {
+    "page": "src/pages/CbbDynasty.tsx",
+    "base": {
+      "chunk": 9323,
+      "closure": 300271,
+      "files": 29
+    },
+    "branch": {
+      "chunk": 9586,
+      "closure": 303164,
+      "files": 30
+    },
+    "chunkDelta": 263,
+    "closureDelta": 2893
+  },
+  {
+    "page": "src/pages/WhatsNew.tsx",
+    "base": {
+      "chunk": 124354,
+      "closure": 367089,
+      "files": 3
+    },
+    "branch": {
+      "chunk": 124623,
+      "closure": 367353,
+      "files": 3
+    },
+    "chunkDelta": 269,
+    "closureDelta": 264
+  }
+]

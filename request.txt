@@ -1,0 +1,2 @@
+#!serial
+weight: git worktree add -q /tmp/base 3ee0bf629 && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && node_modules/.bin/vite build --manifest --outDir /tmp/distA --logLevel error) && node_modules/.bin/vite build --manifest --outDir /tmp/distB --logLevel error && node .rc/x/weight.mjs /tmp/distA /tmp/distB src/pages/CfbDynasty.tsx src/pages/CbbDynasty.tsx src/pages/WhatsNew.tsx
