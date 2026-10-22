@@ -1,0 +1,18 @@
+MUTATION firstcallold applied to src/lib/gmDeskHost.ts
+4) the market after real firings: every club graded as a GM's club, the first out of work screen and the next two
+  FAIL [4]: seed 1 season 10 LV: the club that fired him is in his feed
+  FAIL [4]: seed 3 season 3 MIA: the club that fired him is in his feed
+  FAIL [4]: seed 3 season 8 CHI: the club that fired him is in his feed
+  FAIL [4]: seed 9 season 10 GB: the club that fired him is in his feed
+  FAIL [4]: seed 10 season 5 DET: the club that fired him is in his feed
+  FAIL [4]: seed 11 season 11 NE: the club that fired him is in his feed
+  FAIL [4]: seed 13 season 11 SF: the club that fired him is in his feed
+  FAIL [4]: seed 16 season 8 DEN: the club that fired him is in his feed
+  FAIL [4]: (further failures in this check not printed)
+   MEASURE 20 seeds x 12 seasons: 475 firings
+   first screen with the host's rule: offers 475 (100.0%), quiet 0 (0.0%), closed 0 (0.0%); first calls 283
+   first screen on the raw feed:      offers 192 (40.4%), quiet 228 (48.0%), closed 55 (11.6%)
+   of the screens with offers, last calls: host 87 of 475 (18.3%), raw 32 of 192 (16.7%)
+   re hired within three feeds (firings with two seasons left to read, 377): host 377 (100.0%), raw 209 (55.4%); 249 later feeds read
+   ASSERTED on 475 first feeds (311 straight after a badly season): never the club that fired him, no top tier after badly, every ask for next season, keyed
+simGmCareer: 9 failure(s) in 4

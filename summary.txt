@@ -1,0 +1,7 @@
+m3-career4 exit=1 65s | simGmCareer: 9 failure(s) in 4
+m3-deskhost exit=1 44s | simGmDeskHost: FAILED, red checks 4:80
+m3-vitest exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmDeskHost.test.ts,title=src/lib/gmDeskHost.test.ts > the job market > tells offers%2C quiet and closed
+m5-career5 exit=1 97s | simGmCareer: 475 failure(s) in 5
+m5-vitest exit=1 17s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmDeskHost.test.ts,title=src/lib/gmDeskHost.test.ts > taking a seat > moves his club%2C his trust%2C th
+m6-career7 exit=0 16s | simGmCareer: all checks passed (nfl, sections 7)
+m6-vitest exit=0 17s |    Duration  16.91s (transform 1.47s, setup 135ms, collect 726ms, tests 16.07s, environment 664ms, prepare 145ms)

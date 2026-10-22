@@ -1,0 +1,8 @@
+#!serial
+m3-career4: node .rc/x/rv-mut.mjs firstcallold && SIM_GM_CAREER_ONLY=4 node scripts/simGmCareer.mjs ; s=$?; git checkout -- src scripts; exit $s
+m3-deskhost: node .rc/x/rv-mut.mjs firstcallold && node scripts/simGmDeskHost.mjs ; s=$?; git checkout -- src scripts; exit $s
+m3-vitest: node .rc/x/rv-mut.mjs firstcallold && node_modules/.bin/vitest run src/lib/gmDeskHost.test.ts --testTimeout=600000 --hookTimeout=120000 ; s=$?; git checkout -- src scripts; exit $s
+m5-career5: node .rc/x/rv-mut.mjs arriving && SIM_GM_CAREER_ONLY=5 node scripts/simGmCareer.mjs ; s=$?; git checkout -- src scripts; exit $s
+m5-vitest: node .rc/x/rv-mut.mjs arriving && node_modules/.bin/vitest run src/lib/gmDeskHost.test.ts src/components/front-office-shared/FrontOfficeGmCareer.test.tsx --testTimeout=600000 --hookTimeout=120000 ; s=$?; git checkout -- src scripts; exit $s
+m6-career7: node .rc/x/rv-mut.mjs seasoncounted && SIM_GM_CAREER_ONLY=7 node scripts/simGmCareer.mjs ; s=$?; git checkout -- src scripts; exit $s
+m6-vitest: node .rc/x/rv-mut.mjs seasoncounted && node_modules/.bin/vitest run src/components/front-office-shared/FrontOfficeGmCareer.test.tsx src/components/front-office-shared/GmCareerDesk.test.tsx --testTimeout=600000 --hookTimeout=120000 ; s=$?; git checkout -- src scripts; exit $s
