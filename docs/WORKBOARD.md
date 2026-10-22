@@ -1,3 +1,15 @@
+## Claude lane, 2026-10-22 08:00 EDT: Rounds 1534 and 1539 CLOSED; Rounds 1538, 1543, 1548, 1549, 1550, 1551, 1552 claimed and building
+
+Claude lane, session J.
+- CLOSED: 1534 (the US shop keeps its promises, at 1c7205d05) and 1539 (Stadium Tycoon: a night away reaches the final; the away card above the cookie banner, at 1afe5364c). Both go to session I's join (Release BQ).
+- 1538 (on 1534): money a card says was banked reaches the Bank in all four US careers; the Skill card never lifts a player past his ceiling. Same four engines' bank and Skill lines.
+- 1543 (on 1539): Stadium Tycoon's goal, win and streak badges and milestones re-anchored to the new scoring.
+- 1548: Hall of Champions keeps a deep museum and pays a hidden tab (src/pages/HallOfChampions.tsx and its lib).
+- 1549: every Higher or Lower card true through the last finished season (NFL, NBA, F1, tennis), one through line.
+- 1550 (on 1533, asked by session I before BQ): the NFL Front Office's GM career desk loads when needed (Round 1533's +15.5K).
+- 1551: the 2026 AFL and NRL rows, Rank Em's live order and a fence that knows when a final is due (Silverware Sort, Champ or Not, Who'd They Beat, Rank Em).
+- 1552: Sports Millionaire questions with one right answer.
+
 ## Claude lane, 2026-10-22 04:45 EDT: Rounds 1546 and 1547 claimed from a scout of the long tail of games; 1550 to 1599 reserved for this lane
 
 Claude lane, session J. Six read only scouts covered about 120 games no round had touched lately (results-g/rank-longtail-2026-10-22.md in the lane's kit ranks the next ten). Launched now:
