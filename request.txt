@@ -1,0 +1,1 @@
+eng31337-r0: node .rc/x/mut-r0.mjs && SIM_CAREER_FORM_FLEET_KIND=engaged SIM_CAREER_FORM_SECTIONS=4 SIM_CAREER_FORM_SEED=31337 node scripts/simCareerForm.mjs; s=$?; git checkout -- src scripts; exit $s

@@ -1,0 +1,6 @@
+mut-r0: src/lib/careerForm.ts now says return 0;
+4) the natural fleet (engaged): the round against the same tree without the morale step, same seeds
+   round     9600 careers, 220264 seasons, morale 98.6 as the engine reads it: Ballon d'Or 55.26 per 100 careers, league games 26.54, rating 6.88; legacy GOAT 27.5%, LEGEND 25.8%, GREAT 25.6%, SOLID PRO 10.4%, JOURNEYMAN 10.7%
+   no step   9600 careers, 220127 seasons, morale 98.7 as the engine reads it: Ballon d'Or 51.70 per 100 careers, league games 25.70, rating 6.86; legacy GOAT 27.6%, LEGEND 24.1%, GREAT 26.6%, SOLID PRO 11.0%, JOURNEYMAN 10.8%
+   shift: Ballon d'Or 3.56 per 100, league games 0.84, rating 0.02; legacy GOAT -0.1, LEGEND 1.7, GREAT -0.9, SOLID PRO -0.6, JOURNEYMAN -0.1 points
+simCareerForm: green
