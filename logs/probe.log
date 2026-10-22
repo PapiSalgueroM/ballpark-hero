@@ -1,0 +1,17 @@
+head: owner chunks in the build: OwnerTail-BePMPozj.js, soccerCareerOwner-BigDUZV5.js
+head: owner save at WSG Tirol, tier 4, debt 8
+  ok   head 390x844: with the owner chunk blocked (6 requests) the panel says "Couldn't load your club's screen"
+  ok   head 390x844: the panel offers Retry
+  ok   head 390x844: Next Owner Season waits (disabled) while no call can be made
+  ok   head 390x844: Sell Club still works
+  ok   head 390x844: Retry reloads and the owner panel comes back once the chunk can load
+  ok   head 390x844: the debt call names its fee ("Pay down the debt €4M off the €8M owed: less interest and less pressure to sell, but the lenders take €0.4M for paying early.")
+  ok   head 390x844: no sideways scroll with the panel up (0 px over)
+  ok   head 1280x900: with the owner chunk blocked (6 requests) the panel says "Couldn't load your club's screen"
+  ok   head 1280x900: the panel offers Retry
+  ok   head 1280x900: Next Owner Season waits (disabled) while no call can be made
+  ok   head 1280x900: Sell Club still works
+  ok   head 1280x900: Retry reloads and the owner panel comes back once the chunk can load
+  ok   head 1280x900: the debt call names its fee ("Pay down the debt €4M off the €8M owed: less interest and less pressure to sell, but the lenders take €0.4M for paying early.")
+  ok   head 1280x900: no sideways scroll with the panel up (0 px over)
+probeOwnerPanelFail (head): green

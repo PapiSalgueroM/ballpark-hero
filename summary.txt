@@ -1,0 +1,8 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+probe exit=0 7s | probeOwnerPanelFail (head): green
+sweepWeight exit=0 29s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+simFlagshipWeight exit=0 0s | simFlagshipWeight: green. The flagship carries its own game and nobody else's.
+playFlagshipLazy exit=0 10s | playFlagshipLazy: green. The dugout costs nothing until you walk into it, and it still works when you do.
+base-probe exit=1 98s | probeOwnerPanelFail (base): 4 check(s) failed
+walk exit=0 147s | walkRun1524: green, 388 checks
+landing-bar exit=0 99s | playSoccerLanding: green at 320x640, 390x844, 1280x900 (also bar 360x780, bar 375x667; bar), HEAD ONLY

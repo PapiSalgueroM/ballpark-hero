@@ -1,0 +1,11 @@
+base: owner chunks in the build: OwnerTail-C3sJj356.js, soccerCareerOwner-BHSburAn.js
+base: owner save at WSG Tirol, tier 4, debt 8
+  FAIL base 390x844: with the owner chunk blocked (5 requests) the panel says "Couldn't load your club's screen"
+  FAIL base 390x844: the panel offers Retry
+  ok   base 390x844: Next Owner Season waits (disabled) while no call can be made
+  ok   base 390x844: Sell Club still works
+  FAIL base 1280x900: with the owner chunk blocked (5 requests) the panel says "Couldn't load your club's screen"
+  FAIL base 1280x900: the panel offers Retry
+  ok   base 1280x900: Next Owner Season waits (disabled) while no call can be made
+  ok   base 1280x900: Sell Club still works
+probeOwnerPanelFail (base): 4 check(s) failed
