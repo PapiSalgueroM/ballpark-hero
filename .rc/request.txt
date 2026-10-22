@@ -1,0 +1,4 @@
+bundle: LIVE_MOTION_ONLY=bundle node scripts/simLiveSimMotion.mjs
+bigpart: LIVE_MOTION_CONTROL=bigpart node scripts/simLiveSimMotion.mjs
+rival: node scripts/simNoRivalNames.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
