@@ -1,0 +1,6 @@
+# Release BP triage, trE: rgC simCmLedgerBound (section 1 time) alone, twice, on the BP head; rgBJe sd-base and rgBIc simClubManagerBudget on whatever head this is sent to.
+#!serial
+headsha: git log --oneline -1
+ledger-1: node scripts/simCmLedgerBound.mjs
+ledger-2: node scripts/simCmLedgerBound.mjs
+sd-base: B=$(node scripts/lib/treeWithoutMerge.mjs 9bbc7b5a 353d1c26) || exit 2; SIM_SOCCER_DECK_BASE=$B SIM_SOCCER_DECK_SECTIONS=2,3,4 node scripts/simSoccerDeck.mjs
