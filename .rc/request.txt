@@ -1,0 +1,4 @@
+#!serial
+ctl-hook: git show 03f56b56d:src/hooks/useStadiumTycoon.ts > src/hooks/useStadiumTycoon.ts && git diff --stat && node_modules/.bin/vitest run src/test/tycoonBadgeTurns.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src; exit $s
+restore: git diff --quiet && echo RESTORED
+turns-head: node_modules/.bin/vitest run src/test/tycoonBadgeTurns.test.tsx --testTimeout=300000 --hookTimeout=120000
