@@ -34,13 +34,17 @@
  *   fmtstop     fmt stops at T again                                 section 3
  *   hookfixed   the hook ticks a fixed quarter second per callback   section 4
  *   hooknocopy  the hook no longer keeps a refused save aside        section 4
- *   hooknote    the load's note tells only the closed part again     section 4
- *   novisible   advanceClock ignores visibility, only the gap counts section 2
- *   hookvisible the hook calls advanceClock as if always visible     section 4
- *   awayafter   AWAY_AFTER_MS an hour, not five seconds              section 2
- *   hookstampnow  a save stamps Date.now(), not the paid through time section 4
+ *   hooknote     the load's note tells only the closed part again    section 4
+ *   novisible    advanceClock ignores visibility, only gaps count    section 2
+ *   hookvisible  the hook calls advanceClock as if always visible    section 4
+ *   awayafter    AWAY_AFTER_MS an hour, not five seconds             section 2
+ *   hookstampnow a save stamps Date.now(), not the paid through time section 4
+ *   hookcrash    a hook that does not compile: CRASHED, exit 2       section 4
  * A control rewrites a copy of the file, never the file, and aborts if the text
- * it rewrites is not in the shipped file exactly once.
+ * it rewrites is not in the shipped file exactly once. A hook control whose
+ * suite crashes (no report, a load error, a wrong test count, or a targeted
+ * test the suite does not have) prints CRASHED and exits 2, never FIRED; the
+ * hookcrash control (a hook that does not compile) must end exactly that way.
  *
  * MEASURED (GitHub runner, remote check r1548-s2 on 16ef6107, and the same
  * numbers on Windows): the run is deterministic, so these are exact, not bands.
@@ -81,7 +85,7 @@ let failures = 0, section = 0, dead = 0, collateral = 0;
 const bySection = {};
 const fail = m => { failures += 1; bySection[section] = (bySection[section] || 0) + 1; console.error('  FAIL: ' + m); };
 /* the section each control must turn red */
-const CONTROL_SECTION = { ceiling: 1, fixedstep: 2, fmtstop: 3, hookfixed: 4, hooknocopy: 4, hooknote: 4, novisible: 2, hookvisible: 4, awayafter: 2, hookstampnow: 4 };
+const CONTROL_SECTION = { ceiling: 1, fixedstep: 2, fmtstop: 3, hookfixed: 4, hooknocopy: 4, hooknote: 4, novisible: 2, hookvisible: 4, awayafter: 2, hookstampnow: 4, hookcrash: 4 };
 const abort = m => { console.error(m); process.exit(1); };
 const read = f => fs.readFileSync(f, 'utf8').split('\r\n').join('\n');
 
@@ -124,6 +128,11 @@ const HOOK_CONTROLS = {
   hookstampnow: {
     from: '      try { localStorage.setItem(SAVE_KEY, serialize(s, lastTickRef.current)); } catch { /* storage full or blocked */ }',
     to: '      try { localStorage.setItem(SAVE_KEY, serialize(s, Date.now())); } catch { /* storage full or blocked */ }',
+  },
+  /* the crash path's own control: a hook that does not compile must read CRASHED, exit 2 */
+  hookcrash: {
+    from: 'export function useHallOfChampions() {',
+    to: 'export function useHallOfChampions() { const broken = ;',
   },
   hooknocopy: {
     from: '          keepRefusedSave();\n',
@@ -389,9 +398,10 @@ if (run(4) && !LIB_CONTROLS[CONTROL]) {
   console.log('4) the real hook on fake timers');
   let env = {};
   if (HOOK_CONTROLS[CONTROL]) {
-    /* The copy sits inside the checkout so its own imports resolve from here. */
-    const dir = path.join(ROOT, 'dist', `.hall-longplay-${CONTROL}`);
-    fs.mkdirSync(dir, { recursive: true });
+    /* The copy sits inside the checkout so its own imports resolve from here,
+       in a folder made for this run alone (not dist, which a build empties),
+       and the whole folder goes on exit, so nothing is left behind. */
+    const dir = fs.mkdtempSync(path.join(ROOT, '.hall-longplay-'));
     process.on('exit', () => { try { fs.rmSync(dir, { recursive: true, force: true }); } catch { /* best effort */ } });
     const copy = path.join(dir, 'useHallOfChampions.ts');
     fs.writeFileSync(copy, rewrite(HOOK, HOOK_CONTROLS[CONTROL], 'src/hooks/useHallOfChampions.ts'));
@@ -400,9 +410,20 @@ if (run(4) && !LIB_CONTROLS[CONTROL]) {
     console.log(`control ${CONTROL}: the hook is a copy with one rewrite`);
   }
   const rows = runHookSuite(env, CONTROL || 'shipped');
-  if (!rows) fail('the hook suite wrote no report');
-  else if (rows.loadError) fail(`the hook suite did not load, so every red is a crash:\n${rows.loadError}`);
-  else if (rows.length !== HOOK_TESTS) fail(`the hook suite ran ${rows.length} tests, not ${HOOK_TESTS}`);
+  const missing = rows && !rows.loadError ? (HOOK_RED[CONTROL] || []).filter(n => !rows.some(r => r.n === n)) : [];
+  const crash = !rows ? 'the hook suite wrote no report'
+    : rows.loadError ? `the hook suite did not load, so every red is a crash:\n${rows.loadError}`
+    : rows.length !== HOOK_TESTS ? `the hook suite ran ${rows.length} tests, not ${HOOK_TESTS}`
+    : missing.length ? `the control targets test ${missing.join(', ')}, which the suite does not have`
+    : null;
+  if (crash && CONTROL) {
+    /* A control that crashed proves nothing, so it never reads as FIRED: its
+       own last line and its own exit code (2, where a fire is 1). */
+    console.error(crash);
+    console.log(`simHallLongPlay control ${CONTROL}: CRASHED, ${crash.split('\n')[0]}; a crash is not a fire, so this control proves nothing`);
+    process.exit(2);
+  }
+  if (crash) fail(crash);
   else {
     const red = HOOK_RED[CONTROL] || [];
     for (const row of rows) {
