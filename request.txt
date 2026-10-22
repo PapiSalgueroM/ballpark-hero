@@ -1,0 +1,5 @@
+simCareerStoryRole: node scripts/simCareerStoryRole.mjs
+simCareerTrophyRuns: node scripts/simCareerTrophyRuns.mjs
+simSoccerCareerDevelopment: node scripts/simSoccerCareerDevelopment.mjs
+simSoccerDeckFairness: node scripts/simSoccerDeckFairness.mjs
+simSoccerWorldTruth: node scripts/simSoccerWorldTruth.mjs
