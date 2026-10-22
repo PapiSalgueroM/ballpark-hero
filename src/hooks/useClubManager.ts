@@ -390,9 +390,10 @@ export function useClubManager() {
     loadTactics().then(() => { if (live) setTacticsIn(true); }, () => { if (live) setTacticsFailed(true); });
     return () => { live = false; };
   }, [career, tacticsIn]);
-  /* Round 1522 review: a match action made while the module is still on its way is held and played the moment it
-     lands (the last one wins, and only on the career it was made on), and a module that cannot load says so on the
-     page instead of leaving the tap dead. */
+  /* Round 1522 review: a tap on Play, Quick Sim, the calendar or Second half made while the module is still on its
+     way is held and played the moment it lands (the last one wins, and only on the career it was made on), and a
+     module that cannot load says so on the page instead of leaving the tap dead. The live and dressing room actions
+     need no hold: only the live screen and the dressing room call them, and both import the module. */
   const tacticsHeld = useRef<{ c: CareerState; run: () => void } | null>(null);
   const heldForTactics = useCallback((run: () => void): boolean => {
     const c = careerRef.current;
@@ -1218,18 +1219,15 @@ export function useClubManager() {
 
   /* ---------- Round 119: the dressing room ---------- */
   const subAtHalftime = useCallback((outId: string, inId: string) => {
-    if (heldForTactics(() => { subAtHalftime(outId, inId); })) return;
     setCareer(prev => (prev && !tacticsWait(prev) ? makeHalftimeSub(prev, outId, inId) ?? prev : prev));
   }, []);
 
   const shapeAtHalftime = useCallback((m: Mentality) => {
-    if (heldForTactics(() => { shapeAtHalftime(m); })) return;
     setCareer(prev => (prev && !tacticsWait(prev) ? setHalftimeMentality(prev, m) : prev));
   }, []);
 
   /* Round 1522: instructions, a formation or a duty in the dressing room, for tonight only (the restart, 46). */
   const changeAtHalftime = useCallback((change: LiveChange) => {
-    if (heldForTactics(() => { changeAtHalftime(change); })) return;
     setCareer(prev => (prev && !tacticsWait(prev) ? changeLive(prev, 46, change) ?? prev : prev));
   }, []);
 
@@ -1258,7 +1256,6 @@ export function useClubManager() {
      viewer walks football that is already decided and a change in the 70th
      minute has something to redraw. */
   const startSecondHalfLive = useCallback(() => {
-    if (heldForTactics(() => { startSecondHalfLive(); })) return;
     setCareer(prev => (prev && !tacticsWait(prev) ? startSecondHalf(prev) ?? prev : prev));
   }, []);
 
@@ -1269,7 +1266,6 @@ export function useClubManager() {
      latest save (prev), so a change still on its way when the clock got
      there is part of the answer; the viewer reads it off live.et. */
   const startExtraTimeLive = useCallback(() => {
-    if (heldForTactics(() => { startExtraTimeLive(); })) return;
     setCareer(prev => (prev && !tacticsWait(prev) ? startExtraTime(prev) ?? prev : prev));
   }, []);
 
@@ -1278,7 +1274,6 @@ export function useClubManager() {
      the half off the eleven and the shape you just chose. */
   const changeAt = useCallback((minute: number, change: LiveChange, plus?: number) => {
     /* Round 781: and how far into the board it was made, for the line's label. */
-    if (heldForTactics(() => { changeAt(minute, change, plus); })) return;
     setCareer(prev => (prev && !tacticsWait(prev) ? changeLive(prev, minute, change, plus) ?? prev : prev));
   }, []);
 
