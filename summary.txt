@@ -1,0 +1,4 @@
+ls exit=0 35s | simCareerLeagueSeasons: all sections green
+ls-unattributed exit=1 69s | simCareerLeagueSeasons: 12 failures (sections c)
+anchors exit=0 55s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+endings-1519 exit=0 91s | PASS: no career ends before the age rules without the player, and the pair is reconciled
