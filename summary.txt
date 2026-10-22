@@ -1,0 +1,3 @@
+crowdkick exit=1 17s | simLiveSimMotion: control crowdkick turned "R11" red on an assertion (1 failed), as it must.
+motionfull exit=0 74s | simLiveSimMotion: green. 66 tests passed (the viewer on real feeds, the pitch part's rules on 200 half feeds and on feeds made by hand, the goal sequence, match mode), an
+tsc exit=0 88s | 

@@ -1,0 +1,3 @@
+motionfull: node scripts/simLiveSimMotion.mjs
+crowdkick: LIVE_MOTION_CONTROL=crowdkick node scripts/simLiveSimMotion.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
