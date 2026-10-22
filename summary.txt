@@ -1,0 +1,4 @@
+turnback exit=1 16s | simLiveSimMotion: control turnback turned "R12" red on an assertion (1 failed), as it must.
+deadrestart exit=1 15s | simLiveSimMotion: control deadrestart turned "R12" red on an assertion (1 failed), as it must.
+motion exit=1 81s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/liveSimMotion.test.tsx,title=src/test/liveSimMotion.test.tsx > Round 1521%3A the live match looks like
+tsc exit=0 89s | 
