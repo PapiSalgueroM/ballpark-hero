@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+simTycoonGroundGrowth: node scripts/qa/tycoonGroundGrowth1094.mjs --prefetch-assets-only && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonGroundGrowth.mjs
+weight-base: git worktree add /tmp/wb 77c00798 && ln -s "$PWD/node_modules" /tmp/wb/node_modules && (cd /tmp/wb && npm run build > /tmp/wb-build.log 2>&1) && (node scripts/lib/hostLikeServer.mjs /tmp/wb/dist 4174 > /tmp/wb-server.log 2>&1 &) && sleep 3 && SWEEP_OFFLINE=1 BASE=http://localhost:4174 SWEEP_BASE=http://localhost:4174 node scripts/sweepWeight.mjs
+simTycoonPacks: node scripts/simTycoonPacks.mjs
