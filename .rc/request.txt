@@ -1,0 +1,5 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+cfbstaff: node scripts/simCfbStaff.mjs
+cfbstaff-noslate: CFB_STAFF_CONTROL=noslate node scripts/simCfbStaff.mjs
+seat: node scripts/simCollegeSeat.mjs
+seat-noease: SIM_COLLEGE_SEAT_SPORTS=cfb SIM_COLLEGE_SEAT_CONTROL=noease node scripts/simCollegeSeat.mjs
