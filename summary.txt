@@ -1,0 +1,5 @@
+build exit=0 24s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fonts exit=0 1s | Prepared 9 declared font dependencies for local fulfillment.
+simCareerProgramme-forwalk exit=0 48s | Career programme:50 original/compatibility/full product season pairs with exact RNG,240 opted gameplay seasons,21 effective loaded faults,163 unchanged chance outcomes an
+ctl-playSoccerSeasonCalendar exit=1 186s | Node.js v24.21.0
+ctl-playCareerHub exit=0 47s | playCareerHub: green. Four career games on live boxes, and every award on the screen has a year on it.

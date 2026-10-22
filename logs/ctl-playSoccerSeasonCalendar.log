@@ -1,0 +1,19 @@
+Calendar native: 6 cases, 30 checks, 0 effective copied observation control
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+0 !== 1
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerSeasonCalendar.mjs:139:46 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 0,
+  expected: 1,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
