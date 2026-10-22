@@ -1,0 +1,12 @@
+playCmNoSack: seed 969109896 (replay with NOSACK_SEED=969109896), widths 390, control sack
+
+== 390 by 844
+  PASS  390: the career is running
+  PASS  390: the save was planted on its last point with No sacking and a weak squad
+  18 steps: the sacked screen opened
+  CAUGHT  390: a defeat on the last point put the No sacking line on the match report
+  CAUGHT  390: still in the job (board 0, saved sacked flag true)
+  CAUGHT  390: the Board meter reads ""
+  PASS  no page errors
+
+playCmNoSack control sack: all 3 guarded checks fired (mutations landed: {"readNoSack":2})
