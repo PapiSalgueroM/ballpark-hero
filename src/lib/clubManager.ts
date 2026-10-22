@@ -4788,7 +4788,7 @@ const DRAWN_NATIONS = new Map<string, string>();
 /** A made up man's country, drawn where the save first meets him (madeUpNations.ts says how). Undefined when there
     is no place to draw from, or the world's squads have not arrived: nothing is stored then, and the next
     ensureMadeUpNations draws the same one. `local`: a youth pad or a boy of the club's own intake is from the
-    club's country, since FIFA's transfer rules (RSTP Article 19) bar a minor's move abroad; the foreign boys come
+    club's country, since the world body's transfer rules (Article 19, on minors) bar a minor's move abroad; the foreign boys come
     through the scouting trips. */
 export function madeUpNationAt(name: string, place: NationPlace | null, eraId: string | undefined, local = false): string | undefined {
   if (!place) return undefined;
