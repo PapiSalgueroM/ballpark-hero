@@ -1,0 +1,7 @@
+earned exit=0 23s | simNbaEarnedDraft: green.
+judgetwo exit=1 25s | simNbaEarnedDraft: CONTROL judgetwo FIRED. Red in section 11 (3 failures).
+judgefloor exit=1 19s | simNbaEarnedDraft: CONTROL judgefloor FIRED. Red in section 11 (1 failures).
+judgerange exit=1 27s | simNbaEarnedDraft: CONTROL judgerange FIRED. Red in section 11 (2 failures).
+judgecap exit=1 20s | simNbaEarnedDraft: CONTROL judgecap FIRED. Red in section 11 (1 failures).
+judgeflip exit=1 23s | simNbaEarnedDraft: CONTROL judgeflip FIRED. Red in section 11 (12 failures).
+earned-ctl exit=0 431s | simNbaEarnedDraft controls: all 25 fired, each in exactly its own sections.

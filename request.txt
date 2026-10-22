@@ -1,0 +1,7 @@
+earned: node scripts/simNbaEarnedDraft.mjs
+earned-ctl: SIM_NBA_EARNED_DRAFT_CONTROL=all node scripts/simNbaEarnedDraft.mjs
+judgetwo: SIM_NBA_EARNED_DRAFT_CONTROL=judgetwo node scripts/simNbaEarnedDraft.mjs
+judgerange: SIM_NBA_EARNED_DRAFT_CONTROL=judgerange node scripts/simNbaEarnedDraft.mjs
+judgefloor: SIM_NBA_EARNED_DRAFT_CONTROL=judgefloor node scripts/simNbaEarnedDraft.mjs
+judgecap: SIM_NBA_EARNED_DRAFT_CONTROL=judgecap node scripts/simNbaEarnedDraft.mjs
+judgeflip: SIM_NBA_EARNED_DRAFT_CONTROL=judgeflip node scripts/simNbaEarnedDraft.mjs
