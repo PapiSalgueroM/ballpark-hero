@@ -8,14 +8,16 @@
  *
  *   - a new front office starts (his record opens at the tier of the club he took);
  *   - the season reaches its last week (the verdict at the close needs it, so it is on its way before the press);
- *   - the recap, the draft after it and the fired and out of work screens are drawn (a save that loads straight
- *     into one of them waits for it, then draws);
- *   - a career box (Job market, Career, GM level) is opened;
- *   - a save older than the record is on the hub (its record is read off the league through the adapter).
+ *   - the recap and the fired and out of work screens are drawn (a save that loads straight into one of them
+ *     waits for it in a holding box, then draws);
+ *   - a press conference waits for an answer (Media eases a gamble through the host's XP effects);
+ *   - a career box (Job market, Career, GM level) is opened.
  *
- * What the hub draws on every visit (the two career boxes, the record and XP readers, the GM level help) stays
- * static in src/lib/gmCareerFace.ts, so the boxes never wait. Nothing here is evaluated at module scope: it only
- * re-exports.
+ * What the hub draws on every visit (the two career boxes, the record and XP readers, the GM level help, the
+ * summer's ask the draft reads) stays static in src/lib/gmCareerFace.ts, so the boxes and the draft never wait;
+ * a save older than the record draws its boxes from the save alone (hostBoxLegacy). The board's kitNeeded says
+ * the same in code, and scripts/simFoLazyDesk.mjs, FrontOfficeLazyDesk.test.tsx and playGmCareer.mjs (Walk E)
+ * hold it. Nothing here is evaluated at module scope: it only re-exports.
  */
 export {
   hostArrivalLine, hostArriving, hostAwayRefusalLine, hostEarnsLine, hostMarket, hostNewSeat, hostOutOfWorkCard,
