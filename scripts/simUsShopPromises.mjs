@@ -20,7 +20,9 @@
  *
  * Controls (SHOP_CONTROL=<name>; each patches the head bundle in memory, never the source, asserts its needle is
  * present first, and must turn red what it names):
- *   rate     index_nba pays 0.08                        -> section 2's NBA case (and the NBA unit rows in 0)
+ *   rate     index_nba pays 0.08                        -> section 1's index_nba row and section 2's NBA case, nothing else
+ *   words    the NBA shoe says "real royalties" again   -> section 1, that card only
+ *   camp     the NBA summer camp's buy case removed      -> section 1, the NBA camp only
  *   nocall   the settle call removed from all four engines -> sections 2, 3, 4 and 9 in all four sports
  *   chance   every crypto punt wins at 0.3                 -> section 3's crypto bands in all four sports
  *   twice    a settled stake stays in `purchased`          -> section 3's settles once case
@@ -44,7 +46,7 @@ import { build } from 'esbuild';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SHOP_BASE = process.env.SHOP_BASE || '413685149bed816a5c384242aa8c40f412b1d523';
 const CONTROL = process.env.SHOP_CONTROL || '';
-const CONTROL_SECTIONS = { rate: ['2'], nocall: ['2', '3', '4', '9'], chance: ['3'], twice: ['3'], office: ['4'], lawyer: ['5'], leak: ['8'], coolall: ['8'], backpay: ['9'] };
+const CONTROL_SECTIONS = { rate: ['1', '2'], words: ['1'], camp: ['1'], nocall: ['2', '3', '4', '9'], chance: ['3'], twice: ['3'], office: ['4'], lawyer: ['5'], leak: ['8'], coolall: ['8'], backpay: ['9'] };
 if (CONTROL && !CONTROL_SECTIONS[CONTROL]) { console.log(`simUsShopPromises: could not run, unknown SHOP_CONTROL ${CONTROL}`); process.exit(2); }
 const SECTIONS = (process.env.SHOP_SECTIONS || (CONTROL ? CONTROL_SECTIONS[CONTROL].join(',') : '0,1,2,3,4,5,8,9')).split(',').map(s => s.trim());
 const runs = s => SECTIONS.includes(s);
@@ -87,13 +89,35 @@ const unshopHunks = sport => [
   ['const drift = dm > 0 ? Math.min(8, 2 + dm * 0.5) : -usCareerSeasonCool(c.purchased, 9);', 'const drift = dm > 0 ? Math.min(8, 2 + dm * 0.5) : -9;'],
   [SETTLE_LINES(sport.S), ''],
 ];
+/* The card words this round changed (decision 6), on the card's own line: [id, the words now, the words before]. */
+const OFFICE_ID = { nba: 'family_office_nba', nfl: 'family_office', mlb: 'family_office_mlb', nhl: 'family_office_nhl' };
+const STAKE_ID = { nba: 'team_stake', nfl: 'minority_stake', mlb: 'team_stake', nhl: 'team_stake' };
+const SHOE_ID = { nba: 'signature_shoe', nfl: 'shoe_line', mlb: 'signature_shoe', nhl: 'signature_shoe' };
+const SHADY = { nba: 'nshady', nfl: 'shady', mlb: 'mshady', nhl: 'hshady' };
+const WORDS_1534 = sport => [
+  [OFFICE_ID[sport.id], "effect: 'Adds 2 percent to your cash every season'", "effect: 'Protects your money'"],
+  [STAKE_ID[sport.id], "effect: 'Fanbase +10'", "effect: 'The retirement plan, fanbase +10'"],
+  [SHOE_ID[sport.id], "effect: 'Fanbase +12'", "effect: 'Fanbase +12, real royalties'"],
+  [`${SHADY[sport.id]}_club`, "effect: 'Washes 4M, heat +3'", `effect: 'Washes 4M, heat +${sport.id === 'nfl' ? 5 : 3} a year'`],
+  [`${SHADY[sport.id]}_offshore`, "effect: 'Heat +6'", "effect: 'Hides money, heat +6'"],
+];
+const CAMP_CASE = "    case 'summer_camp': {";
 function unshop(sport, text) {
   let out = text;
   for (const [now, was] of unshopHunks(sport)) {
     if (out.split(now).length !== 2) abort(`${sport.file} does not hold this round's hunk exactly once: ${now.slice(0, 70)}`);
     out = out.replace(now, () => was);
   }
-  return out;
+  const lines = out.split('\n');
+  for (const [id, now, was] of WORDS_1534(sport)) {
+    const at = lines.flatMap((l, i) => (l.includes(`{ id: '${id}',`) ? [i] : []));
+    if (at.length !== 1 || lines[at[0]].split(now).length !== 2) abort(`${sport.file}: the card ${id} does not hold this round's words once (${now})`);
+    lines[at[0]] = lines[at[0]].replace(now, () => was);
+  }
+  const camp = lines.flatMap((l, i) => (l.startsWith(CAMP_CASE) ? [i] : []));
+  if (camp.length !== (sport.id === 'nfl' ? 0 : 1)) abort(`${sport.file}: the summer camp's buy case is there ${camp.length} times`);
+  if (camp.length) lines.splice(camp[0], 1);
+  return lines.join('\n');
 }
 
 /* ─── the controls' patches to the head arm, each needle asserted present first ─── */
@@ -115,6 +139,12 @@ function headServe() {
     + '\nfunction r1Leak(v: number): number { return Math.round(v * 10) / 10; }\n';
   if (CONTROL === 'backpay') mod = patchOnce(mod, '    const exact = Math.round((carry + earned) * 10000);\n', '    const exact = Math.round((carry + earned * (prior === undefined ? 2 : 1)) * 10000);\n', MODULE);
   if (mod !== read(MODULE)) serve[MODULE] = mod;
+  if (CONTROL === 'words') serve['src/lib/nbaMyCareer.ts'] = patchOnce(read('src/lib/nbaMyCareer.ts'), "minFanbase: 70, effect: 'Fanbase +12' }", "minFanbase: 70, effect: 'Fanbase +12, real royalties' }", 'nbaMyCareer.ts');
+  if (CONTROL === 'camp') {
+    const nba = read('src/lib/nbaMyCareer.ts'), at = nba.split('\n').filter(l => l.startsWith(CAMP_CASE));
+    if (at.length !== 1) abort(`control camp: the NBA summer camp case is there ${at.length} times`);
+    serve['src/lib/nbaMyCareer.ts'] = patchOnce(nba, `${at[0]}\n`, '', 'nbaMyCareer.ts');
+  }
   if (CONTROL === 'nocall') for (const sport of US) serve[sport.file] = patchOnce(read(sport.file), SETTLE_LINES(sport.S), '', sport.file);
   return serve;
 }
@@ -147,7 +177,7 @@ globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: 
 
 /* ─── section 0: the unit file, in a vitest child ─── */
 const UNIT = 'src/lib/usCareerShopPromises.test.ts';
-const UNIT_ROWS = 24;
+const UNIT_ROWS = 28;
 if (runs('0')) {
   console.log(`0) ${UNIT} in a vitest child`);
   const report = path.join(TMP, 'unit.json');
@@ -209,6 +239,59 @@ function playSeason(X, sport, run) {
   return lib[sport.progress](run.c, run.rng);
 }
 const pinned = (seed, f) => { const real = Math.random; Math.random = mulberry(seed ^ 0x2545f491); try { return f(); } finally { Math.random = real; } };
+
+/* ─── section 1: the words. Every card that prints a return is a row with the printed numbers; the office prints
+   its rate; the reworded cards no longer promise what nothing does; the summer camp does what it prints on buy; the
+   help rule prints the cards' own numbers. ─── */
+const PROMISE = /percent|chance of|prints/;
+const REMOVED = ['Protects your money', 'The retirement plan', 'real royalties', 'Hides money', 'heat +3 a year', 'heat +5 a year'];
+if (runs('1')) {
+  console.log('1) words: the table against the printed cards, the reworded cards, the summer camp and the help rule');
+  const table = H.shop.US_SHOP_RETURNS, seenRows = new Set();
+  for (const sport of US) {
+    const items = itemsOf(H, sport), ids = new Set(items.map(card => card.id));
+    let rows = 0;
+    for (const card of items) {
+      const text = `${card.desc} ${card.effect ?? ''}`;
+      if (!PROMISE.test(text)) continue;
+      const p = printed(card);
+      if (p) {
+        rows += 1; seenRows.add(card.id);
+        if (JSON.stringify(table[card.id]) !== JSON.stringify(p)) fail('1', `${sport.id} ${card.id}`, `the table holds ${JSON.stringify(table[card.id])}, the card prints ${JSON.stringify(p)}`);
+      } else if (card.name === 'Family Office') {
+        const m = (card.effect ?? '').match(/(\d+) percent/);
+        if (!m || Number(m[1]) / 100 !== H.shop.US_FAMILY_OFFICE_RATE || Number(m[1]) / 100 !== OFFICE_PRINTED) fail('1', `${sport.id} ${card.id}`, `the office prints ${m?.[1]} percent, the rule pays ${H.shop.US_FAMILY_OFFICE_RATE}`);
+      } else fail('1', `${sport.id} ${card.id}`, `"${text}" promises a return no rule reads`);
+    }
+    for (const id of Object.keys(table)) if (ids.has(id) && !printed(items.find(card => card.id === id))) fail('1', `${sport.id} ${id}`, 'a table row whose card prints no return');
+    for (const card of items) for (const gone of REMOVED) if (`${card.desc} ${card.effect ?? ''}`.includes(gone)) fail('1', `${sport.id} ${card.id}`, `still says "${gone}"`);
+    const office = byName(items, 'Family Office');
+    if (!office || !/^Adds 2 percent/.test(office.effect ?? '')) fail('1', `${sport.id} office`, `the office card says "${office?.effect}"`);
+    const camp = items.find(card => card.id === 'summer_camp');
+    if (sport.id !== 'nfl') {
+      const m = (camp?.effect ?? '').match(/^Fanbase \+(\d+), morale \+(\d+)$/);
+      if (!m) { fail('1', `${sport.id} camp`, `the summer camp says "${camp?.effect}"`); continue; }
+      const run = career(H, sport, 'Fictional camp', 1534);
+      run.c.netWorth = 10; run.c.fanbase = 40; run.c.morale = 60;
+      const got = H[sport.id][sport.buy](run.c, 'summer_camp');
+      if (!got || got.state.fanbase !== 40 + Number(m[1]) || got.state.morale !== 60 + Number(m[2])) fail('1', `${sport.id} camp`, `bought at fanbase 40 and morale 60 it lands ${got?.state.fanbase} and ${got?.state.morale}, the card prints +${m[1]} and +${m[2]}`);
+      else if (!got.log.endsWith(`Fanbase +${m[1]}, morale +${m[2]}.`)) fail('1', `${sport.id} camp`, `its line says "${got.log}"`);
+      const full = career(H, sport, 'Fictional camp full', 1534);
+      full.c.netWorth = 10; full.c.fanbase = 97; full.c.morale = 100;
+      const capped = H[sport.id][sport.buy](full.c, 'summer_camp');
+      if (!capped || capped.state.fanbase !== 100 || capped.state.morale !== 100 || !capped.log.endsWith('Fanbase +3, morale +0.')) fail('1', `${sport.id} camp capped`, `at 97 and 100 it says "${capped?.log}"`);
+    } else if (camp) fail('1', 'nfl camp', 'the NFL shop has a summer camp now; give it a buy case and a row here');
+    console.log(`   ${sport.id}: ${rows} paying cards match their words${sport.id === 'nfl' ? '' : '; the summer camp lands what it prints'}`);
+  }
+  if (seenRows.size !== Object.keys(table).length) fail('1', 'table', `${Object.keys(table).length - seenRows.size} table rows name no card in any shop`);
+  const nbaItems = itemsOf(H, US[0]), index = byName(nbaItems, 'Boring Index Fund'), crypto = byName(nbaItems, 'Crypto Punt');
+  const ip = printed(index), cp = printed(crypto), earned = Math.round(index.cost * ip.rate * 10000) / 10000;
+  const help = H.shop.US_SHOP_HELP_RULE;
+  for (const want of [`Put ${index.cost}M in the Boring Index Fund and it pays ${Math.round(ip.rate * 100)} percent, ${earned}M, every season.`,
+    `one time in ${Math.round(1 / cp.chance)} you get ${cp.times * crypto.cost}M back on your ${crypto.cost}M`, `adds ${Math.round(OFFICE_PRINTED * 100)} percent of your cash`]) {
+    if (!help.includes(want)) fail('1', 'help', `the help rule does not say "${want}"`);
+  }
+}
 
 /* ─── section 2: steady cards pay their printed rate, every season held, and stop when sold ─── */
 if (runs('2')) {
@@ -473,7 +556,9 @@ if (CONTROL) {
   const want = CONTROL_SECTIONS[CONTROL];
   for (const s of want) console.log(`   control ${CONTROL}: section ${s} turned ${red.get(s)?.size ?? 0} red`);
   let fired = want.every(s => red.has(s));
-  if (CONTROL === 'rate') fired = fired && [...red.get('2') ?? []].every(k => k.startsWith('nba '));
+  if (CONTROL === 'rate') fired = fired && [...red.get('2') ?? []].every(k => k.startsWith('nba ')) && [...red.get('1') ?? []].every(k => k === 'nba index_nba');
+  if (CONTROL === 'words') fired = fired && [...red.get('1')].every(k => k === 'nba signature_shoe');
+  if (CONTROL === 'camp') fired = fired && [...red.get('1')].every(k => k.startsWith('nba camp'));
   if (CONTROL === 'nocall') for (const s of ['2', '4', '9']) fired = fired && US.every(sp => [...red.get(s) ?? []].some(k => k.startsWith(`${sp.id} `)));
   if (CONTROL === 'chance') fired = fired && US.every(sp => red.get('3')?.has(`${sp.id} ${byName(itemsOf(H, sp), 'Crypto Punt').id} band`));
   if (CONTROL === 'leak') fired = fired && US.every(sp => [...red.get('8') ?? []].some(k => k.startsWith(`${sp.id} `)));

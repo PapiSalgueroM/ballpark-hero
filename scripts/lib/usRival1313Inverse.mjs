@@ -70,13 +70,32 @@ const LIFT_1534 = {
   'src/lib/mlbMyCareer.ts': LIFT_1534_COMMON('MLB'),
   'src/lib/nhlMyCareer.ts': LIFT_1534_COMMON('NHL'),
 };
+/* The card words, each on its own card's line: [id, the words now, the words before]. */
+const WORDS_1534 = shady => [
+  [`family_office_${shady === 'mshady' ? 'mlb' : 'nhl'}`, "effect: 'Adds 2 percent to your cash every season'", "effect: 'Protects your money'"],
+  ['team_stake', "effect: 'Fanbase +10'", "effect: 'The retirement plan, fanbase +10'"],
+  ['signature_shoe', "effect: 'Fanbase +12'", "effect: 'Fanbase +12, real royalties'"],
+  [`${shady}_club`, "effect: 'Washes 4M, heat +3'", "effect: 'Washes 4M, heat +3 a year'"],
+  [`${shady}_offshore`, "effect: 'Heat +6'", "effect: 'Hides money, heat +6'"],
+];
+const WORDS_1534_OF = { 'src/lib/mlbMyCareer.ts': WORDS_1534('mshady'), 'src/lib/nhlMyCareer.ts': WORDS_1534('hshady') };
 function unlift1534(rel, text) {
   let out = text;
   for (const [from, to] of LIFT_1534[rel] ?? []) {
     assert.equal(out.split(from).length, 2, 'Round 1534: ' + rel + ' must hold its shop hunk exactly once: ' + from.slice(0, 60));
     out = out.replace(from, () => to);
   }
-  return out;
+  if (!WORDS_1534_OF[rel]) return out;
+  const lines = out.split('\n');
+  for (const [id, now, was] of WORDS_1534_OF[rel]) {
+    const at = lines.flatMap((l, i) => (l.includes(`{ id: '${id}',`) ? [i] : []));
+    assert.ok(at.length === 1 && lines[at[0]].split(now).length === 2, 'Round 1534: ' + rel + ' must hold the card ' + id + "'s new words exactly once");
+    lines[at[0]] = lines[at[0]].replace(now, () => was);
+  }
+  const camp = lines.flatMap((l, i) => (l.startsWith("    case 'summer_camp': {") ? [i] : []));
+  assert.equal(camp.length, 1, 'Round 1534: ' + rel + " must hold the summer camp's buy case exactly once");
+  lines.splice(camp[0], 1);
+  return lines.join('\n');
 }
 
 const show = (commit, rel) => execFileSync('git', ['show', commit + ':' + rel], { maxBuffer: 64 * 1024 * 1024 }).toString('utf8').replaceAll('\r\n', '\n');

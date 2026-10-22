@@ -4,9 +4,9 @@
    scripts/simUsShopPromises.mjs section 0 too. */
 import { describe, expect, it } from 'vitest';
 import { ARCHETYPES, startCareer, NFL_SPEND_ITEMS } from '@/lib/nflMyCareer';
-import { NBA_ARCHETYPES, startNbaCareer, NBA_SPEND_ITEMS, type NbaCareerState } from '@/lib/nbaMyCareer';
-import { MLB_ARCHETYPES, startMlbCareer, MLB_SPEND_ITEMS } from '@/lib/mlbMyCareer';
-import { NHL_ARCHETYPES, startNhlCareer, NHL_SPEND_ITEMS } from '@/lib/nhlMyCareer';
+import { NBA_ARCHETYPES, startNbaCareer, NBA_SPEND_ITEMS, buyNbaItem, nbaProgress, type NbaCareerState } from '@/lib/nbaMyCareer';
+import { MLB_ARCHETYPES, startMlbCareer, MLB_SPEND_ITEMS, buyMlbItem } from '@/lib/mlbMyCareer';
+import { NHL_ARCHETYPES, startNhlCareer, NHL_SPEND_ITEMS, buyNhlItem } from '@/lib/nhlMyCareer';
 import {
   liquidateUsCareerPurchases, settleUsCareerShop, usCareerSeasonCool, US_SHOP_HELP_RULE, US_SHOP_RETURNS,
 } from '@/lib/usCareerAnnualBenefits';
@@ -163,6 +163,45 @@ describe('Round 1534: the lawyer, liquidation, and careers that hold nothing tha
       expect(settleUsCareerShop(c, NBA_SPEND_ITEMS)).toEqual([]);
       expect(c).toEqual(before);
     }
+  });
+});
+
+describe('Round 1534: the cards say what happens', () => {
+  it('the family office prints the 2 percent it pays, in every sport', () => {
+    for (const [, items] of SHOPS) {
+      const office = items.find(card => card.name === 'Family Office') as Card;
+      expect(office.effect).toBe('Adds 2 percent to your cash every season');
+    }
+  });
+  it('no card promises royalties, a retirement plan, hidden money or a yearly heat any more', () => {
+    for (const [sport, items] of SHOPS) for (const card of items) {
+      expect(`${card.desc} ${card.effect ?? ''}`, `${sport} ${card.id}`).not.toMatch(/real royalties|The retirement plan|Hides money|heat \+\d a year|Protects your money/);
+    }
+  });
+  it('the summer camp lands its printed fanbase and morale on buy, clamped at 100 and printed as landed', () => {
+    const buys = [['nba', buyNbaItem], ['mlb', buyMlbItem], ['nhl', buyNhlItem]] as const;
+    for (const [sport, buy] of buys) {
+      const c = { ...starts[sport](), netWorth: 10, fanbase: 40, morale: 60 };
+      const got = buy(c as never, 'summer_camp');
+      expect(got?.state.fanbase, sport).toBe(48);
+      expect(got?.state.morale, sport).toBe(66);
+      expect(got?.log, sport).toMatch(/ Fanbase \+8, morale \+6\.$/);
+      const full = buy({ ...starts[sport](), netWorth: 10, fanbase: 97, morale: 100 } as never, 'summer_camp');
+      expect([full?.state.fanbase, full?.state.morale], sport).toEqual([100, 100]);
+      expect(full?.log, sport).toMatch(/ Fanbase \+3, morale \+0\.$/);
+    }
+    expect(NFL_SPEND_ITEMS.some(card => card.id === 'summer_camp')).toBe(false);
+  });
+  it('a real season end keys each stake on the year after it, so a reload cannot re-roll', () => {
+    const rngOf = () => { let s = 7; return () => { s = (s * 16807) % 2147483647; return s / 2147483647; }; };
+    const b = nba(['crypto_nba', 'crypto_nba', 'crypto_nba', 'crypto_nba', 'crypto_nba'], 10);
+    const t = nba([], 10);
+    const before = b.year;
+    nbaProgress(b, rngOf()); nbaProgress(t, rngOf());
+    expect(b.year).toBe(before + 1);
+    const wins = [0, 1, 2, 3, 4].filter(i => keyedRng(`${summerCareerKey(b)}|shop|crypto_nba|${before + 1}|${i}`)() < 0.2).length;
+    expect(Math.round(((b.netWorth ?? 0) - (t.netWorth ?? 0)) * 10) / 10).toBe(5 * wins);
+    expect(b.purchased).toEqual([]);
   });
 });
 
