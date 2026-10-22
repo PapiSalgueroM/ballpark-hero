@@ -1,0 +1,19 @@
+head: git rev-parse HEAD~1
+s6: SIM_SEED=6 node scripts/simNbaGmDesk.mjs > /tmp/s6.txt 2>&1; e=$?; grep -F '(Round 1556)' /tmp/s6.txt | grep -v continued | sed 's/^ *//' | cut -c1-200; tail -1 /tmp/s6.txt; exit $e
+s10: SIM_SEED=10 node scripts/simNbaGmDesk.mjs > /tmp/s10.txt 2>&1; e=$?; grep -F '(Round 1556)' /tmp/s10.txt | grep -v continued | sed 's/^ *//' | cut -c1-200; tail -1 /tmp/s10.txt; exit $e
+s35: SIM_SEED=35 node scripts/simNbaGmDesk.mjs > /tmp/s35.txt 2>&1; e=$?; grep -F '(Round 1556)' /tmp/s35.txt | grep -v continued | sed 's/^ *//' | cut -c1-200; tail -1 /tmp/s35.txt; exit $e
+s60: SIM_SEED=60 node scripts/simNbaGmDesk.mjs > /tmp/s60.txt 2>&1; e=$?; grep -F '(Round 1556)' /tmp/s60.txt | grep -v continued | sed 's/^ *//' | cut -c1-200; tail -1 /tmp/s60.txt; exit $e
+s61: SIM_SEED=61 node scripts/simNbaGmDesk.mjs > /tmp/s61.txt 2>&1; e=$?; grep -F '(Round 1556)' /tmp/s61.txt | grep -v continued | sed 's/^ *//' | cut -c1-200; tail -1 /tmp/s61.txt; exit $e
+s62: SIM_SEED=62 node scripts/simNbaGmDesk.mjs > /tmp/s62.txt 2>&1; e=$?; grep -F '(Round 1556)' /tmp/s62.txt | grep -v continued | sed 's/^ *//' | cut -c1-200; tail -1 /tmp/s62.txt; exit $e
+s63: SIM_SEED=63 node scripts/simNbaGmDesk.mjs > /tmp/s63.txt 2>&1; e=$?; grep -F '(Round 1556)' /tmp/s63.txt | grep -v continued | sed 's/^ *//' | cut -c1-200; tail -1 /tmp/s63.txt; exit $e
+s64: SIM_SEED=64 node scripts/simNbaGmDesk.mjs > /tmp/s64.txt 2>&1; e=$?; grep -F '(Round 1556)' /tmp/s64.txt | grep -v continued | sed 's/^ *//' | cut -c1-200; tail -1 /tmp/s64.txt; exit $e
+s65: SIM_SEED=65 node scripts/simNbaGmDesk.mjs > /tmp/s65.txt 2>&1; e=$?; grep -F '(Round 1556)' /tmp/s65.txt | grep -v continued | sed 's/^ *//' | cut -c1-200; tail -1 /tmp/s65.txt; exit $e
+s66: SIM_SEED=66 node scripts/simNbaGmDesk.mjs > /tmp/s66.txt 2>&1; e=$?; grep -F '(Round 1556)' /tmp/s66.txt | grep -v continued | sed 's/^ *//' | cut -c1-200; tail -1 /tmp/s66.txt; exit $e
+s67: SIM_SEED=67 node scripts/simNbaGmDesk.mjs > /tmp/s67.txt 2>&1; e=$?; grep -F '(Round 1556)' /tmp/s67.txt | grep -v continued | sed 's/^ *//' | cut -c1-200; tail -1 /tmp/s67.txt; exit $e
+s68: SIM_SEED=68 node scripts/simNbaGmDesk.mjs > /tmp/s68.txt 2>&1; e=$?; grep -F '(Round 1556)' /tmp/s68.txt | grep -v continued | sed 's/^ *//' | cut -c1-200; tail -1 /tmp/s68.txt; exit $e
+s69: SIM_SEED=69 node scripts/simNbaGmDesk.mjs > /tmp/s69.txt 2>&1; e=$?; grep -F '(Round 1556)' /tmp/s69.txt | grep -v continued | sed 's/^ *//' | cut -c1-200; tail -1 /tmp/s69.txt; exit $e
+s70: SIM_SEED=70 node scripts/simNbaGmDesk.mjs > /tmp/s70.txt 2>&1; e=$?; grep -F '(Round 1556)' /tmp/s70.txt | grep -v continued | sed 's/^ *//' | cut -c1-200; tail -1 /tmp/s70.txt; exit $e
+s71: SIM_SEED=71 node scripts/simNbaGmDesk.mjs > /tmp/s71.txt 2>&1; e=$?; grep -F '(Round 1556)' /tmp/s71.txt | grep -v continued | sed 's/^ *//' | cut -c1-200; tail -1 /tmp/s71.txt; exit $e
+s72: SIM_SEED=72 node scripts/simNbaGmDesk.mjs > /tmp/s72.txt 2>&1; e=$?; grep -F '(Round 1556)' /tmp/s72.txt | grep -v continued | sed 's/^ *//' | cut -c1-200; tail -1 /tmp/s72.txt; exit $e
+s73: SIM_SEED=73 node scripts/simNbaGmDesk.mjs > /tmp/s73.txt 2>&1; e=$?; grep -F '(Round 1556)' /tmp/s73.txt | grep -v continued | sed 's/^ *//' | cut -c1-200; tail -1 /tmp/s73.txt; exit $e
+s74: SIM_SEED=74 node scripts/simNbaGmDesk.mjs > /tmp/s74.txt 2>&1; e=$?; grep -F '(Round 1556)' /tmp/s74.txt | grep -v continued | sed 's/^ *//' | cut -c1-200; tail -1 /tmp/s74.txt; exit $e
