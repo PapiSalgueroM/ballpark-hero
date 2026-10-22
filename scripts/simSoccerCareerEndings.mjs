@@ -158,6 +158,9 @@ const CUR = await bundle('current', source, overrides);
 const BASE = await bundle('base', baseSource);
 fs.rmSync(TMP, { recursive: true, force: true });
 let E = CUR;
+/* Round 1524 (Release BP): the owner tail is a lazy chunk the page awaits before the boardroom, and the engine buys
+   nothing until it has landed; so does this, or the chosen owner fixture of section C is never an owner. */
+await E.loadOwnerTail();
 const clubs = E.FALLBACK_CLUBS;
 
 function seedRandom(n) {
