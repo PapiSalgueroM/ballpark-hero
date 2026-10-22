@@ -16,6 +16,13 @@
  * elementFromPoint what sits at the button's centre. Only when the button itself is there does it tap that point,
  * and then the dialog must close and the screen must be usable (no modal or scrim left over the middle of the free
  * area). A route with no first visit dialog is listed as such. The banner is never answered or tapped.
+ * A centre that can be tapped is not enough on its own (Round 1536 review: a box with no height cap passed with its
+ * top 32 px above the screen and 11 of its button's 48 px under the banner). The line is also red when any part of
+ * the button sits under a pending banner or off screen, when the dialog's top is above the screen on arrival (its
+ * heading and close out of reach), or when a dialog's own box runs under a pending banner (which is also what a
+ * [role=dialog] put back on a fixed overlay looks like: the pending rule pushes that overlay down into the banner).
+ * The banner must be on screen for a line to count: a line where it never appeared measured nothing, and the walk
+ * refuses it (ABORTED, exit 2) rather than calling it green.
  *
  * The banner is read by its label, "Cookie choices". Round 1535's scripts/lib/answerConsent.mjs exports the same
  * selector as CONSENT_REGION; that branch had not merged when this walk was written, so swap the constant for the
@@ -30,6 +37,13 @@
  * test. Every route that opened a dialog must then go red. Its last line says FIRED (exit 1), did NOT fire (exit 3),
  * or ABORTED when no route in the run opened a dialog (exit 2). PLAYFIRST_CONTROL=ratchet lists every walked route
  * width in EXPECTED_SITE_RED, and every green or dialog free one must then fail: FIRED (exit 1), NOT (3), ABORTED (2).
+ * PLAYFIRST_CONTROL=expected covers every button AND lists every route width that opened a dialog, so each must print
+ * EXPECTED and none may fail the walk (the other half of the ratchet). PLAYFIRST_CONTROL=edge slides each dialog down
+ * until its button's bottom sits 8 px under a pending banner with its centre still clear: every such line must go red
+ * for the button AND for the box under the banner while its centre still reads tappable. PLAYFIRST_CONTROL=lift slides
+ * each dialog up until its top is 20 px above the screen: every dialog line must go red for its top. PLAYFIRST_CONTROL=
+ * nobanner hides the banner: every line must be refused as measuring nothing. Each says FIRED (exit 1), did NOT fire
+ * (exit 3) or ABORTED when it had nothing to act on (exit 2).
  * Measured 2026-10-22 on runners (Round 1536): 399 route widths over 133 routes, 41 routes open a first visit dialog;
  * before the Round 1536 hardening 9 were red (Stadium Tycoon, Idle Arena, Wonderkid Factory at all three widths),
  * after it 0, every button at least 37 px above a pending banner; the cover fired on 123 of 123 dialog buttons.
@@ -47,7 +61,8 @@ const { chromium } = pw;
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BASE = process.env.BASE ?? process.env.SWEEP_BASE ?? 'http://localhost:4173';
 const CONTROL = process.env.PLAYFIRST_CONTROL || '';
-if (CONTROL && CONTROL !== 'cover' && CONTROL !== 'ratchet') { console.error(`PLAYFIRST_CONTROL=${CONTROL} is not a control this walk knows (cover, ratchet)`); process.exit(2); }
+const CONTROLS = ['cover', 'ratchet', 'expected', 'edge', 'lift', 'nobanner'];
+if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`PLAYFIRST_CONTROL=${CONTROL} is not a control this walk knows (${CONTROLS.join(', ')})`); process.exit(2); }
 const WIDTHS = [[320, 640], [390, 844], [1280, 900]];
 const BANNER = '[role="region"][aria-label="Cookie choices"], [role="dialog"][aria-label="Cookie choices"]';
 
@@ -68,8 +83,6 @@ if (routes.length === 0) { console.error('playFirstVisitDialogs: no routes match
    its own scroll box and reports what sits at its centre. Marks both so the tap and the close check find them again. */
 function measureInPage({ BANNER, control }) {
   const W = innerWidth, H = innerHeight;
-  const banner = document.querySelector(BANNER);
-  const bannerFixed = !!banner && getComputedStyle(banner).position === 'fixed';
   const box = r => ({ top: Math.round(r.top), bottom: Math.round(r.bottom) });
   const vis = el => {
     const r = el.getBoundingClientRect();
@@ -77,6 +90,9 @@ function measureInPage({ BANNER, control }) {
     const s = getComputedStyle(el);
     return s.display !== 'none' && s.visibility !== 'hidden' && Number(s.opacity) > 0.05;
   };
+  /* only a banner that is on screen counts: one that is in the page but hidden measures nothing */
+  const banner = [...document.querySelectorAll(BANNER)].find(vis) || null;
+  const bannerFixed = !!banner && getComputedStyle(banner).position === 'fixed';
   const inBanner = el => !!banner && banner.contains(el);
   const roleDialogs = [...document.querySelectorAll('[role="dialog"],[role="alertdialog"],[aria-modal="true"]')].filter(d => vis(d) && !inBanner(d));
   const overlays = [...document.querySelectorAll('body *')].filter(el => {
@@ -98,6 +114,8 @@ function measureInPage({ BANNER, control }) {
   out.kind = inner === g && !g.matches('[role="dialog"],[role="alertdialog"],[aria-modal="true"]') ? 'overlay' : 'dialog';
   out.position = getComputedStyle(inner).position;
   out.bannerInside = !!banner && g.contains(banner);
+  /* PLAYFIRST_CONTROL=lift: the CSS translate property adds to a dialog's own transform rather than replacing it */
+  if (control === 'lift') { g.style.translate = `0px ${-Math.round(inner.getBoundingClientRect().top + 20)}px`; out.controlApplied = true; }
   out.dialogBox = box(inner.getBoundingClientRect());
   g.setAttribute('data-playfirst-dialog', '');
   const label = b => ((b.textContent || '').trim() || b.getAttribute('aria-label') || '').replace(/\s+/g, ' ').slice(0, 30);
@@ -110,9 +128,16 @@ function measureInPage({ BANNER, control }) {
   if (!pick) return out;
   pick.setAttribute('data-playfirst-button', '');
   pick.scrollIntoView({ block: 'center', inline: 'nearest' });
+  const bb = banner && bannerFixed ? banner.getBoundingClientRect() : null;
+  if (control === 'edge' && bb && !out.bannerInside) {
+    const shift = Math.round(bb.top + 8 - pick.getBoundingClientRect().bottom);
+    if (shift > 0) { g.style.translate = `0px ${shift}px`; out.controlApplied = true; }
+  }
   const r = pick.getBoundingClientRect();
   const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
-  if (control === 'cover') {
+  /* where the dialog's own box ends once its button is in view, against a pending banner outside it */
+  out.boxUnder = bb && out.kind === 'dialog' && !out.bannerInside ? Math.round(inner.getBoundingClientRect().bottom - bb.top) : null;
+  if (control === 'cover' || control === 'expected') {
     const c = document.createElement('div');
     c.setAttribute('data-playfirst-cover', '');
     /* pointer-events auto on purpose: a modal Radix dialog sets pointer-events none on the body, which the cover
@@ -125,7 +150,6 @@ function measureInPage({ BANNER, control }) {
   const describe = el => `${el.tagName.toLowerCase()} "${(el.getAttribute('aria-label') || el.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 24)}"`;
   out.at = !onScreen ? 'off screen' : !hit ? 'nothing' : pick.contains(hit) ? 'tappable' : inBanner(hit) ? 'the banner'
     : hit.hasAttribute('data-playfirst-cover') ? 'the control' : `covered by ${describe(hit)}`;
-  const bb = banner && bannerFixed ? banner.getBoundingClientRect() : null;
   out.overlap = bb && r.right > bb.left && r.left < bb.right ? Math.max(0, Math.round(Math.min(r.bottom, bb.bottom) - Math.max(r.top, bb.top))) : 0;
   out.depth = out.overlap ? Math.round(r.bottom - bb.top) : 0;
   out.clear = bb && !out.overlap ? Math.round(bb.top - r.bottom) : null;
@@ -159,6 +183,7 @@ for (const route of routes) {
     const key = `${route}@${w}`;
     const res = { route, width: w, height: h, key };
     const ctx = await browser.newContext({ viewport: { width: w, height: h } });
+    if (CONTROL === 'nobanner') await ctx.addInitScript(() => { const s = document.createElement('style'); s.textContent = '[aria-label="Cookie choices"] { display: none !important; }'; document.documentElement.appendChild(s); });
     const page = await ctx.newPage();
     await page.route(/supabase\.co/, r => r.abort());
     try {
@@ -189,13 +214,17 @@ await browser.close();
 /* PLAYFIRST_CONTROL=ratchet lists every walked route width as an expected site red, so every green or dialog free
    line must fail with "remove it from the list": proof the ratchet empties the list rather than hiding a fix. */
 if (CONTROL === 'ratchet') for (const r of results) EXPECTED_SITE_RED[r.key] = 'control';
-const failures = [];
+/* PLAYFIRST_CONTROL=expected covers every button and lists every route width that opened one, so each must print
+   EXPECTED and none may fail: proof a listed red is held without failing the walk. */
+if (CONTROL === 'expected') for (const r of results) if (r.button) EXPECTED_SITE_RED[r.key] = 'control';
+const failures = [], noBanner = [];
 let expected = 0, none = 0, passed = 0, fired = 0, withButton = 0, ratcheted = 0;
 for (const r of results) {
   const where = `${r.route} ${r.width}x${r.height}`;
   const bannerNote = `banner ${span(r.banner)}${r.bannerInside ? ' (inside the dialog)' : r.pending ? ' (pending)' : ''}`;
   let state, why;
   if (r.error) { state = 'FAIL'; why = `the page did not load: ${r.error}`; }
+  else if (!r.banner) { state = 'NOBANNER'; why = 'the cookie banner never came on screen, so this line measured nothing'; noBanner.push(where); }
   else if (!r.dialogs) { state = 'NONE'; why = `no first visit dialog, ${bannerNote}`; }
   else {
     const head = `${r.kind} "${r.name}" (${r.position}) ${span(r.dialogBox)}`;
@@ -203,15 +232,22 @@ for (const r of results) {
     else {
       withButton += 1;
       if (r.at === 'the control') fired += 1;
-      const btn = `"${r.button}" (${r.how}) ${span(r.buttonBox)}${r.whole ? '' : ' (partly off screen)'}`;
-      if (r.at !== 'tappable') { state = 'FAIL'; why = `${head}, ${btn} is not tappable: at its centre ${r.at}${r.overlap ? `, ${r.overlap} of its ${r.buttonBox.bottom - r.buttonBox.top} px under the banner (its bottom ${r.depth} px below the banner's top)` : ''}, ${bannerNote}`; }
-      else if (!r.closed) { state = 'FAIL'; why = `${head}, ${btn} tapped but the dialog did not close, ${bannerNote}`; }
-      else if (r.blocker) { state = 'FAIL'; why = `${head}, ${btn} tapped and closed, but ${r.blocker} still covers the screen, ${bannerNote}`; }
+      const btn = `"${r.button}" (${r.how}) ${span(r.buttonBox)}`;
+      const problems = [];
+      if (r.at !== 'tappable') problems.push(['centre', `is not tappable: at its centre ${r.at}`]);
+      if (r.overlap) problems.push(['under', `has ${r.overlap} of its ${r.buttonBox.bottom - r.buttonBox.top} px under the banner (its bottom ${r.depth} px below the banner's top)`]);
+      if (!r.whole) problems.push(['offscreen', 'is partly off screen']);
+      if (r.dialogBox.top < -1) problems.push(['top', `sits in a dialog whose top is ${-r.dialogBox.top} px above the screen, so its heading and close are out of reach`]);
+      if (r.boxUnder > 1) problems.push(['boxunder', `sits in a dialog whose own box runs ${r.boxUnder} px under the banner`]);
+      if (r.at === 'tappable' && !r.closed) problems.push(['close', 'was tapped but the dialog did not close']);
+      if (r.at === 'tappable' && r.closed && r.blocker) problems.push(['blocker', `was tapped and the dialog closed, but ${r.blocker} still covers the screen`]);
+      r.problems = problems.map(p => p[0]);
+      if (problems.length) { state = 'FAIL'; why = `${head}, ${btn} ${problems.map(p => p[1]).join('; ')}, ${bannerNote}`; }
       else { state = 'PASS'; why = `${head}, ${btn} tappable${r.clear !== null ? ` (${r.clear} px above the banner)` : ''}, ${bannerNote}; tapped, closed, screen usable`; }
     }
   }
   const note = EXPECTED_SITE_RED[r.key];
-  if (note && !r.error) {
+  if (note && !r.error && state !== 'NOBANNER') {
     if (state === 'FAIL') { state = 'EXPECTED'; why += ` (site rule, board note ${note})`; }
     else { why = `listed in EXPECTED_SITE_RED (${note}) but ${state === 'NONE' ? 'no dialog opens now' : 'green now'}: remove it from the list. ${why}`; state = 'FAIL'; ratcheted += 1; }
   }
@@ -239,8 +275,39 @@ if (CONTROL === 'ratchet') {
   console.log(`playFirstVisitDialogs: PLAYFIRST_CONTROL=ratchet did NOT fire: ${judged - ratcheted - expected} of ${judged} route widths escaped it`);
   process.exit(3);
 }
+if (CONTROL === 'expected') {
+  if (withButton === 0) { console.log('playFirstVisitDialogs control ABORTED: no route in this run opened a dialog with a button, so nothing was listed'); process.exit(2); }
+  if (expected === withButton && failures.length === 0) { console.log(`playFirstVisitDialogs: PLAYFIRST_CONTROL=expected FIRED. ${expected} of ${withButton} covered route widths listed in EXPECTED_SITE_RED printed EXPECTED and none failed the walk`); process.exit(1); }
+  console.log(`playFirstVisitDialogs: PLAYFIRST_CONTROL=expected did NOT fire: ${expected} of ${withButton} printed EXPECTED, ${failures.length} failed the walk`);
+  process.exit(3);
+}
+/* edge and lift: each line the control moved must be red for the check it targets. For edge the centre must still
+   read tappable, so the red comes from the whole button and box checks, not from the centre test that was already there. */
+const hits = {
+  edge: r => r.at === 'tappable' && r.problems.includes('under') && (r.kind !== 'dialog' || r.problems.includes('boxunder')),
+  lift: r => r.problems.includes('top'),
+};
+if (hits[CONTROL]) {
+  const moved = results.filter(r => r.controlApplied && r.button && r.problems);
+  if (moved.length === 0) { console.log(`playFirstVisitDialogs control ABORTED: PLAYFIRST_CONTROL=${CONTROL} moved no dialog in this run`); process.exit(2); }
+  const escaped = moved.filter(r => !hits[CONTROL](r));
+  if (escaped.length === 0) { console.log(`playFirstVisitDialogs: PLAYFIRST_CONTROL=${CONTROL} FIRED. ${moved.length} of ${moved.length} moved dialogs read red for the check it targets`); process.exit(1); }
+  console.log(`playFirstVisitDialogs: PLAYFIRST_CONTROL=${CONTROL} did NOT fire on ${escaped.length} of ${moved.length} moved dialogs: ${escaped.map(r => r.key).join(', ')}`);
+  process.exit(3);
+}
+if (CONTROL === 'nobanner') {
+  const judged = results.filter(r => !r.error).length;
+  if (judged === 0) { console.log('playFirstVisitDialogs control ABORTED: no route width loaded'); process.exit(2); }
+  if (noBanner.length === judged) { console.log(`playFirstVisitDialogs: PLAYFIRST_CONTROL=nobanner FIRED. ${judged} of ${judged} route widths with the banner hidden were refused as measuring nothing`); process.exit(1); }
+  console.log(`playFirstVisitDialogs: PLAYFIRST_CONTROL=nobanner did NOT fire: ${judged - noBanner.length} of ${judged} route widths counted with no banner on screen`);
+  process.exit(3);
+}
 if (failures.length) {
   console.log(`playFirstVisitDialogs: RED. ${failures.length} route widths: ${failures.map(f => f.split(':')[0]).join(', ')}`);
   process.exit(1);
+}
+if (noBanner.length) {
+  console.log(`playFirstVisitDialogs ABORTED: the cookie banner never came on screen on ${noBanner.length} route widths, so they measured nothing: ${noBanner.join(', ')}`);
+  process.exit(2);
 }
 console.log('playFirstVisitDialogs: green. Every first visit dialog can be started with the cookie banner unanswered.');
