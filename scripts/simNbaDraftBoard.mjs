@@ -111,8 +111,10 @@ const CONTROLS = {
   classtwice: { expect: [2], swap: ['    const cls = nbaEarnedDraftClass(Math.random, opened.night.slots.length, leagueNames(lg));',
     '    nbaEarnedDraftClass(Math.random, opened.night.slots.length, leagueNames(lg));\n    const cls = nbaEarnedDraftClass(Math.random, opened.night.slots.length, leagueNames(lg));'] },
   unseen: { expect: [3], swap: ['seen: earnedUi.seen(earnedNight),', 'seen: earnedNight.seen,'] },
-  redraw: { expect: [3], swap: ["      else if (s.phase !== 'recap') setPhase(s.phase);\n",
-    "      else if (s.phase !== 'recap') { setPhase(s.phase); if (s.phase === 'draft' && s.gm && nbaDraftNightOf(readGmDesk(s.gm), s.league)) openEarnedDraft(s.league, s.myTeam, s); }\n"] },
+  /* Anchored on the load path's desk line, not on the restore lines simGmReload holds (a control that edits a fenced
+     anchor turns section 6 red as well: r1540-s5b5). */
+  redraw: { expect: [3], swap: ['      setGm(s.gm === undefined ? null : readGmDesk(s.gm));\n',
+    "      setGm(s.gm === undefined ? null : readGmDesk(s.gm));\n      if (s.phase === 'draft' && s.gm && nbaDraftNightOf(readGmDesk(s.gm), s.league)) openEarnedDraft(s.league, s.myTeam, s);\n"] },
   nofinish: { expect: [2, 3, 4], swap: ['    if (press.done && night) {', '    if (press.done && night && false) {'] },
   zerobatches: { expect: [3, 5], swap: ["persist({ ...patch, phase: 'draft', draftClass: cls, picksLeft: slots, draftAiBatchesLeft: 2 }, lg, team);",
     "persist({ ...patch, phase: 'draft', draftClass: cls, picksLeft: slots, draftAiBatchesLeft: 0 }, lg, team);"] },
