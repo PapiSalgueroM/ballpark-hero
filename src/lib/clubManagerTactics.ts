@@ -293,9 +293,14 @@ function keyedPoisson(mean: number, rand: () => number): number {
  * is the one the squad is charged at the whistle. Pure: the same match gives the same numbers, and the harness
  * reads balanced football's numbers through the same function.
  */
+/** A goal as the report's numbers read it: when, and whether it was a set piece or an own goal (never credited to
+ *  the break or the wing; Round 1522 review). */
+export interface GoalMark { minute: number; penalty?: boolean; freeKick?: boolean; og?: unknown; }
+const openPlay = (gs: GoalMark[]): number[] => gs.filter(g => !g.penalty && !g.freeKick && !g.og).map(g => g.minute);
+
 export function tacticStatsOf(a: {
   key: string; log: InstructionStep[] | undefined; theirs: TeamInstructions; lastMinute: number;
-  possHalves: [number, number]; myGoalMinutes: number[]; oppGoalMinutes: number[]; wideDuties: number;
+  possHalves: [number, number]; myGoals: GoalMark[]; oppGoals: GoalMark[]; wideDuties: number;
 }): TacticStats {
   const T = TACTIC_TABLE;
   const rand = keyedRng(`cm-tactics|${a.key}`);
@@ -311,12 +316,12 @@ export function tacticStatsOf(a: {
     offsides += (T.offsides.base / 90) * (i.line === 1 ? T.offsides.high : i.line === -1 ? T.offsides.deep : 1);
     legs += legsCost(i) / 90;
   }
-  const breakConceded = a.oppGoalMinutes.filter(m => {
+  const breakConceded = openPlay(a.oppGoals).filter(m => {
     const i = instructionsAt(a.log, m);
     const p = clamp(T.breakShare.base + T.breakShare.perLine * i.line + (i.press === 1 ? T.breakShare.press : 0) + (a.theirs.tempo === 1 ? T.breakShare.vsDirect : 0), 0.03, 0.6);
     return rand() < p;
   }).length;
-  const wideGoals = a.myGoalMinutes.filter(m => {
+  const wideGoals = openPlay(a.myGoals).filter(m => {
     const i = instructionsAt(a.log, m);
     const p = clamp(T.wideShare.base + T.wideShare.perWidth * i.width + T.wideShare.perDuty * a.wideDuties, 0.08, 0.75);
     return rand() < p;
@@ -398,14 +403,14 @@ setTacticsImpl({
   possShift,
   day: (state, fx, live, pairs, lastMinute) => {
     const theirStyle = opponentStyle(state, fx.opponent);
-    const goals = (a?: { minute: number }[], b?: { minute: number }[]) => [...(a ?? []), ...(b ?? [])].map(g => g.minute);
+    const goals = (a?: GoalMark[], b?: GoalMark[]): GoalMark[] => [...(a ?? []), ...(b ?? [])];
     return {
       log: live.instrLog ?? [], theirStyle,
       stats: tacticStatsOf({
         key: `${worldYear(state)}:${state.clubName}:${live.week}:${live.opponent}`,
         log: live.instrLog, theirs: AI_STYLES[theirStyle].instructions, lastMinute,
         possHalves: [live.possH1 ?? 50, live.possH2 ?? live.possH1 ?? 50],
-        myGoalMinutes: goals(live.h1My, live.h2My), oppGoalMinutes: goals(live.h1Opp, live.h2Opp),
+        myGoals: goals(live.h1My, live.h2My), oppGoals: goals(live.h1Opp, live.h2Opp),
         wideDuties: wideDutyCount(pairs.map(x => x.duty)),
       }),
     };

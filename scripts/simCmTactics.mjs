@@ -100,7 +100,8 @@
    tacticStatsOf off TACTIC_TABLE's multipliers on a keyed stream, not counted off the football the engine played;
    their bands prove the table reaches the report and can only go red when a constant changes (which is all nowidth
    and noline do). Possession, shots, fitness at kick off, knocks, late goals and expected points are the engine's
-   own outputs.
+   own outputs. Goals from the spot, direct free kicks and own goals are never credited to the break or the wing
+   (tacticStatsOf skips them, for the report and for the balanced arms here alike).
    The default run checks dominance over the eight single settings only; the 80 fixed sets run with ARMS=all in
    shards (SHARD=k/16, TIERS=mid, folded with FOLD), and a table edit wants that run too before it ships.
    The adapt band is a sanity line, not the check: with tacticBoost zero (the flat control) adapt still measured
@@ -546,13 +547,15 @@ function runCareer(arm, club, seed) {
 function countMatch(cm, tac, s, report, obs, rec, key) {
   const d = report.detail;
   if (!d) return;
-  const goals = side => d.timeline.filter(e => e.kind === 'goal' && e.side === side).map(e => e.minute);
-  const mine = goals('me'), theirs = goals('opp');
+  /* The timeline's goal rows carry the set piece and own goal marks the report's numbers skip, the same as the
+     engine's own goal lines do. */
+  const goalRows = side => d.timeline.filter(e => e.kind === 'goal' && e.side === side);
+  const mine = goalRows('me').map(e => e.minute), theirs = goalRows('opp').map(e => e.minute);
   const t = d.tactics ? d.tactics.stats : tac.tacticStatsOf({
     key: `${key}|${obs.week}`, log: undefined,
     theirs: tac.AI_STYLES[tac.opponentStyle(s, obs.opp)].instructions,
     lastMinute: d.et ? d.et.to : 90, possHalves: d.possHalves ?? [d.stats.possession, d.stats.possession],
-    myGoalMinutes: mine, oppGoalMinutes: theirs, wideDuties: 0,
+    myGoals: goalRows('me'), oppGoals: goalRows('opp'), wideDuties: 0,
   });
   rec.all += 1;
   rec.poss += d.stats.possession;

@@ -82,10 +82,23 @@ describe('Round 1522: the dials', () => {
     expect(tacticsImpl()).not.toBeNull();
   });
   it('the report numbers are a pure function of the match', () => {
-    const args = { key: 'k', log: [{ minute: 0, instructions: { ...BALANCED, width: 1 as const } }], theirs: BALANCED, lastMinute: 90, possHalves: [55, 50] as [number, number], myGoalMinutes: [10, 70], oppGoalMinutes: [30], wideDuties: 2 };
+    const args = { key: 'k', log: [{ minute: 0, instructions: { ...BALANCED, width: 1 as const } }], theirs: BALANCED, lastMinute: 90, possHalves: [55, 50] as [number, number], myGoals: [{ minute: 10 }, { minute: 70 }], oppGoals: [{ minute: 30 }], wideDuties: 2 };
     expect(tacticStatsOf(args)).toEqual(tacticStatsOf(args));
     expect(instructionsAt(args.log, 1).width).toBe(1);
     expect(isBalanced(instructionsAt(undefined, 50))).toBe(true);
+  });
+  it('a penalty, a direct free kick or an own goal is never on the break or from wide (review run minor 1)', () => {
+    const log = [{ minute: 0, instructions: { ...BALANCED, width: 1 as const, line: 1 as const } }];
+    const base = { log, theirs: AI_STYLES.direct.instructions, lastMinute: 90, possHalves: [50, 50] as [number, number], wideDuties: 3 };
+    const set = [{ minute: 12, penalty: true }, { minute: 40, freeKick: true }, { minute: 77, og: true }, { minute: 88, og: { n: 'X' } }];
+    for (let k = 0; k < 40; k++) {
+      const t = tacticStatsOf({ ...base, key: `set${k}`, myGoals: set, oppGoals: set });
+      expect([t.breakConceded, t.wideGoals]).toEqual([0, 0]);
+    }
+    const open = Array.from({ length: 30 }, (_, i) => ({ minute: i + 1 }));
+    const t = tacticStatsOf({ ...base, key: 'open', myGoals: open, oppGoals: open });
+    expect(t.breakConceded).toBeGreaterThan(0);
+    expect(t.wideGoals).toBeGreaterThan(0);
   });
 });
 
