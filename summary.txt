@@ -1,0 +1,7 @@
+headsha exit=0 0s | 72ad37001e Release BP seam: playCmDataOnDemand reads the flag a man shows through the engine's shownNation (Round 1520)
+ctl-shootout-keepleague exit=0 24s | simCmShootoutOrder: 3 FAILURE(S)
+simCmShootoutOrder exit=0 37s | simCmShootoutOrder: all sections passed
+ctl-shootout-unsetpath exit=0 40s | simCmShootoutOrder: 3 FAILURE(S)
+dashscan exit=0 0s | since 212b9069: added lines with an en or em dash 0, commit message lines with one 0
+simNoRivalNames exit=0 16s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 54s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.

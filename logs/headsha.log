@@ -1,0 +1,6 @@
+1189b7e2ef rc request rBP-trF3 for 7226430fdbd647bae9f8074fe1cb7850cad64e6d
+7226430fdb Release BP seam: simCmShootoutOrder names the engine file through the 1520 bridge's own export
+d87049dd6d Release BP m14: merge origin/main again at f8a7e761 (the other lane's Round 1448, game descriptions and hosting cookies)
+7b55242f76 Release BP budget: simClubManagerSlots BUDGET 562,500, measured the way Rounds 1052 and 1311 set it
+998d22b00b Release BP seam: simCmShootoutOrder's historical arm takes Round 1520 out through that round's own bridge
+72ad37001e Release BP seam: playCmDataOnDemand reads the flag a man shows through the engine's shownNation (Round 1520)

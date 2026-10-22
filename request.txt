@@ -1,0 +1,8 @@
+# Release BP triage, trF3: the shootout seam after the anchor fence fix (7226430f), with the fence and the dash scan.
+headsha: git log --oneline -6
+simCmShootoutOrder: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmShootoutOrder.mjs
+ctl-shootout-unsetpath: CM_SHOOTOUT_CONTROL=unsetpath node scripts/simCmShootoutOrder.mjs 2>&1 | tee "$TMPDIR/ctl.log"; s=${PIPESTATUS[0]}; [ $s -eq 1 ] && grep -qE 'simCmShootoutOrder: [1-9][0-9]* FAILURE\(S\)' "$TMPDIR/ctl.log"
+ctl-shootout-keepleague: CM_SHOOTOUT_CONTROL=keepleague node scripts/simCmShootoutOrder.mjs 2>&1 | tee "$TMPDIR/ctl.log"; s=${PIPESTATUS[0]}; [ $s -eq 1 ] && grep -qE 'simCmShootoutOrder: [1-9][0-9]* FAILURE\(S\)' "$TMPDIR/ctl.log"
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+dashscan: B=212b9069; n=$(git diff $B HEAD | grep -cP '^\+(?!\+\+).*(\x{2013}|\x{2014})'); m=$(git log --format=%B $B..HEAD | grep -cP '\x{2013}|\x{2014}'); echo "since $B: added lines with an en or em dash $n, commit message lines with one $m"; [ "$n" = 0 ] && [ "$m" = 0 ]
