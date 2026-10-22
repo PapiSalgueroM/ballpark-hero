@@ -1,0 +1,4 @@
+simGuideHeadings: refreshed /nba-higher-lower from its actual guide (howToPlay 5, rules 5, example 2, tips 4)
+simGuideHeadings: refreshed /f1-driver from its actual guide (howToPlay 5, rules 4, example 3, tips 3)
+ scripts/data/guideHeadingsFrozen.json | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)

@@ -1,0 +1,3 @@
+refresh: node scripts/simGuideHeadings.mjs --refresh /nba-higher-lower && node scripts/simGuideHeadings.mjs --refresh /f1-driver && cp scripts/data/guideHeadingsFrozen.json "$RC_OUT/guideHeadingsFrozen.json" && git diff --stat
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simHigherLowerFacts: node scripts/simHigherLowerFacts.mjs

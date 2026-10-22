@@ -1,0 +1,3 @@
+simHigherLowerFacts exit=0 0s | simHigherLowerFacts: green. 64 checks across 10 fenced game(s). Every total matches the source it came from, every matchup is ordered correctly, and every figure nobody c
+refresh exit=0 1s |  1 file changed, 2 insertions(+), 2 deletions(-)
+tsc exit=0 55s | 
