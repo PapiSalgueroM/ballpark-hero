@@ -1,0 +1,38 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simTycoonScorelines: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonScorelines.mjs
+simTycoonAwayMatchdays: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonAwayMatchdays.mjs
+simAllPlayersValue: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simAllPlayersValue.mjs
+simTycoonSetPiece: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonSetPiece.mjs
+simStadiumTycoon: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simStadiumTycoon.mjs
+simTycoonHelp: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonHelp.mjs
+ladder: node scripts/measureTycoonLadder.mjs
+retake-head: node scripts/retakeTycoonHistories.mjs
+vitest: node_modules/.bin/vitest run src/test/tycoonAway.test.tsx src/test/tycoonGear.test.tsx src/test/tycoonHelp.test.tsx src/test/tycoonLatestSeason.test.tsx src/test/tycoonLoads.test.tsx src/test/tycoonPacks.test.tsx src/test/tycoonPitch.test.tsx src/test/tycoonRooms.test.tsx src/test/tycoonSaleReview.test.tsx src/test/tycoonSetPieceBoard.test.tsx src/test/tycoonSetPiecePage.test.tsx src/test/tycoonTicketPolicy.test.tsx --testTimeout=300000 --hookTimeout=120000
+dashscan: n=$(git diff 640506ef8 HEAD -- scripts/simTycoonScorelines.mjs src/pages/WhatsNew.tsx docs/audits/ROUND-1543-NOTES.md | grep '^+' | LC_ALL=C.UTF-8 grep -cP '\x{2013}|\x{2014}'); c=$(printf 'a\xe2\x80\x94b\n' | LC_ALL=C.UTF-8 grep -cP '\x{2013}|\x{2014}'); m=$(git log --first-parent --format=%B 640506ef8..HEAD | LC_ALL=C.UTF-8 grep -cP '\x{2013}|\x{2014}'); echo "added lines with a dash: $n, commit messages: $m, control (an em dash typed): $c"; [ "$n" = 0 ] && [ "$m" = 0 ] && [ "$c" = 1 ]
+simNoRivalNames: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simNoRivalNames.mjs
+simHarnessAnchors: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simHarnessAnchors.mjs
+simStorageWrites: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simStorageWrites.mjs
+simLiveScores: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simLiveScores.mjs
+simInventedNames: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simInventedNames.mjs
+simNoInventedQuotes: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simNoInventedQuotes.mjs
+simNoInventedConduct: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simNoInventedConduct.mjs
+simLegalPages: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simLegalPages.mjs
+simSingleFooter: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSingleFooter.mjs
+simCompletionSlugs: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCompletionSlugs.mjs
+simCompletionOnce: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCompletionOnce.mjs
+simNoDoubleRecord: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simNoDoubleRecord.mjs
+simDailyPuzzleContract: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simDailyPuzzleContract.mjs
+simDailySaveHardening: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simDailySaveHardening.mjs
+simWritesAreSent: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simWritesAreSent.mjs
+simSchemaNames: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSchemaNames.mjs
+simFetchRetry: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simFetchRetry.mjs
+simGoogleOnlyReturn: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simGoogleOnlyReturn.mjs
+simReportRelay: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simReportRelay.mjs
+simNavbarStatsReads: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simNavbarStatsReads.mjs
+simLeaderboardCaps: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simLeaderboardCaps.mjs
+simScoringCoverage: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simScoringCoverage.mjs
+simSiteSearch: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSiteSearch.mjs
+simResultMoment: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simResultMoment.mjs
+simGuideHeadings: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simGuideHeadings.mjs
+simTrustCopy: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTrustCopy.mjs
+simAccessibility: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simAccessibility.mjs
