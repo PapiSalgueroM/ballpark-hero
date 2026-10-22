@@ -1,0 +1,3 @@
+#!playwright
+#!serial
+wr-main: git worktree add -q /tmp/base 776d1072 && ln -s "$PWD/node_modules" /tmp/base/node_modules && cd /tmp/base && node_modules/.bin/vite build > /tmp/bb.log 2>&1 && node scripts/simWritesAreSent.mjs > /tmp/wb.log 2>&1; e=$?; tail -6 /tmp/wb.log | cut -c1-220; exit $e

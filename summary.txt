@@ -1,0 +1,1 @@
+wr-main exit=1 48s | simWritesAreSent: 2 failures
