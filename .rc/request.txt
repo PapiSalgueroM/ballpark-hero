@@ -1,0 +1,13 @@
+#!serial
+m-promo3: node .rc/x/mut1524.mjs promo3 && node scripts/simSoccerOwnerTail.mjs; s=$?; git checkout -- src scripts; exit $s
+m-releg4: node .rc/x/mut1524.mjs releg4 && node scripts/simSoccerOwnerTail.mjs; s=$?; git checkout -- src scripts; exit $s
+m-stalekey: node .rc/x/mut1524.mjs stalekey && node scripts/simSoccerOwnerTail.mjs; s=$?; git checkout -- src scripts; exit $s
+m-youthnow: node .rc/x/mut1524.mjs youthnow && node scripts/simSoccerOwnerTail.mjs; s=$?; git checkout -- src scripts; exit $s
+m-plankeep: node .rc/x/mut1524.mjs plankeep && node scripts/simSoccerOwnerTail.mjs; s=$?; git checkout -- src scripts; exit $s
+m-plankeep-vitest: node .rc/x/mut1524.mjs plankeep && node_modules/.bin/vitest run src/test/scoreShown.test.tsx src/test/soccerCareerSaveRecovery.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
+m-revenue4: node .rc/x/mut1524.mjs revenue4 && node scripts/simSoccerOwnerTail.mjs; s=$?; git checkout -- src scripts; exit $s
+m-revenue4-money: node .rc/x/mut1524.mjs revenue4 && node scripts/simCareerMoneyAfterRetirement.mjs; s=$?; git checkout -- src scripts; exit $s
+m-tiebreak: node .rc/x/mut1524.mjs tiebreak && node scripts/simSoccerOwnerTail.mjs; s=$?; git checkout -- src scripts; exit $s
+m-tiebreak-mgr: node .rc/x/mut1524.mjs tiebreak && node scripts/simManagerCareer.mjs; s=$?; git checkout -- src scripts; exit $s
+m-dragsign: node .rc/x/mut1524.mjs dragsign && node scripts/simSoccerOwnerTail.mjs; s=$?; git checkout -- src scripts; exit $s
+m-stalekey-vitest: node .rc/x/mut1524.mjs stalekey && node_modules/.bin/vitest run src/test/scoreShown.test.tsx src/test/soccerCareerSaveRecovery.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
