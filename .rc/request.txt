@@ -1,0 +1,5 @@
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+stop-earned: git show 822bd75d:scripts/simNbaGmDesk.mjs > scripts/simNbaGmDesk.mjs && T=$(mktemp -d) && TMPDIR=$T TEMP=$T TMP=$T node scripts/simNbaGmDesk.mjs > /tmp/g.txt 2>&1; s=$?; grep -vE "^\s*FAIL" /tmp/g.txt | tail -40; echo "FAIL lines: $(grep -cE '^\s*FAIL' /tmp/g.txt)"; grep -E "^\s*FAIL" /tmp/g.txt | sed -E 's/[0-9]+/N/g' | sort | uniq -c | sort -rn | head -8; git checkout -- scripts; exit $s
+simNbaGmDesk: T=$(mktemp -d); TMPDIR=$T TEMP=$T TMP=$T node scripts/simNbaGmDesk.mjs > /tmp/h.txt 2>&1; s=$?; tail -12 /tmp/h.txt; exit $s
+contract-files: git diff --quiet 7a8750ba HEAD -- scripts/simNbaGmDesk.mjs src/lib/gmContractRules.ts src/lib/gmContracts.ts && echo "simNbaGmDesk, gmContractRules, gmContracts byte equal to 7a8750ba"
