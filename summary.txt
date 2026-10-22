@@ -1,0 +1,2 @@
+headsha exit=0 0s | b7c5bcee86 rc request rBP-trN-bp for d87049dd6dbeb57bed1fdc416804e010be2592b6
+anchors-all exit=0 45s |    FAIL simCmShootoutOrder.mjs reads src/lib/clubManager.ts raw at line 283 and searches it with a multi line anchor (line 319), so on a CRLF checkout it matches nothing 

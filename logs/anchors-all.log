@@ -1,0 +1,5 @@
+anchorsAll: every offence printed
+   offence simCmShootoutOrder.mjs: raw read line 283 of src/lib/clubManager.ts, anchor line 319
+   offence simCmShootoutOrder.mjs: raw read line 1256 of src/lib/clubManager.ts, anchor line 319
+   offence simCmShootoutOrder.mjs: raw read line 1263 of src/lib/clubManager.ts, anchor line 319
+   FAIL simCmShootoutOrder.mjs reads src/lib/clubManager.ts raw at line 283 and searches it with a multi line anchor (line 319), so on a CRLF checkout it matches nothing (3 raw reads in all)
