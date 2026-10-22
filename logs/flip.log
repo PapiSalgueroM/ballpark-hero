@@ -1,0 +1,26 @@
+flipprobe: wrote scripts/pfFlipProbe1539.mjs
+FLIP /stadium-tycoon#away@320 card=true [0.999,0.999,0.999]
+FLIP /stadium-tycoon#away@390 card=true [0.999,0.999,0.999]
+FLIP /stadium-tycoon#away@1280 card=true [0.999,0.999,0.999]
+  PASS     /stadium-tycoon 320x640: dialog "How Stadium Tycoon works" (static) 16 to 319, "Let's go" (its go label) 250 to 298 tappable (37 px above the banner), banner 335 to 640 (pending); tapped, closed, screen usable
+  PASS     /stadium-tycoon 390x844: dialog "How Stadium Tycoon works" (static) 16 to 595, "Let's go" (its go label) 526 to 574 tappable (37 px above the banner), banner 611 to 844 (pending); tapped, closed, screen usable
+  PASS     /stadium-tycoon 1280x900: dialog "How Stadium Tycoon works" (static) 16 to 719, "Let's go" (its go label) 650 to 698 tappable (37 px above the banner), banner 735 to 900 (pending); tapped, closed, screen usable
+  PASS     /stadium-tycoon#away 320x640: dialog "While you were away" (static) 16 to 319, "Back to work" (its primary style) 250 to 294 tappable (41 px above the banner), banner 335 to 640 (pending); tapped, closed, screen usable; the full card (18 results) drawn, the page held at scrollY 0, height 13251
+  PASS     /stadium-tycoon#away 390x844: dialog "While you were away" (static) 73 to 538, "Back to work" (its primary style) 469 to 513 tappable (98 px above the banner), banner 611 to 844 (pending); tapped, closed, screen usable; the full card (18 results) drawn, the page held at scrollY 0, height 10896
+  PASS     /stadium-tycoon#away 1280x900: dialog "While you were away" (static) 143 to 592, "Back to work" (its primary style) 523 to 567 tappable (168 px above the banner), banner 735 to 900 (pending); tapped, closed, screen usable; the full card (18 results) drawn, the page held at scrollY 0, height 7493
+
+6 route widths walked over 1 routes and 1 seeded scene (3 of the lines): 6 dialogs tapped and closed, 0 expected site reds, 0 without a first visit dialog, 0 red
+playFirstVisitDialogs: green. Every first visit dialog can be started with the cookie banner unanswered.
+FLIP /stadium-tycoon#away@320 card=false [0.03369191405363381,0.7872054418548942,0.15856528002768755]
+FLIP /stadium-tycoon#away@390 card=false [0.03369191405363381,0.7872054418548942,0.15856528002768755]
+FLIP /stadium-tycoon#away@1280 card=false [0.03369191405363381,0.7872054418548942,0.15856528002768755]
+  PASS     /stadium-tycoon 320x640: dialog "How Stadium Tycoon works" (static) 16 to 319, "Let's go" (its go label) 250 to 298 tappable (37 px above the banner), banner 335 to 640 (pending); tapped, closed, screen usable
+  PASS     /stadium-tycoon 390x844: dialog "How Stadium Tycoon works" (static) 16 to 595, "Let's go" (its go label) 526 to 574 tappable (37 px above the banner), banner 611 to 844 (pending); tapped, closed, screen usable
+  PASS     /stadium-tycoon 1280x900: dialog "How Stadium Tycoon works" (static) 16 to 719, "Let's go" (its go label) 650 to 698 tappable (37 px above the banner), banner 735 to 900 (pending); tapped, closed, screen usable
+  FAIL     /stadium-tycoon#away 320x640: the planted save opened no card, banner 335 to 640 (pending)
+  FAIL     /stadium-tycoon#away 390x844: the planted save opened no card, banner 611 to 844 (pending)
+  FAIL     /stadium-tycoon#away 1280x900: the planted save opened no card, banner 735 to 900 (pending)
+
+6 route widths walked over 1 routes and 1 seeded scene (3 of the lines): 3 dialogs tapped and closed, 0 expected site reds, 0 without a first visit dialog, 3 red
+playFirstVisitDialogs: PLAYFIRST_CONTROL=stale FIRED. 3 of 3 seeded lines with a fresh save opened no card and failed the walk
+flip probe exits: card 0 (want 0), stale 1 (want 1)
