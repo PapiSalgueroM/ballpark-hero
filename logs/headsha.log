@@ -1,0 +1,6 @@
+3763d9aaf6 rc request rBP-trF1 for 7b55242f763e5e8935c43c277e92fb90bbc07988
+7b55242f76 Release BP budget: simClubManagerSlots BUDGET 562,500, measured the way Rounds 1052 and 1311 set it
+998d22b00b Release BP seam: simCmShootoutOrder's historical arm takes Round 1520 out through that round's own bridge
+72ad37001e Release BP seam: playCmDataOnDemand reads the flag a man shows through the engine's shownNation (Round 1520)
+e04e8428dd Release BP seam: three Soccer Career qa walks give their retired boundary the Just retire choice (Round 1519)
+e89ec25559 Release BP seam: simLiveSimMotion's whistle control follows the viewer's import line as Round 1522 left it

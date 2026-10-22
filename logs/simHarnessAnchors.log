@@ -1,0 +1,8 @@
+1) every harness parses
+   ok   992 harnesses pass node --check
+2) no harness carries an anchor it can never match
+   992 harnesses, 268 carry a multi line anchor into src, 347 normalised reads guard one
+   ok   268 harnesses are in scope, so the check is looking at something
+   FAIL simCmShootoutOrder.mjs reads src/lib/clubManager.ts raw at line 283 and searches it with a multi line anchor (line 319), so on a CRLF checkout it matches nothing (3 raw reads in all)
+
+simHarnessAnchors: 1 failure(s)

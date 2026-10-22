@@ -1,0 +1,14 @@
+headsha exit=0 0s | e89ec25559 Release BP seam: simLiveSimMotion's whistle control follows the viewer's import line as Round 1522 left it
+ctl-motion-banner exit=0 13s | simLiveSimMotion: control banner turned "the extra time banner says what is true" red on an assertion (1 failed), as it must.
+ctl-motion-whistle exit=0 15s | simLiveSimMotion: control whistle turned "the ninetieth minute asks the latest save" red on an assertion (2 failed), as it must.
+ctl-shootout-unsetpath exit=0 33s | simCmShootoutOrder: 3 FAILURE(S)
+simCmShootoutOrder exit=0 35s | simCmShootoutOrder: all sections passed
+ctl-shootout-keepleague exit=0 23s | simCmShootoutOrder: 3 FAILURE(S)
+simLiveSimMotion exit=0 83s | simLiveSimMotion: green. 56 tests passed (the viewer on real feeds, the pitch part's rules on 200 half feeds and on feeds made by hand, the goal sequence, match mode), an
+appeal1081 exit=0 55s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+simClubManagerSlots exit=0 105s | simClubManagerSlots: all sections green
+slots-dupe exit=0 108s | CONTROL FIRED: SLOTS_CONTROL=dupe turned section 2 red through its budget check (red sections: 2, 3), as it must
+simNoRivalNames exit=0 20s | No rival product names found. 0 findings.
+dashscan exit=0 0s | since 212b9069: added lines with an en or em dash 0, commit message lines with one 0
+simHarnessAnchors exit=1 60s | simHarnessAnchors: 1 failure(s)
+sizediag exit=0 488s | DIAGNOSTIC complete: original/current unchanged historical budgets, full raw states, storage and unfiltered action vectors retained
