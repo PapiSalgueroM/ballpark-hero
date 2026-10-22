@@ -359,6 +359,17 @@
  * Continue" (its markup: the training card on screen). No save, text excerpt,
  * length, coverage count or other step moved; no brand or corruption answer
  * is pressed here. 2,298,769 bytes.
+ * Re-recorded on purpose once more in Round 1538's fix pass, on 2026-10-22,
+ * by the same method, from fb4ba543 (r1538x-rrb, rech-head): the review found
+ * the maintenance Skill button said "Health +4" at full health, and commit
+ * c85ccd6a makes it "Health +4, up to 100". With that commit's five source
+ * files put back (the four engines and usCareerAnnualBenefits.ts) the head
+ * replays the recording before it green (board-nof1) and records it byte
+ * for byte, header aside (rech-nof1); as shipped the replay is red at exactly
+ * 1 step (board-head), the NFL fixed save "dirty"'s screen after "curtain:
+ * Continue" at age 31 (its markup: the training card on screen, where the
+ * button is the maintenance one). No save, text excerpt, length or coverage
+ * count moved. 2,298,769 bytes.
  *
  * Controls, one per run (each is a full replay, about three minutes):
  *   US_BOARD_PARITY_CONTROL=label    one label changed in a copy of the shared
