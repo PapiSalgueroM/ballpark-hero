@@ -1,0 +1,68 @@
+treeWithoutMerge: fad799a2e9cbdf8005c802b28c0b051926613f00, 082fc277 without 5ec5a724; conflicts kept from 082fc277: scripts/qa/managerWorldContinuityKit.mjs, scripts/qa/managerWorldSizeDiagnostic.mjs, scripts/simCmLeagueRules.mjs, scripts/simCmUnseededWorld.mjs, src/pages/WhatsNew.tsx
+base 472fc0666c79ddc2038a2852d47c1cbb3faa3196 (Release BC as published without Release AZ)
+FAIL [healthy] inactive: Entire inactive AR result and saved bytes match
++ actual - expected
+... Skipped lines
+
+  {
+    loaded: {
+      academy: {
+        candidates: [
+          {
+...
+          playerWages: 0,
++         shirts: {
++           costPence: 0,
++           grossPence: 0,
++           openingPence: 0,
++           paidPence: 0,
++           v: 1,
++           weeks: 0
++         },
+          sponsor: 0,
+          staffWages: 0,
+          tickets: 0,
+          travel: 0,
+          weeks: 0
+...
+            playerWages: 0.533,
++           shirts: {
++             costPence: 672000,
++             grossPence: 1680000,
++             openingPence: 0,
++             paidPence: 1000000,
++             v: 1,
++             weeks: 1
++           },
+            sponsor: 0,
+            staffWages: 0.167,
+            tickets: 1.63,
+            travel: 0,
+            weeks: 1
+...
+        },
++       budget: 56.03,
+-       budget: 56.02,
+        calendar: [
+          {
+            round: 0,
+            type: 'league'
+          },
+
+PASS [healthy] constructors
+PASS [healthy] identity
+PASS [healthy] buy-job
+PASS [healthy] year-away
+PASS [healthy] sale
+PASS [healthy] option
+PASS [healthy] release
+PASS [healthy] refresh
+PASS [healthy] seeded-world
+PASS [healthy] storage
+AssertionError [ERR_ASSERTION]: Healthy complete outcome groups all pass
+
+1 !== 0
+
+    at arm (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:519:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:527:24
