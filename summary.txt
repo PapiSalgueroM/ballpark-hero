@@ -1,0 +1,5 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+ctl-wipebutton exit=0 14s | playGmCareer control wipebutton: all 1 guarded checks fired (mutations landed: {"wipebutton":2})
+ctl-eagerpanel exit=1 38s | playGmCareer control eagerpanel: 1/1 guarded checks fired, 0 missed, 2 unrelated failure(s)
+ctl-nofallback exit=1 45s | playGmCareer control nofallback: only 0 guarded checks ran, expected at least 1
+base-gmpress exit=1 125s | playGmPress: 2 failures

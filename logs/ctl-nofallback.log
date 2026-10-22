@@ -1,0 +1,12 @@
+/front-office at 390 by 844
+  PASS  nfl 390x844 A: no button on the recap deletes the save
+  PASS  nfl 390x844 A: the recap offers who is calling
+  PASS  nfl 390x844 A: no career panel chunk is asked for before a box is tapped (0)
+  PASS  nfl 390x844 A: the save survives the firing, fired, on the out of work screen
+  PASS  nfl 390x844 A: the out of work screen
+  PASS  nfl 390x844 A out of work: nothing wider than the screen (0px over)
+  PASS  nfl 390x844 A out of work: every control at least 44 px tall (all)
+  PASS  nfl 390x844 A out of work: no text under its floor (none)
+  FAIL  nfl 390x844 walkA: the walk could not finish (TimeoutError: locator.boundingBox: Timeout 30000ms exceeded.)
+
+playGmCareer control nofallback: only 0 guarded checks ran, expected at least 1
