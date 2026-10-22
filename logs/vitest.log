@@ -1,0 +1,61 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/lineupValidatorClient.test.tsx [2m([22m[2m55 tests[22m[2m)[22m[32m 125[2mms[22m[39m
+ [31m❯[39m src/test/nbaCourtSelection.test.tsx [2m([22m[2m14 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 707[2mms[22m[39m
+   [32m✓[39m NBA court position selection[2m > [22mselects every empty court position through the original index callback[32m 153[2mms[22m[39m
+   [32m✓[39m NBA court position selection[2m > [22mexposes the selected empty court slot and retains native focus[32m 52[2mms[22m[39m
+   [32m✓[39m NBA court position selection[2m > [22mrefuses court callbacks while selection is explicitly locked[32m 11[2mms[22m[39m
+   [32m✓[39m NBA court position selection[2m > [22mpreserves read-only player names stat rounding units and zero values[32m 11[2mms[22m[39m
+   [32m✓[39m NBA court position selection[2m > [22mkeeps filled court cards inert while empty slots remain selectable[32m 23[2mms[22m[39m
+   [32m✓[39m NBA court position selection[2m > [22mleaves empty court cards static without the optional selection callback[32m 6[2mms[22m[39m
+   [32m✓[39m NBA court position selection[2m > [22mroutes court and position-row picks through the same page handler[32m 152[2mms[22m[39m
+   [32m✓[39m NBA court position selection[2m > [22mlocks court and position-row picks during team spin[32m 53[2mms[22m[39m
+   [32m✓[39m NBA court position selection[2m > [22mlocks court and position-row picks during player validation[32m 120[2mms[22m[39m
+   [32m✓[39m NBA court position selection[2m > [22mclears the previous position input through the existing court selection path[32m 43[2mms[22m[39m
+   [32m✓[39m NBA court position selection[2m > [22mkeeps court opener focus while the existing row still autofocuses player input[32m 62[2mms[22m[39m
+   [32m✓[39m NBA court position selection[2m > [22mkeeps court selection out of the challenge phase[32m 2[2mms[22m[39m
+   [32m✓[39m NBA court position selection[2m > [22mkeeps court selection out of the reviewing phase[32m 10[2mms[22m[39m
+[31m   [31m×[31m NBA court position selection[2m > [22mkeeps court selection out of the result phase[39m[32m 5[2mms[22m[39m
+[31m     → Unable to find an element with the text: Simulated Guard. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<main />[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/nbaCourtSelection.test.tsx[2m > [22mNBA court position selection[2m > [22mkeeps court selection out of the result phase
+[31m[1mTestingLibraryElementError[22m: Unable to find an element with the text: Simulated Guard. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<main />[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[90m [2m❯[22m Object.getElementError node_modules/@testing-library/dom/dist/config.js:[2m37:19[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m76:38[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m52:17[22m[39m
+[90m [2m❯[22m getByText node_modules/@testing-library/dom/dist/query-helpers.js:[2m95:19[22m[39m
+[36m [2m❯[22m src/test/nbaCourtSelection.test.tsx:[2m137:44[22m[39m
+    [90m135| [39m    expect(view.queryByRole('button', { name: /on court$/ })).toBeNull…
+    [90m136| [39m    [34mexpect[39m(fixture[33m.[39mselect)[33m.[39mnot[33m.[39m[34mtoHaveBeenCalled[39m()[33m;[39m
+    [90m137| [39m    if (phase !== 'challenge') expect(view.getByText('Simulated Guard'…
+    [90m   | [39m                                           [31m^[39m
+    [90m138| [39m  })[33m;[39m
+    [90m139| [39m})[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m68 passed[39m[22m[90m (69)[39m
+[2m   Start at [22m 12:46:03
+[2m   Duration [22m 2.28s[2m (transform 580ms, setup 165ms, collect 1.14s, tests 833ms, environment 660ms, prepare 278ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/nbaCourtSelection.test.tsx,title=src/test/nbaCourtSelection.test.tsx > NBA court position selection > keeps court selection out of the result phase,line=137,column=44::TestingLibraryElementError: Unable to find an element with the text: Simulated Guard. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.%0A%0AIgnored nodes: comments, script, style%0A<body>%0A  <div>%0A    <main />%0A  </div>%0A</body>%0A ❯ Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19%0A ❯ node_modules/@testing-library/dom/dist/query-helpers.js:76:38%0A ❯ node_modules/@testing-library/dom/dist/query-helpers.js:52:17%0A ❯ getByText node_modules/@testing-library/dom/dist/query-helpers.js:95:19%0A ❯ src/test/nbaCourtSelection.test.tsx:137:44%0A%0A

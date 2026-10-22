@@ -1,0 +1,5 @@
+simNbaCourtSelection exit=1 3s | Node.js v24.22.1
+vitest exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/nbaCourtSelection.test.tsx,title=src/test/nbaCourtSelection.test.tsx > NBA court position selection > 
+simNbaLineupSearch exit=1 0s | simNbaLineupSearch: 6 finding(s).
+simNoRivalNames exit=0 10s | No rival product names found. 0 findings.
+tsc exit=2 40s |   Property 'reason' does not exist on type '{ ok: true; value: number; }'.
