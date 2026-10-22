@@ -1,0 +1,8 @@
+vitest exit=0 5s |    Duration  4.87s (transform 3.23s, setup 387ms, collect 4.26s, tests 638ms, environment 2.02s, prepare 643ms)
+simHallLongPlay exit=0 32s | simHallLongPlay: green
+simNoRivalNames exit=0 20s | No rival product names found. 0 findings.
+tsc exit=0 108s | 
+simStorageWrites exit=0 4s | simStorageWrites: all green (owed: 12)
+probeOld exit=0 109s | probeOld: green
+simSaveKeeper exit=0 5s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+simHarnessAnchors exit=0 66s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
