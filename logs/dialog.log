@@ -1,0 +1,30 @@
+treeWithoutMerge: dba636c6b211cdc90daa5488807a72475d439f1b, 2ae08dcc without 48bb600a; conflicts kept from 2ae08dcc: scripts/qa/soccerNewCareerDialogBrowser.mjs
+SOCCER_NEW_CAREER_PARENT_REF dba636c6b211cdc90daa5488807a72475d439f1b (this head without PR277s merge 48bb600a)
+FAIL 320: actual New Career dialog and Cancel
+FAIL 390: actual New Career dialog and Cancel
+FAIL 430: actual New Career dialog and Cancel
+FAIL 1440: actual New Career dialog and Cancel
+New Career dialogs: 0/4 actual Cancel flows.
+New Career controls: 0/2 effective full inverses.
+FAIL Soccer New Career dialog browser
+[
+ {
+  "width": 320,
+  "error": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-career-action-bar=\"floating\"]').getByRole('button', { name: '⚽ New Career', exact: true })\n\n    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/soccerNewCareerDialogBrowser.mjs:136:157\n    at read (/home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/soccerNewCareerDialogBrowser.mjs:110:30)\n    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/soccerNewCareerDialogBrowser.mjs:136:7"
+ },
+ {
+  "width": 390,
+  "error": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-career-action-bar=\"floating\"]').getByRole('button', { name: '⚽ New Career', exact: true })\n\n    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/soccerNewCareerDialogBrowser.mjs:136:157\n    at read (/home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/soccerNewCareerDialogBrowser.mjs:110:30)\n    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/soccerNewCareerDialogBrowser.mjs:136:7"
+ },
+ {
+  "width": 430,
+  "error": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-career-action-bar=\"floating\"]').getByRole('button', { name: '⚽ New Career', exact: true })\n\n    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/soccerNewCareerDialogBrowser.mjs:136:157\n    at read (/home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/soccerNewCareerDialogBrowser.mjs:110:30)\n    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/soccerNewCareerDialogBrowser.mjs:136:7"
+ },
+ {
+  "width": 1440,
+  "error": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-career-action-bar=\"floating\"]').getByRole('button', { name: '⚽ New Career', exact: true })\n\n    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/soccerNewCareerDialogBrowser.mjs:136:157\n    at read (/home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/soccerNewCareerDialogBrowser.mjs:110:30)\n    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/soccerNewCareerDialogBrowser.mjs:136:7"
+ },
+ {
+  "fatal": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert(report.cases.every(row => row.status === 'pass'))\n\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/soccerNewCareerDialogBrowser.mjs:159:3"
+ }
+]
