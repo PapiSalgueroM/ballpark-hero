@@ -1,0 +1,3 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+walkOwner-1524 exit=1 50s | walkOwner: 2 of 92 checks failed
+cookie-1446 exit=1 0s | COOKIE_POLICY_BROWSER_RESULT {"status":"FAIL","phase":"green","originalOutcomes":0,"profiles":0,"faults":0,"restorations":0,"setupErrors":2,"actualOutbound":0}
