@@ -50,7 +50,9 @@ export function OwnerClubSale({ career, clubs, onBuy, onBack }: { career: Career
 /* ─── Round 1524: the club owner's panel ───
    The season is the dugout's table (DugoutTableBlock), and before each one
    he makes one call: where the budget goes. The call is saved with the
-   career, so a reload keeps it, and the season button waits for it. */
+   career, so a reload keeps it, and the season button waits for it. The
+   hover outline is for a mouse only: on a phone a hover sticks after a tap,
+   and the tile under the finger would look picked when it is not. */
 export function OwnerPanel({ owner, onCareer }: { owner: OwnerState; onCareer?: (fn: (prev: CareerState) => CareerState) => void }) {
   const lv = ownerLevels(owner);
   const budget = ownerBudget(owner);
@@ -93,7 +95,7 @@ export function OwnerPanel({ owner, onCareer }: { owner: OwnerState; onCareer?: 
                 onClick={() => onCareer?.(c => chooseOwnerPlan(c, p))}
                 aria-pressed={on}
                 data-plan={p}
-                className={`min-w-0 rounded-lg border p-2.5 text-left transition-all ${on ? "border-primary bg-primary/15" : "border-border bg-card hover:border-primary"}`}
+                className={`min-w-0 rounded-lg border p-2.5 text-left transition-all ${on ? "border-primary bg-primary/15" : "border-border bg-card [@media(hover:hover)]:hover:border-primary"}`}
               >
                 <div className="text-xs font-black">{w.title}</div>
                 <div className="text-[10px] leading-snug text-muted-foreground">{money(w.line)}</div>
