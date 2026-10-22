@@ -1,0 +1,19 @@
+SIM_SEED 1 exit 0 vanish 0 other check 2 lines 0 | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+SIM_SEED 2 exit 0 vanish 0 other check 2 lines 0 | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+SIM_SEED 3 exit 0 vanish 0 other check 2 lines 0 | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+SIM_SEED 4 exit 0 vanish 0 other check 2 lines 0 | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+SIM_SEED 5 exit 0 vanish 0 other check 2 lines 0 | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+SIM_SEED 6 exit 1 vanish 1 other check 2 lines 0 | simNbaGmDesk: 1 failure(s) in ["2"]
+  FAIL [2]: seed 10 season 2: Cole Strother let his sheet stand and is at no rival club
+SIM_SEED 7 exit 0 vanish 0 other check 2 lines 0 | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+SIM_SEED 8 exit 0 vanish 0 other check 2 lines 0 | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+SIM_SEED 9 exit 0 vanish 0 other check 2 lines 0 | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+SIM_SEED 10 exit 1 vanish 2 other check 2 lines 0 | simNbaGmDesk: 2 failure(s) in ["2"]
+  FAIL [2]: seed 10 season 2 full draft: Cole Strother let IND's sheet stand and is not there after the summer
+  FAIL [2]: seed 10 season 2: Cole Strother let his sheet stand and is at no rival club
+SIM_SEED 11 exit 0 vanish 0 other check 2 lines 0 | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+SIM_SEED 12 exit 0 vanish 0 other check 2 lines 0 | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+SIM_SEED 13 exit 0 vanish 0 other check 2 lines 0 | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+SIM_SEED 14 exit 0 vanish 0 other check 2 lines 0 | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+SIM_SEED 15 exit 0 vanish 0 other check 2 lines 0 | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+fresh streams SIM_SEED 1..15 done
