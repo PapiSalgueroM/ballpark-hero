@@ -95,8 +95,8 @@ export const CFB_SCHOOLS: CfbSchool[] = [
   { id: 'CLEM', name: 'Clemson', color: '#F56600', prestige: 89, conf: 'ACC' },
   { id: 'FSU', name: 'Florida State', color: '#782F40', prestige: 85, conf: 'ACC' },
   { id: 'MIA', name: 'Miami', color: '#F47321', prestige: 86, conf: 'ACC' },
-  /* Round 1554: Notre Dame is an independent in football and has never joined
-     the ACC there. It keeps its place in this list on purpose: every engine
+  /* Round 1554: Notre Dame is an independent in football (it played one
+     season, 2020, as an ACC member, then went back). It keeps its place in this list on purpose: every engine
      loop walks this order, so moving it would reshuffle every older save. A
      season played before the round's format still counts it in the ACC
      (cfbConfOf). */
