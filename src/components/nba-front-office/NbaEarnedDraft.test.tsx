@@ -103,15 +103,19 @@ describe('the earned draft night on the NBA board', () => {
     expect(night().made).toBe(mine[0] - 1);
     expect(headingLines()).toContain(`You are on the clock at ${mine[0]}.`);
     if (mine[0] > 1) expect($('[data-draft-night]')).toBeTruthy();
+    /* The scan sees a landed slot once the night may say it: the heading now reads "You pick ...". */
+    for (const o of mine) expect(spoils(ownText(), o)).toBe(true);
     press('[data-gm-draft-choice]');
     expect(night().made).toBe(mine[1] - 1);
     expect(headingLines()).toContain(`You are on the clock at ${mine[1]}.`);
+    /* His pick's feed line, in the old path's words (the summer's lines replace the feed after the last pick, as on
+       the old path). */
+    expect(document.body.textContent).toMatch(/📥 Drafted .+ \([GFC]\), true rating \d+ vs scouted \d+\./);
     press('[data-gm-draft-choice]');
     const end = saved();
     expect(end.phase).toBe('hub');
     expect(end.league.season).toBe(b.league.season + 1);
     expect($('[data-gm-earned-draft]')!.getAttribute('data-gm-earned-draft')).toBe('over');
-    expect(document.body.textContent).toContain('Drafted');
     toHub();
     expect($('[data-gm-earned-draft]')).toBeNull();
   });
