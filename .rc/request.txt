@@ -1,0 +1,6 @@
+diff2: git worktree add .rc-base 30b4b3ca >/dev/null 2>&1 && BASE_ROOT=.rc-base SECTION=2 node scripts/simCmDifficulty.mjs
+simCmMatchDay: node scripts/simCmMatchDay.mjs
+simLiveMatch: node scripts/simLiveMatch.mjs
+simLiveSim: node scripts/simLiveSim.mjs
+simLiveSimCelebration: node scripts/simLiveSimCelebration.mjs
+simCmMatchCentre: node scripts/simCmMatchCentre.mjs
