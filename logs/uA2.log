@@ -1,0 +1,89 @@
+MUTATION A2 APPLIED
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/lib/clubManagerTactics.test.ts [2m([22m[2m52 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 258[2mms[22m[39m
+   [32m✓[39m Round 1522: the dials[2m > [22mbalanced is zero against every style, both halves[32m 2[2mms[22m[39m
+   [32m✓[39m Round 1522: the dials[2m > [22ma high press against a patient side reads the table, legs and all[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1522: the dials[2m > [22msetInstructions sets, drops the field on balanced, refuses junk and a match on[32m 71[2mms[22m[39m
+   [32m✓[39m Round 1522: the dials[2m > [22ma style is keyed: the same club and strength give the same style, and no draw is taken[32m 25[2mms[22m[39m
+   [32m✓[39m Round 1522: the dials[2m > [22mthe engine reads the instructions through the slot the tactics module fills[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1522: the dials[2m > [22mthe report numbers are a pure function of the match[32m 1[2mms[22m[39m
+   [32m✓[39m Round 1522: the dials[2m > [22ma penalty, a direct free kick or an own goal is never on the break or from wide (review run minor 1)[32m 2[2mms[22m[39m
+   [32m✓[39m Round 1522: changes during a match[2m > [22minstructions at the break bite from the restart and reach the report and the legs[32m 35[2mms[22m[39m
+   [32m✓[39m Round 1522: changes during a match[2m > [22ma balanced match keeps no log and no tactics on its report[32m 19[2mms[22m[39m
+   [32m✓[39m Round 1522: changes during a match[2m > [22ma formation and a duty in play reshape from the next minute and the pitch reads each minute in its own shape[32m 27[2mms[22m[39m
+[31m   [31m×[31m Round 1522 review: a change in play moves the football, not just the log[2m > [22min the first half: the stretch from the change is drawn at new rates, the one before keeps its own[39m[32m 19[2mms[22m[39m
+[31m     → expected false to be true // Object.is equality[39m
+   [32m✓[39m Round 1522 review: a change in play moves the football, not just the log[2m > [22mon the board at the end of the first half: the redraw asks for the new set[32m 15[2mms[22m[39m
+   [32m✓[39m Round 1522 review: a change in play moves the football, not just the log[2m > [22min the second half: the stretch from the change is drawn at new rates, the one before keeps its own[32m 15[2mms[22m[39m
+   [32m✓[39m Round 1522 review: a change in play moves the football, not just the log[2m > [22ma change at a minute bites from the next one, never its own (mutation B)[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1522 review: a change in play moves the football, not just the log[2m > [22mthe press costs the legs of the men who played and of nobody else (mutation C)[32m 21[2mms[22m[39m
+   [32m✓[39m Round 1522 review: every row of the table, through tacticBoost[2m > [22mhigh press, first half, fresh legs[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1522 review: every row of the table, through tacticBoost[2m > [22mhigh press, first half, half the legs[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1522 review: every row of the table, through tacticBoost[2m > [22mhigh press, first half, no legs[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1522 review: every row of the table, through tacticBoost[2m > [22mhigh press, second half[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1522 review: every row of the table, through tacticBoost[2m > [22mhigh press against a patient side[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1522 review: every row of the table, through tacticBoost[2m > [22mhigh press against a direct side[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1522 review: every row of the table, through tacticBoost[2m > [22mstand off[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1522 review: every row of the table, through tacticBoost[2m > [22mstand off against a patient side[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1522 review: every row of the table, through tacticBoost[2m > [22mstand off against a direct side[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1522 review: every row of the table, through tacticBoost[2m > [22mdirect[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1522 review: every row of the table, through tacticBoost[2m > [22mdirect against a high line[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1522 review: every row of the table, through tacticBoost[2m > [22mdirect against a deep line[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1522 review: every row of the table, through tacticBoost[2m > [22mdirect with three target men and poachers (two count)[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1522 review: every row of the table, through tacticBoost[2m > [22mpatient[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1522 review: every row of the table, through tacticBoost[2m > [22mpatient against a side that stands off[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1522 review: every row of the table, through tacticBoost[2m > [22mpatient against a press[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1522 review: every row of the table, through tacticBoost[2m > [22mpatient with three builders (two count)[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1522 review: every row of the table, through tacticBoost[2m > [22mwide[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1522 review: every row of the table, through tacticBoost[2m > [22mwide against a narrow side[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1522 review: every row of the table, through tacticBoost[2m > [22mwide with four wide duties (three count)[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1522 review: every row of the table, through tacticBoost[2m > [22mnarrow[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1522 review: every row of the table, through tacticBoost[2m > [22mnarrow against a wide side[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1522 review: every row of the table, through tacticBoost[2m > [22mnarrow with four central duties (three count)[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1522 review: every row of the table, through tacticBoost[2m > [22mhigh line[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1522 review: every row of the table, through tacticBoost[2m > [22mhigh line against a direct side[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1522 review: every row of the table, through tacticBoost[2m > [22mhigh line against a patient side[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1522 review: every row of the table, through tacticBoost[2m > [22mhigh line with nobody pressing[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1522 review: every row of the table, through tacticBoost[2m > [22mdeep line[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1522 review: every row of the table, through tacticBoost[2m > [22mdeep line against a patient side[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1522 review: every row of the table, through tacticBoost[2m > [22mdeep line against a direct side[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1522 review: every row of the table, through tacticBoost[2m > [22mdeep line behind a high press (a gap)[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1522 review: every row of the table, through tacticBoost[2m > [22ma high line with my own direct tempo is no direct opponent[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1522 review: every row of the table, through tacticBoost[2m > [22ma deep line with my own patient tempo is no patient opponent[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1522 review: every row of the table, through tacticBoost[2m > [22ma high press with my own patient tempo is no patient opponent[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1522 review: every row of the table, through tacticBoost[2m > [22mdirect with my own high line is no high line of theirs[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1522 review: every row of the table, through tacticBoost[2m > [22mpatient while I stand off is no side that stands off[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1522 review: every row of the table, through tacticBoost[2m > [22mevery style read says what the table does against that style[32m 1[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/clubManagerTactics.test.ts[2m > [22mRound 1522 review: a change in play moves the football, not just the log[2m > [22min the first half: the stretch from the change is drawn at new rates, the one before keeps its own
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/lib/clubManagerTactics.test.ts:[2m182:42[22m[39m
+    [90m180| [39m    const changed = changeLive(ht, 20, { kind: 'instructions', instruc…
+    [90m181| [39m    expect(changed.live!.instrLog).toEqual([{ minute: 20, instructions…
+    [90m182| [39m    [34mexpect[39m([34maskedFor[39m(edge[33m.[39mmock[33m.[39mcalls[33m,[39m [34m1[39m))[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m   | [39m                                         [31m^[39m
+    [90m183| [39m    expect(ratesAt(changed.live!.h1Segs, was, 10)).toEqual(ratesAt(ht.…
+    [90m184| [39m    expect(ratesAt(changed.live!.h1Segs, was, 30)).not.toEqual(ratesAt…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m51 passed[39m[22m[90m (52)[39m
+[2m   Start at [22m 02:36:01
+[2m   Duration [22m 1.82s[2m (transform 935ms, setup 38ms, collect 1.12s, tests 258ms, environment 150ms, prepare 41ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerTactics.test.ts,title=src/lib/clubManagerTactics.test.ts > Round 1522 review%3A a change in play moves the football%2C not just the log > in the first half%3A the stretch from the change is drawn at new rates%2C the one before keeps its own,line=182,column=42::AssertionError: expected false to be true // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- true%0A+ false%0A%0A ❯ src/lib/clubManagerTactics.test.ts:182:42%0A%0A
+SUMMARY mutation A2 units exit 1
