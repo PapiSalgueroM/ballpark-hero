@@ -1,0 +1,17 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-cm: node_modules/.bin/vitest run src/lib/clubManager src/test/clubManager src/test/cm --testTimeout=300000 --hookTimeout=120000 2>&1 | tail -8; exit ${PIPESTATUS[0]}
+nat: node scripts/simCmMadeUpNations.mjs
+nat-base: git worktree add -q /tmp/base 6d2d7a7d && BASE_ROOT=/tmp/base node scripts/simCmMadeUpNations.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+simManagerAppealIsolation: node scripts/simManagerAppealIsolation.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+simNoRivalNames: node scripts/simNoRivalNames.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+simStorageWrites: node scripts/simStorageWrites.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+simBoardAsks: node scripts/simBoardAsks.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+simWorldEditor: node scripts/simWorldEditor.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+simClubManagerALeague: node scripts/simClubManagerALeague.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+simOneOffCups: node scripts/simOneOffCups.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+walk: node scripts/playCmMadeUpNations.mjs 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+weight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs 2>&1 | grep -E "^ +/(club-manager|manager-hot-seat|deadline-day|whats-new) |sweepWeight:"; exit ${PIPESTATUS[0]}
