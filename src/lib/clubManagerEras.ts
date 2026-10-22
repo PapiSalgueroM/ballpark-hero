@@ -429,6 +429,8 @@ export interface ProjectedPlayer {
   r: number;
   /** True if this game made him up. Absent on real players. */
   g?: boolean;
+  /** Round 1520: a made up man's own country, once a save has met him (CMPlayer.nation). */
+  nation?: string;
   /**
    * The level of the squad slot he occupies, carried from the real player who
    * held it in 2026. This is the mean reversion handle: it keeps a big club

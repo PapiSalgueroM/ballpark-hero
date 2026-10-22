@@ -8,6 +8,7 @@ import { BASE, BASE_TREE, HEAD, TREE, ROOT, clone, sha, sourceHashes, writeEvide
 import { PRE_AZ_ANCHOR, PRE_AZ_RULE } from './lib/cmOwnClubMarket1339.mjs';
 import { withoutAiMoves } from './lib/cmNoAiMoves1344.mjs';
 import { withoutAdoption } from './lib/cmNoAdoption1508.mjs';
+import { withoutMadeUpNations } from './lib/cmNoMadeUpNations1520.mjs';
 
 const OUT = path.resolve(process.env.MANAGER_WORLD_CONTINUITY_ARTIFACTS || '.tmp-fx/manager-world-continuity');
 const CONTROL = process.env.MANAGER_WORLD_CONTINUITY_CONTROL || '';
@@ -144,8 +145,11 @@ async function arm(control) {
      compares is everything else; simCmWorldMoves section 8 proves the bridge leaves the head equal to the round's base. */
   const B = await loadEngine({ label: control || 'healthy', patch: (file, source, receipts) => {
     /* Round 1508: and the adoption of a career with no seed at its next summer (scripts/lib/cmNoAdoption1508.mjs,
-       fail closed), which the pinned engine never did: the inactive group rolls such careers into a summer. */
-    const bridged = withoutAdoption(withoutAiMoves(source, file), file);
+       fail closed), which the pinned engine never did: the inactive group rolls such careers into a summer.
+       Round 1520: and made up men's countries, the board's count of them and the marks that travel with them
+       (scripts/lib/cmNoMadeUpNations1520.mjs, fail closed), which the pinned engine never had; simCmMadeUpNations
+       section 7 proves that cut plays as its base. */
+    const bridged = withoutMadeUpNations(withoutAdoption(withoutAiMoves(source, file), file), file);
     return defect && file === defect.file ? uniquePatch(bridged, defect.from, defect.to, file, receipts) : bridged;
   } });
   const originalEngine = A; const currentEngine = B;

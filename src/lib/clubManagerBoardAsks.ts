@@ -20,7 +20,9 @@
  *                Ramsey is Welsh and the modern one is English, so an ask
  *                counted off one flat map would be counting the wrong men in
  *                an era save. A player the map has no country for counts for
- *                nobody: unknown is never a guess.
+ *                nobody: unknown is never a guess. Round 1520: a made up man
+ *                counts for the country he carries (CMPlayer.nation), the one
+ *                his flag shows; a real man still only ever reads the map.
  *   EXPERIENCE   one more player aged 30 or over than the club already has.
  *   POSITION     a signing in the thinnest line in the squad.
  *   YOUNG STAR   a signing 21 or under at a rating floor read off the market.
@@ -55,11 +57,7 @@
  * repaired lazily and only once.
  */
 import type { BoardObjective, CareerState, CMPlayer, MarketPlayer, ObjectiveStatus, PosGroup } from '@/lib/clubManager';
-import {
-  LEAGUE_NATIONS, SQUAD_LIMIT, buildMarket, careerLeagueOf, groupOf, money,
-  REAL_LEAGUES, isHistoricEra, leagueRulesOf,
-} from '@/lib/clubManager';
-import { nationalityOf } from '@/data/playerNationalities';
+import { SQUAD_LIMIT, buildMarket, careerPlace, groupOf, money, shownNation } from '@/lib/clubManager';
 import { marketForMe } from '@/lib/clubManagerDifficulty';
 
 /** Bump when the shape of a stored ask changes so old saves rebuild theirs. */
@@ -77,10 +75,6 @@ export function isBoardAsk(id: string): id is BoardAskId {
  *  Two, because the board screen is a list a phone has to hold and the base
  *  demands already run to four or six lines. */
 const ASKS_PER_SEASON = 2;
-
-/** The country the league sits in, spelt the way the nationality pull spells
- *  it. Only one of the nineteen league nations disagrees with the data. */
-const LEAGUE_NATION_ALIAS: Record<string, string> = { USA: 'United States' };
 
 /** The oldest a player can be and still count as one for the future. */
 const YOUNG_AGE = 21;
@@ -127,26 +121,40 @@ function niceFloor(m: number): number {
  *  plays in, so one the world editor moved keeps its own country: Celtic in
  *  the Premier League are still a Scottish club and their board asks for
  *  Scottish players. Promotion never crosses a border, so on every save
- *  without an edit this is the league's country exactly as before. */
+ *  without an edit this is the league's country exactly as before.
+ *  Round 1520: the rule moved to the engine unchanged (careerPlace), where a
+ *  made up man's country is drawn from the same answer. */
 function clubCountry(career: Pick<CareerState, 'clubName' | 'eraId' | 'customClub'>): string | null {
-  const historic = !!career.eraId && isHistoricEra(career.eraId);
-  const custom = !!career.customClub && career.customClub.name === career.clubName;
-  const home = historic || custom ? undefined : REAL_LEAGUES.find(l => l.clubs.includes(career.clubName));
-  const leagueId = (home ?? careerLeagueOf(career)).id;
-  /* Round 1035: a club its league's row places in another country (Auckland
-     FC and Wellington Phoenix, New Zealand clubs in the A-League Men). */
-  const own = custom ? undefined : leagueRulesOf(leagueId).clubCountry?.[career.clubName];
-  if (own) return own;
-  const raw = LEAGUE_NATIONS[leagueId];
-  if (!raw) return null;
-  return LEAGUE_NATION_ALIAS[raw] ?? raw;
+  return careerPlace(career)?.home ?? null;
 }
 
 /** Squad members who count towards a country quota, read in the save's own
- *  world. A generated player and a player the map has no country for both
- *  count for nobody, on purpose. */
+ *  world. A player the map has no country for counts for nobody, on purpose.
+ *  Round 1520: a made up man counts for his own country (CMPlayer.nation), the
+ *  one his flag shows, so the board and the squad screen read one answer. */
 function fromCountry(squad: CMPlayer[], country: string, eraId: string | undefined): number {
-  return squad.filter(p => !p.onLoan && nationalityOf(eraId, p.name) === country).length;
+  return squad.filter(p => !p.onLoan && shownNation(eraId, p) === country).length;
+}
+
+const natLabel = (n: number, country: string): string => `Have ${n} player${n === 1 ? '' : 's'} from ${country} in the squad`;
+
+/** Round 1520 review: giving made up men their countries (`stamp`, ensureMadeUpNations) never meets a country ask
+ *  by itself. A stored ask was set at one more than the squad counted then, so where the stamp adds men to that
+ *  count the target rises by as many and the ask still wants exactly as many more men (a save from before the round
+ *  opened with its home youth newly counted and read the ask done with nothing signed). */
+export function keepCountryAsks(state: CareerState, stamp: () => void): void {
+  const asks = Array.isArray(state.boardObjectives) ? state.boardObjectives : [];
+  const count = (o: BoardObjective): number => (o.id === 'natQuota' && o.country ? fromCountry(state.squad ?? [], o.country, state.eraId) : 0);
+  const before = asks.map(count);
+  stamp();
+  let changed = false;
+  const next = asks.map((o, i) => {
+    const target = Math.max(1, o.target + count(o) - before[i]);
+    if (o.id !== 'natQuota' || target === o.target) return o;
+    changed = true;
+    return { ...o, target, label: natLabel(target, o.country!) };
+  });
+  if (changed) state.boardObjectives = next;
 }
 
 /* ================================================================== */
@@ -189,7 +197,7 @@ export function askCandidates(career: CareerState): AskCandidate[] {
   const country = clubCountry(career);
   if (country) {
     const have = fromCountry(squad, country, career.eraId);
-    const pool = affordable.filter(p => nationalityOf(career.eraId, p.name) === country);
+    const pool = affordable.filter(p => shownNation(career.eraId, p) === country);
     /* Two spare targets, not one: the market screen sells to other clubs too
        and a single reachable name is a coin flip dressed as an objective. */
     if (pool.length >= 2 && room >= 1 && have + 1 <= SQUAD_LIMIT) {
@@ -201,7 +209,7 @@ export function askCandidates(career: CareerState): AskCandidate[] {
           id: 'natQuota',
           target: n,
           country,
-          label: `Have ${n} player${n === 1 ? '' : 's'} from ${country} in the squad`,
+          label: natLabel(n, country),
         },
       });
     }

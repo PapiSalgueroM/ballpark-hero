@@ -113,7 +113,9 @@ const QUAL_LEAGUE = 'const qualLeague = worldEdit ? (REAL_LEAGUES.find(l => l.cl
 if (CONTROL === 'euroone') cmSrc = mutate(cmSrc, QUAL_LEAGUE, 'const qualLeague = league;', 'season one real league read');
 /* The board's transfer asks, bundled against the same engine copy. */
 let baSrc = fs.readFileSync(path.join(ROOT, 'src/lib/clubManagerBoardAsks.ts'), 'utf8');
-if (CONTROL === 'homecountry') baSrc = mutate(baSrc, 'LEAGUE_NATIONS[(home ?? careerLeagueOf(career)).id]', 'LEAGUE_NATIONS[careerLeagueOf(career).id]', 'real league country read');
+/* Round 1520: the board's club country rule moved into the engine (careerPlace), where a made up man's flag reads
+   it too, so this control mutates the engine copy; its old anchor in the asks module had been gone since Round 1035. */
+if (CONTROL === 'homecountry') cmSrc = mutate(cmSrc, 'placeIn((home ?? careerLeagueOf(career)).id,', 'placeIn(careerLeagueOf(career).id,', 'real league country read');
 const cmPath = path.join(TMP, 'clubManager.ts').replaceAll('\\', '/');
 fs.writeFileSync(cmPath, cmSrc);
 fs.writeFileSync(path.join(TMP, 'clubManagerWorldEdit.ts'), weSrc.replace("from '@/lib/clubManager'", `from '${cmPath}'`));
