@@ -1,0 +1,17 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+boxing-fonts exit=0 1s | 
+base-usSeam exit=0 33s | playUsCareerSaveSeam: 15 journeys, 67 checks, 0 failed
+base-boxing exit=0 7s | Boxing forecast: 4 actual-route journeys passed.
+mut-swapLists-usSeam exit=1 33s | playUsCareerSaveSeam: 15 journeys, 67 checks, 1 failed
+mut-swapLists-boxing exit=1 3s | Node.js v24.21.0
+mut-staleKey-usSeam exit=1 32s | playUsCareerSaveSeam: 15 journeys, 67 checks, 1 failed
+mut-staleKey-boxing exit=1 2s | Node.js v24.21.0
+mut-invertMap-usSeam exit=1 32s | playUsCareerSaveSeam: 15 journeys, 67 checks, 1 failed
+mut-invertMap-boxing exit=1 2s | Node.js v24.21.0
+mut-dialogOnly-usSeam exit=1 35s | playUsCareerSaveSeam: 15 journeys, 67 checks, 2 failed
+mut-dialogOnly-boxing exit=1 14s | Node.js v24.21.0
+mut-noSettle-usSeam exit=0 32s | playUsCareerSaveSeam: 15 journeys, 67 checks, 0 failed
+mut-noSettle-era2005 exit=0 12s | playEra2005: green. The 2005-06 branch plays like a person would find it.
+mut-noSettle-foGameDay exit=0 354s | playFrontOfficeGameDay: 386 checks, 0 failed
+mut-staleKey-storageBlocked exit=0 272s | playStorageBlocked: 826 checks, 0 failed
+restored exit=0 0s | scripts restored, clean

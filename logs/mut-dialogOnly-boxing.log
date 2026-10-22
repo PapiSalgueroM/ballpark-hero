@@ -1,0 +1,16 @@
+MUTATION dialogOnly applied to scripts/lib/answerConsent.mjs
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Every actual-route boxing forecast journey passes
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playBoxingShowForecast1086.mjs:215:3 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
