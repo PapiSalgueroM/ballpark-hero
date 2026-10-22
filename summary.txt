@@ -1,0 +1,8 @@
+shop-settleafter exit=1 1s | simUsShopPromises: CONTROL settleafter FIRED (red sections 4)
+shop-stakefloor exit=2 0s | simUsShopPromises: could not run, SHOP_STAKE_CAREERS 1999 is under 2000 (section 3's band only widens with fewer careers)
+vitest exit=0 5s |    Duration  3.77s (transform 1.80s, setup 224ms, collect 4.51s, tests 510ms, environment 1.06s, prepare 369ms)
+annual exit=0 5s | Career yearly support: fictional offline engine fixtures only, no native UI, full career completion or historical-data validation claim.
+shop exit=0 32s | simUsShopPromises: green (sections 0, 1, 2, 3, 4, 5, 8, 9)
+rival exit=0 19s | No rival product names found. 0 findings.
+boardparity exit=0 62s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen with the proved historical main775 coaching Panel.
+tsc exit=0 83s | 
