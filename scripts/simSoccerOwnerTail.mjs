@@ -41,15 +41,24 @@
  *      exactly 0 and 0; Grow the ground exactly 0 points, +11.95, +11.35, +11.29M, this season -1.20M; Pay down the
  *      debt +4.73, +4.87, +4.89 points and +7.20, +7.24, +7.05M, this season +0.77 points and +1.06M.
  *      Bands: 4 points and -0.5M (signings now), 4 points and 2M (academy over 6), -0.5M now and 5M over 6 (ground),
- *      0.3 points and 0.4M now (debt).
+ *      0.3 points and 0.4M now (debt; the closing check replaced the 0.4M now with the fee and the 6 season money,
+ *      below).
  *   4) the closest pair at 6 seasons is the academy against the debt: the debt pays 1.25M to 1.9M more, the academy
- *      gives 2.6 points more, against margins of 0.3M and 0.5 points. Most points and most money: squad and stadium at
+ *      gives 2.6 points more, against margins of 0.3M and 0.5 points (before the lenders' fee; with it, below). Most points and most money: squad and stadium at
  *      3 and 6 seasons, youth and stadium at 10.
  *   5) 12 of 12 old saves play on.  6) 16 careers, 790 states and draw counts, 96 manager seasons: 0 differ.
  * Added after the round's reviews (runner r1524-fix2, salts 1, 4 and 9): 1) 4464 tiles for 1995 to 2025, 0 name a
  * league the ledgers do not give the club that season (3086, 3086 and 3071 name none); control saleleague 3185 of
  * 4464. 2) 549, 550 and 550 back to back seasons in one league, 0 replay last season's four rivals on the same points;
  * control stalekey 319 of 556 (57 percent) against the bound of 1 percent.
+ * The lenders' fee (closing check, runner r1524-f2fee for salts 1, 2, 3, 4, 9 and r1524-f2salts for 5 to 8 and 10 to
+ * 14): 3) Pay down the debt at 6 seasons +4.73, +4.87, +4.89, +5.03, +4.93 points and +6.49, +6.55, +6.37, +6.88,
+ *    +6.84M, this season +0.77 points and +0.35M; its first season pays back 10.00 percent of the payment (7.06M,
+ *    6.91M, 6.89M, 7.07M, 7.11M paid on average) less than the interest it saves, the fee, on every salt; control
+ *    debtfree 0.00 percent. Bands: 4M over 6 seasons and a fee of 5 percent of the payment.
+ *    4) the debt now pays more than the academy at 6 seasons by 0.50, 0.80, 1.20, 1.09 and 0.77M (salts 1, 2, 3, 4,
+ *    9) and by 0.78, 1.11, 0.94, 0.78, 1.08, 0.50, 0.84, 0.91 and 0.61M (salts 5 to 8, 10 to 14), every one above
+ *    the 0.3M margin; every other pair and the best call at 3, 6 and 10 seasons as before.
  *
  * Negative controls, SIM_OWNER_CONTROL=<name>, each asserting the string it mutates is in its file exactly once
  * (exit 2 otherwise), each measured red: randomclub (section 1, the old random club), coin (section 2, the old
@@ -454,7 +463,7 @@ const show = (label, e) => {
 };
 
 /* the debt's bands (review 2026-10-22, the lenders' fee): set from the measured numbers in the header */
-const DEBT_MONEY_6 = 3, DEBT_FEE_SHARE = 0.05;
+const DEBT_MONEY_6 = 4, DEBT_FEE_SHARE = 0.05;
 if (ONLY.has(3)) {
   console.log('3) Each call moves what it says it moves (against placing nothing, same keyed seasons)');
   const e = EFFECTS[6].own;
