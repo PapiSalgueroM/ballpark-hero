@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Briefcase, ChevronLeft, Crown, RotateCcw, ShieldHalf } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
 import { FO_TEAMS, FO_TEAM_MAP } from '@/data/frontOfficePlayers';
@@ -115,7 +115,16 @@ import {
 } from '@/lib/nflSeasonStats';
 import { FoAwardBadge } from '@/components/front-office-shared/FoAwardBadge';
 import type { NflSeasonCardProps } from '@/components/front-office/NflSeasonStats';
-const NflSeasonCard = lazyPart<NflSeasonCardProps>(() => import('@/components/front-office/NflSeasonStats'), 260);
+/* its own holding box, not the desk's (data-gm-panel-loading means the career kit is on its way, FrontOfficeLazyDesk.test.tsx):
+   the same fixed height, so the recap and Standings do not jump when the card lands */
+const NflSeasonCardChunk = lazy(() => import('@/components/front-office/NflSeasonStats'));
+function NflSeasonCard(props: NflSeasonCardProps) {
+  return (
+    <Suspense fallback={<div role="status" data-season-stats-loading style={{ minHeight: 260 }} className="rounded-2xl border border-border bg-card p-3 text-xs text-muted-foreground">One moment</div>}>
+      <NflSeasonCardChunk {...props} />
+    </Suspense>
+  );
+}
 /* Round 1550: the two binding fields only the screens behind the career boxes read (the seat pack, the earn line).
    Those screens are drawn once the kit is here and never before, so a read without it is a bug and says so. */
 const careerKitOrThrow = (): NflCareerKit => {
