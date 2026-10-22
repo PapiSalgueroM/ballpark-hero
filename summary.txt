@@ -1,0 +1,6 @@
+build exit=0 36s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+simResultMoment exit=0 6s | simResultMoment: green. Every live game reaches the shared result moment or is listed with what it draws instead, the pill shows exactly the score it is given, the three 
+simWritesAreSent exit=1 14s | simWritesAreSent: 2 failures
+base-build exit=0 34s | base built at aba51f223
+playGmPress-base exit=0 88s | playGmPress: 2 failures
+simWritesAreSent-base exit=0 1s | simWritesAreSent: 1 failure

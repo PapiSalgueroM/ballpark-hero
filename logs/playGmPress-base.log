@@ -1,0 +1,17 @@
+  PASS  the introduction presser is on the hub
+  PASS  the bold answer talks Super Bowl in the NFL room
+  PASS  the owner card shares the hub with the presser
+  PASS  the answer landed in the feed
+  PASS  the answered trust survived the reload
+  PASS  the recap carries a presser
+  PASS  the patience answer discloses its tilt
+  PASS  the draft button waits while the room does
+  PASS  the scrum ends when answered
+  PASS  the draft button returns
+  FAIL  the offseason set a new mandate
+  FAIL  the feed credits the press answer for the softer bar
+FEED|NFL|the draft finished: yes (1 more picks pressed after the walk's own)
+FEED|/nba-front-office|the draft finished: yes (2 more picks pressed after the walk's own)
+FEED|/nhl-front-office|the draft finished: yes (2 more picks pressed after the walk's own)
+FEED|/mlb-front-office|the draft finished: yes (2 more picks pressed after the walk's own)
+playGmPress: 2 failures
