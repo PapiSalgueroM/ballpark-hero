@@ -1,0 +1,16 @@
+320x640 /connections: raw 0/0 [], reachable 0/0, clipped share ; taps 
+320x640 /baseball-connections: raw 0/0 [], reachable 0/0, clipped share ; taps 
+320x640 /nba-connections: raw 2/2 [Michael Jordan over Clear draft | Kobe Bryant over Submit five], reachable 0/0, clipped share Michael Jordan 0%, Kobe Bryant 0%; taps Clear draft->itself; Submit five->itself; Michael Jordan->itself; Kobe Bryant->itself
+320x640 /nfl-connections: raw 0/0 [], reachable 0/0, clipped share ; taps 
+320x640 /nhl-connections: raw 2/2 [Evgeni Malkin over Clear draft | Mario Lemieux over Submit five], reachable 0/0, clipped share Evgeni Malkin 0%, Mario Lemieux 0%; taps Clear draft->itself; Submit five->itself; Evgeni Malkin->itself; Mario Lemieux->itself
+375x812 /connections: raw 0/0 [], reachable 0/0, clipped share ; taps 
+375x812 /baseball-connections: raw 0/0 [], reachable 0/0, clipped share ; taps 
+375x812 /nba-connections: raw 2/2 [Michael Jordan over Clear draft | Kobe Bryant over Submit five], reachable 0/0, clipped share Michael Jordan 0%, Kobe Bryant 0%; taps Clear draft->itself; Submit five->itself; Michael Jordan->itself; Kobe Bryant->itself
+375x812 /nfl-connections: raw 0/0 [], reachable 0/0, clipped share ; taps 
+375x812 /nhl-connections: raw 2/2 [Evgeni Malkin over Clear draft | Mario Lemieux over Submit five], reachable 0/0, clipped share Evgeni Malkin 0%, Mario Lemieux 0%; taps Clear draft->itself; Submit five->itself; Evgeni Malkin->itself; Mario Lemieux->itself
+390x844 /connections: raw 0/0 [], reachable 0/0, clipped share ; taps 
+390x844 /baseball-connections: raw 0/0 [], reachable 0/0, clipped share ; taps 
+390x844 /nba-connections: raw 2/2 [Michael Jordan over Clear draft | Kobe Bryant over Submit five], reachable 0/0, clipped share Michael Jordan 0%, Kobe Bryant 0%; taps Clear draft->itself; Submit five->itself; Michael Jordan->itself; Kobe Bryant->itself
+390x844 /nfl-connections: raw 0/0 [], reachable 0/0, clipped share ; taps 
+390x844 /nhl-connections: raw 2/2 [Evgeni Malkin over Clear draft | Mario Lemieux over Submit five], reachable 0/0, clipped share Evgeni Malkin 0%, Mario Lemieux 0%; taps Clear draft->itself; Submit five->itself; Evgeni Malkin->itself; Mario Lemieux->itself
+connProbe: no reachable overlap anywhere, and every tap lands on the control it aims at
