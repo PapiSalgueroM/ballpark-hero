@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simSeasonDue: node scripts/simSeasonDue.mjs
+due-unfiltered: SEASON_DUE_CONTROL=unfiltered node scripts/simSeasonDue.mjs
+vitest: node_modules/.bin/vitest run src/test/champOrNotReveal.test.tsx src/test/silverwareReveal.test.tsx src/test/rugbyLeagueChallenge.test.tsx src/test/whodTheyBeatReveal.test.tsx src/test/rankEmOrder.test.tsx src/test/dailySaveParity.test.tsx --testTimeout=300000 --hookTimeout=120000
+simChampOrNot: node scripts/simChampOrNot.mjs
+simSilverwareSort: node scripts/simSilverwareSort.mjs
+simRankEmOrder: node scripts/simRankEmOrder.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
