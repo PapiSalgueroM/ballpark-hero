@@ -1,0 +1,12 @@
+vitest-host exit=0 3s |    Duration  2.57s (transform 504ms, setup 238ms, collect 1.02s, tests 1.20s, environment 1.08s, prepare 393ms)
+deskhost-123 exit=0 49s | simGmDeskHost: all 10 checks passed on seeds 1,2,3 (4 engines, 3 seasons a seed)
+deskhost-456 exit=0 51s | simGmDeskHost: all 10 checks passed on seeds 4,5,6 (4 engines, 3 seasons a seed)
+deskhost-anchors exit=0 0s | simGmDeskHost anchors: 50 rewrites of 47 controls checked, 0 cannot run
+tsc exit=0 79s | 
+deskhost-789 exit=0 43s | simGmDeskHost: all 10 checks passed on seeds 7,8,9 (4 engines, 3 seasons a seed)
+ctl-epoch exit=1 9s | CONTROL epoch: 1 rewrite(s) applied, 12 failure(s) in section 1 (FIRED)
+ctl-nofirstcall exit=1 45s | simGmDeskHost CONTROL nofirstcall FIRED: check 4 went red with 638 failures (red checks 4:638)
+ctl-addkey exit=1 8s | CONTROL addkey: 1 rewrite(s) applied, 1 failure(s) in section 1 (FIRED)
+career exit=0 66s | simGmCareer: all checks passed (nfl)
+anchors exit=0 50s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+collegeseat exit=0 165s | simCollegeSeat: all sections green (S1 to S9 and SY)

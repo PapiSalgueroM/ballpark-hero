@@ -1,0 +1,13 @@
+NEGATIVE CONTROL ON: epoch; section 1 must go red
+1) the default path: a desk on save graded through the host is the base's, season for season, and gains only seat and xp
+  FAIL [1]: seed 1 checkpoint 1 (close): not the base's
+  FAIL [1]: seed 2 checkpoint 1 (close): not the base's
+  FAIL [1]: seed 3 checkpoint 1 (close): not the base's
+  FAIL [1]: seed 4 checkpoint 1 (close): not the base's
+  FAIL [1]: seed 5 checkpoint 1 (close): not the base's
+  FAIL [1]: seed 6: 5 checkpoints played, the base played 10
+  FAIL [1]: seed 6 checkpoint 1 (close): not the base's
+  FAIL [1]: seed 7: 10 checkpoints played, the base played 5
+  FAIL [1]: (further failures in this check not printed)
+   10 checkpoints over 48 seasons against 6d2d7a7d (10 moved); fired at ["6:3"]; digest fabcaaebfdcb1c8bb05b1b15d5e4dc8e97d90b40
+CONTROL epoch: 1 rewrite(s) applied, 12 failure(s) in section 1 (FIRED)
