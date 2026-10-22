@@ -57,7 +57,7 @@
  *   spendany (8) canspend (8) stalestaff (9) halfseason (9) noyear (9) awayxp (9) lastcall (9)
  *   emptytile (10) closedsit (10) fewseasons (10) shutbutton (10) passquiet (10)
  *   longtile (10) clubvalue (10) openpromise (10) halfword (10) allfired (10)
- *   tileclimb (10) climbword (10)   nofirstcall (4, Round 1533)
+ *   tileclimb (10) climbword (10)   nofirstcall (4, Round 1533) arrivalnull (9, Round 1533: hostArrivalLine)
  * Eleven of them are the review's own mutants made permanent (2026-10-10): five that passed every gate of the round
  * (nhlrecord, nhlpct, rankplace, canspend, tileclimb), hockey read without its overtime losses (nhlgames, which
  * only check 9 caught), and five the two vitest files alone caught (tierunknown, fitsave, craftfirst, awayxp,
@@ -204,6 +204,7 @@ const EDITS = {
   awayxp: ['9', 'host', '  delete blocks[GM_HOST_KEYS.xp];', '  /* gone */',
     '  if (Object.prototype.hasOwnProperty.call(a.desk.blocks, GM_HOST_KEYS.xp)) blocks[GM_HOST_KEYS.xp] = a.desk.blocks[GM_HOST_KEYS.xp];', '  /* gone too */'],
   lastcall: ['9', 'host', "  if (!hostCanSitOut(market)) return { ok: false, reason: 'last-call' };", "  if (false) return { ok: false, reason: 'last-call' };"],
+  arrivalnull: ['9', 'host', '  if (!hostArriving(seat, host.season(league))) return null;', '  if (false) return null;'],
   shutbutton: ['10', 'host', "  return !!market && market.nextYear !== 'shut';", "  return !!market && (market as HostMarket).state !== 'closed';"],
   passquiet: ['10', 'host', "    return climb !== null ? `${called} Pass, and next year ${climb}` : called;", '    return called;'],
   emptytile: ['10', 'host', "value: 'No more calls',", "value: '',"],
@@ -1234,6 +1235,11 @@ for (const sport of SPORTS) {
     const newLegacy = H.hostLegacy(d.host, lg, { team: offer.teamId, seasonsPlayed: save.seasonsPlayed, titles: save.titles, fired: false, seasonCounted: true });
     ok(H.hostTakeSeat({ host: d.host, league: lg, desk: out.desk, save: out.save, legacy: newLegacy, teamId: offer.teamId, nameOf, blocks: RULES }) === null, `${at}: a man who holds a seat took another`);
     word(H.hostTakeArmLine(d.host.pack, offer, false), `${at} arm`); boxed(H.hostCareerTile(ns, labelOf(sport)), `${at} after the move`);
+    /* Round 1533: the arrival line, drawn on the arrival alone and naming the club he takes (control arrivalnull). */
+    const arrival = H.hostArrivalLine(d.host, lg, ns, nameOf);
+    ok(arrival !== null && arrival.includes(nameOf(offer.teamId)) && H.hostArrivalLine(d.host, lg, seat, nameOf) === null,
+      `${at}: the arrival line is not drawn on the arrival alone (${arrival})`);
+    if (arrival !== null) word(arrival, `${at} arrival line`);
 
     /* The year out. Refused three ways, each before the league is touched. */
     const copy = clone(lg), frozen = J(copy), rng = mulberry32(900 + snap.seed);

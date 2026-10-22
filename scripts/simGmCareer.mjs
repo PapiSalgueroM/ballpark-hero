@@ -28,10 +28,47 @@
  *      and with the raw feed beside it), the share of those with offers that
  *      are last calls, and the share re hired within three feeds.
  *
+ *      ASSERTED on every first feed: never the club that fired him, nothing
+ *      above the second tier straight after a 'badly' season, every ask for
+ *      the season after the league's, the same feed on a second read and
+ *      after a reload.
+ *   5  taking a seat, on every fired GM of section 4 and every offer of his
+ *      first feed (nflTakeSeat on a copy, the board's desk): the league and
+ *      the desk byte equal but for the two clubs' contracts and staff and the
+ *      old club's saved depth chart (planted first, so its reset is seen);
+ *      picks conserved; his XP equal; the new stint open from next season and
+ *      the old one ended fired; the new ledger and staff the new club's own;
+ *      the save's six fields takeSeat's. The first offer is followed through
+ *      the new club's draft and summer: arriving until the summer has run,
+ *      graded on the offer's ask.
+ *   6  a season out through nflAwayHost, twenty seeds, up to three years
+ *      each: one decided season a year with one champion, every club plays
+ *      17 games, every club inside the roster limit after the summer, no id
+ *      minted in a week or the playoffs, picks conserved, his record gains a
+ *      year out and nothing else, his XP and the old club's blocks untouched,
+ *      and refusals (in a seat, a closed market, a last call) leave the league
+ *      byte equal. Against a measured baseline (the same seeds with an idle GM
+ *      in the old club's chair, the board's calls with that club as the user),
+ *      read on the other 31 clubs only (the old club is the engine's user club
+ *      in the baseline, so it is never cut, tagged or drafted for there): the
+ *      drafted men on rosters after the years out, and the mean roster after
+ *      a summer.
+ *   7  whole careers: ten seeds of twelve seasons, a sacking forced every
+ *      third season (trust 5 under a title ask, as playOwnerMandate forces
+ *      one), then a take or a year out by the seed: at every step the save
+ *      passes isFrontOfficeSave, the record fits the save, stints never
+ *      overlap, and the record's seasons and titles are the save's counters.
+ *   8  the words (and the arrival line, Round 1533 step 4).
+ *
  * Controls (SIM_GM_CAREER_CONTROL), each must go red in its section:
  *   epoch (1)    the id epoch is not pinned before the bundle is evaluated
  *   addkey (1)   the host's close writes a third block
- * Exit 0 green, 1 red (or a control fired), 2 could not run.
+ *   deskoffblock, paytwice, lateseat (2); emptytile, nameinline (8)
+ *   firedclub, unkeyed (4)
+ *   staffrides, ledgerrides, rostermove, depthstays, askrebuilt (5)
+ *   halfseason, notrim, awayxp, lastcall, noawaydraft (6)
+ *   overlap, firedlost (7)
+ * Exit 0 green, 1 red (or a control fired), 2 could not run, 3 a control did not fire.
  *
  * Recording: SIM_GM_CAREER_RECORD=<sha of the base> writes the fixture
  * (scripts/data/gmCareerFixture.json, or SIM_GM_CAREER_OUT) and stops.
@@ -57,7 +94,11 @@ const CONTROL = process.env.SIM_GM_CAREER_CONTROL || '';
 const RECORD = process.env.SIM_GM_CAREER_RECORD || '';
 const ONLY = (process.env.SIM_GM_CAREER_ONLY || '').split(',').filter(Boolean);
 const runs = id => ONLY.length === 0 || ONLY.includes(id);
-const CONTROLS = { epoch: '1', addkey: '1', deskoffblock: '2', paytwice: '2', lateseat: '2', emptytile: '8' };
+const CONTROLS = {
+  epoch: '1', addkey: '1', deskoffblock: '2', paytwice: '2', lateseat: '2', emptytile: '8', nameinline: '8',
+  firedclub: '4', unkeyed: '4', staffrides: '5', ledgerrides: '5', rostermove: '5', depthstays: '5', askrebuilt: '5',
+  halfseason: '6', notrim: '6', awayxp: '6', lastcall: '6', noawaydraft: '6', overlap: '7', firedlost: '7',
+};
 if (CONTROL && !CONTROLS[CONTROL]) {
   console.error(`SIM_GM_CAREER_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(CONTROLS).join(', ')})`);
   process.exit(2);
@@ -100,6 +141,30 @@ const EDITS = {
   paytwice: ['host', '  if (seat.last !== undefined && f.season <= seat.last) return same;', '  if (false) return same;'],
   lateseat: ['host', 'titles: i.titles, fired: i.fired, seasonCounted: false,', 'titles: i.titles, fired: i.fired, seasonCounted: true,'],
   emptytile: ['host', "value: 'No more calls',", "value: '',"],
+  /* Section 4: the feed. The fired club let back into it; the feed drawn from Math.random, not its key. */
+  firedclub: ['seat', '.filter(t => t.id !== last.team)', '.filter(t => true)'],
+  unkeyed: ['host', '    keyedRng(hostFeedKey(host.sport, seat, season)), host.champion(league, season),', '    Math.random, host.champion(league, season),'],
+  /* Section 5: taking a seat. His staff or his old ledger follow him; a man of the old club changes club with him;
+     the old club keeps the depth chart he saved; the summer builds the ask again. */
+  staffrides: ['desk', "    { key: NFL_DESK_KEYS.staff, owner: 'club', fresh: (league, team) => freshStaff(league, team) },", "    { key: NFL_DESK_KEYS.staff, owner: 'gm' },"],
+  ledgerrides: ['desk', "    { key: NFL_DESK_KEYS.contracts, owner: 'club', fresh: (league, team) => openLedger(league, team) },", "    { key: NFL_DESK_KEYS.contracts, owner: 'gm' },"],
+  rostermove: ['desk', '  const old = league.teams[legacy.team];\n  if (old) for (const pos of DEPTH_GROUPS) resetDepth(old, pos);',
+    '  const old = league.teams[legacy.team];\n  if (old) for (const pos of DEPTH_GROUPS) resetDepth(old, pos);\n  if (old && league.teams[teamId]) league.teams[teamId].players.push(old.players.pop()!);'],
+  depthstays: ['desk', '  const old = league.teams[legacy.team];\n  if (old) for (const pos of DEPTH_GROUPS) resetDepth(old, pos);', '  const old = league.teams[legacy.team];'],
+  askrebuilt: ['host', '  return stored && stored.season === season ? stored : built;', '  return built;'],
+  /* Section 6: the year out. The last week skipped; the old club named as the summer's user club, so it is not cut;
+     his XP not put back; the last call refusal removed; the away draft skipped. */
+  halfseason: ['desk', '    periods: () => REGULAR_WEEKS,', '    periods: () => REGULAR_WEEKS - 1,'],
+  notrim: ['desk', '      runOffseason(league, rng);', '      runOffseason(league, rng, oldTeam);'],
+  awayxp: ['host', '  if (Object.prototype.hasOwnProperty.call(a.desk.blocks, GM_HOST_KEYS.xp)) blocks[GM_HOST_KEYS.xp] = a.desk.blocks[GM_HOST_KEYS.xp];', '  /* his XP is not put back */'],
+  lastcall: ['host', "  if (!hostCanSitOut(market)) return { ok: false, reason: 'last-call' };", "  if (false) return { ok: false, reason: 'last-call' };"],
+  noawaydraft: ['desk', "      for (let i = 0; i < batches; i++) cls = nflAiDraftPicks(league, cls, '', rng).remaining;", '      /* the draft skipped */'],
+  /* Section 7: whole careers. A new stint opened for the league's season instead of the next; the firing not recorded. */
+  overlap: ['host', '  const career = startSeatStint(seat.career, offer, market.season);', '  const career = startSeatStint(seat.career, offer, market.season - 1);'],
+  firedlost: ['host', "  if (f.fired) career = endSeatStint(career, 'fired');", '  /* the firing not recorded */'],
+  /* Section 8: a player's name put into the arrival line. */
+  nameinline: ['host', 'return `You take over the ${nameOf(s.team)}. They finished ${row.record}, ${ordinal(row.place)} in the league.`;',
+    'return `You take over the ${nameOf(s.team)}. They finished ${row.record}, ${ordinal(row.place)} in the league. ${(league as any).teams?.[s.team]?.players?.[0]?.name ?? \'\'}`;'],
 };
 const overrides = new Map();
 let fired = 0;
@@ -137,6 +202,8 @@ export { FO_DEPTH } from '${ROOT_URL}/src/data/frontOfficeDepth.ts';
 export { FO_TEAMS } from '${ROOT_URL}/src/data/frontOfficePlayers.ts';
 export * as S from ${lib('gmStaff')};
 export * as X from ${lib('gmXp')};
+export * as P from ${lib('gmPicks')};
+export { isFrontOfficeSave } from ${lib('frontOfficeSave')};
 `);
 const esbuild = createRequire(`${NM}/`)('esbuild');
 await esbuild.build({
@@ -184,7 +251,7 @@ if (CONTROL === 'epoch') {
 }
 const M = createRequire(import.meta.url)(BUNDLE);
 Math.random = realRandom;
-const { E, D, H, FM, SEAT, G, K, S, X, nflDeskHost, leagueNames, FO_DEPTH, FO_TEAMS } = M;
+const { E, D, H, FM, SEAT, G, K, S, X, P, isFrontOfficeSave, nflDeskHost, leagueNames, FO_DEPTH, FO_TEAMS } = M;
 const EPOCH = (() => { const id = M.makeIdMinter('x')(); return id.slice(1, id.lastIndexOf('-')); })();
 const unEpoch = s => s.split(EPOCH).join('E');
 
@@ -498,6 +565,9 @@ if (runs('8')) {
       }
       /* The Career box while he holds the seat, under the club's real name. */
       boxes.push([H.hostCareerTile(H.hostNewSeat(id, tiers.get(id), season), label), `the Career box held, ${id}`]);
+      /* The arrival recap's line, the day he takes this club (control nameinline: a player's name put in it). */
+      const arrival = H.hostArrivalLine(d.host, lg, { v: 1, career: SEAT.newGmCareer(id, tiers.get(id), season + 1) }, label);
+      if (arrival === null) fail(`${id}: no arrival line on the day he takes the club`); else say(arrival, `the arrival line, ${id}`);
     }
     for (const deskOn of [true, false]) boxes.push([H.hostXpTile(null, D.NFL_XP_LIVE ?? [], deskOn), `the GM level box, desk ${deskOn ? 'on' : 'off'}`]);
   }
@@ -527,8 +597,76 @@ const S4_SEEDS = (process.env.SIM_GM_CAREER_MEASURE_SEEDS || '1,2,3,4,5,6,7,8,9,
 const S4_SEASONS = Number(process.env.SIM_GM_CAREER_MEASURE_SEASONS || 12);
 const S4 = {
   firings: 0, first: { offers: 0, quiet: 0, closed: 0 }, raw: { offers: 0, quiet: 0, closed: 0 },
-  lastCalls: 0, rawLastCalls: 0, firstCalls: 0, eligible: 0, hired3: 0, rawHired3: 0, feedsRead: 0,
+  lastCalls: 0, rawLastCalls: 0, firstCalls: 0, eligible: 0, hired3: 0, rawHired3: 0, feedsRead: 0, asserted: 0, badly: 0,
 };
+const S5 = { takes: 0, follows: 0, planted: 0, refused: 0 };
+const clone = v => JSON.parse(J(v));
+/** The league as a take must leave it: the old club's saved depth chart is the one thing allowed to go. */
+const withoutDepth = (lg, team) => { const c = clone(lg); if (c.teams[team]) delete c.teams[team].depth; return J(c); };
+const pickCount = lg => Object.values(lg.teams).reduce((n, t) => n + t.picks.length, 0);
+
+/* ================================================================== */
+/* 5. Taking a seat, on every fired GM of section 4 and every offer     */
+/* ================================================================== */
+/**
+ * Every offer of his first feed is taken on a copy of the league the moment he is fired (the board's takeSeat
+ * hands nflTakeSeat a copy). The desk is the one the board would hold: Round 1019's three blocks opened on his old
+ * club, his record and his XP. A saved depth chart is planted on the old club first, so its reset can be seen.
+ * With the two clubs' contracts and staff blocks set aside and the old club's depth taken out, the league and the
+ * desk are byte equal before and after; the six SeatSave fields are takeSeat's; the new ledger and staff are the
+ * new club's fresh ones. The first offer is then followed through his new club's draft and summer: he is arriving
+ * until the summer has run, and the ask he is graded on is the offer's.
+ */
+function takeChecks(lgAtFiring, old, g, seat, m, salt) {
+  const prev = check;
+  check = '5';
+  for (const [k, offer] of m.offers.entries()) {
+    const lg = clone(lgAtFiring);
+    const t = lg.teams[old];
+    const qbs = t.players.filter(p => p.pos === 'QB');
+    if (qbs.length >= 2 && E.swapDepth(t, 'QB', qbs[0].id, qbs[1].id) && t.depth) S5.planted++;
+    let desk = D.openNflDesk(lg, old);
+    D.syncNflPicks(lg, D.nflPicksOf(desk, lg));
+    desk = G.withGmBlock(desk, H.GM_HOST_KEYS.seat, g.desk.blocks.seat);
+    if (g.desk.blocks.xp !== undefined) desk = G.withGmBlock(desk, H.GM_HOST_KEYS.xp, g.desk.blocks.xp);
+    const save = { myTeam: old, trust: g.trust, fired: true, mandate: g.mandate, pressTilt: 1, seasonTradeLine: 'a deal' };
+    const legacy = H.hostLegacy(d.host, lg, { team: old, seasonsPlayed: g.seasonsPlayed, titles: g.titles, fired: true, seasonCounted: true });
+    const at = `${old} to ${offer.teamId} (${salt})`;
+    const lgBefore = withoutDepth(lg, old), picksBefore = pickCount(lg), deskBefore = J(desk);
+    const r = D.nflTakeSeat(lg, desk, save, legacy, offer.teamId, label);
+    if (!r) { S5.refused++; fail(`${at}: an offer on the table was refused`); continue; }
+    S5.takes++;
+    ok(J(desk) === deskBefore, `${at}: the desk handed in was changed`);
+    ok(withoutDepth(lg, old) === lgBefore, `${at}: taking the seat moved the league (a roster, a pick, a standing)`);
+    ok(lg.teams[old].depth === undefined, `${at}: his old club kept the depth chart he saved`);
+    ok(pickCount(lg) === picksBefore && J(r.desk.blocks.picks) === J(desk.blocks.picks), `${at}: picks were not conserved`);
+    ok(J(r.desk.blocks.xp) === J(desk.blocks.xp), `${at}: his XP moved`);
+    ok(J(r.save) === J(SEAT.takeSeat(save, offer)) && r.save.myTeam === offer.teamId && r.save.trust === FM.FO_TRUST_START
+      && r.save.fired === false && J(r.save.mandate) === J(offer.ask), `${at}: the save's six fields are not takeSeat's`);
+    const fresh = D.openNflDesk(lg, offer.teamId);
+    ok(J(r.desk.blocks.contracts) === J(fresh.blocks.contracts), `${at}: the re-sign ledger is not the new club's own`);
+    ok(J(r.desk.blocks.staff) === J(fresh.blocks.staff), `${at}: the staff is not the new club's own`);
+    const ns = r.desk.blocks.seat, st = SEAT.currentStint(ns.career), before = ns.career.stints.at(-2);
+    ok(H.isGmSeatBlock(ns) && st.team === offer.teamId && st.from === lg.season + 1 && !st.ended && before && before.ended === 'fired',
+      `${at}: the new stint is not open from ${lg.season + 1} with the old one ended fired`);
+    const extra = Object.keys(r.desk.blocks).filter(key => ![...DESK_KEYS, ...GAINED_KEYS].includes(key));
+    ok(extra.length === 0, `${at}: the move wrote ${J(extra)}`);
+    if (k !== 0) continue;
+    /* The first offer, followed through his new club's draft and summer, as the board runs them. */
+    S5.follows++;
+    const rng = mulberry32(5000 + salt);
+    let deskF = r.desk;
+    ok(H.hostArriving(deskF.blocks.seat, lg.season), `${at}: the arrival recap does not read as an arrival`);
+    deskF = d.draft(lg, offer.teamId, rng, deskF);
+    ok(H.hostArriving(deskF.blocks.seat, lg.season), `${at}: the draft ended the arrival`);
+    deskF = d.summer(lg, offer.teamId, rng, deskF);
+    const champion = lg.champions.find(c => c.season === lg.season - 1)?.team ?? null;
+    const mandate = H.hostSummerMandate(r.save.mandate, d.mandateFor(lg, offer.teamId, champion === offer.teamId, 0), lg.season);
+    ok(J(mandate) === J(offer.ask), `${at}: the ask after the summer is not the one he was shown`);
+    ok(!H.hostArriving(deskF.blocks.seat, lg.season), `${at}: still arriving once the summer has run`);
+  }
+  check = prev;
+}
 /** The feed without any rule the host adds on top: gmSeat's own offers, keyed as the host keys them. */
 function rawMarket(host, lg, seat) {
   const season = host.season(lg);
@@ -538,7 +676,7 @@ function rawMarket(host, lg, seat) {
   return { offers, nextYear, state: offers.length > 0 ? 'offers' : nextYear === 'shut' ? 'closed' : 'quiet' };
 }
 const sitOut = seat => ({ ...seat, career: SEAT.sitOutYear(seat.career) });
-if (runs('4')) {
+if (runs('4') || runs('5')) {
   begin('4', 'the market after real firings: every club graded as a GM\'s club, the first out of work screen and the next two');
   const host = d.host;
   for (const seed of S4_SEEDS) {
@@ -582,6 +720,20 @@ if (runs('4')) {
         const seat = H.hostSeatOf(g.desk, legacy);
         const m = H.hostMarket(host, lg, seat, label);
         const raw = rawMarket(host, lg, seat);
+        /* ASSERTED: the club that let him go never calls, nothing above the second tier straight after a 'badly'
+           season, every ask is for the season he would first be graded in, and the feed is the same on a second
+           read and after a reload (controls firedclub, unkeyed). */
+        if (runs('4')) {
+          const at = `seed ${seed} season ${s + 1} ${id}`;
+          S4.asserted++;
+          ok(!m.offers.some(o => o.teamId === id), `${at}: the club that fired him is in his feed`);
+          const lastGrade = SEAT.currentStint(seat.career).grades.at(-1);
+          if (lastGrade === 'badly') { S4.badly++; ok(m.offers.every(o => o.tier >= 2), `${at}: a top tier club called straight after a badly season`); }
+          ok(m.offers.every(o => o.ask.season === lg.season + 1) && m.season === lg.season + 1, `${at}: an ask is not for ${lg.season + 1}`);
+          ok(J(H.hostMarket(host, lg, seat, label)) === J(m), `${at}: a second read of the feed is not the first`);
+          ok(J(H.hostMarket(host, JSON.parse(J(lg)), JSON.parse(J(seat)), label)) === J(m), `${at}: the feed after a reload is not the feed before it`);
+        }
+        if (runs('5')) takeChecks(lg, id, g, seat, m, seed * 100 + s);
         S4.first[m.state]++; S4.raw[raw.state]++;
         if (m.state === 'offers' && m.nextYear === 'shut') S4.lastCalls++;
         if (raw.state === 'offers' && raw.nextYear === 'shut') S4.rawLastCalls++;
@@ -609,6 +761,228 @@ if (runs('4')) {
   console.log(`   of the screens with offers, last calls: host ${S4.lastCalls} of ${f.offers} (${pct(S4.lastCalls, f.offers)}), raw ${S4.rawLastCalls} of ${rw.offers} (${pct(S4.rawLastCalls, rw.offers)})`);
   console.log(`   re hired within three feeds (firings with two seasons left to read, ${S4.eligible}): host ${S4.hired3} (${pct(S4.hired3, S4.eligible)}), raw ${S4.rawHired3} (${pct(S4.rawHired3, S4.eligible)}); ${S4.feedsRead} later feeds read`);
   ok(S4.firings > 0, 'no club was fired in the measuring run, so it measured nothing');
+  if (runs('4')) {
+    console.log(`   ASSERTED on ${S4.asserted} first feeds (${S4.badly} straight after a badly season): never the club that fired him, no top tier after badly, every ask for next season, keyed`);
+    ok(S4.asserted >= 300 && S4.badly >= 50, `only ${S4.asserted} feeds (${S4.badly} after badly) asserted, too few to hold the rules`);
+  }
+  if (runs('5')) {
+    check = '5';
+    console.log(`5) taking a seat: ${S5.takes} offers taken (${S5.planted} with a planted depth chart), ${S5.follows} followed through the draft and the summer, ${S5.refused} refused`);
+    ok(S5.takes >= 400 && S5.follows >= 300 && S5.planted >= 0.9 * S5.takes, `too few seats taken (${S5.takes}, ${S5.follows} followed, ${S5.planted} planted)`);
+  }
+}
+
+/* ================================================================== */
+/* 6. A season out, through the board's own away host                   */
+/* ================================================================== */
+const S6_SEEDS = (process.env.SIM_GM_CAREER_AWAY_SEEDS || '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20').split(',').map(Number);
+const S6_YEARS = 3;
+/* PROVISIONAL until measured on three seed sets (see the header): the away draft's share of the idle GM baseline's
+   draftees on the other 31 clubs, and the mean roster after a summer, away less baseline. */
+const S6_BAND = { draft: [0.6, 1.4], roster: [-1.5, 1.5] };
+const S6 = {
+  years: 0, stopped: 0, over: 0, minted: 0, inSeat: 0, closed: 0, lastCall: 0,
+  away: { drafted: 0, rosters: 0, clubSummers: 0 }, base: { drafted: 0, rosters: 0, clubSummers: 0 },
+};
+const rosterIds = (lg, skip) => new Set(Object.entries(lg.teams).filter(([a]) => a !== skip).flatMap(([, t]) => [...t.players, ...(t.practice ?? [])].map(p => p.id)));
+const everyId = lg => { const s = rosterIds(lg, null); for (const p of lg.freeAgents) s.add(p.id); return s; };
+const firedSeatFor = (team, tier, season, grades, out = 0) => {
+  let c = SEAT.newGmCareer(team, tier, season - out - grades.length + 1);
+  for (const gr of grades) c = SEAT.recordSeatSeason(c, gr);
+  c = SEAT.endSeatStint(c, 'fired');
+  for (let i = 0; i < out; i++) c = SEAT.sitOutYear(c);
+  return { v: 1, career: c, last: season - out };
+};
+/** Every club's pick in every round of every year carried exists exactly once, and every engine list is the ledger's (simNflGmDesk check 4). */
+function picksHold(lg, desk, at) {
+  const ledger = desk.blocks[D.NFL_DESK_KEYS.picks], ids = Object.keys(lg.teams), rules = D.nflGamePickRules();
+  if (!P.validateLedger(ledger, ids, rules)) { fail(`${at}: the stored pick ledger does not validate`); return; }
+  for (const p of P.ledgerProblems(ledger, ids, lg.season, rules)) fail(`${at}: ${p}`);
+  for (const [abbr, t] of Object.entries(lg.teams)) {
+    const held = P.picksHeldBy(ledger, abbr, lg.season).map(p => p.round).sort((a, b) => a - b);
+    if (J(held) !== J([...t.picks].sort((a, b) => a - b))) fail(`${at}: ${abbr}'s engine list is not the ledger's`);
+  }
+}
+if (runs('6')) {
+  begin('6', 'a season out: the league plays a whole season without him, his record gains a year out and nothing else, and refusals touch nothing');
+  const host = d.host, team = d.team;
+  for (const seed of S6_SEEDS) {
+    const rng0 = mulberry32(6000 + seed);
+    const lg0 = d.newLeague(rng0, team);
+    d.cut(lg0, team);
+    d.season(lg0, team, rng0, d.openDesk(lg0, team));
+    const tiers = tiersOf(lg0);
+    const legacyOf = (lg, old, fired = true) => H.hostLegacy(host, lg, { team: old, seasonsPlayed: 3, titles: 0, fired, seasonCounted: false });
+    /* The refusals, each on a copy that must come back byte equal: in a seat, a closed market, a last call. */
+    const refuse = (seat, old, why) => {
+      const lg = clone(lg0), before = J(lg);
+      const desk = G.withGmBlock(D.openNflDesk(lg, old), H.GM_HOST_KEYS.seat, seat);
+      const r = H.hostSeasonAway({ host, away: D.nflAwayHost(old), league: lg, desk, legacy: legacyOf(lg, old, why !== 'in-seat'), rng: mulberry32(seed) });
+      ok(r.ok === false && r.reason === why && J(lg) === before, `seed ${seed} ${old}: a year out that must be refused (${why}) was not, or moved the league (${r.ok === false ? r.reason : 'played'})`);
+    };
+    refuse(H.hostNewSeat(team, tiers.get(team), lg0.season), team, 'in-seat'); S6.inSeat++;
+    let closed = null, last = null;
+    for (const id of Object.keys(lg0.teams).sort()) {
+      for (const grades of [['badly', 'badly', 'badly'], ['missed', 'badly'], ['badly'], ['missed', 'missed']]) {
+        for (const out of [0, 1, 2]) {
+          const seat = firedSeatFor(id, tiers.get(id), lg0.season, grades, out), m = H.hostMarket(host, lg0, seat, label);
+          if (!closed && m.state === 'closed') closed = [seat, id];
+          if (!last && m.state === 'offers' && m.nextYear === 'shut') last = [seat, id];
+        }
+      }
+      if (closed && last) break;
+    }
+    if (closed) { refuse(closed[0], closed[1], 'market-closed'); S6.closed++; }
+    if (last) { refuse(last[0], last[1], 'last-call'); S6.lastCall++; }
+
+    /* The away path: fired at the close of the season he ran, with a record good enough that next year stays open. */
+    const lgA = clone(lg0);
+    let desk = G.withGmBlock(D.openNflDesk(lgA, team), H.GM_HOST_KEYS.seat, firedSeatFor(team, tiers.get(team), lg0.season, ['overachieved', 'met', 'missed']));
+    desk = G.withGmBlock(desk, H.GM_HOST_KEYS.xp, X.addXp(X.defaultGmXp(), 777));
+    D.syncNflPicks(lgA, D.nflPicksOf(desk, lgA));
+    const xpBefore = J(desk.blocks.xp), clubBlocks = J([desk.blocks.contracts, desk.blocks.staff]);
+    const totalsBefore = J(SEAT.careerTotals(desk.blocks.seat.career));
+    const rngA = mulberry32(7000 + seed), drafted = new Set();
+    let years = 0;
+    for (let y = 0; y < S6_YEARS; y++) {
+      const at = `seed ${seed} year out ${y + 1}`;
+      const away = D.nflAwayHost(team);
+      const noneMinted = (step, b, lg) => { for (const id of everyId(lg)) if (!b.has(id)) { S6.minted++; fail(`${at}: ${step} minted a player`); break; } };
+      const wrapped = {
+        awayDraft(lg, r, dk) { const b = rosterIds(lg, null); const out = away.awayDraft(lg, r, dk); for (const id of rosterIds(lg, null)) if (!b.has(id)) drafted.add(id); return out; },
+        awaySummer(lg, r, dk) {
+          const out = away.awaySummer(lg, r, dk);
+          for (const [abbr, t] of Object.entries(lg.teams)) {
+            if (E.deepOverLimit(t) > 0) { S6.over++; fail(`${at}: ${abbr} is over the roster limit after the summer`); }
+            if (abbr !== team) { S6.away.rosters += t.players.length; S6.away.clubSummers++; }
+          }
+          return out;
+        },
+        periods: lg => away.periods(lg),
+        playRound(lg, r, dk) { const b = everyId(lg); const out = away.playRound(lg, r, dk); noneMinted('a week', b, lg); return out; },
+        playoffs(lg, r, dk) { const b = everyId(lg); const out = away.playoffs(lg, r, dk); noneMinted('the playoffs', b, lg); return out; },
+      };
+      const season = lgA.season, champs = lgA.champions.length;
+      const r = H.hostSeasonAway({ host, away: wrapped, league: lgA, desk, legacy: legacyOf(lgA, team), rng: rngA });
+      if (r.ok === false) { if (y === 0) fail(`${at}: the first year out was refused (${r.reason})`); S6.stopped++; break; }
+      years++; S6.years++;
+      ok(lgA.season === season + 1 && lgA.champions.length === champs + 1 && new Set(lgA.champions.map(c => c.season)).size === lgA.champions.length,
+        `${at}: not one more decided season with one champion`);
+      ok(Object.values(lgA.teams).every(t => t.wins + t.losses === E.REGULAR_WEEKS), `${at}: a club did not play ${E.REGULAR_WEEKS} games`);
+      const seat = r.desk.blocks.seat;
+      ok(H.isGmSeatBlock(seat) && seat.career.seasonsOut === y + 1 && J(SEAT.careerTotals(seat.career)) === totalsBefore, `${at}: the record moved beyond one more year out`);
+      ok(J(r.desk.blocks.xp) === xpBefore, `${at}: his XP moved in a year out`);
+      ok(J([r.desk.blocks.contracts, r.desk.blocks.staff]) === clubBlocks, `${at}: the old club's ledger or staff moved`);
+      picksHold(lgA, r.desk, at);
+      desk = r.desk;
+    }
+    S6.away.drafted += [...rosterIds(lgA, team)].filter(id => drafted.has(id)).length;
+
+    /* The baseline: the same league with an idle GM in the old club's chair, the board's calls with him as the user. */
+    const lgB = clone(lg0), rngB = mulberry32(7000 + seed), draftedB = new Set();
+    let deskB = D.openNflDesk(lgB, team);
+    for (let y = 0; y < years; y++) {
+      const b = rosterIds(lgB, null);
+      deskB = d.draft(lgB, team, rngB, deskB);
+      for (const id of rosterIds(lgB, null)) if (!b.has(id)) draftedB.add(id);
+      deskB = d.summer(lgB, team, rngB, deskB);
+      d.cut(lgB, team);
+      for (const [abbr, t] of Object.entries(lgB.teams)) if (abbr !== team) { S6.base.rosters += t.players.length; S6.base.clubSummers++; }
+      deskB = d.season(lgB, team, rngB, deskB).desk;
+    }
+    S6.base.drafted += [...rosterIds(lgB, team)].filter(id => draftedB.has(id)).length;
+  }
+  const draftRatio = S6.away.drafted / Math.max(1, S6.base.drafted);
+  const rosterA = S6.away.rosters / Math.max(1, S6.away.clubSummers), rosterB = S6.base.rosters / Math.max(1, S6.base.clubSummers);
+  console.log(`   ${S6.years} years out over ${S6_SEEDS.length} seeds (${S6.stopped} stopped early); refusals: ${S6.inSeat} in a seat, ${S6.closed} closed, ${S6.lastCall} last calls`);
+  console.log(`   drafted men on the other clubs' rosters after the years out: away ${S6.away.drafted}, idle GM ${S6.base.drafted} (ratio ${draftRatio.toFixed(3)}); mean roster after a summer: away ${rosterA.toFixed(2)}, idle GM ${rosterB.toFixed(2)}`);
+  ok(S6.years >= 0.9 * S6_SEEDS.length * S6_YEARS, `only ${S6.years} years out played`);
+  ok(S6.closed >= 1 && S6.lastCall >= 1, `no closed market or no last call found to refuse (${S6.closed}, ${S6.lastCall})`);
+  ok(draftRatio >= S6_BAND.draft[0] && draftRatio <= S6_BAND.draft[1], `the away draft put ${draftRatio.toFixed(3)} of the idle GM baseline's draftees on the other clubs, band ${J(S6_BAND.draft)}`);
+  ok(rosterA - rosterB >= S6_BAND.roster[0] && rosterA - rosterB <= S6_BAND.roster[1], `the mean roster after an away summer differs from the baseline by ${(rosterA - rosterB).toFixed(2)}, band ${J(S6_BAND.roster)}`);
+}
+
+/* ================================================================== */
+/* 7. Whole careers: fired every third season, then a take or a year out */
+/* ================================================================== */
+const S7_SEEDS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+const S7_SEASONS = 12;
+const TITLE_ASK = season => ({ tier: 'title', text: 'Win the Super Bowl. Anything less is a failed season upstairs.', winFloor: 0, reqLevel: 4, season });
+if (runs('7')) {
+  begin('7', 'whole careers: the save, the record and the counters agree at every step across firings, takes and years out');
+  const host = d.host;
+  const S7 = { checks: 0, forced: 0, firings: 0, takes: 0, sits: 0, closed: 0, seasons: 0 };
+  for (const seed of S7_SEEDS) {
+    const rng = mulberry32(8000 + seed);
+    const lg = d.newLeague(rng, d.team);
+    d.cut(lg, d.team);
+    let desk = G.withGmBlock(d.openDesk(lg, d.team), H.GM_HOST_KEYS.seat, H.hostNewSeat(d.team, tiersOf(lg).get(d.team), lg.season));
+    const save = {
+      league: lg, myTeam: d.team, phase: 'hub', titles: 0, seasonsPlayed: 0, draftClass: null, picksLeft: 0,
+      mandate: d.mandateFor(lg, d.team, false), trust: FM.FO_TRUST_START, fired: false, pressTilt: 0, seasonTradeLine: null, postseason: null,
+    };
+    const point = where => {
+      S7.checks++;
+      const at = `seed ${seed} ${where} (${lg.season})`;
+      ok(isFrontOfficeSave({ ...save, gm: desk }, 'NFL', E.REGULAR_WEEKS), `${at}: the save does not pass isFrontOfficeSave`);
+      const b = desk.blocks[H.GM_HOST_KEYS.seat];
+      if (!H.isGmSeatBlock(b)) { fail(`${at}: the seat block is not sound`); return; }
+      const cur = SEAT.currentStint(b.career);
+      ok(cur.team === save.myTeam && (cur.ended !== undefined) === save.fired, `${at}: the record does not fit the save`);
+      const st = b.career.stints;
+      for (let i = 1; i < st.length; i++) ok(st[i - 1].from + st[i - 1].grades.length <= st[i].from, `${at}: stint ${i + 1} overlaps the one before it`);
+      const tot = SEAT.careerTotals(b.career);
+      ok(tot.seasons + (b.before?.seasons ?? 0) === save.seasonsPlayed, `${at}: the record holds ${tot.seasons} seasons, the save ${save.seasonsPlayed}`);
+      ok(tot.titles === save.titles, `${at}: the record holds ${tot.titles} titles, the save ${save.titles}`);
+    };
+    const summer = () => {
+      const champion = save.postseason?.champion ?? null;
+      desk = d.draft(lg, save.myTeam, rng, desk);
+      desk = d.summer(lg, save.myTeam, rng, desk);
+      save.mandate = H.hostSummerMandate(save.mandate, d.mandateFor(lg, save.myTeam, champion === save.myTeam, 0), lg.season);
+      d.cut(lg, save.myTeam);
+      save.phase = 'hub'; save.postseason = null;
+    };
+    point('start');
+    for (let s = 0; s < S7_SEASONS; s++) {
+      if (!save.fired) {
+        if (s % 3 === 2) { save.trust = 5; save.mandate = TITLE_ASK(lg.season); S7.forced++; }
+        const r = d.season(lg, save.myTeam, rng, desk);
+        desk = r.desk;
+        const v = H.hostSeasonVerdict(host, lg, {
+          team: save.myTeam, mandate: save.mandate, trust: save.trust, fired: false,
+          outcome: d.outcome(lg, save.myTeam, r.rounds, r.champion), desk, seasonsPlayed: save.seasonsPlayed, titles: save.titles,
+        });
+        desk = v.desk; save.trust = v.trust; save.fired = v.fired;
+        save.titles += r.champion === save.myTeam ? 1 : 0; save.seasonsPlayed += 1; S7.seasons++;
+        save.postseason = { rounds: r.rounds, champion: r.champion, gradeLine: v.grade?.verdict ?? null };
+        save.phase = v.fired ? 'fired' : 'recap';
+        point('close');
+        if (!v.fired) { summer(); point('summer'); continue; }
+        S7.firings++;
+      }
+      const legacy = H.hostLegacy(host, lg, { team: save.myTeam, seasonsPlayed: save.seasonsPlayed, titles: save.titles, fired: true, seasonCounted: D.nflSeasonCounted('fired', desk) });
+      const m = H.hostMarket(host, lg, H.hostSeatOf(desk, legacy), label);
+      if (m.offers.length > 0 && ((seed + s) % 2 === 0 || !H.hostCanSitOut(m))) {
+        const r = D.nflTakeSeat(lg, desk, { myTeam: save.myTeam, trust: save.trust, fired: true, mandate: save.mandate, pressTilt: save.pressTilt, seasonTradeLine: save.seasonTradeLine }, legacy, m.offers[0].teamId, label);
+        if (!r) { fail(`seed ${seed}: an offer on the table was refused`); break; }
+        Object.assign(save, r.save, { phase: 'recap' });
+        save.postseason = { ...save.postseason, gradeLine: null };
+        desk = r.desk; S7.takes++;
+        point('take');
+        summer();
+        point('summer after a take');
+      } else if (H.hostCanSitOut(m)) {
+        const r = H.hostSeasonAway({ host, away: D.nflAwayHost(save.myTeam), league: lg, desk, legacy, rng });
+        if (r.ok === false) { fail(`seed ${seed}: a year out on offer was refused (${r.reason})`); break; }
+        desk = r.desk; S7.sits++;
+        save.postseason = { rounds: [], champion: r.report.champion, gradeLine: null };
+        point('year out');
+      } else { S7.closed++; break; }
+    }
+  }
+  console.log(`   ${S7_SEEDS.length} careers, ${S7.seasons} seasons run: ${S7.forced} sackings forced, ${S7.firings} firings, ${S7.takes} seats taken, ${S7.sits} years out, ${S7.closed} closed for good; ${S7.checks} checkpoints`);
+  ok(S7.firings >= 15 && S7.takes >= 5 && S7.sits >= 3, `too few firings (${S7.firings}), takes (${S7.takes}) or years out (${S7.sits}) to hold a career`);
 }
 
 /* ================================================================== */
