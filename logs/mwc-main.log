@@ -1,0 +1,10 @@
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  FAIL  simManagerWorldContinuity.mjs   23.8s
+
+----- simManagerWorldContinuity.mjs (FAIL) -----
+FAIL [healthy] inactive: Entire inactive AR result and saved bytes match
+FAIL [healthy] constructors: Fresh constructor changes only the declared held seed
+AssertionError [ERR_ASSERTION]: Healthy complete outcome groups all pass
+
+1 harness not green.
