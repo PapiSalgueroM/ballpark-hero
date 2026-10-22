@@ -215,7 +215,8 @@ for (const [w, h, reduced] of VIEWPORTS) {
         if ((await heading()) === 'FULL TIME') { finished = true; break; }
         if (await press(page, /full report/i, 600)) { await page.waitForTimeout(700); continue; }
         await press(page, /^\s*4x\s*$/, 600);
-        if (await press(page, /second half/i, 600)) { await page.waitForTimeout(500); continue; }
+        /* Release BP seam: the name exactly, because Round 1522's dressing room Tactics tile mentions the second half. */
+        if (await press(page, /^\s*Second half\s*$/i, 600)) { await page.waitForTimeout(500); continue; }
         if (await press(page, /skip/i, 600)) { await page.waitForTimeout(600); continue; }
         if (await press(page, /take the pens|penalt|continue|carry on|next/i, 600)) { await page.waitForTimeout(500); continue; }
         await page.waitForTimeout(1200);
