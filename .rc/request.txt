@@ -1,0 +1,2 @@
+#!playwright
+base-simWritesAreSent: git worktree add /tmp/wb c75d04dad && ln -s "$PWD/node_modules" /tmp/wb/node_modules && cd /tmp/wb && node_modules/.bin/vite build > /tmp/wb-build.log 2>&1 && export TMPDIR=$(mktemp -d) && node scripts/simWritesAreSent.mjs
