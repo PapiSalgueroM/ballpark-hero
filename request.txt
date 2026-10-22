@@ -1,0 +1,10 @@
+#!serial
+mutA: node .rc/x/mut1555.mjs A || exit 9; node scripts/simNbaStartingFive.mjs; a=$?; node .rc/x/probe1555.mjs 40 > /tmp/pA.log 2>&1; b=$?; tail -2 /tmp/pA.log; git checkout -- src scripts; echo "MUT-A harness=$a probe=$b"; exit $a
+mutB: node .rc/x/mut1555.mjs B || exit 9; node scripts/simNbaStartingFive.mjs; a=$?; node .rc/x/probe1555.mjs 40 > /tmp/pB.log 2>&1; b=$?; tail -2 /tmp/pB.log; git checkout -- src scripts; echo "MUT-B harness=$a probe=$b"; exit $a
+mutC: node .rc/x/mut1555.mjs C || exit 9; node scripts/simNbaStartingFive.mjs; a=$?; node scripts/simNbaCourtSelection.mjs > /tmp/cC.log 2>&1; b=$?; tail -2 /tmp/cC.log; node_modules/.bin/vitest run src/test/nbaCourtSelection.test.tsx --testTimeout=300000 > /tmp/vC.log 2>&1; c=$?; tail -6 /tmp/vC.log; git checkout -- src scripts; echo "MUT-C harness=$a court=$b vitest=$c"; exit $((a+b+c))
+mutD: node .rc/x/mut1555.mjs D || exit 9; node scripts/simNbaStartingFive.mjs; a=$?; node scripts/simNbaCourtSelection.mjs > /tmp/cD.log 2>&1; b=$?; tail -2 /tmp/cD.log; node_modules/.bin/vitest run src/test/nbaCourtSelection.test.tsx --testTimeout=300000 > /tmp/vD.log 2>&1; c=$?; tail -6 /tmp/vD.log; git checkout -- src scripts; echo "MUT-D harness=$a court=$b vitest=$c"; exit $((a+b+c))
+mutE: node .rc/x/mut1555.mjs E || exit 9; node scripts/simNbaStartingFive.mjs; a=$?; git checkout -- src scripts; echo "MUT-E harness=$a"; exit $a
+mutF: node .rc/x/mut1555.mjs F || exit 9; node scripts/simNbaStartingFive.mjs; a=$?; node .rc/x/probe1555.mjs 40 > /tmp/pF.log 2>&1; b=$?; tail -4 /tmp/pF.log; git checkout -- src scripts; echo "MUT-F harness=$a probe=$b"; exit $a
+mutG: node .rc/x/mut1555.mjs G || exit 9; node scripts/simNbaStartingFive.mjs; a=$?; git checkout -- src scripts; echo "MUT-G harness=$a"; exit $a
+mutH: node .rc/x/mut1555.mjs H || exit 9; node scripts/simNbaStartingFive.mjs; a=$?; git checkout -- src scripts; echo "MUT-H harness=$a"; exit $a
+clean: git status --short | head -5; echo "tree after mutations: $(git status --short | wc -l) changed paths"

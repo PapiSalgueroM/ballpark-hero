@@ -1,0 +1,9 @@
+mutA exit=0 11s | MUT-A harness=0 probe=1
+mutB exit=0 10s | MUT-B harness=0 probe=1
+mutC exit=0 6s | MUT-C harness=0 court=0 vitest=0
+mutD exit=0 6s | MUT-D harness=0 court=0 vitest=0
+mutE exit=1 1s | MUT-E harness=1
+mutF exit=0 9s | MUT-F harness=0 probe=1
+mutG exit=1 1s | MUT-G harness=1
+mutH exit=1 1s | MUT-H harness=1
+clean exit=0 0s | tree after mutations: 0 changed paths
