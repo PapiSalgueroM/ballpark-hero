@@ -1,0 +1,20 @@
+career: node scripts/simGmCareer.mjs
+away-21: SIM_GM_CAREER_ONLY=6 SIM_GM_CAREER_AWAY_SEEDS=21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40 node scripts/simGmCareer.mjs
+away-41: SIM_GM_CAREER_ONLY=6 SIM_GM_CAREER_AWAY_SEEDS=41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60 node scripts/simGmCareer.mjs
+deskhost: node scripts/simGmDeskHost.mjs
+ctl-arrivalnull: SIM_GM_DESK_HOST_CONTROL=arrivalnull node scripts/simGmDeskHost.mjs
+ctl-firedclub: SIM_GM_CAREER_CONTROL=firedclub SIM_GM_CAREER_ONLY=4 node scripts/simGmCareer.mjs
+ctl-unkeyed: SIM_GM_CAREER_CONTROL=unkeyed SIM_GM_CAREER_ONLY=4 node scripts/simGmCareer.mjs
+ctl-staffrides: SIM_GM_CAREER_CONTROL=staffrides SIM_GM_CAREER_ONLY=5 node scripts/simGmCareer.mjs
+ctl-ledgerrides: SIM_GM_CAREER_CONTROL=ledgerrides SIM_GM_CAREER_ONLY=5 node scripts/simGmCareer.mjs
+ctl-rostermove: SIM_GM_CAREER_CONTROL=rostermove SIM_GM_CAREER_ONLY=5 node scripts/simGmCareer.mjs
+ctl-depthstays: SIM_GM_CAREER_CONTROL=depthstays SIM_GM_CAREER_ONLY=5 node scripts/simGmCareer.mjs
+ctl-askrebuilt: SIM_GM_CAREER_CONTROL=askrebuilt SIM_GM_CAREER_ONLY=5 node scripts/simGmCareer.mjs
+ctl-halfseason: SIM_GM_CAREER_CONTROL=halfseason SIM_GM_CAREER_ONLY=6 node scripts/simGmCareer.mjs
+ctl-notrim: SIM_GM_CAREER_CONTROL=notrim SIM_GM_CAREER_ONLY=6 node scripts/simGmCareer.mjs
+ctl-awayxp: SIM_GM_CAREER_CONTROL=awayxp SIM_GM_CAREER_ONLY=6 node scripts/simGmCareer.mjs
+ctl-lastcall: SIM_GM_CAREER_CONTROL=lastcall SIM_GM_CAREER_ONLY=6 node scripts/simGmCareer.mjs
+ctl-noawaydraft: SIM_GM_CAREER_CONTROL=noawaydraft SIM_GM_CAREER_ONLY=6 node scripts/simGmCareer.mjs
+ctl-overlap: SIM_GM_CAREER_CONTROL=overlap SIM_GM_CAREER_ONLY=7 node scripts/simGmCareer.mjs
+ctl-firedlost: SIM_GM_CAREER_CONTROL=firedlost SIM_GM_CAREER_ONLY=7 node scripts/simGmCareer.mjs
+ctl-nameinline: SIM_GM_CAREER_CONTROL=nameinline SIM_GM_CAREER_ONLY=8 node scripts/simGmCareer.mjs
