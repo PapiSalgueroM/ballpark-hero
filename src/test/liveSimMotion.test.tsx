@@ -1686,6 +1686,7 @@ describe('Round 1521 by hand, and through the viewer', () => {
        it over, opened where this test opens it), in the first half, with no goal near it to hold the clock. */
     let career: CareerState | null = null;
     let foul: LiveFeedEvent | undefined;
+    let planned = '';
     for (const kind of ['shot', 'goal', 'save']) {
       const candidate = structuredClone(fixtures.get(kind)!.career);
       const feed = liveFeed(candidate.live!);
@@ -1699,7 +1700,9 @@ describe('Round 1521 by hand, and through the viewer', () => {
         /* Each call of liveFeed makes its lines afresh, so the foul is found by what it is, not by identity. */
         const order = input.feed.findIndex(x => x.kind === 'foul' && x.minute === e.minute && (x.plus ?? 0) === (e.plus ?? 0) && x.side === e.side && x.text === e.text);
         const plan = pitchPlan(input);
-        return order >= 0 && plan.entries.some(b => b.foul?.order === order && pitchScene(plan, b.start).cue?.order === order);
+        const whistle = order >= 0 ? plan.entries.find(b => b.foul?.order === order && pitchScene(plan, b.start).cue?.order === order) : undefined;
+        if (whistle) planned = `line ${order}, whistled at ${whistle.start.toFixed(2)}`;
+        return !!whistle;
       });
       if (foul) { career = candidate; break; }
     }
@@ -1707,17 +1710,17 @@ describe('Round 1521 by hand, and through the viewer', () => {
     const feed = liveFeed(career!.live!);
     career!.live!.minute = foul!.minute - 1.2;
     const { container } = mount(career!);
-    let seen: { text: string; side: string | null; minute: string | null; card: string | null } | null = null;
+    let seen: { text: string; side: string | null; minute: string | null; card: string | null; order: string | null } | null = null;
     let lifted = 0;
     for (let ms = 0; ms < 4000 && !seen; ms += 40) {
       await step(40);
       if (container.querySelector('[data-cm-ball-lift]')) lifted++;
       const cue = container.querySelector('[data-pm-cue="foul"]');
       const label = container.querySelector('[data-cm-foul-cue]');
-      if (cue && label) seen = { text: label.textContent ?? '', side: label.getAttribute('data-cm-foul-cue'), minute: container.querySelector('[data-cm-live-minute]')?.getAttribute('data-cm-live-minute') ?? null, card: cue.getAttribute('data-pm-cue-card') };
+      if (cue && label) seen = { text: label.textContent ?? '', side: label.getAttribute('data-cm-foul-cue'), minute: container.querySelector('[data-cm-live-minute]')?.getAttribute('data-cm-live-minute') ?? null, card: cue.getAttribute('data-pm-cue-card'), order: label.getAttribute('data-cm-foul-order') };
     }
     expect(seen, 'the whistle was never drawn').not.toBeNull();
-    expect(seen!.minute).toBe(String(foul!.minute));
+    expect(seen!.minute, `${seen!.text} (the screen's line ${seen!.order}), planned ${planned}`).toBe(String(foul!.minute));
     const lines = feed.filter(e => e.kind === 'foul' && e.minute === foul!.minute && e.side === seen!.side);
     expect(lines.some(e => seen!.text.startsWith(`Foul by ${pitchName(e.text)}`)), seen!.text).toBe(true);
     const booked = feed.some(e => (e.kind === 'yellow' || e.kind === 'red') && e.minute === foul!.minute && lines.some(l => l.text === e.text));

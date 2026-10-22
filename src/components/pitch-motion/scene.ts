@@ -396,10 +396,10 @@ export function pitchPlan(input: PitchInput): PitchPlan {
   }
   /* Round 1521: where the dead balls of the feed already are (a corner's and a throw in's two beats, from their own
      places), so a foul staged with `build` waits for them rather than stepping on them; each foul adds its own. */
-  const deadWindows: [number, number][] = [];
-  if (build) for (const e of input.feed) {
-    if ((e.kind === 'corner' || e.kind === 'throwin') && e.side !== 'none') deadWindows.push([placeOf(e), placeOf(e) + 2 * BEAT_SPAN]);
-  }
+  const deadWindows: { from: number; to: number; order: number; foul: boolean }[] = [];
+  if (build) input.feed.forEach((e, order) => {
+    if ((e.kind === 'corner' || e.kind === 'throwin') && e.side !== 'none') deadWindows.push({ from: placeOf(e), to: placeOf(e) + 2 * BEAT_SPAN, order, foul: false });
+  });
   /* ---- corners, throw ins and fouls, each staged from its own place ---- */
   const nearest = (side: PitchSide, spot: PitchPoint, skipKeeper: boolean): PitchFigure | null => {
     let best: PitchFigure | null = null;
@@ -461,27 +461,14 @@ export function pitchPlan(input: PitchInput): PitchPlan {
          line names who is the keeper fouls a forward, near his own goal. The card is the feed's own, never made. */
       let foul: Layer['foul'];
       /* With `build` it is also staged where it can be seen: inside its own minute (the clock still reads it) at the
-         first instant no chance, kick off, follow up or other dead ball holds the pitch, its meeting and its whistle
-         if both fit, its whistle alone if only that does. When nothing fits, the pitch is held all through its
-         minute and the foul is not drawn on the grass at all (it is still in the list beside the pitch): it neither
-         covers what is drawn there nor holds room from the next foul. */
+         first instant nothing else holds the pitch (a chance, a kick off, a follow up, a corner's or a throw in's two
+         beats, another foul's), its meeting and its whistle if both fit, its whistle alone if only that does. Failing
+         that, at its own place as every dead ball always was (of two at one place the later line is drawn), when its
+         whistle is still what is drawn at that instant and it takes no room from another foul. Failing that too, the
+         pitch is held all through its minute and the foul is not drawn on the grass at all (it is still in the list
+         beside the pitch): it neither covers what is drawn there nor holds room from the next foul. */
       let at = p;
       let meets = false;
-      if (build) {
-        /* Held: a stretch of a chance or a kick off, a corner's or a throw in's two beats, or another foul's. */
-        const held = (s: number, e: number) => layers.some(l => l.priority >= 2 && l.start < e - EPS && s < l.end - EPS)
-          || deadWindows.some(([a, b]) => a < e - EPS && s < b - EPS);
-        const latest = Math.min(p + 1 - BEAT_SPAN, to - BEAT_SPAN);
-        let found = -1;
-        for (const span of [BEAT_SPAN, 0]) {
-          for (let k = 0; found < 0 && p + k * 0.02 <= latest + EPS; k++) if (!held(p + k * 0.02 - span, p + k * 0.02 + 2 * BEAT_SPAN)) found = p + k * 0.02;
-          if (found >= 0) { meets = span > 0; break; }
-        }
-        if (found < 0) for (let k = 0; found < 0 && p + k * 0.02 <= latest + EPS; k++) if (!held(p + k * 0.02, p + k * 0.02 + BEAT_SPAN)) { found = p + k * 0.02; meets = false; }
-        if (found < 0) return;
-        at = Math.round(found * 1e6) / 1e6;
-        deadWindows.push([at - (meets ? BEAT_SPAN : 0), at + 2 * BEAT_SPAN]);
-      }
       if (build) {
         const meet = keyedRng(`${seed}:w:${order}`);
         const by = lists[event.side].find(f => f.name !== undefined && f.name === event.text) ?? null;
@@ -489,6 +476,23 @@ export function pitchPlan(input: PitchInput): PitchPlan {
         const forwards = outfield.filter(f => f.line === 'attack');
         const pool = by?.line === 'keeper' && forwards.length ? forwards : outfield;
         const victim = pool.length ? pool[pickIndex(pool, meet())] : null;
+        const over = (a: number, b: number, s: number, e: number) => a < e - EPS && s < b - EPS;
+        const held = (s: number, e: number) => layers.some(l => l.priority >= 2 && over(l.start, l.end, s, e)) || deadWindows.some(w => over(w.from, w.to, s, e));
+        const latest = Math.min(p + 1 - BEAT_SPAN, to - BEAT_SPAN);
+        let found = -1;
+        for (const span of victim ? [BEAT_SPAN, 0] : [0]) {
+          for (let k = 0; found < 0 && p + k * 0.02 <= latest + EPS; k++) if (!held(p + k * 0.02 - span, p + k * 0.02 + 2 * BEAT_SPAN)) found = p + k * 0.02;
+          if (found >= 0) { meets = span > 0; break; }
+        }
+        if (found < 0) for (let k = 0; found < 0 && p + k * 0.02 <= latest + EPS; k++) if (!held(p + k * 0.02, p + k * 0.02 + BEAT_SPAN)) found = p + k * 0.02;
+        if (found < 0) {
+          const drawnHere = !layers.some(l => l.priority >= 2 && over(l.start, l.end, p, p + 1e-6))
+            && !deadWindows.some(w => (w.foul ? over(w.from, w.to, p, p + 2 * BEAT_SPAN) : w.order > order && over(w.from, w.to, p, p + 1e-6)));
+          if (!drawnHere) return;
+          found = p;
+        }
+        at = Math.round(found * 1e6) / 1e6;
+        deadWindows.push({ from: at - (meets ? BEAT_SPAN : 0), to: at + 2 * BEAT_SPAN, order, foul: true });
         foul = { order, at, by: by?.key ?? null, on: victim?.key ?? null };
         const card = cards.get(order);
         if (card) foul.card = card;
