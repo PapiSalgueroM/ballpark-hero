@@ -1,0 +1,2 @@
+hall-nfl-base exit=1 205s | simCareerHall nfl: RED [base]
+hall-nfl-head exit=1 206s | simCareerHall nfl: RED [base]
