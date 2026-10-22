@@ -1,0 +1,3154 @@
+{
+  "complete": false,
+  "sourceBefore": {
+    "src/components/fight-promoter/FightPromoterBoard.tsx": "ed329bdedc57120224333ac75561386df9e1d9df0b825196619a81edf25d69f3",
+    "src/components/fight-promoter/BoxingShowForecast.tsx": "6a15a9974f4ae016ec7614a9bfa6420c66d272e4d171cb28156618f1904da100",
+    "src/lib/fightPromoter.ts": "a65725708788437fd43a010e2b8527b1e3555b06cc6138fd40d9a605f9510534",
+    "src/lib/fightCareer.ts": "ccdd83dfbbf41597a5d1890a45c9013ca82a234c7fa9786c00161c949063f5c3",
+    "src/lib/mmaPromotion.ts": "a8959fe152196e6f25cd40422ec2f22721c1a68c84f8ccacacfdba65eac170c9",
+    "src/hooks/useMmaPromotion.ts": "4494556e3dd4445bd7a5e6cd7b8a8122605a34e57ca7d7bd376a84ffa10e27cc",
+    "package.json": "acfe14626dea53cf5f9c5e0286b766a22237656b52aac4c888b080873ac90e31",
+    "package-lock.json": "c7e3867eabf0bfa03a8aa6a5e601b0050b937ed210d48c6bbd241019e3c9ea76"
+  },
+  "cases": [
+    {
+      "profile": {
+        "width": 320,
+        "height": 780,
+        "touch": true,
+        "theme": "dark",
+        "reduced": true,
+        "boundary": "negative"
+      },
+      "observations": [],
+      "errors": [],
+      "responses": [
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+          "sha256": "f867cc05f0d31bbbdad175a4301931100be7a1316ead1b8f83bf492d38ba6b3b",
+          "bytes": 1864
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfMZg.ttf",
+          "sha256": "1b08e7fc267a5c7e1d614100f604b83e7e8a0be241f0f288faa2b3ac93a683ba",
+          "bytes": 324820
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7oUUsj.ttf",
+          "sha256": "ec926d5065eaca49a48f96e312bbae0bbc5733c24215cf5dfabbdccee926fef7",
+          "bytes": 69360
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuGKYMZg.ttf",
+          "sha256": "e7a1aaf7eda9f2fad4131725fa556265ec75ca7b2d756260173a040363e8d4f7",
+          "bytes": 326048
+        },
+        {
+          "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-21T22%3A18%3A55.958Z&start_at=lte.2026-10-23T06%3A18%3A55.958Z",
+          "handling": "explicit local empty live board"
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuI6fMZg.ttf",
+          "sha256": "8c883f63b2c4157d997319f2c8bc6995ed4357ef371940d31ca159004a4aae63",
+          "bytes": 325304
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuFuYMZg.ttf",
+          "sha256": "b37284b5701b6b168dfc770aa1a4ac492106422fd3ba76bc7641e37434e8019c",
+          "bytes": 326468
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj4PVksj.ttf",
+          "sha256": "3e756954468ff1cb302dae0414262e72f76a67d87bef3fa1f3226cd0fb9b2d85",
+          "bytes": 69308
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj42Vksj.ttf",
+          "sha256": "6c0346b8d297ebdc225832833e03e884a26ad99d265ecd3924d46e1ba285ea87",
+          "bytes": 69356
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7aUUsj.ttf",
+          "sha256": "3e699ead1876244fa392243054ddefe7cf631b488438828a8a100731a22ab995",
+          "bytes": 69416
+        }
+      ],
+      "unexpectedRequests": [],
+      "emulatedCompletionWrites": [],
+      "complete": false,
+      "fixture": {
+        "state": {
+          "version": 1,
+          "name": "Native cash promotion",
+          "show": 1,
+          "money": 0.006,
+          "reputation": 35,
+          "pool": [
+            {
+              "id": "f1",
+              "name": "Cristian Bellini",
+              "style": "outboxer",
+              "attrs": {
+                "power": 41,
+                "chin": 50,
+                "speed": 61,
+                "stamina": 52,
+                "defence": 64,
+                "ringIq": 56
+              },
+              "age": 30,
+              "wins": 1,
+              "losses": 1,
+              "draws": 0,
+              "kos": 0,
+              "damage": 0,
+              "rank": 99,
+              "potential": 74
+            },
+            {
+              "id": "f2",
+              "name": "Fabio Kowalski",
+              "style": "swarmer",
+              "attrs": {
+                "power": 49,
+                "chin": 56,
+                "speed": 50,
+                "stamina": 54,
+                "defence": 43,
+                "ringIq": 41
+              },
+              "age": 23,
+              "wins": 0,
+              "losses": 1,
+              "draws": 0,
+              "kos": 0,
+              "damage": 0,
+              "rank": 99,
+              "potential": 60
+            },
+            {
+              "id": "f3",
+              "name": "Andre Salgado",
+              "style": "slugger",
+              "attrs": {
+                "power": 66,
+                "chin": 52,
+                "speed": 43,
+                "stamina": 41,
+                "defence": 51,
+                "ringIq": 50
+              },
+              "age": 26,
+              "wins": 0,
+              "losses": 2,
+              "draws": 0,
+              "kos": 0,
+              "damage": 0,
+              "rank": 99,
+              "potential": 66
+            },
+            {
+              "id": "f4",
+              "name": "Gustavo Yilmaz",
+              "style": "outboxer",
+              "attrs": {
+                "power": 38,
+                "chin": 41,
+                "speed": 51,
+                "stamina": 47,
+                "defence": 47,
+                "ringIq": 54
+              },
+              "age": 26,
+              "wins": 5,
+              "losses": 1,
+              "draws": 0,
+              "kos": 0,
+              "damage": 0,
+              "rank": 99,
+              "potential": 62
+            },
+            {
+              "id": "f5",
+              "name": "Kwame Quintero",
+              "style": "slugger",
+              "attrs": {
+                "power": 51,
+                "chin": 49,
+                "speed": 33,
+                "stamina": 36,
+                "defence": 39,
+                "ringIq": 47
+              },
+              "age": 29,
+              "wins": 2,
+              "losses": 2,
+              "draws": 0,
+              "kos": 0,
+              "damage": 0,
+              "rank": 99,
+              "potential": 57
+            },
+            {
+              "id": "f6",
+              "name": "Soren Bellini",
+              "style": "swarmer",
+              "attrs": {
+                "power": 55,
+                "chin": 56,
+                "speed": 47,
+                "stamina": 63,
+                "defence": 45,
+                "ringIq": 50
+              },
+              "age": 30,
+              "wins": 7,
+              "losses": 1,
+              "draws": 0,
+              "kos": 0,
+              "damage": 0,
+              "rank": 99,
+              "potential": 63
+            },
+            {
+              "id": "f7",
+              "name": "Eze Varga",
+              "style": "swarmer",
+              "attrs": {
+                "power": 46,
+                "chin": 51,
+                "speed": 42,
+                "stamina": 59,
+                "defence": 41,
+                "ringIq": 41
+              },
+              "age": 23,
+              "wins": 0,
+              "losses": 3,
+              "draws": 0,
+              "kos": 0,
+              "damage": 0,
+              "rank": 99,
+              "potential": 61
+            },
+            {
+              "id": "f8",
+              "name": "Jonas Rivas",
+              "style": "counter",
+              "attrs": {
+                "power": 49,
+                "chin": 53,
+                "speed": 56,
+                "stamina": 48,
+                "defence": 61,
+                "ringIq": 63
+              },
+              "age": 23,
+              "wins": 1,
+              "losses": 3,
+              "draws": 0,
+              "kos": 0,
+              "damage": 0,
+              "rank": 99,
+              "potential": 61
+            },
+            {
+              "id": "f9",
+              "name": "Fabio Costa",
+              "style": "swarmer",
+              "attrs": {
+                "power": 44,
+                "chin": 54,
+                "speed": 42,
+                "stamina": 58,
+                "defence": 33,
+                "ringIq": 41
+              },
+              "age": 22,
+              "wins": 6,
+              "losses": 0,
+              "draws": 0,
+              "kos": 0,
+              "damage": 0,
+              "rank": 99,
+              "potential": 68
+            },
+            {
+              "id": "f10",
+              "name": "Dmitri Guerrero",
+              "style": "counter",
+              "attrs": {
+                "power": 43,
+                "chin": 43,
+                "speed": 47,
+                "stamina": 37,
+                "defence": 53,
+                "ringIq": 53
+              },
+              "age": 21,
+              "wins": 5,
+              "losses": 0,
+              "draws": 0,
+              "kos": 0,
+              "damage": 0,
+              "rank": 99,
+              "potential": 62
+            }
+          ],
+          "history": [],
+          "log": [
+            "You book your first room. Nobody has heard of you."
+          ],
+          "closed": false,
+          "seed": 916525050,
+          "rngTick": 0
+        },
+        "plan": {
+          "venueId": "hall",
+          "ticketPrice": 0.0006,
+          "bookings": [
+            {
+              "aId": "f1",
+              "bId": "f9",
+              "rounds": 8,
+              "title": false
+            }
+          ]
+        },
+        "bytes": "{\"st\":{\"version\":1,\"name\":\"Native cash promotion\",\"show\":1,\"money\":0.006,\"reputation\":35,\"pool\":[{\"id\":\"f1\",\"name\":\"Cristian Bellini\",\"style\":\"outboxer\",\"attrs\":{\"power\":41,\"chin\":50,\"speed\":61,\"stamina\":52,\"defence\":64,\"ringIq\":56},\"age\":30,\"wins\":1,\"losses\":1,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":74},{\"id\":\"f2\",\"name\":\"Fabio Kowalski\",\"style\":\"swarmer\",\"attrs\":{\"power\":49,\"chin\":56,\"speed\":50,\"stamina\":54,\"defence\":43,\"ringIq\":41},\"age\":23,\"wins\":0,\"losses\":1,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":60},{\"id\":\"f3\",\"name\":\"Andre Salgado\",\"style\":\"slugger\",\"attrs\":{\"power\":66,\"chin\":52,\"speed\":43,\"stamina\":41,\"defence\":51,\"ringIq\":50},\"age\":26,\"wins\":0,\"losses\":2,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":66},{\"id\":\"f4\",\"name\":\"Gustavo Yilmaz\",\"style\":\"outboxer\",\"attrs\":{\"power\":38,\"chin\":41,\"speed\":51,\"stamina\":47,\"defence\":47,\"ringIq\":54},\"age\":26,\"wins\":5,\"losses\":1,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":62},{\"id\":\"f5\",\"name\":\"Kwame Quintero\",\"style\":\"slugger\",\"attrs\":{\"power\":51,\"chin\":49,\"speed\":33,\"stamina\":36,\"defence\":39,\"ringIq\":47},\"age\":29,\"wins\":2,\"losses\":2,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":57},{\"id\":\"f6\",\"name\":\"Soren Bellini\",\"style\":\"swarmer\",\"attrs\":{\"power\":55,\"chin\":56,\"speed\":47,\"stamina\":63,\"defence\":45,\"ringIq\":50},\"age\":30,\"wins\":7,\"losses\":1,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":63},{\"id\":\"f7\",\"name\":\"Eze Varga\",\"style\":\"swarmer\",\"attrs\":{\"power\":46,\"chin\":51,\"speed\":42,\"stamina\":59,\"defence\":41,\"ringIq\":41},\"age\":23,\"wins\":0,\"losses\":3,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":61},{\"id\":\"f8\",\"name\":\"Jonas Rivas\",\"style\":\"counter\",\"attrs\":{\"power\":49,\"chin\":53,\"speed\":56,\"stamina\":48,\"defence\":61,\"ringIq\":63},\"age\":23,\"wins\":1,\"losses\":3,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":61},{\"id\":\"f9\",\"name\":\"Fabio Costa\",\"style\":\"swarmer\",\"attrs\":{\"power\":44,\"chin\":54,\"speed\":42,\"stamina\":58,\"defence\":33,\"ringIq\":41},\"age\":22,\"wins\":6,\"losses\":0,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":68},{\"id\":\"f10\",\"name\":\"Dmitri Guerrero\",\"style\":\"counter\",\"attrs\":{\"power\":43,\"chin\":43,\"speed\":47,\"stamina\":37,\"defence\":53,\"ringIq\":53},\"age\":21,\"wins\":5,\"losses\":0,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":62}],\"history\":[],\"log\":[\"You book your first room. Nobody has heard of you.\"],\"closed\":false,\"seed\":916525050,\"rngTick\":0}}",
+        "expected": {
+          "state": {
+            "version": 1,
+            "name": "Native cash promotion",
+            "show": 2,
+            "money": -0.002,
+            "reputation": 33.3,
+            "pool": [
+              {
+                "id": "f1",
+                "name": "Cristian Bellini",
+                "style": "outboxer",
+                "attrs": {
+                  "power": 41,
+                  "chin": 50,
+                  "speed": 61,
+                  "stamina": 52,
+                  "defence": 64,
+                  "ringIq": 56
+                },
+                "age": 30.08,
+                "wins": 2,
+                "losses": 1,
+                "draws": 0,
+                "kos": 0,
+                "damage": 1.6,
+                "rank": 99,
+                "potential": 74
+              },
+              {
+                "id": "f2",
+                "name": "Fabio Kowalski",
+                "style": "swarmer",
+                "attrs": {
+                  "power": 49,
+                  "chin": 56,
+                  "speed": 50,
+                  "stamina": 54,
+                  "defence": 43,
+                  "ringIq": 41
+                },
+                "age": 23,
+                "wins": 0,
+                "losses": 1,
+                "draws": 0,
+                "kos": 0,
+                "damage": 0,
+                "rank": 99,
+                "potential": 60
+              },
+              {
+                "id": "f3",
+                "name": "Andre Salgado",
+                "style": "slugger",
+                "attrs": {
+                  "power": 66,
+                  "chin": 52,
+                  "speed": 43,
+                  "stamina": 41,
+                  "defence": 51,
+                  "ringIq": 50
+                },
+                "age": 26,
+                "wins": 0,
+                "losses": 2,
+                "draws": 0,
+                "kos": 0,
+                "damage": 0,
+                "rank": 99,
+                "potential": 66
+              },
+              {
+                "id": "f4",
+                "name": "Gustavo Yilmaz",
+                "style": "outboxer",
+                "attrs": {
+                  "power": 38,
+                  "chin": 41,
+                  "speed": 51,
+                  "stamina": 47,
+                  "defence": 47,
+                  "ringIq": 54
+                },
+                "age": 26,
+                "wins": 5,
+                "losses": 1,
+                "draws": 0,
+                "kos": 0,
+                "damage": 0,
+                "rank": 99,
+                "potential": 62
+              },
+              {
+                "id": "f5",
+                "name": "Kwame Quintero",
+                "style": "slugger",
+                "attrs": {
+                  "power": 51,
+                  "chin": 49,
+                  "speed": 33,
+                  "stamina": 36,
+                  "defence": 39,
+                  "ringIq": 47
+                },
+                "age": 29,
+                "wins": 2,
+                "losses": 2,
+                "draws": 0,
+                "kos": 0,
+                "damage": 0,
+                "rank": 99,
+                "potential": 57
+              },
+              {
+                "id": "f6",
+                "name": "Soren Bellini",
+                "style": "swarmer",
+                "attrs": {
+                  "power": 55,
+                  "chin": 56,
+                  "speed": 47,
+                  "stamina": 63,
+                  "defence": 45,
+                  "ringIq": 50
+                },
+                "age": 30,
+                "wins": 7,
+                "losses": 1,
+                "draws": 0,
+                "kos": 0,
+                "damage": 0,
+                "rank": 99,
+                "potential": 63
+              },
+              {
+                "id": "f7",
+                "name": "Eze Varga",
+                "style": "swarmer",
+                "attrs": {
+                  "power": 46,
+                  "chin": 51,
+                  "speed": 42,
+                  "stamina": 59,
+                  "defence": 41,
+                  "ringIq": 41
+                },
+                "age": 23,
+                "wins": 0,
+                "losses": 3,
+                "draws": 0,
+                "kos": 0,
+                "damage": 0,
+                "rank": 99,
+                "potential": 61
+              },
+              {
+                "id": "f8",
+                "name": "Jonas Rivas",
+                "style": "counter",
+                "attrs": {
+                  "power": 49,
+                  "chin": 53,
+                  "speed": 56,
+                  "stamina": 48,
+                  "defence": 61,
+                  "ringIq": 63
+                },
+                "age": 23,
+                "wins": 1,
+                "losses": 3,
+                "draws": 0,
+                "kos": 0,
+                "damage": 0,
+                "rank": 99,
+                "potential": 61
+              },
+              {
+                "id": "f9",
+                "name": "Fabio Costa",
+                "style": "swarmer",
+                "attrs": {
+                  "power": 44,
+                  "chin": 54,
+                  "speed": 42,
+                  "stamina": 58,
+                  "defence": 33,
+                  "ringIq": 41
+                },
+                "age": 22.08,
+                "wins": 6,
+                "losses": 1,
+                "draws": 0,
+                "kos": 0,
+                "damage": 3,
+                "rank": 99,
+                "potential": 68
+              },
+              {
+                "id": "f10",
+                "name": "Dmitri Guerrero",
+                "style": "counter",
+                "attrs": {
+                  "power": 43,
+                  "chin": 43,
+                  "speed": 47,
+                  "stamina": 37,
+                  "defence": 53,
+                  "ringIq": 53
+                },
+                "age": 21,
+                "wins": 5,
+                "losses": 0,
+                "draws": 0,
+                "kos": 0,
+                "damage": 0,
+                "rank": 99,
+                "potential": 62
+              }
+            ],
+            "history": [
+              {
+                "show": 1,
+                "venue": "The Leisure Centre",
+                "attendance": 15,
+                "profit": -0.008,
+                "best": "Cristian Bellini vs Fabio Costa"
+              }
+            ],
+            "log": [
+              "You cannot cover the next room. That is the business.",
+              "The Leisure Centre: 15 in, gate 0.009m, purses 0.011m, loss 0.008m.",
+              "You book your first room. Nobody has heard of you."
+            ],
+            "closed": true,
+            "seed": 916525050,
+            "rngTick": 118,
+            "exit": "broke"
+          },
+          "result": {
+            "venue": {
+              "id": "hall",
+              "name": "The Leisure Centre",
+              "capacity": 1200,
+              "rent": 0.006,
+              "needs": 0
+            },
+            "attendance": 15,
+            "ticketPrice": 0.0006,
+            "gate": 0.009,
+            "purses": 0.011,
+            "rent": 0.006,
+            "profit": -0.008,
+            "bouts": [
+              {
+                "a": {
+                  "id": "f1",
+                  "name": "Cristian Bellini",
+                  "style": "outboxer",
+                  "attrs": {
+                    "power": 41,
+                    "chin": 50,
+                    "speed": 61,
+                    "stamina": 52,
+                    "defence": 64,
+                    "ringIq": 56
+                  },
+                  "age": 30,
+                  "wins": 1,
+                  "losses": 1,
+                  "draws": 0,
+                  "kos": 0,
+                  "damage": 0,
+                  "rank": 99,
+                  "potential": 74
+                },
+                "b": {
+                  "id": "f9",
+                  "name": "Fabio Costa",
+                  "style": "swarmer",
+                  "attrs": {
+                    "power": 44,
+                    "chin": 54,
+                    "speed": 42,
+                    "stamina": 58,
+                    "defence": 33,
+                    "ringIq": 41
+                  },
+                  "age": 22,
+                  "wins": 6,
+                  "losses": 0,
+                  "draws": 0,
+                  "kos": 0,
+                  "damage": 0,
+                  "rank": 99,
+                  "potential": 68
+                },
+                "result": {
+                  "rounds": [
+                    {
+                      "round": 1,
+                      "tactic": "box",
+                      "oppTactic": "brawl",
+                      "stance": "swarmer",
+                      "switched": false,
+                      "playerLanded": 17,
+                      "oppLanded": 0,
+                      "playerScore": 10,
+                      "oppScore": 9,
+                      "knockdown": null,
+                      "note": "The tactic is working."
+                    },
+                    {
+                      "round": 2,
+                      "tactic": "press",
+                      "oppTactic": "counter",
+                      "stance": "counter",
+                      "switched": true,
+                      "playerLanded": 8,
+                      "oppLanded": 2,
+                      "playerScore": 8,
+                      "oppScore": 10,
+                      "knockdown": "opp",
+                      "note": "You are down."
+                    },
+                    {
+                      "round": 3,
+                      "tactic": "counter",
+                      "oppTactic": "brawl",
+                      "stance": "swarmer",
+                      "switched": false,
+                      "playerLanded": 7,
+                      "oppLanded": 4,
+                      "playerScore": 10,
+                      "oppScore": 9,
+                      "knockdown": null,
+                      "note": ""
+                    },
+                    {
+                      "round": 4,
+                      "tactic": "box",
+                      "oppTactic": "press",
+                      "stance": "swarmer",
+                      "switched": false,
+                      "playerLanded": 8,
+                      "oppLanded": 5,
+                      "playerScore": 10,
+                      "oppScore": 9,
+                      "knockdown": null,
+                      "note": ""
+                    },
+                    {
+                      "round": 5,
+                      "tactic": "press",
+                      "oppTactic": "brawl",
+                      "stance": "counter",
+                      "switched": true,
+                      "playerLanded": 10,
+                      "oppLanded": 1,
+                      "playerScore": 10,
+                      "oppScore": 9,
+                      "knockdown": null,
+                      "note": "He has changed how he is fighting."
+                    },
+                    {
+                      "round": 6,
+                      "tactic": "counter",
+                      "oppTactic": "brawl",
+                      "stance": "slugger",
+                      "switched": true,
+                      "playerLanded": 15,
+                      "oppLanded": 1,
+                      "playerScore": 10,
+                      "oppScore": 8,
+                      "knockdown": "player",
+                      "note": "Fabio Costa is down."
+                    },
+                    {
+                      "round": 7,
+                      "tactic": "box",
+                      "oppTactic": "brawl",
+                      "stance": "swarmer",
+                      "switched": false,
+                      "playerLanded": 14,
+                      "oppLanded": 0,
+                      "playerScore": 10,
+                      "oppScore": 9,
+                      "knockdown": null,
+                      "note": "The tactic is working."
+                    },
+                    {
+                      "round": 8,
+                      "tactic": "press",
+                      "oppTactic": "press",
+                      "stance": "swarmer",
+                      "switched": false,
+                      "playerLanded": 4,
+                      "oppLanded": 4,
+                      "playerScore": 10,
+                      "oppScore": 9,
+                      "knockdown": null,
+                      "note": "He has your number this round."
+                    }
+                  ],
+                  "winner": "player",
+                  "method": "UD",
+                  "endedRound": 8,
+                  "playerCard": 78,
+                  "oppCard": 72,
+                  "damageTaken": 1.5740000000000003,
+                  "damageDealt": 3.026,
+                  "roundsWon": 7
+                },
+                "rounds": 8,
+                "title": false,
+                "quality": 27
+              }
+            ],
+            "repDelta": -1.7,
+            "headline": "Cristian Bellini against Fabio Costa, UD"
+          }
+        },
+        "staging": "Source-generated fighters and legal pair. Reputation35/100 and boundary cash are explicitly staged. Positive cases require actual revenue-share pay and profit."
+      },
+      "consentBefore": {
+        "storage": {
+          "cash-unrelated": "{\"keep\":1086}",
+          "dukb-guest-handle": "QuietLibero-66",
+          "dukb-mma-promoter-v1": "{\"keep\":\"MMA exact bytes\"}",
+          "dukb-theme": "dark",
+          "fight-promoter-mode-v1": "boxing",
+          "fight-promoter-save-v1": "{\"st\":{\"version\":1,\"name\":\"Native cash promotion\",\"show\":1,\"money\":0.006,\"reputation\":35,\"pool\":[{\"id\":\"f1\",\"name\":\"Cristian Bellini\",\"style\":\"outboxer\",\"attrs\":{\"power\":41,\"chin\":50,\"speed\":61,\"stamina\":52,\"defence\":64,\"ringIq\":56},\"age\":30,\"wins\":1,\"losses\":1,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":74},{\"id\":\"f2\",\"name\":\"Fabio Kowalski\",\"style\":\"swarmer\",\"attrs\":{\"power\":49,\"chin\":56,\"speed\":50,\"stamina\":54,\"defence\":43,\"ringIq\":41},\"age\":23,\"wins\":0,\"losses\":1,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":60},{\"id\":\"f3\",\"name\":\"Andre Salgado\",\"style\":\"slugger\",\"attrs\":{\"power\":66,\"chin\":52,\"speed\":43,\"stamina\":41,\"defence\":51,\"ringIq\":50},\"age\":26,\"wins\":0,\"losses\":2,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":66},{\"id\":\"f4\",\"name\":\"Gustavo Yilmaz\",\"style\":\"outboxer\",\"attrs\":{\"power\":38,\"chin\":41,\"speed\":51,\"stamina\":47,\"defence\":47,\"ringIq\":54},\"age\":26,\"wins\":5,\"losses\":1,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":62},{\"id\":\"f5\",\"name\":\"Kwame Quintero\",\"style\":\"slugger\",\"attrs\":{\"power\":51,\"chin\":49,\"speed\":33,\"stamina\":36,\"defence\":39,\"ringIq\":47},\"age\":29,\"wins\":2,\"losses\":2,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":57},{\"id\":\"f6\",\"name\":\"Soren Bellini\",\"style\":\"swarmer\",\"attrs\":{\"power\":55,\"chin\":56,\"speed\":47,\"stamina\":63,\"defence\":45,\"ringIq\":50},\"age\":30,\"wins\":7,\"losses\":1,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":63},{\"id\":\"f7\",\"name\":\"Eze Varga\",\"style\":\"swarmer\",\"attrs\":{\"power\":46,\"chin\":51,\"speed\":42,\"stamina\":59,\"defence\":41,\"ringIq\":41},\"age\":23,\"wins\":0,\"losses\":3,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":61},{\"id\":\"f8\",\"name\":\"Jonas Rivas\",\"style\":\"counter\",\"attrs\":{\"power\":49,\"chin\":53,\"speed\":56,\"stamina\":48,\"defence\":61,\"ringIq\":63},\"age\":23,\"wins\":1,\"losses\":3,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":61},{\"id\":\"f9\",\"name\":\"Fabio Costa\",\"style\":\"swarmer\",\"attrs\":{\"power\":44,\"chin\":54,\"speed\":42,\"stamina\":58,\"defence\":33,\"ringIq\":41},\"age\":22,\"wins\":6,\"losses\":0,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":68},{\"id\":\"f10\",\"name\":\"Dmitri Guerrero\",\"style\":\"counter\",\"attrs\":{\"power\":43,\"chin\":43,\"speed\":47,\"stamina\":37,\"defence\":53,\"ringIq\":53},\"age\":21,\"wins\":5,\"losses\":0,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":62}],\"history\":[],\"log\":[\"You book your first room. Nobody has heard of you.\"],\"closed\":false,\"seed\":916525050,\"rngTick\":0}}"
+        },
+        "writes": [
+          {
+            "method": "setItem",
+            "args": [
+              "lswt-0.78006451822400220.6340204135880959",
+              "lswt-0.78006451822400220.6340204135880959"
+            ]
+          },
+          {
+            "method": "removeItem",
+            "args": [
+              "lswt-0.78006451822400220.6340204135880959"
+            ]
+          },
+          {
+            "method": "setItem",
+            "args": [
+              "__dukb_storage_probe__",
+              "1"
+            ]
+          },
+          {
+            "method": "removeItem",
+            "args": [
+              "__dukb_storage_probe__"
+            ]
+          },
+          {
+            "method": "setItem",
+            "args": [
+              "dukb-guest-handle",
+              "QuietLibero-66"
+            ]
+          }
+        ],
+        "rng": 7,
+        "raw": "{\"st\":{\"version\":1,\"name\":\"Native cash promotion\",\"show\":1,\"money\":0.006,\"reputation\":35,\"pool\":[{\"id\":\"f1\",\"name\":\"Cristian Bellini\",\"style\":\"outboxer\",\"attrs\":{\"power\":41,\"chin\":50,\"speed\":61,\"stamina\":52,\"defence\":64,\"ringIq\":56},\"age\":30,\"wins\":1,\"losses\":1,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":74},{\"id\":\"f2\",\"name\":\"Fabio Kowalski\",\"style\":\"swarmer\",\"attrs\":{\"power\":49,\"chin\":56,\"speed\":50,\"stamina\":54,\"defence\":43,\"ringIq\":41},\"age\":23,\"wins\":0,\"losses\":1,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":60},{\"id\":\"f3\",\"name\":\"Andre Salgado\",\"style\":\"slugger\",\"attrs\":{\"power\":66,\"chin\":52,\"speed\":43,\"stamina\":41,\"defence\":51,\"ringIq\":50},\"age\":26,\"wins\":0,\"losses\":2,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":66},{\"id\":\"f4\",\"name\":\"Gustavo Yilmaz\",\"style\":\"outboxer\",\"attrs\":{\"power\":38,\"chin\":41,\"speed\":51,\"stamina\":47,\"defence\":47,\"ringIq\":54},\"age\":26,\"wins\":5,\"losses\":1,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":62},{\"id\":\"f5\",\"name\":\"Kwame Quintero\",\"style\":\"slugger\",\"attrs\":{\"power\":51,\"chin\":49,\"speed\":33,\"stamina\":36,\"defence\":39,\"ringIq\":47},\"age\":29,\"wins\":2,\"losses\":2,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":57},{\"id\":\"f6\",\"name\":\"Soren Bellini\",\"style\":\"swarmer\",\"attrs\":{\"power\":55,\"chin\":56,\"speed\":47,\"stamina\":63,\"defence\":45,\"ringIq\":50},\"age\":30,\"wins\":7,\"losses\":1,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":63},{\"id\":\"f7\",\"name\":\"Eze Varga\",\"style\":\"swarmer\",\"attrs\":{\"power\":46,\"chin\":51,\"speed\":42,\"stamina\":59,\"defence\":41,\"ringIq\":41},\"age\":23,\"wins\":0,\"losses\":3,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":61},{\"id\":\"f8\",\"name\":\"Jonas Rivas\",\"style\":\"counter\",\"attrs\":{\"power\":49,\"chin\":53,\"speed\":56,\"stamina\":48,\"defence\":61,\"ringIq\":63},\"age\":23,\"wins\":1,\"losses\":3,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":61},{\"id\":\"f9\",\"name\":\"Fabio Costa\",\"style\":\"swarmer\",\"attrs\":{\"power\":44,\"chin\":54,\"speed\":42,\"stamina\":58,\"defence\":33,\"ringIq\":41},\"age\":22,\"wins\":6,\"losses\":0,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":68},{\"id\":\"f10\",\"name\":\"Dmitri Guerrero\",\"style\":\"counter\",\"attrs\":{\"power\":43,\"chin\":43,\"speed\":47,\"stamina\":37,\"defence\":53,\"ringIq\":53},\"age\":21,\"wins\":5,\"losses\":0,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":62}],\"history\":[],\"log\":[\"You book your first room. Nobody has heard of you.\"],\"closed\":false,\"seed\":916525050,\"rngTick\":0}}",
+        "scrollY": 0
+      },
+      "error": {
+        "name": "TimeoutError",
+        "message": "locator.tap: Timeout 15000ms exceeded.\nCall log:\n  - waiting for getByRole('button', { name: 'Essential only', exact: true })\n",
+        "stack": "locator.tap: Timeout 15000ms exceeded.\nCall log:\n  - waiting for getByRole('button', { name: 'Essential only', exact: true })\n\n    at activate (/tmp/base/scripts/playBoxingShowForecast1086.mjs:136:72)\n    at /tmp/base/scripts/playBoxingShowForecast1086.mjs:139:55"
+      }
+    },
+    {
+      "profile": {
+        "width": 390,
+        "height": 844,
+        "touch": true,
+        "theme": "light",
+        "reduced": false,
+        "boundary": "zero"
+      },
+      "observations": [],
+      "errors": [],
+      "responses": [
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+          "sha256": "f867cc05f0d31bbbdad175a4301931100be7a1316ead1b8f83bf492d38ba6b3b",
+          "bytes": 1864
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfMZg.ttf",
+          "sha256": "1b08e7fc267a5c7e1d614100f604b83e7e8a0be241f0f288faa2b3ac93a683ba",
+          "bytes": 324820
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7oUUsj.ttf",
+          "sha256": "ec926d5065eaca49a48f96e312bbae0bbc5733c24215cf5dfabbdccee926fef7",
+          "bytes": 69360
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuGKYMZg.ttf",
+          "sha256": "e7a1aaf7eda9f2fad4131725fa556265ec75ca7b2d756260173a040363e8d4f7",
+          "bytes": 326048
+        },
+        {
+          "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-21T22%3A19%3A11.313Z&start_at=lte.2026-10-23T06%3A19%3A11.313Z",
+          "handling": "explicit local empty live board"
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuI6fMZg.ttf",
+          "sha256": "8c883f63b2c4157d997319f2c8bc6995ed4357ef371940d31ca159004a4aae63",
+          "bytes": 325304
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuFuYMZg.ttf",
+          "sha256": "b37284b5701b6b168dfc770aa1a4ac492106422fd3ba76bc7641e37434e8019c",
+          "bytes": 326468
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj4PVksj.ttf",
+          "sha256": "3e756954468ff1cb302dae0414262e72f76a67d87bef3fa1f3226cd0fb9b2d85",
+          "bytes": 69308
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj42Vksj.ttf",
+          "sha256": "6c0346b8d297ebdc225832833e03e884a26ad99d265ecd3924d46e1ba285ea87",
+          "bytes": 69356
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7aUUsj.ttf",
+          "sha256": "3e699ead1876244fa392243054ddefe7cf631b488438828a8a100731a22ab995",
+          "bytes": 69416
+        }
+      ],
+      "unexpectedRequests": [],
+      "emulatedCompletionWrites": [],
+      "complete": false,
+      "fixture": {
+        "state": {
+          "version": 1,
+          "name": "Native cash promotion",
+          "show": 1,
+          "money": 0.008,
+          "reputation": 35,
+          "pool": [
+            {
+              "id": "f1",
+              "name": "Cristian Bellini",
+              "style": "outboxer",
+              "attrs": {
+                "power": 41,
+                "chin": 50,
+                "speed": 61,
+                "stamina": 52,
+                "defence": 64,
+                "ringIq": 56
+              },
+              "age": 30,
+              "wins": 1,
+              "losses": 1,
+              "draws": 0,
+              "kos": 0,
+              "damage": 0,
+              "rank": 99,
+              "potential": 74
+            },
+            {
+              "id": "f2",
+              "name": "Fabio Kowalski",
+              "style": "swarmer",
+              "attrs": {
+                "power": 49,
+                "chin": 56,
+                "speed": 50,
+                "stamina": 54,
+                "defence": 43,
+                "ringIq": 41
+              },
+              "age": 23,
+              "wins": 0,
+              "losses": 1,
+              "draws": 0,
+              "kos": 0,
+              "damage": 0,
+              "rank": 99,
+              "potential": 60
+            },
+            {
+              "id": "f3",
+              "name": "Andre Salgado",
+              "style": "slugger",
+              "attrs": {
+                "power": 66,
+                "chin": 52,
+                "speed": 43,
+                "stamina": 41,
+                "defence": 51,
+                "ringIq": 50
+              },
+              "age": 26,
+              "wins": 0,
+              "losses": 2,
+              "draws": 0,
+              "kos": 0,
+              "damage": 0,
+              "rank": 99,
+              "potential": 66
+            },
+            {
+              "id": "f4",
+              "name": "Gustavo Yilmaz",
+              "style": "outboxer",
+              "attrs": {
+                "power": 38,
+                "chin": 41,
+                "speed": 51,
+                "stamina": 47,
+                "defence": 47,
+                "ringIq": 54
+              },
+              "age": 26,
+              "wins": 5,
+              "losses": 1,
+              "draws": 0,
+              "kos": 0,
+              "damage": 0,
+              "rank": 99,
+              "potential": 62
+            },
+            {
+              "id": "f5",
+              "name": "Kwame Quintero",
+              "style": "slugger",
+              "attrs": {
+                "power": 51,
+                "chin": 49,
+                "speed": 33,
+                "stamina": 36,
+                "defence": 39,
+                "ringIq": 47
+              },
+              "age": 29,
+              "wins": 2,
+              "losses": 2,
+              "draws": 0,
+              "kos": 0,
+              "damage": 0,
+              "rank": 99,
+              "potential": 57
+            },
+            {
+              "id": "f6",
+              "name": "Soren Bellini",
+              "style": "swarmer",
+              "attrs": {
+                "power": 55,
+                "chin": 56,
+                "speed": 47,
+                "stamina": 63,
+                "defence": 45,
+                "ringIq": 50
+              },
+              "age": 30,
+              "wins": 7,
+              "losses": 1,
+              "draws": 0,
+              "kos": 0,
+              "damage": 0,
+              "rank": 99,
+              "potential": 63
+            },
+            {
+              "id": "f7",
+              "name": "Eze Varga",
+              "style": "swarmer",
+              "attrs": {
+                "power": 46,
+                "chin": 51,
+                "speed": 42,
+                "stamina": 59,
+                "defence": 41,
+                "ringIq": 41
+              },
+              "age": 23,
+              "wins": 0,
+              "losses": 3,
+              "draws": 0,
+              "kos": 0,
+              "damage": 0,
+              "rank": 99,
+              "potential": 61
+            },
+            {
+              "id": "f8",
+              "name": "Jonas Rivas",
+              "style": "counter",
+              "attrs": {
+                "power": 49,
+                "chin": 53,
+                "speed": 56,
+                "stamina": 48,
+                "defence": 61,
+                "ringIq": 63
+              },
+              "age": 23,
+              "wins": 1,
+              "losses": 3,
+              "draws": 0,
+              "kos": 0,
+              "damage": 0,
+              "rank": 99,
+              "potential": 61
+            },
+            {
+              "id": "f9",
+              "name": "Fabio Costa",
+              "style": "swarmer",
+              "attrs": {
+                "power": 44,
+                "chin": 54,
+                "speed": 42,
+                "stamina": 58,
+                "defence": 33,
+                "ringIq": 41
+              },
+              "age": 22,
+              "wins": 6,
+              "losses": 0,
+              "draws": 0,
+              "kos": 0,
+              "damage": 0,
+              "rank": 99,
+              "potential": 68
+            },
+            {
+              "id": "f10",
+              "name": "Dmitri Guerrero",
+              "style": "counter",
+              "attrs": {
+                "power": 43,
+                "chin": 43,
+                "speed": 47,
+                "stamina": 37,
+                "defence": 53,
+                "ringIq": 53
+              },
+              "age": 21,
+              "wins": 5,
+              "losses": 0,
+              "draws": 0,
+              "kos": 0,
+              "damage": 0,
+              "rank": 99,
+              "potential": 62
+            }
+          ],
+          "history": [],
+          "log": [
+            "You book your first room. Nobody has heard of you."
+          ],
+          "closed": false,
+          "seed": 916525050,
+          "rngTick": 0
+        },
+        "plan": {
+          "venueId": "hall",
+          "ticketPrice": 0.0006,
+          "bookings": [
+            {
+              "aId": "f1",
+              "bId": "f9",
+              "rounds": 8,
+              "title": false
+            }
+          ]
+        },
+        "bytes": "{\"st\":{\"version\":1,\"name\":\"Native cash promotion\",\"show\":1,\"money\":0.008,\"reputation\":35,\"pool\":[{\"id\":\"f1\",\"name\":\"Cristian Bellini\",\"style\":\"outboxer\",\"attrs\":{\"power\":41,\"chin\":50,\"speed\":61,\"stamina\":52,\"defence\":64,\"ringIq\":56},\"age\":30,\"wins\":1,\"losses\":1,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":74},{\"id\":\"f2\",\"name\":\"Fabio Kowalski\",\"style\":\"swarmer\",\"attrs\":{\"power\":49,\"chin\":56,\"speed\":50,\"stamina\":54,\"defence\":43,\"ringIq\":41},\"age\":23,\"wins\":0,\"losses\":1,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":60},{\"id\":\"f3\",\"name\":\"Andre Salgado\",\"style\":\"slugger\",\"attrs\":{\"power\":66,\"chin\":52,\"speed\":43,\"stamina\":41,\"defence\":51,\"ringIq\":50},\"age\":26,\"wins\":0,\"losses\":2,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":66},{\"id\":\"f4\",\"name\":\"Gustavo Yilmaz\",\"style\":\"outboxer\",\"attrs\":{\"power\":38,\"chin\":41,\"speed\":51,\"stamina\":47,\"defence\":47,\"ringIq\":54},\"age\":26,\"wins\":5,\"losses\":1,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":62},{\"id\":\"f5\",\"name\":\"Kwame Quintero\",\"style\":\"slugger\",\"attrs\":{\"power\":51,\"chin\":49,\"speed\":33,\"stamina\":36,\"defence\":39,\"ringIq\":47},\"age\":29,\"wins\":2,\"losses\":2,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":57},{\"id\":\"f6\",\"name\":\"Soren Bellini\",\"style\":\"swarmer\",\"attrs\":{\"power\":55,\"chin\":56,\"speed\":47,\"stamina\":63,\"defence\":45,\"ringIq\":50},\"age\":30,\"wins\":7,\"losses\":1,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":63},{\"id\":\"f7\",\"name\":\"Eze Varga\",\"style\":\"swarmer\",\"attrs\":{\"power\":46,\"chin\":51,\"speed\":42,\"stamina\":59,\"defence\":41,\"ringIq\":41},\"age\":23,\"wins\":0,\"losses\":3,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":61},{\"id\":\"f8\",\"name\":\"Jonas Rivas\",\"style\":\"counter\",\"attrs\":{\"power\":49,\"chin\":53,\"speed\":56,\"stamina\":48,\"defence\":61,\"ringIq\":63},\"age\":23,\"wins\":1,\"losses\":3,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":61},{\"id\":\"f9\",\"name\":\"Fabio Costa\",\"style\":\"swarmer\",\"attrs\":{\"power\":44,\"chin\":54,\"speed\":42,\"stamina\":58,\"defence\":33,\"ringIq\":41},\"age\":22,\"wins\":6,\"losses\":0,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":68},{\"id\":\"f10\",\"name\":\"Dmitri Guerrero\",\"style\":\"counter\",\"attrs\":{\"power\":43,\"chin\":43,\"speed\":47,\"stamina\":37,\"defence\":53,\"ringIq\":53},\"age\":21,\"wins\":5,\"losses\":0,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":62}],\"history\":[],\"log\":[\"You book your first room. Nobody has heard of you.\"],\"closed\":false,\"seed\":916525050,\"rngTick\":0}}",
+        "expected": {
+          "state": {
+            "version": 1,
+            "name": "Native cash promotion",
+            "show": 2,
+            "money": 0,
+            "reputation": 33.3,
+            "pool": [
+              {
+                "id": "f1",
+                "name": "Cristian Bellini",
+                "style": "outboxer",
+                "attrs": {
+                  "power": 41,
+                  "chin": 50,
+                  "speed": 61,
+                  "stamina": 52,
+                  "defence": 64,
+                  "ringIq": 56
+                },
+                "age": 30.08,
+                "wins": 2,
+                "losses": 1,
+                "draws": 0,
+                "kos": 0,
+                "damage": 1.6,
+                "rank": 99,
+                "potential": 74
+              },
+              {
+                "id": "f2",
+                "name": "Fabio Kowalski",
+                "style": "swarmer",
+                "attrs": {
+                  "power": 49,
+                  "chin": 56,
+                  "speed": 50,
+                  "stamina": 54,
+                  "defence": 43,
+                  "ringIq": 41
+                },
+                "age": 23,
+                "wins": 0,
+                "losses": 1,
+                "draws": 0,
+                "kos": 0,
+                "damage": 0,
+                "rank": 99,
+                "potential": 60
+              },
+              {
+                "id": "f3",
+                "name": "Andre Salgado",
+                "style": "slugger",
+                "attrs": {
+                  "power": 66,
+                  "chin": 52,
+                  "speed": 43,
+                  "stamina": 41,
+                  "defence": 51,
+                  "ringIq": 50
+                },
+                "age": 26,
+                "wins": 0,
+                "losses": 2,
+                "draws": 0,
+                "kos": 0,
+                "damage": 0,
+                "rank": 99,
+                "potential": 66
+              },
+              {
+                "id": "f4",
+                "name": "Gustavo Yilmaz",
+                "style": "outboxer",
+                "attrs": {
+                  "power": 38,
+                  "chin": 41,
+                  "speed": 51,
+                  "stamina": 47,
+                  "defence": 47,
+                  "ringIq": 54
+                },
+                "age": 26,
+                "wins": 5,
+                "losses": 1,
+                "draws": 0,
+                "kos": 0,
+                "damage": 0,
+                "rank": 99,
+                "potential": 62
+              },
+              {
+                "id": "f5",
+                "name": "Kwame Quintero",
+                "style": "slugger",
+                "attrs": {
+                  "power": 51,
+                  "chin": 49,
+                  "speed": 33,
+                  "stamina": 36,
+                  "defence": 39,
+                  "ringIq": 47
+                },
+                "age": 29,
+                "wins": 2,
+                "losses": 2,
+                "draws": 0,
+                "kos": 0,
+                "damage": 0,
+                "rank": 99,
+                "potential": 57
+              },
+              {
+                "id": "f6",
+                "name": "Soren Bellini",
+                "style": "swarmer",
+                "attrs": {
+                  "power": 55,
+                  "chin": 56,
+                  "speed": 47,
+                  "stamina": 63,
+                  "defence": 45,
+                  "ringIq": 50
+                },
+                "age": 30,
+                "wins": 7,
+                "losses": 1,
+                "draws": 0,
+                "kos": 0,
+                "damage": 0,
+                "rank": 99,
+                "potential": 63
+              },
+              {
+                "id": "f7",
+                "name": "Eze Varga",
+                "style": "swarmer",
+                "attrs": {
+                  "power": 46,
+                  "chin": 51,
+                  "speed": 42,
+                  "stamina": 59,
+                  "defence": 41,
+                  "ringIq": 41
+                },
+                "age": 23,
+                "wins": 0,
+                "losses": 3,
+                "draws": 0,
+                "kos": 0,
+                "damage": 0,
+                "rank": 99,
+                "potential": 61
+              },
+              {
+                "id": "f8",
+                "name": "Jonas Rivas",
+                "style": "counter",
+                "attrs": {
+                  "power": 49,
+                  "chin": 53,
+                  "speed": 56,
+                  "stamina": 48,
+                  "defence": 61,
+                  "ringIq": 63
+                },
+                "age": 23,
+                "wins": 1,
+                "losses": 3,
+                "draws": 0,
+                "kos": 0,
+                "damage": 0,
+                "rank": 99,
+                "potential": 61
+              },
+              {
+                "id": "f9",
+                "name": "Fabio Costa",
+                "style": "swarmer",
+                "attrs": {
+                  "power": 44,
+                  "chin": 54,
+                  "speed": 42,
+                  "stamina": 58,
+                  "defence": 33,
+                  "ringIq": 41
+                },
+                "age": 22.08,
+                "wins": 6,
+                "losses": 1,
+                "draws": 0,
+                "kos": 0,
+                "damage": 3,
+                "rank": 99,
+                "potential": 68
+              },
+              {
+                "id": "f10",
+                "name": "Dmitri Guerrero",
+                "style": "counter",
+                "attrs": {
+                  "power": 43,
+                  "chin": 43,
+                  "speed": 47,
+                  "stamina": 37,
+                  "defence": 53,
+                  "ringIq": 53
+                },
+                "age": 21,
+                "wins": 5,
+                "losses": 0,
+                "draws": 0,
+                "kos": 0,
+                "damage": 0,
+                "rank": 99,
+                "potential": 62
+              }
+            ],
+            "history": [
+              {
+                "show": 1,
+                "venue": "The Leisure Centre",
+                "attendance": 15,
+                "profit": -0.008,
+                "best": "Cristian Bellini vs Fabio Costa"
+              }
+            ],
+            "log": [
+              "The Leisure Centre: 15 in, gate 0.009m, purses 0.011m, loss 0.008m.",
+              "You book your first room. Nobody has heard of you."
+            ],
+            "closed": false,
+            "seed": 916525050,
+            "rngTick": 118
+          },
+          "result": {
+            "venue": {
+              "id": "hall",
+              "name": "The Leisure Centre",
+              "capacity": 1200,
+              "rent": 0.006,
+              "needs": 0
+            },
+            "attendance": 15,
+            "ticketPrice": 0.0006,
+            "gate": 0.009,
+            "purses": 0.011,
+            "rent": 0.006,
+            "profit": -0.008,
+            "bouts": [
+              {
+                "a": {
+                  "id": "f1",
+                  "name": "Cristian Bellini",
+                  "style": "outboxer",
+                  "attrs": {
+                    "power": 41,
+                    "chin": 50,
+                    "speed": 61,
+                    "stamina": 52,
+                    "defence": 64,
+                    "ringIq": 56
+                  },
+                  "age": 30,
+                  "wins": 1,
+                  "losses": 1,
+                  "draws": 0,
+                  "kos": 0,
+                  "damage": 0,
+                  "rank": 99,
+                  "potential": 74
+                },
+                "b": {
+                  "id": "f9",
+                  "name": "Fabio Costa",
+                  "style": "swarmer",
+                  "attrs": {
+                    "power": 44,
+                    "chin": 54,
+                    "speed": 42,
+                    "stamina": 58,
+                    "defence": 33,
+                    "ringIq": 41
+                  },
+                  "age": 22,
+                  "wins": 6,
+                  "losses": 0,
+                  "draws": 0,
+                  "kos": 0,
+                  "damage": 0,
+                  "rank": 99,
+                  "potential": 68
+                },
+                "result": {
+                  "rounds": [
+                    {
+                      "round": 1,
+                      "tactic": "box",
+                      "oppTactic": "brawl",
+                      "stance": "swarmer",
+                      "switched": false,
+                      "playerLanded": 17,
+                      "oppLanded": 0,
+                      "playerScore": 10,
+                      "oppScore": 9,
+                      "knockdown": null,
+                      "note": "The tactic is working."
+                    },
+                    {
+                      "round": 2,
+                      "tactic": "press",
+                      "oppTactic": "counter",
+                      "stance": "counter",
+                      "switched": true,
+                      "playerLanded": 8,
+                      "oppLanded": 2,
+                      "playerScore": 8,
+                      "oppScore": 10,
+                      "knockdown": "opp",
+                      "note": "You are down."
+                    },
+                    {
+                      "round": 3,
+                      "tactic": "counter",
+                      "oppTactic": "brawl",
+                      "stance": "swarmer",
+                      "switched": false,
+                      "playerLanded": 7,
+                      "oppLanded": 4,
+                      "playerScore": 10,
+                      "oppScore": 9,
+                      "knockdown": null,
+                      "note": ""
+                    },
+                    {
+                      "round": 4,
+                      "tactic": "box",
+                      "oppTactic": "press",
+                      "stance": "swarmer",
+                      "switched": false,
+                      "playerLanded": 8,
+                      "oppLanded": 5,
+                      "playerScore": 10,
+                      "oppScore": 9,
+                      "knockdown": null,
+                      "note": ""
+                    },
+                    {
+                      "round": 5,
+                      "tactic": "press",
+                      "oppTactic": "brawl",
+                      "stance": "counter",
+                      "switched": true,
+                      "playerLanded": 10,
+                      "oppLanded": 1,
+                      "playerScore": 10,
+                      "oppScore": 9,
+                      "knockdown": null,
+                      "note": "He has changed how he is fighting."
+                    },
+                    {
+                      "round": 6,
+                      "tactic": "counter",
+                      "oppTactic": "brawl",
+                      "stance": "slugger",
+                      "switched": true,
+                      "playerLanded": 15,
+                      "oppLanded": 1,
+                      "playerScore": 10,
+                      "oppScore": 8,
+                      "knockdown": "player",
+                      "note": "Fabio Costa is down."
+                    },
+                    {
+                      "round": 7,
+                      "tactic": "box",
+                      "oppTactic": "brawl",
+                      "stance": "swarmer",
+                      "switched": false,
+                      "playerLanded": 14,
+                      "oppLanded": 0,
+                      "playerScore": 10,
+                      "oppScore": 9,
+                      "knockdown": null,
+                      "note": "The tactic is working."
+                    },
+                    {
+                      "round": 8,
+                      "tactic": "press",
+                      "oppTactic": "press",
+                      "stance": "swarmer",
+                      "switched": false,
+                      "playerLanded": 4,
+                      "oppLanded": 4,
+                      "playerScore": 10,
+                      "oppScore": 9,
+                      "knockdown": null,
+                      "note": "He has your number this round."
+                    }
+                  ],
+                  "winner": "player",
+                  "method": "UD",
+                  "endedRound": 8,
+                  "playerCard": 78,
+                  "oppCard": 72,
+                  "damageTaken": 1.5740000000000003,
+                  "damageDealt": 3.026,
+                  "roundsWon": 7
+                },
+                "rounds": 8,
+                "title": false,
+                "quality": 27
+              }
+            ],
+            "repDelta": -1.7,
+            "headline": "Cristian Bellini against Fabio Costa, UD"
+          }
+        },
+        "staging": "Source-generated fighters and legal pair. Reputation35/100 and boundary cash are explicitly staged. Positive cases require actual revenue-share pay and profit."
+      },
+      "consentBefore": {
+        "storage": {
+          "cash-unrelated": "{\"keep\":1086}",
+          "dukb-guest-handle": "GoldenTifo-65",
+          "dukb-mma-promoter-v1": "{\"keep\":\"MMA exact bytes\"}",
+          "dukb-theme": "light",
+          "fight-promoter-mode-v1": "boxing",
+          "fight-promoter-save-v1": "{\"st\":{\"version\":1,\"name\":\"Native cash promotion\",\"show\":1,\"money\":0.008,\"reputation\":35,\"pool\":[{\"id\":\"f1\",\"name\":\"Cristian Bellini\",\"style\":\"outboxer\",\"attrs\":{\"power\":41,\"chin\":50,\"speed\":61,\"stamina\":52,\"defence\":64,\"ringIq\":56},\"age\":30,\"wins\":1,\"losses\":1,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":74},{\"id\":\"f2\",\"name\":\"Fabio Kowalski\",\"style\":\"swarmer\",\"attrs\":{\"power\":49,\"chin\":56,\"speed\":50,\"stamina\":54,\"defence\":43,\"ringIq\":41},\"age\":23,\"wins\":0,\"losses\":1,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":60},{\"id\":\"f3\",\"name\":\"Andre Salgado\",\"style\":\"slugger\",\"attrs\":{\"power\":66,\"chin\":52,\"speed\":43,\"stamina\":41,\"defence\":51,\"ringIq\":50},\"age\":26,\"wins\":0,\"losses\":2,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":66},{\"id\":\"f4\",\"name\":\"Gustavo Yilmaz\",\"style\":\"outboxer\",\"attrs\":{\"power\":38,\"chin\":41,\"speed\":51,\"stamina\":47,\"defence\":47,\"ringIq\":54},\"age\":26,\"wins\":5,\"losses\":1,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":62},{\"id\":\"f5\",\"name\":\"Kwame Quintero\",\"style\":\"slugger\",\"attrs\":{\"power\":51,\"chin\":49,\"speed\":33,\"stamina\":36,\"defence\":39,\"ringIq\":47},\"age\":29,\"wins\":2,\"losses\":2,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":57},{\"id\":\"f6\",\"name\":\"Soren Bellini\",\"style\":\"swarmer\",\"attrs\":{\"power\":55,\"chin\":56,\"speed\":47,\"stamina\":63,\"defence\":45,\"ringIq\":50},\"age\":30,\"wins\":7,\"losses\":1,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":63},{\"id\":\"f7\",\"name\":\"Eze Varga\",\"style\":\"swarmer\",\"attrs\":{\"power\":46,\"chin\":51,\"speed\":42,\"stamina\":59,\"defence\":41,\"ringIq\":41},\"age\":23,\"wins\":0,\"losses\":3,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":61},{\"id\":\"f8\",\"name\":\"Jonas Rivas\",\"style\":\"counter\",\"attrs\":{\"power\":49,\"chin\":53,\"speed\":56,\"stamina\":48,\"defence\":61,\"ringIq\":63},\"age\":23,\"wins\":1,\"losses\":3,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":61},{\"id\":\"f9\",\"name\":\"Fabio Costa\",\"style\":\"swarmer\",\"attrs\":{\"power\":44,\"chin\":54,\"speed\":42,\"stamina\":58,\"defence\":33,\"ringIq\":41},\"age\":22,\"wins\":6,\"losses\":0,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":68},{\"id\":\"f10\",\"name\":\"Dmitri Guerrero\",\"style\":\"counter\",\"attrs\":{\"power\":43,\"chin\":43,\"speed\":47,\"stamina\":37,\"defence\":53,\"ringIq\":53},\"age\":21,\"wins\":5,\"losses\":0,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":62}],\"history\":[],\"log\":[\"You book your first room. Nobody has heard of you.\"],\"closed\":false,\"seed\":916525050,\"rngTick\":0}}"
+        },
+        "writes": [
+          {
+            "method": "setItem",
+            "args": [
+              "lswt-0.52725002753569360.4546488920804199",
+              "lswt-0.52725002753569360.4546488920804199"
+            ]
+          },
+          {
+            "method": "removeItem",
+            "args": [
+              "lswt-0.52725002753569360.4546488920804199"
+            ]
+          },
+          {
+            "method": "setItem",
+            "args": [
+              "__dukb_storage_probe__",
+              "1"
+            ]
+          },
+          {
+            "method": "removeItem",
+            "args": [
+              "__dukb_storage_probe__"
+            ]
+          },
+          {
+            "method": "setItem",
+            "args": [
+              "dukb-guest-handle",
+              "GoldenTifo-65"
+            ]
+          }
+        ],
+        "rng": 7,
+        "raw": "{\"st\":{\"version\":1,\"name\":\"Native cash promotion\",\"show\":1,\"money\":0.008,\"reputation\":35,\"pool\":[{\"id\":\"f1\",\"name\":\"Cristian Bellini\",\"style\":\"outboxer\",\"attrs\":{\"power\":41,\"chin\":50,\"speed\":61,\"stamina\":52,\"defence\":64,\"ringIq\":56},\"age\":30,\"wins\":1,\"losses\":1,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":74},{\"id\":\"f2\",\"name\":\"Fabio Kowalski\",\"style\":\"swarmer\",\"attrs\":{\"power\":49,\"chin\":56,\"speed\":50,\"stamina\":54,\"defence\":43,\"ringIq\":41},\"age\":23,\"wins\":0,\"losses\":1,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":60},{\"id\":\"f3\",\"name\":\"Andre Salgado\",\"style\":\"slugger\",\"attrs\":{\"power\":66,\"chin\":52,\"speed\":43,\"stamina\":41,\"defence\":51,\"ringIq\":50},\"age\":26,\"wins\":0,\"losses\":2,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":66},{\"id\":\"f4\",\"name\":\"Gustavo Yilmaz\",\"style\":\"outboxer\",\"attrs\":{\"power\":38,\"chin\":41,\"speed\":51,\"stamina\":47,\"defence\":47,\"ringIq\":54},\"age\":26,\"wins\":5,\"losses\":1,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":62},{\"id\":\"f5\",\"name\":\"Kwame Quintero\",\"style\":\"slugger\",\"attrs\":{\"power\":51,\"chin\":49,\"speed\":33,\"stamina\":36,\"defence\":39,\"ringIq\":47},\"age\":29,\"wins\":2,\"losses\":2,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":57},{\"id\":\"f6\",\"name\":\"Soren Bellini\",\"style\":\"swarmer\",\"attrs\":{\"power\":55,\"chin\":56,\"speed\":47,\"stamina\":63,\"defence\":45,\"ringIq\":50},\"age\":30,\"wins\":7,\"losses\":1,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":63},{\"id\":\"f7\",\"name\":\"Eze Varga\",\"style\":\"swarmer\",\"attrs\":{\"power\":46,\"chin\":51,\"speed\":42,\"stamina\":59,\"defence\":41,\"ringIq\":41},\"age\":23,\"wins\":0,\"losses\":3,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":61},{\"id\":\"f8\",\"name\":\"Jonas Rivas\",\"style\":\"counter\",\"attrs\":{\"power\":49,\"chin\":53,\"speed\":56,\"stamina\":48,\"defence\":61,\"ringIq\":63},\"age\":23,\"wins\":1,\"losses\":3,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":61},{\"id\":\"f9\",\"name\":\"Fabio Costa\",\"style\":\"swarmer\",\"attrs\":{\"power\":44,\"chin\":54,\"speed\":42,\"stamina\":58,\"defence\":33,\"ringIq\":41},\"age\":22,\"wins\":6,\"losses\":0,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":68},{\"id\":\"f10\",\"name\":\"Dmitri Guerrero\",\"style\":\"counter\",\"attrs\":{\"power\":43,\"chin\":43,\"speed\":47,\"stamina\":37,\"defence\":53,\"ringIq\":53},\"age\":21,\"wins\":5,\"losses\":0,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":62}],\"history\":[],\"log\":[\"You book your first room. Nobody has heard of you.\"],\"closed\":false,\"seed\":916525050,\"rngTick\":0}}",
+        "scrollY": 0
+      },
+      "error": {
+        "name": "TimeoutError",
+        "message": "locator.tap: Timeout 15000ms exceeded.\nCall log:\n  - waiting for getByRole('button', { name: 'Essential only', exact: true })\n",
+        "stack": "locator.tap: Timeout 15000ms exceeded.\nCall log:\n  - waiting for getByRole('button', { name: 'Essential only', exact: true })\n\n    at activate (/tmp/base/scripts/playBoxingShowForecast1086.mjs:136:72)\n    at /tmp/base/scripts/playBoxingShowForecast1086.mjs:139:55"
+      }
+    },
+    {
+      "profile": {
+        "width": 430,
+        "height": 932,
+        "touch": true,
+        "theme": "dark",
+        "reduced": false,
+        "boundary": "positive"
+      },
+      "observations": [],
+      "errors": [],
+      "responses": [
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+          "sha256": "f867cc05f0d31bbbdad175a4301931100be7a1316ead1b8f83bf492d38ba6b3b",
+          "bytes": 1864
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfMZg.ttf",
+          "sha256": "1b08e7fc267a5c7e1d614100f604b83e7e8a0be241f0f288faa2b3ac93a683ba",
+          "bytes": 324820
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7oUUsj.ttf",
+          "sha256": "ec926d5065eaca49a48f96e312bbae0bbc5733c24215cf5dfabbdccee926fef7",
+          "bytes": 69360
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuGKYMZg.ttf",
+          "sha256": "e7a1aaf7eda9f2fad4131725fa556265ec75ca7b2d756260173a040363e8d4f7",
+          "bytes": 326048
+        },
+        {
+          "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-21T22%3A19%3A26.662Z&start_at=lte.2026-10-23T06%3A19%3A26.662Z",
+          "handling": "explicit local empty live board"
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuI6fMZg.ttf",
+          "sha256": "8c883f63b2c4157d997319f2c8bc6995ed4357ef371940d31ca159004a4aae63",
+          "bytes": 325304
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuFuYMZg.ttf",
+          "sha256": "b37284b5701b6b168dfc770aa1a4ac492106422fd3ba76bc7641e37434e8019c",
+          "bytes": 326468
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj4PVksj.ttf",
+          "sha256": "3e756954468ff1cb302dae0414262e72f76a67d87bef3fa1f3226cd0fb9b2d85",
+          "bytes": 69308
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj42Vksj.ttf",
+          "sha256": "6c0346b8d297ebdc225832833e03e884a26ad99d265ecd3924d46e1ba285ea87",
+          "bytes": 69356
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7aUUsj.ttf",
+          "sha256": "3e699ead1876244fa392243054ddefe7cf631b488438828a8a100731a22ab995",
+          "bytes": 69416
+        }
+      ],
+      "unexpectedRequests": [],
+      "emulatedCompletionWrites": [],
+      "complete": false,
+      "fixture": {
+        "state": {
+          "version": 1,
+          "name": "Native cash promotion",
+          "show": 1,
+          "money": 0.12,
+          "reputation": 100,
+          "pool": [
+            {
+              "id": "f1",
+              "name": "Cristian Bellini",
+              "style": "outboxer",
+              "attrs": {
+                "power": 41,
+                "chin": 50,
+                "speed": 61,
+                "stamina": 52,
+                "defence": 64,
+                "ringIq": 56
+              },
+              "age": 30,
+              "wins": 1,
+              "losses": 1,
+              "draws": 0,
+              "kos": 0,
+              "damage": 0,
+              "rank": 99,
+              "potential": 74
+            },
+            {
+              "id": "f2",
+              "name": "Fabio Kowalski",
+              "style": "swarmer",
+              "attrs": {
+                "power": 49,
+                "chin": 56,
+                "speed": 50,
+                "stamina": 54,
+                "defence": 43,
+                "ringIq": 41
+              },
+              "age": 23,
+              "wins": 0,
+              "losses": 1,
+              "draws": 0,
+              "kos": 0,
+              "damage": 0,
+              "rank": 99,
+              "potential": 60
+            },
+            {
+              "id": "f3",
+              "name": "Andre Salgado",
+              "style": "slugger",
+              "attrs": {
+                "power": 66,
+                "chin": 52,
+                "speed": 43,
+                "stamina": 41,
+                "defence": 51,
+                "ringIq": 50
+              },
+              "age": 26,
+              "wins": 0,
+              "losses": 2,
+              "draws": 0,
+              "kos": 0,
+              "damage": 0,
+              "rank": 99,
+              "potential": 66
+            },
+            {
+              "id": "f4",
+              "name": "Gustavo Yilmaz",
+              "style": "outboxer",
+              "attrs": {
+                "power": 38,
+                "chin": 41,
+                "speed": 51,
+                "stamina": 47,
+                "defence": 47,
+                "ringIq": 54
+              },
+              "age": 26,
+              "wins": 5,
+              "losses": 1,
+              "draws": 0,
+              "kos": 0,
+              "damage": 0,
+              "rank": 99,
+              "potential": 62
+            },
+            {
+              "id": "f5",
+              "name": "Kwame Quintero",
+              "style": "slugger",
+              "attrs": {
+                "power": 51,
+                "chin": 49,
+                "speed": 33,
+                "stamina": 36,
+                "defence": 39,
+                "ringIq": 47
+              },
+              "age": 29,
+              "wins": 2,
+              "losses": 2,
+              "draws": 0,
+              "kos": 0,
+              "damage": 0,
+              "rank": 99,
+              "potential": 57
+            },
+            {
+              "id": "f6",
+              "name": "Soren Bellini",
+              "style": "swarmer",
+              "attrs": {
+                "power": 55,
+                "chin": 56,
+                "speed": 47,
+                "stamina": 63,
+                "defence": 45,
+                "ringIq": 50
+              },
+              "age": 30,
+              "wins": 7,
+              "losses": 1,
+              "draws": 0,
+              "kos": 0,
+              "damage": 0,
+              "rank": 99,
+              "potential": 63
+            },
+            {
+              "id": "f7",
+              "name": "Eze Varga",
+              "style": "swarmer",
+              "attrs": {
+                "power": 46,
+                "chin": 51,
+                "speed": 42,
+                "stamina": 59,
+                "defence": 41,
+                "ringIq": 41
+              },
+              "age": 23,
+              "wins": 0,
+              "losses": 3,
+              "draws": 0,
+              "kos": 0,
+              "damage": 0,
+              "rank": 99,
+              "potential": 61
+            },
+            {
+              "id": "f8",
+              "name": "Jonas Rivas",
+              "style": "counter",
+              "attrs": {
+                "power": 49,
+                "chin": 53,
+                "speed": 56,
+                "stamina": 48,
+                "defence": 61,
+                "ringIq": 63
+              },
+              "age": 23,
+              "wins": 1,
+              "losses": 3,
+              "draws": 0,
+              "kos": 0,
+              "damage": 0,
+              "rank": 99,
+              "potential": 61
+            },
+            {
+              "id": "f9",
+              "name": "Fabio Costa",
+              "style": "swarmer",
+              "attrs": {
+                "power": 44,
+                "chin": 54,
+                "speed": 42,
+                "stamina": 58,
+                "defence": 33,
+                "ringIq": 41
+              },
+              "age": 22,
+              "wins": 6,
+              "losses": 0,
+              "draws": 0,
+              "kos": 0,
+              "damage": 0,
+              "rank": 99,
+              "potential": 68
+            },
+            {
+              "id": "f10",
+              "name": "Dmitri Guerrero",
+              "style": "counter",
+              "attrs": {
+                "power": 43,
+                "chin": 43,
+                "speed": 47,
+                "stamina": 37,
+                "defence": 53,
+                "ringIq": 53
+              },
+              "age": 21,
+              "wins": 5,
+              "losses": 0,
+              "draws": 0,
+              "kos": 0,
+              "damage": 0,
+              "rank": 99,
+              "potential": 62
+            }
+          ],
+          "history": [],
+          "log": [
+            "You book your first room. Nobody has heard of you."
+          ],
+          "closed": false,
+          "seed": 916525050,
+          "rngTick": 0
+        },
+        "plan": {
+          "venueId": "hall",
+          "ticketPrice": 0.00006,
+          "bookings": [
+            {
+              "aId": "f1",
+              "bId": "f9",
+              "rounds": 8,
+              "title": false
+            }
+          ]
+        },
+        "bytes": "{\"st\":{\"version\":1,\"name\":\"Native cash promotion\",\"show\":1,\"money\":0.12,\"reputation\":100,\"pool\":[{\"id\":\"f1\",\"name\":\"Cristian Bellini\",\"style\":\"outboxer\",\"attrs\":{\"power\":41,\"chin\":50,\"speed\":61,\"stamina\":52,\"defence\":64,\"ringIq\":56},\"age\":30,\"wins\":1,\"losses\":1,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":74},{\"id\":\"f2\",\"name\":\"Fabio Kowalski\",\"style\":\"swarmer\",\"attrs\":{\"power\":49,\"chin\":56,\"speed\":50,\"stamina\":54,\"defence\":43,\"ringIq\":41},\"age\":23,\"wins\":0,\"losses\":1,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":60},{\"id\":\"f3\",\"name\":\"Andre Salgado\",\"style\":\"slugger\",\"attrs\":{\"power\":66,\"chin\":52,\"speed\":43,\"stamina\":41,\"defence\":51,\"ringIq\":50},\"age\":26,\"wins\":0,\"losses\":2,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":66},{\"id\":\"f4\",\"name\":\"Gustavo Yilmaz\",\"style\":\"outboxer\",\"attrs\":{\"power\":38,\"chin\":41,\"speed\":51,\"stamina\":47,\"defence\":47,\"ringIq\":54},\"age\":26,\"wins\":5,\"losses\":1,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":62},{\"id\":\"f5\",\"name\":\"Kwame Quintero\",\"style\":\"slugger\",\"attrs\":{\"power\":51,\"chin\":49,\"speed\":33,\"stamina\":36,\"defence\":39,\"ringIq\":47},\"age\":29,\"wins\":2,\"losses\":2,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":57},{\"id\":\"f6\",\"name\":\"Soren Bellini\",\"style\":\"swarmer\",\"attrs\":{\"power\":55,\"chin\":56,\"speed\":47,\"stamina\":63,\"defence\":45,\"ringIq\":50},\"age\":30,\"wins\":7,\"losses\":1,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":63},{\"id\":\"f7\",\"name\":\"Eze Varga\",\"style\":\"swarmer\",\"attrs\":{\"power\":46,\"chin\":51,\"speed\":42,\"stamina\":59,\"defence\":41,\"ringIq\":41},\"age\":23,\"wins\":0,\"losses\":3,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":61},{\"id\":\"f8\",\"name\":\"Jonas Rivas\",\"style\":\"counter\",\"attrs\":{\"power\":49,\"chin\":53,\"speed\":56,\"stamina\":48,\"defence\":61,\"ringIq\":63},\"age\":23,\"wins\":1,\"losses\":3,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":61},{\"id\":\"f9\",\"name\":\"Fabio Costa\",\"style\":\"swarmer\",\"attrs\":{\"power\":44,\"chin\":54,\"speed\":42,\"stamina\":58,\"defence\":33,\"ringIq\":41},\"age\":22,\"wins\":6,\"losses\":0,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":68},{\"id\":\"f10\",\"name\":\"Dmitri Guerrero\",\"style\":\"counter\",\"attrs\":{\"power\":43,\"chin\":43,\"speed\":47,\"stamina\":37,\"defence\":53,\"ringIq\":53},\"age\":21,\"wins\":5,\"losses\":0,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":62}],\"history\":[],\"log\":[\"You book your first room. Nobody has heard of you.\"],\"closed\":false,\"seed\":916525050,\"rngTick\":0}}",
+        "expected": {
+          "state": {
+            "version": 1,
+            "name": "Native cash promotion",
+            "show": 2,
+            "money": 0.126,
+            "reputation": 99.7,
+            "pool": [
+              {
+                "id": "f1",
+                "name": "Cristian Bellini",
+                "style": "outboxer",
+                "attrs": {
+                  "power": 41,
+                  "chin": 50,
+                  "speed": 61,
+                  "stamina": 52,
+                  "defence": 64,
+                  "ringIq": 56
+                },
+                "age": 30.08,
+                "wins": 2,
+                "losses": 1,
+                "draws": 0,
+                "kos": 0,
+                "damage": 1.6,
+                "rank": 99,
+                "potential": 74
+              },
+              {
+                "id": "f2",
+                "name": "Fabio Kowalski",
+                "style": "swarmer",
+                "attrs": {
+                  "power": 49,
+                  "chin": 56,
+                  "speed": 50,
+                  "stamina": 54,
+                  "defence": 43,
+                  "ringIq": 41
+                },
+                "age": 23,
+                "wins": 0,
+                "losses": 1,
+                "draws": 0,
+                "kos": 0,
+                "damage": 0,
+                "rank": 99,
+                "potential": 60
+              },
+              {
+                "id": "f3",
+                "name": "Andre Salgado",
+                "style": "slugger",
+                "attrs": {
+                  "power": 66,
+                  "chin": 52,
+                  "speed": 43,
+                  "stamina": 41,
+                  "defence": 51,
+                  "ringIq": 50
+                },
+                "age": 26,
+                "wins": 0,
+                "losses": 2,
+                "draws": 0,
+                "kos": 0,
+                "damage": 0,
+                "rank": 99,
+                "potential": 66
+              },
+              {
+                "id": "f4",
+                "name": "Gustavo Yilmaz",
+                "style": "outboxer",
+                "attrs": {
+                  "power": 38,
+                  "chin": 41,
+                  "speed": 51,
+                  "stamina": 47,
+                  "defence": 47,
+                  "ringIq": 54
+                },
+                "age": 26,
+                "wins": 5,
+                "losses": 1,
+                "draws": 0,
+                "kos": 0,
+                "damage": 0,
+                "rank": 99,
+                "potential": 62
+              },
+              {
+                "id": "f5",
+                "name": "Kwame Quintero",
+                "style": "slugger",
+                "attrs": {
+                  "power": 51,
+                  "chin": 49,
+                  "speed": 33,
+                  "stamina": 36,
+                  "defence": 39,
+                  "ringIq": 47
+                },
+                "age": 29,
+                "wins": 2,
+                "losses": 2,
+                "draws": 0,
+                "kos": 0,
+                "damage": 0,
+                "rank": 99,
+                "potential": 57
+              },
+              {
+                "id": "f6",
+                "name": "Soren Bellini",
+                "style": "swarmer",
+                "attrs": {
+                  "power": 55,
+                  "chin": 56,
+                  "speed": 47,
+                  "stamina": 63,
+                  "defence": 45,
+                  "ringIq": 50
+                },
+                "age": 30,
+                "wins": 7,
+                "losses": 1,
+                "draws": 0,
+                "kos": 0,
+                "damage": 0,
+                "rank": 99,
+                "potential": 63
+              },
+              {
+                "id": "f7",
+                "name": "Eze Varga",
+                "style": "swarmer",
+                "attrs": {
+                  "power": 46,
+                  "chin": 51,
+                  "speed": 42,
+                  "stamina": 59,
+                  "defence": 41,
+                  "ringIq": 41
+                },
+                "age": 23,
+                "wins": 0,
+                "losses": 3,
+                "draws": 0,
+                "kos": 0,
+                "damage": 0,
+                "rank": 99,
+                "potential": 61
+              },
+              {
+                "id": "f8",
+                "name": "Jonas Rivas",
+                "style": "counter",
+                "attrs": {
+                  "power": 49,
+                  "chin": 53,
+                  "speed": 56,
+                  "stamina": 48,
+                  "defence": 61,
+                  "ringIq": 63
+                },
+                "age": 23,
+                "wins": 1,
+                "losses": 3,
+                "draws": 0,
+                "kos": 0,
+                "damage": 0,
+                "rank": 99,
+                "potential": 61
+              },
+              {
+                "id": "f9",
+                "name": "Fabio Costa",
+                "style": "swarmer",
+                "attrs": {
+                  "power": 44,
+                  "chin": 54,
+                  "speed": 42,
+                  "stamina": 58,
+                  "defence": 33,
+                  "ringIq": 41
+                },
+                "age": 22.08,
+                "wins": 6,
+                "losses": 1,
+                "draws": 0,
+                "kos": 0,
+                "damage": 3,
+                "rank": 99,
+                "potential": 68
+              },
+              {
+                "id": "f10",
+                "name": "Dmitri Guerrero",
+                "style": "counter",
+                "attrs": {
+                  "power": 43,
+                  "chin": 43,
+                  "speed": 47,
+                  "stamina": 37,
+                  "defence": 53,
+                  "ringIq": 53
+                },
+                "age": 21,
+                "wins": 5,
+                "losses": 0,
+                "draws": 0,
+                "kos": 0,
+                "damage": 0,
+                "rank": 99,
+                "potential": 62
+              }
+            ],
+            "history": [
+              {
+                "show": 1,
+                "venue": "The Leisure Centre",
+                "attendance": 468,
+                "profit": 0.006,
+                "best": "Cristian Bellini vs Fabio Costa"
+              }
+            ],
+            "log": [
+              "The Leisure Centre: 468 in, gate 0.028m, purses 0.016m, profit 0.006m.",
+              "You book your first room. Nobody has heard of you."
+            ],
+            "closed": false,
+            "seed": 916525050,
+            "rngTick": 118
+          },
+          "result": {
+            "venue": {
+              "id": "hall",
+              "name": "The Leisure Centre",
+              "capacity": 1200,
+              "rent": 0.006,
+              "needs": 0
+            },
+            "attendance": 468,
+            "ticketPrice": 0.00006,
+            "gate": 0.028,
+            "purses": 0.016,
+            "rent": 0.006,
+            "profit": 0.006,
+            "bouts": [
+              {
+                "a": {
+                  "id": "f1",
+                  "name": "Cristian Bellini",
+                  "style": "outboxer",
+                  "attrs": {
+                    "power": 41,
+                    "chin": 50,
+                    "speed": 61,
+                    "stamina": 52,
+                    "defence": 64,
+                    "ringIq": 56
+                  },
+                  "age": 30,
+                  "wins": 1,
+                  "losses": 1,
+                  "draws": 0,
+                  "kos": 0,
+                  "damage": 0,
+                  "rank": 99,
+                  "potential": 74
+                },
+                "b": {
+                  "id": "f9",
+                  "name": "Fabio Costa",
+                  "style": "swarmer",
+                  "attrs": {
+                    "power": 44,
+                    "chin": 54,
+                    "speed": 42,
+                    "stamina": 58,
+                    "defence": 33,
+                    "ringIq": 41
+                  },
+                  "age": 22,
+                  "wins": 6,
+                  "losses": 0,
+                  "draws": 0,
+                  "kos": 0,
+                  "damage": 0,
+                  "rank": 99,
+                  "potential": 68
+                },
+                "result": {
+                  "rounds": [
+                    {
+                      "round": 1,
+                      "tactic": "box",
+                      "oppTactic": "brawl",
+                      "stance": "swarmer",
+                      "switched": false,
+                      "playerLanded": 17,
+                      "oppLanded": 0,
+                      "playerScore": 10,
+                      "oppScore": 9,
+                      "knockdown": null,
+                      "note": "The tactic is working."
+                    },
+                    {
+                      "round": 2,
+                      "tactic": "press",
+                      "oppTactic": "counter",
+                      "stance": "counter",
+                      "switched": true,
+                      "playerLanded": 8,
+                      "oppLanded": 2,
+                      "playerScore": 8,
+                      "oppScore": 10,
+                      "knockdown": "opp",
+                      "note": "You are down."
+                    },
+                    {
+                      "round": 3,
+                      "tactic": "counter",
+                      "oppTactic": "brawl",
+                      "stance": "swarmer",
+                      "switched": false,
+                      "playerLanded": 7,
+                      "oppLanded": 4,
+                      "playerScore": 10,
+                      "oppScore": 9,
+                      "knockdown": null,
+                      "note": ""
+                    },
+                    {
+                      "round": 4,
+                      "tactic": "box",
+                      "oppTactic": "press",
+                      "stance": "swarmer",
+                      "switched": false,
+                      "playerLanded": 8,
+                      "oppLanded": 5,
+                      "playerScore": 10,
+                      "oppScore": 9,
+                      "knockdown": null,
+                      "note": ""
+                    },
+                    {
+                      "round": 5,
+                      "tactic": "press",
+                      "oppTactic": "brawl",
+                      "stance": "counter",
+                      "switched": true,
+                      "playerLanded": 10,
+                      "oppLanded": 1,
+                      "playerScore": 10,
+                      "oppScore": 9,
+                      "knockdown": null,
+                      "note": "He has changed how he is fighting."
+                    },
+                    {
+                      "round": 6,
+                      "tactic": "counter",
+                      "oppTactic": "brawl",
+                      "stance": "slugger",
+                      "switched": true,
+                      "playerLanded": 15,
+                      "oppLanded": 1,
+                      "playerScore": 10,
+                      "oppScore": 8,
+                      "knockdown": "player",
+                      "note": "Fabio Costa is down."
+                    },
+                    {
+                      "round": 7,
+                      "tactic": "box",
+                      "oppTactic": "brawl",
+                      "stance": "swarmer",
+                      "switched": false,
+                      "playerLanded": 14,
+                      "oppLanded": 0,
+                      "playerScore": 10,
+                      "oppScore": 9,
+                      "knockdown": null,
+                      "note": "The tactic is working."
+                    },
+                    {
+                      "round": 8,
+                      "tactic": "press",
+                      "oppTactic": "press",
+                      "stance": "swarmer",
+                      "switched": false,
+                      "playerLanded": 4,
+                      "oppLanded": 4,
+                      "playerScore": 10,
+                      "oppScore": 9,
+                      "knockdown": null,
+                      "note": "He has your number this round."
+                    }
+                  ],
+                  "winner": "player",
+                  "method": "UD",
+                  "endedRound": 8,
+                  "playerCard": 78,
+                  "oppCard": 72,
+                  "damageTaken": 1.5740000000000003,
+                  "damageDealt": 3.026,
+                  "roundsWon": 7
+                },
+                "rounds": 8,
+                "title": false,
+                "quality": 27
+              }
+            ],
+            "repDelta": -0.3,
+            "headline": "Cristian Bellini against Fabio Costa, UD"
+          }
+        },
+        "staging": "Source-generated fighters and legal pair. Reputation35/100 and boundary cash are explicitly staged. Positive cases require actual revenue-share pay and profit."
+      },
+      "consentBefore": {
+        "storage": {
+          "cash-unrelated": "{\"keep\":1086}",
+          "dukb-guest-handle": "BallerBuzzer-43",
+          "dukb-mma-promoter-v1": "{\"keep\":\"MMA exact bytes\"}",
+          "dukb-theme": "dark",
+          "fight-promoter-mode-v1": "boxing",
+          "fight-promoter-save-v1": "{\"st\":{\"version\":1,\"name\":\"Native cash promotion\",\"show\":1,\"money\":0.12,\"reputation\":100,\"pool\":[{\"id\":\"f1\",\"name\":\"Cristian Bellini\",\"style\":\"outboxer\",\"attrs\":{\"power\":41,\"chin\":50,\"speed\":61,\"stamina\":52,\"defence\":64,\"ringIq\":56},\"age\":30,\"wins\":1,\"losses\":1,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":74},{\"id\":\"f2\",\"name\":\"Fabio Kowalski\",\"style\":\"swarmer\",\"attrs\":{\"power\":49,\"chin\":56,\"speed\":50,\"stamina\":54,\"defence\":43,\"ringIq\":41},\"age\":23,\"wins\":0,\"losses\":1,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":60},{\"id\":\"f3\",\"name\":\"Andre Salgado\",\"style\":\"slugger\",\"attrs\":{\"power\":66,\"chin\":52,\"speed\":43,\"stamina\":41,\"defence\":51,\"ringIq\":50},\"age\":26,\"wins\":0,\"losses\":2,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":66},{\"id\":\"f4\",\"name\":\"Gustavo Yilmaz\",\"style\":\"outboxer\",\"attrs\":{\"power\":38,\"chin\":41,\"speed\":51,\"stamina\":47,\"defence\":47,\"ringIq\":54},\"age\":26,\"wins\":5,\"losses\":1,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":62},{\"id\":\"f5\",\"name\":\"Kwame Quintero\",\"style\":\"slugger\",\"attrs\":{\"power\":51,\"chin\":49,\"speed\":33,\"stamina\":36,\"defence\":39,\"ringIq\":47},\"age\":29,\"wins\":2,\"losses\":2,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":57},{\"id\":\"f6\",\"name\":\"Soren Bellini\",\"style\":\"swarmer\",\"attrs\":{\"power\":55,\"chin\":56,\"speed\":47,\"stamina\":63,\"defence\":45,\"ringIq\":50},\"age\":30,\"wins\":7,\"losses\":1,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":63},{\"id\":\"f7\",\"name\":\"Eze Varga\",\"style\":\"swarmer\",\"attrs\":{\"power\":46,\"chin\":51,\"speed\":42,\"stamina\":59,\"defence\":41,\"ringIq\":41},\"age\":23,\"wins\":0,\"losses\":3,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":61},{\"id\":\"f8\",\"name\":\"Jonas Rivas\",\"style\":\"counter\",\"attrs\":{\"power\":49,\"chin\":53,\"speed\":56,\"stamina\":48,\"defence\":61,\"ringIq\":63},\"age\":23,\"wins\":1,\"losses\":3,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":61},{\"id\":\"f9\",\"name\":\"Fabio Costa\",\"style\":\"swarmer\",\"attrs\":{\"power\":44,\"chin\":54,\"speed\":42,\"stamina\":58,\"defence\":33,\"ringIq\":41},\"age\":22,\"wins\":6,\"losses\":0,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":68},{\"id\":\"f10\",\"name\":\"Dmitri Guerrero\",\"style\":\"counter\",\"attrs\":{\"power\":43,\"chin\":43,\"speed\":47,\"stamina\":37,\"defence\":53,\"ringIq\":53},\"age\":21,\"wins\":5,\"losses\":0,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":62}],\"history\":[],\"log\":[\"You book your first room. Nobody has heard of you.\"],\"closed\":false,\"seed\":916525050,\"rngTick\":0}}"
+        },
+        "writes": [
+          {
+            "method": "setItem",
+            "args": [
+              "lswt-0.55246007143643780.5397019086375374",
+              "lswt-0.55246007143643780.5397019086375374"
+            ]
+          },
+          {
+            "method": "removeItem",
+            "args": [
+              "lswt-0.55246007143643780.5397019086375374"
+            ]
+          },
+          {
+            "method": "setItem",
+            "args": [
+              "__dukb_storage_probe__",
+              "1"
+            ]
+          },
+          {
+            "method": "removeItem",
+            "args": [
+              "__dukb_storage_probe__"
+            ]
+          },
+          {
+            "method": "setItem",
+            "args": [
+              "dukb-guest-handle",
+              "BallerBuzzer-43"
+            ]
+          }
+        ],
+        "rng": 7,
+        "raw": "{\"st\":{\"version\":1,\"name\":\"Native cash promotion\",\"show\":1,\"money\":0.12,\"reputation\":100,\"pool\":[{\"id\":\"f1\",\"name\":\"Cristian Bellini\",\"style\":\"outboxer\",\"attrs\":{\"power\":41,\"chin\":50,\"speed\":61,\"stamina\":52,\"defence\":64,\"ringIq\":56},\"age\":30,\"wins\":1,\"losses\":1,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":74},{\"id\":\"f2\",\"name\":\"Fabio Kowalski\",\"style\":\"swarmer\",\"attrs\":{\"power\":49,\"chin\":56,\"speed\":50,\"stamina\":54,\"defence\":43,\"ringIq\":41},\"age\":23,\"wins\":0,\"losses\":1,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":60},{\"id\":\"f3\",\"name\":\"Andre Salgado\",\"style\":\"slugger\",\"attrs\":{\"power\":66,\"chin\":52,\"speed\":43,\"stamina\":41,\"defence\":51,\"ringIq\":50},\"age\":26,\"wins\":0,\"losses\":2,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":66},{\"id\":\"f4\",\"name\":\"Gustavo Yilmaz\",\"style\":\"outboxer\",\"attrs\":{\"power\":38,\"chin\":41,\"speed\":51,\"stamina\":47,\"defence\":47,\"ringIq\":54},\"age\":26,\"wins\":5,\"losses\":1,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":62},{\"id\":\"f5\",\"name\":\"Kwame Quintero\",\"style\":\"slugger\",\"attrs\":{\"power\":51,\"chin\":49,\"speed\":33,\"stamina\":36,\"defence\":39,\"ringIq\":47},\"age\":29,\"wins\":2,\"losses\":2,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":57},{\"id\":\"f6\",\"name\":\"Soren Bellini\",\"style\":\"swarmer\",\"attrs\":{\"power\":55,\"chin\":56,\"speed\":47,\"stamina\":63,\"defence\":45,\"ringIq\":50},\"age\":30,\"wins\":7,\"losses\":1,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":63},{\"id\":\"f7\",\"name\":\"Eze Varga\",\"style\":\"swarmer\",\"attrs\":{\"power\":46,\"chin\":51,\"speed\":42,\"stamina\":59,\"defence\":41,\"ringIq\":41},\"age\":23,\"wins\":0,\"losses\":3,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":61},{\"id\":\"f8\",\"name\":\"Jonas Rivas\",\"style\":\"counter\",\"attrs\":{\"power\":49,\"chin\":53,\"speed\":56,\"stamina\":48,\"defence\":61,\"ringIq\":63},\"age\":23,\"wins\":1,\"losses\":3,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":61},{\"id\":\"f9\",\"name\":\"Fabio Costa\",\"style\":\"swarmer\",\"attrs\":{\"power\":44,\"chin\":54,\"speed\":42,\"stamina\":58,\"defence\":33,\"ringIq\":41},\"age\":22,\"wins\":6,\"losses\":0,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":68},{\"id\":\"f10\",\"name\":\"Dmitri Guerrero\",\"style\":\"counter\",\"attrs\":{\"power\":43,\"chin\":43,\"speed\":47,\"stamina\":37,\"defence\":53,\"ringIq\":53},\"age\":21,\"wins\":5,\"losses\":0,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":62}],\"history\":[],\"log\":[\"You book your first room. Nobody has heard of you.\"],\"closed\":false,\"seed\":916525050,\"rngTick\":0}}",
+        "scrollY": 0
+      },
+      "error": {
+        "name": "TimeoutError",
+        "message": "locator.tap: Timeout 15000ms exceeded.\nCall log:\n  - waiting for getByRole('button', { name: 'Essential only', exact: true })\n",
+        "stack": "locator.tap: Timeout 15000ms exceeded.\nCall log:\n  - waiting for getByRole('button', { name: 'Essential only', exact: true })\n\n    at activate (/tmp/base/scripts/playBoxingShowForecast1086.mjs:136:72)\n    at /tmp/base/scripts/playBoxingShowForecast1086.mjs:139:55"
+      }
+    },
+    {
+      "profile": {
+        "width": 1440,
+        "height": 900,
+        "touch": false,
+        "theme": "light",
+        "reduced": true,
+        "boundary": "positive"
+      },
+      "observations": [],
+      "errors": [],
+      "responses": [
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+          "sha256": "f867cc05f0d31bbbdad175a4301931100be7a1316ead1b8f83bf492d38ba6b3b",
+          "bytes": 1864
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfMZg.ttf",
+          "sha256": "1b08e7fc267a5c7e1d614100f604b83e7e8a0be241f0f288faa2b3ac93a683ba",
+          "bytes": 324820
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7oUUsj.ttf",
+          "sha256": "ec926d5065eaca49a48f96e312bbae0bbc5733c24215cf5dfabbdccee926fef7",
+          "bytes": 69360
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuFuYMZg.ttf",
+          "sha256": "b37284b5701b6b168dfc770aa1a4ac492106422fd3ba76bc7641e37434e8019c",
+          "bytes": 326468
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuGKYMZg.ttf",
+          "sha256": "e7a1aaf7eda9f2fad4131725fa556265ec75ca7b2d756260173a040363e8d4f7",
+          "bytes": 326048
+        },
+        {
+          "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-21T22%3A19%3A42.009Z&start_at=lte.2026-10-23T06%3A19%3A42.009Z",
+          "handling": "explicit local empty live board"
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuI6fMZg.ttf",
+          "sha256": "8c883f63b2c4157d997319f2c8bc6995ed4357ef371940d31ca159004a4aae63",
+          "bytes": 325304
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj4PVksj.ttf",
+          "sha256": "3e756954468ff1cb302dae0414262e72f76a67d87bef3fa1f3226cd0fb9b2d85",
+          "bytes": 69308
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj42Vksj.ttf",
+          "sha256": "6c0346b8d297ebdc225832833e03e884a26ad99d265ecd3924d46e1ba285ea87",
+          "bytes": 69356
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7aUUsj.ttf",
+          "sha256": "3e699ead1876244fa392243054ddefe7cf631b488438828a8a100731a22ab995",
+          "bytes": 69416
+        }
+      ],
+      "unexpectedRequests": [],
+      "emulatedCompletionWrites": [],
+      "complete": false,
+      "fixture": {
+        "state": {
+          "version": 1,
+          "name": "Native cash promotion",
+          "show": 1,
+          "money": 0.12,
+          "reputation": 100,
+          "pool": [
+            {
+              "id": "f1",
+              "name": "Cristian Bellini",
+              "style": "outboxer",
+              "attrs": {
+                "power": 41,
+                "chin": 50,
+                "speed": 61,
+                "stamina": 52,
+                "defence": 64,
+                "ringIq": 56
+              },
+              "age": 30,
+              "wins": 1,
+              "losses": 1,
+              "draws": 0,
+              "kos": 0,
+              "damage": 0,
+              "rank": 99,
+              "potential": 74
+            },
+            {
+              "id": "f2",
+              "name": "Fabio Kowalski",
+              "style": "swarmer",
+              "attrs": {
+                "power": 49,
+                "chin": 56,
+                "speed": 50,
+                "stamina": 54,
+                "defence": 43,
+                "ringIq": 41
+              },
+              "age": 23,
+              "wins": 0,
+              "losses": 1,
+              "draws": 0,
+              "kos": 0,
+              "damage": 0,
+              "rank": 99,
+              "potential": 60
+            },
+            {
+              "id": "f3",
+              "name": "Andre Salgado",
+              "style": "slugger",
+              "attrs": {
+                "power": 66,
+                "chin": 52,
+                "speed": 43,
+                "stamina": 41,
+                "defence": 51,
+                "ringIq": 50
+              },
+              "age": 26,
+              "wins": 0,
+              "losses": 2,
+              "draws": 0,
+              "kos": 0,
+              "damage": 0,
+              "rank": 99,
+              "potential": 66
+            },
+            {
+              "id": "f4",
+              "name": "Gustavo Yilmaz",
+              "style": "outboxer",
+              "attrs": {
+                "power": 38,
+                "chin": 41,
+                "speed": 51,
+                "stamina": 47,
+                "defence": 47,
+                "ringIq": 54
+              },
+              "age": 26,
+              "wins": 5,
+              "losses": 1,
+              "draws": 0,
+              "kos": 0,
+              "damage": 0,
+              "rank": 99,
+              "potential": 62
+            },
+            {
+              "id": "f5",
+              "name": "Kwame Quintero",
+              "style": "slugger",
+              "attrs": {
+                "power": 51,
+                "chin": 49,
+                "speed": 33,
+                "stamina": 36,
+                "defence": 39,
+                "ringIq": 47
+              },
+              "age": 29,
+              "wins": 2,
+              "losses": 2,
+              "draws": 0,
+              "kos": 0,
+              "damage": 0,
+              "rank": 99,
+              "potential": 57
+            },
+            {
+              "id": "f6",
+              "name": "Soren Bellini",
+              "style": "swarmer",
+              "attrs": {
+                "power": 55,
+                "chin": 56,
+                "speed": 47,
+                "stamina": 63,
+                "defence": 45,
+                "ringIq": 50
+              },
+              "age": 30,
+              "wins": 7,
+              "losses": 1,
+              "draws": 0,
+              "kos": 0,
+              "damage": 0,
+              "rank": 99,
+              "potential": 63
+            },
+            {
+              "id": "f7",
+              "name": "Eze Varga",
+              "style": "swarmer",
+              "attrs": {
+                "power": 46,
+                "chin": 51,
+                "speed": 42,
+                "stamina": 59,
+                "defence": 41,
+                "ringIq": 41
+              },
+              "age": 23,
+              "wins": 0,
+              "losses": 3,
+              "draws": 0,
+              "kos": 0,
+              "damage": 0,
+              "rank": 99,
+              "potential": 61
+            },
+            {
+              "id": "f8",
+              "name": "Jonas Rivas",
+              "style": "counter",
+              "attrs": {
+                "power": 49,
+                "chin": 53,
+                "speed": 56,
+                "stamina": 48,
+                "defence": 61,
+                "ringIq": 63
+              },
+              "age": 23,
+              "wins": 1,
+              "losses": 3,
+              "draws": 0,
+              "kos": 0,
+              "damage": 0,
+              "rank": 99,
+              "potential": 61
+            },
+            {
+              "id": "f9",
+              "name": "Fabio Costa",
+              "style": "swarmer",
+              "attrs": {
+                "power": 44,
+                "chin": 54,
+                "speed": 42,
+                "stamina": 58,
+                "defence": 33,
+                "ringIq": 41
+              },
+              "age": 22,
+              "wins": 6,
+              "losses": 0,
+              "draws": 0,
+              "kos": 0,
+              "damage": 0,
+              "rank": 99,
+              "potential": 68
+            },
+            {
+              "id": "f10",
+              "name": "Dmitri Guerrero",
+              "style": "counter",
+              "attrs": {
+                "power": 43,
+                "chin": 43,
+                "speed": 47,
+                "stamina": 37,
+                "defence": 53,
+                "ringIq": 53
+              },
+              "age": 21,
+              "wins": 5,
+              "losses": 0,
+              "draws": 0,
+              "kos": 0,
+              "damage": 0,
+              "rank": 99,
+              "potential": 62
+            }
+          ],
+          "history": [],
+          "log": [
+            "You book your first room. Nobody has heard of you."
+          ],
+          "closed": false,
+          "seed": 916525050,
+          "rngTick": 0
+        },
+        "plan": {
+          "venueId": "hall",
+          "ticketPrice": 0.00006,
+          "bookings": [
+            {
+              "aId": "f1",
+              "bId": "f9",
+              "rounds": 8,
+              "title": false
+            }
+          ]
+        },
+        "bytes": "{\"st\":{\"version\":1,\"name\":\"Native cash promotion\",\"show\":1,\"money\":0.12,\"reputation\":100,\"pool\":[{\"id\":\"f1\",\"name\":\"Cristian Bellini\",\"style\":\"outboxer\",\"attrs\":{\"power\":41,\"chin\":50,\"speed\":61,\"stamina\":52,\"defence\":64,\"ringIq\":56},\"age\":30,\"wins\":1,\"losses\":1,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":74},{\"id\":\"f2\",\"name\":\"Fabio Kowalski\",\"style\":\"swarmer\",\"attrs\":{\"power\":49,\"chin\":56,\"speed\":50,\"stamina\":54,\"defence\":43,\"ringIq\":41},\"age\":23,\"wins\":0,\"losses\":1,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":60},{\"id\":\"f3\",\"name\":\"Andre Salgado\",\"style\":\"slugger\",\"attrs\":{\"power\":66,\"chin\":52,\"speed\":43,\"stamina\":41,\"defence\":51,\"ringIq\":50},\"age\":26,\"wins\":0,\"losses\":2,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":66},{\"id\":\"f4\",\"name\":\"Gustavo Yilmaz\",\"style\":\"outboxer\",\"attrs\":{\"power\":38,\"chin\":41,\"speed\":51,\"stamina\":47,\"defence\":47,\"ringIq\":54},\"age\":26,\"wins\":5,\"losses\":1,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":62},{\"id\":\"f5\",\"name\":\"Kwame Quintero\",\"style\":\"slugger\",\"attrs\":{\"power\":51,\"chin\":49,\"speed\":33,\"stamina\":36,\"defence\":39,\"ringIq\":47},\"age\":29,\"wins\":2,\"losses\":2,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":57},{\"id\":\"f6\",\"name\":\"Soren Bellini\",\"style\":\"swarmer\",\"attrs\":{\"power\":55,\"chin\":56,\"speed\":47,\"stamina\":63,\"defence\":45,\"ringIq\":50},\"age\":30,\"wins\":7,\"losses\":1,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":63},{\"id\":\"f7\",\"name\":\"Eze Varga\",\"style\":\"swarmer\",\"attrs\":{\"power\":46,\"chin\":51,\"speed\":42,\"stamina\":59,\"defence\":41,\"ringIq\":41},\"age\":23,\"wins\":0,\"losses\":3,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":61},{\"id\":\"f8\",\"name\":\"Jonas Rivas\",\"style\":\"counter\",\"attrs\":{\"power\":49,\"chin\":53,\"speed\":56,\"stamina\":48,\"defence\":61,\"ringIq\":63},\"age\":23,\"wins\":1,\"losses\":3,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":61},{\"id\":\"f9\",\"name\":\"Fabio Costa\",\"style\":\"swarmer\",\"attrs\":{\"power\":44,\"chin\":54,\"speed\":42,\"stamina\":58,\"defence\":33,\"ringIq\":41},\"age\":22,\"wins\":6,\"losses\":0,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":68},{\"id\":\"f10\",\"name\":\"Dmitri Guerrero\",\"style\":\"counter\",\"attrs\":{\"power\":43,\"chin\":43,\"speed\":47,\"stamina\":37,\"defence\":53,\"ringIq\":53},\"age\":21,\"wins\":5,\"losses\":0,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":62}],\"history\":[],\"log\":[\"You book your first room. Nobody has heard of you.\"],\"closed\":false,\"seed\":916525050,\"rngTick\":0}}",
+        "expected": {
+          "state": {
+            "version": 1,
+            "name": "Native cash promotion",
+            "show": 2,
+            "money": 0.126,
+            "reputation": 99.7,
+            "pool": [
+              {
+                "id": "f1",
+                "name": "Cristian Bellini",
+                "style": "outboxer",
+                "attrs": {
+                  "power": 41,
+                  "chin": 50,
+                  "speed": 61,
+                  "stamina": 52,
+                  "defence": 64,
+                  "ringIq": 56
+                },
+                "age": 30.08,
+                "wins": 2,
+                "losses": 1,
+                "draws": 0,
+                "kos": 0,
+                "damage": 1.6,
+                "rank": 99,
+                "potential": 74
+              },
+              {
+                "id": "f2",
+                "name": "Fabio Kowalski",
+                "style": "swarmer",
+                "attrs": {
+                  "power": 49,
+                  "chin": 56,
+                  "speed": 50,
+                  "stamina": 54,
+                  "defence": 43,
+                  "ringIq": 41
+                },
+                "age": 23,
+                "wins": 0,
+                "losses": 1,
+                "draws": 0,
+                "kos": 0,
+                "damage": 0,
+                "rank": 99,
+                "potential": 60
+              },
+              {
+                "id": "f3",
+                "name": "Andre Salgado",
+                "style": "slugger",
+                "attrs": {
+                  "power": 66,
+                  "chin": 52,
+                  "speed": 43,
+                  "stamina": 41,
+                  "defence": 51,
+                  "ringIq": 50
+                },
+                "age": 26,
+                "wins": 0,
+                "losses": 2,
+                "draws": 0,
+                "kos": 0,
+                "damage": 0,
+                "rank": 99,
+                "potential": 66
+              },
+              {
+                "id": "f4",
+                "name": "Gustavo Yilmaz",
+                "style": "outboxer",
+                "attrs": {
+                  "power": 38,
+                  "chin": 41,
+                  "speed": 51,
+                  "stamina": 47,
+                  "defence": 47,
+                  "ringIq": 54
+                },
+                "age": 26,
+                "wins": 5,
+                "losses": 1,
+                "draws": 0,
+                "kos": 0,
+                "damage": 0,
+                "rank": 99,
+                "potential": 62
+              },
+              {
+                "id": "f5",
+                "name": "Kwame Quintero",
+                "style": "slugger",
+                "attrs": {
+                  "power": 51,
+                  "chin": 49,
+                  "speed": 33,
+                  "stamina": 36,
+                  "defence": 39,
+                  "ringIq": 47
+                },
+                "age": 29,
+                "wins": 2,
+                "losses": 2,
+                "draws": 0,
+                "kos": 0,
+                "damage": 0,
+                "rank": 99,
+                "potential": 57
+              },
+              {
+                "id": "f6",
+                "name": "Soren Bellini",
+                "style": "swarmer",
+                "attrs": {
+                  "power": 55,
+                  "chin": 56,
+                  "speed": 47,
+                  "stamina": 63,
+                  "defence": 45,
+                  "ringIq": 50
+                },
+                "age": 30,
+                "wins": 7,
+                "losses": 1,
+                "draws": 0,
+                "kos": 0,
+                "damage": 0,
+                "rank": 99,
+                "potential": 63
+              },
+              {
+                "id": "f7",
+                "name": "Eze Varga",
+                "style": "swarmer",
+                "attrs": {
+                  "power": 46,
+                  "chin": 51,
+                  "speed": 42,
+                  "stamina": 59,
+                  "defence": 41,
+                  "ringIq": 41
+                },
+                "age": 23,
+                "wins": 0,
+                "losses": 3,
+                "draws": 0,
+                "kos": 0,
+                "damage": 0,
+                "rank": 99,
+                "potential": 61
+              },
+              {
+                "id": "f8",
+                "name": "Jonas Rivas",
+                "style": "counter",
+                "attrs": {
+                  "power": 49,
+                  "chin": 53,
+                  "speed": 56,
+                  "stamina": 48,
+                  "defence": 61,
+                  "ringIq": 63
+                },
+                "age": 23,
+                "wins": 1,
+                "losses": 3,
+                "draws": 0,
+                "kos": 0,
+                "damage": 0,
+                "rank": 99,
+                "potential": 61
+              },
+              {
+                "id": "f9",
+                "name": "Fabio Costa",
+                "style": "swarmer",
+                "attrs": {
+                  "power": 44,
+                  "chin": 54,
+                  "speed": 42,
+                  "stamina": 58,
+                  "defence": 33,
+                  "ringIq": 41
+                },
+                "age": 22.08,
+                "wins": 6,
+                "losses": 1,
+                "draws": 0,
+                "kos": 0,
+                "damage": 3,
+                "rank": 99,
+                "potential": 68
+              },
+              {
+                "id": "f10",
+                "name": "Dmitri Guerrero",
+                "style": "counter",
+                "attrs": {
+                  "power": 43,
+                  "chin": 43,
+                  "speed": 47,
+                  "stamina": 37,
+                  "defence": 53,
+                  "ringIq": 53
+                },
+                "age": 21,
+                "wins": 5,
+                "losses": 0,
+                "draws": 0,
+                "kos": 0,
+                "damage": 0,
+                "rank": 99,
+                "potential": 62
+              }
+            ],
+            "history": [
+              {
+                "show": 1,
+                "venue": "The Leisure Centre",
+                "attendance": 468,
+                "profit": 0.006,
+                "best": "Cristian Bellini vs Fabio Costa"
+              }
+            ],
+            "log": [
+              "The Leisure Centre: 468 in, gate 0.028m, purses 0.016m, profit 0.006m.",
+              "You book your first room. Nobody has heard of you."
+            ],
+            "closed": false,
+            "seed": 916525050,
+            "rngTick": 118
+          },
+          "result": {
+            "venue": {
+              "id": "hall",
+              "name": "The Leisure Centre",
+              "capacity": 1200,
+              "rent": 0.006,
+              "needs": 0
+            },
+            "attendance": 468,
+            "ticketPrice": 0.00006,
+            "gate": 0.028,
+            "purses": 0.016,
+            "rent": 0.006,
+            "profit": 0.006,
+            "bouts": [
+              {
+                "a": {
+                  "id": "f1",
+                  "name": "Cristian Bellini",
+                  "style": "outboxer",
+                  "attrs": {
+                    "power": 41,
+                    "chin": 50,
+                    "speed": 61,
+                    "stamina": 52,
+                    "defence": 64,
+                    "ringIq": 56
+                  },
+                  "age": 30,
+                  "wins": 1,
+                  "losses": 1,
+                  "draws": 0,
+                  "kos": 0,
+                  "damage": 0,
+                  "rank": 99,
+                  "potential": 74
+                },
+                "b": {
+                  "id": "f9",
+                  "name": "Fabio Costa",
+                  "style": "swarmer",
+                  "attrs": {
+                    "power": 44,
+                    "chin": 54,
+                    "speed": 42,
+                    "stamina": 58,
+                    "defence": 33,
+                    "ringIq": 41
+                  },
+                  "age": 22,
+                  "wins": 6,
+                  "losses": 0,
+                  "draws": 0,
+                  "kos": 0,
+                  "damage": 0,
+                  "rank": 99,
+                  "potential": 68
+                },
+                "result": {
+                  "rounds": [
+                    {
+                      "round": 1,
+                      "tactic": "box",
+                      "oppTactic": "brawl",
+                      "stance": "swarmer",
+                      "switched": false,
+                      "playerLanded": 17,
+                      "oppLanded": 0,
+                      "playerScore": 10,
+                      "oppScore": 9,
+                      "knockdown": null,
+                      "note": "The tactic is working."
+                    },
+                    {
+                      "round": 2,
+                      "tactic": "press",
+                      "oppTactic": "counter",
+                      "stance": "counter",
+                      "switched": true,
+                      "playerLanded": 8,
+                      "oppLanded": 2,
+                      "playerScore": 8,
+                      "oppScore": 10,
+                      "knockdown": "opp",
+                      "note": "You are down."
+                    },
+                    {
+                      "round": 3,
+                      "tactic": "counter",
+                      "oppTactic": "brawl",
+                      "stance": "swarmer",
+                      "switched": false,
+                      "playerLanded": 7,
+                      "oppLanded": 4,
+                      "playerScore": 10,
+                      "oppScore": 9,
+                      "knockdown": null,
+                      "note": ""
+                    },
+                    {
+                      "round": 4,
+                      "tactic": "box",
+                      "oppTactic": "press",
+                      "stance": "swarmer",
+                      "switched": false,
+                      "playerLanded": 8,
+                      "oppLanded": 5,
+                      "playerScore": 10,
+                      "oppScore": 9,
+                      "knockdown": null,
+                      "note": ""
+                    },
+                    {
+                      "round": 5,
+                      "tactic": "press",
+                      "oppTactic": "brawl",
+                      "stance": "counter",
+                      "switched": true,
+                      "playerLanded": 10,
+                      "oppLanded": 1,
+                      "playerScore": 10,
+                      "oppScore": 9,
+                      "knockdown": null,
+                      "note": "He has changed how he is fighting."
+                    },
+                    {
+                      "round": 6,
+                      "tactic": "counter",
+                      "oppTactic": "brawl",
+                      "stance": "slugger",
+                      "switched": true,
+                      "playerLanded": 15,
+                      "oppLanded": 1,
+                      "playerScore": 10,
+                      "oppScore": 8,
+                      "knockdown": "player",
+                      "note": "Fabio Costa is down."
+                    },
+                    {
+                      "round": 7,
+                      "tactic": "box",
+                      "oppTactic": "brawl",
+                      "stance": "swarmer",
+                      "switched": false,
+                      "playerLanded": 14,
+                      "oppLanded": 0,
+                      "playerScore": 10,
+                      "oppScore": 9,
+                      "knockdown": null,
+                      "note": "The tactic is working."
+                    },
+                    {
+                      "round": 8,
+                      "tactic": "press",
+                      "oppTactic": "press",
+                      "stance": "swarmer",
+                      "switched": false,
+                      "playerLanded": 4,
+                      "oppLanded": 4,
+                      "playerScore": 10,
+                      "oppScore": 9,
+                      "knockdown": null,
+                      "note": "He has your number this round."
+                    }
+                  ],
+                  "winner": "player",
+                  "method": "UD",
+                  "endedRound": 8,
+                  "playerCard": 78,
+                  "oppCard": 72,
+                  "damageTaken": 1.5740000000000003,
+                  "damageDealt": 3.026,
+                  "roundsWon": 7
+                },
+                "rounds": 8,
+                "title": false,
+                "quality": 27
+              }
+            ],
+            "repDelta": -0.3,
+            "headline": "Cristian Bellini against Fabio Costa, UD"
+          }
+        },
+        "staging": "Source-generated fighters and legal pair. Reputation35/100 and boundary cash are explicitly staged. Positive cases require actual revenue-share pay and profit."
+      },
+      "consentBefore": {
+        "storage": {
+          "cash-unrelated": "{\"keep\":1086}",
+          "dukb-guest-handle": "LateDeke-20",
+          "dukb-mma-promoter-v1": "{\"keep\":\"MMA exact bytes\"}",
+          "dukb-theme": "light",
+          "fight-promoter-mode-v1": "boxing",
+          "fight-promoter-save-v1": "{\"st\":{\"version\":1,\"name\":\"Native cash promotion\",\"show\":1,\"money\":0.12,\"reputation\":100,\"pool\":[{\"id\":\"f1\",\"name\":\"Cristian Bellini\",\"style\":\"outboxer\",\"attrs\":{\"power\":41,\"chin\":50,\"speed\":61,\"stamina\":52,\"defence\":64,\"ringIq\":56},\"age\":30,\"wins\":1,\"losses\":1,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":74},{\"id\":\"f2\",\"name\":\"Fabio Kowalski\",\"style\":\"swarmer\",\"attrs\":{\"power\":49,\"chin\":56,\"speed\":50,\"stamina\":54,\"defence\":43,\"ringIq\":41},\"age\":23,\"wins\":0,\"losses\":1,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":60},{\"id\":\"f3\",\"name\":\"Andre Salgado\",\"style\":\"slugger\",\"attrs\":{\"power\":66,\"chin\":52,\"speed\":43,\"stamina\":41,\"defence\":51,\"ringIq\":50},\"age\":26,\"wins\":0,\"losses\":2,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":66},{\"id\":\"f4\",\"name\":\"Gustavo Yilmaz\",\"style\":\"outboxer\",\"attrs\":{\"power\":38,\"chin\":41,\"speed\":51,\"stamina\":47,\"defence\":47,\"ringIq\":54},\"age\":26,\"wins\":5,\"losses\":1,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":62},{\"id\":\"f5\",\"name\":\"Kwame Quintero\",\"style\":\"slugger\",\"attrs\":{\"power\":51,\"chin\":49,\"speed\":33,\"stamina\":36,\"defence\":39,\"ringIq\":47},\"age\":29,\"wins\":2,\"losses\":2,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":57},{\"id\":\"f6\",\"name\":\"Soren Bellini\",\"style\":\"swarmer\",\"attrs\":{\"power\":55,\"chin\":56,\"speed\":47,\"stamina\":63,\"defence\":45,\"ringIq\":50},\"age\":30,\"wins\":7,\"losses\":1,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":63},{\"id\":\"f7\",\"name\":\"Eze Varga\",\"style\":\"swarmer\",\"attrs\":{\"power\":46,\"chin\":51,\"speed\":42,\"stamina\":59,\"defence\":41,\"ringIq\":41},\"age\":23,\"wins\":0,\"losses\":3,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":61},{\"id\":\"f8\",\"name\":\"Jonas Rivas\",\"style\":\"counter\",\"attrs\":{\"power\":49,\"chin\":53,\"speed\":56,\"stamina\":48,\"defence\":61,\"ringIq\":63},\"age\":23,\"wins\":1,\"losses\":3,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":61},{\"id\":\"f9\",\"name\":\"Fabio Costa\",\"style\":\"swarmer\",\"attrs\":{\"power\":44,\"chin\":54,\"speed\":42,\"stamina\":58,\"defence\":33,\"ringIq\":41},\"age\":22,\"wins\":6,\"losses\":0,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":68},{\"id\":\"f10\",\"name\":\"Dmitri Guerrero\",\"style\":\"counter\",\"attrs\":{\"power\":43,\"chin\":43,\"speed\":47,\"stamina\":37,\"defence\":53,\"ringIq\":53},\"age\":21,\"wins\":5,\"losses\":0,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":62}],\"history\":[],\"log\":[\"You book your first room. Nobody has heard of you.\"],\"closed\":false,\"seed\":916525050,\"rngTick\":0}}"
+        },
+        "writes": [
+          {
+            "method": "setItem",
+            "args": [
+              "lswt-0.42184569874830080.34740421100553176",
+              "lswt-0.42184569874830080.34740421100553176"
+            ]
+          },
+          {
+            "method": "removeItem",
+            "args": [
+              "lswt-0.42184569874830080.34740421100553176"
+            ]
+          },
+          {
+            "method": "setItem",
+            "args": [
+              "__dukb_storage_probe__",
+              "1"
+            ]
+          },
+          {
+            "method": "removeItem",
+            "args": [
+              "__dukb_storage_probe__"
+            ]
+          },
+          {
+            "method": "setItem",
+            "args": [
+              "dukb-guest-handle",
+              "LateDeke-20"
+            ]
+          }
+        ],
+        "rng": 7,
+        "raw": "{\"st\":{\"version\":1,\"name\":\"Native cash promotion\",\"show\":1,\"money\":0.12,\"reputation\":100,\"pool\":[{\"id\":\"f1\",\"name\":\"Cristian Bellini\",\"style\":\"outboxer\",\"attrs\":{\"power\":41,\"chin\":50,\"speed\":61,\"stamina\":52,\"defence\":64,\"ringIq\":56},\"age\":30,\"wins\":1,\"losses\":1,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":74},{\"id\":\"f2\",\"name\":\"Fabio Kowalski\",\"style\":\"swarmer\",\"attrs\":{\"power\":49,\"chin\":56,\"speed\":50,\"stamina\":54,\"defence\":43,\"ringIq\":41},\"age\":23,\"wins\":0,\"losses\":1,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":60},{\"id\":\"f3\",\"name\":\"Andre Salgado\",\"style\":\"slugger\",\"attrs\":{\"power\":66,\"chin\":52,\"speed\":43,\"stamina\":41,\"defence\":51,\"ringIq\":50},\"age\":26,\"wins\":0,\"losses\":2,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":66},{\"id\":\"f4\",\"name\":\"Gustavo Yilmaz\",\"style\":\"outboxer\",\"attrs\":{\"power\":38,\"chin\":41,\"speed\":51,\"stamina\":47,\"defence\":47,\"ringIq\":54},\"age\":26,\"wins\":5,\"losses\":1,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":62},{\"id\":\"f5\",\"name\":\"Kwame Quintero\",\"style\":\"slugger\",\"attrs\":{\"power\":51,\"chin\":49,\"speed\":33,\"stamina\":36,\"defence\":39,\"ringIq\":47},\"age\":29,\"wins\":2,\"losses\":2,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":57},{\"id\":\"f6\",\"name\":\"Soren Bellini\",\"style\":\"swarmer\",\"attrs\":{\"power\":55,\"chin\":56,\"speed\":47,\"stamina\":63,\"defence\":45,\"ringIq\":50},\"age\":30,\"wins\":7,\"losses\":1,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":63},{\"id\":\"f7\",\"name\":\"Eze Varga\",\"style\":\"swarmer\",\"attrs\":{\"power\":46,\"chin\":51,\"speed\":42,\"stamina\":59,\"defence\":41,\"ringIq\":41},\"age\":23,\"wins\":0,\"losses\":3,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":61},{\"id\":\"f8\",\"name\":\"Jonas Rivas\",\"style\":\"counter\",\"attrs\":{\"power\":49,\"chin\":53,\"speed\":56,\"stamina\":48,\"defence\":61,\"ringIq\":63},\"age\":23,\"wins\":1,\"losses\":3,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":61},{\"id\":\"f9\",\"name\":\"Fabio Costa\",\"style\":\"swarmer\",\"attrs\":{\"power\":44,\"chin\":54,\"speed\":42,\"stamina\":58,\"defence\":33,\"ringIq\":41},\"age\":22,\"wins\":6,\"losses\":0,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":68},{\"id\":\"f10\",\"name\":\"Dmitri Guerrero\",\"style\":\"counter\",\"attrs\":{\"power\":43,\"chin\":43,\"speed\":47,\"stamina\":37,\"defence\":53,\"ringIq\":53},\"age\":21,\"wins\":5,\"losses\":0,\"draws\":0,\"kos\":0,\"damage\":0,\"rank\":99,\"potential\":62}],\"history\":[],\"log\":[\"You book your first room. Nobody has heard of you.\"],\"closed\":false,\"seed\":916525050,\"rngTick\":0}}",
+        "scrollY": 0
+      },
+      "error": {
+        "name": "TimeoutError",
+        "message": "locator.focus: Timeout 15000ms exceeded.\nCall log:\n  - waiting for getByRole('button', { name: 'Essential only', exact: true })\n",
+        "stack": "locator.focus: Timeout 15000ms exceeded.\nCall log:\n  - waiting for getByRole('button', { name: 'Essential only', exact: true })\n\n    at activate (/tmp/base/scripts/playBoxingShowForecast1086.mjs:136:99)\n    at /tmp/base/scripts/playBoxingShowForecast1086.mjs:139:55"
+      }
+    }
+  ],
+  "controls": [],
+  "forwardedWrites": 0,
+  "limits": [
+    "Four explicitly staged source-generated promotions, not whole campaigns.",
+    "One trusted show action per profile. No duplicate-input, blocked-save or naturally earned late-game coverage.",
+    "Native geometry covers the new forecast and help, not every existing boxing control."
+  ],
+  "sourceAfter": {
+    "src/components/fight-promoter/FightPromoterBoard.tsx": "ed329bdedc57120224333ac75561386df9e1d9df0b825196619a81edf25d69f3",
+    "src/components/fight-promoter/BoxingShowForecast.tsx": "6a15a9974f4ae016ec7614a9bfa6420c66d272e4d171cb28156618f1904da100",
+    "src/lib/fightPromoter.ts": "a65725708788437fd43a010e2b8527b1e3555b06cc6138fd40d9a605f9510534",
+    "src/lib/fightCareer.ts": "ccdd83dfbbf41597a5d1890a45c9013ca82a234c7fa9786c00161c949063f5c3",
+    "src/lib/mmaPromotion.ts": "a8959fe152196e6f25cd40422ec2f22721c1a68c84f8ccacacfdba65eac170c9",
+    "src/hooks/useMmaPromotion.ts": "4494556e3dd4445bd7a5e6cd7b8a8122605a34e57ca7d7bd376a84ffa10e27cc",
+    "package.json": "acfe14626dea53cf5f9c5e0286b766a22237656b52aac4c888b080873ac90e31",
+    "package-lock.json": "c7e3867eabf0bfa03a8aa6a5e601b0050b937ed210d48c6bbd241019e3c9ea76"
+  }
+}
