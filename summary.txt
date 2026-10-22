@@ -1,0 +1,9 @@
+shotflat exit=1 15s | simLiveSimMotion: control shotflat turned "R10" red on an assertion (2 failed), as it must.
+groundlob exit=3 15s | simLiveSimMotion: control groundlob did NOT behave: vitest exit 0, 0 failed, 1 passed.
+flatball exit=1 15s | simLiveSimMotion: control flatball turned "R10" red on an assertion (2 failed), as it must.
+liftnone exit=1 9s | simLiveSimMotion: control liftnone turned "the ball leaves the grass" red on an assertion (1 failed), as it must.
+foulpair exit=1 15s | simLiveSimMotion: control foulpair turned "R11" red on an assertion (1 failed), as it must.
+foulcue exit=1 15s | simLiveSimMotion: control foulcue turned "R11|a foul is seen" red on an assertion (2 failed), as it must.
+foulcard exit=1 14s | simLiveSimMotion: control foulcard turned "R11" red on an assertion (1 failed), as it must.
+buildrandom exit=1 12s | simLiveSimMotion: control buildrandom turned "R12" red on an assertion (1 failed), as it must.
+foulmeet exit=1 13s | simLiveSimMotion: control foulmeet turned "R11" red on an assertion (1 failed), as it must.
