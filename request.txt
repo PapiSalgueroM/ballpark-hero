@@ -1,0 +1,47 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-1523: node_modules/.bin/vitest run src/lib/soccerClubSquad.test.ts src/test/soccerPuskasYear1523.test.ts src/test/soccerCareerDevelopment.test.ts src/test/soccerCareerStoryRole.test.ts src/test/soccerEventDeckIntegrity.test.ts src/lib/usCareerAnnualBenefits.test.ts src/lib/usCareerRecovery.test.ts src/test/nbaOldSaveLines.test.ts src/test/nbaStatLineColumns.test.ts src/test/myCareerRestore.test.tsx src/test/careerHall.test.tsx src/test/soccerCareerRetirement1519.test.tsx src/test/soccerCareerSaveRecovery.test.tsx src/test/soccerCareerDocumentaryReview.test.ts --testTimeout=300000 --hookTimeout=120000 2>&1 | tail -8; exit ${PIPESTATUS[0]}
+form-1235: SIM_CAREER_FORM_SECTIONS=1,2,3,5 node scripts/simCareerForm.mjs
+form-4-house: SIM_CAREER_FORM_SECTIONS=4 node scripts/simCareerForm.mjs
+form-4-engaged: SIM_CAREER_FORM_FLEET_KIND=engaged SIM_CAREER_FORM_SECTIONS=4 node scripts/simCareerForm.mjs
+ctl-divisor: SIM_CAREER_FORM_CONTROL=divisor node scripts/simCareerForm.mjs
+ctl-zero: SIM_CAREER_FORM_CONTROL=zero node scripts/simCareerForm.mjs
+ctl-posttext: SIM_CAREER_FORM_CONTROL=posttext node scripts/simCareerForm.mjs
+ctl-nogate: SIM_CAREER_FORM_CONTROL=nogate node scripts/simCareerForm.mjs
+ctl-per10: SIM_CAREER_FORM_CONTROL=per10 node scripts/simCareerForm.mjs
+ctl-pageline: SIM_CAREER_FORM_CONTROL=pageline node scripts/simCareerForm.mjs
+ctl-double: SIM_CAREER_FORM_CONTROL=double node scripts/simCareerForm.mjs
+beats: node scripts/simCareerInboxBeats.mjs
+beats-flatnba: BEATS_CONTROL=flatnba node scripts/simCareerInboxBeats.mjs
+squad: node scripts/simCareerSquad.mjs
+deck-a: SIM_SOCCER_DECK_SECTIONS=1,2,3,4,5 node scripts/simSoccerDeck.mjs
+deck-b: SIM_SOCCER_DECK_SECTIONS=6,7,9,10 node scripts/simSoccerDeck.mjs
+deck-c: SIM_SOCCER_DECK_SECTIONS=8 node scripts/simSoccerDeck.mjs
+deck-unattributed: SIM_SOCCER_DECK_MORALE= SIM_SOCCER_DECK_SECTIONS=2 node scripts/simSoccerDeck.mjs
+ls: node scripts/simCareerLeagueSeasons.mjs
+ls-unattributed: SIM_LEAGUE_SEASONS_MORALE= node scripts/simCareerLeagueSeasons.mjs
+fair: node scripts/simSoccerDeckFairness.mjs
+fair-unattributed: SIM_DECK_FAIRNESS_MORALE= node scripts/simSoccerDeckFairness.mjs
+truth: node scripts/simSoccerWorldTruth.mjs
+truth-unattributed: SIM_WORLD_TRUTH_MORALE= node scripts/simSoccerWorldTruth.mjs
+dev: node scripts/simSoccerCareerDevelopment.mjs
+storyrole: node scripts/simCareerStoryRole.mjs
+pressmarket: node scripts/simCareerPressMarket.mjs
+loan: node scripts/simLoanSpell.mjs
+awardsnight: node scripts/simCareerAwardsNight.mjs
+leaguefinish: node scripts/simCareerLeagueFinish.mjs
+socialbrands: node scripts/simCareerSocialBrands.mjs
+programme: node scripts/simCareerProgramme.mjs
+trophyruns: node scripts/simCareerTrophyRuns.mjs
+transferbrief: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerTransferBrief.mjs
+derbyhistory: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerDerbyHistory.mjs
+seasonhistory: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerSeasonHistory.mjs
+agentreview: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerAgentReview.mjs
+farewell: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerFarewell.mjs
+intlreturn: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerInternationalReturn.mjs
+endings-1519: export B1519=41368514; SC_ENDINGS_BASE=${B1519:-cedd0239} node scripts/simSoccerCareerEndings.mjs > /tmp/e19.log 2>&1; s=$?; grep -E "^  base |careers 240|alive at" /tmp/e19.log | head -3 | cut -c1-200; tail -1 /tmp/e19.log | cut -c1-200; exit $s
+endings-oldbase: SC_ENDINGS_BASE=cedd0239 node scripts/simSoccerCareerEndings.mjs > /tmp/e19o.log 2>&1; s=$?; grep -E "^  base |careers 240|alive at|differ" /tmp/e19o.log | head -4 | cut -c1-200; tail -1 /tmp/e19o.log | cut -c1-200; exit $s
+ctl-1519: export B1519=41368514; bad=0; for c in early noreconcile summary noreason; do SC_ENDINGS_BASE=${B1519:-cedd0239} SC_ENDINGS_CONTROL=$c node scripts/simSoccerCareerEndings.mjs > /tmp/c19-$c.log 2>&1; e=$?; echo "$c exit=$e $(tail -1 /tmp/c19-$c.log | cut -c1-160)"; if [ $e -ne 1 ] || ! grep -q "CONTROL $c: .* is mutated" /tmp/c19-$c.log || grep -q ABORT /tmp/c19-$c.log || ! tail -1 /tmp/c19-$c.log | grep -q '^FAIL: '; then bad=1; fi; done; exit $bad
+norival: node scripts/simNoRivalNames.mjs
+sitesearch: node scripts/simSiteSearch.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+storage: node scripts/simStorageWrites.mjs

@@ -1,0 +1,4 @@
+  careers 240, alive at 26 240 (overall under 60 there 26), alive at 27 240
+  base cedd0239: 240 careers, 240 differ from this tree
+  FAIL: the fleets match the base byte for byte (240 differ)
+FAIL: 1 check(s) failed
