@@ -555,4 +555,4 @@ if (failures) {
   console.log(`simSoccerOwnerTail: ${failures} failure(s)`);
   process.exit(1);
 }
-console.log(`simSoccerOwnerTail: green. The owner picks his club, plays on the table, and every call has a cost and a reason${CONTROL ? ` (CONTROL ${CONTROL} did not fire)` : ''}.`);
+console.log(`simSoccerOwnerTail: green. The owner picks his club, plays on the table, and every call does what it says and none is best at everything${CONTROL ? ` (CONTROL ${CONTROL} did not fire)` : ''}.`);

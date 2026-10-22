@@ -12,9 +12,12 @@
      the finish, a title, a promotion and a relegation are read off the table
      and nothing else;
    - before every season he makes one call: where the budget goes. Each of the
-     four has a real effect, on the table strength or on the money, and a
-     cost, so no one of them is the right answer every time
-     (scripts/simSoccerOwnerTail.mjs measures all of it over a fleet).
+     four has a real effect, on the table strength or on the money. Two cost
+     money that season (the signings' wages, the building work), the academy
+     pays nothing back until the season after, and the debt payment's only
+     price is the season's budget not going anywhere else; no one of them is
+     the right answer every time (scripts/simSoccerOwnerTail.mjs measures all
+     of it over a fleet).
 
    Nothing here touches Math.random: the table is drawn from a stream keyed to
    the save and the season, so the same save plays the same season in any tab
