@@ -73,20 +73,23 @@ export async function answerConsent(page, { wait = 3000, timeout = 5000, press, 
 /**
  * What the page stored as its consent answer, in either store shape: 'rejected', 'accepted' or null. Round 1442
  * moved the answer from cookie-consent ('essential' or 'accepted') to cookie-consent-v2 (JSON with advertising and
- * analytics), so a walk that read the old key alone reads null on the new build.
+ * analytics), so a walk that read the old key alone reads null on the new build. store names a window global to
+ * read instead of localStorage (a walk that wraps storage keeps the real one aside, as playStorageBlocked does).
  */
-export async function storedConsent(page) {
-  return page.evaluate(() => {
+export async function storedConsent(page, { store } = {}) {
+  return page.evaluate(name => {
     try {
-      const v2 = localStorage.getItem('cookie-consent-v2');
+      const local = name ? window[name] : localStorage;
+      if (!local) return null;
+      const v2 = local.getItem('cookie-consent-v2');
       if (v2) {
         const value = JSON.parse(v2);
         if (value && typeof value.advertising === 'boolean') return value.advertising || value.analytics ? 'accepted' : 'rejected';
       }
-      const old = localStorage.getItem('cookie-consent');
+      const old = local.getItem('cookie-consent');
       if (old === 'essential') return 'rejected';
       if (old === 'accepted') return 'accepted';
     } catch { /* an unreadable store has no answer */ }
     return null;
-  });
+  }, store ?? null);
 }
