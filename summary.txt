@@ -1,0 +1,1 @@
+quick exit=1 70s | simNbaDraftBoard: red in section 2.
