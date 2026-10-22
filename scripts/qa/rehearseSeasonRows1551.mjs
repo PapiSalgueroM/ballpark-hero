@@ -69,7 +69,14 @@ console.log('1) the rows land on the real rolls');
 {
   const db = await fresh();
   eq('pre counts', await counts(db), '129/117/112/47');
-  await db.exec(MIGRATION);
+  /* A raise is a FAIL with its message, never a crash past the summary line. */
+  const run = async what => {
+    try { await db.exec(MIGRATION); } catch (e) {
+      fail(`the ${what} raised: ${String(e?.message ?? e)}`);
+      try { await db.exec('ROLLBACK'); } catch { /* already rolled back */ }
+    }
+  };
+  await run('first run');
   eq('post counts', await counts(db), '130/118/113/48');
   eq('afl distinct names', await distinct(db, 'afl_premiers', 'premier'), 18);
   eq('nrl distinct names', await distinct(db, 'nrl_premiers', 'premier'), 20);
@@ -85,7 +92,7 @@ console.log('1) the rows land on the real rolls');
   const dm = await one(db, 'SELECT winner FROM nrl_dally_m WHERE year = 2026');
   eq('dally m 2026', dm?.winner, 'Nathan Cleary');
   console.log('2) a second run changes nothing');
-  await db.exec(MIGRATION);
+  await run('re-run');
   eq('counts after a re-run', await counts(db), '130/118/113/48');
   await db.close();
 }
