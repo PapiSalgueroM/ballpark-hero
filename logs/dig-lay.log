@@ -1,0 +1,16 @@
+SKIPPED mlb: not asked for (SPORTS)
+bundled in 168 ms; sports nba, nfl; 40 careers a sport and a seed set; seed sets 0, 1, 2, 3, 4
+played 480 careers twice in 17233 ms; 8440 seasons observed
+digest nba seed set 0: 902 seasons, 810 derived, season 8f559e5a8371fe8b4967396abda8cb7a5ebf8a89, careers dccc2b18cfa6574143ebfd6f02d6dabcbd440ff7
+digest nba seed set 1: 903 seasons, 812 derived, season 91a66478f364da313a8315f291ae8c468460fc37, careers 278374912b70eb40523b102d04bd23a778e8b16c
+digest nba seed set 2: 902 seasons, 810 derived, season 0c508df43df4f123c8e9447729a7dd34a6586de9, careers c64ff4f5ff4a0106cfc06566a735f174f401e16b
+digest nba seed set 3: 892 seasons, 802 derived, season 00a88f56b0593ff870aa9e82b7e73501e280b194, careers 025426085201418ed26dfae4f4df4099d355fbb9
+digest nba seed set 4: 897 seasons, 809 derived, season 4a48faf37ee05a207236c2735ce429e6ced6c687, careers 72badb034e85e4ed451eff048392591aee805eab
+digest nfl seed set 0: 787 seasons, 501 derived, season 5178262dae90fff5e929fcc5b8d0b5488ba0a206, careers 06ae9cb7456afce69d3c1654dedf8b088c84c41c
+digest nfl seed set 1: 787 seasons, 502 derived, season 4f2fd0fa8f71336d4af08ad5d86a02d70ce14abe, careers eb79bc3906b35b6d77199332faf881ae5e4146fd
+digest nfl seed set 2: 790 seasons, 505 derived, season 2d9db73e2c744d5d81e7a07eb225a470ffcce222, careers bcbdf9f26533261f677863b468ec6c690dc5020a
+digest nfl seed set 3: 781 seasons, 500 derived, season af115f6f56e6d834deafccb72c1d8bc35e6ccdc0, careers 86b542104487763909162194ace6866cfa0ecaeb
+digest nfl seed set 4: 799 seasons, 515 derived, season 6e0f577a8914feef3ee4b3332621a048770a70fb, careers a76f863ee21a79c764181c0341f5b1ca38083108
+digest stray draws (Math.random calls while a season was derived): 0
+inputs moved under the digest: src/lib/careerDirtyMoney.ts (not in the record's bundle); src/lib/careerForm.ts (not in the record's bundle); src/lib/nbaCareerCorruption.ts (5c53089019b2 at the record, 4e3d8b1873df now); src/lib/nbaCareerPreDraft.ts (1492c52c1fb3 at the record, 5352d30899ea now); src/lib/nbaMyCareer.ts (317ea8d44d62 at the record, 4d2895a591f6 now); src/lib/nflCareerCorruption.ts (34a116b82498 at the record, f87aec081473 now); src/lib/nflCareerPreDraft.ts (a04cf8c58a9f at the record, 15c8c9ce9677 now); src/lib/nflMyCareer.ts (4dc8feabe22a at the record, bd512beebaa2 now); src/lib/season/nba.ts (5b9ffc060d56 at the record, 2b6f612fb228 now)
+simUsSeasonCentre digest compare: NOT COMPARED, 9 bundled files are not the ones the record was made on (exit 3: this is no red of the playoff lay)

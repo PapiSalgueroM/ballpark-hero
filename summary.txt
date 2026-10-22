@@ -1,0 +1,3 @@
+dig-law exit=3 17s | simUsSeasonCentre digest compare: NOT COMPARED, 9 bundled files are not the ones the record was made on (exit 3: this is no red of the score law)
+dig-seam exit=3 17s | simUsSeasonCentre digest compare: NOT COMPARED, 9 bundled files are not the ones the record was made on (exit 3: this is no red of the seam)
+dig-lay exit=3 17s | simUsSeasonCentre digest compare: NOT COMPARED, 9 bundled files are not the ones the record was made on (exit 3: this is no red of the playoff lay)

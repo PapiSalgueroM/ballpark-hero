@@ -1,0 +1,3 @@
+dig-lay: US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=lay node scripts/simUsSeasonCentre.mjs
+dig-law: US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=law node scripts/simUsSeasonCentre.mjs
+dig-seam: US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=seam node scripts/simUsSeasonCentre.mjs
