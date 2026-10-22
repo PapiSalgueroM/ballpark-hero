@@ -46,6 +46,7 @@ import type { RivalryChoiceCard } from './careerRivalryChoices';
 import { countOf, mlbCareerStatBullet, mlbMajorAward, mlbStatLine, mlbLineAsPrinted, type MlbCareerSums } from './usCareerStatLine';
 import { raiseWithinPotential, ratingRaiseNote } from './careerHeadroom';
 import { applyUsCareerAnnualBenefits } from './usCareerAnnualBenefits';
+import { settleUsCareerShop, usCareerSeasonCool } from './usCareerAnnualBenefits';
 import { careerRecoveryRisk } from './usCareerRecovery';
 import { hallCalibrationOf, legacyRead, type HallCalibration, type LegacyRead, type LegacyWeights } from './careerHallOfFame';
 import { moraleForm } from './careerForm';
@@ -865,7 +866,7 @@ export function mlbProgress(c: MlbCareerState, rng: () => number): string[] {
   const heat = c.heat ?? 0;
   if (heat > 0) {
     const dm = c.dirtyMoney ?? 0;
-    const drift = dm > 0 ? Math.min(8, 2 + dm * 0.5) : -9;
+    const drift = dm > 0 ? Math.min(8, 2 + dm * 0.5) : -usCareerSeasonCool(c.purchased, 9);
     c.heat = Math.max(0, Math.min(100, heat + drift));
     if ((c.heat ?? 0) >= 90 && (c.suspendedSeasons ?? 0) === 0) {
       c.suspendedSeasons = 1;
@@ -896,6 +897,9 @@ export function mlbProgress(c: MlbCareerState, rng: () => number): string[] {
   const upkeep = c.yearlyCosts ?? 0;
   const priorNet = c.netWorth ?? Math.round(Math.max(0, c.earnings - c.salary) * TAKE_HOME * 10) / 10;
   c.netWorth = Math.round((priorNet + c.salary * TAKE_HOME - upkeep) * 10) / 10;
+  /* Round 1534: the shop pays what its cards print (src/lib/usCareerAnnualBenefits.ts), straight after the pay
+     line so Cash is in tenths, and before the money app. Stakes draw on their own keyed stream, never this rng. */
+  for (const line of settleUsCareerShop(c, MLB_SPEND_ITEMS)) notes.push(line);
   /* Round 470: the money app's season, after the pay and the upkeep have
      landed, the same place in the loop Soccer Career and the NFL career run
      it. Savings pays, every price moves, and a balance the upkeep has pushed

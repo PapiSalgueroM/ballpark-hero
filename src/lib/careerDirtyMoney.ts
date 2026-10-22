@@ -25,9 +25,10 @@
    option stays the bigger, rarer deal.
 
    HONEST ABOUT A BAN (correction 3, binding). The preview plays the season ends the way the four engines do
-   (nbaMyCareer.ts 917 to 931 and its three copies: with no dirty money held heat cools 9 a season, and at 90 or
-   more the league suspends you once nothing is pending) and prints the seasons it will cost, so a wash at the top
-   of the meter says it ends in a suspension whether or not you are caught.
+   (nbaMyCareer.ts 917 to 931 and its three copies: with no dirty money held heat cools 9 a season, 18 with the
+   Shady aisle's lawyer on retainer since Round 1534, and at 90 or more the league suspends you once nothing is
+   pending) and prints the seasons it will cost, so a wash at the top of the meter says it ends in a suspension
+   whether or not you are caught.
 
    KEYED, NEVER Math.random. The wash is decided by one keyedRng draw on the career's own key (its summer salt or
    its name, the year, the seasons played and the money in tenths), so a reload cannot re-roll it and the season's
@@ -43,6 +44,7 @@
    binds through an adapter, so Soccer Career's own laundering can join later without a rename. No sport is
    imported here: the board and the four corruption decks import this, never the reverse. */
 import { keyedRng } from '@/lib/keyedRng';
+import { usCareerSeasonCool } from '@/lib/usCareerAnnualBenefits';
 
 export type DirtyWay = 'clean' | 'give' | 'quiet' | 'wash';
 /** In the order the desk draws them. */
@@ -62,6 +64,8 @@ export interface DirtyMoneyHost {
   karma?: number;
   suspendedSeasons?: number;
   summerSalt?: string;
+  /** Round 1534: the shop's receipts, read only for the lawyer (usCareerSeasonCool). */
+  purchased?: readonly string[];
 }
 
 /* The tuning. Every number a button prints comes from here, through wayNumbers. */
@@ -121,15 +125,16 @@ export function washCaughtPct(heatAfter: number): number {
 }
 
 /** Seasons served banned in the seasons ahead with no dirty money held, played the way the four engines play
- *  their season end: a banned year first takes one off the count, then the heat cools 9, and at 90 or more a new
- *  suspension starts once nothing is pending. Heat only falls with nothing held, so four seasons settle it. */
-export function bannedAhead(heat: number, suspended: number): number {
-  return banAhead(heat, suspended).seasons;
+ *  their season end: a banned year first takes one off the count, then the heat cools 9 (18 with the lawyer, the
+ *  `cool` the desk passes), and at 90 or more a new suspension starts once nothing is pending. Heat only falls with
+ *  nothing held, so four seasons settle it. */
+export function bannedAhead(heat: number, suspended: number, cool: number = SEASON_COOL): number {
+  return banAhead(heat, suspended, cool).seasons;
 }
 
 /** bannedAhead, with how many of those suspensions start at a season end (each start costs the fanbase and the
  *  morale the engines take; one already pending was paid for when it started). */
-function banAhead(heat: number, suspended: number): { seasons: number; starts: number } {
+function banAhead(heat: number, suspended: number, cool: number = SEASON_COOL): { seasons: number; starts: number } {
   let h = heat;
   let s = Math.max(0, suspended);
   let banned = 0;
@@ -137,7 +142,7 @@ function banAhead(heat: number, suspended: number): { seasons: number; starts: n
   for (let i = 0; i < 4; i++) {
     if (s > 0) { s -= 1; banned += 1; }
     if (h > 0) {
-      h = Math.max(0, Math.min(100, h - SEASON_COOL));
+      h = Math.max(0, Math.min(100, h - cool));
       if (h >= BAN_HEAT && s === 0) { s = 1; starts += 1; }
     }
   }
@@ -181,7 +186,8 @@ export function wayNumbers(c: DirtyMoneyHost, way: DirtyWay): DirtyNumbers {
   const heat = c.heat ?? 0;
   const karma = c.karma ?? 50;
   const pending = Math.max(0, c.suspendedSeasons ?? 0);
-  const now = banAhead(heat, pending);
+  const cool = usCareerSeasonCool(c.purchased, SEASON_COOL);
+  const now = banAhead(heat, pending, cool);
   const n: DirtyNumbers = {
     way, amount, keep: 0, fine: 0, fineIsAll: false, heat: 0, karma: 0, caughtPct: null,
     caughtFanbase: 0, caughtMorale: 0, bannedAfter: now.seasons, bannedIfCaught: 0, startsAfter: now.starts, startsIfCaught: 0, burnsToBan: false,
@@ -194,7 +200,7 @@ export function wayNumbers(c: DirtyMoneyHost, way: DirtyWay): DirtyNumbers {
     const relief = cleanHeatRelief(amount, heat);
     n.heat = relief > 0 ? -relief : 0;
     n.karma = cleanKarma(amount, karma);
-    const ahead = banAhead(heat + n.heat, pending);
+    const ahead = banAhead(heat + n.heat, pending, cool);
     n.bannedAfter = ahead.seasons;
     n.startsAfter = ahead.starts;
   } else if (way === 'give') {
@@ -206,8 +212,8 @@ export function wayNumbers(c: DirtyMoneyHost, way: DirtyWay): DirtyNumbers {
     n.caughtPct = washCaughtPct(after);
     n.caughtFanbase = Math.min(CAUGHT_FANBASE, Math.max(0, c.fanbase));
     n.caughtMorale = Math.min(CAUGHT_MORALE, Math.max(0, c.morale));
-    const free = banAhead(after, pending);
-    const held = banAhead(after, Math.max(1, pending));
+    const free = banAhead(after, pending, cool);
+    const held = banAhead(after, Math.max(1, pending), cool);
     n.bannedAfter = free.seasons;
     n.startsAfter = free.starts;
     n.bannedIfCaught = held.seasons;

@@ -53,12 +53,38 @@ function unlift1523(rel, text) {
   return out;
 }
 
+/* Round 1534 (the US shop keeps its promises) edits mlbMyCareer.ts and nhlMyCareer.ts too: one import line, the heat
+   drift reading the lawyer, the shop's settle call after the pay line, and (its step 3) the card words and the summer
+   camp's buy case. Decided again here the way 1523 was: each hunk is put back first, required exactly once, and the
+   file must then still be 1313's closed head, so any other later change is still refused. The inverse is whole
+   files, so with these two inverted the kit's MLB and NHL careers run 48cb9d4b's engines, as before this round. */
+const SETTLE_1534 = sport => '  /* Round 1534: the shop pays what its cards print (src/lib/usCareerAnnualBenefits.ts), straight after the pay\n'
+  + '     line so Cash is in tenths, and before the money app. Stakes draw on their own keyed stream, never this rng. */\n'
+  + '  for (const line of settleUsCareerShop(c, ' + sport + '_SPEND_ITEMS)) notes.push(line);\n';
+const LIFT_1534_COMMON = sport => [
+  ["import { settleUsCareerShop, usCareerSeasonCool } from './usCareerAnnualBenefits';\n", ''],
+  ['const drift = dm > 0 ? Math.min(8, 2 + dm * 0.5) : -usCareerSeasonCool(c.purchased, 9);', 'const drift = dm > 0 ? Math.min(8, 2 + dm * 0.5) : -9;'],
+  [SETTLE_1534(sport), ''],
+];
+const LIFT_1534 = {
+  'src/lib/mlbMyCareer.ts': LIFT_1534_COMMON('MLB'),
+  'src/lib/nhlMyCareer.ts': LIFT_1534_COMMON('NHL'),
+};
+function unlift1534(rel, text) {
+  let out = text;
+  for (const [from, to] of LIFT_1534[rel] ?? []) {
+    assert.equal(out.split(from).length, 2, 'Round 1534: ' + rel + ' must hold its shop hunk exactly once: ' + from.slice(0, 60));
+    out = out.replace(from, () => to);
+  }
+  return out;
+}
+
 const show = (commit, rel) => execFileSync('git', ['show', commit + ':' + rel], { maxBuffer: 64 * 1024 * 1024 }).toString('utf8').replaceAll('\r\n', '\n');
 
 /* contents: the file as read from disk (any line endings). rows: receives rel once per file inverted. */
 export function inverseUsRival1313(rel, contents, rows) {
   if (!US_RIVAL_1313_FILES.includes(rel)) return contents;
-  assert.equal(unlift1523(rel, contents.replaceAll('\r\n', '\n')), show(US_RIVAL_1313_HEAD, rel), 'Release BB: ' + rel + ' is no longer as Round 1313 closed it (' + US_RIVAL_1313_HEAD + '); decide its inverse again in scripts/lib/usRival1313Inverse.mjs');
+  assert.equal(unlift1523(rel, unlift1534(rel, contents.replaceAll('\r\n', '\n'))), show(US_RIVAL_1313_HEAD, rel), 'Release BB: ' + rel + ' is no longer as Round 1313 closed it (' + US_RIVAL_1313_HEAD + '); decide its inverse again in scripts/lib/usRival1313Inverse.mjs');
   assert.notEqual(rel, 'src/lib/careerFactBeats.ts', 'Release BB: careerFactBeats.ts is new in Round 1313 and only its own files import it; something else loaded it, so the inverse of 1313 is no longer whole');
   rows.push(rel);
   return show(US_RIVAL_1313_BASE, rel);
