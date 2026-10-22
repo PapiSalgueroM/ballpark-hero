@@ -1,0 +1,7 @@
+tsc exit=0 101s | 
+s5 exit=0 6s | simCareerIntl: GREEN, 180066 checks over sections 5
+vitest-us exit=0 115s |    Duration  113.60s (transform 5.55s, setup 3.41s, collect 35.67s, tests 195.00s, environment 20.97s, prepare 4.48s)
+simCareerIntl exit=0 124s | simCareerIntl: GREEN, 23682 checks over sections 1,2,3,4,6
+s8 exit=0 2s | simCareerIntl: GREEN, 7 checks over sections 8
+s7-start exit=0 296s | simCareerIntl: GREEN, 2973 checks over sections 7
+s7-mergebase exit=0 294s | simCareerIntl: GREEN, 2973 checks over sections 7
