@@ -16,13 +16,20 @@
         old draw's baseline, which the random control measures);
      2) the slate is known at kickoff: before week 1 the Schedule tab's
         fixtures list all twelve of my games, and every round the engine plays
-        exactly the games the slate set (hard);
+        exactly the games the slate set (hard); and the week shape the guide
+        and the Play tab state, read from their code (weeks 1 to 4 out of
+        conference, 5 to 11 conference play, 12 rivalry week): no conference
+        game outside those weeks (hard);
      3) Notre Dame: never in a conference title game, five ACC opponents a
-        season (ND_ACC_GAMES), and in the Playoff field every season it ranks
+        season (ND_ACC_GAMES, and the number the guide and What's New state,
+        read from their code), and in the Playoff field every season it ranks
         in the top 12 at selection (hard); plus a built case where the top 12
         rule is the only way in (hard);
      4) the Playoff: four title games, none named for the Group of Five, the
-        best ranked Group of Five school always in the field (hard);
+        best ranked Group of Five school always in the field, and the
+        Conferences tab's "(auto spot)" row (the first of the Group of Five
+        table, the mark read from the board's code) is that school, before
+        and after the postseason (hard);
      5) rivalry week: every row of src/data/collegeRivalries.ts with both
         schools on the board is a 'series' pair, and every week 12 game of a
         school in such a row is that pair, every season (hard); league
@@ -37,7 +44,9 @@
      8) the builder under load: STRESS slates from fresh seeds, none of them
         on the fallback circle (hard), and the time a slate takes (printed);
      9) CBB: its series rows are rivalry pairs, and under its new format the
-        conference table goes by league winning percentage (hard).
+        conference table goes by league winning percentage, a program with no
+        league game yet at .500, checked at the end of every season and after
+        rounds 1 to 3 (hard).
 
    MEASURED (2026-10-22, see the round's closing report for the runner runs):
    numbers are printed by every run; the hard checks are counts that must be
@@ -54,6 +63,12 @@
      CFB_SLATE_CONTROL=source   one row loses a source line              -> 6 red
      CFB_SLATE_CONTROL=midseason a slate is built mid season             -> 7 red
      CFB_SLATE_CONTROL=cbbraw   the CBB table goes back to overall wins  -> 9 red
+     added by the review fixes (the run review's mutations, which only the
+     recorded fixture caught before):
+     CFB_SLATE_CONTROL=window   conference play moved to weeks 4 to 10   -> 2 red
+     CFB_SLATE_CONTROL=ndsix    Notre Dame gets six ACC games            -> 3 red
+     CFB_SLATE_CONTROL=g5sort   the Group of Five table off the ranking  -> 4 red
+     CFB_SLATE_CONTROL=cbbzero  a 0-0 league record sorts as zero        -> 9 red
 
    Run: node scripts/simCfbSlate.mjs   (SIM_SEEDS, SIM_SEASONS, SIM_STRESS to scale)
 */
@@ -85,6 +100,11 @@ const CONTROLS = {
   source: ['DATA', '//          https://local10.com/', '//          '],
   midseason: ['cfbDynasty.ts', '  if (!st.depth || st.round !== 1) return;\n  if (st.slate && st.slate.season === st.season) return;', '  if (!st.depth) return;\n  if (st.slate && st.slate.season === st.season) return;'],
   cbbraw: ['cbbDynasty.ts', '  if (st.format) {\n    /* Round 1554: the table goes by the league record', '  if (false) {\n    /* Round 1554: the table goes by the league record'],
+  /* added by the review fixes (the run review's mutations window, ndsix and g5sort, which only the recorded fixture caught) */
+  window: ['collegeProgram.ts', 'for (let r = spec.windowStart - 1; r < rr; r += 1) window.push(r);', 'for (let r = spec.windowStart - 2; r < rr - 1; r += 1) window.push(r);'],
+  ndsix: ['cfbDynasty.ts', 'export const ND_ACC_GAMES = 5;', 'export const ND_ACC_GAMES = 6;'],
+  g5sort: ['cfbDynasty.ts', '  if (st.format && !LEAGUE_SET.has(conf)) {', '  if (false) {'],
+  cbbzero: ['cbbDynasty.ts', 'return n ? (t.confWins ?? 0) / n : 0.5;', 'return n ? (t.confWins ?? 0) / n : 0;'],
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`CFB_SLATE_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
 const ctl = CONTROL ? CONTROLS[CONTROL] : null;
@@ -131,12 +151,37 @@ const LEAGUES = new Set(cfb.CFB_LEAGUES);
 const ids = cfb.CFB_SCHOOLS.map(s => s.id);
 const seriesRows = riv.CFB_RIVALRY_SERIES.filter(r => cfb.CFB_SCHOOL_MAP.has(r.a) && cfb.CFB_SCHOOL_MAP.has(r.b));
 
+/* ---- the words the round ships, read from the code (comments stripped), so a number the engine
+   changes and the copy keeps goes red here and not only in the recorded fixture ---- */
+const codeOf = rel => readLf(path.join(ROOT, ...rel.split('/'))).replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+const NUMBER_WORDS = { three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8 };
+const COPY = (() => {
+  const guide = codeOf('src/data/gameContent/college.ts');
+  const board = codeOf('src/components/cfb-dynasty/CfbDynastyBoard.tsx');
+  const news = codeOf('src/pages/WhatsNew.tsx');
+  const gw = guide.match(/Weeks 1 to (\d+) are out of conference, weeks (\d+) to (\d+) are conference play/);
+  const bw = board.match(/Weeks 1-(\d+) are out of conference, weeks (\d+)-(\d+) are the conference race/);
+  const gn = guide.match(/meets (\w+) ACC teams a season/);
+  const nn = news.match(/(\w+) ACC teams a year/);
+  const auto = board.includes("mark: conf === 'G5' && i === 0 ? ' (auto spot)' : ''");
+  return {
+    found: !!(gw && bw && gn && nn && auto),
+    guideWeeks: gw ? gw.slice(1).map(Number) : null,
+    boardWeeks: bw ? bw.slice(1).map(Number) : null,
+    guideNd: gn ? NUMBER_WORDS[gn[1].toLowerCase()] ?? NaN : NaN,
+    newsNd: nn ? NUMBER_WORDS[nn[1].toLowerCase()] ?? NaN : NaN,
+    auto,
+  };
+})();
+const [OUT_END, CONF_START, CONF_END] = COPY.guideWeeks ?? [0, 0, 0];
+
 /* ---- one pass over SEEDS dynasties of SEASONS seasons feeds sections 1 to 5 ---- */
 const m = {
   seasons: 0, repeats: 0, seasonsWithRepeats: 0, badCounts: 0, fixtureMisses: 0, fixtureShort: 0,
   ndCcg: 0, ndAccOff: 0, ndTop12: 0, ndTop12Out: 0, ndInField: 0, ccgBad: 0, g5Named: 0, fifthOut: 0,
   rivalMiss: 0, seriesUnplayed: 0, confBad: 0, slates: 0, fallbacks: 0, homeMin: 99, homeMax: 0,
   firstRepeat: null, firstMiss: null, firstConf: null,
+  weekBad: 0, firstWeek: null, confGames: 0, ndAccCopy: 0, autoOff: 0, autoChecked: 0,
 };
 for (let seed = 1; seed <= SEEDS; seed += 1) {
   const rng = lehmer(seed * 7919);
@@ -162,6 +207,11 @@ for (let seed = 1; seed <= SEEDS; seed += 1) {
         const k = key(g.home, g.away);
         if (pairs.has(k)) { repeatsThisSeason += 1; if (!m.firstRepeat) m.firstRepeat = `seed ${seed} season ${st.season} week ${r}: ${k}`; }
         pairs.add(k);
+        /* 2) the week shape the copy states: conference games only in its conference weeks and rivalry week */
+        if (g.conference) {
+          m.confGames += 1;
+          if ((r < CONF_START || r > CONF_END) && r !== cfb.CFB_RIVALRY_ROUND) { m.weekBad += 1; if (!m.firstWeek) m.firstWeek = `seed ${seed} season ${st.season} week ${r}: ${k}`; }
+        }
         /* 5) rivalry week is the table's pair where one exists */
         if (r === cfb.CFB_RIVALRY_ROUND) {
           for (const [x, y] of [[g.home, g.away], [g.away, g.home]]) {
@@ -194,7 +244,13 @@ for (let seed = 1; seed <= SEEDS; seed += 1) {
     /* 3) Notre Dame's ACC count, before the title games add anyone */
     const ndAcc = st.teams.ND.opps.filter(o => confOf(o) === 'ACC').length;
     if (ndAcc !== cfb.ND_ACC_GAMES) m.ndAccOff += 1;
+    if (ndAcc !== COPY.guideNd) m.ndAccCopy += 1;
+    /* 4) the Conferences tab marks the first row of the Group of Five table as the auto spot */
+    const autoBefore = cfb.confStandings(st, 'G5')[0]?.id;
     const post = cfb.runCfbPostseason(st, rng);
+    const autoAfter = cfb.confStandings(st, 'G5')[0]?.id;
+    m.autoChecked += 1;
+    if (autoBefore !== post.fifth || autoAfter !== post.fifth) m.autoOff += 1;
     const ranked = cfb.cfbRankings(st).map(t => t.id);
     if (post.ccgs.length !== cfb.CFB_LEAGUES.length) m.ccgBad += 1;
     for (const g of post.ccgs) {
@@ -222,11 +278,21 @@ console.log('2) the slate is known at kickoff and is what gets played');
 console.log(`   seasons whose fixtures did not list twelve games before week 1 ${m.fixtureShort}; rounds that played other games than the slate set ${m.fixtureMisses}`);
 if (m.fixtureShort > 0) fail(`${m.fixtureShort} season(s) without all twelve fixtures at kickoff`);
 if (m.fixtureMisses > 0) fail(`${m.fixtureMisses} round(s) played something other than the slate, first: ${m.firstMiss}`);
+console.log(`   the copy's week shape: guide weeks 1 to ${OUT_END} out of conference, ${CONF_START} to ${CONF_END} conference play; board ${COPY.boardWeeks ? `1-${COPY.boardWeeks[0]}, ${COPY.boardWeeks[1]}-${COPY.boardWeeks[2]}` : 'not found'}; rivalry week ${cfb.CFB_RIVALRY_ROUND}`);
+console.log(`   conference games played ${m.confGames}, outside the copy's conference weeks and rivalry week ${m.weekBad}`);
+if (!COPY.found) fail('the copy this harness holds the engine to (guide and board week shape, the guide and What\'s New ACC count, the board\'s auto spot mark) is no longer where it reads it: point the harness at the new words');
+if (COPY.boardWeeks && COPY.boardWeeks.join() !== [OUT_END, CONF_START, CONF_END].join()) fail('the board and the guide state different week shapes');
+if (CONF_START !== OUT_END + 1 || CONF_END + 1 !== cfb.CFB_RIVALRY_ROUND) fail(`the copy's weeks (1 to ${OUT_END}, ${CONF_START} to ${CONF_END}) do not run up to rivalry week ${cfb.CFB_RIVALRY_ROUND}`);
+if (m.confGames === 0) fail('no conference game was played, so the week shape is untested');
+if (m.weekBad > 0) fail(`${m.weekBad} conference game(s) outside weeks ${CONF_START} to ${CONF_END} and rivalry week, first: ${m.firstWeek}`);
 
 console.log('3) Notre Dame is an independent');
 console.log(`   in a title game ${m.ndCcg}; seasons off ${cfb.ND_ACC_GAMES} ACC games ${m.ndAccOff}; ranked top ${cfb.CFB_INDEPENDENT_CUT} at selection ${m.ndTop12} times, left out of the field ${m.ndTop12Out}; in the field ${m.ndInField} of ${m.seasons}`);
 if (m.ndCcg > 0) fail(`Notre Dame played ${m.ndCcg} conference title game(s)`);
 if (m.ndAccOff > 0) fail(`${m.ndAccOff} season(s) where Notre Dame did not play exactly ${cfb.ND_ACC_GAMES} ACC teams`);
+console.log(`   the copy says ${COPY.guideNd} ACC teams a season (guide) and ${COPY.newsNd} a year (What's New); seasons off the guide's number ${m.ndAccCopy}`);
+if (COPY.guideNd !== COPY.newsNd) fail(`the guide says ${COPY.guideNd} ACC teams for Notre Dame and What's New says ${COPY.newsNd}`);
+if (m.ndAccCopy > 0) fail(`${m.ndAccCopy} season(s) where Notre Dame played another number of ACC teams than the guide's ${COPY.guideNd}`);
 if (m.ndTop12Out > 0) fail(`Notre Dame ranked top ${cfb.CFB_INDEPENDENT_CUT} and missed the field ${m.ndTop12Out} time(s)`);
 {
   /* A built case where the rule is Notre Dame's only way in: eleven SEC and
@@ -253,6 +319,9 @@ console.log(`   seasons without exactly ${cfb.CFB_LEAGUES.length} title games ${
 if (m.ccgBad > 0) fail(`${m.ccgBad} season(s) without exactly ${cfb.CFB_LEAGUES.length} title games`);
 if (m.g5Named > 0) fail(`${m.g5Named} Group of Five title game(s), a game that does not exist`);
 if (m.fifthOut > 0) fail(`${m.fifthOut} season(s) where the best ranked Group of Five school did not take the fifth spot`);
+console.log(`   the Conferences tab's auto spot row (first of the Group of Five table) against the school given the spot: ${m.autoOff} of ${m.autoChecked} seasons differ`);
+if (m.autoChecked === 0) fail('the auto spot row was never checked');
+if (m.autoOff > 0) fail(`${m.autoOff} season(s) where the Group of Five table's first row is not the school that took the fifth spot`);
 
 console.log('5) rivalry week and the conference count');
 console.log(`   week 12 games off the table's pair ${m.rivalMiss}; table pairs not played ${m.seriesUnplayed}; league schools off six conference games (seven with an in-league rival in an even league) ${m.confBad}`);
@@ -349,14 +418,31 @@ console.log('9) CBB: its series rows are rivalry pairs, and the table goes by le
     if (r.kind === 'series' && !riv.CBB_RIVALRY_SERIES.some(s => key(s.a, s.b) === key(r.a, r.b))) fail(`CBB: the engine calls ${r.a} and ${r.b} a real series, but no row of the table says so`);
   }
   let unsorted = 0; let checked = 0; let differs = 0;
+  /* A program with no league game yet sits at .500 (the run review saw 0-0 rows below losing records
+     early in a season), so the early rounds are checked too: no 0-0 row below a losing league record. */
+  let early = 0; let zeroRows = 0; let zeroBelow = 0;
+  const pct = t => { const n = (t.confWins ?? 0) + (t.confLosses ?? 0); return n ? t.confWins / n : 0.5; };
   for (let seed = 1; seed <= 5; seed += 1) {
     const rng = lehmer(seed * 104729);
     const st = cbb.initCbb('DUKE', rng, { depth: true });
     for (let season = 0; season < 3; season += 1) {
-      for (let r = 1; r <= cbb.CBB_ROUNDS; r += 1) { cbb.simCbbRound(st, rng); if (r < cbb.CBB_ROUNDS) st.round += 1; }
+      for (let r = 1; r <= cbb.CBB_ROUNDS; r += 1) {
+        cbb.simCbbRound(st, rng);
+        if (r <= 3) {
+          for (const conf of cbb.CBB_CONFS) {
+            const table = cbb.cbbConfStandings(st, conf);
+            early += 1;
+            table.forEach((t, i) => {
+              if ((t.confWins ?? 0) + (t.confLosses ?? 0) !== 0) return;
+              zeroRows += 1;
+              if (table.slice(0, i).some(u => (u.confLosses ?? 0) > (u.confWins ?? 0))) zeroBelow += 1;
+            });
+          }
+        }
+        if (r < cbb.CBB_ROUNDS) st.round += 1;
+      }
       for (const conf of cbb.CBB_CONFS) {
         const table = cbb.cbbConfStandings(st, conf);
-        const pct = t => { const n = (t.confWins ?? 0) + (t.confLosses ?? 0); return n ? t.confWins / n : 0; };
         checked += 1;
         for (let i = 1; i < table.length; i += 1) if (pct(table[i]) > pct(table[i - 1])) { unsorted += 1; break; }
         const byWins = [...table].sort((a, b) => b.wins - a.wins || a.losses - b.losses);
@@ -370,6 +456,9 @@ console.log('9) CBB: its series rows are rivalry pairs, and the table goes by le
   console.log(`   tables checked ${checked}, out of league order ${unsorted}; tournament fields the league record changed ${differs}`);
   if (checked === 0) fail('no CBB table was checked');
   if (unsorted > 0) fail(`${unsorted} CBB table(s) not in league record order`);
+  console.log(`   early tables (rounds 1 to 3) ${early}, rows still 0-0 in the league ${zeroRows}, of them below a losing league record ${zeroBelow}`);
+  if (zeroRows === 0) fail('no CBB table early in a season held a 0-0 row, so the .500 rule is untested');
+  if (zeroBelow > 0) fail(`${zeroBelow} CBB row(s) with no league game yet sorted below a losing league record`);
 }
 
 fs.rmSync(TMP, { recursive: true, force: true });

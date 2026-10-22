@@ -476,10 +476,11 @@ export function cbbConfStandings(st: CbbState, conf: string): CbbTeam[] {
   if (st.format) {
     /* Round 1554: the table goes by the league record, the way a real one
        does. Winning percentage first, since rivalry night takes a league game
-       off a program whose rival is in another league; then overall record. */
+       off a program whose rival is in another league; then overall record.
+       A program with no league game yet sits at .500, not below a losing record. */
     const pct = (t: CbbTeam) => {
       const n = (t.confWins ?? 0) + (t.confLosses ?? 0);
-      return n ? (t.confWins ?? 0) / n : 0;
+      return n ? (t.confWins ?? 0) / n : 0.5;
     };
     return teams.sort((a, b) => pct(b) - pct(a) || (b.confWins ?? 0) - (a.confWins ?? 0)
       || b.wins - a.wins || a.losses - b.losses || cbbStrength(b) - cbbStrength(a));
