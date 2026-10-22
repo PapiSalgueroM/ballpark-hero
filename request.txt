@@ -1,0 +1,2 @@
+#!playwright
+main-writes: git worktree add /tmp/mn1543 f8a7e7618 && ln -s "$PWD/node_modules" /tmp/mn1543/node_modules && cd /tmp/mn1543 && npm run build > /tmp/mn1543-build.log 2>&1 && tail -1 /tmp/mn1543-build.log && NODE_OPTIONS="--require=/tmp/mn1543/scripts/lib/offlineTransport.cjs" node scripts/simWritesAreSent.mjs
