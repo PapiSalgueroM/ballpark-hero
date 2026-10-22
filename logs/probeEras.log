@@ -1,0 +1,22 @@
+tiles 720; before 2026 0; fallback to today's label 0; of those contradicted by the game's own ledger 0; key shown where the season had another name 0
+distinct contradicted club-years 0; distinct key-not-name club-years 0; distinct clubs on today's label outside the ledgers 0
+contradicted tiles per year: 
+CONTRADICTED (first 45):
+KEY NOT NAME (first 12):
+TODAY LABEL OUTSIDE LEDGERS (first 12):
+  start 1990: buys in 2010, net worth 32M, 6 for sale, contradicted 0
+  start 1990: buys in 2010, net worth 35M, 6 for sale, contradicted 0
+  start 1990: buys in 2011, net worth 25M, 6 for sale, contradicted 0
+  start 1995: buys in 2015, net worth 35M, 6 for sale, contradicted 1 (Sheffield United as Championship)
+  start 1995: buys in 2014, net worth 16M, 6 for sale, contradicted 1 (Real Betis as La Liga)
+  start 1995: buys in 2015, net worth 17M, 6 for sale, contradicted 1 (Osasuna as La Liga)
+  start 2000: buys in 2020, net worth 29M, 6 for sale, contradicted 0
+  start 2000: buys in 2020, net worth 23M, 6 for sale, contradicted 1 (Sunderland as Premier League)
+  start 2000: buys in 2022, net worth 8M, 6 for sale, contradicted 0
+  start 2005: buys in 2026, net worth 32M, 6 for sale, contradicted 0
+  start 2005: buys in 2026, net worth 19M, 6 for sale, contradicted 0
+  start 2005: buys in 2025, net worth 16M, 6 for sale, contradicted 1 (Malaga as La Liga)
+  start 2010: buys in 2031, net worth 27M, 6 for sale, contradicted 0
+  start 2010: buys in 2028, net worth 24M, 6 for sale, contradicted 0
+  start 2010: buys in 2030, net worth 16M, 6 for sale, contradicted 0
+probe done

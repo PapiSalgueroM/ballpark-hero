@@ -1,0 +1,65 @@
+tiles 15120; before 2026 15120; fallback to today's label 10287; of those contradicted by the game's own ledger 509; key shown where the season had another name 0
+distinct contradicted club-years 53; distinct key-not-name club-years 0; distinct clubs on today's label outside the ledgers 150
+contradicted tiles per year: 2005:26 2006:20 2007:25 2008:23 2009:31 2010:34 2011:30 2012:26 2013:23 2014:25 2015:26 2016:23 2017:20 2018:23 2019:38 2020:29 2021:18 2022:19 2023:18 2024:19 2025:13
+CONTRADICTED (first 45):
+  2005: Atalanta shown as "Serie A · Tier 3", the game's ledger for Serie A 2005 does not hold it
+  2005: Bologna shown as "Serie A · Tier 4", the game's ledger for Serie A 2005 does not hold it
+  2005: Bournemouth shown as "Premier League · Tier 4", the game's ledger for Premier League 2005 does not hold it
+  2005: Levante shown as "La Liga · Tier 4", the game's ledger for La Liga 2005 does not hold it
+  2005: Napoli shown as "Serie A · Tier 4", the game's ledger for Serie A 2005 does not hold it
+  2005: Lincoln City shown as "Championship · Tier 4", the game's ledger for Championship 2005 does not hold it
+  2005: Elche shown as "La Liga · Tier 4", the game's ledger for La Liga 2005 does not hold it
+  2005: Nottingham Forest shown as "Premier League · Tier 4", the game's ledger for Premier League 2005 does not hold it
+  2005: Rayo Vallecano shown as "La Liga · Tier 4", the game's ledger for La Liga 2005 does not hold it
+  2006: Rayo Vallecano shown as "La Liga · Tier 4", the game's ledger for La Liga 2006 does not hold it
+  2006: Swansea City shown as "Championship · Tier 4", the game's ledger for Championship 2006 does not hold it
+  2006: Brighton shown as "Premier League · Tier 4", the game's ledger for Premier League 2006 does not hold it
+  2006: Alaves shown as "La Liga · Tier 4", the game's ledger for La Liga 2006 does not hold it
+  2006: Millwall shown as "Championship · Tier 4", the game's ledger for Championship 2006 does not hold it
+  2006: Strasbourg shown as "Ligue 1 · Tier 4", the game's ledger for Ligue 1 2006 does not hold it
+  2006: Brentford shown as "Premier League · Tier 4", the game's ledger for Premier League 2006 does not hold it
+  2007: Bournemouth shown as "Premier League · Tier 4", the game's ledger for Premier League 2007 does not hold it
+  2007: Celta Vigo shown as "La Liga · Tier 4", the game's ledger for La Liga 2007 does not hold it
+  2007: Wrexham shown as "Championship · Tier 4", the game's ledger for Championship 2007 does not hold it
+  2007: Real Sociedad shown as "La Liga · Tier 3", the game's ledger for La Liga 2007 does not hold it
+  2007: Malaga shown as "La Liga · Tier 4", the game's ledger for La Liga 2007 does not hold it
+  2007: Leeds United shown as "Premier League · Tier 4", the game's ledger for Premier League 2007 does not hold it
+  2008: Bournemouth shown as "Premier League · Tier 4", the game's ledger for Premier League 2008 does not hold it
+  2009: Real Betis shown as "La Liga · Tier 4", the game's ledger for La Liga 2009 does not hold it
+  2009: Charlton Athletic shown as "Championship · Tier 4", the game's ledger for Championship 2009 does not hold it
+  2009: Norwich City shown as "Championship · Tier 4", the game's ledger for Championship 2009 does not hold it
+  2009: Torino shown as "Serie A · Tier 4", the game's ledger for Serie A 2009 does not hold it
+  2010: Wrexham shown as "Championship · Tier 4", the game's ledger for Championship 2010 does not hold it
+  2010: Leipzig shown as "Bundesliga · Tier 4", the game's ledger for Bundesliga 2010 does not hold it
+  2010: Southampton shown as "Championship · Tier 4", the game's ledger for Championship 2010 does not hold it
+  2011: Wrexham shown as "Championship · Tier 4", the game's ledger for Championship 2011 does not hold it
+  2011: Frankfurt shown as "Bundesliga · Tier 3", the game's ledger for Bundesliga 2011 does not hold it
+  2011: Deportivo shown as "La Liga · Tier 4", the game's ledger for La Liga 2011 does not hold it
+  2011: Monaco shown as "Ligue 1 · Tier 3", the game's ledger for Ligue 1 2011 does not hold it
+  2011: Preston North End shown as "Championship · Tier 4", the game's ledger for Championship 2011 does not hold it
+  2012: Alaves shown as "La Liga · Tier 4", the game's ledger for La Liga 2012 does not hold it
+  2012: Villarreal shown as "La Liga · Tier 3", the game's ledger for La Liga 2012 does not hold it
+  2012: Sheffield United shown as "Championship · Tier 4", the game's ledger for Championship 2012 does not hold it
+  2012: Coventry City shown as "Premier League · Tier 4", the game's ledger for Premier League 2012 does not hold it
+  2012: Racing Santander shown as "La Liga · Tier 4", the game's ledger for La Liga 2012 does not hold it
+  2013: Wolves shown as "Championship · Tier 4", the game's ledger for Championship 2013 does not hold it
+  2014: Racing Santander shown as "La Liga · Tier 4", the game's ledger for La Liga 2014 does not hold it
+  2015: Racing Santander shown as "La Liga · Tier 4", the game's ledger for La Liga 2015 does not hold it
+  2016: Wrexham shown as "Championship · Tier 4", the game's ledger for Championship 2016 does not hold it
+  2017: Osasuna shown as "La Liga · Tier 4", the game's ledger for La Liga 2017 does not hold it
+KEY NOT NAME (first 12):
+TODAY LABEL OUTSIDE LEDGERS (first 12):
+  2005: Zenit shown as "Russian Premier League" (today's label; no ledger for that league)
+  2005: FC Copenhagen shown as "Danish Superliga" (today's label; no ledger for that league)
+  2005: Celtic shown as "Scottish Premiership" (today's label; no ledger for that league)
+  2005: Young Africans shown as "NBC Premier League" (today's label; no ledger for that league)
+  2005: Slavia Prague shown as "Czech First League" (today's label; no ledger for that league)
+  2005: Olympiacos shown as "Super League Greece" (today's label; no ledger for that league)
+  2005: Comunicaciones shown as "Liga Nacional Guatemala" (today's label; no ledger for that league)
+  2005: Coritiba shown as "Brasileirao" (today's label; no ledger for that league)
+  2005: Rangers shown as "Scottish Premiership" (today's label; no ledger for that league)
+  2005: Corinthians shown as "Brasileirao" (today's label; no ledger for that league)
+  2005: Girona shown as "Segunda Division" (today's label; no ledger for that league)
+  2005: Zamalek shown as "Egyptian Premier League" (today's label; no ledger for that league)
+FIRST SEASON of Atalanta bought in 2005: saved league "Serie A", row league none, lineupUnknown true, header "Final table", line "Finished 6th on 66 points. Loss €0.3M."
+probe done
