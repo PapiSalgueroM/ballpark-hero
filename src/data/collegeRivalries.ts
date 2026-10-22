@@ -17,7 +17,11 @@
  *
  * Every row was checked on 2026-10-22 on two publishers that are not a wiki
  * (the schools' own athletics sites, the NCAA, ESPN, CBS, SI, local news).
- * In the comment above every row are its two sources. Each school appears in at most one row per sport, since every school has
+ * In the comment above every row are its two sources. On 2026-10-22 the review
+ * fixes opened every replaced link and read it: six links that answered 410,
+ * 404 or 403, or never called the series a rivalry, were replaced by pages that
+ * opened and do (Texas and Texas A&M, Florida and Florida State, Oregon and
+ * Washington, Duke and North Carolina twice, Indiana and Purdue). Each school appears in at most one row per sport, since every school has
  * exactly one rival for the week. Rows whose schools are not both in a game
  * are not here: Georgia and Georgia Tech, Louisville and Kentucky in
  * football, Arizona State and Arizona, and so on fall to the in-state or
@@ -43,10 +47,10 @@ export const CFB_RIVALRY_SERIES: RivalrySeries[] = [
   //          https://www.ncaa.com/news/football/article/2018-02-22/alabama-auburn-football-teams-played-1st-iron-bowl-feb-22-1893
   { a: 'ALA', b: 'AUB', name: 'the Iron Bowl' },
   // sources: https://www.kbtx.com/2024/08/23/slocum-speaks-renewed-lonestar-showdown/
-  //          https://www.si.com/college/tamu/football/texas-am-aggies-texas-longhorns-lone-star-showdown-return-2024-jimbo-fisher
+  //          https://www.cbssports.com/college-football/news/texas-vs-texas-a-m-football-rivalry-renewed-longhorns-aggies-set-to-reignite-feud-on-2024-sec-schedule/
   { a: 'TEX', b: 'A&M', name: 'the Lone Star Showdown' },
   // sources: https://www.espn.com/blog/sec/post/_/id/110980
-  //          https://local10.com/sports/2019/11/28/10-most-memorable-games-in-history-of-florida-vs-florida-state-rivalry
+  //          https://www.wptv.com/sports/college-sports/5-memorable-games-between-florida-gators-florida-state-seminoles
   { a: 'FLA', b: 'FSU' },
   // sources: https://gamecocksonline.com/news/2024/11/29/palmetto-bowl-set-for-noon-saturday-nov-30/
   //          https://fbschedules.com/series-spotlight-a-brief-history-of-the-palmetto-bowl-clemson-vs-south-carolina/
@@ -57,7 +61,7 @@ export const CFB_RIVALRY_SERIES: RivalrySeries[] = [
   // sources: https://huskers.com/news/2016/11/21/huskers-hawkeyes-battle-for-heroes-trophy-on-abc
   //          https://lastwordonsports.com/collegefootball/2022/11/23/heroes-game-two-trophies-on-the-line-iowa/
   { a: 'IOWA', b: 'NEB', name: 'the Heroes Game' },
-  // sources: https://gohuskies.com/news/2021/11/1/football-huskies-ready-for-113th-meeting-with-oregon
+  // sources: https://kval.com/sports/content/when-it-comes-to-huskies-and-ducks-acrimony-reigns
   //          https://fbschedules.com/series-spotlight-a-brief-history-of-the-oregon-washington-rivalry/
   { a: 'ORE', b: 'WASH' },
   // sources: https://lsusports.net/news/2008/11/17/1626915/
@@ -78,13 +82,13 @@ export const CFB_RIVALRY_SERIES: RivalrySeries[] = [
 ];
 
 export const CBB_RIVALRY_SERIES: RivalrySeries[] = [
-  // sources: https://www.ncaa.com/news/basketball-men/article/2025-03-04/duke-vs-north-carolina-rivalry-wins-highlights-memorable-moments
-  //          https://dukechronicle.com/article/2021/02/duke-basketball-north-carolina-tobacco-road-rivalry-history
+  // sources: https://bleacherreport.com/articles/1985145-how-duke-vs-unc-became-the-best-rivalry-in-college-basketball
+  //          https://www.si.com/college/duke/blue-devils-tobacco-road-greatest-hits-from-1920-origins-modern-masterpieces
   { a: 'DUKE', b: 'UNC' },
   // sources: https://www.si.com/college/louisville/basketball/recap-2025-26-game-3-kentucky
   //          https://spectrumnews1.com/ky/louisville/news/2025/05/07/louisville-kentucky-basketball.html
   { a: 'UK', b: 'LOU', name: 'the Battle of the Bluegrass' },
-  // sources: https://www.hammerandrails.com/2016/2/17/11034554/the-rivalry-indiana-vs-purdue-best-moments
+  // sources: https://www.si.com/college/indiana/basketball/indiana-vs-purdue-college-basketball-rivalry-rankings
   //          https://1075thefan.com/706251/indiana-purdue-historic-rivalry/
   { a: 'IU', b: 'PUR' },
   // sources: https://msuspartans.com/news/2014/2/22/men_s_basketball_takes_on_rival_michigan.aspx

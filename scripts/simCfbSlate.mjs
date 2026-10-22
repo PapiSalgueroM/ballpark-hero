@@ -97,7 +97,7 @@ const CONTROLS = {
   g5title: ['cfbDynasty.ts', 'for (const conf of st.format ? CFB_LEAGUES : LEGACY_CONFS) {', 'for (const conf of LEGACY_CONFS) {'],
   nofifth: ['cfbDynasty.ts', 'if (fifth && !champs.includes(fifth)) champs.push(fifth);', 'if (fifth && !champs.includes(fifth)) void 0;'],
   rivals: ['cfbDynasty.ts', 'buildRivalries(CFB_SCHOOLS, CFB_SCHOOL_STATES, CFB_RIVALRY_SERIES)', 'buildRivalries(CFB_SCHOOLS, CFB_SCHOOL_STATES, [])'],
-  source: ['DATA', '//          https://local10.com/', '//          '],
+  source: ['DATA', '//          https://www.wptv.com/', '//          '],
   midseason: ['cfbDynasty.ts', '  if (!st.depth || st.round !== 1) return;\n  if (st.slate && st.slate.season === st.season) return;', '  if (!st.depth) return;\n  if (st.slate && st.slate.season === st.season) return;'],
   cbbraw: ['cbbDynasty.ts', '  if (st.format) {\n    /* Round 1554: the table goes by the league record', '  if (false) {\n    /* Round 1554: the table goes by the league record'],
   /* added by the review fixes (the run review's mutations window, ndsix and g5sort, which only the recorded fixture caught) */
