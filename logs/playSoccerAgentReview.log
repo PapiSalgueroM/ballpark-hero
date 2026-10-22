@@ -1,0 +1,55 @@
+sim first: PASS agent review product and proof source bytes held.
+FAIL 320-cousin AssertionError [ERR_ASSERTION]: 320-cousin: Actual essential-only consent saved
+    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:26:26)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:77:3
+FAIL 320-shark AssertionError [ERR_ASSERTION]: 320-shark: Actual essential-only consent saved
+    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:26:26)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:77:3
+FAIL 320-super AssertionError [ERR_ASSERTION]: 320-super: Actual essential-only consent saved
+    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:26:26)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:77:3
+FAIL 320-self AssertionError [ERR_ASSERTION]: 320-self: Actual essential-only consent saved
+    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:26:26)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:77:3
+FAIL 390-cousin AssertionError [ERR_ASSERTION]: 390-cousin: Actual essential-only consent saved
+    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:26:26)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:77:3
+FAIL 390-shark AssertionError [ERR_ASSERTION]: 390-shark: Actual essential-only consent saved
+    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:26:26)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:77:3
+FAIL 390-super AssertionError [ERR_ASSERTION]: 390-super: Actual essential-only consent saved
+    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:26:26)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:77:3
+FAIL 390-self AssertionError [ERR_ASSERTION]: 390-self: Actual essential-only consent saved
+    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:26:26)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:77:3
+FAIL 1280-cousin AssertionError [ERR_ASSERTION]: 1280-cousin: Actual essential-only consent saved
+    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:26:26)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:77:3
+FAIL 1280-shark AssertionError [ERR_ASSERTION]: 1280-shark: Actual essential-only consent saved
+    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:26:26)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:77:3
+FAIL 1280-super AssertionError [ERR_ASSERTION]: 1280-super: Actual essential-only consent saved
+    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:26:26)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:77:3
+FAIL 1280-self AssertionError [ERR_ASSERTION]: 1280-self: Actual essential-only consent saved
+    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:26:26)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:77:3
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+0 !== 3
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:130:45 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 0,
+  expected: 3,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

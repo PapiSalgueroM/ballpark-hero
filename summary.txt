@@ -1,0 +1,10 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fonts exit=0 0s | Prepared 9 declared font dependencies for local fulfillment.
+simCareerProgramme-forwalk exit=0 74s | Career programme:50 original/compatibility/full product season pairs with exact RNG,240 opted gameplay seasons,21 effective loaded faults,163 unchanged chance outcomes an
+playCareerProgramme exit=0 133s | Career programme native: 1154 checks, 21/21 completed gameplay journeys
+playSoccerSeasonCalendar exit=0 52s | Calendar native: 6 cases, 301 checks, 1 effective copied observation control
+simCareerTransferBrief-forwalk exit=0 6s | Transfer Brief:9 healthy outcome groups,60 full original state/RNG pairs,8 effective copied source controls,9 prepared native branches.
+playCareerTransferBrief exit=0 181s | Transfer Brief native 1341 checks,27 journeys,3 copied observation controls,0 failures.
+playSoccerAgentReview exit=1 28s | Node.js v24.21.0
+simSoccerVeteranTalks exit=0 63s | ok   five production browser fixtures including USD, all raw amounts remain EUR
+playSoccerVeteranTalks exit=0 164s | ok   strict geometry and three effective copied observation detectors
