@@ -1,0 +1,2 @@
+attrib-static exit=0 3s |    Duration  1.99s (transform 164ms, setup 36ms, collect 277ms, tests 1.26s, environment 160ms, prepare 48ms)
+m-ndsix-fixture exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/college-dynasty/collegeDynastyFixture.test.tsx,title=src/components/college-dynasty/collegeDynas

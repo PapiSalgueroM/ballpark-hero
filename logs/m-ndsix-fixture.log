@@ -1,0 +1,45 @@
+MUTATION ndsix APPLIED to src/lib/cfbDynasty.ts
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/components/cfb-dynasty/CfbDynastyBoard.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 230[2mms[22m[39m
+ [32m✓[39m src/components/cfb-dynasty/CfbDynastyDepth.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 315[2mms[22m[39m
+ [31m❯[39m src/components/college-dynasty/collegeDynastyFixture.test.tsx [2m([22m[2m4 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 1439[2mms[22m[39m
+[31m   [31m×[31m Round 912: both college dynasty boards hold their recorded behaviour[2m > [22mcfb: every step matches the fixture[39m[33m 915[2mms[22m[39m
+[31m     → expected 'step 1 (start) differs in save\n  was…' to be '' // Object.is equality[39m
+   [32m✓[39m Round 912: both college dynasty boards hold their recorded behaviour[2m > [22mcfb: the replay ran with the athletic director on, and an old save was offered him and not given him[32m 0[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 912: both college dynasty boards hold their recorded behaviour[2m > [22mcbb: every step matches the fixture [33m 522[2mms[22m[39m
+   [32m✓[39m Round 912: both college dynasty boards hold their recorded behaviour[2m > [22mcbb: the replay ran with the athletic director on, and an old save was offered him and not given him[32m 0[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/components/college-dynasty/collegeDynastyFixture.test.tsx[2m > [22mRound 912: both college dynasty boards hold their recorded behaviour[2m > [22mcfb: every step matches the fixture
+[31m[1mAssertionError[22m: expected 'step 1 (start) differs in save\n  was…' to be '' // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[31m+ step 1 (start) differs in save[39m
+[31m+   was: Alabama2026 · Week 1/12Record 0-0 (0-0)Rank #4Strength 90 Roster Play Schedule Top 25 ConferencesWelcome to Alabama. The 2026 season kicks off with a 12-game slate, a conference title to defend, and a[39m
+[31m+   now: Alabama2026 · Week 1/12Record 0-0 (0-0)Rank #4Strength 90 Roster Play Schedule Top 25 ConferencesWelcome to Alabama. The 2026 season kicks off with a 12-game slate, a conference title to defend, and a[39m
+[31m+   was info {"keys":"st,phase,recruits,portal,postseason","phase":"season","season":2026,"round":1,"nil":95,"played":0,"titles":0,"depth":1,"recruits":null,"portal":null}[39m
+[31m+   now info {"keys":"st,phase,recruits,portal,postseason","phase":"season","season":2026,"round":1,"nil":95,"played":0,"titles":0,"depth":1,"recruits":null,"portal":null}[39m
+
+[36m [2m❯[22m src/components/college-dynasty/collegeDynastyFixture.test.tsx:[2m326:21[22m[39m
+    [90m324| [39m        if (off.length) first = `step ${i} (${a.step}) differs in ${of…
+    [90m325| [39m      }
+    [90m326| [39m      [34mexpect[39m(first)[33m.[39m[34mtoBe[39m([32m''[39m)[33m;[39m
+    [90m   | [39m                    [31m^[39m
+    [90m327| [39m    }, 120_000); /* a full scripted dynasty: 3 s on a quiet machine, 1…
+    [90m328| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m2 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m10 passed[39m[22m[90m (11)[39m
+[2m   Start at [22m 14:38:01
+[2m   Duration [22m 2.32s[2m (transform 280ms, setup 148ms, collect 935ms, tests 1.98s, environment 677ms, prepare 146ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/college-dynasty/collegeDynastyFixture.test.tsx,title=src/components/college-dynasty/collegeDynastyFixture.test.tsx > Round 912%3A both college dynasty boards hold their recorded behaviour > cfb%3A every step matches the fixture,line=326,column=21::AssertionError: expected 'step 1 (start) differs in save\n  was…' to be '' // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A+ step 1 (start) differs in save%0A+   was: Alabama2026 · Week 1/12Record 0-0 (0-0)Rank #4Strength 90 Roster Play Schedule Top 25 ConferencesWelcome to Alabama. The 2026 season kicks off with a 12-game slate, a conference title to defend, and a%0A+   now: Alabama2026 · Week 1/12Record 0-0 (0-0)Rank #4Strength 90 Roster Play Schedule Top 25 ConferencesWelcome to Alabama. The 2026 season kicks off with a 12-game slate, a conference title to defend, and a%0A+   was info {"keys":"st,phase,recruits,portal,postseason","phase":"season","season":2026,"round":1,"nil":95,"played":0,"titles":0,"depth":1,"recruits":null,"portal":null}%0A+   now info {"keys":"st,phase,recruits,portal,postseason","phase":"season","season":2026,"round":1,"nil":95,"played":0,"titles":0,"depth":1,"recruits":null,"portal":null}%0A%0A ❯ src/components/college-dynasty/collegeDynastyFixture.test.tsx:326:21%0A%0A

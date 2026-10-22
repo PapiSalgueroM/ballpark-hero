@@ -1,0 +1,3 @@
+#!serial
+attrib-static: node .rc/x/mut1554.mjs noformat noformatcbb noseries noseriescbb ndstatic confsold && git show 3ee0bf629:src/components/college-dynasty/collegeDynastyFixture.json > src/components/college-dynasty/collegeDynastyFixture.json && node_modules/.bin/vitest run src/components/college-dynasty/collegeDynastyFixture.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
+m-ndsix-fixture: node .rc/x/mut1554.mjs ndsix && node_modules/.bin/vitest run src/components/college-dynasty/collegeDynastyFixture.test.tsx src/components/cfb-dynasty --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
