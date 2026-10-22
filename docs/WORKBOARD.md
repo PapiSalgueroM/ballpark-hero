@@ -16504,3 +16504,33 @@ This child changes only those8 source outputs, one final workflow phase and thes
 Source144557287ecfc3873a4a9563e9fe17ca62a12d8e passed final39788124277 attempt1, all six jobs. Complete native admission79408275f56d04c574416ccfab743ecf6bb074a9c3940da37a2fa9b8b03c31f0 binds actual9,337PASS/58SKIP/0FAIL/622files, focused74/29/6 and owned controls, browser4+3+3, HomeCopy/HubDepth/HomeFold,18 readers/14 unchanged caps, all5185 source rows/outputs and798 Tar bodies. Final patch/list/newfiles are present0B with two nonempty and two inventory controls.
 
 This child appends only three truthful qualification notes. I retains sole publication and live/readback, plus CM/Soccer; J keeps its game lanes. Root does not claim publication, provider/AdSense clearance, game fixes, prior failure waivers or785/1441 preservation clearance. The prior1447 merged3ee publish-ready handoff remains valid.
+
+## Root1449 Home source candidate, 2026-10-22 UTC
+
+Exclusive Root branchcodex/home-discovery-1449 starts atf8a7e7618c2c4ed6f504d0e860d75c759916ce59. Six literal H1/comment hunks are reviewed with whole inverses. Fresh remote evidence must establish actual fonts, fit, signed-in chips, control bounds and supported raw color measurements. Original HomeFold and HomeCopy oracles stay byte-exact; any compatibility adapter is artifact-owned and template-bound.
+
+Generation is limited to Home's index/sitemap/ledger, with all five scoped saved pages BASE-exact. Source/measurement/output review and fresh final qualification still precede any integration. I retains publication and CM/Soccer, J its game lanes. No source candidate is a live, provider, AdSense, rights, traffic or preservation-clearance claim.
+
+## Root1449 measured auth header defect, repair candidate only, 2026-10-22 UTC
+
+The a1cb4337 generation run39812401318 passed all six jobs, but source qualification is not complete. The three PowerShell port refusals remain historical. Repaired native measurement admission92be21da passes with all eight native controls, without qualifying the application or clearing its header RED. Actual captured authenticated headers also have narrow-screen overflow and H1/adjacent-content collisions: the pre-repair native outcome check is RED in16 of20 normal cases, with320/328/390/768 failing and1280 passing.
+
+This child adopts one responsive Index title-row class change and two corrected comments; fresh ordinary verification is pending. Typography, chip values, group classes and application behavior outside those spans stay held. Fresh generation, unchanged HomeFold/auth no-shift, the same native header outcome check and complete normal/heading-arm visual review are still owed. Earlier failed runs and preservation gaps remain unwaived. I remains sole publisher and owns CM/Soccer; J keeps its game lanes. No1449 qualified, published or live result is claimed.
+
+## Root1449 setup-only pipeline repair, 2026-10-22 UTC
+
+Actual941375/run39838483867 failed focused ancestry setup before app, unit or browser execution. Preserve its failed1,964-byte artifact12452745224/SHA874d1dc8 and all earlier failures. Root verified the941375 -> a1cb433 -> 86478a7 -> BASEf8a graph and all5,188 current source rows at07d6f195; the depth3 fetch can truncate before BASE.
+
+This child adopts only focused depth3 to32 and exact current Index/probe identity pin updates. The probe receives the same current Index pin; its method and all ancestry/reverse/outcome oracles stay held. Index000c61fd, the app layout and game lanes are unchanged. Fresh ordinary generation, the same20-case native header outcome check, unchanged HomeFold/no-shift and normal/heading-arm review remain required. No setup repair clears the earlier16-of20 header RED or establishes a new qualified/live result. I remains sole publisher; I/J game ownership and preservation limits remain unchanged.
+
+## Root1449 generation evidence and exact output adoption, 2026-10-22 UTC
+
+Actual4e7f808d/run39840573059 passed all six CI jobs and all seven native components. Full input identity is5,188 rows/685ba3ca. Units report9,395 cases:9,337PASS,58 explicitSKIP,0FAIL across622 files. Focused controls,18 readers and14 unchanged caps pass. HomeFold is23 passes,22 plus one owned H1 failure,23 fresh-restoration passes; first hero y351 is inside430, and its existing auth/streak fixtures keep that position. The same871217 data checker now passes all20 authenticated headers; preserve the old16-of20 RED and all earlier failures.
+
+This child adopts only the exact Home template and Home ledger-hash outputs plus the final-phase flag. Home ledger date2026-10-22, sitemap bytes, five saved-page sources/transforms, app Index000c61fd and probeeb9c3a7d stay held. All68 pictures are reviewed (56 normal,12 separate same-build heading arms). The targeted normal auth header is clear in this fixture set. Retain eight normal Range-only records and19 raw arm findings; deliberate long-text overflow is a control outcome. Fresh final six-job0B patch/list/new-files, four effective output controls and complete holds remain owed. I retains sole publication and I/J game ownership is unchanged. No final-qualified or live claim is made.
+
+## Root1449 qualified application handoff, 2026-10-22 UTC
+
+Actual3d081ad2e465c7d98ecb23ad8fb3bfe0526d1384 passed final39846253883 attempt1, all six CI jobs and seven native components. Complete qualificationc489523352e4b9cae40607a991dd10c93801ea1390acf91cb27858d4ed3dc835 binds5,188 source rows,9,337PASS/58 explicitSKIP/0FAIL across622 files,18 readers,14 unchanged caps and present0B patch/list/new-files with four effective output controls. The same871217 header check passes20/20. HomeFold remains23/22 plus one owned H1 failure/23, with first hero y351 inside430 and its existing no-shift fixtures held.
+
+Final visual coverage is18 changed images actually viewed plus50 exact prior-view PNG transfers, including16 hubs and12 separate text arms. This is a docs-only closure child, with native commit checks still owned by Root. I retains sole publication/live verification and I/J game ownership is unchanged. The separate Fight Career quality feedback is routed for SEO/I game-quality review; no arbitrary nerf or game-fix claim is included. Prior failures, unsupported contrast and provider/legal/rights/preservation limits remain unwaived. No live claim is made.
