@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+form1235: SIM_CAREER_FORM_SECTIONS=1,2,3,5 node scripts/simCareerForm.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+vitest: node_modules/.bin/vitest run src/test/soccerPuskasYear1523.test.ts src/lib/soccerClubSquad.test.ts src/test/soccerCareerStoryRole.test.ts src/test/soccerCareerDevelopment.test.ts --testTimeout=300000 --hookTimeout=120000
