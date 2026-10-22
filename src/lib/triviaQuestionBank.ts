@@ -1,4 +1,5 @@
 import { supabase } from '@/integrations/supabase/client';
+import { gameQueryClient } from '@/lib/gameQueryClient';
 import { dateSeed } from '@/lib/dateUtils';
 import { flagFor, fmtCompactUsd } from '@/lib/dealPlayers';
 
@@ -132,7 +133,7 @@ async function fetchMarketPool(): Promise<MarketRow[]> {
   for (let page = 0; page < 10; page++) {
     const from = page * pageSize;
     const to = from + pageSize - 1;
-    const { data, error } = await supabase
+    const { data, error } = await gameQueryClient
       .from('player_market_values_dedup')
       .select(cols)
       .eq('year', CURRENT_YEAR)
@@ -163,7 +164,7 @@ async function fetchMarketPool(): Promise<MarketRow[]> {
 }
 
 async function fetchBallonDor(): Promise<BallonRow[]> {
-  const { data, error } = await supabase
+  const { data, error } = await gameQueryClient
     .from('ballon_dor')
     .select('year, rank, player_name, nationality, club, award_type')
     .order('year', { ascending: false })

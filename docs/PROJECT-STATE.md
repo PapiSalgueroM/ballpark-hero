@@ -1,4 +1,8 @@
 
+## Preview query typing repair, 2026-10-22 UTC
+
+The preview's generated schema is missing live game relations and Transfer Path hint columns. A narrow local gameQueryClient contract reuses the existing connection and session without changing query strings or generated files. Affected game readers now use that contract. Preview verification is pending; no publication performed.
+
 ## Round1446 Green candidate, 2026-10-22 UTC
 
 Original f8a52c8938e1119f0c9753bb65d46f51df25de90/run39715479837 attempt1 is Root and peer admitted: 74 consent and29 account passes, exactly5 owned Profile assertion failures plus1 preservation pass, and3 owned missing-policy browser assertions after healthy Privacy/choices foundations. Complete ZIP/nested hashes, source/dist/generated end holds, zero transport and effective copied nonempty/inventory controls held. Original branch and every failure remain preserved.
