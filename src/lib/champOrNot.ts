@@ -1,5 +1,6 @@
 import { supabase } from '@/integrations/supabase/client';
-import { dailyDraw, shuffledRange } from '@/lib/dateUtils';
+import { dailyDraw, getTodayET, shuffledRange } from '@/lib/dateUtils';
+import { seasonCounts } from '@/lib/seasonCalendar';
 
 /**
  * Champ or Not (Round 235): quick daily true-or-false over the champion
@@ -171,10 +172,14 @@ export async function fetchCompetitionRows(def: CompetitionDef): Promise<ChampRo
   const { data, error } = await (q as { limit: (n: number) => PromiseLike<{ data: unknown; error: unknown }> }).limit(5000);
   if (error || !Array.isArray(data)) throw new Error(`${def.table} unavailable`);
   const out: ChampRow[] = [];
+  /* Round 1551: a season that just landed counts from a day boundary, so it
+     cannot reshuffle a board somebody already played today (seasonCalendar.ts). */
+  const today = getTodayET();
   for (const r of data as Record<string, unknown>[]) {
     const year = r[def.yearCol];
     const team = r[def.winCol];
-    if (typeof year === 'number' && Number.isFinite(year) && typeof team === 'string' && team.trim().length >= 3) {
+    if (typeof year === 'number' && Number.isFinite(year) && typeof team === 'string' && team.trim().length >= 3
+      && seasonCounts(def.table, year, today)) {
       const row: ChampRow = { year, team: team.trim() };
       if (def.finals) {
         const loser = r[def.finals.loseCol];

@@ -1,5 +1,6 @@
 import { supabase } from '@/integrations/supabase/client';
-import { dailyDraw, shuffledRange } from '@/lib/dateUtils';
+import { dailyDraw, getTodayET, shuffledRange } from '@/lib/dateUtils';
+import { seasonCounts } from '@/lib/seasonCalendar';
 
 /**
  * Who'd They Beat? (Round 242): the champion is given, you name the team
@@ -111,12 +112,16 @@ export async function fetchFinalsRows(def: FinalsCompDef): Promise<FinalsRow[]> 
   const { data, error } = await (q as unknown as { limit: (n: number) => PromiseLike<{ data: unknown; error: unknown }> }).limit(5000);
   if (error || !Array.isArray(data)) throw new Error(`${def.table} unavailable`);
   const out: FinalsRow[] = [];
+  /* Round 1551: a season that just landed counts from a day boundary
+     (seasonCalendar.ts), the same rule Champ or Not reads. */
+  const today = getTodayET();
   for (const r of data as Record<string, unknown>[]) {
     const year = r[def.yearCol];
     const winner = r[def.winCol];
     const loser = r[def.loseCol];
     const series = r[def.seriesCol];
     if (typeof year !== 'number' || typeof winner !== 'string' || typeof loser !== 'string') continue;
+    if (!seasonCounts(def.table, year, today)) continue;
     if (!winner.trim() || !loser.trim()) continue;
     const row: FinalsRow = { year, winner: winner.trim(), loser: loser.trim(), series: typeof series === 'string' ? series.trim() : '' };
     if (def.extraCols) {
