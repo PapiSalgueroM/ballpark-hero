@@ -1,0 +1,19 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+suite3: CI=1 ONLY=simFreeKickRange,simTycoonMoneyDisplay,simTycoonDrawResult node scripts/runAllSims.mjs
+simTycoonDrawResult: TYCOON_DRAW_RESULT_ARTIFACTS=$PWD/.rcart/draw NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonDrawResult.mjs
+simTycoonMoneyDisplay: TYCOON_MONEY_DISPLAY_ARTIFACTS=$PWD/.rcart/money NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonMoneyDisplay.mjs
+simFreeKickRange: FREE_KICK_RANGE_ARTIFACTS=$PWD/.rcart/fk NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simFreeKickRange.mjs
+qaFreeKickRange: node scripts/qa/freeKickRange1091.mjs --prefetch-assets-only && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/freeKickRange1091.mjs
+checkTycoonGroundGrowth: node scripts/qa/tycoonGroundGrowth1094.mjs --prefetch-assets-only && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/checkTycoonGroundGrowth.mjs
+simNoRivalNames: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simNoRivalNames.mjs
+simHarnessAnchors: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simHarnessAnchors.mjs
+simStorageWrites: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simStorageWrites.mjs
+simGuideHeadings: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simGuideHeadings.mjs
+simSiteSearch: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSiteSearch.mjs
+simTrustCopy: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTrustCopy.mjs
+simDailySaveHardening: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simDailySaveHardening.mjs
+simFreeKick: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simFreeKick.mjs
+simNumberFormatting: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simNumberFormatting.mjs
+playArcadeHelp: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playArcadeHelp.mjs
