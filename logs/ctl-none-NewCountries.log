@@ -1,0 +1,16 @@
+  FAIL: 390x844: step 3: the hub did not open on Zenit in Season 1 (the page reads: Skip to main content DOUKNOWBALL Back Track stats CLUB MANAGER 27 real league tables and 454 clubs today, squads as of August 2026, after the summer window (the A-League Men and the Russian Premier Le)
+  FAIL: 390x844: step 3: the table card draws no rows for Russian Premier League, the league has 16 clubs
+  FAIL: 390x844: step 7: no Play Live button on the Zenit hub
+  FAIL: 1280x800: step 3: the hub did not open on Zenit in Season 1 (the page reads: Skip to main content LIVE Live scores temporarily unavailable DOUKNOWBALL Back Sign up to track your stats CLUB MANAGER 27 real league tables and 454 clubs today, squads as of August 2026, after the s)
+  FAIL: 1280x800: step 3: the table card draws no rows for Russian Premier League, the league has 16 clubs
+  FAIL: 1280x800: step 7: no Play Live button on the Zenit hub
+  FAIL: 390x844 reduced motion: step 3: the hub did not open on Zenit in Season 1 (the page reads: Skip to main content DOUKNOWBALL Back Track stats CLUB MANAGER 27 real league tables and 454 clubs today, squads as of August 2026, after the summer window (the A-League Men and the Russian Premier Le)
+  FAIL: 390x844 reduced motion: step 3: the table card draws no rows for Russian Premier League, the league has 16 clubs
+  FAIL: 390x844 reduced motion: step 7: no Play Live button on the Zenit hub
+   390x844 Russia: 1 league(s), 16 club tiles, hub on Zenit, 0 table rows, live match not started
+   390x844 old save, resumed on Sevilla: browser says "27 leagues in this save"; Russian Premier League draws 16 rows under "RUSSIAN PREMIER LEAGUE · PRE-SEASON, ALPHABETICAL ORDER"
+   1280x800 Russia: 1 league(s), 16 club tiles, hub on Zenit, 0 table rows, live match not started
+   1280x800 old save, resumed on Sevilla: browser says "27 leagues in this save"; Russian Premier League draws 16 rows under "RUSSIAN PREMIER LEAGUE · PRE-SEASON, ALPHABETICAL ORDER"
+   390x844 reduced motion Russia: 1 league(s), 16 club tiles, hub on Zenit, 0 table rows, live match not started
+   5 requests to the database host aborted
+playClubManagerNewCountries: 9 failure(s)
