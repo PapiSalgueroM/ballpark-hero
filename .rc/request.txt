@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+slow: node .rc/x/slowload.mjs
+control: SLOW=0 node .rc/x/slowload.mjs
