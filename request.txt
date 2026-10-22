@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+cw-head: export FREE_KICK_FONT_CACHE=/tmp/fk-1442 LEGAL_PRIVACY_OUT=/tmp/lp-walk; node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only | tail -1 && BASE=http://127.0.0.1:4173 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playConsentPrivacy1442.mjs > /tmp/cpw.log 2>&1; s=$?; cp /tmp/cpw.log "$RC_OUT/cw-head.log"; grep -v -E '^\s*at ' /tmp/cpw.log | tail -40 | cut -c1-230; exit $s
+cw-base: git worktree add -q /tmp/cwb cedd0239 && ln -s "$PWD/node_modules" /tmp/cwb/node_modules && (cd /tmp/cwb && node_modules/.bin/vite build > /tmp/cwb-build.log 2>&1; tail -1 /tmp/cwb-build.log) && (nohup node scripts/lib/hostLikeServer.mjs /tmp/cwb/dist 4175 >/dev/null 2>&1 &) && sleep 4 && cd /tmp/cwb && export FREE_KICK_FONT_CACHE=/tmp/fk-1442b LEGAL_PRIVACY_OUT=/tmp/lp-walkb; node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only | tail -1 && BASE=http://127.0.0.1:4175 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playConsentPrivacy1442.mjs > /tmp/cpwb.log 2>&1; s=$?; cp /tmp/cpwb.log "$RC_OUT/cw-base.log"; grep -v -E '^\s*at ' /tmp/cpwb.log | tail -40 | cut -c1-230; exit $s

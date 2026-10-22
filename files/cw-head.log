@@ -1,0 +1,9 @@
+Consent browser: fresh choice, paused analytics and footer opening preserve the current decision
+Consent browser: withdrawal reloads both tabs, removes optional cookies and preserves essential storage
+Consent browser: legacy accepted never grants optional scripts
+Consent browser: legacy essential never grants optional scripts
+Consent browser: saved head before app boot, analytics=false
+Consent browser: saved head before app boot, analytics=true
+Consent browser: browser privacy signal keeps advertising off
+Consent browser: account form loads on request, keeps drafts and returns focus
+Consent browser: PASS, 8 cases. Every external request was fulfilled locally; no live provider requests.
