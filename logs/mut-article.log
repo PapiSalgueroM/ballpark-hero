@@ -1,0 +1,9 @@
+MUTATION article APPLIED in src/lib/gmEarnedDraft.ts
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/lib/gmEarnedDraft.test.ts[2m > [22mlotteryChancesBefore: the lines before the draw cannot give the draw away (correction 1)[2m > [22ma share read with a vowel sound takes "an" (review 1540 run m3: "it has a 8.2% chance")
+[31m[1mAssertionError[22m: expected 'Your club goes in seeded 4th of 14. B…' to contain 'seeded 4th of 14. By the table it has…'[39m
+Expected: [32m"seeded 4th of 14. By the table it has a[7mn[27m 11.5% chance at the first pick"[39m
+Received: [31m"[7mYour club goes in [27mseeded 4th of 14. By the table it has a 11.5% chance at the first pick[7m and 45.2% at a top four pick, and it picks no later than 8th.[27m"[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m19 passed[39m[22m[90m (20)[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmEarnedDraft.test.ts,title=src/lib/gmEarnedDraft.test.ts > lotteryChancesBefore%3A the lines before the draw cannot give the draw away (correction 1) > a share read with a vowel sound takes "an" (review 1540 run m3%3A "it has a 8.2%25 chance"),line=366,column=86::AssertionError: expected 'Your club goes in seeded 4th of 14. B…' to contain 'seeded 4th of 14. By the table it has…'%0A%0AExpected: "seeded 4th of 14. By the table it has an 11.5%25 chance at the first pick"%0AReceived: "Your club goes in seeded 4th of 14. By the table it has a 11.5%25 chance at the first pick and 45.2%25 at a top four pick, and it picks no later than 8th."%0A%0A ❯ src/lib/gmEarnedDraft.test.ts:366:86%0A%0A
+MUTANT article KILLED vitest=1

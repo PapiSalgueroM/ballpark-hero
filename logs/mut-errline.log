@@ -1,0 +1,9 @@
+MUTATION errline APPLIED in src/components/front-office-shared/GmEarnedDraftScreen.tsx
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/components/front-office-shared/GmEarnedDraftScreen.test.tsx[2m > [22mGmEarnedDraftScreen[2m > [22ma refused press says so once on every stage, and no stage draws the line without one (review 1540 read m1)
+[31m[1mAssertionError[22m: stage lottery: expected +0 to be 1 // Object.is equality[39m
+[32m- Expected[39m
+[31m+ Received[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m5 passed[39m[22m[90m (6)[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmEarnedDraftScreen.test.tsx,title=src/components/front-office-shared/GmEarnedDraftScreen.test.tsx > GmEarnedDraftScreen > a refused press says so once on every stage%2C and no stage draws the line without one (review 1540 read m1),line=104,column=77::AssertionError: stage lottery: expected +0 to be 1 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 1%0A+ 0%0A%0A ❯ src/components/front-office-shared/GmEarnedDraftScreen.test.tsx:104:77%0A%0A
+MUTANT errline KILLED vitest=1

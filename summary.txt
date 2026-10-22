@@ -1,0 +1,5 @@
+mut-nocopy exit=0 5s | MUTANT nocopy KILLED vitest=1
+mut-sort exit=0 4s | MUTANT sort KILLED vitest=1
+mut-errline exit=0 2s | MUTANT errline KILLED vitest=1
+mut-article exit=0 3s | MUTANT article KILLED vitest=1
+mut-lotteryline exit=0 2s | MUTANT lotteryline KILLED vitest=1

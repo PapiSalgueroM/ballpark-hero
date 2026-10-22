@@ -1,0 +1,9 @@
+MUTATION sort APPLIED in src/components/nba-front-office/NbaFrontOfficeBoard.tsx
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/components/nba-front-office/NbaEarnedDraft.test.tsx[2m > [22mthe earned draft night on the NBA board[2m > [22m(l) each press hands the library its own copy of the league, and his board runs best first on his scout's read
+[31m[1mAssertionError[22m: expected [ Array(14) ] to deeply equal [ Array(14) ][39m
+[32m- Expected[39m
+[31m+ Received[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m11 passed[39m[22m[90m (12)[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/nba-front-office/NbaEarnedDraft.test.tsx,title=src/components/nba-front-office/NbaEarnedDraft.test.tsx > the earned draft night on the NBA board > (l) each press hands the library its own copy of the league%2C and his board runs best first on his scout's read,line=346,column=22::AssertionError: expected [ Array(14) ] to deeply equal [ Array(14) ]%0A%0A- Expected%0A+ Received%0A%0A  [%0A+   83,%0A    89,%0A    87,%0A-   85,%0A    84,%0A-   83,%0A-   82,%0A-   81,%0A-   80,%0A-   78,%0A+   85,%0A    77,%0A+   81,%0A+   82,%0A    76,%0A    75,%0A+   80,%0A+   78,%0A    72,%0A    72,%0A  ]%0A%0A ❯ src/components/nba-front-office/NbaEarnedDraft.test.tsx:346:22%0A%0A
+MUTANT sort KILLED vitest=1

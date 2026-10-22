@@ -1,0 +1,9 @@
+MUTATION nocopy APPLIED in src/components/nba-front-office/NbaFrontOfficeBoard.tsx
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/components/nba-front-office/NbaEarnedDraft.test.tsx[2m > [22mthe earned draft night on the NBA board[2m > [22m(l) each press hands the library its own copy of the league, and his board runs best first on his scout's read
+[31m[1mAssertionError[22m: expected 1 to be 3 // Object.is equality[39m
+[32m- Expected[39m
+[31m+ Received[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m11 passed[39m[22m[90m (12)[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/nba-front-office/NbaEarnedDraft.test.tsx,title=src/components/nba-front-office/NbaEarnedDraft.test.tsx > the earned draft night on the NBA board > (l) each press hands the library its own copy of the league%2C and his board runs best first on his scout's read,line=354,column=34::AssertionError: expected 1 to be 3 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 3%0A+ 1%0A%0A ❯ src/components/nba-front-office/NbaEarnedDraft.test.tsx:354:34%0A%0A
+MUTANT nocopy KILLED vitest=1
