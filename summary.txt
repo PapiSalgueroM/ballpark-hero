@@ -1,0 +1,15 @@
+head exit=0 0s | 378d6047193e3bb96128cc87ae3f0b1ff929f9e3
+desk-def exit=0 38s | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+ctl-dropone exit=0 38s | simNbaGmDesk: control dropone fired (20 failures, as it should)
+ctl-nohandback exit=0 35s | simNbaGmDesk: control nohandback fired (12 failures, as it should)
+ctl-overlimit exit=0 35s | simNbaGmDesk: control overlimit fired (8 failures, as it should)
+tsc exit=0 102s | 
+ctl-fullbird exit=0 33s | simNbaGmDesk: control fullbird fired (116 failures, as it should)
+ctl-sheetrepick exit=0 35s | simNbaGmDesk: control sheetrepick fired (51 failures, as it should)
+contracts exit=0 1s | simGmContracts: PASS, 4 engines, 20 runs of 10 seasons, nobody left on a flip
+ctl-coinflip exit=0 31s | simNbaGmDesk: control coinflip fired (160 failures, as it should)
+nhl exit=0 4s | simNhlGmDesk: all seven checks passed (10 seeds x 10 seasons)
+ctl-norfa exit=0 33s | simNbaGmDesk: control norfa fired (177 failures, as it should)
+vitest exit=0 4s |    Duration  3.31s (transform 1.38s, setup 195ms, collect 2.09s, tests 526ms, environment 1.07s, prepare 344ms)
+norival exit=0 17s | No rival product names found. 0 findings.
+deskhost exit=0 55s | simGmDeskHost: all 10 checks passed on seeds 1,2,3 (4 engines, 3 seasons a seed)
