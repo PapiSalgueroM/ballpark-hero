@@ -1,0 +1,5 @@
+#!serial
+deckc-head: node scripts/simUsCareerDeckC.mjs
+deckc-nof1: git checkout f0cb24756 -- src/lib/usCareerAnnualBenefits.ts src/lib/nbaMyCareer.ts src/lib/nflMyCareer.ts src/lib/mlbMyCareer.ts src/lib/nhlMyCareer.ts && node scripts/simUsCareerDeckC.mjs; s=$?; git checkout HEAD -- src; exit $s
+deckc-rec: DECKC_RECORD=1 node scripts/simUsCareerDeckC.mjs; s=$?; cp scripts/data/usCareerDeckCDigest.json $RC_OUT/deckc-new.json; git checkout HEAD -- scripts; exit $s
+deckc-nobs: git checkout 4530c0497 -- src && node .rc/x/revert1538.mjs brand && node .rc/x/revert1538.mjs skill && DECKC_RECORD=1 node scripts/simUsCareerDeckC.mjs; s=$?; cp scripts/data/usCareerDeckCDigest.json $RC_OUT/deckc-nobs.json; git checkout HEAD -- src scripts; exit $s
