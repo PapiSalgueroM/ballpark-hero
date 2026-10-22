@@ -60,6 +60,8 @@ import {
   nextSeasonYear, managerNextSeasonYear,
 } from "@/lib/soccerCareerEngine";
 import type { FirstStageStage } from "@/lib/soccerCareerContinental";
+import { DugoutTableBlock } from "@/components/soccer-career/DugoutTableBlock";
+import { loadOwnerTail } from "@/lib/soccerOwnerGate";
 import { careerBeforeBallonDorReveal, revealBallonDorResult, ballonDorAwaitingReveal } from "@/lib/soccerAwardReveal";
 import { readLeagueWorldSeason } from "@/lib/soccerCareerLeagueWorld";
 import { soccerExtensionQuote } from "@/lib/soccerCareerContracts";
@@ -147,6 +149,35 @@ import { readSeasonMoments } from '@/lib/season/momentsSave';
    the Ratings dialog when it is opened (step 7 of the round: the weight it
    adds is paid here, never by a budget). */
 const SoccerSeasonCentre = lazy(() => import("@/components/soccer-career/SoccerSeasonCentre"));
+/* Round 1524: the club owner's screens ride with the owner tail in one lazy chunk (src/lib/soccerOwnerGate.ts) */
+/* a chunk that fails, or resolves empty (freshBuild cancels the preload error), keeps its placeholder, as CareerStory's does */
+const ownerScreens = () => import("@/components/soccer-career/OwnerTail").then(m => { if (!m?.OwnerPanel) throw new Error("owner screens"); return m; });
+const OwnerClubSale = lazy(() => ownerScreens().then(m => ({ default: m.OwnerClubSale })).catch(() => new Promise<never>(() => undefined)));
+const OwnerPanel = lazy(() => ownerScreens().then(m => ({ default: m.OwnerPanel })).catch(() => new Promise<never>(() => undefined)));
+/* the sale list's placeholder keeps its Back where the list puts it, so a chunk that never lands cannot strand the doors */
+const OwnerSaleWait = ({ onBack }: { onBack: () => void }) => <div className="min-h-[14rem]"><Button onClick={onBack} variant="ghost" className="h-8 px-2 text-xs font-bold">Back</Button></div>;
+const OWNER_LOAD_FAILED = "The club owner side didn't load. Check your connection and try again.";
+/* the owner panel's placeholder: the same box while the screens load, and if their chunk cannot load it says so
+   with Retry (a reload, as the Season Centre's does: the save is already on disk), so a blank box never sits over
+   a season button that waits for the panel's call */
+const OwnerPanelWait = () => {
+  const [failed, setFailed] = useState(false);
+  useEffect(() => {
+    let live = true;
+    ownerScreens().catch(() => { if (live) setFailed(true); });
+    return () => { live = false; };
+  }, []);
+  return (
+    <div className="min-h-[24rem] rounded-xl border border-border bg-card">
+      {failed && (
+        <div className="space-y-3 p-4 text-center">
+          <p className="text-sm">Couldn't load your club's screen. Your career is safe.</p>
+          <button type="button" onClick={() => { if (!reloadToRetryChunk()) toast(OWNER_LOAD_FAILED, PAGE_TOAST); }} className="h-10 w-full rounded-lg border border-border text-sm font-semibold">↻ Retry</button>
+        </div>
+      )}
+    </div>
+  );
+};
 const TrophyCabinet = lazy(() => import("@/components/soccer-career/TrophyCabinet"));
 const SeasonRatings = lazy(() => import("@/components/soccer-career/SeasonRatings"));
 const SoccerDerbyHistory = lazy(() => import("@/components/soccer-career/SoccerDerbyHistory"));
@@ -967,6 +998,15 @@ export default function SoccerCareer() {
     }
   }, [career?.phase]);
 
+  /* Round 1524: the owner tail (a lazy chunk) is fetched as soon as a career
+     could open it: a career at its end with the €200M to buy a club, or one
+     already in the boardroom. Buying and playing a season await it as well. */
+  const ownerWanted = career?.phase === "owner_season"
+    || ((career?.phase === "retirement_ceremony" || career?.phase === "post_retirement") && (career?.netWorth ?? 0) >= 200);
+  useEffect(() => {
+    if (ownerWanted) void loadOwnerTail().catch(() => { /* retried when he buys or plays a season */ });
+  }, [ownerWanted]);
+
   /* Round 1504: the summer cards (src/lib/soccerDeckGate.ts) are a lazy chunk,
      fetched as soon as a live career is on screen so it is usually in memory
      long before a summer's deal. Nothing waits for it at a season end: a deal
@@ -1289,12 +1329,16 @@ export default function SoccerCareer() {
      fetched it already by the time this runs, because the retirement screen
      is a page of reading; the await is here so that a fast click on a slow
      phone still lands in a manager career with a working offer feed. */
-  const handlePostRetirement = async (choice: PostRetirementChoice) => {
+  const handlePostRetirement = async (choice: PostRetirementChoice, ownerClub?: string) => {
     if (!career) return;
     if (choice === "manager") {
       try { await loadManagerMarket(); } catch { /* the engine says so on screen and retries */ }
     }
-    setCareer(choosePostRetirement(career, choice, clubs));
+    /* Round 1524: the owner tail is a lazy chunk; nothing is bought before it lands */
+    if (choice === "owner") {
+      try { await loadOwnerTail(); } catch { toast(OWNER_LOAD_FAILED, PAGE_TOAST); return; }
+    }
+    setCareer(choosePostRetirement(career, choice, clubs, ownerClub));
   };
 
   const handleAdvanceManager = () => {
@@ -1411,9 +1455,11 @@ export default function SoccerCareer() {
     setCareer(endPunditCareer(career));
   };
 
-  const handleAdvanceOwner = () => {
+  const handleAdvanceOwner = async () => {
     if (!career) return;
-    setCareer(advanceOwnerSeason(career));
+    /* Round 1524: the season is played by the lazy owner tail */
+    try { await loadOwnerTail(); } catch { toast(OWNER_LOAD_FAILED, PAGE_TOAST); return; }
+    setCareer(advanceOwnerSeason(career, clubs));
   };
 
   const handleEndOwner = () => {
@@ -2925,7 +2971,9 @@ function BallonDorCeremonyCard({ bdor, career, onDismiss, onSpeech, onReveal }: 
 }
 
 /* ─── Retirement Ceremony Card ─── */
-function RetirementCeremonyCard({ career, totals, onPostRetirement }: { career: CareerState; totals: ReturnType<typeof getCareerTotals>; onPostRetirement: (c: PostRetirementChoice) => void }) {
+function RetirementCeremonyCard({ career, clubs, totals, onPostRetirement }: { career: CareerState; clubs: ClubData[]; totals: ReturnType<typeof getCareerTotals>; onPostRetirement: (c: PostRetirementChoice, ownerClub?: string) => void }) {
+  /* Round 1524: the club list opens in place of the four doors */
+  const [buying, setBuying] = useState(false);
   const legacy = career.legacy!;
   const reason = retirementReason(career);
   const tierColors: Record<LegacyTier, string> = { "GOAT": "text-amber-400", "LEGEND": "text-purple-400", "GREAT": "text-emerald-400", "SOLID PRO": "text-blue-400", "JOURNEYMAN": "text-muted-foreground" };
@@ -3004,6 +3052,9 @@ function RetirementCeremonyCard({ career, totals, onPostRetirement }: { career: 
       </div>
 
       {/* Post-retirement choices */}
+      {buying ? (
+        <Suspense fallback={<OwnerSaleWait onBack={() => setBuying(false)} />}><OwnerClubSale career={career} clubs={clubs} onBuy={name => onPostRetirement("owner", name)} onBack={() => setBuying(false)} /></Suspense>
+      ) : (
       <div className="space-y-2">
         <div className="text-xs text-center text-muted-foreground font-bold uppercase">What's Next?</div>
         <Button onClick={() => onPostRetirement("retire")} className="w-full h-11 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-black">
@@ -3016,17 +3067,27 @@ function RetirementCeremonyCard({ career, totals, onPostRetirement }: { career: 
           🎙️ Become a TV Pundit
         </Button>
         {career.netWorth >= 200 && (
-          <Button onClick={() => onPostRetirement("owner")} variant="outline" className="w-full h-11 text-sm font-bold">
+          <Button onClick={() => setBuying(true)} variant="outline" className="w-full h-11 text-sm font-bold">
             🏟️ Buy a Football Club ({formatNetWorth(career.netWorth)} net worth)
           </Button>
         )}
       </div>
+      )}
     </div>
   );
 }
 
 /* ─── Post-Retirement Card (unused since choices are in ceremony, but kept for direct phase) ─── */
-function PostRetirementCard({ career, onChoice }: { career: CareerState; onChoice: (c: PostRetirementChoice) => void }) {
+function PostRetirementCard({ career, clubs, onChoice }: { career: CareerState; clubs: ClubData[]; onChoice: (c: PostRetirementChoice, ownerClub?: string) => void }) {
+  /* Round 1524: the club list, as on the ceremony */
+  const [buying, setBuying] = useState(false);
+  if (buying) {
+    return (
+      <div className="rounded-xl border border-border p-5">
+        <Suspense fallback={<OwnerSaleWait onBack={() => setBuying(false)} />}><OwnerClubSale career={career} clubs={clubs} onBuy={name => onChoice("owner", name)} onBack={() => setBuying(false)} /></Suspense>
+      </div>
+    );
+  }
   return (
     <div className="rounded-xl border border-border p-5 space-y-3 text-center">
       <h3 className="text-lg font-black">What's Next?</h3>
@@ -3034,7 +3095,7 @@ function PostRetirementCard({ career, onChoice }: { career: CareerState; onChoic
       <Button onClick={() => onChoice("manager")} variant="outline" className="w-full h-11 text-sm font-bold">📋 Become a Manager</Button>
       <Button onClick={() => onChoice("pundit")} variant="outline" className="w-full h-11 text-sm font-bold">🎙️ Become a TV Pundit</Button>
       {career.netWorth >= 200 && (
-        <Button onClick={() => onChoice("owner")} variant="outline" className="w-full h-11 text-sm font-bold">🏟️ Buy a Football Club</Button>
+        <Button onClick={() => setBuying(true)} variant="outline" className="w-full h-11 text-sm font-bold">🏟️ Buy a Football Club</Button>
       )}
     </div>
   );
@@ -3065,53 +3126,9 @@ function ManagerPanel({ manager, career, onAdvance, onEnd, onAcceptOffer }: { ma
       )}
 
       {/* Round 227: the season is a table now, so show it: the leaders plus
-          your own row, the W-D-L line, and how the cup run ended. */}
-      {(() => {
-        const last = manager.seasonResults[manager.seasonResults.length - 1];
-        if (!last?.table) return null;
-        const afterResults = Math.min(manager.seasonResults.length, 5);
-        /* Round 1029: the table is his club's own league. A club of that
-           league the game does not know by name keeps its place, unnamed,
-           and a table with no rival we can name says where he finished. A
-           season before 2026-27 names no league at all: the game does not
-           know which one his club was in that year. The words come from
-           dugoutTableWords, which the harness reads too. */
-        const { header, named, sizeUnknown, note, orderNote } = dugoutTableWords(last);
-        return (
-          <div className="rounded-xl border border-border bg-muted/10 p-3 space-y-1.5">
-            <div className="flex items-center justify-between gap-2">
-              <span className="truncate text-[10px] font-bold uppercase tracking-wider text-muted-foreground">{header}</span>
-              {last.record && !sizeUnknown && <span className="shrink-0 text-[10px] text-muted-foreground">{last.record}</span>}
-            </div>
-            {note && (
-              <p className="cm-tick-in text-xs" style={{ animationDelay: revealDelay(afterResults) }}>{note}</p>
-            )}
-            {orderNote && (
-              <p className="text-[10px] text-muted-foreground">{orderNote}</p>
-            )}
-            {named && last.table.map((row, i) => (
-              <div
-                key={`${last.year}-${i}`}
-                className={`cm-tick-in flex items-center justify-between text-xs rounded px-2 py-1 ${row.you ? "bg-primary/15 font-bold" : ""}`}
-                style={{ animationDelay: revealDelay(afterResults + i) }}
-              >
-                <span className="flex items-center gap-2 min-w-0">
-                  {!sizeUnknown && <span className="w-5 shrink-0 text-right text-muted-foreground">{row.pos}</span>}
-                  {/* with no numbers, mark the clubs between the leaders and him */}
-                  {sizeUnknown && i > 0 && row.pos > last.table[i - 1].pos + 1 && <span className="shrink-0 text-muted-foreground">…</span>}
-                  {row.unnamed || !row.club
-                    ? <span className="truncate italic text-muted-foreground">another club</span>
-                    : <span className="truncate">{row.club}</span>}
-                </span>
-                {!sizeUnknown && <span className="shrink-0 tabular-nums">{row.pts} pts</span>}
-              </div>
-            ))}
-            {last.cup && (
-              <p className="pt-1 text-[10px] text-muted-foreground">Cup run: {last.cup}</p>
-            )}
-          </div>
-        );
-      })()}
+          your own row, the W-D-L line, and how the cup run ended. Round 1524:
+          the block is DugoutTableBlock, which the owner's panel shows too. */}
+      <DugoutTableBlock results={manager.seasonResults} />
 
       {/* Round 111: out of work, with a feed you had to earn. */}
       {manager.unemployed && (
@@ -3578,7 +3595,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   onDismissBallonDor: () => void;
   onBdorSpeech: (choice: BdorSpeechChoice) => void;
   onManualRetire: () => void;
-  onPostRetirement: (choice: PostRetirementChoice) => void;
+  onPostRetirement: (choice: PostRetirementChoice, ownerClub?: string) => void;
   onAdvanceManager: () => void;
   onAcceptManagerOffer: (i: number) => void;
   onEndManager: () => void;
@@ -4059,7 +4076,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
 
           {/* OVERLAY: Retirement Ceremony */}
           {career.phase === "retirement_ceremony" && career.legacy && (
-            <RetirementCeremonyCard career={career} totals={totals} onPostRetirement={onPostRetirement} />
+            <RetirementCeremonyCard career={career} clubs={clubs} totals={totals} onPostRetirement={onPostRetirement} />
           )}
 
           {/* OVERLAY: Retirement Suggestion */}
@@ -4090,7 +4107,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
 
           {/* OVERLAY: Post-Retirement Choice */}
           {career.phase === "post_retirement" && (
-            <PostRetirementCard career={career} onChoice={onPostRetirement} />
+            <PostRetirementCard career={career} clubs={clubs} onChoice={onPostRetirement} />
           )}
 
           {/* OVERLAY: Manager Season */}
@@ -4136,28 +4153,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
 
           {/* OVERLAY: Owner Season */}
           {career.phase === "owner_season" && career.ownerState && (
-            <div className="rounded-xl border border-border bg-card p-4 space-y-3">
-              <div className="text-center space-y-1">
-                <h3 className="text-lg font-black">🏟️ Club Owner</h3>
-                <p className="text-xs text-muted-foreground">Owning {career.ownerState.club} (Tier {career.ownerState.clubTier}) · Season {career.ownerState.season}</p>
-              </div>
-              {career.ownerState.seasonResults.length > 0 && (
-                <div className="space-y-1">
-                  {career.ownerState.seasonResults.slice(-5).map((r, i) => (
-                    <div key={i} className="flex items-center justify-between text-xs bg-muted/20 rounded-lg px-3 py-1.5">
-                      <span className="text-muted-foreground">S{r.year}</span>
-                      <span className="font-semibold">{r.club}</span>
-                      <span className={`text-[10px] ${r.trophy ? "text-amber-400" : "text-muted-foreground"}`}>{r.result}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
-              <div className="grid grid-cols-3 gap-2 text-center text-xs">
-                <div className="bg-muted/20 rounded-lg p-2"><div className="font-black">{career.ownerState.trophies}</div><div className="text-[9px] text-muted-foreground">Trophies</div></div>
-                <div className="bg-muted/20 rounded-lg p-2"><div className="font-black">{career.ownerState.promotions}</div><div className="text-[9px] text-muted-foreground">Promotions</div></div>
-                <div className="bg-muted/20 rounded-lg p-2"><div className="font-black">{money(`€${career.ownerState.budget.toFixed(0)}M`)}</div><div className="text-[9px] text-muted-foreground">Budget</div></div>
-              </div>
-            </div>
+            <Suspense fallback={<OwnerPanelWait />}><OwnerPanel owner={career.ownerState} onCareer={onCareerPatch} /></Suspense>
           )}
           {career.phase === "ballon_dor" && career.pendingBallonDor && (
             /* Release AQ: the night's headline slams in from 1.6 times its size. On a phone that block is as
@@ -4546,7 +4542,9 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           </div>
         ) : career.phase === "owner_season" ? (
           <div className="flex-1 flex gap-2">
-            <Button onClick={onAdvanceOwner} className="flex-1 h-12 text-base font-bold bg-emerald-600 hover:bg-emerald-500 text-black gap-2 max-[399px]:px-3 max-[399px]:text-sm">
+            {/* Round 1524: the season waits for the season's call (the panel asks
+                for it); the label stays the base's, which fits a 320 bar */}
+            <Button onClick={onAdvanceOwner} disabled={!career.ownerState?.plan} className="flex-1 h-12 text-base font-bold bg-emerald-600 hover:bg-emerald-500 text-black gap-2 max-[399px]:px-3 max-[399px]:text-sm">
               Next Owner Season <ChevronRight className="w-5 h-5 max-[399px]:hidden" />
             </Button>
             <Button onClick={onEndOwner} variant="outline" className="h-12 text-sm font-bold max-[399px]:px-3">Sell Club</Button>

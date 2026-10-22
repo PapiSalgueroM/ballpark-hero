@@ -1953,7 +1953,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       },
       {
         q: "What happens after retirement?",
-        a: "Four paths: read your legacy breakdown and walk away, farm controversy as a TV pundit, chase trophies as a manager, or buy a lower league club and run it as owner.",
+        a: "Four paths: read your legacy breakdown and walk away, farm controversy as a TV pundit, chase trophies as a manager, or buy a club that is up for sale and run it as owner.",
       },
       {
         q: "What is the highest legacy score?",

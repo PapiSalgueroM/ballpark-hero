@@ -170,7 +170,9 @@ describe('Soccer Career actual save recovery', () => {
     fireEvent.click(view.getByRole('button', { name: /Continue/ }));
     expect(read().phase).not.toBe('world_cup');
   });
-  for (const tail of ['manager', 'pundit', 'owner'] as const) it(`restores the current ${tail} tail with its own saved season history`, () => {
+  for (const tail of ['manager', 'pundit', 'owner'] as const) it(`restores the current ${tail} tail with its own saved season history`, async () => {
+    /* Round 1524: the owner tail is a lazy chunk the page awaits before the boardroom */
+    if (tail === 'owner') await E.loadOwnerTail();
     const retired = E.manualRetire(nativeCareer());
     const saved = E.choosePostRetirement(retired, tail, E.FALLBACK_CLUBS);
     const { view } = mount(JSON.stringify(saved));

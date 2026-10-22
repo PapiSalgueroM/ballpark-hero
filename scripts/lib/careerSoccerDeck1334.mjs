@@ -28,12 +28,18 @@
  * engine (docs/audits/ROUND-1334-NOTES.md holds the recipe).
  *
  * Round 1523 (morale that plays, the Puskas year) moved the engine after this file was written. Its rows live in
- * their own file, scripts/lib/careerSoccerMorale1523.mjs (the tenth inverse, with its own pins), and come off FIRST
- * inside the functions below, so every importer of this file takes 1523 and then 1334 out, in that order, with one
- * receipt. This file's own rows and pins are unchanged: the tenth gives back exactly the head pinned above.
+ * their own file, scripts/lib/careerSoccerMorale1523.mjs (the tenth inverse, with its own pins), and come off
+ * inside the functions below, in front of this file's own rows.
+ *
+ * Round 1524 (the club owner tail) moved the engine after that. Its rows live in their own file,
+ * scripts/lib/careerSoccerOwner1524.mjs (with its own pins), and come off FIRST of all. On Release BP, where 1524 was
+ * merged after 1523, its rows were regenerated against the merged engine, so they give back 1523's head, 1523's give
+ * back the head pinned above, and every importer of this file takes 1524, then 1523, then 1334 out, in that order,
+ * with one receipt. This file's own rows and pins are unchanged.
  */
 import assert from 'node:assert/strict';
 import { SOCCER_MORALE_ROWS } from './careerSoccerMorale1523.mjs';
+import { SOCCER_OWNER_ROWS } from './careerSoccerOwner1524.mjs';
 
 export const SOCCER_DECK_BASE = 'e814c2def671e07bd6163462dff8ab1230be2000';
 export const SOCCER_DECK_SHA256 = {
@@ -68,8 +74,8 @@ const OWN_EDITS = [
     from: "  if (prev.phase !== \"retirement_suggestion\" || prev.retired) {\n    /* Round 1519: a retirement the repair stood up keeps its screen, never retired on Next Season. */\n    if (!s.retired) s.phase = \"playing\";\n    return s;",
     to: "  if (prev.phase !== \"retirement_suggestion\" || prev.retired) {\n    s.phase = \"playing\";\n    return s;" },
 ];
-/* Round 1523: the tenth inverse's rows first, then this round's, every row once at its turn. */
-const EDITS = [...SOCCER_MORALE_ROWS, ...OWN_EDITS];
+/* Rounds 1524 and 1523 (Release BP): 1524's rows first, then 1523's, then this round's, every row once at its turn. */
+const EDITS = [...SOCCER_OWNER_ROWS, ...SOCCER_MORALE_ROWS, ...OWN_EDITS];
 
 export const SOCCER_DECK_FILES = Object.keys(SOCCER_DECK_SHA256);
 export const SOCCER_DECK_ADDITIONS = EDITS.map(row => row.name);

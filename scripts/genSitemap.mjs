@@ -98,6 +98,7 @@ const STATIC_PAGES = [
   { p: '/about', freq: 'yearly', pri: '0.4' },
   { p: '/contact', freq: 'yearly', pri: '0.4' },
   { p: '/privacy', freq: 'yearly', pri: '0.3' },
+  { p: '/cookie-policy', freq: 'yearly', pri: '0.3' },
   { p: '/terms', freq: 'yearly', pri: '0.3' },
   { p: '/accessibility', freq: 'yearly', pri: '0.3' },
 ];
