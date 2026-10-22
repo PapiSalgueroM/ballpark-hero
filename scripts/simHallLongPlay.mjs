@@ -35,6 +35,8 @@
  *   hookfixed   the hook ticks a fixed quarter second per callback   section 4
  *   hooknocopy  the hook no longer keeps a refused save aside        section 4
  *   hooknote    the load's note tells only the closed part again     section 4
+ *   novisible   advanceClock ignores visibility, only the gap counts section 2
+ *   hookvisible the hook calls advanceClock as if always visible     section 4
  * A control rewrites a copy of the file, never the file, and aborts if the text
  * it rewrites is not in the shipped file exactly once.
  *
@@ -77,7 +79,7 @@ let failures = 0, section = 0, dead = 0, collateral = 0;
 const bySection = {};
 const fail = m => { failures += 1; bySection[section] = (bySection[section] || 0) + 1; console.error('  FAIL: ' + m); };
 /* the section each control must turn red */
-const CONTROL_SECTION = { ceiling: 1, fixedstep: 2, fmtstop: 3, hookfixed: 4, hooknocopy: 4, hooknote: 4 };
+const CONTROL_SECTION = { ceiling: 1, fixedstep: 2, fmtstop: 3, hookfixed: 4, hooknocopy: 4, hooknote: 4, novisible: 2, hookvisible: 4 };
 const abort = m => { console.error(m); process.exit(1); };
 const read = f => fs.readFileSync(f, 'utf8').split('\r\n').join('\n');
 
@@ -91,6 +93,11 @@ const LIB_CONTROLS = {
     from: '  if (!visible || gapMs > AWAY_AFTER_MS) return { away: true, earned: applyAway(wings, s, gapMs) };',
     to: '  { const b0 = s.funds; tick(wings, s, 0.25); return { away: false, earned: s.funds - b0 }; }',
   },
+  /* advanceClock forgets the page's visibility: only the gap decides */
+  novisible: {
+    from: '  if (!visible || gapMs > AWAY_AFTER_MS) return { away: true, earned: applyAway(wings, s, gapMs) };',
+    to: '  if (gapMs > AWAY_AFTER_MS) return { away: true, earned: applyAway(wings, s, gapMs) };',
+  },
   fmtstop: {
     from: "  [1e33, 'Dc'], [1e30, 'No'], [1e27, 'Oc'], [1e24, 'Sp'], [1e21, 'Sx'], [1e18, 'Qi'], [1e15, 'Qa'],\n",
     to: '',
@@ -100,6 +107,11 @@ const HOOK_CONTROLS = {
   hookfixed: {
     from: "const step = advanceClock(wings, s, gap, document.visibilityState !== 'hidden');",
     to: 'const step = advanceClock(wings, s, 250, true);',
+  },
+  /* the hook forgets the page's visibility (the lib's default is visible) */
+  hookvisible: {
+    from: "const step = advanceClock(wings, s, gap, document.visibilityState !== 'hidden');",
+    to: 'const step = advanceClock(wings, s, gap, true);',
   },
   hooknocopy: {
     from: '          keepRefusedSave();\n',
@@ -286,11 +298,27 @@ if (run(2)) {
     if (!j || j.state.awayPaid !== 0) fail(`a save with awayPaid ${junk} ${j ? `loaded it as ${j.state.awayPaid}` : 'was refused'}, it must load as 0`);
   }
 
+  /* a hidden page woken once a second (a browser's first minutes of throttling):
+     the gap is far under AWAY_AFTER_MS, so only visibility makes it away */
+  const g = midMuseum();
+  const gOracle = midMuseum();
+  let gAway = 0, gPaid = 0, gOwed = 0;
+  for (let i = 0; i < 30; i += 1) {
+    const step = lib.advanceClock(wings, g, 1_000, false);
+    if (step.away) gAway += 1;
+    gPaid += step.earned;
+    gOwed += lib.applyAway(wings, gOracle, 1_000);
+  }
+  if (gAway !== 30) fail(`only ${gAway} of 30 one second wakes on a hidden page were paid as away time`);
+  if (g.funds !== gOracle.funds) fail(`30 hidden seconds paid x${(gPaid / gOwed).toFixed(4)} of the away rule`);
+  if (g.awayMs !== 30_000) fail(`30 hidden seconds left the absence meter at ${g.awayMs} ms, not 30000`);
+
   /* a visible page that did not run (a laptop asleep two hours) is away time too */
   const z = midMuseum();
   const slept = lib.advanceClock(wings, z, 2 * HOUR_MS, true);
   if (!slept.away || Math.abs(slept.earned / (income * awayRate * 7200) - 1) > 1e-6) fail(`two asleep hours on a visible page paid x${(slept.earned / (income * awayRate * 7200)).toFixed(4)} of two away hours`);
   console.log(`   watched minute x${(seen / (income * 60)).toFixed(6)} of full rate; 3 h hidden then 7 h closed x${(both / owed).toFixed(6)} of one capped absence; 2 h asleep paid as away: ${slept.away}`);
+  console.log(`   30 hidden wakes a second apart: ${gAway} paid as away, x${(gPaid / gOwed).toFixed(6)} of the away rule, meter ${g.awayMs} ms`);
 }
 
 /* ---------------------------------------- 3: prices past T read as numbers */
@@ -307,7 +335,7 @@ if (run(3)) {
 
 /* ------------------------------------------------------ 4: the real hook */
 /* Which tests each hook control must turn red; every other test must stay green. */
-const HOOK_RED = { hookfixed: [2, 3, 7], hooknocopy: [4], hooknote: [3, 7] };
+const HOOK_RED = { hookfixed: [2, 3, 6, 7], hooknocopy: [4], hooknote: [3, 7], hookvisible: [6] };
 const HOOK_TESTS = 7;
 function findUp(rel) {
   for (let dir = ROOT; ; dir = path.dirname(dir)) {

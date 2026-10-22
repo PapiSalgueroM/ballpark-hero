@@ -243,13 +243,23 @@ describe('Hall of Champions long play', () => {
   it('6 half a minute in another tab pays as away time and shows no welcome', async () => {
     localStorage.setItem(SAVE_KEY, serialize(midMuseum(), EPOCH));
     await mount();
+    const wings = hook().wings;
     watch(1_000);
-    const before = state().funds;
+    const atHide = clone(state());
+    /* a browser wakes a hidden tab once a second for its first minutes, a gap
+       far under AWAY_AFTER_MS, so only the page's visibility makes this away */
     hiddenWakes(30, 1_000);
+    const oracle = clone(atHide);
+    for (let i = 0; i < 30; i += 1) applyAway(wings, oracle, 1_000);
+    const paid = state().funds - atHide.funds;
+    const watchedRate = totalIncome(wings, atHide, atHide.clock) * 30;
+    expect(state().funds, `thirty hidden seconds paid x${(paid / watchedRate).toFixed(4)} of thirty watched ones, not the away rule`).toBe(oracle.funds);
+    expect(state().awayMs, 'the absence meter did not count the hidden seconds').toBe(30_000);
+    const meter = state().awayMs;
     setVisible(true);
     watch(CALLBACK_MS);
-    expect(state().funds).toBeGreaterThan(before);
     expect(hook().offlineEarned, 'a glance at another tab raised the welcome').toBeNull();
+    measured(`glance: 30 hidden wakes a second apart paid x${(paid / watchedRate).toFixed(6)} of 30 watched seconds; meter ${meter} ms while hidden`);
   }, TEST_MS);
 
   it('7 nine hidden hours and then two closed days still leave a note that says what the hall took', async () => {
