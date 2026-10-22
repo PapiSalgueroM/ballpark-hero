@@ -1,0 +1,13 @@
+#!serve
+#!playwright
+#!serial
+walkOwner-1524: node .rc/x/walkOwner.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+walkRun-1524: node .rc/x/walkFix1524.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+probe-1524: node .rc/x/probeOwnerPanelFail.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+landing-bar: SOCCER_LANDING_HEAD_ONLY=1 SECTIONS=bar node scripts/playSoccerLanding.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+walk-1523: node scripts/playSoccerMoraleLine.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+walk-1519: node scripts/playSoccerCareerEndings.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+cookie-1446: node scripts/playCookiePolicy1446.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+flagship: node scripts/simFlagshipWeight.mjs
+flaglazy: node scripts/playFlagshipLazy.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+weight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs

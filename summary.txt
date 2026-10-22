@@ -1,0 +1,11 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+walkOwner-1524 exit=1 50s | walkOwner: 2 of 92 checks failed
+walkRun-1524 exit=0 139s | walkRun1524: green, 388 checks
+probe-1524 exit=0 5s | probeOwnerPanelFail (head): green
+landing-bar exit=0 98s | playSoccerLanding: green at 320x640, 390x844, 1280x900 (also bar 360x780, bar 375x667; bar), HEAD ONLY
+walk-1523 exit=0 34s | playSoccerMoraleLine: green
+walk-1519 exit=0 37s | playSoccerCareerEndings: 57 checks, 0 failures
+cookie-1446 exit=1 0s | COOKIE_POLICY_BROWSER_RESULT {"status":"FAIL","phase":"green","originalOutcomes":0,"profiles":0,"faults":0,"restorations":0,"setupErrors":2,"actualOutbound":0}
+flagship exit=0 0s | simFlagshipWeight: green. The flagship carries its own game and nobody else's.
+flaglazy exit=0 8s | playFlagshipLazy: green. The dugout costs nothing until you walk into it, and it still works when you do.
+weight exit=1 27s | sweepWeight: 1 failure
