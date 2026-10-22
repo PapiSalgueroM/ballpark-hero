@@ -1,0 +1,14 @@
+mutrun: finalline applied to src/pages/StadiumTycoon.tsx
+ src/pages/StadiumTycoon.tsx | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+MUT finalline: built
+  PASS     /stadium-tycoon 320x640: dialog "How Stadium Tycoon works" (static) 16 to 319, "Let's go" (its go label) 250 to 298 tappable (37 px above the banner), banner 335 to 640 (pending); tapped, closed, screen usable
+  PASS     /stadium-tycoon 390x844: dialog "How Stadium Tycoon works" (static) 16 to 595, "Let's go" (its go label) 526 to 574 tappable (37 px above the banner), banner 611 to 844 (pending); tapped, closed, screen usable
+  PASS     /stadium-tycoon 1280x900: dialog "How Stadium Tycoon works" (static) 16 to 719, "Let's go" (its go label) 650 to 698 tappable (37 px above the banner), banner 735 to 900 (pending); tapped, closed, screen usable
+  PASS     /stadium-tycoon#away 320x640: dialog "While you were away" (static) 16 to 319, "Back to work" (its primary style) 250 to 294 tappable (41 px above the banner), banner 335 to 640 (pending); tapped, closed, screen usable; the full card (18 results) drawn, the page held at scrollY 0, height 13251
+  PASS     /stadium-tycoon#away 390x844: dialog "While you were away" (static) 81 to 530, "Back to work" (its primary style) 461 to 505 tappable (106 px above the banner), banner 611 to 844 (pending); tapped, closed, screen usable; the full card (18 results) drawn, the page held at scrollY 0, height 10896
+  PASS     /stadium-tycoon#away 1280x900: dialog "While you were away" (static) 143 to 592, "Back to work" (its primary style) 523 to 567 tappable (168 px above the banner), banner 735 to 900 (pending); tapped, closed, screen usable; the full card (18 results) drawn, the page held at scrollY 0, height 7493
+
+6 route widths walked over 1 routes and 1 seeded scene (3 of the lines): 6 dialogs tapped and closed, 0 expected site reds, 0 without a first visit dialog, 0 red
+playFirstVisitDialogs ABORTED: the planted trip did not draw the full card on 3 lines, so they would measure a smaller card: /stadium-tycoon#away 320x640 (18 of 18 drawn, missing "the final matchday is waiting for you"); /stadium-tycoon#away 390x844 (18 of 18 drawn, missing "the final matchday is waiting for you"); /stadium-tycoon#away 1280x900 (18 of 18 drawn, missing "the final matchday is waiting for you")
+MUT finalline: command exit 2

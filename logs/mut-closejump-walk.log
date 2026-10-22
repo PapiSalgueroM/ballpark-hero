@@ -1,0 +1,70 @@
+mutrun: closejump applied to src/pages/StadiumTycoon.tsx
+ src/pages/StadiumTycoon.tsx | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+MUT closejump: built
+walk1539: division 6 (10 clubs, 18 matchdays), Squad par 72; planted night 17, seven 15, largest 18
+  FAIL night-390-rm-pending: card 96 to 516, button 447 to 491, banner 611 to 844, 17 results, y 0 h 10896 -> y 120 h 10896; "🏟️ While you were away The turnstiles kept spinning at 50% speed. +$2 ... arned 💎 7 gems You are 4th of 10, and the final matchday is waiting for you. Back to work"
+      the page jumped: scrollY 0 to 120, height 10896 to 10896
+  FAIL night-390-rm-answered: card 212 to 632, button 563 to 607, banner none, 17 results, y 0 h 10896 -> y 120 h 10896; "🏟️ While you were away The turnstiles kept spinning at 50% speed. +$2 ... rned 💎 10 gems You are 1st of 10, and the final matchday is waiting for you. Back to work"
+      the page jumped: scrollY 0 to 120, height 10896 to 10896
+  FAIL night-390-motion-pending: card 96 to 516, button 447 to 491, banner 611 to 844, 17 results, y 0 h 10896 -> y 120 h 10896; "🏟️ While you were away The turnstiles kept spinning at 50% speed. +$2 ... rned 💎 10 gems You are 2nd of 10, and the final matchday is waiting for you. Back to work"
+      the page jumped: scrollY 0 to 120, height 10896 to 10896
+  FAIL night-390-motion-answered: card 200 to 644, button 575 to 619, banner none, 17 results, y 0 h 10896 -> y 120 h 10896; "🏟️ While you were away The turnstiles kept spinning at 50% speed. +$2 ... rned 💎 12 gems You are 1st of 10, and the final matchday is waiting for you. Back to work"
+      the page jumped: scrollY 0 to 120, height 10896 to 10896
+  FAIL night-1280-rm-pending: card 154 to 582, button 513 to 557, banner 735 to 900, 17 results, y 0 h 7493 -> y 120 h 7493; "🏟️ While you were away The turnstiles kept spinning at 50% speed. +$2 ... arned 💎 9 gems You are 2nd of 10, and the final matchday is waiting for you. Back to work"
+      the page jumped: scrollY 0 to 120, height 7493 to 7493
+  FAIL night-1280-rm-answered: card 248 to 652, button 583 to 627, banner none, 17 results, y 0 h 7493 -> y 120 h 7493; "🏟️ While you were away The turnstiles kept spinning at 50% speed. +$2 ... arned 💎 7 gems You are 2nd of 10, and the final matchday is waiting for you. Back to work"
+      the page jumped: scrollY 0 to 120, height 7493 to 7493
+  FAIL night-1280-motion-pending: card 166 to 570, button 501 to 545, banner 735 to 900, 17 results, y 0 h 7493 -> y 120 h 7493; "🏟️ While you were away The turnstiles kept spinning at 50% speed. +$2 ... arned 💎 6 gems You are 8th of 10, and the final matchday is waiting for you. Back to work"
+      the page jumped: scrollY 0 to 120, height 7493 to 7493
+  FAIL night-1280-motion-answered: card 248 to 652, button 583 to 627, banner none, 17 results, y 0 h 7493 -> y 120 h 7493; "🏟️ While you were away The turnstiles kept spinning at 50% speed. +$2 ... arned 💎 8 gems You are 4th of 10, and the final matchday is waiting for you. Back to work"
+      the page jumped: scrollY 0 to 120, height 7493 to 7493
+  FAIL seven-390-rm-pending: card 104 to 508, button 439 to 483, banner 611 to 844, 15 results, y 0 h 10896 -> y 120 h 10896; "🏟️ While you were away The turnstiles kept spinning at 50% speed. +$1 ...  W W L D Away wins earned 💎 5 gems You are 7th of 10 with 3 matchdays to go. Back to work"
+      the page jumped: scrollY 0 to 120, height 10896 to 10896
+  FAIL seven-390-rm-answered: card 208 to 636, button 567 to 611, banner none, 15 results, y 0 h 10896 -> y 120 h 10896; "🏟️ While you were away The turnstiles kept spinning at 50% speed. +$1 ...  +$6,000 Away wins earned 💎 9 gems You are 2nd of 10 with 3 matchdays to go. Back to work"
+      the page jumped: scrollY 0 to 120, height 10896 to 10896
+  FAIL seven-390-motion-pending: card 92 to 520, button 451 to 495, banner 611 to 844, 15 results, y 0 h 10896 -> y 120 h 10896; "🏟️ While you were away The turnstiles kept spinning at 50% speed. +$1 ... +$6,000 Away wins earned 💎 10 gems You are 1st of 10 with 3 matchdays to go. Back to work"
+      the page jumped: scrollY 0 to 120, height 10896 to 10896
+  FAIL seven-390-motion-answered: card 220 to 624, button 555 to 599, banner none, 15 results, y 0 h 10896 -> y 120 h 10896; "🏟️ While you were away The turnstiles kept spinning at 50% speed. +$1 ...  L W W L Away wins earned 💎 5 gems You are 4th of 10 with 3 matchdays to go. Back to work"
+      the page jumped: scrollY 0 to 120, height 10896 to 10896
+  FAIL seven-1280-rm-pending: card 166 to 570, button 501 to 545, banner 735 to 900, 15 results, y 0 h 7493 -> y 120 h 7493; "🏟️ While you were away The turnstiles kept spinning at 50% speed. +$1 ...  L W W L Away wins earned 💎 6 gems You are 3rd of 10 with 3 matchdays to go. Back to work"
+      the page jumped: scrollY 0 to 120, height 7493 to 7493
+  FAIL seven-1280-rm-answered: card 248 to 652, button 583 to 627, banner none, 15 results, y 0 h 7493 -> y 120 h 7493; "🏟️ While you were away The turnstiles kept spinning at 50% speed. +$1 ...  W W L L Away wins earned 💎 7 gems You are 3rd of 10 with 3 matchdays to go. Back to work"
+      the page jumped: scrollY 0 to 120, height 7493 to 7493
+  FAIL seven-1280-motion-pending: card 154 to 582, button 513 to 557, banner 735 to 900, 15 results, y 0 h 7493 -> y 120 h 7493; "🏟️ While you were away The turnstiles kept spinning at 50% speed. +$1 ...  +$6,000 Away wins earned 💎 7 gems You are 3rd of 10 with 3 matchdays to go. Back to work"
+      the page jumped: scrollY 0 to 120, height 7493 to 7493
+  FAIL seven-1280-motion-answered: card 248 to 652, button 583 to 627, banner none, 15 results, y 0 h 7493 -> y 120 h 7493; "🏟️ While you were away The turnstiles kept spinning at 50% speed. +$1 ...  L W D W Away wins earned 💎 5 gems You are 6th of 10 with 3 matchdays to go. Back to work"
+      the page jumped: scrollY 0 to 120, height 7493 to 7493
+  FAIL largest-320-rm-pending: card 16 to 319 (scrolls), button 476 to 520, banner 335 to 640, 18 results, y 0 h 13251; "🏟️ While you were away The turnstiles kept spinning at 80% speed. +$4 ... rned 💎 18 gems You are 1st of 10, and the final matchday is waiting for you. Back to work"
+      the button ends 185 px under the banner
+      the button's centre is p "Analytics is paused. Goo"
+  FAIL largest-320-rm-answered: card 56 to 585, button 516 to 560, banner none, 18 results, y 0 h 13251 -> y 120 h 13251; "🏟️ While you were away The turnstiles kept spinning at 80% speed. +$4 ... rned 💎 18 gems You are 1st of 10, and the final matchday is waiting for you. Back to work"
+      the page jumped: scrollY 0 to 120, height 13251 to 13251
+  FAIL largest-320-motion-pending: card 16 to 319 (scrolls), button 476 to 520, banner 335 to 640, 18 results, y 0 h 13251; "🏟️ While you were away The turnstiles kept spinning at 80% speed. +$4 ... rned 💎 18 gems You are 1st of 10, and the final matchday is waiting for you. Back to work"
+      the button ends 185 px under the banner
+      the button's centre is p "Analytics is paused. Goo"
+  FAIL largest-320-motion-answered: card 56 to 585, button 516 to 560, banner none, 18 results, y 0 h 13251 -> y 120 h 13251; "🏟️ While you were away The turnstiles kept spinning at 80% speed. +$4 ... rned 💎 18 gems You are 1st of 10, and the final matchday is waiting for you. Back to work"
+      the page jumped: scrollY 0 to 120, height 13251 to 13251
+  FAIL largest-390-rm-pending: card 73 to 538, button 469 to 513, banner 611 to 844, 18 results, y 0 h 10896 -> y 120 h 10896; "🏟️ While you were away The turnstiles kept spinning at 80% speed. +$4 ... rned 💎 18 gems You are 1st of 10, and the final matchday is waiting for you. Back to work"
+      the page jumped: scrollY 0 to 120, height 10896 to 10896
+  FAIL largest-390-rm-answered: card 190 to 654, button 585 to 629, banner none, 18 results, y 0 h 10896 -> y 120 h 10896; "🏟️ While you were away The turnstiles kept spinning at 80% speed. +$4 ... rned 💎 18 gems You are 1st of 10, and the final matchday is waiting for you. Back to work"
+      the page jumped: scrollY 0 to 120, height 10896 to 10896
+  FAIL largest-390-motion-pending: card 73 to 538, button 469 to 513, banner 611 to 844, 18 results, y 0 h 10896 -> y 120 h 10896; "🏟️ While you were away The turnstiles kept spinning at 80% speed. +$4 ... rned 💎 17 gems You are 1st of 10, and the final matchday is waiting for you. Back to work"
+      the page jumped: scrollY 0 to 120, height 10896 to 10896
+  FAIL largest-390-motion-answered: card 190 to 654, button 585 to 629, banner none, 18 results, y 0 h 10896 -> y 120 h 10896; "🏟️ While you were away The turnstiles kept spinning at 80% speed. +$4 ... rned 💎 17 gems You are 1st of 10, and the final matchday is waiting for you. Back to work"
+      the page jumped: scrollY 0 to 120, height 10896 to 10896
+  FAIL largest-1280-rm-pending: card 143 to 592, button 523 to 567, banner 735 to 900, 18 results, y 0 h 7493 -> y 120 h 7493; "🏟️ While you were away The turnstiles kept spinning at 80% speed. +$4 ... rned 💎 18 gems You are 1st of 10, and the final matchday is waiting for you. Back to work"
+      the page jumped: scrollY 0 to 120, height 7493 to 7493
+  FAIL largest-1280-rm-answered: card 226 to 674, button 605 to 649, banner none, 18 results, y 0 h 7493 -> y 120 h 7493; "🏟️ While you were away The turnstiles kept spinning at 80% speed. +$4 ... rned 💎 18 gems You are 1st of 10, and the final matchday is waiting for you. Back to work"
+      the page jumped: scrollY 0 to 120, height 7493 to 7493
+  FAIL largest-1280-motion-pending: card 143 to 592, button 523 to 567, banner 735 to 900, 18 results, y 0 h 7493 -> y 120 h 7493; "🏟️ While you were away The turnstiles kept spinning at 80% speed. +$4 ... rned 💎 18 gems You are 1st of 10, and the final matchday is waiting for you. Back to work"
+      the page jumped: scrollY 0 to 120, height 7493 to 7493
+  FAIL largest-1280-motion-answered: card 226 to 674, button 605 to 649, banner none, 18 results, y 0 h 7493 -> y 120 h 7493; "🏟️ While you were away The turnstiles kept spinning at 80% speed. +$4 ... rned 💎 18 gems You are 1st of 10, and the final matchday is waiting for you. Back to work"
+      the page jumped: scrollY 0 to 120, height 7493 to 7493
+  rules-390: rules say "Matchdays keep playing while you are away, one every 28 minutes with no goal or win bonuses, and the final matchday of a season always waits for you."
+  rules-390: the page's guide says "Matchdays keep playing while you are away, one for every 28 minutes of the trip and inside the same cap."
+  rules-1280: rules say "Matchdays keep playing while you are away, one every 28 minutes with no goal or win bonuses, and the final matchday of a season always waits for you."
+  rules-1280: the page's guide says "Matchdays keep playing while you are away, one for every 28 minutes of the trip and inside the same cap."
+
+walk1539: RED, 30 problems on 28 lines of 30
+MUT closejump: command exit 1
