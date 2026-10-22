@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+nat: node scripts/simCmMadeUpNations.mjs
+weight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs 2>&1 | grep -E "^ +/(club-manager|manager-hot-seat|deadline-day|whats-new) |sweepWeight:"; exit ${PIPESTATUS[0]}
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+simManagerAppealIsolation: node scripts/simManagerAppealIsolation.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
