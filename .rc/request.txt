@@ -1,0 +1,8 @@
+#!serial
+fob-resetbutton: node scripts/controlFrontOfficeBoard.mjs resetbutton
+fob-arrivaltitle: node scripts/controlFrontOfficeBoard.mjs arrivaltitle
+fob-thirdkey: node scripts/controlFrontOfficeBoard.mjs thirdkey
+fob-blank: node scripts/controlFrontOfficeBoard.mjs blank
+m1-deskstale: node .rc/x/rv-mut.mjs deskstale && node_modules/.bin/vitest run src/components/front-office/FrontOfficeOnePress.test.tsx src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx src/components/front-office-shared/FrontOfficeGmCareer.test.tsx --testTimeout=600000 --hookTimeout=120000 ; s=$?; git checkout -- src scripts; exit $s
+m2-opendesk: node .rc/x/rv-mut.mjs opendesk && node_modules/.bin/vitest run src/components/front-office-shared/FrontOfficeGmCareer.test.tsx src/components/front-office-shared/GmCareerDesk.test.tsx src/components/front-office/FrontOfficeOnePress.test.tsx --testTimeout=600000 --hookTimeout=120000 ; s=$?; git checkout -- src scripts; exit $s
+m4-summer: node .rc/x/rv-mut.mjs summer && node_modules/.bin/vitest run src/components/front-office-shared/FrontOfficeGmCareer.test.tsx --testTimeout=600000 --hookTimeout=120000 ; s=$?; git checkout -- src scripts; exit $s
