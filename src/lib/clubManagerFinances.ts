@@ -79,6 +79,7 @@ import { staffOf, staffPayrollWeekly } from '@/lib/clubManagerStaff';
    the gate's own expectation to the pound. clubManagerXp imports only a type
    from the engine, so there is no cycle. */
 import { gateEdge } from '@/lib/clubManagerXp';
+import { fanMeter } from '@/lib/clubManagerMeters';
 
 export type ConcessionTier = 0 | 1 | 2;
 
@@ -90,6 +91,15 @@ export const CONCESSION_TIERS = [
 
 export const BOOKS_VERSION = 1;
 export const FAN_MOOD_START = 50;
+
+export interface ShirtSalesLedger {
+  v: 1;
+  weeks: number;
+  openingPence: number;
+  grossPence: number;
+  costPence: number;
+  paidPence: number;
+}
 
 export interface SeasonLedger {
   /** Calendar weeks charged so far. */
@@ -103,6 +113,8 @@ export interface SeasonLedger {
   playerWages: number;
   staffWages: number;
   travel: number;
+  /** Absent on old saves; null means the retail record is unavailable. */
+  shirts?: ShirtSalesLedger | null;
 }
 
 /** A closed season: the ledger plus the lines the engine already keeps elsewhere. */
@@ -143,8 +155,50 @@ function careerTier(state: Pick<CareerState, 'clubName' | 'eraId'>): 1 | 2 | 3 |
   return (eraHistOf(state) ? eraClubDefFor(state.clubName, state.eraId) : clubDefFor(state.clubName)).tier;
 }
 
-export function emptyLedger(): SeasonLedger {
-  return { weeks: 0, homeGames: 0, awayTrips: 0, tickets: 0, concessions: 0, sponsor: 0, playerWages: 0, staffWages: 0, travel: 0 };
+const SHIRT_CASH_PENCE = 1_000_000;
+const SHIRT_PENCE_PER_M = 100_000_000;
+
+export function emptyShirtSales(openingPence = 0): ShirtSalesLedger {
+  return { v: 1, weeks: 0, openingPence, grossPence: 0, costPence: 0, paidPence: 0 };
+}
+
+export function shirtPendingPence(ledger: ShirtSalesLedger): number {
+  return ledger.openingPence + ledger.grossPence - ledger.costPence - ledger.paidPence;
+}
+
+/** Missing legacy retail starts at zero, without changing the saved books. */
+export function readShirtSales(value: unknown): ShirtSalesLedger | null {
+  if (value === undefined) return emptyShirtSales();
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
+  const ledger = value as ShirtSalesLedger;
+  if (ledger.v !== 1 || !['weeks', 'openingPence', 'grossPence', 'costPence', 'paidPence']
+    .every(key => Number.isSafeInteger(ledger[key as keyof ShirtSalesLedger]) && ledger[key as keyof ShirtSalesLedger] >= 0)) return null;
+  const pending = shirtPendingPence(ledger);
+  return ledger.openingPence < SHIRT_CASH_PENCE && ledger.costPence <= ledger.grossPence
+    && Number.isSafeInteger(ledger.openingPence + ledger.grossPence)
+    && ledger.paidPence % SHIRT_CASH_PENCE === 0 && Number.isSafeInteger(pending)
+    && pending >= 0 && pending < SHIRT_CASH_PENCE ? ledger : null;
+}
+
+/** Fictional weekly shop rates, based on club stature and the displayed fan reading. */
+export function shirtSalesForWeek(state: CareerState): { grossPence: number; costPence: number } {
+  const units = Math.floor([1600, 600, 240, 80][careerTier(state) - 1] * (0.5 + fanMeter(state).shown / 100));
+  const scale = eraHistOf(state) ? ERA_MONEY : 1;
+  return { grossPence: Math.round(units * 5000 * scale), costPence: Math.round(units * 2000 * scale) };
+}
+
+/** Keep every penny; only whole cash batches leave the club's pending balance. */
+export function settleShirtSales(ledger: ShirtSalesLedger, quote: { grossPence: number; costPence: number }, weeks = 1): { ledger: ShirtSalesLedger; cashPence: number } | null {
+  if (!readShirtSales(ledger) || ![weeks, quote.grossPence, quote.costPence].every(n => Number.isSafeInteger(n) && n >= 0)
+    || quote.costPence > quote.grossPence) return null;
+  const next = { ...ledger, weeks: ledger.weeks + weeks, grossPence: ledger.grossPence + quote.grossPence * weeks, costPence: ledger.costPence + quote.costPence * weeks };
+  const cashPence = Math.floor(shirtPendingPence(next) / SHIRT_CASH_PENCE) * SHIRT_CASH_PENCE;
+  next.paidPence += cashPence;
+  return readShirtSales(next) ? { ledger: next, cashPence } : null;
+}
+
+export function emptyLedger(openingPence = 0): SeasonLedger {
+  return { weeks: 0, homeGames: 0, awayTrips: 0, tickets: 0, concessions: 0, sponsor: 0, playerWages: 0, staffWages: 0, travel: 0, shirts: emptyShirtSales(openingPence) };
 }
 
 const LEDGER_KEYS: (keyof SeasonLedger)[] = ['weeks', 'homeGames', 'awayTrips', 'tickets', 'concessions', 'sponsor', 'playerWages', 'staffWages', 'travel'];
@@ -329,6 +383,10 @@ export function tickBooks(state: CareerState): void {
   s.weeks += 1;
   s.playerWages = round3(s.playerWages + wageBill(state) / 1000);
   s.staffWages = round3(s.staffWages + staffWagesWeekly(state) / 1000);
+  const retail = readShirtSales(s.shirts);
+  const sale = retail ? settleShirtSales(retail, shirtSalesForWeek(state)) : null;
+  s.shirts = sale?.ledger ?? null;
+  if (sale && sale.cashPence > 0) state.budget = round2(state.budget + sale.cashPence / SHIRT_PENCE_PER_M);
   const target = gateMoodTarget(state);
   books.fanMood = clamp(round1(books.fanMood + (target - books.fanMood) * 0.15), 0, 100);
 }
@@ -367,6 +425,8 @@ export interface ProjectionLine {
   projected: number;
   /** True when the line moves the transfer kitty; false for the club's running costs. */
   kitty: boolean;
+  unavailable?: boolean;
+  projectionUnavailable?: boolean;
   note?: string;
 }
 
@@ -444,6 +504,11 @@ export function projectFinances(state: CareerState): FinanceProjection {
   const books = booksOf(state);
   const s = books.season;
   const weeksLeft = Math.max(0, state.calendar.length - state.week);
+  const retail = readShirtSales(s.shirts);
+  const retailWeeksLeft = state.calendar.slice(state.week).filter(entry => !entry.night).length;
+  const quote = shirtSalesForWeek(state);
+  const retailPaid = retail ? retail.paidPence / SHIRT_PENCE_PER_M : 0;
+  const retailForecast = retail ? settleShirtSales(retail, quote, retailWeeksLeft) : null;
   const left = certainFixturesLeft(state);
   const perFan = gatePricePerFan(state);
   const food = concessionPerFan(state);
@@ -489,6 +554,7 @@ export function projectFinances(state: CareerState): FinanceProjection {
   const income: ProjectionLine[] = [
     { id: 'tickets', label: 'Tickets', actual: round2(s.tickets), projected: round2(s.tickets + ticketsLeft), kitty: true, note: `${left.home} certain home game${left.home === 1 ? '' : 's'} left` },
     { id: 'concessions', label: 'Food and drink', actual: round2(s.concessions), projected: round2(s.concessions + foodLeft), kitty: true },
+    { id: 'shirtSales', label: 'Shirt sales (net paid)', actual: retailPaid, projected: retailForecast ? retailForecast.ledger.paidPence / SHIRT_PENCE_PER_M : retailPaid, kitty: true, unavailable: !retail, projectionUnavailable: !!retail && !retailForecast, note: !retail ? 'record unavailable' : !retailForecast ? 'future estimate unavailable' : `estimate at today's demand, ${retailWeeksLeft} club weeks left` },
     { id: 'sponsor', label: 'Sponsor', actual: round2(s.sponsor), projected: round2(s.sponsor), kitty: true, note: state.sponsor ? 'guaranteed money, landed' : 'no deal' },
     { id: 'transferIn', label: 'Players sold', actual: transferIn, projected: transferIn, kitty: true, note: 'assumes no more deals' },
   ];
@@ -534,9 +600,10 @@ export function closeLedger(state: CareerState): ClosedLedger {
   const transferOut = round2(signings.filter(t => t.dir === 'in').reduce((n, t) => n + t.fee + (t.bonus ?? 0), 0));
   const facilities = round2(facilitiesOf(state).seasonSpend);
   const staffFees = round2(staffOf(state).seasonSpend);
-  const income = round2(s.tickets + s.concessions + s.sponsor + transferIn);
+  const retail = readShirtSales(s.shirts);
+  const income = round2(s.tickets + s.concessions + s.sponsor + transferIn + (retail ? retail.paidPence / SHIRT_PENCE_PER_M : 0));
   const spend = round2(s.playerWages + s.staffWages + s.travel + transferOut + facilities + staffFees);
-  return { ...s, transferIn, transferOut, facilities, staffFees, income, spend, result: round2(income - spend) };
+  return { ...s, shirts: retail, transferIn, transferOut, facilities, staffFees, income, spend, result: round2(income - spend) };
 }
 
 /**
@@ -550,7 +617,7 @@ export function rolloverBooks(state: CareerState, career: CareerState, moving: b
   if (moving || !isValidBooks(career.books)) { state.books = undefined; return; }
   state.books = {
     ...career.books,
-    season: emptyLedger(),
+    season: emptyLedger(shirtPendingPence(readShirtSales(career.books.season.shirts) ?? emptyShirtSales())),
     lastSeason: closeLedger(career),
     pushed: {},
     walked: [],

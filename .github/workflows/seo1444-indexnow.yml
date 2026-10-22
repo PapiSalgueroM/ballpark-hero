@@ -1,0 +1,65 @@
+name: Index verified SEO1444 pages
+
+on:
+  push:
+    branches: [codex/seo1444-indexnow]
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  index_seo_pages:
+    if: github.ref == 'refs/heads/codex/seo1444-indexnow'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      SOURCE_SHA: 529bc3c105b0d365d96961e72587bb7ab36a9a8d
+      READBACK_RUN: '39695657018'
+      READBACK_SHA: 27ab2c9ca7e76bffd5c5a823a355e4021ad95a98
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Require successful public readback and unchanged published source
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir indexnow-evidence
+          git fetch --no-tags --depth=1 origin "$SOURCE_SHA" > indexnow-evidence/published-source-fetch.log 2>&1
+          git cat-file -e "$SOURCE_SHA^{commit}"
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/runs/$READBACK_RUN" --jq '[.head_sha,.status,.conclusion,.name] | @tsv' > indexnow-evidence/public-readback.tsv
+          expected="$(printf '%s\tcompleted\tsuccess\tSEO1444 public readback' "$READBACK_SHA")"
+          test "$(cat indexnow-evidence/public-readback.tsv)" = "$expected"
+          git diff --exit-code "$SOURCE_SHA" HEAD -- src public scripts supabase package.json package-lock.json > indexnow-evidence/source-hold.log
+          git rev-parse HEAD > indexnow-evidence/head.txt
+          sha256sum scripts/indexnowSubmit.mjs public/16211a5a50cff8f3434e5db883a21d8f.txt > indexnow-evidence/source-before.sha256
+      - name: Submit only the two verified SEO pages
+        env:
+          URLS: /,/football-grid
+        run: |
+          set -euo pipefail
+          status=0
+          timeout --signal=TERM --kill-after=5s 2m node scripts/indexnowSubmit.mjs > indexnow-evidence/indexnow.log 2>&1 || status=$?
+          printf '%s\n' "$status" > indexnow-evidence/indexnow.exit
+          cat indexnow-evidence/indexnow.log
+          test "$status" -eq 0
+          sha256sum --check indexnow-evidence/source-before.sha256 > indexnow-evidence/source-after.log
+      - name: Preserve complete submission evidence
+        if: always()
+        run: |
+          set -euo pipefail
+          if test -f indexnow-evidence/source-before.sha256; then sha256sum --check indexnow-evidence/source-before.sha256 > indexnow-evidence/source-final.log; fi
+          (cd indexnow-evidence; find . -type f ! -name evidence.sha256 -print0 | sort -z | xargs -0 sha256sum) > indexnow-evidence/evidence.sha256
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: seo1444-indexnow-${{ github.run_id }}-${{ github.run_attempt }}
+          path: indexnow-evidence/
+          if-no-files-found: error
+          retention-days: 14

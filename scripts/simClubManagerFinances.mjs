@@ -15,7 +15,7 @@
         same way.
      2) the kitty identity. A passive manager (no deals, no scouts, no
         builders, no staff changes) plays a whole season, and the kitty's
-        movement equals tickets plus food plus sponsor money to the pound;
+        movement equals tickets plus food plus sponsor money plus paid shirt net;
         Round 471's staff fees are a kitty line of their own and sit at zero
         for a manager who never changes his staff. Wages, staff and
         travel are in the ledger and NOT in that sum, which is what the
@@ -315,7 +315,7 @@ console.log('1) Every projection and every closed ledger adds up, week after wee
     withStream(10 + i, () => {
       const end = playSeason(startCareer(club), s => { checkSums(projectFinances(s), `${club} week ${s.week}`); checked++; });
       const c = closeLedger(end);
-      if (!near(c.tickets + c.concessions + c.sponsor + c.transferIn, c.income, 0.011)) fail(`${club}: closed income does not sum`);
+      if (!near(c.tickets + c.concessions + c.sponsor + c.transferIn + (c.shirts?.paidPence ?? 0) / 100_000_000, c.income, 0.011)) fail(`${club}: closed income does not sum`);
       if (!near(c.playerWages + c.staffWages + c.travel + c.transferOut + c.facilities + c.staffFees, c.spend, 0.011)) fail(`${club}: closed spend does not sum`);
       if (!near(c.income - c.spend, c.result, 0.011)) fail(`${club}: closed result is not income minus spend`);
       if (!complete(end)) { sacked++; return; }
@@ -330,7 +330,7 @@ console.log('1) Every projection and every closed ledger adds up, week after wee
 }
 
 /* ---------- 2. The kitty identity ---------- */
-console.log('2) The kitty moves by tickets, food and sponsor money and nothing else; wages stay in the ledger');
+console.log('2) Tickets, food, sponsor and paid shirt net move the kitty; wages stay in the ledger');
 {
   for (const [i, club] of ['Real Madrid', 'Manchester City', 'Brentford', 'Napoli'].entries()) {
     withStream(20 + i, () => {
@@ -339,7 +339,7 @@ console.log('2) The kitty moves by tickets, food and sponsor money and nothing e
       s = acceptSponsor(s, 'safe') ?? s;
       const end = playSeason(s);
       const c = closeLedger(end);
-      const kittyLines = c.tickets + c.concessions + c.sponsor + c.transferIn - c.transferOut - c.facilities - c.staffFees;
+      const kittyLines = c.tickets + c.concessions + c.sponsor + c.transferIn + (c.shirts?.paidPence ?? 0) / 100_000_000 - c.transferOut - c.facilities - c.staffFees;
       const moved = end.budget - start;
       if (!near(moved, kittyLines, 0.6)) fail(`${club}: the kitty moved ${moved.toFixed(2)}m, the kitty lines say ${kittyLines.toFixed(2)}m`);
       if (!(c.playerWages > 0 && c.staffWages > 0 && c.travel > 0)) fail(`${club}: the ledger has no running costs (${c.playerWages}/${c.staffWages}/${c.travel})`);
