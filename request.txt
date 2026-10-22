@@ -1,0 +1,3 @@
+#!build
+weigh: R=$PWD && git worktree add /tmp/base e3deb2cb >/dev/null 2>&1 && ln -s $R/node_modules /tmp/base/node_modules && cd /tmp/base && node_modules/.bin/vite build --outDir /tmp/base-dist >/dev/null 2>&1 && cd $R && node .rc/x/weigh.mjs dist/assets /tmp/base-dist/assets
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json

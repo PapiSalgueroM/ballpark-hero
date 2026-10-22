@@ -1,0 +1,7 @@
+chunk | base raw | head raw | delta raw | base gzip | head gzip | delta gzip
+FightCareer | 92551 | 95879 | 3328 | 28999 | 29674 | 675
+FightGym | 32008 | 32316 | 308 | 10328 | 10458 | 130
+FightPromoter | 68525 | 68649 | 124 | 20806 | 20870 | 64
+fightCareer | 11141 | 13666 | 2525 | 4921 | 5892 | 971
+total gzip | 65054 | 66894 | 1840
+weigh: 4 chunks compared
