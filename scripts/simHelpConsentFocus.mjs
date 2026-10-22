@@ -45,8 +45,8 @@ try {
     assert.equal(report.numFailedTests, 5);
     assert.equal(report.numPassedTests, 2);
     const intended = [
-      'Essential only receives focus inside initial rules and keeps its original consent behavior',
-      'Accept receives focus inside initial rules and keeps its original consent behavior',
+      'Reject all receives focus inside initial rules and keeps its original consent behavior',
+      'Accept all receives focus inside initial rules and keeps its original consent behavior',
       'keeps its single pending banner reachable when initial help is dismissed',
       'reuses the banner and its choices when help is reopened without a decision',
       'honors storage choices and restores pending choices within the same open rules',
