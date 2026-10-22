@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-nat: node_modules/.bin/vitest run src/test/cmMadeUpNations.test.ts --testTimeout=300000 --hookTimeout=120000 2>&1 | tail -8; exit ${PIPESTATUS[0]}
+nat: node scripts/simCmMadeUpNations.mjs
+nat-base: git worktree add -q /tmp/base 85a76241 && BASE_ROOT=/tmp/base node scripts/simCmMadeUpNations.mjs
+nat-aiswap: CM_NATIONS_CONTROL=aiswap node scripts/simCmMadeUpNations.mjs 2>&1 | grep -E "FAIL|^4\)|CANNOT|NEGATIVE|simCmMadeUpNations:" | head -20; exit ${PIPESTATUS[0]}
+nat-expiry: CM_NATIONS_CONTROL=expiry node scripts/simCmMadeUpNations.mjs 2>&1 | grep -E "FAIL|^4\)|CANNOT|NEGATIVE|simCmMadeUpNations:" | head -20; exit ${PIPESTATUS[0]}
+nat-fasign: CM_NATIONS_CONTROL=fasign node scripts/simCmMadeUpNations.mjs 2>&1 | grep -E "FAIL|^4\)|CANNOT|NEGATIVE|simCmMadeUpNations:" | head -20; exit ${PIPESTATUS[0]}
+nat-freeask: CM_NATIONS_CONTROL=freeask node scripts/simCmMadeUpNations.mjs 2>&1 | grep -E "FAIL|^5b|CANNOT|NEGATIVE|simCmMadeUpNations:|read |wanted " | head -20; exit ${PIPESTATUS[0]}
+nat-nocap: CM_NATIONS_CONTROL=nocap node scripts/simCmMadeUpNations.mjs 2>&1 | grep -E "FAIL|^2c|CANNOT|NEGATIVE|simCmMadeUpNations:" | head -20; exit ${PIPESTATUS[0]}
