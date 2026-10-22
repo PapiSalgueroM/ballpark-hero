@@ -1,0 +1,7 @@
+get exit=0 2s | 60
+combine exit=0 16s | simNbaEarnedDraft: green.
+fat exit=1 16s | simNbaEarnedDraft: CONTROL fatclass FIRED on the fleet: outside S1 at 5 by 2.27, 100.1 errors; S1 at 10 by 3.90, 318.2 errors; S2 by 35.7, 94.7 errors; S6 payers by 10.33
+best exit=1 16s | simNbaEarnedDraft: CONTROL bestfirst FIRED on the fleet: outside S5 OUTSIDE at 1-5 to 6-10 pick -9.5 errors rating -12.4 errors, 21-25 to 26-30 pick -30.4 errors rating 0
+straddle-c exit=1 16s | simNbaEarnedDraft: CONTROL judgestraddle FIRED. Red in section 11 (52 failures).
+rise-c exit=1 17s | simNbaEarnedDraft: CONTROL judgerise FIRED. Red in section 11 (4 failures).
+flip-c exit=1 17s | simNbaEarnedDraft: CONTROL judgeflip FIRED. Red in section 11 and 7 (36 failures and 3 failures).
