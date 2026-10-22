@@ -84,8 +84,10 @@ const rank = (line: PitchLine) => LINES.indexOf(line);
  *  rest goes across the same line. From the front line there is no further line: the ball is kept among the
  *  forwards (`keep`) or it goes back. */
 const BUILD = { forward: 0.6, forwardPush: 0.15, reset: 0.08, resetPush: -0.04, keep: 0.65, keepPush: 0.2 };
-/** A pass that goes further than this arrives in the air. */
-const LONG_PASS = 38;
+/** A pass that goes further than this many metres arrives in the air: a long ball. The pitch's units are a hundredth
+ *  of its length one way and of its width the other, 105 by 68 metres, so a unit across is shorter than one along. */
+const LONG_PASS = 32;
+const METRES = { x: 0.68, y: 1.05 };
 /** A reset that goes back and this far across is a switch of play; a shorter one is pressure. */
 const SWITCH_ACROSS = 30;
 
@@ -709,11 +711,12 @@ export function pitchScene(plan: PitchPlan, clock: number): MotionScene<PitchPla
 
 /** Round 1521: how the ball travels into a stretch from the one before it. A dead ball is fetched or placed (no
  *  flight); a corner's delivery is a cross; out of a throw in it is thrown; out of a goal kick, and any pass longer
- *  than LONG_PASS (a keeper's kick, a switch, a ball over the top), it goes in the air; every other pass is on the grass. */
+ *  than LONG_PASS metres (a keeper's kick, a long switch, a ball over the top), it goes in the air; every other pass is
+ *  on the grass. */
 export function flightInto(before: PitchBeat | undefined, beat: PitchBeat): BallFlight | undefined {
   if (beat.dead || !before) return undefined;
   if (beat.arc) return 'cross';
   if (before.state === 'throwin') return 'throw';
   if (before.state === 'goalkick') return 'air';
-  return Math.hypot(beat.anchor.x - before.anchor.x, beat.anchor.y - before.anchor.y) > LONG_PASS ? 'air' : 'ground';
+  return Math.hypot((beat.anchor.x - before.anchor.x) * METRES.x, (beat.anchor.y - before.anchor.y) * METRES.y) > LONG_PASS ? 'air' : 'ground';
 }
