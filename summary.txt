@@ -1,0 +1,11 @@
+lazydesk exit=0 37s | simFoLazyDesk: all checks passed
+ctl-eager exit=1 38s | simFoLazyDesk CONTROL eager FIRED: section 1 went red with 8 failures (red sections 1)
+ctl-hostimport exit=1 32s | simFoLazyDesk CONTROL hostimport FIRED: section 1 went red with 3 failures (red sections 1)
+ctl-tiertile exit=1 39s | simFoLazyDesk CONTROL tiertile FIRED: section 2 went red with 14904 failures (red sections 2)
+ctl-bogus exit=2 0s | SIM_FO_LAZY_DESK_CONTROL=bogus is not a control this harness knows (eager, hostimport, tiertile, boxseasons)
+vitest-lazy exit=0 4s |    Duration  4.05s (transform 1.32s, setup 84ms, collect 157ms, tests 2.74s, environment 393ms, prepare 313ms)
+tsc exit=0 105s | 
+ctl-boxseasons exit=1 46s | simFoLazyDesk CONTROL boxseasons FIRED: section 2 went red with 20736 failures (red sections 2)
+vitest-shared exit=0 7s |    Duration  6.54s (transform 1.10s, setup 1.01s, collect 2.84s, tests 4.56s, environment 4.72s, prepare 1.70s)
+vitest-board exit=0 43s |    Duration  42.63s (transform 5.52s, setup 478ms, collect 6.34s, tests 64.35s, environment 2.51s, prepare 663ms)
+vitest-fo exit=0 23s |    Duration  23.11s (transform 4.89s, setup 1.25s, collect 12.55s, tests 39.07s, environment 6.32s, prepare 1.69s)
