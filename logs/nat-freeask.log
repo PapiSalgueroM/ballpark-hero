@@ -1,0 +1,16 @@
+NEGATIVE CONTROL ON: freeask
+5b) A country ask stored before the round still wants as many more men on opening, and reads the same
+   Lincoln City: "Have 1 player from England in the squad" read onTrack before the round and done on opening, nothing signed
+   Lincoln City: "Have 1 player from England in the squad" wanted 1 more men and on opening wants -13
+   Elversberg: "Have 7 players from Germany in the squad" read onTrack before the round and done on opening, nothing signed
+   Elversberg: "Have 7 players from Germany in the squad" wanted 1 more men and on opening wants -5
+   Excelsior: "Have 1 player from Netherlands in the squad" read onTrack before the round and done on opening, nothing signed
+   Excelsior: "Have 1 player from Netherlands in the squad" wanted 1 more men and on opening wants -14
+   Al-Hilal: "Have 2 players from Saudi Arabia in the squad" read onTrack before the round and done on opening, nothing signed
+   Al-Hilal: "Have 2 players from Saudi Arabia in the squad" wanted 1 more men and on opening wants -3
+   Inter Miami: "Have 2 players from United States in the squad" read onTrack before the round and done on opening, nothing signed
+   Inter Miami: "Have 2 players from United States in the squad" wanted 1 more men and on opening wants -1
+  FAIL: 42 of 57 stored country asks grade differently on opening
+  FAIL: 42 of 57 stored country asks want a different number of men on opening
+  FAIL: only 0 stored asks were rebased, the opening hardly counted a made up man
+simCmMadeUpNations: RED, 3 failure(s)

@@ -1,0 +1,5 @@
+NEGATIVE CONTROL ON: fasign
+4) It stays with him: bought, loaned out and back, the summer, released, sold to a club, promoted, reloaded
+  FAIL: Nation Probe 0, scouted as Türkiye, was signed back from the pool as "Hungary"
+  FAIL: Nation Probe 2, scouted as Japan, was signed back from the pool as "Brazil"
+simCmMadeUpNations: RED, 2 failure(s)

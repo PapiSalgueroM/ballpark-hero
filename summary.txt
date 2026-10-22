@@ -1,0 +1,9 @@
+vitest-nat exit=0 6s |    Duration  5.24s (transform 2.58s, setup 125ms, collect 3.23s, tests 545ms, environment 510ms, prepare 217ms)
+tsc exit=0 111s | 
+nat exit=0 164s | simCmMadeUpNations: green. Made up men carry a country of their own, drawn and kept honestly.
+nat-base exit=0 181s | simCmMadeUpNations: green. Made up men carry a country of their own, drawn and kept honestly.
+nat-aiswap exit=1 159s | simCmMadeUpNations: RED, 10 failure(s)
+nat-expiry exit=1 162s | simCmMadeUpNations: RED, 8 failure(s)
+nat-fasign exit=1 157s | simCmMadeUpNations: RED, 2 failure(s)
+nat-freeask exit=1 139s | simCmMadeUpNations: RED, 3 failure(s)
+nat-nocap exit=1 119s | simCmMadeUpNations: RED, 3 failure(s)

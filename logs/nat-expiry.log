@@ -1,0 +1,11 @@
+NEGATIVE CONTROL ON: expiry
+4) It stays with him: bought, loaned out and back, the summer, released, sold to a club, promoted, reloaded
+  FAIL: after the summer: Nation Probe 0 (scouted in Turkey) is "Hungary", was "Türkiye"
+  FAIL: after the summer: Nation Probe 1 (scouted in Ivory Coast) is "Türkiye", was "Cote d'Ivoire"
+  FAIL: after the summer: Nation Probe 2 (scouted in Japan) is "Brazil", was "Japan"
+  FAIL: Nation Probe 0, scouted as Türkiye, walked to the pool as {"nation":"Hungary","generated":true}
+  FAIL: Nation Probe 1, scouted as Cote d'Ivoire, walked to the pool as {"nation":"Türkiye","generated":true}
+  FAIL: Nation Probe 2, scouted as Japan, walked to the pool as {"nation":"Brazil","generated":true}
+  FAIL: Nation Probe 0, scouted as Türkiye, was signed back from the pool as "Hungary"
+  FAIL: Nation Probe 2, scouted as Japan, was signed back from the pool as "Brazil"
+simCmMadeUpNations: RED, 8 failure(s)

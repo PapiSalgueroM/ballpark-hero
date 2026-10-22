@@ -1,0 +1,6 @@
+NEGATIVE CONTROL ON: nocap
+2c) A league that caps its imports: its squads, real and made up men together, hold the cap's home floor
+  FAIL: saudi (Saudi Arabia): its squads are 7.3% home, under the cap's floor of 60.0%
+  FAIL: mlsEast (United States): its squads are 19.7% home, under the cap's floor of 72.6%
+  FAIL: mlsWest (United States): its squads are 29.0% home, under the cap's floor of 73.2%
+simCmMadeUpNations: RED, 3 failure(s)
