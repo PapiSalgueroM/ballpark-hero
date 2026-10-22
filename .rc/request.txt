@@ -1,0 +1,4 @@
+slate: node scripts/simCfbSlate.mjs
+c-oldrivals: CFB_SLATE_CONTROL=oldrivals node scripts/simCfbSlate.mjs
+board: node scripts/simCollegeDynastyBoard.mjs
+old: git worktree add /tmp/base 3ee0bf629 >/dev/null 2>&1; node .rc/x/oldsave1554.mjs
