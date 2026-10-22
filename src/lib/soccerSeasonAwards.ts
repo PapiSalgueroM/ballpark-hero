@@ -5,7 +5,7 @@
    and a coin: 25 goals and a 30 percent coin for the Golden Boot, so a 40 goal season lost it seven times in ten
    and a 24 goal season could never win it. Round 123 ended that in the four US careers (careerAwards.ts): DRAW the
    best rival season in the league out of a measured distribution and win only by beating it. Soccer now asks the
-   same question through the same draw (beatsFieldOf and bestOfNAt), with its own field table below.
+   same question through the same draw (beatsFieldOf), with its own field table below.
 
    One stream per award, keyed to the career and the season (keyedRng), so the main stream never moves: the engine
    still makes the old coin draws in the old order and throws them away (the Round 1329 rule).
@@ -31,7 +31,7 @@
    the game's own thumb on the scale for a vote that leans to attacking players. Every rate they give is measured
    in scripts/simSoccerSeasonAwards.mjs (rates per 100 seasons per position and tier band, against the designed
    one winner a league a season). Import free but for the two files it reads, so it can never close a cycle. */
-import { beatsFieldOf, bestOfNAt, gumbel, type FieldConfig } from './careerAwards';
+import { beatsFieldOf, type FieldConfig } from './careerAwards';
 import { goldenGloveAwardExists, puskasAwardExists, uefaPlayerAwardExists } from './soccerWorldTruth';
 
 export type SoccerSeasonAward =
@@ -119,7 +119,10 @@ export function soccerAwardConfig(award: Exclude<SoccerSeasonAward, 'Puskás Awa
 /** Did this season win the award? Pure: the same season and the same stream always give the same answer. */
 export function soccerAwardWon(award: SoccerSeasonAward, s: SoccerAwardSeason, rng: () => number): boolean {
   if (!soccerAwardEligible(award, s)) return false;
-  if (award === 'Puskás Award') return bestOfNAt(s.goals, gumbel(rng)) > bestOfNAt(PUSKAS_FIELD_GOALS, gumbel(rng));
+  /* The best goal of the season is one of his with the chance goals / (goals + the field's), exactly, for goals of
+     one quality distribution. careerAwards.ts's extreme value bar is a large n shortcut and overstates a handful of
+     goals against thousands (measured: three times this chance), so the one award about a single moment uses this. */
+  if (award === 'Puskás Award') return rng() < s.goals / (s.goals + PUSKAS_FIELD_GOALS);
   const { score, field } = soccerAwardScore(award, s);
   return beatsFieldOf(rng, field, score, soccerAwardConfig(award, s.position));
 }

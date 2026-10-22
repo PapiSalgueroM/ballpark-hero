@@ -40,6 +40,9 @@
  *    some after it, every award on a season with 15 goals, and in lockstep with an ungated tree the gated one makes
  *    the same draws and keeps the same state where only the ungated one wins early. Measured (r1523-m1): 0 before,
  *    114 from it, 43 lockstep careers all equal. Control nogate (the gate gone): 126 before.
+ *    Round 1525 moved the award to a field (src/lib/soccerSeasonAwards.ts): every goal is a chance at it, so an
+ *    award's year must hold a season with a goal (it was 15 goals under the old bar), and the gate the control
+ *    removes is now that file's eligibility line. scripts/simSoccerSeasonAwards.mjs section 3 holds all three years.
  *
  * Environment: SIM_CAREER_FORM_BASE (the ref the base arm reads), SIM_CAREER_FORM_SECTIONS (comma separated),
  * SIM_CAREER_FORM_SEED, SIM_CAREER_FORM_PIN_CAREERS, SIM_CAREER_FORM_FLEET, SIM_CAREER_FORM_FLEET_KIND,
@@ -156,7 +159,9 @@ if (runs('1')) {
 /* ─── Soccer Career: the bundles ─── */
 const ENGINE = 'src/lib/soccerCareerEngine.ts';
 const STEP_LINE = "Math.round(moraleForm('soccer', morale as number)) || 0";
-const GATE_LINE = 'if (puskasDrawn && puskasAwardExists(thisYear)) {';
+/* Round 1525: the Puskas gate is soccerSeasonAwards.ts's eligibility line now (the award is won against a field). */
+const AWARDS = 'src/lib/soccerSeasonAwards.ts';
+const GATE_LINE = "case 'Puskás Award': return s.goals > 0 && puskasAwardExists(s.year);";
 const PRESS_MARK = 'function generateSeasonStats(state, clubs) {';
 const AT_PRESS = 'const moraleAtPress = (state: CareerState): number => MORALE_AT_PRESS.get(state) ?? state.morale;';
 const APPS_MARK = 'dressingRoomApps(phoneAppsSwing(state), moraleAtPress(state))';
@@ -190,9 +195,9 @@ async function soccer(name, { stepOff = false, noGate = false, postText = false,
     serve[ENGINE] = engine.replace(GOAT_LINE, GOAT_LINE.replace('90', '86'));
   }
   if (noGate) {
-    const engine = read(ENGINE);
-    if (engine.split(GATE_LINE).length !== 2) { console.log(`ABORT: ${ENGINE} does not hold ${GATE_LINE} once`); process.exit(1); }
-    serve[ENGINE] = engine.replace(GATE_LINE, 'if (puskasDrawn) {');
+    const awards = read(AWARDS);
+    if (awards.split(GATE_LINE).length !== 2) { console.log(`ABORT: ${AWARDS} does not hold ${GATE_LINE} once`); process.exit(1); }
+    serve[AWARDS] = awards.replace(GATE_LINE, "case 'Puskás Award': return s.goals > 0;");
   }
   if (double) {
     let engine = serve[ENGINE] ?? read(ENGINE);
@@ -524,7 +529,7 @@ if (runs('5')) {
     for (const a of c.awards ?? []) {
       if (a.name !== PUSKAS) continue;
       if (a.year < 2008) before += 1; else from += 1;
-      if (!c.seasons.some(row => row.type === 'playing' && row.year === a.year && row.goals >= 15)) offRow += 1;
+      if (!c.seasons.some(row => row.type === 'playing' && row.year === a.year && row.goals >= 1)) offRow += 1;
     }
     if (U === S || i >= N / 2) continue;
     /* lockstep: the gated and ungated trees from one seed; where only the ungated one wins a pre 2008 award, the
@@ -541,11 +546,11 @@ if (runs('5')) {
       }
     }
   }
-  console.log(`   ${N} careers from 1990, 1995, 2000 and 2005 (seed ${SEED + 5}): ${before} awards before 2008-09, ${from} from it, ${offRow} on a year without a 15 goal season`);
+  console.log(`   ${N} careers from 1990, 1995, 2000 and 2005 (seed ${SEED + 5}): ${before} awards before 2008-09, ${from} from it, ${offRow} on a year without a goal`);
   if (U !== S) console.log(`   the ungated tree won one before 2008-09 in ${kept} lockstep careers; the gated tree made the same draws and kept the same state in ${kept - keptBad}`);
   if (before > 0) fail(`${before} Puskas Awards were won in seasons before 2008-09`);
   if (from === 0) fail('nobody won a Puskas Award from 2008-09 on either, so the fleet proves nothing');
-  if (offRow > 0) fail(`${offRow} awards carry a year with no 15 goal season, so the award year is not the season's`);
+  if (offRow > 0) fail(`${offRow} awards carry a year with no goal scored, so the award year is not the season's`);
   if (U !== S && kept === 0) fail('no lockstep career reached a pre 2008 award on the ungated tree, so the kept draw is unproven');
   if (keptBad > 0) fail(`${keptBad} lockstep careers parted from the ungated tree beyond the award itself`);
 }
