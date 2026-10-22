@@ -1,0 +1,9 @@
+tsc exit=0 73s | 
+desk exit=0 70s | cmp desk: BYTE EQUAL to 7a8750ba
+desk-norfa exit=0 69s | cmp desk-norfa: BYTE EQUAL to 7a8750ba
+desk-shortscale exit=0 69s | cmp desk-shortscale: BYTE EQUAL to 7a8750ba
+desk-sheetrepick exit=0 68s | cmp desk-sheetrepick: BYTE EQUAL to 7a8750ba
+desk-coinflip exit=0 69s | cmp desk-coinflip: BYTE EQUAL to 7a8750ba
+desk-s2 exit=0 69s | cmp desk-s2: BYTE EQUAL to 7a8750ba
+desk-s3 exit=0 69s | cmp desk-s3: BYTE EQUAL to 7a8750ba
+vitest-contracts exit=0 5s |    Duration  4.31s (transform 2.02s, setup 388ms, collect 3.37s, tests 2.30s, environment 2.32s, prepare 679ms)

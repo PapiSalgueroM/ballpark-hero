@@ -1,0 +1,6 @@
+cmp desk-shortscale: exit base=0 head=0 head2=0
+  base last line: simNbaGmDesk: control shortscale fired (70 failures, as it should)
+  head last line: simNbaGmDesk: control shortscale fired (70 failures, as it should)
+  lines: base 36, head 36
+  sha1 base 701c62b1bd56 head 701c62b1bd56 head2 701c62b1bd56
+cmp desk-shortscale: BYTE EQUAL to 7a8750ba

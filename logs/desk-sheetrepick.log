@@ -1,0 +1,6 @@
+cmp desk-sheetrepick: exit base=0 head=0 head2=0
+  base last line: simNbaGmDesk: control sheetrepick fired (34 failures, as it should)
+  head last line: simNbaGmDesk: control sheetrepick fired (34 failures, as it should)
+  lines: base 36, head 36
+  sha1 base 65206ea98311 head 65206ea98311 head2 65206ea98311
+cmp desk-sheetrepick: BYTE EQUAL to 7a8750ba

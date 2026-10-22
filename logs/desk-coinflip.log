@@ -1,0 +1,6 @@
+cmp desk-coinflip: exit base=0 head=0 head2=0
+  base last line: simNbaGmDesk: control coinflip fired (84 failures, as it should)
+  head last line: simNbaGmDesk: control coinflip fired (84 failures, as it should)
+  lines: base 36, head 36
+  sha1 base 72611fffada5 head 72611fffada5 head2 72611fffada5
+cmp desk-coinflip: BYTE EQUAL to 7a8750ba
