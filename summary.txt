@@ -1,0 +1,10 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simTycoonPackPace exit=0 20s | simTycoonPackPace: green. Both policies measured; every applied price control broke its pace check.
+simTycoonMoneyDisplay exit=0 17s | Original source holds: 3921; full copies, executable transforms and raw process records retained at /home/runner/work/ballpark-hero/ballpark-hero/tycoon-money-display-art
+simTycoonDrawResult exit=0 8s | 3921 original source holds; copies, transforms and raw process records retained at /home/runner/work/ballpark-hero/ballpark-hero/tycoon-draw-result-artifacts/outcomes.
+simTycoonGroundGrowth exit=1 61s | Node.js v24.21.0
+simTycoonAwayMatchdays exit=0 89s |    All 6 controls fired exactly where they should, in node and in the real hook.
+simTycoonPacks exit=1 213s |   FAIL: control: wonderkidFactory.ts does not carry exactly one "price: 30, firstFree:", so this control would prove nothing
+simAllPlayersValue exit=0 83s | simAllPlayersValue: green.
+simTycoonScorelines exit=0 290s | simTycoonScorelines: 15 checks, 0 failed [289 s]
+tsc exit=0 85s | 
