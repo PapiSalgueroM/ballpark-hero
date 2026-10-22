@@ -1,0 +1,6 @@
+vitest-a exit=0 20s |    Duration  19.88s (transform 4.68s, setup 1.19s, collect 16.48s, tests 25.25s, environment 7.89s, prepare 2.32s)
+vitest-b exit=0 36s |    Duration  36.02s (transform 9.87s, setup 1.57s, collect 24.46s, tests 62.81s, environment 8.68s, prepare 2.11s)
+decision exit=0 6s | simCareerDecisionOutcome normal: intended assertions and independent ordinary/rivalry baseline passed.
+press exit=0 7s | Press/Market:6 outcomes,27 full original state/RNG pairs,6 effective copied source controls,18 native fixture branches.
+tsc exit=0 72s | 
+shop exit=0 108s | simUsShopPromises: green (sections 0, 1, 2, 3, 4, 5, 6, 7, 8, 9)
