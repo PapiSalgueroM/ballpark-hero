@@ -1,0 +1,5 @@
+parity-fixture exit=0 78s | simUsBoardParity control fixture: green. The control turned its own sports red for its own reason.
+simUsBoardParity exit=0 79s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen with the proved historical main775 coaching Panel.
+simNflCoachStaffRecovery exit=1 0s | Node.js v24.21.0
+parity-label exit=0 80s | simUsBoardParity control label: green. The control turned its own sports red for its own reason.
+vitest exit=0 11s |    Duration  9.86s (transform 2.55s, setup 419ms, collect 7.23s, tests 9.30s, environment 2.59s, prepare 596ms)
