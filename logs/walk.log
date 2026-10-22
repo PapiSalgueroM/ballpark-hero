@@ -1,0 +1,153 @@
+  NOTE base save hubOn: phase hub fired false desk contracts+picks+staff season 2026
+  NOTE base save firedOn: phase fired fired true desk contracts+picks+staff season 2026
+  NOTE base save hubOff: phase hub fired false desk off season 2026
+  NOTE base save firedOff: phase fired fired true desk off season 2026
+ok   base: a fired save with the desk on was made
+ok   base: a fired save with the desk off was made
+ok   old fired desk on: the reload opens on the out of work screen
+ok   old fired desk on: three boxes
+  NOTE old fired desk on: card reads: 🪑 Let go by the Arizona Cardinals Ownership made the call: you are out after 1 season and no titles with the Arizona Cardinals. 1 franchise called. Pass, and next year the phone rings only if the Arizona Cardinals have climbed into the second tier of the league by then.
+ok   old fired desk on out of work: nothing wider than the screen (0px over)
+ok   old fired desk on out of work: nothing animating under reduced motion (none)
+FAIL old fired desk on out of work: no text under 11 px in the round's screens (Job market 10px ; Next year hangs on your old club 9px ; Career 10px ; 1 club, no titles 9px)
+ok   old fired desk on: the Job market box opens
+  NOTE old fired desk on Job market: Hub Job market Ownership made the call: you are out after 1 season and no titles with the Arizona Cardinals. 1 franchise called. Pass, and next year the phone rings only if the Arizona Cardinals have climbed into the second tier of the league by then. ? BOTTOM
+ok   old fired desk on Job market: nothing wider than the screen (0px over)
+ok   old fired desk on Job market: nothing animating under reduced motion (none)
+ok   old fired desk on Job market: no text under 11 px in the round's screens (none)
+ok   old fired desk on: the Career box opens
+  NOTE old fired desk on Career: Hub Career 1 season, 1 club, no titles ? Arizona Cardinals In the chair since 2026 ✕ LET GO
+ok   old fired desk on Career: nothing wider than the screen (0px over)
+ok   old fired desk on Career: nothing animating under reduced motion (none)
+ok   old fired desk on Career: no text under 11 px in the round's screens (none)
+ok   old fired desk on: the GM level box opens
+  NOTE old fired desk on GM level: Hub GM level You earn XP every season for your win share, titles, playoff rounds won and meeting or beating the ask from upstairs. Points are yours for good: nothing here can be taken back. ? 🎖️ GM level 1 0 XP 400 XP to level 2, which is one more point. 0 of
+ok   old fired desk on GM level: nothing wider than the screen (0px over)
+ok   old fired desk on GM level: nothing animating under reduced motion (none)
+ok   old fired desk on GM level: no text under 11 px in the round's screens (none)
+ok   old fired desk on: looking at the three boxes writes nothing to the save
+  NOTE old fired desk on: market state offers
+ok   old fired desk on: two taps take the seat (the save goes to the arrival recap)
+ok   old fired desk on: one tap on take only arms
+ok   old fired desk on: the take writes his record, trust 60, not fired
+  NOTE old fired desk on: arrival recap reads: San Francisco 49ers win the 2026 title You take over the Cleveland Browns. They finished 0-1, 31st in the league. Trust upstairs: 60 of 100. AFC Wild Card: Denver Broncos beat Tennessee Titans 20-17 · Baltimore Ravens beat Pittsburgh Steelers 38-17 · Indianapolis Colts beat New England Patriots 21-1
+ok   old fired desk on: the arrival line
+ok   old fired desk on arrival: nothing wider than the screen (0px over)
+ok   old fired desk on arrival: nothing animating under reduced motion (none)
+FAIL old fired desk on arrival: no text under 11 px in the round's screens (Measured 9px ; Nobody clips it. That is the point 10px ; Candid 9px ; Candor plays upstairs, usually · a real  10px)
+ok   old fired desk on: no console error ()
+ok   old fired desk off: the reload opens on the out of work screen
+ok   old fired desk off: three boxes
+  NOTE old fired desk off: card reads: 🪑 Let go by the Arizona Cardinals Ownership made the call: you are out after 1 season and no titles with the Arizona Cardinals. 1 franchise called. Pass, and next year the phone rings only if the Arizona Cardinals have climbed into the second tier of the league by then.
+ok   old fired desk off out of work: nothing wider than the screen (0px over)
+ok   old fired desk off out of work: nothing animating under reduced motion (none)
+FAIL old fired desk off out of work: no text under 11 px in the round's screens (Job market 10px ; Next year hangs on your old club 9px ; Career 10px ; 1 club, no titles 9px)
+ok   old fired desk off: the Job market box opens
+  NOTE old fired desk off Job market: Hub Job market Ownership made the call: you are out after 1 season and no titles with the Arizona Cardinals. 1 franchise called. Pass, and next year the phone rings only if the Arizona Cardinals have climbed into the second tier of the league by then. ? BOTTOM
+ok   old fired desk off Job market: nothing wider than the screen (0px over)
+ok   old fired desk off Job market: nothing animating under reduced motion (none)
+ok   old fired desk off Job market: no text under 11 px in the round's screens (none)
+ok   old fired desk off: the Career box opens
+  NOTE old fired desk off Career: Hub Career 1 season, 1 club, no titles ? Arizona Cardinals In the chair since 2026 ✕ LET GO
+ok   old fired desk off Career: nothing wider than the screen (0px over)
+ok   old fired desk off Career: nothing animating under reduced motion (none)
+ok   old fired desk off Career: no text under 11 px in the round's screens (none)
+ok   old fired desk off: the GM level box opens
+  NOTE old fired desk off GM level: Hub GM level XP starts once your GM desk is open. ? 🎖️ GM level 1 0 XP 400 XP to level 2, which is one more point. 0 of 35 points spent 🏛️ Ownership ○○○○○ Spend a point (0/5) ? 🎤 Media ○○○○○ Spend a point (0/5) ? 🔭 Scouting ○○○○○ Not here yet ? 🤝 Negotiat
+ok   old fired desk off GM level: nothing wider than the screen (0px over)
+ok   old fired desk off GM level: nothing animating under reduced motion (none)
+ok   old fired desk off GM level: no text under 11 px in the round's screens (none)
+ok   old fired desk off: looking at the three boxes writes nothing to the save
+ok   old fired desk off: a year out opens the desk for good and writes one season out
+ok   old fired desk off: a year out moves no counter and stays out of work
+ok   old fired desk off after a year out: nothing wider than the screen (0px over)
+ok   old fired desk off after a year out: nothing animating under reduced motion (none)
+FAIL old fired desk off after a year out: no text under 11 px in the round's screens (Job market 10px ; Only a new front office now 9px ; Career 10px ; 1 club, no titles 9px)
+ok   old fired desk off: no console error ()
+  NOTE old hub desk on: after the final week phase recap trust 82 fired false desk contracts+picks+staff+seat+xp
+ok   old hub desk on: the graded season writes his record and XP
+  NOTE old hub desk on: recap XP line: GM XP +270. Level 1.
+ok   old hub desk on: the recap prints what the season paid
+ok   old hub desk on recap: nothing wider than the screen (0px over)
+ok   old hub desk on recap: nothing animating under reduced motion (none)
+ok   old hub desk on recap: no text under 11 px in the round's screens (none)
+ok   old hub desk on: no console error ()
+  NOTE old hub desk off: after the final week phase recap trust 32 fired false desk off
+ok   old hub desk off: a desk off save writes no desk at the close
+  NOTE old hub desk off: recap XP line: (none)
+ok   old hub desk off: no XP line with the desk off
+ok   old hub desk off recap: nothing wider than the screen (0px over)
+ok   old hub desk off recap: nothing animating under reduced motion (none)
+FAIL old hub desk off recap: no text under 11 px in the round's screens (Measured 9px ; Survives the news cycle, moves nothing 10px ; Candid 9px ; The ask softens. Upstairs hates hearing  10px)
+ok   old hub desk off: no console error ()
+ok   fresh-390 fired recap: nothing wider than the screen (0px over)
+ok   fresh-390 fired recap: nothing animating under reduced motion (none)
+ok   fresh-390 fired recap: no text under 11 px in the round's screens (none)
+  NOTE fresh-390: fired recap reads: Detroit Lions win the 2026 title Your Arizona Cardinals finished 0-1, No. 32 overall. 🔻 Nowhere near the ask. The room upstairs went quiet. GM XP +0. Level 1. AFC Wild Card: Jacksonville Jaguars beat Tennessee Titans 42-6 · Las Vegas Raiders beat Kansas City Chiefs 28-24 · Pittsburgh Steelers beat Houston Texans 27-14 NFC Wild Card: San Francisco 49ers beat Washington Commanders 35-27 · Green Bay
+ok   fresh-390: the fired recap offers who is calling
+ok   fresh-390: no button on the recap deletes the save
+ok   fresh-390: the recap's fired box says what the phone did (🔻 Nowhere near the ask. The room upstairs went quiet.)
+ok   fresh-390: who is calling opens the out of work screen
+ok   fresh-390 out of work: nothing wider than the screen (0px over)
+ok   fresh-390 out of work: nothing animating under reduced motion (none)
+FAIL fresh-390 out of work: no text under 11 px in the round's screens (Job market 10px ; Next year hangs on your old club 9px ; Career 10px ; 1 club, no titles 9px)
+  NOTE fresh-390: market state offers
+ok   fresh-390: two taps take the seat (the save goes to the arrival recap)
+  NOTE fresh-390: scroll and height on the out of work screen before the market [270,9595]
+  NOTE fresh-390: arrival recap reads: Detroit Lions win the 2026 title You take over the Cleveland Browns. They finished 0-1, 31st in the league. Trust upstairs: 60 of 100. AFC Wild Card: Jacksonville Jaguars beat Tennessee Titans 42-6 · Las Vegas Raiders beat Kansas City Chiefs 28-24 · Pittsburgh Steelers beat Houston Texans 27-14 NFC Wild Card: San Francisco 49ers beat Washington Commanders 35-27 · Green Bay Packers beat Philadelphi
+ok   fresh-390: the arrival line
+ok   fresh-390 arrival: nothing wider than the screen (0px over)
+ok   fresh-390 arrival: nothing animating under reduced motion (none)
+FAIL fresh-390 arrival: no text under 11 px in the round's screens (Measured 9px ; Nobody clips it. That is the point 10px ; Candid 9px ; Candor plays upstairs, usually · a real  10px)
+ok   fresh-390: no title of his staged on the arrival
+ok   fresh-390: the new club's draft runs to the hub
+ok   fresh-390 hub: nothing wider than the screen (0px over)
+ok   fresh-390 hub: nothing animating under reduced motion (none)
+ok   fresh-390 hub: no text under 11 px in the round's screens (none)
+ok   fresh-390: the hub's Career box opens
+  NOTE fresh-390 hub Career: Hub Career 1 season, 2 clubs, no titles ? Arizona Cardinals Took over in 2026, third tier ✕ LET GO Cleveland Browns Took over in 2027, bottom tier No graded season yet STILL HERE
+ok   fresh-390 hub Career: nothing wider than the screen (0px over)
+ok   fresh-390 hub Career: nothing animating under reduced motion (none)
+ok   fresh-390 hub Career: no text under 11 px in the round's screens (none)
+ok   fresh-390: the hub's GM level box opens
+  NOTE fresh-390 hub GM level: Hub GM level You earn XP every season for your win share, titles, playoff rounds won and meeting or beating the ask from upstairs. Points are yours for good: nothing here can be taken back. ? 🎖️ GM level 1 0 XP 400 XP to level 2, which is one more point. 0 of 35 points spent 🏛️ Ownership ○○○○○ Spe
+ok   fresh-390 hub GM level: nothing wider than the screen (0px over)
+ok   fresh-390 hub GM level: nothing animating under reduced motion (none)
+ok   fresh-390 hub GM level: no text under 11 px in the round's screens (none)
+ok   fresh-390: no console error ()
+ok   fresh-1280 fired recap: nothing wider than the screen (0px over)
+  NOTE fresh-1280 fired recap: 13 elements animating with motion on
+ok   fresh-1280 fired recap: no text under 11 px in the round's screens (none)
+  NOTE fresh-1280: fired recap reads: Detroit Lions win the 2026 title Your Arizona Cardinals finished 1-0, No. 16 overall. 🔻 Nowhere near the ask. The room upstairs went quiet. GM XP +100. Level 1. AFC Wild Card: Los Angeles Chargers beat Denver Broncos 28-13 · Jacksonville Jaguars beat Indianapolis Colts 17-6 · Houston Texans beat Baltimore Ravens 21-20 NFC Wild Card: San Francisco 49ers beat Green Bay Packers 34-24 · Philadelphia 
+ok   fresh-1280: the fired recap offers who is calling
+ok   fresh-1280: no button on the recap deletes the save
+ok   fresh-1280: the recap's fired box says what the phone did (🔻 Nowhere near the ask. The room upstairs went quiet.)
+ok   fresh-1280: who is calling opens the out of work screen
+ok   fresh-1280 out of work: nothing wider than the screen (0px over)
+  NOTE fresh-1280 out of work: 1 elements animating with motion on
+FAIL fresh-1280 out of work: no text under 11 px in the round's screens (Job market 10px ; Next year hangs on your old club 9px ; Career 10px ; 1 club, no titles 9px)
+  NOTE fresh-1280: market state offers
+ok   fresh-1280: two taps take the seat (the save goes to the arrival recap)
+  NOTE fresh-1280: scroll and height on the out of work screen before the market [0,6326]
+  NOTE fresh-1280: arrival recap reads: Detroit Lions win the 2026 title You take over the Cleveland Browns. They finished 0-1, 32nd in the league. Trust upstairs: 60 of 100. AFC Wild Card: Los Angeles Chargers beat Denver Broncos 28-13 · Jacksonville Jaguars beat Indianapolis Colts 17-6 · Houston Texans beat Baltimore Ravens 21-20 NFC Wild Card: San Francisco 49ers beat Green Bay Packers 34-24 · Philadelphia Eagles beat Seattle Seahawk
+ok   fresh-1280: the arrival line
+ok   fresh-1280 arrival: nothing wider than the screen (0px over)
+  NOTE fresh-1280 arrival: 19 elements animating with motion on
+FAIL fresh-1280 arrival: no text under 11 px in the round's screens (Measured 9px ; Nobody clips it. That is the point 10px ; Candid 9px ; Candor plays upstairs, usually · a real  10px)
+ok   fresh-1280: no title of his staged on the arrival
+ok   fresh-1280: the new club's draft runs to the hub
+ok   fresh-1280 hub: nothing wider than the screen (0px over)
+  NOTE fresh-1280 hub: 6 elements animating with motion on
+ok   fresh-1280 hub: no text under 11 px in the round's screens (none)
+ok   fresh-1280: the hub's Career box opens
+  NOTE fresh-1280 hub Career: Hub Career 1 season, 2 clubs, no titles ? Arizona Cardinals Took over in 2026, third tier ✕ LET GO Cleveland Browns Took over in 2027, bottom tier No graded season yet STILL HERE
+ok   fresh-1280 hub Career: nothing wider than the screen (0px over)
+  NOTE fresh-1280 hub Career: 5 elements animating with motion on
+ok   fresh-1280 hub Career: no text under 11 px in the round's screens (none)
+ok   fresh-1280: the hub's GM level box opens
+  NOTE fresh-1280 hub GM level: Hub GM level You earn XP every season for your win share, titles, playoff rounds won and meeting or beating the ask from upstairs. Points are yours for good: nothing here can be taken back. ? 🎖️ GM level 1 100 XP 300 XP to level 2, which is one more point. 0 of 35 points spent 🏛️ Ownership ○○○○○ S
+ok   fresh-1280 hub GM level: nothing wider than the screen (0px over)
+  NOTE fresh-1280 hub GM level: 5 elements animating with motion on
+ok   fresh-1280 hub GM level: no text under 11 px in the round's screens (none)
+ok   fresh-1280: no console error ()
+review walk: 116 checks, 9 failed
