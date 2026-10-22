@@ -1,0 +1,4517 @@
+{
+  "fixture": "Actual hook with fictional players/deferred transport and deterministic existing club/nation catalog assignment; no browser or natural-frequency claim.",
+  "pageGate": "LineupBuilder.handleSelectPlayer returns when isValidating. A retry is dispatched only while that actual public state is false.",
+  "observations": {
+    "overlap": {
+      "before": {
+        "hook": {
+          "formation": "4-4-2",
+          "phase": "building",
+          "selectedPositionIndex": 9,
+          "currentTeam": {
+            "name": "Real Madrid",
+            "isNation": false
+          },
+          "positions": [
+            {
+              "role": "GK",
+              "label": "GK"
+            },
+            {
+              "role": "LB",
+              "label": "LB"
+            },
+            {
+              "role": "CB",
+              "label": "CB"
+            },
+            {
+              "role": "CB",
+              "label": "CB"
+            },
+            {
+              "role": "RB",
+              "label": "RB"
+            },
+            {
+              "role": "LM",
+              "label": "LM"
+            },
+            {
+              "role": "CM",
+              "label": "CM"
+            },
+            {
+              "role": "CM",
+              "label": "CM"
+            },
+            {
+              "role": "RM",
+              "label": "RM"
+            },
+            {
+              "role": "ST",
+              "label": "ST"
+            },
+            {
+              "role": "ST",
+              "label": "ST"
+            }
+          ],
+          "filledSlots": [],
+          "filledSlotsArray": [],
+          "filledCount": 0,
+          "verdict": null,
+          "isEvaluating": false,
+          "isValidating": false,
+          "validationError": null,
+          "isSpinning": false,
+          "spinTeamIndex": 0,
+          "checkingDown": false,
+          "teamAssignments": [
+            {
+              "name": "Real Madrid",
+              "isNation": false
+            },
+            {
+              "name": "Barcelona",
+              "isNation": false
+            },
+            {
+              "name": "Manchester City",
+              "isNation": false
+            },
+            {
+              "name": "Liverpool",
+              "isNation": false
+            },
+            {
+              "name": "Bayern Munich",
+              "isNation": false
+            },
+            {
+              "name": "PSG",
+              "isNation": false
+            },
+            {
+              "name": "Chelsea",
+              "isNation": false
+            },
+            {
+              "name": "Arsenal",
+              "isNation": false
+            },
+            {
+              "name": "Manchester United",
+              "isNation": false
+            },
+            {
+              "name": "Juventus",
+              "isNation": false
+            },
+            {
+              "name": "AC Milan",
+              "isNation": false
+            }
+          ]
+        },
+        "draws": [],
+        "stores": {
+          "local": {
+            "xi-race-sentinel": "local-held"
+          },
+          "session": {
+            "xi-race-sentinel": "session-held"
+          }
+        },
+        "trace": [
+          {
+            "action": "actual selectFormation/selectPosition",
+            "formation": "4-4-2",
+            "slot": 9,
+            "team": {
+              "name": "Real Madrid",
+              "isNation": false
+            }
+          }
+        ]
+      },
+      "duringHistory": {
+        "hook": {
+          "formation": "4-4-2",
+          "phase": "building",
+          "selectedPositionIndex": 9,
+          "currentTeam": {
+            "name": "Real Madrid",
+            "isNation": false
+          },
+          "positions": [
+            {
+              "role": "GK",
+              "label": "GK"
+            },
+            {
+              "role": "LB",
+              "label": "LB"
+            },
+            {
+              "role": "CB",
+              "label": "CB"
+            },
+            {
+              "role": "CB",
+              "label": "CB"
+            },
+            {
+              "role": "RB",
+              "label": "RB"
+            },
+            {
+              "role": "LM",
+              "label": "LM"
+            },
+            {
+              "role": "CM",
+              "label": "CM"
+            },
+            {
+              "role": "CM",
+              "label": "CM"
+            },
+            {
+              "role": "RM",
+              "label": "RM"
+            },
+            {
+              "role": "ST",
+              "label": "ST"
+            },
+            {
+              "role": "ST",
+              "label": "ST"
+            }
+          ],
+          "filledSlots": [],
+          "filledSlotsArray": [],
+          "filledCount": 0,
+          "verdict": null,
+          "isEvaluating": false,
+          "isValidating": false,
+          "validationError": null,
+          "isSpinning": false,
+          "spinTeamIndex": 0,
+          "checkingDown": false,
+          "teamAssignments": [
+            {
+              "name": "Real Madrid",
+              "isNation": false
+            },
+            {
+              "name": "Barcelona",
+              "isNation": false
+            },
+            {
+              "name": "Manchester City",
+              "isNation": false
+            },
+            {
+              "name": "Liverpool",
+              "isNation": false
+            },
+            {
+              "name": "Bayern Munich",
+              "isNation": false
+            },
+            {
+              "name": "PSG",
+              "isNation": false
+            },
+            {
+              "name": "Chelsea",
+              "isNation": false
+            },
+            {
+              "name": "Arsenal",
+              "isNation": false
+            },
+            {
+              "name": "Manchester United",
+              "isNation": false
+            },
+            {
+              "name": "Juventus",
+              "isNation": false
+            },
+            {
+              "name": "AC Milan",
+              "isNation": false
+            }
+          ]
+        },
+        "draws": [],
+        "stores": {
+          "local": {
+            "xi-race-sentinel": "local-held"
+          },
+          "session": {
+            "xi-race-sentinel": "session-held"
+          }
+        },
+        "trace": [
+          {
+            "action": "actual selectFormation/selectPosition",
+            "formation": "4-4-2",
+            "slot": 9,
+            "team": {
+              "name": "Real Madrid",
+              "isNation": false
+            }
+          },
+          {
+            "action": "actual submitPlayer",
+            "name": "Fixture Harbor Defender",
+            "pick": {
+              "rawName": "Fixture Harbor Defender",
+              "rawPosition": "Centre-Back",
+              "position": "CB",
+              "club": "Real Madrid",
+              "nationality": "Fixture Nation",
+              "value": 1200000,
+              "age": 27,
+              "year": 2026
+            }
+          },
+          {
+            "action": "actual transport request",
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/player_verified_positions?select=primary_position,secondary_positions&player_name=ilike.Fixture%20Harbor%20Defender&limit=1",
+            "method": "GET",
+            "body": null,
+            "kind": "history"
+          }
+        ]
+      },
+      "retryEnabled": true,
+      "afterRetry": {
+        "hook": {
+          "formation": "4-4-2",
+          "phase": "building",
+          "selectedPositionIndex": null,
+          "currentTeam": {
+            "name": "Barcelona",
+            "isNation": false
+          },
+          "positions": [
+            {
+              "role": "GK",
+              "label": "GK"
+            },
+            {
+              "role": "LB",
+              "label": "LB"
+            },
+            {
+              "role": "CB",
+              "label": "CB"
+            },
+            {
+              "role": "CB",
+              "label": "CB"
+            },
+            {
+              "role": "RB",
+              "label": "RB"
+            },
+            {
+              "role": "LM",
+              "label": "LM"
+            },
+            {
+              "role": "CM",
+              "label": "CM"
+            },
+            {
+              "role": "CM",
+              "label": "CM"
+            },
+            {
+              "role": "RM",
+              "label": "RM"
+            },
+            {
+              "role": "ST",
+              "label": "ST"
+            },
+            {
+              "role": "ST",
+              "label": "ST"
+            }
+          ],
+          "filledSlots": [
+            [
+              9,
+              {
+                "role": "ST",
+                "label": "ST",
+                "playerName": "Fixture Harbor Striker",
+                "assignedTeam": "Real Madrid",
+                "isNation": false,
+                "pick": {
+                  "rawName": "Fixture Harbor Striker",
+                  "rawPosition": "Centre-Forward",
+                  "position": "ST",
+                  "club": "Real Madrid",
+                  "nationality": "Fixture Nation",
+                  "value": 1300000,
+                  "age": 27,
+                  "year": 2026
+                }
+              }
+            ]
+          ],
+          "filledSlotsArray": [
+            {
+              "role": "ST",
+              "label": "ST",
+              "playerName": "Fixture Harbor Striker",
+              "assignedTeam": "Real Madrid",
+              "isNation": false,
+              "pick": {
+                "rawName": "Fixture Harbor Striker",
+                "rawPosition": "Centre-Forward",
+                "position": "ST",
+                "club": "Real Madrid",
+                "nationality": "Fixture Nation",
+                "value": 1300000,
+                "age": 27,
+                "year": 2026
+              }
+            }
+          ],
+          "filledCount": 1,
+          "verdict": null,
+          "isEvaluating": false,
+          "isValidating": false,
+          "validationError": null,
+          "isSpinning": true,
+          "spinTeamIndex": 0,
+          "checkingDown": false,
+          "teamAssignments": [
+            {
+              "name": "Real Madrid",
+              "isNation": false
+            },
+            {
+              "name": "Barcelona",
+              "isNation": false
+            },
+            {
+              "name": "Manchester City",
+              "isNation": false
+            },
+            {
+              "name": "Liverpool",
+              "isNation": false
+            },
+            {
+              "name": "Bayern Munich",
+              "isNation": false
+            },
+            {
+              "name": "PSG",
+              "isNation": false
+            },
+            {
+              "name": "Chelsea",
+              "isNation": false
+            },
+            {
+              "name": "Arsenal",
+              "isNation": false
+            },
+            {
+              "name": "Manchester United",
+              "isNation": false
+            },
+            {
+              "name": "Juventus",
+              "isNation": false
+            },
+            {
+              "name": "AC Milan",
+              "isNation": false
+            }
+          ]
+        },
+        "draws": [],
+        "stores": {
+          "local": {
+            "xi-race-sentinel": "local-held"
+          },
+          "session": {
+            "xi-race-sentinel": "session-held"
+          }
+        },
+        "trace": [
+          {
+            "action": "actual selectFormation/selectPosition",
+            "formation": "4-4-2",
+            "slot": 9,
+            "team": {
+              "name": "Real Madrid",
+              "isNation": false
+            }
+          },
+          {
+            "action": "actual submitPlayer",
+            "name": "Fixture Harbor Defender",
+            "pick": {
+              "rawName": "Fixture Harbor Defender",
+              "rawPosition": "Centre-Back",
+              "position": "CB",
+              "club": "Real Madrid",
+              "nationality": "Fixture Nation",
+              "value": 1200000,
+              "age": 27,
+              "year": 2026
+            }
+          },
+          {
+            "action": "actual transport request",
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/player_verified_positions?select=primary_position,secondary_positions&player_name=ilike.Fixture%20Harbor%20Defender&limit=1",
+            "method": "GET",
+            "body": null,
+            "kind": "history"
+          },
+          {
+            "action": "actual submitPlayer",
+            "name": "Fixture Harbor Striker",
+            "pick": {
+              "rawName": "Fixture Harbor Striker",
+              "rawPosition": "Centre-Forward",
+              "position": "ST",
+              "club": "Real Madrid",
+              "nationality": "Fixture Nation",
+              "value": 1300000,
+              "age": 27,
+              "year": 2026
+            }
+          }
+        ]
+      },
+      "afterHistory": {
+        "hook": {
+          "formation": "4-4-2",
+          "phase": "building",
+          "selectedPositionIndex": null,
+          "currentTeam": {
+            "name": "Barcelona",
+            "isNation": false
+          },
+          "positions": [
+            {
+              "role": "GK",
+              "label": "GK"
+            },
+            {
+              "role": "LB",
+              "label": "LB"
+            },
+            {
+              "role": "CB",
+              "label": "CB"
+            },
+            {
+              "role": "CB",
+              "label": "CB"
+            },
+            {
+              "role": "RB",
+              "label": "RB"
+            },
+            {
+              "role": "LM",
+              "label": "LM"
+            },
+            {
+              "role": "CM",
+              "label": "CM"
+            },
+            {
+              "role": "CM",
+              "label": "CM"
+            },
+            {
+              "role": "RM",
+              "label": "RM"
+            },
+            {
+              "role": "ST",
+              "label": "ST"
+            },
+            {
+              "role": "ST",
+              "label": "ST"
+            }
+          ],
+          "filledSlots": [
+            [
+              9,
+              {
+                "role": "ST",
+                "label": "ST",
+                "playerName": "Fixture Harbor Defender",
+                "assignedTeam": "Real Madrid",
+                "isNation": false,
+                "pick": {
+                  "rawName": "Fixture Harbor Defender",
+                  "rawPosition": "Centre-Back",
+                  "position": "CB",
+                  "club": "Real Madrid",
+                  "nationality": "Fixture Nation",
+                  "value": 1200000,
+                  "age": 27,
+                  "year": 2026,
+                  "played": [
+                    "ST"
+                  ]
+                }
+              }
+            ]
+          ],
+          "filledSlotsArray": [
+            {
+              "role": "ST",
+              "label": "ST",
+              "playerName": "Fixture Harbor Defender",
+              "assignedTeam": "Real Madrid",
+              "isNation": false,
+              "pick": {
+                "rawName": "Fixture Harbor Defender",
+                "rawPosition": "Centre-Back",
+                "position": "CB",
+                "club": "Real Madrid",
+                "nationality": "Fixture Nation",
+                "value": 1200000,
+                "age": 27,
+                "year": 2026,
+                "played": [
+                  "ST"
+                ]
+              }
+            }
+          ],
+          "filledCount": 1,
+          "verdict": null,
+          "isEvaluating": false,
+          "isValidating": false,
+          "validationError": null,
+          "isSpinning": true,
+          "spinTeamIndex": 0,
+          "checkingDown": false,
+          "teamAssignments": [
+            {
+              "name": "Real Madrid",
+              "isNation": false
+            },
+            {
+              "name": "Barcelona",
+              "isNation": false
+            },
+            {
+              "name": "Manchester City",
+              "isNation": false
+            },
+            {
+              "name": "Liverpool",
+              "isNation": false
+            },
+            {
+              "name": "Bayern Munich",
+              "isNation": false
+            },
+            {
+              "name": "PSG",
+              "isNation": false
+            },
+            {
+              "name": "Chelsea",
+              "isNation": false
+            },
+            {
+              "name": "Arsenal",
+              "isNation": false
+            },
+            {
+              "name": "Manchester United",
+              "isNation": false
+            },
+            {
+              "name": "Juventus",
+              "isNation": false
+            },
+            {
+              "name": "AC Milan",
+              "isNation": false
+            }
+          ]
+        },
+        "draws": [],
+        "stores": {
+          "local": {
+            "xi-race-sentinel": "local-held"
+          },
+          "session": {
+            "xi-race-sentinel": "session-held"
+          }
+        },
+        "trace": [
+          {
+            "action": "actual selectFormation/selectPosition",
+            "formation": "4-4-2",
+            "slot": 9,
+            "team": {
+              "name": "Real Madrid",
+              "isNation": false
+            }
+          },
+          {
+            "action": "actual submitPlayer",
+            "name": "Fixture Harbor Defender",
+            "pick": {
+              "rawName": "Fixture Harbor Defender",
+              "rawPosition": "Centre-Back",
+              "position": "CB",
+              "club": "Real Madrid",
+              "nationality": "Fixture Nation",
+              "value": 1200000,
+              "age": 27,
+              "year": 2026
+            }
+          },
+          {
+            "action": "actual transport request",
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/player_verified_positions?select=primary_position,secondary_positions&player_name=ilike.Fixture%20Harbor%20Defender&limit=1",
+            "method": "GET",
+            "body": null,
+            "kind": "history"
+          },
+          {
+            "action": "actual submitPlayer",
+            "name": "Fixture Harbor Striker",
+            "pick": {
+              "rawName": "Fixture Harbor Striker",
+              "rawPosition": "Centre-Forward",
+              "position": "ST",
+              "club": "Real Madrid",
+              "nationality": "Fixture Nation",
+              "value": 1300000,
+              "age": 27,
+              "year": 2026
+            }
+          },
+          {
+            "action": "fixture response",
+            "kind": "history",
+            "body": [
+              {
+                "primary_position": "Centre-Back",
+                "secondary_positions": [
+                  "ST"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "expectedOwner": "Fixture Harbor Striker",
+      "inputs": {
+        "first": {
+          "rawName": "Fixture Harbor Defender",
+          "rawPosition": "Centre-Back",
+          "position": "CB",
+          "club": "Real Madrid",
+          "nationality": "Fixture Nation",
+          "value": 1200000,
+          "age": 27,
+          "year": 2026
+        },
+        "second": {
+          "rawName": "Fixture Harbor Striker",
+          "rawPosition": "Centre-Forward",
+          "position": "ST",
+          "club": "Real Madrid",
+          "nationality": "Fixture Nation",
+          "value": 1300000,
+          "age": 27,
+          "year": 2026
+        }
+      }
+    },
+    "primary": {
+      "before": {
+        "hook": {
+          "formation": "4-4-2",
+          "phase": "building",
+          "selectedPositionIndex": 0,
+          "currentTeam": {
+            "name": "Real Madrid",
+            "isNation": false
+          },
+          "positions": [
+            {
+              "role": "GK",
+              "label": "GK"
+            },
+            {
+              "role": "LB",
+              "label": "LB"
+            },
+            {
+              "role": "CB",
+              "label": "CB"
+            },
+            {
+              "role": "CB",
+              "label": "CB"
+            },
+            {
+              "role": "RB",
+              "label": "RB"
+            },
+            {
+              "role": "LM",
+              "label": "LM"
+            },
+            {
+              "role": "CM",
+              "label": "CM"
+            },
+            {
+              "role": "CM",
+              "label": "CM"
+            },
+            {
+              "role": "RM",
+              "label": "RM"
+            },
+            {
+              "role": "ST",
+              "label": "ST"
+            },
+            {
+              "role": "ST",
+              "label": "ST"
+            }
+          ],
+          "filledSlots": [],
+          "filledSlotsArray": [],
+          "filledCount": 0,
+          "verdict": null,
+          "isEvaluating": false,
+          "isValidating": false,
+          "validationError": null,
+          "isSpinning": false,
+          "spinTeamIndex": 0,
+          "checkingDown": false,
+          "teamAssignments": [
+            {
+              "name": "Real Madrid",
+              "isNation": false
+            },
+            {
+              "name": "Barcelona",
+              "isNation": false
+            },
+            {
+              "name": "Manchester City",
+              "isNation": false
+            },
+            {
+              "name": "Liverpool",
+              "isNation": false
+            },
+            {
+              "name": "Bayern Munich",
+              "isNation": false
+            },
+            {
+              "name": "PSG",
+              "isNation": false
+            },
+            {
+              "name": "Chelsea",
+              "isNation": false
+            },
+            {
+              "name": "Arsenal",
+              "isNation": false
+            },
+            {
+              "name": "Manchester United",
+              "isNation": false
+            },
+            {
+              "name": "Juventus",
+              "isNation": false
+            },
+            {
+              "name": "AC Milan",
+              "isNation": false
+            }
+          ]
+        },
+        "draws": [],
+        "stores": {
+          "local": {
+            "xi-race-sentinel": "local-held"
+          },
+          "session": {
+            "xi-race-sentinel": "session-held"
+          }
+        },
+        "trace": [
+          {
+            "action": "actual selectFormation/selectPosition",
+            "formation": "4-4-2",
+            "slot": 0,
+            "team": {
+              "name": "Real Madrid",
+              "isNation": false
+            }
+          }
+        ]
+      },
+      "after": {
+        "hook": {
+          "formation": "4-4-2",
+          "phase": "building",
+          "selectedPositionIndex": null,
+          "currentTeam": {
+            "name": "Barcelona",
+            "isNation": false
+          },
+          "positions": [
+            {
+              "role": "GK",
+              "label": "GK"
+            },
+            {
+              "role": "LB",
+              "label": "LB"
+            },
+            {
+              "role": "CB",
+              "label": "CB"
+            },
+            {
+              "role": "CB",
+              "label": "CB"
+            },
+            {
+              "role": "RB",
+              "label": "RB"
+            },
+            {
+              "role": "LM",
+              "label": "LM"
+            },
+            {
+              "role": "CM",
+              "label": "CM"
+            },
+            {
+              "role": "CM",
+              "label": "CM"
+            },
+            {
+              "role": "RM",
+              "label": "RM"
+            },
+            {
+              "role": "ST",
+              "label": "ST"
+            },
+            {
+              "role": "ST",
+              "label": "ST"
+            }
+          ],
+          "filledSlots": [
+            [
+              0,
+              {
+                "role": "GK",
+                "label": "GK",
+                "playerName": "Fixture Harbor Keeper",
+                "assignedTeam": "Real Madrid",
+                "isNation": false,
+                "pick": {
+                  "rawName": "Fixture Harbor Keeper",
+                  "rawPosition": "Goalkeeper",
+                  "position": "GK",
+                  "club": "Real Madrid",
+                  "nationality": "Fixture Nation",
+                  "value": 1400000,
+                  "age": 27,
+                  "year": 2026
+                }
+              }
+            ]
+          ],
+          "filledSlotsArray": [
+            {
+              "role": "GK",
+              "label": "GK",
+              "playerName": "Fixture Harbor Keeper",
+              "assignedTeam": "Real Madrid",
+              "isNation": false,
+              "pick": {
+                "rawName": "Fixture Harbor Keeper",
+                "rawPosition": "Goalkeeper",
+                "position": "GK",
+                "club": "Real Madrid",
+                "nationality": "Fixture Nation",
+                "value": 1400000,
+                "age": 27,
+                "year": 2026
+              }
+            }
+          ],
+          "filledCount": 1,
+          "verdict": null,
+          "isEvaluating": false,
+          "isValidating": false,
+          "validationError": null,
+          "isSpinning": true,
+          "spinTeamIndex": 0,
+          "checkingDown": false,
+          "teamAssignments": [
+            {
+              "name": "Real Madrid",
+              "isNation": false
+            },
+            {
+              "name": "Barcelona",
+              "isNation": false
+            },
+            {
+              "name": "Manchester City",
+              "isNation": false
+            },
+            {
+              "name": "Liverpool",
+              "isNation": false
+            },
+            {
+              "name": "Bayern Munich",
+              "isNation": false
+            },
+            {
+              "name": "PSG",
+              "isNation": false
+            },
+            {
+              "name": "Chelsea",
+              "isNation": false
+            },
+            {
+              "name": "Arsenal",
+              "isNation": false
+            },
+            {
+              "name": "Manchester United",
+              "isNation": false
+            },
+            {
+              "name": "Juventus",
+              "isNation": false
+            },
+            {
+              "name": "AC Milan",
+              "isNation": false
+            }
+          ]
+        },
+        "draws": [],
+        "stores": {
+          "local": {
+            "xi-race-sentinel": "local-held"
+          },
+          "session": {
+            "xi-race-sentinel": "session-held"
+          }
+        },
+        "trace": [
+          {
+            "action": "actual selectFormation/selectPosition",
+            "formation": "4-4-2",
+            "slot": 0,
+            "team": {
+              "name": "Real Madrid",
+              "isNation": false
+            }
+          },
+          {
+            "action": "actual submitPlayer",
+            "name": "Fixture Harbor Keeper",
+            "pick": {
+              "rawName": "Fixture Harbor Keeper",
+              "rawPosition": "Goalkeeper",
+              "position": "GK",
+              "club": "Real Madrid",
+              "nationality": "Fixture Nation",
+              "value": 1400000,
+              "age": 27,
+              "year": 2026
+            }
+          }
+        ]
+      },
+      "input": {
+        "rawName": "Fixture Harbor Keeper",
+        "rawPosition": "Goalkeeper",
+        "position": "GK",
+        "club": "Real Madrid",
+        "nationality": "Fixture Nation",
+        "value": 1400000,
+        "age": 27,
+        "year": 2026
+      }
+    },
+    "valid-history": {
+      "before": {
+        "hook": {
+          "formation": "4-4-2",
+          "phase": "building",
+          "selectedPositionIndex": 9,
+          "currentTeam": {
+            "name": "Real Madrid",
+            "isNation": false
+          },
+          "positions": [
+            {
+              "role": "GK",
+              "label": "GK"
+            },
+            {
+              "role": "LB",
+              "label": "LB"
+            },
+            {
+              "role": "CB",
+              "label": "CB"
+            },
+            {
+              "role": "CB",
+              "label": "CB"
+            },
+            {
+              "role": "RB",
+              "label": "RB"
+            },
+            {
+              "role": "LM",
+              "label": "LM"
+            },
+            {
+              "role": "CM",
+              "label": "CM"
+            },
+            {
+              "role": "CM",
+              "label": "CM"
+            },
+            {
+              "role": "RM",
+              "label": "RM"
+            },
+            {
+              "role": "ST",
+              "label": "ST"
+            },
+            {
+              "role": "ST",
+              "label": "ST"
+            }
+          ],
+          "filledSlots": [],
+          "filledSlotsArray": [],
+          "filledCount": 0,
+          "verdict": null,
+          "isEvaluating": false,
+          "isValidating": false,
+          "validationError": null,
+          "isSpinning": false,
+          "spinTeamIndex": 0,
+          "checkingDown": false,
+          "teamAssignments": [
+            {
+              "name": "Real Madrid",
+              "isNation": false
+            },
+            {
+              "name": "Barcelona",
+              "isNation": false
+            },
+            {
+              "name": "Manchester City",
+              "isNation": false
+            },
+            {
+              "name": "Liverpool",
+              "isNation": false
+            },
+            {
+              "name": "Bayern Munich",
+              "isNation": false
+            },
+            {
+              "name": "PSG",
+              "isNation": false
+            },
+            {
+              "name": "Chelsea",
+              "isNation": false
+            },
+            {
+              "name": "Arsenal",
+              "isNation": false
+            },
+            {
+              "name": "Manchester United",
+              "isNation": false
+            },
+            {
+              "name": "Juventus",
+              "isNation": false
+            },
+            {
+              "name": "AC Milan",
+              "isNation": false
+            }
+          ]
+        },
+        "draws": [],
+        "stores": {
+          "local": {
+            "xi-race-sentinel": "local-held"
+          },
+          "session": {
+            "xi-race-sentinel": "session-held"
+          }
+        },
+        "trace": [
+          {
+            "action": "actual selectFormation/selectPosition",
+            "formation": "4-4-2",
+            "slot": 9,
+            "team": {
+              "name": "Real Madrid",
+              "isNation": false
+            }
+          }
+        ]
+      },
+      "during": {
+        "hook": {
+          "formation": "4-4-2",
+          "phase": "building",
+          "selectedPositionIndex": 9,
+          "currentTeam": {
+            "name": "Real Madrid",
+            "isNation": false
+          },
+          "positions": [
+            {
+              "role": "GK",
+              "label": "GK"
+            },
+            {
+              "role": "LB",
+              "label": "LB"
+            },
+            {
+              "role": "CB",
+              "label": "CB"
+            },
+            {
+              "role": "CB",
+              "label": "CB"
+            },
+            {
+              "role": "RB",
+              "label": "RB"
+            },
+            {
+              "role": "LM",
+              "label": "LM"
+            },
+            {
+              "role": "CM",
+              "label": "CM"
+            },
+            {
+              "role": "CM",
+              "label": "CM"
+            },
+            {
+              "role": "RM",
+              "label": "RM"
+            },
+            {
+              "role": "ST",
+              "label": "ST"
+            },
+            {
+              "role": "ST",
+              "label": "ST"
+            }
+          ],
+          "filledSlots": [],
+          "filledSlotsArray": [],
+          "filledCount": 0,
+          "verdict": null,
+          "isEvaluating": false,
+          "isValidating": false,
+          "validationError": null,
+          "isSpinning": false,
+          "spinTeamIndex": 0,
+          "checkingDown": false,
+          "teamAssignments": [
+            {
+              "name": "Real Madrid",
+              "isNation": false
+            },
+            {
+              "name": "Barcelona",
+              "isNation": false
+            },
+            {
+              "name": "Manchester City",
+              "isNation": false
+            },
+            {
+              "name": "Liverpool",
+              "isNation": false
+            },
+            {
+              "name": "Bayern Munich",
+              "isNation": false
+            },
+            {
+              "name": "PSG",
+              "isNation": false
+            },
+            {
+              "name": "Chelsea",
+              "isNation": false
+            },
+            {
+              "name": "Arsenal",
+              "isNation": false
+            },
+            {
+              "name": "Manchester United",
+              "isNation": false
+            },
+            {
+              "name": "Juventus",
+              "isNation": false
+            },
+            {
+              "name": "AC Milan",
+              "isNation": false
+            }
+          ]
+        },
+        "draws": [],
+        "stores": {
+          "local": {
+            "xi-race-sentinel": "local-held"
+          },
+          "session": {
+            "xi-race-sentinel": "session-held"
+          }
+        },
+        "trace": [
+          {
+            "action": "actual selectFormation/selectPosition",
+            "formation": "4-4-2",
+            "slot": 9,
+            "team": {
+              "name": "Real Madrid",
+              "isNation": false
+            }
+          },
+          {
+            "action": "actual submitPlayer",
+            "name": "Fixture Harbor Defender",
+            "pick": {
+              "rawName": "Fixture Harbor Defender",
+              "rawPosition": "Centre-Back",
+              "position": "CB",
+              "club": "Real Madrid",
+              "nationality": "Fixture Nation",
+              "value": 1200000,
+              "age": 27,
+              "year": 2026
+            }
+          },
+          {
+            "action": "actual transport request",
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/player_verified_positions?select=primary_position,secondary_positions&player_name=ilike.Fixture%20Harbor%20Defender&limit=1",
+            "method": "GET",
+            "body": null,
+            "kind": "history"
+          }
+        ]
+      },
+      "after": {
+        "hook": {
+          "formation": "4-4-2",
+          "phase": "building",
+          "selectedPositionIndex": null,
+          "currentTeam": {
+            "name": "Barcelona",
+            "isNation": false
+          },
+          "positions": [
+            {
+              "role": "GK",
+              "label": "GK"
+            },
+            {
+              "role": "LB",
+              "label": "LB"
+            },
+            {
+              "role": "CB",
+              "label": "CB"
+            },
+            {
+              "role": "CB",
+              "label": "CB"
+            },
+            {
+              "role": "RB",
+              "label": "RB"
+            },
+            {
+              "role": "LM",
+              "label": "LM"
+            },
+            {
+              "role": "CM",
+              "label": "CM"
+            },
+            {
+              "role": "CM",
+              "label": "CM"
+            },
+            {
+              "role": "RM",
+              "label": "RM"
+            },
+            {
+              "role": "ST",
+              "label": "ST"
+            },
+            {
+              "role": "ST",
+              "label": "ST"
+            }
+          ],
+          "filledSlots": [
+            [
+              9,
+              {
+                "role": "ST",
+                "label": "ST",
+                "playerName": "Fixture Harbor Defender",
+                "assignedTeam": "Real Madrid",
+                "isNation": false,
+                "pick": {
+                  "rawName": "Fixture Harbor Defender",
+                  "rawPosition": "Centre-Back",
+                  "position": "CB",
+                  "club": "Real Madrid",
+                  "nationality": "Fixture Nation",
+                  "value": 1200000,
+                  "age": 27,
+                  "year": 2026,
+                  "played": [
+                    "ST"
+                  ]
+                }
+              }
+            ]
+          ],
+          "filledSlotsArray": [
+            {
+              "role": "ST",
+              "label": "ST",
+              "playerName": "Fixture Harbor Defender",
+              "assignedTeam": "Real Madrid",
+              "isNation": false,
+              "pick": {
+                "rawName": "Fixture Harbor Defender",
+                "rawPosition": "Centre-Back",
+                "position": "CB",
+                "club": "Real Madrid",
+                "nationality": "Fixture Nation",
+                "value": 1200000,
+                "age": 27,
+                "year": 2026,
+                "played": [
+                  "ST"
+                ]
+              }
+            }
+          ],
+          "filledCount": 1,
+          "verdict": null,
+          "isEvaluating": false,
+          "isValidating": false,
+          "validationError": null,
+          "isSpinning": true,
+          "spinTeamIndex": 0,
+          "checkingDown": false,
+          "teamAssignments": [
+            {
+              "name": "Real Madrid",
+              "isNation": false
+            },
+            {
+              "name": "Barcelona",
+              "isNation": false
+            },
+            {
+              "name": "Manchester City",
+              "isNation": false
+            },
+            {
+              "name": "Liverpool",
+              "isNation": false
+            },
+            {
+              "name": "Bayern Munich",
+              "isNation": false
+            },
+            {
+              "name": "PSG",
+              "isNation": false
+            },
+            {
+              "name": "Chelsea",
+              "isNation": false
+            },
+            {
+              "name": "Arsenal",
+              "isNation": false
+            },
+            {
+              "name": "Manchester United",
+              "isNation": false
+            },
+            {
+              "name": "Juventus",
+              "isNation": false
+            },
+            {
+              "name": "AC Milan",
+              "isNation": false
+            }
+          ]
+        },
+        "draws": [],
+        "stores": {
+          "local": {
+            "xi-race-sentinel": "local-held"
+          },
+          "session": {
+            "xi-race-sentinel": "session-held"
+          }
+        },
+        "trace": [
+          {
+            "action": "actual selectFormation/selectPosition",
+            "formation": "4-4-2",
+            "slot": 9,
+            "team": {
+              "name": "Real Madrid",
+              "isNation": false
+            }
+          },
+          {
+            "action": "actual submitPlayer",
+            "name": "Fixture Harbor Defender",
+            "pick": {
+              "rawName": "Fixture Harbor Defender",
+              "rawPosition": "Centre-Back",
+              "position": "CB",
+              "club": "Real Madrid",
+              "nationality": "Fixture Nation",
+              "value": 1200000,
+              "age": 27,
+              "year": 2026
+            }
+          },
+          {
+            "action": "actual transport request",
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/player_verified_positions?select=primary_position,secondary_positions&player_name=ilike.Fixture%20Harbor%20Defender&limit=1",
+            "method": "GET",
+            "body": null,
+            "kind": "history"
+          },
+          {
+            "action": "fixture response",
+            "kind": "history",
+            "body": [
+              {
+                "primary_position": "Centre-Back",
+                "secondary_positions": [
+                  "ST"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "input": {
+        "rawName": "Fixture Harbor Defender",
+        "rawPosition": "Centre-Back",
+        "position": "CB",
+        "club": "Real Madrid",
+        "nationality": "Fixture Nation",
+        "value": 1200000,
+        "age": 27,
+        "year": 2026
+      }
+    },
+    "refused-retry": {
+      "before": {
+        "hook": {
+          "formation": "4-4-2",
+          "phase": "building",
+          "selectedPositionIndex": 9,
+          "currentTeam": {
+            "name": "Real Madrid",
+            "isNation": false
+          },
+          "positions": [
+            {
+              "role": "GK",
+              "label": "GK"
+            },
+            {
+              "role": "LB",
+              "label": "LB"
+            },
+            {
+              "role": "CB",
+              "label": "CB"
+            },
+            {
+              "role": "CB",
+              "label": "CB"
+            },
+            {
+              "role": "RB",
+              "label": "RB"
+            },
+            {
+              "role": "LM",
+              "label": "LM"
+            },
+            {
+              "role": "CM",
+              "label": "CM"
+            },
+            {
+              "role": "CM",
+              "label": "CM"
+            },
+            {
+              "role": "RM",
+              "label": "RM"
+            },
+            {
+              "role": "ST",
+              "label": "ST"
+            },
+            {
+              "role": "ST",
+              "label": "ST"
+            }
+          ],
+          "filledSlots": [],
+          "filledSlotsArray": [],
+          "filledCount": 0,
+          "verdict": null,
+          "isEvaluating": false,
+          "isValidating": false,
+          "validationError": null,
+          "isSpinning": false,
+          "spinTeamIndex": 0,
+          "checkingDown": false,
+          "teamAssignments": [
+            {
+              "name": "Real Madrid",
+              "isNation": false
+            },
+            {
+              "name": "Barcelona",
+              "isNation": false
+            },
+            {
+              "name": "Manchester City",
+              "isNation": false
+            },
+            {
+              "name": "Liverpool",
+              "isNation": false
+            },
+            {
+              "name": "Bayern Munich",
+              "isNation": false
+            },
+            {
+              "name": "PSG",
+              "isNation": false
+            },
+            {
+              "name": "Chelsea",
+              "isNation": false
+            },
+            {
+              "name": "Arsenal",
+              "isNation": false
+            },
+            {
+              "name": "Manchester United",
+              "isNation": false
+            },
+            {
+              "name": "Juventus",
+              "isNation": false
+            },
+            {
+              "name": "AC Milan",
+              "isNation": false
+            }
+          ]
+        },
+        "draws": [],
+        "stores": {
+          "local": {
+            "xi-race-sentinel": "local-held"
+          },
+          "session": {
+            "xi-race-sentinel": "session-held"
+          }
+        },
+        "trace": [
+          {
+            "action": "actual selectFormation/selectPosition",
+            "formation": "4-4-2",
+            "slot": 9,
+            "team": {
+              "name": "Real Madrid",
+              "isNation": false
+            }
+          }
+        ]
+      },
+      "during": {
+        "hook": {
+          "formation": "4-4-2",
+          "phase": "building",
+          "selectedPositionIndex": 9,
+          "currentTeam": {
+            "name": "Real Madrid",
+            "isNation": false
+          },
+          "positions": [
+            {
+              "role": "GK",
+              "label": "GK"
+            },
+            {
+              "role": "LB",
+              "label": "LB"
+            },
+            {
+              "role": "CB",
+              "label": "CB"
+            },
+            {
+              "role": "CB",
+              "label": "CB"
+            },
+            {
+              "role": "RB",
+              "label": "RB"
+            },
+            {
+              "role": "LM",
+              "label": "LM"
+            },
+            {
+              "role": "CM",
+              "label": "CM"
+            },
+            {
+              "role": "CM",
+              "label": "CM"
+            },
+            {
+              "role": "RM",
+              "label": "RM"
+            },
+            {
+              "role": "ST",
+              "label": "ST"
+            },
+            {
+              "role": "ST",
+              "label": "ST"
+            }
+          ],
+          "filledSlots": [],
+          "filledSlotsArray": [],
+          "filledCount": 0,
+          "verdict": null,
+          "isEvaluating": false,
+          "isValidating": false,
+          "validationError": null,
+          "isSpinning": false,
+          "spinTeamIndex": 0,
+          "checkingDown": false,
+          "teamAssignments": [
+            {
+              "name": "Real Madrid",
+              "isNation": false
+            },
+            {
+              "name": "Barcelona",
+              "isNation": false
+            },
+            {
+              "name": "Manchester City",
+              "isNation": false
+            },
+            {
+              "name": "Liverpool",
+              "isNation": false
+            },
+            {
+              "name": "Bayern Munich",
+              "isNation": false
+            },
+            {
+              "name": "PSG",
+              "isNation": false
+            },
+            {
+              "name": "Chelsea",
+              "isNation": false
+            },
+            {
+              "name": "Arsenal",
+              "isNation": false
+            },
+            {
+              "name": "Manchester United",
+              "isNation": false
+            },
+            {
+              "name": "Juventus",
+              "isNation": false
+            },
+            {
+              "name": "AC Milan",
+              "isNation": false
+            }
+          ]
+        },
+        "draws": [],
+        "stores": {
+          "local": {
+            "xi-race-sentinel": "local-held"
+          },
+          "session": {
+            "xi-race-sentinel": "session-held"
+          }
+        },
+        "trace": [
+          {
+            "action": "actual selectFormation/selectPosition",
+            "formation": "4-4-2",
+            "slot": 9,
+            "team": {
+              "name": "Real Madrid",
+              "isNation": false
+            }
+          },
+          {
+            "action": "actual submitPlayer",
+            "name": "Fixture Harbor Defender",
+            "pick": {
+              "rawName": "Fixture Harbor Defender",
+              "rawPosition": "Centre-Back",
+              "position": "CB",
+              "club": "Real Madrid",
+              "nationality": "Fixture Nation",
+              "value": 1200000,
+              "age": 27,
+              "year": 2026
+            }
+          },
+          {
+            "action": "actual transport request",
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/player_verified_positions?select=primary_position,secondary_positions&player_name=ilike.Fixture%20Harbor%20Defender&limit=1",
+            "method": "GET",
+            "body": null,
+            "kind": "history"
+          }
+        ]
+      },
+      "refused": {
+        "hook": {
+          "formation": "4-4-2",
+          "phase": "building",
+          "selectedPositionIndex": 9,
+          "currentTeam": {
+            "name": "Real Madrid",
+            "isNation": false
+          },
+          "positions": [
+            {
+              "role": "GK",
+              "label": "GK"
+            },
+            {
+              "role": "LB",
+              "label": "LB"
+            },
+            {
+              "role": "CB",
+              "label": "CB"
+            },
+            {
+              "role": "CB",
+              "label": "CB"
+            },
+            {
+              "role": "RB",
+              "label": "RB"
+            },
+            {
+              "role": "LM",
+              "label": "LM"
+            },
+            {
+              "role": "CM",
+              "label": "CM"
+            },
+            {
+              "role": "CM",
+              "label": "CM"
+            },
+            {
+              "role": "RM",
+              "label": "RM"
+            },
+            {
+              "role": "ST",
+              "label": "ST"
+            },
+            {
+              "role": "ST",
+              "label": "ST"
+            }
+          ],
+          "filledSlots": [],
+          "filledSlotsArray": [],
+          "filledCount": 0,
+          "verdict": null,
+          "isEvaluating": false,
+          "isValidating": false,
+          "validationError": "Fixture Harbor Defender plays CB. The ST slot needs CF / ST. Try someone else.",
+          "isSpinning": false,
+          "spinTeamIndex": 0,
+          "checkingDown": false,
+          "teamAssignments": [
+            {
+              "name": "Real Madrid",
+              "isNation": false
+            },
+            {
+              "name": "Barcelona",
+              "isNation": false
+            },
+            {
+              "name": "Manchester City",
+              "isNation": false
+            },
+            {
+              "name": "Liverpool",
+              "isNation": false
+            },
+            {
+              "name": "Bayern Munich",
+              "isNation": false
+            },
+            {
+              "name": "PSG",
+              "isNation": false
+            },
+            {
+              "name": "Chelsea",
+              "isNation": false
+            },
+            {
+              "name": "Arsenal",
+              "isNation": false
+            },
+            {
+              "name": "Manchester United",
+              "isNation": false
+            },
+            {
+              "name": "Juventus",
+              "isNation": false
+            },
+            {
+              "name": "AC Milan",
+              "isNation": false
+            }
+          ]
+        },
+        "draws": [],
+        "stores": {
+          "local": {
+            "xi-race-sentinel": "local-held"
+          },
+          "session": {
+            "xi-race-sentinel": "session-held"
+          }
+        },
+        "trace": [
+          {
+            "action": "actual selectFormation/selectPosition",
+            "formation": "4-4-2",
+            "slot": 9,
+            "team": {
+              "name": "Real Madrid",
+              "isNation": false
+            }
+          },
+          {
+            "action": "actual submitPlayer",
+            "name": "Fixture Harbor Defender",
+            "pick": {
+              "rawName": "Fixture Harbor Defender",
+              "rawPosition": "Centre-Back",
+              "position": "CB",
+              "club": "Real Madrid",
+              "nationality": "Fixture Nation",
+              "value": 1200000,
+              "age": 27,
+              "year": 2026
+            }
+          },
+          {
+            "action": "actual transport request",
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/player_verified_positions?select=primary_position,secondary_positions&player_name=ilike.Fixture%20Harbor%20Defender&limit=1",
+            "method": "GET",
+            "body": null,
+            "kind": "history"
+          },
+          {
+            "action": "fixture response",
+            "kind": "history",
+            "body": []
+          }
+        ]
+      },
+      "retryEnabled": true,
+      "afterRetry": {
+        "hook": {
+          "formation": "4-4-2",
+          "phase": "building",
+          "selectedPositionIndex": null,
+          "currentTeam": {
+            "name": "Barcelona",
+            "isNation": false
+          },
+          "positions": [
+            {
+              "role": "GK",
+              "label": "GK"
+            },
+            {
+              "role": "LB",
+              "label": "LB"
+            },
+            {
+              "role": "CB",
+              "label": "CB"
+            },
+            {
+              "role": "CB",
+              "label": "CB"
+            },
+            {
+              "role": "RB",
+              "label": "RB"
+            },
+            {
+              "role": "LM",
+              "label": "LM"
+            },
+            {
+              "role": "CM",
+              "label": "CM"
+            },
+            {
+              "role": "CM",
+              "label": "CM"
+            },
+            {
+              "role": "RM",
+              "label": "RM"
+            },
+            {
+              "role": "ST",
+              "label": "ST"
+            },
+            {
+              "role": "ST",
+              "label": "ST"
+            }
+          ],
+          "filledSlots": [
+            [
+              9,
+              {
+                "role": "ST",
+                "label": "ST",
+                "playerName": "Fixture Harbor Striker",
+                "assignedTeam": "Real Madrid",
+                "isNation": false,
+                "pick": {
+                  "rawName": "Fixture Harbor Striker",
+                  "rawPosition": "Centre-Forward",
+                  "position": "ST",
+                  "club": "Real Madrid",
+                  "nationality": "Fixture Nation",
+                  "value": 1300000,
+                  "age": 27,
+                  "year": 2026
+                }
+              }
+            ]
+          ],
+          "filledSlotsArray": [
+            {
+              "role": "ST",
+              "label": "ST",
+              "playerName": "Fixture Harbor Striker",
+              "assignedTeam": "Real Madrid",
+              "isNation": false,
+              "pick": {
+                "rawName": "Fixture Harbor Striker",
+                "rawPosition": "Centre-Forward",
+                "position": "ST",
+                "club": "Real Madrid",
+                "nationality": "Fixture Nation",
+                "value": 1300000,
+                "age": 27,
+                "year": 2026
+              }
+            }
+          ],
+          "filledCount": 1,
+          "verdict": null,
+          "isEvaluating": false,
+          "isValidating": false,
+          "validationError": null,
+          "isSpinning": true,
+          "spinTeamIndex": 0,
+          "checkingDown": false,
+          "teamAssignments": [
+            {
+              "name": "Real Madrid",
+              "isNation": false
+            },
+            {
+              "name": "Barcelona",
+              "isNation": false
+            },
+            {
+              "name": "Manchester City",
+              "isNation": false
+            },
+            {
+              "name": "Liverpool",
+              "isNation": false
+            },
+            {
+              "name": "Bayern Munich",
+              "isNation": false
+            },
+            {
+              "name": "PSG",
+              "isNation": false
+            },
+            {
+              "name": "Chelsea",
+              "isNation": false
+            },
+            {
+              "name": "Arsenal",
+              "isNation": false
+            },
+            {
+              "name": "Manchester United",
+              "isNation": false
+            },
+            {
+              "name": "Juventus",
+              "isNation": false
+            },
+            {
+              "name": "AC Milan",
+              "isNation": false
+            }
+          ]
+        },
+        "draws": [],
+        "stores": {
+          "local": {
+            "xi-race-sentinel": "local-held"
+          },
+          "session": {
+            "xi-race-sentinel": "session-held"
+          }
+        },
+        "trace": [
+          {
+            "action": "actual selectFormation/selectPosition",
+            "formation": "4-4-2",
+            "slot": 9,
+            "team": {
+              "name": "Real Madrid",
+              "isNation": false
+            }
+          },
+          {
+            "action": "actual submitPlayer",
+            "name": "Fixture Harbor Defender",
+            "pick": {
+              "rawName": "Fixture Harbor Defender",
+              "rawPosition": "Centre-Back",
+              "position": "CB",
+              "club": "Real Madrid",
+              "nationality": "Fixture Nation",
+              "value": 1200000,
+              "age": 27,
+              "year": 2026
+            }
+          },
+          {
+            "action": "actual transport request",
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/player_verified_positions?select=primary_position,secondary_positions&player_name=ilike.Fixture%20Harbor%20Defender&limit=1",
+            "method": "GET",
+            "body": null,
+            "kind": "history"
+          },
+          {
+            "action": "fixture response",
+            "kind": "history",
+            "body": []
+          },
+          {
+            "action": "actual submitPlayer",
+            "name": "Fixture Harbor Striker",
+            "pick": {
+              "rawName": "Fixture Harbor Striker",
+              "rawPosition": "Centre-Forward",
+              "position": "ST",
+              "club": "Real Madrid",
+              "nationality": "Fixture Nation",
+              "value": 1300000,
+              "age": 27,
+              "year": 2026
+            }
+          }
+        ]
+      }
+    },
+    "unverified-retry": {
+      "before": {
+        "hook": {
+          "formation": "4-4-2",
+          "phase": "building",
+          "selectedPositionIndex": 9,
+          "currentTeam": {
+            "name": "Argentina",
+            "isNation": true
+          },
+          "positions": [
+            {
+              "role": "GK",
+              "label": "GK"
+            },
+            {
+              "role": "LB",
+              "label": "LB"
+            },
+            {
+              "role": "CB",
+              "label": "CB"
+            },
+            {
+              "role": "CB",
+              "label": "CB"
+            },
+            {
+              "role": "RB",
+              "label": "RB"
+            },
+            {
+              "role": "LM",
+              "label": "LM"
+            },
+            {
+              "role": "CM",
+              "label": "CM"
+            },
+            {
+              "role": "CM",
+              "label": "CM"
+            },
+            {
+              "role": "RM",
+              "label": "RM"
+            },
+            {
+              "role": "ST",
+              "label": "ST"
+            },
+            {
+              "role": "ST",
+              "label": "ST"
+            }
+          ],
+          "filledSlots": [],
+          "filledSlotsArray": [],
+          "filledCount": 0,
+          "verdict": null,
+          "isEvaluating": false,
+          "isValidating": false,
+          "validationError": null,
+          "isSpinning": false,
+          "spinTeamIndex": 0,
+          "checkingDown": false,
+          "teamAssignments": [
+            {
+              "name": "Argentina",
+              "isNation": true
+            },
+            {
+              "name": "France",
+              "isNation": true
+            },
+            {
+              "name": "Brazil",
+              "isNation": true
+            },
+            {
+              "name": "England",
+              "isNation": true
+            },
+            {
+              "name": "Belgium",
+              "isNation": true
+            },
+            {
+              "name": "Croatia",
+              "isNation": true
+            },
+            {
+              "name": "Netherlands",
+              "isNation": true
+            },
+            {
+              "name": "Portugal",
+              "isNation": true
+            },
+            {
+              "name": "Spain",
+              "isNation": true
+            },
+            {
+              "name": "Italy",
+              "isNation": true
+            },
+            {
+              "name": "Germany",
+              "isNation": true
+            }
+          ]
+        },
+        "draws": [],
+        "stores": {
+          "local": {
+            "xi-race-sentinel": "local-held"
+          },
+          "session": {
+            "xi-race-sentinel": "session-held"
+          }
+        },
+        "trace": [
+          {
+            "action": "actual selectFormation/selectPosition",
+            "formation": "4-4-2",
+            "slot": 9,
+            "team": {
+              "name": "Argentina",
+              "isNation": true
+            }
+          }
+        ]
+      },
+      "during": {
+        "hook": {
+          "formation": "4-4-2",
+          "phase": "building",
+          "selectedPositionIndex": 9,
+          "currentTeam": {
+            "name": "Argentina",
+            "isNation": true
+          },
+          "positions": [
+            {
+              "role": "GK",
+              "label": "GK"
+            },
+            {
+              "role": "LB",
+              "label": "LB"
+            },
+            {
+              "role": "CB",
+              "label": "CB"
+            },
+            {
+              "role": "CB",
+              "label": "CB"
+            },
+            {
+              "role": "RB",
+              "label": "RB"
+            },
+            {
+              "role": "LM",
+              "label": "LM"
+            },
+            {
+              "role": "CM",
+              "label": "CM"
+            },
+            {
+              "role": "CM",
+              "label": "CM"
+            },
+            {
+              "role": "RM",
+              "label": "RM"
+            },
+            {
+              "role": "ST",
+              "label": "ST"
+            },
+            {
+              "role": "ST",
+              "label": "ST"
+            }
+          ],
+          "filledSlots": [],
+          "filledSlotsArray": [],
+          "filledCount": 0,
+          "verdict": null,
+          "isEvaluating": false,
+          "isValidating": true,
+          "validationError": null,
+          "isSpinning": false,
+          "spinTeamIndex": 0,
+          "checkingDown": false,
+          "teamAssignments": [
+            {
+              "name": "Argentina",
+              "isNation": true
+            },
+            {
+              "name": "France",
+              "isNation": true
+            },
+            {
+              "name": "Brazil",
+              "isNation": true
+            },
+            {
+              "name": "England",
+              "isNation": true
+            },
+            {
+              "name": "Belgium",
+              "isNation": true
+            },
+            {
+              "name": "Croatia",
+              "isNation": true
+            },
+            {
+              "name": "Netherlands",
+              "isNation": true
+            },
+            {
+              "name": "Portugal",
+              "isNation": true
+            },
+            {
+              "name": "Spain",
+              "isNation": true
+            },
+            {
+              "name": "Italy",
+              "isNation": true
+            },
+            {
+              "name": "Germany",
+              "isNation": true
+            }
+          ]
+        },
+        "draws": [],
+        "stores": {
+          "local": {
+            "xi-race-sentinel": "local-held"
+          },
+          "session": {
+            "xi-race-sentinel": "session-held"
+          }
+        },
+        "trace": [
+          {
+            "action": "actual selectFormation/selectPosition",
+            "formation": "4-4-2",
+            "slot": 9,
+            "team": {
+              "name": "Argentina",
+              "isNation": true
+            }
+          },
+          {
+            "action": "actual submitPlayer",
+            "name": "Fixture Nation Striker",
+            "pick": {
+              "rawName": "Fixture Nation Striker",
+              "rawPosition": "Centre-Forward",
+              "position": "ST",
+              "club": "Fixture Harbor FC",
+              "nationality": "Argentina",
+              "value": 1300000,
+              "age": 27,
+              "year": 2026
+            }
+          },
+          {
+            "action": "actual transport request",
+            "url": "http://127.0.0.1:1/functions/v1/validate-player",
+            "method": "POST",
+            "body": {
+              "playerName": "Fixture Nation Striker",
+              "teamName": "Argentina",
+              "isNation": true,
+              "position": "ST"
+            },
+            "kind": "validator"
+          }
+        ]
+      },
+      "unverified": {
+        "hook": {
+          "formation": "4-4-2",
+          "phase": "building",
+          "selectedPositionIndex": 9,
+          "currentTeam": {
+            "name": "Argentina",
+            "isNation": true
+          },
+          "positions": [
+            {
+              "role": "GK",
+              "label": "GK"
+            },
+            {
+              "role": "LB",
+              "label": "LB"
+            },
+            {
+              "role": "CB",
+              "label": "CB"
+            },
+            {
+              "role": "CB",
+              "label": "CB"
+            },
+            {
+              "role": "RB",
+              "label": "RB"
+            },
+            {
+              "role": "LM",
+              "label": "LM"
+            },
+            {
+              "role": "CM",
+              "label": "CM"
+            },
+            {
+              "role": "CM",
+              "label": "CM"
+            },
+            {
+              "role": "RM",
+              "label": "RM"
+            },
+            {
+              "role": "ST",
+              "label": "ST"
+            },
+            {
+              "role": "ST",
+              "label": "ST"
+            }
+          ],
+          "filledSlots": [],
+          "filledSlotsArray": [],
+          "filledCount": 0,
+          "verdict": null,
+          "isEvaluating": false,
+          "isValidating": false,
+          "validationError": "Fixture temporarily unavailable",
+          "isSpinning": false,
+          "spinTeamIndex": 0,
+          "checkingDown": false,
+          "teamAssignments": [
+            {
+              "name": "Argentina",
+              "isNation": true
+            },
+            {
+              "name": "France",
+              "isNation": true
+            },
+            {
+              "name": "Brazil",
+              "isNation": true
+            },
+            {
+              "name": "England",
+              "isNation": true
+            },
+            {
+              "name": "Belgium",
+              "isNation": true
+            },
+            {
+              "name": "Croatia",
+              "isNation": true
+            },
+            {
+              "name": "Netherlands",
+              "isNation": true
+            },
+            {
+              "name": "Portugal",
+              "isNation": true
+            },
+            {
+              "name": "Spain",
+              "isNation": true
+            },
+            {
+              "name": "Italy",
+              "isNation": true
+            },
+            {
+              "name": "Germany",
+              "isNation": true
+            }
+          ]
+        },
+        "draws": [],
+        "stores": {
+          "local": {
+            "xi-race-sentinel": "local-held"
+          },
+          "session": {
+            "xi-race-sentinel": "session-held"
+          }
+        },
+        "trace": [
+          {
+            "action": "actual selectFormation/selectPosition",
+            "formation": "4-4-2",
+            "slot": 9,
+            "team": {
+              "name": "Argentina",
+              "isNation": true
+            }
+          },
+          {
+            "action": "actual submitPlayer",
+            "name": "Fixture Nation Striker",
+            "pick": {
+              "rawName": "Fixture Nation Striker",
+              "rawPosition": "Centre-Forward",
+              "position": "ST",
+              "club": "Fixture Harbor FC",
+              "nationality": "Argentina",
+              "value": 1300000,
+              "age": 27,
+              "year": 2026
+            }
+          },
+          {
+            "action": "actual transport request",
+            "url": "http://127.0.0.1:1/functions/v1/validate-player",
+            "method": "POST",
+            "body": {
+              "playerName": "Fixture Nation Striker",
+              "teamName": "Argentina",
+              "isNation": true,
+              "position": "ST"
+            },
+            "kind": "validator"
+          },
+          {
+            "action": "fixture response",
+            "kind": "validator",
+            "body": {
+              "unverified": true,
+              "reason": "Fixture temporarily unavailable"
+            }
+          }
+        ]
+      },
+      "retryEnabled": true,
+      "afterRetry": {
+        "hook": {
+          "formation": "4-4-2",
+          "phase": "building",
+          "selectedPositionIndex": null,
+          "currentTeam": {
+            "name": "France",
+            "isNation": true
+          },
+          "positions": [
+            {
+              "role": "GK",
+              "label": "GK"
+            },
+            {
+              "role": "LB",
+              "label": "LB"
+            },
+            {
+              "role": "CB",
+              "label": "CB"
+            },
+            {
+              "role": "CB",
+              "label": "CB"
+            },
+            {
+              "role": "RB",
+              "label": "RB"
+            },
+            {
+              "role": "LM",
+              "label": "LM"
+            },
+            {
+              "role": "CM",
+              "label": "CM"
+            },
+            {
+              "role": "CM",
+              "label": "CM"
+            },
+            {
+              "role": "RM",
+              "label": "RM"
+            },
+            {
+              "role": "ST",
+              "label": "ST"
+            },
+            {
+              "role": "ST",
+              "label": "ST"
+            }
+          ],
+          "filledSlots": [
+            [
+              9,
+              {
+                "role": "ST",
+                "label": "ST",
+                "playerName": "Fixture Nation Striker",
+                "assignedTeam": "Argentina",
+                "isNation": true,
+                "pick": {
+                  "rawName": "Fixture Nation Striker",
+                  "rawPosition": "Centre-Forward",
+                  "position": "ST",
+                  "club": "Fixture Harbor FC",
+                  "nationality": "Argentina",
+                  "value": 1300000,
+                  "age": 27,
+                  "year": 2026
+                }
+              }
+            ]
+          ],
+          "filledSlotsArray": [
+            {
+              "role": "ST",
+              "label": "ST",
+              "playerName": "Fixture Nation Striker",
+              "assignedTeam": "Argentina",
+              "isNation": true,
+              "pick": {
+                "rawName": "Fixture Nation Striker",
+                "rawPosition": "Centre-Forward",
+                "position": "ST",
+                "club": "Fixture Harbor FC",
+                "nationality": "Argentina",
+                "value": 1300000,
+                "age": 27,
+                "year": 2026
+              }
+            }
+          ],
+          "filledCount": 1,
+          "verdict": null,
+          "isEvaluating": false,
+          "isValidating": false,
+          "validationError": null,
+          "isSpinning": true,
+          "spinTeamIndex": 0,
+          "checkingDown": false,
+          "teamAssignments": [
+            {
+              "name": "Argentina",
+              "isNation": true
+            },
+            {
+              "name": "France",
+              "isNation": true
+            },
+            {
+              "name": "Brazil",
+              "isNation": true
+            },
+            {
+              "name": "England",
+              "isNation": true
+            },
+            {
+              "name": "Belgium",
+              "isNation": true
+            },
+            {
+              "name": "Croatia",
+              "isNation": true
+            },
+            {
+              "name": "Netherlands",
+              "isNation": true
+            },
+            {
+              "name": "Portugal",
+              "isNation": true
+            },
+            {
+              "name": "Spain",
+              "isNation": true
+            },
+            {
+              "name": "Italy",
+              "isNation": true
+            },
+            {
+              "name": "Germany",
+              "isNation": true
+            }
+          ]
+        },
+        "draws": [],
+        "stores": {
+          "local": {
+            "xi-race-sentinel": "local-held"
+          },
+          "session": {
+            "xi-race-sentinel": "session-held"
+          }
+        },
+        "trace": [
+          {
+            "action": "actual selectFormation/selectPosition",
+            "formation": "4-4-2",
+            "slot": 9,
+            "team": {
+              "name": "Argentina",
+              "isNation": true
+            }
+          },
+          {
+            "action": "actual submitPlayer",
+            "name": "Fixture Nation Striker",
+            "pick": {
+              "rawName": "Fixture Nation Striker",
+              "rawPosition": "Centre-Forward",
+              "position": "ST",
+              "club": "Fixture Harbor FC",
+              "nationality": "Argentina",
+              "value": 1300000,
+              "age": 27,
+              "year": 2026
+            }
+          },
+          {
+            "action": "actual transport request",
+            "url": "http://127.0.0.1:1/functions/v1/validate-player",
+            "method": "POST",
+            "body": {
+              "playerName": "Fixture Nation Striker",
+              "teamName": "Argentina",
+              "isNation": true,
+              "position": "ST"
+            },
+            "kind": "validator"
+          },
+          {
+            "action": "fixture response",
+            "kind": "validator",
+            "body": {
+              "unverified": true,
+              "reason": "Fixture temporarily unavailable"
+            }
+          },
+          {
+            "action": "actual submitPlayer",
+            "name": "Fixture Nation Striker",
+            "pick": {
+              "rawName": "Fixture Nation Striker",
+              "rawPosition": "Centre-Forward",
+              "position": "ST",
+              "club": "Fixture Harbor FC",
+              "nationality": "Argentina",
+              "value": 1300000,
+              "age": 27,
+              "year": 2026
+            }
+          },
+          {
+            "action": "actual transport request",
+            "url": "http://127.0.0.1:1/functions/v1/validate-player",
+            "method": "POST",
+            "body": {
+              "playerName": "Fixture Nation Striker",
+              "teamName": "Argentina",
+              "isNation": true,
+              "position": "ST"
+            },
+            "kind": "validator"
+          },
+          {
+            "action": "fixture response",
+            "kind": "validator",
+            "body": {
+              "valid": true
+            }
+          }
+        ]
+      },
+      "input": {
+        "rawName": "Fixture Nation Striker",
+        "rawPosition": "Centre-Forward",
+        "position": "ST",
+        "club": "Fixture Harbor FC",
+        "nationality": "Argentina",
+        "value": 1300000,
+        "age": 27,
+        "year": 2026
+      }
+    },
+    "reroll": {
+      "before": {
+        "hook": {
+          "formation": "4-4-2",
+          "phase": "building",
+          "selectedPositionIndex": 9,
+          "currentTeam": {
+            "name": "Real Madrid",
+            "isNation": false
+          },
+          "positions": [
+            {
+              "role": "GK",
+              "label": "GK"
+            },
+            {
+              "role": "LB",
+              "label": "LB"
+            },
+            {
+              "role": "CB",
+              "label": "CB"
+            },
+            {
+              "role": "CB",
+              "label": "CB"
+            },
+            {
+              "role": "RB",
+              "label": "RB"
+            },
+            {
+              "role": "LM",
+              "label": "LM"
+            },
+            {
+              "role": "CM",
+              "label": "CM"
+            },
+            {
+              "role": "CM",
+              "label": "CM"
+            },
+            {
+              "role": "RM",
+              "label": "RM"
+            },
+            {
+              "role": "ST",
+              "label": "ST"
+            },
+            {
+              "role": "ST",
+              "label": "ST"
+            }
+          ],
+          "filledSlots": [],
+          "filledSlotsArray": [],
+          "filledCount": 0,
+          "verdict": null,
+          "isEvaluating": false,
+          "isValidating": false,
+          "validationError": null,
+          "isSpinning": false,
+          "spinTeamIndex": 0,
+          "checkingDown": false,
+          "teamAssignments": [
+            {
+              "name": "Real Madrid",
+              "isNation": false
+            },
+            {
+              "name": "Barcelona",
+              "isNation": false
+            },
+            {
+              "name": "Manchester City",
+              "isNation": false
+            },
+            {
+              "name": "Liverpool",
+              "isNation": false
+            },
+            {
+              "name": "Bayern Munich",
+              "isNation": false
+            },
+            {
+              "name": "PSG",
+              "isNation": false
+            },
+            {
+              "name": "Chelsea",
+              "isNation": false
+            },
+            {
+              "name": "Arsenal",
+              "isNation": false
+            },
+            {
+              "name": "Manchester United",
+              "isNation": false
+            },
+            {
+              "name": "Juventus",
+              "isNation": false
+            },
+            {
+              "name": "AC Milan",
+              "isNation": false
+            }
+          ]
+        },
+        "draws": [],
+        "stores": {
+          "local": {
+            "xi-race-sentinel": "local-held"
+          },
+          "session": {
+            "xi-race-sentinel": "session-held"
+          }
+        },
+        "trace": [
+          {
+            "action": "actual selectFormation/selectPosition",
+            "formation": "4-4-2",
+            "slot": 9,
+            "team": {
+              "name": "Real Madrid",
+              "isNation": false
+            }
+          }
+        ]
+      },
+      "during": {
+        "hook": {
+          "formation": "4-4-2",
+          "phase": "building",
+          "selectedPositionIndex": 9,
+          "currentTeam": {
+            "name": "Real Madrid",
+            "isNation": false
+          },
+          "positions": [
+            {
+              "role": "GK",
+              "label": "GK"
+            },
+            {
+              "role": "LB",
+              "label": "LB"
+            },
+            {
+              "role": "CB",
+              "label": "CB"
+            },
+            {
+              "role": "CB",
+              "label": "CB"
+            },
+            {
+              "role": "RB",
+              "label": "RB"
+            },
+            {
+              "role": "LM",
+              "label": "LM"
+            },
+            {
+              "role": "CM",
+              "label": "CM"
+            },
+            {
+              "role": "CM",
+              "label": "CM"
+            },
+            {
+              "role": "RM",
+              "label": "RM"
+            },
+            {
+              "role": "ST",
+              "label": "ST"
+            },
+            {
+              "role": "ST",
+              "label": "ST"
+            }
+          ],
+          "filledSlots": [],
+          "filledSlotsArray": [],
+          "filledCount": 0,
+          "verdict": null,
+          "isEvaluating": false,
+          "isValidating": false,
+          "validationError": null,
+          "isSpinning": false,
+          "spinTeamIndex": 0,
+          "checkingDown": false,
+          "teamAssignments": [
+            {
+              "name": "Real Madrid",
+              "isNation": false
+            },
+            {
+              "name": "Barcelona",
+              "isNation": false
+            },
+            {
+              "name": "Manchester City",
+              "isNation": false
+            },
+            {
+              "name": "Liverpool",
+              "isNation": false
+            },
+            {
+              "name": "Bayern Munich",
+              "isNation": false
+            },
+            {
+              "name": "PSG",
+              "isNation": false
+            },
+            {
+              "name": "Chelsea",
+              "isNation": false
+            },
+            {
+              "name": "Arsenal",
+              "isNation": false
+            },
+            {
+              "name": "Manchester United",
+              "isNation": false
+            },
+            {
+              "name": "Juventus",
+              "isNation": false
+            },
+            {
+              "name": "AC Milan",
+              "isNation": false
+            }
+          ]
+        },
+        "draws": [],
+        "stores": {
+          "local": {
+            "xi-race-sentinel": "local-held"
+          },
+          "session": {
+            "xi-race-sentinel": "session-held"
+          }
+        },
+        "trace": [
+          {
+            "action": "actual selectFormation/selectPosition",
+            "formation": "4-4-2",
+            "slot": 9,
+            "team": {
+              "name": "Real Madrid",
+              "isNation": false
+            }
+          },
+          {
+            "action": "actual submitPlayer",
+            "name": "Fixture Harbor Defender",
+            "pick": {
+              "rawName": "Fixture Harbor Defender",
+              "rawPosition": "Centre-Back",
+              "position": "CB",
+              "club": "Real Madrid",
+              "nationality": "Fixture Nation",
+              "value": 1200000,
+              "age": 27,
+              "year": 2026
+            }
+          },
+          {
+            "action": "actual transport request",
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/player_verified_positions?select=primary_position,secondary_positions&player_name=ilike.Fixture%20Harbor%20Defender&limit=1",
+            "method": "GET",
+            "body": null,
+            "kind": "history"
+          }
+        ]
+      },
+      "cancelled": {
+        "hook": {
+          "formation": "4-4-2",
+          "phase": "building",
+          "selectedPositionIndex": null,
+          "currentTeam": {
+            "name": "Brazil",
+            "isNation": true
+          },
+          "positions": [
+            {
+              "role": "GK",
+              "label": "GK"
+            },
+            {
+              "role": "LB",
+              "label": "LB"
+            },
+            {
+              "role": "CB",
+              "label": "CB"
+            },
+            {
+              "role": "CB",
+              "label": "CB"
+            },
+            {
+              "role": "RB",
+              "label": "RB"
+            },
+            {
+              "role": "LM",
+              "label": "LM"
+            },
+            {
+              "role": "CM",
+              "label": "CM"
+            },
+            {
+              "role": "CM",
+              "label": "CM"
+            },
+            {
+              "role": "RM",
+              "label": "RM"
+            },
+            {
+              "role": "ST",
+              "label": "ST"
+            },
+            {
+              "role": "ST",
+              "label": "ST"
+            }
+          ],
+          "filledSlots": [],
+          "filledSlotsArray": [],
+          "filledCount": 0,
+          "verdict": null,
+          "isEvaluating": false,
+          "isValidating": false,
+          "validationError": null,
+          "isSpinning": true,
+          "spinTeamIndex": 0,
+          "checkingDown": false,
+          "teamAssignments": [
+            {
+              "name": "Brazil",
+              "isNation": true
+            },
+            {
+              "name": "Barcelona",
+              "isNation": false
+            },
+            {
+              "name": "Manchester City",
+              "isNation": false
+            },
+            {
+              "name": "Liverpool",
+              "isNation": false
+            },
+            {
+              "name": "Bayern Munich",
+              "isNation": false
+            },
+            {
+              "name": "PSG",
+              "isNation": false
+            },
+            {
+              "name": "Chelsea",
+              "isNation": false
+            },
+            {
+              "name": "Arsenal",
+              "isNation": false
+            },
+            {
+              "name": "Manchester United",
+              "isNation": false
+            },
+            {
+              "name": "Juventus",
+              "isNation": false
+            },
+            {
+              "name": "AC Milan",
+              "isNation": false
+            }
+          ]
+        },
+        "draws": [
+          0.5
+        ],
+        "stores": {
+          "local": {
+            "xi-race-sentinel": "local-held"
+          },
+          "session": {
+            "xi-race-sentinel": "session-held"
+          }
+        },
+        "trace": [
+          {
+            "action": "actual selectFormation/selectPosition",
+            "formation": "4-4-2",
+            "slot": 9,
+            "team": {
+              "name": "Real Madrid",
+              "isNation": false
+            }
+          },
+          {
+            "action": "actual submitPlayer",
+            "name": "Fixture Harbor Defender",
+            "pick": {
+              "rawName": "Fixture Harbor Defender",
+              "rawPosition": "Centre-Back",
+              "position": "CB",
+              "club": "Real Madrid",
+              "nationality": "Fixture Nation",
+              "value": 1200000,
+              "age": 27,
+              "year": 2026
+            }
+          },
+          {
+            "action": "actual transport request",
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/player_verified_positions?select=primary_position,secondary_positions&player_name=ilike.Fixture%20Harbor%20Defender&limit=1",
+            "method": "GET",
+            "body": null,
+            "kind": "history"
+          }
+        ]
+      },
+      "after": {
+        "hook": {
+          "formation": "4-4-2",
+          "phase": "building",
+          "selectedPositionIndex": null,
+          "currentTeam": {
+            "name": "Brazil",
+            "isNation": true
+          },
+          "positions": [
+            {
+              "role": "GK",
+              "label": "GK"
+            },
+            {
+              "role": "LB",
+              "label": "LB"
+            },
+            {
+              "role": "CB",
+              "label": "CB"
+            },
+            {
+              "role": "CB",
+              "label": "CB"
+            },
+            {
+              "role": "RB",
+              "label": "RB"
+            },
+            {
+              "role": "LM",
+              "label": "LM"
+            },
+            {
+              "role": "CM",
+              "label": "CM"
+            },
+            {
+              "role": "CM",
+              "label": "CM"
+            },
+            {
+              "role": "RM",
+              "label": "RM"
+            },
+            {
+              "role": "ST",
+              "label": "ST"
+            },
+            {
+              "role": "ST",
+              "label": "ST"
+            }
+          ],
+          "filledSlots": [],
+          "filledSlotsArray": [],
+          "filledCount": 0,
+          "verdict": null,
+          "isEvaluating": false,
+          "isValidating": false,
+          "validationError": null,
+          "isSpinning": true,
+          "spinTeamIndex": 0,
+          "checkingDown": false,
+          "teamAssignments": [
+            {
+              "name": "Brazil",
+              "isNation": true
+            },
+            {
+              "name": "Barcelona",
+              "isNation": false
+            },
+            {
+              "name": "Manchester City",
+              "isNation": false
+            },
+            {
+              "name": "Liverpool",
+              "isNation": false
+            },
+            {
+              "name": "Bayern Munich",
+              "isNation": false
+            },
+            {
+              "name": "PSG",
+              "isNation": false
+            },
+            {
+              "name": "Chelsea",
+              "isNation": false
+            },
+            {
+              "name": "Arsenal",
+              "isNation": false
+            },
+            {
+              "name": "Manchester United",
+              "isNation": false
+            },
+            {
+              "name": "Juventus",
+              "isNation": false
+            },
+            {
+              "name": "AC Milan",
+              "isNation": false
+            }
+          ]
+        },
+        "draws": [
+          0.5
+        ],
+        "stores": {
+          "local": {
+            "xi-race-sentinel": "local-held"
+          },
+          "session": {
+            "xi-race-sentinel": "session-held"
+          }
+        },
+        "trace": [
+          {
+            "action": "actual selectFormation/selectPosition",
+            "formation": "4-4-2",
+            "slot": 9,
+            "team": {
+              "name": "Real Madrid",
+              "isNation": false
+            }
+          },
+          {
+            "action": "actual submitPlayer",
+            "name": "Fixture Harbor Defender",
+            "pick": {
+              "rawName": "Fixture Harbor Defender",
+              "rawPosition": "Centre-Back",
+              "position": "CB",
+              "club": "Real Madrid",
+              "nationality": "Fixture Nation",
+              "value": 1200000,
+              "age": 27,
+              "year": 2026
+            }
+          },
+          {
+            "action": "actual transport request",
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/player_verified_positions?select=primary_position,secondary_positions&player_name=ilike.Fixture%20Harbor%20Defender&limit=1",
+            "method": "GET",
+            "body": null,
+            "kind": "history"
+          },
+          {
+            "action": "fixture response",
+            "kind": "history",
+            "body": [
+              {
+                "primary_position": "Centre-Back",
+                "secondary_positions": [
+                  "ST"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "input": {
+        "rawName": "Fixture Harbor Defender",
+        "rawPosition": "Centre-Back",
+        "position": "CB",
+        "club": "Real Madrid",
+        "nationality": "Fixture Nation",
+        "value": 1200000,
+        "age": 27,
+        "year": 2026
+      }
+    },
+    "reset": {
+      "before": {
+        "hook": {
+          "formation": "4-4-2",
+          "phase": "building",
+          "selectedPositionIndex": 9,
+          "currentTeam": {
+            "name": "Real Madrid",
+            "isNation": false
+          },
+          "positions": [
+            {
+              "role": "GK",
+              "label": "GK"
+            },
+            {
+              "role": "LB",
+              "label": "LB"
+            },
+            {
+              "role": "CB",
+              "label": "CB"
+            },
+            {
+              "role": "CB",
+              "label": "CB"
+            },
+            {
+              "role": "RB",
+              "label": "RB"
+            },
+            {
+              "role": "LM",
+              "label": "LM"
+            },
+            {
+              "role": "CM",
+              "label": "CM"
+            },
+            {
+              "role": "CM",
+              "label": "CM"
+            },
+            {
+              "role": "RM",
+              "label": "RM"
+            },
+            {
+              "role": "ST",
+              "label": "ST"
+            },
+            {
+              "role": "ST",
+              "label": "ST"
+            }
+          ],
+          "filledSlots": [],
+          "filledSlotsArray": [],
+          "filledCount": 0,
+          "verdict": null,
+          "isEvaluating": false,
+          "isValidating": false,
+          "validationError": null,
+          "isSpinning": false,
+          "spinTeamIndex": 0,
+          "checkingDown": false,
+          "teamAssignments": [
+            {
+              "name": "Real Madrid",
+              "isNation": false
+            },
+            {
+              "name": "Barcelona",
+              "isNation": false
+            },
+            {
+              "name": "Manchester City",
+              "isNation": false
+            },
+            {
+              "name": "Liverpool",
+              "isNation": false
+            },
+            {
+              "name": "Bayern Munich",
+              "isNation": false
+            },
+            {
+              "name": "PSG",
+              "isNation": false
+            },
+            {
+              "name": "Chelsea",
+              "isNation": false
+            },
+            {
+              "name": "Arsenal",
+              "isNation": false
+            },
+            {
+              "name": "Manchester United",
+              "isNation": false
+            },
+            {
+              "name": "Juventus",
+              "isNation": false
+            },
+            {
+              "name": "AC Milan",
+              "isNation": false
+            }
+          ]
+        },
+        "draws": [],
+        "stores": {
+          "local": {
+            "xi-race-sentinel": "local-held"
+          },
+          "session": {
+            "xi-race-sentinel": "session-held"
+          }
+        },
+        "trace": [
+          {
+            "action": "actual selectFormation/selectPosition",
+            "formation": "4-4-2",
+            "slot": 9,
+            "team": {
+              "name": "Real Madrid",
+              "isNation": false
+            }
+          }
+        ]
+      },
+      "during": {
+        "hook": {
+          "formation": "4-4-2",
+          "phase": "building",
+          "selectedPositionIndex": 9,
+          "currentTeam": {
+            "name": "Real Madrid",
+            "isNation": false
+          },
+          "positions": [
+            {
+              "role": "GK",
+              "label": "GK"
+            },
+            {
+              "role": "LB",
+              "label": "LB"
+            },
+            {
+              "role": "CB",
+              "label": "CB"
+            },
+            {
+              "role": "CB",
+              "label": "CB"
+            },
+            {
+              "role": "RB",
+              "label": "RB"
+            },
+            {
+              "role": "LM",
+              "label": "LM"
+            },
+            {
+              "role": "CM",
+              "label": "CM"
+            },
+            {
+              "role": "CM",
+              "label": "CM"
+            },
+            {
+              "role": "RM",
+              "label": "RM"
+            },
+            {
+              "role": "ST",
+              "label": "ST"
+            },
+            {
+              "role": "ST",
+              "label": "ST"
+            }
+          ],
+          "filledSlots": [],
+          "filledSlotsArray": [],
+          "filledCount": 0,
+          "verdict": null,
+          "isEvaluating": false,
+          "isValidating": false,
+          "validationError": null,
+          "isSpinning": false,
+          "spinTeamIndex": 0,
+          "checkingDown": false,
+          "teamAssignments": [
+            {
+              "name": "Real Madrid",
+              "isNation": false
+            },
+            {
+              "name": "Barcelona",
+              "isNation": false
+            },
+            {
+              "name": "Manchester City",
+              "isNation": false
+            },
+            {
+              "name": "Liverpool",
+              "isNation": false
+            },
+            {
+              "name": "Bayern Munich",
+              "isNation": false
+            },
+            {
+              "name": "PSG",
+              "isNation": false
+            },
+            {
+              "name": "Chelsea",
+              "isNation": false
+            },
+            {
+              "name": "Arsenal",
+              "isNation": false
+            },
+            {
+              "name": "Manchester United",
+              "isNation": false
+            },
+            {
+              "name": "Juventus",
+              "isNation": false
+            },
+            {
+              "name": "AC Milan",
+              "isNation": false
+            }
+          ]
+        },
+        "draws": [],
+        "stores": {
+          "local": {
+            "xi-race-sentinel": "local-held"
+          },
+          "session": {
+            "xi-race-sentinel": "session-held"
+          }
+        },
+        "trace": [
+          {
+            "action": "actual selectFormation/selectPosition",
+            "formation": "4-4-2",
+            "slot": 9,
+            "team": {
+              "name": "Real Madrid",
+              "isNation": false
+            }
+          },
+          {
+            "action": "actual submitPlayer",
+            "name": "Fixture Harbor Defender",
+            "pick": {
+              "rawName": "Fixture Harbor Defender",
+              "rawPosition": "Centre-Back",
+              "position": "CB",
+              "club": "Real Madrid",
+              "nationality": "Fixture Nation",
+              "value": 1200000,
+              "age": 27,
+              "year": 2026
+            }
+          },
+          {
+            "action": "actual transport request",
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/player_verified_positions?select=primary_position,secondary_positions&player_name=ilike.Fixture%20Harbor%20Defender&limit=1",
+            "method": "GET",
+            "body": null,
+            "kind": "history"
+          }
+        ]
+      },
+      "cancelled": {
+        "hook": {
+          "formation": null,
+          "phase": "formation",
+          "selectedPositionIndex": null,
+          "currentTeam": null,
+          "positions": [],
+          "filledSlots": [],
+          "filledSlotsArray": [],
+          "filledCount": 0,
+          "verdict": null,
+          "isEvaluating": false,
+          "isValidating": false,
+          "validationError": null,
+          "isSpinning": false,
+          "spinTeamIndex": 0,
+          "checkingDown": false,
+          "teamAssignments": []
+        },
+        "draws": [],
+        "stores": {
+          "local": {
+            "xi-race-sentinel": "local-held"
+          },
+          "session": {
+            "xi-race-sentinel": "session-held"
+          }
+        },
+        "trace": [
+          {
+            "action": "actual selectFormation/selectPosition",
+            "formation": "4-4-2",
+            "slot": 9,
+            "team": {
+              "name": "Real Madrid",
+              "isNation": false
+            }
+          },
+          {
+            "action": "actual submitPlayer",
+            "name": "Fixture Harbor Defender",
+            "pick": {
+              "rawName": "Fixture Harbor Defender",
+              "rawPosition": "Centre-Back",
+              "position": "CB",
+              "club": "Real Madrid",
+              "nationality": "Fixture Nation",
+              "value": 1200000,
+              "age": 27,
+              "year": 2026
+            }
+          },
+          {
+            "action": "actual transport request",
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/player_verified_positions?select=primary_position,secondary_positions&player_name=ilike.Fixture%20Harbor%20Defender&limit=1",
+            "method": "GET",
+            "body": null,
+            "kind": "history"
+          }
+        ]
+      },
+      "after": {
+        "hook": {
+          "formation": null,
+          "phase": "formation",
+          "selectedPositionIndex": null,
+          "currentTeam": null,
+          "positions": [],
+          "filledSlots": [],
+          "filledSlotsArray": [],
+          "filledCount": 0,
+          "verdict": null,
+          "isEvaluating": false,
+          "isValidating": false,
+          "validationError": null,
+          "isSpinning": false,
+          "spinTeamIndex": 0,
+          "checkingDown": false,
+          "teamAssignments": []
+        },
+        "draws": [],
+        "stores": {
+          "local": {
+            "xi-race-sentinel": "local-held"
+          },
+          "session": {
+            "xi-race-sentinel": "session-held"
+          }
+        },
+        "trace": [
+          {
+            "action": "actual selectFormation/selectPosition",
+            "formation": "4-4-2",
+            "slot": 9,
+            "team": {
+              "name": "Real Madrid",
+              "isNation": false
+            }
+          },
+          {
+            "action": "actual submitPlayer",
+            "name": "Fixture Harbor Defender",
+            "pick": {
+              "rawName": "Fixture Harbor Defender",
+              "rawPosition": "Centre-Back",
+              "position": "CB",
+              "club": "Real Madrid",
+              "nationality": "Fixture Nation",
+              "value": 1200000,
+              "age": 27,
+              "year": 2026
+            }
+          },
+          {
+            "action": "actual transport request",
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/player_verified_positions?select=primary_position,secondary_positions&player_name=ilike.Fixture%20Harbor%20Defender&limit=1",
+            "method": "GET",
+            "body": null,
+            "kind": "history"
+          },
+          {
+            "action": "fixture response",
+            "kind": "history",
+            "body": [
+              {
+                "primary_position": "Centre-Back",
+                "secondary_positions": [
+                  "ST"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "input": {
+        "rawName": "Fixture Harbor Defender",
+        "rawPosition": "Centre-Back",
+        "position": "CB",
+        "club": "Real Madrid",
+        "nationality": "Fixture Nation",
+        "value": 1200000,
+        "age": 27,
+        "year": 2026
+      }
+    },
+    "next-door": {
+      "before": {
+        "hook": {
+          "formation": "4-4-2",
+          "phase": "building",
+          "selectedPositionIndex": 1,
+          "currentTeam": {
+            "name": "Real Madrid",
+            "isNation": false
+          },
+          "positions": [
+            {
+              "role": "GK",
+              "label": "GK"
+            },
+            {
+              "role": "LB",
+              "label": "LB"
+            },
+            {
+              "role": "CB",
+              "label": "CB"
+            },
+            {
+              "role": "CB",
+              "label": "CB"
+            },
+            {
+              "role": "RB",
+              "label": "RB"
+            },
+            {
+              "role": "LM",
+              "label": "LM"
+            },
+            {
+              "role": "CM",
+              "label": "CM"
+            },
+            {
+              "role": "CM",
+              "label": "CM"
+            },
+            {
+              "role": "RM",
+              "label": "RM"
+            },
+            {
+              "role": "ST",
+              "label": "ST"
+            },
+            {
+              "role": "ST",
+              "label": "ST"
+            }
+          ],
+          "filledSlots": [],
+          "filledSlotsArray": [],
+          "filledCount": 0,
+          "verdict": null,
+          "isEvaluating": false,
+          "isValidating": false,
+          "validationError": null,
+          "isSpinning": false,
+          "spinTeamIndex": 0,
+          "checkingDown": false,
+          "teamAssignments": [
+            {
+              "name": "Real Madrid",
+              "isNation": false
+            },
+            {
+              "name": "Barcelona",
+              "isNation": false
+            },
+            {
+              "name": "Manchester City",
+              "isNation": false
+            },
+            {
+              "name": "Liverpool",
+              "isNation": false
+            },
+            {
+              "name": "Bayern Munich",
+              "isNation": false
+            },
+            {
+              "name": "PSG",
+              "isNation": false
+            },
+            {
+              "name": "Chelsea",
+              "isNation": false
+            },
+            {
+              "name": "Arsenal",
+              "isNation": false
+            },
+            {
+              "name": "Manchester United",
+              "isNation": false
+            },
+            {
+              "name": "Juventus",
+              "isNation": false
+            },
+            {
+              "name": "AC Milan",
+              "isNation": false
+            }
+          ]
+        },
+        "draws": [],
+        "stores": {
+          "local": {
+            "xi-race-sentinel": "local-held"
+          },
+          "session": {
+            "xi-race-sentinel": "session-held"
+          }
+        },
+        "trace": [
+          {
+            "action": "actual selectFormation/selectPosition",
+            "formation": "4-4-2",
+            "slot": 1,
+            "team": {
+              "name": "Real Madrid",
+              "isNation": false
+            }
+          }
+        ]
+      },
+      "during": {
+        "hook": {
+          "formation": "4-4-2",
+          "phase": "building",
+          "selectedPositionIndex": 1,
+          "currentTeam": {
+            "name": "Real Madrid",
+            "isNation": false
+          },
+          "positions": [
+            {
+              "role": "GK",
+              "label": "GK"
+            },
+            {
+              "role": "LB",
+              "label": "LB"
+            },
+            {
+              "role": "CB",
+              "label": "CB"
+            },
+            {
+              "role": "CB",
+              "label": "CB"
+            },
+            {
+              "role": "RB",
+              "label": "RB"
+            },
+            {
+              "role": "LM",
+              "label": "LM"
+            },
+            {
+              "role": "CM",
+              "label": "CM"
+            },
+            {
+              "role": "CM",
+              "label": "CM"
+            },
+            {
+              "role": "RM",
+              "label": "RM"
+            },
+            {
+              "role": "ST",
+              "label": "ST"
+            },
+            {
+              "role": "ST",
+              "label": "ST"
+            }
+          ],
+          "filledSlots": [],
+          "filledSlotsArray": [],
+          "filledCount": 0,
+          "verdict": null,
+          "isEvaluating": false,
+          "isValidating": true,
+          "validationError": null,
+          "isSpinning": false,
+          "spinTeamIndex": 0,
+          "checkingDown": false,
+          "teamAssignments": [
+            {
+              "name": "Real Madrid",
+              "isNation": false
+            },
+            {
+              "name": "Barcelona",
+              "isNation": false
+            },
+            {
+              "name": "Manchester City",
+              "isNation": false
+            },
+            {
+              "name": "Liverpool",
+              "isNation": false
+            },
+            {
+              "name": "Bayern Munich",
+              "isNation": false
+            },
+            {
+              "name": "PSG",
+              "isNation": false
+            },
+            {
+              "name": "Chelsea",
+              "isNation": false
+            },
+            {
+              "name": "Arsenal",
+              "isNation": false
+            },
+            {
+              "name": "Manchester United",
+              "isNation": false
+            },
+            {
+              "name": "Juventus",
+              "isNation": false
+            },
+            {
+              "name": "AC Milan",
+              "isNation": false
+            }
+          ]
+        },
+        "draws": [],
+        "stores": {
+          "local": {
+            "xi-race-sentinel": "local-held"
+          },
+          "session": {
+            "xi-race-sentinel": "session-held"
+          }
+        },
+        "trace": [
+          {
+            "action": "actual selectFormation/selectPosition",
+            "formation": "4-4-2",
+            "slot": 1,
+            "team": {
+              "name": "Real Madrid",
+              "isNation": false
+            }
+          },
+          {
+            "action": "actual submitPlayer",
+            "name": "Fixture Harbor Fullback",
+            "pick": {
+              "rawName": "Fixture Harbor Fullback",
+              "rawPosition": "Right-Back",
+              "position": "RB",
+              "club": "Real Madrid",
+              "nationality": "Fixture Nation",
+              "value": 1500000,
+              "age": 27,
+              "year": 2026
+            }
+          },
+          {
+            "action": "actual transport request",
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/player_verified_positions?select=primary_position,secondary_positions&player_name=ilike.Fixture%20Harbor%20Fullback&limit=1",
+            "method": "GET",
+            "body": null,
+            "kind": "history"
+          }
+        ]
+      },
+      "after": {
+        "hook": {
+          "formation": "4-4-2",
+          "phase": "building",
+          "selectedPositionIndex": null,
+          "currentTeam": {
+            "name": "Barcelona",
+            "isNation": false
+          },
+          "positions": [
+            {
+              "role": "GK",
+              "label": "GK"
+            },
+            {
+              "role": "LB",
+              "label": "LB"
+            },
+            {
+              "role": "CB",
+              "label": "CB"
+            },
+            {
+              "role": "CB",
+              "label": "CB"
+            },
+            {
+              "role": "RB",
+              "label": "RB"
+            },
+            {
+              "role": "LM",
+              "label": "LM"
+            },
+            {
+              "role": "CM",
+              "label": "CM"
+            },
+            {
+              "role": "CM",
+              "label": "CM"
+            },
+            {
+              "role": "RM",
+              "label": "RM"
+            },
+            {
+              "role": "ST",
+              "label": "ST"
+            },
+            {
+              "role": "ST",
+              "label": "ST"
+            }
+          ],
+          "filledSlots": [
+            [
+              1,
+              {
+                "role": "LB",
+                "label": "LB",
+                "playerName": "Fixture Harbor Fullback",
+                "assignedTeam": "Real Madrid",
+                "isNation": false,
+                "pick": {
+                  "rawName": "Fixture Harbor Fullback",
+                  "rawPosition": "Right-Back",
+                  "position": "RB",
+                  "club": "Real Madrid",
+                  "nationality": "Fixture Nation",
+                  "value": 1500000,
+                  "age": 27,
+                  "year": 2026
+                }
+              }
+            ]
+          ],
+          "filledSlotsArray": [
+            {
+              "role": "LB",
+              "label": "LB",
+              "playerName": "Fixture Harbor Fullback",
+              "assignedTeam": "Real Madrid",
+              "isNation": false,
+              "pick": {
+                "rawName": "Fixture Harbor Fullback",
+                "rawPosition": "Right-Back",
+                "position": "RB",
+                "club": "Real Madrid",
+                "nationality": "Fixture Nation",
+                "value": 1500000,
+                "age": 27,
+                "year": 2026
+              }
+            }
+          ],
+          "filledCount": 1,
+          "verdict": null,
+          "isEvaluating": false,
+          "isValidating": false,
+          "validationError": null,
+          "isSpinning": true,
+          "spinTeamIndex": 0,
+          "checkingDown": false,
+          "teamAssignments": [
+            {
+              "name": "Real Madrid",
+              "isNation": false
+            },
+            {
+              "name": "Barcelona",
+              "isNation": false
+            },
+            {
+              "name": "Manchester City",
+              "isNation": false
+            },
+            {
+              "name": "Liverpool",
+              "isNation": false
+            },
+            {
+              "name": "Bayern Munich",
+              "isNation": false
+            },
+            {
+              "name": "PSG",
+              "isNation": false
+            },
+            {
+              "name": "Chelsea",
+              "isNation": false
+            },
+            {
+              "name": "Arsenal",
+              "isNation": false
+            },
+            {
+              "name": "Manchester United",
+              "isNation": false
+            },
+            {
+              "name": "Juventus",
+              "isNation": false
+            },
+            {
+              "name": "AC Milan",
+              "isNation": false
+            }
+          ]
+        },
+        "draws": [],
+        "stores": {
+          "local": {
+            "xi-race-sentinel": "local-held"
+          },
+          "session": {
+            "xi-race-sentinel": "session-held"
+          }
+        },
+        "trace": [
+          {
+            "action": "actual selectFormation/selectPosition",
+            "formation": "4-4-2",
+            "slot": 1,
+            "team": {
+              "name": "Real Madrid",
+              "isNation": false
+            }
+          },
+          {
+            "action": "actual submitPlayer",
+            "name": "Fixture Harbor Fullback",
+            "pick": {
+              "rawName": "Fixture Harbor Fullback",
+              "rawPosition": "Right-Back",
+              "position": "RB",
+              "club": "Real Madrid",
+              "nationality": "Fixture Nation",
+              "value": 1500000,
+              "age": 27,
+              "year": 2026
+            }
+          },
+          {
+            "action": "actual transport request",
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/player_verified_positions?select=primary_position,secondary_positions&player_name=ilike.Fixture%20Harbor%20Fullback&limit=1",
+            "method": "GET",
+            "body": null,
+            "kind": "history"
+          },
+          {
+            "action": "fixture response",
+            "kind": "history",
+            "body": []
+          }
+        ]
+      },
+      "input": {
+        "rawName": "Fixture Harbor Fullback",
+        "rawPosition": "Right-Back",
+        "position": "RB",
+        "club": "Real Madrid",
+        "nationality": "Fixture Nation",
+        "value": 1500000,
+        "age": 27,
+        "year": 2026
+      }
+    }
+  }
+}
