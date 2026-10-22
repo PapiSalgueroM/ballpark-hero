@@ -1,0 +1,3 @@
+simHarnessAnchors exit=0 40s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 58s | 
+simNbaDraftBoard-controls exit=0 938s | simNbaDraftBoard controls: all 12 fired, each in exactly its own section.
