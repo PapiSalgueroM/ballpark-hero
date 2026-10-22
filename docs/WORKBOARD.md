@@ -16538,3 +16538,7 @@ Final visual coverage is18 changed images actually viewed plus50 exact prior-vie
 ## Root1450 poll date Original regression handoff, 2026-10-22 UTC
 
 This child adds only thirteen getPollDayET regression cases, their ordinary branch-only CI workflow and these notes. Tests remain unexecuted at authoring; four owned failures and nine healthy cases are the source-based expectation, not an admitted RED or qualification. The existing helper b580faa8, its caller and all game files stay unchanged. Root must inspect actual raw case names/errors, source holds and the empty strict transport receipt before any helper fix. I retains sole publication and game ownership. No live result is claimed.
+
+## Root1450 shared poll helper, Green proof pending, 2026-10-22 UTC
+
+Original source3dcc9c8e/run39857298617 has preliminary expected4error/9healthy output; the complete native Original admission must pass and be pinned before this child is adopted. Preparation adds only the reviewed two-span civil-day helper, Green workflow and these notes. Thirteen tests and all caller/game/config/dependency files remain held. Green has not run. Exact old-body control, restoration and release checks remain owed. No user-facing query/rollover, qualified or live claim. I retains publication/game ownership.

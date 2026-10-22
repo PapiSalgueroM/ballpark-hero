@@ -19063,3 +19063,9 @@ Final picture coverage uses18 freshly viewed changed images and50 exact PNG tran
 This child adds thirteen date-helper regression cases and a branch-only ordinary CI workflow from verified main89765449d170955aff841c93398179ecf0a4e135. The tests are unexecuted at authoring. Source inspection predicts four owned AssertionErrors and nine healthy cases around Eastern daylight-saving transitions; only actual raw CI results can establish that RED.
 
 The original dateUtils helper b580faa8 stays unchanged. CI must retain the ordinary failing test exit, complete raw JSON/logs and exact source/input/offline holds. No helper implementation, caller-specific noon query proof, mounted refresh behavior, qualified application or live result is claimed. I retains publication and game ownership.
+
+## Round1450 calendar-day helper, Green verification pending, 2026-10-22 UTC
+
+Prepared after Original source3dcc9c8e/run39857298617. Preliminary raw output reports the expected four noon-boundary errors and nine healthy cases. Complete native Original admission was still pending at preparation; its pinned successful receipt is mandatory before adopting this child.
+
+The proposed child changes only the shared poll-day helper comment/body to Eastern civil-day arithmetic, its branch workflow and append-only notes. It preserves the thirteen tests, caller, config, dependencies and game files. Green requires the same13 tests normal, exact oldb580 body control and fresh restoration, existing poll rendering/fallback tests and daily harnesses, real types/plain build, all saved-page readers and unchanged page caps. Green is unexecuted here. No caller-query, mounted noon refresh, qualified release or live result is claimed. I retains publication and game ownership.
