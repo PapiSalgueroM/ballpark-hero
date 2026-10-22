@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+pf1: PLAYFIRST_SHARD=1/3 PLAYFIRST_JSON=$RC_OUT/pf1.json node scripts/playFirstVisitDialogs.mjs
+pf2: PLAYFIRST_SHARD=2/3 PLAYFIRST_JSON=$RC_OUT/pf2.json node scripts/playFirstVisitDialogs.mjs
+pf3: PLAYFIRST_SHARD=3/3 PLAYFIRST_JSON=$RC_OUT/pf3.json node scripts/playFirstVisitDialogs.mjs
