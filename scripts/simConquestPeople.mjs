@@ -44,23 +44,33 @@
      of three fallen clubs, every lone survivor), 340 and 288 labelled greats dealt
      (every great not on a standing roster, in every state; 25 and 27 before the
      review's minor 5 fix, when the fallen stars could push them out of the 30);
-     key stats 146 printed with "2025: ", 174 print none; about 50,000 checks.
+     key stats 146 printed with "2025: ", 174 print none; about 75,100 checks.
+     Section 3 also checks each list against the harness's own expected list: nobody
+     on a standing roster (also after the market's best and a free great are signed
+     onto a standing club), each fallen man once with his first fallen club, best
+     first, and the 30 holding every free great plus the best fallen men that fit.
 
    NEGATIVE CONTROLS (CONQUEST_PEOPLE_CONTROL=<name>; each asserts its anchor exists
    and that the rewrite changed the bytes, or it aborts with exit 2; a control that
    does not fire exits 3). Measured red counts on the round's head:
-     dt      Demaryius Thomas back in the NFL power up list.        74 red, sections 2, 3, 4
-     market  the market stops skipping legends and retired greats.  2,608 red, section 3
+     dt      Demaryius Thomas back in the NFL power up list.        108 red, sections 2, 3, 4
+     market  the market stops skipping legends and retired greats.  2,732 red, section 3
      nflnba  NBA Conquest deals the NFL retired greats again.        2 red, section 4
      label   the NBA board drops the "Retired, last played" label.   1 red, section 4
      season  Mahomes's key stat back to the old unseasoned number.   2 red, section 5
-     greatsSet    retiredNames drops the retired greats (one character).   632 red, section 3
-     hookPred     the NFL hook inverts its never on market predicate.      1,990 red, sections 3, 4
-     hookPredNba  the NBA hook inverts its never on market predicate.      1,844 red, sections 3, 4
-     greatsCap    the fallen stars may push the greats out of the 30 again.  576 red, section 3
-   (The last four were added after the adversarial review: before them the harness
+     greatsSet    retiredNames drops the retired greats (one character).   744 red, section 3
+     hookPred     the NFL hook inverts its never on market predicate.      2,118 red, sections 3, 4
+     hookPredNba  the NBA hook inverts its never on market predicate.      1,964 red, sections 3, 4
+     greatsCap    the fallen stars may push the greats out of the 30 again.  643 red, section 3
+     taken        the market offers men on a standing roster.              140 red, section 3
+     greatsTaken  the dialog deals greats already on a standing roster.    745 red, section 3
+     sortAsc      the Sign a Player list comes worst first.                124 red, section 3
+     pickWorst    the dialog fills its room with the worst fallen men.     110 red, section 3
+     marketAsc    the market comes worst first.                            124 red, section 3
+   (The last nine were added after the adversarial review: before them the harness
    checked the market against retiredNames itself, so both one character slips stayed
-   green, and the dialog could offer a retired great while listing none.)
+   green, the dialog could offer a retired great while listing none, and the standing
+   roster rule, the order and the 30 were held by nothing.)
 
    Run: node scripts/simConquestPeople.mjs   (offline; reads files, never the network) */
 import fs from 'node:fs';
@@ -120,6 +130,31 @@ const CONTROLS = {
     file: 'src/lib/conquestMarket.ts',
     from: 'return [...greats, ...fallen.slice(0, Math.max(0, SIGNING_LIST_MAX - greats.length))].sort((a, b) => b.overall - a.overall);',
     to: 'return [...greats, ...fallen].sort((a, b) => b.overall - a.overall).slice(0, SIGNING_LIST_MAX);',
+  },
+  taken: {
+    file: 'src/lib/conquestMarket.ts',
+    from: "if (taken.has(name) || seen.has(name) || state.neverOnMarket.has(name)) continue;\n      seen.add(name);\n      const card = state.cardOf(name);\n      out.push({ name, position: card.position, overall: card.overall, blurb:",
+    to: "if (seen.has(name) || state.neverOnMarket.has(name)) continue;\n      seen.add(name);\n      const card = state.cardOf(name);\n      out.push({ name, position: card.position, overall: card.overall, blurb:",
+  },
+  greatsTaken: {
+    file: 'src/lib/conquestMarket.ts',
+    from: '.filter(g => !taken.has(g.name))',
+    to: '.filter(g => !!g.name)',
+  },
+  sortAsc: {
+    file: 'src/lib/conquestMarket.ts',
+    from: '].sort((a, b) => b.overall - a.overall);',
+    to: '].sort((a, b) => a.overall - b.overall);',
+  },
+  pickWorst: {
+    file: 'src/lib/conquestMarket.ts',
+    from: 'fallen.sort((a, b) => b.overall - a.overall);',
+    to: 'fallen.sort((a, b) => a.overall - b.overall);',
+  },
+  marketAsc: {
+    file: 'src/lib/conquestMarket.ts',
+    from: 'return out.sort((a, b) => b.overall - a.overall);',
+    to: 'return out.sort((a, b) => a.overall - b.overall);',
   },
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.log(`CONTROL ABORTED: unknown control ${CONTROL}`); process.exit(2); }
@@ -234,6 +269,8 @@ for (const [sport, s] of Object.entries(SPORTS)) {
 }
 
 /* 3. The market over every end state, after every legend and retired great was signed somewhere. */
+const DIALOG_MAX = 30; // the Sign a Player dialog's length, as before this round
+const bestFirst = list => list.every((c, i) => i === 0 || list[i - 1].overall >= c.overall);
 for (const [sport, s] of Object.entries(SPORTS)) {
   const ids = s.teams.map(t => t.id);
   const onTable = new Set(s.teams.flatMap(t => (t.players || []).map(p => p.name)));
@@ -281,6 +318,35 @@ for (const [sport, s] of Object.entries(SPORTS)) {
     const standing = new Set(st.alive.flatMap(id => rosters[id] || []));
     const signNames = new Set(sign.map(c => c.name));
     for (const g of s.greats) if (!standing.has(g.name)) check(3, signNames.has(g.name), `${sport} ${st.tag}: the dialog offers to call a retired great back but leaves ${g.name} off the list`);
+
+    /* The harness's own expected lists (review minors 3 and 4): nobody on a standing roster, each fallen man once with
+       the first fallen club that listed him, best first, and the room the greats leave in the 30 filled by the fallen
+       teams' best. */
+    const expectedPool = new Map();
+    for (const id of st.eliminated) for (const n of rosters[id] || []) if (!standing.has(n) && !retired.has(n) && !expectedPool.has(n)) expectedPool.set(n, id);
+    for (const c of [...sign, ...pool]) check(3, !standing.has(c.name), `${sport} ${st.tag}: deals ${c.name}, who is on a standing roster`);
+    check(3, pool.length === expectedPool.size && pool.every(c => expectedPool.has(c.name) && c.blurb === `Hit the market when the ${expectedPool.get(c.name)} fell`), `${sport} ${st.tag}: the market deals ${pool.length} men, expected the ${expectedPool.size} fallen men on no standing roster, each once, with his first fallen club`);
+    check(3, bestFirst(pool), `${sport} ${st.tag}: the market is not best first`);
+    check(3, bestFirst(sign), `${sport} ${st.tag}: the Sign a Player list is not best first`);
+    const freeGreats = s.greats.filter(g => !standing.has(g.name));
+    const room = Math.max(0, DIALOG_MAX - freeGreats.length);
+    const fallenDealt = sign.filter(c => c.lastSeason === undefined);
+    check(3, sign.length === freeGreats.length + Math.min(room, expectedPool.size), `${sport} ${st.tag}: the Sign a Player list holds ${sign.length}, expected ${freeGreats.length} greats plus ${Math.min(room, expectedPool.size)} fallen men`);
+    const topOvr = [...expectedPool.keys()].map(n => cardOf(n).overall).sort((a, b) => b - a).slice(0, room).join(',');
+    const gotOvr = fallenDealt.map(c => c.overall).sort((a, b) => b - a).join(',');
+    check(3, gotOvr === topOvr && fallenDealt.every(c => expectedPool.has(c.name)), `${sport} ${st.tag}: the fallen men in the Sign a Player list are not the best ${room} on the market`);
+
+    /* Sign the market's best onto a standing club, and a free great onto one: neither may be offered again, though the
+       first still sits on his fallen club's final roster (the "not on a standing roster" rule, which the data alone
+       exercises only where a man is on two tables). */
+    if (st.alive.length) {
+      const club = st.alive[0];
+      for (const who of [pool[0]?.name, freeGreats[0]?.name].filter(Boolean)) {
+        const after = { ...state, rosters: { ...rosters, [club]: [...rosters[club], who] } };
+        const again = [...market.signingList(after, s.greats), ...market.fallenTeamMarket(after, x => x)];
+        check(3, !again.some(c => c.name === who), `${sport} ${st.tag}: ${who} signed for ${club} and is still offered`);
+      }
+    }
     for (const c of sign) {
       if (c.lastSeason !== undefined) {
         labelled++;
