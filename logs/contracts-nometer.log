@@ -1,0 +1,6 @@
+cmp contracts-nometer: exit base=1 head=1 head2=1
+  base last line: simGmContracts: CONTROL nometer FIRED, section 3 went red as it must (8166 findings, exit 1)
+  head last line: simGmContracts: CONTROL nometer FIRED, section 3 went red as it must (8166 findings, exit 1)
+  lines: base 59, head 59
+  sha1 base 8de9b81c9d1a head 8de9b81c9d1a head2 8de9b81c9d1a
+cmp contracts-nometer: BYTE EQUAL to 7a8750ba

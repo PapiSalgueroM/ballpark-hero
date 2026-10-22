@@ -1,0 +1,6 @@
+cmp mlbdesk: exit base=0 head=0 head2=0
+  base last line: simMlbGmDesk: all seven checks passed (10 seeds x 10 seasons)
+  head last line: simMlbGmDesk: all seven checks passed (10 seeds x 10 seasons)
+  lines: base 18, head 18
+  sha1 base a9aabd6fd8d5 head a9aabd6fd8d5 head2 a9aabd6fd8d5
+cmp mlbdesk: BYTE EQUAL to 7a8750ba

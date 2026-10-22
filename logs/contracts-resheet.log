@@ -1,0 +1,6 @@
+cmp contracts-resheet: exit base=1 head=1 head2=1
+  base last line: simGmContracts: CONTROL resheet FIRED, section 4 went red as it must (109 findings, exit 1)
+  head last line: simGmContracts: CONTROL resheet FIRED, section 4 went red as it must (109 findings, exit 1)
+  lines: base 50, head 50
+  sha1 base c80af29ebe8b head c80af29ebe8b head2 c80af29ebe8b
+cmp contracts-resheet: BYTE EQUAL to 7a8750ba

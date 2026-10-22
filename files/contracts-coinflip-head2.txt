@@ -1,0 +1,57 @@
+  FAIL (1): nfl 2026 Laken Tomlinson: kept on 1y at 2.4, the roster says 1y at 1
+  FAIL (1): nfl 2026 Kevin Zeitler: kept on 1y at 4.8, the roster says 1y at 1.8
+  FAIL (1): nfl 2027 Kevin Zeitler: kept on 1y at 1.5, the roster says 1y at 1
+  FAIL (1): nfl 2027 Javon Hargrave: kept on 1y at 8.8, the roster says 1y at 7.5
+  FAIL (1): nfl 2028 Devonte Wyatt: kept on 2y at 16.7, the roster says 2y at 14.5
+  FAIL (1): nfl 2028 Micah Parsons: kept on 3y at 15.3, the roster says 2y at 14.5
+  FAIL (4): nfl 2035 Roman Maddox: option offered for a round 1 draft man whose rookie deal is over
+  FAIL (4): nfl 2033 Malik Ellingsworth: option offered for a round 1 draft man whose rookie deal is over
+  FAIL (4): nfl 2035 Ezra Okafor: option offered for a round 1 draft man whose rookie deal is over
+  FAIL (4): nfl 2035 Bo Sterling: option offered for a round 1 draft man whose rookie deal is over
+  FAIL (4): nfl 2032 Ezra Marchetti: option offered for a round 1 draft man whose rookie deal is over
+  FAIL (4): nfl 2033 Jamari Okafor: option offered for a round 1 draft man whose rookie deal is over
+simGmContracts: 4 engines x 5 seeds (11, 22, 33, 44, 55) x 10 seasons, CONTROL coinflip
+
+NFL
+  0) baseline, no desk: 31 of 227 expiring men left on the engine's flip (13.7%)
+  1) desk: 213 cases, 0 kept on their agreed terms, 89 let go, 2 kept then retired by the engine, 122 left without a decision; 213 expiring by the roster, 0 of them never at the desk
+  2) ask / cap: p05 0.003, median 0.036, p95 0.052; lowest in any season 0.002, highest 0.069; seasons with cases 10 of 10 (empty: none)
+     season medians from 0.010 to 0.043 (seasons with five or more asks)
+  3) meter steps walked: 70290
+  4) rule counts: tagged 48, tag year men at the desk 40, let go men repriced 78, options 45, laterRoundsAsked 80, first rounders past their rookie deal 13, first rounders back with the option unused 7; picks owed and paid 0
+     doors: kept at ask 46, let go 35, option declined 3, option holder re-signed for one season 25, option 17, push 0.4: walkout 21, push 0.65: insulted 30, push 0.86: counter 36
+
+NBA
+  0) baseline, no desk: 10 of 122 expiring men left on the engine's flip (8.2%)
+  1) desk: 151 cases, 2 kept on their agreed terms, 79 let go, 0 kept then retired by the engine, 70 left without a decision; 151 expiring by the roster, 0 of them never at the desk
+  2) ask / cap: p05 0.081, median 0.250, p95 0.300; lowest in any season 0.052, highest 0.315; seasons with cases 9 of 10 (empty: 0)
+     season medians from 0.087 to 0.268 (seasons with five or more asks)
+  3) meter steps walked: 46992
+  4) rule counts: cases with dead money on the books 149, cases with a tax cheque held back 111, last word over an imposed ceiling 240, pushes over the rules 120, tier full 108, capped 97, tier non 25, overCeiling 30, capped men kept 45, tier early 18, sheet men at the rival 21, early bird exception 11, last word over the ceiling 1; picks owed and paid 0
+     doors: capped by rule 1, kept at ask 31, let go 22, push 0.4: walkout 8, push 0.65: insulted 10, push 0.65: walkout 11, push 0.86: counter 10, push 0.86: walkout 6, qualified rfa 21, sheet matched 10, sheet picks 21
+
+MLB
+  0) baseline, no desk: 69 of 431 expiring men left on the engine's flip (16%)
+  1) desk: 484 cases, 5 kept on their agreed terms, 180 let go, 10 kept then retired by the engine, 289 left without a decision; 484 expiring by the roster, 0 of them never at the desk
+  2) ask / cap: p05 0.003, median 0.038, p95 0.070; lowest in any season 0.002, highest 0.085; seasons with cases 10 of 10 (empty: none)
+     season medians from 0.019 to 0.044 (seasons with five or more asks)
+  3) meter steps walked: 159720
+  4) rule counts: free-agent 381, mid season arrivals at the desk 50, qualifyingOffers 240, pre-arbitration 45, pre-arbitration tenders priced 45, let go men repriced 121, qualifying offer refusers signed back 13, men back after a qualifying offer 109, arbitration 58, arbitration tenders priced 58, arbitration tenders set by the step 43, qualifying offer refusers signed by a rival 12; picks owed and paid 8
+     doors: kept at ask 56, let go 40, non tender 11, push 0.4: walkout 54, push 0.65: insulted 50, push 0.86: counter 56, qo accepted 100, qo rejected 25, tender 92
+
+NHL
+  0) baseline, no desk: 4 of 198 expiring men left on the engine's flip (2%)
+  1) desk: 215 cases, 3 kept on their agreed terms, 78 let go, 4 kept then retired by the engine, 130 left without a decision; 215 expiring by the roster, 0 of them never at the desk
+  2) ask / cap: p05 0.022, median 0.043, p95 0.066; lowest in any season 0.005, highest 0.085; seasons with cases 9 of 10 (empty: 0)
+     season medians from 0.036 to 0.060 (seasons with five or more asks)
+  3) meter steps walked: 70950
+  4) rule counts: restricted 114, sheets 47, sheets priced off the published ladder 47, sheet men at the rival 23; picks owed and paid 24
+     doors: kept at ask 48, let go 23, push 0.4: walkout 15, push 0.65: insulted 17, push 0.86: counter 25, qualified rfa 40, sheet matched 24, sheet picks 23
+
+4) NHL offer sheet ladder: 33 rung edges and middles walked against the published 2025-26 table
+
+5) 11 rules on the books, 0 marked as resting partly on one source
+
+section 1: 615 finding(s)
+section 4: 17 finding(s)
+simGmContracts: CONTROL coinflip FIRED, section 1 went red as it must (615 findings, exit 1)

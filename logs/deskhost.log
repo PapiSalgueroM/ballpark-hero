@@ -1,0 +1,6 @@
+cmp deskhost: exit base=0 head=0 head2=0
+  base last line: simGmDeskHost: all 10 checks passed on seeds 1,2,3 (4 engines, 3 seasons a seed)
+  head last line: simGmDeskHost: all 10 checks passed on seeds 1,2,3 (4 engines, 3 seasons a seed)
+  lines: base 56, head 56
+  sha1 base 3e757f22f3fb head 3e757f22f3fb head2 3e757f22f3fb
+cmp deskhost: BYTE EQUAL to 7a8750ba

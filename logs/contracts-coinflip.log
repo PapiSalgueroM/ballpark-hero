@@ -1,0 +1,6 @@
+cmp contracts-coinflip: exit base=1 head=1 head2=1
+  base last line: simGmContracts: CONTROL coinflip FIRED, section 1 went red as it must (615 findings, exit 1)
+  head last line: simGmContracts: CONTROL coinflip FIRED, section 1 went red as it must (615 findings, exit 1)
+  lines: base 57, head 57
+  sha1 base b272f6a83729 head b272f6a83729 head2 b272f6a83729
+cmp contracts-coinflip: BYTE EQUAL to 7a8750ba

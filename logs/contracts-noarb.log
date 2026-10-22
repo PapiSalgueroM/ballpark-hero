@@ -1,0 +1,6 @@
+cmp contracts-noarb: exit base=1 head=1 head2=1
+  base last line: simGmContracts: CONTROL noarb FIRED, section 4 went red as it must (157 findings, exit 1)
+  head last line: simGmContracts: CONTROL noarb FIRED, section 4 went red as it must (157 findings, exit 1)
+  lines: base 50, head 50
+  sha1 base 12f67c84e36f head 12f67c84e36f head2 12f67c84e36f
+cmp contracts-noarb: BYTE EQUAL to 7a8750ba
