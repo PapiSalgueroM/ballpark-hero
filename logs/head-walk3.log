@@ -1,0 +1,16 @@
+{"tag":"head-rep0-hockey-higher-lower-390-mo-clean","gridBefore":229,"grid":256,"lines":["through 2017-18","season not confirmed"],"lineBottoms":[222,218],"lineHeights":[6,6],"anim":"cell-reveal","dur":"0.35s","opacity":"0.426047","scrollY":355,"banner":false}
+{"tag":"head-rep0-hockey-higher-lower-390-rm-clean","gridBefore":229,"grid":256,"lines":["through 2017-18","season not confirmed"],"lineBottoms":[590,586],"lineHeights":[15,15],"anim":"cell-reveal","dur":"1e-06s","opacity":"1","scrollY":0,"banner":false}
+{"tag":"head-rep0-nfl-higher-lower-390-mo-clean","gridBefore":234,"grid":293,"lines":["through 2025","through 2025"],"lineBottoms":[606,634],"lineHeights":[6,6],"anim":"cell-reveal","dur":"0.35s","opacity":"0.426306","scrollY":0,"banner":false}
+{"tag":"head-rep0-nfl-higher-lower-390-rm-clean","gridBefore":234,"grid":293,"lines":["through 2025","through 2025"],"lineBottoms":[629,657],"lineHeights":[15,15],"anim":"cell-reveal","dur":"1e-06s","opacity":"1","scrollY":0,"banner":false}
+{"tag":"head-rep1-hockey-higher-lower-390-mo-clean","gridBefore":229,"grid":256,"lines":["through 2017-18","season not confirmed"],"lineBottoms":[222,218],"lineHeights":[6,6],"anim":"cell-reveal","dur":"0.35s","opacity":"0.426389","scrollY":355,"banner":false}
+{"tag":"head-rep1-hockey-higher-lower-390-rm-clean","gridBefore":229,"grid":256,"lines":["through 2017-18","season not confirmed"],"lineBottoms":[590,586],"lineHeights":[15,15],"anim":"cell-reveal","dur":"1e-06s","opacity":"1","scrollY":0,"banner":false}
+{"tag":"head-rep1-nfl-higher-lower-390-mo-clean","gridBefore":234,"grid":293,"lines":["through 2025","through 2025"],"lineBottoms":[606,634],"lineHeights":[6,6],"anim":"cell-reveal","dur":"0.35s","opacity":"0.42615","scrollY":0,"banner":false}
+{"tag":"head-rep1-nfl-higher-lower-390-rm-clean","gridBefore":234,"grid":293,"lines":["through 2025","through 2025"],"lineBottoms":[629,657],"lineHeights":[15,15],"anim":"cell-reveal","dur":"1e-06s","opacity":"1","scrollY":0,"banner":false}
+{"tag":"head-rep2-hockey-higher-lower-390-mo-clean","gridBefore":229,"grid":256,"lines":["through 2017-18","season not confirmed"],"lineBottoms":[222,218],"lineHeights":[6,6],"anim":"cell-reveal","dur":"0.35s","opacity":"0.426518","scrollY":355,"banner":false}
+{"tag":"head-rep2-hockey-higher-lower-390-rm-clean","gridBefore":229,"grid":256,"lines":["through 2017-18","season not confirmed"],"lineBottoms":[590,586],"lineHeights":[15,15],"anim":"cell-reveal","dur":"1e-06s","opacity":"1","scrollY":0,"banner":false}
+{"tag":"head-rep2-nfl-higher-lower-390-mo-clean","gridBefore":234,"grid":293,"lines":["through 2025","through 2025"],"lineBottoms":[606,634],"lineHeights":[6,6],"anim":"cell-reveal","dur":"0.35s","opacity":"0.426017","scrollY":0,"banner":false}
+{"tag":"head-rep2-nfl-higher-lower-390-rm-clean","gridBefore":234,"grid":293,"lines":["through 2025","through 2025"],"lineBottoms":[629,657],"lineHeights":[15,15],"anim":"cell-reveal","dur":"1e-06s","opacity":"1","scrollY":0,"banner":false}
+PROBLEM head-rep0-hockey-higher-lower-390-mo-clean: the page scrolled to 355 on reveal
+PROBLEM head-rep1-hockey-higher-lower-390-mo-clean: the page scrolled to 355 on reveal
+PROBLEM head-rep2-hockey-higher-lower-390-mo-clean: the page scrolled to 355 on reveal
+walk3 head:12 reveals measured, 3 problem(s)

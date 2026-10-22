@@ -1,0 +1,219 @@
+{
+ "rows": [
+  {
+   "tag": "base-rep0-hockey-higher-lower-390-mo-clean",
+   "gridBefore": 229,
+   "grid": 256,
+   "lines": [
+    "through 2017-18",
+    "season not confirmed"
+   ],
+   "lineBottoms": [
+    222,
+    218
+   ],
+   "lineHeights": [
+    6,
+    6
+   ],
+   "anim": "cell-reveal",
+   "dur": "0.35s",
+   "opacity": "0.426553",
+   "scrollY": 355,
+   "banner": false
+  },
+  {
+   "tag": "base-rep0-hockey-higher-lower-390-rm-clean",
+   "gridBefore": 229,
+   "grid": 256,
+   "lines": [
+    "through 2017-18",
+    "season not confirmed"
+   ],
+   "lineBottoms": [
+    590,
+    586
+   ],
+   "lineHeights": [
+    15,
+    15
+   ],
+   "anim": "cell-reveal",
+   "dur": "1e-06s",
+   "opacity": "1",
+   "scrollY": 0,
+   "banner": false
+  },
+  {
+   "tag": "base-rep0-nfl-higher-lower-390-mo-clean",
+   "gridBefore": 234,
+   "grid": 278,
+   "lines": [],
+   "lineBottoms": [],
+   "lineHeights": [],
+   "anim": null,
+   "dur": null,
+   "opacity": null,
+   "scrollY": 0,
+   "banner": false
+  },
+  {
+   "tag": "base-rep0-nfl-higher-lower-390-rm-clean",
+   "gridBefore": 234,
+   "grid": 278,
+   "lines": [],
+   "lineBottoms": [],
+   "lineHeights": [],
+   "anim": null,
+   "dur": null,
+   "opacity": null,
+   "scrollY": 0,
+   "banner": false
+  },
+  {
+   "tag": "base-rep1-hockey-higher-lower-390-mo-clean",
+   "gridBefore": 229,
+   "grid": 256,
+   "lines": [
+    "through 2017-18",
+    "season not confirmed"
+   ],
+   "lineBottoms": [
+    222,
+    218
+   ],
+   "lineHeights": [
+    6,
+    6
+   ],
+   "anim": "cell-reveal",
+   "dur": "0.35s",
+   "opacity": "0.426416",
+   "scrollY": 355,
+   "banner": false
+  },
+  {
+   "tag": "base-rep1-hockey-higher-lower-390-rm-clean",
+   "gridBefore": 229,
+   "grid": 256,
+   "lines": [
+    "through 2017-18",
+    "season not confirmed"
+   ],
+   "lineBottoms": [
+    590,
+    586
+   ],
+   "lineHeights": [
+    15,
+    15
+   ],
+   "anim": "cell-reveal",
+   "dur": "1e-06s",
+   "opacity": "1",
+   "scrollY": 0,
+   "banner": false
+  },
+  {
+   "tag": "base-rep1-nfl-higher-lower-390-mo-clean",
+   "gridBefore": 234,
+   "grid": 278,
+   "lines": [],
+   "lineBottoms": [],
+   "lineHeights": [],
+   "anim": null,
+   "dur": null,
+   "opacity": null,
+   "scrollY": 0,
+   "banner": false
+  },
+  {
+   "tag": "base-rep1-nfl-higher-lower-390-rm-clean",
+   "gridBefore": 234,
+   "grid": 278,
+   "lines": [],
+   "lineBottoms": [],
+   "lineHeights": [],
+   "anim": null,
+   "dur": null,
+   "opacity": null,
+   "scrollY": 0,
+   "banner": false
+  },
+  {
+   "tag": "base-rep2-hockey-higher-lower-390-mo-clean",
+   "gridBefore": 229,
+   "grid": 256,
+   "lines": [
+    "through 2017-18",
+    "season not confirmed"
+   ],
+   "lineBottoms": [
+    222,
+    218
+   ],
+   "lineHeights": [
+    6,
+    6
+   ],
+   "anim": "cell-reveal",
+   "dur": "0.35s",
+   "opacity": "0.426317",
+   "scrollY": 355,
+   "banner": false
+  },
+  {
+   "tag": "base-rep2-hockey-higher-lower-390-rm-clean",
+   "gridBefore": 229,
+   "grid": 256,
+   "lines": [
+    "through 2017-18",
+    "season not confirmed"
+   ],
+   "lineBottoms": [
+    590,
+    586
+   ],
+   "lineHeights": [
+    15,
+    15
+   ],
+   "anim": "cell-reveal",
+   "dur": "1e-06s",
+   "opacity": "1",
+   "scrollY": 0,
+   "banner": false
+  },
+  {
+   "tag": "base-rep2-nfl-higher-lower-390-mo-clean",
+   "gridBefore": 234,
+   "grid": 278,
+   "lines": [],
+   "lineBottoms": [],
+   "lineHeights": [],
+   "anim": null,
+   "dur": null,
+   "opacity": null,
+   "scrollY": 0,
+   "banner": false
+  },
+  {
+   "tag": "base-rep2-nfl-higher-lower-390-rm-clean",
+   "gridBefore": 234,
+   "grid": 278,
+   "lines": [],
+   "lineBottoms": [],
+   "lineHeights": [],
+   "anim": null,
+   "dur": null,
+   "opacity": null,
+   "scrollY": 0,
+   "banner": false
+  }
+ ],
+ "problems": [
+  "base-rep0-hockey-higher-lower-390-mo-clean: the page scrolled to 355 on reveal",
+  "base-rep1-hockey-higher-lower-390-mo-clean: the page scrolled to 355 on reveal",
+  "base-rep2-hockey-higher-lower-390-mo-clean: the page scrolled to 355 on reveal"
+ ]
+}
