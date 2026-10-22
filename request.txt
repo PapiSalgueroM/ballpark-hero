@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+weigh-head: node .rc/x/weigh.mjs head
+weigh-base: git worktree add /tmp/wb 0846f9c5 && ln -s "$PWD/node_modules" /tmp/wb/node_modules && (cd /tmp/wb && npm run build > /tmp/wb-build.log 2>&1) && (node scripts/lib/hostLikeServer.mjs /tmp/wb/dist 4174 > /tmp/wb-serve.log 2>&1 &) && sleep 3 && BASE=http://localhost:4174 node .rc/x/weigh.mjs base

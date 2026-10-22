@@ -1,0 +1,31 @@
+Preparing worktree (detached HEAD 0846f9c5b)
+HEAD is now at 0846f9c5b Claim Round 1525 (Soccer Career awards against a field)
+base /nba-my-career: 578.5K gzipped JS in 50 files
+   237.3K /assets/index-DArznQlK.js
+   152.1K /assets/usCareerSeasonReview-n4nV3AGp.js
+   85.8K /assets/NbaMyCareer-DofqIALr.js
+   28.6K /assets/basketball-WzvisrdN.js
+   14.6K /assets/AppearanceBuilder-CKtoZsuM.js
+   8.3K /assets/conquestDataNba-BDN2iDyW.js
+base /nfl-my-career: 493.1K gzipped JS in 49 files
+   237.3K /assets/index-DArznQlK.js
+   152.1K /assets/usCareerSeasonReview-n4nV3AGp.js
+   22.3K /assets/football-DwCm5RIA.js
+   14.6K /assets/AppearanceBuilder-CKtoZsuM.js
+   8.3K /assets/conquestDataNba-BDN2iDyW.js
+   6.8K /assets/NflMyCareer-CGoMJKA9.js
+base /mlb-my-career: 566.7K gzipped JS in 50 files
+   237.3K /assets/index-DArznQlK.js
+   152.1K /assets/usCareerSeasonReview-n4nV3AGp.js
+   80.5K /assets/MlbMyCareer-CTR4cCDp.js
+   19.0K /assets/baseball-C94Eb-PF.js
+   14.6K /assets/AppearanceBuilder-CKtoZsuM.js
+   8.3K /assets/conquestDataNba-BDN2iDyW.js
+base /nhl-my-career: 569.3K gzipped JS in 50 files
+   237.3K /assets/index-DArznQlK.js
+   152.1K /assets/usCareerSeasonReview-n4nV3AGp.js
+   81.0K /assets/NhlMyCareer-BlVtGXWB.js
+   21.0K /assets/hockey-D-_8KTQs.js
+   14.6K /assets/AppearanceBuilder-CKtoZsuM.js
+   8.3K /assets/conquestDataNba-BDN2iDyW.js
+weigh base: done
