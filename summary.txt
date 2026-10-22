@@ -1,0 +1,7 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+bridge-check exit=0 0s | cmNoAiMoves1344: all 5 anchors stand once and can be taken out
+vitest-moves exit=0 13s |    Duration  11.70s (transform 2.95s, setup 793ms, collect 10.00s, tests 16.05s, environment 3.45s, prepare 882ms)
+walk exit=0 29s | playCmWorldMoves: green, 22 checks held; pictures in /home/runner/work/_temp/rc-out/files/head
+w-norecord exit=1 56s | playCmWorldMoves: control norecord FIRED: (b) red
+w-norepair exit=1 49s | playCmWorldMoves: control norepair FIRED: (d) red
+tsc exit=0 87s | 
