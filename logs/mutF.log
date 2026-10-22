@@ -1,0 +1,14 @@
+MUTATION F applied to src/lib/soccerWorldTruth.ts
+---- [F.1] exit=0: SIM_CAREER_FORM_SECTIONS=5 node scripts/simCareerForm.mjs
+simCareerForm: green
+   the ungated tree won one before 2008-09 in 41 lockstep careers; the gated tree made the same draws and kept the same state in 41
+simCareerForm: green
+---- [F.2] exit=1: node_modules/.bin/vitest run src/test/soccerPuskasYear1523.test.ts src/lib/soccerClubSquad.test.ts src/test/soccerCareerStoryRole.test.ts src/test/soccerCareerDevelopment.test.ts --testTimeout=300000 --hookTimeout=120000
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/soccerPuskasYear1523.test.ts[2m > [22mthe Puskas Award year (Round 1523)[2m > [22mgives no award for a season before it and does for that season on
+[41m[1m FAIL [22m[49m src/test/soccerPuskasYear1523.test.ts[2m > [22mthe Puskas Award year (Round 1523)[2m > [22magrees with the season card that deals a nominated goal
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m3 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m113 passed[39m[22m[90m (115)[39m
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerPuskasYear1523.test.ts,title=src/test/soccerPuskasYear1523.test.ts > the Puskas Award year (Round 1523) > agrees with the season card that deals a nominated goal,line=40,column=55::AssertionError: expected true to be false // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- false%0A+ true%0A%0A ❯ src/test/soccerPuskasYear1523.test.ts:40:55%0A%0A
+MUTATION F CAUGHT: 1=0 2=1

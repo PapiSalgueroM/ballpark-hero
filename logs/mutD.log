@@ -1,0 +1,12 @@
+MUTATION D applied to src/lib/soccerCareerEngine.ts
+---- [D.1] exit=1: SIM_CAREER_FORM_SECTIONS=3 node scripts/simCareerForm.mjs
+   FAIL gap r2 is 0.04, under its floor 0.07
+simCareerForm: RED, 1 failure(s)
+   FAIL gap r2 is 0.04, under its floor 0.07
+simCareerForm: RED, 1 failure(s)
+---- [D.2] exit=0: node_modules/.bin/vitest run src/test/soccerPuskasYear1523.test.ts src/lib/soccerClubSquad.test.ts src/test/soccerCareerStoryRole.test.ts src/test/soccerCareerDevelopment.test.ts --testTimeout=300000 --hookTimeout=120000
+[2m Test Files [22m [1m[32m4 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[32m115 passed[39m[22m[90m (115)[39m
+[2m   Duration [22m 2.55s[2m (transform 1.18s, setup 207ms, collect 3.31s, tests 977ms, environment 1.21s, prepare 276ms)[22m
+
+MUTATION D CAUGHT: 1=1 2=0

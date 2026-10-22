@@ -1,0 +1,12 @@
+MUTATION C applied to src/pages/SoccerCareer.tsx
+---- [C.1] exit=0: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+---- [C.2] exit=0: SIM_CAREER_FORM_SECTIONS=2 node scripts/simCareerForm.mjs
+simCareerForm: green
+   neutral 81, 15 morale points a step; 13 steps, 15 caps, 5 ratings, 6 hub lines checked
+simCareerForm: green
+---- [C.3] exit=0: node_modules/.bin/vitest run src/test/soccerPuskasYear1523.test.ts src/lib/soccerClubSquad.test.ts src/test/soccerCareerStoryRole.test.ts src/test/soccerCareerDevelopment.test.ts --testTimeout=300000 --hookTimeout=120000
+[2m Test Files [22m [1m[32m4 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[32m115 passed[39m[22m[90m (115)[39m
+[2m   Duration [22m 2.51s[2m (transform 996ms, setup 208ms, collect 3.26s, tests 958ms, environment 1.22s, prepare 407ms)[22m
+
+MUTATION C SURVIVED (all green): 1=0 2=0 3=0

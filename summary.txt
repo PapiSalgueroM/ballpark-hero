@@ -1,0 +1,4 @@
+mutC exit=0 58s | MUTATION C SURVIVED (all green): 1=0 2=0 3=0
+mutD exit=1 69s | MUTATION D CAUGHT: 1=1 2=0
+mutF exit=1 17s | MUTATION F CAUGHT: 1=0 2=1
+mutG exit=1 19s | MUTATION G CAUGHT: 1=1 2=0
