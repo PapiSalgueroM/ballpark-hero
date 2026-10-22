@@ -37,7 +37,8 @@ const SAVE_KEY = keyLine[1];
 
 let failures = 0;
 const red = new Set();
-const fail = (walk, what) => { failures += 1; red.add(walk); console.log(`  FAIL ${walk}: ${what}`); };
+const why = new Set();
+const fail = (walk, what, kind = 'check') => { failures += 1; red.add(walk); why.add(kind); console.log(`  FAIL ${walk}: ${what}`); };
 const notes = [];
 
 const port = await new Promise((resolve, reject) => {
@@ -105,7 +106,7 @@ async function walkA(browser, size) {
       if (!text.includes(want)) fail(walk, `${size.width}: the How to play dialog does not say "${want}"`);
     }
     await check('first-visit');
-  } catch (error) { fail(walk, `${size.width}: ${String(error.message || error).split('\n')[0]}`); } finally { await context.close(); }
+  } catch (error) { fail(walk, `${size.width}: ${String(error.message || error).split('\n')[0]}`, 'crash'); } finally { await context.close(); }
 }
 
 async function walkB(browser, size) {
@@ -138,19 +139,19 @@ async function walkB(browser, size) {
       if (m.cut || m.right > m.iw) fail(walk, `${size.width}: the office's effect line is cut`);
     }
     await check('family-aisle');
-    await tap(page.getByRole('button', { name: /back/i }).first());
+    await tap(page.getByRole('button', { name: 'Hub', exact: true }).first());
     await play.waitFor();
     const before = save.c;
     await tap(play);
     const line = page.getByText(/^💵 This season /).first();
-    try { await line.waitFor({ timeout: 10000 }); } catch { fail(walk, `${size.width}: the season's feed has no returns line`); }
+    try { await line.waitFor({ timeout: 10000 }); } catch { fail(walk, `${size.width}: the season's feed has no returns line`, 'promise'); }
     const after = JSON.parse(await page.evaluate(k => localStorage.getItem(k), SAVE_KEY)).c;
     const pay = r1(before.netWorth + before.salary * TAKE_HOME - before.yearlyCosts);
     const steady = INDEX_RATE * INDEX_COST * 2;
     const exact = Math.round((steady + (pay + steady) * OFFICE_RATE) * 10000), tenths = Math.floor(exact / 1000);
     const want = r1(pay + tenths / 10), carry = (exact - tenths * 1000) / 10000;
     notes.push(`b ${size.width}: Cash ${before.netWorth} to ${after.netWorth} (pay less upkeep ${pay}, banked ${tenths / 10}, waiting ${after.shopCarry}); wanted ${want} and ${carry}`);
-    if (after.netWorth !== want || after.shopCarry !== carry) fail(walk, `${size.width}: Cash ${after.netWorth} with ${after.shopCarry} waiting, the cards print ${want} with ${carry} waiting`);
+    if (after.netWorth !== want || after.shopCarry !== carry) fail(walk, `${size.width}: Cash ${after.netWorth} with ${after.shopCarry} waiting, the cards print ${want} with ${carry} waiting`, 'promise');
     if (await line.count()) {
       const said = await line.innerText();
       if (!said.includes(`$${tenths / 10}M went into the Bank`)) fail(walk, `${size.width}: the returns line says "${said}"`);
@@ -158,7 +159,7 @@ async function walkB(browser, size) {
       if (cut) fail(walk, `${size.width}: the returns line is cut`);
     }
     await check('season-played');
-  } catch (error) { fail(walk, `${size.width}: ${String(error.message || error).split('\n')[0]}`); } finally { await context.close(); }
+  } catch (error) { fail(walk, `${size.width}: ${String(error.message || error).split('\n')[0]}`, 'crash'); } finally { await context.close(); }
 }
 
 const browser = await chromium.launch();
@@ -175,7 +176,8 @@ try {
 for (const line of notes) console.log(`  ${line}`);
 console.log(`  screenshots: ${fs.readdirSync(OUT).filter(f => f.endsWith('.png')).length} in ${OUT}`);
 if (CONTROL) {
-  const fired = red.has('b');
+  /* It fires only on the promise itself (no returns line, or Cash not moved by it), never on a crash or a timeout. */
+  const fired = red.has('b') && why.has('promise') && !why.has('crash');
   console.log(fired ? `playUsShopPromises: CONTROL ${CONTROL} FIRED, (b) red` : `playUsShopPromises: CONTROL ${CONTROL} DID NOT FIRE, (b) stayed green`);
   process.exit(fired ? 1 : 3);
 }
