@@ -104,8 +104,12 @@
  *      asserted (it measures the old draft's gift to the GM); S4 the two
  *      strongest starts' PLAYOFF seasons, seasons 2 to 10, the new arm's own
  *      AT LEAST 60 percent, the old arm printed beside it (their title share
- *      printed, never asserted); S5 section 5's rise at every band in every
- *      set; S6 CPU dead money a season under 3.0 $M (its cause: CPU firsts 13
+ *      printed, never asserted); S5 section 5's rise at every band, POOLED
+ *      over every set of both runs, each step positive by at least two of
+ *      its own errors in the pick number and in the true rating (the lead's
+ *      ruling E2 of 2026-10-22; how many sets rise at every band is printed
+ *      and never asserted, a minimum over 24 sets being an extreme); S6 CPU
+ *      dead money a season under 3.0 $M (its cause: CPU firsts 13
  *      to 30 on the engine's four season deal, three of them played after the
  *      summer's season, cut by CPU clubs; a per slot rookie scale with team
  *      options for every club is the fix, after which the band returns under
@@ -115,8 +119,14 @@
  *      S4 and S6 dead) are the replicates, the error of the pooled value is
  *      their sd over root k and must be under a third of the line's `res`
  *      (its margin, or for the widened lines the old scale: 0.5, 10 and 1.0),
- *      and the two runs' pooled values within two errors of each other; else
- *      UNRESOLVED and the size the rule asks is printed. OUTSIDE is a STOP.
+ *      else UNRESOLVED and the size the rule asks is printed. The two runs
+ *      (the lead's ruling E1 of 2026-10-22): each run's pooled value is held
+ *      to the band on its own; both inside is a PASS; one inside and one
+ *      outside is RUNS DISAGREE (they straddle an edge: the fleet grows once,
+ *      and a line that still straddles is a STOP for the lead); neither
+ *      inside is OUTSIDE, a STOP. Agreement is never judged by one run's
+ *      error: the gap between the runs and its error, the root of the two
+ *      squared errors, are printed beside every line and decide nothing.
  *      The table prints between TABLE BEGIN and TABLE END for the notes, then
  *      what the lead reads beside it, never asserted.
  *  11. THE JUDGE ON KNOWN ANSWERS (every run). The verdict code the table runs
@@ -125,11 +135,18 @@
  *      its band on both sides of every edge, S3 never judged. Without it the
  *      judge could only ever be seen to pass (the lead's ruling 7). Since the
  *      review of 2026-10-22 (F2) also the other half of the verdict: every
- *      asserted line UNRESOLVED (a spread of two res), RUNS DISAGREE (two
- *      runs a fifth of res apart) and NOT TWO RUNS (one run); what the table
- *      asserts of each verdict (lineHolds: PASS only); and the fleet's size
- *      (fleetShort: two runs of at least twelve sets, which the table now
- *      checks before any verdict, a fleet control's reduced fleet exempt).
+ *      asserted line UNRESOLVED (a spread of two res) and NOT TWO RUNS (one
+ *      run); what the table asserts of each verdict (lineHolds: PASS only);
+ *      and the fleet's size (fleetShort: two runs of at least twelve sets,
+ *      which the table now checks before any verdict, a fleet control's
+ *      reduced fleet exempt). Since the lead's rulings E1 and E2 of the same
+ *      day: two runs a fifth of res apart, both inside, PASS; at every edge
+ *      of every band two runs on opposite sides, with their mean inside and
+ *      with it outside, are RUNS DISAGREE, and again on a fleet of 24 sets;
+ *      and S5's pooled rise on seven planted fleets (clear, one set
+ *      backward but the pool clear, a step at 2.6 errors: PASS; a step at
+ *      1.4 and at 1.0 errors, a step backward, a band empty: OUTSIDE), the
+ *      printed count of sets that rise at every band among them.
  *
  * THE FLEET. Six user clubs, the two strongest, the two middle and the two
  * weakest by opening nbaStrength, on seed sets of ten seeds: 60 careers of ten
@@ -195,9 +212,12 @@
  *   judgecap     the cap compared against the value's negative           (11)
  *   judgeflip    the two sided band turned inside out                    (11; 11 and 7 under a COMBINE)
  *   judgeres     the resolution rule at three res, not a third            (11)
- *   judgeagree   the two runs agree within 200 errors, not two            (11)
+ *   judgestraddle one run inside its band carries the line (E1)           (11)
+ *   judgerise    a pooled S5 step passes on any positive mean (E2)        (11)
  *   judgepass    the table holds a line on any verdict but OUTSIDE        (11)
  *   judgefleet   a fleet of one set a run is whole                        (11)
+ * (judgeagree, the two runs within two of one run's errors, went with the
+ * rule it slipped: the lead's ruling E1 of 2026-10-22 struck that rule.)
  * Two checks have no control, on purpose: section 4's JSON round trip (the
  * block is the lift's plain data, which no edit outside the lift can make
  * change under JSON) and its swapped table (no press reads the table today,
@@ -411,7 +431,12 @@ const CONTROLS = {
      is in this file exactly once. A real fleet that passes is untouched by all four, so under a COMBINE only
      section 11 goes red. */
   judgeres: { expect: [11], self: [['p.se < res' + ' / 3', 'p.se < res * 3']] },
-  judgeagree: { expect: [11], self: [['perRun[1].d) <= 2' + ' * maxSe', 'perRun[1].d) <= 200 * maxSe']] },
+  /* The lead's rulings E1 and E2 of 2026-10-22 (E4: each new judging rule gets a control that proves it can fail).
+     judgestraddle lets one run inside its band carry the line, so two runs on opposite sides of an edge PASS;
+     judgerise lets a pooled S5 step through on any positive mean, so a step under two of its errors PASSES. It
+     replaces judgeagree, whose rule (two runs within two of one run's errors) E1 struck. */
+  judgestraddle: { expect: [11], self: [['inRun.every' + '(Boolean)', 'inRun.some(Boolean)']] },
+  judgerise: { expect: [11], self: [['m >= RISE_ERRORS' + ' * se', 'm >= 0 * se']] },
   judgepass: { expect: [11], self: [['  return verdict === \'PASS\';', '  return verdict !== \'OUTSIDE\';']] },
   judgefleet: { expect: [11], self: [['const FLEET_MIN_SETS' + ' = 12;', 'const FLEET_MIN_SETS = 1;']] },
 };
@@ -1527,7 +1552,7 @@ const MARGIN = { S3: 10, S4: 10 };
    S6 cap, so neither widened band made its line coarser. */
 const LINES = [
   { id: 'S1 at 5', get: L => L.S1at5, kind: 'two', margin: () => 0.5, d: 2, what: 'mean nbaStrength of the 30 clubs, season 5 tip off' },
-  { id: 'S1 at 10', get: L => L.S1at10, kind: 'range', lo: -0.5, hi: 1.5, margin: () => 1.5, res: () => 0.5, d: 2, what: 'mean nbaStrength of the 30 clubs, season 10 tip off (ruled 2026-10-21: up to +1.5)' },
+  { id: 'S1 at 10', get: L => L.S1at10, kind: 'range', lo: -0.5, hi: 1.5, margin: () => 1.5, res: () => 0.5, d: 2, what: 'mean nbaStrength of the 30 clubs, season 10 tip off (ruled 2026-10-21: up to +1.5; its lower side of -0.5 confirmed 2026-10-22)' },
   { id: 'S2', get: L => L.S2, kind: 'two', margin: old => 0.2 * old, d: 1, what: 'men rated 85 or more, season 10 tip off (20 percent of the old arm)' },
   { id: 'S3', get: L => L.S3.rate, kind: 'print', margin: () => 10, d: 1, what: "two weakest starts' playoff seasons, seasons 2 to 5, per season (ruled 2026-10-21: printed)" },
   { id: 'S4', get: L => L.S4.rate, kind: 'floor', floor: 60, margin: () => 60, res: () => 10, d: 1, what: "two strongest starts' playoff seasons, seasons 2 to 10, per season (ruled 2026-10-21: the arm's own, at least 60)" },
@@ -1549,7 +1574,13 @@ function inBand(line, dbar, margin) {
   throw new Error(`the judge knows no band of kind ${line.kind}`);
 }
 
-/** One line judged over the runs: old and vs map run -> set -> a set's lines. Pure: it prints and checks nothing. */
+/** One line judged over the runs: old and vs map run -> set -> a set's lines. Pure: it prints and checks nothing.
+    THE LEAD'S RULING E1 OF 2026-10-22: each run is held to the band on its own (inBand on its pooled value). Both runs
+    inside is a PASS (each resolved); one inside and one outside is RUNS DISAGREE, the two runs on opposite sides of a
+    band edge, so the fleet grows once, and a line that still straddles is a STOP for the lead; neither inside is
+    OUTSIDE. Agreement is never judged by one run's error: the gap between the runs and ITS error, the root of the
+    two runs' squared errors, are returned to be printed beside every line, and decide nothing. One run is never a
+    verdict (review 2026-10-22, F2). Control judgestraddle lets one run inside carry the line. */
 function judgeLine(line, old, vs, runs) {
   const perRun = runs.map(r => {
     const sets = [...vs.get(r).keys()].filter(s => old.get(r).has(s)).sort((a, b) => a - b);
@@ -1564,25 +1595,63 @@ function judgeLine(line, old, vs, runs) {
   const dbar = mean(perRun.map(p => p.d));
   const maxSe = Math.max(...perRun.map(p => p.se));
   const resolved = perRun.length > 0 && perRun.every(p => Number.isFinite(p.se) && p.se < res / 3);
-  /* Correction 8 (b) wants the two runs within two errors of each other, so one run is never a verdict (review
-     2026-10-22, F2: with one run this used to be true by construction). */
   const two = perRun.length === 2;
-  const agree = two && Math.abs(perRun[0].d - perRun[1].d) <= 2 * maxSe;
-  if (line.kind === 'print') return { perRun, margin, res, dbar, maxSe, verdict: 'PRINTED', miss: NaN, need: 0 };
-  const inside = inBand(line, dbar, margin);
-  const verdict = !inside ? 'OUTSIDE' : !resolved ? 'UNRESOLVED' : !two ? 'NOT TWO RUNS' : !agree ? 'RUNS DISAGREE' : 'PASS';
+  const gap = two ? Math.abs(perRun[0].d - perRun[1].d) : NaN;
+  const gapSe = two ? Math.hypot(perRun[0].se, perRun[1].se) : NaN;
+  if (line.kind === 'print') return { perRun, margin, res, dbar, maxSe, gap, gapSe, verdict: 'PRINTED', miss: NaN, need: 0 };
+  const inRun = perRun.map(p => inBand(line, p.d, margin));
+  const anyIn = inRun.some(Boolean);
+  const allIn = inRun.length > 0 && inRun.every(Boolean);
+  const verdict = !anyIn ? 'OUTSIDE' : !resolved ? 'UNRESOLVED' : !two ? 'NOT TWO RUNS' : !allIn ? 'RUNS DISAGREE' : 'PASS';
   const miss = line.kind === 'two' ? Math.abs(dbar) - margin
     : line.kind === 'range' ? (dbar > line.hi ? dbar - line.hi : line.lo - dbar)
     : line.kind === 'floor' ? line.floor - dbar : dbar - margin;
   let need = 0;
   const sdd = Math.max(...perRun.map(p => p.sdd));
   if (verdict === 'UNRESOLVED' && Number.isFinite(sdd)) { need = perRun[0].k; while (need < 24 && sdd / Math.sqrt(need) >= res / 3) need += 1; }
-  return { perRun, margin, res, dbar, maxSe, verdict, miss, need };
+  /* a straddle on a fleet already grown past the ruled twelve sets cannot grow again: a STOP for the lead */
+  const grown = perRun.some(p => p.k > FLEET_MIN_SETS);
+  return { perRun, margin, res, dbar, maxSe, gap, gapSe, inRun, grown, verdict, miss, need };
 }
 
-/** What the table asserts of an asserted line's verdict: PASS and nothing else (OUTSIDE is a STOP, UNRESOLVED grows
-    the fleet, NOT TWO RUNS and RUNS DISAGREE are no verdict). Section 11 holds it to every known answer and control
-    judgepass loosens it (review 2026-10-22, F2: this assertion had no control). */
+/** S5 AS RULED (the lead's ruling E2 of 2026-10-22). Over every set of both runs, the POOLED rise of his first
+    selection from each band of finish to the next: its pick number later and its true rating worse, each step's
+    per set values the replicates (their mean, and their sd over root n its error), and each positive by at least
+    RISE_ERRORS of its own errors at every band. How many sets rise at every band is PRINTED, never asserted: a count
+    of 24 of 24 is a minimum over 24 sets, an extreme, and the house never asserts on a max or a min. A band empty in
+    a set leaves that set out of the step beside it; a step with under two sets has no error and fails. Pure: section
+    11 holds it to known answers, and control judgerise lets a rise under two errors through. */
+const RISE_ERRORS = 2;
+function judgeRise(vs, runs) {
+  const sets = runs.flatMap(r => [...vs.get(r).values()]);
+  const bands = sets[0]?.S5 ?? [];
+  const pooled = v => {
+    const m = mean(v);
+    const se = sdOf(v) / Math.sqrt(v.length);
+    return { m, se, z: m / se, ok: Number.isFinite(m) && Number.isFinite(se) && m > 0 && m >= RISE_ERRORS * se };
+  };
+  const steps = [];
+  for (let i = 0; i + 1 < bands.length; i += 1) {
+    const pick = [];
+    const fall = [];
+    for (const L of sets) {
+      const a = L.S5[i];
+      const b = L.S5[i + 1];
+      if (!(a?.n > 0) || !(b?.n > 0)) continue;
+      pick.push(b.overall - a.overall);
+      fall.push(a.trueOvr - b.trueOvr);
+    }
+    steps.push({ from: bands[i].band, to: bands[i + 1].band, n: pick.length, pick: pooled(pick), fall: pooled(fall) });
+  }
+  const perSet = sets.filter(L => L.S5.every(x => x.n > 0) && L.S5.slice(1).every((x, i) => x.overall > L.S5[i].overall && x.trueOvr < L.S5[i].trueOvr)).length;
+  const ok = steps.length === 5 && steps.every(s => s.pick.ok && s.fall.ok);
+  return { steps, perSet, sets: sets.length, verdict: ok ? 'PASS' : 'OUTSIDE' };
+}
+
+/** What the table asserts of an asserted line's verdict, S5's included: PASS and nothing else (OUTSIDE is a STOP,
+    UNRESOLVED grows the fleet, RUNS DISAGREE grows it once and is a STOP on a grown fleet, NOT TWO RUNS is no
+    verdict). Section 11 holds it to every known answer and control judgepass loosens it (review 2026-10-22, F2: this
+    assertion had no control). */
 function lineHolds(verdict) {
   return verdict === 'PASS';
 }
@@ -1698,28 +1767,28 @@ function twoArmTable(table) {
   const short = fleetShort(old, vs);
   console.log(`   the fleet judged: ${runs.map(r => `run ${r} ${[...vs.get(r).keys()].filter(s => old.get(r).has(s)).length} sets`).join(', ')}${short.length ? ` (SHORT: ${short.join('; ')})` : ''}`);
   if (!FLEET_CONTROL) check(short.length === 0, `the fleet is short of the ruled size: ${short.join('; ')}`);
-  const md = ['TABLE BEGIN', `| line | old | ${VS} | ${VS} minus old, run by run (error) | band | sets | verdict |`, '|---|---|---|---|---|---|---|'];
+  const md = ['TABLE BEGIN', `| line | old | ${VS} | ${VS} minus old, run by run (error) | the gap between the runs (its error, the gap in errors) | band | sets | verdict |`, '|---|---|---|---|---|---|---|---|'];
   for (const line of LINES) {
-    const { perRun, margin, maxSe, verdict, miss, need } = judgeLine(line, old, vs, runs);
-    const said = `${verdict}${verdict === 'OUTSIDE' ? ` by ${fix(miss, line.d)} (${fix(miss / maxSe, 1)} errors)` : ''}${need ? ` (the rule asks ${need} sets)` : ''}`;
+    const { perRun, margin, maxSe, gap, gapSe, inRun, grown, verdict, miss, need } = judgeLine(line, old, vs, runs);
+    const straddle = verdict === 'RUNS DISAGREE'
+      ? ` (run ${perRun.filter((p, i) => inRun[i]).map(p => p.run).join(', ')} inside, run ${perRun.filter((p, i) => !inRun[i]).map(p => p.run).join(', ')} outside: ${grown ? 'the fleet has grown, a STOP for the lead' : 'the fleet grows once, to at most 24 sets; a line that still straddles is a STOP for the lead'})`
+      : '';
+    const said = `${verdict}${verdict === 'OUTSIDE' ? ` by ${fix(miss, line.d)} (${fix(miss / maxSe, 1)} errors)` : ''}${straddle}${need ? ` (the rule asks ${need} sets)` : ''}`;
     const own = OWN.has(line.kind) ? "(the arm's own) " : '';
-    md.push(`| ${line.id}: ${line.what} | ${perRun.map(p => fix(p.old, line.d)).join(' / ')} | ${perRun.map(p => fix(p.vs, line.d)).join(' / ')} | ${own}${perRun.map(p => `${p.d >= 0 && !own ? '+' : ''}${fix(p.d, line.d)} (${fix(p.se, line.d)})`).join(' / ')} | ${bandText(line, margin)} | ${perRun.map(p => p.k).join(' / ')} | ${said} |`);
+    const gapText = Number.isFinite(gap) ? `${fix(gap, line.d + 1)} (${fix(gapSe, line.d + 1)}, ${fix(gap / gapSe, 1)} errors)` : 'one run';
+    md.push(`| ${line.id}: ${line.what} | ${perRun.map(p => fix(p.old, line.d)).join(' / ')} | ${perRun.map(p => fix(p.vs, line.d)).join(' / ')} | ${own}${perRun.map(p => `${p.d >= 0 && !own ? '+' : ''}${fix(p.d, line.d)} (${fix(p.se, line.d)})`).join(' / ')} | ${gapText} | ${bandText(line, margin)} | ${perRun.map(p => p.k).join(' / ')} | ${said} |`);
     if (verdict === 'OUTSIDE') fleetMisses.push(`${line.id} by ${fix(miss, line.d)}, ${fix(miss / maxSe, 1)} errors`);
     if (!FLEET_CONTROL && line.kind !== 'print') check(lineHolds(verdict), `${line.id} (${line.what}): ${said}`);
   }
-  /* S5: in every set of every run of VS, his first selection comes later and is worse at every band of finish. */
-  const s5bad = [];
-  for (const r of runs) {
-    for (const [s, L] of vs.get(r)) {
-      const b = L.S5;
-      const ok = b.every(x => x.n > 0) && b.slice(1).every((x, i) => x.overall > b[i].overall && x.trueOvr < b[i].trueOvr);
-      if (!ok) s5bad.push(`run ${r} set ${s}`);
-    }
-  }
-  const s5n = runs.reduce((a, r) => a + vs.get(r).size, 0);
-  md.push(`| S5: his first selection later and worse at every band of finish, in every set | flat (pick 1) | ${s5n - s5bad.length} of ${s5n} sets | | every set | ${s5n} | ${s5bad.length ? `OUTSIDE in ${s5bad.join(', ')}` : 'PASS'} |`);
-  if (s5bad.length) fleetMisses.push(`S5 in ${s5bad.length} sets`);
-  if (!FLEET_CONTROL) check(s5bad.length === 0, `S5: the rise is not positive at every band in ${s5bad.join(', ')}`);
+  /* S5 as ruled (E2): the pooled rise at every band, each step by at least two of its own errors; the count of sets
+     that rise at every band is printed beside it and never asserted. */
+  const rise = judgeRise(vs, runs);
+  const stepText = rise.steps.map(s => `${s.from} to ${s.to}: pick +${fix(s.pick.m, 2)} (${fix(s.pick.se, 2)}, ${fix(s.pick.z, 1)} errors), rating -${fix(s.fall.m, 2)} (${fix(s.fall.se, 2)}, ${fix(s.fall.z, 1)} errors), ${s.n} sets`).join('; ');
+  const thin = rise.steps.filter(s => !s.pick.ok || !s.fall.ok).map(s => `${s.from} to ${s.to}${s.pick.ok ? '' : ` pick ${fix(s.pick.z, 1)} errors`}${s.fall.ok ? '' : ` rating ${fix(s.fall.z, 1)} errors`}`);
+  const riseSaid = rise.verdict === 'OUTSIDE' ? `OUTSIDE at ${thin.length ? thin.join(', ') : `${rise.steps.length} steps, not 5`}` : rise.verdict;
+  md.push(`| S5: his first selection later and worse from each band of finish to the next, pooled over every set of both runs (ruled 2026-10-22) | flat (pick 1) | ${rise.perSet} of ${rise.sets} sets rise at every band (printed, never asserted) | ${stepText} | | each step positive by at least ${RISE_ERRORS} of its errors | ${rise.sets} | ${riseSaid} |`);
+  if (rise.verdict === 'OUTSIDE') fleetMisses.push(`S5 ${riseSaid}`);
+  if (!FLEET_CONTROL) check(lineHolds(rise.verdict), `S5 (the pooled rise at every band of finish): ${riseSaid}`);
   md.push('TABLE END');
   console.log(md.join('\n'));
   /* What the lead reads beside the lines, never asserted: pooled over every set and run of each arm. */
@@ -1786,28 +1855,44 @@ open(11);
       : line.kind === 'floor' ? [[line.floor + 5, 'PASS'], [line.floor - 5, 'OUTSIDE']]
       : line.kind === 'cap' ? [[0.5 * margin, 'PASS'], [1.5 * margin, 'OUTSIDE']]
       : [[line.get(base) - 50, 'PRINTED'], [line.get(base), 'PRINTED']];
-    /* The resolution and agreement half (review 2026-10-22, F2), on the value of the first PASS case, for every
-       asserted line: a set to set spread of two `res` either side puts the error near 0.6 of `res`, over the third
-       the rule allows (UNRESOLVED); two runs a tenth of `res` either side of it, each resolved, are farther apart than
-       two errors (RUNS DISAGREE); and one run alone is no verdict (NOT TWO RUNS). Each is inside its band, so only
-       the half under test can keep it from PASS. */
+    /* The resolution and agreement half (review 2026-10-22, F2, and the lead's ruling E1 of 2026-10-22), on the
+       value of the first PASS case, for every asserted line: a set to set spread of two `res` either side puts the
+       error near 0.6 of `res`, over the third the rule allows (UNRESOLVED); two runs a tenth of `res` either side of
+       it, each resolved and each inside, are a PASS, though they sit far more than two of one run's errors apart
+       (E1: never judged by one run's error); and one run alone is no verdict (NOT TWO RUNS). */
     const inside = cases.find(c => c[1] === 'PASS')?.[0];
     const shapes = [{ value: null, want: null, spread: 1 / 100, apart: 0, runs: [1, 2] }];
     if (line.kind !== 'print') {
       shapes.push({ value: inside, want: 'UNRESOLVED', spread: 2, apart: 0, runs: [1, 2] });
-      shapes.push({ value: inside, want: 'RUNS DISAGREE', spread: 1 / 100, apart: 1 / 10, runs: [1, 2] });
+      shapes.push({ value: inside, want: 'PASS', spread: 1 / 100, apart: 1 / 10, runs: [1, 2] });
       shapes.push({ value: inside, want: 'NOT TWO RUNS', spread: 1 / 100, apart: 0, runs: [1] });
+      /* E1's straddles: at every edge of the band, two runs on opposite sides of it, each resolved. Once with the
+         runs' mean inside the band (run 1 three tenths of `res` inside, run 2 a tenth outside) and once with it
+         outside (run 1 three tenths outside, run 2 a tenth inside): RUNS DISAGREE both times, whatever the mean says,
+         and again on a fleet grown to 24 sets, where it is a STOP for the lead. In the line's own space: the
+         difference from the old arm, or the arm's own value for a floor or a cap. */
+      const edges = line.kind === 'two' ? [[margin, -1], [-margin, 1]]
+        : line.kind === 'range' ? [[line.hi, -1], [line.lo, 1]]
+        : line.kind === 'floor' ? [[line.floor, 1]] : [[margin, -1]];
+      edges.forEach(([edge, inward], e) => {
+        const meanIn = [edge + inward * 0.3 * res, edge - inward * 0.1 * res];
+        shapes.push({ at: meanIn, want: 'RUNS DISAGREE', spread: 1 / 100, apart: 0, runs: [1, 2] });
+        shapes.push({ at: [edge - inward * 0.3 * res, edge + inward * 0.1 * res], want: 'RUNS DISAGREE', spread: 1 / 100, apart: 0, runs: [1, 2] });
+        if (e === 0) shapes.push({ at: meanIn, want: 'RUNS DISAGREE', spread: 1 / 100, apart: 0, runs: [1, 2], sets: 24 });
+      });
     }
     const all = [...cases.map(([value, want]) => ({ ...shapes[0], value, want })), ...shapes.slice(1)];
     for (const c of all) {
-      /* a jitter set to set (mean zero over the twelve sets) and, for the two runs, an offset either side */
+      /* a jitter set to set (mean zero over the sets) and, for the two runs, an offset either side or a value each */
       const vs = runsOf((i, r) => {
-        const v = c.value + (i % 2 ? 1 : -1) * c.spread * res + (r === 1 ? -1 : 1) * c.apart * res;
+        const at = c.at ? (own ? c.at[r - 1] : line.get(base) + c.at[r - 1]) : c.value + (r === 1 ? -1 : 1) * c.apart * res;
+        const v = at + (i % 2 ? 1 : -1) * c.spread * res;
         return { ...base, [key]: typeof base[key] === 'object' ? { ...base[key], rate: v } : v };
-      }, c.runs);
-      const got = judgeLine(line, runsOf(() => base, c.runs), vs, c.runs).verdict;
+      }, c.runs, c.sets ?? 12);
+      const got = judgeLine(line, runsOf(() => base, c.runs, c.sets ?? 12), vs, c.runs).verdict;
       known += 1;
-      check(got === c.want, `${line.id} (${line.kind}): the new arm at ${fix(c.value, line.d)}${own ? '' : ` against ${fix(line.get(base), line.d)}`} (spread ${c.spread} res, runs ${c.runs.length}${c.apart ? `, ${c.apart} res apart` : ''}) was judged ${got}, the known answer is ${c.want}`);
+      const where = c.at ? `the runs at ${c.at.map(x => fix(x, line.d + 1)).join(' and ')}${own ? '' : ' from the old arm'}` : `the new arm at ${fix(c.value, line.d)}${own ? '' : ` against ${fix(line.get(base), line.d)}`}`;
+      check(got === c.want, `${line.id} (${line.kind}): ${where} (spread ${c.spread} res, runs ${c.runs.length}, ${c.sets ?? 12} sets${c.apart ? `, ${c.apart} res apart` : ''}) was judged ${got}, the known answer is ${c.want}`);
       /* and what the table asserts of that verdict: it holds a line only on PASS */
       if (line.kind !== 'print') {
         held += 1;
@@ -1827,7 +1912,41 @@ open(11);
     known += 1;
     check((short.length === 0) === whole, `a fleet of old ${oRuns.length} runs of ${oSets} sets and new ${vRuns.length} of ${vSets} was judged ${short.length ? `short (${short.join('; ')})` : 'whole'}, the known answer is ${whole ? 'whole' : 'short'}`);
   }
-  console.log(`   ${known} known answers judged over ${LINES.length} lines (${LINES.map(l => `${l.id} ${l.kind}`).join(', ')}) and the fleet's size; the table's assertion held to ${held} verdicts`);
+  /* S5 as ruled (the lead's ruling E2 of 2026-10-22): six bands of finish over two runs of twelve sets, each step from
+     a band to the next planted as [the pick number's rise, the true rating's fall] with a set to set jitter either
+     side, and the verdict known. A step with a jitter of 1 has an error of about 0.21 over 24 sets, so a mean of 0.55
+     is 2.6 of its errors (PASS) and 0.30 is 1.4 (OUTSIDE): the rule's two errors sit between them. One set going
+     backward while the pool is clear is a PASS, its count printed (23 of 24); a band empty in every set fails. */
+  const jit = (i, m, s) => m + (i % 2 ? 1 : -1) * s;
+  const clear = (k, i) => [jit(i, 4, 0.5), jit(i, 2, 0.5)];
+  const s5Of = (step, empty = -1) => runsOf((i, r) => {
+    const S5 = [];
+    let overall = 3;
+    let trueOvr = 80;
+    for (let b = 0; b < 6; b += 1) {
+      if (b > 0) { const [p, f] = step(b - 1, i, r); overall += p; trueOvr -= f; }
+      S5.push({ band: `${b * 5 + 1}-${b * 5 + 5}`, n: b === empty ? 0 : 5, overall: b === empty ? NaN : overall, trueOvr: b === empty ? NaN : trueOvr });
+    }
+    return { ...base, S5 };
+  });
+  const riseCases = [
+    ['every step clear in every set', s5Of(clear), 'PASS', 24],
+    ['one set backward at the last step, the pool clear', s5Of((k, i, r) => (k === 4 && r === 2 && i === 9 ? [4, -0.3] : clear(k, i))), 'PASS', 23],
+    ['the last rating step 2.6 errors over zero', s5Of((k, i) => (k === 4 ? [jit(i, 4, 0.5), jit(i, 0.55, 1)] : clear(k, i))), 'PASS'],
+    ['the last rating step 1.4 errors over zero', s5Of((k, i) => (k === 4 ? [jit(i, 4, 0.5), jit(i, 0.3, 1)] : clear(k, i))), 'OUTSIDE'],
+    ['the third pick step 1.0 error over zero', s5Of((k, i) => (k === 2 ? [jit(i, 0.2, 1), jit(i, 2, 0.5)] : clear(k, i))), 'OUTSIDE'],
+    ['the last rating step backward', s5Of((k, i) => (k === 4 ? [jit(i, 4, 0.5), jit(i, -2, 0.5)] : clear(k, i))), 'OUTSIDE'],
+    ['the fourth band of finish empty in every set', s5Of(clear, 3), 'OUTSIDE'],
+  ];
+  for (const [what, vs, want, perSet] of riseCases) {
+    const got = judgeRise(vs, [1, 2]);
+    known += 1;
+    check(got.verdict === want, `S5, ${what}: judged ${got.verdict} (${got.steps.map(s => `${s.from} to ${s.to} pick ${fix(s.pick.z, 1)} rating ${fix(s.fall.z, 1)} errors`).join('; ')}), the known answer is ${want}`);
+    held += 1;
+    check(lineHolds(got.verdict) === (want === 'PASS'), `S5, ${what}: the table would ${lineHolds(got.verdict) ? 'hold' : 'refuse'} it on ${got.verdict} (known answer ${want})`);
+    if (perSet !== undefined) check(got.perSet === perSet && got.sets === 24, `S5, ${what}: the printed count is ${got.perSet} of ${got.sets} sets, the known count ${perSet} of 24`);
+  }
+  console.log(`   ${known} known answers judged over ${LINES.length} lines (${LINES.map(l => `${l.id} ${l.kind}`).join(', ')}), the fleet's size and S5's pooled rise; the table's assertion held to ${held} verdicts`);
 }
 
 if (FLEET === 'full' || COMBINE) {
