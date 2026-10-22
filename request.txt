@@ -1,0 +1,6 @@
+# Release BJ, Round 1500's walk on the final tree. The control must exit 1 with "CONTROL nodesk FIRED".
+#!serve
+#!playwright
+#!serial
+dirty-walk: ENGINES=chromium node scripts/playUsDirtyMoney.mjs
+dirty-nodesk: ENGINES=chromium PLAY_US_DIRTY_CONTROL=nodesk node scripts/playUsDirtyMoney.mjs; s=$?; [ $s = 1 ] && echo "nodesk FIRED as it must" && exit 0; echo "nodesk did not exit 1 ($s)"; exit 1
