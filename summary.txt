@@ -1,0 +1,6 @@
+s6 exit=1 2s | simCmDifficulty: 3 FAILURES (sections 6)
+c-oldlevel exit=1 163s | simCmDifficulty: 65 FAILURES (sections 2)
+ctl-unseeded-noinverse exit=0 30s | simCmUnseededWorld: CONTROL noinverse FIRED: without the inverse the fresh careers differ from the base (15 of 15)
+unseeded-minusAZ exit=1 151s | simCmUnseededWorld: 113 FAILURE(S)
+continuity-minusAZ exit=1 29s |     at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:523:24
+ctl-continuity-all exit=1 29s |     at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:523:24
