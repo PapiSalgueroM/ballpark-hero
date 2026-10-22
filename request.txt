@@ -1,0 +1,13 @@
+#!serial
+m1-tennis-cutoff: node .rc/x/mut.mjs m1 && node scripts/simSportsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+m2-nfl-cat-lastseason: node .rc/x/mut.mjs m2 && node scripts/simHigherLowerFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+m3-samehost: node .rc/x/mut.mjs m3 && node scripts/simHigherLowerFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+m3b-noflag-samehost: node .rc/x/mut.mjs m3b && node scripts/simHigherLowerFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+m4-nba-swaparg-hlf: node .rc/x/mut.mjs m4 && node scripts/simHigherLowerFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+m4-nba-swaparg-reveal: node .rc/x/mut.mjs m4 && node scripts/simHigherLowerReveal.mjs; s=$?; git checkout -- src scripts; exit $s
+m5-hamilton105-ssf: node .rc/x/mut.mjs m5 && node scripts/simSportsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+m5-hamilton105-f1c: node .rc/x/mut.mjs m5 && node scripts/simF1Champions.mjs; s=$?; git checkout -- src scripts; exit $s
+m6-component-playeduntil: node .rc/x/mut.mjs m6 && node scripts/simHigherLowerFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+m7-henry-through2024: node .rc/x/mut.mjs m7 && node scripts/simHigherLowerFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+m8-durant-through2425: node .rc/x/mut.mjs m8 && node scripts/simHigherLowerFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+clean-after: git status --short | grep -v '^??' | wc -l | xargs -I{} sh -c 'echo "tracked changes left: {}"; test {} -eq 0'

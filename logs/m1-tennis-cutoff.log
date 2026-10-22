@@ -1,0 +1,46 @@
+MUTATION m1 applied to src/data/tennisHLPlayers.ts
+
+--- 1. the record: every fact sourced, two organisations, one official, one independent, no Wikipedia or copy of it, a real past check date, a date value that is a real day, a noOfficial reason that names the official host, no admitted gap ---
+  1814 sourced nodes (plus 305 fields covered by their golfer's sources and 51 editorial openers left to sections 5 and 6); 1659 carry an official source; 90 verified values are dates, each checked as a real day
+  155 stand on two independent organisations with a stated reason: ufcFighters.Jon Jones.birthDate; ufcFighters.Georges St-Pierre.birthDate; ufcFighters.Georges St-Pierre.koTko; ufcFighters.Georges St-Pierre.submissions; ufcFighters.Anderson Silva.birthDate; ufcFighters.Khabib Nurmagomedov.birthDate; ufcFighters.Demetrious Johnson.record; ufcFighters.Demetrious Johnson.birthDate ...
+
+--- 2. UFC Guesser: every fighter matches the verified record ---
+  90 fighters compared on all ten fields (90 rows shipped)
+
+--- 3. Combat Chain fighters: record, a division they really fought in, Hall of Fame ---
+  62 chain fighters checked (62 rows shipped)
+
+--- 4. Combat Chain links: every accepted link is a verified fight ---
+  59 links, each a verified fight
+
+--- 5. F1 drivers: every clue is the verified text, and the answer is in the record ---
+  20 drivers compared (20 cards shipped)
+
+--- 6. F1 constructors: every clue is the verified text, and the answer is in the record ---
+  31 constructors compared (31 cards shipped)
+
+--- 7. Perfect Lineup F1: every card's team, era and nationality ---
+  41 drivers compared (41 cards shipped)
+
+--- 8. The Medal Games: every field a player can be shown, and the country as the page draws it ---
+  43 athletes compared on 8 fields, 43 countries rendered and checked (43 cards shipped)
+
+--- 9. Golf legends: majors, first and last win, nationality, the majors won ---
+  61 golfers compared (61 rows shipped)
+
+--- 10. golf_majors placeholder rows are never counted as a player ---
+  4 reads of golf_majors in code, each through onlyNames
+  masters-champs: 4 names from a stub serving 4 dash rows, none of them a dash
+  pga-champs: 4 names from a stub serving 4 dash rows, none of them a dash
+  theopen-champs: 4 names from a stub serving 4 dash rows, none of them a dash
+  usopen-golf-champs: 4 names from a stub serving 4 dash rows, none of them a dash
+
+--- 11. F1 Higher or Lower: every win count and the cutoff the card names, and every F1 Driver clue that counts wins, against the 2026-10 record ---
+  44 drivers agree with the record through the 2026 Singapore Grand Prix (17 races of 2026 counted); 9 of them race in 2026 and show it
+  6 F1 Driver clues that count a pool driver's wins agree with the same record at the point each names
+
+--- 12. Tennis Higher or Lower: every count recounted from the two source slam record, and the cutoff the card names ---
+  FAIL [cutoff]: the card says its counts run through the 2026 Wimbledon, the slam record's latest slam is the 2026 US Open
+  44 players recounted from 1015 singles rows through the 2026 US Open, every count, year and tour as the card shows it
+
+simSportsFacts: 1 failure(s). By section: 12 (1). By check: cutoff 1

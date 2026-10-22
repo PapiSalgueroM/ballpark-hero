@@ -1,0 +1,12 @@
+m1-tennis-cutoff exit=1 1s | simSportsFacts: 1 failure(s). By section: 12 (1). By check: cutoff 1
+m2-nfl-cat-lastseason exit=1 0s | simHigherLowerFacts: 1 failure(s) in section(s) 2
+m3-samehost exit=1 0s | simHigherLowerFacts: 1 failure(s) in section(s) 1
+m3b-noflag-samehost exit=0 0s | simHigherLowerFacts: green. 63 checks across 10 fenced game(s). Every total matches the source it came from, every matchup is ordered correctly, and every figure nobody c
+m4-nba-swaparg-hlf exit=0 0s | simHigherLowerFacts: green. 63 checks across 10 fenced game(s). Every total matches the source it came from, every matchup is ordered correctly, and every figure nobody c
+m4-nba-swaparg-reveal exit=0 1s | simHigherLowerReveal: 23 source inputs held, owned copies and report cleaned.
+m5-hamilton105-ssf exit=1 0s | simSportsFacts: 1 failure(s). By section: 11 (1). By check: value 1
+m5-hamilton105-f1c exit=1 0s | simF1Champions: RED, 1 failure(s)
+m6-component-playeduntil exit=0 0s | simHigherLowerFacts: green. 63 checks across 10 fenced game(s). Every total matches the source it came from, every matchup is ordered correctly, and every figure nobody c
+m7-henry-through2024 exit=1 0s | simHigherLowerFacts: 1 failure(s) in section(s) 2
+m8-durant-through2425 exit=1 0s | simHigherLowerFacts: 2 failure(s) in section(s) 2, 8
+clean-after exit=0 0s | tracked changes left: 0
