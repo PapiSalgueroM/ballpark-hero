@@ -104,6 +104,7 @@
  * The closing check (2026-10-22):
  *   chancewait   a chance no longer waits for the whistle of a foul in its minute R11 (by hand, and the share)
  *   prevwait     nor for one of the minute before that its lead in would cover    R11 (by hand, and the count)
+ *   crowdkick    a foul with another later in its minute keeps its free kick      R11 by hand (both whistled)
  *   nomeet       a whistle with no room for its free kick has no meeting before   R11 by hand (the two meet)
  *   nameearly    the fouler's name is up while he is still walking in            R11 (his name waits for him)
  * A control exits 1 when its test went red on an assertion, as it must, and 3 when it did anything else.
@@ -137,7 +138,7 @@ const HELD = ['castnow'];
 /* Round 1521's review fixes. */
 const FIX = ['mapswap', 'turnback', 'deadrestart', 'feederholds', 'pinoff', 'facing', 'reducedlift', 'metresswap', 'longpass32'];
 /* Round 1521's closing check. */
-const CLOSE = ['chancewait', 'prevwait', 'nomeet', 'nameearly'];
+const CLOSE = ['chancewait', 'prevwait', 'crowdkick', 'nomeet', 'nameearly'];
 const LOOK = ['flatball', 'groundlob', 'shotflat', 'liftnone', 'foulcue', 'foulpair', 'foulcard', 'foulmeet', 'buildrandom', 'buildflat', 'noreason', 'buildchain', 'lookname', 'looknone', 'keepersame', 'pressnone', 'foulwait', 'cueheld'];
 assert.ok(['', ...OLD, ...NEW, ...REVIEW, ...HELD, ...LOOK, ...FIX, ...CLOSE].includes(control), 'Unknown live motion control');
 assert.ok(['', 'bundle'].includes(only), 'Unknown LIVE_MOTION_ONLY');
@@ -271,6 +272,7 @@ try {
     if (control === 'longpass32') scene = replace(scene, 'const LONG_PASS = 45;', 'const LONG_PASS = 32;');
     /* ---- Round 1521's closing check ---- */
     if (control === 'chancewait') scene = replace(scene, 'for (const minute of build ? [c.place, c.place - 1] : []) {', 'for (const minute of build && false ? [c.place, c.place - 1] : []) {');
+    if (control === 'crowdkick') scene = replace(scene, 'const crowded = input.feed.some(', 'const crowded = false && input.feed.some(');
     if (control === 'prevwait') scene = replace(scene, 'for (const minute of build ? [c.place, c.place - 1] : []) {', 'for (const minute of build ? [c.place] : []) {');
     if (control === 'nomeet') scene = replace(scene, '[0, 2 * BEAT_SPAN], [BEAT_SPAN, BEAT_SPAN], [0, BEAT_SPAN]]', '[0, 2 * BEAT_SPAN], [0, BEAT_SPAN]]');
     if (control === 'nameearly') scene = replace(scene, 'return !man || Math.hypot(man.x - cue.at.x, man.y - cue.at.y) <= 6;', 'return !man || Math.hypot(man.x - cue.at.x, man.y - cue.at.y) <= 600;');
@@ -322,7 +324,7 @@ try {
     lookname: 'R13|a renamed man the same', looknone: 'a renamed man the same', keepersame: 'a renamed man the same',
     pressnone: 'R12', foulwait: 'R11', cueheld: 'R11',
     mapswap: 'the viewer leans my side', turnback: 'R12', deadrestart: 'R12', feederholds: 'R11', pinoff: 'R11', facing: 'R11', reducedlift: 'the ball leaves the grass', metresswap: 'R10: the ball travels', longpass32: 'R10: the ball travels',
-    chancewait: 'R11', prevwait: 'R11', nomeet: 'R11', nameearly: 'R11',
+    chancewait: 'R11', prevwait: 'R11', crowdkick: 'R11', nomeet: 'R11', nameearly: 'R11',
   };
   let passed = 0;
   if (only !== 'bundle' && control !== 'cmimport' && control !== 'bigpart') {

@@ -256,11 +256,11 @@ describe('Live simcast motion', () => {
       await step(430);
       const pitch = mounted.container.querySelector('[data-cm-live-pitch]')!;
       /* The closing check of 2026-10-22: a chance may wait inside its minute for the whistle of a foul first (never
-         more than PITCH_LATE, 1.8 seconds at this speed), so the action is found when it starts and read from there,
-         as far into it as before. */
+         more than PITCH_LATE, 0.9 of a second at this speed), so the action is found when it starts and read from
+         there as far into it as a chance on time is read: 230 ms (opened 0.2 before it, read at 430). */
       let waited = 0;
-      for (; waited < 2000 && pitch.getAttribute('data-cm-motion') !== kind; waited += 16) await step(16);
-      if (waited) await step(30);
+      for (; waited < 1200 && pitch.getAttribute('data-cm-motion') !== kind; waited += 16) await step(16);
+      if (waited) await step(214);
       expect(pitch.getAttribute('data-cm-motion')).toBe(kind);
       expect(pitch.querySelector('[data-cm-actor-pose="strike"]')).not.toBeNull();
       const ball = pitch.querySelector('[data-cm-ball]')!;
@@ -1688,6 +1688,15 @@ describe('Round 1521: the live match looks like football', () => {
     expect(after.actions[1].at).toBeLessThanOrEqual(20 + PITCH_LATE + 1e-9);
     expect(after.actions[1].at - after.entries[e].end).toBeGreaterThanOrEqual(PITCH_SQUEEZE - 1e-9);
     near(pitchBeatAt(after, after.entries[e].end + 1e-6).start, after.entries[e].end);
+    /* Two fouls in one minute with nothing else near: the first is whistled without its free kick, so the second has
+       room for its own whistle inside that minute. */
+    const pair = plan([{ minute: 30, side: 'opp', kind: 'foul', text: 't defender 1' }, { minute: 30, side: 'me', kind: 'foul', text: 'm forward 1' }]);
+    for (const o of [0, 1]) {
+      const w = pair.entries.find(b => b.foul?.order === o && b.dead && pitchScene(pair, b.start).cue?.order === o);
+      expect(w, `foul ${o} of the minute is whistled`).toBeDefined();
+      expect(w!.start).toBeGreaterThanOrEqual(30 - 1e-9);
+      expect(w!.start).toBeLessThanOrEqual(30 + 1 - BEAT_SPAN + 1e-9);
+    }
     /* When the minute has no room for the whistle as well (a goal the minute before, and its kick off), nothing
        waits: the chance starts where it does with no foul in the feed. */
     const goal: PitchInput['feed'][number] = { minute: 19, side: 'opp', kind: 'goal', text: 't forward 1' };

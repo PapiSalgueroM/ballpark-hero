@@ -578,8 +578,18 @@ export function pitchPlan(input: PitchInput): PitchPlan {
         let found = -1;
         /* Where the foul needs the pitch to itself: through its free kick, or through its whistle alone. */
         let need = 0;
+        /* Round 1521 closing check: another foul of the feed later in this same minute. */
+        const crowded = input.feed.some((x, i) => i > order && x.kind === 'foul' && x.side !== 'none' && placeOf(x) === p);
         const search = (holding: (l: Layer) => boolean) => {
           const held = (s: number, e: number) => layers.some(l => holding(l) && over(l.start, l.end, s, e)) || deadWindows.some(w => over(w.from, w.to, s, e));
+          /* Round 1521 closing check: with another foul later in the same minute, this one is whistled at the first
+             instant it fits with no free kick (and met before it when that beat is free too), so the later one has
+             room for its own whistle inside the minute (r1521-f2m2: 161 fouls hidden by another foul's two beats). */
+          if (crowded) {
+            for (let k = 0; found < 0 && p + k * 0.02 <= latest + EPS; k++) if (!held(p + k * 0.02, p + k * 0.02 + BEAT_SPAN)) found = p + k * 0.02;
+            if (found >= 0) { meets = !!victim && !held(found - BEAT_SPAN, found); need = found + BEAT_SPAN; }
+            return;
+          }
           /* Round 1521 closing check: the two meeting and the free kick taken, then the free kick with no meeting seen,
              then (new) the two meeting and the whistle alone, and last the whistle alone, so a whistle with no room for
              its free kick (one a chance of its own minute waits for, above) still has the man who fouled get there
