@@ -1,0 +1,23 @@
+nba-390-rm: rules dialog 1, names 20, box 272/600px, tap Clear->itself, Submit->itself, wheel scrolled box 328/328, page 409->409, tapped "Mark Jackson" pressed=true "Draft A: 1/5. Planning costs nothing.", Clear draft -> "Draft A: 0/5. Planning costs nothing.", overflow 0px, errors 0
+nba-390-mo: rules dialog 1, names 20, box 272/600px, tap Clear->itself, Submit->itself, wheel scrolled box 328/328, page 409->409, tapped "Mark Jackson" pressed=true "Draft A: 1/5. Planning costs nothing.", Clear draft -> "Draft A: 0/5. Planning costs nothing.", overflow 0px, errors 0
+nba-1280-rm: rules dialog 1, names 20, box 272/302px, tap Clear->itself, Submit->itself, wheel scrolled box 30/30, page 461->461, tapped "Mark Jackson" pressed=true "Draft A: 1/5. Planning costs nothing.", Clear draft -> "Draft A: 0/5. Planning costs nothing.", overflow 0px, errors 0
+nba-1280-mo: rules dialog 1, names 20, box 272/302px, tap Clear->itself, Submit->itself, wheel scrolled box 30/30, page 461->461, tapped "Mark Jackson" pressed=true "Draft A: 1/5. Planning costs nothing.", Clear draft -> "Draft A: 0/5. Planning costs nothing.", overflow 0px, errors 0
+nhl-390-rm: rules dialog 1, names 20, box 272/602px, tap Clear->itself, Submit->itself, wheel scrolled box 330/330, page 373->373, tapped "Cale Makar" pressed=true "Draft A: 1/5. Planning costs nothing.", Clear draft -> "Draft A: 0/5. Planning costs nothing.", overflow 0px, errors 0
+nhl-390-mo: rules dialog 1, names 20, box 272/602px, tap Clear->itself, Submit->itself, wheel scrolled box 330/330, page 373->373, tapped "Cale Makar" pressed=true "Draft A: 1/5. Planning costs nothing.", Clear draft -> "Draft A: 0/5. Planning costs nothing.", overflow 0px, errors 0
+nhl-1280-rm: rules dialog 1, names 20, box 272/304px, tap Clear->itself, Submit->itself, wheel scrolled box 32/32, page 461->461, tapped "Cale Makar" pressed=true "Draft A: 1/5. Planning costs nothing.", Clear draft -> "Draft A: 0/5. Planning costs nothing.", overflow 0px, errors 0
+nhl-1280-mo: rules dialog 1, names 20, box 272/304px, tap Clear->itself, Submit->itself, wheel scrolled box 32/32, page 461->461, tapped "Cale Makar" pressed=true "Draft A: 1/5. Planning costs nothing.", Clear draft -> "Draft A: 0/5. Planning costs nothing.", overflow 0px, errors 0
+nbafo-390 fresh: "👔 / ROSTER / 10 under contract / 4 short of the 14 man floor. Filled on minimum deals at tip off." dots=1
+nbafo-390 after round 1 (14 men, feed: You tipped off with 10 under contract, so the league filled you to 14 on minimum deals: Quentin Lockridge, Tarik Holiday, Isaiah Lockr): "👔 / ROSTER / 1 unavailable / Tarik Holiday is out 1 round" dots=1
+nbafo-390 after one waive (14 waive buttons, 13 men, round 2): "👔 / ROSTER / 1 unavailable / Tarik Holiday is out 1 round" dots=1
+nbafo-390 hurt star Nikola Jokic, 13 men, mid season: "👔 / ROSTER / 1 unavailable / Nikola Jokic is out 3 rounds" dots=1
+nbafo-390 fit squad, 13 men: "👔 / ROSTER / 13 under contract / Nikola Jokic leads them at 94" dots=0
+nbafo-390 after round 2 (13 men, round 3): "👔 / ROSTER / 13 under contract / Nikola Jokic leads them at 94" dots=0
+nbafo-390: page errors 0
+nbafo-1280 fresh: "👔 / ROSTER / 10 under contract / 4 short of the 14 man floor. Filled on minimum deals at tip off." dots=1
+nbafo-1280 after round 1 (14 men, feed: You tipped off with 10 under contract, so the league filled you to 14 on minimum deals: Jalen Danforth, Devon Beaudry, Vontae Reeves, ): "👔 / ROSTER / 1 unavailable / Kobi Coltrane is out 3 rounds" dots=1
+nbafo-1280 after one waive (14 waive buttons, 13 men, round 2): "👔 / ROSTER / 1 unavailable / Kobi Coltrane is out 3 rounds" dots=1
+nbafo-1280 hurt star Nikola Jokic, 13 men, mid season: "👔 / ROSTER / 1 unavailable / Nikola Jokic is out 3 rounds" dots=1
+nbafo-1280 fit squad, 13 men: "👔 / ROSTER / 13 under contract / Nikola Jokic leads them at 94" dots=0
+nbafo-1280 after round 2 (13 men, round 3): "👔 / ROSTER / 1 unavailable / Julian Strawther is out 3 rounds" dots=1
+nbafo-1280: page errors 0
+walk1537: done, every reading above, shots in RC_OUT

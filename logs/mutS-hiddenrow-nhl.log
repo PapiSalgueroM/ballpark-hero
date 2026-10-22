@@ -1,0 +1,10 @@
+mutSweep2 hiddenrow: css "[aria-label="Available players"] > div > button:nth-child(17) { transform: translateY(-60px) !important; }" route /nhl-connections control none
+Sweeping 1 routes at 390x844 with touch
+  FAIL: /nhl-connections: controls sitting on top of each other: Nicklas Lidström over Henrik Zetterberg
+  NOTE: /nhl-connections: 2 pairs collide only where a scroll box hides one of the two: Evgeni Malkin over Clear draft, Mario Lemieux over Submit five
+
+   1 routes swept, worst overflow 0px
+   0 small tap targets, 0 runs of tiny text, 1 overlapping controls
+   2 pairs on 1 route collide only where a scroll box hides one of the two (not failures, see the header)
+sweepPhone: 1 failure
+mutSweep2 hiddenrow: sweep copy exited 1

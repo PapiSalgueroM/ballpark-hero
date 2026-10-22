@@ -1,0 +1,7 @@
+build exit=0 23s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+mutS-hiddenrow-nba exit=1 3s | mutSweep2 hiddenrow: sweep copy exited 1
+mutS-hiddenrow-nhl exit=1 3s | mutSweep2 hiddenrow: sweep copy exited 1
+stackhidden-nba exit=1 2s | sweepPhone: 1 failure
+noclip-nba exit=1 2s | sweepPhone: 1 failure
+walk exit=0 74s | walk1537: done, every reading above, shots in RC_OUT
+sweep-all exit=0 110s | sweepPhone: green. Every page of the site fits the phone it is played on.

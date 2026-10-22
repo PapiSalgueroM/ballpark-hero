@@ -1,0 +1,8 @@
+Sweeping 181 routes at 390x844 with touch
+  NOTE: /nba-connections: 2 pairs collide only where a scroll box hides one of the two: Michael Jordan over Clear draft, Kobe Bryant over Submit five
+  NOTE: /nhl-connections: 2 pairs collide only where a scroll box hides one of the two: Evgeni Malkin over Clear draft, Mario Lemieux over Submit five
+
+   181 routes swept, worst overflow 0px
+   0 small tap targets, 0 runs of tiny text, 0 overlapping controls
+   4 pairs on 2 routes collide only where a scroll box hides one of the two (not failures, see the header)
+sweepPhone: green. Every page of the site fits the phone it is played on.
