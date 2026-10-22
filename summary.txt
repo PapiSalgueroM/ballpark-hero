@@ -1,0 +1,2 @@
+summer6-nhl exit=0 500s | simUsCareerSummer: green. Sections 6 held.
+summer6-mlb exit=0 1975s | simUsCareerSummer: green. Sections 6 held.
