@@ -1,0 +1,10 @@
+#!serial
+says-neg: node .rc/x/saysctl1543.mjs && SCORELINES_CONTROL=bonus NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonScorelines.mjs; s=$?; git checkout -- scripts; exit $s
+says-pos: SCORELINES_CONTROL=bonus NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonScorelines.mjs
+leg-base: git worktree add /tmp/old1543 HEAD && git show bac65fb0b:scripts/data/allPlayersValueBaseline.json > /tmp/old1543/scripts/data/allPlayersValueBaseline.json && ln -s "$PWD/node_modules" /tmp/old1543/node_modules && git worktree add /tmp/base1543 bac65fb0b && cd /tmp/old1543 && node scripts/retakeTycoonHistories.mjs --root /tmp/base1543
+leg-oldladder: git worktree add /tmp/ol1543 HEAD && git show bac65fb0b:scripts/data/allPlayersValueBaseline.json > /tmp/ol1543/scripts/data/allPlayersValueBaseline.json && ln -s "$PWD/node_modules" /tmp/ol1543/node_modules && node .rc/x/oldLadder1543.mjs /tmp/ol1543/src/lib/stadiumTycoon.ts --write && cd /tmp/ol1543 && node scripts/retakeTycoonHistories.mjs
+leg-headold: git worktree add /tmp/ho1543 HEAD && git show bac65fb0b:scripts/data/allPlayersValueBaseline.json > /tmp/ho1543/scripts/data/allPlayersValueBaseline.json && ln -s "$PWD/node_modules" /tmp/ho1543/node_modules && cd /tmp/ho1543 && node scripts/retakeTycoonHistories.mjs
+leg-head: node scripts/retakeTycoonHistories.mjs
+leg-rewrite: bash .rc/x/retakeSame1543.sh
+identity: git show bac65fb0b:src/lib/stadiumTycoon.ts > /tmp/baselib1543.ts && node .rc/x/oldLadder1543.mjs src/lib/stadiumTycoon.ts --check /tmp/baselib1543.ts
+restore: git status --short | head -5; git diff --quiet && echo RESTORED
