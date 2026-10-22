@@ -1,0 +1,10 @@
+s4-hard-6: mkdir -p "$RC_OUT/s4" && SECTION=4 LEVELS=hard SEEDS=32 SHARD=6/8 OUT_JSON="$RC_OUT/s4/hard-6.json" node scripts/simCmDifficulty.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+s4-hard-7: mkdir -p "$RC_OUT/s4" && SECTION=4 LEVELS=hard SEEDS=32 SHARD=7/8 OUT_JSON="$RC_OUT/s4/hard-7.json" node scripts/simCmDifficulty.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+s4-legend-0: mkdir -p "$RC_OUT/s4" && SECTION=4 LEVELS=legend SEEDS=32 SHARD=0/8 OUT_JSON="$RC_OUT/s4/legend-0.json" node scripts/simCmDifficulty.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+s4-legend-1: mkdir -p "$RC_OUT/s4" && SECTION=4 LEVELS=legend SEEDS=32 SHARD=1/8 OUT_JSON="$RC_OUT/s4/legend-1.json" node scripts/simCmDifficulty.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+s4-legend-2: mkdir -p "$RC_OUT/s4" && SECTION=4 LEVELS=legend SEEDS=32 SHARD=2/8 OUT_JSON="$RC_OUT/s4/legend-2.json" node scripts/simCmDifficulty.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+s4-legend-3: mkdir -p "$RC_OUT/s4" && SECTION=4 LEVELS=legend SEEDS=32 SHARD=3/8 OUT_JSON="$RC_OUT/s4/legend-3.json" node scripts/simCmDifficulty.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+s4-legend-4: mkdir -p "$RC_OUT/s4" && SECTION=4 LEVELS=legend SEEDS=32 SHARD=4/8 OUT_JSON="$RC_OUT/s4/legend-4.json" node scripts/simCmDifficulty.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+s4-legend-5: mkdir -p "$RC_OUT/s4" && SECTION=4 LEVELS=legend SEEDS=32 SHARD=5/8 OUT_JSON="$RC_OUT/s4/legend-5.json" node scripts/simCmDifficulty.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+s4-legend-6: mkdir -p "$RC_OUT/s4" && SECTION=4 LEVELS=legend SEEDS=32 SHARD=6/8 OUT_JSON="$RC_OUT/s4/legend-6.json" node scripts/simCmDifficulty.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+s4-legend-7: mkdir -p "$RC_OUT/s4" && SECTION=4 LEVELS=legend SEEDS=32 SHARD=7/8 OUT_JSON="$RC_OUT/s4/legend-7.json" node scripts/simCmDifficulty.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
