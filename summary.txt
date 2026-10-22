@@ -1,0 +1,1 @@
+probe280 exit=0 0s | probe280: 20 of 20 seeds reached an attendance of 280+ (first tick); goal bonus before any streak min 1630 median 1677 max 1677 (guide says 70)

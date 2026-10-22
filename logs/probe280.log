@@ -1,0 +1,21 @@
+{"seed":1,"min":5.25,"att":280,"cap":1440,"fans":280,"div":0,"goal":1630,"goalAt280":1630,"tickets":36,"snacks":30,"shop":18,"parking":23,"lights":13,"ach":4}
+{"seed":2,"min":5.24,"att":280,"cap":1440,"fans":280,"div":0,"goal":1630,"goalAt280":1630,"tickets":36,"snacks":30,"shop":18,"parking":23,"lights":13,"ach":4}
+{"seed":3,"min":5.91,"att":280,"cap":1440,"fans":280,"div":0,"goal":1646,"goalAt280":1646,"tickets":37,"snacks":30,"shop":18,"parking":23,"lights":14,"ach":4}
+{"seed":4,"min":5.67,"att":280,"cap":1440,"fans":280,"div":0,"goal":1677,"goalAt280":1677,"tickets":37,"snacks":30,"shop":18,"parking":23,"lights":13,"ach":5}
+{"seed":5,"min":5.67,"att":280,"cap":1440,"fans":280,"div":0,"goal":1677,"goalAt280":1677,"tickets":37,"snacks":30,"shop":18,"parking":23,"lights":14,"ach":5}
+{"seed":6,"min":5.94,"att":280,"cap":1440,"fans":280,"div":0,"goal":1646,"goalAt280":1646,"tickets":37,"snacks":30,"shop":18,"parking":23,"lights":14,"ach":4}
+{"seed":7,"min":5.91,"att":280,"cap":1440,"fans":280,"div":0,"goal":1646,"goalAt280":1646,"tickets":37,"snacks":30,"shop":18,"parking":23,"lights":14,"ach":4}
+{"seed":8,"min":5.24,"att":280,"cap":1440,"fans":280,"div":0,"goal":1630,"goalAt280":1630,"tickets":36,"snacks":30,"shop":18,"parking":23,"lights":13,"ach":4}
+{"seed":9,"min":5.95,"att":280,"cap":1440,"fans":280,"div":0,"goal":1646,"goalAt280":1646,"tickets":37,"snacks":30,"shop":18,"parking":23,"lights":14,"ach":4}
+{"seed":10,"min":5.25,"att":280,"cap":1440,"fans":280,"div":0,"goal":1630,"goalAt280":1630,"tickets":36,"snacks":30,"shop":18,"parking":23,"lights":13,"ach":4}
+{"seed":11,"min":5.66,"att":280,"cap":1440,"fans":280,"div":0,"goal":1677,"goalAt280":1677,"tickets":37,"snacks":30,"shop":18,"parking":23,"lights":14,"ach":5}
+{"seed":12,"min":5.68,"att":280,"cap":1440,"fans":280,"div":0,"goal":1677,"goalAt280":1677,"tickets":37,"snacks":30,"shop":18,"parking":23,"lights":14,"ach":5}
+{"seed":13,"min":5.69,"att":280,"cap":1440,"fans":280,"div":0,"goal":1677,"goalAt280":1677,"tickets":37,"snacks":30,"shop":18,"parking":23,"lights":14,"ach":5}
+{"seed":14,"min":5.66,"att":280,"cap":1440,"fans":280,"div":0,"goal":1677,"goalAt280":1677,"tickets":37,"snacks":30,"shop":18,"parking":23,"lights":14,"ach":5}
+{"seed":15,"min":5.66,"att":280,"cap":1440,"fans":280,"div":0,"goal":1677,"goalAt280":1677,"tickets":37,"snacks":30,"shop":18,"parking":23,"lights":14,"ach":5}
+{"seed":16,"min":5.7,"att":280,"cap":1440,"fans":280,"div":0,"goal":1677,"goalAt280":1677,"tickets":37,"snacks":30,"shop":18,"parking":23,"lights":13,"ach":5}
+{"seed":17,"min":5.7,"att":280,"cap":1440,"fans":280,"div":0,"goal":1677,"goalAt280":1677,"tickets":37,"snacks":30,"shop":18,"parking":23,"lights":13,"ach":5}
+{"seed":18,"min":5.65,"att":280,"cap":1440,"fans":280,"div":0,"goal":1677,"goalAt280":1677,"tickets":37,"snacks":30,"shop":18,"parking":23,"lights":14,"ach":5}
+{"seed":19,"min":5.68,"att":280,"cap":1440,"fans":280,"div":0,"goal":1677,"goalAt280":1677,"tickets":37,"snacks":30,"shop":18,"parking":23,"lights":14,"ach":5}
+{"seed":20,"min":5.71,"att":280,"cap":1440,"fans":280,"div":0,"goal":1677,"goalAt280":1677,"tickets":37,"snacks":30,"shop":18,"parking":23,"lights":14,"ach":5}
+probe280: 20 of 20 seeds reached an attendance of 280+ (first tick); goal bonus before any streak min 1630 median 1677 max 1677 (guide says 70)
