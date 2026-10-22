@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+walkb: node .rc/x/walk1546b.mjs
+walkfix: node .rc/x/walkfix1546.mjs
