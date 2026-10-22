@@ -18981,3 +18981,12 @@ Actual browser4healthy+3specificserved-bytefaults+3exactrestorations,18saved-pag
 Actualmaincedd02399673fb5ef307129a3a6165bc208fe1a8 is integrated atc0d1c2583d6bf62846dc105139a606e02939ada4, only18WORKBOARD lines with both full prior bodies preserved. The final candidate takes only the four reviewed generated legal/sitemap/ledger outputs and the exact one-line default to final mode on the existing Green branch. Workflow8bc53a9567b49f18bf0e56d8930f01690ca70b12891840433abcde074cc2caf5 preserves all other workflow bytes and requires both generated patch/list empty, effective copied nonempty controls and complete final inventories.
 
 Fresh final all-six qualification and actual0Bpatch/list are still required before PR367 integration, coordinated publication, public readback and the two-URL IndexNow submission. No live1446 claim yet. Profile stored data/account behavior stay held. Anthony Salguero appears only in Privacy's operator notice. Analytics remains paused; provider/traffic/console/rights and ongoing legal operations are unverified. Root1447 shared consent CSS remains separate source-only preparation, J retains game dialog hardening. Primarysource/index, all oldbranches/checkouts and broader785/1441/historical preservation gaps remain protected and unwaived.
+## Round1446 LIVE and verified, 2026-10-22 UTC
+
+Profile now shows the viewed player's initial, without rendering stored or Auth avatar URLs. Avatar records and existing account behavior are preserved. The dedicated Cookie Policy, Footer/Privacy links and scoped operator notice are live.
+
+Qualified source `0dc9865` passed all six jobs in run39732838642, including 9,337 unit passes, 58 explicit skips, four healthy browser cases, three effective faults/restorations, 18 readers, 14 unchanged caps and zero generated changes. PR367 merged as `4b4d99e`.
+
+Proper public run39747821847 verified published deployment `16a8e658-6527-43a1-85ff-d5c3c7d896a4`, three raw pages, four observed assets, 67 guarded requests and normal3/3 with effective thin2/3. IndexNow run39759337399 accepted only Cookie Policy and Privacy with HTTP200. Acceptance is not an indexing guarantee. Earlier failed runs and raw CI/public differences remain retained.
+
+Analytics remains paused. Provider readiness, broader legal/operational dependencies and the old785/1441 preservation gaps remain open. Round1447 is separate. I retains publication ownership; this operators/docs closure needs no product republish.

@@ -1,0 +1,126 @@
+name: Index verified Site privacy1446 pages
+
+on:
+  push:
+    branches: [codex/siteprivacy1446-indexnow-fixture]
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  index_privacy_pages:
+    if: github.ref == 'refs/heads/codex/siteprivacy1446-indexnow-fixture'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    env:
+      SOURCE_SHA: 4b4d99ebd64f50ffb45bca9d8f56fba6b7e4dcee
+      READBACK_RUN: 39747821847
+      READBACK_SHA: dc4ee9f89d711555af76b2ce8f4ed97b5ccb8c49
+      READBACK_ARTIFACT_ID: 12412331532
+      READBACK_ZIP_SHA256: 0f63b2ed94797642abf6849d39ddb05a6eb6bc109c5493b60dc7ec1cb50ebbc7
+      READBACK_WORKFLOW_SHA256: dc354663c9dbbb47b0734f104367320b2323979fde131a6891acc4d87641c589
+      READBACK_PUBLIC_OPERATOR_SHA256: 307f2c254d8ce17b37b814f235d5eed9216dc396c3acd6be30d2e57f59bebe48
+      EXPECTED_DEPLOYMENT: 16a8e658-6527-43a1-85ff-d5c3c7d896a4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Require successful proper readback and exact admitted source bindings
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir indexnow-evidence
+          git rev-parse HEAD > indexnow-evidence/head.txt
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          node <<'JS'
+          const fs=require('node:fs'),assert=require('node:assert/strict');
+          for(const key of ['SOURCE_SHA','READBACK_SHA'])assert.match(process.env[key]||'',/^[a-f0-9]{40}$/);
+          for(const key of ['READBACK_RUN','READBACK_ARTIFACT_ID'])assert.match(process.env[key]||'',/^[1-9][0-9]+$/);
+          for(const key of ['READBACK_ZIP_SHA256','READBACK_WORKFLOW_SHA256','READBACK_PUBLIC_OPERATOR_SHA256'])assert.match(process.env[key]||'',/^[a-f0-9]{64}$/);
+          assert.match(process.env.EXPECTED_DEPLOYMENT||'',/^[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/);assert.notEqual(process.env.EXPECTED_DEPLOYMENT,'00000000-0000-0000-0000-000000000000');
+          fs.writeFileSync('indexnow-evidence/bindings.json',JSON.stringify(Object.fromEntries(['SOURCE_SHA','READBACK_RUN','READBACK_SHA','READBACK_ARTIFACT_ID','READBACK_ZIP_SHA256','READBACK_WORKFLOW_SHA256','READBACK_PUBLIC_OPERATOR_SHA256','EXPECTED_DEPLOYMENT'].map(key=>[key,process.env[key]])),null,2)+'\n');
+          JS
+          git fetch --no-tags --depth=1 origin "$SOURCE_SHA" > indexnow-evidence/published-source-fetch.log 2>&1
+          git fetch --no-tags --depth=1 origin "$READBACK_SHA" >> indexnow-evidence/published-source-fetch.log 2>&1
+          git cat-file -e "$SOURCE_SHA^{commit}"
+          git show "$READBACK_SHA:.github/workflows/site-privacy1446-public.yml" > indexnow-evidence/proper-workflow.yml
+          printf '%s  %s\n' "$READBACK_WORKFLOW_SHA256" indexnow-evidence/proper-workflow.yml | sha256sum --check > indexnow-evidence/proper-workflow-hold.log
+          git diff --exit-code "$SOURCE_SHA" HEAD -- . ':!docs/**' ':!.github/workflows/siteprivacy1446-indexnow.yml' > indexnow-evidence/source-hold.log
+          git diff --exit-code "$SOURCE_SHA" "$READBACK_SHA" -- . ':!docs/**' ':!.github/workflows/site-privacy1446-public.yml' > indexnow-evidence/proper-source-hold.log
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/runs/$READBACK_RUN" > indexnow-evidence/public-readback.json
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/runs/$READBACK_RUN/jobs?per_page=100" > indexnow-evidence/public-jobs.json
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/runs/$READBACK_RUN/artifacts?per_page=100" > indexnow-evidence/public-artifacts.json
+          node <<'JS'
+          const fs=require('node:fs'),assert=require('node:assert/strict'),{createHash}=require('node:crypto'),hash=body=>createHash('sha256').update(body).digest('hex');
+          const read=file=>JSON.parse(fs.readFileSync('indexnow-evidence/'+file)),run=read('public-readback.json');assert.equal(String(run.id),process.env.READBACK_RUN);assert.equal(run.repository.full_name,'PapiSalgueroM/ballpark-hero');assert.equal(run.head_sha,process.env.READBACK_SHA);assert.equal(run.status,'completed');assert.equal(run.conclusion,'success');assert.equal(run.name,'Site privacy1446 public readback');
+          fs.writeFileSync('indexnow-evidence/public-readback.tsv',[run.head_sha,run.status,run.conclusion,run.name].join('\t')+'\n');
+          const jobs=read('public-jobs.json');assert.equal(jobs.total_count,1);assert.equal(jobs.jobs.length,1);assert.equal(jobs.jobs[0].status,'completed');assert.equal(jobs.jobs[0].conclusion,'success');
+          const list=read('public-artifacts.json');assert(list.total_count>0&&list.total_count<=100);assert.equal(list.artifacts.length,list.total_count);const selected=list.artifacts.filter(row=>String(row.id)===process.env.READBACK_ARTIFACT_ID);assert.equal(selected.length,1);const artifact=selected[0];assert.equal(artifact.expired,false);assert.equal(artifact.digest,'sha256:'+process.env.READBACK_ZIP_SHA256);assert.equal(String(artifact.workflow_run.id),process.env.READBACK_RUN);assert.equal(artifact.workflow_run.head_sha,process.env.READBACK_SHA);assert(artifact.name.startsWith('siteprivacy1446-public-readback-'+process.env.READBACK_RUN+'-'));
+          const source=fs.readFileSync('indexnow-evidence/proper-workflow.yml','utf8');for(const [key,value] of Object.entries({OPERATOR_MODE:'readback',SOURCE_SHA:process.env.SOURCE_SHA,EXPECTED_DEPLOYMENT:process.env.EXPECTED_DEPLOYMENT,OPERATOR_SHA256:process.env.READBACK_PUBLIC_OPERATOR_SHA256})){const line='      '+key+': '+value;assert.equal(source.split('\n').filter(row=>row===line).length,1);}
+          const pins={'scripts/indexnowSubmit.mjs':'b2bea64932bb38d764c6dd84a897dfa603338fa42e9756bcc512ae5f5fec62d6','public/16211a5a50cff8f3434e5db883a21d8f.txt':'c42c3c91e0aee24ae111f71483a082a99c0289ef43c7d1c3fa5c925b5d1529a3','src/lib/consentPreferences.ts':'a7f50b82c4ca1c757ec98b53e30688b91b160e0b3216f0b3ec0b9ee3576ed124','src/lib/consentedScripts.ts':'8106f28dcd5faa8546de50e304af41add45b4fd43a15ccaf009dac809ab6be50'},controls=[];
+          for(const [file,pin] of Object.entries(pins)){const bytes=fs.readFileSync(file);assert.equal(hash(bytes),pin);const changed=Buffer.concat([bytes,Buffer.from('\n')]);assert.notEqual(hash(changed),pin);assert.throws(()=>assert.equal(hash(changed),pin));controls.push({file,beforeSha256:pin,changedSha256:hash(changed),changedRejected:true,sourceWritten:false});}
+          fs.writeFileSync('indexnow-evidence/source-pin-controls.json',JSON.stringify({complete:true,controls},null,2)+'\n');
+          JS
+          git ls-files -z -- . | sort -z | xargs -0 sha256sum > indexnow-evidence/source-before.sha256
+      - name: Submit only the two verified legal pages through the fixed key and submission protocol
+        env:
+          URLS: /cookie-policy,/privacy
+        run: |
+          set -euo pipefail
+          test -z "${DRY:-}"
+          cat > indexnow-evidence/indexnow-guard.cjs <<'JS'
+          const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),{createHash}=require('node:crypto');
+          const hash=body=>createHash('sha256').update(body).digest('hex'),out=path.join(process.cwd(),'indexnow-evidence'),native=globalThis.fetch,key='16211a5a50cff8f3434e5db883a21d8f';
+          const keyURL='https://douknowball.com/'+key+'.txt',endpoint='https://api.indexnow.org/indexnow',urls=['https://douknowball.com/cookie-policy','https://douknowball.com/privacy'];
+          assert.equal(process.argv[1],path.join(process.cwd(),'scripts/indexnowSubmit.mjs'));assert.equal(process.env.URLS,'/cookie-policy,/privacy');assert(!process.env.DRY);
+          const record=row=>fs.appendFileSync(path.join(out,'protocol.jsonl'),JSON.stringify(row)+'\n');let calls=0;
+          function validate(input,options,ordinal){
+            assert.equal(typeof input,'string','INDEX1446_PROTOCOL: string URL');const url=new URL(input);assert(!url.username&&!url.password&&!url.hash,'INDEX1446_PROTOCOL: no credentials/fragment');
+            if(ordinal===1){assert.equal(url.origin,'https://douknowball.com','INDEX1446_PROTOCOL: key origin');assert.equal(url.pathname,'/'+key+'.txt','INDEX1446_PROTOCOL: key path');assert.deepEqual([...url.searchParams.keys()],['v'],'INDEX1446_PROTOCOL: key cachebuster');assert.match(url.searchParams.get('v'),/^[1-9][0-9]+$/,'INDEX1446_PROTOCOL: key timestamp');assert.deepEqual(Object.keys(options),[],'INDEX1446_PROTOCOL: plain key GET');return {method:'GET',url};}
+            assert.equal(ordinal,2,'INDEX1446_PROTOCOL: exactly two requests');assert.equal(url.href,endpoint,'INDEX1446_PROTOCOL: fixed submission endpoint');assert.deepEqual(Object.keys(options).sort(),['body','headers','method'],'INDEX1446_PROTOCOL: exact POST options');assert.equal(options.method,'POST','INDEX1446_PROTOCOL: POST only');assert.deepEqual(options.headers,{'Content-Type':'application/json; charset=utf-8'},'INDEX1446_PROTOCOL: fixed content type');assert.equal(typeof options.body,'string','INDEX1446_PROTOCOL: fixed JSON body');
+            assert.deepEqual(JSON.parse(options.body),{host:'douknowball.com',key,keyLocation:keyURL,urlList:urls},'INDEX1446_PROTOCOL: exact two legal URLs');return {method:'POST',url,bodySha256:hash(options.body),bodyBytes:Buffer.byteLength(options.body),urls};
+          }
+          const payload={method:'POST',headers:{'Content-Type':'application/json; charset=utf-8'},body:JSON.stringify({host:'douknowball.com',key,keyLocation:keyURL,urlList:urls})};validate(keyURL+'?v=10',{},1);validate(endpoint,payload,2);
+          const controls=[['foreign-key-origin','https://example.com/'+key+'.txt?v=10',{},1],['wrong-post-method',endpoint,{...payload,method:'GET'},2],['extra-url',endpoint,{...payload,body:JSON.stringify({host:'douknowball.com',key,keyLocation:keyURL,urlList:[...urls,'https://douknowball.com/']})},2],['third-request',endpoint,payload,3]].map(([name,url,options,ordinal])=>{const before=JSON.stringify([endpoint,payload,2]),changed=JSON.stringify([url,options,ordinal]);assert.notEqual(before,changed);let caught;try{validate(url,options,ordinal);}catch(error){caught=error;}assert.equal(caught?.name,'AssertionError');const expectedMarker={'foreign-key-origin':'INDEX1446_PROTOCOL: key origin','wrong-post-method':'INDEX1446_PROTOCOL: POST only','extra-url':'INDEX1446_PROTOCOL: exact two legal URLs','third-request':'INDEX1446_PROTOCOL: exactly two requests'}[name];assert.equal(typeof expectedMarker,'string');assert(caught.message.startsWith(expectedMarker));return {name,beforeSha256:hash(before),changedSha256:hash(changed),rejection:{name:caught.name,message:caught.message},networkAttempted:false};});
+          fs.writeFileSync(path.join(out,'protocol-controls.json'),JSON.stringify({complete:true,controls},null,2)+'\n');
+          globalThis.fetch=async(input,options={})=>{const request=validate(input,options,++calls);record({event:'request',ordinal:calls,method:request.method,origin:request.url.origin,path:request.url.pathname,bodySha256:request.bodySha256,bodyBytes:request.bodyBytes,urls:request.urls});
+            const response=await native(input,{...options,redirect:'error'}),row={event:'response',ordinal:calls,status:response.status};
+            if(calls===1){assert.equal(response.status,200,'INDEX1446_PROTOCOL: key HTTP200');assert.equal((await response.clone().text()).trim(),key,'INDEX1446_PROTOCOL: exact live key');const value=response.headers.get('x-deployment-id'),uuid='[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}',match=String(value).match(new RegExp('^('+uuid+')$|^psr2\\.('+uuid+')\\.[0-9]{10}\\.[A-Za-z0-9_-]{43}$','i'));assert(match,'INDEX1446_PROTOCOL: deployment header');assert.equal((match[1]||match[2]).toLowerCase(),process.env.EXPECTED_DEPLOYMENT,'INDEX1446_PROTOCOL: published deployment');row.keyVerified=true;row.deployment=process.env.EXPECTED_DEPLOYMENT;}
+            else assert([200,202].includes(response.status),'INDEX1446_PROTOCOL: IndexNow HTTP200or202');record(row);return response;};
+          JS
+          sha256sum indexnow-evidence/indexnow-guard.cjs > indexnow-evidence/guard-source.sha256
+          status=0
+          NODE_OPTIONS="--require=$PWD/indexnow-evidence/indexnow-guard.cjs" timeout --signal=TERM --kill-after=5s 2m node scripts/indexnowSubmit.mjs > indexnow-evidence/indexnow.log 2>&1 || status=$?
+          printf '%s\n' "$status" > indexnow-evidence/indexnow.exit
+          cat indexnow-evidence/indexnow.log
+          test "$status" -eq 0
+          node <<'JS'
+          const fs=require('node:fs'),assert=require('node:assert/strict'),rows=fs.readFileSync('indexnow-evidence/protocol.jsonl','utf8').trim().split('\n').map(JSON.parse);assert.deepEqual(rows.map(row=>[row.event,row.ordinal]),[['request',1],['response',1],['request',2],['response',2]]);assert.equal(rows[0].method,'GET');assert.equal(rows[1].keyVerified,true);assert.equal(rows[1].deployment,process.env.EXPECTED_DEPLOYMENT);assert.equal(rows[1].status,200);assert.equal(rows[2].method,'POST');assert.deepEqual(rows[2].urls,['https://douknowball.com/cookie-policy','https://douknowball.com/privacy']);assert([200,202].includes(rows[3].status));
+          const log=fs.readFileSync('indexnow-evidence/indexnow.log','utf8');assert(log.split('\n').includes('2 URLs to submit for douknowball.com'));assert(log.split('\n').includes('key file verified live'));assert.match(log,/accepted \(HTTP (200|202)\)\./);
+          fs.writeFileSync('indexnow-evidence/submission.json',JSON.stringify({complete:true,source:process.env.SOURCE_SHA,properRun:process.env.READBACK_RUN,properHead:process.env.READBACK_SHA,properArtifact:process.env.READBACK_ARTIFACT_ID,properZipSha256:process.env.READBACK_ZIP_SHA256,deployment:process.env.EXPECTED_DEPLOYMENT,keyGets:1,submissionPosts:1,urls:rows[2].urls,payloadSha256:rows[2].bodySha256,status:rows[3].status,acceptanceOnly:true},null,2)+'\n');
+          JS
+          sha256sum --check indexnow-evidence/source-before.sha256 > indexnow-evidence/source-after.log
+      - name: Preserve complete submission evidence and every hold outcome
+        if: always()
+        run: |
+          set -euo pipefail
+          mkdir -p indexnow-evidence;failed=0
+          status=0;sha256sum --check indexnow-evidence/source-before.sha256 > indexnow-evidence/source-final.log 2>&1 || status=$?;printf '%s\n' "$status" > indexnow-evidence/source-final.exit;test "$status" -eq 0 || failed=1
+          status=0;sha256sum --check indexnow-evidence/guard-source.sha256 > indexnow-evidence/guard-source-final.log 2>&1 || status=$?;printf '%s\n' "$status" > indexnow-evidence/guard-source-final.exit;test "$status" -eq 0 || failed=1
+          status=0;git diff --exit-code HEAD -- . > indexnow-evidence/operator-source-final.log 2>&1 || status=$?;printf '%s\n' "$status" > indexnow-evidence/operator-source-final.exit;test "$status" -eq 0 || failed=1
+          printf '%s\n' "$failed" > indexnow-evidence/final-holds.exit
+          (cd indexnow-evidence; find . -type f ! -path ./evidence.sha256 -print0 | sort -z | xargs -0 sha256sum) > indexnow-evidence/evidence.sha256
+          exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: siteprivacy1446-indexnow-${{ github.run_id }}-${{ github.run_attempt }}
+          path: indexnow-evidence/
+          if-no-files-found: error
+          retention-days: 14
