@@ -1,6 +1,14 @@
 /* Round 1541: the international summers of NBA My Career, Part A (dark).
 
-   What this holds, section by section (Part A builds 1 to 8; Part B adds 9 to 11):
+   The bundle holds src/data/basketballIntl.ts, src/lib/careerIntl.ts,
+   src/lib/keyedRng.ts, src/lib/nbaCareerIntl.ts, the NBA binding
+   (src/lib/nbaCareerSport.ts) and the drive that mirrors the board
+   (src/test/helpers/usCareerDrive.ts); section 7 bundles the same binding and
+   drive from INTL_BASE_DIR as well. Nothing here reaches the network: the
+   ledger is a committed file and the saves of section 8 are built locally by
+   scripts/lib/realSaves.mjs.
+
+   Sections (INTL_SECTIONS, default 1,2,3,4,6; 5, 7 and 8 are asked for by name):
      1. the ledger. Every fact in scripts/data/basketballIntlSources.json has two
         reads on two hosts that are not each other (fiba.basketball and
         about.fiba.basketball are one body), none a wiki, each with its words;
@@ -9,27 +17,56 @@
      2. the calendar. Every edition id is its competition and the summer it was
         played; one edition a summer at most; the game's own cycles start one
         cycle after the last ledgered edition of their competition; every summer
-        2004 to 2050 resolves to a ledger edition, a projected one or none, and
-        a played summer of the ledger is never answered by the projection.
+        2004 to 2050 resolves to a ledger edition, a projected one or none; and
+        (2b, through the real NBA engine) the season labelled Y is called to the
+        summer Y + 1.
      3. the fields. A played field is as big as its shape, holds no nation
-        twice, holds the USA and every nation its finishing places name; the
-        eight placed nations are distinct; every nation draws a flag or is on
-        the named no flag list; Serbia and Montenegro is kept as it played. An
-        edition still to come has no field and no places.
+        twice, holds the USA and every nation its finishing places name; every
+        nation draws a flag or is on the named no flag list; Serbia and
+        Montenegro is kept as it played; an edition still to come has no field,
+        and the field the game draws for it is the same for every career.
+     4. the call, INTL_FLEET careers an era (default 400) through the real NBA
+        engine: called exactly when the oracle (86, 36, 50, an edition) says so.
+     5. the tournament, INTL_TOURNEYS tournaments an edition kind (default 2000)
+        in ten seed sets: gold and medal rates by rating tier and kind inside
+        BANDS, gold rising tier to tier (RISE), the knock's hurt share by age
+        inside KNOCK_BANDS and rising with age (KNOCK_RISE). Sets 1 to 5 set
+        the bands, sets 6 to 10 are held out; the measured numbers sit in the
+        comments above BANDS and KNOCK_BANDS.
+     6. one engine and the stream: the bracket runner's fingerprints live in
+        careerIntl.ts alone, and a tournament never calls Math.random.
+     7. what must not move (needs INTL_BASE_DIR, a worktree of the base): the
+        same careers with no answer equal the base byte for byte; resting moves
+        only the intl block; going moves the block and, after a knock, health
+        and what follows; deals before the first knock agree; legacy never
+        reads the block.
+     8. saves: the repair leaves every real NBA save byte identical and drops a
+        broken block, row or last alone.
 
-   Controls (INTL_CONTROL=<name>), each asserted to change something before it
-   runs, and a run whose control did not turn its section red exits 3:
-     onesource   one calendar fact of oly-2008 keeps one read          (1 red)
-     shiftyear   oly-2008's src year moved to 2009                      (2 red)
-     dupnation   oly-2012's field holds Spain twice                     (3 red)
-     fieldsize   wc-2014's field loses a nation                         (3 red)
+   Controls (INTL_CONTROL=<name>; run each with INTL_SECTIONS set to its own
+   section, or it also runs the default sections). Each is asserted to change
+   something before it runs (an anchor that is not there once exits 2):
+     onesource    one calendar fact of oly-2008 keeps one read          (1 red)
+     shiftyear    oly-2008's src year moved to 2009                      (2 red)
+     seasonyear   the call reads the season label, not the summer after  (2 red)
+     dupnation    oly-2012's field holds Spain twice                     (3 red)
+     fieldsize    wc-2014's field loses a nation                         (3 red)
+     genfield     a drawn field keyed to the career, not the edition     (3 red)
+     anyyear      every summer answers an edition                        (4 red)
+     lowbar       the bar is five points lower in the bind               (4 red)
+     nolift       he lifts the USA by nothing                            (5 red)
+     nobronze     no bronze game is played                               (5 red)
+     knockflip    the knock comparison flipped                           (5 red)
+     knockage     the knock forgets his age                              (5 red)
+     copy         a copy of the runner planted in a sport file           (6 red)
+     mathrandom   the pot draw uses Math.random                          (6 red)
+     restwrites   resting takes a point of health                        (7 red)
+     legacyreads  legacy counts his medals                               (7 red)
+     norepair     the repair on load does nothing                        (8 red)
 
    Exit codes: 0 green, 1 red (or a control that fired), 2 could not run,
    3 a control that did not fire. Green means the closing summary line AND
-   the exit code; a control's last line says FIRED or DID NOT FIRE.
-
-   Nothing here reaches the network: the bundle is the data module alone and
-   the ledger is a committed file. */
+   the exit code; a control's last line says FIRED or DID NOT FIRE. */
 
 import fs from 'node:fs';
 import os from 'node:os';
@@ -576,7 +613,8 @@ if (SECTIONS.has('5')) {
    base; one that only rested differs by its intl key alone; one that went
    differs only through its block and, after the first summer it came home
    hurt, its health and what follows from it. The deal comes before the
-   answer: the first call's dealt cards are the same in the go and rest arms. */
+   answer: every call's dealt cards, up to and including the summer of the
+   first knock, are the same in the go and rest arms. */
 const BASE_DIR = process.env.INTL_BASE_DIR || '';
 const median = xs => { const s = [...xs].sort((a, b) => a - b); return s.length ? s[Math.floor(s.length / 2)] : 0; };
 if (SECTIONS.has('7')) {
@@ -610,10 +648,15 @@ if (SECTIONS.has('7')) {
       }
       n.rested += 1;
       check('7', same(strip(rest.json), JSON.parse(baseJson)), `${era} ${i}: resting moved something beside the intl block`);
-      check('7', go.intlLog.length > 0 && go.intlLog[0].dealt === rest.intlLog[0].dealt && go.intlLog[0].year === rest.intlLog[0].year, `${era} ${i}: the first call's deal differs between go and rest`);
       const gc = JSON.parse(go.json);
       const rows = gc.intl?.summers ?? [];
       const firstHurt = rows.find(r => r.went && r.hurt);
+      /* Every call up to and including the summer of the first knock is dealt before it, so its cards are
+         the same whether he goes or rests; after a knock the careers may part. */
+      const upTo = firstHurt ? firstHurt.year : Infinity;
+      const goCalls = go.intlLog.filter(x => x.year <= upTo);
+      const restCalls = rest.intlLog.filter(x => x.year <= upTo);
+      check('7', goCalls.length > 0 && same(goCalls.map(x => [x.year, x.edition, x.dealt]), restCalls.map(x => [x.year, x.edition, x.dealt])), `${era} ${i}: a call's deal differs between go and rest before the first knock (${goCalls.length} go calls, ${restCalls.length} rest calls up to ${upTo})`);
       n.went += 1;
       if (gc.seasons.length >= 21) sizes.push([baseJson.length, go.json.length, gc.intl?.summers?.length ?? 0]);
       if (!firstHurt) {
