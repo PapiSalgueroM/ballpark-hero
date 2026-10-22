@@ -2,7 +2,8 @@ import { describe, expect, it } from 'vitest';
 import {
   buildDraftOrder, draftRulesFor, draftSlots, earnedByStaff, earnedContinue, earnedDraftHeading, earnedDraftHelp,
   earnedPick, lotteryChancesLine, lotteryRangeLine, movePicks, newLedger, openDraftNight, ordinal, pickKey,
-  type DraftSeason, type GmDraftHost, type GmDraftNight,
+  LOTTERY_ODDS_BUDGET, lotteryChancesBefore, lotteryOdds,
+  type DraftSeason, type EarnedSlot, type GmDraftHost, type GmDraftNight, type GmLotteryRules, type LotteryOdds, type SavedDraftOrder,
 } from './gmEarnedDraft';
 import { nbaGamePickRules } from './nbaGmDesk';
 
@@ -172,3 +173,187 @@ describe('the worked example and the chances are computed from the night and the
     expect(help.findIndex(b => b.heading === 'The chances')).toBeLessThan(help.length - 1);
   });
 });
+
+/* ---------------------------------------------------------------------- */
+/* Round 1540: every club's chances, and the lines before the draw          */
+/* ---------------------------------------------------------------------- */
+
+const EPS = 1e-9;
+const sum = (xs: number[]): number => xs.reduce((a, b) => a + b, 0);
+const fmt = (p: number): string => `${(Math.round(p * 1000) / 10).toFixed(1)}%`;
+
+/** Every ordered run of `draws` distinct winners with its chance, written here on its own so the checks do not lean
+    on lotteryOdds' walk. The redraw rule weights a winner by its share of the clubs not yet drawn; `full` weights it
+    by its share of the whole field instead (the "with replacement" control). */
+function runsOf(pct: number[], draws: number, full = false): { seq: number[]; p: number }[] {
+  const total = sum(pct);
+  const out: { seq: number[]; p: number }[] = [];
+  const go = (seq: number[], p: number): void => {
+    if (seq.length === draws) { out.push({ seq, p }); return; }
+    const rest = full ? total : sum(pct.filter((_, i) => !seq.includes(i)));
+    pct.forEach((x, i) => { if (x > 0 && !seq.includes(i)) go([...seq, i], p * (x / rest)); });
+  };
+  go([], 1);
+  return out;
+}
+
+/** What must hold of any table's odds; each broken identity is one line. `maxClimb` null is the uncapped shape. */
+function identityFailures(odds: LotteryOdds, pct: number[], maxClimb: number | null): string[] {
+  const out: string[] = [];
+  const n = odds.clubs.length;
+  const total = sum(pct);
+  const runs = runsOf(pct, odds.draws);
+  odds.clubs.forEach((c, i) => {
+    if (Math.abs(sum(c.slot) - 1) > EPS) out.push(`${c.club}'s places sum to ${sum(c.slot)}`);
+    const best = maxClimb === null ? 1 : Math.max(1, c.seed - maxClimb);
+    const worst = Math.min(n, c.seed + odds.draws);
+    c.slot.forEach((p, k) => { if (p > EPS && (k + 1 < best || k + 1 > worst)) out.push(`${c.club} can land ${k + 1}`); });
+    if (maxClimb === null) {
+      if (Math.abs(c.slot[0] - pct[i] / total) > EPS) out.push(`${c.club}'s first pick chance is not its share`);
+      const drawn = sum(runs.filter(r => r.seq.includes(i)).map(r => r.p));
+      if (Math.abs(sum(c.slot.slice(0, odds.draws)) - drawn) > EPS) out.push(`${c.club}'s top chance is not its chance of being drawn`);
+    } else if (c.seed > 1 + maxClimb && c.slot[0] > EPS) out.push(`${c.club} climbs past its limit to the first pick`);
+  });
+  for (let k = 0; k < n; k += 1) {
+    const col = sum(odds.clubs.map(c => c.slot[k]));
+    if (Math.abs(col - 1) > EPS) out.push(`place ${k + 1} sums to ${col}`);
+  }
+  return out;
+}
+
+function toyOrder(pct: number[], table: string): SavedDraftOrder {
+  const clubs = pct.map((_, i) => `T${String(i + 1).padStart(2, '0')}`);
+  return {
+    v: 1, sport: 'toy', draftYear: 2030, rulesId: 'toy', first: clubs, later: clubs,
+    lottery: { table, field: clubs.map((club, i) => ({ club, seed: i + 1, pct: pct[i] })), wins: [] }, plain: null, level: [],
+  };
+}
+const NBA_LOTTERY = PICK_RULES.lottery!;
+const NBA_PCT = order.lottery!.field.map(f => f.pct);
+
+describe('lotteryOdds: every club at every place, by the draw itself', () => {
+  it('the uncapped table: places and clubs sum to one, the first pick is the share, a top pick is being drawn', () => {
+    const odds = lotteryOdds(order, NBA_LOTTERY)!;
+    expect(odds).not.toBeNull();
+    expect(odds.draws).toBe(4);
+    expect(odds.clubs.map(c => c.club)).toEqual(order.lottery!.field.map(f => f.club));
+    expect(identityFailures(odds, NBA_PCT, null)).toEqual([]);
+  });
+
+  it('a sixteen club table, two draws and a climb capped at ten places: the identities of that shape', () => {
+    const pct = [20, 15, 12, 10, 8, 7, 6, 5, 4, 3, 3, 2, 2, 1.5, 1, 0.5];
+    const climb: GmLotteryRules = { clubs: 16, odds: pct, draws: 2, maxClimb: 10, table: 'a toy climb table' };
+    const odds = lotteryOdds(toyOrder(pct, climb.table), climb)!;
+    expect(odds).not.toBeNull();
+    expect(identityFailures(odds, pct, 10)).toEqual([]);
+    for (const c of odds.clubs.filter(x => x.seed > 11)) expect(c.slot[0]).toBe(0);
+    expect(odds.clubs.find(c => c.seed === 12)!.slot[1]).toBeGreaterThan(0);
+  });
+
+  it('two clubs level on a shared chance hold the same identities', () => {
+    const pct = [...NBA_LOTTERY.odds];
+    pct[3] = pct[4] = (NBA_LOTTERY.odds[3] + NBA_LOTTERY.odds[4]) / 2;
+    const level: GmLotteryRules = { ...NBA_LOTTERY, table: 'level' };
+    const odds = lotteryOdds(toyOrder(pct, 'level'), level)!;
+    expect(odds.clubs[3].slot[0]).toBeCloseTo(odds.clubs[4].slot[0], 12);
+    expect(identityFailures(odds, pct, null)).toEqual([]);
+  });
+
+  it('control: a with replacement draw put through the same checker breaks an identity', () => {
+    const n = NBA_PCT.length;
+    const slot = NBA_PCT.map(() => NBA_PCT.map(() => 0));
+    for (const r of runsOf(NBA_PCT, 4, true)) {
+      [...r.seq, ...Array.from({ length: n }, (_, i) => i).filter(i => !r.seq.includes(i))].forEach((club, place) => { slot[club][place] += r.p; });
+    }
+    const wrong: LotteryOdds = { draws: 4, clubs: order.lottery!.field.map((f, i) => ({ club: f.club, seed: f.seed, slot: slot[i] })) };
+    expect(identityFailures(wrong, NBA_PCT, null).length).toBeGreaterThan(0);
+  });
+
+  it('null on another table, and past the budget of runs', () => {
+    expect(lotteryOdds(order, { ...NBA_LOTTERY, table: 'another' })).toBeNull();
+    expect(lotteryOdds(order, null)).toBeNull();
+    const wide = Array.from({ length: 18 }, () => 100 / 18);
+    expect(18 * 17 * 16 * 15 * 14 * 13).toBeGreaterThan(LOTTERY_ODDS_BUDGET);
+    expect(lotteryOdds(toyOrder(wide, 'wide'), { clubs: 18, odds: wide, draws: 6, maxClimb: null, table: 'wide' })).toBeNull();
+    expect(lotteryOdds(toyOrder(wide, 'wide'), { clubs: 18, odds: wide, draws: 2, maxClimb: null, table: 'wide' })).not.toBeNull();
+  });
+});
+
+describe('lotteryChancesBefore: the lines before the draw cannot give the draw away (correction 1)', () => {
+  const keyed = (key: string): SavedDraftOrder => buildDraftOrder(season, rules, PICK_RULES, key);
+  const slotsOn = (o: SavedDraftOrder, moves: [number, string, string][] = []): EarnedSlot[] => {
+    let ledger = newLedger(CLUBS, 2026, PICK_RULES);
+    for (const [round, orig, to] of moves) ledger = movePicks(ledger, [pickKey({ year: 2026, round, orig })], to);
+    return draftSlots(o, ledger, 2026, 2);
+  };
+  const label = (c: string): string => `the ${c}s`;
+  const lines = (o: SavedDraftOrder, me: string, moves: [number, string, string][] = []): string[] =>
+    lotteryChancesBefore(o, slotsOn(o, moves), me, NBA_LOTTERY, label);
+  const landed = (o: SavedDraftOrder, club: string): number => o.first.indexOf(club) + 1;
+  const HELD: [number, string, string][] = [[1, 'C05', 'C20'], [1, 'C09', 'C20']];
+  /* Two keys for one season: the draws differ, the two firsts C20 holds land in the opposite order, and C03 lands at
+     another place. Found by a fixed walk over key names, so the test is the same every run. */
+  const A = keyed('k0');
+  let B: SavedDraftOrder | null = null;
+  for (let i = 1; i < 400 && !B; i += 1) {
+    const o = keyed(`k${i}`);
+    const flips = (landed(A, 'C05') < landed(A, 'C09')) !== (landed(o, 'C05') < landed(o, 'C09'));
+    if (flips && landed(o, 'C03') !== landed(A, 'C03') && JSON.stringify(o.lottery!.wins) !== JSON.stringify(A.lottery!.wins)) B = o;
+  }
+
+  /* The independent figures: the share of the table, the chance of being drawn at all, and seed plus draws. */
+  const runs = runsOf(NBA_PCT, 4);
+  const figures = (seed: number) => ({
+    first: fmt(NBA_PCT[seed - 1] / sum(NBA_PCT)),
+    top: fmt(sum(runs.filter(r => r.seq.includes(seed - 1)).map(r => r.p))),
+    latest: ordinal(Math.min(14, seed + 4)),
+  });
+  const seeded = (seed: number): string => {
+    const f = figures(seed);
+    return `Your club goes in seeded ${ordinal(seed)} of 14. By the table it has a ${f.first} chance at the first pick and ${f.top} at a top four pick, and it picks no later than ${f.latest}.`;
+  };
+  const held = (club: string, seed: number): string => {
+    const f = figures(seed);
+    return `You also hold the ${club}s' first: seeded ${ordinal(seed)}, ${f.first} at the first pick, ${f.top} at a top four pick, no later than ${f.latest}.`;
+  };
+
+  it('the two keys draw differently on the same field, every club on its own record', () => {
+    expect(B).not.toBeNull();
+    expect(B!.lottery!.wins).not.toEqual(A.lottery!.wins);
+    expect(B!.lottery!.field).toEqual(A.lottery!.field);
+    expect(new Set(NBA_PCT).size).toBeGreaterThan(1);
+    expect(new Set(season.rows.map(r => r.wins)).size).toBe(30);
+  });
+
+  it('his club seeded 1st, 3rd and 14th, a playoff club, a traded away first, a bought first and two bought firsts', () => {
+    const cases: { me: string; moves?: [number, string, string][]; want: string[] }[] = [
+      { me: 'C01', want: [seeded(1)] },
+      { me: 'C03', want: [seeded(3)] },
+      { me: 'C14', want: [seeded(14)] },
+      { me: 'C20', want: ['Your club made the playoffs, so its own first is not in the lottery.'] },
+      { me: 'C03', moves: [[1, 'C03', 'C07']], want: [seeded(3), "That pick is the C07s' tonight, wherever it lands."] },
+      { me: 'C20', moves: [HELD[0]], want: ['Your club made the playoffs, so its own first is not in the lottery.', held('C05', 5)] },
+      { me: 'C20', moves: HELD, want: ['Your club made the playoffs, so its own first is not in the lottery.', held('C05', 5), held('C09', 9)] },
+    ];
+    for (const c of cases) {
+      expect(lines(A, c.me, c.moves)).toEqual(c.want);
+      expect(lines(B!, c.me, c.moves)).toEqual(c.want);
+    }
+  });
+
+  it('control: a variant that adds where his pick landed, or lists held firsts in slot order, tells the keys apart', () => {
+    const withLanding = (o: SavedDraftOrder) => [...lines(o, 'C03'), `It landed ${ordinal(landed(o, 'C03'))}.`];
+    expect(withLanding(A)).not.toEqual(withLanding(B!));
+    const bySlot = (o: SavedDraftOrder): string[] => slotsOn(o, HELD)
+      .filter(s => s.round === 1 && s.kind === 'std' && s.holder === 'C20' && s.orig !== 'C20')
+      .map(s => s.orig);
+    expect(bySlot(A)).not.toEqual(bySlot(B!));
+    expect(lines(A, 'C20', HELD)).toEqual(lines(B!, 'C20', HELD));
+  });
+
+  it('no line without a drawn lottery on this table', () => {
+    expect(lotteryChancesBefore(order, slotsOn(order), 'C03', { ...NBA_LOTTERY, table: 'another' }, label)).toEqual([]);
+    expect(lotteryChancesBefore({ ...order, lottery: null }, slotsOn(order), 'C03', NBA_LOTTERY, label)).toEqual([]);
+  });
+});
+

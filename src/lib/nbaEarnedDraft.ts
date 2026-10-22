@@ -30,7 +30,8 @@ import type { GmDesk } from './gmDesk';
 import { gmStaffLevel } from './gmStaff';
 import {
   buildDraftOrder, draftRulesFor, draftRunReveal, draftSeasonKey, draftSlots, earnedByStaff, earnedContinue,
-  earnedDraftHeading, earnedDraftHelp, earnedPick, isGmDraftNight, lotteryRangeLine, openDraftNight,
+  earnedDraftHeading, earnedDraftHelp, earnedPick, isGmDraftNight, lotteryChancesBefore, lotteryRangeLine, openDraftNight,
+  ordinal,
 } from './gmEarnedDraft';
 import type {
   DraftClubRow, DraftSeason, EarnedDraftStep, EarnedSlot, GmDraftHost, GmDraftNight, LotteryHelpBlock, RunStep, SavedDraftOrder,
@@ -38,10 +39,10 @@ import type {
 
 /* Everything part B's board needs, through this file, so the board never names a lift module. */
 export { nbaEarnedDraftClass } from './nbaFrontOffice';
-export { draftRulesFor, lotteryNight, lotteryNightRule, ordinal, slotsLeftFor } from './gmEarnedDraft';
+export { draftRulesFor, lotteryNight, lotteryNightRule, lotteryOdds, ordinal, slotsLeftFor } from './gmEarnedDraft';
 export type {
-  EarnedDraftStep, EarnedSlot, GmDraftNight, GmDraftOrderRules, GmLotteryRules, LotteryHelpBlock, LotteryNightView, RunStep,
-  SavedDraftOrder,
+  EarnedDraftStep, EarnedSlot, GmDraftNight, GmDraftOrderRules, GmLotteryRules, LotteryHelpBlock, LotteryNightView, LotteryOdds,
+  RunStep, SavedDraftOrder,
 } from './gmEarnedDraft';
 
 /** The desk block the night is saved under. */
@@ -220,10 +221,40 @@ export function nbaDraftHeading(night: GmDraftNight, me: string, labelOf: (club:
   return earnedDraftHeading(night, me, labelOf);
 }
 
+/** A club as a lottery tile shows it: the nickname, text only ("Jazz"). */
+export function nbaDraftTileLabel(club: string): string {
+  return NBA_TEAM_MAP.get(club)?.name ?? club;
+}
+
+/** The heading's lines before the draw: where his club goes in and its chances, from the field and the table, never
+    from where a pick landed (Round 1540). Works through every run of the lottery (24,024 on this table), so a board
+    computes it once a night and hands it to nbaDraftHelp. */
+export function nbaDraftChances(night: GmDraftNight, me: string): string[] {
+  return lotteryChancesBefore(night.order, night.slots, me, nbaGamePickRules().lottery, nbaDraftLabel);
+}
+
+const SEASON_WORDS = ['one season', 'two seasons', 'three seasons', 'four seasons'];
+
+/** The class's two knobs as the "?" states them: one rule for every club, his own included. Built from the knobs
+    themselves, so a knob turned off takes its line with it and a changed number changes the words. */
+export function nbaDraftKnobLines(
+  knobs: typeof NBA_DRAFT_KNOBS = NBA_DRAFT_KNOBS, secondSeasons: number = NBA_SECOND_ROUND_SEASONS,
+): string[] {
+  const lines: string[] = [];
+  if (knobs.secondOnMin) {
+    lines.push(`Every club's second round pick, yours included, signs for ${SEASON_WORDS[secondSeasons - 1] ?? `${secondSeasons} seasons`} at the league minimum.`);
+  }
+  if (knobs.latePot) {
+    lines.push(`Every club's man taken ${ordinal(knobs.latePot.from)} or later, yours included, never grows past the rating he is drafted at.`);
+  }
+  return lines;
+}
+
 /** The heading's "?": the lottery's rule as the league used it from its 2019 draft to its 2026 draft, the chances,
-    then this game's own draft, with a worked example computed from this night. Nothing here prints a line of the
-    desk's pick rules' `partial`, which still describes the old draft. */
-export function nbaDraftHelp(night: GmDraftNight, me: string): LotteryHelpBlock[] {
+    then this game's own draft, its chances before the draw and a worked example computed from this night. Nothing
+    here prints a line of the desk's pick rules' `partial`. `chances` is nbaDraftChances' answer when the caller
+    already holds it (it walks every run of the lottery). */
+export function nbaDraftHelp(night: GmDraftNight, me: string, chances: string[] = nbaDraftChances(night, me)): LotteryHelpBlock[] {
   const lottery = nbaGamePickRules().lottery;
   const size = nbaEarnedClassSize(night.slots.length);
   const own: string[] = [
@@ -232,10 +263,12 @@ export function nbaDraftHelp(night: GmDraftNight, me: string): LotteryHelpBlock[
     'Every grade you see is your scout\'s read, never the true rating.',
     'A pick traded away is used by the club that holds it, at the place its first club earned. A pick you hold from another club is yours, at that club\'s place.',
     'Your staff can make every pick you have left, on your scout\'s read and your needs, and the rest of the draft runs to its end.',
+    ...nbaDraftKnobLines(),
   ];
   const example = lotteryRangeLine(night.order, me, lottery);
   return earnedDraftHelp(night, draftRulesFor('nba', night.order.draftYear), lottery, [
     { heading: "This game's draft", lines: own },
+    { heading: 'Before the draw', lines: chances },
     ...(example ? [{ heading: 'Tonight, worked out', lines: [example] }] : []),
   ]);
 }

@@ -4,11 +4,13 @@ import {
 } from './nbaFrontOffice';
 import { nbaContractsOf, nbaDeskOffseason, nbaGamePickRules, nbaPicksOf, nbaScoutRead, openNbaDesk, syncNbaPicks } from './nbaGmDesk';
 import { withGmBlock, type GmDesk } from './gmDesk';
-import { movePicks, pickKey } from './gmEarnedDraft';
+import { lotteryChancesBefore, movePicks, pickKey } from './gmEarnedDraft';
 import { NBA_ROOKIE_SCALE_YEARS } from './gmContractRules';
+import { NBA_TEAM_MAP } from '@/data/conquestDataNba';
 import {
   NBA_DRAFT_BLOCK, NBA_DRAFT_KNOBS, NBA_DRAFT_NIGHT_SUMMER, NBA_SECOND_ROUND_SEASONS, draftRulesFor, nbaDraftByStaff, nbaDraftContinue, nbaDraftHeading, nbaDraftHelp, nbaDraftHost,
   nbaDraftNightOf, nbaDraftPick, nbaDraftSeason, nbaEarnedDraftClass, openNbaDraftNight, type EarnedSlot, type GmDraftNight,
+  lotteryOdds, nbaDraftChances, nbaDraftKnobLines, nbaDraftLabel, nbaDraftTileLabel,
 } from './nbaEarnedDraft';
 
 function mulberry32(seed: number): () => number {
@@ -315,8 +317,76 @@ describe('the "?" (correction 9)', () => {
     const { night } = opened();
     const total = nbaGamePickRules().lottery!.odds.reduce((a, b) => a + b, 0);
     const table = new Set(nbaGamePickRules().lottery!.odds.map(o => Math.round((o / total) * 1000) / 10));
+    /* Round 1540: the chances before the draw add each lottery club's chance at a top four pick, worked out from the
+       same table by lotteryOdds; nothing else may appear. */
+    const odds = lotteryOdds(night.order, nbaGamePickRules().lottery)!;
+    for (const c of odds.clubs) table.add(Math.round(c.slot.slice(0, odds.draws).reduce((a, b) => a + b, 0) * 1000) / 10);
     const shown = nbaDraftHelp(night, ME).flatMap(b => b.lines).flatMap(l => [...l.matchAll(/(\d+(?:\.\d+)?)%/g)].map(m => Number(m[1])));
     expect(shown.length).toBeGreaterThan(10);
     for (const pct of shown) expect(table.has(pct)).toBe(true);
+  });
+});
+
+describe('Round 1540: the "?" states the league wide knobs, and the chances come before the draw', () => {
+  it('"This game\'s draft" is the whole list, the two knob lines last', () => {
+    const { night } = opened();
+    const own = nbaDraftHelp(night, ME).find(b => b.heading === "This game's draft")!;
+    expect(own.lines).toEqual([
+      `This game's draft is two rounds of prospects it generates: ${night.slots.length} picks tonight and a class of ${nbaEarnedDraftClass(mulberry32(1), night.slots.length, new Set()).length}, so the last club still has a choice.`,
+      'Each rival club takes the best man on its own read, leaning a little to a position its best eight are short of.',
+      'Every grade you see is your scout\'s read, never the true rating.',
+      'A pick traded away is used by the club that holds it, at the place its first club earned. A pick you hold from another club is yours, at that club\'s place.',
+      'Your staff can make every pick you have left, on your scout\'s read and your needs, and the rest of the draft runs to its end.',
+      'Every club\'s second round pick, yours included, signs for one season at the league minimum.',
+      'Every club\'s man taken 13th or later, yours included, never grows past the rating he is drafted at.',
+    ]);
+  });
+
+  it('each knob line comes from its knob: off takes it away, a new number changes the words', () => {
+    expect(nbaDraftKnobLines()).toHaveLength(2);
+    expect(NBA_DRAFT_KNOBS.secondOnMin).toBe(true);
+    expect(NBA_SECOND_ROUND_SEASONS).toBe(1);
+    expect(NBA_DRAFT_KNOBS.latePot).toEqual({ from: 13, cap: 66 });
+    const offSecond = nbaDraftKnobLines({ ...NBA_DRAFT_KNOBS, secondOnMin: false });
+    expect(offSecond).toEqual([nbaDraftKnobLines()[1]]);
+    const offLate = nbaDraftKnobLines({ ...NBA_DRAFT_KNOBS, latePot: null });
+    expect(offLate).toEqual([nbaDraftKnobLines()[0]]);
+    expect(nbaDraftKnobLines(NBA_DRAFT_KNOBS, 2)[0]).toContain('signs for two seasons at the league minimum');
+    expect(nbaDraftKnobLines({ ...NBA_DRAFT_KNOBS, latePot: { from: 21, cap: 66 } })[1]).toContain('taken 21st or later');
+  });
+
+  /* "Never grows past the rating he is drafted at" is true only while no man of a class is under the cap: the cap
+     then leaves every late man's ceiling at his own rating. */
+  const everyManAtTheCap = (cls: NbaProspect[], cap: number): boolean => cls.every(p => p.trueOvr >= cap);
+  it('over 200 classes no man is drawn under the late cap, and the check sees one who is', () => {
+    const cap = NBA_DRAFT_KNOBS.latePot!.cap;
+    let men = 0;
+    for (let seed = 1; seed <= 200; seed += 1) {
+      const cls = nbaEarnedDraftClass(mulberry32(seed * 7919), 60, new Set());
+      men += cls.length;
+      expect(everyManAtTheCap(cls, cap)).toBe(true);
+    }
+    expect(men).toBe(200 * 64);
+    const lowered = nbaEarnedDraftClass(mulberry32(3), 60, new Set()).map((p, i) => (i === 40 ? { ...p, trueOvr: cap - 1 } : p));
+    expect(everyManAtTheCap(lowered, cap)).toBe(false);
+  });
+
+  it('the chances are the shared lines on the NBA table and labels, and land in the "?" before the worked example', () => {
+    const { night } = opened();
+    const chances = nbaDraftChances(night, ME);
+    expect(chances).toEqual(lotteryChancesBefore(night.order, night.slots, ME, nbaGamePickRules().lottery, nbaDraftLabel));
+    expect(chances[0]).toMatch(/^Your club goes in seeded 3rd of 14\. By the table it has a 14\.0% chance at the first pick and \d+\.\d% at a top four pick, and it picks no later than 7th\.$/);
+    const help = nbaDraftHelp(night, ME);
+    const at = help.findIndex(b => b.heading === 'Before the draw');
+    expect(help[at].lines).toEqual(chances);
+    expect(help[at + 1].heading).toBe('Tonight, worked out');
+    expect(nbaDraftHelp(night, ME, ['handed in'])[at].lines).toEqual(['handed in']);
+    expect(nbaDraftHelp(night, ME, []).some(b => b.heading === 'Before the draw')).toBe(false);
+  });
+
+  it('a lottery tile shows the nickname alone', () => {
+    expect(nbaDraftTileLabel('BOS')).toBe(NBA_TEAM_MAP.get('BOS')!.name);
+    expect(nbaDraftLabel('BOS')).toBe(`the ${nbaDraftTileLabel('BOS')}`);
+    expect(nbaDraftTileLabel('ZZZ')).toBe('ZZZ');
   });
 });

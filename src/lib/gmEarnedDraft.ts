@@ -22,6 +22,7 @@ import { nextSlot } from './gmDraftOrder';
 import type { EarnedSlot, SavedDraftOrder } from './gmDraftOrder';
 import { lotteryHelp, ordinal } from './gmLotteryNight';
 import type { LotteryHelpBlock } from './gmLotteryNight';
+import { runLottery } from './gmPicks';
 import type { GmLotteryRules } from './gmPicks';
 import type { GmDraftOrderRules } from '@/data/gmDraftOrder/rules';
 
@@ -127,6 +128,121 @@ export function lotteryChancesLine(order: SavedDraftOrder, lottery: GmLotteryRul
   const total = lottery.odds.reduce((a, b) => a + b, 0);
   if (total <= 0) return null;
   return `By the table, the chances at the first pick, worst record first: ${lottery.odds.map(o => `${tenth((o / total) * 100)}%`).join(', ')}.`;
+}
+
+/* ---------------------------------------------------------------------- */
+/* The chances before the draw (Round 1540)                                */
+/* ---------------------------------------------------------------------- */
+
+/** The most ordered runs of winners lotteryOdds walks. A table past it answers null and its line is left out:
+    fourteen clubs and four draws is 24,024 runs, sixteen and two is 240, eighteen and six would be over thirteen
+    million. */
+export const LOTTERY_ODDS_BUDGET = 100_000;
+
+/** Every lottery club's chance at each place, from the field the night was drawn on. */
+export interface LotteryOdds {
+  draws: number;
+  /** In seed order. `slot[k]` is the chance the club's own first lands at pick k + 1. */
+  clubs: { club: string; seed: number; slot: number[] }[];
+}
+
+/** The exact chance of every club's own first landing at every place, BY THE LIFT'S OWN DRAW: every ordered run of
+    winners is weighted by the product of each winner's share of the clubs not yet drawn, and its order comes from
+    runLottery itself, fed a scripted stream that lands each draw on the intended club. No copy of the placement
+    rule (the cap on a climb included) and no random number. Null when the night was not drawn on this table, when
+    a scripted run drew a club it did not mean, or past LOTTERY_ODDS_BUDGET. */
+export function lotteryOdds(order: SavedDraftOrder, lottery: GmLotteryRules | null): LotteryOdds | null {
+  if (!order.lottery || !lottery || lottery.table !== order.lottery.table || lottery.odds.length !== order.lottery.field.length) return null;
+  const field = order.lottery.field;
+  const pool = field.map(f => f.club);
+  const pct = field.map(f => (f.pct > 0 ? f.pct : 0));
+  const live = pct.map((p, i) => (p > 0 ? i : -1)).filter(i => i >= 0);
+  const draws = Math.min(lottery.draws, live.length);
+  let runs = 1;
+  for (let d = 0; d < draws; d += 1) runs *= live.length - d;
+  if (draws < 1 || runs > LOTTERY_ODDS_BUDGET) return null;
+  const at = new Map(pool.map((club, i) => [club, i]));
+  const slot = pool.map(() => pool.map(() => 0));
+  const rules: GmLotteryRules = { ...lottery, odds: pct };
+  const taken = pool.map(() => false);
+  const seq: number[] = [];
+  /* answers[d] is what the stream hands draw d + 1: the undrawn weight before the intended club plus half its own,
+     over the undrawn total, so runLottery's walk over the undrawn clubs in pool order stops on that club. */
+  const answers: number[] = [];
+  let ok = true;
+  const walk = (chance: number): void => {
+    if (!ok) return;
+    if (seq.length === draws) {
+      let k = 0;
+      const run = runLottery(pool, rules, () => answers[k++] ?? 0);
+      if (run.wins.length !== draws || run.wins.some((w, d) => w.club !== pool[seq[d]])) { ok = false; return; }
+      run.order.forEach((club, place) => { slot[at.get(club)!][place] += chance; });
+      return;
+    }
+    let rest = 0;
+    for (const i of live) if (!taken[i]) rest += pct[i];
+    let before = 0;
+    for (const i of live) {
+      if (taken[i]) continue;
+      taken[i] = true;
+      seq.push(i);
+      answers.push((before + pct[i] / 2) / rest);
+      walk(chance * (pct[i] / rest));
+      answers.pop();
+      seq.pop();
+      taken[i] = false;
+      before += pct[i];
+    }
+  };
+  walk(1);
+  if (!ok) return null;
+  return { draws, clubs: field.map((f, i) => ({ club: f.club, seed: f.seed, slot: slot[i] })) };
+}
+
+const NUMBER_WORDS = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
+const percent = (p: number): string => `${(Math.round(p * 1000) / 10).toFixed(1)}%`;
+
+/** One club's figures: the chance at the first pick, at a pick the draws hand out, and the latest place it can land. */
+function chanceFigures(odds: LotteryOdds, club: string): { seed: number; first: string; top: string | null; latest: number } | null {
+  const row = odds.clubs.find(c => c.club === club);
+  if (!row) return null;
+  const top = odds.draws > 1 && odds.draws <= NUMBER_WORDS.length
+    ? `${percent(row.slot.slice(0, odds.draws).reduce((a, b) => a + b, 0))} at a top ${NUMBER_WORDS[odds.draws - 1]} pick`
+    : null;
+  let latest = 0;
+  row.slot.forEach((p, k) => { if (p > 1e-12) latest = k + 1; });
+  return { seed: row.seed, first: percent(row.slot[0] ?? 0), top, latest };
+}
+
+/** The heading's lines BEFORE the draw: where his club goes in and its chances, who uses his own first if he traded
+    it, and the chances of each lottery first he holds from another club, in seed order. Read off the field, the
+    table and who holds whose first (each slot's round, kind, orig and holder), never off where a slot landed, so
+    the lines cannot give the draw away. Empty when no lottery was drawn or the chances cannot be worked out. */
+export function lotteryChancesBefore(
+  order: SavedDraftOrder, slots: EarnedSlot[], me: string, lottery: GmLotteryRules | null, labelOf: (club: string) => string,
+): string[] {
+  const odds = lotteryOdds(order, lottery);
+  if (!odds || !order.lottery) return [];
+  const field = order.lottery.field;
+  const firstOf = (orig: string) => slots.find(s => s.round === 1 && s.kind === 'std' && s.orig === orig);
+  const lines: string[] = [];
+  const mine = chanceFigures(odds, me);
+  if (mine) {
+    const top = mine.top ? ` and ${mine.top}` : '';
+    lines.push(`Your club goes in seeded ${ordinal(mine.seed)} of ${field.length}. By the table it has a ${mine.first} chance at the first pick${top}, and it picks no later than ${ordinal(mine.latest)}.`);
+    const own = firstOf(me);
+    if (own && own.holder !== me) lines.push(`That pick is ${whose(labelOf(own.holder))} tonight, wherever it lands.`);
+  } else {
+    lines.push('Your club made the playoffs, so its own first is not in the lottery.');
+  }
+  for (const f of field) {
+    if (f.club === me || firstOf(f.club)?.holder !== me) continue;
+    const held = chanceFigures(odds, f.club);
+    if (!held) continue;
+    const top = held.top ? `, ${held.top}` : '';
+    lines.push(`You also hold ${whose(labelOf(f.club))} first: seeded ${ordinal(held.seed)}, ${held.first} at the first pick${top}, no later than ${ordinal(held.latest)}.`);
+  }
+  return lines;
 }
 
 /** What sits behind the heading's "?": the lottery's own blocks (gmLotteryNight's lotteryHelp), the chances line,
