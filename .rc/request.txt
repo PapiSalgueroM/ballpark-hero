@@ -1,0 +1,11 @@
+simCfbSlate: node scripts/simCfbSlate.mjs
+baseline-main: git worktree add -q /tmp/base 7f99c27ee && node .rc/x/baseline.mjs /tmp/base
+c-random: CFB_SLATE_CONTROL=random node scripts/simCfbSlate.mjs
+c-ndacc: CFB_SLATE_CONTROL=ndacc node scripts/simCfbSlate.mjs
+c-top12: CFB_SLATE_CONTROL=top12 node scripts/simCfbSlate.mjs
+c-g5title: CFB_SLATE_CONTROL=g5title node scripts/simCfbSlate.mjs
+c-nofifth: CFB_SLATE_CONTROL=nofifth node scripts/simCfbSlate.mjs
+c-rivals: CFB_SLATE_CONTROL=rivals node scripts/simCfbSlate.mjs
+c-source: CFB_SLATE_CONTROL=source node scripts/simCfbSlate.mjs
+c-midseason: CFB_SLATE_CONTROL=midseason node scripts/simCfbSlate.mjs
+c-cbbraw: CFB_SLATE_CONTROL=cbbraw node scripts/simCfbSlate.mjs
