@@ -154,10 +154,14 @@ const RECORDED: Record<string, string> = {
 
 const sha1 = (s: string) => createHash('sha1').update(s).digest('hex');
 
-/** The save with the two things this round changes set aside (see the header). */
+/** The save with the two things this round changes set aside (see the header), and, since Round 1533, the two
+    blocks the GM desk host writes at the close (gm.blocks.seat, his record, and gm.blocks.xp, his GM XP): a key
+    that did not exist on the base, as gameLog was. Every other block of the desk stays in the digest to the byte;
+    scripts/controlFrontOfficeBoard.mjs thirdkey proves a third key written at the close still turns it red. */
 function onePressDigest(raw: string): string {
   const s = JSON.parse(raw);
   delete s.gameLog;
+  if (s.gm && s.gm.blocks) { delete s.gm.blocks.seat; delete s.gm.blocks.xp; }
   for (const r of s.postseason?.rounds ?? []) for (const g of r.games) { g.homeScore = 0; g.awayScore = 0; }
   return sha1(JSON.stringify(s));
 }

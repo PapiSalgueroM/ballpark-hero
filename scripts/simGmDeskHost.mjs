@@ -57,7 +57,7 @@
  *   spendany (8) canspend (8) stalestaff (9) halfseason (9) noyear (9) awayxp (9) lastcall (9)
  *   emptytile (10) closedsit (10) fewseasons (10) shutbutton (10) passquiet (10)
  *   longtile (10) clubvalue (10) openpromise (10) halfword (10) allfired (10)
- *   tileclimb (10) climbword (10)
+ *   tileclimb (10) climbword (10)   nofirstcall (4, Round 1533)
  * Eleven of them are the review's own mutants made permanent (2026-10-10): five that passed every gate of the round
  * (nhlrecord, nhlpct, rankplace, canspend, tileclimb), hockey read without its overtime losses (nhlgames, which
  * only check 9 caught), and five the two vitest files alone caught (tierunknown, fitsave, craftfirst, awayxp,
@@ -102,6 +102,17 @@
  * floor on one seed. The two processes of one seed set print one feed digest (seeds 1,2,3:
  * 4639809b50a97cedd2ac870d05cfdb6d59a4b6e4).
  * CONTROLS, each run alone on seeds 1,2,3, failures counted in its own check: see CONTROL COUNTS below T.
+ * MEASURED AGAIN 2026-10-22 for Round 1533 (runner result r1533-s0c), after the first call joined hostMarket: when
+ * the first feed after a sacking is empty, the weakest roster that did not let him go rings, once. Only the
+ * market counts of check 4 moved (every other count above is as it was), on seeds 1,2,3 / 4,5,6 / 7,8,9:
+ *   markets on the ladder    16800 each: offers 12694 / 12703 / 12716, after a badly season 2636 / 2628 / 2651,
+ *                            quiet 2800 / 2804 / 2793, quiet on a climb 729 / 722 / 723, closed 4721 / 4725 / 4736
+ *   first calls              637 / 651 / 671 (45 of them a last call on each set), every one of them out of work
+ *                            no year: a man fired straight from the seat never reads quiet or closed now
+ *   last calls 559 / 555 / 544, on a climb 555 / 562 / 561 (about one market with offers in eight, as before)
+ *   offers from a club whose roster rank is not its standings place   10697 / 11072 / 10931
+ * The floors below still sit under these (minFirstCalls at 70 percent of the lowest set, 445). Control nofirstcall
+ * fired with 638 failures in check 4 on seeds 1,2,3.
  */
 import './lib/seedRandom.mjs';
 import fs from 'node:fs';
@@ -471,7 +482,7 @@ const SPORTS = Object.keys(DRIVE);
 const PER3 = {
   minLeagues: 58, minRealSaves: 168, minOffers: 8400, minBadlyOffers: 1570, minClimb: 560, minClosed: 3300, minQuietOpen: 2300,
   minReach: 455, minVerdicts: 780, minLosing: 348, minFiredCloses: 348, minCases: 6100, minYoung: 7600, minPairs: 730000,
-  minLastCalls: 345, minPassClimb: 330, minRankApart: 7300,
+  minLastCalls: 345, minPassClimb: 330, minRankApart: 7300, minFirstCalls: 445,
 };
 const FIXED = { minFeedsWithOffers: 23, minMen: 2290, minCuts: 200 };
 const T = { ...FIXED, ...Object.fromEntries(Object.entries(PER3).map(([k, v]) => [k, Math.floor((v * SEEDS.length) / 3)])) };
@@ -819,7 +830,7 @@ ok(M4.lastCalls >= T.minLastCalls && M4.passClimb >= T.minPassClimb, `the ladder
 ok(M4.rankApart >= T.minRankApart, `only ${M4.rankApart} of ${M4.offers} offers come from a club whose strength rank is not its standings place, too few to tell the two apart`);
 console.log(`   with offers on the table and next year not open: ${M4.lastCalls} are the last calls (next year shut), ${M4.passClimb} hang on a climb; ${M4.rankApart} offers from a club whose roster rank is not its place`);
 console.log(`   the ceiling six clubs at a time: ${reach} offers in ${reachFeeds} feeds of the most decorated careers, none from the top tier`);
-ok(M4.firstCalls > 0, 'no fired career needed the first call, so the rule went unread');
+ok(M4.firstCalls >= T.minFirstCalls, `only ${M4.firstCalls} first calls on the ladder, too few to hold the rule`);
 console.log(`   first calls (fired straight from the seat, nobody else rang): ${M4.firstCalls}, ${M4.firstLast} of them the last call`);
 
 /* ================================================================== */

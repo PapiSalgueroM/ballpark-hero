@@ -244,6 +244,13 @@ describe('the GM level panel', () => {
     expect(container.querySelectorAll('[data-gm-xp-help] p')).toHaveLength(4);
     /* The earn line is on the screen once: above the "?", never a second time inside it. */
     expect(container.textContent!.split(career.earns)).toHaveLength(2);
+    /* Round 1533, the 1223 notes' condition 1: the panel under the earn line promises no source this desk cannot
+       feed (GmXpPanel's own six source sentence is not drawn when `earns` is passed). */
+    expect(container.textContent).not.toContain('finishing higher than anyone expected');
+    expect(container.textContent).not.toContain('bringing a prospect through');
+    expect(container.querySelector('[data-gm-xp-sources]')).toBeNull();
+    /* Condition 2: on a phone the live trees come first. */
+    expect(Array.from(container.querySelectorAll('[data-gm-tree]')).slice(0, 2).map(e => e.getAttribute('data-gm-tree'))).toEqual(['ownership', 'media']);
   });
   it('says XP has not started on a save whose desk is off, and the "?" then carries the earn line', () => {
     const career = binding(HELD, { deskOn: false });

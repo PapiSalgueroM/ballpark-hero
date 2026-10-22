@@ -57,7 +57,7 @@ const CONTROL = process.env.SIM_GM_CAREER_CONTROL || '';
 const RECORD = process.env.SIM_GM_CAREER_RECORD || '';
 const ONLY = (process.env.SIM_GM_CAREER_ONLY || '').split(',').filter(Boolean);
 const runs = id => ONLY.length === 0 || ONLY.includes(id);
-const CONTROLS = { epoch: '1', addkey: '1' };
+const CONTROLS = { epoch: '1', addkey: '1', deskoffblock: '2', paytwice: '2', lateseat: '2', emptytile: '8' };
 if (CONTROL && !CONTROLS[CONTROL]) {
   console.error(`SIM_GM_CAREER_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(CONTROLS).join(', ')})`);
   process.exit(2);
@@ -96,6 +96,10 @@ const FILES = {
 const EDITS = {
   addkey: ['host', '  next = withGmBlock(next, GM_HOST_KEYS.xp, nextXp);\n',
     "  next = withGmBlock(next, GM_HOST_KEYS.xp, nextXp);\n  next = withGmBlock(next, 'extra', 1);\n"],
+  deskoffblock: ['host', '  if (!i.desk) return out;', '  if (!i.desk) return { ...out, desk: { v: 1, blocks: { seat: 1 } } };'],
+  paytwice: ['host', '  if (seat.last !== undefined && f.season <= seat.last) return same;', '  if (false) return same;'],
+  lateseat: ['host', 'titles: i.titles, fired: i.fired, seasonCounted: false,', 'titles: i.titles, fired: i.fired, seasonCounted: true,'],
+  emptytile: ['host', "value: 'No more calls',", "value: '',"],
 };
 const overrides = new Map();
 let fired = 0;
@@ -132,6 +136,7 @@ export { leagueNames } from ${lib('foNames')};
 export { FO_DEPTH } from '${ROOT_URL}/src/data/frontOfficeDepth.ts';
 export { FO_TEAMS } from '${ROOT_URL}/src/data/frontOfficePlayers.ts';
 export * as S from ${lib('gmStaff')};
+export * as X from ${lib('gmXp')};
 `);
 const esbuild = createRequire(`${NM}/`)('esbuild');
 await esbuild.build({
@@ -179,7 +184,7 @@ if (CONTROL === 'epoch') {
 }
 const M = createRequire(import.meta.url)(BUNDLE);
 Math.random = realRandom;
-const { E, D, H, FM, SEAT, G, K, S, nflDeskHost, leagueNames, FO_DEPTH, FO_TEAMS } = M;
+const { E, D, H, FM, SEAT, G, K, S, X, nflDeskHost, leagueNames, FO_DEPTH, FO_TEAMS } = M;
 const EPOCH = (() => { const id = M.makeIdMinter('x')(); return id.slice(1, id.lastIndexOf('-')); })();
 const unEpoch = s => s.split(EPOCH).join('E');
 
@@ -372,6 +377,147 @@ if (runs('1')) {
     ok(s1.badKeys === 0, `${s1.badKeys} closes wrote a block other than seat and xp`);
     console.log(`   ${compared} checkpoints over ${s1.seasons} seasons against ${fixture.recordedFrom} (${moved} moved); fired at ${J(s1.firedAt)}; digest ${s1Digest}`);
   }
+}
+
+/* ================================================================== */
+/* The fleet: real closed seasons, every club's own, for sections 2, 8 */
+/* ================================================================== */
+const FLEET_SEEDS = [1, 2, 3, 4];
+const FLEET_SEASONS = 3;
+function buildFleet() {
+  const out = [];
+  for (const seed of FLEET_SEEDS) {
+    const rng = mulberry32(2000 + seed);
+    const lg = d.cpuLeague(rng);
+    const ids = Object.keys(lg.teams).sort();
+    let champion = null;
+    for (let s = 0; s < FLEET_SEASONS; s++) {
+      const mandates = Object.fromEntries(ids.map(id => [id, d.mandateFor(lg, id, champion === id, 0)]));
+      const r = d.cpuSeason(lg, rng);
+      champion = r.champion;
+      out.push({ seed, s, lg: JSON.parse(J(lg)), rounds: r.rounds, champion: r.champion, mandates });
+      d.cpuSummer(lg, rng);
+    }
+  }
+  return out;
+}
+const FLEET = runs('2') || runs('8') ? buildFleet() : [];
+const tiersOf = lg => SEAT.leagueTiers(H.hostSeatTeams(d.host, lg, sameId));
+
+/* ================================================================== */
+/* 2. The verdict on every club's real season                          */
+/* ================================================================== */
+const RECAP_LINES = [];
+if (runs('2')) {
+  begin('2', 'the verdict on every club\'s real season: desk off it is today\'s two calls, desk on it records once and pays once');
+  const S2 = { off: 0, on: 0, reloads: 0, old: 0, paid: 0 };
+  for (const snap of FLEET) {
+    const lg = snap.lg, season = lg.season, tiers = tiersOf(lg), clubs = d.host.clubs(lg);
+    const before = J(lg);
+    for (const id of Object.keys(lg.teams).sort()) {
+      const at = `seed ${snap.seed} season ${snap.s + 1} ${id}`;
+      const mandate = snap.mandates[id];
+      const outcome = d.outcome(lg, id, snap.rounds, snap.champion);
+      const grade = FM.gradeSeason(mandate, outcome);
+      /* Desk off: exactly gradeSeason then applyMandateResult over the same grade, and no desk written. */
+      for (const trust of [60, 30, 12]) {
+        const today = FM.applyMandateResult(trust, grade);
+        const v = H.hostSeasonVerdict(d.host, lg, { team: id, mandate, trust, fired: false, outcome, desk: null, seasonsPlayed: 2, titles: 0 });
+        S2.off++;
+        if (v.desk !== null) fail(`${at} trust ${trust}: a desk off close wrote a desk`);
+        if (v.trust !== today.trust || v.fired !== today.fired || J(v.grade) !== J(grade)) fail(`${at} trust ${trust}: desk off reads ${v.trust}/${v.fired}, today's two calls ${today.trust}/${today.fired}`);
+      }
+      /* Desk on, a new save: start writes his record the day he takes the club, so the first close records the
+         season he started in, pays once, and the recap after it is his season (not an arrival). */
+      const fresh = G.withGmBlock(G.freshGmDesk(), H.GM_HOST_KEYS.seat, H.hostNewSeat(id, tiers.get(id), season));
+      const v1 = H.hostSeasonVerdict(d.host, lg, { team: id, mandate, trust: 60, fired: false, outcome, desk: fresh, seasonsPlayed: 0, titles: 0 });
+      S2.on++;
+      const seat1 = v1.desk?.blocks?.seat;
+      if (!v1.award || !seat1 || seat1.last !== season || seat1.career.stints.length !== 1 || seat1.career.stints[0].from !== season
+        || seat1.career.stints[0].grades.join() !== grade.result) fail(`${at}: a new save's first close is not one graded season from ${season} (${J(seat1?.career)})`);
+      else if (H.hostArriving(seat1, season)) fail(`${at}: his first recap reads as an arrival`);
+      if (v1.trust !== FM.applyMandateResult(60, grade).trust) fail(`${at}: with no point spent the desk on trust is not today's`);
+      const club = clubs.find(c => c.id === id);
+      const want = X.gmSeasonXp({ winPct: club.games ? club.wins / club.games : 0, titles: outcome.wonTitle ? 1 : 0, playoffRoundsWon: outcome.roundsWon,
+        mandateSteps: X.mandateSteps(grade.result), placesAboveExpectation: 0, prospectsGraduated: 0 });
+      if (v1.award && v1.award.total !== want.total) fail(`${at}: paid ${v1.award.total} XP, the four facts pay ${want.total}`);
+      if (v1.award) { S2.paid += v1.award.total; RECAP_LINES.push(H.hostXpRecapLine({ award: v1.award, levelAfter: v1.levelAfter, desk: v1.desk }, D.NFL_XP_LIVE ?? [])); }
+      /* A reload on the recap closes the same season again: nothing is paid and nothing moves. */
+      const v2 = H.hostSeasonVerdict(d.host, lg, { team: id, mandate, trust: 60, fired: false, outcome, desk: v1.desk, seasonsPlayed: 1, titles: outcome.wonTitle ? 1 : 0 });
+      S2.reloads++;
+      if (v2.award !== null || J(v2.desk) !== J(v1.desk)) fail(`${at}: a second close of the same season paid again or moved his record`);
+      /* An older desk on save (no record yet): the record starts the season the counters say, never a season late. */
+      const v3 = H.hostSeasonVerdict(d.host, lg, { team: id, mandate, trust: 60, fired: false, outcome, desk: G.freshGmDesk(), seasonsPlayed: 3, titles: 0 });
+      S2.old++;
+      const seat3 = v3.desk?.blocks?.seat;
+      if (!seat3 || seat3.career.stints[0].from !== season - 3) fail(`${at}: an older save's record starts in ${seat3?.career.stints[0].from}, he took the club in ${season - 3}`);
+    }
+    if (J(lg) !== before) fail(`seed ${snap.seed} season ${snap.s + 1}: a verdict changed the league`);
+  }
+  console.log(`   ${S2.off} desk off closes equal today's two calls; ${S2.on} desk on closes recorded once (${S2.paid} XP paid, the median club ${Math.round(S2.paid / Math.max(1, S2.on))} a season), ${S2.reloads} reloads paid nothing, ${S2.old} older saves started on time`);
+  ok(S2.on >= 300, `only ${S2.on} real club seasons read, too few to hold the verdict`);
+}
+
+/* ================================================================== */
+/* 8. The words                                                        */
+/* ================================================================== */
+const WORDS = [];
+if (runs('8')) {
+  begin('8', 'the words: never empty, no dash, no quote, no placeholder, no player\'s name, a closed line never says sit, every box fits');
+  const careers = [['met'], ['badly'], ['missed', 'missed'], ['badly', 'badly', 'badly'], ['title', 'met', 'overachieved']];
+  const pack = d.host.pack;
+  const boxes = [];
+  for (const snap of FLEET.filter(x => x.s === FLEET_SEASONS - 1)) {
+    const lg = snap.lg, tiers = tiersOf(lg), season = lg.season;
+    const names = new Set(Object.values(lg.teams).flatMap(t => [...t.players, ...(t.practice ?? [])].map(p => p.name)).concat(lg.freeAgents.map(p => p.name)));
+    const say = (s, where) => WORDS.push([s, `${where} (seed ${snap.seed})`, names]);
+    for (const id of Object.keys(lg.teams).sort()) {
+      for (const grades of careers) for (const out of [0, 1, 2]) {
+        let c = SEAT.newGmCareer(id, tiers.get(id), season - out - grades.length + 1);
+        for (const g of grades) c = SEAT.recordSeatSeason(c, g);
+        c = SEAT.endSeatStint(c, 'fired');
+        for (let i = 0; i < out; i++) c = SEAT.sitOutYear(c);
+        const seat = { v: 1, career: c, last: season - out };
+        const m = H.hostMarket(d.host, lg, seat, label);
+        const at = `${id} ${grades.join(',')} out ${out}`;
+        say(m.line, `the market line, ${at}`);
+        if (m.state === 'closed' && /\bsit\b/i.test(m.line)) fail(`${at}: a closed line says sit`);
+        const tile = H.hostMarketTile(m);
+        boxes.push([tile, `the Job market box, ${at}`]);
+        const card = H.hostOutOfWorkCard(d.host, lg, seat, m, label);
+        say(card.title, `the card title, ${at}`); card.lines.forEach(l => say(l, `the card, ${at}`));
+        say(H.hostSitArmLine(m, true), `the stay out arm, ${at}`); say(H.hostSitArmLine(m, false), `the stay out arm, desk off, ${at}`);
+        for (const o of m.offers) {
+          say(o.reason, `an offer's reason, ${at}`); say(o.ask.text, `an offer's ask, ${at}`);
+          say(H.hostTakeArmLine(pack, o, true), `the take arm, ${at}`); say(H.hostTakeArmLine(pack, o, false), `the take arm, desk off, ${at}`);
+          if (m.facts[o.teamId]) say(H.hostOfferFactsLine(m.facts[o.teamId], 'cap'), `an offer's facts, ${at}`);
+        }
+        boxes.push([H.hostCareerTile(seat, label), `the Career box, ${at}`]);
+        say(H.hostCareerTotalsLine(seat), `the career totals, ${at}`);
+        for (const v of H.hostStintViews(seat, label)) { say(v.arrival, `a stint, ${at}`); say(v.ended, `a stint end, ${at}`); }
+      }
+      /* The Career box while he holds the seat, under the club's real name. */
+      boxes.push([H.hostCareerTile(H.hostNewSeat(id, tiers.get(id), season), label), `the Career box held, ${id}`]);
+    }
+    for (const deskOn of [true, false]) boxes.push([H.hostXpTile(null, D.NFL_XP_LIVE ?? [], deskOn), `the GM level box, desk ${deskOn ? 'on' : 'off'}`]);
+  }
+  for (const l of [...H.hostMarketHelp(d.host.pack), ...H.hostCareerHelp(d.host.pack), ...H.hostXpHelp(), H.hostEarnsLine(D.NFL_XP_SOURCES ?? [])]) WORDS.push([l, 'a help line', new Set()]);
+  for (const l of RECAP_LINES) WORDS.push([l, 'the recap XP line', new Set()]);
+  const NOT_ALLOWED = [[String.fromCharCode(0x2013), 'an en dash'], [String.fromCharCode(0x2014), 'an em dash'], ['"', 'a quote mark'],
+    [String.fromCharCode(0x201c), 'a quote mark'], [String.fromCharCode(0x201d), 'a quote mark']];
+  const RAW = /[{}]|undefined|NaN|\bnull\b|\[object/;
+  for (const [s, where, names] of WORDS) {
+    if (typeof s !== 'string' || !s.trim()) { fail(`an empty string on ${where}`); continue; }
+    for (const [ch, what] of NOT_ALLOWED) if (s.includes(ch)) fail(`${what} on ${where}: ${s.slice(0, 80)}`);
+    if (RAW.test(s)) fail(`an unfilled value on ${where}: ${s.slice(0, 80)}`);
+    for (const n of names) if (n && s.includes(n)) { fail(`a player's name (${n}) on ${where}: ${s.slice(0, 80)}`); break; }
+  }
+  for (const [t, where] of boxes) {
+    if (!t) continue;
+    if (!t.value || !t.sub) fail(`an empty box on ${where}`);
+    if (t.value.length > H.HOST_TILE_VALUE_MAX || t.sub.length > H.HOST_TILE_SUB_MAX) fail(`${where} outgrows its box: ${t.value} / ${t.sub}`);
+  }
+  console.log(`   ${WORDS.length} strings and ${boxes.length} boxes read over ${FLEET_SEEDS.length} leagues, every roster name checked`);
 }
 
 /* ================================================================== */

@@ -15,7 +15,9 @@ import { GmStaffPanel } from '@/components/front-office-shared/GmStaffPanel';
 import { GmResignDesk } from '@/components/front-office-shared/GmResignDesk';
 import { GmPicksCard } from '@/components/front-office-shared/GmPicksCard';
 import { GmTradeBuilder, type BuilderTile } from '@/components/front-office-shared/GmTradeBuilder';
-import { type GmDesk, type GmFacts, type GmPanelDef, type GmPanelProps, withGmBlock } from '@/lib/gmDesk';
+import { type GmDesk, type GmPanelDef, type GmPanelProps, withGmBlock } from '@/lib/gmDesk';
+import type { GmCareerFacts } from '@/lib/gmDeskHost';
+import { GM_CAREER_PANELS } from '@/components/front-office-shared/gmCareerDesk';
 import {
   acceptFinal, deskCases, decisionFor, keepAtAsk, letGo, matchSheet, pushFor, qualify, takePicks, tenderHim, useOption,
   type DeskCase, type GmTerms, type Made, type PushResult,
@@ -31,8 +33,8 @@ import {
   nflStaffCtx, nflStaffOf, nflStaffTile, nflStances, nflTradeDeadMoney, nflTradeWindow,
 } from '@/lib/nflGmDesk';
 
-/** The board's state, flattened for the desk, plus the actions a panel may take. */
-export interface NflDeskFacts extends GmFacts {
+/** The board's state, flattened for the desk, plus the actions a panel may take. Round 1533: and his career (GmCareerFacts). */
+export interface NflDeskFacts extends GmCareerFacts {
   league: LeagueState;
   /** The regular season is over (the recap). Deals are shut, the re-sign desk is the business of the day. */
   seasonOver: boolean;
@@ -258,3 +260,5 @@ const DEALS: GmPanelDef<NflDeskFacts> = {
 export const NFL_DESK_PANELS: readonly GmPanelDef<NflDeskFacts>[] = [STAFF, CONTRACTS, PICKS, DEALS];
 /** The recap, once the season is over: the re-sign desk before the draft. */
 export const NFL_RECAP_PANELS: readonly GmPanelDef<NflDeskFacts>[] = [CONTRACTS];
+/** Round 1533: the hub, the desk's four boxes and then his career's three (gmCareerDesk.tsx; the Job market box only while he is out of work). */
+export const NFL_HUB_PANELS: readonly GmPanelDef<NflDeskFacts>[] = [...NFL_DESK_PANELS, ...GM_CAREER_PANELS];

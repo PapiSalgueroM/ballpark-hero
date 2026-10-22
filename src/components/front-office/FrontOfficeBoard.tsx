@@ -38,9 +38,18 @@ import { cn } from '@/lib/utils';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 // Round 180: the owner upstairs, shared engine and card.
 import {
-  buildOwnerMandate, strengthRank, mandatePace, gradeSeason, applyMandateResult,
-  firedLine, nflPostseason, FO_TRUST_START, type OwnerMandate, type FoSportWords,
+  buildOwnerMandate, strengthRank, mandatePace, gradeSeason,
+  firedLine, FO_TRUST_START, type OwnerMandate, type FoSportWords,
 } from '@/lib/foOwnerMandate';
+/* Round 1533: the GM's career. The desk host is the one place it lives for all four front offices
+   (src/lib/gmDeskHost.ts); this board binds it through the NFL's read adapter and src/lib/nflGmDesk.ts. */
+import {
+  GM_HOST_KEYS, hostEarnsLine, hostMarket, hostNewSeat, hostSeasonVerdict, hostSeatOf, hostSeatTeams, hostSpendPoint,
+  hostXpRecapLine, type GmCareerBinding,
+} from '@/lib/gmDeskHost';
+import { nflDeskHost } from '@/lib/gmDeskHostNfl';
+import { leagueTiers } from '@/lib/gmSeat';
+import type { GmTree } from '@/lib/gmXp';
 import OwnerMandateCard from '@/components/front-office-shared/OwnerMandateCard';
 /* Round 187: the verdict curtain. stageVerdict decides the presentation
    facts (confetti only for the champion GM, fired kills it outright) so
@@ -66,9 +75,10 @@ import {
   nflApplyTradeDeadMoney, nflDeadlineRefusal, nflDeskAfterWeek, nflDeskEdges, nflDeskOffseason, nflDeskWeekOptions,
   nflMirrorPickMove, nflNoteArrivals, nflPackageCapCheck, nflPicksOf, nflScoutRead, nflSignDraftee, nflStaffOf, nflTradeDeadMoney,
   nflTradeWindow, openNflDesk, syncNflPicks, NFL_DESK_KEYS,
+  nflLegacy, nflOutcome, nflSeasonCounted, NFL_XP_LIVE, NFL_XP_SOURCES,
 } from '@/lib/nflGmDesk';
 /* By its full path, not './': harnesses bundle a copy of this board from a temp folder. */
-import { NFL_DESK_PANELS, NFL_RECAP_PANELS, type NflDeskFacts } from '@/components/front-office/NflGmDesk';
+import { NFL_DESK_PANELS, NFL_HUB_PANELS, NFL_RECAP_PANELS, type NflDeskFacts } from '@/components/front-office/NflGmDesk';
 /* Round 1305: every score a GM reads is told by the football law for the
    winner the engine decided, and his club's games of the season are kept in
    the save. Both are needed in the press's own tick, so they are static;
@@ -233,6 +243,8 @@ export default function FrontOfficeBoard() {
   const [trust, setTrust] = useState(FO_TRUST_START);
   const [fired, setFired] = useState(false);
   const [gradeLine, setGradeLine] = useState<string | null>(null);
+  /* Round 1533: the GM XP the season's verdict paid, for the recap's line. Transient like a presser: a reload shows no line. */
+  const [xpLine, setXpLine] = useState<string | null>(null);
   /* Round 192: the room. Presser transient; tilt and trade line persist. */
   const [presser, setPresser] = useState<GmPresser | null>(null);
   const [pressTilt, setPressTilt] = useState<-1 | 0 | 1>(0);
@@ -478,6 +490,10 @@ export default function FrontOfficeBoard() {
     /* Round 1019: a new front office opens with the desk on. Only a save from
        before it waits for the GM to open a desk box. */
     setGm(openNflDesk(lg, abbr)); setGmOpen(null);
+    /* Round 1533: and his record from the first day, so the Career box knows the tier he took over at (only a
+       record built from an older save leaves the tier off). */
+    setGm(withGmBlock(gmLive.current!, GM_HOST_KEYS.seat, hostNewSeat(abbr, leagueTiers(hostSeatTeams(nflDeskHost, lg, label)).get(abbr) ?? 4, lg.season)));
+    setXpLine(null);
     /* Round 1305: the games of the club he ran before are not this club's season. */
     setGameLog(null); /* a new franchise */
     setPlayoffs(null); ask.current = 'week'; setHeld(null); /* Round 1309: nor are his old club's playoffs */
@@ -562,17 +578,27 @@ export default function FrontOfficeBoard() {
     let newTrust = trust, nowFired = fired;
     let gradeResult: ReturnType<typeof gradeSeason>['result'] | null = null;
     let gradeVerdict: string | null = null;
+    setXpLine(null);
     if (mandate) {
-      const post = nflPostseason(rounds, myTeam);
-      const grade = gradeSeason(mandate, { wins: lg.teams[myTeam].wins, ...post, wonTitle: won });
-      const applied = applyMandateResult(trust, grade);
-      newTrust = applied.trust;
-      nowFired = applied.fired;
+      /* Round 1533: the verdict through the desk host. With the desk off it is gradeSeason then applyMandateResult
+         over the same grade, today's two calls exactly; with it on the season is also recorded once on his record
+         and pays its GM XP (the counters handed in are the ones before this season, the host's contract). */
+      /* The desk as it stands after the week's tick: the ref, which setGm moved in the same press (the render's
+         `gm` is the one from before the press). */
+      const deskNow = gmLive.current;
+      const v = hostSeasonVerdict(nflDeskHost, lg, {
+        team: myTeam, mandate, trust, fired, outcome: nflOutcome(lg, myTeam, rounds, champ), desk: deskNow, seasonsPlayed, titles,
+      });
+      const grade = v.grade!;
+      newTrust = v.trust;
+      nowFired = v.fired;
       gradeResult = grade.result;
-      setTrust(applied.trust);
-      setFired(applied.fired);
+      setTrust(v.trust);
+      setFired(v.fired);
       setGradeLine(grade.verdict);
       gradeVerdict = grade.verdict;
+      if (v.desk && v.desk !== deskNow) setGm(v.desk);
+      setXpLine(v.desk && v.award ? hostXpRecapLine({ award: v.award, levelAfter: v.levelAfter, desk: v.desk }, NFL_XP_LIVE) : null);
     }
     /* Round 192: the room reacts to the season that actually happened.
        A fired GM gets no presser (the door shuts with one shake), and a
@@ -868,6 +894,7 @@ export default function FrontOfficeBoard() {
       setPlayoffRounds([]);
       setChampion('');
       setWonTitleNow(false);
+      setXpLine(null);
       setPressTilt(0);
       setSeasonTradeLine(null);
       /* Round 530: the phase stays 'draft' so the last pick's card is seen;
@@ -1119,6 +1146,7 @@ export default function FrontOfficeBoard() {
     setTrust(FO_TRUST_START);
     setFired(false);
     setGradeLine(null);
+    setXpLine(null);
     setPresser(null);
     setPressTilt(0);
     setSeasonTradeLine(null);
@@ -1131,7 +1159,9 @@ export default function FrontOfficeBoard() {
      the desk, switches it on: the ledgers are opened from the league as it
      stands (every pick on the old lists kept) and saved with it. */
   const openDesk = (key: string | null) => {
-    if (key !== null && !gm && league) {
+    /* Round 1533: only a desk box of its own switches the desk on. A career box (Job market, Career, GM level)
+       opens through setGmOpen alone, so looking writes nothing. */
+    if (key !== null && !gm && league && gmPanelFor(NFL_DESK_PANELS, key)) {
       const desk = openNflDesk(league, myTeam);
       const lg: LeagueState = JSON.parse(JSON.stringify(league));
       syncNflPicks(lg, nflPicksOf(desk, lg));
@@ -1144,6 +1174,27 @@ export default function FrontOfficeBoard() {
     setGm(next);
     persist({}, league, myTeam);
   };
+  /* Round 1533: a point into a tree this desk routes. A save whose desk is off has nothing to spend from. */
+  const spendPoint = (tree: GmTree) => {
+    if (!gm) return;
+    const next = hostSpendPoint(gm, tree, NFL_XP_LIVE);
+    if (next) changeDesk(next);
+  };
+  /* Round 1533: the career half of the facts, built once a render for the three career boxes. His record is the
+     stored block when it fits the save, else the record a save older than the block stands on (never written
+     by reading). The market is read only while he is between seats. */
+  const careerOf = (lg: LeagueState): GmCareerBinding => {
+    const legacy = nflLegacy(lg, {
+      team: myTeam, seasonsPlayed, titles, fired, seasonCounted: nflSeasonCounted(phase, gm),
+      mandate, rounds: playoffRounds, champion,
+    });
+    const seat = hostSeatOf(gm, legacy);
+    return {
+      pack: nflDeskHost.pack, seat, market: fired ? hostMarket(nflDeskHost, lg, seat, label) : null, nameOf: label,
+      live: NFL_XP_LIVE, deskOn: gm !== null, earns: hostEarnsLine(NFL_XP_SOURCES),
+      take: () => {}, sitOut: () => {}, spend: spendPoint,
+    };
+  };
   const deskFacts = (hub: NflDeskFacts['hub']): NflDeskFacts | null => league ? {
     teamId: myTeam, teamLabel: label(myTeam), seasonsPlayed, phase, hub, league,
     seasonOver: phase === 'recap', deskOn: gm !== null, clubName: label,
@@ -1152,6 +1203,7 @@ export default function FrontOfficeBoard() {
       setGm(desk); setLeague(lg); slamFeed(line);
       persist({}, lg, myTeam);
     },
+    career: careerOf(league),
   } : null;
 
   /* ------------------------------ pick screen ------------------------------ */
@@ -1319,6 +1371,10 @@ export default function FrontOfficeBoard() {
           )}
           {mandate && !fired && (
             <p className="cm-rise mt-1 text-[11px] text-muted-foreground" style={{ animationDelay: '0.7s' }}>Trust upstairs: {trust} of 100{trust <= 25 ? '. The seat is hot.' : '.'}</p>
+          )}
+          {/* Round 1533: what the season paid his GM, fired or not: his XP follows him. */}
+          {xpLine && (
+            <p data-gm-xp-recap className="cm-rise mt-1 text-[11px] font-semibold text-gold" style={{ animationDelay: '0.75s' }}>{xpLine}</p>
           )}
           <div className="mt-3 space-y-1 text-xs text-muted-foreground">
             {playoffRounds.map((r, i) => (
@@ -1488,7 +1544,7 @@ export default function FrontOfficeBoard() {
   const tiles = foHubTiles(hubFacts);
   /* Round 1019: the desk's boxes sit under the board's own; a desk panel open hides the board's boxes. */
   const hubDesk = deskFacts(hubFacts);
-  const deskPanelOpen = gmPanelFor(NFL_DESK_PANELS, gmOpen) !== null;
+  const deskPanelOpen = gmPanelFor(NFL_HUB_PANELS, gmOpen) !== null;
   const openPanel = (key: FoPanelKey) => { setCutArmed(null); setDepthView(null); setDepthPick(null); setRosterGroup(null); setGmOpen(null); setTab(key === 'play' ? 'week' : key); };
   /* Round 723: the chart the sim reads, and who it counts as starting today. */
   const chart = chartNow;
@@ -1743,7 +1799,7 @@ export default function FrontOfficeBoard() {
         ? !deskPanelOpen && <FoHubTiles tiles={tiles} onOpen={openPanel} />
         : <FoPanelHeader title={panelTitle} onBack={() => setTab(null)} />}
       {tab === null && hubDesk && (
-        <GmDeskMount sport="nfl" desk={gm ?? readGmDesk(undefined)} facts={hubDesk} panels={NFL_DESK_PANELS}
+        <GmDeskMount sport="nfl" desk={gm ?? readGmDesk(undefined)} facts={hubDesk} panels={NFL_HUB_PANELS}
           open={gmOpen} onOpen={openDesk} onDesk={changeDesk} />
       )}
 

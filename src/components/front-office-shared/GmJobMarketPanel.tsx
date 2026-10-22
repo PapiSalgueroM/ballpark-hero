@@ -73,7 +73,7 @@ export default function GmJobMarketPanel({ sport, facts }: GmPanelProps<GmCareer
           </button>
         </div>
         {help && (
-          <div className="mt-2 space-y-1 rounded-lg border border-border bg-secondary/30 p-2 text-[10px] text-muted-foreground" data-gm-market-help>
+          <div className="mt-2 space-y-1 rounded-lg border border-border bg-secondary/30 p-2 text-[11px] text-muted-foreground" data-gm-market-help>
             {hostMarketHelp(pack).map(line => <p key={line}>{line}</p>)}
           </div>
         )}
@@ -84,7 +84,7 @@ export default function GmJobMarketPanel({ sport, facts }: GmPanelProps<GmCareer
           <button
             type="button"
             onClick={() => pick(null)}
-            className="mb-2 min-h-[44px] rounded-full border border-border px-3 text-[10px] text-muted-foreground hover:text-foreground"
+            className="mb-2 min-h-[44px] rounded-full border border-border px-3 text-[11px] text-muted-foreground hover:text-foreground"
           >
             Back to the offers
           </button>
@@ -95,12 +95,12 @@ export default function GmJobMarketPanel({ sport, facts }: GmPanelProps<GmCareer
           <p className="mt-1 text-[11px] leading-snug text-foreground">{offer.ask.text}</p>
           <p className="mt-0.5 text-[11px] leading-snug text-muted-foreground">{offer.reason}</p>
           {offerFacts && (
-            <p className="mt-0.5 text-[10px] leading-snug text-muted-foreground" data-gm-offer-facts>
+            <p className="mt-0.5 text-[11px] leading-snug text-muted-foreground" data-gm-offer-facts>
               {hostOfferFactsLine(offerFacts, sport.cap.line)}
             </p>
           )}
           {armed === 'take' && (
-            <p className="mt-2 text-[10px] font-semibold text-gold" data-gm-arm="take">{hostTakeArmLine(pack, offer, deskOn)}</p>
+            <p className="mt-2 text-[11px] font-semibold text-gold" data-gm-arm="take">{hostTakeArmLine(pack, offer, deskOn)}</p>
           )}
           <button
             type="button"
@@ -124,9 +124,9 @@ export default function GmJobMarketPanel({ sport, facts }: GmPanelProps<GmCareer
               onClick={() => pick(o.teamId)}
               className="min-h-[64px] rounded-lg border border-border bg-secondary/20 p-2 text-left transition-colors hover:bg-secondary/40"
             >
-              <div className="text-[10px] uppercase tracking-wider text-muted-foreground">{cap(HOST_TIER_WORDS[o.tier])}</div>
+              <div className="text-[11px] uppercase tracking-wider text-muted-foreground">{cap(HOST_TIER_WORDS[o.tier])}</div>
               <div className="truncate text-xs font-bold text-foreground">{o.teamName}</div>
-              <div className="truncate text-[9px] text-muted-foreground">{market.facts[o.teamId]?.record ?? 'Open the offer'}</div>
+              <div className="truncate text-[11px] text-muted-foreground">{market.facts[o.teamId]?.record ?? 'Open the offer'}</div>
             </button>
           ))}
         </div>
@@ -135,7 +135,7 @@ export default function GmJobMarketPanel({ sport, facts }: GmPanelProps<GmCareer
       {hostCanSitOut(market) && !offer && (
         <div className="rounded-2xl border border-border bg-card p-3" data-gm-sit>
           {armed === 'sit' && (
-            <p className="mb-2 text-[10px] font-semibold text-gold" data-gm-arm="sit">{hostSitArmLine(market, deskOn)}</p>
+            <p className="mb-2 text-[11px] font-semibold text-gold" data-gm-arm="sit">{hostSitArmLine(market, deskOn)}</p>
           )}
           <button
             type="button"

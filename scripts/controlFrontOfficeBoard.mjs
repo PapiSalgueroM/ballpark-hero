@@ -121,6 +121,9 @@ const T = {
   psTitleRoom: [PS, 'the title game watched, won and lost'],
   psTieRival: [PS, '"Your game" on a tie against a club he met in the regular season'],
   psHurtFeed: [PS, 'a man of his hurt on "Play Week 17" is out for the playoffs in the feed'],
+  /* Round 1533: the one press digests with the desk on and off (the digest sets aside the host's two blocks only) */
+  opDeskOn: [OP, 'GM desk on: one press of the final week ordinary'],
+  opDeskOff: [OP, 'GM desk off: one press of the final week ordinary'],
 };
 
 const TELL_WEEK = 'const told = games.map(g => nflTell(g, lg.teams, lg.season, nflWhere(lg.week), deskWeek?.edges));';
@@ -182,6 +185,8 @@ const CONTROLS = {
   tiewhere: ['"Your game" opens the first game between the two clubs, whatever its round (the review\'s mutant)', [['games.findIndex(g => g.where === tie.round && (g.home === p.home', 'games.findIndex(g => (g.home === p.home']], [T.psTieRival], [T.psFaces, T.psBye]],
   hurtweeks: ['a man hurt on "Play Week 17" is out a count of weeks in the feed, though nobody heals in the bracket', [["const outForPlayoffs = lg.week >= REGULAR_WEEKS && asked === 'bracket';", 'const outForPlayoffs = false;']], [T.psHurtFeed], [T.psChipPress, T.psKeep]],
   donenow: ["the finish is recorded at the title game's press while he watches it", [["useGameCompletion('front-office', roomHeld ? roomHeld.won : wonTitleNow,", "useGameCompletion('front-office', wonTitleNow,"]], [T.psTitleRoom], [T.psTitleWatch, T.psWatchRound]],
+  /* Round 1533: the close through the desk host writes a third block beside seat and xp (critic 1533 correction 2) */
+  thirdkey: ['the season close writes a third block on the desk', [['if (v.desk && v.desk !== deskNow) setGm(v.desk);', "if (v.desk) setGm(withGmBlock(v.desk, 'extra', 1));"]], [T.opDeskOn], [T.opDeskOff]],
   blank: ["THIS FILE'S OWN CONTROL: a comment is reworded and nothing else, so nothing may fire", [['setGameLog(null); /* the summer */', 'setGameLog(null); /* the summer, as it was */']], [T.week], []],
 };
 
