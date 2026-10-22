@@ -5,7 +5,7 @@ export const WORLD_CONTENT: GameContentMap = {
   '/rank-em': {
     intro: [
       "One stat, five players, one shot at the right order. Rank 'Em names a career stat, gives you five greats who sit near the top of it, and asks you to place them most to fewest.",
-      "Every round is built from verified career totals in the site's database, with no ties anywhere. The order is the order.",
+      "Every round is built from verified career totals, with no ties anywhere. The order is the order.",
       "There's a daily ranking everyone shares, plus an unlimited mode.",
     ],
     headings: {
@@ -118,7 +118,7 @@ export const WORLD_CONTENT: GameContentMap = {
     faqs: [
       {
         q: "Where do the numbers come from?",
-        a: "Every ranking uses career totals from the site's stats database, and all five values are always distinct, so there is one clean right order.",
+        a: "Every ranking uses verified career totals, and a round with a player who is still active says which season they run through. All five values are always distinct, so there is one clean right order.",
       },
       {
         q: "Which sports show up?",
