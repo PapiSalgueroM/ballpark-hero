@@ -246,6 +246,8 @@ export default function FrontOfficeBoard() {
   const [gradeLine, setGradeLine] = useState<string | null>(null);
   /* Round 1533: the GM XP the season's verdict paid, for the recap's line. Transient like a presser: a reload shows no line. */
   const [xpLine, setXpLine] = useState<string | null>(null);
+  /* Round 1533's fix pass: the club he just took a seat at, so the arrival recap can bring its top onto the screen. */
+  const [landedAt, setLandedAt] = useState<string | null>(null);
   /* Round 192: the room. Presser transient; tilt and trade line persist. */
   const [presser, setPresser] = useState<GmPresser | null>(null);
   const [pressTilt, setPressTilt] = useState<-1 | 0 | 1>(0);
@@ -317,6 +319,16 @@ export default function FrontOfficeBoard() {
   const revealRef = useRevealScroll<HTMLDivElement>(
     `${phase}:${league?.week ?? 0}:${weekResults.length}:${hold ? 'watch' : ''}:${playoffs?.played.length ?? 0}`,
     wideAtLoad ? { block: 'end' } : inBracket ? { block: 'end' } : undefined,
+  );
+
+  /* Round 1533's fix pass (the review's finding 5): the two career screens a tap lands on bring their top onto the
+     screen, the owner's rule that the next step appears in view on its own. Measured at 390 by 844 with real taps,
+     "See who is calling" left the out of work card cut off at scrollY 270 and the take left the arrival's title,
+     arrival line and trust 877 px above the screen. Keyed to those two landings alone ('out' and the club he took),
+     so opening a box, a year out, a reload or an ordinary recap never moves the page. */
+  const careerRevealRef = useRevealScroll<HTMLDivElement>(
+    phase === 'fired' ? 'out' : landedAt === null ? 'none' : `arrival:${landedAt}`,
+    { enabled: phase === 'fired' || landedAt !== null, skipFirst: false },
   );
 
   useGameCompletion('front-office', roomHeld ? roomHeld.won : wonTitleNow, titles * 100 + seasonsPlayed * 5);
@@ -1236,6 +1248,7 @@ export default function FrontOfficeBoard() {
       gradeResult: null, tradeLine: null, seasonsPlayed,
     }));
     setNewsFeed([`You take over the ${label(teamId)}. The ${r.offer.ask.season} ask: ${r.offer.ask.text}`]);
+    setLandedAt(teamId);
     setPhase('recap');
     persist({
       phase: 'recap', trust: next.trust, fired: false, mandate: next.mandate, pressTilt: 0, seasonTradeLine: null,
@@ -1386,16 +1399,18 @@ export default function FrontOfficeBoard() {
     const outFacts = deskFacts(hubFacts)!; /* the league is set past the pick screen */
     const market = outFacts.career.market;
     return (
-      <GmOutOfWork<NflDeskFacts>
-        sport="nfl"
-        card={market ? hostOutOfWorkCard(nflDeskHost, league, outFacts.career.seat, market, label) : { title: `Let go by the ${label(myTeam)}`, lines: [] }}
-        desk={gm ?? readGmDesk(undefined)}
-        facts={outFacts}
-        open={gmOpen}
-        onOpen={openDesk}
-        onDesk={changeDesk}
-        onNewFrontOffice={reset}
-      />
+      <div ref={careerRevealRef}>
+        <GmOutOfWork<NflDeskFacts>
+          sport="nfl"
+          card={market ? hostOutOfWorkCard(nflDeskHost, league, outFacts.career.seat, market, label) : { title: `Let go by the ${label(myTeam)}`, lines: [] }}
+          desk={gm ?? readGmDesk(undefined)}
+          facts={outFacts}
+          open={gmOpen}
+          onOpen={openDesk}
+          onDesk={changeDesk}
+          onNewFrontOffice={reset}
+        />
+      </div>
     );
   }
 
@@ -1430,6 +1445,7 @@ export default function FrontOfficeBoard() {
     return (
       <div className="space-y-4">
         <div
+          ref={careerRevealRef}
           data-verdict-reveal
           className={cn(
             'relative overflow-hidden rounded-2xl border bg-card p-5 text-center',
