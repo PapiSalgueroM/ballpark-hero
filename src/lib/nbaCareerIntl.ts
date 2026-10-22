@@ -46,7 +46,7 @@ import {
 import { keyedRng } from '@/lib/keyedRng';
 import { summerCareerKey } from '@/lib/usCareerSummer';
 import type { NbaCareerState } from '@/lib/nbaMyCareer';
-import type { UsIntlSport } from '@/lib/usCareerSport';
+import type { IntlSummerNotes, UsIntlSport } from '@/lib/usCareerSport';
 import {
   INTL_KNOCK_FLOOR, INTL_KNOCK_HEALTH, nbaIntlCallSummer, nbaIntlKnockChance, nbaIntlLift, nbaIntlSummerOf,
   nbaIntlHelpRules, type NbaIntlHelpFacts,
@@ -209,6 +209,23 @@ export function nbaIntlTrophyRows(c: NbaCareerState): { label: string; n: number
   return [...rows.entries()].map(([label, years]) => ({ label, n: years.length, years }));
 }
 
+/** The words of the call card and the result screen (critic advice 15: nothing
+ *  about the real world that goes false on a date, so a drawn field is "the
+ *  game's own", never "not settled yet"). */
+export function nbaIntlSummerNotes(id: string, age: number): IntlSummerNotes {
+  const e = NBA_INTL_CALENDAR.byId(id);
+  return {
+    label: nbaIntlEditionLabel(id),
+    knockPct: Math.round(nbaIntlKnockChance(age) * 100),
+    hurtCost: `health down ${INTL_KNOCK_HEALTH}, never below ${INTL_KNOCK_FLOOR}`,
+    fieldNote: !e || e.kind === 'played' ? null : e.host ? 'This field is the game\'s own.' : 'Host and field are the game\'s own.',
+    playedAsNote: e && !e.shape.playable ? 'The game plays its two group rounds as one, into a round of 16.' : null,
+    happened: e?.kind === 'played',
+    nation: 'USA',
+    statWords: [['pts', 'points'], ['reb', 'rebounds'], ['ast', 'assists']],
+  };
+}
+
 /** The help's facts read off the ledger: simCareerIntl section 2 holds the
  *  gate's NBA_INTL_HELP_FACTS equal to this, so the static help names what the
  *  ledger holds and nothing it does not. */
@@ -236,6 +253,7 @@ export const NBA_CAREER_INTL: UsIntlSport<NbaCareerState> = {
   summersOf: c => (c as NbaIntlCareer).intl?.summers ?? [],
   editionLabel: nbaIntlEditionLabel,
   helpRules: nbaIntlHelpRules,
+  summerNotes: nbaIntlSummerNotes,
 };
 
 export type { CareerIntlBlock, IntlCall, IntlSummerEntry, IntlTournament };

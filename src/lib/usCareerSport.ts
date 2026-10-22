@@ -137,6 +137,27 @@ export interface UsIntlSport<C> {
   editionLabel(id: string): string;
   /** The rules behind the page's ?, built from the bind's constants. */
   helpRules(): string[];
+  /** Round 1544: the words the call card and the result screen print for an edition, at his age that summer. */
+  summerNotes(editionId: string, age: number): IntlSummerNotes;
+}
+
+/** Round 1544: what the national team's two screens print, written by the sport so the screens import none. */
+export interface IntlSummerNotes {
+  /** "the 2004 Olympics in Athens" */
+  label: string;
+  /** the chance he comes home hurt that summer, whole percent, and what it costs in words */
+  knockPct: number;
+  hurtCost: string;
+  /** a line when the game draws the field (an edition still to come, or the game's own), else null */
+  fieldNote: string | null;
+  /** a line when the game plays the edition in another format, else null */
+  playedAsNote: string | null;
+  /** the real tournament was played (so its groups and results here are this career's own) */
+  happened: boolean;
+  /** the nation he plays for, as the tournament names it */
+  nation: string;
+  /** his numbers a game in words: [key on the summer row's avg, word] */
+  statWords: readonly (readonly [string, string])[];
 }
 
 /** Round 1544 (the lead's ruling L5): what the binding holds of a sport's

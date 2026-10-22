@@ -888,7 +888,7 @@ if (SECTIONS.has('12')) {
   const statics = inputsOf([...seen]);
   const lazies = inputsOf(Object.keys(outs).filter(k => !seen.has(k)));
   const has = (set, f) => [...set].some(x => x.endsWith(f));
-  for (const f of ['src/data/basketballIntl.ts', 'src/lib/careerIntl.ts', 'src/lib/nbaCareerIntl.ts']) {
+  for (const f of ['src/data/basketballIntl.ts', 'src/lib/careerIntl.ts', 'src/lib/nbaCareerIntl.ts', 'src/components/us-career/IntlCallUpCard.tsx', 'src/components/us-career/IntlSummerResult.tsx']) {
     check('12', !has(statics, f), `${f} is in the static graph of /nba-my-career`);
     check('12', has(lazies, f), `${f} is in no lazy chunk, so the page cannot load it`);
   }
