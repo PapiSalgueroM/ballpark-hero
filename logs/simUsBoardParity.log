@@ -1,0 +1,12 @@
+Round1424 historical presentation: proved main775 coaching Panel SHA9390fab969844b20ca4f7adbc097664191d3f5ea082090553f479305fe85d321, current engine and unchanged fixture. This replay gives no current-Panel visual parity credit.
+Historical installed aliases: [{"id":"react/jsx-dev-runtime","file":"/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react/jsx-dev-runtime.js","sha256":"25a7dbfdb2ae574b67fcdd2aab811080b415edd1c8043ead46866a533e99320e"},{"id":"react/jsx-runtime","file":"/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react/jsx-runtime.js","sha256":"28170e60f2ff0bc045bc7d175f5849e86f68dd02d76d7255369420718b30295a"},{"id":"react","file":"/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react/index.js","sha256":"a216c390bf956cbb906c66d29fdb2e2ad6999464a5ca83e476533a6f25ad0ef3"},{"id":"lucide-react","file":"/home/runner/work/ballpark-hero/ballpark-hero/node_modules/lucide-react/dist/cjs/lucide-react.js","sha256":"9590413b4a39d32a36ea229b3a06a597a012702546e23f6b6cca998e8de411ea"}]
+A) the fixture is whole
+   recorded from dd033ebf83b59bdb201ad79d7a60461088b56832 (not main: src differs from b967a30991ea83890fee7d1efed14c6827a76203)
+   nfl: 475 clicks, 24 seasons, 19 fixed saves, 928 screen steps; 16 wheel steps, 13 steps saved in an extension talk, 27 in free agency
+   nba: 521 clicks, 24 seasons, 19 fixed saves, 932 screen steps; 14 wheel steps, 13 steps saved in an extension talk, 20 in free agency
+   mlb: 455 clicks, 24 seasons, 19 fixed saves, 886 screen steps; 6 wheel steps, 5 steps saved in an extension talk, 13 in free agency
+   nhl: 421 clicks, 24 seasons, 19 fixed saves, 900 screen steps; 6 wheel steps, 11 steps saved in an extension talk, 6 in free agency
+B) the replay: every click, every save, every screen
+   Vitest exit 0, passed [nfl, nba, mlb, nhl], failed []
+
+simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen with the proved historical main775 coaching Panel.

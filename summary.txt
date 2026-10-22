@@ -1,0 +1,6 @@
+s8 exit=0 2s | simCareerIntl: GREEN, 7 checks over sections 8
+unit exit=0 5s |    Duration  4.65s (transform 2.35s, setup 210ms, collect 3.15s, tests 2.76s, environment 1.23s, prepare 534ms)
+simStorageWrites exit=0 4s | simStorageWrites: all green (owed: 12)
+simUsCareerWeight exit=0 0s | simUsCareerWeight: green. 31 checks: the four wrappers hand the board their own binding, no shared file or binding imports another sport, and every control fired.
+s5 exit=0 9s | simCareerIntl: GREEN, 180087 checks over sections 5
+simUsBoardParity exit=0 47s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen with the proved historical main775 coaching Panel.
