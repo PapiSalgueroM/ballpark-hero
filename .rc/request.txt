@@ -1,0 +1,14 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-new: node_modules/.bin/vitest run src/components/front-office/FrontOfficeSeasonStats.test.tsx src/lib/nflSeasonStats.test.ts --testTimeout=300000 --hookTimeout=120000
+vitest-board1: node_modules/.bin/vitest run src/components/front-office/FrontOfficeTile.test.tsx src/components/front-office/FrontOfficeGameDay.test.tsx src/components/front-office/FrontOfficeOnePress.test.tsx src/components/front-office/FrontOfficePostseason.test.tsx src/test/frontOfficeSaveRecovery.test.tsx --testTimeout=300000 --hookTimeout=120000
+vitest-board2: node_modules/.bin/vitest run src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx src/components/front-office/FrontOfficeLazyDesk.test.tsx src/components/front-office/FrontOfficeCuts.test.tsx src/components/front-office/FrontOfficeFullRoster.test.tsx src/components/front-office/FrontOfficeDraftCapital.test.tsx src/components/front-office/FrontOfficePromotion.test.tsx src/components/front-office/FrontOfficeTagDepth.test.tsx src/components/front-office/FrontOfficeRatingEvidence.test.tsx --testTimeout=300000 --hookTimeout=120000
+sim: node scripts/simNflSeasonStats.mjs
+simGmGameDay: node scripts/simGmGameDay.mjs
+gmgd-statsstory: GM_GAMEDAY_CONTROL=statsstory node scripts/simGmGameDay.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simGmReload: node scripts/simGmReload.mjs
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+simSessionMarks: node scripts/simSessionMarks.mjs
+simNflFullRosters: node scripts/simNflFullRosters.mjs
+simNflTagDepth: node scripts/simNflTagDepth.mjs
+simNbaSeasonStats: node scripts/simNbaSeasonStats.mjs
