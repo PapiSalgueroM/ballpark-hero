@@ -1,0 +1,5 @@
+motionfull exit=0 66s | simLiveSimMotion: green. 64 tests passed (the viewer on real feeds, the pitch part's rules on 200 half feeds and on feeds made by hand, the goal sequence, match mode), an
+motion exit=0 67s |    Duration  67.19s (transform 2.60s, setup 83ms, collect 3.38s, tests 62.51s, environment 398ms, prepare 121ms)
+tsc exit=0 86s | 
+rival exit=0 18s | No rival product names found. 0 findings.
+siblings exit=0 88s |    Duration  87.81s (transform 6.05s, setup 462ms, collect 12.74s, tests 108.41s, environment 3.22s, prepare 866ms)
