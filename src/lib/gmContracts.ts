@@ -73,6 +73,9 @@ export interface GmContractLeague<P extends GmMan = GmMan> {
   freeAgents: P[];
 }
 
+/** Round 1556: a man who let a rival's offer sheet stand, and the club that tabled it, where the desk has put him. */
+export interface GmSheetArrival { id: string; club: string }
+
 /** The three things the desk cannot know without asking the engine. */
 export interface GmContractHost<L extends GmContractLeague = GmContractLeague, R = unknown> {
   sport: GmSportKey;
@@ -80,8 +83,11 @@ export interface GmContractHost<L extends GmContractLeague = GmContractLeague, R
   marketSalary(league: L, man: GmMan): number;
   /** The cap his new deal will be priced against. */
   nextCap(league: L): number;
-  /** The engine's own offseason, untouched. Whatever it returns is handed back as it is: the desk never reads it. */
-  runOffseason(league: L, rng: () => number, team: string): R;
+  /** The engine's own offseason, untouched. Whatever it returns is handed back as it is: the desk never reads it.
+      Round 1556: `arrivals` names every man the desk has just put on a rival club because he let its offer sheet
+      stand, so a host whose summer waives a club down to its limit can keep him there (the NBA's does). A host
+      that ignores it runs exactly as before. */
+  runOffseason(league: L, rng: () => number, team: string, arrivals?: readonly GmSheetArrival[]): R;
   /** True when the engine already holds him for next season (the NFL tag). */
   held?(league: L, man: GmMan): boolean;
   /** The lowest salary the engine signs anybody for. Defaults to 0.5. */
@@ -893,6 +899,7 @@ export function runDeskOffseason<L extends GmContractLeague, R>(
   const applied: GmDecision[] = [];
   const owed: number[] = [];
   const sheets: { id: string; club: string; picks: number[] }[] = [];
+  const arrivals: GmSheetArrival[] = [];
   /* MLB: a pick waiting on a man who turned down the qualifying offer is paid
      once he has turned up at another club, and dropped if he came back here. */
   if (ledger.qoOwed?.length) {
@@ -930,6 +937,7 @@ export function runDeskOffseason<L extends GmContractLeague, R>(
       if (sheetClub) {
         /* He signed the rival's sheet, so he goes to that club on its terms. */
         league.teams[sheetClub].players.push({ ...man, years: (d.years ?? 1) + 1, salary: d.salary ?? man.salary });
+        arrivals.push({ id: man.id, club: sheetClub });
         /* The ladder pays only when he has really gone to the club that tabled it. */
         if (d.picks) { owed.push(...d.picks); sheets.push({ id: man.id, club: sheetClub, picks: [...d.picks] }); }
       } else {
@@ -943,7 +951,7 @@ export function runDeskOffseason<L extends GmContractLeague, R>(
     }
   }
 
-  const engine = host.runOffseason(league, rng, ledger.team);
+  const engine = host.runOffseason(league, rng, ledger.team, arrivals);
 
   /* Every engine resets a club's picks inside its offseason, so picks owed to
      the club go on afterwards or they would be wiped. */

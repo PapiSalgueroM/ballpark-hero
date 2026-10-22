@@ -36,7 +36,7 @@ import {
   type GmContractHost, type GmContractLedger, type GmDecision, autoDecide, expiringMen, isValidLedger, noteArrival,
   openLedger, runDeskOffseason, undecided,
 } from './gmContracts';
-import { nbaContractHost } from './gmContractsHostNba';
+import { nbaContractHost, nbaSummerKeepingSheets } from './gmContractsHostNba';
 import {
   type GmPickLedger, type GmPickRules, NBA_PICK_RULES, findPick, migrateLegacyPicks, movePicks, pickKey,
   pickSwapRefusal, picksHeldBy, rollLedger, validateLedger,
@@ -58,7 +58,7 @@ import { NBA_STAFF_PACK, type NbaStaffPost } from '@/data/gmStaff/packs';
 import { nbaReconcileRotation } from './nbaRotation';
 import {
   EAST, NBA_ROSTER_MAX, NBA_ROSTER_MIN, NBA_ROUNDS, type NbaGmPlayer, type NbaLeague, type NbaProspect,
-  type NbaRoundOptions, nbaCapRoom, nbaCapUsed, nbaFirstApron, nbaOffseason, nbaStrength, nbaTradeValue,
+  type NbaRoundOptions, nbaCapRoom, nbaCapUsed, nbaFirstApron, nbaStrength, nbaTradeValue,
 } from './nbaFrontOffice';
 
 /* ------------------------------------------------------------------ */
@@ -485,7 +485,8 @@ export function nbaDeskAfterRound(desk: GmDesk, league: NbaLeague, team: string)
 export function nbaDeskHost(block: GmStaffBlock<NbaStaffPost>, team: string, season: number): GmContractHost<NbaLeague, string[]> {
   return {
     ...nbaContractHost,
-    runOffseason: (league, rng, my) => nbaOffseason(league, rng, my, {
+    /* Round 1556: through the host's summer, so a man who let a sheet stand stays at the club that tabled it. */
+    runOffseason: (league, rng, my, arrivals) => nbaSummerKeepingSheets(league, rng, my, arrivals, {
       growth: (abbr, p, step) => (abbr === team ? nbaGrowthStep(block, team, season, p.id, step) : step),
     }),
   };
