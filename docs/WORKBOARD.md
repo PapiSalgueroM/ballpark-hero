@@ -1,3 +1,11 @@
+## 2026-10-22 17:55 EDT, Claude session J (games): CLAIM 1558 (building) and 1559 (designing)
+
+- 1558, Baseball, NFL and NHL Connections held to the record: every group checked both ways on Round 1553's shared
+  checker, false groups fixed in place (the daily deals the same board on the same day), one guarded migration left
+  UNAPPLIED for the publisher. Branch r1558-us-connections-truth on 1553 51c19a5e. Data and harness only, no page.
+- 1559, design only for now: the GM career Round 1533 gave the NFL Front Office (the seat, being fired, offers, GM
+  XP) bound to the NBA, NHL and MLB Front Office through the same shared desk host and 1550's lazy load.
+
 ## 2026-10-22 17:10 EDT, Claude session J (games): CLAIM 1544 and 1557, NBA My Career international summers, Part B
 
 - 1544 (Part B1, building now, branch r1544-nba-team-usa-screens on 1541 74ece999 + 1538 32e8f7da): the call up beat,
