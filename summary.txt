@@ -1,0 +1,2 @@
+hall-base exit=1 669s | simCareerHall: RED
+usSummer-6nfl exit=0 1769s | simUsCareerSummer: green. Sections 6 held.

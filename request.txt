@@ -1,0 +1,2 @@
+usSummer-6nfl: SIM_SECTIONS=6 SIM_SPORTS=nfl node scripts/simUsCareerSummer.mjs
+hall-base: git worktree add /tmp/wb 0846f9c5 && ln -s "$PWD/node_modules" /tmp/wb/node_modules && cd /tmp/wb && node scripts/simCareerHall.mjs
