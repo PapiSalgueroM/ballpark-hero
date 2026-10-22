@@ -68,6 +68,18 @@ dukb-handoff/2026-10-10/results-g/finish-1540.md.
   runDeskOffseason is shared by all four desks, so a fix there moves the old desk's byte equal proof), so nothing is
   changed. The NHL desk's summer has the same waive and slice shape and its harness never checks where a let go sheet
   man ends up: unmeasured, for the lead.
+- Item 7, measured further after the third closing check (still NOT FIXED, still the lead's to rule; full report
+  results-g/fix2-1540.md). How often, both kinds of check 2 line counted: 0 of 140 independent careers on the
+  committed name (walk seeds 1..140; runner r1540-fx2-a ran 41..140); 3 of 59 fresh streams red (SIM_SEED 6 and 10 at
+  seed 10 season 2, SIM_SEED 35 at seed 7 season 4, full draft copy only; runners r1540-fx2-a and r1540-fx2-c), so not
+  one spot, about one ten season career in 240. A probe following every man let go on a sheet by id through the summer
+  (runner r1540-fx2-b, positive control SIM_SEED 10 found both lost lines): the earned night's committed stream 14
+  arrivals, all on a roster of 17, none lost; the OLD desk's committed stream (70593dd4's harness) 40 arrivals, 23 of
+  them over fifteen, none waived, none lost; the NHL desk 7 streams, 178 arrivals, none over its limit, none lost; the
+  NFL and MLB desks have no sheets. So a fix that makes room before he arrives would run on the old desk's stream
+  (likely moving its byte equal proof), while one that only spares a sheet arrival from the waiver or the pool cut
+  would, by inference, leave the old desk and the NHL streams as they are. The NHL is latent until its earned draft
+  bind brings the same trigger.
 - Item 8, the Arenas residual: reported in results-g/fix-1540.md, not changed (Round 1018's sheet rule, not this
   round's code; no card line claims the league's limit).
 
