@@ -1,0 +1,48 @@
+NEGATIVE CONTROL ON: fatclass. Sections 6 must go red and no other.
+1) what must not move: the season before the draft, and the desk off fixture
+   1a: 30 seasons to the draft, desk on, every club the user once: league, desk and 315516 draws held to the base 48cb9d4b
+   1b: git diff --quiet 48cb9d4b -- scripts/data/nbaGmDeskFixture.json scripts/simNbaGmDesk.mjs scripts/simNbaDraftCapital.mjs src/lib/nbaGmDesk.ts: exit 0, all equal to the base (printed, not a check)
+6) the class: today's twelve, then the curve, slots plus four, never over 70
+  FAIL [6]: the curve does not fall from band 1 [70,87] to band 2 [70,87]
+  FAIL [6]: the curve does not fall from band 2 [70,87] to band 3 [70,87]
+  FAIL [6]: the curve's last band {"from":46,"to":70,"ovr":[70,87]} does not reach slot 70 at the minimum man's band (66 to 72)
+   1500 classes of 64 for 60 slots: today's twelve found in every one, 78000 men after them held to the curve rating by rating (worst 1.65 standard errors, band 4.5)
+   mean true rating by ten slots: 85.25, 83.44, 81.49, 79.04, 76.06, 73.32, 71.30; steps 1.81, 1.95, 2.45, 2.98, 2.74, 2.02
+2) the lottery through the bind: the sixteen off the numbers, drawn every season, the table's chances
+   90 closed seasons, a lottery drawn on 90 (0 with no level records in the field); 20 of them, 40000 keyed lotteries each: 280 club shares, the worst 2.82 standard errors from the table (band 4.5)
+3) the slot is the truth: every pick used once by its holder at its first owner's place
+   90 drafts, 5400 picks: 451 of the year's picks moved first (56 his), a club with three or more 90 times, a club with none 90 times; on the clock 144 times; 1737 rival rows shown, every one on its club at his scout's read
+4) drawn once: the block survives a round trip, every press, a second open and a swapped table
+   90 nights: each opened twice to the same block, read back after a JSON round trip, unchanged by every press; 90 opened again after Continue and answered as they stood; 30 drafts replayed with the table swapped under the block
+5) the incentive: the worse the finish, the earlier and the better his first selection
+   2700 nights over 90 seasons x 1 classes (450 a band), each club the GM once a class, in 7.4 s
+   new, by finish worst first, his first selection's pick and true rating: 1-5: #4.4 86.4, 6-10: #7.4 86.1, 11-15: #12.9 85.7, 16-20: #17.5 85.1, 21-25: #22.9 84.1, 26-30: #27.9 82.8
+   old, the same clubs today: 1-5: #1.0 85.8, 6-10: #1.0 85.9, 11-15: #1.0 85.9, 16-20: #1.0 85.8, 21-25: #1.0 85.9, 26-30: #1.0 85.9
+   new steps: later by 3.07, 5.47, 4.57, 5.40, 5.07 places; worse by 0.28, 0.41, 0.60, 0.95, 1.33 rating (errors 0.07, 0.08, 0.08, 0.11, 0.11)
+8) the fallback: a block broken mid draft finishes the old way on a valid league
+   150 blocks broken mid draft (year, order, a slot, made past the end, seen): never current, no press ran, 150 finished the old way to a valid league
+9) need: a club short at a position leans to it, and never past a better read by more than the weight
+   5256 rival choices, 5256 of them the rule's man on the engine's grade; none passed a better grade by more than 2; taken when short vs not, in points: G 35.4 (597/4659), F 30.8 (1840/3416), C 26.8 (2682/2574)
+10) the shared half names no sport; neither library draws from Math.random or carries an address
+   src/lib/gmEarnedDraft.ts: 17 imports, all the lift's; no sport named; neither library draws from Math.random or carries an address
+7) the table: the old and new arms on the fleet, and the stop lines (FLEET=full plays, COMBINE judges)
+   the six user clubs by opening strength: BOS strong 85.62, CLE strong 85.34, POR middle 83.26, CHI middle 83.05, MIL weak 79.49, BKN weak 78.23
+   new-fatclass set 2 (seeds 11 to 20), run 1: 60 careers in 36.7 s
+   new-fatclass set 4 (seeds 31 to 40), run 1: 60 careers in 36.1 s
+   shard 1/2: 120 careers in 72.8 s; Math.random called 0 times while the fleet played
+   new-fatclass run 1 set 2: S1 85.94 / 87.70, S2 168.3, S3 68.8 (n 80), S4 97.2 titles 27.8 (n 180), S6 dead 1.33 payers 13.73, signed a night 60.0
+      S5, worst finish first: 1-5 #4.0 86.6 (35), 6-10 #7.4 86.3 (15), 11-15 #12.5 85.8 (22), 16-20 #17.4 85.2 (48), 21-25 #22.8 84.1 (85), 26-30 #29.0 82.6 (395)
+   new-fatclass run 1 set 4: S1 85.94 / 87.74, S2 169.9, S3 71.3 (n 80), S4 97.2 titles 17.2 (n 180), S6 dead 1.35 payers 13.79, signed a night 60.0
+      S5, worst finish first: 1-5 #4.4 86.2 (33), 6-10 #7.6 86.0 (14), 11-15 #12.8 85.6 (25), 16-20 #17.9 85.0 (50), 21-25 #22.3 84.1 (63), 26-30 #29.0 82.7 (415)
+   section 1: green
+   section 6: 3 failures
+   section 2: green
+   section 3: green
+   section 4: green
+   section 5: green
+   section 8: green
+   section 9: green
+   section 10: green
+   section 7: green
+   10 sections ran (1, 6, 2, 3, 4, 5, 8, 9, 10, 7), 213637 checks
+simNbaEarnedDraft: CONTROL fatclass FIRED. Red in section 6 (3 failures).
