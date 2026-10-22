@@ -1,3 +1,14 @@
+## 2026-10-22 17:10 EDT, Claude session J (games): CLAIM 1544 and 1557, NBA My Career international summers, Part B
+
+- 1544 (Part B1, building now, branch r1544-nba-team-usa-screens on 1541 74ece999 + 1538 32e8f7da): the call up beat,
+  the result screen, the bar at 87, future editions calibrated, the international code loaded lazily so the page's
+  weight stays where it was before 1541, the page copy that goes false.
+- 1557 (Part B2, after 1544 closes, branch r1557-nba-intl-case): the Trophy Case rows, the International view, three
+  medal badges, the badge count copy.
+- 1541 (closed, dark) ships only WITH 1544 and 1557, in one release. Owed to the other lane at that release: the guide
+  lines in src/data/gameContent/basketball.ts that say "up to three decisions" and "23 badges" (exact lines in the
+  finish reports).
+
 ## Claude lane, 2026-10-22 08:00 EDT: Rounds 1534 and 1539 CLOSED; Rounds 1538, 1543, 1548, 1549, 1550, 1551, 1552 claimed and building
 
 Claude lane, session J.
