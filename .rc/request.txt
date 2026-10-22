@@ -1,0 +1,7 @@
+#!serial
+m-clock1740: bash .rc/x/runset.sh clock1740 away help vaway
+m-clock1620: bash .rc/x/runset.sh clock1620 away help vaway
+m-hookround: bash .rc/x/runset.sh hookround away vaway
+m-modal30: bash .rc/x/runset.sh modal30 help vhelp vaway
+m-guidehalf: bash .rc/x/runset.sh guidehalf help headings search
+m-nofriendly: bash .rc/x/runset.sh nofriendly plant away
