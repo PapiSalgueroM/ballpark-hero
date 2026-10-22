@@ -1,0 +1,2 @@
+simOneOffCups: node scripts/simOneOffCups.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+simWorldUcl: node scripts/simWorldUcl.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
