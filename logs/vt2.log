@@ -1,0 +1,40 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/components/nba-front-office/NbaGmDeskBoard.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 878[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1018: the NBA GM desk on the real board[2m > [22mdesk on: draft night ends in the desk summer, the GM calls applied and the rookie scale signed [33m 417[2mms[22m[39m
+ [32m✓[39m src/components/nba-front-office/NbaFrontOfficeRatingEvidence.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 2949[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA actual opening ratings and readable saved evidence[2m > [22mdrops a real pending rating import after unmount without overwriting a newer save [33m 686[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA actual opening ratings and readable saved evidence[2m > [22mstarts actual DEN with all300 reviewed prices ratings and opening evidence [33m 589[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA actual opening ratings and readable saved evidence[2m > [22msettles two same-frame franchise clicks with one initializer and one save [33m 597[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA actual opening ratings and readable saved evidence[2m > [22mrefuses an invalid opening version without overwriting another save and retries cleanly [33m 729[2mms[22m[39m
+ [32m✓[39m src/components/nba-front-office/NbaTradeLists.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 576[2mms[22m[39m
+ [32m✓[39m src/components/nba-front-office/NbaSeasonStats.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 1611[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA Front Office: the season in numbers[2m > [22mdraws the awards the engine named, the leaders and the club lines, labelled as the sim season [33m 631[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA Front Office: the season in numbers[2m > [22ma reload draws the same awards and writes nothing twice [33m 345[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA Front Office: the season in numbers[2m > [22ma save from before the round closes its season without lines and says so [33m 349[2mms[22m[39m
+ [32m✓[39m src/components/nba-front-office/NbaRotationPanel.test.tsx [2m([22m[2m15 tests[22m[2m)[22m[33m 6677[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA rotation UI with real board persistence[2m > [22mpreserves an old automatic save and exact original strength as an independent baseline [33m 530[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA rotation UI with real board persistence[2m > [22mswaps a bench player into the starting five and saves the actual changed strength [33m 417[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA rotation UI with real board persistence[2m > [22mpreserves two distinct selections without overwriting the first saved choice [33m 480[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA rotation UI with real board persistence[2m > [22mdisables injured options and rejects a forced injured selection without changing the save [33m 442[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA rotation UI with real board persistence[2m > [22mrestores automatic selection by removing its saved preference and announces only that action [33m 462[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA rotation UI with real board persistence[2m > [22mreloads saved manual choices quietly with identical persisted bytes [33m 405[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA rotation UI with real board persistence[2m > [22mkeeps an injured preferred slot visible with its actual healthy cover [33m 377[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA rotation UI with real board persistence[2m > [22mkeeps thin roster bench roles and minutes in place when an injured starter has no cover [33m 668[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA rotation UI with real board persistence[2m > [22mgives a chosen bench prospect real simulated games and points while automatic leaves him outside the eight [33m 1024[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA rotation UI with real board persistence[2m > [22mmoves opening and return focus to the exact controls with preventScroll [33m 514[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA rotation UI with real board persistence[2m > [22mshows earned update feedback once with finite motion reduced motion and native sized controls [33m 585[2mms[22m[39m
+ [32m✓[39m src/components/nba-front-office/NbaRotationReset.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 2792[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA rotation view lifecycle across actual Board restart[2m > [22mkeeps ordinary restored roster and local save unchanged as an independent baseline [33m 590[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA rotation view lifecycle across actual Board restart[2m > [22mkeeps ordinary new-franchise restart and own-key deletion as an independent baseline [33m 1156[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA rotation view lifecycle across actual Board restart[2m > [22mcloses the previous rotation view before a new franchise opens its roster [33m 1043[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m6 passed[39m[22m[90m (6)[39m
+[2m      Tests [22m [1m[32m38 passed[39m[22m[90m (38)[39m
+[2m   Start at [22m 05:32:54
+[2m   Duration [22m 10.22s[2m (transform 1.61s, setup 657ms, collect 6.40s, tests 15.48s, environment 3.40s, prepare 1.19s)[22m
+

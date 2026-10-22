@@ -1,0 +1,26 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/mlbTradeRoster.test.tsx[2m > [22mactual MLB whole-roster trade access[2m > [22mholds the original first-eight rating and tied order without writes or choices[33m 487[2mms[22m[39m
+ [32m✓[39m src/test/mlbTradeRoster.test.tsx[2m > [22mactual MLB whole-roster trade access[2m > [22mreaches all Finder choices with truthful counts, stable earlier nodes and native focus[33m 562[2mms[22m[39m
+ [32m✓[39m src/test/mlbTradeRoster.test.tsx[2m > [22mactual MLB whole-roster trade access[2m > [22mreaches all manual send choices and shares the exact selected ID with Finder[33m 522[2mms[22m[39m
+ [32m✓[39m src/test/mlbTradeRoster.test.tsx[2m > [22mactual MLB whole-roster trade access[2m > [22mreaches every partner choice and resets only its page when changing clubs[33m 778[2mms[22m[39m
+ [32m✓[39m src/test/mlbTradeRoster.test.tsx[2m > [22mactual MLB whole-roster trade access[2m > [22mshops a later exact own ID through original Finder and accepts its unchanged full Save[33m 1084[2mms[22m[39m
+ [32m✓[39m src/test/mlbTradeRoster.test.tsx[2m > [22mactual MLB whole-roster trade access[2m > [22mopens and commits a later exact manual pair through original talks and salary/pick rules[33m 451[2mms[22m[39m
+ [32m✓[39m src/test/mlbTradeRoster.test.tsx[2m > [22mactual MLB whole-roster trade access[2m > [22mkeeps later released-player refusals quiet and focuses the count when no receive choice is enabled[33m 332[2mms[22m[39m
+ [32m✓[39m src/test/mlbTradeRoster.test.tsx[2m > [22mactual MLB whole-roster trade access[2m > [22mholds an independent original-helper first-eight baseline without roster, RNG or save mutation[32m 16[2mms[22m[39m
+ [32m✓[39m src/test/mlbTradeRoster.test.tsx[2m > [22mactual MLB whole-roster trade access[2m > [22mblocks held-key default activation on newly exposed choices while fresh keys stay usable[33m 368[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m9 passed[39m[22m[90m (9)[39m
+[2m   Start at [22m 05:30:52
+[2m   Duration [22m 7.14s[2m (transform 1.08s, setup 94ms, collect 1.59s, tests 4.60s, environment 426ms, prepare 153ms)[22m
+
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+simMlbTradeRoster: nine actual Board/helper outcomes passed.
+simMlbTradeRoster: all current own/partner IDs, original first-eight ties, exact Finder/manual callbacks, full Save and salary/pick rules exercised.
+simMlbTradeRoster: stable retained rows, quiet paging/selection/refusals, focus and native-repeat default cancellation exercised; pixel/native flow remains separate.
+simMlbTradeRoster: original Board, scoped CSS, engines, completion and transaction helpers remain byte-held; only owned copies are written.

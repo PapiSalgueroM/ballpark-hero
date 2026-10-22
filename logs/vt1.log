@@ -1,0 +1,48 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/components/front-office/FrontOfficeTagDepth.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 1684[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL Front Office: the depth chart and the franchise tag on the board[2m > [22mopens the chart from the Roster box, swaps two men on two taps, saves the order and moves strength [33m 1188[2mms[22m[39m
+ [32m✓[39m src/components/front-office/FrontOfficeTile.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[33m 3325[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office: the Game Day tile[2m > [22mthe week box holds a tile: the next game before a press, his saved final after it, and again after a remount [33m 999[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office: the Game Day tile[2m > [22mWATCH IS THE SAME PRESS and gives nothing away: the page is the week before it until full time, and the save is the played week's [33m 456[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office: the Game Day tile[2m > [22mNO SPOILER ON THE OWNER CARD: while he watches, its pace line is the one of before the press, and at full time the saved league's [33m 527[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office: the Game Day tile[2m > [22mHIS SEED IS COUNTED FROM 1: on a club that holds a seed the standing line is the engine's own seeding of the saved league [33m 314[2mms[22m[39m
+[90mstdout[2m | src/components/nba-front-office/NbaDraftNightRivals.test.tsx[2m > [22m[2mNBA draft night, GM desk off: the card shows the picks the engine made[2m > [22m[2mthe rival rows are the picks the engine made, in order, each on the club its row names
+[22m[39mNBA draft night, desk off: the engine took 5 for rival clubs, the card drew 5 rival rows
+
+ [32m✓[39m src/components/mlb-front-office/MlbDraftCapital.test.tsx [2m([22m[2m18 tests[22m[2m)[22m[33m 5838[2mms[22m[39m
+   [33m[2m✓[22m[39m 966 MLB real draft-capital consequences[2m > [22mordinary two choices keep the original two five-rival batches full offseason salaries and RNG [33m 1027[2mms[22m[39m
+   [33m[2m✓[22m[39m 966 MLB real draft-capital consequences[2m > [22mone actual pick consumes exactly once through a same-frame duplicate and refresh [33m 510[2mms[22m[39m
+   [33m[2m✓[22m[39m 966 MLB real draft-capital consequences[2m > [22mfour acquired rights add four real players but only the two ordinary CPU batches [33m 837[2mms[22m[39m
+   [33m[2m✓[22m[39m 966 MLB real draft-capital consequences[2m > [22mlegacy two-left with one actual right closes and drains the ordinary CPU quota after that choice [33m 454[2mms[22m[39m
+   [33m[2m✓[22m[39m 966 MLB real draft-capital consequences[2m > [22man exhausted legacy prospect board can be replaced without losing earlier players or rights [33m 443[2mms[22m[39m
+   [33m[2m✓[22m[39m 966 MLB real draft-capital consequences[2m > [22mmalformed pick progress retains exact raw bytes until explicit own-key discard [33m 916[2mms[22m[39m
+   [33m[2m✓[22m[39m 966 MLB real draft-capital consequences[2m > [22mthe final human choice runs one actual offseason on repeated same-frame input [33m 483[2mms[22m[39m
+[90mstdout[2m | src/components/nba-front-office/NbaDraftNightRivals.test.tsx[2m > [22m[2mNBA draft night, GM desk off: the card shows the picks the engine made[2m > [22m[2mevery rival row carries the grade the draft screen printed for that prospect before the press
+[22m[39mNBA draft night, desk off: 5 of 5 rival rows were on the draft screen before the press, each grade equal
+
+[90mstdout[2m | src/components/nba-front-office/NbaDraftNightRivals.test.tsx[2m > [22m[2mNBA draft night, GM desk on: the card shows the picks the engine made[2m > [22m[2mthe rival rows are the picks the engine made, in order, each on the club its row names
+[22m[39mNBA draft night, desk on: the engine took 5 for rival clubs, the card drew 5 rival rows
+
+[90mstdout[2m | src/components/nba-front-office/NbaDraftNightRivals.test.tsx[2m > [22m[2mNBA draft night, GM desk on: the card shows the picks the engine made[2m > [22m[2mevery rival row carries the grade the draft screen printed for that prospect before the press
+[22m[39mNBA draft night, desk on: 5 of 5 rival rows were on the draft screen before the press, each grade equal
+
+ [32m✓[39m src/components/nba-front-office/NbaDraftNightRivals.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 897[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA draft night, GM desk off: the card shows the picks the engine made[2m > [22mthe case is the one it says it is: the first press leaves the draft open with no summer run [33m 356[2mms[22m[39m
+ [32m✓[39m src/components/mlb-front-office/MlbGmDesk.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 1673[2mms[22m[39m
+   [33m[2m✓[22m[39m 1020 MLB GM desk on the board[2m > [22man old save shows the desk boxes and stays off until one is tapped [33m 386[2mms[22m[39m
+   [33m[2m✓[22m[39m 1020 MLB GM desk on the board[2m > [22ma desk save plays October with the staff edge and takes its winter through the re-sign desk [33m 657[2mms[22m[39m
+   [33m[2m✓[22m[39m 1020 MLB GM desk on the board[2m > [22man old save walks the same season with no desk: nothing handed to the engine, nothing written down [33m 363[2mms[22m[39m
+ [32m✓[39m src/components/front-office/FrontOfficeRatingEvidence.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 1238[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL saved opening rating evidence[2m > [22mexplains a partial new estimate instead of reusing the old draft-only claim [33m 459[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL saved opening rating evidence[2m > [22mretains the original evidence after transfer, development and reload [33m 390[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m6 passed[39m[22m[90m (6)[39m
+[2m      Tests [22m [1m[32m47 passed[39m[22m[90m (47)[39m
+[2m   Start at [22m 05:32:37
+[2m   Duration [22m 15.36s[2m (transform 5.11s, setup 929ms, collect 13.75s, tests 14.65s, environment 6.11s, prepare 1.39s)[22m
+
