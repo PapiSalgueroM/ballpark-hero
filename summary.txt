@@ -1,0 +1,6 @@
+simCfbDynasty exit=1 4s | simCfbDynasty: 9 failure(s)
+simCbbStaff exit=1 20s | simCbbStaff: 6 failure(s)
+simCfbStaff exit=1 58s | Node.js v24.22.1
+vitest-college exit=1 12s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/college-dynasty/collegeDynastyFixture.test.tsx,title=src/components/college-dynasty/collegeDynas
+tsc exit=0 90s | 
+simCollegeSeat exit=0 347s | simCollegeSeat: all sections green (S1 to S9 and SY)

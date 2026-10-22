@@ -1,0 +1,445 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/components/cbb-dynasty/CbbDynastyDepth.test.tsx [2m([22m[2m6 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 837[2mms[22m[39m
+   [32m✓[39m CBB Dynasty: the program layer on the board[2m > [22mplays a save from before assistant coaches existed without adding anything to it[32m 203[2mms[22m[39m
+   [32m✓[39m CBB Dynasty: the program layer on the board[2m > [22mgives a save from before assistant coaches existed the program layer when its offseason closes[32m 172[2mms[22m[39m
+[31m   [31m×[31m CBB Dynasty: the program layer on the board[2m > [22mgives a new dynasty its assistants and a schedule with a strength[39m[32m 135[2mms[22m[39m
+[31m     → Unable to find an element with the text: /rivalry night: North Carolina, the in-state game \(both in North Carolina\)/. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"space-y-4"[31m
+    [36m>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"flex flex-wrap items-center justify-center gap-2 text-xs"[31m
+      [36m>[31m
+        [36m<span[31m
+          [33mclass[31m=[32m"rounded-full px-3 py-1 font-bold text-white"[31m
+          [33mstyle[31m=[32m"background: rgb(0, 48, 135);"[31m
+        [36m>[31m
+          [0mDuke[0m
+        [36m</span>[31m
+        [36m<span[31m
+          [33mclass[31m=[32m"rounded-full border border-border bg-card px-3 py-1 text-muted-foreground"[31m
+        [36m>[31m
+          [0m2026-27[0m
+          [0m · [0m
+          [0mRound[0m
+          [0m [0m
+          [0m1[0m
+          [0m/[0m
+          [0m10[0m
+        [36m</span>[31m
+        [36m<span[31m
+          [33mclass[31m=[32m"rounded-full border border-border bg-card px-3 py-1 text-muted-foreground"[31m
+        [36m>[31m
+          [0mRecord [0m
+          [36m<b[31m
+            [33mclass[31m=[32m"text-foreground"[31m
+          [36m>[31m
+            [0m0[0m
+            [0m-[0m
+            [0m0[0m
+          [36m</b>[31m
+        [36m</span>[31m
+        [36m<span[31m
+          [33mclass[31m=[32m"rounded-full border border-border bg-card px-3 py-1 text-muted-foreground"[31m
+        [36m>[31m
+          [0mRank [0m
+          [36m<b[31m
+            [33mclass[31m=[32m"text-primary"[31m
+          [36m>[31m
+            [0m#[0m
+            [0m1[0m
+          [36m</b>[31m
+        [36m</span>[31m
+        [36m<span[31m
+          [33mclass[31m=[32m"rounded-full border border-border bg-card px-3 py-1 text-muted-foreground"[31m
+        [36m>[31m
+          [0mStrength [0m
+          [36m<b[31m
+            [33mclass[31m=[32m"text-primary"[31m
+          [36m>[31m
+            [0m91[0m
+          [36m</b>[31m
+        [36m</span>[31m
+      [36m</div>[31m
+      [36m<button[31m
+        [33mclass[31m=[32m"h-36 flex w-full flex-col justify-center gap-1 overflow-hidden rounded-2xl border border-gold/40 bg-card px-4 py-2 text-left hover:border-gold/70"[31m
+        [33mdata-college-seat[31m=[32m"tile"[31m
+        [33mtype[31m=[32m"button"[31m
+      [36m>[31m
+        [36m<span[31m
+          [33mclass[31m=[32m"sr-only"[31m
+        [36m>[31m
+          [0mOpen the athletic director's card. [0m
+        [36m</span>[31m
+        [36m<span[31m
+          [33mclass[31m=[32m"flex items-center justify-between text-xs font-bold uppercase tracking-wider text-muted-foreground"[31m
+        [36m>[31m
+          [36m<span>[31m
+            [0mAthletic director[0m
+          [36m</span>[31m
+          [36m<span[31m
+            [33mclass[31m=[32m"text-foreground"[31m
+          [36m>[31m
+            [0mTrust [0m
+            [0m60[0m
+          [36m</span>[31m
+        [36m</span>[31m
+        [36m<span[31m
+          [33maria-hidden[31m=[32m"true"[31m
+          [33mclass[31m=[32m"block h-1.5 w-full overflow-hidden rounded-full bg-secondary"[31m
+        [36m>[31m
+          [36m<span[31m
+            [33mclass[31m=[32m"block h-full rounded-full bg-primary"[31m
+            [33mstyle[31m=[32m"width: 60%;"[31m
+          [36m/>[31m
+        [36m</span>[31m
+        [36m<span[31m
+          [33mclass[31m=[32m"line-clamp-3 text-xs text-foreground"[31m
+        [36m>[31m
+          [0mWin the national title. Anything short of it and the boosters start asking questions.[0m
+        [36m</span>[31m
+        [36m<span[31m
+          [33mclass[31m=[32m"line-clamp-2 text-xs text-primary"[31m
+        [36m>[31m
+          [0mIn the postseason picture. Hold it.[0m
+        [36m</span>[31m
+      [36m</button>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"flex items-center justify-center gap-0.5 rounded-full bg-secondary p-1 text-xs sm:gap-1"[31m
+      [36m>[31m
+        [36m<button[31m
+          [33mclass[31m=[32m"inline-flex items-center gap-1 rounded-full px-1.5 py-1.5 font-semibold transition-all min-[360px]:px-2 sm:px-3 bg-background text-foreground shadow-sm"[31m
+        [36m>[31m
+          [36m<svg[31m
+            [33mclass[31m=[32m"lucide lucide-users hidden h-3.5 w-3.5 sm:inline"[31m
+            [33mfill[31m=[32m"none"[31m
+            [33mheight[31m=[32m"24"[31m
+            [33mstroke[31m=[32m"currentColor"[31m
+            [33mstroke-linecap[31m=[32m"round"[31m
+            [33mstroke-linejoin[31m=[32m"round"[31m
+            [33mstroke-width[31m=[32m"2"[31m
+            [33mviewBox[31m=[32m"0 0 24 24"[31m
+            [33mwidth[31m=[32m"24"[31m
+            [33mxmlns[31m=[32m"http://www.w3.org/2000/svg"[31m
+          [36m>[31m
+            [36m<path[31m
+              [33md[31m=[32m"M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"[31m
+            [36m/>[31m
+            [36m<circle[31m
+              [33mcx[31m=[32m"9"[31m
+              [33mcy[31m=[32m"7"[31m
+              [33mr[31m=[32m"4"[31m
+            [36m/>[31m
+            [36m<path[31m
+              [33md[31m=[32m"M22 21v-2a4 4 0 0 0-3-3.87"[31m
+            [36m/>[31m
+            [36m<path[31m
+              [33md[31m=[32m"M16 3.13a4 4 0 0 1 0 7.75"[31m
+            [36m/>[31m
+          [36m</svg>[31m
+          [0m [0m
+          [0mRoster[0m
+        [36m</button>[31m
+        [36m<button[31m
+          [33mclass[31m=[32m"inline-flex items-center gap-1 rounded-full px-1.5 py-1.5 font-semibold transition-all min-[360px]:px-2 sm:px-3 text-muted-foreground hover:text-foreground"[31m
+        [36m>[31m
+          [36m<svg[31m
+            [33mclass[31m=[32m"lucide lucide-shield-half hidden h-3.5 w-3.5 sm:inline"[31m
+            [33mfill[31m=[32m"none"[31m
+            [33mheight[31m=[32m"24"[31m
+            [33mstroke[31m=[32m"currentColor"[31m
+            [33mstroke-linecap[31m=[32m"round"[31m
+            [33mstroke-linejoin[31m=[32m"round"[31m
+            [33mstroke-width[31m=[32m"2"[31m
+            [33mviewBox[31m=[32m"0 0 24 24"[31m
+            [33mwidth[31m=[32m"24"[31m
+            [33mxmlns[31m=[32m"http://www.w3.org/2000/svg"[31m
+          [36m>[31m
+            [36m<path[31m
+              [33md[31m=[32m"M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"[31m
+            [36m/>[31m
+            [36m<path[31m
+              [33md[31m=[32m"M12 22V2"[31m
+            [36m/>[31m
+          [36m</svg>[31m
+          [0m [0m
+          [0mPlay[0m
+        [36m</button>[31m
+        [36m<button[31m
+          [33mclass[31m=[32m"inline-flex items-center gap-1 rounded-full px-1.5 py-1.5 font-semibold transition-all min-[360px]:px-2 sm:px-3 text-muted-foreground hover:text-foreground"[31m
+        [36m>[31m
+     ...[39m
+   [32m✓[39m CBB Dynasty: the program layer on the board[2m > [22mrefuses an assistant the pot cannot cover and changes nothing[32m 114[2mms[22m[39m
+   [32m✓[39m CBB Dynasty: the program layer on the board[2m > [22mlets an assistant go, puts his pay back in the pot, and hires into the empty chair[32m 94[2mms[22m[39m
+   [32m✓[39m CBB Dynasty: the program layer on the board[2m > [22ma reload on the recap draws the recap again, and an older recap save goes to recruiting, never replaying the season[32m 114[2mms[22m[39m
+ [32m✓[39m src/components/cfb-dynasty/CfbDynastyDepth.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 664[2mms[22m[39m
+ [31m❯[39m src/components/college-dynasty/collegeDynastyFixture.test.tsx [2m([22m[2m4 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[33m 4782[2mms[22m[39m
+[31m   [31m×[31m Round 912: both college dynasty boards hold their recorded behaviour[2m > [22mcfb: every step matches the fixture[39m[33m 2847[2mms[22m[39m
+[31m     → expected 'step 0 (pick) differs in html, text\n…' to be '' // Object.is equality[39m
+   [32m✓[39m Round 912: both college dynasty boards hold their recorded behaviour[2m > [22mcfb: the replay ran with the athletic director on, and an old save was offered him and not given him[32m 1[2mms[22m[39m
+[31m   [31m×[31m Round 912: both college dynasty boards hold their recorded behaviour[2m > [22mcbb: every step matches the fixture[39m[33m 1929[2mms[22m[39m
+[31m     → expected 'step 1 (start) differs in html, text,…' to be '' // Object.is equality[39m
+   [32m✓[39m Round 912: both college dynasty boards hold their recorded behaviour[2m > [22mcbb: the replay ran with the athletic director on, and an old save was offered him and not given him[32m 0[2mms[22m[39m
+ [32m✓[39m src/components/cfb-dynasty/CfbDynastyBoard.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 566[2mms[22m[39m
+   [33m[2m✓[22m[39m CFB Dynasty: the season closes once[2m > [22mdraws the recap again after a reload and does not replay the season [33m 334[2mms[22m[39m
+[90mstdout[2m | src/components/college-dynasty/CollegeSeat.test.tsx[2m > [22m[2mRound 1320: a buyout bid after a big year[2m > [22m[2mcfb: a second dynasty in one mount takes its own bid, though its key matches the first one's
+[22m[39mcfb: the second dynasty's bid came on try 39 at Miami, of 25 programs that can bid
+
+[90mstdout[2m | src/components/college-dynasty/CollegeSeat.test.tsx[2m > [22m[2mRound 1320: a buyout bid after a big year[2m > [22m[2mcbb: a second dynasty in one mount takes its own bid, though its key matches the first one's
+[22m[39mcbb: the second dynasty's bid came on try 1 at Virginia, of 22 programs that can bid
+
+ [32m✓[39m src/components/college-dynasty/CollegeSeat.test.tsx [2m([22m[2m18 tests[22m[2m)[22m[33m 9485[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1320: the athletic director on the college boards[2m > [22mcfb: a new dynasty starts with him, the tile carries the ask, and the card opens and closes [33m 309[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1320: the athletic director on the college boards[2m > [22mcfb: the live line follows the record, and the recap grades the year and moves trust [33m 325[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1320: the athletic director on the college boards[2m > [22mcfb: Take the job moves him once and opens the new program's trail; Sit the year out plays a season without him [33m 324[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1320: a buyout bid after a big year[2m > [22mcfb: a second dynasty in one mount takes its own bid, though its key matches the first one's [33m 6178[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 3 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/components/cbb-dynasty/CbbDynastyDepth.test.tsx[2m > [22mCBB Dynasty: the program layer on the board[2m > [22mgives a new dynasty its assistants and a schedule with a strength
+[31m[1mTestingLibraryElementError[22m[39m: Unable to find an element with the text: /rivalry night: North Carolina, the in-state game \(both in North Carolina\)/. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"space-y-4"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"flex flex-wrap items-center justify-center gap-2 text-xs"[39m
+      [36m>[39m
+        [36m<span[39m
+          [33mclass[39m=[32m"rounded-full px-3 py-1 font-bold text-white"[39m
+          [33mstyle[39m=[32m"background: rgb(0, 48, 135);"[39m
+        [36m>[39m
+          [0mDuke[0m
+        [36m</span>[39m
+        [36m<span[39m
+          [33mclass[39m=[32m"rounded-full border border-border bg-card px-3 py-1 text-muted-foreground"[39m
+        [36m>[39m
+          [0m2026-27[0m
+          [0m · [0m
+          [0mRound[0m
+          [0m [0m
+          [0m1[0m
+          [0m/[0m
+          [0m10[0m
+        [36m</span>[39m
+        [36m<span[39m
+          [33mclass[39m=[32m"rounded-full border border-border bg-card px-3 py-1 text-muted-foreground"[39m
+        [36m>[39m
+          [0mRecord [0m
+          [36m<b[39m
+            [33mclass[39m=[32m"text-foreground"[39m
+          [36m>[39m
+            [0m0[0m
+            [0m-[0m
+            [0m0[0m
+          [36m</b>[39m
+        [36m</span>[39m
+        [36m<span[39m
+          [33mclass[39m=[32m"rounded-full border border-border bg-card px-3 py-1 text-muted-foreground"[39m
+        [36m>[39m
+          [0mRank [0m
+          [36m<b[39m
+            [33mclass[39m=[32m"text-primary"[39m
+          [36m>[39m
+            [0m#[0m
+            [0m1[0m
+          [36m</b>[39m
+        [36m</span>[39m
+        [36m<span[39m
+          [33mclass[39m=[32m"rounded-full border border-border bg-card px-3 py-1 text-muted-foreground"[39m
+        [36m>[39m
+          [0mStrength [0m
+          [36m<b[39m
+            [33mclass[39m=[32m"text-primary"[39m
+          [36m>[39m
+            [0m91[0m
+          [36m</b>[39m
+        [36m</span>[39m
+      [36m</div>[39m
+      [36m<button[39m
+        [33mclass[39m=[32m"h-36 flex w-full flex-col justify-center gap-1 overflow-hidden rounded-2xl border border-gold/40 bg-card px-4 py-2 text-left hover:border-gold/70"[39m
+        [33mdata-college-seat[39m=[32m"tile"[39m
+        [33mtype[39m=[32m"button"[39m
+      [36m>[39m
+        [36m<span[39m
+          [33mclass[39m=[32m"sr-only"[39m
+        [36m>[39m
+          [0mOpen the athletic director's card. [0m
+        [36m</span>[39m
+        [36m<span[39m
+          [33mclass[39m=[32m"flex items-center justify-between text-xs font-bold uppercase tracking-wider text-muted-foreground"[39m
+        [36m>[39m
+          [36m<span>[39m
+            [0mAthletic director[0m
+          [36m</span>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"text-foreground"[39m
+          [36m>[39m
+            [0mTrust [0m
+            [0m60[0m
+          [36m</span>[39m
+        [36m</span>[39m
+        [36m<span[39m
+          [33maria-hidden[39m=[32m"true"[39m
+          [33mclass[39m=[32m"block h-1.5 w-full overflow-hidden rounded-full bg-secondary"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"block h-full rounded-full bg-primary"[39m
+            [33mstyle[39m=[32m"width: 60%;"[39m
+          [36m/>[39m
+        [36m</span>[39m
+        [36m<span[39m
+          [33mclass[39m=[32m"line-clamp-3 text-xs text-foreground"[39m
+        [36m>[39m
+          [0mWin the national title. Anything short of it and the boosters start asking questions.[0m
+        [36m</span>[39m
+        [36m<span[39m
+          [33mclass[39m=[32m"line-clamp-2 text-xs text-primary"[39m
+        [36m>[39m
+          [0mIn the postseason picture. Hold it.[0m
+        [36m</span>[39m
+      [36m</button>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"flex items-center justify-center gap-0.5 rounded-full bg-secondary p-1 text-xs sm:gap-1"[39m
+      [36m>[39m
+        [36m<button[39m
+          [33mclass[39m=[32m"inline-flex items-center gap-1 rounded-full px-1.5 py-1.5 font-semibold transition-all min-[360px]:px-2 sm:px-3 bg-background text-foreground shadow-sm"[39m
+        [36m>[39m
+          [36m<svg[39m
+            [33mclass[39m=[32m"lucide lucide-users hidden h-3.5 w-3.5 sm:inline"[39m
+            [33mfill[39m=[32m"none"[39m
+            [33mheight[39m=[32m"24"[39m
+            [33mstroke[39m=[32m"currentColor"[39m
+            [33mstroke-linecap[39m=[32m"round"[39m
+            [33mstroke-linejoin[39m=[32m"round"[39m
+            [33mstroke-width[39m=[32m"2"[39m
+            [33mviewBox[39m=[32m"0 0 24 24"[39m
+            [33mwidth[39m=[32m"24"[39m
+            [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+          [36m>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"[39m
+            [36m/>[39m
+            [36m<circle[39m
+              [33mcx[39m=[32m"9"[39m
+              [33mcy[39m=[32m"7"[39m
+              [33mr[39m=[32m"4"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M22 21v-2a4 4 0 0 0-3-3.87"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M16 3.13a4 4 0 0 1 0 7.75"[39m
+            [36m/>[39m
+          [36m</svg>[39m
+          [0m [0m
+          [0mRoster[0m
+        [36m</button>[39m
+        [36m<button[39m
+          [33mclass[39m=[32m"inline-flex items-center gap-1 rounded-full px-1.5 py-1.5 font-semibold transition-all min-[360px]:px-2 sm:px-3 text-muted-foreground hover:text-foreground"[39m
+        [36m>[39m
+          [36m<svg[39m
+            [33mclass[39m=[32m"lucide lucide-shield-half hidden h-3.5 w-3.5 sm:inline"[39m
+            [33mfill[39m=[32m"none"[39m
+            [33mheight[39m=[32m"24"[39m
+            [33mstroke[39m=[32m"currentColor"[39m
+            [33mstroke-linecap[39m=[32m"round"[39m
+            [33mstroke-linejoin[39m=[32m"round"[39m
+            [33mstroke-width[39m=[32m"2"[39m
+            [33mviewBox[39m=[32m"0 0 24 24"[39m
+            [33mwidth[39m=[32m"24"[39m
+            [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+          [36m>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M12 22V2"[39m
+            [36m/>[39m
+          [36m</svg>[39m
+          [0m [0m
+          [0mPlay[0m
+        [36m</button>[39m
+        [36m<button[39m
+          [33mclass[39m=[32m"inline-flex items-center gap-1 rounded-full px-1.5 py-1.5 font-semibold transition-all min-[360px]:px-2 sm:px-3 text-muted-foreground hover:text-foreground"[39m
+        [36m>[39m
+     ...
+[90m [2m❯[22m Object.getElementError node_modules/@testing-library/dom/dist/config.js:[2m37:19[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m76:38[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m52:17[22m[39m
+[90m [2m❯[22m getByText node_modules/@testing-library/dom/dist/query-helpers.js:[2m95:19[22m[39m
+[36m [2m❯[22m src/components/cbb-dynasty/CbbDynastyDepth.test.tsx:[2m109:19[22m[39m
+    [90m107| [39m    [34mexpect[39m(s[33m.[39mst[33m.[39mteams[33m.[39m[33mDUKE[39m[33m.[39mstaff[33m.[39m[33mOC[39m[33m.[39mname)[33m.[39m[34mtoBeTruthy[39m()[33m;[39m
+    [90m108| [39m    [34mexpect[39m(s[33m.[39mst[33m.[39mteams[33m.[39m[33mDUKE[39m[33m.[39mstaff[33m.[39m[33mDC[39m[33m.[39mname)[33m.[39m[34mtoBeTruthy[39m()[33m;[39m
+    [90m109| [39m    expect(screen.getByText(/rivalry night: North Carolina, the in-sta…
+    [90m   | [39m                  [31m^[39m
+    [90m110| [39m    fireEvent[33m.[39m[34mclick[39m(screen[33m.[39m[34mgetByText[39m([32m'Play'[39m))[33m;[39m
+    [90m111| [39m    fireEvent[33m.[39m[34mclick[39m(screen[33m.[39m[34mgetByText[39m([32m'Play Round 1'[39m))[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/college-dynasty/collegeDynastyFixture.test.tsx[2m > [22mRound 912: both college dynasty boards hold their recorded behaviour[2m > [22mcfb: every step matches the fixture
+[31m[1mAssertionError[22m: expected 'step 0 (pick) differs in html, text\n…' to be '' // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[31m+ step 0 (pick) differs in html, text[39m
+[31m+   was: Pick your program44 real schools in the post-realignment landscape. Recruit with NIL, survive the conference, make the 12-team Playoff, win the natty, then do it again with a new roster. Classes gradu[39m
+[31m+   now: Pick your program44 real schools in the post-realignment landscape. Recruit with NIL, survive the conference, make the 12-team Playoff, win the natty, then do it again with a new roster. Classes gradu[39m
+[31m+   was info [39m
+[31m+   now info [39m
+
+[36m [2m❯[22m src/components/college-dynasty/collegeDynastyFixture.test.tsx:[2m312:21[22m[39m
+    [90m310| [39m        if (off.length) first = `step ${i} (${a.step}) differs in ${of…
+    [90m311| [39m      }
+    [90m312| [39m      [34mexpect[39m(first)[33m.[39m[34mtoBe[39m([32m''[39m)[33m;[39m
+    [90m   | [39m                    [31m^[39m
+    [90m313| [39m    }, 120_000); /* a full scripted dynasty: 3 s on a quiet machine, 1…
+    [90m314| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/college-dynasty/collegeDynastyFixture.test.tsx[2m > [22mRound 912: both college dynasty boards hold their recorded behaviour[2m > [22mcbb: every step matches the fixture
+[31m[1mAssertionError[22m: expected 'step 1 (start) differs in html, text,…' to be '' // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[31m+ step 1 (start) differs in html, text, save[39m
+[31m+   was: Kentucky2026-27 · Round 1/10Record 0-0Rank #6Strength 86 Roster Play Schedule Top 25 LeaguesWelcome to Kentucky. Twenty games, a conference tournament, and one shot at surviving March.📋 Your bench: M[39m
+[31m+   now: Kentucky2026-27 · Round 1/10Record 0-0Rank #6Strength 86 Roster Play Schedule Top 25 LeaguesWelcome to Kentucky. Twenty games, a conference tournament, and one shot at surviving March.📋 Your bench: M[39m
+[31m+   was info {"keys":"st,phase,recruits,portal,march","phase":"season","season":2026,"round":1,"nil":82,"played":0,"titles":0,"depth":1,"recruits":null,"portal":null}[39m
+[31m+   now info {"keys":"st,phase,recruits,portal,march","phase":"season","season":2026,"round":1,"nil":82,"played":0,"titles":0,"depth":1,"recruits":null,"portal":null}[39m
+
+[36m [2m❯[22m src/components/college-dynasty/collegeDynastyFixture.test.tsx:[2m312:21[22m[39m
+    [90m310| [39m        if (off.length) first = `step ${i} (${a.step}) differs in ${of…
+    [90m311| [39m      }
+    [90m312| [39m      [34mexpect[39m(first)[33m.[39m[34mtoBe[39m([32m''[39m)[33m;[39m
+    [90m   | [39m                    [31m^[39m
+    [90m313| [39m    }, 120_000); /* a full scripted dynasty: 3 s on a quiet machine, 1…
+    [90m314| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m3 passed[39m[22m[90m (5)[39m
+[2m      Tests [22m [1m[31m3 failed[39m[22m[2m | [22m[1m[32m32 passed[39m[22m[90m (35)[39m
+[2m   Start at [22m 12:41:50
+[2m   Duration [22m 11.43s[2m (transform 739ms, setup 452ms, collect 2.89s, tests 16.33s, environment 3.03s, prepare 820ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/cbb-dynasty/CbbDynastyDepth.test.tsx,title=src/components/cbb-dynasty/CbbDynastyDepth.test.tsx > CBB Dynasty%3A the program layer on the board > gives a new dynasty its assistants and a schedule with a strength,line=109,column=19::TestingLibraryElementError: Unable to find an element with the text: /rivalry night: North Carolina, the in-state game \(both in North Carolina\)/. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.%0A%0AIgnored nodes: comments, script, style%0A<body>%0A  <div>%0A    <div%0A      class="space-y-4"%0A    >%0A      <div%0A        class="flex flex-wrap items-center justify-center gap-2 text-xs"%0A      >%0A        <span%0A          class="rounded-full px-3 py-1 font-bold text-white"%0A          style="background: rgb(0, 48, 135);"%0A        >%0A          Duke%0A        </span>%0A        <span%0A          class="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground"%0A        >%0A          2026-27%0A           · %0A          Round%0A           %0A          1%0A          /%0A          10%0A        </span>%0A        <span%0A          class="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground"%0A        >%0A          Record %0A          <b%0A            class="text-foreground"%0A          >%0A            0%0A            -%0A            0%0A          </b>%0A        </span>%0A        <span%0A          class="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground"%0A        >%0A          Rank %0A          <b%0A            class="text-primary"%0A          >%0A            #%0A            1%0A          </b>%0A        </span>%0A        <span%0A          class="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground"%0A        >%0A          Strength %0A          <b%0A            class="text-primary"%0A          >%0A            91%0A          </b>%0A        </span>%0A      </div>%0A      <button%0A        class="h-36 flex w-full flex-col justify-center gap-1 overflow-hidden rounded-2xl border border-gold/40 bg-card px-4 py-2 text-left hover:border-gold/70"%0A        data-college-seat="tile"%0A        type="button"%0A      >%0A        <span%0A          class="sr-only"%0A        >%0A          Open the athletic director's card. %0A        </span>%0A        <span%0A          class="flex items-center justify-between text-xs font-bold uppercase tracking-wider text-muted-foreground"%0A        >%0A          <span>%0A            Athletic director%0A          </span>%0A          <span%0A            class="text-foreground"%0A          >%0A            Trust %0A            60%0A          </span>%0A        </span>%0A        <span%0A          aria-hidden="true"%0A          class="block h-1.5 w-full overflow-hidden rounded-full bg-secondary"%0A        >%0A          <span%0A            class="block h-full rounded-full bg-primary"%0A            style="width: 60%25;"%0A          />%0A        </span>%0A        <span%0A          class="line-clamp-3 text-xs text-foreground"%0A        >%0A          Win the national title. Anything short of it and the boosters start asking questions.%0A        </span>%0A        <span%0A          class="line-clamp-2 text-xs text-primary"%0A        >%0A          In the postseason picture. Hold it.%0A        </span>%0A      </button>%0A      <div%0A        class="flex items-center justify-center gap-0.5 rounded-full bg-secondary p-1 text-xs sm:gap-1"%0A      >%0A        <button%0A          class="inline-flex items-center gap-1 rounded-full px-1.5 py-1.5 font-semibold transition-all min-[360px]:px-2 sm:px-3 bg-background text-foreground shadow-sm"%0A        >%0A          <svg%0A            class="lucide lucide-users hidden h-3.5 w-3.5 sm:inline"%0A            fill="none"%0A            height="24"%0A            stroke="currentColor"%0A            stroke-linecap="round"%0A            stroke-linejoin="round"%0A            stroke-width="2"%0A            viewBox="0 0 24 24"%0A            width="24"%0A            xmlns="http://www.w3.org/2000/svg"%0A          >%0A            <path%0A              d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"%0A            />%0A            <circle%0A              cx="9"%0A              cy="7"%0A              r="4"%0A            />%0A            <path%0A              d="M22 21v-2a4 4 0 0 0-3-3.87"%0A            />%0A            <path%0A              d="M16 3.13a4 4 0 0 1 0 7.75"%0A            />%0A          </svg>%0A           %0A          Roster%0A        </button>%0A        <button%0A          class="inline-flex items-center gap-1 rounded-full px-1.5 py-1.5 font-semibold transition-all min-[360px]:px-2 sm:px-3 text-muted-foreground hover:text-foreground"%0A        >%0A          <svg%0A            class="lucide lucide-shield-half hidden h-3.5 w-3.5 sm:inline"%0A            fill="none"%0A            height="24"%0A            stroke="currentColor"%0A            stroke-linecap="round"%0A            stroke-linejoin="round"%0A            stroke-width="2"%0A            viewBox="0 0 24 24"%0A            width="24"%0A            xmlns="http://www.w3.org/2000/svg"%0A          >%0A            <path%0A              d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"%0A            />%0A            <path%0A              d="M12 22V2"%0A            />%0A          </svg>%0A           %0A          Play%0A        </button>%0A        <button%0A          class="inline-flex items-center gap-1 rounded-full px-1.5 py-1.5 font-semibold transition-all min-[360px]:px-2 sm:px-3 text-muted-foreground hover:text-foreground"%0A        >%0A     ...%0A ❯ Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19%0A ❯ node_modules/@testing-library/dom/dist/query-helpers.js:76:38%0A ❯ node_modules/@testing-library/dom/dist/query-helpers.js:52:17%0A ❯ getByText node_modules/@testing-library/dom/dist/query-helpers.js:95:19%0A ❯ src/components/cbb-dynasty/CbbDynastyDepth.test.tsx:109:19%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/college-dynasty/collegeDynastyFixture.test.tsx,title=src/components/college-dynasty/collegeDynastyFixture.test.tsx > Round 912%3A both college dynasty boards hold their recorded behaviour > cfb%3A every step matches the fixture,line=312,column=21::AssertionError: expected 'step 0 (pick) differs in html, text\n…' to be '' // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A+ step 0 (pick) differs in html, text%0A+   was: Pick your program44 real schools in the post-realignment landscape. Recruit with NIL, survive the conference, make the 12-team Playoff, win the natty, then do it again with a new roster. Classes gradu%0A+   now: Pick your program44 real schools in the post-realignment landscape. Recruit with NIL, survive the conference, make the 12-team Playoff, win the natty, then do it again with a new roster. Classes gradu%0A+   was info %0A+   now info %0A%0A ❯ src/components/college-dynasty/collegeDynastyFixture.test.tsx:312:21%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/college-dynasty/collegeDynastyFixture.test.tsx,title=src/components/college-dynasty/collegeDynastyFixture.test.tsx > Round 912%3A both college dynasty boards hold their recorded behaviour > cbb%3A every step matches the fixture,line=312,column=21::AssertionError: expected 'step 1 (start) differs in html, text,…' to be '' // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A+ step 1 (start) differs in html, text, save%0A+   was: Kentucky2026-27 · Round 1/10Record 0-0Rank #6Strength 86 Roster Play Schedule Top 25 LeaguesWelcome to Kentucky. Twenty games, a conference tournament, and one shot at surviving March.📋 Your bench: M%0A+   now: Kentucky2026-27 · Round 1/10Record 0-0Rank #6Strength 86 Roster Play Schedule Top 25 LeaguesWelcome to Kentucky. Twenty games, a conference tournament, and one shot at surviving March.📋 Your bench: M%0A+   was info {"keys":"st,phase,recruits,portal,march","phase":"season","season":2026,"round":1,"nil":82,"played":0,"titles":0,"depth":1,"recruits":null,"portal":null}%0A+   now info {"keys":"st,phase,recruits,portal,march","phase":"season","season":2026,"round":1,"nil":82,"played":0,"titles":0,"depth":1,"recruits":null,"portal":null}%0A%0A ❯ src/components/college-dynasty/collegeDynastyFixture.test.tsx:312:21%0A%0A
