@@ -1,0 +1,38 @@
+  W1:nba-390: Review coaching career is 44 px tall
+  W2:nba-390: a double tap on the confirm leaves the done hub open; under that spot now: no button
+  W2:nba-390: after Keep coaching focus is on button "Retire from coaching"; after the retirement it is on the page body
+  W3:nba-390: around Undo skip the card's top is at 103 then 103 px on screen (scrollY 507 then 500)
+  W3:nba-390: the night's button row is 46 px live, 46 skipped, 46 on the replay, 46 landed
+  W5:nba-390-150ms: a double tap on Undo skip 150 ms apart ends at phase showcase (showcase none); under that spot now: Go all outPush every drill to the limit.; scrollY 507 before, 500 after
+  W5:nba-390-150ms: a double tap on Skip to the end leaves the night skipped; one on Watch it again leaves it live
+  W5:nba-390-700ms: a double tap on Undo skip 700 ms apart ends at phase showcase (showcase none); under that spot now: Go all outPush every drill to the limit.; scrollY 507 before, 500 after
+  W5:nba-390-700ms: a double tap on Skip to the end leaves the night skipped; one on Watch it again leaves it live
+  W1:nba-1280: Review coaching career is 44 px tall
+  W2:nba-1280: a double click on the confirm leaves the done hub open; under that spot now: no button
+  W2:nba-1280: after Keep coaching focus is on button "Retire from coaching"; after the retirement it is on the page body
+  W3:nba-1280: around Undo skip the card's top is at 81 then 81 px on screen (scrollY 496 then 493)
+  W3:nba-1280: the night's button row is 46 px live, 46 skipped, 46 on the replay, 46 landed
+  W5:nba-1280-150ms: a double tap on Undo skip 150 ms apart ends at phase showcase (showcase none); under that spot now: Go all outPush every drill to the limit.; scrollY 496 before, 493 after
+  W5:nba-1280-150ms: a double tap on Skip to the end leaves the night skipped; one on Watch it again leaves it live
+  W5:nba-1280-700ms: a double tap on Undo skip 700 ms apart ends at phase showcase (showcase none); under that spot now: Go all outPush every drill to the limit.; scrollY 496 before, 493 after
+  W5:nba-1280-700ms: a double tap on Skip to the end leaves the night skipped; one on Watch it again leaves it live
+  W1:nfl-390: Review coaching career is 44 px tall
+  W2:nfl-390: a double tap on the confirm leaves the done hub open; under that spot now: no button
+  W2:nfl-390: after Keep coaching focus is on button "Retire from coaching"; after the retirement it is on button "🗞️The MarketYou are not looking now"
+  W3:nfl-390: around Undo skip the card's top is at 103 then 103 px on screen (scrollY 507 then 500)
+  W3:nfl-390: the night's button row is 46 px live, 46 skipped, 46 on the replay, 46 landed
+  W5:nfl-390-150ms: a double tap on Undo skip 150 ms apart ends at phase showcase (showcase none); under that spot now: Go all outPush every drill to the limit.; scrollY 507 before, 500 after
+  W5:nfl-390-150ms: a double tap on Skip to the end leaves the night skipped; one on Watch it again leaves it live
+  W5:nfl-390-700ms: a double tap on Undo skip 700 ms apart ends at phase showcase (showcase none); under that spot now: Go all outPush every drill to the limit.; scrollY 507 before, 500 after
+  W5:nfl-390-700ms: a double tap on Skip to the end leaves the night skipped; one on Watch it again leaves it live
+  W1:nfl-1280: Review coaching career is 44 px tall
+  W2:nfl-1280: a double click on the confirm leaves the done hub open; under that spot now: no button
+  W2:nfl-1280: after Keep coaching focus is on button "Retire from coaching"; after the retirement it is on the page body
+  W3:nfl-1280: around Undo skip the card's top is at 81 then 81 px on screen (scrollY 496 then 493)
+  W3:nfl-1280: the night's button row is 46 px live, 46 skipped, 46 on the replay, 46 landed
+  W5:nfl-1280-150ms: a double tap on Undo skip 150 ms apart ends at phase showcase (showcase none); under that spot now: Go all outPush every drill to the limit.; scrollY 496 before, 493 after
+  W5:nfl-1280-150ms: a double tap on Skip to the end leaves the night skipped; one on Watch it again leaves it live
+  W5:nfl-1280-700ms: a double tap on Undo skip 700 ms apart ends at phase showcase (showcase none); under that spot now: Go all outPush every drill to the limit.; scrollY 496 before, 493 after
+  W5:nfl-1280-700ms: a double tap on Skip to the end leaves the night skipped; one on Watch it again leaves it live
+  screenshots: 102 in /home/runner/work/_temp/rc-out/files
+playUsCareerReports: ALL GREEN, 22 walks
