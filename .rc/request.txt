@@ -1,0 +1,6 @@
+s5: INTL_SECTIONS=5 node scripts/simCareerIntl.mjs
+s8: INTL_SECTIONS=8 node scripts/simCareerIntl.mjs
+unit: node_modules/.bin/vitest run src/lib/careerIntl.test.ts src/test/nbaCareerIntl.test.ts --testTimeout=300000
+simStorageWrites: node scripts/simStorageWrites.mjs
+simUsBoardParity: node scripts/simUsBoardParity.mjs
+simUsCareerWeight: node scripts/simUsCareerWeight.mjs
