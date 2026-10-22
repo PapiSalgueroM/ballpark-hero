@@ -20,6 +20,17 @@ dukb-handoff/2026-10-10/results-g/finish-1540.md.
   row (measured +13.6K on the route, no row exists), the release join (1321 first, then this round), the adversarial
   review, dukb-qa-hunter and dukb-visual-qa.
 
+## After the adversarial review (fixer, 2026-10-22)
+
+- Both lenses (results-g/review-run-1540.md, review-read-1540.md) returned FIX on one major: the STOP above, which
+  also makes two lines of the desk's rules card false (gmContractRules.ts 239 and 251). Still open, the lead's to
+  rule; option (b) is measured in results-g/fix-1540.md (r1540-fix-m1b).
+- Fixed, each with a check that fires: the help panel's way back in view (walk H, control backfold), the refusal line
+  on every stage, the screen's lottery and finish lines handed in by the board, "an 8.2%" style articles, the copy of
+  the league each press is handed and his board's order (NbaEarnedDraft.test.tsx case l), the What's New link, and
+  walk J's measured headroom in its header. Left: the run card's "On the clock" kicker after the last pick (shared
+  card, presenter round) and the lift's "no lower than" (gmLotteryNight.ts, must not touch).
+
 ## What a later session must not trust
 
 - A runner summary that says SETUP exit=1 right after a send: the request branch sometimes fires two workflow runs,
