@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { NbaRotationPanel } from './NbaRotationPanel';
 import { nbaSetRotationSlot, nbaAutoRotation } from '@/lib/nbaRotation';
 import { DraftNightCard } from '@/components/front-office-shared/DraftNightCard';
@@ -67,7 +67,17 @@ import { gmStaffLevel } from '@/lib/gmStaff';
 import {
   nbaDeadlineRefusal, nbaDeskAfterRound, nbaDeskEdges, nbaDeskOffseason, nbaDeskRoundOptions, nbaMirrorPickMove,
   nbaMirrorPickRefusal, nbaNoteArrivals, nbaPicksOf, nbaScoutRead, nbaSignDraftee, nbaStaffOf, nbaTradeWindow, openNbaDesk, syncNbaPicks, NBA_DESK_KEYS,
+  nbaGamePickRules,
 } from '@/lib/nbaGmDesk';
+/* Round 1540: the earned draft night, through its library, the shared screen and the shared glue. With the desk
+   on and the playoff field on hand, every club picks where its record put it, and the old draft below runs for
+   every other save exactly as before. */
+import {
+  draftRulesFor, nbaDraftByStaff, nbaDraftChances, nbaDraftContinue, nbaDraftHeading, nbaDraftHelp, nbaDraftNightOf,
+  nbaDraftPick, nbaDraftTileLabel, nbaEarnedDraftClass, openNbaDraftNight, slotsLeftFor, type NbaDraftPress,
+} from '@/lib/nbaEarnedDraft';
+import { GmEarnedDraftScreen } from '@/components/front-office-shared/GmEarnedDraftScreen';
+import { useGmEarnedDraft } from '@/components/front-office-shared/useGmEarnedDraft';
 import { NBA_DESK_PANELS, NBA_RECAP_PANELS, type NbaDeskFacts } from '@/components/nba-front-office/NbaGmDesk';
 
 /* Round 180: 'fired' is new. Zero trust upstairs ends the save. */
@@ -211,6 +221,15 @@ export default function NbaFrontOfficeBoard() {
   const gmLive = useRef<GmDesk | null>(null);
   const setGm = (d: GmDesk | null) => { gmLive.current = d; setGmState(d); };
   const [gmOpen, setGmOpen] = useState<string | null>(null);
+  /* Round 1540: the earned night's transient state (the lottery playing, the run card, the closing screen, the
+     press guard), and its chances before the draw, worked out once a night: they walk every run of the lottery. */
+  const earnedUi = useGmEarnedDraft([gm, phase, league]);
+  const earnedNight = gm && league ? nbaDraftNightOf(gm, league) : null;
+  const earnedChances = useMemo(
+    () => (earnedNight ? nbaDraftChances(earnedNight, myTeam) : []),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [earnedNight?.order, earnedNight?.slots, myTeam],
+  );
 
   useGameCompletion('nba-front-office', wonNow, titles * 100 + seasonsPlayed * 5);
 
@@ -510,8 +529,30 @@ export default function NbaFrontOfficeBoard() {
      written on the recap screen, which has no postseason to draw. That restore
      passes the save's own fields as the patch, because persist's closure still
      holds the first render's defaults while the load effect runs. */
+  /* Round 1540: the earned night. It opens only with the desk on and the playoff field on hand: the patch's
+     postseason first, because the load path runs with the first render's closure, where `series` is still empty
+     (and a save from before Round 431 carries none, so it keeps the old draft). Null from the library writes
+     nothing and the old draft runs. The class is drawn once, after the guard is taken; the desk is set before the
+     save is written, because persist reads it from gmLive. */
+  const openEarnedDraft = (lg: NbaLeague, team: string, patch: Partial<SaveShape>): boolean => {
+    const desk = gmLive.current;
+    if (!desk) return false;
+    const opened = openNbaDraftNight(desk, lg, patch.postseason?.series ?? series, team);
+    if (!opened) return false;
+    draftPending.current = true;
+    const cls = nbaEarnedDraftClass(Math.random, opened.night.slots.length, leagueNames(lg));
+    const slots = slotsLeftFor(opened.night.slots, opened.night.made, team).length;
+    setGm(opened.desk);
+    setDraftClass(cls); setPicksLeft(slots); setDraftAiBatchesLeft(2);
+    earnedUi.opened();
+    setDraftNight(null); setDraftError(''); setPhase('draft');
+    persist({ ...patch, phase: 'draft', draftClass: cls, picksLeft: slots, draftAiBatchesLeft: 2 }, lg, team);
+    return true;
+  };
+
   const openDraft = (lg: NbaLeague, team: string, patch: Partial<SaveShape> = {}) => {
     if (draftPending.current) return;
+    if (openEarnedDraft(lg, team, patch)) return;
     const capital = nbaDraftCapital(lg.teams[team]);
     if (capital == null) { setDraftError('Draft rights are unavailable. Your save has not changed.'); return; }
     draftPending.current = true;
@@ -637,6 +678,39 @@ export default function NbaFrontOfficeBoard() {
   };
 
   const leaveDraft = () => { setPhase('hub'); setTab(null); };
+
+  /* Round 1540: the earned night's three presses (Continue, his pick, his staff). Each hands the library a copy of
+     the league (the presses mutate what they are handed), saves the night where it now stands, and runs the summer
+     when the answer says no slot is left, whichever press that was. A refused press changes nothing. */
+  const earnedPress = (go: (lg: NbaLeague, desk: GmDesk, cls: NbaProspect[]) => NbaDraftPress | null) => {
+    const desk = gmLive.current;
+    if (!league || !desk || !draftClass || !earnedUi.begin()) return;
+    const lg: NbaLeague = JSON.parse(JSON.stringify(league));
+    const press = go(lg, desk, draftClass);
+    if (!press) { earnedUi.refused(); return; }
+    setGm(press.desk);
+    earnedUi.answered(press);
+    const night = nbaDraftNightOf(press.desk, lg);
+    const slots = night ? slotsLeftFor(night.slots, night.made, myTeam).length : 0;
+    const byName = new Map(draftClass.map(p => [p.name, p]));
+    const signed = press.steps.filter(s => s.mine).map(s => byName.get(s.playerName)).filter((p): p is NbaProspect => !!p);
+    if (signed.length) setFeed(f => [...signed.reverse().map(p => `📥 Drafted ${p.name} (${p.pos}), true rating ${p.trueOvr} vs scouted ${gradeOf(p)}.`), ...f].slice(0, 6));
+    setDraftClass(press.left); setPicksLeft(slots);
+    setLeague(lg);
+    persist({ draftClass: press.left, picksLeft: slots, draftAiBatchesLeft: 2 }, lg, myTeam);
+    if (press.done && night) {
+      earnedUi.finished({
+        year: night.order.draftYear,
+        lines: [...nbaDraftHeading(night, myTeam), 'That is your draft done. The offseason has run and the new season is set up on the hub.'],
+        help: nbaDraftHelp(night, myTeam, earnedChances),
+      });
+      finishDraft(lg, true, press.desk);
+    }
+  };
+  const pressContinue = () => earnedPress((lg, desk, cls) => nbaDraftContinue(lg, desk, myTeam, cls, Math.random));
+  const pressPick = (id: string) => earnedPress((lg, desk, cls) => nbaDraftPick(lg, desk, myTeam, cls, id, Math.random));
+  const pressStaff = () => earnedPress((lg, desk, cls) => nbaDraftByStaff(lg, desk, myTeam, cls, Math.random));
+  const leaveEarned = () => { earnedUi.clear(); leaveDraft(); };
 
   const doRelease = (pid: string) => {
     if (!league) return;
@@ -772,6 +846,7 @@ export default function NbaFrontOfficeBoard() {
     localStorage.removeItem(SAVE_KEY);
     setRotationOpen(false); rotationReturn.current = false;
     setDraftClass(null); setDraftNight(null); setPicksLeft(0); setDraftAiBatchesLeft(null); setDraftError(''); draftPending.current = false;
+    earnedUi.clear();
     setPhase('pick'); setLeague(null); setMyTeam('');
     setMandate(null); setTrust(FO_TRUST_START); setFired(false); setGradeLine(null); setTaxClose(null);
     setPresser(null); setPressTilt(0); setSeasonTradeLine(null);
@@ -1030,6 +1105,44 @@ export default function NbaFrontOfficeBoard() {
   }
 
   if (phase === 'draft' && draftClass) {
+    /* Round 1540: a night on the desk for this season, or one just finished whose summer has rolled the season,
+       draws the earned screen; a block that breaks mid draft answers null with the round still 20, and the old
+       screen below runs the draft the old way. */
+    const earnedStage = earnedUi.stage(earnedNight, league.round === 1);
+    if (earnedStage) {
+      const left = earnedNight ? slotsLeftFor(earnedNight.slots, earnedNight.made, myTeam).length : 0;
+      const board = [...draftClass].sort((a, b) => gradeOf(b) - gradeOf(a) || a.id.localeCompare(b.id)).slice(0, 14);
+      const done = earnedUi.done;
+      return (
+        <div className="space-y-4">
+          <CelebrationStyles />
+          <GmEarnedDraftScreen
+            year={earnedNight ? earnedNight.order.draftYear : done?.year ?? league.season}
+            stage={earnedStage}
+            chances={earnedChances}
+            lines={earnedNight ? nbaDraftHeading(earnedNight, myTeam) : done?.lines ?? []}
+            help={earnedNight ? nbaDraftHelp(earnedNight, myTeam, earnedChances) : done?.help ?? []}
+            lottery={earnedNight && earnedStage === 'lottery' ? {
+              order: earnedNight.order, myClub: myTeam, labelOf: nbaDraftTileLabel,
+              rules: draftRulesFor('nba', earnedNight.order.draftYear), lottery: nbaGamePickRules().lottery,
+              seen: earnedUi.seen(earnedNight), onContinue: pressContinue, continueLabel: 'Continue to the draft',
+            } : null}
+            run={earnedUi.run}
+            choices={board.map(pr => ({ id: pr.id, name: pr.name, sub: `${pr.pos} · age ${pr.age}`, grade: gradeOf(pr) }))}
+            onPick={pressPick}
+            staff={left > 0 ? { label: `Let your staff make your ${left === 1 ? 'pick' : `${left} picks`}`, onPress: pressStaff } : null}
+            finish={earnedNight && left === 0 ? { label: 'Finish the draft and the summer', onPress: pressStaff } : null}
+            onLeave={leaveEarned}
+            error={earnedUi.error}
+          />
+          {feed.length > 0 && (
+            <div className="rounded-2xl border border-border bg-card p-3 text-xs text-muted-foreground">
+              {feedRows(feed.slice(0, 4), `${league.season}:e${picksLeft}`)}
+            </div>
+          )}
+        </div>
+      );
+    }
     /* Round 530: after the last pick the offseason has run and the season
        has rolled, so the heading reads the season as it stands rather than
        one on from it, and the board is put away: no picks, no grid, just the

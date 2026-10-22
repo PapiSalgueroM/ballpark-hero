@@ -384,6 +384,13 @@ describe('Round 1540: the "?" states the league wide knobs, and the chances come
     expect(nbaDraftHelp(night, ME, []).some(b => b.heading === 'Before the draw')).toBe(false);
   });
 
+  it('the desk\'s partial lines: the table\'s, then the earned night\'s; the old short draft\'s and the second round line are gone', () => {
+    expect(nbaGamePickRules().partial).toEqual([
+      'The lottery table is the one the 2026 draft used. The league switched to a new lottery from the 2027 draft, and this game does not model it yet.',
+      'Draft night here runs in the order your record earns, on the lottery the league used for its 2019 to 2026 drafts.',
+    ]);
+  });
+
   it('a lottery tile shows the nickname alone', () => {
     expect(nbaDraftTileLabel('BOS')).toBe(NBA_TEAM_MAP.get('BOS')!.name);
     expect(nbaDraftLabel('BOS')).toBe(`the ${nbaDraftTileLabel('BOS')}`);

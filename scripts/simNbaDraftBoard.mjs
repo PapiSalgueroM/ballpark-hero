@@ -26,6 +26,9 @@
  * CONTROLS (SIM_NBA_DRAFT_BOARD_CONTROL; `all` runs each alone and is green only if every one fired in exactly its
  * own section). Each asserts its anchor is present exactly once first and edits an in memory copy only.
  *   extradraw    one extra Math.random call before the old openDraft's class draw: section 1, cases (1) and (4) red
+ *   deskless     the earned night opens on a fresh desk when the save has none: section 1, case (1) red (exit 3
+ *                before the board binds the night: there is nothing to break)
+ *   blockedopen  a valid night planted on (2)'s desk: section 1, case (2) red (exit 3 before the bind)
  *   screensport  an NBA import in a copy of the screen: section 6 red
  *   boardlift    a lift import in a copy of the board: section 6 red
  */
@@ -63,8 +66,11 @@ const once = (text, anchor) => text.split(anchor).length - 1;
 function cannotRun(msg) { console.error(`simNbaDraftBoard: could not run: ${msg}`); process.exit(2); }
 
 const OLD_CLASS_DRAW = 'const cls = nbaDraftClass(Math.random, Math.max(24, capital + Math.min(10, rivalCapital)), leagueNames(lg));';
+const DESK_GUARD = '    if (!desk) return false;\n    const opened = openNbaDraftNight(desk, lg, patch.postseason?.series ?? series, team);';
 const CONTROLS = {
   extradraw: { expect: [1], cases: ['deskOffRecap', 'preRecap'] },
+  deskless: { expect: [1], cases: ['deskOffRecap'] },
+  blockedopen: { expect: [1], cases: ['deskOnOpen'] },
   screensport: { expect: [6] },
   boardlift: { expect: [6] },
 };
@@ -112,6 +118,12 @@ if (CONTROL === 'extradraw') {
   board = board.replace(OLD_CLASS_DRAW, `Math.random(); ${OLD_CLASS_DRAW}`);
   console.log('   NEGATIVE CONTROL extradraw: one extra Math.random call before the old draft\'s class draw; section 1 must go red on (1) and (4)');
 }
+if (CONTROL === 'deskless') {
+  if (once(board, DESK_GUARD) !== 1) { console.log('simNbaDraftBoard control deskless: CANNOT FIRE, the board has no earned bind to break (its desk guard is not there once).'); process.exit(3); }
+  board = board.replace(DESK_GUARD, '    const opened = openNbaDraftNight(desk ?? openNbaDesk(lg, team), lg, patch.postseason?.series ?? series, team);');
+  console.log('   NEGATIVE CONTROL deskless: the earned night opens on a fresh desk when the save has none; section 1 must go red on (1)');
+}
+if (CONTROL === 'blockedopen') console.log('   NEGATIVE CONTROL blockedopen: a valid night is planted on (2)\'s desk; section 1 must go red on (2)');
 
 async function bundle(srcRoot, boardText, tag) {
   const { build } = await import('esbuild');
@@ -169,7 +181,7 @@ const redCases = new Set();
 
   /* ---------------------------------------------------------------- */
   open(1, 'The old paths: three saves that keep today\'s draft, played to the hub, against the fixture recorded from BASE');
-  const jobs = CASES.flatMap(c => Array.from({ length: SEEDS }, (_, i) => ({ kind: c, seed: i + 1 })));
+  const jobs = CASES.flatMap(c => Array.from({ length: SEEDS }, (_, i) => ({ kind: c, seed: i + 1, plant: CONTROL === 'blockedopen' && c === 'deskOnOpen' })));
   const rows = play(head, jobs);
   if (rows.length !== jobs.length) cannotRun(`${rows.length} rows for ${jobs.length} plays`);
   for (const r of rows) if (r.pre !== true) cannotRun(`${CASE_WORDS[r.kind]}, seed ${r.seed}: ${r.pre} (critic correction 6: the save must be one a night could open on)`);

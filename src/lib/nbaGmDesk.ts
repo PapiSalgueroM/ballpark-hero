@@ -72,13 +72,19 @@ export const NBA_DESK_KEYS = { contracts: 'contracts', picks: 'picks', staff: 's
  * 2026-10-02), two rounds as the league has, with what draft night here does
  * differently said out loud. A function, not a constant, so nothing imported
  * is read at module scope.
+ *
+ * Round 1540: draft night with the desk on is the earned night
+ * (nbaEarnedDraft.ts), so the partial list keeps the table's line and drops
+ * the pick rules' second one (round two there is every club by record, not the
+ * clubs that missed the playoffs first), and the old short draft's line is
+ * replaced by the one that is true now.
  */
 export function nbaGamePickRules(): GmPickRules {
   return {
     ...NBA_PICK_RULES,
     partial: [
-      ...NBA_PICK_RULES.partial,
-      'The lottery is in the rules, but draft night here is the game\'s own short draft: you pick first in each batch, then the other clubs go in reverse standings.',
+      NBA_PICK_RULES.partial[0],
+      'Draft night here runs in the order your record earns, on the lottery the league used for its 2019 to 2026 drafts.',
     ],
   };
 }
