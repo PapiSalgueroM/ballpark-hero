@@ -1,0 +1,163 @@
+name: Consent dialog Academy baseline1447
+on:
+  push:
+    branches: [codex/consent-dialog-academy-preservation-1447]
+permissions:
+  contents: read
+concurrency:
+  group: consent-dialog-academy1447-${{ github.ref }}
+  cancel-in-progress: false
+env:
+  BASE_SOURCE: 86fb920b2cb9ecb390b386811c5d5b121d9ff7d2
+  OUT: consent-dialog1447-academy-artifacts
+jobs:
+  original:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Exact Original source and complete application protection
+        run: |
+          set -euo pipefail
+          mkdir "$OUT"
+          test "$GITHUB_REF" = refs/heads/codex/consent-dialog-academy-preservation-1447
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          [[ "$BASE_SOURCE" =~ ^[a-f0-9]{40}$ ]]
+          git rev-parse HEAD > "$OUT/head.txt"
+          printf '%s\n' academy-baseline > "$OUT/phase.txt"
+          git fetch --no-tags --depth=1 origin "$BASE_SOURCE" > "$OUT/base-fetch.log" 2>&1
+          git diff --exit-code "$BASE_SOURCE" HEAD -- . ':!docs/ROUND1447.md' ':!docs/PROJECT-STATE.md' ':!docs/WORKBOARD.md' ':!.github/workflows/consent-dialog-academy-preservation-1447.yml' ':!scripts/qa/playConsentAcademyPrimaryBaseline1447.mjs' > "$OUT/original-product-hold.log"
+          printf '%s  %s\n' 2229fe57d04b14740f8f68ce0f9b1ff9932951372bb7e99ca5f708035378988b scripts/qa/playConsentAcademyPrimaryBaseline1447.mjs e60ff1534307e449ccef598e3b7470dcba58681b82cea4005cec7319f14f9221 scripts/lib/offlineTransport.cjs > "$OUT/proof-inputs.sha256"
+          sha256sum --check "$OUT/proof-inputs.sha256" > "$OUT/proof-inputs-initial.log"
+          git ls-files -z -- . | sort -z > "$OUT/tracked-paths-before.bin"
+          xargs -0 sha256sum < "$OUT/tracked-paths-before.bin" > "$OUT/source-before.sha256"
+          find public scripts/data/lastmod.json scripts/data/guideHeadingsFrozen.json src/data/searchKeywords.json ! -type d ! -type f -print > "$OUT/generated-nonregular-before.txt"
+          test ! -s "$OUT/generated-nonregular-before.txt"
+          find public scripts/data/lastmod.json scripts/data/guideHeadingsFrozen.json src/data/searchKeywords.json -type f -print0 | sort -z | xargs -0 sha256sum > "$OUT/generated-before.sha256"
+          sha256sum package.json package-lock.json vitest.config.ts scripts/sweepWeight.mjs scripts/lib/offlineTransport.cjs scripts/lib/hostLikeServer.mjs > "$OUT/dependencies.sha256"
+          npm ci > "$OUT/install.log" 2>&1
+      - name: Isolated Playwright1.64 and exact known font cache
+        run: |
+          set -euo pipefail
+          browser_tools="$RUNNER_TEMP/consent-dialog1447-academy-browser"
+          npm install --prefix "$browser_tools" --no-save --package-lock=false playwright@1.64.0 > "$OUT/browser-install.log" 2>&1
+          test ! -e node_modules/playwright;test ! -e node_modules/playwright-core
+          ln -s "$browser_tools/node_modules/playwright" node_modules/playwright
+          ln -s "$browser_tools/node_modules/playwright-core" node_modules/playwright-core
+          node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium > "$OUT/chromium-install.log" 2>&1
+          export FREE_KICK_FONT_CACHE="$PWD/$OUT/font-cache"
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > "$OUT/fonts.log" 2>&1
+          echo "FREE_KICK_FONT_CACHE=$FREE_KICK_FONT_CACHE" >> "$GITHUB_ENV"
+          echo "FONT_CACHE_MANIFEST_SHA256=$(sha256sum "$FREE_KICK_FONT_CACHE/manifest.json" | cut -d ' ' -f 1)" >> "$GITHUB_ENV"
+          find "$FREE_KICK_FONT_CACHE" -type f -print0 | sort -z | xargs -0 sha256sum > "$OUT/font-inputs.sha256"
+      - name: Real types and completed plain build under unchanged offline guard
+        id: build
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$PWD/$OUT/build.transport";: > "$SIM_OFFLINE_RECEIPT"
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$OUT/types.log" 2>&1
+          timeout --signal=TERM --kill-after=15s 6m npm run build > "$OUT/build.log" 2>&1
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+          find dist ! -type d ! -type f -print > "$OUT/dist-nonregular-before.txt";test ! -s "$OUT/dist-nonregular-before.txt"
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$OUT/dist-before.sha256";test -s "$OUT/dist-before.sha256"
+          for inventory in generated-before.sha256 dist-before.sha256;do
+            cp "$OUT/$inventory" "$OUT/$inventory.control";printf '%s\n' CONTROL_DIFFERENT_INVENTORY_LINE >> "$OUT/$inventory.control"
+            status=0;cmp "$OUT/$inventory" "$OUT/$inventory.control" > "$OUT/$inventory.control.log" 2>&1 || status=$?
+            printf '%s\n' "$status" > "$OUT/$inventory.control.exit";test "$status" -eq 1
+          done
+          tar -czf "$OUT/dist.tar.gz" -C dist .
+      - name: Three source-reachable Academy contexts before CSS
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$PWD/$OUT/browser.transport";: > "$SIM_OFFLINE_RECEIPT"
+          out="$PWD/$OUT"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$out/server.log" 2>&1 &
+          server=$!;trap 'kill "$server" 2>/dev/null || true' EXIT
+          ready=0;for attempt in 1 2 3 4 5;do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null;then ready=1;break;fi;sleep 1;done;test "$ready" -eq 1
+          status=0;BASE=http://127.0.0.1:4173 SOURCE_SHA="$GITHUB_SHA" CONSENT_DIALOG_OUT="$out/browser" timeout --signal=TERM --kill-after=15s 7m node scripts/qa/playConsentAcademyPrimaryBaseline1447.mjs > "$out/browser.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/browser.exit"
+          STATUS="$status" node --input-type=module > "$out/browser-classification.log" 2>&1 <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          const sha=b=>createHash('sha256').update(b).digest('hex'),dir=process.env.OUT+'/browser/',r=JSON.parse(fs.readFileSync(dir+'report.json','utf8'));
+          const driverExit=Number(process.env.STATUS);assert([0,1].includes(driverExit),'ACADEMY1447_ADMISSION: only complete healthy or measured owned baseline outcomes');
+          assert.equal(r.exit,driverExit);assert.equal(r.source,process.env.GITHUB_SHA);assert.equal(r.phase,'academy-baseline');assert.equal(r.complete,true);assert.deepEqual(r.errors,[]);assert.equal(r.plannedCases,3);assert.equal(r.actualContexts,3);assert.equal(r.actualCompleteCases,3);assert.equal(r.cases.length,3);assert.deepEqual(r.unclassifiedCases,[]);
+          assert.equal(r.holds.unchanged,true);assert.deepEqual(r.holds.before,r.holds.after);assert.deepEqual(r.holds.distBefore,r.holds.distAfter);
+          const expected=[{id:'academy-320',width:320,height:640},{id:'academy-390',width:390,height:844},{id:'academy-1280',width:1280,height:900}];assert.deepEqual(r.cases.map(row=>row.id),expected.map(row=>row.id));const primaryActions=[],ownedFailures=[];
+          for(let index=0;index<expected.length;index++){
+            const row=r.cases[index],spec=expected[index];assert.equal(row.route,'/stadium-tycoon');assert.deepEqual(row.configuredViewport,{width:spec.width,height:spec.height});assert.equal(row.contextCreated,true);assert.equal(row.complete,true);assert(['PASS','OBSERVED_FAILURE'].includes(row.status));assert.equal(row.foundation.status,'PASS');assert.deepEqual(row.initialStorage,{keys:[],error:null});
+            assert.deepEqual(row.blocked,[]);assert.deepEqual(row.pageErrors,[]);assert.deepEqual(row.consoleErrors,[]);assert.equal(row.observerOverflow,false);for(const key of ['error','finalError','closeError','collectionError','responseError'])assert(!row[key],row.id+': '+key);
+            const entry=row.entryNavigation;assert.equal(entry.status,'PASS');assert.equal(entry.initialDialog,'How Stadium Tycoon works');assert.equal(entry.initialClose,'Close the rules');assert.equal(entry.trustedInitialClose,true);assert.equal(entry.trustedAcademyTab,true);assert.equal(entry.room,'academy');assert.equal(entry.pressed,'true');assert.equal(entry.cookieChoiceBefore,null);assert.equal(entry.cookieChoiceAfter,null);assert(entry.initialCloseRect&&entry.initialCloseRect.width>0&&entry.initialCloseRect.height>0);
+            assert.equal(row.foundation.detail.pending,'1');assert.equal(row.foundation.detail.embedded,false);assert.equal(row.foundation.detail.bannerPosition,'fixed');assert(row.foundation.detail.consentHeight);assert(row.attemptedRequests>0&&row.attemptedRequests<=2048);
+            assert(row.cachedFonts.some(x=>x.resourceType==='stylesheet')&&row.cachedFonts.some(x=>x.resourceType==='font'));assert(row.cssResponses.length>0);for(const css of row.cssResponses){assert.equal(css.status,200);assert.equal(sha(fs.readFileSync(dir+css.file)),css.sha256);}
+            assert.equal(row.bannerLeg.status,'PASS');assert.equal(row.bannerLeg.trustedReject,true);assert.equal(row.bannerLeg.choice.version,2);assert.equal(row.bannerLeg.choice.advertising,false);assert.equal(row.bannerLeg.choice.analytics,false);assert.deepEqual(row.actions.map(action=>action.phase),['pending-first','pending-reopened','answered']);
+            for(const action of row.actions){
+              assert.equal(action.label,"Let's go");assert(['PASS','FAILED_ACTION','NOT_ATTEMPTED'].includes(action.status));
+              if(action.status==='NOT_ATTEMPTED'){assert.equal(action.phase,'pending-reopened');assert.equal(action.attempted,false);assert.equal(row.actions[0].status,'FAILED_ACTION');continue;}
+              assert.equal(action.attempted,true);
+              if(action.status==='FAILED_ACTION'){
+                assert(action.phase.startsWith('pending'));assert.equal(action.dialogRemains,true);assert.equal(action.ownedAssertion.name,'AssertionError');assert(action.ownedAssertion.message.startsWith('ACADEMY1447_FIXED_BANNER_INTERCEPTION: '+row.id+':'));assert.equal(action.error.name,'TimeoutError');assert(/intercepts pointer events/i.test(action.error.message));
+                const p=action.interceptionProof,blocked=frame=>frame?.pending==='1'&&!frame.embedded&&frame.bannerPosition==='fixed'&&frame.target?.exists&&frame.target.nodeId===p.targetId&&frame.target.hitIsCookieRegion===true&&frame.target.overlapArea>0;
+                assert.equal(p.foundationPassed,true);assert.equal(p.clickAttempted,true);assert.equal(p.dialogRemains,true);assert(Number.isSafeInteger(p.targetId)&&p.targetId>0);assert.equal(p.error.name,'TimeoutError');assert(/intercepts pointer events/i.test(p.error.message));assert(blocked(p.after)&&p.frames.some(blocked));ownedFailures.push({caseId:row.id,label:action.label,phase:action.phase});continue;
+              }
+              assert.equal(action.trustedClick,true);assert.equal(action.dialogRemains,false);assert(!action.error&&!action.outcomeError);const click=action.deliveredClick,p=action.geometryProof,t=p.target;assert.equal(click.type,'click');assert.equal(click.isTrusted,true);assert.equal(click.target.label,"Let's go");assert.equal(click.primaryNodeId,p.targetId);assert(click.ms>=action.startMs&&click.ms<=action.endMs);assert.deepEqual(t,click.primarySnapshot.targets["Let's go"]);assert.deepEqual(p.card,click.primarySnapshot.card);assert.deepEqual(p.viewport,{width:spec.width,height:spec.height});
+              assert.equal(t.exists,true);assert(Number.isSafeInteger(p.targetId)&&p.targetId>0);assert.equal(t.nodeId,p.targetId);assert.equal(t.centerInViewport,true);assert.equal(t.hitIsTarget,true);assert.equal(t.hitIsCookieRegion,false);assert.equal(t.overlapArea,0);assert(p.card&&t.rect.top>=Math.max(0,p.card.top)&&t.rect.bottom<=Math.min(p.viewport.height,p.card.bottom)&&t.rect.left>=Math.max(0,p.card.left)&&t.rect.right<=Math.min(p.viewport.width,p.card.right));primaryActions.push({caseId:row.id,phase:action.phase});
+            }
+            assert.equal(row.actions[2].status,'PASS');assert.equal(row.status,row.actions.some(x=>x.status==='FAILED_ACTION')?'OBSERVED_FAILURE':'PASS');for(const phase of ['entry-stadium-help','opening','settled','answered','completed']){assert(fs.statSync(dir+row.id+'-'+phase+'.png').size>1000);assert(fs.statSync(dir+row.id+'-'+phase+'.html').size>1000);}assert(fs.statSync(dir+row.id+'-observations.json').size>1000);
+          }
+          assert.equal(r.actualFailures.length,ownedFailures.length);assert.equal(r.actualPassedCases,r.cases.filter(x=>x.status==='PASS').length);assert.equal(r.actualFailedCases,r.cases.filter(x=>x.status==='OBSERVED_FAILURE').length);assert.equal(r.healthy,ownedFailures.length===0);assert.equal(r.status,r.healthy?'PASS':'BASELINE_FAILURES_OBSERVED');assert.equal(driverExit,r.healthy?0:1);
+          assert.equal(r.transportPredicateControls.length,6);assert.equal(new Set(r.transportPredicateControls.map(x=>x.name)).size,6);assert(r.transportPredicateControls.every(x=>x.networkAttempted===false&&x.beforeSha256!==x.afterSha256&&x.error.name==='AssertionError'&&x.error.message.startsWith('COOKIE_TRANSPORT:')));
+          assert.equal(r.fontControls.length,2*r.cases.length);for(const row of r.cases){const controls=r.fontControls.filter(x=>x.caseId===row.id);assert.deepEqual(controls.map(x=>x.family),['Inter','Space Grotesk']);assert(controls.every(x=>x.beforeSha256!==x.afterSha256&&x.absenceRejectedDespiteCheckTrue===true&&x.networkAttempted===false));}
+          assert.equal(r.primaryGeometryControls.length,10*primaryActions.length);for(const primary of primaryActions){const controls=r.primaryGeometryControls.filter(x=>x.caseId===primary.caseId&&x.phase===primary.phase);assert.deepEqual(controls.map(x=>x.name),['different-primary','center-outside-viewport','center-blocked','cookie-hit','cookie-overlap','above-dialog','below-dialog','left-of-dialog','right-of-dialog','missing-dialog']);assert(controls.every(x=>x.beforeSha256!==x.afterSha256&&x.geometryRefused===true&&x.networkAttempted===false&&x.error.name==='AssertionError'&&x.error.message.startsWith('RADIX1447_PRIMARY_')));}
+          assert.equal(r.classificationControls.length,5*ownedFailures.length);for(const owned of ownedFailures){const controls=r.classificationControls.filter(x=>x.caseId===owned.caseId&&x.action===owned.label);assert.deepEqual(controls.map(x=>x.name),['missing-banner-hit','missing-final-banner-hit','different-final-button','wrong-error','dialog-already-closed']);assert(controls.every(x=>x.beforeSha256!==x.afterSha256&&x.classificationRefused===true&&x.networkAttempted===false));}
+          fs.writeFileSync(process.env.OUT+'/academy-baseline-admission.json',JSON.stringify({complete:true,healthy:r.healthy,source:process.env.GITHUB_SHA,base:process.env.BASE_SOURCE,phase:'academy-baseline',status:r.status,actualDriverExit:driverExit,plannedCases:r.plannedCases,actualContexts:r.actualContexts,actualCompleteCases:r.actualCompleteCases,actualPassedCases:r.actualPassedCases,actualFailedCases:r.actualFailedCases,actualPassingPrimaryActions:primaryActions.length,actualOwnedBannerFailures:ownedFailures.length,fontControls:r.fontControls.length,primaryGeometryControls:r.primaryGeometryControls.length,classificationControls:r.classificationControls.length,unrelatedFailureOrUnclassifiedAdmitted:false,applicationQualified:false},null,2)+'\n');
+          JS
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+      - name: Always retain exact source, public, completed dist, font and transport holds
+        if: always()
+        run: |
+          set -uo pipefail
+          mkdir -p "$OUT";failed=0
+          status=0;sha256sum --check "$OUT/source-before.sha256" > "$OUT/source-hold.log" 2>&1 || status=$?;printf '%s\n' "$status" > "$OUT/source-hold.exit";test "$status" -eq 0 || failed=1
+          status=0;{
+            git ls-files -z -- . | sort -z > "$OUT/tracked-paths-after.bin" && cmp "$OUT/tracked-paths-before.bin" "$OUT/tracked-paths-after.bin" &&
+            git diff --exit-code HEAD -- . && git ls-files --others --exclude-standard -- . ":!$OUT/**" > "$OUT/source-untracked-after.txt" && test ! -s "$OUT/source-untracked-after.txt"
+          } > "$OUT/operator-source-hold.log" 2>&1 || status=$?;printf '%s\n' "$status" > "$OUT/operator-source-hold.exit";test "$status" -eq 0 || failed=1
+          status=0;{
+            find public scripts/data/lastmod.json scripts/data/guideHeadingsFrozen.json src/data/searchKeywords.json ! -type d ! -type f -print > "$OUT/generated-nonregular-after.txt" && test ! -s "$OUT/generated-nonregular-after.txt" &&
+            find public scripts/data/lastmod.json scripts/data/guideHeadingsFrozen.json src/data/searchKeywords.json -type f -print0 | sort -z | xargs -0 sha256sum > "$OUT/generated-after.sha256" && cmp "$OUT/generated-before.sha256" "$OUT/generated-after.sha256" &&
+            git diff --binary HEAD -- public scripts/data/lastmod.json scripts/data/guideHeadingsFrozen.json src/data/searchKeywords.json > "$OUT/generated.patch" && test ! -s "$OUT/generated.patch" &&
+            git diff --name-only HEAD -- public scripts/data/lastmod.json scripts/data/guideHeadingsFrozen.json src/data/searchKeywords.json > "$OUT/generated-files.txt" && test ! -s "$OUT/generated-files.txt"
+          } > "$OUT/generated-output-hold.log" 2>&1 || status=$?;printf '%s\n' "$status" > "$OUT/generated-output-hold.exit";test "$status" -eq 0 || failed=1
+          status=0;{
+            find dist ! -type d ! -type f -print > "$OUT/dist-nonregular-after.txt" && test ! -s "$OUT/dist-nonregular-after.txt" &&
+            find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$OUT/dist-after.sha256" && cmp "$OUT/dist-before.sha256" "$OUT/dist-after.sha256"
+          } > "$OUT/dist-output-hold.log" 2>&1 || status=$?;printf '%s\n' "$status" > "$OUT/dist-output-hold.exit";test "$status" -eq 0 || failed=1
+          for kind in dependencies proof-inputs font-inputs;do
+            status=0;sha256sum --check "$OUT/$kind.sha256" > "$OUT/$kind-hold.log" 2>&1 || status=$?;printf '%s\n' "$status" > "$OUT/$kind-hold.exit";test "$status" -eq 0 || failed=1
+          done
+          status=0;{
+            test -f "$OUT/build.transport" && test ! -s "$OUT/build.transport" && test -f "$OUT/browser.transport" && test ! -s "$OUT/browser.transport"
+          } > "$OUT/transport-hold.log" 2>&1 || status=$?;printf '%s\n' "$status" > "$OUT/transport-hold.exit";test "$status" -eq 0 || failed=1
+          printf '%s\n' "$failed" > "$OUT/final-holds.exit"
+          (cd "$OUT";find . -type f ! -path ./evidence.sha256 -print0 | sort -z | xargs -0 sha256sum) > "$OUT/evidence.sha256" || failed=1
+          exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: consent-dialog1447-academy-${{ github.run_id }}-${{ github.run_attempt }}
+          path: consent-dialog1447-academy-artifacts/
+          if-no-files-found: error
+          retention-days: 14
