@@ -1,0 +1,6 @@
+guideRefresh exit=0 3s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+simTycoonHelp exit=0 27s |    All 25 controls fired exactly where they should.
+ticketpolicy-all exit=0 100s | Ticket policy: 21/21 normal outcomes; 24/24 effective copied faults, each with independent purchase baseline. Raw reports, logs, copied sources and hashes retained at /ho
+tsc exit=0 99s | 
+simTycoonPacks exit=0 270s |    All 23 controls fired exactly where they should.
+simTycoonScorelines exit=0 342s | simTycoonScorelines: 17 checks, 0 failed [342 s]

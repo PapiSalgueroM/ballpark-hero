@@ -1,0 +1,6 @@
+simTycoonPacks: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonPacks.mjs
+simTycoonScorelines: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonScorelines.mjs
+guideRefresh: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simGuideHeadings.mjs --refresh /stadium-tycoon && cp scripts/data/guideHeadingsFrozen.json "$RC_OUT/" && git diff --stat && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simGuideHeadings.mjs
+simTycoonHelp: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonHelp.mjs
+ticketpolicy-all: TYCOON_TICKET_POLICY_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonTicketPolicy.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
