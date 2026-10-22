@@ -1,0 +1,4 @@
+#!build
+#!playwright
+simWritesAreSent: export TMPDIR=$(mktemp -d); node scripts/simWritesAreSent.mjs
+simResultMoment: export TMPDIR=$(mktemp -d); node scripts/simResultMoment.mjs
