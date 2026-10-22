@@ -1,0 +1,2 @@
+#!playwright
+base-writessent: git worktree add /tmp/base 6d2d7a7d >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/base/node_modules && cd /tmp/base && node_modules/.bin/vite build > /tmp/base-build.log 2>&1 && node scripts/simWritesAreSent.mjs
