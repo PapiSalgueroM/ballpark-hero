@@ -1,0 +1,80 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/components/nba-front-office/NbaRotationPanel.test.tsx [2m([22m[2m15 tests[22m[2m)[22m[33m 4711[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA rotation UI with real board persistence[2m > [22mpreserves an old automatic save and exact original strength as an independent baseline [33m 651[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA rotation UI with real board persistence[2m > [22mswaps a bench player into the starting five and saves the actual changed strength [33m 353[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA rotation UI with real board persistence[2m > [22mpreserves two distinct selections without overwriting the first saved choice [33m 411[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA rotation UI with real board persistence[2m > [22mdisables injured options and rejects a forced injured selection without changing the save [33m 329[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA rotation UI with real board persistence[2m > [22mrestores automatic selection by removing its saved preference and announces only that action [33m 330[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA rotation UI with real board persistence[2m > [22mreloads saved manual choices quietly with identical persisted bytes [33m 326[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA rotation UI with real board persistence[2m > [22mgives a chosen bench prospect real simulated games and points while automatic leaves him outside the eight [33m 614[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA rotation UI with real board persistence[2m > [22mshows earned update feedback once with finite motion reduced motion and native sized controls [33m 490[2mms[22m[39m
+ [32m✓[39m src/test/nhlContributorsBoard.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[33m 5765[2mms[22m[39m
+   [33m[2m✓[22m[39m actual NHL contributor decisions[2m > [22mopens automatic contributors quietly with exact healthy counts and unchanged ratings [33m 1255[2mms[22m[39m
+   [33m[2m✓[22m[39m actual NHL contributor decisions[2m > [22mstages replacements without saving and cancels back to the exact roster opener [33m 626[2mms[22m[39m
+   [33m[2m✓[22m[39m actual NHL contributor decisions[2m > [22mapplies exact IDs once through the original save with finite clone-safe feedback and stable inputs [33m 938[2mms[22m[39m
+   [33m[2m✓[22m[39m actual NHL contributor decisions[2m > [22mrestores manual choices quietly and returns to automatic selection in one unchanged-pipeline save [33m 550[2mms[22m[39m
+   [33m[2m✓[22m[39m actual NHL contributor decisions[2m > [22mshows thin and empty groups truthfully with the original empty-group rating [33m 630[2mms[22m[39m
+   [33m[2m✓[22m[39m actual NHL contributor decisions[2m > [22mrepairs existing restored overrides after ID repair without creating automatic overrides or writes [33m 657[2mms[22m[39m
+   [33m[2m✓[22m[39m actual NHL contributor decisions[2m > [22mrefuses same-frame duplicate Apply without a second save or booking [33m 507[2mms[22m[39m
+   [33m[2m✓[22m[39m actual NHL contributor decisions[2m > [22mpreserves the existing waive callback, exact dead cap and contributor repair [33m 596[2mms[22m[39m
+ [32m✓[39m src/test/mlbTradeRoster.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[33m 7347[2mms[22m[39m
+   [33m[2m✓[22m[39m actual MLB whole-roster trade access[2m > [22mholds the original first-eight rating and tied order without writes or choices [33m 966[2mms[22m[39m
+   [33m[2m✓[22m[39m actual MLB whole-roster trade access[2m > [22mreaches all Finder choices with truthful counts, stable earlier nodes and native focus [33m 697[2mms[22m[39m
+   [33m[2m✓[22m[39m actual MLB whole-roster trade access[2m > [22mreaches all manual send choices and shares the exact selected ID with Finder [33m 691[2mms[22m[39m
+   [33m[2m✓[22m[39m actual MLB whole-roster trade access[2m > [22mreaches every partner choice and resets only its page when changing clubs [33m 1016[2mms[22m[39m
+   [33m[2m✓[22m[39m actual MLB whole-roster trade access[2m > [22mshops a later exact own ID through original Finder and accepts its unchanged full Save [33m 1830[2mms[22m[39m
+   [33m[2m✓[22m[39m actual MLB whole-roster trade access[2m > [22mopens and commits a later exact manual pair through original talks and salary/pick rules [33m 906[2mms[22m[39m
+   [33m[2m✓[22m[39m actual MLB whole-roster trade access[2m > [22mkeeps later released-player refusals quiet and focuses the count when no receive choice is enabled [33m 544[2mms[22m[39m
+   [33m[2m✓[22m[39m actual MLB whole-roster trade access[2m > [22mblocks held-key default activation on newly exposed choices while fresh keys stay usable [33m 665[2mms[22m[39m
+ [32m✓[39m src/components/nba-front-office/NbaGmDeskBoard.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 679[2mms[22m[39m
+ [32m✓[39m src/components/nhl-front-office/NhlFrontOfficeRatingEvidence.test.tsx [2m([22m[2m10 tests[22m[2m)[22m[33m 3789[2mms[22m[39m
+   [33m[2m✓[22m[39m NHL actual opening ratings and readable saved evidence[2m > [22mdrops a real pending rating import after unmount without overwriting a newer save [33m 567[2mms[22m[39m
+   [33m[2m✓[22m[39m NHL actual opening ratings and readable saved evidence[2m > [22mstarts actual ANA with all416 reviewed prices ratings and opening evidence [33m 450[2mms[22m[39m
+   [33m[2m✓[22m[39m NHL actual opening ratings and readable saved evidence[2m > [22msettles two same-frame franchise clicks with one initializer and one save [33m 572[2mms[22m[39m
+   [33m[2m✓[22m[39m NHL actual opening ratings and readable saved evidence[2m > [22mkeeps opening estimates separate from developed grades after a real saved trade [33m 372[2mms[22m[39m
+   [33m[2m✓[22m[39m NHL actual opening ratings and readable saved evidence[2m > [22mrefuses an invalid opening version without overwriting another save and retries cleanly [33m 761[2mms[22m[39m
+   [33m[2m✓[22m[39m NHL actual opening ratings and readable saved evidence[2m > [22mforwards saved quote version through actual waiver market display and signing [33m 335[2mms[22m[39m
+ [32m✓[39m src/components/mlb-front-office/MlbDraftCapital.test.tsx [2m([22m[2m18 tests[22m[2m)[22m[33m 3633[2mms[22m[39m
+   [33m[2m✓[22m[39m 966 MLB real draft-capital consequences[2m > [22mordinary two choices keep the original two five-rival batches full offseason salaries and RNG [33m 668[2mms[22m[39m
+   [33m[2m✓[22m[39m 966 MLB real draft-capital consequences[2m > [22mone actual pick consumes exactly once through a same-frame duplicate and refresh [33m 340[2mms[22m[39m
+   [33m[2m✓[22m[39m 966 MLB real draft-capital consequences[2m > [22mfour acquired rights add four real players but only the two ordinary CPU batches [33m 752[2mms[22m[39m
+   [33m[2m✓[22m[39m 966 MLB real draft-capital consequences[2m > [22mmalformed pick progress retains exact raw bytes until explicit own-key discard [33m 384[2mms[22m[39m
+[90mstdout[2m | src/components/nba-front-office/NbaDraftNightRivals.test.tsx[2m > [22m[2mNBA draft night, GM desk off: the card shows the picks the engine made[2m > [22m[2mthe rival rows are the picks the engine made, in order, each on the club its row names
+[22m[39mNBA draft night, desk off: the engine took 5 for rival clubs, the card drew 5 rival rows
+
+[90mstdout[2m | src/components/nba-front-office/NbaDraftNightRivals.test.tsx[2m > [22m[2mNBA draft night, GM desk off: the card shows the picks the engine made[2m > [22m[2mevery rival row carries the grade the draft screen printed for that prospect before the press
+[22m[39mNBA draft night, desk off: 5 of 5 rival rows were on the draft screen before the press, each grade equal
+
+[90mstdout[2m | src/components/nba-front-office/NbaDraftNightRivals.test.tsx[2m > [22m[2mNBA draft night, GM desk on: the card shows the picks the engine made[2m > [22m[2mthe rival rows are the picks the engine made, in order, each on the club its row names
+[22m[39mNBA draft night, desk on: the engine took 5 for rival clubs, the card drew 5 rival rows
+
+[90mstdout[2m | src/components/nba-front-office/NbaDraftNightRivals.test.tsx[2m > [22m[2mNBA draft night, GM desk on: the card shows the picks the engine made[2m > [22m[2mevery rival row carries the grade the draft screen printed for that prospect before the press
+[22m[39mNBA draft night, desk on: 5 of 5 rival rows were on the draft screen before the press, each grade equal
+
+ [32m✓[39m src/components/nba-front-office/NbaDraftNightRivals.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 551[2mms[22m[39m
+ [32m✓[39m src/test/mlbFullRosters.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 782[2mms[22m[39m
+ [32m✓[39m src/components/nba-front-office/NbaFrontOfficeRatingEvidence.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 2063[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA actual opening ratings and readable saved evidence[2m > [22mdrops a real pending rating import after unmount without overwriting a newer save [33m 409[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA actual opening ratings and readable saved evidence[2m > [22mstarts actual DEN with all300 reviewed prices ratings and opening evidence [33m 410[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA actual opening ratings and readable saved evidence[2m > [22msettles two same-frame franchise clicks with one initializer and one save [33m 389[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA actual opening ratings and readable saved evidence[2m > [22mrefuses an invalid opening version without overwriting another save and retries cleanly [33m 584[2mms[22m[39m
+ [32m✓[39m src/components/nhl-front-office/NhlWaiverReceipt.test.tsx [2m([22m[2m11 tests[22m[2m)[22m[33m 321[2mms[22m[39m
+ [32m✓[39m src/components/mlb-front-office/MlbGmDesk.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 1192[2mms[22m[39m
+   [33m[2m✓[22m[39m 1020 MLB GM desk on the board[2m > [22ma desk save plays October with the staff edge and takes its winter through the re-sign desk [33m 547[2mms[22m[39m
+ [32m✓[39m src/components/nhl-front-office/NhlTradeLists.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 523[2mms[22m[39m
+ [32m✓[39m src/components/nba-front-office/NbaTradeLists.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 478[2mms[22m[39m
+ [32m✓[39m src/components/nba-front-office/NbaRotationReset.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 1301[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA rotation view lifecycle across actual Board restart[2m > [22mkeeps ordinary new-franchise restart and own-key deletion as an independent baseline [33m 487[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA rotation view lifecycle across actual Board restart[2m > [22mcloses the previous rotation view before a new franchise opens its roster [33m 513[2mms[22m[39m
+ [32m✓[39m src/components/nba-front-office/NbaSeasonStats.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 600[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m15 passed[39m[22m[90m (15)[39m
+[2m      Tests [22m [1m[32m117 passed[39m[22m[90m (117)[39m
+[2m   Start at [22m 09:14:46
+[2m   Duration [22m 19.66s[2m (transform 2.57s, setup 1.12s, collect 10.08s, tests 33.74s, environment 7.48s, prepare 1.83s)[22m
+

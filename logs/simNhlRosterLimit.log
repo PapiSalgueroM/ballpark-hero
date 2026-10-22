@@ -1,0 +1,7 @@
+NHL roster normal: PASS: actual overage restore retains all players and names the required roster decision
+NHL roster normal: PASS: overage cannot advance through its control or the actual handler
+NHL roster normal: PASS: two deliberate waivers keep their real costs and allow the next round at fifteen
+NHL roster normal: PASS: ordinary within-limit opening play keeps the original engine outcome and draw tape
+NHL roster normal: 4/4 passed, 0 exact outcome rejections, all four cases executed.
+NHL roster receipt: /home/runner/work/_temp/t-simNhlRosterLimit/dukb-nhl968-proof-T5Gr67
+NHL roster: exact controls, CRLF-safe matching, bounded cleanup and zero outside transport verified.
