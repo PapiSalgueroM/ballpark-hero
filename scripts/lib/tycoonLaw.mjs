@@ -81,7 +81,7 @@ export function matchGap(s: TycoonState): number {
 /** A rival's chance of scoring in one minute of a fixture you are not in: the
  *  law's expected goals against the other club at this venue, over ninety
  *  one roll minutes. */
-function rivalChancePerMin(st: TycoonState, c: LeagueClub, other: LeagueClub, venue: number): number {
+export function rivalChancePerMin(st: TycoonState, c: LeagueClub, other: LeagueClub, venue: number): number {
   return goalLambda(clubStrength(st, c) - clubStrength(st, other), venue) / 90;
 }
 `;

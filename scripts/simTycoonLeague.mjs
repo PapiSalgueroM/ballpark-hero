@@ -37,6 +37,12 @@
  *
  *  9. No wall (Round 582 review): clubs with a squad of 3 and of 6 get promoted
  *     out of the bottom league within three hours in all but a few seeded runs.
+ *     Since Round 1532 rivals do not read the match count at all: their strength is
+ *     their division's plus their own offset, in the shared scoring law's points.
+ *  9b. No club is walled (Round 1532): every stadium save of the test corpus, and
+ *     the keeping pace club's own state on arrival in each division it reaches,
+ *     with its Squad cut by 10 levels, wins a title within three hours in at least
+ *     27 of 30 seeded runs of the same greedy buyer.
  * 10. The loader (Round 582 review): a league failing a check keeps its division,
  *     a doctored division above the career best is refused, an impossible table
  *     is refused, a kept "Your club" is remembered, a dead heat goes your way.
@@ -47,7 +53,7 @@
  *   doubleleg  the bottom divisions play home and away                           red 4
  *   reroll     the other fixtures roll Math.random                                red 5
  *   spread     the league latch reads the spread save instead of the raw one      red 6
- *   globalclimb   opponents strengthen by the career match count again            red 9
+ *   globalclimb   opponents strengthen by the career match count again            red 9, red 9b
  *   dropdivision  a failed league is rebuilt from the old win count again         red 10
  *   uncapped      a stored league above the career best is trusted                red 10
  *   lopsided      a stored table that cannot add up is trusted                    red 10
@@ -358,6 +364,76 @@ function sectionNoWall(T) {
   return { out, note: `never promoted in three hours: squad 3 ${stuck[3]}/${SEEDS}, squad 6 ${stuck[6]}/${SEEDS}; median first promotion ${med(minutes[3])} and ${med(minutes[6])} min` };
 }
 
+/* 9b (Round 1532, the scout's ask): no club is walled. Every stadium save of the
+   test corpus, and for every division the keeping pace bot reaches within 300
+   minutes (seed 1) its own state on arrival with the Squad cut by 10 levels (a club
+   that fell behind the ladder, not an impossible doctored one), is played on by the
+   same greedy buyer for 180 minutes over 30 seeds, and must win a title (a
+   promotion, or at The Summit a title) in at least CATCH_UP_FENCE of the 30. A
+   division the bot never reaches is printed as untested. */
+const SAVES = path.join(ROOT, 'src/test/fixtures/tycoonSaves.json');
+const CATCH_UP_SEEDS = 30;
+const CATCH_UP_FENCE = 27;
+function greedyRound(T, s) {
+  for (let i = 0; i < 6; i += 1) s = T.tap(s);
+  for (let guard = 0; guard < 25; guard += 1) {
+    const full = T.attendance(s) >= T.capacity(s) - 5;
+    const options = T.TRACKS.filter(tr => T.canBuy(s, tr.id)).sort((a, b) =>
+      T.costOf(s, a.id) * (full && a.id === 'stands' ? 0.55 : 1) - T.costOf(s, b.id) * (full && b.id === 'stands' ? 0.55 : 1));
+    if (!options.length) break;
+    s = T.buy(s, options[0].id);
+  }
+  return s;
+}
+function sectionCatchUp(T) {
+  const out = [];
+  const everyTwo = Math.round(2 / DT);
+  const corpus = JSON.parse(read(SAVES));
+  const cases = [];
+  for (const e of corpus.entries.filter(x => x.key === 'stadium')) {
+    const s = T.deserializeTycoon(e.raw, corpus.now);
+    if (!s) { out.push(`the corpus save ${e.name} did not load`); continue; }
+    cases.push({ name: `save ${e.name} (division ${T.divisionIndex(s)}, Squad ${T.levelOf(s, 'squad')})`, state: s });
+  }
+  const roll = mulberry(1);
+  let s = T.newTycoon(0);
+  const reached = new Set();
+  for (let step = 0; step < Math.round((300 * 60) / DT); step += 1) {
+    const r = T.tick(s, DT, roll);
+    s = r.state;
+    if (r.events.some(e => e.kind === 'promoted') && !reached.has(T.divisionIndex(s))) {
+      const d = T.divisionIndex(s);
+      reached.add(d);
+      const squad = T.levelOf(s, 'squad');
+      cases.push({ name: `division ${d} on arrival, Squad ${squad} cut to ${Math.max(0, squad - 10)}`, state: { ...s, levels: { ...s.levels, squad: Math.max(0, squad - 10) } } });
+    }
+    if ((step + 1) % everyTwo === 0) s = greedyRound(T, s);
+  }
+  const untested = [];
+  for (let d = 1; d < 10; d += 1) if (!reached.has(d)) untested.push(d);
+  const notes = [];
+  for (const [k, c] of cases.entries()) {
+    const at = T.divisionIndex(c.state);
+    let won = 0; const when = [];
+    for (let seed = 1; seed <= CATCH_UP_SEEDS; seed += 1) {
+      const rl = mulberry(seed * 104729 + k * 31);
+      let st = c.state; let t = null;
+      for (let step = 0; step < Math.round((180 * 60) / DT) && t === null; step += 1) {
+        const r = T.tick(st, DT, rl);
+        st = r.state;
+        if (r.events.some(e => e.kind === 'promoted' || (at >= 9 && e.kind === 'title'))) t = ((step + 1) * DT) / 60;
+        if ((step + 1) % everyTwo === 0) st = greedyRound(T, st);
+      }
+      if (t !== null) { won += 1; when.push(t); }
+      if (seed - won > CATCH_UP_SEEDS - CATCH_UP_FENCE) break;
+    }
+    const median = when.length ? [...when].sort((a, b) => a - b)[Math.floor(when.length / 2)].toFixed(1) : 'never';
+    notes.push(`${c.name}: ${won}/${CATCH_UP_SEEDS}, median ${median} min`);
+    if (won < CATCH_UP_FENCE) { out.push(`${c.name} won a title in only ${won} of the seeds it played, under ${CATCH_UP_FENCE} of ${CATCH_UP_SEEDS}`); return { out, note: notes.join('; ') }; }
+  }
+  return { out, note: `${notes.join('; ')}${untested.length ? `; divisions not reached in 300 minutes, untested: ${untested.join(', ')}` : ''}` };
+}
+
 /* The loader, as the review attacked it: a league that fails a check keeps its
    division (capped at the career best), a doctored division above the career
    best is refused, a table that cannot add up is refused, a kept "Your club" is
@@ -406,10 +482,13 @@ function sectionLoader(T) {
 
 /* ---------- controls ---------- */
 
+/* Round 1532: the squad reaches both sides' scoring chance through one line,
+   squadStrength (the scoring law reads the gap between it and today's rival), so
+   "the squad stops changing either side's scoring chance" is that line returning 0. */
 const FLAT_REWRITES = [
-  ["  const sq = levelOf(s, 'squad');\n  return Math.min(0.16, 0.028 + sq * 0.0016);", '  return Math.min(0.16, 0.028);'],
-  ['  const base = Math.max(0.008, Math.min(0.14, opp - sq * 0.0008));', '  const base = Math.max(0.008, Math.min(0.14, opp));'],
+  ["  return levelOf(s, 'squad') * SQUAD_POINTS;", '  return 0;'],
 ];
+const GLOBAL_CLIMB = [['  return divisionOf(s).rivalStrength;', '  return divisionOf(s).rivalStrength + s.matchNo * 1.8;']];
 const CONTROLS = [
   { name: 'threshold', why: 'a club that did not win the league goes up when its home win count would have promoted it', section: 1,
     rewrites: [['  if (position !== 1) {', '  if (position !== 1 && legacyDivisionIndex(st.groundWins ?? 0) <= played.division) {']] },
@@ -420,8 +499,11 @@ const CONTROLS = [
     rewrites: [['  const rnd = mulberry32(hash32(lg.seed, lg.season, lg.matchday, 7));', '  const rnd = Math.random;']] },
   { name: 'spread', why: 'the league latch reads the spread save, which always carries a fresh bottom league', section: 6,
     rewrites: [['    const rawLeague = (p as { league?: unknown }).league;', '    const rawLeague = (s as { league?: unknown }).league;']] },
-  { name: 'globalclimb', why: 'opponents are strengthened by the career match count again, the first draft', section: 9,
-    rewrites: [['  return Number.isFinite(base) ? Math.min(s.matchNo, base as number) : s.matchNo;', '  return base === undefined || base !== null ? s.matchNo : s.matchNo;']] },
+  /* Round 1532: rivals no longer read the match count at all, so the first draft's
+     climb comes back as the old 0.0011 a match turned into law points (1.8 a match)
+     on the one line every rival's strength reads. It must turn 9 and 9b red. */
+  { name: 'globalclimb', why: 'opponents are strengthened by the career match count again, the first draft', section: 9, rewrites: GLOBAL_CLIMB },
+  { name: 'globalclimb', why: 'opponents are strengthened by the career match count again, so a club behind the ladder never catches it', section: '9b', rewrites: GLOBAL_CLIMB },
   { name: 'dropdivision', why: 'a league that fails a check is rebuilt from the old win count again', section: 10,
     rewrites: [['newLeague(s.rep, Number.isInteger(claimed) ? Math.min(Math.max(0, claimed as number), best) : Math.min(legacyDivisionIndex(s.groundWins ?? 0), best), 0, youName, s.matchNo);', 'newLeague(s.rep, Math.min(legacyDivisionIndex(s.groundWins ?? 0), best), 0, youName, s.matchNo);']] },
   { name: 'uncapped', why: 'a stored league above the career best is trusted', section: 10,
@@ -454,6 +536,7 @@ const SECTIONS = {
   8: ['Rebuild still plays the shared calendar', () => sectionRebuild()],
   9: ['No wall: a club that can compete gets promoted in time', lib => sectionNoWall(lib)],
   10: ['The loader keeps divisions, refuses doctored leagues, and ties go your way', lib => sectionLoader(lib)],
+  '9b': ['No club is walled: saved clubs and clubs behind the ladder win a title in time', lib => sectionCatchUp(lib)],
 };
 
 for (const [n, [title, run]] of Object.entries(SECTIONS)) {

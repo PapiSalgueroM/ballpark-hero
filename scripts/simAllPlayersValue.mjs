@@ -252,7 +252,11 @@ function policyRun(mods, seed, sellAge) {
   let elapsed = 0;
   for (let season = 1; season <= 10; season += 1) {
     let s = T.newTycoon(NOW);
-    s.levels.squad = 40;
+    /* Round 1532, the lead's ruling S3: the fixture stood for a contested mid game
+       club. Under the scoring law a Squad of 40 sits 12 points under division 3's
+       rivals, a hopeless side, so it moves to division 3's par plus 6 law points
+       (par = the Squad level whose strength equals its rivals'). */
+    s.levels.squad = Math.round(T.DIVISIONS[3].rivalStrength / T.SQUAD_POINTS) + Math.ceil(6 / T.SQUAD_POINTS);
     s.league = T.newLeague(0, 3, season, undefined, 70);
     s.matchNo = 70;
     const matches = T.leagueShape(3).matchdays;
@@ -296,6 +300,11 @@ function policyMeasure(mods, offset = 0) {
     sellSenior: mean(row => row.sell.seniorFees), holdSenior: mean(row => row.hold.seniorFees),
     sellRefills: mean(row => row.sell.refills), holdRefills: mean(row => row.hold.refills),
   };
+  /* Round 1532 (brief R2): the standard error of the paired per seed win gain, for
+     the hard stop on the holdout. */
+  const gains = rows.map(row => row.hold.wins - row.sell.wins);
+  const g = mean(row => row.hold.wins - row.sell.wins);
+  result.winGainSe = Math.sqrt(gains.reduce((sum, x) => sum + (x - g) ** 2, 0) / (gains.length - 1) / gains.length);
   console.log(`  POLICY ${offset ? 'holdout' : 'calibration'} ${JSON.stringify(result)}`);
   return result;
 }
@@ -356,6 +365,11 @@ try {
       const gain = sample.holdWins - sample.sellWins;
       assert(gain > baseline.policy.winsGainFloor, `${label}: hold33 win gain ${gain.toFixed(3)} below measured half-headroom floor ${baseline.policy.winsGainFloor}`);
     }
+    /* Round 1532, the lead's hard stop (brief R2): the first team must still
+       measurably win matches, so the holdout's gain must clear zero by more than two
+       standard errors of its paired seeds, whatever the floor. */
+    const holdGain = holdout.holdWins - holdout.sellWins;
+    assert(holdGain > 2 * holdout.winGainSe, `holdout: hold33 win gain ${holdGain.toFixed(3)} is not above two standard errors (${(2 * holdout.winGainSe).toFixed(3)}), so the first team no longer measurably wins matches`);
     return `${policy.seeds}+${holdout.seeds} paired seeds: hold33 gains ${policy.holdWins - policy.sellWins} wins, holdout ${holdout.holdWins - holdout.sellWins} (floor ${baseline.policy.winsGainFloor})`;
   });
   if (!CONTROL) {

@@ -205,7 +205,11 @@ try {
     let ignoredWins = 0, kickerWins = 0, goals = 0;
     for (let i = 0; i < count; i += 1) {
       const match = seedStart + i;
-      const initial = { ...fresh, levels: { ...fresh.levels, squad: 40 }, league: competition, matchNo: 70, totalMatches: match };
+      /* Round 1532, the lead's ruling S3: Round 586's and this fixture's club moves
+         from Squad 40 (12 law points under division 3's rivals, a hopeless side) to
+         division 3's par plus 6 points, a contested mid game club. */
+      const squad = Math.round(T.DIVISIONS[3].rivalStrength / T.SQUAD_POINTS) + Math.ceil(6 / T.SQUAD_POINTS);
+      const initial = { ...fresh, levels: { ...fresh.levels, squad }, league: competition, matchNo: 70, totalMatches: match };
       const arms = [structuredClone(initial), structuredClone(initial)];
       const rolls = [L.mulberry32(match * 101), L.mulberry32(match * 101)];
       const wins = [false, false];

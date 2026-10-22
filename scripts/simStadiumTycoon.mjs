@@ -44,13 +44,14 @@ const mod = await import('${ROOT.replaceAll('\\', '/')}/src/lib/stadiumTycoon.ts
 const cm = await import('${ROOT.replaceAll('\\', '/')}/src/lib/clubManager.ts');
 export const T = mod;
 export const CM_WORLD = { real: cm.REAL_LEAGUES, eras: cm.ERA_LEAGUES };
+export const LW = await import('${ROOT.replaceAll('\\', '/')}/src/lib/season/law.ts');
 `);
 execSync(
   `"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`,
   { stdio: 'inherit' },
 );
 
-const { T, CM_WORLD } = await import(pathToFileURL(BUNDLE).href);
+const { T, CM_WORLD, LW } = await import(pathToFileURL(BUNDLE).href);
 const {
   TRACKS, newTycoon, tick, buy, tap, costOf, canBuy, incomePerSec,
   prestige, canPrestige, prestigeThreshold, offlineEarnings,
@@ -372,7 +373,7 @@ console.log('9) Ten divisions, exact multipliers, promotion pays');
   for (let i = 1; i < DIVISIONS.length; i++) {
     if (DIVISIONS[i].winsNeeded <= DIVISIONS[i - 1].winsNeeded) fail(`division ${i} needs no more wins than division ${i - 1}`);
     if (DIVISIONS[i].incomeMult <= DIVISIONS[i - 1].incomeMult) fail(`division ${i} does not pay more than division ${i - 1}`);
-    if (DIVISIONS[i].oppBoost <= DIVISIONS[i - 1].oppBoost) fail(`division ${i} is not harder than division ${i - 1}`);
+    if (!(DIVISIONS[i].rivalStrength > DIVISIONS[i - 1].rivalStrength)) fail(`division ${i} is not harder than division ${i - 1}`);
   }
   const s0 = newTycoon(0);
   if (divisionIndex(s0) !== 0) fail('a new club is not in the bottom division');
@@ -388,13 +389,25 @@ console.log('9) Ten divisions, exact multipliers, promotion pays');
   const ratio = incomePerSec(lifted) / incomePerSec(base);
   if (Math.abs(ratio - 2.25) > 1e-9) fail(`Silverline pays x${ratio}, the table says x2.25`);
 
-  // And it shoots back: net of today's rival's own strength, the opposition
-  // chance gap is exactly the oppBoost gap while both sit inside the clamp.
-  const oppGap = (oppChancePerMin(lifted) - T.currentOpponentOffset(lifted)) - (oppChancePerMin(base) - T.currentOpponentOffset(base));
-  if (Math.abs(oppGap - DIVISIONS[5].oppBoost) > 1e-9) fail(`Silverline oppBoost lands as ${oppGap}, table says ${DIVISIONS[5].oppBoost}`);
+  // And it shoots back. Round 1532: a rival's expected goals come from the shared
+  // scoring law at the gap between your Squad and its strength (its division plus
+  // its own offset, in law points), so the same club at Silverline concedes more
+  // by exactly the law's difference between the two gaps. Squad 12 keeps both
+  // rivals' expected goals inside the law's clamp, so the difference is the table's.
+  const { LAW, goalLambda } = LW;
+  const sq12 = st => ({ ...st, levels: { ...st.levels, squad: 12 } });
+  const gapOf = (st, d) => 12 * T.SQUAD_POINTS - DIVISIONS[d].rivalStrength - T.currentOpponentOffset(st) * T.RIVAL_OFFSET_POINTS;
+  const g5 = gapOf(lifted, 5), g0 = gapOf(base, 0);
+  const lam5 = LAW.base - g5 * LAW.perPoint + LAW.away, lam0 = LAW.base - g0 * LAW.perPoint + LAW.away;
+  if (!(lam5 > LAW.min && lam5 < LAW.max && lam0 > LAW.min && lam0 < LAW.max)) fail(`Squad 12 puts a rival at the law's clamp (${lam0.toFixed(3)} and ${lam5.toFixed(3)} expected goals), so this check proves nothing`);
+  const oppGap = oppChancePerMin(sq12(lifted)) - oppChancePerMin(sq12(base));
+  const lawGap = (goalLambda(-g5, LAW.away) - goalLambda(-g0, LAW.away)) / 90;
+  if (!(oppGap > 0) || Math.abs(oppGap - lawGap) > 1e-12) fail(`Silverline's rivals score ${oppGap} a minute more than Muddy Meadows', the law at gaps ${g5} and ${g0} says ${lawGap}`);
 
   // Promotion pays on the spot, only for the champion, on the last matchday:
-  // exactly attendance x8 x the new stage x rep, once.
+  // Round 1532, exactly PROMOTION_BONUS_SEC seconds of the club's unboosted
+  // income in the division it just reached, once. Badges the win earns settle
+  // after the pay, so the expected income is read without them.
   const noGoals = () => 0.999; // one quiet minute, straight to full time
   const finalDay = (youPts, rivalPts) => {
     const lg = T.newLeague(0, 0, 0);
@@ -405,13 +418,14 @@ console.log('9) Ten divisions, exact multipliers, promotion pays');
     });
     return { ...newTycoon(0), fanbase: 2000, minute: 89, goalsFor: 1, goalsAgainst: 0, league: { ...lg, matchday: last, clubs } };
   };
-  const r = tick(finalDay(12, 3), 1.4, noGoals);
+  const day = finalDay(12, 3);
+  const r = tick(day, 1.4, noGoals);
   const promo = r.events.find(e => e.kind === 'promoted');
   if (!r.events.some(e => e.kind === 'title')) fail('winning the league raised no title');
   if (!promo) fail('winning the league on the last matchday did not raise a promotion');
   else {
-    const expect = Math.round(attendance(r.state) * 8 * DIVISIONS[1].incomeMult * repMult(r.state));
-    if (promo.amount !== expect) fail(`promotion paid ${promo.amount}, the formula says ${expect}`);
+    if (divisionOf(r.state) !== DIVISIONS[1]) fail('the promoted club is not in division 1');
+    const expect = Math.round(T.unboostedIncomePerSec({ ...r.state, ach: day.ach }) * T.PROMOTION_BONUS_SEC);    if (promo.amount !== expect) fail(`promotion paid ${promo.amount}, the formula says ${expect}`);
     if (!promo.label.includes('Gravel Lane')) fail(`promotion label reads "${promo.label}"`);
     if (r.state.bestDivision !== 1) fail('bestDivision did not record the climb');
     if (divisionIndex(r.state) !== 1 || r.state.league.matchday !== 0) fail('the champion did not start the new division at matchday 1');

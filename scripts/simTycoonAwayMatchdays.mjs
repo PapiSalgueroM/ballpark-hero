@@ -68,7 +68,9 @@ const SECTIONS = ['S1', 'S2', 'S3', 'S4', 'S5', 'S6'];
 const MEAN_FENCE = 8;
 /* Measured on the first run: a squad of 50 won 94.8% of its away matches and a
    squad of 0 won 8.8%, an 86 point gap on fixed seeds. Half that is the fence: far
-   under the measurement, far over what a loop that ignored the squad could reach. */
+   under the measurement, far over what a loop that ignored the squad could reach.
+   Round 1532 re-anchors the two clubs to each division's par plus and minus 20 law
+   points (S5 below); the step 1 prediction for that fixture was 91.2% against 4.0%. */
 const WIN_GAP_FENCE = 0.5;
 
 let failures = 0;
@@ -301,21 +303,30 @@ function sections(T) {
   /* The count above is arithmetic, as the review pointed out, so the outcome is
      measured too: a strong squad must win clearly more of its away matches than a
      squad of nothing, on the same divisions and seeds, or away play is not the match. */
-  const winShare = squad => {
+  /* Round 1532: rivals now stand where their division puts them, so a fixed Squad of
+     50 is strong at the bottom and hopeless at The Summit. The two clubs are anchored
+     to each division's par (the Squad level whose strength equals its rivals'), plus
+     and minus ceil(20 / SQUAD_POINTS) levels, which is plus and minus 20 points of the
+     scoring law: the 86 point gap this fence was halved from (brief-1532 Q6, critic
+     item 7). Fence and seeds unchanged. */
+  const reach = Math.ceil(20 / T.SQUAD_POINTS);
+  const winShare = side => {
     let w = 0;
     let all = 0;
     for (let k = 0; k < 60; k += 1) {
-      const s = { ...T.newTycoon(0), levels: { ...T.newTycoon(0).levels, squad }, league: T.newLeague(k % 3, 3 + (k % 7), 0), bestDivision: 3 + (k % 7) };
+      const d = 3 + (k % 7);
+      const squad = Math.max(0, Math.round(T.DIVISIONS[d].rivalStrength / T.SQUAD_POINTS) + side * reach);
+      const s = { ...T.newTycoon(0), levels: { ...T.newTycoon(0).levels, squad }, league: T.newLeague(k % 3, d, 0), bestDivision: d };
       const r = T.playAwayMatchdays(s, 16, mulberry(8800 + k)).results;
       w += r.filter(m => m.result === 'W').length;
       all += r.length;
     }
     return all ? w / all : 0;
   };
-  const strong = winShare(50);
-  const weak = winShare(0);
-  if (!(strong - weak >= WIN_GAP_FENCE)) out.S5.push(`a squad of 50 won ${(100 * strong).toFixed(1)}% of its away matches and a squad of 0 won ${(100 * weak).toFixed(1)}%, a gap under the ${100 * WIN_GAP_FENCE} point fence`);
-  notes.S5 = `mean ${mean.toFixed(2)} away matchdays over eight hours (fence ${MEAN_FENCE}); away win share ${(100 * strong).toFixed(1)}% for a squad of 50 against ${(100 * weak).toFixed(1)}% for 0 (fence ${100 * WIN_GAP_FENCE} points); a club that buys nothing lost ${poorMatches ? ((100 * losses) / poorMatches).toFixed(0) : 0}% of its ${poorMatches} away matches`;
+  const strong = winShare(1);
+  const weak = winShare(-1);
+  if (!(strong - weak >= WIN_GAP_FENCE)) out.S5.push(`a club ${reach} Squad levels above its division's par won ${(100 * strong).toFixed(1)}% of its away matches and one ${reach} below won ${(100 * weak).toFixed(1)}%, a gap under the ${100 * WIN_GAP_FENCE} point fence`);
+  notes.S5 = `mean ${mean.toFixed(2)} away matchdays over eight hours (fence ${MEAN_FENCE}); away win share ${(100 * strong).toFixed(1)}% for par plus ${reach} Squad levels against ${(100 * weak).toFixed(1)}% for par minus ${reach} (fence ${100 * WIN_GAP_FENCE} points); a club that buys nothing lost ${poorMatches ? ((100 * losses) / poorMatches).toFixed(0) : 0}% of its ${poorMatches} away matches`;
   return { out, notes };
 }
 
@@ -385,7 +396,7 @@ function copyLoop(text) {
 }
 const CONTROLS = [
   { name: 'off', why: 'away matchdays never play', build: t => mustReplace(t, PLAYABLE, '  const n = 0;', 'stadiumTycoon.ts'), red: ['S1', 'S2', 'S3', 'S5', 'S6'], green: ['S4'], vRed: [7, 8], vGreen: [1, 2, 3, 4, 5, 6] },
-  { name: 'copy', why: 'the away minutes run a private loop that forgets the squad\'s defence', build: copyLoop, red: ['S1'], green: ['S2', 'S3', 'S4', 'S5', 'S6'], vRed: [], vGreen: [1, 2, 3, 4, 5, 6, 7, 8] },
+  { name: 'copy', why: 'the away minutes run a private loop whose opponent reads a different chance', build: copyLoop, red: ['S1'], green: ['S2', 'S3', 'S4', 'S5', 'S6'], vRed: [], vGreen: [1, 2, 3, 4, 5, 6, 7, 8] },
   { name: 'cash', why: 'away minutes pay their goal and win bonuses', build: t => mustReplace(t, AWAY_MINUTE, 'playMinute(st, roll, events, { pay: true }, edge)', 'stadiumTycoon.ts'), red: ['S3'], green: ['S1', 'S2', 'S4', 'S5', 'S6'], vRed: [3], vGreen: [1, 2, 4, 5, 6, 7, 8] },
   {
     name: 'counter',

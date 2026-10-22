@@ -19,6 +19,7 @@
  */
 
 import { roundRobinCalendar, tableOrder, mulberry32, hash32 } from '@/lib/leagueCore';
+import { goalLambda, LAW } from '@/lib/season/law';
 
 export interface TycoonTrack {
   id: string;
@@ -71,24 +72,31 @@ export interface TycoonDivision {
   winsNeeded: number;
   /** Everything earns this much more here: bigger stage, bigger money. */
   incomeMult: number;
-  /** Opponents up here are better, permanently. */
-  oppBoost: number;
+  /** Round 1532: this division's average rival, in the scoring law's points.
+   *  Strictly rising: every division up sends stronger rivals. */
+  rivalStrength: number;
 }
 
 /* Invented league names, checked by the harness against every real club
  * and league in the Club Manager world. Climbing is per GROUND: sell up
  * and the new club starts at the bottom with the rep multiplier for company. */
+/* Round 1532: rivalStrength is tuned by the recipe of brief-1532 design 3.5,
+ * never set by feel. Division 0 is knob 4; division d above it is
+ * round(SQUAD_POINTS x A_d) - ARRIVAL_EDGE, where A_d is the Squad a club that
+ * kept pace had when it was promoted into d before the law
+ * (scripts/data/tycoonScorelineBaseline.json) and ARRIVAL_EDGE is knob 3, measured
+ * by scripts/tuneTycoonScorelines.mjs into scripts/data/tycoonScorelineTuning.json. */
 export const DIVISIONS: TycoonDivision[] = [
-  { name: 'Muddy Meadows League', emoji: '🌧️', winsNeeded: 0, incomeMult: 1, oppBoost: 0 },
-  { name: 'Gravel Lane League', emoji: '🧱', winsNeeded: 6, incomeMult: 1.15, oppBoost: 0.006 },
-  { name: 'Tin Cup Division', emoji: '🥫', winsNeeded: 14, incomeMult: 1.32, oppBoost: 0.012 },
-  { name: 'Ironworks League', emoji: '⚙️', winsNeeded: 25, incomeMult: 1.55, oppBoost: 0.019 },
-  { name: 'Granite Division', emoji: '🪨', winsNeeded: 40, incomeMult: 1.85, oppBoost: 0.027 },
-  { name: 'Silverline League', emoji: '🥈', winsNeeded: 60, incomeMult: 2.25, oppBoost: 0.036 },
-  { name: 'Floodlit League', emoji: '💡', winsNeeded: 85, incomeMult: 2.8, oppBoost: 0.046 },
-  { name: 'Velvet Division', emoji: '🎩', winsNeeded: 115, incomeMult: 3.5, oppBoost: 0.057 },
-  { name: 'Crown Circuit', emoji: '👑', winsNeeded: 150, incomeMult: 4.4, oppBoost: 0.069 },
-  { name: 'The Summit', emoji: '🏔️', winsNeeded: 200, incomeMult: 5.5, oppBoost: 0.082 },
+  { name: 'Muddy Meadows League', emoji: '🌧️', winsNeeded: 0, incomeMult: 1, rivalStrength: 1 },
+  { name: 'Gravel Lane League', emoji: '🧱', winsNeeded: 6, incomeMult: 1.15, rivalStrength: 25 },
+  { name: 'Tin Cup Division', emoji: '🥫', winsNeeded: 14, incomeMult: 1.32, rivalStrength: 40 },
+  { name: 'Ironworks League', emoji: '⚙️', winsNeeded: 25, incomeMult: 1.55, rivalStrength: 46 },
+  { name: 'Granite Division', emoji: '🪨', winsNeeded: 40, incomeMult: 1.85, rivalStrength: 54 },
+  { name: 'Silverline League', emoji: '🥈', winsNeeded: 60, incomeMult: 2.25, rivalStrength: 58 },
+  { name: 'Floodlit League', emoji: '💡', winsNeeded: 85, incomeMult: 2.8, rivalStrength: 61 },
+  { name: 'Velvet Division', emoji: '🎩', winsNeeded: 115, incomeMult: 3.5, rivalStrength: 65 },
+  { name: 'Crown Circuit', emoji: '👑', winsNeeded: 150, incomeMult: 4.4, rivalStrength: 67 },
+  { name: 'The Summit', emoji: '🏔️', winsNeeded: 200, incomeMult: 5.5, rivalStrength: 69 },
 ];
 
 /** Index into DIVISIONS for the current ground. Round 582: the league decides.
@@ -677,8 +685,9 @@ export interface TycoonLeague {
   /** The seed this set of rivals was drawn from. */
   seed: number;
   /** Round 582 review: the career match count when this division's league was
-   *  drawn. Its rivals play at that strength for as long as you chase the title,
-   *  so a club that could compete on arrival can always win it eventually. */
+   *  drawn. Since Round 1532 no chance reads it, but it is still written, so a
+   *  rollback to an older build plays these rivals at the strength they were
+   *  drawn at rather than at the career count. */
   baseMatchNo?: number;
   /** Index 0 is you. */
   clubs: LeagueClub[];
@@ -835,24 +844,45 @@ function recordResult(c: LeagueClub, gf: number, ga: number): void {
   if (gf > ga) { c.w += 1; c.pts += 3; } else if (gf === ga) { c.d += 1; c.pts += 1; } else { c.l += 1; }
 }
 
-/**
- * The match count opponents are strengthened by. Until Round 582 it was the
- * career count, so every match was harder than the last forever, and under a
- * title-only league that turned into a wall: the review measured a club with a
- * squad of 3 never leaving the bottom league in 91 of 200 three hour runs, where
- * the old win count had promoted all 200, because a whole season has to be won
- * against rivals who kept getting stronger while it failed. A division's rivals
- * now play at the strength they had when its league was drawn, and every
- * division up is drawn later and is tougher, so the climb still steepens.
- */
-export function leagueMatchNo(s: TycoonState): number {
-  const base = s.league?.baseMatchNo;
-  return Number.isFinite(base) ? Math.min(s.matchNo, base as number) : s.matchNo;
+/* Round 1532: strength is counted in the points of the shared scoring law
+ * (src/lib/season/law.ts, the law Club Manager scores with). Until this round a
+ * rival's chance grew with the career match count and ours with the Squad alone,
+ * so by minute fifteen a match was a timer, won 95 to 99 times in a hundred. Now
+ * your side is the Squad, a rival is its division plus its own stored offset,
+ * and the gap between the two sets both sides' expected goals. Nothing reads the
+ * match count. */
+
+/** Law points per Squad level: knob 1 of the Round 1532 tuning recipe. */
+export const SQUAD_POINTS = 0.85;
+/** A rival's stored offset (plus or minus OFFSET_SPREAD a minute) in law points. */
+export const RIVAL_OFFSET_POINTS = 500;
+
+/** Your side's strength: the Squad track. */
+export function squadStrength(s: TycoonState): number {
+  return levelOf(s, 'squad') * SQUAD_POINTS;
 }
 
-/** A rival's chance of scoring in one minute: today's baseline plus its offset. */
-function rivalChancePerMin(st: TycoonState, c: LeagueClub): number {
-  return Math.max(0.008, Math.min(0.14, 0.024 + leagueMatchNo(st) * 0.0011 + divisionOf(st).oppBoost + c.offset));
+/** This division's average rival. The only reader of rivalStrength. */
+export function divisionStrength(s: TycoonState): number {
+  return divisionOf(s).rivalStrength;
+}
+
+/** One rival's strength: its division plus its own stored offset. */
+function clubStrength(s: TycoonState, c: LeagueClub): number {
+  return divisionStrength(s) + c.offset * RIVAL_OFFSET_POINTS;
+}
+
+/** Your strength minus today's opponent's, in law points. A carryover friendly
+ *  and a save with no league meet a rival with offset 0. */
+export function matchGap(s: TycoonState): number {
+  return squadStrength(s) - divisionStrength(s) - currentOpponentOffset(s) * RIVAL_OFFSET_POINTS;
+}
+
+/** A rival's chance of scoring in one minute of a fixture you are not in: the
+ *  law's expected goals against the other club at this venue, over ninety
+ *  one roll minutes. */
+export function rivalChancePerMin(st: TycoonState, c: LeagueClub, other: LeagueClub, venue: number): number {
+  return goalLambda(clubStrength(st, c) - clubStrength(st, other), venue) / 90;
 }
 
 /**
@@ -872,8 +902,8 @@ function playMatchday(st: TycoonState, gf: number, ga: number, events: TickEvent
       recordResult(clubs[opp], ga, gf);
       continue;
     }
-    const ph = rivalChancePerMin(st, clubs[h]);
-    const pa = rivalChancePerMin(st, clubs[a]);
+    const ph = rivalChancePerMin(st, clubs[h], clubs[a], LAW.home);
+    const pa = rivalChancePerMin(st, clubs[a], clubs[h], LAW.away);
     let hg = 0;
     let ag = 0;
     for (let m = 0; m < 90; m += 1) {
@@ -894,7 +924,7 @@ function playMatchday(st: TycoonState, gf: number, ga: number, events: TickEvent
   }
   st.leagueTitles = (st.leagueTitles ?? 0) + 1;
   if (played.division >= DIVISIONS.length - 1) {
-    const pay = Math.round(attendance(st) * 8 * d.incomeMult * repMult(st));
+    const pay = Math.round(unboostedIncomePerSec(st) * PROMOTION_BONUS_SEC);
     st.money += pay;
     st.lifetime += pay;
     events.push({ kind: 'title', amount: pay, label: `${d.emoji} CHAMPIONS OF ${d.name.toUpperCase()}`, position, table: clubs });
@@ -904,7 +934,7 @@ function playMatchday(st: TycoonState, gf: number, ga: number, events: TickEvent
   const up = played.division + 1;
   const nd = DIVISIONS[up];
   const next = newLeague(st.rep, up, played.season + 1, clubs[0].name === YOUR_CLUB ? undefined : clubs[0].name, st.matchNo);
-  const pay = Math.round(attendance(st) * 8 * nd.incomeMult * repMult(st));
+  const pay = Math.round(unboostedIncomePerSec({ ...st, league: next }) * PROMOTION_BONUS_SEC);
   st.money += pay;
   st.lifetime += pay;
   st.bestDivision = Math.max(st.bestDivision ?? 0, up);
@@ -1091,28 +1121,40 @@ export function ticketEconomy(s: TycoonState) {
   };
 }
 
-/** Chance our toy team scores in one match minute. */
+/** Chance our team scores in one match minute. Round 1532: the shared law's
+ *  expected goals for you at your ground (every watched match is at home,
+ *  contract section 8), over ninety one roll minutes. */
 export function goalChancePerMin(s: TycoonState): number {
-  const sq = levelOf(s, 'squad');
-  return Math.min(0.16, 0.028 + sq * 0.0016);
+  return goalLambda(matchGap(s), LAW.home) / 90;
 }
 
-/** Chance the opponent scores in one minute; opponents scale forever. */
+/** Chance the opponent scores in one minute. Round 1532: the law's expected
+ *  goals for today's rival as the away side; every division up sends stronger
+ *  rivals, and a stronger Squad pushes their share down as it pushes yours up. */
 export function oppChancePerMin(s: TycoonState, edge = 0): number {
-  const sq = levelOf(s, 'squad');
-  // Round 162: the division you climbed into shoots back. Promotion is a
-  // real thing, not a bigger number with the same Sunday opposition.
-  // Round 582: plus the strength of the league rival you are playing today.
-  const opp = 0.024 + leagueMatchNo(s) * 0.0011 + divisionOf(s).oppBoost + currentOpponentOffset(s);
-  // Your squad defends too: half its levels push the opponent back down.
-  const base = Math.max(0.008, Math.min(0.14, opp - sq * 0.0008));
+  // Round 586: the first team's edge takes exactly its share off the rival's
+  // expected goals, with no floor after it, so every step of it counts.
   const defence = Number.isFinite(edge) ? Math.max(0, Math.min(0.40, edge)) : 0;
-  return Math.max(0.008, base * (1 - defence));
+  return goalLambda(-matchGap(s), LAW.away) * (1 - defence) / 90;
+}
+
+/** Round 1532: a goal, a win and a promotion pay seconds of the club's own
+ *  income, so they are worth the same at every stage of a run. They used to
+ *  scale with the crowd, which stops growing when the ground is full, and by
+ *  two hours a win paid a fraction of a second. */
+export const GOAL_BONUS_SEC = 5;
+export const WIN_BONUS_SEC = 20;
+export const PROMOTION_BONUS_SEC = 120;
+
+/** Income with no Matchday Hype and no golden whistle: what away pay and every
+ *  match bonus are counted in. */
+export function unboostedIncomePerSec(s: TycoonState): number {
+  return incomePerSec({ ...s, boostLeftSec: 0, goldenLeftSec: 0, goldenKind: null });
 }
 
 /** Bonus paid the moment we score: the crowd goes up as one. */
 export function goalBonus(s: TycoonState): number {
-  return Math.round(attendance(s) * 0.6 * repMult(s) * streakMult(s));
+  return Math.round(unboostedIncomePerSec(s) * GOAL_BONUS_SEC);
 }
 
 /** Round 587: the offer counts watched match seconds, just like the clock. */
@@ -1177,7 +1219,7 @@ export function awardSetPieceGoal(s: TycoonState, offer: SetPieceOffer): { state
 
 /** Bonus for winning a match, on top of the streak continuing. */
 export function winBonus(s: TycoonState): number {
-  return Math.round(attendance(s) * 2.2 * repMult(s));
+  return Math.round(unboostedIncomePerSec(s) * WIN_BONUS_SEC);
 }
 
 /** Can this track be bought right now? */
@@ -1505,7 +1547,7 @@ export function offlineEarnings(s: TycoonState, now: number): number {
   if (capped === 0) return 0;
   // Round 162: same rule for the golden whistle as for hype: saving mid
   // frenzy must not turn 77 seconds of x7 into eight hours of it.
-  return Math.round(incomePerSec({ ...s, boostLeftSec: 0, goldenLeftSec: 0, goldenKind: null }) * capped * offlineRateOf(s));
+  return Math.round(unboostedIncomePerSec(s) * capped * offlineRateOf(s));
 }
 
 /* ---------------- save plumbing ---------------- */
