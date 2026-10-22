@@ -1,0 +1,3 @@
+probeBots: git show bac65fb0b:scripts/lib/tycoonBots.mjs > scripts/lib/tycoonBotsBase1543.mjs && node .rc/x/probeBots1543.mjs; s=$?; rm -f scripts/lib/tycoonBotsBase1543.mjs; exit $s
+ladder: node scripts/measureTycoonLadder.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
