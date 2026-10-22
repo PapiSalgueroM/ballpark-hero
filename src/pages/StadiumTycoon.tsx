@@ -57,6 +57,7 @@ import type { TapFx } from '@/components/tycoon/TycoonPitch';
 import type { AcademyStatus, Room } from '@/lib/tycoonRooms';
 import { deserialize as deserializeAcademy, applyOffline as applyAcademyOffline, SAVE_KEY as ACADEMY_SAVE_KEY, squadEdge } from '@/lib/wonderkidFactory';
 import type { FactoryState } from '@/lib/wonderkidFactory';
+import { OVERLAY_ABOVE_BANNER, boxInsideOverlay } from '@/components/game/aboveConsentBanner';
 
 const AcademyPanel = lazy(() => import('@/components/tycoon/AcademyPanel'));
 const SetPieceBoard = lazy(() => import('@/components/tycoon/SetPieceBoard').then(module => ({ default: module.WatchedSetPieceBoard })));
@@ -947,8 +948,8 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
       {showHelp && (() => {
         const h = helpFacts();
         return (
-        <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4" onClick={() => setShowHelp(false)}>
-          <div role="dialog" aria-modal="true" aria-label="How Stadium Tycoon works" tabIndex={-1} ref={focusDialogOnMount} onKeyDown={escapeCloses(() => setShowHelp(false))} className="bg-card border border-border rounded-2xl p-5 max-w-md w-full max-h-[80vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
+        <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4" style={OVERLAY_ABOVE_BANNER} onClick={() => setShowHelp(false)}>
+          <div role="dialog" aria-modal="true" aria-label="How Stadium Tycoon works" tabIndex={-1} ref={focusDialogOnMount} onKeyDown={escapeCloses(() => setShowHelp(false))} className="bg-card border border-border rounded-2xl p-5 max-w-md w-full overflow-y-auto" style={boxInsideOverlay('80vh')} onClick={e => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-2">
               <div className="text-lg font-bold font-display text-foreground">How Stadium Tycoon works</div>
               <button onClick={() => setShowHelp(false)} aria-label="Close the rules"><X className="w-4 h-4 text-muted-foreground" /></button>

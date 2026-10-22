@@ -17,6 +17,7 @@ import { HubTiles, HubPanelHeader, type HubTile } from '@/components/hub/HubTile
 import { ConfettiBurst, CelebrationStyles } from '@/components/club-manager/Celebration';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { useIdleArena } from '@/hooks/useIdleArena';
+import { OVERLAY_ABOVE_BANNER, boxInsideOverlay } from '@/components/game/aboveConsentBanner';
 import {
   GENERATORS, UPGRADES, ACHIEVEMENTS, TROPHY_BONUS, TROPHY_FLOOR, ACHIEVEMENT_BONUS, OFFLINE_RATE, OFFLINE_CAP_MS, GROWTH,
   NIGHT_SHIFT_RATE, ROOM_EXAMPLE,
@@ -469,8 +470,8 @@ const IdleArena = () => {
       `}</style>
 
       {showHelp && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4" role="dialog" aria-modal="true" aria-label="How Idle Arena works">
-          <div className="max-w-md w-full rounded-2xl border border-border bg-card p-5 max-h-[85vh] overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4" style={OVERLAY_ABOVE_BANNER}>
+          <div className="max-w-md w-full rounded-2xl border border-border bg-card p-5 overflow-y-auto" style={boxInsideOverlay('85vh')} role="dialog" aria-modal="true" aria-label="How Idle Arena works">
             <div className="flex items-center justify-between mb-3">
               <h2 className="text-xl font-bold text-primary font-display">HOW IT WORKS</h2>
               <button onClick={() => setShowHelp(false)} className="p-2 text-muted-foreground hover:text-foreground" aria-label="Close the rules">
