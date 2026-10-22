@@ -1,0 +1,5 @@
+build exit=0 24s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+oldsave exit=0 9s | walkSave1553: played
+vd-head exit=0 14s |    Duration  13.71s (transform 1.63s, setup 39ms, collect 171ms, tests 13.05s, environment 175ms, prepare 57ms)
+vd-main exit=0 15s |    Duration  14.69s (transform 1.74s, setup 41ms, collect 166ms, tests 14.01s, environment 169ms, prepare 40ms)
+vd-head-again exit=0 14s |    Duration  13.46s (transform 1.66s, setup 39ms, collect 166ms, tests 12.80s, environment 152ms, prepare 85ms)
