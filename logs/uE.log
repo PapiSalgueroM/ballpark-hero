@@ -1,0 +1,80 @@
+MUTATION E APPLIED
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/clubManagerSaveSize.test.tsx[2m > [22m[2mClub Manager: the write when the page goes[2m > [22m[2mpagehide writes the career held in memory, with nothing else able to
+[22m[39m  after pagehide the disk holds 59671 bytes, memory 59671
+
+ [31m❯[39m src/lib/clubManagerTactics.test.ts [2m([22m[2m9 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 319[2mms[22m[39m
+   [32m✓[39m Round 1522: the dials[2m > [22mbalanced is zero against every style, both halves[32m 3[2mms[22m[39m
+   [32m✓[39m Round 1522: the dials[2m > [22ma high press against a patient side reads the table, legs and all[32m 1[2mms[22m[39m
+   [32m✓[39m Round 1522: the dials[2m > [22msetInstructions sets, drops the field on balanced, refuses junk and a match on[32m 117[2mms[22m[39m
+   [32m✓[39m Round 1522: the dials[2m > [22ma style is keyed: the same club and strength give the same style, and no draw is taken[32m 36[2mms[22m[39m
+   [32m✓[39m Round 1522: the dials[2m > [22mthe engine reads the instructions through the slot the tactics module fills[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1522: the dials[2m > [22mthe report numbers are a pure function of the match[32m 1[2mms[22m[39m
+[31m   [31m×[31m Round 1522: changes during a match[2m > [22minstructions at the break bite from the restart and reach the report and the legs[39m[32m 44[2mms[22m[39m
+[31m     → expected [ { minute: +0, …(1) }, …(1) ] to deeply equal [ { minute: 46, …(1) } ][39m
+   [32m✓[39m Round 1522: changes during a match[2m > [22ma balanced match keeps no log and no tactics on its report[32m 56[2mms[22m[39m
+   [32m✓[39m Round 1522: changes during a match[2m > [22ma formation and a duty in play reshape from the next minute and the pitch reads each minute in its own shape[32m 59[2mms[22m[39m
+[90mstdout[2m | src/test/clubManagerSaveSize.test.tsx[2m > [22m[2mClub Manager: the write when the page goes[2m > [22m[2mthe tab going hidden writes it too
+[22m[39m  after the tab went hidden the disk holds 59965 bytes, memory 59965
+
+[90mstdout[2m | src/test/clubManagerSaveSize.test.tsx[2m > [22m[2mClub Manager: the write when the page goes[2m > [22m[2mtwo writes of one career are the same bytes
+[22m[39m  three writes, 58354 bytes each, identical
+
+[90mstdout[2m | src/test/clubManagerSaveSize.test.tsx[2m > [22m[2mClub Manager: a refused write is said out loud[2m > [22m[2msaveFailed goes up when the store throws and comes down when a write lands
+[22m[39m  with a throwing store, saveFailed is true
+  with the store back, saveFailed is false and the disk matches memory: true
+
+[90mstdout[2m | src/test/clubManagerSaveSize.test.tsx[2m > [22m[2mClub Manager: a refused write is said out loud[2m > [22m[2ma refused press on the transfer desk says why, and one that goes through clears it
+[22m[39m  second press on Serge Gnabry: "Serge Gnabry is already in your squad."
+  loan out again after the recall: "Christian Pulisic has already been out on loan once this season. One loan out a season."
+
+ [32m✓[39m src/test/clubManagerSaveSize.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 487[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/clubManagerTactics.test.ts[2m > [22mRound 1522: changes during a match[2m > [22minstructions at the break bite from the restart and reach the report and the legs
+[31m[1mAssertionError[22m: expected [ { minute: +0, …(1) }, …(1) ] to deeply equal [ { minute: 46, …(1) } ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[33m@@ -1,8 +1,17 @@[39m
+[2m  [[22m
+[2m    {[22m
+[2m      "instructions": {[22m
+[31m+       "line": 0,[39m
+[31m+       "press": 0,[39m
+[31m+       "tempo": 0,[39m
+[31m+       "width": 0,[39m
+[31m+     },[39m
+[31m+     "minute": 0,[39m
+[31m+   },[39m
+[31m+   {[39m
+[31m+     "instructions": {[39m
+[2m        "line": 1,[22m
+[2m        "press": 1,[22m
+[2m        "tempo": 1,[22m
+[2m        "width": 0,[22m
+[2m      },[22m
+
+[36m [2m❯[22m src/lib/clubManagerTactics.test.ts:[2m96:36[22m[39m
+    [90m 94| [39m    [35mconst[39m plain [33m=[39m [34mstartSecondHalf[39m(ht)[33m![39m[33m;[39m
+    [90m 95| [39m    const changed = changeLive(ht, 46, { kind: 'instructions', instruc…
+    [90m 96| [39m    expect(changed.live!.instrLog).toEqual([{ minute: 46, instructions…
+    [90m   | [39m                                   [31m^[39m
+    [90m 97| [39m    [34mexpect[39m([34mliveInstructions[39m(changed[33m.[39mlive[33m![39m)[33m.[39mpress)[33m.[39m[34mtoBe[39m([34m1[39m)[33m;[39m
+    [90m 98| [39m    expect(changeLive(changed, 46, { kind: 'instructions', instruction…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m14 passed[39m[22m[90m (15)[39m
+[2m   Start at [22m 01:21:57
+[2m   Duration [22m 2.60s[2m (transform 1.71s, setup 98ms, collect 2.91s, tests 806ms, environment 484ms, prepare 110ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerTactics.test.ts,title=src/lib/clubManagerTactics.test.ts > Round 1522%3A changes during a match > instructions at the break bite from the restart and reach the report and the legs,line=96,column=36::AssertionError: expected [ { minute: +0, …(1) }, …(1) ] to deeply equal [ { minute: 46, …(1) } ]%0A%0A- Expected%0A+ Received%0A%0A@@ -1,8 +1,17 @@%0A  [%0A    {%0A      "instructions": {%0A+       "line": 0,%0A+       "press": 0,%0A+       "tempo": 0,%0A+       "width": 0,%0A+     },%0A+     "minute": 0,%0A+   },%0A+   {%0A+     "instructions": {%0A        "line": 1,%0A        "press": 1,%0A        "tempo": 1,%0A        "width": 0,%0A      },%0A%0A ❯ src/lib/clubManagerTactics.test.ts:96:36%0A%0A
+SUMMARY mutation E units exit 1

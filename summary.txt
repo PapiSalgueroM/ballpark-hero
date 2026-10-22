@@ -1,0 +1,6 @@
+uA exit=0 3s | SUMMARY mutation A units exit 0
+uB exit=0 2s | SUMMARY mutation B units exit 0
+uC exit=0 2s | SUMMARY mutation C units exit 0
+uD exit=0 3s | SUMMARY mutation D units exit 0
+uE exit=1 3s | SUMMARY mutation E units exit 1
+uNone exit=0 3s | SUMMARY unmutated units exit 0

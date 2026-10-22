@@ -1,0 +1,7 @@
+#!serial
+uA: node .rc/x/mut.mjs A && node_modules/.bin/vitest run src/lib/clubManagerTactics.test.ts --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; echo "SUMMARY mutation A units exit $s"; exit $s
+uB: node .rc/x/mut.mjs B && node_modules/.bin/vitest run src/lib/clubManagerTactics.test.ts --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; echo "SUMMARY mutation B units exit $s"; exit $s
+uC: node .rc/x/mut.mjs C && node_modules/.bin/vitest run src/lib/clubManagerTactics.test.ts --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; echo "SUMMARY mutation C units exit $s"; exit $s
+uD: node .rc/x/mut.mjs D && node_modules/.bin/vitest run src/lib/clubManagerTactics.test.ts --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; echo "SUMMARY mutation D units exit $s"; exit $s
+uE: node .rc/x/mut.mjs E && node_modules/.bin/vitest run src/lib/clubManagerTactics.test.ts src/test/clubManagerSaveSize.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; echo "SUMMARY mutation E units exit $s"; exit $s
+uNone: node_modules/.bin/vitest run src/lib/clubManagerTactics.test.ts src/test/clubManagerSaveSize.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; echo "SUMMARY unmutated units exit $s"; exit $s
