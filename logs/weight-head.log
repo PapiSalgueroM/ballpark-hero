@@ -1,0 +1,10 @@
+  FAIL: /club-manager: 632K of gzipped JavaScript against a budget of 630K
+  FAIL: /front-office: 380K of gzipped JavaScript against a budget of 374K
+  FAIL: /manager-hot-seat: 647K of gzipped JavaScript against a budget of 645K
+  FAIL: /deadline-day: 656K of gzipped JavaScript against a budget of 655K
+   /club-manager       632K gz over  43 files (budget 630K, 631.9K to the tenth)
+   /front-office       380K gz over  40 files (budget 374K, 380.3K to the tenth)
+   /manager-hot-seat   647K gz over  45 files (budget 645K, 646.5K to the tenth)
+   /deadline-day       656K gz over  48 files (budget 655K, 656.4K to the tenth)
+
+sweepWeight: 4 failures
