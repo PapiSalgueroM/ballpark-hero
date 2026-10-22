@@ -1,0 +1,38 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/faceOffDeadline.test.tsx [2m([22m[2m15 tests[22m[2m)[22m[32m 109[2mms[22m[39m
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstderr[2m | src/test/resultScorePillComparison.test.tsx[2m > [22m[2mFace Off reveals the scoreline the hook totals[2m > [22m[2m/face-off: a win against The Pro reveals the totals on the pill
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/resultScorePillComparison.test.tsx[2m > [22m[2mFace Off reveals the scoreline the hook totals[2m > [22m[2m/face-off: a loss against The Pro reveals the totals on the pill
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/resultScorePillComparison.test.tsx[2m > [22m[2mChamp or Not and Who'd They Beat reveal the right answers out of ten[2m > [22m[2m/champ-or-not: a win reveals score/total on the pill
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/resultScorePillComparison.test.tsx[2m > [22m[2mChamp or Not and Who'd They Beat reveal the right answers out of ten[2m > [22m[2m/whod-they-beat: a win reveals score/total on the pill
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/resultScorePillComparison.test.tsx[2m > [22m[2mChamp or Not and Who'd They Beat reveal the right answers out of ten[2m > [22m[2m/champ-or-not: a loss reveals score/total on the pill
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/resultScorePillComparison.test.tsx[2m > [22m[2mChamp or Not and Who'd They Beat reveal the right answers out of ten[2m > [22m[2m/whod-they-beat: a loss reveals score/total on the pill
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/resultScorePillComparison.test.tsx[2m > [22m[2mSilverware Sort reveals the rungs right out of the most there were[2m > [22m[2m/silverware-sort: a win reveals score/maxScore on the pill
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/resultScorePillComparison.test.tsx[2m > [22m[2mSilverware Sort reveals the rungs right out of the most there were[2m > [22m[2m/silverware-sort: a loss reveals score/maxScore on the pill
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ [32m✓[39m src/test/resultScorePillComparison.test.tsx [2m([22m[2m33 tests[22m[2m)[22m[33m 714[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m48 passed[39m[22m[90m (48)[39m
+[2m   Start at [22m 12:15:16
+[2m   Duration [22m 2.76s[2m (transform 1.01s, setup 145ms, collect 1.62s, tests 822ms, environment 668ms, prepare 252ms)[22m
+

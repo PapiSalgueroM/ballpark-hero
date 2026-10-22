@@ -1,0 +1,14 @@
+ctl-ties exit=1 48s | simTriviaBank: 3 failure(s) (NEGATIVE CONTROL ties ON)
+simTriviaBank exit=0 53s | simTriviaBank: all checks passed
+tsc exit=0 74s | 
+ctl-namesake exit=1 42s | simTriviaBank: 3 failure(s) (NEGATIVE CONTROL namesake ON)
+namesakes-check exit=0 0s | src/data/marketNamesakes.json is current: 54 names
+simFaceOff exit=0 0s | simFaceOff: green. The deck deals fair, the daily is shared, the rivals climb, and the record holds.
+simFaceOffDeadline exit=0 1s | Face Off deadline cleanup: owned copies/reports removed; production hook bytes held.
+simHigherLower exit=0 0s | simHigherLower: all sections green
+vitest-faceoff exit=0 3s |    Duration  2.76s (transform 1.01s, setup 145ms, collect 1.62s, tests 822ms, environment 668ms, prepare 252ms)
+ctl-tense exit=1 50s | simTriviaBank: 3 failure(s) (NEGATIVE CONTROL tense ON)
+simTrustCopy exit=0 0s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+dailyReload exit=0 4s |    Duration  3.40s (transform 1.46s, setup 69ms, collect 2.04s, tests 570ms, environment 322ms, prepare 96ms)
+simAccessibility exit=0 0s | simAccessibility: all green
+ctl-legacy exit=1 49s | simTriviaBank: 4 failure(s) (NEGATIVE CONTROL legacy ON)
