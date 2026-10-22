@@ -1,0 +1,6 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+hl-apmerge exit=1 0s | simHigherLowerFacts: control apmerge turned section(s) 2, 3 red and nothing else. The check works.
+simHigherLowerFacts exit=0 0s | simHigherLowerFacts: green. 63 checks across 10 fenced game(s). Every total matches the source it came from, every matchup is ordered correctly, and every figure nobody c
+writes-head exit=1 14s | simWritesAreSent: 2 failures
+writes-head-again exit=1 15s | simWritesAreSent: 2 failures
+writes-base exit=1 47s | simWritesAreSent: 2 failures
