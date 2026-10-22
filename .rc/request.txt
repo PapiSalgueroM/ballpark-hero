@@ -1,0 +1,19 @@
+#!serve
+#!playwright
+#!serial
+boxing-fonts: node scripts/playBoxingShowForecast1086.mjs --prefetch-fonts-only 2>&1 | tail -3
+base-usSeam: node scripts/playUsCareerSaveSeam.mjs
+base-boxing: node scripts/playBoxingShowForecast1086.mjs
+mut-swapLists-usSeam: node .rc/x/mut.mjs swapLists && node scripts/playUsCareerSaveSeam.mjs; s=$?; git checkout -- scripts; exit $s
+mut-swapLists-boxing: node .rc/x/mut.mjs swapLists && node scripts/playBoxingShowForecast1086.mjs; s=$?; git checkout -- scripts; exit $s
+mut-staleKey-usSeam: node .rc/x/mut.mjs staleKey && node scripts/playUsCareerSaveSeam.mjs; s=$?; git checkout -- scripts; exit $s
+mut-staleKey-boxing: node .rc/x/mut.mjs staleKey && node scripts/playBoxingShowForecast1086.mjs; s=$?; git checkout -- scripts; exit $s
+mut-invertMap-usSeam: node .rc/x/mut.mjs invertMap && node scripts/playUsCareerSaveSeam.mjs; s=$?; git checkout -- scripts; exit $s
+mut-invertMap-boxing: node .rc/x/mut.mjs invertMap && node scripts/playBoxingShowForecast1086.mjs; s=$?; git checkout -- scripts; exit $s
+mut-dialogOnly-usSeam: node .rc/x/mut.mjs dialogOnly && node scripts/playUsCareerSaveSeam.mjs; s=$?; git checkout -- scripts; exit $s
+mut-dialogOnly-boxing: node .rc/x/mut.mjs dialogOnly && node scripts/playBoxingShowForecast1086.mjs; s=$?; git checkout -- scripts; exit $s
+mut-noSettle-usSeam: node .rc/x/mut.mjs noSettle && node scripts/playUsCareerSaveSeam.mjs; s=$?; git checkout -- scripts; exit $s
+mut-noSettle-era2005: node .rc/x/mut.mjs noSettle && ENGINES=chromium node scripts/playEra2005.mjs; s=$?; git checkout -- scripts; exit $s
+mut-noSettle-foGameDay: node .rc/x/mut.mjs noSettle && node scripts/playFrontOfficeGameDay.mjs; s=$?; git checkout -- scripts; exit $s
+mut-staleKey-storageBlocked: node .rc/x/mut.mjs staleKey && node scripts/playStorageBlocked.mjs; s=$?; git checkout -- scripts; exit $s
+restored: git status --short scripts | head -5; git diff --quiet -- scripts && echo "scripts restored, clean"
