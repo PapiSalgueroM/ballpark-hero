@@ -1,0 +1,7 @@
+simCareerIntl exit=0 0s | simCareerIntl: GREEN, 945 checks over sections 1,2,3
+ctl-onesource exit=1 0s | simCareerIntl: control onesource FIRED (section 1, 1 failures)
+ctl-shiftyear exit=1 0s | simCareerIntl: control shiftyear FIRED (section 2, 3 failures)
+ctl-dupnation exit=1 0s | simCareerIntl: control dupnation FIRED (section 3, 1 failures)
+ctl-fieldsize exit=1 0s | simCareerIntl: control fieldsize FIRED (section 3, 1 failures)
+simNoRivalNames exit=0 10s | No rival product names found. 0 findings.
+tsc exit=0 40s | 

@@ -1,0 +1,7 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simCareerIntl: node scripts/simCareerIntl.mjs
+ctl-onesource: INTL_CONTROL=onesource node scripts/simCareerIntl.mjs
+ctl-shiftyear: INTL_CONTROL=shiftyear node scripts/simCareerIntl.mjs
+ctl-dupnation: INTL_CONTROL=dupnation node scripts/simCareerIntl.mjs
+ctl-fieldsize: INTL_CONTROL=fieldsize node scripts/simCareerIntl.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs

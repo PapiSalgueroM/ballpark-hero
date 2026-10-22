@@ -1,0 +1,13 @@
+NEGATIVE CONTROL shiftyear: oly-2008's src year moved by one (section 2 must fail)
+section 1: the ledger
+  FAIL [1] oly-2008 calendar differs: ledger {"comp":"oly","year":2008,"host":"Beijing"}
+  69 facts, 165 reads, partial: oly-2028 oly-2032 wc-2027 wc-2031
+section 2: the calendar
+  FAIL [2] oly-2008 is not its competition and summer (comp oly, year 2009)
+  FAIL [2] 2008 is the ledger's oly-2008 but the src rows say nothing
+  FAIL [2] 2009 has src row oly-2008 the ledger does not hold
+  2004 to 2050: 23 summers with an edition, 24 without
+  oly-2004 - wc-2006 - oly-2008 - wc-2010 - oly-2012 - wc-2014 - oly-2016 - - wc-2019 - oly-2021 - wc-2023 oly-2024 - - wc-2027 oly-2028 - - wc-2031 oly-2032 - - wc-2035 oly-2036 - - wc-2039 oly-2040 - - wc-2043 oly-2044 - - wc-2047 oly-2048 - -
+section 3: the fields
+  11 played fields, 47 nations, no flag: Puerto Rico, Serbia and Montenegro
+simCareerIntl: control shiftyear FIRED (section 2, 3 failures)

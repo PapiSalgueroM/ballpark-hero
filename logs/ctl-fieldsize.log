@@ -1,0 +1,11 @@
+NEGATIVE CONTROL fieldsize: wc-2014's field loses a nation (section 3 must fail)
+section 1: the ledger
+  FAIL [1] wc-2014 field differs from the ledger
+  69 facts, 165 reads, partial: oly-2028 oly-2032 wc-2027 wc-2031
+section 2: the calendar
+  2004 to 2050: 23 summers with an edition, 24 without
+  oly-2004 - wc-2006 - oly-2008 - wc-2010 - oly-2012 - wc-2014 - oly-2016 - - wc-2019 - oly-2021 - wc-2023 oly-2024 - - wc-2027 oly-2028 - - wc-2031 oly-2032 - - wc-2035 oly-2036 - - wc-2039 oly-2040 - - wc-2043 oly-2044 - - wc-2047 oly-2048 - -
+section 3: the fields
+  FAIL [3] wc-2014 field holds 23 nations, the shape 24
+  11 played fields, 47 nations, no flag: Puerto Rico, Serbia and Montenegro
+simCareerIntl: control fieldsize FIRED (section 3, 1 failures)
