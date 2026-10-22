@@ -152,6 +152,9 @@ const SoccerSeasonCentre = lazy(() => import("@/components/soccer-career/SoccerS
 const ownerScreens = () => import("@/components/soccer-career/OwnerTail").then(m => { if (!m?.OwnerPanel) throw new Error("owner screens"); return m; });
 const OwnerClubSale = lazy(() => ownerScreens().then(m => ({ default: m.OwnerClubSale })).catch(() => new Promise<never>(() => undefined)));
 const OwnerPanel = lazy(() => ownerScreens().then(m => ({ default: m.OwnerPanel })).catch(() => new Promise<never>(() => undefined)));
+/* the sale list's placeholder keeps its Back where the list puts it, so a chunk that never lands cannot strand the doors */
+const OwnerSaleWait = ({ onBack }: { onBack: () => void }) => <div className="min-h-[14rem]"><Button onClick={onBack} variant="ghost" className="h-8 px-2 text-xs font-bold">Back</Button></div>;
+const OWNER_LOAD_FAILED = "The club owner side didn't load. Check your connection and try again.";
 const TrophyCabinet = lazy(() => import("@/components/soccer-career/TrophyCabinet"));
 const SeasonRatings = lazy(() => import("@/components/soccer-career/SeasonRatings"));
 const SoccerDerbyHistory = lazy(() => import("@/components/soccer-career/SoccerDerbyHistory"));
@@ -1310,7 +1313,7 @@ export default function SoccerCareer() {
     }
     /* Round 1524: the owner tail is a lazy chunk; nothing is bought before it lands */
     if (choice === "owner") {
-      try { await loadOwnerTail(); } catch { return; }
+      try { await loadOwnerTail(); } catch { toast(OWNER_LOAD_FAILED, PAGE_TOAST); return; }
     }
     setCareer(choosePostRetirement(career, choice, clubs, ownerClub));
   };
@@ -1432,7 +1435,7 @@ export default function SoccerCareer() {
   const handleAdvanceOwner = async () => {
     if (!career) return;
     /* Round 1524: the season is played by the lazy owner tail */
-    try { await loadOwnerTail(); } catch { return; }
+    try { await loadOwnerTail(); } catch { toast(OWNER_LOAD_FAILED, PAGE_TOAST); return; }
     setCareer(advanceOwnerSeason(career, clubs));
   };
 
@@ -3019,7 +3022,7 @@ function RetirementCeremonyCard({ career, clubs, totals, onPostRetirement }: { c
 
       {/* Post-retirement choices */}
       {buying ? (
-        <Suspense fallback={<div className="min-h-[14rem]" />}><OwnerClubSale career={career} clubs={clubs} onBuy={name => onPostRetirement("owner", name)} onBack={() => setBuying(false)} /></Suspense>
+        <Suspense fallback={<OwnerSaleWait onBack={() => setBuying(false)} />}><OwnerClubSale career={career} clubs={clubs} onBuy={name => onPostRetirement("owner", name)} onBack={() => setBuying(false)} /></Suspense>
       ) : (
       <div className="space-y-2">
         <div className="text-xs text-center text-muted-foreground font-bold uppercase">What's Next?</div>
@@ -3050,7 +3053,7 @@ function PostRetirementCard({ career, clubs, onChoice }: { career: CareerState; 
   if (buying) {
     return (
       <div className="rounded-xl border border-border p-5">
-        <Suspense fallback={<div className="min-h-[14rem]" />}><OwnerClubSale career={career} clubs={clubs} onBuy={name => onChoice("owner", name)} onBack={() => setBuying(false)} /></Suspense>
+        <Suspense fallback={<OwnerSaleWait onBack={() => setBuying(false)} />}><OwnerClubSale career={career} clubs={clubs} onBuy={name => onChoice("owner", name)} onBack={() => setBuying(false)} /></Suspense>
       </div>
     );
   }
