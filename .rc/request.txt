@@ -1,0 +1,6 @@
+earned: node scripts/simNbaEarnedDraft.mjs
+ctl-all: SIM_NBA_EARNED_DRAFT_CONTROL=all node scripts/simNbaEarnedDraft.mjs
+ctl-summerdeal: SIM_NBA_EARNED_DRAFT_CONTROL=summerdeal node scripts/simNbaEarnedDraft.mjs
+ctl-playinmade: SIM_NBA_EARNED_DRAFT_CONTROL=playinmade node scripts/simNbaEarnedDraft.mjs
+ctl-judgeres: SIM_NBA_EARNED_DRAFT_CONTROL=judgeres node scripts/simNbaEarnedDraft.mjs
+ctl-judgepass: SIM_NBA_EARNED_DRAFT_CONTROL=judgepass node scripts/simNbaEarnedDraft.mjs
