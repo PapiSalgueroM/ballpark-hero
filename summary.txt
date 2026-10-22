@@ -1,0 +1,4 @@
+build exit=0 22s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simTycoonGroundGrowth exit=0 29s | Original source, build and actual template font cache stayed byte-identical.
+weight-base exit=1 50s | sweepWeight: 13 failures
+simTycoonPacks exit=1 121s | simTycoonPacks: 2 failures
