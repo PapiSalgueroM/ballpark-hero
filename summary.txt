@@ -1,0 +1,5 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simFlagshipWeight exit=0 1s | simFlagshipWeight: green. The flagship carries its own game and nobody else's.
+playFlagshipLazy exit=0 8s | playFlagshipLazy: green. The dugout costs nothing until you walk into it, and it still works when you do.
+sweepWeight exit=0 27s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+landing-bar exit=1 99s | playSoccerLanding: RED, 3 finding(s)
