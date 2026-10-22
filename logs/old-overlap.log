@@ -1,0 +1,9 @@
+1
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
+[32m✓ built in 21.78s[39m
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+draw-390x844: result 138-256 x 465-485 gems 238-295 x 458-478 overlap 237.490234375px others [{"text":"FULL TIME DRAW","px":237.490234375}] inside true errors 0
+win-390x844: result 131-326 x 462-490 gems 238-298 x 458-478 overlap 989.0625px others [{"text":"FULL TIME WIN +$198","px":989.0625}] inside true errors 0
+draw-1280x900: result 538-656 x 516-536 gems 717-774 x 507-527 overlap 0px others [] inside true errors 0
+win-1280x900: result 525-720 x 511-539 gems 717-777 x 507-527 overlap 56.001708984375px others [{"text":"FULL TIME WIN +$198","px":56.001708984375}] inside true errors 0
+floaterwalk overlap: the old hook covers the gems floater at 390 for a draw and a win (control fired)

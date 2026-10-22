@@ -1,0 +1,5 @@
+draw-390x844: result 138-256 x 465-485 gems 238-295 x 539-559 overlap 0px others [] inside true errors 0
+win-390x844: result 131-326 x 462-490 gems 238-298 x 539-559 overlap 0px others [] inside true errors 0
+draw-1280x900: result 538-656 x 516-536 gems 717-774 x 610-630 overlap 0px others [] inside true errors 0
+win-1280x900: result 525-720 x 511-539 gems 717-777 x 610-630 overlap 0px others [] inside true errors 0
+floaterwalk clear: result and gems floaters apart at 390x844 and 1280x900, draw and win

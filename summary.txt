@@ -1,0 +1,3 @@
+build exit=0 21s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk-head exit=0 57s | floaterwalk clear: result and gems floaters apart at 390x844 and 1280x900, draw and win
+old-overlap exit=0 84s | floaterwalk overlap: the old hook covers the gems floater at 390 for a draw and a win (control fired)

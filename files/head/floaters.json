@@ -1,0 +1,202 @@
+[
+  {
+    "tag": "draw-390x844",
+    "errors": [],
+    "result": {
+      "text": "FULL TIME DRAW",
+      "left": 138.03125,
+      "right": 256.03125,
+      "top": 465.125,
+      "bottom": 485.125
+    },
+    "gems": {
+      "text": "+1 gems",
+      "left": 237.71875,
+      "right": 294.71875,
+      "top": 539.046875,
+      "bottom": 559.046875
+    },
+    "all": [
+      {
+        "text": "FULL TIME DRAW",
+        "left": 138.03125,
+        "right": 256.03125,
+        "top": 465.125,
+        "bottom": 485.125
+      },
+      {
+        "text": "+1 gems",
+        "left": 237.71875,
+        "right": 294.71875,
+        "top": 539.046875,
+        "bottom": 559.046875
+      }
+    ],
+    "pitch": {
+      "x": 17,
+      "y": 440.5,
+      "width": 356,
+      "height": 176
+    },
+    "resultGemsOverlapPx": 0,
+    "gemsOverlapsAny": [],
+    "gemsInsidePitch": true
+  },
+  {
+    "tag": "win-390x844",
+    "errors": [],
+    "result": {
+      "text": "FULL TIME WIN +$198",
+      "left": 130.90625,
+      "right": 325.90625,
+      "top": 461.609375,
+      "bottom": 489.609375
+    },
+    "gems": {
+      "text": "+3 gems",
+      "left": 237.71875,
+      "right": 297.71875,
+      "top": 539.046875,
+      "bottom": 559.046875
+    },
+    "all": [
+      {
+        "text": "FULL TIME WIN +$198",
+        "left": 130.90625,
+        "right": 325.90625,
+        "top": 461.609375,
+        "bottom": 489.609375
+      },
+      {
+        "text": "🏁 First win +$250",
+        "left": 81.078125,
+        "right": 244.078125,
+        "top": 493.296875,
+        "bottom": 521.296875
+      },
+      {
+        "text": "🏁 First career win: +2% forever",
+        "left": 95.3125,
+        "right": 377.3125,
+        "top": 503.859375,
+        "bottom": 531.859375
+      },
+      {
+        "text": "+3 gems",
+        "left": 237.71875,
+        "right": 297.71875,
+        "top": 539.046875,
+        "bottom": 559.046875
+      }
+    ],
+    "pitch": {
+      "x": 17,
+      "y": 440.5,
+      "width": 356,
+      "height": 176
+    },
+    "resultGemsOverlapPx": 0,
+    "gemsOverlapsAny": [],
+    "gemsInsidePitch": true
+  },
+  {
+    "tag": "draw-1280x900",
+    "errors": [],
+    "result": {
+      "text": "FULL TIME DRAW",
+      "left": 537.90625,
+      "right": 655.90625,
+      "top": 515.859375,
+      "bottom": 535.859375
+    },
+    "gems": {
+      "text": "+1 gems",
+      "left": 716.546875,
+      "right": 773.546875,
+      "top": 609.9375,
+      "bottom": 629.9375
+    },
+    "all": [
+      {
+        "text": "FULL TIME DRAW",
+        "left": 537.90625,
+        "right": 655.90625,
+        "top": 515.859375,
+        "bottom": 535.859375
+      },
+      {
+        "text": "+1 gems",
+        "left": 716.546875,
+        "right": 773.546875,
+        "top": 609.9375,
+        "bottom": 629.9375
+      }
+    ],
+    "pitch": {
+      "x": 321,
+      "y": 484.5,
+      "width": 638,
+      "height": 224
+    },
+    "resultGemsOverlapPx": 0,
+    "gemsOverlapsAny": [],
+    "gemsInsidePitch": true
+  },
+  {
+    "tag": "win-1280x900",
+    "errors": [],
+    "result": {
+      "text": "FULL TIME WIN +$198",
+      "left": 525.15625,
+      "right": 720.15625,
+      "top": 511.375,
+      "bottom": 539.375
+    },
+    "gems": {
+      "text": "+3 gems",
+      "left": 716.546875,
+      "right": 776.546875,
+      "top": 609.9375,
+      "bottom": 629.9375
+    },
+    "all": [
+      {
+        "text": "FULL TIME WIN +$198",
+        "left": 525.15625,
+        "right": 720.15625,
+        "top": 511.375,
+        "bottom": 539.375
+      },
+      {
+        "text": "🏁 First win +$250",
+        "left": 435.828125,
+        "right": 598.828125,
+        "top": 551.6875,
+        "bottom": 579.6875
+      },
+      {
+        "text": "🏁 First career win: +2% forever",
+        "left": 461.359375,
+        "right": 743.359375,
+        "top": 565.125,
+        "bottom": 593.125
+      },
+      {
+        "text": "+3 gems",
+        "left": 716.546875,
+        "right": 776.546875,
+        "top": 609.9375,
+        "bottom": 629.9375
+      }
+    ],
+    "pitch": {
+      "x": 321,
+      "y": 484.5,
+      "width": 638,
+      "height": 224
+    },
+    "resultGemsOverlapPx": 0,
+    "gemsOverlapsAny": [],
+    "gemsInsidePitch": true
+  }
+]

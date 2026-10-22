@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+walk-head: FLOATER_TAG=head node .rc/x/floaterwalk.mjs
+old-overlap: git show 7ad9208beb598be6baf054ffe90aa650cfc4c1b1:src/hooks/useStadiumTycoon.ts > src/hooks/useStadiumTycoon.ts && grep -c "'money', 62, 10" src/hooks/useStadiumTycoon.ts && node_modules/.bin/vite build --outDir /tmp/dist-old --emptyOutDir > /tmp/oldbuild.log 2>&1; b=$?; git checkout -- src; tail -3 /tmp/oldbuild.log; [ $b -eq 0 ] || exit 3; (node scripts/lib/hostLikeServer.mjs /tmp/dist-old 4181 > /tmp/srv-old.log 2>&1 &); sleep 4; FLOATER_BASE=http://localhost:4181 FLOATER_TAG=old FLOATER_EXPECT=overlap node .rc/x/floaterwalk.mjs
