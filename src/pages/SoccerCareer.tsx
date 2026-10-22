@@ -1493,6 +1493,7 @@ export default function SoccerCareer() {
             'Academy mentoring: the Youth Mentor event starts one generated player. Ten senior appearances at your shared club adds one mentoring year. Example: 12 appearances moves 0/3 to 1/3; six appearances pauses it. Three qualifying years complete it, a move ends it, and its history stays in the mentor tile.',
             ...STORY_ROLE_HELP_RULES,
             ...SOCCER_DECK_HELP_RULES,
+            'Season awards are won against the best rival season that year, so a great season usually wins and a good one can lose to a better one. Example: at a top club, 30 goals wins the Golden Boot about half the time and 40 almost always. Named awards only exist from their real first season: Golden Glove 2004-05, Puskás 2008-09, UEFA Player of the Year 2010-11 to 2022-23.',
             'One tab at a time: the career plays in the newest tab you opened. An older tab asks you to reload. Example: open it in two tabs and play a season in the second; the first asks you to reload, and the reload shows that season.',
           ]} className={career ? "h-11 w-11 sm:h-auto sm:w-auto" : undefined} />
         </div>
