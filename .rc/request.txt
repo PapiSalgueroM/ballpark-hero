@@ -1,0 +1,6 @@
+#!serial
+pin-hash: sha256sum src/lib/clubManager.ts src/lib/clubManagerSlots.ts scripts/simClubManagerSlots.mjs scripts/simClubManagerDecisions.mjs; grep -c 8219e9d2f02bde1fdd79492327728c7f90c844921c386e08fd5c09d0ddd5bfbf scripts/fixtures/managerAppealIsolation1081/manifest.json
+pin-head: node scripts/simManagerAppealIsolation.mjs 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+pin-revert1520: git checkout 92195850 -- src/lib/clubManager.ts && sha256sum src/lib/clubManager.ts && node scripts/simManagerAppealIsolation.mjs 2>&1 | tail -4; s=${PIPESTATUS[0]}; git checkout HEAD -- src; exit $s
+pin-new: H=$(sha256sum src/lib/clubManager.ts | cut -c1-64); grep -c 8219e9d2f02bde1fdd79492327728c7f90c844921c386e08fd5c09d0ddd5bfbf scripts/fixtures/managerAppealIsolation1081/manifest.json && sed -i "s/8219e9d2f02bde1fdd79492327728c7f90c844921c386e08fd5c09d0ddd5bfbf/$H/" scripts/fixtures/managerAppealIsolation1081/manifest.json && echo "pinned $H" && node scripts/simManagerAppealIsolation.mjs 2>&1 | tail -4; s=${PIPESTATUS[0]}; git checkout HEAD -- scripts; exit $s
+digest-head: node scripts/simCmLeagueRules.mjs > /tmp/lh.log 2>&1; s=$?; grep -c -E 'FAIL|differs' /tmp/lh.log; grep -E 'FAIL|differs' /tmp/lh.log | head -12 | cut -c1-220; tail -2 /tmp/lh.log | cut -c1-220; exit $s
