@@ -17,11 +17,32 @@
  * Run: npm run build && npx serve -s dist -l 4173, then
  *      ENGINES=chromium node scripts/playFoHub.mjs
  */
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import pw from './lib/playwrightLoader.mjs';
 import { answerConsent } from './lib/answerConsent.mjs';
 
 const { chromium } = pw;
 const BASE = process.env.BASE ?? process.env.SWEEP_BASE ?? 'http://localhost:4173';
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+
+/* Round 1537: the NBA desk's tip off floor (Round 722), read from the game's own constant so the walk
+   cannot drift from it. See the live check below for why the walk needs it. */
+const NBA_FLOOR = Number(fs.readFileSync(path.join(ROOT, 'src/lib/nbaLuxuryTax.ts'), 'utf8')
+  .match(/export const NBA_TIPOFF_MIN = (\d+);/)?.[1]);
+if (!Number.isInteger(NBA_FLOOR) || NBA_FLOOR < 1) {
+  console.error('playFoHub: could not read NBA_TIPOFF_MIN from src/lib/nbaLuxuryTax.ts');
+  process.exit(2);
+}
+/* PLAY_FO_HUB_CONTROL=nofloor skips the top up, which is the walk as it stood before Round 1537: the NBA
+   lines "the roster box names" and "a fit squad puts the dot out" must then go red. */
+const CONTROL = process.env.PLAY_FO_HUB_CONTROL ?? '';
+if (CONTROL && CONTROL !== 'nofloor') {
+  console.error(`PLAY_FO_HUB_CONTROL=${CONTROL} is not a control this walk knows (nofloor)`);
+  process.exit(2);
+}
+if (CONTROL) console.log('CONTROL nofloor is on: the NBA roster stays short of its floor, so the walk is SUPPOSED to fail.');
 
 let failures = 0;
 const say = (ok, what) => {
@@ -32,7 +53,7 @@ const say = (ok, what) => {
 const DESKS = [
   { route: '/front-office', key: 'front-office-save-v1', name: 'NFL', play: 'This week', panel: /Play Week|Play the final week|Bye week/ },
   { route: '/mlb-front-office', key: 'mlb-front-office-save-v1', name: 'MLB', play: 'Play', panel: /Play Round|Final stretch/ },
-  { route: '/nba-front-office', key: 'nba-front-office-save-v1', name: 'NBA', play: 'Play', panel: /Play Round|Final stretch/ },
+  { route: '/nba-front-office', key: 'nba-front-office-save-v1', name: 'NBA', play: 'Play', panel: /Play Round|Final stretch/, floor: NBA_FLOOR },
   { route: '/nhl-front-office', key: 'nhl-front-office-save-v1', name: 'NHL', play: 'Play', panel: /Play Round|Final stretch/ },
 ];
 
@@ -133,6 +154,44 @@ for (const desk of DESKS) {
 
   /* ---- the boxes are live, not decoration ---- */
   {
+    /* Round 1537: a desk with a tip off floor (the NBA since Round 722, 5ef33f71, 2026-10-01) opens a
+       fresh franchise short of it, and a short roster outranks a hurt star on the box's second line and
+       keeps the dot lit, by design (simNbaLuxuryTax section 6). The walk went on doctoring its injury onto
+       that short roster, so the box rightly read "4 short of the 14 man floor" instead of the star's name.
+       It now reads that floor line first, then tops the roster up to the floor from the save's own free
+       agents, lowest rated first, the way a signing moves a man, and plays the injury checks below on a
+       roster the season can start with. Every check below is unchanged. */
+    if (desk.floor && CONTROL !== 'nofloor') {
+      const count = await page.evaluate(key => {
+        const s = JSON.parse(localStorage.getItem(key) ?? 'null');
+        return s ? s.league.teams[s.myTeam].players.length : null;
+      }, desk.key);
+      if (count !== null && count < desk.floor) {
+        const shortBox = tile(page, 'Roster');
+        const st = await shortBox.innerText();
+        say(st.includes(`${desk.floor - count} short of the ${desk.floor} man floor`), `${desk.name}: a short roster says so on the box (reads "${st.replace(/\n/g, ' / ')}")`);
+        say(await shortBox.locator('span.animate-pulse').count() === 1, `${desk.name}: a short roster lights the box`);
+        const moved = await page.evaluate(([key, floor]) => {
+          const s = JSON.parse(localStorage.getItem(key));
+          const squad = s.league.teams[s.myTeam].players;
+          const pool = [...s.league.freeAgents].sort((a, b) => a.ovr - b.ovr);
+          let n = 0;
+          while (squad.length < floor && pool.length > 0) {
+            const p = pool.shift();
+            s.league.freeAgents.splice(s.league.freeAgents.indexOf(p), 1);
+            squad.push(p);
+            n += 1;
+          }
+          localStorage.setItem(key, JSON.stringify(s));
+          return { n, size: squad.length };
+        }, [desk.key, desk.floor]);
+        say(moved.size === desk.floor, `${desk.name}: the roster is topped up to the ${desk.floor} man floor (${moved.n} free agents signed, ${count} before)`);
+        await page.reload({ waitUntil: 'networkidle' });
+        await page.waitForTimeout(1200);
+      } else {
+        console.log(`  NOTE  ${desk.name}: the roster opens at ${count ?? 'no save'}, not short of the ${desk.floor} man floor`);
+      }
+    }
     /* Injure the best man on the roster and the roster box must change
        what it says, name him, and light up. */
     const hurtName = await page.evaluate(key => {
