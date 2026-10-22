@@ -20,7 +20,8 @@
  *      "Won the 2026 Champions League" over four Barcelona men; PSG won it
  *   2) no refuted claim is on any board (scripts/data/connectionsVerified2026-10/ledger.json
  *      "refuted": a claim two hosts show false, such as Wayne Rooney in a
- *      treble group)
+ *      treble group, matched by the claim: the label folded, or the entry's
+ *      claimWords, so "Won the treble" and "Won a treble" are caught too)
  *   3) every group the ledger covers is held to it: each member stands on
  *      two different hosts, none of them a wiki, and the group on the board
  *      is the group in the ledger, word for word
@@ -45,6 +46,12 @@
  *                         of puzzle-1, which carries a Ballon d'Or group: section 4
  *                         must report him as a second answer
  *   CONN_CONTROL=current  writes "Current" back into a dated group (section 1)
+ *   CONN_CONTROL=treblecase writes Rooney into "Won a treble" on puzzle-136, a
+ *                         board this round did not rebuild (section 2 matches the
+ *                         claim, not the exact label)
+ *   CONN_CONTROL=onehost  deals a man only one host lists in Chelsea's 2025-26
+ *                         squad into puzzle-1's Chelsea group (section 3, the two
+ *                         host rule)
  *   CONN_CONTROL=nominee  deals Harry Kane, a 2026 Ballon d'Or nominee, back into
  *                         puzzle-151's Bayern group beside its Ballon d'Or group
  *                         (section 3, the ledger's watch on the award list)
@@ -134,6 +141,20 @@ if (CONTROL) {
     const b = boardById('puzzle-76');
     const g = b?.groups.find(x => x.category === 'Played for Arsenal in 2025-26');
     if (g) { g.category = 'Current Arsenal stars (2025-26)'; changed = true; }
+  } else if (CONTROL === 'treblecase') {
+    /* Rooney's treble claim in another spelling, on a board this round did not rebuild: only section 2 can see it */
+    const b = boardById('puzzle-136');
+    const g = b?.groups.find(x => x.category === 'Won the Puskas Award');
+    if (g && !b.groups.some(x => x.players.includes('Wayne Rooney'))) { g.category = 'Won a treble'; g.players[3] = 'Wayne Rooney'; changed = true; }
+  } else if (CONTROL === 'onehost') {
+    /* a man only one host lists in Chelsea's 2025-26 squad, dealt into puzzle-1's Chelsea group: the two host rule must refuse him */
+    const sq = ledger.squads?.['Chelsea 2025-26'];
+    const b = boardById('puzzle-1');
+    const g = b?.groups.find(x => x.category === 'Played for Chelsea in 2025-26');
+    const [a, c] = (sq?.sources ?? []).map(s => new Set(s.players.map(fold)));
+    const onBoard = new Set((b?.groups ?? []).flatMap(x => x.players).map(fold));
+    const one = a && c ? [...sq.sources[0].players, ...sq.sources[1].players].find(p => (a.has(fold(p)) !== c.has(fold(p))) && !onBoard.has(fold(p))) : undefined;
+    if (g && one) { g.players[2] = one; changed = true; console.log(`CONN_CONTROL=onehost: ${one} is on one host only`); }
   } else if (CONTROL === 'nominee') {
     /* Harry Kane (Bayern 2025-26, a 2026 Ballon d'Or nominee) back on puzzle-151, beside its Ballon d'Or group */
     const b = boardById('puzzle-151');
@@ -199,9 +220,14 @@ console.log('2) no refuted claim is on a board');
   let n = 0;
   for (const r of ledger.refuted ?? []) {
     if (!hostsOk(r.sources)) fail(`refuted "${r.name}" in "${r.labels?.[0]}" does not stand on two hosts`);
-    const labels = new Set(r.labels ?? []);
+    /* the claim, not its spelling: a label matches when it folds to one of the entry's labels (case, spaces
+       and punctuation aside) or carries every word of one of its claimWords ("Won a treble" is Rooney's
+       treble claim too) */
+    const labels = new Set((r.labels ?? []).map(fold));
+    const words = (r.claimWords ?? []).map(alt => alt.map(fold));
+    const claims = label => { const f = fold(label); return labels.has(f) || words.some(alt => alt.length > 0 && alt.every(w => f.includes(w))); };
     for (const b of boards) for (const g of b.groups) {
-      if (labels.has(g.category) && g.players.some(p => fold(p) === fold(r.name))) {
+      if (claims(g.category) && g.players.some(p => fold(p) === fold(r.name))) {
         n += 1;
         fail(`${b.id}: ${r.name} in "${g.category}" is refuted (${r.why})`);
       }

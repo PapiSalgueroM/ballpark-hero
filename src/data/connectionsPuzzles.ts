@@ -1783,7 +1783,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
     groups: [
       { category: 'Played for Inter Milan in 2025-26', players: ['Lautaro Martínez', 'Marcus Thuram', 'Nicolò Barella', 'Hakan Çalhanoğlu'], difficulty: 'easy' },
       { category: 'From South Korea', players: ['Son Heung-min', 'Lee Kang-in', 'Park Ji-sung', 'Hwang Hee-chan'], difficulty: 'medium' },
-      { category: 'Won the Champions League with TWO different clubs', players: ['Clarence Seedorf', 'Samuel Eto\'o', 'Xabi Alonso', 'Dani Alves'], difficulty: 'hard' },
+      { category: 'Won the Champions League with TWO different clubs', players: ['Clarence Seedorf', 'Samuel Eto\'o', 'Xabi Alonso', 'Toni Kroos'], difficulty: 'hard' },
       { category: 'Scored 5 goals in a single Champions League match', players: ['Lionel Messi', 'Luiz Adriano', 'Robert Lewandowski', 'Cristiano Ronaldo'], difficulty: 'insane' },
     ],
   },

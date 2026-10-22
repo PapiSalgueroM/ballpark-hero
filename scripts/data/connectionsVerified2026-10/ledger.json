@@ -37,7 +37,71 @@
       "watchNames": ["Mohamed Salah"]
     }
   },
-  "groups": [],
+  "groups": [
+    {
+      "id": "puzzle-154",
+      "category": "Won the Champions League with TWO different clubs",
+      "why": "Dani Alves won all three of his Champions League titles with Barcelona (refuted below); the widened refuted fence found him here under this spelling. Toni Kroos replaces him.",
+      "members": {
+        "Clarence Seedorf": [
+          {
+            "host": "thefootballfaithful.com",
+            "url": "https://thefootballfaithful.com/players-won-champions-league-different-clubs/",
+            "read": "2026-10-22",
+            "says": "Ajax 1995, Real Madrid 1998 and AC Milan 2003 and 2007"
+          },
+          {
+            "host": "givemesport.com",
+            "url": "https://www.givemesport.com/1798562-ronaldo-seedorf-pique-an-xi-of-players-to-win-the-champions-league-with-different-clubs/",
+            "read": "2026-10-22",
+            "says": "the only player to win the Champions League with three different clubs: Ajax 1995, Real Madrid, AC Milan 2003 and 2007"
+          }
+        ],
+        "Samuel Eto'o": [
+          {
+            "host": "thefootballfaithful.com",
+            "url": "https://thefootballfaithful.com/players-won-champions-league-different-clubs/",
+            "read": "2026-10-22",
+            "says": "Barcelona 2006 and 2009, Inter Milan 2010"
+          },
+          {
+            "host": "colossusbets.com",
+            "url": "https://www.colossusbets.com/blog/champions-league-winners/",
+            "read": "2026-10-22",
+            "says": "won the cup twice with Barcelona (2006 and 2009) and then again with Inter Milan in 2010"
+          }
+        ],
+        "Xabi Alonso": [
+          {
+            "host": "uefa.com",
+            "url": "https://www.uefa.com/uefachampionsleague/news/0251-0e99b2382f3a-7aaf0f99afd5-1000--champions-league-100-club-xabi-alonso/",
+            "read": "2026-10-22",
+            "says": "a two-time winner, a European champion with both Liverpool and Real Madrid; winner with Liverpool 2005, suspended for the 2014 final"
+          },
+          {
+            "host": "thefootballfaithful.com",
+            "url": "https://thefootballfaithful.com/players-won-champions-league-different-clubs/",
+            "read": "2026-10-22",
+            "says": "Liverpool 2005, Real Madrid 2014"
+          }
+        ],
+        "Toni Kroos": [
+          {
+            "host": "thefootballfaithful.com",
+            "url": "https://thefootballfaithful.com/players-won-champions-league-different-clubs/",
+            "read": "2026-10-22",
+            "says": "Bayern Munich 2013, Real Madrid 2016, 2017 and 2018 (the page is from March 2020)"
+          },
+          {
+            "host": "colossusbets.com",
+            "url": "https://www.colossusbets.com/blog/champions-league-winners/",
+            "read": "2026-10-22",
+            "says": "in 2016 the first German to lift the Champions League with two different clubs, Real Madrid after Bayern Munich"
+          }
+        ]
+      }
+    }
+  ],
   "refuted": [
     {
       "name": "Dani Alves",
@@ -56,6 +120,9 @@
           "read": "2026-10-22",
           "says": "his European final record: the three wins came with Barcelona"
         }
+      ],
+      "claimWords": [
+        ["champions league", "clubs"]
       ]
     },
     {
@@ -75,6 +142,10 @@
           "read": "2026-10-22",
           "says": "lists Drogba among the best African players never to win AFCON"
         }
+      ],
+      "claimWords": [
+        ["africa cup of nations"],
+        ["afcon"]
       ]
     },
     {
@@ -94,6 +165,9 @@
           "read": "2026-10-22",
           "says": "Real Madrid 4-1 Atletico aet: Ramos 90+3 to make it 1-1, Bale 110"
         }
+      ],
+      "claimWords": [
+        ["90th", "winner"]
       ]
     },
     {
@@ -113,6 +187,9 @@
           "read": "2026-10-22",
           "says": "his debut for Inter Miami's under 12 side"
         }
+      ],
+      "claimWords": [
+        ["father", "son"]
       ]
     },
     {
@@ -132,6 +209,9 @@
           "read": "2026-10-22",
           "says": "the European trebles club by club; Manchester United's is 1998-99 under Ferguson"
         }
+      ],
+      "claimWords": [
+        ["treble"]
       ]
     }
   ],
@@ -200,7 +280,7 @@
     "puzzle-211 | second-fit | Luis Suarez | From Colombia | listed under From Uruguay",
     "puzzle-229 | second-fit | Luis Suarez | From Colombia | listed under From Uruguay"
   ],
-  "uncheckedCeiling": 303,
+  "uncheckedCeiling": 302,
   "rebuilt": ["puzzle-1", "puzzle-3", "puzzle-4", "puzzle-5", "puzzle-6", "puzzle-10", "puzzle-11", "puzzle-12", "puzzle-151"],
   "players": {
     "Fabinho": {
