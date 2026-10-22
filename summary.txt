@@ -1,0 +1,1 @@
+vitest-all exit=1 806s |  Test Files  1 failed | 632 passed | 2 skipped (635)
