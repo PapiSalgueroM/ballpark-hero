@@ -1,0 +1,4 @@
+simCmMatchCentre exit=0 6s | simCmMatchCentre: PASS. Every stat on the report and the live strip is counted off the committed play and lines, and every timeline row is an event the engine drew.
+simCmMatchDay exit=0 51s | simCmMatchDay: all sections green (918 matches: 462 home, 448 away, 8 neutral)
+tsc exit=0 120s | 
+vitest-cm exit=0 165s |    Duration  164.04s (transform 6.46s, setup 2.73s, collect 28.57s, tests 383.02s, environment 19.90s, prepare 4.33s)
