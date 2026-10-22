@@ -1,0 +1,6 @@
+r2-s1 exit=1 26s | 0
+r2-s3 exit=1 40s |   FAIL [2]: only 4 sheets let stand reached their club after a draft that filled every roster, floor 11
+r2-s2 exit=1 40s |   FAIL [2]: only 5 sheets let stand reached their club after a draft that filled every roster, floor 11
+r2-fullbird exit=0 31s | 8
+r2-s2-fullbird exit=0 29s |   FAIL [2]: seed 11 season 7: Lamar Eastwick, drafted here in round 2, came up at the end of his first deal and is not restricted
+r2-s3-fullbird exit=0 30s |   FAIL [2]: seed 21 season 7: Jalen Pemberton, drafted here in round 2, came up at the end of his first deal and is not restricted
