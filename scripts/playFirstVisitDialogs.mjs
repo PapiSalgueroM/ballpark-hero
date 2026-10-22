@@ -135,8 +135,9 @@ function mulberry(seed) {
    name the loader keeps), the Away Day Deal at its top level, Squad far over the division's par, each goal and win
    counter one under the lowest milestone that counts it (found by probing the hit functions, so a new ladder moves it
    too), and `ach` and `claimed` exactly what that state already earns, so only the trip's own firsts fire. The page
-   writes it 13 hours old and pins Math.random to a seeded stream for 5,000 calls (the trip), then 0.999 (no goal, no
-   whistle behind the card). Before any page opens, 200 seeded streams must each draw the full card in node. */
+   writes it 13 hours old and pins Math.random to a seeded stream until the card opens (the trip), then 0.999 (no goal,
+   no whistle behind the card; see plantInPage). Before any page opens, 200 seeded streams must each draw the full card
+   in node. */
 async function plantTycoonAway() {
   const { build } = await import('esbuild');
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'playfirst-tycoon-'));
@@ -295,13 +296,22 @@ function afterTapInPage({ BANNER }) {
 }
 
 /* Runs in the page before any of its scripts (a seeded scene): writes the planted save `awayMs` old (or fresh, under
-   PLAYFIRST_CONTROL=stale, so no away settle can open the card) and pins Math.random to the seeded stream for 5,000
-   calls, then 0.999 so nothing behind the card scores or offers a whistle. */
-function plantInPage({ key, save, awayMs, seed, stale }) {
+   PLAYFIRST_CONTROL=stale, so no away settle can open the card) and pins Math.random to the seeded stream until the
+   scene's card is in the document, then to 0.999, so nothing behind the card scores or offers a whistle while it is
+   measured. The away settle plays the whole trip before it sets the card (useStadiumTycoon's settleAway), so the trip
+   draws only seeded rolls. 5,000 calls is the backstop for a line whose card never opens (the largest trip draws at
+   most 18 matches x 90 minutes x 2 rolls = 3,240, playMinute in src/lib/stadiumTycoon.ts). */
+function plantInPage({ key, save, awayMs, seed, stale, label }) {
   try { const s = JSON.parse(save); s.savedAt = Date.now() - (stale ? 0 : awayMs); localStorage.setItem(key, JSON.stringify(s)); } catch { /* the line then opens no card and fails */ }
-  let a = seed | 0, n = 0;
+  let a = seed | 0, n = 0, opened = false;
   const next = () => { a = (a + 0x6d2b79f5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
-  Math.random = () => (n++ < 5000 ? next() : 0.999);
+  Math.random = () => (!opened && n++ < 5000 ? next() : 0.999);
+  const watch = new MutationObserver(() => {
+    if (![...document.querySelectorAll('[role="dialog"],[role="alertdialog"],[aria-modal="true"]')].some(d => d.getAttribute('aria-label') === label)) return;
+    opened = true;
+    watch.disconnect();
+  });
+  watch.observe(document, { childList: true, subtree: true, attributes: true, attributeFilter: ['aria-label', 'role', 'aria-modal'] });
 }
 
 /* Runs in the page: what the scene's card drew, against its `full` table. */
@@ -326,7 +336,7 @@ for (const { route, w, h, key, scene } of lines) {
   const page = await ctx.newPage();
   await page.route(/supabase\.co/, r => r.abort());
   try {
-    if (scene) await page.addInitScript(plantInPage, { ...scene.seed, stale: CONTROL === 'stale' });
+    if (scene) await page.addInitScript(plantInPage, { ...scene.seed, stale: CONTROL === 'stale', label: scene.label });
     await page.goto(`${BASE}${route}`, { waitUntil: 'domcontentloaded', timeout: 30000 });
     if (CONTROL === 'nobanner') await page.addStyleTag({ content: '[aria-label="Cookie choices"] { display: none !important; }' });
     await page.waitForFunction(() => (document.body?.innerText ?? '').trim().length > 80, null, { timeout: 15000 }).catch(() => {});
