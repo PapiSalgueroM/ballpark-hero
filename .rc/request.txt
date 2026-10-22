@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+walk: node .rc/x/walk.mjs
+simResultPillComparison: node scripts/simResultPillComparison.mjs
+simResultMoment: node scripts/simResultMoment.mjs
