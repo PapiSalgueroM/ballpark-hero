@@ -77,7 +77,7 @@ import {
   nflApplyTradeDeadMoney, nflDeadlineRefusal, nflDeskAfterWeek, nflDeskEdges, nflDeskOffseason, nflDeskWeekOptions,
   nflMirrorPickMove, nflNoteArrivals, nflPackageCapCheck, nflPicksOf, nflScoutRead, nflSignDraftee, nflStaffOf, nflTradeDeadMoney,
   nflTradeWindow, openNflDesk, syncNflPicks, NFL_DESK_KEYS,
-  nflAwayHost, nflOutcome, nflSeasonCounted, NFL_XP_LIVE, NFL_XP_SOURCES,
+  nflSeasonCounted, NFL_XP_LIVE, NFL_XP_SOURCES,
 } from '@/lib/nflGmDesk';
 /* By its full path, not './': harnesses bundle a copy of this board from a temp folder. */
 import { NFL_DESK_PANELS, NFL_HUB_PANELS, NFL_RECAP_PANELS, type NflDeskFacts } from '@/components/front-office/NflGmDesk';
@@ -641,7 +641,7 @@ export default function FrontOfficeBoard() {
     /* Round 1550: the verdict is the career kit's. Every press that can reach here is made in the last week or the
        playoffs, where the buttons wait for the kit (closeWaits), so it is here; the guard is for the type alone. */
     if (!kit) return;
-    const { hostSeasonVerdict, hostXpRecapLine, nflDeskHost } = kit;
+    const { hostSeasonVerdict, hostXpRecapLine, nflDeskHost, nflOutcome } = kit;
     lg.champions.push({ season: lg.season, team: champ });
     setPlayoffRounds(rounds);
     setChampion(champ);
@@ -1348,7 +1348,7 @@ export default function FrontOfficeBoard() {
   const sitOut = () => {
     if (phase !== 'fired' || !league || playoffsLive.current) return;
     if (!kit) return; /* Round 1550: as takeSeat above */
-    const { hostAwayRefusalLine, hostSeasonAway, nflDeskHost, nflLegacy } = kit;
+    const { hostAwayRefusalLine, hostSeasonAway, nflAwayHost, nflDeskHost, nflLegacy } = kit;
     const lg: LeagueState = JSON.parse(JSON.stringify(league));
     let desk = gm;
     if (!desk) { desk = openNflDesk(lg, myTeam); syncNflPicks(lg, nflPicksOf(desk, lg)); }
