@@ -1,0 +1,5 @@
+bindAt: scripts/qa/proveCareerReleaseGuides.mjs bound
+bindAt: e32dd9facafc -> 4a6083b58a05
+runProver: p1414 at 112b5eed76a9d9b392e941ced71f38b113196afd (release BK proof tree: d83b9d5b1d97 with 1 path(s) from fcaeee96ea8c)
+PASS six guide items, twelve effective source/fixture rejection controls, whole fixture preservation and deterministic search index.
+runProver: p1414 exit 0
