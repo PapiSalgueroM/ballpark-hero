@@ -1,0 +1,6 @@
+headsha exit=0 0s | 70e3b0ff6b rc request rBP-fin for e9428a3eee3561e6432d91e0a9e28e1b96fe2c6f
+simHarnessAnchors exit=0 86s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simNoRivalNames exit=0 24s | No rival product names found. 0 findings.
+dashscan exit=0 0s | since 212b9069: added lines with an en or em dash 0, commit message lines with one 0
+tsc exit=0 129s | 
+vitest-all exit=0 662s |  Test Files  627 passed | 2 skipped (629)
