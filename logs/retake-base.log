@@ -1,0 +1,16 @@
+Preparing worktree (detached HEAD bac65fb0b)
+Updating files:  83% (4339/5192)Updating files:  84% (4362/5192)Updating files:  85% (4414/5192)Updating files:  86% (4466/5192)Updating files:  87% (4518/5192)Updating files:  88% (4569/5192)Updating files:  89% (4621/5192)Updating files:  90% (4673/5192)Updating files:  91% (4725/5192)Updating files:  92% (4777/5192)Updating files:  93% (4829/5192)Updating files:  94% (4881/5192)Updating files:  95% (4933/5192)Updating files:  96% (4985/5192)Updating files:  97% (5037/5192)Updating files:  98% (5089/5192)Updating files:  99% (5141/5192)Updating files: 100% (5192/5192)Updating files: 100% (5192/5192), done.
+HEAD is now at bac65fb0b Merge remote-tracking branch 'origin/main' into r1543-tycoon-badge-ladder
+  seed 101: watched same, away same
+  seed 141: watched same, away same
+  seed 181: watched same, away same
+  seed 1610: watched same, away same
+  seed 1650: watched same, away same
+  seed 1690: watched same, away same
+  seed 3119: watched same, away same
+  seed 3159: watched same, away same
+  seed 3199: watched same, away same
+  seed 4628: watched same, away same
+  seed 4668: watched same, away same
+  seed 4708: watched same, away same
+/tmp/base1543: 12 of 12 histories reproduce the committed hashes, 0 differ

@@ -1,0 +1,12 @@
+retake-base exit=0 3s | /tmp/base1543: 12 of 12 histories reproduce the committed hashes, 0 differ
+retake-oldladder exit=0 2s | /tmp/old1543: 12 of 12 histories reproduce the committed hashes, 0 differ
+retake-head exit=1 1s | this tree: 4 of 12 histories reproduce the committed hashes, 8 differ
+retake-write exit=0 3s | this tree: 12 of 12 histories reproduce the committed hashes, 0 differ
+ladder exit=0 32s | measureTycoonLadder: every rung resolves, 0 row(s) to move [31 s]
+simStadiumTycoon exit=0 1s | simStadiumTycoon: green. The turnstiles spin and the math holds.
+tsc exit=0 100s | 
+simTycoonLeague exit=0 146s |    Every older save lands in the division it had earned, no club that can compete is walled in, and all ten controls fired.
+simTycoonPackPace exit=0 21s | simTycoonPackPace: green. Both policies measured; every applied price control broke its pace check.
+simTycoonAwayMatchdays exit=0 91s |    All 6 controls fired exactly where they should, in node and in the real hook.
+simTycoonPacks exit=0 249s |    All 23 controls fired exactly where they should.
+simTycoonScorelines exit=0 363s | simTycoonScorelines: 17 checks, 0 failed [363 s]

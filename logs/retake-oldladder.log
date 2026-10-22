@@ -1,0 +1,18 @@
+Preparing worktree (detached HEAD b7205be13)
+Updating files:  86% (4514/5197)Updating files:  87% (4522/5197)Updating files:  88% (4574/5197)Updating files:  89% (4626/5197)Updating files:  90% (4678/5197)Updating files:  91% (4730/5197)Updating files:  92% (4782/5197)Updating files:  93% (4834/5197)Updating files:  94% (4886/5197)Updating files:  95% (4938/5197)Updating files:  96% (4990/5197)Updating files:  97% (5042/5197)Updating files:  98% (5094/5197)Updating files:  99% (5146/5197)Updating files: 100% (5197/5197)Updating files: 100% (5197/5197), done.
+HEAD is now at b7205be13 rc request r1543-s2a for 6195a597c75c990f9526ed4db02d06afa016eac6
+oldLadder1543: 2 comment lines and 11 rows written back
+written over /tmp/old1543/src/lib/stadiumTycoon.ts
+  seed 101: watched same, away same
+  seed 141: watched same, away same
+  seed 181: watched same, away same
+  seed 1610: watched same, away same
+  seed 1650: watched same, away same
+  seed 1690: watched same, away same
+  seed 3119: watched same, away same
+  seed 3159: watched same, away same
+  seed 3199: watched same, away same
+  seed 4628: watched same, away same
+  seed 4668: watched same, away same
+  seed 4708: watched same, away same
+/tmp/old1543: 12 of 12 histories reproduce the committed hashes, 0 differ

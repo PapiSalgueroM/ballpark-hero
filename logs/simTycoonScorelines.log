@@ -1,0 +1,74 @@
+Round 1532: Stadium Tycoon scorelines at the hook's cadence (dt 0.2s)
+S1) the law, read not restated
+   1085133 chances equal the law at the engine's own gap (Squad 0 to 200, ten divisions, every rival, the edge 0 to 0.40 and NaN, -1, 1, every rival fixture both ways); the rival's chance falls at every step of the edge; the lib imports goalLambda and types neither 0.055 nor 4.2; the rules' facts 1.45, 1.17 and 0.05 are the law's; every division's rivals spread -3 to 3 law points
+S2) the shape
+   28 frozen bodies hash to the base record; 200 matches drew 180 rolls each; 620 other fixtures over 189 matchdays replay on their own stream at 180 rolls; 40 perfect set pieces added no roll
+S3) goals
+   cal 2.572 goals a match (windows 15 to 30 2.643, 30 to 60 2.711, 60 to 120 2.488, 120 to 240 2.617); away matchdays from pace at 30 / 60 / 120 minutes none (the final matchday waits) / 2.633 goals, 83.333% won of 60 / 2.54 goals, 58.73% won of 189; hold 2.605 goals a match (windows 15 to 30 2.629, 30 to 60 2.575, 60 to 120 2.614, 120 to 240 2.574); away matchdays from pace at 30 / 60 / 120 minutes none (the final matchday waits) / 2.2 goals, 70% won of 50 / 2.924 goals, 64.286% won of 210
+S4) results
+   3741 gaps read the Squad, the division and the rival exactly; cal: pace 65% (se 1.294; 72.143 / 68.571 / 61.552), draws 20.7%, gap 8.775; overinvest 77.82% over 100 seeds (se 0.577, gap 13.823); nosquad 18% (gap -14.523); hold: pace 66.7% (se 1.446; 75.714 / 67.857 / 63.966), draws 20.8%, gap 8.964; overinvest 78.3% over 100 seeds (se 0.561, gap 13.9); nosquad 17.2% (gap -15.113)
+S5) titles
+   cal 0.742 titles a season; hold 0.733 titles a season; season one won in 36 of 40; title share at gaps 0 / 4 / 8 / 12 / 14 through the engine's own playMinute and playMatchday, 500 seasons a cell: 6 clubs one leg: 0.232 / 0.466 / 0.654 / 0.824 / 0.908; 8 clubs two legs: 0.184 / 0.562 / 0.836 / 0.946 / 0.982; 10 clubs two legs: 0.222 / 0.5 / 0.85 / 0.96 / 0.99
+S6) never 99
+   our chance never passed 0.046667 a minute over 5289 states (highest 0.046667); the exact ceiling wins 98.189% and 98.645% with a rival who never scores; the engine's Squad 200 club with a 0.39 edge wins 98.189%
+S7) bonuses
+   2,000 states: a goal 5 and a win 20 seconds of unboosted income, untouched by Hype and the whistles; a promotion paid 8143 and a Summit title 8143, 120 seconds each; away pay Object.is the base on 52 inputs; cal 20 seeds' last win before two hours paid 20 to 20 seconds of income (base 0.1322); hold 20 seeds' last win before two hours paid 20 to 20 seconds of income (base 0.1322)
+S8) the economy beside the base record (printed, no fence) [168 s]
+   pace first Sell up 12.77 min (base 13.37); over4 14.18 (base 14.77)
+   pace income a second at 30 / 60 / 120 min: 18147.381 (base 21155.507) / 27539.107 (base 34433.314) / 42078.334 (base 81037.765)
+   pace division at 30 / 60 / 120 / 240: 2 (base 2) / 3 (base 3) / 5 (base 6) / 7 (base 9)
+   pace minutes to reach divisions 1 to 9: 10.5, 21, 42, 71.4, 119.7, 159.6, 207.9, later, later
+   mean capped streak 15 to 120: pace 4.143, over4 6.51, nosquad 0.482; watched gems an hour: pace 107.971
+   paceSell stars 1 / 2 / 3 at 21 (base 21) / 42 (base 42) / 73.5 (base 73.5) min
+   milestones and badges, pace: win1 4.2 (4.2), win10 23.1 (23.1), win50 107.1 (107.1), goals25 9.52 (9.753), streak5 12.6 (12.6), fans500 7.263 (7.343), fans2k 12.713 (12.903), fans10k 34.787 (32.557), full 13.737 (13.827), allTracks 3.337 (3.337), ag25 9.52 (9.753), ag100 29.377 (27.23), ag500 81.737 (96.11), ag2000 later (later), aw1 4.2 (4.2), aw10 23.1 (23.1), aw50 107.1 (107.1), aw150 later (later), aw400 later (later), as5 12.6 (12.6), as10 29.4 (23.1)
+   mean matchGap per window, pace: 15 to 30 13.076, 30 to 60 9.838, 60 to 120 7.224, 120 to 240 6.958
+
+control copy: 1 place rewritten in a copy of the lib
+   sections red: S1 (expected S1) [188 s]
+     S1: division 0 Squad 0: our chance 0.014555555555555554 is not the law's 0.014583333333333334
+
+control noscale: 1 place rewritten in a copy of the lib
+   sections red: S1 (expected S1) [209 s]
+     S1: division 0 Squad 0 edge 0.002: the rival's chance 0.014527777777777777 is not the law's 0.01449872222222222
+
+control tworolls: 1 place rewritten in a copy of the lib
+   sections red: S2 (expected S2) [235 s]
+     S2: the body of playMinute moved (61 lines, 60 on the base)
+
+control linear: 3 places rewritten in a copy of the lib
+   sections red: S1 S3 S4 S5 S6 (expected S1 S3 S4 S5 S6) [255 s]
+     S1: division 0 Squad 0: our chance 0.028 is not the law's 0.014583333333333334
+     S3: ctl: pace's watched league matches over minutes 15 to 120 held 14.497 goals, outside 2.5 to 3.0
+     S4: ctl: pace won 99.3% over minutes 15 to 120, outside 55 to 75
+     S5: ctl: pace took 0.975 titles a season over minutes 15 to 240, outside 0.40 to 0.90
+     S6: Squad 15 in division 0 scores at 0.052000000000000005 a minute, past the law's ceiling 0.04666666666666667
+
+control flat: 1 place rewritten in a copy of the lib
+   sections red: S4 S5 (expected S4 S5) [282 s]
+     S4: division 0 Squad 7: the gap reads -2.5000000000000004, the Squad, the division and the rival make 3.4499999999999997
+     S5: ctl: pace took 0.04 titles a season over minutes 15 to 240, outside 0.40 to 0.90
+
+control matchno: 1 place rewritten in a copy of the lib
+   sections red: S3 S4 S5 (expected S3 S4 S5) [298 s]
+     S3: ctl: pace's watched league matches over minutes 15 to 120 held 3.419 goals, outside 2.5 to 3.0
+     S4: ctl: pace won 8.8% over minutes 15 to 120, outside 55 to 75
+     S5: ctl: pace took 0.036 titles a season over minutes 15 to 240, outside 0.40 to 0.90
+
+control noclamp: 1 place rewritten in a copy of the lib
+   sections red: S1 S6 (expected S1 S6) [312 s]
+     S1: division 0 Squad 65: our chance 0.04834722222222222 is not the law's 0.04666666666666667
+     S6: Squad 65 in division 0 scores at 0.04834722222222222 a minute, past the law's ceiling 0.04666666666666667
+
+control facts: 1 place rewritten in a copy of the lib
+   sections red: S1 (expected S1) [330 s]
+     S1: scoringFacts().evenAgainst is 1.45, the law says 1.17
+
+control offsetunit: 1 place rewritten in a copy of the lib
+   sections red: S1 (expected S1) [347 s]
+     S1: division 0: its rivals sit -0.3 to 0.3 law points from the division, not minus 3 to plus 3
+
+control crowd: 4 places rewritten in a copy of the lib
+   sections red: S7 (expected S7) [363 s]
+     S7: state 0: a goal paid 1075, 5 seconds of income is 38872
+
+simTycoonScorelines: 17 checks, 0 failed [363 s]

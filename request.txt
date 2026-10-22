@@ -1,0 +1,12 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+ladder: node scripts/measureTycoonLadder.mjs
+retake-base: git worktree add /tmp/base1543 bac65fb0b && node scripts/retakeTycoonHistories.mjs --root /tmp/base1543
+retake-oldladder: git worktree add /tmp/old1543 HEAD && node .rc/x/oldLadder1543.mjs /tmp/old1543/src/lib/stadiumTycoon.ts --write && node scripts/retakeTycoonHistories.mjs --root /tmp/old1543
+retake-head: node scripts/retakeTycoonHistories.mjs
+retake-write: git worktree add /tmp/w1543 HEAD && ln -s "$PWD/node_modules" /tmp/w1543/node_modules && cd /tmp/w1543 && node scripts/retakeTycoonHistories.mjs --write --note "Round 1543 (base bac65fb0): the goal and win badge and milestone ladder moved to lower thresholds, so badges and milestone pay land earlier in the twelve histories; retaken by its legs on remote check r1543-s2a: the base tree reproduced 12 of 12 committed hashes, and the head with only the old ladder written back reproduced 12 of 12, so the ladder is the one cause" && node scripts/retakeTycoonHistories.mjs
+simTycoonScorelines: node scripts/simTycoonScorelines.mjs
+simStadiumTycoon: node scripts/simStadiumTycoon.mjs
+simTycoonLeague: node scripts/simTycoonLeague.mjs
+simTycoonPacks: node scripts/simTycoonPacks.mjs
+simTycoonPackPace: node scripts/simTycoonPackPace.mjs
+simTycoonAwayMatchdays: node scripts/simTycoonAwayMatchdays.mjs
