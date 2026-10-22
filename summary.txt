@@ -1,0 +1,2 @@
+dials exit=0 0s | Very Easy, Easy and Medium dial lines changed since B1515: 0
+s6 exit=1 2s | simCmDifficulty: 3 FAILURES (sections 6)
