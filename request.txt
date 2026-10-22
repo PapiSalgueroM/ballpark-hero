@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+guides: node scripts/simGuideHeadings.mjs --refresh /baseball-connections && node scripts/simGuideHeadings.mjs --refresh /nfl-connections && node scripts/simGuideHeadings.mjs --refresh /nhl-connections && cp scripts/data/guideHeadingsFrozen.json "$RC_OUT/" && node scripts/simGuideHeadings.mjs
+search: node scripts/simSiteSearch.mjs
+trust: node scripts/simTrustCopy.mjs
+facts: node scripts/simUsConnectionsFacts.mjs
+storage: node scripts/simStorageWrites.mjs

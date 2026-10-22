@@ -1,0 +1,6 @@
+guides exit=0 3s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+search exit=0 3s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+facts exit=0 0s | simUsConnectionsFacts: green. Every Baseball, NFL and NHL Connections group is held to the record, and every board has one right answer.
+trust exit=0 1s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+storage exit=0 3s | simStorageWrites: all green (owed: 12)
+tsc exit=0 69s | 
