@@ -1,0 +1,8 @@
+c-window exit=1 6s | simCfbSlate: 1 failure(s)
+slate exit=0 7s | simCfbSlate: all green
+c-g5sort exit=1 5s | simCfbSlate: 1 failure(s)
+c-ndsix exit=1 7s | simCfbSlate: 1 failure(s)
+c-source exit=1 5s | simCfbSlate: 1 failure(s)
+c-cbbzero exit=1 8s | simCfbSlate: 1 failure(s)
+c-cbbraw exit=1 5s | simCfbSlate: 2 failure(s)
+slate-big exit=0 29s | simCfbSlate: all green
