@@ -1,0 +1,2 @@
+#!build
+chunks: git worktree add /tmp/wb 529bc3c105b0d365d96961e72587bb7ab36a9a8d >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/wb/node_modules && (cd /tmp/wb && node_modules/.bin/vite build --logLevel error >/dev/null) && node .rc/x/chunkdiff.mjs dist /tmp/wb/dist

@@ -1,0 +1,32 @@
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+[1m[33mwarn[39m[22m - The class `duration-[800ms]` is ambiguous and matches multiple utilities.
+[1m[33mwarn[39m[22m - If this is content and not a class, replace it with `duration-&lsqb;800ms&rsqb;` to silence this warning.
+    270 B  AppearanceBuilder (15243 B gz)
+    218 B  WhatsNew (124337 B gz)
+    173 B  SoccerCareer (404627 B gz)
+     62 B  SquadSheet (8129 B gz)
+     47 B  soccer2 (37622 B gz)
+     26 B  index (242437 B gz)
+     -9 B  TransferScreen (11055 B gz)
+     -8 B  AcademyPanel (7733 B gz)
+     -8 B  ClubManagerSeasonSummary (5274 B gz)
+     -8 B  ContractsCard (5027 B gz)
+     -7 B  FaceOff (9288 B gz)
+     -7 B  LiveSimScreen (21333 B gz)
+     -7 B  NascarChain (4931 B gz)
+      7 B  WorldXi (7194 B gz)
+     -6 B  BallIq (4684 B gz)
+     -6 B  GolfHigherLower (3770 B gz)
+     -6 B  NbaChain (6095 B gz)
+     -6 B  NbaHigherLower (3683 B gz)
+      6 B  Profile (21834 B gz)
+     -6 B  QuizBoard (4771 B gz)
+     -6 B  SportsBingo (10790 B gz)
+     -6 B  TrophyCabinet (4473 B gz)
+     -5 B  ClubDetailScreen (3375 B gz)
+     -5 B  ContractChaos (9136 B gz)
+     -5 B  GuessTheYear (10899 B gz)
+chunkdiff: 326 chunks differ, net 307 B gz
