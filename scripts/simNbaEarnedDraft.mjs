@@ -388,7 +388,9 @@ if (CONTROL && CONTROLS[CONTROL].self) {
     text = next;
   }
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), `${NAME}-${CONTROL}-`));
-  const copy = path.join(dir, 'judged.mjs');
+  /* The copy keeps this file's name: seedRandom seeds Math.random from the script's file name, so the copy walks
+     exactly the stream the harness itself walks and only the judge differs. */
+  const copy = path.join(dir, `${NAME}.mjs`);
   fs.writeFileSync(copy, text);
   console.log(`NEGATIVE CONTROL ON: ${CONTROL}, a copy of this harness with its judge slipped (${copy}). Sections ${CONTROLS[CONTROL].expect.join(' and ')} must go red and no other.`);
   const run = spawnSync(process.execPath, [copy], { env: { ...process.env, SIM_NBA_EARNED_DRAFT_CONTROL: '' }, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });

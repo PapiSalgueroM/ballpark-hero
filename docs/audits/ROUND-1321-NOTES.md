@@ -31,12 +31,18 @@ Nothing in `src` calls the new code but its own tests. No screen, no copy, no Wh
   B's board (`nbaEarnedDraftClass`, `draftRulesFor`, `lotteryNight`, `lotteryNightRule`, `ordinal`,
   `slotsLeftFor`, the types, `GmDraftOrderRules` and `GmLotteryRules` among them). `openNbaDraftNight` answers a
   night already open for the season as it stands (fix pass). Step (d) adds `NBA_DRAFT_KNOBS`, the class's two
-  knobs of A4 in the host, on a RIVAL's man only and drawing no number: `rivalSecondOnMin: true` (a rival's second
-  round man signs one season at `nbaMinContract`) and `latePot: { from: 13, cap: 66 }` (a rival's man from pick 13
-  on has his ceiling capped at 66, never under his own rating, so he stays the player he was drafted as).
-- `src/lib/gmEarnedDraft.test.ts` (10 tests) and `src/lib/nbaEarnedDraft.test.ts` (15 tests since step (d), which added the knobs test); both reach the lift,
+  knobs of A4 in the host, drawing no number. Since the lead's ruling 5 of 2026-10-21 they are ONE RULE FOR EVERY
+  CLUB, his own included (they were a rival's man only in step (d)): `secondOnMin: true` (renamed from
+  `rivalSecondOnMin`; a second round man signs one season at `nbaMinContract`) and `latePot: { from: 13, cap: 66 }`
+  (a man from pick 13 on has his ceiling capped at 66, never under his own rating, so he stays the player he was
+  drafted as). His first rounder still signs the league's first round scale (`nbaSignDraftee`), which is the
+  league's deal and not a knob.
+- `src/lib/gmEarnedDraft.test.ts` (10 tests) and `src/lib/nbaEarnedDraft.test.ts` (15 tests since step (d), which added the knobs test; since the rulings it holds his own late first and second rounder to the same knobs as a rival's); both reach the lift,
   the pick ledger of gmPicks included, only through gmEarnedDraft's re-exports (`movePicks`, `newLedger`, `pickKey`).
 - `scripts/simNbaEarnedDraft.mjs` (new) and `scripts/data/nbaEarnedDraftFixture.json` (recorded from `48cb9d4b`).
+  Since the rulings: the stop lines as ruled, the judge split into `judgeLine` and its one comparison `inBand`,
+  section 11 (the judge on known answers) and five judge controls (`judgetwo`, `judgerange`, `judgefloor`,
+  `judgecap`, `judgeflip`), each slipping `inBand` in a copy of the harness.
 - `scripts/simGmDraftOrder.mjs`: the two libraries added to `MOUNT_ALLOW`, nothing else.
 - `src/lib/nbaGmDesk.ts`: UNCHANGED (correction 11). The block key lives in nbaEarnedDraft.ts.
 
