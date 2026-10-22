@@ -1,0 +1,11 @@
+mut-late exit=1 0s | simSeasonDue: 10 failures; first: fetchCompetitionRows read the day after its response landed: opened on 2026-10-31, it dealt afl_premiers 2026 once midnight passed
+mut-latewhod exit=1 0s | simSeasonDue: 2 failures; first: fetchFinalsRows read the day after its response landed: opened on 2030-11-30, it dealt super_bowls 2030 once midnight passed
+mut-past exit=1 0s | simSeasonDue: 4 failures; first: afl_premiers 2026: counts from 2026-10-20 has come (today 2026-10-22) and the saved Record Books page still stops at 2025: if the rows ar
+mut-early exit=1 0s | simSeasonDue: 4 failures; first: afl_premiers 2026: counts from 2026-08-10 is not a date after its final (over by 2026-10-05)
+mut-ge exit=1 0s | simSeasonDue: 12 failures; first: fetchCompetitionRows still holds afl_premiers 2026 out on 2026-11-01, the day it counts
+mut-key exit=1 0s | simSeasonDue: 20 failures; first: fetchCompetitionRows dealt afl_premiers 2026 on 2026-10-31, before it counts (2026-11-01)
+mut-whod exit=1 0s | simSeasonDue: 4 failures; first: fetchFinalsRows dealt super_bowls 2030 on 2030-11-30, before it counts (2030-12-01)
+mut-main1022 exit=1 0s | simSeasonDue: 1 failure; first: Brownlow Medal count 2026: over by 2026-10-01, its row has been due in afl_brownlow since 2026-10-22 and the table is held through 2025
+mut-main1021 exit=0 0s | simSeasonDue: green. 69 checks.
+mut-sqlname exit=1 5s | rehearseSeasonRows1551: 4 failures
+clean exit=0 0s | tree clean check done

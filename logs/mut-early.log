@@ -1,0 +1,40 @@
+mut1551 early: applied in src/lib/seasonCalendar.ts
+today (ET) 2026-10-22
+1) the calendar covers every competition a daily reads
+   12 competitions, 5 finals tables inside them
+2) heldThrough matches what the repo records each table holding
+   super_bowls: held through 2026 (migrations none, saved page 2026)
+   nba_finals: held through 2026 (migrations none, saved page 2026)
+   world_series_v2: held through 2025 (migrations none, saved page 2025)
+   stanley_cup_finals_v2: held through 2026 (migrations none, saved page 2026)
+   wnba_finals: held through 2025 (migrations none, saved page 2025)
+   cfb_national_champions: held through 2025 (migrations 2025, saved page 2025)
+   ncaa_basketball_champions: held through 2026 (migrations none, saved page 2026)
+   soccer_league_champions: held through 2026 (migrations none, saved page 2026)
+   afl_premiers: held through 2026 (migrations 2026, saved page 2025)
+   nrl_premiers: held through 2026 (migrations 2026, saved page 2025)
+   afl_brownlow: held through 2026 (migrations 2026, saved page 2025)
+   nrl_dally_m: held through 2026 (migrations 2026, saved page 2025)
+3) every final over 21 days ago has its row
+   super_bowls: latest due 2026, held 2026, next due 2027 on 2027-03-13
+   nba_finals: latest due 2026, held 2026, next due 2027 on 2027-07-16
+   world_series_v2: latest due 2025, held 2025, next due 2026 on 2026-11-26
+   stanley_cup_finals_v2: latest due 2026, held 2026, next due 2027 on 2027-07-21
+   wnba_finals: latest due 2025, held 2025, next due 2026 on 2026-11-21
+   cfb_national_champions: latest due 2025, held 2025, next due 2026 on 2027-02-15
+   ncaa_basketball_champions: latest due 2026, held 2026, next due 2027 on 2027-05-01
+   soccer_league_champions: latest due 2026, held 2026, next due 2027 on 2027-06-21
+   afl_premiers: latest due 2025, held 2026, next due 2027 on 2027-10-26
+   nrl_premiers: latest due 2025, held 2026, next due 2027 on 2027-10-31
+   afl_brownlow: latest due 2026, held 2026, next due 2027 on 2027-10-22
+   nrl_dally_m: latest due 2025, held 2026, next due 2027 on 2027-10-26
+4) a season the saved pages have not shown yet counts from a day boundary
+  FAIL: afl_premiers 2026: counts from 2026-08-10 is not a date after its final (over by 2026-10-05)
+  FAIL: nrl_premiers 2026: counts from 2026-08-10 is not a date after its final (over by 2026-10-10)
+  FAIL: afl_brownlow 2026: counts from 2026-08-10 is not a date after its final (over by 2026-10-01)
+  FAIL: nrl_dally_m 2026: counts from 2026-08-10 is not a date after its final (over by 2026-10-05)
+   6 fetch probes under a moved clock
+5) every Rank 'Em round naming an active player says which season it runs through
+   15 rounds, 2 stamped
+
+simSeasonDue: 4 failures; first: afl_premiers 2026: counts from 2026-08-10 is not a date after its final (over by 2026-10-05)
