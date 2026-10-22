@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+cmfit-p2: bash .rc/x/basesrv.sh 8fea14e2 4175 && mkdir -p "$TMPDIR/out" && RC_OUT="$TMPDIR/out" CM_FIT_PART=2 CM_FIT_BASE_URL=http://localhost:4175 CM_FIT_BASE_DIST=/tmp/wt-8fea14e2/dist node scripts/playCmTablesFit.mjs
+cmfit-p2-ctl-none: bash .rc/x/basesrv.sh 8fea14e2 4175 && mkdir -p "$TMPDIR/out" && RC_OUT="$TMPDIR/out" ANSWER_CONSENT_CONTROL=none CM_FIT_PART=2 CM_FIT_BASE_URL=http://localhost:4175 CM_FIT_BASE_DIST=/tmp/wt-8fea14e2/dist node scripts/playCmTablesFit.mjs
+cmfit-p2-main: git worktree add -q --detach /tmp/wt-main c1b39364 && ln -s "$PWD/node_modules" /tmp/wt-main/node_modules && bash .rc/x/basesrv.sh 8fea14e2 4175 && cd /tmp/wt-main && mkdir -p "$TMPDIR/out2" && RC_OUT="$TMPDIR/out2" CM_FIT_PART=2 CM_FIT_BASE_URL=http://localhost:4175 CM_FIT_BASE_DIST=/tmp/wt-8fea14e2/dist node scripts/playCmTablesFit.mjs
