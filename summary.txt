@@ -1,0 +1,4 @@
+headsha exit=0 0s | 705f576c2a Record Release BP: live at 17:53 EDT on 2026-10-22 (main 5ba8a1c6, deployment e12d7e79), with the board note for the other lane
+wf285 exit=1 543s | wfrun club-detail-fixtures.yml: 8 steps ran, 1 failed: Every rebuilt-site reader
+wf287x exit=1 354s | wfrun manager-handover-desk.yml: 9 steps ran, 1 failed: All fifteen build and snapshot readers
+wf301x exit=0 891s | wfrun manager-decision-method.yml: 5 steps ran, 0 failed

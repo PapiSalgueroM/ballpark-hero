@@ -1,0 +1,3 @@
+bc1abf6f4b rc request rBQ-rgBIi for 3cca8400bd0d4d104ecfae5d3eeece92186778cc
+3cca8400bd Release BQ m16: merge origin/main at 705f576c (Release BP live: main 5ba8a1c6 and its record), BP's triage seams kept
+705f576c2a Record Release BP: live at 17:53 EDT on 2026-10-22 (main 5ba8a1c6, deployment e12d7e79), with the board note for the other lane
