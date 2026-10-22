@@ -4,13 +4,12 @@
 import { describe, expect, it } from 'vitest';
 import type { GmPlayer, GmTeamState, LeagueState } from '@/lib/frontOffice';
 import { unitStarters, SKILL_POS, SKILL_SLOTS, DEF_POS, DEF_SLOTS } from '@/lib/frontOffice';
-import { foNewSeasonStats } from '@/lib/foSeasonStats';
 import { FO_HISTORY_CAP, foCloseOnce } from '@/lib/foSeasonClose';
 import { nflDrivePair } from '@/lib/gameLaws/nflDrives';
 import { keyedRng } from '@/lib/keyedRng';
 import {
   NFL_AWARD_LABEL, nflAwardList, nflCleanSave, nflCloseSeasonStats, nflCreditGame, nflLiveStats, nflMarkRookies, nflMvpScore,
-  nflNewStats, nflPassChance, nflPlaysFor, nflPool, nflPoolMen, nflRecordGame, nflRecordWeek, nflSackChance, nflSeasonAwards,
+  nflFoStats, nflNewStats, nflPassChance, nflPlaysFor, nflPool, nflPoolMen, nflRecordGame, nflRecordWeek, nflSackChance, nflSeasonAwards,
   nflStatsHelp, nflUsage, readNflAwards, readNflStats, type NflSeasonAwards, type NflSeasonStats, type NflToldGame,
 } from '@/lib/nflSeasonStats';
 
@@ -56,12 +55,12 @@ describe('the pool and the credit', () => {
     expect(nflPoolMen(pool).map(p => p.id).sort()).toEqual(want);
     expect(want).toHaveLength(12);
     for (const g of games('AAA', 'BBB', 300)) expect(nflRecordGame(lg, g, 'AAA', true)).toBe(true);
-    const ids = new Set(Object.values(lg.stats!.lines).filter(l => l.team === 'AAA').map(l => l.id));
+    const ids = new Set(Object.values(nflFoStats(lg.stats!).lines).filter(l => l.team === 'AAA').map(l => l.id));
     expect([...ids].sort()).toEqual(want);
     for (const p of [hurt, ...deep.players.filter(p => p.pos === 'OL'), ...deep.practice!]) expect(ids.has(p.id)).toBe(false);
     /* every pool man was in every game, and somebody caught, ran and sacked */
-    for (const l of Object.values(lg.stats!.lines)) expect([l.g, l.gs]).toEqual([300, 300]);
-    const sum = (col: string) => Object.values(lg.stats!.lines).reduce((a, l) => a + (l.tot[col] ?? 0), 0);
+    for (const l of Object.values(nflFoStats(lg.stats!).lines)) expect([l.g, l.gs]).toEqual([300, 300]);
+    const sum = (col: string) => Object.values(nflFoStats(lg.stats!).lines).reduce((a, l) => a + (l.tot[col] ?? 0), 0);
     expect(sum('ptd')).toBe(sum('ctd'));
     expect(sum('rtd')).toBeGreaterThan(0);
     expect(sum('sk')).toBeGreaterThan(0);
@@ -80,12 +79,12 @@ describe('the credit adds up', () => {
       tds += tdsOf(g, 0);
       nflRecordGame(lg, g, 'AAA', true);
     }
-    const lines = Object.values(lg.stats!.lines).filter(l => l.team === 'AAA');
+    const lines = Object.values(nflFoStats(lg.stats!).lines).filter(l => l.team === 'AAA');
     const col = (k: string) => lines.reduce((a, l) => a + (l.tot[k] ?? 0), 0);
     expect(col('ptd')).toBe(col('ctd'));
     expect(col('rtd') + col('ctd')).toBe(tds);
-    expect(lg.stats!.club!.AAA[0]).toBe(tds);
-    expect(lg.stats!.teams.AAA.g).toBe(200);
+    expect(lg.stats!.clubs.AAA[4]).toBe(tds);
+    expect(lg.stats!.clubs.AAA[0]).toBe(200);
   });
 
   it('with no healthy quarterback every touchdown is a run, and a side with nobody to take one leaves it unclaimed', () => {
@@ -128,12 +127,12 @@ describe('the block and his games', () => {
     const g = games('AAA', 'BBB', 3);
     expect(nflRecordWeek(lg, g, 'AAA')).toBe(0);
     expect(lg.stats).toBeUndefined();
-    const old: NflSeasonStats = { ...nflNewStats(2026), lines: { 'AAA|x': { id: 'x', name: 'Old', team: 'AAA', pos: 'QB', g: 17, gs: 17, tot: { ptd: 30 } } } };
+    const old: NflSeasonStats = { ...nflNewStats(2026), lines: { AAA: { x: ['Old', 'QB', 17, 30, 0, 0, 0] } } };
     const history: NflSeasonAwards[] = [{ season: 2026, mvp: null, oroy: null, droy: null, rookies: false }];
     Object.assign(lg, { week: 1, stats: old, awards: history });
     expect(nflRecordWeek(lg, g, 'AAA')).toBe(3);
     expect(lg.stats!.season).toBe(2027);
-    expect(lg.stats!.lines['AAA|x']).toBeUndefined();
+    expect(lg.stats!.lines.AAA.x).toBeUndefined();
     expect(lg.awards).toEqual(history);
     expect(nflPlaysFor(lg, g[0].key)).not.toBeNull();
     expect(nflPlaysFor(lg, 'no such game')).toBeNull();
@@ -168,12 +167,13 @@ describe('rookies, readers and the clean load', () => {
     for (const g of games('AAA', 'BBB', 5)) nflRecordGame(lg, g, 'AAA', true);
     expect(readNflStats(JSON.parse(JSON.stringify(lg.stats)))).not.toBeNull();
     const bad = (f: (s: NflSeasonStats) => void) => { const s: NflSeasonStats = JSON.parse(JSON.stringify(lg.stats)); f(s); return readNflStats(s); };
-    const first = (s: NflSeasonStats) => Object.values(s.lines)[0];
-    expect(bad(s => { first(s).g = -1; })).toBeNull();
-    expect(bad(s => { first(s).tot.yards = 3; })).toBeNull();
-    expect(bad(s => { first(s).team = 'ZZZ'; })).toBeNull();
+    const first = (s: NflSeasonStats) => Object.values(Object.values(s.lines)[0])[0] as unknown as unknown[];
+    expect(bad(s => { first(s)[2] = -1; })).toBeNull();
+    expect(bad(s => { first(s).push(9); })).toBeNull();
+    expect(bad(s => { first(s)[0] = ''; })).toBeNull();
     expect(bad(s => { (Object.values(s.plays!)[0][0] as unknown[]).push([null, 7]); })).toBeNull();
-    expect(bad(s => { s.club!.AAA = [1, 2] as unknown as [number, number, number]; })).toBeNull();
+    expect(bad(s => { s.clubs.AAA = [1, 2] as unknown as NflSeasonStats['clubs'][string]; })).toBeNull();
+    expect(bad(s => { s.clubs.AAA[1] = s.clubs.AAA[0] + 1; })).toBeNull();
     expect(readNflStats('nope')).toBeNull();
     const hist: NflSeasonAwards[] = [{ season: 2026, mvp: null, oroy: null, droy: null, rookies: false }];
     expect(readNflAwards(hist)).not.toBeNull();
@@ -196,8 +196,13 @@ describe('the awards and the close', () => {
   /** A season by hand: the lines in the order given (the man who should LOSE a tie goes first), and each club's [wins, games]. */
   const seasonLeague = (ls: L[], clubs: Record<string, [number, number]>, men: GmPlayer[] = []): LeagueState => {
     const stats = nflNewStats(2027);
-    for (const l of ls) stats.lines[`${l.team}|${l.id}`] = { id: l.id, name: `Name ${l.id}`, team: l.team, pos: l.pos ?? 'QB', g: l.g, gs: l.g, tot: l.tot, ...(l.rookie ? { rookie: true } : {}) };
-    for (const [t, [w, g]] of Object.entries(clubs)) stats.teams[t] = { g, w, pts: 0, opp: 0 };
+    for (const l of ls) {
+      const t = l.tot;
+      (stats.lines[l.team] ??= {})[l.id] = l.rookie
+        ? [`Name ${l.id}`, l.pos ?? 'QB', l.g, t.ptd ?? 0, t.rtd ?? 0, t.ctd ?? 0, t.sk ?? 0, 1]
+        : [`Name ${l.id}`, l.pos ?? 'QB', l.g, t.ptd ?? 0, t.rtd ?? 0, t.ctd ?? 0, t.sk ?? 0];
+    }
+    for (const [t, [w, g]] of Object.entries(clubs)) stats.clubs[t] = [g, w, 0, 0, 0, 0, 0];
     const a = fifteen('AAA');
     a.players.push(...men);
     return league([a, fifteen('BBB')], { stats });
@@ -209,7 +214,8 @@ describe('the awards and the close', () => {
     expect(nflSeasonAwards(big)!.mvp!.id).toBe('a');
     const small = seasonLeague([{ team: 'AAA', id: 'a', g: 17, tot: { ptd: 18 } }, { team: 'BBB', id: 'b', g: 17, tot: { ptd: 20 } }], clubs);
     expect(nflSeasonAwards(small)!.mvp!.id).toBe('b');
-    expect(nflMvpScore(small.stats!, small.stats!.lines['BBB|b'])).toBeCloseTo(20 + 10 * 15 / 17, 9);
+    const fo = nflFoStats(small.stats!);
+    expect(nflMvpScore(fo, fo.lines['BBB|b'])).toBeCloseTo(20 + 10 * 15 / 17, 9);
     /* half a sack counts: 10 sacks are worth 5 touchdowns */
     const sacks = seasonLeague([{ team: 'BBB', id: 'q', g: 17, tot: { ptd: 4 } }, { team: 'BBB', id: 'r', g: 17, tot: { sk: 10 }, pos: 'DL' }], clubs);
     expect(nflSeasonAwards(sacks)!.mvp!.id).toBe('r');
@@ -259,7 +265,7 @@ describe('the awards and the close', () => {
     expect(full.awards).toHaveLength(FO_HISTORY_CAP);
     expect([full.awards[0].season, full.awards[FO_HISTORY_CAP - 1].season]).toEqual([2061, 2100]);
     /* a league keeping no lines for its season names nothing and writes nothing */
-    const none = league([fifteen('AAA')], { stats: foNewSeasonStats(2026) as NflSeasonStats });
+    const none = league([fifteen('AAA')], { stats: nflNewStats(2026) });
     expect(nflLiveStats(none)).toBeNull();
     expect(nflCloseSeasonStats(none)).toBeNull();
     expect(none.awards).toBeUndefined();

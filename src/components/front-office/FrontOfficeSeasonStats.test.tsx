@@ -111,9 +111,9 @@ describe('NFL front office: who scored, the press and the save', () => {
     expect(st.season).toBe(league.season);
     expect(readNflStats(st), 'the saved block reads whole').not.toBeNull();
     /* every club played three games, and every line is a man of the pool (at most twelve a club a game) */
-    for (const t of Object.keys(s.league.teams)) expect(st.teams[t].g).toBe(3);
+    for (const t of Object.keys(s.league.teams)) expect(st.clubs[t][0]).toBe(3);
     const gamesBy: Record<string, number> = {};
-    for (const l of Object.values(st.lines as Record<string, any>)) { gamesBy[l.team] = (gamesBy[l.team] ?? 0) + l.g; expect(l.g).toBeLessThanOrEqual(3); }
+    for (const [t, men] of Object.entries(st.lines as Record<string, Record<string, any[]>>)) for (const l of Object.values(men)) { gamesBy[t] = (gamesBy[t] ?? 0) + l[2]; expect(l[2]).toBeLessThanOrEqual(3); }
     for (const t of Object.keys(gamesBy)) expect(gamesBy[t], `${t}: at most twelve men a game`).toBeLessThanOrEqual(36);
     /* his three games, by the keys his log holds */
     const keys = s.gameLog.games.map((g: any) => g.key);
@@ -238,11 +238,11 @@ describe('NFL front office: who scored, the load and the close', () => {
     expect(s.phase).toBe('recap');
     const bytes = localStorage.getItem(SAVE_KEY)!.length;
     const block = JSON.stringify(s.league.stats).length;
-    const lines = Object.keys(s.league.stats.lines).length;
+    const lines = Object.values(s.league.stats.lines as Record<string, object>).reduce((n: number, men) => n + Object.keys(men).length, 0);
     const without = JSON.stringify({ ...s, league: { ...s.league, stats: undefined, awards: undefined } }).length;
     /* printed for the lead (the NFL save budget is simNflFullRosters.mjs's 700K): never asserted against it here */
     console.log(`MEASURED: the persisted save on full rosters with the desk on: ${opening} characters at Week 1, ${before} after Week 16, ${bytes} on the recap (${without} without the block and the history); the block ${block}, ${lines} lines, the history ${JSON.stringify(s.league.awards).length}`);
-    expect(s.league.stats.teams[team].g).toBe(REGULAR_WEEKS);
+    expect(s.league.stats.clubs[team][0]).toBe(REGULAR_WEEKS);
     expect(readNflStats(s.league.stats)).not.toBeNull();
   });
 });

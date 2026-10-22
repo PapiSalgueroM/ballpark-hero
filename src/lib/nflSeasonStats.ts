@@ -48,7 +48,7 @@
  */
 import type { GmPlayer, GmTeamState, LeagueState } from './frontOffice';
 import { DEF_POS, DEF_SLOTS, OL_SLOTS, REPLACEMENT_OVR, SKILL_POS, SKILL_SLOTS, unitStarters } from './frontOffice';
-import { foNewSeasonStats, foRankAward, foSeasonPlayers, type FoSeasonStats, type FoStatLine } from './foSeasonStats';
+import { foRankAward, foSeasonPlayers, type FoSeasonStats, type FoStatLine } from './foSeasonStats';
 import { FO_HISTORY_CAP, foCloseOnce } from './foSeasonClose';
 import { keyedRng } from './keyedRng';
 import { gmStoryKey, type ToldGame } from './gmGameScore';
@@ -92,14 +92,44 @@ export const nflSackChance = (rush: number, block: number): number => clamp(NFL_
 
 /** One touchdown on the tile: [the passer's name or null for a run, the scorer's name]. Names, not ids, so a man cut or retired later still reads. */
 export type NflCredit = [string | null, string];
-/** A club's regular season scoring drives: [touchdowns, field goals, safeties]. */
-export type NflClubLine = [number, number, number];
+/** A man's season for one club as the save keeps it: [name, position, games, thrown, run in, caught, sacks], and a 1
+ *  at the end for a first year man drafted in this save. Games are games started (he was in the pool). */
+export type NflSavedLine = [string, string, number, number, number, number, number] | [string, string, number, number, number, number, number, 1];
+/** A club's regular season as the save keeps it: [games, wins, points for, points against, touchdowns, field goals, safeties]. */
+export type NflSavedClub = [number, number, number, number, number, number, number];
 
-export interface NflSeasonStats extends FoSeasonStats {
-  /** Every club's touchdowns, field goals and safeties this regular season. */
-  club?: Record<string, NflClubLine>;
+/* THE BLOCK IS KEPT SMALL. A full roster league already opens near the NFL save budget (simNflFullRosters.mjs,
+   700K; the man's opening rating evidence alone is about a third of it), and the NBA's line shape (FoStatLine, named
+   fields) cost about 68K a season there: the board's real save on the recap went from 660K to 728K. So the save
+   keeps lines as short arrays, nested by club then man (about 28K a season), and nflFoStats spells them out as the
+   shared FoSeasonStats whenever the shared helpers (foSeasonPlayers, foRankAward) or the shared card read them. */
+export interface NflSeasonStats {
+  season: number;
+  /** By club, then by man id: his line for the games he played for that club. */
+  lines: Record<string, Record<string, NflSavedLine>>;
+  /** Every club's regular season. */
+  clubs: Record<string, NflSavedClub>;
   /** His games only, regular and playoff, by the game's key: [the home side's credits, the away side's], in draw order. */
-  plays?: Record<string, [NflCredit[], NflCredit[]]>;
+  plays: Record<string, [NflCredit[], NflCredit[]]>;
+}
+
+/** The block spelled out as the shared lines (src/lib/foSeasonStats.ts): one FoStatLine a man and club, keyed
+ *  `${team}|${id}`, gs equal to g, a zero column left out; the club totals; and each club's [touchdowns, field goals,
+ *  safeties]. A fresh object: nothing written to it reaches the save. */
+export function nflFoStats(s: NflSeasonStats): FoSeasonStats & { club: Record<string, [number, number, number]> } {
+  const out: FoSeasonStats & { club: Record<string, [number, number, number]> } = { season: s.season, lines: {}, teams: {}, club: {} };
+  for (const [team, men] of Object.entries(s.lines)) {
+    for (const [id, l] of Object.entries(men)) {
+      const tot: Record<string, number> = {};
+      NFL_STAT_COLS.forEach((c, i) => { const n = l[3 + i] as number; if (n > 0) tot[c] = n; });
+      out.lines[`${team}|${id}`] = { id, name: l[0], team, pos: l[1], g: l[2], gs: l[2], tot, ...(l[7] === 1 ? { rookie: true } : {}) };
+    }
+  }
+  for (const [team, c] of Object.entries(s.clubs)) {
+    out.teams[team] = { g: c[0], w: c[1], pts: c[2], opp: c[3] };
+    out.club[team] = [c[4], c[5], c[6]];
+  }
+  return out;
 }
 
 export interface NflAwardPick { id: string; name: string; team: string; pos: string; g: number; ptd: number; rtd: number; ctd: number; sk: number }
@@ -235,20 +265,22 @@ export function nflLiveStats(league: Pick<LeagueState, 'stats' | 'season'>): Nfl
   return league.stats && league.stats.season === league.season ? league.stats : null;
 }
 
-/** A fresh block for a season: no lines, no club lines, no plays. */
+/** A fresh block for a season: no lines, no clubs, no plays. */
 export function nflNewStats(season: number): NflSeasonStats {
-  return { ...foNewSeasonStats(season), club: {}, plays: {} };
+  return { season, lines: {}, clubs: {}, plays: {} };
 }
 
 const creditsOf = (s: NflSideCredit): NflCredit[] => s.credits.map(c => [c.passer ? c.passer.name : null, c.scorer.name]);
-const bump = (tot: Record<string, number>, col: NflStatCol, n = 1) => { if (n > 0) tot[col] = (tot[col] ?? 0) + n; };
+/** The column of a saved line: 3 thrown, 4 run in, 5 caught, 6 sacks. */
+const COL_AT: Record<NflStatCol, number> = { ptd: 3, rtd: 4, ctd: 5, sk: 6 };
+const bump = (line: NflSavedLine, col: NflStatCol, n = 1) => { (line as unknown as number[])[COL_AT[col]] += n; };
 
 /**
  * Add one told game to the league's live block. `regular`: a regular season
- * game, which goes into the lines, the club totals and the club line; a
- * playoff game (false) writes his credits for the tile and nothing else. His
- * games (`my` home or away) keep their credits under the game's key. Records
- * nothing on a league with no live block. True when the game was recorded.
+ * game, which goes into the lines and the club's season; a playoff game
+ * (false) writes his credits for the tile and nothing else. His games (`my`
+ * home or away) keep their credits under the game's key. Records nothing on
+ * a league with no live block. True when the game was recorded.
  */
 export function nflRecordGame(lg: LeagueState, told: NflToldGame, my: string, regular: boolean): boolean {
   const stats = nflLiveStats(lg);
@@ -256,30 +288,24 @@ export function nflRecordGame(lg: LeagueState, told: NflToldGame, my: string, re
   const c = nflCreditGame(told, lg.teams);
   if (!c) return false;
   if (regular) {
-    const club3 = stats.club ?? (stats.club = {});
     for (const [s, pts, opp] of [[c.home, told.homeScore, told.awayScore], [c.away, told.awayScore, told.homeScore]] as const) {
-      const club = stats.teams[s.team] ?? { g: 0, w: 0, pts: 0, opp: 0 };
-      club.g += 1; club.pts += pts; club.opp += opp;
-      if (pts > opp) club.w += 1;
-      stats.teams[s.team] = club;
-      const kicks = club3[s.team] ?? [0, 0, 0];
-      club3[s.team] = [kicks[0] + s.tds, kicks[1] + s.fgs, kicks[2] + s.safeties];
-      const lines = new Map<string, FoStatLine>();
+      const club = stats.clubs[s.team] ?? [0, 0, 0, 0, 0, 0, 0];
+      stats.clubs[s.team] = [club[0] + 1, club[1] + (pts > opp ? 1 : 0), club[2] + pts, club[3] + opp, club[4] + s.tds, club[5] + s.fgs, club[6] + s.safeties];
+      const men = stats.lines[s.team] ?? (stats.lines[s.team] = {});
       for (const m of nflPoolMen(s.pool)) {
-        const key = `${s.team}|${m.id}`;
-        const line = stats.lines[key] ?? { id: m.id, name: m.name, team: s.team, pos: m.pos, g: 0, gs: 0, tot: {}, ...(m.rookieSeason === lg.season ? { rookie: true } : {}) };
-        line.g += 1; line.gs += 1; line.name = m.name;
-        stats.lines[key] = line;
-        lines.set(m.id, line);
+        const line: NflSavedLine = men[m.id] ?? (m.rookieSeason === lg.season ? [m.name, m.pos, 0, 0, 0, 0, 0, 1] : [m.name, m.pos, 0, 0, 0, 0, 0]);
+        line[0] = m.name;
+        line[2] += 1;
+        men[m.id] = line;
       }
       for (const cr of s.credits) {
-        if (cr.passer) { bump(lines.get(cr.passer.id)!.tot, 'ptd'); bump(lines.get(cr.scorer.id)!.tot, 'ctd'); }
-        else bump(lines.get(cr.scorer.id)!.tot, 'rtd');
+        if (cr.passer) { bump(men[cr.passer.id], 'ptd'); bump(men[cr.scorer.id], 'ctd'); }
+        else bump(men[cr.scorer.id], 'rtd');
       }
-      for (const [id, n] of Object.entries(s.sacks)) bump(lines.get(id)!.tot, 'sk', n);
+      for (const [id, n] of Object.entries(s.sacks)) bump(men[id], 'sk', n);
     }
   }
-  if (told.home === my || told.away === my) (stats.plays ?? (stats.plays = {}))[told.key] = [creditsOf(c.home), creditsOf(c.away)];
+  if (told.home === my || told.away === my) stats.plays[told.key] = [creditsOf(c.home), creditsOf(c.away)];
   return true;
 }
 
@@ -332,8 +358,9 @@ export function nflEveryMan(lg: Pick<LeagueState, 'teams' | 'freeAgents'>): GmPl
  * when the league is not keeping lines for the season it is in. Pure.
  */
 export function nflSeasonAwards(lg: Pick<LeagueState, 'stats' | 'season' | 'teams' | 'freeAgents'>): NflSeasonAwards | null {
-  const stats = nflLiveStats(lg);
-  if (!stats) return null;
+  const live = nflLiveStats(lg);
+  if (!live) return null;
+  const stats = nflFoStats(live);
   const men = foSeasonPlayers(stats);
   const mvp = foRankAward(men, p => nflMvpScore(stats, p))[0] ?? null;
   const rookies = men.filter(p => p.rookie);
@@ -384,24 +411,23 @@ export function nflMarkRookies(lg: Pick<LeagueState, 'teams'>, picks: readonly {
 const isObj = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null && !Array.isArray(v);
 const isCount = (v: unknown): v is number => typeof v === 'number' && Number.isInteger(v) && v >= 0;
 const isText = (v: unknown): v is string => typeof v === 'string' && v !== '';
-const COLS = new Set<string>(NFL_STAT_COLS);
 
-function readLine(key: string, v: unknown): boolean {
-  if (!isObj(v) || !isText(v.id) || !isText(v.name) || !isText(v.team) || !isText(v.pos)) return false;
-  if (key !== `${v.team}|${v.id}` || !isCount(v.g) || !isCount(v.gs) || v.gs > v.g) return false;
-  if (v.rookie !== undefined && v.rookie !== true) return false;
-  return isObj(v.tot) && Object.entries(v.tot).every(([k, n]) => COLS.has(k) && isCount(n));
+/** A saved line: two words, then five counts, then a 1 for a first year man or nothing. */
+function readLine(v: unknown): boolean {
+  if (!Array.isArray(v) || (v.length !== 7 && v.length !== 8) || !isText(v[0]) || !isText(v[1])) return false;
+  if (!v.slice(2, 7).every(isCount)) return false;
+  return v.length === 7 || v[7] === 1;
 }
+const readClub = (c: unknown): boolean => Array.isArray(c) && c.length === 7 && c.every(isCount) && c[1] <= c[0];
 const readCredit = (c: unknown): boolean => Array.isArray(c) && c.length === 2 && (c[0] === null || isText(c[0])) && isText(c[1]);
 
 /** A saved block that reads whole, or null. Never throws. */
 export function readNflStats(v: unknown): NflSeasonStats | null {
   try {
-    if (!isObj(v) || !Number.isInteger(v.season) || !isObj(v.lines) || !isObj(v.teams)) return null;
-    if (!Object.entries(v.lines).every(([k, l]) => readLine(k, l))) return null;
-    if (!Object.values(v.teams).every(t => isObj(t) && isCount(t.g) && isCount(t.w) && isCount(t.pts) && isCount(t.opp) && t.w <= t.g)) return null;
-    if (v.club !== undefined && !(isObj(v.club) && Object.values(v.club).every(c => Array.isArray(c) && c.length === 3 && c.every(isCount)))) return null;
-    if (v.plays !== undefined && !(isObj(v.plays) && Object.values(v.plays).every(p => Array.isArray(p) && p.length === 2 && p.every(side => Array.isArray(side) && side.every(readCredit))))) return null;
+    if (!isObj(v) || !Number.isInteger(v.season) || !isObj(v.lines) || !isObj(v.clubs) || !isObj(v.plays)) return null;
+    if (!Object.values(v.lines).every(men => isObj(men) && Object.values(men).every(readLine))) return null;
+    if (!Object.values(v.clubs).every(readClub)) return null;
+    if (!Object.values(v.plays).every(p => Array.isArray(p) && p.length === 2 && p.every(side => Array.isArray(side) && side.every(readCredit)))) return null;
     return v as unknown as NflSeasonStats;
   } catch {
     return null;

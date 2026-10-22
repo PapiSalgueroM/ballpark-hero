@@ -11,7 +11,7 @@
 import { foRankAward, foSeasonPlayers } from './foSeasonStats';
 import { foClosedSeason } from './foSeasonClose';
 import {
-  NFL_AWARD_KEYS, NFL_AWARD_LABEL, NFL_AWARD_RULE, NFL_STAT_COLS, nflLiveStats,
+  NFL_AWARD_KEYS, NFL_AWARD_LABEL, NFL_AWARD_RULE, NFL_STAT_COLS, nflFoStats, nflLiveStats,
   type NflAwardPick, type NflSeasonAwards, type NflStatCol,
 } from './nflSeasonStats';
 import type { LeagueState } from './frontOffice';
@@ -30,7 +30,7 @@ export interface NflLeaderRow { id: string; name: string; team: string; g: numbe
 export function nflLeaders(lg: Pick<LeagueState, 'stats' | 'season'>, n = 3): Record<'ptd' | 'rtd' | 'sk', NflLeaderRow[]> | null {
   const stats = nflLiveStats(lg);
   if (!stats) return null;
-  const men = foSeasonPlayers(stats);
+  const men = foSeasonPlayers(nflFoStats(stats));
   const rows = (col: NflStatCol) => foRankAward(men.filter(p => (p.tot[col] ?? 0) > 0), p => p.tot[col] ?? 0)
     .slice(0, n).map(p => ({ id: p.id, name: p.name, team: p.team, g: p.g, value: p.tot[col] ?? 0 }));
   return { ptd: rows('ptd'), rtd: rows('rtd'), sk: rows('sk') };
@@ -41,16 +41,16 @@ export interface NflTeamLine { id: string; name: string; pos: string; g: number;
 export function nflTeamLines(lg: Pick<LeagueState, 'stats' | 'season'>, abbr: string): NflTeamLine[] {
   const stats = nflLiveStats(lg);
   if (!stats) return [];
-  return Object.values(stats.lines)
-    .filter(l => l.team === abbr && l.g > 0)
-    .map(l => ({ id: l.id, name: l.name, pos: l.pos, g: l.g, values: NFL_STAT_COLS.map(c => l.tot[c] ?? 0), rookie: !!l.rookie }))
+  return Object.entries(stats.lines[abbr] ?? {})
+    .filter(([, l]) => l[2] > 0)
+    .map(([id, l]) => ({ id, name: l[0], pos: l[1], g: l[2], values: NFL_STAT_COLS.map((_, i) => l[3 + i] as number), rookie: l[7] === 1 }))
     .sort((a, b) => b.values.reduce((x, y) => x + y, 0) - a.values.reduce((x, y) => x + y, 0) || b.g - a.g || a.id.localeCompare(b.id));
 }
 
 /** A club's field goals and safeties this regular season, or null with no lines. */
 export function nflClubKicks(lg: Pick<LeagueState, 'stats' | 'season'>, abbr: string): { td: number; fg: number; sf: number } | null {
-  const c = nflLiveStats(lg)?.club?.[abbr];
-  return c ? { td: c[0], fg: c[1], sf: c[2] } : null;
+  const c = nflLiveStats(lg)?.clubs[abbr];
+  return c ? { td: c[4], fg: c[5], sf: c[6] } : null;
 }
 
 /** An award winner's line in words: "31 TD thrown, 3 run in", "14 sacks". */
