@@ -15,7 +15,8 @@ import './lib/seedRandom.mjs';
                question built from the market pool has a name of src/data/marketNamesakes.json as its
                subject or as an option.
    Plus the plain one right answer checks every market question can carry (exactly one option is
-   true of the row asked about, no "Without Club" or "Retired" offered as a club), no ladder short of
+   true of the row asked about, no "Without Club" or "Retired" offered as a club, no reserve side
+   offered beside its first team or one club under two spellings, section 8), no ladder short of
    fifteen (a short ladder is the page's error screen), the hard band not starved, the daily that was
    already dealt not re-dealt (dates before ONE_ANSWER_FROM reproduce the base generator exactly),
    the namesake list current with its generator and holding every name the saved rows show as two
@@ -51,6 +52,7 @@ import './lib/seedRandom.mjs';
      TRIVIA_CONTROL=namesake  the namesake filter is removed                          (section 2)
      TRIVIA_CONTROL=tense     the club question says "play for" again                 (section 2)
      TRIVIA_CONTROL=postense  the position question says "plays" again                (section 2)
+     TRIVIA_CONTROL=family    a reserve side and its first team are offered together  (section 8)
      TRIVIA_CONTROL=legacy    dates before ONE_ANSWER_FROM get the new rules          (section 4)
      TRIVIA_CONTROL=rulec     a copy of scripts/genMarketNamesakes.mjs loses rule C   (sections 6 and 6b)
    Re-measure the legacy hashes from any copy of the bank (the base of this round was c75d04dad):
@@ -63,7 +65,7 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const CONTROLS = ['ties', 'namesake', 'tense', 'postense', 'legacy', 'rulec'];
+const CONTROLS = ['ties', 'namesake', 'tense', 'postense', 'family', 'legacy', 'rulec'];
 const CONTROL = process.env.TRIVIA_CONTROL || '';
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`TRIVIA_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
 const PRINT_LEGACY = process.argv.includes('--print-legacy');
@@ -108,6 +110,7 @@ const SWAPS = {
   ties: ['    if (rules.oneAnswer && !clearlyAhead(sorted[0].market_value_usd, sorted[1].market_value_usd)) continue;\n', '', 'worth the most stops checking for a clear top value'],
   namesake: ['return rules.oneAnswer ? band.filter((p) => !MARKET_NAMESAKES.has(p.player_name)) : band;', 'return band;', 'the namesake filter is gone'],
   tense: ['`Which club was ${correct.player_name} at in the ${CURRENT_YEAR} market values?`','`Which club does ${correct.player_name} play for?`', 'the club question says "play for" again'],
+  family: ['  const family = rules.oneAnswer ? clubFamily(correct.club as string) : null;\n', '  const family = null;\n', 'a reserve side and its first team can be offered together again'],
   postense: ['? `Who was listed at ${correct.position} in the ${CURRENT_YEAR} market values?`', '? `Which of these players plays ${correct.position}?`', 'the position question says "plays" again'],
   legacy: ['return dateStr < ONE_ANSWER_FROM ? LEGACY : ONE_ANSWER;', 'return ONE_ANSWER;', 'dates before ONE_ANSWER_FROM get the new rules'],
 };
@@ -192,8 +195,21 @@ const TEMPLATES = [
 ];
 const menWinner = new Map(ballonDor.filter(r => r.rank === 1 && r.award_type === 'Men').map(r => [r.year, r.player_name]));
 function newTally() {
-  return { ladders: 0, short: 0, questions: 0, ties: 0, namesake: 0, tense: 0, notAClub: 0, wrong: 0, unknown: 0, dupOptions: 0, byType: {}, worthByBand: { easy: 0, medium: 0, hard: 0 }, examples: {} };
+  return { ladders: 0, short: 0, questions: 0, ties: 0, namesake: 0, tense: 0, notAClub: 0, clubFamily: 0, wrong: 0, unknown: 0, dupOptions: 0, byType: {}, worthByBand: { easy: 0, medium: 0, hard: 0 }, examples: {} };
 }
+/* a reserve or youth side and its first team are one club to a player (Round 1552 review). This is the
+   harness's own reading, written apart from the bank's clubFamily: drop a reserve mark, then a first or
+   last word that only says "club" */
+const RESERVE_WORD = /\s+(U\d{2}|B|II|Reserves|Youth|Juniors|Primavera|Castilla)$/i;
+const LEAD_WORD = new Set(['fc', 'cf', 'sc', 'ac', 'bc', 'cd', 'club']);
+const TRAIL_WORD = new Set(['fc', 'cf', 'sc', 'ac', 'bc', 'cd']);
+function bareClub(c) {
+  const words = c.trim().replace(RESERVE_WORD, '').toLowerCase().split(/\s+/);
+  if (words.length > 1 && LEAD_WORD.has(words[0])) words.shift();
+  if (words.length > 1 && TRAIL_WORD.has(words[words.length - 1])) words.pop();
+  return words.join(' ');
+}
+const sameClub = (a, b) => a !== b && bareClub(a) === bareClub(b);
 function note(t, key, text) { t[key] += 1; if (!t.examples[key]) t.examples[key] = text; }
 function checkQuestion(q, t) {
   t.questions += 1;
@@ -210,6 +226,7 @@ function checkQuestion(q, t) {
     const field = type === 'club' ? 'club' : 'nationality';
     if (NAMESAKES.has(m[1])) note(t, 'namesake', question);
     if (type === 'club' && options.some(o => NOT_A_CLUB.has(o))) note(t, 'notAClub', `${question} [${options.join(' / ')}]`);
+    if (type === 'club' && options.some(o => sameClub(o, right))) note(t, 'clubFamily', `${question} [${options.join(' / ')}]`);
     if (!row || right !== row[field] || options.filter(o => o === row[field]).length !== 1) note(t, 'wrong', question);
   } else if (type === 'position') {
     if (options.some(o => NAMESAKES.has(o))) note(t, 'namesake', `${question} [${options.join(' / ')}]`);
@@ -235,11 +252,11 @@ function checkLadder(ladder, t) {
 }
 function report(label, t) {
   console.log(`   ${label}: ${t.ladders} ladders, ${t.questions} questions (${Object.entries(t.byType).map(([k, v]) => `${k} ${v}`).join(', ')}); worth the most by band easy ${t.worthByBand.easy}, medium ${t.worthByBand.medium}, hard ${t.worthByBand.hard}`);
-  console.log(`   ${label}: short ladders ${t.short}, ties ${t.ties}, namesakes ${t.namesake}, present tense ${t.tense}, not a club offered ${t.notAClub}, wrong answer marked ${t.wrong}, unknown template ${t.unknown}, broken options ${t.dupOptions}`);
+  console.log(`   ${label}: short ladders ${t.short}, ties ${t.ties}, namesakes ${t.namesake}, present tense ${t.tense}, not a club offered ${t.notAClub}, a club's own reserve side or first team offered ${t.clubFamily}, wrong answer marked ${t.wrong}, unknown template ${t.unknown}, broken options ${t.dupOptions}`);
   for (const [k, v] of Object.entries(t.examples)) console.log(`      e.g. ${k}: ${v}`);
 }
 function mustBeClean(label, t) {
-  for (const k of ['short', 'ties', 'namesake', 'tense', 'notAClub', 'wrong', 'unknown', 'dupOptions']) if (t[k] > 0) fail(`${label}: ${t[k]} ${k}`);
+  for (const k of ['short', 'ties', 'namesake', 'tense', 'notAClub', 'clubFamily', 'wrong', 'unknown', 'dupOptions']) if (t[k] > 0) fail(`${label}: ${t[k]} ${k}`);
 }
 /* the bank's own daily stream (mulberry32 over dateSeed), so the old rules can be dealt on the same dates */
 function mulberry32(seed) {
@@ -356,6 +373,31 @@ if (!/import \{ clearlyAhead \} from '@\/lib\/clearWinner';/.test(bank)) fail('t
 if (/1\.04/.test(bank)) fail('the bank carries a ratio literal of its own');
 console.log(`   MIN_RATIO ${MIN_RATIO}`);
 if (MIN_RATIO !== 1.04) fail(`MIN_RATIO moved to ${MIN_RATIO}: Face Off's bands (scripts/simFaceOff.mjs) were measured at 1.04`);
+
+/* ---------------- 8. a reserve side and its first team are never offered together ---------------- */
+/* In the saved slice 34 reserve or youth sides have their first team beside them (50 rows of 5,496),
+   so sections 2 and 3 rarely meet one. A planted pool of ten such pairs (real club names, invented
+   players, never shipped) makes every club question about one: a wrong club is its partner about one
+   time in six under the old rules, and never under the new ones. */
+section('8. a reserve side and its first team are never offered together (a planted pool)');
+const PAIRS = [['Chelsea FC U21', 'Chelsea FC'], ['Real Madrid Castilla', 'Real Madrid'], ['Borussia Dortmund II', 'Borussia Dortmund'], ['Atalanta U23', 'Atalanta BC'], ['FC Bayern Munich II', 'Bayern Munich'], ['Sporting CP B', 'Sporting CP'], ['Club Necaxa U21', 'Club Necaxa'], ['Real Sociedad B', 'Real Sociedad'], ['Aston Villa U21', 'Aston Villa'], ['VfB Stuttgart II', 'VfB Stuttgart']];
+const planted = [];
+for (const pair of PAIRS) for (const club of pair) for (let k = 0; k < 2; k++) planted.push({ player_name: `Planted Player ${planted.length + 1}`, position: 'Central Midfield', nationality: 'Fixtureland', club, market_value_usd: 200e6 - planted.length * 1e6 });
+for (const [a, b] of PAIRS) if (!sameClub(a, b)) fail(`the checker does not read ${a} and ${b} as one club, so section 8 is blind`);
+const plantedTally = { old: 0, now: 0, built: 0 };
+for (const [rules, key] of [[{ oneAnswer: false }, 'old'], [{ oneAnswer: true }, 'now']]) {
+  const rng = mulberry32(hash(`family:${key}`));
+  for (let i = 0; i < CALLS; i++) {
+    const q = T.buildClubQuestion(planted, 3, rng, rules);
+    if (!q) continue;
+    if (key === 'now') plantedTally.built += 1;
+    if (q.options.some(o => sameClub(o, q.options[q.correctIndex]))) plantedTally[key] += 1;
+  }
+}
+console.log(`   ${CALLS} club questions each: old rules offered the partner club ${plantedTally.old} times, new rules ${plantedTally.now} (built ${plantedTally.built} of ${CALLS})`);
+if (plantedTally.old === 0) fail('the old rules never offered a partner club in the planted pool, so section 8 cannot see one');
+if (plantedTally.now > 0) fail(`the new rules offered a reserve side beside its first team ${plantedTally.now} times`);
+if (plantedTally.built < CALLS) fail(`the new rules built ${plantedTally.built} of ${CALLS} club questions in the planted pool`);
 
 console.log(`\nsimTriviaBank: ${failures === 0 ? 'all checks passed' : `${failures} failure(s)`}${CONTROL ? ` (NEGATIVE CONTROL ${CONTROL} ON)` : ''}`);
 process.exit(failures === 0 ? 0 : 1);

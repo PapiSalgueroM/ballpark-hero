@@ -301,6 +301,17 @@ function askableBand(sortedDesc: MarketRow[], difficulty: number, rules: DealRul
  *  the snapshot would make "Without Club" a second right answer). */
 const NOT_A_CLUB = new Set(['Without Club', 'Retired', 'Career break', 'Unknown']);
 
+/** Round 1552 review: a reserve or youth side and its first team (Real Madrid Castilla and Real
+ *  Madrid, Chelsea FC U21 and Chelsea FC, Atalanta U23 and Atalanta BC) read as one club to a
+ *  player, so under the one answer rules the one is never offered as a wrong answer beside the
+ *  other. The key drops a reserve mark and a leading or trailing FC style word. Two clubs it
+ *  wrongly joins only lose a distractor, which another club replaces. */
+const RESERVE_MARK = /\s+(?:U\d{2}|B|II|Reserves|Youth|Juniors|Primavera|Castilla)$/i;
+const CLUB_WORD = /^(?:FC|CF|SC|AC|BC|CD|Club)\s+|\s+(?:FC|CF|SC|AC|BC|CD)$/gi;
+export function clubFamily(club: string): string {
+  return club.trim().replace(RESERVE_MARK, '').replace(CLUB_WORD, '').trim().toLowerCase();
+}
+
 /** The first row of each name, in order. Round 1552 swapped a findIndex per row for a
  *  Set (the same rows in the same order): over the deep band of about 4,400 rows the old
  *  filter made some ten million name comparisons per question on a phone. */
@@ -334,7 +345,9 @@ export function buildClubQuestion(
   const otherClubs = Array.from(
     new Set(pool.map((p) => p.club).filter((c): c is string => isClub(c) && c !== correct.club)),
   );
-  const distractors = shuffleWithRng(otherClubs, rng).slice(0, 3);
+  const family = rules.oneAnswer ? clubFamily(correct.club as string) : null;
+  const wrongClubs = family === null ? otherClubs : otherClubs.filter((c) => clubFamily(c) !== family);
+  const distractors = shuffleWithRng(wrongClubs, rng).slice(0, 3);
   if (distractors.length < 3) return null;
 
   const options = shuffleWithRng([correct.club as string, ...distractors], rng);
