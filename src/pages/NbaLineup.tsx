@@ -389,7 +389,7 @@ const NbaLineup = () => {
                 <div>
                   <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-1.5">Best five your teams allowed</p>
                   <div className="space-y-1">
-                    {result.best.picks.map(p => (
+                    {[...result.best.picks].sort((a, b) => NBA_POSITIONS.findIndex(s => s.role === a.role) - NBA_POSITIONS.findIndex(s => s.role === b.role)).map(p => (
                       <div key={p.role} className="flex items-center gap-2 text-sm tabular-nums">
                         <span className="text-xs font-bold text-primary w-7">{p.role}</span>
                         <span className="text-foreground flex-1 min-w-0 truncate">{p.name}</span>
