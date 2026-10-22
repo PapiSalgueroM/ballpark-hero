@@ -1,0 +1,7 @@
+#!build
+#!serial
+seo-head: node scripts/simSeoDiscovery1444.mjs
+seo-revert-football: git checkout a9b19870 -- src/data/gameContent/football.ts && node scripts/simSeoDiscovery1444.mjs; s=$?; git checkout HEAD -- src/data/gameContent/football.ts; exit $s
+seo-base: git worktree add /tmp/b a9b19870 >/dev/null 2>&1; ln -sfn "$PWD/node_modules" /tmp/b/node_modules && cd /tmp/b && node scripts/simSeoDiscovery1444.mjs
+prerender-head: node scripts/simPrerender.mjs
+prerender-revert-whatsnew: git checkout a9b19870 -- src/pages/WhatsNew.tsx && node scripts/simPrerender.mjs; s=$?; git checkout HEAD -- src/pages/WhatsNew.tsx; exit $s
