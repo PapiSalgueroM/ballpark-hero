@@ -28,8 +28,17 @@ import fs from 'node:fs';
 import path from 'node:path';
 import type { ComponentType } from 'react';
 
-vi.mock('@/hooks/useGameCompletion', () => ({ useGameCompletion: () => undefined }));
-vi.mock('@/lib/completions', () => ({ recordActivity: () => undefined }));
+/* The real completion hook, with a spy where it records (the career block counts the finishes it records). Nothing
+   it does touches the save, so the default path's digests are what they were with the hook stubbed. */
+const completion = vi.hoisted(() => ({ calls: [] as { path: string; score: number | undefined }[] }));
+vi.mock('@/contexts/AuthContext', () => ({ useAuth: () => ({ user: null, profile: null, refreshProfile: () => undefined }) }));
+vi.mock('sonner', () => ({ toast: { success: () => undefined } }));
+vi.mock('@/lib/badges', () => ({ getNewlyEarnedBadges: () => Promise.resolve([]) }));
+vi.mock('@/lib/completions', () => ({
+  recordActivity: () => undefined,
+  recordCompletion: (p: string, score?: number) => { completion.calls.push({ path: p, score }); },
+  getCurrentPlayerName: () => undefined,
+}));
 vi.mock('@/components/game/ShareButtons', () => ({ default: () => null }));
 vi.mock('@/hooks/useRevealScroll', () => ({ useRevealScroll: () => ({ current: null }) }));
 vi.setConfig({ testTimeout: 600_000 });
@@ -225,6 +234,201 @@ for (const row of BOARDS) {
       fs.writeFileSync(file, `${JSON.stringify(prior, null, 2)}\n`);
       console.log(`FO_GM_CAREER_RECORD ${row.sport} ${Object.keys(printed).length} cases -> ${file}`);
       expect(Object.keys(printed)).toHaveLength(6);
+    });
+  });
+}
+
+/* ================================================================== */
+/* BLOCK 'the career': fired is a chapter, not the end (Round 1533)    */
+/* ================================================================== */
+const TITLE_ASK = (season: number) => ({ tier: 'title', text: 'Win the Super Bowl. Anything less is a failed season upstairs.', winFloor: 0, reqLevel: 4, season });
+const outScreen = () => document.querySelector('[data-gm-out-of-work]');
+/** A career box on the out of work screen by its title. */
+async function openCareerBox(title: string) {
+  const box = Array.from(document.querySelectorAll('[data-gm-out-of-work] [data-gm-desk="tiles"] button'))
+    .find(b => Array.from(b.querySelectorAll('div')).some(dv => (dv.textContent ?? '').trim() === title));
+  if (!box) throw new Error(`no career box titled ${title}`);
+  fireEvent.click(box);
+  await waitFor(() => expect(document.querySelector('[data-gm-market]')).not.toBeNull(), { timeout: 30_000 });
+}
+const offerIds = () => Array.from(document.querySelectorAll('[data-gm-offer]')).map(b => b.getAttribute('data-gm-offer'));
+
+/** A new save on the real board, then the last week of a season he cannot survive: trust 5 under a title ask, his
+    roster gutted, the league at its final week (the way playOwnerMandate dooms one). Pressed once: he is fired. */
+async function doomedSave(row: BoardRow, Board: ComponentType) {
+  let view = render(<Board />);
+  clickText(row.clubLabel);
+  await waitFor(() => expect(readSave(row)?.phase).toBe('hub'), { timeout: 120_000 });
+  answerPresser();
+  view.unmount();
+  const s = readSave(row);
+  s.trust = 5;
+  s.mandate = TITLE_ASK(s.league.season);
+  for (const p of s.league.teams[s.myTeam].players) p.ovr = 60;
+  s.league.week = 17;
+  localStorage.setItem(row.saveKey, JSON.stringify(s));
+  view = render(<Board />);
+  cutToLimit();
+  openTile('This week');
+  fireEvent.click(buttonNamed('Play the final week + playoffs')!);
+  await waitFor(() => expect(readSave(row)?.phase).toBe('fired'), { timeout: 60_000 });
+  return view;
+}
+
+/** His record planted on a fired save (the host's own block), and the counters that go with it. */
+function plantRecord(row: BoardRow, seat: any, seasons: number) {
+  const s = readSave(row);
+  s.gm = { ...(s.gm ?? { v: 1, blocks: {} }), blocks: { ...(s.gm?.blocks ?? {}), seat } };
+  s.seasonsPlayed = seasons;
+  s.titles = 0;
+  localStorage.setItem(row.saveKey, JSON.stringify(s));
+}
+
+for (const row of BOARDS) {
+  describe(`${row.sport} board: the career`, () => {
+    it('fired: the recap offers who is calling and keeps the save; a remount opens the out of work screen with three boxes', async () => {
+      const { Board } = await freshBoard(row, 11);
+      completion.calls.length = 0;
+      const view = await doomedSave(row, Board);
+      expect(buttonNamed(/Take another front office/), 'no button on the recap deletes the save').toBeNull();
+      const call = buttonNamed('See who is calling');
+      expect(call, 'the recap offers who is calling').not.toBeNull();
+      fireEvent.click(call!);
+      expect(readSave(row)?.fired, 'the save is still in storage, fired').toBe(true);
+      expect(outScreen(), 'the out of work screen').not.toBeNull();
+      view.unmount();
+      render(<Board />);
+      expect(outScreen(), 'a remount opens the out of work screen').not.toBeNull();
+      expect(document.querySelectorAll('[data-gm-out-of-work] [data-gm-desk="tiles"] button')).toHaveLength(3);
+      expect(completion.calls, 'nothing is recorded as a finish through the firing').toHaveLength(0);
+    });
+
+    it('taking an offer takes two taps, never the club that let him go, and the arrival stages no title even at the champion', async () => {
+      const { Board } = await freshBoard(row, 12);
+      completion.calls.length = 0;
+      let view = await doomedSave(row, Board);
+      const old = readSave(row).myTeam;
+      fireEvent.click(buttonNamed('See who is calling')!);
+      /* The club that calls first is made the closed season's champion, so the arrival meets a parade that is not his. */
+      let target = '';
+      for (let k = 0; k < 3; k += 1) {
+        view.unmount();
+        view = render(<Board />);
+        await openCareerBox('Job market');
+        const ids = offerIds();
+        expect(ids.length, 'somebody calls after a firing').toBeGreaterThan(0);
+        expect(ids, 'the club that let him go is not in his feed').not.toContain(old);
+        if (ids[0] === target) break;
+        target = ids[0]!;
+        const s = readSave(row);
+        s.postseason.champion = target;
+        s.league.champions[s.league.champions.length - 1].team = target;
+        localStorage.setItem(row.saveKey, JSON.stringify(s));
+      }
+      fireEvent.click(document.querySelector(`[data-gm-offer="${target}"]`)!);
+      const take = () => document.querySelector('[data-gm-take]') as HTMLButtonElement;
+      fireEvent.click(take());
+      expect(readSave(row).myTeam, 'one tap only arms').toBe(old);
+      fireEvent.click(take());
+      const s = readSave(row);
+      expect([s.myTeam, s.trust, s.fired, s.phase]).toEqual([target, 60, false, 'recap']);
+      expect(s.postseason.champion, 'the club he joined won the closed season').toBe(target);
+      const recap = document.querySelector('[data-verdict-reveal]')?.textContent ?? '';
+      expect(recap, 'the arrival line').toContain('You take over the');
+      expect(recap, 'no title of his is staged').not.toContain('Your build. Your rings.');
+      expect(document.querySelector('[data-verdict-reveal]')?.className ?? '', 'no title pulse').not.toContain('cm-win-pulse');
+      /* The room meets him, then his new club's draft, and the summer keeps the ask he was shown. */
+      const ask = s.mandate;
+      expect(ask.season).toBe(s.league.season + 1);
+      answerPresser();
+      fireEvent.click(buttonNamed(/Go to the draft/)!);
+      runDraft(row);
+      const after = readSave(row);
+      expect([after.phase, after.myTeam, JSON.stringify(after.mandate)]).toEqual(['hub', target, JSON.stringify(ask)]);
+      expect(completion.calls, 'nothing is recorded through the market, the take, the arrival and the draft').toHaveLength(0);
+      /* His next title at his new club records the career once, at the career's score. */
+      view.unmount();
+      const t = readSave(row);
+      for (const p of t.league.teams[t.myTeam].players) p.ovr = 99;
+      localStorage.setItem(row.saveKey, JSON.stringify(t));
+      render(<Board />);
+      cutToLimit();
+      playSeason(row, () => undefined);
+      const won = readSave(row);
+      expect(won.postseason.champion, 'a club of 99s wins it').toBe(target);
+      expect(completion.calls).toEqual([{ path: '/front-office', score: won.titles * 100 + won.seasonsPlayed * 5 }]);
+    });
+
+    it('a year out: two taps, the league a season on with one more champion, his counters as they were', async () => {
+      const { Board } = await freshBoard(row, 13);
+      const view = await doomedSave(row, Board);
+      view.unmount();
+      const H = await import('@/lib/gmDeskHost');
+      const SEAT = await import('@/lib/gmSeat');
+      const { nflDeskHost } = await import('@/lib/gmDeskHostNfl');
+      const s0 = readSave(row);
+      /* A record whose next year is still open (the stay out button is drawn only then). */
+      let planted = false;
+      for (const grades of [['overachieved', 'met', 'missed'], ['met', 'met', 'missed'], ['title', 'met', 'badly']] as const) {
+        const tier = SEAT.leagueTiers(H.hostSeatTeams(nflDeskHost, s0.league, (id: string) => id)).get(s0.myTeam) ?? 4;
+        let c = SEAT.newGmCareer(s0.myTeam, tier, s0.league.season - grades.length + 1);
+        for (const g of grades) c = SEAT.recordSeatSeason(c, g);
+        const seat = { v: 1, career: SEAT.endSeatStint(c, 'fired'), last: s0.league.season };
+        if (H.hostCanSitOut(H.hostMarket(nflDeskHost, s0.league, seat, (id: string) => id))) { plantRecord(row, seat, grades.length); planted = true; break; }
+      }
+      expect(planted, 'a record with next year open').toBe(true);
+      render(<Board />);
+      await openCareerBox('Job market');
+      const before = readSave(row);
+      const sit = () => document.querySelector('[data-gm-sit-out]') as HTMLButtonElement;
+      expect(sit(), 'the stay out button').not.toBeNull();
+      fireEvent.click(sit());
+      expect(readSave(row).league.season, 'one tap only arms').toBe(before.league.season);
+      fireEvent.click(sit());
+      const s = readSave(row);
+      expect([s.league.season, s.league.champions.length, s.seasonsPlayed, s.titles, s.phase, s.fired, s.myTeam])
+        .toEqual([before.league.season + 1, before.league.champions.length + 1, before.seasonsPlayed, before.titles, 'fired', true, before.myTeam]);
+      expect(s.gm.blocks.seat.career.seasonsOut).toBe(1);
+      expect(s.postseason.champion).toBe(s.league.champions[s.league.champions.length - 1].team);
+      expect(outScreen()?.textContent ?? '', 'the card says the year').toContain('Out of work, 1 season');
+    });
+
+    it('a closed market draws no stay out button, and the new front office link deletes the save on the second tap only', async () => {
+      const { Board } = await freshBoard(row, 14);
+      const view = await doomedSave(row, Board);
+      view.unmount();
+      const H = await import('@/lib/gmDeskHost');
+      const SEAT = await import('@/lib/gmSeat');
+      const { nflDeskHost } = await import('@/lib/gmDeskHostNfl');
+      const s0 = readSave(row);
+      let planted = false;
+      for (const grades of [['badly', 'badly', 'badly'], ['missed', 'badly'], ['badly']] as const) {
+        for (const out of [1, 2]) {
+          const tier = SEAT.leagueTiers(H.hostSeatTeams(nflDeskHost, s0.league, (id: string) => id)).get(s0.myTeam) ?? 4;
+          let c = SEAT.newGmCareer(s0.myTeam, tier, s0.league.season - out - grades.length + 1);
+          for (const g of grades) c = SEAT.recordSeatSeason(c, g);
+          c = SEAT.endSeatStint(c, 'fired');
+          for (let i = 0; i < out; i += 1) c = SEAT.sitOutYear(c);
+          const seat = { v: 1, career: c, last: s0.league.season - out };
+          if (!planted && H.hostMarket(nflDeskHost, s0.league, seat, (id: string) => id)?.state === 'closed') { plantRecord(row, seat, grades.length); planted = true; }
+        }
+      }
+      expect(planted, 'a closed market').toBe(true);
+      render(<Board />);
+      await openCareerBox('Job market');
+      expect(document.querySelector('[data-gm-market="closed"]')).not.toBeNull();
+      expect(document.querySelector('[data-gm-sit-out]'), 'no stay out button on a closed market').toBeNull();
+      backToHub();
+      cleanup();
+      render(<Board />);
+      const link = () => buttonNamed('Start a new front office');
+      expect(link()).not.toBeNull();
+      fireEvent.click(link()!);
+      expect(readSave(row), 'one tap only arms').not.toBeNull();
+      expect(document.querySelector('[data-gm-arm="restart"]')).not.toBeNull();
+      fireEvent.click(link()!);
+      expect(readSave(row), 'the second tap starts over').toBeNull();
+      expect(screen.getAllByText(row.clubLabel).length, 'the pick screen').toBeGreaterThan(0);
     });
   });
 }

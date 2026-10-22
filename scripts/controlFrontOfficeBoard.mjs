@@ -55,6 +55,12 @@
  * regular season was played; and the feed counting the weeks of a man
  * hurt on "Play Week 17", though nobody heals in the bracket (hurtweeks).
  *
+ * Round 1533 added the fifth, src/components/front-office-shared/
+ * FrontOfficeGmCareer.test.tsx (a GM's career on the real board), and two
+ * controls of its career block: the fired recap wired back to the reset that
+ * deletes the save (resetbutton) and the arrival recap staging the club he
+ * joins' title as his own (arrivaltitle). Every control now runs five files.
+ *
  * `blank` is this file's own control and is not part of `all`: it rewrites a
  * comment and nothing else, so no test may go red, and the run must say DID
  * NOT FIRE and exit 1. If `blank` ever exits 0 this file is lying.
@@ -77,6 +83,8 @@ const OP = 'src/components/front-office/FrontOfficeOnePress.test.tsx';
 const TL = 'src/components/front-office/FrontOfficeTile.test.tsx';
 /* Round 1309: the playoffs a round at a time */
 const PS = 'src/components/front-office/FrontOfficePostseason.test.tsx';
+/* Round 1533: the GM's career on the real board (fired is a chapter, not the end) */
+const CA = 'src/components/front-office-shared/FrontOfficeGmCareer.test.tsx';
 
 /* The tests by the words of their titles. */
 const T = {
@@ -124,6 +132,8 @@ const T = {
   /* Round 1533: the one press digests with the desk on and off (the digest sets aside the host's two blocks only) */
   opDeskOn: [OP, 'GM desk on: one press of the final week ordinary'],
   opDeskOff: [OP, 'GM desk off: one press of the final week ordinary'],
+  caFired: [CA, 'fired: the recap offers who is calling and keeps the save'],
+  caTake: [CA, 'taking an offer takes two taps'],
 };
 
 const TELL_WEEK = 'const told = games.map(g => nflTell(g, lg.teams, lg.season, nflWhere(lg.week), deskWeek?.edges));';
@@ -187,6 +197,10 @@ const CONTROLS = {
   donenow: ["the finish is recorded at the title game's press while he watches it", [["useGameCompletion('front-office', roomHeld ? roomHeld.won : wonTitleNow,", "useGameCompletion('front-office', wonTitleNow,"]], [T.psTitleRoom], [T.psTitleWatch, T.psWatchRound]],
   /* Round 1533: the close through the desk host writes a third block beside seat and xp (critic 1533 correction 2) */
   thirdkey: ['the season close writes a third block on the desk', [['if (v.desk && v.desk !== deskNow) setGm(v.desk);', "if (v.desk) setGm(withGmBlock(v.desk, 'extra', 1));"]], [T.opDeskOn], [T.opDeskOff]],
+  /* Round 1533: the fired recap's button wired back to the reset that deletes the save; the arrival recap staging the
+     new club's title as his (no hostArriving gate) */
+  resetbutton: ['the fired recap deletes the save again', [["<button onClick={() => setPhase('fired')} className=", '<button onClick={reset} className=']], [T.caFired], [T.ordinary]],
+  arrivaltitle: ["the arrival recap stages the new club's title as his", [['const myTitle = champion === myTeam && !arriving;', 'const myTitle = champion === myTeam;']], [T.caTake], [T.ordinary]],
   blank: ["THIS FILE'S OWN CONTROL: a comment is reworded and nothing else, so nothing may fire", [['setGameLog(null); /* the summer */', 'setGameLog(null); /* the summer, as it was */']], [T.week], []],
 };
 
@@ -226,7 +240,7 @@ function run(name) {
   fs.writeFileSync(copy, src);
   let r, json = null;
   try {
-    r = spawnSync(process.execPath, [path.join(ROOT, 'node_modules', 'vitest', 'vitest.mjs'), 'run', GD, OP, TL, PS, '--reporter=json', `--outputFile=${report}`, '--testTimeout=600000', '--hookTimeout=120000'],
+    r = spawnSync(process.execPath, [path.join(ROOT, 'node_modules', 'vitest', 'vitest.mjs'), 'run', GD, OP, TL, PS, CA, '--reporter=json', `--outputFile=${report}`, '--testTimeout=600000', '--hookTimeout=120000'],
       { cwd: ROOT, encoding: 'utf8', env: { ...process.env, FO_BOARD_NFL: copy.replaceAll('\\', '/'), CI: '1', FORCE_COLOR: '0', NO_COLOR: '1' }, maxBuffer: 64 * 1024 * 1024 });
     if (fs.existsSync(report)) json = JSON.parse(fs.readFileSync(report, 'utf8'));
   } finally {
@@ -240,7 +254,7 @@ function run(name) {
   console.log(`control ${name} (${why}): vitest exit ${r.status}; ${reds.length} red, ${rows.filter(x => x.status === 'passed').length} green of ${rows.length}`);
   for (const x of reds) console.log(`   red: ${path.basename(x.file)} > ${x.title.slice(0, 150)}`);
   /* a copy that did not load is not a firing */
-  const unloaded = [GD, OP, TL, PS].filter(f => !rows.some(x => x.file.endsWith(f)));
+  const unloaded = [GD, OP, TL, PS, CA].filter(f => !rows.some(x => x.file.endsWith(f)));
   if (unloaded.length || json.testResults.some(f => LOAD_ERROR.test(f.message || '')) || reds.some(x => LOAD_ERROR.test(x.why))) {
     return { name, fired: false, said: `the copy did not load or a test file did not run (${unloaded.join(', ') || 'a load error in the report'}), so a red here is not the check: ${tail}` };
   }
