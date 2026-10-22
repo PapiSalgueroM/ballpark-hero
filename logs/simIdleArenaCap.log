@@ -1,0 +1,25 @@
+1) the clock measured here is the clock the hook installs
+   hook drives tick(s, Date.now()) every TICK_MS (100ms) and boots through applyOffline
+   settled arena scores 2.35M a second, flat, for every case below
+2) a live tab is paid in real time, all day
+   24h at the real 100ms cadence (864,000 ticks): 203B, wanted 203B
+3) no way of being away beats closing the tab
+   tab closed, one catch up on load                               33.9B  (cap says 33.9B)
+   tab open, frozen solid, one late tick                          33.9B  (cap says 33.9B)
+   tab open, throttled to a minute a tick                         33.9B  (cap says 33.9B)
+   tab open, a second a tick for five minutes then a minute       33.9B  (cap says 33.9B)
+   tab open, ten minutes a tick                                   33.9B  (cap says 33.9B)
+4) coming back starts a new absence, staying away does not
+   away a day: 33.9B; away a second day without coming back: +0
+   a minute back at the desk: +141M; then away another day: +33.9B
+5) the away threshold has headroom on both sides
+   AWAY_AFTER_MS is 750: 3.7x the 201ms measured live worst, 25% under the 1000ms hidden clamp
+   live cadences up to 750ms paid in full; one millisecond over is away time
+6) the trophy example reproduces through the real formula
+   9 worked numbers found: 3 in the Trophy panel, 3 in the rules copy, 2 in the tips copy, 1 in the worked example
+   every one of them matches trophiesFor: 1M pays 1, 4M pays 2, 9M pays 3
+7) the trophy room stretches the cap without breaking it
+   16 pairings of Long Night and Night Shift, 6 tab shapes each: every one pays its own cap at its own rate, once per absence, and the desk pays in full
+   caps 8h 0m, 16h 0m, 20h 0m, 24h 0m; rates 50%, 70%, 80%, 95%
+
+simIdleArenaCap: green. Being there pays in real time, being away pays eight hours at half speed however the tab was left, and the trophy example is the formula.

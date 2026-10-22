@@ -1,0 +1,15 @@
+#!serve
+#!playwright
+simTycoonAway: node scripts/simTycoonAway.mjs
+simHelpConsentFocus: node scripts/simHelpConsentFocus.mjs
+simHelpDialogFocus: node scripts/simHelpDialogFocus.mjs
+simRulesGateConsentFocus: node scripts/simRulesGateConsentFocus.mjs
+simTycoonRooms: node scripts/simTycoonRooms.mjs
+simTycoonPitch: node scripts/simTycoonPitch.mjs
+simIdleArenaCap: node scripts/simIdleArenaCap.mjs
+simMobileChrome: node scripts/simMobileChrome.mjs
+simPrerender: node scripts/simPrerender.mjs
+sweepWeight: node scripts/sweepWeight.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simErrorBoundary: node scripts/simErrorBoundary.mjs

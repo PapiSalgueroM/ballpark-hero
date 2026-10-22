@@ -1,0 +1,14 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simHelpDialogFocus exit=0 2s | simHelpDialogFocus: six real-dialog checks passed for close paths, trigger identity, controlled callbacks and content.
+simHelpConsentFocus exit=0 2s | simHelpConsentFocus: real source held, disposable copies cleaned, no vendor requests.
+simTycoonAway exit=0 4s |    The control put the load-only settle back and sections 3 and 4 went red, so these checks are alive.
+simRulesGateConsentFocus exit=0 2s | simRulesGateConsentFocus: source held, owned copies cleaned, no backend or vendor requests.
+simIdleArenaCap exit=0 3s | simIdleArenaCap: green. Being there pays in real time, being away pays eight hours at half speed however the tab was left, and the trophy example is the formula.
+simTycoonRooms exit=0 112s |    All eleven controls fired exactly where they should.
+simPrerender exit=1 1s | simPrerender: 1 failure
+sweepWeight exit=0 29s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+simHarnessAnchors exit=0 42s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simAccessibility exit=0 0s | simAccessibility: all green
+simErrorBoundary exit=0 1s | simErrorBoundary: all green
+simMobileChrome exit=0 212s | GREEN: 34 top bar measurements and 134 scroll stops, no overlaps, nothing off the side of the screen, controls reachable everywhere, footer never covered.
+simTycoonPitch exit=0 513s |    All 8 controls fired exactly where they should.

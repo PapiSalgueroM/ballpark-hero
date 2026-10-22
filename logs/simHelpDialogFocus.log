@@ -1,0 +1,35 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ ✓ src/test/helpDialogFocus.test.tsx > help dialog focus return > returns to its help trigger after Let's Play! 137ms
+ ✓ src/test/helpDialogFocus.test.tsx > help dialog focus return > returns to its help trigger after Close 61ms
+ ✓ src/test/helpDialogFocus.test.tsx > help dialog focus return > returns to its help trigger after Escape 68ms
+ ✓ src/test/helpDialogFocus.test.tsx > help dialog focus return > returns focus after the controlling parent closes its dialog 32ms
+ ✓ src/test/helpDialogFocus.test.tsx > help dialog focus return > returns to the help control belonging to the closed dialog 105ms
+ ✓ src/test/helpDialogFocus.test.tsx > help dialog focus return > preserves controlled open callbacks, exact content and trigger label 44ms
+
+ Test Files  1 passed (1)
+      Tests  6 passed (6)
+   Start at  04:36:16
+   Duration  1.86s (transform 89ms, setup 78ms, collect 320ms, tests 449ms, environment 320ms, prepare 269ms)
+
+
+stderr | src/test/helpDialogFocus.test.tsx > help dialog focus return > returns to its help trigger after Let's Play!
+Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+stderr | src/test/helpDialogFocus.test.tsx > help dialog focus return > returns to its help trigger after Close
+Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+stderr | src/test/helpDialogFocus.test.tsx > help dialog focus return > returns to its help trigger after Escape
+Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+stderr | src/test/helpDialogFocus.test.tsx > help dialog focus return > returns focus after the controlling parent closes its dialog
+Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+stderr | src/test/helpDialogFocus.test.tsx > help dialog focus return > returns to the help control belonging to the closed dialog
+Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+stderr | src/test/helpDialogFocus.test.tsx > help dialog focus return > preserves controlled open callbacks, exact content and trigger label
+Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+simHelpDialogFocus: six real-dialog checks passed for close paths, trigger identity, controlled callbacks and content.
