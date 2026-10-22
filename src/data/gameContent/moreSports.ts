@@ -1891,7 +1891,7 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
         subsections: [
           {
             heading: "What ends a career and reads the verdict",
-            items: ["Keep going until the damage, the years or a run of defeats ends it, then read the verdict on your career."],
+            items: ["Keep going until the damage, the years or a run of defeats ends it, or retire yourself any time after 10 fights, then read the verdict on your career."],
           },
         ],
       },
