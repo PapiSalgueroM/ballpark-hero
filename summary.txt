@@ -1,0 +1,8 @@
+buildseo exit=0 2364s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simGuideHeadings exit=0 1s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+simSiteSearch exit=0 1s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+simPrerender exit=0 0s | simPrerender: green. Every page answers with its own words, no JavaScript required.
+simSitemap exit=0 0s | simSitemap: green. Google only ever hears about real pages.
+simIndexNow exit=0 0s | simIndexNow: green. The key file, the script and the sitemap agree.
+simHeadTags exit=0 0s | simHeadTags: green. Every page says its own thing, once.
+sweepWeight exit=0 26s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.

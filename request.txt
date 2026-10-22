@@ -1,0 +1,12 @@
+# Release BO publish prep: build:seo on the merged head a853fb54 (main 0383bd6e plus the release), its changed files exported, then the readers of the saved pages and the weight on the served build
+#!buildseo
+#!export
+#!serve
+#!serial
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simPrerender: node scripts/simPrerender.mjs
+simSitemap: node scripts/simSitemap.mjs
+simIndexNow: node scripts/simIndexNow.mjs
+simHeadTags: node scripts/simHeadTags.mjs
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
