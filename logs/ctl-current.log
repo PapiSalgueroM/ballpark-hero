@@ -1,0 +1,17 @@
+CONN_CONTROL=current: the boards were changed; this run must end red
+1) no group claims the present
+  FAIL: puzzle-76: "Current Arsenal stars (2025-26)" claims the present, and a saved board outlives it; stamp a past season
+   1 present tense, unstamped season or unheld recent year labels; 11 recent year groups owed to part B
+2) no refuted claim is on a board
+   5 refuted claims held off every board, 0 found
+3) every group this round wrote stands on two hosts
+   2 watches over 31 men about to join a list
+   26 squads, 1 lists, 1 ledgered groups, 68 stamped groups, 340 members confirmed, 9 rebuilt boards
+4) one right answer: the cross check over every board
+   696 of 1000 groups judged; members 2246 judged (538 unknown), other tiles 6932 judged (1420 unknown)
+   62 findings: 0 adjudicated, 62 owed to part B on boards not yet rebuilt
+5) the groups nothing checks yet may only get fewer
+  FAIL: 303 groups nothing checks, over the ceiling of 302
+   303 groups nothing checks yet (ceiling 302); part B ledgers them
+
+simConnectionsFacts: 2 failures
