@@ -1,0 +1,8 @@
+simSoccerOwnerTail exit=0 18s | simSoccerOwnerTail: green. The owner picks his club, plays on the table, and every call has a cost and a reason.
+vitest exit=0 27s |    Duration  26.67s (transform 9.68s, setup 669ms, collect 21.03s, tests 28.74s, environment 3.27s, prepare 1.16s)
+ctl-randomclub exit=1 11s | simSoccerOwnerTail: 3 failure(s)
+simCareerMoneyAfterRetirement exit=0 7s | All good: the money app keeps running for the whole retirement tail.
+simManagerCareer exit=0 12s | ALL MANAGER CAREER CHECKS PASSED
+simCareerNoDeadEnd exit=0 1s | simCareerNoDeadEnd: green. A convicted career is still a career, and a stranded save comes back.
+simScoreShown exit=0 32s | simScoreShown: all sections green
+tsc exit=0 96s | 
