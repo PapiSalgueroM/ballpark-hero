@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+probe: node .rc/x/rv-probe-focus.mjs
