@@ -1,0 +1,14 @@
+playClubManager: seed 1542433760 (the walk's own, from its file name). Replay with PLAY_CM_SEED=1542433760
+1) Taking a job
+  BLOCKED  could not get past the club picker, so nothing below ran
+2) Playing a season through the interface
+  STUCK    nothing moved the game on at step 1. On screen: "Skip to main content DOUKNOWBALL Back Track stats CLUB MANAGER 27 real league tables and 454 clubs today, squads as of A". Buttons: Back | Track stats | Premier League | Arsenal 👑 Elite Squad 89  | Manchester City 👑 Elite S | Liverpool 👑 Elite Squad 8 | Chelsea 👑 Elite Squad 88  | Manchester United 🥇 Conte | Tottenham 🥇 Contenders Sq | Newcastle 🥇 Contenders Sq | Nottingham Forest 🥇 Conte | Aston Villa 🥇 Contenders  | Crystal Palace 🥇 Contende | Brentford 🥇 Contenders Sq | Bournemouth 🥇 Contenders  | Brighton 🥇 Contenders Squ | Everton 🥇 Contenders Squa | Fulham ⚔️ Challengers Squa | Sunderland ⚔️ Challengers 
+   the page had drawn 7 times since its last load when the walk ended (null at the hub before the first kick off)
+   0 half times, 0 full times, 0 subs, 0 shape changes, 2 windows, 0 signings, 0 skips through the live viewer
+   ending: ran out of steps
+  SHALLOW  only reached 0 matches, so most of the season was never exercised
+  SHALLOW  only 0 matches were played, which is too few to have exercised much
+  BROKEN   never reached a single half time, so Round 119 is not covered by this run
+  SHALLOW  2 transfer window(s) opened and not one signing completed, so the market was not exercised either
+
+Played Club Manager through its own screens. 6 findings.

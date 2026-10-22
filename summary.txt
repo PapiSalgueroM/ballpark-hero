@@ -1,0 +1,14 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playClubManager exit=0 287s | Played Club Manager through its own screens. 0 findings.
+playCmFinanceDesk exit=0 27s | playCmFinanceDesk: green. The Finances desk reads at 12px, taps at 44px, cuts nothing, keeps every figure on one line and shows what the board covers and what the kitty k
+ctl-desk-small exit=0 27s | playCmFinanceDesk: CONTROL small FIRED (9 failures, as it must)
+playSessionMarks exit=0 18s | playSessionMarks: green. Playing counts, loading does not, and nothing invented a score.
+playLiveMatchFit exit=0 143s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen, an own goal drawn as one.
+playLiveMatchFit-fresh exit=0 149s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen, an own goal drawn as one.
+livefit-ctl exit=0 170s | controls (each must be 1): widelabels=1 digits=1
+ctl-none-playClubManager exit=1 18s | Played Club Manager through its own screens. 6 findings.
+ctl-none-playCmFinanceDesk exit=2 16s | playCmFinanceDesk: could not run: no Liverpool save after taking the job (saw none). NOTHING WAS CHECKED.
+ctl-none-playSessionMarks exit=1 38s | Node.js v24.21.0
+ctl-none-playLiveMatchFit exit=1 16s | playLiveMatchFit: 1 failure.
+ctl-desk-cut exit=0 27s | playCmFinanceDesk: CONTROL cut FIRED (3 failures, as it must)
+ctl-desk-wrap exit=0 28s | playCmFinanceDesk: CONTROL wrap FIRED (3 failures, as it must)
