@@ -1,0 +1,11 @@
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+rehearse: npm install --silent --no-save --prefix /tmp/pgl @electric-sql/pglite >/dev/null 2>&1 && PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseSeasonRows1551.mjs
+rehearse-noafl: REHEARSE_CONTROL=noafl PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseSeasonRows1551.mjs
+simSeasonDue: node scripts/simSeasonDue.mjs
+hall-head: node scripts/simHallOfChampions.mjs
+hall-base: R=$PWD && git worktree add /tmp/hbase c75d04dad >/dev/null 2>&1 && cd /tmp/hbase && ln -s "$R/node_modules" node_modules && node scripts/simHallOfChampions.mjs
+vitest: node_modules/.bin/vitest run src/test/champOrNotReveal.test.tsx src/test/silverwareReveal.test.tsx src/test/rugbyLeagueChallenge.test.tsx src/test/rugbyLeagueReview.test.tsx src/test/whodTheyBeatReveal.test.tsx src/test/rankEmCircuit.test.tsx src/test/rankEmOrder.test.tsx src/test/dailySaveParity.test.tsx src/test/noDoubleRecord.test.tsx --testTimeout=300000 --hookTimeout=120000
+simAccessibility: node scripts/simAccessibility.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simInventedNames: node scripts/simInventedNames.mjs
