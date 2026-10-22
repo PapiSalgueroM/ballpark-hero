@@ -27,7 +27,7 @@ const sourceFiles = ['src/index.css', 'src/components/CookieConsent.tsx', 'src/c
   'src/pages/StadiumTycoon.tsx', 'src/pages/IdleArena.tsx', 'src/pages/FrontOffice.tsx',
   'scripts/lib/offlineTransport.cjs', 'scripts/lib/hostLikeServer.mjs', 'scripts/lib/playwrightLoader.mjs', 'package.json', 'package-lock.json'];
 const report = { v: 1, source: SOURCE, phase: 'original', status: 'RUNNING', complete: false, plannedCases: planned.length,
-  cases: [], errors: [], transportPredicateControls: [], classificationControls: [], fontControls: [], holds: {},
+  cases: [], errors: [], transportPredicateControls: [], classificationControls: [], pendingShellClippingControls: [], fontControls: [], holds: {},
   scope: 'Nine fresh-context source-bound surfaces only. Actual failures are not predetermined. No CSS/DOM repair or full-game qualification.' };
 let browser, fonts, fontManifest, staticFiles, deadline;
 fs.mkdirSync(OUT, { recursive: true });
@@ -161,6 +161,60 @@ function classificationControls(proof, caseId, action) {
     report.classificationControls.push({ caseId, action, name, beforeSha256, afterSha256, classificationRefused: true, networkAttempted: false });
   }
 }
+function ownedPendingShellClipping(proof) {
+  const missed = frame => frame?.pending === '1' && !frame.embedded && frame.bannerPosition === 'fixed'
+    && frame.target?.exists && frame.target.nodeId === proof.targetId && frame.target.centerInViewport === true
+    && frame.target.hit && frame.target.hitIsTarget === false && frame.target.hitIsCookieRegion === false && frame.target.overlapArea === 0;
+  const target = proof.after?.target, ancestors = target?.ancestors || [];
+  const shells = ancestors.filter(node => node.role === 'dialog' && node.label === 'How Idle Arena works');
+  const shell = shells.length === 1 ? shells[0] : null, card = shell ? ancestors[ancestors.indexOf(shell) - 1] : null;
+  return proof.surface === 'idle' && proof.action === 'Close the rules' && proof.phase === 'pending'
+    && proof.foundationPassed === true && proof.clickAttempted === true && proof.dialogRemains === true
+    && Number.isSafeInteger(proof.targetId) && proof.targetId > 0
+    && proof.error?.name === 'TimeoutError' && /intercepts pointer events/i.test(proof.error.message)
+    && missed(proof.after) && proof.frames.length > 0 && proof.frames.every(missed)
+    && shell?.css?.position === 'fixed' && shell.css.overflowY === 'auto'
+    && card?.rect?.height > shell.rect.height && card.rect.top < shell.rect.top && target.rect.bottom < shell.rect.top;
+}
+function pendingShellClippingControls(proof, caseId, action) {
+  assert(ownedPendingShellClipping(proof), 'DIALOG1447_CLIPPING_CONTROL: actual owned clipping required');
+  const target = change => ({ ...proof, after: { ...proof.after, target: { ...proof.after.target, ...change } } });
+  const shellIndex = proof.after.target.ancestors.findIndex(node => node.role === 'dialog' && node.label === 'How Idle Arena works');
+  const ancestor = (index, change) => target({ ancestors: proof.after.target.ancestors.map((node, at) => at === index ? change(node) : node) });
+  const during = change => ({ ...proof, frames: proof.frames.map(change) });
+  const alternatives = [
+    ['wrong-surface', { ...proof, surface: 'stadium' }],
+    ['wrong-phase', { ...proof, phase: 'answered' }],
+    ['wrong-action', { ...proof, action: 'Start tapping' }],
+    ['foundation-not-healthy', { ...proof, foundationPassed: false }],
+    ['click-not-attempted', { ...proof, clickAttempted: false }],
+    ['dialog-already-closed', { ...proof, dialogRemains: false }],
+    ['wrong-error', { ...proof, error: { name: 'Error', message: 'CONTROL_UNRELATED_ERROR' } }],
+    ['missing-final-ancestor', target({ ancestors: [] })],
+    ['nonfixed-ancestor', ancestor(shellIndex, node => ({ ...node, css: { ...node.css, position: 'static' } }))],
+    ['nonclipping-overflow', ancestor(shellIndex, node => ({ ...node, css: { ...node.css, overflowY: 'visible' } }))],
+    ['button-inside-shell', ancestor(shellIndex, node => ({ ...node, rect: { ...node.rect, top: proof.after.target.rect.top - 1 } }))],
+    ['card-fits-shell', ancestor(shellIndex - 1, node => ({ ...node, rect: { ...node.rect, height: proof.after.target.ancestors[shellIndex].rect.height } }))],
+    ['different-final-button', target({ nodeId: proof.targetId + 1 })],
+    ['final-hit-is-target', target({ hitIsTarget: true })],
+    ['final-hit-is-cookie', target({ hitIsCookieRegion: true })],
+    ['final-not-pending', { ...proof, after: { ...proof.after, pending: null } }],
+    ['final-banner-not-fixed', { ...proof, after: { ...proof.after, bannerPosition: 'static' } }],
+    ['no-during-frame', { ...proof, frames: [] }],
+    ['different-frame-button', during(frame => ({ ...frame, target: { ...frame.target, nodeId: proof.targetId + 1 } }))],
+    ['frame-hit-is-target', during(frame => ({ ...frame, target: { ...frame.target, hitIsTarget: true } }))],
+    ['frame-hit-is-cookie', during(frame => ({ ...frame, target: { ...frame.target, hitIsCookieRegion: true } }))],
+    ['frame-not-pending', during(frame => ({ ...frame, pending: null }))],
+    ['frame-banner-not-fixed', during(frame => ({ ...frame, bannerPosition: 'static' }))],
+    ['final-outside-viewport', target({ centerInViewport: false })],
+  ];
+  for (const [name, changed] of alternatives) {
+    const beforeSha256 = sha(JSON.stringify(proof)), afterSha256 = sha(JSON.stringify(changed)); assert.notEqual(beforeSha256, afterSha256);
+    assert.equal(ownedPendingShellClipping(changed), false, 'DIALOG1447_CLIPPING_CONTROL: unrelated evidence refused');
+    assert.equal(ownedInterception(changed), false, 'DIALOG1447_CLIPPING_CONTROL: no cookie-interception substitution');
+    report.pendingShellClippingControls.push({ caseId, action, name, beforeSha256, afterSha256, classificationRefused: true, networkAttempted: false });
+  }
+}
 async function snapshot(page) { return page.evaluate(() => window.__consentDialog1447.snapshot(true)); }
 async function mark(view, phase) {
   const detail = await snapshot(view.page); view.row.snapshots.push({ phase, detail });
@@ -239,7 +293,7 @@ async function dismiss(view, label, phase) {
   }
   await frames(page); action.after = await snapshot(page); action.dialogRemains = await dialog(page, spec).count() === 1 && await dialog(page, spec).isVisible();
   const observation = await page.evaluate(() => window.__consentDialog1447.state);
-  const proof = { foundationPassed: row.foundation.status === 'PASS', clickAttempted: action.attempted, dialogRemains: action.dialogRemains, error: action.error,
+  const proof = { surface: spec.id, action: label, phase, foundationPassed: row.foundation.status === 'PASS', clickAttempted: action.attempted, dialogRemains: action.dialogRemains, error: action.error,
     targetId: action.before.targets[label]?.nodeId,
     after: { ms: action.after.ms, pending: action.after.pending, embedded: action.after.embedded, bannerPosition: action.after.bannerPosition, target: action.after.targets[label] },
     frames: observation.rows.filter(frame => frame.ms >= action.startMs && frame.ms <= action.endMs).map(frame => ({ ms: frame.ms, pending: frame.pending, embedded: frame.embedded, bannerPosition: frame.bannerPosition, target: frame.targets[label] })) };
@@ -252,6 +306,10 @@ async function dismiss(view, label, phase) {
     action.status = 'OBSERVED_FAILURE';
     try { assert.fail('CONSENT_DIALOG1447_FIXED_BANNER_INTERCEPTION: ' + row.id + ': ' + label); } catch (error) { action.ownedAssertion = failure(error); }
     classificationControls(proof, row.id, label); await mark(view, 'blocked-' + row.actions.length);
+  } else if (ownedPendingShellClipping(proof)) {
+    action.status = 'OBSERVED_FAILURE';
+    try { assert.fail('CONSENT_DIALOG1447_PENDING_SHELL_CLIPPING: ' + row.id + ': ' + label); } catch (error) { action.ownedAssertion = failure(error); }
+    pendingShellClippingControls(proof, row.id, label); await mark(view, 'blocked-' + row.actions.length);
   }
   return action;
 }

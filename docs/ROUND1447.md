@@ -27,3 +27,12 @@ Before any CSS product adoption, require a separate healthy preservation baselin
 ## Next gate
 
 Observe the actual first remote run and admit complete metadata, source/ZIP/Tar manifests, all nine foundations/outcomes/control records and screenshots. An actual Original gap permits a separately reviewed candidate; no reproduction means reassess before CSS. Any product change needs its own later branch, correct owner coordination and full required qualification, readers and unchanged size caps. This diagnostic does not ship a visual fix.
+
+
+### Round1447 refined Original, fresh proof pending (2026-10-22)
+
+The first actual Original run39740445404 atb08fd2d3120213bd9da68b2e39bf028fdf506088 remains failed and unqualified. All9 foundations and answered dismissals passed, with3 direct Stadium banner interceptions,3 Front Office passes and3 Idle clipping failures that the first predicate correctly left unclassified. Its complete source/build/transport evidence is retained. No CSS repair has run.
+
+The separate codex/consent-dialog-refined-original-1447 branch preserves the old branch and adds a distinct, strict Idle-only pending-shell clipping predicate. It requires actual final ancestor geometry, a fixed overflow-auto shell, a taller child card, a same-node visible close button wholly above that shell, actual pointer-interception timeout, healthy pending foundation and non-target/non-cookie attempt frames. It does not infer ancestor clipping from compact frames. The old banner predicate and its5 controls remain byte exact. The new predicate has24 separate effective changed-record controls. A new remote run must demonstrate all9 complete healthy cases and dynamically count only the two exact owned causes. No previous failure is converted to a pass.
+
+The product and existing test/transport/dependency/font/build/output holds remain unchanged. Four Radix dialog families still need12 healthy preservation contexts before any CSS change, with matching old-CSS and restored coverage later. This is proof preparation, not a user-facing fix or a release. Root retains the shared site author lease. No game source, save, engine, old walk, local application runtime, paid setting or provider change is included.
