@@ -1,0 +1,32 @@
+  FAIL 390: morale 40 played 0 league games against 81, the line said -1
+  FAIL 1280: morale 40 played 0 league games against 81, the line said -1
+  390-rm-100: "Morale 100: +1 league game, rating +0.1 this season." phone -2 box 29,414 332x15 font 10px
+  390-rm-95: "Morale 95: +1 league game, rating +0.1 this season." phone -2 box 29,414 332x15 font 10px
+  390-rm-89: "Morale 89: +1 league game, rating +0.1 this season." phone -2 box 29,414 332x15 font 10px
+  390-rm-88: "Morale 88: no swing this season." phone -2 box 29,414 332x15 font 10px
+  390-rm-81: "Morale 81: no swing this season." phone -2 box 29,414 332x15 font 10px
+  390-rm-74: "Morale 74: no swing this season." phone -2 box 29,414 332x15 font 10px
+  390-rm-73: "Morale 73: -1 league game, rating -0.1 this season." phone -2 box 29,414 332x15 font 10px
+  390-rm-58: "Morale 58: -1 league game, rating -0.2 this season." phone -2 box 29,414 332x15 font 10px
+  390-rm-40: "Morale 40: -1 league game, rating -0.2 this season." phone -2 box 29,414 332x15 font 10px
+  390-rm-95-p90: "Morale 95: rating +0.1 this season." phone 3 box 29,414 332x15 font 10px
+  390-rm-40-p15: "Morale 40: rating -0.2 this season." phone -3 box 29,414 332x15 font 10px
+  390-mo-95: "Morale 95: +1 league game, rating +0.1 this season." phone -2 box 29,414 332x15 font 10px
+  390-mo-40-p15: "Morale 40: rating -0.2 this season." phone -3 box 29,414 332x15 font 10px
+  1280-rm-100: "Morale 100: +1 league game, rating +0.1 this season." phone -2 box 433,442 686x15 font 10px
+  1280-rm-95: "Morale 95: +1 league game, rating +0.1 this season." phone -2 box 433,442 686x15 font 10px
+  1280-rm-89: "Morale 89: +1 league game, rating +0.1 this season." phone -2 box 433,442 686x15 font 10px
+  1280-rm-88: "Morale 88: no swing this season." phone -2 box 433,442 686x15 font 10px
+  1280-rm-81: "Morale 81: no swing this season." phone -2 box 433,442 686x15 font 10px
+  1280-rm-74: "Morale 74: no swing this season." phone -2 box 433,442 686x15 font 10px
+  1280-rm-73: "Morale 73: -1 league game, rating -0.1 this season." phone -2 box 433,442 686x15 font 10px
+  1280-rm-58: "Morale 58: -1 league game, rating -0.2 this season." phone -2 box 433,442 686x15 font 10px
+  1280-rm-40: "Morale 40: -1 league game, rating -0.2 this season." phone -2 box 433,442 686x15 font 10px
+  1280-rm-95-p90: "Morale 95: rating +0.1 this season." phone 3 box 433,442 686x15 font 10px
+  1280-rm-40-p15: "Morale 40: rating -0.2 this season." phone -3 box 433,442 686x15 font 10px
+  1280-mo-95: "Morale 95: +1 league game, rating +0.1 this season." phone -2 box 433,442 686x15 font 10px
+  1280-mo-40-p15: "Morale 40: rating -0.2 this season." phone -3 box 433,442 686x15 font 10px
+  390: league games 95 22, 81 21, 40 21; ratings 7, 6.8, 6.6; hub said 1 and -1 (phone on the hub -2)
+  1280: league games 95 22, 81 21, 40 21; ratings 7, 6.8, 6.6; hub said 1 and -1 (phone on the hub -2)
+122 checks
+walkRun1523: RED, 2 failed
