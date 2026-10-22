@@ -1,0 +1,8 @@
+5) the US careers replay byte identical with the base's careerAwards.ts (the draw moved to awardDraw.ts)
+   nba: 1620 seasons replayed, byte identical
+   nfl: 2592 seasons replayed, byte identical
+   mlb: 3564 seasons replayed, byte identical
+   nhl: 1944 seasons replayed, byte identical
+6) legacy: calculateLegacy reads no awards and no popularity
+   calculateLegacy: 167 lines, reads neither; a copy that reads state.awards is caught
+simSoccerSeasonAwards: green

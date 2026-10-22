@@ -1,0 +1,14 @@
+chain exit=0 0s | CHAIN OK
+vitest exit=0 53s |    Duration  52.89s (transform 6.56s, setup 1.04s, collect 18.31s, tests 64.24s, environment 7.09s, prepare 1.48s)
+tsc exit=0 99s | 
+sa-1-stale exit=1 63s | simSoccerSeasonAwards: RED, 1 failure(s)
+sa-3 exit=0 34s | simSoccerSeasonAwards: green
+sa-3-nogate exit=1 34s | simSoccerSeasonAwards: RED, 3 failure(s)
+sa-2 exit=0 179s | simSoccerSeasonAwards: green
+sa-4 exit=0 105s | simSoccerSeasonAwards: green
+sa-56 exit=0 4s | simSoccerSeasonAwards: green
+sa-5-usdrift exit=1 5s | simSoccerSeasonAwards: RED, 1 failure(s)
+form-15 exit=0 32s | simCareerForm: green
+form-5-nogate exit=1 17s | simCareerForm: RED, 1 failure(s)
+sa-4-dropcoins exit=1 99s | simSoccerSeasonAwards: RED, 1 failure(s)
+sa-1 exit=0 498s | simSoccerSeasonAwards: green
