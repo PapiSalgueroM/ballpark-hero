@@ -366,7 +366,15 @@ Every finding was fixed, each in its own commit. Report: `dukb-handoff/2026-10-1
 
 After the lead's rulings, 2026-10-21 late (session J), newest first. The merge of origin/main `c1b39364` is
 `a04e791c`; the symmetric knobs `1db74de3`; the lines, the judge and section 11 `a717acfc`; the copy's file name
-`2ffb7cc7`.
+`2ffb7cc7`; the notes and header `7bae50f1`; the merge of origin/main `0383bd6e` (workflows and docs only)
+`f98eeb7b`, the code head of the round's final proof.
+
+- FINAL, `r1321-k10` on f98eeb7b: tsc exit 0 (125 s); vitest exit 0, 22 files, 237 tests; earned exit 0
+  "simNbaEarnedDraft: green." (10 sections, 212,104 checks, 1a "315516 draws held to the base 48cb9d4b", section
+  11 on 22 known answers); earned-ctl exit 0 "all 25 fired, each in exactly its own sections"; fleetjudge exit 0
+  (the COMBINE of the 60 fleet files prints the table above to the digit and ends "green", fatclass and bestfirst
+  "FIRED on the fleet"); anchors exit 0 (simHarnessAnchors green, simNoRivalNames "0 findings", simInventedNames
+  green); diffproof exit 0 "diffproof-ok" against 0383bd6e.
 
 - `r1321-k8` on 2ffb7cc7: earned exit 0 "simNbaEarnedDraft: green." (10 sections); earned-ctl exit 0 "all 25
   fired, each in exactly its own sections" (the 20 of step (d), a few counts moved by the symmetric knobs:
