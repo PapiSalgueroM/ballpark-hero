@@ -1,0 +1,8 @@
+heavy (sections 10) exit=1 | simEventDeck: 1 failure, red sections 10 (CONTROL=heavy fired)
+unreach (sections 10) exit=1 | simEventDeck: 1 failure, red sections 10 (CONTROL=unreach fired)
+neutral (sections 8) exit=1 | simEventDeck: 1 failure, red sections 8 (CONTROL=neutral fired)
+kctl: every control exited 1 and fired
+unreach soccer lines:
+   soccer: reach over seeds 1 to 30 (5,000 seasons each), the least reached card 719 in 0 of 30, at least 28 required
+   FAIL soccer: 1 cards dealt in fewer than 28 of seeds 1 to 30 (719 in 0)
+ok lines for soccer after the FAIL: 0 (0 expected)
