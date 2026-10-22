@@ -1,0 +1,2 @@
+#!build
+runAllSims: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/runAllSims.mjs
