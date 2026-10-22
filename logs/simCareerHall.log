@@ -1,0 +1,8 @@
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  FAIL  simCareerHall.mjs            2275.5s
+
+----- simCareerHall.mjs (FAIL) -----
+  FAIL base: 1 base misses [TE median base credit 108.8]
+
+1 harness not green.
