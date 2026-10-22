@@ -1,0 +1,3 @@
+attr-engine-only exit=0 1s | this tree: 12 of 12 histories reproduce the committed hashes, 0 differ
+attr-control-json-only exit=1 1s | this tree: 0 of 12 histories reproduce the committed hashes, 12 differ
+head-as-committed exit=0 1s | this tree: 12 of 12 histories reproduce the committed hashes, 0 differ
