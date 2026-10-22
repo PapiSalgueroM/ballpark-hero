@@ -8,7 +8,8 @@
     "A row that is not verified (toVerify) carries no constant: its usedBy list is empty, its id is in CM_ONE_OFF_PARTIAL, and the game plays no super cup for that country and year. Candidates written beside it are memory or another lane's notes, never facts.",
     "A ground's name is a fact of one edition: it is printed only for the season one edition its row sources, never projected onto a later season.",
     "The game's dates are its own: no real date and no real result is ever shown. The real 2026 result is not recorded here on purpose.",
-    "Round 1514: a row marked rule twoPublishers (the other lane's standard in dukb-handoff/2026-10-18/owner-report-intake-1424-1425/SUPER-CUP-SOURCES.md, which the lead bound this round to) stands on two independent publishers on two hosts, none a wiki, each with a line about the fact; an official page of a league, a federation, UEFA or a club counts, a press page too. A 'dated' row holds one edition's clubs, date, venue and ground; its date places a 'dated' row's night on the game's own calendar and is never printed. A 'cupRunnerUp' row holds a real cup final's losing club."
+    "Round 1514: a row marked rule twoPublishers (the other lane's standard in dukb-handoff/2026-10-18/owner-report-intake-1424-1425/SUPER-CUP-SOURCES.md, which the lead bound this round to) stands on two independent publishers on two hosts, none a wiki, each with a line about the fact; an official page of a league, a federation, UEFA or a club counts, a press page too. A 'dated' row holds one edition's clubs, date, venue and ground; its date places a 'dated' row's night on the game's own calendar and is never printed. A 'cupRunnerUp' row holds a real cup final's losing club.",
+    "Round 1516: a 'euroWinners' row holds one season's Champions League and Europa League winners, the clubs a season one UEFA Super Cup is drawn from; the Champions League's is the one CM_FINAL_TABLES_2025_26 already holds, rechecked."
   ],
   "sources": {
     "FA-0604": { "family": "official", "publisher": "The FA", "url": "https://www.thefa.com/news/2026/jun/04/2026-fa-community-shield", "published": "2026-06-04", "literal": ["Further details confirmed for the 2026 FA Community Shield", "The 2025-26 Premier League champions, Arsenal, will face the 2026 Emirates FA Cup winners, Manchester City,", "in the English football season's traditional 'curtain raiser' on Sunday 16 August.", "Cardiff's Principality Stadium will host the match"] },
@@ -38,7 +39,10 @@
     "GOAL-0926": { "family": "press", "publisher": "Goal (Bour Han Amoussa)", "url": "https://www.goal.com/fr/news/psg-om-la-lfp-a-tranche-pour-le-lieu-du-trophee-des-champions-officiel/blt64088480adece0e7", "published": "2025-09-26", "literal": ["champion de France et vainqueur de la Coupe de France, à l'Olympique de Marseille, dauphin en Ligue 1"] },
     "LEGA-43": { "family": "official", "publisher": "Lega Serie A, Comunicato Ufficiale n. 43", "url": "https://images.legaseriea.it/image/private/fl_attachment/prd/cuauneg9k8wibh9h1thh.pdf", "published": "2026-10-01", "literal": ["La gara per l'aggiudicazione della Supercoppa Italiana 2026/2027", "si disputa a Milano, presso lo Stadio Giuseppe Meazza", "il giorno martedì 22 dicembre 2026 alle ore 21.00", "FC Internazionale Milano: Società Campione d'Italia", "SS Lazio : Società Finalista Coppa Italia", "essendo la Società vincitrice della Coppa Italia corrispondente a quella vincitrice il Campionato", "La Competizione prevede la disputa di 1 gara.", "le squadre devono disputare due tempi supplementari della durata di 15 minuti ciascuno"] },
     "INTER-1001": { "family": "official", "publisher": "FC Internazionale Milano", "url": "https://www.inter.it/en/news/supercoppa-italiana-inter-lazio-22-december-2026-san-siro", "published": "2026-10-01", "literal": ["Supercoppa Italiana: Inter vs. Lazio on 22 December at San Siro", "The competition will be decided over a single match.", "If the scores are level after the 90 minutes, two 15-minute periods of extra time will be played.", "will be played as a single match on 22 December 2026 at San Siro"] },
-    "FI-COPPA": { "family": "press", "publisher": "Football Italia", "url": "https://football-italia.net/coppa-final-lazio-0-2-inter-player-ratings/", "published": "undated", "literal": ["Coppa Italia Final Player Ratings: Lazio 0-2 Inter"] }
+    "FI-COPPA": { "family": "press", "publisher": "Football Italia", "url": "https://football-italia.net/coppa-final-lazio-0-2-inter-player-ratings/", "published": "undated", "literal": ["Coppa Italia Final Player Ratings: Lazio 0-2 Inter"] },
+    "UEFA-SC26": { "family": "official", "publisher": "UEFA", "url": "https://www.uefa.com/uefasupercup/news/02a4-2056c25ced6f-cc7862c2721f-1000--2026-uefa-super-cup-in-salzburg-all-you-need-to-know/", "published": "2026-08-12", "literal": ["The 2026 UEFA Super Cup will be held at Stadion Salzburg in Salzburg, Austria.", "UEFA Champions League winners Paris Saint-Germain will take on UEFA Europa League holders Aston Villa.", "The 2026 UEFA Super Cup will kick off at 21:00 CET on Wednesday 12 August 2026.", "No extra time will be played."] },
+    "PSG-0812": { "family": "official", "publisher": "Paris Saint-Germain", "url": "https://www.psg.fr/matchs/football-masculin/20262027/paris-vs-aston-villa-2026-08-12", "published": "undated", "literal": ["Mercredi 12 août 2026", "Coup d'envoi de la rencontre à 21h au Stadion Salzburg !", "le Paris Saint-Germain, double vainqueur de la Champions League en titre", "une équipe d'Aston Villa vainqueur sans contestation de l'Europa League la saison dernière"] },
+    "OEFB-SC26": { "family": "official", "publisher": "Österreichischer Fußball-Bund (ÖFB)", "url": "https://www.oefb.at/oefb/News/UEFA-Super-Cup-Salzburg-begruesst-Europas-Fussball-Elite", "published": "undated", "literal": ["zum UEFA Super Cup 2026 willkommen", "den Sieger der UEFA Champions League, Paris Saint-Germain, und den Gewinner der UEFA Europa League, Aston Villa", "den UEFA Super Cup in Salzburg ausrichten zu dürfen"] }
   },
   "rows": [
     {
@@ -154,6 +158,24 @@
       "usedBy": ["CM_ONE_OFF_CUP_RUNNERS_UP_2025_26.seriea"],
       "facts": {
         "club": { "value": "Lazio", "by": ["LEGA-43", "FI-COPPA"], "token": "Lazio", "note": "The 2025-26 Coppa Italia final, Lazio 0-2 Inter." }
+      }
+    },
+    {
+      "id": "uel-2025-26", "kind": "euroWinners", "season": "2025-26", "status": "verified", "rule": "twoPublishers",
+      "usedBy": ["CM_ONE_OFF_UEL_WINNER_2025_26", "CM_FINAL_TABLES_2025_26.holders"],
+      "facts": {
+        "uclWinner": { "value": "PSG", "by": ["UEFA-SC26", "OEFB-SC26", "PSG-0812"], "token": "Champions League winners Paris Saint-Germain|Sieger der UEFA Champions League, Paris Saint-Germain|double vainqueur de la Champions League", "note": "Round 1516 rechecked the 2025-26 Champions League winners the game already holds (CM_FINAL_TABLES_2025_26.holders, read 2026-09-15 on UEFA, ESPN and CBS Sports): Paris Saint-Germain, the game's PSG." },
+        "uelWinner": { "value": "Aston Villa", "by": ["UEFA-SC26", "OEFB-SC26", "PSG-0812"], "token": "Europa League holders Aston Villa|Gewinner der UEFA Europa League, Aston Villa|Aston Villa vainqueur", "note": "The 2025-26 Europa League winners, Aston Villa as the game spells them (a Premier League club of the game's world)." }
+      }
+    },
+    {
+      "id": "uefa-2026-e2026", "kind": "dated", "row": "uefa-2026", "year": 2026, "season": "2025-26", "status": "verified", "rule": "twoPublishers",
+      "usedBy": ["CM_ONE_OFF_EDITIONS.uefa-2026"],
+      "facts": {
+        "clubs": { "value": ["PSG", "Aston Villa"], "by": ["UEFA-SC26", "OEFB-SC26", "PSG-0812"], "token": "Aston Villa", "note": "The 2025-26 winners (row uel-2025-26), the Champions League's first as the row lists them. The game plays season one's edition between them." },
+        "date": { "value": "2026-08-12", "by": ["UEFA-SC26", "PSG-0812"], "token": "12 August 2026|12 août 2026", "note": "Wednesday 12 August 2026. The game plays it on its own free midweek nearest that date and prints no real date." },
+        "venue": { "value": "n", "by": ["UEFA-SC26", "PSG-0812", "OEFB-SC26"], "token": "Salzburg", "note": "Salzburg's ground in Austria, neither club's." },
+        "ground": { "value": "Stadion Salzburg in Austria", "by": ["UEFA-SC26", "PSG-0812"], "token": "Stadion Salzburg" }
       }
     }
   ]
