@@ -1,0 +1,4 @@
+Section 4: source scan
+   source scan: 18 findings
+  FAIL: /career: 21 unreadable runs: "1999-2000" 3.12 (needs 4.5) [101,103,110 on 22,25,34] | "1999-2000" 3.12 (needs 4.5) [101,103,110 on 22,25,34] | "2000-2001" 3.12 (needs 4.5) [101,103,110 on 22,2
+   1 routes measured: 21 unreadable runs, 0 unnamed controls, 0 unlabelled fields
