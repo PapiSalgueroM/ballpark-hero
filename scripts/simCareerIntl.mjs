@@ -34,8 +34,9 @@
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
+import { buildRealSaves } from './lib/realSaves.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_URL = ROOT.replaceAll('\\', '/');
@@ -56,6 +57,11 @@ const CONTROLS = {
   seasonyear: { section: '2', note: 'the call reads the season label itself, not the summer after it', edits: [{ file: NBA, from: 'NBA_INTL_CALENDAR.editionFor(nbaIntlSummerOf(line.year))', to: 'NBA_INTL_CALENDAR.editionFor(line.year)' }] },
   anyyear: { section: '4', note: 'every summer answers an edition', edits: [{ file: NBA, from: 'const e = NBA_INTL_CALENDAR.editionFor(nbaIntlSummerOf(line.year));', to: 'const e = NBA_INTL_CALENDAR.editionFor(nbaIntlSummerOf(line.year)) ?? NBA_INTL_CALENDAR.byId(`oly-${nbaIntlSummerOf(line.year)}`);' }] },
   lowbar: { section: '4', note: 'the bar is five points lower in the bind', edits: [{ file: NBA, from: 'line.ovr < INTL_CALL_UP_OVR', to: 'line.ovr < INTL_CALL_UP_OVR - 5' }] },
+  legacyreads: { section: '7', note: 'legacy counts his medals' },
+  restwrites: { section: '7', note: 'resting takes a point of health', edits: [{ file: NBA, from: 'answer: (c, choice) => answerCallUp(c as NbaIntlCareer, NBA_INTL_BIND, choice),', to: "answer: (c, choice) => { if (choice === 'rest') c.health -= 1; return answerCallUp(c as NbaIntlCareer, NBA_INTL_BIND, choice); }," }] },
+  norepair: { section: '8', note: 'the repair on load does nothing', edits: [{ file: INTL, from: 'export function repairIntlOnLoad(c: IntlCareer): boolean {', to: 'export function repairIntlOnLoad(c: IntlCareer): boolean {\n  if (c) return false;' }] },
+  nolift: { section: '5', note: 'he lifts the USA by nothing', edits: [{ file: NBA, from: 'liftOf: c => nbaIntlLift(lastLine(c)?.ovr ?? 0),', to: 'liftOf: () => 0,' }] },
+  nobronze: { section: '5', note: 'no bronze game is played', edits: [{ file: INTL, from: 'if (shape.bronze && semiLosers.length === 2) {', to: 'if (false && shape.bronze && semiLosers.length === 2) {' }] },
   mathrandom: { section: '6', note: 'the pot draw uses Math.random', edits: [{ file: INTL, from: 'const j = Math.floor(rng() * (i + 1));', to: 'const j = Math.floor(Math.random() * (i + 1));' }] },
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown control "${CONTROL}": use ${Object.keys(CONTROLS).join(', ')}`); process.exit(2); }
@@ -373,9 +379,11 @@ if (SECTIONS.has('2') || SECTIONS.has('4')) {
   for (const [era, eraId, firstSummer] of ERAS) {
     let careers = 0; let called = 0; let calls = 0; let summers = 0; let rated = 0; let hurtBlocked = 0; let oldBlocked = 0;
     const firsts = new Map();
+    const bests = [];
     for (let i = 0; i < FLEET; i += 1) {
       let mine = 0;
       let first = null;
+      let best = 0;
       const onSummer = c => {
         const line = c.seasons[c.seasons.length - 1];
         const summer = line.year + 1;
@@ -388,6 +396,7 @@ if (SECTIONS.has('2') || SECTIONS.has('4')) {
           if (c.health < ORACLE.health) hurtBlocked += 1;
           if (c.age > ORACLE.age) oldBlocked += 1;
         }
+        if (ed && !suspended && c.age <= ORACLE.age && c.health >= ORACLE.health) best = Math.max(best, line.ovr);
         const meets = !!ed && !c.retired && !suspended && line.ovr >= ORACLE.ovr && c.age <= ORACLE.age && c.health >= ORACLE.health;
         const call = nbaIntl.NBA_CAREER_INTL.pending(c);
         check('4', !!call === meets, `${era} ${i} summer ${summer}: ovr ${line.ovr} age ${c.age} health ${c.health} edition ${ed?.id ?? 'none'}, called ${!!call}, the oracle says ${meets}`);
@@ -398,6 +407,7 @@ if (SECTIONS.has('2') || SECTIONS.has('4')) {
       };
       drive.driveCareer(NBA_CAREER_SPORT, { key: `intl:${era}:${i}`, pos: POS[i % POS.length], arch: i, eraId, seasons: 30, onSummer });
       careers += 1;
+      bests.push(best);
       if (mine) called += 1;
       calls += mine;
       if (first !== null) firsts.set(first, (firsts.get(first) ?? 0) + 1);
@@ -405,8 +415,186 @@ if (SECTIONS.has('2') || SECTIONS.has('4')) {
     check('2', firsts.size === 1 && firsts.has(firstSummer), `${era}: first summers ${JSON.stringify([...firsts])}, expected ${firstSummer}`);
     check('4', called > 0, `${era}: nobody was ever called, so the section proves nothing`);
     console.log(`  ${era}: ${careers} careers, ${summers} summers, first summer ${[...firsts.keys()].join(' ')}; called at least once ${called} (${(100 * called / careers).toFixed(1)} percent), ${calls} calls (${(calls / careers).toFixed(2)} a career, ${(calls / Math.max(1, called)).toFixed(2)} a called career)`);
+    console.log(`  ${era}: share of careers ever called if the bar were 84 to 92: ${[84, 85, 86, 87, 88, 89, 90, 91, 92].map(b => `${b} ${(100 * bests.filter(x => x >= b).length / careers).toFixed(1)}`).join(", ")}`);
     console.log(`  ${era}: ${rated} edition summers rated ${ORACLE.ovr} or more; held back by health under ${ORACLE.health}: ${hurtBlocked} (${(100 * hurtBlocked / Math.max(1, rated)).toFixed(1)} percent), by age over ${ORACLE.age}: ${oldBlocked}`);
   }
+}
+
+/* ─── 5. the tournament, by rating tier ──────────────────────────────────── */
+/* TOURNEYS tournaments an edition kind a seed set (played, still to come,
+   projected), ten seed sets: sets 1 to 5 set the bands (BANDS below, read off
+   their printed rates on the runner with headroom), sets 6 to 10 are held out
+   and must sit inside them. A career at the call is a season line at a tier's
+   rating and nothing else, so the tier is the only thing that moves. */
+const TOURNEYS = Number(process.env.INTL_TOURNEYS || 2000);
+const TIERS = [[86, 88], [89, 91], [92, 94], [95, 99]];
+const KINDS = ['played', 'future', 'projected'];
+/* Gold and medal bands a tier, a kind (percent), from sets 1 to 5 (null: not set yet, the section only prints). */
+const BANDS = null;
+/* Gold must rise from tier to tier (the first three) by at least this many points, pooled over the held out sets. */
+const RISE = null;
+const tierCareer = (ovr, k) => ({
+  name: `band ${k}`, pos: 'SF', draftPick: 1, age: 28, health: 80, retired: false,
+  seasons: [{ year: 2000, ovr, ppg: 24, rpg: 6, apg: 5, teamResult: 'band', games: 70 }],
+});
+if (SECTIONS.has('5')) {
+  console.log(`section 5: the tournament, ${TOURNEYS} tournaments an edition kind, ten seed sets`);
+  const cal = nbaIntl.NBA_INTL_CALENDAR;
+  const editions = { played: cal.played(), future: [], projected: [] };
+  for (let y = 2025; y <= 2050; y += 1) { const e = cal.editionFor(y); if (e && e.kind !== 'played') editions[e.kind].push(e); }
+  const rates = {};
+  let invariants = 0;
+  for (let set = 1; set <= 10; set += 1) {
+    for (const kind of KINDS) {
+      const eds = editions[kind];
+      const tally = TIERS.map(() => ({ n: 0, gold: 0, medal: 0 }));
+      for (let k = 0; k < TOURNEYS; k += 1) {
+        const ti = k % TIERS.length;
+        const [lo, hi] = TIERS[ti];
+        const ovr = lo + (Math.floor(k / TIERS.length) % (hi - lo + 1));
+        const e = eds[k % eds.length];
+        const t = intl.runIntlTournament(e, 'USA', nbaIntl.NBA_INTL_BIND, tierCareer(ovr, k), keyed.keyedRng(`band:${set}:${kind}:${k}`));
+        if (!t) { check('5', false, `${e.id} played no tournament`); continue; }
+        const place = t.places.USA;
+        tally[ti].n += 1;
+        if (place === 'gold') tally[ti].gold += 1;
+        if (place === 'gold' || place === 'silver' || place === 'bronze') tally[ti].medal += 1;
+        /* the unit file's invariants, on every tournament */
+        invariants += 1;
+        const by = p => Object.entries(t.places).filter(([, x]) => x === p).map(([n]) => n);
+        const medals = [...by('gold'), ...by('silver'), ...by('bronze')];
+        if (e.play.bronze) check('5', medals.length === 3 && new Set(medals).size === 3 && by('fourth').length === 1, `${e.id} set ${set} #${k}: podium ${medals.join(',')}`);
+        check('5', t.champion === t.games.find(g => g.round === 'final')?.winner, `${e.id} #${k}: the champion is not the final's winner`);
+        let w = 0; let l = 0;
+        for (const gr of t.groups) for (const r of gr.table) { w += r.won; l += r.lost; }
+        check('5', w === l, `${e.id} #${k}: group wins ${w}, losses ${l}`);
+        for (const g of t.games) if (g.sa === g.sb || g.a === g.b || !(g.winner === g.a || g.winner === g.b)) check('5', false, `${e.id} #${k}: a level, self or unwon game`);
+      }
+      rates[`${set}:${kind}`] = tally.map(x => ({ gold: (100 * x.gold) / x.n, medal: (100 * x.medal) / x.n }));
+    }
+  }
+  const fmt = r => r.map(x => `${x.gold.toFixed(1)}/${x.medal.toFixed(1)}`).join('  ');
+  for (const kind of KINDS) {
+    console.log(`  ${kind} (gold/medal percent by tier ${TIERS.map(([a, b]) => `${a}-${b}`).join(', ')}):`);
+    for (let set = 1; set <= 10; set += 1) console.log(`    set ${set}${set > 5 ? ' (held out)' : ''}: ${fmt(rates[`${set}:${kind}`])}`);
+    const lo = TIERS.map((_, ti) => Math.min(...[1, 2, 3, 4, 5].map(s => rates[`${s}:${kind}`][ti].gold)));
+    const hi = TIERS.map((_, ti) => Math.max(...[1, 2, 3, 4, 5].map(s => rates[`${s}:${kind}`][ti].gold)));
+    console.log(`    sets 1 to 5 gold range by tier: ${lo.map((x, i) => `${x.toFixed(1)} to ${hi[i].toFixed(1)}`).join(', ')}`);
+    const held = TIERS.map((_, ti) => [6, 7, 8, 9, 10].reduce((s, x) => s + rates[`${x}:${kind}`][ti].gold, 0) / 5);
+    console.log(`    held out pooled gold by tier: ${held.map(x => x.toFixed(1)).join(', ')}; rises ${held.slice(1).map((x, i) => (x - held[i]).toFixed(1)).join(', ')}`);
+    if (BANDS) {
+      for (let s = 6; s <= 10; s += 1) TIERS.forEach((_, ti) => {
+        const [g0, g1, m0, m1] = BANDS[kind][ti];
+        const r = rates[`${s}:${kind}`][ti];
+        check('5', r.gold >= g0 && r.gold <= g1 && r.medal >= m0 && r.medal <= m1, `${kind} set ${s} tier ${TIERS[ti].join('-')}: gold ${r.gold.toFixed(1)} medal ${r.medal.toFixed(1)} outside ${g0}-${g1} / ${m0}-${m1}`);
+      });
+    }
+    if (RISE !== null) for (let ti = 1; ti < 3; ti += 1) check('5', held[ti] - held[ti - 1] >= RISE, `${kind}: gold rises ${(held[ti] - held[ti - 1]).toFixed(1)} from tier ${TIERS[ti - 1].join('-')} to ${TIERS[ti].join('-')}, under ${RISE}`);
+  }
+  console.log(`  ${invariants} tournaments held to the invariants`);
+}
+
+/* ─── 7. what must not move ──────────────────────────────────────────────── */
+/* The same FLEET careers an era, four ways: INTL_BASE's NBA binding and drive
+   (INTL_BASE_DIR, a worktree of the commit the branch started from, or of
+   origin/main's merge base after a merge), and this head with no policy,
+   always go and always rest. A career never called is byte identical to the
+   base; one that only rested differs by its intl key alone; one that went
+   differs only through its block and, after the first summer it came home
+   hurt, its health and what follows from it. The deal comes before the
+   answer: the first call's dealt cards are the same in the go and rest arms. */
+const BASE_DIR = process.env.INTL_BASE_DIR || '';
+const median = xs => { const s = [...xs].sort((a, b) => a - b); return s.length ? s[Math.floor(s.length / 2)] : 0; };
+if (SECTIONS.has('7')) {
+  console.log(`section 7: what must not move, ${FLEET} careers an era against ${BASE_DIR || '(no base)'}`);
+  if (!BASE_DIR || !fs.existsSync(path.join(BASE_DIR, 'src/lib/nbaCareerSport.ts'))) { console.error('section 7 needs INTL_BASE_DIR, a worktree of the base commit'); process.exit(2); }
+  const BENTRY = path.join(TMP, 'base-entry.mjs');
+  const BOUT = path.join(TMP, 'base-bundle.mjs');
+  const B = path.resolve(BASE_DIR).replaceAll('\\', '/');
+  fs.writeFileSync(BENTRY, `export { NBA_CAREER_SPORT } from '${B}/src/lib/nbaCareerSport.ts';\nexport * as drive from '${B}/src/test/helpers/usCareerDrive.ts';\n`);
+  await build({ entryPoints: [BENTRY], bundle: true, format: 'esm', platform: 'node', outfile: BOUT, logLevel: 'error', absWorkingDir: path.resolve(BASE_DIR), alias: { '@': path.join(path.resolve(BASE_DIR), 'src') }, nodePaths: [path.join(ROOT, 'node_modules')] });
+  const base = await import(pathToFileURL(BOUT).href);
+  const legacyOf = CONTROL === 'legacyreads'
+    ? c => { const l = NBA_CAREER_SPORT.legacyOf(c); return { ...l, score: l.score + intl.intlStatsOf(c.intl).medals }; }
+    : c => NBA_CAREER_SPORT.legacyOf(c);
+  const strip = json => { const c = JSON.parse(json); delete c.intl; return c; };
+  for (const [era, eraId] of ERAS) {
+    const n = { never: 0, rested: 0, went: 0, hurt: 0, unhurt: 0 };
+    const leg = { go: [], rest: [], goHof: 0, restHof: 0 };
+    for (let i = 0; i < FLEET; i += 1) {
+      const o = { key: `intl7:${era}:${i}`, pos: POS[i % POS.length], arch: i, eraId, seasons: 30 };
+      const baseJson = base.drive.driveCareer(base.NBA_CAREER_SPORT, o).json;
+      const none = drive.driveCareer(NBA_CAREER_SPORT, o);
+      const go = drive.driveCareer(NBA_CAREER_SPORT, { ...o, intl: 'go' });
+      const rest = drive.driveCareer(NBA_CAREER_SPORT, { ...o, intl: 'rest' });
+      check('7', none.json === baseJson, `${era} ${i}: with no answer the career differs from the base`);
+      if (!rest.intlLog.length) {
+        n.never += 1;
+        check('7', rest.json === baseJson && go.json === baseJson && !go.intlLog.length, `${era} ${i}: never called, yet the career moved`);
+        continue;
+      }
+      n.rested += 1;
+      check('7', same(strip(rest.json), JSON.parse(baseJson)), `${era} ${i}: resting moved something beside the intl block`);
+      check('7', go.intlLog.length > 0 && go.intlLog[0].dealt === rest.intlLog[0].dealt && go.intlLog[0].year === rest.intlLog[0].year, `${era} ${i}: the first call's deal differs between go and rest`);
+      const gc = JSON.parse(go.json);
+      const rows = gc.intl?.summers ?? [];
+      const firstHurt = rows.find(r => r.went && r.hurt);
+      n.went += 1;
+      if (!firstHurt) {
+        n.unhurt += 1;
+        check('7', same(strip(go.json), JSON.parse(baseJson)), `${era} ${i}: went and never came home hurt, yet more than the block moved`);
+      } else {
+        n.hurt += 1;
+        const bc = JSON.parse(baseJson);
+        const before = s => s.year < firstHurt.year;
+        check('7', same(gc.seasons.filter(before), bc.seasons.filter(before)), `${era} ${i}: the seasons before the first knock (${firstHurt.year}) moved`);
+      }
+      const rc = JSON.parse(rest.json);
+      const lg = legacyOf(gc); const lr = legacyOf(rc);
+      check('7', same(legacyOf(gc), legacyOf(strip(go.json))), `${era} ${i}: legacy reads the intl block`);
+      leg.go.push(lg.score); leg.rest.push(lr.score);
+      if (lg.hof) leg.goHof += 1;
+      if (lr.hof) leg.restHof += 1;
+    }
+    check('7', n.rested > 0 && n.never > 0 && n.unhurt > 0, `${era}: the fleet has no called, never called or unhurt career, so the section proves nothing`);
+    console.log(`  ${era}: never called ${n.never}, called ${n.rested} (went and never hurt ${n.unhurt}, hurt at least once ${n.hurt})`);
+    console.log(`  ${era}: called careers, legacy median always go ${median(leg.go)} vs always rest ${median(leg.rest)}; Hall share ${(100 * leg.goHof / Math.max(1, leg.go.length)).toFixed(1)} vs ${(100 * leg.restHof / Math.max(1, leg.rest.length)).toFixed(1)} percent (measured, never asserted)`);
+  }
+}
+
+/* ─── 8. saves ───────────────────────────────────────────────────────────── */
+/* Part A's board never calls the repair, so the repair is run directly: over
+   every NBA save scripts/lib/realSaves.mjs builds (each must come back byte
+   identical) and over a planted broken block, row and last (each dropped
+   alone, the rest of the career untouched). */
+if (SECTIONS.has('8')) {
+  console.log('section 8: saves');
+  const { fleet } = await buildRealSaves({ root: ROOT, tmpDir: path.join(TMP, 'real') });
+  const saves = (fleet['/nba-my-career'] ?? []).map(raw => JSON.parse(raw)).filter(s => s && s.c);
+  check('8', saves.length >= 2, `only ${saves.length} played NBA saves were built`);
+  for (const [k, s] of saves.entries()) {
+    const c = JSON.parse(JSON.stringify(s.c));
+    const was = JSON.stringify(c);
+    check('8', nbaIntl.NBA_CAREER_INTL.repairOnLoad(c) === false && JSON.stringify(c) === was, `real save ${k} moved on repair`);
+  }
+  const good = () => [
+    { year: 2004, edition: 'oly-2004', went: false },
+    { year: 2008, edition: 'oly-2008', went: true, age: 25, place: 'gold', games: 8, wins: 8, avg: { pts: 20, reb: 5, ast: 4 }, hurt: false },
+  ];
+  const plant = (s, intlBlock) => { const c = JSON.parse(JSON.stringify(s.c)); c.intl = intlBlock; return c; };
+  const sample = saves[0];
+  if (sample) {
+    const plain = JSON.stringify(sample.c);
+    const a = plant(sample, { v: 9, summers: 'broken' });
+    check('8', nbaIntl.NBA_CAREER_INTL.repairOnLoad(a) && !('intl' in a) && JSON.stringify(a) === plain, 'a broken block was not dropped alone');
+    const b = plant(sample, { v: 1, summers: [...good(), { year: 2006, edition: 'oly-2008', went: false }] });
+    check('8', nbaIntl.NBA_CAREER_INTL.repairOnLoad(b) && same(b.intl?.summers, good()), 'a broken row was not dropped alone');
+    const cOk = plant(sample, { v: 1, summers: good(), last: { v: 1, edition: 'oly-2008' } });
+    check('8', nbaIntl.NBA_CAREER_INTL.repairOnLoad(cOk) && same(cOk.intl, { v: 1, summers: good() }), 'a broken last was not dropped alone');
+    const d = plant(sample, { v: 1, summers: [{ year: 2035, edition: 'wc-2035', went: true, age: 30, place: 'gold', games: 8, wins: 8, avg: { pts: 20 }, hurt: false }] });
+    check('8', nbaIntl.NBA_CAREER_INTL.repairOnLoad(d) === false && d.intl.summers.length === 1, 'a projected summer was dropped');
+  }
+  console.log(`  ${saves.length} played NBA saves repaired byte identical; four planted blocks checked`);
 }
 
 /* ─── summary ────────────────────────────────────────────────────────────── */
