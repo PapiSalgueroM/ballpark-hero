@@ -1,0 +1,3 @@
+oldbands exit=1 61s | simCfbStaff: 1 failure(s)
+guide-rec-old exit=1 1s | simGuideHeadings: RED, 17 failures in section 1
+guide-rec-attrib exit=0 1s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
