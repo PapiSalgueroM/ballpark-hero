@@ -186,6 +186,8 @@
  *               (the engine forgets the desk in the playoffs)         edge moved: none)
  *   storyleak   an import of the bracket's view lib planted in memory section 6 (the boards' static chain: the press
  *               in frontOfficePostseason.ts                           half reaches a story file; the mount list allows it)
+ *   statsstory  an import of the NFL's story law planted in memory     section 6 (Round 1542: the board's static chain
+ *               in nflSeasonStats.ts                                  reaches the story through the season lines)
  *   inseason    loadGmPostseason loses its "not in the postseason"    section 12 (outside the postseason the load
  *               line                                                  is null); a sound block stays green
  *   byeplays    the NFL data's first Wild Card tie made seed 1        section 13 (no entry in a week he has the
@@ -337,6 +339,8 @@ const CONTROLS = {
   logplayoff: { section: 13, labels: ["deep equal the one press path's", 'his playoff record in the log is his record in nflRoundsOf'], patches: [{ file: NFL_POST, from: 'if (t.last) told.push(t.last);', to: '' }] },
   /* Round 1308's review: a control for each check that had none (s12.outside, s13.when and the desk's count) */
   storyleak: { section: 6, labels: ['import no story law'], patches: [], plant: { file: NFL_POST, text: "\nimport { gmBracketPlace } from '@/lib/gmBracketView';\n" } },
+  /* Round 1542: the season lines are a static import of the NFL board and read the drive arithmetic, never the story */
+  statsstory: { section: 6, labels: ['import no story law'], patches: [], plant: { file: 'src/lib/nflSeasonStats.ts', text: "\nimport { NFL_STORY_LAW } from './gameLaws/nfl';\n" } },
   inseason: { section: 12, labels: ['outside the postseason the load is null'], clean: ['comes back as it is'], patches: [{ file: POST, from: 'if (!inPostseason) return null;', to: '' }] },
   byeplays: { section: 13, labels: ['no log entry in a week he has the bye'], patches: [{ file: NFL_DATA, from: 'home: { seed: top + 1 }, away: { seed: top + 6 }', to: 'home: { seed: top }, away: { seed: top + 6 }' }] },
   deskless: { section: 11, labels: ['so the desk on checks hold something'], patches: [{ file: 'src/lib/frontOffice.ts', from: "const games = pairs.map(([h, a]) => simGame({ week: 0, home: h, away: a, homeScore: 0, awayScore: 0, winner: '' }, teams, rng, edges));", to: "const games = pairs.map(([h, a]) => simGame({ week: 0, home: h, away: a, homeScore: 0, awayScore: 0, winner: '' }, teams, rng));" }] },
