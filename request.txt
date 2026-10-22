@@ -1,0 +1,7 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+motion: node_modules/.bin/vitest run src/test/liveSimMotion.test.tsx --testTimeout=600000 --hookTimeout=120000
+reducedlift: LIVE_MOTION_CONTROL=reducedlift node scripts/simLiveSimMotion.mjs
+metresswap: LIVE_MOTION_CONTROL=metresswap node scripts/simLiveSimMotion.mjs
+longpass32: LIVE_MOTION_CONTROL=longpass32 node scripts/simLiveSimMotion.mjs
+feederholds: LIVE_MOTION_CONTROL=feederholds node scripts/simLiveSimMotion.mjs
+foulwait: LIVE_MOTION_CONTROL=foulwait node scripts/simLiveSimMotion.mjs

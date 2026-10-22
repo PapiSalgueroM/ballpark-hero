@@ -1,0 +1,7 @@
+reducedlift exit=1 6s | simLiveSimMotion: control reducedlift turned "the ball leaves the grass" red on an assertion (1 failed), as it must.
+metresswap exit=1 10s | simLiveSimMotion: control metresswap turned "R10: the ball travels" red on an assertion (1 failed), as it must.
+longpass32 exit=1 9s | simLiveSimMotion: control longpass32 turned "R10: the ball travels" red on an assertion (1 failed), as it must.
+feederholds exit=1 9s | simLiveSimMotion: control feederholds turned "R11" red on an assertion (1 failed), as it must.
+foulwait exit=1 9s | simLiveSimMotion: control foulwait turned "R11" red on an assertion (1 failed), as it must.
+motion exit=0 54s |    Duration  53.99s (transform 2.34s, setup 91ms, collect 3.05s, tests 49.75s, environment 344ms, prepare 190ms)
+tsc exit=0 61s | 
