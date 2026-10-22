@@ -1,0 +1,15 @@
+    "import { lateSummerWindowWeeks } from '@/lib/clubManagerCalendar';\n" +
+    '/* Round 478: the Champions League orders a level group table by its own\n' +
+    '   rule, not a league one. That module imports nothing but types from here,\n' +
+    '   so there is no cycle at all. */\n' +
+    "import { UCL_GROUP_LEDGER, countWaitingLevelRuns, noteUclGroupResult, sortedUclGroupTable, uclGroupFootnote } from '@/lib/clubManagerUclGroups';\n" +
+    "import type { UclGroupRule } from '@/lib/clubManagerUclGroups';\n" +
+    '/* Round 670 review: how a Champions League tie is read, shared with Soccer\n' +
+    '   Career. The module imports nothing. */\n' +
+    "import { uclTieOutcome } from '@/lib/uclTieRule';\n" +
+    '/* Round 781: the match cl'... 1088790 more characters,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

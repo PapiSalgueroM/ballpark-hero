@@ -1,0 +1,15 @@
+    '    const step = (3.6 - gap) * (Math.abs(along) <= 3.6 ? 1 : (6 - Math.abs(along)) / 2.4) * ease / 2;\n' +
+    '    now[i].x -= n.x * step; now[i].y -= n.y * step;\n' +
+    '    now[j].x += n.x * step; now[j].y += n.y * step;\n' +
+    '  }\n' +
+    '  return now;\n' +
+    '}\n' +
+    '\n' +
+    'export function between<T extends MotionPlayer>(from: MotionScene<T>, to: MotionScene<T>, t: number): MotionScene<T> {\n' +
+    '  const players = (before: T[], after: T[]) => passing(before, after, after.map(player => ({ ...player, ...point(before.find(p => p.key === player.key && p.name === player.name) ?? player, player, t) })), t);\n' +
+    '  // Round 1101: a scene that carries an arc is reached along a quadratic curve (a corne'... 12121 more characters,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

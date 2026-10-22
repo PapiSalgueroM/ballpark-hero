@@ -1,0 +1,15 @@
+    "const isChance = (e: { kind: string }) => e.kind === 'goal' || e.kind === 'shot' || e.kind === 'save';\n" +
+    "/** One line's key: what the banner effect remembers it by, and what the plan's start times are looked up by. */\n" +
+    "const lineKey = (e: { kind: string; side: string; minute: number; plus?: number; text: string }) => `${e.kind}:${e.side}:${e.minute}${e.plus ? `+${e.plus}` : ''}:${e.text}`;\n" +
+    '/* Round 1218 fix: a goal a review rules out is DRAWN before its review. The engine keeps no shot for it (it counts\n' +
+    "   for nothing), so the pitch is handed one line in its place, by the man the review names at the review's minute.\n" +
+    "   The plan stages it as a shot (what follows it is the defending side's restart, never a kick off) and the screen\n" +
+    '   plays it as a goal (the ball goes in). Nothing else here reads it: not the score, not the stats, not a card. */\n' +
+    'type RuledOutChance = LiveFeedEvent & { ruledOut: string };\n' +
+    '/** A review that takes a goal away. */\n' +
+    'const isRuledOut = (e: LiveFeedEvent): bool'... 122301 more characters,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

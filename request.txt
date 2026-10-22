@@ -1,0 +1,5 @@
+#!serial
+restart-head: CI=1 SIM_NETWORK=offline node scripts/simPitchRestartContinuity.mjs 2>&1 | tail -15; exit ${PIPESTATUS[0]}
+restart-base: git worktree add .rc-base 30b4b3ca >/dev/null 2>&1; cd .rc-base && CI=1 SIM_NETWORK=offline node scripts/simPitchRestartContinuity.mjs 2>&1 | tail -15; exit ${PIPESTATUS[0]}
+lineups-head: CI=1 SIM_NETWORK=offline node scripts/simManagerLiveLineups.mjs 2>&1 | tail -15; exit ${PIPESTATUS[0]}
+lineups-base: git worktree add .rc-base 30b4b3ca >/dev/null 2>&1; cd .rc-base && CI=1 SIM_NETWORK=offline node scripts/simManagerLiveLineups.mjs 2>&1 | tail -15; exit ${PIPESTATUS[0]}
