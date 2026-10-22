@@ -40,21 +40,16 @@ export interface Floater {
   /** Percent coordinates inside the pitch panel. */
   x: number;
   y: number;
-  /** Round 1543: milliseconds before it shows. Only a badge or milestone that
-   *  waits its turn behind others from the same tick has one. */
-  delay?: number;
 }
 
 let floaterSeq = 1;
 /** How long a floater is on the pitch: the page's 1.8 s rise plus a frame. */
 const FLOATER_LIFE_MS = 1900;
-/** Round 1543: the rows a tick's milestones and badges take, top to bottom.
- *  A floater is about 16 percent of the phone pitch tall, so these never
- *  touch, the top one clears the FULL TIME line at 12 and the bottom one ends
- *  above the badge line. A third and fourth wait one floater life and reuse
- *  them. Before this an old save that crossed three lowered rungs in its
- *  first tick drew them all on one spot for 1.9 s, unreadable. */
-const ANNOUNCE_ROWS = [30, 47];
+/** Round 1543: the one spot a milestone or badge floater takes (the
+ *  milestone's old height). It clears the FULL TIME line at 12 and ends above
+ *  the badge line even when that wraps to two lines on a phone, which a second
+ *  row lower down did not (the fix walk measured it 73 percent covered). */
+const ANNOUNCE_Y = 30;
 
 /** Round 530: the two loudest events, held for the page's cards. The label
  *  and the bonus are the engine's own event fields, printed as they came. */
@@ -139,18 +134,20 @@ export function useStadiumTycoon(getEdge?: () => number) {
      with it (see useOwnedTimeouts). */
   const later = useOwnedTimeouts();
 
-  const pushFloater = useCallback((text: string, kind: Floater['kind'], x?: number, y?: number, delay = 0) => {
+  /* Round 1543: `replaces` takes a floater off in the same update that puts
+     this one up, so the two are never on screen together. */
+  const pushFloater = useCallback((text: string, kind: Floater['kind'], x?: number, y?: number, replaces?: number) => {
     const f: Floater = {
       id: floaterSeq++,
       text,
       kind,
       x: x ?? 20 + Math.random() * 60,
       y: y ?? 30 + Math.random() * 40,
-      ...(delay > 0 ? { delay } : {}),
     };
-    setFloaters(cur => [...cur.slice(-14), f]);
+    setFloaters(cur => [...(replaces === undefined ? cur : cur.filter(g => g.id !== replaces)).slice(-14), f]);
     // Floaters clean themselves up after the animation finishes.
-    later(() => setFloaters(cur => cur.filter(g => g.id !== f.id)), FLOATER_LIFE_MS + delay);
+    later(() => setFloaters(cur => cur.filter(g => g.id !== f.id)), FLOATER_LIFE_MS);
+    return f.id;
   }, [later]);
 
   /* Round 439: away earnings settle from the wall clock the ground has not
@@ -218,22 +215,29 @@ export function useStadiumTycoon(getEdge?: () => number) {
     let last = performance.now();
     let acc = 0;
     let sinceSave = 0;
-    /* Round 1543: a milestone or badge takes the top free row, or, if every
-       row is still showing one, waits for the row that frees up first, so two
-       of them never share a spot, in one tick or in two close ones. */
-    const rowFreeAt = ANNOUNCE_ROWS.map(() => 0);
-    const announce = (text: string, x: number) => {
+    /* Round 1543: milestones and badges take turns on one spot. Each waits in
+       this queue until the one before it has had its full floater life, and
+       the frame that shows it takes the old one off in the same update, so no
+       frame ever draws two (reduced motion included, where the floater does
+       not fade and the sitewide rule zeroes any CSS delay). The frame loop
+       releases them, not a timer, so the queue runs on the loop's own clock.
+       Before this an old save that crossed three lowered rungs in its first
+       tick drew them all on one spot for 1.9 s, unreadable. */
+    const waiting: { text: string; x: number }[] = [];
+    let onSpot = { id: -1, until: 0 };
+    const release = () => {
       const now = performance.now();
-      let row = rowFreeAt.findIndex(t => t <= now);
-      if (row < 0) {
-        row = 0;
-        for (let r = 1; r < rowFreeAt.length; r += 1) if (rowFreeAt[r] < rowFreeAt[row]) row = r;
-      }
-      const start = Math.max(now, rowFreeAt[row]);
-      rowFreeAt[row] = start + FLOATER_LIFE_MS;
-      pushFloater(text, 'win', x, ANNOUNCE_ROWS[row], Math.round(start - now));
+      if (!waiting.length || now < onSpot.until) return;
+      const next = waiting.shift();
+      if (!next) return;
+      onSpot = { id: pushFloater(next.text, 'win', next.x, ANNOUNCE_Y, onSpot.id), until: now + FLOATER_LIFE_MS };
+    };
+    const announce = (text: string, x: number) => {
+      waiting.push({ text, x });
+      release();
     };
     const step = (t: number) => {
+      release();
       const dt = Math.min(2, (t - last) / 1000);
       last = t;
       acc += dt;
