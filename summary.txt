@@ -1,0 +1,16 @@
+ctl-notrim exit=1 34s | CONTROL notrim: 1 rewrite(s) applied, 17 failure(s) in section 6 (FIRED)
+vitest-board exit=0 30s |    Duration  29.52s (transform 4.13s, setup 486ms, collect 4.99s, tests 49.60s, environment 2.47s, prepare 794ms)
+vitest-shared exit=0 4s |    Duration  3.80s (transform 601ms, setup 451ms, collect 1.59s, tests 2.96s, environment 2.78s, prepare 640ms)
+tsc exit=0 104s | 
+deskhost exit=0 65s | simGmDeskHost: all 10 checks passed on seeds 1,2,3 (4 engines, 3 seasons a seed)
+nflgmdesk exit=0 31s | simNflGmDesk: all seven checks passed (10 seeds x 10 seasons)
+gmxp exit=0 1s | simGmXp: all checks passed
+sessionmarks exit=0 0s | simSessionMarks: green. Nine games count the day you play them, none of them invented a score or a streak day to do it.
+gmreload exit=0 10s | simGmReload: all green. Four front offices keep a finished season through a reload, and none of them can play a closed one again.
+fob-check exit=0 0s | controlFrontOfficeBoard: check passed. Every string of all 44 controls is in the board exactly once.
+guideheadings exit=0 2s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+sitesearch exit=0 4s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+rivalnames exit=0 22s | No rival product names found. 0 findings.
+anchors exit=0 64s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+quotes exit=0 29s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+career exit=0 228s | simGmCareer: all checks passed (nfl)

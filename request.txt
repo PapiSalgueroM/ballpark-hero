@@ -1,0 +1,16 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+career: node scripts/simGmCareer.mjs
+ctl-notrim: SIM_GM_CAREER_CONTROL=notrim SIM_GM_CAREER_ONLY=6 node scripts/simGmCareer.mjs
+vitest-board: node_modules/.bin/vitest run src/components/front-office/FrontOfficeOnePress.test.tsx src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx src/components/front-office-shared/FrontOfficeGmCareer.test.tsx src/test/frontOfficeSaveRecovery.test.tsx --testTimeout=600000 --hookTimeout=120000
+vitest-shared: node_modules/.bin/vitest run src/lib/gmDeskHost.test.ts src/components/front-office-shared/GmCareerDesk.test.tsx src/lib/gmXp.test.ts src/lib/gmSeat.test.ts --testTimeout=300000 --hookTimeout=120000
+deskhost: node scripts/simGmDeskHost.mjs
+nflgmdesk: node scripts/simNflGmDesk.mjs
+gmreload: node scripts/simGmReload.mjs
+gmxp: node scripts/simGmXp.mjs
+sessionmarks: node scripts/simSessionMarks.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+fob-check: node scripts/controlFrontOfficeBoard.mjs check
+guideheadings: node scripts/simGuideHeadings.mjs
+sitesearch: node scripts/simSiteSearch.mjs
+rivalnames: node scripts/simNoRivalNames.mjs
+quotes: node scripts/simNoInventedQuotes.mjs
