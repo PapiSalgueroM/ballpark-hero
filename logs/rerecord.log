@@ -1,0 +1,4 @@
+   90 plays through the real board, each in its own process, in 63 s
+   recorded 90 plays from 7a8750ba into scripts/data/nbaDraftBoardFixture.json
+simNbaDraftBoard: recorded.
+RERECORD FROM 7a8750ba: the committed fixture is byte identical

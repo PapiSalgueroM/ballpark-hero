@@ -1,0 +1,74 @@
+== w1: 390x844 reduced motion off, team tile 0
+NOTE w1: frame one settled=false headline opacity=0 (reduced=false)
+NOTE w1: heading before Continue: The 2027 Draft Lottery night first. Your club made the playoffs, so its own first is not in the lottery.
+NOTE w1: tiles 14, his tile(s): 
+NOTE w1: closing line: Your club is not in the lottery. Its own round one pick is 29th.
+NOTE w1: reload at the card: stage lottery, settled true, same tiles true
+NOTE w1: after Continue (scrollY 0 -> 0): You pick 29th and 59th. You are on the clock at 29.
+NOTE w1: run card: ON THE CLOCK Picks 1 to 28 are in. You are on the clock at 29. 20. ORL take Jalen Ashgrove F 67 21. GSW take Tyrese Oakhurst F 69 22. OKC take Tyrese Pemberton F 68 23. PHI take Dashawn Marchand G 66 24. CLE take Bryce Coltrane F 70 25. IND take Zaire Reeves F 66 26. BOS take Sekou Holiday G 68 27. TOR take Damon Quinn F 67 28. NYK take Omari Vance F 72
+NOTE w1: help panel: THE LEAGUE'S RULE Every club that misses the playoffs is in the lottery, and only those clubs. A lottery club that is not drawn picks after the drawn picks, worst record first. Every playoff club picks after every lottery club in round one, worst record first, whatever it did in the playoffs. Round two is every club by record, worst first. The lottery changes nothing there except the order among lottery clubs level on record. Level records are split by a random drawing. Level lottery clubs share their chances, and the winner of the drawing gets the odd combination. Clubs level on record pick in round two in the reverse of their round one order. The league used this rule from its 2019 draft to its 2026 draft. THIS GAME'S OWN The league switched to a new lottery from its 2027 draft. This game still runs this one for every draft it plays. Every prospect, every record and every draw here is 
+NOTE w1: the panel's own close button at y 1224 to 1268 of a 844 px view
+NOTE w1: picked "Emory Marchand G · age 21 71"; now stage clock: You pick 29th and 59th. You are on the clock at 59.
+NOTE w1: reload on the clock kept the slot and the board
+NOTE w1: staff button "Let your staff make your pick"
+NOTE w1: after the staff: stage over: You pick 29th and 59th. Every pick of the draft is in. That is your draft done. The offseason has run and the new season is set up on the hub. | done: ON THE CLOCK Your pick is in at 59. Pick 60 is in. Every pick of the draft is in. 59. DEN select Tyrese Holiday G · your pick 71 60. SAS take Damon Holiday G 68 Continue to the hub
+NOTE w1: after leaving: phase hub, season 2027 (was 2026), round 1
+== w1b: the same save's second season
+BAD w1b: never reached "Go to the draft"
+== w2: 1280x900 reduced motion off, team tile 29
+NOTE w2: frame one settled=false headline opacity=0 (reduced=false)
+NOTE w2: heading before Continue: The 2027 Draft Lottery night first. Your club goes in seeded 11th of 14. By the table it has a 1.8% chance at the first pick and 8.5% at a top four pick, and it picks no later than 14th.
+NOTE w2: tiles 14, his tile(s): 11 11 Bulls Seed 11 · Held · you
+NOTE w2: closing line: Your club's own pick stays 11th.
+NOTE w2: after Continue (scrollY 140 -> 140): You pick 11th and 42nd. You are on the clock at 11.
+NOTE w2: run card: ON THE CLOCK Picks 1 to 10 are in. You are on the clock at 11. 2. MIL take Malik Coltrane G 85 3. MIA take Malik Grissom G 82 4. DAL take Sekou Bellamy G 82 5. BKN take Omari Ashgrove F 79 6. UTA take Sekou Castleton G 81 7. WAS take Sekou Vance G 87 8. LAC take Vontae Holiday G 74 9. DET take Kobi Coltrane F 80 10. MEM take Isaiah Strother F 81
+NOTE w2: help panel: THE LEAGUE'S RULE Every club that misses the playoffs is in the lottery, and only those clubs. A lottery club that is not drawn picks after the drawn picks, worst record first. Every playoff club picks after every lottery club in round one, worst record first, whatever it did in the playoffs. Round two is every club by record, worst first. The lottery changes nothing there except the order among lottery clubs level on record. Level records are split by a random drawing. Level lottery clubs share their chances, and the winner of the drawing gets the odd combination. Clubs level on record pick in round two in the reverse of their round one order. The league used this rule from its 2019 draft to its 2026 draft. THIS GAME'S OWN The league switched to a new lottery from its 2027 draft. This game still runs this one for every draft it plays. Every prospect, every record and every draw here is 
+NOTE w2: the panel's own close button at y 1064 to 1108 of a 900 px view
+NOTE w2: picked "Naz Strother G · age 21 90"; now stage clock: You pick 11th and 42nd. You are on the clock at 42.
+NOTE w2: staff button "Let your staff make your pick"
+NOTE w2: after the staff: stage over: You pick 11th and 42nd. Every pick of the draft is in. That is your draft done. The offseason has run and the new season is set up on the hub. | done: ON THE CLOCK Your pick is in at 42. Picks 43 to 60 are in. Every pick of the draft is in. 42. CHI select Naz Kingman F · your pick 73 53. CHA take Devon Stallworth C 69 54. IND take Marcus Oakhurst G 66 55. MIN take Malik Kingman F 70 56. PHI take Vontae Jarreau F 66 57. TOR take Trey Quinn F 67 58. PHX take Cole Coltrane F 66 59. CLE take Kobi Danforth F 66 60. DEN take Naz Oakhurst F 68 Continue to the hub
+NOTE w2: after leaving: phase hub, season 2027 (was 2026), round 1
+== w3: 390x844 reduced motion on, team tile 12
+NOTE w3: frame one settled=false headline opacity=1 (reduced=true)
+BAD w3: reduced motion, but the card is not on its last frame at frame one
+NOTE w3: heading before Continue: The 2027 Draft Lottery night first. Your club goes in seeded 7th of 14. By the table it has a 8.2% chance at the first pick and 34.4% at a top four pick, and it picks no later than 11th.
+NOTE w3: tiles 14, his tile(s): 7 7 Grizzlies Seed 7 · Held · you
+NOTE w3: closing line: Your club's own pick stays 7th.
+NOTE w3: after Continue (scrollY 19 -> 19): You pick 7th and 36th. You are on the clock at 7.
+NOTE w3: run card: ON THE CLOCK Picks 1 to 6 are in. You are on the clock at 7. 1. WAS take Devon Beaudry G 85 2. MIL take Kobi Halverson G 83 3. BKN take Kobi Danforth F 85 4. LAL take Bryce Holiday F 84 5. DAL take Marquis Holiday F 82 6. MIA take Andre Maplewood F 82
+NOTE w3: help panel: THE LEAGUE'S RULE Every club that misses the playoffs is in the lottery, and only those clubs. A lottery club that is not drawn picks after the drawn picks, worst record first. Every playoff club picks after every lottery club in round one, worst record first, whatever it did in the playoffs. Round two is every club by record, worst first. The lottery changes nothing there except the order among lottery clubs level on record. Level records are split by a random drawing. Level lottery clubs share their chances, and the winner of the drawing gets the odd combination. Clubs level on record pick in round two in the reverse of their round one order. The league used this rule from its 2019 draft to its 2026 draft. THIS GAME'S OWN The league switched to a new lottery from its 2027 draft. This game still runs this one for every draft it plays. Every prospect, every record and every draw here is 
+NOTE w3: the panel's own close button at y 1058 to 1102 of a 844 px view
+NOTE w3: picked "Kobi Holiday F · age 20 81"; now stage clock: You pick 7th and 36th. You are on the clock at 36.
+NOTE w3: staff button "Let your staff make your pick"
+NOTE w3: after the staff: stage over: You pick 7th and 36th. Every pick of the draft is in. That is your draft done. The offseason has run and the new season is set up on the hub. | done: ON THE CLOCK Your pick is in at 36. Picks 37 to 60 are in. Every pick of the draft is in. 36. MEM select Sekou Stallworth F · your pick 73 53. NYK take Jaylen Pemberton F 66 54. CLE take Naz Vance F 69 55. PHI take Tarik Maplewood G 67 56. GSW take Emory Holiday F 66 57. OKC take Emory Grissom F 69 58. PHX take Vontae Reeves G 67 59. DEN take Naz Strother G 66 60. BOS take Isaiah Jarreau G 70 Continue to the hub
+NOTE w3: after leaving: phase hub, season 2027 (was 2026), round 1
+== w4: 1280x900 reduced motion on, team tile 20
+NOTE w4: frame one settled=false headline opacity=1 (reduced=true)
+BAD w4: reduced motion, but the card is not on its last frame at frame one
+NOTE w4: heading before Continue: The 2027 Draft Lottery night first. Your club made the playoffs, so its own first is not in the lottery.
+NOTE w4: tiles 14, his tile(s): 
+NOTE w4: closing line: Your club is not in the lottery. Its own round one pick is 27th.
+NOTE w4: after Continue (scrollY 0 -> 0): You pick 27th and 57th. You are on the clock at 27.
+NOTE w4: run card: ON THE CLOCK Picks 1 to 26 are in. You are on the clock at 27. 18. GSW take Bryce Kingman F 69 19. NOP take Tarik Vance G 73 20. CHA take Jalen Danforth G 70 21. MIN take Vontae Halverson F 66 22. HOU take Marcus Danforth C 68 23. PHX take Naz Beaudry G 67 24. PHI take Quentin Beaudry C 66 25. DEN take Naz Ridgeway F 66 26. BOS take Lamar Fairweather F 69
+NOTE w4: help panel: THE LEAGUE'S RULE Every club that misses the playoffs is in the lottery, and only those clubs. A lottery club that is not drawn picks after the drawn picks, worst record first. Every playoff club picks after every lottery club in round one, worst record first, whatever it did in the playoffs. Round two is every club by record, worst first. The lottery changes nothing there except the order among lottery clubs level on record. Level records are split by a random drawing. Level lottery clubs share their chances, and the winner of the drawing gets the odd combination. Clubs level on record pick in round two in the reverse of their round one order. The league used this rule from its 2019 draft to its 2026 draft. THIS GAME'S OWN The league switched to a new lottery from its 2027 draft. This game still runs this one for every draft it plays. Every prospect, every record and every draw here is 
+NOTE w4: the panel's own close button at y 1204 to 1248 of a 900 px view
+NOTE w4: picked "Damon Okonkwo G · age 21 72"; now stage clock: You pick 27th and 57th. You are on the clock at 57.
+NOTE w4: staff button "Let your staff make your pick"
+NOTE w4: after the staff: stage over: You pick 27th and 57th. Every pick of the draft is in. That is your draft done. The offseason has run and the new season is set up on the hub. | done: ON THE CLOCK Your pick is in at 57. Picks 58 to 60 are in. Every pick of the draft is in. 57. TOR select Quentin Maplewood G · your pick 72 58. SAS take Trey Castleton G 69 59. CLE take Keon Reeves F 66 60. NYK take Marquis Fairweather G 66 Continue to the hub
+NOTE w4: after leaving: phase hub, season 2027 (was 2026), round 1
+== o: saves made by the base build
+NOTE o-base: base saves taken: recap true, draft open true (phase draft), after one pick true
+NOTE o2: frame one settled=false headline opacity=0 (reduced=false)
+NOTE o2: heading before Continue: The 2027 Draft Lottery night first. Your club goes in seeded 4th of 14. By the table it has a 12.5% chance at the first pick and 48.1% at a top four pick, and it picks no later than 8th.
+NOTE o2: tiles 14, his tile(s): 7 7 Bucks Seed 4 · Down 3 · you
+NOTE o2: closing line: Your club's own pick lands 7th, down 3 places.
+NOTE o2: after Continue (scrollY 0 -> 0): You pick 7th and 34th. You are on the clock at 7.
+NOTE o2: run card: ON THE CLOCK Picks 1 to 6 are in. You are on the clock at 7. 1. MEM take Marquis Ridgeway F 87 2. LAL take Devon Holiday F 79 3. POR take Keon Halverson G 84 4. HOU take Vontae Isley G 80 5. BKN take Omari Ridgeway F 83 6. DAL take Amari Reeves G 77
+NOTE o2: staff button "Let your staff make your 2 picks"
+NOTE o2: after the staff: stage over: You pick 7th and 34th. Every pick of the draft is in. That is your draft done. The offseason has run and the new season is set up on the hub. | done: ON THE CLOCK Your pick is in at 7. Picks 8 to 33 are in. Your pick is in at 34. Picks 35 to 60 are in. Every pick of the draft is in. 7. MIL select Dashawn Pemberton F · your pick 80 34. MIL select Dashawn Beaudry C · your pick 72 54. MIN take Cole Isley F 69 55. TOR take Malik Grissom G 70 56. CLE take Devon Oakhurst F 70 57. NYK take Vontae Danforth F 67 58. DEN take Dashawn Ashgrove G 66 59. ATL take Dashawn St
+NOTE o2: after leaving: phase hub, season 2027 (was 2026), round 1
+NOTE o5: the base build on a head save on the clock: NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. The 2027 Draft You hold 2 picks. Scout grades carry error. Dashawn Pemberton F · age 19 80 Emory Marchand F · age 19 78 Bryce Kingman C · age 19 77 Lamar Kingman C · age 19 77 Jalen Oko
+NOTE o5: old draft done: phase hub, season 2027 (was 2026)
+NOTE o3: old draft done: phase hub, season 2027 (was 2026)
+NOTE o4: old draft done: phase hub, season 2027 (was 2026)
+review walk: 3 BAD line(s).

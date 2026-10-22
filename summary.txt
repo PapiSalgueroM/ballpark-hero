@@ -1,0 +1,9 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+rerecord exit=0 63s | RERECORD FROM 7a8750ba: the committed fixture is byte identical
+base-build exit=0 28s | base built at 3467527c8
+walk exit=1 241s | review walk: 3 BAD line(s).
+playNbaLotteryNight exit=0 42s | playNbaLotteryNight: green.
+pnl-nocard exit=1 49s | playNbaLotteryNight control nocard: FIRED, section A red, the others green.
+pnl-spoil exit=1 20s | playNbaLotteryNight control spoil: FIRED, section A red, the others green.
+pnl-jump exit=1 4s | playNbaLotteryNight control jump: FIRED, section J red, the others green.
+pnl-fold exit=1 20s | playNbaLotteryNight control fold: FIRED, section N red, the others green.
