@@ -1,0 +1,6 @@
+build exit=0 39s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simGuideHeadings exit=0 1s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+walk exit=0 41s | playSoccerMoraleLine: green
+walk-gate exit=1 28s | playSoccerMoraleLine: RED, 2 failed
+weight exit=0 28s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+simSiteSearch exit=0 2s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.

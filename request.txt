@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+#!serial
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+walk: node scripts/playSoccerMoraleLine.mjs
+walk-gate: PLAY_MORALE_LINE_CONTROL=gate node scripts/playSoccerMoraleLine.mjs
+weight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs

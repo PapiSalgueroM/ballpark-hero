@@ -1,0 +1,4 @@
+  FAIL 390 ban: no morale line before a season that is not played (found 1, Morale bar 9)
+  FAIL 1280 ban: no morale line before a season that is not played (found 1, Morale bar 9)
+78 checks (CONTROL gate: the ban save opened as a plain one)
+playSoccerMoraleLine: RED, 2 failed
