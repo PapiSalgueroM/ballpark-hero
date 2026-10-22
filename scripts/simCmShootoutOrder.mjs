@@ -257,7 +257,7 @@
 import './lib/seedRandom.mjs';
 import { buildSync } from 'esbuild';
 import { withoutWorldSeed } from './lib/cmWorldSeed1250.mjs';
-import { withoutMadeUpNations } from './lib/cmNoMadeUpNations1520.mjs';
+import { withoutMadeUpNations, BRIDGE_FILES_1520 } from './lib/cmNoMadeUpNations1520.mjs';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import os from 'node:os';
@@ -476,7 +476,9 @@ if (!WRITE_FIXTURE) {
        Round 1520 out of this copy, through that round's own bridge (scripts/lib/cmNoMadeUpNations1520.mjs, its engine
        edits, each anchor exactly once or it throws), the composition the bridge's header asks of every kit that
        compares this engine with one pinned from before the round. A row still different after both fails as before. */
-    try { out = withoutMadeUpNations(out.split('\r\n').join('\n'), 'src/lib/clubManager.ts'); }
+    /* The engine file goes by the bridge's own name for it (BRIDGE_FILES_1520[0]): the asks file's edits could not
+       stand in this copy, so a wrong name throws. */
+    try { out = withoutMadeUpNations(out.split('\r\n').join('\n'), BRIDGE_FILES_1520[0]); }
     catch (e) { abort(`Round 1520 arm: ${e.message}`); }
     fs.writeFileSync(leagueOutPath, out);
     leagueOutEnginePath = leagueOutPath;
