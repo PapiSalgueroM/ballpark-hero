@@ -113,6 +113,13 @@
  *   offers from a club whose roster rank is not its standings place   10697 / 11072 / 10931
  * The floors below still sit under these (minFirstCalls at 70 percent of the lowest set, 445). Control nofirstcall
  * fired with 638 failures in check 4 on seeds 1,2,3.
+ * MEASURED 2026-10-22 for Round 1533's fix pass (runner result r1533-fx1, head 509d7021): the first call's words
+ * are read against the caller's rank (the weakest only when every other club is stronger), and check 4 also fires
+ * from the weakest club itself on every league: 24 first calls on each of seeds 1,2,3 / 4,5,6 / 7,8,9 (four
+ * sports, three leagues, two tails: every one rang, from the next weakest), so minNearCalls is 16, 70 percent.
+ * The ladder already holds the case once in a while (nba seed 1: BKN is the weakest and MIL, 29th of 30, calls).
+ * Control onereason (the reason always "the weakest roster") fired with 64 failures in check 4 on seeds 1,2,3;
+ * nofirstcall fired with 639 there on the same head.
  */
 import './lib/seedRandom.mjs';
 import fs from 'node:fs';
@@ -485,7 +492,7 @@ const SPORTS = Object.keys(DRIVE);
 const PER3 = {
   minLeagues: 58, minRealSaves: 168, minOffers: 8400, minBadlyOffers: 1570, minClimb: 560, minClosed: 3300, minQuietOpen: 2300,
   minReach: 455, minVerdicts: 780, minLosing: 348, minFiredCloses: 348, minCases: 6100, minYoung: 7600, minPairs: 730000,
-  minLastCalls: 345, minPassClimb: 330, minRankApart: 7300, minFirstCalls: 445, minNearCalls: 1,
+  minLastCalls: 345, minPassClimb: 330, minRankApart: 7300, minFirstCalls: 445, minNearCalls: 16,
 };
 const FIXED = { minFeedsWithOffers: 23, minMen: 2290, minCuts: 200 };
 const T = { ...FIXED, ...Object.fromEntries(Object.entries(PER3).map(([k, v]) => [k, Math.floor((v * SEEDS.length) / 3)])) };
@@ -507,6 +514,7 @@ if (!SEEDS.length || SEEDS.some(s => !Number.isInteger(s))) { console.error(`SIM
      openpromise 3310 in 10    halfword 1 in 10          allfired 12 in 10         tileclimb 4121 in 10
      climbword 1284 in 10      longtile 4145 in 10       clubvalue 552 in 10       closedsit 4946 in 10
      fewseasons 504 in 10
+     onereason 64 in 4 (Round 1533's fix pass, r1533-fx1)
    badlyceiling did NOT fire on the full leagues alone (0 failures in 2,260 offers after a badly season): the
    engine's own ceiling hides the rule there, which is why check 4 also reads six real clubs at a time
    (653 / 651 / 653 offers in 216 feeds on the three seed sets, none from the top tier). */
