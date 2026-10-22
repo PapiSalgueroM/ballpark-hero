@@ -1,0 +1,16 @@
+{
+  "first-390x844": {
+    "badgeLine": "🏅 Badge earned: 📅 25 matches played, +2% income forever",
+    "floaters": [
+      {
+        "t": "📅 25 matches played: +2% forever",
+        "x": 88,
+        "y": 495,
+        "w": 327,
+        "h": 29,
+        "outRight": 41
+      }
+    ],
+    "overlaps": []
+  }
+}

@@ -1,0 +1,462 @@
+{
+  "first-390x844": {
+    "badgeLine": "🏅 Badge earned: 📅 25 matches played, +2% income forever",
+    "floaters": [
+      {
+        "t": "🏁 35 wins +$30.0K",
+        "x": 77,
+        "y": 485,
+        "w": 184,
+        "h": 29,
+        "outRight": -113
+      },
+      {
+        "t": "🏁 35 career wins: +2% forever",
+        "x": 88,
+        "y": 495,
+        "w": 289,
+        "h": 29,
+        "outRight": 4
+      },
+      {
+        "t": "⚽ 75 goals: +2% forever",
+        "x": 90,
+        "y": 495,
+        "w": 229,
+        "h": 29,
+        "outRight": -54
+      },
+      {
+        "t": "💵 $10K lifetime: +2% forever",
+        "x": 89,
+        "y": 495,
+        "w": 275,
+        "h": 29,
+        "outRight": -9
+      },
+      {
+        "t": "📅 25 matches played: +2% forever",
+        "x": 88,
+        "y": 495,
+        "w": 327,
+        "h": 29,
+        "outRight": 41
+      }
+    ],
+    "overlaps": [
+      "\"🏁 35 wins +$30.0K\" over \"🏁 35 career wins: +2% forever\" (62 percent)",
+      "\"🏁 35 wins +$30.0K\" over \"⚽ 75 goals: +2% forever\" (61 percent)",
+      "\"🏁 35 wins +$30.0K\" over \"💵 $10K lifetime: +2% forever\" (61 percent)",
+      "\"🏁 35 wins +$30.0K\" over \"📅 25 matches played: +2% forever\" (62 percent)",
+      "\"🏁 35 career wins: +2% forever\" over \"⚽ 75 goals: +2% forever\" (100 percent)",
+      "\"🏁 35 career wins: +2% forever\" over \"💵 $10K lifetime: +2% forever\" (100 percent)",
+      "\"🏁 35 career wins: +2% forever\" over \"📅 25 matches played: +2% forever\" (100 percent)",
+      "\"⚽ 75 goals: +2% forever\" over \"💵 $10K lifetime: +2% forever\" (100 percent)",
+      "\"⚽ 75 goals: +2% forever\" over \"📅 25 matches played: +2% forever\" (100 percent)",
+      "\"💵 $10K lifetime: +2% forever\" over \"📅 25 matches played: +2% forever\" (100 percent)"
+    ],
+    "ach": [
+      "aw1",
+      "aw10",
+      "ag25",
+      "ag100"
+    ],
+    "claimed": [
+      "win1",
+      "win10",
+      "goals25"
+    ],
+    "money": 63.08049999999989,
+    "scroll": "0 to 0",
+    "badges": [
+      {
+        "t": "8 career wins",
+        "cut": false
+      },
+      {
+        "t": "35 career wins",
+        "cut": false
+      },
+      {
+        "t": "125 career wins",
+        "cut": false
+      },
+      {
+        "t": "300 career wins",
+        "cut": false
+      },
+      {
+        "t": "10 goals",
+        "cut": false
+      },
+      {
+        "t": "30 goals",
+        "cut": false
+      },
+      {
+        "t": "75 goals",
+        "cut": false
+      },
+      {
+        "t": "250 goals",
+        "cut": false
+      },
+      {
+        "t": "Five straight wins",
+        "cut": false
+      },
+      {
+        "t": "Ten straight wins",
+        "cut": false
+      }
+    ],
+    "overflow": 0
+  },
+  "first-390x844-reduced": {
+    "badgeLine": "🏅 Badge earned: 📅 25 matches played, +2% income forever",
+    "floaters": [
+      {
+        "t": "🏁 35 wins +$30.0K",
+        "x": 81,
+        "y": 493,
+        "w": 175,
+        "h": 28,
+        "outRight": -117
+      },
+      {
+        "t": "🏁 35 career wins: +2% forever",
+        "x": 95,
+        "y": 504,
+        "w": 275,
+        "h": 28,
+        "outRight": -3
+      },
+      {
+        "t": "⚽ 75 goals: +2% forever",
+        "x": 95,
+        "y": 504,
+        "w": 218,
+        "h": 28,
+        "outRight": -60
+      },
+      {
+        "t": "💵 $10K lifetime: +2% forever",
+        "x": 95,
+        "y": 504,
+        "w": 262,
+        "h": 28,
+        "outRight": -16
+      },
+      {
+        "t": "📅 25 matches played: +2% forever",
+        "x": 95,
+        "y": 504,
+        "w": 311,
+        "h": 28,
+        "outRight": 33
+      }
+    ],
+    "overlaps": [
+      "\"🏁 35 wins +$30.0K\" over \"🏁 35 career wins: +2% forever\" (56 percent)",
+      "\"🏁 35 wins +$30.0K\" over \"⚽ 75 goals: +2% forever\" (56 percent)",
+      "\"🏁 35 wins +$30.0K\" over \"💵 $10K lifetime: +2% forever\" (56 percent)",
+      "\"🏁 35 wins +$30.0K\" over \"📅 25 matches played: +2% forever\" (56 percent)",
+      "\"🏁 35 career wins: +2% forever\" over \"⚽ 75 goals: +2% forever\" (100 percent)",
+      "\"🏁 35 career wins: +2% forever\" over \"💵 $10K lifetime: +2% forever\" (100 percent)",
+      "\"🏁 35 career wins: +2% forever\" over \"📅 25 matches played: +2% forever\" (100 percent)",
+      "\"⚽ 75 goals: +2% forever\" over \"💵 $10K lifetime: +2% forever\" (100 percent)",
+      "\"⚽ 75 goals: +2% forever\" over \"📅 25 matches played: +2% forever\" (100 percent)",
+      "\"💵 $10K lifetime: +2% forever\" over \"📅 25 matches played: +2% forever\" (100 percent)"
+    ],
+    "ach": [
+      "aw1",
+      "aw10",
+      "ag25",
+      "ag100"
+    ],
+    "claimed": [
+      "win1",
+      "win10",
+      "goals25"
+    ],
+    "money": 62.91804999999989,
+    "scroll": "0 to 0",
+    "badges": [
+      {
+        "t": "8 career wins",
+        "cut": false
+      },
+      {
+        "t": "35 career wins",
+        "cut": false
+      },
+      {
+        "t": "125 career wins",
+        "cut": false
+      },
+      {
+        "t": "300 career wins",
+        "cut": false
+      },
+      {
+        "t": "10 goals",
+        "cut": false
+      },
+      {
+        "t": "30 goals",
+        "cut": false
+      },
+      {
+        "t": "75 goals",
+        "cut": false
+      },
+      {
+        "t": "250 goals",
+        "cut": false
+      },
+      {
+        "t": "Five straight wins",
+        "cut": false
+      },
+      {
+        "t": "Ten straight wins",
+        "cut": false
+      }
+    ],
+    "overflow": 0
+  },
+  "first-1280x900": {
+    "badgeLine": "🏅 Badge earned: 📅 25 matches played, +2% income forever",
+    "floaters": [
+      {
+        "t": "🏁 35 wins +$30.0K",
+        "x": 431,
+        "y": 546,
+        "w": 184,
+        "h": 30,
+        "outRight": -343
+      },
+      {
+        "t": "🏁 35 career wins: +2% forever",
+        "x": 454,
+        "y": 560,
+        "w": 290,
+        "h": 30,
+        "outRight": -215
+      },
+      {
+        "t": "⚽ 75 goals: +2% forever",
+        "x": 455,
+        "y": 560,
+        "w": 230,
+        "h": 30,
+        "outRight": -274
+      },
+      {
+        "t": "💵 $10K lifetime: +2% forever",
+        "x": 454,
+        "y": 560,
+        "w": 276,
+        "h": 30,
+        "outRight": -229
+      },
+      {
+        "t": "📅 25 matches played: +2% forever",
+        "x": 453,
+        "y": 560,
+        "w": 328,
+        "h": 30,
+        "outRight": -178
+      }
+    ],
+    "overlaps": [
+      "\"🏁 35 wins +$30.0K\" over \"🏁 35 career wins: +2% forever\" (47 percent)",
+      "\"🏁 35 wins +$30.0K\" over \"⚽ 75 goals: +2% forever\" (46 percent)",
+      "\"🏁 35 wins +$30.0K\" over \"💵 $10K lifetime: +2% forever\" (47 percent)",
+      "\"🏁 35 wins +$30.0K\" over \"📅 25 matches played: +2% forever\" (47 percent)",
+      "\"🏁 35 career wins: +2% forever\" over \"⚽ 75 goals: +2% forever\" (100 percent)",
+      "\"🏁 35 career wins: +2% forever\" over \"💵 $10K lifetime: +2% forever\" (100 percent)",
+      "\"🏁 35 career wins: +2% forever\" over \"📅 25 matches played: +2% forever\" (100 percent)",
+      "\"⚽ 75 goals: +2% forever\" over \"💵 $10K lifetime: +2% forever\" (100 percent)",
+      "\"⚽ 75 goals: +2% forever\" over \"📅 25 matches played: +2% forever\" (100 percent)",
+      "\"💵 $10K lifetime: +2% forever\" over \"📅 25 matches played: +2% forever\" (100 percent)"
+    ],
+    "ach": [
+      "aw1",
+      "aw10",
+      "ag25",
+      "ag100"
+    ],
+    "claimed": [
+      "win1",
+      "win10",
+      "goals25"
+    ],
+    "money": 63.00894999999981,
+    "scroll": "0 to 0",
+    "badges": [
+      {
+        "t": "8 career wins",
+        "cut": false
+      },
+      {
+        "t": "35 career wins",
+        "cut": false
+      },
+      {
+        "t": "125 career wins",
+        "cut": false
+      },
+      {
+        "t": "300 career wins",
+        "cut": false
+      },
+      {
+        "t": "10 goals",
+        "cut": false
+      },
+      {
+        "t": "30 goals",
+        "cut": false
+      },
+      {
+        "t": "75 goals",
+        "cut": false
+      },
+      {
+        "t": "250 goals",
+        "cut": false
+      },
+      {
+        "t": "Five straight wins",
+        "cut": false
+      },
+      {
+        "t": "Ten straight wins",
+        "cut": false
+      }
+    ],
+    "overflow": 0
+  },
+  "first-1280x900-reduced": {
+    "badgeLine": "🏅 Badge earned: 📅 25 matches played, +2% income forever",
+    "floaters": [
+      {
+        "t": "🏁 35 wins +$30.0K",
+        "x": 436,
+        "y": 552,
+        "w": 175,
+        "h": 28,
+        "outRight": -348
+      },
+      {
+        "t": "🏁 35 career wins: +2% forever",
+        "x": 461,
+        "y": 565,
+        "w": 275,
+        "h": 28,
+        "outRight": -223
+      },
+      {
+        "t": "⚽ 75 goals: +2% forever",
+        "x": 461,
+        "y": 565,
+        "w": 218,
+        "h": 28,
+        "outRight": -280
+      },
+      {
+        "t": "💵 $10K lifetime: +2% forever",
+        "x": 461,
+        "y": 565,
+        "w": 262,
+        "h": 28,
+        "outRight": -236
+      },
+      {
+        "t": "📅 25 matches played: +2% forever",
+        "x": 461,
+        "y": 565,
+        "w": 311,
+        "h": 28,
+        "outRight": -187
+      }
+    ],
+    "overlaps": [
+      "\"🏁 35 wins +$30.0K\" over \"🏁 35 career wins: +2% forever\" (46 percent)",
+      "\"🏁 35 wins +$30.0K\" over \"⚽ 75 goals: +2% forever\" (46 percent)",
+      "\"🏁 35 wins +$30.0K\" over \"💵 $10K lifetime: +2% forever\" (46 percent)",
+      "\"🏁 35 wins +$30.0K\" over \"📅 25 matches played: +2% forever\" (46 percent)",
+      "\"🏁 35 career wins: +2% forever\" over \"⚽ 75 goals: +2% forever\" (100 percent)",
+      "\"🏁 35 career wins: +2% forever\" over \"💵 $10K lifetime: +2% forever\" (100 percent)",
+      "\"🏁 35 career wins: +2% forever\" over \"📅 25 matches played: +2% forever\" (100 percent)",
+      "\"⚽ 75 goals: +2% forever\" over \"💵 $10K lifetime: +2% forever\" (100 percent)",
+      "\"⚽ 75 goals: +2% forever\" over \"📅 25 matches played: +2% forever\" (100 percent)",
+      "\"💵 $10K lifetime: +2% forever\" over \"📅 25 matches played: +2% forever\" (100 percent)"
+    ],
+    "ach": [
+      "aw1",
+      "aw10",
+      "ag25",
+      "ag100"
+    ],
+    "claimed": [
+      "win1",
+      "win10",
+      "goals25"
+    ],
+    "money": 62.91220000000007,
+    "scroll": "0 to 0",
+    "badges": [
+      {
+        "t": "8 career wins",
+        "cut": false
+      },
+      {
+        "t": "35 career wins",
+        "cut": false
+      },
+      {
+        "t": "125 career wins",
+        "cut": false
+      },
+      {
+        "t": "300 career wins",
+        "cut": false
+      },
+      {
+        "t": "10 goals",
+        "cut": false
+      },
+      {
+        "t": "30 goals",
+        "cut": false
+      },
+      {
+        "t": "75 goals",
+        "cut": false
+      },
+      {
+        "t": "250 goals",
+        "cut": false
+      },
+      {
+        "t": "Five straight wins",
+        "cut": false
+      },
+      {
+        "t": "Ten straight wins",
+        "cut": false
+      }
+    ],
+    "overflow": 0
+  },
+  "trip-390x844": {
+    "card": "🏟️ While you were away The turnstiles kept spinning at 50% speed. +$17.5K Your club kept playing while you were away, with no goal or win bonuses: D D D D Milestones reached on the road: +$30.0K You are 5th of 6, and the final matchday is waiting for you. Back to work",
+    "milestoneLine": "Milestones reached on the road: +$30.0K"
+  },
+  "trip-1280x900": {
+    "card": "🏟️ While you were away The turnstiles kept spinning at 50% speed. +$17.5K Your club kept playing while you were away, with no goal or win bonuses: D D D D Milestones reached on the road: +$30.0K You are 5th of 6, and the final matchday is waiting for you. Back to work",
+    "milestoneLine": "Milestones reached on the road: +$30.0K"
+  }
+}

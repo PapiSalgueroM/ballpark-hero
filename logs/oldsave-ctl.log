@@ -1,0 +1,47 @@
+Preparing worktree (detached HEAD bac65fb0b)
+HEAD is now at bac65fb0b Merge remote-tracking branch 'origin/main' into r1543-tycoon-badge-ladder
+oldsave1543: 1365 saves made by the base (120 bot, 1224 boundary, 9 corpus, 12 histories), 1365 load on both
+  loads byte identical 1365 of 1365; no lowered rung reached 223, of them byte identical after the first tick 223
+  lowered rungs granted on the first tick 1142; extra toasts per save {"1":350,"2":401,"3":250,"4":89,"5":52}; bot fleet max 4 toasts, max one off pay 30000 (0.9 s of income)
+  rollback to the base keeps every id 1365 of 1365; one away matchday pays extra milestone money on 38 saves, max 30000
+  FAIL: pace s1 m15: extra ids ag25 goals25, expected none
+  FAIL: pace s1 m60: extra ids ag100, expected none
+  FAIL: pace s1 m120: extra ids ag500 aw50 win50, expected none
+  FAIL: pace s1 m240: extra ids ag500, expected none
+  FAIL: pace s2 m15: extra ids ag25 goals25, expected none
+  FAIL: pace s2 m60: extra ids ag100, expected none
+  FAIL: pace s2 m120: extra ids ag100 ag500 aw50 win50, expected none
+  FAIL: pace s2 m240: extra ids ag500, expected none
+  FAIL: pace s3 m15: extra ids ag25 goals25, expected none
+  FAIL: pace s3 m30: extra ids ag100, expected none
+  FAIL: pace s3 m60: extra ids ag100, expected none
+  FAIL: pace s3 m120: extra ids ag500 aw50 win50, expected none
+  FAIL: pace s3 m240: extra ids ag500, expected none
+  FAIL: pace s4 m15: extra ids ag25 goals25, expected none
+  FAIL: pace s4 m60: extra ids ag100, expected none
+  FAIL: pace s4 m120: extra ids ag100 ag500 aw50 win50, expected none
+  FAIL: pace s4 m240: extra ids ag500, expected none
+  FAIL: pace s5 m15: extra ids ag25 goals25, expected none
+  FAIL: pace s5 m30: extra ids ag100, expected none
+  FAIL: pace s5 m60: extra ids ag100, expected none
+  FAIL: pace s5 m120: extra ids ag500, expected none
+  FAIL: pace s5 m240: extra ids ag500, expected none
+  FAIL: pace s6 m15: extra ids ag25 goals25, expected none
+  FAIL: pace s6 m30: extra ids ag100, expected none
+  FAIL: pace s6 m60: extra ids ag100, expected none
+  FAIL: pace s6 m120: extra ids ag500 aw50 win50, expected none
+  FAIL: pace s6 m240: extra ids ag500, expected none
+  FAIL: pace s7 m15: extra ids ag25 goals25, expected none
+  FAIL: pace s7 m30: extra ids ag100, expected none
+  FAIL: pace s7 m60: extra ids ag100 ag500, expected none
+  FAIL: pace s7 m120: extra ids ag500 aw50 win50, expected none
+  FAIL: pace s7 m240: extra ids ag500, expected none
+  FAIL: pace s8 m15: extra ids ag25 goals25, expected none
+  FAIL: pace s8 m30: extra ids ag100, expected none
+  FAIL: pace s8 m60: extra ids ag100, expected none
+  FAIL: pace s8 m120: extra ids ag500 aw50 win50, expected none
+  FAIL: pace s8 m240: extra ids ag500, expected none
+  FAIL: pace s9 m15: extra ids ag25 goals25, expected none
+  FAIL: pace s9 m30: extra ids ag25 aw10 goals25 win10, expected none
+  FAIL: pace s9 m60: extra ids ag100, expected none
+oldsave1543: 1270 failed

@@ -1,0 +1,48 @@
+Preparing worktree (detached HEAD bac65fb0b)
+Updating files:  83% (4316/5192)Updating files:  84% (4362/5192)Updating files:  85% (4414/5192)Updating files:  86% (4466/5192)Updating files:  87% (4518/5192)Updating files:  88% (4569/5192)Updating files:  89% (4621/5192)Updating files:  90% (4673/5192)Updating files:  91% (4725/5192)Updating files:  92% (4777/5192)Updating files:  93% (4829/5192)Updating files:  94% (4881/5192)Updating files:  95% (4933/5192)Updating files:  96% (4985/5192)Updating files:  97% (5037/5192)Updating files:  98% (5089/5192)Updating files:  99% (5141/5192)Updating files: 100% (5192/5192)Updating files: 100% (5192/5192), done.
+HEAD is now at bac65fb0b Merge remote-tracking branch 'origin/main' into r1543-tycoon-badge-ladder
+oldsave1543: 1365 saves made by the base (120 bot, 1224 boundary, 9 corpus, 12 histories), 1365 load on both
+  loads byte identical 1365 of 1365; no lowered rung reached 223, of them byte identical after the first tick 223
+  lowered rungs granted on the first tick 1142; extra toasts per save {"1":350,"2":401,"3":250,"4":89,"5":52}; bot fleet max 4 toasts, max one off pay 30000 (0.9 s of income)
+  rollback to the base keeps every id 1365 of 1365; one away matchday pays extra milestone money on 38 saves, max 30000
+  FAIL: edge g0 w35 k0: extra ids am10k aw50 win50, expected aw50 win50
+  FAIL: edge g0 w35 k0: a non ladder id appeared: am10k aw50 win50
+  FAIL: edge g0 w35 k4: extra ids am10k aw50 win50, expected aw50 win50
+  FAIL: edge g0 w35 k4: a non ladder id appeared: am10k aw50 win50
+  FAIL: edge g0 w35 k5: extra ids am10k aw50 win50, expected aw50 win50
+  FAIL: edge g0 w35 k5: a non ladder id appeared: am10k aw50 win50
+  FAIL: edge g0 w35 k10: extra ids am10k aw50 win50, expected aw50 win50
+  FAIL: edge g0 w35 k10: a non ladder id appeared: am10k aw50 win50
+  FAIL: edge g0 w49 k0: extra ids am10k aw50 win50, expected aw50 win50
+  FAIL: edge g0 w49 k0: a non ladder id appeared: am10k aw50 win50
+  FAIL: edge g0 w49 k4: extra ids am10k aw50 win50, expected aw50 win50
+  FAIL: edge g0 w49 k4: a non ladder id appeared: am10k aw50 win50
+  FAIL: edge g0 w49 k5: extra ids am10k aw50 win50, expected aw50 win50
+  FAIL: edge g0 w49 k5: a non ladder id appeared: am10k aw50 win50
+  FAIL: edge g0 w49 k10: extra ids am10k aw50 win50, expected aw50 win50
+  FAIL: edge g0 w49 k10: a non ladder id appeared: am10k aw50 win50
+  FAIL: edge g9 w35 k0: extra ids am10k aw50 win50, expected aw50 win50
+  FAIL: edge g9 w35 k0: a non ladder id appeared: am10k aw50 win50
+  FAIL: edge g9 w35 k4: extra ids am10k aw50 win50, expected aw50 win50
+  FAIL: edge g9 w35 k4: a non ladder id appeared: am10k aw50 win50
+  FAIL: edge g9 w35 k5: extra ids am10k aw50 win50, expected aw50 win50
+  FAIL: edge g9 w35 k5: a non ladder id appeared: am10k aw50 win50
+  FAIL: edge g9 w35 k10: extra ids am10k aw50 win50, expected aw50 win50
+  FAIL: edge g9 w35 k10: a non ladder id appeared: am10k aw50 win50
+  FAIL: edge g9 w49 k0: extra ids am10k aw50 win50, expected aw50 win50
+  FAIL: edge g9 w49 k0: a non ladder id appeared: am10k aw50 win50
+  FAIL: edge g9 w49 k4: extra ids am10k aw50 win50, expected aw50 win50
+  FAIL: edge g9 w49 k4: a non ladder id appeared: am10k aw50 win50
+  FAIL: edge g9 w49 k5: extra ids am10k aw50 win50, expected aw50 win50
+  FAIL: edge g9 w49 k5: a non ladder id appeared: am10k aw50 win50
+  FAIL: edge g9 w49 k10: extra ids am10k aw50 win50, expected aw50 win50
+  FAIL: edge g9 w49 k10: a non ladder id appeared: am10k aw50 win50
+  FAIL: edge g10 w0 k5: extra ids ag25 am10k goals25, expected ag25 goals25
+  FAIL: edge g10 w0 k5: a non ladder id appeared: ag25 am10k goals25
+  FAIL: edge g10 w0 k10: extra ids ag25 am10k goals25, expected ag25 goals25
+  FAIL: edge g10 w0 k10: a non ladder id appeared: ag25 am10k goals25
+  FAIL: edge g10 w7 k5: extra ids ag25 am10k goals25, expected ag25 goals25
+  FAIL: edge g10 w7 k5: a non ladder id appeared: ag25 am10k goals25
+  FAIL: edge g10 w7 k10: extra ids ag25 am10k goals25, expected ag25 goals25
+  FAIL: edge g10 w7 k10: a non ladder id appeared: ag25 am10k goals25
+oldsave1543: 256 failed
