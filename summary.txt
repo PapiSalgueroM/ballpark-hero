@@ -1,0 +1,7 @@
+reducedlift exit=3 5s | simLiveSimMotion: control reducedlift did NOT behave: vitest exit 0, 0 failed, 1 passed.
+metresswap exit=1 9s | simLiveSimMotion: control metresswap turned "R10: the ball travels" red on an assertion (1 failed), as it must.
+longpass32 exit=1 9s | simLiveSimMotion: control longpass32 turned "R10: the ball travels" red on an assertion (1 failed), as it must.
+feederholds exit=1 8s | simLiveSimMotion: control feederholds turned "R11" red on an assertion (1 failed), as it must.
+foulwait exit=1 8s | simLiveSimMotion: control foulwait turned "R11" red on an assertion (1 failed), as it must.
+motion exit=0 51s |    Duration  51.19s (transform 2.14s, setup 70ms, collect 2.87s, tests 47.33s, environment 308ms, prepare 174ms)
+tsc exit=0 59s | 

@@ -1,0 +1,109 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstdout[2m | src/test/liveSimMotion.test.tsx[2m > [22m[2mThe pitch part on real feeds[2m > [22m[2mthe material is 200 half feeds from five clubs in five leagues
+[22m[39m[1101 material] Aston Villa 20 matches 40 halves, Real Madrid 20 matches 40 halves, Lyon 20 matches 40 halves, Ajax 20 matches 40 halves, Celtic 20 matches 40 halves; frames replayed 168292
+
+[90mstdout[2m | src/test/liveSimMotion.test.tsx[2m > [22m[2mThe pitch part on real feeds[2m > [22m[2mR1: the ball is in the goal mouth on goals only
+[22m[39m[1101 R1] goals staged 285, with a frame in the net 285, frames in the mouth 2019, offenders 0
+
+[90mstdout[2m | src/test/liveSimMotion.test.tsx[2m > [22m[2mThe pitch part on real feeds[2m > [22m[2mR2: nobody stands on a team mate
+[22m[39m[1101 R2] scenes 20310; overlapping pairs in a scene: new 0, Round 504 0; pairs overlapping two samples running: in a tween 0, in an action 0
+
+[90mstdout[2m | src/test/liveSimMotion.test.tsx[2m > [22m[2mThe pitch part on real feeds[2m > [22m[2mR3: at a kick off each side is in its own half, far from the other keeper
+[22m[39m[1101 R3] kick off beats 479, hard rule offenders 0; attack line to the other keeper per seed: new 54.13 54.27 54.17 53.98 53.70, Round 504 18.33 18.59 18.36 18.19 17.85; floor 45
+
+[90mstdout[2m | src/test/liveSimMotion.test.tsx[2m > [22m[2mThe pitch part on real feeds[2m > [22m[2mR4: the block follows the ball
+[22m[39m[1101 R4] open beats 8328; slope of the centroid on the ball per seed (the lower of with and without the ball): new 0.465 0.467 0.489 0.464 0.479, Round 504 0.002 -0.000 0.006 -0.003 0.000 (a centroid that never moves reports 0); with 0.506 0.505 0.489 0.504 0.491, without 0.465 0.467 0.492 0.464 0.479; floor 0.3
+
+[90mstdout[2m | src/test/liveSimMotion.test.tsx[2m > [22m[2mThe pitch part on real feeds[2m > [22m[2mR5: nothing is decided here
+[22m[39m[1101 R5] matches 100, frames replayed 168292, Math.random calls inside the replays 0; engine alone 48925b90 9ed4d191 1ea79ceb 1e94e777 d548a0e4; engine with replays 48925b90 9ed4d191 1ea79ceb 1e94e777 d548a0e4
+
+[90mstdout[2m | src/test/liveSimMotion.test.tsx[2m > [22m[2mThe pitch part on real feeds[2m > [22m[2mR6: a chance starts with the ball at the shooter and ends in its follow up
+[22m[39m[1101 R6] chances staged 2156; holder offenders 0, steady offenders 0, follow up offenders 0; a miss or a save followed by its goal kick or its keeper 1396, led straight on to the next chance 434; set aside and counted: no lead in 83, started from a kick off picture 0, the last kick of the period 42
+[1101 R6 turns] chances that waited for their turn 505 of 2156, by 0.46 on average, later than 0.9 0; still playing when the next one starts 20 (per seed 2 5 4 5 4), by more than a tenth of a minute 0
+[1101 R6 kick offs] goals with play left after them 284: kick off seen whole (0.76 or more) 164, for 0.6 or more 77, for a beat or more 34, cut under a beat by the next chance 9, none because the last kick's wind up came first 0; on average 0.670 of the clock; 0.6 or more per seed 48 of 53, 56 of 68, 40 of 44, 52 of 63, 45 of 56; whole per seed 36 of 53, 36 of 68, 24 of 44, 37 of 63, 31 of 56; under a beat per seed 1 of 53, 3 of 68, 1 of 44, 0 of 63, 4 of 56; no lead in per seed 9 of 421, 21 of 446, 11 of 406, 20 of 437, 22 of 446
+[1101 R6 short kick offs] under 0.6: 43 of 284 (per seed 5 12 4 11 11); the goal itself had to wait 24, the next chance was squeezed from behind 16, the period was ending 3, none of these 0
+
+[90mstdout[2m | src/test/liveSimMotion.test.tsx[2m > [22m[2mThe pitch part on real feeds[2m > [22m[2mR7: every dead ball is taken by the right side from the right place
+[22m[39m[1101 R7] dead balls read against their own line of the feed: opening 200, restart 279, corner 695, throwin 1122, freekick 1043, goalkick 935, keeper 461; corners whose line names a flank 695; taken by a stand in because that side has no keeper on 5; offenders 0
+
+[90mstdout[2m | src/test/liveSimMotion.test.tsx[2m > [22m[2mThe pitch part on real feeds[2m > [22m[2mR8: the pitch is handed the right kick off and the right share of the ball
+[22m[39m[1101 R8] halves handed to the pitch 200 (90 of them away from home, 196 with a share of the ball that is not 50); kick off offenders 0, share offenders 0
+
+[90mstdout[2m | src/test/liveSimMotion.test.tsx[2m > [22m[2mRound 1521: the live match looks like football[2m > [22m[2mR10: the ball travels with height and lands at its man, and every chance rises and comes down in the right net
+[22m[39m[1521 R10] passes drawn: on the grass 10714, in the air 2854, crosses 840, throws 1122, dead balls placed 4580; open play passes in the air 0.210, their length in metres p25 20.7, p50 30.0, p75 41.2, p90 52.7; on the grass but lifted 0, in the air but never rose 0, not landing at their man 0; chances read: first halves 1085, second halves 1071, offenders 0
+[1521 R10 air] open play passes in the air per seed 0.203 0.205 0.224 0.213 0.206, band 0.17 to 0.255
+
+[90mstdout[2m | src/test/liveSimMotion.test.tsx[2m > [22m[2mRound 1521: the live match looks like football[2m > [22m[2mR11: every foul the plan stages is seen at its own place, on the right two men, with only the card the feed gave
+[22m[39m[1521 R11] foul lines staged 2002, with their cue 1043 (0.521; per seed 0.527 0.520 0.535 0.515 0.508), of them waiting inside their minute 390, held over their spot through the free kick 1043 (offenders 0; the man it names by the spot through it 861, away from it 0), the man fouled of the line the fouler faces: read 861, offenders 0, under a stretch that outranks them 959 (their minute held by: a chance 737, a corner 159, another foul 143, a goal kick 124, a throw in 83, the kick off after a goal 70, a keeper with the ball 69, a period kick off 19), with no such reason 0; cue offenders 0; named on the grass 861, meetings read 1307, apart 0; cards in the feed 260, carded cues 152, card offenders 0; fouls the stats count 2016 (at the whistle itself 14), halves where the feed and the stats differ 0
+
+[90mstdout[2m | src/test/liveSimMotion.test.tsx[2m > [22m[2mRound 1521: the live match looks like football[2m > [22m[2mR12: an attack builds by lines, more directly the more attacking the side, and goes back only as a reset
+[22m[39m[1521 R12] my possessions defensive 1940, balanced 1940, attacking 1940; passes inside one: forward defensive 1222, balanced 1356, attacking 1383, across defensive 1205, balanced 1201, attacking 1361, back defensive 535, balanced 418, attacking 239; forward share per seed: defensive 0.417 0.400 0.420 0.414 0.415; balanced 0.472 0.440 0.461 0.445 0.467; attacking 0.448 0.444 0.497 0.463 0.471; back share per seed: defensive 0.191 0.187 0.178 0.177 0.170; balanced 0.137 0.150 0.140 0.140 0.134; attacking 0.080 0.088 0.081 0.075 0.075; from behind the front line defensive 2556, balanced 2243, attacking 1859, forward share per seed: defensive 0.491 0.463 0.471 0.493 0.477; balanced 0.647 0.585 0.584 0.596 0.620; attacking 0.761 0.733 0.736 0.740 0.754; resets per possession per seed: defensive 0.285 0.318 0.246 0.262 0.267; balanced 0.205 0.258 0.193 0.207 0.212; attacking 0.120 0.152 0.113 0.111 0.119; by reason: press defensive 355, balanced 264, attacking 152, switch defensive 180, balanced 154, attacking 87; back with no reason defensive 0, balanced 0, attacking 0, switches not across defensive 0, balanced 0, attacking 0, pressure not drawn defensive 0, balanced 0, attacking 0; nearest man to the ball: pressed 2.38 (343), not pressed 5.81 (4572); chances with the feeder drawn 813, with the man before him too 433, out of order 0
+[1521 R12 every pass] passes inside one possession, whatever drew them: defensive 4586, balanced 4586, attacking 4584; of them back defensive 1065, balanced 939, attacking 749; turned back for nothing defensive 0, balanced 0, attacking 0
+
+[90mstdout[2m | src/test/liveSimMotion.test.tsx[2m > [22m[2mRound 1521 by hand, and through the viewer[2m > [22m[2mR13: every figure is his own generic person, a keyed draw from his id and never from his name or nationality
+[22m[39m[1521 R13] 300 ids: 264 different looks (skin, hair style, hair colour, boots), heights 0.92 to 1.08
+
+[90mstdout[2m | src/test/liveSimMotion.test.tsx[2m > [22m[2mRound 1521 by hand, and through the viewer[2m > [22m[2mthe ball leaves the grass on a chance, its element staying where it always was, and never under reduced motion
+[22m[39m[1521 lift] frames with the ball off the grass: 31 of 45, under reduced motion 0 of 45
+
+[90mstdout[2m | src/test/liveSimMotion.test.tsx[2m > [22m[2mRound 1521 by hand, and through the viewer[2m > [22m[2ma foul is seen at its minute: the whistle and the name over its spot, and the ball goes up only when it should
+[22m[39m[1521 viewer] the foul at 19': "Foul by De Cuyper"; frames with the ball off the grass on the way 0
+
+[90mstdout[2m | src/test/liveSimMotion.test.tsx[2m > [22m[2mThe goal sequence[2m > [22m[2mthe card's season count is the settled count
+[22m[39m[1101 card] matches 4, cards of mine checked against the settled squad row 9
+
+[90mstdout[2m | src/test/liveSimMotion.test.tsx[2m > [22m[2mThe goal sequence[2m > [22m[2mafter Skip the second half opens on the right score, with no card and nothing replayed
+[22m[39m[1101 skip] the half found: board 5, its last chance a goal at 44
+
+[90mstdout[2m | src/test/liveSimMotion.test.tsx[2m > [22m[2mThe goal sequence[2m > [22m[2ma goal with the last kick of a period takes nothing off the score while it winds up
+[22m[39m[1101 last kick] the period found ends at 90+7 on a goal by opp, the score before it 2 - 3
+
+[90mstdout[2m | src/test/liveSimMotion.test.tsx[2m > [22m[2mThe goal sequence[2m > [22m[2ma line fired late by Skip is not played again when extra time starts
+[22m[39m[1101 extra] the late line is a shot at 85, the board is 8, found on seed 954 of 30000
+
+[90mstdout[2m | src/test/liveSimMotion.test.tsx[2m > [22m[2mThe goal sequence[2m > [22m[2ma goal still on its way when the line up changes off the clock keeps its net, its card and its men
+[22m[39m[AR held cast] the half found on attempt 103: a goal at 63 for me, its action staged at 63.300 behind save at 62, the ball in at 64.056, and the line up changes at 64
+
+ [32m✓[39m src/test/liveSimMotion.test.tsx [2m([22m[2m65 tests[22m[2m)[22m[33m 47331[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mactual feed triggers player strikes, ball flight, saves and net contact [33m 1252[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mmotion leaves committed state and settled results identical [33m 340[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mspeed changes scale action time with the match clock [33m 382[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mterminal goal and save contact precede the unchanged whistle and score (45 'goal' reduced=false) [33m 2156[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mterminal goal and save contact precede the unchanged whistle and score (45 'goal' reduced=true) [33m 1231[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mterminal goal and save contact precede the unchanged whistle and score (45 'save' reduced=false) [33m 772[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mterminal goal and save contact precede the unchanged whistle and score (45 'save' reduced=true) [33m 668[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mterminal goal and save contact precede the unchanged whistle and score (90 'goal' reduced=false) [33m 2034[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mterminal goal and save contact precede the unchanged whistle and score (90 'goal' reduced=true) [33m 1853[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mterminal goal and save contact precede the unchanged whistle and score (90 'save' reduced=false) [33m 734[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mterminal goal and save contact precede the unchanged whistle and score (90 'save' reduced=true) [33m 994[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mterminal resume shows contact and Skip keeps immediate exactly-once whistle callbacks [33m 6416[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22ma tactics redraw cancels a terminal action that is no longer committed [33m 602[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mthe ninetieth minute asks the latest save: refused means full time, never thirty empty minutes [33m 3831[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mthe ninetieth minute asks the latest save: extra time drawn there is played, whatever this render was given [33m 1336[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mthe extra time banner says what is true: a second leg is level on aggregate [33m 1225[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mthe clock runs into the board as 90 plus, with the running aggregate under the score [33m 311[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22ma goal in the board is announced with its plus, GOAL! ... 90+N [33m 750[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mthe extra time clock runs into its own board as ET 120 plus [33m 372[2mms[22m[39m
+   [33m[2m✓[22m[39m The pitch part on real feeds[2m > [22mthe material is 200 half feeds from five clubs in five leagues [33m 4836[2mms[22m[39m
+   [33m[2m✓[22m[39m The pitch part on real feeds[2m > [22mR5: nothing is decided here [33m 837[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1521 by hand, and through the viewer[2m > [22mthe ball leaves the grass on a chance, its element staying where it always was, and never under reduced motion [33m 820[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1521 by hand, and through the viewer[2m > [22ma foul is seen at its minute: the whistle and the name over its spot, and the ball goes up only when it should [33m 333[2mms[22m[39m
+   [33m[2m✓[22m[39m The goal sequence[2m > [22mthe score waits for the ball and the card lands at net contact [33m 501[2mms[22m[39m
+   [33m[2m✓[22m[39m The goal sequence[2m > [22mafter Skip the second half opens on the right score, with no card and nothing replayed [33m 481[2mms[22m[39m
+   [33m[2m✓[22m[39m The goal sequence[2m > [22ma goal with the last kick of a period takes nothing off the score while it winds up [33m 3786[2mms[22m[39m
+   [33m[2m✓[22m[39m The goal sequence[2m > [22ma line fired late by Skip is not played again when extra time starts [33m 3982[2mms[22m[39m
+   [33m[2m✓[22m[39m The goal sequence[2m > [22munder reduced motion the card is held for its first stretch only, and then the match runs on [33m 335[2mms[22m[39m
+   [33m[2m✓[22m[39m The goal sequence[2m > [22ma goal still on its way when the line up changes off the clock keeps its net, its card and its men [33m 1253[2mms[22m[39m
+   [33m[2m✓[22m[39m Match mode[2m > [22mBack folds the match to a card and pauses it, and the card puts it back [33m 573[2mms[22m[39m
+   [33m[2m✓[22m[39m Match mode[2m > [22mthe stats line a phone keeps in view reads the same count as the full stats [33m 505[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m65 passed[39m[22m[90m (65)[39m
+[2m   Start at [22m 09:21:33
+[2m   Duration [22m 51.19s[2m (transform 2.14s, setup 70ms, collect 2.87s, tests 47.33s, environment 308ms, prepare 174ms)[22m
+
