@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+head-walk3: WALK_TAG=head node .rc/x/walk3.mjs
+base-walk3: git worktree add /tmp/base origin/main > /dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && node_modules/.bin/vite build > /tmp/basebuild.log 2>&1; echo "base build exit $?") && (node scripts/lib/hostLikeServer.mjs /tmp/base/dist 4180 > /tmp/basesrv.log 2>&1 &) && sleep 3 && BASE=http://localhost:4180 WALK_TAG=base node .rc/x/walk3.mjs
