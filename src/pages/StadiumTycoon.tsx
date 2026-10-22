@@ -190,7 +190,8 @@ export default function StadiumTycoon() {
       {/* local animation keyframes */}
       <style>{`
         @keyframes stFloat { 0% { opacity: 0; transform: translateY(6px) scale(0.9); } 12% { opacity: 1; transform: translateY(0) scale(1.06); } 100% { opacity: 0; transform: translateY(-46px) scale(1); } }
-        .st-float { animation: stFloat 1.8s ease-out forwards; }
+        .st-float { animation: stFloat 1.8s ease-out both; }
+        @keyframes stWait { from { opacity: 0; } to { opacity: 1; } }
         @keyframes stConfetti { 0% { opacity: 1; transform: translateY(-8px) rotate(0deg); } 100% { opacity: 0; transform: translateY(190px) rotate(540deg); } }
         .st-confetti { animation-name: stConfetti; animation-timing-function: ease-in; animation-fill-mode: forwards; }
         @keyframes stGlow { 0%, 100% { box-shadow: 0 0 6px rgba(234,179,8,0.5); } 50% { box-shadow: 0 0 22px rgba(234,179,8,0.9); } }
@@ -199,10 +200,13 @@ export default function StadiumTycoon() {
         .st-goldwob { animation: stGoldwob 0.9s ease-in-out infinite; }
         /* Round 530: the setting the visitor already made. The two loops stop
            looping, the floaters land as plain text until they are cleared, and
-           the confetti (decoration, nothing to read) does not run at all. */
+           the confetti (decoration, nothing to read) does not run at all.
+           Round 1543: a badge waiting its turn (data-wait) stays hidden until
+           its delay is up and then just appears, no movement. */
         @media (prefers-reduced-motion: reduce) {
           .st-glow, .st-goldwob { animation: none; }
           .st-float { animation: none; opacity: 1; transform: none; }
+          .st-float[data-wait] { animation: stWait 1ms step-end both; }
           .st-confetti { display: none; }
         }
       `}</style>
@@ -635,7 +639,8 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
                   f.kind === 'money' && 'text-emerald-200 text-sm',
                   f.kind === 'bad' && 'text-red-300 text-xs',
                 )}
-                style={{ left: `${f.x}%`, top: `${f.y}%` }}
+                style={{ left: `${f.x}%`, top: `${f.y}%`, animationDelay: f.delay ? `${f.delay}ms` : undefined }}
+                data-wait={f.delay ? '' : undefined}
               >
                 {formatMoneyText(f.text)}
               </span>

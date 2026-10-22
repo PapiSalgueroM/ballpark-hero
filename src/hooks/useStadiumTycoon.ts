@@ -40,9 +40,21 @@ export interface Floater {
   /** Percent coordinates inside the pitch panel. */
   x: number;
   y: number;
+  /** Round 1543: milliseconds before it shows. Only a badge or milestone that
+   *  waits its turn behind others from the same tick has one. */
+  delay?: number;
 }
 
 let floaterSeq = 1;
+/** How long a floater is on the pitch: the page's 1.8 s rise plus a frame. */
+const FLOATER_LIFE_MS = 1900;
+/** Round 1543: the rows a tick's milestones and badges take, top to bottom.
+ *  A floater is about 16 percent of the phone pitch tall, so these never
+ *  touch, the top one clears the FULL TIME line at 12 and the bottom one ends
+ *  above the badge line. A third and fourth wait one floater life and reuse
+ *  them. Before this an old save that crossed three lowered rungs in its
+ *  first tick drew them all on one spot for 1.9 s, unreadable. */
+const ANNOUNCE_ROWS = [30, 47];
 
 /** Round 530: the two loudest events, held for the page's cards. The label
  *  and the bonus are the engine's own event fields, printed as they came. */
@@ -87,7 +99,10 @@ export function useStadiumTycoon(getEdge?: () => number) {
   const [gearSaveBlocked, setGearSaveBlocked] = useState(false);
   const [ticketSaveFailed, setTicketSaveFailed] = useState(false);
   const [promotion, setPromotion] = useState<Promotion | null>(null);
-  const [badge, setBadge] = useState<BadgeEarned | null>(null);
+  /* Round 1543: badges earned together each get their own turn on the badge
+     line. It used to hold one, so the last of a tick's badges wiped the rest. */
+  const [badgeQueue, setBadgeQueue] = useState<BadgeEarned[]>([]);
+  const badge = badgeQueue[0] ?? null;
   const [lastSeason, setLastSeason] = useState<LastSeason | null>(null);
   /* Round 583: goals waiting for the pitch. Queued only while the pitch is on
      screen: a goal scored while you are in another room is on the scoreboard
@@ -124,17 +139,18 @@ export function useStadiumTycoon(getEdge?: () => number) {
      with it (see useOwnedTimeouts). */
   const later = useOwnedTimeouts();
 
-  const pushFloater = useCallback((text: string, kind: Floater['kind'], x?: number, y?: number) => {
+  const pushFloater = useCallback((text: string, kind: Floater['kind'], x?: number, y?: number, delay = 0) => {
     const f: Floater = {
       id: floaterSeq++,
       text,
       kind,
       x: x ?? 20 + Math.random() * 60,
       y: y ?? 30 + Math.random() * 40,
+      ...(delay > 0 ? { delay } : {}),
     };
     setFloaters(cur => [...cur.slice(-14), f]);
     // Floaters clean themselves up after the animation finishes.
-    later(() => setFloaters(cur => cur.filter(g => g.id !== f.id)), 1900);
+    later(() => setFloaters(cur => cur.filter(g => g.id !== f.id)), FLOATER_LIFE_MS + delay);
   }, [later]);
 
   /* Round 439: away earnings settle from the wall clock the ground has not
@@ -202,6 +218,21 @@ export function useStadiumTycoon(getEdge?: () => number) {
     let last = performance.now();
     let acc = 0;
     let sinceSave = 0;
+    /* Round 1543: a milestone or badge takes the top free row, or, if every
+       row is still showing one, waits for the row that frees up first, so two
+       of them never share a spot, in one tick or in two close ones. */
+    const rowFreeAt = ANNOUNCE_ROWS.map(() => 0);
+    const announce = (text: string, x: number) => {
+      const now = performance.now();
+      let row = rowFreeAt.findIndex(t => t <= now);
+      if (row < 0) {
+        row = 0;
+        for (let r = 1; r < rowFreeAt.length; r += 1) if (rowFreeAt[r] < rowFreeAt[row]) row = r;
+      }
+      const start = Math.max(now, rowFreeAt[row]);
+      rowFreeAt[row] = start + FLOATER_LIFE_MS;
+      pushFloater(text, 'win', x, ANNOUNCE_ROWS[row], Math.round(start - now));
+    };
     const step = (t: number) => {
       const dt = Math.min(2, (t - last) / 1000);
       last = t;
@@ -273,7 +304,7 @@ export function useStadiumTycoon(getEdge?: () => number) {
         pushFloater(`FULL TIME WIN +${fmtMoney(e.amount ?? 0)}`, 'win', 32, 12);
         setConfetti(c => c + 1);
       } else if (e.kind === 'milestone') {
-        pushFloater(`🏁 ${e.label} +${fmtMoney(e.amount ?? 0)}`, 'win', 18, 30);
+        announce(`🏁 ${e.label} +${fmtMoney(e.amount ?? 0)}`, 18);
         setConfetti(c => c + 1);
       } else if (e.kind === 'promoted') {
         // Round 162: the loudest moment the game has. Round 530: it also
@@ -293,9 +324,10 @@ export function useStadiumTycoon(getEdge?: () => number) {
       } else if (e.kind === 'ach') {
         /* Round 530 review: the lib's own bonus, so a retune cannot leave
            the floater announcing a number the game no longer pays. */
-        pushFloater(`${e.label}: +${Math.round(ACH_BONUS * 100)}% forever`, 'win', 22, 36);
+        announce(`${e.label}: +${Math.round(ACH_BONUS * 100)}% forever`, 22);
         setConfetti(c => c + 1);
-        setBadge({ label: e.label, seq: floaterSeq++ });
+        const earned: BadgeEarned = { label: e.label, seq: floaterSeq++ };
+        setBadgeQueue(q => [...q, earned]);
       } else if (e.kind === 'conceded') {
         pushFloater(`${e.minute}' they score`, 'bad', 25 + Math.random() * 50, 55 + Math.random() * 25);
       } else if (e.kind === 'loss') {
@@ -465,7 +497,7 @@ export function useStadiumTycoon(getEdge?: () => number) {
 
   const dismissAway = useCallback(() => { setAwayPay(null); setAwayTrip(null); }, []);
   const dismissPromotion = useCallback(() => setPromotion(null), []);
-  const dismissBadge = useCallback(() => setBadge(null), []);
+  const dismissBadge = useCallback(() => setBadgeQueue(q => q.slice(1)), []);
   /* Round 583: the pitch says when a replay has finished, and whether it is on
      screen at all. Turning it on or off drops anything queued. */
   const endReplay = useCallback((id: number) => setReplays(q => q.filter(r => r.id !== id)), []);
