@@ -1,0 +1,3 @@
+usSummer-rest exit=0 276s | simUsCareerSummer: green. Sections 1, 2, 3, 3b, 4, 5, 7, 8, 9, 10, 11, 12 held over 400 careers a sport.
+usSummer-6mlbnhl exit=0 2282s | simUsCareerSummer: green. Sections 6 held.
+usSummer-6nba exit=0 2536s | simUsCareerSummer: green. Sections 6 held.
