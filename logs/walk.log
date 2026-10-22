@@ -1,0 +1,19 @@
+   note ten fight save: fightNo 10, retired false, pending cards 20, rivalry choice false, beat true
+
+phone-rm
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('button', { name: 'Retire', exact: true })
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/.rc/x/walk1546.mjs:105:16 {
+  log: [
+    "  - waiting for getByRole('button', { name: 'Retire', exact: true })"
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v24.21.0
