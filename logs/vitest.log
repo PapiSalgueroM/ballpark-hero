@@ -1,0 +1,39 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstderr[2m | src/test/rugbyLeagueChallenge.test.tsx[2m > [22m[2mRugby League actual page play[2m > [22m[2mshows playable rules and a verified example before the first question and reopens them safely
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/rugbyLeagueChallenge.test.tsx[2m > [22m[2mRugby League actual page play[2m > [22m[2mkeeps asynchronous rules focus and derives its example only from eligible records
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ [32m✓[39m src/test/dailySaveParity.test.tsx [2m([22m[2m40 tests[22m[2m | [22m[33m39 skipped[39m[2m)[22m[32m 38[2mms[22m[39m
+ [32m✓[39m src/test/rankEmOrder.test.tsx [2m([22m[2m10 tests[22m[2m)[22m[33m 4145[2mms[22m[39m
+   [33m[2m✓[22m[39m Rank Em editable order[2m > [22mkeeps five picks editable and quiet until an exact corrected perfect order is locked [33m 732[2mms[22m[39m
+   [33m[2m✓[22m[39m Rank Em editable order[2m > [22mlocks exact partial and zero daily orders with the original share and one completion [33m 935[2mms[22m[39m
+   [33m[2m✓[22m[39m Rank Em editable order[2m > [22mhands focus to enabled neighbors lock and result and guards owned held keys [33m 829[2mms[22m[39m
+ [32m✓[39m src/test/rugbyLeagueChallenge.test.tsx [2m([22m[2m15 tests[22m[2m)[22m[33m 7568[2mms[22m[39m
+   [33m[2m✓[22m[39m Rugby League actual page play[2m > [22mshows playable rules and a verified example before the first question and reopens them safely [33m 600[2mms[22m[39m
+   [33m[2m✓[22m[39m Rugby League actual page play[2m > [22mreveals actual winners until explicit advance and totals the ten calls by category [33m 941[2mms[22m[39m
+   [33m[2m✓[22m[39m Rugby League actual page play[2m > [22mreplays a new balanced set with no stale points answers or result card [33m 1660[2mms[22m[39m
+   [33m[2m✓[22m[39m Rugby League actual page play[2m > [22mretains pending Daily and Unlimited Hard play while rugby leaves every saved byte alone [33m 683[2mms[22m[39m
+   [33m[2m✓[22m[39m Rugby League actual page play[2m > [22mfinishes and replays rugby without booking or corrupting an earned Daily on reload [33m 1898[2mms[22m[39m
+   [33m[2m✓[22m[39m Rugby League actual page play[2m > [22mrefuses an incomplete record bank and recovers through the actual retry action [33m 973[2mms[22m[39m
+ [32m✓[39m src/test/whodTheyBeatReveal.test.tsx [2m([22m[2m24 tests[22m[2m)[22m[33m 1941[2mms[22m[39m
+   [33m[2m✓[22m[39m Who would they beat readable reveal[2m > [22mthe actual page keeps true feedback locked and announces earned score before Next final [33m 513[2mms[22m[39m
+   [33m[2m✓[22m[39m Who would they beat readable reveal[2m > [22mthe actual page shows View results after the last pick and keeps the final share and booking exact [33m 649[2mms[22m[39m
+ [32m✓[39m src/test/champOrNotReveal.test.tsx [2m([22m[2m18 tests[22m[2m)[22m[33m 2134[2mms[22m[39m
+   [33m[2m✓[22m[39m Champ or Not readable reveal[2m > [22mthe page retains true feedback and shows its earned score before Next claim [33m 402[2mms[22m[39m
+   [33m[2m✓[22m[39m Champ or Not readable reveal[2m > [22mpreserves deliberate Help Hard mode and Record Books focus during answer feedback [33m 492[2mms[22m[39m
+   [33m[2m✓[22m[39m Champ or Not readable reveal[2m > [22mpage final View results retains the exact mixed score share and single booking [33m 706[2mms[22m[39m
+ [32m✓[39m src/test/silverwareReveal.test.tsx [2m([22m[2m10 tests[22m[2m)[22m[33m 2082[2mms[22m[39m
+   [33m[2m✓[22m[39m Silverware deliberate reveal[2m > [22mshows earned rungs and points, focuses manual Next and names the final result action [33m 1412[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m6 passed[39m[22m[90m (6)[39m
+[2m      Tests [22m [1m[32m78 passed[39m[22m[2m | [22m[33m39 skipped[39m[90m (117)[39m
+[2m   Start at [22m 12:49:17
+[2m   Duration [22m 14.20s[2m (transform 5.82s, setup 571ms, collect 11.10s, tests 17.91s, environment 4.07s, prepare 1.18s)[22m
+
