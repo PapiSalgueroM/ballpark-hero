@@ -1,0 +1,5 @@
+CONTROL dupdriver: 2 new failure(s), 0 gone, against an untouched run with 0.
+  + [5 duplicate] driver "hamilton" is listed twice
+  + [5 duplicate] driver "Lewis Hamilton" is listed twice
+
+CONTROL dupdriver: section 5's "duplicate" check caught the break (2 new) and no other section moved.

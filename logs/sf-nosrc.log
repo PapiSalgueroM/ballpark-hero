@@ -1,0 +1,7 @@
+CONTROL nosrc: 4 new failure(s), 0 gone, against an untouched run with 0.
+  + [1 nosrc] ufcFighters.Alex Pereira.koTko: a fact with no src, so nothing says where it comes from
+  + [1 nosrc] fightResults[0]: a fact with no src, so nothing says where it comes from
+  + [1 nosrc] f1Pool.Alain Prost.era: a fact with no src, so nothing says where it comes from
+  + [1 nosrc] olympics.biles-2024.medalSummary: src is empty, so nothing says where this comes from
+
+CONTROL nosrc: section 1's "nosrc" check caught the break (4 new) and no other section moved.

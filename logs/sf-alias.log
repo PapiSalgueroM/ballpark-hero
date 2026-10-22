@@ -1,0 +1,5 @@
+CONTROL alias: 2 new failure(s), 0 gone, against an untouched run with 0.
+  + [6 answer] constructor mclaren: the accepted names ["McLaren","Ferrari"] disagree with the verified ["McLaren"]
+  + [6 resolve] constructor mclaren: typing "Ferrari" finds ferrari's card, so the game refuses its own answer
+
+CONTROL alias: section 6's "resolve" check caught the break (1 new) and no other section moved.

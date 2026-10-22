@@ -1,0 +1,7 @@
+CONTROL sameorg: 4 new failure(s), 0 gone, against an untouched run with 0.
+  + [1 org] ufcFighters.Alex Pereira.record: ufc.com and ufc.com.br belong to one organisation (the UFC), which is one source twice
+  + [1 org] fightResults[0]: espn.com and africa.espn.com belong to one organisation (espn), which is one source twice
+  + [1 org] f1Pool.Alain Prost.team: formula1.com and f1.com belong to one organisation (Formula 1), which is one source twice
+  + [1 org] olympics.biles-2024.medalSummary: nbcolympics.com and nbcsports.com belong to one organisation (NBCUniversal), which is one source twice
+
+CONTROL sameorg: section 1's "org" check caught the break (4 new) and no other section moved.

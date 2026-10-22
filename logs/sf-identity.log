@@ -1,0 +1,5 @@
+CONTROL identity: 2 new failure(s), 0 gone, against an untouched run with 0.
+  + [6 answer] constructor renault: the accepted names ["Renault","Renault F1"] disagree with the verified ["Renault","Alpine","Renault F1"]
+  + [6 identity] constructor renault clue 5 says it now races as Alpine, but typing "Alpine" finds no card, so a player who reads the clue and answers Alpine is refused
+
+CONTROL identity: section 6's "identity" check caught the break (1 new) and no other section moved.

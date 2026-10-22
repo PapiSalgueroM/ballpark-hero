@@ -1,0 +1,4 @@
+CONTROL dupathlete: 1 new failure(s), 0 gone, against an untouched run with 0.
+  + [8 duplicate] athlete "Simone Biles" is listed twice
+
+CONTROL dupathlete: section 8's "duplicate" check caught the break (1 new) and no other section moved.

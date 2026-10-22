@@ -1,0 +1,4 @@
+CONTROL dupfight: 1 new failure(s), 0 gone, against an untouched run with 0.
+  + [4 duplicate] the record holds "Jon Jones > Stipe Miocic @ UFC 309 2024" twice
+
+CONTROL dupfight: section 4's "duplicate" check caught the break (1 new) and no other section moved.

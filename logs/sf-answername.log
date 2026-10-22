@@ -1,0 +1,4 @@
+CONTROL answername: 1 new failure(s), 0 gone, against an untouched run with 0.
+  + [5 answer] driver verstappen: the answer "Max Verstappan" disagrees with the verified "Max Verstappen"
+
+CONTROL answername: section 5's "answer" check caught the break (1 new) and no other section moved.

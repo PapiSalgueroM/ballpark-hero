@@ -1,0 +1,5 @@
+CONTROL pageflag: 2 new failure(s), 0 gone, against an untouched run with 0.
+  + [8 page] src/pages/Olympics.tsx no longer draws the result line through OlympicCountry (<OlympicCountry country={athlete.country} ... />), so what it shows is unchecked
+  + [8 page] src/pages/Olympics.tsx draws a flag itself (<FlagFromEmoji), outside the component this section renders
+
+CONTROL pageflag: section 8's "page" check caught the break (2 new) and no other section moved.

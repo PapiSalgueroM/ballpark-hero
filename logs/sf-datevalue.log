@@ -1,0 +1,4 @@
+CONTROL datevalue: 1 new failure(s), 0 gone, against an untouched run with 0.
+  + [1 datevalue] ufcFighters.Ronda Rousey.birthDate: the verified value "1987-02-30" is not a real calendar date
+
+CONTROL datevalue: section 1's "datevalue" check caught the break (1 new) and no other section moved.

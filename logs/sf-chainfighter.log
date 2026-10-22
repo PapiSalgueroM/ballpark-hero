@@ -1,0 +1,4 @@
+CONTROL chainfighter: 1 new failure(s), 0 gone, against an untouched run with 0.
+  + [3 value] Tom Aspinall: isHallOfFamer ships true, verified false
+
+CONTROL chainfighter: section 3's "value" check caught the break (1 new) and no other section moved.

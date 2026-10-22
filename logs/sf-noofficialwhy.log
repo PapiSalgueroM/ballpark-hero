@@ -1,0 +1,4 @@
+CONTROL noofficialwhy: 1 new failure(s), 0 gone, against an untouched run with 0.
+  + [1 noofficial] ufcFighters.Demetrious Johnson.record: its noOfficial reason names none of the official hosts it could have used (ufc.com, ufcstats.com) and does not say that no official page exists, so it is not a reason: "xxxxxxxxxxxxxxxxxxxxxx"
+
+CONTROL noofficialwhy: section 1's "noofficial" check caught the break (1 new) and no other section moved.

@@ -1,0 +1,63 @@
+#!build
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simSportsFacts: node scripts/simSportsFacts.mjs
+simHigherLowerFacts: node scripts/simHigherLowerFacts.mjs
+simF1Champions: node scripts/simF1Champions.mjs
+simFaceOff: node scripts/simFaceOff.mjs
+simWritesAreSent: node scripts/simWritesAreSent.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+sf-onesource: SPORTS_FACTS_CONTROL=onesource node scripts/simSportsFacts.mjs
+sf-nosrc: SPORTS_FACTS_CONTROL=nosrc node scripts/simSportsFacts.mjs
+sf-flagged: SPORTS_FACTS_CONTROL=flagged node scripts/simSportsFacts.mjs
+sf-mirror: SPORTS_FACTS_CONTROL=mirror node scripts/simSportsFacts.mjs
+sf-baddate: SPORTS_FACTS_CONTROL=baddate node scripts/simSportsFacts.mjs
+sf-sameorg: SPORTS_FACTS_CONTROL=sameorg node scripts/simSportsFacts.mjs
+sf-contradicted: SPORTS_FACTS_CONTROL=contradicted node scripts/simSportsFacts.mjs
+sf-noofficialwhy: SPORTS_FACTS_CONTROL=noofficialwhy node scripts/simSportsFacts.mjs
+sf-datevalue: SPORTS_FACTS_CONTROL=datevalue node scripts/simSportsFacts.mjs
+sf-ufcfighter: SPORTS_FACTS_CONTROL=ufcfighter node scripts/simSportsFacts.mjs
+sf-dupufc: SPORTS_FACTS_CONTROL=dupufc node scripts/simSportsFacts.mjs
+sf-vanish: SPORTS_FACTS_CONTROL=vanish node scripts/simSportsFacts.mjs
+sf-vanishpool: SPORTS_FACTS_CONTROL=vanishpool node scripts/simSportsFacts.mjs
+sf-chainfighter: SPORTS_FACTS_CONTROL=chainfighter node scripts/simSportsFacts.mjs
+sf-dupchain: SPORTS_FACTS_CONTROL=dupchain node scripts/simSportsFacts.mjs
+sf-fakefight: SPORTS_FACTS_CONTROL=fakefight node scripts/simSportsFacts.mjs
+sf-dupfight: SPORTS_FACTS_CONTROL=dupfight node scripts/simSportsFacts.mjs
+sf-f1driver: SPORTS_FACTS_CONTROL=f1driver node scripts/simSportsFacts.mjs
+sf-editorial: SPORTS_FACTS_CONTROL=editorial node scripts/simSportsFacts.mjs
+sf-dupdriver: SPORTS_FACTS_CONTROL=dupdriver node scripts/simSportsFacts.mjs
+sf-answername: SPORTS_FACTS_CONTROL=answername node scripts/simSportsFacts.mjs
+sf-f1constructor: SPORTS_FACTS_CONTROL=f1constructor node scripts/simSportsFacts.mjs
+sf-editorialnumber: SPORTS_FACTS_CONTROL=editorialnumber node scripts/simSportsFacts.mjs
+sf-dupconstructor: SPORTS_FACTS_CONTROL=dupconstructor node scripts/simSportsFacts.mjs
+sf-identity: SPORTS_FACTS_CONTROL=identity node scripts/simSportsFacts.mjs
+sf-alias: SPORTS_FACTS_CONTROL=alias node scripts/simSportsFacts.mjs
+sf-f1pool: SPORTS_FACTS_CONTROL=f1pool node scripts/simSportsFacts.mjs
+sf-duppool: SPORTS_FACTS_CONTROL=duppool node scripts/simSportsFacts.mjs
+sf-olympics: SPORTS_FACTS_CONTROL=olympics node scripts/simSportsFacts.mjs
+sf-dupathlete: SPORTS_FACTS_CONTROL=dupathlete node scripts/simSportsFacts.mjs
+sf-sovietflag: SPORTS_FACTS_CONTROL=sovietflag node scripts/simSportsFacts.mjs
+sf-flaglabel: SPORTS_FACTS_CONTROL=flaglabel node scripts/simSportsFacts.mjs
+sf-pageflag: SPORTS_FACTS_CONTROL=pageflag node scripts/simSportsFacts.mjs
+sf-golf: SPORTS_FACTS_CONTROL=golf node scripts/simSportsFacts.mjs
+sf-dupgolf: SPORTS_FACTS_CONTROL=dupgolf node scripts/simSportsFacts.mjs
+sf-golfdash: SPORTS_FACTS_CONTROL=golfdash node scripts/simSportsFacts.mjs
+sf-hlonesource: SPORTS_FACTS_CONTROL=hlonesource node scripts/simSportsFacts.mjs
+sf-hlstale: SPORTS_FACTS_CONTROL=hlstale node scripts/simSportsFacts.mjs
+sf-crossclue: SPORTS_FACTS_CONTROL=crossclue node scripts/simSportsFacts.mjs
+sf-hlcutoff: SPORTS_FACTS_CONTROL=hlcutoff node scripts/simSportsFacts.mjs
+sf-tennisstale: SPORTS_FACTS_CONTROL=tennisstale node scripts/simSportsFacts.mjs
+hl-stale: HL_FACTS_CONTROL=stale node scripts/simHigherLowerFacts.mjs
+hl-inversion: HL_FACTS_CONTROL=inversion node scripts/simHigherLowerFacts.mjs
+hl-nolast: HL_FACTS_CONTROL=nolast node scripts/simHigherLowerFacts.mjs
+hl-goalieok: HL_FACTS_CONTROL=goalieok node scripts/simHigherLowerFacts.mjs
+hl-heldfix: HL_FACTS_CONTROL=heldfix node scripts/simHigherLowerFacts.mjs
+hl-nbastale: HL_FACTS_CONTROL=nbastale node scripts/simHigherLowerFacts.mjs
+hl-mlbstale: HL_FACTS_CONTROL=mlbstale node scripts/simHigherLowerFacts.mjs
+hl-nflstale: HL_FACTS_CONTROL=nflstale node scripts/simHigherLowerFacts.mjs
+hl-tennismerge: HL_FACTS_CONTROL=tennismerge node scripts/simHigherLowerFacts.mjs
+hl-playeduntil: HL_FACTS_CONTROL=playeduntil node scripts/simHigherLowerFacts.mjs
+hl-henrystale: HL_FACTS_CONTROL=henrystale node scripts/simHigherLowerFacts.mjs
+hl-apmerge: HL_FACTS_CONTROL=apmerge node scripts/simHigherLowerFacts.mjs
+hl-durantteam: HL_FACTS_CONTROL=durantteam node scripts/simHigherLowerFacts.mjs

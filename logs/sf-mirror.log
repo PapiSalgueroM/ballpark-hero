@@ -1,0 +1,5 @@
+CONTROL mirror: 2 new failure(s), 0 gone, against an untouched run with 0.
+  + [1 wiki] f1Pool.Alain Prost.team: dbpedia.org is Wikipedia or a copy of it, a spot check at most, never a source
+  + [1 wiki] golf.Bobby Jones: wikiwand.com is Wikipedia or a copy of it, a spot check at most, never a source
+
+CONTROL mirror: section 1's "wiki" check caught the break (2 new) and no other section moved.

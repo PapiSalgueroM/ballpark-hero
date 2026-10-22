@@ -1,0 +1,4 @@
+CONTROL f1pool: 1 new failure(s), 0 gone, against an untouched run with 0.
+  + [7 value] Alain Prost: era ships "1990s", verified "1980s"
+
+CONTROL f1pool: section 7's "value" check caught the break (1 new) and no other section moved.

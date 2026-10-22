@@ -1,0 +1,5 @@
+CONTROL dupconstructor: 2 new failure(s), 0 gone, against an untouched run with 0.
+  + [6 duplicate] constructor "ferrari" is listed twice
+  + [6 duplicate] constructor "Ferrari" is listed twice
+
+CONTROL dupconstructor: section 6's "duplicate" check caught the break (2 new) and no other section moved.

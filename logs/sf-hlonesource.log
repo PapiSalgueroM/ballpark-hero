@@ -1,0 +1,4 @@
+CONTROL hlonesource: 1 new failure(s), 0 gone, against an untouched run with 0.
+  + [1 sources] f1HigherLower.drivers.Lando Norris.careerWins: 1 source(s), two are required
+
+CONTROL hlonesource: section 1's "sources" check caught the break (1 new) and no other section moved.

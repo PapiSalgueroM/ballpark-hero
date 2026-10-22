@@ -1,0 +1,6 @@
+CONTROL flaglabel: 3 new failure(s), 0 gone, against an untouched run with 0.
+  + [8 render] bolt-2008: the page labels the jm flag "Kenya", which names the ke flag
+  + [8 render] fraser-pryce-2012: the page labels the jm flag "Kenya", which names the ke flag
+  + [8 render] thompson-herah-2020: the page labels the jm flag "Kenya", which names the ke flag
+
+CONTROL flaglabel: section 8's "render" check caught the break (3 new) and no other section moved.

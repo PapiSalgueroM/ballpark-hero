@@ -1,0 +1,10 @@
+CONTROL sovietflag: 7 new failure(s), 0 gone, against an untouched run with 0.
+  + [8 render] latynina-1956: the record says "Soviet Union", a team with no flag today, and the page draws the ru flag
+  + [8 render] latynina-1956: the page labels the country "🇷🇺Soviet Union", the record says "Soviet Union"
+  + [8 render] bubka-1988: the record says "Soviet Union", a team with no flag today, and the page draws the ru flag
+  + [8 render] bubka-1988: the page labels the country "🇷🇺Soviet Union", the record says "Soviet Union"
+  + [8 render] zatopek-1952: the record says "Czechoslovakia", a team with no flag today, and the page draws the cz flag
+  + [8 render] zatopek-1952: the page labels the country "🇨🇿Czechoslovakia", the record says "Czechoslovakia"
+  + [8 render] witt-1988: the page labels the country "East Germany (GDR)East Germany (GDR)", the record says "East Germany (GDR)"
+
+CONTROL sovietflag: section 8's "render" check caught the break (7 new) and no other section moved.

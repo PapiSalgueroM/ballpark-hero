@@ -1,0 +1,4 @@
+CONTROL f1constructor: 1 new failure(s), 0 gone, against an untouched run with 0.
+  + [6 clue] constructor mclaren clue 4 ships "Won 9 Constructors' Championships", verified "Won 10 Constructors' Championships"
+
+CONTROL f1constructor: section 6's "clue" check caught the break (1 new) and no other section moved.

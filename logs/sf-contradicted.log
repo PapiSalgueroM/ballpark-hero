@@ -1,0 +1,4 @@
+CONTROL contradicted: 1 new failure(s), 0 gone, against an untouched run with 0.
+  + [1 contradicted] ufcFighters.Demetrious Johnson.record: only sherdog.com supports "25-4-1". It also lists ufc.com, but its own noOfficial says that page does not give this value ("ufc.com shows "27-3-1" for this; Sherdog and ESPN agree on "25-4-1""), so it is one source
+
+CONTROL contradicted: section 1's "contradicted" check caught the break (1 new) and no other section moved.

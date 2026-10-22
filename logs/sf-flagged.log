@@ -1,0 +1,7 @@
+CONTROL flagged: 4 new failure(s), 0 gone, against an untouched run with 0.
+  + [1 flagged] ufcFighters.Alex Pereira.record: carries underSourced (true). The record itself says part of this is not sourced, so it cannot ship as sourced
+  + [1 flagged] f1Constructors.mclaren.clues[3]: carries unverifiable (No opened page states the tenth title.). The record itself says part of this is not sourced, so it cannot ship as sourced
+  + [1 flagged] olympics.biles-2024.name: carries unmatched (one host spells it differently). The record itself says part of this is not sourced, so it cannot ship as sourced
+  + [1 flagged] golf.Bobby Jones: its note says part of it is unsourced: "The 1926 Open line could not be sourced from any opened page."
+
+CONTROL flagged: section 1's "flagged" check caught the break (4 new) and no other section moved.

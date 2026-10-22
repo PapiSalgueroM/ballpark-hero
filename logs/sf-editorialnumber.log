@@ -1,0 +1,4 @@
+CONTROL editorialnumber: 1 new failure(s), 0 gone, against an untouched run with 0.
+  + [6 editorial] constructor ferrari clue 1 is marked editorial but carries a number ("16 titles"), and a number is a fact
+
+CONTROL editorialnumber: section 6's "editorial" check caught the break (1 new) and no other section moved.

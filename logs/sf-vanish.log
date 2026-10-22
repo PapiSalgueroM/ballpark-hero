@@ -1,0 +1,5 @@
+CONTROL vanish: 2 new failure(s), 0 gone, against an untouched run with 0.
+  + [2 missing] Alex Pereira: the file ships no koTko, a field the game shows
+  + [2 missing] Alex Pereira: the record holds no verified koTko, a field the game shows
+
+CONTROL vanish: section 2's "missing" check caught the break (2 new) and no other section moved.

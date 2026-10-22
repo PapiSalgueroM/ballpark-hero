@@ -1,0 +1,4 @@
+CONTROL fakefight: 1 new failure(s), 0 gone, against an untouched run with 0.
+  + [4 link] the chain accepts "Tom Aspinall > Jon Jones @ UFC 313 2025" and no verified fight says so
+
+CONTROL fakefight: section 4's "link" check caught the break (1 new) and no other section moved.

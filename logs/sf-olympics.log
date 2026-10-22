@@ -1,0 +1,4 @@
+CONTROL olympics: 1 new failure(s), 0 gone, against an untouched run with 0.
+  + [8 value] biles-2024: medalSummary ships "7 Gold, 1 Silver, 2 Bronze (across three Games)", verified "7 Gold, 2 Silver, 2 Bronze (across three Games)"
+
+CONTROL olympics: section 8's "value" check caught the break (1 new) and no other section moved.

@@ -1,0 +1,4 @@
+CONTROL dupufc: 1 new failure(s), 0 gone, against an untouched run with 0.
+  + [2 duplicate] UFC Guesser fighter "Alex Pereira" is listed twice
+
+CONTROL dupufc: section 2's "duplicate" check caught the break (1 new) and no other section moved.

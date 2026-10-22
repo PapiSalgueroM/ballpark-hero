@@ -1,0 +1,4 @@
+CONTROL dupgolf: 1 new failure(s), 0 gone, against an untouched run with 0.
+  + [9 duplicate] golfer "Bobby Jones" is listed twice
+
+CONTROL dupgolf: section 9's "duplicate" check caught the break (1 new) and no other section moved.

@@ -1,0 +1,4 @@
+CONTROL ufcfighter: 1 new failure(s), 0 gone, against an untouched run with 0.
+  + [2 value] Alex Pereira: wins ships as 14, verified 13
+
+CONTROL ufcfighter: section 2's "value" check caught the break (1 new) and no other section moved.

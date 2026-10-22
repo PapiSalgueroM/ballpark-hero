@@ -1,0 +1,6 @@
+CONTROL golfdash: 3 new failure(s), 0 gone, against an untouched run with 0.
+  + [10 golfdash] src/lib/listQuiz.ts:302 reads golf_majors without onlyNames, so a year the major was not played counts as a golfer
+  + [10 golfdash] masters-champs: the fetch returns 4 placeholder row(s) (["—","—","-"," – "]) as golfers
+  + [10 golfdash] masters-champs: expected the 4 real names back from the stub, got 8
+
+CONTROL golfdash: section 10's "golfdash" check caught the break (3 new) and no other section moved.

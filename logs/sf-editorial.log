@@ -1,0 +1,5 @@
+CONTROL editorial: 2 new failure(s), 0 gone, against an untouched run with 0.
+  + [5 editorial] driver verstappen clue 2 is marked editorial; only clue 1, the one word opener, may be
+  + [5 editorial] driver verstappen clue 2 is marked editorial but carries a number ("71 race wins through the 2025 season"), and a number is a fact
+
+CONTROL editorial: section 5's "editorial" check caught the break (2 new) and no other section moved.

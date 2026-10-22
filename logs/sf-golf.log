@@ -1,0 +1,4 @@
+CONTROL golf: 1 new failure(s), 0 gone, against an untouched run with 0.
+  + [9 value] Bobby Jones: majors ships 5, verified 7
+
+CONTROL golf: section 9's "value" check caught the break (1 new) and no other section moved.
