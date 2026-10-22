@@ -14,7 +14,7 @@ import {
   setTeamTalk, giveHalftimeTalk, answerPress, duckPress,
   matchFacts,
   changeLive, startSecondHalf, startExtraTime, markLiveMinute, setInstructions,
-  setDuty, carryShape, setSetPiece, autoSetPieces, startRetraining, stopRetraining,
+  setDuty, setSetPiece, autoSetPieces, startRetraining, stopRetraining,
   setShootoutOrder,
   DEFAULT_ERA_ID,
   releasePlayer, signFreeAgent,
@@ -24,7 +24,8 @@ import {
 } from '@/lib/clubManager';
 import type { MarketDoor } from '@/lib/clubManager';
 import type { MatchFacts, LiveChange, Duty, SetPieceKey, Formation } from '@/lib/clubManager';
-import type { TeamInstructions } from '@/lib/clubManagerTactics';
+import { tacticsImpl, type TeamInstructions } from '@/lib/clubManagerTacticsCore';
+import { carryShape } from '@/lib/clubManagerCarry';
 import type { Position } from '@/types/game';
 import type { TransferStatus, FacilityKind, TrainingPlan, SquadRole, TalkTone, DealExtras } from '@/lib/clubManager';
 import type { NextFixtureInfo, TableRow, CustomClubSpec, ManagerSpec, ManagerEdit, BoardObjective } from '@/lib/clubManager';
@@ -82,11 +83,20 @@ export type HubTab = 'overview' | 'squad' | 'tactics' | 'table' | 'transfers';
  * line first, then one on the same band of the pitch, then any that is left,
  * and his duty rides along wherever the new slot's line offers it.
  */
-/* Round 1522: the rule itself now lives in the engine (carryShape), so the live sheet's reshape and this tab move
-   an eleven the same way. */
+/* Round 1522: the rule itself now lives in clubManagerCarry.ts (carryShape), so the live sheet's reshape and this
+   tab move an eleven the same way. */
 function carryAcross(state: CareerState, from: Formation, to: Formation): { xiIds: (string | null)[]; xiDuties: (Duty | null)[] } {
   return carryShape(state.xiIds, state.xiDuties ?? [], from, to, state.squad);
 }
+
+/* Round 1522: the tactics module (clubManagerTactics.ts) loads apart from the engine, so the page and the dailies
+   do not carry it until it is wanted. A career with instructions, or a live match whose log or shape changed,
+   needs it before any match of it is played; until it is in, every match action below waits (does nothing), and
+   the effect in the hook loads it. The screens that set instructions import it themselves. */
+const needsTactics = (c: CareerState | null | undefined): boolean =>
+  !!c && (!!c.instructions || !!c.live?.instrLog?.length || !!c.live?.formChanges?.length);
+const tacticsWait = (c: CareerState | null | undefined): boolean => needsTactics(c) && tacticsImpl() === null;
+const loadTactics = (): Promise<unknown> => import('@/lib/clubManagerTactics');
 
 /** Round 1225: the key of the real fixture list a new career at this club would open on, or null. */
 function startFixtureKey(clubName: string, eraId: string): string | null {
@@ -370,9 +380,19 @@ export function useClubManager() {
   );
   /* Round 157: everything the pre-match facts screen shows, derived from the
      save itself: real form, real head-to-head, the engine's own odds. */
+  /* Round 1522: the tactics module, loaded when this career needs it (the odds read the instructions through it,
+     so the facts are worked out again once it is in). */
+  const [tacticsIn, setTacticsIn] = useState(() => tacticsImpl() !== null);
+  useEffect(() => {
+    if (tacticsIn || !needsTactics(career)) return;
+    let live = true;
+    void loadTactics().then(() => { if (live) setTacticsIn(true); });
+    return () => { live = false; };
+  }, [career, tacticsIn]);
   const facts: MatchFacts | null = useMemo(
     () => (career && !career.live ? matchFacts(career) : null),
-    [career],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [career, tacticsIn],
   );
 
   /* ---------- lifecycle actions ---------- */
@@ -812,6 +832,7 @@ export function useClubManager() {
   /* ---------- season progression ---------- */
   const runEntry = useCallback((skipHalftime: boolean) => {
     if (!career) return;
+    if (tacticsWait(career)) { void loadTactics().then(() => setTacticsIn(true)); return; }
     const res = playNextEntry(career, { skipHalftime, ...cmVarGameAsk(CM_VAR_LIVE) });
     setCareer(res.state);
     /* Round 119: the match stops at the interval now. Everything this game has
@@ -867,6 +888,7 @@ export function useClubManager() {
      runs it to a week and does what the screens need with how it stopped. */
   const simToWeek = useCallback((targetWeek: number) => {
     if (!career) return;
+    if (tacticsWait(career)) { void loadTactics().then(() => setTacticsIn(true)); return; }
     const run = runSimToWeek(career, targetWeek, cmVarGameAsk(CM_VAR_LIVE));
     if (run.halt === 'window') {
       setCareer(run.state);
@@ -1178,16 +1200,16 @@ export function useClubManager() {
 
   /* ---------- Round 119: the dressing room ---------- */
   const subAtHalftime = useCallback((outId: string, inId: string) => {
-    setCareer(prev => (prev ? makeHalftimeSub(prev, outId, inId) ?? prev : prev));
+    setCareer(prev => (prev && !tacticsWait(prev) ? makeHalftimeSub(prev, outId, inId) ?? prev : prev));
   }, []);
 
   const shapeAtHalftime = useCallback((m: Mentality) => {
-    setCareer(prev => (prev ? setHalftimeMentality(prev, m) : prev));
+    setCareer(prev => (prev && !tacticsWait(prev) ? setHalftimeMentality(prev, m) : prev));
   }, []);
 
   /* Round 1522: instructions, a formation or a duty in the dressing room, for tonight only (the restart, 46). */
   const changeAtHalftime = useCallback((change: LiveChange) => {
-    setCareer(prev => (prev ? changeLive(prev, 46, change) ?? prev : prev));
+    setCareer(prev => (prev && !tacticsWait(prev) ? changeLive(prev, 46, change) ?? prev : prev));
   }, []);
 
   /* Round 504: secondHalf is the FINISH of a live match now. The classic half
@@ -1196,6 +1218,7 @@ export function useClubManager() {
      90 on a second half that startSecondHalfLive already drew. */
   const secondHalf = useCallback(() => {
     if (!career) return;
+    if (tacticsWait(career)) { void loadTactics().then(() => setTacticsIn(true)); return; }
     const res = resumeMatch(career);
     setCareer(res.state);
     if (res.report) {
@@ -1214,7 +1237,7 @@ export function useClubManager() {
      viewer walks football that is already decided and a change in the 70th
      minute has something to redraw. */
   const startSecondHalfLive = useCallback(() => {
-    setCareer(prev => (prev ? startSecondHalf(prev) ?? prev : prev));
+    setCareer(prev => (prev && !tacticsWait(prev) ? startSecondHalf(prev) ?? prev : prev));
   }, []);
 
   /* Round 670: extra time, drawn by the engine when the viewer's clock
@@ -1224,7 +1247,7 @@ export function useClubManager() {
      latest save (prev), so a change still on its way when the clock got
      there is part of the answer; the viewer reads it off live.et. */
   const startExtraTimeLive = useCallback(() => {
-    setCareer(prev => (prev ? startExtraTime(prev) ?? prev : prev));
+    setCareer(prev => (prev && !tacticsWait(prev) ? startExtraTime(prev) ?? prev : prev));
   }, []);
 
   /* Round 504: a sub or a shape change at any minute of a live match. The
@@ -1232,7 +1255,7 @@ export function useClubManager() {
      the half off the eleven and the shape you just chose. */
   const changeAt = useCallback((minute: number, change: LiveChange, plus?: number) => {
     /* Round 781: and how far into the board it was made, for the line's label. */
-    setCareer(prev => (prev ? changeLive(prev, minute, change, plus) ?? prev : prev));
+    setCareer(prev => (prev && !tacticsWait(prev) ? changeLive(prev, minute, change, plus) ?? prev : prev));
   }, []);
 
   /* Round 504: where the clock stands, so a save closed in the 30th minute

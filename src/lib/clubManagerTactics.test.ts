@@ -9,12 +9,13 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   startCareer, playNextEntry, resumeMatch, startSecondHalf, changeLive, setInstructions, liveInstructions,
-  myOnPitchAt, liveShapeAt, matchFacts, opponentStyle, strengthOf, FORMATIONS, dutyOptions,
+  myOnPitchAt, liveShapeAt, matchFacts, strengthOf, FORMATIONS, dutyOptions,
 } from '@/lib/clubManager';
 import type { CareerState } from '@/lib/clubManager';
 import {
-  AI_STYLES, BALANCED, TACTIC_TABLE, aiStyleFor, instructionsAt, isBalanced, readInstructions, tacticBoost, tacticStatsOf,
+  AI_STYLES, BALANCED, TACTIC_TABLE, aiStyleFor, instructionsAt, isBalanced, opponentStyle, readInstructions, tacticBoost, tacticStatsOf,
 } from '@/lib/clubManagerTactics';
+import { tacticsImpl } from '@/lib/clubManagerTacticsCore';
 
 const seeded = (seed: number) => () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
 beforeEach(() => { vi.spyOn(Math, 'random').mockImplementation(seeded(1522)); });
@@ -74,8 +75,10 @@ describe('Round 1522: the dials', () => {
     expect(spy.mock.calls.length).toBe(before);
     const s = startCareer('Everton');
     const f = matchFacts(s)!;
-    expect(f.oppStyle).toBe(aiStyleFor(f.opponent, strengthOf(s, f.opponent)));
-    expect(opponentStyle(s, f.opponent)).toBe(f.oppStyle);
+    expect(opponentStyle(s, f.opponent)).toBe(aiStyleFor(f.opponent, strengthOf(s, f.opponent)));
+  });
+  it('the engine reads the instructions through the slot the tactics module fills', () => {
+    expect(tacticsImpl()).not.toBeNull();
   });
   it('the report numbers are a pure function of the match', () => {
     const args = { key: 'k', log: [{ minute: 0, instructions: { ...BALANCED, width: 1 as const } }], theirs: BALANCED, lastMinute: 90, possHalves: [55, 50] as [number, number], myGoalMinutes: [10, 70], oppGoalMinutes: [30], wideDuties: 2 };

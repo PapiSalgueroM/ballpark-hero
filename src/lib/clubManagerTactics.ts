@@ -27,33 +27,23 @@
  * a weak one sits in and goes direct. Their style only matters through yours: with you on balanced it changes
  * nothing, because the whole league was tuned against balanced football.
  *
- * IMPORTS: types from clubManager.ts and keyedRng.ts (which imports nothing), so the engine imports this file
- * without a cycle. Nothing here draws from Math.random and nothing but the tables runs at module scope.
+ * LOADING: the engine never imports this file. It carries clubManagerTacticsCore.ts (the types, balanced, a saved
+ * value read back, and a slot), and this module fills that slot as it loads (the last lines below), so the page
+ * budget of Club Manager and of the two dailies that load its engine does not carry the table, the words and the
+ * styles. This module imports the engine at run time, which is safe: the engine is already loaded by then and
+ * does not import this back. Nothing here draws from Math.random.
  */
-import type { Duty } from '@/lib/clubManager';
+import { FORMATIONS, dutyOptions, liveDutyAt, liveInstructions, strengthOf, worldYear } from '@/lib/clubManager';
+import type { CareerState, Duty, LiveChange, LiveMatch, MyFixture, XiSlot } from '@/lib/clubManager';
+import { carryShape } from '@/lib/clubManagerCarry';
 import { keyedRng } from '@/lib/keyedRng';
+import {
+  BALANCED, INSTRUCTION_KEYS, isBalanced, readInstructions, setTacticsImpl,
+  type AiStyleId, type InstructionKey, type InstructionStep, type Setting, type TacticStats, type TeamInstructions,
+} from '@/lib/clubManagerTacticsCore';
 
-export type Setting = -1 | 0 | 1;
-export type InstructionKey = 'press' | 'tempo' | 'width' | 'line';
-export interface TeamInstructions { press: Setting; tempo: Setting; width: Setting; line: Setting; }
-
-export const INSTRUCTION_KEYS: InstructionKey[] = ['press', 'tempo', 'width', 'line'];
-export const BALANCED: TeamInstructions = { press: 0, tempo: 0, width: 0, line: 0 };
-
-const isSetting = (v: unknown): v is Setting => v === -1 || v === 0 || v === 1;
-
-/** True for no instructions at all, or all four on balanced. */
-export function isBalanced(i: TeamInstructions | null | undefined): boolean {
-  return !i || (i.press === 0 && i.tempo === 0 && i.width === 0 && i.line === 0);
-}
-
-/** A saved value read back: four settings, or null for anything else (a junk value plays as balanced). */
-export function readInstructions(raw: unknown): TeamInstructions | null {
-  if (!raw || typeof raw !== 'object') return null;
-  const o = raw as Record<string, unknown>;
-  if (!INSTRUCTION_KEYS.every(k => isSetting(o[k]))) return null;
-  return { press: o.press as Setting, tempo: o.tempo as Setting, width: o.width as Setting, line: o.line as Setting };
-}
+export { BALANCED, INSTRUCTION_KEYS, isBalanced, readInstructions, logEverSet } from '@/lib/clubManagerTacticsCore';
+export type { AiStyleId, InstructionKey, InstructionStep, Setting, TacticStats, TeamInstructions } from '@/lib/clubManagerTacticsCore';
 
 /** What the tactics screen and the help say about each setting: one plain line on what it does, one on what it costs. */
 export interface SettingInfo { label: string; does: string; costs: string; }
@@ -103,7 +93,7 @@ export function instructionsSummary(i: TeamInstructions): string {
 
 /* ---------- the other dugout's style ---------- */
 
-export type AiStyleId = 'gegenpress' | 'possession' | 'patient' | 'wingplay' | 'direct' | 'counter' | 'lowblock' | 'balanced';
+/* AiStyleId lives in clubManagerTacticsCore.ts (the engine's types), re-exported above. */
 
 export interface AiStyle {
   label: string; emoji: string;
@@ -281,32 +271,11 @@ export const legsCost = (i: TeamInstructions): number =>
 
 /* ---------- a match's instructions over time, and the report's numbers ---------- */
 
-/** One entry of a match's instruction log: from the minute after `minute`, these were in force. Kick off is minute 0. */
-export interface InstructionStep { minute: number; plus?: number; instructions: TeamInstructions; }
-
 /** The instructions in force at a minute of a match (balanced before the first entry). A change at m bites from m + 1. */
 export function instructionsAt(log: InstructionStep[] | undefined, minute: number): TeamInstructions {
   let out: TeamInstructions = BALANCED;
   for (const s of log ?? []) if (s.minute < minute || (s.minute === 0 && minute <= 0)) out = s.instructions;
   return out;
-}
-
-/** True when the log ever leaves balanced: the match the report and the legs read the instructions off. */
-export const logEverSet = (log: InstructionStep[] | undefined): boolean => (log ?? []).some(s => !isBalanced(s.instructions));
-
-/** What the match report prints for the instructions: the numbers each one moves. */
-export interface TacticStats {
-  /** Balls my side won back in their third. */
-  wonHigh: number;
-  crosses: number;
-  /** Their men caught offside by my line. */
-  offsides: number;
-  /** Their goals that came on the break. */
-  breakConceded: number;
-  /** My goals that came from wide. */
-  wideGoals: number;
-  /** Extra fitness the instructions cost each man who played (negative: what standing off gave back). */
-  legs: number;
 }
 
 /** A count off a keyed stream with mean `mean` (Knuth's product, capped). */
@@ -361,3 +330,85 @@ export function tacticStatsOf(a: {
     legs: Math.round(legs),
   };
 }
+
+/* ---------- the engine's side of it: what clubManagerTacticsCore's slot holds ---------- */
+
+/** The style a club plays, off its own strength (never the level's edge, which is about you). Keyed, no draw. */
+export function opponentStyle(state: CareerState, club: string): AiStyleId {
+  return aiStyleFor(club, strengthOf(state, club));
+}
+
+/** The points of the ball the log was worth over a half (half two runs on through extra time), each minute under
+ *  what was in force then. */
+function possShift(live: LiveMatch, half: 1 | 2): number {
+  const lo = half === 1 ? 1 : 46;
+  const hi = half === 1 ? 45 : (live.et ? live.et.to : 90);
+  let sum = 0;
+  for (let m = lo; m <= hi; m++) sum += possessionShift(instructionsAt(live.instrLog, m));
+  return sum / (hi - lo + 1);
+}
+
+/** An instructions, formation or duty change on a live match, applied in place; false refuses it (the same set
+ *  again, a junk value, a formation or duty that is not one, or the shape already standing). */
+function change(state: CareerState, live: LiveMatch, ch: LiveChange, m: number, p: number): boolean {
+  const plus = p ? { plus: p } : {};
+  if (ch.kind === 'instructions') {
+    const next = readInstructions(ch.instructions);
+    const now = liveInstructions(live);
+    if (!next || INSTRUCTION_KEYS.every(k => next[k] === now[k])) return false;
+    live.instrLog = [...(live.instrLog ?? []), { minute: m, ...plus, instructions: next }];
+    return true;
+  }
+  if (ch.kind !== 'formation' && ch.kind !== 'duty') return false;
+  const fromIdx = live.formationIndex ?? state.formationIndex;
+  const from = FORMATIONS[fromIdx] ?? FORMATIONS[0];
+  const dutiesNow = from.slots.map((_, i) => liveDutyAt(state, live, i));
+  let toIdx = fromIdx;
+  let order = [...live.onPitch];
+  let duties = dutiesNow;
+  if (ch.kind === 'formation') {
+    const to = FORMATIONS[ch.formationIndex];
+    if (!to || ch.formationIndex === fromIdx || !Number.isInteger(ch.formationIndex)) return false;
+    const carried = carryShape(live.onPitch, dutiesNow, from, to, state.squad);
+    if (carried.xiIds.some(id => !id)) return false;
+    toIdx = ch.formationIndex;
+    order = carried.xiIds as string[];
+    duties = carried.xiDuties;
+  } else {
+    const slot = from.slots[ch.slot];
+    if (!slot || !Number.isInteger(ch.slot)) return false;
+    if (ch.duty !== null && !dutyOptions(slot).includes(ch.duty)) return false;
+    if ((dutiesNow[ch.slot] ?? null) === ch.duty) return false;
+    duties = dutiesNow.map((d, i) => (i === ch.slot ? ch.duty : d));
+  }
+  if (!live.kickoffShape && !live.formChanges?.length) live.kickoffShape = { formationIndex: fromIdx, duties: dutiesNow };
+  live.onPitch = order;
+  live.formationIndex = toIdx;
+  live.duties = duties;
+  live.formChanges = [...(live.formChanges ?? []), { minute: m, ...plus, formationIndex: toIdx, order: [...order], duties: [...duties] }];
+  return true;
+}
+
+setTacticsImpl({
+  edge: (state, fx: MyFixture, xi: XiSlot[], instr, half) => tacticBoost({
+    mine: instr, theirs: AI_STYLES[opponentStyle(state, fx.opponent)].instructions, half,
+    fit: xi.length ? xi.reduce((s, x) => s + x.p.fitness, 0) / xi.length : 80, duties: xi.map(x => x.duty),
+  }),
+  segment: instr => ({ knock: injuryMult(instr), shots: shotMult(instr) }),
+  possShift,
+  day: (state, fx, live, pairs, lastMinute) => {
+    const theirStyle = opponentStyle(state, fx.opponent);
+    const goals = (a?: { minute: number }[], b?: { minute: number }[]) => [...(a ?? []), ...(b ?? [])].map(g => g.minute);
+    return {
+      log: live.instrLog ?? [], theirStyle,
+      stats: tacticStatsOf({
+        key: `${worldYear(state)}:${state.clubName}:${live.week}:${live.opponent}`,
+        log: live.instrLog, theirs: AI_STYLES[theirStyle].instructions, lastMinute,
+        possHalves: [live.possH1 ?? 50, live.possH2 ?? live.possH1 ?? 50],
+        myGoalMinutes: goals(live.h1My, live.h2My), oppGoalMinutes: goals(live.h1Opp, live.h2Opp),
+        wideDuties: wideDutyCount(pairs.map(x => x.duty)),
+      }),
+    };
+  },
+  change,
+});

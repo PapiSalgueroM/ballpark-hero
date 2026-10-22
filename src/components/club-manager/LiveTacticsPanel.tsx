@@ -7,10 +7,11 @@ import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
-  FORMATIONS, DUTY_INFO, dutyOptions, liveInstructions, opponentStyle,
+  FORMATIONS, DUTY_INFO, dutyOptions, liveInstructions,
   type CareerState, type Duty, type LiveChange, type LiveMatch,
 } from '@/lib/clubManager';
 import { InstructionsPicker } from '@/components/club-manager/InstructionsPicker';
+import { opponentStyle } from '@/lib/clubManagerTactics';
 
 export function LiveTacticsPanel({ career, live, onChange, idPrefix = 'live' }: {
   career: CareerState;

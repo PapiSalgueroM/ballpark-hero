@@ -174,13 +174,14 @@ import {
 import { UCL_LEAGUE, drawUclLeaguePhase } from '@/lib/uclLeaguePhase';
 /* Round 781: the match clock with the board in it. The module imports nothing. */
 import { clockOrder, playedBy } from '@/lib/clubManagerClock';
-/* Round 1522: team instructions and the other dugout's style. The module imports this one as a type only. Every
-   reader below takes an early return on balanced, so a career that never sets one plays as it always did. */
+/* Round 1522: team instructions. The engine carries only the small core (clubManagerTacticsCore.ts): the types,
+   balanced, and the slot clubManagerTactics.ts fills when it loads. Every reader below is a no op on balanced
+   (it adds zero or multiplies by one), and with the slot empty plays balanced, so a career that never sets one
+   plays as it always did. */
 import {
-  BALANCED, AI_STYLES, aiStyleFor, injuryMult, instructionsAt, isBalanced, logEverSet, possessionShift,
-  readInstructions, shotMult, tacticBoost, tacticStatsOf, wideDutyCount,
+  BALANCED, isBalanced, logEverSet, readInstructions, tacticsImpl,
   type AiStyleId, type InstructionStep, type TacticStats, type TeamInstructions,
-} from '@/lib/clubManagerTactics';
+} from '@/lib/clubManagerTacticsCore';
 
 /**
  * Club Manager engine.
@@ -7055,55 +7056,6 @@ export function autoPickXI(squad: CMPlayer[], formation: Formation): (string | n
     }
   }
   return xi;
-}
-
-/**
- * Round 505's carry, lifted here in Round 1522 so the tactics tab and the live sheet move an eleven to a new shape
- * by one rule: every man to the first free slot wearing his old slot's label, then one on his old duty line, then
- * the same band of the pitch, then any that is left, his duty riding along wherever the new slot's line offers it.
- * Whatever is still empty is filled by autoPickXI over `squad` minus the men placed (the live sheet hands it an
- * eleven, so nothing is ever empty there). Pure, no draw. useClubManager's carryAcross is this with the tab's lists.
- */
-export function carryShape(oldIds: (string | null)[], oldDuties: (Duty | null)[], from: Formation, to: Formation, squad: CMPlayer[]): { xiIds: (string | null)[]; xiDuties: (Duty | null)[] } {
-  const xiIds: (string | null)[] = to.slots.map(() => null);
-  const xiDuties: (Duty | null)[] = to.slots.map(() => null);
-  const taken = new Set<number>();
-  const placed = new Set<string>();
-  const place = (i: number, j: number, id: string) => {
-    taken.add(j);
-    placed.add(id);
-    xiIds[j] = id;
-    const d = oldDuties[i] ?? null;
-    xiDuties[j] = d && dutyOptions(to.slots[j]).includes(d) ? d : null;
-  };
-  const freeSlot = (ok: (t: FormationSlot) => boolean): number => to.slots.findIndex((t, k) => !taken.has(k) && ok(t));
-  const picked = from.slots
-    .map((sl, i) => ({ sl, i, id: oldIds[i] }))
-    .filter((x): x is { sl: FormationSlot; i: number; id: string } => !!x.id && squad.some(p => p.id === x.id));
-  const unmatched: typeof picked = [];
-  for (const x of picked) {
-    if (placed.has(x.id)) continue;
-    const j = freeSlot(t => t.label === x.sl.label);
-    if (j < 0) { unmatched.push(x); continue; }
-    place(x.i, j, x.id);
-  }
-  for (const x of unmatched) {
-    if (placed.has(x.id)) continue;
-    const dutyLine = dutyLineOf(x.sl);
-    const pitchLine = pitchLineOf(x.sl);
-    let j = freeSlot(t => dutyLineOf(t) === dutyLine);
-    if (j < 0) j = freeSlot(t => pitchLineOf(t) === pitchLine);
-    if (j < 0) j = freeSlot(() => true);
-    if (j < 0) break;
-    place(x.i, j, x.id);
-  }
-  const empty = to.slots.map((_, j) => j).filter(j => xiIds[j] === null);
-  if (empty.length) {
-    const used = new Set(xiIds.filter((id): id is string => !!id));
-    const picks = autoPickXI(squad.filter(p => !used.has(p.id)), { name: to.name, slots: empty.map(j => to.slots[j]) });
-    empty.forEach((j, k) => { xiIds[j] = picks[k] ?? null; });
-  }
-  return { xiIds, xiDuties };
 }
 
 export function resolveXI(career: CareerState): (CMPlayer | null)[] {
@@ -15222,7 +15174,7 @@ function liveFormationOf(state: CareerState, live: LiveMatch): Formation {
 
 /** The duty on a live slot: the one frozen at kick off, or the tab's for a
  *  save paused before the match remembered them. */
-function liveDutyAt(state: CareerState, live: LiveMatch, slotIdx: number): Duty | null {
+export function liveDutyAt(state: CareerState, live: LiveMatch, slotIdx: number): Duty | null {
   if (live.duties) return live.duties[slotIdx] ?? null;
   return slotDuty(state, liveFormationOf(state, live), slotIdx);
 }
@@ -15774,7 +15726,7 @@ function drawSegmentInjury(state: CareerState, onPitch: CMPlayer[], from: number
   knock = 1): InjuryLine | null {
   const len = (to - from) / 45;
   if (!onPitch.length) return null;
-  const perHalf = knock === 1 ? INJURY_PER_HALF : INJURY_PER_HALF * knock;
+  const perHalf = INJURY_PER_HALF * knock;
   if (Math.random() >= 1 - Math.pow(1 - perHalf, len)) return null;
   const victim = pick(onPitch);
   // Round 467: the medical staff read the same draw and write it shorter.
@@ -16345,21 +16297,12 @@ function recutSegments(segs: LamSegment[] | undefined, fallback: LamSegment, min
  *  through the football it redrew; a save from before the roll existed
  *  draws it here. */
 function possessionOf(lamMine: number, lamOpp: number, noise?: number, shift = 0): number {
-  /* Round 1522: plus the instructions' share of the ball over the half (possShiftOf); 0 reads the old line. */
-  if (shift) return clamp(Math.round(50 + (lamMine - lamOpp) * 18 + (noise ?? ri(-3, 3)) + shift), 28, 72);
-  return clamp(Math.round(50 + (lamMine - lamOpp) * 18 + (noise ?? ri(-3, 3))), 28, 72);
+  /* Round 1522: plus the instructions' share of the ball over the half (possShiftOf); adding 0 is exact. */
+  return clamp(Math.round(50 + (lamMine - lamOpp) * 18 + (noise ?? ri(-3, 3)) + shift), 28, 72);
 }
 
-/** Round 1522: the points of the ball my instructions were worth over a half (half two runs on through extra
- *  time), each minute under what was in force then. 0 for a match with no instructions log. */
-function possShiftOf(live: LiveMatch, half: 1 | 2): number {
-  if (!live.instrLog || !live.instrLog.length) return 0;
-  const lo = half === 1 ? 1 : 46;
-  const hi = half === 1 ? 45 : (live.et ? live.et.to : 90);
-  let sum = 0;
-  for (let m = lo; m <= hi; m++) sum += possessionShift(instructionsAt(live.instrLog, m));
-  return sum / (hi - lo + 1);
-}
+/** Round 1522: the points of the ball my instructions were worth over a half, 0 with no log (or no module). */
+const possShiftOf = (live: LiveMatch, half: 1 | 2): number => (live.instrLog?.length ? tacticsImpl()?.possShift(live, half) ?? 0 : 0);
 
 /** Everyone of mine who has left the pitch for good: sent off, or limped off. */
 function offPitchIds(live: LiveMatch): Set<string> {
@@ -16540,17 +16483,10 @@ export function instructionsOf(career: CareerState): TeamInstructions {
   return readInstructions(career.instructions) ?? BALANCED;
 }
 
-/** Round 1522: the style a club plays, off its own strength (never the level's edge, which is about you). Keyed,
- *  never the game's stream, so asking it draws nothing. */
-export function opponentStyle(state: CareerState, club: string): AiStyleId {
-  return aiStyleFor(club, strengthOf(state, club));
-}
-
-/** Round 1522: what my instructions are worth to a half's goal rates, or null on balanced (the early return). */
+/** Round 1522: what my instructions are worth to a half's goal rates (clubManagerTactics.ts), or null on balanced
+ *  and before that module has loaded (the early return). */
 function tacticEdge(state: CareerState, fx: MyFixture, xi: XiSlot[], instr: TeamInstructions, half: 1 | 2): { atk: number; def: number } | null {
-  if (isBalanced(instr)) return null;
-  const fit = xi.length ? xi.reduce((s, x) => s + x.p.fitness, 0) / xi.length : 80;
-  return tacticBoost({ mine: instr, theirs: AI_STYLES[opponentStyle(state, fx.opponent)].instructions, half, fit, duties: xi.map(x => x.duty) });
+  return isBalanced(instr) ? null : tacticsImpl()?.edge(state, fx, xi, instr, half) ?? null;
 }
 
 /** The first half's lambdas, the kick off formula: the talk, the press, the shape, the venue. */
@@ -16564,11 +16500,9 @@ function firstHalfLambdas(state: CareerState, fx: MyFixture, xi: XiSlot[], menta
   const oppAtk = fx.home === true ? -0.12 : fx.home === false ? 0.28 : 0.08;
   /* Round 505: the duties, wherever the mentality is. */
   const duty = dutyBoost(xi, state);
-  /* Round 1522: and the instructions, on balanced not at all (the old line, untouched). */
+  /* Round 1522: and the instructions; on balanced they add exactly zero. */
   const tac = tacticEdge(state, fx, xi, instr, 1);
-  const [lamMine, lamOpp] = tac
-    ? halfLambdas(mine, oppS, ment.atk + homeAtk + duty.atk + tac.atk, ment.def + oppAtk + duty.def + tac.def)
-    : halfLambdas(mine, oppS, ment.atk + homeAtk + duty.atk, ment.def + oppAtk + duty.def);
+  const [lamMine, lamOpp] = halfLambdas(mine, oppS, ment.atk + homeAtk + duty.atk + (tac ? tac.atk : 0), ment.def + oppAtk + duty.def + (tac ? tac.def : 0));
   /* Round 670: a match that can go to extra time draws at the deflator. */
   const k = etScale(fx);
   return { lamMine: lamMine * k, lamOpp: lamOpp * k, mine, oppS };
@@ -16605,11 +16539,9 @@ function secondHalfLambdas(
   const opp2 = oppositionShape(scoreOpp, scoreMine);
   /* Round 505: the duties, the same way the first half adds them. */
   const duty = dutyBoost(xi, state);
-  /* Round 1522: the instructions in force now, half two's costs included; balanced takes the old line. */
+  /* Round 1522: the instructions in force now, half two's costs included; on balanced they add exactly zero. */
   const tac = tacticEdge(state, fx, xi, liveInstructions(live), 2);
-  const [lamMine, lamOpp] = tac
-    ? halfLambdas(mine, oppS + fire, ment2.atk + homeAtk + opp2.def + duty.atk + tac.atk, ment2.def + oppAtk + opp2.atk + duty.def + tac.def)
-    : halfLambdas(mine, oppS + fire, ment2.atk + homeAtk + opp2.def + duty.atk, ment2.def + oppAtk + opp2.atk + duty.def);
+  const [lamMine, lamOpp] = halfLambdas(mine, oppS + fire, ment2.atk + homeAtk + opp2.def + duty.atk + (tac ? tac.atk : 0), ment2.def + oppAtk + opp2.atk + duty.def + (tac ? tac.def : 0));
   /* Round 670: the same deflator as the first half, and extra time's too. */
   const k = etScale(fx);
   return { lamMine: lamMine * k, lamOpp: lamOpp * k, mine, oppS };
@@ -16883,7 +16815,8 @@ function drawSegment(
   const board: BoardWeight | undefined = period ? { to, w: BOARD[period].weight } : undefined;
   /* Round 1522: the instructions in force over this stretch (always the latest: a stretch starts at a change). */
   const instr = liveInstructions(live);
-  const me = drawMySegment(state, live, xi, from, to, nMine, maxYellows, taken, dutyOf, hi, board, injuryMult(instr));
+  const seg = isBalanced(instr) ? null : tacticsImpl()?.segment(instr) ?? null;
+  const me = drawMySegment(state, live, xi, from, to, nMine, maxYellows, taken, dutyOf, hi, board, seg ? seg.knock : 1);
   const reviewKey = `${worldYear(state)}:${state.clubName}:${live.week}:${live.opponent}:${from}:${to}`;
   const myReview = reviewKinds.includes('goal') ? settleGoalReviews(me.goals, 'me', reviewKey) : null;
   if (myReview) me.goals = myReview.goals;
@@ -16948,7 +16881,7 @@ function drawSegment(
     myCards: me.cards, oppCards,
     setPieces: state.setPieces ?? null,
     myDuty: dutyOf,
-    ...(shotMult(instr) !== 1 ? { myShotMult: shotMult(instr) } : {}),
+    ...(seg && seg.shots !== 1 ? { myShotMult: seg.shots } : {}),
   });
   if (live.varReviews) {
     const takerAt = (side: 'me' | 'opp', minute: number): { id?: string; name: string } | null => {
@@ -18835,18 +18768,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
   /* Round 1522: the instructions on the day, only for a match where mine left balanced at some point: the
      report's numbers (a keyed stream, never the game's), and the legs every man who played pays for them, after
      the week's own recovery and match cost below. */
-  const tacticsDay: MatchDetail['tactics'] | null = logEverSet(live.instrLog) ? (() => {
-    const theirStyle = opponentStyle(state, fx.opponent);
-    const stats = tacticStatsOf({
-      key: `${worldYear(state)}:${state.clubName}:${live.week}:${live.opponent}`,
-      log: live.instrLog, theirs: AI_STYLES[theirStyle].instructions, lastMinute,
-      possHalves: [live.possH1 ?? 50, live.possH2 ?? live.possH1 ?? 50],
-      myGoalMinutes: [...(live.h1My ?? []), ...(live.h2My ?? [])].map(g => g.minute),
-      oppGoalMinutes: [...(live.h1Opp ?? []), ...(live.h2Opp ?? [])].map(g => g.minute),
-      wideDuties: wideDutyCount(second.map(x => x.duty)),
-    });
-    return { log: live.instrLog ?? [], theirStyle, stats };
-  })() : null;
+  const tacticsDay = logEverSet(live.instrLog) ? tacticsImpl()?.day(state, fx, live, second, lastMinute) ?? null : null;
   if (entry.night) nightSquadTick(state, new Set(xi.map(p => p.id)));
   else tickWeek(state, new Set(xi.map(p => p.id)));
   if (tacticsDay && tacticsDay.stats.legs !== 0) {
@@ -20323,41 +20245,11 @@ export function changeLive(
     live.mentality = change.mentality;
     state.mentality = change.mentality;
     live.shapeChanges = [...(live.shapeChanges ?? []), { minute: m, mentality: change.mentality, ...plusOf({ plus: p }) }];
-  } else if (change.kind === 'instructions') {
-    /* Round 1522: from the next minute, logged at this one. The same four again is no change. */
-    const next = readInstructions(change.instructions);
-    if (!next) return null;
-    const now = liveInstructions(live);
-    if (next.press === now.press && next.tempo === now.tempo && next.width === now.width && next.line === now.line) return null;
-    live.instrLog = [...(live.instrLog ?? []), { minute: m, ...plusOf({ plus: p }), instructions: next }];
   } else {
-    /* Round 1522: a new formation (the eleven carried across, nobody benched) or one slot's duty. */
-    const fromIdx = live.formationIndex ?? state.formationIndex;
-    const from = FORMATIONS[fromIdx] ?? FORMATIONS[0];
-    const dutiesNow = from.slots.map((_, i) => liveDutyAt(state, live, i));
-    let toIdx = fromIdx;
-    let order = [...live.onPitch];
-    let duties = dutiesNow;
-    if (change.kind === 'formation') {
-      const to = FORMATIONS[change.formationIndex];
-      if (!to || change.formationIndex === fromIdx || !Number.isInteger(change.formationIndex)) return null;
-      const carried = carryShape(live.onPitch, dutiesNow, from, to, state.squad);
-      if (carried.xiIds.some(id => !id)) return null;
-      toIdx = change.formationIndex;
-      order = carried.xiIds as string[];
-      duties = carried.xiDuties;
-    } else {
-      const slot = from.slots[change.slot];
-      if (!slot || !Number.isInteger(change.slot)) return null;
-      if (change.duty !== null && !dutyOptions(slot).includes(change.duty)) return null;
-      if ((dutiesNow[change.slot] ?? null) === change.duty) return null;
-      duties = dutiesNow.map((d, i) => (i === change.slot ? change.duty : d));
-    }
-    if (!live.kickoffShape && !live.formChanges?.length) live.kickoffShape = { formationIndex: fromIdx, duties: dutiesNow };
-    live.onPitch = order;
-    live.formationIndex = toIdx;
-    live.duties = duties;
-    live.formChanges = [...(live.formChanges ?? []), { minute: m, ...plusOf({ plus: p }), formationIndex: toIdx, order: [...order], duties: [...duties] }];
+    /* Round 1522: an instructions, formation or duty change, made by the tactics module (it is loaded whenever
+       the screens that offer one are on), from the next minute; without it the change is refused. */
+    const T = tacticsImpl();
+    if (!T || !T.change(state, live, change, m, p)) return null;
   }
   live.minute = m;
   const entry = state.calendar[live.week];
@@ -20682,8 +20574,6 @@ export interface MatchFacts {
   oppDanger: string[];
   myStrength: number;
   oppStrength: number;
-  /** Round 1522: the style the other side plays (AI_STYLES in clubManagerTactics.ts). */
-  oppStyle: AiStyleId;
   /** Round 781: the first leg in my orientation, when tonight is the second
    *  leg of a two legged tie. Absent on every other match. */
   firstLeg?: { mine: number; theirs: number; home: boolean };
@@ -20724,16 +20614,11 @@ export function matchFacts(career: CareerState): MatchFacts | null {
        They stay the odds over ninety minutes: a level decider goes on. */
     const k = etScale(fx);
     /* Round 1522: and the instructions against their style, the two halves' boosts averaged (a press pays in
-       the second); balanced takes the old lines. */
+       the second); balanced adds exactly zero. */
     const t1 = tacticEdge(career, fx, xi, instructionsOf(career), 1);
     const t2 = tacticEdge(career, fx, xi, instructionsOf(career), 2);
-    const tac = t1 && t2 ? { atk: (t1.atk + t2.atk) / 2, def: (t1.def + t2.def) / 2 } : null;
-    const lamMe = tac
-      ? clamp(1.25 + (mine - oppS) * 0.055 + ment.atk + homeAtk + duty.atk + tac.atk, 0.12, 4.2) * k
-      : clamp(1.25 + (mine - oppS) * 0.055 + ment.atk + homeAtk + duty.atk, 0.12, 4.2) * k;
-    const lamOpp = tac
-      ? clamp(1.25 + (oppS - mine) * 0.055 + ment.def + oppAtk + duty.def + tac.def, 0.12, 4.2) * k
-      : clamp(1.25 + (oppS - mine) * 0.055 + ment.def + oppAtk + duty.def, 0.12, 4.2) * k;
+    const lamMe = clamp(1.25 + (mine - oppS) * 0.055 + ment.atk + homeAtk + duty.atk + (t1 && t2 ? (t1.atk + t2.atk) / 2 : 0), 0.12, 4.2) * k;
+    const lamOpp = clamp(1.25 + (oppS - mine) * 0.055 + ment.def + oppAtk + duty.def + (t1 && t2 ? (t1.def + t2.def) / 2 : 0), 0.12, 4.2) * k;
     let pWin = 0, pDraw = 0, pLoss = 0;
     for (let a = 0; a <= 9; a++) {
       for (let b = 0; b <= 9; b++) {
@@ -20798,8 +20683,6 @@ export function matchFacts(career: CareerState): MatchFacts | null {
       oppDanger,
       myStrength: Math.round(mine),
       oppStrength: Math.round(oppS),
-      /* Round 1522: the style they play, for the preview (keyed, no draw). */
-      oppStyle: opponentStyle(career, fx.opponent),
       /* Round 781: the first leg, when tonight settles a two legged tie. */
       ...(() => {
         const ctx = secondLegContext(career, w, 0, 0);

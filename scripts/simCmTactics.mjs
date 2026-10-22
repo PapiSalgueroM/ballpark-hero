@@ -174,7 +174,7 @@ async function bundle(edits) {
   const work = fs.mkdtempSync(path.join(os.tmpdir(), 'cm-tactics-'));
   const entry = path.join(work, 'entry.ts');
   const at = f => JSON.stringify(path.join(ROOT, `src/lib/${f}.ts`).split(path.sep).join('/'));
-  fs.writeFileSync(entry, `export * as cm from ${at('clubManager')};\nexport * as tac from ${at('clubManagerTactics')};\n`);
+  fs.writeFileSync(entry, `export * as cm from ${at('clubManager')};\nexport * as tac from ${at('clubManagerTactics')};\nexport * as core from ${at('clubManagerTacticsCore')};\n`);
   const out = path.join(work, 'bundle.cjs');
   let hits = 0;
   await build({
@@ -323,7 +323,7 @@ function sectionTable() {
 /* ---- styles: the other dugout ---- */
 function sectionStyles() {
   console.log("\n[styles] the other dugout's style");
-  const { cm, tac } = fresh(HEAD);
+  const { cm, tac, core } = fresh(HEAD);
   const real = Math.random;
   let draws = 0;
   Math.random = () => { draws += 1; return real(); };
@@ -345,16 +345,21 @@ function sectionStyles() {
   else ok('styles', `strong sides press high ${(pressS - pressW).toFixed(3)} more often than weak ones`);
   if (!(offW - offS >= 0.1)) fail('styles', `weak sides stand off only ${(offW - offS).toFixed(3)} more often (band 0.1)`);
   else ok('styles', `weak sides stand off ${(offW - offS).toFixed(3)} more often`);
-  /* The match facts carry the style the engine reads, at three clubs. */
+  /* The style the preview prints (opponentStyle) is the one the engine's goal rates read through the slot, at
+     three clubs: the slot's edge for a high press equals the table's boost against that style's settings. */
   for (const club of ['Everton', 'Real Madrid', 'Napoli']) {
     const s = withStream(hash32(`styles|${club}`), () => cm.startCareer(club));
     const f = cm.matchFacts(s);
     if (!f) { fail('styles', `${club}: no match facts on day one`); continue; }
-    const engine = tac.aiStyleFor(f.opponent, cm.strengthOf(s, f.opponent));
-    if (f.oppStyle !== engine || cm.opponentStyle(s, f.opponent) !== engine) fail('styles', `${club}: the preview says ${f.oppStyle}, the engine reads ${engine}`);
-    else ok('styles', `${club}: the preview's ${f.opponent} plays ${engine}, the style the engine reads`);
+    const shown = tac.opponentStyle(s, f.opponent);
+    const xi = cm.effectiveXIWithSlots(s);
+    const mine = { press: 1, tempo: 0, width: 0, line: 0 };
+    const viaEngine = core.tacticsImpl()?.edge(s, { opponent: f.opponent }, xi, mine, 1);
+    const viaTable = tac.tacticBoost({ mine, theirs: tac.AI_STYLES[shown].instructions, half: 1, fit: xi.reduce((a, x) => a + x.p.fitness, 0) / xi.length, duties: xi.map(x => x.duty) });
+    if (shown !== tac.aiStyleFor(f.opponent, cm.strengthOf(s, f.opponent)) || !viaEngine || viaEngine.atk !== viaTable.atk || viaEngine.def !== viaTable.def) fail('styles', `${club}: the preview shows ${shown} and the engine reads ${JSON.stringify(viaEngine)} against the table's ${JSON.stringify(viaTable)}`);
+    else ok('styles', `${club}: the preview's ${f.opponent} plays ${shown}, the style the engine's goal rates read`);
     const dealt = {};
-    for (const c of s.leagueClubs) if (c !== s.clubName) { const id = cm.opponentStyle(s, c); dealt[id] = (dealt[id] ?? 0) + 1; }
+    for (const c of s.leagueClubs) if (c !== s.clubName) { const id = tac.opponentStyle(s, c); dealt[id] = (dealt[id] ?? 0) + 1; }
     console.log(`    ${club}'s league: ${Object.entries(dealt).map(([k, v]) => `${k} ${v}`).join(', ')}`);
   }
 }
@@ -492,7 +497,7 @@ function runCareer(arm, club, seed) {
         for (const p of cm.expiringPlayers(s)) { const nx = cm.renewContract(s, p.id); if (nx) s = nx; }
         if (answers) {
           const f = cm.matchFacts(s);
-          if (f) s = cm.setInstructions(s, answers[arm.misread ? misreadOf(tac, f.oppStyle) : f.oppStyle]) ?? s;
+          if (f) { const id = tac.opponentStyle(s, f.opponent); s = cm.setInstructions(s, answers[arm.misread ? misreadOf(tac, id) : id]) ?? s; }
         }
         obs = null;
         restream(`week|${s.week}`);
@@ -517,7 +522,7 @@ function countMatch(cm, tac, s, report, obs, rec, key) {
   const mine = goals('me'), theirs = goals('opp');
   const t = d.tactics ? d.tactics.stats : tac.tacticStatsOf({
     key: `${key}|${obs.week}`, log: undefined,
-    theirs: tac.AI_STYLES[cm.opponentStyle(s, obs.opp)].instructions,
+    theirs: tac.AI_STYLES[tac.opponentStyle(s, obs.opp)].instructions,
     lastMinute: d.et ? d.et.to : 90, possHalves: d.possHalves ?? [d.stats.possession, d.stats.possession],
     myGoalMinutes: mine, oppGoalMinutes: theirs, wideDuties: 0,
   });

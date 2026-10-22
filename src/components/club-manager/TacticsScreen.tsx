@@ -10,7 +10,7 @@ import {
   SHOOTOUT_MAX_ORDER, shootoutOrderOf, instructionsOf,
 } from '@/lib/clubManager';
 import type { CareerState, CMPlayer, Mentality, Duty, SetPieceKey, FitGrade } from '@/lib/clubManager';
-import { instructionsSummary, type AiStyleId, type TeamInstructions } from '@/lib/clubManagerTactics';
+import { instructionsSummary, opponentStyle, type TeamInstructions } from '@/lib/clubManagerTactics';
 import { InstructionsPicker } from '@/components/club-manager/InstructionsPicker';
 import { ratingTint, SecondPositionChips } from '@/components/club-manager/SquadScreen';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
@@ -54,8 +54,8 @@ interface TacticsScreenProps {
   onMentality: (m: Mentality) => void;
   /** Round 1522: the four standing instructions. Without it the block is not drawn. */
   onInstructions?: (i: TeamInstructions) => void;
-  /** Round 1522: the next opponent's style, for the line on what tends to work against it. */
-  theirStyle?: AiStyleId | null;
+  /** Round 1522: the next opponent, for the line on how they play and what tends to work against it. */
+  theirOpponent?: string | null;
   onSlot: (slotIdx: number, playerId: string | null) => void;
   onSwap: (a: number, b: number) => void;
   onAutoPick: () => void;
@@ -118,7 +118,7 @@ interface TacticsScreenProps {
  * takers with the same-position-first lists the engine ranks.
  */
 export function TacticsScreen({
-  career, onFormation, onMentality, onInstructions, theirStyle, onSlot, onSwap, onAutoPick, onDuty, onSetPiece, onAutoSetPieces,
+  career, onFormation, onMentality, onInstructions, theirOpponent, onSlot, onSwap, onAutoPick, onDuty, onSetPiece, onAutoSetPieces,
   onShootoutOrder, openTileRequest, onOpenTileRequestDone, onSaveMatchPlan, onApplyMatchPlan, onDeleteMatchPlan,
 }: TacticsScreenProps) {
   const [openSlot, setOpenSlot] = useState<number | null>(null);
@@ -464,7 +464,7 @@ export function TacticsScreen({
           </button>
           {instrOpen && (
             <div className="mt-1.5">
-              <InstructionsPicker value={instructionsOf(career)} onChange={onInstructions} theirStyle={theirStyle} idPrefix="tab" />
+              <InstructionsPicker value={instructionsOf(career)} onChange={onInstructions} theirStyle={theirOpponent ? opponentStyle(career, theirOpponent) : null} idPrefix="tab" />
             </div>
           )}
         </div>

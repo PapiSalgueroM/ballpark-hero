@@ -4,7 +4,7 @@ import type { CareerState, MatchFacts, FormResult, TalkTone } from '@/lib/clubMa
 import { toLeague } from '@/lib/clubManager';
 import { TeamTalkRow } from '@/components/club-manager/TeamTalkRow';
 import { inFixtureOrder, myClubFirst } from '@/lib/cmMatchDisplay';
-import { AI_STYLES } from '@/lib/clubManagerTactics';
+import { AI_STYLES, opponentStyle } from '@/lib/clubManagerTactics';
 
 /**
  * Round 157: the pre-match facts screen, modelled on what a matchday app
@@ -58,6 +58,8 @@ export function MatchCentre({
   career, facts, clubColor, tone, onTone, talkRead, talkStale, onQuickSim, onLive, onBack,
 }: MatchCentreProps) {
   const f = facts;
+  /* Round 1522: the style they play (keyed, no draw), the one the engine reads. */
+  const style = opponentStyle(career, f.opponent);
   const venue = f.home === true ? 'Home' : f.home === false ? 'Away' : 'Neutral venue';
   const myPosLabel = f.myPos ? `#${f.myPos}` : null;
   const oppPosLabel = f.oppPos
@@ -119,10 +121,10 @@ export function MatchCentre({
           {venue} · their strength ~{f.oppStrength} · your XI ~{f.myStrength}
         </div>
         {/* Round 1522: how they play, and what tends to work against it. Set your instructions on the Tactics tab. */}
-        {f.oppStyle && AI_STYLES[f.oppStyle] && (
-          <div className="text-[10px] text-foreground mt-1 leading-snug" data-cm-mc-style={f.oppStyle}>
-            <span className="font-bold">{AI_STYLES[f.oppStyle].emoji} They play {AI_STYLES[f.oppStyle].label}.</span>{' '}
-            <span className="text-muted-foreground">{AI_STYLES[f.oppStyle].blurb} {AI_STYLES[f.oppStyle].read}</span>
+        {AI_STYLES[style] && (
+          <div className="text-[10px] text-foreground mt-1 leading-snug" data-cm-mc-style={style}>
+            <span className="font-bold">{AI_STYLES[style].emoji} They play {AI_STYLES[style].label}.</span>{' '}
+            <span className="text-muted-foreground">{AI_STYLES[style].blurb} {AI_STYLES[style].read}</span>
           </div>
         )}
         {/* Round 781: the first leg before a second leg, so you know what tonight has to do. */}
