@@ -1,0 +1,16 @@
+quick exit=0 15s | simCmTactics: all green (sections table, styles, balanced)
+c-keyless exit=1 2s | simCmTactics: control keyless FIRED (5 failures: styles 5; must turn styles red)
+c-weakpress exit=1 1s | simCmTactics: control weakpress FIRED (2 failures: styles 2; must turn styles red)
+c-leak exit=1 17s | simCmTactics: control leak FIRED (6 failures: balanced 6; must turn balanced red)
+c-helpwords exit=1 0s | simCmTactics: control helpwords FIRED (1 failures: table 1; must turn table red)
+tsc exit=0 126s | 
+units exit=0 100s |    Duration  99.23s (transform 5.55s, setup 595ms, collect 14.88s, tests 100.87s, environment 3.11s, prepare 846ms)
+simNoRivalNames exit=0 22s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 80s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simCmCopy exit=0 64s | simCmCopy: green on this tree. Sections 1, 2, 3, 4, 5: Club Manager says what it means.
+simCmMatchDay exit=0 45s | simCmMatchDay: all sections green (918 matches: 462 home, 448 away, 8 neutral)
+simDailyDeals exit=0 7s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+bytes exit=0 302s | simCmDifficulty: all green (sections 2)
+rulesHead exit=1 105s | simCmLeagueRules: 47 failure(s)
+rulesMain exit=1 92s | simCmLeagueRules: 47 failure(s)
+full exit=0 954s | simCmTactics: all green (sections table, styles, balanced, fleet)

@@ -1,0 +1,10 @@
+NEGATIVE CONTROL ON: leak (must turn balanced red)
+
+[balanced] all four on balanced is the untouched career, to the byte
+  FAIL [balanced]: Everton seed 1: set back to balanced is not the untouched season (159964 and 160020 characters, 49981 and 49981 draws)
+  FAIL [balanced]: Everton seed 2: set back to balanced is not the untouched season (159067 and 159123 characters, 50891 and 50891 draws)
+  FAIL [balanced]: Barcelona seed 1: set back to balanced is not the untouched season (172158 and 172214 characters, 57577 and 57577 draws)
+  FAIL [balanced]: Barcelona seed 2: set back to balanced is not the untouched season (173615 and 173671 characters, 60052 and 60052 draws)
+  FAIL [balanced]: Brighton seed 1: set back to balanced is not the untouched season (126754 and 126810 characters, 21395 and 21395 draws)
+  FAIL [balanced]: Brighton seed 2: set back to balanced is not the untouched season (159780 and 159836 characters, 44952 and 44952 draws)
+simCmTactics: control leak FIRED (6 failures: balanced 6; must turn balanced red)
