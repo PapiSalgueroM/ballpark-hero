@@ -1,0 +1,14 @@
+CONTROL debtnoop applied: this run is meant to go red
+0) the owner tail loads on demand: before the load nothing is bought, after it it is ready
+3) Each call moves what it says it moves (against placing nothing, same keyed seasons)
+   600 owner states, 6 seasons, each call where it is open:
+     squad    n 600  points  10.58  money   2.43  this season: points 5.00 money -1.98
+     youth    n 600  points   7.61  money   6.25  this season: points 0.00 money 0.00
+     stadium  n 600  points   0.00  money  11.51  this season: points 0.00 money -1.19
+     debt     n 600  points   0.00  money   0.00  this season: points 0.00 money 0.00
+  FAIL: Pay down the debt adds 0.00 points this season (need 0.3)
+  FAIL: Pay down the debt adds 0.00M over 6 seasons (need 3)
+   the debt payment's first season: 0.00M paid off on average over 600 states, its money 0.00M short of the interest that saves (0.00 percent of the payment)
+  FAIL: too few debt payments to read the fee (600 states, 0.00M paid on average)
+  FAIL: Pay down the debt costs 0.00 percent of the payment this season (the lenders' fee, need 5)
+simSoccerOwnerTail: 4 failure(s)

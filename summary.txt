@@ -1,0 +1,9 @@
+owner-s2 exit=0 5s | simSoccerOwnerTail: green. The owner picks his club, plays on the table, and every call does what it says and none is best at everything.
+owner exit=0 8s | simSoccerOwnerTail: green. The owner picks his club, plays on the table, and every call does what it says and none is best at everything.
+owner-s3 exit=0 3s | simSoccerOwnerTail: green. The owner picks his club, plays on the table, and every call does what it says and none is best at everything.
+owner-s4 exit=0 4s | simSoccerOwnerTail: green. The owner picks his club, plays on the table, and every call does what it says and none is best at everything.
+owner-s9 exit=0 3s | simSoccerOwnerTail: green. The owner picks his club, plays on the table, and every call does what it says and none is best at everything.
+ctl-debtfree exit=1 3s | simSoccerOwnerTail: 1 failure(s)
+ctl-debtnoop exit=1 3s | simSoccerOwnerTail: 4 failure(s)
+ctl-dominant exit=1 2s | simSoccerOwnerTail: 5 failure(s)
+tsc exit=0 50s | 

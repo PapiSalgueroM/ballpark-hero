@@ -1,0 +1,18 @@
+CONTROL dominant applied: this run is meant to go red
+0) the owner tail loads on demand: before the load nothing is bought, after it it is ready
+4) No dominant choice
+   the 576 states where all four calls are open, 6 seasons:
+     squad    n 576  points  10.35  money  15.61
+     youth    n 576  points   7.72  money   5.99
+     stadium  n 576  points   0.00  money  11.45
+     debt     n 576  points   4.73  money   6.49
+  FAIL: squad is never beaten by youth by a margin at 6 seasons (points -2.62, money -9.63): squad dominates youth
+  FAIL: squad is never beaten by stadium by a margin at 6 seasons (points -10.35, money -4.17): squad dominates stadium
+  FAIL: squad is never beaten by debt by a margin at 6 seasons (points -5.62, money -9.12): squad dominates debt
+   12 ordered pairs: every call is beaten by every other somewhere by 0.5 points or 0.3M
+    3 seasons: most points squad (8.89), most money squad (12.83)
+  FAIL: at 3 seasons squad is the best call for points and for money: a dominant choice
+    6 seasons: most points squad (10.35), most money squad (15.61)
+  FAIL: at 6 seasons squad is the best call for points and for money: a dominant choice
+   10 seasons: most points youth (14.23), most money stadium (22.05)
+simSoccerOwnerTail: 5 failure(s)

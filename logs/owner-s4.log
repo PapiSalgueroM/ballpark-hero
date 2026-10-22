@@ -1,0 +1,19 @@
+0) the owner tail loads on demand: before the load nothing is bought, after it it is ready
+3) Each call moves what it says it moves (against placing nothing, same keyed seasons)
+   600 owner states, 6 seasons, each call where it is open:
+     squad    n 600  points  10.57  money   2.47  this season: points 5.00 money -2.03
+     youth    n 600  points   7.63  money   5.97  this season: points 0.00 money 0.00
+     stadium  n 600  points   0.00  money  11.72  this season: points 0.00 money -1.22
+     debt     n 574  points   5.03  money   6.88  this season: points 0.77 money 0.35
+   the debt payment's first season: 7.07M paid off on average over 574 states, its money 0.71M short of the interest that saves (10.00 percent of the payment)
+4) No dominant choice
+   the 574 states where all four calls are open, 6 seasons:
+     squad    n 574  points  10.63  money   2.56
+     youth    n 574  points   7.66  money   5.79
+     stadium  n 574  points   0.00  money  11.11
+     debt     n 574  points   5.03  money   6.88
+   12 ordered pairs: every call is beaten by every other somewhere by 0.5 points or 0.3M
+    3 seasons: most points squad (8.89), most money stadium (3.63)
+    6 seasons: most points squad (10.63), most money stadium (11.11)
+   10 seasons: most points youth (13.80), most money stadium (21.33)
+simSoccerOwnerTail: green. The owner picks his club, plays on the table, and every call does what it says and none is best at everything.
