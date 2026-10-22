@@ -1,0 +1,4 @@
+build exit=0 22s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+cmfit-p2 exit=1 168s | Shots and part1.json: /home/runner/work/_temp/t-cmfit-p2/out/shots
+cmfit-p2-ctl-none exit=1 10s | Node.js v24.22.0
+cmfit-p2-main exit=1 13s | Node.js v24.22.0

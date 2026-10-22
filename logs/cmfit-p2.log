@@ -1,0 +1,20 @@
+served 8fea14e2 on 4175: 200
+/tmp/wt-8fea14e2/dist
+PART 2: this tree at http://localhost:4173, the base at http://localhost:4175
+   comparator: a save altered by one byte is reported, an equal one is not
+   head Liverpool 2026-27 at 390: ok the Squad tab, ok every sort key once (the phone picker), ok three rows opened and shut, ok the Home tab, ok the Dressing room tile, ok 2 men opened in the dressing room, ok back to the hub, ok the Manager tile, ok 3 of 3 Quick Sims; 5117 random draws; save 88427 chars
+   B Hertha at 320: "💀 Worst defeat: 2-3 vs Nürnberg"
+   head Hertha book save at 320: ok the Squad tab, ok every sort key once (the phone picker), ok three rows opened and shut, ok the Home tab, ok the Dressing room tile, ok 2 men opened in the dressing room, ok back to the hub, ok the Manager tile, ok 3 of 3 Quick Sims; 4015 random draws; save 108261 chars
+   base Liverpool 2026-27 at 390: ok the Squad tab, ok every sort key once (the phone picker), ok three rows opened and shut, ok the Home tab, ok the Dressing room tile, ok 2 men opened in the dressing room, ok back to the hub, ok the Manager tile, ok 3 of 3 Quick Sims; 4901 random draws; save 82312 chars
+   base Hertha book save at 320: ok the Squad tab, ok every sort key once (the phone picker), ok three rows opened and shut, ok the Home tab, ok the Dressing room tile, ok 2 men opened in the dressing room, ok back to the hub, ok the Manager tile, ok 3 of 3 Quick Sims; 4015 random draws; save 105186 chars
+   FAIL D liverpool: the saves differ from char 142: .budget: 139.65 on the base, 140.65 now | .boardConfidence: 52.1 on the base, 54.8 now | .squad.0.fitness: 74 on the base, 72 now | .squad.0.morale: 75.6 on the base, 71.6 now | .squad.0.ratingSum: 19.5 on the base, 20.5 now | .squad.0.comp.league.ratingSum: 19.5 on the base, 20.5 now | .squad.1.morale: 81.6 on the base, 71.6 now | .squad.1.seasonGoals: 3 on the base, 1 now | .squad.1.ratingSum: 22.3 on the base, 19.9 now | .squad.1.comp.league.goals: 3 on the base, 1 now
+   FAIL D liverpool: 4901 random draws on the base, 5117 on this tree
+   FAIL D hertha: the saves differ from char 147: .budget: 10.35 on the base, 10.36 now | .careerStats.highestScoring: undefined on the base, {"opp":"St. Pauli","score":"4-3","res":"W","season":1} now | .books.season.shirts: undefined on the base, {"v":1,"weeks":4,"openingPence":0,"grossPence":1930000,"cost now | .approach.club: "West Ham" on the base, "Fenerbahçe" now | .approach.leagueName: "EFL Championship" on the base, "Süper Lig" now | .approach.blurb: "⚔️ Challengers club · EFL Championship · £35m budget · the  on the base, "⚔️ Challengers club · Süper Lig · £45m budget · the board w now | .worldComps: undefined on the base, {"ucl":{"v":1,"s":1,"f":"l36","seed":3413368466,"clubs":["PS now
+   D hertha: 4015 random draws on both builds
+   B head Everton at 320: "💀 Worst defeat: 1-5 vs Newcastle"
+   B base Everton at 320: "💀 Worst defeat: 5-1 vs Newcastle"
+   C reduced motion: squad list 0 running (0 on the whole page), contracts desk 0 running (0 on the whole page), dressing room 0 running (0 on the whole page), career card 0 running (0 on the whole page)
+   E: the chunks holding the save key: base clubManager-D-vLrbID.js (786656 bytes), index-CdTRb3PV.js (794056 bytes), managerHotSeat-CM3KdIbI.js (31723 bytes); this tree clubManager-BIhlEaFz.js (876999 bytes), index-n_O3Xw2P.js (795655 bytes), managerHotSeat-QXqU8Pjp.js (32066 bytes); same name and bytes as built: no
+   FAIL E: the chunks holding the save key differ in their own code, not only in the hashed names they import
+PART 2: FAIL, 4 findings
+Shots and part1.json: /home/runner/work/_temp/t-cmfit-p2/out/shots
