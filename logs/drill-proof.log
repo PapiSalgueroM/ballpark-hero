@@ -1,0 +1,5 @@
+treeWithoutMerge: b62dfaf1fabfd34a8093edffede8097c555b8f19, a0b24a59 without 406c3c0a; conflicts kept from a0b24a59: none
+base b62dfaf1fabfd34a8093edffede8097c555b8f19 (this head without PR334's merge 406c3c0a)
+runProver: drill at b62dfaf1fabfd34a8093edffede8097c555b8f19 (a0b24a59 without 406c3c0a (back to 99154ea3))
+PASS Drill pointer cancellation: three six-case arms, two original-binding assertion failures, five held markup cases, four diagnostic controls
+runProver: drill exit 0

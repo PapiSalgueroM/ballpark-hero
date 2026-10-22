@@ -1,0 +1,12 @@
+PASS 320-top: full retired labels, age and read purity
+PASS 320-footer: full retired labels, age and read purity
+PASS 390-top: full retired labels, age and read purity
+PASS 390-footer: full retired labels, age and read purity
+PASS 430-top: full retired labels, age and read purity
+PASS 430-footer: full retired labels, age and read purity
+PASS 1440-top: full retired labels, age and read purity
+PASS 1440-footer: full retired labels, age and read purity
+Retirement action states: 8/8 declared.
+Retirement confirmations: 4/4 actual Cancel flows.
+Retirement controls: 2/2 effective with full undo.
+PASS Soccer retirement actions browser
