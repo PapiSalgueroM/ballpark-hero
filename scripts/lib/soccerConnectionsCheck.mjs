@@ -19,8 +19,12 @@
  *                          soccer awards record (Round 708) and the lists
  *                          this round verified in connectionsVerified2026-10.
  *
- * The data passed in is the site's own; this file reads nothing itself.
+ * The data passed in is the site's own. Only loadConnectionsRecord, at the
+ * bottom, reads files: the round's record and the award ledgers.
  */
+
+import fs from 'node:fs';
+import path from 'node:path';
 
 /* Letters NFD does not split into a base and a mark. */
 const PLAIN = { ı: 'i', ł: 'l', ø: 'o', đ: 'd', ð: 'd', ß: 'ss', æ: 'ae', œ: 'oe', þ: 'th' };
@@ -188,4 +192,36 @@ export function makeSoccerChecker({ careerPlayers, clubSeasonsOf, nationalityMap
   }
 
   return { criterion, fits, labelOf: g => g.category };
+}
+
+/**
+ * The record the checker judges by: the round's ledger with its squads, and the
+ * closed award lists, each from a verified ledger. The one function here that
+ * reads files; simConnectionsFacts and simFairPuzzles both load through it.
+ */
+export function loadConnectionsRecord(root) {
+  const read = p => JSON.parse(fs.readFileSync(path.join(root, p), 'utf8'));
+  const ledger = read('scripts/data/connectionsVerified2026-10/ledger.json');
+  ledger.squads = read('scripts/data/connectionsVerified2026-10/squads.json').squads;
+  /* The closed award lists the checker may judge, each from a verified ledger. */
+  const ballon = read('scripts/data/ballonDorVerified2026-09.json');
+  const awards = read('scripts/data/soccerAwardsVerified2026-09.json');
+  const setOf = names => new Set(names.map(fold));
+  const men = ballon.rows.filter(r => r.award_type === 'Men' && r.rank === 1);
+  /* knownGaps are winners the sources have decided and the table does not hold yet: still winners. */
+  const winnersOf = award => { const a = awards.verifiedAwards.find(x => x.award === award); return [...(a?.winners ?? []), ...(a?.knownGaps ?? [])].map(w => w.winner); };
+  const awardLists = {
+    ballonDor: { labels: [/^Won the Ballon d'Or$/], members: setOf(men.map(r => r.player_name)) },
+    ballonDor2000s: { labels: [/^Won the Ballon d'Or in the 2000s$/], members: setOf(men.filter(r => r.year >= 2000 && r.year <= 2009).map(r => r.player_name)) },
+    ballonDor2010s: { labels: [/^Won the Ballon d'Or in the 2010s$/], members: setOf(men.filter(r => r.year >= 2010 && r.year <= 2019).map(r => r.player_name)) },
+    ballonDorFeminin: { labels: [/^Won the Ballon d'Or F[eé]minin$/], members: setOf(ballon.rows.filter(r => r.award_type === 'Women' && r.rank === 1).map(r => r.player_name)) },
+    goldenShoe: { labels: [/^Won the European Golden Shoe$/], members: setOf(winnersOf('European Golden Shoe')) },
+    plPlayerOfSeason: { labels: [/^Won the Premier League Player of the Season$/], members: setOf(winnersOf('Premier League Player of the Season')) },
+    mlsMvp: { labels: [/^Won the MLS MVP$/, /^MLS MVP winners$/], members: setOf(winnersOf('MLS MVP')) },
+  };
+  /* Lists this round verified, two hosts each, live in the ledger. */
+  for (const [key, list] of Object.entries(ledger.lists ?? {})) {
+    awardLists[key] = { labels: list.labels.map(l => ({ test: t => t === l })), members: setOf(list.members) };
+  }
+  return { ledger, awardLists };
 }

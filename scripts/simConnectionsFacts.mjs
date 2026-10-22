@@ -49,14 +49,13 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
 import { crossCheckBoards, findingKey } from './lib/connectionsCrossCheck.mjs';
-import { makeSoccerChecker, fold } from './lib/soccerConnectionsCheck.mjs';
+import { makeSoccerChecker, fold, loadConnectionsRecord } from './lib/soccerConnectionsCheck.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const R = ROOT.replaceAll('\\', '/');
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'connfacts-'));
 const ENTRY = path.join(TMP, 'entry.mjs');
 const OUT = path.join(TMP, 'bundle.mjs');
-const LEDGER_DIR = path.join(ROOT, 'scripts/data/connectionsVerified2026-10');
 const CONTROL = process.env.CONN_CONTROL ?? '';
 const MEASURE = process.env.CONN_MEASURE ?? '';
 
@@ -79,37 +78,17 @@ await build({
   outfile: OUT, logLevel: 'error', alias: { '@': path.join(ROOT, 'src') },
 });
 const data = await import(pathToFileURL(OUT).href);
-const ledger = JSON.parse(fs.readFileSync(path.join(LEDGER_DIR, 'ledger.json'), 'utf8'));
-ledger.squads = JSON.parse(fs.readFileSync(path.join(LEDGER_DIR, 'squads.json'), 'utf8')).squads;
+const { ledger, awardLists } = loadConnectionsRecord(ROOT);
 
 /* The boards under test: the shipped file, or the lead's export of the live table. */
 let boards = data.boards.map(b => ({ id: b.id, groups: b.groups.map(g => ({ ...g, players: [...g.players] })) }));
 if (process.env.CONN_LIVE) {
   const rows = JSON.parse(fs.readFileSync(process.env.CONN_LIVE, 'utf8'));
-  boards = rows.map(r => ({ id: r.puzzle_id, groups: typeof r.groups_json === 'string' ? JSON.parse(r.groups_json) : r.groups_json }));
+  const groupsOf = raw => { const v = typeof raw === 'string' ? JSON.parse(raw) : raw; return Array.isArray(v) ? v : (v?.groups ?? []); };
+  boards = rows.map(r => ({ id: r.puzzle_id, groups: groupsOf(r.groups_json) }));
   console.log(`CONN_LIVE: checking ${boards.length} rows of the live table export, not the shipped file`);
 }
 
-/* The closed award lists the checker may judge, each from a verified ledger. */
-const ballon = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/data/ballonDorVerified2026-09.json'), 'utf8'));
-const awards = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/data/soccerAwardsVerified2026-09.json'), 'utf8'));
-const setOf = names => new Set(names.map(fold));
-const men = ballon.rows.filter(r => r.award_type === 'Men' && r.rank === 1);
-/* knownGaps are winners the sources have decided and the table does not hold yet: still winners. */
-const winnersOf = award => { const a = awards.verifiedAwards.find(x => x.award === award); return [...(a?.winners ?? []), ...(a?.knownGaps ?? [])].map(w => w.winner); };
-const awardLists = {
-  ballonDor: { labels: [/^Won the Ballon d'Or$/], members: setOf(men.map(r => r.player_name)) },
-  ballonDor2000s: { labels: [/^Won the Ballon d'Or in the 2000s$/], members: setOf(men.filter(r => r.year >= 2000 && r.year <= 2009).map(r => r.player_name)) },
-  ballonDor2010s: { labels: [/^Won the Ballon d'Or in the 2010s$/], members: setOf(men.filter(r => r.year >= 2010 && r.year <= 2019).map(r => r.player_name)) },
-  ballonDorFeminin: { labels: [/^Won the Ballon d'Or F[eé]minin$/], members: setOf(ballon.rows.filter(r => r.award_type === 'Women' && r.rank === 1).map(r => r.player_name)) },
-  goldenShoe: { labels: [/^Won the European Golden Shoe$/], members: setOf(winnersOf('European Golden Shoe')) },
-  plPlayerOfSeason: { labels: [/^Won the Premier League Player of the Season$/], members: setOf(winnersOf('Premier League Player of the Season')) },
-  mlsMvp: { labels: [/^Won the MLS MVP$/, /^MLS MVP winners$/], members: setOf(winnersOf('MLS MVP')) },
-};
-/* Lists this round verified, two hosts each, live in the ledger. */
-for (const [key, list] of Object.entries(ledger.lists ?? {})) {
-  awardLists[key] = { labels: list.labels.map(l => ({ test: t => t === l })), members: setOf(list.members) };
-}
 const soccer = makeSoccerChecker({
   careerPlayers: data.careerPlayers,
   clubSeasonsOf: data.clubSeasonsOf,
@@ -168,8 +147,13 @@ console.log('1) no group claims the present');
   let n = 0;
   for (const b of boards) for (const g of b.groups) {
     if (PRESENT.test(g.category)) { n += 1; fail(`${b.id}: "${g.category}" claims the present, and a saved board outlives it; stamp a past season`); }
+    /* a season in a label is a claim about that season: only the stamped shapes the checker can hold to a squad pass */
+    else if (/(19|20)[0-9]{2}-[0-9]{2}/.test(g.category)) {
+      const c = soccer.criterion(g.category);
+      if (!c || (c.kind !== 'clubSeason' && c.kind !== 'leagueSeason')) { n += 1; fail(`${b.id}: "${g.category}" names a season in a shape nothing holds to that season's squad`); }
+    }
   }
-  console.log(`   ${n} present tense labels`);
+  console.log(`   ${n} present tense or unstamped season labels`);
 }
 
 console.log('2) no refuted claim is on a board');
