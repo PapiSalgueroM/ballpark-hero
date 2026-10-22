@@ -1,0 +1,13 @@
+#!serve
+#!playwright
+sweep-all: ENGINES=chromium node scripts/sweepPhone.mjs
+noclip-nba: SWEEP_PHONE_CONTROL=noclip ROUTE=/nba-connections ENGINES=chromium node scripts/sweepPhone.mjs
+noclip-nhl: SWEEP_PHONE_CONTROL=noclip ROUTE=/nhl-connections ENGINES=chromium node scripts/sweepPhone.mjs
+stackhidden-nba: SWEEP_PHONE_CONTROL=stackhidden ROUTE=/nba-connections ENGINES=chromium node scripts/sweepPhone.mjs
+stackhidden-home: SWEEP_PHONE_CONTROL=stackhidden ROUTE=/ ENGINES=chromium node scripts/sweepPhone.mjs
+counthidden: SWEEP_PHONE_CONTROL=counthidden ROUTE=/stadium-tycoon ENGINES=chromium node scripts/sweepPhone.mjs
+bogus: SWEEP_PHONE_CONTROL=bogus ROUTE=/nba-connections ENGINES=chromium node scripts/sweepPhone.mjs
+mutS-hiddenrow-nba: ENGINES=chromium node .rc/x/mutSweep2.mjs hiddenrow
+mutS-hiddenrow-nhl: ROUTE=/nhl-connections ENGINES=chromium node .rc/x/mutSweep2.mjs hiddenrow
+mutS-visiblerow: ENGINES=chromium node .rc/x/mutSweep2.mjs visiblerow
+mutS-noscroll: ENGINES=chromium node .rc/x/mutSweep2.mjs noscroll
