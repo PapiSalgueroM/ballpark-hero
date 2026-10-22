@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+motionfull: node scripts/simLiveSimMotion.mjs
+mapswap: LIVE_MOTION_CONTROL=mapswap node scripts/simLiveSimMotion.mjs
+turnback: LIVE_MOTION_CONTROL=turnback node scripts/simLiveSimMotion.mjs
+deadrestart: LIVE_MOTION_CONTROL=deadrestart node scripts/simLiveSimMotion.mjs
+feederholds: LIVE_MOTION_CONTROL=feederholds node scripts/simLiveSimMotion.mjs
+facing: LIVE_MOTION_CONTROL=facing node scripts/simLiveSimMotion.mjs
+metresswap: LIVE_MOTION_CONTROL=metresswap node scripts/simLiveSimMotion.mjs
+longpass32: LIVE_MOTION_CONTROL=longpass32 node scripts/simLiveSimMotion.mjs
