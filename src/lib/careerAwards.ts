@@ -45,7 +45,7 @@
    still a number, c.allPros still counts All-Pro nods. This round changes
    how OFTEN they fire and nothing else. */
 
-import { bestOfNAt, gumbel, type FieldConfig } from './awardDraw';
+import { beatsFieldOf, type FieldConfig } from './awardDraw';
 export { beatsFieldOf, bestOfNAt, gumbel } from './awardDraw';
 export type { FieldConfig } from './awardDraw';
 
@@ -225,24 +225,19 @@ function fieldFor(sport: UsAwardSport, pos: string): { mean: number; sd: number 
 /* Round 1525: the field draw (FieldConfig, the Gumbel draw and the best of n bar, with the reasoning that set them)
    moved verbatim to awardDraw.ts, so Soccer Career binds it without loading the four tables in this file. Re-exported
    here, so every caller reads the same functions from this file as before. */
-function bestOfN(n: number, rng: () => number): number {
-  return bestOfNAt(n, gumbel(rng));
-}
 
 /**
  * Did your season beat the field?
  *
  * One draw, one answer. Called once per award per season with the engine's
  * own rng, so a seeded career replays identically, which is the whole reason
- * this takes an rng instead of reaching for Math.random.
+ * this takes an rng instead of reaching for Math.random. The arithmetic lives
+ * once, in awardDraw.ts's beatsFieldOf, which Soccer Career calls too.
  */
 export function beatsField(
   rng: () => number, sport: UsAwardSport, pos: string, score: number, cfg: FieldConfig,
 ): boolean {
-  const base = fieldFor(sport, pos);
-  const z = base.sd > 0 ? (score - base.mean) / base.sd : 0;
-  const rivals = Math.max(1.2, cfg.pool / Math.max(1, cfg.slots));
-  return z > bestOfN(rivals, rng) + (cfg.grade ?? 0);
+  return beatsFieldOf(rng, fieldFor(sport, pos), score, cfg);
 }
 
 /* ================================================================== */

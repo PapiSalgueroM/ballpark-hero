@@ -67,9 +67,9 @@ export function bestOfNAt(n: number, g: number): number {
 }
 
 /**
- * Round 1525: did your season beat the field, for a career whose field table lives beside its own engine (Soccer
- * Career, soccerSeasonAwards.ts). The same z, the same rival count and the same one draw as careerAwards.ts's
- * beatsField, the field passed in.
+ * Round 1525: did your season beat the field? The field is passed in, so a career whose table lives beside its own
+ * engine (Soccer Career, soccerSeasonAwards.ts) calls this directly, and careerAwards.ts's beatsField calls it with
+ * the US table's row: one copy of the arithmetic (z, the rival count, one draw) for every career.
  */
 export function beatsFieldOf(
   rng: () => number, base: { mean: number; sd: number }, score: number, cfg: FieldConfig,
