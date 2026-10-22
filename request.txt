@@ -1,0 +1,3 @@
+base-staff: R=$(pwd); git worktree add /tmp/b-st 1c7205d059cbcb380ebacaef99ba6751e8c641df > /dev/null 2>&1; ln -sfn $R/node_modules /tmp/b-st/node_modules; cd /tmp/b-st && node scripts/simNflCoachStaffRecovery.mjs
+base-world: R=$(pwd); git worktree add /tmp/b-wc 1c7205d059cbcb380ebacaef99ba6751e8c641df > /dev/null 2>&1; ln -sfn $R/node_modules /tmp/b-wc/node_modules; cd /tmp/b-wc && node scripts/simManagerWorldContinuity.mjs
+base-waiver: R=$(pwd); git worktree add /tmp/b-nw 1c7205d059cbcb380ebacaef99ba6751e8c641df > /dev/null 2>&1; ln -sfn $R/node_modules /tmp/b-nw/node_modules; cd /tmp/b-nw && node scripts/simNhlWaiverReceipt.mjs

@@ -1,0 +1,3 @@
+base-staff exit=1 1s | Node.js v24.21.0
+base-waiver exit=0 3s | NHL waiver: exact copied targets, CRLF-safe controls, owned cleanup and offline transport verified.
+base-world exit=1 29s |     at async file:///tmp/b-wc/scripts/simManagerWorldContinuity.mjs:523:24
