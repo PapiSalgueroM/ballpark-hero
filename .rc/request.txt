@@ -1,0 +1,6 @@
+sa-2: SIM_SEASON_AWARDS_SECTIONS=2 node scripts/simSoccerSeasonAwards.mjs
+sa-2-seed2024: SIM_SEASON_AWARDS_SECTIONS=2 SIM_SEASON_AWARDS_SEED=2024 node scripts/simSoccerSeasonAwards.mjs
+sa-2-seed77: SIM_SEASON_AWARDS_SECTIONS=2 SIM_SEASON_AWARDS_SEED=77 node scripts/simSoccerSeasonAwards.mjs
+sa-34: SIM_SEASON_AWARDS_SECTIONS=3,4 node scripts/simSoccerSeasonAwards.mjs
+form-5: SIM_CAREER_FORM_SECTIONS=5 node scripts/simCareerForm.mjs
+form-5-nogate: SIM_CAREER_FORM_CONTROL=nogate node scripts/simCareerForm.mjs
