@@ -1,0 +1,32 @@
+1) the slate, 20 seeds by 8 seasons (160 seasons, 160 slates, 0 on the fallback circle)
+   repeated regular season pairs 0, seasons with a repeat 0 of 160; home games a school a season 4 to 8
+2) the slate is known at kickoff and is what gets played
+   seasons whose fixtures did not list twelve games before week 1 0; rounds that played other games than the slate set 0
+   the copy's week shape: guide weeks 1 to 4 out of conference, 5 to 11 conference play; board 1-4, 5-11; rivalry week 12
+   conference games played 20640, outside the copy's conference weeks and rivalry week 0
+3) Notre Dame is an independent
+   in a title game 0; seasons off 5 ACC games 0; ranked top 12 at selection 156 times, left out of the field 0; in the field 156 of 160
+   the copy says 5 ACC teams a season (guide) and 5 a year (What's New); seasons off the guide's number 0
+   built case: Notre Dame ranked 12, in the field true
+4) the Playoff: four title games, no Group of Five one, the fifth spot handed out
+   seasons without exactly 4 title games 0; Group of Five title games 0; seasons whose best ranked Group of Five school missed its spot 0
+   the Conferences tab's auto spot row (first of the Group of Five table) against the school given the spot: 0 of 160 seasons differ; Group of Five tables off the ranking order 0
+5) rivalry week and the conference count
+   week 12 games off the table's pair 0; table pairs not played 0; league schools off six conference games (seven with an in-league rival in an even league) 0
+6) the rivalry table: real schools, one row a school, two sources a row on two hosts, no wiki
+   rows read 18, rows the module exports 18
+7) old saves: a season already under way keeps its old draw, groups and rivalry pairs, the next one is real
+   its rivalry week in the order and home sides the old table gives: true; the old and series tables make different games: true
+   its rivalry week: 22 pairs played, 0 off the 22 it started with (11 of those are not on the series table); schools whose rival as the board reads it is not the one it plays: 0
+   the old season: slate or format built false, Notre Dame in the ACC table true, title games 5
+   the next season: format 1, slate for it true
+   the next season: schools whose rival is not the series table's 0
+8) the builder under load: 300 slates from fresh seeds
+   on the fallback circle 0, repeated pairs 0, 8.0 ms a slate
+9) CBB: its series rows are rivalry pairs, and the table goes by league record
+   tables checked 90, out of league order 0; tournament fields the league record changed 47
+   early tables (rounds 1 to 3) 270, rows still 0-0 in the league 123, of them below a losing league record 0
+   an old CBB season's rivalry night in the order and home sides the old table gives: true; the old and series tables make different games: true
+   an old CBB season: rivalry night 20 pairs, 0 off the 20 it started with (0 not on the series table); rival as the board reads it off for 0
+
+simCfbSlate: all green
