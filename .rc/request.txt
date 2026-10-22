@@ -1,0 +1,28 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+owner: node scripts/simSoccerOwnerTail.mjs
+owner-salt4: SIM_OWNER_SALT=4 node scripts/simSoccerOwnerTail.mjs
+owner-salt9: SIM_OWNER_SALT=9 node scripts/simSoccerOwnerTail.mjs
+owner-wide6: sed 's/seed <= 116; seed += 1/seed <= 176; seed += 1/' scripts/simSoccerOwnerTail.mjs > scripts/simOwnerWideRun.mjs && grep -c 'seed <= 176' scripts/simOwnerWideRun.mjs && SIM_OWNER_ONLY=6 node scripts/simOwnerWideRun.mjs
+c-randomclub: SIM_OWNER_CONTROL=randomclub node scripts/simSoccerOwnerTail.mjs
+c-coin: SIM_OWNER_CONTROL=coin node scripts/simSoccerOwnerTail.mjs
+c-mathrandom: SIM_OWNER_CONTROL=mathrandom node scripts/simSoccerOwnerTail.mjs
+c-squadnoop: SIM_OWNER_CONTROL=squadnoop node scripts/simSoccerOwnerTail.mjs
+c-youthnoop: SIM_OWNER_CONTROL=youthnoop node scripts/simSoccerOwnerTail.mjs
+c-stadiumnoop: SIM_OWNER_CONTROL=stadiumnoop node scripts/simSoccerOwnerTail.mjs
+c-debtnoop: SIM_OWNER_CONTROL=debtnoop node scripts/simSoccerOwnerTail.mjs
+c-dominant: SIM_OWNER_CONTROL=dominant node scripts/simSoccerOwnerTail.mjs
+c-oldsave: SIM_OWNER_CONTROL=oldsave node scripts/simSoccerOwnerTail.mjs
+c-drawshift: SIM_OWNER_CONTROL=drawshift node scripts/simSoccerOwnerTail.mjs
+vitest: node_modules/.bin/vitest run src/test/scoreShown.test.tsx src/test/soccerCareerDugoutTable.test.tsx src/test/soccerCareerSaveRecovery.test.tsx src/test/soccerCareerDebutLegacy.test.tsx --testTimeout=300000 --hookTimeout=120000
+simManagerCareer: node scripts/simManagerCareer.mjs
+simManagerEpilogue: node scripts/simManagerEpilogue.mjs
+simCareerMoneyAfterRetirement: node scripts/simCareerMoneyAfterRetirement.mjs
+simScoreShown: node scripts/simScoreShown.mjs
+simCareerNoDeadEnd: node scripts/simCareerNoDeadEnd.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simSoccerDeck: node scripts/simSoccerDeck.mjs
