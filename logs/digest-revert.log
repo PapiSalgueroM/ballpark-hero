@@ -1,0 +1,8 @@
+4b) a synthetic league with no domestic cup, ten seasons
+   10 summers, 340 matches, 0 cup weeks, 0 cup objectives, 0 cup matches; the cup league next door still plays its four rounds
+4c) a three tier chain and a cupless league in a nation with a cup, ten seasons
+   10 summers, 0 broken, my club changed division 4 times; 10 cup brackets, 0 cupless clubs in them
+5) the built chunks: each era in its own chunk, reached only by a dynamic import
+   (no build in dist/, skipped: run vite build first)
+
+simCmLeagueRules: 47 failure(s)

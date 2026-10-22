@@ -1,0 +1,14 @@
+   6911 era players, 22 buildable names, 22 listed
+3d) no league or nation id is branched on outside the rules table
+   125 sources read, 61 ids, 0 finding(s)
+4a) a synthetic top flight that sends 4 down into a modelled second tier, ten seasons
+   bottom of the ladder: "Stay up. Avoid relegation" target 16
+   10 summers, 80 club moves, my club changed division 4 times
+4b) a synthetic league with no domestic cup, ten seasons
+   10 summers, 340 matches, 0 cup weeks, 0 cup objectives, 0 cup matches; the cup league next door still plays its four rounds
+4c) a three tier chain and a cupless league in a nation with a cup, ten seasons
+   10 summers, 0 broken, my club changed division 4 times; 10 cup brackets, 0 cupless clubs in them
+5) the built chunks: each era in its own chunk, reached only by a dynamic import
+   (no build in dist/, skipped: run vite build first)
+
+simCmLeagueRules: 47 failure(s)
