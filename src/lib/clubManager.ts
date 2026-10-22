@@ -53,7 +53,7 @@ import type { CalDate } from '@/lib/calDate';
 import type { NightRef, NightResult } from '@/lib/worldNights';
 import { entrantsFrom, evaluateOneOff, myOneOffFixture, oneOffNightsOf, oneOffPartial, oneOffPlayedIn, oneOffRowAt, oneOffRowFor } from '@/lib/worldOneOffs';
 import type { OneOffFixture, OneOffResult, OneOffRow, OneOffSkip, OneOffSlice, OneOffTables } from '@/lib/worldOneOffs';
-import { CM_ONE_OFF_CUP_RUNNERS_UP_2025_26, CM_ONE_OFF_SEASON_ONE } from '@/data/cmOneOffRows';
+import { CM_ONE_OFF_CUP_RUNNERS_UP_2025_26, CM_ONE_OFF_SEASON_ONE, CM_ONE_OFF_UEL_WINNER_2025_26 } from '@/data/cmOneOffRows';
 /* Round 1229: the one scorer weight table. It imports a type and nothing else, so there is no cycle. */
 import { goalWeight, assistWeight, ASSIST_SHARE } from '@/lib/clubManagerGoalWeight';
 /* Round 1229: the league book, pure. It imports the keyed generator, the own goal rule and the weight table. */
@@ -13809,12 +13809,15 @@ function completeOneOffNight(state: CareerState, night: NightRef, mine: number, 
     events.push(won ? `🛡️ Into the ${got.row.name} final.` : `❌ Out of the ${got.row.name} in the semi final.`);
     return null;
   }
+  /* Round 1516: a one match cup's mark, still a minor trophy: the shield for a domestic super cup, the trophy its
+     tile wears for the UEFA Super Cup. */
+  const mark = k === 'usc' ? '🏆' : '🛡️';
   if (!won) {
-    events.push(`🛡️ The ${got.row.name} goes to ${opp}.`);
+    events.push(`${mark} The ${got.row.name} goes to ${opp}.`);
     return null;
   }
-  state.trophies.push({ name: got.row.name, emoji: '🛡️', season: state.season, minor: true });
-  events.push(`🛡️ The ${got.row.name} is yours!`);
+  state.trophies.push({ name: got.row.name, emoji: mark, season: state.season, minor: true });
+  events.push(`${mark} The ${got.row.name} is yours!`);
   return got.row.name;
 }
 
@@ -13860,9 +13863,12 @@ export function oneOffPartialOf(state: Pick<CareerState, 'clubName' | 'eraId' | 
  * one constant (CM_ONE_OFF_SEASON_ONE: England's): the top flight's verified final order (CM_FINAL_TABLES_2025_26),
  * Round 1509's cup winners (SEASON_ONE_CUP_WINNERS) and the cup runners up the ledger holds. The same rule then
  * picks the clubs as in every later season, so no club is typed. Null where the game holds no 2025-26 table.
+ * Round 1516: for the UEFA Super Cup ('uefa'), the 2025-26 Champions League and Europa League winners the ledger
+ * holds (row uel-2025-26), so season one's edition is drawn by the same rule as every later one.
  */
 export function oneOffSeasonOneTables(nation: string): OneOffTables | null {
-  const top = REAL_LEAGUES.find(l => { const r = leagueRulesOf(l.id); return r.nationId === nation && r.ladder === 'top'; });
+  if (nation === 'uefa') return { table: null, cupWinner: null, cupRunnerUp: null, uclWinner: CM_FINAL_TABLES_2025_26.holders, uelWinner: CM_ONE_OFF_UEL_WINNER_2025_26 };
+  const top =REAL_LEAGUES.find(l => { const r = leagueRulesOf(l.id); return r.nationId === nation && r.ladder === 'top'; });
   const table = top ? CM_FINAL_TABLES_2025_26.leagues[top.id]?.table : undefined;
   if (!top || !table || !table.length) return null;
   return { table, cupWinner: SEASON_ONE_CUP_WINNERS[top.id] ?? null, cupRunnerUp: CM_ONE_OFF_CUP_RUNNERS_UP_2025_26[top.id] ?? null };
@@ -13935,10 +13941,12 @@ function insertOneOffNights(state: CareerState, slots: number[], k: OneOffKey = 
 }
 
 /** startCareer's last step for the super cup: a new career opens season one's edition, followed (my club in it is a
- *  'seasonOne' stub). A job move (`world`) decides in joinClubNow; the dailies open nothing (DAILY_START). */
+ *  'seasonOne' stub). A job move (`world`) decides in joinClubNow; the dailies open nothing (DAILY_START). Round
+ *  1516: and season one's UEFA Super Cup the same way, after the domestic one (today's world only). */
 function openOneOffsOnStart(state: CareerState, world: SeasonWorld | undefined): void {
   if (world || NO_WORLD_COMPS.has(state)) return;
   openOneOff(state, { tables: null, seasonOne: true });
+  openOneOff(state, { tables: null, seasonOne: true }, 'usc');
 }
 
 /** A late season redraws its midweek league rounds from their neighbours, so a night's gap is taken only if every
