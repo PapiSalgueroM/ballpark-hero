@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+edge: PLAYFIRST_CONTROL=edge ONLY=/stadium-tycoon,/idle-arena,/wonderkid-factory,/build-your-xi,/soccer-conquest,/career-ladder,/football-grid,/club-manager node scripts/playFirstVisitDialogs.mjs
+lift: PLAYFIRST_CONTROL=lift ONLY=/stadium-tycoon,/idle-arena,/wonderkid-factory,/build-your-xi,/soccer-conquest,/career-ladder,/football-grid,/club-manager node scripts/playFirstVisitDialogs.mjs
+nobanner: PLAYFIRST_CONTROL=nobanner ONLY=/stadium-tycoon,/idle-arena,/wonderkid-factory,/build-your-xi,/soccer-conquest,/career-ladder,/football-grid,/club-manager node scripts/playFirstVisitDialogs.mjs
