@@ -37,6 +37,8 @@
  *   hooknote    the load's note tells only the closed part again     section 4
  *   novisible   advanceClock ignores visibility, only the gap counts section 2
  *   hookvisible the hook calls advanceClock as if always visible     section 4
+ *   awayafter   AWAY_AFTER_MS an hour, not five seconds              section 2
+ *   hookstampnow  a save stamps Date.now(), not the paid through time section 4
  * A control rewrites a copy of the file, never the file, and aborts if the text
  * it rewrites is not in the shipped file exactly once.
  *
@@ -79,7 +81,7 @@ let failures = 0, section = 0, dead = 0, collateral = 0;
 const bySection = {};
 const fail = m => { failures += 1; bySection[section] = (bySection[section] || 0) + 1; console.error('  FAIL: ' + m); };
 /* the section each control must turn red */
-const CONTROL_SECTION = { ceiling: 1, fixedstep: 2, fmtstop: 3, hookfixed: 4, hooknocopy: 4, hooknote: 4, novisible: 2, hookvisible: 4 };
+const CONTROL_SECTION = { ceiling: 1, fixedstep: 2, fmtstop: 3, hookfixed: 4, hooknocopy: 4, hooknote: 4, novisible: 2, hookvisible: 4, awayafter: 2, hookstampnow: 4 };
 const abort = m => { console.error(m); process.exit(1); };
 const read = f => fs.readFileSync(f, 'utf8').split('\r\n').join('\n');
 
@@ -98,6 +100,11 @@ const LIB_CONTROLS = {
     from: '  if (!visible || gapMs > AWAY_AFTER_MS) return { away: true, earned: applyAway(wings, s, gapMs) };',
     to: '  if (gapMs > AWAY_AFTER_MS) return { away: true, earned: applyAway(wings, s, gapMs) };',
   },
+  /* a stale bound: an hour without a callback still counts as watching */
+  awayafter: {
+    from: 'export const AWAY_AFTER_MS = 5000;',
+    to: 'export const AWAY_AFTER_MS = 3_600_000;',
+  },
   fmtstop: {
     from: "  [1e33, 'Dc'], [1e30, 'No'], [1e27, 'Oc'], [1e24, 'Sp'], [1e21, 'Sx'], [1e18, 'Qi'], [1e15, 'Qa'],\n",
     to: '',
@@ -112,6 +119,11 @@ const HOOK_CONTROLS = {
   hookvisible: {
     from: "const step = advanceClock(wings, s, gap, document.visibilityState !== 'hidden');",
     to: 'const step = advanceClock(wings, s, gap, true);',
+  },
+  /* every save stamps the time it is written, not the time the museum was paid through */
+  hookstampnow: {
+    from: '      try { localStorage.setItem(SAVE_KEY, serialize(s, lastTickRef.current)); } catch { /* storage full or blocked */ }',
+    to: '      try { localStorage.setItem(SAVE_KEY, serialize(s, Date.now())); } catch { /* storage full or blocked */ }',
   },
   hooknocopy: {
     from: '          keepRefusedSave();\n',
@@ -313,12 +325,22 @@ if (run(2)) {
   if (g.funds !== gOracle.funds) fail(`30 hidden seconds paid x${(gPaid / gOwed).toFixed(4)} of the away rule`);
   if (g.awayMs !== 30_000) fail(`30 hidden seconds left the absence meter at ${g.awayMs} ms, not 30000`);
 
+  /* the AWAY_AFTER_MS bound on a visible page: five seconds is still somebody
+     watching (full rate), ten seconds without a callback is time away */
+  const v5 = midMuseum();
+  const five = lib.advanceClock(wings, v5, 5_000, true);
+  if (five.away || Math.abs(five.earned / (income * 5) - 1) > 1e-9) fail(`a 5 s gap on a visible page was ${five.away ? 'paid as away' : `paid x${(five.earned / (income * 5)).toFixed(4)} of 5 watched seconds`}`);
+  const v10 = midMuseum();
+  const ten = lib.advanceClock(wings, v10, 10_000, true);
+  if (!ten.away || Math.abs(ten.earned / (income * awayRate * 10) - 1) > 1e-9 || v10.awayMs !== 10_000) fail(`a 10 s gap on a visible page was ${ten.away ? `paid x${(ten.earned / (income * awayRate * 10)).toFixed(4)} of 10 away seconds, meter ${v10.awayMs} ms` : 'paid as watched'}`);
+
   /* a visible page that did not run (a laptop asleep two hours) is away time too */
   const z = midMuseum();
   const slept = lib.advanceClock(wings, z, 2 * HOUR_MS, true);
   if (!slept.away || Math.abs(slept.earned / (income * awayRate * 7200) - 1) > 1e-6) fail(`two asleep hours on a visible page paid x${(slept.earned / (income * awayRate * 7200)).toFixed(4)} of two away hours`);
   console.log(`   watched minute x${(seen / (income * 60)).toFixed(6)} of full rate; 3 h hidden then 7 h closed x${(both / owed).toFixed(6)} of one capped absence; 2 h asleep paid as away: ${slept.away}`);
   console.log(`   30 hidden wakes a second apart: ${gAway} paid as away, x${(gPaid / gOwed).toFixed(6)} of the away rule, meter ${g.awayMs} ms`);
+  console.log(`   visible gaps: 5 s ${five.away ? 'away' : 'watched'}, 10 s ${ten.away ? 'away' : 'watched'} (AWAY_AFTER_MS ${lib.AWAY_AFTER_MS})`);
 }
 
 /* ---------------------------------------- 3: prices past T read as numbers */
@@ -335,8 +357,8 @@ if (run(3)) {
 
 /* ------------------------------------------------------ 4: the real hook */
 /* Which tests each hook control must turn red; every other test must stay green. */
-const HOOK_RED = { hookfixed: [2, 3, 6, 7], hooknocopy: [4], hooknote: [3, 7], hookvisible: [6] };
-const HOOK_TESTS = 7;
+const HOOK_RED = { hookfixed: [2, 3, 6, 7, 8], hooknocopy: [4], hooknote: [3, 7], hookvisible: [6], hookstampnow: [8] };
+const HOOK_TESTS = 8;
 function findUp(rel) {
   for (let dir = ROOT; ; dir = path.dirname(dir)) {
     const p = path.join(dir, rel);

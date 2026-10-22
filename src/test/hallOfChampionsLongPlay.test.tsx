@@ -282,4 +282,30 @@ describe('Hall of Champions long play', () => {
     expect(near(note!, paid), `the note said x${(note! / paid).toFixed(4)} of what the absence paid`).toBeLessThan(1e-9);
     measured(`closed after hidden: 9 h hidden then 48 h closed paid x${(paid / owed).toFixed(6)} of one eight hour absence; the note says x${(note! / paid).toFixed(6)} of it`);
   }, TEST_MS);
+
+  it('8 a save is stamped with the time the museum was paid through, so a reload pays the rest', async () => {
+    localStorage.setItem(SAVE_KEY, serialize(midMuseum(), EPOCH));
+    await mount();
+    const wings = hook().wings;
+    watch(1_000);
+    const atHide = clone(state());
+    hiddenWakes(5);
+    const paidThrough = Date.now();
+    /* the tab sits frozen forty seconds with no callback, then is closed */
+    vnow += 40_000;
+    act(() => { window.dispatchEvent(new Event('pagehide')); });
+    const saved = loadSave(localStorage.getItem(SAVE_KEY));
+    expect(saved, 'the pagehide save was not written').not.toBeNull();
+    expect(saved!.lastSeen - paidThrough, 'the save was stamped with the time it was written, not the time the museum was paid through').toBe(0);
+    cleanup();
+    latest = null;
+    vnow += HOUR;
+    setVisible(true);
+    await mount();
+    const oracle = clone(atHide);
+    for (let i = 0; i < 5; i += 1) applyAway(wings, oracle, WAKE_MS);
+    applyAway(wings, oracle, HOUR + 40_000);
+    expect(state().funds, 'the reload did not pay the time between the last callback and the save').toBe(oracle.funds);
+    measured(`stamp: a save written 40 s after the last callback carries lastSeen ${saved!.lastSeen - paidThrough} ms from it; the reload paid the away rule exactly`);
+  }, TEST_MS);
 });
