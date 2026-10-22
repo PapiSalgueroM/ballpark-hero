@@ -1,0 +1,7 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+tsc exit=0 66s | 
+vitest-box exit=0 2s |    Duration  1.92s (transform 646ms, setup 74ms, collect 948ms, tests 190ms, environment 319ms, prepare 112ms)
+playFoHub exit=0 60s | playFoHub: green. Four front offices, nine live boxes each, and the five the walk opens open what they name.
+playFoHub-nofloor exit=1 48s | playFoHub: 2 failures
+mut-everyround exit=0 99s | MUT1537 everyround: vitest exit=1, playFoHub exit=1
+src-clean exit=0 0s | 0
