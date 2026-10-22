@@ -1,0 +1,5 @@
+simUsBoardParity: node scripts/simUsBoardParity.mjs
+parity-fixture: US_BOARD_PARITY_CONTROL=fixture node scripts/simUsBoardParity.mjs
+parity-label: US_BOARD_PARITY_CONTROL=label node scripts/simUsBoardParity.mjs
+vitest: node_modules/.bin/vitest run src/test/usBoardFixture.test.tsx src/test/usCareerDirtyMoney.test.tsx src/test/nflCoachStaffRecovery.test.tsx src/test/usCareerReports1346.test.tsx src/test/nbaOldSaveLines.test.ts --testTimeout=300000 --hookTimeout=120000
+simNflCoachStaffRecovery: node scripts/simNflCoachStaffRecovery.mjs
