@@ -1,0 +1,15 @@
+ctl-ties exit=1 47s | simTriviaBank: 3 failure(s) (NEGATIVE CONTROL ties ON)
+simTriviaBank exit=0 50s | simTriviaBank: all checks passed
+tsc exit=0 56s | 
+ctl-namesake exit=1 36s | simTriviaBank: 3 failure(s) (NEGATIVE CONTROL namesake ON)
+ctl-tense exit=1 46s | simTriviaBank: 3 failure(s) (NEGATIVE CONTROL tense ON)
+ctl-legacy exit=1 42s | simTriviaBank: 4 failure(s) (NEGATIVE CONTROL legacy ON)
+namesakes-check exit=0 1s | src/data/marketNamesakes.json is current: 54 names
+simFaceOff exit=0 1s | simFaceOff: green. The deck deals fair, the daily is shared, the rivals climb, and the record holds.
+simHarnessAnchors exit=0 36s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simNoRivalNames exit=0 11s | No rival product names found. 0 findings.
+seed-b exit=0 64s | simTriviaBank: all checks passed
+simDailyPuzzleContract exit=0 0s | simDailyPuzzleContract: green. Every caller honours the contract the selection memo depends on.
+simTrustCopy exit=0 0s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+simNoDoubleRecord exit=0 23s | simNoDoubleRecord: all green (67 rows and checks, each recorded once across the finish, the toggles, the coaching, the reveals and the reloads; 115 recorders read)
+seed-c exit=0 97s | simTriviaBank: all checks passed
