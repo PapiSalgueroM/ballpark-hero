@@ -1,0 +1,645 @@
+FAIL [3] nfl early MIN+LAR+SEA: the dialog offers to call a retired great back but leaves Anquan Boldin off the list
+FAIL [3] nfl early MIN+LAR+SEA: the fallen men in the Sign a Player list are not the best 29 on the market
+FAIL [3] nfl early LAR+SEA+ARI: the dialog offers to call a retired great back but leaves Anquan Boldin off the list
+FAIL [3] nfl early LAR+SEA+ARI: the fallen men in the Sign a Player list are not the best 29 on the market
+FAIL [3] nfl early CAR+NYG+WAS: the dialog offers to call a retired great back but leaves Reggie Wayne off the list
+FAIL [3] nfl early CAR+NYG+WAS: the fallen men in the Sign a Player list are not the best 29 on the market
+FAIL [3] nfl early NYG+WAS+KC: the dialog offers to call a retired great back but leaves Reggie Wayne off the list
+FAIL [3] nfl early NYG+WAS+KC: the fallen men in the Sign a Player list are not the best 28 on the market
+FAIL [3] nfl early WAS+KC+BUF: the dialog offers to call a retired great back but leaves Reggie Wayne off the list
+FAIL [3] nfl early WAS+KC+BUF: the fallen men in the Sign a Player list are not the best 28 on the market
+FAIL [3] nfl end KC: the dialog offers to call a retired great back but leaves Luke Kuechly off the list
+FAIL [3] nfl end KC: the dialog offers to call a retired great back but leaves Andrew Luck off the list
+FAIL [3] nfl end KC: the dialog offers to call a retired great back but leaves Troy Polamalu off the list
+FAIL [3] nfl end KC: the dialog offers to call a retired great back but leaves Tony Gonzalez off the list
+FAIL [3] nfl end KC: the dialog offers to call a retired great back but leaves Darrelle Revis off the list
+FAIL [3] nfl end KC: the dialog offers to call a retired great back but leaves Charles Woodson off the list
+FAIL [3] nfl end KC: the dialog offers to call a retired great back but leaves Vernon Davis off the list
+FAIL [3] nfl end KC: the dialog offers to call a retired great back but leaves Anquan Boldin off the list
+FAIL [3] nfl end KC: the dialog offers to call a retired great back but leaves Reggie Wayne off the list
+FAIL [3] nfl end KC: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nfl end BUF: the dialog offers to call a retired great back but leaves Calvin Johnson off the list
+FAIL [3] nfl end BUF: the dialog offers to call a retired great back but leaves Luke Kuechly off the list
+FAIL [3] nfl end BUF: the dialog offers to call a retired great back but leaves Andrew Luck off the list
+FAIL [3] nfl end BUF: the dialog offers to call a retired great back but leaves Troy Polamalu off the list
+FAIL [3] nfl end BUF: the dialog offers to call a retired great back but leaves Tony Gonzalez off the list
+FAIL [3] nfl end BUF: the dialog offers to call a retired great back but leaves Darrelle Revis off the list
+FAIL [3] nfl end BUF: the dialog offers to call a retired great back but leaves Charles Woodson off the list
+FAIL [3] nfl end BUF: the dialog offers to call a retired great back but leaves Vernon Davis off the list
+FAIL [3] nfl end BUF: the dialog offers to call a retired great back but leaves Anquan Boldin off the list
+FAIL [3] nfl end BUF: the dialog offers to call a retired great back but leaves Reggie Wayne off the list
+FAIL [3] nfl end BUF: the fallen men in the Sign a Player list are not the best 20 on the market
+FAIL [3] nfl end PHI: the dialog offers to call a retired great back but leaves Calvin Johnson off the list
+FAIL [3] nfl end PHI: the dialog offers to call a retired great back but leaves Luke Kuechly off the list
+FAIL [3] nfl end PHI: the dialog offers to call a retired great back but leaves Andrew Luck off the list
+FAIL [3] nfl end PHI: the dialog offers to call a retired great back but leaves Troy Polamalu off the list
+FAIL [3] nfl end PHI: the dialog offers to call a retired great back but leaves Tony Gonzalez off the list
+FAIL [3] nfl end PHI: the dialog offers to call a retired great back but leaves Darrelle Revis off the list
+FAIL [3] nfl end PHI: the dialog offers to call a retired great back but leaves Charles Woodson off the list
+FAIL [3] nfl end PHI: the dialog offers to call a retired great back but leaves Vernon Davis off the list
+FAIL [3] nfl end PHI: the dialog offers to call a retired great back but leaves Anquan Boldin off the list
+FAIL [3] nfl end PHI: the dialog offers to call a retired great back but leaves Reggie Wayne off the list
+FAIL [3] nfl end PHI: the fallen men in the Sign a Player list are not the best 20 on the market
+FAIL [3] nfl end BAL: the dialog offers to call a retired great back but leaves Calvin Johnson off the list
+FAIL [3] nfl end BAL: the dialog offers to call a retired great back but leaves Luke Kuechly off the list
+FAIL [3] nfl end BAL: the dialog offers to call a retired great back but leaves Andrew Luck off the list
+FAIL [3] nfl end BAL: the dialog offers to call a retired great back but leaves Troy Polamalu off the list
+FAIL [3] nfl end BAL: the dialog offers to call a retired great back but leaves Tony Gonzalez off the list
+FAIL [3] nfl end BAL: the dialog offers to call a retired great back but leaves Charles Woodson off the list
+FAIL [3] nfl end BAL: the dialog offers to call a retired great back but leaves Vernon Davis off the list
+FAIL [3] nfl end BAL: the dialog offers to call a retired great back but leaves Anquan Boldin off the list
+FAIL [3] nfl end BAL: the dialog offers to call a retired great back but leaves Reggie Wayne off the list
+FAIL [3] nfl end BAL: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nfl end SF: the dialog offers to call a retired great back but leaves Calvin Johnson off the list
+FAIL [3] nfl end SF: the dialog offers to call a retired great back but leaves Luke Kuechly off the list
+FAIL [3] nfl end SF: the dialog offers to call a retired great back but leaves Andrew Luck off the list
+FAIL [3] nfl end SF: the dialog offers to call a retired great back but leaves Troy Polamalu off the list
+FAIL [3] nfl end SF: the dialog offers to call a retired great back but leaves Tony Gonzalez off the list
+FAIL [3] nfl end SF: the dialog offers to call a retired great back but leaves Darrelle Revis off the list
+FAIL [3] nfl end SF: the dialog offers to call a retired great back but leaves Charles Woodson off the list
+FAIL [3] nfl end SF: the dialog offers to call a retired great back but leaves Vernon Davis off the list
+FAIL [3] nfl end SF: the dialog offers to call a retired great back but leaves Anquan Boldin off the list
+FAIL [3] nfl end SF: the dialog offers to call a retired great back but leaves Reggie Wayne off the list
+FAIL [3] nfl end SF: the fallen men in the Sign a Player list are not the best 20 on the market
+FAIL [3] nfl end DAL: the dialog offers to call a retired great back but leaves Calvin Johnson off the list
+FAIL [3] nfl end DAL: the dialog offers to call a retired great back but leaves Luke Kuechly off the list
+FAIL [3] nfl end DAL: the dialog offers to call a retired great back but leaves Andrew Luck off the list
+FAIL [3] nfl end DAL: the dialog offers to call a retired great back but leaves Troy Polamalu off the list
+FAIL [3] nfl end DAL: the dialog offers to call a retired great back but leaves Tony Gonzalez off the list
+FAIL [3] nfl end DAL: the dialog offers to call a retired great back but leaves Darrelle Revis off the list
+FAIL [3] nfl end DAL: the dialog offers to call a retired great back but leaves Charles Woodson off the list
+FAIL [3] nfl end DAL: the dialog offers to call a retired great back but leaves Vernon Davis off the list
+FAIL [3] nfl end DAL: the dialog offers to call a retired great back but leaves Anquan Boldin off the list
+FAIL [3] nfl end DAL: the dialog offers to call a retired great back but leaves Reggie Wayne off the list
+FAIL [3] nfl end DAL: the fallen men in the Sign a Player list are not the best 20 on the market
+FAIL [3] nfl end DET: the dialog offers to call a retired great back but leaves Calvin Johnson off the list
+FAIL [3] nfl end DET: the dialog offers to call a retired great back but leaves Luke Kuechly off the list
+FAIL [3] nfl end DET: the dialog offers to call a retired great back but leaves Andrew Luck off the list
+FAIL [3] nfl end DET: the dialog offers to call a retired great back but leaves Troy Polamalu off the list
+FAIL [3] nfl end DET: the dialog offers to call a retired great back but leaves Tony Gonzalez off the list
+FAIL [3] nfl end DET: the dialog offers to call a retired great back but leaves Darrelle Revis off the list
+FAIL [3] nfl end DET: the dialog offers to call a retired great back but leaves Charles Woodson off the list
+FAIL [3] nfl end DET: the dialog offers to call a retired great back but leaves Vernon Davis off the list
+FAIL [3] nfl end DET: the dialog offers to call a retired great back but leaves Anquan Boldin off the list
+FAIL [3] nfl end DET: the dialog offers to call a retired great back but leaves Reggie Wayne off the list
+FAIL [3] nfl end DET: the fallen men in the Sign a Player list are not the best 20 on the market
+FAIL [3] nfl end CIN: the dialog offers to call a retired great back but leaves Calvin Johnson off the list
+FAIL [3] nfl end CIN: the dialog offers to call a retired great back but leaves Andrew Luck off the list
+FAIL [3] nfl end CIN: the dialog offers to call a retired great back but leaves Troy Polamalu off the list
+FAIL [3] nfl end CIN: the dialog offers to call a retired great back but leaves Tony Gonzalez off the list
+FAIL [3] nfl end CIN: the dialog offers to call a retired great back but leaves Darrelle Revis off the list
+FAIL [3] nfl end CIN: the dialog offers to call a retired great back but leaves Charles Woodson off the list
+FAIL [3] nfl end CIN: the dialog offers to call a retired great back but leaves Vernon Davis off the list
+FAIL [3] nfl end CIN: the dialog offers to call a retired great back but leaves Anquan Boldin off the list
+FAIL [3] nfl end CIN: the dialog offers to call a retired great back but leaves Reggie Wayne off the list
+FAIL [3] nfl end CIN: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nfl end MIA: the dialog offers to call a retired great back but leaves Calvin Johnson off the list
+FAIL [3] nfl end MIA: the dialog offers to call a retired great back but leaves Luke Kuechly off the list
+FAIL [3] nfl end MIA: the dialog offers to call a retired great back but leaves Andrew Luck off the list
+FAIL [3] nfl end MIA: the dialog offers to call a retired great back but leaves Troy Polamalu off the list
+FAIL [3] nfl end MIA: the dialog offers to call a retired great back but leaves Tony Gonzalez off the list
+FAIL [3] nfl end MIA: the dialog offers to call a retired great back but leaves Darrelle Revis off the list
+FAIL [3] nfl end MIA: the dialog offers to call a retired great back but leaves Charles Woodson off the list
+FAIL [3] nfl end MIA: the dialog offers to call a retired great back but leaves Vernon Davis off the list
+FAIL [3] nfl end MIA: the dialog offers to call a retired great back but leaves Anquan Boldin off the list
+FAIL [3] nfl end MIA: the dialog offers to call a retired great back but leaves Reggie Wayne off the list
+FAIL [3] nfl end MIA: the fallen men in the Sign a Player list are not the best 20 on the market
+FAIL [3] nfl end NYJ: the dialog offers to call a retired great back but leaves Calvin Johnson off the list
+FAIL [3] nfl end NYJ: the dialog offers to call a retired great back but leaves Luke Kuechly off the list
+FAIL [3] nfl end NYJ: the dialog offers to call a retired great back but leaves Andrew Luck off the list
+FAIL [3] nfl end NYJ: the dialog offers to call a retired great back but leaves Troy Polamalu off the list
+FAIL [3] nfl end NYJ: the dialog offers to call a retired great back but leaves Tony Gonzalez off the list
+FAIL [3] nfl end NYJ: the dialog offers to call a retired great back but leaves Darrelle Revis off the list
+FAIL [3] nfl end NYJ: the dialog offers to call a retired great back but leaves Charles Woodson off the list
+FAIL [3] nfl end NYJ: the dialog offers to call a retired great back but leaves Vernon Davis off the list
+FAIL [3] nfl end NYJ: the dialog offers to call a retired great back but leaves Anquan Boldin off the list
+FAIL [3] nfl end NYJ: the dialog offers to call a retired great back but leaves Reggie Wayne off the list
+FAIL [3] nfl end NYJ: the fallen men in the Sign a Player list are not the best 20 on the market
+FAIL [3] nfl end CLE: the dialog offers to call a retired great back but leaves Calvin Johnson off the list
+FAIL [3] nfl end CLE: the dialog offers to call a retired great back but leaves Luke Kuechly off the list
+FAIL [3] nfl end CLE: the dialog offers to call a retired great back but leaves Andrew Luck off the list
+FAIL [3] nfl end CLE: the dialog offers to call a retired great back but leaves Troy Polamalu off the list
+FAIL [3] nfl end CLE: the dialog offers to call a retired great back but leaves Tony Gonzalez off the list
+FAIL [3] nfl end CLE: the dialog offers to call a retired great back but leaves Darrelle Revis off the list
+FAIL [3] nfl end CLE: the dialog offers to call a retired great back but leaves Vernon Davis off the list
+FAIL [3] nfl end CLE: the dialog offers to call a retired great back but leaves Anquan Boldin off the list
+FAIL [3] nfl end CLE: the dialog offers to call a retired great back but leaves Reggie Wayne off the list
+FAIL [3] nfl end CLE: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nfl end PIT: the dialog offers to call a retired great back but leaves Calvin Johnson off the list
+FAIL [3] nfl end PIT: the dialog offers to call a retired great back but leaves Luke Kuechly off the list
+FAIL [3] nfl end PIT: the dialog offers to call a retired great back but leaves Andrew Luck off the list
+FAIL [3] nfl end PIT: the dialog offers to call a retired great back but leaves Troy Polamalu off the list
+FAIL [3] nfl end PIT: the dialog offers to call a retired great back but leaves Tony Gonzalez off the list
+FAIL [3] nfl end PIT: the dialog offers to call a retired great back but leaves Darrelle Revis off the list
+FAIL [3] nfl end PIT: the dialog offers to call a retired great back but leaves Charles Woodson off the list
+FAIL [3] nfl end PIT: the dialog offers to call a retired great back but leaves Vernon Davis off the list
+FAIL [3] nfl end PIT: the dialog offers to call a retired great back but leaves Anquan Boldin off the list
+FAIL [3] nfl end PIT: the dialog offers to call a retired great back but leaves Reggie Wayne off the list
+FAIL [3] nfl end PIT: the fallen men in the Sign a Player list are not the best 20 on the market
+FAIL [3] nfl end HOU: the dialog offers to call a retired great back but leaves Calvin Johnson off the list
+FAIL [3] nfl end HOU: the dialog offers to call a retired great back but leaves Luke Kuechly off the list
+FAIL [3] nfl end HOU: the dialog offers to call a retired great back but leaves Andrew Luck off the list
+FAIL [3] nfl end HOU: the dialog offers to call a retired great back but leaves Troy Polamalu off the list
+FAIL [3] nfl end HOU: the dialog offers to call a retired great back but leaves Tony Gonzalez off the list
+FAIL [3] nfl end HOU: the dialog offers to call a retired great back but leaves Darrelle Revis off the list
+FAIL [3] nfl end HOU: the dialog offers to call a retired great back but leaves Charles Woodson off the list
+FAIL [3] nfl end HOU: the dialog offers to call a retired great back but leaves Vernon Davis off the list
+FAIL [3] nfl end HOU: the dialog offers to call a retired great back but leaves Anquan Boldin off the list
+FAIL [3] nfl end HOU: the dialog offers to call a retired great back but leaves Reggie Wayne off the list
+FAIL [3] nfl end HOU: the fallen men in the Sign a Player list are not the best 20 on the market
+FAIL [3] nfl end JAX: the dialog offers to call a retired great back but leaves Calvin Johnson off the list
+FAIL [3] nfl end JAX: the dialog offers to call a retired great back but leaves Luke Kuechly off the list
+FAIL [3] nfl end JAX: the dialog offers to call a retired great back but leaves Andrew Luck off the list
+FAIL [3] nfl end JAX: the dialog offers to call a retired great back but leaves Troy Polamalu off the list
+FAIL [3] nfl end JAX: the dialog offers to call a retired great back but leaves Tony Gonzalez off the list
+FAIL [3] nfl end JAX: the dialog offers to call a retired great back but leaves Darrelle Revis off the list
+FAIL [3] nfl end JAX: the dialog offers to call a retired great back but leaves Charles Woodson off the list
+FAIL [3] nfl end JAX: the dialog offers to call a retired great back but leaves Vernon Davis off the list
+FAIL [3] nfl end JAX: the dialog offers to call a retired great back but leaves Anquan Boldin off the list
+FAIL [3] nfl end JAX: the dialog offers to call a retired great back but leaves Reggie Wayne off the list
+FAIL [3] nfl end JAX: the fallen men in the Sign a Player list are not the best 20 on the market
+FAIL [3] nfl end TEN: the dialog offers to call a retired great back but leaves Calvin Johnson off the list
+FAIL [3] nfl end TEN: the dialog offers to call a retired great back but leaves Luke Kuechly off the list
+FAIL [3] nfl end TEN: the dialog offers to call a retired great back but leaves Troy Polamalu off the list
+FAIL [3] nfl end TEN: the dialog offers to call a retired great back but leaves Tony Gonzalez off the list
+FAIL [3] nfl end TEN: the dialog offers to call a retired great back but leaves Darrelle Revis off the list
+FAIL [3] nfl end TEN: the dialog offers to call a retired great back but leaves Charles Woodson off the list
+FAIL [3] nfl end TEN: the dialog offers to call a retired great back but leaves Vernon Davis off the list
+FAIL [3] nfl end TEN: the dialog offers to call a retired great back but leaves Anquan Boldin off the list
+FAIL [3] nfl end TEN: the dialog offers to call a retired great back but leaves Reggie Wayne off the list
+FAIL [3] nfl end TEN: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nfl end IND: the dialog offers to call a retired great back but leaves Calvin Johnson off the list
+FAIL [3] nfl end IND: the dialog offers to call a retired great back but leaves Luke Kuechly off the list
+FAIL [3] nfl end IND: the dialog offers to call a retired great back but leaves Andrew Luck off the list
+FAIL [3] nfl end IND: the dialog offers to call a retired great back but leaves Troy Polamalu off the list
+FAIL [3] nfl end IND: the dialog offers to call a retired great back but leaves Tony Gonzalez off the list
+FAIL [3] nfl end IND: the dialog offers to call a retired great back but leaves Darrelle Revis off the list
+FAIL [3] nfl end IND: the dialog offers to call a retired great back but leaves Charles Woodson off the list
+FAIL [3] nfl end IND: the dialog offers to call a retired great back but leaves Vernon Davis off the list
+FAIL [3] nfl end IND: the dialog offers to call a retired great back but leaves Anquan Boldin off the list
+FAIL [3] nfl end IND: the dialog offers to call a retired great back but leaves Reggie Wayne off the list
+FAIL [3] nfl end IND: the fallen men in the Sign a Player list are not the best 20 on the market
+FAIL [3] nfl end NE: the dialog offers to call a retired great back but leaves Calvin Johnson off the list
+FAIL [3] nfl end NE: the dialog offers to call a retired great back but leaves Luke Kuechly off the list
+FAIL [3] nfl end NE: the dialog offers to call a retired great back but leaves Andrew Luck off the list
+FAIL [3] nfl end NE: the dialog offers to call a retired great back but leaves Troy Polamalu off the list
+FAIL [3] nfl end NE: the dialog offers to call a retired great back but leaves Tony Gonzalez off the list
+FAIL [3] nfl end NE: the dialog offers to call a retired great back but leaves Darrelle Revis off the list
+FAIL [3] nfl end NE: the dialog offers to call a retired great back but leaves Charles Woodson off the list
+FAIL [3] nfl end NE: the dialog offers to call a retired great back but leaves Vernon Davis off the list
+FAIL [3] nfl end NE: the dialog offers to call a retired great back but leaves Anquan Boldin off the list
+FAIL [3] nfl end NE: the dialog offers to call a retired great back but leaves Reggie Wayne off the list
+FAIL [3] nfl end NE: the fallen men in the Sign a Player list are not the best 20 on the market
+FAIL [3] nfl end LV: the dialog offers to call a retired great back but leaves Calvin Johnson off the list
+FAIL [3] nfl end LV: the dialog offers to call a retired great back but leaves Luke Kuechly off the list
+FAIL [3] nfl end LV: the dialog offers to call a retired great back but leaves Andrew Luck off the list
+FAIL [3] nfl end LV: the dialog offers to call a retired great back but leaves Troy Polamalu off the list
+FAIL [3] nfl end LV: the dialog offers to call a retired great back but leaves Tony Gonzalez off the list
+FAIL [3] nfl end LV: the dialog offers to call a retired great back but leaves Darrelle Revis off the list
+FAIL [3] nfl end LV: the dialog offers to call a retired great back but leaves Charles Woodson off the list
+FAIL [3] nfl end LV: the dialog offers to call a retired great back but leaves Anquan Boldin off the list
+FAIL [3] nfl end LV: the dialog offers to call a retired great back but leaves Reggie Wayne off the list
+FAIL [3] nfl end LV: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nfl end DEN: the dialog offers to call a retired great back but leaves Calvin Johnson off the list
+FAIL [3] nfl end DEN: the dialog offers to call a retired great back but leaves Luke Kuechly off the list
+FAIL [3] nfl end DEN: the dialog offers to call a retired great back but leaves Andrew Luck off the list
+FAIL [3] nfl end DEN: the dialog offers to call a retired great back but leaves Troy Polamalu off the list
+FAIL [3] nfl end DEN: the dialog offers to call a retired great back but leaves Tony Gonzalez off the list
+FAIL [3] nfl end DEN: the dialog offers to call a retired great back but leaves Darrelle Revis off the list
+FAIL [3] nfl end DEN: the dialog offers to call a retired great back but leaves Charles Woodson off the list
+FAIL [3] nfl end DEN: the dialog offers to call a retired great back but leaves Vernon Davis off the list
+FAIL [3] nfl end DEN: the dialog offers to call a retired great back but leaves Anquan Boldin off the list
+FAIL [3] nfl end DEN: the dialog offers to call a retired great back but leaves Reggie Wayne off the list
+FAIL [3] nfl end DEN: the fallen men in the Sign a Player list are not the best 20 on the market
+FAIL [3] nfl end LAC: the dialog offers to call a retired great back but leaves Calvin Johnson off the list
+FAIL [3] nfl end LAC: the dialog offers to call a retired great back but leaves Luke Kuechly off the list
+FAIL [3] nfl end LAC: the dialog offers to call a retired great back but leaves Andrew Luck off the list
+FAIL [3] nfl end LAC: the dialog offers to call a retired great back but leaves Troy Polamalu off the list
+FAIL [3] nfl end LAC: the dialog offers to call a retired great back but leaves Tony Gonzalez off the list
+FAIL [3] nfl end LAC: the dialog offers to call a retired great back but leaves Darrelle Revis off the list
+FAIL [3] nfl end LAC: the dialog offers to call a retired great back but leaves Charles Woodson off the list
+FAIL [3] nfl end LAC: the dialog offers to call a retired great back but leaves Vernon Davis off the list
+FAIL [3] nfl end LAC: the dialog offers to call a retired great back but leaves Anquan Boldin off the list
+FAIL [3] nfl end LAC: the dialog offers to call a retired great back but leaves Reggie Wayne off the list
+FAIL [3] nfl end LAC: the fallen men in the Sign a Player list are not the best 20 on the market
+FAIL [3] nfl end GB: the dialog offers to call a retired great back but leaves Calvin Johnson off the list
+FAIL [3] nfl end GB: the dialog offers to call a retired great back but leaves Luke Kuechly off the list
+FAIL [3] nfl end GB: the dialog offers to call a retired great back but leaves Andrew Luck off the list
+FAIL [3] nfl end GB: the dialog offers to call a retired great back but leaves Troy Polamalu off the list
+FAIL [3] nfl end GB: the dialog offers to call a retired great back but leaves Tony Gonzalez off the list
+FAIL [3] nfl end GB: the dialog offers to call a retired great back but leaves Darrelle Revis off the list
+FAIL [3] nfl end GB: the dialog offers to call a retired great back but leaves Charles Woodson off the list
+FAIL [3] nfl end GB: the dialog offers to call a retired great back but leaves Vernon Davis off the list
+FAIL [3] nfl end GB: the dialog offers to call a retired great back but leaves Anquan Boldin off the list
+FAIL [3] nfl end GB: the dialog offers to call a retired great back but leaves Reggie Wayne off the list
+FAIL [3] nfl end GB: the fallen men in the Sign a Player list are not the best 20 on the market
+FAIL [3] nfl end CHI: the dialog offers to call a retired great back but leaves Calvin Johnson off the list
+FAIL [3] nfl end CHI: the dialog offers to call a retired great back but leaves Luke Kuechly off the list
+FAIL [3] nfl end CHI: the dialog offers to call a retired great back but leaves Andrew Luck off the list
+FAIL [3] nfl end CHI: the dialog offers to call a retired great back but leaves Tony Gonzalez off the list
+FAIL [3] nfl end CHI: the dialog offers to call a retired great back but leaves Darrelle Revis off the list
+FAIL [3] nfl end CHI: the dialog offers to call a retired great back but leaves Charles Woodson off the list
+FAIL [3] nfl end CHI: the dialog offers to call a retired great back but leaves Vernon Davis off the list
+FAIL [3] nfl end CHI: the dialog offers to call a retired great back but leaves Anquan Boldin off the list
+FAIL [3] nfl end CHI: the dialog offers to call a retired great back but leaves Reggie Wayne off the list
+FAIL [3] nfl end CHI: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nfl end MIN: the dialog offers to call a retired great back but leaves Calvin Johnson off the list
+FAIL [3] nfl end MIN: the dialog offers to call a retired great back but leaves Luke Kuechly off the list
+FAIL [3] nfl end MIN: the dialog offers to call a retired great back but leaves Andrew Luck off the list
+FAIL [3] nfl end MIN: the dialog offers to call a retired great back but leaves Troy Polamalu off the list
+FAIL [3] nfl end MIN: the dialog offers to call a retired great back but leaves Tony Gonzalez off the list
+FAIL [3] nfl end MIN: the dialog offers to call a retired great back but leaves Darrelle Revis off the list
+FAIL [3] nfl end MIN: the dialog offers to call a retired great back but leaves Charles Woodson off the list
+FAIL [3] nfl end MIN: the dialog offers to call a retired great back but leaves Vernon Davis off the list
+FAIL [3] nfl end MIN: the dialog offers to call a retired great back but leaves Anquan Boldin off the list
+FAIL [3] nfl end MIN: the dialog offers to call a retired great back but leaves Reggie Wayne off the list
+FAIL [3] nfl end MIN: the fallen men in the Sign a Player list are not the best 20 on the market
+FAIL [3] nfl end LAR: the dialog offers to call a retired great back but leaves Calvin Johnson off the list
+FAIL [3] nfl end LAR: the dialog offers to call a retired great back but leaves Luke Kuechly off the list
+FAIL [3] nfl end LAR: the dialog offers to call a retired great back but leaves Andrew Luck off the list
+FAIL [3] nfl end LAR: the dialog offers to call a retired great back but leaves Troy Polamalu off the list
+FAIL [3] nfl end LAR: the dialog offers to call a retired great back but leaves Tony Gonzalez off the list
+FAIL [3] nfl end LAR: the dialog offers to call a retired great back but leaves Darrelle Revis off the list
+FAIL [3] nfl end LAR: the dialog offers to call a retired great back but leaves Charles Woodson off the list
+FAIL [3] nfl end LAR: the dialog offers to call a retired great back but leaves Vernon Davis off the list
+FAIL [3] nfl end LAR: the dialog offers to call a retired great back but leaves Anquan Boldin off the list
+FAIL [3] nfl end LAR: the dialog offers to call a retired great back but leaves Reggie Wayne off the list
+FAIL [3] nfl end LAR: the fallen men in the Sign a Player list are not the best 20 on the market
+FAIL [3] nfl end SEA: the dialog offers to call a retired great back but leaves Calvin Johnson off the list
+FAIL [3] nfl end SEA: the dialog offers to call a retired great back but leaves Luke Kuechly off the list
+FAIL [3] nfl end SEA: the dialog offers to call a retired great back but leaves Andrew Luck off the list
+FAIL [3] nfl end SEA: the dialog offers to call a retired great back but leaves Troy Polamalu off the list
+FAIL [3] nfl end SEA: the dialog offers to call a retired great back but leaves Tony Gonzalez off the list
+FAIL [3] nfl end SEA: the dialog offers to call a retired great back but leaves Darrelle Revis off the list
+FAIL [3] nfl end SEA: the dialog offers to call a retired great back but leaves Charles Woodson off the list
+FAIL [3] nfl end SEA: the dialog offers to call a retired great back but leaves Vernon Davis off the list
+FAIL [3] nfl end SEA: the dialog offers to call a retired great back but leaves Reggie Wayne off the list
+FAIL [3] nfl end SEA: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nfl end ARI: the dialog offers to call a retired great back but leaves Calvin Johnson off the list
+FAIL [3] nfl end ARI: the dialog offers to call a retired great back but leaves Luke Kuechly off the list
+FAIL [3] nfl end ARI: the dialog offers to call a retired great back but leaves Andrew Luck off the list
+FAIL [3] nfl end ARI: the dialog offers to call a retired great back but leaves Troy Polamalu off the list
+FAIL [3] nfl end ARI: the dialog offers to call a retired great back but leaves Tony Gonzalez off the list
+FAIL [3] nfl end ARI: the dialog offers to call a retired great back but leaves Darrelle Revis off the list
+FAIL [3] nfl end ARI: the dialog offers to call a retired great back but leaves Charles Woodson off the list
+FAIL [3] nfl end ARI: the dialog offers to call a retired great back but leaves Vernon Davis off the list
+FAIL [3] nfl end ARI: the dialog offers to call a retired great back but leaves Anquan Boldin off the list
+FAIL [3] nfl end ARI: the dialog offers to call a retired great back but leaves Reggie Wayne off the list
+FAIL [3] nfl end ARI: the fallen men in the Sign a Player list are not the best 20 on the market
+FAIL [3] nfl end NO: the dialog offers to call a retired great back but leaves Calvin Johnson off the list
+FAIL [3] nfl end NO: the dialog offers to call a retired great back but leaves Luke Kuechly off the list
+FAIL [3] nfl end NO: the dialog offers to call a retired great back but leaves Andrew Luck off the list
+FAIL [3] nfl end NO: the dialog offers to call a retired great back but leaves Troy Polamalu off the list
+FAIL [3] nfl end NO: the dialog offers to call a retired great back but leaves Tony Gonzalez off the list
+FAIL [3] nfl end NO: the dialog offers to call a retired great back but leaves Darrelle Revis off the list
+FAIL [3] nfl end NO: the dialog offers to call a retired great back but leaves Charles Woodson off the list
+FAIL [3] nfl end NO: the dialog offers to call a retired great back but leaves Vernon Davis off the list
+FAIL [3] nfl end NO: the dialog offers to call a retired great back but leaves Anquan Boldin off the list
+FAIL [3] nfl end NO: the dialog offers to call a retired great back but leaves Reggie Wayne off the list
+FAIL [3] nfl end NO: the fallen men in the Sign a Player list are not the best 20 on the market
+FAIL [3] nfl end TB: the dialog offers to call a retired great back but leaves Calvin Johnson off the list
+FAIL [3] nfl end TB: the dialog offers to call a retired great back but leaves Luke Kuechly off the list
+FAIL [3] nfl end TB: the dialog offers to call a retired great back but leaves Andrew Luck off the list
+FAIL [3] nfl end TB: the dialog offers to call a retired great back but leaves Troy Polamalu off the list
+FAIL [3] nfl end TB: the dialog offers to call a retired great back but leaves Tony Gonzalez off the list
+FAIL [3] nfl end TB: the dialog offers to call a retired great back but leaves Darrelle Revis off the list
+FAIL [3] nfl end TB: the dialog offers to call a retired great back but leaves Charles Woodson off the list
+FAIL [3] nfl end TB: the dialog offers to call a retired great back but leaves Vernon Davis off the list
+FAIL [3] nfl end TB: the dialog offers to call a retired great back but leaves Anquan Boldin off the list
+FAIL [3] nfl end TB: the dialog offers to call a retired great back but leaves Reggie Wayne off the list
+FAIL [3] nfl end TB: the fallen men in the Sign a Player list are not the best 20 on the market
+FAIL [3] nfl end ATL: the dialog offers to call a retired great back but leaves Calvin Johnson off the list
+FAIL [3] nfl end ATL: the dialog offers to call a retired great back but leaves Luke Kuechly off the list
+FAIL [3] nfl end ATL: the dialog offers to call a retired great back but leaves Andrew Luck off the list
+FAIL [3] nfl end ATL: the dialog offers to call a retired great back but leaves Troy Polamalu off the list
+FAIL [3] nfl end ATL: the dialog offers to call a retired great back but leaves Darrelle Revis off the list
+FAIL [3] nfl end ATL: the dialog offers to call a retired great back but leaves Charles Woodson off the list
+FAIL [3] nfl end ATL: the dialog offers to call a retired great back but leaves Vernon Davis off the list
+FAIL [3] nfl end ATL: the dialog offers to call a retired great back but leaves Anquan Boldin off the list
+FAIL [3] nfl end ATL: the dialog offers to call a retired great back but leaves Reggie Wayne off the list
+FAIL [3] nfl end ATL: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nfl end CAR: the dialog offers to call a retired great back but leaves Calvin Johnson off the list
+FAIL [3] nfl end CAR: the dialog offers to call a retired great back but leaves Luke Kuechly off the list
+FAIL [3] nfl end CAR: the dialog offers to call a retired great back but leaves Andrew Luck off the list
+FAIL [3] nfl end CAR: the dialog offers to call a retired great back but leaves Troy Polamalu off the list
+FAIL [3] nfl end CAR: the dialog offers to call a retired great back but leaves Tony Gonzalez off the list
+FAIL [3] nfl end CAR: the dialog offers to call a retired great back but leaves Darrelle Revis off the list
+FAIL [3] nfl end CAR: the dialog offers to call a retired great back but leaves Charles Woodson off the list
+FAIL [3] nfl end CAR: the dialog offers to call a retired great back but leaves Vernon Davis off the list
+FAIL [3] nfl end CAR: the dialog offers to call a retired great back but leaves Anquan Boldin off the list
+FAIL [3] nfl end CAR: the dialog offers to call a retired great back but leaves Reggie Wayne off the list
+FAIL [3] nfl end CAR: the fallen men in the Sign a Player list are not the best 20 on the market
+FAIL [3] nfl end NYG: the dialog offers to call a retired great back but leaves Calvin Johnson off the list
+FAIL [3] nfl end NYG: the dialog offers to call a retired great back but leaves Luke Kuechly off the list
+FAIL [3] nfl end NYG: the dialog offers to call a retired great back but leaves Andrew Luck off the list
+FAIL [3] nfl end NYG: the dialog offers to call a retired great back but leaves Troy Polamalu off the list
+FAIL [3] nfl end NYG: the dialog offers to call a retired great back but leaves Tony Gonzalez off the list
+FAIL [3] nfl end NYG: the dialog offers to call a retired great back but leaves Darrelle Revis off the list
+FAIL [3] nfl end NYG: the dialog offers to call a retired great back but leaves Charles Woodson off the list
+FAIL [3] nfl end NYG: the dialog offers to call a retired great back but leaves Vernon Davis off the list
+FAIL [3] nfl end NYG: the dialog offers to call a retired great back but leaves Anquan Boldin off the list
+FAIL [3] nfl end NYG: the dialog offers to call a retired great back but leaves Reggie Wayne off the list
+FAIL [3] nfl end NYG: the fallen men in the Sign a Player list are not the best 20 on the market
+FAIL [3] nfl end WAS: the dialog offers to call a retired great back but leaves Calvin Johnson off the list
+FAIL [3] nfl end WAS: the dialog offers to call a retired great back but leaves Luke Kuechly off the list
+FAIL [3] nfl end WAS: the dialog offers to call a retired great back but leaves Andrew Luck off the list
+FAIL [3] nfl end WAS: the dialog offers to call a retired great back but leaves Troy Polamalu off the list
+FAIL [3] nfl end WAS: the dialog offers to call a retired great back but leaves Tony Gonzalez off the list
+FAIL [3] nfl end WAS: the dialog offers to call a retired great back but leaves Darrelle Revis off the list
+FAIL [3] nfl end WAS: the dialog offers to call a retired great back but leaves Charles Woodson off the list
+FAIL [3] nfl end WAS: the dialog offers to call a retired great back but leaves Vernon Davis off the list
+FAIL [3] nfl end WAS: the dialog offers to call a retired great back but leaves Anquan Boldin off the list
+FAIL [3] nfl end WAS: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nba end DEN: the dialog offers to call a retired great back but leaves Pau Gasol off the list
+FAIL [3] nba end DEN: the dialog offers to call a retired great back but leaves Paul Pierce off the list
+FAIL [3] nba end DEN: the dialog offers to call a retired great back but leaves Carmelo Anthony off the list
+FAIL [3] nba end DEN: the dialog offers to call a retired great back but leaves Yao Ming off the list
+FAIL [3] nba end DEN: the dialog offers to call a retired great back but leaves Tony Parker off the list
+FAIL [3] nba end DEN: the dialog offers to call a retired great back but leaves Manu Ginobili off the list
+FAIL [3] nba end DEN: the dialog offers to call a retired great back but leaves Ray Allen off the list
+FAIL [3] nba end DEN: the dialog offers to call a retired great back but leaves Derrick Rose off the list
+FAIL [3] nba end DEN: the fallen men in the Sign a Player list are not the best 22 on the market
+FAIL [3] nba end OKC: the dialog offers to call a retired great back but leaves Steve Nash off the list
+FAIL [3] nba end OKC: the dialog offers to call a retired great back but leaves Pau Gasol off the list
+FAIL [3] nba end OKC: the dialog offers to call a retired great back but leaves Paul Pierce off the list
+FAIL [3] nba end OKC: the dialog offers to call a retired great back but leaves Carmelo Anthony off the list
+FAIL [3] nba end OKC: the dialog offers to call a retired great back but leaves Yao Ming off the list
+FAIL [3] nba end OKC: the dialog offers to call a retired great back but leaves Tony Parker off the list
+FAIL [3] nba end OKC: the dialog offers to call a retired great back but leaves Manu Ginobili off the list
+FAIL [3] nba end OKC: the dialog offers to call a retired great back but leaves Ray Allen off the list
+FAIL [3] nba end OKC: the dialog offers to call a retired great back but leaves Derrick Rose off the list
+FAIL [3] nba end OKC: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nba end BOS: the dialog offers to call a retired great back but leaves Steve Nash off the list
+FAIL [3] nba end BOS: the dialog offers to call a retired great back but leaves Pau Gasol off the list
+FAIL [3] nba end BOS: the dialog offers to call a retired great back but leaves Paul Pierce off the list
+FAIL [3] nba end BOS: the dialog offers to call a retired great back but leaves Carmelo Anthony off the list
+FAIL [3] nba end BOS: the dialog offers to call a retired great back but leaves Yao Ming off the list
+FAIL [3] nba end BOS: the dialog offers to call a retired great back but leaves Tony Parker off the list
+FAIL [3] nba end BOS: the dialog offers to call a retired great back but leaves Manu Ginobili off the list
+FAIL [3] nba end BOS: the dialog offers to call a retired great back but leaves Ray Allen off the list
+FAIL [3] nba end BOS: the dialog offers to call a retired great back but leaves Derrick Rose off the list
+FAIL [3] nba end BOS: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nba end NYK: the dialog offers to call a retired great back but leaves Steve Nash off the list
+FAIL [3] nba end NYK: the dialog offers to call a retired great back but leaves Pau Gasol off the list
+FAIL [3] nba end NYK: the dialog offers to call a retired great back but leaves Paul Pierce off the list
+FAIL [3] nba end NYK: the dialog offers to call a retired great back but leaves Carmelo Anthony off the list
+FAIL [3] nba end NYK: the dialog offers to call a retired great back but leaves Yao Ming off the list
+FAIL [3] nba end NYK: the dialog offers to call a retired great back but leaves Tony Parker off the list
+FAIL [3] nba end NYK: the dialog offers to call a retired great back but leaves Manu Ginobili off the list
+FAIL [3] nba end NYK: the dialog offers to call a retired great back but leaves Ray Allen off the list
+FAIL [3] nba end NYK: the dialog offers to call a retired great back but leaves Derrick Rose off the list
+FAIL [3] nba end NYK: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nba end LAL: the dialog offers to call a retired great back but leaves Steve Nash off the list
+FAIL [3] nba end LAL: the dialog offers to call a retired great back but leaves Pau Gasol off the list
+FAIL [3] nba end LAL: the dialog offers to call a retired great back but leaves Paul Pierce off the list
+FAIL [3] nba end LAL: the dialog offers to call a retired great back but leaves Carmelo Anthony off the list
+FAIL [3] nba end LAL: the dialog offers to call a retired great back but leaves Yao Ming off the list
+FAIL [3] nba end LAL: the dialog offers to call a retired great back but leaves Tony Parker off the list
+FAIL [3] nba end LAL: the dialog offers to call a retired great back but leaves Manu Ginobili off the list
+FAIL [3] nba end LAL: the dialog offers to call a retired great back but leaves Ray Allen off the list
+FAIL [3] nba end LAL: the dialog offers to call a retired great back but leaves Derrick Rose off the list
+FAIL [3] nba end LAL: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nba end MIL: the dialog offers to call a retired great back but leaves Steve Nash off the list
+FAIL [3] nba end MIL: the dialog offers to call a retired great back but leaves Pau Gasol off the list
+FAIL [3] nba end MIL: the dialog offers to call a retired great back but leaves Paul Pierce off the list
+FAIL [3] nba end MIL: the dialog offers to call a retired great back but leaves Carmelo Anthony off the list
+FAIL [3] nba end MIL: the dialog offers to call a retired great back but leaves Yao Ming off the list
+FAIL [3] nba end MIL: the dialog offers to call a retired great back but leaves Manu Ginobili off the list
+FAIL [3] nba end MIL: the dialog offers to call a retired great back but leaves Ray Allen off the list
+FAIL [3] nba end MIL: the dialog offers to call a retired great back but leaves Derrick Rose off the list
+FAIL [3] nba end MIL: the fallen men in the Sign a Player list are not the best 22 on the market
+FAIL [3] nba end MIN: the dialog offers to call a retired great back but leaves Steve Nash off the list
+FAIL [3] nba end MIN: the dialog offers to call a retired great back but leaves Pau Gasol off the list
+FAIL [3] nba end MIN: the dialog offers to call a retired great back but leaves Paul Pierce off the list
+FAIL [3] nba end MIN: the dialog offers to call a retired great back but leaves Carmelo Anthony off the list
+FAIL [3] nba end MIN: the dialog offers to call a retired great back but leaves Yao Ming off the list
+FAIL [3] nba end MIN: the dialog offers to call a retired great back but leaves Tony Parker off the list
+FAIL [3] nba end MIN: the dialog offers to call a retired great back but leaves Manu Ginobili off the list
+FAIL [3] nba end MIN: the dialog offers to call a retired great back but leaves Ray Allen off the list
+FAIL [3] nba end MIN: the dialog offers to call a retired great back but leaves Derrick Rose off the list
+FAIL [3] nba end MIN: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nba end HOU: the dialog offers to call a retired great back but leaves Steve Nash off the list
+FAIL [3] nba end HOU: the dialog offers to call a retired great back but leaves Paul Pierce off the list
+FAIL [3] nba end HOU: the dialog offers to call a retired great back but leaves Carmelo Anthony off the list
+FAIL [3] nba end HOU: the dialog offers to call a retired great back but leaves Yao Ming off the list
+FAIL [3] nba end HOU: the dialog offers to call a retired great back but leaves Tony Parker off the list
+FAIL [3] nba end HOU: the dialog offers to call a retired great back but leaves Manu Ginobili off the list
+FAIL [3] nba end HOU: the dialog offers to call a retired great back but leaves Ray Allen off the list
+FAIL [3] nba end HOU: the dialog offers to call a retired great back but leaves Derrick Rose off the list
+FAIL [3] nba end HOU: the fallen men in the Sign a Player list are not the best 22 on the market
+FAIL [3] nba end CLE: the dialog offers to call a retired great back but leaves Steve Nash off the list
+FAIL [3] nba end CLE: the dialog offers to call a retired great back but leaves Pau Gasol off the list
+FAIL [3] nba end CLE: the dialog offers to call a retired great back but leaves Paul Pierce off the list
+FAIL [3] nba end CLE: the dialog offers to call a retired great back but leaves Carmelo Anthony off the list
+FAIL [3] nba end CLE: the dialog offers to call a retired great back but leaves Yao Ming off the list
+FAIL [3] nba end CLE: the dialog offers to call a retired great back but leaves Tony Parker off the list
+FAIL [3] nba end CLE: the dialog offers to call a retired great back but leaves Manu Ginobili off the list
+FAIL [3] nba end CLE: the dialog offers to call a retired great back but leaves Ray Allen off the list
+FAIL [3] nba end CLE: the dialog offers to call a retired great back but leaves Derrick Rose off the list
+FAIL [3] nba end CLE: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nba end IND: the dialog offers to call a retired great back but leaves Steve Nash off the list
+FAIL [3] nba end IND: the dialog offers to call a retired great back but leaves Pau Gasol off the list
+FAIL [3] nba end IND: the dialog offers to call a retired great back but leaves Paul Pierce off the list
+FAIL [3] nba end IND: the dialog offers to call a retired great back but leaves Carmelo Anthony off the list
+FAIL [3] nba end IND: the dialog offers to call a retired great back but leaves Yao Ming off the list
+FAIL [3] nba end IND: the dialog offers to call a retired great back but leaves Tony Parker off the list
+FAIL [3] nba end IND: the dialog offers to call a retired great back but leaves Manu Ginobili off the list
+FAIL [3] nba end IND: the dialog offers to call a retired great back but leaves Ray Allen off the list
+FAIL [3] nba end IND: the dialog offers to call a retired great back but leaves Derrick Rose off the list
+FAIL [3] nba end IND: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nba end GSW: the dialog offers to call a retired great back but leaves Steve Nash off the list
+FAIL [3] nba end GSW: the dialog offers to call a retired great back but leaves Pau Gasol off the list
+FAIL [3] nba end GSW: the dialog offers to call a retired great back but leaves Paul Pierce off the list
+FAIL [3] nba end GSW: the dialog offers to call a retired great back but leaves Carmelo Anthony off the list
+FAIL [3] nba end GSW: the dialog offers to call a retired great back but leaves Yao Ming off the list
+FAIL [3] nba end GSW: the dialog offers to call a retired great back but leaves Tony Parker off the list
+FAIL [3] nba end GSW: the dialog offers to call a retired great back but leaves Manu Ginobili off the list
+FAIL [3] nba end GSW: the dialog offers to call a retired great back but leaves Ray Allen off the list
+FAIL [3] nba end GSW: the dialog offers to call a retired great back but leaves Derrick Rose off the list
+FAIL [3] nba end GSW: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nba end DAL: the dialog offers to call a retired great back but leaves Steve Nash off the list
+FAIL [3] nba end DAL: the dialog offers to call a retired great back but leaves Pau Gasol off the list
+FAIL [3] nba end DAL: the dialog offers to call a retired great back but leaves Paul Pierce off the list
+FAIL [3] nba end DAL: the dialog offers to call a retired great back but leaves Carmelo Anthony off the list
+FAIL [3] nba end DAL: the dialog offers to call a retired great back but leaves Yao Ming off the list
+FAIL [3] nba end DAL: the dialog offers to call a retired great back but leaves Tony Parker off the list
+FAIL [3] nba end DAL: the dialog offers to call a retired great back but leaves Manu Ginobili off the list
+FAIL [3] nba end DAL: the dialog offers to call a retired great back but leaves Ray Allen off the list
+FAIL [3] nba end DAL: the dialog offers to call a retired great back but leaves Derrick Rose off the list
+FAIL [3] nba end DAL: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nba end MEM: the dialog offers to call a retired great back but leaves Steve Nash off the list
+FAIL [3] nba end MEM: the dialog offers to call a retired great back but leaves Pau Gasol off the list
+FAIL [3] nba end MEM: the dialog offers to call a retired great back but leaves Paul Pierce off the list
+FAIL [3] nba end MEM: the dialog offers to call a retired great back but leaves Carmelo Anthony off the list
+FAIL [3] nba end MEM: the dialog offers to call a retired great back but leaves Yao Ming off the list
+FAIL [3] nba end MEM: the dialog offers to call a retired great back but leaves Tony Parker off the list
+FAIL [3] nba end MEM: the dialog offers to call a retired great back but leaves Ray Allen off the list
+FAIL [3] nba end MEM: the dialog offers to call a retired great back but leaves Derrick Rose off the list
+FAIL [3] nba end MEM: the fallen men in the Sign a Player list are not the best 22 on the market
+FAIL [3] nba end PHI: the dialog offers to call a retired great back but leaves Steve Nash off the list
+FAIL [3] nba end PHI: the dialog offers to call a retired great back but leaves Pau Gasol off the list
+FAIL [3] nba end PHI: the dialog offers to call a retired great back but leaves Paul Pierce off the list
+FAIL [3] nba end PHI: the dialog offers to call a retired great back but leaves Carmelo Anthony off the list
+FAIL [3] nba end PHI: the dialog offers to call a retired great back but leaves Yao Ming off the list
+FAIL [3] nba end PHI: the dialog offers to call a retired great back but leaves Tony Parker off the list
+FAIL [3] nba end PHI: the dialog offers to call a retired great back but leaves Manu Ginobili off the list
+FAIL [3] nba end PHI: the dialog offers to call a retired great back but leaves Ray Allen off the list
+FAIL [3] nba end PHI: the dialog offers to call a retired great back but leaves Derrick Rose off the list
+FAIL [3] nba end PHI: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nba end MIA: the dialog offers to call a retired great back but leaves Steve Nash off the list
+FAIL [3] nba end MIA: the dialog offers to call a retired great back but leaves Pau Gasol off the list
+FAIL [3] nba end MIA: the dialog offers to call a retired great back but leaves Carmelo Anthony off the list
+FAIL [3] nba end MIA: the dialog offers to call a retired great back but leaves Yao Ming off the list
+FAIL [3] nba end MIA: the dialog offers to call a retired great back but leaves Tony Parker off the list
+FAIL [3] nba end MIA: the dialog offers to call a retired great back but leaves Manu Ginobili off the list
+FAIL [3] nba end MIA: the dialog offers to call a retired great back but leaves Ray Allen off the list
+FAIL [3] nba end MIA: the dialog offers to call a retired great back but leaves Derrick Rose off the list
+FAIL [3] nba end MIA: the fallen men in the Sign a Player list are not the best 22 on the market
+FAIL [3] nba end LAC: the dialog offers to call a retired great back but leaves Steve Nash off the list
+FAIL [3] nba end LAC: the dialog offers to call a retired great back but leaves Pau Gasol off the list
+FAIL [3] nba end LAC: the dialog offers to call a retired great back but leaves Paul Pierce off the list
+FAIL [3] nba end LAC: the dialog offers to call a retired great back but leaves Carmelo Anthony off the list
+FAIL [3] nba end LAC: the dialog offers to call a retired great back but leaves Yao Ming off the list
+FAIL [3] nba end LAC: the dialog offers to call a retired great back but leaves Tony Parker off the list
+FAIL [3] nba end LAC: the dialog offers to call a retired great back but leaves Manu Ginobili off the list
+FAIL [3] nba end LAC: the dialog offers to call a retired great back but leaves Ray Allen off the list
+FAIL [3] nba end LAC: the dialog offers to call a retired great back but leaves Derrick Rose off the list
+FAIL [3] nba end LAC: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nba end PHX: the dialog offers to call a retired great back but leaves Steve Nash off the list
+FAIL [3] nba end PHX: the dialog offers to call a retired great back but leaves Pau Gasol off the list
+FAIL [3] nba end PHX: the dialog offers to call a retired great back but leaves Paul Pierce off the list
+FAIL [3] nba end PHX: the dialog offers to call a retired great back but leaves Carmelo Anthony off the list
+FAIL [3] nba end PHX: the dialog offers to call a retired great back but leaves Yao Ming off the list
+FAIL [3] nba end PHX: the dialog offers to call a retired great back but leaves Tony Parker off the list
+FAIL [3] nba end PHX: the dialog offers to call a retired great back but leaves Manu Ginobili off the list
+FAIL [3] nba end PHX: the dialog offers to call a retired great back but leaves Ray Allen off the list
+FAIL [3] nba end PHX: the dialog offers to call a retired great back but leaves Derrick Rose off the list
+FAIL [3] nba end PHX: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nba end SAC: the dialog offers to call a retired great back but leaves Steve Nash off the list
+FAIL [3] nba end SAC: the dialog offers to call a retired great back but leaves Pau Gasol off the list
+FAIL [3] nba end SAC: the dialog offers to call a retired great back but leaves Paul Pierce off the list
+FAIL [3] nba end SAC: the dialog offers to call a retired great back but leaves Carmelo Anthony off the list
+FAIL [3] nba end SAC: the dialog offers to call a retired great back but leaves Yao Ming off the list
+FAIL [3] nba end SAC: the dialog offers to call a retired great back but leaves Tony Parker off the list
+FAIL [3] nba end SAC: the dialog offers to call a retired great back but leaves Manu Ginobili off the list
+FAIL [3] nba end SAC: the dialog offers to call a retired great back but leaves Ray Allen off the list
+FAIL [3] nba end SAC: the dialog offers to call a retired great back but leaves Derrick Rose off the list
+FAIL [3] nba end SAC: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nba end ATL: the dialog offers to call a retired great back but leaves Steve Nash off the list
+FAIL [3] nba end ATL: the dialog offers to call a retired great back but leaves Pau Gasol off the list
+FAIL [3] nba end ATL: the dialog offers to call a retired great back but leaves Paul Pierce off the list
+FAIL [3] nba end ATL: the dialog offers to call a retired great back but leaves Carmelo Anthony off the list
+FAIL [3] nba end ATL: the dialog offers to call a retired great back but leaves Yao Ming off the list
+FAIL [3] nba end ATL: the dialog offers to call a retired great back but leaves Tony Parker off the list
+FAIL [3] nba end ATL: the dialog offers to call a retired great back but leaves Manu Ginobili off the list
+FAIL [3] nba end ATL: the dialog offers to call a retired great back but leaves Ray Allen off the list
+FAIL [3] nba end ATL: the dialog offers to call a retired great back but leaves Derrick Rose off the list
+FAIL [3] nba end ATL: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nba end NOP: the dialog offers to call a retired great back but leaves Steve Nash off the list
+FAIL [3] nba end NOP: the dialog offers to call a retired great back but leaves Pau Gasol off the list
+FAIL [3] nba end NOP: the dialog offers to call a retired great back but leaves Paul Pierce off the list
+FAIL [3] nba end NOP: the dialog offers to call a retired great back but leaves Carmelo Anthony off the list
+FAIL [3] nba end NOP: the dialog offers to call a retired great back but leaves Yao Ming off the list
+FAIL [3] nba end NOP: the dialog offers to call a retired great back but leaves Tony Parker off the list
+FAIL [3] nba end NOP: the dialog offers to call a retired great back but leaves Manu Ginobili off the list
+FAIL [3] nba end NOP: the dialog offers to call a retired great back but leaves Derrick Rose off the list
+FAIL [3] nba end NOP: the fallen men in the Sign a Player list are not the best 22 on the market
+FAIL [3] nba end TOR: the dialog offers to call a retired great back but leaves Steve Nash off the list
+FAIL [3] nba end TOR: the dialog offers to call a retired great back but leaves Pau Gasol off the list
+FAIL [3] nba end TOR: the dialog offers to call a retired great back but leaves Paul Pierce off the list
+FAIL [3] nba end TOR: the dialog offers to call a retired great back but leaves Carmelo Anthony off the list
+FAIL [3] nba end TOR: the dialog offers to call a retired great back but leaves Yao Ming off the list
+FAIL [3] nba end TOR: the dialog offers to call a retired great back but leaves Tony Parker off the list
+FAIL [3] nba end TOR: the dialog offers to call a retired great back but leaves Manu Ginobili off the list
+FAIL [3] nba end TOR: the dialog offers to call a retired great back but leaves Ray Allen off the list
+FAIL [3] nba end TOR: the dialog offers to call a retired great back but leaves Derrick Rose off the list
+FAIL [3] nba end TOR: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nba end SAS: the dialog offers to call a retired great back but leaves Steve Nash off the list
+FAIL [3] nba end SAS: the dialog offers to call a retired great back but leaves Pau Gasol off the list
+FAIL [3] nba end SAS: the dialog offers to call a retired great back but leaves Paul Pierce off the list
+FAIL [3] nba end SAS: the dialog offers to call a retired great back but leaves Yao Ming off the list
+FAIL [3] nba end SAS: the dialog offers to call a retired great back but leaves Tony Parker off the list
+FAIL [3] nba end SAS: the dialog offers to call a retired great back but leaves Manu Ginobili off the list
+FAIL [3] nba end SAS: the dialog offers to call a retired great back but leaves Ray Allen off the list
+FAIL [3] nba end SAS: the dialog offers to call a retired great back but leaves Derrick Rose off the list
+FAIL [3] nba end SAS: the fallen men in the Sign a Player list are not the best 22 on the market
+FAIL [3] nba end ORL: the dialog offers to call a retired great back but leaves Steve Nash off the list
+FAIL [3] nba end ORL: the dialog offers to call a retired great back but leaves Pau Gasol off the list
+FAIL [3] nba end ORL: the dialog offers to call a retired great back but leaves Paul Pierce off the list
+FAIL [3] nba end ORL: the dialog offers to call a retired great back but leaves Carmelo Anthony off the list
+FAIL [3] nba end ORL: the dialog offers to call a retired great back but leaves Yao Ming off the list
+FAIL [3] nba end ORL: the dialog offers to call a retired great back but leaves Tony Parker off the list
+FAIL [3] nba end ORL: the dialog offers to call a retired great back but leaves Manu Ginobili off the list
+FAIL [3] nba end ORL: the dialog offers to call a retired great back but leaves Ray Allen off the list
+FAIL [3] nba end ORL: the dialog offers to call a retired great back but leaves Derrick Rose off the list
+FAIL [3] nba end ORL: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nba end UTA: the dialog offers to call a retired great back but leaves Steve Nash off the list
+FAIL [3] nba end UTA: the dialog offers to call a retired great back but leaves Pau Gasol off the list
+FAIL [3] nba end UTA: the dialog offers to call a retired great back but leaves Paul Pierce off the list
+FAIL [3] nba end UTA: the dialog offers to call a retired great back but leaves Carmelo Anthony off the list
+FAIL [3] nba end UTA: the dialog offers to call a retired great back but leaves Yao Ming off the list
+FAIL [3] nba end UTA: the dialog offers to call a retired great back but leaves Tony Parker off the list
+FAIL [3] nba end UTA: the dialog offers to call a retired great back but leaves Manu Ginobili off the list
+FAIL [3] nba end UTA: the dialog offers to call a retired great back but leaves Ray Allen off the list
+FAIL [3] nba end UTA: the dialog offers to call a retired great back but leaves Derrick Rose off the list
+FAIL [3] nba end UTA: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nba end CHA: the dialog offers to call a retired great back but leaves Steve Nash off the list
+FAIL [3] nba end CHA: the dialog offers to call a retired great back but leaves Pau Gasol off the list
+FAIL [3] nba end CHA: the dialog offers to call a retired great back but leaves Paul Pierce off the list
+FAIL [3] nba end CHA: the dialog offers to call a retired great back but leaves Carmelo Anthony off the list
+FAIL [3] nba end CHA: the dialog offers to call a retired great back but leaves Yao Ming off the list
+FAIL [3] nba end CHA: the dialog offers to call a retired great back but leaves Tony Parker off the list
+FAIL [3] nba end CHA: the dialog offers to call a retired great back but leaves Manu Ginobili off the list
+FAIL [3] nba end CHA: the dialog offers to call a retired great back but leaves Ray Allen off the list
+FAIL [3] nba end CHA: the dialog offers to call a retired great back but leaves Derrick Rose off the list
+FAIL [3] nba end CHA: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nba end DET: the dialog offers to call a retired great back but leaves Steve Nash off the list
+FAIL [3] nba end DET: the dialog offers to call a retired great back but leaves Pau Gasol off the list
+FAIL [3] nba end DET: the dialog offers to call a retired great back but leaves Paul Pierce off the list
+FAIL [3] nba end DET: the dialog offers to call a retired great back but leaves Carmelo Anthony off the list
+FAIL [3] nba end DET: the dialog offers to call a retired great back but leaves Yao Ming off the list
+FAIL [3] nba end DET: the dialog offers to call a retired great back but leaves Tony Parker off the list
+FAIL [3] nba end DET: the dialog offers to call a retired great back but leaves Manu Ginobili off the list
+FAIL [3] nba end DET: the dialog offers to call a retired great back but leaves Ray Allen off the list
+FAIL [3] nba end DET: the dialog offers to call a retired great back but leaves Derrick Rose off the list
+FAIL [3] nba end DET: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nba end BKN: the dialog offers to call a retired great back but leaves Steve Nash off the list
+FAIL [3] nba end BKN: the dialog offers to call a retired great back but leaves Pau Gasol off the list
+FAIL [3] nba end BKN: the dialog offers to call a retired great back but leaves Paul Pierce off the list
+FAIL [3] nba end BKN: the dialog offers to call a retired great back but leaves Carmelo Anthony off the list
+FAIL [3] nba end BKN: the dialog offers to call a retired great back but leaves Yao Ming off the list
+FAIL [3] nba end BKN: the dialog offers to call a retired great back but leaves Tony Parker off the list
+FAIL [3] nba end BKN: the dialog offers to call a retired great back but leaves Manu Ginobili off the list
+FAIL [3] nba end BKN: the dialog offers to call a retired great back but leaves Ray Allen off the list
+FAIL [3] nba end BKN: the fallen men in the Sign a Player list are not the best 22 on the market
+FAIL [3] nba end WAS: the dialog offers to call a retired great back but leaves Steve Nash off the list
+FAIL [3] nba end WAS: the dialog offers to call a retired great back but leaves Pau Gasol off the list
+FAIL [3] nba end WAS: the dialog offers to call a retired great back but leaves Paul Pierce off the list
+FAIL [3] nba end WAS: the dialog offers to call a retired great back but leaves Carmelo Anthony off the list
+FAIL [3] nba end WAS: the dialog offers to call a retired great back but leaves Yao Ming off the list
+FAIL [3] nba end WAS: the dialog offers to call a retired great back but leaves Tony Parker off the list
+FAIL [3] nba end WAS: the dialog offers to call a retired great back but leaves Manu Ginobili off the list
+FAIL [3] nba end WAS: the dialog offers to call a retired great back but leaves Ray Allen off the list
+FAIL [3] nba end WAS: the dialog offers to call a retired great back but leaves Derrick Rose off the list
+FAIL [3] nba end WAS: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nba end POR: the dialog offers to call a retired great back but leaves Steve Nash off the list
+FAIL [3] nba end POR: the dialog offers to call a retired great back but leaves Pau Gasol off the list
+FAIL [3] nba end POR: the dialog offers to call a retired great back but leaves Paul Pierce off the list
+FAIL [3] nba end POR: the dialog offers to call a retired great back but leaves Carmelo Anthony off the list
+FAIL [3] nba end POR: the dialog offers to call a retired great back but leaves Tony Parker off the list
+FAIL [3] nba end POR: the dialog offers to call a retired great back but leaves Manu Ginobili off the list
+FAIL [3] nba end POR: the dialog offers to call a retired great back but leaves Ray Allen off the list
+FAIL [3] nba end POR: the dialog offers to call a retired great back but leaves Derrick Rose off the list
+FAIL [3] nba end POR: the fallen men in the Sign a Player list are not the best 22 on the market
+FAIL [3] nba end CHI: the dialog offers to call a retired great back but leaves Steve Nash off the list
+FAIL [3] nba end CHI: the dialog offers to call a retired great back but leaves Pau Gasol off the list
+FAIL [3] nba end CHI: the dialog offers to call a retired great back but leaves Paul Pierce off the list
+FAIL [3] nba end CHI: the dialog offers to call a retired great back but leaves Carmelo Anthony off the list
+FAIL [3] nba end CHI: the dialog offers to call a retired great back but leaves Yao Ming off the list
+FAIL [3] nba end CHI: the dialog offers to call a retired great back but leaves Tony Parker off the list
+FAIL [3] nba end CHI: the dialog offers to call a retired great back but leaves Manu Ginobili off the list
+FAIL [3] nba end CHI: the dialog offers to call a retired great back but leaves Ray Allen off the list
+FAIL [3] nba end CHI: the dialog offers to call a retired great back but leaves Derrick Rose off the list
+FAIL [3] nba end CHI: the fallen men in the Sign a Player list are not the best 21 on the market
+measured: {"nflGreats":10,"nbaGreats":9,"nflRetired":42,"nflStates":64,"nflDealt":1920,"nflMarket":10880,"nflLabelled":25,"nbaRetired":37,"nbaStates":60,"nbaDealt":1800,"nbaMarket":9596,"nbaLabelled":27,"conquestFilesScanned":32,"nflKeyStats":320,"nflPrinted":146,"nbaKeyStats":300}
+simConquestPeople: FAIL, 643 of 75130 checks red (control greatsCap fired)
