@@ -1,0 +1,26 @@
+src/lib/nbaMyCareer.ts: settle call removed
+src/lib/nflMyCareer.ts: settle call removed
+src/lib/mlbMyCareer.ts: settle call removed
+src/lib/nhlMyCareer.ts: settle call removed
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+[1m[33mwarn[39m[22m - The class `duration-[800ms]` is ambiguous and matches multiple utilities.
+[1m[33mwarn[39m[22m - If this is content and not a class, replace it with `duration-&lsqb;800ms&rsqb;` to silence this warning.
+[33m
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
+  FAIL b: 320: the season's feed has no returns line
+  FAIL b: 320: Cash 30.4 with undefined waiting, the cards print 31.2 with 0.0936 waiting
+  FAIL b: 390: the season's feed has no returns line
+  FAIL b: 390: Cash 30.4 with undefined waiting, the cards print 31.2 with 0.0936 waiting
+  FAIL b: 1280: the season's feed has no returns line
+  FAIL b: 1280: Cash 30.4 with undefined waiting, the cards print 31.2 with 0.0936 waiting
+  b 320: Cash 15.8 to 30.4 (pay less upkeep 30.4, banked 0.8, waiting undefined); wanted 31.2 and 0.0936
+  b 390: Cash 15.8 to 30.4 (pay less upkeep 30.4, banked 0.8, waiting undefined); wanted 31.2 and 0.0936
+  b 1280: Cash 15.8 to 30.4 (pay less upkeep 30.4, banked 0.8, waiting undefined); wanted 31.2 and 0.0936
+  screenshots: 9 in /home/runner/work/_temp/rc-out/files
+playUsShopPromises: CONTROL nocall FIRED, (b) red
