@@ -216,7 +216,7 @@ try {
     if (control === 'flatball') motion = replace(motion, "if (!flight || flight === 'ground') return 0;", 'if (flight || !flight) return 0;');
     if (control === 'shotflat') motion = replace(motion, 'if (flight <= 0) return 0;', 'if (flight <= 2) return 0;');
     if (control === 'groundlob') scene = replace(scene, "LONG_PASS ? 'air' : 'ground';", "LONG_PASS ? 'air' : 'air';");
-    if (control === 'foulcue') scene = replace(scene, 'if (beat.foul && beat.dead) {', 'if (beat.foul && beat.dead && false) {');
+    if (control === 'foulcue') scene = replace(scene, 'if (beat.foul && beat.dead && Math.abs(beat.start - beat.foul.at) < 1e-6) {', 'if (beat.foul && beat.dead && false) {');
     if (control === 'foulpair') scene = replace(scene, 'const by = lists[event.side].find(', 'const by = lists[side].find(');
     if (control === 'foulcard') scene = replace(scene, 'if (card) foul.card = card;', "foul.card = card ?? 'yellow';");
     if (control === 'foulmeet') scene = replace(scene, 'tackler.y = b.y + 3.4; }', 'tackler.y = b.y + 13.4; }');

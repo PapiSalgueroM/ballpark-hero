@@ -61,7 +61,7 @@ export interface PitchBeat {
   pressed?: boolean;
   /** and a foul: the line of the feed it is, the man it names (by), the man it was on (on), the card the feed
    *  books that man on it at that place, and `contact` on the stretch the two meet in, before the whistle. */
-  foul?: { order: number; by: string | null; on: string | null; card?: 'yellow' | 'red'; contact?: boolean };
+  foul?: { order: number; at: number; by: string | null; on: string | null; card?: 'yellow' | 'red'; contact?: boolean };
 }
 /** A goal, a shot or a save the plan staged, and the instant its action starts. */
 export interface PitchStagedAction { event: PitchEvent; at: number }
@@ -78,13 +78,14 @@ export interface PitchPlan {
 /** Round 1521: the lines in order up the pitch. */
 const LINES: PitchLine[] = ['keeper', 'defence', 'midfield', 'attack'];
 const rank = (line: PitchLine) => LINES.indexOf(line);
-/** Round 1521, a plan built with `build`: of a possession on the ball, how its next pass goes. `forward` and `level`
- *  are cumulative shares at a push of 0 (balanced); each moves by its `push` per unit of push, so a side that plays
- *  directly goes forward more and back less. The rest is a reset. From the front line there is no further line:
- *  the ball is kept among the forwards or it goes back. */
-const BUILD = { forward: 0.55, forwardPush: 0.15, level: 0.33, levelPush: -0.1, keep: 0.6, keepPush: 0.1 };
+/** Round 1521, a plan built with `build`: of a possession on the ball behind the front line, how its next pass goes.
+ *  `forward` is the share that goes up a line and `reset` the share that goes back, each at a push of 0 (balanced)
+ *  and moved by its `push` per unit of push, so a side that plays directly goes forward more and back less; the
+ *  rest goes across the same line. From the front line there is no further line: the ball is kept among the
+ *  forwards (`keep`) or it goes back. */
+const BUILD = { forward: 0.55, forwardPush: 0.2, reset: 0.1, resetPush: -0.05, keep: 0.6, keepPush: 0.1 };
 /** A pass that goes further than this arrives in the air. */
-const LONG_PASS = 30;
+const LONG_PASS = 38;
 /** A reset that goes back and this far across is a switch of play; a shorter one is pressure. */
 const SWITCH_ACROSS = 30;
 
@@ -187,7 +188,7 @@ export function pitchPlan(input: PitchInput): PitchPlan {
     else if (priorRank === 0) want = roll < 0.7 ? 1 : 2;
     else if (priorRank < 3) {
       const forward = BUILD.forward + BUILD.forwardPush * lean;
-      want = roll < forward ? priorRank + 1 : roll < forward + BUILD.level + BUILD.levelPush * lean ? priorRank : priorRank - 1;
+      want = roll < forward ? priorRank + 1 : roll < 1 - (BUILD.reset + BUILD.resetPush * lean) ? priorRank : priorRank - 1;
     } else want = roll < BUILD.keep + BUILD.keepPush * lean ? 3 : 2;
     /* Who he is: a man of that line other than the man who has it now; with nobody else there, the next line up
        (or, going back, the next line back), and failing all of that anybody else outfield. */
@@ -393,6 +394,12 @@ export function pitchPlan(input: PitchInput): PitchPlan {
     const at = input.feed.findIndex((e, i) => e.kind === 'foul' && !cards.has(i) && e.side === card.side && e.text === card.text && placeOf(e) === placeOf(card));
     if (at >= 0) cards.set(at, card.kind);
   }
+  /* Round 1521: where the dead balls of the feed already are (a corner's and a throw in's two beats, from their own
+     places), so a foul staged with `build` waits for them rather than stepping on them; each foul adds its own. */
+  const deadWindows: [number, number][] = [];
+  if (build) for (const e of input.feed) {
+    if ((e.kind === 'corner' || e.kind === 'throwin') && e.side !== 'none') deadWindows.push([placeOf(e), placeOf(e) + 2 * BEAT_SPAN]);
+  }
   /* ---- corners, throw ins and fouls, each staged from its own place ---- */
   const nearest = (side: PitchSide, spot: PitchPoint, skipKeeper: boolean): PitchFigure | null => {
     let best: PitchFigure | null = null;
@@ -453,6 +460,25 @@ export function pitchPlan(input: PitchInput): PitchPlan {
          names); the whistle stops play there, with its cue, and the man it was on takes the free kick. A man the
          line names who is the keeper fouls a forward, near his own goal. The card is the feed's own, never made. */
       let foul: Layer['foul'];
+      /* With `build` it is also staged where it can be seen: inside its own minute (the clock still reads it) at the
+         first instant no chance, kick off or follow up holds the pitch, its meeting and its whistle if both fit, its
+         whistle alone if only that does, and at its place as before if neither. */
+      let at = p;
+      let meets = false;
+      if (build) {
+        /* Held: a stretch of a chance or a kick off, a corner's or a throw in's two beats, or another foul's. */
+        const held = (s: number, e: number) => layers.some(l => l.priority >= 2 && l.start < e - EPS && s < l.end - EPS)
+          || deadWindows.some(([a, b]) => a < e - EPS && s < b - EPS);
+        const latest = Math.min(p + 1 - BEAT_SPAN, to - BEAT_SPAN);
+        let found = -1;
+        for (const span of [BEAT_SPAN, 0]) {
+          for (let k = 0; found < 0 && p + k * 0.02 <= latest + EPS; k++) if (!held(p + k * 0.02 - span, p + k * 0.02 + 2 * BEAT_SPAN)) found = p + k * 0.02;
+          if (found >= 0) { meets = span > 0; break; }
+        }
+        if (found < 0) for (let k = 0; found < 0 && p + k * 0.02 <= latest + EPS; k++) if (!held(p + k * 0.02, p + k * 0.02 + BEAT_SPAN)) { found = p + k * 0.02; meets = false; }
+        if (found >= 0) at = Math.round(found * 1e6) / 1e6;
+        deadWindows.push([at - (meets ? BEAT_SPAN : 0), at + 2 * BEAT_SPAN]);
+      }
       if (build) {
         const meet = keyedRng(`${seed}:w:${order}`);
         const by = lists[event.side].find(f => f.name !== undefined && f.name === event.text) ?? null;
@@ -460,17 +486,17 @@ export function pitchPlan(input: PitchInput): PitchPlan {
         const forwards = outfield.filter(f => f.line === 'attack');
         const pool = by?.line === 'keeper' && forwards.length ? forwards : outfield;
         const victim = pool.length ? pool[pickIndex(pool, meet())] : null;
-        foul = { order, by: by?.key ?? null, on: victim?.key ?? null };
+        foul = { order, at, by: by?.key ?? null, on: victim?.key ?? null };
         const card = cards.get(order);
         if (card) foul.card = card;
-        if (victim) layers.push({
-          start: p - BEAT_SPAN, end: p, priority: 1, order, state: 'open', via: 'dead', side, carrier: victim.key, dead: false,
+        if (victim && meets) layers.push({
+          start: at - BEAT_SPAN, end: at, priority: 1, order, state: 'open', via: 'dead', side, carrier: victim.key, dead: false,
           id: `w${order}`, anchor: zoneAnchor(side, victim, meet), line: victim.line, foul: { ...foul, contact: true },
         });
       }
       const fouled = foul?.on ?? null;
       layers.push({
-        start: p, end: p + BEAT_SPAN, priority: 1, order, state: 'freekick', via: 'dead', side, carrier: null,
+        start: at, end: at + BEAT_SPAN, priority: 1, order, state: 'freekick', via: 'dead', side, carrier: null,
         carrierFrom: anchor => fouled ?? nearest(side, anchor, true)?.key ?? null, dead: true, id: `x${order}`,
         anchor: before => ({ x: clamp(before.x, 6, 94), y: clamp(before.y, 8, 92) }),
         ...(foul ? { foul } : {}),
@@ -479,7 +505,7 @@ export function pitchPlan(input: PitchInput): PitchPlan {
       const list = lists[side];
       const receiver = list.length ? list[pickIndex(list, rng())] : null;
       layers.push({
-        start: p + BEAT_SPAN, end: p + 2 * BEAT_SPAN, priority: 1, order, state: 'open', via: 'dead', side,
+        start: at + BEAT_SPAN, end: at + 2 * BEAT_SPAN, priority: 1, order, state: 'open', via: 'dead', side,
         carrier: receiver?.key ?? null, dead: false, id: `y${order}`, anchor: receiver ? zoneAnchor(side, receiver, rng) : { x: 50, y: 50 },
       });
     }
@@ -587,7 +613,7 @@ function blockOf(plan: PitchPlan, beat: PitchBeat, side: PitchSide): Own[] {
       /* A man with the ball goes most of the way to where it is wanted. The shooter of a chance is all the
          way there before his line fires, so his plant is a step and not a run through his own team. */
       /* Round 1521: and the man a foul is on is all the way there too, so the man who fouls him meets him. */
-      const pull = beat.via === 'carrier' || beat.foul?.contact ? 1 : 0.6;
+      const pull = beat.via === 'carrier' || beat.foul?.contact || beat.pressed ? 1 : 0.6;
       carrier.x += (b.x - carrier.x) * pull;
       carrier.y += (b.y - carrier.y) * pull;
     }
@@ -607,11 +633,12 @@ function blockOf(plan: PitchPlan, beat: PitchBeat, side: PitchSide): Own[] {
   }
   if (!beat.dead) {
     if (!hasBall && !tackler) {
-      /* The press: the nearest outfield man goes part of the way to the ball. Round 1521: most of the way when the
-         man on the ball is being closed down, the stretch before the reset that pressure forces. */
+      /* The press: the nearest outfield man goes part of the way to the ball. Round 1521: when the man on the ball is
+         being closed down (the stretch before the reset that pressure forces) he is right on him, a step goal side of
+         the ball, which is drawn 1.6 across and 2.2 on from the man who has it. */
       const presser = nearestTo(b);
-      const press = beat.pressed ? 0.75 : 0.35;
-      if (presser) { presser.x += (b.x - presser.x) * press; presser.y += (b.y - presser.y) * press; }
+      if (presser && beat.pressed) { presser.x = b.x + (side === 'opp' ? -1.6 : 1.6); presser.y = b.y + 4.6; }
+      else if (presser) { presser.x += (b.x - presser.x) * 0.35; presser.y += (b.y - presser.y) * 0.35; }
     }
     for (const p of placed) {
       if (p.figure.line === 'keeper' || p === carrier || p === tackler) continue;
@@ -662,7 +689,9 @@ export function pitchScene(plan: PitchPlan, clock: number): MotionScene<PitchPla
   if (plan.build) {
     const flight = flightInto(plan.entries[index - 1], beat);
     if (flight) scene.flight = flight;
-    if (beat.foul && beat.dead) {
+    /* The whistle is drawn only on the stretch that starts at the instant the foul was staged: one cut short at its
+       start by something that outranks it is that foul played through, never a whistle late. */
+    if (beat.foul && beat.dead && Math.abs(beat.start - beat.foul.at) < 1e-6) {
       scene.cue = { kind: 'foul', at: { x: ball.x, y: ball.y }, order: beat.foul.order, by: beat.foul.by, on: beat.foul.on };
       if (beat.foul.card) scene.cue.card = beat.foul.card;
     }
