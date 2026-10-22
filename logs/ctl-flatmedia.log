@@ -1,0 +1,13 @@
+NEGATIVE CONTROL ON: flatmedia; section 3 must go red
+3) Media: every gamble lands exactly one step more often a level, the safe answers and the tilt never move, one draw an answer
+  FAIL [3]: gmPressIntro "Name the roster holes out loud": level 1 lands 700, level 0 700: not 30 more
+  FAIL [3]: gmPressIntro "Name the roster holes out loud": level 2 lands 700, level 1 700: not 30 more
+  FAIL [3]: gmPressIntro "Name the roster holes out loud": level 3 lands 700, level 2 700: not 30 more
+  FAIL [3]: gmPressIntro "Name the roster holes out loud": level 4 lands 700, level 3 700: not 30 more
+  FAIL [3]: gmPressIntro "Name the roster holes out loud": level 5 lands 700, level 4 700: not 30 more
+  FAIL [3]: gmPressIntro "Say the Super Bowl is the only bar": level 1 lands 500, level 0 500: not 30 more
+  FAIL [3]: gmPressIntro "Say the Super Bowl is the only bar": level 2 lands 500, level 1 500: not 30 more
+  FAIL [3]: gmPressIntro "Say the Super Bowl is the only bar": level 3 lands 500, level 2 500: not 30 more
+  FAIL [3]: (further failures in this check not printed)
+   4 pressers, 6 gambles and 6 safe answers at levels 0 to 5; landed of 1000: Intro 700/700/700/700/700/700; Intro 500/500/500/500/500/500; Podium 600/600/600/600/600/600; Scrum 450/450/450/450/450/450; Trade 700/700/700/700/700/700; Trade 550/550/550/550/550/550
+CONTROL flatmedia: 1 rewrite(s) applied, 30 failure(s) in section 3 (FIRED)

@@ -1,0 +1,13 @@
+fob-askalways exit=0 18s | controlFrontOfficeBoard: 1 of 1 control(s) fired, the board tests can fail for each named reason.
+fob-nowait exit=0 18s | controlFrontOfficeBoard: 1 of 1 control(s) fired, the board tests can fail for each named reason.
+fob-recapnever exit=0 23s | controlFrontOfficeBoard: 1 of 1 control(s) fired, the board tests can fail for each named reason.
+fob-blank exit=1 18s | controlFrontOfficeBoard: 0 of 1 control(s) fired. NOT FIRED: blank
+ctl-staffrides exit=1 70s | CONTROL staffrides: 1 rewrite(s) applied, 487 failure(s) in section 5 (FIRED)
+ctl-rostermove exit=1 74s | CONTROL rostermove: 1 rewrite(s) applied, 487 failure(s) in section 5 (FIRED)
+ctl-askrebuilt exit=1 73s | CONTROL askrebuilt: 1 rewrite(s) applied, 269 failure(s) in section 5 (FIRED)
+ctl-notrim exit=1 15s | CONTROL notrim: 1 rewrite(s) applied, 17 failure(s) in section 6 (FIRED)
+ctl-halfseason exit=1 15s | CONTROL halfseason: 1 rewrite(s) applied, 60 failure(s) in section 6 (FIRED)
+ctl-noawaydraft exit=1 15s | CONTROL noawaydraft: 1 rewrite(s) applied, 1 failure(s) in section 6 (FIRED)
+ctl-emptytile exit=1 12s | CONTROL emptytile: 1 rewrite(s) applied, 659 failure(s) in section 8 (FIRED)
+ctl-flatmedia exit=1 5s | CONTROL flatmedia: 1 rewrite(s) applied, 30 failure(s) in section 3 (FIRED)
+ctl-extradraw exit=1 5s | CONTROL extradraw: 1 rewrite(s) applied, 1 failure(s) in section 3 (FIRED)

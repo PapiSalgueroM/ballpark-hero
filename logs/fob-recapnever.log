@@ -1,0 +1,4 @@
+control recapnever (a save that loads on the recap never asks for the career kit): vitest exit 1; 1 red, 88 green of 89
+   red: FrontOfficeLazyDesk.test.tsx > NFL front office: the GM career kit loads when it is needed a save that loads on the recap waits in a holding box, then draws the recap
+control recapnever: FIRED. Every test it names is red and every test it spares is green.
+controlFrontOfficeBoard: 1 of 1 control(s) fired, the board tests can fail for each named reason.
