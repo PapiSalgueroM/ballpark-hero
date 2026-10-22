@@ -1,0 +1,13 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simSeasonDue: node scripts/simSeasonDue.mjs
+due-late: SEASON_DUE_CONTROL=late node scripts/simSeasonDue.mjs
+due-past: SEASON_DUE_CONTROL=past node scripts/simSeasonDue.mjs
+due-early: SEASON_DUE_CONTROL=early node scripts/simSeasonDue.mjs
+due-1031: SEASON_DUE_TODAY=2026-10-31 node scripts/simSeasonDue.mjs
+due-1101: SEASON_DUE_TODAY=2026-11-01 node scripts/simSeasonDue.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simRankEmOrder: node scripts/simRankEmOrder.mjs
+simRugbyLeagueChallenge: node scripts/simRugbyLeagueChallenge.mjs
+vitest: node_modules/.bin/vitest run src/test/champOrNotReveal.test.tsx src/test/whodTheyBeatReveal.test.tsx src/test/silverwareReveal.test.tsx src/test/rugbyLeagueChallenge.test.tsx src/test/rugbyLeagueReview.test.tsx src/test/rankEmOrder.test.tsx src/test/rankEmCircuit.test.tsx src/test/noDoubleRecord.test.tsx src/test/storageBlockedBoot.test.tsx --testTimeout=300000 --hookTimeout=120000
