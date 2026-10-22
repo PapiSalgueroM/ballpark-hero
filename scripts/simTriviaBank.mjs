@@ -33,6 +33,15 @@ import './lib/seedRandom.mjs';
    one value) and the listed namesakes in every band (the harness refuses to run without both).
    Nothing here reaches the network: the database client is swapped for one that throws.
 
+   MEASURED (runner r1552-a, 2026-10-22, 5,000 daily dates from 2026-10-25): the OLD rules on those
+   dates dealt 557 tied worth the most questions out of 4,731, 1,414 questions about a listed
+   namesake, 19,472 in the present tense and 169 with a non club offered as a club; the new rules 0 of
+   each, with worth the most dealt 4,737 times (easy 3,098, medium 1,184, hard 455 against 3,100,
+   1,176, 455), so dropping the ties starved no band. Every builder succeeds 100% in every band under
+   both rules, which is why the floors of section 5 sit at 100% (99% for worth the most, whose twelve
+   draws could in principle all tie). The checks of sections 2 and 3 are zero tolerance because each
+   one is a question with two right answers or none, and the baseline proves each is visible.
+
    Run: node scripts/simTriviaBank.mjs
    Negative controls (each edits a copy of the bank, refuses to run if its target string is not
    there, and must turn its own section red):
