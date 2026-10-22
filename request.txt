@@ -1,0 +1,16 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/soccerSeasonAwards1525.test.ts src/test/soccerPuskasYear1523.test.ts src/test/soccerWorldTruth.test.ts src/test/soccerEventDeckIntegrity.test.ts src/test/nflTruthRules1104.test.ts src/test/careerHall.test.tsx src/test/careerAwardsNightCard.test.tsx src/test/internationalPanelTruth.test.tsx src/test/careerKeepPlaying.test.tsx src/test/careerDilemmaReach.test.tsx src/test/awardsNightSound.test.tsx --testTimeout=300000 --hookTimeout=120000
+chain: node .rc/x/check-chain.mjs
+sa-1: SIM_SEASON_AWARDS_SECTIONS=1 node scripts/simSoccerSeasonAwards.mjs
+sa-1-stale: SIM_SEASON_AWARDS_CONTROL=stale node scripts/simSoccerSeasonAwards.mjs
+sa-2: SIM_SEASON_AWARDS_SECTIONS=2 node scripts/simSoccerSeasonAwards.mjs
+sa-3: SIM_SEASON_AWARDS_SECTIONS=3 node scripts/simSoccerSeasonAwards.mjs
+sa-3-nogate: SIM_SEASON_AWARDS_CONTROL=nogate node scripts/simSoccerSeasonAwards.mjs
+sa-4: SIM_SEASON_AWARDS_SECTIONS=4 node scripts/simSoccerSeasonAwards.mjs
+sa-4-dropcoins: SIM_SEASON_AWARDS_CONTROL=dropcoins node scripts/simSoccerSeasonAwards.mjs
+sa-56: SIM_SEASON_AWARDS_SECTIONS=5,6 node scripts/simSoccerSeasonAwards.mjs
+sa-5-usdrift: SIM_SEASON_AWARDS_CONTROL=usdrift node scripts/simSoccerSeasonAwards.mjs
+form-15: SIM_CAREER_FORM_SECTIONS=1,5 node scripts/simCareerForm.mjs
+form-5-nogate: SIM_CAREER_FORM_CONTROL=nogate node scripts/simCareerForm.mjs
+sa-2-seed2024: SIM_SEASON_AWARDS_SECTIONS=2 SIM_SEASON_AWARDS_SEED=2024 node scripts/simSoccerSeasonAwards.mjs
+sa-2-seed77: SIM_SEASON_AWARDS_SECTIONS=2 SIM_SEASON_AWARDS_SEED=77 node scripts/simSoccerSeasonAwards.mjs

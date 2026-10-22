@@ -1,0 +1,31 @@
+2) the rates: the engine hands out the model's awards, the best seasons win, one winner a league a season
+   2000 house careers (seed 2026), 44411 seasons decided
+   Player of the Year: 37832 eligible seasons, 495 won (model 496.75), 1.31 per 100 eligible, 0.247 a career
+     per 100 eligible by position and tier band: ST 1:5.75(1496) 2:0.95(1366) 3+:0.00(926) | CM 1:2.10(1664) 2:0.46(1087) 3+:0.00(1023) | CB 1:1.11(1357) 2:0.34(1454) 3+:0.00(875) | GK 1:2.41(1534) 2:0.00(1269) 3+:0.00(897) | LW 1:5.70(1420) 2:0.77(1436) 3+:0.11(922) | CAM 1:4.54(1587) 2:0.56(1242) 3+:0.19(1031) | CDM 1:1.25(1524) 2:0.00(1319) 3+:0.00(940) | RB 1:0.90(1670) 2:0.09(1126) 3+:0.00(1053) | RW 1:4.25(1531) 2:0.76(1319) 3+:0.31(969) | LB 1:0.68(1609) 2:0.09(1083) 3+:0.00(1103)
+     the best seasons (past the typical best rival): 318, won 207 (65.09 percent; the model 67.92)
+   Puskás Award: 27233 eligible seasons, 67 won (model 77.15), 0.25 per 100 eligible, 0.034 a career
+     per 100 eligible by position and tier band: ST 1:0.27(1472) 2:0.55(1271) 3+:0.31(652) | CM 1:0.06(1717) 2:0.11(870) 3+:0.13(769) | CB 1:0.11(937) 2:0.21(950) 3+:0.45(448) | GK 1:- 2:- 3+:- | LW 1:0.51(1362) 2:0.61(1306) 3+:0.58(692) | CAM 1:0.12(1604) 2:0.50(991) 3+:0.13(796) | CDM 1:0.00(1398) 2:0.17(1170) 3+:0.00(656) | RB 1:0.08(1209) 2:0.00(619) 3+:0.00(600) | RW 1:0.53(1515) 2:0.41(1210) 3+:0.30(668) | LB 1:0.00(1150) 2:0.00(618) 3+:0.17(583)
+   Golden Boot: 27437 eligible seasons, 435 won (model 440.83), 1.59 per 100 eligible, 0.217 a career
+     per 100 eligible by position and tier band: ST 1:9.74(1777) 2:2.36(1695) 3+:- | CM 1:0.00(2063) 2:0.00(1284) 3+:- | CB 1:0.00(1158) 2:0.00(1268) 3+:- | GK 1:- 2:- 3+:- | LW 1:5.48(1679) 2:0.74(1767) 3+:- | CAM 1:0.31(1918) 2:0.00(1450) 3+:- | CDM 1:0.00(1736) 2:0.00(1561) 3+:- | RB 1:0.00(1456) 2:0.00(927) 3+:- | RW 1:5.02(1831) 2:1.19(1601) 3+:- | LB 1:0.00(1385) 2:0.00(881) 3+:-
+     the best seasons (past the typical best rival): 428, won 324 (75.70 percent; the model 76.77)
+   Golden Glove: 3070 eligible seasons, 179 won (model 171.57), 5.83 per 100 eligible, 0.089 a career
+     per 100 eligible by position and tier band: ST 1:- 2:- 3+:- | CM 1:- 2:- 3+:- | CB 1:- 2:- 3+:- | GK 1:8.96(1340) 2:4.78(1047) 3+:1.32(683) | LW 1:- 2:- 3+:- | CAM 1:- 2:- 3+:- | CDM 1:- 2:- 3+:- | RB 1:- 2:- 3+:- | RW 1:- 2:- 3+:- | LB 1:- 2:- 3+:-
+     the best seasons (past the typical best rival): 121, won 96 (79.34 percent; the model 80.88)
+   Young Player of the Year: 8517 eligible seasons, 133 won (model 142.66), 1.56 per 100 eligible, 0.067 a career
+     per 100 eligible by position and tier band: ST 1:4.13(121) 2:2.25(355) 3+:0.28(358) | CM 1:5.80(138) 2:1.43(280) 3+:1.55(451) | CB 1:1.96(102) 2:0.29(339) 3+:0.27(375) | GK 1:3.40(206) 2:3.79(264) 3+:0.76(393) | LW 1:1.83(109) 2:2.32(388) 3+:0.62(325) | CAM 1:2.61(153) 2:3.04(263) 3+:0.00(462) | CDM 1:5.88(153) 2:2.48(323) 3+:0.26(385) | RB 1:2.86(140) 2:1.93(259) 3+:0.21(476) | RW 1:7.41(108) 2:0.84(358) 3+:0.79(380) | LB 1:4.07(123) 2:1.17(257) 3+:0.21(473)
+     the best seasons (past the typical best rival): 71, won 48 (67.61 percent; the model 64.93)
+     (under 100 such seasons: the share is judged on the model and the wins against it)
+   UEFA Player of the Year: 123 eligible seasons, 32 won (model 27.28), 26.02 per 100 eligible, 0.016 a career
+     per 100 eligible by position and tier band: ST 1:50.00(10) 2:- 3+:- | CM 1:60.00(5) 2:- 3+:- | CB 1:20.00(10) 2:- 3+:- | GK 1:20.00(10) 2:0.00(1) 3+:- | LW 1:37.50(16) 2:- 3+:- | CAM 1:29.41(17) 2:100.00(1) 3+:- | CDM 1:14.29(14) 2:- 3+:- | RB 1:25.00(8) 2:- 3+:- | RW 1:25.00(8) 2:0.00(1) 3+:- | LB 1:9.52(21) 2:0.00(1) 3+:-
+     the best seasons (past the typical best rival): 26, won 21 (80.77 percent; the model 69.69)
+     (under 100 such seasons: the share is judged on the model and the wins against it)
+   Comeback Player of the Year: 8958 eligible seasons, 56 won (model 58.59), 0.63 per 100 eligible, 0.028 a career
+     per 100 eligible by position and tier band: ST 1:0.56(356) 2:0.32(310) 3+:0.00(231) | CM 1:1.28(549) 2:0.43(235) 3+:0.00(197) | CB 1:2.22(406) 2:0.26(380) 3+:0.00(182) | GK 1:1.13(355) 2:1.12(179) 3+:0.00(152) | LW 1:0.90(334) 2:0.00(336) 3+:0.00(224) | CAM 1:1.25(400) 2:0.00(249) 3+:0.00(182) | CDM 1:1.95(462) 2:0.94(319) 3+:0.00(192) | RB 1:0.57(528) 2:0.00(244) 3+:0.00(205) | RW 1:0.62(325) 2:0.00(267) 3+:0.00(227) | LB 1:0.82(488) 2:0.00(245) 3+:0.00(199)
+     the best seasons (past the typical best rival): 8, won 6 (75.00 percent; the model 61.25)
+     (under 100 such seasons: the share is judged on the model and the wins against it)
+   Fair Play Award: 6762 eligible seasons, 279 won (model 292.85), 4.13 per 100 eligible, 0.140 a career
+     per 100 eligible by position and tier band: ST 1:13.04(253) 2:1.93(259) 3+:0.56(177) | CM 1:5.80(276) 2:3.50(200) 3+:0.00(161) | CB 1:5.39(241) 2:2.49(241) 3+:0.00(153) | GK 1:8.43(261) 2:1.80(222) 3+:0.00(160) | LW 1:13.07(283) 2:2.32(259) 3+:1.22(164) | CAM 1:12.50(280) 2:1.32(228) 3+:0.00(185) | CDM 1:4.53(287) 2:0.47(211) 3+:0.00(180) | RB 1:6.38(282) 2:0.50(199) 3+:0.51(196) | RW 1:10.18(275) 2:2.15(233) 3+:0.56(180) | LB 1:6.02(266) 2:1.87(214) 3+:0.42(236)
+     the best seasons (past the typical best rival): 226, won 155 (68.58 percent; the model 68.73)
+   Golden Boot (ST): 6.13 per 100 eligible seasons, designed 4.76, ratio 1.29
+   Golden Glove (GK): 5.83 per 100 eligible seasons, designed 4.76, ratio 1.22
+simSoccerSeasonAwards: green
