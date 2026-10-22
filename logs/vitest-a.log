@@ -1,0 +1,135 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/tycoonPacks.test.tsx[2m > [22m[2mpacks on the real academy[2m > [22m[2m1 every pack prints the published odds, before its button
+[22m[39mPACKS| 3 packs print 15 odds exactly as PACKS holds them, each above its button
+
+[90mstdout[2m | src/test/tycoonPacks.test.tsx[2m > [22m[2mpacks on the real academy[2m > [22m[2m2 a pack costs what its button says, the first Scout Pack is free, and the button waits for a bed and the gems
+[22m[39mPACKS| the Club Pack cost its printed price, the first Scout Pack cost nothing and the second its price, and a full academy opens nothing
+
+ [32m✓[39m src/test/tycoonGear.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 866[2mms[22m[39m
+   [33m[2m✓[22m[39m title boots through the real hooks and page[2m > [22m6 the cold real page uses saved gear for the first away result and watched minute [33m 738[2mms[22m[39m
+[90mstdout[2m | src/test/tycoonPacks.test.tsx[2m > [22m[2mpacks on the real academy[2m > [22m[2m3 the card shows the tier drawn, and the kid in the bed carries it
+[22m[39mPACKS| 12 Elite Packs: every card showed the tier drawn and every kid carried it (star, phenom, talent)
+
+[90mstdout[2m | src/test/tycoonPacks.test.tsx[2m > [22m[2mpacks on the real academy[2m > [22m[2m4 a reload in the middle of a reveal shows the same kid, delivered exactly once
+[22m[39mPACKS| a reload mid-reveal showed Borja Herrezuelo again, in one bed, one pack opened; a draw stranded by a dead tab arrived once over two reloads
+
+[90mstdout[2m | src/test/tycoonPacks.test.tsx[2m > [22m[2mpacks on the real academy[2m > [22m[2m5 a watched win at the ground earns its gems once, and nothing else earns any
+[22m[39mPACKS| 20 taps and a purchase earned 0 gems; 1 watched win(s) earned 3, keyed on match 1
+
+[90mstdout[2m | src/test/tycoonPacks.test.tsx[2m > [22m[2mpacks on the real academy[2m > [22m[2m6 a kid still waiting for a bed cannot be waved away, and moves in when one frees
+[22m[39mPACKS| a kid with no bed could not be waved away, moved in when a bed was sold free, and was then welcomed
+
+[90mstderr[2m | src/test/tycoonPitch.test.tsx[2m > [22m[2mthe pitch plays the engine's match[2m > [22m[2m1 over 30 matches every goal the engine commits is replayed once, at its end, stamped with its minute
+[22m[39mWarning: An update to PageSeo inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at PageSeo (/home/runner/work/ballpark-hero/ballpark-hero/src/components/seo/PageSeo.tsx:101:27)
+    at div
+    at StadiumTycoon (/home/runner/work/ballpark-hero/ballpark-hero/src/pages/StadiumTycoon.tsx:96:50)
+    at Router (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7134:13)
+    at MemoryRouter (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7044:3)
+    at _HelmetProvider (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-helmet-async/lib/index.esm.js:460:5)
+Warning: An update to GameSeoContent inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at GameSeoContent (/home/runner/work/ballpark-hero/ballpark-hero/src/components/seo/GameSeoContent.tsx:162:27)
+    at div
+    at div
+    at StadiumTycoon (/home/runner/work/ballpark-hero/ballpark-hero/src/pages/StadiumTycoon.tsx:96:50)
+    at Router (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7134:13)
+    at MemoryRouter (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7044:3)
+    at _HelmetProvider (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-helmet-async/lib/index.esm.js:460:5)
+
+[90mstdout[2m | src/test/tycoonPacks.test.tsx[2m > [22m[2mpacks on the real academy[2m > [22m[2m7 an academy that remembers more packs than a lost ledger still gets the next kid
+[22m[39mPACKS| with the ledger lost and the academy at four packs, the next pack carried number 5 and moved in
+
+[90mstdout[2m | src/test/tycoonPacks.test.tsx[2m > [22m[2mpacks on the real academy[2m > [22m[2m8 away wins earn one gem each, and a watched title adds its twenty
+[22m[39mPACKS| 6 away wins earned 6 gems; the watched title match earned 23
+
+[90mstdout[2m | src/test/tycoonPacks.test.tsx[2m > [22m[2mpacks on the real academy[2m > [22m[2m9 malformed saved card fields stay safe before and after delivery
+[22m[39mPACKS| object-valued saved card fields and inherited nation names render safely and the same repaired kid reaches a bed
+
+[90mstdout[2m | src/test/tycoonPacks.test.tsx[2m > [22m[2mpacks on the real academy[2m > [22m[2m10 a refused academy write keeps the paid draw through same-visit recovery and reload
+[22m[39mPACKS| a paid pack survived refused academy writes, recovered once in the same visit and after reload, with one charge and the original kid
+
+[90mstdout[2m | src/test/tycoonPacks.test.tsx[2m > [22m[2mpacks on the real academy[2m > [22m[2m11 dismissal retains the draw when the latest academy state cannot be saved
+[22m[39mPACKS| Welcome retained the recovery draw after a refused save and dismissed it once the academy was saved
+
+[90mstdout[2m | src/test/tycoonPacks.test.tsx[2m > [22m[2mpacks on the real academy[2m > [22m[2m12 a refused ledger debit cannot deliver a kid or spend gems
+[22m[39mPACKS| a refused ledger debit delivered no kid and spent no gems, then one paid pack opened after storage recovered
+
+ [32m✓[39m src/test/tycoonPacks.test.tsx [2m([22m[2m12 tests[22m[2m)[22m[33m 1998[2mms[22m[39m
+   [33m[2m✓[22m[39m packs on the real academy[2m > [22m3 the card shows the tier drawn, and the kid in the bed carries it [33m 662[2mms[22m[39m
+[90mstdout[2m | src/test/tycoonHelp.test.tsx[2m > [22m[2mStadium Tycoon tells the truth[2m > [22m[2m1 every tap floater prints fmtMoney of the money the tap really added, from a dollar to trillions
+[22m[39mHELP| 1196 taps across 13 clubs printed exactly fmtMoney of what they added, covering plain, K, M, B, T
+
+[90mstdout[2m | src/test/tycoonHelp.test.tsx[2m > [22m[2mStadium Tycoon tells the truth[2m > [22m[2m2 goal, win, milestone and promotion floaters print fmtMoney of the event that paid them
+[22m[39mHELP| 553 paying events (milestone, goal, win) each had a floater printing fmtMoney of its amount
+
+[90mstdout[2m | src/test/tycoonHelp.test.tsx[2m > [22m[2mStadium Tycoon tells the truth[2m > [22m[2m3 the rules open before first play and close with Let's go
+[22m[39mHELP| a fresh visitor saw the rules first, and Let's go closed them
+
+[90mstdout[2m | src/test/tycoonHelp.test.tsx[2m > [22m[2mStadium Tycoon tells the truth[2m > [22m[2m4 the rules stay closed for a player who already has a save
+[22m[39mHELP| a returning player went straight to the game, and How it works reopens the rules with a named close button
+
+[90mstdout[2m | src/test/tycoonHelp.test.tsx[2m > [22m[2mStadium Tycoon tells the truth[2m > [22m[2m5 the keyboard tap button pays exactly one tap
+[22m[39mHELP| the keyboard tap button ("Tap the stadium for $3") paid one tap
+
+ [32m✓[39m src/test/tycoonHelp.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 705[2mms[22m[39m
+[90mstderr[2m | src/test/tycoonPitch.test.tsx[2m > [22m[2mthe pitch plays the engine's match[2m > [22m[2m1 over 30 matches every goal the engine commits is replayed once, at its end, stamped with its minute
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstdout[2m | src/test/tycoonPitch.test.tsx[2m > [22m[2mthe pitch plays the engine's match[2m > [22m[2m1 over 30 matches every goal the engine commits is replayed once, at its end, stamped with its minute
+[22m[39mPITCH| 30 matches: 79 goals committed (17 yours, 62 theirs), 79 replayed one for one by end and minute; 79 on the frame they were scored, the longest wait 0 frames
+
+[90mstdout[2m | src/test/tycoonPitch.test.tsx[2m > [22m[2mthe pitch plays the engine's match[2m > [22m[2m2 goals scored while you are in another room are on the scoreboard when you come back, and never replayed late
+[22m[39mPITCH| 6 goals while the League tab showed, 0 replayed on return; the scoreboard read YOU 0; the 5 goals after the return replayed one for one
+
+[90mstdout[2m | src/test/tycoonPitch.test.tsx[2m > [22m[2mthe pitch plays the engine's match[2m > [22m[2m3 under reduced motion no replay runs and no spark or pop is drawn, while the score and the floaters still land
+[22m[39mPITCH| reduced motion: 10 goals over 5 matches, the ball never left play, 0 sparks and no pop after 8 taps, up to 4 floaters on screen
+
+[90mstdout[2m | src/test/tycoonPitch.test.tsx[2m > [22m[2mthe pitch plays the engine's match[2m > [22m[2m4 a tap pops the pitch and throws six sparks, and the taps chip counts and then clears
+[22m[39mPITCH| 12 taps: the chip read "12 taps", 6 sparks, the pitch popped, the chip cleared at 1.5s idle; 22 players on the pitch
+
+[90mstdout[2m | src/test/tycoonPitch.test.tsx[2m > [22m[2mthe pitch plays the engine's match[2m > [22m[2m5 the office is six tiles, one panel at a time, Upgrades first
+[22m[39mPITCH| six tiles: Upgrades open on arrival, and Ticket offer, Payroll, Legacy, Badges and Records each replaced it with their own panel
+
+[90mstdout[2m | src/test/tycoonPitch.test.tsx[2m > [22m[2mthe pitch plays the engine's match[2m > [22m[2m6 in a goal storm the older replays land on their final frame, so the pitch never falls behind the match
+[22m[39mPITCH| goal storm: 360 goals in 2 matches, all shown in order, 179 landed on their final frame, the longest wait 11 frames
+
+ [32m✓[39m src/test/tycoonPitch.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 103698[2mms[22m[39m
+   [33m[2m✓[22m[39m the pitch plays the engine's match[2m > [22m1 over 30 matches every goal the engine commits is replayed once, at its end, stamped with its minute [33m 75602[2mms[22m[39m
+   [33m[2m✓[22m[39m the pitch plays the engine's match[2m > [22m2 goals scored while you are in another room are on the scoreboard when you come back, and never replayed late [33m 7452[2mms[22m[39m
+   [33m[2m✓[22m[39m the pitch plays the engine's match[2m > [22m3 under reduced motion no replay runs and no spark or pop is drawn, while the score and the floaters still land [33m 13608[2mms[22m[39m
+   [33m[2m✓[22m[39m the pitch plays the engine's match[2m > [22m6 in a goal storm the older replays land on their final frame, so the pitch never falls behind the match [33m 6870[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m4 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[32m29 passed[39m[22m[90m (29)[39m
+[2m   Start at [22m 00:32:35
+[2m   Duration [22m 105.53s[2m (transform 924ms, setup 319ms, collect 2.78s, tests 107.27s, environment 1.89s, prepare 589ms)[22m
+

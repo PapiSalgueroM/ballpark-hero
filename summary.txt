@@ -1,0 +1,4 @@
+retake-base exit=0 1s | /tmp/base: 12 of 12 histories reproduce the committed hashes, 0 differ
+retake-head exit=0 1s | wrote the twelve histories of this tree into scripts/data/allPlayersValueBaseline.json (12 changed)
+vitest-a exit=0 106s |    Duration  105.53s (transform 924ms, setup 319ms, collect 2.78s, tests 107.27s, environment 1.89s, prepare 589ms)
+vitest-b exit=0 5s |    Duration  5.24s (transform 926ms, setup 323ms, collect 2.61s, tests 5.08s, environment 1.84s, prepare 359ms)

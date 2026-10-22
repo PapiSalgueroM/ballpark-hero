@@ -1,0 +1,5 @@
+#!serial
+retake-base: git worktree add /tmp/base 77c00798 && node scripts/retakeTycoonHistories.mjs --root /tmp/base
+retake-head: node scripts/retakeTycoonHistories.mjs --write --note "Round 1532 (base 77c00798): the shared scoring law and the bonuses in seconds of income change every match on purpose, so the twelve histories were retaken by their legs with scripts/retakeTycoonHistories.mjs; the base tree reproduced all twelve committed hashes first"
+vitest-a: node_modules/.bin/vitest run src/test/tycoonGear.test.tsx src/test/tycoonHelp.test.tsx src/test/tycoonPacks.test.tsx src/test/tycoonPitch.test.tsx --testTimeout=300000 --hookTimeout=120000
+vitest-b: node_modules/.bin/vitest run src/test/tycoonTicketPolicy.test.tsx src/test/firstTeam.test.tsx src/test/tycoonLoads.test.tsx src/test/tycoonAway.test.tsx --testTimeout=300000 --hookTimeout=120000

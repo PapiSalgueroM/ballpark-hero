@@ -1,0 +1,14 @@
+  seed 101: watched DIFFERS, away DIFFERS
+  seed 141: watched DIFFERS, away DIFFERS
+  seed 181: watched DIFFERS, away DIFFERS
+  seed 1610: watched DIFFERS, away DIFFERS
+  seed 1650: watched DIFFERS, away DIFFERS
+  seed 1690: watched DIFFERS, away DIFFERS
+  seed 3119: watched DIFFERS, away DIFFERS
+  seed 3159: watched DIFFERS, away DIFFERS
+  seed 3199: watched DIFFERS, away DIFFERS
+  seed 4628: watched DIFFERS, away DIFFERS
+  seed 4668: watched DIFFERS, away DIFFERS
+  seed 4708: watched DIFFERS, away DIFFERS
+this tree: 0 of 12 histories reproduce the committed hashes, 12 differ
+wrote the twelve histories of this tree into scripts/data/allPlayersValueBaseline.json (12 changed)

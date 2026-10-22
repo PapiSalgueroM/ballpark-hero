@@ -1,0 +1,2205 @@
+{
+  "commit": "cf15dce5434567e87af320ec1b017e76e0fd9f19",
+  "stadiumSourceSha256": "0a3d79ed7179f90591b5dc77cca7679640fe09b2cf952d2fd59973a642404d5d",
+  "feeFixtureSha256": "3d6c958e5c0c448fef26a44037d70bf781f446536f61bc278213b821846d6455",
+  "steps": 480,
+  "dt": [
+    0.2,
+    0.8,
+    1.4,
+    7,
+    60
+  ],
+  "cases": [
+    {
+      "seed": 101,
+      "initial": {
+        "v": 1,
+        "money": 40,
+        "lifetime": 0,
+        "rep": 0,
+        "levels": {
+          "stands": 0,
+          "tickets": 0,
+          "snacks": 0,
+          "shop": 0,
+          "parking": 0,
+          "lights": 0,
+          "squad": 0,
+          "academy": 0,
+          "megaphone": 0
+        },
+        "fanbase": 90,
+        "minute": 0,
+        "goalsFor": 0,
+        "goalsAgainst": 0,
+        "streak": 0,
+        "matchNo": 0,
+        "savedAt": 1767225600000,
+        "totalGoals": 0,
+        "totalWins": 0,
+        "totalTaps": 0,
+        "boostChargeSec": 0,
+        "boostLeftSec": 0,
+        "claimed": [],
+        "groundWins": 0,
+        "bestDivision": 0,
+        "staffLevels": {},
+        "ach": [],
+        "goldenKind": null,
+        "goldenLeftSec": 0,
+        "goldenCaught": 0,
+        "boostsUsed": 0,
+        "totalMatches": 0,
+        "legacyPoints": 0,
+        "legacyPerks": {},
+        "legacySeeded": true,
+        "league": {
+          "division": 0,
+          "season": 1,
+          "matchday": 0,
+          "seed": 712666757,
+          "baseMatchNo": 70,
+          "clubs": [
+            {
+              "name": "Your club",
+              "offset": 0,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Crowhurst Olympic",
+              "offset": 0.003000000000000001,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Emberton Olympic",
+              "offset": -0.006,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Harborview Rovers",
+              "offset": 0,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Northquay Olympic",
+              "offset": 0.006,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Thornbury Town",
+              "offset": -0.003,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            }
+          ]
+        },
+        "leagueTitles": 0
+      },
+      "watchedHash": "edded553a40a3ea66d3dc5ebcd15cff7a14e625fc6122f556210d9cbc4bc9e57",
+      "awayHash": "e73b536dd71aea7adf84c96b534b93a0b05f57f83091a680fd318c59d47a7c57"
+    },
+    {
+      "seed": 141,
+      "initial": {
+        "v": 1,
+        "money": 40,
+        "lifetime": 0,
+        "rep": 0,
+        "levels": {
+          "stands": 0,
+          "tickets": 0,
+          "snacks": 0,
+          "shop": 0,
+          "parking": 0,
+          "lights": 0,
+          "squad": 40,
+          "academy": 0,
+          "megaphone": 0
+        },
+        "fanbase": 90,
+        "minute": 0,
+        "goalsFor": 0,
+        "goalsAgainst": 0,
+        "streak": 0,
+        "matchNo": 0,
+        "savedAt": 1767225600000,
+        "totalGoals": 0,
+        "totalWins": 0,
+        "totalTaps": 0,
+        "boostChargeSec": 0,
+        "boostLeftSec": 0,
+        "claimed": [],
+        "groundWins": 0,
+        "bestDivision": 0,
+        "staffLevels": {},
+        "ach": [],
+        "goldenKind": null,
+        "goldenLeftSec": 0,
+        "goldenCaught": 0,
+        "boostsUsed": 0,
+        "totalMatches": 0,
+        "legacyPoints": 0,
+        "legacyPerks": {},
+        "legacySeeded": true,
+        "league": {
+          "division": 0,
+          "season": 1,
+          "matchday": 0,
+          "seed": 712666757,
+          "baseMatchNo": 70,
+          "clubs": [
+            {
+              "name": "Your club",
+              "offset": 0,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Crowhurst Olympic",
+              "offset": 0.003000000000000001,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Emberton Olympic",
+              "offset": -0.006,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Harborview Rovers",
+              "offset": 0,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Northquay Olympic",
+              "offset": 0.006,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Thornbury Town",
+              "offset": -0.003,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            }
+          ]
+        },
+        "leagueTitles": 0
+      },
+      "watchedHash": "7e7bcf3d9778859824a32ac260e75eb49f8cff999bff05a805fbddc5e0f50417",
+      "awayHash": "fb7bdd9bae0006cc616540114945f754ec16264be69c2aa3cb1d48593253a092"
+    },
+    {
+      "seed": 181,
+      "initial": {
+        "v": 1,
+        "money": 40,
+        "lifetime": 0,
+        "rep": 0,
+        "levels": {
+          "stands": 0,
+          "tickets": 0,
+          "snacks": 0,
+          "shop": 0,
+          "parking": 0,
+          "lights": 0,
+          "squad": 80,
+          "academy": 0,
+          "megaphone": 0
+        },
+        "fanbase": 90,
+        "minute": 0,
+        "goalsFor": 0,
+        "goalsAgainst": 0,
+        "streak": 0,
+        "matchNo": 0,
+        "savedAt": 1767225600000,
+        "totalGoals": 0,
+        "totalWins": 0,
+        "totalTaps": 0,
+        "boostChargeSec": 0,
+        "boostLeftSec": 0,
+        "claimed": [],
+        "groundWins": 0,
+        "bestDivision": 0,
+        "staffLevels": {},
+        "ach": [],
+        "goldenKind": null,
+        "goldenLeftSec": 0,
+        "goldenCaught": 0,
+        "boostsUsed": 0,
+        "totalMatches": 0,
+        "legacyPoints": 0,
+        "legacyPerks": {},
+        "legacySeeded": true,
+        "league": {
+          "division": 0,
+          "season": 1,
+          "matchday": 0,
+          "seed": 712666757,
+          "baseMatchNo": 70,
+          "clubs": [
+            {
+              "name": "Your club",
+              "offset": 0,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Crowhurst Olympic",
+              "offset": 0.003000000000000001,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Emberton Olympic",
+              "offset": -0.006,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Harborview Rovers",
+              "offset": 0,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Northquay Olympic",
+              "offset": 0.006,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Thornbury Town",
+              "offset": -0.003,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            }
+          ]
+        },
+        "leagueTitles": 0
+      },
+      "watchedHash": "da133e206adba68f17f507258530c0e50775682d313f8a5496e9d923023188d7",
+      "awayHash": "dad029e212fbd05406a2d3e303f18a85d12c08e420f1463debfe71e742b16325"
+    },
+    {
+      "seed": 1610,
+      "initial": {
+        "v": 1,
+        "money": 40,
+        "lifetime": 0,
+        "rep": 0,
+        "levels": {
+          "stands": 0,
+          "tickets": 0,
+          "snacks": 0,
+          "shop": 0,
+          "parking": 0,
+          "lights": 0,
+          "squad": 0,
+          "academy": 0,
+          "megaphone": 0
+        },
+        "fanbase": 90,
+        "minute": 0,
+        "goalsFor": 0,
+        "goalsAgainst": 0,
+        "streak": 0,
+        "matchNo": 0,
+        "savedAt": 1767225600000,
+        "totalGoals": 0,
+        "totalWins": 0,
+        "totalTaps": 0,
+        "boostChargeSec": 0,
+        "boostLeftSec": 0,
+        "claimed": [],
+        "groundWins": 0,
+        "bestDivision": 3,
+        "staffLevels": {},
+        "ach": [],
+        "goldenKind": null,
+        "goldenLeftSec": 0,
+        "goldenCaught": 0,
+        "boostsUsed": 0,
+        "totalMatches": 0,
+        "legacyPoints": 0,
+        "legacyPerks": {},
+        "legacySeeded": true,
+        "league": {
+          "division": 3,
+          "season": 1,
+          "matchday": 0,
+          "seed": 2489048462,
+          "baseMatchNo": 70,
+          "clubs": [
+            {
+              "name": "Your club",
+              "offset": 0,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Windmere Town",
+              "offset": -0.002,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Foxglove Rangers",
+              "offset": -0.006,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Redmoor Town",
+              "offset": 8.673617379884035e-19,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Foxglove Albion",
+              "offset": 0.002,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Northquay Town",
+              "offset": 0.006000000000000002,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Windmere Harriers",
+              "offset": -0.004,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Larkspur Albion",
+              "offset": 0.004,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            }
+          ]
+        },
+        "leagueTitles": 0
+      },
+      "watchedHash": "362f9139293fb3e847a99e924d8200629f9d43afc28c31c6b9422d30e8c7905b",
+      "awayHash": "a911e8aa26001da9e80a93ab3eb8ca1cc71e19d2bb09fa8c8977c8627546c499"
+    },
+    {
+      "seed": 1650,
+      "initial": {
+        "v": 1,
+        "money": 40,
+        "lifetime": 0,
+        "rep": 0,
+        "levels": {
+          "stands": 0,
+          "tickets": 0,
+          "snacks": 0,
+          "shop": 0,
+          "parking": 0,
+          "lights": 0,
+          "squad": 40,
+          "academy": 0,
+          "megaphone": 0
+        },
+        "fanbase": 90,
+        "minute": 0,
+        "goalsFor": 0,
+        "goalsAgainst": 0,
+        "streak": 0,
+        "matchNo": 0,
+        "savedAt": 1767225600000,
+        "totalGoals": 0,
+        "totalWins": 0,
+        "totalTaps": 0,
+        "boostChargeSec": 0,
+        "boostLeftSec": 0,
+        "claimed": [],
+        "groundWins": 0,
+        "bestDivision": 3,
+        "staffLevels": {},
+        "ach": [],
+        "goldenKind": null,
+        "goldenLeftSec": 0,
+        "goldenCaught": 0,
+        "boostsUsed": 0,
+        "totalMatches": 0,
+        "legacyPoints": 0,
+        "legacyPerks": {},
+        "legacySeeded": true,
+        "league": {
+          "division": 3,
+          "season": 1,
+          "matchday": 0,
+          "seed": 2489048462,
+          "baseMatchNo": 70,
+          "clubs": [
+            {
+              "name": "Your club",
+              "offset": 0,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Windmere Town",
+              "offset": -0.002,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Foxglove Rangers",
+              "offset": -0.006,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Redmoor Town",
+              "offset": 8.673617379884035e-19,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Foxglove Albion",
+              "offset": 0.002,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Northquay Town",
+              "offset": 0.006000000000000002,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Windmere Harriers",
+              "offset": -0.004,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Larkspur Albion",
+              "offset": 0.004,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            }
+          ]
+        },
+        "leagueTitles": 0
+      },
+      "watchedHash": "3d1c18a34504e21369167f60e679fce667a6d3db40734a25350a65745b3ad7fa",
+      "awayHash": "aaee5f5b8947d82b7d3c4cf8e0ad0be0b198074c711240b2e094924bacd932f4"
+    },
+    {
+      "seed": 1690,
+      "initial": {
+        "v": 1,
+        "money": 40,
+        "lifetime": 0,
+        "rep": 0,
+        "levels": {
+          "stands": 0,
+          "tickets": 0,
+          "snacks": 0,
+          "shop": 0,
+          "parking": 0,
+          "lights": 0,
+          "squad": 80,
+          "academy": 0,
+          "megaphone": 0
+        },
+        "fanbase": 90,
+        "minute": 0,
+        "goalsFor": 0,
+        "goalsAgainst": 0,
+        "streak": 0,
+        "matchNo": 0,
+        "savedAt": 1767225600000,
+        "totalGoals": 0,
+        "totalWins": 0,
+        "totalTaps": 0,
+        "boostChargeSec": 0,
+        "boostLeftSec": 0,
+        "claimed": [],
+        "groundWins": 0,
+        "bestDivision": 3,
+        "staffLevels": {},
+        "ach": [],
+        "goldenKind": null,
+        "goldenLeftSec": 0,
+        "goldenCaught": 0,
+        "boostsUsed": 0,
+        "totalMatches": 0,
+        "legacyPoints": 0,
+        "legacyPerks": {},
+        "legacySeeded": true,
+        "league": {
+          "division": 3,
+          "season": 1,
+          "matchday": 0,
+          "seed": 2489048462,
+          "baseMatchNo": 70,
+          "clubs": [
+            {
+              "name": "Your club",
+              "offset": 0,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Windmere Town",
+              "offset": -0.002,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Foxglove Rangers",
+              "offset": -0.006,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Redmoor Town",
+              "offset": 8.673617379884035e-19,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Foxglove Albion",
+              "offset": 0.002,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Northquay Town",
+              "offset": 0.006000000000000002,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Windmere Harriers",
+              "offset": -0.004,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Larkspur Albion",
+              "offset": 0.004,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            }
+          ]
+        },
+        "leagueTitles": 0
+      },
+      "watchedHash": "bd5b36fdc6871641638e2f5978981fb3474df3adc7901b5b7c6cd4aea97dbdae",
+      "awayHash": "d65d102d1dd9d9a7f125369fbd387f7d854b696fb5a31a698e83732cc3cb0201"
+    },
+    {
+      "seed": 3119,
+      "initial": {
+        "v": 1,
+        "money": 40,
+        "lifetime": 0,
+        "rep": 0,
+        "levels": {
+          "stands": 0,
+          "tickets": 0,
+          "snacks": 0,
+          "shop": 0,
+          "parking": 0,
+          "lights": 0,
+          "squad": 0,
+          "academy": 0,
+          "megaphone": 0
+        },
+        "fanbase": 90,
+        "minute": 0,
+        "goalsFor": 0,
+        "goalsAgainst": 0,
+        "streak": 0,
+        "matchNo": 0,
+        "savedAt": 1767225600000,
+        "totalGoals": 0,
+        "totalWins": 0,
+        "totalTaps": 0,
+        "boostChargeSec": 0,
+        "boostLeftSec": 0,
+        "claimed": [],
+        "groundWins": 0,
+        "bestDivision": 6,
+        "staffLevels": {},
+        "ach": [],
+        "goldenKind": null,
+        "goldenLeftSec": 0,
+        "goldenCaught": 0,
+        "boostsUsed": 0,
+        "totalMatches": 0,
+        "legacyPoints": 0,
+        "legacyPerks": {},
+        "legacySeeded": true,
+        "league": {
+          "division": 6,
+          "season": 1,
+          "matchday": 0,
+          "seed": 331330585,
+          "baseMatchNo": 70,
+          "clubs": [
+            {
+              "name": "Your club",
+              "offset": 0,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Windmere Rangers",
+              "offset": 0.006,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Mistral Harriers",
+              "offset": 0.003000000000000001,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Redmoor Olympic",
+              "offset": -0.0045000000000000005,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Duskfield Olympic",
+              "offset": -0.006,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Larkspur Olympic",
+              "offset": -0.003,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Northquay County",
+              "offset": 0,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Foxglove Athletic",
+              "offset": 0.0014999999999999996,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Redmoor Harriers",
+              "offset": -0.0014999999999999996,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Stonegate Rovers",
+              "offset": 0.0045000000000000005,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            }
+          ]
+        },
+        "leagueTitles": 0
+      },
+      "watchedHash": "012b3743e2a8e0054c80b7df2b4eeae31379bcd1f73c510e522fd45472e221ea",
+      "awayHash": "f9b5c319c4d16bdf45ff771bbad2ead8f522ab7ce64472fa69965b528d6931c6"
+    },
+    {
+      "seed": 3159,
+      "initial": {
+        "v": 1,
+        "money": 40,
+        "lifetime": 0,
+        "rep": 0,
+        "levels": {
+          "stands": 0,
+          "tickets": 0,
+          "snacks": 0,
+          "shop": 0,
+          "parking": 0,
+          "lights": 0,
+          "squad": 40,
+          "academy": 0,
+          "megaphone": 0
+        },
+        "fanbase": 90,
+        "minute": 0,
+        "goalsFor": 0,
+        "goalsAgainst": 0,
+        "streak": 0,
+        "matchNo": 0,
+        "savedAt": 1767225600000,
+        "totalGoals": 0,
+        "totalWins": 0,
+        "totalTaps": 0,
+        "boostChargeSec": 0,
+        "boostLeftSec": 0,
+        "claimed": [],
+        "groundWins": 0,
+        "bestDivision": 6,
+        "staffLevels": {},
+        "ach": [],
+        "goldenKind": null,
+        "goldenLeftSec": 0,
+        "goldenCaught": 0,
+        "boostsUsed": 0,
+        "totalMatches": 0,
+        "legacyPoints": 0,
+        "legacyPerks": {},
+        "legacySeeded": true,
+        "league": {
+          "division": 6,
+          "season": 1,
+          "matchday": 0,
+          "seed": 331330585,
+          "baseMatchNo": 70,
+          "clubs": [
+            {
+              "name": "Your club",
+              "offset": 0,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Windmere Rangers",
+              "offset": 0.006,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Mistral Harriers",
+              "offset": 0.003000000000000001,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Redmoor Olympic",
+              "offset": -0.0045000000000000005,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Duskfield Olympic",
+              "offset": -0.006,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Larkspur Olympic",
+              "offset": -0.003,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Northquay County",
+              "offset": 0,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Foxglove Athletic",
+              "offset": 0.0014999999999999996,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Redmoor Harriers",
+              "offset": -0.0014999999999999996,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Stonegate Rovers",
+              "offset": 0.0045000000000000005,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            }
+          ]
+        },
+        "leagueTitles": 0
+      },
+      "watchedHash": "9ab8fc825b9ba919284c40254d55eccc08f064740167e7fb3eb0888d9ad787a2",
+      "awayHash": "cb627787c147ed08ecd1be285d3cc0c38c5f562be2c2b4194f7dfc1d9a70b81a"
+    },
+    {
+      "seed": 3199,
+      "initial": {
+        "v": 1,
+        "money": 40,
+        "lifetime": 0,
+        "rep": 0,
+        "levels": {
+          "stands": 0,
+          "tickets": 0,
+          "snacks": 0,
+          "shop": 0,
+          "parking": 0,
+          "lights": 0,
+          "squad": 80,
+          "academy": 0,
+          "megaphone": 0
+        },
+        "fanbase": 90,
+        "minute": 0,
+        "goalsFor": 0,
+        "goalsAgainst": 0,
+        "streak": 0,
+        "matchNo": 0,
+        "savedAt": 1767225600000,
+        "totalGoals": 0,
+        "totalWins": 0,
+        "totalTaps": 0,
+        "boostChargeSec": 0,
+        "boostLeftSec": 0,
+        "claimed": [],
+        "groundWins": 0,
+        "bestDivision": 6,
+        "staffLevels": {},
+        "ach": [],
+        "goldenKind": null,
+        "goldenLeftSec": 0,
+        "goldenCaught": 0,
+        "boostsUsed": 0,
+        "totalMatches": 0,
+        "legacyPoints": 0,
+        "legacyPerks": {},
+        "legacySeeded": true,
+        "league": {
+          "division": 6,
+          "season": 1,
+          "matchday": 0,
+          "seed": 331330585,
+          "baseMatchNo": 70,
+          "clubs": [
+            {
+              "name": "Your club",
+              "offset": 0,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Windmere Rangers",
+              "offset": 0.006,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Mistral Harriers",
+              "offset": 0.003000000000000001,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Redmoor Olympic",
+              "offset": -0.0045000000000000005,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Duskfield Olympic",
+              "offset": -0.006,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Larkspur Olympic",
+              "offset": -0.003,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Northquay County",
+              "offset": 0,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Foxglove Athletic",
+              "offset": 0.0014999999999999996,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Redmoor Harriers",
+              "offset": -0.0014999999999999996,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Stonegate Rovers",
+              "offset": 0.0045000000000000005,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            }
+          ]
+        },
+        "leagueTitles": 0
+      },
+      "watchedHash": "1df0275a282761b18c359a5c48c507733520ade5b1af67e9c7efa18417cba0de",
+      "awayHash": "6776221d574875cd47a939d1b95d6be67f608519a67b90d10a012dc91ff7cf8d"
+    },
+    {
+      "seed": 4628,
+      "initial": {
+        "v": 1,
+        "money": 40,
+        "lifetime": 0,
+        "rep": 0,
+        "levels": {
+          "stands": 0,
+          "tickets": 0,
+          "snacks": 0,
+          "shop": 0,
+          "parking": 0,
+          "lights": 0,
+          "squad": 0,
+          "academy": 0,
+          "megaphone": 0
+        },
+        "fanbase": 90,
+        "minute": 0,
+        "goalsFor": 0,
+        "goalsAgainst": 0,
+        "streak": 0,
+        "matchNo": 0,
+        "savedAt": 1767225600000,
+        "totalGoals": 0,
+        "totalWins": 0,
+        "totalTaps": 0,
+        "boostChargeSec": 0,
+        "boostLeftSec": 0,
+        "claimed": [],
+        "groundWins": 0,
+        "bestDivision": 9,
+        "staffLevels": {},
+        "ach": [],
+        "goldenKind": null,
+        "goldenLeftSec": 0,
+        "goldenCaught": 0,
+        "boostsUsed": 0,
+        "totalMatches": 0,
+        "legacyPoints": 0,
+        "legacyPerks": {},
+        "legacySeeded": true,
+        "league": {
+          "division": 9,
+          "season": 1,
+          "matchday": 0,
+          "seed": 2888606016,
+          "baseMatchNo": 70,
+          "clubs": [
+            {
+              "name": "Your club",
+              "offset": 0,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Fernhill Victoria",
+              "offset": 0.0045000000000000005,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Quarryside Albion",
+              "offset": -0.0045000000000000005,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Mistral Rangers",
+              "offset": -0.0014999999999999996,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Northquay Swifts",
+              "offset": 0.003000000000000001,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Foxglove Albion",
+              "offset": -0.006,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Fernhill Rangers",
+              "offset": 0.006,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Stonegate Swifts",
+              "offset": 0,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Mistral Olympic",
+              "offset": 0.0014999999999999996,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Windmere Town",
+              "offset": -0.003,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            }
+          ]
+        },
+        "leagueTitles": 0
+      },
+      "watchedHash": "8ca474d5b461889d2e5c1a43ade4da38cce648eee71dea59e92d466e566411f6",
+      "awayHash": "887f2fb4ca7783f83da8b046b27c1edae4babc9ec4339853c7a3f820996ac215"
+    },
+    {
+      "seed": 4668,
+      "initial": {
+        "v": 1,
+        "money": 40,
+        "lifetime": 0,
+        "rep": 0,
+        "levels": {
+          "stands": 0,
+          "tickets": 0,
+          "snacks": 0,
+          "shop": 0,
+          "parking": 0,
+          "lights": 0,
+          "squad": 40,
+          "academy": 0,
+          "megaphone": 0
+        },
+        "fanbase": 90,
+        "minute": 0,
+        "goalsFor": 0,
+        "goalsAgainst": 0,
+        "streak": 0,
+        "matchNo": 0,
+        "savedAt": 1767225600000,
+        "totalGoals": 0,
+        "totalWins": 0,
+        "totalTaps": 0,
+        "boostChargeSec": 0,
+        "boostLeftSec": 0,
+        "claimed": [],
+        "groundWins": 0,
+        "bestDivision": 9,
+        "staffLevels": {},
+        "ach": [],
+        "goldenKind": null,
+        "goldenLeftSec": 0,
+        "goldenCaught": 0,
+        "boostsUsed": 0,
+        "totalMatches": 0,
+        "legacyPoints": 0,
+        "legacyPerks": {},
+        "legacySeeded": true,
+        "league": {
+          "division": 9,
+          "season": 1,
+          "matchday": 0,
+          "seed": 2888606016,
+          "baseMatchNo": 70,
+          "clubs": [
+            {
+              "name": "Your club",
+              "offset": 0,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Fernhill Victoria",
+              "offset": 0.0045000000000000005,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Quarryside Albion",
+              "offset": -0.0045000000000000005,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Mistral Rangers",
+              "offset": -0.0014999999999999996,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Northquay Swifts",
+              "offset": 0.003000000000000001,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Foxglove Albion",
+              "offset": -0.006,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Fernhill Rangers",
+              "offset": 0.006,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Stonegate Swifts",
+              "offset": 0,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Mistral Olympic",
+              "offset": 0.0014999999999999996,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Windmere Town",
+              "offset": -0.003,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            }
+          ]
+        },
+        "leagueTitles": 0
+      },
+      "watchedHash": "94b72aff5a93a5dca91f63b40b93c69cb901bb0119b0906de16e568dbe337d00",
+      "awayHash": "e2c8405c2c156670b6fa066e5a58fdc46a2cccd1fa30eab158575f5374ec9f24"
+    },
+    {
+      "seed": 4708,
+      "initial": {
+        "v": 1,
+        "money": 40,
+        "lifetime": 0,
+        "rep": 0,
+        "levels": {
+          "stands": 0,
+          "tickets": 0,
+          "snacks": 0,
+          "shop": 0,
+          "parking": 0,
+          "lights": 0,
+          "squad": 80,
+          "academy": 0,
+          "megaphone": 0
+        },
+        "fanbase": 90,
+        "minute": 0,
+        "goalsFor": 0,
+        "goalsAgainst": 0,
+        "streak": 0,
+        "matchNo": 0,
+        "savedAt": 1767225600000,
+        "totalGoals": 0,
+        "totalWins": 0,
+        "totalTaps": 0,
+        "boostChargeSec": 0,
+        "boostLeftSec": 0,
+        "claimed": [],
+        "groundWins": 0,
+        "bestDivision": 9,
+        "staffLevels": {},
+        "ach": [],
+        "goldenKind": null,
+        "goldenLeftSec": 0,
+        "goldenCaught": 0,
+        "boostsUsed": 0,
+        "totalMatches": 0,
+        "legacyPoints": 0,
+        "legacyPerks": {},
+        "legacySeeded": true,
+        "league": {
+          "division": 9,
+          "season": 1,
+          "matchday": 0,
+          "seed": 2888606016,
+          "baseMatchNo": 70,
+          "clubs": [
+            {
+              "name": "Your club",
+              "offset": 0,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Fernhill Victoria",
+              "offset": 0.0045000000000000005,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Quarryside Albion",
+              "offset": -0.0045000000000000005,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Mistral Rangers",
+              "offset": -0.0014999999999999996,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Northquay Swifts",
+              "offset": 0.003000000000000001,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Foxglove Albion",
+              "offset": -0.006,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Fernhill Rangers",
+              "offset": 0.006,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Stonegate Swifts",
+              "offset": 0,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Mistral Olympic",
+              "offset": 0.0014999999999999996,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            },
+            {
+              "name": "Windmere Town",
+              "offset": -0.003,
+              "w": 0,
+              "d": 0,
+              "l": 0,
+              "gf": 0,
+              "ga": 0,
+              "pts": 0
+            }
+          ]
+        },
+        "leagueTitles": 0
+      },
+      "watchedHash": "9dba78ccba4df5f1788de9df88fd982fdb83e29336029a9c8daa850e6aa14a03",
+      "awayHash": "e1fd2e256f8e8378185d2b6c3ab85238487270d98b214ef0635f37f07ec3b8e2"
+    }
+  ],
+  "policy": {
+    "fixture": "five seeded Elite pack seniors, age27, followed by local scouting; fixed division3, squad40, opposition starts at match70; ten14-match seasons",
+    "calibrationSeeds": "101*i for i=1..32",
+    "holdoutSeeds": "101*i for i=33..64",
+    "healthy": {
+      "sellWins": 78.8125,
+      "holdWins": 82.46875,
+      "sellCohortFee": 2567.4375,
+      "holdCohortFee": 546.75
+    },
+    "noprime": {
+      "sellCohortFee": 2852.875,
+      "holdCohortFee": 2485.40625
+    },
+    "flatedge": {
+      "sellWins": 68.40625,
+      "holdWins": 68.40625
+    },
+    "cashGapFloor": 1010.34375,
+    "winsGainFloor": 1.828125,
+    "marginReason": "Each floor retains one half of the healthy calibration effect. Removing prime leaves a 367.46875 fee gap from rating decline, below the 1010.34375 floor. Removing edge leaves zero win gain. Independent holdout seeds validate both floors without fitting them again.",
+    "holdoutHealthy": {
+      "seeds": 32,
+      "sellWins": 77.9375,
+      "holdWins": 81.125,
+      "sellFee": 2561.59375,
+      "holdFee": 545.53125,
+      "sellBudget": 25346.46875,
+      "holdBudget": 22479.625,
+      "sellSenior": 4895.53125,
+      "holdSenior": 592.09375,
+      "sellRefills": 12,
+      "holdRefills": 5.625
+    },
+    "noprimeHoldout": {
+      "seeds": 32,
+      "sellWins": 77.9375,
+      "holdWins": 81.125,
+      "sellFee": 2846.34375,
+      "holdFee": 2480.34375,
+      "sellBudget": 25891.0625,
+      "holdBudget": 24579.21875,
+      "sellSenior": 5440.125,
+      "holdSenior": 2691.6875,
+      "sellRefills": 12,
+      "holdRefills": 5.625
+    },
+    "flatedgeHoldout": {
+      "seeds": 32,
+      "sellWins": 67.625,
+      "holdWins": 67.625,
+      "sellFee": 2561.59375,
+      "holdFee": 545.53125,
+      "sellBudget": 25346.46875,
+      "holdBudget": 22479.625,
+      "sellSenior": 4895.53125,
+      "holdSenior": 592.09375,
+      "sellRefills": 12,
+      "holdRefills": 5.625
+    }
+  },
+  "paceBeforeRetune": {
+    "regionGoals": [
+      8000,
+      70000,
+      700000,
+      5500000,
+      45000000,
+      400000000
+    ],
+    "watchedHours": 100,
+    "policy": "Fresh academy and stadium, 10-second engine ticks, immediate showcase, sell at potential minus0.5 or age22, cheapest facility pass, automatic moveUp, highest affordable pack with actual results gems; no taps, staff or purchased gems.",
+    "runs": [
+      {
+        "seed": 101,
+        "starHours": [
+          0.431,
+          1.286,
+          3.736,
+          13.408,
+          58.831
+        ],
+        "packs": 279,
+        "at100Hours": {
+          "hours": 100,
+          "region": 6,
+          "lifetime": 48978896,
+          "goal": 400000000
+        }
+      },
+      {
+        "seed": 202,
+        "starHours": [
+          0.422,
+          1.264,
+          3.811,
+          13.406,
+          58.789
+        ],
+        "packs": 270,
+        "at100Hours": {
+          "hours": 100,
+          "region": 6,
+          "lifetime": 49075387,
+          "goal": 400000000
+        }
+      },
+      {
+        "seed": 303,
+        "starHours": [
+          0.436,
+          1.328,
+          3.833,
+          13.456,
+          58.903
+        ],
+        "packs": 274,
+        "at100Hours": {
+          "hours": 100,
+          "region": 6,
+          "lifetime": 48712079,
+          "goal": 400000000
+        }
+      },
+      {
+        "seed": 404,
+        "starHours": [
+          0.381,
+          1.233,
+          3.742,
+          13.322,
+          58.744
+        ],
+        "packs": 281,
+        "at100Hours": {
+          "hours": 100,
+          "region": 6,
+          "lifetime": 49073780,
+          "goal": 400000000
+        }
+      },
+      {
+        "seed": 505,
+        "starHours": [
+          0.364,
+          1.217,
+          3.725,
+          13.308,
+          58.772
+        ],
+        "packs": 267,
+        "at100Hours": {
+          "hours": 100,
+          "region": 6,
+          "lifetime": 48891460,
+          "goal": 400000000
+        }
+      },
+      {
+        "seed": 606,
+        "starHours": [
+          0.339,
+          1.156,
+          3.664,
+          13.228,
+          58.511
+        ],
+        "packs": 278,
+        "at100Hours": {
+          "hours": 100,
+          "region": 6,
+          "lifetime": 49356230,
+          "goal": 400000000
+        }
+      },
+      {
+        "seed": 707,
+        "starHours": [
+          0.439,
+          1.314,
+          3.853,
+          13.319,
+          58.531
+        ],
+        "packs": 274,
+        "at100Hours": {
+          "hours": 100,
+          "region": 6,
+          "lifetime": 49318231,
+          "goal": 400000000
+        }
+      },
+      {
+        "seed": 808,
+        "starHours": [
+          0.436,
+          1.278,
+          3.786,
+          13.364,
+          58.747
+        ],
+        "packs": 277,
+        "at100Hours": {
+          "hours": 100,
+          "region": 6,
+          "lifetime": 49100939,
+          "goal": 400000000
+        }
+      },
+      {
+        "seed": 909,
+        "starHours": [
+          0.417,
+          1.275,
+          3.808,
+          13.428,
+          58.808
+        ],
+        "packs": 262,
+        "at100Hours": {
+          "hours": 100,
+          "region": 6,
+          "lifetime": 48789932,
+          "goal": 400000000
+        }
+      },
+      {
+        "seed": 1010,
+        "starHours": [
+          0.439,
+          1.256,
+          3.761,
+          13.431,
+          58.731
+        ],
+        "packs": 277,
+        "at100Hours": {
+          "hours": 100,
+          "region": 6,
+          "lifetime": 48923234,
+          "goal": 400000000
+        }
+      },
+      {
+        "seed": 1111,
+        "starHours": [
+          0.422,
+          1.244,
+          3.753,
+          13.369,
+          58.753
+        ],
+        "packs": 264,
+        "at100Hours": {
+          "hours": 100,
+          "region": 6,
+          "lifetime": 49060488,
+          "goal": 400000000
+        }
+      },
+      {
+        "seed": 1212,
+        "starHours": [
+          0.442,
+          1.311,
+          3.825,
+          13.428,
+          58.731
+        ],
+        "packs": 276,
+        "at100Hours": {
+          "hours": 100,
+          "region": 6,
+          "lifetime": 49147287,
+          "goal": 400000000
+        }
+      }
+    ]
+  },
+  "paceAfterRetune": {
+    "worldStageGoal": 45000000,
+    "sixthStarWindowHours": 100,
+    "representativeContinuationSeed": 101,
+    "runs": [
+      {
+        "seed": 101,
+        "starHours": [
+          0.431,
+          1.286,
+          3.736,
+          13.408,
+          58.831,
+          97.086,
+          130.389,
+          159.892,
+          186.381,
+          210.428,
+          232.381,
+          252.594,
+          271.308,
+          288.683,
+          305.05,
+          320.556,
+          335.378,
+          349.7,
+          363.45,
+          376.706,
+          389.483,
+          401.892,
+          413.892,
+          425.5,
+          436.797,
+          447.739,
+          458.386,
+          468.728,
+          478.853,
+          488.661,
+          498.236,
+          507.569,
+          516.642,
+          525.519,
+          534.25,
+          542.797,
+          551.139,
+          559.292,
+          567.292,
+          575.089,
+          582.761,
+          590.278,
+          597.667,
+          604.906,
+          611.975,
+          618.939,
+          625.775,
+          632.517,
+          639.128,
+          645.661,
+          652.031,
+          658.308,
+          664.472,
+          670.556,
+          676.553,
+          682.456,
+          688.267,
+          693.969,
+          699.606,
+          705.153
+        ],
+        "packs": 1754
+      },
+      {
+        "seed": 202,
+        "starHours": [
+          0.422,
+          1.264,
+          3.811,
+          13.406,
+          58.789,
+          96.969
+        ],
+        "packs": 263
+      },
+      {
+        "seed": 303,
+        "starHours": [
+          0.436,
+          1.328,
+          3.833,
+          13.456,
+          58.903,
+          97.239
+        ],
+        "packs": 267
+      },
+      {
+        "seed": 404,
+        "starHours": [
+          0.381,
+          1.233,
+          3.742,
+          13.322,
+          58.744,
+          96.961
+        ],
+        "packs": 276
+      },
+      {
+        "seed": 505,
+        "starHours": [
+          0.364,
+          1.217,
+          3.725,
+          13.308,
+          58.772,
+          97.111
+        ],
+        "packs": 260
+      },
+      {
+        "seed": 606,
+        "starHours": [
+          0.339,
+          1.156,
+          3.664,
+          13.228,
+          58.511,
+          96.756
+        ],
+        "packs": 270
+      },
+      {
+        "seed": 707,
+        "starHours": [
+          0.439,
+          1.314,
+          3.853,
+          13.319,
+          58.531,
+          96.819
+        ],
+        "packs": 266
+      },
+      {
+        "seed": 808,
+        "starHours": [
+          0.436,
+          1.278,
+          3.786,
+          13.364,
+          58.747,
+          96.925
+        ],
+        "packs": 269
+      },
+      {
+        "seed": 909,
+        "starHours": [
+          0.417,
+          1.275,
+          3.808,
+          13.428,
+          58.808,
+          97.167
+        ],
+        "packs": 254
+      },
+      {
+        "seed": 1010,
+        "starHours": [
+          0.439,
+          1.256,
+          3.761,
+          13.431,
+          58.731,
+          97.072
+        ],
+        "packs": 270
+      },
+      {
+        "seed": 1111,
+        "starHours": [
+          0.422,
+          1.244,
+          3.753,
+          13.369,
+          58.753,
+          96.994
+        ],
+        "packs": 258
+      },
+      {
+        "seed": 1212,
+        "starHours": [
+          0.442,
+          1.311,
+          3.825,
+          13.428,
+          58.731,
+          96.928
+        ],
+        "packs": 267
+      }
+    ]
+  }
+,
+  "casesRetaken": "Round 1532 (base 77c00798): the shared scoring law and the bonuses in seconds of income change every match on purpose, so the twelve histories were retaken by their legs with scripts/retakeTycoonHistories.mjs; the base tree reproduced all twelve committed hashes first"
+}
