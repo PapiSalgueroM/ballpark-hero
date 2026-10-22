@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-career: node_modules/.bin/vitest run src/components/front-office-shared/FrontOfficeGmCareer.test.tsx --testTimeout=600000 --hookTimeout=120000
+vitest-host: node_modules/.bin/vitest run src/lib/gmDeskHost.test.ts src/components/front-office-shared/GmCareerDesk.test.tsx --testTimeout=300000 --hookTimeout=120000
+host-123: node scripts/simGmDeskHost.mjs
+host-456: SIM_GM_DESK_HOST_SEEDS=4,5,6 node scripts/simGmDeskHost.mjs
+host-789: SIM_GM_DESK_HOST_SEEDS=7,8,9 node scripts/simGmDeskHost.mjs
+host-onereason: SIM_GM_DESK_HOST_CONTROL=onereason node scripts/simGmDeskHost.mjs
+simSeoDiscovery1444: node scripts/simSeoDiscovery1444.mjs
+head-sha: git rev-parse HEAD^ HEAD; git log --oneline -3
