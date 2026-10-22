@@ -1,0 +1,14 @@
+NEGATIVE CONTROL ON: notrim; section 6 must go red
+6) a season out: the league plays a whole season without him, his record gains a year out and nothing else, and refusals touch nothing
+  FAIL [6]: seed 1 year out 2: the away summer is not the engine's offseason with no user club (1528 of 1528 draws replayed)
+  FAIL [6]: seed 2 year out 2: the away summer is not the engine's offseason with no user club (1536 of 1536 draws replayed, the replay ran out)
+  FAIL [6]: seed 2 year out 3: the away summer is not the engine's offseason with no user club (2188 of 2208 draws replayed)
+  FAIL [6]: seed 3 year out 2: the away summer is not the engine's offseason with no user club (1483 of 1483 draws replayed, the replay ran out)
+  FAIL [6]: seed 4 year out 2: the away summer is not the engine's offseason with no user club (1510 of 1510 draws replayed)
+  FAIL [6]: seed 8 year out 2: the away summer is not the engine's offseason with no user club (1495 of 1495 draws replayed, the replay ran out)
+  FAIL [6]: seed 9 year out 2: the away summer is not the engine's offseason with no user club (1501 of 1506 draws replayed)
+  FAIL [6]: seed 10 year out 2: the away summer is not the engine's offseason with no user club (1487 of 1487 draws replayed)
+  FAIL [6]: (further failures in this check not printed)
+   60 years out over 20 seeds (0 stopped early); refusals: 20 in a seat, 20 closed, 20 last calls
+   drafted men on the other clubs' rosters after the years out: away 1058, idle GM 1080 (ratio 0.980); mean roster after a summer: away 52.25, idle GM 52.23
+CONTROL notrim: 1 rewrite(s) applied, 17 failure(s) in section 6 (FIRED)

@@ -1,0 +1,12 @@
+4) the market after real firings: every club graded as a GM's club, the first out of work screen and the next two
+   MEASURE 20 seeds x 12 seasons: 471 firings
+   first screen with the host's rule: offers 471 (100.0%), quiet 0 (0.0%), closed 0 (0.0%); first calls 278
+   first screen on the raw feed:      offers 193 (41.0%), quiet 227 (48.2%), closed 51 (10.8%)
+   of the screens with offers, last calls: host 82 of 471 (17.4%), raw 31 of 193 (16.1%)
+   re hired within three feeds (firings with two seasons left to read, 387): host 387 (100.0%), raw 211 (54.5%); 243 later feeds read
+   ASSERTED on 471 first feeds (308 straight after a badly season): never the club that fired him, no top tier after badly, every ask for next season, keyed
+5) taking a seat: 479 offers taken (479 with a planted depth chart), 471 followed through the draft and the summer, 0 refused
+6) a season out: the league plays a whole season without him, his record gains a year out and nothing else, and refusals touch nothing
+   60 years out over 20 seeds (0 stopped early); refusals: 20 in a seat, 20 closed, 20 last calls
+   drafted men on the other clubs' rosters after the years out: away 1064, idle GM 1080 (ratio 0.985); mean roster after a summer: away 52.25, idle GM 52.25
+simGmCareer: all checks passed (nfl, sections 4,5,6)

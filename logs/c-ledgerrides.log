@@ -1,0 +1,18 @@
+NEGATIVE CONTROL ON: ledgerrides; section 5 must go red
+4) the market after real firings: every club graded as a GM's club, the first out of work screen and the next two
+  FAIL [5]: HOU to MIA (102): the re-sign ledger is not the new club's own
+  FAIL [5]: SF to CAR (102): the re-sign ledger is not the new club's own
+  FAIL [5]: PHI to PIT (103): the re-sign ledger is not the new club's own
+  FAIL [5]: CIN to PIT (104): the re-sign ledger is not the new club's own
+  FAIL [5]: LV to CAR (104): the re-sign ledger is not the new club's own
+  FAIL [5]: TB to PIT (104): the re-sign ledger is not the new club's own
+  FAIL [5]: HOU to BAL (105): the re-sign ledger is not the new club's own
+  FAIL [5]: NE to BAL (105): the re-sign ledger is not the new club's own
+  FAIL [5]: (further failures in this check not printed)
+   MEASURE 20 seeds x 12 seasons: 475 firings
+   first screen with the host's rule: offers 475 (100.0%), quiet 0 (0.0%), closed 0 (0.0%); first calls 283
+   first screen on the raw feed:      offers 192 (40.4%), quiet 228 (48.0%), closed 55 (11.6%)
+   of the screens with offers, last calls: host 87 of 475 (18.3%), raw 32 of 192 (16.7%)
+   re hired within three feeds (firings with two seasons left to read, 377): host 377 (100.0%), raw 209 (55.4%); 249 later feeds read
+5) taking a seat: 487 offers taken (487 with a planted depth chart), 475 followed through the draft and the summer, 0 refused
+CONTROL ledgerrides: 1 rewrite(s) applied, 487 failure(s) in section 5 (FIRED)

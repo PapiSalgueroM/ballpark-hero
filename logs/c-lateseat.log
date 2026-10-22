@@ -1,0 +1,14 @@
+NEGATIVE CONTROL ON: lateseat; section 2 must go red
+2) the verdict on every club's real season: desk off it is today's two calls, desk on it records once and pays once
+  FAIL [2]: seed 1 season 1 ARI: an older save's record starts in 2024, he took the club in 2023
+  FAIL [2]: seed 1 season 1 ATL: an older save's record starts in 2024, he took the club in 2023
+  FAIL [2]: seed 1 season 1 BAL: an older save's record starts in 2024, he took the club in 2023
+  FAIL [2]: seed 1 season 1 BUF: an older save's record starts in 2024, he took the club in 2023
+  FAIL [2]: seed 1 season 1 CAR: an older save's record starts in 2024, he took the club in 2023
+  FAIL [2]: seed 1 season 1 CHI: an older save's record starts in 2024, he took the club in 2023
+  FAIL [2]: seed 1 season 1 CIN: an older save's record starts in 2024, he took the club in 2023
+  FAIL [2]: seed 1 season 1 CLE: an older save's record starts in 2024, he took the club in 2023
+  FAIL [2]: (further failures in this check not printed)
+   1152 desk off closes equal today's two calls; 384 desk on closes recorded once (42599 XP paid, the median club 111 a season), 384 reloads paid nothing, 384 older saves started on time
+   OWNERSHIP: 211 losing and 173 winning club seasons walked at levels 0 to 5; from trust 60 a season costs badly 28, 26, 24, 22, 20, 18; missed 16, 15, 14, 13, 12, 10; trust 16, missed: level 0 fired (0), level 1 keeps the job on 1
+CONTROL lateseat: 1 rewrite(s) applied, 384 failure(s) in section 2 (FIRED)

@@ -1,0 +1,46 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+career: node scripts/simGmCareer.mjs
+career-s61: SIM_GM_CAREER_ONLY=4,5,6 SIM_GM_CAREER_MEASURE_SEEDS=61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80 SIM_GM_CAREER_AWAY_SEEDS=61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80 node scripts/simGmCareer.mjs
+career-s81: SIM_GM_CAREER_ONLY=4,5,6 SIM_GM_CAREER_MEASURE_SEEDS=81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100 SIM_GM_CAREER_AWAY_SEEDS=81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100 node scripts/simGmCareer.mjs
+c-epoch: SIM_GM_CAREER_CONTROL=epoch SIM_GM_CAREER_ONLY=1 node scripts/simGmCareer.mjs
+c-addkey: SIM_GM_CAREER_CONTROL=addkey SIM_GM_CAREER_ONLY=1 node scripts/simGmCareer.mjs
+c-deskoffblock: SIM_GM_CAREER_CONTROL=deskoffblock SIM_GM_CAREER_ONLY=2 node scripts/simGmCareer.mjs
+c-paytwice: SIM_GM_CAREER_CONTROL=paytwice SIM_GM_CAREER_ONLY=2 node scripts/simGmCareer.mjs
+c-lateseat: SIM_GM_CAREER_CONTROL=lateseat SIM_GM_CAREER_ONLY=2 node scripts/simGmCareer.mjs
+c-flatowner: SIM_GM_CAREER_CONTROL=flatowner SIM_GM_CAREER_ONLY=2 node scripts/simGmCareer.mjs
+c-flatmedia: SIM_GM_CAREER_CONTROL=flatmedia SIM_GM_CAREER_ONLY=3 node scripts/simGmCareer.mjs
+c-extradraw: SIM_GM_CAREER_CONTROL=extradraw SIM_GM_CAREER_ONLY=3 node scripts/simGmCareer.mjs
+c-firedclub: SIM_GM_CAREER_CONTROL=firedclub SIM_GM_CAREER_ONLY=4 node scripts/simGmCareer.mjs
+c-unkeyed: SIM_GM_CAREER_CONTROL=unkeyed SIM_GM_CAREER_ONLY=4 node scripts/simGmCareer.mjs
+c-staffrides: SIM_GM_CAREER_CONTROL=staffrides SIM_GM_CAREER_ONLY=5 node scripts/simGmCareer.mjs
+c-ledgerrides: SIM_GM_CAREER_CONTROL=ledgerrides SIM_GM_CAREER_ONLY=5 node scripts/simGmCareer.mjs
+c-rostermove: SIM_GM_CAREER_CONTROL=rostermove SIM_GM_CAREER_ONLY=5 node scripts/simGmCareer.mjs
+c-depthstays: SIM_GM_CAREER_CONTROL=depthstays SIM_GM_CAREER_ONLY=5 node scripts/simGmCareer.mjs
+c-askrebuilt: SIM_GM_CAREER_CONTROL=askrebuilt SIM_GM_CAREER_ONLY=5 node scripts/simGmCareer.mjs
+c-halfseason: SIM_GM_CAREER_CONTROL=halfseason SIM_GM_CAREER_ONLY=6 node scripts/simGmCareer.mjs
+c-notrim: SIM_GM_CAREER_CONTROL=notrim SIM_GM_CAREER_ONLY=6 node scripts/simGmCareer.mjs
+c-awayxp: SIM_GM_CAREER_CONTROL=awayxp SIM_GM_CAREER_ONLY=6 node scripts/simGmCareer.mjs
+c-lastcall: SIM_GM_CAREER_CONTROL=lastcall SIM_GM_CAREER_ONLY=6 node scripts/simGmCareer.mjs
+c-noawaydraft: SIM_GM_CAREER_CONTROL=noawaydraft SIM_GM_CAREER_ONLY=6 node scripts/simGmCareer.mjs
+c-overlap: SIM_GM_CAREER_CONTROL=overlap SIM_GM_CAREER_ONLY=7 node scripts/simGmCareer.mjs
+c-firedlost: SIM_GM_CAREER_CONTROL=firedlost SIM_GM_CAREER_ONLY=7 node scripts/simGmCareer.mjs
+c-emptytile: SIM_GM_CAREER_CONTROL=emptytile SIM_GM_CAREER_ONLY=8 node scripts/simGmCareer.mjs
+c-nameinline: SIM_GM_CAREER_CONTROL=nameinline SIM_GM_CAREER_ONLY=8 node scripts/simGmCareer.mjs
+deskhost: node scripts/simGmDeskHost.mjs
+deskhost-nofirstcall: SIM_GM_DESK_HOST_CONTROL=nofirstcall node scripts/simGmDeskHost.mjs
+deskhost-arrivalnull: SIM_GM_DESK_HOST_CONTROL=arrivalnull node scripts/simGmDeskHost.mjs
+vitest-board: node_modules/.bin/vitest run src/components/front-office/FrontOfficeOnePress.test.tsx src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx src/components/front-office-shared/FrontOfficeGmCareer.test.tsx src/test/frontOfficeSaveRecovery.test.tsx --testTimeout=600000 --hookTimeout=120000
+vitest-shared: node_modules/.bin/vitest run src/lib/gmDeskHost.test.ts src/components/front-office-shared/GmCareerDesk.test.tsx src/lib/gmXp.test.ts src/lib/gmSeat.test.ts --testTimeout=300000 --hookTimeout=120000
+nflgmdesk: node scripts/simNflGmDesk.mjs
+gmreload: node scripts/simGmReload.mjs
+gmxp: node scripts/simGmXp.mjs
+gmseat: node scripts/simGmSeat.mjs
+sessionmarks: node scripts/simSessionMarks.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+rivalnames: node scripts/simNoRivalNames.mjs
+quotes: node scripts/simNoInventedQuotes.mjs
+conduct: node scripts/simNoInventedConduct.mjs
+storage: node scripts/simStorageWrites.mjs
+guideheadings: node scripts/simGuideHeadings.mjs
+sitesearch: node scripts/simSiteSearch.mjs
+dashes: n=$(git diff a9b19870 HEAD | grep '^+' | grep -cP '[\x{2013}\x{2014}]'); echo "added lines with an en or em dash: $n"; test "$n" -eq 0

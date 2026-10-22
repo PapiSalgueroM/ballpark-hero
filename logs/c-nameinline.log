@@ -1,0 +1,13 @@
+NEGATIVE CONTROL ON: nameinline; section 8 must go red
+8) the words: never empty, no dash, no quote, no placeholder, no player's name, a closed line never says sit, every box fits
+  FAIL [8]: a player's name (Trey Benson) on the arrival line, ARI (seed 1): You take over the Arizona Cardinals. They finished 14-3, 2nd in the league. Trey
+  FAIL [8]: a player's name (Michael Penix Jr.) on the arrival line, ATL (seed 1): You take over the Atlanta Falcons. They finished 8-9, 21st in the league. Michae
+  FAIL [8]: a player's name (Lamar Jackson) on the arrival line, BAL (seed 1): You take over the Baltimore Ravens. They finished 10-7, 8th in the league. Lamar
+  FAIL [8]: a player's name (Josh Allen) on the arrival line, BUF (seed 1): You take over the Buffalo Bills. They finished 13-4, 3rd in the league. Josh All
+  FAIL [8]: a player's name (Bryce Young) on the arrival line, CAR (seed 1): You take over the Carolina Panthers. They finished 5-12, 30th in the league. Bry
+  FAIL [8]: a player's name (Caleb Williams) on the arrival line, CHI (seed 1): You take over the Chicago Bears. They finished 6-11, 26th in the league. Caleb W
+  FAIL [8]: a player's name (Joe Burrow) on the arrival line, CIN (seed 1): You take over the Cincinnati Bengals. They finished 9-8, 14th in the league. Joe
+  FAIL [8]: a player's name (Shedeur Sanders) on the arrival line, CLE (seed 1): You take over the Cleveland Browns. They finished 3-14, 32nd in the league. Shed
+  FAIL [8]: (further failures in this check not printed)
+   23717 strings and 3976 boxes read over 4 leagues, every roster name checked
+CONTROL nameinline: 1 rewrite(s) applied, 128 failure(s) in section 8 (FIRED)
