@@ -1,0 +1,15 @@
+simCareerHall: node scripts/simCareerHall.mjs
+simUsCareerSummer: node scripts/simUsCareerSummer.mjs
+simCareerBanking: node scripts/simCareerBanking.mjs
+simUsCareerBank: node scripts/simUsCareerBank.mjs
+simCareerDecisionOutcome: node scripts/simCareerDecisionOutcome.mjs
+simUsSeasonCentre: node scripts/simUsSeasonCentre.mjs
+simUsPostseason: node scripts/simUsPostseason.mjs
+simNbaCareer: node scripts/simNbaCareer.mjs
+simNflCareer: node scripts/simNflCareer.mjs
+simMlbCareer: node scripts/simMlbCareer.mjs
+simNhlCareer: node scripts/simNhlCareer.mjs
+simCareerRealism: node scripts/simCareerRealism.mjs
+simNbaAwardsSense: node scripts/simNbaAwardsSense.mjs
+simUsCareerWeight: node scripts/simUsCareerWeight.mjs
+simSeasonReveal: node scripts/simSeasonReveal.mjs
