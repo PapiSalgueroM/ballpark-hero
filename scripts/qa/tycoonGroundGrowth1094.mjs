@@ -12,8 +12,10 @@ assert(process.env.CI, 'Run this verification only in remote CI');
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const ART = path.join(ROOT, 'tycoon-ground-growth-artifacts'), OUT = path.join(ART, 'native'), CACHE = path.join(ART, 'asset-cache');
 /* Round 1531. The parent is this round's PR182 landing commit and TERRACES its PR183 landing commit, so the scope
-   check still proves PR183 changed only the page (a fixed fact about two commits: land the branch with a merge commit,
-   as main does, or they stop being reachable). The old arm is NOT read from the parent: it is the CURRENT page minus
+   check still proves PR183 changed only the page (a fixed fact about two commits). It runs whenever both commits are in
+   the clone, which a merge landing keeps true; after a squash or cherry pick landing they are gone, and the walk prints
+   that the check was skipped and why, rather than going red over history that no longer exists, so the landing method
+   is not a condition on this walk. The old arm is NOT read from the parent: it is the CURRENT page minus
    the terrace memo and the svg, each asserted to occur once, so a later unrelated page edit cannot red this walk. The
    entity-ID epoch guard finds its line by shape, not by exact text. */
 const PAGE = 'src/pages/StadiumTycoon.tsx', HOOK = 'src/hooks/useStadiumTycoon.ts', BASE = '3dc37dbf9c4d8c57edc18009c0b127b4d487726b', TERRACES = 'beb301396869b37d96536915e32d50235c753d07', NOW = Date.parse('2026-10-07T12:00:00Z');
@@ -82,9 +84,11 @@ function pixelDifference(x, y) { const sameSize=x.width===y.width&&x.height===y.
 let browser, server;
 try {
   const copyDir = path.join(OUT, 'copies'); fs.mkdirSync(copyDir, { recursive: true });
-  const parent = execFileSync('git', ['rev-parse', BASE], { cwd: ROOT, encoding: 'utf8' }).trim(); report.parent = parent;
-  const terraces = execFileSync('git', ['rev-parse', TERRACES], { cwd: ROOT, encoding: 'utf8' }).trim(); report.terraces = terraces;
-  assert.deepEqual(execFileSync('git',['diff','--name-only',parent,terraces,'--','src'],{cwd:ROOT,encoding:'utf8'}).trim().split('\n'),[PAGE],'Only the declared page changes from the parent');
+  const present = sha => { try { execFileSync('git', ['cat-file', '-e', `${sha}^{commit}`], { cwd: ROOT, stdio: 'ignore' }); return true; } catch { return false; } };
+  const parent = present(BASE) && present(TERRACES) ? BASE : null; report.parent = parent; report.terraces = parent && TERRACES;
+  if (parent) { assert.deepEqual(execFileSync('git',['diff','--name-only',BASE,TERRACES,'--','src'],{cwd:ROOT,encoding:'utf8'}).trim().split('\n'),[PAGE],'Only the declared page changes from the parent'); report.commitScope = `checked: ${BASE.slice(0, 8)} to ${TERRACES.slice(0, 8)} changes only ${PAGE}`; }
+  else report.commitScope = `skipped: ${BASE.slice(0, 8)} and ${TERRACES.slice(0, 8)} are not both in this clone (a squash or cherry pick landing, or a shallow checkout), so there is no PR183 history to check`;
+  console.log(`PR183 commit scope ${report.commitScope}.`);
   const current = read(path.join(ROOT, PAGE));
   const memo = `  const standBays = useMemo(() => Array.from({ length: Math.min(203, Math.floor(cap / 40)) }, (_, i) => {\n    const column = i % 20;\n    const centered = column % 2 === 0 ? 9 - Math.floor(column / 2) : 10 + Math.floor(column / 2);\n    return { x: 8 + centered * 15, y: 56 - Math.floor(i / 20) * 5 };\n  }), [cap]);\n\n`;
   const svg = `            <svg data-tycoon-terraces aria-hidden="true" viewBox="0 0 320 64" preserveAspectRatio="none" className="absolute inset-0 h-full w-full pointer-events-none text-muted-foreground/50">\n              {standBays.map((bay, i) => (\n                <rect key={i} x={bay.x} y={bay.y} width="13" height="3" rx="1" fill="currentColor" />\n              ))}\n            </svg>\n`;

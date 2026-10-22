@@ -45,6 +45,8 @@ assert.equal(report.clockControl.clocks.actual.now - report.clockControl.clocks.
 assert.equal(report.mounts.count, 45); assert.equal(report.mounts.regularCount, 44); assert.equal(report.mounts.setupCount, 1); assert.equal(report.mounts.screenshots, 70);
 assert.deepEqual(report.errors, []); assert.deepEqual(report.sourceAfter, report.sourceBefore);
 assert.deepEqual(report.buildAfter, report.buildBefore); assert.deepEqual(report.cacheAfter, report.cacheBefore);
+assert(/^(checked|skipped): /.test(report.commitScope ?? ''), 'The walk says whether it checked the PR183 commit scope');
+console.log(`PR183 commit scope ${report.commitScope}.`);
 console.log('Ground growth: four reduced-motion page journeys passed with paired original pages.');
 console.log('First purchase, row boundary, maximum, attendance and unrelated upgrade retain actual geometry and pixels.');
 console.log('Four exclusive copied faults caused their sole mapped AssertionError beside healthy baselines.');
