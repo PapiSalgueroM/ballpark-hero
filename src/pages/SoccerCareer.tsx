@@ -42,7 +42,7 @@ import {
   giveWorldCupSpeech, type WorldCupSpeechChoice, manualRetire, choosePostRetirement, advanceManagerSeason, acceptManagerOffer, endManagerCareer, loadManagerMarket,
   acceptRetirementSuggestion, declineRetirementSuggestion, announceFarewellSeason,
   advancePunditSeason, endPunditCareer, punditLegacyPaid, playedSeniorSeason, POST_RETIREMENT_BONUS_CAP,
-  advanceOwnerSeason, endOwnerCareer, ownerClubsOnSale, chooseOwnerPlan, type OwnerState, type OwnerPlan,
+  advanceOwnerSeason, endOwnerCareer, ownerClubsOnSale, chooseOwnerPlan, type OwnerPlan,
   dismissNewspaper, purchaseSpendingItem, SPENDING_ITEMS,
   applySocialMediaAction, handleCoverAthleteDecision, dismissSocialMediaPhase,
   applyMoralDilemmaChoice, dismissMoralDilemma, MORAL_DILEMMAS,
