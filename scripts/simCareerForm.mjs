@@ -136,7 +136,7 @@ if (runs('1')) {
 
 /* ─── Soccer Career: the bundles ─── */
 const ENGINE = 'src/lib/soccerCareerEngine.ts';
-const STEP_LINE = "const step = Math.round(moraleForm('soccer', morale));";
+const STEP_LINE = "Math.round(moraleForm('soccer', morale as number)) || 0";
 const GATE_LINE = 'if (puskasDrawn && puskasAwardExists(thisYear)) {';
 const PRESS_MARK = 'function generateSeasonStats(state, clubs) {';
 const AT_PRESS = 'const moraleAtPress = (state: CareerState): number => MORALE_AT_PRESS.get(state) ?? state.morale;';
@@ -151,7 +151,7 @@ async function soccer(name, { stepOff = false, noGate = false, postText = false,
   if (stepOff) {
     const form = read(FORM);
     if (form.split(STEP_LINE).length !== 2) { console.log(`ABORT: ${FORM} does not hold ${STEP_LINE} once`); process.exit(1); }
-    serve[FORM] = form.replace(STEP_LINE, 'const step = 0;');
+    serve[FORM] = form.replace(STEP_LINE, '0');
   }
   if (noGate) {
     const engine = read(ENGINE);
