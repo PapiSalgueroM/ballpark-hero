@@ -1,0 +1,6 @@
+tscA exit=2 67s | SUMMARY mutation A tsc exit 2
+uA exit=1 3s | SUMMARY mutation A units exit 1
+uA2 exit=1 3s | SUMMARY mutation A2 units exit 1
+uA3 exit=1 3s | SUMMARY mutation A3 units exit 1
+uD exit=1 3s | SUMMARY mutation D units exit 1
+hD exit=1 0s | SUMMARY mutation D harness table exit 1

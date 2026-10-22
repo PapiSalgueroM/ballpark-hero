@@ -1,0 +1,7 @@
+#!serial
+tscA: node .rc/x/fx-mut.mjs A && node_modules/.bin/tsc --noEmit -p tsconfig.app.json; s=$?; git checkout -- src scripts; echo "SUMMARY mutation A tsc exit $s"; exit $s
+uA: node .rc/x/fx-mut.mjs A && node_modules/.bin/vitest run src/lib/clubManagerTactics.test.ts --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; echo "SUMMARY mutation A units exit $s"; exit $s
+uA2: node .rc/x/fx-mut.mjs A2 && node_modules/.bin/vitest run src/lib/clubManagerTactics.test.ts --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; echo "SUMMARY mutation A2 units exit $s"; exit $s
+uA3: node .rc/x/fx-mut.mjs A3 && node_modules/.bin/vitest run src/lib/clubManagerTactics.test.ts --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; echo "SUMMARY mutation A3 units exit $s"; exit $s
+uD: node .rc/x/fx-mut.mjs D && node_modules/.bin/vitest run src/lib/clubManagerTactics.test.ts --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; echo "SUMMARY mutation D units exit $s"; exit $s
+hD: node .rc/x/fx-mut.mjs D && SECTION=table node scripts/simCmTactics.mjs; s=$?; git checkout -- src scripts; echo "SUMMARY mutation D harness table exit $s"; exit $s
