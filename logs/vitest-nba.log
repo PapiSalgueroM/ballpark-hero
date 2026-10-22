@@ -1,0 +1,80 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/components/nba-front-office/NbaGmDeskBoard.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 942[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1018: the NBA GM desk on the real board[2m > [22mdesk on: draft night ends in the desk summer, the GM calls applied and the rookie scale signed [33m 376[2mms[22m[39m
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx[2m > [22m[2mNFL Front Office: the season closes once[2m > [22m[2mREPRO: what a reload on the recap lets the player do today
+[22m[39mNFL Front Office: after finishing the season and reloading, hub shown=false, seasonsPlayed 1 -> 1, titles 0 -> 0, league games 544 -> 544, period 17, phase recap -> recap
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx[2m > [22m[2mNFL Front Office, full rosters: the season closes once[2m > [22m[2mREPRO: what a reload on the recap lets the player do today
+[22m[39mNFL Front Office, full rosters: after finishing the season and reloading, hub shown=false, seasonsPlayed 1 -> 1, titles 0 -> 0, league games 544 -> 544, period 17, phase recap -> recap
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx[2m > [22m[2mNBA Front Office: the season closes once[2m > [22m[2mREPRO: what a reload on the recap lets the player do today
+[22m[39mNBA Front Office: after finishing the season and reloading, hub shown=false, seasonsPlayed 1 -> 1, titles 0 -> 0, league games 2400 -> 2400, period 20, phase recap -> recap
+
+ [32m✓[39m src/components/nba-front-office/NbaFrontOfficeRatingEvidence.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 3550[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA actual opening ratings and readable saved evidence[2m > [22mdrops a real pending rating import after unmount without overwriting a newer save [33m 602[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA actual opening ratings and readable saved evidence[2m > [22mstarts actual DEN with all300 reviewed prices ratings and opening evidence [33m 654[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA actual opening ratings and readable saved evidence[2m > [22msettles two same-frame franchise clicks with one initializer and one save [33m 687[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA actual opening ratings and readable saved evidence[2m > [22mrefuses an invalid opening version without overwriting another save and retries cleanly [33m 1131[2mms[22m[39m
+ [32m✓[39m src/components/nba-front-office/NbaRotationPanel.test.tsx [2m([22m[2m15 tests[22m[2m)[22m[33m 7120[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA rotation UI with real board persistence[2m > [22mpreserves an old automatic save and exact original strength as an independent baseline [33m 686[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA rotation UI with real board persistence[2m > [22mswaps a bench player into the starting five and saves the actual changed strength [33m 502[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA rotation UI with real board persistence[2m > [22mpreserves two distinct selections without overwriting the first saved choice [33m 675[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA rotation UI with real board persistence[2m > [22mrejects the same selection without writing a save or claiming an earned update [33m 301[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA rotation UI with real board persistence[2m > [22mrejects a foreign option without writing a save or claiming an earned update [33m 330[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA rotation UI with real board persistence[2m > [22mdisables injured options and rejects a forced injured selection without changing the save [33m 498[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA rotation UI with real board persistence[2m > [22mrestores automatic selection by removing its saved preference and announces only that action [33m 789[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA rotation UI with real board persistence[2m > [22mreloads saved manual choices quietly with identical persisted bytes [33m 501[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA rotation UI with real board persistence[2m > [22mkeeps an injured preferred slot visible with its actual healthy cover [33m 335[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA rotation UI with real board persistence[2m > [22mkeeps thin roster bench roles and minutes in place when an injured starter has no cover [33m 642[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA rotation UI with real board persistence[2m > [22mgives a chosen bench prospect real simulated games and points while automatic leaves him outside the eight [33m 735[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA rotation UI with real board persistence[2m > [22mshows earned update feedback once with finite motion reduced motion and native sized controls [33m 526[2mms[22m[39m
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx[2m > [22m[2mMLB Front Office: the season closes once[2m > [22m[2mREPRO: what a reload on the recap lets the player do today
+[22m[39mMLB Front Office: after finishing the season and reloading, hub shown=false, seasonsPlayed 1 -> 1, titles 0 -> 0, league games 4860 -> 4860, period 27, phase recap -> recap
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx[2m > [22m[2mNHL Front Office: the season closes once[2m > [22m[2mREPRO: what a reload on the recap lets the player do today
+[22m[39mNHL Front Office: after finishing the season and reloading, hub shown=false, seasonsPlayed 1 -> 1, titles 0 -> 0, league games 2560 -> 2560, period 20, phase recap -> recap
+
+ [32m✓[39m src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx [2m([22m[2m25 tests[22m[2m)[22m[33m 7418[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL Front Office: the season closes once[2m > [22mdraws the recap again after a reload and does not replay the season [33m 583[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL Front Office: the season closes once[2m > [22mplays the next season after the draft: the record refuses only the closed one [33m 564[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL Front Office, full rosters: the season closes once[2m > [22mdraws the recap again after a reload and does not replay the season [33m 540[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL Front Office, full rosters: the season closes once[2m > [22mREPRO: what a reload on the recap lets the player do today [33m 456[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL Front Office, full rosters: the season closes once[2m > [22mplays the next season after the draft: the record refuses only the closed one [33m 1339[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA Front Office: the season closes once[2m > [22mdraws the recap again after a reload and does not replay the season [33m 379[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA Front Office: the season closes once[2m > [22mREPRO: what a reload on the recap lets the player do today [33m 361[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA Front Office: the season closes once[2m > [22mplays the next season after the draft: the record refuses only the closed one [33m 429[2mms[22m[39m
+[90mstdout[2m | src/components/nba-front-office/NbaDraftNightRivals.test.tsx[2m > [22m[2mNBA draft night, GM desk off: the card shows the picks the engine made[2m > [22m[2mthe rival rows are the picks the engine made, in order, each on the club its row names
+[22m[39mNBA draft night, desk off: the engine took 5 for rival clubs, the card drew 5 rival rows
+
+[90mstdout[2m | src/components/nba-front-office/NbaDraftNightRivals.test.tsx[2m > [22m[2mNBA draft night, GM desk off: the card shows the picks the engine made[2m > [22m[2mevery rival row carries the grade the draft screen printed for that prospect before the press
+[22m[39mNBA draft night, desk off: 5 of 5 rival rows were on the draft screen before the press, each grade equal
+
+[90mstdout[2m | src/components/nba-front-office/NbaDraftNightRivals.test.tsx[2m > [22m[2mNBA draft night, GM desk on: the card shows the picks the engine made[2m > [22m[2mthe rival rows are the picks the engine made, in order, each on the club its row names
+[22m[39mNBA draft night, desk on: the engine took 5 for rival clubs, the card drew 5 rival rows
+
+[90mstdout[2m | src/components/nba-front-office/NbaDraftNightRivals.test.tsx[2m > [22m[2mNBA draft night, GM desk on: the card shows the picks the engine made[2m > [22m[2mevery rival row carries the grade the draft screen printed for that prospect before the press
+[22m[39mNBA draft night, desk on: 5 of 5 rival rows were on the draft screen before the press, each grade equal
+
+ [32m✓[39m src/components/nba-front-office/NbaDraftNightRivals.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 961[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA draft night, GM desk off: the card shows the picks the engine made[2m > [22mthe case is the one it says it is: the first press leaves the draft open with no summer run [33m 337[2mms[22m[39m
+ [32m✓[39m src/components/nba-front-office/NbaTradeLists.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 855[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA Front Office: every man on the roster can be traded[2m > [22mthe Trade Finder, the send list and the partner list each show the whole roster [33m 394[2mms[22m[39m
+ [32m✓[39m src/components/nba-front-office/NbaSeasonStats.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 1230[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA Front Office: the season in numbers[2m > [22mdraws the awards the engine named, the leaders and the club lines, labelled as the sim season [33m 455[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA Front Office: the season in numbers[2m > [22ma reload draws the same awards and writes nothing twice [33m 352[2mms[22m[39m
+ [32m✓[39m src/components/nba-front-office/NbaRosterBoxTipOff.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 474[2mms[22m[39m
+ [32m✓[39m src/components/nba-front-office/NbaRotationReset.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 2013[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA rotation view lifecycle across actual Board restart[2m > [22mkeeps ordinary restored roster and local save unchanged as an independent baseline [33m 397[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA rotation view lifecycle across actual Board restart[2m > [22mkeeps ordinary new-franchise restart and own-key deletion as an independent baseline [33m 824[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA rotation view lifecycle across actual Board restart[2m > [22mcloses the previous rotation view before a new franchise opens its roster [33m 789[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m9 passed[39m[22m[90m (9)[39m
+[2m      Tests [22m [1m[32m76 passed[39m[22m[90m (76)[39m
+[2m   Start at [22m 06:08:29
+[2m   Duration [22m 17.84s[2m (transform 5.55s, setup 992ms, collect 14.18s, tests 24.56s, environment 6.22s, prepare 1.82s)[22m
+

@@ -1,0 +1,23 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+vitest-nba exit=0 18s |    Duration  17.84s (transform 5.55s, setup 992ms, collect 14.18s, tests 24.56s, environment 6.22s, prepare 1.82s)
+simNoRivalNames exit=0 29s | No rival product names found. 0 findings.
+simStorageWrites exit=0 6s | simStorageWrites: all green (owed: 12)
+simTrustCopy exit=0 1s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+simNbaLuxuryTax exit=0 19s | simNbaLuxuryTax: 347 checks passed over 10 seeded franchises and 5 seasons each. The bill is the published formula, a dollar over pays, every season tips off on fourteen 
+simNbaTipOffForecast exit=0 2s | NBA tip-off forecast: CRLF-safe executable controls, raw-byte holds, bounded owned-copy cleanup and zero outside transport verified.
+simGmDesk exit=0 0s | simGmDesk: PASS. Four sports declare one descriptor that matches their engines and boards, a corrupt block costs that block alone, an old save opens on a fresh desk, and 
+simHarnessAnchors exit=0 59s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 101s | 
+playFoHub-bogus exit=2 0s | PLAY_FO_HUB_CONTROL=bogus is not a control this walk knows (nofloor)
+playFoHub exit=0 62s | playFoHub: green. Four front offices, nine live boxes each, and the five the walk opens open what they name.
+sweepPhone-noclip-nba exit=1 3s | sweepPhone: 1 failure
+playFoHub-nofloor exit=1 50s | playFoHub: 2 failures
+sweepPhone-stackhidden exit=1 3s | sweepPhone: 1 failure
+sweepPhone-counthidden exit=1 3s | sweepPhone: 1 failure
+help exit=0 3s | simHelpConsentFocus: real source held, disposable copies cleaned, no vendor requests.
+rules exit=0 3s | simRulesGateConsentFocus: source held, owned copies cleaned, no backend or vendor requests.
+help-external exit=0 5s | simHelpConsentFocus: real source held, disposable copies cleaned, no vendor requests.
+rules-host exit=0 5s | simRulesGateConsentFocus: source held, owned copies cleaned, no backend or vendor requests.
+rules-return exit=0 6s | simRulesGateConsentFocus: source held, owned copies cleaned, no backend or vendor requests.
+sweepPhone exit=0 115s | sweepPhone: green. Every page of the site fits the phone it is played on.
+walk exit=0 78s | walk1537: done, every reading above, shots in RC_OUT
