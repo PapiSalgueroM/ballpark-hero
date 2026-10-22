@@ -28,7 +28,8 @@ export function countNations(nations: readonly (string | null)[], home: string):
     if (n === home) own += 1;
     else away.set(n, (away.get(n) ?? 0) + 1);
   }
-  return { known, home: own, abroad: [...away].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])) };
+  /* Ties by code point, never localeCompare: the order the draw walks must not follow the viewer's language. */
+  return { known, home: own, abroad: [...away].sort((a, b) => b[1] - a[1] || (a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0)) };
 }
 
 /** His country: home at the counted share, else a foreign country in proportion. Keyed on his name, never the main stream. */
