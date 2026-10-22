@@ -1,0 +1,3 @@
+hub-house: PART=hub N=150 node .rc/x/probe.mjs
+hub-engaged: PART=hub FLEET=engaged N=150 node .rc/x/probe.mjs
+hub-house-s77: PART=hub N=150 SEED=77 node .rc/x/probe.mjs

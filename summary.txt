@@ -1,0 +1,3 @@
+hub-house-s77 exit=0 18s | PROBE hub house: presses=3064 gamesLie=52 stepLie=0 planLie=52 phoneMoved=300
+hub-house exit=0 18s | PROBE hub house: presses=3063 gamesLie=65 stepLie=0 planLie=65 phoneMoved=300
+hub-engaged exit=0 18s | PROBE hub engaged: presses=3085 gamesLie=213 stepLie=0 planLie=213 phoneMoved=1215

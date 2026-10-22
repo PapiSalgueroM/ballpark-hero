@@ -1,0 +1,11 @@
+hub probe, engaged fleet, 150 careers, seed 1523: 3085 presses
+  pressed morale differs from the hub's: 0; phone swing at the draw differs from the hub's: 1215
+  the cap took a share of the morale step: on the hub 306, at the draw 93
+  the line's games disagree with the engine's: 213 (6.90 percent); its rating step: 0; the squad plan's morale games: 213
+  e.g. "Morale 100: rating +0.1 this season." (phone 3 on the hub, 2 at the draw): the engine played 1 games from morale
+  e.g. "Morale 100: rating +0.1 this season." (phone 3 on the hub, 0 at the draw): the engine played 1 games from morale
+  e.g. "Morale 91: rating +0.1 this season." (phone 3 on the hub, 2 at the draw): the engine played 1 games from morale
+  e.g. "Morale 100: rating +0.1 this season." (phone 3 on the hub, 2 at the draw): the engine played 1 games from morale
+  e.g. "Morale 100: rating +0.1 this season." (phone 3 on the hub, 2 at the draw): the engine played 1 games from morale
+  e.g. "Morale 100: rating +0.1 this season." (phone 3 on the hub, 2 at the draw): the engine played 1 games from morale
+PROBE hub engaged: presses=3085 gamesLie=213 stepLie=0 planLie=213 phoneMoved=1215
