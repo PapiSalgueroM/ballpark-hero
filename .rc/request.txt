@@ -1,0 +1,5 @@
+m-quarter: node .rc/x/mutrun.mjs quarter
+m-pool3: node .rc/x/mutrun.mjs pool3
+m-thirds: node .rc/x/mutrun.mjs thirds
+m-knock: node .rc/x/mutrun.mjs knock
+m-bronzefourth: node .rc/x/mutrun.mjs bronzefourth
