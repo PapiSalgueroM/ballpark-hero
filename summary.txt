@@ -1,0 +1,4 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+walk exit=0 29s | playUsShopPromises: green, 9 walks
+walk-jump exit=1 8s | playUsShopPromises: CONTROL jump FIRED, (c) red
+walk-nobank exit=1 42s | playUsShopPromises: CONTROL nobank FIRED, (c) red
