@@ -1,0 +1,248 @@
+name: Consent dialog layout matrix1447
+on:
+  push:
+    branches: [codex/consent-dialog-layout-1447]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: consent-dialog-layout-matrix1447-${{ github.ref }}
+  cancel-in-progress: false
+env:
+  BASE_SOURCE: c75d04dad21dae05bb110aa10e9e99d670adc38e
+  GREEN_CSS_SHA256: ada9cc819db63d0e2eb013bd3c29eec16877e2a30166c390b81901142369fef3
+  RADIX_SOURCE: 16883ace0b18b06e2834702c30e7a8e79e21dd46
+  RADIX_RUN: 39764128344
+  RADIX_ARTIFACT: 12419971098
+  RADIX_ZIP_BYTES: 14888352
+  RADIX_ZIP_SHA256: 5ede7b3461c5586e719d1c5f3be2c0573cc3cfa9cf4d6927af1f0596323c930b
+  RADIX_REPORT_SHA256: 687825e5982c2a45ab4dbda275dcd97fd9bc3f7a80203b3e72cd91e9bf6bd550
+  RADIX_NATIVE_SHA256: c2f7004015ea2e765eac96331f3a892d16db739cbe55666b3077235099fd7a79
+  RADIX_BRIDGE_SHA256: 9b675ea3d0087e408a9714f9faee67696c632ce315f5f18c81ef5f7b61396d40
+  OUT: consent-dialog1447-matrix-artifacts
+  MATRIX_OUT: consent-dialog1447-matrix-observed
+jobs:
+  matrix:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Exact candidate source and complete application protection
+        run: |
+          set -euo pipefail
+          mkdir "$OUT"
+          test "$GITHUB_REF" = refs/heads/codex/consent-dialog-layout-1447
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          git rev-parse HEAD > "$OUT/head.txt"
+          printf '%s\n' matrix-counterfactual > "$OUT/phase.txt"
+          node <<'JS'
+          const fs=require('node:fs'),assert=require('node:assert/strict');
+          for(const key of ['BASE_SOURCE','RADIX_SOURCE'])assert.match(process.env[key]||'',/^[a-f0-9]{40}$/);
+          for(const key of ['GREEN_CSS_SHA256','RADIX_ZIP_SHA256','RADIX_REPORT_SHA256','RADIX_NATIVE_SHA256','RADIX_BRIDGE_SHA256'])assert.match(process.env[key]||'',/^[a-f0-9]{64}$/);
+          for(const key of ['RADIX_RUN','RADIX_ARTIFACT','RADIX_ZIP_BYTES']){assert.match(process.env[key]||'',/^[1-9][0-9]+$/);assert(Number.isSafeInteger(Number(process.env[key])));}
+          const input=(source,run,artifact,bytes,zipSha,reportSha,nativeSha,bridgeSha,name,workflow,artifactName)=>({source,run,artifact,bytes,zipSha,reportSha,nativeSha,bridgeSha,name,workflow,artifactName,attempt:1});
+          const bindings={
+            original:input('86fb920b2cb9ecb390b386811c5d5b121d9ff7d2',39746799578,12411698481,12735011,'afee10170b54645eec654b957cbdef4911c4f5ebfbb8adfe3120b610086f3f9d','d77ca345817cbfc3d11751d3e4b8029b017d12191ed2c786a990d02677a2c6c4','796e160acc57541b7bacf8972fbed6e7e43ec86087d8250037124b01293c0c3f','9de11711e26ffcc53a0d5a6d7bcc6f824463e3bdc723a06e07f7925b7d4ad87e','Consent dialog Refined Original1447','.github/workflows/consent-dialog-original-1447.yml','consent-dialog1447-refined-original-39746799578-1'),
+            radix:input(process.env.RADIX_SOURCE,Number(process.env.RADIX_RUN),Number(process.env.RADIX_ARTIFACT),Number(process.env.RADIX_ZIP_BYTES),process.env.RADIX_ZIP_SHA256,process.env.RADIX_REPORT_SHA256,process.env.RADIX_NATIVE_SHA256,process.env.RADIX_BRIDGE_SHA256,'Consent dialog Radix preservation answered1447','.github/workflows/consent-dialog-preservation-1447.yml','consent-dialog1447-preservation-'+process.env.RADIX_RUN+'-1'),
+            academy:input('3a5aad2130b37752bd35f2240010885e1baacf14',39754554795,12415034051,9723579,'f1bfb1af01759564da1567f3f99cc8e389691b2c5fc4b1675e25479dd8f4abae','b707ebcdb26615965e670581ad9f98ac0f63a3b96e5e5e4119499359135484d5','7dff46c59ebffd76eaf6eaff3a196674e7ee0f90f93361954a92f5e5dee3ee9d','97ebc13e8f01835166445d040da9143a7c88c142c30b73ba218cca39fe99247c','Consent dialog Academy baseline1447','.github/workflows/consent-dialog-academy-preservation-1447.yml','consent-dialog1447-academy-39754554795-1')};
+          fs.writeFileSync(process.env.OUT+'/baseline-bindings.json',JSON.stringify(bindings,null,2)+'\n');
+          JS
+          git fetch --no-tags --depth=1 origin "$BASE_SOURCE" > "$OUT/base-fetch.log" 2>&1
+          git diff --exit-code "$BASE_SOURCE" HEAD -- . ':!src/index.css' ':!docs/ROUND1447.md' ':!docs/PROJECT-STATE.md' ':!docs/WORKBOARD.md' ':!.github/workflows/consent-dialog-layout-matrix-1447.yml' ':!scripts/qa/playConsentDialogOriginal1447.mjs' ':!scripts/qa/playConsentRadixPrimaryBaseline1447.mjs' ':!scripts/qa/playConsentAcademyPrimaryBaseline1447.mjs' ':!scripts/qa/consent-dialog1447/runConsentDialogMatrix1447.candidate.mjs' ':!scripts/qa/consent-dialog1447/matrix1447-copies.candidate.mjs' ':!scripts/qa/consent-dialog1447/matrix1447-styles.candidate.mjs' ':!scripts/qa/consent-dialog1447/hostLikeServer.matrix1447.candidate.mjs' ':!scripts/qa/consent-dialog1447/evidence/original.native-admission.json.gz' ':!scripts/qa/consent-dialog1447/evidence/original.bridge.json' ':!scripts/qa/consent-dialog1447/evidence/radix.native-admission.json.gz' ':!scripts/qa/consent-dialog1447/evidence/radix.bridge.json' ':!scripts/qa/consent-dialog1447/evidence/academy.native-admission.json.gz' ':!scripts/qa/consent-dialog1447/evidence/academy.bridge.json' > "$OUT/protected-product-hold.log"
+          git show "$BASE_SOURCE:src/index.css" > "$OUT/base-index.css"
+          printf '%s  %s\n' caea4bd0f6cfd6d9fcfde38d9a4498e1496e89d3e82b46d418a9d789142bdc5a "$OUT/base-index.css" "$GREEN_CSS_SHA256" src/index.css > "$OUT/css-source-inputs.sha256"
+          sha256sum --check "$OUT/css-source-inputs.sha256" > "$OUT/css-source-initial.log"
+          test "$GREEN_CSS_SHA256" != caea4bd0f6cfd6d9fcfde38d9a4498e1496e89d3e82b46d418a9d789142bdc5a
+          git diff --binary "$BASE_SOURCE" HEAD -- src/index.css > "$OUT/source-css.patch";test -s "$OUT/source-css.patch"
+          printf '%s  %s\n' ff59de8be52bffabdb462e4c15f5e946e21951e3e40f734a4f446e05fe61b250 scripts/qa/playConsentDialogOriginal1447.mjs 327fc27589c9e84cf70a27f877eb65e4bf9b16dce8a985031b0525e4a9dc6f19 scripts/qa/playConsentRadixPrimaryBaseline1447.mjs 2229fe57d04b14740f8f68ce0f9b1ff9932951372bb7e99ca5f708035378988b scripts/qa/playConsentAcademyPrimaryBaseline1447.mjs 08f06f62465111e38c6dbaca84502f2c37efb70166770a276c0147665db6e91a scripts/qa/consent-dialog1447/runConsentDialogMatrix1447.candidate.mjs a985c0237b50b50219cf98bcd504563fe623e0a1686dba895d78508ca4113fde scripts/qa/consent-dialog1447/matrix1447-copies.candidate.mjs 8bcce451190eb2939c014033f716d9ebdf45d0b449f540d55945a237b02b87f8 scripts/qa/consent-dialog1447/matrix1447-styles.candidate.mjs ea0117e8b464e8816f6f6ddd51a1509860ebc8b64da237d8876c4bca2d5f6171 scripts/qa/consent-dialog1447/hostLikeServer.matrix1447.candidate.mjs e60ff1534307e449ccef598e3b7470dcba58681b82cea4005cec7319f14f9221 scripts/lib/offlineTransport.cjs 94a07179be7ca6b9562d118b52c2d5d0dff0b6b2e29e49e4fea16fa2defb5a93 scripts/lib/playwrightLoader.mjs > "$OUT/proof-inputs.sha256"
+          sha256sum --check "$OUT/proof-inputs.sha256" > "$OUT/proof-inputs-initial.log"
+          printf '%s  %s\n' 11fbdb4f51486087e2455c6a579135361e2354e124e155c0fd66822dd094b69f scripts/qa/consent-dialog1447/evidence/original.native-admission.json.gz 5a61d943e8cd8d2620d86460d620976a7eca37aa442f209c61c902aae1bc9602 scripts/qa/consent-dialog1447/evidence/radix.native-admission.json.gz b708e4304bcb3a5006dd84d310495e648cca4e264490151d0a215665e71a6901 scripts/qa/consent-dialog1447/evidence/academy.native-admission.json.gz > "$OUT/native-carriers.sha256"
+          sha256sum --check "$OUT/native-carriers.sha256" > "$OUT/native-carriers-initial.log"
+          mkdir "$OUT/native-admissions"
+          for family in original radix academy;do gzip -dc "scripts/qa/consent-dialog1447/evidence/$family.native-admission.json.gz" > "$OUT/native-admissions/$family.native-admission.json";done
+          test "$(wc -c < "$OUT/native-admissions/original.native-admission.json")" -eq 57534
+          test "$(wc -c < "$OUT/native-admissions/radix.native-admission.json")" -eq 250015
+          test "$(wc -c < "$OUT/native-admissions/academy.native-admission.json")" -eq 18705
+          for family in original radix academy;do node -e 'const b=require("./"+process.env.OUT+"/baseline-bindings.json")[process.argv[1]],p="scripts/qa/consent-dialog1447/evidence/"+process.argv[1];console.log(b.nativeSha+"  "+process.env.OUT+"/native-admissions/"+process.argv[1]+".native-admission.json");console.log(b.bridgeSha+"  "+p+".bridge.json")' "$family";done > "$OUT/native-evidence-inputs.sha256"
+          cat "$OUT/native-carriers.sha256" >> "$OUT/native-evidence-inputs.sha256"
+          sha256sum --check "$OUT/native-evidence-inputs.sha256" > "$OUT/native-evidence-inputs-initial.log"
+          git ls-files -z -- . | sort -z > "$OUT/tracked-paths-before.bin"
+          xargs -0 sha256sum < "$OUT/tracked-paths-before.bin" > "$OUT/source-before.sha256"
+          find public scripts/data/lastmod.json scripts/data/guideHeadingsFrozen.json src/data/searchKeywords.json ! -type d ! -type f -print > "$OUT/generated-nonregular-before.txt";test ! -s "$OUT/generated-nonregular-before.txt"
+          find public scripts/data/lastmod.json scripts/data/guideHeadingsFrozen.json src/data/searchKeywords.json -type f -print0 | sort -z | xargs -0 sha256sum > "$OUT/generated-before.sha256"
+          sha256sum package.json package-lock.json vitest.config.ts scripts/sweepWeight.mjs scripts/lib/offlineTransport.cjs scripts/lib/hostLikeServer.mjs > "$OUT/dependencies.sha256"
+          npm ci > "$OUT/install.log" 2>&1
+      - name: Exact admitted artifact inputs before offline application work
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir "$OUT/inputs"
+          for family in original radix academy;do
+            mkdir "$OUT/inputs/$family"
+            read -r run artifact < <(node -e 'const b=require("./"+process.env.OUT+"/baseline-bindings.json")[process.argv[1]];console.log(b.run+" "+b.artifact)' "$family")
+            gh api "/repos/PapiSalgueroM/ballpark-hero/actions/runs/$run" > "$OUT/inputs/$family/run.json"
+            gh api "/repos/PapiSalgueroM/ballpark-hero/actions/runs/$run/jobs?per_page=100" > "$OUT/inputs/$family/jobs.json"
+            gh api "/repos/PapiSalgueroM/ballpark-hero/actions/runs/$run/artifacts?per_page=100" > "$OUT/inputs/$family/artifacts.json"
+            FAMILY="$family" node <<'JS'
+          const fs=require('node:fs'),assert=require('node:assert/strict'),family=process.env.FAMILY,out=process.env.OUT+'/inputs/'+family,bind=JSON.parse(fs.readFileSync(process.env.OUT+'/baseline-bindings.json'))[family];
+          const run=JSON.parse(fs.readFileSync(out+'/run.json')),jobs=JSON.parse(fs.readFileSync(out+'/jobs.json')),catalog=JSON.parse(fs.readFileSync(out+'/artifacts.json'));
+          assert.equal(run.id,bind.run);assert.equal(run.head_sha,bind.source);assert.equal(run.run_attempt,bind.attempt);assert.equal(run.repository.full_name,'PapiSalgueroM/ballpark-hero');assert.equal(run.name,bind.name);assert.equal(run.path,bind.workflow);assert.equal(run.status,'completed');assert.equal(run.conclusion,'success');assert.equal(jobs.total_count,1);assert.equal(jobs.jobs.length,1);assert(jobs.jobs.every(j=>j.status==='completed'&&j.conclusion==='success'&&j.run_id===bind.run));assert.equal(catalog.total_count,1);assert.equal(catalog.artifacts.length,1);const a=catalog.artifacts[0];assert.equal(a.id,bind.artifact);assert.equal(a.name,bind.artifactName);assert.equal(a.size_in_bytes,bind.bytes);assert.equal(a.digest,'sha256:'+bind.zipSha);assert.equal(a.expired,false);assert.equal(a.workflow_run.id,bind.run);assert.equal(a.workflow_run.head_sha,bind.source);
+          JS
+            gh api "/repos/PapiSalgueroM/ballpark-hero/actions/artifacts/$artifact/zip" > "$OUT/inputs/$family/input.zip"
+          done
+          python <<'PY'
+          import os,pathlib,zipfile,hashlib,json,re,stat
+          root=pathlib.Path.cwd();out=root/os.environ['OUT'];bindings=json.loads((out/'baseline-bindings.json').read_text());receipts=[]
+          def safe(name):
+              parts=pathlib.PurePosixPath(name)
+              assert name and not parts.is_absolute() and '..' not in parts.parts and '\\' not in name and ':' not in name and '\x00' not in name
+              return parts
+          def manifest(body):
+              result={}
+              for line in body.decode().splitlines():
+                  match=re.fullmatch(r'([a-f0-9]{64})  (?:\./)?(.+)',line);assert match
+                  name=str(safe(match[2]));assert name not in result;result[name]=match[1]
+              assert result;return result
+          digest=lambda body:hashlib.sha256(body).hexdigest()
+          for family in ['original','radix','academy']:
+              b=bindings[family];folder=out/'inputs'/family;zipbody=(folder/'input.zip').read_bytes();assert len(zipbody)==b['bytes'] and digest(zipbody)==b['zipSha'];target=folder/'evidence';target.mkdir()
+              with zipfile.ZipFile(folder/'input.zip') as archive:
+                  names=set()
+                  for member in archive.infolist():
+                      safe(member.filename);assert member.filename not in names;names.add(member.filename);mode=(member.external_attr>>16)&0xf000;assert not member.is_dir() and mode in [0,stat.S_IFREG]
+                  archive.extractall(target)
+              hashes=manifest((target/'evidence.sha256').read_bytes());actual={str(p.relative_to(target)) for p in target.rglob('*') if p.is_file()}-{'evidence.sha256'};assert actual==set(hashes) and 'evidence.sha256' not in hashes
+              for name,expected in hashes.items():assert digest((target/name).read_bytes())==expected
+              nested=[]
+              for name in sorted(actual):
+                  if not name.endswith('/evidence.sha256'):continue
+                  prefix=name[:name.rfind('/')+1];rows=manifest((target/name).read_bytes());children={p[len(prefix):] for p in actual if p.startswith(prefix) and p!=name};assert children==set(rows)
+                  for child,expected in rows.items():assert hashes[prefix+child]==expected
+                  nested.append({'file':name,'rows':len(rows),'sha256':hashes[name]})
+              assert (target/'head.txt').read_text().strip()==b['source'];assert (target/'final-holds.exit').read_text()=='0\n'
+              for name in ['generated.patch','generated-files.txt','build.transport','browser.transport','original-product-hold.log','operator-source-hold.log','generated-output-hold.log','dist-output-hold.log','transport-hold.log','source-untracked-after.txt']:
+                  assert (target/name).is_file() and (target/name).stat().st_size==0
+              for a,z in [('tracked-paths-before.bin','tracked-paths-after.bin'),('generated-before.sha256','generated-after.sha256'),('dist-before.sha256','dist-after.sha256'),('browser/dist-before.sha256','browser/dist-after.sha256')]:assert (target/a).read_bytes()==(target/z).read_bytes()
+              raw=(target/'browser/report.json').read_bytes();assert digest(raw)==b['reportSha'];report=json.loads(raw);assert report['source']==b['source'] and report['complete'] is True and not report['errors']
+              expected_count={'original':9,'radix':12,'academy':3}[family];assert len(report['cases'])==expected_count and all(c['complete'] is True and c['foundation']['status']=='PASS' for c in report['cases'])
+              if family=='original':assert report['status']=='ORIGINAL_GAPS_OBSERVED'
+              elif family=='radix':assert report['status']=='PASS' and report['healthy'] is True
+              else:assert report['status']=='BASELINE_FAILURES_OBSERVED' and report['healthy'] is False
+              source=manifest((target/'source-before.sha256').read_bytes());driver={'original':'playConsentDialogOriginal1447.mjs','radix':'playConsentRadixPrimaryBaseline1447.mjs','academy':'playConsentAcademyPrimaryBaseline1447.mjs'}[family];assert source['scripts/qa/'+driver]==digest((root/'scripts/qa'/driver).read_bytes())
+              native=out/'native-admissions'/f'{family}.native-admission.json';bridge=root/'scripts/qa/consent-dialog1447/evidence'/f'{family}.bridge.json';assert digest(native.read_bytes())==b['nativeSha'] and digest(bridge.read_bytes())==b['bridgeSha'];summary=json.loads(bridge.read_bytes());assert set(summary)=={'complete','source','run','artifact','driverSha256','reportSha256','normalizedFromSha256','allManifestsAndSourceHoldsAdmitted'}
+              assert summary['complete'] is True and summary['allManifestsAndSourceHoldsAdmitted'] is True and summary['source']==b['source'] and summary['run']==b['run'] and summary['artifact']==b['artifact'] and summary['driverSha256']==source['scripts/qa/'+driver] and summary['reportSha256']==b['reportSha'] and summary['normalizedFromSha256']==b['nativeSha']
+              receipts.append({'family':family,'source':b['source'],'run':b['run'],'artifact':b['artifact'],'zipBytes':b['bytes'],'zipSha256':b['zipSha'],'regularFiles':len(names),'rootRows':len(hashes),'nested':nested,'rawReportSha256':b['reportSha'],'completePreviouslyAdmittedBytesReused':True,'fullNativeAdmissionSha256':b['nativeSha'],'bridgeIsNotReplacementEvidence':True})
+          old=out/'inputs/original/evidence/browser/served-css-f3a73714c7f08ea22bf18e1d6264b86f241e9a836e3b02ba58625e1359837bff.css';assert old.stat().st_size==201613 and digest(old.read_bytes())=='f3a73714c7f08ea22bf18e1d6264b86f241e9a836e3b02ba58625e1359837bff'
+          (out/'baseline-input-admission.json').write_text(json.dumps({'complete':True,'rows':receipts,'oldCssSha256':digest(old.read_bytes()),'newTarQualificationClaimed':False},indent=2)+'\n')
+          PY
+          find "$OUT/inputs" -type f -print0 | sort -z | xargs -0 sha256sum > "$OUT/baseline-inputs.sha256"
+      - name: Isolated Playwright1.64 and exact known font cache
+        run: |
+          set -euo pipefail
+          browser_tools="$RUNNER_TEMP/consent-dialog1447-matrix-browser"
+          npm install --prefix "$browser_tools" --no-save --package-lock=false playwright@1.64.0 > "$OUT/browser-install.log" 2>&1
+          test ! -e node_modules/playwright;test ! -e node_modules/playwright-core
+          ln -s "$browser_tools/node_modules/playwright" node_modules/playwright
+          ln -s "$browser_tools/node_modules/playwright-core" node_modules/playwright-core
+          node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium > "$OUT/chromium-install.log" 2>&1
+          export FREE_KICK_FONT_CACHE="$PWD/$OUT/font-cache"
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > "$OUT/fonts.log" 2>&1
+          echo "FREE_KICK_FONT_CACHE=$FREE_KICK_FONT_CACHE" >> "$GITHUB_ENV"
+          font_sha=$(sha256sum "$FREE_KICK_FONT_CACHE/manifest.json" | cut -d ' ' -f 1)
+          test "$font_sha" = 3171c3241bbb489c22f51489f8b2cd94c880f071dfe9760a5c9aabdf48363d82
+          echo "FONT_CACHE_MANIFEST_SHA256=$font_sha" >> "$GITHUB_ENV"
+          find "$FREE_KICK_FONT_CACHE" -type f -print0 | sort -z | xargs -0 sha256sum > "$OUT/font-inputs.sha256"
+      - name: Real types and completed plain build under unchanged offline guard
+        id: build
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$PWD/$OUT/build.transport";: > "$SIM_OFFLINE_RECEIPT"
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$OUT/types.log" 2>&1
+          timeout --signal=TERM --kill-after=15s 6m npm run build > "$OUT/build.log" 2>&1
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+          find dist ! -type d ! -type f -print > "$OUT/dist-nonregular-before.txt";test ! -s "$OUT/dist-nonregular-before.txt"
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$OUT/dist-before.sha256";test -s "$OUT/dist-before.sha256"
+          for inventory in generated-before.sha256 dist-before.sha256;do
+            cp "$OUT/$inventory" "$OUT/$inventory.control";printf '%s\n' CONTROL_DIFFERENT_INVENTORY_LINE >> "$OUT/$inventory.control"
+            status=0;cmp "$OUT/$inventory" "$OUT/$inventory.control" > "$OUT/$inventory.control.log" 2>&1 || status=$?
+            printf '%s\n' "$status" > "$OUT/$inventory.control.exit";test "$status" -eq 1
+          done
+          tar -czf "$OUT/dist.tar.gz" -C dist .
+      - name: Seventy-two fresh contexts with measured old CSS and restored replay
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$PWD/$OUT/matrix.transport";: > "$SIM_OFFLINE_RECEIPT"
+          test ! -e "$MATRIX_OUT";mkdir "$OUT/methods"
+          for name in runConsentDialogMatrix1447.candidate.mjs matrix1447-copies.candidate.mjs matrix1447-styles.candidate.mjs hostLikeServer.matrix1447.candidate.mjs;do cp "scripts/qa/consent-dialog1447/$name" "$OUT/methods/$name";done
+          find "$OUT/methods" -type f -print0 | sort -z | xargs -0 sha256sum > "$OUT/method-inputs.sha256"
+          node <<'JS'
+          const fs=require('node:fs'),path=require('node:path'),{createHash}=require('node:crypto'),sha=b=>createHash('sha256').update(b).digest('hex'),root=process.cwd(),out=process.env.OUT,input=JSON.parse(fs.readFileSync(out+'/baseline-bindings.json'));
+          const drivers={original:{path:'scripts/qa/playConsentDialogOriginal1447.mjs',sha256:'ff59de8be52bffabdb462e4c15f5e946e21951e3e40f734a4f446e05fe61b250'},radix:{path:'scripts/qa/playConsentRadixPrimaryBaseline1447.mjs',sha256:'327fc27589c9e84cf70a27f877eb65e4bf9b16dce8a985031b0525e4a9dc6f19'},academy:{path:'scripts/qa/playConsentAcademyPrimaryBaseline1447.mjs',sha256:'2229fe57d04b14740f8f68ce0f9b1ff9932951372bb7e99ca5f708035378988b'}};
+          const sourceBody=fs.readFileSync(out+'/source-before.sha256'),config={repository:root,greenSource:process.env.GITHUB_SHA,outputName:process.env.MATRIX_OUT,sourceManifest:{file:path.resolve(out,'source-before.sha256'),sha256:sha(sourceBody),rows:sourceBody.toString().trimEnd().split('\n').length},methodPins:{'runConsentDialogMatrix1447.candidate.mjs':'08f06f62465111e38c6dbaca84502f2c37efb70166770a276c0147665db6e91a','matrix1447-copies.candidate.mjs':'a985c0237b50b50219cf98bcd504563fe623e0a1686dba895d78508ca4113fde','matrix1447-styles.candidate.mjs':'8bcce451190eb2939c014033f716d9ebdf45d0b449f540d55945a237b02b87f8'},offlineGuardSha256:'e60ff1534307e449ccef598e3b7470dcba58681b82cea4005cec7319f14f9221',loaderSha256:'94a07179be7ca6b9562d118b52c2d5d0dff0b6b2e29e49e4fea16fa2defb5a93',serverCandidate:{file:path.resolve(out,'methods/hostLikeServer.matrix1447.candidate.mjs'),sha256:'ea0117e8b464e8816f6f6ddd51a1509860ebc8b64da237d8876c4bca2d5f6171'},oldCss:{file:path.resolve(out,'inputs/original/evidence/browser/served-css-f3a73714c7f08ea22bf18e1d6264b86f241e9a836e3b02ba58625e1359837bff.css'),sha256:'f3a73714c7f08ea22bf18e1d6264b86f241e9a836e3b02ba58625e1359837bff'},drivers,baselines:{}};
+          for(const family of ['original','radix','academy']){const b=input[family];config.baselines[family]={source:b.source,run:b.run,artifact:b.artifact,driverSha256:drivers[family].sha256,report:{file:path.resolve(out,'inputs',family,'evidence/browser/report.json'),sha256:b.reportSha},originalAdmission:{file:path.resolve(out,'native-admissions',family+'.native-admission.json'),sha256:b.nativeSha},admission:{file:path.resolve('scripts/qa/consent-dialog1447/evidence',family+'.bridge.json'),sha256:b.bridgeSha}};}
+          fs.writeFileSync(out+'/matrix-config.json',JSON.stringify(config,null,2)+'\n');
+          JS
+          sha256sum "$OUT/matrix-config.json" > "$OUT/matrix-config.sha256"
+          status=0;timeout --signal=TERM --kill-after=15s 30m node "$OUT/methods/runConsentDialogMatrix1447.candidate.mjs" "$PWD/$OUT/matrix-config.json" > "$OUT/matrix.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$OUT/matrix.exit"
+          test "$status" -eq 0
+          node <<'JS'
+          const fs=require('node:fs'),assert=require('node:assert/strict'),dir=process.env.MATRIX_OUT,r=JSON.parse(fs.readFileSync(dir+'/matrix-report.json'));
+          assert.equal(r.source,process.env.GITHUB_SHA);assert.equal(r.complete,true);assert.equal(r.status,'MATRIX_OUTCOMES_READY_FOR_ROOT_COMPILED_DIFF_REVIEW');assert.equal(r.applicationQualified,false);assert.equal(r.requiredRootCompiledDifferenceReview,true);assert.equal(r.plannedContexts,72);assert.equal(r.actualContexts,72);assert.deepEqual(r.errors,[]);assert.equal(r.holds.unchanged,true);assert.equal(r.arms.length,3);assert.deepEqual(r.arms.map(a=>a.arm),['green','old','restored']);assert(r.arms.every(a=>a.complete&&a.families.length===3&&a.families.every(f=>f.complete)));assert.equal(r.serverExits.length,3);assert(r.serverExits.every(e=>e.complete&&e.plannedClose&&!e.alreadyFinished));assert(fs.statSync(dir+'/compiled-css.patch').size>0);
+          for(const arm of ['green','old','restored'])for(const family of ['original','radix','academy']){const raw=JSON.parse(fs.readFileSync(dir+'/'+arm+'-'+family+'/report.json'));assert.equal(raw.source,process.env.GITHUB_SHA);assert.equal(raw.complete,true);assert.deepEqual(raw.errors,[]);assert.equal(raw.cases.length,{original:9,radix:12,academy:3}[family]);assert(raw.cases.every(c=>c.complete&&c.foundation.status==='PASS'));assert.equal(fs.statSync(dir+'/'+arm+'-'+family+'.transport').size,0);}
+          fs.writeFileSync(process.env.OUT+'/matrix-summary.json',JSON.stringify({complete:true,source:r.source,status:r.status,contexts:r.actualContexts,actualFamilyRuns:9,actualServerExits:3,applicationQualified:false,rootCompiledCssReviewOwed:true,broaderReleaseQualificationOwed:true},null,2)+'\n');
+          JS
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+      - name: Always retain complete source, inputs, generated, dist and transport evidence
+        if: always()
+        run: |
+          set -uo pipefail
+          mkdir -p "$OUT";failed=0
+          if test -d "$MATRIX_OUT";then status=0;cp -a "$MATRIX_OUT" "$OUT/matrix" > "$OUT/matrix-copy.log" 2>&1 || status=$?;printf '%s\n' "$status" > "$OUT/matrix-copy.exit";test "$status" -eq 0 || failed=1;fi
+          status=0;sha256sum --check "$OUT/source-before.sha256" > "$OUT/source-hold.log" 2>&1 || status=$?;printf '%s\n' "$status" > "$OUT/source-hold.exit";test "$status" -eq 0 || failed=1
+          status=0;{
+            git ls-files -z -- . | sort -z > "$OUT/tracked-paths-after.bin" && cmp "$OUT/tracked-paths-before.bin" "$OUT/tracked-paths-after.bin" &&
+            git diff --exit-code HEAD -- . && git ls-files --others --exclude-standard -- . ":!$OUT/**" ":!$MATRIX_OUT/**" > "$OUT/source-untracked-after.txt" && test ! -s "$OUT/source-untracked-after.txt"
+          } > "$OUT/operator-source-hold.log" 2>&1 || status=$?;printf '%s\n' "$status" > "$OUT/operator-source-hold.exit";test "$status" -eq 0 || failed=1
+          status=0;{
+            find public scripts/data/lastmod.json scripts/data/guideHeadingsFrozen.json src/data/searchKeywords.json ! -type d ! -type f -print > "$OUT/generated-nonregular-after.txt" && test ! -s "$OUT/generated-nonregular-after.txt" &&
+            find public scripts/data/lastmod.json scripts/data/guideHeadingsFrozen.json src/data/searchKeywords.json -type f -print0 | sort -z | xargs -0 sha256sum > "$OUT/generated-after.sha256" && cmp "$OUT/generated-before.sha256" "$OUT/generated-after.sha256" &&
+            git diff --binary HEAD -- public scripts/data/lastmod.json scripts/data/guideHeadingsFrozen.json src/data/searchKeywords.json > "$OUT/generated.patch" && test ! -s "$OUT/generated.patch" &&
+            git diff --name-only HEAD -- public scripts/data/lastmod.json scripts/data/guideHeadingsFrozen.json src/data/searchKeywords.json > "$OUT/generated-files.txt" && test ! -s "$OUT/generated-files.txt"
+          } > "$OUT/generated-output-hold.log" 2>&1 || status=$?;printf '%s\n' "$status" > "$OUT/generated-output-hold.exit";test "$status" -eq 0 || failed=1
+          status=0;{
+            find dist ! -type d ! -type f -print > "$OUT/dist-nonregular-after.txt" && test ! -s "$OUT/dist-nonregular-after.txt" &&
+            find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$OUT/dist-after.sha256" && cmp "$OUT/dist-before.sha256" "$OUT/dist-after.sha256"
+          } > "$OUT/dist-output-hold.log" 2>&1 || status=$?;printf '%s\n' "$status" > "$OUT/dist-output-hold.exit";test "$status" -eq 0 || failed=1
+          for kind in dependencies proof-inputs css-source-inputs native-carriers native-evidence-inputs baseline-inputs font-inputs method-inputs matrix-config;do
+            status=0;sha256sum --check "$OUT/$kind.sha256" > "$OUT/$kind-hold.log" 2>&1 || status=$?;printf '%s\n' "$status" > "$OUT/$kind-hold.exit";test "$status" -eq 0 || failed=1
+          done
+          status=0;(
+            test -f "$OUT/build.transport" && test ! -s "$OUT/build.transport" && test -f "$OUT/matrix.transport" && test ! -s "$OUT/matrix.transport" &&
+            for arm in green old restored;do for family in original radix academy;do test -f "$MATRIX_OUT/$arm-$family.transport" && test ! -s "$MATRIX_OUT/$arm-$family.transport" || exit 1;done;done
+          ) > "$OUT/transport-hold.log" 2>&1 || status=$?;printf '%s\n' "$status" > "$OUT/transport-hold.exit";test "$status" -eq 0 || failed=1
+          printf '%s\n' "$failed" > "$OUT/final-holds.exit"
+          (cd "$OUT";find . -type f ! -path ./evidence.sha256 -print0 | sort -z | xargs -0 sha256sum) > "$OUT/evidence.sha256" || failed=1
+          exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: consent-dialog1447-matrix-${{ github.run_id }}-${{ github.run_attempt }}
+          path: consent-dialog1447-matrix-artifacts/
