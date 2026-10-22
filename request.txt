@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+sweepContrast-1: node scripts/sweepContrast.mjs 2>&1 | grep -E "FAIL|sweepContrast" | grep -v "src/components" | cut -c1-260; exit ${PIPESTATUS[0]}
+sweepContrast-2: node scripts/sweepContrast.mjs 2>&1 | grep -E "FAIL|sweepContrast" | grep -v "src/components" | cut -c1-260; exit ${PIPESTATUS[0]}

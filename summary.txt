@@ -1,0 +1,3 @@
+build exit=0 25s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+sweepContrast-1 exit=1 369s | sweepContrast: 15 failures
+sweepContrast-2 exit=1 381s | sweepContrast: 15 failures

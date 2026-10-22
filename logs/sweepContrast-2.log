@@ -1,0 +1,4 @@
+  FAIL: ...and 6 more source findings
+  FAIL: /soccer: 1 unreadable run: "12" 3.19 (needs 4.5) [90,99,113 on 11,13,19]
+  FAIL: /pro-basketball: 1 unreadable run: "10" 3.19 (needs 4.5) [90,99,113 on 11,13,19]
+sweepContrast: 15 failures
