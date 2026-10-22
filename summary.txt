@@ -1,0 +1,3 @@
+mut-poy exit=0 133s | simSoccerSeasonAwards: green
+mut-fair exit=0 131s | simSoccerSeasonAwards: green
+mut-grade exit=0 129s | simSoccerSeasonAwards: green

@@ -1,0 +1,4 @@
+#!serial
+mut-poy: node .rc/x/mutAwards.mjs poy && SIM_SEASON_AWARDS_SECTIONS=2 node scripts/simSoccerSeasonAwards.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-fair: node .rc/x/mutAwards.mjs fair && SIM_SEASON_AWARDS_SECTIONS=2 node scripts/simSoccerSeasonAwards.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-grade: node .rc/x/mutAwards.mjs grade && SIM_SEASON_AWARDS_SECTIONS=2 node scripts/simSoccerSeasonAwards.mjs; s=$?; git checkout -- src scripts; exit $s
