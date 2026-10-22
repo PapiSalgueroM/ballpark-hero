@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+readers1: s=0; for h in simBooks simFrontOfficeCuts simFrontOfficeSchedule simGmBooks simGmContracts simGmDesk simGmDeskHost simGmFarm simHomeFront simLeagueCaps simNbaLuxuryTax simNbaOpeningRatings; do node scripts/$h.mjs > /tmp/r-$h.log 2>&1; e=$?; echo "$h exit=$e | $(tail -1 /tmp/r-$h.log | cut -c1-120)"; [ $e -ne 0 ] && s=1; done; exit $s
+readers2: s=0; for h in simNbaRatingEvidence simNbaRotation simNbaRotationReset simNbaRotationUi simNbaSeasonStats simNbaTipOffForecast simOwnerMandate simTradeFinder simTradeTalks simGmGameDay simSaveKeeper; do node scripts/$h.mjs > /tmp/r-$h.log 2>&1; e=$?; echo "$h exit=$e | $(tail -1 /tmp/r-$h.log | cut -c1-120)"; [ $e -ne 0 ] && s=1; done; exit $s
+fences: s=0; for h in simLiveScores simNoInventedQuotes simNoInventedConduct simLegalPages simSingleFooter simCompletionOnce simNoDoubleRecord simDailyPuzzleContract simDailySaveHardening simWritesAreSent simFetchRetry simGoogleOnlyReturn simNavbarStatsReads simScoringCoverage simSiteSearch simResultMoment simGuideHeadings; do node scripts/$h.mjs > /tmp/f-$h.log 2>&1; e=$?; echo "$h exit=$e | $(tail -1 /tmp/f-$h.log | cut -c1-120)"; [ $e -ne 0 ] && s=1; done; exit $s
+known: for h in simGmXp simGmCalendar; do node scripts/$h.mjs > /tmp/k-$h.log 2>&1; echo "$h exit=$? | $(tail -1 /tmp/k-$h.log | cut -c1-140)"; done; exit 0
