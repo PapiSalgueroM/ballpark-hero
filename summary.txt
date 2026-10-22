@@ -1,0 +1,15 @@
+simCareerBanking exit=0 2s | simCareerBanking: green. Every career banks its pay, scales with it, and a broken save is repaired.
+simUsCareerBank exit=0 160s | simUsCareerBank: green. No call leaves a bank below zero in any of the four careers, savings pay a bill before anything is written off, and a reload never adds money.
+simCareerDecisionOutcome exit=0 7s | simCareerDecisionOutcome normal: intended assertions and independent ordinary/rivalry baseline passed.
+simUsSeasonCentre exit=0 180s | simUsSeasonCentre: 158 checks, 0 failed
+simUsPostseason exit=0 43s | simUsPostseason: 33 checks, 0 failed, 0 findings for the lead
+simNbaCareer exit=0 36s | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, life cards tagged, rivalry beats honest
+simNflCareer exit=0 5s | PASS: no crashes, every position produces stats, shop fully reachable, deck C drawn, every card dealt only where its words hold (its words, odds and money: simUsCareerDec
+simMlbCareer exit=0 39s | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, every life card tagged
+simNhlCareer exit=0 35s | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, life cards tagged
+simCareerRealism exit=0 15s | ALL CAREER REALISM CHECKS PASSED
+simNbaAwardsSense exit=0 264s | simNbaAwardsSense: 164 checks, 0 failed (full size), 263s
+simUsCareerWeight exit=0 0s | simUsCareerWeight: green. 31 checks: the four wrappers hand the board their own binding, no shared file or binding imports another sport, and every control fired.
+simSeasonReveal exit=0 1s | simSeasonReveal: green. The curtain celebrates only what the engine wrote, and only when it earned it.
+simCareerHall exit=1 2107s | simCareerHall: RED
+simUsCareerSummer exit=124 4200s | 6) balance: one child per sport, careers a seed nfl 12000, nba 8000, mlb 8000, nhl 2000, 3 seeds
