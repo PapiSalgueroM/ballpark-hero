@@ -1,0 +1,3 @@
+#!serial
+ctl-per10: SIM_CAREER_FORM_CONTROL=per10 node scripts/simCareerForm.mjs
+ctl-per10-engaged: SIM_CAREER_FORM_CONTROL=per10 SIM_CAREER_FORM_FLEET_KIND=engaged node scripts/simCareerForm.mjs

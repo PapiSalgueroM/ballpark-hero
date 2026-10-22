@@ -1,0 +1,2 @@
+ctl-per10 exit=1 870s | simCareerForm: RED, 1 failure(s)
+ctl-per10-engaged exit=1 881s | simCareerForm: RED, 3 failure(s)

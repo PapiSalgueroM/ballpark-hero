@@ -1,0 +1,9 @@
+4) the natural fleet (engaged): the round against the same tree without the morale step, same seeds
+   CONTROL per10: the rejected design, 10 morale points a step, in this tree's bundle
+   round     9600 careers, 220598 seasons, morale 98.7 as the engine reads it: Ballon d'Or 58.39 per 100 careers, league games 27.06, rating 7.08; legacy GOAT 29.6%, LEGEND 27.2%, GREAT 24.3%, SOLID PRO 8.8%, JOURNEYMAN 10.1%
+   no step   9600 careers, 219982 seasons, morale 98.7 as the engine reads it: Ballon d'Or 50.01 per 100 careers, league games 25.65, rating 6.85; legacy GOAT 26.8%, LEGEND 24.3%, GREAT 25.8%, SOLID PRO 11.8%, JOURNEYMAN 11.3%
+   shift: Ballon d'Or 8.38 per 100, league games 1.41, rating 0.23; legacy GOAT 2.9, LEGEND 2.9, GREAT -1.5, SOLID PRO -3.0, JOURNEYMAN -1.2 points
+   FAIL league games a season moved 1.41, past 1.1
+   FAIL the season rating moved 0.23, past 0.17
+   FAIL the Ballon d'Or rate moved 8.38 per 100 careers, past 8
+simCareerForm: RED, 3 failure(s)
