@@ -36,8 +36,9 @@
  * Controls (each must exit 1, and the harness first asserts the control
  * changed its input):
  *   CONN_CONTROL=rooney   puts Wayne Rooney back in a treble group (section 2)
- *   CONN_CONTROL=zidane   puts Zinedine Zidane back in puzzle-1's World Cup
- *                         final group, beside a Ballon d'Or group (section 4)
+ *   CONN_CONTROL=zidane   deals Zinedine Zidane (Ballon d'Or 1998) into another group
+ *                         of puzzle-1, which carries a Ballon d'Or group: section 4
+ *                         must report him as a second answer
  *   CONN_CONTROL=current  writes "Current" back into a dated group (section 1)
  *
  * Run: node scripts/simConnectionsFacts.mjs
@@ -132,12 +133,12 @@ if (CONTROL) {
       changed = true;
     }
   } else if (CONTROL === 'zidane') {
-    /* Zidane scored in two World Cup finals and won the 1998 Ballon d'Or */
+    /* Zidane won the 1998 Ballon d'Or: deal him into another group of a board that carries the Ballon d'Or */
     const b = boardById('puzzle-1');
-    const final = b?.groups.find(x => x.category === 'Scored in a World Cup Final');
     const ballon = b?.groups.find(x => x.category === "Won the Ballon d'Or");
-    if (final && ballon && !final.players.includes('Zinedine Zidane')) {
-      final.players[1] = 'Zinedine Zidane';
+    const other = b?.groups.find(x => x !== ballon && x.category === 'Over 100 Premier League assists');
+    if (ballon && other && !b.groups.some(x => x.players.includes('Zinedine Zidane'))) {
+      other.players[3] = 'Zinedine Zidane';
       changed = true;
     }
   } else if (CONTROL === 'current') {
@@ -204,6 +205,14 @@ console.log('3) every group this round wrote stands on two hosts');
 {
   /* the ledger's own facts first: a list, a squad, a title, a man's nation or clubs */
   for (const [key, list] of Object.entries(ledger.lists ?? {})) if (!hostsOk(list.sources)) fail(`list ${key} does not stand on two hosts`);
+  /* a list that is still moving names the men about to join it: none may share a board with it */
+  for (const [key, list] of Object.entries(ledger.lists ?? {})) {
+    const watch = new Set((list.watchNames ?? []).map(fold));
+    if (!watch.size) continue;
+    for (const b of boards) if (b.groups.some(g => list.labels.includes(g.category))) {
+      for (const g of b.groups) for (const p of g.players) if (watch.has(fold(p))) fail(`${b.id}: ${p} is about to join "${list.labels[0]}" (${key} watch), so he cannot share a board with it`);
+    }
+  }
   for (const [key, sq] of Object.entries(ledger.squads ?? {})) {
     if (!hostsOk(sq.sources)) fail(`squad ${key} does not stand on two hosts`);
     if (sq.wonLeague && !hostsOk(sq.wonLeague)) fail(`the title of ${key} does not stand on two hosts`);
