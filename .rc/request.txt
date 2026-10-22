@@ -1,0 +1,2 @@
+readprobe: node .rc/x/readprobe1554.mjs
+readprobe-big: SEEDS=60 SEASONS=10 node .rc/x/readprobe1554.mjs
