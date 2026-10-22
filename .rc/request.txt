@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simCfbDynasty: node scripts/simCfbDynasty.mjs
+simCfbStaff: node scripts/simCfbStaff.mjs
+simCbbStaff: node scripts/simCbbStaff.mjs
+simCollegeSeat: node scripts/simCollegeSeat.mjs
+vitest-college: node_modules/.bin/vitest run src/components/cfb-dynasty src/components/college-dynasty src/components/cbb-dynasty --testTimeout=300000 --hookTimeout=120000
