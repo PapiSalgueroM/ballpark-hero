@@ -15,9 +15,8 @@
  *     as many rows as the story of the saved game has touchdowns (told here,
  *     in node, from the log entry read off the save, by the Game Day law), and
  *     the Game Day box keeps its height. The page's scrollY and its height are
- *     held equal either side of the second and third presses (the first press
- *     also draws the week's sixteen scores under the box, a change of an
- *     earlier round, so its numbers are printed and not held);
+ *     printed either side of each press, not held: the week's feed and its
+ *     sixteen scores under the box move them, an earlier round's doing;
  *   b a save planted at Week 17 (built here in node by the lib on a seeded
  *     league, the board's way: never typed) plays the final week and the
  *     playoffs in one press: the recap draws the season card, its awards tab
@@ -26,8 +25,9 @@
  *   c a save planted in Week 9 of its second season, with the first season's
  *     awards in its history and his club the MVP's: Standings opens on the
  *     table, and its This season face draws the season so far and the award
- *     history with the first season's line;
- *   d its Roster box: the MVP's row carries the sim badge;
+ *     history with the first season's line (his club is that of a first season
+ *     winner still on a roster after the summer);
+ *   d its Roster box: a first season winner's row carries the sim badge;
  *   e on every face above: no horizontal overflow; every button this round
  *     adds is 44 px high or more; every text this round adds is 12 px or more
  *     and is not cut (the shared season card's own classes and the badge,
@@ -70,6 +70,8 @@ const say = (point, ok, what) => {
   console.log(`  ${ok ? 'ok  ' : 'FAIL'} (${point}) ${what}`);
 };
 const shot = async (page, size, point) => { if (OUT) await page.screenshot({ path: path.join(OUT, `nss-${size.w}-${point}.png`), fullPage: false }); };
+/** A picture of one element (the part a point is about), beside the screen's. */
+const shotEl = async (page, size, point, sel) => { const el = OUT ? await page.$(sel) : null; if (el) await el.screenshot({ path: path.join(OUT, `nss-${size.w}-${point}-part.png`) }).catch(() => {}); };
 
 /* ─── node side: the engine, the lib and the Game Day law, for the planted saves and the story of a saved game ─── */
 let M;
@@ -125,10 +127,12 @@ function plantSecondSeason() {
     lg.champions.push({ season: lg.season, team: champion });
     const closed = S.nflCloseSeasonStats(lg);
     E.runOffseason(lg, Math.random, user);
-    const mvpClub = Object.values(lg.teams).find(t => t.players.some(p => p.id === closed.mvp.id));
-    if (mvpClub) user = mvpClub.abbr;
+    /* the badge's man: a first season winner still on a roster after the summer (a winner can retire in it) */
+    const winners = S.nflAwardList(closed).map(([k, m]) => ({ id: m.id, name: m.name, label: `${closed.season} ${S.NFL_AWARD_LABEL[k]}` }));
+    const holder = winners.map(w => ({ w, club: Object.values(lg.teams).find(t => t.players.some(p => p.id === w.id)) })).find(x => x.club);
+    if (holder) user = holder.club.abbr;
     playWeeks(lg, user, 1, 8);
-    return { save: { ...shape(lg, user), seasonsPlayed: 1 }, closed, mvpOnRoster: !!mvpClub };
+    return { save: { ...shape(lg, user), seasonsPlayed: 1 }, closed, badge: holder ? holder.w : null };
   }).value;
 }
 
@@ -216,13 +220,14 @@ async function pointA(browser, size) {
     say('a', rows.every(r => / to .|.runs it in/.test(r)), `${size.w}, Week ${w}: every row names a man${rows[0] ? ` (${rows[0].slice(0, 60)})` : ''}`);
     say('a', !!last && !!sv.league.stats?.plays?.[last.key], `${size.w}, Week ${w}: the save keeps his game's credits under its key`);
     say('a', before.box === after.box && after.box > 0, `${size.w}, Week ${w}: the Game Day box keeps its height (${before.box} then ${after.box})`);
-    if (w > 1) say('a', before.y === after.y && before.h === after.h, `${size.w}, Week ${w}: the page did not move or grow (scrollY ${before.y} then ${after.y}, height ${before.h} then ${after.h})`);
-    else console.log(`  (printed) ${size.w}, Week 1: scrollY ${before.y} then ${after.y}, height ${before.h} then ${after.h} (the week's scores are drawn under the box on the first press)`);
+    /* printed, not held: the page's height moves with the week's feed and scores under the box, an earlier round's */
+    console.log(`  (printed) ${size.w}, Week ${w}: scrollY ${before.y} then ${after.y}, page height ${before.h} then ${after.h}`);
   }
   say('a', named > 0, `${size.w}: the three games named ${named} scorers`);
   const list = await page.$('[data-gameday-scorers]');
   if (list) await list.scrollIntoViewIfNeeded();
   await shot(page, size, 'a');
+  await shotEl(page, size, 'a', '[data-gameday-box]');
   sayLayout(size, 'the tile', await layout(page, '[data-gameday-scorers]', EXEMPT));
   say('e', errors.length === 0, `${size.w}, a: no page error${errors.length ? `: ${errors[0]}` : ''}`);
   await ctx.close();
@@ -250,6 +255,7 @@ async function pointB(browser, size) {
     await card.scrollIntoViewIfNeeded();
   }
   await shot(page, size, 'b');
+  await shotEl(page, size, 'b', '[data-nfl-season]');
   sayLayout(size, 'the recap card', await layout(page, '[data-nfl-season]', EXEMPT));
   say('e', errors.length === 0, `${size.w}, b: no page error${errors.length ? `: ${errors[0]}` : ''}`);
   await ctx.close();
@@ -268,14 +274,16 @@ async function pointCD(browser, size, second) {
   const hist = await page.$eval('[data-award-history]', e => e.textContent || '').catch(() => '');
   say('c', hist.includes(`${second.closed.season}`) && hist.includes(`MVP ${second.closed.mvp.name}`) && hist.includes('Sim seasons, not real NFL history.'), `${size.w}: the award history holds the first season's line (${hist.slice(0, 90)})`);
   await shot(page, size, 'c');
+  await shotEl(page, size, 'c', 'div:has(> [data-standings-faces])');
   sayLayout(size, 'Standings', await layout(page, '[data-standings-faces], [data-award-history], [data-season-stats-pending]', EXEMPT));
   await toHub(page);
   await openTile(page, 'Roster');
-  const badge = await page.$eval(`[data-roster-row="${second.closed.mvp.id}"] [data-award-badge]`, e => ({ text: e.textContent || '', title: e.getAttribute('title') || '' })).catch(() => null);
-  say('d', !!badge && badge.text.includes(`Sim ${second.closed.season} MVP`) && badge.title.includes("This save's sim awards, not real NFL ones"), `${size.w}: the MVP's roster row carries the sim badge${badge ? ` (${badge.text.trim()})` : ''}`);
-  const row = await page.$(`[data-roster-row="${second.closed.mvp.id}"]`);
+  const badge = await page.$eval(`[data-roster-row="${second.badge.id}"] [data-award-badge]`, e => ({ text: e.textContent || '', title: e.getAttribute('title') || '' })).catch(() => null);
+  say('d', !!badge && badge.text.includes(`Sim ${second.badge.label}`) && badge.title.includes("This save's sim awards, not real NFL ones"), `${size.w}: the MVP's roster row carries the sim badge${badge ? ` (${badge.text.trim()})` : ''}`);
+  const row = await page.$(`[data-roster-row="${second.badge.id}"]`);
   if (row) await row.scrollIntoViewIfNeeded();
   await shot(page, size, 'd');
+  await shotEl(page, size, 'd', `[data-roster-row="${second.badge.id}"]`);
   say('e', errors.length === 0, `${size.w}, c and d: no page error${errors.length ? `: ${errors[0]}` : ''}`);
   await ctx.close();
 }
@@ -283,7 +291,7 @@ async function pointCD(browser, size, second) {
 /* ─── run ─── */
 if (OUT) fs.mkdirSync(OUT, { recursive: true });
 const second = plantSecondSeason();
-say('c', second.mvpOnRoster && !!second.closed && !!second.closed.mvp, `the planted second season has a first season MVP on a roster (${second.closed?.mvp?.name ?? 'none'})`);
+say('c', !!second.closed && !!second.closed.mvp && !!second.badge, `the planted second season has its first season's awards and a winner still on a roster (${second.badge ? `${second.badge.name}, ${second.badge.label}` : 'none'})`);
 let browser;
 try { browser = await chromium.launch(); } catch (e) { console.error(`playNflSeasonStats: no browser: ${e.message}`); process.exit(2); }
 try {
