@@ -1,0 +1,27 @@
+1) The order is 1 to n, and exactly one pick is the player own
+   6 runs checked, every one ordered and with one owner
+2) The steps are exactly the picks the engine made, no more and no fewer
+   4 runs compared against their own input, every pick accounted for
+3) A malformed pick yields an empty or shortened run, never a throw
+   10 malformed inputs handled without a throw
+4) Picks land in order, and the whole run stays short enough not to be a wait
+   9 picks, step 400ms, lead 180ms, whole run 3780ms
+   40 rivals capped to 9 steps at 3780ms
+5) All four front offices build a reveal and capture the rival picks
+   4 of 4 boards capture the rival picks, hand them over and render the reveal
+   the card is shared and honours prefers-reduced-motion
+
+simDraftNight: green. Every pick the engine made is shown, none is invented, and the run cannot become a wait.
+  FAIL: 3 rivals produced 2 steps, expected 4
+  FAIL: 6 rivals produced 2 steps, expected 7
+  FAIL: 12 rivals produced 2 steps, expected 9
+  FAIL: 1 pick(s) the engine made never reached the reveal: DAL|Prospect 2|CB|62
+  FAIL: 4 pick(s) the engine made never reached the reveal: DAL|Prospect 2|CB|62 , GB|Prospect 3|C|63 , NYG|Prospect 4|G|64
+  FAIL: 5 pick(s) the engine made never reached the reveal: DAL|Prospect 2|CB|62 , GB|Prospect 3|C|63 , MIA|Prospect 6|WR|66
+  FAIL: a run with two junk rivals produced 2 steps, expected 3
+NEGATIVE CONTROL dropai was on; 7 finding(s). A control run is expected to be red.
+  FAIL: a full run takes 36180ms, over the 5000ms ceiling, so draft night has become a wait
+NEGATIVE CONTROL slowsteps was on; 1 finding(s). A control run is expected to be red.
+  FAIL: NBA does not hand the captured rivals to buildDraftNight, so the picks it collected go nowhere
+  FAIL: only 3 of 4 front offices show draft night
+control "norivals": both reds were seen (the source check for the NBA on the copy, and the behaviour test red by name with the copy loaded). The check works.

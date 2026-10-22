@@ -1,0 +1,40 @@
+1) what must not move: the season before the draft, and the desk off fixture
+   1a: 30 seasons to the draft, desk on, every club the user once: league, desk and 315516 draws held to the base 48cb9d4b
+   1b: git diff --quiet 48cb9d4b -- scripts/data/nbaGmDeskFixture.json scripts/simNbaGmDesk.mjs scripts/simNbaDraftCapital.mjs src/lib/nbaGmDesk.ts: exit 1, one of them MOVED since the base (printed, not a check)
+6) the class: today's twelve, then the curve, slots plus four, never over 70
+   1500 classes of 64 for 60 slots: today's twelve found in every one, 78000 men after them held to the curve rating by rating (worst 1.41 standard errors, band 4.5)
+   mean true rating by ten slots: 83.05, 71.80, 68.27, 67.94, 67.66, 67.08, 66.84; steps 11.25, 3.53, 0.33, 0.28, 0.58, 0.25
+2) the lottery through the bind: the sixteen off the numbers, drawn every season, the table's chances
+   30 closed seasons, a lottery drawn on 30 (0 with no level records in the field); 20 of them, 10000 keyed lotteries each: 280 club shares, the worst 2.99 standard errors from the table (band 4.5)
+3) the slot is the truth: every pick used once by its holder at its first owner's place
+   30 drafts, 1800 picks: 150 of the year's picks moved first (16 his), a club with three or more 30 times, a club with none 30 times; on the clock 46 times; 566 rival rows shown, every one on its club at his scout's read
+4) drawn once: the block survives a round trip, every press, a second open and a swapped table
+   30 nights: each opened twice to the same block, read back after a JSON round trip, unchanged by every press; 30 opened again after Continue and answered as they stood; 10 drafts replayed with the table swapped under the block
+5) the incentive: the worse the finish, the earlier and the better his first selection
+   2700 nights over 30 seasons x 3 classes (450 a band), each club the GM once a class, in 9.2 s
+   new, by finish worst first, his first selection's pick and true rating: 1-5: #3.9 85.0, 6-10: #7.5 82.8, 11-15: #13.3 74.8, 16-20: #17.4 71.1, 21-25: #22.9 70.7, 26-30: #27.9 70.3
+   old, the same clubs today: 1-5: #1.0 85.8, 6-10: #1.0 85.7, 11-15: #1.0 85.8, 16-20: #1.0 85.7, 21-25: #1.0 85.7, 26-30: #1.0 85.7
+   new steps: later by 3.59, 5.79, 4.15, 5.50, 5.01 places (errors 0.26, 0.29, 0.30, 0.21, 0.09); worse by 2.19, 7.98, 3.70, 0.45, 0.33 rating (errors 0.27, 0.33, 0.26, 0.13, 0.08)
+8) the fallback: a block broken mid draft finishes the old way on a valid league
+   50 blocks broken mid draft (year, order, a slot, made past the end, seen): never current, no press ran, 50 finished the old way to a valid league
+9) need: a club short at a position leans to it, and never past a better read by more than the weight
+   1754 rival choices, 1754 of them the rule's man on the engine's grade; none passed a better grade by more than 2; taken when short vs not, in points: G 39.3 (247/1507), F 41.3 (655/1099), C 31.0 (872/882)
+10) the shared half names no sport; neither library draws from Math.random or carries an address
+   src/lib/gmEarnedDraft.ts: 18 imports, all the lift's; no sport named; neither library draws from Math.random or carries an address
+12) the deals survive the summer: every draft night deal is played, a second rounder's one season at the minimum
+   1800 draft night deals followed through the summer after them: 46 his own (every one still his, none on his re-sign desk), 1745 on their clubs with the deal less one season, 55 rivals' men waived by the summer's trim; 858 second rounders (30 his) into their one season at the minimum
+11) the judge on known answers: the two arm table's verdict on both sides of every edge of every band
+   79 known answers judged over 7 lines (S1 at 5 two, S1 at 10 range, S2 two, S3 print, S4 floor, S6 dead cap, S6 payers two), the fleet's size and S5's pooled rise; the table's assertion held to 71 verdicts
+   section 1: green
+   section 6: green
+   section 2: green
+   section 3: green
+   section 4: green
+   section 5: green
+   section 8: green
+   section 9: green
+   section 10: green
+   section 12: green
+   section 11: green
+   11 sections ran (1, 6, 2, 3, 4, 5, 8, 9, 10, 12, 11), 212237 checks
+simNbaEarnedDraft: green.
