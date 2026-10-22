@@ -1,0 +1,3 @@
+deck-a: SIM_SOCCER_DECK_SECTIONS=1,2,3,4,5 node scripts/simSoccerDeck.mjs
+deck-b: SIM_SOCCER_DECK_SECTIONS=6,7,9,10 node scripts/simSoccerDeck.mjs
+deck-c: SIM_SOCCER_DECK_SECTIONS=8 node scripts/simSoccerDeck.mjs
