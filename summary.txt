@@ -1,0 +1,4 @@
+deckc-head exit=1 32s | simUsCareerDeckC: 4 failure(s)
+deckc-nof1 exit=0 33s | simUsCareerDeckC: all checks passed
+deckc-rec exit=0 25s | simUsCareerDeckC: all checks passed
+deckc-nobs exit=0 25s | simUsCareerDeckC: all checks passed
