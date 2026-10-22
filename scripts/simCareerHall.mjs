@@ -304,7 +304,9 @@
                     the majority call against firstBallotChance: ballotflip
                     (the ballot draws against the wrong side of the chance).
      19. base, words (a) the base terms are the ledger's and the median
-                    career of a base position earns what was measured. (b)
+                    career of a base position earns what was measured,
+                    read since Round 1530 on the fleet of 17 (a) pooled,
+                    never on one seed (control basedrift). (b)
                     the Hall share on 2 is at or over 1 and under its
                     ceiling (never over 45 percent: that is the lead's call).
                     (c) the two lines of the "?" carry the rule's numbers,
@@ -351,6 +353,35 @@
        Each floor is half the smallest of the six.
      base, median credit: TE 110.5 to 113.3, LB 107.9 to 110.8, CB 107.5 to
        111.9, EDGE 107.1 to 110.2 (bands: the range widened by half).
+     ROUND 1530, 19 (a) READ ON THE FLEET. Those bands are six SINGLE run
+       medians widened by half, and six runs undersold one run's spread.
+       Measured on GitHub runners 2026-10-21 on main 2736e054, 48 measuring
+       runs a sport at 2000 careers (the default seed and SIM_SEED 1 to 47):
+       one run's median, mean and deviation, and the runs outside the band:
+       nfl (about 250 careers a position) TE 111.8 and 1.43 (2 of 48), LB
+       110.3 and 1.32 (2), CB 110.2 and 1.67 (0), EDGE 109.1 and 1.62 (3);
+       nba (about 400) PG 20.72 and 0.30 (0), SG 22.47 and 0.30 (8), SF
+       21.80 and 0.32 (2), PF 20.28 and 0.29 (4), C 18.33 and 0.25 (5). The
+       default seed itself read TE 108.8 against 109.17, so the whole nfl run
+       was red on main on healthy code. Pooled over the check fleet (seeds 6
+       to 29, about 6,000 careers a position in football, 9,600 in
+       basketball), the median against its band, and the nearer edge in
+       errors of a pooled median (a run's deviation over the root of 24):
+       TE 112.05 (109.17 to 114.70, 9.1 errors), LB 109.86 (106.43 to 112.28,
+       9.0), CB 109.97 (105.33 to 114.11, 12.2), EDGE 108.97 (105.55 to
+       111.82, 8.6), PG 20.68 (19.45 to 21.74, 17.0), SG 22.46 (21.83 to
+       22.76, 4.8, the least), SF 21.83 (21.21 to 23.24, 9.4), PF 20.25
+       (19.90 to 21.05, 5.8), C 18.28 (17.97 to 18.71, 6.1). Other fleets
+       agree: the even seeds, the odd seeds and seeds 30 to 47, each pooled,
+       read TE 111.3 to 112.3 and SG 22.38 to 22.49. Seven of football's 192
+       one run readings and 19 of basketball's 240 fell outside their bands.
+       Baseball and hockey band no base.
+     Control basedrift lowers football's TE by 4.5 and basketball's PG by
+       1.6, in memory where 19 (a) reads them. Pooled that is TE 107.55 and PG
+       19.08, 5.5 and 6.0 errors under the band, so the fleet must catch it;
+       one seed alone stays inside the band on 4 of the fleet's 24 seeds (TE)
+       and 3 of 24 (PG), so the old one seed check could miss it. The run
+       prints both counts.
      points paid (the legacy is the finished game's score), median on 1 and
        on 2: nfl 293 to 314 and 348 to 372, nba 348 to 362 and 356 to 368,
        mlb 420 to 434 and 424 to 436, nhl 356 to 372 and 360 to 375.
@@ -555,7 +586,8 @@ const CONTROLS = {
   // man at a base position (the reliever's base is gone, basketball and hockey have none), and there it refuses.
   basebig: { cur: true, file: `${SPORT}MyCareer.ts`, re: { nfl: /(\n    EDGE: \{\s+terms: \[\{ stat: 'sacks', per: )2\.5( \}, \{ stat: 'tackles', per: )41( \}, \{ stat: 'forcedFum', per: )1\.3( \}\],)/ }[SPORT] ?? /a string that is in no file, so this control refuses to run here/, to: (m, a, b, c, d) => `${a}0.5${b}8.2${c}0.26${d}` },
   // Section 19 (a), for every sport: a base term planted at a position the ledger gives none (a point guard's assists, a kicker's field goals, the reliever's saves back, a defenceman's assists).
-  plantbase: { cur: true, file: `${SPORT}MyCareer.ts`, re: { nba: /(\n    PG: \{\s+terms: \[\{ stat: 'pts', per: 430 \})(\],)/, nfl: /(\n    K: \{\s+terms: \[)(\],)/, mlb: /(\n    RP: \{ terms: \[\{ stat: 'hr', per: 4 \}, \{ stat: 'rbi', per: 60 \})(\] \},)/, nhl: /(\n    D: \{\s+terms: \[\{ stat: 'points', per: 18 \})(\],)/ }[SPORT], to: (m, a, b) => `${a}${SPORT === 'nfl' ? '' : ', '}{ stat: '${{ nba: 'ast', nfl: 'fgMade', mlb: 'saves', nhl: 'assists' }[SPORT]}', per: 8 }${b}` },
+  // Round 1530: the point guard's row has carried NBA_NEW_LINE_TERM since Round 1103 (03d52fb2), so the basketball string had stopped matching and the control refused; the assists now go after that term.
+  plantbase: { cur: true, file: `${SPORT}MyCareer.ts`, re: { nba: /(\n    PG: \{\s+terms: \[\{ stat: 'pts', per: 430 \}, NBA_NEW_LINE_TERM)(\],)/, nfl: /(\n    K: \{\s+terms: \[)(\],)/, mlb: /(\n    RP: \{ terms: \[\{ stat: 'hr', per: 4 \}, \{ stat: 'rbi', per: 60 \})(\] \},)/, nhl: /(\n    D: \{\s+terms: \[\{ stat: 'points', per: 18 \})(\],)/ }[SPORT], to: (m, a, b) => `${a}${SPORT === 'nfl' ? '' : ', '}{ stat: '${{ nba: 'ast', nfl: 'fgMade', mlb: 'saves', nhl: 'assists' }[SPORT]}', per: 8 }${b}` },
   // Section 17 (d): every paying family added up instead of the best one taken.
   twofamilies: { file: 'careerHallOfFame.ts', from: 'if (credit > 0 && (!standout || credit > standout.credit)) standout = { stat: s.stat, label: s.label, total, credit };', to: 'if (credit > 0) standout = { stat: s.stat, label: s.label, total, credit: credit + (standout ? standout.credit : 0) };' },
   // Section 15 (d): one to mark of the calibration 2 table plus one (too small to move a recorded save: the recorded table itself must catch it).
@@ -567,6 +599,8 @@ const CONTROLS = {
   // Section 17 (a), Round 1301: every career total of the fleet times 1.02, and divided by it (done in memory where the fleet is read; the string below only has to be there).
   statsup: { file: 'careerHallOfFame.ts', from: 'export type HallCalibration = 1 | 2 | 3;', to: 'export type HallCalibration = 1 | 2 | 3;' },
   statsdown: { file: 'careerHallOfFame.ts', from: 'export type HallCalibration = 1 | 2 | 3;', to: 'export type HallCalibration = 1 | 2 | 3;' },
+  // Section 19 (a), Round 1530: one base position's credit lowered by BASE_DRIFT, in memory where 19 (a) reads it (the string below only has to be there). Football and basketball only.
+  basedrift: { file: 'careerHallOfFame.ts', from: 'export type HallCalibration = 1 | 2 | 3;', to: 'export type HallCalibration = 1 | 2 | 3;' },
   // Section 18 (c): the ballot draws its first call against the wrong side of the chance.
   ballotflip: { file: 'careerHallOfFame.ts', from: 'if (rng() >= firstBallotChance(cand.score, lines)) {', to: 'if (rng() >= 1 - firstBallotChance(cand.score, lines)) {' },
   // Section 19 (b): calibration 2 pays every season double, so the Hall fills past its ceiling.
@@ -579,6 +613,11 @@ const CONTROLS = {
   v1drift: { file: `${SPORT}MyCareer.ts`, re: /(_LEGACY_V1: LegacyWeights = \{\s+awards: \{ \w+: )(\d+)/, to: (m, a, n) => `${a}${Number(n) + 1}` },
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown SIM_CONTROL ${CONTROL}`); process.exit(2); }
+/* Control basedrift (Round 1530, section 19 (a)): the base position it moves and by how much, in credit
+   points. The size is one a single seed's median can miss and the fleet's pooled median cannot: the
+   header's Round 1530 block has the measured numbers behind it. Baseball and hockey band no base. */
+const BASE_DRIFT = { nfl: { pos: 'TE', by: -4.5 }, nba: { pos: 'PG', by: -1.6 } };
+if (CONTROL === 'basedrift' && !BASE_DRIFT[SPORT]) { console.error(`simCareerHall ${SPORT}: basedrift refuses to run, the ledger bands no base position in this sport, so there is nothing to move`); process.exit(2); }
 /* Round 1301. The table a career retiring today is read on, by its name in the
    sport's own file: the last entry of its <SPORT>_LEGACY_WEIGHTS map (the NHL's
    is NHL_LEGACY_V3; football, basketball and baseball map calibration 3 to
@@ -1519,7 +1558,7 @@ console.log(`  17 (a) marks, this run's one seed (printed, never the check): ${t
 const FLEET = MARKS.fleet ?? null;
 const FL = FLEET?.sports?.[SPORT] ?? null;
 /* The controls that aim at [marks] or must leave it green. Any other control is judged on its own check, so it plays no fleet. */
-const FLEET_CONTROLS = ['markdrift', 'todrift', 'nostandout', 'oldmarks', 'statsup', 'statsdown'];
+const FLEET_CONTROLS = ['markdrift', 'todrift', 'nostandout', 'oldmarks', 'statsup', 'statsdown', 'basedrift'];
 /* A measuring run (a child of the fleet, or a row dump for the generator) plays no fleet of its own. */
 const MEASURING = Boolean(process.env.SIM_DUMP_ROWS) || process.env.SIM_FLEET_CHILD === '1';
 const fleetRuns = !MEASURING && (!CONTROL || FLEET_CONTROLS.includes(CONTROL));
@@ -1527,6 +1566,8 @@ const fleetRuns = !MEASURING && (!CONTROL || FLEET_CONTROLS.includes(CONTROL));
 const STATS_STEP = 1.02;
 const fleetScale = CONTROL === 'statsup' ? STATS_STEP : CONTROL === 'statsdown' ? 1 / STATS_STEP : 1;
 let fleetOk = false, fleetDetail = 'the fleet was not played on this run';
+/* Round 1530: the fleet's rows, one array a seed, kept for 19 (a) when every seed left a full row file. */
+let fleetRows = null;
 if (fleetRuns && !FL) fleetDetail = `the ledger holds no fleet band for ${SPORT}: record one (MARKS_FLEET, the header of scripts/genCareerHallMarks.mjs)`;
 if (fleetRuns && FL) {
   /* SIM_FLEET_SEEDS=a-b plays another fleet against the same reference (the out of sample confirmation). */
@@ -1561,6 +1602,7 @@ if (fleetRuns && FL) {
     bySeed.push(r);
   }
   const K = bySeed.length, R = FLEET.refSeeds.length;
+  if (bad.length === 0 && K === seeds.length && K >= 10) fleetRows = bySeed;
   const err = sd => sd * Math.sqrt(1 / K + 1 / R);
   const bandOf = m => ({ lo: Math.max(0, m.mean - FLEET.z * err(m.sd)), hi: m.mean + FLEET.z * err(m.sd) });
   let fa = 0, fb = 0, fn = 0;
@@ -1666,8 +1708,21 @@ console.log(`  17 (d) cap: ${capMiss} of ${careers.length} careers off the resta
 
 /* 19 (a). The base: the table's added terms are the ledger's, the median
    career of each base position earns what was measured, and a position the
-   ledger gives no base has none (the kicker). */
+   ledger gives no base has none (the kicker).
+   Round 1530: the median is read on the fleet of 17 (a), never on this run's
+   one seed. The band (outcome.baseCredit) is the range of six single run
+   medians widened by half its width each side, and six runs undersold the
+   spread of one run: at 2000 careers one seed's median wanders past that band
+   on healthy code (the default seed read nfl TE 108.8 against 109.17 on main
+   2736e054). The fleet's 24 seeds pooled (about 48,000 careers) read the
+   median of the position itself, which the six runs were measuring, with
+   about a fifth of one run's wander; the header has the numbers.
+   This run's one seed, and how many of the fleet's seeds alone the band
+   would have passed, are printed and judge nothing. A run that plays no
+   fleet (a measuring run, or a control aimed at another check) does not
+   judge the median; one that should have and has no full set of rows is red. */
 const baseOf = pos => (W2.positions[pos] ?? W2.positions['*']).terms.slice((W1.positions[pos] ?? W1.positions['*']).terms.length);
+const drift = CONTROL === 'basedrift' ? BASE_DRIFT[SPORT] : null;
 const baseMiss = [], baseSeen = [];
 for (const pos of Object.keys(ML.base)) {
   if (!decided(pos, 'base', null, 'dropped')) continue;
@@ -1677,9 +1732,19 @@ for (const pos of Object.keys(ML.base)) {
 for (const [pos, band] of Object.entries(ML.outcome.baseCredit)) {
   const terms = baseOf(pos);
   if (!sameJson(terms, ML.base[pos].map(t => ({ stat: t.stat, per: t.per })))) baseMiss.push(`${pos} terms off the ledger`);
-  const med = medOf(rows.filter(r => r.pos === pos).map(r => terms.reduce((s, t) => s + (r.t[t.stat] ?? 0) / t.per, 0)));
-  baseSeen.push(`${pos} ${med.toFixed(1)} (${band.lo.toFixed(1)} to ${band.hi.toFixed(1)})`);
-  if (!inBand(med, band)) baseMiss.push(`${pos} median base credit ${med.toFixed(1)}`);
+  const shift = drift && drift.pos === pos ? drift.by : 0;
+  const credit = r => terms.reduce((s, t) => s + (r.t[t.stat] ?? 0) / t.per, 0) + shift;
+  const one = medOf(rows.filter(r => r.pos === pos).map(credit));
+  const range = `${band.lo.toFixed(1)} to ${band.hi.toFixed(1)}`;
+  if (fleetRows) {
+    const pooled = medOf(fleetRows.flatMap(run => run.filter(r => r.pos === pos).map(credit)));
+    const alone = fleetRows.filter(run => inBand(medOf(run.filter(r => r.pos === pos).map(credit)), band)).length;
+    baseSeen.push(`${pos} ${pooled.toFixed(2)} pooled over ${fleetRows.length} seeds (${range}${shift ? `; shifted ${shift} by the control` : ''}; this run's one seed ${one.toFixed(1)}, the fleet's seeds alone inside the band ${alone} of ${fleetRows.length})`);
+    if (!inBand(pooled, band)) baseMiss.push(`${pos} pooled median base credit ${pooled.toFixed(2)}`);
+  } else {
+    baseSeen.push(`${pos} ${one.toFixed(1)} on this run's one seed, NOT JUDGED (${range})`);
+    if (fleetRuns) baseMiss.push(`${pos}: the fleet left no full set of rows, so the median was not judged`);
+  }
 }
 for (const pos of E.positions) if (!ML.base[pos] && baseOf(pos).length) baseMiss.push(`${pos} has a base the ledger does not`);
 for (const d of DECISIONS) if (d.kind === 'base' && d.action !== 'dropped') baseMiss.push(`${d.pos}: a base decision the harness does not know (${d.action})`);
@@ -2036,6 +2101,8 @@ if (CONTROL) {
     // Round 1301. In the NHL calibration 3 has a table of its own, so its drift must leave the recording of 2 alone.
     v3drift: SPORT === 'nhl' ? { red: ['v3replay'], green: ['v2replay'] } : 'v3replay',
     oldmarks: 'marks', statsup: 'marks', statsdown: 'marks',
+    // Round 1530: the base median moved alone, the marks read on the same fleet untouched.
+    basedrift: { red: ['base'], green: ['marks'] },
     // The board loop's own stamp check only exists on a run that plays the board loop.
     nostamp: SKIP_BOARD ? 'calrule' : ['calrule', 'boardstamp'],
     // An object also names checks that must stay green: the standout switched off moves the outcome, never the marks.
