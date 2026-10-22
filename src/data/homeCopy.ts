@@ -94,8 +94,9 @@ export const HOME_COPY: HomeCopy = {
         p('Play a whole career out season by season: contracts, transfers, injuries, international call-ups, the lot.'),
         list(
           [a('/soccer-career', 'Soccer Career'), ', the biggest one here: start at 16 and play until you hang them up'],
-          [a('/club-manager', 'Club Manager'), ', run a club through a season of real fixtures'],
-          [a('/nba-my-career', 'NBA My Career'), ' and ', a('/nfl-my-career', 'NFL My Career'), ', draft night to the rafters'],
+          [a('/club-manager', 'Club Manager'), ', run a club, shape the squad and balance the budget'],
+          [a('/nba-my-career', 'NBA My Career'), ' and ', a('/nfl-my-career', 'NFL My Career'), ', create a prospect and play from draft night to retirement'],
+          [a('/fight-career', 'Fight Career'), ', create a boxer, choose your fights and manage damage that never heals'],
           [a('/stadium-tycoon', 'Stadium Tycoon'), ', ', a('/hall-of-champions', 'Hall of Champions'), ' and ', a('/wonderkid-factory', 'Wonderkid Factory'), ', the idle ones, the last an academy where you grow made up kids and sell at the right moment'],
           [a('/build-your-xi', 'Build Your XI'), ', pick a lineup and get it rated'],
         ),
