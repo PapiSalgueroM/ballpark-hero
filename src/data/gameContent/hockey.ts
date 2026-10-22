@@ -682,7 +682,7 @@ export const HOCKEY_CONTENT: GameContentMap = {
       {
         heading: "Assume the overlap is intentional",
         items: [
-          "Assume the overlap is intentional. The player who fits two themes is the trap.",
+          "Assume the overlap is intentional. The player who seems to fit two themes is the trap.",
           "Think about purple early. Spotting the sneaky link protects your easy groups.",
         ],
       },

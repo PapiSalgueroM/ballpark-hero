@@ -1415,7 +1415,7 @@ export const BASEBALL_CONTENT: GameContentMap = {
       {
         heading: "Spotting the overlap in the Yankees group",
         paragraphs: [
-          "You spot five obvious Yankees and nearly submit, then notice one of them also fits a cluster of 500 homer guys. That overlap is the whole puzzle. So you chase the safest read first, and it locks in yellow.",
+          "You spot five obvious Yankees and nearly submit, then notice one of them could pass for one of the 500 homer guys. That doubt is the whole puzzle. So you chase the safest read first, and it locks in yellow.",
         ],
       },
       {
