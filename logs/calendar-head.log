@@ -1,0 +1,5 @@
+  FAIL: Everton seasonDays: hash 158dee139333cccc41abdbfc != recorded 4f6e77bb426d72edb25d0123; first lines now ["{\"worldYear\":2026,\"entryDates\":[{\"y\":2026,\"m\":8,\"d\":8},{\"y\":2026,\"m\":8,\
+  FAIL: Everton monthGrid: hash 998eed009784b43682c66dfd != recorded 191228a15047c811f0735e7a; first lines now ["2026-8 light [null,null,null,null,null,null,{\"date\":{\"y\":2026,\"m\":8,\"d\":1},\"ke
+  FAIL: Augsburg seasonDays: hash 29e2211231b009dd2c13593e != recorded d004198f9594eff7c0c3edf6; first lines now ["{\"worldYear\":2026,\"entryDates\":[{\"y\":2026,\"m\":8,\"d\":8},{\"y\":2026,\"m\":8,
+  FAIL: Augsburg monthGrid: hash 486aafe84bae636d46f7d710 != recorded ecebc393e3df7ebcd664c12a; first lines now ["2026-8 light [null,null,null,null,null,null,{\"date\":{\"y\":2026,\"m\":8,\"d\":1},\"k
+head exit=1 | simGmCalendar: 6 failure(s)

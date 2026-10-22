@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+#!serial
+weight-head: node .rc/x/weight1321.mjs http://localhost:4173 dist head
+weight-base: git worktree add -q /tmp/base 85a76241 && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && node_modules/.bin/vite build --outDir /tmp/base-dist > /tmp/vb.log 2>&1) && (node scripts/lib/hostLikeServer.mjs /tmp/base-dist 4174 > /tmp/hs.log 2>&1 &) && sleep 3 && node .rc/x/weight1321.mjs http://localhost:4174 /tmp/base-dist base
+writes-head: node scripts/simWritesAreSent.mjs > /tmp/wh.log 2>&1; e=$?; grep -E "FAIL|fail" /tmp/wh.log | head -6 | cut -c1-200; echo "head exit=$e | $(tail -1 /tmp/wh.log)"; exit $e
+writes-base: cd /tmp/base && node_modules/.bin/vite build > /tmp/vb2.log 2>&1 && node scripts/simWritesAreSent.mjs > /tmp/wb.log 2>&1; e=$?; grep -E "FAIL|fail" /tmp/wb.log | head -6 | cut -c1-200; echo "base exit=$e | $(tail -1 /tmp/wb.log)"
+calendar-head: node scripts/simGmCalendar.mjs > /tmp/ch.log 2>&1; e=$?; grep -E "FAIL|fail" /tmp/ch.log | head -4 | cut -c1-200; echo "head exit=$e | $(tail -1 /tmp/ch.log)"; exit $e
+calendar-base: cd /tmp/base && node scripts/simGmCalendar.mjs > /tmp/cb.log 2>&1; e=$?; grep -E "FAIL|fail" /tmp/cb.log | head -4 | cut -c1-200; echo "base exit=$e | $(tail -1 /tmp/cb.log)"
