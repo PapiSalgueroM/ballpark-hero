@@ -1,0 +1,25 @@
+NEGATIVE CONTROL ON: judgeflip, a copy of this harness with its judge slipped (/home/runner/work/_temp/t-judgeflip/simNbaEarnedDraft-judgeflip-6sdHUd/judged.mjs). Sections 11 must go red and no other.
+   section 1: 30 failures
+   section 6: green
+   section 2: green
+   section 3: green
+   section 4: green
+   section 5: green
+   section 8: green
+   section 9: green
+   section 10: green
+   section 11: 12 failures
+  FAIL [1]: seed 1: the league at the draft is not the base's (7be835b2ef vs 7b21592150)
+  FAIL [1]: seed 2: the league at the draft is not the base's (d14373a4c6 vs dc0fe59669)
+  FAIL [1]: seed 3: the league at the draft is not the base's (b3338ab98f vs 1981d44cf2)
+  FAIL [1]: seed 4: the league at the draft is not the base's (e115ab8188 vs 0c09215172)
+  FAIL [1]: seed 5: the league at the draft is not the base's (10ca616bc1 vs c33636dc3c)
+  FAIL [1]: seed 6: the league at the draft is not the base's (606f19f509 vs 9e2108777e)
+  FAIL [1]: seed 7: the league at the draft is not the base's (d8587a5fb3 vs 1558e6567e)
+  FAIL [1]: seed 8: the league at the draft is not the base's (4e93bd7e8f vs 84f43844a1)
+  FAIL [11]: S1 at 5 (two): the new arm at 83.25 against 83.00 was judged OUTSIDE, the known answer is PASS
+  FAIL [11]: S1 at 5 (two): the new arm at 82.75 against 83.00 was judged OUTSIDE, the known answer is PASS
+  FAIL [11]: S1 at 5 (two): the new arm at 83.75 against 83.00 was judged PASS, the known answer is OUTSIDE
+  FAIL [11]: S1 at 5 (two): the new arm at 82.25 against 83.00 was judged PASS, the known answer is OUTSIDE
+   the copy exited 1: simNbaEarnedDraft: RED in section 1, 11.
+simNbaEarnedDraft: CONTROL judgeflip DID NOT FIRE as expected: the copy exited 1, red in [1, 11], expected [11].
