@@ -1,0 +1,194 @@
+/front-office at 320 by 640
+  PASS  nfl 320x640 A: no button on the recap deletes the save
+  PASS  nfl 320x640 A: the recap offers who is calling
+  PASS  nfl 320x640 A: no career panel chunk is asked for before a box is tapped (0)
+  PASS  nfl 320x640 A: the save survives the firing, fired, on the out of work screen
+  PASS  nfl 320x640 A: the out of work screen
+  PASS  nfl 320x640 A out of work: nothing wider than the screen (0px over)
+  PASS  nfl 320x640 A out of work: every control at least 44 px tall (all)
+  PASS  nfl 320x640 A out of work: no text under its floor (none)
+  MEASURED nfl 320x640 A: holding box 220px, landed panel 285px
+  PASS  nfl 320x640 A: on a slow connection the holding box shows while the panel loads
+  PASS  nfl 320x640 A: the holding box keeps the panel's room (220px for 285px)
+  PASS  nfl 320x640 A: the page does not move when the panel lands (top 197 to 197, scroll 392 to 392)
+  PASS  nfl 320x640 A: the Job market chunk is asked for on the tap
+  PASS  nfl 320x640 A market: nothing wider than the screen (0px over)
+  PASS  nfl 320x640 A market: every control at least 44 px tall (all)
+  PASS  nfl 320x640 A market: no text under its floor (none)
+  PASS  nfl 320x640 A: somebody calls, and never the club that let him go (MIA)
+  PASS  nfl 320x640 A: one tap only arms the offer
+  PASS  nfl 320x640 A: the second tap takes the job (MIA, trust 60, recap)
+  PASS  nfl 320x640 A: the arrival recap says who he takes over, with no confetti
+  PASS  nfl 320x640 A: the arrival recap holds the re-sign box
+  PASS  nfl 320x640 A: the new club's re-sign box opens
+  PASS  nfl 320x640 A: the new club's draft runs to the hub
+  PASS  nfl 320x640 A: the hub has the Career box
+  PASS  nfl 320x640 A: the hub has the GM level box
+  PASS  nfl 320x640 A career: nothing wider than the screen (0px over)
+  PASS  nfl 320x640 A career: every control at least 44 px tall (all)
+  PASS  nfl 320x640 A career: no text under its floor (none)
+  MEASURED nfl 320x640 A: the GM level panel is 775 px tall at 320
+  PASS  nfl 320x640 A GM level: nothing wider than the screen (0px over)
+  PASS  nfl 320x640 A GM level: every control at least 44 px tall (all)
+  PASS  nfl 320x640 A GM level: no text under its floor (none)
+  PASS  nfl 320x640 A: a tree off the live list sells nothing
+  PASS  nfl 320x640 A: a point spent in Ownership is in the save after a reload
+  FAIL  nfl 320x640 walkA: the walk could not finish (TimeoutError: locator.click: Timeout 30000ms exceeded.)
+  PASS  nfl 320x640 B: a record whose next year is open draws the stay out button
+  PASS  nfl 320x640 B: one tap only arms the year out
+  MEASURED nfl 320x640 B: the year out took 156 ms from the second tap to the save
+  PASS  nfl 320x640 B: the league is a season on with one more champion, his counters as they were, one more year out
+  PASS  nfl 320x640 B: the card says the year out
+  PASS  nfl 320x640 B year out: nothing wider than the screen (0px over)
+  PASS  nfl 320x640 B year out: every control at least 44 px tall (all)
+  PASS  nfl 320x640 B year out: no text under its floor (none)
+  PASS  nfl 320x640 B: no console error (clean)
+  PASS  nfl 320x640 C: a closed market is found
+  PASS  nfl 320x640 C: a closed market draws no stay out button
+  PASS  nfl 320x640 C: one tap on the new front office link only arms it
+  PASS  nfl 320x640 C: the second tap deletes the save and opens the picker
+  PASS  nfl 320x640 C: no console error (clean)
+  PASS  nfl 320x640 D: the Job market box's ? opens its rules
+  PASS  nfl 320x640 D Job market with its rules open: nothing wider than the screen (0px over)
+  PASS  nfl 320x640 D Job market with its rules open: every control at least 44 px tall (all)
+  PASS  nfl 320x640 D Job market with its rules open: no text under its floor (none)
+  PASS  nfl 320x640 D: the Career box's ? opens its rules
+  PASS  nfl 320x640 D Career with its rules open: nothing wider than the screen (0px over)
+  PASS  nfl 320x640 D Career with its rules open: every control at least 44 px tall (all)
+  PASS  nfl 320x640 D Career with its rules open: no text under its floor (none)
+  PASS  nfl 320x640 D: the GM level box's ? opens its rules
+  PASS  nfl 320x640 D GM level with its rules open: nothing wider than the screen (0px over)
+  PASS  nfl 320x640 D GM level with its rules open: every control at least 44 px tall (all)
+  PASS  nfl 320x640 D GM level with its rules open: no text under its floor (none)
+  PASS  nfl 320x640 D: no console error (clean)
+/front-office at 390 by 844
+  PASS  nfl 390x844 A: no button on the recap deletes the save
+  PASS  nfl 390x844 A: the recap offers who is calling
+  PASS  nfl 390x844 A: no career panel chunk is asked for before a box is tapped (0)
+  PASS  nfl 390x844 A: the save survives the firing, fired, on the out of work screen
+  PASS  nfl 390x844 A: the out of work screen
+  PASS  nfl 390x844 A out of work: nothing wider than the screen (0px over)
+  PASS  nfl 390x844 A out of work: every control at least 44 px tall (all)
+  PASS  nfl 390x844 A out of work: no text under its floor (none)
+  MEASURED nfl 390x844 A: holding box 220px, landed panel 255px
+  PASS  nfl 390x844 A: on a slow connection the holding box shows while the panel loads
+  PASS  nfl 390x844 A: the holding box keeps the panel's room (220px for 255px)
+  PASS  nfl 390x844 A: the page does not move when the panel lands (top 197 to 197, scroll 270 to 270)
+  PASS  nfl 390x844 A: the Job market chunk is asked for on the tap
+  PASS  nfl 390x844 A market: nothing wider than the screen (0px over)
+  PASS  nfl 390x844 A market: every control at least 44 px tall (all)
+  PASS  nfl 390x844 A market: no text under its floor (none)
+  PASS  nfl 390x844 A: somebody calls, and never the club that let him go (CLE)
+  PASS  nfl 390x844 A: one tap only arms the offer
+  PASS  nfl 390x844 A: the second tap takes the job (CLE, trust 60, recap)
+  PASS  nfl 390x844 A: the arrival recap says who he takes over, with no confetti
+  PASS  nfl 390x844 A: the arrival recap holds the re-sign box
+  PASS  nfl 390x844 A: the new club's re-sign box opens
+  PASS  nfl 390x844 A: the new club's draft runs to the hub
+  PASS  nfl 390x844 A: the hub has the Career box
+  PASS  nfl 390x844 A: the hub has the GM level box
+  PASS  nfl 390x844 A career: nothing wider than the screen (0px over)
+  PASS  nfl 390x844 A career: every control at least 44 px tall (all)
+  PASS  nfl 390x844 A career: no text under its floor (none)
+  MEASURED nfl 390x844 A: the GM level panel is 730 px tall at 390
+  PASS  nfl 390x844 A: the GM level panel fits one and a half screens at 390 (730px)
+  PASS  nfl 390x844 A GM level: nothing wider than the screen (0px over)
+  PASS  nfl 390x844 A GM level: every control at least 44 px tall (all)
+  PASS  nfl 390x844 A GM level: no text under its floor (none)
+  PASS  nfl 390x844 A: a tree off the live list sells nothing
+  PASS  nfl 390x844 A: a point spent in Ownership is in the save after a reload
+  PASS  nfl 390x844 A: a week plays at the new club
+  PASS  nfl 390x844 A: no console error (clean)
+  PASS  nfl 390x844 B: a record whose next year is open draws the stay out button
+  PASS  nfl 390x844 B: one tap only arms the year out
+  MEASURED nfl 390x844 B: the year out took 122 ms from the second tap to the save
+  PASS  nfl 390x844 B: the league is a season on with one more champion, his counters as they were, one more year out
+  PASS  nfl 390x844 B: the card says the year out
+  PASS  nfl 390x844 B year out: nothing wider than the screen (0px over)
+  PASS  nfl 390x844 B year out: every control at least 44 px tall (all)
+  PASS  nfl 390x844 B year out: no text under its floor (none)
+  PASS  nfl 390x844 B: no console error (clean)
+  PASS  nfl 390x844 C: a closed market is found
+  PASS  nfl 390x844 C: a closed market draws no stay out button
+  PASS  nfl 390x844 C: one tap on the new front office link only arms it
+  PASS  nfl 390x844 C: the second tap deletes the save and opens the picker
+  PASS  nfl 390x844 C: no console error (clean)
+  PASS  nfl 390x844 D: the Job market box's ? opens its rules
+  PASS  nfl 390x844 D Job market with its rules open: nothing wider than the screen (0px over)
+  PASS  nfl 390x844 D Job market with its rules open: every control at least 44 px tall (all)
+  PASS  nfl 390x844 D Job market with its rules open: no text under its floor (none)
+  PASS  nfl 390x844 D: the Career box's ? opens its rules
+  PASS  nfl 390x844 D Career with its rules open: nothing wider than the screen (0px over)
+  PASS  nfl 390x844 D Career with its rules open: every control at least 44 px tall (all)
+  PASS  nfl 390x844 D Career with its rules open: no text under its floor (none)
+  PASS  nfl 390x844 D: the GM level box's ? opens its rules
+  PASS  nfl 390x844 D GM level with its rules open: nothing wider than the screen (0px over)
+  PASS  nfl 390x844 D GM level with its rules open: every control at least 44 px tall (all)
+  PASS  nfl 390x844 D GM level with its rules open: no text under its floor (none)
+  PASS  nfl 390x844 D: no console error (clean)
+/front-office at 1280 by 900
+  PASS  nfl 1280x900 A: no button on the recap deletes the save
+  PASS  nfl 1280x900 A: the recap offers who is calling
+  PASS  nfl 1280x900 A: no career panel chunk is asked for before a box is tapped (0)
+  PASS  nfl 1280x900 A: the save survives the firing, fired, on the out of work screen
+  PASS  nfl 1280x900 A: the out of work screen
+  PASS  nfl 1280x900 A out of work: nothing wider than the screen (0px over)
+  PASS  nfl 1280x900 A out of work: every control at least 44 px tall (all)
+  PASS  nfl 1280x900 A out of work: no text under its floor (none)
+  MEASURED nfl 1280x900 A: holding box 220px, landed panel 224px
+  PASS  nfl 1280x900 A: on a slow connection the holding box shows while the panel loads
+  PASS  nfl 1280x900 A: the holding box keeps the panel's room (220px for 224px)
+  PASS  nfl 1280x900 A: the page does not move when the panel lands (top 177 to 177, scroll 0 to 0)
+  PASS  nfl 1280x900 A: the Job market chunk is asked for on the tap
+  PASS  nfl 1280x900 A market: nothing wider than the screen (0px over)
+  PASS  nfl 1280x900 A market: every control at least 44 px tall (all)
+  PASS  nfl 1280x900 A market: no text under its floor (none)
+  PASS  nfl 1280x900 A: somebody calls, and never the club that let him go (CLE)
+  PASS  nfl 1280x900 A: one tap only arms the offer
+  PASS  nfl 1280x900 A: the second tap takes the job (CLE, trust 60, recap)
+  PASS  nfl 1280x900 A: the arrival recap says who he takes over, with no confetti
+  PASS  nfl 1280x900 A: the arrival recap holds the re-sign box
+  PASS  nfl 1280x900 A: the new club's re-sign box opens
+  PASS  nfl 1280x900 A: the new club's draft runs to the hub
+  PASS  nfl 1280x900 A: the hub has the Career box
+  PASS  nfl 1280x900 A: the hub has the GM level box
+  PASS  nfl 1280x900 A career: nothing wider than the screen (0px over)
+  PASS  nfl 1280x900 A career: every control at least 44 px tall (all)
+  PASS  nfl 1280x900 A career: no text under its floor (none)
+  MEASURED nfl 1280x900 A: the GM level panel is 722 px tall at 1280
+  PASS  nfl 1280x900 A GM level: nothing wider than the screen (0px over)
+  PASS  nfl 1280x900 A GM level: every control at least 44 px tall (all)
+  PASS  nfl 1280x900 A GM level: no text under its floor (none)
+  PASS  nfl 1280x900 A: a tree off the live list sells nothing
+  PASS  nfl 1280x900 A: a point spent in Ownership is in the save after a reload
+  PASS  nfl 1280x900 A: a week plays at the new club
+  PASS  nfl 1280x900 A: no console error (clean)
+  PASS  nfl 1280x900 B: a record whose next year is open draws the stay out button
+  PASS  nfl 1280x900 B: one tap only arms the year out
+  MEASURED nfl 1280x900 B: the year out took 131 ms from the second tap to the save
+  PASS  nfl 1280x900 B: the league is a season on with one more champion, his counters as they were, one more year out
+  PASS  nfl 1280x900 B: the card says the year out
+  PASS  nfl 1280x900 B year out: nothing wider than the screen (0px over)
+  PASS  nfl 1280x900 B year out: every control at least 44 px tall (all)
+  PASS  nfl 1280x900 B year out: no text under its floor (none)
+  PASS  nfl 1280x900 B: no console error (clean)
+  PASS  nfl 1280x900 C: a closed market is found
+  PASS  nfl 1280x900 C: a closed market draws no stay out button
+  PASS  nfl 1280x900 C: one tap on the new front office link only arms it
+  PASS  nfl 1280x900 C: the second tap deletes the save and opens the picker
+  PASS  nfl 1280x900 C: no console error (clean)
+  PASS  nfl 1280x900 D: the Job market box's ? opens its rules
+  PASS  nfl 1280x900 D Job market with its rules open: nothing wider than the screen (0px over)
+  PASS  nfl 1280x900 D Job market with its rules open: every control at least 44 px tall (all)
+  PASS  nfl 1280x900 D Job market with its rules open: no text under its floor (none)
+  PASS  nfl 1280x900 D: the Career box's ? opens its rules
+  PASS  nfl 1280x900 D Career with its rules open: nothing wider than the screen (0px over)
+  PASS  nfl 1280x900 D Career with its rules open: every control at least 44 px tall (all)
+  PASS  nfl 1280x900 D Career with its rules open: no text under its floor (none)
+  PASS  nfl 1280x900 D: the GM level box's ? opens its rules
+  PASS  nfl 1280x900 D GM level with its rules open: nothing wider than the screen (0px over)
+  PASS  nfl 1280x900 D GM level with its rules open: every control at least 44 px tall (all)
+  PASS  nfl 1280x900 D GM level with its rules open: no text under its floor (none)
+  PASS  nfl 1280x900 D: no console error (clean)
+
+playGmCareer: 1 failure

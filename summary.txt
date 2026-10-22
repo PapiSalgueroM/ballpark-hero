@@ -1,0 +1,9 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+ctl-wipebutton exit=0 13s | playGmCareer control wipebutton: all 1 guarded checks fired (mutations landed: {"wipebutton":2})
+ctl-nofallback exit=0 33s | playGmCareer control nofallback: all 1 guarded checks fired (mutations landed: {"nofallback":4})
+ctl-eagerpanel exit=0 32s | playGmCareer control eagerpanel: all 1 guarded checks fired (mutations landed: {"eagerpanel":16})
+writessent exit=1 14s | simWritesAreSent: 2 failures
+resultmoment exit=0 6s | simResultMoment: green. Every live game reaches the shared result moment or is listed with what it draws instead, the pill shows exactly the score it is given, the three 
+weight-head exit=1 29s | sweepWeight: 4 failures
+weight-base exit=0 71s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+gmcareer exit=1 264s | playGmCareer: 1 failure
