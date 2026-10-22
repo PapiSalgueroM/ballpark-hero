@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+#!serial
+playNbaLotteryNight: node scripts/playNbaLotteryNight.mjs
+pnl-backfold: PLAY_NBA_LOTTERY_CONTROL=backfold node scripts/playNbaLotteryNight.mjs
+pnl-nocard: PLAY_NBA_LOTTERY_CONTROL=nocard node scripts/playNbaLotteryNight.mjs
+pnl-spoil: PLAY_NBA_LOTTERY_CONTROL=spoil node scripts/playNbaLotteryNight.mjs
+pnl-jump: PLAY_NBA_LOTTERY_CONTROL=jump node scripts/playNbaLotteryNight.mjs
+pnl-fold: PLAY_NBA_LOTTERY_CONTROL=fold node scripts/playNbaLotteryNight.mjs
