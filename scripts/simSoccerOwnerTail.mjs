@@ -44,6 +44,10 @@
  *      gives 2.6 points more, against margins of 0.3M and 0.5 points. Most points and most money: squad and stadium at
  *      3 and 6 seasons, youth and stadium at 10.
  *   5) 12 of 12 old saves play on.  6) 16 careers, 790 states and draw counts, 96 manager seasons: 0 differ.
+ * Added after the round's reviews (runner r1524-fix2, salts 1, 4 and 9): 1) 4464 tiles for 1995 to 2025, 0 name a
+ * league the ledgers do not give the club that season (3086, 3086 and 3071 name none); control saleleague 3185 of
+ * 4464. 2) 549, 550 and 550 back to back seasons in one league, 0 replay last season's four rivals on the same points;
+ * control stalekey 319 of 556 (57 percent) against the bound of 1 percent.
  *
  * Negative controls, SIM_OWNER_CONTROL=<name>, each asserting the string it mutates is in its file exactly once
  * (exit 2 otherwise), each measured red: randomclub (section 1, the old random club), coin (section 2, the old
