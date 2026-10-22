@@ -1,0 +1,6 @@
+#!build
+#!playwright
+#!serial
+mainbuild: git worktree add /tmp/wb 6d2d7a7d >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/wb/node_modules && (cd /tmp/wb && node_modules/.bin/vite build --logLevel error >/dev/null) && ls /tmp/wb/dist/assets | wc -l
+chunks: node .rc/x/chunkdiff.mjs dist /tmp/wb/dist
+mainweight: (node scripts/lib/hostLikeServer.mjs /tmp/wb/dist 4175 >/dev/null 2>&1 &) ; sleep 4; cd /tmp/wb && SWEEP_OFFLINE=1 BASE=http://localhost:4175 node scripts/sweepWeight.mjs
