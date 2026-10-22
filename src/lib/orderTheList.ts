@@ -88,7 +88,7 @@ export const RANK_ROUNDS: RankRound[] = [
     { name: 'Jaromír Jágr', value: 766 },
     { name: 'Brett Hull', value: 741 },
     { name: 'Steve Yzerman', value: 692 },
-  ], 'nhl_player_stats.goals (all debuted >= 1971)'),
+  ], 'Hockey-Reference and ESPN regular season rows through 2025-26, checked 2026-10-22'),
   R('nhl-ast', 'NHL', 'career assists', 'A', [
     { name: 'Wayne Gretzky', value: 1963 },
     { name: 'Ron Francis', value: 1249 },
