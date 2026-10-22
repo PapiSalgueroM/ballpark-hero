@@ -1,0 +1,54 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: The input did not match the regular expression /expect\(element\)\.(?:toHaveFocus|toContainElement)/. Input:
+
+'Error: \x1B[2mexpect(\x1B[22m\x1B[31melement\x1B[39m\x1B[2m).toHaveFocus()\x1B[22m\n' +
+  '\n' +
+  'Expected element with focus:\n' +
+  '  \x1B[32m<button\n' +
+  '  class="min-h-11 px-4 py-2 rounded-lg bg-transparent border border-border text-foreground font-medium text-sm hover:bg-muted transition-colors"\n' +
+  '>\n' +
+  '  Essential only\n' +
+  '</button>\x1B[39m\n' +
+  'Received element with focus:\n' +
+  '  \x1B[31m<button\n' +
+  '  class="w-full py-3 min-h-[44px] bg-primary text-primary-foreground rounded-xl font-semibold hover:opacity-90 transition-opacity"\n' +
+  '>\n' +
+  "  Let's Play!\n" +
+  '</button>\x1B[39m\n' +
+  '    at Proxy.expectWrapper (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/expect/dist/index.js:1745:12)\n' +
+  '    at Proxy.<anonymous> (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/expect/dist/index.js:1029:14)\n' +
+  '    at Proxy.toHaveFocus (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/chai/index.js:1686:25)\n' +
+  '    at /tmp/wt-bn/src/test/helpConsentFocus.test.tsx:43:22\n' +
+  '    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:752:20'
+
+    at file:///tmp/wt-bn/scripts/simHelpConsentFocus.mjs:57:14 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 'Error: \x1B[2mexpect(\x1B[22m\x1B[31melement\x1B[39m\x1B[2m).toHaveFocus()\x1B[22m\n' +
+    '\n' +
+    'Expected element with focus:\n' +
+    '  \x1B[32m<button\n' +
+    '  class="min-h-11 px-4 py-2 rounded-lg bg-transparent border border-border text-foreground font-medium text-sm hover:bg-muted transition-colors"\n' +
+    '>\n' +
+    '  Essential only\n' +
+    '</button>\x1B[39m\n' +
+    'Received element with focus:\n' +
+    '  \x1B[31m<button\n' +
+    '  class="w-full py-3 min-h-[44px] bg-primary text-primary-foreground rounded-xl font-semibold hover:opacity-90 transition-opacity"\n' +
+    '>\n' +
+    "  Let's Play!\n" +
+    '</button>\x1B[39m\n' +
+    '    at Proxy.expectWrapper (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/expect/dist/index.js:1745:12)\n' +
+    '    at Proxy.<anonymous> (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/expect/dist/index.js:1029:14)\n' +
+    '    at Proxy.toHaveFocus (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/chai/index.js:1686:25)\n' +
+    '    at /tmp/wt-bn/src/test/helpConsentFocus.test.tsx:43:22\n' +
+    '    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:752:20',
+  expected: /expect\(element\)\.(?:toHaveFocus|toContainElement)/,
+  operator: 'match',
+  diff: 'simple'
+}
+
+Node.js v24.22.0

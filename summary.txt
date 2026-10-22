@@ -1,0 +1,11 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+boxing-fonts exit=0 0s | 
+playBoxingShowForecast1086 exit=0 7s | Boxing forecast: 4 actual-route journeys passed.
+simHelpConsentFocus-external-nocolor exit=0 4s | simHelpConsentFocus: real source held, disposable copies cleaned, no vendor requests.
+simRulesGateConsentFocus-host-nocolor exit=0 4s | simRulesGateConsentFocus: source held, owned copies cleaned, no backend or vendor requests.
+simRulesGateConsentFocus-return-nocolor exit=0 5s | simRulesGateConsentFocus: source held, owned copies cleaned, no backend or vendor requests.
+bn-base exit=0 35s | /tmp/wt-bn
+bn-own-playAdRoutes exit=0 47s | playAdRoutes: green. One deliberate game route requested one ad, 16 policy-risk routes requested none, delayed Accept worked, and Essential only stayed off.
+bn-ours-playAdRoutes exit=0 48s | playAdRoutes: green. One deliberate game route requested one ad, 16 policy-risk routes requested none, delayed Accept worked, and Essential only stayed off.
+bn-own-simHelpConsentFocus-external exit=1 4s | Node.js v24.22.0
+bn-own-simRulesGateConsentFocus-host exit=1 4s | Node.js v24.22.0

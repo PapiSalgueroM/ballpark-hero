@@ -1,0 +1,13 @@
+#!serve
+#!playwright
+#!serial
+boxing-fonts: node scripts/playBoxingShowForecast1086.mjs --prefetch-fonts-only 2>&1 | tail -3
+playBoxingShowForecast1086: node scripts/playBoxingShowForecast1086.mjs
+simHelpConsentFocus-external-nocolor: NO_COLOR=1 HELP_CONSENT_FOCUS_CONTROL=external node scripts/simHelpConsentFocus.mjs
+simRulesGateConsentFocus-host-nocolor: NO_COLOR=1 RULES_GATE_FOCUS_CONTROL=host node scripts/simRulesGateConsentFocus.mjs
+simRulesGateConsentFocus-return-nocolor: NO_COLOR=1 RULES_GATE_FOCUS_CONTROL=return node scripts/simRulesGateConsentFocus.mjs
+bn-base: bash .rc/x/bnsrv.sh scripts/lib/answerConsent.mjs && cp scripts/playAdRoutes.mjs /tmp/wt-bn/scripts/playAdRoutes1535.mjs
+bn-own-playAdRoutes: cd /tmp/wt-bn && BASE=http://localhost:4174 SWEEP_BASE=http://localhost:4174 node scripts/playAdRoutes.mjs
+bn-ours-playAdRoutes: cd /tmp/wt-bn && BASE=http://localhost:4174 SWEEP_BASE=http://localhost:4174 node scripts/playAdRoutes1535.mjs
+bn-own-simHelpConsentFocus-external: cd /tmp/wt-bn && HELP_CONSENT_FOCUS_CONTROL=external node scripts/simHelpConsentFocus.mjs
+bn-own-simRulesGateConsentFocus-host: cd /tmp/wt-bn && RULES_GATE_FOCUS_CONTROL=host node scripts/simRulesGateConsentFocus.mjs
