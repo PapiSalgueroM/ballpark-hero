@@ -1,0 +1,29 @@
+Reveal scroll, 390x844, 5 games, base http://localhost:4173
+A press is a YANK if the page went down while the new panel was already readable,
+LOSTTOP if the panel's top ended up above the screen, PROOF if something hidden was brought into view.
+
+  PROOF   /club-manager    step  4  scrollY   507 ->   101 (-406)  panel top  -394 h   798 -> top    12  block=start  [📼 2005-06 Ronaldinho's Ballon d'O]
+  PROOF   /club-manager    step  6  scrollY   507 ->   101 (-406)  panel top  -394 h   798 -> top    12  block=start  [📼 2005-06 Ronaldinho's Ballon d'O]
+  PROOF   /club-manager    step  8  scrollY   101 ->   101 (+0)  panel top  -271 h   798 -> top    12  block=start  [🕰️ 2010-11 Prime Messi. Mourinho']
+  PROOF   /club-manager    step 10  scrollY    15 ->   101 (+86)  panel top  -271 h   798 -> top    12  block=start  [🕰️ 2010-11 Prime Messi. Mourinho']
+  PROOF   /club-manager    step 12  scrollY   261 ->   101 (-160)  panel top  -148 h   798 -> top    12  block=start  [🦊 2015-16 The Leicester season. M]
+  PROOF   /club-manager    step 14  scrollY   101 ->   101 (+0)  panel top  -148 h   798 -> top    12  block=start  [🦊 2015-16 The Leicester season. M]
+
+What each game did
+  /soccer-career    7 presses,  0 of them scrolled,  7 left the page alone, 0 yanks, 0 lost tops, 0 rescued  (ran out of controls after 7 presses, screen was offering: 🏋️ Training Drill ready | 📱 Phone 3 unread | Review contract | Review contract | Review contract | Review contract | Your next season Roles,  | Full attributes 183 cm ·)
+                   measured insets (top/bottom px): 0/0, 0/285
+  /club-manager    16 presses,  6 of them scrolled, 10 left the page alone, 0 yanks, 0 lost tops, 6 rescued
+                   measured insets (top/bottom px): 0/0, 0/285
+  /dart-draft      10 presses,  0 of them scrolled, 10 left the page alone, 0 yanks, 0 lost tops, 0 rescued
+                   measured insets (top/bottom px): 0/0, 0/285
+  /cfb-dynasty     12 presses,  0 of them scrolled, 12 left the page alone, 0 yanks, 0 lost tops, 0 rescued
+                   measured insets (top/bottom px): 0/233
+  /clue-auction    10 presses,  0 of them scrolled, 10 left the page alone, 0 yanks, 0 lost tops, 0 rescued
+                   measured insets (top/bottom px): 0/0, 0/285
+
+Of 55 presses across 5 games, 6 asked for a scroll and 49 did not. 1 moved the page down, by 86 to 86px.
+Panel tops after a scroll ran from 12px to 12px down the screen.
+
+The feature still works: 6 presses took content that could not be read where it was and put it back under the top of the screen, 0 of them from completely off screen.
+
+Green. 55 presses measured, nothing dragged the page down on content that was already readable, no panel lost its top, and 6 presses proved the feature still does its job.
