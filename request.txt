@@ -1,0 +1,24 @@
+#!serve
+#!playwright
+#!serial
+playSoccerCareer: node scripts/playSoccerCareer.mjs
+playTranslatedPage: node scripts/playTranslatedPage.mjs
+playStorageBlocked: node scripts/playStorageBlocked.mjs
+playStorageBlocked-open: PLAY_STORAGE_CONTROL=open node scripts/playStorageBlocked.mjs
+playUsCareerSaveSeam: node scripts/playUsCareerSaveSeam.mjs
+sweepPhone: ENGINES=chromium node scripts/sweepPhone.mjs
+sweepContrast: node scripts/sweepContrast.mjs
+sweepSaves: node scripts/sweepSaves.mjs
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+simCareerProgramme-forwalk: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerProgramme.mjs
+playCareerProgramme: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCareerProgramme.mjs
+playSoccerSeasonCalendar: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerSeasonCalendar.mjs
+simCareerTransferBrief-forwalk: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerTransferBrief.mjs
+playCareerTransferBrief: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCareerTransferBrief.mjs
+playSoccerAgentReview: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerAgentReview.mjs > "$TMPDIR/sim.log" 2>&1 || { tail -5 "$TMPDIR/sim.log"; echo "simSoccerAgentReview went red, so the walk has no fixtures of this head"; exit 1; }; echo "sim first: $(tail -1 "$TMPDIR/sim.log")"; FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerAgentReview.mjs
+simSoccerVeteranTalks: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerVeteranTalks.mjs
+playSoccerVeteranTalks: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" ENGINES=chromium NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerVeteranTalks.mjs
+oneoff-walk: node scripts/playOneOffCups.mjs > /tmp/w.log 2>&1; s=$?; grep -E "FAIL|playOneOffCups" /tmp/w.log | head -12 | cut -c1-300; exit $s
+oneoff-ctl-none: ANSWER_CONSENT_CONTROL=none node scripts/playOneOffCups.mjs > /tmp/wcn.log 2>&1; s=$?; grep -E "FAIL|ABORT|Error" /tmp/wcn.log | head -4 | cut -c1-300; tail -1 /tmp/wcn.log | cut -c1-300; exit $s
+cmtactics: node scripts/playCmTactics.mjs > /tmp/ct.log 2>&1; s=$?; grep -E "FAIL" /tmp/ct.log | head -8 | cut -c1-300; tail -2 /tmp/ct.log | cut -c1-300; exit $s
+cmtactics-ctl-none: ANSWER_CONSENT_CONTROL=none node scripts/playCmTactics.mjs > /tmp/ctn.log 2>&1; s=$?; grep -E "FAIL|Error" /tmp/ctn.log | head -4 | cut -c1-300; tail -1 /tmp/ctn.log | cut -c1-300; exit $s
