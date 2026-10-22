@@ -1,0 +1,27 @@
+1) a dead address is marked, before anything renders
+  PASS  the server answers it with the fallback, which is what makes it identifiable
+  PASS  robots is "noindex, follow"
+  PASS  the home page canonical is gone (gone)
+  PASS  its social title says so too: "Page Not Found | DoUKnowBall"
+  PASS  its title says so: "Page Not Found | DoUKnowBall"
+  PASS  the home page's opening line is gone from it ("130+ free sports games in the browser: s")
+  PASS  it still points somewhere useful (8 internal links)
+2) a second dead address, one that looks like a real route
+  PASS  robots is "noindex, follow"
+  PASS  the home page's opening line is gone from it too
+3) the home page is untouched
+  PASS  no robots tag on the home page (none)
+  PASS  it keeps its canonical (https://douknowball.com/)
+  PASS  its title is its own: "DoUKnowBall: Free Sports Trivia Games and Daily Quizzes"
+  PASS  it still carries its copy (5713 characters)
+4) real routes are untouched, which is the half that must not fail
+  PASS  9 real routes, 0 wrongly marked, 0 served from the fallback, 0 serving home page copy
+5) a player profile is a real page with no saved copy, and it is not painted as a 404
+  PASS  the server answers a profile link with the fallback, which is why this case exists
+  PASS  robots is "noindex, follow", as the profile page itself asks
+  PASS  the home page canonical is gone (gone)
+  PASS  no 404 text is painted over it ("DoUKnowBall 130+ free sports games in the browser: sports tr")
+  PASS  its title is not the not found title: "DoUKnowBall: Free Sports Trivia Games and Daily Quizzes"
+  PASS  a deeper path under /profile is still marked as a dead address
+
+playSoftFourOhFour: green. A dead address says it is dead before a line of app code runs, and no real page is touched.
