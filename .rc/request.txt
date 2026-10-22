@@ -1,0 +1,8 @@
+#!build
+#!playwright
+#!serial
+gg-base: rm -rf tycoon-ground-growth-artifacts; node scripts/qa/tycoonGroundGrowth1094.mjs --prefetch-assets-only && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/checkTycoonGroundGrowth.mjs
+gg-squash: rm -rf tycoon-ground-growth-artifacts; node scripts/qa/tycoonGroundGrowth1094.mjs --prefetch-assets-only && sed -i "s/BASE = '3dc37dbf9c4d8c57edc18009c0b127b4d487726b'/BASE = 'ffffffffffffffffffffffffffffffffffffffff'/" scripts/qa/tycoonGroundGrowth1094.mjs && grep -c "BASE = 'ffffffff" scripts/qa/tycoonGroundGrowth1094.mjs && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/checkTycoonGroundGrowth.mjs; s=$?; git checkout -- scripts; exit $s
+gg-widescope: rm -rf tycoon-ground-growth-artifacts; node scripts/qa/tycoonGroundGrowth1094.mjs --prefetch-assets-only && H=$(git rev-parse HEAD) && sed -i "s/TERRACES = 'beb301396869b37d96536915e32d50235c753d07'/TERRACES = '$H'/" scripts/qa/tycoonGroundGrowth1094.mjs && grep -c "TERRACES = '$H'" scripts/qa/tycoonGroundGrowth1094.mjs && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/checkTycoonGroundGrowth.mjs; s=$?; git checkout -- scripts; grep -o "Only the declared page changes from the parent" tycoon-ground-growth-artifacts/native-stderr.log | head -1; exit $s
+draw-base: rm -rf tycoon-draw-result-artifacts; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonDrawResult.mjs
+money-base: rm -rf tycoon-money-display-artifacts; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonMoneyDisplay.mjs
