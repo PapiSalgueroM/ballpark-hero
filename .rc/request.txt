@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+walk: node .rc/x/walk.mjs
+walkE: PLAY_GM_CAREER_WALKS=E PLAY_GM_CAREER_OUT="$RC_OUT/gmc" node scripts/playGmCareer.mjs
+eagerkit: PLAY_GM_CAREER_CONTROL=eagerkit PLAY_GM_CAREER_WALKS=E PLAY_GM_CAREER_SIZE=390 node scripts/playGmCareer.mjs
