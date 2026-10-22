@@ -87,6 +87,19 @@ const read = rel => fs.readFileSync(path.join(ROOT, rel), 'utf8').replaceAll('\r
 const strip = s => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/.*$/gm, '$1');
 const once = (text, anchor) => text.split(anchor).length - 1;
 function cannotRun(msg) { console.error(`simNbaDraftBoard: could not run: ${msg}`); process.exit(2); }
+/** The first path at which two plain values differ, for the debug print (ids are not renamed here). */
+function firstDiff(a, b, at) {
+  if (typeof a !== typeof b || Array.isArray(a) !== Array.isArray(b)) return `${at || '(top)'}: ${JSON.stringify(a)?.slice(0, 80)} vs ${JSON.stringify(b)?.slice(0, 80)}`;
+  if (a && typeof a === 'object') {
+    const keys = [...new Set([...Object.keys(a), ...Object.keys(b)])];
+    for (const k of keys) {
+      if (JSON.stringify(a[k]) === JSON.stringify(b[k])) continue;
+      return firstDiff(a[k], b[k], `${at}.${k}`);
+    }
+    return `${at}: equal`;
+  }
+  return `${at}: ${JSON.stringify(a)?.slice(0, 80)} vs ${JSON.stringify(b)?.slice(0, 80)}`;
+}
 
 const OLD_CLASS_DRAW = 'const cls = nbaDraftClass(Math.random, Math.max(24, capital + Math.min(10, rivalCapital)), leagueNames(lg));';
 const DESK_GUARD = '    if (!desk) return false;\n    const opened = openNbaDraftNight(desk, lg, patch.postseason?.series ?? series, team);';
@@ -276,7 +289,10 @@ const redCases = new Set();
       const presses = b.writes.slice(0, -1);
       const at = presses.findIndex((h, i) => h !== r.states[i]);
       if (presses.length !== r.states.length) fail(2, `${tagOf(b)}: the board saved ${presses.length} times before the summer, the libraries reached ${r.states.length} states`);
-      else if (at >= 0) fail(2, `${tagOf(b)}: the save after ${at === 0 ? 'the open' : `press ${at}`} differs from the libraries'`);
+      else if (at >= 0) {
+        fail(2, `${tagOf(b)}: the save after ${at === 0 ? 'the open' : `press ${at}`} differs from the libraries'`);
+        if (at === 0 && b.debugOpen && r.debugOpen && failures.get(2).length === 1) console.log(`   first difference (SIM_NBA_DRAFT_BOARD_DEBUG): ${firstDiff(b.debugOpen, r.debugOpen, '')}`);
+      }
       if (b.final !== r.final) fail(2, `${tagOf(b)}: the league and desk after the summer differ from the libraries'`);
       if (b.calls !== r.calls) fail(2, `${tagOf(b)}: the board drew ${b.calls} numbers, the libraries ${r.calls}`);
       if (b.phase !== 'hub' || b.round !== 1 || b.seasonGain !== 1) fail(2, `${tagOf(b)}: ended on ${b.phase}, round ${b.round}, season +${b.seasonGain}`);
@@ -517,17 +533,22 @@ async function child() {
        staff), to the end, then the desk's summer. Each state is what the board's save after that press holds. */
     const rr = lehmer(drawSeed);
     const L = clone(save.league);
+    /* The board's load path repairs ids and reconciles every rotation before anything else reads the league
+       (ensureNbaLeagueIds); the replay starts from the league the board holds, not the raw save. */
+    E.ensureNbaLeagueIds(L);
     let desk = save.gm;
     const opened = E.openNbaDraftNight(desk, L, series, me);
     const states = [];
     let error = null;
     let final = null;
+    let debugOpen;
     if (!opened) error = 'the libraries opened no night';
     else {
       desk = opened.desk;
       let cls = E.nbaEarnedDraftClass(rr, opened.night.slots.length, E.leagueNames(L));
       const left = () => { const n = E.nbaDraftNightOf(desk, L); return n ? E.slotsLeftFor(n.slots, n.made, me).length : 0; };
       states.push(hashOf({ league: L, gm: desk, draftClass: cls, picksLeft: left() }));
+      if (process.env.SIM_NBA_DRAFT_BOARD_DEBUG) debugOpen = clone({ league: L, gm: desk, draftClass: cls, picksLeft: left() });
       let press = E.nbaDraftContinue(L, desk, me, cls, rr);
       for (let i = 0; i < 70 && press; i += 1) {
         desk = press.desk;
@@ -549,7 +570,7 @@ async function child() {
         final = hashOf({ league: L, gm: summer.desk });
       }
     }
-    fs.writeFileSync(process.env.SIM_NBA_DRAFT_BOARD_OUT, JSON.stringify({ kind: job.kind, seed: job.seed, mode: 'replay', pre, error, states, final, calls: rr.calls() }));
+    fs.writeFileSync(process.env.SIM_NBA_DRAFT_BOARD_OUT, JSON.stringify({ kind: job.kind, seed: job.seed, mode: 'replay', pre, error, states, final, calls: rr.calls(), debugOpen }));
     dom.window.close();
     return;
   }
@@ -668,7 +689,7 @@ async function child() {
       kind: job.kind, seed: job.seed, mode: job.mode, pre, error, picks, clockAt, remounts, cardChecks, reloadFaults,
       phase: end.phase, round: end.league.round, seasonGain: end.league.season - seasonBefore, calls: draw.calls(),
       writes: parsed.map(s => hashOf(pickOf(s))), final: last ? hashOf({ league: last.league, gm: last.gm }) : null, finalAll: hashOf(end),
-      saveAt,
+      saveAt, debugOpen: process.env.SIM_NBA_DRAFT_BOARD_DEBUG && parsed[0] ? pickOf(parsed[0]) : undefined,
     };
     await act(async () => root.unmount());
     dom.window.close();
