@@ -1,0 +1,5 @@
+#!serial
+oldsave: node .rc/x/oldsave1538.mjs
+oldsave-potplus: node .rc/x/mut1538.mjs potplus && node .rc/x/oldsave1538.mjs; s=$?; git checkout -- src; exit $s
+oldsave-nobank: node .rc/x/mut1538.mjs nobank && node .rc/x/oldsave1538.mjs; s=$?; git checkout -- src; exit $s
+oldsave-clampdown: node .rc/x/mut1538.mjs clampdown && node .rc/x/oldsave1538.mjs; s=$?; git checkout -- src; exit $s
