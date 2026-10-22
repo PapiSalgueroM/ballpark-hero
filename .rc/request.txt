@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+walk: node scripts/playUsShopPromises.mjs
+playNflTruth: node scripts/playNflTruth.mjs
+qa-entry1031: node scripts/qa/careerEntryGuide1031.mjs
+weight-fix: node .rc/x/weight1534.mjs fix
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
