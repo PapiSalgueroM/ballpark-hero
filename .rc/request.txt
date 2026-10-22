@@ -1,0 +1,13 @@
+#!serve
+#!playwright
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+playClubManager: ENGINES=chromium node scripts/playClubManager.mjs
+playCmFinanceDesk: ENGINES=chromium node scripts/playCmFinanceDesk.mjs
+playLiveMatchFit-fresh: LIVE_FIT_SEED=fresh node scripts/playLiveMatchFit.mjs
+playLiveMatchFit: node scripts/playLiveMatchFit.mjs
+playSessionMarks: node scripts/playSessionMarks.mjs
+simTactics: node scripts/simTactics.mjs
+ctl-none-playClubManager: ANSWER_CONSENT_CONTROL=none ENGINES=chromium node scripts/playClubManager.mjs
+ctl-none-playCmFinanceDesk: ANSWER_CONSENT_CONTROL=none ENGINES=chromium node scripts/playCmFinanceDesk.mjs
+ctl-none-playLiveMatchFit-fresh: ANSWER_CONSENT_CONTROL=none LIVE_FIT_SEED=fresh node scripts/playLiveMatchFit.mjs
