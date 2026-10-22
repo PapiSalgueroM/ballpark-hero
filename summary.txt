@@ -1,0 +1,3 @@
+headsha exit=0 0s | ab77b9c36f rc request rBP-trP-bp for 212b9069f010799e4b79574e5f144b190d7a1342
+shoot-no1520 exit=0 24s | simCmShootoutOrder: all sections passed
+shoot-noensure exit=1 24s | simCmShootoutOrder: 3 FAILURE(S)
