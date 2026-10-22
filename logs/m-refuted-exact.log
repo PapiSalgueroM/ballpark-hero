@@ -1,0 +1,15 @@
+mutation refuted-exact applied to src/data/connectionsPuzzles.ts
+1) no group claims the present
+   0 present tense or unstamped season labels
+2) no refuted claim is on a board
+  FAIL: puzzle-136: Wayne Rooney in "Won the Treble" is refuted (Manchester United's only treble is 1998-99, years before he joined them from Everton in 2004)
+   5 refuted claims held off every board, 1 found
+3) every group this round wrote stands on two hosts
+   26 squads, 1 lists, 0 ledgered groups, 67 stamped groups, 336 members confirmed, 9 rebuilt boards
+4) one right answer: the cross check over every board
+   696 of 1000 groups judged; members 2244 judged (540 unknown), other tiles 6929 judged (1423 unknown)
+   64 findings: 0 adjudicated, 64 owed to part B on boards not yet rebuilt
+5) the groups nothing checks yet may only get fewer
+   304 groups nothing checks yet (ceiling 304); part B ledgers them
+
+simConnectionsFacts: 1 failure

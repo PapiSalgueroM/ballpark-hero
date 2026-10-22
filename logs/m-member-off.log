@@ -1,0 +1,54 @@
+mutation member-off applied to scripts/lib/connectionsCrossCheck.mjs
+1) no group claims the present
+   0 present tense or unstamped season labels
+2) no refuted claim is on a board
+   5 refuted claims held off every board, 0 found
+3) every group this round wrote stands on two hosts
+   26 squads, 1 lists, 0 ledgered groups, 67 stamped groups, 336 members confirmed, 9 rebuilt boards
+4) one right answer: the cross check over every board
+  FAIL: owed "puzzle-8 | not-a-member | Carlos Tévez | Played for both Manchester clubs" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-8 | not-a-member | Peter Schmeichel | Played for both Manchester clubs" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-23 | not-a-member | Samuel Eto'o | Played for both Real Madrid and Barcelona" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-27 | not-a-member | Jan Oblak | Played for Benfica" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-28 | not-a-member | Diego Forlán | Played for Sevilla" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-34 | not-a-member | Didier Drogba | Played for Galatasaray" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-39 | not-a-member | Gareth Bale | Played for Southampton" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-45 | not-a-member | Yaya Touré | Played for Olympiacos" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-46 | not-a-member | Raheem Sterling | From Jamaica" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-50 | not-a-member | Gianluigi Buffon | Played for Parma" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-68 | not-a-member | Moussa Sissoko | From Mali" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-70 | not-a-member | Willy Sagnol | From Georgia" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-73 | not-a-member | Arjen Robben | Played for PSV Eindhoven" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-74 | not-a-member | Robin van Persie | Played for Feyenoord" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-76 | not-a-member | Andrea Pirlo | Played for both Juventus and Inter Milan" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-81 | not-a-member | Ángel Di María | Played for Porto and Benfica" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-87 | not-a-member | Jan Oblak | Played for SL Benfica" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-87 | not-a-member | Bernardo Silva | Played for SL Benfica" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-92 | not-a-member | Fernando Torres | Played for both Barcelona and Atlético Madrid" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-94 | not-a-member | Mesut Özil | Played for Fenerbahçe" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-97 | not-a-member | Willy Sagnol | From Georgia" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-103 | not-a-member | Nabil Fekir | Played for both Lyon and PSG" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-103 | not-a-member | Memphis Depay | Played for both Lyon and PSG" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-109 | not-a-member | James Rodríguez | Played for both Benfica and Porto" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-109 | not-a-member | Deco | Played for both Benfica and Porto" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-111 | not-a-member | Gonzalo Higuaín | Played for River Plate" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-113 | not-a-member | Edinson Cavani | Played for Boca Juniors" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-113 | not-a-member | Robbie Keane | Played for both Tottenham and Real Madrid" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-118 | not-a-member | Andrea Pirlo | Played for both Inter Milan and AC Milan" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-123 | not-a-member | Edinson Cavani | Played for PSG and Chelsea" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-123 | not-a-member | Mauro Icardi | Played for PSG and Chelsea" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-131 | not-a-member | Carlos Tévez | Played for PSG and Manchester City" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-136 | not-a-member | Dries Mertens | Played for both Liverpool and Napoli" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-136 | not-a-member | Lorenzo Insigne | Played for both Liverpool and Napoli" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-137 | not-a-member | Andrea Pirlo | Played for both AC Milan and Inter Milan" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-138 | not-a-member | Karim Benzema | Won the Ballon d'Or in the 2010s" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-138 | not-a-member | Mamadou Diallo | From Guinea" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-149 | not-a-member | Ronaldinho Gaúcho | Played for PSG, Barcelona AND Real Madrid" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-149 | not-a-member | Neymar Jr | Played for PSG, Barcelona AND Real Madrid" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-149 | not-a-member | Luis Figo | Played for PSG, Barcelona AND Real Madrid" no longer fires: take it off the owed list so it cannot come back
+   696 of 1000 groups judged; members 2244 judged (540 unknown), other tiles 6927 judged (1425 unknown)
+   24 findings: 0 adjudicated, 24 owed to part B on boards not yet rebuilt
+5) the groups nothing checks yet may only get fewer
+   304 groups nothing checks yet (ceiling 304); part B ledgers them
+
+simConnectionsFacts: 40 failures

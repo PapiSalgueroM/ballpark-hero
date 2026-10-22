@@ -1,0 +1,15 @@
+mutation twohost-data applied to src/data/connectionsPuzzles.ts
+1) no group claims the present
+   0 present tense or unstamped season labels
+2) no refuted claim is on a board
+   5 refuted claims held off every board, 0 found
+3) every group this round wrote stands on two hosts
+  FAIL: puzzle-1: Jamie Gittens in "Played for Chelsea in 2025-26" is not confirmed by the record
+   26 squads, 1 lists, 0 ledgered groups, 67 stamped groups, 336 members confirmed, 9 rebuilt boards
+4) one right answer: the cross check over every board
+   696 of 1000 groups judged; members 2243 judged (541 unknown), other tiles 6927 judged (1425 unknown)
+   64 findings: 0 adjudicated, 64 owed to part B on boards not yet rebuilt
+5) the groups nothing checks yet may only get fewer
+   304 groups nothing checks yet (ceiling 304); part B ledgers them
+
+simConnectionsFacts: 1 failure

@@ -1,0 +1,32 @@
+mutation mig-drift applied to supabase/migrations/20261022130000_round_1553_connections_truth.sql
+   seed: 155 rows, 129 valid before and 129 after; 49 rewritten in place; puzzle-151 drifted on purpose and left alone; 6 seeded rows already differ from the pre-round file and were left alone: puzzle-4 puzzle-10 puzzle-12 puzzle-75 puzzle-104 puzzle-112
+   file: 155 rows, 135 valid before and 135 after; 55 rewritten in place; puzzle-151 drifted on purpose and left alone; 0 seeded rows already differ from the pre-round file and were left alone
+rehearseConnections1553: green. The rows land in place, a drifted row is left alone, and a second run is a no-op.
+1) no group claims the present
+   0 present tense or unstamped season labels
+2) no refuted claim is on a board
+   5 refuted claims held off every board, 0 found
+3) every group this round wrote stands on two hosts
+   26 squads, 1 lists, 0 ledgered groups, 67 stamped groups, 336 members confirmed, 9 rebuilt boards
+4) one right answer: the cross check over every board
+   696 of 1000 groups judged; members 2244 judged (540 unknown), other tiles 6927 judged (1425 unknown)
+   64 findings: 0 adjudicated, 64 owed to part B on boards not yet rebuilt
+5) the groups nothing checks yet may only get fewer
+   304 groups nothing checks yet (ceiling 304); part B ledgers them
+
+simConnectionsFacts: green. Every claim this round checked stands on two hosts and no rebuilt board has a second answer.
+1) No player belongs to two groups of the same board
+   322 puzzles, 1288 groups, 5440 tiles, 0 shared between groups
+   soccer against the record: 696 groups judged, 2 findings owed or adjudicated in the ledger, 0 new
+2) The pools are deep enough that a daily is not a weekly
+   pools: baseball 60, nba 4, nfl 4, nhl 4, soccer 250
+   THIN, repeats inside a week: nba 4, nfl 4, nhl 4. Round 213's shuffled walk covers
+   the whole pool before repeating any of it, which is the most that can be done
+   with four boards. These need writing, and they cannot be generated: a group is
+   a claim about the world and this site does not ship claims it cannot check.
+3) A ranking round has one right order
+   14 ranking rounds, no ties, no repeats
+4) A team sheet can actually be solved
+   317 team sheets, every blank on its own sheet and every slot filled
+
+simFairPuzzles: green. Every board on the site has exactly one right answer.

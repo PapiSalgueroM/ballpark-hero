@@ -1,0 +1,304 @@
+puzzle-2 | Scored 50+ goals in a calendar year
+puzzle-2 | Captained their country at a World Cup
+puzzle-7 | African Player of the Year winners
+puzzle-7 | Retired in MLS
+puzzle-7 | Scored a hat-trick on their league debut
+puzzle-8 | Won the Golden Boot at a World Cup
+puzzle-9 | Won the Copa América
+puzzle-9 | Scored 100+ international goals
+puzzle-9 | Managed the club they played for
+puzzle-13 | Won the PFA Player of the Year
+puzzle-13 | Scored on every day of the week
+puzzle-14 | Top scorer in Champions League history
+puzzle-14 | Wore the number 7 at Manchester United
+puzzle-15 | Won the World Cup with Italy
+puzzle-15 | Won the Champions League with Bayern Munich
+puzzle-15 | Left-footed legends
+puzzle-16 | Won the Golden Ball at a World Cup
+puzzle-16 | Played their entire career at one club
+puzzle-17 | Won consecutive Ballon d'Or awards
+puzzle-17 | Scored a Panenka penalty in a final
+puzzle-18 | Scored a hat-trick in the Champions League final
+puzzle-18 | Won the Premier League with Leicester City
+puzzle-19 | Scored in their first El Clásico
+puzzle-19 | Had an iconic celebration
+puzzle-20 | All-time top scorer for their country
+puzzle-20 | Won the Champions League with Porto
+puzzle-21 | Won the FIFA Club World Cup
+puzzle-21 | Made 100+ appearances for their country
+puzzle-22 | Won the UEFA Cup / Europa League
+puzzle-22 | Scored directly from a corner kick
+puzzle-23 | Youngest to score in a World Cup
+puzzle-24 | Won the Serie A title with a non-Big 3 club
+puzzle-24 | Famous for a long throw-in
+puzzle-25 | Scored a last-minute title-winning goal
+puzzle-25 | Goalkeeper who scored a goal
+puzzle-26 | Won the FA Cup 3+ times
+puzzle-26 | Scored on all 6 continents
+puzzle-27 | Won the Community Shield 5+ times
+puzzle-27 | Played in 3+ World Cups for their country
+puzzle-28 | Scored 200+ Premier League goals
+puzzle-28 | Played in both Serie A and Bundesliga
+puzzle-29 | Won the League Cup 4+ times
+puzzle-29 | Scored a goal from the halfway line
+puzzle-30 | Scored in an FA Cup Final
+puzzle-30 | Had a famous on-pitch altercation with a teammate
+puzzle-31 | Scored 4+ goals in a single Premier League game
+puzzle-31 | Won the Confederations Cup
+puzzle-32 | Won the Premier League Golden Boot
+puzzle-32 | Took a famous penalty in a shootout
+puzzle-33 | Won the Champions League with an English club
+puzzle-33 | Known for their heading ability
+puzzle-34 | Won the Olympic Gold in football
+puzzle-34 | Had a famous goal celebration banned
+puzzle-35 | Won the Eredivisie Golden Boot
+puzzle-35 | Scored a late winner in a derby
+puzzle-36 | Won the Carabao Cup with Manchester City
+puzzle-36 | Scored a backheel goal in a top league
+puzzle-37 | Won the Champions League as a substitute
+puzzle-37 | Had a famous rivalry with another player
+puzzle-38 | Famous for their rabona
+puzzle-39 | Won the Supercopa de España
+puzzle-39 | Scored with a scorpion kick
+puzzle-40 | Famous for their stepover dribble
+puzzle-41 | Won both La Liga and Premier League
+puzzle-41 | Scored a goal of the season in England
+puzzle-42 | Won the DFB-Pokal 3+ times
+puzzle-42 | Famous for their long-range shooting
+puzzle-43 | Won the Copa del Rey 5+ times
+puzzle-43 | Had a famous moment at the World Cup
+puzzle-44 | Won the Serie A title with Juventus
+puzzle-44 | Famous for their chip goals
+puzzle-45 | Won the Coppa Italia 3+ times
+puzzle-45 | Famous for a memorable interview moment
+puzzle-46 | Won the Ligue 1 title 3+ times
+puzzle-46 | Had an iconic kit number
+puzzle-47 | Won the Premier League with Chelsea
+puzzle-47 | Famous for their slide tackles
+puzzle-48 | Played for Schalke 04
+puzzle-48 | Won the UEFA Super Cup
+puzzle-48 | Had a trademark hairstyle
+puzzle-49 | Won the Bundesliga Golden Boot
+puzzle-49 | Famous for their goalkeeping saves
+puzzle-50 | Won the Intercontinental Cup
+puzzle-50 | Famous for their nutmegs
+puzzle-51 | Won the Scottish Premiership 5+ times
+puzzle-51 | Scored a penalty with no run-up
+puzzle-52 | Won the Copa Libertadores
+puzzle-52 | Famous for their volleyed goals
+puzzle-53 | Won the Champions League 3+ times
+puzzle-53 | Had a famous handshake controversy
+puzzle-54 | Won the World Cup Golden Glove
+puzzle-54 | Had an iconic goal against England
+puzzle-55 | Won the Asian Cup
+puzzle-55 | Scored directly from a throw-in
+puzzle-56 | Won the World Cup as manager and player
+puzzle-56 | Famous for playing barefoot or in unusual boots
+puzzle-57 | Won the Premier League with Arsenal (Invincibles)
+puzzle-57 | Scored a goal while injured
+puzzle-58 | Won the Ballon d'Or as a defender
+puzzle-58 | Had a famous goal disallowed
+puzzle-59 | Won the MLS Cup
+puzzle-59 | Played a match in a mask
+puzzle-60 | Won the Champions League with Liverpool
+puzzle-60 | Famous for their knee slide celebration
+puzzle-61 | Won both the Champions League and World Cup
+puzzle-61 | Known for their loyalty to one club
+puzzle-62 | Won the Supercopa de Europa
+puzzle-62 | Had a famous miss in front of goal
+puzzle-63 | Won the Club World Cup as captain
+puzzle-63 | Had a famous touchline celebration
+puzzle-64 | Played in the 2006 World Cup Final
+puzzle-65 | Scored a World Cup-winning goal
+puzzle-65 | Had their shirt number retired
+puzzle-66 | Scored in a penalty shootout at a World Cup Final
+puzzle-67 | Won the Champions League with Real Madrid 3 times in a row
+puzzle-67 | Scored a header in a Champions League Final
+puzzle-68 | Scored 30+ goals in a single Premier League season
+puzzle-68 | Played in 4+ different top-5 European leagues
+puzzle-69 | Won the Capocannoniere (Serie A top scorer)
+puzzle-69 | Scored on their Premier League debut
+puzzle-70 | Won the Premier League with Manchester United in the Fergie era
+puzzle-70 | Had a famous goal against Brazil
+puzzle-71 | Won the Champions League unbeaten
+puzzle-71 | Scored directly from the restart after conceding
+puzzle-72 | Won the Golden Glove (Premier League)
+puzzle-72 | Famous for their overhead/bicycle kick
+puzzle-73 | Won the World Cup with France (2018)
+puzzle-73 | Broke a long-standing goalscoring record
+puzzle-74 | Won the Premier League and La Liga in their career
+puzzle-74 | Scored an injury-time equaliser in a final
+puzzle-75 | Won the Puskas Award
+puzzle-76 | Won the Série A (Brazil)
+puzzle-76 | Scored 40+ league goals in a single season
+puzzle-77 | Won the Bundesliga with Bayern Munich
+puzzle-77 | Transferred for over €80M before age 21
+puzzle-78 | Won the World Cup as captain
+puzzle-79 | Ligue 1 legends
+puzzle-79 | Won the Champions League in their first season at a club
+puzzle-80 | Liga NOS legends
+puzzle-80 | Scored a hat-trick on their Premier League debut
+puzzle-81 | Won consecutive league titles in different countries
+puzzle-82 | Won the Euros and Champions League in same year
+puzzle-83 | Scored in 4+ consecutive World Cups
+puzzle-84 | Won the World Cup with Germany
+puzzle-84 | Played for 6+ clubs in their career
+puzzle-85 | Won the Copa América multiple times
+puzzle-85 | Scored 100+ goals for a single Premier League club
+puzzle-86 | Won the World Cup Golden Boot
+puzzle-87 | Won the Premier League and World Cup
+puzzle-88 | Won the Eredivisie with Ajax
+puzzle-88 | Scored on their Champions League debut
+puzzle-89 | Played for AC Milan (2020s)
+puzzle-89 | Won the DFB-Pokal and Bundesliga double
+puzzle-89 | Captained their national team at age 21 or younger
+puzzle-90 | Won the Ballon d'Or as a midfielder
+puzzle-91 | Played in the 2022 World Cup Final
+puzzle-91 | Won the Serie A Golden Boot 3+ times
+puzzle-92 | Galatasaray stars (past & present)
+puzzle-92 | Won the World Cup with France (2018)
+puzzle-93 | Liga NOS Player of the Year winners
+puzzle-93 | Scored an own goal at a World Cup
+puzzle-94 | Won the Club World Cup with Real Madrid
+puzzle-95 | Played for Napoli (2020s)
+puzzle-95 | Won the Ballon d'Or and Champions League in same year
+puzzle-96 | Scored in 3+ Champions League finals
+puzzle-97 | Played for Borussia Dortmund (2020s)
+puzzle-97 | Won the Coppa Italia with Inter Milan
+puzzle-97 | Famous for their trivela technique
+puzzle-98 | MLS legends
+puzzle-98 | Won the Premier League without losing a game
+puzzle-99 | Played for Juventus (2020s)
+puzzle-99 | Won the FA Cup with Arsenal
+puzzle-99 | Scored on their international debut as a teenager
+puzzle-100 | Played in MLS and Premier League
+puzzle-100 | Scored a goal directly from a free kick at a World Cup
+puzzle-101 | Won the Europa League with Sevilla
+puzzle-101 | Played their 1000th professional match
+puzzle-102 | Scored a hat-trick at the World Cup
+puzzle-103 | Premier League Young Player of Year winners
+puzzle-103 | Won the Champions League with Barcelona
+puzzle-104 | From Bosnia & Herzegovina
+puzzle-104 | Won the World Cup and Euro as a player
+puzzle-105 | Won the Coppa Italia with Napoli
+puzzle-105 | Had an iconic goal celebration with fireworks or flares
+puzzle-106 | Scored the fastest goal in Champions League history (debut or overall)
+puzzle-107 | Famous for their elastico dribble
+puzzle-108 | Won the Carabao Cup (2020s)
+puzzle-108 | Scored directly from a kickoff
+puzzle-109 | Scored a bicycle kick in the Champions League
+puzzle-110 | Played in the 2014 World Cup Final
+puzzle-110 | Won the Champions League as a goalkeeper
+puzzle-111 | Won the UEFA Nations League
+puzzle-111 | Famous for their cruyff turn
+puzzle-112 | Had an iconic World Cup moment off the pitch
+puzzle-113 | Won the Scudetto with AC Milan (2020s)
+puzzle-114 | Won 3+ different domestic leagues
+puzzle-115 | Won the Champions League with Chelsea
+puzzle-115 | Played in 6+ major international tournaments
+puzzle-116 | Premier League Golden Boot winners
+puzzle-116 | Brazilian legends
+puzzle-116 | Managed after retiring
+puzzle-117 | Won the World Cup with Brazil
+puzzle-117 | Played in MLS
+puzzle-117 | African Footballers of the Year
+puzzle-117 | One club legends (15+ years)
+puzzle-118 | Players who wore the number 10
+puzzle-118 | Champions League winners with Liverpool
+puzzle-119 | Played for PSG (2020s)
+puzzle-119 | Premier League Golden Boot (2010s)
+puzzle-119 | Won the World Cup with Spain
+puzzle-119 | One club legends (never transferred)
+puzzle-120 | Brazilian legends of the 1990s-2000s
+puzzle-120 | Played in MLS after European career
+puzzle-120 | African Champions League winners
+puzzle-120 | Players who wore number 10 at Barcelona
+puzzle-121 | Champions League winners with Real Madrid (2010s)
+puzzle-121 | Managed the club they became legendary at
+puzzle-122 | Won the World Cup with France (1998)
+puzzle-122 | African defenders who starred in Europe
+puzzle-122 | Players who wore number 10 at Real Madrid
+puzzle-123 | Premier League Golden Boot (pre-2010)
+puzzle-123 | Brazilian legends of the 1950s-70s
+puzzle-123 | One club legends of Serie A
+puzzle-124 | Champions League winners with Bayern Munich
+puzzle-124 | Won the World Cup with Argentina
+puzzle-124 | Managed after retiring (Premier League)
+puzzle-125 | African midfielders in the Premier League
+puzzle-125 | Players who wore number 10 at Juventus
+puzzle-125 | Played in MLS and La Liga
+puzzle-126 | Won the World Cup with Italy (2006)
+puzzle-126 | Brazilian legends at Barcelona
+puzzle-126 | Champions League winners with Manchester United
+puzzle-126 | One club legends of the Premier League
+puzzle-127 | Premier League Golden Boot (2020s)
+puzzle-127 | Managed after retiring (La Liga managers)
+puzzle-128 | African strikers who starred in Europe
+puzzle-128 | Won the World Cup with Germany (2014)
+puzzle-128 | Players who wore number 10 at Manchester United
+puzzle-128 | Played in MLS and Serie A
+puzzle-129 | Champions League winners with Barcelona (2015)
+puzzle-129 | Brazilian legends at Real Madrid
+puzzle-129 | One club legends of La Liga
+puzzle-130 | Won the World Cup with England
+puzzle-130 | African goalkeepers in top European leagues
+puzzle-130 | Players who wore number 10 at Chelsea
+puzzle-130 | Managed after retiring (Bundesliga)
+puzzle-131 | Premier League Golden Boot shared winners
+puzzle-131 | Brazilian legends at Inter Milan
+puzzle-131 | Champions League winners as a substitute in the final
+puzzle-132 | Won the World Cup with France (2018)
+puzzle-132 | African midfield legends
+puzzle-132 | Played in MLS and Bundesliga
+puzzle-132 | One club legends of Bundesliga
+puzzle-133 | Players who wore number 10 at Arsenal
+puzzle-133 | Champions League winners with Inter Milan (2010)
+puzzle-133 | Brazilian legends in Ligue 1
+puzzle-133 | Managed after retiring (Italian managers)
+puzzle-134 | Won the World Cup twice
+puzzle-134 | African players at Liverpool
+puzzle-134 | One club legends who became club ambassadors
+puzzle-135 | Players who wore number 10 at Liverpool
+puzzle-135 | Played in MLS and Ligue 1
+puzzle-135 | Champions League winners with AC Milan (2007)
+puzzle-135 | Brazilian legends at PSG
+puzzle-136 | Won the 2026 Champions League
+puzzle-136 | Won the Puskas Award
+puzzle-137 | Scored a hat-trick in a World Cup knockout stage
+puzzle-138 | Named in the FIFA FIFPro World XI 10+ times
+puzzle-139 | Won the Copa Libertadores as a player
+puzzle-139 | Played in Ligue 1, Premier League, Serie A AND La Liga
+puzzle-140 | Won the Euros with Spain in the same year as club trophies
+puzzle-140 | Won World Cup, Champions League, and Ballon d'Or
+puzzle-141 | Won 2024 Euros with Spain
+puzzle-141 | Scored in back-to-back Champions League Finals
+puzzle-142 | Wore number 10 at THREE different top clubs
+puzzle-143 | Scored 400+ goals in top 5 European leagues
+puzzle-144 | Won the Champions League in their debut season at a club
+puzzle-144 | Made 100+ appearances for THREE different top clubs
+puzzle-145 | From Georgia (country)
+puzzle-145 | Won La Liga with Real Madrid AND Barcelona
+puzzle-145 | Captained their country to win a major tournament
+puzzle-146 | Won the World Cup as player AND manager
+puzzle-147 | Scored 50+ goals for THREE different European clubs
+puzzle-147 | Won the Golden Boot at TWO different World Cups
+puzzle-148 | Icons who played for LA Galaxy
+puzzle-148 | Won Champions League AND World Cup in same year
+puzzle-148 | Scored in the first AND last minute of a CL match
+puzzle-149 | Won the 2022 World Cup with Argentina
+puzzle-149 | Won 5+ different domestic league titles
+puzzle-150 | Came through Barcelona's La Masia academy
+puzzle-150 | Named UEFA CL squad of the season 5+ times
+puzzle-152 | Won the World Cup as the tournament top scorer
+puzzle-153 | Scored a goal from their own half in a competitive match
+puzzle-154 | Won the Champions League with TWO different clubs
+puzzle-154 | Scored 5 goals in a single Champions League match
+puzzle-155 | Won the Ballon d'Or before turning 22
+puzzle-156 | French legends
+puzzle-156 | Brazilian legends
+puzzle-156 | Argentine legends
+puzzle-156 | German legends
+puzzle-157 | Italian legends
+puzzle-157 | Spanish legends
+puzzle-157 | English legends
+puzzle-157 | Dutch legends

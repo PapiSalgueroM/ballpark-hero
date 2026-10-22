@@ -1,0 +1,26 @@
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+facts: node scripts/simConnectionsFacts.mjs
+ctl-rooney: CONN_CONTROL=rooney node scripts/simConnectionsFacts.mjs
+ctl-zidane: CONN_CONTROL=zidane node scripts/simConnectionsFacts.mjs
+ctl-current: CONN_CONTROL=current node scripts/simConnectionsFacts.mjs
+ctl-bogus: CONN_CONTROL=bogus node scripts/simConnectionsFacts.mjs
+fair: node scripts/simFairPuzzles.mjs
+fair-secondfit: FAIR_CONTROL=secondfit node scripts/simFairPuzzles.mjs
+rehearse: npm install --prefix /tmp/pgl @electric-sql/pglite >/dev/null 2>&1 && PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseConnections1553.mjs
+rehearse-noguard: REHEARSE_CONTROL=noguard PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseConnections1553.mjs
+measure: CONN_MEASURE=$RC_OUT/measure.txt node scripts/simConnectionsFacts.mjs && echo "unchecked on puzzle-136:" && grep 'puzzle-136' $RC_OUT/measure.txt.unchecked.txt
+m-member-off: node .rc/x/mut.mjs member-off && node scripts/simConnectionsFacts.mjs; s=$?; git checkout -- src scripts supabase; exit $s
+m-secondfit-off: node .rc/x/mut.mjs secondfit-off && node scripts/simConnectionsFacts.mjs; s=$?; git checkout -- src scripts supabase; exit $s
+m-twohost-data: node .rc/x/mut.mjs twohost-data && node scripts/simConnectionsFacts.mjs; s=$?; git checkout -- src scripts supabase; exit $s
+m-twohost-both: node .rc/x/mut.mjs twohost-code twohost-data && node scripts/simConnectionsFacts.mjs; s=$?; git checkout -- src scripts supabase; exit $s
+m-twohost-code: node .rc/x/mut.mjs twohost-code && node scripts/simConnectionsFacts.mjs && CONN_CONTROL=zidane node scripts/simConnectionsFacts.mjs; s=$?; git checkout -- src scripts supabase; exit $s
+m-refuted-exact: node .rc/x/mut.mjs refuted-exact && node scripts/simConnectionsFacts.mjs; s=$?; git checkout -- src scripts supabase; exit $s
+m-refuted-case: node .rc/x/mut.mjs refuted-case && node scripts/simConnectionsFacts.mjs && node scripts/simFairPuzzles.mjs; s=$?; git checkout -- src scripts supabase; exit $s
+m-mig-drift: node .rc/x/mut.mjs mig-drift && PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseConnections1553.mjs && node scripts/simConnectionsFacts.mjs && node scripts/simFairPuzzles.mjs; s=$?; git checkout -- src scripts supabase; exit $s
+clean-after: git status --short | head -5; echo "tree clean check done"; node scripts/simConnectionsFacts.mjs
+noRival: node scripts/simNoRivalNames.mjs
+trustCopy: node scripts/simTrustCopy.mjs
+loss: node scripts/simConnectionsLoss.mjs
+shake: node scripts/simConnectionsShake.mjs
+vitest-daily: node_modules/.bin/vitest run src/test/dailySaveParity.test.tsx src/test/dailySaveShapes.test.tsx --testTimeout=300000 --hookTimeout=120000

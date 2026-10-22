@@ -1,0 +1,38 @@
+mutation secondfit-off applied to scripts/lib/connectionsCrossCheck.mjs
+1) no group claims the present
+   0 present tense or unstamped season labels
+2) no refuted claim is on a board
+   5 refuted claims held off every board, 0 found
+3) every group this round wrote stands on two hosts
+   26 squads, 1 lists, 0 ledgered groups, 67 stamped groups, 336 members confirmed, 9 rebuilt boards
+4) one right answer: the cross check over every board
+  FAIL: owed "puzzle-2 | second-fit | Ronaldinho Gaúcho | Played for AC Milan | listed under From Brazil" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-2 | second-fit | Rivaldo Vítor | Played for AC Milan | listed under From Brazil" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-2 | second-fit | Ricardo Kaká | Played for AC Milan | listed under From Brazil" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-7 | second-fit | Sadio Mané | Played for Bayern Munich | listed under Scored a hat-trick on their league debut" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-8 | second-fit | Carlos Tévez | Played for Juventus | listed under Played for both Manchester clubs" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-13 | second-fit | Luis Suárez | Played for Atlético Madrid | listed under Won the PFA Player of the Year" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-16 | second-fit | Francesco Totti | Played for AS Roma | listed under Played their entire career at one club" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-18 | second-fit | Luis Suárez | Played for Ajax | listed under From Uruguay" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-22 | second-fit | Olof Mellberg | From Sweden | listed under Scored directly from a corner kick" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-26 | second-fit | Robbie Keane | Played for Aston Villa | listed under Scored on all 6 continents" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-28 | second-fit | Kevin-Prince Boateng | From Ghana | listed under Played in both Serie A and Bundesliga" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-38 | second-fit | Diego Forlán | Won the European Golden Shoe | listed under Played for Villarreal" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-43 | second-fit | James Morrison | From Scotland | listed under Played for West Brom" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-53 | second-fit | Nicolas Anelka | Played for Bolton Wanderers | listed under Had a famous handshake controversy" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-55 | second-fit | Ismaïla Sarr | From Senegal | listed under Played for Watford" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-59 | second-fit | Robbie Keane | Played for Wolverhampton Wanderers | listed under Won the MLS Cup" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-64 | second-fit | Ronaldinho Gaúcho | Played for AC Milan | listed under Won the Ballon d'Or in the 2000s" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-64 | second-fit | Kaká | Played for AC Milan | listed under Won the Ballon d'Or in the 2000s" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-65 | second-fit | Didier Drogba | Played for Chelsea | listed under From Côte d'Ivoire" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-90 | second-fit | Luis Figo | From Portugal | listed under Won the Ballon d'Or as a midfielder" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-92 | second-fit | Mauro Icardi | From Argentina | listed under Galatasaray stars (past & present)" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-188 | second-fit | Luis Suarez | From Colombia | listed under From Uruguay" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-211 | second-fit | Luis Suarez | From Colombia | listed under From Uruguay" no longer fires: take it off the owed list so it cannot come back
+  FAIL: owed "puzzle-229 | second-fit | Luis Suarez | From Colombia | listed under From Uruguay" no longer fires: take it off the owed list so it cannot come back
+   696 of 1000 groups judged; members 2244 judged (540 unknown), other tiles 6927 judged (1425 unknown)
+   40 findings: 0 adjudicated, 40 owed to part B on boards not yet rebuilt
+5) the groups nothing checks yet may only get fewer
+   304 groups nothing checks yet (ceiling 304); part B ledgers them
+
+simConnectionsFacts: 24 failures
