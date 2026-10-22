@@ -650,12 +650,17 @@ const CLAIMS = [
 
   /* ---- Round 584: the league keeps playing while you are away ---- */
   {
-    where: 'stadium', phrase: 'Matchdays keep playing while you are away, one for every half hour of the trip and inside the same cap',
+    where: 'stadium', phrase: 'Matchdays keep playing while you are away, one for every 28 minutes of the trip and inside the same cap',
+    /* Round 1539: 28 minutes. A division 6 club at its first matchday: 8 hours is
+       floor(28800 / 1680) = 17, which is also its 18 matchday season's hold, and
+       twenty hours is cut to the cap first. */
     check: (T, m) => {
       const s = { ...m.fresh, league: T.newLeague(0, 6, 0), savedAt: 0 };
       const count = sec => Math.floor(T.awaySecondsOf(s, sec * 1000) / T.AWAY_MATCHDAY_SEC);
       const played = sec => T.playAwayMatchdays(s, count(sec), () => 0.5).results.length;
-      return T.AWAY_MATCHDAY_SEC === 1800 && played(1800) === 1 && played(5400) === 3 && played(20 * 3600) === (T.offlineCapHoursOf(s) * 3600) / 1800 ? '' : `a half hour plays ${played(1800)}, ninety minutes ${played(5400)}, twenty hours ${played(20 * 3600)}`;
+      return T.AWAY_MATCHDAY_SEC === 1680 && played(1679) === 0 && played(1680) === 1 && played(5040) === 3 && played(8 * 3600) === 17
+        && played(20 * 3600) === Math.min(Math.floor(T.offlineCapHoursOf(s) * 3600 / 1680), 17)
+        ? '' : `28 minutes less a second plays ${played(1679)}, 28 minutes ${played(1680)}, 84 minutes ${played(5040)}, 8 hours ${played(8 * 3600)}, twenty hours ${played(20 * 3600)}`;
     },
   },
   {

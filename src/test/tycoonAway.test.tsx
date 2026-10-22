@@ -250,10 +250,12 @@ describe('Stadium Tycoon away earnings', () => {
     measured('floor: 20s behind another window paid nothing, which is the lib rule that a tab refresh is not a trip away');
   });
 
-  /* Round 584: matchdays keep playing while you are away, one for every half
-     hour of the trip the pay counts, never the final matchday of a season. The
+  /* Round 584: matchdays keep playing while you are away, one for every
+     AWAY_MATCHDAY_SEC of the trip the pay counts, never the final matchday of a
+     season. Round 1539 made it 28 minutes, so an 8 hour night plays an 18
+     matchday season right up to its final (17 matchdays) and stops there. The
      wrapper for these two is scripts/simTycoonAwayMatchdays.mjs. */
-  it('7 a closed tab plays one matchday per half hour away, and never the final one', () => {
+  it('7 a closed tab plays one matchday per AWAY_MATCHDAY_SEC away, and never the final one', () => {
     const club = (division: number) => {
       const f = newTycoon(Date.now());
       return { ...f, league: newLeague(0, division, 0), bestDivision: division, savedAt: Date.now() };
@@ -273,9 +275,11 @@ describe('Stadium Tycoon away earnings', () => {
     const top = 6;
     const topLeft = leagueShape(top).matchdays;
     const cases: [string, number, number, number][] = [
-      ['no time', 0, top, 0], ['29 seconds', 29, top, 0], ['1,799 seconds', 1799, top, 0], ['1,800 seconds', 1800, top, 1],
-      ['3 hours', 3 * 3600, top, 6], ['8 hours', 8 * 3600, top, Math.min(16, topLeft - 1)],
-      ['8 hours in a 14 matchday league', 8 * 3600, 3, Math.min(16, leagueShape(3).matchdays - 1)],
+      ['no time', 0, top, 0], ['29 seconds', 29, top, 0], ['1,679 seconds', 1679, top, 0], ['1,680 seconds', 1680, top, 1],
+      ['1,799 seconds', 1799, top, 1], ['3 hours', 3 * 3600, top, 6],
+      /* the round's promise, not a copy of the clock: a night reaches the final and stops on it */
+      ['8 hours', 8 * 3600, top, topLeft - 1],
+      ['8 hours in a 14 matchday league', 8 * 3600, 3, leagueShape(3).matchdays - 1],
     ];
     const got: string[] = [];
     for (const [label, seconds, division, want] of cases) {
