@@ -1,0 +1,12 @@
+#!serve
+#!playwright
+#!serial
+ctl-none-tt-all: ANSWER_CONSENT_CONTROL=none ENGINES=chromium node scripts/playTwoTabs.mjs
+ctl-none-NewCountries: ANSWER_CONSENT_CONTROL=none ENGINES=chromium node scripts/playClubManagerNewCountries.mjs
+ctl-none-SaveLeave: ANSWER_CONSENT_CONTROL=none ENGINES=chromium node scripts/playClubManagerSaveLeave.mjs
+ctl-none-Slots: ANSWER_CONSENT_CONTROL=none ENGINES=chromium node scripts/playClubManagerSlots.mjs
+ctl-none-BoardVerdict: ANSWER_CONSENT_CONTROL=none ENGINES=chromium node scripts/playCmBoardVerdict.mjs
+ctl-none-Conquest: ANSWER_CONSENT_CONTROL=none ENGINES=chromium node scripts/playConquestScenes.mjs
+ctl-none-DealDesk: ANSWER_CONSENT_CONTROL=none ENGINES=chromium node scripts/playDealDesk.mjs
+ctl-none-SoccerLanding: ANSWER_CONSENT_CONTROL=none ENGINES=chromium node scripts/playSoccerLanding.mjs
+ctl-none-RevealScroll: ANSWER_CONSENT_CONTROL=none node scripts/simRevealScroll.mjs
