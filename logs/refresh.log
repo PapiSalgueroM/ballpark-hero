@@ -1,0 +1,8 @@
+simGuideHeadings: refreshed /nba-front-office from its actual guide (howToPlay 6, rules 14, example 2, tips 3)
+searchKeywords.json: 133 of 133 games covered, 1215 keywords, 10977 bytes
+  filters: tf >= 2, df <= 33 of 133 guides, max 12 per game
+  guide source hash e4f5b79d56732d80
+ scripts/data/guideHeadingsFrozen.json | 2 +-
+ src/data/gameContent/basketball.ts    | 2 +-
+ src/data/searchKeywords.json          | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)

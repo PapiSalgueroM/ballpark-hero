@@ -1,0 +1,4 @@
+refresh exit=0 0s |  3 files changed, 3 insertions(+), 3 deletions(-)
+simGuideHeadings exit=0 0s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+guide-controls exit=0 3s | snapdrift exit 1 | simGuideHeadings control snapdrift: section 4 red and every other section green, the break was caught where it should be (exit 1)
+simSiteSearch exit=0 0s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.

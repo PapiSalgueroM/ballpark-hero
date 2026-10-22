@@ -1,0 +1,7 @@
+skiplevel exit 1 | simGuideHeadings control skiplevel: section 2 red and every other section green, the break was caught where it should be (exit 1)
+nokeyword exit 1 | simGuideHeadings control nokeyword: section 1 red and every other section green, the break was caught where it should be (exit 1)
+lostline exit 1 | simGuideHeadings control lostline: section 1 red and every other section green, the break was caught where it should be (exit 1)
+careerline exit 1 | simGuideHeadings control careerline: section 1 red and every other section green, the break was caught where it should be (exit 1)
+traininglocation exit 1 | simGuideHeadings control traininglocation: section 1 red and every other section green, the break was caught where it should be (exit 1)
+unconvert exit 1 | simGuideHeadings control unconvert: section 3 red and every other section green, the break was caught where it should be (exit 1)
+snapdrift exit 1 | simGuideHeadings control snapdrift: section 4 red and every other section green, the break was caught where it should be (exit 1)

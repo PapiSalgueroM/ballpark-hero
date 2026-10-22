@@ -1,0 +1,5 @@
+#!serial
+refresh: cp .rc/x/basketball.ts src/data/gameContent/basketball.ts && node scripts/simGuideHeadings.mjs --refresh /nba-front-office && node scripts/genSearchKeywords.mjs && cp scripts/data/guideHeadingsFrozen.json src/data/searchKeywords.json "$RC_OUT/" && git diff --stat
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+guide-controls: for c in skiplevel nokeyword lostline careerline traininglocation unconvert snapdrift; do GUIDE_HEADINGS_CONTROL=$c node scripts/simGuideHeadings.mjs > /tmp/gh-$c.txt 2>&1; echo "$c exit $? | $(tail -1 /tmp/gh-$c.txt | cut -c1-160)"; done
+simSiteSearch: node scripts/simSiteSearch.mjs
