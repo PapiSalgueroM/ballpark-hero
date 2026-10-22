@@ -19003,3 +19003,9 @@ The new `codex/consent-dialog-layout-1447` candidate starts from exact mainc75d0
 Source35d9e57ab680f4ef24e011809b39c3412e7abbbe/run39769358433 attempt1 passed the72-context matrix. Root observed144 trusted primary passes across Green/restored, with the exact9 owned old-CSS failures and9 not-attempted old actions retained; all arms preserved36 Radix primary passes each. Complete compiled CSS attribution and the native envelope are reviewed. ROUND1447 records the full native admission binding.
 
 The separate ordinary release branch must still pass all six jobs, existing controls, four unit partitions,18 readers,14 unchanged caps, zero generated changes and complete final holds at its actual source. No merge, publication or live claim follows from matrix success alone. I retains sole publication ownership. Game lanes and old785/1441 preservation gaps remain unchanged and unwaived.
+
+## Round1447 source qualified, publication pending, 2026-10-22 UTC
+
+The shared dialog CSS fix is source-qualified atd9da128d0174405ab8b63ab34bc27feb35a8f389. Matrix39769358433 covered72 contexts,144 Green/restored trusted primary passes and the nine expected old-CSS failures. Ordinary run39773713224 passed all six jobs:9,337 unit passes,58 explicit skips,0 failures across622 files;74 consent/29 account/6 Profile plus existing controls;18 readers and14 unchanged caps. Generated patch/list are empty and complete source/output/transport holds passed.
+
+I retains sole publication ownership. This update records qualification and the handoff, not publication or live verification. Game lanes, earlier failures and785/1441 preservation gaps remain held and unwaived.

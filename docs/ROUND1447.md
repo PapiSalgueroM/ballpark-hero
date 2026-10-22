@@ -13,3 +13,11 @@ Matrix source `35d9e57ab680f4ef24e011809b39c3412e7abbbe` passed run39769358433 a
 Root and the independent CSS reviewer attributed the complete compiled CSS difference to the approved source tail span, SHAada9cc819db63d0e2eb013bd3c29eec16877e2a30166c390b81901142369fef3. The envelope admits1,346 regular files,1,345 root hashes,16 nested hashes,5,182 source rows,798 captured dist files,19 exit receipts,2 inventory controls and11 empty transport receipts. Complete native matrix admission: `08161019ae38d9cd23a24845451e57622c07366f6a59859e2c7d0cc37f292ef9`.
 
 The ordinary six-job qualifier belongs on separate `codex/consent-dialog-release-1447`, directly after this admitted source. It must retain all focused/control outcomes, four unit partitions,18 readers,14 unchanged caps, zero generated changes and complete final output/source/transport holds. Matrix success alone does not qualify or publish the product. I retains sole publication ownership; no game/data change or old785/1441 waiver is included.
+
+## Source qualified, publication with I, 2026-10-22 UTC
+
+The shared dialog CSS fix passed the72-context paired matrix at35d9/run39769358433. Green and restored arms recorded144 trusted primary passes. The nine owned old-CSS failures returned only in the old arm, with all Radix preservation cases held.
+
+Source `d9da128d0174405ab8b63ab34bc27feb35a8f389` passed all six ordinary jobs in run39773713224 attempt1:9,337 unit passes,58 explicit skips and0 failures across622 files. Focused74 consent,29 account and6 Profile cases passed with the existing Profile/timer fault and restoration controls. All18 readers,14 unchanged caps, zero generated patch/list and complete final source/output/transport holds passed. The separate native Tar/output admission is bound in Root's final composite before these notes are adopted.
+
+This is source qualification, not a live claim. I retains sole publication ownership and the publication/readback handoff. No game/data change, old failure waiver or785/1441 preservation clearance is included.
