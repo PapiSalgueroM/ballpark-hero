@@ -201,6 +201,14 @@ async function walkC(browser, size) {
     const want = Math.round((before.netWorth + BRAND_FEE) * 10000) / 10000;
     notes.push(`c ${size.width}: earnings row ${earned}, Cash row ${cash}, saved Cash ${before.netWorth} to ${after.netWorth} (want ${want})`);
     if (after.netWorth !== want) fail(walk, `${size.width}: the saved Cash is ${after.netWorth}, not ${want}`, 'promise');
+    /* Measured, not judged: where the Cash row sits in the card's own scroll body (the board holds the card to the
+       height of the card it replaced, so a third row can sit below the body's fold; that is the board's, as on base). */
+    const fold = await outcome.evaluate(el => {
+      const body = el.querySelector('[data-decision-body]'), row = el.querySelector('[data-decision-change="netWorth"]');
+      const b = body.getBoundingClientRect(), r = row ? row.getBoundingClientRect() : null;
+      return { bodyH: Math.round(b.height), bodySH: body.scrollHeight, rowTop: r ? Math.round(r.top - b.top) : null, rowBottom: r ? Math.round(r.bottom - b.top) : null };
+    });
+    notes.push(`c ${size.width}: the card's body shows ${fold.bodyH}px of ${fold.bodySH}px; the Cash row sits ${fold.rowTop} to ${fold.rowBottom}px into it`);
     await outcome.screenshot({ path: path.join(OUT, `${walk}-${size.width}-outcome-card.png`) });
     const m0 = await page.evaluate(() => ({ y: Math.round(scrollY), h: document.documentElement.scrollHeight }));
     await check('outcome');
