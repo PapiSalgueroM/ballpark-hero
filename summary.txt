@@ -1,0 +1,16 @@
+vitest-a exit=0 82s |    Duration  81.17s (transform 13.83s, setup 4.66s, collect 48.63s, tests 132.55s, environment 29.30s, prepare 7.40s)
+td-seam exit=0 72s |    Duration  69.03s (transform 3.26s, setup 206ms, collect 4.30s, tests 62.91s, environment 619ms, prepare 512ms)
+tsc exit=0 162s | 
+vitest-b exit=1 163s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerTruthDigest.test.ts,title=src/test/usCareerTruthDigest.test.ts > Round 1104%3A the US career t
+intl-8 exit=0 50s | simCareerIntl: GREEN, 569 checks over sections 8
+intl-default exit=0 138s | simCareerIntl: GREEN, 52687 checks over sections 1,2,3,4,6,12
+ctl-staticledger exit=1 1s | simCareerIntl: control staticledger FIRED (section 12, 2 failures)
+ctl-norepair exit=1 27s | simCareerIntl: control norepair FIRED (section 8, 62 failures)
+ctl-gateyear exit=1 131s | simCareerIntl: control gateyear FIRED (section 2, 3 failures)
+ctl-lowbar exit=1 141s | simCareerIntl: control lowbar FIRED (section 4, 6450 failures)
+ctl-anyyear exit=1 137s | simCareerIntl: control anyyear FIRED (section 4, 4134 failures)
+ctl-endcall exit=1 118s | simCareerIntl: control endcall FIRED (section 4, 24 failures)
+ctl-knockage exit=1 28s | simCareerIntl: control knockage FIRED (section 5, 6 failures)
+simUsCareerWeight exit=0 0s | simUsCareerWeight: green. 31 checks: the four wrappers hand the board their own binding, no shared file or binding imports another sport, and every control fired.
+ctl-seasonyear exit=1 145s | simCareerIntl: control seasonyear FIRED (section 2, 1297 failures)
+intl-7 exit=0 482s | simCareerIntl: GREEN, 2706 checks over sections 7

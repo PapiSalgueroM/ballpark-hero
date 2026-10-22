@@ -1,0 +1,17 @@
+NEGATIVE CONTROL norepair: the repair on load does nothing (section 8 must fail)
+section 8: saves
+  FAIL [8] a broken block was not dropped alone
+  FAIL [8] a broken row was not dropped alone
+  FAIL [8] a broken last was not dropped alone
+  2 played NBA saves repaired byte identical; four planted blocks checked
+  FAIL [8] now 0: a stored last the replay equals was not dropped alone
+  FAIL [8] now 6: a stored last the replay equals was not dropped alone
+  FAIL [8] now 8: a stored last the replay equals was not dropped alone
+  FAIL [8] now 10: a stored last the replay equals was not dropped alone
+  FAIL [8] now 12: a stored last the replay equals was not dropped alone
+  FAIL [8] now 13: a stored last the replay equals was not dropped alone
+  FAIL [8] now 17: a stored last the replay equals was not dropped alone
+  FAIL [8] now 18: a stored last the replay equals was not dropped alone
+  FAIL [8] now 19: a stored last the replay equals was not dropped alone
+  200 tournaments of 60 go careers an era played again from the final save, byte identical; planted lasts: 59 equal to the replay dropped, 59 unequal kept
+simCareerIntl: control norepair FIRED (section 8, 62 failures)
