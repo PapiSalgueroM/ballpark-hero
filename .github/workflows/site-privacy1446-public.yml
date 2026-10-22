@@ -1,8 +1,8 @@
-name: Site privacy1446 public strict
+name: Site privacy1446 public intake
 on:
   workflow_dispatch:
   push:
-    branches: [codex/site-privacy1446-public-strict]
+    branches: [codex/site-privacy1446-public-intake]
 permissions:
   contents: read
   actions: read
@@ -11,14 +11,14 @@ concurrency:
   cancel-in-progress: false
 jobs:
   public_operator:
-    if: github.ref == 'refs/heads/codex/site-privacy1446-public-strict'
+    if: github.ref == 'refs/heads/codex/site-privacy1446-public-intake'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     defaults:
       run:
         shell: bash
     env:
-      OPERATOR_MODE: strict
+      OPERATOR_MODE: intake
       READBACK_OUT: siteprivacy1446-public-artifacts
       SOURCE_SHA: 4b4d99ebd64f50ffb45bca9d8f56fba6b7e4dcee
       QUALIFIED_BUILD_SHA: 0dc98659137ead9a6a237d64f1a279e5afee7976
@@ -636,7 +636,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: siteprivacy1446-public-strict-${{ github.run_id }}-${{ github.run_attempt }}
+          name: siteprivacy1446-public-intake-${{ github.run_id }}-${{ github.run_attempt }}
           path: siteprivacy1446-public-artifacts/
           if-no-files-found: error
           retention-days: 14
