@@ -62,3 +62,18 @@ Round 1538 (brief-1538.md) is the second half: the paid lines, the Skill card's 
   clean" (18 with the lawyer now), and optionally a sentence on the shop's returns.
 - usCareerProgramme.ts bankShare is the twin of the fee rounding (1538's concern).
 - The life decks' and deck C's own `pot + 1` helpers and the unclamped meters of brief item 9.
+
+## Proof (GitHub runners, closing head b1bf97d9; the full table is in finish-1534.md)
+- tsc 0; vitest 34 files 0 (720 tests); simUsShopPromises green on sections 0, 1, 2, 3, 4, 5, 8, 9 and every one of
+  its eleven controls fired on exactly its sections; SHOP_BASE_CHECK green (the rebuilt base engines equal
+  41368514's byte for byte); simUsCareerAnnualBenefits green unedited with its eleven controls; simUsDirtyMoney
+  green with the lawyer in section 9 (4,608 cases) and every control firing, lawyerdesk on the 360 lawyer cases only;
+  simCareerForm, simCareerPressMarket, simUsBoardParity (re-recorded fixture), simUsCareerDeckC, simUsCareerSummer
+  (every section, section 6 per sport) and the four career sims green.
+- The walk (playUsShopPromises) green at 320, 390 and 1280: the office card prints its 2 percent, the season feed
+  holds the returns line, and Cash moved 15.8 to 31.2 (pay less upkeep 30.4, banked 0.8, 0.0936 waiting). Its control
+  nocall fired on a build without the settle call.
+- Reds that are not this round's, each shown on the base 41368514 too: simCareerHall nfl [base] (TE 108.8, Round
+  1530's fix), simNflCoachStaffRecovery (frozen fixture since Release BL), simWritesAreSent, the 1009 and 1008
+  natives, simManagerWorldContinuity; three harnesses need the live database.
+- Weight: /nfl-my-career 493.2K against its 493 row (base 491.8K); the lead sets the rows at the join.
