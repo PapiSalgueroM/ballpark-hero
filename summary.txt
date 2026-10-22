@@ -1,0 +1,5 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+weight-branch exit=0 0s | branch: page chunk HallOfChampions-CtbapMT5.js raw 25232 gz 8662; closure 16 files raw 861416 gz 267048
+weight-base exit=0 34s | base: page chunk HallOfChampions-r3ElmZ18.js raw 24142 gz 8212; closure 16 files raw 860299 gz 266582
+playSaveKeeper-hall exit=0 76s | playSaveKeeper: green on the BRANCH ARM ONLY (KEEPER_NO_BASE=1). The base arm and journey K were NOT run, so this run carries no loss control and says nothing about the k
+playCorruptSaves exit=1 132s | playCorruptSaves: 1 broken save(s) trap the player: /hall-of-champions all

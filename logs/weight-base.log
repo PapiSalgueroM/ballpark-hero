@@ -1,0 +1,5 @@
+base c75d04dad21dae05bb110aa10e9e99d670adc38e
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
+[32m✓ built in 32.79s[39m
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+base: page chunk HallOfChampions-r3ElmZ18.js raw 24142 gz 8212; closure 16 files raw 860299 gz 266582

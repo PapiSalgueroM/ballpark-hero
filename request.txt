@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+#!serial
+weight-branch: node .rc/x/weight.mjs dist branch
+weight-base: B=$(git merge-base HEAD origin/main) && echo base $B && git worktree add /tmp/base $B > /dev/null 2>&1 && ln -s $PWD/node_modules /tmp/base/node_modules && (cd /tmp/base && node_modules/.bin/vite build > /tmp/base-build.log 2>&1; tail -3 /tmp/base-build.log) && node .rc/x/weight.mjs /tmp/base/dist base
+playSaveKeeper-hall: ONLY=/hall-of-champions KEEPER_NO_BASE=1 node scripts/playSaveKeeper.mjs
+playCorruptSaves: node scripts/playCorruptSaves.mjs
