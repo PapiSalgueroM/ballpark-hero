@@ -45,8 +45,12 @@
  *              case in all four sports (review of 2026-10-22, run lens finding 3: before the earnings started at
  *              hundredths this escaped every check)
  *   clampdown  the Skill answer pulls a rating above the ceiling down to it -> section 7's (a) case "above the
- *              ceiling" in all four sports (run lens finding 2: before that case this kept section 7 green), and the
- *              fleet's every-answer check wherever a head career answers the card above its ceiling
+ *              ceiling" in all four sports (run lens finding 2: before that case this kept section 7 green). The
+ *              fleet cannot see this one: under the control the summer deal counts the card as one that moves the
+ *              rating, so no head career answers it above the ceiling (r1538x-c1: 0 such answers in every sport,
+ *              against 8 NBA, 1 NFL, 7 MLB and 9 NHL on the plain head), and only the (a) case catches it.
+ * Measured on the runner (r1538x-c1, head f0cb2475): earnround 28 of 28 section 6 cases red, clampdown 4 red (one
+ * (a) case a sport), potplusone, potplusoneall and nobank fire as before.
  *
  * Section 3's band, with its measured headroom (RULES line 7; review of 2026-10-22, read lens finding 4). The share
  * is checked inside the printed chance plus or minus 4 binomial sd. The careers are named and seeded in a fixed
