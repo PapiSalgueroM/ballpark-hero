@@ -1,0 +1,11 @@
+4) the family office: 2 percent of Cash above zero, after the steady returns
+   FAIL [4] nba before the tick: the holder ended on morale 70 and the bare twin on 70; with the returns banked before the money app the holder keeps 3
+   nba: the office alone earned 0.4220 then 0.4520; at -4.1M nothing moved; with the index fund 0.4648 (wanted 0.4648); thin buffer: the holder ends on 0.3M and morale 70, the bare twin on 0.1M and 70
+   FAIL [4] nfl before the tick: the holder ended on morale 67 and the bare twin on 67; with the returns banked before the money app the holder keeps 3
+   nfl: the office alone earned 0.4220 then 0.4520; at -3.9M nothing moved; with the index fund 0.4648 (wanted 0.4648); thin buffer: the holder ends on 0.3M and morale 67, the bare twin on 0.1M and 67
+   FAIL [4] mlb before the tick: the holder ended on morale 67 and the bare twin on 67; with the returns banked before the money app the holder keeps 3
+   mlb: the office alone earned 0.4080 then 0.4240; at -3.4M nothing moved; with the index fund 0.4508 (wanted 0.4508); thin buffer: the holder ends on 0.3M and morale 67, the bare twin on 0.1M and 67
+   FAIL [4] nhl before the tick: the holder ended on morale 70 and the bare twin on 70; with the returns banked before the money app the holder keeps 3
+   nhl: the office alone earned 0.4080 then 0.4240; at -3.4M nothing moved; with the index fund 0.4508 (wanted 0.4508); thin buffer: the holder ends on 0.3M and morale 70, the bare twin on 0.1M and 70
+   control settleafter: section 4 turned 4 red
+simUsShopPromises: CONTROL settleafter FIRED (red sections 4)

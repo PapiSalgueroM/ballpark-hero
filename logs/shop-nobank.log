@@ -1,0 +1,22 @@
+6) paid lines: the four brand answers and the ten clean corruption answers bank what they say, both eras
+   FAIL [6] nba now Build the brand: Cash went 10.37 to 10.37, not by the 5M that landed
+   FAIL [6] nba now Build the brand: the outcome card's Cash row is null, not +$5M
+   FAIL [6] nba now ncorr_sneaks: Cash went 10.37 to 10.37, not by the 2M that landed
+   FAIL [6] nba now ncorr_sneaks: the outcome card's Cash row is null, not +$2M
+   FAIL [6] nba now ncorr_memorabilia: Cash went 10.37 to 10.37, not by the 0.9M that landed
+   FAIL [6] nba now ncorr_memorabilia: the outcome card's Cash row is null, not +$0.9M
+   FAIL [6] nba now ncorr_sportsbook: Cash went 10.37 to 10.37, not by the 2.5M that landed
+   FAIL [6] nba now ncorr_sportsbook: the outcome card's Cash row is null, not +$2.5M
+   FAIL [6] nba now ncorr_exhibition: Cash went 10.37 to 10.37, not by the 0.9M that landed
+   FAIL [6] nba now ncorr_exhibition: the outcome card's Cash row is null, not +$0.9M
+   FAIL [6] nba y2004 Build the brand: Cash went 10.37 to 10.37, not by the 1.6M that landed
+   FAIL [6] nba y2004 Build the brand: the outcome card's Cash row is null, not +$1.6M
+   FAIL [6] nba y2004 ncorr_sneaks: Cash went 10.37 to 10.37, not by the 2M that landed
+   FAIL [6] nba y2004 ncorr_sneaks: the outcome card's Cash row is null, not +$2M
+   FAIL [6] nba y2004 ncorr_memorabilia: Cash went 10.37 to 10.37, not by the 0.9M that landed
+   nba: 10 paid answers played (2026 and y2004), each banks what it says
+   nfl: 6 paid answers played (2026 and y2005), each banks what it says
+   mlb: 6 paid answers played (2026 and y2004), each banks what it says
+   nhl: 6 paid answers played (2026 and y2006), each banks what it says
+   control nobank: section 6 turned 28 red
+simUsShopPromises: CONTROL nobank FIRED (red sections 6)
