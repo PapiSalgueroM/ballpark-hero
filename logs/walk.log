@@ -1,0 +1,15 @@
+  [390 figures] {"scrollW":390,"clientW":390,"scrollY":101,"minute":"1","pitch":{"x":0,"y":82,"w":390,"h":668},"label":null,"cue":null,"labelText":null,"lift":null,"phase":"pass","looks":22,"figures":22}
+  ok: 390: all 22 figures carry their own look
+  [390 foul] {"scrollW":390,"clientW":390,"scrollY":101,"minute":"8","pitch":{"x":0,"y":82,"w":390,"h":668},"label":{"x":128,"y":326,"w":93,"h":19},"cue":{"x":164,"y":347,"w":20,"h":12},"labelText":"Foul by Wharton","lift":null,"phase":"pass","looks":22,"figures":22}
+  ok: 390: the foul's label "Foul by Wharton" is inside the pitch
+  [390 air] {"scrollW":390,"clientW":390,"scrollY":101,"minute":"8","pitch":{"x":0,"y":82,"w":390,"h":668},"label":null,"cue":null,"labelText":null,"lift":"3.97","phase":"pass","looks":22,"figures":22}
+  [390 shot] {"scrollW":390,"clientW":390,"scrollY":101,"minute":"12","pitch":{"x":0,"y":82,"w":390,"h":668},"label":null,"cue":null,"labelText":null,"lift":"0.27","phase":"flight","looks":22,"figures":22}
+  ok: 390: no page errors
+  [1280 figures] {"scrollW":1280,"clientW":1280,"scrollY":113,"minute":"1","pitch":{"x":183,"y":74,"w":542,"h":722},"label":null,"cue":null,"labelText":null,"lift":null,"phase":"pass","looks":22,"figures":22}
+  ok: 1280: all 22 figures carry their own look
+  [1280 foul] {"scrollW":1280,"clientW":1280,"scrollY":113,"minute":"7","pitch":{"x":183,"y":74,"w":542,"h":722},"label":{"x":392,"y":335,"w":85,"h":19},"cue":{"x":425,"y":357,"w":20,"h":12},"labelText":"Foul by Garner","lift":null,"phase":"pass","looks":22,"figures":22}
+  ok: 1280: the foul's label "Foul by Garner" is inside the pitch
+  [1280 air] {"scrollW":1280,"clientW":1280,"scrollY":113,"minute":"8","pitch":{"x":183,"y":74,"w":542,"h":722},"label":null,"cue":null,"labelText":null,"lift":"3.97","phase":"pass","looks":22,"figures":22}
+  [1280 shot] {"scrollW":1280,"clientW":1280,"scrollY":113,"minute":"12","pitch":{"x":183,"y":74,"w":542,"h":722},"label":null,"cue":null,"labelText":null,"lift":"0.20","phase":"flight","looks":22,"figures":22}
+  ok: 1280: no page errors
+walk1521: green, both sizes walked, screenshots in RC_OUT
