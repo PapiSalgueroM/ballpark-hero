@@ -1,0 +1,5 @@
+#!playwright
+#!serial
+simHomeSearchRecovery: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simHomeSearchRecovery.mjs
+simWritesAreSent: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simWritesAreSent.mjs
+simWritesAreSent-base: git worktree add /tmp/base 268e3b97 >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/base/node_modules && cd /tmp/base && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simWritesAreSent.mjs

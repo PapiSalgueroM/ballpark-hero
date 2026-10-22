@@ -1,0 +1,3 @@
+simHomeSearchRecovery exit=0 43s | Home search recovery: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/home-search-recovery-artifacts/outcomes
+simWritesAreSent exit=1 0s | simWritesAreSent: 1 failure
+simWritesAreSent-base exit=1 1s | simWritesAreSent: 1 failure
