@@ -1,0 +1,3 @@
+m-flipgoal exit=1 450s | simTycoonScorelines: 37 checks, 10 failed [449 s]
+m-tworolls exit=1 445s | simTycoonScorelines: 37 checks, 11 failed [444 s]
+m-restore exit=0 0s | RESTORED

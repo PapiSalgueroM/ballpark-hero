@@ -1,0 +1,200 @@
+MUTATION APPLIED: tworolls (1 replacement(s))
+Round 1532: Stadium Tycoon scorelines at the hook's cadence (dt 0.2s)
+S1) the law, read not restated
+   1085133 chances equal the law at the engine's own gap (Squad 0 to 200, ten divisions, every rival, the edge 0 to 0.40 and NaN, -1, 1, every rival fixture both ways); the rival's chance falls at every step of the edge; the lib imports goalLambda and types neither 0.055 nor 4.2; the rules' facts 1.45, 1.17 and 0.05 are the law's; every division's rivals spread -3 to 3 law points
+S2) the shape
+  FAIL: S2: the body of playMinute moved (61 lines, 60 on the base)
+  FAIL: S2: a watched match drew 270 rolls, not 180
+  FAIL: S2: a watched match drew 270 rolls, not 180
+  FAIL: S2: a watched match drew 270 rolls, not 180
+  FAIL: S2: a watched match drew 270 rolls, not 180
+S3) goals
+   cal 2.56 goals a match (windows 15 to 30 2.821, 30 to 60 2.482, 60 to 120 2.534, 120 to 240 2.626); away matchdays from pace at 30 / 60 / 120 minutes none (the final matchday waits) / 2.361 goals, 69.444% won of 36 / 2.637 goals, 61.579% won of 190; hold 2.557 goals a match (windows 15 to 30 2.379, 30 to 60 2.536, 60 to 120 2.61, 120 to 240 2.657); away matchdays from pace at 30 / 60 / 120 minutes none (the final matchday waits) / 2.2 goals, 73.333% won of 60 / 2.789 goals, 61.491% won of 161
+S4) results
+  FAIL: S4: cal: pace won 81.429% in minutes 15 to 30, outside 50 to 80 (a drift into a timer or a wall)
+S5) titles
+   cal 0.752 titles a season; hold 0.749 titles a season; season one won in 36 of 40; title share at gaps 0 / 4 / 8 / 12 / 14 through the engine's own playMinute and playMatchday, 500 seasons a cell: 6 clubs one leg: 0.28 / 0.442 / 0.642 / 0.784 / 0.874; 8 clubs two legs: 0.258 / 0.566 / 0.864 / 0.964 / 0.994; 10 clubs two legs: 0.258 / 0.554 / 0.844 / 0.994 / 0.998
+S6) never 99
+   our chance never passed 0.046667 a minute over 5289 states (highest 0.046667); the exact ceiling wins 98.189% and 98.645% with a rival who never scores; the engine's Squad 200 club with a 0.39 edge wins 98.189%
+S7) bonuses
+   2,000 states: a goal 5 and a win 20 seconds of unboosted income, untouched by Hype and the whistles; a promotion paid 8143 and a Summit title 8143, 120 seconds each; away pay Object.is the base on 52 inputs; cal 20 seeds' last win before two hours paid 20 to 20 seconds of income (base 0.1322); hold 20 seeds' last win before two hours paid 20 to 20 seconds of income (base 0.1322)
+S8) the economy beside the base record (printed, no fence) [102 s]
+   pace first Sell up 13.02 min (base 13.37); over4 14.203 (base 14.77)
+   pace income a second at 30 / 60 / 120 min: 17884.117 (base 21155.507) / 25721.792 (base 34433.314) / 47650.745 (base 81037.765)
+   pace division at 30 / 60 / 120 / 240: 2 (base 2) / 3 (base 3) / 5 (base 6) / 7 (base 9)
+   pace minutes to reach divisions 1 to 9: 10.5, 21, 31.5, 60.9, 119.7, 159.6, 216.3, later, later
+   mean capped streak 15 to 120: pace 4.519, over4 6.781, nosquad 0.411; watched gems an hour: pace 109.314
+   paceSell stars 1 / 2 / 3 at 21 (base 21) / 42 (base 42) / 73.5 (base 73.5) min
+   milestones and badges, pace: win1 4.2 (4.2), win10 21 (23.1), win50 109.2 (107.1), goals25 9.66 (9.753), streak5 14.7 (12.6), fans500 7.293 (7.343), fans2k 13.007 (12.903), fans10k 34.907 (32.557), full 14.143 (13.827), allTracks 3.337 (3.337), ag25 9.66 (9.753), ag100 27.697 (27.23), ag500 78.097 (96.11), ag2000 later (later), aw1 4.2 (4.2), aw10 21 (23.1), aw50 109.2 (107.1), aw150 later (later), aw400 later (later), as5 14.7 (12.6), as10 29.4 (23.1)
+   mean matchGap per window, pace: 15 to 30 14.657, 30 to 60 9.843, 60 to 120 8.005, 120 to 240 7.118
+S9a) the ladder: its rungs, found by code
+   16 rungs found by the hit functions' code (comments stripped), each reading its own counter: aw1 aw10 aw50 aw150 aw400 ag25 ag100 ag500 ag2000 as5 as10 win1 win10 win50 goals25 streak5; 57 rows read, all 57 the lib exports
+S9b) the ladder: its shape
+   every base id present (47 badges, 10 milestones), ACH_BONUS 0.02, every milestone pays its base pay; wins 1, 8, 35, 125, 300, goals 10, 30, 75, 250, streak 5, 10, each at or below its old threshold, pairs shared, as10 at streakMult's cap (10), streak5 and as5 at the lead's 5, every label carries its threshold
+S9c) the ladder: its minutes
+   cal: win1 4.2 (2 m) against 4.2, x1, headroom 6.3 (se 0.712); aw1 4.2 (2 m) against 4.2, x1, headroom 6.3 (se 0.712); win10 21 (10 m) against 23.1, x0.909, headroom 5.985 (se 0.911); aw10 21 (10 m) against 23.1, x0.909, headroom 5.985 (se 0.911); win50 109.2 (52 m) against 107.1, x1.02, headroom 35.385 (se 2.207); aw50 109.2 (52 m) against 107.1, x1.02, headroom 35.385 (se 2.207); goals25 9.66 (4.6 m) against 9.753, x0.99, headroom 6.207 (se 1.072); ag25 9.66 (4.6 m) against 9.753, x0.99, headroom 6.207 (se 1.072); ag100 27.697 (13.189 m) against 27.23, x1.017, headroom 9.064 (se 1.297); ag500 78.097 (37.189 m) against 96.11, x0.813, headroom 15.625 (se 3.096); streak5 14.7 (7 m) against 12.6, x1.167 (exempt); as5 14.7 (7 m) against 12.6, x1.167 (exempt); as10 29.4 (14 m) against 23.1, x1.273 (exempt); aw150 125 = x1.119 of 150 x 0.614 / 0.825 a match, room 0.131 (se 0.041); aw400 300 = x1.007 of 400 x 0.614 / 0.825 a match, room 0.207 (se 0.037); ag2000 250 = x0.96 of 2000 x 1.86 / 14.281 a match, room 0.16 (se 0.035)
+   hold: win1 2.1 (1 m) against 2.1, x1, headroom 6.3 (se 0.483); aw1 2.1 (1 m) against 2.1, x1, headroom 6.3 (se 0.483); win10 21 (10 m) against 21, x1, headroom 7.35 (se 1.313); aw10 21 (10 m) against 21, x1, headroom 7.35 (se 1.313); win50 109.2 (52 m) against 105, x1.04, headroom 32.55 (se 3.088); aw50 109.2 (52 m) against 105, x1.04, headroom 32.55 (se 3.088); goals25 8.96 (4.267 m) against 9.613, x0.932, headroom 5.647 (se 0.685); ag25 8.96 (4.267 m) against 9.613, x0.932, headroom 5.647 (se 0.685); ag100 30.38 (14.467 m) against 25.783, x1.178, headroom 4.427 (se 1.778); ag500 76.3 (36.333 m) against 94.897, x0.804, headroom 14.617 (se 2.821); streak5 12.6 (6 m) against 10.5, x1.2 (exempt); as5 12.6 (6 m) against 10.5, x1.2 (exempt); as10 39.9 (19 m) against 21, x1.9 (exempt); aw150 125 = x1.104 of 150 x 0.649 / 0.86 a match, room 0.146 (se 0.058); aw400 300 = x0.993 of 400 x 0.649 / 0.86 a match, room 0.193 (se 0.052); ag2000 250 = x0.924 of 2000 x 1.93 / 14.263 a match, room 0.124 (se 0.031)
+   every rung but as10 within 35 percent or 3 matches of its base minute, the long rungs within 0.8 to 1.25 of old x the per match rate ratio
+S9d) the ladder: every badge kept
+   a veteran save (2,000 goals, 400 wins, a streak of 10, every id) keeps all 47 badges and 10 milestones through load and a 2 second tick; 9 corpus saves and 12 histories lose no id; 11 thresholds each earn nothing one under and exactly their rungs at it
+
+control copy: 1 place rewritten in a copy of the lib
+   sections red: S1 S2 (expected S1) [115 s]
+     S1: division 0 Squad 0: our chance 0.014555555555555554 is not the law's 0.014583333333333334
+     S2: the body of playMinute moved (61 lines, 60 on the base)
+  FAIL: control copy: S2 went red too
+
+control noscale: 1 place rewritten in a copy of the lib
+   sections red: S1 S2 (expected S1) [127 s]
+     S1: division 0 Squad 0 edge 0.002: the rival's chance 0.014527777777777777 is not the law's 0.01449872222222222
+     S2: the body of playMinute moved (61 lines, 60 on the base)
+  FAIL: control noscale: S2 went red too
+
+control tworolls: 1 place rewritten in a copy of the lib
+   sections red: S2 (expected S2) [143 s]
+     S2: the body of playMinute moved (62 lines, 60 on the base)
+
+control linear: 3 places rewritten in a copy of the lib
+   sections red: S1 S2 S3 S4 S5 S6 (expected S1 S3 S4 S5 S6) [155 s]
+     S1: division 0 Squad 0: our chance 0.028 is not the law's 0.014583333333333334
+     S2: the body of playMinute moved (61 lines, 60 on the base)
+     S3: ctl: pace's watched league matches over minutes 15 to 120 held 14.589 goals, outside 2.5 to 3.0
+     S4: ctl: pace won 99.7% over minutes 15 to 120, outside 55 to 75
+     S5: ctl: pace took 0.981 titles a season over minutes 15 to 240, outside 0.40 to 0.90
+     S6: Squad 15 in division 0 scores at 0.052000000000000005 a minute, past the law's ceiling 0.04666666666666667
+  FAIL: control linear: S2 went red too
+
+control flat: 1 place rewritten in a copy of the lib
+   sections red: S2 S4 S5 (expected S4 S5) [169 s]
+     S2: the body of playMinute moved (61 lines, 60 on the base)
+     S4: division 0 Squad 7: the gap reads -2.5000000000000004, the Squad, the division and the rival make 3.4499999999999997
+     S5: ctl: pace took 0.043 titles a season over minutes 15 to 240, outside 0.40 to 0.90
+  FAIL: control flat: S2 went red too
+
+control matchno: 1 place rewritten in a copy of the lib
+   sections red: S2 S3 S4 S5 (expected S3 S4 S5) [183 s]
+     S2: the body of playMinute moved (61 lines, 60 on the base)
+     S3: ctl: pace's watched league matches over minutes 15 to 120 held 3.351 goals, outside 2.5 to 3.0
+     S4: ctl: pace won 10.3% over minutes 15 to 120, outside 55 to 75
+     S5: ctl: pace took 0.036 titles a season over minutes 15 to 240, outside 0.40 to 0.90
+  FAIL: control matchno: S2 went red too
+
+control noclamp: 1 place rewritten in a copy of the lib
+   sections red: S1 S2 S6 (expected S1 S6) [196 s]
+     S1: division 0 Squad 65: our chance 0.04834722222222222 is not the law's 0.04666666666666667
+     S2: the body of playMinute moved (61 lines, 60 on the base)
+     S6: Squad 65 in division 0 scores at 0.04834722222222222 a minute, past the law's ceiling 0.04666666666666667
+  FAIL: control noclamp: S2 went red too
+
+control facts: 1 place rewritten in a copy of the lib
+   sections red: S1 S2 (expected S1) [212 s]
+     S1: scoringFacts().evenAgainst is 1.45, the law says 1.17
+     S2: the body of playMinute moved (61 lines, 60 on the base)
+  FAIL: control facts: S2 went red too
+
+control offsetunit: 1 place rewritten in a copy of the lib
+   sections red: S1 S2 (expected S1) [227 s]
+     S1: division 0: its rivals sit -0.3 to 0.3 law points from the division, not minus 3 to plus 3
+     S2: the body of playMinute moved (61 lines, 60 on the base)
+  FAIL: control offsetunit: S2 went red too
+
+control crowd: 4 places rewritten in a copy of the lib
+   sections red: S2 S7 (expected S7) [242 s]
+     S2: the body of playMinute moved (61 lines, 60 on the base)
+     S7: state 0: a goal paid 1075, 5 seconds of income is 38872
+  FAIL: control crowd: S2 went red too
+
+control newrung: 1 place rewritten in a copy of the lib
+   sections red: S9a (expected S9a) [255 s]
+     S9a: astall reads totalWins: a new rung needs an anchor
+     says S9a: astall reads totalWins: a new rung needs an anchor
+
+control raise: 1 place rewritten in a copy of the lib
+   sections red: S9b S9c (expected S9b S9c) [268 s]
+     S9b: goals25 and ag25 are a pair and no longer share a threshold (30, 10)
+     S9c: ctl: goals25 lands at 27.697 minutes against the base's 9.753, outside 35 percent or 3 matches
+     says S9b: goals25 rose to 30 from 25: a threshold may only go down
+     says S9c: ctl: goals25 lands at 27.697 minutes against the base's 9.753, outside 35 percent or 3 matches
+
+control oldladder: 11 places rewritten in a copy of the lib
+   sections red: S9c (expected S9c) [280 s]
+     S9c: ctl: win50 lands at 165.9 minutes against the base's 107.1, outside 35 percent or 3 matches
+     says S9c: ctl: win50 lands at 165.9 minutes against the base's 107.1, outside 35 percent or 3 matches
+     says S9c: ctl: ag2000 at 2000 is x7.752 of old x the per match rate ratio, outside 0.8 to 1.25
+
+control offbyone: 1 place rewritten in a copy of the lib
+   sections red: S9d (expected S9d) [293 s]
+     S9d: goals at 250 earned nothing, the rungs at 250 are ag2000
+     says S9d: goals at 250 earned nothing, the rungs at 250 are ag2000
+
+control split: 1 place rewritten in a copy of the lib
+   sections red: S9a (expected S9a) [305 s]
+     S9a: 56 rows in the code, but the lib exports 57: a row written across lines escapes this fence
+     says S9a: 56 rows in the code, but the lib exports 57: a row written across lines escapes this fence
+
+control wrongcounter: 1 place rewritten in a copy of the lib
+   sections red: S9a S9d (expected S9a S9d) [318 s]
+     S9a: win1 reads totalGoals, not totalWins
+     S9d: wins at 1 earned aw1, the rungs at 1 are aw1 win1
+     says S9a: win1 reads totalGoals, not totalWins
+     says S9d: wins at 1 earned aw1, the rungs at 1 are aw1 win1
+
+control dropid: 2 places rewritten in a copy of the lib
+   sections red: S9b S9d (expected S9b S9d) [331 s]
+     S9b: badge agw25 is gone, and it is a save key
+     S9d: the veteran save lost agw25 allTracks through load and one tick
+     says S9b: badge agw25 is gone, and it is a save key
+     says S9b: milestone allTracks is gone, and it is a save key
+     says S9d: the veteran save lost agw25 allTracks through load and one tick
+
+control pay: 1 place rewritten in a copy of the lib
+   sections red: S9b (expected S9b) [343 s]
+     S9b: milestone full pays 601, the base paid 600
+     says S9b: milestone full pays 601, the base paid 600
+
+control bonus: 1 place rewritten in a copy of the lib
+   sections red: S9b (expected S9b) [356 s]
+     S9b: ACH_BONUS is 0.021, not 0.02
+     says S9b: ACH_BONUS is 0.021, not 0.02
+
+control unpair: 1 place rewritten in a copy of the lib
+   sections red: S9b (expected S9b) [369 s]
+     S9b: win10 and aw10 are a pair and no longer share a threshold (8, 7)
+     says S9b: win10 and aw10 are a pair and no longer share a threshold (8, 7)
+
+control raiseone: 2 places rewritten in a copy of the lib
+   sections red: S9b (expected S9b) [381 s]
+     S9b: win1 rose to 2 from 1: a threshold may only go down
+     says S9b: win1 rose to 2 from 1: a threshold may only go down
+     says S9b: aw1 rose to 2 from 1: a threshold may only go down
+
+control falls: 1 place rewritten in a copy of the lib
+   sections red: S9b S9c (expected S9b S9c) [394 s]
+     S9b: the goals rungs no longer rise: 10, 10, 75, 250
+     S9c: ctl: ag100 lands at 9.66 minutes against the base's 27.23, outside 35 percent or 3 matches
+     says S9b: the goals rungs no longer rise: 10, 10, 75, 250
+     says S9c: ctl: ag100 lands at 9.66 minutes against the base's 27.23, outside 35 percent or 3 matches
+
+control streakfour: 2 places rewritten in a copy of the lib
+   sections red: S9b (expected S9b) [407 s]
+     S9b: streak5 is 4, but the lead fixed it at 5 (brief-1543 1.2)
+     says S9b: streak5 is 4, but the lead fixed it at 5 (brief-1543 1.2)
+     says S9b: as5 is 4, but the lead fixed it at 5 (brief-1543 1.2)
+
+control asnine: 1 place rewritten in a copy of the lib
+   sections red: S9b (expected S9b) [419 s]
+     S9b: as10 is 9, but streakMult stops rising at 10
+     says S9b: as10 is 9, but streakMult stops rising at 10
+
+control label: 1 place rewritten in a copy of the lib
+   sections red: S9b (expected S9b) [432 s]
+     S9b: aw50's label "50 career wins" does not carry its threshold 35
+     says S9b: aw50's label "50 career wins" does not carry its threshold 35
+
+control goalstwenty: 2 places rewritten in a copy of the lib
+   sections red: S9c (expected S9c) [444 s]
+     S9c: ctl: goals25 lands at 18.503 minutes against the base's 9.753, outside 35 percent or 3 matches
+     says S9c: ctl: goals25 lands at 18.503 minutes against the base's 9.753, outside 35 percent or 3 matches
+     says S9c: ctl: ag25 lands at 18.503 minutes against the base's 9.753, outside 35 percent or 3 matches
+
+simTycoonScorelines: 37 checks, 11 failed [444 s]
