@@ -1,0 +1,2 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+trust: ONLY=simTrustCopy,simNoRivalNames,simHarnessAnchors node scripts/runAllSims.mjs
