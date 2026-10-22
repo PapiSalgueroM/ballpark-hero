@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+owner: node scripts/simSoccerOwnerTail.mjs
+owner-s2: SIM_OWNER_SALT=2 SIM_OWNER_ONLY=3,4 node scripts/simSoccerOwnerTail.mjs
+owner-s3: SIM_OWNER_SALT=3 SIM_OWNER_ONLY=3,4 node scripts/simSoccerOwnerTail.mjs
+owner-s4: SIM_OWNER_SALT=4 SIM_OWNER_ONLY=3,4 node scripts/simSoccerOwnerTail.mjs
+owner-s9: SIM_OWNER_SALT=9 SIM_OWNER_ONLY=3,4 node scripts/simSoccerOwnerTail.mjs
+ctl-debtfree: SIM_OWNER_CONTROL=debtfree SIM_OWNER_ONLY=3 node scripts/simSoccerOwnerTail.mjs
+ctl-debtnoop: SIM_OWNER_CONTROL=debtnoop SIM_OWNER_ONLY=3 node scripts/simSoccerOwnerTail.mjs
+ctl-dominant: SIM_OWNER_CONTROL=dominant SIM_OWNER_ONLY=4 node scripts/simSoccerOwnerTail.mjs
