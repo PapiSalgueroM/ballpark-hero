@@ -1,0 +1,19 @@
+consentPatch: scripts/playCmDifficulty.mjs already patched
+playCmDifficulty: seed 2543157748 (replay with DIFF_SEED=2543157748), widths 320, play widths 390, 1280, control jump
+
+== 320 by 640
+  PASS  320: the Dugout step offers Very Easy, Easy, Medium, Hard and Impossible with Medium pressed ([["Very Easy","false"],["Easy","false"],["Medium","true"],["Hard","false"],["Impossible","false"]])
+  PASS  320: a Medium career carries no level and no easy mark and wears no level pill
+  PASS  320: Easy is pressed
+  CAUGHT  320: pressing every tile in turn moves nothing (start 2105/31255, veryeasy 2105/31287, easy 2105/31287, hard 2105/31271, legend 2105/31255, normal 2105/31255, easy 2105/31287)
+  PASS  320: the card's shortest button is 44.0 px and its smallest text 12 px
+  PASS  320: the Dugout step is no wider than the screen
+  PASS  320: the Easy career is running
+  PASS  320: the save holds Easy and the easy mark of season 1 (easy, 1)
+  PASS  320: the hub wears the Easy pill ("Easy")
+  PASS  320: nothing in the header overlaps or runs off the page (0 overlaps)
+   320: header 62 px on Easy, 62 px on Medium
+  PASS  320: the Managers card reads "SLOT 1 · LAST PLAYED You Brentford 2026-27 · Season 1 Week 1 of 54 · Board 69/100 🏆 0 tro"
+  PASS  no page errors
+
+playCmDifficulty control jump: all 1 guarded checks fired (mutations landed: {"blurb":2})

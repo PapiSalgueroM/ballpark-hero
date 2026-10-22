@@ -1,0 +1,14 @@
+build exit=0 22s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playLiveMatchFit exit=0 141s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen, an own goal drawn as one.
+playLiveMatchFit-fresh exit=0 159s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen, an own goal drawn as one.
+livefit-ctl exit=0 166s | controls (each must be 1): widelabels=1 digits=1
+diff-walk exit=0 112s |   PASS  no page errors
+walk-jump exit=0 28s | playCmDifficulty control jump: all 1 guarded checks fired (mutations landed: {"blurb":2})
+walk-nopill exit=0 163s | playCmDifficulty control nopill: all 2 guarded checks fired (mutations landed: {"pill":5})
+walk-nolevel exit=0 43s | playCmDifficulty control nolevel: all 8 guarded checks fired (mutations landed: {"change":5})
+playCmNoSack exit=0 252s |   PASS  no page errors
+playCmSavePoints exit=0 132s | playCmSavePoints: OK at 390 and 1280
+walk-nodoor exit=1 184s | playCmSavePoints: control nodoor FIRED (7 door check(s) red, 7 in all)
+walk-nomark exit=1 36s | playCmSavePoints: control nomark FIRED (2 slot check(s) red, 2 in all)
+walk-noevent exit=1 36s | playCmSavePoints: control noevent FIRED (2 slot check(s) red, 2 in all)
+tt-all exit=0 445s | playTwoTabs: green at 320x640, 390x844, 1280x900
