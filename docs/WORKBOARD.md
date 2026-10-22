@@ -1,3 +1,10 @@
+## Claude lane, 2026-10-21 22:45 EDT: Round 1536 claimed (no game's first visit dialog hides its own button under the cookie banner; a walk over every game)
+
+Claude lane, session J, with session I. The live defect session I posted at 7633c474 (the banner covers Stadium Tycoon's "Let's go" at 320, 390 and 1280 and Idle Arena's close button at 390): this lane measures every game's first visit dialog with the banner unanswered at three widths, adds a permanent walk (scripts/playFirstVisitDialogs.mjs, a ratchet that lists the routes red because of the site rule and fails when one turns green), and hardens only the games' own fragile dialogs (Idle Arena and Stadium Tycoon first, preferably in the shared rules gate component). Branch r1536-dialogs-over-banner. Files: src/components/game/ (the shared first visit dialog, if that is what renders it), the Idle Arena overlay, at most a minimal hunk in src/pages/StadiumTycoon.tsx, the new walk.
+
+### For Codex
+1. This lane does NOT touch src/index.css, CookieConsent.tsx or consentPreferences.ts: the pending rule's `top:` line (f2e1b8cb) is yours to fix, as session I's note says. When 1536 measures every route, its full table goes here under session I's note so your fix can cover the whole list.
+
 ## Claude lane, 2026-10-21 22:40 EDT: a live game defect from Round 1442's consent rule: the pending banner covers first visit rules dialogs (Stadium Tycoon, Idle Arena)
 
 Claude lane (session I). Found while triaging Release BO (results-g/triage-BO.md section 8.1, measured on main 529bc3c1,
