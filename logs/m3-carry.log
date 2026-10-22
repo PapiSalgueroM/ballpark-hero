@@ -1,0 +1,15 @@
+MUTATION APPLIED: expiry
+(a) Everton: sacked, skipped
+(a) Real Madrid: sacked, skipped
+(a) Lyon: sacked, skipped
+   (c) Review C 0: scouted Brazil, in the pool as Nigeria (generated true)
+   (c) Review C 1: scouted Japan, in the pool as Norway (generated true)
+   (c) Review C 2: scouted Türkiye, in the pool as Hungary (generated true)
+   (c) Review C 3: scouted Nigeria, in the pool as Brazil (generated true)
+(c) deals ran out: 4 of 4 in the pool, 0 with the trip's country
+   (b) Review C 0: scouted Brazil, signed back as Nigeria
+   (b) Review C 1: scouted Japan, signed back as Norway
+   (b) Review C 2: scouted Türkiye, signed back as Hungary
+   (b) Review C 3: scouted Nigeria, signed back as Brazil
+(b) signed back from the pool: 4 of 4, 0 kept the trip country
+review-carry: BROKEN in 2 check(s)
