@@ -41,7 +41,29 @@ fleet (hostXpHelp's sentence holds). Media: each gamble lands exactly 30 more ti
 Section 5: 487 offers taken, 475 followed through the draft and the summer, 0 refused. Section 6: 60 years out on
 each of three seed sets, drafted ratio 0.987, 0.981, 0.985 (and 0.984 on 37876c81), band [0.95, 1.01].
 
+## Step 6 and the final proof
+
+| request (head) | result |
+|---|---|
+| r1533-s2c (37876c81) | every harness and test naming an edited file: 42 lines, all exit 0 |
+| r1533-s7b (fb3d5eb5) | 24 rule fences: 20 green; simSchemaNames and simLeaderboardCaps red for want of the database (by design on a runner); simWritesAreSent and simResultMoment needed Playwright (rerun in s8w) |
+| r1533-s6w (460d9a06) | playGmCareer 0, playOwnerMandate 0, playFrontOfficeGameDay 0 (386 checks), playDraftNight 0, sweepGames 0 (183 routes); playFoHub 1 (two NBA lines recorded red before this round: roster box names Nikola Jokic, a fit squad puts the dot out); playGmPress 1 with the same two lines as the base build (r1533-s6c base-gmpress); simGmStaff 1 with the base's first line |
+| r1533-s8a (3192dbf9) | tsc 0, simGmCareer 0 (228 s), notrim FIRED (17), vitest board, career, shared 0, simGmDeskHost, simNflGmDesk, simGmReload, simGmXp, simSessionMarks, simHarnessAnchors, controlFrontOfficeBoard check, simGuideHeadings, simSiteSearch, simNoRivalNames, simNoInventedQuotes 0 |
+| r1533-s8w (3192dbf9) | playGmCareer controls wipebutton, nofallback, eagerpanel all FIRED; simResultMoment 0; simWritesAreSent 1, and 1 on the base build too (r1533-s9b: Guess the Nation's click times out, not this round's); weight below |
+| r1533-s9w (3f417564) | playGmCareer 0 at 320, 390 and 1280 (233 s); chunk listings of head and base |
+
+Measured in the browser: the holding box 220 px for a landed market of 224 to 285 px, the page not moving; the GM
+level panel 722 to 775 px tall (one and a half phone screens is 1266); a year out 117 to 158 ms from the second tap
+to the save (well under two seconds, so no "Playing the season..." state was built).
+
+THE WEIGHT (R5: sweepWeight.mjs not edited; the lead sets the rows). sweepWeight, SWEEP_OFFLINE=1, on a runner:
+/front-office 389.3K on the head (42 files) against 372.9K on the base (38 files), budget 374K. The head also goes
+over on /club-manager 632K (budget 630K), /manager-hot-seat 646K (645K) and /deadline-day 656K (655K); the base build
+is green on all of them. The cause, by gzipped chunk (head less base): the FrontOffice chunk +8.8K (the board, the
+desk host, nflGmDesk's additions), a new shared seat packs chunk 3.7K (CollegeDynastyBoard 3.0K lighter for it), a
+new shared gmXp chunk 2.3K (clubManager 0.3K lighter), the Phone icon 0.4K. The three career panels are lazy chunks
+(GmXpDeskPanel 2.5K, GmJobMarketPanel 2.1K, GmCareerPanel 1.4K) and are not on the route.
+
 ## What a later session must not trust
-- The browser walks (playGmCareer and its three controls, playOwnerMandate, playFoHub, playFrontOfficeGameDay,
-  playGmPress against the base, playDraftNight, sweepGames) are sent as r1533-s6w and r1533-s6c on 460d9a06; read
-  them before calling step 6 done.
+- runAllSims (r1533-s7a, sent on fb3d5eb5) was still running when this was written; read it before the release.
+- The adversarial review the brief asks for has not run.
