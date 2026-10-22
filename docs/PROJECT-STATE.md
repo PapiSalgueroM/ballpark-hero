@@ -19057,3 +19057,9 @@ This child adopts exactly two reviewed generated outputs, the Home template and 
 Application source3d081ad2e465c7d98ecb23ad8fb3bfe0526d1384 is qualified by final39846253883 attempt1 and compositec489523352e4b9cae40607a991dd10c93801ea1390acf91cb27858d4ed3dc835. All six CI jobs and seven native components pass. The three generated delta files are present0B, both nonempty-output and both inventory controls pass, and complete source/output/transport holds are admitted. The unchanged header checker passes20/20 authenticated normal cases.
 
 Final picture coverage uses18 freshly viewed changed images and50 exact PNG transfers from prior actual views, not68 new views. Normal header results, Range-only observations and separate text arms stay distinct. This child only appends qualification notes; Root still owns native docs-only commit verification. I retains sole publication and live verification. Unsupported contrast, provider/legal/sports-rights and old preservation limits remain unwaived. No published or live result is claimed.
+
+## Round1450 poll noon Eastern regression, Original proof pending, 2026-10-22 UTC
+
+This child adds thirteen date-helper regression cases and a branch-only ordinary CI workflow from verified main89765449d170955aff841c93398179ecf0a4e135. The tests are unexecuted at authoring. Source inspection predicts four owned AssertionErrors and nine healthy cases around Eastern daylight-saving transitions; only actual raw CI results can establish that RED.
+
+The original dateUtils helper b580faa8 stays unchanged. CI must retain the ordinary failing test exit, complete raw JSON/logs and exact source/input/offline holds. No helper implementation, caller-specific noon query proof, mounted refresh behavior, qualified application or live result is claimed. I retains publication and game ownership.

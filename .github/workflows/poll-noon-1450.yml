@@ -1,0 +1,108 @@
+name: Poll noon1450 original
+
+on:
+  push:
+    branches: [codex/poll-noon-1450]
+    paths-ignore: ['docs/**']
+
+permissions:
+  contents: read
+concurrency:
+  group: poll-noon1450-original-${{ github.sha }}
+  cancel-in-progress: false
+
+env:
+  BASE_SOURCE: 89765449d170955aff841c93398179ecf0a4e135
+  CI: '1'
+  SIM_NETWORK: offline
+  TZ: UTC
+  OUT: poll-noon1450-original-artifacts
+
+jobs:
+  original:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/codex/poll-noon-1450'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Capture actual tracked source and immutable original inputs
+        run: |
+          set -euo pipefail
+          mkdir -p "$OUT"
+          test "$GITHUB_REF" = refs/heads/codex/poll-noon-1450
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          printf '{"source":"%s","run":"%s","attempt":"%s","base":"%s","phase":"original","test":"src/test/pollDayEt.test.ts"}\n' "$GITHUB_SHA" "$GITHUB_RUN_ID" "$GITHUB_RUN_ATTEMPT" "$BASE_SOURCE" > "$OUT/bindings.json"
+          git ls-files -z -- . | LC_ALL=C sort -z | xargs -0 -r sha256sum > "$OUT/source-before.sha256"
+          test -s "$OUT/source-before.sha256"
+          cat > "$OUT/inputs.expected.sha256" <<'PINS'
+          d34e2f72eef41d241c89a7fc11330b2f2d18b3c79bb73f9bf263b63de8826064  src/test/pollDayEt.test.ts
+          b580faa88089a5d6a15aef0a1fc08f0f1444b38c273d458e3c74a43a7f72781e  src/lib/dateUtils.ts
+          6a68dd2f214dab4a3013eb41bad38eea65d703d61440002710ec246495e1c58a  vitest.config.ts
+          acfe14626dea53cf5f9c5e0286b766a22237656b52aac4c888b080873ac90e31  package.json
+          c7e3867eabf0bfa03a8aa6a5e601b0050b937ed210d48c6bbd241019e3c9ea76  package-lock.json
+          e60ff1534307e449ccef598e3b7470dcba58681b82cea4005cec7319f14f9221  scripts/lib/offlineTransport.cjs
+          PINS
+          sha256sum --check "$OUT/inputs.expected.sha256" > "$OUT/inputs-before.log" 2>&1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Install only locked existing dependencies
+        timeout-minutes: 6
+        run: npm ci --no-audit --no-fund
+      - name: Actual thirteen-case original helper run, ordinary failure retained
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$PWD/$OUT/vitest.transport"
+          : > "$SIM_OFFLINE_RECEIPT"
+          status=0
+          timeout --signal=TERM --kill-after=15s 3m node_modules/.bin/vitest run src/test/pollDayEt.test.ts --maxWorkers=1 --reporter=json --outputFile="$OUT/vitest.json" > "$OUT/vitest.stdout.log" 2> "$OUT/vitest.stderr.log" || status=$?
+          printf '%s\n' "$status" > "$OUT/vitest.exit"
+          exit "$status"
+      - name: Always complete source, input and offline evidence
+        if: always()
+        run: |
+          set -uo pipefail
+          mkdir -p "$OUT"
+          failed=0
+          status=0
+          { git ls-files -z -- . | LC_ALL=C sort -z | xargs -0 -r sha256sum > "$OUT/source-after.sha256"; } 2> "$OUT/source-after.log" || status=$?
+          printf '%s\n' "$status" > "$OUT/source-after.exit"
+          test "$status" -eq 0 || failed=1
+          status=0
+          if test -s "$OUT/source-before.sha256"; then
+            sha256sum --check "$OUT/source-before.sha256" > "$OUT/source-hold.log" 2>&1 || status=$?
+          else
+            printf '%s\n' 'Missing nonempty actual source-before inventory' > "$OUT/source-hold.log"
+            status=1
+          fi
+          printf '%s\n' "$status" > "$OUT/source-hold.exit"
+          test "$status" -eq 0 || failed=1
+          status=0
+          cmp "$OUT/source-before.sha256" "$OUT/source-after.sha256" > "$OUT/source-inventory-hold.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$OUT/source-inventory-hold.exit"
+          test "$status" -eq 0 || failed=1
+          status=0
+          sha256sum --check "$OUT/inputs.expected.sha256" > "$OUT/inputs-end.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$OUT/inputs-end.exit"
+          test "$status" -eq 0 || failed=1
+          status=0
+          { test -f "$OUT/vitest.transport" && test ! -s "$OUT/vitest.transport"; } || status=$?
+          printf '%s\n' "$status" > "$OUT/transport-hold.exit"
+          test "$status" -eq 0 || failed=1
+          printf '%s\n' "$failed" > "$OUT/final-holds.exit"
+          (cd "$OUT" && find . -type f ! -path './evidence.sha256' -print0 | LC_ALL=C sort -z | xargs -0 -r sha256sum) > "$OUT/evidence.sha256" || exit $?
+          exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: poll-noon1450-original-${{ github.run_id }}-${{ github.run_attempt }}
+          path: poll-noon1450-original-artifacts
+          if-no-files-found: error
+          include-hidden-files: true
