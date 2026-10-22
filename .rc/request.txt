@@ -1,0 +1,4 @@
+#!serial
+mut-knock-s5: node .rc/x/mutknockv.mjs && INTL_SECTIONS=5 node scripts/simCareerIntl.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-knock-unit: node .rc/x/mutknockv.mjs && node_modules/.bin/vitest run src/lib/careerIntl.test.ts src/test/nbaCareerIntl.test.ts --testTimeout=300000; s=$?; git checkout -- src scripts; exit $s
+restored: git status --short src scripts | head -5; grep -c "const hurt = rng() < bind.knockChance(c);" src/lib/careerIntl.ts
