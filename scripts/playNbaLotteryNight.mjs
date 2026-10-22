@@ -19,7 +19,12 @@
  *      the panel open its "Back to the draft" button inside the viewport (review 1540 m1: at the panel's foot it sat
  *      at y 1224 to 1268 of an 844 px view at 390 and 1204 to 1248 of a 900 px view at 1280)
  *   I  a desk off save keeps the old draft: no card
- *   J  the lazy box: the card's chunk held until the box is measured, then the card's first frame against it
+ *   J  the lazy box: the card's chunk held until the box is measured, then the card's first frame against it; at 390
+ *      the two may differ by 8 px at most. MEASURED (the band's headroom, review 1540 read m5): the card's first frame
+ *      was 589.0 px at 320, 553.0 at 390 and 537.0 at 1280 on r1540-s6 (box then 520, jumps 69, 33 and 17) and the
+ *      same three heights on r1540-run-walk (box 553, jumps 36.0, 0.0 and -16.0 px), so the 390 frame has not moved
+ *      by a pixel between runners; 8 px is a quarter of the 33 px the old 520 px box jumped there, so a drift of that
+ *      size still fails, and control jump (a 100 px box) fails at 453 px. 320 and 1280 are printed, never asserted.
  *   N  no jump (critic 1540 correction 4): after Go to the draft, Continue, each pick and the staff press, the
  *      heading tile's top and the first line of the stage are in the viewport
  *   At every step of A: no two tiles overlap; at 390 and 1280 no tile label is cut; at 320 the slot number and the
