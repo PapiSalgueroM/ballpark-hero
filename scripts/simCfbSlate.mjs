@@ -181,7 +181,7 @@ const m = {
   ndCcg: 0, ndAccOff: 0, ndTop12: 0, ndTop12Out: 0, ndInField: 0, ccgBad: 0, g5Named: 0, fifthOut: 0,
   rivalMiss: 0, seriesUnplayed: 0, confBad: 0, slates: 0, fallbacks: 0, homeMin: 99, homeMax: 0,
   firstRepeat: null, firstMiss: null, firstConf: null,
-  weekBad: 0, firstWeek: null, confGames: 0, ndAccCopy: 0, autoOff: 0, autoChecked: 0,
+  weekBad: 0, firstWeek: null, confGames: 0, ndAccCopy: 0, autoOff: 0, autoChecked: 0, g5Order: 0,
 };
 for (let seed = 1; seed <= SEEDS; seed += 1) {
   const rng = lehmer(seed * 7919);
@@ -246,7 +246,10 @@ for (let seed = 1; seed <= SEEDS; seed += 1) {
     if (ndAcc !== cfb.ND_ACC_GAMES) m.ndAccOff += 1;
     if (ndAcc !== COPY.guideNd) m.ndAccCopy += 1;
     /* 4) the Conferences tab marks the first row of the Group of Five table as the auto spot */
-    const autoBefore = cfb.confStandings(st, 'G5')[0]?.id;
+    const g5Table = cfb.confStandings(st, 'G5').map(t => t.id);
+    const g5Ranked = cfb.cfbRankings(st).map(t => t.id).filter(id => confOf(id) === 'G5');
+    if (g5Table.join() !== g5Ranked.join()) m.g5Order += 1;
+    const autoBefore = g5Table[0];
     const post = cfb.runCfbPostseason(st, rng);
     const autoAfter = cfb.confStandings(st, 'G5')[0]?.id;
     m.autoChecked += 1;
@@ -319,8 +322,9 @@ console.log(`   seasons without exactly ${cfb.CFB_LEAGUES.length} title games ${
 if (m.ccgBad > 0) fail(`${m.ccgBad} season(s) without exactly ${cfb.CFB_LEAGUES.length} title games`);
 if (m.g5Named > 0) fail(`${m.g5Named} Group of Five title game(s), a game that does not exist`);
 if (m.fifthOut > 0) fail(`${m.fifthOut} season(s) where the best ranked Group of Five school did not take the fifth spot`);
-console.log(`   the Conferences tab's auto spot row (first of the Group of Five table) against the school given the spot: ${m.autoOff} of ${m.autoChecked} seasons differ`);
+console.log(`   the Conferences tab's auto spot row (first of the Group of Five table) against the school given the spot: ${m.autoOff} of ${m.autoChecked} seasons differ; Group of Five tables off the ranking order ${m.g5Order}`);
 if (m.autoChecked === 0) fail('the auto spot row was never checked');
+if (m.g5Order > 0) fail(`${m.g5Order} season(s) where the Group of Five table is not in the ranking's order, the order the fifth spot reads and the board's "(auto spot)" mark assumes`);
 if (m.autoOff > 0) fail(`${m.autoOff} season(s) where the Group of Five table's first row is not the school that took the fifth spot`);
 
 console.log('5) rivalry week and the conference count');
