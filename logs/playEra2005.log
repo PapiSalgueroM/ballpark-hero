@@ -1,0 +1,34 @@
+consentPatch: scripts/playEra2005.mjs: 1 rewrite(s)
+1) The era step now holds four real starts
+  PASS  the 2005-06 era tile is on the menu
+  PASS  the 2015-16 tile survived
+  PASS  the 2010-11 tile survived
+  PASS  all four eras carry the REAL DATA badge
+  PASS  the 2005-06 tile sells the Ronaldinho season
+2) Spain in 2005
+  PASS  England and Spain offered in 2005
+  PASS  Italy, Germany and France offered in 2005 (Round 902)
+  PASS  the Netherlands correctly absent from 2005
+  PASS  2005 Cadiz are a pickable club
+  PASS  Eibar correctly absent from 2005 La Liga
+  PASS  the thin-squad marker shows for Cadiz AND Alaves
+  PASS  the Barcelona tile demands the title
+  PASS  the Barcelona tile never says "the La Liga"
+  PASS  no real page errors on the Spain walk (clean)
+3) The 2005 Premier League speaks 2005
+  PASS  2005 Wigan are a pickable club
+  PASS  Leicester correctly absent from the 2005 top flight
+  PASS  the Chelsea tile demands the title
+  PASS  the club grid renders board demands (20 tiles)
+  PASS  somebody's board names the UEFA Cup
+  PASS  no 2005 board says Europa League (that name arrived in 2009)
+  PASS  no 2005 board says Conference League
+4) Into the 2005 dressing room
+  PASS  the career header says 2005-06
+  PASS  the Squad tab listed the squad
+  PASS  Michael Owen is at 2005 Newcastle (the window correction, visible in the UI)
+  PASS  Alan Shearer is in the squad
+  PASS  no 2026 player leaked into 2005
+  PASS  no real page errors on the England walk (clean)
+
+playEra2005: green. The 2005-06 branch plays like a person would find it.

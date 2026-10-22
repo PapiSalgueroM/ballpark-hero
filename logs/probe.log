@@ -1,0 +1,7 @@
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+main 320x640: banner 383 to 640 [Reject all / Accept all / Save choices], dialog 141 to 500 (static, top 191.5px, max 359px), "Let's go" 451 to 499, at its centre: the banner; pending 1, --dukb-consent-height 257px
+main 390x844: banner 639 to 844 [Reject all / Accept all / Save choices], dialog 115 to 730 (static, top 319.5px, max 615px), "Let's go" 681 to 729, at its centre: the banner; pending 1, --dukb-consent-height 205px
+main 1280x900: banner 715 to 900 [Reject all / Accept all / Save choices], dialog 105 to 796 (static, top 357.5px, max 691px), "Let's go" 747 to 795, at its centre: the banner; pending 1, --dukb-consent-height 185px
+pre1442 320x640: banner 491 to 640 [Essential only / Accept], dialog 115 to 525 (static, top auto, max 410px), "Let's go" 476 to 524, at its centre: the banner; pending 1, --dukb-consent-height null
+pre1442 390x844: banner 695 to 844 [Essential only / Accept], dialog 115 to 729 (static, top auto, max 614px), "Let's go" 680 to 728, at its centre: the banner; pending 1, --dukb-consent-height null
+pre1442 1280x900: banner 823 to 900 [Essential only / Accept], dialog 115 to 785 (static, top auto, max 670px), "Let's go" 736 to 784, at its centre: Let's go; pending 1, --dukb-consent-height null
