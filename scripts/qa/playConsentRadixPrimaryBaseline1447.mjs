@@ -349,11 +349,41 @@ async function walk(spec) {
     await page.waitForFunction(() => !document.body.hasAttribute('data-consent-pending') && !document.body.style.getPropertyValue('--dukb-consent-height'), null, { timeout: bounded() });
     const choice = await page.evaluate(key => JSON.parse(localStorage.getItem(key) || 'null'), KEY);
     assert(choice?.version === 2 && choice.advertising === false && choice.analytics === false, 'DIALOG1447_BANNER: actual saved rejection');
-    assert(await dialog(page, spec).isVisible(), 'DIALOG1447_BANNER: rejection keeps the same game help open');
+    const rejectedDialog = page.getByRole('dialog', { name: spec.dialog, exact: true, includeHidden: true });
+    const rejectedState = await rejectedDialog.evaluateAll(elements => ({ count: elements.length, state: elements.length === 1 ? elements[0].getAttribute('data-state') : 'absent' }));
+    const rejectedDialogCount = rejectedState.count, rejectedDialogState = rejectedState.state;
+    assert(rejectedDialogCount === 0 || rejectedDialogCount === 1, 'RADIX1447_ANSWERED_SETUP: unique closed or absent named dialog');
+    row.answeredJourney = { status: 'RUNNING', observedDialogCount: rejectedDialogCount, observedAfterRejectState: rejectedDialogState };
+    assert(['closed', 'absent'].includes(rejectedDialogState), 'RADIX1447_ANSWERED_SETUP: actual baseline exterior dismissal observed');
     const bannerEnd = await page.evaluate(() => performance.now()), bannerEvents = await page.evaluate(() => window.__consentDialog1447.state.events);
     const trustedReject = bannerEvents.some(event => event.type === 'click' && event.isTrusted === true && event.target?.label === 'Reject all' && event.ms >= row.bannerLeg.startedMs && event.ms <= bannerEnd);
     assert.equal(trustedReject, true, 'DIALOG1447_BANNER: delivered trusted rejection');
     row.bannerLeg = { ...row.bannerLeg, status: 'PASS', choice, endedMs: bannerEnd, trustedReject, after: await mark(view, 'answered') };
+    await rejectedDialog.waitFor({ state: 'hidden', timeout: bounded(2000) }); row.answeredJourney.hiddenBeforeReopen = true;
+    const answeredHeading = await routeHeading(page, spec), answeredOwner = answeredHeading.locator('..');
+    const answeredReopen = answeredOwner.getByRole('button', { name: spec.reopen, exact: true });
+    row.answeredJourney.reopenControl = { globalMatches: await page.getByRole('button', { name: spec.reopen, exact: true }).count(), scopedMatches: await answeredReopen.count(),
+      owner: await answeredOwner.evaluate(element => ({ tag: element.tagName, headingText: element.querySelector('h1')?.textContent.trim() ?? null })) };
+    assert.equal(row.answeredJourney.reopenControl.scopedMatches, 1, 'RADIX1447_ANSWERED_SETUP: unique real page-owned reopen');
+    assert.equal(row.answeredJourney.reopenControl.owner.headingText, spec.h1, 'RADIX1447_ANSWERED_SETUP: actual route owns answered reopen');
+    row.answeredJourney.startedMs = await page.evaluate(() => performance.now());
+    await answeredReopen.click({ timeout: bounded() }); await dialog(page, spec).waitFor({ state: 'visible', timeout: bounded() }); await frames(page);
+    await page.waitForFunction(() => document.fonts.status === 'loaded' && window.__consentDialog1447?.state.stable >= 6, null, { timeout: bounded(4500) });
+    assert.equal(await dialog(page, spec).count(), 1, 'RADIX1447_ANSWERED_SETUP: unique reopened named help');
+    row.answeredJourney.openState = await dialog(page, spec).getAttribute('data-state');
+    assert.equal(row.answeredJourney.openState, 'open', 'RADIX1447_ANSWERED_SETUP: actual reopened state');
+    const answeredDetail = await snapshot(page); verifyFontFaces(answeredDetail.fonts);
+    assert.equal(await region(page).count(), 0, 'RADIX1447_ANSWERED_SETUP: consent region remains absent');
+    assert.equal(answeredDetail.pending, null, 'RADIX1447_ANSWERED_SETUP: pending flag remains absent');
+    assert.equal(answeredDetail.consentHeight, '', 'RADIX1447_ANSWERED_SETUP: body consent height remains empty');
+    const answeredChoice = await page.evaluate(key => JSON.parse(localStorage.getItem(key) || 'null'), KEY);
+    assert.deepEqual(answeredChoice, choice, 'RADIX1447_ANSWERED_SETUP: real saved rejection remains unchanged');
+    row.answeredJourney.endedMs = await page.evaluate(() => performance.now());
+    const answeredEvents = await page.evaluate(() => window.__consentDialog1447.state.events);
+    row.answeredJourney.trustedReopen = answeredEvents.some(event => event.type === 'click' && event.isTrusted === true && event.target?.label === spec.reopen
+      && event.ms >= row.answeredJourney.startedMs && event.ms <= row.answeredJourney.endedMs);
+    assert.equal(row.answeredJourney.trustedReopen, true, 'RADIX1447_ANSWERED_SETUP: delivered trusted real reopen');
+    row.answeredJourney = { ...row.answeredJourney, status: 'PASS', afterOpen: answeredDetail, savedChoice: answeredChoice }; clean(row);
     await dismiss(view, spec.primary, 'answered'); await mark(view, 'completed');
     row.complete = row.actions.every(action => ['PASS', 'FAILED_ACTION', 'NOT_ATTEMPTED'].includes(action.status)) && row.bannerLeg.status === 'PASS';
   } catch (error) { row.error = failure(error); }
