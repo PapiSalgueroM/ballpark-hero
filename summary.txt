@@ -1,0 +1,7 @@
+build exit=0 35s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+weight-head exit=1 31s | sweepWeight: 4 failures
+analyze exit=0 43s | dynamic imports of the route chunk: assets/nflCareerKit-scZ0Wb1M.js:2.0K assets/GmJobMarketPanel-D8Rh0hz5.js:2.0K assets/GmCareerPanel-B6xWgt39.js:1.4K assets/GmXpDeskPan
+weight-base exit=0 81s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+weight-1533 exit=1 84s | sweepWeight: 4 failures
+analyze-base exit=0 32s | dynamic imports of the route chunk: assets/NflGameDay-BKqkJKtz.js:5.3K assets/NflBracket-BJdytcFW.js:4.1K assets/frontOfficeDepth-hFZ-rvc7.js:55.1K
+gmcareer exit=0 226s | playGmCareer: green. 1 board, 3 sizes, four walks each.
