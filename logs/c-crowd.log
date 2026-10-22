@@ -1,0 +1,7 @@
+Round 1532: Stadium Tycoon scorelines at the hook's cadence (dt 0.2s), control crowd alone
+
+control crowd: 4 places rewritten in a copy of the lib
+   sections red: S7 (expected S7) [17 s]
+     S7: state 0: a goal paid 1075, 5 seconds of income is 38872
+
+simTycoonScorelines: 1 checks, 0 failed [17 s]

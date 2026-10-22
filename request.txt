@@ -1,0 +1,13 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+scorelines: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonScorelines.mjs
+c-copy: SCORELINES_CONTROL=copy NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonScorelines.mjs
+c-noscale: SCORELINES_CONTROL=noscale NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonScorelines.mjs
+c-tworolls: SCORELINES_CONTROL=tworolls NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonScorelines.mjs
+c-linear: SCORELINES_CONTROL=linear NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonScorelines.mjs
+c-flat: SCORELINES_CONTROL=flat NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonScorelines.mjs
+c-matchno: SCORELINES_CONTROL=matchno NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonScorelines.mjs
+c-noclamp: SCORELINES_CONTROL=noclamp NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonScorelines.mjs
+c-crowd: SCORELINES_CONTROL=crowd NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonScorelines.mjs
+c-bogus-must-abort: SCORELINES_CONTROL=bogus NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonScorelines.mjs
+simSeasonLaw: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSeasonLaw.mjs
+retake-head: node scripts/retakeTycoonHistories.mjs

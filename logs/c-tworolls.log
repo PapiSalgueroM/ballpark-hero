@@ -1,0 +1,7 @@
+Round 1532: Stadium Tycoon scorelines at the hook's cadence (dt 0.2s), control tworolls alone
+
+control tworolls: 1 place rewritten in a copy of the lib
+   sections red: S2 (expected S2) [21 s]
+     S2: the body of playMinute moved (61 lines, 60 on the base)
+
+simTycoonScorelines: 1 checks, 0 failed [21 s]

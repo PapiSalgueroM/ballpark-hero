@@ -1,0 +1,11 @@
+Round 1532: Stadium Tycoon scorelines at the hook's cadence (dt 0.2s), control linear alone
+
+control linear: 3 places rewritten in a copy of the lib
+   sections red: S1 S3 S4 S5 S6 (expected S1 S3 S4 S5 S6) [17 s]
+     S1: division 0 Squad 0: our chance 0.028 is not the law's 0.014583333333333334
+     S3: ctl: pace's watched league matches over minutes 15 to 120 held 14.48 goals, outside 2.5 to 3.0
+     S4: ctl: pace won 99.2% over minutes 15 to 120, outside 55 to 75
+     S5: ctl: pace took 0.975 titles a season over minutes 15 to 240, outside 0.40 to 0.90
+     S6: Squad 15 in division 0 scores at 0.052000000000000005 a minute, past the law's ceiling 0.04666666666666667
+
+simTycoonScorelines: 1 checks, 0 failed [17 s]

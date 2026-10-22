@@ -1,0 +1,8 @@
+Round 1532: Stadium Tycoon scorelines at the hook's cadence (dt 0.2s), control noclamp alone
+
+control noclamp: 1 place rewritten in a copy of the lib
+   sections red: S1 S6 (expected S1 S6) [14 s]
+     S1: division 0 Squad 65: our chance 0.04834722222222222 is not the law's 0.04666666666666667
+     S6: Squad 65 in division 0 scores at 0.04834722222222222 a minute, past the law's ceiling 0.04666666666666667
+
+simTycoonScorelines: 1 checks, 0 failed [14 s]

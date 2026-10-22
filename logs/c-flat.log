@@ -1,0 +1,8 @@
+Round 1532: Stadium Tycoon scorelines at the hook's cadence (dt 0.2s), control flat alone
+
+control flat: 1 place rewritten in a copy of the lib
+   sections red: S4 S5 (expected S4 S5) [19 s]
+     S4: division 0 Squad 7: the gap reads -2.5000000000000004, the Squad, the division and the rival make 3.4499999999999997
+     S5: ctl: pace took 0.04 titles a season over minutes 15 to 240, outside 0.40 to 0.90
+
+simTycoonScorelines: 1 checks, 0 failed [19 s]

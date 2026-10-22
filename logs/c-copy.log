@@ -1,0 +1,7 @@
+Round 1532: Stadium Tycoon scorelines at the hook's cadence (dt 0.2s), control copy alone
+
+control copy: 1 place rewritten in a copy of the lib
+   sections red: S1 (expected S1) [21 s]
+     S1: division 0 Squad 0: our chance 0.014555555555555554 is not the law's 0.014583333333333334
+
+simTycoonScorelines: 1 checks, 0 failed [21 s]

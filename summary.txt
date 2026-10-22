@@ -1,0 +1,13 @@
+c-copy exit=0 21s | simTycoonScorelines: 1 checks, 0 failed [21 s]
+c-noscale exit=0 23s | simTycoonScorelines: 1 checks, 0 failed [23 s]
+c-tworolls exit=0 21s | simTycoonScorelines: 1 checks, 0 failed [21 s]
+c-linear exit=0 17s | simTycoonScorelines: 1 checks, 0 failed [17 s]
+tsc exit=0 98s | 
+c-flat exit=0 19s | simTycoonScorelines: 1 checks, 0 failed [19 s]
+c-noclamp exit=0 14s | simTycoonScorelines: 1 checks, 0 failed [14 s]
+c-matchno exit=0 24s | simTycoonScorelines: 1 checks, 0 failed [23 s]
+c-bogus-must-abort exit=2 0s | unknown SCORELINES_CONTROL bogus
+simSeasonLaw exit=0 0s | simSeasonLaw: 14 checks, 0 failed
+retake-head exit=0 1s | this tree: 12 of 12 histories reproduce the committed hashes, 0 differ
+c-crowd exit=0 17s | simTycoonScorelines: 1 checks, 0 failed [17 s]
+scorelines exit=0 228s | simTycoonScorelines: 15 checks, 0 failed [228 s]

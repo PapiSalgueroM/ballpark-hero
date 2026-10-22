@@ -1,0 +1,9 @@
+Round 1532: Stadium Tycoon scorelines at the hook's cadence (dt 0.2s), control matchno alone
+
+control matchno: 1 place rewritten in a copy of the lib
+   sections red: S3 S4 S5 (expected S3 S4 S5) [23 s]
+     S3: ctl: pace's watched league matches over minutes 15 to 120 held 3.424 goals, outside 2.5 to 3.0
+     S4: ctl: pace won 8.8% over minutes 15 to 120, outside 55 to 75
+     S5: ctl: pace took 0.036 titles a season over minutes 15 to 240, outside 0.40 to 0.90
+
+simTycoonScorelines: 1 checks, 0 failed [23 s]
