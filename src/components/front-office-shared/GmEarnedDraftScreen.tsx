@@ -10,8 +10,9 @@
    at least 44 px tall and nothing of this screen's own is under 12 px (the
    two shared cards and the lazy box keep their own small print).
 
-   NO SPOILER. Before "Continue" the heading says the year, "Lottery night
-   first." and the chances the board computed before the draw, nothing about
+   NO SPOILER. Before "Continue" the heading says the year, the board's
+   lottery line (the NBA's "Lottery night first.") and the chances the board
+   computed before the draw, nothing about
    where any pick landed, and it has no "?": closing a panel over a live card
    would remount it and play the night again. The card's own "?" carries the
    lottery's rules then. After it, the heading's "?" opens over the stage in a
@@ -43,6 +44,8 @@ export interface GmEarnedDraftScreenProps {
   /** The draft's year as the heading prints it. */
   year: number;
   stage: EarnedDraftScreenStage;
+  /** Stage lottery: the line under the year, in the sport's own words (a sport with no lottery has its own, or none). */
+  lotteryLine?: string;
   /** Stage lottery: the lines before the draw. */
   chances?: string[];
   /** Stages clock and over: the heading's lines. */
@@ -60,14 +63,16 @@ export interface GmEarnedDraftScreenProps {
   staff?: EarnedDraftButton | null;
   /** Every slot used but the summer not run: "Finish the draft and the summer". */
   finish?: EarnedDraftButton | null;
+  /** Over the finish button: what is still to come, in the sport's own words. */
+  finishLine?: string;
   /** Stage over: the way to the hub. */
   onLeave?: () => void;
   error?: string;
 }
 
 export function GmEarnedDraftScreen({
-  year, stage, chances = [], lines = [], help = [], lottery = null, run = null, choices = [], onPick, staff = null,
-  finish = null, onLeave, error = '',
+  year, stage, lotteryLine = '', chances = [], lines = [], help = [], lottery = null, run = null, choices = [], onPick,
+  staff = null, finish = null, finishLine = '', onLeave, error = '',
 }: GmEarnedDraftScreenProps) {
   const [helpOpen, setHelpOpen] = useState(false);
   const blocks = stage === 'lottery' ? [] : help.filter(b => b.lines.length > 0);
@@ -80,7 +85,7 @@ export function GmEarnedDraftScreen({
         <p className="font-display text-lg font-bold text-foreground">The {year} Draft</p>
         {stage === 'lottery' ? (
           <>
-            <p className="mt-1 text-xs text-muted-foreground">Lottery night first.</p>
+            {lotteryLine && <p className="mt-1 text-xs text-muted-foreground">{lotteryLine}</p>}
             {chances.length > 0 && (
               <div data-gm-draft-chances className="mt-1 space-y-1">
                 {chances.map((l, i) => <p key={i} className="text-xs text-foreground">{l}</p>)}
@@ -117,8 +122,8 @@ export function GmEarnedDraftScreen({
               {error && <p role="alert" className="text-xs text-destructive">{error}</p>}
               {finish ? (
                 <div className="rounded-2xl border border-border bg-card p-4 text-center">
-                  <p className="text-xs text-muted-foreground">Every pick of the draft is in. The summer still has to run.</p>
-                  <button type="button" data-gm-draft-finish onClick={finish.onPress} className="mt-3 min-h-11 rounded-full bg-primary px-5 py-2 text-sm font-bold text-primary-foreground">
+                  {finishLine && <p className="text-xs text-muted-foreground">{finishLine}</p>}
+                  <button type="button" data-gm-draft-finish onClick={finish.onPress} className={cn('min-h-11 rounded-full bg-primary px-5 py-2 text-sm font-bold text-primary-foreground', finishLine && 'mt-3')}>
                     {finish.label}
                   </button>
                 </div>

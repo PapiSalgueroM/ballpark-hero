@@ -41,12 +41,12 @@ function ownMarkup(html: string): { own: string; skipped: number } {
 
 describe('GmEarnedDraftScreen', () => {
   it('stage lottery: the chances, no heading "?", the lazy card box at its fixed height', () => {
-    const html = draw({
-      stage: 'lottery', chances: ['Your club goes in seeded 3rd of 14.'], help,
-      lottery: { order, myClub: 'C03', rules, lottery, onContinue: () => {}, continueLabel: 'Continue to the draft' },
-    });
+    const card = { order, myClub: 'C03', rules, lottery, onContinue: () => {}, continueLabel: 'Continue to the draft' };
+    const html = draw({ stage: 'lottery', lotteryLine: 'Lottery night first.', chances: ['Your club goes in seeded 3rd of 14.'], help, lottery: card });
     expect(count(html, 'data-gm-draft-chances')).toBe(1);
     expect(html).toContain('Lottery night first.');
+    /* The screen knows no sport: a board with no lottery line of its own gets none (review 1540 read m2). */
+    expect(draw({ stage: 'lottery', chances: ['x'], lottery: card })).not.toContain('Lottery night');
     expect(html).toContain('Your club goes in seeded 3rd of 14.');
     expect(count(html, 'data-gm-draft-help')).toBe(0);
     expect(count(html, 'data-gm-panel-loading')).toBe(1);
@@ -68,9 +68,12 @@ describe('GmEarnedDraftScreen', () => {
   });
 
   it('every slot used and the summer refused: the finish button in place of the board', () => {
-    const html = draw({ help, choices, staff: { label: 'Let your staff make your pick', onPress: () => {} }, finish: { label: 'Finish the draft and the summer', onPress: () => {} } });
+    const finish = { label: 'Finish the draft and the summer', onPress: () => {} };
+    const html = draw({ help, choices, staff: { label: 'Let your staff make your pick', onPress: () => {} }, finish, finishLine: 'Every pick of the draft is in. The summer still has to run.' });
     expect(count(html, 'data-gm-draft-finish')).toBe(1);
     expect(html).toContain('Finish the draft and the summer');
+    expect(html).toContain('The summer still has to run.');
+    expect(draw({ help, finish })).not.toContain('summer still');
     expect(count(html, 'data-gm-draft-choice=')).toBe(0);
     expect(count(html, 'data-gm-draft-staff')).toBe(0);
   });

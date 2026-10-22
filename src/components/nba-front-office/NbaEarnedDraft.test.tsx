@@ -302,6 +302,7 @@ describe('the earned draft night on the NBA board', () => {
     expect($('[data-gm-earned-draft]')!.getAttribute('data-gm-earned-draft')).toBe('clock');
     expect($('[data-gm-draft-choice]')).toBeNull();
     expect($('[data-gm-draft-finish]')!.textContent).toBe('Finish the draft and the summer');
+    expect($('[data-gm-draft-finish]')!.parentElement!.textContent).toContain('Every pick of the draft is in. The summer still has to run.');
     press('[data-gm-draft-finish]');
     expect(saved().phase).toBe('hub');
     expect(saved().league.season).toBe(b.league.season + 1);

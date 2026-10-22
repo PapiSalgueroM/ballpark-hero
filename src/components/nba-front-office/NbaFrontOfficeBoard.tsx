@@ -1119,6 +1119,7 @@ export default function NbaFrontOfficeBoard() {
           <GmEarnedDraftScreen
             year={earnedNight ? earnedNight.order.draftYear : done?.year ?? league.season}
             stage={earnedStage}
+            lotteryLine="Lottery night first."
             chances={earnedChances}
             lines={earnedNight ? nbaDraftHeading(earnedNight, myTeam) : done?.lines ?? []}
             help={earnedNight ? nbaDraftHelp(earnedNight, myTeam, earnedChances) : done?.help ?? []}
@@ -1132,6 +1133,7 @@ export default function NbaFrontOfficeBoard() {
             onPick={pressPick}
             staff={left > 0 ? { label: `Let your staff make your ${left === 1 ? 'pick' : `${left} picks`}`, onPress: pressStaff } : null}
             finish={earnedNight && left === 0 ? { label: 'Finish the draft and the summer', onPress: pressStaff } : null}
+            finishLine="Every pick of the draft is in. The summer still has to run."
             onLeave={leaveEarned}
             error={earnedUi.error}
           />
