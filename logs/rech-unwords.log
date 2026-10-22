@@ -1,0 +1,14 @@
+src/lib/nbaMyCareer.ts: the five old card words are back
+src/lib/nflMyCareer.ts: the five old card words are back
+src/lib/mlbMyCareer.ts: the five old card words are back
+src/lib/nhlMyCareer.ts: the five old card words are back
+recording from bca642a8f9332f66d291952e5782aa55fd72e7f0 (not main: src differs from e3deb2cb30ad1dc92a2e9fc3cef03fc096261d15)
+  nfl: 475 clicks on the path, 24 seasons, 19 fixed saves, 928 screen steps
+  nba: 521 clicks on the path, 24 seasons, 19 fixed saves, 932 screen steps
+  mlb: 455 clicks on the path, 24 seasons, 19 fixed saves, 886 screen steps
+  nhl: 421 clicks on the path, 24 seasons, 19 fixed saves, 900 screen steps
+recordUsBoardFixture: wrote ../../_temp/rc-out/files/fixture-hist-unwords.json (2298731 bytes)
+headers equal: false
+steps that differ: 0
+by action: []
+by field: []

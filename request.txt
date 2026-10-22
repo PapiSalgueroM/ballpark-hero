@@ -1,0 +1,6 @@
+#!serial
+fx-old-unwords: node .rc/x/unwords.mjs && git show 41368514:scripts/data/usBoardFixture.json > scripts/data/usBoardFixture.json && node scripts/simUsBoardParity.mjs; s=$?; git checkout -- src scripts; exit $s
+fx-old-head: git show 41368514:scripts/data/usBoardFixture.json > scripts/data/usBoardFixture.json && node scripts/simUsBoardParity.mjs; s=$?; git checkout -- src scripts; exit $s
+rech-head: node .rc/x/recHist.mjs $RC_OUT/fixture-hist-head.json && node .rc/x/fxcmp.mjs scripts/data/usBoardFixture.json $RC_OUT/fixture-hist-head.json
+rech-unwords: node .rc/x/unwords.mjs && node .rc/x/recHist.mjs $RC_OUT/fixture-hist-unwords.json; s=$?; git checkout -- src; [ $s -eq 0 ] && git show 41368514:scripts/data/usBoardFixture.json > $RC_OUT/fixture-41368514.json && node .rc/x/fxcmp.mjs $RC_OUT/fixture-41368514.json $RC_OUT/fixture-hist-unwords.json; exit $s
+clean: echo "changed files in src and scripts: $(git status --short src scripts | wc -l)"
