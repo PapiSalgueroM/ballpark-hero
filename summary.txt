@@ -1,0 +1,6 @@
+head exit=0 0s | 0ac6409a1 rc request v1547-gates for 8206759e3dfe4ca361761447f53a407f9e0c7516
+vitest-conquest exit=0 6s |    Duration  4.98s (transform 984ms, setup 473ms, collect 2.59s, tests 5.71s, environment 2.36s, prepare 631ms)
+keystats-check exit=0 1s | players 320, {"printed":146,"no stat for this position":167,"held":2,"no 2025 row":5}, differing from the committed file 0
+simNbaOpeningRatingInputs exit=0 4s | NBA opening inputs normal: 0 intended failed / 10 held, full10. Receipt /home/runner/work/_temp/t-simNbaOpeningRatingInputs/dukb-nba-opening895-IwFVhm
+simNoRivalNames exit=0 19s | No rival product names found. 0 findings.
+tsc exit=0 73s | 
