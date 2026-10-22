@@ -1,0 +1,6 @@
+deck: node scripts/simSoccerDeck.mjs
+leagueseasons: node scripts/simCareerLeagueSeasons.mjs
+deckfair: node scripts/simSoccerDeckFairness.mjs
+awardsnight: node scripts/simCareerAwardsNight.mjs
+awards: node scripts/simAwards.mjs
+recorded: node scripts/simCareerRecordedStats.mjs

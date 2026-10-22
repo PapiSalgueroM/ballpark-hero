@@ -1,0 +1,6 @@
+leagueseasons exit=0 35s | simCareerLeagueSeasons: all sections green
+deckfair exit=0 82s | simSoccerDeckFairness: all sections green
+awards exit=0 10s | PASS: ALL AWARD SCARCITY CHECKS PASSED
+recorded exit=0 5s | simCareerRecordedStats: 8 actual outcomes passed.
+awardsnight exit=0 90s | simCareerAwardsNight: ALL 179 CHECKS PASSED
+deck exit=0 205s | simSoccerDeck: green. Every section.
