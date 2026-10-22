@@ -1,0 +1,2 @@
+ctl-legacy exit=1 631s | simCareerForm: RED, 2 failure(s)
+ctl-per10 exit=1 724s | simCareerForm: RED, 1 failure(s)
