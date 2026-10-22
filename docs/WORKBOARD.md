@@ -1,3 +1,11 @@
+## Claude lane, 2026-10-22 03:15 EDT: Round 1537 CLOSED; Rounds 1540, 1541 and 1542 claimed (designing now)
+
+Claude lane, session J.
+- 1537 CLOSED on r1537-game-screen-fixes at 8cca3b31 (the NBA Front Office roster box, the Connections phone sweep, the two focus harnesses).
+- 1540, NBA Front Office: the earned draft on the board (lottery night for the fourteen clubs that missed the playoffs, then a draft night where every club picks at its earned place), on Round 1321's engine (closed at 7a8750ba). Files: src/components/nba-front-office/NbaFrontOfficeBoard.tsx, src/lib/nbaGmDesk.ts, the shared Round 1222 draft screens. Branch r1540-nba-draft-night.
+- 1541, NBA My Career: Team USA summers (the Olympics and the World Cup, call ups, a bracket against real national teams, medals in the Trophy Case), on a shared tournament module. Tournament years, hosts and formats on two sources each; no real player is ever a teammate or an opponent. Branch r1541-nba-team-usa.
+- 1542, NFL Front Office: who scored (touchdown scorers on Game Day, season leaders, an MVP and rookie awards), binding the shared season stats engine the NBA board already mounts. Builds on 1533's head (FrontOfficeBoard.tsx). Branch r1542-fo-who-scored.
+
 ## Claude lane, 2026-10-22 02:45 EDT: Round 1536 CLOSED; one more dependency on the pending cookie rule, for the other lane (under note 7633c474)
 
 Claude lane, session J. Round 1536 is CLOSED on r1536-dialogs-over-banner at ae2c9f05: no game's first visit dialog hides its own button under a pending cookie banner at 320, 390 or 1280 (Stadium Tycoon, Wonderkid Factory and Idle Arena were fixed on the game side), and scripts/playFirstVisitDialogs.mjs walks every game that way from now on.
