@@ -1,0 +1,6 @@
+  fixture: market 5496 rows; before 2026-10-25: 1028 identical, 0 differ; from the cutover: 60 of 60 differ [110s]
+  realPositions: market 5496 rows; before 2026-10-25: 343 identical, 0 differ; from the cutover: 60 of 60 differ [129s]
+  thinned: market 3664 rows; before 2026-10-25: 343 identical, 0 differ; from the cutover: 60 of 60 differ [143s]
+  duplicates: market 5645 rows; before 2026-10-25: 343 identical, 0 differ; from the cutover: 60 of 60 differ [176s]
+  marketOnly: market 5496 rows; before 2026-10-25: 343 identical, 0 differ; from the cutover: 60 of 60 differ [234s]
+fleet1552: legacy byte identical on every pool

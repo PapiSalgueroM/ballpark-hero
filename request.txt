@@ -1,0 +1,4 @@
+fleet: node .rc/x/fleet1552.mjs
+fleet-control: FLEET_CONTROL=1 FLEET_FROM=2026-06-01 node .rc/x/fleet1552.mjs
+fleet-main: FLEET_BASE=origin/main node .rc/x/fleet1552.mjs
+dailyReload: ONLY=sports-millionaire node_modules/.bin/vitest run src/test/dailyReload.test.tsx --testTimeout=300000 --hookTimeout=120000

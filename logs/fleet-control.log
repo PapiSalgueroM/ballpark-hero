@@ -1,0 +1,7 @@
+FLEET CONTROL ON: every date on the new rules
+  fixture: market 5496 rows; before 2026-10-25: 0 identical, 146 differ (first 2026-06-01); from the cutover: 60 of 60 differ [33s]
+  realPositions: market 5496 rows; before 2026-10-25: 0 identical, 49 differ (first 2026-06-01); from the cutover: 60 of 60 differ [43s]
+  thinned: market 3664 rows; before 2026-10-25: 0 identical, 49 differ (first 2026-06-01); from the cutover: 60 of 60 differ [51s]
+  duplicates: market 5645 rows; before 2026-10-25: 0 identical, 49 differ (first 2026-06-01); from the cutover: 60 of 60 differ [67s]
+  marketOnly: market 5496 rows; before 2026-10-25: 0 identical, 49 differ (first 2026-06-01); from the cutover: 60 of 60 differ [91s]
+fleet1552: 5 failure(s) (CONTROL ON)
