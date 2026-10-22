@@ -1,0 +1,8 @@
+MUTATION m1 APPLIED (1 edits)
+   section 9: 2 failures
+simNbaEarnedDraft: RED in section 9.
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[31m[1mAssertionError[22m: expected 86 to be 88 // Object.is equality[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m24 passed[39m[22m[90m (25)[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/nbaEarnedDraft.test.ts,title=src/lib/nbaEarnedDraft.test.ts > the host and the three presses > a rival reads the engine's own grade; he%2C his staff and every card read his scout (A5),line=143,column=78::AssertionError: expected 86 to be 88 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 88%0A+ 86%0A%0A ❯ src/lib/nbaEarnedDraft.test.ts:143:78%0A%0A
+m1 CAUGHT: harness 1, vitest 1

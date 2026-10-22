@@ -1,0 +1,14 @@
+fleet exit=0 14s | simNbaEarnedDraft: green.
+partial exit=0 13s | PARTIAL SURVIVED: two sets of one run judged green
+oneset exit=1 13s | simNbaEarnedDraft: RED in section 7.
+j1 exit=0 27s | j1 SURVIVED: quick 0, combine 0
+j2 exit=1 26s | j2 CAUGHT: quick 1, combine 1
+j3 exit=0 39s | j3 SURVIVED: quick 0, combine 0, oneset 0
+probe exit=0 24s | PROBE2  108  old HIS 5 season deal -> kept his deal (years 4, salary unchanged)
+k1 exit=0 15s | k1 SURVIVED: harness 0, vitest 0
+m1 exit=1 15s | m1 CAUGHT: harness 1, vitest 1
+m3 exit=0 15s | m3 SURVIVED: harness 0, vitest 0
+m4 exit=1 15s | m4 CAUGHT: harness 0, vitest 1
+m5 exit=1 15s | m5 CAUGHT: harness 1, vitest 0
+rerecord exit=0 2s | RERECORD from 48cb9d4b equals the committed fixture
+after exit=0 14s | simNbaEarnedDraft: green.

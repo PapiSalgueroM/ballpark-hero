@@ -1,0 +1,4 @@
+MUTATION k1 APPLIED (1 edits)
+simNbaEarnedDraft: green.
+[2m      Tests [22m [1m[32m25 passed[39m[22m[90m (25)[39m
+k1 SURVIVED: harness 0, vitest 0

@@ -1,0 +1,6 @@
+MUTATION j2 APPLIED (1 edits)
+/tmp/q.log:   section 11: 2 failures
+/tmp/c.log:   section 11: 2 failures
+quick: simNbaEarnedDraft: RED in section 11.
+combine: simNbaEarnedDraft: RED in section 11.
+j2 CAUGHT: quick 1, combine 1

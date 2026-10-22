@@ -1,0 +1,10 @@
+files 60: arb-run1-set1.json arb-run1-set2.json arb-run1-set3.json arb-run1-set4.json new-bestfirst-run1-set1.json new-bestfirst-run1-set2.json new-bestfirst-run1-set3.json new-bestfirst-run1-set4.json new-fatclass-run1-set1.json new-fatclass-run1-set2.json new-fatclass-run1-set3.json new-fatclass-run1-set4.json new-run1-set1.json new-run1-set10.json new-run1-set11.json new-run1-set12.json new-run1-set2.jso
+| S1 at 5: mean nbaStrength of the 30 clubs, season 5 tip off | 83.11 / 83.11 | 83.37 / 83.37 | +0.26 (0.01) / +0.25 (0.01) | within 0.50 | 12 / 12 | PASS |
+| S1 at 10: mean nbaStrength of the 30 clubs, season 10 tip off (ruled 2026-10-21: up to +1.5) | 82.20 / 82.19 | 83.18 / 83.17 | +0.98 (0.01) / +0.98 (0.01) | from -0.50 to +1.50 | 12 / 12 | PASS |
+| S2: men rated 85 or more, season 10 tip off (20 percent of the old arm) | 105.9 / 106.0 | 108.4 / 108.1 | +2.6 (0.2) / +2.1 (0.2) | within 21.2 | 12 / 12 | PASS |
+| S3: two weakest starts' playoff seasons, seasons 2 to 5, per season (ruled 2026-10-21: printed) | 81.8 / 80.9 | 43.5 / 43.3 | -38.2 (1.4) / -37.6 (1.3) | printed, never asserted | 12 / 12 | PRINTED |
+| S4: two strongest starts' playoff seasons, seasons 2 to 10, per season (ruled 2026-10-21: the arm's own, at least 60) | 100.0 / 100.0 | 65.9 / 64.6 | (the arm's own) 65.9 (1.0) / 64.6 (0.8) | the arm's own at least 60.0 | 12 / 12 | PASS |
+| S6 dead: CPU dead money a season ($M), seasons 2 to 10 (ruled 2026-10-21: under 3.0; cause: firsts 13 to 30 on the four season deal, cut) | 0.13 / 0.13 | 2.47 / 2.52 | (the arm's own) 2.47 (0.02) / 2.52 (0.02) | the arm's own under 3.00 | 12 / 12 | PASS |
+| S6 payers: tax payers a season, seasons 2 to 10 | 2.29 / 2.29 | 1.90 / 1.90 | -0.39 (0.02) / -0.39 (0.02) | within 0.50 | 12 / 12 | PASS |
+| S5: his first selection later and worse at every band of finish, in every set | flat (pick 1) | 24 of 24 sets | | every set | 24 | PASS |
+simNbaEarnedDraft: green.

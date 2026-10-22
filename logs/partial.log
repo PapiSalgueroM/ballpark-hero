@@ -1,0 +1,11 @@
+   combined 240 careers from /tmp/fp: new, old
+| S1 at 5: mean nbaStrength of the 30 clubs, season 5 tip off | 83.11 | 83.38 | +0.27 (0.03) | within 0.50 | 2 | PASS |
+| S1 at 10: mean nbaStrength of the 30 clubs, season 10 tip off (ruled 2026-10-21: up to +1.5) | 82.21 | 83.20 | +0.99 (0.01) | from -0.50 to +1.50 | 2 | PASS |
+| S2: men rated 85 or more, season 10 tip off (20 percent of the old arm) | 105.8 | 108.4 | +2.6 (0.2) | within 21.2 | 2 | PASS |
+| S3: two weakest starts' playoff seasons, seasons 2 to 5, per season (ruled 2026-10-21: printed) | 84.4 | 42.5 | -41.9 (3.1) | printed, never asserted | 2 | PRINTED |
+| S4: two strongest starts' playoff seasons, seasons 2 to 10, per season (ruled 2026-10-21: the arm's own, at least 60) | 100.0 | 65.0 | (the arm's own) 65.0 (1.7) | the arm's own at least 60.0 | 2 | PASS |
+| S6 dead: CPU dead money a season ($M), seasons 2 to 10 (ruled 2026-10-21: under 3.0; cause: firsts 13 to 30 on the four season deal, cut) | 0.12 | 2.54 | (the arm's own) 2.54 (0.00) | the arm's own under 3.00 | 2 | PASS |
+| S6 payers: tax payers a season, seasons 2 to 10 | 2.28 | 1.91 | -0.37 (0.00) | within 0.50 | 2 | PASS |
+| S5: his first selection later and worse at every band of finish, in every set | flat (pick 1) | 2 of 2 sets | | every set | 2 | PASS |
+simNbaEarnedDraft: green.
+PARTIAL SURVIVED: two sets of one run judged green

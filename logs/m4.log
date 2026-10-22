@@ -1,0 +1,7 @@
+MUTATION m4 APPLIED (1 edits)
+simNbaEarnedDraft: green.
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[31m[1mAssertionError[22m: expected [ 'You pick 21st and 51st.', …(1) ] to deeply equal [ 'You pick 21st and 51st.' ][39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m24 passed[39m[22m[90m (25)[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmEarnedDraft.test.ts,title=src/lib/gmEarnedDraft.test.ts > the heading%2C from the slots > the clock line is his alone%3A the whole heading before Continue%2C on his clock and after the last pick,line=146,column=51::AssertionError: expected [ 'You pick 21st and 51st.', …(1) ] to deeply equal [ 'You pick 21st and 51st.' ]%0A%0A- Expected%0A+ Received%0A%0A  [%0A    "You pick 21st and 51st.",%0A+   "You are on the clock at 1.",%0A  ]%0A%0A ❯ src/lib/gmEarnedDraft.test.ts:146:51%0A%0A
+m4 CAUGHT: harness 0, vitest 1
