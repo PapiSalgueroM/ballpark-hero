@@ -1,0 +1,2 @@
+probeLate: Y0=2005 Y1=2025 node .rc/x/probeSaleLeague2.mjs
+probeEras: Y0=2030 Y1=2030 ERAS=1 node .rc/x/probeSaleLeague2.mjs
