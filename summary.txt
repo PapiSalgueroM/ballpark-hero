@@ -1,0 +1,12 @@
+build exit=0 22s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+playCmFinanceDesk exit=0 29s | playCmFinanceDesk: green. The Finances desk reads at 12px, taps at 44px, cuts nothing, keeps every figure on one line and shows what the board covers and what the kitty k
+ctl-desk-small exit=0 26s | playCmFinanceDesk: CONTROL small FIRED (9 failures, as it must)
+ctl-none-playCmFinanceDesk exit=2 15s | playCmFinanceDesk: could not run: no Liverpool save after taking the job (saw none). NOTHING WAS CHECKED.
+ctl-desk-cut exit=0 25s | playCmFinanceDesk: CONTROL cut FIRED (3 failures, as it must)
+ctl-desk-wrap exit=0 25s | playCmFinanceDesk: CONTROL wrap FIRED (3 failures, as it must)
+playClubManagerNewCountries exit=0 53s | playClubManagerNewCountries: green. Russia can be picked, started, played live and found in an old save's world (3 runs: 390x844, 1280x800, 390x844 reduced motion).
+playClubManagerSaveLeave exit=0 20s | playClubManagerSaveLeave: green, the career survived leaving the page and the banner behaves
+ctl-none-NewCountries exit=1 149s | playClubManagerNewCountries: 9 failure(s)
+ctl-none-SaveLeave exit=1 15s | playClubManagerSaveLeave: 1 failure
+cm exit=0 287s | Played Club Manager through its own screens. 0 findings.
+anchors exit=0 30s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
