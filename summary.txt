@@ -1,0 +1,12 @@
+vitest exit=0 53s |    Duration  52.12s (transform 11.92s, setup 2.37s, collect 31.58s, tests 87.04s, environment 15.29s, prepare 3.93s)
+simUsDirtyMoney exit=0 113s | simUsDirtyMoney: all sections green
+tsc exit=0 118s | 
+simUsCareerAnnualBenefits exit=0 5s | Career yearly support: fictional offline engine fixtures only, no native UI, full career completion or historical-data validation claim.
+simUsDirtyMoney-lawyerdesk exit=1 79s | CONTROL lawyerdesk FIRED (red sections 9)
+simCareerPressMarket exit=0 9s | Press/Market:6 outcomes,27 full original state/RNG pairs,6 effective copied source controls,18 native fixture branches.
+simUsDirtyMoney-cool8 exit=1 88s | CONTROL cool8 FIRED (red sections 9)
+simUsBoardParity exit=0 79s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen with the proved historical main775 coaching Panel.
+simUsCareerDefects exit=0 18s | simUsCareerDefects: 157 tests passed across the stat lines, the era cards and the shop cap.
+simCareerParity exit=0 12s | simCareerParity: green. One money app, one fan rule, one rival shape, one badge case, in all five careers.
+simUsCareerDeckC exit=0 87s | simUsCareerDeckC: all checks passed
+simCareerForm exit=0 1356s | simCareerForm: green

@@ -1,0 +1,23 @@
+1) the four US careers replay byte identical through careerForm.ts
+   nba: 90 careers, 1620 seasons replayed, byte identical
+   nfl: 144 careers, 2592 seasons replayed, byte identical
+   mlb: 198 careers, 3564 seasons replayed, byte identical
+   nhl: 108 careers, 1944 seasons replayed, byte identical
+2) the soccer step, the cap it shares with the phone, and the hub line
+   neutral 81, 15 morale points a step; 13 steps, 15 caps, 5 ratings, 5 hub lines and 101 said steps checked, the page wired 1 time(s)
+3) a pinned fleet: every press played again at morale 20, at the neutral point and at 90
+   120 careers, 2458 presses played three ways (seed 1523)
+   league games: morale 20 22.19, 81 22.29, 90 23.28; rating 6.57, 6.77, 6.92
+   gaps: games 0.10 and 1.00, rating 0.20 and 0.14
+   exact: 2450 presses moved by exactly the designed step at every pin, 0 did not, 8 left out where 0 or 38 bit
+   at the neutral point the round's arm and the arm without the step: 2458 presses byte identical with the same draws, 0 not
+   at morale 20 the two arms made the same number of draws in 2286 presses and a different number in 172 (draws after the league games move with them)
+   the hub line: 7350 pinned presses read against the games they played, 0 did not fit what the line said, 2450 played fewer than "up to" (the shared cap); the cap worked out with the hub's phone would have been wrong in 240
+4) the natural fleet (house): the round against the same tree without the morale step, same seeds
+   round     9600 careers, 219306 seasons, morale 78.5 as the engine reads it: Ballon d'Or 30.58 per 100 careers, league games 22.31, rating 6.74; legacy GOAT 20.6%, LEGEND 20.8%, GREAT 26.4%, SOLID PRO 17.2%, JOURNEYMAN 15.0%
+   no step   9600 careers, 219262 seasons, morale 78.7 as the engine reads it: Ballon d'Or 29.83 per 100 careers, league games 22.05, rating 6.74; legacy GOAT 20.2%, LEGEND 19.7%, GREAT 26.6%, SOLID PRO 17.5%, JOURNEYMAN 16.1%
+   shift: Ballon d'Or 0.75 per 100, league games 0.25, rating -0.00; legacy GOAT 0.4, LEGEND 1.1, GREAT -0.2, SOLID PRO -0.3, JOURNEYMAN -1.0 points
+5) the era fleet: no Puskas Award before 2008-09, and the draw before it is kept
+   240 careers from 1990, 1995, 2000 and 2005 (seed 1528): 0 awards before 2008-09, 126 from it, 0 on a year without a 15 goal season
+   the ungated tree won one before 2008-09 in 41 lockstep careers; the gated tree made the same draws and kept the same state in 41
+simCareerForm: green
