@@ -1,0 +1,10 @@
+#!serve
+#!playwright
+#!serial
+saleReview: node scripts/playTycoonSaleReview1083.mjs --prefetch-fonts-only && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" PORT=4193 ONLY=playTycoonSaleReview1083 node scripts/runAllSims.mjs --browser
+simTycoonGoalFlight: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" PORT=4186 ONLY=simTycoonGoalFlight node scripts/runAllSims.mjs --browser
+simSetPiecePresentation: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" PORT=4187 ONLY=simSetPiecePresentation node scripts/runAllSims.mjs --browser
+base-build: git worktree add /tmp/base 268e3b97 >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/base/node_modules && cd /tmp/base && node_modules/.bin/vite build > /tmp/base-build.log 2>&1 && echo "base built at 268e3b97"
+saleReview-base: cd /tmp/base && node scripts/playTycoonSaleReview1083.mjs --prefetch-fonts-only && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" PORT=4293 ONLY=playTycoonSaleReview1083 node scripts/runAllSims.mjs --browser
+simTycoonGoalFlight-base: cd /tmp/base && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" PORT=4286 ONLY=simTycoonGoalFlight node scripts/runAllSims.mjs --browser
+simSetPiecePresentation-base: cd /tmp/base && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" PORT=4287 ONLY=simSetPiecePresentation node scripts/runAllSims.mjs --browser
