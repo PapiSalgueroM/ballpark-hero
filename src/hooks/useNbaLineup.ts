@@ -10,7 +10,7 @@ import { HIT_SCORE } from '@/lib/nbaStatLine';
 import {
   NBA_FIVE_FRANCHISE_CODES, buildTeamPool, challengeByStat, findPoolEntry, isPositionEligibleForSlot,
   nbaFivePoints, refusalText, scoreFive, valueFor,
-  type NbaFiveRecordRow, type NbaFiveRosterRow, type NbaFiveScore, type NbaFiveTeamPool,
+  type NbaFiveRecordRow, type NbaFiveRosterRow, type NbaFiveScore, type NbaFiveTeamPool, type NbaFiveValue,
 } from '@/lib/nbaStartingFiveScore';
 
 /**
@@ -269,8 +269,8 @@ export function useNbaLineup() {
         return;
       }
       const entry = findPoolEntry(pool, fullDisplayName);
-      const numbered = entry ? valueFor(entry, def) : ({ ok: false, reason: 'no-record' } as const);
-      if (!numbered.ok) {
+      const numbered: NbaFiveValue = entry ? valueFor(entry, def) : { ok: false, reason: 'no-record' };
+      if ('reason' in numbered) {
         setIsValidating(false);
         setValidationError(refusalText(numbered.reason, fullDisplayName, def));
         return;
