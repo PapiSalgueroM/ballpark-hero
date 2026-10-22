@@ -1,0 +1,20 @@
+#!build
+simNbaRotation: node scripts/simNbaRotation.mjs
+simNbaSeasonStats: node scripts/simNbaSeasonStats.mjs
+simNbaOpeningRatings: node scripts/simNbaOpeningRatings.mjs
+simNbaOpeningRatingInputs: node scripts/simNbaOpeningRatingInputs.mjs
+simNbaRatingEvidence: node scripts/simNbaRatingEvidence.mjs
+simNbaTipOffForecast: node scripts/simNbaTipOffForecast.mjs
+simNbaDraftCapital: node scripts/simNbaDraftCapital.mjs
+simNbaLuxuryTax: node scripts/simNbaLuxuryTax.mjs
+simNbaRotationReset: node scripts/simNbaRotationReset.mjs
+simPerfectSeasonOdds: node scripts/simPerfectSeasonOdds.mjs
+simGmDeskHost: node scripts/simGmDeskHost.mjs
+simGmInbox: node scripts/simGmInbox.mjs
+simUsCoachCareer: node scripts/simUsCoachCareer.mjs
+simUsCoaching: node scripts/simUsCoaching.mjs
+simEventDeck: node scripts/simEventDeck.mjs
+simSoccerDeck: node scripts/simSoccerDeck.mjs
+simCmLeagueFixtures: node scripts/simCmLeagueFixtures.mjs
+simMissingElevenSources: node scripts/simMissingElevenSources.mjs
+simPrerender: node scripts/simPrerender.mjs

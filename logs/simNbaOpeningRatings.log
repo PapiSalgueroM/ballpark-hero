@@ -1,0 +1,19 @@
+NBA_OPENING_OUTCOMES {"control":"normal","outcomes":[{"title":"preserves the physical e8b39ccc default league full season and RNG as an independent baseline","status":"passed"},{"title":"keeps physical old-save grades and absent evidence unchanged through restore and play","status":"passed"},{"title":"replays all300 frozen model grades and fictional opening prices without named overrides","status":"passed"},{"title":"applies all300 real initializer tuples and preserves30 exact original club budgets","status":"passed"},{"title":"holds original terms generated ages free agents schedule tax scale and constructor RNG","status":"passed"},{"title":"carries original developmental headroom onto new grades with a99 potential ceiling","status":"passed"},{"title":"copies exact five-field partial original evidence with distinct prior and unresolved bases","status":"passed"},{"title":"resumes progressed JSON saves without rerating or losing original lineage below400KiB","status":"passed"},{"title":"retains original player evidence through an actual opening-price trade","status":"passed"},{"title":"retains waiver lineage charges actual dead money and prevents same-season return","status":"passed"},{"title":"leaves generated free agents and future draft arrivals without historical opening evidence","status":"passed"},{"title":"keeps actual tipoff and played box-score points consistent with opening player identities","status":"passed"},{"title":"keeps hard signing refusals and increasing-salary apron trades while allowing matched over-cap trades","status":"passed"},{"title":"plays three complete real seasons drafts and summers with saved lineage and accounting identities","status":"passed"},{"title":"retains a dated script-only source checkpoint and excludes raw observations from the browser","status":"failed"},{"title":"bounds measured targets before opportunity blending and leaves unmeasured players at a disclosed prior","status":"passed"}]}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Independent default/old-save/source baselines held
+
+'failed' !== 'passed'
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simNbaOpeningRatings.mjs:97:79 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 'failed',
+  expected: 'passed',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.22.0
