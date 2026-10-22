@@ -1,0 +1,49 @@
+14.9K assets/AppearanceBuilder-D0H6ow1m.js | lib/careerBadges.ts:18261 lib/careerMoney.ts:16880 lib/careerSocial.ts:16433 soccer-career/AppearanceBuilder.tsx:9273 lib/careerAppearanceCopy.ts:4465 lib/careerEventDeck.ts:1606 lib/careerForm.ts:931
+0.8K assets/Celebration-C7JEvWa4.js | club-manager/Celebration.tsx:1909
+0.7K assets/CelebrationStyles-Bl3vdLxs.js | club-manager/CelebrationStyles.tsx:2112
+0.6K assets/Confetti-CUDLwTP_.js | career-moments/Confetti.tsx:1458
+0.8K assets/GameHelp-wCeLs_x1.js | game/GameHelp.tsx:3021
+1.7K assets/GameNav-BlWV7g3d.js | game/GameNav.tsx:7008 game/DailyCountdown.tsx:2474
+3.7K assets/GameNavbar-o9z8D96c.js | game/GameNavbar.tsx:7516 hooks/useGameNavbarStats.ts:3568 hooks/useDailyLegend.ts:2829 game/SharedResultCard.tsx:1902 lib/sharedResult.ts:1499 icons/user-plus.js:503
+3.0K assets/GameReportContext-BKi7dpua.js | gameContent/loader.ts:6522 game/ReportQuestion.tsx:5864 gameContent/guideShape.ts:876 game/GameReportContext.tsx:57
+2.4K assets/GameSeoContent-Cejc4eDn.js | seo/GameSeoContent.tsx:10536 lib/relatedGames.ts:2102
+0.8K assets/HowToPlayPopover-CQkw53yh.js | game/HowToPlayPopover.tsx:2429
+0.6K assets/HubTiles-CIevvzOb.js | hub/HubTiles.tsx:2068
+93.2K assets/NbaMyCareer-zXoREvAS.js | lib/nbaCareerLifeB.ts:83172 lib/nbaCareerLifeA.ts:78881 lib/nbaMyCareer.ts:46555 lib/nbaCareerLifeC.ts:41265 lib/nbaCareerInbox.ts:41154 lib/nbaCareerCorruption.ts:34581 lib/nbaCareerRivalryEvents.ts:18653 lib/careerIntl.ts:14270 lib/nbaCareerIntl.ts:9332 lib/nbaCareerAwards.ts:8281 data/basketballIntl.ts:6496 lib/nbaCareerSport.ts:5353 data/nbaLeagueNorms.ts:5191 pages/NbaMyCareer.tsx:4277
+4.3K assets/PlayerAvatar-Blz4UpD2.js | soccer-career/PlayerAvatar.tsx:27162
+4.4K assets/ShareButtons-B2wSBBHD.js | game/ShareButtons.tsx:12788 game/ShareCard.tsx:3610 icons/share-2.js:565 lib/share.ts:510 icons/image.js:449 icons/mail.js:379
+0.3K assets/arrow-left-DhgQnny1.js | icons/arrow-left.js:325
+0.2K assets/awardDecision-aIUMdt9Z.js | lib/awardDecision.ts:823
+2.2K assets/badges--PTDlolk.js | lib/badges.ts:8966
+0.3K assets/briefcase-CAm32oZP.js | icons/briefcase.js:389
+0.2K assets/careerHeadroom-B6hg86bq.js | lib/careerHeadroom.ts:416
+2.4K assets/careerRivalryChoices-B2c2ZYXB.js | lib/careerInbox.ts:4724 lib/careerRivalryChoices.ts:4137 lib/careerRivalryEvents.ts:1001
+0.3K assets/circle-help-9aeQHcUo.js | icons/circle-help.js:413
+0.4K assets/clipboard-list-DRwW1DlW.js | icons/clipboard-list.js:649
+1.2K assets/conquestDataMlb-B4MKOeDm.js | data/conquestDataMlb.ts:3826
+8.3K assets/conquestDataNba-BDN2iDyW.js | data/conquestDataNba.ts:38558
+1.2K assets/conquestDataNhl-BBvewyKz.js | data/conquestDataNhl.ts:4334
+1.4K assets/conquestMapGeometry-DMIJk1yA.js | lib/conquestMapGeometry.ts:5011
+0.3K assets/copy-Cz5qoggz.js | icons/copy.js:402
+0.4K assets/crown-CFFiRBIU.js | icons/crown.js:547
+0.4K assets/dumbbell-CEN8AC7a.js | icons/dumbbell.js:802
+0.3K assets/flag-atNzj6xU.js | icons/flag.js:381
+0.2K assets/formatNumber-CGuttX8h.js | lib/formatNumber.ts:229
+0.4K assets/handshake-eT3gmCH6.js | icons/handshake.js:662
+0.2K assets/keyedRng-BKZQ2UGv.js | lib/keyedRng.ts:365
+0.4K assets/leagueCore--DUG-EXw.js | lib/leagueCore.ts:1105
+0.4K assets/medal-D46FL6KJ.js | icons/medal.js:660
+0.3K assets/rotate-ccw-DH0avj-I.js | icons/rotate-ccw.js:360
+0.2K assets/soccerBootIds-BWkyFIXk.js | lib/soccerBootIds.ts:341
+1.0K assets/soccerBoots-BK_dXNrV.js | lib/soccerBoots.ts:2418
+2.6K assets/soccerCareerAppearance-DvnUwYbX.js | lib/soccerCareerAppearance.ts:8787
+0.4K assets/star-CijfqJ8A.js | icons/star.js:647
+0.3K assets/trending-up-Bmi9V2af.js | icons/trending-up.js:366
+1.9K assets/usCareerFreeAgency-ViodNrE8.js | lib/usCareerFreeAgency.ts:6069
+0.6K assets/usCareerReveal-BW47Ke0-.js | lib/usCareerReveal.ts:1427
+153.6K assets/usCareerSeasonReview-BXIzKmPf.js | lib/nflCareerLifeB.ts:77991 lib/nflCareerLifeA.ts:77220 us-career/UsCareerBoard.tsx:74797 lib/nflMyCareer.ts:45714 us-career/CoachCareerPanel.tsx:36363 lib/nflCareerInbox.ts:35876 lib/nflCareerCorruption.ts:34488 lib/nflCareerLifeC.ts:32281 lib/nflCareerRivalryEvents.ts:23108 us-career/MoneyApp.tsx:22970 lib/usCareerProgramme.ts:22039 lib/usCoachCareer.ts:18478 us-career/ProspectJourney.tsx:16690 lib/careerPreDraft.ts:15702
+5.2K assets/usStatesPaths-DfX_GtuE.js | data/usStatesPaths.ts:18178
+0.5K assets/useGameCompletion-DGJ-e3rA.js | hooks/useGameCompletion.ts:1213 lib/restoredFinish.ts:335
+0.8K assets/useRevealScroll-CDNvWJwU.js | hooks/useRevealScroll.ts:3277
+route-own 320.3K in 47 files; entry closure 237.4K in 1 files
+dynamic imports of the route chunk: assets/nbaCareerTraining-C7Rk82fe.js:1.6K assets/nba-BXZN9ryx.js:3.7K

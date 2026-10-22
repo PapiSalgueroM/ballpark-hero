@@ -1,0 +1,7 @@
+build exit=0 24s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+weight-head exit=0 28s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+analyze-head exit=0 31s | dynamic imports of the route chunk: assets/nbaCareerIntl-5l3qQxol.js:7.6K assets/nbaCareerTraining-BIMapZos.js:1.6K assets/nba-UHuu0knx.js:3.7K
+weight-1541 exit=1 68s | sweepWeight: 13 failures
+weight-base exit=1 68s | sweepWeight: 13 failures
+analyze-base exit=0 29s | dynamic imports of the route chunk: assets/nbaCareerTraining-5eltsN8i.js:1.6K assets/nba-BhoHXM9y.js:3.7K
+analyze-1541 exit=0 30s | dynamic imports of the route chunk: assets/nbaCareerTraining-C7Rk82fe.js:1.6K assets/nba-BXZN9ryx.js:3.7K
