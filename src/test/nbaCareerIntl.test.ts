@@ -1,5 +1,5 @@
 /* Round 1541: the NBA bind of the international summers (src/lib/nbaCareerIntl.ts).
-   Dark in this round: nothing here is drawn by the board until Round 1544. */
+   Round 1544: the board reads the static gate (nbaCareerIntlGate.ts) and loads this on demand. */
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { NBA_ARCHETYPES, startNbaCareer, type NbaCareerState, type NbaSeasonLine } from '@/lib/nbaMyCareer';
 import { keyedRng } from '@/lib/keyedRng';
@@ -9,6 +9,7 @@ import {
   nbaIntlLine, nbaIntlPlay, nbaIntlStrength, nbaIntlSummerOf,
 } from '@/lib/nbaCareerIntl';
 import { NBA_CAREER_SPORT } from '@/lib/nbaCareerSport';
+import { NBA_CAREER_INTL_LAZY } from '@/lib/nbaCareerIntlGate';
 import { NFL_CAREER_SPORT } from '@/lib/nflCareerSport';
 import { MLB_CAREER_SPORT } from '@/lib/mlbCareerSport';
 import { NHL_CAREER_SPORT } from '@/lib/nhlCareerSport';
@@ -74,7 +75,7 @@ describe('the call', () => {
     expect(nbaIntlCallOf(long)?.id).toBe('oly-2004');
     const farewell = Object.assign(after(2003, 90), { retirement: { farewellYear: 2003 } });
     expect(nbaIntlCallOf(farewell)).toBeNull();
-    expect(NBA_CAREER_INTL.curtainLine(farewell)).toBeNull();
+    expect(NBA_CAREER_INTL_LAZY.curtainLine(farewell)).toBeNull();
     expect(nbaIntlCallOf(Object.assign(after(2003, 90), { retirement: { retiredYear: 2003 } }))).toBeNull();
     expect(nbaIntlCallOf(Object.assign(after(2003, 90), { retirement: { farewellYear: 2004 } }))?.id).toBe('oly-2004');
   });
@@ -87,12 +88,13 @@ describe('the call', () => {
     expect(intl).toEqual({ v: 1, summers: [{ year: 2004, edition: 'oly-2004', went: false }] });
     expect(JSON.stringify(rest)).toBe(before);
     expect(NBA_CAREER_INTL.pending(c)).toBeNull();
-    expect(NBA_CAREER_INTL.curtainLine(c)).toBeNull();
+    expect(NBA_CAREER_INTL_LAZY.curtainLine(c)).toBeNull();
   });
   it('go writes the row and never the tournament, which the save plays again; only health moves outside the block', () => {
     const c = after(2003, 92);
     const before = { ...c, health: 0 };
-    expect(NBA_CAREER_INTL.curtainLine(c)).toBe('The national team wants you for the 2004 Olympics in Athens. You decide next.');
+    expect(NBA_CAREER_INTL_LAZY.curtainLine(c)).toBe('The US national team wants you this summer. You decide next.');
+    expect(NBA_CAREER_INTL_LAZY.pendingYear(c)).toBe(2004);
     const spy = vi.spyOn(Math, 'random');
     const a = NBA_CAREER_INTL.answer(c, 'go');
     expect(a?.row.went).toBe(true);
@@ -187,8 +189,9 @@ describe('the help and the bindings', () => {
     const dashes = [String.fromCharCode(0x2013), String.fromCharCode(0x2014)];
     for (const d of dashes) expect(text.includes(d)).toBe(false);
   });
-  it('binds the NBA alone', () => {
-    expect(NBA_CAREER_SPORT.intl).toBe(NBA_CAREER_INTL);
+  it('binds the NBA alone, the gate now and the whole face on demand (Round 1544)', async () => {
+    expect(NBA_CAREER_SPORT.intl).toBe(NBA_CAREER_INTL_LAZY);
+    expect(await NBA_CAREER_SPORT.intl?.load()).toBe(NBA_CAREER_INTL);
     expect(NFL_CAREER_SPORT.intl).toBeUndefined();
     expect(MLB_CAREER_SPORT.intl).toBeUndefined();
     expect(NHL_CAREER_SPORT.intl).toBeUndefined();

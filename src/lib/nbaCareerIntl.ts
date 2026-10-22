@@ -7,10 +7,12 @@
  * rule, not a claim about FIBA's) and the words the screens print.
  * scripts/simCareerIntl.mjs section 6 fences a copy of the runner out of here.
  *
- * DARK IN THIS ROUND. The NBA binding carries NBA_CAREER_INTL from Round
- * 1541, but the board reads `sport.intl` only from Round 1544 (the call up
- * beat, the result screen, the Trophy Case rows). Until then nothing a player
- * sees changes and no save gains a block.
+ * LOADED ON DEMAND (Round 1544, the lead's ruling L5). The NBA binding holds
+ * the static gate (src/lib/nbaCareerIntlGate.ts: the bar, the edition summers,
+ * the curtain and the help) and reaches this file, with the ledger and the
+ * bracket runner, through a dynamic import when a career first meets a call
+ * or opens something international. Nothing static may import this file:
+ * scripts/simCareerIntl.mjs section 12 reads the page's bundle graph.
  *
  * THE SUMMER AFTER A SEASON. The season labelled Y is played from autumn Y to
  * spring Y + 1, so its summer is Y + 1: the season labelled 2003 is followed
@@ -43,24 +45,27 @@ import {
 } from '@/data/basketballIntl';
 import { keyedRng } from '@/lib/keyedRng';
 import { summerCareerKey } from '@/lib/usCareerSummer';
-import { endsAfterSeason } from '@/lib/usCareerRetirementFlow';
-import { nbaShouldRetire, type NbaCareerState } from '@/lib/nbaMyCareer';
+import type { NbaCareerState } from '@/lib/nbaMyCareer';
 import type { UsIntlSport } from '@/lib/usCareerSport';
+import {
+  INTL_KNOCK_FLOOR, INTL_KNOCK_HEALTH, nbaIntlCallSummer, nbaIntlKnockChance, nbaIntlLift, nbaIntlSummerOf,
+  nbaIntlHelpRules, type NbaIntlHelpFacts,
+} from '@/lib/nbaCareerIntlGate';
+
+/* Round 1544 (the lead's ruling L5): the bar, the edition summers, the lift,
+   the knock's numbers and the help's words live in the static gate
+   (src/lib/nbaCareerIntlGate.ts), so the board reads them without this file.
+   They are re-exported here so a reader of the bind finds every rule. */
+export {
+  INTL_CALL_UP_OVR, INTL_MAX_AGE, INTL_MIN_HEALTH, INTL_LIFT_PER_POINT, INTL_LIFT_CAP, INTL_KNOCK_BASE,
+  INTL_KNOCK_PER_YEAR, INTL_KNOCK_AGE, INTL_KNOCK_HEALTH, INTL_KNOCK_FLOOR, nbaIntlSummerOf, nbaIntlLift,
+  nbaIntlKnockChance, nbaIntlHelpRules,
+} from '@/lib/nbaCareerIntlGate';
 
 /* ─── the game's own rules ───────────────────────────────────────────────── */
 
-/** The game's own rule: the season's rating that earns a call (Round 1544, the lead's ruling L1: 87, about
- *  one career in two ever called; 86 called 57.5 and 59.5 percent). */
-export const INTL_CALL_UP_OVR = 87;
-/** The game's own rule: the oldest he can be in the summer of a call. */
-export const INTL_MAX_AGE = 36;
-/** The game's own rule: the least health he can carry into a call. */
-export const INTL_MIN_HEALTH = 50;
 /** The game's own rule: a nation plays at the strength of where it really finished that summer. */
 export const INTL_RUNG_STRENGTH: Record<IntlRung, number> = { gold: 92, silver: 89, bronze: 87, fourth: 85, quarter: 82, field: 76 };
-/** The game's own rule: he lifts the USA by this much a rating point over the bar, up to the cap. */
-export const INTL_LIFT_PER_POINT = 0.5;
-export const INTL_LIFT_CAP = 4;
 /** The game's own rule: a side scores BASE + SLOPE x (own minus other) + a normal draw of SPREAD, never under FLOOR. */
 export const INTL_SCORE_BASE = 80;
 export const INTL_SCORE_SLOPE = 1.2;
@@ -75,12 +80,6 @@ export const INTL_STAR_SHARE = 0.75;
 /** The game's own rule: the spread on his points and on his rebounds and assists. */
 export const INTL_LINE_SPREAD_PTS = 3;
 export const INTL_LINE_SPREAD_OTHER = 1.5;
-/** The game's own rule: the chance of coming home hurt, plus a point a year over INTL_KNOCK_AGE, and its cost. */
-export const INTL_KNOCK_BASE = 0.08;
-export const INTL_KNOCK_PER_YEAR = 0.01;
-export const INTL_KNOCK_AGE = 30;
-export const INTL_KNOCK_HEALTH = 8;
-export const INTL_KNOCK_FLOOR = 30;
 
 export const NBA_INTL_CALENDAR = intlCalendar({
   shapes: BASKETBALL_INTL_SHAPES, editions: BASKETBALL_INTL_EDITIONS, cycles: BASKETBALL_INTL_CYCLES,
@@ -89,9 +88,6 @@ export const NBA_INTL_CALENDAR = intlCalendar({
 
 type NbaIntlCareer = NbaCareerState & IntlCareer;
 const lastLine = (c: NbaCareerState) => c.seasons[c.seasons.length - 1];
-
-/** The summer after the season labelled Y is Y + 1. */
-export const nbaIntlSummerOf = (seasonYear: number): number => seasonYear + 1;
 
 function normal(rng: Rng): number {
   let u = 0;
@@ -129,20 +125,12 @@ export function nbaIntlCareerAt(c: NbaCareerState, summer: number, age: number):
   return i < 0 ? null : { ...c, seasons: c.seasons.slice(0, i + 1), age };
 }
 
-export const nbaIntlLift = (ovr: number): number => Math.max(0, Math.min(INTL_LIFT_CAP, (ovr - INTL_CALL_UP_OVR) * INTL_LIFT_PER_POINT));
-
-/** The chance he comes home hurt, at his age that summer. */
-export const nbaIntlKnockChance = (age: number): number => INTL_KNOCK_BASE + INTL_KNOCK_PER_YEAR * Math.max(0, age - INTL_KNOCK_AGE);
-
-/** The edition he is called up for after his last season, or null (decision 4 of the brief). */
+/** The edition he is called up for after his last season, or null: the
+ *  gate's summer (every condition of the call lives there, Round 1544), read
+ *  on the ledger's calendar. */
 export function nbaIntlCallOf(c: NbaCareerState): IntlEdition | null {
-  const line = lastLine(c);
-  if (!line || c.retired || nbaShouldRetire(c) || endsAfterSeason(c, line.year)) return null;
-  if (line.teamResult === 'SUSPENDED' || (c.suspendedSeasons ?? 0) > 0) return null;
-  const e = NBA_INTL_CALENDAR.editionFor(nbaIntlSummerOf(line.year));
-  if (!e) return null;
-  if (line.ovr < INTL_CALL_UP_OVR || c.age > INTL_MAX_AGE || c.health < INTL_MIN_HEALTH) return null;
-  return e;
+  const summer = nbaIntlCallSummer(c);
+  return summer === null ? null : NBA_INTL_CALENDAR.editionFor(summer);
 }
 
 /** One game, never level: overtime until one side leads. */
@@ -209,12 +197,6 @@ export function nbaIntlEditionLabel(id: string): string {
   return `the ${when}`;
 }
 
-/** The curtain's line when a call is waiting, or null. The same pending call the beat reads, so the two never disagree. */
-export function nbaIntlCurtainLine(c: NbaCareerState): string | null {
-  const call = pendingCallUp(c as NbaIntlCareer, NBA_INTL_BIND);
-  return call ? `The national team wants you for ${nbaIntlEditionLabel(call.edition.id)}. You decide next.` : null;
-}
-
 /** The Trophy Case rows: one a medal kind, with the summers it was won. */
 export function nbaIntlTrophyRows(c: NbaCareerState): { label: string; n: number; years: number[] }[] {
   const rows = new Map<string, number[]>();
@@ -227,34 +209,19 @@ export function nbaIntlTrophyRows(c: NbaCareerState): { label: string; n: number
   return [...rows.entries()].map(([label, years]) => ({ label, n: years.length, years }));
 }
 
-const pct = (x: number) => `${Math.round(x * 100)} percent`;
-const LAST_LEDGER_YEAR = Math.max(...BASKETBALL_INTL_EDITIONS.map(r => r[2]));
-const inWords = (xs: string[]) => (xs.length < 2 ? xs.join('') : `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}`);
-/* Read off the ledger, so the help names what the ledger holds and nothing it does not. */
-const OLD_NAME_YEARS = BASKETBALL_INTL_EDITIONS.filter(r => r[3] === 'World Championship').map(r => String(r[2]));
-const PLAYED_ROWS = BASKETBALL_INTL_EDITIONS.filter(r => r[6] !== null);
-const FIRST_PLAYED = PLAYED_ROWS[0];
-const LAST_PLAYED = PLAYED_ROWS[PLAYED_ROWS.length - 1];
-const ANNOUNCED = BASKETBALL_INTL_EDITIONS.filter(r => r[6] === null).map(r => `${r[4]} ${r[2]}`);
-const KNOCK_POINTS = Math.round(INTL_KNOCK_PER_YEAR * 100);
-
-/**
- * The rules behind the page's ?, built from the constants above the way
- * nbaAwardHelpRules is, so the help can never disagree with the code. Shown
- * from Round 1544, when the board starts reading `sport.intl`.
- */
-export function nbaIntlHelpRules(): string[] {
-  const exOvr = INTL_CALL_UP_OVR + 2;
-  return [
-    `International summers: after a season rated ${INTL_CALL_UP_OVR} or better, in a summer with an Olympics or a Basketball World Cup (the World Championship in ${inWords(OLD_NAME_YEARS)}), the US national team calls you up, as long as you are ${INTL_MAX_AGE} or younger that summer, your health is ${INTL_MIN_HEALTH} or more, you are not suspended and your career is not ending with that season. In this game every player is eligible for the USA.`,
-    'You choose: go and play the tournament, or rest. The call waits for your answer, one call a summer, and it comes before the summer\'s cards.',
-    'The tournament is groups, then a knockout: the best of each group (and the best third placed sides, when the format has them) go through, and the semi-final losers play for bronze. The knockout is seeded by group finish and record, so you can meet a side from your own group again in the first knockout game. Groups rank by wins, then points for minus against: the game\'s own rule, not FIBA\'s tie rules. A World Cup with a second group round is played as one group round into a round of 16.',
-    `In a summer already played, each nation plays at the strength of where it really finished; in one still to come, the game draws each nation's strength for your career from where it really finished in the tournaments it played (a nation new to this stage plays as an outsider). You lift the USA by ${INTL_LIFT_PER_POINT} for every rating point over ${INTL_CALL_UP_OVR}, up to ${INTL_LIFT_CAP}. Groups and results are this career's own.`,
-    `If you go, the chance you come home hurt is ${pct(INTL_KNOCK_BASE)} (health drops ${INTL_KNOCK_HEALTH}, never below ${INTL_KNOCK_FLOOR}), plus ${KNOCK_POINTS} percentage point${KNOCK_POINTS === 1 ? '' : 's'} for every year you are over ${INTL_KNOCK_AGE}. Resting carries nothing and gives nothing.`,
-    'A medal goes in your Trophy Case. It does not change your legacy, your Hall of Fame case, your morale, your fans or your money.',
-    `Tournaments from ${FIRST_PLAYED[4]} ${FIRST_PLAYED[2]} to ${LAST_PLAYED[4]} ${LAST_PLAYED[2]} use their real hosts and fields. The ones announced after that (${inWords(ANNOUNCED)}) use their real hosts, but their fields are not settled, so the game draws each from the nations of that competition's last two tournaments, the same for every career, and a format not confirmed yet plays as that competition's last known one. Past ${LAST_LEDGER_YEAR} the game keeps its own calendar, with no host. The game puts the USA in every one of these tournaments, with no qualifying.`,
-    `Example: you finish the 2027-28 season rated ${exOvr} and you are 27 that summer. 2028 is an Olympic summer in Los Angeles and the national team calls players rated ${INTL_CALL_UP_OVR} or better, so you are called. Go: three group games, then a top two finish (or one of the two best thirds) puts you in the quarter-final; win it, the semi-final and the final for gold, or lose the semi-final and play for bronze. You lift the USA by ${nbaIntlLift(exOvr)}, and at 27 the chance you come home hurt is ${pct(nbaIntlKnockChance(27))}. Rest: no games, no risk, nothing on the shelf.`,
-  ];
+/** The help's facts read off the ledger: simCareerIntl section 2 holds the
+ *  gate's NBA_INTL_HELP_FACTS equal to this, so the static help names what the
+ *  ledger holds and nothing it does not. */
+export function nbaIntlHelpFactsOfLedger(): NbaIntlHelpFacts {
+  const played = BASKETBALL_INTL_EDITIONS.filter(r => r[6] !== null);
+  const at = (r: (typeof BASKETBALL_INTL_EDITIONS)[number]) => `${r[4]} ${r[2]}`;
+  return {
+    oldNameYears: BASKETBALL_INTL_EDITIONS.filter(r => r[3] === 'World Championship').map(r => String(r[2])),
+    firstPlayed: at(played[0]),
+    lastPlayed: at(played[played.length - 1]),
+    announced: BASKETBALL_INTL_EDITIONS.filter(r => r[6] === null).map(at),
+    lastLedgerYear: Math.max(...BASKETBALL_INTL_EDITIONS.map(r => r[2])),
+  };
 }
 
 /* ─── the face the board reads (from Round 1544) ─────────────────────────── */
@@ -264,7 +231,6 @@ export const NBA_CAREER_INTL: UsIntlSport<NbaCareerState> = {
   answer: (c, choice) => answerCallUp(c as NbaIntlCareer, NBA_INTL_BIND, choice),
   repairOnLoad: c => repairIntlOnLoad(c as NbaIntlCareer, NBA_INTL_BIND),
   tournamentOf: (c, year) => intlTournamentOf(c as NbaIntlCareer, NBA_INTL_BIND, year),
-  curtainLine: nbaIntlCurtainLine,
   trophyRows: nbaIntlTrophyRows,
   medalCount: c => intlStatsOf((c as NbaIntlCareer).intl).medals,
   summersOf: c => (c as NbaIntlCareer).intl?.summers ?? [],

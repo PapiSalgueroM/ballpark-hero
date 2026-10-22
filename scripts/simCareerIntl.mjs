@@ -8,7 +8,7 @@
    ledger is a committed file and the saves of section 8 are built locally by
    scripts/lib/realSaves.mjs.
 
-   Sections (INTL_SECTIONS, default 1,2,3,4,6; 5, 7 and 8 are asked for by name):
+   Sections (INTL_SECTIONS, default 1,2,3,4,6,12; 5, 7 and 8 are asked for by name):
      1. the ledger. Every fact in scripts/data/basketballIntlSources.json has two
         reads on two hosts that are not each other (fiba.basketball and
         about.fiba.basketball are one body), none a wiki, each with its words;
@@ -19,7 +19,9 @@
         cycle after the last ledgered edition of their competition; every summer
         2004 to 2050 resolves to a ledger edition, a projected one or none; and
         (2b, through the real NBA engine) the season labelled Y is called to the
-        summer Y + 1.
+        summer Y + 1; (Round 1544) the static gate the board reads,
+        src/lib/nbaCareerIntlGate.ts, agrees with the ledger on every summer
+        2004 to 2050, its cycles and the help's facts.
      3. the fields. A played field is as big as its shape, holds no nation
         twice, holds the USA and every nation its finishing places name; every
         nation draws a flag or is on the named no flag list; Serbia and
@@ -49,6 +51,10 @@
         nothing of it is stored), a stored last the replay equals is dropped and
         one it does not equal is kept; with INTL_OLD_DIR (a tree of Round 1541's
         closing head) the saves that code wrote are repaired and counted.
+     12. the weight (Round 1544): src/pages/NbaMyCareer.tsx bundled with
+        splitting; the page's static closure, read off the metafile, holds the
+        gate and none of the ledger, careerIntl.ts or nbaCareerIntl.ts, which
+        sit in lazy chunks. (9 to 11 are Round 1557's.)
 
    Controls (INTL_CONTROL=<name>; run each with INTL_SECTIONS set to its own
    section, or it also runs the default sections). Each is asserted to change
@@ -73,6 +79,10 @@
      restwrites   resting takes a point of health                        (7 red)
      legacyreads  legacy counts his medals                               (7 red)
      norepair     the repair on load does nothing                        (8 red)
+     gateyear     the gate's 2004 moved to 2005                          (2 red)
+     staticledger the NBA binding imports the ledger statically         (12 red)
+   (Round 1544: seasonyear, anyyear, endcall, lowbar and knockage edit the
+   gate, where the call's conditions and the knock's numbers now live.)
 
    Exit codes: 0 green, 1 red (or a control that fired), 2 could not run,
    3 a control that did not fire. Green means the closing summary line AND
@@ -88,12 +98,14 @@ import { buildRealSaves } from './lib/realSaves.mjs';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_URL = ROOT.replaceAll('\\', '/');
 const CONTROL = process.env.INTL_CONTROL || '';
-const SECTIONS = new Set((process.env.INTL_SECTIONS || '1,2,3,4,6').split(',').map(s => s.trim()));
+const SECTIONS = new Set((process.env.INTL_SECTIONS || '1,2,3,4,6,12').split(',').map(s => s.trim()));
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'careerIntl-'));
 process.on('exit', () => { try { fs.rmSync(TMP, { recursive: true, force: true }); } catch { /* best effort */ } });
 
 const INTL = 'src/lib/careerIntl.ts';
 const NBA = 'src/lib/nbaCareerIntl.ts';
+const GATE = 'src/lib/nbaCareerIntlGate.ts';
+const SPORT = 'src/lib/nbaCareerSport.ts';
 const CONTROLS = {
   onesource: { section: '1', note: 'one calendar fact of oly-2008 keeps one read' },
   shiftyear: { section: '2', note: "oly-2008's src year moved by one" },
@@ -101,19 +113,21 @@ const CONTROLS = {
   fieldsize: { section: '3', note: "wc-2014's field loses a nation" },
   genfield: { section: '3', note: 'a generated field is drawn on a stream keyed to the career, not the edition', edits: [{ file: INTL, from: 'bind.rng(`intl-field:${e.id}`)', to: 'bind.rng(`intl-field:${e.id}:${Math.random()}`)' }] },
   copy: { section: '6', note: 'a private copy of the bracket runner planted in a sport file' },
-  seasonyear: { section: '2', note: 'the call reads the season label itself, not the summer after it', edits: [{ file: NBA, from: 'NBA_INTL_CALENDAR.editionFor(nbaIntlSummerOf(line.year))', to: 'NBA_INTL_CALENDAR.editionFor(line.year)' }] },
-  anyyear: { section: '4', note: 'every summer answers an edition', edits: [{ file: NBA, from: 'const e = NBA_INTL_CALENDAR.editionFor(nbaIntlSummerOf(line.year));', to: 'const e = NBA_INTL_CALENDAR.editionFor(nbaIntlSummerOf(line.year)) ?? NBA_INTL_CALENDAR.byId(`oly-${nbaIntlSummerOf(line.year)}`);' }] },
-  endcall: { section: '4', note: 'the call ignores a career that ends with this season', edits: [{ file: NBA, from: ' || nbaShouldRetire(c) || endsAfterSeason(c, line.year)) return null;', to: ') return null;' }] },
-  lowbar: { section: '4', note: 'the bar is five points lower in the bind', edits: [{ file: NBA, from: 'line.ovr < INTL_CALL_UP_OVR', to: 'line.ovr < INTL_CALL_UP_OVR - 5' }] },
+  seasonyear: { section: '2', note: 'the call reads the season label itself, not the summer after it', edits: [{ file: GATE, from: 'const summer = nbaIntlSummerOf(line.year);', to: 'const summer = line.year;' }] },
+  anyyear: { section: '4', note: 'every summer answers an edition', edits: [{ file: GATE, from: '  if (!nbaIntlIsEditionSummer(summer)) return null;\n', to: '' }, { file: NBA, from: 'return summer === null ? null : NBA_INTL_CALENDAR.editionFor(summer);', to: 'return summer === null ? null : NBA_INTL_CALENDAR.editionFor(summer) ?? NBA_INTL_CALENDAR.byId(`oly-${summer}`);' }] },
+  endcall: { section: '4', note: 'the call ignores a career that ends with this season', edits: [{ file: GATE, from: ' || nbaShouldRetire(c) || endsAfterSeason(c, line.year)) return null;', to: ') return null;' }] },
+  lowbar: { section: '4', note: 'the bar is five points lower in the gate', edits: [{ file: GATE, from: 'line.ovr < INTL_CALL_UP_OVR', to: 'line.ovr < INTL_CALL_UP_OVR - 5' }] },
   legacyreads: { section: '7', note: 'legacy counts his medals' },
   restwrites: { section: '7', note: 'resting takes a point of health', edits: [{ file: NBA, from: 'answer: (c, choice) => answerCallUp(c as NbaIntlCareer, NBA_INTL_BIND, choice),', to: "answer: (c, choice) => { if (choice === 'rest') c.health -= 1; return answerCallUp(c as NbaIntlCareer, NBA_INTL_BIND, choice); }," }] },
-  norepair: { section: '8', note: 'the repair on load does nothing', edits: [{ file: INTL, from: 'export function repairIntlOnLoad(c: IntlCareer): boolean {', to: 'export function repairIntlOnLoad(c: IntlCareer): boolean {\n  if (c) return false;' }] },
+  norepair: { section: '8', note: 'the repair on load does nothing', edits: [{ file: INTL, from: 'export function repairIntlOnLoad<C extends IntlCareer>(c: C, bind?: IntlSportBind<C>): boolean {', to: 'export function repairIntlOnLoad<C extends IntlCareer>(c: C, bind?: IntlSportBind<C>): boolean {\n  if (c) return false;' }] },
   nolift: { section: '5', note: 'he lifts the USA by nothing', edits: [{ file: NBA, from: 'liftOf: c => nbaIntlLift(lastLine(c)?.ovr ?? 0),', to: 'liftOf: () => 0,' }] },
   nobronze: { section: '5', note: 'no bronze game is played', edits: [{ file: INTL, from: 'if (shape.bronze && semiLosers.length === 2) {', to: 'if (false && shape.bronze && semiLosers.length === 2) {' }] },
   knockflip: { section: '5', note: 'the knock comparison is flipped, so he comes home hurt from most tournaments', edits: [{ file: INTL, from: 'const hurt = rng() < bind.knockChance(c);', to: 'const hurt = rng() > bind.knockChance(c);' }] },
-  knockage: { section: '5', note: 'the knock forgets his age', edits: [{ file: NBA, from: 'INTL_KNOCK_BASE + INTL_KNOCK_PER_YEAR * Math.max(0, age - INTL_KNOCK_AGE)', to: 'INTL_KNOCK_BASE' }] },
+  knockage: { section: '5', note: 'the knock forgets his age', edits: [{ file: GATE, from: 'INTL_KNOCK_BASE + INTL_KNOCK_PER_YEAR * Math.max(0, age - INTL_KNOCK_AGE)', to: 'INTL_KNOCK_BASE' }] },
   easyfuture: { section: '5', note: "a summer still to come gives each nation the mean of its rungs again (Round 1541's field)", edits: [{ file: NBA, from: 'return INTL_RUNG_STRENGTH[past[Math.min(past.length - 1, Math.floor(rng() * past.length))]];', to: 'return past.reduce((s, r) => s + INTL_RUNG_STRENGTH[r], 0) / past.length;' }] },
   mathrandom: { section: '6', note: 'the pot draw uses Math.random', edits: [{ file: INTL, from: 'const j = Math.floor(rng() * (i + 1));', to: 'const j = Math.floor(Math.random() * (i + 1));' }] },
+  gateyear: { section: '2', note: "the gate's first edition summer moved from 2004 to 2005", edits: [{ file: GATE, from: '[2004, 2006, 2008,', to: '[2005, 2006, 2008,' }] },
+  staticledger: { section: '12', note: 'the NBA binding imports the ledger statically', edits: [{ file: SPORT, from: "import { NBA_CAREER_INTL_LAZY } from '@/lib/nbaCareerIntlGate';", to: "import { NBA_CAREER_INTL_LAZY } from '@/lib/nbaCareerIntlGate';\nimport { BASKETBALL_INTL_EDITIONS } from '@/data/basketballIntl';" }, { file: SPORT, from: '  intl: NBA_CAREER_INTL_LAZY,', to: '  intl: { ...NBA_CAREER_INTL_LAZY, ledgerRows: BASKETBALL_INTL_EDITIONS.length },' }] },
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown control "${CONTROL}": use ${Object.keys(CONTROLS).join(', ')}`); process.exit(2); }
 if (CONTROL && !SECTIONS.has(CONTROLS[CONTROL].section)) SECTIONS.add(CONTROLS[CONTROL].section);
@@ -147,11 +161,12 @@ fs.writeFileSync(ENTRY, [
   `export * as intl from '${ROOT_URL}/src/lib/careerIntl.ts';`,
   `export * as keyed from '${ROOT_URL}/src/lib/keyedRng.ts';`,
   `export * as nbaIntl from '${ROOT_URL}/src/lib/nbaCareerIntl.ts';`,
+  `export * as gate from '${ROOT_URL}/src/lib/nbaCareerIntlGate.ts';`,
   `export { NBA_CAREER_SPORT } from '${ROOT_URL}/src/lib/nbaCareerSport.ts';`,
   `export * as drive from '${ROOT_URL}/src/test/helpers/usCareerDrive.ts';`,
 ].join('\n'));
 await build({ entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node', outfile: OUT, logLevel: 'error', absWorkingDir: ROOT, alias: { '@': path.join(ROOT, 'src') }, plugins: [controlPlugin] });
-const { data, intl, keyed, nbaIntl, NBA_CAREER_SPORT, drive } = await import(`file://${OUT.replaceAll('\\', '/')}`);
+const { data, intl, keyed, nbaIntl, gate, NBA_CAREER_SPORT, drive } = await import(`file://${OUT.replaceAll('\\', '/')}`);
 const LEDGER = () => ({ shapes: data.BASKETBALL_INTL_SHAPES, editions: data.BASKETBALL_INTL_EDITIONS, cycles: data.BASKETBALL_INTL_CYCLES, partial: data.BASKETBALL_INTL_PARTIAL, lastPlayed: data.BASKETBALL_LAST_PLAYED_SUMMER });
 let MATH_RANDOM_CALLS = 0;
 const realRandom = Math.random;
@@ -279,6 +294,21 @@ if (SECTIONS.has('2')) {
   }
   console.log(`  2004 to 2050: ${table.filter(t => t !== '-').length} summers with an edition, ${none} without`);
   console.log(`  ${table.join(' ')}`);
+  /* Round 1544 (the lead's ruling L5): the static gate (src/lib/nbaCareerIntlGate.ts) holds its own copy of
+     the edition summers, the cycles and the help's facts, so the board needs no ledger before a call. It must
+     answer every summer exactly as the ledger's calendar and the harness's resolver do. Control gateyear. */
+  let gateAgrees = 0;
+  for (let y = 2004; y <= 2050; y += 1) {
+    const g = gate.nbaIntlIsEditionSummer(y);
+    const ok = g === !!nbaIntl.NBA_INTL_CALENDAR.editionFor(y) && g === !!resolve(y);
+    check('2', ok, `the gate says ${y} ${g ? 'holds' : 'holds no'} edition, the ledger's calendar says ${nbaIntl.NBA_INTL_CALENDAR.editionFor(y)?.id ?? 'none'}`);
+    if (ok) gateAgrees += 1;
+  }
+  check('2', same(gate.NBA_INTL_LEDGER_SUMMERS, data.BASKETBALL_INTL_EDITIONS.map(r => r[2]).sort((a, b) => a - b)), `the gate's ledger summers ${JSON.stringify(gate.NBA_INTL_LEDGER_SUMMERS)} are not the ledger rows' years`);
+  check('2', same(gate.NBA_INTL_GATE_CYCLES, data.BASKETBALL_INTL_CYCLES.map(([, first, every]) => [first, every])), `the gate's cycles ${JSON.stringify(gate.NBA_INTL_GATE_CYCLES)} are not the ledger's`);
+  check('2', same(gate.NBA_INTL_HELP_FACTS, nbaIntl.nbaIntlHelpFactsOfLedger()), `the help's facts ${JSON.stringify(gate.NBA_INTL_HELP_FACTS)} are not the ledger's ${JSON.stringify(nbaIntl.nbaIntlHelpFactsOfLedger())}`);
+  check('2', same(gate.nbaIntlHelpRules(), gate.nbaIntlHelpRules(nbaIntl.nbaIntlHelpFactsOfLedger())), 'the static help reads differently on the ledger\'s facts');
+  console.log(`  the static gate: ${gateAgrees} of 47 summers 2004 to 2050 agree with the ledger's calendar; help facts ${same(gate.NBA_INTL_HELP_FACTS, nbaIntl.nbaIntlHelpFactsOfLedger()) ? 'equal' : 'DIFFER'}`);
 }
 
 /* ─── 3. the fields ──────────────────────────────────────────────────────── */
@@ -458,7 +488,11 @@ if (SECTIONS.has('2') || SECTIONS.has('4')) {
         if (ed && !suspended && !ending && c.age <= ORACLE.age && c.health >= ORACLE.health) best = Math.max(best, line.ovr);
         const meets = !!ed && !c.retired && !ending && !suspended && line.ovr >= ORACLE.ovr && c.age <= ORACLE.age && c.health >= ORACLE.health;
         const call = nbaIntl.NBA_CAREER_INTL.pending(c);
-        check('4', !!call === meets, `${era} ${i} summer ${summer}: ovr ${line.ovr} age ${c.age} health ${c.health} edition ${ed?.id ?? 'none'}, called ${!!call}, the oracle says ${meets}`);
+        /* Round 1544: what the board reads before the module loads, the binding's static gate. */
+        const gateYear = NBA_CAREER_SPORT.intl.pendingYear(c);
+        check('4', (gateYear !== null) === meets && (gateYear === null || gateYear === summer), `${era} ${i} summer ${summer}: the gate says ${gateYear}, the oracle says ${meets}`);
+        check('4', (NBA_CAREER_SPORT.intl.curtainLine(c) !== null) === meets, `${era} ${i} summer ${summer}: the curtain line and the oracle disagree`);
+        check('4', !!call === meets,`${era} ${i} summer ${summer}: ovr ${line.ovr} age ${c.age} health ${c.health} edition ${ed?.id ?? 'none'}, called ${!!call}, the oracle says ${meets}`);
         if (call) {
           mine += 1;
           check('2', call.year === summer && call.edition.id === ed?.id, `${era} ${i}: the season labelled ${line.year} is called to ${call.edition.id}, the summer after it is ${summer} (${ed?.id ?? 'none'})`);
@@ -669,8 +703,8 @@ if (SECTIONS.has('7')) {
       const o = { key: `intl7:${era}:${i}`, pos: POS[i % POS.length], arch: i, eraId, seasons: 30 };
       const baseJson = base.drive.driveCareer(base.NBA_CAREER_SPORT, o).json;
       const none = drive.driveCareer(NBA_CAREER_SPORT, o);
-      const go = drive.driveCareer(NBA_CAREER_SPORT, { ...o, intl: 'go' });
-      const rest = drive.driveCareer(NBA_CAREER_SPORT, { ...o, intl: 'rest' });
+      const go = drive.driveCareer(NBA_CAREER_SPORT, { ...o, intl: 'go', intlFace: nbaIntl.NBA_CAREER_INTL });
+      const rest = drive.driveCareer(NBA_CAREER_SPORT, { ...o, intl: 'rest', intlFace: nbaIntl.NBA_CAREER_INTL });
       check('7', none.json === baseJson, `${era} ${i}: with no answer the career differs from the base`);
       if (!rest.intlLog.length) {
         n.never += 1;
@@ -756,7 +790,7 @@ if (SECTIONS.has('8')) {
   let replays = 0; let dropped = 0; let kept = 0;
   for (const [era, eraId] of ERAS) {
     for (let i = 0; i < RF; i += 1) {
-      const r = drive.driveCareer(NBA_CAREER_SPORT, { key: `intl8:${era}:${i}`, pos: POS[i % POS.length], arch: i, eraId, seasons: 30, intl: 'go' });
+      const r = drive.driveCareer(NBA_CAREER_SPORT, { key: `intl8:${era}:${i}`, pos: POS[i % POS.length], arch: i, eraId, seasons: 30, intl: 'go', intlFace: nbaIntl.NBA_CAREER_INTL });
       const c = JSON.parse(r.json);
       check('8', !c.intl || !('last' in c.intl), `${era} ${i}: a save stores a tournament`);
       for (const x of r.intlLog) {
@@ -814,6 +848,53 @@ if (SECTIONS.has('8')) {
     check('8', withLast > 0, 'Round 1541\'s code wrote no save with a stored last, so 8c proves nothing');
     console.log(`  8c, ${withLast} saves Round 1541's code wrote with a stored last, repaired here: ${Object.entries(tally).map(([k, v]) => `${k}: ${v.dropped} dropped, ${v.kept} kept`).join('; ')}`);
   }
+}
+
+/* ─── 12. the weight: the page's static graph holds no ledger ───────────── */
+/* Round 1544 (the lead's ruling L5). src/pages/NbaMyCareer.tsx is bundled the
+   way the site splits it (esbuild, splitting on, every dynamic import its own
+   chunk), and the page's entry output is walked through its STATIC imports
+   only. Every source module in that closure is read off the bundler's
+   metafile, its graph, not source text. The ledger, the bracket runner and
+   the NBA bind must be outside it and inside some lazy chunk; the gate must
+   be inside it. Control staticledger (the binding imports the ledger): red.
+   The weight in bytes is measured on a served build by sweepWeight. */
+if (SECTIONS.has('12')) {
+  console.log('section 12: the static graph of /nba-my-career');
+  const empty = ['.css', '.png', '.jpg', '.jpeg', '.svg', '.webp', '.gif', '.woff', '.woff2', '.mp3', '.ttf'];
+  const viteOnly = { name: 'r1544-vite-only', setup(b) {
+    b.onResolve({ filter: /\?(url|raw)$/ }, a => ({ path: a.path, namespace: 'r1544-empty' }));
+    b.onLoad({ filter: /.*/, namespace: 'r1544-empty' }, () => ({ contents: 'export default "";', loader: 'js' }));
+  } };
+  const res = await build({
+    entryPoints: [path.join(ROOT, 'src/pages/NbaMyCareer.tsx')], bundle: true, splitting: true, format: 'esm', platform: 'browser',
+    outdir: path.join(TMP, 'graph'), write: false, metafile: true, logLevel: 'error', absWorkingDir: ROOT, jsx: 'automatic',
+    alias: { '@': path.join(ROOT, 'src') }, loader: Object.fromEntries(empty.map(x => [x, 'empty'])),
+    define: { 'process.env.NODE_ENV': '"production"' }, plugins: [controlPlugin, viteOnly],
+  });
+  const outs = res.metafile.outputs;
+  /* With splitting every dynamically imported module is an entry point too, so the page's own is found by name. */
+  const entry = Object.keys(outs).find(k => (outs[k].entryPoint ?? '').replaceAll('\\', '/').endsWith('src/pages/NbaMyCareer.tsx'));
+  check('12', !!entry, 'the page has no entry output');
+  const seen = new Set();
+  const stack = [entry];
+  while (stack.length) {
+    const k = stack.pop();
+    if (!k || seen.has(k)) continue;
+    seen.add(k);
+    for (const im of outs[k]?.imports ?? []) if (im.kind === 'import-statement' && !im.external) stack.push(im.path);
+  }
+  const inputsOf = keys => new Set(keys.flatMap(k => Object.keys(outs[k].inputs).map(f => f.replaceAll('\\', '/'))));
+  const statics = inputsOf([...seen]);
+  const lazies = inputsOf(Object.keys(outs).filter(k => !seen.has(k)));
+  const has = (set, f) => [...set].some(x => x.endsWith(f));
+  for (const f of ['src/data/basketballIntl.ts', 'src/lib/careerIntl.ts', 'src/lib/nbaCareerIntl.ts']) {
+    check('12', !has(statics, f), `${f} is in the static graph of /nba-my-career`);
+    check('12', has(lazies, f), `${f} is in no lazy chunk, so the page cannot load it`);
+  }
+  check('12', has(statics, 'src/lib/nbaCareerIntlGate.ts'), 'the static gate is not in the static graph, so the board cannot read it');
+  check('12', statics.size > 200, `the static graph holds ${statics.size} modules, too few to be the page`);
+  console.log(`  ${seen.size} static outputs (${statics.size} modules) of ${Object.keys(outs).length}; ledger static: ${has(statics, 'src/data/basketballIntl.ts')}, bracket runner static: ${has(statics, 'src/lib/careerIntl.ts')}, gate static: ${has(statics, 'src/lib/nbaCareerIntlGate.ts')}`);
 }
 
 /* ─── summary ────────────────────────────────────────────────────────────── */

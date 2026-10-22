@@ -129,8 +129,6 @@ export interface UsIntlSport<C> {
    *  save (nothing of it is stored), or null when it no longer agrees with the
    *  summer's row, which stays the record. */
   tournamentOf(c: C, year: number): IntlTournament | null;
-  /** The curtain's line when a call is waiting, or null. */
-  curtainLine(c: C): string | null;
   /** The Trophy Case's medal rows. */
   trophyRows(c: C): { label: string; n: number; years: number[] }[];
   medalCount(c: C): number;
@@ -139,6 +137,19 @@ export interface UsIntlSport<C> {
   editionLabel(id: string): string;
   /** The rules behind the page's ?, built from the bind's constants. */
   helpRules(): string[];
+}
+
+/** Round 1544 (the lead's ruling L5): what the binding holds of a sport's
+ *  international summers. The board reads the gate synchronously and loads
+ *  the whole face (the ledger, the bracket runner, the words) only when a
+ *  career meets a call or its save carries a summer. */
+export interface UsIntlLazy<C> {
+  /** The summer whose call waits on an answer after his last season, or null: no ledger needed. */
+  pendingYear(c: C): number | null;
+  /** The curtain's line when a call is waiting, or null. */
+  curtainLine(c: C): string | null;
+  /** The whole face, in its own chunk. */
+  load(): Promise<UsIntlSport<C>>;
 }
 
 /** Round 1038: one offseason's cards, as ids, and how many are answered. */
@@ -341,8 +352,9 @@ export interface UsCareerSport<C extends UsCareerCore = any, L extends UsCareerS
   hall?: UsHallSport<C>;
   /** Round 1541: the international summers (src/lib/careerIntl.ts). Optional: a
    *  binding without it never calls anyone up, which is the NFL, MLB and NHL
-   *  today; the board reads it from Round 1544. */
-  intl?: UsIntlSport<C>;
+   *  today; the board reads it from Round 1544, through the static gate, and
+   *  loads the rest on demand (UsIntlLazy). */
+  intl?: UsIntlLazy<C>;
   /** Round 1048: the Season Center's numbers for this sport (src/lib/season/us.ts), loaded when he first
    *  watches a season. Optional: a binding without it shows no button, which is the NHL today (baseball
    *  was bound in Round 1212). */

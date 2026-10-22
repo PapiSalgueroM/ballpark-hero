@@ -17,7 +17,7 @@
  * the loop short.
  */
 import { createHash } from 'node:crypto';
-import type { UsCareerSport } from '@/lib/usCareerSport';
+import type { UsCareerSport, UsIntlSport } from '@/lib/usCareerSport';
 import { applyFaSigning } from '@/lib/usCareerFreeAgency';
 import { answerSummerCard, startSummer } from '@/lib/usCareerSummer';
 
@@ -52,6 +52,10 @@ export interface DriveOptions {
    *  (after the summer is dealt, before card 1 is answered). Absent: the call
    *  is never answered, so the drive is the drive it was before the round. */
   intl?: 'go' | 'rest';
+  /** Round 1544: the sport's whole international face, which the binding now
+   *  loads on demand (`await sport.intl.load()`), handed in so the drive stays
+   *  synchronous. Needed with `intl`; without it the call is never answered. */
+  intlFace?: UsIntlSport<AnyCareer>;
   /** Round 1541: shown the career right after each summer is dealt, before
    *  the call is answered (the harness's oracle reads it there). */
   onSummer?: (c: AnyCareer) => void;
@@ -114,10 +118,10 @@ export function driveCareer(sport: UsCareerSport, o: DriveOptions): DriveResult 
       if (sport.shouldRetire(c)) { c.retired = true; break; }
       let ev = startSummer(c, sport, Math.random, null);
       o.onSummer?.(c);
-      const call = o.intl && sport.intl ? sport.intl.pending(c) : null;
-      if (call && o.intl && sport.intl) {
+      const call = o.intl && o.intlFace ? o.intlFace.pending(c) : null;
+      if (call && o.intl && o.intlFace) {
         const dealt = JSON.stringify(c.summer ?? null);
-        const res = sport.intl.answer(c, o.intl); see(c);
+        const res = o.intlFace.answer(c, o.intl); see(c);
         intlLog.push({ year: call.year, edition: call.edition.id, dealt, played: JSON.stringify(res?.tournament ?? null) });
       }
       while (ev) {
