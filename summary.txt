@@ -1,0 +1,16 @@
+tsc exit=0 106s | 
+c-mirror exit=1 1s | simCmTactics: control mirror FIRED (1 failures: table 1; must turn table red)
+c-helpwords exit=1 1s | simCmTactics: control helpwords FIRED (1 failures: table 1; must turn table red)
+simNoRivalNames exit=0 19s | No rival product names found. 0 findings.
+vitest-cm exit=0 162s |    Duration  160.87s (transform 6.04s, setup 3.81s, collect 31.79s, tests 371.34s, environment 25.09s, prepare 5.59s)
+simStorageWrites exit=0 3s | simStorageWrites: all green (owed: 12)
+simHarnessAnchors exit=0 55s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simDailyDeals exit=0 4s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+simCmMatchCentre exit=0 4s | simCmMatchCentre: PASS. Every stat on the report and the live strip is counted off the committed play and lines, and every timeline row is an event the engine drew.
+simLiveMatch exit=0 5s | simLiveMatch: PASS. Each half is committed as one stream, the report is counted off it, a change keeps the past and redraws the future, and the other dugout fields eleven
+simCmCopy exit=0 33s | simCmCopy: green on this tree. Sections 1, 2, 3, 4, 5: Club Manager says what it means.
+rulesHead exit=0 63s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+simGuideHeadings exit=0 1s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+simSiteSearch exit=0 2s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+bytes exit=0 158s | simCmDifficulty: all green (sections 2)
+full exit=0 625s | simCmTactics: all green (sections table, styles, balanced, fleet)
