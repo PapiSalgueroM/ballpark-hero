@@ -1,0 +1,13 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+chain: node .rc/x/check-chain.mjs
+sa-1: SIM_SEASON_AWARDS_SECTIONS=1 node scripts/simSoccerSeasonAwards.mjs
+sa-2: SIM_SEASON_AWARDS_SECTIONS=2 node scripts/simSoccerSeasonAwards.mjs
+sa-3: SIM_SEASON_AWARDS_SECTIONS=3 node scripts/simSoccerSeasonAwards.mjs
+sa-4: SIM_SEASON_AWARDS_SECTIONS=4 node scripts/simSoccerSeasonAwards.mjs
+sa-56: SIM_SEASON_AWARDS_SECTIONS=5,6 node scripts/simSoccerSeasonAwards.mjs
+sa-2-s9: SIM_SEASON_AWARDS_SECTIONS=2 SIM_SEASON_AWARDS_SEED=9 node scripts/simSoccerSeasonAwards.mjs
+sa-3-s9: SIM_SEASON_AWARDS_SECTIONS=3 SIM_SEASON_AWARDS_SEED=9 node scripts/simSoccerSeasonAwards.mjs
+sa-4-s9: SIM_SEASON_AWARDS_SECTIONS=4 SIM_SEASON_AWARDS_SEED=9 node scripts/simSoccerSeasonAwards.mjs
+form-15: SIM_CAREER_FORM_SECTIONS=1,5 node scripts/simCareerForm.mjs
+rival: node scripts/simNoRivalNames.mjs
+worldtruth: node scripts/simSoccerWorldTruth.mjs

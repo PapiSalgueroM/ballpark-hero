@@ -1,0 +1,13 @@
+chain exit=0 0s | CHAIN OK
+tsc exit=0 66s | 
+sa-3 exit=0 16s | simSoccerSeasonAwards: green
+sa-2 exit=0 119s | simSoccerSeasonAwards: green
+sa-56 exit=0 2s | simSoccerSeasonAwards: green
+sa-4 exit=0 69s | simSoccerSeasonAwards: green
+sa-3-s9 exit=0 18s | simSoccerSeasonAwards: green
+sa-2-s9 exit=0 104s | simSoccerSeasonAwards: green
+sa-4-s9 exit=0 63s | simSoccerSeasonAwards: green
+rival exit=0 13s | No rival product names found. 0 findings.
+form-15 exit=0 23s | simCareerForm: green
+worldtruth exit=0 38s | simSoccerWorldTruth: OK, every section green
+sa-1 exit=0 297s | simSoccerSeasonAwards: green
