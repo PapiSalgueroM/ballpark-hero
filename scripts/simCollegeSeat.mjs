@@ -150,6 +150,10 @@ const EDITS = {
 const CBB_LINE = '  cbb: { respect: 1, rebuild: 1 },';
 const CFB_LINE = '  cfb: { title: -1, contend: -1, playoffs: -1 },';
 const BUILT = { cfb: { title: -1, contend: -1, playoffs: -1 }, cbb: { respect: 1, rebuild: 1 } };
+/* Round 1554: the slate ease as built (COLLEGE_SLATE_EASE), and the line the ease variants rewrite. */
+const EASE_LINE = 'export const COLLEGE_SLATE_EASE: Record<CollegeSeatSport, number> = { cfb: 2, cbb: 0 };';
+const EASE_BUILT = { cfb: 2, cbb: 0 };
+const easeVariant = n => ({ table: BUILT, ease: { cfb: n, cbb: 0 }, edits: [['seat', EASE_LINE, EASE_LINE.replace('cfb: 2', `cfb: ${n}`)]] });
 const VARIANTS = {
   /* as built: football one step softer on every postseason ask, basketball one step more of its bottom rosters */
   built: { table: BUILT, edits: [] },
@@ -157,6 +161,10 @@ const VARIANTS = {
   'cfb-none': { table: { ...BUILT, cfb: {} }, edits: [['seat', CFB_LINE, '  cfb: {},']] },
   /* the pro ladder unchanged in both sports */
   none: { table: { cfb: {}, cbb: {} }, edits: [['seat', CFB_LINE, '  cfb: {},'], ['seat', CBB_LINE, '  cbb: {},']] },
+  /* Round 1554: the Group of Five's win total ask on the slate eased by 0 (no ease), 1 or 3 wins instead of 2 */
+  'ease-0': easeVariant(0),
+  'ease-1': easeVariant(1),
+  'ease-3': easeVariant(3),
 };
 if (CONTROL && !EDITS[CONTROL]) {
   console.error(`SIM_COLLEGE_SEAT_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(EDITS).join(', ')})`);
@@ -351,6 +359,7 @@ function prestigeTiers(schools) {
   return new Map(sorted.map((s, i) => [s.id, 1 + Math.floor((i * 4) / sorted.length)]));
 }
 const VARIANT_TABLE = VARIANTS[TILT].table;
+const VARIANT_EASE = VARIANTS[TILT].ease ?? EASE_BUILT;
 function oracleAsk(sp, sportId, st, teamId, season) {
   const pack = GM_SEAT_PACKS[sportId];
   const strengths = Object.values(st.teams).map(t => [t.id, sp.E[sportId === 'cfb' ? 'cfbStrength' : 'cbbStrength'](t)]);
@@ -360,7 +369,17 @@ function oracleAsk(sp, sportId, st, teamId, season) {
   const defending = champs.some(c => c.season === season - 1 && c.team === teamId);
   const base = SEAT.seatMandate(pack, rank, strengths.length, defending, season, 0);
   const step = VARIANT_TABLE[sportId][base.tier];
-  return { ask: step ? SEAT.seatMandate(pack, rank, strengths.length, defending, season, step) : base, rank };
+  let ask = step ? SEAT.seatMandate(pack, rank, strengths.length, defending, season, step) : base;
+  /* Round 1554: a Group of Five school in a season played on its slate has a win total ask eased by
+     the ease as built, never below one win. Read here off the school's group and the slate the engine
+     built for that season, never off the binding's own flags. */
+  const ease = VARIANT_EASE[sportId];
+  const onSlate = !!st.slate && st.slate.season === season;
+  if (ease && sportId === 'cfb' && onSlate && groupOf(sp, teamId) === 'Group of Five' && (ask.tier === 'respect' || ask.tier === 'rebuild')) {
+    const winFloor = Math.max(1, ask.winFloor - ease);
+    ask = { ...ask, winFloor, text: SEAT.fillSeatWords(pack.asks[ask.tier], pack, winFloor) };
+  }
+  return { ask, rank };
 }
 function prestigeRank(schools, id) {
   const mine = schools.find(s => s.id === id).prestige;
@@ -393,7 +412,13 @@ const tallyOf = sportId => (T[sportId] ??= {
   bidsAfter: { title: 0, overachieved: 0 }, moves: { bid: 0, market: 0 }, ended: 0,
   s8Rounds: 0, s8Closes: 0, yearOuts: 0, refusals: { 'in-seat': 0, 'season-open': 0, 'market-closed': 0 }, emptyChairs: 0,
   careers: [], twice: { markets: 0, drawnFirst: 0, removed: 0, bidsDrawn: 0, bidsDropped: 0 },
+  groupGrades: {}, groupWins: {},
 });
+/* Round 1554: a school's group, which decides its slate (football's Group of Five plays mostly power schools). */
+const groupOf = (sp, id) => {
+  const c = sp.schools.find(s => s.id === id)?.conf;
+  return c === 'G5' ? 'Group of Five' : c === 'IND' ? 'independent' : 'league';
+};
 const inc = (o, k, n = 1) => { o[k] = (o[k] ?? 0) + n; };
 const without = st => { const c = { ...st }; delete c.seat; return JSON.stringify(c); };
 const TIER_WORD = ['', 'tier 1', 'tier 2', 'tier 3', 'tier 4'];
@@ -512,6 +537,9 @@ function runDynasty(sportId, seed, index, team, startTier) {
       t.graded += 1;
       t.grades[res.mandate.tier] ??= {};
       inc(t.grades[res.mandate.tier], res.grade.result);
+      const gk = `${groupOf(sp, st.myTeam)}|${res.mandate.tier}`;
+      inc(t.groupGrades[gk] ??= {}, res.grade.result);
+      inc(t.groupWins[gk] ??= {}, oracle.wins);
 
       check = 'S3';
       const want = Math.max(0, Math.min(100, before.trust + g.trustDelta));
@@ -567,6 +595,9 @@ function runDynasty(sportId, seed, index, team, startTier) {
   }
   if (firedOnce) { inc(t.firedBy.askTier, first); inc(t.firedBy.startTier, TIER_WORD[startTier]); }
   inc(t.firedBy, `n:${first}`); inc(t.firedBy, `n:${TIER_WORD[startTier]}`);
+  const g0 = groupOf(sp, team);
+  inc(t.firedBy, `gn:${g0}`); inc(t.firedBy, `an:${first}|${g0}`);
+  if (firedOnce) { inc(t.firedBy, `gf:${g0}`); inc(t.firedBy, `af:${first}|${g0}`); }
   if (st.seat) t.careers.push(st.seat.career);
 }
 
@@ -789,6 +820,21 @@ for (const [s, t] of Object.entries(T)) {
   console.log(`     fired within the run, by first ask tier: ${['title', 'contend', 'playoffs', 'respect', 'rebuild'].filter(k => fb[`n:${k}`]).map(k => `${k} ${pct(fb.askTier[k] ?? 0, fb[`n:${k}`])} of ${fb[`n:${k}`]}`).join(', ')}`);
   console.log(`     fired within the run, by starting tier: ${[1, 2, 3, 4].map(q => `${TIER_WORD[q]} ${pct(fb.startTier[TIER_WORD[q]] ?? 0, fb[`n:${TIER_WORD[q]}`])}`).join(', ')}`);
   console.log(`     first feeds already closed, by starting tier: ${[1, 2, 3, 4].map(q => `${TIER_WORD[q]} ${t.firstFeedClosed[TIER_WORD[q]] ?? 0} of ${t.firstFeedClosed[`n:${TIER_WORD[q]}`] ?? 0}`).join(', ')}`);
+  const groups = ['league', 'Group of Five', 'independent'].filter(g => fb[`gn:${g}`]);
+  if (groups.length > 1) {
+    console.log(`     fired within the run, by starting group: ${groups.map(g => `${g} ${pct(fb[`gf:${g}`] ?? 0, fb[`gn:${g}`])} of ${fb[`gn:${g}`]}`).join(', ')}`);
+    for (const k of ['respect', 'rebuild']) {
+      console.log(`     fired within the run, first ask ${k}, by group: ${groups.filter(g => fb[`an:${k}|${g}`]).map(g => `${g} ${pct(fb[`af:${k}|${g}`] ?? 0, fb[`an:${k}|${g}`])} of ${fb[`an:${k}|${g}`]}`).join(', ')}`);
+    }
+    for (const [gk, g] of Object.entries(t.groupGrades).sort()) {
+      const [grp, tier] = gk.split('|');
+      if (tier !== 'respect' && tier !== 'rebuild') continue;
+      const n = Object.values(g).reduce((a, b) => a + b, 0);
+      const w = t.groupWins[gk];
+      const hist = Object.keys(w).map(Number).sort((a, b) => a - b).map(k => `${k}:${w[k]}`).join(' ');
+      console.log(`     ${grp}, ${tier} asks ${n}: ${['overachieved', 'met', 'missed', 'badly'].map(r => `${r} ${pct(g[r] ?? 0, n)}`).join(', ')}; wins ${hist}`);
+    }
+  }
   ok(t.graded > 0, `${s}: nothing was graded`);
 }
 
