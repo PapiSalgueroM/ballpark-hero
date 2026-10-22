@@ -1,0 +1,4 @@
+form1 exit=0 4s | simCareerForm: green
+ctl-divisor exit=1 3s | simCareerForm: RED, 1 failure(s)
+deck-unattributed exit=1 22s | simSoccerDeck: 2 failures, red sections 2
+ls-unattributed exit=1 47s | simCareerLeagueSeasons: 12 failures (sections c)
