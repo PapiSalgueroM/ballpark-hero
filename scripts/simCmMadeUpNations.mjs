@@ -8,7 +8,9 @@
         the same countries in a fresh load of the engine.
      2) realistic shares per league: for every league of every world, 2000 drawn men land on the home country at the
         share the league's real squads have (within four standard errors), and a world ten years on lists its made
-        up market men by league at those shares too.
+        up market men by league at those shares too. 2c) the review's fix: in a league that caps its imports (the
+        Saudi Pro League, MLS's American clubs), the squads, real men and made up men together, hold the cap's home
+        floor, against the sourced cap written in this file and the raw squads, never the engine's table.
      3) every made up man carries a country (squads, the free agent pool, the market today and ten years on), and no
         real man is touched: none carries the field, and his flag is the verified map's. A youth pad or a boy of
         the club's own intake is from the club's country (the review's fix: a minor cannot move abroad).
@@ -27,7 +29,7 @@
 
    NEGATIVE CONTROLS (CM_NATIONS_CONTROL), each must turn its section red, and each refuses to run if its edit finds
    nothing to edit: mainstream (1), flat (2), realtouched (3), nocarry, noledger and nopromote (4), noload (5),
-   askoff (6), leak and bloat (7); added by the review's fixes: awayyouth (3).
+   askoff (6), leak and bloat (7); added by the review's fixes: nocap (2c), awayyouth (3).
 
    Run: node scripts/simCmMadeUpNations.mjs      (BASE_ROOT=/tmp/base for the base comparison; SEASONS, LONG)
    Numbers measured on a runner are in the round's report (results-g/finish-1520.md). */
@@ -63,6 +65,7 @@ const CONTROLS = {
   bloat: [{ file: N, from: "  if (!count || count.known <= 0 || !count.abroad.length) return home;", to: "  return home.padEnd(400, '.');" }],
   /* Review fixes. */
   awayyouth: [{ file: E, from: '  if (local) return place.home;\n', to: '' }],
+  nocap: [{ file: E, from: '  if (!cap || !away) return c;', to: '  if (cap || !cap) return c;' }],
 };
 if (CONTROL && !CONTROLS[CONTROL]) cannot(`CM_NATIONS_CONTROL=${CONTROL} is not a control this harness knows`);
 /* NONATION is the bridge every kit pinned to an older engine composes (scripts/lib/cmNoMadeUpNations1520.mjs): no
@@ -229,12 +232,40 @@ const DRAWS = 2000;
       checked += 1;
       if (z > worst) { worst = z; worstAt = `${p.era} ${p.league} ${p.home}${young ? ' young' : ''}`; }
       if (z > 4) fail(`${p.era} ${p.league} (${p.home}${young ? ', young' : ''}): drawn home ${(drawn * 100).toFixed(1)}% against real ${(real * 100).toFixed(1)}%, top foreign ${top?.[0]} ${(drawnTop * 100).toFixed(1)}% against ${(realTop * 100).toFixed(1)}%`);
-      if (!young && p.era === 'now' || !young && table.length < 60) table.push(`   ${p.era.padEnd(7)} ${p.league.padEnd(14)} ${p.home.padEnd(14)} real men ${String(c.known).padStart(4)}  home ${(real * 100).toFixed(1).padStart(5)}% drawn ${(drawn * 100).toFixed(1).padStart(5)}%  then ${c.abroad.slice(0, 3).map(([n, k]) => `${n} ${(k / c.known * 100).toFixed(0)}%`).join(', ')}`);
+      if (!young && p.era === 'now' || !young && table.length < 60) table.push(`   ${p.era.padEnd(7)} ${p.league.padEnd(14)} ${p.home.padEnd(14)} real men ${String(Math.round(c.known)).padStart(4)}  home ${(real * 100).toFixed(1).padStart(5)}% drawn ${(drawn * 100).toFixed(1).padStart(5)}%  then ${c.abroad.slice(0, 3).map(([n, k]) => `${n} ${(k / c.known * 100).toFixed(0)}%`).join(', ')}`);
     }
   }
   console.log(table.join('\n'));
   if (checked < 40) fail(`only ${checked} counts were checked, the places shrank`);
   ok(`${checked} counts checked at ${DRAWS} draws each (${thin} under 20 known men left unchecked), worst ${worst.toFixed(2)} standard errors (${worstAt}), bound 4`);
+}
+
+console.log("2c) A league that caps its imports: its squads, real and made up men together, hold the cap's home floor");
+{
+  /* The review's fix. The caps are the ones the engine's IMPORT_CAPS comment sources (Saudi Pro League: 10 non-Saudi
+     in 25; MLS: 241 international slots over 30 clubs, rosters of up to 30), written here again so this check never
+     reads the engine's table: it reads the raw squads and the draw, and asks whether the squads honour the rule. */
+  const CAPS = [['saudi', 'Saudi Arabia', 25, 10], ['mlsEast', 'United States', 30, 241 / 30], ['mlsWest', 'United States', 30, 241 / 30]];
+  const raw = m.eras.eraRostersRaw('now');
+  for (const [league, home, squad, most] of CAPS) {
+    let clubs = 0, men = 0, homeMen = 0;
+    for (const club of m.cm.REAL_LEAGUES.find(l => l.id === league).clubs) {
+      if (m.cm.careerPlace({ clubName: club, eraId: 'now' })?.home !== home) continue;
+      const roster = raw[club] ?? [];
+      clubs += 1;
+      men += roster.length;
+      homeMen += roster.filter(b => m.pn.nationalityOf('now', b.n) === home).length;
+    }
+    if (clubs < 8) { fail(`${league} (${home}): only ${clubs} clubs found`); continue; }
+    let drawnHome = 0;
+    for (let i = 0; i < DRAWS; i += 1) if (m.cm.madeUpNationAt(`Cap Probe ${league} ${i}`, { league, home }, 'now') === home) drawnHome += 1;
+    const drawn = drawnHome / DRAWS, slots = Math.max(0, clubs * squad - men), seats = clubs * squad;
+    const share = (homeMen + drawn * slots) / seats, floor = (squad - most) / squad;
+    const se = Math.sqrt(Math.max(drawn * (1 - drawn), 0.0025) / DRAWS) * slots / seats;
+    console.log(`   ${league.padEnd(8)} ${home.padEnd(14)} ${clubs} clubs, ${men} real men (${homeMen} home); made up men drawn home ${(drawn * 100).toFixed(1)}%; squads home ${(share * 100).toFixed(1)}% against the cap's floor ${(floor * 100).toFixed(1)}%`);
+    if (share < floor - 4 * se) fail(`${league} (${home}): its squads are ${(share * 100).toFixed(1)}% home, under the cap's floor of ${(floor * 100).toFixed(1)}%`);
+    else ok(`${league} (${home}) holds the cap's floor`);
+  }
 }
 
 /* The fleet: every league's first and last playable club in every world, and a created club. */

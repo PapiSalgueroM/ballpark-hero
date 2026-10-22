@@ -15,7 +15,8 @@
    lands on the same country, a save from before this round included. Pure: no state, no clock. */
 import { keyedRng } from '@/lib/keyedRng';
 
-/** One club country's real men in one league, counted. `known` holds only men the verified map has a country for. */
+/** One club country's real men in one league, counted. `known` holds only men the verified map has a country for
+    (a league that caps its imports is raised to the cap's home floor, IMPORT_CAPS in clubManager.ts). */
 export interface NationCount { known: number; home: number; abroad: [string, number][] }
 
 /** Counts a list of verified countries against the club country they play in, busiest foreign country first. */

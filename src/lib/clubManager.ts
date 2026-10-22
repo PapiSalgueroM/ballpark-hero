@@ -4744,20 +4744,39 @@ function clubPlace(club: string, eraId: string | undefined): NationPlace | null 
 /* Each league's real men counted by country, once a world, from the squads and the verified map of that world. */
 const NATION_COUNTS = new Map<string, Map<string, NationCount>>();
 
+/* Round 1520 review: a league whose rules cap its imports keeps the rest of every squad at home. Where its real
+   squads are thin, the data holds a club's best known men, mostly the imports (Al-Hilal: 16 men, one Saudi), so the
+   men this game makes up there are the home players the cap guarantees: they are drawn home at the share that fills
+   the place's squads up to the cap's floor. [squad, most imports]. Saudi Pro League: 10 non-Saudi players in a 25 man
+   squad (Arab News, 2023-12-29, from 2024-25; africasoccer.com, 2026-07-27, for the new season). MLS: 241
+   international slots over 30 clubs in rosters of up to 30 (mlssoccer.com roster rules, 2026-02-03; Sporting KC on
+   its 2026 slots). A Canadian MLS club's domestic men may be American, so only the American places are held. */
+const IMPORT_CAPS: Record<string, [number, number]> = {
+  'saudi|Saudi Arabia': [25, 10], 'mlsEast|United States': [30, 241 / 30], 'mlsWest|United States': [30, 241 / 30],
+};
+function capped(key: string, c: NationCount, clubs: number, men: number): NationCount {
+  const cap = IMPORT_CAPS[key], away = c.known - c.home;
+  if (!cap || !away) return c;
+  const share = (clubs * (cap[0] - cap[1]) - c.home) / Math.max(1, clubs * cap[0] - men);
+  if (share * c.known <= c.home) return c;
+  return share >= 1 ? { ...c, home: c.known } : { ...c, known: away / (1 - share), home: away / (1 - share) - away };
+}
+
 /** The real count behind a place. Undefined while the world's squads have not arrived. */
 export function nationCountsAt(place: NationPlace, eraId: string | undefined): NationCount | null | undefined {
   if (!eraRostersLoaded(eraId)) return undefined;
   const world = isHistoricEra(eraId) ? eraId! : 'now';
   let table = NATION_COUNTS.get(world);
   if (!table) {
-    const lists = new Map<string, (string | null)[]>();
+    const lists = new Map<string, (string | null)[]>(), clubs = new Map<string, number>();
     for (const [club, roster] of Object.entries(eraRostersRaw(eraId))) {
       const at = clubPlace(club, eraId);
       if (!at) continue;
       const key = `${at.league}|${at.home}`;
       lists.set(key, (lists.get(key) ?? []).concat(roster.map(b => nationalityOf(eraId, b.n))));
+      clubs.set(key, (clubs.get(key) ?? 0) + 1);
     }
-    table = new Map([...lists].map(([key, all]) => [key, countNations(all, key.slice(key.indexOf('|') + 1))]));
+    table = new Map([...lists].map(([key, all]) => [key, capped(key, countNations(all, key.slice(key.indexOf('|') + 1)), clubs.get(key)!, all.length)]));
     NATION_COUNTS.set(world, table);
   }
   return table.get(`${place.league}|${place.home}`) ?? null;
