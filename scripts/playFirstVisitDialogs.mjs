@@ -114,8 +114,11 @@ function measureInPage({ BANNER, control }) {
   out.kind = inner === g && !g.matches('[role="dialog"],[role="alertdialog"],[aria-modal="true"]') ? 'overlay' : 'dialog';
   out.position = getComputedStyle(inner).position;
   out.bannerInside = !!banner && g.contains(banner);
-  /* PLAYFIRST_CONTROL=lift: the CSS translate property adds to a dialog's own transform rather than replacing it */
-  if (control === 'lift') { g.style.translate = `0px ${-Math.round(inner.getBoundingClientRect().top + 20)}px`; out.controlApplied = true; }
+  /* PLAYFIRST_CONTROL=lift and edge move the dialog with the CSS translate property, which adds to a dialog's own
+     transform rather than replacing it, with transitions off: a Radix dialog's duration-200 would otherwise animate
+     the move and the reads that follow would still see it where it was (the first edge run moved no Radix dialog). */
+  const slide = px => { Object.assign(g.style, { transition: 'none', translate: `0px ${px}px` }); out.controlApplied = true; };
+  if (control === 'lift') slide(-Math.round(inner.getBoundingClientRect().top + 20));
   out.dialogBox = box(inner.getBoundingClientRect());
   g.setAttribute('data-playfirst-dialog', '');
   const label = b => ((b.textContent || '').trim() || b.getAttribute('aria-label') || '').replace(/\s+/g, ' ').slice(0, 30);
@@ -131,7 +134,7 @@ function measureInPage({ BANNER, control }) {
   const bb = banner && bannerFixed ? banner.getBoundingClientRect() : null;
   if (control === 'edge' && bb && !out.bannerInside) {
     const shift = Math.round(bb.top + 8 - pick.getBoundingClientRect().bottom);
-    if (shift > 0) { g.style.translate = `0px ${shift}px`; out.controlApplied = true; }
+    if (shift > 0) slide(shift);
   }
   const r = pick.getBoundingClientRect();
   const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
@@ -183,11 +186,11 @@ for (const route of routes) {
     const key = `${route}@${w}`;
     const res = { route, width: w, height: h, key };
     const ctx = await browser.newContext({ viewport: { width: w, height: h } });
-    if (CONTROL === 'nobanner') await ctx.addInitScript(() => { const s = document.createElement('style'); s.textContent = '[aria-label="Cookie choices"] { display: none !important; }'; document.documentElement.appendChild(s); });
     const page = await ctx.newPage();
     await page.route(/supabase\.co/, r => r.abort());
     try {
       await page.goto(`${BASE}${route}`, { waitUntil: 'domcontentloaded', timeout: 30000 });
+      if (CONTROL === 'nobanner') await page.addStyleTag({ content: '[aria-label="Cookie choices"] { display: none !important; }' });
       await page.waitForFunction(() => (document.body?.innerText ?? '').trim().length > 80, null, { timeout: 15000 }).catch(() => {});
       await page.waitForSelector(BANNER, { timeout: 5000 }).catch(() => {});
       await page.waitForTimeout(1500);
@@ -299,7 +302,7 @@ if (CONTROL === 'nobanner') {
   const judged = results.filter(r => !r.error).length;
   if (judged === 0) { console.log('playFirstVisitDialogs control ABORTED: no route width loaded'); process.exit(2); }
   if (noBanner.length === judged) { console.log(`playFirstVisitDialogs: PLAYFIRST_CONTROL=nobanner FIRED. ${judged} of ${judged} route widths with the banner hidden were refused as measuring nothing`); process.exit(1); }
-  console.log(`playFirstVisitDialogs: PLAYFIRST_CONTROL=nobanner did NOT fire: ${judged - noBanner.length} of ${judged} route widths counted with no banner on screen`);
+  console.log(`playFirstVisitDialogs: PLAYFIRST_CONTROL=nobanner did NOT fire: ${judged - noBanner.length} of ${judged} route widths still saw the banner on screen`);
   process.exit(3);
 }
 if (failures.length) {
