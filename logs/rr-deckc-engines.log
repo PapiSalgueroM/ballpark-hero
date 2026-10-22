@@ -1,0 +1,17 @@
+nfl: 1920 saves, 36 deck C cards dealt, 336 of 1920 draws were deck C, draw hash b81a46a087e76f0d
+   words against effects: 8460 plays, 1294 at a gamble's edge, 3840 era money pairs, 0 trades or claims
+   and 6738 plays again with the rating at its potential
+nba: 1200 saves, 36 deck C cards dealt, 111 of 1200 draws were deck C, draw hash 95aa20cc41ea91ec
+   words against effects: 11268 plays, 1464 at a gamble's edge, 1812 era money pairs, 320 trades or claims
+   and 7132 plays again with the rating at its potential
+mlb: 2640 saves, 36 deck C cards dealt, 226 of 2640 draws were deck C, draw hash 7e68d296006e550f
+   words against effects: 11892 plays, 2394 at a gamble's edge, 4128 era money pairs, 80 trades or claims
+   and 8828 plays again with the rating at its potential
+nhl: 1200 saves, 36 deck C cards dealt, 109 of 1200 draws were deck C, draw hash bab69e50ab1cff10
+   words against effects: 11882 plays, 2222 at a gamble's edge, 1572 era money pairs, 556 trades or claims
+   and 7744 plays again with the rating at its potential
+FAIL nfl: the seeded draw changed on 7 of 1920 saves (first: save 25)
+FAIL nba: the seeded draw changed on 28 of 1200 saves (first: save 1)
+FAIL mlb: the seeded draw changed on 22 of 2640 saves (first: save 4)
+FAIL nhl: the seeded draw changed on 12 of 1200 saves (first: save 25)
+simUsCareerDeckC: 4 failure(s)
