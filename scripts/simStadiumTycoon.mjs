@@ -12,9 +12,12 @@
  *    minutes so it can never become a cliff
  *  - progression: income at 30 minutes is a large multiple of income at
  *    minute 1 (measured 2026-08-18 on the division-era economy: about 530x;
- *    re-measured 2026-09-14 with the Round 582 league: 668x; floor 8x)
+ *    re-measured 2026-09-14 with the Round 582 league: 668x; 2026-10-21 with
+ *    Round 1532's scoring law and bonuses in seconds, remote check r1532-b1:
+ *    665x; floor 8x)
  *  - the carrot: greedy active play reaches the first prestige inside 45
- *    minutes (measured 2026-08-18: minute 14; 2026-09-14 with the league: 13)
+ *    minutes (measured 2026-08-18: minute 14; 2026-09-14 with the league: 13;
+ *    2026-10-21 with the scoring law: 13)
  *
  * Round 162 grew the game (divisions, payroll, golden whistle, badges) and
  * sections 9 to 12 pin each new system to its exact formula: the division

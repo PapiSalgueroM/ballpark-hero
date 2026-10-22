@@ -507,7 +507,9 @@ const CONTROLS = [
   { name: 'forgetful', why: 'a pack is dismissed whether or not its kid reached a bed', red: ['S13'],
     lib: () => [REWARDS_LIB, mustReplace(read(REWARDS_LIB), '  if (!l.pending || deliveredUpTo < l.pending.seq) return false;', '  if (!l.pending || deliveredUpTo < -1) return false;', 'tycoonRewards.ts')] },
   { name: 'dear', why: 'every pack costs four times as much', red: ['S15'],
-    lib: () => [ACADEMY_LIB, ['30', '100', '250'].reduce((t, p) => mustReplace(t, `price: ${p}, firstFree:`, `price: ${Number(p) * 4}, firstFree:`, 'wonderkidFactory.ts'), read(ACADEMY_LIB))] },
+    /* Round 1532: the pack price rule moved the prices (30, 100, 250 became 21, 71, 178), so the control reads
+       the three prices off the file instead of typing them; it still quadruples each one. */
+    lib: () => { const text = read(ACADEMY_LIB); const prices = [...text.matchAll(/price: (\d+), firstFree:/g)].map(m => m[1]); if (prices.length !== 3) abort(`control dear: wonderkidFactory.ts carries ${prices.length} pack prices, not 3`); return [ACADEMY_LIB, prices.reduce((t, p) => mustReplace(t, `price: ${p}, firstFree:`, `price: ${Number(p) * 4}, firstFree:`, 'wonderkidFactory.ts'), text)]; } },
   { name: 'rawkid', why: 'the reveal receives unvalidated kid fields from storage', red: [], vRed: [9], vitest: 'TYCOON_PACKS_REWARDS',
     lib: () => [REWARDS_LIB, mustReplace(read(REWARDS_LIB), '    const kid = cleanPackKid(p.kid, p.tier);', '    const kid = p.kid;', 'tycoonRewards.ts')] },
   { name: 'unsaveddelivery', why: 'an academy write refusal still counts the kid as delivered', red: [], vRed: [10], vitest: 'TYCOON_LOADS_ACADEMY_HOOK',

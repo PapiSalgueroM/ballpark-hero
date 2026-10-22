@@ -70,7 +70,8 @@ const MEAN_FENCE = 8;
    squad of 0 won 8.8%, an 86 point gap on fixed seeds. Half that is the fence: far
    under the measurement, far over what a loop that ignored the squad could reach.
    Round 1532 re-anchors the two clubs to each division's par plus and minus 20 law
-   points (S5 below); the step 1 prediction for that fixture was 91.2% against 4.0%. */
+   points (S5 below); measured 2026-10-21 (remote check r1532-b3): 91.2% against
+   4.0%, a gap of 0.87, as step 1 predicted. */
 const WIN_GAP_FENCE = 0.5;
 
 let failures = 0;

@@ -52,6 +52,23 @@
  * asserts the law's formula and S6 the law's ceiling, both of which the base lines
  * break), and noclamp breaks S1's clamp for the same reason.
  *
+ * MEASURED 2026-10-21 on a GitHub runner (remote check r1532-b4, head 6daaa8d3, 290 s),
+ * calibration / holdout seed means over minutes 15 to 120 unless named:
+ *   goals a match 2.569 / 2.600; pace wins 64.6 (se 1.38) / 66.6 (se 1.45), windows
+ *   15 to 30, 30 to 60, 60 to 120: 72.1, 67.9, 61.2 / 75.0, 67.9, 64.0; draws 20.9 /
+ *   20.5; overinvest (over4) 76.4 / 78.7 (0.4 over its floor on calibration: the
+ *   seeds are fixed, so it is stable run to run, but any table change must remeasure
+ *   it); nosquad 18.0 / 17.2; mean matchGap pace 8.7, over4 13.6, nosquad -14.5;
+ *   titles a season over 15 to 240 0.733 / 0.727; season one won in 36 of 40.
+ *   S5's table at gaps 0 / 4 / 8 / 12 / 14 (500 seasons a cell): 6 clubs one leg
+ *   0.232 / 0.466 / 0.654 / 0.824 / 0.908; 8 clubs two legs 0.184 / 0.562 / 0.836 /
+ *   0.946 / 0.982; 10 clubs two legs 0.222 / 0.500 / 0.850 / 0.960 / 0.990, so the
+ *   0.40 floor (a club at the win band's floor, gap +4) is re-derived from the code.
+ *   S6: the exact ceiling 98.19 (98.65 against a rival who never scores). S7: every
+ *   seed's last win before two hours paid 20 seconds of income (base 0.13).
+ *   S8: first Sell up 12.77 minutes (base 13.37); income at 30 / 60 / 120 minutes
+ *   17.9K / 25.6K / 41.7K a second (base 21.2K / 34.4K / 81.0K).
+ *
  * Exit 0 green; 1 a check failed or a control turned the wrong sections; 2 could
  * not run; 3 a control did not fire. Green is the closing summary line AND exit 0.
  *   node scripts/simTycoonScorelines.mjs                     the run and every control

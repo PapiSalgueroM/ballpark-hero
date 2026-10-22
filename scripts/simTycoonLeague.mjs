@@ -42,7 +42,9 @@
  *  9b. No club is walled (Round 1532): every stadium save of the test corpus, and
  *     the keeping pace club's own state on arrival in each division it reaches,
  *     with its Squad cut by 10 levels, wins a title within three hours in at least
- *     27 of 30 seeded runs of the same greedy buyer.
+ *     27 of 30 seeded runs of the same greedy buyer. Measured 2026-10-21 (remote
+ *     check r1532-b1): all 13 cases (four saves, divisions 1 to 9) 30 of 30, median
+ *     10.5 to 75.6 minutes, so the fence keeps three runs of headroom (critic item 23).
  * 10. The loader (Round 582 review): a league failing a check keeps its division,
  *     a doctored division above the career best is refused, an impossible table
  *     is refused, a kept "Your club" is remembered, a dead heat goes your way.
@@ -205,7 +207,9 @@ async function sectionStrength(T) {
      the bottom league's title in 100% of seasons and squad 0 in 10%, a gap of
      0.90, while the neutral arm (squad does nothing) read 13% against 10%, a gap
      of 0.02. The fence at 0.35 is well under half the measured gap and far above
-     anything the neutral arm produces. */
+     anything the neutral arm produces. Re-measured 2026-10-21 under Round 1532's
+     scoring law (remote check r1532-b1): squad 30 100%, squad 0 20%, a gap of
+     0.80; the neutral arm 25% against 20%, 0.05. Fence and seeds unchanged. */
   if (gap < 0.35) out.push(`a squad of 30 won ${(hi.rate * 100).toFixed(0)}% of titles and a squad of 0 won ${(lo.rate * 100).toFixed(0)}%, a gap of ${gap.toFixed(2)}, under the 0.35 fence`);
   if (Math.abs(neutral) >= gap / 2) out.push(`the neutral arm, where the squad does nothing, shows a gap of ${neutral.toFixed(2)} against the real ${gap.toFixed(2)}, so the measure cannot tell strength from noise`);
   return { out, note: `title rate squad 30 ${(hi.rate * 100).toFixed(0)}%, squad 0 ${(lo.rate * 100).toFixed(0)}% (gap ${gap.toFixed(2)}); neutral arm ${(nHi.rate * 100).toFixed(0)}% vs ${(nLo.rate * 100).toFixed(0)}% (gap ${neutral.toFixed(2)})` };
