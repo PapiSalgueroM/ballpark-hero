@@ -6,7 +6,7 @@ import path from 'node:path';
 import {createServer} from 'node:net';
 import {spawn} from 'node:child_process';
 import pw from './lib/playwrightLoader.mjs';
-import { answerConsent } from './lib/answerConsent.mjs';
+import { answerConsent, storedConsent } from './lib/answerConsent.mjs';
 import {OUT,NOW,copy,sha,git,bundleInternationalReturn,sourceReceipt} from './qa/soccerInternationalReturnKit.mjs';
 assert(process.env.CI,'Soccer comeback native proof runs remotely');
 const out=path.join(OUT,'native');fs.mkdirSync(out,{recursive:true});
@@ -74,7 +74,7 @@ try{for(const width of [320,390,1280])for(const fixture of fixtures){const id=wi
   const consent=page.getByRole('region',{name:'Cookie choices',exact:true});await consent.waitFor();await consent.scrollIntoViewIfNeeded();
   const cookie=await measure('actual-cookie-choice',consent,['[aria-label="Cookie choices"] button:first-of-type','[aria-label="Cookie choices"] button:last-of-type']);
   await answerConsent(page,{press:activate});await consent.waitFor({state:'hidden'});
-  check(await page.evaluate(()=>localStorage.getItem('cookie-consent'))==='essential','Actual essential-only consent saved');
+  check(await storedConsent(page)==='rejected','Actual essential-only consent saved');
   let held=await bytes();const loaded=await expected('load',fixture.input);await pair('first-load',fixture.input,loaded.value,held);await reload('initial',held);
   const initial=JSON.parse(held),sourceCount=initial.seasons.length;
   const helpControls=['[data-international-return-cancel]','[data-international-return-help-open]','[data-international-return-review-open]','[data-international-return-dialog] > button:last-child'];
