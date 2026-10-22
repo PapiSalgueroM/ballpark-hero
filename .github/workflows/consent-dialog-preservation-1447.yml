@@ -1,7 +1,7 @@
-name: Consent dialog Radix preservation1447
+name: Consent dialog Radix preservation refined1447
 on:
   push:
-    branches: [codex/consent-dialog-preservation-1447]
+    branches: [codex/consent-dialog-preservation-refined-1447]
 permissions:
   contents: read
 concurrency:
@@ -30,14 +30,14 @@ jobs:
         run: |
           set -euo pipefail
           mkdir "$OUT"
-          test "$GITHUB_REF" = refs/heads/codex/consent-dialog-preservation-1447
+          test "$GITHUB_REF" = refs/heads/codex/consent-dialog-preservation-refined-1447
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
           [[ "$BASE_SOURCE" =~ ^[a-f0-9]{40}$ ]]
           git rev-parse HEAD > "$OUT/head.txt"
           printf '%s\n' preservation-baseline > "$OUT/phase.txt"
           git fetch --no-tags --depth=1 origin "$BASE_SOURCE" > "$OUT/base-fetch.log" 2>&1
           git diff --exit-code "$BASE_SOURCE" HEAD -- . ':!docs/ROUND1447.md' ':!docs/PROJECT-STATE.md' ':!docs/WORKBOARD.md' ':!.github/workflows/consent-dialog-preservation-1447.yml' ':!scripts/qa/playConsentRadixPrimaryBaseline1447.mjs' > "$OUT/original-product-hold.log"
-          printf '%s  %s\n' 96f0e0b0d566b89f926ed1bb0c71a3026f02f02d09842e4b2e804ac75c659303 scripts/qa/playConsentRadixPrimaryBaseline1447.mjs e60ff1534307e449ccef598e3b7470dcba58681b82cea4005cec7319f14f9221 scripts/lib/offlineTransport.cjs > "$OUT/proof-inputs.sha256"
+          printf '%s  %s\n' 4dd84147a64e4750c111e7951db690d6a9b04f20967af593020cf01d9876b2ff scripts/qa/playConsentRadixPrimaryBaseline1447.mjs e60ff1534307e449ccef598e3b7470dcba58681b82cea4005cec7319f14f9221 scripts/lib/offlineTransport.cjs > "$OUT/proof-inputs.sha256"
           sha256sum --check "$OUT/proof-inputs.sha256" > "$OUT/proof-inputs-initial.log"
           git ls-files -z -- . | sort -z > "$OUT/tracked-paths-before.bin"
           xargs -0 sha256sum < "$OUT/tracked-paths-before.bin" > "$OUT/source-before.sha256"
@@ -102,6 +102,9 @@ jobs:
           for(let index=0;index<expected.length;index++){
             const row=r.cases[index],spec=expected[index];assert.equal(row.route,spec.route);assert.deepEqual(row.configuredViewport,{width:spec.width,height:spec.height});assert.equal(row.contextCreated,true);assert.equal(row.complete,true);assert.equal(row.status,'PASS');assert.equal(row.foundation.status,'PASS');assert.deepEqual(row.initialStorage,{keys:[],error:null});
             assert.deepEqual(row.blocked,[]);assert.deepEqual(row.pageErrors,[]);assert.deepEqual(row.consoleErrors,[]);assert.equal(row.observerOverflow,false);for(const key of ['error','finalError','closeError','collectionError','responseError'])assert(!row[key],row.id+': '+key);
+            const h1={'/build-your-xi':'BUILD YOUR XI','/soccer-conquest':'Soccer Conquest','/conquest-nhl':'NHL Conquest','/conquest-mlb':'MLB Conquest'}[spec.route],ownerTag=spec.route==='/build-your-xi'?'HEADER':'DIV';
+            assert.equal(row.routeHeading.tag,'H1');assert.equal(row.routeHeading.text,h1);assert.equal(row.routeHeading.parentTag,ownerTag);assert.equal(row.reopenControls.length,2);
+            for(const control of row.reopenControls){assert.equal(control.globalMatches,2);assert.equal(control.scopedMatches,1);assert.deepEqual(control.owner,{tag:ownerTag,headingText:h1});}
             assert.equal(row.foundation.detail.pending,'1');assert.equal(row.foundation.detail.embedded,false);assert.equal(row.foundation.detail.bannerPosition,'fixed');assert(row.foundation.detail.consentHeight);assert(row.attemptedRequests>0&&row.attemptedRequests<=2048);
             assert(row.cachedFonts.some(x=>x.resourceType==='stylesheet')&&row.cachedFonts.some(x=>x.resourceType==='font'));assert(row.cssResponses.length>0);for(const css of row.cssResponses){assert.equal(css.status,200);assert.equal(sha(fs.readFileSync(dir+css.file)),css.sha256);}
             assert.equal(row.bannerLeg.status,'PASS');assert.equal(row.bannerLeg.trustedReject,true);assert.equal(row.bannerLeg.choice.version,2);assert.equal(row.bannerLeg.choice.advertising,false);assert.equal(row.bannerLeg.choice.analytics,false);

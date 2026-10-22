@@ -221,9 +221,21 @@ async function settled(view) {
     }
   clean(view.row); return detail;
 }
+async function routeHeading(page, spec) {
+  const heading = page.getByRole('heading', { level: 1, name: spec.h1, exact: true, includeHidden: true });
+  await heading.waitFor({ state: 'attached', timeout: bounded(5000) });
+  assert.equal(await heading.count(), 1, 'DIALOG1447_SETUP: unique route heading identity');
+  assert.equal((await heading.textContent()).trim(), spec.h1, 'DIALOG1447_SETUP: actual route heading text');
+  return heading;
+}
 async function reopen(view) {
-  const target = view.page.getByRole('button', { name: view.spec.reopen, exact: true });
-  assert.equal(await target.count(), 1, 'DIALOG1447_SETUP: unique real reopen control');
+  const heading = await routeHeading(view.page, view.spec), owner = heading.locator('..');
+  const target = owner.getByRole('button', { name: view.spec.reopen, exact: true });
+  const control = { globalMatches: await view.page.getByRole('button', { name: view.spec.reopen, exact: true }).count(), scopedMatches: await target.count(),
+    owner: await owner.evaluate(element => ({ tag: element.tagName, headingText: element.querySelector('h1')?.textContent.trim() ?? null })) };
+  (view.row.reopenControls ||= []).push(control);
+  assert.equal(control.scopedMatches, 1, 'DIALOG1447_SETUP: unique real page-owned reopen control');
+  assert.equal(control.owner.headingText, view.spec.h1, 'DIALOG1447_SETUP: reopen belongs to exact route heading');
   await target.click({ timeout: bounded() }); return settled(view);
 }
 async function wheelToTarget(view, label) {
@@ -309,7 +321,9 @@ async function walk(spec) {
       })().catch(error => { row.responseError = failure(error); }));
     });
     await page.goto(BASE + spec.route, { waitUntil: 'domcontentloaded', timeout: bounded(20000) });
-    await page.getByRole('heading', { name: spec.h1, exact: true }).waitFor({ timeout: bounded(5000) });
+    const heading = await routeHeading(page, spec);
+    row.routeHeading = await heading.evaluate(element => ({ tag: element.tagName, text: element.textContent.trim(), parentTag: element.parentElement?.tagName ?? null,
+      ariaHiddenAncestor: element.closest('[aria-hidden="true"]')?.tagName ?? null }));
     assert.equal(new URL(page.url()).pathname, spec.route, 'DIALOG1447_SETUP: exact route');
     assert.equal(await page.locator('link[rel="canonical"]').getAttribute('href'), 'https://douknowball.com' + spec.route, 'DIALOG1447_SETUP: own route canonical');
     const initial = await page.evaluate(() => ({ keys: window.__consentDialog1447?.state.initialStorage, error: window.__consentDialog1447?.state.initialStorageError }));

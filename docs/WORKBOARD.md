@@ -16448,3 +16448,10 @@ The refined Original run39746799578 at86fb920b2cb9ecb390b386811c5d5b121d9ff7d2 i
 This proof-only branch adds a separate four-route baseline for /build-your-xi, /soccer-conquest, /conquest-nhl and /conquest-mlb at320x640,390x844 and1280x900. Twelve actual fresh contexts must prove the real bottom primary, reopen/primary, and real Reject all followed by primary dismissal, with trusted click geometry, exact cached loaded fonts, source/dist/public holds and strict offline transport. Unexpected failures are retained and refuse healthy baseline admission. The actual new runtime is still pending.
 
 Only the new baseline workflow/driver and these three appended documentation notes are authorized. CSS, game code, existing Original proof files, dependencies, guard and generated outputs are held against the qualified refined source. No local application runtime, CSS fix, game implementation, publication or live claim is included.
+
+
+### Round1447 refined Radix baseline pending, 2026-10-22
+
+Failed Radix12 run39749654551 at3c469983 remains failed:10 background heading timeouts and2 duplicate reopen refusals prevented a complete baseline. A separate proof-only branch `codex/consent-dialog-preservation-refined-1447` starts from that exact source. Its two locator regions identify the attached route h1 without claiming background accessibility, then click the unique game-owned help button under that h1's parent. Both global help controls remain recorded.
+
+Fresh remote evidence is still required:12 healthy contexts,36 trusted primary outcomes,360 effective geometry controls,24 font controls,6 transport controls and unchanged source/dist/output holds. Academy run39754554795 separately measured3 strict pending cookie interceptions and3 answered primary passes; it was not a healthy presentation result. No CSS, game, fixture or product change is adopted here. Later counterfactual coverage remains24 contexts per arm,72 total, with each expectation bound to its actual baseline.
