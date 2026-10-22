@@ -1,0 +1,4 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+ctl-playFrontOfficeGameDay exit=2 132s | playFrontOfficeGameDay: 233 checks before it stopped, 5 failed. ABORTED, this is not a result.
+ctl-playUsCareerSaveSeam exit=1 33s | playUsCareerSaveSeam: 15 journeys, 67 checks, 2 failed
+ctl-playStorageBlocked exit=1 284s | playStorageBlocked: 826 checks, 17 failed

@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+ctl-playFrontOfficeGameDay: ANSWER_CONSENT_CONTROL=none node scripts/playFrontOfficeGameDay.mjs
+ctl-playUsCareerSaveSeam: ANSWER_CONSENT_CONTROL=none node scripts/playUsCareerSaveSeam.mjs
+ctl-playStorageBlocked: ANSWER_CONSENT_CONTROL=none node scripts/playStorageBlocked.mjs
