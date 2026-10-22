@@ -41,6 +41,12 @@
  *   potplusone     the NBA Skill answer back to pot + 1       -> section 7's NBA (a) cases only
  *   potplusoneall  all four Skill answers back to pot + 1     -> section 7's (a) cases in every sport, and the summer
  *                  fleet parts from the base arm nowhere (which proves the fleet's attribution)
+ *   earnround  the fee helper rounds the earnings total to a tenth again (critic 6 forbids it) -> section 6, every
+ *              case in all four sports (review of 2026-10-22, run lens finding 3: before the earnings started at
+ *              hundredths this escaped every check)
+ *   clampdown  the Skill answer pulls a rating above the ceiling down to it -> section 7's (a) case "above the
+ *              ceiling" in all four sports (run lens finding 2: before that case this kept section 7 green), and the
+ *              fleet's every-answer check wherever a head career answers the card above its ceiling
  *
  * Section 3's band, with its measured headroom (RULES line 7; review of 2026-10-22, read lens finding 4). The share
  * is checked inside the printed chance plus or minus 4 binomial sd. The careers are named and seeded in a fixed
@@ -71,7 +77,7 @@ import { build } from 'esbuild';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SHOP_BASE = process.env.SHOP_BASE || '413685149bed816a5c384242aa8c40f412b1d523';
 const CONTROL = process.env.SHOP_CONTROL || '';
-const CONTROL_SECTIONS = { rate: ['1', '2'], words: ['1'], camp: ['1'], nocall: ['2', '3', '4', '9'], chance: ['3'], twice: ['3'], office: ['4'], lawyer: ['5'], leak: ['8'], coolall: ['8'], backpay: ['9'], settleafter: ['4'], nobank: ['6'], potplusone: ['7'], potplusoneall: ['7'] };
+const CONTROL_SECTIONS = { rate: ['1', '2'], words: ['1'], camp: ['1'], nocall: ['2', '3', '4', '9'], chance: ['3'], twice: ['3'], office: ['4'], lawyer: ['5'], leak: ['8'], coolall: ['8'], backpay: ['9'], settleafter: ['4'], nobank: ['6'], earnround: ['6'], potplusone: ['7'], potplusoneall: ['7'], clampdown: ['7'] };
 if (CONTROL && !CONTROL_SECTIONS[CONTROL]) { console.log(`simUsShopPromises: could not run, unknown SHOP_CONTROL ${CONTROL}`); process.exit(2); }
 const SECTIONS = (process.env.SHOP_SECTIONS || (CONTROL ? CONTROL_SECTIONS[CONTROL].join(',') : '0,1,2,3,4,5,6,7,8,9')).split(',').map(s => s.trim());
 const runs = s => SECTIONS.includes(s);
@@ -188,6 +194,8 @@ function headServe() {
     + '\nfunction r1Leak(v: number): number { return Math.round(v * 10) / 10; }\n';
   if (CONTROL === 'backpay') mod = patchOnce(mod, '    const exact = Math.round((carry + earned) * 10000);\n', '    const exact = Math.round((carry + earned * (prior === undefined ? 2 : 1)) * 10000);\n', MODULE);
   if (CONTROL === 'nobank') mod = patchOnce(mod, '  c.netWorth = Math.round((prior + fee) * 10000) / 10000;\n', '', MODULE);
+  if (CONTROL === 'earnround') mod = patchOnce(mod, '  c.earnings += fee;\n', '  c.earnings = Math.round((c.earnings + fee) * 10) / 10;\n', MODULE);
+  if (CONTROL === 'clampdown') mod = patchOnce(mod, '  cc.ovr = raiseWithinPotential(cc.ovr, cc.pot, up);\n', '  cc.ovr = Math.min(Math.min(99, cc.pot), cc.ovr + up);\n', MODULE);
   if (mod !== read(MODULE)) serve[MODULE] = mod;
   if (CONTROL === 'words') serve['src/lib/nbaMyCareer.ts'] = patchOnce(read('src/lib/nbaMyCareer.ts'), "minFanbase: 70, effect: 'Fanbase +12' }", "minFanbase: 70, effect: 'Fanbase +12, real royalties' }", 'nbaMyCareer.ts');
   if (CONTROL === 'camp') {
@@ -521,7 +529,10 @@ const CLEAN_ANSWERS = {
 };
 const DECK_OF = { nba: 'nbaEventDeck', nfl: 'nflEventDeck', mlb: 'mlbEventDeck', nhl: 'nhlEventDeck' };
 const CORR_OF = { nba: 'getNbaCorruptionEvents', nfl: 'getNflCorruptionEvents', mlb: 'getMlbCorruptionEvents', nhl: 'getNhlCorruptionEvents' };
-const CASH_BEFORE = 10.37, EARNED_BEFORE = 20;
+/* Career earnings start at hundredths too (review of 2026-10-22, run lens finding 3): critic 6 binds "earnings +=
+   the fee, unrounded", and from a whole number a helper that rounded the earnings total to a tenth again looked the
+   same. From 41.27 every rounded total is 0.03 off, and earnings are compared exactly with the helper's own sum. */
+const CASH_BEFORE = 10.37, EARNED_BEFORE = 41.27;
 /* Three seasons in, then a fixed state every gate of the ten cards opens on (rating 85, fanbase 80, no flags). */
 function paidState(X, sport, eraIndex) {
   const run = career(X, sport, 'Fictional paid line', 1538, eraIndex);
@@ -535,7 +546,7 @@ function checkPaid(who, c, card, label, landed) {
   if (!option) { fail('6', who, `the answer '${label}' is not on the card ${card?.id ?? '(not dealt)'}`); return; }
   const before = clone(c), after = clone(c);
   const line = option.apply(after, () => 0.5);
-  if (!near(after.earnings, EARNED_BEFORE + landed)) fail('6', who, `earnings moved ${after.earnings - EARNED_BEFORE}, the line pays ${landed}`);
+  if (after.earnings !== EARNED_BEFORE + landed) fail('6', who, `earnings went ${EARNED_BEFORE} to ${after.earnings}, not ${EARNED_BEFORE} plus the ${landed}M that landed, unrounded`);
   if (after.netWorth !== Math.round((CASH_BEFORE + landed) * 10000) / 10000) fail('6', who, `Cash went ${CASH_BEFORE} to ${after.netWorth}, not by the ${landed}M that landed`);
   if (!String(line).includes(`${landed}M`)) fail('6', who, `the line "${line}" does not print the ${landed}M that landed`);
   const rows = H.buildCareerDecisionOutcome({ title: card.title, choice: label, before, after, teamLabel: t => t }).changes;
@@ -635,7 +646,8 @@ if (runs('8')) {
 }
 
 /* ─── section 7: the summer Skill card stops at the ceiling (Round 1538; never reintroduce Rounds 96 and 116) ───
-   (a) Every sport's Skill answer from a fixed state: at the ceiling the rating stays and the line says so; one
+   (a) Every sport's Skill answer from a fixed state: at the ceiling the rating stays and the line says so; above
+       it the rating stays where it is, never pulled down, and the line says so; one
        under it with a draw of 2 it lands one and says that is the ceiling; with room it lands the draw; under the
        maintenance age it draws once, from that age it draws nothing and gives health +4 (critic 5), and its button
        says what lands at each age (critic 8). Ages and words are literals.
@@ -650,7 +662,9 @@ if (runs('8')) {
        under that age that leaves the rating at min(99, pot) or above while the training card waits in a later slot:
        the summer then probes the Skill answer to decide whether to skip it (laterAnswerMovesRating), and the old
        answer pulled a rating above pot + 1 back down, so it counted as a move and the card was skipped. Any other
-       first divergence is red. */
+       first divergence is red. A first divergence at the Skill answer only says where the trees parted, not that the
+       head was right there, so every young Skill answer the head gives is also checked on its own: the rating never
+       goes down, never past max(rating, min(99, pot)), never by more than 2 (run lens finding 2). */
 const SKILL_LABELS = new Set(['Skill grind', 'Skill work', 'New pitch lab', 'Swing rebuild', 'Skills coach']);
 const FLEET_SETS = (process.env.SHOP_FLEET_SETS || '1538,2024').split(',').map(Number);
 const FLEET_CAREERS = Number(process.env.SHOP_FLEET_CAREERS || 120);
@@ -680,7 +694,7 @@ function summerLife(X, sport, set, k) {
   const arch = archs[Math.floor(k / positions.length) % archs.length], era = lib[sport.eras][k % lib[sport.eras].length].id;
   const rng = mulberry(set * 100019 + k);
   const trail = [];
-  const at = (kind, c, extra = {}) => ({ kind, ovr: c.ovr, pot: c.pot, age: c.age, ...extra });
+  const at = (kind, c, extra = {}) => ({ kind, ovr: c.ovr, pot: c.pot, age: c.age, health: c.health, ...extra });
   pinned(set * 13 + k, () => {
     let c = lib[sport.start](`Summer ${set} ${k}`, pos, arch, rng, null, era);
     let tq = null;
@@ -705,7 +719,7 @@ function summerLife(X, sport, set, k) {
         const later = (c.summer?.ids ?? []).slice((c.summer?.at ?? 0) + 1).includes('training');
         const before = at('answer', c, { skill: ev.id === 'training' && SKILL_LABELS.has(option.label), later });
         const out = X.answerSummerCard(c, SB, ev, ev.options.indexOf(option), rng);
-        before.after = { ovr: c.ovr, pot: c.pot };
+        before.after = { ovr: c.ovr, pot: c.pot, health: c.health };
         trail.push({ rec: `${ev.id} ${option.label} ${JSON.stringify(out.line)} ${digestOf(JSON.stringify(c))} ${rng.count()}`, ctx: before });
         ev = out.next;
       }
@@ -727,13 +741,25 @@ if (runs('7')) {
     skillCase(sport, 'one under', { ovr: 79 }, 0.9, { ovr: 80, says: 'and that is your ceiling' });
     skillCase(sport, 'with room', { ovr: 70 }, 0.9, { ovr: 72, says: 'Rating +2.' });
     skillCase(sport, 'at 99', { ovr: 99, pot: 99 }, 0.9, { ovr: 99, says: 'already at your ceiling' });
+    /* A rating already above the ceiling (another card can put it there: NHL career 1538/69's oversized pads took
+       it to 93 over 90) keeps it, and the line says so (run lens finding 2; control clampdown). */
+    skillCase(sport, 'above the ceiling', { ovr: 83 }, 0.9, { ovr: 83, says: 'so the rating stays at 83.' });
     skillCase(sport, 'at the maintenance age', { age, ovr: 70 }, 0.9, { ovr: 70, health: 74, says: 'Health +4.' });
     skillCase(sport, 'one year under it', { age: age - 1, ovr: 70 }, 0, { ovr: 71, says: 'Rating +1.' });
     const kinds = { deal: 0, answer: 0, later: 0 };
-    let careers = 0, offseasons = 0, parted = 0;
+    let careers = 0, offseasons = 0, parted = 0, skillAnswers = 0, overCap = 0;
     for (const set of FLEET_SETS) for (let k = 0; k < FLEET_CAREERS; k += 1) {
       const a = summerLife(H, sport, set, k), b = summerLife(B, sport, set, k);
       careers += 1; offseasons += a.filter(x => x.ctx.kind === 'deal').length;
+      /* Every Skill answer the head arm gives under the maintenance age, not only a first divergence (run lens
+         finding 2): it never lowers the rating, never lifts it past max(rating, min(99, pot)), never by more than 2. */
+      for (const { ctx } of a) {
+        if (ctx.kind !== 'answer' || !ctx.skill || ctx.age >= age) continue;
+        skillAnswers += 1;
+        const cap = Math.min(99, ctx.pot);
+        if (ctx.ovr > cap) overCap += 1;
+        if (ctx.after.ovr < ctx.ovr || ctx.after.ovr > Math.max(ctx.ovr, cap) || ctx.after.ovr > ctx.ovr + 2) fail('7', `${sport.id} skill answer ${set}/${k}`, `the Skill answer took the rating ${ctx.ovr} to ${ctx.after.ovr} with the ceiling at ${cap}`);
+      }
       let i = a.findIndex((x, j) => !b[j] || x.rec !== b[j].rec);
       if (i < 0 && a.length !== b.length) i = a.length;
       if (i < 0) continue;
@@ -745,7 +771,7 @@ if (runs('7')) {
       if (ok) kinds[ctx.kind === 'deal' ? 'deal' : skillAt ? 'answer' : 'later'] += 1;
       else fail('7', `${sport.id} fleet ${set}/${k}`, `first parts at record ${i} (${ctx?.kind ?? 'end'}, rating ${ctx?.ovr} of ${ctx?.pot}, age ${ctx?.age}), where the rider does not act; head [${a[i - 1]?.rec.slice(0, 90)}] then [${a[i]?.rec.slice(0, 160)}], base then [${b[i]?.rec.slice(0, 160)}]`);
     }
-    console.log(`   ${sport.id}: (a) 6 cases; fleet ${careers} careers, ${offseasons} offseasons, ${parted} parted from the base arm, ${kinds.deal} first at a deal at the ceiling, ${kinds.answer} at the Skill answer and ${kinds.later} at an answer before a later training card`);
+    console.log(`   ${sport.id}: (a) 7 cases; fleet ${careers} careers, ${offseasons} offseasons, ${parted} parted from the base arm, ${kinds.deal} first at a deal at the ceiling, ${kinds.answer} at the Skill answer and ${kinds.later} at an answer before a later training card; ${skillAnswers} young Skill answers on the head, ${overCap} of them above the ceiling`);
   }
 }
 
@@ -815,7 +841,8 @@ if (CONTROL) {
   if (CONTROL === 'camp') fired = fired && [...red.get('1')].every(k => k.startsWith('nba camp'));
   if (CONTROL === 'nocall') for (const s of ['2', '4', '9']) fired = fired && US.every(sp => [...red.get(s) ?? []].some(k => k.startsWith(`${sp.id} `)));
   if (CONTROL === 'chance') fired = fired && US.every(sp => red.get('3')?.has(`${sp.id} ${byName(itemsOf(H, sp), 'Crypto Punt').id} band`));
-  if (CONTROL === 'nobank') fired = fired && paidCases > 0 && red.get('6')?.size === paidCases;
+  if (CONTROL === 'nobank' || CONTROL === 'earnround') fired = fired && paidCases > 0 && red.get('6')?.size === paidCases;
+  if (CONTROL === 'clampdown') fired = fired && US.every(sp => red.get('7')?.has(`${sp.id} skill above the ceiling`));
   if (CONTROL === 'potplusone') fired = fired && [...red.get('7')].every(k => k.startsWith('nba skill '));
   if (CONTROL === 'potplusoneall') fired = fired && fleetParted === 0 && US.every(sp => [...red.get('7')].some(k => k.startsWith(`${sp.id} skill `))) && [...red.get('7')].every(k => !k.includes(' fleet '));
   if (CONTROL === 'leak') fired = fired && US.every(sp => [...red.get('8') ?? []].some(k => k.startsWith(`${sp.id} `)));
