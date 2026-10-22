@@ -1,0 +1,3 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+walkf3-pile exit=1 18s | walkf3 (control pile): 1 failure
+walkf3 exit=1 64s | walkf3: 2 failures
