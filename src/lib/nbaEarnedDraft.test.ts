@@ -1,13 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import {
-  NBA_ROUNDS, initNbaLeague, nbaDraftSigning, nbaMinContract, type NbaLeague, type NbaProspect, type SeriesResult,
+  NBA_ROSTER_MAX, NBA_ROUNDS, initNbaLeague, nbaDraftSigning, nbaMinContract, type NbaLeague, type NbaProspect, type SeriesResult,
 } from './nbaFrontOffice';
-import { nbaContractsOf, nbaGamePickRules, nbaPicksOf, nbaScoutRead, openNbaDesk, syncNbaPicks } from './nbaGmDesk';
+import { nbaContractsOf, nbaDeskOffseason, nbaGamePickRules, nbaPicksOf, nbaScoutRead, openNbaDesk, syncNbaPicks } from './nbaGmDesk';
 import { withGmBlock, type GmDesk } from './gmDesk';
 import { movePicks, pickKey } from './gmEarnedDraft';
 import { NBA_ROOKIE_SCALE_YEARS } from './gmContractRules';
 import {
-  NBA_DRAFT_BLOCK, NBA_DRAFT_KNOBS, draftRulesFor, nbaDraftByStaff, nbaDraftContinue, nbaDraftHeading, nbaDraftHelp, nbaDraftHost,
+  NBA_DRAFT_BLOCK, NBA_DRAFT_KNOBS, NBA_DRAFT_NIGHT_SUMMER, NBA_SECOND_ROUND_SEASONS, draftRulesFor, nbaDraftByStaff, nbaDraftContinue, nbaDraftHeading, nbaDraftHelp, nbaDraftHost,
   nbaDraftNightOf, nbaDraftPick, nbaDraftSeason, nbaEarnedDraftClass, openNbaDraftNight, type EarnedSlot, type GmDraftNight,
 } from './nbaEarnedDraft';
 
@@ -145,7 +145,7 @@ describe('the host and the three presses', () => {
       expect(host.shown(p)).toBe(scout(p));
     }
   });
-  it('the two knobs are one rule for every club, his own included: a second rounder signs one season at the minimum, a man from pick 13 never grows', () => {
+  it('the two knobs are one rule for every club, his own included: a second rounder plays one season at the minimum, a man from pick 13 never grows', () => {
     const { league, night } = opened();
     const { host } = nbaDraftHost({ me: ME, season: league.season, scoutLevel: 1, rng: mulberry32(2) });
     const cls = nbaEarnedDraftClass(mulberry32(21), night.slots.length, new Set());
@@ -154,19 +154,31 @@ describe('the host and the three presses', () => {
       return league.teams[club].players[league.teams[club].players.length - 1];
     };
     const at = (overall: number) => night.slots[overall - 1];
-    expect([at(5).round, at(20).round, at(40).round]).toEqual([1, 1, 2]);
+    expect([at(5).round, at(12).round, at(13).round, at(20).round, at(40).round]).toEqual([1, 1, 1, 1, 2]);
     expect(NBA_DRAFT_KNOBS).toEqual({ secondOnMin: true, latePot: { from: 13, cap: 66 } });
+    /* A draft night deal is written with the season the summer after the draft takes off on top (fix pass of
+       2026-10-22): one season at the minimum is two on draft night, the same + 1 nbaSignDraftee gives the scale. */
+    expect([NBA_SECOND_ROUND_SEASONS, NBA_DRAFT_NIGHT_SUMMER]).toEqual([1, 1]);
+    const onMin = NBA_SECOND_ROUND_SEASONS + NBA_DRAFT_NIGHT_SUMMER;
     const min = nbaMinContract(nbaDraftSigning(league).cap);
     const top = signed('LAL', cls[0], at(5));
     expect(top.years).toBe(4);
     expect(top.pot).toBeGreaterThan(top.ovr);
+    /* Knob (ii)'s own edge (review 2026-10-22, mutation k1): pick 12 keeps the ceiling it was drawn with, pick 13 is
+       capped at his rating. A drawn ceiling is at least four over the rating, so neither can pass by chance. */
+    const twelfth = signed('MIA', cls[11], at(12));
+    expect(twelfth.pot).toBeGreaterThanOrEqual(twelfth.ovr + 4);
+    const thirteenth = signed('MIA', cls[12], at(13));
+    expect(thirteenth.pot).toBe(thirteenth.ovr);
     const lateFirst = signed('LAL', cls[20], at(20));
     expect(lateFirst.years).toBe(4);
     expect(lateFirst.pot).toBe(lateFirst.ovr);
     const second = signed('DEN', cls[40], at(40));
-    expect([second.years, second.salary, second.pot]).toEqual([1, min, second.ovr]);
+    expect([second.years, second.salary, second.pot]).toEqual([onMin, min, second.ovr]);
     /* His own men meet the same rule (the lead's ruling of 2026-10-21): no hidden privilege for his club. Only the
-       first round scale is his alone, and it is the league's deal, not a knob. */
+       first round scale (nbaSignDraftee, four seasons plus the summer's) is his club's alone and no knob: a rival's
+       first rounder keeps the engine's deal of four, so he plays three (review 2026-10-22, a note for the rookie scale
+       a later round builds). */
     const myTop = signed(ME, cls[1], at(5));
     expect(myTop.years).toBe(NBA_ROOKIE_SCALE_YEARS + 1);
     expect(myTop.pot).toBeGreaterThan(myTop.ovr);
@@ -174,7 +186,7 @@ describe('the host and the three presses', () => {
     expect(myLateFirst.years).toBe(NBA_ROOKIE_SCALE_YEARS + 1);
     expect(myLateFirst.pot).toBe(myLateFirst.ovr);
     const mySecond = signed(ME, cls[41], at(40));
-    expect([mySecond.years, mySecond.salary, mySecond.pot]).toEqual([1, min, mySecond.ovr]);
+    expect([mySecond.years, mySecond.salary, mySecond.pot]).toEqual([onMin, min, mySecond.ovr]);
   });
   it('the staff press is done, and every man of his reaches the re-sign ledger with his round', () => {
     const { league, desk, night } = opened();
@@ -192,10 +204,64 @@ describe('the host and the three presses', () => {
     expect(rounds.map(r => r.round).sort()).toEqual([1, 2]);
     expect(rookies.find(p => ledger.men[p.id].round === 1)!.years).toBe(NBA_ROOKIE_SCALE_YEARS + 1);
     /* His second round man signs the league's second round deal (knob (i), one season at the minimum, the same rule as
-       every club's since 2026-10-21), never the first round scale (review 2026-10-12, mutation m3). */
+       every club's since 2026-10-21, written with the summer's season on top), never the first round scale (review
+       2026-10-12, mutation m3). */
     const second = rookies.find(p => ledger.men[p.id].round === 2)!;
     expect(second.years).not.toBe(NBA_ROOKIE_SCALE_YEARS + 1);
-    expect([second.years, second.salary]).toEqual([1, nbaMinContract(nbaDraftSigning(league).cap)]);
+    expect([second.years, second.salary]).toEqual([NBA_SECOND_ROUND_SEASONS + NBA_DRAFT_NIGHT_SUMMER, nbaMinContract(nbaDraftSigning(league).cap)]);
+  });
+  it('the summer after the draft leaves every second rounder on his club for one season at the minimum, his own and a rival\'s (review 2026-10-22)', () => {
+    /* The draft is held before the summer, and the summer takes a season off every deal and puts a man with one
+       season left on the re-sign desk. Knob (i) once wrote one season on draft night: his own second rounder was
+       released by his staff's rule that same summer, a rival's re-signed for four seasons or let go, so nobody played
+       a season at the minimum. Here the night runs to its end, then his desk's summer (which runs the engine's summer
+       for the whole league), and every man the night signed is followed. */
+    const { league, desk, night } = opened();
+    const cls = nbaEarnedDraftClass(mulberry32(3), night.slots.length, new Set());
+    const run = nbaDraftByStaff(league, desk, ME, cls, mulberry32(4))!;
+    expect(run.done).toBe(true);
+    const deals = run.steps.map(st => {
+      const man = league.teams[st.team].players.find(p => p.name === st.playerName)!;
+      return { id: man.id, club: st.team, round: night.slots[st.overall - 1].round, years: man.years, salary: man.salary };
+    });
+    expect(deals).toHaveLength(60);
+    const min = nbaMinContract(nbaDraftSigning(league).cap);
+    const summer = nbaDeskOffseason(league, run.desk, ME, mulberry32(5));
+    expect(summer.ok).toBe(true);
+    if (!summer.ok) return;
+    /* Neither of his draftees came up on his re-sign desk that summer: nothing settled them, by him or his staff. */
+    for (const d of deals.filter(x => x.club === ME)) {
+      expect(summer.autoSettled.some(x => x.id === d.id)).toBe(false);
+      expect(summer.applied.some(x => x.id === d.id)).toBe(false);
+    }
+    const onClub = (d: { id: string; club: string }) => league.teams[d.club].players.find(p => p.id === d.id);
+    const mine = deals.filter(d => d.club === ME);
+    expect(mine.map(d => d.round).sort()).toEqual([1, 2]);
+    for (const d of mine) {
+      const man = onClub(d)!;
+      expect(man).toBeDefined();
+      expect([man.years, man.salary]).toEqual([d.years - NBA_DRAFT_NIGHT_SUMMER, d.salary]);
+    }
+    expect(onClub(mine.find(d => d.round === 2)!)!.years).toBe(NBA_SECOND_ROUND_SEASONS);
+    expect(onClub(mine.find(d => d.round === 1)!)!.years).toBe(NBA_ROOKIE_SCALE_YEARS);
+    /* A rival's man stays on his deal less the summer's season, or is waived by the summer's trim of a club over the
+       roster's fifteen (its lowest rated man, often a second rounder): never re-signed, never let go as expiring. */
+    let kept = 0;
+    let trimmed = 0;
+    for (const d of deals.filter(x => x.club !== ME)) {
+      const man = onClub(d);
+      if (!man) {
+        trimmed += 1;
+        expect(league.teams[d.club].players.length).toBeGreaterThanOrEqual(NBA_ROSTER_MAX);
+        continue;
+      }
+      kept += 1;
+      expect([man.years, man.salary]).toEqual([d.years - NBA_DRAFT_NIGHT_SUMMER, d.salary]);
+      if (d.round === 2) expect([man.years, man.salary]).toEqual([NBA_SECOND_ROUND_SEASONS, min]);
+    }
+    expect(kept + trimmed).toBe(58);
+    expect(kept).toBeGreaterThan(0);
+    expect(deals.filter(d => d.club !== ME && d.round === 2 && onClub(d)).length).toBeGreaterThan(0);
   });
   it('a GM with no pick is done on Continue; a GM whose last slot is the last pick is done by it', () => {
     const a = opened();

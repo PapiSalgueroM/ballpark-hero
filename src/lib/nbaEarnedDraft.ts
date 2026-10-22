@@ -99,10 +99,20 @@ export function openNbaDraftNight(desk: GmDesk, league: NbaLeague, series: Serie
   return nbaDraftNightOf(next, league) ? { desk: next, night } : null;
 }
 
+/** A deal signed on draft night runs one season longer than the seasons it buys: the summer that runs right after
+    draft night takes a season off every deal before the man has played a game (nbaOffseason's contract loop), and
+    the re-sign desk reads a deal with one season left as expiring that same summer. nbaSignDraftee adds the same one
+    season to the rookie scale for the same reason. Fix pass of 2026-10-22: knob (i) wrote one season with no room for
+    that summer, so every second rounder was released, re-signed or gone before he played a game. */
+export const NBA_DRAFT_NIGHT_SUMMER = 1;
+/** Knob (i)'s deal: the seasons a second rounder plays at the league minimum. */
+export const NBA_SECOND_ROUND_SEASONS = 1;
+
 /** The class's two knobs (the brief's A4), after a man signs, and neither draws a number. ONE RULE FOR THE LEAGUE:
     each touches EVERY club's man, his own included (the lead's ruling of 2026-10-21: a rule that held rivals' late
-    picks down while his kept their ceiling would be a hidden privilege). `secondOnMin`, a second round man signs one
-    season at the league minimum instead of the draft's deal; `latePot`, a man taken at overall pick `from` or later
+    picks down while his kept their ceiling would be a hidden privilege). `secondOnMin`, a second round man plays
+    NBA_SECOND_ROUND_SEASONS at the league minimum instead of the draft's deal (written with the summer's season on
+    top, NBA_DRAFT_NIGHT_SUMMER); `latePot`, a man taken at overall pick `from` or later
     has his ceiling capped at `cap`, never under his own rating (null leaves every ceiling as drawn). Tuned on
     2026-10-21 against the two arm table of scripts/simNbaEarnedDraft.mjs: both on, and a cap of 66 from pick 13
     means a man from there on stays the player he was drafted as (the class never draws under 66). The values and
@@ -135,7 +145,7 @@ export function nbaDraftHost(ctx: NbaDraftHostCtx): { host: GmDraftHost<NbaLeagu
       }
       if (NBA_DRAFT_KNOBS.secondOnMin && slot.round === 2) {
         man.salary = nbaMinContract(signing.cap);
-        man.years = 1;
+        man.years = NBA_SECOND_ROUND_SEASONS + NBA_DRAFT_NIGHT_SUMMER;
       }
       const late = NBA_DRAFT_KNOBS.latePot;
       if (late && slot.overall >= late.from) man.pot = Math.max(man.ovr, Math.min(man.pot, late.cap));
