@@ -272,8 +272,8 @@ describe('repair on load', () => {
     expect(JSON.stringify(c)).toBe(was);
   });
   it('drops a broken block alone', () => {
-    const c = toy() as Toy & { intl: unknown };
-    c.intl = { v: 2, summers: 'no' };
+    const c = toy();
+    (c as { intl?: unknown }).intl = { v: 2, summers: 'no' };
     expect(repairIntlOnLoad(c)).toBe(true);
     expect('intl' in c).toBe(false);
     expect(c.health).toBe(80);

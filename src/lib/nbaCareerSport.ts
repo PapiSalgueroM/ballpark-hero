@@ -27,6 +27,7 @@ import { dismissNbaRivalryEvent, resolveNbaRivalryChoice } from '@/lib/nbaCareer
 import type { UsCareerSport } from '@/lib/usCareerSport';
 import { repairBankOnLoad, withBankFloor } from '@/lib/usCareerBank';
 import { NBA_CAREER_HALL } from '@/lib/nbaCareerHall';
+import { NBA_CAREER_INTL } from '@/lib/nbaCareerIntl';
 import { nbaSeasonReview } from '@/lib/usCareerSeasonReview';
 import { usSeasonHeldLine } from '@/data/usSeasonLengths';
 
@@ -145,6 +146,8 @@ export const NBA_CAREER_SPORT: UsCareerSport<NbaCareerState, NbaSeasonLine> = wi
   retirementAvatar: false,
   /* Round 1039: the retirement talk, the farewell season and the Hall. */
   hall: NBA_CAREER_HALL,
+  /* Round 1541: dark until Round 1544, when the board reads it. */
+  intl: NBA_CAREER_INTL,
   /* Round 1048: the Season Center. Its numbers load when he first watches a
      season; the held line is tiny and eager, so the hub can say a year has no
      game by game view before he presses. */

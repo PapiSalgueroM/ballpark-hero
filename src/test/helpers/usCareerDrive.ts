@@ -48,6 +48,13 @@ export interface DriveOptions {
   arch: number;
   eraId?: string;
   seasons: number;
+  /** Round 1541: answer the international call up where the board will
+   *  (after the summer is dealt, before card 1 is answered). Absent: the call
+   *  is never answered, so the drive is the drive it was before the round. */
+  intl?: 'go' | 'rest';
+  /** Round 1541: shown the career right after each summer is dealt, before
+   *  the call is answered (the harness's oracle reads it there). */
+  onSummer?: (c: AnyCareer) => void;
 }
 
 export interface DriveResult {
@@ -58,6 +65,8 @@ export interface DriveResult {
   /** How many calls left the balance below zero. */
   below: number;
   seasons: number;
+  /** Round 1541: each call answered, with the summer's dealt cards at that moment. */
+  intlLog: { year: number; edition: string; dealt: string }[];
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -69,6 +78,7 @@ export function driveCareer(sport: UsCareerSport, o: DriveOptions): DriveResult 
   const pick = keyedStream(`pick:${sport.slug}:${o.key}`);
   let lowest = Infinity;
   let below = 0;
+  const intlLog: DriveResult['intlLog'] = [];
   const see = (c: AnyCareer) => {
     const n = typeof c.netWorth === 'number' ? c.netWorth : 0;
     if (n < lowest) lowest = n;
@@ -102,6 +112,12 @@ export function driveCareer(sport: UsCareerSport, o: DriveOptions): DriveResult 
       sport.progress(c, Math.random); see(c);
       if (sport.shouldRetire(c)) { c.retired = true; break; }
       let ev = startSummer(c, sport, Math.random, null);
+      o.onSummer?.(c);
+      const call = o.intl && sport.intl ? sport.intl.pending(c) : null;
+      if (call && o.intl && sport.intl) {
+        intlLog.push({ year: call.year, edition: call.edition.id, dealt: JSON.stringify(c.summer ?? null) });
+        sport.intl.answer(c, o.intl); see(c);
+      }
       while (ev) {
         const k = Math.floor(pick() * ev.options.length);
         ev = answerSummerCard(c, sport, ev, k, Math.random, null).next; see(c);
@@ -115,7 +131,7 @@ export function driveCareer(sport: UsCareerSport, o: DriveOptions): DriveResult 
         if (res) { c = res.state; see(c); }
       }
     }
-    return { json: JSON.stringify(c), lowest: lowest === Infinity ? 0 : lowest, below, seasons: c.seasons.length };
+    return { json: JSON.stringify(c), lowest: lowest === Infinity ? 0 : lowest, below, seasons: c.seasons.length, intlLog };
   } finally {
     Math.random = keep;
   }
