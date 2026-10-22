@@ -1,0 +1,10 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+simNbaOpeningRatingInputs exit=0 3s | NBA opening inputs normal: 0 intended failed / 10 held, full10. Receipt /home/runner/work/_temp/t-simNbaOpeningRatingInputs/dukb-nba-opening895-yFHO0d
+simNbaOpeningRatings exit=0 5s | NBA opening:normalized CRLF bindings, raw holds and owned-copy cleanup passed. These offline cases do not prove historical player ability, native UI, remote saves or all-
+simConquestPeople exit=0 1s | simConquestPeople: 49426 checks, all green
+simPrerender exit=1 1s | simPrerender: 1 failure
+vitest-nba exit=0 7s |    Duration  6.12s (transform 1.58s, setup 321ms, collect 4.40s, tests 9.46s, environment 1.70s, prepare 522ms)
+simNbaRatingEvidence exit=0 6s | NBA rating evidence: CRLF-safe executable bindings, original raw-byte holds and owned-copy cleanup verified. No native or live claims.
+gen-check exit=0 0s | players 320, {"printed":146,"no stat for this position":167,"held":2,"no 2025 row":5}, differing from the committed file 0
+simNbaRotationReset exit=0 5s | NBA rotation reset: normalized control binding, raw source holds and owned cleanup verified. Component fixtures do not prove native play, live data or real roster accurac
+tsc exit=0 71s | 

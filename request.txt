@@ -1,0 +1,10 @@
+#!build
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simNbaOpeningRatings: node scripts/simNbaOpeningRatings.mjs
+simNbaOpeningRatingInputs: node scripts/simNbaOpeningRatingInputs.mjs
+vitest-nba: node_modules/.bin/vitest run src/lib/nbaOpeningRatings.test.ts src/components/nba-front-office/NbaFrontOfficeRatingEvidence.test.tsx src/components/nba-front-office/NbaRotationReset.test.tsx --testTimeout=300000 --hookTimeout=120000
+simConquestPeople: node scripts/simConquestPeople.mjs
+simPrerender: node scripts/simPrerender.mjs
+simNbaRatingEvidence: node scripts/simNbaRatingEvidence.mjs
+simNbaRotationReset: node scripts/simNbaRotationReset.mjs
+gen-check: node scripts/genConquestKeyStats.mjs --check
