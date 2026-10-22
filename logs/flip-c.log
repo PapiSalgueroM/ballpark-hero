@@ -1,0 +1,26 @@
+NEGATIVE CONTROL ON: judgeflip, a copy of this harness with its judge slipped (/home/runner/work/_temp/t-flip-c/simNbaEarnedDraft-judgeflip-BVfB8Y/simNbaEarnedDraft.mjs). Sections 11 and 7 must go red and no other.
+   section 1: green
+   section 6: green
+   section 2: green
+   section 3: green
+   section 4: green
+   section 5: green
+   section 8: green
+   section 9: green
+   section 10: green
+   section 12: green
+   section 11: 36 failures
+   section 7: 3 failures
+  FAIL [11]: S1 at 5 (two): the new arm at 83.25 against 83.00 (spread 0.01 res, runs 2, 12 sets) was judged OUTSIDE, the known answer is PASS
+  FAIL [11]: S1 at 5: the table would refuse a line judged OUTSIDE (known answer PASS)
+  FAIL [11]: S1 at 5 (two): the new arm at 82.75 against 83.00 (spread 0.01 res, runs 2, 12 sets) was judged OUTSIDE, the known answer is PASS
+  FAIL [11]: S1 at 5: the table would refuse a line judged OUTSIDE (known answer PASS)
+  FAIL [11]: S1 at 5 (two): the new arm at 83.75 against 83.00 (spread 0.01 res, runs 2, 12 sets) was judged PASS, the known answer is OUTSIDE
+  FAIL [11]: S1 at 5: the table would hold a line judged PASS (known answer OUTSIDE)
+  FAIL [11]: S1 at 5 (two): the new arm at 82.25 against 83.00 (spread 0.01 res, runs 2, 12 sets) was judged PASS, the known answer is OUTSIDE
+  FAIL [11]: S1 at 5: the table would hold a line judged PASS (known answer OUTSIDE)
+  FAIL [7]: S1 at 5 (mean nbaStrength of the 30 clubs, season 5 tip off): OUTSIDE by -0.24 (-31.8 errors)
+  FAIL [7]: S2 (men rated 85 or more, season 10 tip off (20 percent of the old arm)): OUTSIDE by -18.9 (-84.2 errors)
+  FAIL [7]: S6 payers (tax payers a season, seasons 2 to 10): OUTSIDE by -0.14 (-9.6 errors)
+   the copy exited 1: simNbaEarnedDraft: RED in section 11, 7.
+simNbaEarnedDraft: CONTROL judgeflip FIRED. Red in section 11 and 7 (36 failures and 3 failures).
