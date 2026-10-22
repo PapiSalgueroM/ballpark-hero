@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+cover1: PLAYFIRST_SHARD=1/3 PLAYFIRST_CONTROL=cover node scripts/playFirstVisitDialogs.mjs
+cover2: PLAYFIRST_SHARD=2/3 PLAYFIRST_CONTROL=cover node scripts/playFirstVisitDialogs.mjs
+cover3: PLAYFIRST_SHARD=3/3 PLAYFIRST_CONTROL=cover node scripts/playFirstVisitDialogs.mjs
+four: ONLY=/stadium-tycoon,/idle-arena,/wonderkid-factory,/hall-of-champions node scripts/playFirstVisitDialogs.mjs
+abort: ONLY=/footle-unlimited,/club-manager PLAYFIRST_CONTROL=cover node scripts/playFirstVisitDialogs.mjs
+badcontrol: PLAYFIRST_CONTROL=nope node scripts/playFirstVisitDialogs.mjs

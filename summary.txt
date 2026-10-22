@@ -1,0 +1,7 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+cover2 exit=1 243s | playFirstVisitDialogs: PLAYFIRST_CONTROL=cover FIRED. 30 of 30 dialog buttons read as covered and the walk is red
+cover3 exit=1 243s | playFirstVisitDialogs: PLAYFIRST_CONTROL=cover FIRED. 39 of 39 dialog buttons read as covered and the walk is red
+cover1 exit=1 248s | playFirstVisitDialogs: PLAYFIRST_CONTROL=cover FIRED. 54 of 54 dialog buttons read as covered and the walk is red
+badcontrol exit=2 0s | PLAYFIRST_CONTROL=nope is not a control this walk knows (cover)
+abort exit=2 6s | playFirstVisitDialogs control ABORTED: no route in this run opened a dialog with a button, so the cover had nothing to cover
+four exit=0 24s | playFirstVisitDialogs: green. Every first visit dialog can be started with the cookie banner unanswered.

@@ -1,0 +1,15 @@
+  PASS     /stadium-tycoon 320x640: dialog "How Stadium Tycoon works" (static) 16 to 319, "Let's go" (its go label) 250 to 298 tappable (37 px above the banner), banner 335 to 640 (pending); tapped, closed, screen usable
+  PASS     /stadium-tycoon 390x844: dialog "How Stadium Tycoon works" (static) 16 to 595, "Let's go" (its go label) 526 to 574 tappable (37 px above the banner), banner 611 to 844 (pending); tapped, closed, screen usable
+  PASS     /stadium-tycoon 1280x900: dialog "How Stadium Tycoon works" (static) 16 to 719, "Let's go" (its go label) 650 to 698 tappable (37 px above the banner), banner 735 to 900 (pending); tapped, closed, screen usable
+  PASS     /wonderkid-factory 320x640: dialog "How Wonderkid Factory works" (static) 16 to 319, "Let's go" (its go label) 250 to 298 tappable (37 px above the banner), banner 335 to 640 (pending); tapped, closed, screen usable
+  PASS     /wonderkid-factory 390x844: dialog "How Wonderkid Factory works" (static) 16 to 595, "Let's go" (its go label) 526 to 574 tappable (37 px above the banner), banner 611 to 844 (pending); tapped, closed, screen usable
+  PASS     /wonderkid-factory 1280x900: dialog "How Wonderkid Factory works" (static) 16 to 719, "Let's go" (its go label) 650 to 698 tappable (37 px above the banner), banner 735 to 900 (pending); tapped, closed, screen usable
+  NONE     /hall-of-champions 320x640: no first visit dialog, banner 335 to 640 (pending)
+  NONE     /hall-of-champions 390x844: no first visit dialog, banner 611 to 844 (pending)
+  NONE     /hall-of-champions 1280x900: no first visit dialog, banner 735 to 900 (pending)
+  PASS     /idle-arena 320x640: dialog "How Idle Arena works" (static) 0 to 319, "Start tapping" (its go label) 250 to 298 tappable (37 px above the banner), banner 335 to 640 (pending); tapped, closed, screen usable
+  PASS     /idle-arena 390x844: dialog "How Idle Arena works" (static) 0 to 595, "Start tapping" (its go label) 526 to 574 tappable (37 px above the banner), banner 611 to 844 (pending); tapped, closed, screen usable
+  PASS     /idle-arena 1280x900: dialog "How Idle Arena works" (static) 0 to 719, "Start tapping" (its go label) 650 to 698 tappable (38 px above the banner), banner 735 to 900 (pending); tapped, closed, screen usable
+
+12 route widths walked over 4 routes: 9 dialogs tapped and closed, 0 expected site reds, 3 without a first visit dialog, 0 red
+playFirstVisitDialogs: green. Every first visit dialog can be started with the cookie banner unanswered.
