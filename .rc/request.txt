@@ -1,0 +1,17 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+shop: node scripts/simUsShopPromises.mjs
+shop-nobank: SHOP_CONTROL=nobank node scripts/simUsShopPromises.mjs
+shop-pp1: SHOP_CONTROL=potplusone node scripts/simUsShopPromises.mjs
+shop-ppall: SHOP_CONTROL=potplusoneall node scripts/simUsShopPromises.mjs
+shop-basecheck: SHOP_BASE_CHECK=1 node scripts/simUsShopPromises.mjs
+shop-fleet4: SHOP_SECTIONS=7 SHOP_FLEET_SETS=1538,2024,7,99 SHOP_FLEET_CAREERS=240 node scripts/simUsShopPromises.mjs
+vitest: node_modules/.bin/vitest run src/lib/usCareerShopPromises.test.ts src/lib/usCareerAnnualBenefits.test.ts src/test/careerDecisionOutcome.test.tsx src/test/usCareerSmallItems1104.test.ts src/test/usCareerShopCap.test.ts --testTimeout=300000 --hookTimeout=120000
+deckc: node scripts/simUsCareerDeckC.mjs
+board: node scripts/simUsBoardParity.mjs
+press: node scripts/simCareerPressMarket.mjs
+defects: node scripts/simUsCareerDefects.mjs
+ann: node scripts/simUsCareerAnnualBenefits.mjs
+dirty: node scripts/simUsDirtyMoney.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+rival: node scripts/simNoRivalNames.mjs
+decision: node scripts/simCareerDecisionOutcome.mjs
