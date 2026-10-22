@@ -1,0 +1,4 @@
+rehearse-noguard exit=1 15s | rehearseUsConnections1558: 8 failures
+rehearse-drift exit=1 15s | rehearseUsConnections1558: 1 failure
+facts exit=0 0s | simUsConnectionsFacts: green. Every Baseball, NFL and NHL Connections group is held to the record, and every board has one right answer.
+rehearse exit=0 25s | rehearseUsConnections1558: green. The rows land in place, a drifted row is left alone, and a second run is a no-op.
