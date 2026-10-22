@@ -1,0 +1,18 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+shop: node scripts/simUsShopPromises.mjs
+shop-settleafter: SHOP_CONTROL=settleafter node scripts/simUsShopPromises.mjs
+shop-nocall: SHOP_CONTROL=nocall node scripts/simUsShopPromises.mjs
+shop-office: SHOP_CONTROL=office node scripts/simUsShopPromises.mjs
+shop-chance: SHOP_CONTROL=chance node scripts/simUsShopPromises.mjs
+shop-stakefloor: SHOP_STAKE_CAREERS=1999 node scripts/simUsShopPromises.mjs
+shop-allsets: SHOP_DIGEST_SETS=1534,2024,7,99 SHOP_STAKE_CAREERS=4000 node scripts/simUsShopPromises.mjs
+shop-basecheck: SHOP_BASE_CHECK=1 SHOP_SECTIONS=1,2 node scripts/simUsShopPromises.mjs
+vitest-a: node_modules/.bin/vitest run src/lib/usCareerShopPromises.test.ts src/lib/usCareerAnnualBenefits.test.ts src/lib/careerDirtyMoney.test.ts src/lib/usCareerRecovery.test.ts src/test/careerDecisionOutcome.test.tsx src/test/usCareerSmallItems1104.test.ts src/test/usCareerShopCap.test.ts src/test/usBoardFixture.test.tsx src/test/usCareerDirtyMoney.test.tsx src/test/careerEntryGuide.test.tsx src/test/usCareerHelpRules1104.test.tsx --testTimeout=300000 --hookTimeout=120000
+annual: node scripts/simUsCareerAnnualBenefits.mjs
+dirty: node scripts/simUsDirtyMoney.mjs
+recovery: node scripts/simUsCareerRecovery.mjs
+pressmarket: node scripts/simCareerPressMarket.mjs
+boardparity: node scripts/simUsBoardParity.mjs
+rival: node scripts/simNoRivalNames.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+writes: node scripts/simStorageWrites.mjs
