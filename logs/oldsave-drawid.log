@@ -1,0 +1,7 @@
+MUTATION drawid APPLIED to src/lib/fightCareer.ts
+Preparing worktree (detached HEAD e3deb2cb3)
+HEAD is now at e3deb2cb3 Board: session J claims Rounds 1546 (fighter ids) and 1547 (Conquest truth) from the long tail scout; reserves 1550 to 1599
+1 Fight Career: 160 main saves (20 already retired), 2021 fights played on after the load
+  loaded differently on the branch 0, played on differently beyond the ids 134, verdict differs 105
+2 Fight Gym: 60 main saves, loaded differently on the branch 0; Fight Promoter: 60 main saves, loaded differently 0
+oldsave1546: 239 differences

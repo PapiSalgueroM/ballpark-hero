@@ -1,0 +1,2 @@
+#!serial
+oldsave-drawid: node .rc/x/mut1546.mjs drawid && git worktree add /tmp/base e3deb2cb && node .rc/x/oldsave1546.mjs /tmp/base; s=$?; git checkout -- src scripts; exit $s
