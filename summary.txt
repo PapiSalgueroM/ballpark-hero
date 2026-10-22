@@ -1,0 +1,5 @@
+simNbaGmDesk-fullbird exit=0 38s | simNbaGmDesk: control fullbird fired (115 failures, as it should)
+simNbaGmDesk-earned exit=1 39s | simNbaGmDesk: 3 failure(s) in ["2"]
+simNoRivalNames exit=0 21s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 65s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simNbaGmDesk-norfa exit=0 28s | simNbaGmDesk: control norfa fired (176 failures, as it should)
