@@ -1,0 +1,2 @@
+control noinjhook: red in ["5"], wanted 5
+simNbaGmDesk: control noinjhook fired (9 failures, as it should)

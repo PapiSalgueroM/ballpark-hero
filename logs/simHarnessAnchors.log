@@ -1,0 +1,3 @@
+   ok   every read a multi line anchor can search normalises line endings first
+
+simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.

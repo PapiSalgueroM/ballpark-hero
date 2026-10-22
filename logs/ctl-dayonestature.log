@@ -1,0 +1,2 @@
+control dayonestature: red in ["2","5"], wanted 5
+simNbaGmDesk: control dayonestature fired (88 failures, as it should)

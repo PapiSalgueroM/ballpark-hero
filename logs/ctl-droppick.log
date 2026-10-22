@@ -1,0 +1,2 @@
+control droppick: red in ["4"], wanted 4
+simNbaGmDesk: control droppick fired (83 failures, as it should)

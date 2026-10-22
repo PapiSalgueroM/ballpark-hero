@@ -1,0 +1,2 @@
+control noedgepo: red in ["5"], wanted 5
+simNbaGmDesk: control noedgepo fired (9 failures, as it should)

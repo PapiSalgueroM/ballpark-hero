@@ -1,0 +1,2 @@
+control latetrade: red in ["3"], wanted 3
+simNbaGmDesk: control latetrade fired (700 failures, as it should)

@@ -1,0 +1,2 @@
+control coinflip: red in ["2"], wanted 2
+simNbaGmDesk: control coinflip fired (147 failures, as it should)
