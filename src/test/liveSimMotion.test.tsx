@@ -929,7 +929,7 @@ function replayHalf(t: SeedTally, input: PitchInput) {
    is reached by a build up that ends at its shooter. */
 type Arm1521 = 'defensive' | 'balanced' | 'attacking';
 const ARMS_1521: [Arm1521, number][] = [['defensive', -1], ['balanced', 0], ['attacking', 1]];
-interface BuildArm { possessions: number; forward: number; level: number; back: number; behind: number; behindForward: number; resets: { press: number; switch: number }; unreasoned: number; switchOffenders: number; pressOffenders: number }
+interface BuildArm { possessions: number; forward: number; level: number; back: number; behind: number; behindForward: number; resets: { press: number; switch: number }; unreasoned: number; switchOffenders: number; pressOffenders: number; joined: number; joinedBack: number; turns: number; turnExamples: string[] }
 interface Tally1521 {
   passes: Record<'ground' | 'air' | 'cross' | 'throw' | 'placed', number>; liftedGround: number; flatAerial: number; landOffenders: number; passMetres: number[];
   shots: Record<'first' | 'second', number>; shotOffenders: number; shotExamples: string[];
@@ -937,7 +937,7 @@ interface Tally1521 {
   cardLines: number; carded: number; cardOffenders: number; statFouls: number; statOffenders: number; foulExamples: string[];
   arms: Record<Arm1521, BuildArm>; pressGap: number[]; calmGap: number[]; chains: number; deepChains: number; chainOffenders: number; chainExamples: string[];
 }
-const buildArm = (): BuildArm => ({ possessions: 0, forward: 0, level: 0, back: 0, behind: 0, behindForward: 0, resets: { press: 0, switch: 0 }, unreasoned: 0, switchOffenders: 0, pressOffenders: 0 });
+const buildArm = (): BuildArm => ({ possessions: 0, forward: 0, level: 0, back: 0, behind: 0, behindForward: 0, resets: { press: 0, switch: 0 }, unreasoned: 0, switchOffenders: 0, pressOffenders: 0, joined: 0, joinedBack: 0, turns: 0, turnExamples: [] });
 const tally1521 = (): Tally1521 => ({
   passes: { ground: 0, air: 0, cross: 0, throw: 0, placed: 0 }, liftedGround: 0, flatAerial: 0, landOffenders: 0, passMetres: [],
   shots: { first: 0, second: 0 }, shotOffenders: 0, shotExamples: [],
@@ -1127,6 +1127,23 @@ function replayBuild(t: Tally1521, input: PitchInput, plan: PitchPlan) {
       }
       prev = beat;
     }
+    /* The review of 2026-10-22: every pass inside one possession, whatever drew it (the grid, a chance's build up and
+       its shooter, the man a throw in, a free kick or a corner is played to), not only grid to grid. Two of my open
+       stretches running straight into each other, each with a man of a line on the ball: a back pass carries its
+       reason, drawn. A foul's meeting is not a pass (the ball is where the foul happens), and what follows a shot is dead. */
+    const joined = (b: PitchBeat | null | undefined): b is PitchBeat => !!b && !b.dead && b.state === 'open' && b.side === 'me' && !!b.line && b.carrier !== null && !b.foul;
+    armPlan.entries.forEach((beat, n) => {
+      const last = armPlan.entries[n - 1];
+      if (!joined(beat) || !joined(last) || last.via === 'carrier' || Math.abs(last.end - beat.start) > 1e-6) return;
+      tally.joined++;
+      const up = LINE_RANK[beat.line!] - LINE_RANK[last.line!];
+      const turn = (why: string) => { tally.turns++; if (tally.turnExamples.length < 3) tally.turnExamples.push(`${arm}: ${last.id} (${last.carrier}, ${last.line}) to ${beat.id} (${beat.carrier}, ${beat.line}) at ${beat.start.toFixed(2)}: ${why}`); };
+      if (up >= 0) { if (beat.reset) turn('a reason on a pass that did not go back'); return; }
+      tally.joinedBack++;
+      if (!beat.reset) turn('back with no reason');
+      else if (beat.reset === 'press' && !last.pressed) turn('pressure not drawn');
+      else if (beat.reset === 'switch' && Math.abs(beat.anchor.x - last.anchor.x) < 30) turn('a switch not across');
+    });
   }
   /* The chance: the feeder plays no further up than the shooter, and the man before him is deeper still. */
   plan.entries.forEach((beat, n) => {
@@ -1560,11 +1577,15 @@ describe('Round 1521: the live match looks like football', () => {
     const ahead = (arm: Arm1521) => m.looks.map(t => t.arms[arm].behindForward / Math.max(1, t.arms[arm].behind));
     const resets = (arm: Arm1521) => m.looks.map(t => t.arms[arm].back / Math.max(1, t.arms[arm].possessions));
     console.log(`[1521 R12] my possessions ${all(a => a.possessions)}; passes inside one: forward ${all(a => a.forward)}, across ${all(a => a.level)}, back ${all(a => a.back)}; forward share per seed: ${ARMS_1521.map(([arm]) => `${arm} ${fixed(per(arm, 'forward'), 3)}`).join('; ')}; back share per seed: ${ARMS_1521.map(([arm]) => `${arm} ${fixed(per(arm, 'back'), 3)}`).join('; ')}; from behind the front line ${all(a => a.behind)}, forward share per seed: ${ARMS_1521.map(([arm]) => `${arm} ${fixed(ahead(arm), 3)}`).join('; ')}; resets per possession per seed: ${ARMS_1521.map(([arm]) => `${arm} ${fixed(resets(arm), 3)}`).join('; ')}; by reason: press ${all(a => a.resets.press)}, switch ${all(a => a.resets.switch)}; back with no reason ${all(a => a.unreasoned)}, switches not across ${all(a => a.switchOffenders)}, pressure not drawn ${all(a => a.pressOffenders)}; nearest man to the ball: pressed ${median(press).toFixed(2)} (${press.length}), not pressed ${median(calm).toFixed(2)} (${calm.length}); chances with the feeder drawn ${totals1521(t => t.chains)}, with the man before him too ${totals1521(t => t.deepChains)}, out of order ${totals1521(t => t.chainOffenders)}${m.looks.flatMap(t => t.chainExamples).slice(0, 3).map(s => ` | ${s}`).join("")}`);
+    console.log(`[1521 R12 every pass] passes inside one possession, whatever drew them: ${all(a => a.joined)}; of them back ${all(a => a.joinedBack)}; turned back for nothing ${all(a => a.turns)}${m.looks.flatMap(t => ARMS_1521.flatMap(([arm]) => t.arms[arm].turnExamples)).slice(0, 4).map(s => ` | ${s}`).join('')}`);
     for (const [arm] of ARMS_1521) {
       expect(totals1521(t => t.arms[arm].possessions), arm).toBeGreaterThan(1000);
       expect(totals1521(t => t.arms[arm].unreasoned), arm).toBe(0);
       expect(totals1521(t => t.arms[arm].switchOffenders), arm).toBe(0);
       expect(totals1521(t => t.arms[arm].pressOffenders), arm).toBe(0);
+      /* Every pass, not only grid to grid: the build up into a chance and the man a dead ball is played to included. */
+      expect(totals1521(t => t.arms[arm].joined), arm).toBeGreaterThan(totals1521(t => t.arms[arm].forward + t.arms[arm].level + t.arms[arm].back));
+      expect(totals1521(t => t.arms[arm].turns), arm).toBe(0);
       /* Both reasons are read, many times. */
       expect(totals1521(t => t.arms[arm].resets.press), arm).toBeGreaterThan(50);
       expect(totals1521(t => t.arms[arm].resets.switch), arm).toBeGreaterThan(50);

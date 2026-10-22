@@ -148,6 +148,9 @@ interface Layer extends Omit<PitchBeat, 'start' | 'end' | 'anchor'> {
   anchor: PitchPoint | ((before: PitchPoint) => PitchPoint);
   arcFrom?: (before: PitchPoint, anchor: PitchPoint) => PitchPoint;
   carrierFrom?: (anchor: PitchPoint) => string | null;
+  /** Round 1521 review, a plan built with `build`: the stretch as it is drawn after the one drawn before it (null:
+   *  not drawn at all). Worked out once, when the one timeline reaches it. */
+  resolve?: (previous: Layer | null) => Layer | null;
 }
 
 /** Cuts the stretch into its plan: open play on a grid, and every chance and dead ball of the feed over it. */
@@ -171,12 +174,19 @@ export function pitchPlan(input: PitchInput): PitchPlan {
      across the same line, or back as a reset with its reason), anything else starts a new possession deep. Every
      roll is the stretch's own keyed stream, so no stretch depends on how many draws another made. */
   const build = input.build;
+  /* Round 1521 review: the stretch a possession carries on from is the same side's open play drawn just before,
+     whatever drew it (the grid, a chance's build up, a throw in's or a free kick's receiver, a corner's delivery):
+     a man of a line on the ball, with nothing dead in between. The other side or a dead ball is a new possession. */
+  const joinedOpen = (prev: Layer | null, side: PitchSide): Layer | null =>
+    (prev && !prev.dead && prev.state === 'open' && prev.side === side && prev.line && prev.carrier !== null ? prev : null);
+  /** The same, read by a chance's build up and its shooter (see where a chance is staged). */
+  const leadIn = (prev: Layer | null, side: PitchSide): Layer | null => joinedOpen(prev, side);
   const built = new Map<number, Layer>();
   const open = (i: number, previous: Layer | null): Layer => {
     if (!build) return rawOpen(i);
     const known = built.get(i);
     if (known) return known;
-    const layer = builtOpen(i, previous && previous.via === 'grid' && previous.side === spell(i) ? previous : null, build);
+    const layer = builtOpen(i, joinedOpen(previous, spell(i)), build);
     built.set(i, layer);
     return layer;
   };
@@ -211,12 +221,14 @@ export function pitchPlan(input: PitchInput): PitchPlan {
     let figure: PitchFigure | null = men.length ? men[pickIndex(men, rng())] : null;
     let anchor: PitchPoint = figure ? zoneAnchor(side, figure, rng) : { x: 50, y: 50 };
     const at = prior && typeof prior.anchor !== 'function' ? prior.anchor : null;
-    if (figure && prior && rank(figure.line) < priorRank && at) {
+    if (figure && prior && rank(figure.line) < priorRank) {
       /* A reset, never a turn for nothing: across to the far side when a man of that line is out there (a switch
-         of play), else back because the man on the ball was closed down (his stretch is marked, and drawn so). */
-      const far = [...men].sort((a, b) => Math.abs(turn(side, b.slot).x - at.x) - Math.abs(turn(side, a.slot).x - at.x))[0];
-      const farAnchor = zoneAnchor(side, far, rng);
-      if (rng() < 0.5 && Math.abs(farAnchor.x - at.x) >= SWITCH_ACROSS) { figure = far; anchor = farAnchor; reset = 'switch'; }
+         of play), else back because the man on the ball was closed down (his stretch is marked, and drawn so).
+         After a throw in, whose spot is worked out only when it is drawn, there is nothing to measure a switch
+         from, so it is pressure. */
+      const far = at ? [...men].sort((a, b) => Math.abs(turn(side, b.slot).x - at.x) - Math.abs(turn(side, a.slot).x - at.x))[0] : null;
+      const farAnchor = far ? zoneAnchor(side, far, rng) : null;
+      if (far && farAnchor && at && rng() < 0.5 && Math.abs(farAnchor.x - at.x) >= SWITCH_ACROSS) { figure = far; anchor = farAnchor; reset = 'switch'; }
       else { reset = 'press'; prior.pressed = true; }
     }
     const layer: Layer = {
@@ -346,30 +358,64 @@ export function pitchPlan(input: PitchInput): PitchPlan {
     const room = before ? a.at - before.at - ACTION_SPAN : Infinity;
     const led = before ? Math.max(0, Math.min(PITCH_LEAD, Math.max(room - whole(before), Math.min(PITCH_SQUEEZE, room - restart(before))))) : PITCH_LEAD;
     const lead = a.at - led;
-    layers.push({
+    const shooting: Layer = {
       start: lead, end: a.at + ACTION_SPAN, priority: a.last ? 6 : 4, order: n, state: set ? 'freekick' : 'open', via: 'carrier', side,
       carrier: shooter?.key ?? null, dead: set, id: `c${a.order}`, anchor: turn(side, shot),
       ...(build && shooter ? { line: shooter.line } : {}),
-    });
+    };
+    layers.push(shooting);
     /* Round 1521: with `build`, the chance is reached by a build up that ends at the shooter: a man deeper than the
        feeder, then the feeder, then the shooter, each stretch running straight into the next. A shooter with nobody
-       at or behind his line (the keeper, now and then the man a line names) is not built up to: he just has it. */
+       at or behind his line (the keeper, now and then the man a line names) is not built up to: he just has it.
+       Round 1521 review: and it carries on from where the ball already is. When the same side has the ball just
+       before, the man before the feeder is no deeper than the man on it (or he is left out), the feeder is no deeper
+       either while there is a man up there to feed the shooter (the man on the ball himself, failing anybody else),
+       and when there is nobody, the ball goes back to him because the man on it is closed down, drawn so. The same
+       holds for a shooter who gets the ball with no feeder drawn. Every roll is still its own keyed stream. */
+    if (build && shooter && !set) shooting.resolve = prev => {
+      const p = leadIn(prev, side);
+      if (!p?.line || !shooting.line || rank(p.line) <= rank(shooting.line)) return shooting;
+      p.pressed = true;
+      return { ...shooting, reset: 'press' };
+    };
     if (build && feeder && feederAnchor && behind.length) {
-      layers.push({
+      const feed: Layer = {
         start: lead - BEAT_SPAN, end: lead, priority: 2, order: n, state: 'open', via: 'approach', side,
         carrier: feeder.key, dead: false, id: `a${a.order}`, anchor: feederAnchor, line: feeder.line,
-      });
+      };
+      feed.resolve = prev => {
+        const p = leadIn(prev, side);
+        if (!p?.line || rank(p.line) <= rank(feeder.line)) return feed;
+        const up = behind.filter(f => rank(f.line) >= rank(p.line!));
+        const fresh = up.filter(f => f.key !== p.carrier);
+        const men = fresh.length ? fresh : up;
+        if (men.length) {
+          const again = keyedRng(`${seed}:af:${a.order}`);
+          const man = men[pickIndex(men, again())];
+          return { ...feed, carrier: man.key, anchor: zoneAnchor(side, man, again), line: man.line };
+        }
+        p.pressed = true;
+        return { ...feed, reset: 'press' };
+      };
+      layers.push(feed);
       const deeper = lists[side].filter(f => f.key !== shooter?.key && f.key !== feeder.key && rank(f.line) < rank(feeder.line));
       const pool = deeper.filter(f => f.line !== 'keeper').length ? deeper.filter(f => f.line !== 'keeper') : deeper;
       if (pool.length) {
-        const deep = keyedRng(`${seed}:ab:${a.order}`);
-        const man = pool[pickIndex(pool, deep())];
         /* Under every dead ball (0.5): a corner or a free kick in the minute before the chance is how it came about,
            and is drawn as that, not covered by the build up. */
-        layers.push({
+        const first: Layer = {
           start: lead - 2 * BEAT_SPAN, end: lead - BEAT_SPAN, priority: 0.5, order: n, state: 'open', via: 'approach', side,
-          carrier: man.key, dead: false, id: `b${a.order}`, anchor: zoneAnchor(side, man, deep), line: man.line,
-        });
+          carrier: null, dead: false, id: `b${a.order}`, anchor: { x: 50, y: 50 },
+        };
+        first.resolve = prev => {
+          const p = leadIn(prev, side);
+          const fit = p?.line ? pool.filter(f => rank(f.line) >= rank(p.line!)) : pool;
+          if (!fit.length) return null;
+          const deep = keyedRng(`${seed}:ab:${a.order}`);
+          const man = fit[pickIndex(fit, deep())];
+          return { ...first, carrier: man.key, anchor: zoneAnchor(side, man, deep), line: man.line };
+        };
+        layers.push(first);
       }
     }
     const after = a.at + ACTION_SPAN;
@@ -438,7 +484,7 @@ export function pitchPlan(input: PitchInput): PitchPlan {
       const header = mostAdvanced(lists[side]);
       layers.push({
         start: p + BEAT_SPAN, end: p + 2 * BEAT_SPAN, priority: 1, order, state: 'open', via: 'dead', side,
-        carrier: header?.key ?? null, dead: false, id: `d${order}`, anchor: target,
+        carrier: header?.key ?? null, dead: false, id: `d${order}`, anchor: target, ...(build && header ? { line: header.line } : {}),
         /* The midpoint pulled 10 toward the centre of the pitch and 4 away from the goal. */
         arcFrom: (before, anchor) => {
           const mid = { x: (before.x + anchor.x) / 2, y: (before.y + anchor.y) / 2 };
@@ -457,7 +503,7 @@ export function pitchPlan(input: PitchInput): PitchPlan {
       const receiver = list.length ? list[pickIndex(list, rng())] : null;
       layers.push({
         start: p + BEAT_SPAN, end: p + 2 * BEAT_SPAN, priority: 1, order, state: 'open', via: 'dead', side,
-        carrier: receiver?.key ?? null, dead: false, id: `u${order}`,
+        carrier: receiver?.key ?? null, dead: false, id: `u${order}`, ...(build && receiver ? { line: receiver.line } : {}),
         anchor: receiver ? (before: PitchPoint) => { const own = zoneAnchor(side, receiver, rng); return { x: (own.x + before.x) / 2, y: own.y }; } : { x: 50, y: 50 },
       });
     } else if (event.kind === 'foul') {
@@ -529,6 +575,8 @@ export function pitchPlan(input: PitchInput): PitchPlan {
       layers.push({
         start: at + BEAT_SPAN, end: at + 2 * BEAT_SPAN, priority: 1, order, state: 'open', via: 'dead', side,
         carrier: receiver?.key ?? null, dead: false, id: `y${order}`, anchor: receiver ? zoneAnchor(side, receiver, rng) : { x: 50, y: 50 },
+        /* Round 1521 review: the line of the man a dead ball is played to, so the possession carries on from him. */
+        ...(build && receiver ? { line: receiver.line } : {}),
       });
     }
   });
@@ -541,14 +589,24 @@ export function pitchPlan(input: PitchInput): PitchPlan {
   for (const layer of layers) { cut(layer.start); cut(layer.end); }
   const marks = [...cuts].sort((a, b) => a - b);
   const pieces: { start: number; end: number; layer: Layer }[] = [];
+  /* Round 1521 review: a stretch that is worked out from the one before it is worked out once, the first time it is
+     on top; one that comes out as not drawn is passed over for whatever lies under it. */
+  const settled = new Map<Layer, Layer | null>();
   for (let k = 0; k + 1 < marks.length; k++) {
     const mid = (marks[k] + marks[k + 1]) / 2;
+    const prior = pieces[pieces.length - 1]?.layer ?? null;
     let top: Layer | null = null;
-    for (const layer of layers) {
-      if (layer.start > mid || mid >= layer.end) continue;
-      if (!top || layer.priority > top.priority || (layer.priority === top.priority && layer.order > top.order)) top = layer;
+    for (let looking = true; looking;) {
+      top = null;
+      for (const layer of layers) {
+        if (layer.start > mid || mid >= layer.end || settled.get(layer) === null) continue;
+        if (!top || layer.priority > top.priority || (layer.priority === top.priority && layer.order > top.order)) top = layer;
+      }
+      looking = false;
+      if (top?.resolve && !settled.has(top)) { settled.set(top, top.resolve(prior)); looking = settled.get(top) === null; }
     }
-    const layer = top ?? open(Math.min(beats - 1, Math.floor((mid - from) / BEAT_SPAN)), pieces[pieces.length - 1]?.layer ?? null);
+    if (top && settled.has(top)) top = settled.get(top)!;
+    const layer = top ?? open(Math.min(beats - 1, Math.floor((mid - from) / BEAT_SPAN)), prior);
     const previous = pieces[pieces.length - 1];
     /* A scrap of open play shorter than half a beat is not worth a pass: the stretch before it runs on. */
     const scrap = layer.via === 'grid' && marks[k + 1] - marks[k] < BEAT_SPAN / 2 - EPS && !!previous;
