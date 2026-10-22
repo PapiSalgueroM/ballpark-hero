@@ -1,0 +1,8 @@
+vitest exit=0 27s |    Duration  26.64s (transform 6.01s, setup 3.15s, collect 16.54s, tests 28.65s, environment 15.63s, prepare 3.60s)
+earned exit=0 36s | simNbaEarnedDraft: green.
+tsc exit=0 116s | 
+f-r1-0 exit=0 390s | simNbaEarnedDraft: green.
+f-r1-1 exit=0 393s | simNbaEarnedDraft: green.
+earned-ctl exit=1 520s | simNbaEarnedDraft controls: 2 of 20 DID NOT FIRE as expected.
+f-r1-2 exit=0 326s | simNbaEarnedDraft: green.
+f-r1-3 exit=0 294s | simNbaEarnedDraft: green.
