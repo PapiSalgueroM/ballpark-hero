@@ -1,0 +1,2 @@
+#!serial
+refresh: for r in /f1-driver /nfl-higher-lower /nba-higher-lower; do node scripts/simGuideHeadings.mjs --refresh $r || exit 1; done; cp scripts/data/guideHeadingsFrozen.json $RC_OUT/guideHeadingsFrozen.json; node scripts/simGuideHeadings.mjs; s=$?; git diff --stat; exit $s
