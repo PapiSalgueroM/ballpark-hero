@@ -245,3 +245,49 @@ describe('NFL front office: who scored, the load and the close', () => {
     expect(readNflStats(s.league.stats)).not.toBeNull();
   });
 });
+
+describe('NFL front office: the season card and the history', () => {
+  it('Standings opens on the table, and its This season face draws the season so far and the award history', async () => {
+    const { league, team } = leagueAt(1);
+    league.awards = [{ season: league.season - 1, mvp: { id: 'x1', name: 'Old Hand', team, pos: 'QB', g: 17, ptd: 30, rtd: 2, ctd: 0, sk: 0 }, oroy: null, droy: null, rookies: false }];
+    league.champions.push({ season: league.season - 1, team });
+    save(shape(league, team));
+    render(<Board />);
+    press('Play Week 1');
+    { const hub = screen.queryByText('Hub'); if (hub) fireEvent.click(hub); }
+    fireEvent.click(screen.getByText('Standings'));
+    expect(document.querySelector('[data-standings-faces]')).toBeTruthy();
+    expect(document.querySelector('[data-award-history]'), 'the table face first').toBeNull();
+    fireEvent.click(screen.getByText('This season'));
+    expect(await screen.findByText(`The ${league.season} season in numbers`)).toBeTruthy();
+    const history = await screen.findByText(/Award history, this save/);
+    const box = history.closest('[data-award-history]')!;
+    expect(box.textContent).toContain(`${league.season - 1}`);
+    expect(box.textContent).toContain('MVP Old Hand');
+    expect(box.textContent).toContain('Sim seasons, not real NFL history.');
+    expect(box.textContent).toContain('Your club has won 1 award here.');
+    /* before the close the awards tab sends him to the leaders */
+    expect(document.body.textContent).toContain('Awards are named when the regular season ends.');
+    expect(document.querySelector('[data-sim-note]')!.textContent).toBe("Sim season: every line and award here comes from this save's games, not real NFL stats.");
+  });
+
+  it('the recap draws the closed season with its three award boxes, and a save with no lines says so', async () => {
+    const { league, team } = leagueAt(REGULAR_WEEKS);
+    league.stats = nflNewStats(league.season);
+    save(shape(league, team));
+    const first = render(<Board />);
+    press('Play the final week + playoffs');
+    expect(await screen.findByText(`The ${league.season} season in numbers`)).toBeTruthy();
+    for (const award of ['MVP', 'Offensive Rookie of the Year', 'Defensive Rookie of the Year']) expect(screen.getByText(award)).toBeTruthy();
+    /* a save's first season: no class drafted in it yet, and the rookie boxes say why */
+    expect(document.body.textContent).toContain('rookie awards start with the first class drafted in this save');
+    first.unmount();
+    cleanup();
+    localStorage.clear();
+    const old = leagueAt(REGULAR_WEEKS);
+    save(shape(old.league, old.team));
+    render(<Board />);
+    press('Play the final week + playoffs');
+    expect((await screen.findByText(/This save started before season lines were kept/)).textContent).toContain('next season\'s Week 1');
+  });
+});

@@ -6,6 +6,8 @@ import { GameNav } from '@/components/game/GameNav';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { hostXpHelp } from '@/lib/gmCareerFace'; /* Round 1550: the help's part of the career, not the whole host */
+/* Round 1542: who scored and the season's awards, from the rules themselves (the board holds the same module) */
+import { nflStatsHelp } from '@/lib/nflSeasonStats';
 
 /* Round 1130. A page that has a guide never renders the howToPlay prop below (GameSeoContent keeps it as a
    fallback only), and this page's guide is another round's file this week. So the opening rating rule reaches
@@ -30,8 +32,13 @@ function frontOfficeCareerRules(): string[] {
   ];
 }
 
+/* Round 1542: the season numbers' rules, built inside the component like the career's, the worked example computed */
+function frontOfficeStatsRules(): string[] {
+  return nflStatsHelp();
+}
+
 const FrontOffice = () => {
-  const rules = [...FRONT_OFFICE_RATING_RULES, ...frontOfficeCareerRules()];
+  const rules = [...FRONT_OFFICE_RATING_RULES, ...frontOfficeCareerRules(), ...frontOfficeStatsRules()];
   return (
     <>
       <PageSeo

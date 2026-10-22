@@ -111,9 +111,11 @@ const NflBracket = lazyPart<GmBracketMount>(() => import('@/components/front-off
    close and the readers are static: they run in the press's own tick and at load); the season card, its leaders, its
    words and the award history are one chunk the recap and Standings ask for. */
 import {
-  nflAwardList, nflAwardsOf, nflCleanSave, nflCloseSeasonStats, nflLiveStats, nflMarkRookies, nflRecordGame, nflRecordWeek, NFL_AWARD_LABEL,
+  nflAwardList, nflAwardsOf, nflCleanSave, nflCloseSeasonStats, nflMarkRookies, nflRecordGame, nflRecordWeek, NFL_AWARD_LABEL,
 } from '@/lib/nflSeasonStats';
 import { FoAwardBadge } from '@/components/front-office-shared/FoAwardBadge';
+import type { NflSeasonCardProps } from '@/components/front-office/NflSeasonStats';
+const NflSeasonCard = lazyPart<NflSeasonCardProps>(() => import('@/components/front-office/NflSeasonStats'), 260);
 /* Round 1550: the two binding fields only the screens behind the career boxes read (the seat pack, the earn line).
    Those screens are drawn once the kit is here and never before, so a read without it is a bug and says so. */
 const careerKitOrThrow = (): NflCareerKit => {
@@ -259,6 +261,8 @@ export default function FrontOfficeBoard() {
      filter by group. Both transient. starting holds the club whose league is
      loading its bench, startError says the load failed. */
   const [rosterGroup, setRosterGroup] = useState<DepthPos | 'practice' | null>(null);
+  /* Round 1542: the Standings box's two faces, the table and the season in numbers (transient, opens on the table) */
+  const [standingsFace, setStandingsFace] = useState<'table' | 'season'>('table');
   const [tradeGroup, setTradeGroup] = useState<DepthPos | 'starters'>('starters');
   const [starting, setStarting] = useState<string | null>(null);
   const [startError, setStartError] = useState(false);
@@ -1645,6 +1649,9 @@ export default function FrontOfficeBoard() {
             </div>
           )}
         </div>
+        {/* Round 1542: the season in numbers, the season he ran (not on the day he takes another club's seat: the
+            season on this screen was not his, and Standings carries it) */}
+        {!arriving && <NflSeasonCard league={league} myTeam={myTeam} label={label} mode="close" />}
         {gm && recapDesk && (
           <GmDeskMount sport="nfl" desk={gm} facts={recapDesk} panels={NFL_RECAP_PANELS} open={gmOpen} onOpen={openDesk} onDesk={changeDesk} />
         )}
@@ -1772,7 +1779,7 @@ export default function FrontOfficeBoard() {
   /* Round 1019: the desk's boxes sit under the board's own; a desk panel open hides the board's boxes. */
   const hubDesk = deskFacts(hubFacts);
   const deskPanelOpen = gmPanelFor(NFL_HUB_PANELS, gmOpen) !== null;
-  const openPanel = (key: FoPanelKey) => { setCutArmed(null); setDepthView(null); setDepthPick(null); setRosterGroup(null); setGmOpen(null); setTab(key === 'play' ? 'week' : key); };
+  const openPanel = (key: FoPanelKey) => { setCutArmed(null); setDepthView(null); setDepthPick(null); setRosterGroup(null); setGmOpen(null); setStandingsFace('table'); setTab(key === 'play' ? 'week' : key); };
   /* Round 723: the chart the sim reads, and who it counts as starting today. */
   const chart = chartNow;
   const starters = starterIds(my);
@@ -2572,6 +2579,23 @@ export default function FrontOfficeBoard() {
 
       {tab === 'standings' && (
         <div className="rounded-2xl border border-border bg-card p-3">
+          {/* Round 1542: two small tiles, so the season in numbers is a face of the box and never stacked under the table */}
+          <div className="mb-3 grid grid-cols-2 gap-2" role="tablist" data-standings-faces>
+            {([['table', 'Table'], ['season', 'This season']] as const).map(([face, text]) => (
+              <button
+                key={face}
+                role="tab"
+                aria-selected={standingsFace === face}
+                onClick={() => setStandingsFace(face)}
+                className={cn('min-h-[44px] rounded-xl border px-3 text-sm font-bold', standingsFace === face ? 'border-gold bg-gold/10 text-foreground' : 'border-border text-muted-foreground hover:text-foreground')}
+              >
+                {text}
+              </button>
+            ))}
+          </div>
+          {standingsFace === 'season' ? (
+            <NflSeasonCard league={league} myTeam={myTeam} label={label} mode="live" />
+          ) : (
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             {['AFC East', 'AFC North', 'AFC South', 'AFC West', 'NFC East', 'NFC North', 'NFC South', 'NFC West'].map(div => (
               <div key={div}>
@@ -2585,6 +2609,7 @@ export default function FrontOfficeBoard() {
               </div>
             ))}
           </div>
+          )}
         </div>
       )}
 

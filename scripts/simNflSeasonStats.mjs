@@ -154,6 +154,7 @@ const HEAD_ENTRY = [
   ...STORY_ENTRY,
   "export * as bind from './src/lib/frontOfficeGameDay.ts';",
   "export * as stats from './src/lib/nflSeasonStats.ts';",
+  "export * as view from './src/lib/nflSeasonView.ts';",
   "export * as fo from './src/lib/foSeasonStats.ts';",
   "export { leagueNames } from './src/lib/foNames.ts';",
 ];
@@ -693,6 +694,28 @@ if (SECTIONS.includes(8)) {
   const bad = words.filter(w => QUOTES.test(w) || SPEECH.test(w));
   check(8, `every sentence the lib builds has no quotation mark and no verb of speech (${words.length} read)`, bad.length === 0, bad[0] ?? '');
   check(8, "the page's rules say the numbers are this save's sim season", S.nflStatsHelp().some(w => w.includes("this save's sim season")));
+  /* the card's words (the view lib rides with the card): its note is the NBA's with NFL in its place, read off the NBA
+     board's source; every other line it builds for a fixture season has no quotation mark and no verb of speech */
+  const V = M.view;
+  const nba = readSrc('src/components/nba-front-office/NbaFrontOfficeBoard.tsx').match(/const SIM_NOTE = "([^"]+)";/);
+  check(8, 'the card\'s sim note is the NBA card\'s with NFL in its place', !!nba && V.NFL_SIM_NOTE === nba[1].replace('NBA', 'NFL'), nba ? nba[1] : 'the NBA note was not found');
+  const pick = { id: 'p1', name: 'A Man', team: 'AAA', pos: 'QB', g: 17, ptd: 31, rtd: 3, ctd: 0, sk: 0 };
+  const fixture = { season: 2027, awards: [{ season: 2027, mvp: pick, oroy: null, droy: { ...pick, pos: 'DL', ptd: 0, rtd: 0, sk: 9 }, rookies: true }], champions: [{ season: 2027, team: 'AAA' }] };
+  const cardWords = [
+    V.NFL_SIM_NOTE, V.NFL_EMPTY_AWARDS, V.NFL_NO_CLASS, V.NFL_HISTORY_GAP, ...V.NFL_STAT_HEADS, ...V.NFL_LEADER_TABLES.map(t => t[0]),
+    V.nflAwardDetail(pick), ...V.nflAwardBoxes(fixture.awards[0], 'AAA').flatMap(b => [b.label, b.rule, ...b.winners.map(w => w.detail)]),
+    ...V.nflHistoryRows(fixture, 'AAA').rows.map(r => r.text),
+  ];
+  const badCard = cardWords.filter(w => QUOTES.test(w) || SPEECH.test(w));
+  check(8, `every line the card builds has no quotation mark and no verb of speech (${cardWords.length} read)`, badCard.length === 0, badCard[0] ?? '');
+  check(8, `an award winner's line reads as the NBA's does: "${V.nflAwardDetail(pick)}"`, V.nflAwardDetail(pick) === '31 TD thrown, 3 run in');
+  /* where the NBA puts the marker, the NFL does: the badge, the history and the feed line, read off the code */
+  const badge = codeOf(readSrc('src/components/front-office-shared/FoAwardBadge.tsx'));
+  const hist = codeOf(readSrc('src/components/front-office-shared/FoAwardHistory.tsx'));
+  const board = codeOf(readSrc('src/components/front-office/FrontOfficeBoard.tsx'));
+  check(8, 'the badge says Sim on every award and its title says they are this save\'s sim awards', badge.includes('`Sim ${a}`') && badge.includes("This save's sim awards, not real ${league} ones"));
+  check(8, 'the history says its seasons are sim seasons', hist.includes('Sim seasons, not real ${league} history.'));
+  check(8, "the feed line names the award in this save's season", board.includes("in this save's ${closedStats.season} season."));
 }
 
 /* ─── Closing ─── */
