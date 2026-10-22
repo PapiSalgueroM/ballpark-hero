@@ -240,10 +240,10 @@ let draws = 0;
 const seedRandom = seed => { const r = mulberry(seed); draws = 0; Math.random = () => { draws += 1; return r(); }; };
 const POS = ['ST', 'CM', 'CB', 'GK', 'LW', 'CAM', 'CDM', 'RB', 'RW', 'LB'];
 const STAT_KEYS = ['pace', 'shooting', 'passing', 'dribbling', 'defending', 'physical', 'reflexes'];
-function newCareer(S, i, { era = '2020-24', start = 2020, ovr = 56 + (i % 5) * 3, pos = POS[i % POS.length] } = {}) {
+function newCareer(S, i, { era = '2020-24', start = 2020, ovr = 56 + (i % 5) * 3, pos = POS[i % POS.length], name = 'Form Sim' } = {}) {
   const off = S.A.POSITION_OFFSETS[pos];
   const stats = Object.fromEntries(STAT_KEYS.map((k, j) => [k, Math.max(25, Math.min(99, ovr + off[j]))]));
-  return S.E.initCareer('Form Sim', i % 2 ? 'England' : 'Spain', pos, era, stats, ovr, start, S.E.FALLBACK_CLUBS, null, Math.min(94, ovr + 20));
+  return S.E.initCareer(name, i % 2 ? 'England' : 'Spain', pos, era, stats, ovr, start, S.E.FALLBACK_CLUBS, null, Math.min(94, ovr + 20));
 }
 /* One step of the house fleet (scripts/lib/careerStep.mjs) that also walks past the retirement screens. */
 function step(S, c) {
@@ -524,7 +524,10 @@ if (runs('5')) {
   let before = 0, from = 0, offRow = 0, kept = 0, keptBad = 0;
   for (let i = 0; i < N; i += 1) {
     const [era, start] = ERAS[i % ERAS.length];
-    const opts = { era, start, ovr: 70 + (i % 4) * 3, pos: ATT[i % ATT.length] };
+    /* Round 1525: each career its own name. The award is decided on a stream keyed to the career's identity (name,
+       era, nation, position) and the season, and i % 4 picks the era, the position and the nation together, so under
+       one name the fleet held four identities and so about four draws a season. */
+    const opts = { era, start, ovr: 70 + (i % 4) * 3, pos: ATT[i % ATT.length], name: `Form Era ${i}` };
     const c = wholeCareer(S, i, SEED + 5, opts);
     for (const a of c.awards ?? []) {
       if (a.name !== PUSKAS) continue;

@@ -182,9 +182,10 @@ if (runs('2')) {
   let career = 0;
   globalThis.__awardCall = (award, s, won) => { calls.push({ award, s, won, career }); };
   for (let i = 0; i < N; i += 1) {
-    const [era, start] = ERAS[Math.floor(i / POS.length) % ERAS.length];
+    /* position, start overall and era each on their own digit of i, so no position is always the weakest start */
+    const [era, start] = ERAS[Math.floor(i / 50) % ERAS.length];
     career = i;
-    const c = wholeCareer(S, i, SEED + 2, { era, start });
+    const c = wholeCareer(S, i, SEED + 2, { era, start, ovr: 56 + (Math.floor(i / POS.length) % 5) * 3 });
     careers.set(i, c.position);
   }
   globalThis.__awardCall = null;
@@ -218,9 +219,13 @@ if (runs('2')) {
       return (score - field.mean) / field.sd - (cfg.grade ?? 0) >= loc + 0.3665 / root;
     });
     const bestWins = best.filter(c => c.won).length;
-    console.log(`     the best seasons (past the typical best rival): ${best.length}, won ${bestWins} (${f2(100 * bestWins / Math.max(1, best.length))} percent)`);
-    if (best.length >= 20 && bestWins * 2 <= best.length) fail(`${award}: the best seasons won ${bestWins} of ${best.length}, not more often than not`);
-    if (best.length < 20) console.log(`     (under 20 such seasons, not judged)`);
+    const bestModel = best.reduce((sum, c) => sum + c.p, 0);
+    const bestVar = best.reduce((sum, c) => sum + c.p * (1 - c.p), 0);
+    console.log(`     the best seasons (past the typical best rival): ${best.length}, won ${bestWins} (${f2(100 * bestWins / Math.max(1, best.length))} percent; the model ${f2(100 * bestModel / Math.max(1, best.length))})`);
+    if (best.length > 0 && bestModel * 2 <= best.length) fail(`${award}: the model gives the best seasons ${f2(bestModel)} of ${best.length}, not more often than not`);
+    if (bestWins < bestModel - 3 * Math.sqrt(bestVar) - 1) fail(`${award}: the best seasons won ${bestWins}, well under the model's ${f2(bestModel)}`);
+    if (best.length >= 100 && bestWins * 2 <= best.length) fail(`${award}: the best seasons won ${bestWins} of ${best.length}, not more often than not`);
+    if (best.length < 100) console.log('     (under 100 such seasons: the share is judged on the model and the wins against it)');
   }
   /* one winner a league a season, on the populations the two counting awards' fields were measured on */
   for (const [award, pos, pop] of [['Golden Boot', 'ST', c => c.s.position === 'ST'], ['Golden Glove', 'GK', c => c.s.position === 'GK']]) {
@@ -254,8 +259,8 @@ if (runs('3')) {
   const WINDOWS = { 'Golden Glove': [2004, 9999], 'UEFA Player of the Year': [2010, 2022], 'Puskás Award': [2008, 9999] };
   const count = Object.fromEntries(Object.keys(WINDOWS).map(k => [k, { out: 0, in: 0 }]));
   for (let i = 0; i < N; i += 1) {
-    const [era, start] = STARTS[i % STARTS.length];
-    const c = wholeCareer(S, i, SEED + 3, { era, start, ovr: 70 + (i % 4) * 3, pos: ERA_POS[i % ERA_POS.length], name: `Era Sim ${i}` });
+    const [era, start] = STARTS[Math.floor(i / 32) % STARTS.length];
+    const c = wholeCareer(S, i, SEED + 3, { era, start, ovr: 70 + (Math.floor(i / ERA_POS.length) % 4) * 3, pos: ERA_POS[i % ERA_POS.length], name: `Era Sim ${i}` });
     for (const a of c.awards ?? []) {
       const w = WINDOWS[a.name];
       if (!w) continue;
@@ -289,9 +294,9 @@ if (runs('4')) {
   const N = Number(process.env.SIM_SEASON_AWARDS_LOCK || 160);
   let seasons = 0, drawParts = 0, rowParts = 0, hookParts = 0, outcomeDiffers = 0;
   for (let i = 0; i < N; i += 1) {
-    const [era, start] = ERAS[i % ERAS.length];
+    const [era, start] = ERAS[Math.floor(i / 40) % ERAS.length];
     seedRandom((SEED + 4) * 1000 + i);
-    let c = newCareer(H, i, { era, start, ovr: 62 + (i % 4) * 4 });
+    let c = newCareer(H, i, { era, start, ovr: 62 + (Math.floor(i / POS.length) % 4) * 4 });
     for (let k = 0; k < 1500 && !c.retired; k += 1) {
       const seed = (SEED + 4) * 100000 + i * 1000 + k;
       const both = [H, B].map(S => {
