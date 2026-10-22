@@ -1,0 +1,8 @@
+1) The values and the date
+   8 pinned values, read 2026-09-11, shown as "September 2026"
+2) The engines import, they do not retype
+   4 engines, each base assigned its named figure from ./leagueCaps
+3) The screens say the date
+   4 boards rendered on the server and mounted in jsdom, the date line under the cap on each
+
+simLeagueCaps: green. Four caps, two sources each, read on one day, and every screen says which day.
