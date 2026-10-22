@@ -1,0 +1,25 @@
+PASS cold standalone pack: no-preference, actual free draw and dismissal
+PASS cold standalone pack: reduce, actual free draw and dismissal
+PASS delayed academy: no-preference/dismiss/cold standalone, saved moves and notice lifetime intact
+PASS delayed academy: no-preference/expire/cold standalone, saved moves and notice lifetime intact
+PASS delayed academy: no-preference/resolve/cold standalone, saved moves and notice lifetime intact
+PASS delayed academy: no-preference/resolve/Stadium styles, saved moves and notice lifetime intact
+PASS delayed academy: reduce/dismiss/cold standalone, saved moves and notice lifetime intact
+PASS delayed academy: reduce/expire/cold standalone, saved moves and notice lifetime intact
+PASS delayed academy: reduce/resolve/cold standalone, saved moves and notice lifetime intact
+PASS delayed academy: reduce/resolve/Stadium styles, saved moves and notice lifetime intact
+node:fs:1630
+  const result = binding.readdir(
+                         ^
+
+Error: ENOENT: no such file or directory, scandir '/home/runner/work/ballpark-hero/ballpark-hero/dist/assets'
+    at Object.readdirSync (node:fs:1630:26)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simVictoryMoment.mjs:203:25
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'scandir',
+  path: '/home/runner/work/ballpark-hero/ballpark-hero/dist/assets'
+}
+
+Node.js v24.22.0
