@@ -66,6 +66,15 @@ Measured (r1539-c1 and r1539-c2 on f968a135, r1539-c3 for the mutation):
   320 red (centre on the banner, the button 407 to 451 wholly under it, the box 141 px under it), 390 red (18 of the
   button's 44 px and 43 px of the box under the banner), 1280 green.
 
+## Final gates (on 941a1a62, remote checks r1539-f1 to r1539-f7)
+
+tsc 0; vitest 0 (13 tycoon files, 101 tests); every tycoon sim 0 (simTycoonScorelines' log identical to the base's);
+retake-head 0 (12 of 12 histories reproduce, 0 differ); the walks 0 (pf1 to pf3, playTycoonScorelines, the fit walks,
+playHomeFold, checkTycoonGroundGrowth, qaFreeKickRange, playTycoonSaleReview1083 alone); every control on its exit code;
+the rule fences 0 except the database blocked pair; sweepWeight 0 (/stadium-tycoon 303.4K against 303.3K on 268e3b97).
+Red on head and base alike, the same first line: simWritesAreSent, simTycoonGoalFlight, simSetPiecePresentation,
+simTycoonSeasonReview. Not checked: simPrerender (needs build:seo). Details: results-g/finish-1539.md section 5.
+
 Choices made: the "answered banner" line is not in the permanent walk (the walk refuses a line with no banner on screen;
 critic item 6), and Round 1536's probe measured it once. The page-must-not-jump check has its own control (jump), as
 critic item 18 asked. scripts/lib/answerConsent.mjs (Round 1535) is not in this tree, so BANNER stays.
