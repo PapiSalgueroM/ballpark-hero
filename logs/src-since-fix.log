@@ -1,0 +1,3 @@
+ src/data/homeCopy.ts |  8 ++++----
+ src/pages/Index.tsx  | 23 +++++++++++------------
+ 2 files changed, 15 insertions(+), 16 deletions(-)

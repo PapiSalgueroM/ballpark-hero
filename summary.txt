@@ -1,0 +1,14 @@
+head exit=0 0s | 378d6047193e3bb96128cc87ae3f0b1ff929f9e3
+desk-def exit=0 39s | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+tsc exit=0 92s | 
+sweep-1 exit=0 726s | SWEEP 1..20: 20 streams, 0 red
+sweep-2 exit=0 710s | SWEEP 21..40: 20 streams, 0 red
+ctl-dropone exit=0 32s | simNbaGmDesk: control dropone fired (20 failures, as it should)
+sweep-3 exit=0 678s | SWEEP 41..59: 19 streams, 0 red
+vitest exit=0 6s |    Duration  6.01s (transform 1.57s, setup 341ms, collect 3.64s, tests 3.74s, environment 1.98s, prepare 793ms)
+ctl-nohandback exit=0 41s | simNbaGmDesk: control nohandback fired (12 failures, as it should)
+ctl-overlimit exit=0 34s | simNbaGmDesk: control overlimit fired (8 failures, as it should)
+dashes exit=0 0s | added lines read: 1690, with a dash: 0; commit messages read: 15, with a dash: 0
+src-since-fix exit=1 0s |  2 files changed, 15 insertions(+), 16 deletions(-)
+norival exit=0 21s | No rival product names found. 0 findings.
+anchors exit=0 52s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
