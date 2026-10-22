@@ -68,9 +68,12 @@ export function challengeByStat(stat: string | null | undefined): NbaFiveChallen
  * keyed by the game's team names (src/data/nbaTeams.ts). Relocations count
  * for the franchise that carries the history today. The same map, keyed by
  * nickname, has served supabase/functions/nba-validate-player since 2026-07.
+ * Atlanta carries STL: the club was the St. Louis Hawks through 1967-68 and
+ * moved in 1968 (Basketball Reference's ATL franchise page codes those seasons
+ * STL; NBA.com's Hawks history says the same), inside the table's 1965-66 on.
  */
 export const NBA_FIVE_FRANCHISE_CODES: Record<string, string[]> = {
-  'Atlanta Hawks': ['ATL'],
+  'Atlanta Hawks': ['ATL', 'STL'],
   'Boston Celtics': ['BOS'],
   'Brooklyn Nets': ['BRK', 'NJN', 'NYN'],
   'Charlotte Hornets': ['CHO', 'CHH', 'CHA'],
@@ -152,6 +155,8 @@ export interface NbaFiveRecordRow {
   player_name: string | null;
   teams: string | null;
   year_from: string | null;
+  /** Read for the span check below; fixtures may leave it out. */
+  year_to?: string | null;
   games: number | null;
   points: number | null;
   trb: number | null;
@@ -193,12 +198,47 @@ export function recordTeamCodes(row: NbaFiveRecordRow): string[] {
 }
 
 /**
- * Builds what one dealt team allows. A roster name that appears twice on the
- * team, or that matches two record rows listing the franchise, is held as a
- * namesake: the game cannot tell whose numbers are whose, so it scores
- * neither. A record row that does not list the franchise is never used.
+ * No NBA career has run past 23 seasons: LeBron James's 2025-26 was the first
+ * 23rd season ever (AP's season opener report and Al Jazeera's July 2025
+ * report on his option). nba_player_stats keeps one row per display name and
+ * no person key, so a row spanning more seasons than any one man has played
+ * is two men under one name (a father and a son, for one). The bound leaves
+ * two seasons of room for careers still running.
  */
-export function buildTeamPool(team: string, roster: NbaFiveRosterRow[], records: NbaFiveRecordRow[]): NbaFiveTeamPool {
+export const NBA_FIVE_MAX_CAREER_SEASONS = 25;
+
+/** Seasons from his first to his last, or null when either end is unreadable. */
+export function careerSeasons(row: NbaFiveRecordRow): number | null {
+  const first = startYearOf(row.year_from), last = startYearOf(row.year_to);
+  return first === null || last === null ? null : last - first + 1;
+}
+
+/** How many nba_players_extended_v2 rows carry each name key, table wide. */
+export function nbaFiveNameCounts(rows: NbaFiveRosterRow[]): Map<string, number> {
+  const counts = new Map<string, number>();
+  for (const row of rows) {
+    const key = nbaFiveNameKey(rosterName(row));
+    if (key) counts.set(key, (counts.get(key) ?? 0) + 1);
+  }
+  return counts;
+}
+
+/**
+ * Builds what one dealt team allows. A roster name is held as a namesake when
+ * it appears twice on the team, when the search table holds it on more than
+ * one row anywhere (tableNames, from nbaFiveNameCounts: the record keeps one
+ * row per name, so two men on two teams would both get it), when it matches
+ * two record rows listing the franchise, or when its record spans more
+ * seasons than any one career has: the game cannot tell whose numbers are
+ * whose, so it scores none of them. A record row that does not list the
+ * franchise is never used.
+ */
+export function buildTeamPool(
+  team: string,
+  roster: NbaFiveRosterRow[],
+  records: NbaFiveRecordRow[],
+  tableNames?: Map<string, number>,
+): NbaFiveTeamPool {
   const codes = new Set(NBA_FIVE_FRANCHISE_CODES[team] ?? []);
   const byKey = new Map<string, NbaFiveRecordRow[]>();
   for (const r of records) {
@@ -220,7 +260,9 @@ export function buildTeamPool(team: string, roster: NbaFiveRosterRow[], records:
     if (!key || seen.has(key)) continue;
     seen.add(key);
     const matches = byKey.get(key) ?? [];
-    const twice = (rosterCount.get(key) ?? 0) > 1 || matches.length > 1;
+    const twice = (rosterCount.get(key) ?? 0) > 1 || matches.length > 1
+      || (tableNames?.get(key) ?? 0) > 1
+      || matches.some(r => (careerSeasons(r) ?? 0) > NBA_FIVE_MAX_CAREER_SEASONS);
     entries.push({
       key,
       name,
@@ -272,10 +314,10 @@ export function valueFor(entry: NbaFivePoolEntry, challenge: NbaFiveChallengeDef
 
 /** What the page says when a pick has no number. Casual, no dash. */
 export function refusalText(reason: NbaFiveRefusal, name: string, challenge: NbaFiveChallengeDef): string {
-  if (reason === 'namesake') return `More than one ${name} shows up here and we can't tell whose numbers are whose. Pick someone else.`;
+  if (reason === 'namesake') return `More than one ${name} shows up in our tables and we can't tell whose numbers are whose. Pick someone else.`;
   if (reason === 'untracked') return `Steals and blocks only started counting in 1973-74 and ${name} was already playing, so his career line isn't complete. Pick someone else.`;
   if (reason === 'missing') return `Our stat table has no ${challenge.unit} for ${name}. Pick someone else.`;
-  return `We can't find a career line for ${name} in our stat table (it holds careers from 1965-66 on), so there's no number to score. Pick someone else.`;
+  return `We can't match ${name} to a career line in our stat table, so there's no number to score. Pick someone else.`;
 }
 
 /* ---------------- the five, against the best five allowed ---------------- */
