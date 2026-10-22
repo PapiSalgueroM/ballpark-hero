@@ -1,0 +1,3 @@
+#!serial
+m-rollfirst: node .rc/x/mut1543.mjs rollfirst && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonScorelines.mjs; s=$?; git checkout -- src scripts; exit $s
+m-restore: git diff --stat | tail -3; git diff --quiet && echo RESTORED

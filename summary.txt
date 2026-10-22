@@ -1,0 +1,2 @@
+m-rollfirst exit=1 252s | simTycoonScorelines: 37 checks, 10 failed [252 s]
+m-restore exit=0 0s | RESTORED
