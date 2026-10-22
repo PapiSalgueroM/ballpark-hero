@@ -846,7 +846,7 @@ for (const w of walked) {
 console.log('\nthe cookie banner');
 for (const arm of ARMS) {
   const mode = CONTROL === 'open' ? 'open' : arm;
-  for (const choice of ['essential', 'accept']) await bannerCheck(browser, { mode, raw, choice });
+  for (const choice of ['reject', 'accept']) await bannerCheck(browser, { mode, raw, choice });
   if (CONTROL === 'open') break;
 }
 
