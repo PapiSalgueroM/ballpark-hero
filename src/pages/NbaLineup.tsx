@@ -420,11 +420,17 @@ const NbaLineup = () => {
             "Submit your lineup for a score out of 100 against the best five your teams allowed",
           ]}
           examples={[
-            "PG from Celtics = Jrue Holiday, Rajon Rondo",
-            "SG from Bulls = Michael Jordan, Zach LaVine",
-            "SF from Lakers = LeBron James, Kobe Bryant",
-            "PF from Bucks = Giannis Antetokounmpo, Bobby Portis",
-            "C from Nuggets = Nikola Jokić, Dikembe Mutombo",
+            /* The search lists each man under ONE team, so every example is a
+               whole career with that one franchise (Basketball Reference's
+               player pages for all five; second sources: nba.com's legend
+               profiles for Stockton, Miller and Bird, ESPN's July 2018 report
+               of Nowitzki's 21st season with Dallas, Sports Illustrated's 2009
+               Hall of Fame piece on Robinson's 14 years with the Spurs). */
+            "PG from Jazz = John Stockton",
+            "SG from Pacers = Reggie Miller",
+            "SF from Celtics = Larry Bird",
+            "PF from Mavericks = Dirk Nowitzki",
+            "C from Spurs = David Robinson",
             "Challenge: Build lineup with highest combined PPG"
           ]}
         />
