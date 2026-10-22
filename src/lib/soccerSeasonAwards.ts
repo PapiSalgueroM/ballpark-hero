@@ -11,10 +11,12 @@
    One stream per award, keyed to the career and the season (keyedRng), so the main stream never moves: the engine
    still makes the old coin draws in the old order and throws them away (the Round 1329 rule).
 
-   THE FIELD. Measured, never typed: 2,200 house careers a position (scripts/lib/careerStep.mjs, every era from
-   1990 to 2020, start overall 56 to 68) read at the awards block on 2026-10-22, every season of 20 or more games,
-   about 41,000 a position. scripts/simSoccerSeasonAwards.mjs section 1 measures it again on other seeds and fails
-   when a row goes stale. Like the US table, it is the engine's own players, who are all good enough to hold a
+   THE FIELD. Measured, never typed: the house fleet of scripts/simSoccerSeasonAwards.mjs section 1
+   (scripts/lib/careerStep.mjs, eras 1990, 2000, 2010 and 2020, start overall 56 to 68) read at the awards block of
+   this engine on 2026-10-22, every season of 20 or more games: six seeds of 600 careers a position, about 68,000
+   seasons a position, the strikers on 2,400 careers a seed (remote check r1525-fx-m1). A first table, measured on
+   the engine before this round, sat under this round's own fleet on every striker row (review r1525-run-s1), so it
+   was measured again here. Section 1 measures it again on other seeds and fails when a row goes stale. Like the US table, it is the engine's own players, who are all good enough to hold a
    job, so every bar sits a little high: the safe direction.
 
    THE SCORE, from numbers the season row holds.
@@ -56,15 +58,15 @@ export interface SoccerAwardSeason {
 type Field = { mean: number; sd: number };
 const POSITIONS = ['ST', 'LW', 'RW', 'CAM', 'CM', 'CDM', 'CB', 'LB', 'RB', 'GK'];
 /** [level mean, level sd] per position, in POSITIONS order. */
-const LEVEL_ROWS = [[6.53, 0.95], [6.58, 0.93], [6.61, 0.94], [6.52, 0.84], [6.42, 0.74], [6.43, 0.74], [6.41, 0.75], [6.44, 0.75], [6.44, 0.75], [6.68, 0.77]];
+const LEVEL_ROWS = [[6.56, 0.95], [6.6, 0.95], [6.6, 0.94], [6.54, 0.85], [6.43, 0.76], [6.44, 0.74], [6.41, 0.74], [6.45, 0.75], [6.44, 0.75], [6.69, 0.78]];
 /** A position's level field (exported for the harness). An unknown position reads the first row. */
 export function soccerField(position: string): Field {
   const [mean, sd] = LEVEL_ROWS[Math.max(0, POSITIONS.indexOf(position))];
   return { mean, sd };
 }
 /** Strikers' goals at a top two tier club, and keepers' clean sheets, every season of 20 or more games. */
-export const SOCCER_GOALS_FIELD: Field = { mean: 14.55, sd: 8.08 };
-export const SOCCER_SHEETS_FIELD: Field = { mean: 10.01, sd: 3.26 };
+export const SOCCER_GOALS_FIELD: Field = { mean: 14.71, sd: 8.17 };
+export const SOCCER_SHEETS_FIELD: Field = { mean: 10.06, sd: 3.27 };
 /** The goals a season's Puskas jury chooses between. A design number: the game's own estimate. */
 export const PUSKAS_FIELD_GOALS = 2000;
 

@@ -180,18 +180,22 @@ const AWARD_NAMES = ['Player of the Year', 'Puskás Award', 'Golden Boot', 'Gold
 
 if (runs('1')) {
   console.log('1) the field table against the engine it was measured on');
-  const STALE = '[6.53, 0.95]';
+  const STALE = '[6.56, 0.95]';
   let awardsText = read(AWARDS);
   once(awardsText, STALE, AWARDS);
-  if (CONTROL === 'stale') { console.log('   CONTROL stale: the striker level mean moved from 6.53 to 6.73 in this bundle\'s table'); awardsText = awardsText.replace(STALE, STALE.replace('6.53', '6.73')); }
+  if (CONTROL === 'stale') { console.log('   CONTROL stale: the striker level mean moved from 6.56 to 6.76 in this bundle\'s table'); awardsText = awardsText.replace(STALE, STALE.replace('6.56', '6.76')); }
   const S = await soccer(CONTROL === 'stale' ? 'field-stale' : 'field', CONTROL === 'stale' ? { [AWARDS]: awardsText } : {});
   const W = S.W;
   const only = process.env.SIM_SEASON_AWARDS_POS ? [process.env.SIM_SEASON_AWARDS_POS] : CONTROL === 'stale' ? ['ST'] : POS;
   const N = Number(process.env.SIM_SEASON_AWARDS_FIELD_N || 600);
-  /* Measured headroom, remote check r1525-f1 (2026-10-22, seeds 1525, 2024 and 77, 600 careers a position, all ten
-     positions): the largest gap between the table and a run was 0.03 on a level mean and
-     0.02 on its sd, 0.11 and 0.05 on the strikers' goals, 0.10 and 0.05 on the keepers' clean sheets. Each bound is
-     twice that, so a run never sits near it, and an engine change that moves a field by a tenth of its sd fails. */
+  /* Measured headroom. First set from r1525-f1 (three seeds, against a table measured on the engine before the round),
+     which proved too thin: review r1525-run-s1 found the strikers' goals row red on 6 of 12 seeds at 600 careers,
+     every seed above a stale table. The table was measured again on this engine (r1525-fx-m1, seeds 101 to 106, 600
+     careers a position, the strikers on 2,400), and the strikers now play four times the careers. Against the
+     pooled table each seed's largest gap was 0.023 on a level mean and 0.015 on its sd, 0.042 and 0.028 on the
+     strikers' goals, 0.058 and 0.042 on the keepers' clean sheets; r1525-fx-v1 and r1525-fx-v2 (seeds 1 to 12, the
+     reviewer's) then measured it out of sample. The bounds are unchanged and sit at 2.6 times, 6 times and 3.4 times
+     those gaps, and an engine change that moves a field by a tenth of its sd fails. */
   const BOUNDS = { level: [0.06, 0.04], goals: [0.25, 0.15], sheets: [0.2, 0.12] };
   const MEASURE = process.env.SIM_SEASON_AWARDS_MEASURE === '1';
   const check = (what, got, want, [dm, ds]) => {
