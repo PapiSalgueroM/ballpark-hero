@@ -16455,3 +16455,10 @@ IndexNow39759337399 at `2947aaf092668d9621968dea14fcb34065c1565d` accepted exact
 Closure adopts only two proof workflows plus these three documentation additions on a separate closure branch. It must not add a commit to either IndexNow trigger branch or republish the product. Current main `e3deb2cb30ad1dc92a2e9fc3cef03fc096261d15` differed from published4b4 only by20 WORKBOARD additions when checked. Recheck actual main before adoption and preserve every existing documentation byte.
 
 I retains publication ownership. Root1447 and J game work remain separate; no app/game/engine/save, provider, GA activation or historical785/1441 waiver is part of this closure.
+
+
+### Round1447 dialog layout matrix candidate pending, 2026-10-22
+
+The measured old-CSS baselines are separate and remain preserved: Original9 at86fb/run39746799578 has3 Stadium cookie interceptions,3 Idle pending-shell clipping outcomes and3 healthy Front Office cases. Academy3 at3a5/run39754554795 has3 measured cookie interceptions and3 passing answered actions. Radix12 at16883/run39764128344 is fully admitted healthy, including36 trusted primary dismissals and the real help reopen after Reject all.
+
+The new `codex/consent-dialog-layout-1447` candidate starts from exact mainc75d04dad21dae05bb110aa10e9e99d670adc38e. Only the reviewed global CSS span, pinned proof inputs and append-only status notes are authorized. The remote matrix must build once, then collect72 fresh contexts across Green, admitted old CSS and restored Green. The exact nine old causes must return only in the old arm; all Green/restored cases and all Radix preservation cases must pass. Source, generated output, completed dist, font, proof input and offline transport holds remain required. The matrix cannot grant product qualification by itself: Root must review the complete compiled CSS diff and finish the broader release gates. No game or data change, merge, publication or live claim is included. I retains publication coordination.
