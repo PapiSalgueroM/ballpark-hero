@@ -1,0 +1,38 @@
+1) the bound: a coordinator moves his unit at most 3 points, for any rating
+   team strength, what the win model reads: 42328 staff pairs probed, off the unit edges 0, past the bound 0; a 95 pair moves it 3.00
+   edge at 0/45/70/95/150: -3.00 / -3.00 / 0.00 / 3.00 / 3.00; salary at 45/70/95: 3 / 10 / 16
+2) offense: over 300 seeds a better offensive coordinator scores more, never past his cap
+   points scored per game at 45/55/65/70/75/85/95: 28.92 / 31.04 / 33.21 / 34.27 / 35.31 / 37.38 / 39.60
+   45 to 95 uplift 10.68, smallest step 1.04, seeds that went the wrong way 0, games compared 21152 (+448 that flipped), cap breaks 0
+   wins a season at 45/95: 8.917 / 9.797, gain 0.880 (band 0.6 to 1.3), seed steps that lost wins 0
+3) defense: over 300 seeds a better defensive coordinator allows less, never past his cap
+   points allowed per game at 45/55/65/70/75/85/95: 25.49 / 23.32 / 21.10 / 20.05 / 19.04 / 17.04 / 15.03
+   45 to 95 drop 10.46, smallest step 1.01, seeds that went the wrong way 0, games compared 21161 (+439 that flipped), cap breaks 0
+   wins a season at 45/95: 8.913 / 9.760, gain 0.847 (band 0.6 to 1.3), seed steps that lost wins 0
+4) ten season dynasties over 20 seeds complete, and the budget never goes negative
+   provoked: a 8 point hire on a 7 point pot was refused
+   provoked payroll walk: a 30 point budget against two 16 point 95s walked someone in 4 of 10 seeds, broken 0; chargePayroll grid 1150 cases, broken 0
+   200 seasons: budget negative 0 time(s), hires 108, refused 110 (broken refusals 0), walked on payroll 0
+   empty Heisman races 0, bad fields 0, teams off twelve games 0, skill holes 0, empty AI chairs 0
+5) rivalry week: one rival each, in-state pairs are real geography, swings stay in range
+   22 pairs: 13 real series, 3 in-state, 6 generated; e.g. OSU-MICH, ALA-AUB, TEX-A&M, FLA-FSU
+   4400 rivalry games played: swings out of range 0, morale not reaching strength 0, budgets off the swing 0 (over 200 of my own)
+   conference race: 800 conference seasons, 600 with uneven league game counts; a better conference record left out of the title game 0 time(s); percentage picked a different title game from raw wins 0 time(s)
+6) strength of schedule: the number is the opponents actually played, and a tie goes to the tougher schedule
+   8800 team seasons checked against the game log: mismatches 0, order disagreements 0
+   constructed pair: SOS 85.6 vs 66.9, ranked 1 and 2
+   the schedule changed the Playoff field in 19 of 200 seasons
+7) old saves: a pre-728 save plays exactly as it did, and upgrades at its offseason
+   legacy digest 58ee7ea0fd820e94..., golden 58ee7ea0fd820e94...
+   upgraded save: 10 seasons played, staff on every program, rivalry week played
+8) the board: an old save loads, a new dynasty has its staff, the window refuses what it cannot afford
+   vitest exit 0, 4 passed (4)
+9) league balance: over 600 seasons the program layer tilts the league no further than measured, and the slate costs what it was measured to
+   seasons started on the slate: legacy 0, layer on the old draw 0, layer on the slate 600 (of 600 each)
+   the layer: upsets 20.32% legacy, 18.29% with the layer on the old draw, drift -2.03 (band -3.5 to -0.5)
+   the layer: UNLV regular season wins 2.242 legacy, 1.892 with the layer on the old draw, drift -0.350 (band -0.8 to 0.1)
+   the slate: upsets 16.86% with the layer on the slate, drift -1.43 (band -99 to 99)
+   the slate: UNLV regular season wins 0.835 on the slate, drift -1.057 (band -99 to 99); both together -1.41
+   top six prestige titles 93.2% legacy, 91.8% on the old draw, 95.8% on the slate (printed, too few titles to band)
+
+simCfbStaff: all green

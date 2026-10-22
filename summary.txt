@@ -1,0 +1,8 @@
+m1000 exit=0 58s | simCfbStaff: all green
+m2000 exit=0 71s | simCfbStaff: all green
+m0 exit=0 74s | simCfbStaff: all green
+m3000 exit=0 73s | simCfbStaff: all green
+m4000 exit=0 60s | simCfbStaff: all green
+m-doubled exit=0 72s | control "doubled": 4 failure(s) fired as expected, the check works
+m-noslate exit=1 17s | control "noslate": changed NOTHING, the check is dead
+base exit=0 57s |    UNLV regular season wins 2.24 legacy, 1.89 with the layer, drift -0.35 (band -0.8 to 0.1); top six prestige titles 91.5% and 92.5%

@@ -1,0 +1,15 @@
+seed base 0
+   upsets 20.14% legacy, 18.20% with the layer, drift -1.93 (band -3.5 to -0.5)
+   UNLV regular season wins 2.21 legacy, 1.79 with the layer, drift -0.41 (band -0.8 to 0.1); top six prestige titles 93.0% and 94.7%
+seed base 1000
+   upsets 20.36% legacy, 18.46% with the layer, drift -1.90 (band -3.5 to -0.5)
+   UNLV regular season wins 2.24 legacy, 1.87 with the layer, drift -0.37 (band -0.8 to 0.1); top six prestige titles 92.0% and 92.2%
+seed base 2000
+   upsets 20.32% legacy, 18.29% with the layer, drift -2.03 (band -3.5 to -0.5)
+   UNLV regular season wins 2.24 legacy, 1.89 with the layer, drift -0.35 (band -0.8 to 0.1); top six prestige titles 93.2% and 91.8%
+seed base 3000
+   upsets 20.02% legacy, 18.50% with the layer, drift -1.53 (band -3.5 to -0.5)
+   UNLV regular season wins 2.19 legacy, 1.95 with the layer, drift -0.24 (band -0.8 to 0.1); top six prestige titles 92.0% and 94.5%
+seed base 4000
+   upsets 20.36% legacy, 18.35% with the layer, drift -2.01 (band -3.5 to -0.5)
+   UNLV regular season wins 2.24 legacy, 1.89 with the layer, drift -0.35 (band -0.8 to 0.1); top six prestige titles 91.5% and 92.5%
