@@ -1,0 +1,2 @@
+DRYPROBE x6 {"p90":75.7,"median":73.5,"p10":48.2,"ends":{"a pack":18,"a title":26,"a badge":4,"a region":2},"meanTitles":70.9,"meanGems":4183.6,"prices":[126,426,1068],"p75":75.5,"max":104.5,"sec":38}
+DRYPROBE x8 {"p90":75.7,"median":75.5,"p10":42,"ends":{"a pack":16,"a title":29,"a region":2,"a badge":2,"a star":1},"meanTitles":70.9,"meanGems":4183.6,"prices":[168,568,1424],"p75":75.7,"max":96.7,"sec":31}

@@ -1,0 +1,3 @@
+dry3-c exit=0 50s | DRYPROBE x12 {"p90":76.5,"median":75.5,"p10":48.3,"ends":{"a pack":6,"a title":37,"a badge":6,"a region":1},"meanTitles":70.9,"meanGems":4183.6,"prices":[252,852,2136],"p
+dry3-b exit=0 54s | DRYPROBE x1+wall {"p90":1386.3,"median":1109,"p10":784.3,"ends":{"a pack":26,"the end of the run":24},"meanTitles":5.3,"meanGems":297.7,"prices":[21,71,178],"p75":1306.7,
+dry3-a exit=0 69s | DRYPROBE x8 {"p90":75.7,"median":75.5,"p10":42,"ends":{"a pack":16,"a title":29,"a region":2,"a badge":2,"a star":1},"meanTitles":70.9,"meanGems":4183.6,"prices":[168,568

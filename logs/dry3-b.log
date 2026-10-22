@@ -1,0 +1,2 @@
+DRYPROBE x1000 {"p90":95.2,"median":75.7,"p10":52.5,"ends":{"a title":43,"a badge":5,"a region":2},"meanTitles":70.9,"meanGems":4183.6,"prices":[21000,71000,178000],"p75":75.7,"max":113.5,"sec":35}
+DRYPROBE x1+wall {"p90":1386.3,"median":1109,"p10":784.3,"ends":{"a pack":26,"the end of the run":24},"meanTitles":5.3,"meanGems":297.7,"prices":[21,71,178],"p75":1306.7,"max":1408.7,"sec":20}
