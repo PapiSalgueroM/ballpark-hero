@@ -1,0 +1,4 @@
+  none: save before the reload {"week":0,"played":0,"instr":{"press":1,"tempo":0,"width":0,"line":0}}
+  none: save after the tap {"week":1,"played":1,"instr":{"press":1,"tempo":0,"width":0,"line":0}}
+fx-slowload none: green, the tap played the match
+  page errors: 0 

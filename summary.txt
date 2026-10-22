@@ -1,0 +1,6 @@
+build exit=0 24s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fx-none exit=0 10s |   page errors: 0 
+fx-fail exit=0 11s |   page errors: 0 
+fx-slow exit=0 16s |   page errors: 0 
+weight exit=0 26s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+walk exit=0 110s | playCmTactics: all green (41 checks)
