@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+walk: node .rc/x/walkRetire.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+playBoxing1086: node scripts/playBoxingShowForecast1086.mjs
+vitest-more: node_modules/.bin/vitest run src/test/mmaBoutRecap.test.tsx src/test/mmaPromotion.test.tsx src/test/noDoubleRecord.test.tsx --testTimeout=300000 --hookTimeout=120000

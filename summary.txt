@@ -1,0 +1,5 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+playBoxing1086 exit=1 0s | Node.js v24.22.0
+walk exit=1 2s | Node.js v24.22.0
+simResultMoment exit=0 8s | simResultMoment: green. Every live game reaches the shared result moment or is listed with what it draws instead, the pill shows exactly the score it is given, the three 
+vitest-more exit=0 27s |    Duration  26.86s (transform 4.93s, setup 366ms, collect 7.85s, tests 22.87s, environment 2.00s, prepare 714ms)

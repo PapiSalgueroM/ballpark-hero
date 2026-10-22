@@ -1,0 +1,18 @@
+   ok   phone: Retire is open at 10 fights
+   ok   phone: the confirm opens inside the screen (y 474)
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+locator.waitFor: Error: strict mode violation: getByText('Final verdict') resolved to 2 elements:
+    1) <p class="text-xs uppercase tracking-wide text-muted-foreground">Final verdict</p> aka getByText('Final verdict', { exact: true })
+    2) <h3 class="text-sm font-semibold text-foreground mb-2">Watching the ring before the final verdict</h3> aka getByRole('heading', { name: 'Watching the ring before the' })
+
+Call log:
+  - waiting for getByText('Final verdict') to be visible
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/.rc/x/walkRetire.mjs:52:41 {
+  log: [ "  - waiting for getByText('Final verdict') to be visible" ]
+}
+
+Node.js v24.22.0
