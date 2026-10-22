@@ -1,0 +1,6 @@
+sa-2 exit=0 150s | simSoccerSeasonAwards: green
+sa-2-seed77 exit=0 159s | simSoccerSeasonAwards: green
+sa-2-seed2024 exit=0 171s | simSoccerSeasonAwards: green
+form-5-nogate exit=1 13s | simCareerForm: RED, 1 failure(s)
+form-5 exit=0 25s | simCareerForm: green
+sa-34 exit=0 88s | simSoccerSeasonAwards: green
