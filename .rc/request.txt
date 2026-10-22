@@ -1,0 +1,7 @@
+set1: node scripts/simNbaGmDesk.mjs
+set2: SIM_NBA_GM_DESK_SEEDS=11,12,13,14,15,16,17,18,19,20 node scripts/simNbaGmDesk.mjs
+set3: SIM_NBA_GM_DESK_SEEDS=21,22,23,24,25,26,27,28,29,30 node scripts/simNbaGmDesk.mjs
+base-set1: git worktree add -q /tmp/base 7a8750ba && cd /tmp/base && ln -s "$GITHUB_WORKSPACE/node_modules" node_modules && node scripts/simNbaGmDesk.mjs
+controls-a: for c in coinflip shortscale norfa latetrade noguard droppick; do SIM_NBA_GM_DESK_CONTROL=$c node scripts/simNbaGmDesk.mjs > /tmp/gd-$c.txt 2>&1; echo "$c exit $? | $(tail -1 /tmp/gd-$c.txt | cut -c1-200)"; done
+controls-b: for c in flatstaff flatgrowth nodefault pilefit noedgeround noedgepo; do SIM_NBA_GM_DESK_CONTROL=$c node scripts/simNbaGmDesk.mjs > /tmp/gd-$c.txt 2>&1; echo "$c exit $? | $(tail -1 /tmp/gd-$c.txt | cut -c1-200)"; done
+controls-c: for c in noinjhook nomirror nostepien noruleblock dayonestature sheetrepick; do SIM_NBA_GM_DESK_CONTROL=$c node scripts/simNbaGmDesk.mjs > /tmp/gd-$c.txt 2>&1; echo "$c exit $? | $(tail -1 /tmp/gd-$c.txt | cut -c1-200)"; done
