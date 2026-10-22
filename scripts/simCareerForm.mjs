@@ -161,7 +161,7 @@ const ENGINE = 'src/lib/soccerCareerEngine.ts';
 const STEP_LINE = "Math.round(moraleForm('soccer', morale as number)) || 0";
 /* Round 1525: the Puskas gate is soccerSeasonAwards.ts's eligibility line now (the award is won against a field). */
 const AWARDS = 'src/lib/soccerSeasonAwards.ts';
-const GATE_LINE = "case 'Puskás Award': return s.goals > 0 && puskasAwardExists(s.year);";
+const GATE_LINE = 'const puskasEligible = (s: SoccerAwardSeason) => s.goals > 0 && puskasAwardExists(s.year);';
 const PRESS_MARK = 'function generateSeasonStats(state, clubs) {';
 const AT_PRESS = 'const moraleAtPress = (state: CareerState): number => MORALE_AT_PRESS.get(state) ?? state.morale;';
 const APPS_MARK = 'dressingRoomApps(phoneAppsSwing(state), moraleAtPress(state))';
@@ -197,7 +197,7 @@ async function soccer(name, { stepOff = false, noGate = false, postText = false,
   if (noGate) {
     const awards = read(AWARDS);
     if (awards.split(GATE_LINE).length !== 2) { console.log(`ABORT: ${AWARDS} does not hold ${GATE_LINE} once`); process.exit(1); }
-    serve[AWARDS] = awards.replace(GATE_LINE, "case 'Puskás Award': return s.goals > 0;");
+    serve[AWARDS] = awards.replace(GATE_LINE, 'const puskasEligible = (s: SoccerAwardSeason) => s.goals > 0;');
   }
   if (double) {
     let engine = serve[ENGINE] ?? read(ENGINE);

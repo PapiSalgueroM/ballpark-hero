@@ -5761,9 +5761,7 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
      them feeds a branch the bundler cannot rule out, so nothing later in the season moves. */
   const playedBefore = s.seasons.filter(ss => ss.type === "playing");
   const awardSeason: SoccerAwardSeason = {
-    year: thisYear, apps: season.apps, goals: season.goals, cleanSheets: season.cleanSheets, rating: season.rating,
-    yellowCards: season.yellowCards, redCards: season.redCards, championsLeague: season.championsLeague,
-    clubTier: season.clubTier, position: s.position, age: s.age, level: seasonLevel(season.rating, season.clubTier),
+    ...season, year: thisYear, position: s.position, age: s.age, level: seasonLevel(season.rating, season.clubTier),
     prevRating: playedBefore.length >= 2 ? (playedBefore[playedBefore.length - 1]?.rating || 0) : null,
   };
   const wonSeasonAward = (award: SoccerSeasonAward): boolean =>

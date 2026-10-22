@@ -13,7 +13,7 @@
  * then 1523, then 1334 out in that order with one receipt. Applied IN ORDER to this round's engine they give the
  * tenth's head byte for byte (LF):
  *   src/lib/soccerCareerEngine.ts
- *     head sha256 921cb4ddc55efa2f12454f4784984dcbb142d0f8ba760f16c1ecf38251be1f87
+ *     head sha256 66805cfe259b84fafd971cbae2cc3e796c07d5fa0fc8b94f12e62513ab31a7b7
  *     base sha256 41e017d973ddbff539d6752313ca068cec04a08dbc671a7698728f1d7961650f
  * (base: git show 41368514:<file>, Round 1523's closing head, whose engine is the tenth inverse's head
  * pin). Every row is required exactly once at its turn. Rows are regenerated, never hand edited, after any change to
@@ -23,7 +23,7 @@
 export const SOCCER_AWARDS_BASE = '41368514';
 export const SOCCER_AWARDS_SHA256 = {
   "src/lib/soccerCareerEngine.ts": {
-    "head": "921cb4ddc55efa2f12454f4784984dcbb142d0f8ba760f16c1ecf38251be1f87",
+    "head": "66805cfe259b84fafd971cbae2cc3e796c07d5fa0fc8b94f12e62513ab31a7b7",
     "base": "41e017d973ddbff539d6752313ca068cec04a08dbc671a7698728f1d7961650f"
   }
 };
@@ -43,7 +43,7 @@ export const SOCCER_AWARDS_ROWS = [
     from: "  const diff = overall - clubAvg;\n  let base = 6.0 + diff * RATING_PER_OVERALL;\n  if (position === \"GK\") { base += cleanSheets * 0.08; }",
     to: "  const diff = overall - clubAvg;\n  let base = 6.0 + diff * 0.06;\n  if (position === \"GK\") { base += cleanSheets * 0.08; }" },
   { name: "awards-engine-5", file: "src/lib/soccerCareerEngine.ts",
-    from: "\n  /* Round 1525: the season awards were a bar on his own numbers and a coin (a 40 goal season lost the Golden Boot\n     seven times in ten). Each is now won against a field drawn on a stream keyed to the career, the season and\n     the award (soccerSeasonAwards.ts, on careerAwards.ts's draw), and only in the seasons it was given for. Every\n     old coin is still drawn, the same ones in the same order, and thrown away (the Round 1329 rule): the sum of\n     them feeds a branch the bundler cannot rule out, so nothing later in the season moves. */\n  const playedBefore = s.seasons.filter(ss => ss.type === \"playing\");\n  const awardSeason: SoccerAwardSeason = {\n    year: thisYear, apps: season.apps, goals: season.goals, cleanSheets: season.cleanSheets, rating: season.rating,\n    yellowCards: season.yellowCards, redCards: season.redCards, championsLeague: season.championsLeague,\n    clubTier: season.clubTier, position: s.position, age: s.age, level: seasonLevel(season.rating, season.clubTier),\n    prevRating: playedBefore.length >= 2 ? (playedBefore[playedBefore.length - 1]?.rating || 0) : null,\n  };\n  const wonSeasonAward = (award: SoccerSeasonAward): boolean =>\n    soccerAwardWon(award, awardSeason, keyedRng(`${soccerDeckIdentity(s)}|${season.year}|award|${award}`));\n\n  // Player of the Year (domestic)",
+    from: "\n  /* Round 1525: the season awards were a bar on his own numbers and a coin (a 40 goal season lost the Golden Boot\n     seven times in ten). Each is now won against a field drawn on a stream keyed to the career, the season and\n     the award (soccerSeasonAwards.ts, on careerAwards.ts's draw), and only in the seasons it was given for. Every\n     old coin is still drawn, the same ones in the same order, and thrown away (the Round 1329 rule): the sum of\n     them feeds a branch the bundler cannot rule out, so nothing later in the season moves. */\n  const playedBefore = s.seasons.filter(ss => ss.type === \"playing\");\n  const awardSeason: SoccerAwardSeason = {\n    ...season, year: thisYear, position: s.position, age: s.age, level: seasonLevel(season.rating, season.clubTier),\n    prevRating: playedBefore.length >= 2 ? (playedBefore[playedBefore.length - 1]?.rating || 0) : null,\n  };\n  const wonSeasonAward = (award: SoccerSeasonAward): boolean =>\n    soccerAwardWon(award, awardSeason, keyedRng(`${soccerDeckIdentity(s)}|${season.year}|award|${award}`));\n\n  // Player of the Year (domestic)",
     to: "\n  // Player of the Year (domestic)" },
   { name: "awards-engine-6", file: "src/lib/soccerCareerEngine.ts",
     from: "  // Player of the Year (domestic)\n  const poyCoin = season.rating >= 8.0 && s.overall >= 82 ? Math.random() : 0;\n  if (wonSeasonAward(\"Player of the Year\")) {\n    s.awards = [...s.awards, { year: thisYear, name: \"Player of the Year\", emoji: \"🌟\" }];",

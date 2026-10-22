@@ -6,7 +6,7 @@
  *
  * 1) THE FIELD is fresh. The house fleet (scripts/lib/careerStep.mjs) is played at every position and the season
  *    at the awards block is read the way the table was measured (20 or more games; strikers' goals at a top two
- *    tier club; keepers' clean sheets; level, young level and rating per position). Every mean and sd of the
+ *    tier club; keepers' clean sheets; the level per position). Every mean and sd of the
  *    table must sit within BOUNDS of what this run measures. Fails when the engine moves under the table. Control
  *    stale (the striker level mean moved by 0.2 in the table) must fail on the strikers.
  * 2) THE RATES. A natural fleet (every position, eras 1990 to 2020): for every decision the engine made, the
@@ -22,8 +22,11 @@
  *    and by this tree with Round 1525 taken out (scripts/lib/careerSoccerAwards1525.mjs, the base's engine byte for
  *    byte). At the end of the awards block both have made the same number of Math.random draws and hold the same
  *    season row. Control dropcoins (the eight old coins no longer drawn) must part.
- * 5) THE US CAREERS. Every US module that reads careerAwards.ts bundles byte for byte the same with this round's
- *    file and with the base's. Control usdrift (one NFL All-Pro grade moved in this round's file) must part.
+ * 5) THE US CAREERS. The round lifts the field draw out of careerAwards.ts into awardDraw.ts (so this page never
+ *    loads the four US tables) and careerAwards.ts re-exports it. Each US engine is bundled with this round's
+ *    careerAwards.ts and with the base's, and seeded careers at every position and archetype (6 each, 18 seasons,
+ *    morale and team quality from a stream of their own, simCareerForm section 1's replay) must be the same string
+ *    after every season and every progress step. Control usdrift (the MLB All-Star grade moved) must part.
  * 6) LEGACY. calculateLegacy's code (comments stripped) reads no awards and no popularity, so no award this round
  *    moves can reach it directly. A doctored copy that reads state.awards must be caught (built in control).
  *
@@ -142,7 +145,7 @@ const AWARD_NAMES = ['Player of the Year', 'Puskás Award', 'Golden Boot', 'Gold
 
 if (runs('1')) {
   console.log('1) the field table against the engine it was measured on');
-  const STALE = '[6.53, 0.95, 6.05, 0.60, 7.00, 0.85]';
+  const STALE = '[6.53, 0.95]';
   let awardsText = read(AWARDS);
   once(awardsText, STALE, AWARDS);
   if (CONTROL === 'stale') { console.log('   CONTROL stale: the striker level mean moved from 6.53 to 6.73 in this bundle\'s table'); awardsText = awardsText.replace(STALE, STALE.replace('6.53', '6.73')); }
@@ -151,10 +154,10 @@ if (runs('1')) {
   const only = process.env.SIM_SEASON_AWARDS_POS ? [process.env.SIM_SEASON_AWARDS_POS] : CONTROL === 'stale' ? ['ST'] : POS;
   const N = Number(process.env.SIM_SEASON_AWARDS_FIELD_N || 600);
   /* Measured headroom, remote check r1525-f1 (2026-10-22, seeds 1525, 2024 and 77, 600 careers a position, all ten
-     positions): the largest gap between the table and a run was 0.03 on a level, young level or rating mean and
+     positions): the largest gap between the table and a run was 0.03 on a level mean and
      0.02 on its sd, 0.11 and 0.05 on the strikers' goals, 0.10 and 0.05 on the keepers' clean sheets. Each bound is
      twice that, so a run never sits near it, and an engine change that moves a field by a tenth of its sd fails. */
-  const BOUNDS = { level: [0.06, 0.04], young: [0.06, 0.04], rating: [0.06, 0.04], goals: [0.25, 0.15], sheets: [0.2, 0.12] };
+  const BOUNDS = { level: [0.06, 0.04], goals: [0.25, 0.15], sheets: [0.2, 0.12] };
   const MEASURE = process.env.SIM_SEASON_AWARDS_MEASURE === '1';
   const check = (what, got, want, [dm, ds]) => {
     const line = `${what}: mean ${f2(got.mean)} (table ${f2(want.mean)}), sd ${f2(got.sd)} (table ${f2(want.sd)}), n ${got.n}`;
@@ -173,9 +176,7 @@ if (runs('1')) {
     }
     globalThis.__awardCall = null;
     const w = rows.filter(r => r.apps >= 20);
-    check(`${pos} level`, meanSd(w.map(r => r.level)), W.soccerField('level', pos), BOUNDS.level);
-    check(`${pos} young level`, meanSd(w.filter(r => r.age < 23).map(r => r.level)), W.soccerField('young', pos), BOUNDS.young);
-    check(`${pos} rating`, meanSd(w.map(r => r.rating)), W.soccerField('rating', pos), BOUNDS.rating);
+    check(`${pos} level`, meanSd(w.map(r => r.level)), W.soccerField(pos), BOUNDS.level);
     if (pos === 'ST') check('ST goals at a top two tier club', meanSd(w.filter(r => r.clubTier <= 2).map(r => r.goals)), W.SOCCER_GOALS_FIELD, BOUNDS.goals);
     if (pos === 'GK') check('GK clean sheets', meanSd(w.map(r => r.cleanSheets)), W.SOCCER_SHEETS_FIELD, BOUNDS.sheets);
   }
@@ -251,9 +252,9 @@ if (runs('2')) {
 if (runs('3')) {
   console.log('3) the years: no award in a season it was not given for');
   const GATES = [
-    ["case 'Golden Glove': return s.position === 'GK' && s.apps >= 20 && goldenGloveAwardExists(s.year);", "case 'Golden Glove': return s.position === 'GK' && s.apps >= 20;"],
-    ["case 'UEFA Player of the Year': return s.championsLeague && s.apps >= 20 && uefaPlayerAwardExists(s.year);", "case 'UEFA Player of the Year': return s.championsLeague && s.apps >= 20;"],
-    ["case 'Puskás Award': return s.goals > 0 && puskasAwardExists(s.year);", "case 'Puskás Award': return s.goals > 0;"],
+    ["'Golden Glove': [20, 'sheets', s => s.position === 'GK' && s.apps >= 20 && goldenGloveAwardExists(s.year)]", "'Golden Glove': [20, 'sheets', s => s.position === 'GK' && s.apps >= 20]"],
+    ["'UEFA Player of the Year': [10, 'vote', s => s.championsLeague && s.apps >= 20 && uefaPlayerAwardExists(s.year)]", "'UEFA Player of the Year': [10, 'vote', s => s.championsLeague && s.apps >= 20]"],
+    ["const puskasEligible = (s: SoccerAwardSeason) => s.goals > 0 && puskasAwardExists(s.year);", "const puskasEligible = (s: SoccerAwardSeason) => s.goals > 0;"],
   ];
   let awardsText = read(AWARDS);
   for (const [was] of GATES) once(awardsText, was, AWARDS);
@@ -350,28 +351,58 @@ async function bundleText(entry, serve = {}) {
 }
 
 if (runs('5')) {
-  console.log('5) the US careers: every module that reads careerAwards.ts bundles the same with the base\'s file');
+  console.log('5) the US careers replay byte identical with the base\'s careerAwards.ts (the draw moved to awardDraw.ts)');
   let base;
   try { base = lf(execFileSync('git', ['show', `${SOCCER_AWARDS_BASE}:${CAREER_AWARDS}`], { cwd: ROOT, encoding: 'utf8', maxBuffer: 64e6 })); }
   catch { console.log(`ABORT: git cannot show ${CAREER_AWARDS} at ${SOCCER_AWARDS_BASE.slice(0, 8)} (a shallow clone?)`); process.exit(1); }
   let head = read(CAREER_AWARDS);
   if (head === base) fail(`${CAREER_AWARDS} is the base's own file, so there is nothing to prove`);
-  const DRIFT = 'QB: { pool: 32, slots: 1, grade: 0.25 },';
+  if (base.includes("from './awardDraw'")) fail(`at ${SOCCER_AWARDS_BASE.slice(0, 8)} ${CAREER_AWARDS} already read awardDraw.ts, so the base arm is not the tree before the lift`);
+  const DRIFT = 'const MLB_ALL_STAR: FieldConfig = { pool: 780, slots: 64, grade: 0.15 };';
   once(head, DRIFT, CAREER_AWARDS);
-  if (CONTROL === 'usdrift') { console.log('   CONTROL usdrift: the NFL quarterback All-Pro grade moved in this round\'s file'); head = head.replace(DRIFT, DRIFT.replace('0.25', '0.26')); }
-  /* every importer of careerAwards.ts but this round's own; usCareerStatLine.ts imports a type only, nothing that bundles */
-  const US = ['src/lib/nbaMyCareer.ts', 'src/lib/nflMyCareer.ts', 'src/lib/mlbMyCareer.ts', 'src/lib/nhlMyCareer.ts', 'src/lib/nbaCareerAwards.ts'];
-  let parted = 0;
-  for (const entry of US) {
-    const a = await bundleText(entry, { [CAREER_AWARDS]: head });
-    const b = await bundleText(entry, { [CAREER_AWARDS]: base });
-    const reads = a.served.length > 0 && b.served.length > 0;
-    const same = a.text === b.text;
-    console.log(`   ${entry}: ${reads ? 'reads careerAwards.ts' : 'never loads careerAwards.ts'}, ${a.text.length} bytes, ${same ? 'byte identical' : 'PARTS'}`);
-    if (!reads) fail(`${entry} never loaded ${CAREER_AWARDS}, so it proves nothing`);
-    if (!same) parted += 1;
+  if (CONTROL === 'usdrift') { console.log('   CONTROL usdrift: the MLB All-Star grade moved from 0.15 to 0.65 in this round\'s file'); head = head.replace(DRIFT, DRIFT.replace('0.15', '0.65')); }
+  /* The four engines and their entry points, as simCareerForm section 1 drives them. nbaCareerAwards.ts, the other
+     importer, is played inside the NBA career; usCareerStatLine.ts imports a type only. */
+  const US = [
+    { id: 'nba', file: 'src/lib/nbaMyCareer.ts', arch: 'NBA_ARCHETYPES', start: 'startNbaCareer', season: 'simNbaSeason', progress: 'nbaProgress' },
+    { id: 'nfl', file: 'src/lib/nflMyCareer.ts', arch: 'ARCHETYPES', start: 'startCareer', season: 'simSeason', progress: 'progress' },
+    { id: 'mlb', file: 'src/lib/mlbMyCareer.ts', arch: 'MLB_ARCHETYPES', start: 'startMlbCareer', season: 'simMlbSeason', progress: 'mlbProgress' },
+    { id: 'nhl', file: 'src/lib/nhlMyCareer.ts', arch: 'NHL_ARCHETYPES', start: 'startNhlCareer', season: 'simNhlSeason', progress: 'nhlProgress' },
+  ];
+  const load = async (name, entry, text) => {
+    const b = await bundleText(entry, { [CAREER_AWARDS]: text });
+    if (b.served.length === 0) fail(`${entry} never loaded ${CAREER_AWARDS}, so it proves nothing`);
+    const out = path.join(TMP, `${name}.mjs`);
+    fs.writeFileSync(out, b.text);
+    return import(pathToFileURL(out).href);
+  };
+  /* Every position and archetype, 6 seeded careers each, 18 seasons; morale and team quality from a stream of their own. */
+  const replay = (lib, sport) => {
+    const trail = [];
+    const real = Math.random;
+    for (const pos of Object.keys(lib[sport.arch])) for (const archetype of lib[sport.arch][pos]) for (let k = 0; k < 6; k += 1) {
+      const seed = 1000 + k * 7919, rng = mulberry(seed), dial = mulberry(seed ^ 0x5bd1e995);
+      Math.random = mulberry(seed + 17);
+      try {
+        const c = lib[sport.start]('Replay Man', pos, archetype, rng);
+        for (let y = 0; y < 18 && !c.retired; y += 1) {
+          c.morale = Math.round(dial() * 100);
+          trail.push(JSON.stringify(lib[sport.season](c, 70 + Math.floor(dial() * 20), rng)), JSON.stringify(c));
+          trail.push(JSON.stringify(lib[sport.progress](c, rng)), JSON.stringify(c));
+        }
+      } finally { Math.random = real; }
+    }
+    return trail;
+  };
+  for (const sport of US) {
+    const a = replay(await load(`${sport.id}-head`, sport.file, head), sport);
+    const b = replay(await load(`${sport.id}-base`, sport.file, base), sport);
+    let first = -1;
+    for (let i = 0; i < Math.max(a.length, b.length); i += 1) if (a[i] !== b[i]) { first = i; break; }
+    console.log(`   ${sport.id}: ${a.length / 4} seasons replayed, ${first < 0 ? 'byte identical' : `parts at record ${first}`}`);
+    if (a.length < 400) fail(`${sport.id}: only ${a.length / 4} seasons were played, too thin to mean anything`);
+    if (first >= 0) fail(`${sport.id}: this round's ${CAREER_AWARDS} parts from the base's at record ${first}`);
   }
-  if (parted > 0) fail(`${parted} US modules bundle differently with this round's ${CAREER_AWARDS}`);
 }
 
 if (runs('6')) {
