@@ -1,0 +1,6 @@
+simRulesGateConsentFocus return: 3 of 3 failure messages carried colour codes, read with them taken out.
+simRulesGateConsentFocus return: executable focus return mutation applied once to a disposable component.
+simRulesGateConsentFocus return: 3 intended actual-outcome assertions fail.
+simRulesGateConsentFocus return: 6 independent outcomes stay green, none skipped.
+simRulesGateConsentFocus return: original trap and seen-per-route instructions baseline both pass.
+simRulesGateConsentFocus: source held, owned copies cleaned, no backend or vendor requests.
