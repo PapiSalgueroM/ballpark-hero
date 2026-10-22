@@ -1,0 +1,7 @@
+#!build
+#!playwright
+#!serial
+head-1009: CAREER_DECISION_OUTCOME_NATIVE_ARTIFACTS=$RC_OUT/h1009 node scripts/qa/careerDecisionOutcome1009.mjs
+head-1008: CAREER_SEASON_REVIEW_NATIVE_ARTIFACTS=$RC_OUT/h1008 node scripts/qa/careerSeasonReview1008.mjs
+writes-alone: ONLY=simWritesAreSent node scripts/runAllSims.mjs --browser
+base-natives: R=$(pwd); git worktree add /tmp/base 413685149bed816a5c384242aa8c40f412b1d523 > /dev/null 2>&1 && cd /tmp/base && ln -s "$R/node_modules" node_modules && node_modules/.bin/vite build > /dev/null 2>&1; CAREER_DECISION_OUTCOME_NATIVE_ARTIFACTS=$RC_OUT/b1009 node scripts/qa/careerDecisionOutcome1009.mjs > $RC_OUT/b1009.log 2>&1; a=$?; CAREER_SEASON_REVIEW_NATIVE_ARTIFACTS=$RC_OUT/b1008 node scripts/qa/careerSeasonReview1008.mjs > $RC_OUT/b1008.log 2>&1; b=$?; echo "base natives: careerDecisionOutcome1009 exit $a, careerSeasonReview1008 exit $b"; exit $((a|b))

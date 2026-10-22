@@ -1,0 +1,5 @@
+build exit=0 35s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+head-1009 exit=1 37s | Node.js v24.21.0
+head-1008 exit=1 117s | Node.js v24.21.0
+writes-alone exit=1 14s | 1 harness not green.
+base-natives exit=1 189s | base natives: careerDecisionOutcome1009 exit 1, careerSeasonReview1008 exit 1
