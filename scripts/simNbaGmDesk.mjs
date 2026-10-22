@@ -142,8 +142,9 @@
  * Three floors in T were measured on the old desk and fail here: minSheets 34,
  * minSheetGone 11 and minSheetFull 11. STOP FOR THE LEAD (critic 1540
  * correction 10 c, the lead's ruling item 4): never re-banded by a builder.
- * On fresh streams (copies under other names, SIM_SEED 1..9) sheets ran 14 to
- * 27 and gone 3 to 10, so 70 percent of the lowest would be 9, 2 and 2. Twice
+ * On fresh streams (copies under other names, SIM_SEED 1..9) sheets ran 13 to
+ * 27, gone and full draft copies 3 to 10, so 70 percent of the lowest would be
+ * 9, 2 and 2. Twice
  * in about 40 runs check 2 also failed on its own assertion, a man let go on a
  * sheet "is at no rival club" (SIM_SEED 6 seed 10 season 2; the noinjhook
  * control's stream, seed 3 season 4): he was neither at the club written down
