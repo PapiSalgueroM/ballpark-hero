@@ -1,0 +1,5 @@
+CONTROL nogain: one unique executable mutation applied
+MEASUREMENT {"calibration":[],"holdout":{"matches":2000,"seedStart":4001,"ignoredWins":1221,"kickerWins":1221,"uplift":0,"goals":0}}
+FAIL perfect-kicker measured win uplift: win uplift 0 is outside the frozen measured band
+Tycoon set pieces: 0/1 selected sections pass (nogain control)
+CONTROL PROVED nogain: perfect-kicker measured win uplift

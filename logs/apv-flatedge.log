@@ -1,0 +1,11 @@
+Round 586 all players value, control flatedge
+  PASS youth: 334,620 exact youth quotes: rating 30..99 by 0.25, ceiling max(45,ceil(rating))..99, age 15..23, four positions
+  PASS prime: 18920 strict senior age declines at fixed rating and ceiling
+  PASS empty: 12 frozen pre-round watched histories and away runs match byte for byte
+  FAIL edge: one of1 players at60 gained no edge
+  PASS saves: promotion, birthday quote, decline, retirement, away training, current/frozen V1 saves, malformed repairs, move up and Sell up verified
+  POLICY calibration {"seeds":32,"sellWins":86,"holdWins":86,"sellFee":2567.4375,"holdFee":546.75,"sellBudget":25509.625,"holdBudget":22704.96875,"sellSenior":5004.625,"holdSenior":597.65625,"sellRefills":12.0625,"holdRefills":5.65625,"winGainSe":0}
+  POLICY holdout {"seeds":32,"sellWins":85.71875,"holdWins":85.71875,"sellFee":2561.59375,"holdFee":545.53125,"sellBudget":25346.46875,"holdBudget":22479.625,"sellSenior":4895.53125,"holdSenior":592.09375,"sellRefills":12,"holdRefills":5.625,"winGainSe":0}
+  PASS policy-cash: sell28 budget 25509.6 vs hold33 22705.0; cohort fee advantage 2020.6875, holdout 2016.0625 (floor 1010.34375)
+  FAIL policy-wins: calibration: hold33 win gain 0.000 below measured half-headroom floor 0.53125
+  CONTROL flatedge applied; expected failing sections edge,policy-wins; observed edge,policy-wins

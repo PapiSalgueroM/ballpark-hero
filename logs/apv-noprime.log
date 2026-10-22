@@ -1,0 +1,11 @@
+Round 586 all players value, control noprime
+  PASS youth: 334,620 exact youth quotes: rating 30..99 by 0.25, ceiling max(45,ceil(rating))..99, age 15..23, four positions
+  FAIL prime: 30/45/GK does not decline across27,29,31: 46.860541574307135,46.860541574307135,46.860541574307135
+  PASS empty: 12 frozen pre-round watched histories and away runs match byte for byte
+  PASS edge: 195 rating increments reach the live tick; the away consumer also changes its committed result
+  PASS saves: promotion, birthday quote, decline, retirement, away training, current/frozen V1 saves, malformed repairs, move up and Sell up verified
+  POLICY calibration {"seeds":32,"sellWins":88.3125,"holdWins":89.375,"sellFee":2852.875,"holdFee":2485.40625,"sellBudget":26066.6875,"holdBudget":24824.3125,"sellSenior":5561.6875,"holdSenior":2717,"sellRefills":12.0625,"holdRefills":5.65625,"winGainSe":0.27289332371648867}
+  POLICY holdout {"seeds":32,"sellWins":88.0625,"holdWins":88.875,"sellFee":2846.34375,"holdFee":2480.34375,"sellBudget":25891.0625,"holdBudget":24579.21875,"sellSenior":5440.125,"holdSenior":2691.6875,"sellRefills":12,"holdRefills":5.625,"winGainSe":0.2173776073875789}
+  FAIL policy-cash: calibration: starting-cohort fee gap 367.469 below measured half-headroom floor 1010.34375
+  PASS policy-wins: 32+32 paired seeds: hold33 gains 1.0625 wins, holdout 0.8125 (floor 0.53125)
+  CONTROL noprime applied; expected failing sections prime,policy-cash; observed prime,policy-cash

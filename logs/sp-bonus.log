@@ -1,0 +1,7 @@
+CONTROL bonus: one unique executable mutation applied
+FAIL one goal and normal bonus in 10,000 matches: Expected values to be strictly equal:
+
+46 !== 23
+
+Tycoon set pieces: 0/1 selected sections pass (bonus control)
+CONTROL PROVED bonus: one goal and normal bonus in 10,000 matches

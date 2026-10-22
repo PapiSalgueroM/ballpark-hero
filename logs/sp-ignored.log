@@ -1,0 +1,9 @@
+CONTROL ignored: one unique executable mutation applied
+FAIL ignored offers preserve frozen watched and away histories: ignored-offer watched baseline seed 101
++ actual - expected
+
++ 'f3e8cd971fe076de06a9baa701965b02d5dbb0f8eb53611688395fddaf07f38b'
+- 'edded553a40a3ea66d3dc5ebcd15cff7a14e625fc6122f556210d9cbc4bc9e57'
+
+Tycoon set pieces: 0/1 selected sections pass (ignored control)
+CONTROL PROVED ignored: ignored offers preserve frozen watched and away histories
