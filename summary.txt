@@ -1,0 +1,9 @@
+simTycoonSetPiece exit=0 11s | Tycoon set pieces: 8/8 selected sections pass
+simAllPlayersValue exit=0 68s | simAllPlayersValue: green.
+simTycoonAwayMatchdays exit=1 84s | simTycoonAwayMatchdays: 1 failure
+packprobe-base exit=0 17s | PACKPROBE {"label":"base","prices":[["scout",30],["club",100],["elite",250]],"immediate":{"visit2":{"p10":9,"median":31,"p90":34},"visit4":{"p10":35,"median":51,"p90":69}
+packprobe-head exit=0 22s | PACKPROBE {"label":"head","prices":[["scout",30],["club",100],["elite",250]],"immediate":{"visit2":{"p10":6,"median":27,"p90":32},"visit4":{"p10":25,"median":42,"p90":63}
+packpace-base exit=0 16s | simTycoonPackPace: green. Both policies measured; every applied price control broke its pace check.
+simTycoonLeague exit=0 147s |    Every older save lands in the division it had earned, no club that can compete is walled in, and all ten controls fired.
+dryprobe-base exit=0 52s | DRYPROBE {"label":"base","shipped":{"p90":52.8,"median":49.5,"ends":{"a pack":50},"meanTitles":52.56},"dear":{"p90":149.2,"median":136.5,"ends":{"a title":4,"a pack":45,"
+dryprobe-head exit=0 83s | DRYPROBE {"label":"head","shipped":{"p90":41.8,"median":35.7,"ends":{"a pack":43,"a title":6,"a region":1},"meanTitles":70.88},"dear":{"p90":75.7,"median":75.5,"ends":{"a

@@ -1,0 +1,4 @@
+Preparing worktree (detached HEAD 77c00798c)
+Updating files:  98% (5061/5142)Updating files:  99% (5091/5142)Updating files: 100% (5142/5142)Updating files: 100% (5142/5142), done.
+HEAD is now at 77c00798c Round 1531: What's New says which amounts gained a comma (the pitch floaters), not a vague example
+PACKPROBE {"label":"base","prices":[["scout",30],["club",100],["elite",250]],"immediate":{"visit2":{"p10":9,"median":31,"p90":34},"visit4":{"p10":35,"median":51,"p90":69},"visit6":{"p10":62,"median":86,"p90":105},"visit10":{"p10":144,"median":164,"p90":194}},"afterFinal":{"visit2":{"p10":9,"median":31,"p90":34},"visit4":{"p10":51,"median":72,"p90":91},"visit6":{"p10":106,"median":128,"p90":147},"visit10":{"p10":212,"median":239,"p90":261}}}

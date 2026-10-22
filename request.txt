@@ -1,0 +1,9 @@
+simTycoonLeague: node scripts/simTycoonLeague.mjs
+simTycoonAwayMatchdays: node scripts/simTycoonAwayMatchdays.mjs
+simTycoonSetPiece: node scripts/simTycoonSetPiece.mjs
+simAllPlayersValue: node scripts/simAllPlayersValue.mjs
+packprobe-head: node .rc/x/packprobe.mjs . head
+packprobe-base: git worktree add /tmp/base 77c00798 && node .rc/x/packprobe.mjs /tmp/base base
+packpace-base: git worktree add /tmp/base2 77c00798 && ln -s "$PWD/node_modules" /tmp/base2/node_modules && cd /tmp/base2 && node scripts/simTycoonPackPace.mjs
+dryprobe-head: node .rc/x/dryprobe.mjs . head
+dryprobe-base: git worktree add /tmp/base3 77c00798 && node .rc/x/dryprobe.mjs /tmp/base3 base
