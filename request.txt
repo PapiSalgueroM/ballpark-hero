@@ -1,0 +1,3 @@
+#!serial
+attr-engine-only: git checkout 00bffb93 -- src/lib/stadiumTycoon.ts scripts/data/allPlayersValueBaseline.json && node scripts/retakeTycoonHistories.mjs; s=$?; git checkout HEAD -- src/lib/stadiumTycoon.ts scripts/data/allPlayersValueBaseline.json; exit $s
+attr-json-only: git checkout 00bffb93 -- scripts/data/allPlayersValueBaseline.json && node scripts/retakeTycoonHistories.mjs; s=$?; git checkout HEAD -- scripts/data/allPlayersValueBaseline.json; exit $s
