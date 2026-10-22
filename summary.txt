@@ -1,0 +1,4 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+weight-head exit=1 36s | sweepWeight: 4 failures
+analyze exit=0 37s | dynamic imports of the route chunk: assets/nflCareerKit-DKSYroNm.js:2.4K assets/GmJobMarketPanel-F3XnRNRa.js:2.0K assets/GmCareerPanel-Brrfql0R.js:1.4K assets/GmXpDeskPan
+gmcareer-e exit=0 246s | playGmCareer: green. 1 board, 3 sizes, four walks each and the slow kit walk at 390 and 1280.
