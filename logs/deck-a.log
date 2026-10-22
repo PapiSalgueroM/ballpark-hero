@@ -1,0 +1,33 @@
+simSoccerDeck: Round 1523 taken out of the bundle sections 2, 4 and 9 hold to the base (6 rows; SIM_SOCCER_DECK_MORALE= keeps it in)
+simSoccerDeck: head and base e814c2de bundled (2.8 s); the shipped pack holds 28 cards
+1) Bind: the shipped pack has no problem, every soccer rule is refused with its own message, and a pack with a problem deals nothing
+   ok the shipped pack (28 cards) has no problem
+   ok 28 titles: no quote mark, dash, first person, conduct or private word, or any of 10483 real names
+   ok 24 breakages, each refused with its own message
+   ok the clean pack dealt 20 of 20 keys, the same pack with a problem none
+2) Inert: the deck not loaded, 200 careers of 12 seasons, every save byte equal to the base's after every step and the Math.random count equal
+   200 careers, 20846 saves compared, 1155960 Math.random calls on the base
+   ok every save after every step byte equal to the base, and every career's Math.random count equal
+3) Adds, never replaces: at each deal, from one identical state, the old batch is the base's and a deck card is first
+   1933 deals compared from the base fleet's own states; a deck card dealt at 1903 (98.4%)
+   ok at every deal the old batch is the base's (ids, order, words), the deck card is first, the draws and the catalog are the base's, the stamps the base's plus the deck card's
+   a head fleet with the deck loaded: 1930 deals, 1801 batches holding a deck card, 1801 batches opening on a deck card
+   ok no deck card is pending at any deal of the loaded head fleet
+4) Neutral: every deck card answered on the option that moves nothing, every season end save is the base's but for the deck's own stamps
+   200 careers, 2200 season ends compared, 1810 deck cards answered on the option that moves nothing; seasons whose old draw was empty: 0
+   ok every season end save equals the base's once the deck's own stamps are taken out
+5) Promises: every option moves what its button prints, to the bound and no further, says what landed, and never moves money or fame
+   4176 answers (2016 on the option that moves nothing), 1568 effects at a bound, 160 trainings held at 99
+   ok every option moves exactly what it prints (to the bound and no further), the season log says what landed, nothing moves money, fame or karma, and the option that moves nothing moves nothing
+   ok 320 deals at room 0 and 1, none with training that would not fit
+   the banked drill: room 1 at the deal, 0 after the drill; the answer logs "🔋 Pressing from the front: You push through the sprint work. Morale -1, Pace next season +0, you are at your ceiling, Shooting next season +0, you only pay for training that landed."
+   ok a drill banked between the deal and the answer: the answer lands nothing past the ceiling and its line says so
+   the fleet: 1252 deck training answers, 0 clamped (expected 0: the deck card is answered first); with a full drill banked after each, 185 (14.8%) would pass the ceiling only because of the deck's boost (the drills' rule, owed)
+6) Reach by position: every position card reaches its own group and never another, every situation card someone, no keeper word for an outfielder
+7) Keyed: the slot and the deck's answers draw no Math.random, the same save deals the same card in a fresh bundle, and the season moves the pick
+8) Economy: four answer arms against the deck off, over five seeds of whole careers
+9) Old saves: the base's saves load and play here as they do there; a save with a deck card pending loads on the base (skipped, its stamp handed back) and answers here
+10) Lazy: the page and the engine reach the gate and nothing of the deck, and the page is the one caller that loads it
+
+runtime 79.1 s
+simSoccerDeck: green. Sections 1, 2, 3, 4, 5 only.
