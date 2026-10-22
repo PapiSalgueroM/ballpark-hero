@@ -1,0 +1,17 @@
+build exit=0 35s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+vitest-1508 exit=0 13s |    Duration  11.81s (transform 4.56s, setup 425ms, collect 12.24s, tests 7.75s, environment 3.34s, prepare 1.12s)
+bridges-1508 exit=0 0s | cmNoAiMoves1344: all 5 anchors stand once and can be taken out
+tsc-1508 exit=0 170s | 
+vitest-cm-1508 exit=0 244s |    Duration  243.73s (transform 11.44s, setup 7.58s, collect 59.54s, tests 475.38s, environment 48.31s, prepare 11.08s)
+unseeded-1508 exit=1 314s | simCmUnseededWorld: 113 FAILURE(S)
+u-never-1508 exit=3 112s | simCmUnseededWorld: CONTROL never DID NOT FIRE as it must: moved red 3178, the comparison before the rollover red true
+u-noinverse-1508 exit=1 50s | simCmUnseededWorld: CONTROL noinverse FIRED: without the inverse the fresh careers differ from the base (15 of 15)
+u-early-1508 exit=1 247s | simCmUnseededWorld: CONTROL early FIRED: adopted as the save opens, the comparison with BASE before the first summer went red (quiet 49, deals 49 saves)
+oldworld-1508 exit=2 0s | treeWithoutMerge: taking the piece out conflicts in src/components/club-manager/ClubManagerHelp.tsx, src/lib/clubManager.ts: no honest base
+ow-never-1508 exit=2 0s | treeWithoutMerge: taking the piece out conflicts in src/components/club-manager/ClubManagerHelp.tsx, src/lib/clubManager.ts: no honest base
+ow-early-1508 exit=2 0s | treeWithoutMerge: taking the piece out conflicts in src/components/club-manager/ClubManagerHelp.tsx, src/lib/clubManager.ts: no honest base
+ow-bridge-1508 exit=2 0s | treeWithoutMerge: taking the piece out conflicts in src/components/club-manager/ClubManagerHelp.tsx, src/lib/clubManager.ts: no honest base
+walk-1508 exit=0 6s | playCmOldCareersWorld: green, 5 checks held; pictures in /home/runner/work/_temp/rc-out/files/head
+walk-never-1508 exit=1 25s | playCmOldCareersWorld: control never FIRED: (b) red
+u-norecord-1508 exit=3 107s | simCmUnseededWorld: CONTROL norecord DID NOT FIRE as it must: mine red 1232, the comparison before the rollover red true
+u-guard-1508 exit=3 198s | simCmUnseededWorld: CONTROL guard DID NOT FIRE as it must: deals red true, quiet red true
