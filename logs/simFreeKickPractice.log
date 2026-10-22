@@ -1,0 +1,25 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ ✓ src/test/freeKickPractice.test.tsx > actual Free Kick steady practice > shows rules and a worked example before play, closes to the entry and starts on the native Kick 430ms
+ ✓ src/test/freeKickPractice.test.tsx > actual Free Kick steady practice > holds chosen power through delayed aim taps and drags, firing only an explicit unchanged engine input 132ms
+ ✓ src/test/freeKickPractice.test.tsx > actual Free Kick steady practice > routes range, button and dialog keys independently while one pitch Space kicks once 164ms
+ ✓ src/test/freeKickPractice.test.tsx > actual Free Kick steady practice > pauses selected inputs and the real flight, reopens help and resumes one unchanged outcome 187ms
+ ✓ src/test/freeKickPractice.test.tsx > actual Free Kick steady practice > finishes and replays ten real shots without replacing a saved daily or recording or sharing practice 267ms
+ ✓ src/test/freeKickPractice.test.tsx > actual Free Kick steady practice > preserves the daily charge mode and its original completion and daily-write boundary 281ms
+ ✓ src/test/freeKickPractice.test.tsx > actual Free Kick steady practice > preserves the unlimited charge mode and its original completion and daily-write boundary 223ms
+ ✓ src/test/freeKickPractice.test.tsx > actual Free Kick steady practice > returns to the original saved daily and later unlimited mode without suppressing its next completion 463ms
+ ✓ src/test/freeKickPractice.test.tsx > actual Free Kick steady practice > keeps reduced motion immediate and discards normal practice work on unmount 62ms
+ ✓ src/test/freeKickPractice.test.tsx > actual Free Kick steady practice > keeps a newly finished daily booked across practice and unlimited without rewriting or recording it 492ms
+ ✓ src/test/freeKickPractice.test.tsx > actual Free Kick steady practice > keeps a newly finished daily in memory when private storage refuses its write 476ms
+
+ Test Files  1 passed (1)
+      Tests  11 passed (11)
+   Start at  06:28:11
+   Duration  5.77s (transform 517ms, setup 108ms, collect 887ms, tests 3.18s, environment 402ms, prepare 98ms)
+
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+simFreeKickPractice: eleven actual Board/engine checks passed for explicit inputs, exact geometry, native key routing, pause/help, ten-shot practice, fresh daily roundtrips and private storage refusal.
