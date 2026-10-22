@@ -1,3 +1,21 @@
+
+## Round1446 Green candidate, 2026-10-22 UTC
+
+Original f8a52c8938e1119f0c9753bb65d46f51df25de90/run39715479837 attempt1 is Root and peer admitted: 74 consent and29 account passes, exactly5 owned Profile assertion failures plus1 preservation pass, and3 owned missing-policy browser assertions after healthy Privacy/choices foundations. Complete ZIP/nested hashes, source/dist/generated end holds, zero transport and effective copied nonempty/inventory controls held. Original branch and every failure remain preserved.
+
+Green integrated actual published main6d2d7a7d2cb41d25f9c71c24c848af583e804f6a atfc380f452ede528af25f08ba6e787b25a830296d. Main's game, guide, search, saved outputs and14limits stay exact. Only a PROJECT-STATE merge conflict needed resolution, preserving all of current main's body and Root's own claim. Green proof base and two cap-file hash references now match that selected main; Original provenance is unchanged.
+
+Nine scoped product paths are authored: Profile renders viewed display_name/username/U initials without its stored/Auth image sink; Cookie Policy has real route, Footer/Privacy links, WebPage schema, sitemap172 ratchet and llms link. Stored avatar records, queries, edit/share/account/noindex and consent/GA behavior stay held. The owner-provided full operator name appears only in Privacy's existing Contact notice, with no address or location assertion. No game implementation or cap authored by Root.
+
+Green runtime, generated-output adoption, final fixedpoint qualification, PR integration, coordinated publication, public readback and IndexNow are PENDING. No live/fixed claim yet. Analytics remains paused. The game owner's new first-visit rules/banner issue remains in that lane. Existing785/1441 preservation gaps and provider/traffic/console/rights dependencies are unwaived.
+
+## 2026-10-22: Round1446 claimed, Profile initials and dedicated Cookie Policy
+
+Root site lane, codex/site-privacy-followup-1446 from observed main0383bd6e0a7912ddbc7a71820a22afd0b4749799. Scope is Profile's remote-image render boundary plus one Cookie Policy page, its site links and required schema/sitemap/saved-page outputs. Initials will use the viewed profile's name/username/U, without deleting stored avatar values. The policy uses already reviewed copy and retains GA paused, advertising opt-in/GPC, withdrawal limits and the180-day choice distinction.
+
+Current phase: original proof authoring. Product behavior is unchanged; no runtime result or live fix yet. New actual-Profile tests and actual-dist route/link browser cases must produce admitted intended RED before product adoption. All runtime stays in new remote offline Actions, with actual types, existing privacy/profile checks, build/readers and14 held caps. Generated outputs require reviewed adoption and a final0B fixed point. Primary source/index and old branches/worktrees stay protected. No game engine/data/save, dependency, provider/DNS, legal identity or analytics readiness change.
+
+The Growth/Nitro audit remains a finite engineering audit, not approval or clean-traffic proof. I/J own game reports and games; this round takes no game lease. Existing785/1441 and historical preservation issues remain unwaived. Plan: docs/ROUND1446.md and the outside site-privacy-followup-1446 implementation plan. Publication remains coordinated against actual main and the publisher's release slot.
 ## Release BO LIVE, 2026-10-21 22:37 EDT: Club Manager's UEFA Super Cup from season one (PSG against Aston Villa), and the saved pages redrawn
 
 Claude lane (session I). main 889e1b38 (published with the board note 7633c474 on top), deployment
@@ -18935,3 +18953,31 @@ approve the new tree. The completed combined 587 run `35001991548` failed the
 old broad SVG map guard, lazy-panel test waits and Wonderkid's 271K/270K budget.
 Its expected negative controls passed. The records below retain earlier
 verification context and do not supersede this current integration note.
+
+## Round1446 fixture-only qualification repair, 2026-10-22 UTC
+Current candidate077f49da67f461dd741dba4535c87978228448f8 holds the reviewed font-proof count correction and actual Privacy revision date. FirstGreen39718502107 remainsFAILED: actual9394unitcases9336PASS58SKIP, but13strictguard denials. Browser/readers/caps were skipped after the font receipt error, with no credit. Failed generated4path patch remains unadopted.
+
+Isolated source4674492f88860cadd49e3714c54de159035ddaef/run39726444132 completed: timer2PASS+1database denial; Shapes36PASS+6static-key denials; Skip174PASS+6static-key denials; realCollegeOffline2PASS+zero trace/guard, own fixture unchanged. Three jobs remainFAILED, OfflineSUCCESS. All four actual test files isolated, raw all21-row ZIP manifests Rootread, fullsource admission in progress. This identifies fixture boundaries, not game defects or guard exemptions.
+
+Root widens only the1446 proof scope to src/test/idleFloaterTimers.test.tsx, src/test/dailySaveShapes.test.tsx and src/test/skipTarget.test.tsx. Proposed partialmock isolates only the irrelevant completion writer; two local loader fixtures explicitly return unavailable null for DOM-only checks. All existing assertions stay exact, no shared/globalfetch or game/real-key/engine/data/save changes. Existing simIdleTimers normal/noclear/rawtimer oracles will run under the unchanged guard. OnlyGreen exactpath allowlist is widened; allOriginalguards and oldfailureartifacts are retained. No adoption or successful freshGreen yet.
+
+Clarification: Root owns the separate1447 shared pending-consent CSS fix. J owns game dialog hardening and game walks. Earlier text assigning the entire first-visit issue to the game lane was incomplete.1447 remains private source planning, no product/runtime yet.1446 remains draftPR367, unqualified/unpublished. No provider/traffic/rights/fulllegal clearance, GAactivation or old785/1441 preservation waiver.
+
+## Round1446 timer-control setup diagnosis, 2026-10-22 UTC
+Green19d0bcb030be48bae9d70d5ce139b08997943962/run39727905678 isFAILED. Types0,74consent/29accountPASS and original simIdleTimers normal2PASS with empty transport. Its added old noclear control ran0tests due a setup error, so Profile controls/fullunits/build/browser/readers/caps were SKIPPED and have no credit. Root admitted all19 manifest rows and physically rehashed every5164current19dsource path. No generated output adopted.
+
+Diagnostic a5ac6fc9cbd7d8f154b6d8280f08a6ec9a15c5f2/run39728795894 remainsFAILED and is independently admitted: artifact12404301755,292119B/afae5ac6702d03f01c8c2970b4cbe6a2154a497070ce387f69c11a7ea48b5a61,31regularfiles/30manifestrows, all5164prior19dhashes plus onlynewworkflow5e7c, source/operator/immutable/capture/final holds0 and transport0. Raw normal2PASS; raw noclear0assertions/childexit1, exact Vite Failed to resolve import react from /tmp/idletimers-*/useOwnedTimeouts.noclear.ts. This is setup failure, not an intended timer assertion failure. Original harness/test/helper/config remain unchanged.
+
+The scoped repair now uses an artifact-local copy of the control harness at the same path depth, with only raw-child retention and temporary-helper base moved below OUT so existing dependencies resolve. Original normal harness invocation stays exact. Adoption requires source review, then the actual two named timer AssertionErrors, positive leaked timers, exact mutated-helper inverse, rawtimer/comment controls, strict empty transport and all remaining qualification gates. The failed old runs remain retained. Existing3fixture repairs stay exact. No game/product/guard/cap/dependency source changed by this method.
+
+Old final-push candidate68223 is obsolete as a whole workflow and must not be adopted. Its single unique Green-to-final default hunk must be rebound to the actual final workflow only after fresh generated outputs are admitted. A fresh final all6success/zero-byte patch+list still precedes merge/publication. CurrentPR367 remainsdraft/unqualified/unpublished.1447 CSS remains private proof/source planning; no runtime or CSS product. Primary source/index, all olderbranches/checkouts and785/1441/historical preservation gaps remain protected/unwaived.
+
+## Round1446 final generated candidate, 2026-10-22 UTC
+
+Green98ee9f20172f20358e12899a14c3d3ed98cfc0ef/run39729640183 attempt1 passed all six jobs. Actual units are9394cases:9336PASS,58explicitSKIP,0FAIL across622files. Focused74consent/29account/6ProfilePASS, oldProfile5specificfailures+1preservationPASS and6restoredPASS; originaltimer2PASS plus actualtwoownedhelper failures, rawtimer/comment controls and empty transport. The three minimal local fixtures preserve every pre-existing assertion and the real optional-key offline tests.
+
+Actual browser4healthy+3specificserved-bytefaults+3exactrestorations,18saved-page readers and14unchanged download limits passed. Cached-font/context/flag controls and complete source/public/dist/end holds passed. Root reviewed phone/desktop screenshots and the whole fresh25614B generated patch at SHA3c3a6ae68ef8e23e884acc7460c34845954d3d7b6274cf15fba070fa96472759; complete ZIP/nested source and output admissions are retained outside the repo. Earlier failed runs and their outputs remain preserved and unadopted.
+
+Actualmaincedd02399673fb5ef307129a3a6165bc208fe1a8 is integrated atc0d1c2583d6bf62846dc105139a606e02939ada4, only18WORKBOARD lines with both full prior bodies preserved. The final candidate takes only the four reviewed generated legal/sitemap/ledger outputs and the exact one-line default to final mode on the existing Green branch. Workflow8bc53a9567b49f18bf0e56d8930f01690ca70b12891840433abcde074cc2caf5 preserves all other workflow bytes and requires both generated patch/list empty, effective copied nonempty controls and complete final inventories.
+
+Fresh final all-six qualification and actual0Bpatch/list are still required before PR367 integration, coordinated publication, public readback and the two-URL IndexNow submission. No live1446 claim yet. Profile stored data/account behavior stay held. Anthony Salguero appears only in Privacy's operator notice. Analytics remains paused; provider/traffic/console/rights and ongoing legal operations are unverified. Root1447 shared consent CSS remains separate source-only preparation, J retains game dialog hardening. Primarysource/index, all oldbranches/checkouts and broader785/1441/historical preservation gaps remain protected and unwaived.
