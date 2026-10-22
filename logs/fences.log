@@ -1,0 +1,76 @@
+Network mode: offline, loopback only, no production probe or database retries.
+Running 23 node harnesses
+  PASS  simCompletionOnce.mjs          12.4s
+  FAIL  simCompletionSlugs.mjs          2.9s
+        it reported success after an offline transport block; checks needing live data did not run
+  PASS  simDailyPuzzleContract.mjs      1.3s
+  PASS  simDailySaveHardening.mjs     193.4s
+  PASS  simFetchRetry.mjs               5.5s
+  PASS  simGoogleOnlyReturn.mjs       158.4s
+  PASS  simGuideHeadings.mjs            2.6s
+  PASS  simHarnessAnchors.mjs         270.7s
+  PASS  simInventedNames.mjs           28.2s
+  FAIL  simLeaderboardCaps.mjs          2.8s
+  PASS  simLegalPages.mjs               1.4s
+  PASS  simLiveScores.mjs               1.6s
+  PASS  simNavbarStatsReads.mjs         6.6s
+  PASS  simNoDoubleRecord.mjs          52.3s
+  PASS  simNoInventedConduct.mjs        2.9s
+  PASS  simNoInventedQuotes.mjs        52.6s
+  PASS  simNoRivalNames.mjs            20.7s
+  FAIL  simReportRelay.mjs              0.5s
+        it reported success after an offline transport block; checks needing live data did not run
+  SKIP  simSchemaNames.mjs              1.7s
+        it reached no database and said so, and the database is unreachable here (offline mode blocks production; no database probe was sent)
+  PASS  simScoringCoverage.mjs          0.9s
+  PASS  simSingleFooter.mjs             0.9s
+  PASS  simSiteSearch.mjs               3.4s
+  PASS  simStorageWrites.mjs            4.3s
+
+Serving dist on 4173 for 2 browser harnesses
+  PASS  simResultMoment.mjs             4.9s
+  FAIL  simWritesAreSent.mjs           13.4s
+
+1 harness SKIPPED, not run and not counted: simSchemaNames.
+Each one reached no database and said so, and the database is unreachable here: offline mode blocks production; no database probe was sent.
+Run SIM_NETWORK=live only after production traffic is cleared. DB_PROBE changes classification in live mode, not transport permission.
+----- simCompletionSlugs.mjs (FAIL) -----
+1) every slug the source writes names a routed game
+   98 slugs written by source, 11 for games withdrawn from the registry on purpose, 0 that name no game
+2) every slug in the live table resolves, or is a declared retirement
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+   the database did not answer, skipped (section 1 still holds the source side)
+3) the map has no dead rows
+   7 mapped slugs, 0 pointing nowhere
+4) the round trip closes for every game that records
+   87 games checked both ways, 0 that do not round trip
+
+simCompletionSlugs: green. Every recorded slug names a game the site can find.
+
+
+----- simLeaderboardCaps.mjs (FAIL) -----
+the database refused game_score_caps?select=game,max_score&limit=2000: Error: Offline harness blocked fetch to https://flawuiqbvjobmkfkauhw.supabase.co
+
+----- simReportRelay.mjs (FAIL) -----
+4) the live table carries the column
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+   SKIPPED: the table could not be reached (Offline harness blocked fetch to https://flawuiqbvjobmkfkauhw.supabase.co), so the live column check did not run.
+5) the triage workflow, run: the spec statuses, every status move, the counts on every chip
+   7 statuses and 4 priorities, the same as spec section 123
+   all 49 status moves keep resolved and resolved_at true, with and without the new columns
+   every status offered reads back as itself after a save (7 with the columns, 2 before the migration)
+   36 chip counts (9 filters by 4 game choices) match the cards and the hand count
+6) the migration and the module agree, and the public insert path can only take the defaults
+   the insert policy keeps all 4 committed clauses and pins 6 admin columns to their defaults; no other policy is touched
+   7 statuses, 4 priorities and both length caps match the module; the backfill is there; no grant, trigger or function
+
+simReportRelay: green. Both buttons ask the same questions, every report records whether it reached him, and the queue has a real workflow.
+
+
+----- simWritesAreSent.mjs (FAIL) -----
+  FAIL: the harness could not drive Guess the Nation to a finish: TimeoutError: locator.click: Timeout 8000ms exceeded.
+  FAIL: no guess was ever submitted, so this section proved nothing about the write
+
+4 harnesses not green.

@@ -1,0 +1,24 @@
+Network mode: offline, loopback only, no production probe or database retries.
+Running 13 node harnesses
+  PASS  simAdsense.mjs                  1.6s
+  PASS  simBrand.mjs                    1.2s
+  PASS  simHeadTags.mjs                 1.2s
+  PASS  simHiddenPages.mjs              0.8s
+  PASS  simHubs.mjs                     1.0s
+  PASS  simIndexing.mjs                 0.9s
+  PASS  simIndexNow.mjs                 1.0s
+  PASS  simInternalLinks.mjs            1.4s
+  FAIL  simPrerender.mjs                2.4s
+  PASS  simRetiredRoutes.mjs            1.3s
+  PASS  simSchema.mjs                   1.5s
+  PASS  simSitemap.mjs                  1.1s
+  PASS  simSnapshotAssets.mjs           0.9s
+
+Serving dist on 4173 for 1 browser harnesses
+  PASS  simPrerenderBoot.mjs           27.5s
+
+----- simPrerender.mjs (FAIL) -----
+  FAIL: /whats-new drops the entry "NBA, NFL, MLB and NHL My Career: the shop pays what its cards say.", which means the extractor is throwing away real content again
+  FAIL: /whats-new drops the entry "Soccer Career: your morale counts on the pitch, and the Puskás Award waits for 2008-09.", which means the extractor is throwing away real content again
+
+1 harness not green.
