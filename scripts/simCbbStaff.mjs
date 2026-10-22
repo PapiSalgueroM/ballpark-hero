@@ -184,7 +184,7 @@ const CONTROLS = {
   overspend: ['if (net > holder.nil) return false;', ''],
   nowalk: ['while (staffPayroll(staff) > pot) {', 'while (false) {'],
   swing: ['const share = Math.min(1, Math.max(0, margin) / fullMargin);', 'const share = Math.max(0, margin) / fullMargin;'],
-  rematch: ['if (cbbRivalOf(a)?.rival !== b) continue;', 'continue;'],
+  rematch: ['if (cbbRivalOf(a, st)?.rival !== b) continue;', 'continue;'],
   sos: ['(home.opps ??= []).push(g.away);', '(home.opps ??= []).push(g.home);'],
   rank: ['const sos = strengthOfSchedule(t.opps, (oid) => str.get(oid) ?? 60) ?? own;', 'const sos = own;'],
   nosos: ['return [t.id, t.wins * 1.6 + own * 0.8 + sos * CBB_SOS_WEIGHT];', 'return [t.id, t.wins * 1.6 + own * 0.8];'],

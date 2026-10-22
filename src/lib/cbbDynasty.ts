@@ -1,8 +1,8 @@
 import { makeIdMinter, ensureLeagueEntityIds } from './entityIds';
 import {
-  buildRivalries, enableProgramLayer, openProgramOffseason, recordProgramRound, rivalOf, sosTable,
+  buildRivalries, enableProgramLayer, openProgramOffseason, recordProgramRound, rivalOf, seasonRivalries, sosTable,
   staffEdges, staffPayroll, strengthOfSchedule, windowFire, windowHire,
-  type Coordinator, type ProgramSport, type ProgramStaff, type RivalKind, type RivalryResult, type Rivalry,
+  type Coordinator, type ProgramSport, type ProgramStaff, type RivalKind, type RivalryResult, type Rivalry, type RivalrySeason,
   type SlateGame, type StaffRole, type StaffWindow,
 } from './collegeProgram';
 import { CBB_RIVALRY_SERIES } from '@/data/collegeRivalries';
@@ -128,15 +128,23 @@ export const CBB_POINTS_PER_EDGE = 1.5;
 export const CBB_SOS_WEIGHT = 0.8;
 
 let rivalryCache: Rivalry[] | null = null;
+let oldRivalryCache: Rivalry[] | null = null;
 /** Every school's rivalry night opponent. Built on first use rather than at
- *  module scope, the house rule for anything computed from an import. */
-export function cbbRivalries(): Rivalry[] {
-  /* Round 1554: the real series first (src/data/collegeRivalries.ts), the same table football reads. */
-  if (!rivalryCache) rivalryCache = buildRivalries(CBB_SCHOOLS, CBB_SCHOOL_STATES, CBB_RIVALRY_SERIES);
-  return rivalryCache;
+ *  module scope, the house rule for anything computed from an import.
+ *  Round 1554: handed a season that started before CbbState.format (an old
+ *  save in the middle of one), the table that season started with. */
+export function cbbRivalries(st?: RivalrySeason): Rivalry[] {
+  return seasonRivalries(st, () => {
+    /* Round 1554: the real series first (src/data/collegeRivalries.ts), the same table football reads. */
+    if (!rivalryCache) rivalryCache = buildRivalries(CBB_SCHOOLS, CBB_SCHOOL_STATES, CBB_RIVALRY_SERIES);
+    return rivalryCache;
+  }, () => {
+    if (!oldRivalryCache) oldRivalryCache = buildRivalries(CBB_SCHOOLS, CBB_SCHOOL_STATES);
+    return oldRivalryCache;
+  });
 }
-export function cbbRivalOf(id: string): { rival: string; kind: RivalKind; state?: string; name?: string } | null {
-  return rivalOf(cbbRivalries(), id);
+export function cbbRivalOf(id: string, st?: RivalrySeason): { rival: string; kind: RivalKind; state?: string; name?: string } | null {
+  return rivalOf(cbbRivalries(st), id);
 }
 
 /** Round 823: basketball's descriptor for the shared program glue. The chairs
@@ -202,8 +210,8 @@ export interface CbbState {
   staffWindow?: CbbStaffWindow | null;
   /** Round 1554: 1 once a season has started keeping league records, which
    *  the conference table then goes by. Absent on every older save, which
-   *  finishes the season it is in on the old table (only rivalry night reads
-   *  the real series already: cbbRivalries). */
+   *  finishes the season it is in on the old table and its old rivalry
+   *  pairs (cbbRivalries handed the state). */
   format?: number;
 }
 
@@ -409,7 +417,7 @@ export function simCbbRound(st: CbbState, rng: () => number): { games: CbbGame[]
  * the swap can never make a new rival pair.
  */
 function playRivalryNight(st: CbbState, rng: () => number, games: CbbGame[]): void {
-  for (const r of cbbRivalries()) {
+  for (const r of cbbRivalries(st)) {
     if (!st.teams[r.a] || !st.teams[r.b]) continue;
     const g = st.season % 2 === 0 ? playGame(r.a, r.b, st, rng) : playGame(r.b, r.a, st, rng);
     g.rivalry = true;
@@ -429,7 +437,7 @@ function playRivalryNight(st: CbbState, rng: () => number, games: CbbGame[]): vo
   }
   for (let i = 0; i < pairs.length && pairs.length > 1; i += 1) {
     const [a, b] = pairs[i];
-    if (cbbRivalOf(a)?.rival !== b) continue;
+    if (cbbRivalOf(a, st)?.rival !== b) continue;
     const j = i === 0 ? 1 : 0;
     const [c, d] = pairs[j];
     pairs[i] = [a, d];

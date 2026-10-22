@@ -39,14 +39,17 @@
         of one sport, and every row carries two source links on two different
         hosts, neither a wiki (hard);
      7) old saves: a save in the middle of a pre-1554 season finishes it the
-        old way (no slate, Notre Dame still in the ACC, five title games) and
-        the next season starts under the real format (hard);
+        old way (no slate, Notre Dame still in the ACC, five title games, and
+        rivalry week plays the pairs the season started with, the rival the
+        board names among them, never the series table) and the next season
+        starts under the real format and reads the series table (hard);
      8) the builder under load: STRESS slates from fresh seeds, none of them
         on the fallback circle (hard), and the time a slate takes (printed);
      9) CBB: its series rows are rivalry pairs, and under its new format the
         conference table goes by league winning percentage, a program with no
         league game yet at .500, checked at the end of every season and after
-        rounds 1 to 3 (hard).
+        rounds 1 to 3 (hard); and an old CBB season in the middle plays its
+        rivalry night on the pairs it started with, as section 7 (hard).
 
    MEASURED (2026-10-22, see the round's closing report for the runner runs):
    numbers are printed by every run; the hard checks are counts that must be
@@ -69,6 +72,8 @@
      CFB_SLATE_CONTROL=ndsix    Notre Dame gets six ACC games            -> 3 red
      CFB_SLATE_CONTROL=g5sort   the Group of Five table off the ranking  -> 4 red
      CFB_SLATE_CONTROL=cbbzero  a 0-0 league record sorts as zero        -> 9 red
+     added by the closing check fixes:
+     CFB_SLATE_CONTROL=oldrivals an old season reads the series table    -> 7, 9 red
 
    Run: node scripts/simCfbSlate.mjs   (SIM_SEEDS, SIM_SEASONS, SIM_STRESS to scale)
 */
@@ -105,6 +110,8 @@ const CONTROLS = {
   ndsix: ['cfbDynasty.ts', 'export const ND_ACC_GAMES = 5;', 'export const ND_ACC_GAMES = 6;'],
   g5sort: ['cfbDynasty.ts', '  if (st.format && !LEAGUE_SET.has(conf)) {', '  if (false) {'],
   cbbzero: ['cbbDynasty.ts', 'return n ? (t.confWins ?? 0) / n : 0.5;', 'return n ? (t.confWins ?? 0) / n : 0;'],
+  /* added by the closing check fixes: the gate that keeps an old season on the pairs it started with */
+  oldrivals: ['collegeProgram.ts', 'return st && !st.format ? old() : current();', 'return current();'],
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`CFB_SLATE_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
 const ctl = CONTROL ? CONTROLS[CONTROL] : null;
@@ -372,13 +379,28 @@ console.log('6) the rivalry table: real schools, one row a school, two sources a
   if (rows !== want) fail(`read ${rows} rows from the file but the module exports ${want}: the reader no longer matches the file`);
 }
 
-console.log('7) old saves: a season already under way keeps its old draw and groups (its rivalry week reads the series table already), the next one is real');
+console.log('7) old saves: a season already under way keeps its old draw, groups and rivalry pairs, the next one is real');
 {
   const rng = lehmer(777);
   const st = cfb.initCfb('CLEM', rng, { depth: true });
   /* A save from before this round, written in week 5: no format, no slate. */
   delete st.format; delete st.slate; st.round = 5;
-  for (let r = 5; r <= cfb.CFB_ROUNDS; r += 1) { cfb.simCfbRound(st, rng); st.round += 1; }
+  /* The pairs it started with: the table built without the series, as it was before this round. */
+  const oldTable = prog.buildRivalries(cfb.CFB_SCHOOLS, cfb.CFB_SCHOOL_STATES);
+  const oldPairs = new Set(oldTable.map(r => key(r.a, r.b)));
+  const seriesPairs = new Set(cfb.cfbRivalries().map(r => key(r.a, r.b)));
+  const moved = [...oldPairs].filter(k => !seriesPairs.has(k)).length;
+  const played = new Set();
+  for (let r = 5; r <= cfb.CFB_ROUNDS; r += 1) {
+    for (const g of cfb.simCfbRound(st, rng).games) if (g.rivalry) played.add(key(g.home, g.away));
+    st.round += 1;
+  }
+  const offOld = [...played].filter(k => !oldPairs.has(k)).length;
+  const noteOff = cfb.CFB_SCHOOLS.filter(t => cfb.cfbRivalOf(t.id, st)?.rival !== prog.rivalOf(oldTable, t.id)?.rival).length;
+  console.log(`   its rivalry week: ${played.size} pairs played, ${offOld} off the ${oldPairs.size} it started with (${moved} of those are not on the series table); schools whose rival as the board reads it is not the one it plays: ${noteOff}`);
+  if (moved === 0) fail('the old rivalry table and the series table agree, so the old season check proves nothing');
+  if (offOld > 0 || played.size !== oldPairs.size) fail(`an old season's rivalry week played ${offOld} pair(s) off the table it started with (${played.size} of ${oldPairs.size} played)`);
+  if (noteOff > 0) fail(`in an old season the board would name another rival than the one played, for ${noteOff} school(s)`);
   st.round = cfb.CFB_ROUNDS;
   const built = !!(st.slate || st.format);
   const acc = cfb.confStandings(st, 'ACC').map(t => t.id);
@@ -392,6 +414,9 @@ console.log('7) old saves: a season already under way keeps its old draw and gro
   cfb.cfbOffseason(st, rng);
   console.log(`   the next season: format ${st.format}, slate for it ${!!(st.slate && st.slate.season === st.season)}`);
   if (st.format !== 1 || !st.slate || st.slate.season !== st.season) fail('the season after an old one did not start under the real format');
+  const notSeries = cfb.CFB_SCHOOLS.filter(t => cfb.cfbRivalOf(t.id, st)?.rival !== cfb.cfbRivalOf(t.id)?.rival).length;
+  console.log(`   the next season: schools whose rival is not the series table's ${notSeries}`);
+  if (notSeries > 0) fail(`the season after an old one still reads the old rivalry table for ${notSeries} school(s)`);
 }
 
 console.log(`8) the builder under load: ${STRESS} slates from fresh seeds`);
@@ -463,6 +488,26 @@ console.log('9) CBB: its series rows are rivalry pairs, and the table goes by le
   console.log(`   early tables (rounds 1 to 3) ${early}, rows still 0-0 in the league ${zeroRows}, of them below a losing league record ${zeroBelow}`);
   if (zeroRows === 0) fail('no CBB table early in a season held a 0-0 row, so the .500 rule is untested');
   if (zeroBelow > 0) fail(`${zeroBelow} CBB row(s) with no league game yet sorted below a losing league record`);
+
+  /* An old CBB save in round 3 (no format): its rivalry night plays the pairs the season started with. */
+  const oldTable = prog.buildRivalries(cbb.CBB_SCHOOLS, cbb.CBB_SCHOOL_STATES);
+  const oldPairs = new Set(oldTable.map(r => key(r.a, r.b)));
+  const seriesPairs = new Set(cbb.cbbRivalries().map(r => key(r.a, r.b)));
+  const moved = [...oldPairs].filter(k => !seriesPairs.has(k)).length;
+  const rng = lehmer(4242);
+  const st = cbb.initCbb('DUKE', rng, { depth: true });
+  delete st.format; st.round = 3;
+  const played = new Set();
+  for (let r = 3; r <= cbb.CBB_ROUNDS; r += 1) {
+    for (const g of cbb.simCbbRound(st, rng).games) if (g.rivalry) played.add(key(g.home, g.away));
+    if (r < cbb.CBB_ROUNDS) st.round += 1;
+  }
+  const offOld = [...played].filter(k => !oldPairs.has(k)).length;
+  const noteOff = cbb.CBB_SCHOOLS.filter(t => cbb.cbbRivalOf(t.id, st)?.rival !== prog.rivalOf(oldTable, t.id)?.rival).length;
+  console.log(`   an old CBB season: rivalry night ${played.size} pairs, ${offOld} off the ${oldPairs.size} it started with (${moved} not on the series table); rival as the board reads it off for ${noteOff}`);
+  if (moved === 0) fail('CBB: the old rivalry table and the series table agree, so the old season check proves nothing');
+  if (offOld > 0 || played.size !== oldPairs.size) fail(`CBB: an old season's rivalry night played ${offOld} pair(s) off the table it started with (${played.size} of ${oldPairs.size} played)`);
+  if (noteOff > 0) fail(`CBB: in an old season the board would name another rival than the one played, for ${noteOff} school(s)`);
 }
 
 fs.rmSync(TMP, { recursive: true, force: true });

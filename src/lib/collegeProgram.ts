@@ -303,6 +303,20 @@ export function rivalOf(rivalries: Rivalry[], id: string): { rival: string; kind
     : { rival: r.a === id ? r.b : r.a, kind: r.kind, state: r.state };
 }
 
+/** Round 1554: what a rivalry lookup reads off the season, when it is handed one. */
+export interface RivalrySeason { format?: number }
+
+/**
+ * Round 1554: the rivalry table a season plays. The real series came in with
+ * the real format, so a season that started before it (an old save in the
+ * middle of one: a state with no format) keeps the pairs it started with and
+ * finishes exactly as it started; its next season starts on the series.
+ * No state means the table as it stands (the pick screen, a new dynasty).
+ */
+export function seasonRivalries(st: RivalrySeason | undefined, current: () => Rivalry[], old: () => Rivalry[]): Rivalry[] {
+  return st && !st.format ? old() : current();
+}
+
 /** The swing a rivalry result carries, in its stated range: morale between
  *  RIVAL_MORALE_MIN and RIVAL_MORALE_MAX strength points, recruiting between
  *  RIVAL_RECRUIT_MIN and RIVAL_RECRUIT_MAX budget points. A blowout (the
@@ -402,6 +416,8 @@ export interface ProgramLeague<T extends ProgramTeam = ProgramTeam> {
   lastRivalry?: RivalryResult | null;
   mySlate?: SlateGame[];
   staffWindow?: StaffWindow | null;
+  /** Round 1554: set by the sport once a season starts under its real format (seasonRivalries). */
+  format?: number;
 }
 
 /** Everything that differs between the dynasties, and nothing else. */
@@ -409,7 +425,8 @@ export interface ProgramSport {
   schools: readonly { id: string; name: string; prestige: number; conf: string }[];
   /** A rivalry won by this many points or more swings the most. */
   rivalFullMargin: number;
-  rivalOf: (id: string) => { rival: string; kind: RivalKind; state?: string } | null;
+  /** Round 1554: handed the season, it answers with the table that season plays (seasonRivalries). */
+  rivalOf: (id: string, st?: RivalrySeason) => { rival: string; kind: RivalKind; state?: string } | null;
   /** What the notes call the man in each chair ("offensive coordinator"). */
   roleTitle: Record<StaffRole, string>;
   /** What the notes call the chair itself ("OC"). */
@@ -461,7 +478,7 @@ export function recordProgramRound(st: ProgramLeague, games: ProgramGame[], spor
     const conference = g.conference ?? confOf.get(g.home) === confOf.get(g.away);
     (st.mySlate ??= []).push({ round: st.round, opp, home: home_, us, them, won, conference, rivalry: !!g.rivalry });
     if (swing) {
-      const rival = sport.rivalOf(st.myTeam);
+      const rival = sport.rivalOf(st.myTeam, st);
       st.lastRivalry = {
         season: st.season, opp, us, them, won,
         kind: rival?.kind ?? 'generated', state: rival?.state,

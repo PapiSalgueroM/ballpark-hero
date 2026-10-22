@@ -20,7 +20,7 @@ import ShareButtons from '@/components/game/ShareButtons';
 import { ConfettiBurst, CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';
 import {
   coordinatorEdge, VACANT_RATING, STAFF_ROLES,
-  type Coordinator, type ProgramStaff, type RivalKind, type RivalryResult, type SlateGame, type StaffRole, type StaffWindow,
+  type Coordinator, type ProgramStaff, type RivalKind, type RivalryResult, type RivalrySeason, type SlateGame, type StaffRole, type StaffWindow,
 } from '@/lib/collegeProgram';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { cn } from '@/lib/utils';
@@ -51,6 +51,8 @@ export interface CollegeState<T extends CollegeTeam> {
   depth?: number; lastRivalry?: RivalryResult | null; mySlate?: SlateGame[]; staffWindow?: StaffWindow | null;
   /** Round 1320: the athletic director's block. Absent on every save that never took him. */
   seat?: CollegeSeatBlock;
+  /** Round 1554: set once a season starts under the sport's real format (seasonRivalries). */
+  format?: number;
 }
 export interface CollegeGame { home: string; away: string; hs: number; as: number; winner: string }
 export interface CollegeRecruit { id: string; name: string; pos: string; stars: number; grade: number; nilAsk: number }
@@ -84,7 +86,8 @@ export interface CollegeSport<T extends CollegeTeam, S extends CollegeState<T>, 
   confLabel: (conf: string) => string;
   rounds: number;
   rivalryRound: number;
-  rivalOf: (id: string) => { rival: string; kind: RivalKind; state?: string; name?: string } | null;
+  /** Round 1554: handed the season, the rival that season plays (an old season keeps its old pairs). */
+  rivalOf: (id: string, st?: RivalrySeason) => { rival: string; kind: RivalKind; state?: string; name?: string } | null;
   positions: readonly string[];
   /** Round 1554: the weeks of my schedule still to play, when the sport fixes its slate at kickoff. */
   fixtures?: (st: S) => CollegeFixture[];
@@ -310,7 +313,8 @@ export default function CollegeDynastyBoard<
   }, [openRecruiting, sport]);
 
   const label = (id: string) => sport.schoolMap.get(id)?.name ?? id;
-  const rivalry = (id: string) => rivalryNoteFor(sport.rivalOf, sport.schoolMap, id);
+  /* Round 1554: the rival the season on screen plays, so an old season's note names its old rival. */
+  const rivalry = (id: string) => rivalryNoteFor(x => sport.rivalOf(x, st ?? undefined), sport.schoolMap, id);
   const ctx: CollegeWordsContext = { label, rivalry };
 
   const start = (id: string) => {

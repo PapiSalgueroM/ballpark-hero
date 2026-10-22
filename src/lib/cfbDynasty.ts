@@ -1,8 +1,8 @@
 import { makeIdMinter, ensureLeagueEntityIds } from './entityIds';
 import {
-  buildRivalries, collegeSlate, enableProgramLayer, openProgramOffseason, recordProgramRound, rivalOf, sosTable,
+  buildRivalries, collegeSlate, enableProgramLayer, openProgramOffseason, recordProgramRound, rivalOf, seasonRivalries, sosTable,
   staffEdges, staffPayroll, strengthOfSchedule, windowFire, windowHire,
-  type Coordinator, type ProgramSport, type ProgramStaff, type RivalKind, type RivalryResult, type Rivalry,
+  type Coordinator, type ProgramSport, type ProgramStaff, type RivalKind, type RivalryResult, type Rivalry, type RivalrySeason,
   type SlateGame, type SlateSpec, type StaffRole, type StaffWindow,
 } from './collegeProgram';
 import { hash32, mulberry32 } from './leagueCore';
@@ -23,8 +23,8 @@ import { CFB_RIVALRY_SERIES } from '@/data/collegeRivalries';
  * format), byes for the top four, single elimination to the title.
  *
  * Round 1554, the real season (CfbState.format 1, from the first season that
- * starts after it ships; a season already under way keeps its old draw to
- * the end, though its rivalry week reads the series table below already):
+ * starts after it ships; a season already under way keeps its old draw and
+ * its old rivalry pairs to the end, cfbRivalries with its state):
  *   - the whole slate is set at kickoff and no regular season pair repeats
  *     (src/lib/collegeProgram.ts collegeSlate): weeks 1 to 4 out of
  *     conference, weeks 5 to 11 conference play with one non-conference date
@@ -161,15 +161,23 @@ export const CFB_RIVAL_FULL_MARGIN = 21;
 export const CFB_POINTS_PER_EDGE = 1.5;
 
 let rivalryCache: Rivalry[] | null = null;
+let oldRivalryCache: Rivalry[] | null = null;
 /** Every school's rivalry week opponent. Built on first use rather than at
- *  module scope, the house rule for anything computed from an import. */
-export function cfbRivalries(): Rivalry[] {
-  /* Round 1554: the real series first (src/data/collegeRivalries.ts). */
-  if (!rivalryCache) rivalryCache = buildRivalries(CFB_SCHOOLS, CFB_SCHOOL_STATES, CFB_RIVALRY_SERIES);
-  return rivalryCache;
+ *  module scope, the house rule for anything computed from an import.
+ *  Round 1554: handed a season that started before the real format (an old
+ *  save in the middle of one), the table that season started with. */
+export function cfbRivalries(st?: RivalrySeason): Rivalry[] {
+  return seasonRivalries(st, () => {
+    /* Round 1554: the real series first (src/data/collegeRivalries.ts). */
+    if (!rivalryCache) rivalryCache = buildRivalries(CFB_SCHOOLS, CFB_SCHOOL_STATES, CFB_RIVALRY_SERIES);
+    return rivalryCache;
+  }, () => {
+    if (!oldRivalryCache) oldRivalryCache = buildRivalries(CFB_SCHOOLS, CFB_SCHOOL_STATES);
+    return oldRivalryCache;
+  });
 }
-export function cfbRivalOf(id: string): { rival: string; kind: RivalKind; state?: string; name?: string } | null {
-  return rivalOf(cfbRivalries(), id);
+export function cfbRivalOf(id: string, st?: RivalrySeason): { rival: string; kind: RivalKind; state?: string; name?: string } | null {
+  return rivalOf(cfbRivalries(st), id);
 }
 
 /** Round 823: football's descriptor for the shared program glue. */
@@ -237,7 +245,7 @@ export interface CfbState {
   /** Round 1554: 1 once a season has started under the real format (a fixed
    *  slate, Notre Dame independent, no Group of Five title game). Absent on
    *  every older save, which finishes the season it is in on the old draw
-   *  (only rivalry week reads the real series already: cfbRivalries). */
+   *  and its old rivalry pairs (cfbRivalries handed the state). */
   format?: number;
   /** Round 1554: this season's whole schedule, built at kickoff. */
   slate?: CfbSlate | null;
@@ -509,7 +517,7 @@ export function simCfbRound(st: CfbState, rng: () => number): { games: CfbGame[]
   }
   if (!slate && st.depth && st.round === CFB_RIVALRY_ROUND) {
     /* Home field alternates by season, the way a series does. */
-    for (const r of cfbRivalries()) {
+    for (const r of cfbRivalries(st)) {
       if (!st.teams[r.a] || !st.teams[r.b]) continue;
       if (st.season % 2 === 0) play(r.a, r.b, true); else play(r.b, r.a, true);
     }
