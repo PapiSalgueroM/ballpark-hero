@@ -214,7 +214,10 @@ const MEASURE_NAV = `(() => {
 })()`;
 
 async function clearBanner(page) {
-  await answerConsent(page, { wait: 900 });
+  /* 1800 ms is the time the two 900 ms presses this replaced spent when the banner was already answered (it
+     always is here, CONSENT_SEED), and the signed in bar's stats are measured on that clock: at 900 three
+     signed in rows read 0 games (Round 1535, r1535-fx-b). */
+  await answerConsent(page, { wait: 1800 });
 }
 
 async function measureNav(browser, { width, signedIn, route }) {
