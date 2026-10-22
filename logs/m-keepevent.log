@@ -1,0 +1,34 @@
+MUTATION keepevent APPLIED to src/lib/fightCareerLifeFlow.ts
+
+1. The gate (10 fights), probed after every fight of 240 careers
+   6950 probes, 2400 below the gate, 4550 at or above it
+   open below the gate 0 (a 1-0 fighter retired 0 times), shut at or above it 0
+   ok   nobody retires below the gate
+   ok   every career at or past the gate can retire
+
+2. Retired by choice at every fight number from the gate on: 4313 retirements
+   4313 of them had something from the life layer waiting at the moment of retiring
+   not over 0, still waiting on a card 2110, record changed 0, score changed 0, verdict silent on who called it 0
+   a fight taken afterwards 0, retired twice 0, lost on a reload 0
+   ok   a retired career is over: no offers, no camp, no fight, no second retirement
+   FAIL 2110 retired careers still have a card, a choice or a beat waiting
+   ok   the verdict scores the record the career had, nothing added and nothing taken
+   ok   the verdict says he called it himself, and after how many fights
+   ok   a reload lands on the same finished career
+
+3. The past fighters list: 452 chosen retirements, 240 forced ones
+   listed twice across a reload 0, chosen shown as forced 0; 451 pairs of careers, 0 not listed as two, newest first
+   forced retirements listed wrong 0, a live career listed 0, junk entries kept 0, a list of 12 kept as 8
+   ok   one entry a career across a save and a reload, and a second career adds a second
+   ok   a forced retirement and an old save read as forced, a chosen one as chosen, a live career is not listed
+   ok   junk in storage is dropped and the list holds the newest 8
+
+4. Walking away at the gate against walking away later and against playing it out, 240 careers played the way a person plays
+   walked away at 10: 233 careers, legacy 20.8 against 20.1 for the same careers played out; as well or better 58.4 percent, a tier higher 1.7 percent
+   walked away at 15: 221 careers, legacy 23.5 against 20.1 for the same careers played out; as well or better 67.4 percent, a tier higher 13.6 percent
+   walked away at 20: 212 careers, legacy 24.7 against 20.0 for the same careers played out; as well or better 75.5 percent, a tier higher 19.8 percent
+   walked away at 25: 200 careers, legacy 23.3 against 20.3 for the same careers played out; as well or better 85.5 percent, a tier higher 16.5 percent
+   the same 212 careers walked away at 20 rather than 10: +3.8 legacy (bar 2); 97.4 percent of walkaways at the gate are a Footnote
+   ok   playing on past the gate pays: the earliest exit is not the best exit
+
+simFightCareerRetire: 1 failure(s)

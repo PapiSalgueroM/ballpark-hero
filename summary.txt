@@ -1,0 +1,15 @@
+m-gate1-retire exit=0 3s | simFightCareerRetire: all sections passed
+m-gate1-vitest exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/fightCareerRetireBoard.test.tsx,title=src/test/fightCareerRetireBoard.test.tsx > Fight Career board%2C
+m-gate5-retire exit=0 2s | simFightCareerRetire: all sections passed
+m-gate5-vitest exit=0 3s |    Duration  2.09s (transform 300ms, setup 68ms, collect 549ms, tests 791ms, environment 293ms, prepare 116ms)
+m-gate5-guide exit=0 1s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+m-nolift exit=0 5s | simFightIds: all sections passed
+m-keyseed exit=1 2s | simFightCareerRetire: 1 failure(s)
+m-keyseed-vitest exit=0 3s |    Duration  2.08s (transform 302ms, setup 70ms, collect 537ms, tests 785ms, environment 303ms, prepare 113ms)
+m-keepevent exit=1 2s | simFightCareerRetire: 1 failure(s)
+m-prospectcopy exit=1 5s | simFightIds: 6 failure(s)
+m-poolcopy exit=1 5s | simFightIds: 4 failure(s)
+m-weightignored exit=1 5s | simFightIds: 1 failure(s)
+m-keepoffers exit=1 2s | simFightCareerRetire: 1 failure(s)
+m-chosenonly exit=1 2s | simFightCareerRetire: 1 failure(s)
+m-clean exit=0 0s | 0

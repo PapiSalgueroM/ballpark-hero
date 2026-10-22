@@ -1,0 +1,37 @@
+MUTATION prospectcopy APPLIED to src/lib/fightGym.ts
+
+1. Fight Gym: 30 weeks, then a reload every 6 weeks to week 60, 40 gyms
+   200 reloads, 2400 weeks: 680 signed (320 after the first reload), 2400 blocks, 2400 fights, 480 released
+   weeks ending with two men under one id 2040, wrong man trained 288, wrong man fought 320, releases that did not remove exactly the one man 40
+   FAIL 2040 gym weeks ended with two men under one id
+   FAIL 288 training blocks went to a man nobody clicked
+   FAIL 320 fights were fought by a man nobody clicked
+   FAIL 40 releases did not remove exactly the one man
+
+2. Fight Promoter: 15 shows, then a reload every 4 shows to show 30, 40 promotions
+   160 reloads, 1200 shows, 3185 bouts (1611 after the first reload), 0 cards with nobody to match, 0 refused
+   shows ending with two men under one id 0, bouts fought by somebody other than the men booked 0
+   ok   no pool ever holds two men under one id
+   ok   every bout on the result is the pair that was booked
+
+3. Saves broken by the old rule: played, reloaded, played on, then loaded
+   76 of 80 saves came out of the old rule holding two men under one id; 144 men moved to a new id on load
+   after load: saves still holding a pair 0, men showing another division 0, men changed beyond the id 0, first holders who lost the id 0, training maps changed 0, counters not above the ids 0, repairs that differ between two loads 0
+   played on: gym weeks 480 (pairs 320, wrong trained 0, wrong fought 0, bad releases 0); shows 400, bouts 1122 (pairs 0, wrong bouts 0)
+   80 saves with nothing to repair, 20 of them loaded different from how they were written
+   ok   every broken save loads with every id unique
+   ok   every man still shows the division he showed before the load
+   ok   the first holder keeps the id and his training; only the man shadowing him moves
+   ok   the counter sits above every id on the save, and the same save repairs the same way every load
+   FAIL after the repair the games did not play on clean (320 faults, 480 weeks, 1122 bouts)
+   FAIL 20 saves with nothing to repair loaded different from how they were written
+
+4. The same names on the old rule and the fixed one: everything but the ids, 60 names
+   1440 men and offers compared, 0 differ beyond the id
+   ok   every man, prospect, pool, career, offer and daily is drawn exactly as before
+
+5. The divisions a new promotion opens with, 400 names
+   matchable pairs on the first card: 2 pairs 400
+   ok   every new promotion opens with two pairs who can be matched, as it always has
+
+simFightIds: 6 failure(s)
