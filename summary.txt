@@ -1,0 +1,6 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+walk exit=0 63s | walk1553: all 7 cases played
+m-refuted-case exit=1 0s | simConnectionsFacts: 1 failure
+m-mig-drift exit=1 4s | rehearseConnections1553: 1 failure
+m-twohost-onehost exit=0 0s | simConnectionsFacts: green. Every claim this round checked stands on two hosts and no rebuilt board has a second answer.
+clean-after exit=0 0s | simConnectionsFacts: green. Every claim this round checked stands on two hosts and no rebuilt board has a second answer.

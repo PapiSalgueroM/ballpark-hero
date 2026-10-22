@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+#!serial
+walk: node .rc/x/walkFix1553.mjs
+m-refuted-case: node .rc/x/mut.mjs refuted-case && node scripts/simConnectionsFacts.mjs && node scripts/simFairPuzzles.mjs; s=$?; git checkout -- src scripts supabase; exit $s
+m-mig-drift: npm install --prefix /tmp/pglm @electric-sql/pglite >/dev/null 2>&1 && node .rc/x/mut.mjs mig-drift && PGLITE_DIR=/tmp/pglm node scripts/qa/rehearseConnections1553.mjs && node scripts/simConnectionsFacts.mjs && node scripts/simFairPuzzles.mjs; s=$?; git checkout -- src scripts supabase; exit $s
+m-twohost-onehost: node .rc/x/mut.mjs twohost-code && CONN_CONTROL=onehost node scripts/simConnectionsFacts.mjs; s=$?; git checkout -- src scripts supabase; exit $s
+clean-after: git status --short | head -5; echo "tree clean check done"; node scripts/simConnectionsFacts.mjs
