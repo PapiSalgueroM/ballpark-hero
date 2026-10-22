@@ -1,0 +1,9 @@
+fix /nfl-my-career window: 493.2K over 48 files
+fix /nfl-my-career settled: 493.2K over 48 files
+fix /nba-my-career window: 578.7K over 49 files
+fix /nba-my-career settled: 578.7K over 49 files
+fix /mlb-my-career window: 566.9K over 49 files
+fix /mlb-my-career settled: 566.9K over 49 files
+fix /nhl-my-career window: 569.5K over 49 files
+fix /nhl-my-career settled: 569.5K over 49 files
+weight probe fix done
