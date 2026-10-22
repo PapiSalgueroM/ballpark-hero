@@ -1,0 +1,5 @@
+  FAIL b: 320: locator.waitFor: Timeout 15000ms exceeded.
+  FAIL b: 390: locator.waitFor: Timeout 15000ms exceeded.
+  FAIL b: 1280: locator.waitFor: Timeout 15000ms exceeded.
+  screenshots: 9 in /home/runner/work/_temp/rc-out/files
+playUsShopPromises: red, 3 failures
