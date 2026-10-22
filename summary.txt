@@ -1,0 +1,9 @@
+rival exit=0 27s | No rival product names found. 0 findings.
+storage exit=0 4s | simStorageWrites: all green (owed: 12)
+anchors exit=0 68s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 109s | 
+sa-3 exit=0 33s | simSoccerSeasonAwards: green
+sa-4 exit=0 108s | simSoccerSeasonAwards: green
+sa-56 exit=0 5s | simSoccerSeasonAwards: green
+sa-2 exit=0 192s | simSoccerSeasonAwards: green
+sa-1 exit=0 570s | simSoccerSeasonAwards: green
