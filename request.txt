@@ -1,0 +1,16 @@
+#!build
+#!playwright
+corrupt: node scripts/playCorruptSaves.mjs
+corrupt-everybutton: CORRUPT_CONTROL=everybutton node scripts/playCorruptSaves.mjs
+corrupt-nobutton: CORRUPT_CONTROL=nobutton node scripts/playCorruptSaves.mjs
+corrupt-norestore: CORRUPT_CONTROL=norestore node scripts/playCorruptSaves.mjs
+corrupt-multiline: CORRUPT_CONTROL=multiline node scripts/playCorruptSaves.mjs
+hall-nfl: node scripts/simCareerHall.mjs nfl
+hall-nba: node scripts/simCareerHall.mjs nba
+hall-mlb: node scripts/simCareerHall.mjs mlb
+hall-nhl: node scripts/simCareerHall.mjs nhl
+hall-nfl-basedrift: SIM_CONTROL=basedrift SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs nfl
+hall-nba-basedrift: SIM_CONTROL=basedrift SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs nba
+hall-nfl-nobase: SIM_CONTROL=nobase SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs nfl
+hall-nfl-plantbase: SIM_CONTROL=plantbase SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs nfl
+hall-nba-plantbase: SIM_CONTROL=plantbase SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs nba
