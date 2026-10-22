@@ -1,0 +1,15 @@
+head: git log --oneline -2 && git rev-parse HEAD~1
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+desk-def: node scripts/simNbaGmDesk.mjs
+ctl-dropone: SIM_NBA_GM_DESK_CONTROL=dropone node scripts/simNbaGmDesk.mjs
+ctl-nohandback: SIM_NBA_GM_DESK_CONTROL=nohandback node scripts/simNbaGmDesk.mjs
+ctl-overlimit: SIM_NBA_GM_DESK_CONTROL=overlimit node scripts/simNbaGmDesk.mjs
+ctl-sheetrepick: SIM_NBA_GM_DESK_CONTROL=sheetrepick node scripts/simNbaGmDesk.mjs
+ctl-fullbird: SIM_NBA_GM_DESK_CONTROL=fullbird node scripts/simNbaGmDesk.mjs
+ctl-coinflip: SIM_NBA_GM_DESK_CONTROL=coinflip node scripts/simNbaGmDesk.mjs
+ctl-norfa: SIM_NBA_GM_DESK_CONTROL=norfa node scripts/simNbaGmDesk.mjs
+contracts: node scripts/simGmContracts.mjs
+deskhost: node scripts/simGmDeskHost.mjs
+nhl: node scripts/simNhlGmDesk.mjs
+norival: node scripts/simNoRivalNames.mjs
+vitest: node_modules/.bin/vitest run src/lib/gmContracts.test.ts src/components/nba-front-office/NbaGmDeskBoard.test.tsx --testTimeout=300000 --hookTimeout=120000
