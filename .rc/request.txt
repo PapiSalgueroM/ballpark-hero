@@ -1,0 +1,2 @@
+seat-base: git worktree add /tmp/base 3ee0bf629 >/dev/null 2>&1; ln -s "$PWD/node_modules" /tmp/base/node_modules; cd /tmp/base && SIM_COLLEGE_SEAT_SPORTS=cfb node scripts/simCollegeSeat.mjs
+seat-head: SIM_COLLEGE_SEAT_SPORTS=cfb node scripts/simCollegeSeat.mjs
