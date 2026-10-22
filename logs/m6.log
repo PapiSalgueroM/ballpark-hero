@@ -1,0 +1,10 @@
+MUTATION noclose applied to src/pages/StadiumTycoon.tsx
+ src/pages/StadiumTycoon.tsx | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+MUT m6: built
+  FAIL     /stadium-tycoon 320x640: dialog "How Stadium Tycoon works" (static) 16 to 319, "Let's go" (its go label) 250 to 298 tapped but the dialog did not close, banner 335 to 640 (pending)
+  FAIL     /stadium-tycoon 390x844: dialog "How Stadium Tycoon works" (static) 16 to 595, "Let's go" (its go label) 526 to 574 tapped but the dialog did not close, banner 611 to 844 (pending)
+  FAIL     /stadium-tycoon 1280x900: dialog "How Stadium Tycoon works" (static) 16 to 719, "Let's go" (its go label) 650 to 698 tapped but the dialog did not close, banner 735 to 900 (pending)
+
+3 route widths walked over 1 routes: 0 dialogs tapped and closed, 0 expected site reds, 0 without a first visit dialog, 3 red
+playFirstVisitDialogs: RED. 3 route widths: /stadium-tycoon 320x640, /stadium-tycoon 390x844, /stadium-tycoon 1280x900

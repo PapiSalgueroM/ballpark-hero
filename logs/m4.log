@@ -1,0 +1,34 @@
+MUTATION notop applied to src/index.css
+ src/index.css | 1 -
+ 1 file changed, 1 deletion(-)
+MUT m4: built
+  FAIL     /soccer-conquest 320x640: dialog "How to Play" (fixed) 165 to 476, "Got it, let's play Soccer Conq" (its go label) 407 to 451 is not tappable: at its centre the banner, 44 of its 44 px under the banner (its bottom 116 px below the banner's top), banner 335 to 640 (pending)
+  FAIL     /soccer-conquest 390x844: dialog "How to Play" (fixed) 129 to 716, "Got it, let's play Soccer Conq" (its go label) 647 to 691 is not tappable: at its centre the banner, 44 of its 44 px under the banner (its bottom 80 px below the banner's top), banner 611 to 844 (pending)
+  FAIL     /soccer-conquest 1280x900: dialog "How to Play" (fixed) 95 to 806, "Got it, let's play Soccer Conq" (its go label) 737 to 781 is not tappable: at its centre the banner, 44 of its 44 px under the banner (its bottom 46 px below the banner's top), banner 735 to 900 (pending)
+  PASS     /stadium-tycoon 320x640: dialog "How Stadium Tycoon works" (static) 16 to 319, "Let's go" (its go label) 250 to 298 tappable (37 px above the banner), banner 335 to 640 (pending); tapped, closed, screen usable
+  PASS     /stadium-tycoon 390x844: dialog "How Stadium Tycoon works" (static) 16 to 595, "Let's go" (its go label) 526 to 574 tappable (37 px above the banner), banner 611 to 844 (pending); tapped, closed, screen usable
+  PASS     /stadium-tycoon 1280x900: dialog "How Stadium Tycoon works" (static) 16 to 719, "Let's go" (its go label) 650 to 698 tappable (37 px above the banner), banner 735 to 900 (pending); tapped, closed, screen usable
+  PASS     /wonderkid-factory 320x640: dialog "How Wonderkid Factory works" (static) 16 to 319, "Let's go" (its go label) 250 to 298 tappable (37 px above the banner), banner 335 to 640 (pending); tapped, closed, screen usable
+  PASS     /wonderkid-factory 390x844: dialog "How Wonderkid Factory works" (static) 16 to 595, "Let's go" (its go label) 526 to 574 tappable (37 px above the banner), banner 611 to 844 (pending); tapped, closed, screen usable
+  PASS     /wonderkid-factory 1280x900: dialog "How Wonderkid Factory works" (static) 16 to 719, "Let's go" (its go label) 650 to 698 tappable (37 px above the banner), banner 735 to 900 (pending); tapped, closed, screen usable
+  PASS     /footle 320x640: dialog "How to Play Footle" (fixed) 48 to 592, "Let's Play!" (its go label) 523 to 567 tappable, banner 49 to 367 (inside the dialog); tapped, closed, screen usable
+  PASS     /footle 390x844: dialog "How to Play Footle" (fixed) 63 to 781, "Let's Play!" (its go label) 711 to 755 tappable, banner 136 to 434 (inside the dialog); tapped, closed, screen usable
+  PASS     /footle 1280x900: dialog "How to Play Footle" (fixed) 68 to 833, "Let's Play!" (its go label) 764 to 808 tappable, banner 141 to 367 (inside the dialog); tapped, closed, screen usable
+  PASS     /connections 320x640: dialog "How to Play" (fixed) 165 to 476, "Close" (its close label) 174 to 206 tappable (130 px above the banner), banner 335 to 640 (pending); tapped, closed, screen usable
+  PASS     /connections 390x844: dialog "How to Play" (fixed) 135 to 709, "Close" (its close label) 144 to 176 tappable (435 px above the banner), banner 611 to 844 (pending); tapped, closed, screen usable
+  PASS     /connections 1280x900: dialog "How to Play" (fixed) 191 to 709, "Close" (its close label) 200 to 232 tappable (503 px above the banner), banner 735 to 900 (pending); tapped, closed, screen usable
+  FAIL     /build-your-xi 320x640: dialog "How to Play: Build Your XI" (fixed) 165 to 476, "Got it!" (its go label) 407 to 451 is not tappable: at its centre the banner, 44 of its 44 px under the banner (its bottom 116 px below the banner's top), banner 335 to 640 (pending)
+  FAIL     /build-your-xi 390x844: dialog "How to Play: Build Your XI" (fixed) 129 to 716, "Got it!" (its go label) 647 to 691 is not tappable: at its centre the banner, 44 of its 44 px under the banner (its bottom 80 px below the banner's top), banner 611 to 844 (pending)
+  FAIL     /build-your-xi 1280x900: dialog "How to Play: Build Your XI" (fixed) 95 to 806, "Got it!" (its go label) 737 to 781 is not tappable: at its centre the banner, 44 of its 44 px under the banner (its bottom 46 px below the banner's top), banner 735 to 900 (pending)
+  PASS     /football-grid 320x640: dialog "How to Play" (fixed) 165 to 476, "Close" (its close label) 174 to 206 tappable (130 px above the banner), banner 335 to 640 (pending); tapped, closed, screen usable
+  PASS     /football-grid 390x844: dialog "How to Play" (fixed) 208 to 637, "Close" (its close label) 217 to 249 tappable (363 px above the banner), banner 611 to 844 (pending); tapped, closed, screen usable
+  PASS     /football-grid 1280x900: dialog "How to Play" (fixed) 246 to 655, "Close" (its close label) 255 to 287 tappable (449 px above the banner), banner 735 to 900 (pending); tapped, closed, screen usable
+  FAIL     /conquest-nhl 320x640: dialog "How to Play" (fixed) 165 to 476, "Got it, let's play NHL Imperia" (its go label) 407 to 451 is not tappable: at its centre the banner, 44 of its 44 px under the banner (its bottom 116 px below the banner's top), banner 335 to 640 (pending)
+  FAIL     /conquest-nhl 390x844: dialog "How to Play" (fixed) 129 to 716, "Got it, let's play NHL Imperia" (its go label) 647 to 691 is not tappable: at its centre the banner, 44 of its 44 px under the banner (its bottom 80 px below the banner's top), banner 611 to 844 (pending)
+  FAIL     /conquest-nhl 1280x900: dialog "How to Play" (fixed) 95 to 806, "Got it, let's play NHL Imperia" (its go label) 737 to 781 is not tappable: at its centre the banner, 44 of its 44 px under the banner (its bottom 46 px below the banner's top), banner 735 to 900 (pending)
+  PASS     /idle-arena 320x640: dialog "How Idle Arena works" (static) 0 to 319, "Start tapping" (its go label) 250 to 298 tappable (37 px above the banner), banner 335 to 640 (pending); tapped, closed, screen usable
+  PASS     /idle-arena 390x844: dialog "How Idle Arena works" (static) 0 to 595, "Start tapping" (its go label) 526 to 574 tappable (37 px above the banner), banner 611 to 844 (pending); tapped, closed, screen usable
+  PASS     /idle-arena 1280x900: dialog "How Idle Arena works" (static) 0 to 719, "Start tapping" (its go label) 650 to 698 tappable (38 px above the banner), banner 735 to 900 (pending); tapped, closed, screen usable
+
+27 route widths walked over 9 routes: 18 dialogs tapped and closed, 0 expected site reds, 0 without a first visit dialog, 9 red
+playFirstVisitDialogs: RED. 9 route widths: /soccer-conquest 320x640, /soccer-conquest 390x844, /soccer-conquest 1280x900, /build-your-xi 320x640, /build-your-xi 390x844, /build-your-xi 1280x900, /conquest-nhl 320x640, /conquest-nhl 390x844, /conquest-nhl 1280x900

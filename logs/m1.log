@@ -1,0 +1,16 @@
+MUTATION stalevar applied to src/components/game/aboveConsentBanner.ts
+ src/components/game/aboveConsentBanner.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+MUT m1: built
+  FAIL     /stadium-tycoon 320x640: dialog "How Stadium Tycoon works" (static) 64 to 576, "Let's go" (its go label) 507 to 555 is not tappable: at its centre the banner, 48 of its 48 px under the banner (its bottom 220 px below the banner's top), banner 335 to 640 (pending)
+  FAIL     /stadium-tycoon 390x844: dialog "How Stadium Tycoon works" (static) 84 to 760, "Let's go" (its go label) 690 to 738 is not tappable: at its centre the banner, 48 of its 48 px under the banner (its bottom 127 px below the banner's top), banner 611 to 844 (pending)
+  FAIL     /stadium-tycoon 1280x900: dialog "How Stadium Tycoon works" (static) 90 to 810, "Let's go" (its go label) 741 to 789 is not tappable: at its centre the banner, 48 of its 48 px under the banner (its bottom 54 px below the banner's top), banner 735 to 900 (pending)
+  FAIL     /wonderkid-factory 320x640: dialog "How Wonderkid Factory works" (static) 64 to 576, "Let's go" (its go label) 507 to 555 is not tappable: at its centre the banner, 48 of its 48 px under the banner (its bottom 220 px below the banner's top), banner 335 to 640 (pending)
+  FAIL     /wonderkid-factory 390x844: dialog "How Wonderkid Factory works" (static) 84 to 760, "Let's go" (its go label) 690 to 738 is not tappable: at its centre the banner, 48 of its 48 px under the banner (its bottom 127 px below the banner's top), banner 611 to 844 (pending)
+  FAIL     /wonderkid-factory 1280x900: dialog "How Wonderkid Factory works" (static) 90 to 810, "Let's go" (its go label) 741 to 789 is not tappable: at its centre the banner, 48 of its 48 px under the banner (its bottom 54 px below the banner's top), banner 735 to 900 (pending)
+  FAIL     /idle-arena 320x640: dialog "How Idle Arena works" (static) 40 to 584, "Start tapping" (its go label) 515 to 563 is not tappable: at its centre the banner, 48 of its 48 px under the banner (its bottom 228 px below the banner's top), banner 335 to 640 (pending)
+  FAIL     /idle-arena 390x844: dialog "How Idle Arena works" (static) 55 to 773, "Start tapping" (its go label) 703 to 751 is not tappable: at its centre the banner, 48 of its 48 px under the banner (its bottom 140 px below the banner's top), banner 611 to 844 (pending)
+  FAIL     /idle-arena 1280x900: dialog "How Idle Arena works" (static) 60 to 825, "Start tapping" (its go label) 755 to 803 is not tappable: at its centre the banner, 48 of its 48 px under the banner (its bottom 68 px below the banner's top), banner 735 to 900 (pending)
+
+9 route widths walked over 3 routes: 0 dialogs tapped and closed, 0 expected site reds, 0 without a first visit dialog, 9 red
+playFirstVisitDialogs: RED. 9 route widths: /stadium-tycoon 320x640, /stadium-tycoon 390x844, /stadium-tycoon 1280x900, /wonderkid-factory 320x640, /wonderkid-factory 390x844, /wonderkid-factory 1280x900, /idle-arena 320x640, /idle-arena 390x844, /idle-arena 1280x900

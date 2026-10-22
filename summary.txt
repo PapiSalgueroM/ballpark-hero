@@ -1,0 +1,7 @@
+m1 exit=1 84s | playFirstVisitDialogs: RED. 9 route widths: /stadium-tycoon 320x640, /stadium-tycoon 390x844, /stadium-tycoon 1280x900, /wonderkid-factory 320x640, /wonderkid-factory 390
+m2 exit=1 89s | playFirstVisitDialogs: RED. 4 route widths: /stadium-tycoon 320x640, /wonderkid-factory 320x640, /idle-arena 320x640, /idle-arena 390x844
+m0 exit=0 127s | m0 revert: plain exit 1 (want 1), expect9 exit 0 (want 0), expect8 exit 1 (want 1)
+m3 exit=0 74s | playFirstVisitDialogs: green. Every first visit dialog can be started with the cookie banner unanswered.
+m4 exit=1 116s | playFirstVisitDialogs: RED. 9 route widths: /soccer-conquest 320x640, /soccer-conquest 390x844, /soccer-conquest 1280x900, /build-your-xi 320x640, /build-your-xi 390x844,
+m6 exit=1 63s | playFirstVisitDialogs: RED. 3 route widths: /stadium-tycoon 320x640, /stadium-tycoon 390x844, /stadium-tycoon 1280x900
+m5 exit=1 108s | playFirstVisitDialogs: RED. 9 route widths: /soccer-conquest 320x640, /soccer-conquest 390x844, /soccer-conquest 1280x900, /build-your-xi 320x640, /build-your-xi 390x844,
