@@ -1,0 +1,10 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simHigherLowerFacts: node scripts/simHigherLowerFacts.mjs
+hl-curryshort: HL_FACTS_CONTROL=curryshort node scripts/simHigherLowerFacts.mjs
+hl-nbaonesource: HL_FACTS_CONTROL=nbaonesource node scripts/simHigherLowerFacts.mjs
+hl-flagless: HL_FACTS_CONTROL=flagless node scripts/simHigherLowerFacts.mjs
+hl-nbastale: HL_FACTS_CONTROL=nbastale node scripts/simHigherLowerFacts.mjs
+hl-examplestale: HL_FACTS_CONTROL=examplestale node scripts/simHigherLowerFacts.mjs
+hl-throughprop: HL_FACTS_CONTROL=throughprop node scripts/simHigherLowerFacts.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs

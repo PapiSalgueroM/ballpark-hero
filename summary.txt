@@ -1,0 +1,10 @@
+hl-curryshort exit=1 1s | simHigherLowerFacts: control curryshort turned section(s) 2, 3 red and nothing else. The check works.
+simHigherLowerFacts exit=0 1s | simHigherLowerFacts: green. 64 checks across 10 fenced game(s). Every total matches the source it came from, every matchup is ordered correctly, and every figure nobody c
+hl-nbaonesource exit=1 1s | simHigherLowerFacts: control nbaonesource turned section(s) 1 red and nothing else. The check works.
+hl-flagless exit=1 1s | simHigherLowerFacts: control flagless turned section(s) 1 red and nothing else. The check works.
+hl-nbastale exit=1 1s | simHigherLowerFacts: control nbastale turned section(s) 2, 3 red and nothing else. The check works.
+hl-examplestale exit=1 1s | simHigherLowerFacts: control examplestale turned section(s) 9 red and nothing else. The check works.
+hl-throughprop exit=1 1s | simHigherLowerFacts: control throughprop turned section(s) 7 red and nothing else. The check works.
+simGuideHeadings exit=1 1s | simGuideHeadings: RED, 1 failure in section 4
+simSiteSearch exit=0 2s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+tsc exit=0 50s | 
