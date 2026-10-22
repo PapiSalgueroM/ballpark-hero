@@ -308,19 +308,21 @@ export function pitchPlan(input: PitchInput): PitchPlan {
     const before = queue[n - 1];
     if (before) { floor = Math.max(floor, before.floor + ACTION_SPAN + restart(before)); wanted = Math.max(wanted, before.at + ACTION_SPAN + waitedFor(before) + PITCH_SQUEEZE); }
     /* Round 1521 closing check, with `build`: a foul of the very same minute is whistled before the chance, which
-       waits for it inside its minute (the clock still reads it), as a chance already waits for the action before it.
-       The whistle goes at the first instant of the minute that the action before, what follows it, the period's
+       waits for it inside its minute (the clock still reads it), as a chance already waits for the action before it;
+       failing one, so is a foul of the minute before, whose whistle the chance's lead in would otherwise cover. The
+       whistle goes at the first instant of the foul's minute that the action before, what follows it, the period's
        kick off and the feed's corners and throw ins leave free, on the grid the foul is looked for on; the chance
        waits for that whistle and then a lead in (the whole of it if it fits, else PITCH_SQUEEZE). When even that does
-       not fit inside its minute nothing waits, and the foul is not drawn, as before. */
-    if (build && foulPlaces.has(c.place)) {
+       not fit inside the chance's own minute nothing waits, and the foul is not drawn, as before. */
+    for (const minute of build ? [c.place, c.place - 1] : []) {
+      if (c.whistle !== undefined || minute < from - EPS || !foulPlaces.has(minute)) continue;
       const cap = Math.min(c.place + PITCH_LATE, Math.max(c.place, ceiling));
-      let clear = c.place;
-      for (const k of opening) if (k.at <= c.place + EPS) clear = Math.max(clear, k.at + PITCH_KICKOFF);
+      let clear = minute;
+      for (const k of opening) if (k.at <= minute + EPS) clear = Math.max(clear, k.at + PITCH_KICKOFF);
       if (before) clear = Math.max(clear, before.at + ACTION_SPAN + Math.max(whole(before), BEAT_SPAN));
-      const latestWhistle = Math.min(c.place + 1 - BEAT_SPAN, to - BEAT_SPAN);
-      for (let k = Math.max(0, Math.ceil((clear - c.place) / 0.02 - 1e-6)); c.place + k * 0.02 <= latestWhistle + EPS; k++) {
-        const w = c.place + k * 0.02;
+      const latestWhistle = Math.min(minute + 1 - BEAT_SPAN, to - BEAT_SPAN);
+      for (let k = Math.max(0, Math.ceil((clear - minute) / 0.02 - 1e-6)); minute + k * 0.02 <= latestWhistle + EPS; k++) {
+        const w = minute + k * 0.02;
         if (setPieces.some(q => q < w + BEAT_SPAN - EPS && w < q + 2 * BEAT_SPAN - EPS)) continue;
         const lead = w + BEAT_SPAN + PITCH_LEAD <= cap + EPS ? PITCH_LEAD : PITCH_SQUEEZE;
         if (w + BEAT_SPAN + lead > cap + EPS) break;
@@ -605,7 +607,9 @@ export function pitchPlan(input: PitchInput): PitchPlan {
         if (found < 0) here(holds);
         if (found < 0) return;
         at = Math.round(found * 1e6) / 1e6;
-        deadWindows.push({ from: at - (meets ? BEAT_SPAN : 0), to: at + 2 * BEAT_SPAN, order, foul: true });
+        /* Round 1521 closing check: it keeps the pitch for as long as it needs it (its whistle, or its whistle and free
+           kick), so a foul after it whose minute has no other room may step on a free kick the first had no room for. */
+        deadWindows.push({ from: at - (meets ? BEAT_SPAN : 0), to: need, order, foul: true });
         const taken = new Set(layers.filter(l => l.via === 'approach' && l.id.startsWith('a') && over(l.start, l.end, at - (meets ? BEAT_SPAN : 0), need)).map(l => l.id.slice(1)));
         for (let k = layers.length - 1; k >= 0; k--) if (layers[k].via === 'approach' && taken.has(layers[k].id.slice(1))) layers.splice(k, 1);
         foul = { order, at, by: by?.key ?? null, on: victim?.key ?? null };
