@@ -83,7 +83,7 @@ const rank = (line: PitchLine) => LINES.indexOf(line);
  *  and moved by its `push` per unit of push, so a side that plays directly goes forward more and back less; the
  *  rest goes across the same line. From the front line there is no further line: the ball is kept among the
  *  forwards (`keep`) or it goes back. */
-const BUILD = { forward: 0.55, forwardPush: 0.2, reset: 0.1, resetPush: -0.05, keep: 0.6, keepPush: 0.1 };
+const BUILD = { forward: 0.6, forwardPush: 0.15, reset: 0.08, resetPush: -0.04, keep: 0.65, keepPush: 0.2 };
 /** A pass that goes further than this arrives in the air. */
 const LONG_PASS = 38;
 /** A reset that goes back and this far across is a switch of play; a shorter one is pressure. */
