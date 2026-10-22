@@ -921,9 +921,6 @@ for (const seed of SEEDS) {
   }
 }
 
-/* Round 1556: the bottom copies written down on the walk, played now that both walks are done. */
-for (const q of bottomQueue) playBottom(q);
-
 begin('2', 'over ten seasons a seed, no expiring man of yours leaves without a recorded decision, applied as written');
 for (const p of problems.s2) fail(p);
 if (stats.decisions < T.minDecisions) fail(`only ${stats.decisions} decisions over the walk, floor ${T.minDecisions}`);
@@ -936,10 +933,9 @@ if (stats.sheets < T.minSheets) fail(`only ${stats.sheets} offer sheets, floor $
 if (stats.sheetGone < T.minSheetGone) fail(`only ${stats.sheetGone} men left on a sheet and found at the rival, floor ${T.minSheetGone}`);
 if (stats.sheetFull < T.minSheetFull) fail(`only ${stats.sheetFull} sheets let stand reached their club after a draft that filled every roster, floor ${T.minSheetFull}`);
 if (stats.censusWalk < SEEDS.length * SEASONS) fail(`the census closed ${stats.censusWalk} windows on the walk, which had ${SEEDS.length * SEASONS} summers`);
-if (stats.bottom < T.minBottom) fail(`only ${stats.bottom} sheets let stand were kept at a club whose waiver reached them first, floor ${T.minBottom}`);
 console.log(`   ${stats.sheetFull} sheets let stand still reached the club written down after a draft that filled every rival roster`);
-console.log(`   census of the offer sheet window (Round 1556): ${stats.censusWindows} windows (${stats.censusWalk} on the walk), ${stats.censusMen} men followed: ${stats.censusClub} on a club after it, ${stats.censusPool} in the pool, ${stats.censusRetired} retired, ${stats.censusPoolCut} not kept by the pool's best 30, ${stats.censusGone} gone`);
-console.log(`   a sheet let stand at the bottom of a full club: ${stats.bottom} kept there with room made (${stats.bottomWaived} of the club's men left in the summer), ${stats.bottomSkipped} skipped (his ceiling at 99)`);
+const censusLine = () => `${stats.censusWindows} windows (${stats.censusWalk} on the walk), ${stats.censusMen} men followed: ${stats.censusClub} on a club after it, ${stats.censusPool} in the pool, ${stats.censusRetired} retired, ${stats.censusPoolCut} not kept by the pool's best 30, ${stats.censusGone} gone`;
+console.log(`   census of the offer sheet window, the walk and its full draft copies (Round 1556): ${censusLine()}`);
 console.log(`   sheet floors on the earned night (the lead's ruling, 2026-10-22): sheets ${T.minSheets} (old desk ${OLD_SHEET_FLOORS.minSheets}), gone to the rival ${T.minSheetGone} (old desk ${OLD_SHEET_FLOORS.minSheetGone}), full draft copies ${T.minSheetFull} (old desk ${OLD_SHEET_FLOORS.minSheetFull})`);
 console.log(`   ${stats.applyChecks} expiring men: ${stats.gm} decided by the GM, ${stats.auto} by the staff's rule`);
 console.log(`   draftees up: ${stats.scaleUp} first rounders after the rookie scale, ${stats.secondUp} second rounders; ${stats.restricted} restricted cases, ${stats.sheets} sheets (${stats.sheetMatched} matched, ${stats.sheetGone} gone to the rival on its terms)`);
@@ -1346,6 +1342,23 @@ begin('7', 'every desk panel draws, and the re-sign desk shows a tile for every 
   const resignBox = NBA_DESK_PANELS.find(p => p.key === 'contracts').tile({ desk, facts: { ...facts, deskOn: false } });
   if (/waiting on you|Every call is made/.test(resignBox.sub)) fail(`a save without the desk says ${J(resignBox.sub)} while the summer still decides`);
   console.log(`   4 panels drawn, ${tiles} re-sign tiles for ${cases} expiring men`);
+}
+
+/* ================================================================== */
+/* Round 1556: the bottom copies written down on the walk, played last. A
+   copy's summer mints ids and ids feed hashed draws (the sheets on the walk,
+   the trainer's rolls in check 5), so played any earlier they would move what
+   the checks above print. Their failures count in check 2. */
+check = '2';
+console.log('2) continued (Round 1556): a sheet let stand at the bottom of a full club, and the census on those copies');
+{
+  const from = problems.s2.length;
+  const windowsBefore = stats.censusWindows;
+  for (const q of bottomQueue) playBottom(q);
+  for (const p of problems.s2.slice(from)) fail(p);
+  if (stats.bottom < T.minBottom) fail(`only ${stats.bottom} sheets let stand were kept at a club whose waiver reached them first, floor ${T.minBottom}`);
+  console.log(`   a sheet let stand at the bottom of a full club (Round 1556): ${stats.bottom} kept there with room made over ${stats.censusWindows - windowsBefore} copies (${stats.bottomWaived} of the club's men left in the summer), ${stats.bottomSkipped} skipped (his ceiling at 99)`);
+  console.log(`   census with those copies (Round 1556): ${censusLine()}`);
 }
 
 /* ================================================================== */
