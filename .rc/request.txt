@@ -1,0 +1,10 @@
+#!serve
+#!playwright
+#!serial
+playSoccerCareer: node scripts/playSoccerCareer.mjs
+playTranslatedPage: node scripts/playTranslatedPage.mjs
+playStorageBlocked: node scripts/playStorageBlocked.mjs
+playUsCareerSaveSeam: node scripts/playUsCareerSaveSeam.mjs
+sweepPhone: ENGINES=chromium node scripts/sweepPhone.mjs
+sweepContrast: node scripts/sweepContrast.mjs
+sweepSaves: node scripts/sweepSaves.mjs
