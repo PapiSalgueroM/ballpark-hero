@@ -17,7 +17,8 @@ import './lib/seedRandom.mjs';
    true of the row asked about, no "Without Club" or "Retired" offered as a club), no ladder short of
    fifteen (a short ladder is the page's error screen), the hard band not starved, the daily that was
    already dealt not re-dealt (dates before ONE_ANSWER_FROM reproduce the base generator exactly),
-   the namesake list current with its generator, and Face Off and this bank on one MIN_RATIO.
+   the namesake list current with its generator and holding every name the saved rows show as two
+   men in one season (worked out by this harness on its own), and Face Off and this bank on one MIN_RATIO.
 
    THE FIXTURE is shaped like the live slice because it is a saved copy of it:
      market     every 2026 row of player_market_values_dedup with a value, name, nationality, club
@@ -49,6 +50,7 @@ import './lib/seedRandom.mjs';
      TRIVIA_CONTROL=namesake  the namesake filter is removed                          (section 2)
      TRIVIA_CONTROL=tense     the club question says "play for" again                 (section 2)
      TRIVIA_CONTROL=legacy    dates before ONE_ANSWER_FROM get the new rules          (section 4)
+     TRIVIA_CONTROL=rulec     a copy of scripts/genMarketNamesakes.mjs loses rule C   (sections 6 and 6b)
    Re-measure the legacy hashes from any copy of the bank (the base of this round was c75d04dad):
      TRIVIA_BANK_FILE=<path> node scripts/simTriviaBank.mjs --print-legacy
 */
@@ -59,7 +61,7 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const CONTROLS = ['ties', 'namesake', 'tense', 'legacy'];
+const CONTROLS = ['ties', 'namesake', 'tense', 'legacy', 'rulec'];
 const CONTROL = process.env.TRIVIA_CONTROL || '';
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`TRIVIA_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
 const PRINT_LEGACY = process.argv.includes('--print-legacy');
@@ -106,12 +108,25 @@ const SWAPS = {
   tense: ['`Which club was ${correct.player_name} at in the ${CURRENT_YEAR} market values?`','`Which club does ${correct.player_name} play for?`', 'the club question says "play for" again'],
   legacy: ['return dateStr < ONE_ANSWER_FROM ? LEGACY : ONE_ANSWER;', 'return ONE_ANSWER;', 'dates before ONE_ANSWER_FROM get the new rules'],
 };
+/* a control on the namesake generator edits a copy of it, which section 6 then derives the list from */
+const GEN_SWAPS = {
+  rulec: ['if (seen.size >= 2) {', 'if (false) {', "the generator's rule C (two different rows in one season are two men) is gone"],
+};
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'dukb-trivia-'));
 let bankSource = fs.readFileSync(BANK_FILE, 'utf8').replace(/\r\n/g, '\n');
-if (CONTROL) {
+if (SWAPS[CONTROL]) {
   const [from, to, what] = SWAPS[CONTROL];
   if (!bankSource.includes(from)) { console.error(`control cannot run: the bank does not contain ${JSON.stringify(from.trim())}`); process.exit(1); }
   bankSource = bankSource.replace(from, to);
+  console.log(`NEGATIVE CONTROL ON: ${what}`);
+}
+let GEN_FILE = path.join(ROOT, 'scripts/genMarketNamesakes.mjs');
+if (GEN_SWAPS[CONTROL]) {
+  const [from, to, what] = GEN_SWAPS[CONTROL];
+  const genSource = fs.readFileSync(GEN_FILE, 'utf8').replace(/\r\n/g, '\n');
+  if (!genSource.includes(from)) { console.error(`control cannot run: the generator does not contain ${JSON.stringify(from)}`); process.exit(1); }
+  GEN_FILE = path.join(tmp, 'genMarketNamesakes.mjs');
+  fs.writeFileSync(GEN_FILE, genSource.replace(from, to));
   console.log(`NEGATIVE CONTROL ON: ${what}`);
 }
 if (/from '\.\.?\//.test(bankSource)) { console.error('cannot run: the bank imports by relative path, so a copy of it cannot be bundled'); process.exit(1); }
@@ -155,7 +170,7 @@ for (const [band, rows] of Object.entries(BANDS)) {
   if (named.length === 0) fail(`the ${band} band carries no listed namesake, so this harness could not see one asked`);
 }
 if (biggestTie < 2) fail('the easy band has no tied values, so this harness could not see a tie asked');
-if (NAMESAKES.size < 40) fail(`the namesake list has ${NAMESAKES.size} names, fewer than the 54 the saved rows show`);
+if (NAMESAKES.size < 40) fail(`the namesake list has ${NAMESAKES.size} names, well short of the 62 the saved rows show`);
 
 /* ---------------- the one right answer checker every ladder goes through ---------------- */
 const TEMPLATES = [
@@ -286,7 +301,7 @@ for (const [band, d] of [['easy', 3], ['medium', 8], ['hard', 13]]) {
 
 /* ---------------- 6. the namesake list is what the saved rows say ---------------- */
 section('6. src/data/marketNamesakes.json is current with scripts/genMarketNamesakes.mjs');
-const { deriveNamesakes } = await import(pathToFileURL(path.join(ROOT, 'scripts/genMarketNamesakes.mjs')).href);
+const { deriveNamesakes } = await import(pathToFileURL(GEN_FILE).href);
 const derived = deriveNamesakes(stock, alpha);
 const livePath = path.join(ROOT, 'scripts/data/marketNamesakesLive.json');
 const liveNames = fs.existsSync(livePath) ? JSON.parse(fs.readFileSync(livePath, 'utf8')).names : [];
@@ -295,7 +310,30 @@ const missing = [...expected].filter(x => !NAMESAKES.has(x)), extra = [...NAMESA
 console.log(`   derived ${derived.size} from the saved rows, ${liveNames.length} from a live read; shipped ${NAMESAKES.size}`);
 if (missing.length) fail(`namesakes the saved rows show but the list leaves out: ${missing.slice(0, 8).join(', ')}`);
 if (extra.length) fail(`names on the list nothing derives (typed by hand?): ${extra.slice(0, 8).join(', ')}`);
-for (const name of ['Danilo', 'João Pedro', 'Luis Suárez', 'Nico González']) if (!NAMESAKES.has(name)) fail(`${name}, a namesake the saved rows show plainly, is not on the list`);
+for (const name of ['Danilo', 'João Pedro', 'Luis Suárez', 'Nico González', 'Vitinha', 'Alisson', 'Otávio', 'Pablo']) if (!NAMESAKES.has(name)) fail(`${name}, a namesake the saved rows show plainly, is not on the list`);
+
+/* 6b. The check above only proves the list equals what the generator derives, so a gap in the
+   generator's rules is invisible to it: the generator of Round 1552's first build missed Vitinha,
+   Alisson, Otavio, Pablo and four more because their two men are the same age or one year apart.
+   This works the same evidence out here, by its own code: the saved pull holds one row per player
+   per season (exact repeats aside), so a name with two rows in one season that disagree on position
+   or age is two men, and every such name of the 2026 slice must be listed, both by the generator's
+   output and in the shipped file. TRIVIA_CONTROL=rulec takes the generator's rule C away. */
+const sliceNames = new Set(alpha.map(r => r.player_name));
+const twoMen = new Map();
+for (const [season, rows] of Object.entries(stock.pools)) {
+  const shapes = new Map();
+  for (const r of rows) {
+    if (!sliceNames.has(r[0])) continue;
+    if (!shapes.has(r[0])) shapes.set(r[0], new Set());
+    shapes.get(r[0]).add(`${r[1]} ${r[2]}`);
+  }
+  for (const [name, s] of shapes) if (s.size > 1 && !twoMen.has(name)) twoMen.set(name, `${season}: ${[...s].join(' and ')}`);
+}
+const twoMenLeftOut = [...twoMen.keys()].filter(n => !expected.has(n) || !NAMESAKES.has(n));
+console.log(`   6b. ${twoMen.size} names of the 2026 slice show two men in one season of the saved rows; left off the list ${twoMenLeftOut.length}`);
+if (twoMen.size === 0) fail('the saved rows show no name with two men in one season, so section 6b could not see one left out');
+for (const n of twoMenLeftOut) fail(`${n} shows two men in one season (${twoMen.get(n)}) but the namesake list leaves it out`);
 
 /* ---------------- 7. one no tie rule ---------------- */
 section('7. Face Off and the bank read one MIN_RATIO');

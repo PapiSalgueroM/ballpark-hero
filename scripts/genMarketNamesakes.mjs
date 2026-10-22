@@ -13,7 +13,14 @@
  *   A. one season carries two rows under it whose ages differ by 2 or more (one man is not two ages
  *      apart from himself in one season's snapshot), or
  *   B. its rows across seasons imply birth years (season minus age) 3 or more apart (one man's implied
- *      birth year moves by at most 1 between snapshots).
+ *      birth year moves by at most 1 between snapshots), or
+ *   C. one season carries two rows under it that differ in position or in age. The pull holds one row
+ *      per player per season (some rows come twice, exactly the same, which is one man's row repeated):
+ *      measured 2026-10-22, no name in it has two different rows in one season that agree on both
+ *      position and age. So two rows of one season that disagree are two men, even the same age:
+ *      Vitinha in 2022 is a Centre-Forward of 21 and a Defensive Midfield of 21, Alisson in 2015 a
+ *      Goalkeeper of 22 and a Central Midfield of 21. A and B missed those (Round 1552 review); C added
+ *      8 names, 54 to 62.
  * Only names in the 2026 slice (scripts/data/alphabetSprintPool.json, pulled 2026-09-05) are kept,
  * because only those are ever asked.
  *
@@ -41,9 +48,9 @@ export function deriveNamesakes(stock, slice2026) {
   const inSlice = new Set(slice2026.map(r => r.player_name));
   const byName = new Map();
   for (const [season, rows] of Object.entries(stock.pools)) {
-    for (const [name, , age] of rows) {
+    for (const [name, position, age] of rows) {
       if (!byName.has(name)) byName.set(name, []);
-      byName.get(name).push({ season: Number(season), age });
+      byName.get(name).push({ season: Number(season), position, age });
     }
   }
   const evidence = new Map();
@@ -54,6 +61,12 @@ export function deriveNamesakes(stock, slice2026) {
     for (const r of aged) { if (!seasons.has(r.season)) seasons.set(r.season, []); seasons.get(r.season).push(r.age); }
     for (const [season, ages] of seasons) {
       if (Math.max(...ages) - Math.min(...ages) >= 2) { evidence.set(name, `A ${season}: ages ${Math.min(...ages)} and ${Math.max(...ages)}`); break; }
+    }
+    if (evidence.has(name)) continue;
+    const shapes = new Map();
+    for (const r of rows) { if (!shapes.has(r.season)) shapes.set(r.season, new Set()); shapes.get(r.season).add(`${r.position} ${r.age}`); }
+    for (const [season, seen] of shapes) {
+      if (seen.size >= 2) { evidence.set(name, `C ${season}: ${[...seen].join(' and ')}`); break; }
     }
     if (evidence.has(name) || aged.length < 2) continue;
     const births = aged.map(r => r.season - r.age);
