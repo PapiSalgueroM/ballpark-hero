@@ -1,0 +1,19 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/soccerCareerDugoutTable.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[33m 2047[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the dugout table is his own league (Round 1029)[2m > [22man Arsenal season names Premier League clubs and nobody from abroad [33m 529[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerDebutLegacy.test.tsx [2m([22m[2m19 tests[22m[2m)[22m[33m 2231[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 985: through the real page, a reload never replays the moment[2m > [22ma save left sitting on the debut card loads still, and the control slams [33m 354[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 985: through the real page, the moment plays when the state flips[2m > [22mContinue off the season summary onto the call-up plays the debut card [33m 441[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 985: through the real page, the moment plays when the state flips[2m > [22mRetire and Enjoy Life off the ceremony plays the legacy card, even from a save reloaded on the ceremony [33m 653[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerSaveRecovery.test.tsx [2m([22m[2m39 tests[22m[2m)[22m[33m 6404[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career actual save recovery[2m > [22mrestores current progress synchronously and advances the same career once [33m 486[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career actual save recovery[2m > [22mrestores a decided moral dilemma and keeps its consequence after Continue [33m 335[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career actual save recovery[2m > [22mrecords a newly finished ceremony once and does not replay it on the next mount [33m 440[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[32m67 passed[39m[22m[90m (67)[39m
+[2m   Start at [22m 04:01:00
+[2m   Duration [22m 12.94s[2m (transform 5.69s, setup 560ms, collect 14.19s, tests 10.68s, environment 2.10s, prepare 825ms)[22m
+

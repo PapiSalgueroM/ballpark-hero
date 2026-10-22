@@ -1,0 +1,5 @@
+vitest exit=0 14s |    Duration  12.94s (transform 5.69s, setup 560ms, collect 14.19s, tests 10.68s, environment 2.10s, prepare 825ms)
+simManagerCareer exit=0 17s | ALL MANAGER CAREER CHECKS PASSED
+simCareerNoDeadEnd exit=0 1s | simCareerNoDeadEnd: green. A convicted career is still a career, and a stranded save comes back.
+simCareerMoneyAfterRetirement exit=0 7s | All good: the money app keeps running for the whole retirement tail.
+tsc exit=0 79s | 
