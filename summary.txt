@@ -1,0 +1,4 @@
+m2 exit=1 86s | playFirstVisitDialogs: RED. 7 route widths: /stadium-tycoon 320x640, /stadium-tycoon 390x844, /wonderkid-factory 320x640, /wonderkid-factory 390x844, /idle-arena 320x640,
+away-old exit=1 95s | away probe (old): RED. old-away-320, old-away-390
+away-head exit=0 97s | away probe (head): green. 4 of 4 away boxes measured, "Back to work" whole, tappable and above the banner
+m3 exit=1 57s | playFirstVisitDialogs: RED. 3 route widths: /idle-arena 320x640, /idle-arena 390x844, /idle-arena 1280x900

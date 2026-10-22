@@ -1,0 +1,12 @@
+MUTATION oldaway applied to src/pages/StadiumTycoon.tsx
+ src/pages/StadiumTycoon.tsx | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+MUT a1: built
+  FAIL old-away-320: save aged true, box top 165, scrolled to its end: box bottom 476 (scroll 309/390), "Back to work" 407 to 451 at its centre BANNER, banner top 335 pending true: at the button's centre BANNER; 44 px of the button under the banner; the box runs 141 px under the banner
+  FAIL old-away-390: save aged true, box top 214, scrolled to its end: box bottom 630 (scroll 414/414), "Back to work" 561 to 605 at its centre button, banner top 611 pending true: the box runs 19 px under the banner
+       tapping "Back to work" closes it: true
+  PASS old-away-1280: save aged true, box top 250, scrolled to its end: box bottom 650 (scroll 398/398), "Back to work" 581 to 625 at its centre button, banner top 735 pending true
+       tapping "Back to work" closes it: true
+  PASS old-away-390-answered: save aged true, box top 214, scrolled to its end: box bottom 630 (scroll 414/414), "Back to work" 561 to 605 at its centre button, banner top none pending false
+       tapping "Back to work" closes it: true
+away probe (old): RED. old-away-320, old-away-390

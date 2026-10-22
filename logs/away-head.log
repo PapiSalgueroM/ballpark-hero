@@ -1,0 +1,10 @@
+MUT a0: built
+  PASS head-away-320: save aged true, box top 16, scrolled to its end: box bottom 319 (scroll 301/434), "Back to work" 250 to 294 at its centre button, banner top 335 pending true
+       tapping "Back to work" closes it: true
+  PASS head-away-390: save aged true, box top 98, scrolled to its end: box bottom 514 (scroll 414/414), "Back to work" 445 to 489 at its centre button, banner top 611 pending true
+       tapping "Back to work" closes it: true
+  PASS head-away-1280: save aged true, box top 168, scrolled to its end: box bottom 568 (scroll 398/398), "Back to work" 499 to 543 at its centre button, banner top 735 pending true
+       tapping "Back to work" closes it: true
+  PASS head-away-390-answered: save aged true, box top 214, scrolled to its end: box bottom 630 (scroll 414/414), "Back to work" 561 to 605 at its centre button, banner top none pending false
+       tapping "Back to work" closes it: true
+away probe (head): green. 4 of 4 away boxes measured, "Back to work" whole, tappable and above the banner
