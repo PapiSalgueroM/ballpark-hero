@@ -1,0 +1,7 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+seed6: SIM_SEED=6 node scripts/simNbaGmDesk.mjs
+seed10: SIM_SEED=10 node scripts/simNbaGmDesk.mjs
+seed35: SIM_SEED=35 node scripts/simNbaGmDesk.mjs
+vitest: node_modules/.bin/vitest run src/lib/gmContracts.test.ts src/components/nba-front-office/NbaGmDeskBoard.test.tsx src/components/nba-front-office/NbaEarnedDraft.test.tsx --testTimeout=300000 --hookTimeout=120000
+norival: node scripts/simNoRivalNames.mjs
+anchors: node scripts/simHarnessAnchors.mjs
