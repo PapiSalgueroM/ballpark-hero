@@ -1,0 +1,33 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/hallOfChampionsLongPlay.test.tsx src/test/saveKeeper.test.ts src/test/routeErrorRecovery.test.tsx src/lib/brokenSaveRecovery.test.ts --testTimeout=300000 --hookTimeout=120000
+simHallLongPlay: node scripts/simHallLongPlay.mjs
+ctl-ceiling: SIM_HALL_CONTROL=ceiling node scripts/simHallLongPlay.mjs
+ctl-fixedstep: SIM_HALL_CONTROL=fixedstep node scripts/simHallLongPlay.mjs
+ctl-fmtstop: SIM_HALL_CONTROL=fmtstop node scripts/simHallLongPlay.mjs
+ctl-hookfixed: SIM_HALL_CONTROL=hookfixed node scripts/simHallLongPlay.mjs
+ctl-hooknocopy: SIM_HALL_CONTROL=hooknocopy node scripts/simHallLongPlay.mjs
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simSingleFooter: node scripts/simSingleFooter.mjs
+simCompletionSlugs: node scripts/simCompletionSlugs.mjs
+simCompletionOnce: node scripts/simCompletionOnce.mjs
+simNoDoubleRecord: node scripts/simNoDoubleRecord.mjs
+simDailyPuzzleContract: node scripts/simDailyPuzzleContract.mjs
+simDailySaveHardening: node scripts/simDailySaveHardening.mjs
+simWritesAreSent: node scripts/simWritesAreSent.mjs
+simSchemaNames: node scripts/simSchemaNames.mjs
+simFetchRetry: node scripts/simFetchRetry.mjs
+simGoogleOnlyReturn: node scripts/simGoogleOnlyReturn.mjs
+simReportRelay: node scripts/simReportRelay.mjs
+simNavbarStatsReads: node scripts/simNavbarStatsReads.mjs
+simLeaderboardCaps: node scripts/simLeaderboardCaps.mjs
+simScoringCoverage: node scripts/simScoringCoverage.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
