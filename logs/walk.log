@@ -1,0 +1,49 @@
+== 390-rm
+  PASS  390-rm: the picker has no sideways scroll
+  PASS  390-rm: the hub has no sideways scroll
+  PASS  390-rm: played 20 round presses to the recap
+  PASS  390-rm: the recap offers Go to the draft
+  PASS  390-rm: the draft screen is up (The 2027 Draft)
+  PASS  390-rm: the old heading line is there (You hold 2 picks)
+  PASS  390-rm: the draft screen has no sideways scroll
+  PASS  390-rm: made 2 picks on the old draft
+  PASS  390-rm: the draft reaches its end screen
+  PASS  390-rm: back on the hub after the draft
+  PASS  390-rm: no page errors (clean)
+== 1280-mo
+  PASS  1280-mo: the picker has no sideways scroll
+  PASS  1280-mo: the hub has no sideways scroll
+  PASS  1280-mo: played 20 round presses to the recap
+  PASS  1280-mo: the recap offers Go to the draft
+  PASS  1280-mo: the draft screen is up (The 2027 Draft)
+  PASS  1280-mo: the old heading line is there (You hold 2 picks)
+  PASS  1280-mo: the draft screen has no sideways scroll
+  PASS  1280-mo: made 2 picks on the old draft
+  PASS  1280-mo: the draft reaches its end screen
+  PASS  1280-mo: back on the hub after the draft
+  PASS  1280-mo: no page errors (clean)
+== 390-mo
+  PASS  390-mo: the picker has no sideways scroll
+  PASS  390-mo: the hub has no sideways scroll
+  PASS  390-mo: played 20 round presses to the recap
+  PASS  390-mo: the recap offers Go to the draft
+  PASS  390-mo: the draft screen is up (The 2027 Draft)
+  PASS  390-mo: the old heading line is there (You hold 2 picks)
+  PASS  390-mo: the draft screen has no sideways scroll
+  PASS  390-mo: made 2 picks on the old draft
+  PASS  390-mo: the draft reaches its end screen
+  PASS  390-mo: back on the hub after the draft
+  PASS  390-mo: no page errors (clean)
+== 1280-rm
+  PASS  1280-rm: the picker has no sideways scroll
+  PASS  1280-rm: the hub has no sideways scroll
+  PASS  1280-rm: played 20 round presses to the recap
+  PASS  1280-rm: the recap offers Go to the draft
+  PASS  1280-rm: the draft screen is up (The 2027 Draft)
+  PASS  1280-rm: the old heading line is there (You hold 2 picks)
+  PASS  1280-rm: the draft screen has no sideways scroll
+  PASS  1280-rm: made 2 picks on the old draft
+  PASS  1280-rm: the draft reaches its end screen
+  PASS  1280-rm: back on the hub after the draft
+  PASS  1280-rm: no page errors (clean)
+WALK GREEN
