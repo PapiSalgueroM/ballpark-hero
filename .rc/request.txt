@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+fx-slow: MODE=slow node .rc/x/fx-slowload.mjs
+fx-none: MODE=none node .rc/x/fx-slowload.mjs
+fx-fail: MODE=fail node .rc/x/fx-slowload.mjs
+walk: node scripts/playCmTactics.mjs
+weight: ENGINES=chromium SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
