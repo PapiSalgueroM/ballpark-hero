@@ -1,0 +1,24 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-nba: node_modules/.bin/vitest run src/components/nba-front-office src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx --testTimeout=300000 --hookTimeout=120000
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simNbaLuxuryTax: node scripts/simNbaLuxuryTax.mjs
+simNbaTipOffForecast: node scripts/simNbaTipOffForecast.mjs
+simGmDesk: node scripts/simGmDesk.mjs
+playFoHub: ENGINES=chromium node scripts/playFoHub.mjs
+playFoHub-nofloor: PLAY_FO_HUB_CONTROL=nofloor ENGINES=chromium node scripts/playFoHub.mjs
+playFoHub-bogus: PLAY_FO_HUB_CONTROL=bogus ENGINES=chromium node scripts/playFoHub.mjs
+sweepPhone: ENGINES=chromium node scripts/sweepPhone.mjs
+sweepPhone-noclip-nba: SWEEP_PHONE_CONTROL=noclip ROUTE=/nba-connections ENGINES=chromium node scripts/sweepPhone.mjs
+sweepPhone-stackhidden: SWEEP_PHONE_CONTROL=stackhidden ROUTE=/nba-connections ENGINES=chromium node scripts/sweepPhone.mjs
+sweepPhone-counthidden: SWEEP_PHONE_CONTROL=counthidden ROUTE=/stadium-tycoon ENGINES=chromium node scripts/sweepPhone.mjs
+help: env -u NO_COLOR node scripts/simHelpConsentFocus.mjs
+help-external: env -u NO_COLOR HELP_CONSENT_FOCUS_CONTROL=external node scripts/simHelpConsentFocus.mjs
+rules: env -u NO_COLOR node scripts/simRulesGateConsentFocus.mjs
+rules-host: env -u NO_COLOR RULES_GATE_FOCUS_CONTROL=host node scripts/simRulesGateConsentFocus.mjs
+rules-return: env -u NO_COLOR RULES_GATE_FOCUS_CONTROL=return node scripts/simRulesGateConsentFocus.mjs
+walk: ENGINES=chromium node .rc/x/walk1537.mjs
