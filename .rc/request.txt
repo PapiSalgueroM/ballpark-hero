@@ -1,0 +1,5 @@
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNbaGmDesk-earned: T=$(mktemp -d); TMPDIR=$T TEMP=$T TMP=$T node scripts/simNbaGmDesk.mjs > $RC_OUT/earned.txt 2>&1; a=$?; grep -E 'draftees up|sheets let stand|expiring men:|FAIL|^simNbaGmDesk' $RC_OUT/earned.txt | head -12 | cut -c1-220; exit $a
+simNbaGmDesk-fullbird: T=$(mktemp -d); TMPDIR=$T TEMP=$T TMP=$T SIM_NBA_GM_DESK_CONTROL=fullbird node scripts/simNbaGmDesk.mjs > $RC_OUT/fullbird.txt 2>&1; a=$?; grep -E 'draftees up|^control |^simNbaGmDesk' $RC_OUT/fullbird.txt | cut -c1-220; exit $a
+simNbaGmDesk-norfa: T=$(mktemp -d); TMPDIR=$T TEMP=$T TMP=$T SIM_NBA_GM_DESK_CONTROL=norfa node scripts/simNbaGmDesk.mjs > $RC_OUT/norfa.txt 2>&1; a=$?; grep -E '^control |^simNbaGmDesk' $RC_OUT/norfa.txt | cut -c1-220; exit $a
+simNoRivalNames: node scripts/simNoRivalNames.mjs
