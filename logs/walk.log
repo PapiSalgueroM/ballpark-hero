@@ -1,0 +1,378 @@
+parsed greats nfl 10 nba 9, legends nfl 32 nba 29
+nfl-390-rm: closing 1 dialog(s) at start: How to Play
+nfl-390-rm STEAL 10 rows: Josh Hines-Allen LB · 89 OVR | Foye Oluokun LB · 88 OVR | Bhayshul Tuten RB · 80 OVR · 2025: 307 rush yds | Brian Thomas Jr WR · 86 OVR · 2025: 707 rec yds | Trevor Lawrence QB · 86 OVR · 2025: 4,007 pass yds | Brenton Strange TE · 81 OVR · 2025: 540 rec yds | Tyson Campbell CB · 84 OVR | Jourdan Lewis CB · 81 OVR | Devin Lloyd LB · 82 OVR | Travis Hunter WR · 85 OVR · 2025: 298 rec yds
+nfl-390-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nfl-390-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nfl-390-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nfl-390-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nfl-390-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nfl-390-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+STUCK nfl-390-rm: Save for Later not clickable; dialogs open: ⚡ Power-Up Found!; offer text: ⚡ Power-Up Found! Close
+NOTE nfl-390-rm: no Sign a Player offer in 8 battles (power ups seen: All-Time Great, ?)
+nfl-390-rm: battles 8, powerups [All-Time Great, ?], sign not reached, market not seen, steal seen
+nfl-390-motion: closing 1 dialog(s) at start: How to Play
+nfl-390-motion STEAL 10 rows: CJ Stroud QB · 90 OVR · 2025: 3,041 pass yds | Will Anderson DE · 90 OVR | Nico Collins WR · 89 OVR · 2025: 1,117 rec yds | Derek Stingley CB · 89 OVR | Kamari Lassiter CB · 84 OVR | Danielle Hunter DE · 87 OVR | Jayden Higgins WR · 80 OVR · 2025: 525 rec yds | Woody Marks RB · 81 OVR · 2025: 703 rush yds | Jalen Pitre S · 83 OVR | Dalton Schultz TE · 82 OVR · 2025: 777 rec yds
+nfl-390-motion: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nfl-390-motion: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nfl-390-motion SIGN rows 10, labelled 10: Calvin Johnson [WR · 84 OVR] {Retired, last played 2015}; Luke Kuechly [LB · 84 OVR] {Retired, last played 2019}; Andrew Luck [QB · 84 OVR] {Retired, last played 2018}; Troy Polamalu [S · 82 OVR] {Retired, last played 2014}; Tony Gonzalez [TE · 82 OVR] {Retired, last played 2013}; Darrelle Revis [CB · 82 OVR] {Retired, last played 2017}; Charles Woodson [S · 80 OVR] {Retired, last played 2015}; Vernon Davis [TE · 78 OVR] {Retired, last played 2019}; Anquan Boldin [WR · 77 OVR] {Retired, last played 2016}; Reggie Wayne [WR · 76 OVR] {Retired, last played 2014}
+nfl-390-motion: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nfl-390-motion: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nfl-390-motion MARKET 9 blurbs: ✍️ FREE AGENCY Kansas City Chiefs ← Change team Jaylen Waddle WR · 90 OVR Hit the market when the Dolphins fell Sign Minkah Fitzpatrick S · 90 OVR Hit the market when the Dolphins fell Sign De'Von Achane RB · 88 OVR Hit the market when the Dolphins fell Sign Jordyn Brooks LB · 86 OVR Hit the market 
+nfl-390-motion: battles 6, powerups [Sign a Player], sign 10 rows, market 9 rows, steal seen
+nfl-1280-rm: closing 1 dialog(s) at start: How to Play
+nfl-1280-rm STEAL 10 rows: Amon-Ra St. Brown WR · 96 OVR · 2025: 1,401 rec yds | Penei Sewell OT · 95 OVR | Aidan Hutchinson DE · 93 OVR | Jahmyr Gibbs RB · 90 OVR · 2025: 1,223 rush yds | Jared Goff QB · 89 OVR · 2025: 4,564 pass yds | Brian Branch S · 87 OVR | David Montgomery RB · 85 OVR · 2025: 716 rush yds | Sam LaPorta TE · 85 OVR · 2025: 489 rec yds | DJ Reed CB · 84 OVR | Alim McNeill DT · 83 OVR
+nfl-1280-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nfl-1280-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nfl-1280-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nfl-1280-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nfl-1280-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nfl-1280-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nfl-1280-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nfl-1280-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nfl-1280-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nfl-1280-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nfl-1280-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nfl-1280-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nfl-1280-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nfl-1280-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nfl-1280-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nfl-1280-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nfl-1280-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nfl-1280-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nfl-1280-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nfl-1280-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nfl-1280-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nfl-1280-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nfl-1280-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+RED nfl-1280-rm: no retired great in the dialog
+nfl-1280-rm SIGN rows 30, labelled 0: Josh Allen [QB · 99 OVR]; Ja'Marr Chase [WR · 99 OVR]; Derrick Henry [RB · 98 OVR]; Lane Johnson [OT · 98 OVR]; Roquan Smith [LB · 94 OVR]; Tristan Wirfs [OT · 93 OVR]; Kyle Hamilton [S · 93 OVR]; AJ Brown [WR · 93 OVR]; Justin Herbert [QB · 93 OVR]; Matthew Stafford [QB · 93 OVR]; Jalen Hurts [QB · 92 OVR]; Vita Vea [DT · 91 OVR]
+nfl-1280-rm MARKET 88 blurbs: ✍️ FREE AGENCY Kansas City Chiefs ← Change team Ja'Marr Chase WR · 99 OVR Hit the market when the Lions fell Sign Derrick Henry RB · 98 OVR Hit the market when the Ravens fell Sign Lane Johnson OT · 98 OVR Hit the market when the Eagles fell Sign Roquan Smith LB · 94 OVR Hit the market when the Rave
+nfl-1280-rm: battles 40, powerups [All-Time Great, Sign a Player], sign 30 rows, market 88 rows, steal seen
+nfl-1280-motion: closing 1 dialog(s) at start: How to Play
+STUCK nfl-1280-motion: Save for Later not clickable; dialogs open: ⚡ Power-Up Found!; offer text: ⚡ Power-Up Found! Close
+NOTE nfl-1280-motion: no Sign a Player offer in 1 battles (power ups seen: Territory Steal, ?)
+nfl-1280-motion: battles 1, powerups [Territory Steal, ?], sign not reached, market not seen, steal no
+nba-390-rm: closing 1 dialog(s) at start: How to Play
+nba-390-rm STEAL 10 rows: Jaden Ivey G · 78 OVR · Explosive slashing guard | Guerschon Yabusele F · 74 OVR · Stretch big depth | Josh Giddey G-F · 79 OVR · Playmaking forward-guard | Norman Powell G-F · 81 OVR · Efficient scoring wing | Anfernee Simons G · 80 OVR · Microwave scorer (Vucevic trade return) | Patrick Williams F · 75 OVR · Versatile stretch forward | Collin Sexton G · 78 OVR · Downhill scoring guard | Matas Buzelis F · 73 OVR · Young athletic forward | Zach Collins F-C · 74 OVR · Passing big man | Rob Dillingham G · 74 OVR · Shifty young shot creator
+nba-390-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+STUCK nba-390-rm: Save for Later not clickable; dialogs open: ⚡ Power-Up Found!; offer text: ⚡ Power-Up Found! Close
+NOTE nba-390-rm: no Sign a Player offer in 2 battles (power ups seen: Invincibility, ?)
+nba-390-rm: battles 2, powerups [Invincibility, ?], sign not reached, market not seen, steal seen
+nba-390-motion: closing 1 dialog(s) at start: How to Play
+nba-390-motion STEAL 10 rows: Anthony Edwards G · 93 OVR · Explosive scoring star | Julius Randle F · 85 OVR · Physical scoring forward | Donte DiVincenzo G · 80 OVR · Sharpshooting guard | Rudy Gobert C · 86 OVR · Anchor rim protector | Jaden McDaniels F · 82 OVR · Premier wing stopper | Naz Reid C-F · 79 OVR · Sixth Man scoring big | Ayo Dosunmu G · 76 OVR · Two-way combo guard | Joan Beringer C · 72 OVR · Rookie rim-runner | Terrence Shannon Jr. G · 76 OVR · Athletic scoring wing | Julian Phillips F · 71 OVR · Athletic depth wing
+nba-390-motion: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-390-motion: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-390-motion: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-390-motion: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-390-motion: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-390-motion: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-390-motion: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-390-motion: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-390-motion: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-390-motion: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-390-motion: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-390-motion: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-390-motion: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-390-motion: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-390-motion: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-390-motion: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-390-motion: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-390-motion: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-390-motion: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-390-motion: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-390-motion: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-390-motion: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-390-motion: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-390-motion: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-390-motion: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-390-motion: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+NOTE nba-390-motion: no Sign a Player offer in 26 battles (power ups seen: none)
+nba-390-motion: battles 26, powerups [], sign not reached, market not seen, steal seen
+nba-1280-rm: closing 1 dialog(s) at start: How to Play
+nba-1280-rm STEAL 10 rows: Donovan Mitchell G · 91 OVR · Elite scoring guard | Dennis Schroder G · 75 OVR · Veteran playmaking guard | Evan Mobley F-C · 87 OVR · Defensive Player of the Year tier | James Harden G · 87 OVR · Former MVP playmaker | Jarrett Allen C · 83 OVR · Elite rim finisher | Max Strus G-F · 78 OVR · Catch-and-shoot wing | Dean Wade F · 74 OVR · Stretch forward depth | Keon Ellis G · 76 OVR · Three-and-D guard | Sam Merrill G · 75 OVR · Three-point specialist | Craig Porter Jr. G · 72 OVR · Backup point guard
+nba-1280-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-1280-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-1280-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-1280-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-1280-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-1280-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-1280-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-1280-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-1280-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-1280-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-1280-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-1280-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-1280-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-1280-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-1280-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-1280-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-1280-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-1280-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-1280-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-1280-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-1280-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-1280-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-1280-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-1280-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-1280-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-1280-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-1280-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-1280-rm: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+NOTE nba-1280-rm: no Sign a Player offer in 28 battles (power ups seen: none)
+nba-1280-rm: battles 28, powerups [], sign not reached, market not seen, steal seen
+nba-1280-motion: closing 1 dialog(s) at start: How to Play
+nba-1280-motion STEAL 10 rows: Coby White G · 82 OVR · Breakout scoring guard | LaMelo Ball G · 85 OVR · Flashy scoring playmaker | Brandon Miller F · 80 OVR · Rising scoring forward | Miles Bridges F · 78 OVR · Athletic scoring forward | Kon Knueppel G-F · 80 OVR · Sharpshooting All-Rookie wing | Grant Williams F · 74 OVR · Stretch-four defender | Josh Green G · 73 OVR · Athletic wing defender | Tidjane Salaun F · 71 OVR · Young stretch forward | Ryan Kalkbrenner C · 74 OVR · Shot-blocking rookie center | Dorian Finney-Smith F · 76 OVR · Three-and-D veteran
+nba-1280-motion: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-1280-motion: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-1280-motion: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-1280-motion: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-1280-motion: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-1280-motion: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-1280-motion: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-1280-motion: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-1280-motion: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-1280-motion: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-1280-motion: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-1280-motion: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-1280-motion: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-1280-motion: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-1280-motion: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-1280-motion: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-1280-motion: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-1280-motion: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-1280-motion: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-1280-motion: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-1280-motion: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-1280-motion: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-1280-motion: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-1280-motion: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+nba-1280-motion: steal click failed TimeoutError: locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasT
+NOTE nba-1280-motion: no Sign a Player offer in 26 battles (power ups seen: none)
+nba-1280-motion: battles 26, powerups [], sign not reached, market not seen, steal seen
+walkSign1547: 1 red, Sign a Player reached in 2 of 8

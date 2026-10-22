@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+walk: node .rc/x/walkSign1547.mjs

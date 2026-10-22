@@ -1,0 +1,394 @@
+[
+ {
+  "tag": "nfl-390-rm",
+  "battles": 8,
+  "powerups": [
+   "All-Time Great",
+   "?"
+  ],
+  "sign": null,
+  "steal": {
+   "rows": 10
+  },
+  "market": null,
+  "errors": []
+ },
+ {
+  "tag": "nfl-390-motion",
+  "battles": 6,
+  "powerups": [
+   "Sign a Player"
+  ],
+  "sign": {
+   "rows": [
+    {
+     "name": "Calvin Johnson",
+     "label": "Retired, last played 2015",
+     "right": "WR · 84 OVR",
+     "over": false,
+     "nameCut": false
+    },
+    {
+     "name": "Luke Kuechly",
+     "label": "Retired, last played 2019",
+     "right": "LB · 84 OVR",
+     "over": false,
+     "nameCut": false
+    },
+    {
+     "name": "Andrew Luck",
+     "label": "Retired, last played 2018",
+     "right": "QB · 84 OVR",
+     "over": false,
+     "nameCut": false
+    },
+    {
+     "name": "Troy Polamalu",
+     "label": "Retired, last played 2014",
+     "right": "S · 82 OVR",
+     "over": false,
+     "nameCut": false
+    },
+    {
+     "name": "Tony Gonzalez",
+     "label": "Retired, last played 2013",
+     "right": "TE · 82 OVR",
+     "over": false,
+     "nameCut": false
+    },
+    {
+     "name": "Darrelle Revis",
+     "label": "Retired, last played 2017",
+     "right": "CB · 82 OVR",
+     "over": false,
+     "nameCut": false
+    },
+    {
+     "name": "Charles Woodson",
+     "label": "Retired, last played 2015",
+     "right": "S · 80 OVR",
+     "over": false,
+     "nameCut": false
+    },
+    {
+     "name": "Vernon Davis",
+     "label": "Retired, last played 2019",
+     "right": "TE · 78 OVR",
+     "over": false,
+     "nameCut": false
+    },
+    {
+     "name": "Anquan Boldin",
+     "label": "Retired, last played 2016",
+     "right": "WR · 77 OVR",
+     "over": false,
+     "nameCut": false
+    },
+    {
+     "name": "Reggie Wayne",
+     "label": "Retired, last played 2014",
+     "right": "WR · 76 OVR",
+     "over": false,
+     "nameCut": false
+    }
+   ],
+   "labelled": 10
+  },
+  "steal": {
+   "rows": 10
+  },
+  "market": {
+   "rows": 9
+  },
+  "errors": []
+ },
+ {
+  "tag": "nfl-1280-rm",
+  "battles": 40,
+  "powerups": [
+   "All-Time Great",
+   "Sign a Player"
+  ],
+  "sign": {
+   "rows": [
+    {
+     "name": "Josh Allen",
+     "label": "",
+     "right": "QB · 99 OVR",
+     "over": false,
+     "nameCut": false
+    },
+    {
+     "name": "Ja'Marr Chase",
+     "label": "",
+     "right": "WR · 99 OVR",
+     "over": false,
+     "nameCut": false
+    },
+    {
+     "name": "Derrick Henry",
+     "label": "",
+     "right": "RB · 98 OVR",
+     "over": false,
+     "nameCut": false
+    },
+    {
+     "name": "Lane Johnson",
+     "label": "",
+     "right": "OT · 98 OVR",
+     "over": false,
+     "nameCut": false
+    },
+    {
+     "name": "Roquan Smith",
+     "label": "",
+     "right": "LB · 94 OVR",
+     "over": false,
+     "nameCut": false
+    },
+    {
+     "name": "Tristan Wirfs",
+     "label": "",
+     "right": "OT · 93 OVR",
+     "over": false,
+     "nameCut": false
+    },
+    {
+     "name": "Kyle Hamilton",
+     "label": "",
+     "right": "S · 93 OVR",
+     "over": false,
+     "nameCut": false
+    },
+    {
+     "name": "AJ Brown",
+     "label": "",
+     "right": "WR · 93 OVR",
+     "over": false,
+     "nameCut": false
+    },
+    {
+     "name": "Justin Herbert",
+     "label": "",
+     "right": "QB · 93 OVR",
+     "over": false,
+     "nameCut": false
+    },
+    {
+     "name": "Matthew Stafford",
+     "label": "",
+     "right": "QB · 93 OVR",
+     "over": false,
+     "nameCut": false
+    },
+    {
+     "name": "Jalen Hurts",
+     "label": "",
+     "right": "QB · 92 OVR",
+     "over": false,
+     "nameCut": false
+    },
+    {
+     "name": "Vita Vea",
+     "label": "",
+     "right": "DT · 91 OVR",
+     "over": false,
+     "nameCut": false
+    },
+    {
+     "name": "Mark Andrews",
+     "label": "",
+     "right": "TE · 91 OVR",
+     "over": false,
+     "nameCut": false
+    },
+    {
+     "name": "James Cook",
+     "label": "",
+     "right": "RB · 91 OVR",
+     "over": false,
+     "nameCut": false
+    },
+    {
+     "name": "Rashawn Slater",
+     "label": "",
+     "right": "OT · 91 OVR",
+     "over": false,
+     "nameCut": false
+    },
+    {
+     "name": "Trey Hendrickson",
+     "label": "",
+     "right": "DE · 90 OVR",
+     "over": false,
+     "nameCut": false
+    },
+    {
+     "name": "Jalen Carter",
+     "label": "",
+     "right": "DT · 90 OVR",
+     "over": false,
+     "nameCut": false
+    },
+    {
+     "name": "Christian Gonzalez",
+     "label": "",
+     "right": "CB · 90 OVR",
+     "over": false,
+     "nameCut": false
+    },
+    {
+     "name": "Jahmyr Gibbs",
+     "label": "",
+     "right": "RB · 90 OVR",
+     "over": false,
+     "nameCut": false
+    },
+    {
+     "name": "Drake Maye",
+     "label": "",
+     "right": "QB · 89 OVR",
+     "over": false,
+     "nameCut": false
+    },
+    {
+     "name": "Jared Goff",
+     "label": "",
+     "right": "QB · 89 OVR",
+     "over": false,
+     "nameCut": false
+    },
+    {
+     "name": "Xavier McKinney",
+     "label": "",
+     "right": "S · 88 OVR",
+     "over": false,
+     "nameCut": false
+    },
+    {
+     "name": "Marlon Humphrey",
+     "label": "",
+     "right": "CB · 88 OVR",
+     "over": false,
+     "nameCut": false
+    },
+    {
+     "name": "DeVonta Smith",
+     "label": "",
+     "right": "WR · 88 OVR",
+     "over": false,
+     "nameCut": false
+    },
+    {
+     "name": "Zack Baun",
+     "label": "",
+     "right": "LB · 88 OVR",
+     "over": false,
+     "nameCut": false
+    },
+    {
+     "name": "Dak Prescott",
+     "label": "",
+     "right": "QB · 88 OVR",
+     "over": false,
+     "nameCut": false
+    },
+    {
+     "name": "Rashan Gary",
+     "label": "",
+     "right": "DE · 87 OVR",
+     "over": false,
+     "nameCut": false
+    },
+    {
+     "name": "Dallas Goedert",
+     "label": "",
+     "right": "TE · 87 OVR",
+     "over": false,
+     "nameCut": false
+    },
+    {
+     "name": "George Pickens",
+     "label": "",
+     "right": "WR · 87 OVR",
+     "over": false,
+     "nameCut": false
+    },
+    {
+     "name": "Brian Branch",
+     "label": "",
+     "right": "S · 87 OVR",
+     "over": false,
+     "nameCut": false
+    }
+   ],
+   "labelled": 0
+  },
+  "steal": {
+   "rows": 10
+  },
+  "market": {
+   "rows": 88
+  },
+  "errors": []
+ },
+ {
+  "tag": "nfl-1280-motion",
+  "battles": 1,
+  "powerups": [
+   "Territory Steal",
+   "?"
+  ],
+  "sign": null,
+  "steal": null,
+  "market": null,
+  "errors": []
+ },
+ {
+  "tag": "nba-390-rm",
+  "battles": 2,
+  "powerups": [
+   "Invincibility",
+   "?"
+  ],
+  "sign": null,
+  "steal": {
+   "rows": 10
+  },
+  "market": null,
+  "errors": []
+ },
+ {
+  "tag": "nba-390-motion",
+  "battles": 26,
+  "powerups": [],
+  "sign": null,
+  "steal": {
+   "rows": 10
+  },
+  "market": null,
+  "errors": []
+ },
+ {
+  "tag": "nba-1280-rm",
+  "battles": 28,
+  "powerups": [],
+  "sign": null,
+  "steal": {
+   "rows": 10
+  },
+  "market": null,
+  "errors": []
+ },
+ {
+  "tag": "nba-1280-motion",
+  "battles": 26,
+  "powerups": [],
+  "sign": null,
+  "steal": {
+   "rows": 10
+  },
+  "market": null,
+  "errors": []
+ }
+]
