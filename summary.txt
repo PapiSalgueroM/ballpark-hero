@@ -1,0 +1,17 @@
+vitest-panels exit=0 5s |    Duration  4.63s (transform 993ms, setup 532ms, collect 2.45s, tests 2.72s, environment 3.01s, prepare 1.33s)
+vitest-fo-rest exit=0 23s |    Duration  22.34s (transform 6.91s, setup 846ms, collect 12.75s, tests 23.81s, environment 3.16s, prepare 1.04s)
+vitest-board exit=0 31s |    Duration  30.26s (transform 5.68s, setup 561ms, collect 5.42s, tests 48.33s, environment 3.36s, prepare 1.05s)
+ctl-deskoffblock exit=1 17s | CONTROL deskoffblock: 1 rewrite(s) applied, 1152 failure(s) in section 2 (FIRED)
+ctl-paytwice exit=1 19s | CONTROL paytwice: 1 rewrite(s) applied, 384 failure(s) in section 2 (FIRED)
+ctl-lateseat exit=1 20s | CONTROL lateseat: 1 rewrite(s) applied, 384 failure(s) in section 2 (FIRED)
+tsc exit=0 101s | 
+ctl-emptytile exit=1 21s | CONTROL emptytile: 1 rewrite(s) applied, 659 failure(s) in section 8 (FIRED)
+gmreload exit=0 9s | simGmReload: all green. Four front offices keep a finished season through a reload, and none of them can play a closed one again.
+gmxp exit=0 1s | simGmXp: all checks passed
+nflgmdesk exit=0 36s | simNflGmDesk: all seven checks passed (10 seeds x 10 seasons)
+sessionmarks exit=0 0s | simSessionMarks: green. Nine games count the day you play them, none of them invented a score or a streak day to do it.
+career exit=0 122s | simGmCareer: all checks passed (nfl)
+fob-check exit=0 0s | controlFrontOfficeBoard: check passed. Every string of all 42 controls is in the board exactly once.
+names exit=0 0s | src/test/nhlContributorsBoard.test.tsx
+deskhost exit=0 55s | simGmDeskHost: all 10 checks passed on seeds 1,2,3 (4 engines, 3 seasons a seed)
+anchors exit=0 51s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.

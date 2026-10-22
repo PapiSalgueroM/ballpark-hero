@@ -1,0 +1,13 @@
+NEGATIVE CONTROL ON: deskoffblock; section 2 must go red
+2) the verdict on every club's real season: desk off it is today's two calls, desk on it records once and pays once
+  FAIL [2]: seed 1 season 1 ARI trust 60: a desk off close wrote a desk
+  FAIL [2]: seed 1 season 1 ARI trust 30: a desk off close wrote a desk
+  FAIL [2]: seed 1 season 1 ARI trust 12: a desk off close wrote a desk
+  FAIL [2]: seed 1 season 1 ATL trust 60: a desk off close wrote a desk
+  FAIL [2]: seed 1 season 1 ATL trust 30: a desk off close wrote a desk
+  FAIL [2]: seed 1 season 1 ATL trust 12: a desk off close wrote a desk
+  FAIL [2]: seed 1 season 1 BAL trust 60: a desk off close wrote a desk
+  FAIL [2]: seed 1 season 1 BAL trust 30: a desk off close wrote a desk
+  FAIL [2]: (further failures in this check not printed)
+   1152 desk off closes equal today's two calls; 384 desk on closes recorded once (42599 XP paid, the median club 111 a season), 384 reloads paid nothing, 384 older saves started on time
+CONTROL deskoffblock: 1 rewrite(s) applied, 1152 failure(s) in section 2 (FIRED)

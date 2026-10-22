@@ -1,0 +1,13 @@
+NEGATIVE CONTROL ON: emptytile; section 8 must go red
+8) the words: never empty, no dash, no quote, no placeholder, no player's name, a closed line never says sit, every box fits
+  FAIL [8]: an empty box on the Job market box, ARI met out 2
+  FAIL [8]: an empty box on the Job market box, ARI badly out 1
+  FAIL [8]: an empty box on the Job market box, ARI badly out 2
+  FAIL [8]: an empty box on the Job market box, ARI missed,missed out 2
+  FAIL [8]: an empty box on the Job market box, ARI badly,badly,badly out 1
+  FAIL [8]: an empty box on the Job market box, ARI badly,badly,badly out 2
+  FAIL [8]: an empty box on the Job market box, ATL met out 2
+  FAIL [8]: an empty box on the Job market box, ATL badly out 1
+  FAIL [8]: (further failures in this check not printed)
+   23589 strings and 3976 boxes read over 4 leagues, every roster name checked
+CONTROL emptytile: 1 rewrite(s) applied, 659 failure(s) in section 8 (FIRED)

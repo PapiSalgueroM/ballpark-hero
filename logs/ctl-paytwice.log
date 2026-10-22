@@ -1,0 +1,13 @@
+NEGATIVE CONTROL ON: paytwice; section 2 must go red
+2) the verdict on every club's real season: desk off it is today's two calls, desk on it records once and pays once
+  FAIL [2]: seed 1 season 1 ARI: a second close of the same season paid again or moved his record
+  FAIL [2]: seed 1 season 1 ATL: a second close of the same season paid again or moved his record
+  FAIL [2]: seed 1 season 1 BAL: a second close of the same season paid again or moved his record
+  FAIL [2]: seed 1 season 1 BUF: a second close of the same season paid again or moved his record
+  FAIL [2]: seed 1 season 1 CAR: a second close of the same season paid again or moved his record
+  FAIL [2]: seed 1 season 1 CHI: a second close of the same season paid again or moved his record
+  FAIL [2]: seed 1 season 1 CIN: a second close of the same season paid again or moved his record
+  FAIL [2]: seed 1 season 1 CLE: a second close of the same season paid again or moved his record
+  FAIL [2]: (further failures in this check not printed)
+   1152 desk off closes equal today's two calls; 384 desk on closes recorded once (42599 XP paid, the median club 111 a season), 384 reloads paid nothing, 384 older saves started on time
+CONTROL paytwice: 1 rewrite(s) applied, 384 failure(s) in section 2 (FIRED)

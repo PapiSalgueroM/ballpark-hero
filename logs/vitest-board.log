@@ -1,0 +1,366 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstdout[2m | src/components/front-office/FrontOfficeOnePress.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk off: one press of the final week[2m > [22m[2mordinary: the save at the recap, the draft and the next season's hub is the base's
+[22m[39mFO_ONE_PRESS_ENDING|fifteen|desk off|ordinary|took ordinary|press seed 11|phase recap|champion KC|his club ARI 4-13|trust 32
+
+[90mstderr[2m | src/components/front-office/FrontOfficeOnePress.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk off: one press of the final week[2m > [22m[2mtitle: the save at the recap, the draft and the next season's hub is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficeOnePress.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk off: one press of the final week[2m > [22m[2mtitle: the save at the recap, the draft and the next season's hub is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx[2m > [22m[2mNFL Front Office: the season closes once[2m > [22m[2mREPRO: what a reload on the recap lets the player do today
+[22m[39mNFL Front Office: after finishing the season and reloading, hub shown=false, seasonsPlayed 1 -> 1, titles 0 -> 0, league games 544 -> 544, period 17, phase recap -> recap
+
+[90mstdout[2m | src/components/front-office/FrontOfficeOnePress.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk off: one press of the final week[2m > [22m[2mtitle: the save at the recap, the draft and the next season's hub is the base's
+[22m[39mFO_ONE_PRESS_ENDING|fifteen|desk off|title|took title|press seed 12|phase recap|champion ARI|his club ARI 17-0|trust 100
+
+[90mstderr[2m | src/components/front-office/FrontOfficeOnePress.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk off: one press of the final week[2m > [22m[2mtitle: the save at the recap, the draft and the next season's hub is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstdout[2m | src/components/front-office/FrontOfficeOnePress.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk off: one press of the final week[2m > [22m[2mfired: the save at the recap, the draft and the next season's hub is the base's
+[22m[39mFO_ONE_PRESS_ENDING|fifteen|desk off|fired|took fired|press seed 11|phase fired|champion KC|his club ARI 3-14|trust 0
+
+[90mstderr[2m | src/components/front-office/FrontOfficeOnePress.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk on: one press of the final week[2m > [22m[2mordinary: the save at the recap, the draft and the next season's hub is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstdout[2m | src/components/front-office/FrontOfficeOnePress.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk on: one press of the final week[2m > [22m[2mordinary: the save at the recap, the draft and the next season's hub is the base's
+[22m[39mFO_ONE_PRESS_ENDING|fifteen|desk on|ordinary|took ordinary|press seed 11|phase recap|champion KC|his club ARI 4-13|trust 32
+
+[90mstderr[2m | src/components/front-office/FrontOfficeOnePress.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk on: one press of the final week[2m > [22m[2mtitle: the save at the recap, the draft and the next season's hub is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstdout[2m | src/components/front-office/FrontOfficeOnePress.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk on: one press of the final week[2m > [22m[2mtitle: the save at the recap, the draft and the next season's hub is the base's
+[22m[39mFO_ONE_PRESS_ENDING|fifteen|desk on|title|took title|press seed 11|phase recap|champion ARI|his club ARI 17-0|trust 100
+
+[90mstderr[2m | src/components/front-office/FrontOfficeOnePress.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk on: one press of the final week[2m > [22m[2mfired: the save at the recap, the draft and the next season's hub is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx[2m > [22m[2mNFL Front Office, full rosters: the season closes once[2m > [22m[2mREPRO: what a reload on the recap lets the player do today
+[22m[39mNFL Front Office, full rosters: after finishing the season and reloading, hub shown=false, seasonsPlayed 1 -> 1, titles 0 -> 0, league games 544 -> 544, period 17, phase recap -> recap
+
+[90mstdout[2m | src/components/front-office/FrontOfficeOnePress.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk on: one press of the final week[2m > [22m[2mfired: the save at the recap, the draft and the next season's hub is the base's
+[22m[39mFO_ONE_PRESS_ENDING|fifteen|desk on|fired|took fired|press seed 11|phase fired|champion KC|his club ARI 3-14|trust 0
+
+[90mstderr[2m | src/components/front-office/FrontOfficeOnePress.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk off: one press of the final week[2m > [22m[2mordinary: the save at the recap, the draft and the next season's hub is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstdout[2m | src/components/front-office/FrontOfficeOnePress.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk off: one press of the final week[2m > [22m[2mordinary: the save at the recap, the draft and the next season's hub is the base's
+[22m[39mFO_ONE_PRESS_ENDING|deep|desk off|ordinary|took ordinary|press seed 11|phase recap|champion SF|his club ARI 4-13|trust 32
+
+[90mstderr[2m | src/components/front-office/FrontOfficeOnePress.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk off: one press of the final week[2m > [22m[2mtitle: the save at the recap, the draft and the next season's hub is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstdout[2m | src/components/front-office/FrontOfficeOnePress.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk off: one press of the final week[2m > [22m[2mtitle: the save at the recap, the draft and the next season's hub is the base's
+[22m[39mFO_ONE_PRESS_ENDING|deep|desk off|title|took title|press seed 11|phase recap|champion ARI|his club ARI 12-5|trust 100
+
+[90mstderr[2m | src/components/front-office/FrontOfficeOnePress.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk off: one press of the final week[2m > [22m[2mfired: the save at the recap, the draft and the next season's hub is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstdout[2m | src/components/front-office/FrontOfficeOnePress.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk off: one press of the final week[2m > [22m[2mfired: the save at the recap, the draft and the next season's hub is the base's
+[22m[39mFO_ONE_PRESS_ENDING|deep|desk off|fired|took fired|press seed 11|phase fired|champion SF|his club ARI 3-14|trust 0
+
+[90mstderr[2m | src/components/front-office/FrontOfficeOnePress.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk on: one press of the final week[2m > [22m[2mordinary: the save at the recap, the draft and the next season's hub is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 1|desk on: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nfl|seed 1|desk on|15 checkpoints|start,presser,cut,sign,week 1,week 9,recap,draft,summer,week 1,week 9,recap,answered,draft,summer
+
+[90mstderr[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 1|desk off: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstdout[2m | src/components/front-office/FrontOfficeOnePress.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk on: one press of the final week[2m > [22m[2mordinary: the save at the recap, the draft and the next season's hub is the base's
+[22m[39mFO_ONE_PRESS_ENDING|deep|desk on|ordinary|took ordinary|press seed 11|phase recap|champion SF|his club ARI 4-13|trust 32
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx[2m > [22m[2mNBA Front Office: the season closes once[2m > [22m[2mREPRO: what a reload on the recap lets the player do today
+[22m[39mNBA Front Office: after finishing the season and reloading, hub shown=false, seasonsPlayed 1 -> 1, titles 0 -> 0, league games 2400 -> 2400, period 20, phase recap -> recap
+
+[90mstderr[2m | src/components/front-office/FrontOfficeOnePress.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk on: one press of the final week[2m > [22m[2mtitle: the save at the recap, the draft and the next season's hub is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstdout[2m | src/components/front-office/FrontOfficeOnePress.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk on: one press of the final week[2m > [22m[2mtitle: the save at the recap, the draft and the next season's hub is the base's
+[22m[39mFO_ONE_PRESS_ENDING|deep|desk on|title|took title|press seed 11|phase recap|champion ARI|his club ARI 12-5|trust 100
+
+[90mstderr[2m | src/components/front-office/FrontOfficeOnePress.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk on: one press of the final week[2m > [22m[2mfired: the save at the recap, the draft and the next season's hub is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx[2m > [22m[2mMLB Front Office: the season closes once[2m > [22m[2mREPRO: what a reload on the recap lets the player do today
+[22m[39mMLB Front Office: after finishing the season and reloading, hub shown=false, seasonsPlayed 1 -> 1, titles 0 -> 0, league games 4860 -> 4860, period 27, phase recap -> recap
+
+[90mstdout[2m | src/components/front-office/FrontOfficeOnePress.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk on: one press of the final week[2m > [22m[2mfired: the save at the recap, the draft and the next season's hub is the base's
+[22m[39mFO_ONE_PRESS_ENDING|deep|desk on|fired|took fired|press seed 11|phase fired|champion SF|his club ARI 3-14|trust 0
+
+ [32m✓[39m src/components/front-office/FrontOfficeOnePress.test.tsx [2m([22m[2m13 tests[22m[2m)[22m[33m 11998[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office, fifteen league, GM desk off: one press of the final week[2m > [22mordinary: the save at the recap, the draft and the next season's hub is the base's [33m 3411[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office, fifteen league, GM desk off: one press of the final week[2m > [22mtitle: the save at the recap, the draft and the next season's hub is the base's [33m 1573[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office, fifteen league, GM desk off: one press of the final week[2m > [22mfired: the save at the recap, the draft and the next season's hub is the base's [33m 383[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office, fifteen league, GM desk on: one press of the final week[2m > [22mordinary: the save at the recap, the draft and the next season's hub is the base's [33m 627[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office, fifteen league, GM desk on: one press of the final week[2m > [22mtitle: the save at the recap, the draft and the next season's hub is the base's [33m 520[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office, deep league, GM desk off: one press of the final week[2m > [22mordinary: the save at the recap, the draft and the next season's hub is the base's [33m 960[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office, deep league, GM desk off: one press of the final week[2m > [22mtitle: the save at the recap, the draft and the next season's hub is the base's [33m 855[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office, deep league, GM desk off: one press of the final week[2m > [22mfired: the save at the recap, the draft and the next season's hub is the base's [33m 370[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office, deep league, GM desk on: one press of the final week[2m > [22mordinary: the save at the recap, the draft and the next season's hub is the base's [33m 1052[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office, deep league, GM desk on: one press of the final week[2m > [22mtitle: the save at the recap, the draft and the next season's hub is the base's [33m 1335[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office, deep league, GM desk on: one press of the final week[2m > [22mfired: the save at the recap, the draft and the next season's hub is the base's [33m 662[2mms[22m[39m
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx[2m > [22m[2mNHL Front Office: the season closes once[2m > [22m[2mREPRO: what a reload on the recap lets the player do today
+[22m[39mNHL Front Office: after finishing the season and reloading, hub shown=false, seasonsPlayed 1 -> 1, titles 0 -> 0, league games 2560 -> 2560, period 20, phase recap -> recap
+
+ [32m✓[39m src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx [2m([22m[2m25 tests[22m[2m)[22m[33m 8868[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL Front Office: the season closes once[2m > [22mdraws the recap again after a reload and does not replay the season [33m 609[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL Front Office: the season closes once[2m > [22mplays the next season after the draft: the record refuses only the closed one [33m 731[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL Front Office, full rosters: the season closes once[2m > [22mdraws the recap again after a reload and does not replay the season [33m 466[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL Front Office, full rosters: the season closes once[2m > [22mREPRO: what a reload on the recap lets the player do today [33m 312[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL Front Office, full rosters: the season closes once[2m > [22mrefuses to run the final week twice for one season [33m 354[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL Front Office, full rosters: the season closes once[2m > [22mplays the next season after the draft: the record refuses only the closed one [33m 2238[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA Front Office: the season closes once[2m > [22mdraws the recap again after a reload and does not replay the season [33m 356[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA Front Office: the season closes once[2m > [22mREPRO: what a reload on the recap lets the player do today [33m 310[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA Front Office: the season closes once[2m > [22mplays the next season after the draft: the record refuses only the closed one [33m 537[2mms[22m[39m
+   [33m[2m✓[22m[39m MLB Front Office: the season closes once[2m > [22mdraws the recap again after a reload and does not replay the season [33m 362[2mms[22m[39m
+   [33m[2m✓[22m[39m MLB Front Office: the season closes once[2m > [22mplays the next season after the draft: the record refuses only the closed one [33m 363[2mms[22m[39m
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 1|desk off: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nfl|seed 1|desk off|14 checkpoints|start,cut,sign,week 1,week 9,recap,answered,draft,summer,week 1,week 9,recap,draft,summer
+
+[90mstderr[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 2|desk on: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 2|desk on: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nfl|seed 2|desk on|15 checkpoints|start,presser,cut,sign,week 1,week 9,recap,answered,draft,summer,week 1,week 9,recap,draft,summer
+
+[90mstderr[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 2|desk off: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 2|desk off: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nfl|seed 2|desk off|13 checkpoints|start,cut,sign,week 1,week 9,recap,draft,summer,week 1,week 9,recap,draft,summer
+
+[90mstderr[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 3|desk on: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 3|desk on: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nfl|seed 3|desk on|15 checkpoints|start,presser,cut,sign,week 1,week 9,recap,draft,summer,week 1,week 9,recap,answered,draft,summer
+
+[90mstderr[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 3|desk off: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 3|desk off: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nfl|seed 3|desk off|14 checkpoints|start,cut,sign,week 1,week 9,recap,answered,draft,summer,week 1,week 9,recap,draft,summer
+
+ [32m✓[39m src/components/front-office-shared/FrontOfficeGmCareer.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 27464[2mms[22m[39m
+   [33m[2m✓[22m[39m nfl board: the default path[2m > [22mseed 1|desk on: every checkpoint of two seasons is the base's [33m 9919[2mms[22m[39m
+   [33m[2m✓[22m[39m nfl board: the default path[2m > [22mseed 1|desk off: every checkpoint of two seasons is the base's [33m 5366[2mms[22m[39m
+   [33m[2m✓[22m[39m nfl board: the default path[2m > [22mseed 2|desk on: every checkpoint of two seasons is the base's [33m 3524[2mms[22m[39m
+   [33m[2m✓[22m[39m nfl board: the default path[2m > [22mseed 2|desk off: every checkpoint of two seasons is the base's [33m 2768[2mms[22m[39m
+   [33m[2m✓[22m[39m nfl board: the default path[2m > [22mseed 3|desk on: every checkpoint of two seasons is the base's [33m 3420[2mms[22m[39m
+   [33m[2m✓[22m[39m nfl board: the default path[2m > [22mseed 3|desk off: every checkpoint of two seasons is the base's [33m 2461[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[32m45 passed[39m[22m[90m (45)[39m
+[2m   Start at [22m 04:37:33
+[2m   Duration [22m 30.26s[2m (transform 5.68s, setup 561ms, collect 5.42s, tests 48.33s, environment 3.36s, prepare 1.05s)[22m
+
