@@ -1,0 +1,14 @@
+tsc exit=0 55s | 
+simHarnessAnchors exit=0 50s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simNoRivalNames exit=0 11s | No rival product names found. 0 findings.
+simStorageWrites exit=0 2s | simStorageWrites: all green (owed: 12)
+simTycoonAwayMatchdays exit=0 51s |    All 6 controls fired exactly where they should, in node and in the real hook.
+simTrustCopy exit=0 0s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+simTycoonHelp exit=0 14s |    All 25 controls fired exactly where they should.
+dashes exit=0 0s | dash lines added 0, in messages 0, control 1
+rr1-oldOnOld exit=0 1s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+rr1-oldOnHead exit=1 0s | simGuideHeadings: RED, 2 failures in section 1
+rr1-retake exit=0 1s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+rr2-oldOnOld exit=0 1s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+rr2-oldOnHead exit=1 1s | simSiteSearch: 1 failure
+rr2-retake exit=0 1s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
