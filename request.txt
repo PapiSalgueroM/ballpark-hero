@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+#!serial
+# Release BP part two (Round BPH, finish-BPH.md). ROUND 1535, part D: the F, J, K and L walks and the Club Manager fit against base builds
+# (8fea14e2 and c1b39364, 1535's own bases). Proven on adeba447 as rBPh-m7d and on the final head. Extra: basesrv1535.sh.
+# Split three ways (d, d2, d3) because the whole of part D in one request runs close to the runner job limit of 100 minutes.
+# Part D4: the two long walks of part D, alone (about 68 minutes together).
+playUsRivalLines: node scripts/playUsRivalLines.mjs
+playStartingXi: ENGINES=chromium node scripts/playStartingXi.mjs
