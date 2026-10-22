@@ -1,0 +1,11 @@
+MUTATION storedignored APPLIED to src/components/front-office/FrontOfficeBoard.tsx
+2) the Career box drawn before the kit is the box drawn with it, save by save (the GM level box reads the desk alone, the same on both)
+   55296 saves over 3 leagues: the records differ in 30348, the kit's tier is not the bottom one in 39744, a last grade in 9216, a stored record read as itself in 13824
+simFoLazyDesk: all checks passed
+[2m      Tests [22m [1m[32m97 passed[39m[22m[90m (97)[39m
+   NHL Front Office: 5 green, 0 red. NHL Front Office: after finishing the season and reloading, hub shown=false, seasonsPlayed 1 -> 1, titles 0 -> 0, league games 2560 -> 2560, period 20, phase recap -> recap
+
+simGmReload: all green. Four front offices keep a finished season through a reload, and none of them can play a closed one again.
+   10 careers, 70 seasons run: 24 sackings forced, 21 firings, 14 seats taken, 15 years out, 6 closed for good; 182 checkpoints
+simGmCareer: all checks passed (nfl)
+SUMMARY storedignored: simFoLazyDesk=0 vitest=0 simGmReload=0 simGmCareer=0
