@@ -61,6 +61,8 @@ const firedFrom = (grades: FoGradeResult[], team = BOTTOM, from = 2026): GmSeatB
 /* Strong enough that the engine's own count is never zero, weak enough to be shut for good, and one in between. */
 const WINNER = firedFrom(['title', 'title', 'title', 'title', 'title', 'overachieved', 'overachieved', 'overachieved', 'missed']);
 const WRECK = firedFrom(['badly', 'badly', 'badly']);
+/* Round 1533: fired straight from the seat somebody always rings (the first call), so the closed market is a year out on. */
+const WRECK_OUT: GmSeatBlock = { ...WRECK, career: { ...WRECK.career, seasonsOut: 1 } };
 const CLIMB = firedFrom(['badly', 'badly']);
 const HELD: GmSeatBlock = { v: 1, career: { version: 1, stints: [{ team: BOTTOM, tier: 4, from: 2026, grades: ['met', 'title'] }], seasonsOut: 0 } };
 
@@ -124,9 +126,10 @@ describe('the job market panel', () => {
   });
   it('stays out a year on the second tap only, and says when that opens the desk', () => {
     const career = binding(CLIMB, { deskOn: false });
-    expect(career.market!.state).toBe('quiet');
+    /* Round 1533: nobody rated it, so the first call is the one offer, and passing on it still hangs on a climb. */
+    expect(career.market).toMatchObject({ state: 'offers', firstCall: true, nextYear: 'climb' });
     const { container } = render(<GmJobMarketPanel {...panelProps(career)} />);
-    expect(container.querySelector('[data-gm-offers]')).toBeNull();
+    expect(container.querySelectorAll('[data-gm-offer]')).toHaveLength(1);
     const button = container.querySelector('[data-gm-sit-out]')!;
     fireEvent.click(button);
     expect(career.sitOut).not.toHaveBeenCalled();
@@ -178,7 +181,7 @@ describe('the job market panel', () => {
     expect(/stay out/i.test(container.textContent ?? '')).toBe(false);
   });
   it('offers no year out on a closed market, and its "?" opens the rules', () => {
-    const career = binding(WRECK);
+    const career = binding(WRECK_OUT);
     expect(career.market!.state).toBe('closed');
     const { container } = render(<GmJobMarketPanel {...panelProps(career)} />);
     expect(container.querySelector('[data-gm-sit-out]')).toBeNull();
@@ -186,7 +189,7 @@ describe('the job market panel', () => {
     expect(/\bsit|stay out/i.test(container.textContent ?? '')).toBe(false);
     expect(container.querySelector('[data-gm-market-help]')).toBeNull();
     fireEvent.click(screen.getByLabelText('How the job market works'));
-    expect(container.querySelectorAll('[data-gm-market-help] p')).toHaveLength(4);
+    expect(container.querySelectorAll('[data-gm-market-help] p')).toHaveLength(5);
   });
   it('draws something sane while he holds a seat', () => {
     const { container } = render(<GmJobMarketPanel {...panelProps(binding(HELD))} />);

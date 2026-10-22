@@ -45,7 +45,7 @@
 import { gmBlock, withGmBlock, type GmDesk, type GmFacts, type GmTileFace } from './gmDesk';
 import {
   careerTotals, currentStint, endSeatStint, leagueTiers, newGmCareer, recordSeatSeason,
-  sanitizeGmCareer, seatNextYear, seatOffers, sitOutYear, startSeatStint, takeSeat, BADLY_FIRED_CEILING,
+  sanitizeGmCareer, seatMandate, seatNextYear, seatOffers, sitOutYear, startSeatStint, takeSeat, BADLY_FIRED_CEILING,
   type GmCareer, type GmSeatPack, type SeatNextYear, type SeatOffer, type SeatSave, type SeatStint, type SeatTeam,
 } from './gmSeat';
 import {
@@ -665,6 +665,8 @@ export interface HostMarket {
   offers: SeatOffer[];
   /** By teamId. */
   facts: Record<string, HostOfferFacts>;
+  /** True when the one offer on the table is the first call (hostFirstCall): nobody else rang. */
+  firstCall?: boolean;
 }
 
 /**
@@ -756,6 +758,38 @@ export function hostMarketLine(
     : `${head} Nobody called this year. As things stand next year is still open, and every year out makes the phone quieter.`;
 }
 
+/** Why the first call came. The game's own words: no real club, no real person. */
+export const HOST_FIRST_CALL_REASON = 'Nobody else rang. They have the weakest roster in the league and they will take the chance on you.';
+
+/**
+ * Round 1533: the first call. A firing must never open on a screen that says
+ * the save is over: the owner asked for exactly that not to be built (his
+ * ruling is recorded at managerOffers.ts 138 to 142, where a man pinned at
+ * zero standing is the save being over). So when the first feed after a sacking is empty, the club with
+ * the weakest roster by the engine's own strength (ties by id, the order
+ * leagueTiers sorts in) that is not the club that let him go calls, with its
+ * own ask from seatMandate as every offer has. Only then: a man who walked
+ * gets no call he did not earn, and after a year out the feed is the
+ * engine's alone, so passing on this call can still end on an honest closed
+ * screen a year later. It draws nothing, so the feed key that names the
+ * feed names it too, and every read of the same save reads the same call.
+ */
+function hostFirstCall(pack: GmSeatPack, teams: SeatTeam[], seat: GmSeatBlock, season: number, champion: string | null): SeatOffer | null {
+  const last = currentStint(seat.career);
+  if (last.ended !== 'fired' || seat.career.seasonsOut !== 0) return null;
+  const weakest = [...teams].sort((a, b) => a.strength - b.strength || b.id.localeCompare(a.id)).find(t => t.id !== last.team);
+  if (!weakest) return null;
+  const strengths = Object.fromEntries(teams.map(t => [t.id, t.strength]));
+  return {
+    teamId: weakest.id,
+    teamName: weakest.name,
+    tier: leagueTiers(teams).get(weakest.id) ?? 4,
+    ask: seatMandate(pack, strengthRank(strengths, weakest.id), teams.length, champion === weakest.id, season),
+    reason: HOST_FIRST_CALL_REASON,
+    keenness: 5,
+  };
+}
+
 /**
  * The market for a GM between seats, or null while he holds one. Pure and
  * keyed: reading it twice, or after a reload, reads the same feed.
@@ -771,10 +805,15 @@ export function hostMarket<L>(
   const season = host.season(league);
   const clubs = host.clubs(league);
   const teams: SeatTeam[] = clubs.map(c => ({ id: c.id, name: nameOf(c.id), strength: c.strength }));
-  const offers = seatOffers(
+  let offers = seatOffers(
     host.pack, teams, seat.career, season + 1,
     keyedRng(hostFeedKey(host.sport, seat, season)), host.champion(league, season),
   );
+  let firstCall = false;
+  if (offers.length === 0) {
+    const call = hostFirstCall(host.pack, teams, seat, season + 1, host.champion(league, season));
+    if (call) { offers = [call]; firstCall = true; }
+  }
   const { nextYear, climbTo } = hostNextYear(seat, leagueTiers(teams));
   const state: HostMarketState = offers.length > 0 ? 'offers' : nextYear === 'shut' ? 'closed' : 'quiet';
   const strengths = Object.fromEntries(clubs.map(c => [c.id, c.strength]));
@@ -788,6 +827,7 @@ export function hostMarket<L>(
   return {
     state, nextYear, climbTo, seasonsOut: seat.career.seasonsOut, season: season + 1, offers, facts,
     line: hostMarketLine(host.pack, seat, state, { nextYear, climbTo }, offers.length, nameOf(last.team)),
+    firstCall,
   };
 }
 
@@ -1276,6 +1316,7 @@ export function hostCareerTotalsLine(seat: GmSeatBlock): string {
 export function hostMarketHelp(pack: GmSeatPack): string[] {
   return [
     `When ${pack.upstairs} lets you go, the ${pack.seats} that rate your record can call. The ${pack.seat} that let you go never does.`,
+    `If nobody rates it, the ${pack.seat} with the weakest ${pack.roster} in the league still rings, once, the day you are let go.`,
     `Each offer shows what that ${pack.seat} asks of your first season there. That is the ask you are graded on.`,
     'No call this year? A year out lets the league play a season without you and the phone can ring next summer, but every year out makes it quieter. The screen says when the offers in front of you are the last ones and when the phone has stopped for good, and then there is no year out to take.',
     `Worked example: leave straight after a season graded nowhere near the ask and no ${HOST_TIER_WORDS[BADLY_FIRED_CEILING - 1]} ${pack.seat} calls, whatever you won before. The best that can ring is rated ${HOST_TIER_WORDS[BADLY_FIRED_CEILING]}. The tiers are the four quarters of the league by strength.`,

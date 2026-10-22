@@ -3,7 +3,7 @@
    scripts/simGmDeskHost.mjs. This file holds the same properties small. */
 import { describe, expect, it } from 'vitest';
 import {
-  GM_HOST_KEYS, HOST_BLOCK_RULES, HOST_TILE_SUB_MAX, HOST_TILE_VALUE_MAX, hostArriving, hostCanSitOut, hostCanSpend, hostCareerHelp, hostCareerTile, hostCloseSeason,
+  GM_HOST_KEYS, HOST_BLOCK_RULES, HOST_FIRST_CALL_REASON, HOST_TILE_SUB_MAX, HOST_TILE_VALUE_MAX, hostArriving, hostCanSitOut, hostCanSpend, hostCareerHelp, hostCareerTile, hostCloseSeason,
   hostCraftCut, hostCutQuote, hostDeskCases, hostEarnsLine, hostFeedKey, hostKey, hostLastGrade, hostLegacy,
   hostLegacySeat, hostMarket, hostMarketHelp, hostMarketTile, hostMoveBlocks, hostNewSeat, hostOutOfWorkCard,
   hostPressOption, hostSeasonAway, hostSeasonVerdict, hostSeasonsRecorded, hostSeatOf, hostSitArmLine, hostSitOut, hostSpendPoint,
@@ -408,7 +408,8 @@ describe('the job market', () => {
     expect(offers).toBeGreaterThanOrEqual(48);
   });
   it('tells offers, quiet and closed apart, and a closed line never tells him to sit', () => {
-    const closed = hostMarket(host, lg, firedFrom(BOTTOM, WRECK), nameOf)!;
+    /* Round 1533: fired straight from the seat somebody always rings (the first call), so closed is a year out on. */
+    const closed = hostMarket(host, lg, firedFrom(BOTTOM, WRECK, 2026, 1), nameOf)!;
     expect(closed).toMatchObject({ state: 'closed', nextYear: 'shut', offers: [] });
     expect(/\bsit/i.test(closed.line)).toBe(false);
     expect(closed.line).toContain('the phone has stopped');
@@ -416,27 +417,52 @@ describe('the job market', () => {
     /* A tier 1 club's wreck is above the floor today and under it next year
        whatever happens: with an empty feed that is closed, not quiet. */
     let topClosed = 0;
+    let topFirst = 0;
     let quiet = 0;
     for (let from = 2000; from < 2027; from++) {
+      /* Fired straight from the seat the phone always rings: with the feed empty it is the first call, the weakest
+         roster that did not let him go, and for this wreck it is the last call. A year out on, an empty feed is closed. */
       const top = hostMarket(host, lg, firedFrom(TOP, WRECK, from), nameOf)!;
-      if (top.offers.length === 0) { topClosed += 1; expect(top.state).toBe('closed'); }
-      const mid = hostMarket(host, lg, firedFrom(BOTTOM, ['badly', 'missed', 'missed'], from), nameOf)!;
-      if (mid.offers.length === 0) {
-        quiet += 1;
-        expect(mid.state).toBe('quiet');
-        expect(mid.nextYear).toBe('open');
-        expect(mid.line).toContain('Nobody called this year');
-        /* Open is read at his old club's tier today, and a year out can move it: the words never promise more. */
-        expect(mid.line).toContain('As things stand next year is still open');
-        expect(hostMarketTile(mid)).toMatchObject({ value: 'Nobody called', sub: 'Next year open, as things stand' });
+      expect(top.state).toBe('offers');
+      if (top.firstCall) {
+        topFirst += 1;
+        expect(top.nextYear).toBe('shut');
+        expect(top.offers).toHaveLength(1);
+        expect(top.offers[0]).toMatchObject({ teamId: BOTTOM, reason: HOST_FIRST_CALL_REASON, keenness: 5 });
+        expect(top.offers[0].ask.season).toBe(lg.season + 1);
       }
-      /* Two seasons nowhere near the ask at the bottom: under the floor today, and a climb reopens next year. */
+      const later = hostMarket(host, lg, firedFrom(TOP, WRECK, from, 1), nameOf)!;
+      expect(later.firstCall).toBe(false);
+      if (later.offers.length === 0) { topClosed += 1; expect(later.state).toBe('closed'); }
+      const mid = hostMarket(host, lg, firedFrom(BOTTOM, ['badly', 'missed', 'missed'], from), nameOf)!;
+      if (mid.firstCall) {
+        /* What used to read quiet: the first call, and passing on it keeps next year open as things stand. */
+        expect(mid).toMatchObject({ state: 'offers', nextYear: 'open' });
+        expect(mid.offers[0].teamId).not.toBe(BOTTOM);
+        expect(mid.line).toMatch(/1 franchise called\.$/);
+      }
+      for (const out of [1, 2]) {
+        const q = hostMarket(host, lg, firedFrom(BOTTOM, ['badly', 'missed', 'missed'], from, out), nameOf)!;
+        if (q.state !== 'quiet') continue;
+        quiet += 1;
+        expect(q.line).toContain('Nobody called this year');
+        if (q.nextYear === 'open') {
+          /* Open is read at his old club's tier today, and a year out can move it: the words never promise more. */
+          expect(q.line).toContain('As things stand next year is still open');
+          expect(hostMarketTile(q)).toMatchObject({ value: 'Nobody called', sub: 'Next year open, as things stand' });
+        } else {
+          expect(hostMarketTile(q)).toMatchObject({ value: 'Nobody called', sub: 'Next year hangs on your old club' });
+        }
+      }
+      /* Two seasons nowhere near the ask at the bottom: under the floor today, so nobody rates it and the first call
+         rings, and a climb reopens next year if he passes. */
       const climb = hostMarket(host, lg, firedFrom(BOTTOM, ['badly', 'badly'], from), nameOf)!;
-      expect(climb).toMatchObject({ state: 'quiet', nextYear: 'climb', climbTo: 1, offers: [] });
+      expect(climb).toMatchObject({ state: 'offers', firstCall: true, nextYear: 'climb', climbTo: 1 });
       expect(climb.line).toContain('climbed into the top tier of the league');
-      expect(hostMarketTile(climb)).toMatchObject({ value: 'Nobody called', sub: 'Next year hangs on your old club' });
+      expect(hostMarketTile(climb)).toMatchObject({ value: '1 offer', sub: 'Next year hangs on your old club' });
     }
     expect(topClosed).toBeGreaterThan(5);
+    expect(topFirst).toBeGreaterThan(5);
     expect(quiet).toBeGreaterThan(5);
   });
   it('with offers on the table says what passing costs, and takes the year out away when they are the last calls', () => {
@@ -641,7 +667,9 @@ describe('a year out', () => {
     const cases: [GmDesk, HostLegacy, (lg: TLeague) => void, string][] = [
       [deskWith(block(BOTTOM, ['met'], false)), legacy({ seasonsPlayed: 1 }), () => {}, 'in-seat'],
       [deskWith(quietSeat), l, lg => { lg.champions = {}; }, 'season-open'],
-      [deskWith(firedFrom(BOTTOM, WRECK)), l, () => {}, 'market-closed'],
+      [deskWith(firedFrom(BOTTOM, WRECK, 2026, 1)), l, () => {}, 'market-closed'],
+      /* Round 1533: the day he is let go the first call rings, and for a wreck it is the last call. */
+      [deskWith(firedFrom(BOTTOM, WRECK)), l, () => {}, 'last-call'],
     ];
     for (const [desk, leg, prep, reason] of cases) {
       const lg = league();
@@ -775,7 +803,7 @@ describe('the words on the boxes', () => {
     /* Every market state, with and without a call, a year out or four. */
     const states = new Set<string>();
     for (const team of [TOP, BOTTOM]) for (const grades of [WINNER, WRECK, ['badly', 'badly'], ['badly', 'badly', 'missed'], ['badly', 'missed', 'missed']] as FoGradeResult[][]) {
-      for (let from = 1990; from < 2027; from++) for (const out of [0, 4]) {
+      for (let from = 1990; from < 2027; from++) for (const out of [0, 1, 2, 4]) {
         const m = hostMarket(host, lg, firedFrom(team, grades, from, out), nameOf)!;
         states.add(`${m.state} ${m.nextYear}`);
         fits(hostMarketTile(m)!);

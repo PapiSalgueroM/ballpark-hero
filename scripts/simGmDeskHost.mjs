@@ -205,6 +205,7 @@ const EDITS = {
   clubvalue: ['10', 'host', 'value: `Season ${hostStintSeasons(seat, index) + 1}`,', 'value: `Season ${hostStintSeasons(seat, index) + 1} with the ${name}`,'],
   closedsit: ['10', 'host', 'Nobody called, and nobody will: the phone has stopped. A new front office is the way back in.',
     'Nobody has called yet. Sit the year out and see who remembers you.'],
+  nofirstcall: ['4', 'host', '    if (call) { offers = [call]; firstCall = true; }', '    if (call && false) { offers = [call]; firstCall = true; }'],
   fewseasons: ['10', 'host', '  const record = seasonsAndTitles(hostStintSeasons(seat, index), s.grades', '  const record = seasonsAndTitles(s.grades.length, s.grades'],
 };
 if (CONTROL && !EDITS[CONTROL]) {
@@ -732,7 +733,7 @@ begin('4', 'the market rules on real tiers: never the club that let him go, a ce
    without which no career reads closed and check 5 would be empty. */
 const TAILS = [['title'], ['overachieved'], ['met'], ['missed'], ['badly'], ['badly', 'badly'], ['badly', 'badly', 'badly'],
   ['badly', 'badly', 'missed'], ['badly', 'missed', 'missed'], ['missed', 'missed', 'missed', 'missed']];
-const M4 = { markets: 0, offers: 0, withOffers: 0, badlyOffers: 0, quietOpen: 0, climb: 0, closed: 0, most: 0, lastCalls: 0, passClimb: 0, rankApart: 0 };
+const M4 = { firstCalls: 0, firstLast: 0, markets: 0, offers: 0, withOffers: 0, badlyOffers: 0, quietOpen: 0, climb: 0, closed: 0, most: 0, lastCalls: 0, passClimb: 0, rankApart: 0 };
 const closedCareers = [], quietCareers = [], lastCallCareers = [];
 for (const sport of SPORTS) {
   const d = DRIVE[sport], pack = d.host.pack;
@@ -746,6 +747,20 @@ for (const sport of SPORTS) {
       M4.markets++;
       if (!m || m.season !== season + 1 || m.seasonsOut !== out) { fail(`${at}: no market, or not next season's`); continue; }
       const lastBadly = tail[tail.length - 1] === 'badly';
+      /* Round 1533: the first call. Fired straight from the seat, somebody always rings: the feed, or else the
+         weakest roster that did not let him go. A year out on, the feed is the engine's alone (control nofirstcall). */
+      if (out === 0) {
+        if (m.state !== 'offers') fail(`${at}: fired straight from the seat and nobody rings, the first call is missing`);
+        if (m.firstCall) {
+          M4.firstCalls++;
+          const weakest = [...clubs].sort((a, b) => a.strength - b.strength || b.id.localeCompare(a.id)).find(c => c.id !== old);
+          const o = m.offers[0];
+          if (m.offers.length !== 1 || o.teamId !== weakest.id || o.reason !== H.HOST_FIRST_CALL_REASON || o.ask.season !== season + 1) {
+            fail(`${at}: the first call is not one call from the weakest roster that did not let him go (${J(m.offers.map(x => x.teamId))})`);
+          }
+          if (m.nextYear === 'shut') M4.firstLast++;
+        }
+      } else if (m.firstCall) fail(`${at}: a first call ${out} year(s) out`);
       for (const o of m.offers) {
         const c = clubs.find(x => x.id === o.teamId), f = m.facts[o.teamId];
         if (o.teamId === old) fail(`${at}: the club that let him go is in the feed`);
@@ -804,6 +819,8 @@ ok(M4.lastCalls >= T.minLastCalls && M4.passClimb >= T.minPassClimb, `the ladder
 ok(M4.rankApart >= T.minRankApart, `only ${M4.rankApart} of ${M4.offers} offers come from a club whose strength rank is not its standings place, too few to tell the two apart`);
 console.log(`   with offers on the table and next year not open: ${M4.lastCalls} are the last calls (next year shut), ${M4.passClimb} hang on a climb; ${M4.rankApart} offers from a club whose roster rank is not its place`);
 console.log(`   the ceiling six clubs at a time: ${reach} offers in ${reachFeeds} feeds of the most decorated careers, none from the top tier`);
+ok(M4.firstCalls > 0, 'no fired career needed the first call, so the rule went unread');
+console.log(`   first calls (fired straight from the seat, nobody else rang): ${M4.firstCalls}, ${M4.firstLast} of them the last call`);
 
 /* ================================================================== */
 begin('5', 'shut means shut, closed or on a last call: no tier his old club can reach and no year out reopens it, a quiet market is never in that set, and the year out is on offer only while next year can hold a call');
