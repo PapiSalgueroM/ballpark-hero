@@ -1,0 +1,2 @@
+seat-base exit=0 120s | simCollegeSeat: all sections green (S1 to S9 and SY)
+seat-head exit=0 273s | simCollegeSeat: all sections green (S1 to S9 and SY)
