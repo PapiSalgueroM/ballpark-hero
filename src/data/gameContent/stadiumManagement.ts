@@ -34,7 +34,7 @@ export const STADIUM_MANAGEMENT_CONTENT: GameContentMap = {
       {
         heading: "Live matches and the league ladder",
         items: [
-          "Follow the match at the top of the pitch. Goals pay a bonus scaled by the crowd, wins extend your streak, and the streak multiplies income and pulls in new fans.",
+          "Follow the match at the top of the pitch. Goals and wins pay bonuses counted in seconds of your own income, wins extend your streak, and the streak multiplies income and pulls in new fans.",
           "Win your league to climb the divisions. Each division is a small league of named rival clubs with a table on the League tab, and only the champion goes up. Every division multiplies all income up to five and a half times, each promotion pays a bonus on the spot, and higher divisions send tougher opponents.",
         ],
       },
@@ -91,7 +91,7 @@ export const STADIUM_MANAGEMENT_CONTENT: GameContentMap = {
         items: [
           "Attendance is the smaller of your seats and the supporters who want a ticket. On Standard and Community that is your whole fanbase, and on Premium it is 75 percent of it. So Stands matter only when the ground is full and spending tracks matter only when it is not.",
           "The Ticket offer tile sets your matchday price, and switching is free at any time. Community takes 15 percent off the gate money each fan pays and grows your supporters 50 percent faster. Premium adds 25 percent to the gate money each fan pays, draws 75 percent of your supporters and grows them 25 percent slower. Snacks, the shop, parking and the payroll keep their own rates. A new 120 seat ground with 90 supporters draws 67 on Premium and earns less than Standard, and Premium earns more once 75 percent of your supporters still fill the ground.",
-          "Matches run about two real minutes. Your Squad level drives your goal chance. A division's rivals stay as strong as they were when you arrived, so a club that can compete there can always win it in time, but every division up is tougher, and the longer the club has played the tougher each new division is.",
+          "Matches run about two real minutes. Your Squad level drives your goal chance. A division's rivals stay as strong as they were when you arrived, so a club that can compete there can always win it in time, but every division up is tougher.",
           "A win extends the streak, a draw keeps it alive without extending it, a loss ends it. The streak multiplier caps at ten wins.",
         ],
         subsections: [
@@ -134,7 +134,7 @@ export const STADIUM_MANAGEMENT_CONTENT: GameContentMap = {
           {
             heading: "How graduates help in watched and away matches",
             items: [
-              "Your first team helps in watched and away matches. Each rating point above 60 adds to its defensive edge. With five players rated 80, opponents get twenty percent fewer chances before the minimum chance is applied. This changes the odds, not a match's guaranteed result.",
+              "Your first team helps in watched and away matches. Each rating point above 60 adds to its defensive edge. With five players rated 80, opponents get twenty percent fewer chances. This changes the odds, not a match's guaranteed result.",
             ],
           },
           {
@@ -168,7 +168,7 @@ export const STADIUM_MANAGEMENT_CONTENT: GameContentMap = {
       {
         heading: "A full ground and the Muddy Meadows title",
         paragraphs: [
-          "Once Floodlights pull your fanbase past your seats, the ground is full and Stands become the best purchase on the board. With 280 in the ground a goal pays a 168 dollar bonus before any streak, and the league's fifth matchday comes about ten minutes in: top the table then and the Muddy Meadows title lifts you into the Gravel Lane League, with a promotion bonus and a bigger multiplier on every dollar after it.",
+          "Once Floodlights pull your fanbase past your seats, the ground is full and Stands become the best purchase on the board. With 280 in the ground a goal pays a 70 dollar bonus before any streak, and the league's fifth matchday comes about ten minutes in: top the table then and the Muddy Meadows title lifts you into the Gravel Lane League, with a promotion bonus and a bigger multiplier on every dollar after it.",
         ],
       },
       {
@@ -189,7 +189,7 @@ export const STADIUM_MANAGEMENT_CONTENT: GameContentMap = {
         heading: "Seats, spending and the Squad track",
         items: [
           "Balance seats against spend. A full ground with a poor Snack Bar wastes fans; a rich concourse with empty seats wastes upgrades.",
-          "Squad is quietly the best economy track: goals pay crowd-scaled bonuses, the streak multiplier compounds everything else, and wins are what climb the division ladder.",
+          "Squad is quietly the best economy track: goals pay bonuses in seconds of your income, the streak multiplier compounds everything else, and wins are what climb the division ladder.",
         ],
       },
       {
@@ -227,7 +227,7 @@ export const STADIUM_MANAGEMENT_CONTENT: GameContentMap = {
       },
       {
         q: "Can the opponents be beaten forever?",
-        a: "Each division is tougher than the last, and a division drawn later in a club's life is tougher again, so eventually the next title stops coming. That is the signal the current ground has peaked and the sell-up bar is the way forward.",
+        a: "Each division is tougher than the last, so the climb slows the higher you go. When the next title keeps getting harder while the sell-up bar is full, that is the signal the current ground has peaked and the sell-up bar is the way forward.",
       },
       {
         q: "Can I buy gems?",

@@ -1138,6 +1138,14 @@ export function oppChancePerMin(s: TycoonState, edge = 0): number {
   return goalLambda(-matchGap(s), LAW.away) * (1 - defence) / 90;
 }
 
+/** Round 1532: the law's numbers the rules quote, so the page never imports the
+ *  law itself: each side's expected goals when the two are level (you at home),
+ *  and the expected goals one Squad level moves, to two decimals. */
+export function scoringFacts(): { evenFor: number; evenAgainst: number; levelGoals: number } {
+  const r2 = (x: number) => Math.round(x * 100) / 100;
+  return { evenFor: r2(goalLambda(0, LAW.home)), evenAgainst: r2(goalLambda(0, LAW.away)), levelGoals: r2(SQUAD_POINTS * LAW.perPoint) };
+}
+
 /** Round 1532: a goal, a win and a promotion pay seconds of the club's own
  *  income, so they are worth the same at every stage of a run. They used to
  *  scale with the crowd, which stops growing when the ground is full, and by
