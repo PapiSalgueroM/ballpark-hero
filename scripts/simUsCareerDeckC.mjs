@@ -54,6 +54,22 @@
    fix for a trade demand that could land a player on the club he was already
    on (the same fix Round 1104 made in the NHL) changes which club that save
    is dealt to.
+   Re-recorded on purpose in Round 1538 (paid lines and the Skill card's
+   ceiling), on 2026-10-22, on a GitHub runner from its branch head b53b1f9c
+   (r1538-rec). Deck C's own cards did not change in any sport. The seeded
+   draw changed on 33 of 1,920 NFL saves, 44 of 1,200 NBA, 78 of 2,640 MLB
+   and 31 of 1,200 NHL, every one attributed by recording the head again with
+   one part of the round put back at a time (extra file revert1538.mjs):
+   the ten clean corruption answers that now bank their money moved NFL 7,
+   NBA 28, MLB 22 and NHL 12 (each restored by putting the corruption decks
+   back); the summer Skill answer's new button words moved NFL 26, NBA 9, MLB
+   33 and NHL 9 (each restored by putting the Skill answers back); and NBA 7,
+   MLB 23 and NHL 10 are a training card drawn with its brand answer applied,
+   which moved for both reasons (its button words and the brand money now
+   reaching Cash). The NFL brand answer moved no draw: it banked before and
+   its line is the same. Measured commit by commit too: the banked lines
+   alone (f5cc075a, r1538-s2) moved NFL 7, NBA 35, MLB 45 and NHL 22; the
+   Skill change on top (fbe4f4ed, r1538-s3) took them to 33, 44, 78 and 31.
 
    Section 2, WORDS AGAINST EFFECTS (see its own comment below): the log,
    the button, the gamble's odds, the era's money, the trade's league and
