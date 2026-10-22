@@ -26,13 +26,26 @@
  *     person plays (the adaptive policy of simFightCareer), walked away from
  *     ten fights after the gate, score more than walked away from at it. The
  *     earliest exit is never the best one.
+ *   5 The copy says the gate: the How to play line and the guide sentence
+ *     name the same number of fights as RETIRE_MIN_FIGHTS. (What's New is a
+ *     dated record of the day it shipped and is not held to a later retune.)
+ *
+ * THE GATE IS PINNED HERE (GATE = 10), not read off the engine, so lowering
+ * RETIRE_MIN_FIGHTS turns section 1 red instead of moving the harness with it
+ * (Round 1546 review: at 1 the harness used to stay green while a 1-0 fighter
+ * retired 229 times). A deliberate retune changes the engine, this pin and
+ * the copy together, and section 5 catches the copy left behind.
  *
  * CONTROLS (RETIRE_CONTROL=...), each must turn its section red:
  *   nogate       anybody can retire, a 1-0 fighter included        -> 1
+ *   gate1        RETIRE_MIN_FIGHTS lowered to 1                     -> 1
  *   keepcards    lifeRetire leaves the life layer's cards waiting   -> 2
  *   twice        the past list keeps the same career twice         -> 3
+ *   keyseed      the past list key is the seed alone, so two
+ *                careers under one reused name list as one         -> 3
  *   cleanrecord  an unbeaten record is worth 60, not 18, so banking
  *                a short perfect record is the best play            -> 4
+ *   copy         the guide sentence says 12 fights                  -> 5
  *
  * MEASURED (2026-10-22, 240 careers, seed sets 4000, 9000, 15000).
  *   Walking away at 10 fights: legacy 20.8, 20.1, 20.5; the same careers
@@ -42,6 +55,9 @@
  *   +3.8, +5.2, +5.0 (bar 2). Walking away at 15 to 25 beats playing out on
  *   average (23.3 to 25.4 against about 20): the decline at the end of a
  *   career costs legacy, which is the decision this round hands the player.
+ *   Added by the review fix (seed 4000): one reused name played two ways, 60
+ *   pairs, 0 listed as one (60 under keyseed); both copy lines say 10 (the
+ *   guide says 12 under copy); under gate1 a 1-0 fighter retired 229 times.
  */
 import './lib/seedRandom.mjs';
 import os from 'node:os';
@@ -52,7 +68,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.RETIRE_CONTROL || '';
-const KNOWN = ['', 'nogate', 'keepcards', 'twice', 'cleanrecord'];
+const KNOWN = ['', 'nogate', 'gate1', 'keepcards', 'twice', 'keyseed', 'cleanrecord', 'copy'];
 if (!KNOWN.includes(CONTROL)) {
   console.log(`   FAIL unknown control ${CONTROL}`);
   process.exit(1);
@@ -88,6 +104,14 @@ const FILES = [
 const src = Object.fromEntries(FILES.map(n => [
   n, fs.readFileSync(path.join(ROOT, 'src/lib', `${n}.ts`), 'utf8').replaceAll('\r\n', '\n'),
 ]));
+/* Section 5's copy, read here so a control can rewrite it. Each pattern opens
+   on the string's own quote or runs into its next words, so a comment that
+   quotes the line cannot satisfy it. */
+const COPY = [
+  { file: 'src/pages/FightCareer.tsx', what: 'the How to play line', re: /'Retire any time after (\d+) fights, or when your body makes you/g },
+  { file: 'src/data/gameContent/moreSports.ts', what: 'the guide sentence', re: /, or retire yourself any time after (\d+) fights, then read the verdict/g },
+];
+const copyText = Object.fromEntries(COPY.map(c => [c.file, fs.readFileSync(path.join(ROOT, c.file), 'utf8').replaceAll('\r\n', '\n')]));
 
 /* Every control asserts its anchor exists before editing, so a control that
    changes nothing aborts instead of reading as green. */
@@ -101,6 +125,21 @@ function swap(which, file, anchor, replacement) {
 }
 if (CONTROL === 'nogate') {
   swap('nogate', 'fightCareer', '  return !st.retired && st.fightNo >= RETIRE_MIN_FIGHTS;', '  return !st.retired;');
+} else if (CONTROL === 'gate1') {
+  swap('gate1', 'fightCareer', 'export const RETIRE_MIN_FIGHTS = 10;', 'export const RETIRE_MIN_FIGHTS = 1;');
+} else if (CONTROL === 'keyseed') {
+  swap('keyseed', 'fightCareer',
+    '    key: `${st.seed >>> 0}:${st.fightNo}:${f.wins}-${f.losses}-${f.draws}:${f.kos}:${st.earnings}`,',
+    '    key: `${st.seed >>> 0}`,');
+} else if (CONTROL === 'copy') {
+  const guide = 'src/data/gameContent/moreSports.ts';
+  const anchor = 'or retire yourself any time after 10 fights';
+  if (!copyText[guide].includes(anchor)) {
+    console.log(`   FAIL control copy: anchor is not in ${guide}, so it would change nothing`);
+    process.exit(1);
+  }
+  copyText[guide] = copyText[guide].replace(anchor, 'or retire yourself any time after 12 fights');
+  console.log('   [control copy applied]');
 } else if (CONTROL === 'keepcards') {
   swap('keepcards', 'fightCareerLifeFlow',
     '  next.life.pending = [];\n  next.life.pendingRivalryChoice = null;\n  next.life.pendingRivalryEvent = null;\n', '');
@@ -123,7 +162,8 @@ fs.writeFileSync(path.join(TMP, 'entry.ts'), [
 const BUNDLE = path.join(TMP, 'bundle.mjs');
 execSync(`"${findEsbuild()}" "${path.join(TMP, 'entry.ts')}" --bundle --format=esm --platform=node --outfile="${BUNDLE}"`, { stdio: 'pipe' });
 const { fc, fl, ff, fi, fr } = await import(pathToFileURL(BUNDLE).href);
-const GATE = fc.RETIRE_MIN_FIGHTS;
+/* Pinned, see the header: the gate the game promises, not whatever the engine says today. */
+const GATE = 10;
 
 /* ─── playing a career, as simFightCareer plays one through the life layer ─── */
 function rngFrom(seed) {
@@ -194,8 +234,22 @@ function playCareer(seed, onFight) {
   }
   return st;
 }
+/* A career played to fight n with the given pick and then retired by choice,
+   or null if the body or the record ended it first. */
+function retireAt(st0, n, pick) {
+  let st = st0;
+  while (!st.retired && st.fightNo < n) {
+    st = clearGap(st);
+    const offer = pick(st.offers, st);
+    if (!offer) return null;
+    const res = ff.lifeTakeFight(ff.lifeRunCamp(st, PLAN), offer.id, smartLine(offer.opponent.style, offer.rounds));
+    if (!res) return null;
+    st = res.state;
+  }
+  return st.retired ? null : ff.lifeRetire(st);
+}
 const roundTrip = (x) => JSON.parse(JSON.stringify(x));
-const mean = (xs) => xs.reduce((a, b) => a + b, 0) / Math.max(1, xs.length);
+const mean =(xs) => xs.reduce((a, b) => a + b, 0) / Math.max(1, xs.length);
 const waiting = (st) => st.life.pending.length > 0 || !!st.life.pendingRivalryChoice || !!st.life.pendingRivalryEvent;
 const recordOf = (st) => JSON.stringify([st.fighter, st.history, st.fightNo, st.earnings, st.champion, st.titleDefences, st.life.bank]);
 
@@ -248,10 +302,12 @@ for (let i = 0; i < CAREERS; i += 1) {
 }
 
 /* ─── 1. The gate ─── */
-console.log(`\n1. The gate (${GATE} fights), probed after every fight of ${CAREERS} careers`);
+console.log(`\n1. The gate (${GATE} fights, the engine says ${fc.RETIRE_MIN_FIGHTS}), probed after every fight of ${CAREERS} careers`);
 console.log(`   ${s1.probes} probes, ${s1.below} below the gate, ${s1.above} at or above it`);
 console.log(`   open below the gate ${s1.wrongOpen} (a 1-0 fighter retired ${s1.oneAndOh} times), shut at or above it ${s1.wrongShut}`);
 if (s1.below < CAREERS * GATE * 0.9 || s1.above < CAREERS * 5) fail('too few probes on one side of the gate to mean anything');
+if (fc.RETIRE_MIN_FIGHTS !== GATE) fail(`the engine's gate is ${fc.RETIRE_MIN_FIGHTS} fights, not the ${GATE} the game promises`);
+if (s1.oneAndOh) fail(`a 1-0 fighter could retire (${s1.oneAndOh} times), banking a perfect record before meeting anybody`);
 if (s1.wrongOpen) fail(`${s1.wrongOpen} careers could retire below the gate`);
 else ok('nobody retires below the gate');
 if (s1.wrongShut) fail(`${s1.wrongShut} careers at or past the gate were refused`);
@@ -309,7 +365,32 @@ console.log(`\n3. The past fighters list: ${chosen.length} chosen retirements, $
   const junk = [fc.sanitizePastFighters('x'), fc.sanitizePastFighters(null), fc.sanitizePastFighters([{}, 3, { ...sample, weight: 'cruiser' }])]
     .reduce((n, l) => n + l.length, 0);
   const capped = fc.sanitizePastFighters(many).length;
+  /* Two careers under one reused name, weight and style share a seed, which is
+     what the board gives a player who types the same name again. Played two
+     ways (tune ups only, and the way a person plays) and walked away from at
+     the gate, they are two careers and are listed as two (Round 1546 review:
+     a key cut down to the seed was caught only by an activity floor). */
+  const SAME = 60;
+  let sameSeedPairs = 0;
+  let sameSeedOne = 0;
+  let notSameSeed = 0;
+  for (let k = 0; k < SAME; k += 1) {
+    const args = [`Same Name ${k}`, WEIGHTS[k % WEIGHTS.length], STYLES[k % STYLES.length]];
+    const a = retireAt(ff.lifeNewCareer(...args), GATE, (offers) => offers[0]);
+    const b = retireAt(ff.lifeNewCareer(...args), GATE, adaptive);
+    if (!a || !b) continue;
+    if (a.seed !== b.seed) { notSameSeed += 1; continue; }
+    if (recordOf(a) === recordOf(b)) continue;
+    sameSeedPairs += 1;
+    let list = fc.archiveCareer([], a);
+    list = fc.archiveCareer(fc.sanitizePastFighters(roundTrip(list)), b);
+    if (list.length !== 2) sameSeedOne += 1;
+  }
   console.log(`   listed twice across a reload ${dup}, chosen shown as forced ${wrongChose}; ${pairs} pairs of careers, ${badPair} not listed as two, newest first`);
+  console.log(`   one name, weight and style played two ways: ${sameSeedPairs} pairs, ${sameSeedOne} listed as one, ${notSameSeed} that did not share a seed`);
+  if (sameSeedPairs < SAME / 2 || notSameSeed) fail(`only ${sameSeedPairs} same seed pairs (${notSameSeed} did not share a seed), too few to mean anything`);
+  if (sameSeedOne) fail(`${sameSeedOne} pairs of careers under one reused name were listed as one`);
+  else ok('two careers under one reused name are listed as two');
   console.log(`   forced retirements listed wrong ${forcedWrong}, a live career listed ${liveListed}, junk entries kept ${junk}, a list of 12 kept as ${capped}`);
   if (chosen.length < CAREERS || forced.length < CAREERS / 2 || pairs < CAREERS) fail('too few careers reached the list to mean anything');
   if (dup || badPair) fail(`the same career was listed twice (${dup}) or two careers were not listed as two (${badPair})`);
@@ -342,6 +423,16 @@ console.log(`\n4. Walking away at the gate against walking away later and agains
   if (both.length < CAREERS * 0.7) fail(`only ${both.length} careers reached fight ${LATE} to compare`);
   if (gain < MARGIN) fail(`walking away at the gate scores within ${MARGIN} of walking away ten fights later, so the earliest door is the best one`);
   else ok('playing on past the gate pays: the earliest exit is not the best exit');
+}
+
+/* ─── 5. The copy says the gate ─── */
+console.log(`\n5. The copy names the gate the engine holds (${fc.RETIRE_MIN_FIGHTS} fights)`);
+for (const c of COPY) {
+  const found = [...copyText[c.file].matchAll(c.re)].map(m => Number(m[1]));
+  console.log(`   ${c.what} (${c.file}): ${found.length ? found.join(', ') : 'not found'}`);
+  if (found.length !== 1) fail(`${c.what} was found ${found.length} times in ${c.file}, not once`);
+  else if (found[0] !== fc.RETIRE_MIN_FIGHTS) fail(`${c.what} says ${found[0]} fights, the engine's gate is ${fc.RETIRE_MIN_FIGHTS}`);
+  else ok(`${c.what} says ${found[0]} fights, the engine's gate`);
 }
 
 try { fs.rmSync(TMP, { recursive: true, force: true }); } catch { /* best effort */ }
