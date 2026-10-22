@@ -34,7 +34,9 @@
  * SIM_SEASON_AWARDS_POS (section 1: one position), SIM_SEASON_AWARDS_FIELD_N (section 1 careers a position),
  * SIM_SEASON_AWARDS_N (section 2 careers), SIM_SEASON_AWARDS_ERA (section 3 careers), SIM_SEASON_AWARDS_LOCK
  * (section 4 careers), SIM_SEASON_AWARDS_CONTROL (stale, nogate, dropcoins, usdrift), SIM_SEASON_AWARDS_MEASURE=1
- * (section 1 prints and judges nothing). Never reads the network.
+ * (section 1 prints and judges nothing). Never reads the network. Every career's name carries the seed: an award's
+ * stream is keyed to the career's identity and the season, so under one name every seed would replay the same draws
+ * (three seeds of r1525-final-a agreed on every award's sign against the model for exactly that reason).
  * Exit 1 on any failure; the last line says green or red.
  */
 import { execFileSync } from 'node:child_process';
@@ -106,7 +108,7 @@ const seedRandom = seed => { const r = mulberry(seed); draws = 0; Math.random = 
 const POS = ['ST', 'CM', 'CB', 'GK', 'LW', 'CAM', 'CDM', 'RB', 'RW', 'LB'];
 const STAT_KEYS = ['pace', 'shooting', 'passing', 'dribbling', 'defending', 'physical', 'reflexes'];
 const ERAS = [['2020-24', 2020], ['2010-14', 2010], ['2000-04', 2000], ['1990-94', 1990]];
-function newCareer(S, i, { era = '2020-24', start = 2020, ovr = 56 + (i % 5) * 3, pos = POS[i % POS.length], name = `Award Sim ${i}` } = {}) {
+function newCareer(S, i, { era = '2020-24', start = 2020, ovr = 56 + (i % 5) * 3, pos = POS[i % POS.length], name = `Award Sim ${SEED} ${i}` } = {}) {
   const off = S.A.POSITION_OFFSETS[pos];
   const stats = Object.fromEntries(STAT_KEYS.map((k, j) => [k, Math.max(25, Math.min(99, ovr + off[j]))]));
   return S.E.initCareer(name, i % 2 ? 'England' : 'Spain', pos, era, stats, ovr, start, S.E.FALLBACK_CLUBS, null, Math.min(94, ovr + 20));
@@ -172,7 +174,7 @@ if (runs('1')) {
     globalThis.__awardCall = (award, s) => { if (award === 'Player of the Year') rows.push({ ...s }); };
     for (let i = 0; i < N; i += 1) {
       const [era, start] = ERAS[Math.floor(i / 5) % ERAS.length];
-      wholeCareer(S, i, SEED + 1 + pos.charCodeAt(0) * 3 + pos.charCodeAt(1), { era, start, pos, name: `Field ${pos} ${i}` });
+      wholeCareer(S, i, SEED + 1 + pos.charCodeAt(0) * 3 + pos.charCodeAt(1), { era, start, pos, name: `Field ${SEED} ${pos} ${i}` });
     }
     globalThis.__awardCall = null;
     const w = rows.filter(r => r.apps >= 20);
@@ -270,7 +272,7 @@ if (runs('3')) {
   const count = Object.fromEntries(Object.keys(WINDOWS).map(k => [k, { out: 0, in: 0 }]));
   for (let i = 0; i < N; i += 1) {
     const [era, start] = STARTS[Math.floor(i / 32) % STARTS.length];
-    const c = wholeCareer(S, i, SEED + 3, { era, start, ovr: 70 + (Math.floor(i / ERA_POS.length) % 4) * 3, pos: ERA_POS[i % ERA_POS.length], name: `Era Sim ${i}` });
+    const c = wholeCareer(S, i, SEED + 3, { era, start, ovr: 70 + (Math.floor(i / ERA_POS.length) % 4) * 3, pos: ERA_POS[i % ERA_POS.length], name: `Era Sim ${SEED} ${i}` });
     for (const a of c.awards ?? []) {
       const w = WINDOWS[a.name];
       if (!w) continue;
