@@ -1,0 +1,12 @@
+desk-s1 exit=0 34s | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+desk-s2 exit=0 39s | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+desk-s3 exit=0 32s | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+desk-s4held exit=0 37s | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+tsc exit=0 94s | 
+ctl-fullbird exit=0 39s | simNbaGmDesk: control fullbird fired (115 failures, as it should)
+ctl-norfa exit=0 31s | simNbaGmDesk: control norfa fired (176 failures, as it should)
+vanish-6 exit=1 24s | simNbaGmDesk: 1 failure(s) in ["2"]
+simNoRivalNames exit=0 22s | No rival product names found. 0 findings.
+engine exit=0 0s | engine files byte equal to 7a8750ba
+vanish-10 exit=1 40s | simNbaGmDesk: 2 failure(s) in ["2"]
+simHarnessAnchors exit=0 45s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.

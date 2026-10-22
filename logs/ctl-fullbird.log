@@ -1,0 +1,5 @@
+is not restricted lines: 8
+NEGATIVE CONTROL ON: fullbird; check 2 must go red
+   draftees up: 60 first rounders after the rookie scale, 111 second rounders; 60 restricted cases, 6 sheets (1 matched, 1 gone to the rival on its terms)
+control fullbird: red in ["2"], wanted 2
+simNbaGmDesk: control fullbird fired (115 failures, as it should)

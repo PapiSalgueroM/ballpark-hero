@@ -1,0 +1,3 @@
+NEGATIVE CONTROL ON: norfa; check 2 must go red
+control norfa: red in ["2"], wanted 2
+simNbaGmDesk: control norfa fired (176 failures, as it should)
