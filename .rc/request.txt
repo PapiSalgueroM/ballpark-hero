@@ -1,0 +1,15 @@
+ctl-onesource: INTL_SECTIONS=1 INTL_CONTROL=onesource node scripts/simCareerIntl.mjs
+ctl-shiftyear: INTL_SECTIONS=2 INTL_CONTROL=shiftyear node scripts/simCareerIntl.mjs
+ctl-dupnation: INTL_SECTIONS=3 INTL_CONTROL=dupnation node scripts/simCareerIntl.mjs
+ctl-fieldsize: INTL_SECTIONS=3 INTL_CONTROL=fieldsize node scripts/simCareerIntl.mjs
+ctl-genfield: INTL_SECTIONS=3 INTL_CONTROL=genfield node scripts/simCareerIntl.mjs
+ctl-copy: INTL_SECTIONS=6 INTL_CONTROL=copy node scripts/simCareerIntl.mjs
+ctl-mathrandom: INTL_SECTIONS=6 INTL_CONTROL=mathrandom node scripts/simCareerIntl.mjs
+ctl-norepair: INTL_SECTIONS=8 INTL_CONTROL=norepair node scripts/simCareerIntl.mjs
+ctl-nobronze: INTL_SECTIONS=5 INTL_CONTROL=nobronze node scripts/simCareerIntl.mjs
+ctl-nolift: INTL_SECTIONS=5 INTL_CONTROL=nolift node scripts/simCareerIntl.mjs
+ctl-seasonyear: INTL_FLEET=100 INTL_SECTIONS=2,4 INTL_CONTROL=seasonyear node scripts/simCareerIntl.mjs
+ctl-anyyear: INTL_FLEET=100 INTL_SECTIONS=2,4 INTL_CONTROL=anyyear node scripts/simCareerIntl.mjs
+ctl-lowbar: INTL_FLEET=100 INTL_SECTIONS=2,4 INTL_CONTROL=lowbar node scripts/simCareerIntl.mjs
+ctl-legacyreads: mkdir -p /tmp/blegacyreads && git archive 0846f9c5 | tar -x -C /tmp/blegacyreads && INTL_BASE_DIR=/tmp/blegacyreads INTL_FLEET=100 INTL_SECTIONS=7 INTL_CONTROL=legacyreads node scripts/simCareerIntl.mjs
+ctl-restwrites: mkdir -p /tmp/brestwrites && git archive 0846f9c5 | tar -x -C /tmp/brestwrites && INTL_BASE_DIR=/tmp/brestwrites INTL_FLEET=100 INTL_SECTIONS=7 INTL_CONTROL=restwrites node scripts/simCareerIntl.mjs
