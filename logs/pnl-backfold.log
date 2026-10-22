@@ -1,0 +1,10 @@
+  FAIL H: 320: with the panel open, "Back to the draft" is in view ({"top":1056,"bottom":1100,"view":640})
+   save bytes at the lottery card: 89069
+   save bytes on the clock at 6: 89288
+  FAIL H: 390: with the panel open, "Back to the draft" is in view ({"top":1036,"bottom":1080,"view":844})
+  FAIL H: 1280: with the panel open, "Back to the draft" is in view ({"top":1016,"bottom":1060,"view":900})
+  section A: 78 passed, 0 failed
+  section H: 3 passed, 3 failed
+  section N: 12 passed, 0 failed
+  24 screenshots in /home/runner/work/_temp/rc-out/files
+playNbaLotteryNight control backfold: FIRED, section H red, the others green.

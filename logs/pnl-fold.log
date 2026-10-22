@@ -1,0 +1,18 @@
+  FAIL N: Go to the draft at 320: heading top 197 and stage top 3363 in a viewport of 640
+  FAIL N: Continue at 320: heading top 197 and stage top 3299 in a viewport of 640
+  FAIL N: his first pick at 320: heading top 197 and stage top 3299 in a viewport of 640
+  FAIL N: his last pick at 320: heading top 197 and stage top 3351 in a viewport of 640
+  FAIL N: Go to the draft at 390: heading top 197 and stage top 3347 in a viewport of 844
+   save bytes at the lottery card: 88749
+  FAIL N: Continue at 390: heading top 197 and stage top 3299 in a viewport of 844
+   save bytes on the clock at 6: 88968
+  FAIL N: his first pick at 390: heading top 197 and stage top 3299 in a viewport of 844
+  FAIL N: his last pick at 390: heading top 197 and stage top 3335 in a viewport of 844
+  FAIL N: Go to the draft at 1280: heading top 177 and stage top 3295 in a viewport of 900
+  FAIL N: Continue at 1280: heading top 177 and stage top 3279 in a viewport of 900
+  FAIL N: his first pick at 1280: heading top 177 and stage top 3279 in a viewport of 900
+  FAIL N: his last pick at 1280: heading top 177 and stage top 3299 in a viewport of 900
+  section A: 78 passed, 0 failed
+  section N: 0 passed, 12 failed
+  21 screenshots in /home/runner/work/_temp/rc-out/files
+playNbaLotteryNight control fold: FIRED, section N red, the others green.
