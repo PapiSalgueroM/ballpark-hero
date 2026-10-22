@@ -1,0 +1,9 @@
+runner default locale: en-US
+locale et: 8 of 48 places order their foreign countries differently; 744 draws of 40000 differ; e.g. now|championship|England: Tunisia / Zimbabwe at count 2, 58 of 5000 names draw differently
+locale lt: 2 of 48 places order their foreign countries differently; 398 draws of 10000 differ; e.g. now|saudi|Saudi Arabia: Italy / Yemen at count 1, 350 of 5000 names draw differently
+locale sv: 0 of 48 places order their foreign countries differently; 0 draws of 0 differ
+locale da: 0 of 48 places order their foreign countries differently; 0 draws of 0 differ
+locale tr: 0 of 48 places order their foreign countries differently; 0 draws of 0 differ
+locale cs: 19 of 48 places order their foreign countries differently; 3106 draws of 95000 differ; e.g. now|premier|England: Chile / Colombia at count 2, 68 of 5000 names draw differently
+locale is: 0 of 48 places order their foreign countries differently; 0 draws of 0 differ
+review-locale: done
