@@ -1,0 +1,40 @@
+== 390
+  [390 opened] {"scrollW":390,"clientW":390,"scrollY":101,"minute":"1","pitch":{"x":0,"y":82,"w":390,"h":668},"label":null,"cue":null,"pill":null,"labelText":null,"card":null,"lift":null,"ball":{"x":180,"y":260,"w":7,"h":7},"phase":"plant","looks":22,"figures":22,"feed":["1'Penalty saved! Dean Henderson"]}
+  ok: 390: all 22 figures carry a look
+  ok: 390: the help says the figures are not likenesses
+  [390 foul] {"scrollW":390,"clientW":390,"scrollY":101,"minute":"13","pitch":{"x":0,"y":82,"w":390,"h":668},"label":{"x":12,"y":205,"w":88,"h":19},"cue":{"x":46,"y":226,"w":20,"h":12},"pill":null,"labelText":"Foul by O'Brien","card":null,"lift":null,"ball":{"x":58,"y":230,"w":7,"h":7},"phase":"pass","looks":22,"figures":22,"feed":["12'Throw in, Everton","11'Shot: Hayden Hackney","10'Throw in, Everton"]}
+  [390 air] {"scrollW":390,"clientW":390,"scrollY":101,"minute":"14","pitch":{"x":0,"y":82,"w":390,"h":668},"label":null,"cue":null,"pill":null,"labelText":null,"card":null,"lift":"3.97","ball":{"x":302,"y":297,"w":7,"h":7},"phase":"pass","looks":22,"figures":22,"feed":["12'Throw in, Everton","11'Shot: Hayden Hackney","10'Throw in, Everton"]}
+  [390 shot] {"scrollW":390,"clientW":390,"scrollY":101,"minute":"15","pitch":{"x":0,"y":82,"w":390,"h":668},"label":null,"cue":null,"pill":null,"labelText":null,"card":null,"lift":"0.13","ball":{"x":222,"y":584,"w":7,"h":7},"phase":"flight","looks":22,"figures":22,"feed":["12'Corner, right, Dwight McNeil","12'Throw in, Everton","11'Shot: Hayden Hackney"]}
+  note: 390: no card within 150 s
+  ok: 390: no page errors
+== 1280
+  [1280 opened] {"scrollW":1280,"clientW":1280,"scrollY":113,"minute":"1","pitch":{"x":183,"y":74,"w":542,"h":722},"label":null,"cue":null,"pill":null,"labelText":null,"card":null,"lift":null,"ball":{"x":580,"y":411,"w":7,"h":7},"phase":"pass","looks":22,"figures":22,"feed":[]}
+  ok: 1280: all 22 figures carry a look
+  [1280 foul] {"scrollW":1280,"clientW":1280,"scrollY":113,"minute":"3","pitch":{"x":183,"y":74,"w":542,"h":722},"label":{"x":382,"y":441,"w":94,"h":19},"cue":{"x":419,"y":462,"w":20,"h":12},"pill":null,"labelText":"Foul by Hackney","card":null,"lift":null,"ball":{"x":434,"y":466,"w":7,"h":7},"phase":"pass","looks":22,"figures":22,"feed":["3'Foul by Hayden Hackney","2'Throw in, Everton"]}
+  [1280 air] {"scrollW":1280,"clientW":1280,"scrollY":113,"minute":"4","pitch":{"x":183,"y":74,"w":542,"h":722},"label":null,"cue":null,"pill":null,"labelText":null,"card":null,"lift":"3.97","ball":{"x":601,"y":353,"w":7,"h":7},"phase":"pass","looks":22,"figures":22,"feed":["3'Foul by Hayden Hackney","2'Throw in, Everton"]}
+  [1280 shot] {"scrollW":1280,"clientW":1280,"scrollY":113,"minute":"6","pitch":{"x":183,"y":74,"w":542,"h":722},"label":null,"cue":null,"pill":null,"labelText":null,"card":null,"lift":"0.26","ball":{"x":584,"y":617,"w":7,"h":7},"phase":"flight","looks":22,"figures":22,"feed":["6'Shot: Merlin Röhl","3'Foul by Hayden Hackney","2'Throw in, Everton"]}
+  ok: 1280: no page errors
+== 844x390
+  [844x390 opened] {"scrollW":844,"clientW":844,"scrollY":153,"minute":"1","pitch":{"x":0,"y":1,"w":518,"h":389},"label":null,"cue":null,"pill":null,"labelText":null,"card":null,"lift":null,"ball":{"x":270,"y":285,"w":7,"h":7},"phase":"pass","looks":22,"figures":22,"feed":[]}
+  ok: 844x390: all 22 figures carry a look
+  [844x390 foul] {"scrollW":844,"clientW":844,"scrollY":153,"minute":"5","pitch":{"x":0,"y":1,"w":518,"h":389},"label":{"x":253,"y":246,"w":94,"h":19},"cue":{"x":290,"y":267,"w":20,"h":12},"pill":null,"labelText":"Foul by Hackney","card":null,"lift":null,"ball":{"x":305,"y":250,"w":7,"h":7},"phase":"pass","looks":22,"figures":22,"feed":["3'Save! Dean Henderson","3'Shot: Ismaïla Sarr","3'Shot: Daichi Kamada"]}
+  [844x390 air] {"scrollW":844,"clientW":844,"scrollY":153,"minute":"6","pitch":{"x":0,"y":1,"w":518,"h":389},"label":null,"cue":null,"pill":null,"labelText":null,"card":null,"lift":"3.49","ball":{"x":491,"y":44,"w":7,"h":7},"phase":"pass","looks":22,"figures":22,"feed":["5'Throw in, Everton","3'Save! Dean Henderson","3'Shot: Ismaïla Sarr"]}
+  [844x390 shot] {"scrollW":844,"clientW":844,"scrollY":153,"minute":"15","pitch":{"x":0,"y":1,"w":518,"h":389},"label":null,"cue":null,"pill":null,"labelText":null,"card":null,"lift":"0.14","ball":{"x":122,"y":252,"w":7,"h":7},"phase":"flight","looks":22,"figures":22,"feed":["12'Throw in, Crystal Palace","8'Throw in, Crystal Palace","7'Throw in, Everton"]}
+  ok: 844x390: no page errors
+== 390-reduced
+  [390-reduced opened] {"scrollW":390,"clientW":390,"scrollY":101,"minute":"1","pitch":{"x":0,"y":82,"w":390,"h":668},"label":null,"cue":null,"pill":null,"labelText":null,"card":null,"lift":null,"ball":{"x":219,"y":85,"w":7,"h":7},"phase":"net","looks":22,"figures":22,"feed":["1'GOAL! Ismaïla Sarr","1'Corner, left, Kiernan Dewsbury-Hall"]}
+  ok: 390-reduced: all 22 figures carry a look
+  [390-reduced sampled] {"frames":3601,"lifted":0,"maxLift":0,"cues":206,"phases":{"net":639,"pass":1950,"wide":759,"caught":253},"labels":206}
+  ok: 390-reduced: the ball stayed on the grass on all 3601 frames
+  [390-reduced foul] {"scrollW":390,"clientW":390,"scrollY":101,"minute":"24","pitch":{"x":0,"y":82,"w":390,"h":668},"label":{"x":94,"y":509,"w":95,"h":19},"cue":{"x":131,"y":530,"w":20,"h":12},"pill":null,"labelText":"Foul by Richards","card":null,"lift":null,"ball":{"x":138,"y":549,"w":7,"h":7},"phase":"pass","looks":22,"figures":22,"feed":["20'Shot: Thierno Barry","20'Corner, left, Jarrad Branthwaite","19'Throw in, Everton"]}
+  [390-reduced sampled again] {"frames":1801,"lifted":0,"maxLift":0,"cues":55,"phases":{"pass":1295,"wide":253,"caught":253},"labels":55}
+  ok: 390-reduced: no page errors
+== 1280-reduced
+  [1280-reduced opened] {"scrollW":1280,"clientW":1280,"scrollY":113,"minute":"1","pitch":{"x":183,"y":74,"w":542,"h":722},"label":null,"cue":null,"pill":null,"labelText":null,"card":null,"lift":null,"ball":{"x":710,"y":399,"w":7,"h":7},"phase":"pass","looks":22,"figures":22,"feed":["1'Throw in, Everton"]}
+  ok: 1280-reduced: all 22 figures carry a look
+  [1280-reduced sampled] {"frames":3602,"lifted":0,"maxLift":0,"cues":0,"phases":{"pass":2511,"wide":506,"net":332,"caught":253},"labels":0}
+  ok: 1280-reduced: the ball stayed on the grass on all 3602 frames
+  [1280-reduced foul] {"scrollW":1280,"clientW":1280,"scrollY":113,"minute":"17","pitch":{"x":183,"y":74,"w":542,"h":722},"label":{"x":530,"y":371,"w":94,"h":19},"cue":{"x":567,"y":392,"w":20,"h":12},"pill":null,"labelText":"Foul by Hackney","card":null,"lift":null,"ball":{"x":573,"y":411,"w":7,"h":7},"phase":"pass","looks":22,"figures":22,"feed":["14'Save! Dean Henderson","14'Save! Dean Henderson","12'Throw in, Crystal Palace"]}
+  [1280-reduced sampled again] {"frames":1801,"lifted":0,"maxLift":0,"cues":428,"phases":{"pass":1391,"wide":410},"labels":428}
+  ok: 1280-reduced: no page errors
+walkrun: green, every size walked, screenshots in RC_OUT
