@@ -1,0 +1,2 @@
+#!playwright
+weightBase: git worktree add .rc-base 30b4b3ca >/dev/null 2>&1 && cd .rc-base && git -c user.email=rc@example.invalid -c user.name=rc merge --no-edit origin/main >/dev/null 2>&1 && git log --oneline -1 && node ../node_modules/vite/bin/vite.js build >/dev/null 2>&1 && (node scripts/lib/hostLikeServer.mjs dist 4175 >/dev/null 2>&1 &) && sleep 4 && SWEEP_OFFLINE=1 BASE=http://localhost:4175 SWEEP_BASE=http://localhost:4175 node scripts/sweepWeight.mjs
