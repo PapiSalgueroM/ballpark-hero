@@ -1,0 +1,4 @@
+vitest-career exit=0 19s |    Duration  18.08s (transform 1.25s, setup 68ms, collect 173ms, tests 17.12s, environment 309ms, prepare 96ms)
+ctl-lookopens exit=0 24s | controlFrontOfficeBoard: 1 of 1 control(s) fired, the board tests can fail for each named reason.
+ctl-deskstale exit=0 22s | controlFrontOfficeBoard: 1 of 1 control(s) fired, the board tests can fail for each named reason.
+ctl-check exit=0 0s | controlFrontOfficeBoard: check passed. Every string of all 46 controls is in the board exactly once.

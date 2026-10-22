@@ -1,0 +1,5 @@
+#!serial
+vitest-career: node_modules/.bin/vitest run src/components/front-office-shared/FrontOfficeGmCareer.test.tsx --testTimeout=600000 --hookTimeout=120000
+ctl-lookopens: node scripts/controlFrontOfficeBoard.mjs lookopens
+ctl-deskstale: node scripts/controlFrontOfficeBoard.mjs deskstale
+ctl-check: node scripts/controlFrontOfficeBoard.mjs check
