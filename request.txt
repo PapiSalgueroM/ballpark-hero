@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+walk: node scripts/playUsShopPromises.mjs
+walk-nocall: node .rc/x/nocall.mjs && node_modules/.bin/vite build --outDir dist-nocall --emptyOutDir > /dev/null; git checkout -- src; PLAY_SHOP_DIST=dist-nocall PLAY_SHOP_CONTROL=nocall node scripts/playUsShopPromises.mjs
+walk-nobank: node .rc/x/nobank.mjs && node_modules/.bin/vite build --outDir dist-nobank --emptyOutDir > /dev/null; git checkout -- src; PLAY_SHOP_DIST=dist-nobank PLAY_SHOP_CONTROL=nobank node scripts/playUsShopPromises.mjs
