@@ -1,0 +1,14 @@
+MUTATION pool3: a generated field draws from the last THREE played fields, not the last two the help promises
+  s1 exit=0 129s
+    simCareerIntl: GREEN, 23682 checks over sections 1,2,3,4,6
+  s5 exit=1 7s
+      FAIL [5] future set 8 tier 89-91: gold 89.6 medal 99.6 outside 66.8-86.4 / 89.6-100
+      FAIL [5] future set 10 tier 89-91: gold 89.8 medal 98.8 outside 66.8-86.4 / 89.6-100
+      FAIL [5] future: gold rises -0.2 from tier 89-91 to 92-94, under 3
+    simCareerIntl: RED, 180066 checks, section 5: 4
+  s8 exit=0 2s
+    simCareerIntl: GREEN, 7 checks over sections 8
+  unit exit=0 5s
+    [2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+    [2m      Tests [22m [1m[32m34 passed[39m[22m[90m (34)[39m
+MUTATION pool3: s1=0 s5=1 s8=0 unit=0 => CAUGHT by s5

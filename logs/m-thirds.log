@@ -1,0 +1,11 @@
+MUTATION thirds: the third placed sides go through in group order, not the best two by record
+  s1 exit=0 110s
+    simCareerIntl: GREEN, 23682 checks over sections 1,2,3,4,6
+  s5 exit=0 7s
+    simCareerIntl: GREEN, 180066 checks over sections 5
+  s8 exit=0 2s
+    simCareerIntl: GREEN, 7 checks over sections 8
+  unit exit=0 4s
+    [2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+    [2m      Tests [22m [1m[32m34 passed[39m[22m[90m (34)[39m
+MUTATION thirds: s1=0 s5=0 s8=0 unit=0 => SURVIVED, every gate green

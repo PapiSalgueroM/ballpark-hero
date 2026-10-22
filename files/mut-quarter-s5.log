@@ -1,0 +1,49 @@
+section 5: the tournament, 2000 tournaments an edition kind, ten seed sets
+  played (gold/medal percent by tier 86-88, 89-91, 92-94, 95-99):
+    set 1: 44.0/79.6  55.6/84.2  62.2/86.8  66.0/89.2
+    set 2: 45.4/80.0  56.4/86.4  64.0/84.8  66.2/86.8
+    set 3: 47.6/79.8  57.2/83.6  63.6/87.8  66.0/88.0
+    set 4: 48.4/77.6  54.8/86.4  64.6/87.4  67.2/88.6
+    set 5: 47.8/81.4  55.4/84.6  63.0/87.0  65.2/87.8
+    set 6 (held out): 45.8/82.8  53.6/85.0  63.0/88.6  63.4/86.6
+    set 7 (held out): 44.2/81.2  56.8/84.4  65.6/85.8  67.0/87.0
+    set 8 (held out): 47.2/81.4  53.8/85.6  62.2/87.4  63.0/88.6
+    set 9 (held out): 44.2/80.8  57.2/83.8  64.2/87.6  65.2/88.0
+    set 10 (held out): 48.2/80.4  54.6/84.0  64.4/87.6  65.8/87.6
+    sets 1 to 5 gold range by tier: 44.0 to 48.4, 54.8 to 57.2, 62.2 to 64.6, 65.2 to 67.2
+    held out pooled gold by tier: 45.9, 55.2, 63.9, 64.9; rises 9.3, 8.7, 1.0
+  future (gold/medal percent by tier 86-88, 89-91, 92-94, 95-99):
+    set 1: 72.4/93.4  84.0/98.0  87.6/98.4  97.0/99.8
+    set 2: 74.6/95.8  83.8/98.4  90.2/99.4  96.0/100.0
+    set 3: 72.0/96.0  82.2/99.0  92.0/99.2  96.0/99.6
+    set 4: 72.0/95.6  79.4/99.0  90.2/98.4  97.6/99.8
+    set 5: 72.8/95.2  82.2/97.6  90.4/98.2  96.6/99.8
+    set 6 (held out): 74.8/94.8  82.8/98.4  90.0/99.2  97.2/99.6
+    set 7 (held out): 75.2/94.6  80.8/98.2  93.2/99.2  97.2/99.6
+    set 8 (held out): 72.6/94.0  84.0/99.4  89.0/98.6  96.6/100.0
+    set 9 (held out): 73.4/95.6  82.2/97.8  92.2/99.0  97.8/99.4
+    set 10 (held out): 73.0/95.0  84.2/97.8  88.6/98.2  97.0/99.2
+    sets 1 to 5 gold range by tier: 72.0 to 74.6, 79.4 to 84.0, 87.6 to 92.0, 96.0 to 97.6
+    held out pooled gold by tier: 73.8, 82.8, 90.6, 97.2; rises 9.0, 7.8, 6.6
+  FAIL [5] future set 6 tier 86-88: gold 74.8 medal 94.8 outside 55.2-72.6 / 80.8-96.6
+  FAIL [5] future set 7 tier 86-88: gold 75.2 medal 94.6 outside 55.2-72.6 / 80.8-96.6
+  FAIL [5] future set 9 tier 86-88: gold 73.4 medal 95.6 outside 55.2-72.6 / 80.8-96.6
+  FAIL [5] future set 10 tier 86-88: gold 73.0 medal 95.0 outside 55.2-72.6 / 80.8-96.6
+  projected (gold/medal percent by tier 86-88, 89-91, 92-94, 95-99):
+    set 1: 74.6/95.6  89.4/98.8  91.8/98.6  94.4/100.0
+    set 2: 75.6/96.4  89.0/99.6  93.6/99.6  95.8/99.8
+    set 3: 74.0/93.0  86.4/97.4  93.6/99.0  96.2/100.0
+    set 4: 74.6/95.0  86.8/98.8  93.0/98.2  95.8/99.4
+    set 5: 73.4/94.0  88.6/98.8  94.0/98.6  96.6/99.8
+    set 6 (held out): 69.8/94.6  85.6/98.4  94.0/99.2  95.2/100.0
+    set 7 (held out): 74.4/94.2  89.0/99.4  94.6/99.2  96.0/100.0
+    set 8 (held out): 74.4/94.6  89.0/98.8  92.8/99.0  95.2/100.0
+    set 9 (held out): 69.2/93.4  90.6/98.4  90.6/97.8  96.6/99.8
+    set 10 (held out): 74.6/95.2  88.0/98.2  91.4/99.2  94.6/99.8
+    sets 1 to 5 gold range by tier: 73.4 to 75.6, 86.4 to 89.4, 91.8 to 94.0, 94.4 to 96.6
+    held out pooled gold by tier: 72.5, 88.4, 92.7, 95.5; rises 16.0, 4.2, 2.8
+  FAIL [5] projected set 7 tier 86-88: gold 74.4 medal 94.2 outside 58.4-72.2 / 81-96.2
+  FAIL [5] projected set 8 tier 86-88: gold 74.4 medal 94.6 outside 58.4-72.2 / 81-96.2
+  FAIL [5] projected set 10 tier 86-88: gold 74.6 medal 95.2 outside 58.4-72.2 / 81-96.2
+  60000 tournaments held to the invariants
+simCareerIntl: RED, 180066 checks, section 5: 7

@@ -1,0 +1,14 @@
+MUTATION quarter: the other quarter-finalists of a played edition play at the field rung (76) instead of 82
+  s1 exit=0 133s
+    simCareerIntl: GREEN, 23682 checks over sections 1,2,3,4,6
+  s5 exit=1 8s
+      FAIL [5] projected set 7 tier 86-88: gold 74.4 medal 94.2 outside 58.4-72.2 / 81-96.2
+      FAIL [5] projected set 8 tier 86-88: gold 74.4 medal 94.6 outside 58.4-72.2 / 81-96.2
+      FAIL [5] projected set 10 tier 86-88: gold 74.6 medal 95.2 outside 58.4-72.2 / 81-96.2
+    simCareerIntl: RED, 180066 checks, section 5: 7
+  s8 exit=0 2s
+    simCareerIntl: GREEN, 7 checks over sections 8
+  unit exit=0 4s
+    [2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+    [2m      Tests [22m [1m[32m34 passed[39m[22m[90m (34)[39m
+MUTATION quarter: s1=0 s5=1 s8=0 unit=0 => CAUGHT by s5

@@ -1,0 +1,13 @@
+MUTATION bronzefourth: intlStatsOf counts a fourth place as a bronze medal
+  s1 exit=0 93s
+    simCareerIntl: GREEN, 23682 checks over sections 1,2,3,4,6
+  s5 exit=0 5s
+    simCareerIntl: GREEN, 180066 checks over sections 5
+  s8 exit=0 1s
+    simCareerIntl: GREEN, 7 checks over sections 8
+  unit exit=1 4s
+    [2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+    [2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m33 passed[39m[22m[90m (34)[39m
+    [31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+    [41m[1m FAIL [22m[49m src/test/nbaCareerIntl.test.ts[2m > [22mthe call[2m > [22mgo writes the row and the snapshot, and only health moves outside the block
+MUTATION bronzefourth: s1=0 s5=0 s8=0 unit=1 => CAUGHT by unit

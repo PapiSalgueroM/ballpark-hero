@@ -1,0 +1,5 @@
+m-thirds exit=0 123s | MUTATION thirds: s1=0 s5=0 s8=0 unit=0 => SURVIVED, every gate green
+m-pool3 exit=1 143s | MUTATION pool3: s1=0 s5=1 s8=0 unit=0 => CAUGHT by s5
+m-quarter exit=1 148s | MUTATION quarter: s1=0 s5=1 s8=0 unit=0 => CAUGHT by s5
+m-bronzefourth exit=1 104s | MUTATION bronzefourth: s1=0 s5=0 s8=0 unit=1 => CAUGHT by unit
+m-knock exit=0 479s | MUTATION knock: s1=0 s5=0 s8=0 unit=0 s7=0 => SURVIVED, every gate green

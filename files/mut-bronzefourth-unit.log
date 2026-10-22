@@ -1,0 +1,50 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/tmp/mut-bronzefourth[39m
+
+ [32m✓[39m src/lib/careerIntl.test.ts [2m([22m[2m22 tests[22m[2m)[22m[33m 1529[2mms[22m[39m
+   [33m[2m✓[22m[39m the tournament[2m > [22mplays every shape to one champion, never level [33m 905[2mms[22m[39m
+   [33m[2m✓[22m[39m the tournament[2m > [22mplays every shape to one champion, groups may draw [33m 552[2mms[22m[39m
+ [31m❯[39m src/test/nbaCareerIntl.test.ts [2m([22m[2m12 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 136[2mms[22m[39m
+   [32m✓[39m the summer after a season[2m > [22mmaps the season labelled Y to the summer Y + 1[32m 1[2mms[22m[39m
+   [32m✓[39m the summer after a season[2m > [22mhas no edition in the summers between[32m 0[2mms[22m[39m
+   [32m✓[39m the summer after a season[2m > [22mlabels an edition from the ledger, Tokyo with the year it was held, a projected one with no host[32m 1[2mms[22m[39m
+   [32m✓[39m the call[2m > [22mcomes at 86 and not one below[32m 1[2mms[22m[39m
+   [32m✓[39m the call[2m > [22mnever comes when retired, suspended, too old or too hurt, or in a summer with no edition[32m 1[2mms[22m[39m
+   [32m✓[39m the call[2m > [22mrest writes the year, the edition and went false, and nothing else[32m 1[2mms[22m[39m
+[31m   [31m×[31m the call[2m > [22mgo writes the row and the snapshot, and only health moves outside the block[39m[32m 10[2mms[22m[39m
+[31m     → expected 1 to be +0 // Object.is equality[39m
+   [32m✓[39m the call[2m > [22mplays the same tournament for the same career twice[32m 1[2mms[22m[39m
+   [32m✓[39m the game[2m > [22mis never level, and goes to overtime only from level[32m 117[2mms[22m[39m
+   [32m✓[39m the game[2m > [22mgives each nation its real rung in a played summer and its mean before one to come[32m 1[2mms[22m[39m
+   [32m✓[39m the help and the bindings[2m > [22mquotes the module numbers and never the marks[32m 1[2mms[22m[39m
+   [32m✓[39m the help and the bindings[2m > [22mbinds the NBA alone[32m 0[2mms[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m33 passed[39m[22m[90m (34)[39m
+[2m   Start at [22m 11:46:25
+[2m   Duration [22m 3.11s[2m (transform 1.58s, setup 159ms, collect 2.12s, tests 1.66s, environment 822ms, prepare 287ms)[22m
+
+
+::error file=/tmp/mut-bronzefourth/src/test/nbaCareerIntl.test.ts,title=src/test/nbaCareerIntl.test.ts > the call > go writes the row and the snapshot%2C and only health moves outside the block,line=93,column=43::AssertionError: expected 1 to be +0 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 0%0A+ 1%0A%0A ❯ src/test/nbaCareerIntl.test.ts:93:43%0A%0A
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/nbaCareerIntl.test.ts[2m > [22mthe call[2m > [22mgo writes the row and the snapshot, and only health moves outside the block
+[31m[1mAssertionError[22m: expected 1 to be +0 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 0[39m
+[31m+ 1[39m
+
+[36m [2m❯[22m src/test/nbaCareerIntl.test.ts:[2m93:43[22m[39m
+    [90m 91| [39m    expect(JSON.stringify({ ...rest, health: 0 })).toBe(JSON.stringify…
+    [90m 92| [39m    [34mexpect[39m([33mNBA_CAREER_INTL[39m[33m.[39m[34mpending[39m(c))[33m.[39m[34mtoBeNull[39m()[33m;[39m
+    [90m 93| [39m    expect(NBA_CAREER_INTL.medalCount(c)).toBe(NBA_CAREER_INTL.trophyR…
+    [90m   | [39m                                          [31m^[39m
+    [90m 94| [39m  })[33m;[39m
+    [90m 95| [39m  [34mit[39m([32m'plays the same tournament for the same career twice'[39m[33m,[39m () [33m=>[39m {
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
