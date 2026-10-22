@@ -1,0 +1,117 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/lib/nbaEarnedDraft.test.ts [2m([22m[2m22 tests[22m[2m)[22m[33m 1923[2mms[22m[39m
+   [33m[2m✓[22m[39m the "?" (correction 9)[2m > [22mprints no chance the table cannot compute [33m 464[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1540: the "?" states the league wide knobs, and the chances come before the draw[2m > [22mthe chances are the shared lines on the NBA table and labels, and land in the "?" before the worked example [33m 365[2mms[22m[39m
+ [32m✓[39m src/components/front-office-shared/GmEarnedDraftScreen.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[32m 104[2mms[22m[39m
+ [32m✓[39m src/lib/gmEarnedDraft.test.ts [2m([22m[2m19 tests[22m[2m)[22m[33m 3797[2mms[22m[39m
+   [33m[2m✓[22m[39m lotteryOdds: every club at every place, by the draw itself[2m > [22mthe uncapped table: places and clubs sum to one, the first pick is the share, a top pick is being drawn [33m 435[2mms[22m[39m
+   [33m[2m✓[22m[39m lotteryOdds: every club at every place, by the draw itself[2m > [22mtwo clubs level on a shared chance hold the same identities [33m 421[2mms[22m[39m
+   [33m[2m✓[22m[39m lotteryOdds: every club at every place, by the draw itself[2m > [22mcontrol: a with replacement draw put through the same checker breaks an identity [33m 313[2mms[22m[39m
+   [33m[2m✓[22m[39m lotteryChancesBefore: the lines before the draw cannot give the draw away (correction 1)[2m > [22mhis club seeded 1st, 3rd and 14th, a playoff club, a traded away first, a bought first and two bought firsts [33m 2082[2mms[22m[39m
+   [33m[2m✓[22m[39m lotteryChancesBefore: the lines before the draw cannot give the draw away (correction 1)[2m > [22mcontrol: a variant that adds where his pick landed, or lists held firsts in slot order, tells the keys apart [33m 458[2mms[22m[39m
+ [32m✓[39m src/components/front-office-shared/useGmEarnedDraft.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 36[2mms[22m[39m
+ [32m✓[39m src/components/front-office-shared/DraftNightCard.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 74[2mms[22m[39m
+ [31m❯[39m src/components/nba-front-office/NbaEarnedDraft.test.tsx [2m([22m[2m11 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 6146[2mms[22m[39m
+[31m   [31m×[31m the earned draft night on the NBA board[2m > [22m(a) from the recap: the chances first and no spoiler, Continue to his slot, his two picks, the summer, the hub[39m[33m 1038[2mms[22m[39m
+[31m     → expected '\n      @keyframes cmRise { 0% { opac…' to contain 'Drafted'[39m
+   [33m[2m✓[22m[39m the earned draft night on the NBA board[2m > [22m(b) a draft already open with the desk on and no night finishes the old way; a night planted there takes over [33m 380[2mms[22m[39m
+   [33m[2m✓[22m[39m the earned draft night on the NBA board[2m > [22m(c) he holds pick 1: no run card and on the clock at 1; he holds only pick 60: on the clock at 60 after 59 picks [33m 573[2mms[22m[39m
+   [33m[2m✓[22m[39m the earned draft night on the NBA board[2m > [22m(d) no pick: Continue runs every slot and the summer; with the class emptied every slot passes and the screen draws its own way out [33m 912[2mms[22m[39m
+   [33m[2m✓[22m[39m the earned draft night on the NBA board[2m > [22m(e) a first he traded away is used by the club that holds it, one he bought is his at that club's place [33m 439[2mms[22m[39m
+   [33m[2m✓[22m[39m the earned draft night on the NBA board[2m > [22m(f) a night broken mid draft, at each field, finishes the old way with the rivals' batches [33m 1328[2mms[22m[39m
+   [33m[2m✓[22m[39m the earned draft night on the NBA board[2m > [22m(g) a reload at the card draws its last frame with Continue live; a reload on the clock is the same slot and class with no draw [33m 488[2mms[22m[39m
+   [32m✓[39m the earned draft night on the NBA board[2m > [22m(h) two presses in one act are one effect each: one class, one Continue, one pick, one summer[32m 203[2mms[22m[39m
+   [32m✓[39m the earned draft night on the NBA board[2m > [22m(i) no heading "?" while the card is up; after Continue it opens over the stage and the run card stays the same node[32m 265[2mms[22m[39m
+   [32m✓[39m the earned draft night on the NBA board[2m > [22m(j) every slot used and the summer not run (the state a refused summer leaves): the finish button runs it[32m 215[2mms[22m[39m
+   [32m✓[39m the earned draft night on the NBA board[2m > [22m(k) leaving the night and abandoning the franchise leaves nothing of it on screen[32m 296[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/components/nba-front-office/NbaEarnedDraft.test.tsx[2m > [22mthe earned draft night on the NBA board[2m > [22m(a) from the recap: the chances first and no spoiler, Continue to his slot, his two picks, the summer, the hub
+[31m[1mAssertionError[22m: expected '\n      @keyframes cmRise { 0% { opac…' to contain 'Drafted'[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- Drafted[39m
+[31m+[39m
+[31m+       @keyframes cmRise { 0% { opacity: 0; transform: translateY(7px); } 100% { opacity: 1; transform: translateY(0); } }[39m
+[31m+       .cm-rise { opacity: 0; animation: cmRise 0.45s ease-out forwards; }[39m
+[31m+       @keyframes cmSlam { 0% { opacity: 0; transform: scale(1.6); } 60% { opacity: 1; transform: scale(0.94); } 100% { opacity: 1; transform: scale(1); } }[39m
+[31m+       .cm-slam { opacity: 0; animation: cmSlam 0.4s cubic-bezier(0.2, 0.8, 0.3, 1.2) forwards; }[39m
+[31m+       @keyframes cmWinPulse { 0% { box-shadow: 0 0 0 0 rgba(34,197,94,0.45); } 100% { box-shadow: 0 0 0 26px rgba(34,197,94,0); } }[39m
+[31m+       .cm-win-pulse { animation: cmWinPulse 0.9s ease-out 1; }[39m
+[31m+       @keyframes cmLossShake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-4px); } 55% { transform: translateX(3px); } 80% { transform: translateX(-2px); } }[39m
+[31m+       .cm-loss-shake { animation: cmLossShake 0.4s ease-in-out 1; }[39m
+[31m+       @keyframes cmGoldGlow { 0%, 100% { box-shadow: 0 0 8px rgba(234,179,8,0.35); } 50% { box-shadow: 0 0 22px rgba(234,179,8,0.75); } }[39m
+[31m+       .cm-gold-glow { animation: cmGoldGlow 1.5s ease-in-out infinite; }[39m
+[31m+       @keyframes cmTickIn { 0% { opacity: 0; transform: translateX(-6px); } 100% { opacity: 1; transform: translateX(0); } }[39m
+[31m+       .cm-tick-in { opacity: 0; animation: cmTickIn 0.35s ease-out forwards; }[39m
+[31m+       /* cm-rise for a control that must not be pressed before it shows: hidden[39m
+[31m+          (so unclickable) through its delay, visible from its first frame. */[39m
+[31m+       @keyframes cmRiseGated { 0% { opacity: 0; visibility: visible; transform: translateY(7px); } 100% { opacity: 1; visibility: visible; transform: translateY(0); } }[39m
+[31m+       .cm-rise-gated { opacity: 0; visibility: hidden; animation: cmRiseGated 0.45s ease-out forwards; }[39m
+[31m+[39m
+[31m+[39m
+[31m+       @media (prefers-reduced-motion: reduce) {[39m
+[31m+         .cm-rise, .cm-slam, .cm-tick-in, .cm-rise-gated { animation: none; opacity: 1; transform: none; visibility: visible; }[39m
+[31m+         .cm-win-pulse, .cm-loss-shake, .cm-gold-glow { animation: none; }[39m
+[31m+       }[39m
+[31m+     The 2027 DraftYou pick 1st and 33rd.Every pick of the draft is in.That is your draft done. The offseason has run and the new season is set up on the hub.?[39m
+[31m+         @keyframes cmConfettiFall {[39m
+[31m+           0% { opacity: 0; transform: translateY(-10px) rotate(0deg); }[39m
+[31m+           8% { opacity: 1; }[39m
+[31m+           100% { opacity: 0; transform: translateY(240px) rotate(560deg); }[39m
+[31m+         }[39m
+[31m+         .cm-confetti { animation-name: cmConfettiFall; animation-timing-function: ease-in; animation-fill-mode: forwards; }[39m
+[31m+[39m
+[31m+         @media (prefers-reduced-motion: reduce) {[39m
+[31m+           .cm-confetti { display: none; }[39m
+[31m+         }[39m
+[31m+       On the clockYour pick is in at 33. Picks 34 to 60 are in. Every pick of the draft is in.33. BOS select Tyrese StrotherG · your pick7353. PHI take Cole NorthcuttC6654. PHX take Marcus QuinnG6755. POR take Tyrese NorthcuttC6756. SAC take Keon NorthcuttC6657. SAS take Tyrese MaplewoodC6658. TOR take Vontae OakhurstG6759. UTA take Andre LockridgeC7060. WAS take Keon HolidayG67Continue to the hub[39m
+[31m+         @keyframes foDraftIn {[39m
+[31m+           0% { opacity: 0; transform: translateY(6px) scale(0.98); }[39m
+[31m+           100% { opacity: 1; transform: translateY(0) scale(1); }[39m
+[31m+         }[39m
+[31m+         .fo-draft-row { opacity: 0; animation: foDraftIn 0.34s ease-out forwards; }[39m
+[31m+         .fo-draft-continue { opacity: 0; animation: foDraftIn 0.34s ease-out forwards; }[39m
+[31m+         @keyframes foDraftHead { 0% { opacity: 0; } 100% { opacity: 1; } }[39m
+[31m+         .fo-draft-head { opacity: 0; animation: foDraftHead 0.3s ease-out forwards; }[39m
+[31m+         /* Round 423's rule, and it matters more here than usual: every row above[39m
+[31m+            starts invisible, so cancelling the animation without landing it would[39m
+[31m+            hide the entire pick list from the people who asked for less motion.[39m
+[31m+            The rows end on their final frame instead, which is the whole board[39m
+[31m+            shown at once with no movement. The Continue button is on the same[39m
+[31m+            rule, or the way off the draft would be invisible to them. */[39m
+[31m+         @media (prefers-reduced-motion: reduce) {[39m
+[31m+           .fo-draft-row, .fo-draft-head, .fo-draft-continue {[39m
+[31m+             animation: none;[39m
+[31m+             opacity: 1;[39m
+[31m+             transform: none;[39m
+[31m+           }[39m
+[31m+         }[39m
+[31m+       🏛️ The new mandate: Win the Finals. Anything less is a failed season upstairs.[39m
+
+[36m [2m❯[22m src/components/nba-front-office/NbaEarnedDraft.test.tsx:[2m114:39[22m[39m
+    [90m112| [39m    [34mexpect[39m(end[33m.[39mleague[33m.[39mseason)[33m.[39m[34mtoBe[39m(b[33m.[39mleague[33m.[39mseason [33m+[39m [34m1[39m)[33m;[39m
+    [90m113| [39m    expect($('[data-gm-earned-draft]')!.getAttribute('data-gm-earned-d…
+    [90m114| [39m    [34mexpect[39m(document[33m.[39mbody[33m.[39mtextContent)[33m.[39m[34mtoContain[39m([32m'Drafted'[39m)[33m;[39m
+    [90m   | [39m                                      [31m^[39m
+    [90m115| [39m    [34mtoHub[39m()[33m;[39m
+    [90m116| [39m    [34mexpect[39m([34m$[39m([32m'[data-gm-earned-draft]'[39m))[33m.[39m[34mtoBeNull[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m5 passed[39m[22m[90m (6)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m62 passed[39m[22m[90m (63)[39m
+[2m   Start at [22m 09:00:11
+[2m   Duration [22m 11.33s[2m (transform 2.83s, setup 757ms, collect 5.55s, tests 12.08s, environment 4.98s, prepare 1.69s)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/nba-front-office/NbaEarnedDraft.test.tsx,title=src/components/nba-front-office/NbaEarnedDraft.test.tsx > the earned draft night on the NBA board > (a) from the recap%3A the chances first and no spoiler%2C Continue to his slot%2C his two picks%2C the summer%2C the hub,line=114,column=39::AssertionError: expected '\n      @keyframes cmRise { 0%25 { opac…' to contain 'Drafted'%0A%0A- Expected%0A+ Received%0A%0A- Drafted%0A+%0A+       @keyframes cmRise { 0%25 { opacity: 0; transform: translateY(7px); } 100%25 { opacity: 1; transform: translateY(0); } }%0A+       .cm-rise { opacity: 0; animation: cmRise 0.45s ease-out forwards; }%0A+       @keyframes cmSlam { 0%25 { opacity: 0; transform: scale(1.6); } 60%25 { opacity: 1; transform: scale(0.94); } 100%25 { opacity: 1; transform: scale(1); } }%0A+       .cm-slam { opacity: 0; animation: cmSlam 0.4s cubic-bezier(0.2, 0.8, 0.3, 1.2) forwards; }%0A+       @keyframes cmWinPulse { 0%25 { box-shadow: 0 0 0 0 rgba(34,197,94,0.45); } 100%25 { box-shadow: 0 0 0 26px rgba(34,197,94,0); } }%0A+       .cm-win-pulse { animation: cmWinPulse 0.9s ease-out 1; }%0A+       @keyframes cmLossShake { 0%25, 100%25 { transform: translateX(0); } 25%25 { transform: translateX(-4px); } 55%25 { transform: translateX(3px); } 80%25 { transform: translateX(-2px); } }%0A+       .cm-loss-shake { animation: cmLossShake 0.4s ease-in-out 1; }%0A+       @keyframes cmGoldGlow { 0%25, 100%25 { box-shadow: 0 0 8px rgba(234,179,8,0.35); } 50%25 { box-shadow: 0 0 22px rgba(234,179,8,0.75); } }%0A+       .cm-gold-glow { animation: cmGoldGlow 1.5s ease-in-out infinite; }%0A+       @keyframes cmTickIn { 0%25 { opacity: 0; transform: translateX(-6px); } 100%25 { opacity: 1; transform: translateX(0); } }%0A+       .cm-tick-in { opacity: 0; animation: cmTickIn 0.35s ease-out forwards; }%0A+       /* cm-rise for a control that must not be pressed before it shows: hidden%0A+          (so unclickable) through its delay, visible from its first frame. */%0A+       @keyframes cmRiseGated { 0%25 { opacity: 0; visibility: visible; transform: translateY(7px); } 100%25 { opacity: 1; visibility: visible; transform: translateY(0); } }%0A+       .cm-rise-gated { opacity: 0; visibility: hidden; animation: cmRiseGated 0.45s ease-out forwards; }%0A+%0A+%0A+       @media (prefers-reduced-motion: reduce) {%0A+         .cm-rise, .cm-slam, .cm-tick-in, .cm-rise-gated { animation: none; opacity: 1; transform: none; visibility: visible; }%0A+         .cm-win-pulse, .cm-loss-shake, .cm-gold-glow { animation: none; }%0A+       }%0A+     The 2027 DraftYou pick 1st and 33rd.Every pick of the draft is in.That is your draft done. The offseason has run and the new season is set up on the hub.?%0A+         @keyframes cmConfettiFall {%0A+           0%25 { opacity: 0; transform: translateY(-10px) rotate(0deg); }%0A+           8%25 { opacity: 1; }%0A+           100%25 { opacity: 0; transform: translateY(240px) rotate(560deg); }%0A+         }%0A+         .cm-confetti { animation-name: cmConfettiFall; animation-timing-function: ease-in; animation-fill-mode: forwards; }%0A+%0A+         @media (prefers-reduced-motion: reduce) {%0A+           .cm-confetti { display: none; }%0A+         }%0A+       On the clockYour pick is in at 33. Picks 34 to 60 are in. Every pick of the draft is in.33. BOS select Tyrese StrotherG · your pick7353. PHI take Cole NorthcuttC6654. PHX take Marcus QuinnG6755. POR take Tyrese NorthcuttC6756. SAC take Keon NorthcuttC6657. SAS take Tyrese MaplewoodC6658. TOR take Vontae OakhurstG6759. UTA take Andre LockridgeC7060. WAS take Keon HolidayG67Continue to the hub%0A+         @keyframes foDraftIn {%0A+           0%25 { opacity: 0; transform: translateY(6px) scale(0.98); }%0A+           100%25 { opacity: 1; transform: translateY(0) scale(1); }%0A+         }%0A+         .fo-draft-row { opacity: 0; animation: foDraftIn 0.34s ease-out forwards; }%0A+         .fo-draft-continue { opacity: 0; animation: foDraftIn 0.34s ease-out forwards; }%0A+         @keyframes foDraftHead { 0%25 { opacity: 0; } 100%25 { opacity: 1; } }%0A+         .fo-draft-head { opacity: 0; animation: foDraftHead 0.3s ease-out forwards; }%0A+         /* Round 423's rule, and it matters more here than usual: every row above%0A+            starts invisible, so cancelling the animation without landing it would%0A+            hide the entire pick list from the people who asked for less motion.%0A+            The rows end on their final frame instead, which is the whole board%0A+            shown at once with no movement. The Continue button is on the same%0A+            rule, or the way off the draft would be invisible to them. */%0A+         @media (prefers-reduced-motion: reduce) {%0A+           .fo-draft-row, .fo-draft-head, .fo-draft-continue {%0A+             animation: none;%0A+             opacity: 1;%0A+             transform: none;%0A+           }%0A+         }%0A+       🏛️ The new mandate: Win the Finals. Anything less is a failed season upstairs.%0A%0A ❯ src/components/nba-front-office/NbaEarnedDraft.test.tsx:114:39%0A%0A

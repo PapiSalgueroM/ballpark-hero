@@ -1,0 +1,9 @@
+vitest-new exit=1 12s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/nba-front-office/NbaEarnedDraft.test.tsx,title=src/components/nba-front-office/NbaEarnedDraft.te
+vitest-readers exit=0 36s |    Duration  35.36s (transform 6.99s, setup 2.70s, collect 19.52s, tests 51.39s, environment 16.28s, prepare 3.82s)
+simNbaDraftBoard exit=0 26s | simNbaDraftBoard: green.
+simNbaDraftBoard-full exit=0 89s | simNbaDraftBoard: green.
+tsc exit=0 127s | 
+simNbaDraftBoard-controls exit=0 89s | simNbaDraftBoard controls: all 5 fired, each in exactly its own section.
+simNbaDraftCapital exit=0 2s | NBA draft-capital actual29 outcomes, independent baselines, CRLF controls, source holds and owned cleanup completed.
+simGmDraftOrder exit=0 18s | mounted exit 1
+simNbaDraftCapital-controls exit=0 42s | simNbaDraftCapital: all 21 controls red in exactly their own checks

@@ -1,0 +1,6 @@
+  extradraw: exit 1, 17 s | simNbaDraftBoard control extradraw: FIRED, section 1 red with 12 failure(s) (cases deskOffRecap, preRecap), the others green.
+  deskless: exit 1, 17 s | simNbaDraftBoard control deskless: FIRED, section 1 red with 12 failure(s) (cases deskOffRecap), the others green.
+  blockedopen: exit 1, 18 s | simNbaDraftBoard control blockedopen: FIRED, section 1 red with 12 failure(s) (cases deskOnOpen), the others green.
+  screensport: exit 1, 17 s | simNbaDraftBoard control screensport: FIRED, section 6 red with 2 failure(s), the others green.
+  boardlift: exit 1, 20 s | simNbaDraftBoard control boardlift: FIRED, section 6 red with 1 failure(s), the others green.
+simNbaDraftBoard controls: all 5 fired, each in exactly its own section.
