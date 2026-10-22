@@ -1,0 +1,11 @@
+#!serve
+#!playwright
+simTycoonScorelines: node scripts/simTycoonScorelines.mjs
+simTycoonPackPace: node scripts/simTycoonPackPace.mjs
+simTycoonPacks: node scripts/simTycoonPacks.mjs
+simTycoonMoneyDisplay: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonMoneyDisplay.mjs
+simTycoonDrawResult: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonDrawResult.mjs
+simTycoonGroundGrowth: node scripts/qa/tycoonGroundGrowth1094.mjs --prefetch-assets-only && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonGroundGrowth.mjs
+simTycoonAwayMatchdays: node scripts/simTycoonAwayMatchdays.mjs
+simAllPlayersValue: node scripts/simAllPlayersValue.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
