@@ -1,0 +1,8 @@
+  FAIL: now Málaga: with countries the career differs once they are stripped, season 1, first at key budget
+  FAIL: now West Ham: with countries the career differs once they are stripped, season 2, first at key squad
+  FAIL: now Wellington Phoenix: with countries the career differs once they are stripped, season 2, first at key squad
+  FAIL: era2005 Everton: with countries the career differs once they are stripped, season 1, first at key squad
+  FAIL: era2015 Bournemouth: with countries the career differs once they are stripped, season 1, first at key squad
+  FAIL: now a created club: 26763 draws with countries, 33154 without
+  FAIL: now a created club: with countries the career differs once they are stripped, season 1, first at key week
+simCmMadeUpNations: RED, 14 failure(s)

@@ -1,0 +1,8 @@
+  FAIL: the moved career, countries stripped: Jesper Tavares had France and reopened as "undefined"
+  FAIL: the moved career, countries stripped: Oliwier Salcedo had England and reopened as "undefined"
+  FAIL: cmBookSaveEvertonFixture: opened with no made up man carrying a country
+  FAIL: cmBookSaveHerthaFixture: opened with no made up man carrying a country
+  FAIL: cmOldSave1052Fixture: opened with no made up man carrying a country
+  FAIL: cmSecondTierOldSaveFixture: opened with no made up man carrying a country
+  FAIL: only 0 stored asks were rebased, the opening hardly counted a made up man
+simCmMadeUpNations: RED, 22 failure(s)

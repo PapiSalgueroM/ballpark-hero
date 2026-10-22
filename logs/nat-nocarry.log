@@ -1,0 +1,7 @@
+NEGATIVE CONTROL ON: nocarry
+  FAIL: Cesar Konate, listed at Wellington Phoenix as New Zealand, joined as "undefined"
+  FAIL: Erik Paredes, listed at Auckland FC as New Zealand, joined as "undefined"
+  FAIL: Filip Lima, listed at Perth Glory as Australia, joined as "undefined"
+  FAIL: could not loan undefined out
+  FAIL: no bought man was left to sell to a club, so the ledger was not tried
+simCmMadeUpNations: RED, 5 failure(s)

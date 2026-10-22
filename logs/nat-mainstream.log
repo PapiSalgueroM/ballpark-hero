@@ -1,0 +1,8 @@
+  FAIL: the moved career, countries stripped: Tadeo Caldeira had Netherlands and reopened as "England"
+  FAIL: the moved career, countries stripped: Dario Molina had Germany and reopened as "England"
+  FAIL: the moved career, countries stripped: Oliwier Salcedo had France and reopened as "Spain"
+  FAIL: cmBookSaveEvertonFixture: two opens differ, first at key freeAgents
+  FAIL: cmBookSaveHerthaFixture: two opens differ, first at key freeAgents
+  FAIL: cmOldSave1052Fixture: two opens differ, first at key freeAgents
+  FAIL: cmSecondTierOldSaveFixture: two opens differ, first at key freeAgents
+simCmMadeUpNations: RED, 11 failure(s)

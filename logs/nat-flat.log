@@ -1,0 +1,8 @@
+  FAIL: now aleague (Australia): 217 made up market men 49.8% home against real 81.6%
+  FAIL: era2020 premier2020 (England): 291 made up market men 47.8% home against real 29.9%
+  FAIL: era2020 bundesliga2020 (Germany): 239 made up market men 52.3% home against real 36.9%
+  FAIL: era2020 seriea2020 (Italy): 269 made up market men 53.9% home against real 36.0%
+  FAIL: era2015 premier2015 (England): 337 made up market men 54.0% home against real 28.2%
+  FAIL: era2010 premier2010 (England): 349 made up market men 51.0% home against real 31.6%
+  FAIL: era2005 premier2005 (England): 345 made up market men 48.4% home against real 35.5%
+simCmMadeUpNations: RED, 67 failure(s)

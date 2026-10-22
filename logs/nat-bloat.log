@@ -1,0 +1,8 @@
+  FAIL: era2005 seriea2005 (Italy): 261 made up market men 0.0% home against real 62.6%
+  FAIL: era2005 premier2005 (England): 351 made up market men 0.0% home against real 35.5%
+  FAIL: era2005 laliga2005 (Spain): 310 made up market men 0.0% home against real 58.5%
+  FAIL: era2005 bundesliga2005 (Germany): 294 made up market men 0.0% home against real 46.7%
+  FAIL: era2005 ligue12005 (France): 290 made up market men 0.0% home against real 48.1%
+  FAIL: Everton: the countries add 8414 characters at season 15, over the 1500 budget
+  FAIL: Málaga: the countries add 10428 characters at season 15, over the 1500 budget
+simCmMadeUpNations: RED, 99 failure(s)

@@ -1,0 +1,8 @@
+  FAIL: Youri Bertrand, listed at PSG as Nigeria, is listed at Villarreal as "Spain" after an AI deal
+  FAIL: Tomas Rosales, listed at Arsenal as Ireland, is listed at Athletic Club as "Spain" after an AI deal
+  FAIL: Zaid Gudmundsson, listed at Al-Hilal as Saudi Arabia, is listed at Real Betis as "Spain" after an AI deal
+  FAIL: Ari Zabala, listed at Inter Milan as Switzerland, is listed at Real Sociedad as "Canada" after an AI deal
+  FAIL: Cheick Lozano, listed at Al-Hilal as Saudi Arabia, is listed at Sevilla as "Cameroon" after an AI deal
+  FAIL: Elias Diarra, listed at Al-Ahli as Saudi Arabia, is listed at Valencia as "Spain" after an AI deal
+  FAIL: Ezra Esposito, listed at Liverpool as Greece, is listed at Celta Vigo as "Spain" after an AI deal
+simCmMadeUpNations: RED, 11 failure(s)

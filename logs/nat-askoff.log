@@ -1,0 +1,8 @@
+  FAIL: era2010 Arles-Avignon: 13 men show France's flag and an ask for 13 is "onTrack"
+  FAIL: era2005 Wigan Athletic: 10 men show England's flag and an ask for 10 is "onTrack"
+  FAIL: era2005 Cádiz: 16 men show Spain's flag and an ask for 16 is "onTrack"
+  FAIL: era2005 Treviso: 14 men show Italy's flag and an ask for 14 is "onTrack"
+  FAIL: era2005 Duisburg: 12 men show Germany's flag and an ask for 12 is "onTrack"
+  FAIL: era2005 Nancy: 15 men show France's flag and an ask for 15 is "onTrack"
+  FAIL: now Nation Town: 7 men show England's flag and an ask for 7 is "onTrack"
+simCmMadeUpNations: RED, 68 failure(s)

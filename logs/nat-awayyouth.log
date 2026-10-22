@@ -1,0 +1,8 @@
+  FAIL: now Lincoln City: youth Felix Petrov (Youth) is "Norway", the club is in England
+  FAIL: now Lincoln City: youth Tariq Petrov (Youth) is "Italy", the club is in England
+  FAIL: now Lincoln City: youth Jamie Ozturk (Youth) is "Latvia", the club is in England
+  FAIL: now Lincoln City: youth Diego Reyes (Youth) is "Ecuador", the club is in England
+  FAIL: now Lincoln City: youth Jonas Achebe (Youth) is "Burkina Faso", the club is in England
+  FAIL: now Lincoln City: youth Soren Voskuil (Youth) is "Jamaica", the club is in England
+  FAIL: 297 of 574 youth pads are not from their club's country
+simCmMadeUpNations: RED, 9 failure(s)
