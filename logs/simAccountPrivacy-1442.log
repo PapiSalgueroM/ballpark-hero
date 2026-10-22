@@ -1,0 +1,3 @@
+Account privacy: cross-account-export, 10 tests, 1 assertion failures, expected exit 1.
+Account privacy: ignored-password-confirmation, 10 tests, 1 assertion failures, expected exit 1.
+Account privacy: PASS, actual security cases and all copied faults verified.

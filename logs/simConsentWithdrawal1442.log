@@ -1,0 +1,3 @@
+Consent withdrawal: analyticsCollection-actual, expected passed.
+Consent withdrawal: analyticsCollection-fault, expected failed.
+Consent withdrawal: PASS, 6 actual outcomes and 6 effective copied faults.
