@@ -1,0 +1,5 @@
+build exit=0 24s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+pm-fonts exit=0 0s | Prepared 9 declared font dependencies for local fulfillment.
+pm-units exit=0 13s | Units: 244 actual passed assertions in all7 required files.
+pm-outcomes exit=0 4s | Outcomes:6 healthy groups,27 entire original/current state+RNG pairs,6 effective exact copied failures,18 prepared fixture branches.
+pm-native exit=0 337s | Native: 1899 checks,54 journeys,225 whole-save pairs,252 raw reloads,147 engine RNG pairs,93 PNGs,186 layouts,30 exact restorations,3 copied detectors.
