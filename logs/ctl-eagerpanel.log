@@ -1,0 +1,39 @@
+/front-office at 390 by 844
+  PASS  nfl 390x844 A: no button on the recap deletes the save
+  PASS  nfl 390x844 A: the recap offers who is calling
+  CAUGHT  nfl 390x844 A: no career panel chunk is asked for before a box is tapped (2)
+  PASS  nfl 390x844 A: the save survives the firing, fired, on the out of work screen
+  PASS  nfl 390x844 A: the out of work screen
+  PASS  nfl 390x844 A out of work: nothing wider than the screen (0px over)
+  PASS  nfl 390x844 A out of work: every control at least 44 px tall (all)
+  PASS  nfl 390x844 A out of work: no text under its floor (none)
+  MEASURED nfl 390x844 A: holding box 220px, landed panel 255px
+  SKIP  nfl 390x844 A: the chunk was fetched before the tap, so there is nothing to hold (the chunk check above is the one aimed at that)
+  PASS  nfl 390x844 A: the page does not move when the panel lands (top 197 to 197, scroll 185 to 185)
+  PASS  nfl 390x844 A: the Job market chunk is asked for on the tap
+  PASS  nfl 390x844 A market: nothing wider than the screen (0px over)
+  PASS  nfl 390x844 A market: every control at least 44 px tall (all)
+  PASS  nfl 390x844 A market: no text under its floor (none)
+  PASS  nfl 390x844 A: somebody calls, and never the club that let him go (CLE)
+  PASS  nfl 390x844 A: one tap only arms the offer
+  PASS  nfl 390x844 A: the second tap takes the job (CLE, trust 60, recap)
+  PASS  nfl 390x844 A: the arrival recap says who he takes over, with no confetti
+  PASS  nfl 390x844 A: the arrival recap holds the re-sign box
+  PASS  nfl 390x844 A: the new club's re-sign box opens
+  PASS  nfl 390x844 A: the new club's draft runs to the hub
+  PASS  nfl 390x844 A: the hub has the Career box
+  PASS  nfl 390x844 A: the hub has the GM level box
+  PASS  nfl 390x844 A career: nothing wider than the screen (0px over)
+  PASS  nfl 390x844 A career: every control at least 44 px tall (all)
+  PASS  nfl 390x844 A career: no text under its floor (none)
+  MEASURED nfl 390x844 A: the GM level panel is 730 px tall at 390
+  PASS  nfl 390x844 A: the GM level panel fits one and a half screens at 390 (730px)
+  PASS  nfl 390x844 A GM level: nothing wider than the screen (0px over)
+  PASS  nfl 390x844 A GM level: every control at least 44 px tall (all)
+  PASS  nfl 390x844 A GM level: no text under its floor (none)
+  PASS  nfl 390x844 A: a tree off the live list sells nothing
+  PASS  nfl 390x844 A: a point spent in Ownership is in the save after a reload
+  PASS  nfl 390x844 A: a week plays at the new club
+  PASS  nfl 390x844 A: no console error (clean)
+
+playGmCareer control eagerpanel: all 1 guarded checks fired (mutations landed: {"eagerpanel":16})

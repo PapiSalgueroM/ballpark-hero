@@ -1,0 +1,13 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+ownermandate exit=0 26s | ALL OWNER MANDATE WALK CHECKS PASSED
+fohub exit=1 48s | playFoHub: 2 failures
+gmpress exit=1 85s | playGmPress: 2 failures
+gmcareer exit=0 226s | playGmCareer: green. 1 board, 3 sizes, four walks each.
+probe exit=0 26s | focus probe: done
+draftnight exit=0 212s | playDraftNight: ALL GREEN, 49 nights walked
+ctl-nofallback exit=0 30s | playGmCareer control nofallback: all 1 guarded checks fired (mutations landed: {"nofallback":4})
+fogameday exit=0 353s | playFrontOfficeGameDay: 386 checks, 0 failed
+ctl-eagerpanel exit=0 30s | playGmCareer control eagerpanel: all 1 guarded checks fired (mutations landed: {"eagerpanel":16})
+weight-head exit=1 27s | sweepWeight: 4 failures
+gmstaff exit=1 2s | GM STAFF: 40 failure(s)
+revealscroll exit=0 213s | Green. 53 presses measured, nothing dragged the page down on content that was already readable, no panel lost its top, and 5 presses proved the feature still does its job
