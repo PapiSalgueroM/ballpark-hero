@@ -1,0 +1,4 @@
+FAIL [4] useConquestNba.ts: the power up does not deal RETIRED_GREATS_NBA with the never on market set
+FAIL [4] useConquestNba.ts: names a football list
+measured: {"nflGreats":10,"nbaGreats":9,"nflStates":64,"nflDealt":1920,"nflMarket":10880,"nflLabelled":25,"nbaStates":60,"nbaDealt":1800,"nbaMarket":9596,"nbaLabelled":27,"conquestFilesScanned":32,"nflKeyStats":320,"nflPrinted":146,"nbaKeyStats":300}
+simConquestPeople: FAIL, 2 of 49426 checks red (control nflnba fired)

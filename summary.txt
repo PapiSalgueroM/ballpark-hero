@@ -1,0 +1,11 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+simConquestPeople exit=0 0s | simConquestPeople: 49426 checks, all green
+ctl-dt exit=1 0s | simConquestPeople: FAIL, 4 of 49431 checks red (control dt fired)
+ctl-nflnba exit=1 1s | simConquestPeople: FAIL, 2 of 49426 checks red (control nflnba fired)
+ctl-market exit=1 1s | simConquestPeople: FAIL, 2608 of 54642 checks red (control market fired)
+ctl-season exit=1 0s | simConquestPeople: FAIL, 2 of 49426 checks red (control season fired)
+ctl-label exit=1 1s | simConquestPeople: FAIL, 1 of 49426 checks red (control label fired)
+weight-head exit=0 11s | weight probe head done
+walk exit=0 11s | walk1547: green, both routes
+weight-base exit=0 46s | weight probe base done
+tsc exit=0 69s | 

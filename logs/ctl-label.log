@@ -1,0 +1,3 @@
+FAIL [4] src/components/conquest/ConquestBoardNba.tsx: the power up dialog does not label a retired great with his last season
+measured: {"nflGreats":10,"nbaGreats":9,"nflStates":64,"nflDealt":1920,"nflMarket":10880,"nflLabelled":25,"nbaStates":60,"nbaDealt":1800,"nbaMarket":9596,"nbaLabelled":27,"conquestFilesScanned":32,"nflKeyStats":320,"nflPrinted":146,"nbaKeyStats":300}
+simConquestPeople: FAIL, 1 of 49426 checks red (control label fired)

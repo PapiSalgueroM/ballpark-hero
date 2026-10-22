@@ -1,0 +1,4 @@
+FAIL [5] KC Patrick Mahomes: key stat "4,502 pass yds" carries no 2025 season
+FAIL [5] KC Patrick Mahomes: key stat "4,502 pass yds", the two sourced 2025 line says "2025: 3,587 pass yds" (agree KC|Patrick Mahomes|QB)
+measured: {"nflGreats":10,"nbaGreats":9,"nflStates":64,"nflDealt":1920,"nflMarket":10880,"nflLabelled":25,"nbaStates":60,"nbaDealt":1800,"nbaMarket":9596,"nbaLabelled":27,"conquestFilesScanned":32,"nflKeyStats":320,"nflPrinted":146,"nbaKeyStats":300}
+simConquestPeople: FAIL, 2 of 49426 checks red (control season fired)
