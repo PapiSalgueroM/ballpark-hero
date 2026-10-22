@@ -7,26 +7,31 @@ import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
-  FORMATIONS, DUTY_INFO, dutyOptions, liveInstructions,
+  FORMATIONS, DUTY_INFO, dutyOptions, liveGoneIds, liveInstructions,
   type CareerState, type Duty, type LiveChange, type LiveMatch,
 } from '@/lib/clubManager';
 import { InstructionsPicker } from '@/components/club-manager/InstructionsPicker';
 import { opponentStyle } from '@/lib/clubManagerTactics';
 
-export function LiveTacticsPanel({ career, live, onChange, idPrefix = 'live' }: {
+export function LiveTacticsPanel({ career, live, onChange, idPrefix = 'live', minute, plus }: {
   career: CareerState;
   live: LiveMatch;
   onChange: (change: LiveChange) => void;
   idPrefix?: string;
+  /** The clock in play (and how far into a board), so a man sent off or helped off by now is shown as gone. At a
+   *  break it is left out: everything drawn so far has happened. */
+  minute?: number;
+  plus?: number;
 }) {
   const [duties, setDuties] = useState(false);
   const formationIndex = live.formationIndex ?? career.formationIndex;
   const formation = FORMATIONS[formationIndex] ?? FORMATIONS[0];
+  const gone = liveGoneIds(live, minute ?? 999, minute === undefined ? undefined : plus);
   const nameOf = (id: string) => (career.squad.find(p => p.id === id)?.name ?? '').replace(' (Youth)', '').split(' ').slice(-1)[0];
   return (
     <div className="space-y-2" data-cm-live-tactics={idPrefix}>
       <p className="text-[10px] text-muted-foreground leading-snug">
-        For tonight only, from the next minute. Your standing plan stays on the Tactics tab.
+        For this match only, from the next minute. Your standing plan stays on the Tactics tab.
       </p>
       <InstructionsPicker
         value={liveInstructions(live)}
@@ -64,7 +69,7 @@ export function LiveTacticsPanel({ career, live, onChange, idPrefix = 'live' }: 
               return (
                 <label key={i} className="flex items-center gap-1.5 min-w-0">
                   <span className="w-9 shrink-0 text-[9px] font-bold text-muted-foreground bg-secondary rounded px-1 py-0.5 text-center">{slot.label}</span>
-                  <span className="w-16 shrink-0 truncate text-[10px] text-foreground">{id ? nameOf(id) : ''}</span>
+                  <span className={cn('w-16 shrink-0 truncate text-[10px]', id && gone.has(id) ? 'line-through text-muted-foreground' : 'text-foreground')} title={id && gone.has(id) ? 'Off the pitch' : undefined}>{id ? nameOf(id) : ''}</span>
                   <select
                     data-cm-live-duty={`${idPrefix}:${i}`}
                     value={current ?? ''}

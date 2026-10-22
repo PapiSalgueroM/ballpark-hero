@@ -2050,7 +2050,7 @@ export function LiveSimScreen({
                   </button>
                   {tacticsOpen && liveNow && (
                     <div className="mt-1.5">
-                      <LiveTacticsPanel career={career} live={liveNow} onChange={c => onChange(changeMinute, c, plus)} idPrefix="sheet" />
+                      <LiveTacticsPanel career={career} live={liveNow} onChange={c => onChange(changeMinute, c, plus)} idPrefix="sheet" minute={changeMinute} plus={plus} />
                     </div>
                   )}
 
