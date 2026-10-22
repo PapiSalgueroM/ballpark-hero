@@ -1,0 +1,18 @@
+staff-b0: CFB_STAFF_SEED_BASE=0 node scripts/simCfbStaff.mjs
+staff-b1000: CFB_STAFF_SEED_BASE=1000 node scripts/simCfbStaff.mjs
+staff-b2000: CFB_STAFF_SEED_BASE=2000 node scripts/simCfbStaff.mjs
+staff-b3000: CFB_STAFF_SEED_BASE=3000 node scripts/simCfbStaff.mjs
+staff-b4000: CFB_STAFF_SEED_BASE=4000 node scripts/simCfbStaff.mjs
+staff-c-unbounded: CFB_STAFF_CONTROL=unbounded node scripts/simCfbStaff.mjs
+staff-c-inverted: CFB_STAFF_CONTROL=inverted node scripts/simCfbStaff.mjs
+staff-c-overspend: CFB_STAFF_CONTROL=overspend node scripts/simCfbStaff.mjs
+staff-c-swing: CFB_STAFF_CONTROL=swing node scripts/simCfbStaff.mjs
+staff-c-sos: CFB_STAFF_CONTROL=sos node scripts/simCfbStaff.mjs
+staff-c-rank: CFB_STAFF_CONTROL=rank node scripts/simCfbStaff.mjs
+staff-c-legacy: CFB_STAFF_CONTROL=legacy node scripts/simCfbStaff.mjs
+staff-c-nostaff: CFB_STAFF_CONTROL=nostaff node scripts/simCfbStaff.mjs
+staff-c-doubled: CFB_STAFF_CONTROL=doubled node scripts/simCfbStaff.mjs
+staff-c-nowalk: CFB_STAFF_CONTROL=nowalk node scripts/simCfbStaff.mjs
+staff-c-confraw: CFB_STAFF_CONTROL=confraw node scripts/simCfbStaff.mjs
+simCollegeDynastyBoard: node scripts/simCollegeDynastyBoard.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs

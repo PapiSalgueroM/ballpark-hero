@@ -1,0 +1,18 @@
+staff-b2000 exit=1 40s | simCfbStaff: 1 failure(s)
+staff-b0 exit=1 52s | simCfbStaff: 1 failure(s)
+staff-b1000 exit=1 53s | simCfbStaff: 1 failure(s)
+staff-b3000 exit=1 49s | simCfbStaff: 1 failure(s)
+staff-c-unbounded exit=0 44s | control "unbounded": 3 failure(s) fired as expected, the check works
+staff-b4000 exit=1 46s | simCfbStaff: 2 failure(s)
+staff-c-inverted exit=0 41s | control "inverted": 13 failure(s) fired as expected, the check works
+staff-c-overspend exit=0 49s | control "overspend": 4 failure(s) fired as expected, the check works
+staff-c-swing exit=0 49s | control "swing": 3 failure(s) fired as expected, the check works
+staff-c-legacy exit=1 0s | control cannot run: "if (st.depth && st.round === CFB_RIVALRY_ROUND) {" is in the bundle 0 times, not once
+staff-c-sos exit=0 45s | control "sos": 3 failure(s) fired as expected, the check works
+staff-c-nostaff exit=0 43s | control "nostaff": 4 failure(s) fired as expected, the check works
+staff-c-rank exit=0 50s | control "rank": 3 failure(s) fired as expected, the check works
+staff-c-doubled exit=0 47s | control "doubled": 6 failure(s) fired as expected, the check works
+simCollegeDynastyBoard exit=1 3s | simCollegeDynastyBoard: 1 failure(s)
+simGuideHeadings exit=0 0s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+staff-c-confraw exit=0 40s | control "confraw": 1 failure(s) fired as expected, the check works
+staff-c-nowalk exit=0 46s | control "nowalk": 4 failure(s) fired as expected, the check works
