@@ -1,0 +1,62 @@
+puzzle-2 | second-fit | Ronaldinho Gaúcho | Played for AC Milan | listed under From Brazil
+puzzle-2 | second-fit | Rivaldo Vítor | Played for AC Milan | listed under From Brazil
+puzzle-2 | second-fit | Ricardo Kaká | Played for AC Milan | listed under From Brazil
+puzzle-7 | second-fit | Sadio Mané | Played for Bayern Munich | listed under Scored a hat-trick on their league debut
+puzzle-8 | second-fit | Carlos Tévez | Played for Juventus | listed under Played for both Manchester clubs
+puzzle-8 | not-a-member | Carlos Tévez | Played for both Manchester clubs
+puzzle-8 | not-a-member | Peter Schmeichel | Played for both Manchester clubs
+puzzle-13 | second-fit | Luis Suárez | Played for Atlético Madrid | listed under Won the PFA Player of the Year
+puzzle-16 | second-fit | Francesco Totti | Played for AS Roma | listed under Played their entire career at one club
+puzzle-18 | second-fit | Luis Suárez | Played for Ajax | listed under From Uruguay
+puzzle-22 | second-fit | Olof Mellberg | From Sweden | listed under Scored directly from a corner kick
+puzzle-23 | not-a-member | Samuel Eto'o | Played for both Real Madrid and Barcelona
+puzzle-26 | second-fit | Robbie Keane | Played for Aston Villa | listed under Scored on all 6 continents
+puzzle-27 | not-a-member | Jan Oblak | Played for Benfica
+puzzle-28 | not-a-member | Diego Forlán | Played for Sevilla
+puzzle-28 | second-fit | Kevin-Prince Boateng | From Ghana | listed under Played in both Serie A and Bundesliga
+puzzle-34 | not-a-member | Didier Drogba | Played for Galatasaray
+puzzle-38 | second-fit | Diego Forlán | Won the European Golden Shoe | listed under Played for Villarreal
+puzzle-39 | not-a-member | Gareth Bale | Played for Southampton
+puzzle-43 | second-fit | James Morrison | From Scotland | listed under Played for West Brom
+puzzle-45 | not-a-member | Yaya Touré | Played for Olympiacos
+puzzle-46 | not-a-member | Raheem Sterling | From Jamaica
+puzzle-50 | not-a-member | Gianluigi Buffon | Played for Parma
+puzzle-53 | second-fit | Nicolas Anelka | Played for Bolton Wanderers | listed under Had a famous handshake controversy
+puzzle-55 | second-fit | Ismaïla Sarr | From Senegal | listed under Played for Watford
+puzzle-59 | second-fit | Robbie Keane | Played for Wolverhampton Wanderers | listed under Won the MLS Cup
+puzzle-64 | second-fit | Ronaldinho Gaúcho | Played for AC Milan | listed under Won the Ballon d'Or in the 2000s
+puzzle-64 | second-fit | Kaká | Played for AC Milan | listed under Won the Ballon d'Or in the 2000s
+puzzle-65 | second-fit | Didier Drogba | Played for Chelsea | listed under From Côte d'Ivoire
+puzzle-68 | not-a-member | Moussa Sissoko | From Mali
+puzzle-70 | not-a-member | Willy Sagnol | From Georgia
+puzzle-73 | not-a-member | Arjen Robben | Played for PSV Eindhoven
+puzzle-74 | not-a-member | Robin van Persie | Played for Feyenoord
+puzzle-76 | not-a-member | Andrea Pirlo | Played for both Juventus and Inter Milan
+puzzle-81 | not-a-member | Ángel Di María | Played for Porto and Benfica
+puzzle-87 | not-a-member | Jan Oblak | Played for SL Benfica
+puzzle-87 | not-a-member | Bernardo Silva | Played for SL Benfica
+puzzle-90 | second-fit | Luis Figo | From Portugal | listed under Won the Ballon d'Or as a midfielder
+puzzle-92 | second-fit | Mauro Icardi | From Argentina | listed under Galatasaray stars (past & present)
+puzzle-92 | not-a-member | Fernando Torres | Played for both Barcelona and Atlético Madrid
+puzzle-94 | not-a-member | Mesut Özil | Played for Fenerbahçe
+puzzle-97 | not-a-member | Willy Sagnol | From Georgia
+puzzle-103 | not-a-member | Nabil Fekir | Played for both Lyon and PSG
+puzzle-103 | not-a-member | Memphis Depay | Played for both Lyon and PSG
+puzzle-109 | not-a-member | James Rodríguez | Played for both Benfica and Porto
+puzzle-109 | not-a-member | Deco | Played for both Benfica and Porto
+puzzle-111 | not-a-member | Gonzalo Higuaín | Played for River Plate
+puzzle-113 | not-a-member | Edinson Cavani | Played for Boca Juniors
+puzzle-113 | not-a-member | Robbie Keane | Played for both Tottenham and Real Madrid
+puzzle-118 | not-a-member | Andrea Pirlo | Played for both Inter Milan and AC Milan
+puzzle-123 | not-a-member | Edinson Cavani | Played for PSG and Chelsea
+puzzle-123 | not-a-member | Mauro Icardi | Played for PSG and Chelsea
+puzzle-131 | not-a-member | Carlos Tévez | Played for PSG and Manchester City
+puzzle-137 | not-a-member | Andrea Pirlo | Played for both AC Milan and Inter Milan
+puzzle-138 | not-a-member | Karim Benzema | Won the Ballon d'Or in the 2010s
+puzzle-138 | not-a-member | Mamadou Diallo | From Guinea
+puzzle-149 | not-a-member | Ronaldinho Gaúcho | Played for PSG, Barcelona AND Real Madrid
+puzzle-149 | not-a-member | Neymar Jr | Played for PSG, Barcelona AND Real Madrid
+puzzle-149 | not-a-member | Luis Figo | Played for PSG, Barcelona AND Real Madrid
+puzzle-188 | second-fit | Luis Suarez | From Colombia | listed under From Uruguay
+puzzle-211 | second-fit | Luis Suarez | From Colombia | listed under From Uruguay
+puzzle-229 | second-fit | Luis Suarez | From Colombia | listed under From Uruguay
