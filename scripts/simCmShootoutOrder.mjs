@@ -257,6 +257,7 @@
 import './lib/seedRandom.mjs';
 import { buildSync } from 'esbuild';
 import { withoutWorldSeed } from './lib/cmWorldSeed1250.mjs';
+import { withoutMadeUpNations, BRIDGE_FILES_1520 } from './lib/cmNoMadeUpNations1520.mjs';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import os from 'node:os';
@@ -469,6 +470,16 @@ if (!WRITE_FIXTURE) {
     };
     for (const id of R1052_LEAGUES) { cut(`\n  ${id}: {\n`, '\n  },', `the rules row ${id}`); cut(`\n  {\n    id: '${id}',`, '\n  },', `the league row ${id}`); }
     for (const id of R1052_NATIONS) cut(`\n  { id: '${id}', name: `, ' },', `the nation ${id}`);
+    /* Release BP seam: Round 1520 gives every made up man a country of his own, and a career that lists such men
+       moves its unmanaged play from there (with only Round 1520's draw answering nothing, every row of sections 4
+       and 5 equals the pinned engine again: Release BP triage, rBP-trQ-bp, bridge edit 0). So the same arm also takes
+       Round 1520 out of this copy, through that round's own bridge (scripts/lib/cmNoMadeUpNations1520.mjs, its engine
+       edits, each anchor exactly once or it throws), the composition the bridge's header asks of every kit that
+       compares this engine with one pinned from before the round. A row still different after both fails as before. */
+    /* The engine file goes by the bridge's own name for it (BRIDGE_FILES_1520[0]): the asks file's edits could not
+       stand in this copy, so a wrong name throws. */
+    try { out = withoutMadeUpNations(out.split('\r\n').join('\n'), BRIDGE_FILES_1520[0]); }
+    catch (e) { abort(`Round 1520 arm: ${e.message}`); }
     fs.writeFileSync(leagueOutPath, out);
     leagueOutEnginePath = leagueOutPath;
   }
@@ -926,7 +937,7 @@ const baselineEvidence = { baselineRef: '5b70b05f', baselineSourceHash, rows: []
   console.log(`   ${sameBaseline} of ${fixture.rows.length} rows equal actual pre-1072 main in result, next draw and full content (${sameRaw} raw hashes); ancient golden mismatches candidate ${fixture.rows.length - same}, baseline ${fixture.rows.length - baselineGolden}`);
   baselineEvidence.summary = { rows: fixture.rows.length, paired: sameBaseline, rawPaired: sameRaw,
     goldenCandidateMismatches: fixture.rows.length - same, goldenBaselineMismatches: fixture.rows.length - baselineGolden };
-  if (by1052) console.log(`   ${by1052} of those rows equal it only with Round 1052's league taken out of this tree's world in memory (the move is that round's)`);
+  if (by1052) console.log(`   ${by1052} of those rows equal it only with Round 1052's league and Round 1520's made up countries taken out of this tree's world in memory (the move is that round's)`);
   baselineEvidence.summary.by1052 = by1052;
   if (sameBaseline !== fixture.rows.length) fail(`${fixture.rows.length - sameBaseline} rows differ from the actual pre-1072 engine with no order set`);
   if (same !== baselineGolden) fail(`ancient golden matching counts differ: candidate ${same}, actual pre-1072 main ${baselineGolden}`);
@@ -965,7 +976,7 @@ const baselineEvidence = { baselineRef: '5b70b05f', baselineSourceHash, rows: []
   }
   const livePens = baselineEvidence.rows.filter(r => r.baseline.decidedBy === 'pens').length;
   console.log(`   on section 1's base: ${namedSame} of ${NAMED_SEEDS.length} rows equal actual pre-1072 main in result, next draw and full content, ${namedPens} of them settled on penalties by main (${livePens} on the fixture's base)`);
-  if (namedBy1052) console.log(`   ${namedBy1052} of those rows equal it only with Round 1052's league taken out of this tree's world in memory`);
+  if (namedBy1052) console.log(`   ${namedBy1052} of those rows equal it only with Round 1052's league and Round 1520's made up countries taken out of this tree's world in memory`);
   baselineEvidence.namedBase = { seed: NAMED_BASE_SEED, rows: NAMED_SEEDS.length, paired: namedSame, pens: namedPens, by1052: namedBy1052 };
   if (namedSame !== NAMED_SEEDS.length) fail(`${NAMED_SEEDS.length - namedSame} rows on section 1's base differ from the actual pre-1072 engine with no order set`);
   if (namedKicks) fail(`${namedKicks} reports on section 1's base carried shootout kicks with no order set`);
@@ -1024,7 +1035,7 @@ section = 5;
     const goldenBaseline = JSON.stringify(base) === JSON.stringify(probe);
     const rawPaired = JSON.stringify(got) === JSON.stringify(base);
     baselineEvidence.oldLoad = { seed: probe.seed, candidate: got, baseline: base, goldenCandidate, goldenBaseline, rawPaired, by1052: oldBy1052, ...content };
-    if (oldBy1052) console.log(`   the old save equals actual pre-1072 main only with Round 1052's league taken out of this tree's world in memory`);
+    if (oldBy1052) console.log(`   the old save equals actual pre-1072 main only with Round 1052's league and Round 1520's made up countries taken out of this tree's world in memory`);
     if (!content.paired) fail(`the loaded old save differs from actual pre-1072 main at seed ${probe.seed}: ${JSON.stringify(got)} vs ${JSON.stringify(base)}`);
     if (goldenCandidate !== goldenBaseline) fail('The loaded old save has a different ancient golden mismatch from actual pre-1072 main');
     console.log(`   loaded old save, seed ${probe.seed} (one of ${pensNow.size} rows main settles on penalties, decided ${base.decidedBy}): equal actual pre-1072 main ${content.paired}; ancient golden matches candidate ${goldenCandidate}, baseline ${goldenBaseline}`);

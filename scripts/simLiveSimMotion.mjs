@@ -177,9 +177,11 @@ try {
     /* Round 1302 fix: the statement runs over two lines since Round 1302 gave it a clause for a goal a review rules
        out, so the anchor is the whole statement as it stands (the file is read through `lf`, so the line end is \n). */
     if (control === 'redraw') viewer = replace(viewer, "const motionStillCommitted = !motionEvent || motionEvent.event.minute + (motionEvent.event.plus ?? 0) <= clock || feed.includes(motionEvent.event)\n    || feed.some(e => isRuledOut(e) && ruledOutKey(e) === motionEvent.key);", 'const motionStillCommitted = true;');
+    /* Release BP seam: Round 1522 put liveShapeAt at the end of the viewer's import line, so the import anchor
+       follows the line as it stands (it could never match again and the control stopped before it ran). */
     if (control === 'whistle') {
       viewer = replace(viewer, '      if (liveNow?.et) {\n', '      if (isExtraTimeDue(career)) {\n');
-      viewer = replace(viewer, '  liveFeed, liveStatsAt, myOnPitchAt, oppOnPitchAt, squadNumbers, benchFor, changeRoom, liveGoneIds,\n', '  liveFeed, liveStatsAt, myOnPitchAt, oppOnPitchAt, squadNumbers, benchFor, changeRoom, liveGoneIds, isExtraTimeDue,\n');
+      viewer = replace(viewer, '  liveFeed, liveStatsAt, myOnPitchAt, oppOnPitchAt, squadNumbers, benchFor, changeRoom, liveGoneIds, liveShapeAt,\n', '  liveFeed, liveStatsAt, myOnPitchAt, oppOnPitchAt, squadNumbers, benchFor, changeRoom, liveGoneIds, liveShapeAt, isExtraTimeDue,\n');
     }
     if (control === 'banner') viewer = replace(viewer, "club: extraTimeCall(career, liveNow), tone: 'none'", "club: 'Level after 90 minutes', tone: 'none'");
     /* Release AR: Round 1146 moved the goal's line into goalSegs (one function for the pill, the card and the
