@@ -1,0 +1,15 @@
+simBallonDorFairness: node scripts/simBallonDorFairness.mjs
+simCareerCleanSheets: node scripts/simCareerCleanSheets.mjs
+simCareerDilemmaReach: node scripts/simCareerDilemmaReach.mjs
+simCareerEngaged: node scripts/simCareerEngaged.mjs
+simCareerInboxBeats: node scripts/simCareerInboxBeats.mjs
+simCareerLeagueWorld: node scripts/simCareerLeagueWorld.mjs
+simCareerNoDeadEnd: node scripts/simCareerNoDeadEnd.mjs
+simCareerPendingPopularityGates: node scripts/simCareerPendingPopularityGates.mjs
+simCareerRecordedStats: node scripts/simCareerRecordedStats.mjs
+simCareerSquad: node scripts/simCareerSquad.mjs
+simCareerTransferBrief: node scripts/simCareerTransferBrief.mjs
+simClubSquads: node scripts/simClubSquads.mjs
+simFlagshipWeight: node scripts/simFlagshipWeight.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simMoney: node scripts/simMoney.mjs
