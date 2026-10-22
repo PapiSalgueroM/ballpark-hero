@@ -1,0 +1,5 @@
+#!build
+#!playwright
+#!serial
+writes-head: node scripts/simWritesAreSent.mjs
+writes-base: git worktree add /tmp/wb 0846f9c5 && ln -s "$PWD/node_modules" /tmp/wb/node_modules && cd /tmp/wb && npm run build > /tmp/wb-build.log 2>&1 && node scripts/simWritesAreSent.mjs
