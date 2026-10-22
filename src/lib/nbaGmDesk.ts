@@ -439,7 +439,10 @@ export function nbaProposePackage(league: NbaLeague, desk: GmDesk, team: string,
  * right after draft night takes off before he has played a game (the
  * engine's offseason runs after the draft and takes a season off every
  * deal), so he plays four seasons before he comes up on the re-sign desk. A
- * second round pick is not on the scale and keeps the engine's own deal.
+ * second round pick is not on the scale and this function leaves his deal
+ * alone: on the earned draft night (nbaEarnedDraft.ts, every club's man) he
+ * signs NBA_SECOND_ROUND_SEASONS at the league minimum, and only a draft
+ * opened the old way keeps the engine's own figure for him (Round 1540).
  * With the desk off the engine's figure stands, so an old save plays as it did.
  */
 export function nbaSignDraftee(p: NbaGmPlayer, round: number): void {
