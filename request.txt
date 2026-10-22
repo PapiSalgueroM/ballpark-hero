@@ -1,0 +1,5 @@
+simSoccerEventPromises: node scripts/simSoccerEventPromises.mjs
+simSoccerLoanBite: node scripts/simSoccerLoanBite.mjs
+simSoccerPracticeLifecycle: node scripts/simSoccerPracticeLifecycle.mjs
+simSoccerWorldTruth: node scripts/simSoccerWorldTruth.mjs
+simUsCareerSummer: node scripts/simUsCareerSummer.mjs

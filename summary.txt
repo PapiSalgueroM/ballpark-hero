@@ -1,0 +1,5 @@
+simSoccerPracticeLifecycle exit=0 10s | simSoccerPracticeLifecycle: 15 actual outcomes passed.
+simSoccerEventPromises exit=0 25s | simSoccerEventPromises: all sections green
+simSoccerWorldTruth exit=0 81s | simSoccerWorldTruth: OK, every section green
+simSoccerLoanBite exit=0 694s | simSoccerLoanBite PASS
+simUsCareerSummer exit=124 4200s | 6) balance: one child per sport, careers a seed nfl 12000, nba 8000, mlb 8000, nhl 2000, 3 seeds
