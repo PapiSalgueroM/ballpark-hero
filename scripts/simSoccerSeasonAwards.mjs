@@ -7,7 +7,8 @@
  * 1) THE FIELD is fresh. The house fleet (scripts/lib/careerStep.mjs) is played at every position and the season
  *    at the awards block is read the way the table was measured (20 or more games; strikers' goals at a top two
  *    tier club; keepers' clean sheets; level, young level and rating per position). Every mean and sd of the
- *    table must sit within BOUNDS of what this run measures. Fails when the engine moves under the table.
+ *    table must sit within BOUNDS of what this run measures. Fails when the engine moves under the table. Control
+ *    stale (the striker level mean moved by 0.2 in the table) must fail on the strikers.
  * 2) THE RATES. A natural fleet (every position, eras 1990 to 2020): for every decision the engine made, the
  *    model's own chance of it (from the season's score, the table and the config); the wins the engine handed out
  *    must match the chances summed (binomial bound), the top of each award (its designed share of eligible
@@ -29,7 +30,8 @@
  * Environment: SIM_SEASON_AWARDS_SECTIONS (comma separated, default all), SIM_SEASON_AWARDS_SEED,
  * SIM_SEASON_AWARDS_POS (section 1: one position), SIM_SEASON_AWARDS_FIELD_N (section 1 careers a position),
  * SIM_SEASON_AWARDS_N (section 2 careers), SIM_SEASON_AWARDS_ERA (section 3 careers), SIM_SEASON_AWARDS_LOCK
- * (section 4 careers), SIM_SEASON_AWARDS_CONTROL (nogate, dropcoins, usdrift). Never reads the network.
+ * (section 4 careers), SIM_SEASON_AWARDS_CONTROL (stale, nogate, dropcoins, usdrift), SIM_SEASON_AWARDS_MEASURE=1
+ * (section 1 prints and judges nothing). Never reads the network.
  * Exit 1 on any failure; the last line says green or red.
  */
 import { execFileSync } from 'node:child_process';
@@ -42,7 +44,7 @@ import { inverseSoccerAwards, soccerAwardsReceiptProblem, SOCCER_AWARDS_BASE } f
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_SEASON_AWARDS_CONTROL || '';
-const CONTROLS = { nogate: '3', dropcoins: '4', usdrift: '5' };
+const CONTROLS = { stale: '1', nogate: '3', dropcoins: '4', usdrift: '5' };
 if (CONTROL && !CONTROLS[CONTROL]) { console.log(`ABORT: unknown SIM_SEASON_AWARDS_CONTROL ${CONTROL}`); process.exit(1); }
 const SECTIONS = (process.env.SIM_SEASON_AWARDS_SECTIONS || (CONTROL ? CONTROLS[CONTROL] : '1,2,3,4,5,6')).split(',').map(s => s.trim());
 const runs = n => SECTIONS.includes(n);
@@ -140,12 +142,19 @@ const AWARD_NAMES = ['Player of the Year', 'Puskás Award', 'Golden Boot', 'Gold
 
 if (runs('1')) {
   console.log('1) the field table against the engine it was measured on');
-  const S = await soccer('field');
+  const STALE = '[6.53, 0.95, 6.05, 0.60, 7.00, 0.85]';
+  let awardsText = read(AWARDS);
+  once(awardsText, STALE, AWARDS);
+  if (CONTROL === 'stale') { console.log('   CONTROL stale: the striker level mean moved from 6.53 to 6.73 in this bundle\'s table'); awardsText = awardsText.replace(STALE, STALE.replace('6.53', '6.73')); }
+  const S = await soccer(CONTROL === 'stale' ? 'field-stale' : 'field', CONTROL === 'stale' ? { [AWARDS]: awardsText } : {});
   const W = S.W;
-  const only = process.env.SIM_SEASON_AWARDS_POS ? [process.env.SIM_SEASON_AWARDS_POS] : POS;
+  const only = process.env.SIM_SEASON_AWARDS_POS ? [process.env.SIM_SEASON_AWARDS_POS] : CONTROL === 'stale' ? ['ST'] : POS;
   const N = Number(process.env.SIM_SEASON_AWARDS_FIELD_N || 600);
-  /* Measured headroom (see BOUNDS): the largest gap between the table and a fresh run of 600 careers a position. */
-  const BOUNDS = { level: [0.08, 0.06], young: [0.08, 0.06], rating: [0.08, 0.06], goals: [1.0, 0.6], sheets: [0.4, 0.3] };
+  /* Measured headroom, remote check r1525-f1 (2026-10-22, seeds 1525, 2024 and 77, 600 careers a position, all ten
+     positions): the largest gap between the table and a run was 0.03 on a level, young level or rating mean and
+     0.02 on its sd, 0.11 and 0.05 on the strikers' goals, 0.10 and 0.05 on the keepers' clean sheets. Each bound is
+     twice that, so a run never sits near it, and an engine change that moves a field by a tenth of its sd fails. */
+  const BOUNDS = { level: [0.06, 0.04], young: [0.06, 0.04], rating: [0.06, 0.04], goals: [0.25, 0.15], sheets: [0.2, 0.12] };
   const MEASURE = process.env.SIM_SEASON_AWARDS_MEASURE === '1';
   const check = (what, got, want, [dm, ds]) => {
     const line = `${what}: mean ${f2(got.mean)} (table ${f2(want.mean)}), sd ${f2(got.sd)} (table ${f2(want.sd)}), n ${got.n}`;
