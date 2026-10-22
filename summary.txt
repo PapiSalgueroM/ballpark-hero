@@ -1,0 +1,2 @@
+tsc-m1 exit=0 79s | 
+tsc exit=0 79s | 
