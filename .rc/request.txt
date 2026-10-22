@@ -1,0 +1,6 @@
+#!serial
+m4-scorelines: node .rc/x/mut1543.mjs aw10gt && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonScorelines.mjs; s=$?; git checkout -- src scripts; exit $s
+m5-scorelines: node .rc/x/mut1543.mjs streak4 && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonScorelines.mjs; s=$?; git checkout -- src scripts; exit $s
+m5-awaymatchdays: node .rc/x/mut1543.mjs streak4 && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonAwayMatchdays.mjs; s=$?; git checkout -- src scripts; exit $s
+m3-ladder: node .rc/x/mut1543.mjs countoff && node scripts/measureTycoonLadder.mjs; s=$?; git checkout -- src scripts; exit $s
+m0-restored: git status --short | head -5; node .rc/x/mut1543.mjs aw10gt && git diff --stat; git checkout -- src scripts; git diff --stat | wc -l
