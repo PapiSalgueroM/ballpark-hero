@@ -1,0 +1,15 @@
+SEO_FOUNDATION_PASS registry-routes-and-brand-h1
+SEO_FOUNDATION_PASS real-visible-hero-template
+SEO_FOUNDATION_PASS existing-summary-canonical-foundation
+SEO_FOUNDATION_PASS actual-exported-guide-and-game-rules
+SEO_SETUP_ERROR AssertionError [ERR_ASSERTION]: unrelated football guide changed
++ actual - expected
+
++ '074cb5990d9ae7c0f259775280a1d1863f12af7b0fbbbbd5d92e04300fbf5e50'
+- 'e729f4417fe3207a5c5c457efe56e89be1e9de41939b4c2b029a6a477cb2a903'
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSeoDiscovery1444.mjs:112:12
+    at foundation (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSeoDiscovery1444.mjs:31:25)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSeoDiscovery1444.mjs:108:3
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+SEO_DISCOVERY_RESULT {"status":"failed","foundations":5,"outcomes":0,"failed":0,"errors":1,"sourceUnchanged":true,"networkAttempts":0,"control":null,"detected":false}
