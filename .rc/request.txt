@@ -1,0 +1,5 @@
+#!build
+#!playwright
+#!serial
+walk: node .rc/x/walk1521.mjs
+walkBase: git worktree add .rc-base 30b4b3ca >/dev/null 2>&1 && cd .rc-base && node ../node_modules/vite/bin/vite.js build >/dev/null 2>&1 && mkdir -p "$RC_OUT/base" && RC_OUT="$RC_OUT/base" WALK_OPEN_ONLY=1 node ../.rc/x/walk1521.mjs
