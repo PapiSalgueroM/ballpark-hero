@@ -1,0 +1,3 @@
+#!build
+#!playwright
+walk: node .rc/x/walk1521.mjs
