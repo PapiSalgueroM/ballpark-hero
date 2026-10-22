@@ -1,0 +1,3 @@
+groundlob exit=1 14s | simLiveSimMotion: control groundlob turned "R10: the ball travels" red on an assertion (1 failed), as it must.
+motion exit=0 65s |    Duration  64.04s (transform 3.30s, setup 87ms, collect 4.08s, tests 58.42s, environment 509ms, prepare 278ms)
+tsc exit=0 76s | 
