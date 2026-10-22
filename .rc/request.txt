@@ -1,0 +1,3 @@
+#!serial
+stop-earned: git show 822bd75d:scripts/simNbaGmDesk.mjs > scripts/simNbaGmDesk.mjs && T=$(mktemp -d) && TMPDIR=$T TEMP=$T TMP=$T node scripts/simNbaGmDesk.mjs > /tmp/g.txt 2>&1; s=$?; grep -vE "^\s*FAIL" /tmp/g.txt | tail -40; echo "FAIL lines: $(grep -cE '^\s*FAIL' /tmp/g.txt)"; grep -E "^\s*FAIL" /tmp/g.txt | sed -E 's/[0-9]+/N/g' | sort | uniq -c | sort -rn | head -8; git checkout -- scripts; exit $s
+full: T=$(mktemp -d); TMPDIR=$T TEMP=$T TMP=$T SIM_NBA_DRAFT_BOARD_FLEET=full node scripts/simNbaDraftBoard.mjs
