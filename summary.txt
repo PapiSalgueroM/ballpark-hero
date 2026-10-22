@@ -1,0 +1,13 @@
+build exit=0 23s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+srclib-1337 exit=0 0s | engine, save, shared files and guides byte equal to the tree without Round 1337
+vitest-1337 exit=0 10s |    Duration  9.00s (transform 3.66s, setup 254ms, collect 10.59s, tests 9.24s, environment 1.49s, prepare 405ms)
+opponentLabels-1337 exit=0 25s | 0 failing checks in the report
+storage-1337 exit=0 3s | simStorageWrites: all green (owed: 12)
+storage-gone-1337 exit=1 5s | simStorageWrites (control gone): 1 failed, the control FIRED on src/lib/safeStorage.ts write:plantedNeverWritten gone (owed: 12)
+dash-1337 exit=0 1s | dashBase: 989 added lines since 9335262b3a51d7deab2c0d455dc276e10963d884 scanned; with a dash: 0
+potential-1337 exit=0 50s | PASS Soccer potential progress browser
+truths-1337 exit=0 103s | playSoccerScreenTruths: green, W4 W4r W5 W6 W7 W8 pass on the head and every control section is red on the base
+practice1076-1337 exit=0 88s | PASS career practice native: 9 actual panel journeys, 27 effective DOM controls, trusted focus/input, earned banking and unchanged sources.
+nolazy-1334 exit=1 0s | simEventDeck: 1 failure, red sections 16
+vitest-1334 exit=0 50s |    Duration  50.06s (transform 5.94s, setup 1.78s, collect 17.32s, tests 98.97s, environment 10.88s, prepare 2.23s)
+playCareerSquad-1337 exit=0 137s | playCareerSquad: 190 checks, 0 failed
