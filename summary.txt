@@ -1,0 +1,5 @@
+m4-scorelines exit=2 161s | control oldladder: the lib carries 0 of "{ id: 'aw10', label: '8 career wins', emoji: '🏁', hit: s => s.totalWins >= 8 },", not exactly one, so this control would prove
+m5-scorelines exit=0 178s | simTycoonScorelines: 25 checks, 0 failed [178 s]
+m5-awaymatchdays exit=1 41s | simTycoonAwayMatchdays: 4 failures
+m3-ladder exit=2 11s | ABORT: seed 1: win1 was earned at 2.1 but wins reached 1 at 4.2, so the counter and the badge disagree
+m0-restored exit=0 0s | 0
