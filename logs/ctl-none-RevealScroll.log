@@ -1,0 +1,32 @@
+Reveal scroll, 390x844, 5 games, base http://localhost:4173
+A press is a YANK if the page went down while the new panel was already readable,
+LOSTTOP if the panel's top ended up above the screen, PROOF if something hidden was brought into view.
+
+  PROOF   /club-manager    step  0  scrollY   507 ->   101 (-406)  panel top  -394 h   798 -> top    12  block=start  [📼 2005-06 Ronaldinho's Ballon d'O]
+  PROOF   /club-manager    step  2  scrollY   507 ->   101 (-406)  panel top  -394 h   798 -> top    12  block=start  [📼 2005-06 Ronaldinho's Ballon d'O]
+  PROOF   /club-manager    step  4  scrollY   384 ->   101 (-283)  panel top  -271 h   798 -> top    12  block=start  [🕰️ 2010-11 Prime Messi. Mourinho']
+  PROOF   /club-manager    step  6  scrollY   384 ->   101 (-283)  panel top  -271 h   798 -> top    12  block=start  [🕰️ 2010-11 Prime Messi. Mourinho']
+  PROOF   /club-manager    step  8  scrollY   261 ->   101 (-160)  panel top  -148 h   798 -> top    12  block=start  [🦊 2015-16 The Leicester season. M]
+  PROOF   /club-manager    step 10  scrollY   261 ->   101 (-160)  panel top  -148 h   798 -> top    12  block=start  [🦊 2015-16 The Leicester season. M]
+  PROOF   /club-manager    step 12  scrollY   131 ->   101 (-30)  panel top   -18 h   798 -> top    12  block=start  [🏟️ 2020-21 Haaland and Bellingham]
+  PROOF   /club-manager    step 14  scrollY   131 ->   101 (-30)  panel top   -18 h   798 -> top    12  block=start  [🏟️ 2020-21 Haaland and Bellingham]
+
+What each game did
+  /soccer-career    3 presses,  0 of them scrolled,  3 left the page alone, 0 yanks, 0 lost tops, 0 rescued  (ran out of controls after 3 presses, screen was offering: 🏋️ Training Drill ready | 📱 Phone 3 unread | Review contract | Review contract | Review contract | Review contract | Your next season Roles,  | Full attributes 183 cm ·)
+                   measured insets (top/bottom px): 0/233
+  /club-manager    16 presses,  8 of them scrolled,  8 left the page alone, 0 yanks, 0 lost tops, 8 rescued
+                   measured insets (top/bottom px): 0/233
+  /dart-draft       1 presses,  0 of them scrolled,  1 left the page alone, 0 yanks, 0 lost tops, 0 rescued  (ran out of controls after 1 presses, screen was offering: Cookie choices | Light mode | Sound: off)
+                   measured insets (top/bottom px): 0/233
+  /cfb-dynasty     12 presses,  0 of them scrolled, 12 left the page alone, 0 yanks, 0 lost tops, 0 rescued
+                   measured insets (top/bottom px): 0/233
+  /clue-auction     0 presses,  0 of them scrolled,  0 left the page alone, 0 yanks, 0 lost tops, 0 rescued  (ran out of controls after 0 presses, screen was offering: Try again | Cookie choices | Light mode | Sound: off)
+
+Of 32 presses across 5 games, 8 asked for a scroll and 24 did not. 0 moved the page down.
+Panel tops after a scroll ran from 12px to 12px down the screen.
+
+The feature still works: 8 presses took content that could not be read where it was and put it back under the top of the screen, 0 of them from completely off screen.
+
+2 problems:
+  FAIL: /dart-draft: only 1 presses landed (ran out of controls after 1 presses, screen was offering: Cookie choices | Light mode | Sound: off), so this game was not really measured
+  FAIL: /clue-auction: only 0 presses landed (ran out of controls after 0 presses, screen was offering: Try again | Cookie choices | Light mode | Sound: off), so this game was not really measured
