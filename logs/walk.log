@@ -1,0 +1,8 @@
+  PASS  1280 squad: 1 of 1 MADE UP rows show a flag
+  PASS  1280 squad: Cesar Konate shows New Zealand (bought as New Zealand)
+  FAIL  1280 squad: youth kid Yusuf Keane (Youth) shows no flag (England)
+  PASS  1280 market: the nationality filter offers New Zealand
+  PASS  1280 market: the page held still while typing (0 then 0)
+  PASS  1280 market: filtered to New Zealand, Erik Paredes is listed with New Zealand and the MADE UP mark
+  PASS  1280: no page error
+playCmMadeUpNations: RED, 2 failure(s)
