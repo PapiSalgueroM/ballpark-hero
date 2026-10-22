@@ -1,0 +1,6 @@
+record exit=0 38s | board unchanged from BASE
+quick exit=0 7s | simNbaDraftBoard: green.
+full exit=0 38s | simNbaDraftBoard: green.
+extradraw exit=1 7s | simNbaDraftBoard control extradraw: FIRED, section 1 red with 12 failure(s) (cases deskOffRecap, preRecap), the others green.
+screensport exit=1 7s | simNbaDraftBoard control screensport: FIRED, section 6 red with 2 failure(s), the others green.
+boardlift exit=1 8s | simNbaDraftBoard control boardlift: FIRED, section 6 red with 1 failure(s), the others green.

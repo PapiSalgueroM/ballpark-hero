@@ -1,0 +1,25 @@
+   NEGATIVE CONTROL extradraw: one extra Math.random call before the old draft's class draw; section 1 must go red on (1) and (4)
+
+1. The old paths: three saves that keep today's draft, played to the hub, against the fixture recorded from BASE
+   18 plays through the real board, each in its own process, in 7 s
+   FAIL: (1) desk off from the recap, seed 1: the save or the draws moved from 7a8750ba's (Math.random calls 801 vs 784, save differs)
+   FAIL: (1) desk off from the recap, seed 2: the save or the draws moved from 7a8750ba's (Math.random calls 781 vs 796, save differs)
+   FAIL: (1) desk off from the recap, seed 3: the save or the draws moved from 7a8750ba's (Math.random calls 788 vs 797, save differs)
+   FAIL: (1) desk off from the recap, seed 4: the save or the draws moved from 7a8750ba's (Math.random calls 801 vs 800, save differs)
+   FAIL: (1) desk off from the recap, seed 5: the save or the draws moved from 7a8750ba's (Math.random calls 792 vs 781, save differs)
+   FAIL: (1) desk off from the recap, seed 6: the save or the draws moved from 7a8750ba's (Math.random calls 775 vs 782, save differs)
+   FAIL: (4) desk on, recap with no postseason, reloaded, seed 1: the save or the draws moved from 7a8750ba's (Math.random calls 787 vs 804, save differs)
+   FAIL: (4) desk on, recap with no postseason, reloaded, seed 2: the save or the draws moved from 7a8750ba's (Math.random calls 797 vs 802, save differs)
+   FAIL: (4) desk on, recap with no postseason, reloaded, seed 3: the save or the draws moved from 7a8750ba's (Math.random calls 794 vs 789, save differs)
+   FAIL: (4) desk on, recap with no postseason, reloaded, seed 4: the save or the draws moved from 7a8750ba's (Math.random calls 797 vs 808, save differs)
+   FAIL: (4) desk on, recap with no postseason, reloaded, seed 5: the save or the draws moved from 7a8750ba's (Math.random calls 784 vs 773, save differs)
+   FAIL: (4) desk on, recap with no postseason, reloaded, seed 6: the save or the draws moved from 7a8750ba's (Math.random calls 787 vs 782, save differs)
+   (1) desk off from the recap: 6 plays to the hub, 12 picks made on his board, 775 to 801 draws a play; 0 equal to 7a8750ba's
+   (2) desk on, a draft open, no night: 6 plays to the hub, 12 picks made on his board, 617 to 658 draws a play; 6 equal to 7a8750ba's
+   (4) desk on, recap with no postseason, reloaded: 6 plays to the hub, 12 picks made on his board, 784 to 797 draws a play; 0 equal to 7a8750ba's
+
+6. Fences: the screen and its hook name no sport, the board names no lift module, every harness anchor is there once
+   src/components/front-office-shared/GmEarnedDraftScreen.tsx: 8 imports, all allowed; no sport, no draw, no storage
+   src/components/front-office-shared/useGmEarnedDraft.ts: 4 imports, all allowed; no sport, no draw, no storage
+   src/components/nba-front-office/NbaFrontOfficeBoard.tsx: names no lift module; 17 of simNbaDraftCapital's 21 anchors are board anchors, each once; simGmReload's and simDraftNight's anchors once
+simNbaDraftBoard control extradraw: FIRED, section 1 red with 12 failure(s) (cases deskOffRecap, preRecap), the others green.

@@ -1,0 +1,6 @@
+
+1. The old paths: three saves that keep today's draft, played to the hub, against the fixture recorded from BASE
+   90 plays through the real board, each in its own process, in 37 s
+   recorded 90 plays from 7a8750ba into scripts/data/nbaDraftBoardFixture.json
+simNbaDraftBoard: recorded.
+board unchanged from BASE

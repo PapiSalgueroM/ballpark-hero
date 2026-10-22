@@ -1,0 +1,14 @@
+
+1. The old paths: three saves that keep today's draft, played to the hub, against the fixture recorded from BASE
+   90 plays through the real board, each in its own process, in 38 s
+   (1) desk off from the recap: 30 plays to the hub, 60 picks made on his board, 765 to 822 draws a play; 30 equal to 7a8750ba's
+   (2) desk on, a draft open, no night: 30 plays to the hub, 60 picks made on his board, 617 to 669 draws a play; 30 equal to 7a8750ba's
+   (4) desk on, recap with no postseason, reloaded: 30 plays to the hub, 60 picks made on his board, 771 to 824 draws a play; 30 equal to 7a8750ba's
+
+6. Fences: the screen and its hook name no sport, the board names no lift module, every harness anchor is there once
+   src/components/front-office-shared/GmEarnedDraftScreen.tsx: 8 imports, all allowed; no sport, no draw, no storage
+   src/components/front-office-shared/useGmEarnedDraft.ts: 4 imports, all allowed; no sport, no draw, no storage
+   src/components/nba-front-office/NbaFrontOfficeBoard.tsx: names no lift module; 17 of simNbaDraftCapital's 21 anchors are board anchors, each once; simGmReload's and simDraftNight's anchors once
+
+2 sections (1, 6), 30 seeds a case, 0 failure(s).
+simNbaDraftBoard: green.

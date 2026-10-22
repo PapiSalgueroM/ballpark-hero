@@ -1,0 +1,7 @@
+#!serial
+record: SIM_NBA_DRAFT_BOARD_RECORD=7a8750ba node scripts/simNbaDraftBoard.mjs && cp scripts/data/nbaDraftBoardFixture.json "$RC_OUT/" && git diff --quiet 7a8750ba -- src/components/nba-front-office/NbaFrontOfficeBoard.tsx && echo "board unchanged from BASE"
+quick: node scripts/simNbaDraftBoard.mjs
+full: SIM_NBA_DRAFT_BOARD_FLEET=full node scripts/simNbaDraftBoard.mjs
+extradraw: SIM_NBA_DRAFT_BOARD_CONTROL=extradraw node scripts/simNbaDraftBoard.mjs
+screensport: SIM_NBA_DRAFT_BOARD_CONTROL=screensport node scripts/simNbaDraftBoard.mjs
+boardlift: SIM_NBA_DRAFT_BOARD_CONTROL=boardlift node scripts/simNbaDraftBoard.mjs
