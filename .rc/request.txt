@@ -1,0 +1,5 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+motion: node_modules/.bin/vitest run src/test/liveSimMotion.test.tsx --testTimeout=300000 --hookTimeout=120000
+groundlob: LIVE_MOTION_CONTROL=groundlob node scripts/simLiveSimMotion.mjs
+simCmMatchDay: node scripts/simCmMatchDay.mjs
+lineupsBase: git worktree add .rc-base 30b4b3ca >/dev/null 2>&1 && cd .rc-base && node scripts/simManagerLiveLineups.mjs
