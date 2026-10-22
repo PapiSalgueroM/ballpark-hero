@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+base-bar: git worktree add /tmp/base cedd02399673fb5ef307129a3a6165bc208fe1a8 && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && node_modules/.bin/vite build --outDir /tmp/basedist > /tmp/basebuild.log 2>&1; echo "base build exit $?") && SOCCER_LANDING_BASE_DIST=/tmp/basedist SOCCER_LANDING_ARMS=base SECTIONS=bar node scripts/playSoccerLanding.mjs
+head-bar-again: SOCCER_LANDING_HEAD_ONLY=1 SECTIONS=bar node scripts/playSoccerLanding.mjs

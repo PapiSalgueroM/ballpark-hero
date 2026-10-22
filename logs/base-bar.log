@@ -1,0 +1,53 @@
+Preparing worktree (detached HEAD cedd02399)
+HEAD is now at cedd02399 Board: session J posts Round 1536's measurement of first visit dialogs under the pending cookie banner for the other lane
+base build exit 0
+seed 1987332285; arms base; sections bar; sizes 320x640, 390x844, 1280x900
+bar save youth: phase youth, age 16
+bar save playing: phase playing, age 18
+bar save manager: phase manager_season, age 18, employed
+bar save pundit: phase pundit_season, age 18
+bar save owner: phase owner_season, age 18
+bar save retired: phase retired, age 18
+bar save managerOut: phase manager_season, age 18, out of work
+== base 320x640
+   bar youth (floating): ["Next Year"], AGE 283 to 303
+   bar playing (floating): ["Next Season","Week by week: watch your season match by match"], AGE 283 to 303
+   bar manager (floating): ["Next Manager Season","Retire"], AGE 283 to 303
+   bar pundit (floating): ["Next Season"], AGE 283 to 303
+   bar owner (floating): ["Next Owner Season","Sell Club"], AGE 283 to 303
+   bar retired (floating): ["📤 Share Legacy","⚽ New Career"], AGE 283 to 303
+   bar managerOut (floating): ["Sit Out A Season","Walk Away"], AGE 283 to 303
+== base 390x844
+   bar youth (floating): ["Next Year"], AGE 353 to 373
+   bar playing (floating): ["Next Season","Week by week: watch your season match by match"], AGE 353 to 373
+   bar manager (floating): ["Next Manager Season","Retire"], AGE 353 to 373
+   bar pundit (floating): ["Next Season"], AGE 353 to 373
+   bar owner (floating): ["Next Owner Season","Sell Club"], AGE 353 to 373
+   bar retired (floating): ["📤 Share Legacy","⚽ New Career"], AGE 353 to 373
+   bar managerOut (floating): ["Sit Out A Season","Walk Away"], AGE 353 to 373
+== base 1280x900
+   bar youth (floating): ["Next Year"], AGE 1099 to 1119
+   bar playing (floating): ["Next Season","Week by week: watch your season match by match"], AGE 1099 to 1119
+   bar manager (floating): ["Next Manager Season","Retire"], AGE 1099 to 1119
+   bar pundit (floating): ["Next Season"], AGE 1099 to 1119
+   bar owner (floating): ["Next Owner Season","Sell Club"], AGE 1099 to 1119
+   bar retired (floating): ["📤 Share Legacy","⚽ New Career"], AGE 1099 to 1119
+   bar managerOut (floating): ["Sit Out A Season","Walk Away"], AGE 1099 to 1119
+== base 360x780 (bar only)
+   bar youth (floating): ["Next Year"], AGE 323 to 343
+   bar playing (floating): ["Next Season","Week by week: watch your season match by match"], AGE 323 to 343
+   bar manager (floating): ["Next Manager Season","Retire"], AGE 323 to 343
+   bar pundit (floating): ["Next Season"], AGE 323 to 343
+   bar owner (floating): ["Next Owner Season","Sell Club"], AGE 323 to 343
+   bar retired (floating): ["📤 Share Legacy","⚽ New Career"], AGE 323 to 343
+   bar managerOut (floating): ["Sit Out A Season","Walk Away"], AGE 323 to 343
+== base 375x667 (bar only)
+   bar youth (floating): ["Next Year"], AGE 338 to 358
+   bar playing (floating): ["Next Season","Week by week: watch your season match by match"], AGE 338 to 358
+   bar manager (floating): ["Next Manager Season","Retire"], AGE 338 to 358
+   bar pundit (floating): ["Next Season"], AGE 338 to 358
+   bar owner (floating): ["Next Owner Season","Sell Club"], AGE 338 to 358
+   bar retired (floating): ["📤 Share Legacy","⚽ New Career"], AGE 338 to 358
+   bar managerOut (floating): ["Sit Out A Season","Walk Away"], AGE 338 to 358
+  BLIND [bar]: the base arm passed where it must fail (0 finding(s)), so this section proves nothing
+playSoccerLanding base arm: RED, 1 section(s) blind
