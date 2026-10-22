@@ -1,0 +1,7 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+motionfull: node scripts/simLiveSimMotion.mjs
+foulcue: LIVE_MOTION_CONTROL=foulcue node scripts/simLiveSimMotion.mjs
+cueheld: LIVE_MOTION_CONTROL=cueheld node scripts/simLiveSimMotion.mjs
+foulwait: LIVE_MOTION_CONTROL=foulwait node scripts/simLiveSimMotion.mjs
+foulmeet: LIVE_MOTION_CONTROL=foulmeet node scripts/simLiveSimMotion.mjs
+simCmMatchDay: node scripts/simCmMatchDay.mjs
