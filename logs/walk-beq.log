@@ -1,0 +1,10 @@
+head 8f4459d409, base f276b8a8c, old harness -
+base tree f276b8a8cb
+head exit 0, base exit 0
+head last line: simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+base last line: simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+DIFFER walk
+16c16
+<    through simRound: 1144 injuries to your men announced 2286, 2224, 2173, 2121, 2066, 2018, 1972, 1932, 1875, 1813 rounds out at trainer levels 1 to 10
+---
+>    through simRound: 1144 injuries to your men announced 2286, 2228, 2178, 2121, 2052, 2004, 1948, 1903, 1835, 1778 rounds out at trainer levels 1 to 10

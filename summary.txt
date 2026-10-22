@@ -1,0 +1,13 @@
+set1 exit=0 32s | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+set2 exit=0 35s | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+set3 exit=0 31s | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+held exit=0 38s | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+walk-beq exit=1 75s | >    through simRound: 1144 injuries to your men announced 2286, 2228, 2178, 2121, 2052, 2004, 1948, 1903, 1835, 1778 rounds out at trainer levels 1 to 10
+ctl-dropone exit=0 29s | simNbaGmDesk: control dropone fired (20 failures, as it should)
+ctl-nohandback exit=0 31s | simNbaGmDesk: control nohandback fired (12 failures, as it should)
+ctl-overlimit exit=0 35s | simNbaGmDesk: control overlimit fired (8 failures, as it should)
+ctl-sheetrepick exit=0 38s | simNbaGmDesk: control sheetrepick fired (51 failures, as it should)
+ctl-fullbird exit=0 28s | simNbaGmDesk: control fullbird fired (116 failures, as it should)
+ctl-coinflip exit=0 42s | simNbaGmDesk: control coinflip fired (160 failures, as it should)
+ctl-norfa exit=0 35s | simNbaGmDesk: control norfa fired (177 failures, as it should)
+anchors exit=0 53s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
