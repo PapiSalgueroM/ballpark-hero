@@ -1,0 +1,21 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-board: node_modules/.bin/vitest run src/components/front-office-shared/FrontOfficeGmCareer.test.tsx src/components/front-office/FrontOfficeOnePress.test.tsx src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx --testTimeout=600000 --hookTimeout=120000
+vitest-shared: node_modules/.bin/vitest run src/lib/gmDeskHost.test.ts src/components/front-office-shared/GmCareerDesk.test.tsx src/lib/gmXp.test.ts src/lib/gmSeat.test.ts --testTimeout=300000 --hookTimeout=120000
+host-123: node scripts/simGmDeskHost.mjs
+host-456: SIM_GM_DESK_HOST_SEEDS=4,5,6 node scripts/simGmDeskHost.mjs
+host-onereason: SIM_GM_DESK_HOST_CONTROL=onereason node scripts/simGmDeskHost.mjs
+simGmCareer: node scripts/simGmCareer.mjs
+career-hubcounted: SIM_GM_CAREER_CONTROL=hubcounted node scripts/simGmCareer.mjs
+simNflGmDesk: node scripts/simNflGmDesk.mjs
+simGmReload: node scripts/simGmReload.mjs
+simGmXp: node scripts/simGmXp.mjs
+simGmSeat: node scripts/simGmSeat.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simSeoDiscovery1444: node scripts/simSeoDiscovery1444.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+dashes: n=$(git log --first-parent --no-merges -p --format= fe60cd00..HEAD -- src scripts | grep '^+' | grep -cP '[\x{2013}\x{2014}]'); m=$(git log --first-parent --format=%B fe60cd00..HEAD | grep -cP '[\x{2013}\x{2014}]'); k=$(git log --first-parent --no-merges -p --format= fe60cd00..HEAD -- src scripts | grep -c '^+'); echo "added lines read: $k; dashes in them: $n; dashes in messages: $m"; test "$n" = 0 && test "$m" = 0 && test "$k" -gt 100
