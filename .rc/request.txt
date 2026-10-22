@@ -1,0 +1,50 @@
+#!build
+simAccessibility: node scripts/simAccessibility.mjs
+simCmLeagueFixtures: node scripts/simCmLeagueFixtures.mjs
+simCollegeSeat: node scripts/simCollegeSeat.mjs
+simDraftNight: node scripts/simDraftNight.mjs
+simEventDeck: node scripts/simEventDeck.mjs
+simFoHub: node scripts/simFoHub.mjs
+simFrontOfficeCuts: node scripts/simFrontOfficeCuts.mjs
+simFrontOfficeRoster: node scripts/simFrontOfficeRoster.mjs
+simFrontOfficeSchedule: node scripts/simFrontOfficeSchedule.mjs
+simGauntletGuideLadder: node scripts/simGauntletGuideLadder.mjs
+simGmDesk: node scripts/simGmDesk.mjs
+simGmDraftOrder: node scripts/simGmDraftOrder.mjs
+simGmGameDay: node scripts/simGmGameDay.mjs
+simHomeFront: node scripts/simHomeFront.mjs
+simHomeSearchRecovery: node scripts/simHomeSearchRecovery.mjs
+simLeagueCaps: node scripts/simLeagueCaps.mjs
+simMissingElevenSources: node scripts/simMissingElevenSources.mjs
+simMlbDraftCapital: node scripts/simMlbDraftCapital.mjs
+simMlbGmDesk: node scripts/simMlbGmDesk.mjs
+simMlbTradeRoster: node scripts/simMlbTradeRoster.mjs
+simNbaDraftCapital: node scripts/simNbaDraftCapital.mjs
+simNbaGmDesk: node scripts/simNbaGmDesk.mjs
+simNbaLuxuryTax: node scripts/simNbaLuxuryTax.mjs
+simNbaRatingEvidence: node scripts/simNbaRatingEvidence.mjs
+simNbaRotationReset: node scripts/simNbaRotationReset.mjs
+simNbaRotationUi: node scripts/simNbaRotationUi.mjs
+simNbaSeasonStats: node scripts/simNbaSeasonStats.mjs
+simNbaTipOffForecast: node scripts/simNbaTipOffForecast.mjs
+simNflDraftCapital: node scripts/simNflDraftCapital.mjs
+simNflGridPage: node scripts/simNflGridPage.mjs
+simNflPracticePromotion: node scripts/simNflPracticePromotion.mjs
+simNflRatingEvidence: node scripts/simNflRatingEvidence.mjs
+simNhlContributorsBoard: node scripts/simNhlContributorsBoard.mjs
+simNhlDraftCapital: node scripts/simNhlDraftCapital.mjs
+simNhlGmDesk: node scripts/simNhlGmDesk.mjs
+simNhlRatingEvidence: node scripts/simNhlRatingEvidence.mjs
+simNhlRosterLimit: node scripts/simNhlRosterLimit.mjs
+simNhlWaiverReceipt: node scripts/simNhlWaiverReceipt.mjs
+simPerfectSeasonOdds: node scripts/simPerfectSeasonOdds.mjs
+simPrerender: node scripts/simPrerender.mjs
+simSeoDiscovery1444: node scripts/simSeoDiscovery1444.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simCompletionOnce: node scripts/simCompletionOnce.mjs
+simNoDoubleRecord: node scripts/simNoDoubleRecord.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+keywords-fresh: node scripts/genSearchKeywords.mjs && git diff --exit-code --stat src/data/searchKeywords.json
+vt-fo1: node_modules/.bin/vitest run src/components/front-office/FrontOfficeCuts.test.tsx src/components/front-office/FrontOfficeDraftCapital.test.tsx src/components/front-office/FrontOfficeFullRoster.test.tsx src/components/front-office/FrontOfficeGameDay.test.tsx src/components/front-office/FrontOfficePostseason.test.tsx --testTimeout=600000 --hookTimeout=120000
+vt-fo2: node_modules/.bin/vitest run src/components/front-office/FrontOfficePromotion.test.tsx src/components/front-office/FrontOfficeRatingEvidence.test.tsx src/components/front-office/FrontOfficeTagDepth.test.tsx src/components/front-office/FrontOfficeTile.test.tsx --testTimeout=600000 --hookTimeout=120000
+vt-other: node_modules/.bin/vitest run src/components/mlb-front-office/MlbDraftCapital.test.tsx src/components/mlb-front-office/MlbGmDesk.test.tsx src/components/nba-front-office src/components/nhl-front-office src/test/mlbFullRosters.test.tsx src/test/mlbTradeRoster.test.tsx src/test/nhlContributorsBoard.test.tsx --testTimeout=600000 --hookTimeout=120000
