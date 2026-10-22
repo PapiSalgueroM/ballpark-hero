@@ -1,0 +1,2 @@
+truthdigest exit=0 39s |    Duration  37.98s (transform 1.34s, setup 76ms, collect 1.73s, tests 35.32s, environment 360ms, prepare 122ms)
+truthdigest-nof1538 exit=1 40s | td nof1538: exit 1
