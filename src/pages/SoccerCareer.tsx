@@ -148,8 +148,10 @@ import { readSeasonMoments } from '@/lib/season/momentsSave';
    adds is paid here, never by a budget). */
 const SoccerSeasonCentre = lazy(() => import("@/components/soccer-career/SoccerSeasonCentre"));
 /* Round 1524: the club owner's screens ride with the owner tail in one lazy chunk (src/lib/soccerOwnerGate.ts) */
-const OwnerClubSale = lazy(() => import("@/components/soccer-career/OwnerTail").then(m => ({ default: m.OwnerClubSale })));
-const OwnerPanel = lazy(() => import("@/components/soccer-career/OwnerTail").then(m => ({ default: m.OwnerPanel })));
+/* a chunk that fails, or resolves empty (freshBuild cancels the preload error), keeps its placeholder, as CareerStory's does */
+const ownerScreens = () => import("@/components/soccer-career/OwnerTail").then(m => { if (!m?.OwnerPanel) throw new Error("owner screens"); return m; });
+const OwnerClubSale = lazy(() => ownerScreens().then(m => ({ default: m.OwnerClubSale })).catch(() => new Promise<never>(() => undefined)));
+const OwnerPanel = lazy(() => ownerScreens().then(m => ({ default: m.OwnerPanel })).catch(() => new Promise<never>(() => undefined)));
 const TrophyCabinet = lazy(() => import("@/components/soccer-career/TrophyCabinet"));
 const SeasonRatings = lazy(() => import("@/components/soccer-career/SeasonRatings"));
 const SoccerDerbyHistory = lazy(() => import("@/components/soccer-career/SoccerDerbyHistory"));
