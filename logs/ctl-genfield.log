@@ -1,0 +1,17 @@
+NEGATIVE CONTROL genfield: a generated field is drawn on a stream keyed to the career, not the edition (section 3 must fail)
+section 3: the fields
+  11 played fields, 47 nations, no flag: Puerto Rico, Serbia and Montenegro
+  FAIL [3] wc-2027 drawn field differs between two careers
+  FAIL [3] oly-2028 drawn field differs between two careers
+  FAIL [3] wc-2031 drawn field differs between two careers
+  FAIL [3] oly-2032 drawn field differs between two careers
+  FAIL [3] wc-2035 drawn field differs between two careers
+  FAIL [3] oly-2036 drawn field differs between two careers
+  FAIL [3] wc-2039 drawn field differs between two careers
+  FAIL [3] oly-2040 drawn field differs between two careers
+  FAIL [3] wc-2043 drawn field differs between two careers
+  FAIL [3] oly-2044 drawn field differs between two careers
+  FAIL [3] wc-2047 drawn field differs between two careers
+  FAIL [3] oly-2048 drawn field differs between two careers
+  12 summers 2025 to 2050 draw their field (the same for every career)
+simCareerIntl: control genfield FIRED (section 3, 12 failures)

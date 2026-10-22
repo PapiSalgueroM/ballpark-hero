@@ -1,0 +1,6 @@
+NEGATIVE CONTROL fieldsize: wc-2014's field loses a nation (section 3 must fail)
+section 3: the fields
+  FAIL [3] wc-2014 field holds 23 nations, the shape 24
+  11 played fields, 47 nations, no flag: Puerto Rico, Serbia and Montenegro
+  12 summers 2025 to 2050 draw their field (the same for every career)
+simCareerIntl: control fieldsize FIRED (section 3, 1 failures)
