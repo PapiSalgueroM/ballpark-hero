@@ -1,0 +1,3 @@
+# Release BP rehearsal: rc-BMa s6 and dials verbatim
+s6: B1515=${B1515:-580b27f0}; mkdir -p /tmp/b6 && git archive $B1515 | tar -x -C /tmp/b6 && BASE_ROOT=/tmp/b6 SECTION=6 node scripts/simCmDifficulty.mjs
+dials: B1515=${B1515:-580b27f0}; n=$(git diff $B1515 HEAD -- src/lib/clubManagerDifficulty.ts | grep -cE '^[-+] +(veryeasy|easy|normal):'); echo "Very Easy, Easy and Medium dial lines changed since B1515: $n"; [ "$n" = 0 ]
