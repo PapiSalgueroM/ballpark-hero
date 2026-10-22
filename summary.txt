@@ -1,0 +1,4 @@
+simNoRivalNames exit=0 29s | No rival product names found. 0 findings.
+dashscan exit=0 0s | since cedd0239: added lines with an en or em dash 0, commit message lines with one 0
+tsc exit=0 135s | 
+vitest-all exit=0 857s |       Tests  9402 passed | 58 skipped (9460)
