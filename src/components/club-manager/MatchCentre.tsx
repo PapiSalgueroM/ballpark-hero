@@ -123,7 +123,7 @@ export function MatchCentre({
         {/* Round 1522: how they play, and what tends to work against it. Set your instructions on the Tactics tab. */}
         {style && AI_STYLES[style] && (
           <div className="text-[10px] text-foreground mt-1 leading-snug" data-cm-mc-style={style}>
-            <span className="font-bold">{AI_STYLES[style].emoji} They play {AI_STYLES[style].label}.</span>{' '}
+            <span className="font-bold">{AI_STYLES[style].emoji} In this sim they play {AI_STYLES[style].label}.</span>{' '}
             <span className="text-muted-foreground">{AI_STYLES[style].blurb} {AI_STYLES[style].read}</span>
           </div>
         )}

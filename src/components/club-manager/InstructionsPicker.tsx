@@ -24,7 +24,7 @@ export function InstructionsPicker({ value, onChange, theirStyle, idPrefix = 'cm
     <div className="space-y-1.5" data-cm-instructions={idPrefix}>
       {style && (
         <p className="text-[10px] leading-snug text-muted-foreground" data-cm-instr-read={theirStyle ?? ''}>
-          <span className="font-semibold text-foreground">{style.emoji} They play {style.label}.</span> {style.read}
+          <span className="font-semibold text-foreground">{style.emoji} In this sim they play {style.label}.</span> {style.read}
         </p>
       )}
       {INSTRUCTION_KEYS.map(k => {

@@ -101,7 +101,7 @@ function TacticsDayBlock({ tactics, myGoals, oppGoals }: { tactics: NonNullable<
         {first && first.minute === 0 ? words(first.instructions) : 'Balanced on all four'}
         {later.map((s, i) => <span key={i} className="text-muted-foreground">. {minuteLabel(s)}: {words(s.instructions)}</span>)}
       </p>
-      <p className="text-[10px] text-muted-foreground mt-0.5">{style.emoji} They played {style.label}.</p>
+      <p className="text-[10px] text-muted-foreground mt-0.5">{style.emoji} In this sim they played {style.label}.</p>
       <div className="mt-1.5 grid grid-cols-1 gap-0.5">
         {rows.map(([key, label, value]) => (
           <div key={key} className="flex items-center justify-between gap-2 text-[11px]" data-cm-report-tac={key}>

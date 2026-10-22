@@ -157,7 +157,7 @@ for (const W of WIDTHS) {
     await page.locator('button:visible').filter({ hasText: 'Match Centre: form' }).first().click({ timeout: 20000 });
     await page.locator('[data-cm-mc-style]').waitFor({ timeout: 20000 }).catch(() => {});
     const style = ((await page.locator('[data-cm-mc-style]').innerText().catch(() => '')) || '').trim();
-    say(/They play /.test(style), `${W}: the Match Centre names their style ("${style.slice(0, 60)}")`);
+    say(/In this sim they play /.test(style), `${W}: the Match Centre names their style ("${style.slice(0, 60)}")`);
     await shot(page, `centre-${W}.png`);
 
     /* (h) Play Live, Skip to the interval, the dressing room's Tactics */
@@ -225,7 +225,7 @@ for (const W of WIDTHS) {
     await page.locator('[data-cm-report-tactics]').waitFor({ timeout: 30000 }).catch(() => {});
     const block = ((await page.locator('[data-cm-report-tactics]').innerText().catch(() => '')) || '').replace(/\s+/g, ' ');
     const tacRows = await page.locator('[data-cm-report-tac]').count();
-    say(tacRows === 6 && /They played/.test(block) && /High press/.test(block), `${W}: the report's instructions block names the day and prints six numbers ("${block.slice(0, 90)}")`);
+    say(tacRows === 6 && /In this sim they played/.test(block) && /High press/.test(block), `${W}: the report's instructions block names the day and prints six numbers ("${block.slice(0, 90)}")`);
     await shot(page, `report-${W}.png`);
   } catch (e) {
     say(false, `${W}: the walk stopped: ${String(e).split('\n')[0]}`);
