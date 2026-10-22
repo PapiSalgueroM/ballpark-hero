@@ -87,6 +87,23 @@ describe('GmEarnedDraftScreen', () => {
     expect(count(withRun, 'data-draft-continue')).toBe(1);
   });
 
+  it('a refused press says so once on every stage, and no stage draws the line without one (review 1540 read m1)', () => {
+    const said = 'That pick could not be made. Your save has not changed.';
+    const card = { order, myClub: 'C03', rules, lottery, onContinue: () => {}, continueLabel: 'Continue to the draft' };
+    const stages: Partial<GmEarnedDraftScreenProps>[] = [
+      { stage: 'lottery', chances: ['a'], lottery: card },
+      { lines: ['b'], help, run, choices, staff: { label: 's', onPress: () => {} } },
+      { stage: 'over', lines: ['c'], help, run, onLeave: () => {} },
+      { stage: 'over', lines: ['c'], help, onLeave: () => {} },
+    ];
+    for (const p of stages) {
+      const refused = draw({ ...p, error: said });
+      expect(count(refused, 'role="alert"'), `stage ${p.stage ?? 'clock'}`).toBe(1);
+      expect(refused).toContain(said);
+      expect(count(draw(p), 'role="alert"'), `stage ${p.stage ?? 'clock'} with no refusal`).toBe(0);
+    }
+  });
+
   it('no 10 or 11 px text of the screen\'s own, at any stage (the shared cards and the lazy box skipped, and counted)', () => {
     const pages = [
       draw({ stage: 'lottery', chances: ['a'], lottery: { order, myClub: 'C03', rules, lottery } }),

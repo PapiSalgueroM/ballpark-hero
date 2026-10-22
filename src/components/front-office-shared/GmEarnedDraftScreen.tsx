@@ -167,6 +167,10 @@ export function GmEarnedDraftScreen({
               )}
             </div>
           )}
+
+          {/* A refused press says so on every stage, not only on the clock (review 1540 read m1): at the card the
+              Continue button would otherwise do nothing anyone can see. */}
+          {stage !== 'clock' && error && <p role="alert" className="text-xs text-destructive">{error}</p>}
         </div>
 
         {open && (
