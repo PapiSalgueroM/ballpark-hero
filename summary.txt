@@ -1,0 +1,14 @@
+vitest-new exit=1 11s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeSeasonStats.test.tsx,title=src/components/front-office/FrontOfficeSeason
+vitest-board1 exit=1 33s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeOnePress.test.tsx,title=src/components/front-office/FrontOfficeOnePress.
+vitest-board2 exit=1 22s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeDraftCapital.test.tsx,title=src/components/front-office/FrontOfficeDraft
+sim exit=0 72s | simNflSeasonStats: 95 checks, 0 failed; section 1 skipped: LIFT_BASE is not set
+tsc exit=2 115s | src/components/front-office/FrontOfficeSeasonStats.test.tsx(116,21): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'number'.
+simGmGameDay exit=0 102s | simGmGameDay: 462 checks, 0 failed
+simGmReload exit=0 9s | simGmReload: all green. Four front offices keep a finished season through a reload, and none of them can play a closed one again.
+simSaveKeeper exit=0 7s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+simSessionMarks exit=0 0s | simSessionMarks: green. Nine games count the day you play them, none of them invented a score or a streak day to do it.
+simHarnessAnchors exit=0 63s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simNflFullRosters exit=0 24s | simNflFullRosters: 91 checks passed over 8 sections
+simNflTagDepth exit=0 3s | simNflTagDepth: 62/62 checks passed
+simNbaSeasonStats exit=0 13s | simNbaSeasonStats: 72 checks passed over 10 seeded franchises and 3 seasons each. Every game adds up, the box takes nothing from the league, the awards follow their rules
+gmgd-statsstory exit=1 92s | simGmGameDay: 462 checks, 1 failed (control statsstory)

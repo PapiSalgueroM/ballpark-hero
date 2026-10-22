@@ -1,0 +1,65 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/nflSeasonStats.test.ts [2m([22m[2m13 tests[22m[2m)[22m[33m 349[2mms[22m[39m
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstdout[2m | src/components/front-office/FrontOfficeSeasonStats.test.tsx[2m > [22m[2mNFL front office: who scored, the load and the close[2m > [22m[2ma whole season on full rosters with lines and the desk on: the save it writes, measured
+[22m[39mMEASURED: the persisted save on full rosters with the desk on: 656167 characters at Week 1, 725611 after Week 16, 728262 on the recap (660236 without the block and the history); the block 67832, 462 lines, the history 175
+
+ [31m❯[39m src/components/front-office/FrontOfficeSeasonStats.test.tsx [2m([22m[2m8 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[33m 4485[2mms[22m[39m
+[31m   [31m×[31m NFL front office: who scored, the press and the save[2m > [22mthree presses from Week 1 record every game of each week, his games keep their credits, and the block reads back whole[39m[33m 639[2mms[22m[39m
+[31m     → expected 13 to be less than or equal to 12[39m
+   [33m[2m✓[22m[39m NFL front office: who scored, the press and the save[2m > [22mthe recorder takes no draw: with it switched off the same presses draw the same numbers and save the same league [33m 704[2mms[22m[39m
+   [32m✓[39m NFL front office: who scored, the press and the save[2m > [22ma save from before season lines, at Week 5, loads, plays on and writes no block until its next Week 1[32m 186[2mms[22m[39m
+   [32m✓[39m NFL front office: who scored, the load and the close[2m > [22ma damaged block is deleted from the stored league on the draft restore of an old recap save[32m 85[2mms[22m[39m
+[31m   [31m×[31m NFL front office: who scored, the load and the close[2m > [22mand on a bracket started again[39m[32m 98[2mms[22m[39m
+[31m     → the bracket was started again and saved at load: expected undefined to be truthy[39m
+   [33m[2m✓[22m[39m NFL front office: who scored, the load and the close[2m > [22mthe final week names the awards once, writes them on the cards, and a reload on the recap names nothing again [33m 364[2mms[22m[39m
+   [32m✓[39m NFL front office: who scored, the load and the close[2m > [22ma winner's roster row carries the sim badge, and a card that does not read shows none[32m 149[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office: who scored, the load and the close[2m > [22ma whole season on full rosters with lines and the desk on: the save it writes, measured [33m 2256[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/components/front-office/FrontOfficeSeasonStats.test.tsx[2m > [22mNFL front office: who scored, the press and the save[2m > [22mthree presses from Week 1 record every game of each week, his games keep their credits, and the block reads back whole
+[31m[1mAssertionError[22m: expected 13 to be less than or equal to 12[39m
+[36m [2m❯[22m src/components/front-office/FrontOfficeSeasonStats.test.tsx:[2m116:49[22m[39m
+    [90m114| [39m    for (const t of Object.keys(s.league.teams)) expect(st.teams[t].g)…
+    [90m115| [39m    const perClub = Object.values(st.lines as Record<string, any>).red…
+    [90m116| [39m    expect(Math.max(...Object.values(perClub))).toBeLessThanOrEqual(12…
+    [90m   | [39m                                                [31m^[39m
+    [90m117| [39m    [90m/* his three games, by the keys his log holds */[39m
+    [90m118| [39m    [35mconst[39m keys [33m=[39m s[33m.[39mgameLog[33m.[39mgames[33m.[39m[34mmap[39m((g[33m:[39m any) [33m=>[39m g[33m.[39mkey)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/front-office/FrontOfficeSeasonStats.test.tsx[2m > [22mNFL front office: who scored, the load and the close[2m > [22mand on a bracket started again
+[31m[1mAssertionError[22m: the bracket was started again and saved at load: expected undefined to be truthy[39m
+
+[32m- Expected:[39m 
+true
+
+[31m+ Received:[39m 
+undefined
+
+[36m [2m❯[22m src/components/front-office/FrontOfficeSeasonStats.test.tsx:[2m187:75[22m[39m
+    [90m185| [39m    [34mrender[39m([33m<[39m[33mBoard[39m [33m/[39m[33m>[39m)[33m;[39m
+    [90m186| [39m    [35mconst[39m s [33m=[39m [34mread[39m()[33m;[39m
+    [90m187| [39m    expect(s.playoffs, 'the bracket was started again and saved at loa…
+    [90m   | [39m                                                                          [31m^[39m
+    [90m188| [39m    [34mexpect[39m([34mclean[39m(s[33m,[39m team))[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m189| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m19 passed[39m[22m[90m (21)[39m
+[2m   Start at [22m 22:07:33
+[2m   Duration [22m 10.01s[2m (transform 2.83s, setup 367ms, collect 4.02s, tests 4.83s, environment 1.53s, prepare 735ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeSeasonStats.test.tsx,title=src/components/front-office/FrontOfficeSeasonStats.test.tsx > NFL front office%3A who scored%2C the press and the save > three presses from Week 1 record every game of each week%2C his games keep their credits%2C and the block reads back whole,line=116,column=49::AssertionError: expected 13 to be less than or equal to 12%0A ❯ src/components/front-office/FrontOfficeSeasonStats.test.tsx:116:49%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeSeasonStats.test.tsx,title=src/components/front-office/FrontOfficeSeasonStats.test.tsx > NFL front office%3A who scored%2C the load and the close > and on a bracket started again,line=187,column=75::AssertionError: the bracket was started again and saved at load: expected undefined to be truthy%0A%0A- Expected: %0Atrue%0A%0A+ Received: %0Aundefined%0A%0A ❯ src/components/front-office/FrontOfficeSeasonStats.test.tsx:187:75%0A%0A
