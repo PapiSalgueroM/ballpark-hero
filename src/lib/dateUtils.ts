@@ -23,14 +23,23 @@ export function getTodayET(): string {
 
 /**
  * Poll-of-the-day rollover: polls flip at NOON Eastern, not midnight (owner
- * request: the day's polls should rotate in at 12pm ET). Implemented by
- * shifting the instant back 12h before taking the ET date, so 11:59am ET
- * still shows yesterday's polls and 12:00pm ET flips to today's.
+ * request: the day's polls should rotate in at 12pm ET). Read the clock once
+ * and use Eastern calendar fields, so daylight saving cannot move the cutoff.
+ * Before noon, select the previous calendar day rather than shifting hours.
  */
 export function getPollDayET(): string {
-  return new Intl.DateTimeFormat('en-CA', {
+  const now = new Date();
+  const parts = new Intl.DateTimeFormat('en-CA', {
     timeZone: 'America/New_York',
-  }).format(new Date(Date.now() - 12 * 60 * 60 * 1000));
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    hourCycle: 'h23',
+  }).formatToParts(now);
+  const values = Object.fromEntries(parts.map(({ type, value }) => [type, value]));
+  const day = Number(values.day) - (Number(values.hour) < 12 ? 1 : 0);
+  return new Date(Date.UTC(Number(values.year), Number(values.month) - 1, day)).toISOString().slice(0, 10);
 }
 
 /**

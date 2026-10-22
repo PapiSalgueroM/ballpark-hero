@@ -1,0 +1,396 @@
+name: Poll noon1450 green
+
+on:
+  push:
+    branches: [codex/poll-noon-1450]
+    paths-ignore: ['docs/**']
+permissions:
+  contents: read
+concurrency:
+  group: poll-noon1450-green-${{ github.sha }}
+  cancel-in-progress: false
+env:
+  BASE_SOURCE: 89765449d170955aff841c93398179ecf0a4e135
+  CI: '1'
+  SIM_NETWORK: offline
+  TZ: UTC
+
+jobs:
+  focused:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/codex/poll-noon-1450'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      OUT: poll-noon1450-focused-artifacts
+      REQUIRED_TRANSPORTS: normal old restored regression sims
+      REQUIRED_INPUT_INVENTORIES: original-input.sha256
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Bind tracked source and exact Green inputs
+        run: |
+          set -euo pipefail
+          mkdir -p "$OUT"
+          test "$GITHUB_REF" = refs/heads/codex/poll-noon-1450
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          printf '{"source":"%s","run":"%s","attempt":"%s","base":"%s","phase":"green"}\n' "$GITHUB_SHA" "$GITHUB_RUN_ID" "$GITHUB_RUN_ATTEMPT" "$BASE_SOURCE" > "$OUT/bindings.json"
+          git ls-files -z -- . | LC_ALL=C sort -z | xargs -0 -r sha256sum > "$OUT/source-before.sha256"
+          test -s "$OUT/source-before.sha256"
+          cat > "$OUT/inputs.expected.sha256" <<'PINS'
+          90cc431b127059c58d3a64c98508e97ed96620dee44c4bd8b6e5a4abd0d30966  src/lib/dateUtils.ts
+          d34e2f72eef41d241c89a7fc11330b2f2d18b3c79bb73f9bf263b63de8826064  src/test/pollDayEt.test.ts
+          6a68dd2f214dab4a3013eb41bad38eea65d703d61440002710ec246495e1c58a  vitest.config.ts
+          acfe14626dea53cf5f9c5e0286b766a22237656b52aac4c888b080873ac90e31  package.json
+          c7e3867eabf0bfa03a8aa6a5e601b0050b937ed210d48c6bbd241019e3c9ea76  package-lock.json
+          e60ff1534307e449ccef598e3b7470dcba58681b82cea4005cec7319f14f9221  scripts/lib/offlineTransport.cjs
+          PINS
+          sha256sum --check "$OUT/inputs.expected.sha256" > "$OUT/inputs-before.log" 2>&1
+          git fetch --no-tags --depth=1 origin "$BASE_SOURCE" > "$OUT/base-fetch.log" 2>&1
+          git show "${BASE_SOURCE}:src/lib/dateUtils.ts" > "$OUT/original-dateUtils.ts"
+          printf '%s  %s\n' b580faa88089a5d6a15aef0a1fc08f0f1444b38c273d458e3c74a43a7f72781e "$OUT/original-dateUtils.ts" > "$OUT/original-input.sha256"
+          sha256sum --check "$OUT/original-input.sha256" > "$OUT/original-input-before.log" 2>&1
+      - name: Install locked existing dependencies
+        timeout-minutes: 6
+        run: npm ci --no-audit --no-fund > "$OUT/install.log" 2>&1
+      - name: Same thirteen real tests, original body control and fresh restoration
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          unset US_BOARD_CONTROL_ALIAS US_BOARD_CONTROL_FILE NO_DOUBLE_SWAP
+          for mode in normal old restored;do
+            export SIM_OFFLINE_RECEIPT="$PWD/$OUT/$mode.transport";: > "$SIM_OFFLINE_RECEIPT"
+            status=0
+            if test "$mode" = old;then
+              US_BOARD_CONTROL_ALIAS='@/lib/dateUtils' US_BOARD_CONTROL_FILE="$PWD/$OUT/original-dateUtils.ts" timeout --signal=TERM --kill-after=15s 3m node_modules/.bin/vitest run src/test/pollDayEt.test.ts --maxWorkers=1 --reporter=json --outputFile="$OUT/$mode.json" > "$OUT/$mode.stdout.log" 2> "$OUT/$mode.stderr.log" || status=$?
+            else
+              timeout --signal=TERM --kill-after=15s 3m node_modules/.bin/vitest run src/test/pollDayEt.test.ts --maxWorkers=1 --reporter=json --outputFile="$OUT/$mode.json" > "$OUT/$mode.stdout.log" 2> "$OUT/$mode.stderr.log" || status=$?
+            fi
+            printf '%s\n' "$status" > "$OUT/$mode.exit"
+          done
+          cat > "$OUT/classify.cjs" <<'JS'
+          'use strict';
+          const fs=require('node:fs'),assert=require('node:assert/strict'),{createHash}=require('node:crypto');
+          const out=process.env.OUT,sha=v=>createHash('sha256').update(v).digest('hex');
+          const cases=['2026-03-08T15:59:00Z','2026-03-08T16:00:00Z','2026-03-08T16:59:00Z','2026-03-08T17:00:00Z','2026-11-01T15:59:00Z','2026-11-01T16:00:00Z','2026-11-01T16:59:00Z','2026-11-01T17:00:00Z','2026-07-15T15:59:00Z','2026-07-15T16:00:00Z','2027-01-01T16:59:00Z','2027-01-01T17:00:00Z','2024-03-01T16:59:00Z'];
+          const failures=new Set(['2026-03-08T16:00:00Z','2026-03-08T16:59:00Z','2026-11-01T16:00:00Z','2026-11-01T16:59:00Z']),prefix='poll noon Eastern calendar date selects the poll date at ';
+          function classify(mode,r,exit,output){
+            assert(!/Failed to load|Cannot find module|SyntaxError|Failed to resolve import|Unhandled (?:Error|Rejection|Exception)|unhandled error/i.test(output),'POLL1450_SETUP_OR_UNHANDLED');
+            assert.equal(exit,mode==='old'?1:0,'POLL1450_REAL_CHILD_EXIT');
+            assert.equal(r.success,mode!=='old','POLL1450_REPORT_SUCCESS');
+            assert(Array.isArray(r.testResults)&&r.testResults.length===1,'POLL1450_ONE_REAL_TEST_FILE');
+            const suite=r.testResults[0];assert(suite.name.replaceAll('\\','/').endsWith('/src/test/pollDayEt.test.ts'),'POLL1450_TEST_PATH');assert(!suite.testExecError,'POLL1450_TEST_EXEC_ERROR');
+            const rows=suite.assertionResults;assert(Array.isArray(rows)&&rows.length===13,'POLL1450_THIRTEEN_DISCOVERED');assert.deepEqual(rows.map(row=>row.fullName).sort(),cases.map(utc=>prefix+utc).sort(),'POLL1450_EXACT_NAMES');
+            for(const key of ['numPendingTests','numTodoTests','numRuntimeErrorTestSuites'])if(Object.hasOwn(r,key))assert.equal(r[key],0,'POLL1450_NONASSERTION_COUNT');
+            if(Object.hasOwn(r,'unhandledErrors'))assert.deepEqual(r.unhandledErrors,[],'POLL1450_UNHANDLED_RECORD');
+            for(const row of rows){const utc=row.fullName.slice(prefix.length),bad=mode==='old'&&failures.has(utc);assert.equal(row.status,bad?'failed':'passed','POLL1450_OWN_STATUS');const messages=row.failureMessages||[];if(bad){assert(messages.length>0&&messages.every(message=>typeof message==='string'&&message.includes('AssertionError: POLL_NOON_ET '+utc)),'POLL1450_OWN_ASSERTION_MESSAGE');}else assert.deepEqual(messages,[],'POLL1450_HEALTHY_MESSAGES');}
+            assert.equal(r.numTotalTests,13);assert.equal(r.numPassedTests,mode==='old'?9:13);assert.equal(r.numFailedTests,mode==='old'?4:0);
+            return {mode,exit,assertions:rows.map(row=>({fullName:row.fullName,status:row.status,failureMessages:row.failureMessages||[]})),runtimeCounters:Object.fromEntries(['numPendingTests','numTodoTests','numRuntimeErrorTestSuites','unhandledErrors'].filter(key=>Object.hasOwn(r,key)).map(key=>[key,r[key]]))};
+          }
+          const results=[],raw={};for(const mode of ['normal','old','restored']){const bytes=fs.readFileSync(out+'/'+mode+'.json');raw[mode]=JSON.parse(bytes);results.push({...classify(mode,raw[mode],Number(fs.readFileSync(out+'/'+mode+'.exit','utf8')),fs.readFileSync(out+'/'+mode+'.stdout.log','utf8')+fs.readFileSync(out+'/'+mode+'.stderr.log','utf8')),rawSha256:sha(bytes)});}
+          const controls=[];function refuses(id,mode,before,after,expected){assert.notEqual(sha(JSON.stringify(before)),sha(JSON.stringify(after)));let error=null;try{classify(mode,after,mode==='old'?1:0,'');}catch(e){error={name:e.name,message:e.message};}assert.equal(error?.name,'AssertionError');assert(error.message.startsWith(expected));controls.push({id,beforeSha256:sha(JSON.stringify(before)),afterSha256:sha(JSON.stringify(after)),actualError:error});}
+          const importFault=structuredClone(raw.old);importFault.testResults[0].assertionResults.find(row=>row.status==='failed').failureMessages=['Error: Cannot find module'];refuses('import-error-cannot-earn-old-RED','old',raw.old,importFault,'POLL1450_OWN_ASSERTION_MESSAGE');
+          const missing=structuredClone(raw.normal);missing.testResults[0].assertionResults.pop();refuses('missing-actual-case','normal',raw.normal,missing,'POLL1450_THIRTEEN_DISCOVERED');
+          fs.writeFileSync(out+'/focused-classification.json',JSON.stringify({complete:true,source:process.env.GITHUB_SHA,status:'NORMAL13_OLD4OWNED9HEALTHY_RESTORED13',results,controls,scope:'Helper arithmetic only. Omitted optional runtime fields stay omitted; raw JSON and complete stdout/stderr remain evidence.'},null,2)+'\n');
+          JS
+          node "$OUT/classify.cjs" > "$OUT/classification.log" 2>&1
+      - name: Existing poll rendering and fallback tests, unchanged pure daily harness
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          unset US_BOARD_CONTROL_ALIAS US_BOARD_CONTROL_FILE NO_DOUBLE_SWAP POLL_COMPONENT POLL_FIXTURES
+          export SIM_OFFLINE_RECEIPT="$PWD/$OUT/regression.transport";: > "$SIM_OFFLINE_RECEIPT"
+          status=0;timeout --signal=TERM --kill-after=15s 4m node_modules/.bin/vitest run src/components/home/PollOfTheDay.test.tsx src/data/pollFixtures.test.ts --maxWorkers=1 --reporter=json --outputFile="$OUT/regression.json" > "$OUT/regression.stdout.log" 2> "$OUT/regression.stderr.log" || status=$?
+          printf '%s\n' "$status" > "$OUT/regression.exit";test "$status" -eq 0
+          node <<'JS'
+          const fs=require('node:fs'),assert=require('node:assert/strict'),out=process.env.OUT,r=JSON.parse(fs.readFileSync(out+'/regression.json'));assert.equal(r.success,true);assert.equal(r.numTotalTests,8);assert.equal(r.numPassedTests,8);assert.equal(r.numFailedTests,0);assert.equal(r.testResults.length,2);assert.deepEqual(r.testResults.map(row=>row.name.replaceAll('\\','/').split('/src/')[1]).sort(),['components/home/PollOfTheDay.test.tsx','data/pollFixtures.test.ts']);assert(r.testResults.every(row=>row.assertionResults.length===4&&row.assertionResults.every(test=>test.status==='passed')));assert(!/Unhandled (?:Error|Rejection|Exception)|Cannot find module|Failed to load/i.test(fs.readFileSync(out+'/regression.stdout.log','utf8')+fs.readFileSync(out+'/regression.stderr.log','utf8')));
+          JS
+          export SIM_OFFLINE_RECEIPT="$PWD/$OUT/sims.transport";: > "$SIM_OFFLINE_RECEIPT"
+          status=0;ONLY=simDaily timeout --signal=TERM --kill-after=15s 12m node scripts/runAllSims.mjs > "$OUT/date-sims.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$OUT/date-sims.exit";test "$status" -eq 0
+          grep -F -x 'All 1 harnesses green.' "$OUT/date-sims.log"
+          printf '{"source":"%s","harness":"simDateDraws","status":"NOT_RUN","verified":false,"reason":"Existing harness requires live transfer-grade and quiz-board data. Strict offline guard rejected that work in failed run39859333398. No live or substitute data is used."}\n' "$GITHUB_SHA" > "$OUT/date-sims-unverified.json"
+      - name: Always preserve generated outputs and complete source evidence
+        if: always()
+        run: |
+          set -uo pipefail
+          mkdir -p "$OUT"
+          failed=0
+          scope=(index.html public scripts/data src/data/searchKeywords.json)
+          status=0;git diff --binary HEAD -- "${scope[@]}" > "$OUT/generated.patch" 2> "$OUT/generated-capture.log" || status=$?
+          test "$status" -eq 0 || failed=1
+          status=0;git ls-files --others --exclude-standard -- "${scope[@]}" > "$OUT/generated-new-files.txt" 2>> "$OUT/generated-capture.log" || status=$?
+          test "$status" -eq 0 || failed=1
+          while IFS= read -r file;do
+            if test -f "$file" && test ! -L "$file";then
+              status=0;git diff --binary --no-index /dev/null "$file" >> "$OUT/generated.patch" 2>> "$OUT/generated-capture.log" || status=$?
+              test "$status" -eq 1 || failed=1
+            else failed=1;fi
+          done < "$OUT/generated-new-files.txt"
+          { git diff --name-only HEAD -- "${scope[@]}";cat "$OUT/generated-new-files.txt"; } | LC_ALL=C sort -u > "$OUT/generated-files.txt" || failed=1
+          if test -d dist;then
+            find dist -type f -print0 | LC_ALL=C sort -z | xargs -0 -r sha256sum > "$OUT/dist-after.sha256" || failed=1
+            if test -f "$OUT/dist-before.sha256";then
+              status=0;cmp "$OUT/dist-before.sha256" "$OUT/dist-after.sha256" > "$OUT/dist-hold.log" 2>&1 || status=$?
+              printf '%s\n' "$status" > "$OUT/dist-hold.exit";test "$status" -eq 0 || failed=1
+            fi
+          fi
+          status=0;{ git ls-files -z -- . | LC_ALL=C sort -z | xargs -0 -r sha256sum > "$OUT/source-after.sha256"; } 2> "$OUT/source-after.log" || status=$?
+          printf '%s\n' "$status" > "$OUT/source-after.exit";test "$status" -eq 0 || failed=1
+          status=0
+          if test -s "$OUT/source-before.sha256";then sha256sum --check "$OUT/source-before.sha256" > "$OUT/source-hold.log" 2>&1 || status=$?;else status=1;fi
+          printf '%s\n' "$status" > "$OUT/source-hold.exit";test "$status" -eq 0 || failed=1
+          status=0;cmp "$OUT/source-before.sha256" "$OUT/source-after.sha256" > "$OUT/source-inventory-hold.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$OUT/source-inventory-hold.exit";test "$status" -eq 0 || failed=1
+          status=0;sha256sum --check "$OUT/inputs.expected.sha256" > "$OUT/inputs-end.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$OUT/inputs-end.exit";test "$status" -eq 0 || failed=1
+          for inventory in $REQUIRED_INPUT_INVENTORIES;do
+            status=0;{ test -s "$OUT/$inventory" && sha256sum --check "$OUT/$inventory"; } > "$OUT/$inventory.end.log" 2>&1 || status=$?
+            printf '%s\n' "$status" > "$OUT/$inventory.end.exit";test "$status" -eq 0 || failed=1
+          done
+          : > "$OUT/transports.tsv"
+          for method in $REQUIRED_TRANSPORTS;do
+            status=0;{ test -f "$OUT/$method.transport" && test ! -s "$OUT/$method.transport"; } || status=$?
+            printf '%s\t%s\n' "$method" "$status" >> "$OUT/transports.tsv";test "$status" -eq 0 || failed=1
+          done
+          printf '%s\n' "$failed" > "$OUT/final-holds.exit"
+          (cd "$OUT" && find . -type f ! -path './evidence.sha256' -print0 | LC_ALL=C sort -z | xargs -0 -r sha256sum) > "$OUT/evidence.sha256" || exit $?
+          exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ${{ env.OUT }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ env.OUT }}
+          if-no-files-found: error
+          include-hidden-files: true
+  saved_pages:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/codex/poll-noon-1450'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      OUT: poll-noon1450-build-artifacts
+      REQUIRED_TRANSPORTS: types build weights simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simSiteSearch simGuideHeadings simLegalPages
+      REQUIRED_INPUT_INVENTORIES: font-inputs.sha256
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Bind tracked source and unchanged release inputs
+        run: |
+          set -euo pipefail
+          mkdir -p "$OUT"
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          printf '{"source":"%s","run":"%s","attempt":"%s","base":"%s","phase":"green"}\n' "$GITHUB_SHA" "$GITHUB_RUN_ID" "$GITHUB_RUN_ATTEMPT" "$BASE_SOURCE" > "$OUT/bindings.json"
+          git ls-files -z -- . | LC_ALL=C sort -z | xargs -0 -r sha256sum > "$OUT/source-before.sha256";test -s "$OUT/source-before.sha256"
+          cat > "$OUT/inputs.expected.sha256" <<'PINS'
+          90cc431b127059c58d3a64c98508e97ed96620dee44c4bd8b6e5a4abd0d30966  src/lib/dateUtils.ts
+          d34e2f72eef41d241c89a7fc11330b2f2d18b3c79bb73f9bf263b63de8826064  src/test/pollDayEt.test.ts
+          6a68dd2f214dab4a3013eb41bad38eea65d703d61440002710ec246495e1c58a  vitest.config.ts
+          acfe14626dea53cf5f9c5e0286b766a22237656b52aac4c888b080873ac90e31  package.json
+          c7e3867eabf0bfa03a8aa6a5e601b0050b937ed210d48c6bbd241019e3c9ea76  package-lock.json
+          e60ff1534307e449ccef598e3b7470dcba58681b82cea4005cec7319f14f9221  scripts/lib/offlineTransport.cjs
+          32263bb4028630b80358d8c8ad1da9e49660a0ecf020e08f95001d93fba462da  scripts/sweepWeight.mjs
+          PINS
+          sha256sum --check "$OUT/inputs.expected.sha256" > "$OUT/inputs-before.log" 2>&1
+          npm ci --no-audit --no-fund > "$OUT/install.log" 2>&1
+      - name: Isolated Playwright1.64 and verified font cache
+        run: |
+          set -euo pipefail
+          browser_tools="$RUNNER_TEMP/poll-noon1450-browser"
+          npm install --prefix "$browser_tools" --no-save --package-lock=false playwright@1.64.0 > poll-noon1450-build-artifacts/browser-install.log 2>&1
+          test ! -e node_modules/playwright; test ! -e node_modules/playwright-core
+          ln -s "$browser_tools/node_modules/playwright" node_modules/playwright
+          ln -s "$browser_tools/node_modules/playwright-core" node_modules/playwright-core
+          node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium > poll-noon1450-build-artifacts/chromium-install.log 2>&1
+          python -m pip install fonttools pillow > poll-noon1450-build-artifacts/python-install.log 2>&1
+          export FREE_KICK_FONT_CACHE="$PWD/poll-noon1450-build-artifacts/font-cache"
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > poll-noon1450-build-artifacts/fonts.log 2>&1
+          echo "FREE_KICK_FONT_CACHE=$FREE_KICK_FONT_CACHE" >> "$GITHUB_ENV"
+          cat > poll-noon1450-build-artifacts/cached-fonts.cjs <<'JS'
+          'use strict';
+          const fs = require('node:fs');
+          const path = require('node:path');
+          const assert = require('node:assert/strict');
+          const { createHash } = require('node:crypto');
+          const hash = value => createHash('sha256').update(value).digest('hex');
+          if (path.basename(process.argv[1] || '') === 'prerender.mjs') {
+            const cache = process.env.FREE_KICK_FONT_CACHE;
+            const manifestBytes = fs.readFileSync(path.join(cache, 'manifest.json'));
+            assert.match(process.env.FONT_CACHE_MANIFEST_SHA256 || '', /^[a-f0-9]{64}$/);
+            assert.equal(hash(manifestBytes), process.env.FONT_CACHE_MANIFEST_SHA256, 'Prepared font manifest stays exact');
+            const sheet = [...fs.readFileSync('index.html', 'utf8').matchAll(/<link\s+href="(https:\/\/fonts\.googleapis\.com\/[^\"]+)"\s+rel="stylesheet"/g)].map(m => new URL(m[1]).href);
+            assert.equal(sheet.length, 1, 'Use the actual single template stylesheet');
+            const entries = JSON.parse(manifestBytes);
+            assert(Array.isArray(entries) && entries.length > 1);
+            const fonts = new Map();
+            for (const entry of entries) {
+              assert(!fonts.has(entry.url), 'No duplicate font cache URL');
+              const url = new URL(entry.url);
+              assert(['https://fonts.googleapis.com', 'https://fonts.gstatic.com'].includes(url.origin));
+              assert.equal(url.href, entry.url);
+              assert.equal(entry.file, hash(entry.url));
+              assert.match(entry.sha256, /^[a-f0-9]{64}$/);
+              assert.equal(typeof entry.contentType, 'string');
+              const body = fs.readFileSync(path.join(cache, entry.file));
+              assert.equal(hash(body), entry.sha256, 'Prepared font body stays exact');
+              fonts.set(entry.url, { ...entry, body });
+            }
+            assert(fonts.has(sheet[0]), 'Current template stylesheet is cached');
+            const css = fonts.get(sheet[0]);
+            assert.match(css.contentType, /^text\/css(?:;|$)/);
+            const declared = [...new Set([...css.body.toString('utf8').matchAll(/url\(\s*['"]?(https:\/\/[^)'"\s]+)/g)].map(m => m[1]))];
+            assert(declared.length > 0);
+            assert.deepEqual([...fonts.keys()].sort(), [sheet[0], ...declared].sort(), 'Only actual stylesheet dependencies are fulfilled');
+            for (const url of declared) assert.equal(new URL(url).origin, 'https://fonts.gstatic.com');
+            const pw = require('playwright-core');
+            let contextId = 0;
+            const originalLaunch = pw.chromium.launch.bind(pw.chromium);
+            pw.chromium.launch = async options => {
+              const browser = await originalLaunch(options);
+              const originalContext = browser.newContext.bind(browser);
+              browser.newContext = async options => {
+                const context = await originalContext(options);
+                const id = ++contextId;
+                await context.route(/^https:\/\/(?:fonts\.googleapis\.com|fonts\.gstatic\.com)\//, async route => {
+                  const request = route.request(), entry = fonts.get(request.url());
+                  if (request.method() !== 'GET' || !entry || !['stylesheet', 'font'].includes(request.resourceType())) return route.fallback();
+                  await route.fulfill({ status: 200, contentType: entry.contentType, body: entry.body });
+                  fs.appendFileSync(process.env.FONT_CACHE_USE_RECEIPT, JSON.stringify({ contextId: id, url: entry.url, sha256: entry.sha256, manifestSha256: hash(manifestBytes), resourceType: request.resourceType() }) + '\n');
+                });
+                return context;
+              };
+              return browser;
+            };
+          }
+          JS
+          sha256sum poll-noon1450-build-artifacts/cached-fonts.cjs > poll-noon1450-build-artifacts/font-inputs.sha256
+          find "$FREE_KICK_FONT_CACHE" -type f -print0 | sort -z | xargs -0 sha256sum >> poll-noon1450-build-artifacts/font-inputs.sha256
+          font_manifest_sha=$(sha256sum "$FREE_KICK_FONT_CACHE/manifest.json" | cut -d ' ' -f 1)
+          echo "FONT_CACHE_MANIFEST_SHA256=$font_manifest_sha" >> "$GITHUB_ENV"
+          node <<'NODE'
+          const fs=require('node:fs'),assert=require('node:assert/strict'),{createHash}=require('node:crypto');const sha=value=>createHash('sha256').update(value).digest('hex');
+          const original=fs.readFileSync('poll-noon1450-build-artifacts/cached-fonts.cjs','utf8');assert.equal(sha(original),'ac09f64a5d9592ec980864bf422c7f580880d9bd981adaef8c9c0e674d298fd3');assert.equal(sha(fs.readFileSync('scripts/sweepWeight.mjs')),'32263bb4028630b80358d8c8ad1da9e49660a0ecf020e08f95001d93fba462da');
+          const gate="if (path.basename(process.argv[1] || '') === 'prerender.mjs') {",newGate="if (path.basename(process.argv[1] || '') === 'sweepWeight.mjs') {",anchor='      const id = ++contextId;';assert.equal(original.split(gate).length,2);assert.equal(original.split(anchor).length,2);
+          const insert=anchor+'\n'+[
+            '      fs.appendFileSync(process.env.SWEEP_CONTEXT_RECEIPT, JSON.stringify({ contextId: id }) + "\\n");',
+            '      await context.route(url => url.origin === "https://flagcdn.com", async route => {',
+            '        const request = route.request(), url = new URL(request.url());',
+            '        const validPath = /^\\/(?:w[1-9][0-9]{0,2}\\/|h[1-9][0-9]{0,2}\\/|[1-9][0-9]{0,2}x[1-9][0-9]{0,2}\\/)?[a-z]{2}(?:-[a-z0-9]{1,8})?\\.(?:png|webp|svg)$/.test(url.pathname);',
+            '        if (url.origin !== "https://flagcdn.com" || url.username || url.password || url.search || url.hash || !validPath || request.method() !== "GET" || request.resourceType() !== "image") return route.fallback();',
+            '        await route.abort("blockedbyclient");',
+            '        fs.appendFileSync(process.env.SWEEP_FLAG_RECEIPT, JSON.stringify({ contextId: id, method: request.method(), resourceType: request.resourceType(), url: url.href, origin: url.origin, path: url.pathname, action: "LOCAL_ABORT" }) + "\\n");',
+            '      });',
+          ].join('\n');
+          const copy=original.replace(gate,newGate).replace(anchor,insert);assert.notEqual(copy,original);assert.equal(copy.replace(insert,anchor).replace(newGate,gate),original);fs.writeFileSync('poll-noon1450-build-artifacts/weights-cached-fonts.cjs',copy);fs.writeFileSync('poll-noon1450-build-artifacts/weights-preload-binding.json',JSON.stringify({complete:true,originalSha256:sha(original),copySha256:sha(copy),gateOccurrences:1,contextAnchorOccurrences:1,wholeInverseExact:true,sweepWeightSha256:'32263bb4028630b80358d8c8ad1da9e49660a0ecf020e08f95001d93fba462da',scope:'Cached known font bodies; local GET image denial for validated flagcdn paths. No outbound flag fetch.'},null,2)+'\n');
+          NODE
+          sha256sum poll-noon1450-build-artifacts/weights-cached-fonts.cjs >> poll-noon1450-build-artifacts/font-inputs.sha256
+      - name: Real types and plain production build
+        id: build
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$PWD/$OUT/types.transport";: > "$SIM_OFFLINE_RECEIPT"
+          status=0;timeout --signal=TERM --kill-after=15s 5m node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$OUT/types.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$OUT/types.exit";test "$status" -eq 0
+          export SIM_OFFLINE_RECEIPT="$PWD/$OUT/build.transport";: > "$SIM_OFFLINE_RECEIPT"
+          status=0;timeout --signal=TERM --kill-after=15s 8m npm run build > "$OUT/plain-build.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$OUT/build.exit";test "$status" -eq 0
+          find dist -type f -print0 | LC_ALL=C sort -z | xargs -0 -r sha256sum > "$OUT/dist-before.sha256";test -s "$OUT/dist-before.sha256"
+          tar -czf "$OUT/dist.tar.gz" -C dist .
+      - name: All18 saved-page readers and14 unchanged page caps sequentially
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$PWD/poll-noon1450-build-artifacts"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$out/readers-server.log" 2>&1 &
+          server=$!;trap 'kill "$server" 2>/dev/null || true' EXIT
+          ready=0;for attempt in 1 2 3 4 5;do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null;then ready=1;break;fi;sleep 1;done;test "$ready" -eq 1
+          failed=0
+          for method in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simSiteSearch simGuideHeadings simLegalPages;do
+            : > "$out/$method.transport"
+            status=0;SIM_OFFLINE_RECEIPT="$out/$method.transport" BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node "scripts/$method.mjs" > "$out/$method.log" 2>&1 || status=$?
+            printf '%s\t%s\n' "$method" "$status" >> "$out/readers.tsv";test "$status" -eq 0 || failed=1
+          done
+          : > "$out/weights.transport"; : > "$out/weights-contexts.jsonl"; : > "$out/weights-font-cache-use.jsonl"; : > "$out/weights-flags-aborted.jsonl"
+          status=0;NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs --require=$out/weights-cached-fonts.cjs" SIM_OFFLINE_RECEIPT="$out/weights.transport" FONT_CACHE_USE_RECEIPT="$out/weights-font-cache-use.jsonl" SWEEP_CONTEXT_RECEIPT="$out/weights-contexts.jsonl" SWEEP_FLAG_RECEIPT="$out/weights-flags-aborted.jsonl" SWEEP_OFFLINE=1 BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 timeout --signal=TERM --kill-after=15s 8m node scripts/sweepWeight.mjs > "$out/weights.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/weights.exit";test "$status" -eq 0 || failed=1
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const rows=fs.readFileSync('poll-noon1450-build-artifacts/readers.tsv','utf8').trim().split('\n').map(line=>line.split('\t'));assert.equal(rows.length,18);assert.equal(new Set(rows.map(row=>row[0])).size,18);assert(rows.every(row=>row[1]==='0'));
+          const weights=fs.readFileSync('poll-noon1450-build-artifacts/weights.log','utf8');assert.equal((weights.match(/gz over[^\n]+budget/g)||[]).length,14);assert.match(weights,/sweepWeight: green/);
+          const load=file=>fs.readFileSync('poll-noon1450-build-artifacts/'+file,'utf8').trim().split('\n').filter(Boolean).map(line=>JSON.parse(line));const contexts=load('weights-contexts.jsonl'),fonts=load('weights-font-cache-use.jsonl'),flags=load('weights-flags-aborted.jsonl');const ids=Array.from({length:14},(_,i)=>i+1);
+          function checkContexts(value){assert.equal(value.length,14,'WEIGHTS_CONTEXT_COUNT');assert.deepEqual(value.map(row=>row.contextId),ids,'WEIGHTS_CONTEXT_IDS');}checkContexts(contexts);assert.throws(()=>checkContexts(contexts.slice(1)),error=>error.name==='AssertionError'&&error.message.startsWith('WEIGHTS_CONTEXT_COUNT'));
+          const cache=new Map(JSON.parse(fs.readFileSync(process.env.FREE_KICK_FONT_CACHE+'/manifest.json','utf8')).map(row=>[row.url,row]));
+          function checkFonts(value){assert.deepEqual([...new Set(value.map(row=>row.contextId))].sort((a,b)=>a-b),ids);assert.equal(value.filter(row=>row.resourceType==='stylesheet').length,14);for(const id of ids){assert.equal(value.filter(row=>row.contextId===id&&row.resourceType==='stylesheet').length,1);assert(value.some(row=>row.contextId===id&&row.resourceType==='font'));}for(const row of value){assert(cache.has(row.url));assert.equal(row.sha256,cache.get(row.url).sha256,'WEIGHTS_FONT_HASH');assert.equal(row.manifestSha256,process.env.FONT_CACHE_MANIFEST_SHA256);}}checkFonts(fonts);const badFonts=fonts.map(row=>({...row}));badFonts[0].sha256=(badFonts[0].sha256[0]==='0'?'1':'0')+badFonts[0].sha256.slice(1);assert.notEqual(badFonts[0].sha256,fonts[0].sha256);assert.throws(()=>checkFonts(badFonts),error=>error.name==='AssertionError'&&error.message.startsWith('WEIGHTS_FONT_HASH'));
+          function checkFlags(value){assert.equal(value.length,4,'WEIGHTS_FLAG_COUNT');for(const row of value){const url=new URL(row.url);assert(ids.includes(row.contextId)&&row.method==='GET'&&row.resourceType==='image'&&row.action==='LOCAL_ABORT'&&url.origin==='https://flagcdn.com'&&!url.username&&!url.password&&!url.search&&!url.hash&&row.origin===url.origin&&row.path===url.pathname&&/^\/(?:w[1-9][0-9]{0,2}\/|h[1-9][0-9]{0,2}\/|[1-9][0-9]{0,2}x[1-9][0-9]{0,2}\/)?[a-z]{2}(?:-[a-z0-9]{1,8})?\.(?:png|webp|svg)$/.test(url.pathname),'WEIGHTS_FLAG_DENIAL_SCOPE');}}checkFlags(flags);const badFlags=flags.map(row=>({...row}));badFlags[0].method='POST';assert.notEqual(badFlags[0].method,flags[0].method);assert.throws(()=>checkFlags(badFlags),error=>error.name==='AssertionError'&&error.message.startsWith('WEIGHTS_FLAG_DENIAL_SCOPE'));
+          fs.writeFileSync('poll-noon1450-build-artifacts/weights-fixture-summary.json',JSON.stringify({complete:true,sourceSha:process.env.GITHUB_SHA,contexts:14,stylesheetFulfillments:14,fontFulfillments:fonts.filter(row=>row.resourceType==='font').length,localFlagDenials:4,controls:['missing-context','changed-font-hash','flag-method'],offlinePreloadFirst:true,prerenderReceiptUnchanged:true},null,2)+'\n');assert.equal(fs.statSync('poll-noon1450-build-artifacts/weights.transport').size,0,'Weights transport remains strictly empty');
+          NODE
+          exit "$failed"
+      - name: Always preserve generated outputs and complete source evidence
+        if: always()
+        run: |
+          set -uo pipefail
+          mkdir -p "$OUT"
+          failed=0
+          scope=(index.html public scripts/data src/data/searchKeywords.json)
+          status=0;git diff --binary HEAD -- "${scope[@]}" > "$OUT/generated.patch" 2> "$OUT/generated-capture.log" || status=$?
+          test "$status" -eq 0 || failed=1
+          status=0;git ls-files --others --exclude-standard -- "${scope[@]}" > "$OUT/generated-new-files.txt" 2>> "$OUT/generated-capture.log" || status=$?
+          test "$status" -eq 0 || failed=1
+          while IFS= read -r file;do
+            if test -f "$file" && test ! -L "$file";then
+              status=0;git diff --binary --no-index /dev/null "$file" >> "$OUT/generated.patch" 2>> "$OUT/generated-capture.log" || status=$?
+              test "$status" -eq 1 || failed=1
+            else failed=1;fi
+          done < "$OUT/generated-new-files.txt"
+          { git diff --name-only HEAD -- "${scope[@]}";cat "$OUT/generated-new-files.txt"; } | LC_ALL=C sort -u > "$OUT/generated-files.txt" || failed=1
+          if test -d dist;then
+            find dist -type f -print0 | LC_ALL=C sort -z | xargs -0 -r sha256sum > "$OUT/dist-after.sha256" || failed=1
+            if test -f "$OUT/dist-before.sha256";then
+              status=0;cmp "$OUT/dist-before.sha256" "$OUT/dist-after.sha256" > "$OUT/dist-hold.log" 2>&1 || status=$?
+              printf '%s\n' "$status" > "$OUT/dist-hold.exit";test "$status" -eq 0 || failed=1
+            fi
+          fi
+          status=0;{ git ls-files -z -- . | LC_ALL=C sort -z | xargs -0 -r sha256sum > "$OUT/source-after.sha256"; } 2> "$OUT/source-after.log" || status=$?
+          printf '%s\n' "$status" > "$OUT/source-after.exit";test "$status" -eq 0 || failed=1
+          status=0
+          if test -s "$OUT/source-before.sha256";then sha256sum --check "$OUT/source-before.sha256" > "$OUT/source-hold.log" 2>&1 || status=$?;else status=1;fi
+          printf '%s\n' "$status" > "$OUT/source-hold.exit";test "$status" -eq 0 || failed=1
+          status=0;cmp "$OUT/source-before.sha256" "$OUT/source-after.sha256" > "$OUT/source-inventory-hold.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$OUT/source-inventory-hold.exit";test "$status" -eq 0 || failed=1
+          status=0;sha256sum --check "$OUT/inputs.expected.sha256" > "$OUT/inputs-end.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$OUT/inputs-end.exit";test "$status" -eq 0 || failed=1
+          for inventory in $REQUIRED_INPUT_INVENTORIES;do
+            status=0;{ test -s "$OUT/$inventory" && sha256sum --check "$OUT/$inventory"; } > "$OUT/$inventory.end.log" 2>&1 || status=$?
+            printf '%s\n' "$status" > "$OUT/$inventory.end.exit";test "$status" -eq 0 || failed=1
+          done
+          : > "$OUT/transports.tsv"
+          for method in $REQUIRED_TRANSPORTS;do
+            status=0;{ test -f "$OUT/$method.transport" && test ! -s "$OUT/$method.transport"; } || status=$?
+            printf '%s\t%s\n' "$method" "$status" >> "$OUT/transports.tsv";test "$status" -eq 0 || failed=1
+          done
+          printf '%s\n' "$failed" > "$OUT/final-holds.exit"
+          (cd "$OUT" && find . -type f ! -path './evidence.sha256' -print0 | LC_ALL=C sort -z | xargs -0 -r sha256sum) > "$OUT/evidence.sha256" || exit $?
+          exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ${{ env.OUT }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ env.OUT }}
+          if-no-files-found: error
+          include-hidden-files: true

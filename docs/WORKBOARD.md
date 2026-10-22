@@ -16592,3 +16592,15 @@ This child adopts only the exact Home template and Home ledger-hash outputs plus
 Actual3d081ad2e465c7d98ecb23ad8fb3bfe0526d1384 passed final39846253883 attempt1, all six CI jobs and seven native components. Complete qualificationc489523352e4b9cae40607a991dd10c93801ea1390acf91cb27858d4ed3dc835 binds5,188 source rows,9,337PASS/58 explicitSKIP/0FAIL across622 files,18 readers,14 unchanged caps and present0B patch/list/new-files with four effective output controls. The same871217 header check passes20/20. HomeFold remains23/22 plus one owned H1 failure/23, with first hero y351 inside430 and its existing no-shift fixtures held.
 
 Final visual coverage is18 changed images actually viewed plus50 exact prior-view PNG transfers, including16 hubs and12 separate text arms. This is a docs-only closure child, with native commit checks still owned by Root. I retains sole publication/live verification and I/J game ownership is unchanged. The separate Fight Career quality feedback is routed for SEO/I game-quality review; no arbitrary nerf or game-fix claim is included. Prior failures, unsupported contrast and provider/legal/rights/preservation limits remain unwaived. No live claim is made.
+
+## Root1450 poll date Original regression handoff, 2026-10-22 UTC
+
+This child adds only thirteen getPollDayET regression cases, their ordinary branch-only CI workflow and these notes. Tests remain unexecuted at authoring; four owned failures and nine healthy cases are the source-based expectation, not an admitted RED or qualification. The existing helper b580faa8, its caller and all game files stay unchanged. Root must inspect actual raw case names/errors, source holds and the empty strict transport receipt before any helper fix. I retains sole publication and game ownership. No live result is claimed.
+
+## Root1450 shared poll helper, Green proof pending, 2026-10-22 UTC
+
+Original source3dcc9c8e/run39857298617 has preliminary expected4error/9healthy output; the complete native Original admission must pass and be pinned before this child is adopted. Preparation adds only the reviewed two-span civil-day helper, Green workflow and these notes. Thirteen tests and all caller/game/config/dependency files remain held. Green has not run. Exact old-body control, restoration and release checks remain owed. No user-facing query/rollover, qualified or live claim. I retains publication/game ownership.
+
+## Root1450 pure daily method, first Green failure retained, 2026-10-22 UTC
+
+Run39859333398/sourcea6d0a919 failed focused only after the raw13normal/old4owned9healthy/13restored/8poll results passed. Existing simDateDraws needs live data, which the strict guard blocked. saved_pages CI succeeded; native release qualification is not claimed. This child changes only WF+3appendnotes to run unchanged simDaily and explicitly mark simDateDraws NOT_RUN/unverified. No guard, helper, test, harness, cap or game changes, live mode, fake data or main integration. Preserve the failed run. Fresh Green/native checks and I publication remain pending.
