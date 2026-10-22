@@ -1,0 +1,1 @@
+sum6-nba-base: R=$(pwd); git worktree add /tmp/b-s6n 1c7205d059cbcb380ebacaef99ba6751e8c641df > /dev/null 2>&1; ln -sfn $R/node_modules /tmp/b-s6n/node_modules; cd /tmp/b-s6n && SIM_SECTIONS=6 SIM_SPORTS=nba node scripts/simUsCareerSummer.mjs
