@@ -1,0 +1,56 @@
+tiles 23760; before 2026 22320; fallback to today's label 15288; of those contradicted by the game's own ledger 964; key shown where the season had another name 497
+distinct contradicted club-years 392; distinct key-not-name club-years 149; distinct clubs on today's label outside the ledgers 150
+CONTRADICTED (first 25):
+  1995: Marseille shown as "Ligue 1 · Tier 2", the game's ledger for Ligue 1 1995 does not hold it
+  1995: Wrexham shown as "Championship · Tier 4", the game's ledger for Championship 1995 does not hold it
+  1995: Bristol City shown as "Championship · Tier 4", the game's ledger for Championship 1995 does not hold it
+  1995: Lincoln City shown as "Championship · Tier 4", the game's ledger for Championship 1995 does not hold it
+  1995: Brentford shown as "Premier League · Tier 4", the game's ledger for Premier League 1995 does not hold it
+  1995: Preston North End shown as "Championship · Tier 4", the game's ledger for Championship 1995 does not hold it
+  1995: Malaga shown as "La Liga · Tier 4", the game's ledger for La Liga 1995 does not hold it
+  1995: Alaves shown as "La Liga · Tier 4", the game's ledger for La Liga 1995 does not hold it
+  1995: Burnley shown as "Championship · Tier 4", the game's ledger for Championship 1995 does not hold it
+  1995: Fulham shown as "Premier League · Tier 3", the game's ledger for Premier League 1995 does not hold it
+  1995: Getafe shown as "La Liga · Tier 4", the game's ledger for La Liga 1995 does not hold it
+  1995: Levante shown as "La Liga · Tier 4", the game's ledger for La Liga 1995 does not hold it
+  1995: Villarreal shown as "La Liga · Tier 3", the game's ledger for La Liga 1995 does not hold it
+  1995: Bologna shown as "Serie A · Tier 4", the game's ledger for Serie A 1995 does not hold it
+  1995: Elche shown as "La Liga · Tier 4", the game's ledger for La Liga 1995 does not hold it
+  1995: Hull City shown as "Premier League · Tier 4", the game's ledger for Premier League 1995 does not hold it
+  1995: Swansea City shown as "Championship · Tier 4", the game's ledger for Championship 1995 does not hold it
+  1995: Brighton shown as "Premier League · Tier 4", the game's ledger for Premier League 1995 does not hold it
+  1995: Cardiff City shown as "Championship · Tier 4", the game's ledger for Championship 1995 does not hold it
+  1996: Frankfurt shown as "Bundesliga · Tier 3", the game's ledger for Bundesliga 1996 does not hold it
+  1996: Wrexham shown as "Championship · Tier 4", the game's ledger for Championship 1996 does not hold it
+  1996: Bristol City shown as "Championship · Tier 4", the game's ledger for Championship 1996 does not hold it
+  1996: Lincoln City shown as "Championship · Tier 4", the game's ledger for Championship 1996 does not hold it
+  1996: Brentford shown as "Premier League · Tier 4", the game's ledger for Premier League 1996 does not hold it
+  1996: Preston North End shown as "Championship · Tier 4", the game's ledger for Championship 1996 does not hold it
+KEY NOT NAME (first 12):
+  1995: West Brom shown as "Championship", the season's name is "First Division"
+  1995: Nice shown as "Ligue 1", the season's name is "Division 1"
+  1995: PSG shown as "Ligue 1", the season's name is "Division 1"
+  1995: Derby County shown as "Championship", the season's name is "First Division"
+  1995: Monaco shown as "Ligue 1", the season's name is "Division 1"
+  1995: Millwall shown as "Championship", the season's name is "First Division"
+  1995: Watford shown as "Championship", the season's name is "First Division"
+  1995: Lyon shown as "Ligue 1", the season's name is "Division 1"
+  1995: Birmingham City shown as "Championship", the season's name is "First Division"
+  1995: Sheffield United shown as "Championship", the season's name is "First Division"
+  1995: Charlton Athletic shown as "Championship", the season's name is "First Division"
+  1995: Wolves shown as "Championship", the season's name is "First Division"
+TODAY LABEL OUTSIDE LEDGERS (first 12):
+  1995: Nacional shown as "Primera Division Uruguay" (today's label; no ledger for that league)
+  1995: Genk shown as "Belgian Pro League" (today's label; no ledger for that league)
+  1995: Rangers shown as "Scottish Premiership" (today's label; no ledger for that league)
+  1995: Vitoria shown as "Brasileirao" (today's label; no ledger for that league)
+  1995: Alianza FC shown as "Primera Division El Salvador" (today's label; no ledger for that league)
+  1995: Dinamo Zagreb shown as "HNL" (today's label; no ledger for that league)
+  1995: FC Copenhagen shown as "Danish Superliga" (today's label; no ledger for that league)
+  1995: Tigres UANL shown as "Liga MX" (today's label; no ledger for that league)
+  1995: Orlando Pirates shown as "PSL" (today's label; no ledger for that league)
+  1995: Slavia Prague shown as "Czech First League" (today's label; no ledger for that league)
+  1995: Malmo FF shown as "Allsvenskan" (today's label; no ledger for that league)
+  1995: Club Brugge shown as "Belgian Pro League" (today's label; no ledger for that league)
+FIRST SEASON of Marseille bought in 1995: saved league "Ligue 1", row league none, lineupUnknown true, header "Final table", line "CHAMPIONS. 80 points, top of the table. 🏆 Promoted to Tier 1! Loss €0.6M."
+probe done

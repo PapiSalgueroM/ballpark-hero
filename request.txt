@@ -1,0 +1,1 @@
+probeSale: node .rc/x/probeSaleLeague.mjs
