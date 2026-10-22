@@ -1,0 +1,11 @@
+Preparing worktree (detached HEAD 7f99c27ee)
+Updating files:  81% (4203/5167)Updating files:  82% (4237/5167)Updating files:  83% (4289/5167)Updating files:  84% (4341/5167)Updating files:  85% (4392/5167)Updating files:  86% (4444/5167)Updating files:  87% (4496/5167)Updating files:  88% (4547/5167)Updating files:  89% (4599/5167)Updating files:  90% (4651/5167)Updating files:  91% (4702/5167)Updating files:  92% (4754/5167)Updating files:  93% (4806/5167)Updating files:  94% (4857/5167)Updating files:  95% (4909/5167)Updating files:  96% (4961/5167)Updating files:  97% (5012/5167)Updating files:  98% (5064/5167)Updating files:  99% (5116/5167)Updating files: 100% (5167/5167)Updating files: 100% (5167/5167), done.
+HEAD is now at 7f99c27ee Board: session J closes Rounds 1534 and 1539 and claims 1538, 1543, 1548 to 1552
+   career 1 (rededicate p=0): 847 exhibits, renown 0, rededications 0, funds 4.26e+16, career 1.20e+18
+   career 2 (rededicate p=0.002): 899 exhibits, renown 80, rededications 3, funds 5.10e+17, career 5.64e+19
+   career 3 (rededicate p=0.02): 899 exhibits, renown 80, rededications 3, funds 1.07e+18, career 5.70e+19
+   career 4 (rededicate p=0.0005): 898 exhibits, renown 80, rededications 3, funds 2.04e+18, career 5.07e+19
+   4320 hourly saves from the base engine: 336 load byte for byte as on base, 3984 base refused and 3984 of them load intact on the branch
+   load welcome identical in 160 checks; watched clock identical in 32; branch saves load on base in 32 (0 too deep for base)
+   17 of 17 hostile saves refused; 7 of 7 meter repairs right; a save at 1.7e308 loads
+probeOld: green

@@ -1,0 +1,14 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simHallLongPlay: node scripts/simHallLongPlay.mjs
+ctl-ceiling: SIM_HALL_CONTROL=ceiling node scripts/simHallLongPlay.mjs
+ctl-fixedstep: SIM_HALL_CONTROL=fixedstep node scripts/simHallLongPlay.mjs
+ctl-fmtstop: SIM_HALL_CONTROL=fmtstop node scripts/simHallLongPlay.mjs
+ctl-hookfixed: SIM_HALL_CONTROL=hookfixed node scripts/simHallLongPlay.mjs
+ctl-hooknocopy: SIM_HALL_CONTROL=hooknocopy node scripts/simHallLongPlay.mjs
+vitest: node_modules/.bin/vitest run src/test/hallOfChampionsLongPlay.test.tsx src/test/saveKeeper.test.ts src/lib/brokenSaveRecovery.test.ts --testTimeout=300000 --hookTimeout=120000
+probeOld: git worktree add /tmp/base 7f99c27ee691df6f31d143847554f7071a421cfa && node .rc/x/r1548run_probeOld.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simAccessibility: node scripts/simAccessibility.mjs
