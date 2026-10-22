@@ -1,0 +1,35 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/tycoonHelp.test.tsx src/test/tycoonTicketPolicy.test.tsx src/test/idleArenaTrophyRoom.test.tsx src/test/idleFloaterTimers.test.tsx --testTimeout=300000 --hookTimeout=120000
+simAccessibility: node scripts/simAccessibility.mjs
+simTycoonHelp: node scripts/simTycoonHelp.mjs
+simHallOfChampions: node scripts/simHallOfChampions.mjs
+simIdleArena: node scripts/simIdleArena.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simSingleFooter: node scripts/simSingleFooter.mjs
+simCompletionSlugs: node scripts/simCompletionSlugs.mjs
+simCompletionOnce: node scripts/simCompletionOnce.mjs
+simNoDoubleRecord: node scripts/simNoDoubleRecord.mjs
+simDailyPuzzleContract: node scripts/simDailyPuzzleContract.mjs
+simDailySaveHardening: node scripts/simDailySaveHardening.mjs
+simWritesAreSent: node scripts/simWritesAreSent.mjs
+simSchemaNames: node scripts/simSchemaNames.mjs
+simFetchRetry: node scripts/simFetchRetry.mjs
+simGoogleOnlyReturn: node scripts/simGoogleOnlyReturn.mjs
+simReportRelay: node scripts/simReportRelay.mjs
+simNavbarStatsReads: node scripts/simNavbarStatsReads.mjs
+simLeaderboardCaps: node scripts/simLeaderboardCaps.mjs
+simScoringCoverage: node scripts/simScoringCoverage.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simTycoonPacks: node scripts/simTycoonPacks.mjs
+simRevealMoments: node scripts/simRevealMoments.mjs
+simVictoryMoment: node scripts/simVictoryMoment.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+vitest2: node_modules/.bin/vitest run src/test/tycoonPacks.test.tsx src/test/tycoonRooms.test.tsx src/test/firstTeam.test.tsx --testTimeout=300000 --hookTimeout=120000

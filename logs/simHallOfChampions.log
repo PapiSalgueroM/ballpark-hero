@@ -1,0 +1,8 @@
+0) hostile saves load as null, never as state
+   12 hostile shapes rejected, the real shape round trips
+1) the catalog against the live tables
+   catalog attempt 1 missed sb, wnba, cfb, nba, cbb, cup, ws, epl, nrl, afl; fetching the live catalog again
+   catalog attempt 2 missed sb, wnba, cfb, nba, cbb, cup, ws, epl, nrl, afl; fetching the live catalog again
+   HALL CATALOG UNREACHABLE OR EMPTY AFTER THREE ATTEMPTS. NOTHING WAS CHECKED.
+  FAIL: the live catalog stayed empty after 3 attempts
+simHallOfChampions: 1 failure

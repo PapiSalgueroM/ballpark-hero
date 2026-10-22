@@ -1,0 +1,34 @@
+1) the curve moves, for a tapper and for a pure idler
+   tapper: a million at 15m 53s, 6.00B earned by 3h 0m, 1.50M/s
+   idler:  a million at 20m 46s, 20.0B earned by 4h 33m, 4.89M/s
+2) ten trophies are worth having
+   ten trophies: a million at 10m 19s against 15m 53s with none
+   77 trophies from 6.00B, reset clean, achievements and all time kept
+3) offline earning is capped and halved
+   eight hours: 21.6B, a week: 21.6B, backwards clock: 0
+4) the save round trips and survives hostility
+   round trip identical, 11 hostile saves handled
+5) the numbers read
+   13 magnitudes, durations
+6) the trophy room: every perk is a trade, and none of them wins everywhere
+   30/3   quick: longNight +7.4% nightShift +7.4% headStart -16.2% scouting +7.4% | long: longNight +6.4% nightShift +6.4% headStart +4.6% scouting -8.5% | night: longNight +3.7% nightShift -15.3% headStart +0.6% scouting -10.1% | day: longNight -32.8% nightShift -15.9% headStart -0.8% scouting -9.8%
+   30/6   quick: longNight +4.7% nightShift +4.7% headStart -10.6% scouting +4.7% | long: longNight +5.5% nightShift +5.5% headStart +4.3% scouting -8.5% | night: longNight +4.2% nightShift -14.7% headStart +2.6% scouting -9.7% | day: longNight -31.4% nightShift -14.9% headStart +2.2% scouting -9.2%
+   30/9   quick: longNight +6.3% nightShift +6.3% headStart -10.4% scouting +6.3% | long: longNight +5.9% nightShift +5.9% headStart +4.8% scouting -8.2% | night: longNight +3.8% nightShift -14.9% headStart +3.0% scouting -10.1% | day: longNight -32.5% nightShift -15.2% headStart +2.8% scouting -9.8%
+   60/3   quick: longNight +5.4% nightShift +5.4% headStart -15.9% scouting +5.4% | long: longNight +3.9% nightShift +3.9% headStart +2.2% scouting -10.5% | night: longNight +2.4% nightShift -15.9% headStart +2.0% scouting -11.1% | day: longNight -32.2% nightShift -16.2% headStart +2.0% scouting -10.9%
+   60/6   quick: longNight +5.1% nightShift +5.1% headStart -12.6% scouting +5.1% | long: longNight +3.9% nightShift +3.9% headStart +2.6% scouting -11.2% | night: longNight +2.2% nightShift -16.1% headStart +1.6% scouting -11.6% | day: longNight -32.4% nightShift -16.6% headStart +1.4% scouting -11.5%
+   60/9   quick: longNight +5.5% nightShift +5.5% headStart -10.6% scouting +5.5% | long: longNight +4.5% nightShift +4.5% headStart +3.4% scouting -10.3% | night: longNight +2.2% nightShift -16.1% headStart +1.3% scouting -11.6% | day: longNight -32.7% nightShift -16.5% headStart +0.9% scouting -11.5%
+   100/3  quick: longNight +5.3% nightShift +5.3% headStart -18.4% scouting +5.3% | long: longNight +2.2% nightShift +2.2% headStart +1.2% scouting -11.4% | night: longNight +1.8% nightShift -16.0% headStart +1.2% scouting -12.0% | day: longNight -31.7% nightShift -16.2% headStart +1.1% scouting -11.8%
+   100/6  quick: longNight +2.2% nightShift +2.2% headStart -12.3% scouting +2.2% | long: longNight +2.1% nightShift +2.1% headStart +1.2% scouting -12.3% | night: longNight +1.6% nightShift -16.1% headStart +1.3% scouting -12.1% | day: longNight -32.1% nightShift -16.3% headStart +1.2% scouting -12.0%
+   100/9  quick: longNight +4.8% nightShift +4.8% headStart -10.4% scouting +4.8% | long: longNight +2.8% nightShift +2.8% headStart +1.8% scouting -12.4% | night: longNight +1.4% nightShift -16.4% headStart +1.0% scouting -12.1% | day: longNight -32.2% nightShift -16.7% headStart +0.8% scouting -12.0%
+   (held/taps a second, level one of each perk against keeping its trophies; 10.3s)
+   the guide states 7 trophy room facts, each rebuilt from the engine and found word for word
+   worked example, 30 trophies and nightShift: overnight -14.7%, sitting and tapping +4.7% and +5.5%
+   smallest margins measured: longNight at home +31.4%, longNight over the next best at home +15.5%, longNight worst stage slowdown +2.2%, nightShift at home +14.7%, nightShift over the next best at home +4.0%, nightShift worst stage slowdown +2.2%, headStart at home +10.4%, headStart over the next best at home +14.5%, headStart worst stage slowdown +1.2%, scouting at home +8.2%, scouting over the next best at home +12.5%, scouting worst stage slowdown +2.2%, longNight ladder step +3.1%, nightShift ladder step +2.4%, headStart ladder step +10.4%, scouting ladder step +6.6%
+   bands: home +4.0%, best by +2.0%, a real cost of +0.5%, each ladder step +1.0%
+7) a save from before the trophy room plays on unchanged
+   fresh                            rate     0.4, tap      1, 0 trophies: identical
+   a tapper, fifteen minutes in     rate   3.14K, tap     35, 0 trophies: identical
+   a veteran with twelve trophies   rate   10.4K, tap    110, 12 trophies: identical
+   an idler with forty trophies     rate   94.2K, tap    955, 40 trophies: identical
+
+simIdleArena: green. The curve climbs, the trophy pays, the cap holds, the save cannot bite.
