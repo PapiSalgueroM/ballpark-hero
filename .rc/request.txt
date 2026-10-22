@@ -1,0 +1,11 @@
+# Release BQ third step (BQI): BP triage walk seams on the joined head (served build), from triage-BP rc-trF2: playCmDataOnDemand and its abort control (wrapped, exit 0 when FIRED), the three Soccer Career qa walks as rgBGa and rgBIj send them.
+#!serve
+#!playwright
+#!serial
+headsha: git log --oneline -1
+playCmDataOnDemand: node scripts/playCmDataOnDemand.mjs
+cmdata-abort: CM_PLAY_CONTROL=abort node scripts/playCmDataOnDemand.mjs 2>&1 | tee "$TMPDIR/ctl.log"; s=${PIPESTATUS[0]}; [ $s -eq 1 ] && grep -q 'CONTROL abort FIRED' "$TMPDIR/ctl.log"
+potential-browser: CI=1 SIM_NETWORK=offline ENGINES=chromium SOCCER_POTENTIAL_BROWSER_OUT="$RUNNER_TEMP/potential-browser" node scripts/qa/soccerPotentialProgressBrowser.mjs
+retire: CI=1 SIM_NETWORK=offline ENGINES=chromium SOCCER_RETIREMENT_PARENT_REF=97d706b2 SOCCER_RETIREMENT_BROWSER_OUT="$RUNNER_TEMP/retire" node scripts/qa/soccerRetirementActionsBrowser.mjs
+dialog: R=$(node scripts/lib/treeWithoutMerge.mjs 48bb600a bc416f2a) || exit 2; echo "SOCCER_NEW_CAREER_PARENT_REF $R (this head without PR277s merge 48bb600a)"; CI=1 SIM_NETWORK=offline ENGINES=chromium SOCCER_NEW_CAREER_PARENT_REF=$R SOCCER_NEW_CAREER_BROWSER_OUT="$RUNNER_TEMP/dialog" node scripts/qa/soccerNewCareerDialogBrowser.mjs; s=$?; node -e "const r=JSON.parse(require(\"fs\").readFileSync(process.argv[1],\"utf8\")); console.log(JSON.stringify(r.errors,null,1).slice(0,1500))" "$RUNNER_TEMP/dialog/report.json"; exit $s
+potential-1337: SOCCER_POTENTIAL_BROWSER_OUT=/tmp/pot node scripts/qa/soccerPotentialProgressBrowser.mjs 2>&1 | tail -12; exit ${PIPESTATUS[0]}
