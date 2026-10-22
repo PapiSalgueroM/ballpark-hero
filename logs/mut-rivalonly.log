@@ -1,0 +1,5 @@
+MUTATION rivalonly APPLIED
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[31m[1mAssertionError[22m: expected [ 4, 3.2, 66 ] to deeply equal [ 1, 2.1, 66 ][39m
+[31m[1mAssertionError[22m: expected [ 4, 3.2 ] to deeply equal [ 1, 2.1 ][39m
+rivalonly CAUGHT

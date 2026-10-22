@@ -1,0 +1,6 @@
+mut-rivalonly exit=0 2s | rivalonly CAUGHT
+mut-rivalonlypot exit=0 2s | rivalonlypot CAUGHT
+mut-latefrom exit=0 2s | latefrom CAUGHT
+mut-firsttoo exit=0 2s | firsttoo CAUGHT
+mut-underown exit=0 2s | underown CAUGHT
+after exit=0 2s |       Tests  25 passed (25)
