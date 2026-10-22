@@ -1,0 +1,9 @@
+#!playwright
+# Review of Round 1536: mutations, each in its own worktree copy on its own port. H3 = the three hardened routes.
+m0: bash .rc/x/mut.sh m0 4201 revert 'H=/stadium-tycoon,/idle-arena,/wonderkid-factory; ONLY=$H node scripts/playFirstVisitDialogs.mjs; a=$?; node .rc/x/apply.mjs expect9 && ONLY=$H node scripts/_rvExpect9.mjs; b=$?; node .rc/x/apply.mjs expect8 && ONLY=$H node scripts/_rvExpect8.mjs; c=$?; echo "m0 revert: plain exit $a (want 1), expect9 exit $b (want 0), expect8 exit $c (want 1)"; [ "$a$b$c" = 101 ]'
+m1: bash .rc/x/mut.sh m1 4202 stalevar 'ONLY=/stadium-tycoon,/idle-arena,/wonderkid-factory node scripts/playFirstVisitDialogs.mjs'
+m2: bash .rc/x/mut.sh m2 4203 nocap 'ONLY=/stadium-tycoon,/idle-arena,/wonderkid-factory node scripts/playFirstVisitDialogs.mjs'
+m3: bash .rc/x/mut.sh m3 4204 roleback 'ONLY=/stadium-tycoon,/idle-arena,/wonderkid-factory node scripts/playFirstVisitDialogs.mjs'
+m4: bash .rc/x/mut.sh m4 4205 notop 'ONLY=/stadium-tycoon,/idle-arena,/wonderkid-factory,/build-your-xi,/soccer-conquest,/conquest-nhl,/footle,/football-grid,/connections node scripts/playFirstVisitDialogs.mjs'
+m5: bash .rc/x/mut.sh m5 4206 rulegone 'ONLY=/stadium-tycoon,/idle-arena,/wonderkid-factory,/build-your-xi,/soccer-conquest,/conquest-nhl,/footle,/football-grid,/connections node scripts/playFirstVisitDialogs.mjs'
+m6: bash .rc/x/mut.sh m6 4207 noclose 'ONLY=/stadium-tycoon node scripts/playFirstVisitDialogs.mjs'
