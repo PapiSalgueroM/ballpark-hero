@@ -1,0 +1,14 @@
+#!serve
+#!playwright
+#!serial
+playCmFinanceDesk: ENGINES=chromium node scripts/playCmFinanceDesk.mjs
+ctl-desk-small: mkdir -p "$TMPDIR/out" && RC_OUT="$TMPDIR/out" ENGINES=chromium CM_FINANCE_CONTROL=small node scripts/playCmFinanceDesk.mjs 2>&1 | tee "$TMPDIR/ctl.log"; s=${PIPESTATUS[0]}; [ $s -eq 1 ] && grep -qF 'playCmFinanceDesk: CONTROL small FIRED (' "$TMPDIR/ctl.log"
+ctl-none-playCmFinanceDesk: ANSWER_CONSENT_CONTROL=none ENGINES=chromium node scripts/playCmFinanceDesk.mjs
+ctl-desk-cut: mkdir -p "$TMPDIR/out" && RC_OUT="$TMPDIR/out" ENGINES=chromium CM_FINANCE_CONTROL=cut node scripts/playCmFinanceDesk.mjs 2>&1 | tee "$TMPDIR/ctl.log"; s=${PIPESTATUS[0]}; [ $s -eq 1 ] && grep -qF 'playCmFinanceDesk: CONTROL cut FIRED (' "$TMPDIR/ctl.log"
+ctl-desk-wrap: mkdir -p "$TMPDIR/out" && RC_OUT="$TMPDIR/out" ENGINES=chromium CM_FINANCE_CONTROL=wrap node scripts/playCmFinanceDesk.mjs 2>&1 | tee "$TMPDIR/ctl.log"; s=${PIPESTATUS[0]}; [ $s -eq 1 ] && grep -qF 'playCmFinanceDesk: CONTROL wrap FIRED (' "$TMPDIR/ctl.log"
+playClubManagerNewCountries: ENGINES=chromium node scripts/playClubManagerNewCountries.mjs
+playClubManagerSaveLeave: ENGINES=chromium node scripts/playClubManagerSaveLeave.mjs
+ctl-none-NewCountries: ANSWER_CONSENT_CONTROL=none ENGINES=chromium node scripts/playClubManagerNewCountries.mjs
+ctl-none-SaveLeave: ANSWER_CONSENT_CONTROL=none ENGINES=chromium node scripts/playClubManagerSaveLeave.mjs
+cm: node scripts/playClubManager.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+anchors: node scripts/simHarnessAnchors.mjs
