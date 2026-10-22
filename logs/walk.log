@@ -1,0 +1,403 @@
+head 5919ef514f, base 4b4d99ebd6
+rich: phase retirement_ceremony, 17 seasons; old: phase owner_season, club Racing Santander tier 4, rows 2
+390x844-rm
+  ok: 390x844-rm: the clubs for sale stands still and shown under reduced motion (6 elements, none)
+  ok: 390x844-rm: six clubs for sale at €320M (6: Excelsior, Crystal Palace, Columbus Crew, Rizespor, Sporting CP, Olympiacos)
+  ok: 390x844-rm: Excelsior (Eredivisie · Tier 4) at €50M, €8M debt is its tier's band and within €320M
+  ok: 390x844-rm: Crystal Palace (Premier League · Tier 4) at €50M, €8M debt is its tier's band and within €320M
+  ok: 390x844-rm: Columbus Crew (MLS · Tier 3) at €100M, €12M debt is its tier's band and within €320M
+  ok: 390x844-rm: Rizespor (Super Lig · Tier 3) at €100M, €12M debt is its tier's band and within €320M
+  ok: 390x844-rm: Sporting CP (Primeira Liga · Tier 2) at €250M, €24M debt is its tier's band and within €320M
+  ok: 390x844-rm: Olympiacos (Super League Greece · Tier 2) at €250M, €24M debt is its tier's band and within €320M
+  ok: 390x844-rm: the list says the prices are the game's estimates
+  ok: 390x844-rm: every club tile inside the screen
+  ok: 390x844-rm: no sideways scroll on the list
+  ok: 390x844-rm: Back returns to the four doors
+  ok: 390x844-rm: the same list on the second visit
+  ok: 390x844-rm: bought Olympiacos at Tier 2: the save says Olympiacos, tier 2, debt 24, net worth 70
+  ok: 390x844-rm: the log line: 🏟️ Bought Olympiacos for €250M with €24M of debt, the game's figures for a Tier 2 club.
+  ok: 390x844-rm: the season button waits for a call (disabled, the base's label)
+  ok: 390x844-rm: the season button's words fit (0px over)
+  ok: 390x844-rm: picking debt does not move the page (286 to 286)
+  ok: 390x844-rm: debt is picked and saved
+  ok: 390x844-rm: with a call the button reads Next Owner Season
+  ok: 390x844-rm: season 1's rows stands still and shown under reduced motion (6 elements, none)
+  ok: 390x844-rm: season 1 (debt) is on the table: Finished in the bottom half. Income €4.2M.
+  ok: 390x844-rm: after season 1 the call is spent and the button waits again
+  ok: 390x844-rm: the panel is on season 1 with its final table
+  ok: 390x844-rm: the panel shows the saved line
+  ok: 390x844-rm: the debt tile shows the saved €12.0M
+  ok: 390x844-rm: no row or tile spills its box after season 1 ()
+  ok: 390x844-rm: no sideways scroll after season 1
+  ok: 390x844-rm: picking squad does not move the page (471 to 471)
+  ok: 390x844-rm: squad is picked and saved
+  ok: 390x844-rm: with a call the button reads Next Owner Season
+  ok: 390x844-rm: season 2's rows stands still and shown under reduced motion (7 elements, none)
+  ok: 390x844-rm: season 2 (squad) is on the table: Finished in the bottom half. Income €1.2M.
+  ok: 390x844-rm: after season 2 the call is spent and the button waits again
+  ok: 390x844-rm: the panel is on season 2 with its final table
+  ok: 390x844-rm: the panel shows the saved line
+  ok: 390x844-rm: the debt tile shows the saved €12.0M
+  ok: 390x844-rm: no row or tile spills its box after season 2 ()
+  ok: 390x844-rm: no sideways scroll after season 2
+  ok: 390x844-rm: a reload after season 2 keeps the save and the panel
+  ok: 390x844-rm: picking youth does not move the page (503 to 503)
+  ok: 390x844-rm: youth is picked and saved
+  ok: 390x844-rm: with a call the button reads Next Owner Season
+  ok: 390x844-rm: season 3's rows stands still and shown under reduced motion (8 elements, none)
+  ok: 390x844-rm: season 3 (youth) is on the table: Finished in the bottom half. Income €4.2M.
+  ok: 390x844-rm: after season 3 the call is spent and the button waits again
+  ok: 390x844-rm: the panel is on season 3 with its final table
+  ok: 390x844-rm: the panel shows the saved line
+  ok: 390x844-rm: the debt tile shows the saved €12.0M
+  ok: 390x844-rm: no row or tile spills its box after season 3 ()
+  ok: 390x844-rm: no sideways scroll after season 3
+  ok: 390x844-rm: picking stadium does not move the page (629 to 629)
+  ok: 390x844-rm: stadium is picked and saved
+  ok: 390x844-rm: with a call the button reads Next Owner Season
+  ok: 390x844-rm: season 4's rows stands still and shown under reduced motion (9 elements, none)
+  ok: 390x844-rm: season 4 (stadium) is on the table: Finished in the top half. Income €3.6M.
+  ok: 390x844-rm: after season 4 the call is spent and the button waits again
+  ok: 390x844-rm: the panel is on season 4 with its final table
+  ok: 390x844-rm: the panel shows the saved line
+  ok: 390x844-rm: the debt tile shows the saved €12.0M
+  ok: 390x844-rm: no row or tile spills its box after season 4 ()
+  ok: 390x844-rm: no sideways scroll after season 4
+  ok: 390x844-rm: no page errors ()
+390x844-rm-200
+  ok: 390x844-rm-200: four clubs at €200M, none of Tier 2 (Eredivisie · Tier 4 / Premier League · Tier 4 / MLS · Tier 3 / Super Lig · Tier 3)
+  ok: 390x844-rm-200: Excelsior (Eredivisie · Tier 4) at €50M, €8M debt is its tier's band and within €200M
+  ok: 390x844-rm-200: Crystal Palace (Premier League · Tier 4) at €50M, €8M debt is its tier's band and within €200M
+  ok: 390x844-rm-200: Columbus Crew (MLS · Tier 3) at €100M, €12M debt is its tier's band and within €200M
+  ok: 390x844-rm-200: Rizespor (Super Lig · Tier 3) at €100M, €12M debt is its tier's band and within €200M
+  ok: 390x844-rm-200: no page errors ()
+390x844-rm-old
+  ok: 390x844-rm-old: the old save shows its club and its two old rows
+  ok: 390x844-rm-old: an old save offers squad, youth and stadium, no debt (squad youth stadium)
+  ok: 390x844-rm-old: an old save's season waits for a call too
+  ok: 390x844-rm-old: picking youth does not move the page (264 to 264)
+  ok: 390x844-rm-old: youth is picked and saved
+  ok: 390x844-rm-old: with a call the button reads Next Owner Season
+  ok: 390x844-rm-old: season 1's rows stands still and shown under reduced motion (8 elements, none)
+  ok: 390x844-rm-old: season 3 (youth) is on the table: Finished 16th of 20 on 49 points. Income €2M.
+  ok: 390x844-rm-old: after season 3 the call is spent and the button waits again
+  ok: 390x844-rm-old: the panel is on season 3 with its final table
+  ok: 390x844-rm-old: the panel shows the saved line
+  ok: 390x844-rm-old: the debt tile shows the saved €0.0M
+  ok: 390x844-rm-old: no row or tile spills its box after season 3 ()
+  ok: 390x844-rm-old: no sideways scroll after season 3
+  ok: 390x844-rm-old: picking stadium does not move the page (603 to 603)
+  ok: 390x844-rm-old: stadium is picked and saved
+  ok: 390x844-rm-old: with a call the button reads Next Owner Season
+  ok: 390x844-rm-old: season 2's rows stands still and shown under reduced motion (9 elements, none)
+  ok: 390x844-rm-old: season 4 (stadium) is on the table: Finished 15th of 20 on 55 points. Income €1.8M.
+  ok: 390x844-rm-old: after season 4 the call is spent and the button waits again
+  ok: 390x844-rm-old: the panel is on season 4 with its final table
+  ok: 390x844-rm-old: the panel shows the saved line
+  ok: 390x844-rm-old: the debt tile shows the saved €0.0M
+  ok: 390x844-rm-old: no row or tile spills its box after season 4 ()
+  ok: 390x844-rm-old: no sideways scroll after season 4
+  ok: 390x844-rm-old: a reload after season 4 keeps the save and the panel
+  ok: 390x844-rm-old: the old club and its old rows are kept byte for byte
+  ok: 390x844-rm-old: no page errors ()
+390x844-mo
+  ok: 390x844-mo: the clubs for sale animates with motion on (6 elements, cmRiseGated)
+  ok: 390x844-mo: six clubs for sale at €320M (6: Excelsior, Crystal Palace, Columbus Crew, Rizespor, Sporting CP, Olympiacos)
+  ok: 390x844-mo: Excelsior (Eredivisie · Tier 4) at €50M, €8M debt is its tier's band and within €320M
+  ok: 390x844-mo: Crystal Palace (Premier League · Tier 4) at €50M, €8M debt is its tier's band and within €320M
+  ok: 390x844-mo: Columbus Crew (MLS · Tier 3) at €100M, €12M debt is its tier's band and within €320M
+  ok: 390x844-mo: Rizespor (Super Lig · Tier 3) at €100M, €12M debt is its tier's band and within €320M
+  ok: 390x844-mo: Sporting CP (Primeira Liga · Tier 2) at €250M, €24M debt is its tier's band and within €320M
+  ok: 390x844-mo: Olympiacos (Super League Greece · Tier 2) at €250M, €24M debt is its tier's band and within €320M
+  ok: 390x844-mo: the list says the prices are the game's estimates
+  ok: 390x844-mo: every club tile inside the screen
+  ok: 390x844-mo: no sideways scroll on the list
+  ok: 390x844-mo: Back returns to the four doors
+  ok: 390x844-mo: the same list on the second visit
+  ok: 390x844-mo: bought Olympiacos at Tier 2: the save says Olympiacos, tier 2, debt 24, net worth 70
+  ok: 390x844-mo: the log line: 🏟️ Bought Olympiacos for €250M with €24M of debt, the game's figures for a Tier 2 club.
+  ok: 390x844-mo: the season button waits for a call (disabled, the base's label)
+  ok: 390x844-mo: the season button's words fit (0px over)
+  ok: 390x844-mo: picking debt does not move the page (286 to 286)
+  ok: 390x844-mo: debt is picked and saved
+  ok: 390x844-mo: with a call the button reads Next Owner Season
+  ok: 390x844-mo: season 1's rows animates with motion on (6 elements, cmTickIn)
+  ok: 390x844-mo: season 1 (debt) is on the table: Finished in the bottom half. Income €4.2M.
+  ok: 390x844-mo: after season 1 the call is spent and the button waits again
+  ok: 390x844-mo: the panel is on season 1 with its final table
+  ok: 390x844-mo: the panel shows the saved line
+  ok: 390x844-mo: the debt tile shows the saved €12.0M
+  ok: 390x844-mo: no row or tile spills its box after season 1 ()
+  ok: 390x844-mo: no sideways scroll after season 1
+  ok: 390x844-mo: picking squad does not move the page (471 to 471)
+  ok: 390x844-mo: squad is picked and saved
+  ok: 390x844-mo: with a call the button reads Next Owner Season
+  ok: 390x844-mo: season 2's rows animates with motion on (7 elements, cmTickIn)
+  ok: 390x844-mo: season 2 (squad) is on the table: Finished in the bottom half. Income €1.2M.
+  ok: 390x844-mo: after season 2 the call is spent and the button waits again
+  ok: 390x844-mo: the panel is on season 2 with its final table
+  ok: 390x844-mo: the panel shows the saved line
+  ok: 390x844-mo: the debt tile shows the saved €12.0M
+  ok: 390x844-mo: no row or tile spills its box after season 2 ()
+  ok: 390x844-mo: no sideways scroll after season 2
+  ok: 390x844-mo: a reload after season 2 keeps the save and the panel
+  ok: 390x844-mo: picking youth does not move the page (503 to 503)
+  ok: 390x844-mo: youth is picked and saved
+  ok: 390x844-mo: with a call the button reads Next Owner Season
+  ok: 390x844-mo: season 3's rows animates with motion on (8 elements, cmTickIn)
+  ok: 390x844-mo: season 3 (youth) is on the table: Finished in the bottom half. Income €4.2M.
+  ok: 390x844-mo: after season 3 the call is spent and the button waits again
+  ok: 390x844-mo: the panel is on season 3 with its final table
+  ok: 390x844-mo: the panel shows the saved line
+  ok: 390x844-mo: the debt tile shows the saved €12.0M
+  ok: 390x844-mo: no row or tile spills its box after season 3 ()
+  ok: 390x844-mo: no sideways scroll after season 3
+  ok: 390x844-mo: picking stadium does not move the page (629 to 629)
+  ok: 390x844-mo: stadium is picked and saved
+  ok: 390x844-mo: with a call the button reads Next Owner Season
+  ok: 390x844-mo: season 4's rows animates with motion on (9 elements, cmTickIn)
+  ok: 390x844-mo: season 4 (stadium) is on the table: Finished in the top half. Income €3.6M.
+  ok: 390x844-mo: after season 4 the call is spent and the button waits again
+  ok: 390x844-mo: the panel is on season 4 with its final table
+  ok: 390x844-mo: the panel shows the saved line
+  ok: 390x844-mo: the debt tile shows the saved €12.0M
+  ok: 390x844-mo: no row or tile spills its box after season 4 ()
+  ok: 390x844-mo: no sideways scroll after season 4
+  ok: 390x844-mo: no page errors ()
+390x844-mo-200
+  ok: 390x844-mo-200: four clubs at €200M, none of Tier 2 (Eredivisie · Tier 4 / Premier League · Tier 4 / MLS · Tier 3 / Super Lig · Tier 3)
+  ok: 390x844-mo-200: Excelsior (Eredivisie · Tier 4) at €50M, €8M debt is its tier's band and within €200M
+  ok: 390x844-mo-200: Crystal Palace (Premier League · Tier 4) at €50M, €8M debt is its tier's band and within €200M
+  ok: 390x844-mo-200: Columbus Crew (MLS · Tier 3) at €100M, €12M debt is its tier's band and within €200M
+  ok: 390x844-mo-200: Rizespor (Super Lig · Tier 3) at €100M, €12M debt is its tier's band and within €200M
+  ok: 390x844-mo-200: no page errors ()
+390x844-mo-old
+  ok: 390x844-mo-old: the old save shows its club and its two old rows
+  ok: 390x844-mo-old: an old save offers squad, youth and stadium, no debt (squad youth stadium)
+  ok: 390x844-mo-old: an old save's season waits for a call too
+  ok: 390x844-mo-old: picking youth does not move the page (264 to 264)
+  ok: 390x844-mo-old: youth is picked and saved
+  ok: 390x844-mo-old: with a call the button reads Next Owner Season
+  ok: 390x844-mo-old: season 1's rows animates with motion on (8 elements, cmTickIn)
+  ok: 390x844-mo-old: season 3 (youth) is on the table: Finished 16th of 20 on 49 points. Income €2M.
+  ok: 390x844-mo-old: after season 3 the call is spent and the button waits again
+  ok: 390x844-mo-old: the panel is on season 3 with its final table
+  ok: 390x844-mo-old: the panel shows the saved line
+  ok: 390x844-mo-old: the debt tile shows the saved €0.0M
+  ok: 390x844-mo-old: no row or tile spills its box after season 3 ()
+  ok: 390x844-mo-old: no sideways scroll after season 3
+  ok: 390x844-mo-old: picking stadium does not move the page (603 to 603)
+  ok: 390x844-mo-old: stadium is picked and saved
+  ok: 390x844-mo-old: with a call the button reads Next Owner Season
+  ok: 390x844-mo-old: season 2's rows animates with motion on (9 elements, cmTickIn)
+  ok: 390x844-mo-old: season 4 (stadium) is on the table: Finished 15th of 20 on 55 points. Income €1.8M.
+  ok: 390x844-mo-old: after season 4 the call is spent and the button waits again
+  ok: 390x844-mo-old: the panel is on season 4 with its final table
+  ok: 390x844-mo-old: the panel shows the saved line
+  ok: 390x844-mo-old: the debt tile shows the saved €0.0M
+  ok: 390x844-mo-old: no row or tile spills its box after season 4 ()
+  ok: 390x844-mo-old: no sideways scroll after season 4
+  ok: 390x844-mo-old: a reload after season 4 keeps the save and the panel
+  ok: 390x844-mo-old: the old club and its old rows are kept byte for byte
+  ok: 390x844-mo-old: no page errors ()
+1280x900-rm
+  ok: 1280x900-rm: the clubs for sale stands still and shown under reduced motion (6 elements, none)
+  ok: 1280x900-rm: six clubs for sale at €320M (6: Excelsior, Crystal Palace, Columbus Crew, Rizespor, Sporting CP, Olympiacos)
+  ok: 1280x900-rm: Excelsior (Eredivisie · Tier 4) at €50M, €8M debt is its tier's band and within €320M
+  ok: 1280x900-rm: Crystal Palace (Premier League · Tier 4) at €50M, €8M debt is its tier's band and within €320M
+  ok: 1280x900-rm: Columbus Crew (MLS · Tier 3) at €100M, €12M debt is its tier's band and within €320M
+  ok: 1280x900-rm: Rizespor (Super Lig · Tier 3) at €100M, €12M debt is its tier's band and within €320M
+  ok: 1280x900-rm: Sporting CP (Primeira Liga · Tier 2) at €250M, €24M debt is its tier's band and within €320M
+  ok: 1280x900-rm: Olympiacos (Super League Greece · Tier 2) at €250M, €24M debt is its tier's band and within €320M
+  ok: 1280x900-rm: the list says the prices are the game's estimates
+  ok: 1280x900-rm: every club tile inside the screen
+  ok: 1280x900-rm: no sideways scroll on the list
+  ok: 1280x900-rm: Back returns to the four doors
+  ok: 1280x900-rm: the same list on the second visit
+  ok: 1280x900-rm: bought Olympiacos at Tier 2: the save says Olympiacos, tier 2, debt 24, net worth 70
+  ok: 1280x900-rm: the log line: 🏟️ Bought Olympiacos for €250M with €24M of debt, the game's figures for a Tier 2 club.
+  ok: 1280x900-rm: the season button waits for a call (disabled, the base's label)
+  ok: 1280x900-rm: the season button's words fit (0px over)
+  ok: 1280x900-rm: picking debt does not move the page (74 to 74)
+  ok: 1280x900-rm: debt is picked and saved
+  ok: 1280x900-rm: with a call the button reads Next Owner Season
+  ok: 1280x900-rm: season 1's rows stands still and shown under reduced motion (6 elements, none)
+  ok: 1280x900-rm: season 1 (debt) is on the table: Finished in the bottom half. Income €4.2M.
+  ok: 1280x900-rm: after season 1 the call is spent and the button waits again
+  ok: 1280x900-rm: the panel is on season 1 with its final table
+  ok: 1280x900-rm: the panel shows the saved line
+  ok: 1280x900-rm: the debt tile shows the saved €12.0M
+  ok: 1280x900-rm: no row or tile spills its box after season 1 ()
+  ok: 1280x900-rm: no sideways scroll after season 1
+  ok: 1280x900-rm: picking squad does not move the page (264 to 264)
+  ok: 1280x900-rm: squad is picked and saved
+  ok: 1280x900-rm: with a call the button reads Next Owner Season
+  ok: 1280x900-rm: season 2's rows stands still and shown under reduced motion (7 elements, none)
+  ok: 1280x900-rm: season 2 (squad) is on the table: Finished in the bottom half. Income €1.2M.
+  ok: 1280x900-rm: after season 2 the call is spent and the button waits again
+  ok: 1280x900-rm: the panel is on season 2 with its final table
+  ok: 1280x900-rm: the panel shows the saved line
+  ok: 1280x900-rm: the debt tile shows the saved €12.0M
+  ok: 1280x900-rm: no row or tile spills its box after season 2 ()
+  ok: 1280x900-rm: no sideways scroll after season 2
+  ok: 1280x900-rm: a reload after season 2 keeps the save and the panel
+  ok: 1280x900-rm: picking youth does not move the page (296 to 296)
+  ok: 1280x900-rm: youth is picked and saved
+  ok: 1280x900-rm: with a call the button reads Next Owner Season
+  ok: 1280x900-rm: season 3's rows stands still and shown under reduced motion (8 elements, none)
+  ok: 1280x900-rm: season 3 (youth) is on the table: Finished in the bottom half. Income €4.2M.
+  ok: 1280x900-rm: after season 3 the call is spent and the button waits again
+  ok: 1280x900-rm: the panel is on season 3 with its final table
+  ok: 1280x900-rm: the panel shows the saved line
+  ok: 1280x900-rm: the debt tile shows the saved €12.0M
+  ok: 1280x900-rm: no row or tile spills its box after season 3 ()
+  ok: 1280x900-rm: no sideways scroll after season 3
+  ok: 1280x900-rm: picking stadium does not move the page (402 to 402)
+  ok: 1280x900-rm: stadium is picked and saved
+  ok: 1280x900-rm: with a call the button reads Next Owner Season
+  ok: 1280x900-rm: season 4's rows stands still and shown under reduced motion (9 elements, none)
+  ok: 1280x900-rm: season 4 (stadium) is on the table: Finished in the top half. Income €3.6M.
+  ok: 1280x900-rm: after season 4 the call is spent and the button waits again
+  ok: 1280x900-rm: the panel is on season 4 with its final table
+  ok: 1280x900-rm: the panel shows the saved line
+  ok: 1280x900-rm: the debt tile shows the saved €12.0M
+  ok: 1280x900-rm: no row or tile spills its box after season 4 ()
+  ok: 1280x900-rm: no sideways scroll after season 4
+  ok: 1280x900-rm: no page errors ()
+1280x900-rm-200
+  ok: 1280x900-rm-200: four clubs at €200M, none of Tier 2 (Eredivisie · Tier 4 / Premier League · Tier 4 / MLS · Tier 3 / Super Lig · Tier 3)
+  ok: 1280x900-rm-200: Excelsior (Eredivisie · Tier 4) at €50M, €8M debt is its tier's band and within €200M
+  ok: 1280x900-rm-200: Crystal Palace (Premier League · Tier 4) at €50M, €8M debt is its tier's band and within €200M
+  ok: 1280x900-rm-200: Columbus Crew (MLS · Tier 3) at €100M, €12M debt is its tier's band and within €200M
+  ok: 1280x900-rm-200: Rizespor (Super Lig · Tier 3) at €100M, €12M debt is its tier's band and within €200M
+  ok: 1280x900-rm-200: no page errors ()
+1280x900-rm-old
+  ok: 1280x900-rm-old: the old save shows its club and its two old rows
+  ok: 1280x900-rm-old: an old save offers squad, youth and stadium, no debt (squad youth stadium)
+  ok: 1280x900-rm-old: an old save's season waits for a call too
+  ok: 1280x900-rm-old: picking youth does not move the page (72 to 72)
+  ok: 1280x900-rm-old: youth is picked and saved
+  ok: 1280x900-rm-old: with a call the button reads Next Owner Season
+  ok: 1280x900-rm-old: season 1's rows stands still and shown under reduced motion (8 elements, none)
+  ok: 1280x900-rm-old: season 3 (youth) is on the table: Finished 16th of 20 on 49 points. Income €2M.
+  ok: 1280x900-rm-old: after season 3 the call is spent and the button waits again
+  ok: 1280x900-rm-old: the panel is on season 3 with its final table
+  ok: 1280x900-rm-old: the panel shows the saved line
+  ok: 1280x900-rm-old: the debt tile shows the saved €0.0M
+  ok: 1280x900-rm-old: no row or tile spills its box after season 3 ()
+  ok: 1280x900-rm-old: no sideways scroll after season 3
+  ok: 1280x900-rm-old: picking stadium does not move the page (381 to 381)
+  ok: 1280x900-rm-old: stadium is picked and saved
+  ok: 1280x900-rm-old: with a call the button reads Next Owner Season
+  ok: 1280x900-rm-old: season 2's rows stands still and shown under reduced motion (9 elements, none)
+  ok: 1280x900-rm-old: season 4 (stadium) is on the table: Finished 15th of 20 on 55 points. Income €1.8M.
+  ok: 1280x900-rm-old: after season 4 the call is spent and the button waits again
+  ok: 1280x900-rm-old: the panel is on season 4 with its final table
+  ok: 1280x900-rm-old: the panel shows the saved line
+  ok: 1280x900-rm-old: the debt tile shows the saved €0.0M
+  ok: 1280x900-rm-old: no row or tile spills its box after season 4 ()
+  ok: 1280x900-rm-old: no sideways scroll after season 4
+  ok: 1280x900-rm-old: a reload after season 4 keeps the save and the panel
+  ok: 1280x900-rm-old: the old club and its old rows are kept byte for byte
+  ok: 1280x900-rm-old: no page errors ()
+1280x900-mo
+  ok: 1280x900-mo: the clubs for sale animates with motion on (6 elements, cmRiseGated)
+  ok: 1280x900-mo: six clubs for sale at €320M (6: Excelsior, Crystal Palace, Columbus Crew, Rizespor, Sporting CP, Olympiacos)
+  ok: 1280x900-mo: Excelsior (Eredivisie · Tier 4) at €50M, €8M debt is its tier's band and within €320M
+  ok: 1280x900-mo: Crystal Palace (Premier League · Tier 4) at €50M, €8M debt is its tier's band and within €320M
+  ok: 1280x900-mo: Columbus Crew (MLS · Tier 3) at €100M, €12M debt is its tier's band and within €320M
+  ok: 1280x900-mo: Rizespor (Super Lig · Tier 3) at €100M, €12M debt is its tier's band and within €320M
+  ok: 1280x900-mo: Sporting CP (Primeira Liga · Tier 2) at €250M, €24M debt is its tier's band and within €320M
+  ok: 1280x900-mo: Olympiacos (Super League Greece · Tier 2) at €250M, €24M debt is its tier's band and within €320M
+  ok: 1280x900-mo: the list says the prices are the game's estimates
+  ok: 1280x900-mo: every club tile inside the screen
+  ok: 1280x900-mo: no sideways scroll on the list
+  ok: 1280x900-mo: Back returns to the four doors
+  ok: 1280x900-mo: the same list on the second visit
+  ok: 1280x900-mo: bought Olympiacos at Tier 2: the save says Olympiacos, tier 2, debt 24, net worth 70
+  ok: 1280x900-mo: the log line: 🏟️ Bought Olympiacos for €250M with €24M of debt, the game's figures for a Tier 2 club.
+  ok: 1280x900-mo: the season button waits for a call (disabled, the base's label)
+  ok: 1280x900-mo: the season button's words fit (0px over)
+  ok: 1280x900-mo: picking debt does not move the page (74 to 74)
+  ok: 1280x900-mo: debt is picked and saved
+  ok: 1280x900-mo: with a call the button reads Next Owner Season
+  ok: 1280x900-mo: season 1's rows animates with motion on (6 elements, cmTickIn)
+  ok: 1280x900-mo: season 1 (debt) is on the table: Finished in the bottom half. Income €4.2M.
+  ok: 1280x900-mo: after season 1 the call is spent and the button waits again
+  ok: 1280x900-mo: the panel is on season 1 with its final table
+  ok: 1280x900-mo: the panel shows the saved line
+  ok: 1280x900-mo: the debt tile shows the saved €12.0M
+  ok: 1280x900-mo: no row or tile spills its box after season 1 ()
+  ok: 1280x900-mo: no sideways scroll after season 1
+  ok: 1280x900-mo: picking squad does not move the page (264 to 264)
+  ok: 1280x900-mo: squad is picked and saved
+  ok: 1280x900-mo: with a call the button reads Next Owner Season
+  ok: 1280x900-mo: season 2's rows animates with motion on (7 elements, cmTickIn)
+  ok: 1280x900-mo: season 2 (squad) is on the table: Finished in the bottom half. Income €1.2M.
+  ok: 1280x900-mo: after season 2 the call is spent and the button waits again
+  ok: 1280x900-mo: the panel is on season 2 with its final table
+  ok: 1280x900-mo: the panel shows the saved line
+  ok: 1280x900-mo: the debt tile shows the saved €12.0M
+  ok: 1280x900-mo: no row or tile spills its box after season 2 ()
+  ok: 1280x900-mo: no sideways scroll after season 2
+  ok: 1280x900-mo: a reload after season 2 keeps the save and the panel
+  ok: 1280x900-mo: picking youth does not move the page (296 to 296)
+  ok: 1280x900-mo: youth is picked and saved
+  ok: 1280x900-mo: with a call the button reads Next Owner Season
+  ok: 1280x900-mo: season 3's rows animates with motion on (8 elements, cmTickIn)
+  ok: 1280x900-mo: season 3 (youth) is on the table: Finished in the bottom half. Income €4.2M.
+  ok: 1280x900-mo: after season 3 the call is spent and the button waits again
+  ok: 1280x900-mo: the panel is on season 3 with its final table
+  ok: 1280x900-mo: the panel shows the saved line
+  ok: 1280x900-mo: the debt tile shows the saved €12.0M
+  ok: 1280x900-mo: no row or tile spills its box after season 3 ()
+  ok: 1280x900-mo: no sideways scroll after season 3
+  ok: 1280x900-mo: picking stadium does not move the page (402 to 402)
+  ok: 1280x900-mo: stadium is picked and saved
+  ok: 1280x900-mo: with a call the button reads Next Owner Season
+  ok: 1280x900-mo: season 4's rows animates with motion on (9 elements, cmTickIn)
+  ok: 1280x900-mo: season 4 (stadium) is on the table: Finished in the top half. Income €3.6M.
+  ok: 1280x900-mo: after season 4 the call is spent and the button waits again
+  ok: 1280x900-mo: the panel is on season 4 with its final table
+  ok: 1280x900-mo: the panel shows the saved line
+  ok: 1280x900-mo: the debt tile shows the saved €12.0M
+  ok: 1280x900-mo: no row or tile spills its box after season 4 ()
+  ok: 1280x900-mo: no sideways scroll after season 4
+  ok: 1280x900-mo: no page errors ()
+1280x900-mo-200
+  ok: 1280x900-mo-200: four clubs at €200M, none of Tier 2 (Eredivisie · Tier 4 / Premier League · Tier 4 / MLS · Tier 3 / Super Lig · Tier 3)
+  ok: 1280x900-mo-200: Excelsior (Eredivisie · Tier 4) at €50M, €8M debt is its tier's band and within €200M
+  ok: 1280x900-mo-200: Crystal Palace (Premier League · Tier 4) at €50M, €8M debt is its tier's band and within €200M
+  ok: 1280x900-mo-200: Columbus Crew (MLS · Tier 3) at €100M, €12M debt is its tier's band and within €200M
+  ok: 1280x900-mo-200: Rizespor (Super Lig · Tier 3) at €100M, €12M debt is its tier's band and within €200M
+  ok: 1280x900-mo-200: no page errors ()
+1280x900-mo-old
+  ok: 1280x900-mo-old: the old save shows its club and its two old rows
+  ok: 1280x900-mo-old: an old save offers squad, youth and stadium, no debt (squad youth stadium)
+  ok: 1280x900-mo-old: an old save's season waits for a call too
+  ok: 1280x900-mo-old: picking youth does not move the page (72 to 72)
+  ok: 1280x900-mo-old: youth is picked and saved
+  ok: 1280x900-mo-old: with a call the button reads Next Owner Season
+  ok: 1280x900-mo-old: season 1's rows animates with motion on (8 elements, cmTickIn)
+  ok: 1280x900-mo-old: season 3 (youth) is on the table: Finished 16th of 20 on 49 points. Income €2M.
+  ok: 1280x900-mo-old: after season 3 the call is spent and the button waits again
+  ok: 1280x900-mo-old: the panel is on season 3 with its final table
+  ok: 1280x900-mo-old: the panel shows the saved line
+  ok: 1280x900-mo-old: the debt tile shows the saved €0.0M
+  ok: 1280x900-mo-old: no row or tile spills its box after season 3 ()
+  ok: 1280x900-mo-old: no sideways scroll after season 3
+  ok: 1280x900-mo-old: picking stadium does not move the page (381 to 381)
+  ok: 1280x900-mo-old: stadium is picked and saved
+  ok: 1280x900-mo-old: with a call the button reads Next Owner Season
+  ok: 1280x900-mo-old: season 2's rows animates with motion on (9 elements, cmTickIn)
+  ok: 1280x900-mo-old: season 4 (stadium) is on the table: Finished 15th of 20 on 55 points. Income €1.8M.
+  ok: 1280x900-mo-old: after season 4 the call is spent and the button waits again
+  ok: 1280x900-mo-old: the panel is on season 4 with its final table
+  ok: 1280x900-mo-old: the panel shows the saved line
+  ok: 1280x900-mo-old: the debt tile shows the saved €0.0M
+  ok: 1280x900-mo-old: no row or tile spills its box after season 4 ()
+  ok: 1280x900-mo-old: no sideways scroll after season 4
+  ok: 1280x900-mo-old: a reload after season 4 keeps the save and the panel
+  ok: 1280x900-mo-old: the old club and its old rows are kept byte for byte
+  ok: 1280x900-mo-old: no page errors ()
+walkRun1524: green, 388 checks

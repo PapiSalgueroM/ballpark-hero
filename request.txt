@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+walk: node .rc/x/walkFix1524.mjs
