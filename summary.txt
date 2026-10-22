@@ -1,0 +1,16 @@
+c-dropone exit=1 52s | simNflSeasonStats: 103 checks, 10 failed (control dropone); section 1 skipped: LIFT_BASE is not set
+c-nocatch exit=1 54s | simNflSeasonStats: 103 checks, 10 failed (control nocatch); section 1 skipped: LIFT_BASE is not set
+c-liftdrift exit=1 68s | simNflSeasonStats: 119 checks, 11 failed (control liftdrift)
+c-swapsides exit=1 55s | simNflSeasonStats: 103 checks, 20 failed (control swapsides); section 1 skipped: LIFT_BASE is not set
+c-injured exit=1 59s | simNflSeasonStats: 103 checks, 5 failed (control injured); section 1 skipped: LIFT_BASE is not set
+c-extradraw exit=1 51s | simNflSeasonStats: 103 checks, 20 failed (control extradraw); section 1 skipped: LIFT_BASE is not set
+c-unkeyed exit=1 49s | simNflSeasonStats: 103 checks, 5 failed (control unkeyed); section 1 skipped: LIFT_BASE is not set
+c-randomcredit exit=1 55s | simNflSeasonStats: 103 checks, 5 failed (control randomcredit); section 1 skipped: LIFT_BASE is not set
+c-tiebreak exit=1 53s | simNflSeasonStats: 103 checks, 2 failed (control tiebreak); section 1 skipped: LIFT_BASE is not set
+c-rookieall exit=1 50s | simNflSeasonStats: 103 checks, 2 failed (control rookieall); section 1 skipped: LIFT_BASE is not set
+c-closetwice exit=1 59s | simNflSeasonStats: 103 checks, 3 failed (control closetwice); section 1 skipped: LIFT_BASE is not set
+c-oldopen exit=1 58s | simNflSeasonStats: 103 checks, 2 failed (control oldopen); section 1 skipped: LIFT_BASE is not set
+usc-oddtd exit=1 6s | simUsSeasonCentre: 59 checks, 1 failed (control oddtd)
+usc-minutes exit=1 5s | simUsSeasonCentre: 59 checks, 1 failed (control minutes)
+c-wholeroster exit=1 51s | simNflSeasonStats: 103 checks, 2 failed (control wholeroster); section 1 skipped: LIFT_BASE is not set
+c-quote exit=1 46s | simNflSeasonStats: 103 checks, 1 failed (control quote); section 1 skipped: LIFT_BASE is not set
