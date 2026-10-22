@@ -1,0 +1,5 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/soccerCareerDugoutTable.test.tsx src/test/soccerCareerSaveRecovery.test.tsx src/test/soccerCareerDebutLegacy.test.tsx --testTimeout=300000 --hookTimeout=120000
+simManagerCareer: node scripts/simManagerCareer.mjs
+simCareerMoneyAfterRetirement: node scripts/simCareerMoneyAfterRetirement.mjs
+simCareerNoDeadEnd: node scripts/simCareerNoDeadEnd.mjs
