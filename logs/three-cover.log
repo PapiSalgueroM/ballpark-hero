@@ -1,0 +1,12 @@
+  FAIL     /stadium-tycoon 320x640: dialog "How Stadium Tycoon works" (static) 16 to 319, "Let's go" (its go label) 250 to 298 is not tappable: at its centre the control, banner 335 to 640 (pending)
+  FAIL     /stadium-tycoon 390x844: dialog "How Stadium Tycoon works" (static) 16 to 595, "Let's go" (its go label) 526 to 574 is not tappable: at its centre the control, banner 611 to 844 (pending)
+  FAIL     /stadium-tycoon 1280x900: dialog "How Stadium Tycoon works" (static) 16 to 719, "Let's go" (its go label) 650 to 698 is not tappable: at its centre the control, banner 735 to 900 (pending)
+  NONE     /hall-of-champions 320x640: no first visit dialog, banner 335 to 640 (pending)
+  NONE     /hall-of-champions 390x844: no first visit dialog, banner 611 to 844 (pending)
+  NONE     /hall-of-champions 1280x900: no first visit dialog, banner 735 to 900 (pending)
+  FAIL     /idle-arena 320x640: dialog "How Idle Arena works" (static) 0 to 319, "Start tapping" (its go label) 250 to 298 is not tappable: at its centre the control, banner 335 to 640 (pending)
+  FAIL     /idle-arena 390x844: dialog "How Idle Arena works" (static) 0 to 595, "Start tapping" (its go label) 526 to 574 is not tappable: at its centre the control, banner 611 to 844 (pending)
+  FAIL     /idle-arena 1280x900: dialog "How Idle Arena works" (static) 0 to 719, "Start tapping" (its go label) 650 to 698 is not tappable: at its centre the control, banner 735 to 900 (pending)
+
+9 route widths walked over 3 routes: 0 dialogs tapped and closed, 0 expected site reds, 3 without a first visit dialog, 6 red
+playFirstVisitDialogs: PLAYFIRST_CONTROL=cover FIRED. 6 of 6 dialog buttons read as covered and the walk is red

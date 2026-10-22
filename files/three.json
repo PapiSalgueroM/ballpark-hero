@@ -1,0 +1,254 @@
+[
+ {
+  "route": "/stadium-tycoon",
+  "width": 320,
+  "height": 640,
+  "key": "/stadium-tycoon@320",
+  "banner": {
+   "top": 335,
+   "bottom": 640
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 1,
+  "name": "How Stadium Tycoon works",
+  "kind": "dialog",
+  "position": "static",
+  "bannerInside": false,
+  "dialogBox": {
+   "top": 16,
+   "bottom": 319
+  },
+  "at": "tappable",
+  "overlap": 0,
+  "button": "Let's go",
+  "how": "its go label",
+  "buttonBox": {
+   "top": 250,
+   "bottom": 298
+  },
+  "cx": 160,
+  "cy": 274,
+  "whole": true,
+  "closed": true,
+  "blocker": null,
+  "state": "PASS"
+ },
+ {
+  "route": "/stadium-tycoon",
+  "width": 390,
+  "height": 844,
+  "key": "/stadium-tycoon@390",
+  "banner": {
+   "top": 611,
+   "bottom": 844
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 1,
+  "name": "How Stadium Tycoon works",
+  "kind": "dialog",
+  "position": "static",
+  "bannerInside": false,
+  "dialogBox": {
+   "top": 16,
+   "bottom": 595
+  },
+  "at": "tappable",
+  "overlap": 0,
+  "button": "Let's go",
+  "how": "its go label",
+  "buttonBox": {
+   "top": 526,
+   "bottom": 574
+  },
+  "cx": 195,
+  "cy": 550,
+  "whole": true,
+  "closed": true,
+  "blocker": null,
+  "state": "PASS"
+ },
+ {
+  "route": "/stadium-tycoon",
+  "width": 1280,
+  "height": 900,
+  "key": "/stadium-tycoon@1280",
+  "banner": {
+   "top": 735,
+   "bottom": 900
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 1,
+  "name": "How Stadium Tycoon works",
+  "kind": "dialog",
+  "position": "static",
+  "bannerInside": false,
+  "dialogBox": {
+   "top": 16,
+   "bottom": 719
+  },
+  "at": "tappable",
+  "overlap": 0,
+  "button": "Let's go",
+  "how": "its go label",
+  "buttonBox": {
+   "top": 650,
+   "bottom": 698
+  },
+  "cx": 640,
+  "cy": 674,
+  "whole": true,
+  "closed": true,
+  "blocker": null,
+  "state": "PASS"
+ },
+ {
+  "route": "/hall-of-champions",
+  "width": 320,
+  "height": 640,
+  "key": "/hall-of-champions@320",
+  "banner": {
+   "top": 335,
+   "bottom": 640
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/hall-of-champions",
+  "width": 390,
+  "height": 844,
+  "key": "/hall-of-champions@390",
+  "banner": {
+   "top": 611,
+   "bottom": 844
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/hall-of-champions",
+  "width": 1280,
+  "height": 900,
+  "key": "/hall-of-champions@1280",
+  "banner": {
+   "top": 735,
+   "bottom": 900
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/idle-arena",
+  "width": 320,
+  "height": 640,
+  "key": "/idle-arena@320",
+  "banner": {
+   "top": 335,
+   "bottom": 640
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 1,
+  "name": "How Idle Arena works",
+  "kind": "dialog",
+  "position": "static",
+  "bannerInside": false,
+  "dialogBox": {
+   "top": 0,
+   "bottom": 319
+  },
+  "at": "tappable",
+  "overlap": 0,
+  "button": "Start tapping",
+  "how": "its go label",
+  "buttonBox": {
+   "top": 250,
+   "bottom": 298
+  },
+  "cx": 160,
+  "cy": 274,
+  "whole": true,
+  "closed": true,
+  "blocker": null,
+  "state": "PASS"
+ },
+ {
+  "route": "/idle-arena",
+  "width": 390,
+  "height": 844,
+  "key": "/idle-arena@390",
+  "banner": {
+   "top": 611,
+   "bottom": 844
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 1,
+  "name": "How Idle Arena works",
+  "kind": "dialog",
+  "position": "static",
+  "bannerInside": false,
+  "dialogBox": {
+   "top": 0,
+   "bottom": 595
+  },
+  "at": "tappable",
+  "overlap": 0,
+  "button": "Start tapping",
+  "how": "its go label",
+  "buttonBox": {
+   "top": 526,
+   "bottom": 574
+  },
+  "cx": 195,
+  "cy": 550,
+  "whole": true,
+  "closed": true,
+  "blocker": null,
+  "state": "PASS"
+ },
+ {
+  "route": "/idle-arena",
+  "width": 1280,
+  "height": 900,
+  "key": "/idle-arena@1280",
+  "banner": {
+   "top": 735,
+   "bottom": 900
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 1,
+  "name": "How Idle Arena works",
+  "kind": "dialog",
+  "position": "static",
+  "bannerInside": false,
+  "dialogBox": {
+   "top": 0,
+   "bottom": 719
+  },
+  "at": "tappable",
+  "overlap": 0,
+  "button": "Start tapping",
+  "how": "its go label",
+  "buttonBox": {
+   "top": 650,
+   "bottom": 698
+  },
+  "cx": 640,
+  "cy": 674,
+  "whole": true,
+  "closed": true,
+  "blocker": null,
+  "state": "PASS"
+ }
+]

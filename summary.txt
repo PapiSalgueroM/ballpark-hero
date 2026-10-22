@@ -1,0 +1,4 @@
+build exit=0 35s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+three-cover exit=1 18s | playFirstVisitDialogs: PLAYFIRST_CONTROL=cover FIRED. 6 of 6 dialog buttons read as covered and the walk is red
+three exit=0 19s | playFirstVisitDialogs: green. Every first visit dialog can be started with the cookie banner unanswered.
+tsc exit=0 69s | 
