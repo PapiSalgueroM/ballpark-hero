@@ -1,0 +1,10 @@
+{
+  "complete": true,
+  "source": "86fb920b2cb9ecb390b386811c5d5b121d9ff7d2",
+  "run": 39746799578,
+  "artifact": 12411698481,
+  "driverSha256": "ff59de8be52bffabdb462e4c15f5e946e21951e3e40f734a4f446e05fe61b250",
+  "reportSha256": "d77ca345817cbfc3d11751d3e4b8029b017d12191ed2c786a990d02677a2c6c4",
+  "normalizedFromSha256": "796e160acc57541b7bacf8972fbed6e7e43ec86087d8250037124b01293c0c3f",
+  "allManifestsAndSourceHoldsAdmitted": true
+}
