@@ -18,6 +18,15 @@
  *      desk gains are `seat` and `xp`. It is not a proof of the board: the
  *      board itself is held by FrontOfficeOnePress.test.tsx and the default
  *      path block of FrontOfficeGmCareer.test.tsx.
+ *   2  the verdict on every club's real season of the fleet: desk off it is
+ *      today's two engine calls; desk on it records once, pays the four
+ *      facts' XP once, a reload pays nothing, a new save's first close is its
+ *      own season. OWNERSHIP (step 2): through the same verdict at levels 0
+ *      to 5, exact against gmXp.cushionTrustLoss over gradeSeason's own
+ *      change; level 0 is today's number; every level strictly gentler than
+ *      the one below on every losing season, the same on every winning one;
+ *      the worked example (trust 16, a missed season: fired at level 0, kept
+ *      on trust 1 at level 1).
  *   4  the market after a real firing (MEASURE): twenty seeds, twelve
  *      seasons, one league a seed played in the board's order with every club
  *      graded as a GM's club: its own mandate from its strength rank each
@@ -63,7 +72,7 @@
  * Controls (SIM_GM_CAREER_CONTROL), each must go red in its section:
  *   epoch (1)    the id epoch is not pinned before the bundle is evaluated
  *   addkey (1)   the host's close writes a third block
- *   deskoffblock, paytwice, lateseat (2); emptytile, nameinline (8)
+ *   deskoffblock, paytwice, lateseat, flatowner (2); emptytile, nameinline (8)
  *   firedclub, unkeyed (4)
  *   staffrides, ledgerrides, rostermove, depthstays, askrebuilt (5)
  *   halfseason, notrim, awayxp, lastcall, noawaydraft (6)
@@ -96,7 +105,7 @@ const ONLY = (process.env.SIM_GM_CAREER_ONLY || '').split(',').filter(Boolean);
 const runs = id => ONLY.length === 0 || ONLY.includes(id);
 const CONTROLS = {
   epoch: '1', addkey: '1', deskoffblock: '2', paytwice: '2', lateseat: '2', emptytile: '8', nameinline: '8',
-  firedclub: '4', unkeyed: '4', staffrides: '5', ledgerrides: '5', rostermove: '5', depthstays: '5', askrebuilt: '5',
+  flatowner: '2', firedclub: '4', unkeyed: '4', staffrides: '5', ledgerrides: '5', rostermove: '5', depthstays: '5', askrebuilt: '5',
   halfseason: '6', notrim: '6', awayxp: '6', lastcall: '6', noawaydraft: '6', overlap: '7', firedlost: '7',
 };
 if (CONTROL && !CONTROLS[CONTROL]) {
@@ -141,6 +150,8 @@ const EDITS = {
   paytwice: ['host', '  if (seat.last !== undefined && f.season <= seat.last) return same;', '  if (false) return same;'],
   lateseat: ['host', 'titles: i.titles, fired: i.fired, seasonCounted: false,', 'titles: i.titles, fired: i.fired, seasonCounted: true,'],
   emptytile: ['host', "value: 'No more calls',", "value: '',"],
+  /* Section 2: Ownership's cushion not applied. */
+  flatowner: ['host', '  const trustDelta = fx.trustDelta(grade.trustDelta) + movers;', '  const trustDelta = grade.trustDelta + movers;'],
   /* Section 4: the feed. The fired club let back into it; the feed drawn from Math.random, not its key. */
   firedclub: ['seat', '.filter(t => t.id !== last.team)', '.filter(t => true)'],
   unkeyed: ['host', '    keyedRng(hostFeedKey(host.sport, seat, season)), host.champion(league, season),', '    Math.random, host.champion(league, season),'],
@@ -523,6 +534,57 @@ if (runs('2')) {
   }
   console.log(`   ${S2.off} desk off closes equal today's two calls; ${S2.on} desk on closes recorded once (${S2.paid} XP paid, the median club ${Math.round(S2.paid / Math.max(1, S2.on))} a season), ${S2.reloads} reloads paid nothing, ${S2.old} older saves started on time`);
   ok(S2.on >= 300, `only ${S2.on} real club seasons read, too few to hold the verdict`);
+
+  /* OWNERSHIP (step 2), through the board's own verdict at every level 0 to 5. The expected loss is
+     gmXp.cushionTrustLoss read off gradeSeason's own change, never typed. Level 0 is today's number exactly; on a
+     losing season every level is strictly gentler than the one below, on a winning one every level is the same.
+     Control flatowner: the cushion not applied. */
+  const ownDesk = (id, season, tier, k) => {
+    let b = X.addXp(X.defaultGmXp(), 1e6);
+    for (let i = 0; i < k; i++) b = X.spendGmPoint(b, 'ownership');
+    return G.withGmBlock(G.withGmBlock(G.freshGmDesk(), H.GM_HOST_KEYS.seat, H.hostNewSeat(id, tier, season)), H.GM_HOST_KEYS.xp, b);
+  };
+  const O = { losing: 0, winning: 0, ladders: {} };
+  for (const snap of FLEET) {
+    const lg = snap.lg, season = lg.season, tiers = tiersOf(lg);
+    for (const id of Object.keys(lg.teams).sort()) {
+      const mandate = snap.mandates[id], outcome = d.outcome(lg, id, snap.rounds, snap.champion);
+      const grade = FM.gradeSeason(mandate, outcome);
+      for (const trust of [60, 16]) {
+        const costs = [];
+        for (let k = 0; k <= 5; k++) {
+          const v = H.hostSeasonVerdict(d.host, lg, { team: id, mandate, trust, fired: false, outcome, desk: ownDesk(id, season, tiers.get(id), k), seasonsPlayed: 0, titles: 0 });
+          const want = FM.applyMandateResult(trust, { ...grade, trustDelta: X.cushionTrustLoss(grade.trustDelta, k) });
+          if (v.trust !== want.trust || v.fired !== want.fired) fail(`${id} ${grade.result} trust ${trust} level ${k}: the verdict reads ${v.trust}/${v.fired}, the cushion ${want.trust}/${want.fired}`);
+          if (k === 0 && J([v.trust, v.fired]) !== J([FM.applyMandateResult(trust, grade).trust, FM.applyMandateResult(trust, grade).fired])) fail(`${id}: level 0 is not today's number`);
+          costs.push(trust - v.trust);
+        }
+        if (trust !== 60) continue;
+        if (grade.trustDelta < 0) {
+          O.losing++;
+          for (let k = 1; k <= 5; k++) if (!(costs[k] < costs[k - 1])) fail(`${id} ${grade.result}: level ${k} costs ${costs[k]}, level ${k - 1} cost ${costs[k - 1]}: not gentler`);
+          O.ladders[grade.result] ??= costs.join(', ');
+        } else {
+          O.winning++;
+          if (new Set(costs).size !== 1) fail(`${id} ${grade.result}: a winning season moves with Ownership (${costs.join(', ')})`);
+        }
+      }
+    }
+  }
+  /* The worked example: a GM on trust 16 who misses is fired at level 0 and keeps the job at level 1. */
+  {
+    const snap = FLEET[0], lg = snap.lg, tiers = tiersOf(lg);
+    const id = Object.keys(lg.teams).sort().find(x => FM.gradeSeason(snap.mandates[x], d.outcome(lg, x, snap.rounds, snap.champion)).result === 'missed');
+    if (!id) fail('no missed season in the first league to walk the worked example on');
+    else {
+      const at = k => H.hostSeasonVerdict(d.host, lg, { team: id, mandate: snap.mandates[id], trust: 16, fired: false, outcome: d.outcome(lg, id, snap.rounds, snap.champion), desk: ownDesk(id, lg.season, tiers.get(id), k), seasonsPlayed: 0, titles: 0 });
+      const v0 = at(0), v1 = at(1);
+      ok(v0.fired === true && v1.fired === false && v1.trust === 1, `trust 16 and a missed season: level 0 ${v0.trust}/${v0.fired}, level 1 ${v1.trust}/${v1.fired}`);
+      O.example = `trust 16, missed: level 0 fired (${v0.trust}), level 1 keeps the job on ${v1.trust}`;
+    }
+  }
+  console.log(`   OWNERSHIP: ${O.losing} losing and ${O.winning} winning club seasons walked at levels 0 to 5; from trust 60 a season costs ${Object.entries(O.ladders).map(([r, c]) => `${r} ${c}`).join('; ')}; ${O.example ?? ''}`);
+  ok(O.losing >= 100 && O.winning >= 100, `too few seasons walked (${O.losing} losing, ${O.winning} winning)`);
 }
 
 /* ================================================================== */
