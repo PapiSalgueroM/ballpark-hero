@@ -1,0 +1,4 @@
+early exit=1 FAIL: 249 check(s) failed
+noreconcile exit=1 FAIL: 17 check(s) failed
+summary exit=1 FAIL: 2 check(s) failed
+noreason exit=1 FAIL: 3 check(s) failed
