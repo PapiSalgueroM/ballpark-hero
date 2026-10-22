@@ -1,0 +1,2 @@
+control sheetrepick: red in ["2"], wanted 2
+simNbaGmDesk: control sheetrepick fired (20 failures, as it should)

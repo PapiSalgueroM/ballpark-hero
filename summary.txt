@@ -1,0 +1,12 @@
+desk-s4held exit=0 28s | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+desk-s1 exit=0 28s | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+ctl-fullbird exit=0 25s | simNbaGmDesk: control fullbird fired (115 failures, as it should)
+ctl-norfa exit=0 25s | simNbaGmDesk: control norfa fired (176 failures, as it should)
+ctl-sheetrepick exit=0 34s | simNbaGmDesk: control sheetrepick fired (20 failures, as it should)
+tsc exit=0 96s | 
+simStorageWrites exit=0 3s | simStorageWrites: all green (owed: 12)
+engine exit=0 0s | engine files byte equal to 7a8750ba: exit 0
+diff-fx2 exit=0 0s |  6 files changed, 176 insertions(+), 2 deletions(-)
+dashes exit=0 0s | since a862aa7fb: added lines read: 17, with a dash: 0; commit messages read: 3, with a dash: 0
+simNoRivalNames exit=0 14s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 52s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
