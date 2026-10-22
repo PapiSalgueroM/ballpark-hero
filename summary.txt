@@ -1,0 +1,7 @@
+build exit=0 24s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+weight-head exit=0 5s | weight1321 head: done
+weight-base exit=0 32s | weight1321 base: done
+writes-head exit=1 13s | head exit=1 | simWritesAreSent: 2 failures
+writes-base exit=0 39s | base exit=1 | simWritesAreSent: 2 failures
+calendar-head exit=1 0s | head exit=1 | simGmCalendar: 6 failure(s)
+calendar-base exit=0 0s | base exit=1 | simGmCalendar: 6 failure(s)
