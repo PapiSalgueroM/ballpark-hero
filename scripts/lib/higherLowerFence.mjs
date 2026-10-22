@@ -46,9 +46,13 @@ import { build } from 'esbuild';
  * that imports the touchdown pool) resolves its '@/' imports for real and
  * returns that category's players.
  */
+let loadNo = 0;
 export async function loadSport(root, cfg, sourceOverride) {
   const source = sourceOverride ?? fs.readFileSync(path.join(root, cfg.file), 'utf8').replaceAll('\r\n', '\n');
-  const tmp = path.join(process.env.TEMP || process.env.TMP || root, `hlfence-${cfg.key}-${process.pid}`);
+  /* A fresh path every call: import() caches by URL, so a second load of the
+     same sport into the same file would hand back the first bundle and a
+     control's edit would never be seen (Round 1549 found this). */
+  const tmp = path.join(process.env.TEMP || process.env.TMP || root, `hlfence-${cfg.key}-${process.pid}-${++loadNo}`);
   fs.mkdirSync(tmp, { recursive: true });
   const entry = path.join(tmp, 'entry.ts');
   fs.writeFileSync(entry, cfg.category ? source : source.replace(/from '@\/[^']*'/g, "from './missing'"), 'utf8');

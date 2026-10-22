@@ -17,10 +17,16 @@
 export interface NbaHLPlayer {
   name: string;
   position: string;
-  /** Up to 5 franchise codes, alphabetical. */
+  /**
+   * Franchise codes, alphabetical. A career that ended before 2025-26 shows up
+   * to 5. Since Round 1549 a man who played in 2025-26 shows every franchise
+   * he played for, so his current team cannot fall off the end of the list
+   * (Durant's Houston and Harden's Cleveland had); simHigherLowerFacts
+   * section 8 holds those lists to scripts/data/nbaHigherLowerTeams2026-10.json.
+   */
   teams: string;
   careerPoints: number;
-  /** Final season, for era context on the card. */
+  /** The last season the total runs through; the card says "through" it. */
   lastSeason: string;
 }
 
@@ -32,10 +38,10 @@ export const nbaHLPlayers: NbaHLPlayer[] = [
   { name: 'Michael Jordan', position: 'SG', teams: 'CHI, WAS', careerPoints: 32292, lastSeason: '2002-03' },
   { name: 'Dirk Nowitzki', position: 'PF', teams: 'DAL', careerPoints: 31560, lastSeason: '2018-19' },
   { name: 'Wilt Chamberlain', position: 'C', teams: 'LAL, PHI, PHW, SFW', careerPoints: 31419, lastSeason: '1972-73' },
-  { name: 'Kevin Durant', position: 'SF', teams: 'BRK, GSW, OKC, PHO, SEA', careerPoints: 32564, lastSeason: '2025-26' },
+  { name: 'Kevin Durant', position: 'SF', teams: 'BRK, GSW, HOU, OKC, PHO, SEA', careerPoints: 32564, lastSeason: '2025-26' },
   { name: "Shaquille O'Neal", position: 'C', teams: 'BOS, CLE, LAL, MIA, ORL', careerPoints: 28596, lastSeason: '2010-11' },
   { name: 'Carmelo Anthony', position: 'SF', teams: 'DEN, HOU, LAL, NYK, OKC', careerPoints: 28289, lastSeason: '2021-22' },
-  { name: 'James Harden', position: 'PG', teams: 'BRK, HOU, LAC, OKC, PHI', careerPoints: 29319, lastSeason: '2025-26' },
+  { name: 'James Harden', position: 'PG', teams: 'BRK, CLE, HOU, LAC, OKC, PHI', careerPoints: 29319, lastSeason: '2025-26' },
   { name: 'Moses Malone', position: 'C', teams: 'ATL, BUF, HOU, MIL, PHI', careerPoints: 27409, lastSeason: '1994-95' },
   { name: 'Elvin Hayes', position: 'PF', teams: 'BAL, CAP, HOU, SDR, WSB', careerPoints: 27313, lastSeason: '1983-84' },
   { name: 'Hakeem Olajuwon', position: 'C', teams: 'HOU, TOR', careerPoints: 26946, lastSeason: '2001-02' },
@@ -44,7 +50,7 @@ export const nbaHLPlayers: NbaHLPlayer[] = [
   { name: 'Tim Duncan', position: 'C', teams: 'SAS', careerPoints: 26496, lastSeason: '2015-16' },
   { name: 'Paul Pierce', position: 'SF', teams: 'BOS, BRK, LAC, WAS', careerPoints: 26397, lastSeason: '2016-17' },
   { name: 'John Havlicek', position: 'SF', teams: 'BOS', careerPoints: 26395, lastSeason: '1977-78' },
-  { name: 'Russell Westbrook', position: 'PG', teams: 'DEN, HOU, LAC, LAL, OKC', careerPoints: 27176, lastSeason: '2025-26' },
+  { name: 'Russell Westbrook', position: 'PG', teams: 'DEN, HOU, LAC, LAL, OKC, SAC, WAS', careerPoints: 27176, lastSeason: '2025-26' },
   { name: 'Kevin Garnett', position: 'PF', teams: 'BOS, BRK, MIN', careerPoints: 26071, lastSeason: '2015-16' },
   { name: 'Vince Carter', position: 'SG', teams: 'ATL, DAL, MEM, NJN, ORL', careerPoints: 25728, lastSeason: '2019-20' },
   { name: 'Alex English', position: 'SF', teams: 'DAL, DEN, IND, MIL', careerPoints: 25613, lastSeason: '1990-91' },
@@ -60,7 +66,7 @@ export const nbaHLPlayers: NbaHLPlayer[] = [
   { name: 'Adrian Dantley', position: 'SF', teams: 'BUF, DAL, DET, IND, LAL', careerPoints: 23177, lastSeason: '1990-91' },
   { name: 'Dwyane Wade', position: 'SG', teams: 'CHI, CLE, MIA', careerPoints: 23165, lastSeason: '2018-19' },
   { name: 'Elgin Baylor', position: 'SF', teams: 'LAL, MNL', careerPoints: 23149, lastSeason: '1971-72' },
-  { name: 'Chris Paul', position: 'PG', teams: 'GSW, HOU, LAC, NOH, NOK', careerPoints: 23058, lastSeason: '2025-26' },
+  { name: 'Chris Paul', position: 'PG', teams: 'GSW, HOU, LAC, NOH, NOK, OKC, PHO, SAS', careerPoints: 23058, lastSeason: '2025-26' },
   { name: 'Damian Lillard', position: 'PG', teams: 'MIL, POR', careerPoints: 22598, lastSeason: '2024-25' },
   { name: 'Clyde Drexler', position: 'SG', teams: 'HOU, POR', careerPoints: 22195, lastSeason: '1997-98' },
   { name: 'Gary Payton', position: 'PG', teams: 'BOS, LAL, MIA, MIL, SEA', careerPoints: 21813, lastSeason: '2006-07' },

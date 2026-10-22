@@ -51,6 +51,7 @@
  *   henrystale  nfl: Henry back to his stale 2024 total of 111            2, 3
  *   apmerge     nfl rushing yards: the two Adrian Petersons added
  *               together again (16,204), which beats Frank Gore           2, 3
+ *   durantteam  nba: Durant's card loses Houston, his 2025-26 team        8
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -59,7 +60,7 @@ import { loadSport, readSource, rewrite, checkSport } from './lib/higherLowerFen
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.HL_FACTS_CONTROL || '';
-const EXPECT = { stale: [2], inversion: [2, 3], nolast: [4], goalieok: [5], heldfix: [3, 6], nbastale: [2, 3], mlbstale: [2], nflstale: [2, 3], tennismerge: [2, 3], playeduntil: [7], henrystale: [2, 3], apmerge: [2, 3] };
+const EXPECT = { stale: [2], inversion: [2, 3], nolast: [4], goalieok: [5], heldfix: [3, 6], nbastale: [2, 3], mlbstale: [2], nflstale: [2, 3], tennismerge: [2, 3], playeduntil: [7], henrystale: [2, 3], apmerge: [2, 3], durantteam: [8] };
 /* Exit 2, never 1: 1 is a control that fired, and a mistyped name must not read as one. */
 if (CONTROL && !(CONTROL in EXPECT)) {
   console.log(`   FAIL unknown control ${CONTROL} (known: ${Object.keys(EXPECT).join(', ')})`);
@@ -243,6 +244,46 @@ console.log('7) every Higher or Lower card says what its total runs through, and
   checks++;
   if (bad) { failures += bad; red.add(7); }
   else console.log(`   ok   ${PAGES.length} pages mount the shared line and none says "played until"`);
+}
+
+/* ---------- section 8: an NBA man still playing lists his current team ---------- */
+/* Round 1549. Round 663 refreshed the NBA points and left the teams, so Kevin
+   Durant's card had no Houston and James Harden's no Cleveland: the list was
+   capped at five codes alphabetically, and the newest team fell off the end.
+   Every man the points record says played in the latest season must be in the
+   teams record, and his card must list every team he played for that season. */
+console.log('8) NBA Higher or Lower: every man who played in the latest season lists the team or teams he played for in it');
+{
+  let bad = 0;
+  const say = (m) => { console.log(`   FAIL ${m}`); bad++; };
+  const teamsRec = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/data/nbaHigherLowerTeams2026-10.json'), 'utf8'));
+  const nbaCfg = SPORTS.find(s => s.key === 'nba');
+  let source = readSource(ROOT, nbaCfg);
+  if (CONTROL === 'durantteam') {
+    try {
+      source = rewrite(source, "teams: 'BRK, GSW, HOU, OKC, PHO, SEA'", "teams: 'BRK, GSW, OKC, PHO, SEA'", 'durantteam drops Houston from Durant');
+    } catch (e) {
+      console.log(`   FAIL ${e.message}`);
+      console.log('simHigherLowerFacts: stopped, the control proved nothing');
+      process.exit(2);
+    }
+  }
+  const players = await loadSport(ROOT, nbaCfg, source);
+  const pointsRec = JSON.parse(fs.readFileSync(path.join(ROOT, nbaCfg.record), 'utf8'));
+  const current = Object.entries(pointsRec.players).filter(([, v]) => v.lastSeason === teamsRec.season).map(([n]) => n);
+  for (const n of current) if (!teamsRec.players[n]) say(`${n} played in ${teamsRec.season} and the teams record does not say for whom`);
+  for (const [n, v] of Object.entries(teamsRec.players)) {
+    const p = (players || []).find(x => x.name === n);
+    if (!p) { say(`${n} is in the teams record and no longer ships`); continue; }
+    if (p.lastSeason !== teamsRec.season) say(`${n} is recorded as playing in ${teamsRec.season} but his card runs through ${p.lastSeason}`);
+    const listed = String(p.teams).split(', ');
+    const missing = v.teams2025_26.filter(t => !listed.includes(t));
+    if (missing.length) say(`${n} played for ${missing.join(' and ')} in ${teamsRec.season}, which his card does not list (${p.teams})`);
+    if (!Array.isArray(v.src) || new Set(v.src.map(u => new URL(u).hostname)).size < 2) say(`${n}'s ${teamsRec.season} teams do not stand on two sources`);
+  }
+  checks++;
+  if (bad) { failures += bad; red.add(8); }
+  else console.log(`   ok   ${Object.keys(teamsRec.players).length} men played in ${teamsRec.season}, and every card lists the team or teams he played for in it`);
 }
 
 if (CONTROL) {
