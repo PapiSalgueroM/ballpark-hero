@@ -1,0 +1,4 @@
+#!build
+#!serial
+seasonReview-head: node scripts/qa/tycoonSeasonReview1095.mjs --prefetch-assets-only && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonSeasonReview.mjs
+seasonReview-base: git worktree add /tmp/sbase bac65fb0b >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/sbase/node_modules && cd /tmp/sbase && node_modules/.bin/vite build > /tmp/sbase-build.log 2>&1 && node scripts/qa/tycoonSeasonReview1095.mjs --prefetch-assets-only && NODE_OPTIONS="--require=/tmp/sbase/scripts/lib/offlineTransport.cjs" node scripts/simTycoonSeasonReview.mjs
