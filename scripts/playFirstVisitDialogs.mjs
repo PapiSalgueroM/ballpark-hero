@@ -111,7 +111,9 @@ function measureInPage({ BANNER, control }) {
   if (control === 'cover') {
     const c = document.createElement('div');
     c.setAttribute('data-playfirst-cover', '');
-    Object.assign(c.style, { position: 'fixed', left: `${cx - 20}px`, top: `${cy - 20}px`, width: '40px', height: '40px', zIndex: '2147483647' });
+    /* pointer-events auto on purpose: a modal Radix dialog sets pointer-events none on the body, which the cover
+       would inherit, and elementFromPoint skips such an element (the first cover run passed 12 Radix buttons). */
+    Object.assign(c.style, { position: 'fixed', left: `${cx - 20}px`, top: `${cy - 20}px`, width: '40px', height: '40px', zIndex: '2147483647', pointerEvents: 'auto' });
     document.body.appendChild(c);
   }
   const onScreen = cx >= 0 && cx < W && cy >= 0 && cy < H;
