@@ -3,23 +3,24 @@
 Brief: dukb-handoff/2026-10-10/briefs/brief-1532.md (section 0 binds), critic-1532.md beside it. Full step 1 record:
 dukb-handoff/2026-10-10/results-g/finish-1532.md.
 
-## Status (2026-10-21, step 2a done)
+## Status (2026-10-21, the round built to its end)
 
-STEP 1 DONE. The lead ruled (brief section 4, S1 to S6): overinvest is the over4 bot and SQUAD_POINTS is 0.85; R0
-starts at 1; Round 586 and 587's shared fixture moves to division 3's par plus ceil(6 / SQUAD_POINTS) levels; the slower
-badges are printed, not tuned; the predictor stays.
+STEP 1 DONE (the base record and the predictor; the lead ruled S1 to S6). STEP 2a DONE: the tuning run
+(scripts/tuneTycoonScorelines.mjs on a copy patched by scripts/lib/tycoonLaw.mjs, remote check r1532-s2a) chose
+SQUAD_POINTS 0.85, R0 1, ARRIVAL_EDGE 4, rivalStrength 1 25 40 46 54 58 61 65 67 69, every target of brief 1.3 met.
+STEP 2b ONWARD DONE: the law and the bonuses in seconds landed in src/lib/stadiumTycoon.ts (the measured text, applied
+by --apply), every harness that pinned the old curve repointed, NEW simTycoonScorelines (r1532-b4: 15 checks, 0 failed,
+every control on exactly its sections), the twelve histories retaken by their legs (r1532-b2), the two fences
+re-derived as the lead ruled (R2 wins floor 0.53125, was 1.828125; R3 band 11.6125 to 34.8375, was 5.8125 to 17.4375)
+at the moved fixture (S3, Squad 62), the pack price rule (Scout 21, Club 71, Elite 178), the rules paragraph and
+helpFacts, six guide sentences (R4), What's New, contract section 21, NEW playTycoonScorelines (green), the weight
+(/stadium-tycoon 302.6K on base, 303.2K on head). Merged origin/r1531-tycoon-held-fixes 7252242c and origin/main
+c1b39364. The full record: dukb-handoff/2026-10-10/results-g/finish-1532.md (step 1's: finish-1532-step1.md).
 
-STEP 2a DONE (no src change). scripts/lib/tycoonLaw.mjs lays the law and the bonuses onto the lib as one text patch;
-scripts/tuneTycoonScorelines.mjs ran the recipe on a runner (remote check r1532-s2a, exit 0, 58 s) and wrote
-scripts/data/tycoonScorelineTuning.json. The table: SQUAD_POINTS 0.85, R0 1, ARRIVAL_EDGE 4, rivalStrength
-1 25 40 46 54 58 61 65 67 69. Every target of brief 1.3 met on calibration and holdout:
-- knob 4 at R0 1: section 4 promotion 10.5 against Sell up 13.10; season one title share 0.90 (8 of 10, 18 of 20);
-  section 3 Squad 30 1.00 against Squad 0 0.20 (gap 0.80, needs 0.476), neutral arm 0.05; section 9 stuck 0 and 0.
-- knob 3 grid (pace win share 15 to 120, cal): AE -2 53.9, 0 57.5, 2 59.5, 4 64.6, 6 68.7, 8 73.6; pick 4.
-- pace holdout 66.6 (se 1.45, headroom needed 4.36); over4 76.4 cal, 78.7 hold; draws 20.9 and 20.5; goals 2.57 and
-  2.60; titles a season 15 to 240 0.733 and 0.727; windows 72 / 68 / 61 (cal), 75 / 68 / 64 (hold); nosquad 18.
-- S8: first Sell up 12.77 (base 13.37); a win at two hours pays 20 seconds of income (base 0.13); income at 30 / 60 /
-  120 minutes 17.9K / 25.6K / 41.7K (base 21.2K / 34.4K / 81.0K); pace reaches division 5 by 120 (base 6).
+Owed to the lead: the /stadium-tycoon weight row (+0.6K, over the +0.3K allowance); simTycoonPacks' dear control is
+dead on S15 (titles now bound the dry spell, measured) and its S2 sample moved with the price seed; the /whats-new and
+/stadium-tycoon saved pages (build:seo); the six guide sentences posted for the other lane; a badge ladder round
+(ruling S4); away play's pace as the next round.
 
 ## Step 1: what was added
 

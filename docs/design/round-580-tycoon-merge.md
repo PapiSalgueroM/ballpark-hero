@@ -1595,6 +1595,9 @@ tuned here; the lead names a badge ladder round after this one.
 **Away play's pace is the next round (R5, Q4).** `AWAY_MATCHDAY_SEC` is 1800 and the
 away cap 8, 10 or 12 hours by the Away Day Deal perk, so a trip plays 16, 20 or 24
 matchdays and never the final one; an 18 matchday season begun at matchday 1 needs 17,
-which only a club without the perk falls one short of. Measured after this round (S3,
-pace's own state at 60 and 120 minutes, 16 away matchdays): see the S3 line of
-simTycoonScorelines for the away goals and win share.
+which only a club without the perk falls one short of. Measured after this round (S3 of
+simTycoonScorelines, pace's own state at 60 and 120 minutes, 16 away matchdays a seed,
+remote check r1532-f2a): at 60 minutes 2.57 goals a match and 82.4 percent won
+(calibration, 51 matches) and 2.24 and 68.0 (holdout, 50); at 120 minutes 2.57 and 58.9
+(180) and 2.92 and 63.8 (210). At 30 minutes pace sits on a season's final matchday,
+which never plays away.
