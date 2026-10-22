@@ -17,7 +17,7 @@ import { useOwnedTimeouts } from '@/hooks/useOwnedTimeouts';
 import {
   type HallState, type Wing, type UpgradeId,
   SAVE_KEY, freshState, loadSave, serialize, fetchCatalog,
-  advanceClock, offlineReport, buyArtifact, openWing, buyUpgrade, startRush, rededicate,
+  advanceClock, offlineReport, awayPaidSoFar, buyArtifact, openWing, buyUpgrade, startRush, rededicate,
 } from '@/lib/hallOfChampions';
 import { recordCompletion } from '@/lib/completions';
 import { CONTINUE_SAVES } from '@/data/continueSaves';
@@ -104,10 +104,11 @@ export function useHallOfChampions() {
           keepRefusedSave();
           s = freshState(now % 2147483647);
         }
-        if (away > 60) {
-          const rep = offlineReport(cat, s, away);
-          if (rep.earned > 1) setOfflineEarned(rep.earned);
-        }
+        /* Round 1548: the note tells the whole absence, the part a hidden tab
+           was paid before it was closed included (it travels in the save). */
+        if (away > 60) offlineReport(cat, s, away);
+        const took = awayPaidSoFar(s);
+        if ((s.awayMs ?? 0) > WELCOME_AFTER_MS && took > 1) setOfflineEarned(took);
         stateRef.current = s;
         lastTickRef.current = now;
         setWings(cat);
@@ -127,27 +128,22 @@ export function useHallOfChampions() {
      watched gap at full rate, and a hidden page, or a gap too long to have
      been watched, as time away under the same half speed, eight hour rule a
      closed tab gets on load (one meter for the whole absence). Coming back to
-     the page after a real absence shows the same welcome a reload does. */
+     the page after a real absence shows the same welcome a reload does, read
+     from the meter and its takings, which the first watched callback zeroes. */
   useEffect(() => {
     if (loadState !== 'ready') return;
-    let awayPaid = 0;
-    let awayFor = 0;
     const iv = window.setInterval(() => {
       const s = stateRef.current;
       if (!s) return;
       const now = Date.now();
       const gap = now - lastTickRef.current;
       lastTickRef.current = now;
+      const absence = s.awayMs ?? 0;
+      const took = awayPaidSoFar(s);
       const step = advanceClock(wings, s, gap, document.visibilityState !== 'hidden');
-      if (step.away) {
-        awayPaid += step.earned;
-        awayFor += gap;
-      } else if (awayFor > 0) {
-        const paid = awayPaid;
-        if (awayFor > WELCOME_AFTER_MS && paid > 1) setOfflineEarned(e => (e ?? 0) + paid);
-        awayPaid = 0;
-        awayFor = 0;
-      }
+      /* the absence just closed. Set, not added: a load's note is the start of
+         this same absence, so adding would count the closed part twice. */
+      if (!step.away && !s.awayMs && absence > WELCOME_AFTER_MS && took > 1) setOfflineEarned(took);
       bump();
     }, 250);
     const save = () => {

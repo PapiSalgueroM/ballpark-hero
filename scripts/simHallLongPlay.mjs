@@ -16,13 +16,17 @@
  *      page (a throttled background tab, ten hours) must earn at least the away
  *      rate times eight hours of income, and the absence meter must stop at the
  *      eight hour cap. Before this round the hook paid a fixed quarter second
- *      per callback: 150 seconds of income for the whole night.
+ *      per callback: 150 seconds of income for the whole night. The absence's
+ *      takings (what the note on the door reads) must equal its pay, zero with
+ *      the meter when watching starts, and travel in the save.
  *   3. PRICES PAST T READ AS NUMBERS. fmt names Qa and Qi.
  *   4. THE REAL HOOK. src/test/hallOfChampionsLongPlay.test.tsx mounts
  *      useHallOfChampions on fake timers and jsdom's localStorage: a deep save
  *      loads and is written back, a hidden tab is paid by the away rule with
- *      the welcome on return, one absence meets one cap across a reload, and a
- *      refused save is kept aside before the fresh museum.
+ *      the welcome on return, one absence meets one cap across a reload, the
+ *      note on the next visit tells the whole absence when a hidden tab was
+ *      closed (the hidden part included), and a refused save is kept aside
+ *      before the fresh museum.
  *
  * NEGATIVE CONTROLS (SIM_HALL_CONTROL=<name>; each must turn its section red):
  *   ceiling     the loader's old num(o.funds, 0, 1e15) and 1e18      section 1
@@ -30,6 +34,7 @@
  *   fmtstop     fmt stops at T again                                 section 3
  *   hookfixed   the hook ticks a fixed quarter second per callback   section 4
  *   hooknocopy  the hook no longer keeps a refused save aside        section 4
+ *   hooknote    the load's note tells only the closed part again     section 4
  * A control rewrites a copy of the file, never the file, and aborts if the text
  * it rewrites is not in the shipped file exactly once.
  *
@@ -72,7 +77,7 @@ let failures = 0, section = 0, dead = 0, collateral = 0;
 const bySection = {};
 const fail = m => { failures += 1; bySection[section] = (bySection[section] || 0) + 1; console.error('  FAIL: ' + m); };
 /* the section each control must turn red */
-const CONTROL_SECTION = { ceiling: 1, fixedstep: 2, fmtstop: 3, hookfixed: 4, hooknocopy: 4 };
+const CONTROL_SECTION = { ceiling: 1, fixedstep: 2, fmtstop: 3, hookfixed: 4, hooknocopy: 4, hooknote: 4 };
 const abort = m => { console.error(m); process.exit(1); };
 const read = f => fs.readFileSync(f, 'utf8').split('\r\n').join('\n');
 
@@ -99,6 +104,11 @@ const HOOK_CONTROLS = {
   hooknocopy: {
     from: '          keepRefusedSave();\n',
     to: '',
+  },
+  /* the load's note back to the closed part alone, the pre fix hook */
+  hooknote: {
+    from: '        if (away > 60) offlineReport(cat, s, away);\n        const took = awayPaidSoFar(s);\n        if ((s.awayMs ?? 0) > WELCOME_AFTER_MS && took > 1) setOfflineEarned(took);\n',
+    to: '        if (away > 60) { const rep = offlineReport(cat, s, away); if (rep.earned > 1) setOfflineEarned(rep.earned); }\n',
   },
 };
 if (CONTROL && !LIB_CONTROLS[CONTROL] && !HOOK_CONTROLS[CONTROL]) abort(`simHallLongPlay: unknown SIM_HALL_CONTROL ${JSON.stringify(CONTROL)}`);
@@ -242,14 +252,18 @@ if (run(2)) {
   if (!(paid >= owed * 0.999)) fail(`a hidden tab left open ten hours earned x${ratio.toFixed(4)} of eight hours at the away rate`);
   if (!(paid <= owed * 1.001)) fail(`a hidden tab earned x${ratio.toFixed(4)} of the eight hour cap, so the cap leaks`);
   if (s.awayMs !== CAP_MS) fail(`the absence meter stopped at ${s.awayMs} ms, the cap is ${CAP_MS}`);
+  /* the note on the door reads the absence's takings, so they must be the pay */
+  if (!(Math.abs(lib.awayPaidSoFar(s) / paid - 1) < 1e-9)) fail(`the absence's takings read ${lib.awayPaidSoFar(s)}, the hidden tab was paid ${paid}`);
 
   /* a watched minute: full rate, and watching closes the absence */
   const w = midMuseum();
   w.awayMs = 3 * HOUR_MS;
+  w.awayPaid = 1.25e7;
   let seen = 0;
   for (let i = 0; i < 240; i += 1) seen += lib.advanceClock(wings, w, 250, true).earned;
   if (Math.abs(seen / (income * 60) - 1) > 1e-9) fail(`a watched minute paid x${(seen / (income * 60)).toFixed(6)} of a minute at full rate`);
   if (w.awayMs !== 0) fail(`watching left the absence meter at ${w.awayMs} ms`);
+  if (w.awayPaid !== 0) fail(`watching left the absence's takings at ${w.awayPaid}`);
 
   /* one absence, one cap: three hidden hours, then the tab closed for seven */
   const a = midMuseum();
@@ -259,6 +273,18 @@ if (run(2)) {
   both += rep.earned;
   if (Math.abs(both / owed - 1) > 1e-6) fail(`three hidden hours and seven closed paid x${(both / owed).toFixed(4)} of one eight hour absence`);
   if (!rep.capped) fail('seven closed hours after three hidden ones were not reported as capped');
+  if (!(Math.abs(lib.awayPaidSoFar(a) / both - 1) < 1e-9)) fail(`after three hidden hours and seven closed the takings read ${lib.awayPaidSoFar(a)}, the absence paid ${both}`);
+
+  /* the open absence travels in the save, and junk in it loads as 0 */
+  const open = midMuseum();
+  open.awayMs = 3 * HOUR_MS;
+  open.awayPaid = 1.25e7;
+  const back = lib.loadSave(lib.serialize(open, 1_800_000_000_000));
+  if (!back || back.state.awayMs !== open.awayMs || back.state.awayPaid !== open.awayPaid) fail(`a save holding an open absence came back as ${back ? `${back.state.awayMs} ms and ${back.state.awayPaid}` : 'refused'}`);
+  for (const junk of ['"x"', '-5', 'null', '1e400']) {
+    const j = lib.loadSave(lib.serialize(midMuseum(), 1_800_000_000_000).replace(/}$/, `,"awayPaid":${junk}}`));
+    if (!j || j.state.awayPaid !== 0) fail(`a save with awayPaid ${junk} ${j ? `loaded it as ${j.state.awayPaid}` : 'was refused'}, it must load as 0`);
+  }
 
   /* a visible page that did not run (a laptop asleep two hours) is away time too */
   const z = midMuseum();
@@ -281,8 +307,8 @@ if (run(3)) {
 
 /* ------------------------------------------------------ 4: the real hook */
 /* Which tests each hook control must turn red; every other test must stay green. */
-const HOOK_RED = { hookfixed: [2, 3], hooknocopy: [4] };
-const HOOK_TESTS = 6;
+const HOOK_RED = { hookfixed: [2, 3, 7], hooknocopy: [4], hooknote: [3, 7] };
+const HOOK_TESTS = 7;
 function findUp(rel) {
   for (let dir = ROOT; ; dir = path.dirname(dir)) {
     const p = path.join(dir, rel);

@@ -5,7 +5,10 @@
    1e18), and the price curve walks every long museum past both, so the hook
    started a fresh museum and its five second saver wrote it over the old one.
    And the clock paid a fixed quarter second per interval callback, so a tab
-   the browser throttled to a callback a minute earned minutes overnight.
+   the browser throttled to a callback a minute earned minutes overnight. Once
+   a hidden tab was paid, a tab hidden and then closed had its hidden part paid
+   with no word, so the next visit's note told only the closed part, or nothing
+   (the absence's takings now travel in the save beside its meter).
 
    HOW THIS DRIVES IT. The real hook, the real lib, jsdom's real localStorage;
    only the catalog fetch is replaced (a fixture with the real wing sizes and
@@ -200,7 +203,10 @@ describe('Hall of Champions long play', () => {
     const paid = state().funds - atHide.funds;
     expect(near(paid, owed), `three hidden hours and seven closed paid x${(paid / owed).toFixed(4)} of one eight hour absence`).toBeLessThan(1e-6);
     expect(state().funds, 'the reload paid differently from the away rule given the same absence').toBe(oracle.funds);
-    measured(`reload: 3 h hidden then 7 h closed paid x${(paid / owed).toFixed(6)} of one eight hour absence`);
+    const note = hook().offlineEarned;
+    expect(note, 'the next visit showed no note').not.toBeNull();
+    expect(near(note!, paid), `the note on the next visit said x${(note! / paid).toFixed(4)} of what the whole absence paid`).toBeLessThan(1e-9);
+    measured(`reload: 3 h hidden then 7 h closed paid x${(paid / owed).toFixed(6)} of one eight hour absence; the note says x${(note! / paid).toFixed(6)} of it`);
   }, TEST_MS);
 
   it('4 a save the loader refuses is kept aside once before the fresh museum is written', async () => {
@@ -244,5 +250,26 @@ describe('Hall of Champions long play', () => {
     watch(CALLBACK_MS);
     expect(state().funds).toBeGreaterThan(before);
     expect(hook().offlineEarned, 'a glance at another tab raised the welcome').toBeNull();
+  }, TEST_MS);
+
+  it('7 nine hidden hours and then two closed days still leave a note that says what the hall took', async () => {
+    localStorage.setItem(SAVE_KEY, serialize(midMuseum(), EPOCH));
+    await mount();
+    const wings = hook().wings;
+    watch(1_000);
+    const atHide = clone(state());
+    hiddenWakes(540);
+    cleanup();
+    latest = null;
+    vnow += 48 * HOUR;
+    setVisible(true);
+    await mount();
+    const owed = totalIncome(wings, atHide, atHide.clock) * AWAY_RATE * (CAP_MS / 1000);
+    const paid = state().funds - atHide.funds;
+    expect(near(paid, owed), `nine hidden hours and two closed days paid x${(paid / owed).toFixed(4)} of one eight hour absence`).toBeLessThan(1e-6);
+    const note = hook().offlineEarned;
+    expect(note, 'the hidden tab was paid the whole night and the next visit showed no note').not.toBeNull();
+    expect(near(note!, paid), `the note said x${(note! / paid).toFixed(4)} of what the absence paid`).toBeLessThan(1e-9);
+    measured(`closed after hidden: 9 h hidden then 48 h closed paid x${(paid / owed).toFixed(6)} of one eight hour absence; the note says x${(note! / paid).toFixed(6)} of it`);
   }, TEST_MS);
 });

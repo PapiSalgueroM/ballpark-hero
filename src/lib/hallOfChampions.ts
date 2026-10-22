@@ -231,6 +231,10 @@ export interface HallState {
    *  away time (hidden or closed), so one absence meets one eight hour cap.
    *  Zero again on the first watched tick. Absent in older saves. */
   awayMs?: number;
+  /** Round 1548: the admissions that absence has paid so far, hidden part and
+   *  closed part together, so the note on the door tells the whole absence even
+   *  when a hidden tab was closed. Zero again with the meter. Absent in older saves. */
+  awayPaid?: number;
 }
 
 export function freshState(seed: number): HallState {
@@ -405,13 +409,20 @@ export function applyAway(wings: Wing[], s: HallState, gapMs: number): number {
   s.awayMs = used + away;
   const before = s.funds;
   tick(wings, s, away / 1000, { offline: true });
-  return s.funds - before;
+  const paid = s.funds - before;
+  s.awayPaid = awayPaidSoFar(s) + paid;
+  return paid;
+}
+
+/** Round 1548: what the current absence has paid so far (the note on the door). */
+export function awayPaidSoFar(s: HallState): number {
+  return Number.isFinite(s.awayPaid) && (s.awayPaid as number) > 0 ? (s.awayPaid as number) : 0;
 }
 
 /**
  * Round 1548: one callback of the hall's clock, `gapMs` of wall time after the
  * last one. On a visible page a gap up to AWAY_AFTER_MS is somebody watching:
- * full rate, and the absence meter goes back to zero. A hidden page, or a
+ * full rate, and the absence meter and its takings go back to zero. A hidden page, or a
  * longer gap, is time away and goes through applyAway. The caller keeps the
  * time of the last callback and says whether the page is visible.
  */
@@ -419,6 +430,7 @@ export function advanceClock(wings: Wing[], s: HallState, gapMs: number, visible
   if (!(gapMs > 0)) return { away: false, earned: 0 };
   if (!visible || gapMs > AWAY_AFTER_MS) return { away: true, earned: applyAway(wings, s, gapMs) };
   s.awayMs = 0;
+  s.awayPaid = 0;
   const before = s.funds;
   tick(wings, s, gapMs / 1000);
   return { away: false, earned: s.funds - before };
@@ -496,6 +508,12 @@ export function loadSave(raw: string | null): { state: HallState; lastSeen: numb
     if (o.awayMs !== undefined) {
       const a = o.awayMs;
       state.awayMs = typeof a === 'number' && Number.isFinite(a) && a > 0 ? Math.min(a, OFFLINE_CAP_SEC * 1000) : 0;
+    }
+    /* Round 1548: the absence's takings so far, repaired the same way. It
+       only feeds the note on the door, never the money. */
+    if (o.awayPaid !== undefined) {
+      const p = o.awayPaid;
+      state.awayPaid = typeof p === 'number' && Number.isFinite(p) && p > 0 ? p : 0;
     }
     return { state, lastSeen };
   } catch {
