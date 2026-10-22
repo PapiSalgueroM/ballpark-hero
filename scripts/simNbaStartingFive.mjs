@@ -15,6 +15,9 @@
  *      fives of 96.0 and 16.5 score 79 and 10).
  *   4. "Lowest" turns the range round: on every five, highest plus lowest is
  *      100 (within 1 for rounding), and the hand computed five scores 21.
+ *      The per pick numbers turn too: on a Lowest spin every pick's "best
+ *      here" is his slot's smallest number and his closeness (the emoji grid)
+ *      is how far under the slot's largest he came.
  *   5. Separation over many seeded deals of real looking careers: the best
  *      five scores 100 and the worst 0 every time, while the old judge, fed
  *      the same careers as season rows, gives both fives the same band in at
@@ -46,6 +49,8 @@
  *   aiverdict   the hook calls the model's edge function again      section 10
  *   flatpoints  every finish records a flat 500 again               section 10
  *   hitdrift    the hit mark drifts from NBA Stat Line's             section 12
+ *   slotflip    "best here" ignores the spin's direction             section 4
+ *   gainflip    the per pick closeness ignores the spin's direction  section 4
  *
  * MEASURED (2026-10-22, here and on a runner alike): section 5, seed 20261022, 300 deals: the best five 100 and the
  * worst 0 on 300 of 300, random fives average 49.7; the old judge rated the best fives 99.0 and the worst 99.0 on
@@ -64,8 +69,11 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..').re
 const LIB = `${ROOT}/src/lib/nbaStartingFiveScore.ts`;
 const CONTROLS = {
   oldjudge: [3, 5], noinvert: [4], greedy: [6], nonamesake: [7], pergame: [3], aiverdict: [10], flatpoints: [10], hitdrift: [12],
+  slotflip: [4], gainflip: [4],
 };
 const LIB_MUTATIONS = {
+  slotflip: ['const slotBest = up ? hi : lo, slotWorst = up ? lo : hi;', 'const slotBest = hi, slotWorst = lo;'],
+  gainflip: ['const gainedHere = up ? own.value - lo : hi - own.value;', 'const gainedHere = own.value - lo;'],
   noinvert: ['const gained = up ? yourTotal - worst.total : worst.total - yourTotal;', 'const gained = yourTotal - worst.total;'],
   greedy: ['        if (!shared(c.key)) break;', '        break;'],
   nonamesake: ['    if (!recordTeamCodes(r).some(c => codes.has(c))) continue;', ''],
@@ -245,6 +253,33 @@ begin(4, 'Lowest turns the range round');
   const highA = score5(FIVE_A, pools, PPG, 'highest');
   if (!lowA || lowA.score !== 21) fail(`five A on a Lowest spin scored ${lowA?.score}, hand computed (119.5 - 96.0) / 114 = 21`);
   if (lowA && lowA.best?.total !== 5.5) fail(`the best Lowest five totals ${lowA.best?.total}, hand computed 5.5`);
+  /* The numbers a player reads per pick turn round too: on a Lowest spin
+     "best here" is the slot's SMALLEST number and closeness is how far under
+     the slot's largest he came. Hand computed: Ace at PG on the Hawks (guards
+     Ace 25.0 and Crumb 0.5) is best here 0.5, worst 25, closeness 0; Oath at
+     PF on the Heat (forwards Mist 19.5 and Oath 2.0) is best here 2, worst
+     19.5, closeness 1. Then every pick of both fives against the pool. */
+  const lowB = score5(FIVE_B, pools, PPG, 'lowest');
+  const hand = [[lowA, 'Fixture Ace', 0.5, 25, 0], [lowB, 'Fixture Oath', 2, 19.5, 1]];
+  for (const [five, name, best, worst, close] of hand) {
+    const p = five?.perPick?.find(x => x.name === name);
+    if (!p || p.slotBest !== best || p.slotWorst !== worst || p.closeness !== close) {
+      fail(`Lowest ${name}: best here ${p?.slotBest}, worst ${p?.slotWorst}, closeness ${p?.closeness}; hand computed ${best}, ${worst}, ${close}`);
+    }
+  }
+  let lowPicks = 0;
+  for (const five of [lowA, lowB]) {
+    if ((five?.perPick?.length ?? 0) !== 5) { fail(`a Lowest five came back with ${five?.perPick?.length ?? 0} picks scored`); continue; }
+    for (const p of five.perPick) {
+      const pool = pools.find(pl => pl.team === p.team);
+      const vals = pool.entries.filter(e => isPositionEligibleForSlot(e.position, p.role)).map(e => valueFor(e, PPG)).flatMap(v => (v.ok ? [v.value] : []));
+      const hi = Math.max(...vals), lo = Math.min(...vals);
+      const close = hi === lo ? 1 : (hi - p.value) / (hi - lo);
+      if (p.slotBest !== lo || p.slotWorst !== hi) fail(`Lowest ${p.name} at ${p.role}: best here ${p.slotBest} and worst ${p.slotWorst}, the slot runs ${lo} to ${hi}`);
+      if (Math.abs(p.closeness - close) > 1e-9) fail(`Lowest ${p.name} at ${p.role}: closeness ${p.closeness}, want ${close}`);
+      lowPicks += 1;
+    }
+  }
   const rand = mulberry32(1555);
   let pairs = 0, worstGap = 0;
   for (let d = 0; d < 40; d++) {
@@ -257,7 +292,7 @@ begin(4, 'Lowest turns the range round');
   }
   if (worstGap > 1) fail(`highest plus lowest strayed ${worstGap} from 100 on a five`);
   if (pairs < 30) fail(`only ${pairs} random fives were legal, the check had too little to stand on`);
-  console.log(`   five A: highest ${highA?.score}, lowest ${lowA?.score}; ${pairs} random fives, highest plus lowest within ${worstGap} of 100`);
+  console.log(`   five A: highest ${highA?.score}, lowest ${lowA?.score}; ${lowPicks} Lowest picks read best here and closeness the right way round; ${pairs} random fives, highest plus lowest within ${worstGap} of 100`);
 }
 
 /* Helpers for the seeded sections (function declarations, hoisted). */
