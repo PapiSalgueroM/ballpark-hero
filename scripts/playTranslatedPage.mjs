@@ -454,6 +454,7 @@ import path from 'node:path';
 import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import pw from './lib/playwrightLoader.mjs';
+import { consentLabelSource } from './lib/answerConsent.mjs';
 
 const { chromium } = pw;
 const env = process.env;
@@ -614,7 +615,7 @@ if (!WALK.actions.includes('Next Year') || !WALK.actions.includes('Next Season')
 }
 /* What neither walk presses: ways off the page, the account, the theme, and the help trigger on a
    page whose rules are not the point. The first visit rules dialog is pressed, it opens by itself. */
-const NEVER = 'Report a problem|Light mode|Dark mode|Cookie|Sign up|Sign in|Log in|Log out|Essential only|Share|Copy|Install|Delete|Reset|New Career|Start over|Retire|\\bBack\\b|^Home$';
+const NEVER = 'Report a problem|Light mode|Dark mode|Cookie|Sign up|Sign in|Log in|Log out|' + consentLabelSource() + '|Share|Copy|Install|Delete|Reset|New Career|Start over|Retire|\\bBack\\b|^Home$';
 
 /* ------------------------------------------------------------------ *
  * Page side. Runs before any page code, on every load and reload.

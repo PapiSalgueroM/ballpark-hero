@@ -30,6 +30,11 @@ export const CONSENT_REGION = '[role="region"][aria-label="Cookie choices"], [ro
 export const REJECT_LABELS = ['Reject all', 'Essential only'];
 export const ACCEPT_LABELS = ['Accept all', 'Accept'];
 
+/** An anchored alternation of banner labels, for a walk that keeps a list of buttons it must never press. */
+export function consentLabelSource(labels = REJECT_LABELS) {
+  return labels.map(label => `^${label}$`).join('|');
+}
+
 export function consentControlOn() {
   return process.env.ANSWER_CONSENT_CONTROL === 'none';
 }
