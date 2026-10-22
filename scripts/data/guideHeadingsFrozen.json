@@ -826,7 +826,7 @@
         "Giving up reveals the driver and scores 0. The daily driver changes every day."
       ],
       "example": [
-        "Imagine the vibe word is Dominant. That fits a handful of drivers, so you take a swing at Michael Schumacher. Wrong, and the next clue slides out: 105 race wins, the all-time record.",
+        "Imagine the vibe word is Dominant. That fits a handful of drivers, so you take a swing at Michael Schumacher. Wrong, and the next clue slides out: the most race wins in F1 history.",
         "Only one driver owns that number. You type Lewis Hamilton on clue two and bank 800 points.",
         "Waiting for the championship clue to confirm the seven titles would have paid 600. Confidence is worth 200 points here."
       ],
@@ -2203,7 +2203,7 @@
     },
     "/nba-higher-lower": {
       "howToPlay": [
-        "Look at the two player cards: name, position, franchises and final season.",
+        "Look at the two player cards: name, position and franchises.",
         "Tap the player you think finished with more career points.",
         "The totals flip over, your answer gets marked, and the next pair loads.",
         "Survive all 10 rounds and post your score.",
@@ -2428,14 +2428,14 @@
     "/nfl-higher-lower": {
       "howToPlay": [
         "Read the stat question at the top. Rounds rotate through touchdowns scored, passing yards, passing touchdowns, rushing yards, receiving yards, and receptions.",
-        "Check each player's position, teams, and final season, then tap the one with the bigger career number.",
+        "Check each player's position and teams, then tap the one with the bigger career number.",
         "Watch both totals reveal, then roll into the next round.",
         "Finish all 10 rounds and post your score."
       ],
       "rules": [
         "Each correct answer scores 10 points, and consecutive correct answers stack a growing streak bonus of 5 points per extra step.",
         "A perfect 10 for 10 with an unbroken streak maxes out at 325.",
-        "Career numbers come from real play by play data, using careers that started in 2000 or later so every total is complete.",
+        "The pool was built from play by play data that starts in 1999, so it uses careers that started in 2000 or later, and every number is the official regular season total through the last finished season.",
         "Daily is the same 10 rounds for everyone, once per day. Unlimited is random, and its Hard toggle pairs the closest values. Rare exact ties count as correct either way."
       ],
       "example": [
