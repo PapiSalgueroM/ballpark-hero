@@ -675,7 +675,7 @@ function rowFor(beat: PitchBeat, side: PitchSide, b: PitchPoint): Row {
 }
 
 interface Own { figure: PitchFigure; x: number; y: number }
-function blockOf(plan: PitchPlan, beat: PitchBeat, side: PitchSide): Own[] {
+function blockOf(plan: PitchPlan, beat: PitchBeat, side: PitchSide, pin?: Own): Own[] {
   const list = side === 'me' ? plan.mine : plan.theirs;
   const b = turn(side, beat.anchor);
   const row = rowFor(beat, side, b);
@@ -734,9 +734,12 @@ function blockOf(plan: PitchPlan, beat: PitchBeat, side: PitchSide): Own[] {
       p.y += (rng() * 2 - 1) * 1.2;
     }
   }
+  /* Round 1521 review: a man held where he stood on another stretch (the man who fouled, through the free kick). */
+  const pinned = pin ? placed.find(p => p.figure.key === pin.figure.key) : undefined;
+  if (pinned && pin) { pinned.x = pin.x; pinned.y = pin.y; }
   /* Separation, last: nobody of one side stands on a team mate. The man on the ball is never the one moved, nor
      (Round 1521) the man who fouls him. */
-  const held = carrier ?? tackler;
+  const held = carrier ?? tackler ?? pinned;
   for (let pass = 0; pass < 3; pass++) {
     for (let i = 0; i < placed.length; i++) for (let j = i + 1; j < placed.length; j++) {
       const a = placed[i], c = placed[j];
@@ -757,7 +760,19 @@ function blockOf(plan: PitchPlan, beat: PitchBeat, side: PitchSide): Own[] {
 export function pitchScene(plan: PitchPlan, clock: number): MotionScene<PitchPlaced> {
   const index = entryIndex(plan, clock);
   const beat = plan.entries[index];
-  const place = (side: PitchSide): PitchPlaced[] => blockOf(plan, beat, side).map(own => {
+  /* The whistle is drawn only on the stretch that starts at the instant the foul was staged: one cut short at its
+     start by something that outranks it is that foul played through, never a whistle late. It stays over the spot
+     while the free kick is taken (the stretch straight after it), so the moment is there long enough to read: the
+     walk at 390 met the whistle up while the two men were still walking in. */
+  const whistled = (b: PitchBeat | undefined) => (b?.foul && b.dead && Math.abs(b.start - b.foul.at) < 1e-6 ? b : null);
+  const prior = plan.entries[index - 1];
+  const whistle = plan.build ? whistled(beat) ?? (prior && whistled(prior) && beat.id === `y${prior.foul!.order}` && Math.abs(prior.end - beat.start) < 1e-6 ? prior : null) : null;
+  /* Round 1521 review: and through that free kick the man who fouled stays where he stood at the whistle, by the spot
+     his name is over, rather than walking back into his shape under a label that names him (the walk at 844 by 390). */
+  const by = whistle && whistle !== beat ? whistle.foul?.by ?? null : null;
+  const pinSide: PitchSide | null = by ? (plan.mine.some(f => f.key === by) ? 'me' : 'opp') : null;
+  const pin = by && pinSide && whistle ? blockOf(plan, whistle, pinSide).find(o => o.figure.key === by) : undefined;
+  const place = (side: PitchSide): PitchPlaced[] => blockOf(plan, beat, side, side === pinSide ? pin : undefined).map(own => {
     const at = turn(side, own);
     const placed: PitchPlaced = { key: own.figure.key, keeper: own.figure.line === 'keeper', line: own.figure.line, x: at.x, y: at.y };
     if (own.figure.name !== undefined) placed.name = own.figure.name;
@@ -776,13 +791,6 @@ export function pitchScene(plan: PitchPlan, clock: number): MotionScene<PitchPla
   if (plan.build) {
     const flight = flightInto(plan.entries[index - 1], beat);
     if (flight) scene.flight = flight;
-    /* The whistle is drawn only on the stretch that starts at the instant the foul was staged: one cut short at its
-       start by something that outranks it is that foul played through, never a whistle late. It stays over the spot
-       while the free kick is taken (the stretch straight after it), so the moment is there long enough to read: the
-       walk at 390 met the whistle up while the two men were still walking in. */
-    const whistled = (b: PitchBeat | undefined) => (b?.foul && b.dead && Math.abs(b.start - b.foul.at) < 1e-6 ? b : null);
-    const before = plan.entries[index - 1];
-    const whistle = whistled(beat) ?? (before && whistled(before) && beat.id === `y${before.foul!.order}` && Math.abs(before.end - beat.start) < 1e-6 ? before : null);
     if (whistle?.foul) {
       scene.cue = { kind: 'foul', at: { x: whistle.anchor.x, y: whistle.anchor.y }, order: whistle.foul.order, by: whistle.foul.by, on: whistle.foul.on };
       if (whistle.foul.card) scene.cue.card = whistle.foul.card;
