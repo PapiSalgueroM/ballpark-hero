@@ -2628,7 +2628,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       {
         heading: "Ten kicks that get harder as you go",
         items: [
-          "Ten kicks a run, each one further out than the last, with more defenders in the wall and a better keeper.",
+          "Ten kicks a run. After the opening penalty every kick comes from outside the box, and as the run goes on they move further out, with more defenders in the wall and a better keeper.",
         ],
       },
     ],
