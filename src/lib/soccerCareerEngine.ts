@@ -42,7 +42,8 @@ import {
 import type { PhoneChoiceDef } from "./careerEras";
 import type { SoccerInternationalReturn } from './soccerInternationalReturn';
 /* Round 929: every season's league finish, and the era aware elite rule. */
-import { divisionMove, drawLeagueFinish, eliteInYear, finishZone, leagueKeyInYear, managerLeagueField, MANAGER_FIELD, ordinal } from "./soccerCareerLeague";
+import { divisionMove, drawLeagueFinish, eliteInYear, finishZone, leagueKeyInYear, managerLeagueField, MANAGER_FIELD, ordinal, playDugoutTable } from "./soccerCareerLeague";
+import { OWNER_TIERS, ownerClubsForSale, ownerPlanOpen, ownerStart, playOwnerSeason, type OwnerClubForSale } from "./soccerCareerOwner";
 /* Round 1012: real club rivalries, played as league derbies each season. */
 import { resolveSeasonDerbies, applySeasonDerbies, type SeasonDerby } from "./soccerCareerDerby";
 import { cupAssociation, cupChanceFor, cupFor as domesticCupFor, cupTitle, drawCupRun, readCupRun, seasonPerformanceBoost, worldLeagueOf, type CupRun } from "./soccerCareerCup";
@@ -495,6 +496,11 @@ export interface PunditState {
 }
 
 /* ─── Club Owner System ─── */
+/** Round 1524: where a season's budget goes (soccerCareerOwner.ts). */
+export type OwnerPlan = "squad" | "youth" | "stadium" | "debt";
+/** Round 1524: an owner season carries the dugout's table, the call he made
+ *  and what it paid. Every new field is optional: an older row has none. */
+export type OwnerSeasonRow = ManagerState["seasonResults"][number] & { plan?: OwnerPlan; edge?: number; income?: number };
 export interface OwnerState {
   club: string;
   clubTier: number;
@@ -502,7 +508,22 @@ export interface OwnerState {
   budget: number; // in millions
   trophies: number;
   promotions: number;
-  seasonResults: { year: number; club: string; tier: number; result: string; trophy: boolean }[];
+  seasonResults: OwnerSeasonRow[];
+  /* Round 1524, all optional so an owner save from before it loads as it
+     was and plays on from its next season */
+  /** The league the club plays in, moved by the table. */
+  league?: string;
+  /** The call made for the coming season, cleared when it is played. */
+  plan?: OwnerPlan;
+  /** What he paid, the game's estimate, €M. */
+  price?: number;
+  /** What the club owes, €M. */
+  debt?: number;
+  /** The signings' edge on the table, in league points. */
+  squad?: number;
+  /** Academy and ground levels, 0 to 5. */
+  academy?: number;
+  stadium?: number;
 }
 
 /* ─── Newspaper Article System ─── */
@@ -8670,7 +8691,7 @@ export function manualRetire(prev: CareerState): CareerState {
 }
 
 /* ─── Post-retirement choices ─── */
-export function choosePostRetirement(prev: CareerState, choice: PostRetirementChoice, clubs: ClubData[]): CareerState {
+export function choosePostRetirement(prev: CareerState, choice: PostRetirementChoice, clubs: ClubData[], ownerClub?: string): CareerState {
   const s = { ...prev };
   s.postRetirementChoice = choice;
   
@@ -8718,21 +8739,17 @@ export function choosePostRetirement(prev: CareerState, choice: PostRetirementCh
   }
   
   if (choice === "owner") {
-    // Buy a lower-league club
-    const ownerClubs = clubs.filter(c => c.tier >= 3);
-    const club = ownerClubs.length > 0 ? pick(ownerClubs) : { name: "Unknown FC", tier: 4 };
-    const purchasePrice = club.tier >= 4 ? 50 : 100; // €50-100M
-    s.netWorth -= purchasePrice;
-    s.ownerState = {
-      club: club.name,
-      clubTier: club.tier,
-      season: 0,
-      budget: 5, // €5M starting transfer budget
-      trophies: 0,
-      promotions: 0,
-      seasonResults: [],
-    };
-    s.events = [...s.events, `🏟️ Purchased ${club.name} for €${purchasePrice}M!`];
+    /* Round 1524: he buys the club he picked off the list of clubs for sale
+       (ownerClubsOnSale); a caller that names none gets the list's first,
+       and a name that is not for sale buys nothing. */
+    const forSale = ownerClubsOnSale(prev, clubs);
+    const club = ownerClub === undefined
+      ? forSale[0] ?? { name: "Unknown FC", tier: 4, league: "", country: "", price: OWNER_TIERS[4].price, debt: 0 }
+      : forSale.find(c => c.name === ownerClub);
+    if (!club) return prev;
+    s.netWorth -= club.price;
+    s.ownerState = ownerStart(club);
+    s.events = [...s.events, `🏟️ Bought ${club.name} for €${club.price}M, the game's price for a Tier ${club.tier} club${club.debt > 0 ? `, with €${club.debt}M of debt` : ""}.`];
     s.phase = "owner_season";
     return s;
   }
@@ -8982,7 +8999,6 @@ export function advanceManagerSeason(prev: CareerState, clubs: ClubData[]): Care
     : managerLeagueField({ clubs, club: ms.club, league: savedLeague, year: calYear, from: movedFrom, placed }, Math.random);
   if (lf.league) ms.league = lf.league;
   const field: (string | null)[] = [...lf.named, ...Array<null>(Math.max(0, lf.size - 1 - lf.named.length)).fill(null)];
-  const games = field.length * 2; // home and away vs each rival
 
   /* His edge comes from what he has actually done: dugout honours, the
      playing legacy that gets boards dreaming, and time in the job. */
@@ -8990,36 +9006,11 @@ export function advanceManagerSeason(prev: CareerState, clubs: ClubData[]): Care
   const edge = Math.min(9,
     ms.trophies * 2 + ms.promotions + Math.min(2, legacy) + Math.min(3, ms.season - 1) * 0.5);
 
-  /* Points for every club: base spread a real league produces, the player's
-     club nudged by the edge. Position is the SORT of the points, so the
-     table can never disagree with itself. */
-  const maxPts = games * 3;
-  const ptsOf = (bonus: number) => {
-    const r = (Math.random() + Math.random() + Math.random()) / 3; // bell-ish
-    let v = Math.max(Math.round(games * 0.35), Math.min(maxPts, Math.round(games * (0.7 + r * 1.6) + bonus)));
-    /* every total must be reachable in `games` games: 3W + D = v needs
-       W + D <= games, which knocks out totals like 3g - 1 */
-    while ((v - (v % 3)) / 3 + (v % 3) > games) v -= 1;
-    return v;
-  };
-  const rows = field.map(name => ({ club: name ?? "", pts: ptsOf(0), you: false, unnamed: name === null }));
-  rows.push({ club: ms.club, pts: ptsOf(edge), you: true, unnamed: false });
-  rows.sort((a, b) => b.pts - a.pts || (a.you ? -1 : 1));
-  const table = rows.map((r, i) => ({ club: r.club, pts: r.pts, pos: i + 1, you: r.you || undefined, unnamed: r.unnamed || undefined }));
-  const me = table.find(r => r.you)!;
+  /* Round 1524: the table itself is playDugoutTable (soccerCareerLeague.ts),
+     which the club owner plays on too; moved there draw for draw. */
+  const { table, me, record } = playDugoutTable(field, ms.club, edge, Math.random);
   const leagueSize = table.length;
   const relegationLine = leagueSize - 2;
-
-  /* W-D-L that adds up: 3W + D = pts forces D to share pts's remainder
-     mod 3. ptsOf guarantees the minimal split fits in the games played;
-     a few extra draw-triples go in when there is room, for realism. */
-  let draws = me.pts % 3;
-  for (let k = 0; k < 3; k += 1) {
-    if (Math.random() < 0.6 && (me.pts - (draws + 3)) >= 0 && (me.pts - (draws + 3)) / 3 + (draws + 3) <= games) draws += 3;
-  }
-  const wins = (me.pts - draws) / 3;
-  const losses = games - wins - draws;
-  const record = `${wins}W ${draws}D ${losses}L`;
 
   /* The domestic cup: a knockout run, each round a real toss shaded by the
      same edge, so a giant sometimes falls early and a small club sometimes
@@ -9243,44 +9234,31 @@ export function endPunditCareer(prev: CareerState): CareerState {
 }
 
 /* ─── Club Owner Career ─── */
-export function advanceOwnerSeason(prev: CareerState): CareerState {
+/* Round 1524: the owner tail is soccerCareerOwner.ts. These are its doors:
+   the list of clubs for sale, the season's call, and the season itself. */
+function ownerKey(s: CareerState): string {
+  return `${soccerDeckIdentity(s)}|owner`;
+}
+
+/** The clubs he can buy at the end of this career, the same list on every visit. */
+export function ownerClubsOnSale(state: CareerState, clubs: readonly ClubData[]): OwnerClubForSale[] {
+  const firstYear = (state.seasons[state.seasons.length - 1]?.year ?? 2024) + 1;
+  return ownerClubsForSale({ clubs, year: firstYear, netWorth: state.netWorth, key: ownerKey(state) });
+}
+
+/** Where the coming season's budget goes; a call that is not open this season changes nothing. */
+export function chooseOwnerPlan(prev: CareerState, plan: OwnerPlan): CareerState {
+  if (prev.phase !== "owner_season" || !prev.ownerState || !ownerPlanOpen(prev.ownerState, plan)) return prev;
+  return { ...prev, ownerState: { ...prev.ownerState, plan } };
+}
+
+export function advanceOwnerSeason(prev: CareerState, clubs: readonly ClubData[] = []): CareerState {
   const s = { ...prev };
   if (!s.ownerState) return s;
-  const os = { ...s.ownerState };
-  os.season += 1;
-  
-  // Transfer budget grows with success
-  os.budget = Math.round((os.budget + rand(1, 3)) * 10) / 10;
-  
-  const promoted = os.clubTier > 1 && Math.random() < 0.25;
-  const wonTrophy = Math.random() < (os.clubTier <= 2 ? 0.15 : 0.10);
-  const relegated = !promoted && os.clubTier < 4 && Math.random() < 0.1;
-  
-  let result = "";
-  if (promoted) {
-    os.promotions += 1;
-    os.clubTier -= 1;
-    result = `🎉 Promoted to Tier ${os.clubTier}!`;
-    os.budget += 5;
-  } else if (relegated) {
-    os.clubTier += 1;
-    result = `📉 Relegated to Tier ${os.clubTier}`;
-    os.budget = Math.max(1, os.budget - 3);
-  } else if (wonTrophy) {
-    os.trophies += 1;
-    result = `🏆 Won the league!`;
-    os.budget += 3;
-  } else {
-    const positions = ["3rd", "5th", "8th", "mid-table", "lower half"];
-    result = `Finished ${pick(positions)}`;
-  }
-  
-  // Revenue from ownership
-  const revenue = os.clubTier === 1 ? 20 : os.clubTier === 2 ? 8 : os.clubTier === 3 ? 3 : 1;
-  s.netWorth += revenue;
-  result += ` · Revenue: €${revenue}M`;
-  
-  os.seasonResults = [...os.seasonResults, { year: os.season, club: os.club, tier: os.clubTier, result, trophy: wonTrophy }];
+  const season = s.ownerState.season + 1;
+  const year = (s.seasons[s.seasons.length - 1]?.year ?? 2024) + season;
+  const { os, result, income } = playOwnerSeason(s.ownerState, { clubs, year, key: `${ownerKey(s)}|${s.ownerState.club}|${season}` });
+  s.netWorth += income;
   s.ownerState = os;
   s.events = [...s.events, `🏟️ Owner Season ${os.season} at ${os.club}: ${result}`];
   applyRetirementMoneySeason(s, os.season);

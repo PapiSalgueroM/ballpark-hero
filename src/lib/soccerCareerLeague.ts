@@ -728,6 +728,61 @@ function ledgerField(input: ManagerLeagueInput, s: LedgerSeason): ManagerLeagueF
   return { league: s.key, leagueName: s.name, size: s.size, sizeVerified: true, named, lineupUnknown: false };
 }
 
+/* ─── Round 1524: one league season of the dugout's table ───
+   Lifted out of advanceManagerSeason (Round 227) so the club owner plays on
+   the very same table, and moved draw for draw: every rival's points, then
+   his club's, then the draws that split his points into a W-D-L line, all
+   from `rng` in exactly that order. The manager tail hands in Math.random,
+   so a manager season draws what it always drew; the owner tail hands in a
+   stream keyed to his save. */
+export interface DugoutTableEntry { club: string; pts: number; pos: number; you?: true; unnamed?: true }
+export interface DugoutSeasonTable {
+  /** The whole table, best first; position is the sort of the points. */
+  table: DugoutTableEntry[];
+  /** His own row of it. */
+  me: DugoutTableEntry;
+  /** League games each club played: home and away against every rival. */
+  games: number;
+  /** His W-D-L line, which adds up to his points and his games. */
+  record: string;
+}
+export function playDugoutTable(field: readonly (string | null)[], club: string, edge: number, rng: () => number): DugoutSeasonTable {
+  const games = field.length * 2; // home and away vs each rival
+  /* Points for every club: base spread a real league produces, his club
+     nudged by the edge. Position is the SORT of the points, so the table can
+     never disagree with itself. */
+  const maxPts = games * 3;
+  const ptsOf = (bonus: number) => {
+    const r = (rng() + rng() + rng()) / 3; // bell-ish
+    let v = Math.max(Math.round(games * 0.35), Math.min(maxPts, Math.round(games * (0.7 + r * 1.6) + bonus)));
+    /* every total must be reachable in `games` games: 3W + D = v needs
+       W + D <= games, which knocks out totals like 3g - 1 */
+    while ((v - (v % 3)) / 3 + (v % 3) > games) v -= 1;
+    return v;
+  };
+  const rows = field.map(name => ({ club: name ?? "", pts: ptsOf(0), you: false, unnamed: name === null }));
+  rows.push({ club, pts: ptsOf(edge), you: true, unnamed: false });
+  rows.sort((a, b) => b.pts - a.pts || (a.you ? -1 : 1));
+  const table: DugoutTableEntry[] = rows.map((r, i) => ({ club: r.club, pts: r.pts, pos: i + 1, you: r.you || undefined, unnamed: r.unnamed || undefined }));
+  const me = table.find(r => r.you)!;
+  /* W-D-L that adds up: 3W + D = pts forces D to share pts's remainder
+     mod 3. ptsOf guarantees the minimal split fits in the games played;
+     a few extra draw-triples go in when there is room, for realism. */
+  let draws = me.pts % 3;
+  for (let k = 0; k < 3; k += 1) {
+    if (rng() < 0.6 && (me.pts - (draws + 3)) >= 0 && (me.pts - (draws + 3)) / 3 + (draws + 3) <= games) draws += 3;
+  }
+  const wins = (me.pts - draws) / 3;
+  const losses = games - wins - draws;
+  return { table, me, games, record: `${wins}W ${draws}D ${losses}L` };
+}
+
+/** Round 1524: a stream keyed to a string (the forked generator above), for a
+ *  caller outside this file that must not touch Math.random. */
+export function keyedStream(key: string): () => number {
+  return forkRng(key);
+}
+
 /** One dugout season as the save holds it, old saves included. */
 export interface DugoutTableRow {
   league?: unknown;

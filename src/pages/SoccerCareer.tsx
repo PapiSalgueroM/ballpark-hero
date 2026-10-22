@@ -1411,7 +1411,7 @@ export default function SoccerCareer() {
 
   const handleAdvanceOwner = () => {
     if (!career) return;
-    setCareer(advanceOwnerSeason(career));
+    setCareer(advanceOwnerSeason(career, clubs));
   };
 
   const handleEndOwner = () => {
