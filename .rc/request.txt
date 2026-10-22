@@ -1,0 +1,10 @@
+#!serve
+#!playwright
+walk: node scripts/playTycoonScorelines.mjs
+walk-crowd: PLAY_SCORELINES_CONTROL=crowd node scripts/playTycoonScorelines.mjs
+simTycoonHelp: node scripts/simTycoonHelp.mjs
+guideHeadings: node scripts/simGuideHeadings.mjs --refresh /stadium-tycoon && cp scripts/data/guideHeadingsFrozen.json "$RC_OUT/" && node scripts/simGuideHeadings.mjs
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/tycoonHelp.test.tsx src/test/tycoonPacks.test.tsx src/test/tycoonSetPiecePage.test.tsx src/test/tycoonTicketPolicy.test.tsx --testTimeout=300000 --hookTimeout=120000
+simSiteSearch: node scripts/simSiteSearch.mjs
