@@ -1,0 +1,126 @@
+NOTE [bn] {"tag":"390-rm","route":"/","bannerMsFromDomContentLoaded":385}
+PASS [bn] 390-rm /: the banner is up on a first visit
+NOTE [bn] {"tag":"390-rm","buttons":["Essential only","Accept"]}
+PASS [bn] 390-rm /: body carries data-consent-pending while it is up
+PASS [bn] 390-rm /: consentButton finds "Essential only" by its exact label
+PASS [bn] 390-rm /: answerConsent says rejected (74 ms)
+PASS [bn] 390-rm /: the banner and data-consent-pending are both gone
+PASS [bn] 390-rm /: the stored answer reads rejected
+NOTE [bn] {"tag":"390-rm","absentMs":3001}
+PASS [bn] 390-rm /: after a reload answerConsent says absent
+PASS [bn] 390-rm /: reopened from the footer, answerConsent says rejected
+PASS [bn] 390-rm /: still stored as rejected after the reopen
+PASS [bn] 390-rm /: no page errors
+NOTE [bn] {"tag":"390-rm","route":"/soccer-career","bannerMsFromDomContentLoaded":223,"insideHelp":false}
+PASS [bn] 390-rm /soccer-career: answerConsent says rejected (inside help: false)
+PASS [bn] 390-rm /soccer-career: banner and pending both gone
+PASS [bn] 390-rm /soccer-career: no page errors
+NOTE [bn] {"tag":"390-rm","route":"/club-manager","bannerMsFromDomContentLoaded":202,"insideHelp":false}
+PASS [bn] 390-rm /club-manager: answerConsent says rejected (inside help: false)
+PASS [bn] 390-rm /club-manager: banner and pending both gone
+PASS [bn] 390-rm /club-manager: no page errors
+NOTE [bn] {"tag":"390-rm","route":"/football-grid","bannerMsFromDomContentLoaded":182,"insideHelp":false}
+PASS [bn] 390-rm /football-grid: answerConsent says rejected (inside help: false)
+PASS [bn] 390-rm /football-grid: banner and pending both gone
+PASS [bn] 390-rm /football-grid: no page errors
+NOTE [bn] {"tag":"390-rm","route":"/nba-my-career","bannerMsFromDomContentLoaded":195,"insideHelp":false}
+PASS [bn] 390-rm /nba-my-career: answerConsent says rejected (inside help: false)
+PASS [bn] 390-rm /nba-my-career: banner and pending both gone
+PASS [bn] 390-rm /nba-my-career: no page errors
+PASS [bn] 390-rm accept: answerConsent({ choice: 'accept' }) says accepted
+PASS [bn] 390-rm accept: the stored answer reads accepted
+NOTE [bn] {"tag":"390-rm","withdrawalAnswer":"rejected","storedAfter":"rejected"}
+PASS [bn] 390-rm no reject button: renamed 1, answerConsent threw (answerConsent: the Cookie choices banner is up but has no "Reject all" or "Essential only" button)
+NOTE [bn] {"tag":"390-motion","route":"/","bannerMsFromDomContentLoaded":333}
+PASS [bn] 390-motion /: the banner is up on a first visit
+NOTE [bn] {"tag":"390-motion","buttons":["Essential only","Accept"]}
+PASS [bn] 390-motion /: body carries data-consent-pending while it is up
+PASS [bn] 390-motion /: consentButton finds "Essential only" by its exact label
+PASS [bn] 390-motion /: answerConsent says rejected (66 ms)
+PASS [bn] 390-motion /: the banner and data-consent-pending are both gone
+PASS [bn] 390-motion /: the stored answer reads rejected
+NOTE [bn] {"tag":"390-motion","absentMs":3000}
+PASS [bn] 390-motion /: after a reload answerConsent says absent
+PASS [bn] 390-motion /: reopened from the footer, answerConsent says rejected
+PASS [bn] 390-motion /: still stored as rejected after the reopen
+PASS [bn] 390-motion /: no page errors
+NOTE [bn] {"tag":"390-motion","route":"/soccer-career","bannerMsFromDomContentLoaded":173,"insideHelp":false}
+PASS [bn] 390-motion /soccer-career: answerConsent says rejected (inside help: false)
+PASS [bn] 390-motion /soccer-career: banner and pending both gone
+PASS [bn] 390-motion /soccer-career: no page errors
+NOTE [bn] {"tag":"390-motion","route":"/club-manager","bannerMsFromDomContentLoaded":187,"insideHelp":false}
+PASS [bn] 390-motion /club-manager: answerConsent says rejected (inside help: false)
+PASS [bn] 390-motion /club-manager: banner and pending both gone
+PASS [bn] 390-motion /club-manager: no page errors
+NOTE [bn] {"tag":"390-motion","route":"/football-grid","bannerMsFromDomContentLoaded":142,"insideHelp":false}
+PASS [bn] 390-motion /football-grid: answerConsent says rejected (inside help: false)
+PASS [bn] 390-motion /football-grid: banner and pending both gone
+PASS [bn] 390-motion /football-grid: no page errors
+NOTE [bn] {"tag":"390-motion","route":"/nba-my-career","bannerMsFromDomContentLoaded":179,"insideHelp":false}
+PASS [bn] 390-motion /nba-my-career: answerConsent says rejected (inside help: false)
+PASS [bn] 390-motion /nba-my-career: banner and pending both gone
+PASS [bn] 390-motion /nba-my-career: no page errors
+NOTE [bn] {"tag":"1280-rm","route":"/","bannerMsFromDomContentLoaded":349}
+PASS [bn] 1280-rm /: the banner is up on a first visit
+NOTE [bn] {"tag":"1280-rm","buttons":["Essential only","Accept"]}
+PASS [bn] 1280-rm /: body carries data-consent-pending while it is up
+PASS [bn] 1280-rm /: consentButton finds "Essential only" by its exact label
+PASS [bn] 1280-rm /: answerConsent says rejected (69 ms)
+PASS [bn] 1280-rm /: the banner and data-consent-pending are both gone
+PASS [bn] 1280-rm /: the stored answer reads rejected
+NOTE [bn] {"tag":"1280-rm","absentMs":3000}
+PASS [bn] 1280-rm /: after a reload answerConsent says absent
+PASS [bn] 1280-rm /: reopened from the footer, answerConsent says rejected
+PASS [bn] 1280-rm /: still stored as rejected after the reopen
+PASS [bn] 1280-rm /: no page errors
+NOTE [bn] {"tag":"1280-rm","route":"/soccer-career","bannerMsFromDomContentLoaded":225,"insideHelp":false}
+PASS [bn] 1280-rm /soccer-career: answerConsent says rejected (inside help: false)
+PASS [bn] 1280-rm /soccer-career: banner and pending both gone
+PASS [bn] 1280-rm /soccer-career: no page errors
+NOTE [bn] {"tag":"1280-rm","route":"/club-manager","bannerMsFromDomContentLoaded":224,"insideHelp":false}
+PASS [bn] 1280-rm /club-manager: answerConsent says rejected (inside help: false)
+PASS [bn] 1280-rm /club-manager: banner and pending both gone
+PASS [bn] 1280-rm /club-manager: no page errors
+NOTE [bn] {"tag":"1280-rm","route":"/football-grid","bannerMsFromDomContentLoaded":185,"insideHelp":false}
+PASS [bn] 1280-rm /football-grid: answerConsent says rejected (inside help: false)
+PASS [bn] 1280-rm /football-grid: banner and pending both gone
+PASS [bn] 1280-rm /football-grid: no page errors
+NOTE [bn] {"tag":"1280-rm","route":"/nba-my-career","bannerMsFromDomContentLoaded":162,"insideHelp":false}
+PASS [bn] 1280-rm /nba-my-career: answerConsent says rejected (inside help: false)
+PASS [bn] 1280-rm /nba-my-career: banner and pending both gone
+PASS [bn] 1280-rm /nba-my-career: no page errors
+PASS [bn] 1280-rm accept: answerConsent({ choice: 'accept' }) says accepted
+PASS [bn] 1280-rm accept: the stored answer reads accepted
+NOTE [bn] {"tag":"1280-rm","withdrawalAnswer":"rejected","storedAfter":"rejected"}
+PASS [bn] 1280-rm no reject button: renamed 1, answerConsent threw (answerConsent: the Cookie choices banner is up but has no "Reject all" or "Essential only" button)
+NOTE [bn] {"tag":"1280-motion","route":"/","bannerMsFromDomContentLoaded":364}
+PASS [bn] 1280-motion /: the banner is up on a first visit
+NOTE [bn] {"tag":"1280-motion","buttons":["Essential only","Accept"]}
+PASS [bn] 1280-motion /: body carries data-consent-pending while it is up
+PASS [bn] 1280-motion /: consentButton finds "Essential only" by its exact label
+PASS [bn] 1280-motion /: answerConsent says rejected (62 ms)
+PASS [bn] 1280-motion /: the banner and data-consent-pending are both gone
+PASS [bn] 1280-motion /: the stored answer reads rejected
+NOTE [bn] {"tag":"1280-motion","absentMs":3000}
+PASS [bn] 1280-motion /: after a reload answerConsent says absent
+PASS [bn] 1280-motion /: reopened from the footer, answerConsent says rejected
+PASS [bn] 1280-motion /: still stored as rejected after the reopen
+PASS [bn] 1280-motion /: no page errors
+NOTE [bn] {"tag":"1280-motion","route":"/soccer-career","bannerMsFromDomContentLoaded":194,"insideHelp":false}
+PASS [bn] 1280-motion /soccer-career: answerConsent says rejected (inside help: false)
+PASS [bn] 1280-motion /soccer-career: banner and pending both gone
+PASS [bn] 1280-motion /soccer-career: no page errors
+NOTE [bn] {"tag":"1280-motion","route":"/club-manager","bannerMsFromDomContentLoaded":180,"insideHelp":false}
+PASS [bn] 1280-motion /club-manager: answerConsent says rejected (inside help: false)
+PASS [bn] 1280-motion /club-manager: banner and pending both gone
+PASS [bn] 1280-motion /club-manager: no page errors
+NOTE [bn] {"tag":"1280-motion","route":"/football-grid","bannerMsFromDomContentLoaded":154,"insideHelp":false}
+PASS [bn] 1280-motion /football-grid: answerConsent says rejected (inside help: false)
+PASS [bn] 1280-motion /football-grid: banner and pending both gone
+PASS [bn] 1280-motion /football-grid: no page errors
+NOTE [bn] {"tag":"1280-motion","route":"/nba-my-career","bannerMsFromDomContentLoaded":182,"insideHelp":false}
+PASS [bn] 1280-motion /nba-my-career: answerConsent says rejected (inside help: false)
+PASS [bn] 1280-motion /nba-my-career: banner and pending both gone
+PASS [bn] 1280-motion /nba-my-career: no page errors
+banner appearance after domcontentloaded (ms): 142 154 162 173 179 180 182 182 185 187 194 195 202 223 224 225 333 349 364 385
+walkConsent [bn]: 94 checks, 0 failed

@@ -1,0 +1,10 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk-head exit=0 36s | walkConsent [head]: 94 checks, 0 failed
+walk-control exit=1 21s | walkConsent [ctl]: 94 checks, 62 failed
+bn-base exit=0 33s | /tmp/wt-bn
+bn-same-walks exit=0 0s | playCmHubLanding: identical on BN and on the branch cut
+walk-bn exit=0 36s | walkConsent [bn]: 94 checks, 0 failed
+bn-playUsCareerSaveSeam exit=0 32s | playUsCareerSaveSeam: 15 journeys, 67 checks, 0 failed
+bn-playCmHubLanding exit=0 92s | playCmHubLanding: green (A 8 pass 0 fail, B 65 pass 0 fail, C 112 pass 0 fail, E 65 pass 0 fail, F 9 pass 0 fail); the hub lands on the club on its first frame
+bn-boxing exit=0 7s | Boxing forecast: 4 actual-route journeys passed.
+bn-playStorageBlocked exit=0 272s | playStorageBlocked: 826 checks, 0 failed

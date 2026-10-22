@@ -1,0 +1,182 @@
+{
+ "label": "head",
+ "base": "http://localhost:4173",
+ "checks": 94,
+ "failed": 0,
+ "notes": [
+  {
+   "tag": "390-rm",
+   "route": "/",
+   "bannerMsFromDomContentLoaded": 426
+  },
+  {
+   "tag": "390-rm",
+   "buttons": [
+    "Reject all",
+    "Accept all",
+    "Save choices"
+   ]
+  },
+  {
+   "tag": "390-rm",
+   "absentMs": 3001
+  },
+  {
+   "tag": "390-rm",
+   "route": "/soccer-career",
+   "bannerMsFromDomContentLoaded": 191,
+   "insideHelp": false
+  },
+  {
+   "tag": "390-rm",
+   "route": "/club-manager",
+   "bannerMsFromDomContentLoaded": 247,
+   "insideHelp": false
+  },
+  {
+   "tag": "390-rm",
+   "route": "/football-grid",
+   "bannerMsFromDomContentLoaded": 176,
+   "insideHelp": false
+  },
+  {
+   "tag": "390-rm",
+   "route": "/nba-my-career",
+   "bannerMsFromDomContentLoaded": 222,
+   "insideHelp": false
+  },
+  {
+   "tag": "390-rm",
+   "withdrawalAnswer": "rejected",
+   "storedAfter": "rejected"
+  },
+  {
+   "tag": "390-motion",
+   "route": "/",
+   "bannerMsFromDomContentLoaded": 367
+  },
+  {
+   "tag": "390-motion",
+   "buttons": [
+    "Reject all",
+    "Accept all",
+    "Save choices"
+   ]
+  },
+  {
+   "tag": "390-motion",
+   "absentMs": 3001
+  },
+  {
+   "tag": "390-motion",
+   "route": "/soccer-career",
+   "bannerMsFromDomContentLoaded": 181,
+   "insideHelp": false
+  },
+  {
+   "tag": "390-motion",
+   "route": "/club-manager",
+   "bannerMsFromDomContentLoaded": 189,
+   "insideHelp": false
+  },
+  {
+   "tag": "390-motion",
+   "route": "/football-grid",
+   "bannerMsFromDomContentLoaded": 164,
+   "insideHelp": false
+  },
+  {
+   "tag": "390-motion",
+   "route": "/nba-my-career",
+   "bannerMsFromDomContentLoaded": 179,
+   "insideHelp": false
+  },
+  {
+   "tag": "1280-rm",
+   "route": "/",
+   "bannerMsFromDomContentLoaded": 407
+  },
+  {
+   "tag": "1280-rm",
+   "buttons": [
+    "Reject all",
+    "Accept all",
+    "Save choices"
+   ]
+  },
+  {
+   "tag": "1280-rm",
+   "absentMs": 3000
+  },
+  {
+   "tag": "1280-rm",
+   "route": "/soccer-career",
+   "bannerMsFromDomContentLoaded": 214,
+   "insideHelp": false
+  },
+  {
+   "tag": "1280-rm",
+   "route": "/club-manager",
+   "bannerMsFromDomContentLoaded": 242,
+   "insideHelp": false
+  },
+  {
+   "tag": "1280-rm",
+   "route": "/football-grid",
+   "bannerMsFromDomContentLoaded": 194,
+   "insideHelp": false
+  },
+  {
+   "tag": "1280-rm",
+   "route": "/nba-my-career",
+   "bannerMsFromDomContentLoaded": 171,
+   "insideHelp": false
+  },
+  {
+   "tag": "1280-rm",
+   "withdrawalAnswer": "rejected",
+   "storedAfter": "rejected"
+  },
+  {
+   "tag": "1280-motion",
+   "route": "/",
+   "bannerMsFromDomContentLoaded": 366
+  },
+  {
+   "tag": "1280-motion",
+   "buttons": [
+    "Reject all",
+    "Accept all",
+    "Save choices"
+   ]
+  },
+  {
+   "tag": "1280-motion",
+   "absentMs": 3001
+  },
+  {
+   "tag": "1280-motion",
+   "route": "/soccer-career",
+   "bannerMsFromDomContentLoaded": 215,
+   "insideHelp": false
+  },
+  {
+   "tag": "1280-motion",
+   "route": "/club-manager",
+   "bannerMsFromDomContentLoaded": 183,
+   "insideHelp": false
+  },
+  {
+   "tag": "1280-motion",
+   "route": "/football-grid",
+   "bannerMsFromDomContentLoaded": 179,
+   "insideHelp": false
+  },
+  {
+   "tag": "1280-motion",
+   "route": "/nba-my-career",
+   "bannerMsFromDomContentLoaded": 192,
+   "insideHelp": false
+  }
+ ]
+}

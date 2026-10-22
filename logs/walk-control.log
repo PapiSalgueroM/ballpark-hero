@@ -1,0 +1,12 @@
+FAIL [ctl] 1280-motion /club-manager: banner and pending both gone
+PASS [ctl] 1280-motion /club-manager: no page errors
+NOTE [ctl] {"tag":"1280-motion","route":"/football-grid","bannerMsFromDomContentLoaded":164,"insideHelp":false}
+FAIL [ctl] 1280-motion /football-grid: answerConsent says skipped (inside help: false)
+FAIL [ctl] 1280-motion /football-grid: banner and pending both gone
+PASS [ctl] 1280-motion /football-grid: no page errors
+NOTE [ctl] {"tag":"1280-motion","route":"/nba-my-career","bannerMsFromDomContentLoaded":173,"insideHelp":false}
+FAIL [ctl] 1280-motion /nba-my-career: answerConsent says skipped (inside help: false)
+FAIL [ctl] 1280-motion /nba-my-career: banner and pending both gone
+PASS [ctl] 1280-motion /nba-my-career: no page errors
+banner appearance after domcontentloaded (ms): 164 164 167 173 181 183 189 190 198 199 204 216 220 221 222 229 365 381 407 428
+walkConsent [ctl]: 94 checks, 62 failed
