@@ -1,0 +1,8 @@
+build exit=0 26s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+saleReview exit=0 100s | All 1 harnesses green.
+simTycoonGoalFlight exit=1 1s | 1 harness not green.
+simSetPiecePresentation exit=1 4s | 1 harness not green.
+base-build exit=0 26s | base built at 268e3b97
+saleReview-base exit=0 98s | All 1 harnesses green.
+simTycoonGoalFlight-base exit=1 2s | 1 harness not green.
+simSetPiecePresentation-base exit=1 4s | 1 harness not green.

@@ -1,0 +1,10 @@
+Network mode: offline, loopback only, no production probe or database retries.
+Running 0 node harnesses
+
+Serving dist on 4186 for 1 browser harnesses
+  FAIL  simTycoonGoalFlight.mjs         0.5s
+
+----- simTycoonGoalFlight.mjs (FAIL) -----
+simTycoonGoalFlight: FAIL, 0/4 effective copied controls; historical expected failure=false.
+
+1 harness not green.
