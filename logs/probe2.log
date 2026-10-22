@@ -1,0 +1,5 @@
+  390x844: where "Buy a Football Club" was tapped there is now no tile
+  390x844: a second tap on the same spot 203ms after the first: nothing bought
+  1280x900: where "Buy a Football Club" was tapped there is now no tile
+  1280x900: a second tap on the same spot 205ms after the first: nothing bought
+probeDoubleTap: 0 of 2 sizes bought an unseen club on a double tap of Buy a Football Club

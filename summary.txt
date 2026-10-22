@@ -1,0 +1,8 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+probe exit=0 26s | probeInvisibleBuy: 0 of 2 sizes bought a club whose tile was not yet visible
+probe2 exit=0 27s | probeDoubleTap: 0 of 2 sizes bought an unseen club on a double tap of Buy a Football Club
+sweepWeight exit=0 28s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+simFlagshipWeight exit=0 1s | simFlagshipWeight: green. The flagship carries its own game and nobody else's.
+playFlagshipLazy exit=0 9s | playFlagshipLazy: green. The dugout costs nothing until you walk into it, and it still works when you do.
+landing-bar exit=0 104s | playSoccerLanding: green at 320x640, 390x844, 1280x900 (also bar 360x780, bar 375x667; bar), HEAD ONLY
+walk exit=0 144s | walkRun1524: green, 384 checks
