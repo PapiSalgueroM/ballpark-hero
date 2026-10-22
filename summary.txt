@@ -1,0 +1,2 @@
+m-linepts exit=0 106s | MUTATION linepts: s1=0 s5=0 s8=0 unit=0 => SURVIVED, every gate green
+m-minutes exit=0 108s | MUTATION minutes: s1=0 s5=0 s8=0 unit=0 => SURVIVED, every gate green
