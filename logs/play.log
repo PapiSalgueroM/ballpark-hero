@@ -1,0 +1,71 @@
+S1 stadium-tycoon-390-motion first:  box 16-595 x 16-374 (scroll 577/2708), button 2657-2705 at its centre: nothing, banner 611-844 pending true var 233px, heading 37 visible
+S1 stadium-tycoon-390-motion bottom: box 16-595 x 16-374 (scroll 577/2708), button 526-574 at its centre: button, banner 611-844 pending true var 233px, heading -2094 covered
+S1 stadium-tycoon-390-motion tapped: closed true; reopened: box 16-595 x 16-374 (scroll 577/2708), button 526-574 at its centre: button, banner 611-844 pending true var 233px, heading -2094 covered
+S1 stadium-tycoon-390-rm first:  box 16-595 x 16-374 (scroll 577/2708), button 2657-2705 at its centre: nothing, banner 611-844 pending true var 233px, heading 37 visible
+S1 stadium-tycoon-390-rm bottom: box 16-595 x 16-374 (scroll 577/2708), button 526-574 at its centre: button, banner 611-844 pending true var 233px, heading -2094 covered
+S1 stadium-tycoon-390-rm tapped: closed true; reopened: box 16-595 x 16-374 (scroll 577/2708), button 526-574 at its centre: button, banner 611-844 pending true var 233px, heading -2094 covered
+S1 stadium-tycoon-1280-motion first:  box 16-719 x 416-864 (scroll 701/2188), button 2137-2185 at its centre: nothing, banner 735-900 pending true var 165px, heading 37 visible
+S1 stadium-tycoon-1280-motion bottom: box 16-719 x 416-864 (scroll 701/2188), button 650-698 at its centre: button, banner 735-900 pending true var 165px, heading -1450 covered
+S1 stadium-tycoon-1280-motion tapped: closed true; reopened: box 16-719 x 416-864 (scroll 701/2188), button 650-698 at its centre: button, banner 735-900 pending true var 165px, heading -1450 covered
+S1 stadium-tycoon-1280-rm first:  box 16-719 x 416-864 (scroll 701/2188), button 2137-2185 at its centre: nothing, banner 735-900 pending true var 165px, heading 37 visible
+S1 stadium-tycoon-1280-rm bottom: box 16-719 x 416-864 (scroll 701/2188), button 650-698 at its centre: button, banner 735-900 pending true var 165px, heading -1450 covered
+S1 stadium-tycoon-1280-rm tapped: closed true; reopened: box 16-719 x 416-864 (scroll 701/2188), button 650-698 at its centre: button, banner 735-900 pending true var 165px, heading -1450 covered
+S1 idle-arena-390-motion first:  box 16-595 x 16-374 (scroll 577/1143), button 1092-1140 at its centre: nothing, banner 611-844 pending true var 233px, heading 41 visible
+S1 idle-arena-390-motion bottom: box 16-595 x 16-374 (scroll 577/1143), button 526-574 at its centre: button, banner 611-844 pending true var 233px, heading -525 covered
+S1 idle-arena-390-motion tapped: closed true; reopened: box 16-595 x 16-374 (scroll 577/1143), button 526-574 at its centre: button, banner 611-844 pending true var 233px, heading -525 covered
+S1 idle-arena-390-rm first:  box 16-595 x 16-374 (scroll 577/1143), button 1092-1140 at its centre: nothing, banner 611-844 pending true var 233px, heading 41 visible
+S1 idle-arena-390-rm bottom: box 16-595 x 16-374 (scroll 577/1143), button 526-574 at its centre: button, banner 611-844 pending true var 233px, heading -525 covered
+S1 idle-arena-390-rm tapped: closed true; reopened: box 16-595 x 16-374 (scroll 577/1143), button 526-574 at its centre: button, banner 611-844 pending true var 233px, heading -525 covered
+S1 idle-arena-1280-motion first:  box 16-719 x 416-864 (scroll 701/935), button 884-932 at its centre: nothing, banner 735-900 pending true var 165px, heading 41 visible
+S1 idle-arena-1280-motion bottom: box 16-719 x 416-864 (scroll 701/935), button 650-698 at its centre: button, banner 735-900 pending true var 165px, heading -193 covered
+S1 idle-arena-1280-motion tapped: closed true; reopened: box 16-719 x 416-864 (scroll 701/935), button 650-698 at its centre: button, banner 735-900 pending true var 165px, heading -193 covered
+S1 idle-arena-1280-rm first:  box 16-719 x 416-864 (scroll 701/935), button 884-932 at its centre: nothing, banner 735-900 pending true var 165px, heading 41 visible
+S1 idle-arena-1280-rm bottom: box 16-719 x 416-864 (scroll 701/935), button 650-698 at its centre: button, banner 735-900 pending true var 165px, heading -193 covered
+S1 idle-arena-1280-rm tapped: closed true; reopened: box 16-719 x 416-864 (scroll 701/935), button 650-698 at its centre: button, banner 735-900 pending true var 165px, heading -193 covered
+S1 wonderkid-factory-390-motion first:  box 16-595 x 16-374 (scroll 577/1708), button 1657-1705 at its centre: nothing, banner 611-844 pending true var 233px, heading 37 visible
+S1 wonderkid-factory-390-motion bottom: box 16-595 x 16-374 (scroll 577/1708), button 526-574 at its centre: button, banner 611-844 pending true var 233px, heading -1094 covered
+S1 wonderkid-factory-390-motion tapped: closed true; reopened: box 16-595 x 16-374 (scroll 577/1708), button 526-574 at its centre: button, banner 611-844 pending true var 233px, heading -1094 covered
+S1 wonderkid-factory-390-rm first:  box 16-595 x 16-374 (scroll 577/1708), button 1657-1705 at its centre: nothing, banner 611-844 pending true var 233px, heading 37 visible
+S1 wonderkid-factory-390-rm bottom: box 16-595 x 16-374 (scroll 577/1708), button 526-574 at its centre: button, banner 611-844 pending true var 233px, heading -1094 covered
+S1 wonderkid-factory-390-rm tapped: closed true; reopened: box 16-595 x 16-374 (scroll 577/1708), button 526-574 at its centre: button, banner 611-844 pending true var 233px, heading -1094 covered
+S1 wonderkid-factory-1280-motion first:  box 16-719 x 416-864 (scroll 701/1388), button 1337-1385 at its centre: nothing, banner 735-900 pending true var 165px, heading 37 visible
+S1 wonderkid-factory-1280-motion bottom: box 16-719 x 416-864 (scroll 701/1388), button 650-698 at its centre: button, banner 735-900 pending true var 165px, heading -650 covered
+S1 wonderkid-factory-1280-motion tapped: closed true; reopened: box 16-719 x 416-864 (scroll 701/1388), button 650-698 at its centre: button, banner 735-900 pending true var 165px, heading -650 covered
+S1 wonderkid-factory-1280-rm first:  box 16-719 x 416-864 (scroll 701/1388), button 1337-1385 at its centre: nothing, banner 735-900 pending true var 165px, heading 37 visible
+S1 wonderkid-factory-1280-rm bottom: box 16-719 x 416-864 (scroll 701/1388), button 650-698 at its centre: button, banner 735-900 pending true var 165px, heading -650 covered
+S1 wonderkid-factory-1280-rm tapped: closed true; reopened: box 16-719 x 416-864 (scroll 701/1388), button 650-698 at its centre: button, banner 735-900 pending true var 165px, heading -650 covered
+S1 hall-of-champions-390-motion first:  box 16-595 x 16-374 (scroll 577/761), button 710-758 at its centre: BANNER, banner 611-844 pending true var 233px, heading 41 visible
+S1 hall-of-champions-390-motion bottom: box 16-595 x 16-374 (scroll 577/761), button 526-574 at its centre: button, banner 611-844 pending true var 233px, heading -143 covered
+S1 hall-of-champions-390-motion tapped: closed true; reopened: box 16-595 x 16-374 (scroll 577/761), button 526-574 at its centre: button, banner 611-844 pending true var 233px, heading -143 covered
+S1 hall-of-champions-390-rm first:  box 16-595 x 16-374 (scroll 577/761), button 710-758 at its centre: BANNER, banner 611-844 pending true var 233px, heading 41 visible
+S1 hall-of-champions-390-rm bottom: box 16-595 x 16-374 (scroll 577/761), button 526-574 at its centre: button, banner 611-844 pending true var 233px, heading -143 covered
+S1 hall-of-champions-390-rm tapped: closed true; reopened: box 16-595 x 16-374 (scroll 577/761), button 526-574 at its centre: button, banner 611-844 pending true var 233px, heading -143 covered
+S1 hall-of-champions-1280-motion first:  box 42-693 x 416-864 (scroll 649/649), button 624-672 at its centre: button, banner 735-900 pending true var 165px, heading 67 visible
+S1 hall-of-champions-1280-motion bottom: box 42-693 x 416-864 (scroll 649/649), button 624-672 at its centre: button, banner 735-900 pending true var 165px, heading 67 visible
+S1 hall-of-champions-1280-motion tapped: closed true; reopened: box 42-693 x 416-864 (scroll 649/649), button 624-672 at its centre: button, banner 735-900 pending true var 165px, heading 67 visible
+S1 hall-of-champions-1280-rm first:  box 42-693 x 416-864 (scroll 649/649), button 624-672 at its centre: button, banner 735-900 pending true var 165px, heading 67 visible
+S1 hall-of-champions-1280-rm bottom: box 42-693 x 416-864 (scroll 649/649), button 624-672 at its centre: button, banner 735-900 pending true var 165px, heading 67 visible
+S1 hall-of-champions-1280-rm tapped: closed true; reopened: box 42-693 x 416-864 (scroll 649/649), button 624-672 at its centre: button, banner 735-900 pending true var 165px, heading 67 visible
+S2 academytab-390 first:  box 16-595 x 16-374 (scroll 577/1708), button 1657-1705 at its centre: nothing, banner 611-844 pending true var 233px, heading 37 visible
+S2 academytab-390 bottom: box 16-595 x 16-374 (scroll 577/1708), button 526-574 at its centre: button, banner 611-844 pending true var 233px, heading -1094 covered
+S2 academytab-1280 first:  box 16-719 x 416-864 (scroll 701/1388), button 1337-1385 at its centre: nothing, banner 735-900 pending true var 165px, heading 37 visible
+S2 academytab-1280 bottom: box 16-719 x 416-864 (scroll 701/1388), button 650-698 at its centre: button, banner 735-900 pending true var 165px, heading -650 covered
+S3 away-320 save aged 3 h; first:  box 16-319 x 16-304 (scroll 301/434), button 383-427 at its centre: BANNER, banner 335-640 pending true var 305px, heading 89 visible
+S3 away-320 bottom: box 16-319 x 16-304 (scroll 301/434), button 250-294 at its centre: button, banner 335-640 pending true var 305px, heading -44 covered
+S3 away-390 save aged 3 h; first:  box 98-514 x 16-374 (scroll 414/414), button 445-489 at its centre: button, banner 611-844 pending true var 233px, heading 171 visible
+S3 away-390 bottom: box 98-514 x 16-374 (scroll 414/414), button 445-489 at its centre: button, banner 611-844 pending true var 233px, heading 171 visible
+S3 away-1280 save aged 3 h; first:  box 168-568 x 448-832 (scroll 398/398), button 499-543 at its centre: button, banner 735-900 pending true var 165px, heading 241 visible
+S3 away-1280 bottom: box 168-568 x 448-832 (scroll 398/398), button 499-543 at its centre: button, banner 735-900 pending true var 165px, heading 241 visible
+S4 answered-stadium-tycoon-390 first:  box 84-760 x 16-374 (scroll 673/2708), button 2725-2773 at its centre: nothing, banner none pending false var unset, heading 105 visible
+S4 answered-stadium-tycoon-390 bottom: box 84-760 x 16-374 (scroll 673/2708), button 690-738 at its centre: button, banner none pending false var unset, heading -1930 covered
+S4 answered-stadium-tycoon-1280 first:  box 90-810 x 416-864 (scroll 718/2188), button 2211-2259 at its centre: nothing, banner none pending false var unset, heading 111 visible
+S4 answered-stadium-tycoon-1280 bottom: box 90-810 x 416-864 (scroll 718/2188), button 741-789 at its centre: button, banner none pending false var unset, heading -1359 covered
+S4 answered-idle-arena-390 first:  box 63-781 x 16-374 (scroll 715/1143), button 1139-1187 at its centre: nothing, banner none pending false var unset, heading 88 visible
+S4 answered-idle-arena-390 bottom: box 63-781 x 16-374 (scroll 715/1143), button 711-759 at its centre: button, banner none pending false var unset, heading -340 covered
+S4 answered-idle-arena-1280 first:  box 68-833 x 416-864 (scroll 763/935), button 935-983 at its centre: nothing, banner none pending false var unset, heading 93 visible
+S4 answered-idle-arena-1280 bottom: box 68-833 x 416-864 (scroll 763/935), button 763-811 at its centre: button, banner none pending false var unset, heading -79 covered
+S4 answered-wonderkid-factory-390 first:  box 84-760 x 16-374 (scroll 673/1708), button 1725-1773 at its centre: nothing, banner none pending false var unset, heading 105 visible
+S4 answered-wonderkid-factory-390 bottom: box 84-760 x 16-374 (scroll 673/1708), button 690-738 at its centre: button, banner none pending false var unset, heading -930 covered
+S4 answered-wonderkid-factory-1280 first:  box 90-810 x 416-864 (scroll 718/1388), button 1411-1459 at its centre: nothing, banner none pending false var unset, heading 111 visible
+S4 answered-wonderkid-factory-1280 bottom: box 90-810 x 416-864 (scroll 718/1388), button 741-789 at its centre: button, banner none pending false var unset, heading -559 covered
+play walk done: 27 scenes measured

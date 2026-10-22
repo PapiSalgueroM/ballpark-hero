@@ -1,0 +1,59 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/tycoonAway.test.tsx[2m > [22m[2mStadium Tycoon away earnings[2m > [22m[2m1 the loop really runs at the frame cadence a browser gives it
+[22m[39mAWAY| 30s of 16ms frames drove 21 match minutes and earned 135.3 against a header rate of 4.500/s
+
+[90mstdout[2m | src/test/tycoonAway.test.tsx[2m > [22m[2mStadium Tycoon away earnings[2m > [22m[2m2 a closed tab reopened hours later settles on the load path
+[22m[39mAWAY| load path, 3h closed: paid 10800.000s of away time, 0.000s off the wall clock, margin 0.5s
+
+[90mstdout[2m | src/test/tycoonAway.test.tsx[2m > [22m[2mStadium Tycoon away earnings[2m > [22m[2m3 a backgrounded tab settles the hours when it comes back
+[22m[39mAWAY| visibility path, 3h hidden: paid 10800.000s of away time, 0.000s off the wall clock, margin 0.5s
+AWAY| visibility path, 3h hidden: the return frame alone would have paid 0.0, worth 0.0s of away time
+
+[90mstdout[2m | src/test/tycoonAway.test.tsx[2m > [22m[2mStadium Tycoon away earnings[2m > [22m[2m4 the stated cap applies to a backgrounded tab exactly as to a closed one
+[22m[39mAWAY| cap: 20h hidden paid 8.0000h against the stated 8h cap; hidden 65520 and closed 65520 are the same number
+
+[90mstdout[2m | src/test/tycoonAway.test.tsx[2m > [22m[2mStadium Tycoon away earnings[2m > [22m[2m5 time spent playing is never billed back as time away
+[22m[39mAWAY| no double bill: 60s of live play then a tab bounce paid 0 more on top of the 24570 already settled
+
+[90mstdout[2m | src/test/tycoonAway.test.tsx[2m > [22m[2mStadium Tycoon away earnings[2m > [22m[2m6 a quick alt tab is not a trip away
+[22m[39mAWAY| floor: 20s behind another window paid nothing, which is the lib rule that a tab refresh is not a trip away
+
+[90mstdout[2m | src/test/tycoonAway.test.tsx[2m > [22m[2mStadium Tycoon away earnings[2m > [22m[2m7 a closed tab plays one matchday per half hour away, and never the final one
+[22m[39mAWAY| away matchdays on the load path: no time: 0, 29 seconds: 0, 1,799 seconds: 0, 1,800 seconds: 1, 3 hours: 6, 8 hours: 16, 8 hours in a 14 matchday league: 13
+
+[90mstdout[2m | src/test/tycoonAway.test.tsx[2m > [22m[2mStadium Tycoon away earnings[2m > [22m[2m8 a hidden tab plays as many away matchdays as a closed one
+[22m[39mAWAY| 3h hidden played 6 away matchdays, 3h closed played 6
+
+ [32m✓[39m src/test/tycoonAway.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 452[2mms[22m[39m
+[90mstdout[2m | src/test/tycoonHelp.test.tsx[2m > [22m[2mStadium Tycoon tells the truth[2m > [22m[2m1 every tap floater prints fmtMoney of the money the tap really added, from a dollar to trillions
+[22m[39mHELP| 1196 taps across 13 clubs printed exactly fmtMoney of what they added, covering plain, K, M, B, T
+
+[90mstdout[2m | src/test/tycoonHelp.test.tsx[2m > [22m[2mStadium Tycoon tells the truth[2m > [22m[2m2 goal, win, milestone and promotion floaters print fmtMoney of the event that paid them
+[22m[39mHELP| 553 paying events (milestone, goal, win) each had a floater printing fmtMoney of its amount
+
+[90mstdout[2m | src/test/tycoonHelp.test.tsx[2m > [22m[2mStadium Tycoon tells the truth[2m > [22m[2m3 the rules open before first play and close with Let's go
+[22m[39mHELP| a fresh visitor saw the rules first, and Let's go closed them
+
+[90mstdout[2m | src/test/tycoonHelp.test.tsx[2m > [22m[2mStadium Tycoon tells the truth[2m > [22m[2m4 the rules stay closed for a player who already has a save
+[22m[39mHELP| a returning player went straight to the game, and How it works reopens the rules with a named close button
+
+[90mstdout[2m | src/test/tycoonHelp.test.tsx[2m > [22m[2mStadium Tycoon tells the truth[2m > [22m[2m5 the keyboard tap button pays exactly one tap
+[22m[39mHELP| the keyboard tap button ("Tap the stadium for $3") paid one tap
+
+ [32m✓[39m src/test/tycoonHelp.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 1451[2mms[22m[39m
+   [33m[2m✓[22m[39m Stadium Tycoon tells the truth[2m > [22m1 every tap floater prints fmtMoney of the money the tap really added, from a dollar to trillions [33m 321[2mms[22m[39m
+   [33m[2m✓[22m[39m Stadium Tycoon tells the truth[2m > [22m2 goal, win, milestone and promotion floaters print fmtMoney of the event that paid them [33m 572[2mms[22m[39m
+   [33m[2m✓[22m[39m Stadium Tycoon tells the truth[2m > [22m3 the rules open before first play and close with Let's go [33m 365[2mms[22m[39m
+ [32m✓[39m src/test/idleArenaTrophyRoom.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 2718[2mms[22m[39m
+   [33m[2m✓[22m[39m Idle Arena trophy room[2m > [22mspends trophies on a perk in two taps, and the card shows what was applied [33m 639[2mms[22m[39m
+   [33m[2m✓[22m[39m Idle Arena trophy room[2m > [22mkeeps the trophies when the second tap is declined [33m 607[2mms[22m[39m
+   [33m[2m✓[22m[39m Idle Arena trophy room[2m > [22mspends a cabinet holding exactly the price, down to none [33m 532[2mms[22m[39m
+   [33m[2m✓[22m[39m Idle Arena trophy room[2m > [22mmax signs exactly the number its button shows, Scouting Network included [33m 723[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[32m18 passed[39m[22m[90m (18)[39m
+[2m   Start at [22m 06:07:01
+[2m   Duration [22m 6.01s[2m (transform 1.68s, setup 602ms, collect 4.14s, tests 4.62s, environment 2.92s, prepare 845ms)[22m
+
