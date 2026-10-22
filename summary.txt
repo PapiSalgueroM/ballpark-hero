@@ -1,0 +1,5 @@
+doc-head exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerDocumentaryReview.test.ts,title=src/test/soccerCareerDocumentaryReview.test.ts > Soccer Ca
+doc-main exit=1 2s |       Tests  no tests
+doc-1519 exit=1 2s |       Tests  no tests
+s6-raw exit=1 3s | simCmDifficulty: 6 FAILURES (sections 6)
+s6-attr exit=0 4s |    red per daily: Hot Seat 0 of 3, Deadline Day 0 of 3; deadlineDay.ts calls none of the match, summer, market or setup entry points

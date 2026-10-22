@@ -1,0 +1,18 @@
+[31m     → expected '{"playerName":"Documentary Review Fix…' to be '{"playerName":"Documentary Review Fix…' // Object.is equality[39m
+[31m     → expected '{"playerName":"Documentary Review Fix…' to be '{"playerName":"Documentary Review Fix…' // Object.is equality[39m
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/soccerCareerDocumentaryReview.test.ts[2m > [22mSoccer Career recorded documentary review[2m > [22mdocumentary review missing: queued family privacy survives JSON and retirement
+[31m[1mAssertionError[22m: expected '{"playerName":"Documentary Review Fix…' to be '{"playerName":"Documentary Review Fix…' // Object.is equality[39m
+[32m- Expected[39m
+[31m+ Received[39m
+[32m- {"playerName":"Documentary Review Fixture","nationality":"England","position":"CM","era":"2020s","age":38,"potential":94,"potentialEarned":0,"eliteStreak":0,"startingOverall":80,"physique":{"heightCm":180,"weightK
+[31m+ {"playerName":"Documentary Review Fixture","nationality":"England","position":"CM","era":"2020s","age":38,"potential":94,"potentialEarned":0,"eliteStreak":0,"startingOverall":80,"physique":{"heightCm":180,"weightK
+[41m[1m FAIL [22m[49m src/test/soccerCareerDocumentaryReview.test.ts[2m > [22mSoccer Career recorded documentary review[2m > [22mdocumentary review preservation: retired careers gain no fresh review or priority
+[31m[1mAssertionError[22m: expected '{"playerName":"Documentary Review Fix…' to be '{"playerName":"Documentary Review Fix…' // Object.is equality[39m
+[32m- Expected[39m
+[31m+ Received[39m
+[32m- {"playerName":"Documentary Review Fixture","nationality":"England","position":"CM","era":"2020s","age":24,"potential":94,"potentialEarned":0,"eliteStreak":0,"startingOverall":80,"physique":{"heightCm":180,"weightK
+[31m+ {"playerName":"Documentary Review Fixture","nationality":"England","position":"CM","era":"2020s","age":24,"potential":94,"potentialEarned":0,"eliteStreak":0,"startingOverall":80,"physique":{"heightCm":180,"weightK
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m20 passed[39m[22m[90m (22)[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerDocumentaryReview.test.ts,title=src/test/soccerCareerDocumentaryReview.test.ts > Soccer Career recorded documentary review > documentary rev
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerDocumentaryReview.test.ts,title=src/test/soccerCareerDocumentaryReview.test.ts > Soccer Career recorded documentary review > documentary rev

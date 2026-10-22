@@ -1,0 +1,2 @@
+mutNoNations1520: Round 1520 taken out of src/lib/clubManager.ts and src/lib/clubManagerBoardAsks.ts (its twelve bridge edits)
+   red per daily: Hot Seat 0 of 3, Deadline Day 0 of 3; deadlineDay.ts calls none of the match, summer, market or setup entry points
