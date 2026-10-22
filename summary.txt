@@ -1,0 +1,4 @@
+earned-20 exit=0 252s | SIM_SEED 29 exit 1 vanished 0 | 165 restricted cases, 18 sheets (5 matched, 4 gone | full    4 sheets let stand
+earned-10 exit=0 260s | SIM_SEED 19 exit 1 vanished 0 | 167 restricted cases, 21 sheets (8 matched, 8 gone | full    8 sheets let stand
+old-1 exit=0 345s | OLD SIM_SEED 15 exit 0 vanished 0 | 132 restricted cases, 53 sheets (38 matched, 15 gone
+old-2 exit=0 268s | OLD SIM_SEED 30 exit 0 vanished 0 | 127 restricted cases, 61 sheets (46 matched, 15 gone
