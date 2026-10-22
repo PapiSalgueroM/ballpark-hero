@@ -41,6 +41,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import pw from './lib/playwrightLoader.mjs';
+import { answerConsent } from './lib/answerConsent.mjs';
 
 const { chromium } = pw;
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -84,7 +85,7 @@ const owned = new Map();
   const page = await ctx.newPage();
   await page.goto(`${BASE}/`, { waitUntil: "networkidle" }).catch(() => {});
   await page.waitForTimeout(500);
-  await page.locator('button:has-text("Essential only")').first().click({ timeout: 1500 }).catch(() => {});
+  await answerConsent(page, { wait: 1500 });
   /* the consent answer and other sitewide keys belong to every page and are
      not any one route's save; they are captured here and excluded below */
   await page.goto(`${BASE}/robots.txt`, { waitUntil: "domcontentloaded" });
@@ -124,7 +125,7 @@ for (const [mode, value] of WRECKAGE) {
   const errs = [];
   page.on("pageerror", e => errs.push(String(e)));
   await page.goto(`${BASE}/`, { waitUntil: "domcontentloaded" }).catch(() => {});
-  await page.locator('button:has-text("Essential only")').first().click({ timeout: 1500 }).catch(() => {});
+  await answerConsent(page, { wait: 1500 });
   for (const route of owned.keys()) {
     errs.length = 0;
     try {

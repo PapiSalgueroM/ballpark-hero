@@ -7,6 +7,7 @@ import { createHash } from 'node:crypto';
 import { createServer } from 'node:net';
 import { spawn, execFileSync } from 'node:child_process';
 import pw from './lib/playwrightLoader.mjs';
+import { answerConsent, storedConsent } from './lib/answerConsent.mjs';
 assert(process.env.CI, 'Native programme checks run remotely');
 const out=path.resolve('career-programme-artifacts/native');fs.mkdirSync(out,{recursive:true});
 const sha=v=>createHash('sha256').update(v).digest('hex'),fixtures=JSON.parse(fs.readFileSync('career-programme-artifacts/native-fixtures.json','utf8'));
@@ -34,10 +35,10 @@ try{for(const width of[320,390,1280])for(const fixture of fixtures){const id=wid
     const bytes=()=>page.evaluate(key=>localStorage.getItem(key),fixture.key),entryBefore=await bytes();
     const consent=page.getByRole('region',{name:'Cookie choices',exact:true});
     await consent.waitFor();let cookieLayout;
-    try{await page.evaluate(async()=>{await document.fonts.ready;});await consent.scrollIntoViewIfNeeded();cookieLayout=await measure('cookie-choice',consent);check(cookieFailures(cookieLayout).length===0,'Every actual consent button is painted and unclipped before the pointer choice');await consent.getByRole('button',{name:'Essential only',exact:true}).click();}
+    try{await page.evaluate(async()=>{await document.fonts.ready;});await consent.scrollIntoViewIfNeeded();cookieLayout=await measure('cookie-choice',consent);check(cookieFailures(cookieLayout).length===0,'Every actual consent button is painted and unclipped before the pointer choice');await answerConsent(page);}
     catch(error){row.consentFailure=await consent.evaluate(e=>{const rect=n=>{const r=n.getBoundingClientRect();return{x:r.x,y:r.y,width:r.width,height:r.height,top:r.top,bottom:r.bottom,left:r.left,right:r.right};};return{viewport:{width:innerWidth,height:innerHeight},fonts:document.fonts.status,region:rect(e),paragraph:[...e.querySelectorAll('p')].map(p=>({text:p.textContent,rect:rect(p),style:{flex:getComputedStyle(p).flex,minWidth:getComputedStyle(p).minWidth}})),buttons:[...e.querySelectorAll('button')].map(b=>{const r=rect(b),hit=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);return{text:b.textContent,rect:r,centerHit:hit?.outerHTML,painted:!!hit&&(hit===b||b.contains(hit))};})};}).catch(()=>null);throw error;}
     await consent.waitFor({state:'hidden'});
-    check(await page.evaluate(()=>localStorage.getItem('cookie-consent'))==='essential','Actual Essential only choice dismisses consent without enabling optional scripts');
+    check(await storedConsent(page)==='rejected','Actual Essential only choice dismisses consent without enabling optional scripts');
     const guide=page.getByRole('dialog',{name:'How to play',exact:true});
     if(!soccer){
       await guide.waitFor({timeout:15000});

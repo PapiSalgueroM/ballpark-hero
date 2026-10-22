@@ -40,6 +40,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import pw from './lib/playwrightLoader.mjs';
 import { installServedCodeControl, controlledChecks } from './lib/servedCodeControl.mjs';
+import { answerConsent } from './lib/answerConsent.mjs';
 
 const { chromium } = pw;
 const BASE = process.env.BASE ?? process.env.SWEEP_BASE ?? 'http://localhost:4173';
@@ -107,8 +108,7 @@ await page.locator('button:has-text("Premier League")').first().click();
 await page.waitForTimeout(700);
 await page.locator('button:has-text("Manchester City")').first().click();
 await page.waitForTimeout(500);
-const essential = page.locator('button:has-text("Essential only")');
-if (await essential.count()) { await essential.click(); await page.waitForTimeout(400); }
+await answerConsent(page); await page.waitForTimeout(400);
 await page.locator('text=Take the job').click();
 await page.getByRole('button', { name: 'Skip: just manage', exact: true }).click();
 await managerTile(page).first().waitFor({ state: 'visible' });

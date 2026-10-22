@@ -20,6 +20,7 @@
  * playwright, and runs it only with --browser.)
  */
 import pw from './lib/playwrightLoader.mjs';
+import { answerConsent } from './lib/answerConsent.mjs';
 
 const { chromium, devices } = pw;
 const BASE = process.env.BASE ?? process.env.SWEEP_BASE ?? 'http://localhost:4173';
@@ -64,8 +65,7 @@ console.log('1) Every page fits the phone it is being played on');
 for (const p of PAGES) {
   await page.goto(`${BASE}${p}`, { waitUntil: 'networkidle' });
   await page.waitForTimeout(700);
-  const consent = page.locator('button:has-text("Essential only")');
-  if (await consent.count()) { await consent.first().click().catch(() => {}); await page.waitForTimeout(300); }
+  await answerConsent(page); await page.waitForTimeout(300);
   const metrics = await page.evaluate(() => ({
     scrollW: document.documentElement.scrollWidth,
     clientW: document.documentElement.clientWidth,

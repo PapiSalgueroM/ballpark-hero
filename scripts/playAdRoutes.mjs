@@ -28,6 +28,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from './lib/playwrightLoader.mjs';
+import { answerConsent, consentBanner, storedConsent } from './lib/answerConsent.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.ADROUTES_CONTROL || '';
@@ -365,7 +366,7 @@ async function freshChoiceVisit(browser, choice, waitBeforeChoiceMs) {
   page.on('pageerror', error => pageErrors.push(error.message));
   try {
     await waitForApp(page, '/footle');
-    await page.getByRole('button', { name: choice, exact: true }).waitFor({ timeout: 10000 });
+    await consentBanner(page).waitFor({ timeout: 10000 });
     await page.waitForTimeout(waitBeforeChoiceMs);
     const beforeChoice = {
       requests: [...adRequests],
@@ -375,14 +376,14 @@ async function freshChoiceVisit(browser, choice, waitBeforeChoiceMs) {
         slots: document.querySelectorAll('[data-dukb-manual-ad]').length,
       })),
     };
-    await page.getByRole('button', { name: choice, exact: true }).click();
-    await waitForRequestCount(adRequests, choice === 'Accept' ? 1 : Number.POSITIVE_INFINITY, choice === 'Accept' ? 5000 : 750);
+    await answerConsent(page, { choice });
+    await waitForRequestCount(adRequests, choice === 'accept' ? 1 : Number.POSITIVE_INFINITY, choice === 'accept' ? 5000 : 750);
     if (pageErrors.length) throw new Error(`fresh /footle raised page errors: ${pageErrors.join(' | ')}`);
     const state = await page.evaluate(() => ({
       scripts: document.querySelectorAll('script[src*="adsbygoogle.js"]').length,
       queue: Array.isArray(window.adsbygoogle) ? window.adsbygoogle.length : 0,
-      stored: localStorage.getItem('cookie-consent'),
     }));
+    state.stored = await storedConsent(page);
     return { beforeChoice, requests: [...adRequests], state };
   } finally {
     await context.close();
@@ -512,7 +513,7 @@ async function crossTabAcceptanceVisit(browser) {
     await waitForApp(settings, '/about');
     const loadsBeforeAccept = gameLoads;
 
-    await settings.getByRole('button', { name: 'Accept', exact: true }).click();
+    await answerConsent(settings, { choice: 'accept' });
     await waitForRequestCount(adRequests, 1, 5000);
     await game.waitForFunction(() => (
       localStorage.getItem('cookie-consent') === 'accepted'
@@ -644,7 +645,7 @@ try {
     }
 
     console.log('\n3) Accept still wakes the slot after more than eight seconds');
-    const delayed = await freshChoiceVisit(browser, 'Accept', 8500);
+    const delayed = await freshChoiceVisit(browser, 'accept', 8500);
     check(delayed.beforeChoice.requests.length === 0, `before delayed Accept made zero AdSense requests (${delayed.beforeChoice.requests.length})`);
     check(delayed.beforeChoice.state.scripts === 0, `before delayed Accept kept the AdSense script out (${delayed.beforeChoice.state.scripts})`);
     check(delayed.beforeChoice.state.queue === 0, `before delayed Accept queued no manual slot (${delayed.beforeChoice.state.queue})`);
@@ -655,8 +656,8 @@ try {
     check(delayed.state.queue === 1, `delayed Accept queued exactly one manual slot (${delayed.state.queue})`);
 
     console.log('\n4) Essential only never starts ads');
-    const essential = await freshChoiceVisit(browser, 'Essential only', 0);
-    check(essential.state.stored === 'essential', `fresh choice stored essential (${essential.state.stored})`);
+    const essential = await freshChoiceVisit(browser, 'reject', 0);
+    check(essential.state.stored === 'rejected', `fresh choice stored essential (${essential.state.stored})`);
     check(essential.requests.length === 0, `Essential only made zero AdSense requests (${essential.requests.length})`);
     check(essential.state.scripts === 0, `Essential only kept the AdSense script out (${essential.state.scripts})`);
     check(essential.state.queue === 0, `Essential only queued no manual slot (${essential.state.queue})`);

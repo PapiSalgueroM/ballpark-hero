@@ -46,8 +46,8 @@ try {
   assert.equal(report.numPendingTests, 0);
   if (control) {
     const titles = control === 'host' ? [
-      'Essential only is reachable within first-entry rules and preserves its consent gate',
-      'Accept is reachable within first-entry rules and preserves its consent gate',
+      'Reject all is reachable within first-entry rules and preserves its consent gate',
+      'Accept all is reachable within first-entry rules and preserves its consent gate',
       'restores one bottom banner when rules close without a cookie decision',
       'puts newly pending storage choices back into the same open rules',
     ] : ['Escape', 'Close', "Let's Play!"].map(close => `returns to the exact manually opened help control after ${close}`);

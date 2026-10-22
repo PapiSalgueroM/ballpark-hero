@@ -8,6 +8,7 @@ import { spawn } from 'node:child_process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
 import { chromium } from './lib/playwrightLoader.mjs';
+import { answerConsent, storedConsent } from './lib/answerConsent.mjs';
 
 assert(process.env.CI, 'Boxing browser checks run only in remote CI');
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -136,8 +137,8 @@ try {
     const activate = async target => { if (profile.touch) await target.tap(); else { await target.focus(); await page.keyboard.press('Enter'); } };
     try {
       await page.goto(`${BASE}/fight-promoter`, { waitUntil: 'domcontentloaded' }); await button('Put the show on').waitFor();
-      row.consentBefore = await snapshot(page); await activate(button('Essential only')); await button('Essential only').waitFor({ state: 'detached' }); row.consentAfter = await snapshot(page);
-      assert.equal(row.consentAfter.storage['cookie-consent'], 'essential', 'Trusted essential-only choice precedes the protected game preview');
+      row.consentBefore = await snapshot(page); assert.equal(await answerConsent(page, { press: activate }), 'rejected', 'The cookie banner was up and its reject button answered it'); row.consentAfter = await snapshot(page);
+      assert.equal(await storedConsent(page), 'rejected', 'Trusted essential-only choice precedes the protected game preview');
       await page.evaluate(async () => { await document.fonts.ready; for (const family of ['Inter', 'Space Grotesk']) for (const weight of [400, 600]) { const list = await document.fonts.load(`${weight} 16px "${family}"`); if (!list.length || !list.every(f => f.status === 'loaded')) throw new Error('Required actual font unavailable'); } });
       const held = await snapshot(page);
       if (plan.venueId !== 'hall') await activate(page.getByRole('button').filter({ has: page.getByText(engine.venueById(plan.venueId).name, { exact: true }) }));

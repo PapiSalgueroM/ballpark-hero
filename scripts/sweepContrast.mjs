@@ -63,6 +63,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import pw from './lib/playwrightLoader.mjs';
+import { answerConsent } from './lib/answerConsent.mjs';
 
 const { chromium } = pw;
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -293,8 +294,7 @@ const newPageSet = async () => {
   await p2.route('**://*.supabase.co/**', r => r.abort());
   await p2.goto(`${BASE}/`, { waitUntil: 'domcontentloaded', timeout: 20000 }).catch(() => {});
   await p2.waitForTimeout(400);
-  const consentBtn = p2.locator('button:has-text("Essential only")');
-  if (await consentBtn.count()) { await consentBtn.first().click().catch(() => {}); await p2.waitForTimeout(300); }
+  await answerConsent(p2); await p2.waitForTimeout(300);
   return { b, c, p2 };
 };
 let browser = await chromium.launch();
@@ -312,8 +312,7 @@ let page = await ctx.newPage();
 
 await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded', timeout: 20000 });
 await page.waitForTimeout(600);
-const consent = page.locator('button:has-text("Essential only")');
-if (await consent.count()) { await consent.first().click().catch(() => {}); await page.waitForTimeout(300); }
+await answerConsent(page); await page.waitForTimeout(300);
 
 /* ------------------------------------------------------------- section 1+3
    One pass per route measures both contrast and names, because the walk over

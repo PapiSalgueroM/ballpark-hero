@@ -36,6 +36,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import pw from './lib/playwrightLoader.mjs';
+import { answerConsent } from './lib/answerConsent.mjs';
 
 const { chromium } = pw;
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -95,7 +96,7 @@ async function tapText(rx, what) {
   return done;
 }
 async function clearRoom() {
-  await page.getByRole('button', { name: /^essential only$/i }).first().click({ timeout: 1200 }).catch(() => {});
+  await answerConsent(page, { wait: 1200 });
   for (let i = 0; i < 3; i++) {
     const d = page.locator('[role="dialog"][data-state="open"]');
     if (await d.count().catch(() => 0) === 0) break;

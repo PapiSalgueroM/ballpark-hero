@@ -152,6 +152,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import pw from './lib/playwrightLoader.mjs';
 import { bundle } from './lib/gmGameDayFleet.mjs';
+import { answerConsent } from './lib/answerConsent.mjs';
 
 const { chromium } = pw;
 const BASE = process.env.BASE ?? process.env.SWEEP_BASE ?? 'http://localhost:4173';
@@ -308,8 +309,7 @@ async function startFranchise(page) {
   await page.goto(`${BASE}/front-office`, { waitUntil: 'networkidle' });
   await page.waitForTimeout(1000);
   /* the consent banner is pinned over the bottom of a phone: answered the private way, as a visitor who has been here before */
-  const essential = page.locator('button:has-text("Essential only")');
-  if (await essential.count() > 0) { await essential.first().click(); await page.waitForTimeout(300); }
+  await answerConsent(page); await page.waitForTimeout(300);
   await page.locator('.grid button').first().click();
   await page.waitForTimeout(900);
 }
@@ -726,8 +726,7 @@ const playoffOf = () => {
 const po = page => page.evaluate(playoffOf);
 async function loadSave(page, raw) {
   await page.goto(`${BASE}/front-office`, { waitUntil: 'networkidle' });
-  const essential = page.locator('button:has-text("Essential only")');
-  if (await essential.count() > 0) { await essential.first().click(); await page.waitForTimeout(300); }
+  await answerConsent(page); await page.waitForTimeout(300);
   await page.evaluate(([k, v]) => localStorage.setItem(k, v), [SAVE_KEY, raw]);
   await page.reload({ waitUntil: 'networkidle' });
   await page.waitForTimeout(900);
