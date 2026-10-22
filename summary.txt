@@ -1,0 +1,9 @@
+ls exit=0 33s | simCareerLeagueSeasons: all sections green
+truth-unattributed exit=1 86s | simSoccerWorldTruth: 4 FAILURES (section 2: 4)
+truth exit=0 90s | simSoccerWorldTruth: OK, every section green
+ls-unattributed exit=1 86s | simCareerLeagueSeasons: 12 failures (sections c)
+deck-unattributed exit=1 36s | simSoccerDeck: 2 failures, red sections 2
+deck-a exit=0 91s | simSoccerDeck: green. Sections 1, 2, 3, 4, 5 only.
+deck-b exit=0 66s | simSoccerDeck: green. Sections 6, 7, 9, 10 only.
+deck-c exit=0 101s | simSoccerDeck: green. Sections 8 only.
+fair exit=0 57s | simSoccerDeckFairness: all sections green
