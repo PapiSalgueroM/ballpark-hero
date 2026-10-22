@@ -1,0 +1,16 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+facts: node scripts/simUsConnectionsFacts.mjs
+ctl-arod: US_CONN_CONTROL=arod node scripts/simUsConnectionsFacts.mjs
+ctl-bell: US_CONN_CONTROL=bell node scripts/simUsConnectionsFacts.mjs
+ctl-karlsson: US_CONN_CONTROL=karlsson node scripts/simUsConnectionsFacts.mjs
+ctl-twice: US_CONN_CONTROL=twice node scripts/simUsConnectionsFacts.mjs
+ctl-onehost: US_CONN_CONTROL=onehost node scripts/simUsConnectionsFacts.mjs
+ctl-unjudged: US_CONN_CONTROL=unjudged node scripts/simUsConnectionsFacts.mjs
+conn1553: node scripts/simConnectionsFacts.mjs
+fair: node scripts/simFairPuzzles.mjs
+rehearse: npm install --prefix /tmp/pgl @electric-sql/pglite >/dev/null 2>&1 && PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseUsConnections1558.mjs
+rehearse-noguard: npm install --prefix /tmp/pgl2 @electric-sql/pglite >/dev/null 2>&1 && REHEARSE_CONTROL=noguard PGLITE_DIR=/tmp/pgl2 node scripts/qa/rehearseUsConnections1558.mjs
+rehearse-drift: npm install --prefix /tmp/pgl3 @electric-sql/pglite >/dev/null 2>&1 && REHEARSE_CONTROL=drift PGLITE_DIR=/tmp/pgl3 node scripts/qa/rehearseUsConnections1558.mjs
+noRival: node scripts/simNoRivalNames.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+vitest-daily: node_modules/.bin/vitest run src/test/dailySaveParity.test.tsx src/test/dailySaveShapes.test.tsx src/test/dailySaveHardening.test.tsx --testTimeout=300000 --hookTimeout=120000
