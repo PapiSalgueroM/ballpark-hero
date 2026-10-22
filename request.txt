@@ -1,0 +1,2 @@
+g-head: cp .rc/x/simCollegeSeatG.mjs scripts/ && SIM_COLLEGE_SEAT_SPORTS=cfb node scripts/simCollegeSeatG.mjs
+g-base: git worktree add /tmp/base 3ee0bf629 >/dev/null 2>&1; ln -s "$PWD/node_modules" /tmp/base/node_modules; cp .rc/x/simCollegeSeatG.mjs /tmp/base/scripts/ && cd /tmp/base && SIM_COLLEGE_SEAT_SPORTS=cfb node scripts/simCollegeSeatG.mjs

@@ -1,0 +1,2 @@
+g-base exit=0 118s | simCollegeSeat: all sections green (S1 to S9 and SY)
+g-head exit=0 263s | simCollegeSeat: all sections green (S1 to S9 and SY)
