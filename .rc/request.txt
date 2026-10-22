@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+landing-bar: SOCCER_LANDING_HEAD_ONLY=1 SECTIONS=bar node scripts/playSoccerLanding.mjs
+probe: node .rc/x/probeInvisibleBuy.mjs
+probe2: node .rc/x/probeDoubleTap.mjs
