@@ -47,7 +47,8 @@
  * hookcrash control (a hook that does not compile) must end exactly that way.
  *
  * MEASURED (GitHub runner, remote check r1548-s2 on 16ef6107, and the same
- * numbers on Windows): the run is deterministic, so these are exact, not bands.
+ * numbers on Windows; the fixes after review: r1548-fix-a and r1548-fix-b on
+ * 99079914): the run is deterministic, so these are exact, not bands.
  *   1. 60 simulated days: 859 of 909 exhibits, peak funds 1.45e17, career
  *      2.49e18; the first save over 1e15 funds on day 3.66 and over 1e18 career
  *      on day 36.01; 86 exhibits bought at over 1e15 (the first, AFL number 83,
@@ -57,11 +58,21 @@
  *      hours at the away rate (4.7768e7), meter 28,800,000 ms. Control
  *      fixedstep: six failures. The hook suite under hookfixed (the pre round
  *      hook) measured ten hidden hours at 497,588, about one percent of the
- *      47,768,430 a closed tab is paid.
+ *      47,768,430 a closed tab is paid. Thirty hidden wakes a second apart:
+ *      30 of 30 away, x1.000000 of the away rule, meter 30,000 ms; a 5 s
+ *      visible gap watched, a 10 s one away. After the fixes fixedstep makes
+ *      14 failures, novisible 3 (x2.0000 of the away rule, meter 0), awayafter
+ *      1 (the 10 s gap paid as watched).
  *   3. 8 of 8 labels exact, the longest under 1e21 five characters ("1.6Qa").
  *      Control fmtstop: "90000000T" for the last AFL exhibit, five failures.
- *   4. 6 of 6 hook tests green; hookfixed turns tests 2 and 3 red and leaves
- *      the other four green, hooknocopy turns test 4 red and leaves five green.
+ *   4. 8 of 8 hook tests green: the glance paid x0.500000 of thirty watched
+ *      seconds with the meter at 30,000 ms, both notes x1.000000 of what the
+ *      absence paid, the stamp 0 ms from the paid through time. hookfixed
+ *      turns tests 2, 3, 6, 7 and 8 red; hooknocopy test 4; hooknote tests 3
+ *      (x0.6250, the run review's x0.626) and 7 (no note); hookvisible test 6
+ *      (x1.0000 of thirty watched seconds: full rate); hookstampnow test 8
+ *      (40,000 ms late); every other test stays green under each. hookcrash
+ *      ends "CRASHED, the hook suite ran 0 tests, not 8", exit 2.
  * The 0.999 floor in section 2 is not a band on noise: the pay is exact, and
  * the floor only forgives floating point. The cap side is held at 1.001.
  *
