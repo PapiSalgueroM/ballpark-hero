@@ -1,0 +1,46 @@
+
+1. The old paths: three saves that keep today's draft, played to the hub, against the fixture recorded from BASE
+   18 plays through the real board, each in its own process, in 13 s
+   (1) desk off from the recap: 6 plays to the hub, 12 picks made on his board, 781 to 800 draws a play; 6 equal to 7a8750ba's
+   (2) desk on, a draft open, no night: 6 plays to the hub, 12 picks made on his board, 617 to 658 draws a play; 6 equal to 7a8750ba's
+   (4) desk on, recap with no postseason, reloaded: 6 plays to the hub, 12 picks made on his board, 773 to 808 draws a play; 6 equal to 7a8750ba's
+
+2. The bind: the board plays each night as the libraries alone do, save for save and draw for draw, to the summer
+   36 plays through the real board, each in its own process, in 30 s
+   36 plays through the real board, each in its own process, in 22 s
+   FAIL: weakest, seed 1: the save after the open differs from the libraries'
+   first difference (SIM_NBA_DRAFT_BOARD_DEBUG, ids renamed): .draftClass.0.name: "Devon Isley" vs "Dashawn Grissom"
+   the board drew 1 numbers before the open, first from: at enqueueTask (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react/cjs/react.development.js:2458:45) < at recursivelyFlushAsyncActWork (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react/cjs/react.development.js:2634:9) < at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/react/cjs/react.development.js:2545:15
+   FAIL: weakest, seed 1: the league and desk after the summer differ from the libraries'
+   FAIL: weakest, seed 1: the board drew 970 numbers, the libraries 953
+   FAIL: weakest, seed 2: the save after the open differs from the libraries'
+   FAIL: weakest, seed 2: the league and desk after the summer differ from the libraries'
+   FAIL: weakest, seed 2: the board drew 966 numbers, the libraries 959
+   FAIL: weakest, seed 3: the save after the open differs from the libraries'
+   FAIL: weakest, seed 3: the league and desk after the summer differ from the libraries'
+   FAIL: weakest, seed 3: the board drew 967 numbers, the libraries 968
+   FAIL: weakest, seed 4: the save after the open differs from the libraries'
+   FAIL: weakest, seed 4: the league and desk after the summer differ from the libraries'
+   FAIL: weakest, seed 4: the board drew 978 numbers, the libraries 965
+   36 nights (weakest, middle, champion, traded, bought, nopick; 6 seeds each): 168 saves compared with the libraries' replay, 60 picks by his hand, 30 nights with picks before his first, 34542 draws in all
+
+3. Reloads: the same nights, the board mounted again from the save after every press
+   36 plays through the real board, each in its own process, in 36 s
+   36 nights, 132 reloads, 36 of them at a lottery card not yet continued
+
+4. The way out: no pick, a last slot at pick 60 and his staff from his first slot all reach the hub of the next season
+   12 plays through the real board, each in its own process, in 10 s
+   18 nights to the hub: 6 with no pick, 6 with only pick 60, 6 by his staff
+
+5. Rollback: a night saved by this build, mounted on the BASE board (7a8750ba), finishes the old way
+   12 plays through the real board, each in its own process, in 9 s
+   12 plays through the real board, each in its own process, in 8 s
+   12 mid night saves (on the clock, and a GM with no pick at the card) finished on 7a8750ba's board: 12 reached the hub, 12 picks made there
+
+6. Fences: the screen and its hook name no sport, the board names no lift module, every harness anchor is there once
+   src/components/front-office-shared/GmEarnedDraftScreen.tsx: 8 imports, all allowed; no sport, no draw, no storage
+   src/components/front-office-shared/useGmEarnedDraft.ts: 4 imports, all allowed; no sport, no draw, no storage
+   src/components/nba-front-office/NbaFrontOfficeBoard.tsx: names no lift module; 17 of simNbaDraftCapital's 21 anchors are board anchors, each once; simGmReload's and simDraftNight's anchors once
+
+6 sections (1, 2, 3, 4, 5, 6), 6 seeds a case, 108 failure(s).
+simNbaDraftBoard: red in section 2.
