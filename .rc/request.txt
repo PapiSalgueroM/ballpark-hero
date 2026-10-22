@@ -1,0 +1,24 @@
+#!build
+#!playwright
+simLiveScores: export TMPDIR=$(mktemp -d); node scripts/simLiveScores.mjs
+simNoRivalNames: export TMPDIR=$(mktemp -d); node scripts/simNoRivalNames.mjs
+simInventedNames: export TMPDIR=$(mktemp -d); node scripts/simInventedNames.mjs
+simHarnessAnchors: export TMPDIR=$(mktemp -d); node scripts/simHarnessAnchors.mjs
+simNoInventedQuotes: export TMPDIR=$(mktemp -d); node scripts/simNoInventedQuotes.mjs
+simNoInventedConduct: export TMPDIR=$(mktemp -d); node scripts/simNoInventedConduct.mjs
+simLegalPages: export TMPDIR=$(mktemp -d); node scripts/simLegalPages.mjs
+simSingleFooter: export TMPDIR=$(mktemp -d); node scripts/simSingleFooter.mjs
+simCompletionSlugs: export TMPDIR=$(mktemp -d); node scripts/simCompletionSlugs.mjs
+simCompletionOnce: export TMPDIR=$(mktemp -d); node scripts/simCompletionOnce.mjs
+simNoDoubleRecord: export TMPDIR=$(mktemp -d); node scripts/simNoDoubleRecord.mjs
+simDailyPuzzleContract: export TMPDIR=$(mktemp -d); node scripts/simDailyPuzzleContract.mjs
+simDailySaveHardening: export TMPDIR=$(mktemp -d); node scripts/simDailySaveHardening.mjs
+simWritesAreSent: export TMPDIR=$(mktemp -d); node scripts/simWritesAreSent.mjs
+simFetchRetry: export TMPDIR=$(mktemp -d); node scripts/simFetchRetry.mjs
+simGoogleOnlyReturn: export TMPDIR=$(mktemp -d); node scripts/simGoogleOnlyReturn.mjs
+simReportRelay: export TMPDIR=$(mktemp -d); node scripts/simReportRelay.mjs
+simNavbarStatsReads: export TMPDIR=$(mktemp -d); node scripts/simNavbarStatsReads.mjs
+simScoringCoverage: export TMPDIR=$(mktemp -d); node scripts/simScoringCoverage.mjs
+simSiteSearch: export TMPDIR=$(mktemp -d); node scripts/simSiteSearch.mjs
+simResultMoment: export TMPDIR=$(mktemp -d); node scripts/simResultMoment.mjs
+simGuideHeadings: export TMPDIR=$(mktemp -d); node scripts/simGuideHeadings.mjs
