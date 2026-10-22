@@ -1,0 +1,23 @@
+[2m      Tests [22m [1m[32m6 passed[39m[22m[90m (6)[39m
+ src/test/fixtures/cmWorldIdentity1052.json | 59 +++++++++++++++++++++++++++---
+ 1 file changed, 54 insertions(+), 5 deletions(-)
+diff --git a/src/test/fixtures/cmWorldIdentity1052.json b/src/test/fixtures/cmWorldIdentity1052.json
+index b161c91a3..40c143229 100644
+--- a/src/test/fixtures/cmWorldIdentity1052.json
++++ b/src/test/fixtures/cmWorldIdentity1052.json
+@@ -650,0 +651,24 @@
++  },
++  {
++   "id": "russia",
++   "name": "Russian Premier League",
++   "cupName": "Russian Cup",
++   "euro": false,
++   "clubs": [
++    "Zenit",
++    "Krasnodar",
++    "Spartak Moscow",
++    "CSKA Moscow",
++    "Lokomotiv Moscow",
++    "Rubin Kazan",
++    "Dynamo Moscow",
++    "Rostov",

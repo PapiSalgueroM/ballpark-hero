@@ -1,0 +1,4 @@
+id-head exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/cmWorldIdentity1052.test.ts,title=src/test/cmWorldIdentity1052.test.ts > Round 1052%3A the world befor
+id-norows exit=0 4s |       Tests  6 passed (6)
+id-record exit=0 3s | +    "Rostov",
+simNoRivalNames exit=0 14s | No rival product names found. 0 findings.
