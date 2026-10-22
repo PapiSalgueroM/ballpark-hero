@@ -27,5 +27,20 @@ Runner result r1533-s0a on BASE 6d2d7a7d (request 631adb91):
 Browser walks on BASE (playFoHub, playOwnerMandate, playGmPress, playFrontOfficeGameDay) wait for Round 1535 to
 close (lead R2): its helper is merged before any walk of this round runs.
 
+Recordings, runner result r1533-s0b on eda10277 (step 0's own commit, no src line changed but the new test file):
+- simGmCareer section 1 recorded twice in two processes (record-a, record-b, exit 0, 10 s each): 10 seeds, 48
+  seasons (seed 7 fired after season 3), one digest 01d932fd8b0b7c3df6ef50b600d6f0359f3e72c9; the two files are
+  byte equal (cmp). Committed as scripts/data/gmCareerFixture.json.
+- FrontOfficeGmCareer.test.tsx 'the default path' recorded twice (board-a, board-b, exit 0, 7 tests): 6 cases,
+  13 to 15 checkpoints a case; the two files byte equal. Committed as FrontOfficeGmCareer.fixture.json beside it.
+- tsc exit 0 on that commit.
+
+THE MEASURING RUN on BASE (simGmCareer section 4, runner r1533-s0b label measure, exit 0, 77 s): 20 seeds x 12
+seasons, every club graded as a GM's club, the clubs' CPU moves standing in for a GM's:
+- 475 firings. First out of work screen: offers 192 (40.4%), quiet 228 (48.0%), closed 55 (11.6%).
+- Of the screens with offers, last calls: 32 of 192 (16.7%).
+- Re hired within three feeds (377 firings with two seasons left to read): 209 (55.4%).
+- So more than 1 in 10 real firings opened on a closed screen; the first call (lead R3) is built regardless.
+
 ## What a later session must not trust
 - Nothing past step 0 is built yet.
