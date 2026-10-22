@@ -1,0 +1,2 @@
+mwc-base: R=$(pwd); git worktree add /tmp/base 413685149bed816a5c384242aa8c40f412b1d523 > /dev/null 2>&1 && cd /tmp/base && ln -s "$R/node_modules" node_modules && ONLY=simManagerWorldContinuity,simNhlWaiverReceipt node scripts/runAllSims.mjs
+mwc-main: R=$(pwd); git worktree add /tmp/main 0846f9c5 > /dev/null 2>&1 && cd /tmp/main && ln -s "$R/node_modules" node_modules && ONLY=simManagerWorldContinuity node scripts/runAllSims.mjs
