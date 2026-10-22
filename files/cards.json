@@ -1,0 +1,4076 @@
+{
+ "problems": [
+  "nfl-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "nfl-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "nfl-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "nfl-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "nfl-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "nfl-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "nfl-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "nfl-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "nfl-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "nfl-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "nfl-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "nfl-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "nfl-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "nfl-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "nfl-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "nfl-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "nfl-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "nfl-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "nfl-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "nfl-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "nfl-higher-lower-1280-rm: reveal animates (cell-reveal) under reduced motion",
+  "nfl-higher-lower-1280-rm: reveal animates (cell-reveal) under reduced motion",
+  "nba-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "nba-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "nba-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "nba-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "nba-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "nba-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "nba-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "nba-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "nba-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "nba-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "nba-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "nba-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "nba-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "nba-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "nba-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "nba-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "nba-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "nba-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "nba-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "nba-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "nba-higher-lower-1280-rm: reveal animates (cell-reveal) under reduced motion",
+  "nba-higher-lower-1280-rm: reveal animates (cell-reveal) under reduced motion",
+  "f1-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "f1-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "f1-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "f1-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "f1-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "f1-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "f1-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "f1-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "f1-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "f1-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "f1-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "f1-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "f1-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "f1-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "f1-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "f1-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "f1-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "f1-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "f1-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "f1-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "f1-higher-lower-1280-rm: reveal animates (cell-reveal) under reduced motion",
+  "f1-higher-lower-1280-rm: reveal animates (cell-reveal) under reduced motion",
+  "tennis-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "tennis-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "tennis-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "tennis-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "tennis-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "tennis-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "tennis-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "tennis-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "tennis-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "tennis-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "tennis-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "tennis-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "tennis-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "tennis-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "tennis-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "tennis-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "tennis-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "tennis-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "tennis-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "tennis-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "tennis-higher-lower-1280-rm: reveal animates (cell-reveal) under reduced motion",
+  "tennis-higher-lower-1280-rm: reveal animates (cell-reveal) under reduced motion",
+  "hockey-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "hockey-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "hockey-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "hockey-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "hockey-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "hockey-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "hockey-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "hockey-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "hockey-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "hockey-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "hockey-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "hockey-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "hockey-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "hockey-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "hockey-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "hockey-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "hockey-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "hockey-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "hockey-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "hockey-higher-lower-390-rm: reveal animates (cell-reveal) under reduced motion",
+  "hockey-higher-lower-1280-rm: reveal animates (cell-reveal) under reduced motion",
+  "hockey-higher-lower-1280-rm: reveal animates (cell-reveal) under reduced motion"
+ ],
+ "cards": [
+  {
+   "tag": "nfl-higher-lower-390-rm",
+   "round": 1,
+   "text": "🏈 Joe Burrow QB CIN 20,810 pass yds through 2025",
+   "through": "through 2025",
+   "throughBox": [
+    54,
+    229,
+    64,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 293,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nfl-higher-lower-390-rm",
+   "round": 1,
+   "text": "🏈 Matthew Stafford QB DET, LA 64,516 pass yds through 2025",
+   "through": "through 2025",
+   "throughBox": [
+    54,
+    257,
+    64,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 293,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nfl-higher-lower-390-rm",
+   "round": 2,
+   "text": "🏈 Cam Newton QB CAR, NE 194 pass TDs through 2021",
+   "through": "through 2021",
+   "throughBox": [
+    55,
+    229,
+    62,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 265,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nfl-higher-lower-390-rm",
+   "round": 2,
+   "text": "🏈 Kirk Cousins QB WAS, MIN, ATL 298 pass TDs through 2025",
+   "through": "through 2025",
+   "throughBox": [
+    54,
+    229,
+    64,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 265,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nfl-higher-lower-390-rm",
+   "round": 3,
+   "text": "🏈 Brandin Cooks WR NO, NE, LA, HOU, BUF 734 catches through 2025",
+   "through": "through 2025",
+   "throughBox": [
+    54,
+    229,
+    64,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 265,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nfl-higher-lower-390-rm",
+   "round": 3,
+   "text": "🏈 Zach Ertz TE PHI, ARI, WAS 825 catches through 2025",
+   "through": "through 2025",
+   "throughBox": [
+    54,
+    229,
+    64,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 265,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nfl-higher-lower-390-rm",
+   "round": 4,
+   "text": "🏈 Adrian Peterson RB MIN, NO, ARI, DET, SEA 126 TDs through 2021",
+   "through": "through 2021",
+   "throughBox": [
+    55,
+    241,
+    62,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 277,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nfl-higher-lower-390-rm",
+   "round": 4,
+   "text": "🏈 Brian Westbrook RB PHI, SF 71 TDs through 2010",
+   "through": "through 2010",
+   "throughBox": [
+    55,
+    225,
+    62,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 277,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nfl-higher-lower-390-rm",
+   "round": 5,
+   "text": "🏈 Chris Johnson RB TEN, NYJ, ARI 9,651 rush yds through 2017",
+   "through": "through 2017",
+   "throughBox": [
+    55,
+    229,
+    62,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 293,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nfl-higher-lower-390-rm",
+   "round": 5,
+   "text": "🏈 Willis McGahee RB BUF, BAL, DEN, CLE 8,474 rush yds through 2013",
+   "through": "through 2013",
+   "throughBox": [
+    55,
+    257,
+    62,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 293,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nfl-higher-lower-390-rm",
+   "round": 6,
+   "text": "🏈 Brandon Marshall WR DEN, MIA, CHI, NYJ, NYG 12,351 rec yds through 2018",
+   "through": "through 2018",
+   "throughBox": [
+    55,
+    273,
+    62,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 309,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nfl-higher-lower-390-rm",
+   "round": 6,
+   "text": "🏈 Antonio Gates TE LAC 11,841 rec yds through 2018",
+   "through": "through 2018",
+   "throughBox": [
+    55,
+    229,
+    62,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 309,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nfl-higher-lower-390-rm",
+   "round": 7,
+   "text": "🏈 Jameis Winston QB TB, NO, CLE, NYG 24,792 pass yds through 2025",
+   "through": "through 2025",
+   "throughBox": [
+    54,
+    257,
+    64,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 293,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nfl-higher-lower-390-rm",
+   "round": 7,
+   "text": "🏈 Russell Wilson QB SEA, DEN, PIT, NYG 46,966 pass yds through 2025",
+   "through": "through 2025",
+   "throughBox": [
+    54,
+    229,
+    64,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 293,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nfl-higher-lower-390-rm",
+   "round": 8,
+   "text": "🏈 Drew Brees QB LAC, NO 571 pass TDs through 2020",
+   "through": "through 2020",
+   "throughBox": [
+    54,
+    229,
+    64,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 265,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nfl-higher-lower-390-rm",
+   "round": 8,
+   "text": "🏈 Matt Ryan QB ATL, IND 381 pass TDs through 2022",
+   "through": "through 2022",
+   "throughBox": [
+    54,
+    229,
+    64,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 265,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nfl-higher-lower-390-rm",
+   "round": 9,
+   "text": "🏈 Steve Smith Sr. WR CAR, BAL 1,031 catches through 2016",
+   "through": "through 2016",
+   "throughBox": [
+    55,
+    257,
+    62,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 293,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nfl-higher-lower-390-rm",
+   "round": 9,
+   "text": "🏈 Andre Johnson WR HOU, IND, TEN 1,062 catches through 2016",
+   "through": "through 2016",
+   "throughBox": [
+    55,
+    229,
+    62,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 293,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nfl-higher-lower-390-rm",
+   "round": 10,
+   "text": "🏈 Ezekiel Elliott RB DAL, NE 88 TDs through 2024",
+   "through": "through 2024",
+   "throughBox": [
+    54,
+    197,
+    64,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 277,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nfl-higher-lower-390-rm",
+   "round": 10,
+   "text": "🏈 Brandon Marshall WR DEN, MIA, CHI, NYJ, NYG 83 TDs through 2018",
+   "through": "through 2018",
+   "throughBox": [
+    55,
+    241,
+    62,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 277,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nfl-higher-lower-1280-mo",
+   "round": 1,
+   "text": "🏈 Joe Burrow QB CIN 20,810 pass yds through 2025",
+   "through": "through 2025",
+   "throughBox": [
+    124,
+    197,
+    64,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nfl-higher-lower-1280-mo",
+   "round": 1,
+   "text": "🏈 Matthew Stafford QB DET, LA 64,516 pass yds through 2025",
+   "through": "through 2025",
+   "throughBox": [
+    124,
+    197,
+    64,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nfl-higher-lower-1280-mo",
+   "round": 2,
+   "text": "🏈 Cam Newton QB CAR, NE 194 pass TDs through 2021",
+   "through": "through 2021",
+   "throughBox": [
+    125,
+    197,
+    62,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nfl-higher-lower-1280-mo",
+   "round": 2,
+   "text": "🏈 Kirk Cousins QB WAS, MIN, ATL 298 pass TDs through 2025",
+   "through": "through 2025",
+   "throughBox": [
+    124,
+    197,
+    64,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nfl-higher-lower-1280-mo",
+   "round": 3,
+   "text": "🏈 Brandin Cooks WR NO, NE, LA, HOU, BUF 734 catches through 2025",
+   "through": "through 2025",
+   "throughBox": [
+    124,
+    197,
+    64,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nfl-higher-lower-1280-mo",
+   "round": 3,
+   "text": "🏈 Zach Ertz TE PHI, ARI, WAS 825 catches through 2025",
+   "through": "through 2025",
+   "throughBox": [
+    124,
+    197,
+    64,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nfl-higher-lower-1280-mo",
+   "round": 4,
+   "text": "🏈 Adrian Peterson RB MIN, NO, ARI, DET, SEA 126 TDs through 2021",
+   "through": "through 2021",
+   "throughBox": [
+    125,
+    197,
+    62,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nfl-higher-lower-1280-mo",
+   "round": 4,
+   "text": "🏈 Brian Westbrook RB PHI, SF 71 TDs through 2010",
+   "through": "through 2010",
+   "throughBox": [
+    125,
+    197,
+    62,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nfl-higher-lower-1280-mo",
+   "round": 5,
+   "text": "🏈 Chris Johnson RB TEN, NYJ, ARI 9,651 rush yds through 2017",
+   "through": "through 2017",
+   "throughBox": [
+    125,
+    197,
+    62,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nfl-higher-lower-1280-mo",
+   "round": 5,
+   "text": "🏈 Willis McGahee RB BUF, BAL, DEN, CLE 8,474 rush yds through 2013",
+   "through": "through 2013",
+   "throughBox": [
+    125,
+    197,
+    62,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nfl-higher-lower-1280-mo",
+   "round": 6,
+   "text": "🏈 Brandon Marshall WR DEN, MIA, CHI, NYJ, NYG 12,351 rec yds through 2018",
+   "through": "through 2018",
+   "throughBox": [
+    125,
+    197,
+    62,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nfl-higher-lower-1280-mo",
+   "round": 6,
+   "text": "🏈 Antonio Gates TE LAC 11,841 rec yds through 2018",
+   "through": "through 2018",
+   "throughBox": [
+    125,
+    197,
+    62,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nfl-higher-lower-1280-mo",
+   "round": 7,
+   "text": "🏈 Jameis Winston QB TB, NO, CLE, NYG 24,792 pass yds through 2025",
+   "through": "through 2025",
+   "throughBox": [
+    124,
+    197,
+    64,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nfl-higher-lower-1280-mo",
+   "round": 7,
+   "text": "🏈 Russell Wilson QB SEA, DEN, PIT, NYG 46,966 pass yds through 2025",
+   "through": "through 2025",
+   "throughBox": [
+    124,
+    197,
+    64,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nfl-higher-lower-1280-mo",
+   "round": 8,
+   "text": "🏈 Drew Brees QB LAC, NO 571 pass TDs through 2020",
+   "through": "through 2020",
+   "throughBox": [
+    124,
+    197,
+    64,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nfl-higher-lower-1280-mo",
+   "round": 8,
+   "text": "🏈 Matt Ryan QB ATL, IND 381 pass TDs through 2022",
+   "through": "through 2022",
+   "throughBox": [
+    124,
+    197,
+    64,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nfl-higher-lower-1280-mo",
+   "round": 9,
+   "text": "🏈 Steve Smith Sr. WR CAR, BAL 1,031 catches through 2016",
+   "through": "through 2016",
+   "throughBox": [
+    125,
+    197,
+    62,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nfl-higher-lower-1280-mo",
+   "round": 9,
+   "text": "🏈 Andre Johnson WR HOU, IND, TEN 1,062 catches through 2016",
+   "through": "through 2016",
+   "throughBox": [
+    125,
+    197,
+    62,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nfl-higher-lower-1280-mo",
+   "round": 10,
+   "text": "🏈 Ezekiel Elliott RB DAL, NE 88 TDs through 2024",
+   "through": "through 2024",
+   "throughBox": [
+    124,
+    197,
+    64,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nfl-higher-lower-1280-mo",
+   "round": 10,
+   "text": "🏈 Brandon Marshall WR DEN, MIA, CHI, NYJ, NYG 83 TDs through 2018",
+   "through": "through 2018",
+   "throughBox": [
+    125,
+    197,
+    62,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nfl-higher-lower-390-mo",
+   "round": 1,
+   "text": "🏈 Joe Burrow QB CIN 20,810 pass yds through 2025",
+   "through": "through 2025",
+   "throughBox": [
+    54,
+    229,
+    64,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 293,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nfl-higher-lower-390-mo",
+   "round": 1,
+   "text": "🏈 Matthew Stafford QB DET, LA 64,516 pass yds through 2025",
+   "through": "through 2025",
+   "throughBox": [
+    54,
+    257,
+    64,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 293,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nfl-higher-lower-1280-rm",
+   "round": 1,
+   "text": "🏈 Joe Burrow QB CIN 20,810 pass yds through 2025",
+   "through": "through 2025",
+   "throughBox": [
+    124,
+    197,
+    64,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nfl-higher-lower-1280-rm",
+   "round": 1,
+   "text": "🏈 Matthew Stafford QB DET, LA 64,516 pass yds through 2025",
+   "through": "through 2025",
+   "throughBox": [
+    124,
+    197,
+    64,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nba-higher-lower-390-rm",
+   "round": 1,
+   "text": "🏀 Oscar Robertson PG CIN, MIL 26,710 pts through 1973-74",
+   "through": "through 1973-74",
+   "throughBox": [
+    47,
+    225,
+    78,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 261,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nba-higher-lower-390-rm",
+   "round": 1,
+   "text": "🏀 Dave Bing PG BOS, DET, WSB 18,327 pts through 1977-78",
+   "through": "through 1977-78",
+   "throughBox": [
+    46,
+    197,
+    79,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 261,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nba-higher-lower-390-rm",
+   "round": 2,
+   "text": "🏀 Jerry West PG LAL 25,192 pts through 1973-74",
+   "through": "through 1973-74",
+   "throughBox": [
+    47,
+    197,
+    78,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 249,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nba-higher-lower-390-rm",
+   "round": 2,
+   "text": "🏀 Kevin Durant SF BRK, GSW, HOU, OKC, PHO, SEA 32,564 pts through 2025-26",
+   "through": "through 2025-26",
+   "throughBox": [
+    45,
+    213,
+    81,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 249,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nba-higher-lower-390-rm",
+   "round": 3,
+   "text": "🏀 Moses Malone C ATL, BUF, HOU, MIL, PHI 27,409 pts through 1994-95",
+   "through": "through 1994-95",
+   "throughBox": [
+    46,
+    213,
+    79,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 249,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nba-higher-lower-390-rm",
+   "round": 3,
+   "text": "🏀 Vince Carter SG ATL, DAL, MEM, NJN, ORL 25,728 pts through 2019-20",
+   "through": "through 2019-20",
+   "throughBox": [
+    46,
+    213,
+    79,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 249,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nba-higher-lower-390-rm",
+   "round": 4,
+   "text": "🏀 Kareem Abdul-Jabbar C LAL, MIL 38,387 pts through 1988-89",
+   "through": "through 1988-89",
+   "throughBox": [
+    46,
+    225,
+    79,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 277,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nba-higher-lower-390-rm",
+   "round": 4,
+   "text": "🏀 Carmelo Anthony SF DEN, HOU, LAL, NYK, OKC 28,289 pts through 2021-22",
+   "through": "through 2021-22",
+   "throughBox": [
+    46,
+    241,
+    79,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 277,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nba-higher-lower-390-rm",
+   "round": 5,
+   "text": "🏀 Terry Cummings PF GSW, MIL, NYK, PHI, SAS 19,460 pts through 1999-00",
+   "through": "through 1999-00",
+   "throughBox": [
+    46,
+    241,
+    79,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 277,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nba-higher-lower-390-rm",
+   "round": 5,
+   "text": "🏀 Bernard King SF GSW, NJN, NYK, UTA, WSB 19,655 pts through 1992-93",
+   "through": "through 1992-93",
+   "throughBox": [
+    46,
+    213,
+    79,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 277,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nba-higher-lower-390-rm",
+   "round": 6,
+   "text": "🏀 Stephen Curry PG GSW 26,493 pts through 2025-26",
+   "through": "through 2025-26",
+   "throughBox": [
+    45,
+    197,
+    81,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nba-higher-lower-390-rm",
+   "round": 6,
+   "text": "🏀 Anthony Davis C DAL, LAL, NOH, NOP 19,385 pts through 2025-26",
+   "through": "through 2025-26",
+   "throughBox": [
+    45,
+    197,
+    81,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nba-higher-lower-390-rm",
+   "round": 7,
+   "text": "🏀 Chet Walker SF CHI, PHI, SYR 18,831 pts through 1974-75",
+   "through": "through 1974-75",
+   "throughBox": [
+    47,
+    197,
+    78,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nba-higher-lower-390-rm",
+   "round": 7,
+   "text": "🏀 Paul Pierce SF BOS, BRK, LAC, WAS 26,397 pts through 2016-17",
+   "through": "through 2016-17",
+   "throughBox": [
+    47,
+    197,
+    77,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nba-higher-lower-390-rm",
+   "round": 8,
+   "text": "🏀 Julius Erving SF PHI 18,364 pts through 1986-87",
+   "through": "through 1986-87",
+   "throughBox": [
+    46,
+    197,
+    79,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nba-higher-lower-390-rm",
+   "round": 8,
+   "text": "🏀 Robert Parish C BOS, CHH, CHI, GSW 23,334 pts through 1996-97",
+   "through": "through 1996-97",
+   "throughBox": [
+    46,
+    197,
+    79,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nba-higher-lower-390-rm",
+   "round": 9,
+   "text": "🏀 Karl Malone PF LAL, UTA 36,928 pts through 2003-04",
+   "through": "through 2003-04",
+   "throughBox": [
+    45,
+    197,
+    81,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 249,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nba-higher-lower-390-rm",
+   "round": 9,
+   "text": "🏀 Joe Johnson SG ATL, BOS, BRK, HOU, MIA 20,407 pts through 2021-22",
+   "through": "through 2021-22",
+   "throughBox": [
+    46,
+    213,
+    79,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 249,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nba-higher-lower-390-rm",
+   "round": 10,
+   "text": "🏀 Bob Lanier C DET, MIL 19,248 pts through 1983-84",
+   "through": "through 1983-84",
+   "throughBox": [
+    46,
+    197,
+    79,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nba-higher-lower-390-rm",
+   "round": 10,
+   "text": "🏀 Dwyane Wade SG CHI, CLE, MIA 23,165 pts through 2018-19",
+   "through": "through 2018-19",
+   "throughBox": [
+    47,
+    197,
+    77,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nba-higher-lower-1280-mo",
+   "round": 1,
+   "text": "🏀 Oscar Robertson PG CIN, MIL 26,710 pts through 1973-74",
+   "through": "through 1973-74",
+   "throughBox": [
+    117,
+    197,
+    78,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nba-higher-lower-1280-mo",
+   "round": 1,
+   "text": "🏀 Dave Bing PG BOS, DET, WSB 18,327 pts through 1977-78",
+   "through": "through 1977-78",
+   "throughBox": [
+    117,
+    197,
+    79,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nba-higher-lower-1280-mo",
+   "round": 2,
+   "text": "🏀 Jerry West PG LAL 25,192 pts through 1973-74",
+   "through": "through 1973-74",
+   "throughBox": [
+    117,
+    197,
+    78,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nba-higher-lower-1280-mo",
+   "round": 2,
+   "text": "🏀 Kevin Durant SF BRK, GSW, HOU, OKC, PHO, SEA 32,564 pts through 2025-26",
+   "through": "through 2025-26",
+   "throughBox": [
+    116,
+    197,
+    81,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nba-higher-lower-1280-mo",
+   "round": 3,
+   "text": "🏀 Moses Malone C ATL, BUF, HOU, MIL, PHI 27,409 pts through 1994-95",
+   "through": "through 1994-95",
+   "throughBox": [
+    117,
+    197,
+    79,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nba-higher-lower-1280-mo",
+   "round": 3,
+   "text": "🏀 Vince Carter SG ATL, DAL, MEM, NJN, ORL 25,728 pts through 2019-20",
+   "through": "through 2019-20",
+   "throughBox": [
+    117,
+    197,
+    79,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nba-higher-lower-1280-mo",
+   "round": 4,
+   "text": "🏀 Kareem Abdul-Jabbar C LAL, MIL 38,387 pts through 1988-89",
+   "through": "through 1988-89",
+   "throughBox": [
+    117,
+    197,
+    79,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nba-higher-lower-1280-mo",
+   "round": 4,
+   "text": "🏀 Carmelo Anthony SF DEN, HOU, LAL, NYK, OKC 28,289 pts through 2021-22",
+   "through": "through 2021-22",
+   "throughBox": [
+    117,
+    197,
+    79,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nba-higher-lower-1280-mo",
+   "round": 5,
+   "text": "🏀 Terry Cummings PF GSW, MIL, NYK, PHI, SAS 19,460 pts through 1999-00",
+   "through": "through 1999-00",
+   "throughBox": [
+    117,
+    197,
+    79,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nba-higher-lower-1280-mo",
+   "round": 5,
+   "text": "🏀 Bernard King SF GSW, NJN, NYK, UTA, WSB 19,655 pts through 1992-93",
+   "through": "through 1992-93",
+   "throughBox": [
+    117,
+    197,
+    79,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nba-higher-lower-1280-mo",
+   "round": 6,
+   "text": "🏀 Stephen Curry PG GSW 26,493 pts through 2025-26",
+   "through": "through 2025-26",
+   "throughBox": [
+    116,
+    197,
+    81,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nba-higher-lower-1280-mo",
+   "round": 6,
+   "text": "🏀 Anthony Davis C DAL, LAL, NOH, NOP 19,385 pts through 2025-26",
+   "through": "through 2025-26",
+   "throughBox": [
+    116,
+    197,
+    81,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nba-higher-lower-1280-mo",
+   "round": 7,
+   "text": "🏀 Chet Walker SF CHI, PHI, SYR 18,831 pts through 1974-75",
+   "through": "through 1974-75",
+   "throughBox": [
+    117,
+    197,
+    78,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nba-higher-lower-1280-mo",
+   "round": 7,
+   "text": "🏀 Paul Pierce SF BOS, BRK, LAC, WAS 26,397 pts through 2016-17",
+   "through": "through 2016-17",
+   "throughBox": [
+    118,
+    197,
+    77,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nba-higher-lower-1280-mo",
+   "round": 8,
+   "text": "🏀 Julius Erving SF PHI 18,364 pts through 1986-87",
+   "through": "through 1986-87",
+   "throughBox": [
+    117,
+    197,
+    79,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nba-higher-lower-1280-mo",
+   "round": 8,
+   "text": "🏀 Robert Parish C BOS, CHH, CHI, GSW 23,334 pts through 1996-97",
+   "through": "through 1996-97",
+   "throughBox": [
+    117,
+    197,
+    79,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nba-higher-lower-1280-mo",
+   "round": 9,
+   "text": "🏀 Karl Malone PF LAL, UTA 36,928 pts through 2003-04",
+   "through": "through 2003-04",
+   "throughBox": [
+    116,
+    197,
+    81,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nba-higher-lower-1280-mo",
+   "round": 9,
+   "text": "🏀 Joe Johnson SG ATL, BOS, BRK, HOU, MIA 20,407 pts through 2021-22",
+   "through": "through 2021-22",
+   "throughBox": [
+    117,
+    197,
+    79,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nba-higher-lower-1280-mo",
+   "round": 10,
+   "text": "🏀 Bob Lanier C DET, MIL 19,248 pts through 1983-84",
+   "through": "through 1983-84",
+   "throughBox": [
+    117,
+    197,
+    79,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nba-higher-lower-1280-mo",
+   "round": 10,
+   "text": "🏀 Dwyane Wade SG CHI, CLE, MIA 23,165 pts through 2018-19",
+   "through": "through 2018-19",
+   "throughBox": [
+    118,
+    197,
+    77,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nba-higher-lower-390-mo",
+   "round": 1,
+   "text": "🏀 Oscar Robertson PG CIN, MIL 26,710 pts through 1973-74",
+   "through": "through 1973-74",
+   "throughBox": [
+    47,
+    225,
+    78,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 261,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nba-higher-lower-390-mo",
+   "round": 1,
+   "text": "🏀 Dave Bing PG BOS, DET, WSB 18,327 pts through 1977-78",
+   "through": "through 1977-78",
+   "throughBox": [
+    46,
+    197,
+    79,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 261,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nba-higher-lower-1280-rm",
+   "round": 1,
+   "text": "🏀 Oscar Robertson PG CIN, MIL 26,710 pts through 1973-74",
+   "through": "through 1973-74",
+   "throughBox": [
+    117,
+    197,
+    78,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "nba-higher-lower-1280-rm",
+   "round": 1,
+   "text": "🏀 Dave Bing PG BOS, DET, WSB 18,327 pts through 1977-78",
+   "through": "through 1977-78",
+   "throughBox": [
+    117,
+    197,
+    79,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "f1-higher-lower-390-rm",
+   "round": 1,
+   "text": "🏎️ Charles Leclerc 2018-2026 Sauber, Ferrari 9 wins through the 2026 Singapore Grand Prix",
+   "through": "through the 2026 Singapore Grand Prix",
+   "throughBox": [
+    21,
+    225,
+    129,
+    30
+   ],
+   "cardW": 171,
+   "cardH": 292,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "f1-higher-lower-390-rm",
+   "round": 1,
+   "text": "🏎️ David Coulthard 1994-2008 Williams, McLaren, Red Bull 13 wins through the 2026 Singapore Grand Prix",
+   "through": "through the 2026 Singapore Grand Prix",
+   "throughBox": [
+    21,
+    241,
+    129,
+    30
+   ],
+   "cardW": 171,
+   "cardH": 292,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "f1-higher-lower-390-rm",
+   "round": 2,
+   "text": "🏎️ Alan Jones 1975-1986 · 1× champion Hesketh, Shadow, Williams, Arrows 12 wins through the 2026 Singapore Grand Prix",
+   "through": "through the 2026 Singapore Grand Prix",
+   "throughBox": [
+    21,
+    229,
+    129,
+    30
+   ],
+   "cardW": 171,
+   "cardH": 280,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "f1-higher-lower-390-rm",
+   "round": 2,
+   "text": "🏎️ Graham Hill 1958-1975 · 2× champion Lotus, BRM, Brabham 14 wins through the 2026 Singapore Grand Prix",
+   "through": "through the 2026 Singapore Grand Prix",
+   "throughBox": [
+    21,
+    213,
+    129,
+    30
+   ],
+   "cardW": 171,
+   "cardH": 280,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "f1-higher-lower-390-rm",
+   "round": 3,
+   "text": "🏎️ Damon Hill 1992-1999 · 1× champion Brabham, Williams, Arrows, Jordan 22 wins through the 2026 Singapore Grand Prix",
+   "through": "through the 2026 Singapore Grand Prix",
+   "throughBox": [
+    21,
+    229,
+    129,
+    30
+   ],
+   "cardW": 171,
+   "cardH": 280,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "f1-higher-lower-390-rm",
+   "round": 3,
+   "text": "🏎️ Nigel Mansell 1980-1995 · 1× champion Lotus, Williams, Ferrari, McLaren 31 wins through the 2026 Singapore Grand Prix",
+   "through": "through the 2026 Singapore Grand Prix",
+   "throughBox": [
+    21,
+    229,
+    129,
+    30
+   ],
+   "cardW": 171,
+   "cardH": 280,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "f1-higher-lower-390-rm",
+   "round": 4,
+   "text": "🏎️ Michael Schumacher 1991-2012 · 7× champion Benetton, Ferrari, Mercedes 91 wins through the 2026 Singapore Grand Prix",
+   "through": "through the 2026 Singapore Grand Prix",
+   "throughBox": [
+    21,
+    257,
+    129,
+    30
+   ],
+   "cardW": 171,
+   "cardH": 308,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "f1-higher-lower-390-rm",
+   "round": 4,
+   "text": "🏎️ Jacky Ickx 1967-1979 Ferrari, Brabham, Lotus, Ligier 8 wins through the 2026 Singapore Grand Prix",
+   "through": "through the 2026 Singapore Grand Prix",
+   "throughBox": [
+    21,
+    213,
+    129,
+    30
+   ],
+   "cardW": 171,
+   "cardH": 308,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "f1-higher-lower-390-rm",
+   "round": 5,
+   "text": "🏎️ Stirling Moss 1951-1961 HWM, Maserati, Mercedes, Cooper 16 wins through the 2026 Singapore Grand Prix",
+   "through": "through the 2026 Singapore Grand Prix",
+   "throughBox": [
+    21,
+    213,
+    129,
+    30
+   ],
+   "cardW": 171,
+   "cardH": 264,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "f1-higher-lower-390-rm",
+   "round": 5,
+   "text": "🏎️ Mark Webber 2002-2013 Minardi, Jaguar, Williams, Red Bull 9 wins through the 2026 Singapore Grand Prix",
+   "through": "through the 2026 Singapore Grand Prix",
+   "throughBox": [
+    21,
+    213,
+    129,
+    30
+   ],
+   "cardW": 171,
+   "cardH": 264,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "f1-higher-lower-390-rm",
+   "round": 6,
+   "text": "🏎️ Juan Manuel Fangio 1950-1958 · 5× champion Alfa Romeo, Maserati, Mercedes, Ferrari 24 wins through the 2026 Singapore Grand Prix",
+   "through": "through the 2026 Singapore Grand Prix",
+   "throughBox": [
+    21,
+    257,
+    129,
+    30
+   ],
+   "cardW": 171,
+   "cardH": 308,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "f1-higher-lower-390-rm",
+   "round": 6,
+   "text": "🏎️ Kimi Räikkönen 2001-2021 · 1× champion Sauber, McLaren, Ferrari, Alfa Romeo 21 wins through the 2026 Singapore Grand Prix",
+   "through": "through the 2026 Singapore Grand Prix",
+   "throughBox": [
+    21,
+    229,
+    129,
+    30
+   ],
+   "cardW": 171,
+   "cardH": 308,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "f1-higher-lower-390-rm",
+   "round": 7,
+   "text": "🏎️ Niki Lauda 1971-1985 · 3× champion BRM, Ferrari, Brabham, McLaren 25 wins through the 2026 Singapore Grand Prix",
+   "through": "through the 2026 Singapore Grand Prix",
+   "throughBox": [
+    21,
+    229,
+    129,
+    30
+   ],
+   "cardW": 171,
+   "cardH": 292,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "f1-higher-lower-390-rm",
+   "round": 7,
+   "text": "🏎️ Daniel Ricciardo 2011-2024 HRT, Red Bull, Renault, McLaren 8 wins through the 2026 Singapore Grand Prix",
+   "through": "through the 2026 Singapore Grand Prix",
+   "throughBox": [
+    21,
+    241,
+    129,
+    30
+   ],
+   "cardW": 171,
+   "cardH": 292,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "f1-higher-lower-390-rm",
+   "round": 8,
+   "text": "🏎️ Sebastian Vettel 2007-2022 · 4× champion Red Bull, Ferrari, Aston Martin 53 wins through the 2026 Singapore Grand Prix",
+   "through": "through the 2026 Singapore Grand Prix",
+   "throughBox": [
+    21,
+    257,
+    129,
+    30
+   ],
+   "cardW": 171,
+   "cardH": 308,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "f1-higher-lower-390-rm",
+   "round": 8,
+   "text": "🏎️ Gerhard Berger 1984-1997 ATS, Benetton, Ferrari, McLaren 10 wins through the 2026 Singapore Grand Prix",
+   "through": "through the 2026 Singapore Grand Prix",
+   "throughBox": [
+    21,
+    241,
+    129,
+    30
+   ],
+   "cardW": 171,
+   "cardH": 308,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "f1-higher-lower-390-rm",
+   "round": 9,
+   "text": "🏎️ Nico Rosberg 2006-2016 · 1× champion Williams, Mercedes 23 wins through the 2026 Singapore Grand Prix",
+   "through": "through the 2026 Singapore Grand Prix",
+   "throughBox": [
+    21,
+    213,
+    129,
+    30
+   ],
+   "cardW": 171,
+   "cardH": 264,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "f1-higher-lower-390-rm",
+   "round": 9,
+   "text": "🏎️ Lando Norris 2019-2026 · 1× champion McLaren 13 wins through the 2026 Singapore Grand Prix",
+   "through": "through the 2026 Singapore Grand Prix",
+   "throughBox": [
+    21,
+    213,
+    129,
+    30
+   ],
+   "cardW": 171,
+   "cardH": 264,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "f1-higher-lower-390-rm",
+   "round": 10,
+   "text": "🏎️ Ronnie Peterson 1970-1978 March, Lotus, Tyrrell 10 wins through the 2026 Singapore Grand Prix",
+   "through": "through the 2026 Singapore Grand Prix",
+   "throughBox": [
+    21,
+    225,
+    129,
+    30
+   ],
+   "cardW": 171,
+   "cardH": 276,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "f1-higher-lower-390-rm",
+   "round": 10,
+   "text": "🏎️ Jack Brabham 1955-1970 · 3× champion Cooper, Brabham 14 wins through the 2026 Singapore Grand Prix",
+   "through": "through the 2026 Singapore Grand Prix",
+   "throughBox": [
+    21,
+    213,
+    129,
+    30
+   ],
+   "cardW": 171,
+   "cardH": 276,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "f1-higher-lower-1280-mo",
+   "round": 1,
+   "text": "🏎️ Charles Leclerc 2018-2026 Sauber, Ferrari 9 wins through the 2026 Singapore Grand Prix",
+   "through": "through the 2026 Singapore Grand Prix",
+   "throughBox": [
+    64,
+    197,
+    185,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "f1-higher-lower-1280-mo",
+   "round": 1,
+   "text": "🏎️ David Coulthard 1994-2008 Williams, McLaren, Red Bull 13 wins through the 2026 Singapore Grand Prix",
+   "through": "through the 2026 Singapore Grand Prix",
+   "throughBox": [
+    64,
+    197,
+    185,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "f1-higher-lower-1280-mo",
+   "round": 2,
+   "text": "🏎️ Alan Jones 1975-1986 · 1× champion Hesketh, Shadow, Williams, Arrows 12 wins through the 2026 Singapore Grand Prix",
+   "through": "through the 2026 Singapore Grand Prix",
+   "throughBox": [
+    64,
+    197,
+    185,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "f1-higher-lower-1280-mo",
+   "round": 2,
+   "text": "🏎️ Graham Hill 1958-1975 · 2× champion Lotus, BRM, Brabham 14 wins through the 2026 Singapore Grand Prix",
+   "through": "through the 2026 Singapore Grand Prix",
+   "throughBox": [
+    64,
+    197,
+    185,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "f1-higher-lower-1280-mo",
+   "round": 3,
+   "text": "🏎️ Damon Hill 1992-1999 · 1× champion Brabham, Williams, Arrows, Jordan 22 wins through the 2026 Singapore Grand Prix",
+   "through": "through the 2026 Singapore Grand Prix",
+   "throughBox": [
+    64,
+    197,
+    185,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "f1-higher-lower-1280-mo",
+   "round": 3,
+   "text": "🏎️ Nigel Mansell 1980-1995 · 1× champion Lotus, Williams, Ferrari, McLaren 31 wins through the 2026 Singapore Grand Prix",
+   "through": "through the 2026 Singapore Grand Prix",
+   "throughBox": [
+    64,
+    197,
+    185,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "f1-higher-lower-1280-mo",
+   "round": 4,
+   "text": "🏎️ Michael Schumacher 1991-2012 · 7× champion Benetton, Ferrari, Mercedes 91 wins through the 2026 Singapore Grand Prix",
+   "through": "through the 2026 Singapore Grand Prix",
+   "throughBox": [
+    64,
+    197,
+    185,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "f1-higher-lower-1280-mo",
+   "round": 4,
+   "text": "🏎️ Jacky Ickx 1967-1979 Ferrari, Brabham, Lotus, Ligier 8 wins through the 2026 Singapore Grand Prix",
+   "through": "through the 2026 Singapore Grand Prix",
+   "throughBox": [
+    64,
+    197,
+    185,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "f1-higher-lower-1280-mo",
+   "round": 5,
+   "text": "🏎️ Stirling Moss 1951-1961 HWM, Maserati, Mercedes, Cooper 16 wins through the 2026 Singapore Grand Prix",
+   "through": "through the 2026 Singapore Grand Prix",
+   "throughBox": [
+    64,
+    197,
+    185,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "f1-higher-lower-1280-mo",
+   "round": 5,
+   "text": "🏎️ Mark Webber 2002-2013 Minardi, Jaguar, Williams, Red Bull 9 wins through the 2026 Singapore Grand Prix",
+   "through": "through the 2026 Singapore Grand Prix",
+   "throughBox": [
+    64,
+    197,
+    185,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "f1-higher-lower-1280-mo",
+   "round": 6,
+   "text": "🏎️ Juan Manuel Fangio 1950-1958 · 5× champion Alfa Romeo, Maserati, Mercedes, Ferrari 24 wins through the 2026 Singapore Grand Prix",
+   "through": "through the 2026 Singapore Grand Prix",
+   "throughBox": [
+    64,
+    197,
+    185,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "f1-higher-lower-1280-mo",
+   "round": 6,
+   "text": "🏎️ Kimi Räikkönen 2001-2021 · 1× champion Sauber, McLaren, Ferrari, Alfa Romeo 21 wins through the 2026 Singapore Grand Prix",
+   "through": "through the 2026 Singapore Grand Prix",
+   "throughBox": [
+    64,
+    197,
+    185,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "f1-higher-lower-1280-mo",
+   "round": 7,
+   "text": "🏎️ Niki Lauda 1971-1985 · 3× champion BRM, Ferrari, Brabham, McLaren 25 wins through the 2026 Singapore Grand Prix",
+   "through": "through the 2026 Singapore Grand Prix",
+   "throughBox": [
+    64,
+    197,
+    185,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "f1-higher-lower-1280-mo",
+   "round": 7,
+   "text": "🏎️ Daniel Ricciardo 2011-2024 HRT, Red Bull, Renault, McLaren 8 wins through the 2026 Singapore Grand Prix",
+   "through": "through the 2026 Singapore Grand Prix",
+   "throughBox": [
+    64,
+    197,
+    185,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "f1-higher-lower-1280-mo",
+   "round": 8,
+   "text": "🏎️ Sebastian Vettel 2007-2022 · 4× champion Red Bull, Ferrari, Aston Martin 53 wins through the 2026 Singapore Grand Prix",
+   "through": "through the 2026 Singapore Grand Prix",
+   "throughBox": [
+    64,
+    197,
+    185,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "f1-higher-lower-1280-mo",
+   "round": 8,
+   "text": "🏎️ Gerhard Berger 1984-1997 ATS, Benetton, Ferrari, McLaren 10 wins through the 2026 Singapore Grand Prix",
+   "through": "through the 2026 Singapore Grand Prix",
+   "throughBox": [
+    64,
+    197,
+    185,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "f1-higher-lower-1280-mo",
+   "round": 9,
+   "text": "🏎️ Nico Rosberg 2006-2016 · 1× champion Williams, Mercedes 23 wins through the 2026 Singapore Grand Prix",
+   "through": "through the 2026 Singapore Grand Prix",
+   "throughBox": [
+    64,
+    197,
+    185,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "f1-higher-lower-1280-mo",
+   "round": 9,
+   "text": "🏎️ Lando Norris 2019-2026 · 1× champion McLaren 13 wins through the 2026 Singapore Grand Prix",
+   "through": "through the 2026 Singapore Grand Prix",
+   "throughBox": [
+    64,
+    197,
+    185,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "f1-higher-lower-1280-mo",
+   "round": 10,
+   "text": "🏎️ Ronnie Peterson 1970-1978 March, Lotus, Tyrrell 10 wins through the 2026 Singapore Grand Prix",
+   "through": "through the 2026 Singapore Grand Prix",
+   "throughBox": [
+    64,
+    197,
+    185,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "f1-higher-lower-1280-mo",
+   "round": 10,
+   "text": "🏎️ Jack Brabham 1955-1970 · 3× champion Cooper, Brabham 14 wins through the 2026 Singapore Grand Prix",
+   "through": "through the 2026 Singapore Grand Prix",
+   "throughBox": [
+    64,
+    197,
+    185,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "f1-higher-lower-390-mo",
+   "round": 1,
+   "text": "🏎️ Charles Leclerc 2018-2026 Sauber, Ferrari 9 wins through the 2026 Singapore Grand Prix",
+   "through": "through the 2026 Singapore Grand Prix",
+   "throughBox": [
+    21,
+    225,
+    129,
+    30
+   ],
+   "cardW": 171,
+   "cardH": 292,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "f1-higher-lower-390-mo",
+   "round": 1,
+   "text": "🏎️ David Coulthard 1994-2008 Williams, McLaren, Red Bull 13 wins through the 2026 Singapore Grand Prix",
+   "through": "through the 2026 Singapore Grand Prix",
+   "throughBox": [
+    21,
+    241,
+    129,
+    30
+   ],
+   "cardW": 171,
+   "cardH": 292,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "f1-higher-lower-1280-rm",
+   "round": 1,
+   "text": "🏎️ Charles Leclerc 2018-2026 Sauber, Ferrari 9 wins through the 2026 Singapore Grand Prix",
+   "through": "through the 2026 Singapore Grand Prix",
+   "throughBox": [
+    64,
+    197,
+    185,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "f1-higher-lower-1280-rm",
+   "round": 1,
+   "text": "🏎️ David Coulthard 1994-2008 Williams, McLaren, Red Bull 13 wins through the 2026 Singapore Grand Prix",
+   "through": "through the 2026 Singapore Grand Prix",
+   "throughBox": [
+    64,
+    197,
+    185,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 233,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "tennis-higher-lower-390-rm",
+   "round": 1,
+   "text": "🎾 Martina Hingis Women's · majors 1997-1999 5 Slams through the 2026 US Open",
+   "through": "through the 2026 US Open",
+   "throughBox": [
+    22,
+    185,
+    127,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 221,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "tennis-higher-lower-390-rm",
+   "round": 1,
+   "text": "🎾 John McEnroe Men's · majors 1979-1984 7 Slams through the 2026 US Open",
+   "through": "through the 2026 US Open",
+   "throughBox": [
+    22,
+    185,
+    127,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 221,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "tennis-higher-lower-390-rm",
+   "round": 2,
+   "text": "🎾 Mats Wilander Men's · majors 1982-1988 7 Slams through the 2026 US Open",
+   "through": "through the 2026 US Open",
+   "throughBox": [
+    22,
+    185,
+    127,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 221,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "tennis-higher-lower-390-rm",
+   "round": 2,
+   "text": "🎾 Fred Perry Men's · majors 1933-1936 8 Slams through the 2026 US Open",
+   "through": "through the 2026 US Open",
+   "throughBox": [
+    22,
+    185,
+    127,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 221,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "tennis-higher-lower-390-rm",
+   "round": 3,
+   "text": "🎾 Bill Tilden Men's · majors 1920-1930 10 Slams through the 2026 US Open",
+   "through": "through the 2026 US Open",
+   "throughBox": [
+    22,
+    185,
+    127,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 221,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "tennis-higher-lower-390-rm",
+   "round": 3,
+   "text": "🎾 Chris Evert Women's · majors 1974-1986 18 Slams through the 2026 US Open",
+   "through": "through the 2026 US Open",
+   "throughBox": [
+    22,
+    185,
+    127,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 221,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "tennis-higher-lower-390-rm",
+   "round": 4,
+   "text": "🎾 Margaret Court Women's · majors 1960-1973 24 Slams through the 2026 US Open",
+   "through": "through the 2026 US Open",
+   "throughBox": [
+    22,
+    213,
+    127,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 249,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "tennis-higher-lower-390-rm",
+   "round": 4,
+   "text": "🎾 Jannik Sinner Men's · majors 2024-2026 5 Slams through the 2026 US Open",
+   "through": "through the 2026 US Open",
+   "throughBox": [
+    22,
+    185,
+    127,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 249,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "tennis-higher-lower-390-rm",
+   "round": 5,
+   "text": "🎾 Andre Agassi Men's · majors 1992-2003 8 Slams through the 2026 US Open",
+   "through": "through the 2026 US Open",
+   "throughBox": [
+    22,
+    185,
+    127,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 277,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "tennis-higher-lower-390-rm",
+   "round": 5,
+   "text": "🎾 Margaret Osborne duPont Women's · majors 1946-1950 6 Slams through the 2026 US Open",
+   "through": "through the 2026 US Open",
+   "throughBox": [
+    22,
+    241,
+    127,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 277,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "tennis-higher-lower-390-rm",
+   "round": 6,
+   "text": "🎾 Billie Jean King Women's · majors 1966-1975 12 Slams through the 2026 US Open",
+   "through": "through the 2026 US Open",
+   "throughBox": [
+    22,
+    213,
+    127,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 249,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "tennis-higher-lower-390-rm",
+   "round": 6,
+   "text": "🎾 Monica Seles Women's · majors 1990-1996 9 Slams through the 2026 US Open",
+   "through": "through the 2026 US Open",
+   "throughBox": [
+    22,
+    185,
+    127,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 249,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "tennis-higher-lower-390-rm",
+   "round": 7,
+   "text": "🎾 Pete Sampras Men's · majors 1990-2002 14 Slams through the 2026 US Open",
+   "through": "through the 2026 US Open",
+   "throughBox": [
+    22,
+    185,
+    127,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 249,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "tennis-higher-lower-390-rm",
+   "round": 7,
+   "text": "🎾 Aryna Sabalenka Women's · majors 2023-2025 4 Slams through the 2026 US Open",
+   "through": "through the 2026 US Open",
+   "throughBox": [
+    22,
+    213,
+    127,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 249,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "tennis-higher-lower-390-rm",
+   "round": 8,
+   "text": "🎾 Rafael Nadal Men's · majors 2005-2022 22 Slams through the 2026 US Open",
+   "through": "through the 2026 US Open",
+   "throughBox": [
+    22,
+    185,
+    127,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 221,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "tennis-higher-lower-390-rm",
+   "round": 8,
+   "text": "🎾 Stefan Edberg Men's · majors 1985-1992 6 Slams through the 2026 US Open",
+   "through": "through the 2026 US Open",
+   "throughBox": [
+    22,
+    185,
+    127,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 221,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "tennis-higher-lower-390-rm",
+   "round": 9,
+   "text": "🎾 Rod Laver Men's · majors 1960-1969 11 Slams through the 2026 US Open",
+   "through": "through the 2026 US Open",
+   "throughBox": [
+    22,
+    185,
+    127,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 249,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "tennis-higher-lower-390-rm",
+   "round": 9,
+   "text": "🎾 John Newcombe Men's · majors 1967-1975 7 Slams through the 2026 US Open",
+   "through": "through the 2026 US Open",
+   "throughBox": [
+    22,
+    213,
+    127,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 249,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "tennis-higher-lower-390-rm",
+   "round": 10,
+   "text": "🎾 Jack Crawford Men's · majors 1931-1935 6 Slams through the 2026 US Open",
+   "through": "through the 2026 US Open",
+   "throughBox": [
+    22,
+    185,
+    127,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 221,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "tennis-higher-lower-390-rm",
+   "round": 10,
+   "text": "🎾 Ken Rosewall Men's · majors 1953-1972 8 Slams through the 2026 US Open",
+   "through": "through the 2026 US Open",
+   "throughBox": [
+    22,
+    185,
+    127,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 221,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "tennis-higher-lower-1280-mo",
+   "round": 1,
+   "text": "🎾 Martina Hingis Women's · majors 1997-1999 5 Slams through the 2026 US Open",
+   "through": "through the 2026 US Open",
+   "throughBox": [
+    93,
+    169,
+    127,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 205,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "tennis-higher-lower-1280-mo",
+   "round": 1,
+   "text": "🎾 John McEnroe Men's · majors 1979-1984 7 Slams through the 2026 US Open",
+   "through": "through the 2026 US Open",
+   "throughBox": [
+    93,
+    169,
+    127,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 205,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "tennis-higher-lower-1280-mo",
+   "round": 2,
+   "text": "🎾 Mats Wilander Men's · majors 1982-1988 7 Slams through the 2026 US Open",
+   "through": "through the 2026 US Open",
+   "throughBox": [
+    93,
+    169,
+    127,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 205,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "tennis-higher-lower-1280-mo",
+   "round": 2,
+   "text": "🎾 Fred Perry Men's · majors 1933-1936 8 Slams through the 2026 US Open",
+   "through": "through the 2026 US Open",
+   "throughBox": [
+    93,
+    169,
+    127,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 205,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "tennis-higher-lower-1280-mo",
+   "round": 3,
+   "text": "🎾 Bill Tilden Men's · majors 1920-1930 10 Slams through the 2026 US Open",
+   "through": "through the 2026 US Open",
+   "throughBox": [
+    93,
+    169,
+    127,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 205,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "tennis-higher-lower-1280-mo",
+   "round": 3,
+   "text": "🎾 Chris Evert Women's · majors 1974-1986 18 Slams through the 2026 US Open",
+   "through": "through the 2026 US Open",
+   "throughBox": [
+    93,
+    169,
+    127,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 205,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "tennis-higher-lower-1280-mo",
+   "round": 4,
+   "text": "🎾 Margaret Court Women's · majors 1960-1973 24 Slams through the 2026 US Open",
+   "through": "through the 2026 US Open",
+   "throughBox": [
+    93,
+    169,
+    127,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 205,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "tennis-higher-lower-1280-mo",
+   "round": 4,
+   "text": "🎾 Jannik Sinner Men's · majors 2024-2026 5 Slams through the 2026 US Open",
+   "through": "through the 2026 US Open",
+   "throughBox": [
+    93,
+    169,
+    127,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 205,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "tennis-higher-lower-1280-mo",
+   "round": 5,
+   "text": "🎾 Andre Agassi Men's · majors 1992-2003 8 Slams through the 2026 US Open",
+   "through": "through the 2026 US Open",
+   "throughBox": [
+    93,
+    169,
+    127,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 205,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "tennis-higher-lower-1280-mo",
+   "round": 5,
+   "text": "🎾 Margaret Osborne duPont Women's · majors 1946-1950 6 Slams through the 2026 US Open",
+   "through": "through the 2026 US Open",
+   "throughBox": [
+    93,
+    169,
+    127,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 205,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "tennis-higher-lower-1280-mo",
+   "round": 6,
+   "text": "🎾 Billie Jean King Women's · majors 1966-1975 12 Slams through the 2026 US Open",
+   "through": "through the 2026 US Open",
+   "throughBox": [
+    93,
+    169,
+    127,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 205,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "tennis-higher-lower-1280-mo",
+   "round": 6,
+   "text": "🎾 Monica Seles Women's · majors 1990-1996 9 Slams through the 2026 US Open",
+   "through": "through the 2026 US Open",
+   "throughBox": [
+    93,
+    169,
+    127,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 205,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "tennis-higher-lower-1280-mo",
+   "round": 7,
+   "text": "🎾 Pete Sampras Men's · majors 1990-2002 14 Slams through the 2026 US Open",
+   "through": "through the 2026 US Open",
+   "throughBox": [
+    93,
+    169,
+    127,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 205,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "tennis-higher-lower-1280-mo",
+   "round": 7,
+   "text": "🎾 Aryna Sabalenka Women's · majors 2023-2025 4 Slams through the 2026 US Open",
+   "through": "through the 2026 US Open",
+   "throughBox": [
+    93,
+    169,
+    127,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 205,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "tennis-higher-lower-1280-mo",
+   "round": 8,
+   "text": "🎾 Rafael Nadal Men's · majors 2005-2022 22 Slams through the 2026 US Open",
+   "through": "through the 2026 US Open",
+   "throughBox": [
+    93,
+    169,
+    127,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 205,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "tennis-higher-lower-1280-mo",
+   "round": 8,
+   "text": "🎾 Stefan Edberg Men's · majors 1985-1992 6 Slams through the 2026 US Open",
+   "through": "through the 2026 US Open",
+   "throughBox": [
+    93,
+    169,
+    127,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 205,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "tennis-higher-lower-1280-mo",
+   "round": 9,
+   "text": "🎾 Rod Laver Men's · majors 1960-1969 11 Slams through the 2026 US Open",
+   "through": "through the 2026 US Open",
+   "throughBox": [
+    93,
+    169,
+    127,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 205,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "tennis-higher-lower-1280-mo",
+   "round": 9,
+   "text": "🎾 John Newcombe Men's · majors 1967-1975 7 Slams through the 2026 US Open",
+   "through": "through the 2026 US Open",
+   "throughBox": [
+    93,
+    169,
+    127,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 205,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "tennis-higher-lower-1280-mo",
+   "round": 10,
+   "text": "🎾 Jack Crawford Men's · majors 1931-1935 6 Slams through the 2026 US Open",
+   "through": "through the 2026 US Open",
+   "throughBox": [
+    93,
+    169,
+    127,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 205,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "tennis-higher-lower-1280-mo",
+   "round": 10,
+   "text": "🎾 Ken Rosewall Men's · majors 1953-1972 8 Slams through the 2026 US Open",
+   "through": "through the 2026 US Open",
+   "throughBox": [
+    93,
+    169,
+    127,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 205,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "tennis-higher-lower-390-mo",
+   "round": 1,
+   "text": "🎾 Martina Hingis Women's · majors 1997-1999 5 Slams through the 2026 US Open",
+   "through": "through the 2026 US Open",
+   "throughBox": [
+    22,
+    185,
+    127,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 221,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "tennis-higher-lower-390-mo",
+   "round": 1,
+   "text": "🎾 John McEnroe Men's · majors 1979-1984 7 Slams through the 2026 US Open",
+   "through": "through the 2026 US Open",
+   "throughBox": [
+    22,
+    185,
+    127,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 221,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "tennis-higher-lower-1280-rm",
+   "round": 1,
+   "text": "🎾 Martina Hingis Women's · majors 1997-1999 5 Slams through the 2026 US Open",
+   "through": "through the 2026 US Open",
+   "throughBox": [
+    93,
+    169,
+    127,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 205,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "tennis-higher-lower-1280-rm",
+   "round": 1,
+   "text": "🎾 John McEnroe Men's · majors 1979-1984 7 Slams through the 2026 US Open",
+   "through": "through the 2026 US Open",
+   "throughBox": [
+    93,
+    169,
+    127,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 205,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "hockey-higher-lower-390-rm",
+   "round": 1,
+   "text": "Jaromir Jagr Forward Pittsburgh, Washington, New York Rangers, Florida 1921 pts through 2017-18",
+   "through": "through 2017-18",
+   "throughBox": [
+    47,
+    220,
+    77,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 256,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "hockey-higher-lower-390-rm",
+   "round": 1,
+   "text": "Igor Shesterkin Goalie New York Rangers 18 pts season not confirmed",
+   "through": "season not confirmed",
+   "throughBox": [
+    34,
+    216,
+    104,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 256,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "hockey-higher-lower-390-rm",
+   "round": 2,
+   "text": "Duncan Keith Defense Chicago, Edmonton 646 pts through 2021-22",
+   "through": "through 2021-22",
+   "throughBox": [
+    46,
+    188,
+    79,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 252,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "hockey-higher-lower-390-rm",
+   "round": 2,
+   "text": "Connor McDavid Forward Edmonton 1215 pts through 2025-26",
+   "through": "through 2025-26",
+   "throughBox": [
+    45,
+    216,
+    81,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 252,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "hockey-higher-lower-390-rm",
+   "round": 3,
+   "text": "Evgeni Malkin Forward Pittsburgh 1407 pts through 2025-26",
+   "through": "through 2025-26",
+   "throughBox": [
+    45,
+    188,
+    81,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 252,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "hockey-higher-lower-390-rm",
+   "round": 3,
+   "text": "Nicklas Lidstrom Defense Detroit 1142 pts through 2011-12",
+   "through": "through 2011-12",
+   "throughBox": [
+    48,
+    216,
+    75,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 252,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "hockey-higher-lower-390-rm",
+   "round": 4,
+   "text": "Gordie Howe Forward Detroit, Hartford 1850 pts through 1979-80",
+   "through": "through 1979-80",
+   "throughBox": [
+    46,
+    188,
+    79,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 224,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "hockey-higher-lower-390-rm",
+   "round": 4,
+   "text": "Kirill Kaprizov Forward Minnesota 475 pts through 2025-26",
+   "through": "through 2025-26",
+   "throughBox": [
+    45,
+    188,
+    81,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 224,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "hockey-higher-lower-390-rm",
+   "round": 5,
+   "text": "Alexander Ovechkin Forward Washington 1684 pts through 2025-26",
+   "through": "through 2025-26",
+   "throughBox": [
+    45,
+    216,
+    81,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 252,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "hockey-higher-lower-390-rm",
+   "round": 5,
+   "text": "Mark Messier Forward Edmonton, New York Rangers, Vancouver 1887 pts through 2003-04",
+   "through": "through 2003-04",
+   "throughBox": [
+    45,
+    204,
+    81,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 252,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "hockey-higher-lower-390-rm",
+   "round": 6,
+   "text": "Patrice Bergeron Forward Boston 1040 pts through 2022-23",
+   "through": "through 2022-23",
+   "throughBox": [
+    45,
+    216,
+    81,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 252,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "hockey-higher-lower-390-rm",
+   "round": 6,
+   "text": "Teemu Selanne Forward Winnipeg, Anaheim, San Jose, Colorado 1457 pts through 2013-14",
+   "through": "through 2013-14",
+   "throughBox": [
+    47,
+    204,
+    77,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 252,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "hockey-higher-lower-390-rm",
+   "round": 7,
+   "text": "David Pastrnak Forward Boston 932 pts through 2025-26",
+   "through": "through 2025-26",
+   "throughBox": [
+    45,
+    188,
+    81,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 240,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "hockey-higher-lower-390-rm",
+   "round": 7,
+   "text": "Joe Thornton Forward Boston, San Jose, Toronto, Florida 1539 pts through 2021-22",
+   "through": "through 2021-22",
+   "throughBox": [
+    46,
+    204,
+    79,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 240,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "hockey-higher-lower-390-rm",
+   "round": 8,
+   "text": "Steven Stamkos Forward Tampa Bay, Nashville 1251 pts through 2025-26",
+   "through": "through 2025-26",
+   "throughBox": [
+    45,
+    216,
+    81,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 252,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "hockey-higher-lower-390-rm",
+   "round": 8,
+   "text": "Pavel Bure Forward Vancouver, Florida, New York Rangers 779 pts through 2002-03",
+   "through": "through 2002-03",
+   "throughBox": [
+    45,
+    204,
+    81,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 252,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "hockey-higher-lower-390-rm",
+   "round": 9,
+   "text": "Paul Coffey Defense Edmonton, Pittsburgh, Detroit, Hartford, Philadelphia 1531 pts through 2000-01",
+   "through": "through 2000-01",
+   "throughBox": [
+    46,
+    220,
+    79,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 256,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "hockey-higher-lower-390-rm",
+   "round": 9,
+   "text": "Ron Francis Forward Hartford, Pittsburgh, Carolina, Toronto 1798 pts through 2003-04",
+   "through": "through 2003-04",
+   "throughBox": [
+    45,
+    204,
+    81,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 256,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "hockey-higher-lower-390-rm",
+   "round": 10,
+   "text": "Jonathan Toews Forward Chicago 911 pts through 2025-26",
+   "through": "through 2025-26",
+   "throughBox": [
+    45,
+    216,
+    81,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 252,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "hockey-higher-lower-390-rm",
+   "round": 10,
+   "text": "Sidney Crosby Forward Pittsburgh 1761 pts through 2025-26",
+   "through": "through 2025-26",
+   "throughBox": [
+    45,
+    188,
+    81,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 252,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "hockey-higher-lower-1280-mo",
+   "round": 1,
+   "text": "Jaromir Jagr Forward Pittsburgh, Washington, New York Rangers, Florida 1921 pts through 2017-18",
+   "through": "through 2017-18",
+   "throughBox": [
+    118,
+    204,
+    77,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 240,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "hockey-higher-lower-1280-mo",
+   "round": 1,
+   "text": "Igor Shesterkin Goalie New York Rangers 18 pts season not confirmed",
+   "through": "season not confirmed",
+   "throughBox": [
+    104,
+    188,
+    104,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 240,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "hockey-higher-lower-1280-mo",
+   "round": 2,
+   "text": "Duncan Keith Defense Chicago, Edmonton 646 pts through 2021-22",
+   "through": "through 2021-22",
+   "throughBox": [
+    117,
+    188,
+    79,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 224,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "hockey-higher-lower-1280-mo",
+   "round": 2,
+   "text": "Connor McDavid Forward Edmonton 1215 pts through 2025-26",
+   "through": "through 2025-26",
+   "throughBox": [
+    116,
+    188,
+    81,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 224,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "hockey-higher-lower-1280-mo",
+   "round": 3,
+   "text": "Evgeni Malkin Forward Pittsburgh 1407 pts through 2025-26",
+   "through": "through 2025-26",
+   "throughBox": [
+    116,
+    188,
+    81,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 224,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "hockey-higher-lower-1280-mo",
+   "round": 3,
+   "text": "Nicklas Lidstrom Defense Detroit 1142 pts through 2011-12",
+   "through": "through 2011-12",
+   "throughBox": [
+    119,
+    188,
+    75,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 224,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "hockey-higher-lower-1280-mo",
+   "round": 4,
+   "text": "Gordie Howe Forward Detroit, Hartford 1850 pts through 1979-80",
+   "through": "through 1979-80",
+   "throughBox": [
+    117,
+    188,
+    79,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 224,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "hockey-higher-lower-1280-mo",
+   "round": 4,
+   "text": "Kirill Kaprizov Forward Minnesota 475 pts through 2025-26",
+   "through": "through 2025-26",
+   "throughBox": [
+    116,
+    188,
+    81,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 224,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "hockey-higher-lower-1280-mo",
+   "round": 5,
+   "text": "Alexander Ovechkin Forward Washington 1684 pts through 2025-26",
+   "through": "through 2025-26",
+   "throughBox": [
+    116,
+    188,
+    81,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 224,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "hockey-higher-lower-1280-mo",
+   "round": 5,
+   "text": "Mark Messier Forward Edmonton, New York Rangers, Vancouver 1887 pts through 2003-04",
+   "through": "through 2003-04",
+   "throughBox": [
+    116,
+    188,
+    81,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 224,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "hockey-higher-lower-1280-mo",
+   "round": 6,
+   "text": "Patrice Bergeron Forward Boston 1040 pts through 2022-23",
+   "through": "through 2022-23",
+   "throughBox": [
+    116,
+    188,
+    81,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 224,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "hockey-higher-lower-1280-mo",
+   "round": 6,
+   "text": "Teemu Selanne Forward Winnipeg, Anaheim, San Jose, Colorado 1457 pts through 2013-14",
+   "through": "through 2013-14",
+   "throughBox": [
+    118,
+    188,
+    77,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 224,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "hockey-higher-lower-1280-mo",
+   "round": 7,
+   "text": "David Pastrnak Forward Boston 932 pts through 2025-26",
+   "through": "through 2025-26",
+   "throughBox": [
+    116,
+    188,
+    81,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 224,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "hockey-higher-lower-1280-mo",
+   "round": 7,
+   "text": "Joe Thornton Forward Boston, San Jose, Toronto, Florida 1539 pts through 2021-22",
+   "through": "through 2021-22",
+   "throughBox": [
+    117,
+    188,
+    79,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 224,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "hockey-higher-lower-1280-mo",
+   "round": 8,
+   "text": "Steven Stamkos Forward Tampa Bay, Nashville 1251 pts through 2025-26",
+   "through": "through 2025-26",
+   "throughBox": [
+    116,
+    188,
+    81,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 224,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "hockey-higher-lower-1280-mo",
+   "round": 8,
+   "text": "Pavel Bure Forward Vancouver, Florida, New York Rangers 779 pts through 2002-03",
+   "through": "through 2002-03",
+   "throughBox": [
+    116,
+    188,
+    81,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 224,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "hockey-higher-lower-1280-mo",
+   "round": 9,
+   "text": "Paul Coffey Defense Edmonton, Pittsburgh, Detroit, Hartford, Philadelphia 1531 pts through 2000-01",
+   "through": "through 2000-01",
+   "throughBox": [
+    117,
+    204,
+    79,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 240,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "hockey-higher-lower-1280-mo",
+   "round": 9,
+   "text": "Ron Francis Forward Hartford, Pittsburgh, Carolina, Toronto 1798 pts through 2003-04",
+   "through": "through 2003-04",
+   "throughBox": [
+    116,
+    188,
+    81,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 240,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "hockey-higher-lower-1280-mo",
+   "round": 10,
+   "text": "Jonathan Toews Forward Chicago 911 pts through 2025-26",
+   "through": "through 2025-26",
+   "throughBox": [
+    116,
+    188,
+    81,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 224,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "hockey-higher-lower-1280-mo",
+   "round": 10,
+   "text": "Sidney Crosby Forward Pittsburgh 1761 pts through 2025-26",
+   "through": "through 2025-26",
+   "throughBox": [
+    116,
+    188,
+    81,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 224,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "hockey-higher-lower-390-mo",
+   "round": 1,
+   "text": "Jaromir Jagr Forward Pittsburgh, Washington, New York Rangers, Florida 1921 pts through 2017-18",
+   "through": "through 2017-18",
+   "throughBox": [
+    47,
+    220,
+    77,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 256,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "hockey-higher-lower-390-mo",
+   "round": 1,
+   "text": "Igor Shesterkin Goalie New York Rangers 18 pts season not confirmed",
+   "through": "season not confirmed",
+   "throughBox": [
+    34,
+    216,
+    104,
+    15
+   ],
+   "cardW": 171,
+   "cardH": 256,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "hockey-higher-lower-1280-rm",
+   "round": 1,
+   "text": "Jaromir Jagr Forward Pittsburgh, Washington, New York Rangers, Florida 1921 pts through 2017-18",
+   "through": "through 2017-18",
+   "throughBox": [
+    118,
+    204,
+    77,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 240,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  },
+  {
+   "tag": "hockey-higher-lower-1280-rm",
+   "round": 1,
+   "text": "Igor Shesterkin Goalie New York Rangers 18 pts season not confirmed",
+   "through": "season not confirmed",
+   "throughBox": [
+    104,
+    188,
+    104,
+    15
+   ],
+   "cardW": 312,
+   "cardH": 240,
+   "spill": [],
+   "overflowX": false,
+   "anim": "cell-reveal",
+   "fontPx": "10px"
+  }
+ ]
+}
