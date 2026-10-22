@@ -1,0 +1,9 @@
+#!serial
+mut-armed-vitest: node .rc/x/mutfix1546.mjs armed && node_modules/.bin/vitest run src/test/fightCareerRetireBoard.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
+proof-guide-old: node .rc/x/mutfix1546.mjs oldsentence && git show e3deb2cb:scripts/data/guideHeadingsFrozen.json > scripts/data/guideHeadingsFrozen.json && node scripts/simGuideHeadings.mjs; s=$?; git checkout -- src scripts; exit $s
+proof-guide-neg: node .rc/x/mutfix1546.mjs oldsentence && node scripts/simGuideHeadings.mjs; s=$?; git checkout -- src scripts; exit $s
+proof-search-old: node .rc/x/mutfix1546.mjs oldsentence && git show e3deb2cb:src/data/searchKeywords.json > src/data/searchKeywords.json && node scripts/simSiteSearch.mjs; s=$?; git checkout -- src scripts; exit $s
+proof-search-neg: node .rc/x/mutfix1546.mjs oldsentence && node scripts/simSiteSearch.mjs; s=$?; git checkout -- src scripts; exit $s
+retake-guide: node scripts/simGuideHeadings.mjs --refresh /fight-career && git diff --stat scripts/data/guideHeadingsFrozen.json && git diff --exit-code scripts/data/guideHeadingsFrozen.json; s=$?; git checkout -- src scripts; exit $s
+retake-search: node scripts/genSearchKeywords.mjs && git diff --stat src/data/searchKeywords.json && git diff --exit-code src/data/searchKeywords.json; s=$?; git checkout -- src scripts; exit $s
+clean: git status --short; test -z "$(git status --short -- src scripts)"
