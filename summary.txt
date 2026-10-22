@@ -1,0 +1,4 @@
+build exit=0 36s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+probe exit=0 27s | probeInvisibleBuy: 0 of 2 sizes bought a club whose tile was not yet visible
+probe2 exit=0 27s | probeDoubleTap: 0 of 2 sizes bought an unseen club on a double tap of Buy a Football Club
+landing-bar exit=0 101s | playSoccerLanding: green at 320x640, 390x844, 1280x900 (also bar 360x780, bar 375x667; bar), HEAD ONLY

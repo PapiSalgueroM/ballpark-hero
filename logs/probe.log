@@ -1,0 +1,15 @@
+  390x844 +6ms Excelsior: opacity 0.00, visibility hidden, delay 0.6s, a tap at its centre lands on it: false
+  390x844 +6ms Crystal Palace: opacity 0.00, visibility hidden, delay 0.82s, a tap at its centre lands on it: false
+  390x844 +6ms Columbus Crew: opacity 0.00, visibility hidden, delay 1.04s, a tap at its centre lands on it: false
+  390x844 +6ms Rizespor: opacity 0.00, visibility hidden, delay 1.26s, a tap at its centre lands on it: false
+  390x844 +6ms Sporting CP: opacity 0.00, visibility hidden, delay 1.48s, a tap at its centre lands on it: false
+  390x844 +6ms Olympiacos: opacity 0.00, visibility hidden, delay 1.7s, a tap at its centre lands on it: false
+  390x844: tapped the last tile (Olympiacos) at +61ms while its opacity was 0.00: nothing bought (undefined)
+  1280x900 +12ms Excelsior: opacity 0.00, visibility hidden, delay 0.6s, a tap at its centre lands on it: false
+  1280x900 +12ms Crystal Palace: opacity 0.00, visibility hidden, delay 0.82s, a tap at its centre lands on it: false
+  1280x900 +12ms Columbus Crew: opacity 0.00, visibility hidden, delay 1.04s, a tap at its centre lands on it: false
+  1280x900 +12ms Rizespor: opacity 0.00, visibility hidden, delay 1.26s, a tap at its centre lands on it: false
+  1280x900 +12ms Sporting CP: opacity 0.00, visibility hidden, delay 1.48s, a tap at its centre lands on it: false
+  1280x900 +12ms Olympiacos: opacity 0.00, visibility hidden, delay 1.7s, a tap at its centre lands on it: false
+  1280x900: tapped the last tile (Olympiacos) at +84ms while its opacity was 0.00: nothing bought (undefined)
+probeInvisibleBuy: 0 of 2 sizes bought a club whose tile was not yet visible
