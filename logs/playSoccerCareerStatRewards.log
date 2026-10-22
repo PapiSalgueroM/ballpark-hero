@@ -1,0 +1,4 @@
+Prepared 9 declared font dependencies for local fulfillment.
+prepInstalled: 521 installed locked versions written to /home/runner/work/ballpark-hero/ballpark-hero/w-playSoccerCareerStatRewards
+simSoccerCareerStatRewards normal: green. Exact source and outcome guards passed.
+Soccer stat-rewards browser: passed; 1836 checks, 14 natural cases, 2 controls, 30 originals, 0 failures, 0 setup failures.
