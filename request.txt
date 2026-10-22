@@ -1,0 +1,4 @@
+#!serial
+r-tworolls: node .rc/x/mut1543.mjs tworolls && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonScorelines.mjs; s=$?; git checkout -- src scripts; exit $s
+r-rollfirst: node .rc/x/mut1543.mjs rollfirst && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonScorelines.mjs; s=$?; git checkout -- src scripts; exit $s
+r-flipgoal: node .rc/x/mut1543.mjs flipgoal && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonScorelines.mjs; s=$?; git checkout -- src scripts; exit $s

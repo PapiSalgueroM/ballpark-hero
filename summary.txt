@@ -1,0 +1,3 @@
+r-tworolls exit=1 293s | simTycoonScorelines: 25 checks, 11 failed [293 s]
+r-rollfirst exit=1 297s | simTycoonScorelines: 25 checks, 10 failed [297 s]
+r-flipgoal exit=1 296s | simTycoonScorelines: 25 checks, 14 failed [296 s]
