@@ -1,0 +1,7 @@
+quick: SECTION=table,styles,balanced node scripts/simCmTactics.mjs
+c-mirror: CM_TACTICS_CONTROL=mirror node scripts/simCmTactics.mjs
+c-helpwords: CM_TACTICS_CONTROL=helpwords node scripts/simCmTactics.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+pin1081Main: git worktree add .rcmain 6d2d7a7d2cb41d25f9c71c24c848af583e804f6a >/dev/null 2>&1 && cd .rcmain && node scripts/simManagerAppealIsolation.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
