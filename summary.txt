@@ -1,0 +1,8 @@
+build exit=0 36s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fonts exit=0 0s | Prepared 9 declared font dependencies for local fulfillment.
+return-native exit=0 110s | PASS international return native: {"mode":"native","checks":854,"journeys":12,"wholePairs":102,"postStartupExactVectors":90,"rawReloads":48,"unfilteredStartupObservations
+farewell-native exit=0 241s | PASS farewell native: {"mode":"native","checks":1343,"journeys":18,"wholePairs":105,"postStartupExactVectors":138,"rawReloads":72,"unfilteredStartupObservations":72,"layo
+pm-fonts exit=0 0s | Prepared 9 declared font dependencies for local fulfillment.
+pm-native exit=1 0s | Node.js v24.22.0
+playSoccerResultsLayout exit=1 0s | Node.js v24.22.0
+playSoccerAgentReview exit=0 451s | Soccer agent review native 1976 checks,12 journeys,3 copied observation controls,0 failures.
