@@ -1,0 +1,15 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+pf1: PLAYFIRST_SHARD=1/3 PLAYFIRST_JSON=$RC_OUT/pf1.json node scripts/playFirstVisitDialogs.mjs
+pf2: PLAYFIRST_SHARD=2/3 PLAYFIRST_JSON=$RC_OUT/pf2.json node scripts/playFirstVisitDialogs.mjs
+pf3: PLAYFIRST_SHARD=3/3 PLAYFIRST_JSON=$RC_OUT/pf3.json node scripts/playFirstVisitDialogs.mjs
+cover1: PLAYFIRST_SHARD=1/3 PLAYFIRST_CONTROL=cover node scripts/playFirstVisitDialogs.mjs
+cover2: PLAYFIRST_SHARD=2/3 PLAYFIRST_CONTROL=cover node scripts/playFirstVisitDialogs.mjs
+cover3: PLAYFIRST_SHARD=3/3 PLAYFIRST_CONTROL=cover node scripts/playFirstVisitDialogs.mjs
+ratchet: ONLY=/stadium-tycoon,/idle-arena,/footle,/club-manager PLAYFIRST_CONTROL=ratchet node scripts/playFirstVisitDialogs.mjs
+abort: ONLY=/club-manager PLAYFIRST_CONTROL=cover node scripts/playFirstVisitDialogs.mjs
+badcontrol: PLAYFIRST_CONTROL=nope node scripts/playFirstVisitDialogs.mjs
+mock1: node .rc/x/apply.mjs mockdb 1 && PLAYFIRST_SHARD=1/3 PLAYFIRST_JSON=$RC_OUT/mock1.json node scripts/_rvMockWalk1.mjs
+mock2: node .rc/x/apply.mjs mockdb 2 && PLAYFIRST_SHARD=2/3 PLAYFIRST_JSON=$RC_OUT/mock2.json node scripts/_rvMockWalk2.mjs
+mock3: node .rc/x/apply.mjs mockdb 3 && PLAYFIRST_SHARD=3/3 PLAYFIRST_JSON=$RC_OUT/mock3.json node scripts/_rvMockWalk3.mjs
