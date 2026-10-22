@@ -1,0 +1,7 @@
+build exit=0 35s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+walk exit=1 43s | playNflSeasonStats: 118 checks, 7 failed (points red: a, c, d)
+weight-head exit=0 15s | weightFo head: /front-office load 387.6K gz over 43 files
+weight-base exit=0 80s | weightFo base: /front-office load 381.8K gz over 41 files
+sweepWeight exit=1 27s | sweepWeight: 4 failures
+walk-nonames exit=3 80s | playNflSeasonStats: 118 checks, 19 failed (control nonames)
+walk-nocard exit=3 135s | playNflSeasonStats: 106 checks, 10 failed (control nocard)
