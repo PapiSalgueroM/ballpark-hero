@@ -1,0 +1,8 @@
+Round 1532: Stadium Tycoon scorelines at the hook's cadence (dt 0.2s), control bonus alone
+
+control bonus: 1 place rewritten in a copy of the lib
+   sections red: S9b (expected S9b) [12 s]
+     S9b: ACH_BONUS is 0.021, not 0.02
+     says S9b: ACH_BONUS is 0.021, not 0.02
+
+simTycoonScorelines: 1 checks, 0 failed [12 s]

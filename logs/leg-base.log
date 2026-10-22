@@ -1,0 +1,17 @@
+Preparing worktree (detached HEAD 813b97f36e)
+HEAD is now at 813b97f36e rc request r1543-x3s for 03f56b56d55f32f9cb72258203a6bd883a5bc35d
+Preparing worktree (detached HEAD bac65fb0b3)
+HEAD is now at bac65fb0b3 Merge remote-tracking branch 'origin/main' into r1543-tycoon-badge-ladder
+  seed 101: watched same, away same
+  seed 141: watched same, away same
+  seed 181: watched same, away same
+  seed 1610: watched same, away same
+  seed 1650: watched same, away same
+  seed 1690: watched same, away same
+  seed 3119: watched same, away same
+  seed 3159: watched same, away same
+  seed 3199: watched same, away same
+  seed 4628: watched same, away same
+  seed 4668: watched same, away same
+  seed 4708: watched same, away same
+/tmp/base1543: 12 of 12 histories reproduce the committed hashes, 0 differ
