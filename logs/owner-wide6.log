@@ -1,0 +1,6 @@
+1
+base cedd023996
+0) the owner tail loads on demand: before the load nothing is bought, after it it is ready
+6) Careers that never buy a club are byte equal to the base
+   76 seeded careers, 3684 states and draw counts compared (456 manager seasons among them): 0 careers differ from the base
+simSoccerOwnerTail: green. The owner picks his club, plays on the table, and every call has a cost and a reason.

@@ -1,0 +1,41 @@
+CONTROL coin applied: this run is meant to go red
+base cedd023996
+0) the owner tail loads on demand: before the load nothing is bought, after it it is ready
+1) The clubs for sale
+   the ceremony career: phase retirement_ceremony, 21 seasons, last 2014
+   at €49M: 0 clubs (tiers none)
+   at €60M: 2 clubs (tiers 44)
+   at €200M: 4 clubs (tiers 4433)
+   at €249M: 4 clubs (tiers 4433)
+   at €250M: 6 clubs (tiers 443322)
+   at €900M: 6 clubs (tiers 443322)
+   60 saves: 152 different clubs offered, 0 lists that moved between visits or drew Math.random
+   40 purchases: 0 not the club picked at its price, 0 that drew Math.random; a club not for sale buys nothing; no name buys Real Betis
+2) Every finish is the table's
+   640 owner seasons: 572 finishes the table did not produce, 68 titles, 96 promotions, 33 relegations; 630 in a named league, 278 of a verified size
+     e.g. Real Betis S1: the line says "Finished 5th Loss €0.2M." for 15th of 20
+     e.g. Real Betis S2: the line says "Finished mid-table Income €0.8M." for 11th of 20
+     e.g. Real Betis S3: the line says "Finished mid-table Income €0.6M." for 18th of 20
+  FAIL: 572 of 640 owner seasons carry a finish, title or move the table did not produce
+   30 seasons replayed under two Math.random streams: 0 came out different
+3) Each call moves what it says it moves (against placing nothing, same keyed seasons)
+   600 owner states, 6 seasons, each call where it is open:
+     squad    n 600  points  10.29  money   2.29  this season: points 5.00 money -2.00
+     youth    n 600  points   7.69  money   6.28  this season: points 0.00 money 0.00
+     stadium  n 600  points   0.00  money  11.95  this season: points 0.00 money -1.20
+     debt     n 576  points   4.73  money   7.20  this season: points 0.77 money 1.06
+4) No dominant choice
+   the 576 states where all four calls are open, 6 seasons:
+     squad    n 576  points  10.35  money   2.34
+     youth    n 576  points   7.72  money   5.99
+     stadium  n 576  points   0.00  money  11.45
+     debt     n 576  points   4.73  money   7.20
+   12 ordered pairs: every call is beaten by every other somewhere by 0.5 points or 0.3M
+    3 seasons: most points squad (8.89), most money stadium (3.83)
+    6 seasons: most points squad (10.35), most money stadium (11.45)
+   10 seasons: most points youth (14.23), most money stadium (22.05)
+5) An owner save from before this round plays on
+   12 old owner saves (base cedd0239): 12 load, keep their club and rows, and play on the table; 0 do not
+6) Careers that never buy a club are byte equal to the base
+   16 seeded careers, 790 states and draw counts compared (96 manager seasons among them): 0 careers differ from the base
+simSoccerOwnerTail: 1 failure(s)

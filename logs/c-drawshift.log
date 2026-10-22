@@ -1,0 +1,41 @@
+CONTROL drawshift applied: this run is meant to go red
+base cedd023996
+0) the owner tail loads on demand: before the load nothing is bought, after it it is ready
+1) The clubs for sale
+   the ceremony career: phase retirement_ceremony, 21 seasons, last 2014
+   at €49M: 0 clubs (tiers none)
+   at €60M: 2 clubs (tiers 44)
+   at €200M: 4 clubs (tiers 4433)
+   at €249M: 4 clubs (tiers 4433)
+   at €250M: 6 clubs (tiers 443322)
+   at €900M: 6 clubs (tiers 443322)
+   60 saves: 152 different clubs offered, 0 lists that moved between visits or drew Math.random
+   40 purchases: 0 not the club picked at its price, 0 that drew Math.random; a club not for sale buys nothing; no name buys Real Betis
+2) Every finish is the table's
+   640 owner seasons: 0 finishes the table did not produce, 69 titles, 99 promotions, 37 relegations; 630 in a named league, 278 of a verified size
+   30 seasons replayed under two Math.random streams: 0 came out different
+3) Each call moves what it says it moves (against placing nothing, same keyed seasons)
+   600 owner states, 6 seasons, each call where it is open:
+     squad    n 600  points  10.28  money   1.76  this season: points 5.00 money -2.01
+     youth    n 600  points   7.45  money   6.07  this season: points 0.00 money 0.00
+     stadium  n 600  points   0.00  money  11.84  this season: points 0.00 money -1.21
+     debt     n 568  points   4.74  money   6.83  this season: points 0.76 money 1.04
+4) No dominant choice
+   the 568 states where all four calls are open, 6 seasons:
+     squad    n 568  points  10.40  money   1.83
+     youth    n 568  points   7.54  money   5.67
+     stadium  n 568  points   0.00  money  11.11
+     debt     n 568  points   4.74  money   6.83
+   12 ordered pairs: every call is beaten by every other somewhere by 0.5 points or 0.3M
+    3 seasons: most points squad (8.96), most money stadium (3.72)
+    6 seasons: most points squad (10.40), most money stadium (11.11)
+   10 seasons: most points youth (13.30), most money stadium (21.37)
+5) An owner save from before this round plays on
+   12 old owner saves (base cedd0239): 12 load, keep their club and rows, and play on the table; 0 do not
+6) Careers that never buy a club are byte equal to the base
+   16 seeded careers, 714 states and draw counts compared (96 manager seasons among them): 16 careers differ from the base
+     seed 101 step 44: manager:392 on the base, manager:396 here
+     seed 102 step 48: manager:571 on the base, manager:575 here
+     seed 103 step 38: manager:1868 on the base, manager:401 here
+  FAIL: 16 of 16 careers that never buy a club differ from the base
+simSoccerOwnerTail: 1 failure(s)
