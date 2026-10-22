@@ -1,0 +1,19 @@
+NEGATIVE CONTROL restwrites: resting takes a point of health (section 7 must fail)
+section 7: what must not move, 100 careers an era against /tmp/b7r
+  FAIL [7] now 3: resting moved something beside the intl block
+  FAIL [7] now 5: resting moved something beside the intl block
+  FAIL [7] now 6: resting moved something beside the intl block
+  FAIL [7] now 12: resting moved something beside the intl block
+  FAIL [7] now 13: resting moved something beside the intl block
+  FAIL [7] now 14: resting moved something beside the intl block
+  FAIL [7] now 16: resting moved something beside the intl block
+  FAIL [7] now 19: resting moved something beside the intl block
+  FAIL [7] now 20: resting moved something beside the intl block
+  FAIL [7] now 21: resting moved something beside the intl block
+  FAIL [7] now 22: resting moved something beside the intl block
+  FAIL [7] now 23: resting moved something beside the intl block
+  now: never called 46, called 54 (went and never hurt 38, hurt at least once 16)
+  now: called careers, legacy median always go 427 vs always rest 381; Hall share 35.2 vs 37.0 percent (measured, never asserted)
+  y2004: never called 41, called 59 (went and never hurt 45, hurt at least once 14)
+  y2004: called careers, legacy median always go 518 vs always rest 520; Hall share 52.5 vs 52.5 percent (measured, never asserted)
+simCareerIntl: control restwrites FIRED (section 7, 90 failures)

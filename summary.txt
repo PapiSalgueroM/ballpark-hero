@@ -1,0 +1,8 @@
+s5 exit=0 9s | simCareerIntl: GREEN, 180000 checks over sections 5
+s8 exit=0 2s | simCareerIntl: GREEN, 7 checks over sections 8
+simCareerIntl exit=0 132s | simCareerIntl: GREEN, 23682 checks over sections 1,2,3,4,6
+ctl-legacyreads exit=1 145s | simCareerIntl: control legacyreads FIRED (section 7, 113 failures)
+ctl-norepair exit=1 2s | simCareerIntl: control norepair FIRED (section 8, 3 failures)
+ctl-nobronze exit=1 2s | simCareerIntl: control nobronze FIRED (section 5, 15000 failures)
+ctl-restwrites exit=1 107s | simCareerIntl: control restwrites FIRED (section 7, 90 failures)
+s7 exit=0 429s | simCareerIntl: GREEN, 2973 checks over sections 7

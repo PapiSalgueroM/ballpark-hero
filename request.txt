@@ -1,0 +1,8 @@
+simCareerIntl: node scripts/simCareerIntl.mjs
+s5: INTL_SECTIONS=5 node scripts/simCareerIntl.mjs
+s7: mkdir -p /tmp/b7 && git archive 0846f9c5 | tar -x -C /tmp/b7 && INTL_BASE_DIR=/tmp/b7 INTL_SECTIONS=7 node scripts/simCareerIntl.mjs
+s8: INTL_SECTIONS=8 node scripts/simCareerIntl.mjs
+ctl-legacyreads: mkdir -p /tmp/b7l && git archive 0846f9c5 | tar -x -C /tmp/b7l && INTL_BASE_DIR=/tmp/b7l INTL_FLEET=100 INTL_SECTIONS=7 INTL_CONTROL=legacyreads node scripts/simCareerIntl.mjs
+ctl-restwrites: mkdir -p /tmp/b7r && git archive 0846f9c5 | tar -x -C /tmp/b7r && INTL_BASE_DIR=/tmp/b7r INTL_FLEET=100 INTL_SECTIONS=7 INTL_CONTROL=restwrites node scripts/simCareerIntl.mjs
+ctl-norepair: INTL_SECTIONS=8 INTL_CONTROL=norepair node scripts/simCareerIntl.mjs
+ctl-nobronze: INTL_TOURNEYS=500 INTL_SECTIONS=5 INTL_CONTROL=nobronze node scripts/simCareerIntl.mjs
