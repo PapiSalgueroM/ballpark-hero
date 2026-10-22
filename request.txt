@@ -1,0 +1,6 @@
+shop: node scripts/simUsShopPromises.mjs
+shop-pp1: SHOP_CONTROL=potplusone node scripts/simUsShopPromises.mjs
+shop-ppall: SHOP_CONTROL=potplusoneall node scripts/simUsShopPromises.mjs
+deckc: node scripts/simUsCareerDeckC.mjs
+board: node scripts/simUsBoardParity.mjs
+board-label: US_BOARD_PARITY_CONTROL=label node scripts/simUsBoardParity.mjs
