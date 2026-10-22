@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+walk: node .rc/x/walkInject1547.mjs
