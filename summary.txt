@@ -1,0 +1,8 @@
+simDraftNight exit=0 0s | simDraftNight: green. Every pick the engine made is shown, none is invented, and the run cannot become a wait.
+simDraftNight-dropai exit=0 0s | NEGATIVE CONTROL dropai was on; 7 finding(s). A control run is expected to be red.
+simDraftNight-slowsteps exit=0 0s | NEGATIVE CONTROL slowsteps was on; 1 finding(s). A control run is expected to be red.
+vitest exit=0 9s |    Duration  8.38s (transform 2.55s, setup 420ms, collect 6.72s, tests 10.53s, environment 2.51s, prepare 942ms)
+simDraftNight-norivals exit=0 7s | control "norivals": both reds were seen (the source check for the NBA on the copy, and the behaviour test red by name with the copy loaded). The check works.
+simRevealMoments exit=0 15s | simRevealMoments: green. No counting number, a reduced motion rule beside every keyframe, one pace for every stagger, every fact and number on the cards is the fixture's 
+simRevealMoments-motion exit=0 15s | NEGATIVE CONTROL motion: section 1 went red with 4 finding(s) and the others stayed green (section 2: 0, section 3: 0), the check works
+tsc exit=0 81s | 

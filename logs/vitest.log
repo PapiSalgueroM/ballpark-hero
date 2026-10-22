@@ -1,0 +1,34 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstdout[2m | src/components/nba-front-office/NbaDraftNightRivals.test.tsx[2m > [22m[2mNBA draft night, GM desk off: the card shows the picks the engine made[2m > [22m[2mthe rival rows are the picks the engine made, in order, each on the club its row names
+[22m[39mNBA draft night, desk off: the engine took 5 for rival clubs, the card drew 5 rival rows
+
+[90mstdout[2m | src/components/nba-front-office/NbaDraftNightRivals.test.tsx[2m > [22m[2mNBA draft night, GM desk off: the card shows the picks the engine made[2m > [22m[2mevery rival row carries the grade the draft screen printed for that prospect before the press
+[22m[39mNBA draft night, desk off: 5 of 5 rival rows were on the draft screen before the press, each grade equal
+
+[90mstdout[2m | src/components/nba-front-office/NbaDraftNightRivals.test.tsx[2m > [22m[2mNBA draft night, GM desk on: the card shows the picks the engine made[2m > [22m[2mthe rival rows are the picks the engine made, in order, each on the club its row names
+[22m[39mNBA draft night, desk on: the engine took 5 for rival clubs, the card drew 5 rival rows
+
+[90mstdout[2m | src/components/nba-front-office/NbaDraftNightRivals.test.tsx[2m > [22m[2mNBA draft night, GM desk on: the card shows the picks the engine made[2m > [22m[2mevery rival row carries the grade the draft screen printed for that prospect before the press
+[22m[39mNBA draft night, desk on: 5 of 5 rival rows were on the draft screen before the press, each grade equal
+
+ [32m✓[39m src/components/nba-front-office/NbaDraftNightRivals.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 1014[2mms[22m[39m
+ [32m✓[39m src/components/front-office-shared/DraftNightCard.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 74[2mms[22m[39m
+ [32m✓[39m src/components/front-office/FrontOfficeDraftCapital.test.tsx [2m([22m[2m25 tests[22m[2m)[22m[33m 4442[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL draft capital outcomes[2m > [22mholds the ordinary three-pick opener and saved counters [33m 486[2mms[22m[39m
+ [32m✓[39m src/components/mlb-front-office/MlbDraftCapital.test.tsx [2m([22m[2m18 tests[22m[2m)[22m[33m 4997[2mms[22m[39m
+   [33m[2m✓[22m[39m 966 MLB real draft-capital consequences[2m > [22mordinary two choices keep the original two five-rival batches full offseason salaries and RNG [33m 996[2mms[22m[39m
+   [33m[2m✓[22m[39m 966 MLB real draft-capital consequences[2m > [22mone actual pick consumes exactly once through a same-frame duplicate and refresh [33m 611[2mms[22m[39m
+   [33m[2m✓[22m[39m 966 MLB real draft-capital consequences[2m > [22mfour acquired rights add four real players but only the two ordinary CPU batches [33m 995[2mms[22m[39m
+   [33m[2m✓[22m[39m 966 MLB real draft-capital consequences[2m > [22mzero traded rights wait for explicit finish and run the actual offseason only once [33m 302[2mms[22m[39m
+   [33m[2m✓[22m[39m 966 MLB real draft-capital consequences[2m > [22mmalformed pick progress retains exact raw bytes until explicit own-key discard [33m 519[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m4 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[32m54 passed[39m[22m[90m (54)[39m
+[2m   Start at [22m 08:21:53
+[2m   Duration [22m 8.38s[2m (transform 2.55s, setup 420ms, collect 6.72s, tests 10.53s, environment 2.51s, prepare 942ms)[22m
+
