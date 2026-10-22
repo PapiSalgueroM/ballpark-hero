@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+head: node .rc/x/weight.mjs http://localhost:4173 dist head
+base: git worktree add -q /tmp/base 7a8750ba && cd /tmp/base && git -c user.name=rc -c user.email=rc@example.invalid merge -q --no-edit 8cca3b31 && git -c user.name=rc -c user.email=rc@example.invalid merge -q --no-edit e3deb2cb30ad && ln -s "$GITHUB_WORKSPACE/node_modules" node_modules && npx vite build --outDir /tmp/base-dist > /tmp/vb.txt 2>&1 && (node "$GITHUB_WORKSPACE/scripts/lib/hostLikeServer.mjs" /tmp/base-dist 4175 > /tmp/srv.txt 2>&1 &) && sleep 3 && node "$GITHUB_WORKSPACE/.rc/x/weight.mjs" http://localhost:4175 /tmp/base-dist base
