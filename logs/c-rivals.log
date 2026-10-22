@@ -1,0 +1,38 @@
+NEGATIVE CONTROL ON: rivals
+1) the slate, 20 seeds by 8 seasons (160 seasons, 160 slates, 0 on the fallback circle)
+   repeated regular season pairs 0, seasons with a repeat 0 of 160; home games a school a season 4 to 8
+2) the slate is known at kickoff and is what gets played
+   seasons whose fixtures did not list twelve games before week 1 0; rounds that played other games than the slate set 0
+3) Notre Dame is an independent
+   in a title game 0; seasons off 5 ACC games 0; ranked top 12 at selection 158 times, left out of the field 0; in the field 158 of 160
+   built case: Notre Dame ranked 12, in the field true
+4) the Playoff: four title games, no Group of Five one, the fifth spot handed out
+   seasons without exactly 4 title games 0; Group of Five title games 0; seasons whose best ranked Group of Five school missed its spot 0
+5) rivalry week and the conference count
+   week 12 games off the table's pair 2560; table pairs not played 477; league schools off six conference games (seven with an in-league rival in an even league) 0
+  FAIL: OSU and MICH are a series in the table but not a series pair in the engine
+  FAIL: ALA and AUB are a series in the table but not a series pair in the engine
+  FAIL: TEX and A&M are a series in the table but not a series pair in the engine
+  FAIL: FLA and FSU are a series in the table but not a series pair in the engine
+  FAIL: CLEM and SCAR are a series in the table but not a series pair in the engine
+  FAIL: USC and UCLA are a series in the table but not a series pair in the engine
+  FAIL: IOWA and NEB are a series in the table but not a series pair in the engine
+  FAIL: ORE and WASH are a series in the table but not a series pair in the engine
+  FAIL: LSU and MISS are a series in the table but not a series pair in the engine
+  FAIL: PSU and MSU are a series in the table but not a series pair in the engine
+  FAIL: KSU and ISU are a series in the table but not a series pair in the engine
+  FAIL: UTAH and COL are a series in the table but not a series pair in the engine
+  FAIL: TCU and BAY are a series in the table but not a series pair in the engine
+  FAIL: 2560 week 12 game(s) left a real series unplayed
+  FAIL: 477 season pair(s) of the series table never met
+6) the rivalry table: real schools, one row a school, two sources a row on two hosts, no wiki
+   rows read 18, rows the module exports 18
+7) old saves: a season already under way finishes the old way, the next one is real
+   the old season: slate or format built false, Notre Dame in the ACC table true, title games 5
+   the next season: format 1, slate for it true
+8) the builder under load: 300 slates from fresh seeds
+   on the fallback circle 0, repeated pairs 0, 10.9 ms a slate
+9) CBB: its series rows are rivalry pairs, and the table goes by league record
+   tables checked 90, out of league order 0; tournament fields the league record changed 47
+
+simCfbSlate: 15 failure(s)

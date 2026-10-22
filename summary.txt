@@ -1,0 +1,11 @@
+baseline-main exit=0 2s | baseline: 160 of 160 seasons repeat a pair (9837 repeats), Notre Dame in 142 ACC title games (won 113), 160 G5 Championships
+simCfbSlate exit=0 6s | simCfbSlate: all green
+c-random exit=1 8s | simCfbSlate: 4 failure(s)
+c-top12 exit=1 7s | simCfbSlate: 2 failure(s)
+c-g5title exit=1 8s | simCfbSlate: 2 failure(s)
+c-nofifth exit=1 7s | simCfbSlate: 1 failure(s)
+c-rivals exit=1 6s | simCfbSlate: 15 failure(s)
+c-midseason exit=1 5s | simCfbSlate: 3 failure(s)
+c-source exit=1 7s | simCfbSlate: 1 failure(s)
+c-cbbraw exit=1 5s | simCfbSlate: 1 failure(s)
+c-ndacc exit=1 60s | simCfbSlate: 6 failure(s)
