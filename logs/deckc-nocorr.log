@@ -1,0 +1,10 @@
+src/lib/nbaCareerCorruption.ts: as on 1c7205d0
+src/lib/nflCareerCorruption.ts: as on 1c7205d0
+src/lib/mlbCareerCorruption.ts: as on 1c7205d0
+src/lib/nhlCareerCorruption.ts: as on 1c7205d0
+nfl: 1920 saves, 36 deck C cards dealt, 336 of 1920 draws were deck C, draw hash b6df6ea521714bb1
+nba: 1200 saves, 36 deck C cards dealt, 111 of 1200 draws were deck C, draw hash ea4d24ad4167734a
+mlb: 2640 saves, 36 deck C cards dealt, 226 of 2640 draws were deck C, draw hash 968e08af31ab4138
+nhl: 1200 saves, 36 deck C cards dealt, 109 of 1200 draws were deck C, draw hash ace3aef79c27b391
+recorded nfl, nba, mlb, nhl into scripts/data/usCareerDeckCDigest.json
+simUsCareerDeckC: all checks passed

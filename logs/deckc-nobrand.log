@@ -1,0 +1,10 @@
+src/lib/nbaMyCareer.ts: put back the line holding label: 'Build the brand'
+src/lib/nflMyCareer.ts: put back the line holding label: 'Brand work'
+src/lib/mlbMyCareer.ts: put back the line holding label: 'The commercial circuit'
+src/lib/nhlMyCareer.ts: put back the line holding label: 'The content summer'
+nfl: 1920 saves, 36 deck C cards dealt, 336 of 1920 draws were deck C, draw hash 3cc592d5ac5ab365
+nba: 1200 saves, 36 deck C cards dealt, 111 of 1200 draws were deck C, draw hash 0715665092e661f0
+mlb: 2640 saves, 36 deck C cards dealt, 226 of 2640 draws were deck C, draw hash c9614e672f391d96
+nhl: 1200 saves, 36 deck C cards dealt, 109 of 1200 draws were deck C, draw hash 72fd4da4242cfeb3
+recorded nfl, nba, mlb, nhl into scripts/data/usCareerDeckCDigest.json
+simUsCareerDeckC: all checks passed

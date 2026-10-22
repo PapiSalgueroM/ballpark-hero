@@ -1,0 +1,8 @@
+shop7 exit=1 58s | simUsShopPromises: red in sections 7
+deckc-head exit=0 30s | simUsCareerDeckC: all checks passed
+deckc-nocorr exit=0 30s | simUsCareerDeckC: all checks passed
+deckc-nobrand exit=0 29s | simUsCareerDeckC: all checks passed
+deckc-noskill exit=0 28s | simUsCareerDeckC: all checks passed
+rech-head exit=0 41s | recordUsBoardFixture: wrote ../../_temp/rc-out/files/fixture-hist-head.json (2298769 bytes)
+rech-noskill exit=0 41s | recordUsBoardFixture: wrote ../../_temp/rc-out/files/fixture-hist-noskill.json (2298731 bytes)
+rech-no1538 exit=0 41s | recordUsBoardFixture: wrote ../../_temp/rc-out/files/fixture-hist-no1538.json (2298731 bytes)

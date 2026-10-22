@@ -1,0 +1,9 @@
+#!serial
+shop7: SHOP_SECTIONS=7 node scripts/simUsShopPromises.mjs
+deckc-head: DECKC_RECORD=1 node scripts/simUsCareerDeckC.mjs; s=$?; cp scripts/data/usCareerDeckCDigest.json $RC_OUT/deckc-head.json; git checkout -- scripts; exit $s
+deckc-nocorr: node .rc/x/revert1538.mjs corr && DECKC_RECORD=1 node scripts/simUsCareerDeckC.mjs; s=$?; cp scripts/data/usCareerDeckCDigest.json $RC_OUT/deckc-nocorr.json; git checkout -- src scripts; exit $s
+deckc-nobrand: node .rc/x/revert1538.mjs brand && DECKC_RECORD=1 node scripts/simUsCareerDeckC.mjs; s=$?; cp scripts/data/usCareerDeckCDigest.json $RC_OUT/deckc-nobrand.json; git checkout -- src scripts; exit $s
+deckc-noskill: node .rc/x/revert1538.mjs skill && DECKC_RECORD=1 node scripts/simUsCareerDeckC.mjs; s=$?; cp scripts/data/usCareerDeckCDigest.json $RC_OUT/deckc-noskill.json; git checkout -- src scripts; exit $s
+rech-head: node .rc/x/recHist.mjs $RC_OUT/fixture-hist-head.json
+rech-noskill: node .rc/x/revert1538.mjs skill && node .rc/x/recHist.mjs $RC_OUT/fixture-hist-noskill.json; s=$?; git checkout -- src; exit $s
+rech-no1538: node .rc/x/revert1538.mjs skill && node .rc/x/revert1538.mjs brand && node .rc/x/revert1538.mjs corr && node .rc/x/recHist.mjs $RC_OUT/fixture-hist-no1538.json; s=$?; git checkout -- src; exit $s

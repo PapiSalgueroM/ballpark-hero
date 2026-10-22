@@ -1,0 +1,10 @@
+src/lib/nbaMyCareer.ts: put back the line holding label: 'Skill grind'
+src/lib/nflMyCareer.ts: put back the line holding label: 'Skill work'
+src/lib/mlbMyCareer.ts: put back the line holding 'New pitch lab' : 'Swing rebuild'
+src/lib/nhlMyCareer.ts: put back the line holding label: 'Skills coach'
+recording from 1a9b0024fa646cb96ce303c2ba7db4030f0d7571 (not main: src differs from 7f99c27ee691df6f31d143847554f7071a421cfa)
+  nfl: 475 clicks on the path, 24 seasons, 19 fixed saves, 928 screen steps
+  nba: 521 clicks on the path, 24 seasons, 19 fixed saves, 932 screen steps
+  mlb: 455 clicks on the path, 24 seasons, 19 fixed saves, 886 screen steps
+  nhl: 421 clicks on the path, 24 seasons, 19 fixed saves, 900 screen steps
+recordUsBoardFixture: wrote ../../_temp/rc-out/files/fixture-hist-noskill.json (2298731 bytes)
