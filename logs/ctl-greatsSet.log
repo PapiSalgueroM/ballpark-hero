@@ -1,0 +1,746 @@
+FAIL [3] nfl: retiredNames gives 32 names, the ledger and the legends tables give 42
+FAIL [3] nfl: the hook's never on market set holds 32 names, the ledger and the legends tables give 42
+FAIL [3] nfl early KC+BUF+PHI: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl early KC+BUF+PHI: the market deals 31 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early BUF+PHI+BAL: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl early BUF+PHI+BAL: the market deals 31 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early PHI+BAL+SF: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl early PHI+BAL+SF: the market deals 31 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early BAL+SF+DAL: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl early BAL+SF+DAL: the market deals 31 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early DAL+DET+CIN: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl early DAL+DET+CIN: the market deals 31 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early DET+CIN+MIA: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl early DET+CIN+MIA: the market deals 31 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early CIN+MIA+NYJ: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl early CIN+MIA+NYJ: the market deals 31 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early MIA+NYJ+CLE: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl early MIA+NYJ+CLE: the market deals 31 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early NYJ+CLE+PIT: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl early NYJ+CLE+PIT: the market deals 31 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early CLE+PIT+HOU: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl early CLE+PIT+HOU: the market deals 31 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early HOU+JAX+TEN: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl early HOU+JAX+TEN: the market deals 31 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early JAX+TEN+IND: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl early JAX+TEN+IND: the market deals 31 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early TEN+IND+NE: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl early TEN+IND+NE: the market deals 31 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early IND+NE+LV: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl early IND+NE+LV: the market deals 31 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early NE+LV+DEN: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl early NE+LV+DEN: the market deals 31 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early LV+DEN+LAC: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl early LV+DEN+LAC: the market deals 31 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early LAC+GB+CHI: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl early LAC+GB+CHI: the market deals 31 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early GB+CHI+MIN: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl early GB+CHI+MIN: the market deals 31 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early CHI+MIN+LAR: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl early CHI+MIN+LAR: the market deals 31 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early MIN+LAR+SEA: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl early MIN+LAR+SEA: the market deals 31 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early LAR+SEA+ARI: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl early LAR+SEA+ARI: the market deals 31 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early SEA+ARI+NO: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl early SEA+ARI+NO: the market deals 31 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early NO+TB+ATL: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl early NO+TB+ATL: the market deals 31 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early TB+ATL+CAR: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl early TB+ATL+CAR: the market deals 31 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early ATL+CAR+NYG: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl early ATL+CAR+NYG: the market deals 31 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early CAR+NYG+WAS: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl early CAR+NYG+WAS: the market deals 31 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early NYG+WAS+KC: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl early NYG+WAS+KC: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl early NYG+WAS+KC: the market deals 32 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early WAS+KC+BUF: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl early WAS+KC+BUF: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl early WAS+KC+BUF: the market deals 32 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end KC: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end KC: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end KC: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end KC: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end KC: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end KC: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end KC: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end KC: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end KC: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end KC: the market deals 319 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end BUF: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end BUF: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end BUF: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end BUF: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end BUF: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end BUF: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end BUF: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end BUF: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end BUF: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end BUF: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end BUF: the market deals 320 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end PHI: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end PHI: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end PHI: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end PHI: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end PHI: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end PHI: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end PHI: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end PHI: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end PHI: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end PHI: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end PHI: the market deals 320 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end BAL: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end BAL: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end BAL: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end BAL: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end BAL: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end BAL: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end BAL: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end BAL: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end BAL: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end BAL: the market deals 319 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end SF: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end SF: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end SF: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end SF: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end SF: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end SF: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end SF: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end SF: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end SF: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end SF: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end SF: the market deals 320 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end DAL: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end DAL: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end DAL: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end DAL: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end DAL: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end DAL: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end DAL: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end DAL: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end DAL: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end DAL: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end DAL: the market deals 320 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end DET: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end DET: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end DET: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end DET: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end DET: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end DET: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end DET: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end DET: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end DET: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end DET: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end DET: the market deals 320 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end CIN: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end CIN: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end CIN: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end CIN: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end CIN: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end CIN: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end CIN: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end CIN: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end CIN: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end CIN: the market deals 319 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end MIA: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end MIA: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end MIA: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end MIA: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end MIA: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end MIA: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end MIA: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end MIA: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end MIA: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end MIA: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end MIA: the market deals 320 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end NYJ: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end NYJ: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end NYJ: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end NYJ: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end NYJ: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end NYJ: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end NYJ: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end NYJ: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end NYJ: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end NYJ: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end NYJ: the market deals 320 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end CLE: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end CLE: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end CLE: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end CLE: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end CLE: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end CLE: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end CLE: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end CLE: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end CLE: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end CLE: the market deals 319 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end PIT: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end PIT: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end PIT: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end PIT: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end PIT: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end PIT: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end PIT: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end PIT: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end PIT: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end PIT: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end PIT: the market deals 320 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end HOU: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end HOU: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end HOU: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end HOU: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end HOU: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end HOU: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end HOU: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end HOU: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end HOU: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end HOU: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end HOU: the market deals 320 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end JAX: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end JAX: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end JAX: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end JAX: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end JAX: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end JAX: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end JAX: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end JAX: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end JAX: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end JAX: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end JAX: the market deals 320 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end TEN: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end TEN: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end TEN: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end TEN: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end TEN: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end TEN: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end TEN: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end TEN: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end TEN: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end TEN: the market deals 319 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end IND: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end IND: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end IND: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end IND: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end IND: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end IND: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end IND: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end IND: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end IND: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end IND: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end IND: the market deals 320 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end NE: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end NE: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end NE: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end NE: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end NE: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end NE: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end NE: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end NE: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end NE: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end NE: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end NE: the market deals 320 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end LV: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end LV: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end LV: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end LV: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end LV: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end LV: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end LV: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end LV: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end LV: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end LV: the market deals 319 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end DEN: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end DEN: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end DEN: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end DEN: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end DEN: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end DEN: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end DEN: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end DEN: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end DEN: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end DEN: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end DEN: the market deals 320 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end LAC: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end LAC: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end LAC: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end LAC: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end LAC: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end LAC: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end LAC: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end LAC: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end LAC: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end LAC: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end LAC: the market deals 320 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end GB: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end GB: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end GB: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end GB: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end GB: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end GB: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end GB: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end GB: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end GB: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end GB: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end GB: the market deals 320 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end CHI: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end CHI: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end CHI: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end CHI: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end CHI: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end CHI: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end CHI: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end CHI: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end CHI: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end CHI: the market deals 319 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end MIN: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end MIN: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end MIN: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end MIN: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end MIN: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end MIN: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end MIN: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end MIN: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end MIN: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end MIN: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end MIN: the market deals 320 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end LAR: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end LAR: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end LAR: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end LAR: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end LAR: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end LAR: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end LAR: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end LAR: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end LAR: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end LAR: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end LAR: the market deals 320 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end SEA: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end SEA: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end SEA: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end SEA: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end SEA: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end SEA: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end SEA: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end SEA: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end SEA: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end SEA: the market deals 319 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end ARI: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end ARI: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end ARI: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end ARI: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end ARI: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end ARI: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end ARI: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end ARI: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end ARI: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end ARI: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end ARI: the market deals 320 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end NO: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end NO: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end NO: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end NO: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end NO: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end NO: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end NO: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end NO: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end NO: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end NO: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end NO: the market deals 320 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end TB: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end TB: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end TB: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end TB: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end TB: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end TB: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end TB: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end TB: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end TB: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end TB: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end TB: the market deals 320 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end ATL: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end ATL: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end ATL: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end ATL: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end ATL: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end ATL: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end ATL: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end ATL: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end ATL: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end ATL: the market deals 319 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end CAR: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end CAR: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end CAR: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end CAR: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end CAR: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end CAR: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end CAR: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end CAR: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end CAR: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end CAR: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end CAR: the market deals 320 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end NYG: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end NYG: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end NYG: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end NYG: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end NYG: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end NYG: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end NYG: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end NYG: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end NYG: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end NYG: the market offers Reggie Wayne, a retired man, as a free agent
+FAIL [3] nfl end NYG: the market deals 320 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end WAS: the market offers Calvin Johnson, a retired man, as a free agent
+FAIL [3] nfl end WAS: the market offers Luke Kuechly, a retired man, as a free agent
+FAIL [3] nfl end WAS: the market offers Andrew Luck, a retired man, as a free agent
+FAIL [3] nfl end WAS: the market offers Darrelle Revis, a retired man, as a free agent
+FAIL [3] nfl end WAS: the market offers Troy Polamalu, a retired man, as a free agent
+FAIL [3] nfl end WAS: the market offers Tony Gonzalez, a retired man, as a free agent
+FAIL [3] nfl end WAS: the market offers Charles Woodson, a retired man, as a free agent
+FAIL [3] nfl end WAS: the market offers Vernon Davis, a retired man, as a free agent
+FAIL [3] nfl end WAS: the market offers Anquan Boldin, a retired man, as a free agent
+FAIL [3] nfl end WAS: the market deals 319 men, expected the 310 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba: retiredNames gives 28 names, the ledger and the legends tables give 37
+FAIL [3] nba: the hook's never on market set holds 28 names, the ledger and the legends tables give 37
+FAIL [3] nba early DEN+OKC+BOS: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba early DEN+OKC+BOS: the market deals 31 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba early NYK+LAL+MIL: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba early NYK+LAL+MIL: the market deals 31 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba early LAL+MIL+MIN: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba early LAL+MIL+MIN: the market deals 31 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba early MIL+MIN+HOU: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba early MIL+MIN+HOU: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba early MIL+MIN+HOU: the market deals 31 men, expected the 29 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba early MIN+HOU+CLE: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba early MIN+HOU+CLE: the market deals 30 men, expected the 29 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba early HOU+CLE+IND: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba early HOU+CLE+IND: the market deals 30 men, expected the 29 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba early GSW+DAL+MEM: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba early GSW+DAL+MEM: the market deals 31 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba early DAL+MEM+PHI: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba early DAL+MEM+PHI: the market deals 31 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba early MEM+PHI+MIA: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba early MEM+PHI+MIA: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba early MEM+PHI+MIA: the market deals 32 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba early PHI+MIA+LAC: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba early PHI+MIA+LAC: the market deals 31 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba early MIA+LAC+PHX: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba early MIA+LAC+PHX: the market deals 31 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba early SAC+ATL+NOP: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba early SAC+ATL+NOP: the market deals 31 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba early ATL+NOP+TOR: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba early ATL+NOP+TOR: the market deals 31 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba early NOP+TOR+SAS: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba early NOP+TOR+SAS: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba early NOP+TOR+SAS: the market deals 32 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba early TOR+SAS+ORL: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba early TOR+SAS+ORL: the market deals 31 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba early SAS+ORL+UTA: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba early SAS+ORL+UTA: the market deals 31 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba early CHA+DET+BKN: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba early CHA+DET+BKN: the market deals 31 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba early DET+BKN+WAS: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba early DET+BKN+WAS: the market deals 31 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba early BKN+WAS+POR: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba early BKN+WAS+POR: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba early BKN+WAS+POR: the market deals 32 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba early WAS+POR+CHI: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba early WAS+POR+CHI: the market deals 31 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba early POR+CHI+DEN: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba early POR+CHI+DEN: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba early POR+CHI+DEN: the market deals 32 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba early CHI+DEN+OKC: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba early CHI+DEN+OKC: the market deals 31 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end DEN: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end DEN: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end DEN: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end DEN: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end DEN: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end DEN: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end DEN: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end DEN: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end DEN: the market deals 298 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end OKC: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end OKC: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end OKC: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end OKC: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end OKC: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end OKC: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end OKC: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end OKC: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end OKC: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end OKC: the market deals 298 men, expected the 289 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end BOS: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end BOS: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end BOS: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end BOS: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end BOS: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end BOS: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end BOS: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end BOS: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end BOS: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end BOS: the market deals 299 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end NYK: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end NYK: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end NYK: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end NYK: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end NYK: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end NYK: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end NYK: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end NYK: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end NYK: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end NYK: the market deals 299 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end LAL: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end LAL: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end LAL: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end LAL: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end LAL: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end LAL: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end LAL: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end LAL: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end LAL: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end LAL: the market deals 299 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end MIL: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end MIL: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end MIL: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end MIL: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end MIL: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end MIL: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end MIL: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end MIL: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end MIL: the market deals 298 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end MIN: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end MIN: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end MIN: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end MIN: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end MIN: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end MIN: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end MIN: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end MIN: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end MIN: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end MIN: the market deals 299 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end HOU: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end HOU: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end HOU: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end HOU: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end HOU: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end HOU: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end HOU: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end HOU: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end HOU: the market deals 298 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end CLE: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end CLE: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end CLE: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end CLE: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end CLE: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end CLE: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end CLE: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end CLE: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end CLE: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end CLE: the market deals 299 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end IND: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end IND: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end IND: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end IND: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end IND: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end IND: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end IND: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end IND: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end IND: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end IND: the market deals 299 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end GSW: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end GSW: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end GSW: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end GSW: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end GSW: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end GSW: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end GSW: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end GSW: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end GSW: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end GSW: the market deals 299 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end DAL: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end DAL: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end DAL: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end DAL: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end DAL: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end DAL: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end DAL: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end DAL: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end DAL: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end DAL: the market deals 299 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end MEM: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end MEM: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end MEM: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end MEM: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end MEM: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end MEM: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end MEM: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end MEM: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end MEM: the market deals 298 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end PHI: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end PHI: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end PHI: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end PHI: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end PHI: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end PHI: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end PHI: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end PHI: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end PHI: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end PHI: the market deals 299 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end MIA: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end MIA: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end MIA: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end MIA: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end MIA: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end MIA: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end MIA: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end MIA: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end MIA: the market deals 298 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end LAC: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end LAC: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end LAC: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end LAC: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end LAC: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end LAC: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end LAC: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end LAC: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end LAC: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end LAC: the market deals 299 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end PHX: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end PHX: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end PHX: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end PHX: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end PHX: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end PHX: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end PHX: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end PHX: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end PHX: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end PHX: the market deals 299 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end SAC: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end SAC: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end SAC: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end SAC: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end SAC: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end SAC: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end SAC: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end SAC: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end SAC: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end SAC: the market deals 299 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end ATL: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end ATL: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end ATL: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end ATL: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end ATL: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end ATL: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end ATL: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end ATL: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end ATL: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end ATL: the market deals 299 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end NOP: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end NOP: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end NOP: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end NOP: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end NOP: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end NOP: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end NOP: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end NOP: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end NOP: the market deals 298 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end TOR: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end TOR: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end TOR: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end TOR: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end TOR: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end TOR: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end TOR: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end TOR: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end TOR: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end TOR: the market deals 299 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end SAS: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end SAS: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end SAS: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end SAS: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end SAS: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end SAS: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end SAS: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end SAS: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end SAS: the market deals 298 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end ORL: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end ORL: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end ORL: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end ORL: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end ORL: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end ORL: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end ORL: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end ORL: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end ORL: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end ORL: the market deals 299 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end UTA: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end UTA: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end UTA: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end UTA: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end UTA: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end UTA: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end UTA: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end UTA: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end UTA: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end UTA: the market deals 299 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end CHA: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end CHA: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end CHA: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end CHA: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end CHA: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end CHA: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end CHA: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end CHA: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end CHA: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end CHA: the market deals 299 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end DET: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end DET: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end DET: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end DET: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end DET: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end DET: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end DET: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end DET: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end DET: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end DET: the market deals 299 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end BKN: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end BKN: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end BKN: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end BKN: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end BKN: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end BKN: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end BKN: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end BKN: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end BKN: the market deals 298 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end WAS: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end WAS: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end WAS: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end WAS: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end WAS: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end WAS: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end WAS: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end WAS: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end WAS: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end WAS: the market deals 299 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end POR: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end POR: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end POR: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end POR: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end POR: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end POR: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end POR: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end POR: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end POR: the market deals 298 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end CHI: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end CHI: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end CHI: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end CHI: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end CHI: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end CHI: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end CHI: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end CHI: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end CHI: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end CHI: the market deals 299 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+measured: {"nflGreats":10,"nbaGreats":9,"nflRetired":42,"nflStates":64,"nflDealt":1920,"nflMarket":11220,"nflLabelled":340,"nbaRetired":37,"nbaStates":60,"nbaDealt":1800,"nbaMarket":9884,"nbaLabelled":288,"conquestFilesScanned":32,"nflKeyStats":320,"nflPrinted":146,"nbaKeyStats":300}
+simConquestPeople: FAIL, 744 of 77013 checks red (control greatsSet fired)

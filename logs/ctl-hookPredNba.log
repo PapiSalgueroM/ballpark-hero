@@ -1,0 +1,1966 @@
+FAIL [3] nba: the hook's never on market set holds 1 names, the ledger and the legends tables give 37
+FAIL [3] nba early DEN+OKC+BOS: the market offers Alex English, a retired man, as a free agent
+FAIL [3] nba early DEN+OKC+BOS: the market offers Larry Bird, a retired man, as a free agent
+FAIL [3] nba early DEN+OKC+BOS: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba early DEN+OKC+BOS: the market deals 33 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba early DEN+OKC+BOS: the fallen men in the Sign a Player list are not the best 29 on the market
+FAIL [3] nba early DEN+OKC+BOS: deals Alex English with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early DEN+OKC+BOS: deals Larry Bird with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early OKC+BOS+NYK: the market offers Larry Bird, a retired man, as a free agent
+FAIL [3] nba early OKC+BOS+NYK: the market offers Patrick Ewing, a retired man, as a free agent
+FAIL [3] nba early OKC+BOS+NYK: the market deals 32 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba early OKC+BOS+NYK: the fallen men in the Sign a Player list are not the best 30 on the market
+FAIL [3] nba early OKC+BOS+NYK: deals Larry Bird with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early OKC+BOS+NYK: deals Patrick Ewing with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early BOS+NYK+LAL: the market offers Larry Bird, a retired man, as a free agent
+FAIL [3] nba early BOS+NYK+LAL: the market offers Patrick Ewing, a retired man, as a free agent
+FAIL [3] nba early BOS+NYK+LAL: the market offers Kobe Bryant, a retired man, as a free agent
+FAIL [3] nba early BOS+NYK+LAL: the market deals 33 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba early BOS+NYK+LAL: the fallen men in the Sign a Player list are not the best 30 on the market
+FAIL [3] nba early BOS+NYK+LAL: deals Larry Bird with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early BOS+NYK+LAL: deals Patrick Ewing with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early BOS+NYK+LAL: deals Kobe Bryant with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early NYK+LAL+MIL: the market offers Patrick Ewing, a retired man, as a free agent
+FAIL [3] nba early NYK+LAL+MIL: the market offers Kobe Bryant, a retired man, as a free agent
+FAIL [3] nba early NYK+LAL+MIL: the market offers Kareem Abdul-Jabbar, a retired man, as a free agent
+FAIL [3] nba early NYK+LAL+MIL: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba early NYK+LAL+MIL: the market deals 34 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba early NYK+LAL+MIL: the fallen men in the Sign a Player list are not the best 29 on the market
+FAIL [3] nba early NYK+LAL+MIL: deals Patrick Ewing with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early NYK+LAL+MIL: deals Kobe Bryant with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early NYK+LAL+MIL: deals Kareem Abdul-Jabbar with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early LAL+MIL+MIN: the market offers Kobe Bryant, a retired man, as a free agent
+FAIL [3] nba early LAL+MIL+MIN: the market offers Kareem Abdul-Jabbar, a retired man, as a free agent
+FAIL [3] nba early LAL+MIL+MIN: the market offers Kevin Garnett, a retired man, as a free agent
+FAIL [3] nba early LAL+MIL+MIN: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba early LAL+MIL+MIN: the market deals 34 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba early LAL+MIL+MIN: the fallen men in the Sign a Player list are not the best 29 on the market
+FAIL [3] nba early LAL+MIL+MIN: deals Kobe Bryant with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early LAL+MIL+MIN: deals Kareem Abdul-Jabbar with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early LAL+MIL+MIN: deals Kevin Garnett with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early MIL+MIN+HOU: the market offers Kareem Abdul-Jabbar, a retired man, as a free agent
+FAIL [3] nba early MIL+MIN+HOU: the market offers Kevin Garnett, a retired man, as a free agent
+FAIL [3] nba early MIL+MIN+HOU: the market offers Hakeem Olajuwon, a retired man, as a free agent
+FAIL [3] nba early MIL+MIN+HOU: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba early MIL+MIN+HOU: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba early MIL+MIN+HOU: the market deals 34 men, expected the 29 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba early MIL+MIN+HOU: the fallen men in the Sign a Player list are not the best 28 on the market
+FAIL [3] nba early MIL+MIN+HOU: deals Kareem Abdul-Jabbar with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early MIL+MIN+HOU: deals Kevin Garnett with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early MIL+MIN+HOU: deals Hakeem Olajuwon with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early MIN+HOU+CLE: the market offers Kevin Garnett, a retired man, as a free agent
+FAIL [3] nba early MIN+HOU+CLE: the market offers Hakeem Olajuwon, a retired man, as a free agent
+FAIL [3] nba early MIN+HOU+CLE: the market offers LeBron James, a retired man, as a free agent
+FAIL [3] nba early MIN+HOU+CLE: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba early MIN+HOU+CLE: the market deals 33 men, expected the 29 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba early MIN+HOU+CLE: the fallen men in the Sign a Player list are not the best 29 on the market
+FAIL [3] nba early MIN+HOU+CLE: deals Kevin Garnett with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early MIN+HOU+CLE: deals Hakeem Olajuwon with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early MIN+HOU+CLE: deals LeBron James with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early HOU+CLE+IND: the market offers Hakeem Olajuwon, a retired man, as a free agent
+FAIL [3] nba early HOU+CLE+IND: the market offers LeBron James, a retired man, as a free agent
+FAIL [3] nba early HOU+CLE+IND: the market offers Reggie Miller, a retired man, as a free agent
+FAIL [3] nba early HOU+CLE+IND: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba early HOU+CLE+IND: the market deals 33 men, expected the 29 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba early HOU+CLE+IND: the fallen men in the Sign a Player list are not the best 29 on the market
+FAIL [3] nba early HOU+CLE+IND: deals Hakeem Olajuwon with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early HOU+CLE+IND: deals LeBron James with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early HOU+CLE+IND: deals Reggie Miller with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early CLE+IND+GSW: the market offers LeBron James, a retired man, as a free agent
+FAIL [3] nba early CLE+IND+GSW: the market offers Reggie Miller, a retired man, as a free agent
+FAIL [3] nba early CLE+IND+GSW: the market offers Wilt Chamberlain, a retired man, as a free agent
+FAIL [3] nba early CLE+IND+GSW: the market deals 33 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba early CLE+IND+GSW: the fallen men in the Sign a Player list are not the best 30 on the market
+FAIL [3] nba early CLE+IND+GSW: deals LeBron James with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early CLE+IND+GSW: deals Reggie Miller with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early CLE+IND+GSW: deals Wilt Chamberlain with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early IND+GSW+DAL: the market offers Reggie Miller, a retired man, as a free agent
+FAIL [3] nba early IND+GSW+DAL: the market offers Wilt Chamberlain, a retired man, as a free agent
+FAIL [3] nba early IND+GSW+DAL: the market offers Dirk Nowitzki, a retired man, as a free agent
+FAIL [3] nba early IND+GSW+DAL: the market deals 33 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba early IND+GSW+DAL: the fallen men in the Sign a Player list are not the best 30 on the market
+FAIL [3] nba early IND+GSW+DAL: deals Reggie Miller with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early IND+GSW+DAL: deals Wilt Chamberlain with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early IND+GSW+DAL: deals Dirk Nowitzki with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early GSW+DAL+MEM: the market offers Wilt Chamberlain, a retired man, as a free agent
+FAIL [3] nba early GSW+DAL+MEM: the market offers Dirk Nowitzki, a retired man, as a free agent
+FAIL [3] nba early GSW+DAL+MEM: the market offers Marc Gasol, a retired man, as a free agent
+FAIL [3] nba early GSW+DAL+MEM: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba early GSW+DAL+MEM: the market deals 34 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba early GSW+DAL+MEM: the fallen men in the Sign a Player list are not the best 29 on the market
+FAIL [3] nba early GSW+DAL+MEM: deals Wilt Chamberlain with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early GSW+DAL+MEM: deals Dirk Nowitzki with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early GSW+DAL+MEM: deals Marc Gasol with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early DAL+MEM+PHI: the market offers Dirk Nowitzki, a retired man, as a free agent
+FAIL [3] nba early DAL+MEM+PHI: the market offers Marc Gasol, a retired man, as a free agent
+FAIL [3] nba early DAL+MEM+PHI: the market offers Allen Iverson, a retired man, as a free agent
+FAIL [3] nba early DAL+MEM+PHI: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba early DAL+MEM+PHI: the market deals 34 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba early DAL+MEM+PHI: the fallen men in the Sign a Player list are not the best 29 on the market
+FAIL [3] nba early DAL+MEM+PHI: deals Dirk Nowitzki with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early DAL+MEM+PHI: deals Marc Gasol with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early DAL+MEM+PHI: deals Allen Iverson with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early MEM+PHI+MIA: the market offers Marc Gasol, a retired man, as a free agent
+FAIL [3] nba early MEM+PHI+MIA: the market offers Allen Iverson, a retired man, as a free agent
+FAIL [3] nba early MEM+PHI+MIA: the market offers Dwyane Wade, a retired man, as a free agent
+FAIL [3] nba early MEM+PHI+MIA: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba early MEM+PHI+MIA: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba early MEM+PHI+MIA: the market deals 35 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba early MEM+PHI+MIA: the fallen men in the Sign a Player list are not the best 28 on the market
+FAIL [3] nba early MEM+PHI+MIA: deals Marc Gasol with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early MEM+PHI+MIA: deals Allen Iverson with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early MEM+PHI+MIA: deals Dwyane Wade with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early PHI+MIA+LAC: the market offers Allen Iverson, a retired man, as a free agent
+FAIL [3] nba early PHI+MIA+LAC: the market offers Dwyane Wade, a retired man, as a free agent
+FAIL [3] nba early PHI+MIA+LAC: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba early PHI+MIA+LAC: the market deals 33 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba early PHI+MIA+LAC: the fallen men in the Sign a Player list are not the best 29 on the market
+FAIL [3] nba early PHI+MIA+LAC: deals Allen Iverson with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early PHI+MIA+LAC: deals Dwyane Wade with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early MIA+LAC+PHX: the market offers Dwyane Wade, a retired man, as a free agent
+FAIL [3] nba early MIA+LAC+PHX: the market offers Charles Barkley, a retired man, as a free agent
+FAIL [3] nba early MIA+LAC+PHX: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba early MIA+LAC+PHX: the market deals 33 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba early MIA+LAC+PHX: the fallen men in the Sign a Player list are not the best 29 on the market
+FAIL [3] nba early MIA+LAC+PHX: deals Dwyane Wade with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early MIA+LAC+PHX: deals Charles Barkley with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early LAC+PHX+SAC: the market offers Charles Barkley, a retired man, as a free agent
+FAIL [3] nba early LAC+PHX+SAC: the market offers Chris Webber, a retired man, as a free agent
+FAIL [3] nba early LAC+PHX+SAC: the market deals 32 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba early LAC+PHX+SAC: the fallen men in the Sign a Player list are not the best 30 on the market
+FAIL [3] nba early LAC+PHX+SAC: deals Charles Barkley with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early LAC+PHX+SAC: deals Chris Webber with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early PHX+SAC+ATL: the market offers Charles Barkley, a retired man, as a free agent
+FAIL [3] nba early PHX+SAC+ATL: the market offers Chris Webber, a retired man, as a free agent
+FAIL [3] nba early PHX+SAC+ATL: the market offers Dominique Wilkins, a retired man, as a free agent
+FAIL [3] nba early PHX+SAC+ATL: the market deals 33 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba early PHX+SAC+ATL: the fallen men in the Sign a Player list are not the best 30 on the market
+FAIL [3] nba early PHX+SAC+ATL: deals Charles Barkley with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early PHX+SAC+ATL: deals Chris Webber with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early PHX+SAC+ATL: deals Dominique Wilkins with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early SAC+ATL+NOP: the market offers Chris Webber, a retired man, as a free agent
+FAIL [3] nba early SAC+ATL+NOP: the market offers Dominique Wilkins, a retired man, as a free agent
+FAIL [3] nba early SAC+ATL+NOP: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba early SAC+ATL+NOP: the market deals 33 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba early SAC+ATL+NOP: the fallen men in the Sign a Player list are not the best 29 on the market
+FAIL [3] nba early SAC+ATL+NOP: deals Chris Webber with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early SAC+ATL+NOP: deals Dominique Wilkins with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early ATL+NOP+TOR: the market offers Dominique Wilkins, a retired man, as a free agent
+FAIL [3] nba early ATL+NOP+TOR: the market offers Vince Carter, a retired man, as a free agent
+FAIL [3] nba early ATL+NOP+TOR: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba early ATL+NOP+TOR: the market deals 33 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba early ATL+NOP+TOR: the fallen men in the Sign a Player list are not the best 29 on the market
+FAIL [3] nba early ATL+NOP+TOR: deals Dominique Wilkins with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early ATL+NOP+TOR: deals Vince Carter with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early NOP+TOR+SAS: the market offers Vince Carter, a retired man, as a free agent
+FAIL [3] nba early NOP+TOR+SAS: the market offers Tim Duncan, a retired man, as a free agent
+FAIL [3] nba early NOP+TOR+SAS: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba early NOP+TOR+SAS: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba early NOP+TOR+SAS: the market deals 34 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba early NOP+TOR+SAS: the fallen men in the Sign a Player list are not the best 28 on the market
+FAIL [3] nba early NOP+TOR+SAS: deals Vince Carter with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early NOP+TOR+SAS: deals Tim Duncan with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early TOR+SAS+ORL: the market offers Vince Carter, a retired man, as a free agent
+FAIL [3] nba early TOR+SAS+ORL: the market offers Tim Duncan, a retired man, as a free agent
+FAIL [3] nba early TOR+SAS+ORL: the market offers Shaquille O'Neal, a retired man, as a free agent
+FAIL [3] nba early TOR+SAS+ORL: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba early TOR+SAS+ORL: the market deals 34 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba early TOR+SAS+ORL: the fallen men in the Sign a Player list are not the best 29 on the market
+FAIL [3] nba early TOR+SAS+ORL: deals Vince Carter with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early TOR+SAS+ORL: deals Tim Duncan with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early TOR+SAS+ORL: deals Shaquille O'Neal with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early SAS+ORL+UTA: the market offers Tim Duncan, a retired man, as a free agent
+FAIL [3] nba early SAS+ORL+UTA: the market offers Shaquille O'Neal, a retired man, as a free agent
+FAIL [3] nba early SAS+ORL+UTA: the market offers John Stockton, a retired man, as a free agent
+FAIL [3] nba early SAS+ORL+UTA: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba early SAS+ORL+UTA: the market deals 34 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba early SAS+ORL+UTA: the fallen men in the Sign a Player list are not the best 29 on the market
+FAIL [3] nba early SAS+ORL+UTA: deals Tim Duncan with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early SAS+ORL+UTA: deals Shaquille O'Neal with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early SAS+ORL+UTA: deals John Stockton with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early ORL+UTA+CHA: the market offers Shaquille O'Neal, a retired man, as a free agent
+FAIL [3] nba early ORL+UTA+CHA: the market offers John Stockton, a retired man, as a free agent
+FAIL [3] nba early ORL+UTA+CHA: the market offers Alonzo Mourning, a retired man, as a free agent
+FAIL [3] nba early ORL+UTA+CHA: the market deals 33 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba early ORL+UTA+CHA: the fallen men in the Sign a Player list are not the best 30 on the market
+FAIL [3] nba early ORL+UTA+CHA: deals Shaquille O'Neal with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early ORL+UTA+CHA: deals John Stockton with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early ORL+UTA+CHA: deals Alonzo Mourning with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early UTA+CHA+DET: the market offers John Stockton, a retired man, as a free agent
+FAIL [3] nba early UTA+CHA+DET: the market offers Alonzo Mourning, a retired man, as a free agent
+FAIL [3] nba early UTA+CHA+DET: the market offers Isiah Thomas, a retired man, as a free agent
+FAIL [3] nba early UTA+CHA+DET: the market deals 33 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba early UTA+CHA+DET: the fallen men in the Sign a Player list are not the best 30 on the market
+FAIL [3] nba early UTA+CHA+DET: deals John Stockton with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early UTA+CHA+DET: deals Alonzo Mourning with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early UTA+CHA+DET: deals Isiah Thomas with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early CHA+DET+BKN: the market offers Alonzo Mourning, a retired man, as a free agent
+FAIL [3] nba early CHA+DET+BKN: the market offers Isiah Thomas, a retired man, as a free agent
+FAIL [3] nba early CHA+DET+BKN: the market offers Jason Kidd, a retired man, as a free agent
+FAIL [3] nba early CHA+DET+BKN: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba early CHA+DET+BKN: the market deals 34 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba early CHA+DET+BKN: the fallen men in the Sign a Player list are not the best 29 on the market
+FAIL [3] nba early CHA+DET+BKN: deals Alonzo Mourning with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early CHA+DET+BKN: deals Isiah Thomas with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early CHA+DET+BKN: deals Jason Kidd with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early DET+BKN+WAS: the market offers Isiah Thomas, a retired man, as a free agent
+FAIL [3] nba early DET+BKN+WAS: the market offers Jason Kidd, a retired man, as a free agent
+FAIL [3] nba early DET+BKN+WAS: the market offers Wes Unseld, a retired man, as a free agent
+FAIL [3] nba early DET+BKN+WAS: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba early DET+BKN+WAS: the market deals 34 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba early DET+BKN+WAS: the fallen men in the Sign a Player list are not the best 29 on the market
+FAIL [3] nba early DET+BKN+WAS: deals Isiah Thomas with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early DET+BKN+WAS: deals Jason Kidd with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early DET+BKN+WAS: deals Wes Unseld with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early BKN+WAS+POR: the market offers Jason Kidd, a retired man, as a free agent
+FAIL [3] nba early BKN+WAS+POR: the market offers Wes Unseld, a retired man, as a free agent
+FAIL [3] nba early BKN+WAS+POR: the market offers Clyde Drexler, a retired man, as a free agent
+FAIL [3] nba early BKN+WAS+POR: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba early BKN+WAS+POR: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba early BKN+WAS+POR: the market deals 35 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba early BKN+WAS+POR: the fallen men in the Sign a Player list are not the best 28 on the market
+FAIL [3] nba early BKN+WAS+POR: deals Jason Kidd with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early BKN+WAS+POR: deals Wes Unseld with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early BKN+WAS+POR: deals Clyde Drexler with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early WAS+POR+CHI: the market offers Wes Unseld, a retired man, as a free agent
+FAIL [3] nba early WAS+POR+CHI: the market offers Clyde Drexler, a retired man, as a free agent
+FAIL [3] nba early WAS+POR+CHI: the market offers Michael Jordan, a retired man, as a free agent
+FAIL [3] nba early WAS+POR+CHI: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba early WAS+POR+CHI: the market deals 34 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba early WAS+POR+CHI: the fallen men in the Sign a Player list are not the best 29 on the market
+FAIL [3] nba early WAS+POR+CHI: deals Wes Unseld with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early WAS+POR+CHI: deals Clyde Drexler with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early WAS+POR+CHI: deals Michael Jordan with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early POR+CHI+DEN: the market offers Clyde Drexler, a retired man, as a free agent
+FAIL [3] nba early POR+CHI+DEN: the market offers Michael Jordan, a retired man, as a free agent
+FAIL [3] nba early POR+CHI+DEN: the market offers Alex English, a retired man, as a free agent
+FAIL [3] nba early POR+CHI+DEN: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba early POR+CHI+DEN: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba early POR+CHI+DEN: the market deals 35 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba early POR+CHI+DEN: the fallen men in the Sign a Player list are not the best 28 on the market
+FAIL [3] nba early POR+CHI+DEN: deals Clyde Drexler with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early POR+CHI+DEN: deals Michael Jordan with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early POR+CHI+DEN: deals Alex English with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early CHI+DEN+OKC: the market offers Michael Jordan, a retired man, as a free agent
+FAIL [3] nba early CHI+DEN+OKC: the market offers Alex English, a retired man, as a free agent
+FAIL [3] nba early CHI+DEN+OKC: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba early CHI+DEN+OKC: the market deals 33 men, expected the 30 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba early CHI+DEN+OKC: the fallen men in the Sign a Player list are not the best 29 on the market
+FAIL [3] nba early CHI+DEN+OKC: deals Michael Jordan with no label, who is on no NBA table or is a retired man
+FAIL [3] nba early CHI+DEN+OKC: deals Alex English with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DEN: the market offers Larry Bird, a retired man, as a free agent
+FAIL [3] nba end DEN: the market offers Patrick Ewing, a retired man, as a free agent
+FAIL [3] nba end DEN: the market offers Kobe Bryant, a retired man, as a free agent
+FAIL [3] nba end DEN: the market offers Kareem Abdul-Jabbar, a retired man, as a free agent
+FAIL [3] nba end DEN: the market offers Kevin Garnett, a retired man, as a free agent
+FAIL [3] nba end DEN: the market offers Hakeem Olajuwon, a retired man, as a free agent
+FAIL [3] nba end DEN: the market offers LeBron James, a retired man, as a free agent
+FAIL [3] nba end DEN: the market offers Reggie Miller, a retired man, as a free agent
+FAIL [3] nba end DEN: the market offers Wilt Chamberlain, a retired man, as a free agent
+FAIL [3] nba end DEN: the market offers Dirk Nowitzki, a retired man, as a free agent
+FAIL [3] nba end DEN: the market offers Marc Gasol, a retired man, as a free agent
+FAIL [3] nba end DEN: the market offers Allen Iverson, a retired man, as a free agent
+FAIL [3] nba end DEN: the market offers Dwyane Wade, a retired man, as a free agent
+FAIL [3] nba end DEN: the market offers Chris Paul, a retired man, as a free agent
+FAIL [3] nba end DEN: the market offers Charles Barkley, a retired man, as a free agent
+FAIL [3] nba end DEN: the market offers Chris Webber, a retired man, as a free agent
+FAIL [3] nba end DEN: the market offers Dominique Wilkins, a retired man, as a free agent
+FAIL [3] nba end DEN: the market offers Vince Carter, a retired man, as a free agent
+FAIL [3] nba end DEN: the market offers Tim Duncan, a retired man, as a free agent
+FAIL [3] nba end DEN: the market offers Shaquille O'Neal, a retired man, as a free agent
+FAIL [3] nba end DEN: the market offers John Stockton, a retired man, as a free agent
+FAIL [3] nba end DEN: the market offers Alonzo Mourning, a retired man, as a free agent
+FAIL [3] nba end DEN: the market offers Isiah Thomas, a retired man, as a free agent
+FAIL [3] nba end DEN: the market offers Jason Kidd, a retired man, as a free agent
+FAIL [3] nba end DEN: the market offers Wes Unseld, a retired man, as a free agent
+FAIL [3] nba end DEN: the market offers Clyde Drexler, a retired man, as a free agent
+FAIL [3] nba end DEN: the market offers Michael Jordan, a retired man, as a free agent
+FAIL [3] nba end DEN: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end DEN: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end DEN: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end DEN: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end DEN: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end DEN: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end DEN: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end DEN: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end DEN: the market deals 324 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end DEN: the fallen men in the Sign a Player list are not the best 22 on the market
+FAIL [3] nba end DEN: deals Larry Bird with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DEN: deals Patrick Ewing with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DEN: deals Kobe Bryant with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DEN: deals Kareem Abdul-Jabbar with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DEN: deals Kevin Garnett with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DEN: deals Hakeem Olajuwon with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DEN: deals LeBron James with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DEN: deals Reggie Miller with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DEN: deals Wilt Chamberlain with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DEN: deals Dirk Nowitzki with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DEN: deals Marc Gasol with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DEN: deals Allen Iverson with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DEN: deals Dwyane Wade with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DEN: deals Chris Paul with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DEN: deals Charles Barkley with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DEN: deals Chris Webber with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DEN: deals Dominique Wilkins with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DEN: deals Vince Carter with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DEN: deals Tim Duncan with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DEN: deals Shaquille O'Neal with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DEN: deals John Stockton with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end OKC: the market offers Alex English, a retired man, as a free agent
+FAIL [3] nba end OKC: the market offers Larry Bird, a retired man, as a free agent
+FAIL [3] nba end OKC: the market offers Patrick Ewing, a retired man, as a free agent
+FAIL [3] nba end OKC: the market offers Kobe Bryant, a retired man, as a free agent
+FAIL [3] nba end OKC: the market offers Kareem Abdul-Jabbar, a retired man, as a free agent
+FAIL [3] nba end OKC: the market offers Kevin Garnett, a retired man, as a free agent
+FAIL [3] nba end OKC: the market offers Hakeem Olajuwon, a retired man, as a free agent
+FAIL [3] nba end OKC: the market offers LeBron James, a retired man, as a free agent
+FAIL [3] nba end OKC: the market offers Reggie Miller, a retired man, as a free agent
+FAIL [3] nba end OKC: the market offers Wilt Chamberlain, a retired man, as a free agent
+FAIL [3] nba end OKC: the market offers Dirk Nowitzki, a retired man, as a free agent
+FAIL [3] nba end OKC: the market offers Marc Gasol, a retired man, as a free agent
+FAIL [3] nba end OKC: the market offers Allen Iverson, a retired man, as a free agent
+FAIL [3] nba end OKC: the market offers Dwyane Wade, a retired man, as a free agent
+FAIL [3] nba end OKC: the market offers Chris Paul, a retired man, as a free agent
+FAIL [3] nba end OKC: the market offers Charles Barkley, a retired man, as a free agent
+FAIL [3] nba end OKC: the market offers Chris Webber, a retired man, as a free agent
+FAIL [3] nba end OKC: the market offers Dominique Wilkins, a retired man, as a free agent
+FAIL [3] nba end OKC: the market offers Vince Carter, a retired man, as a free agent
+FAIL [3] nba end OKC: the market offers Tim Duncan, a retired man, as a free agent
+FAIL [3] nba end OKC: the market offers Shaquille O'Neal, a retired man, as a free agent
+FAIL [3] nba end OKC: the market offers John Stockton, a retired man, as a free agent
+FAIL [3] nba end OKC: the market offers Alonzo Mourning, a retired man, as a free agent
+FAIL [3] nba end OKC: the market offers Isiah Thomas, a retired man, as a free agent
+FAIL [3] nba end OKC: the market offers Jason Kidd, a retired man, as a free agent
+FAIL [3] nba end OKC: the market offers Wes Unseld, a retired man, as a free agent
+FAIL [3] nba end OKC: the market offers Clyde Drexler, a retired man, as a free agent
+FAIL [3] nba end OKC: the market offers Michael Jordan, a retired man, as a free agent
+FAIL [3] nba end OKC: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end OKC: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end OKC: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end OKC: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end OKC: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end OKC: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end OKC: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end OKC: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end OKC: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end OKC: the market deals 326 men, expected the 289 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end OKC: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nba end OKC: deals Alex English with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end OKC: deals Larry Bird with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end OKC: deals Patrick Ewing with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end OKC: deals Kobe Bryant with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end OKC: deals Kareem Abdul-Jabbar with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end OKC: deals Kevin Garnett with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end OKC: deals Hakeem Olajuwon with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end OKC: deals LeBron James with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end OKC: deals Reggie Miller with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end OKC: deals Wilt Chamberlain with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end OKC: deals Dirk Nowitzki with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end OKC: deals Marc Gasol with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end OKC: deals Allen Iverson with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end OKC: deals Dwyane Wade with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end OKC: deals Chris Paul with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end OKC: deals Charles Barkley with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end OKC: deals Chris Webber with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end OKC: deals Dominique Wilkins with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end OKC: deals Vince Carter with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end OKC: deals Tim Duncan with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end BOS: the market offers Alex English, a retired man, as a free agent
+FAIL [3] nba end BOS: the market offers Patrick Ewing, a retired man, as a free agent
+FAIL [3] nba end BOS: the market offers Kobe Bryant, a retired man, as a free agent
+FAIL [3] nba end BOS: the market offers Kareem Abdul-Jabbar, a retired man, as a free agent
+FAIL [3] nba end BOS: the market offers Kevin Garnett, a retired man, as a free agent
+FAIL [3] nba end BOS: the market offers Hakeem Olajuwon, a retired man, as a free agent
+FAIL [3] nba end BOS: the market offers LeBron James, a retired man, as a free agent
+FAIL [3] nba end BOS: the market offers Reggie Miller, a retired man, as a free agent
+FAIL [3] nba end BOS: the market offers Wilt Chamberlain, a retired man, as a free agent
+FAIL [3] nba end BOS: the market offers Dirk Nowitzki, a retired man, as a free agent
+FAIL [3] nba end BOS: the market offers Marc Gasol, a retired man, as a free agent
+FAIL [3] nba end BOS: the market offers Allen Iverson, a retired man, as a free agent
+FAIL [3] nba end BOS: the market offers Dwyane Wade, a retired man, as a free agent
+FAIL [3] nba end BOS: the market offers Chris Paul, a retired man, as a free agent
+FAIL [3] nba end BOS: the market offers Charles Barkley, a retired man, as a free agent
+FAIL [3] nba end BOS: the market offers Chris Webber, a retired man, as a free agent
+FAIL [3] nba end BOS: the market offers Dominique Wilkins, a retired man, as a free agent
+FAIL [3] nba end BOS: the market offers Vince Carter, a retired man, as a free agent
+FAIL [3] nba end BOS: the market offers Tim Duncan, a retired man, as a free agent
+FAIL [3] nba end BOS: the market offers Shaquille O'Neal, a retired man, as a free agent
+FAIL [3] nba end BOS: the market offers John Stockton, a retired man, as a free agent
+FAIL [3] nba end BOS: the market offers Alonzo Mourning, a retired man, as a free agent
+FAIL [3] nba end BOS: the market offers Isiah Thomas, a retired man, as a free agent
+FAIL [3] nba end BOS: the market offers Jason Kidd, a retired man, as a free agent
+FAIL [3] nba end BOS: the market offers Wes Unseld, a retired man, as a free agent
+FAIL [3] nba end BOS: the market offers Clyde Drexler, a retired man, as a free agent
+FAIL [3] nba end BOS: the market offers Michael Jordan, a retired man, as a free agent
+FAIL [3] nba end BOS: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end BOS: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end BOS: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end BOS: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end BOS: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end BOS: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end BOS: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end BOS: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end BOS: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end BOS: the market deals 325 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end BOS: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nba end BOS: deals Alex English with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end BOS: deals Patrick Ewing with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end BOS: deals Kobe Bryant with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end BOS: deals Kareem Abdul-Jabbar with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end BOS: deals Kevin Garnett with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end BOS: deals Hakeem Olajuwon with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end BOS: deals LeBron James with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end BOS: deals Reggie Miller with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end BOS: deals Wilt Chamberlain with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end BOS: deals Dirk Nowitzki with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end BOS: deals Marc Gasol with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end BOS: deals Allen Iverson with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end BOS: deals Dwyane Wade with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end BOS: deals Chris Paul with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end BOS: deals Charles Barkley with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end BOS: deals Chris Webber with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end BOS: deals Dominique Wilkins with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end BOS: deals Vince Carter with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end BOS: deals Tim Duncan with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end NYK: the market offers Alex English, a retired man, as a free agent
+FAIL [3] nba end NYK: the market offers Larry Bird, a retired man, as a free agent
+FAIL [3] nba end NYK: the market offers Kobe Bryant, a retired man, as a free agent
+FAIL [3] nba end NYK: the market offers Kareem Abdul-Jabbar, a retired man, as a free agent
+FAIL [3] nba end NYK: the market offers Kevin Garnett, a retired man, as a free agent
+FAIL [3] nba end NYK: the market offers Hakeem Olajuwon, a retired man, as a free agent
+FAIL [3] nba end NYK: the market offers LeBron James, a retired man, as a free agent
+FAIL [3] nba end NYK: the market offers Reggie Miller, a retired man, as a free agent
+FAIL [3] nba end NYK: the market offers Wilt Chamberlain, a retired man, as a free agent
+FAIL [3] nba end NYK: the market offers Dirk Nowitzki, a retired man, as a free agent
+FAIL [3] nba end NYK: the market offers Marc Gasol, a retired man, as a free agent
+FAIL [3] nba end NYK: the market offers Allen Iverson, a retired man, as a free agent
+FAIL [3] nba end NYK: the market offers Dwyane Wade, a retired man, as a free agent
+FAIL [3] nba end NYK: the market offers Chris Paul, a retired man, as a free agent
+FAIL [3] nba end NYK: the market offers Charles Barkley, a retired man, as a free agent
+FAIL [3] nba end NYK: the market offers Chris Webber, a retired man, as a free agent
+FAIL [3] nba end NYK: the market offers Dominique Wilkins, a retired man, as a free agent
+FAIL [3] nba end NYK: the market offers Vince Carter, a retired man, as a free agent
+FAIL [3] nba end NYK: the market offers Tim Duncan, a retired man, as a free agent
+FAIL [3] nba end NYK: the market offers Shaquille O'Neal, a retired man, as a free agent
+FAIL [3] nba end NYK: the market offers John Stockton, a retired man, as a free agent
+FAIL [3] nba end NYK: the market offers Alonzo Mourning, a retired man, as a free agent
+FAIL [3] nba end NYK: the market offers Isiah Thomas, a retired man, as a free agent
+FAIL [3] nba end NYK: the market offers Jason Kidd, a retired man, as a free agent
+FAIL [3] nba end NYK: the market offers Wes Unseld, a retired man, as a free agent
+FAIL [3] nba end NYK: the market offers Clyde Drexler, a retired man, as a free agent
+FAIL [3] nba end NYK: the market offers Michael Jordan, a retired man, as a free agent
+FAIL [3] nba end NYK: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end NYK: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end NYK: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end NYK: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end NYK: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end NYK: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end NYK: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end NYK: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end NYK: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end NYK: the market deals 325 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end NYK: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nba end NYK: deals Alex English with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end NYK: deals Larry Bird with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end NYK: deals Kobe Bryant with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end NYK: deals Kareem Abdul-Jabbar with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end NYK: deals Kevin Garnett with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end NYK: deals Hakeem Olajuwon with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end NYK: deals LeBron James with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end NYK: deals Reggie Miller with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end NYK: deals Wilt Chamberlain with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end NYK: deals Dirk Nowitzki with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end NYK: deals Marc Gasol with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end NYK: deals Allen Iverson with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end NYK: deals Dwyane Wade with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end NYK: deals Chris Paul with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end NYK: deals Charles Barkley with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end NYK: deals Chris Webber with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end NYK: deals Dominique Wilkins with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end NYK: deals Vince Carter with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end NYK: deals Tim Duncan with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end LAL: the market offers Alex English, a retired man, as a free agent
+FAIL [3] nba end LAL: the market offers Larry Bird, a retired man, as a free agent
+FAIL [3] nba end LAL: the market offers Patrick Ewing, a retired man, as a free agent
+FAIL [3] nba end LAL: the market offers Kareem Abdul-Jabbar, a retired man, as a free agent
+FAIL [3] nba end LAL: the market offers Kevin Garnett, a retired man, as a free agent
+FAIL [3] nba end LAL: the market offers Hakeem Olajuwon, a retired man, as a free agent
+FAIL [3] nba end LAL: the market offers LeBron James, a retired man, as a free agent
+FAIL [3] nba end LAL: the market offers Reggie Miller, a retired man, as a free agent
+FAIL [3] nba end LAL: the market offers Wilt Chamberlain, a retired man, as a free agent
+FAIL [3] nba end LAL: the market offers Dirk Nowitzki, a retired man, as a free agent
+FAIL [3] nba end LAL: the market offers Marc Gasol, a retired man, as a free agent
+FAIL [3] nba end LAL: the market offers Allen Iverson, a retired man, as a free agent
+FAIL [3] nba end LAL: the market offers Dwyane Wade, a retired man, as a free agent
+FAIL [3] nba end LAL: the market offers Chris Paul, a retired man, as a free agent
+FAIL [3] nba end LAL: the market offers Charles Barkley, a retired man, as a free agent
+FAIL [3] nba end LAL: the market offers Chris Webber, a retired man, as a free agent
+FAIL [3] nba end LAL: the market offers Dominique Wilkins, a retired man, as a free agent
+FAIL [3] nba end LAL: the market offers Vince Carter, a retired man, as a free agent
+FAIL [3] nba end LAL: the market offers Tim Duncan, a retired man, as a free agent
+FAIL [3] nba end LAL: the market offers Shaquille O'Neal, a retired man, as a free agent
+FAIL [3] nba end LAL: the market offers John Stockton, a retired man, as a free agent
+FAIL [3] nba end LAL: the market offers Alonzo Mourning, a retired man, as a free agent
+FAIL [3] nba end LAL: the market offers Isiah Thomas, a retired man, as a free agent
+FAIL [3] nba end LAL: the market offers Jason Kidd, a retired man, as a free agent
+FAIL [3] nba end LAL: the market offers Wes Unseld, a retired man, as a free agent
+FAIL [3] nba end LAL: the market offers Clyde Drexler, a retired man, as a free agent
+FAIL [3] nba end LAL: the market offers Michael Jordan, a retired man, as a free agent
+FAIL [3] nba end LAL: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end LAL: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end LAL: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end LAL: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end LAL: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end LAL: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end LAL: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end LAL: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end LAL: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end LAL: the market deals 325 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end LAL: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nba end LAL: deals Alex English with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end LAL: deals Larry Bird with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end LAL: deals Patrick Ewing with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end LAL: deals Kareem Abdul-Jabbar with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end LAL: deals Kevin Garnett with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end LAL: deals Hakeem Olajuwon with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end LAL: deals LeBron James with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end LAL: deals Reggie Miller with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end LAL: deals Wilt Chamberlain with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end LAL: deals Dirk Nowitzki with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end LAL: deals Marc Gasol with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end LAL: deals Allen Iverson with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end LAL: deals Dwyane Wade with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end LAL: deals Chris Paul with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end LAL: deals Charles Barkley with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end LAL: deals Chris Webber with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end LAL: deals Dominique Wilkins with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end LAL: deals Vince Carter with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end LAL: deals Tim Duncan with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIL: the market offers Alex English, a retired man, as a free agent
+FAIL [3] nba end MIL: the market offers Larry Bird, a retired man, as a free agent
+FAIL [3] nba end MIL: the market offers Patrick Ewing, a retired man, as a free agent
+FAIL [3] nba end MIL: the market offers Kobe Bryant, a retired man, as a free agent
+FAIL [3] nba end MIL: the market offers Kevin Garnett, a retired man, as a free agent
+FAIL [3] nba end MIL: the market offers Hakeem Olajuwon, a retired man, as a free agent
+FAIL [3] nba end MIL: the market offers LeBron James, a retired man, as a free agent
+FAIL [3] nba end MIL: the market offers Reggie Miller, a retired man, as a free agent
+FAIL [3] nba end MIL: the market offers Wilt Chamberlain, a retired man, as a free agent
+FAIL [3] nba end MIL: the market offers Dirk Nowitzki, a retired man, as a free agent
+FAIL [3] nba end MIL: the market offers Marc Gasol, a retired man, as a free agent
+FAIL [3] nba end MIL: the market offers Allen Iverson, a retired man, as a free agent
+FAIL [3] nba end MIL: the market offers Dwyane Wade, a retired man, as a free agent
+FAIL [3] nba end MIL: the market offers Chris Paul, a retired man, as a free agent
+FAIL [3] nba end MIL: the market offers Charles Barkley, a retired man, as a free agent
+FAIL [3] nba end MIL: the market offers Chris Webber, a retired man, as a free agent
+FAIL [3] nba end MIL: the market offers Dominique Wilkins, a retired man, as a free agent
+FAIL [3] nba end MIL: the market offers Vince Carter, a retired man, as a free agent
+FAIL [3] nba end MIL: the market offers Tim Duncan, a retired man, as a free agent
+FAIL [3] nba end MIL: the market offers Shaquille O'Neal, a retired man, as a free agent
+FAIL [3] nba end MIL: the market offers John Stockton, a retired man, as a free agent
+FAIL [3] nba end MIL: the market offers Alonzo Mourning, a retired man, as a free agent
+FAIL [3] nba end MIL: the market offers Isiah Thomas, a retired man, as a free agent
+FAIL [3] nba end MIL: the market offers Jason Kidd, a retired man, as a free agent
+FAIL [3] nba end MIL: the market offers Wes Unseld, a retired man, as a free agent
+FAIL [3] nba end MIL: the market offers Clyde Drexler, a retired man, as a free agent
+FAIL [3] nba end MIL: the market offers Michael Jordan, a retired man, as a free agent
+FAIL [3] nba end MIL: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end MIL: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end MIL: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end MIL: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end MIL: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end MIL: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end MIL: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end MIL: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end MIL: the market deals 324 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end MIL: the fallen men in the Sign a Player list are not the best 22 on the market
+FAIL [3] nba end MIL: deals Alex English with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIL: deals Larry Bird with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIL: deals Patrick Ewing with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIL: deals Kobe Bryant with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIL: deals Kevin Garnett with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIL: deals Hakeem Olajuwon with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIL: deals LeBron James with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIL: deals Reggie Miller with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIL: deals Wilt Chamberlain with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIL: deals Dirk Nowitzki with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIL: deals Marc Gasol with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIL: deals Allen Iverson with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIL: deals Dwyane Wade with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIL: deals Chris Paul with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIL: deals Charles Barkley with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIL: deals Chris Webber with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIL: deals Dominique Wilkins with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIL: deals Vince Carter with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIL: deals Tim Duncan with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIL: deals Shaquille O'Neal with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIN: the market offers Alex English, a retired man, as a free agent
+FAIL [3] nba end MIN: the market offers Larry Bird, a retired man, as a free agent
+FAIL [3] nba end MIN: the market offers Patrick Ewing, a retired man, as a free agent
+FAIL [3] nba end MIN: the market offers Kobe Bryant, a retired man, as a free agent
+FAIL [3] nba end MIN: the market offers Kareem Abdul-Jabbar, a retired man, as a free agent
+FAIL [3] nba end MIN: the market offers Hakeem Olajuwon, a retired man, as a free agent
+FAIL [3] nba end MIN: the market offers LeBron James, a retired man, as a free agent
+FAIL [3] nba end MIN: the market offers Reggie Miller, a retired man, as a free agent
+FAIL [3] nba end MIN: the market offers Wilt Chamberlain, a retired man, as a free agent
+FAIL [3] nba end MIN: the market offers Dirk Nowitzki, a retired man, as a free agent
+FAIL [3] nba end MIN: the market offers Marc Gasol, a retired man, as a free agent
+FAIL [3] nba end MIN: the market offers Allen Iverson, a retired man, as a free agent
+FAIL [3] nba end MIN: the market offers Dwyane Wade, a retired man, as a free agent
+FAIL [3] nba end MIN: the market offers Chris Paul, a retired man, as a free agent
+FAIL [3] nba end MIN: the market offers Charles Barkley, a retired man, as a free agent
+FAIL [3] nba end MIN: the market offers Chris Webber, a retired man, as a free agent
+FAIL [3] nba end MIN: the market offers Dominique Wilkins, a retired man, as a free agent
+FAIL [3] nba end MIN: the market offers Vince Carter, a retired man, as a free agent
+FAIL [3] nba end MIN: the market offers Tim Duncan, a retired man, as a free agent
+FAIL [3] nba end MIN: the market offers Shaquille O'Neal, a retired man, as a free agent
+FAIL [3] nba end MIN: the market offers John Stockton, a retired man, as a free agent
+FAIL [3] nba end MIN: the market offers Alonzo Mourning, a retired man, as a free agent
+FAIL [3] nba end MIN: the market offers Isiah Thomas, a retired man, as a free agent
+FAIL [3] nba end MIN: the market offers Jason Kidd, a retired man, as a free agent
+FAIL [3] nba end MIN: the market offers Wes Unseld, a retired man, as a free agent
+FAIL [3] nba end MIN: the market offers Clyde Drexler, a retired man, as a free agent
+FAIL [3] nba end MIN: the market offers Michael Jordan, a retired man, as a free agent
+FAIL [3] nba end MIN: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end MIN: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end MIN: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end MIN: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end MIN: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end MIN: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end MIN: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end MIN: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end MIN: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end MIN: the market deals 325 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end MIN: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nba end MIN: deals Alex English with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIN: deals Larry Bird with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIN: deals Patrick Ewing with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIN: deals Kobe Bryant with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIN: deals Kareem Abdul-Jabbar with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIN: deals Hakeem Olajuwon with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIN: deals LeBron James with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIN: deals Reggie Miller with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIN: deals Wilt Chamberlain with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIN: deals Dirk Nowitzki with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIN: deals Marc Gasol with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIN: deals Allen Iverson with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIN: deals Dwyane Wade with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIN: deals Chris Paul with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIN: deals Charles Barkley with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIN: deals Chris Webber with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIN: deals Dominique Wilkins with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIN: deals Vince Carter with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIN: deals Tim Duncan with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end HOU: the market offers Alex English, a retired man, as a free agent
+FAIL [3] nba end HOU: the market offers Larry Bird, a retired man, as a free agent
+FAIL [3] nba end HOU: the market offers Patrick Ewing, a retired man, as a free agent
+FAIL [3] nba end HOU: the market offers Kobe Bryant, a retired man, as a free agent
+FAIL [3] nba end HOU: the market offers Kareem Abdul-Jabbar, a retired man, as a free agent
+FAIL [3] nba end HOU: the market offers Kevin Garnett, a retired man, as a free agent
+FAIL [3] nba end HOU: the market offers LeBron James, a retired man, as a free agent
+FAIL [3] nba end HOU: the market offers Reggie Miller, a retired man, as a free agent
+FAIL [3] nba end HOU: the market offers Wilt Chamberlain, a retired man, as a free agent
+FAIL [3] nba end HOU: the market offers Dirk Nowitzki, a retired man, as a free agent
+FAIL [3] nba end HOU: the market offers Marc Gasol, a retired man, as a free agent
+FAIL [3] nba end HOU: the market offers Allen Iverson, a retired man, as a free agent
+FAIL [3] nba end HOU: the market offers Dwyane Wade, a retired man, as a free agent
+FAIL [3] nba end HOU: the market offers Chris Paul, a retired man, as a free agent
+FAIL [3] nba end HOU: the market offers Charles Barkley, a retired man, as a free agent
+FAIL [3] nba end HOU: the market offers Chris Webber, a retired man, as a free agent
+FAIL [3] nba end HOU: the market offers Dominique Wilkins, a retired man, as a free agent
+FAIL [3] nba end HOU: the market offers Vince Carter, a retired man, as a free agent
+FAIL [3] nba end HOU: the market offers Tim Duncan, a retired man, as a free agent
+FAIL [3] nba end HOU: the market offers Shaquille O'Neal, a retired man, as a free agent
+FAIL [3] nba end HOU: the market offers John Stockton, a retired man, as a free agent
+FAIL [3] nba end HOU: the market offers Alonzo Mourning, a retired man, as a free agent
+FAIL [3] nba end HOU: the market offers Isiah Thomas, a retired man, as a free agent
+FAIL [3] nba end HOU: the market offers Jason Kidd, a retired man, as a free agent
+FAIL [3] nba end HOU: the market offers Wes Unseld, a retired man, as a free agent
+FAIL [3] nba end HOU: the market offers Clyde Drexler, a retired man, as a free agent
+FAIL [3] nba end HOU: the market offers Michael Jordan, a retired man, as a free agent
+FAIL [3] nba end HOU: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end HOU: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end HOU: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end HOU: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end HOU: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end HOU: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end HOU: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end HOU: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end HOU: the market deals 325 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end HOU: the fallen men in the Sign a Player list are not the best 22 on the market
+FAIL [3] nba end HOU: deals Alex English with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end HOU: deals Larry Bird with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end HOU: deals Patrick Ewing with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end HOU: deals Kobe Bryant with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end HOU: deals Kareem Abdul-Jabbar with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end HOU: deals Kevin Garnett with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end HOU: deals LeBron James with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end HOU: deals Reggie Miller with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end HOU: deals Wilt Chamberlain with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end HOU: deals Dirk Nowitzki with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end HOU: deals Marc Gasol with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end HOU: deals Allen Iverson with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end HOU: deals Dwyane Wade with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end HOU: deals Chris Paul with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end HOU: deals Charles Barkley with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end HOU: deals Chris Webber with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end HOU: deals Dominique Wilkins with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end HOU: deals Vince Carter with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end HOU: deals Tim Duncan with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end HOU: deals Shaquille O'Neal with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end CLE: the market offers Alex English, a retired man, as a free agent
+FAIL [3] nba end CLE: the market offers Larry Bird, a retired man, as a free agent
+FAIL [3] nba end CLE: the market offers Patrick Ewing, a retired man, as a free agent
+FAIL [3] nba end CLE: the market offers Kobe Bryant, a retired man, as a free agent
+FAIL [3] nba end CLE: the market offers Kareem Abdul-Jabbar, a retired man, as a free agent
+FAIL [3] nba end CLE: the market offers Kevin Garnett, a retired man, as a free agent
+FAIL [3] nba end CLE: the market offers Hakeem Olajuwon, a retired man, as a free agent
+FAIL [3] nba end CLE: the market offers Reggie Miller, a retired man, as a free agent
+FAIL [3] nba end CLE: the market offers Wilt Chamberlain, a retired man, as a free agent
+FAIL [3] nba end CLE: the market offers Dirk Nowitzki, a retired man, as a free agent
+FAIL [3] nba end CLE: the market offers Marc Gasol, a retired man, as a free agent
+FAIL [3] nba end CLE: the market offers Allen Iverson, a retired man, as a free agent
+FAIL [3] nba end CLE: the market offers Dwyane Wade, a retired man, as a free agent
+FAIL [3] nba end CLE: the market offers Chris Paul, a retired man, as a free agent
+FAIL [3] nba end CLE: the market offers Charles Barkley, a retired man, as a free agent
+FAIL [3] nba end CLE: the market offers Chris Webber, a retired man, as a free agent
+FAIL [3] nba end CLE: the market offers Dominique Wilkins, a retired man, as a free agent
+FAIL [3] nba end CLE: the market offers Vince Carter, a retired man, as a free agent
+FAIL [3] nba end CLE: the market offers Tim Duncan, a retired man, as a free agent
+FAIL [3] nba end CLE: the market offers Shaquille O'Neal, a retired man, as a free agent
+FAIL [3] nba end CLE: the market offers John Stockton, a retired man, as a free agent
+FAIL [3] nba end CLE: the market offers Alonzo Mourning, a retired man, as a free agent
+FAIL [3] nba end CLE: the market offers Isiah Thomas, a retired man, as a free agent
+FAIL [3] nba end CLE: the market offers Jason Kidd, a retired man, as a free agent
+FAIL [3] nba end CLE: the market offers Wes Unseld, a retired man, as a free agent
+FAIL [3] nba end CLE: the market offers Clyde Drexler, a retired man, as a free agent
+FAIL [3] nba end CLE: the market offers Michael Jordan, a retired man, as a free agent
+FAIL [3] nba end CLE: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end CLE: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end CLE: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end CLE: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end CLE: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end CLE: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end CLE: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end CLE: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end CLE: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end CLE: the market deals 325 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end CLE: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nba end CLE: deals Alex English with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end CLE: deals Larry Bird with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end CLE: deals Patrick Ewing with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end CLE: deals Kobe Bryant with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end CLE: deals Kareem Abdul-Jabbar with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end CLE: deals Kevin Garnett with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end CLE: deals Hakeem Olajuwon with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end CLE: deals Reggie Miller with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end CLE: deals Wilt Chamberlain with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end CLE: deals Dirk Nowitzki with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end CLE: deals Marc Gasol with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end CLE: deals Allen Iverson with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end CLE: deals Dwyane Wade with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end CLE: deals Chris Paul with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end CLE: deals Charles Barkley with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end CLE: deals Chris Webber with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end CLE: deals Dominique Wilkins with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end CLE: deals Vince Carter with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end CLE: deals Tim Duncan with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end IND: the market offers Alex English, a retired man, as a free agent
+FAIL [3] nba end IND: the market offers Larry Bird, a retired man, as a free agent
+FAIL [3] nba end IND: the market offers Patrick Ewing, a retired man, as a free agent
+FAIL [3] nba end IND: the market offers Kobe Bryant, a retired man, as a free agent
+FAIL [3] nba end IND: the market offers Kareem Abdul-Jabbar, a retired man, as a free agent
+FAIL [3] nba end IND: the market offers Kevin Garnett, a retired man, as a free agent
+FAIL [3] nba end IND: the market offers Hakeem Olajuwon, a retired man, as a free agent
+FAIL [3] nba end IND: the market offers LeBron James, a retired man, as a free agent
+FAIL [3] nba end IND: the market offers Wilt Chamberlain, a retired man, as a free agent
+FAIL [3] nba end IND: the market offers Dirk Nowitzki, a retired man, as a free agent
+FAIL [3] nba end IND: the market offers Marc Gasol, a retired man, as a free agent
+FAIL [3] nba end IND: the market offers Allen Iverson, a retired man, as a free agent
+FAIL [3] nba end IND: the market offers Dwyane Wade, a retired man, as a free agent
+FAIL [3] nba end IND: the market offers Chris Paul, a retired man, as a free agent
+FAIL [3] nba end IND: the market offers Charles Barkley, a retired man, as a free agent
+FAIL [3] nba end IND: the market offers Chris Webber, a retired man, as a free agent
+FAIL [3] nba end IND: the market offers Dominique Wilkins, a retired man, as a free agent
+FAIL [3] nba end IND: the market offers Vince Carter, a retired man, as a free agent
+FAIL [3] nba end IND: the market offers Tim Duncan, a retired man, as a free agent
+FAIL [3] nba end IND: the market offers Shaquille O'Neal, a retired man, as a free agent
+FAIL [3] nba end IND: the market offers John Stockton, a retired man, as a free agent
+FAIL [3] nba end IND: the market offers Alonzo Mourning, a retired man, as a free agent
+FAIL [3] nba end IND: the market offers Isiah Thomas, a retired man, as a free agent
+FAIL [3] nba end IND: the market offers Jason Kidd, a retired man, as a free agent
+FAIL [3] nba end IND: the market offers Wes Unseld, a retired man, as a free agent
+FAIL [3] nba end IND: the market offers Clyde Drexler, a retired man, as a free agent
+FAIL [3] nba end IND: the market offers Michael Jordan, a retired man, as a free agent
+FAIL [3] nba end IND: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end IND: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end IND: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end IND: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end IND: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end IND: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end IND: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end IND: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end IND: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end IND: the market deals 325 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end IND: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nba end IND: deals Alex English with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end IND: deals Larry Bird with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end IND: deals Patrick Ewing with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end IND: deals Kobe Bryant with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end IND: deals Kareem Abdul-Jabbar with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end IND: deals Kevin Garnett with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end IND: deals Hakeem Olajuwon with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end IND: deals LeBron James with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end IND: deals Wilt Chamberlain with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end IND: deals Dirk Nowitzki with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end IND: deals Marc Gasol with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end IND: deals Allen Iverson with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end IND: deals Dwyane Wade with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end IND: deals Chris Paul with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end IND: deals Charles Barkley with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end IND: deals Chris Webber with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end IND: deals Dominique Wilkins with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end IND: deals Vince Carter with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end IND: deals Tim Duncan with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end GSW: the market offers Alex English, a retired man, as a free agent
+FAIL [3] nba end GSW: the market offers Larry Bird, a retired man, as a free agent
+FAIL [3] nba end GSW: the market offers Patrick Ewing, a retired man, as a free agent
+FAIL [3] nba end GSW: the market offers Kobe Bryant, a retired man, as a free agent
+FAIL [3] nba end GSW: the market offers Kareem Abdul-Jabbar, a retired man, as a free agent
+FAIL [3] nba end GSW: the market offers Kevin Garnett, a retired man, as a free agent
+FAIL [3] nba end GSW: the market offers Hakeem Olajuwon, a retired man, as a free agent
+FAIL [3] nba end GSW: the market offers LeBron James, a retired man, as a free agent
+FAIL [3] nba end GSW: the market offers Reggie Miller, a retired man, as a free agent
+FAIL [3] nba end GSW: the market offers Dirk Nowitzki, a retired man, as a free agent
+FAIL [3] nba end GSW: the market offers Marc Gasol, a retired man, as a free agent
+FAIL [3] nba end GSW: the market offers Allen Iverson, a retired man, as a free agent
+FAIL [3] nba end GSW: the market offers Dwyane Wade, a retired man, as a free agent
+FAIL [3] nba end GSW: the market offers Chris Paul, a retired man, as a free agent
+FAIL [3] nba end GSW: the market offers Charles Barkley, a retired man, as a free agent
+FAIL [3] nba end GSW: the market offers Chris Webber, a retired man, as a free agent
+FAIL [3] nba end GSW: the market offers Dominique Wilkins, a retired man, as a free agent
+FAIL [3] nba end GSW: the market offers Vince Carter, a retired man, as a free agent
+FAIL [3] nba end GSW: the market offers Tim Duncan, a retired man, as a free agent
+FAIL [3] nba end GSW: the market offers Shaquille O'Neal, a retired man, as a free agent
+FAIL [3] nba end GSW: the market offers John Stockton, a retired man, as a free agent
+FAIL [3] nba end GSW: the market offers Alonzo Mourning, a retired man, as a free agent
+FAIL [3] nba end GSW: the market offers Isiah Thomas, a retired man, as a free agent
+FAIL [3] nba end GSW: the market offers Jason Kidd, a retired man, as a free agent
+FAIL [3] nba end GSW: the market offers Wes Unseld, a retired man, as a free agent
+FAIL [3] nba end GSW: the market offers Clyde Drexler, a retired man, as a free agent
+FAIL [3] nba end GSW: the market offers Michael Jordan, a retired man, as a free agent
+FAIL [3] nba end GSW: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end GSW: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end GSW: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end GSW: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end GSW: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end GSW: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end GSW: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end GSW: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end GSW: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end GSW: the market deals 325 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end GSW: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nba end GSW: deals Alex English with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end GSW: deals Larry Bird with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end GSW: deals Patrick Ewing with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end GSW: deals Kobe Bryant with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end GSW: deals Kareem Abdul-Jabbar with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end GSW: deals Kevin Garnett with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end GSW: deals Hakeem Olajuwon with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end GSW: deals LeBron James with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end GSW: deals Reggie Miller with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end GSW: deals Dirk Nowitzki with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end GSW: deals Marc Gasol with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end GSW: deals Allen Iverson with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end GSW: deals Dwyane Wade with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end GSW: deals Chris Paul with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end GSW: deals Charles Barkley with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end GSW: deals Chris Webber with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end GSW: deals Dominique Wilkins with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end GSW: deals Vince Carter with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end GSW: deals Tim Duncan with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DAL: the market offers Alex English, a retired man, as a free agent
+FAIL [3] nba end DAL: the market offers Larry Bird, a retired man, as a free agent
+FAIL [3] nba end DAL: the market offers Patrick Ewing, a retired man, as a free agent
+FAIL [3] nba end DAL: the market offers Kobe Bryant, a retired man, as a free agent
+FAIL [3] nba end DAL: the market offers Kareem Abdul-Jabbar, a retired man, as a free agent
+FAIL [3] nba end DAL: the market offers Kevin Garnett, a retired man, as a free agent
+FAIL [3] nba end DAL: the market offers Hakeem Olajuwon, a retired man, as a free agent
+FAIL [3] nba end DAL: the market offers LeBron James, a retired man, as a free agent
+FAIL [3] nba end DAL: the market offers Reggie Miller, a retired man, as a free agent
+FAIL [3] nba end DAL: the market offers Wilt Chamberlain, a retired man, as a free agent
+FAIL [3] nba end DAL: the market offers Marc Gasol, a retired man, as a free agent
+FAIL [3] nba end DAL: the market offers Allen Iverson, a retired man, as a free agent
+FAIL [3] nba end DAL: the market offers Dwyane Wade, a retired man, as a free agent
+FAIL [3] nba end DAL: the market offers Chris Paul, a retired man, as a free agent
+FAIL [3] nba end DAL: the market offers Charles Barkley, a retired man, as a free agent
+FAIL [3] nba end DAL: the market offers Chris Webber, a retired man, as a free agent
+FAIL [3] nba end DAL: the market offers Dominique Wilkins, a retired man, as a free agent
+FAIL [3] nba end DAL: the market offers Vince Carter, a retired man, as a free agent
+FAIL [3] nba end DAL: the market offers Tim Duncan, a retired man, as a free agent
+FAIL [3] nba end DAL: the market offers Shaquille O'Neal, a retired man, as a free agent
+FAIL [3] nba end DAL: the market offers John Stockton, a retired man, as a free agent
+FAIL [3] nba end DAL: the market offers Alonzo Mourning, a retired man, as a free agent
+FAIL [3] nba end DAL: the market offers Isiah Thomas, a retired man, as a free agent
+FAIL [3] nba end DAL: the market offers Jason Kidd, a retired man, as a free agent
+FAIL [3] nba end DAL: the market offers Wes Unseld, a retired man, as a free agent
+FAIL [3] nba end DAL: the market offers Clyde Drexler, a retired man, as a free agent
+FAIL [3] nba end DAL: the market offers Michael Jordan, a retired man, as a free agent
+FAIL [3] nba end DAL: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end DAL: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end DAL: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end DAL: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end DAL: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end DAL: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end DAL: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end DAL: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end DAL: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end DAL: the market deals 325 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end DAL: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nba end DAL: deals Alex English with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DAL: deals Larry Bird with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DAL: deals Patrick Ewing with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DAL: deals Kobe Bryant with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DAL: deals Kareem Abdul-Jabbar with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DAL: deals Kevin Garnett with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DAL: deals Hakeem Olajuwon with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DAL: deals LeBron James with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DAL: deals Reggie Miller with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DAL: deals Wilt Chamberlain with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DAL: deals Marc Gasol with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DAL: deals Allen Iverson with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DAL: deals Dwyane Wade with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DAL: deals Chris Paul with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DAL: deals Charles Barkley with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DAL: deals Chris Webber with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DAL: deals Dominique Wilkins with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DAL: deals Vince Carter with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DAL: deals Tim Duncan with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MEM: the market offers Alex English, a retired man, as a free agent
+FAIL [3] nba end MEM: the market offers Larry Bird, a retired man, as a free agent
+FAIL [3] nba end MEM: the market offers Patrick Ewing, a retired man, as a free agent
+FAIL [3] nba end MEM: the market offers Kobe Bryant, a retired man, as a free agent
+FAIL [3] nba end MEM: the market offers Kareem Abdul-Jabbar, a retired man, as a free agent
+FAIL [3] nba end MEM: the market offers Kevin Garnett, a retired man, as a free agent
+FAIL [3] nba end MEM: the market offers Hakeem Olajuwon, a retired man, as a free agent
+FAIL [3] nba end MEM: the market offers LeBron James, a retired man, as a free agent
+FAIL [3] nba end MEM: the market offers Reggie Miller, a retired man, as a free agent
+FAIL [3] nba end MEM: the market offers Wilt Chamberlain, a retired man, as a free agent
+FAIL [3] nba end MEM: the market offers Dirk Nowitzki, a retired man, as a free agent
+FAIL [3] nba end MEM: the market offers Allen Iverson, a retired man, as a free agent
+FAIL [3] nba end MEM: the market offers Dwyane Wade, a retired man, as a free agent
+FAIL [3] nba end MEM: the market offers Chris Paul, a retired man, as a free agent
+FAIL [3] nba end MEM: the market offers Charles Barkley, a retired man, as a free agent
+FAIL [3] nba end MEM: the market offers Chris Webber, a retired man, as a free agent
+FAIL [3] nba end MEM: the market offers Dominique Wilkins, a retired man, as a free agent
+FAIL [3] nba end MEM: the market offers Vince Carter, a retired man, as a free agent
+FAIL [3] nba end MEM: the market offers Tim Duncan, a retired man, as a free agent
+FAIL [3] nba end MEM: the market offers Shaquille O'Neal, a retired man, as a free agent
+FAIL [3] nba end MEM: the market offers John Stockton, a retired man, as a free agent
+FAIL [3] nba end MEM: the market offers Alonzo Mourning, a retired man, as a free agent
+FAIL [3] nba end MEM: the market offers Isiah Thomas, a retired man, as a free agent
+FAIL [3] nba end MEM: the market offers Jason Kidd, a retired man, as a free agent
+FAIL [3] nba end MEM: the market offers Wes Unseld, a retired man, as a free agent
+FAIL [3] nba end MEM: the market offers Clyde Drexler, a retired man, as a free agent
+FAIL [3] nba end MEM: the market offers Michael Jordan, a retired man, as a free agent
+FAIL [3] nba end MEM: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end MEM: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end MEM: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end MEM: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end MEM: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end MEM: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end MEM: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end MEM: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end MEM: the market deals 324 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end MEM: the fallen men in the Sign a Player list are not the best 22 on the market
+FAIL [3] nba end MEM: deals Alex English with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MEM: deals Larry Bird with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MEM: deals Patrick Ewing with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MEM: deals Kobe Bryant with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MEM: deals Kareem Abdul-Jabbar with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MEM: deals Kevin Garnett with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MEM: deals Hakeem Olajuwon with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MEM: deals LeBron James with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MEM: deals Reggie Miller with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MEM: deals Wilt Chamberlain with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MEM: deals Dirk Nowitzki with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MEM: deals Allen Iverson with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MEM: deals Dwyane Wade with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MEM: deals Chris Paul with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MEM: deals Charles Barkley with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MEM: deals Chris Webber with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MEM: deals Dominique Wilkins with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MEM: deals Vince Carter with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MEM: deals Tim Duncan with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MEM: deals Shaquille O'Neal with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end PHI: the market offers Alex English, a retired man, as a free agent
+FAIL [3] nba end PHI: the market offers Larry Bird, a retired man, as a free agent
+FAIL [3] nba end PHI: the market offers Patrick Ewing, a retired man, as a free agent
+FAIL [3] nba end PHI: the market offers Kobe Bryant, a retired man, as a free agent
+FAIL [3] nba end PHI: the market offers Kareem Abdul-Jabbar, a retired man, as a free agent
+FAIL [3] nba end PHI: the market offers Kevin Garnett, a retired man, as a free agent
+FAIL [3] nba end PHI: the market offers Hakeem Olajuwon, a retired man, as a free agent
+FAIL [3] nba end PHI: the market offers LeBron James, a retired man, as a free agent
+FAIL [3] nba end PHI: the market offers Reggie Miller, a retired man, as a free agent
+FAIL [3] nba end PHI: the market offers Wilt Chamberlain, a retired man, as a free agent
+FAIL [3] nba end PHI: the market offers Dirk Nowitzki, a retired man, as a free agent
+FAIL [3] nba end PHI: the market offers Marc Gasol, a retired man, as a free agent
+FAIL [3] nba end PHI: the market offers Dwyane Wade, a retired man, as a free agent
+FAIL [3] nba end PHI: the market offers Chris Paul, a retired man, as a free agent
+FAIL [3] nba end PHI: the market offers Charles Barkley, a retired man, as a free agent
+FAIL [3] nba end PHI: the market offers Chris Webber, a retired man, as a free agent
+FAIL [3] nba end PHI: the market offers Dominique Wilkins, a retired man, as a free agent
+FAIL [3] nba end PHI: the market offers Vince Carter, a retired man, as a free agent
+FAIL [3] nba end PHI: the market offers Tim Duncan, a retired man, as a free agent
+FAIL [3] nba end PHI: the market offers Shaquille O'Neal, a retired man, as a free agent
+FAIL [3] nba end PHI: the market offers John Stockton, a retired man, as a free agent
+FAIL [3] nba end PHI: the market offers Alonzo Mourning, a retired man, as a free agent
+FAIL [3] nba end PHI: the market offers Isiah Thomas, a retired man, as a free agent
+FAIL [3] nba end PHI: the market offers Jason Kidd, a retired man, as a free agent
+FAIL [3] nba end PHI: the market offers Wes Unseld, a retired man, as a free agent
+FAIL [3] nba end PHI: the market offers Clyde Drexler, a retired man, as a free agent
+FAIL [3] nba end PHI: the market offers Michael Jordan, a retired man, as a free agent
+FAIL [3] nba end PHI: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end PHI: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end PHI: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end PHI: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end PHI: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end PHI: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end PHI: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end PHI: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end PHI: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end PHI: the market deals 325 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end PHI: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nba end PHI: deals Alex English with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end PHI: deals Larry Bird with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end PHI: deals Patrick Ewing with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end PHI: deals Kobe Bryant with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end PHI: deals Kareem Abdul-Jabbar with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end PHI: deals Kevin Garnett with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end PHI: deals Hakeem Olajuwon with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end PHI: deals LeBron James with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end PHI: deals Reggie Miller with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end PHI: deals Wilt Chamberlain with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end PHI: deals Dirk Nowitzki with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end PHI: deals Marc Gasol with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end PHI: deals Dwyane Wade with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end PHI: deals Chris Paul with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end PHI: deals Charles Barkley with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end PHI: deals Chris Webber with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end PHI: deals Dominique Wilkins with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end PHI: deals Vince Carter with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end PHI: deals Tim Duncan with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIA: the market offers Alex English, a retired man, as a free agent
+FAIL [3] nba end MIA: the market offers Larry Bird, a retired man, as a free agent
+FAIL [3] nba end MIA: the market offers Patrick Ewing, a retired man, as a free agent
+FAIL [3] nba end MIA: the market offers Kobe Bryant, a retired man, as a free agent
+FAIL [3] nba end MIA: the market offers Kareem Abdul-Jabbar, a retired man, as a free agent
+FAIL [3] nba end MIA: the market offers Kevin Garnett, a retired man, as a free agent
+FAIL [3] nba end MIA: the market offers Hakeem Olajuwon, a retired man, as a free agent
+FAIL [3] nba end MIA: the market offers LeBron James, a retired man, as a free agent
+FAIL [3] nba end MIA: the market offers Reggie Miller, a retired man, as a free agent
+FAIL [3] nba end MIA: the market offers Wilt Chamberlain, a retired man, as a free agent
+FAIL [3] nba end MIA: the market offers Dirk Nowitzki, a retired man, as a free agent
+FAIL [3] nba end MIA: the market offers Marc Gasol, a retired man, as a free agent
+FAIL [3] nba end MIA: the market offers Allen Iverson, a retired man, as a free agent
+FAIL [3] nba end MIA: the market offers Chris Paul, a retired man, as a free agent
+FAIL [3] nba end MIA: the market offers Charles Barkley, a retired man, as a free agent
+FAIL [3] nba end MIA: the market offers Chris Webber, a retired man, as a free agent
+FAIL [3] nba end MIA: the market offers Dominique Wilkins, a retired man, as a free agent
+FAIL [3] nba end MIA: the market offers Vince Carter, a retired man, as a free agent
+FAIL [3] nba end MIA: the market offers Tim Duncan, a retired man, as a free agent
+FAIL [3] nba end MIA: the market offers Shaquille O'Neal, a retired man, as a free agent
+FAIL [3] nba end MIA: the market offers John Stockton, a retired man, as a free agent
+FAIL [3] nba end MIA: the market offers Alonzo Mourning, a retired man, as a free agent
+FAIL [3] nba end MIA: the market offers Isiah Thomas, a retired man, as a free agent
+FAIL [3] nba end MIA: the market offers Jason Kidd, a retired man, as a free agent
+FAIL [3] nba end MIA: the market offers Wes Unseld, a retired man, as a free agent
+FAIL [3] nba end MIA: the market offers Clyde Drexler, a retired man, as a free agent
+FAIL [3] nba end MIA: the market offers Michael Jordan, a retired man, as a free agent
+FAIL [3] nba end MIA: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end MIA: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end MIA: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end MIA: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end MIA: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end MIA: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end MIA: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end MIA: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end MIA: the market deals 324 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end MIA: the fallen men in the Sign a Player list are not the best 22 on the market
+FAIL [3] nba end MIA: deals Alex English with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIA: deals Larry Bird with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIA: deals Patrick Ewing with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIA: deals Kobe Bryant with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIA: deals Kareem Abdul-Jabbar with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIA: deals Kevin Garnett with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIA: deals Hakeem Olajuwon with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIA: deals LeBron James with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIA: deals Reggie Miller with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIA: deals Wilt Chamberlain with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIA: deals Dirk Nowitzki with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIA: deals Marc Gasol with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIA: deals Allen Iverson with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIA: deals Chris Paul with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIA: deals Charles Barkley with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIA: deals Chris Webber with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIA: deals Dominique Wilkins with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIA: deals Vince Carter with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIA: deals Tim Duncan with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end MIA: deals Shaquille O'Neal with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end LAC: the market offers Alex English, a retired man, as a free agent
+FAIL [3] nba end LAC: the market offers Larry Bird, a retired man, as a free agent
+FAIL [3] nba end LAC: the market offers Patrick Ewing, a retired man, as a free agent
+FAIL [3] nba end LAC: the market offers Kobe Bryant, a retired man, as a free agent
+FAIL [3] nba end LAC: the market offers Kareem Abdul-Jabbar, a retired man, as a free agent
+FAIL [3] nba end LAC: the market offers Kevin Garnett, a retired man, as a free agent
+FAIL [3] nba end LAC: the market offers Hakeem Olajuwon, a retired man, as a free agent
+FAIL [3] nba end LAC: the market offers LeBron James, a retired man, as a free agent
+FAIL [3] nba end LAC: the market offers Reggie Miller, a retired man, as a free agent
+FAIL [3] nba end LAC: the market offers Wilt Chamberlain, a retired man, as a free agent
+FAIL [3] nba end LAC: the market offers Dirk Nowitzki, a retired man, as a free agent
+FAIL [3] nba end LAC: the market offers Marc Gasol, a retired man, as a free agent
+FAIL [3] nba end LAC: the market offers Allen Iverson, a retired man, as a free agent
+FAIL [3] nba end LAC: the market offers Dwyane Wade, a retired man, as a free agent
+FAIL [3] nba end LAC: the market offers Charles Barkley, a retired man, as a free agent
+FAIL [3] nba end LAC: the market offers Chris Webber, a retired man, as a free agent
+FAIL [3] nba end LAC: the market offers Dominique Wilkins, a retired man, as a free agent
+FAIL [3] nba end LAC: the market offers Vince Carter, a retired man, as a free agent
+FAIL [3] nba end LAC: the market offers Tim Duncan, a retired man, as a free agent
+FAIL [3] nba end LAC: the market offers Shaquille O'Neal, a retired man, as a free agent
+FAIL [3] nba end LAC: the market offers John Stockton, a retired man, as a free agent
+FAIL [3] nba end LAC: the market offers Alonzo Mourning, a retired man, as a free agent
+FAIL [3] nba end LAC: the market offers Isiah Thomas, a retired man, as a free agent
+FAIL [3] nba end LAC: the market offers Jason Kidd, a retired man, as a free agent
+FAIL [3] nba end LAC: the market offers Wes Unseld, a retired man, as a free agent
+FAIL [3] nba end LAC: the market offers Clyde Drexler, a retired man, as a free agent
+FAIL [3] nba end LAC: the market offers Michael Jordan, a retired man, as a free agent
+FAIL [3] nba end LAC: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end LAC: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end LAC: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end LAC: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end LAC: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end LAC: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end LAC: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end LAC: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end LAC: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end LAC: the market deals 325 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end LAC: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nba end LAC: deals Alex English with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end LAC: deals Larry Bird with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end LAC: deals Patrick Ewing with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end LAC: deals Kobe Bryant with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end LAC: deals Kareem Abdul-Jabbar with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end LAC: deals Kevin Garnett with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end LAC: deals Hakeem Olajuwon with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end LAC: deals LeBron James with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end LAC: deals Reggie Miller with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end LAC: deals Wilt Chamberlain with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end LAC: deals Dirk Nowitzki with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end LAC: deals Marc Gasol with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end LAC: deals Allen Iverson with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end LAC: deals Dwyane Wade with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end LAC: deals Charles Barkley with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end LAC: deals Chris Webber with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end LAC: deals Dominique Wilkins with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end LAC: deals Vince Carter with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end LAC: deals Tim Duncan with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end PHX: the market offers Alex English, a retired man, as a free agent
+FAIL [3] nba end PHX: the market offers Larry Bird, a retired man, as a free agent
+FAIL [3] nba end PHX: the market offers Patrick Ewing, a retired man, as a free agent
+FAIL [3] nba end PHX: the market offers Kobe Bryant, a retired man, as a free agent
+FAIL [3] nba end PHX: the market offers Kareem Abdul-Jabbar, a retired man, as a free agent
+FAIL [3] nba end PHX: the market offers Kevin Garnett, a retired man, as a free agent
+FAIL [3] nba end PHX: the market offers Hakeem Olajuwon, a retired man, as a free agent
+FAIL [3] nba end PHX: the market offers LeBron James, a retired man, as a free agent
+FAIL [3] nba end PHX: the market offers Reggie Miller, a retired man, as a free agent
+FAIL [3] nba end PHX: the market offers Wilt Chamberlain, a retired man, as a free agent
+FAIL [3] nba end PHX: the market offers Dirk Nowitzki, a retired man, as a free agent
+FAIL [3] nba end PHX: the market offers Marc Gasol, a retired man, as a free agent
+FAIL [3] nba end PHX: the market offers Allen Iverson, a retired man, as a free agent
+FAIL [3] nba end PHX: the market offers Dwyane Wade, a retired man, as a free agent
+FAIL [3] nba end PHX: the market offers Chris Paul, a retired man, as a free agent
+FAIL [3] nba end PHX: the market offers Chris Webber, a retired man, as a free agent
+FAIL [3] nba end PHX: the market offers Dominique Wilkins, a retired man, as a free agent
+FAIL [3] nba end PHX: the market offers Vince Carter, a retired man, as a free agent
+FAIL [3] nba end PHX: the market offers Tim Duncan, a retired man, as a free agent
+FAIL [3] nba end PHX: the market offers Shaquille O'Neal, a retired man, as a free agent
+FAIL [3] nba end PHX: the market offers John Stockton, a retired man, as a free agent
+FAIL [3] nba end PHX: the market offers Alonzo Mourning, a retired man, as a free agent
+FAIL [3] nba end PHX: the market offers Isiah Thomas, a retired man, as a free agent
+FAIL [3] nba end PHX: the market offers Jason Kidd, a retired man, as a free agent
+FAIL [3] nba end PHX: the market offers Wes Unseld, a retired man, as a free agent
+FAIL [3] nba end PHX: the market offers Clyde Drexler, a retired man, as a free agent
+FAIL [3] nba end PHX: the market offers Michael Jordan, a retired man, as a free agent
+FAIL [3] nba end PHX: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end PHX: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end PHX: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end PHX: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end PHX: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end PHX: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end PHX: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end PHX: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end PHX: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end PHX: the market deals 325 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end PHX: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nba end PHX: deals Alex English with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end PHX: deals Larry Bird with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end PHX: deals Patrick Ewing with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end PHX: deals Kobe Bryant with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end PHX: deals Kareem Abdul-Jabbar with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end PHX: deals Kevin Garnett with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end PHX: deals Hakeem Olajuwon with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end PHX: deals LeBron James with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end PHX: deals Reggie Miller with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end PHX: deals Wilt Chamberlain with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end PHX: deals Dirk Nowitzki with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end PHX: deals Marc Gasol with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end PHX: deals Allen Iverson with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end PHX: deals Dwyane Wade with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end PHX: deals Chris Paul with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end PHX: deals Chris Webber with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end PHX: deals Dominique Wilkins with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end PHX: deals Vince Carter with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end PHX: deals Tim Duncan with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end SAC: the market offers Alex English, a retired man, as a free agent
+FAIL [3] nba end SAC: the market offers Larry Bird, a retired man, as a free agent
+FAIL [3] nba end SAC: the market offers Patrick Ewing, a retired man, as a free agent
+FAIL [3] nba end SAC: the market offers Kobe Bryant, a retired man, as a free agent
+FAIL [3] nba end SAC: the market offers Kareem Abdul-Jabbar, a retired man, as a free agent
+FAIL [3] nba end SAC: the market offers Kevin Garnett, a retired man, as a free agent
+FAIL [3] nba end SAC: the market offers Hakeem Olajuwon, a retired man, as a free agent
+FAIL [3] nba end SAC: the market offers LeBron James, a retired man, as a free agent
+FAIL [3] nba end SAC: the market offers Reggie Miller, a retired man, as a free agent
+FAIL [3] nba end SAC: the market offers Wilt Chamberlain, a retired man, as a free agent
+FAIL [3] nba end SAC: the market offers Dirk Nowitzki, a retired man, as a free agent
+FAIL [3] nba end SAC: the market offers Marc Gasol, a retired man, as a free agent
+FAIL [3] nba end SAC: the market offers Allen Iverson, a retired man, as a free agent
+FAIL [3] nba end SAC: the market offers Dwyane Wade, a retired man, as a free agent
+FAIL [3] nba end SAC: the market offers Chris Paul, a retired man, as a free agent
+FAIL [3] nba end SAC: the market offers Charles Barkley, a retired man, as a free agent
+FAIL [3] nba end SAC: the market offers Dominique Wilkins, a retired man, as a free agent
+FAIL [3] nba end SAC: the market offers Vince Carter, a retired man, as a free agent
+FAIL [3] nba end SAC: the market offers Tim Duncan, a retired man, as a free agent
+FAIL [3] nba end SAC: the market offers Shaquille O'Neal, a retired man, as a free agent
+FAIL [3] nba end SAC: the market offers John Stockton, a retired man, as a free agent
+FAIL [3] nba end SAC: the market offers Alonzo Mourning, a retired man, as a free agent
+FAIL [3] nba end SAC: the market offers Isiah Thomas, a retired man, as a free agent
+FAIL [3] nba end SAC: the market offers Jason Kidd, a retired man, as a free agent
+FAIL [3] nba end SAC: the market offers Wes Unseld, a retired man, as a free agent
+FAIL [3] nba end SAC: the market offers Clyde Drexler, a retired man, as a free agent
+FAIL [3] nba end SAC: the market offers Michael Jordan, a retired man, as a free agent
+FAIL [3] nba end SAC: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end SAC: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end SAC: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end SAC: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end SAC: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end SAC: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end SAC: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end SAC: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end SAC: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end SAC: the market deals 325 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end SAC: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nba end SAC: deals Alex English with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end SAC: deals Larry Bird with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end SAC: deals Patrick Ewing with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end SAC: deals Kobe Bryant with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end SAC: deals Kareem Abdul-Jabbar with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end SAC: deals Kevin Garnett with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end SAC: deals Hakeem Olajuwon with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end SAC: deals LeBron James with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end SAC: deals Reggie Miller with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end SAC: deals Wilt Chamberlain with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end SAC: deals Dirk Nowitzki with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end SAC: deals Marc Gasol with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end SAC: deals Allen Iverson with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end SAC: deals Dwyane Wade with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end SAC: deals Chris Paul with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end SAC: deals Charles Barkley with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end SAC: deals Dominique Wilkins with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end SAC: deals Vince Carter with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end SAC: deals Tim Duncan with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end ATL: the market offers Alex English, a retired man, as a free agent
+FAIL [3] nba end ATL: the market offers Larry Bird, a retired man, as a free agent
+FAIL [3] nba end ATL: the market offers Patrick Ewing, a retired man, as a free agent
+FAIL [3] nba end ATL: the market offers Kobe Bryant, a retired man, as a free agent
+FAIL [3] nba end ATL: the market offers Kareem Abdul-Jabbar, a retired man, as a free agent
+FAIL [3] nba end ATL: the market offers Kevin Garnett, a retired man, as a free agent
+FAIL [3] nba end ATL: the market offers Hakeem Olajuwon, a retired man, as a free agent
+FAIL [3] nba end ATL: the market offers LeBron James, a retired man, as a free agent
+FAIL [3] nba end ATL: the market offers Reggie Miller, a retired man, as a free agent
+FAIL [3] nba end ATL: the market offers Wilt Chamberlain, a retired man, as a free agent
+FAIL [3] nba end ATL: the market offers Dirk Nowitzki, a retired man, as a free agent
+FAIL [3] nba end ATL: the market offers Marc Gasol, a retired man, as a free agent
+FAIL [3] nba end ATL: the market offers Allen Iverson, a retired man, as a free agent
+FAIL [3] nba end ATL: the market offers Dwyane Wade, a retired man, as a free agent
+FAIL [3] nba end ATL: the market offers Chris Paul, a retired man, as a free agent
+FAIL [3] nba end ATL: the market offers Charles Barkley, a retired man, as a free agent
+FAIL [3] nba end ATL: the market offers Chris Webber, a retired man, as a free agent
+FAIL [3] nba end ATL: the market offers Vince Carter, a retired man, as a free agent
+FAIL [3] nba end ATL: the market offers Tim Duncan, a retired man, as a free agent
+FAIL [3] nba end ATL: the market offers Shaquille O'Neal, a retired man, as a free agent
+FAIL [3] nba end ATL: the market offers John Stockton, a retired man, as a free agent
+FAIL [3] nba end ATL: the market offers Alonzo Mourning, a retired man, as a free agent
+FAIL [3] nba end ATL: the market offers Isiah Thomas, a retired man, as a free agent
+FAIL [3] nba end ATL: the market offers Jason Kidd, a retired man, as a free agent
+FAIL [3] nba end ATL: the market offers Wes Unseld, a retired man, as a free agent
+FAIL [3] nba end ATL: the market offers Clyde Drexler, a retired man, as a free agent
+FAIL [3] nba end ATL: the market offers Michael Jordan, a retired man, as a free agent
+FAIL [3] nba end ATL: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end ATL: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end ATL: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end ATL: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end ATL: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end ATL: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end ATL: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end ATL: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end ATL: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end ATL: the market deals 325 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end ATL: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nba end ATL: deals Alex English with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end ATL: deals Larry Bird with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end ATL: deals Patrick Ewing with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end ATL: deals Kobe Bryant with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end ATL: deals Kareem Abdul-Jabbar with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end ATL: deals Kevin Garnett with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end ATL: deals Hakeem Olajuwon with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end ATL: deals LeBron James with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end ATL: deals Reggie Miller with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end ATL: deals Wilt Chamberlain with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end ATL: deals Dirk Nowitzki with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end ATL: deals Marc Gasol with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end ATL: deals Allen Iverson with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end ATL: deals Dwyane Wade with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end ATL: deals Chris Paul with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end ATL: deals Charles Barkley with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end ATL: deals Chris Webber with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end ATL: deals Vince Carter with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end ATL: deals Tim Duncan with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end NOP: the market offers Alex English, a retired man, as a free agent
+FAIL [3] nba end NOP: the market offers Larry Bird, a retired man, as a free agent
+FAIL [3] nba end NOP: the market offers Patrick Ewing, a retired man, as a free agent
+FAIL [3] nba end NOP: the market offers Kobe Bryant, a retired man, as a free agent
+FAIL [3] nba end NOP: the market offers Kareem Abdul-Jabbar, a retired man, as a free agent
+FAIL [3] nba end NOP: the market offers Kevin Garnett, a retired man, as a free agent
+FAIL [3] nba end NOP: the market offers Hakeem Olajuwon, a retired man, as a free agent
+FAIL [3] nba end NOP: the market offers LeBron James, a retired man, as a free agent
+FAIL [3] nba end NOP: the market offers Reggie Miller, a retired man, as a free agent
+FAIL [3] nba end NOP: the market offers Wilt Chamberlain, a retired man, as a free agent
+FAIL [3] nba end NOP: the market offers Dirk Nowitzki, a retired man, as a free agent
+FAIL [3] nba end NOP: the market offers Marc Gasol, a retired man, as a free agent
+FAIL [3] nba end NOP: the market offers Allen Iverson, a retired man, as a free agent
+FAIL [3] nba end NOP: the market offers Dwyane Wade, a retired man, as a free agent
+FAIL [3] nba end NOP: the market offers Charles Barkley, a retired man, as a free agent
+FAIL [3] nba end NOP: the market offers Chris Webber, a retired man, as a free agent
+FAIL [3] nba end NOP: the market offers Dominique Wilkins, a retired man, as a free agent
+FAIL [3] nba end NOP: the market offers Vince Carter, a retired man, as a free agent
+FAIL [3] nba end NOP: the market offers Tim Duncan, a retired man, as a free agent
+FAIL [3] nba end NOP: the market offers Shaquille O'Neal, a retired man, as a free agent
+FAIL [3] nba end NOP: the market offers John Stockton, a retired man, as a free agent
+FAIL [3] nba end NOP: the market offers Alonzo Mourning, a retired man, as a free agent
+FAIL [3] nba end NOP: the market offers Isiah Thomas, a retired man, as a free agent
+FAIL [3] nba end NOP: the market offers Jason Kidd, a retired man, as a free agent
+FAIL [3] nba end NOP: the market offers Wes Unseld, a retired man, as a free agent
+FAIL [3] nba end NOP: the market offers Clyde Drexler, a retired man, as a free agent
+FAIL [3] nba end NOP: the market offers Michael Jordan, a retired man, as a free agent
+FAIL [3] nba end NOP: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end NOP: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end NOP: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end NOP: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end NOP: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end NOP: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end NOP: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end NOP: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end NOP: the market deals 324 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end NOP: the fallen men in the Sign a Player list are not the best 22 on the market
+FAIL [3] nba end NOP: deals Alex English with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end NOP: deals Larry Bird with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end NOP: deals Patrick Ewing with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end NOP: deals Kobe Bryant with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end NOP: deals Kareem Abdul-Jabbar with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end NOP: deals Kevin Garnett with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end NOP: deals Hakeem Olajuwon with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end NOP: deals LeBron James with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end NOP: deals Reggie Miller with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end NOP: deals Wilt Chamberlain with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end NOP: deals Dirk Nowitzki with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end NOP: deals Marc Gasol with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end NOP: deals Allen Iverson with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end NOP: deals Dwyane Wade with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end NOP: deals Charles Barkley with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end NOP: deals Chris Webber with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end NOP: deals Dominique Wilkins with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end NOP: deals Vince Carter with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end NOP: deals Tim Duncan with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end NOP: deals Shaquille O'Neal with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end TOR: the market offers Alex English, a retired man, as a free agent
+FAIL [3] nba end TOR: the market offers Larry Bird, a retired man, as a free agent
+FAIL [3] nba end TOR: the market offers Patrick Ewing, a retired man, as a free agent
+FAIL [3] nba end TOR: the market offers Kobe Bryant, a retired man, as a free agent
+FAIL [3] nba end TOR: the market offers Kareem Abdul-Jabbar, a retired man, as a free agent
+FAIL [3] nba end TOR: the market offers Kevin Garnett, a retired man, as a free agent
+FAIL [3] nba end TOR: the market offers Hakeem Olajuwon, a retired man, as a free agent
+FAIL [3] nba end TOR: the market offers LeBron James, a retired man, as a free agent
+FAIL [3] nba end TOR: the market offers Reggie Miller, a retired man, as a free agent
+FAIL [3] nba end TOR: the market offers Wilt Chamberlain, a retired man, as a free agent
+FAIL [3] nba end TOR: the market offers Dirk Nowitzki, a retired man, as a free agent
+FAIL [3] nba end TOR: the market offers Marc Gasol, a retired man, as a free agent
+FAIL [3] nba end TOR: the market offers Allen Iverson, a retired man, as a free agent
+FAIL [3] nba end TOR: the market offers Dwyane Wade, a retired man, as a free agent
+FAIL [3] nba end TOR: the market offers Chris Paul, a retired man, as a free agent
+FAIL [3] nba end TOR: the market offers Charles Barkley, a retired man, as a free agent
+FAIL [3] nba end TOR: the market offers Chris Webber, a retired man, as a free agent
+FAIL [3] nba end TOR: the market offers Dominique Wilkins, a retired man, as a free agent
+FAIL [3] nba end TOR: the market offers Tim Duncan, a retired man, as a free agent
+FAIL [3] nba end TOR: the market offers Shaquille O'Neal, a retired man, as a free agent
+FAIL [3] nba end TOR: the market offers John Stockton, a retired man, as a free agent
+FAIL [3] nba end TOR: the market offers Alonzo Mourning, a retired man, as a free agent
+FAIL [3] nba end TOR: the market offers Isiah Thomas, a retired man, as a free agent
+FAIL [3] nba end TOR: the market offers Jason Kidd, a retired man, as a free agent
+FAIL [3] nba end TOR: the market offers Wes Unseld, a retired man, as a free agent
+FAIL [3] nba end TOR: the market offers Clyde Drexler, a retired man, as a free agent
+FAIL [3] nba end TOR: the market offers Michael Jordan, a retired man, as a free agent
+FAIL [3] nba end TOR: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end TOR: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end TOR: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end TOR: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end TOR: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end TOR: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end TOR: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end TOR: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end TOR: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end TOR: the market deals 325 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end TOR: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nba end TOR: deals Alex English with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end TOR: deals Larry Bird with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end TOR: deals Patrick Ewing with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end TOR: deals Kobe Bryant with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end TOR: deals Kareem Abdul-Jabbar with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end TOR: deals Kevin Garnett with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end TOR: deals Hakeem Olajuwon with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end TOR: deals LeBron James with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end TOR: deals Reggie Miller with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end TOR: deals Wilt Chamberlain with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end TOR: deals Dirk Nowitzki with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end TOR: deals Marc Gasol with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end TOR: deals Allen Iverson with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end TOR: deals Dwyane Wade with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end TOR: deals Chris Paul with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end TOR: deals Charles Barkley with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end TOR: deals Chris Webber with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end TOR: deals Dominique Wilkins with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end TOR: deals Tim Duncan with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end SAS: the market offers Alex English, a retired man, as a free agent
+FAIL [3] nba end SAS: the market offers Larry Bird, a retired man, as a free agent
+FAIL [3] nba end SAS: the market offers Patrick Ewing, a retired man, as a free agent
+FAIL [3] nba end SAS: the market offers Kobe Bryant, a retired man, as a free agent
+FAIL [3] nba end SAS: the market offers Kareem Abdul-Jabbar, a retired man, as a free agent
+FAIL [3] nba end SAS: the market offers Kevin Garnett, a retired man, as a free agent
+FAIL [3] nba end SAS: the market offers Hakeem Olajuwon, a retired man, as a free agent
+FAIL [3] nba end SAS: the market offers LeBron James, a retired man, as a free agent
+FAIL [3] nba end SAS: the market offers Reggie Miller, a retired man, as a free agent
+FAIL [3] nba end SAS: the market offers Wilt Chamberlain, a retired man, as a free agent
+FAIL [3] nba end SAS: the market offers Dirk Nowitzki, a retired man, as a free agent
+FAIL [3] nba end SAS: the market offers Marc Gasol, a retired man, as a free agent
+FAIL [3] nba end SAS: the market offers Allen Iverson, a retired man, as a free agent
+FAIL [3] nba end SAS: the market offers Dwyane Wade, a retired man, as a free agent
+FAIL [3] nba end SAS: the market offers Chris Paul, a retired man, as a free agent
+FAIL [3] nba end SAS: the market offers Charles Barkley, a retired man, as a free agent
+FAIL [3] nba end SAS: the market offers Chris Webber, a retired man, as a free agent
+FAIL [3] nba end SAS: the market offers Dominique Wilkins, a retired man, as a free agent
+FAIL [3] nba end SAS: the market offers Vince Carter, a retired man, as a free agent
+FAIL [3] nba end SAS: the market offers Shaquille O'Neal, a retired man, as a free agent
+FAIL [3] nba end SAS: the market offers John Stockton, a retired man, as a free agent
+FAIL [3] nba end SAS: the market offers Alonzo Mourning, a retired man, as a free agent
+FAIL [3] nba end SAS: the market offers Isiah Thomas, a retired man, as a free agent
+FAIL [3] nba end SAS: the market offers Jason Kidd, a retired man, as a free agent
+FAIL [3] nba end SAS: the market offers Wes Unseld, a retired man, as a free agent
+FAIL [3] nba end SAS: the market offers Clyde Drexler, a retired man, as a free agent
+FAIL [3] nba end SAS: the market offers Michael Jordan, a retired man, as a free agent
+FAIL [3] nba end SAS: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end SAS: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end SAS: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end SAS: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end SAS: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end SAS: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end SAS: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end SAS: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end SAS: the market deals 324 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end SAS: the fallen men in the Sign a Player list are not the best 22 on the market
+FAIL [3] nba end SAS: deals Alex English with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end SAS: deals Larry Bird with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end SAS: deals Patrick Ewing with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end SAS: deals Kobe Bryant with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end SAS: deals Kareem Abdul-Jabbar with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end SAS: deals Kevin Garnett with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end SAS: deals Hakeem Olajuwon with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end SAS: deals LeBron James with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end SAS: deals Reggie Miller with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end SAS: deals Wilt Chamberlain with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end SAS: deals Dirk Nowitzki with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end SAS: deals Marc Gasol with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end SAS: deals Allen Iverson with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end SAS: deals Dwyane Wade with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end SAS: deals Chris Paul with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end SAS: deals Charles Barkley with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end SAS: deals Chris Webber with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end SAS: deals Dominique Wilkins with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end SAS: deals Vince Carter with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end SAS: deals Shaquille O'Neal with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end ORL: the market offers Alex English, a retired man, as a free agent
+FAIL [3] nba end ORL: the market offers Larry Bird, a retired man, as a free agent
+FAIL [3] nba end ORL: the market offers Patrick Ewing, a retired man, as a free agent
+FAIL [3] nba end ORL: the market offers Kobe Bryant, a retired man, as a free agent
+FAIL [3] nba end ORL: the market offers Kareem Abdul-Jabbar, a retired man, as a free agent
+FAIL [3] nba end ORL: the market offers Kevin Garnett, a retired man, as a free agent
+FAIL [3] nba end ORL: the market offers Hakeem Olajuwon, a retired man, as a free agent
+FAIL [3] nba end ORL: the market offers LeBron James, a retired man, as a free agent
+FAIL [3] nba end ORL: the market offers Reggie Miller, a retired man, as a free agent
+FAIL [3] nba end ORL: the market offers Wilt Chamberlain, a retired man, as a free agent
+FAIL [3] nba end ORL: the market offers Dirk Nowitzki, a retired man, as a free agent
+FAIL [3] nba end ORL: the market offers Marc Gasol, a retired man, as a free agent
+FAIL [3] nba end ORL: the market offers Allen Iverson, a retired man, as a free agent
+FAIL [3] nba end ORL: the market offers Dwyane Wade, a retired man, as a free agent
+FAIL [3] nba end ORL: the market offers Chris Paul, a retired man, as a free agent
+FAIL [3] nba end ORL: the market offers Charles Barkley, a retired man, as a free agent
+FAIL [3] nba end ORL: the market offers Chris Webber, a retired man, as a free agent
+FAIL [3] nba end ORL: the market offers Dominique Wilkins, a retired man, as a free agent
+FAIL [3] nba end ORL: the market offers Vince Carter, a retired man, as a free agent
+FAIL [3] nba end ORL: the market offers Tim Duncan, a retired man, as a free agent
+FAIL [3] nba end ORL: the market offers John Stockton, a retired man, as a free agent
+FAIL [3] nba end ORL: the market offers Alonzo Mourning, a retired man, as a free agent
+FAIL [3] nba end ORL: the market offers Isiah Thomas, a retired man, as a free agent
+FAIL [3] nba end ORL: the market offers Jason Kidd, a retired man, as a free agent
+FAIL [3] nba end ORL: the market offers Wes Unseld, a retired man, as a free agent
+FAIL [3] nba end ORL: the market offers Clyde Drexler, a retired man, as a free agent
+FAIL [3] nba end ORL: the market offers Michael Jordan, a retired man, as a free agent
+FAIL [3] nba end ORL: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end ORL: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end ORL: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end ORL: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end ORL: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end ORL: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end ORL: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end ORL: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end ORL: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end ORL: the market deals 325 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end ORL: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nba end ORL: deals Alex English with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end ORL: deals Larry Bird with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end ORL: deals Patrick Ewing with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end ORL: deals Kobe Bryant with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end ORL: deals Kareem Abdul-Jabbar with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end ORL: deals Kevin Garnett with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end ORL: deals Hakeem Olajuwon with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end ORL: deals LeBron James with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end ORL: deals Reggie Miller with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end ORL: deals Wilt Chamberlain with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end ORL: deals Dirk Nowitzki with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end ORL: deals Marc Gasol with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end ORL: deals Allen Iverson with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end ORL: deals Dwyane Wade with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end ORL: deals Chris Paul with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end ORL: deals Charles Barkley with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end ORL: deals Chris Webber with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end ORL: deals Dominique Wilkins with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end ORL: deals Vince Carter with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end UTA: the market offers Alex English, a retired man, as a free agent
+FAIL [3] nba end UTA: the market offers Larry Bird, a retired man, as a free agent
+FAIL [3] nba end UTA: the market offers Patrick Ewing, a retired man, as a free agent
+FAIL [3] nba end UTA: the market offers Kobe Bryant, a retired man, as a free agent
+FAIL [3] nba end UTA: the market offers Kareem Abdul-Jabbar, a retired man, as a free agent
+FAIL [3] nba end UTA: the market offers Kevin Garnett, a retired man, as a free agent
+FAIL [3] nba end UTA: the market offers Hakeem Olajuwon, a retired man, as a free agent
+FAIL [3] nba end UTA: the market offers LeBron James, a retired man, as a free agent
+FAIL [3] nba end UTA: the market offers Reggie Miller, a retired man, as a free agent
+FAIL [3] nba end UTA: the market offers Wilt Chamberlain, a retired man, as a free agent
+FAIL [3] nba end UTA: the market offers Dirk Nowitzki, a retired man, as a free agent
+FAIL [3] nba end UTA: the market offers Marc Gasol, a retired man, as a free agent
+FAIL [3] nba end UTA: the market offers Allen Iverson, a retired man, as a free agent
+FAIL [3] nba end UTA: the market offers Dwyane Wade, a retired man, as a free agent
+FAIL [3] nba end UTA: the market offers Chris Paul, a retired man, as a free agent
+FAIL [3] nba end UTA: the market offers Charles Barkley, a retired man, as a free agent
+FAIL [3] nba end UTA: the market offers Chris Webber, a retired man, as a free agent
+FAIL [3] nba end UTA: the market offers Dominique Wilkins, a retired man, as a free agent
+FAIL [3] nba end UTA: the market offers Vince Carter, a retired man, as a free agent
+FAIL [3] nba end UTA: the market offers Tim Duncan, a retired man, as a free agent
+FAIL [3] nba end UTA: the market offers Shaquille O'Neal, a retired man, as a free agent
+FAIL [3] nba end UTA: the market offers Alonzo Mourning, a retired man, as a free agent
+FAIL [3] nba end UTA: the market offers Isiah Thomas, a retired man, as a free agent
+FAIL [3] nba end UTA: the market offers Jason Kidd, a retired man, as a free agent
+FAIL [3] nba end UTA: the market offers Wes Unseld, a retired man, as a free agent
+FAIL [3] nba end UTA: the market offers Clyde Drexler, a retired man, as a free agent
+FAIL [3] nba end UTA: the market offers Michael Jordan, a retired man, as a free agent
+FAIL [3] nba end UTA: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end UTA: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end UTA: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end UTA: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end UTA: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end UTA: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end UTA: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end UTA: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end UTA: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end UTA: the market deals 325 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end UTA: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nba end UTA: deals Alex English with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end UTA: deals Larry Bird with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end UTA: deals Patrick Ewing with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end UTA: deals Kobe Bryant with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end UTA: deals Kareem Abdul-Jabbar with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end UTA: deals Kevin Garnett with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end UTA: deals Hakeem Olajuwon with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end UTA: deals LeBron James with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end UTA: deals Reggie Miller with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end UTA: deals Wilt Chamberlain with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end UTA: deals Dirk Nowitzki with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end UTA: deals Marc Gasol with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end UTA: deals Allen Iverson with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end UTA: deals Dwyane Wade with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end UTA: deals Chris Paul with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end UTA: deals Charles Barkley with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end UTA: deals Chris Webber with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end UTA: deals Dominique Wilkins with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end UTA: deals Vince Carter with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end CHA: the market offers Alex English, a retired man, as a free agent
+FAIL [3] nba end CHA: the market offers Larry Bird, a retired man, as a free agent
+FAIL [3] nba end CHA: the market offers Patrick Ewing, a retired man, as a free agent
+FAIL [3] nba end CHA: the market offers Kobe Bryant, a retired man, as a free agent
+FAIL [3] nba end CHA: the market offers Kareem Abdul-Jabbar, a retired man, as a free agent
+FAIL [3] nba end CHA: the market offers Kevin Garnett, a retired man, as a free agent
+FAIL [3] nba end CHA: the market offers Hakeem Olajuwon, a retired man, as a free agent
+FAIL [3] nba end CHA: the market offers LeBron James, a retired man, as a free agent
+FAIL [3] nba end CHA: the market offers Reggie Miller, a retired man, as a free agent
+FAIL [3] nba end CHA: the market offers Wilt Chamberlain, a retired man, as a free agent
+FAIL [3] nba end CHA: the market offers Dirk Nowitzki, a retired man, as a free agent
+FAIL [3] nba end CHA: the market offers Marc Gasol, a retired man, as a free agent
+FAIL [3] nba end CHA: the market offers Allen Iverson, a retired man, as a free agent
+FAIL [3] nba end CHA: the market offers Dwyane Wade, a retired man, as a free agent
+FAIL [3] nba end CHA: the market offers Chris Paul, a retired man, as a free agent
+FAIL [3] nba end CHA: the market offers Charles Barkley, a retired man, as a free agent
+FAIL [3] nba end CHA: the market offers Chris Webber, a retired man, as a free agent
+FAIL [3] nba end CHA: the market offers Dominique Wilkins, a retired man, as a free agent
+FAIL [3] nba end CHA: the market offers Vince Carter, a retired man, as a free agent
+FAIL [3] nba end CHA: the market offers Tim Duncan, a retired man, as a free agent
+FAIL [3] nba end CHA: the market offers Shaquille O'Neal, a retired man, as a free agent
+FAIL [3] nba end CHA: the market offers John Stockton, a retired man, as a free agent
+FAIL [3] nba end CHA: the market offers Isiah Thomas, a retired man, as a free agent
+FAIL [3] nba end CHA: the market offers Jason Kidd, a retired man, as a free agent
+FAIL [3] nba end CHA: the market offers Wes Unseld, a retired man, as a free agent
+FAIL [3] nba end CHA: the market offers Clyde Drexler, a retired man, as a free agent
+FAIL [3] nba end CHA: the market offers Michael Jordan, a retired man, as a free agent
+FAIL [3] nba end CHA: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end CHA: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end CHA: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end CHA: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end CHA: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end CHA: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end CHA: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end CHA: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end CHA: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end CHA: the market deals 325 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end CHA: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nba end CHA: deals Alex English with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end CHA: deals Larry Bird with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end CHA: deals Patrick Ewing with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end CHA: deals Kobe Bryant with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end CHA: deals Kareem Abdul-Jabbar with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end CHA: deals Kevin Garnett with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end CHA: deals Hakeem Olajuwon with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end CHA: deals LeBron James with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end CHA: deals Reggie Miller with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end CHA: deals Wilt Chamberlain with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end CHA: deals Dirk Nowitzki with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end CHA: deals Marc Gasol with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end CHA: deals Allen Iverson with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end CHA: deals Dwyane Wade with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end CHA: deals Chris Paul with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end CHA: deals Charles Barkley with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end CHA: deals Chris Webber with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end CHA: deals Dominique Wilkins with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end CHA: deals Vince Carter with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DET: the market offers Alex English, a retired man, as a free agent
+FAIL [3] nba end DET: the market offers Larry Bird, a retired man, as a free agent
+FAIL [3] nba end DET: the market offers Patrick Ewing, a retired man, as a free agent
+FAIL [3] nba end DET: the market offers Kobe Bryant, a retired man, as a free agent
+FAIL [3] nba end DET: the market offers Kareem Abdul-Jabbar, a retired man, as a free agent
+FAIL [3] nba end DET: the market offers Kevin Garnett, a retired man, as a free agent
+FAIL [3] nba end DET: the market offers Hakeem Olajuwon, a retired man, as a free agent
+FAIL [3] nba end DET: the market offers LeBron James, a retired man, as a free agent
+FAIL [3] nba end DET: the market offers Reggie Miller, a retired man, as a free agent
+FAIL [3] nba end DET: the market offers Wilt Chamberlain, a retired man, as a free agent
+FAIL [3] nba end DET: the market offers Dirk Nowitzki, a retired man, as a free agent
+FAIL [3] nba end DET: the market offers Marc Gasol, a retired man, as a free agent
+FAIL [3] nba end DET: the market offers Allen Iverson, a retired man, as a free agent
+FAIL [3] nba end DET: the market offers Dwyane Wade, a retired man, as a free agent
+FAIL [3] nba end DET: the market offers Chris Paul, a retired man, as a free agent
+FAIL [3] nba end DET: the market offers Charles Barkley, a retired man, as a free agent
+FAIL [3] nba end DET: the market offers Chris Webber, a retired man, as a free agent
+FAIL [3] nba end DET: the market offers Dominique Wilkins, a retired man, as a free agent
+FAIL [3] nba end DET: the market offers Vince Carter, a retired man, as a free agent
+FAIL [3] nba end DET: the market offers Tim Duncan, a retired man, as a free agent
+FAIL [3] nba end DET: the market offers Shaquille O'Neal, a retired man, as a free agent
+FAIL [3] nba end DET: the market offers John Stockton, a retired man, as a free agent
+FAIL [3] nba end DET: the market offers Alonzo Mourning, a retired man, as a free agent
+FAIL [3] nba end DET: the market offers Jason Kidd, a retired man, as a free agent
+FAIL [3] nba end DET: the market offers Wes Unseld, a retired man, as a free agent
+FAIL [3] nba end DET: the market offers Clyde Drexler, a retired man, as a free agent
+FAIL [3] nba end DET: the market offers Michael Jordan, a retired man, as a free agent
+FAIL [3] nba end DET: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end DET: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end DET: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end DET: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end DET: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end DET: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end DET: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end DET: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end DET: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end DET: the market deals 325 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end DET: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nba end DET: deals Alex English with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DET: deals Larry Bird with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DET: deals Patrick Ewing with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DET: deals Kobe Bryant with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DET: deals Kareem Abdul-Jabbar with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DET: deals Kevin Garnett with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DET: deals Hakeem Olajuwon with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DET: deals LeBron James with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DET: deals Reggie Miller with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DET: deals Wilt Chamberlain with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DET: deals Dirk Nowitzki with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DET: deals Marc Gasol with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DET: deals Allen Iverson with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DET: deals Dwyane Wade with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DET: deals Chris Paul with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DET: deals Charles Barkley with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DET: deals Chris Webber with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DET: deals Dominique Wilkins with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end DET: deals Vince Carter with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end BKN: the market offers Alex English, a retired man, as a free agent
+FAIL [3] nba end BKN: the market offers Larry Bird, a retired man, as a free agent
+FAIL [3] nba end BKN: the market offers Patrick Ewing, a retired man, as a free agent
+FAIL [3] nba end BKN: the market offers Kobe Bryant, a retired man, as a free agent
+FAIL [3] nba end BKN: the market offers Kareem Abdul-Jabbar, a retired man, as a free agent
+FAIL [3] nba end BKN: the market offers Kevin Garnett, a retired man, as a free agent
+FAIL [3] nba end BKN: the market offers Hakeem Olajuwon, a retired man, as a free agent
+FAIL [3] nba end BKN: the market offers LeBron James, a retired man, as a free agent
+FAIL [3] nba end BKN: the market offers Reggie Miller, a retired man, as a free agent
+FAIL [3] nba end BKN: the market offers Wilt Chamberlain, a retired man, as a free agent
+FAIL [3] nba end BKN: the market offers Dirk Nowitzki, a retired man, as a free agent
+FAIL [3] nba end BKN: the market offers Marc Gasol, a retired man, as a free agent
+FAIL [3] nba end BKN: the market offers Allen Iverson, a retired man, as a free agent
+FAIL [3] nba end BKN: the market offers Dwyane Wade, a retired man, as a free agent
+FAIL [3] nba end BKN: the market offers Chris Paul, a retired man, as a free agent
+FAIL [3] nba end BKN: the market offers Charles Barkley, a retired man, as a free agent
+FAIL [3] nba end BKN: the market offers Chris Webber, a retired man, as a free agent
+FAIL [3] nba end BKN: the market offers Dominique Wilkins, a retired man, as a free agent
+FAIL [3] nba end BKN: the market offers Vince Carter, a retired man, as a free agent
+FAIL [3] nba end BKN: the market offers Tim Duncan, a retired man, as a free agent
+FAIL [3] nba end BKN: the market offers Shaquille O'Neal, a retired man, as a free agent
+FAIL [3] nba end BKN: the market offers John Stockton, a retired man, as a free agent
+FAIL [3] nba end BKN: the market offers Alonzo Mourning, a retired man, as a free agent
+FAIL [3] nba end BKN: the market offers Isiah Thomas, a retired man, as a free agent
+FAIL [3] nba end BKN: the market offers Wes Unseld, a retired man, as a free agent
+FAIL [3] nba end BKN: the market offers Clyde Drexler, a retired man, as a free agent
+FAIL [3] nba end BKN: the market offers Michael Jordan, a retired man, as a free agent
+FAIL [3] nba end BKN: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end BKN: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end BKN: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end BKN: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end BKN: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end BKN: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end BKN: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end BKN: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end BKN: the market deals 324 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end BKN: the fallen men in the Sign a Player list are not the best 22 on the market
+FAIL [3] nba end BKN: deals Alex English with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end BKN: deals Larry Bird with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end BKN: deals Patrick Ewing with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end BKN: deals Kobe Bryant with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end BKN: deals Kareem Abdul-Jabbar with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end BKN: deals Kevin Garnett with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end BKN: deals Hakeem Olajuwon with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end BKN: deals LeBron James with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end BKN: deals Reggie Miller with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end BKN: deals Wilt Chamberlain with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end BKN: deals Dirk Nowitzki with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end BKN: deals Marc Gasol with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end BKN: deals Allen Iverson with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end BKN: deals Dwyane Wade with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end BKN: deals Chris Paul with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end BKN: deals Charles Barkley with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end BKN: deals Chris Webber with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end BKN: deals Dominique Wilkins with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end BKN: deals Vince Carter with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end BKN: deals Tim Duncan with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end WAS: the market offers Alex English, a retired man, as a free agent
+FAIL [3] nba end WAS: the market offers Larry Bird, a retired man, as a free agent
+FAIL [3] nba end WAS: the market offers Patrick Ewing, a retired man, as a free agent
+FAIL [3] nba end WAS: the market offers Kobe Bryant, a retired man, as a free agent
+FAIL [3] nba end WAS: the market offers Kareem Abdul-Jabbar, a retired man, as a free agent
+FAIL [3] nba end WAS: the market offers Kevin Garnett, a retired man, as a free agent
+FAIL [3] nba end WAS: the market offers Hakeem Olajuwon, a retired man, as a free agent
+FAIL [3] nba end WAS: the market offers LeBron James, a retired man, as a free agent
+FAIL [3] nba end WAS: the market offers Reggie Miller, a retired man, as a free agent
+FAIL [3] nba end WAS: the market offers Wilt Chamberlain, a retired man, as a free agent
+FAIL [3] nba end WAS: the market offers Dirk Nowitzki, a retired man, as a free agent
+FAIL [3] nba end WAS: the market offers Marc Gasol, a retired man, as a free agent
+FAIL [3] nba end WAS: the market offers Allen Iverson, a retired man, as a free agent
+FAIL [3] nba end WAS: the market offers Dwyane Wade, a retired man, as a free agent
+FAIL [3] nba end WAS: the market offers Chris Paul, a retired man, as a free agent
+FAIL [3] nba end WAS: the market offers Charles Barkley, a retired man, as a free agent
+FAIL [3] nba end WAS: the market offers Chris Webber, a retired man, as a free agent
+FAIL [3] nba end WAS: the market offers Dominique Wilkins, a retired man, as a free agent
+FAIL [3] nba end WAS: the market offers Vince Carter, a retired man, as a free agent
+FAIL [3] nba end WAS: the market offers Tim Duncan, a retired man, as a free agent
+FAIL [3] nba end WAS: the market offers Shaquille O'Neal, a retired man, as a free agent
+FAIL [3] nba end WAS: the market offers John Stockton, a retired man, as a free agent
+FAIL [3] nba end WAS: the market offers Alonzo Mourning, a retired man, as a free agent
+FAIL [3] nba end WAS: the market offers Isiah Thomas, a retired man, as a free agent
+FAIL [3] nba end WAS: the market offers Jason Kidd, a retired man, as a free agent
+FAIL [3] nba end WAS: the market offers Clyde Drexler, a retired man, as a free agent
+FAIL [3] nba end WAS: the market offers Michael Jordan, a retired man, as a free agent
+FAIL [3] nba end WAS: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end WAS: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end WAS: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end WAS: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end WAS: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end WAS: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end WAS: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end WAS: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end WAS: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end WAS: the market deals 325 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end WAS: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nba end WAS: deals Alex English with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end WAS: deals Larry Bird with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end WAS: deals Patrick Ewing with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end WAS: deals Kobe Bryant with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end WAS: deals Kareem Abdul-Jabbar with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end WAS: deals Kevin Garnett with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end WAS: deals Hakeem Olajuwon with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end WAS: deals LeBron James with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end WAS: deals Reggie Miller with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end WAS: deals Wilt Chamberlain with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end WAS: deals Dirk Nowitzki with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end WAS: deals Marc Gasol with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end WAS: deals Allen Iverson with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end WAS: deals Dwyane Wade with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end WAS: deals Chris Paul with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end WAS: deals Charles Barkley with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end WAS: deals Chris Webber with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end WAS: deals Dominique Wilkins with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end WAS: deals Vince Carter with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end POR: the market offers Alex English, a retired man, as a free agent
+FAIL [3] nba end POR: the market offers Larry Bird, a retired man, as a free agent
+FAIL [3] nba end POR: the market offers Patrick Ewing, a retired man, as a free agent
+FAIL [3] nba end POR: the market offers Kobe Bryant, a retired man, as a free agent
+FAIL [3] nba end POR: the market offers Kareem Abdul-Jabbar, a retired man, as a free agent
+FAIL [3] nba end POR: the market offers Kevin Garnett, a retired man, as a free agent
+FAIL [3] nba end POR: the market offers Hakeem Olajuwon, a retired man, as a free agent
+FAIL [3] nba end POR: the market offers LeBron James, a retired man, as a free agent
+FAIL [3] nba end POR: the market offers Reggie Miller, a retired man, as a free agent
+FAIL [3] nba end POR: the market offers Wilt Chamberlain, a retired man, as a free agent
+FAIL [3] nba end POR: the market offers Dirk Nowitzki, a retired man, as a free agent
+FAIL [3] nba end POR: the market offers Marc Gasol, a retired man, as a free agent
+FAIL [3] nba end POR: the market offers Allen Iverson, a retired man, as a free agent
+FAIL [3] nba end POR: the market offers Dwyane Wade, a retired man, as a free agent
+FAIL [3] nba end POR: the market offers Chris Paul, a retired man, as a free agent
+FAIL [3] nba end POR: the market offers Charles Barkley, a retired man, as a free agent
+FAIL [3] nba end POR: the market offers Chris Webber, a retired man, as a free agent
+FAIL [3] nba end POR: the market offers Dominique Wilkins, a retired man, as a free agent
+FAIL [3] nba end POR: the market offers Vince Carter, a retired man, as a free agent
+FAIL [3] nba end POR: the market offers Tim Duncan, a retired man, as a free agent
+FAIL [3] nba end POR: the market offers Shaquille O'Neal, a retired man, as a free agent
+FAIL [3] nba end POR: the market offers John Stockton, a retired man, as a free agent
+FAIL [3] nba end POR: the market offers Alonzo Mourning, a retired man, as a free agent
+FAIL [3] nba end POR: the market offers Isiah Thomas, a retired man, as a free agent
+FAIL [3] nba end POR: the market offers Jason Kidd, a retired man, as a free agent
+FAIL [3] nba end POR: the market offers Wes Unseld, a retired man, as a free agent
+FAIL [3] nba end POR: the market offers Michael Jordan, a retired man, as a free agent
+FAIL [3] nba end POR: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end POR: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end POR: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end POR: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end POR: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end POR: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end POR: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end POR: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end POR: the market deals 324 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end POR: the fallen men in the Sign a Player list are not the best 22 on the market
+FAIL [3] nba end POR: deals Alex English with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end POR: deals Larry Bird with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end POR: deals Patrick Ewing with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end POR: deals Kobe Bryant with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end POR: deals Kareem Abdul-Jabbar with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end POR: deals Kevin Garnett with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end POR: deals Hakeem Olajuwon with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end POR: deals LeBron James with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end POR: deals Reggie Miller with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end POR: deals Wilt Chamberlain with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end POR: deals Dirk Nowitzki with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end POR: deals Marc Gasol with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end POR: deals Allen Iverson with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end POR: deals Dwyane Wade with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end POR: deals Chris Paul with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end POR: deals Charles Barkley with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end POR: deals Chris Webber with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end POR: deals Dominique Wilkins with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end POR: deals Vince Carter with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end POR: deals Tim Duncan with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end CHI: the market offers Alex English, a retired man, as a free agent
+FAIL [3] nba end CHI: the market offers Larry Bird, a retired man, as a free agent
+FAIL [3] nba end CHI: the market offers Patrick Ewing, a retired man, as a free agent
+FAIL [3] nba end CHI: the market offers Kobe Bryant, a retired man, as a free agent
+FAIL [3] nba end CHI: the market offers Kareem Abdul-Jabbar, a retired man, as a free agent
+FAIL [3] nba end CHI: the market offers Kevin Garnett, a retired man, as a free agent
+FAIL [3] nba end CHI: the market offers Hakeem Olajuwon, a retired man, as a free agent
+FAIL [3] nba end CHI: the market offers LeBron James, a retired man, as a free agent
+FAIL [3] nba end CHI: the market offers Reggie Miller, a retired man, as a free agent
+FAIL [3] nba end CHI: the market offers Wilt Chamberlain, a retired man, as a free agent
+FAIL [3] nba end CHI: the market offers Dirk Nowitzki, a retired man, as a free agent
+FAIL [3] nba end CHI: the market offers Marc Gasol, a retired man, as a free agent
+FAIL [3] nba end CHI: the market offers Allen Iverson, a retired man, as a free agent
+FAIL [3] nba end CHI: the market offers Dwyane Wade, a retired man, as a free agent
+FAIL [3] nba end CHI: the market offers Chris Paul, a retired man, as a free agent
+FAIL [3] nba end CHI: the market offers Charles Barkley, a retired man, as a free agent
+FAIL [3] nba end CHI: the market offers Chris Webber, a retired man, as a free agent
+FAIL [3] nba end CHI: the market offers Dominique Wilkins, a retired man, as a free agent
+FAIL [3] nba end CHI: the market offers Vince Carter, a retired man, as a free agent
+FAIL [3] nba end CHI: the market offers Tim Duncan, a retired man, as a free agent
+FAIL [3] nba end CHI: the market offers Shaquille O'Neal, a retired man, as a free agent
+FAIL [3] nba end CHI: the market offers John Stockton, a retired man, as a free agent
+FAIL [3] nba end CHI: the market offers Alonzo Mourning, a retired man, as a free agent
+FAIL [3] nba end CHI: the market offers Isiah Thomas, a retired man, as a free agent
+FAIL [3] nba end CHI: the market offers Jason Kidd, a retired man, as a free agent
+FAIL [3] nba end CHI: the market offers Wes Unseld, a retired man, as a free agent
+FAIL [3] nba end CHI: the market offers Clyde Drexler, a retired man, as a free agent
+FAIL [3] nba end CHI: the market offers Steve Nash, a retired man, as a free agent
+FAIL [3] nba end CHI: the market offers Pau Gasol, a retired man, as a free agent
+FAIL [3] nba end CHI: the market offers Paul Pierce, a retired man, as a free agent
+FAIL [3] nba end CHI: the market offers Carmelo Anthony, a retired man, as a free agent
+FAIL [3] nba end CHI: the market offers Yao Ming, a retired man, as a free agent
+FAIL [3] nba end CHI: the market offers Tony Parker, a retired man, as a free agent
+FAIL [3] nba end CHI: the market offers Manu Ginobili, a retired man, as a free agent
+FAIL [3] nba end CHI: the market offers Ray Allen, a retired man, as a free agent
+FAIL [3] nba end CHI: the market offers Derrick Rose, a retired man, as a free agent
+FAIL [3] nba end CHI: the market deals 325 men, expected the 290 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nba end CHI: the fallen men in the Sign a Player list are not the best 21 on the market
+FAIL [3] nba end CHI: deals Alex English with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end CHI: deals Larry Bird with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end CHI: deals Patrick Ewing with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end CHI: deals Kobe Bryant with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end CHI: deals Kareem Abdul-Jabbar with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end CHI: deals Kevin Garnett with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end CHI: deals Hakeem Olajuwon with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end CHI: deals LeBron James with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end CHI: deals Reggie Miller with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end CHI: deals Wilt Chamberlain with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end CHI: deals Dirk Nowitzki with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end CHI: deals Marc Gasol with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end CHI: deals Allen Iverson with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end CHI: deals Dwyane Wade with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end CHI: deals Chris Paul with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end CHI: deals Charles Barkley with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end CHI: deals Chris Webber with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end CHI: deals Dominique Wilkins with no label, who is on no NBA table or is a retired man
+FAIL [3] nba end CHI: deals Vince Carter with no label, who is on no NBA table or is a retired man
+FAIL [4] useConquestNba.ts: the never on market set is not built from TEAM_LEGENDS_NBA and RETIRED_GREATS_NBA less the men on a team table
+measured: {"nflGreats":10,"nbaGreats":9,"nflRetired":42,"nflStates":64,"nflDealt":1920,"nflMarket":10880,"nflLabelled":340,"nbaRetired":37,"nbaStates":60,"nbaDealt":1800,"nbaMarket":10748,"nbaLabelled":288,"conquestFilesScanned":32,"nflKeyStats":320,"nflPrinted":146,"nbaKeyStats":300}
+simConquestPeople: FAIL, 1964 of 78585 checks red (control hookPredNba fired)

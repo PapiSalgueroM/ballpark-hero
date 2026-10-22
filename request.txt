@@ -1,0 +1,18 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+people: node scripts/simConquestPeople.mjs
+vitest-conquest: node_modules/.bin/vitest run src/hooks/useConquestNba.test.tsx src/test/conquestExplore.test.tsx src/test/conquestRegionDetails.test.tsx --testTimeout=300000 --hookTimeout=120000
+ctl-dt: CONQUEST_PEOPLE_CONTROL=dt node scripts/simConquestPeople.mjs
+ctl-market: CONQUEST_PEOPLE_CONTROL=market node scripts/simConquestPeople.mjs
+ctl-nflnba: CONQUEST_PEOPLE_CONTROL=nflnba node scripts/simConquestPeople.mjs
+ctl-label: CONQUEST_PEOPLE_CONTROL=label node scripts/simConquestPeople.mjs
+ctl-season: CONQUEST_PEOPLE_CONTROL=season node scripts/simConquestPeople.mjs
+ctl-greatsSet: CONQUEST_PEOPLE_CONTROL=greatsSet node scripts/simConquestPeople.mjs
+ctl-hookPred: CONQUEST_PEOPLE_CONTROL=hookPred node scripts/simConquestPeople.mjs
+ctl-hookPredNba: CONQUEST_PEOPLE_CONTROL=hookPredNba node scripts/simConquestPeople.mjs
+ctl-greatsCap: CONQUEST_PEOPLE_CONTROL=greatsCap node scripts/simConquestPeople.mjs
+ctl-taken: CONQUEST_PEOPLE_CONTROL=taken node scripts/simConquestPeople.mjs
+ctl-greatsTaken: CONQUEST_PEOPLE_CONTROL=greatsTaken node scripts/simConquestPeople.mjs
+ctl-sortAsc: CONQUEST_PEOPLE_CONTROL=sortAsc node scripts/simConquestPeople.mjs
+ctl-pickWorst: CONQUEST_PEOPLE_CONTROL=pickWorst node scripts/simConquestPeople.mjs
+ctl-marketAsc: CONQUEST_PEOPLE_CONTROL=marketAsc node scripts/simConquestPeople.mjs
+ctl-bogus: CONQUEST_PEOPLE_CONTROL=bogus node scripts/simConquestPeople.mjs
