@@ -1,0 +1,6 @@
+simHallLongPlay exit=0 38s | simHallLongPlay: green
+simNoRivalNames exit=0 20s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 60s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simStorageWrites exit=0 4s | simStorageWrites: all green (owed: 12)
+ctl-hookvisible exit=1 3s | simHallLongPlay control hookvisible: FIRED, 1 failure in section 4 (red is the right answer)
+tsc exit=0 94s | 
