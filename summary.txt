@@ -1,0 +1,4 @@
+e-help1740 exit=1 19s | simTycoonHelp: 16 failures
+e-modal30 exit=1 18s | simTycoonHelp: 20 failures
+e-plant-nofriendly exit=2 1s | playFirstVisitDialogs ABORTED: the Stadium Tycoon plant: the trip may play 17, not the friendly plus 17
+e-plant-head exit=0 4s | (head, no server: the plant passes and the lines fail to load, expected)

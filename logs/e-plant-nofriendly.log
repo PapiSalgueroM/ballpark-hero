@@ -1,0 +1,5 @@
+mutrun: nofriendly applied to src/lib/stadiumTycoon.ts
+== nofriendly command exit=2 (1 lines)
+playFirstVisitDialogs ABORTED: the Stadium Tycoon plant: the trip may play 17, not the friendly plus 17
+-- last lines:
+playFirstVisitDialogs ABORTED: the Stadium Tycoon plant: the trip may play 17, not the friendly plus 17

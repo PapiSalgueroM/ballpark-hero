@@ -1,0 +1,5 @@
+  FAIL     /stadium-tycoon#away 1280x900: the page did not load: page.goto: net::ERR_UNSAFE_PORT at http://localhost:9/stadium-tycoon
+
+6 route widths walked over 1 routes and 1 seeded scene (3 of the lines): 0 dialogs tapped and closed, 0 expected site reds, 0 without a first visit dialog, 6 red
+playFirstVisitDialogs: RED. 6 route widths: /stadium-tycoon 320x640, /stadium-tycoon 390x844, /stadium-tycoon 1280x900, /stadium-tycoon#away 320x640, /stadium-tycoon#away 390x844, /stadium-tycoon#away 1280x900
+(head, no server: the plant passes and the lines fail to load, expected)
