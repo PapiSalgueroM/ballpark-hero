@@ -100,7 +100,9 @@ export interface BeatQuestion {
   detail: string;
 }
 
-export async function fetchFinalsRows(def: FinalsCompDef): Promise<FinalsRow[]> {
+/* `today` is the board's day, read before the network wait unless the hook
+   passes its mount day (the same rule as fetchCompetitionRows). */
+export async function fetchFinalsRows(def: FinalsCompDef, today: string = getTodayET()): Promise<FinalsRow[]> {
   const cols = [def.yearCol, def.winCol, def.loseCol, def.seriesCol, ...(def.extraCols ?? [])];
   /* ROUND 366: see the note in champOrNot.ts, this is the identical shape and
      the identical positional read. Ordering by id, verified present on every
@@ -114,7 +116,6 @@ export async function fetchFinalsRows(def: FinalsCompDef): Promise<FinalsRow[]> 
   const out: FinalsRow[] = [];
   /* Round 1551: a season that just landed counts from a day boundary
      (seasonCalendar.ts), the same rule Champ or Not reads. */
-  const today = getTodayET();
   for (const r of data as Record<string, unknown>[]) {
     const year = r[def.yearCol];
     const winner = r[def.winCol];

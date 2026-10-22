@@ -149,7 +149,11 @@ export interface ChampRound {
   beatLine?: string;
 }
 
-export async function fetchCompetitionRows(def: CompetitionDef): Promise<ChampRow[]> {
+/* `today` is the board's day. A daily hook passes the day it read at mount; the
+   default is read when the call is made, before the network wait, so a
+   response that lands after midnight ET cannot deal tomorrow's seasons into
+   the board of the day the page opened on (Round 1551 review). */
+export async function fetchCompetitionRows(def: CompetitionDef, today: string = getTodayET()): Promise<ChampRow[]> {
   const cols = [def.yearCol, def.winCol];
   if (def.finals) {
     cols.push(def.finals.loseCol);
@@ -174,7 +178,6 @@ export async function fetchCompetitionRows(def: CompetitionDef): Promise<ChampRo
   const out: ChampRow[] = [];
   /* Round 1551: a season that just landed counts from a day boundary, so it
      cannot reshuffle a board somebody already played today (seasonCalendar.ts). */
-  const today = getTodayET();
   for (const r of data as Record<string, unknown>[]) {
     const year = r[def.yearCol];
     const team = r[def.winCol];
