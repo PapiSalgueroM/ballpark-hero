@@ -1,0 +1,9 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playStorageBlocked exit=0 273s | playStorageBlocked: 826 checks, 0 failed
+playUsCareerSaveSeam exit=0 33s | playUsCareerSaveSeam: 15 journeys, 67 checks, 0 failed
+playFrontOfficeGameDay exit=0 308s | playFrontOfficeGameDay: 386 checks, 0 failed
+fonts exit=0 1s | Prepared 9 declared font dependencies for local fulfillment.
+playSoccerVeteranTalks exit=1 1s | Node.js v24.22.0
+playSoccerSeasonCalendar exit=1 1s | Node.js v24.22.0
+playSoccerCareerDevelopment-1 exit=0 64s | Soccer Career development native: 333 checks, 0 failed, 6 actual journeys. Screenshots and complete saved-state evidence: /home/runner/work/ballpark-hero/ballpark-hero/ca
+playSoccerCareerDevelopment-2 exit=0 62s | Soccer Career development native: 333 checks, 0 failed, 6 actual journeys. Screenshots and complete saved-state evidence: /home/runner/work/ballpark-hero/ballpark-hero/ca

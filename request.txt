@@ -1,0 +1,12 @@
+# Release BO triage main, part C: storage, the US career seam, front office game day, the soccer walks, consent patched in scratch
+#!serve
+#!playwright
+#!serial
+playStorageBlocked: node .rc/x/consentPatch.mjs scripts/playStorageBlocked.mjs && node scripts/playStorageBlocked.mjs
+playUsCareerSaveSeam: node .rc/x/consentPatch.mjs scripts/playUsCareerSaveSeam.mjs && node scripts/playUsCareerSaveSeam.mjs
+playFrontOfficeGameDay: node .rc/x/consentPatch.mjs scripts/playFrontOfficeGameDay.mjs && node scripts/playFrontOfficeGameDay.mjs
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+playSoccerVeteranTalks: node .rc/x/consentPatch.mjs scripts/playSoccerVeteranTalks.mjs && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" ENGINES=chromium NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerVeteranTalks.mjs
+playSoccerSeasonCalendar: node .rc/x/consentPatch.mjs scripts/playSoccerSeasonCalendar.mjs && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerSeasonCalendar.mjs
+playSoccerCareerDevelopment-1: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerCareerDevelopment.mjs
+playSoccerCareerDevelopment-2: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerCareerDevelopment.mjs
