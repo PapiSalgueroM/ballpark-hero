@@ -81,7 +81,6 @@ import path from 'node:path';
 import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import pw from './lib/playwrightLoader.mjs';
-import { consentLabelSource, REJECT_LABELS, ACCEPT_LABELS } from './lib/answerConsent.mjs';
 
 const { chromium } = pw;
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -285,7 +284,7 @@ const ACTIONS = [
   'Next Year', 'Next Season', 'Continue', 'Sign Contract',
   'Accept', 'Confirm', 'Proceed', 'Next', 'Done', 'Close',
 ];
-const SKIP = new RegExp(['Retire|New Career|Report a problem|Light mode|Sound: |Cookie|Sign up|^Back$|Full attributes', consentLabelSource([...REJECT_LABELS, ...ACCEPT_LABELS]), '^⏸$|^🏋️$|^📱'].join('|'));
+const SKIP = /Retire|New Career|Report a problem|Light mode|Sound: |Cookie|Sign up|^Back$|Full attributes|Reject all|Essential only|^Accept all$|^Accept$|^⏸$|^🏋️$|^📱/;
 
 async function stepOnce(page) {
   return page.evaluate(async ([actions, skipSrc]) => {
