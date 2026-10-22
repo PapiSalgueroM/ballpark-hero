@@ -1,0 +1,24 @@
+1) greedy play: liveness, the curve, the carrot
+   first sale at 89s, first move up reachable at minute 7.9 (bar: 45)
+   window earnings: early 4257, late 19793 (4.6x)
+2) the ceiling rule: never passed, approach slows
+   6 kids finished a climb, every one slowed toward the top, none passed it
+3) the price curve and its multipliers
+   70 rated with a 90 ceiling: 541 at 18, 431 at 22, 376 at 23
+   deadline x1.50, agents(10) x1.80, stars(4) x1.40, showcase x3
+4) the clock: leavers, beds, the held find
+   leaver freed his bed, full house held exactly one find, it landed on the next tick
+5) names: unique per academy, inside the enumerated space
+   480 kids across 40 academies: zero duplicates, all inside the enumerated space
+6) the move up: exact star arithmetic, higher ceilings
+   mean ceiling 66.7 in District Fields, 80.1 in The Capital (gap 13.4)
+7) offline: half speed, the eight hour wall, no cash
+   1000h and 8h both apply 4.0h of progress, blip applied 10.0s, cash untouched
+   twenty hidden hours at one wake a minute credited 4.00h, the same as twenty closed hours; nobody aged; a watched tick reset the meter
+   a showcase neither multiplies nor burns away time; a hidden page's short gap keeps the cap; a slow visible page still ages kids
+8) the save: roundtrip, refusal, the doctored save
+   roundtrip identity, garbage refused, the doctored save came back clamped (11 kids reached the clamps, ids unique, nextId 46)
+9) static wiring: the mark, the route, the words
+   mark shape, route, registry row, bundle entry and guide all present
+
+simWonderkid: green. The academy cannot lie, leak, or stall.
