@@ -1,0 +1,20 @@
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+[1m[33mwarn[39m[22m - The class `duration-[800ms]` is ambiguous and matches multiple utilities.
+[1m[33mwarn[39m[22m - If this is content and not a class, replace it with `duration-&lsqb;800ms&rsqb;` to silence this warning.
+[33m
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
+base /nfl-my-career window: 493.2K over 48 files
+base /nfl-my-career settled: 493.2K over 48 files
+base /nba-my-career window: 578.7K over 49 files
+base /nba-my-career settled: 578.7K over 49 files
+base /mlb-my-career window: 566.9K over 49 files
+base /mlb-my-career settled: 566.9K over 49 files
+base /nhl-my-career window: 569.5K over 49 files
+base /nhl-my-career settled: 569.5K over 49 files
+weight probe base done

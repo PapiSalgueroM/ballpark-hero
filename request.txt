@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+#!serial
+walk: node scripts/playUsShopPromises.mjs
+weight-head: node .rc/x/weight1534.mjs head
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+walk-nobank: node .rc/x/nobank.mjs && node_modules/.bin/vite build --outDir dist-nobank --emptyOutDir > /dev/null; git checkout -- src; PLAY_SHOP_DIST=dist-nobank PLAY_SHOP_CONTROL=nobank node scripts/playUsShopPromises.mjs
+weight-base: R=$(pwd); git checkout 1c7205d059cbcb380ebacaef99ba6751e8c641df -- src && node_modules/.bin/vite build --outDir /tmp/wb/dist --emptyOutDir > /dev/null; git checkout HEAD -- src; cd /tmp/wb && (node $R/scripts/lib/hostLikeServer.mjs dist 4175 > /dev/null 2>&1 &); sleep 5; BASE=http://localhost:4175 node $R/.rc/x/weight1534.mjs base

@@ -1,0 +1,9 @@
+head /nfl-my-career window: 493.3K over 48 files
+head /nfl-my-career settled: 493.3K over 48 files
+head /nba-my-career window: 578.9K over 49 files
+head /nba-my-career settled: 578.9K over 49 files
+head /mlb-my-career window: 567.0K over 49 files
+head /mlb-my-career settled: 567.0K over 49 files
+head /nhl-my-career window: 569.6K over 49 files
+head /nhl-my-career settled: 569.6K over 49 files
+weight probe head done

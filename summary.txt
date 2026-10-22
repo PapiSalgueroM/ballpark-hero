@@ -1,0 +1,6 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+walk exit=0 30s | playUsShopPromises: green, 9 walks
+weight-head exit=0 17s | weight probe head done
+sweepWeight exit=0 27s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+walk-nobank exit=1 43s | playUsShopPromises: CONTROL nobank FIRED, (c) red
+weight-base exit=0 56s | weight probe base done
