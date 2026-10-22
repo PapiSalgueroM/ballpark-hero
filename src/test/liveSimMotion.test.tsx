@@ -1075,6 +1075,9 @@ function replayFouls(t: Tally1521, input: PitchInput, plan: PitchPlan, live: Non
     const minuteOf = placeOfLine(e);
     const by = new Set(plan.entries.filter(b => b.start < minuteOf + 1 - 1e-9 && minuteOf < b.end - 1e-9 && !(b.via === 'grid' || b.via === 'approach')).map(b => kinds[b.id[0]] ?? b.id[0]));
     for (const k of by) t.hiddenBy[k] = (t.hiddenBy[k] ?? 0) + 1;
+    /* And how many are the foul a set piece of that same minute is given for (the other side's free kick or penalty). */
+    if (input.feed.some(x => (x.kind === 'goal' || x.kind === 'shot' || x.kind === 'save') && (x.freeKick || x.penalty) && x.side !== e.side && placeOfLine(x) === minuteOf)) t.hiddenBy['its own set piece'] = (t.hiddenBy['its own set piece'] ?? 0) + 1;
+    if (input.feed.some(x => (x.kind === 'goal' || x.kind === 'shot' || x.kind === 'save') && placeOfLine(x) === minuteOf)) t.hiddenBy['a chance of the same minute'] = (t.hiddenBy['a chance of the same minute'] ?? 0) + 1;
     /* Its reason: through the whole of its minute the pitch is held (a chance's shooter or what follows it, a kick
        off, another dead ball or another foul), so no beat of it was free for a whistle. Read off what is drawn, not
        off the rule: a beat is free when only open play, a chance's build up (the review of 2026-10-22: the feeder is
