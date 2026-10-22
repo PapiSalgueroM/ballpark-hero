@@ -355,8 +355,10 @@ export function pitchPlan(input: PitchInput): PitchPlan {
       if (pool.length) {
         const deep = keyedRng(`${seed}:ab:${a.order}`);
         const man = pool[pickIndex(pool, deep())];
+        /* Under every dead ball (0.5): a corner or a free kick in the minute before the chance is how it came about,
+           and is drawn as that, not covered by the build up. */
         layers.push({
-          start: lead - 2 * BEAT_SPAN, end: lead - BEAT_SPAN, priority: 2, order: n, state: 'open', via: 'approach', side,
+          start: lead - 2 * BEAT_SPAN, end: lead - BEAT_SPAN, priority: 0.5, order: n, state: 'open', via: 'approach', side,
           carrier: man.key, dead: false, id: `b${a.order}`, anchor: zoneAnchor(side, man, deep), line: man.line,
         });
       }

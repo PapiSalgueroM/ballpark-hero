@@ -11,10 +11,13 @@ import type { PitchBeat, PitchPlaced, PitchPlan } from '@/components/pitch-motio
 import { scorerMark } from '@/lib/clubManagerScorerLine';
 const motionPath = process.env.LIVE_MOTION_COMPONENT;
 /* Round 1101: the part lives in src/components/pitch-motion now, and `between` is exported there. */
-const { actionFrame, between, useLiveSimMotion } = motionPath ? await import(/* @vite-ignore */ motionPath) : await import('@/components/pitch-motion/motion');
+const { actionFrame, between, useLiveSimMotion, flightPeak, shotLift } = motionPath ? await import(/* @vite-ignore */ motionPath) : await import('@/components/pitch-motion/motion');
 
 const viewerPath = process.env.LIVE_MOTION_VIEWER;
-const { LiveSimScreen, stagePitchInput, goalCardCount, labelsAbove, labelsShort } = viewerPath ? await import(/* @vite-ignore */ viewerPath) : await import('@/components/club-manager/LiveSimScreen');
+const { LiveSimScreen, stagePitchInput, goalCardCount, labelsAbove, labelsShort, lookKeyOf, OPP_KEEPER } = viewerPath ? await import(/* @vite-ignore */ viewerPath) : await import('@/components/club-manager/LiveSimScreen');
+/* Round 1521: the figures' looks, and the pitch's short names for the foul's label. */
+import { figureLook, SKIN_TONES, HAIR_COLOURS, BOOT_COLOURS, HAIR_STYLES } from '@/components/pitch-motion/look';
+import { pitchName } from '@/lib/cmMatchDisplay';
 const seeded = (seed: number) => () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
 const scene = {
   mine: [{ key: 'm0', name: 'Home keeper', keeper: true, x: 50, y: 90 }, { key: 'm9', name: 'Home striker', keeper: false, x: 40, y: 40 }],
@@ -911,8 +914,204 @@ function replayHalf(t: SeedTally, input: PitchInput) {
   });
 }
 
-const FIVE_CLUBS = [
-  { seed: 110101, club: 'Aston Villa', league: 'Premier League' },
+/* ─────────────────────────────────────────────────────────────────────────────────────────────
+   Round 1521: what the viewer draws between the lines of the feed, read on the same 200 half feeds.
+   R10 the ball: every pass into a stretch is drawn with the height its flight says (none on the grass, some
+   in the air, as a cross or as a throw) and lands at the man it is played to. Every chance leaves the foot on
+   the grass, rises, and is back on the grass at its end, in the net of the side it attacks, with the keeper of
+   the side defending going for it, in both halves.
+   R11 fouls: one cue for each foul line the plan stages at its own place, on the two men it is about, with
+   the card the feed books on it and no other; a foul with no cue is under a stretch that outranks it. The foul
+   lines are the plays the stats count, side by side.
+   R12 the build up: inside one possession my side goes forward a line far more often than back, more so the
+   more directly it plays (three arms of the same feeds: defensive, balanced, attacking), and never back
+   without the reason the pitch shows (pressure, drawn as a man closing him down, or a switch across). A chance
+   is reached by a build up that ends at its shooter. */
+type Arm1521 = 'defensive' | 'balanced' | 'attacking';
+const ARMS_1521: [Arm1521, number][] = [['defensive', -1], ['balanced', 0], ['attacking', 1]];
+interface BuildArm { possessions: number; forward: number; level: number; back: number; resets: { press: number; switch: number }; unreasoned: number; switchOffenders: number; pressOffenders: number }
+interface Tally1521 {
+  passes: Record<'ground' | 'air' | 'cross' | 'throw', number>; liftedGround: number; flatAerial: number; landOffenders: number;
+  shots: Record<'first' | 'second', number>; shotOffenders: number; shotExamples: string[];
+  fouls: number; cues: number; cueOffenders: number; hidden: number; hiddenOffenders: number; named: number; contacts: number; contactOffenders: number;
+  cardLines: number; carded: number; cardOffenders: number; statFouls: number; statOffenders: number; foulExamples: string[];
+  arms: Record<Arm1521, BuildArm>; pressGap: number[]; calmGap: number[]; chains: number; deepChains: number; chainOffenders: number;
+}
+const buildArm = (): BuildArm => ({ possessions: 0, forward: 0, level: 0, back: 0, resets: { press: 0, switch: 0 }, unreasoned: 0, switchOffenders: 0, pressOffenders: 0 });
+const tally1521 = (): Tally1521 => ({
+  passes: { ground: 0, air: 0, cross: 0, throw: 0 }, liftedGround: 0, flatAerial: 0, landOffenders: 0,
+  shots: { first: 0, second: 0 }, shotOffenders: 0, shotExamples: [],
+  fouls: 0, cues: 0, cueOffenders: 0, hidden: 0, hiddenOffenders: 0, named: 0, contacts: 0, contactOffenders: 0,
+  cardLines: 0, carded: 0, cardOffenders: 0, statFouls: 0, statOffenders: 0, foulExamples: [],
+  arms: { defensive: buildArm(), balanced: buildArm(), attacking: buildArm() }, pressGap: [], calmGap: [], chains: 0, deepChains: 0, chainOffenders: 0,
+});
+const LINE_RANK = { keeper: 0, defence: 1, midfield: 2, attack: 3 } as const;
+const apart = (a: { x: number; y: number }, b: { x: number; y: number }) => Math.hypot(a.x - b.x, a.y - b.y);
+const placeOfLine = (e: { minute: number; plus?: number }) => e.minute + (e.plus ?? 0);
+/** The nearest outfield man of the other side to the ball: how closely the man on it is pressed. */
+const pressedBy = (scene: MotionScene<PitchPlaced>, side: 'me' | 'opp') => Math.min(...(side === 'me' ? scene.theirs : scene.mine).filter(p => !p.keeper).map(p => apart(p, scene.ball)));
+
+function replay1521(t: Tally1521, input: PitchInput, live: NonNullable<CareerState['live']>, stage: 'first' | 'second') {
+  const plan = pitchPlan(input);
+  const from = input.span.from, to = Math.max(from + BEAT_SPAN, input.span.to);
+  /* R10: every pass, read at the middle and at the end of its flight. */
+  let previous: MotionScene<PitchPlaced> | null = null;
+  for (const beat of plan.entries) {
+    const scene: MotionScene<PitchPlaced> = pitchScene(plan, beat.start);
+    if (previous) {
+      const kind = scene.flight ?? 'ground';
+      t.passes[kind as keyof Tally1521['passes']]++;
+      const mid = between(previous, scene, 0.5);
+      if (kind === 'ground' && (mid.lift ?? 0) > 0) t.liftedGround++;
+      if (kind !== 'ground' && !((mid.lift ?? 0) > 0.5)) t.flatAerial++;
+      const end = between(previous, scene, 1);
+      const holder = [...scene.mine, ...scene.theirs].find(p => p.key === scene.holderKey);
+      if ((end.lift ?? 0) > 0 || apart(end.ball, scene.ball) > 1e-6 || (!beat.dead && holder && apart(end.ball, holder) > 3)) t.landOffenders++;
+    }
+    previous = scene;
+  }
+  /* R10: every chance the plan stages. */
+  for (const a of plan.actions) {
+    const action = { event: a.event, key: 'r1521', at: a.at };
+    const captured: MotionScene<PitchPlaced> = pitchScene(plan, a.at - .05);
+    const mine = a.event.side === 'me';
+    const attacking = mine ? captured.mine : captured.theirs;
+    const keeper = (mine ? captured.theirs : captured.mine).find(p => p.keeper);
+    let rose = false;
+    let bad = '';
+    for (let s = 0; s <= 21; s++) {
+      const f = actionFrame(captured, action, s * .05);
+      if (f.phase === 'plant' && (f.lift ?? 0) !== 0) bad ||= `off the grass at the plant (${f.lift})`;
+      if (f.phase === 'flight' && (f.lift ?? 0) > 0.2) rose = true;
+      for (const p of attacking) if (p.keeper && (f.poses[p.key]?.dive ?? 0) !== 0) bad ||= "the attacking side's keeper dives";
+      if (f.net && f.net !== (mine ? 'opp' : 'me')) bad ||= `the ${f.net} net`;
+    }
+    const last = actionFrame(captured, action, ACTION_SPAN);
+    if ((last.lift ?? 0) !== 0) bad ||= 'off the grass at the end';
+    if (!rose) bad ||= 'never off the grass';
+    if (keeper && a.event.kind === 'save' && !(Math.abs(last.poses[keeper.key]?.dive ?? 0) > 0)) bad ||= 'the defending keeper does not go';
+    if (a.event.kind === 'goal' && (mine ? last.ball.y > GOAL_MOUTH.depth : last.ball.y < 100 - GOAL_MOUTH.depth)) bad ||= 'not in the goal it attacks';
+    t.shots[stage]++;
+    if (bad) { t.shotOffenders++; if (t.shotExamples.length < 3) t.shotExamples.push(`${a.event.kind} ${a.event.side} at ${a.at.toFixed(2)}${a.event.penalty ? ' penalty' : ''}${a.event.og ? ' own goal' : ''}: ${bad}`); }
+  }
+  replayFouls(t, input, plan, live, stage, from, to);
+  replayBuild(t, input, plan);
+}
+
+/** R11, read against the feed's own lines: the plan's cues are worked out one way and checked another. */
+function replayFouls(t: Tally1521, input: PitchInput, plan: PitchPlan, live: NonNullable<CareerState['live']>, stage: 'first' | 'second', from: number, to: number) {
+  const say = (why: string) => { t.cueOffenders++; if (t.foulExamples.length < 4) t.foulExamples.push(why); };
+  const cued = new Map<number, string | undefined>();
+  plan.entries.forEach((beat, n) => {
+    if (!beat.foul || !beat.dead) return;
+    const scene: MotionScene<PitchPlaced> = pitchScene(plan, beat.start);
+    if (!scene.cue) return;
+    t.cues++;
+    const cue = scene.cue;
+    const line = input.feed[cue.order];
+    if (cued.has(cue.order)) say(`two cues for line ${cue.order}`);
+    cued.set(cue.order, cue.card);
+    if (!line || line.kind !== 'foul' || line.side === 'none') { say(`a cue on line ${cue.order}, which is ${line?.kind ?? 'nothing'}`); return; }
+    if (Math.abs(beat.start - placeOfLine(line)) > 1e-6) say(`a whistle at ${beat.start} for a foul at ${placeOfLine(line)}`);
+    const fouled = line.side === 'me' ? 'opp' : 'me';
+    if (beat.side !== fouled) say(`the free kick at ${beat.start} goes to the side that fouled`);
+    const named = (line.side === 'me' ? input.mine : input.theirs).find(f => f.name !== undefined && f.name === line.text);
+    if (named) t.named++;
+    if (cue.by !== (named?.key ?? null)) say(`the foul at ${beat.start} is drawn by ${cue.by}, and its line names ${named?.key ?? 'nobody on the grass'}`);
+    const victims = fouled === 'me' ? scene.mine : scene.theirs;
+    if (!victims.some(p => p.key === cue.on) || beat.carrier !== cue.on) say(`the foul at ${beat.start} is on ${cue.on}, who is not the fouled side's man on the ball`);
+    if (apart(cue.at, scene.ball) > 1e-6) say(`the cue at ${beat.start} is not where the free kick is taken`);
+    /* The two meet: the man it names at the ball at the whistle, and, in the stretch before it, at the man it was on. */
+    const fouler = (line.side === 'me' ? scene.mine : scene.theirs).find(p => p.key === cue.by);
+    if (fouler) { t.contacts++; if (apart(fouler, scene.ball) > 6) t.contactOffenders++; }
+    const before = plan.entries[n - 1];
+    if (fouler && before?.id === `w${cue.order}` && Math.abs(before.end - beat.start) < 1e-6) {
+      const contact: MotionScene<PitchPlaced> = pitchScene(plan, before.start);
+      const a = (line.side === 'me' ? contact.mine : contact.theirs).find(p => p.key === cue.by);
+      const b = (fouled === 'me' ? contact.mine : contact.theirs).find(p => p.key === cue.on);
+      t.contacts++;
+      if (!a || !b || apart(a, b) > 6 || contact.holderKey !== b.key) t.contactOffenders++;
+    }
+  });
+  /* Every staged foul has its cue, unless a stretch that outranks it holds its place. */
+  for (const [order, e] of input.feed.entries()) {
+    if (e.kind !== 'foul' || e.side === 'none' || placeOfLine(e) < from - 1e-9 || placeOfLine(e) >= to - 1e-9) continue;
+    t.fouls++;
+    if (cued.has(order)) continue;
+    t.hidden++;
+    const at = pitchBeatAt(plan, placeOfLine(e) + 1e-6);
+    if (at.via === 'grid' || at.foul?.order === order) { t.hiddenOffenders++; if (t.foulExamples.length < 4) t.foulExamples.push(`the foul at ${placeOfLine(e)} has no cue under ${at.via} ${at.state}`); }
+  }
+  /* The card: the feed's own, on that man at that place, one card to one foul, and never one the feed does not give. */
+  const groups = new Map<string, { cards: string[]; fouls: number[] }>();
+  for (const [order, e] of input.feed.entries()) {
+    if (e.side === 'none' || (e.kind !== 'foul' && e.kind !== 'yellow' && e.kind !== 'red')) continue;
+    const key = `${e.side}|${e.text}|${placeOfLine(e)}`;
+    const g = groups.get(key) ?? { cards: [], fouls: [] };
+    if (e.kind === 'foul') g.fouls.push(order); else g.cards.push(e.kind);
+    groups.set(key, g);
+  }
+  for (const g of groups.values()) {
+    t.cardLines += g.cards.length;
+    const drawn = g.fouls.filter(o => cued.has(o));
+    const carded = drawn.filter(o => cued.get(o));
+    t.carded += carded.length;
+    const kinds = carded.map(o => cued.get(o)!).sort().join(',');
+    if (carded.length > g.cards.length || carded.some(o => !g.cards.includes(cued.get(o)!))) t.cardOffenders++;
+    else if (drawn.length === g.fouls.length && kinds !== [...g.cards].sort().slice(0, g.fouls.length).join(',')) t.cardOffenders++;
+  }
+  /* The foul lines are the plays the stats count: side by side, the same number in this period. */
+  const play = (stage === 'first' ? live.h1Play : live.h2Play) ?? [];
+  for (const side of ['me', 'opp'] as const) {
+    const counted = play.filter(e => e.kind === 'foul' && e.side === side).length;
+    t.statFouls += counted;
+    if (input.feed.filter(e => e.kind === 'foul' && e.side === side).length !== counted) t.statOffenders++;
+  }
+}
+
+/** R12: three arms of the same half, my side defensive, balanced and attacking; the other side as it was. */
+function replayBuild(t: Tally1521, input: PitchInput, plan: PitchPlan) {
+  for (const [arm, lean] of ARMS_1521) {
+    const armPlan = lean === (input.build?.me ?? 0) ? plan : pitchPlan({ ...input, build: { me: lean, opp: input.build?.opp ?? 0 } });
+    const tally = t.arms[arm];
+    let prev: PitchBeat | null = null;
+    for (const beat of armPlan.entries) {
+      if (beat.via === 'grid' && beat.side === 'me' && beat.line) {
+        const carried = !!prev && prev.via === 'grid' && prev.side === 'me' && !!prev.line && Math.abs(prev.end - beat.start) < 1e-6;
+        if (!carried) tally.possessions++;
+        else {
+          const up = LINE_RANK[beat.line] - LINE_RANK[prev!.line!];
+          if (up > 0) tally.forward++;
+          else if (up === 0) tally.level++;
+          else {
+            tally.back++;
+            if (!beat.reset) tally.unreasoned++;
+            else tally.resets[beat.reset]++;
+            if (beat.reset === 'switch' && Math.abs(beat.anchor.x - prev!.anchor.x) < 30) tally.switchOffenders++;
+            if (beat.reset === 'press' && !prev!.pressed) tally.pressOffenders++;
+          }
+          /* A reason on a pass that did not go back would be a reason made up. */
+          if (beat.reset && up >= 0) tally.unreasoned++;
+        }
+        if (arm === 'balanced') (beat.pressed ? t.pressGap : t.calmGap).push(pressedBy(pitchScene(armPlan, beat.start), 'me'));
+      }
+      prev = beat;
+    }
+  }
+  /* The chance: the feeder plays no further up than the shooter, and the man before him is deeper still. */
+  plan.entries.forEach((beat, n) => {
+    if (beat.via !== 'carrier' || !beat.line) return;
+    const order = beat.id.slice(1);
+    const feed = plan.entries[n - 1];
+    if (feed?.id !== `a${order}` || Math.abs(feed.end - beat.start) > 1e-6) return;
+    t.chains++;
+    if (!feed.line || feed.side !== beat.side || LINE_RANK[feed.line] > LINE_RANK[beat.line]) { t.chainOffenders++; return; }
+    const deep = plan.entries[n - 2];
+    if (deep?.id !== `b${order}` || Math.abs(deep.end - feed.start) > 1e-6) return;
+    t.deepChains++;
+    if (!deep.line || deep.side !== beat.side || LINE_RANK[deep.line] >= LINE_RANK[feed.line]) t.chainOffenders++;
+  });
+}
   { seed: 110102, club: 'Real Madrid', league: 'La Liga' },
   { seed: 110103, club: 'Lyon', league: 'Ligue 1' },
   { seed: 110104, club: 'Ajax', league: 'Eredivisie' },
@@ -955,22 +1154,25 @@ function walkClub(seed: number, club: string, onHalf: ((career: CareerState, sta
   return { matches, digest: hash32(lines.join('\n')), draws };
 }
 
-interface Material { seeds: SeedTally[]; digest: string; draws: number; inputs: number }
+interface Material { seeds: SeedTally[]; digest: string; draws: number; inputs: number; looks: Tally1521[] }
 let material: Material | null = null;
 /** The engine with the full replay of each half run between every engine call. Built once. */
 function buildMaterial(): Material {
   if (material) return material;
   const seeds: SeedTally[] = [];
+  const looks: Tally1521[] = [];
   const digests: string[] = [];
   let draws = 0;
   let inputs = 0;
   for (const { seed, club } of FIVE_CLUBS) {
     const t = tally(club);
+    const x = tally1521();
     const walked = walkClub(seed, club, (career, stage) => {
       const cap = stage === 'first' ? 45 : 90;
       const input: PitchInput = stagePitchInput(career, career.live!, null, stage, stage === 'first' ? 0 : 46, 0, cap + boardAt(career, cap));
       inputs++;
       replayHalf(t, input);
+      replay1521(x, input, career.live!, stage);
       /* R8: what the viewer hands the pitch, read against the match itself. Whoever is at home kicks off the
          match and the other side the second half, and the share of the ball is that half's own. */
       const live = career.live!;
@@ -987,8 +1189,9 @@ function buildMaterial(): Material {
     draws += walked.draws;
     digests.push(walked.digest);
     seeds.push(t);
+    looks.push(x);
   }
-  material = { seeds, digest: digests.join(' '), draws, inputs };
+  material = { seeds, digest: digests.join(' '), draws, inputs, looks };
   return material;
 }
 const sum = (values: number[]) => values.reduce((a, b) => a + b, 0);
@@ -1256,6 +1459,216 @@ describe('The pitch part on real feeds', () => {
     /* And every one of them still starts inside its own minute. */
     for (const plan of [alone, three, two, one, twoGoals, full, fuller]) for (const a of plan) { expect(a.late).toBeGreaterThanOrEqual(-1e-9); expect(a.late).toBeLessThanOrEqual(PITCH_LATE + 1e-9); }
   });
+});
+
+/* Round 1521, on the same 200 half feeds (the header of replay1521 says what each reads). The floors are about
+   half of what the material holds, so a data release can move them and an emptied rule can not pass; the
+   bands are the measured numbers with their headroom, written beside each. */
+const totals1521 = (pick: (t: Tally1521) => number) => sum(buildMaterial().looks.map(pick));
+const R10_FLOOR = { ground: 4000, air: 400, cross: 250, throw: 400 } as const;
+const R12_STEP = 0.02;
+describe('Round 1521: the live match looks like football', () => {
+  it('R10: the ball travels with height and lands at its man, and every chance rises and comes down in the right net', () => {
+    const m = buildMaterial();
+    const passes = (k: keyof Tally1521['passes']) => totals1521(t => t.passes[k]);
+    console.log(`[1521 R10] passes drawn: on the grass ${passes('ground')}, in the air ${passes('air')}, crosses ${passes('cross')}, throws ${passes('throw')}; on the grass but lifted ${totals1521(t => t.liftedGround)}, in the air but never rose ${totals1521(t => t.flatAerial)}, not landing at their man ${totals1521(t => t.landOffenders)}; chances read: first halves ${totals1521(t => t.shots.first)}, second halves ${totals1521(t => t.shots.second)}, offenders ${totals1521(t => t.shotOffenders)}${m.looks.flatMap(t => t.shotExamples).slice(0, 3).map(s => ` | ${s}`).join('')}`);
+    for (const k of ['ground', 'air', 'cross', 'throw'] as const) expect(passes(k), k).toBeGreaterThan(R10_FLOOR[k]);
+    expect(totals1521(t => t.liftedGround)).toBe(0);
+    expect(totals1521(t => t.flatAerial)).toBe(0);
+    expect(totals1521(t => t.landOffenders)).toBe(0);
+    /* Both halves, so both ends of the pitch, are read many times over. */
+    expect(totals1521(t => t.shots.first)).toBeGreaterThan(500);
+    expect(totals1521(t => t.shots.second)).toBeGreaterThan(500);
+    expect(totals1521(t => t.shotOffenders)).toBe(0);
+  }, LONG);
+
+  it('R11: every foul the plan stages is seen at its own place, on the right two men, with only the card the feed gave', () => {
+    const m = buildMaterial();
+    const fouls = totals1521(t => t.fouls), cues = totals1521(t => t.cues);
+    console.log(`[1521 R11] foul lines staged ${fouls}, with their cue ${cues} (${(cues / Math.max(1, fouls)).toFixed(3)}), under a stretch that outranks them ${totals1521(t => t.hidden)}, with no such reason ${totals1521(t => t.hiddenOffenders)}; cue offenders ${totals1521(t => t.cueOffenders)}; named on the grass ${totals1521(t => t.named)}, meetings read ${totals1521(t => t.contacts)}, apart ${totals1521(t => t.contactOffenders)}; cards in the feed ${totals1521(t => t.cardLines)}, carded cues ${totals1521(t => t.carded)}, card offenders ${totals1521(t => t.cardOffenders)}; fouls the stats count ${totals1521(t => t.statFouls)}, halves where the feed and the stats differ ${totals1521(t => t.statOffenders)}${m.looks.flatMap(t => t.foulExamples).slice(0, 4).map(s => ` | ${s}`).join('')}`);
+    expect(fouls).toBeGreaterThan(1500);
+    expect(cues * 2).toBeGreaterThan(fouls);
+    expect(totals1521(t => t.cueOffenders)).toBe(0);
+    expect(totals1521(t => t.hiddenOffenders)).toBe(0);
+    expect(totals1521(t => t.named)).toBeGreaterThan(cues / 4);
+    expect(totals1521(t => t.contacts)).toBeGreaterThan(cues / 4);
+    expect(totals1521(t => t.contactOffenders)).toBe(0);
+    expect(totals1521(t => t.carded)).toBeGreaterThan(40);
+    expect(totals1521(t => t.cardOffenders)).toBe(0);
+    expect(totals1521(t => t.statFouls)).toBe(fouls);
+    expect(totals1521(t => t.statOffenders)).toBe(0);
+  }, LONG);
+
+  it('R12: an attack builds by lines, more directly the more attacking the side, and goes back only as a reset', () => {
+    const m = buildMaterial();
+    const share = (a: BuildArm, k: 'forward' | 'back') => a[k] / Math.max(1, a.forward + a.level + a.back);
+    const per = (arm: Arm1521, k: 'forward' | 'back') => m.looks.map(t => share(t.arms[arm], k));
+    const all = (pick: (a: BuildArm) => number) => ARMS_1521.map(([arm]) => `${arm} ${totals1521(t => pick(t.arms[arm]))}`).join(', ');
+    const median = (v: number[]) => { const s = [...v].sort((a, b) => a - b); return s.length ? s[Math.floor(s.length / 2)] : NaN; };
+    const press = m.looks.flatMap(t => t.pressGap), calm = m.looks.flatMap(t => t.calmGap);
+    console.log(`[1521 R12] my possessions ${all(a => a.possessions)}; passes inside one: forward ${all(a => a.forward)}, across ${all(a => a.level)}, back ${all(a => a.back)}; forward share per seed: ${ARMS_1521.map(([arm]) => `${arm} ${fixed(per(arm, 'forward'), 3)}`).join('; ')}; back share per seed: ${ARMS_1521.map(([arm]) => `${arm} ${fixed(per(arm, 'back'), 3)}`).join('; ')}; resets per possession: ${ARMS_1521.map(([arm]) => `${arm} ${(totals1521(t => t.arms[arm].back) / Math.max(1, totals1521(t => t.arms[arm].possessions))).toFixed(3)}`).join(', ')}; by reason: press ${all(a => a.resets.press)}, switch ${all(a => a.resets.switch)}; back with no reason ${all(a => a.unreasoned)}, switches not across ${all(a => a.switchOffenders)}, pressure not drawn ${all(a => a.pressOffenders)}; nearest man to the ball: pressed ${median(press).toFixed(2)} (${press.length}), not pressed ${median(calm).toFixed(2)} (${calm.length}); chances with the feeder drawn ${totals1521(t => t.chains)}, with the man before him too ${totals1521(t => t.deepChains)}, out of order ${totals1521(t => t.chainOffenders)}`);
+    for (const [arm] of ARMS_1521) {
+      expect(totals1521(t => t.arms[arm].possessions), arm).toBeGreaterThan(1000);
+      expect(totals1521(t => t.arms[arm].unreasoned), arm).toBe(0);
+      expect(totals1521(t => t.arms[arm].switchOffenders), arm).toBe(0);
+      expect(totals1521(t => t.arms[arm].pressOffenders), arm).toBe(0);
+      /* Both reasons are read, many times. */
+      expect(totals1521(t => t.arms[arm].resets.press), arm).toBeGreaterThan(50);
+      expect(totals1521(t => t.arms[arm].resets.switch), arm).toBeGreaterThan(50);
+      for (let s = 0; s < m.looks.length; s++) expect(per(arm, 'forward')[s], `${arm} seed ${s}`).toBeGreaterThan(2 * per(arm, 'back')[s]);
+    }
+    /* More directly, the more attacking: per seed, each step of mentality moves the forward share by more than R12_STEP. */
+    for (let s = 0; s < m.looks.length; s++) {
+      expect(per('attacking', 'forward')[s] - per('balanced', 'forward')[s], `seed ${s}`).toBeGreaterThan(R12_STEP);
+      expect(per('balanced', 'forward')[s] - per('defensive', 'forward')[s], `seed ${s}`).toBeGreaterThan(R12_STEP);
+    }
+    /* Pressure is drawn: the man the reset comes after is closed down far tighter than a man on the ball usually is. */
+    expect(press.length).toBeGreaterThan(50);
+    expect(median(press)).toBeLessThan(median(calm) - 2);
+    expect(totals1521(t => t.chains)).toBeGreaterThan(500);
+    expect(totals1521(t => t.deepChains)).toBeGreaterThan(250);
+    expect(totals1521(t => t.chainOffenders)).toBe(0);
+  }, LONG);
+});
+
+describe('Round 1521 by hand, and through the viewer', () => {
+  const man = (key: string, x: number, y: number, keeper = false) => ({ key, keeper, x, y });
+  const at = (x: number, y: number, flight?: string) => ({ mine: [man('m1', x, y)], theirs: [man('o1', 50, 50)], ball: { x: x + 1.6, y: y - 2.2 }, holderKey: 'm1', ...(flight ? { flight } : {}) });
+  it('R10 by hand: a pass on the grass stays on it, a long ball and a cross rise and land, and a shot carries higher the further out it is struck', () => {
+    const from = at(30, 80);
+    for (const t of [0, 0.25, 0.5, 0.75, 1]) {
+      expect(between(from, at(40, 70, 'ground'), t).lift, `ground at ${t}`).toBeUndefined();
+      expect(between(from, at(40, 70), t).lift, `no flight at ${t}`).toBeUndefined();
+    }
+    for (const kind of ['air', 'cross', 'throw']) {
+      const to = at(75, 30, kind);
+      const lifts = [0, 0.25, 0.5, 0.75, 1].map(t => between(from, to, t).lift ?? 0);
+      expect(lifts[0], kind).toBe(0);
+      expect(lifts[4], kind).toBe(0);
+      expect(lifts[2], kind).toBeCloseTo(flightPeak(kind, apart(from.ball, to.ball)), 6);
+      expect(lifts[1] < lifts[2] && lifts[3] < lifts[2], kind).toBe(true);
+    }
+    /* A long ball goes higher the further it goes, up to its ceiling. */
+    expect(flightPeak('air', 20)).toBeLessThan(flightPeak('air', 40));
+    expect(flightPeak('ground', 60)).toBe(0);
+    const peak = (reach: number, line: Record<string, unknown>) => Math.max(...Array.from({ length: 21 }, (_, i) => shotLift({ minute: 20, side: 'me', kind: 'goal', text: '', ...line }, reach, i / 20, 0)));
+    expect(peak(12, {})).toBeLessThan(peak(24, {}));
+    expect(peak(24, {})).toBeLessThan(peak(36, {}));
+    /* Over the wall from a direct free kick, flat from the spot. */
+    expect(peak(30, { freeKick: true })).toBeGreaterThan(peak(30, {}));
+    expect(peak(12, { penalty: true })).toBeLessThan(peak(30, { freeKick: true }));
+    /* On the foot at the plant and back on the grass at the end of every chance: the still form has no flight. */
+    for (const kind of ['goal', 'save', 'shot'] as const) {
+      const action = { event: { minute: 20, side: 'me' as const, kind, text: 'Home striker' }, key: kind, at: 0 };
+      expect(actionFrame(scene, action, 0).lift, kind).toBe(0);
+      expect(actionFrame(scene, action, 0.55).lift, kind).toBeGreaterThan(0.2);
+      expect(actionFrame(scene, action, ACTION_SPAN).lift, kind).toBe(0);
+    }
+  });
+
+  it('R13: every figure is his own generic person, a keyed draw from his id and never from his name or nationality', () => {
+    const looks = Array.from({ length: 300 }, (_, i) => figureLook(`p:${i}`));
+    expect(figureLook('p:7')).toEqual(figureLook('p:7'));
+    const kinds = new Set(looks.map(l => `${l.skin}|${l.style}|${l.hair}|${l.boots}`));
+    console.log(`[1521 R13] 300 ids: ${kinds.size} different looks (skin, hair style, hair colour, boots), heights ${Math.min(...looks.map(l => l.tall))} to ${Math.max(...looks.map(l => l.tall))}`);
+    expect(kinds.size).toBeGreaterThan(240);
+    for (const skin of SKIN_TONES) expect(looks.some(l => l.skin === skin), skin).toBe(true);
+    for (const hair of HAIR_COLOURS) expect(looks.some(l => l.hair === hair), hair).toBe(true);
+    for (const boots of BOOT_COLOURS) expect(looks.some(l => l.boots === boots), boots).toBe(true);
+    for (let style = 0; style < HAIR_STYLES; style++) expect(looks.some(l => l.style === style), `style ${style}`).toBe(true);
+    expect(looks.every(l => l.tall >= 0.92 && l.tall <= 1.08)).toBe(true);
+    /* Whose look: mine by id, theirs by club and teamsheet place. Renamed, or from another country, he is the same man. */
+    const mine = { id: 'cm-123', side: 'me' as const, number: 9, key: 'm8', name: 'First Name', nationality: 'England' };
+    const renamed = { ...mine, name: 'Second Name', nationality: 'Brazil' };
+    const other = { ...mine, id: 'cm-124' };
+    expect(lookKeyOf(renamed, 'Club', 'Opponent')).toBe(lookKeyOf(mine, 'Club', 'Opponent'));
+    expect(lookKeyOf(other, 'Club', 'Opponent')).not.toBe(lookKeyOf(mine, 'Club', 'Opponent'));
+    const theirs = { side: 'opp' as const, number: 4, key: 'o3', name: 'Third Name', nationality: 'Spain' };
+    const theirsRenamed = { ...theirs, name: 'Fourth Name', nationality: 'Japan' };
+    expect(lookKeyOf(theirsRenamed, 'Club', 'Opponent')).toBe(lookKeyOf(theirs, 'Club', 'Opponent'));
+    expect(lookKeyOf({ ...theirs, number: 5 }, 'Club', 'Opponent')).not.toBe(lookKeyOf(theirs, 'Club', 'Opponent'));
+  });
+
+  /** The parts of a drawn figure that are his look: the style, the skin, the boots, and the keeper's shirt. */
+  const lookOf = (svg: Element) => [svg.getAttribute('data-pm-look'), svg.querySelector('ellipse[cy="-20"]')?.getAttribute('fill'), svg.querySelectorAll('g > path')[1]?.getAttribute('stroke'), svg.querySelectorAll('g > path')[2]?.getAttribute('stroke')].join('|');
+  it('the viewer draws each man in his own look, the two keepers apart, and a renamed man the same', async () => {
+    const career = structuredClone(fixtures.get('goal')!.career);
+    const first = mount(career);
+    await step(50);
+    const mineSvgs = [...first.container.querySelectorAll('[data-cm-dot] svg')];
+    const theirSvgs = [...first.container.querySelectorAll('[data-cm-dot-opp] svg')];
+    expect(mineSvgs.length).toBeGreaterThan(8);
+    expect(theirSvgs.length).toBeGreaterThan(8);
+    expect([...mineSvgs, ...theirSvgs].every(svg => svg.hasAttribute('data-pm-look'))).toBe(true);
+    expect(new Set([...mineSvgs, ...theirSvgs].map(lookOf)).size).toBeGreaterThan(16);
+    const keeperShirt = (svgs: Element[]) => svgs.filter(svg => svg.querySelector('circle[fill="#fff2d3"]')).map(svg => svg.querySelectorAll('g > path')[2]?.getAttribute('stroke'));
+    expect(keeperShirt(mineSvgs)).toEqual(['#f0b34b']);
+    expect(keeperShirt(theirSvgs)).toEqual([OPP_KEEPER]);
+    const dot = first.container.querySelector('[data-cm-dot]:not([data-cm-captain])')!;
+    const id = dot.getAttribute('data-cm-dot')!;
+    const before = lookOf(dot.querySelector('svg')!);
+    first.unmount();
+    const again = structuredClone(career);
+    again.squad.find(p => p.id === id)!.name = 'Renamed Somebody';
+    const second = mount(again);
+    await step(50);
+    expect(lookOf(second.container.querySelector(`[data-cm-dot="${id}"] svg`)!)).toBe(before);
+  });
+
+  it('the ball leaves the grass on a chance, its element staying where it always was, and never under reduced motion', async () => {
+    const read = async (reduced: boolean) => {
+      const original = window.matchMedia;
+      const spy = vi.spyOn(window, 'matchMedia').mockImplementation(query => ({ ...original(query), matches: reduced }));
+      const { container, unmount } = mount(structuredClone(fixtures.get('goal')!.career));
+      let lifted = 0, frames = 0, inPlace = true;
+      for (let ms = 0; ms < 1800; ms += 40) {
+        await step(40);
+        const ball = container.querySelector<HTMLElement>('[data-cm-ball]')!;
+        frames++;
+        if (ball.hasAttribute('data-cm-ball-lift')) {
+          lifted++;
+          /* The ball's own element keeps its place on the grass: only its two drawn parts move. */
+          if (!ball.querySelector('.cm-live-ball-air') || !ball.querySelector('.cm-live-ball-shadow') || /transform/.test(ball.getAttribute('style') ?? '')) inPlace = false;
+        } else if (ball.children.length) inPlace = false;
+      }
+      unmount();
+      spy.mockRestore();
+      return { lifted, frames, inPlace };
+    };
+    const moving = await read(false);
+    const still = await read(true);
+    console.log(`[1521 lift] frames with the ball off the grass: ${moving.lifted} of ${moving.frames}, under reduced motion ${still.lifted} of ${still.frames}`);
+    expect(moving.lifted).toBeGreaterThan(2);
+    expect(moving.inPlace).toBe(true);
+    expect(still.lifted).toBe(0);
+    expect(still.inPlace).toBe(true);
+  }, 60000);
+
+  it('a foul is seen at its minute: the whistle and the name over its spot, and the ball goes up only when it should', async () => {
+    const career = structuredClone(fixtures.get('shot')!.career);
+    const feed = liveFeed(career.live!);
+    const quiet = (m: number) => !feed.some(e => ['goal', 'shot', 'save', 'corner', 'throwin', 'var'].includes(e.kind) && Math.abs(placeOfLine(e) - m) <= 2);
+    const foul = feed.find(e => e.kind === 'foul' && !e.plus && e.minute >= 4 && e.minute <= 40 && quiet(e.minute));
+    expect(foul, 'a foul in a quiet minute of the first half').toBeDefined();
+    career.live!.minute = foul!.minute - 1.5;
+    const { container } = mount(career);
+    let seen: { text: string; side: string | null; minute: string | null; card: string | null } | null = null;
+    let lifted = 0;
+    for (let ms = 0; ms < 2600 && !seen; ms += 40) {
+      await step(40);
+      if (container.querySelector('[data-cm-ball-lift]')) lifted++;
+      const cue = container.querySelector('[data-pm-cue="foul"]');
+      const label = container.querySelector('[data-cm-foul-cue]');
+      if (cue && label) seen = { text: label.textContent ?? '', side: label.getAttribute('data-cm-foul-cue'), minute: container.querySelector('[data-cm-live-minute]')?.getAttribute('data-cm-live-minute') ?? null, card: cue.getAttribute('data-pm-cue-card') };
+    }
+    expect(seen, 'the whistle was never drawn').not.toBeNull();
+    expect(seen!.minute).toBe(String(foul!.minute));
+    const lines = feed.filter(e => e.kind === 'foul' && e.minute === foul!.minute && e.side === seen!.side);
+    expect(lines.some(e => seen!.text.startsWith(`Foul by ${pitchName(e.text)}`)), seen!.text).toBe(true);
+    const booked = feed.some(e => (e.kind === 'yellow' || e.kind === 'red') && e.minute === foul!.minute && lines.some(l => l.text === e.text));
+    expect(seen!.card !== null).toBe(booked);
+    console.log(`[1521 viewer] the foul at ${foul!.minute}': "${seen!.text}"${seen!.card ? ` with a ${seen!.card} card` : ''}; frames with the ball off the grass on the way ${lifted}`);
+  }, 60000);
 });
 
 /* ─────────────────────────────────────────────────────────────────────────────────────────────

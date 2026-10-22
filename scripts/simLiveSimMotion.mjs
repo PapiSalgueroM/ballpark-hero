@@ -49,7 +49,7 @@
  *   logearly     the list says GOAL when the line fires                            nothing says GOAL before the ball is in
  *   nth          a scorer's later goals are counted on his first card              a scorer card counts his goals
  *   cardside     an opponent who shares a name gets my player's season count       a scorer card counts his goals
- *   bigpart      the part's barrel carries six kilobytes more                      the bundle section (its size ceiling)
+ *   bigpart      the part's barrel carries eight kilobytes more (six until 1521)    the bundle section (its size ceiling)
  *   scorelead    the score waits on the plan's instant, not the action's own start  no frame draws the new score (it led the net by a frame)
  *   samecommit   an action always starts from the frame on screen, old eleven or not  a chance whose line fires in the very commit
  *   crowd        a man in a crowd keeps his name                                   level neighbours take a row each, and a wall shows numbers
@@ -68,6 +68,23 @@
  * And one old control has a new test to turn red: lineup takes the hook's own guard out (an action is dropped
  * when the line up under it changes). The viewer joins the frame to its eleven by key now, so its substitution
  * test no longer needs that guard and stayed green under it; 'the part drops an action' proves it on the hook.
+ * Round 1521 (the match looks like football: a ball with height, fouls you can see, attacks that build, figures
+ * that are each their own man). Each control names the test it must turn red:
+ *   flatball     a pass in the air is drawn flat                                   R10 (both)
+ *   groundlob    every pass is called a ball in the air                            R10: the ball travels
+ *   shotflat     a chance never leaves the grass                                   R10 (both)
+ *   liftnone     the viewer's pitch is not asked to draw the ball's height          the ball leaves the grass
+ *   foulcue      no foul ever gets its whistle                                     R11, and a foul is seen
+ *   foulpair     the man a foul names is looked for on the fouled side             R11
+ *   foulcard     every foul's whistle carries a card                               R11
+ *   foulmeet     the man who fouls stands ten off the man he fouls                 R11
+ *   buildrandom  every stretch of open play starts a new possession                R12
+ *   buildflat    the mentality moves nothing                                       R12
+ *   noreason     a reset goes back without its reason                              R12
+ *   buildchain   the man before the feeder is further up than him                  R12
+ *   lookname     my figures' looks are keyed on the name, not the id               R13 and the renamed man
+ *   looknone     the viewer draws its figures with no look                         the renamed man
+ *   keepersame   both keepers wear the same shirt                                  the renamed man (the two keepers apart)
  * A control exits 1 when its test went red on an assertion, as it must, and 3 when it did anything else.
  *
  * THE BUNDLE SECTION (clean runs and cmimport): the part must stay a part. src/components/pitch-motion is
@@ -95,7 +112,9 @@ const NEW = ['block', 'kickoff', 'overlap', 'mouth', 'draw', 'approach', 'lag', 
 const REVIEW = ['scorelead', 'samecommit', 'crowd', 'turns', 'restartbeat', 'kickoffside', 'throwside', 'foulside', 'cornerflank', 'goalkickside', 'secondkick', 'possession', 'etclear', 'reducedhold', 'flash', 'lastkick', 'dropped', 'logearly', 'nth', 'cardside', 'bigpart', 'kickoffcut', 'kickoffwait', 'kickoffturn'];
 /* Release AR: the cast a chance started with is held while it plays. */
 const HELD = ['castnow'];
-assert.ok(['', ...OLD, ...NEW, ...REVIEW, ...HELD].includes(control), 'Unknown live motion control');
+/* Round 1521. */
+const LOOK = ['flatball', 'groundlob', 'shotflat', 'liftnone', 'foulcue', 'foulpair', 'foulcard', 'foulmeet', 'buildrandom', 'buildflat', 'noreason', 'buildchain', 'lookname', 'looknone', 'keepersame'];
+assert.ok(['', ...OLD, ...NEW, ...REVIEW, ...HELD, ...LOOK].includes(control), 'Unknown live motion control');
 assert.ok(['', 'bundle'].includes(only), 'Unknown LIVE_MOTION_ONLY');
 /* Minified bytes and gzip bytes of the part alone, and the ceiling: each plus a fifth. */
 const BUNDLE_MEASURED = { min: 19277, gzip: 8077 };
@@ -190,6 +209,25 @@ try {
     if (control === 'stalejoin') viewer = replace(viewer, 'const manOf = useMemo(() => new Map([...men.mine, ...men.theirs].map(m => [m.key, m])), [men]);', 'const manOf = useMemo(() => new Map([...men.mine, ...men.theirs].map(m => [m.key, m])), []);');
     /* ---- Release AR ---- */
     if (control === 'castnow') viewer = replace(viewer, 'const castFrom = liveAction && clock >= liveAction.at && clock - liveAction.at <= ACTION_SPAN ? Math.max(liveAction.at, openedAt.current) : null;', 'const castFrom = null as number | null;');
+    /* ---- Round 1521 ---- */
+    if (control === 'flatball') motion = replace(motion, "if (!flight || flight === 'ground') return 0;", 'if (flight || !flight) return 0;');
+    if (control === 'shotflat') motion = replace(motion, 'if (flight <= 0) return 0;', 'if (flight <= 2) return 0;');
+    if (control === 'groundlob') scene = replace(scene, "LONG_PASS ? 'air' : 'ground';", "LONG_PASS ? 'air' : 'air';");
+    if (control === 'foulcue') scene = replace(scene, 'if (beat.foul && beat.dead) {', 'if (beat.foul && beat.dead && false) {');
+    if (control === 'foulpair') scene = replace(scene, 'const by = lists[event.side].find(', 'const by = lists[side].find(');
+    if (control === 'foulcard') scene = replace(scene, 'if (card) foul.card = card;', "foul.card = card ?? 'yellow';");
+    if (control === 'foulmeet') scene = replace(scene, 'tackler.y = b.y + 3.4; }', 'tackler.y = b.y + 13.4; }');
+    if (control === 'buildrandom') scene = replace(scene, 'const prior = last?.line ? last : null;', 'const prior = null as Layer | null; void last;');
+    if (control === 'buildflat') scene = replace(scene, "const lean = clamp(side === 'me' ? push.me : push.opp, -1, 1);", "const lean = 0 * clamp(side === 'me' ? push.me : push.opp, -1, 1);");
+    if (control === 'noreason') scene = replace(scene, '    if (reset) layer.reset = reset;', '    void reset;');
+    if (control === 'buildchain') scene = replace(scene, 'rank(f.line) < rank(feeder.line));', 'rank(f.line) > rank(feeder.line));');
+    if (control === 'liftnone') viewer = replace(viewer, "style={{ aspectRatio: 'auto' }} lift>", "style={{ aspectRatio: 'auto' }}>");
+    if (control === 'lookname') viewer = replace(viewer, '`p:${m.id}`', '`p:${(m as { name?: string }).name}`');
+    if (control === 'looknone') {
+      viewer = replace(viewer, ' look={looks.get(d.key)} keeperColor={OPP_KEEPER} />', ' keeperColor={OPP_KEEPER} />');
+      viewer = replace(viewer, ' selected={picking === m.id} look={looks.get(d.key)} />', ' selected={picking === m.id} />');
+    }
+    if (control === 'keepersame') viewer = replace(viewer, ' look={looks.get(d.key)} keeperColor={OPP_KEEPER} />', ' look={looks.get(d.key)} />');
     const componentPath = path.join(folder, 'LiveSimMotion.tsx').replaceAll('\\', '/');
     viewer = replace(viewer, "import { LivePitchPlayer, useLiveSimMotion } from '@/components/club-manager/LiveSimMotion';", "import { LivePitchPlayer, useLiveSimMotion } from './LiveSimMotion';");
     viewer = replace(viewer, "import type { MotionEvent } from '@/components/club-manager/LiveSimMotion';", "import type { MotionEvent } from './LiveSimMotion';");
@@ -232,6 +270,10 @@ try {
     lastkick: 'a goal with the last kick of a period takes nothing off', dropped: 'a substitution in a goal', logearly: 'nothing says GOAL before the ball is in',
     nth: 'a scorer card counts his goals', cardside: 'a scorer card counts his goals',
     castnow: 'a goal still on its way when the line up changes off the clock',
+    flatball: 'R10', groundlob: 'R10: the ball travels', shotflat: 'R10', liftnone: 'the ball leaves the grass',
+    foulcue: 'R11|a foul is seen', foulpair: 'R11', foulcard: 'R11', foulmeet: 'R11',
+    buildrandom: 'R12', buildflat: 'R12', noreason: 'R12', buildchain: 'R12',
+    lookname: 'R13|a renamed man the same', looknone: 'a renamed man the same', keepersame: 'a renamed man the same',
   };
   let passed = 0;
   if (only !== 'bundle' && control !== 'cmimport' && control !== 'bigpart') {
@@ -288,10 +330,11 @@ try {
       console.log('Negative control changed temporary source: cmimport');
     }
     if (control === 'bigpart') {
-      /* Six kilobytes that do not squash: the ceiling is the measured size plus a fifth, and this is a third more. */
+      /* Eight kilobytes that do not squash: the ceiling is the measured size plus a fifth (Round 1521 made the part
+         about 28K, so six kilobytes cleared its ceiling by only a few hundred bytes), and this is well over it. */
       const barrel = await lf(entry);
       let pad = '';
-      for (let i = 0; pad.length < 6000; i++) pad += ((i * 2654435761) >>> 0).toString(36);
+      for (let i = 0; pad.length < 8000; i++) pad += ((i * 2654435761) >>> 0).toString(36);
       entry = path.join(folder, 'index.ts');
       await writeFile(entry, barrel + 'export const PAD = ' + JSON.stringify(pad) + ';\n');
       console.log('Negative control changed temporary source: bigpart');
