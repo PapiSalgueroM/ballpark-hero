@@ -1,0 +1,642 @@
+name: Site privacy1446 public readback
+on:
+  workflow_dispatch:
+  push:
+    branches: [codex/site-privacy1446-public-readback]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: siteprivacy1446-public-readback-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  public_operator:
+    if: github.ref == 'refs/heads/codex/site-privacy1446-public-readback'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        shell: bash
+    env:
+      OPERATOR_MODE: readback
+      READBACK_OUT: siteprivacy1446-public-artifacts
+      SOURCE_SHA: 4b4d99ebd64f50ffb45bca9d8f56fba6b7e4dcee
+      QUALIFIED_BUILD_SHA: 0dc98659137ead9a6a237d64f1a279e5afee7976
+      QUALIFICATION_WORKFLOW_SHA256: 8bc53a9567b49f18bf0e56d8930f01690ca70b12891840433abcde074cc2caf5
+      INPUT_RUN_ID: 39746539497
+      INPUT_OPERATOR_SHA: b094e38ad374f32823d949ee816f820b79b42077
+      INPUT_ARTIFACT_ID: 12411338454
+      INPUT_ZIP_SHA256: 0374d5f8370c6244e36e0ce6e1d9fc3aa04243ddfc9b7e18a913b8959d94cfc5
+      INPUT_WORKFLOW_NAME: Site privacy1446 public intake
+      EXPECTED_DEPLOYMENT: 16a8e658-6527-43a1-85ff-d5c3c7d896a4
+      OBSERVED_ENTRY: /assets/index-CSqQNs4Q.js
+      ASSET_PINS_JSON: '{"entry":{"path":"/assets/index-CSqQNs4Q.js","sha256":"e79de1239fbca8a6644198c1deeb7e7762f8106f13ca9c4ab33d36f2f43b5ca2"},"cookiePolicy":{"path":"/assets/CookiePolicy-Cn_v4MMa.js","sha256":"ad5a3d2bbf59a42c100e5c3e4a19141bbf955b39f8cdd35707263e77217a9355"},"privacy":{"path":"/assets/PrivacyPolicy-B8wEUBX4.js","sha256":"f6407ea15cb9d22919e02cc429e75913713181850d7457fb207990316b252496"},"profile":{"path":"/assets/Profile-k17Nxh5h.js","sha256":"9cea737b02f9b4cccf21189b77705f57be1c3b36a38d93ed9d4275f78ef40911"}}'
+      ASSET_PINS_SHA256: 5ebf1e216caa5e06181b8cc13c19516c43502ac746fff702fdbcdc5395a1248b
+      PUBLIC_REQUEST_LIMIT: 67
+      OPERATOR_SHA256: 307f2c254d8ce17b37b814f235d5eed9216dc396c3acd6be30d2e57f59bebe48
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Fail closed on manual bindings before downloads or public requests
+        run: |
+          set -euo pipefail
+          mkdir "$READBACK_OUT"
+          git rev-parse HEAD > "$READBACK_OUT/operator-head.txt"
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          node <<'JS'
+          const fs=require('node:fs'),assert=require('node:assert/strict'),{createHash}=require('node:crypto');
+          for(const key of ['SOURCE_SHA','QUALIFIED_BUILD_SHA','INPUT_OPERATOR_SHA'])assert.match(process.env[key]||'',/^[a-f0-9]{40}$/);
+          for(const key of ['INPUT_RUN_ID','INPUT_ARTIFACT_ID'])assert.match(process.env[key]||'',/^[1-9][0-9]+$/);
+          assert.match(process.env.INPUT_ZIP_SHA256||'',/^[a-f0-9]{64}$/);assert.match(process.env.EXPECTED_DEPLOYMENT||'',/^[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/);assert.notEqual(process.env.EXPECTED_DEPLOYMENT,'00000000-0000-0000-0000-000000000000');
+          assert(['strict','intake','readback'].includes(process.env.OPERATOR_MODE));assert.equal(Number(process.env.PUBLIC_REQUEST_LIMIT),process.env.OPERATOR_MODE==='readback'?67:23);for(const key of ['QUALIFICATION_WORKFLOW_SHA256','OPERATOR_SHA256'])assert.match(process.env[key]||'',/^[a-f0-9]{64}$/);
+          if(process.env.OPERATOR_MODE!=='readback'){assert.equal(process.env.INPUT_OPERATOR_SHA,process.env.QUALIFIED_BUILD_SHA);assert.equal(process.env.INPUT_WORKFLOW_NAME,'Site privacy followup1446');assert.match(process.env.OBSERVED_ENTRY||'',/^\/assets\/index-[A-Za-z0-9_-]{8}\.js$/);}
+          else{assert.equal(process.env.INPUT_WORKFLOW_NAME,'Site privacy1446 public intake');const pins=JSON.parse(process.env.ASSET_PINS_JSON);assert.deepEqual(Object.keys(pins).sort(),['cookiePolicy','entry','privacy','profile']);const hash=value=>createHash('sha256').update(value).digest('hex');assert.match(process.env.ASSET_PINS_SHA256||'',/^[a-f0-9]{64}$/);assert.equal(hash(process.env.ASSET_PINS_JSON),process.env.ASSET_PINS_SHA256);for(const row of Object.values(pins)){assert.deepEqual(Object.keys(row).sort(),['path','sha256']);assert.match(row.path,/^\/assets\/[A-Za-z0-9_.-]+\.js$/);assert.match(row.sha256,/^[a-f0-9]{64}$/);}for(const row of Object.values(pins))for(const other of Object.values(pins))if(row.path===other.path)assert.equal(row.sha256,other.sha256);assert.match(pins.entry.path,/^\/assets\/index-[A-Za-z0-9_-]{8}\.js$/);assert.equal(process.env.OBSERVED_ENTRY,pins.entry.path);}
+          fs.writeFileSync(process.env.READBACK_OUT+'/bindings.json',JSON.stringify(Object.fromEntries(['OPERATOR_MODE','SOURCE_SHA','QUALIFIED_BUILD_SHA','INPUT_RUN_ID','INPUT_OPERATOR_SHA','INPUT_ARTIFACT_ID','INPUT_ZIP_SHA256','INPUT_WORKFLOW_NAME','EXPECTED_DEPLOYMENT','OBSERVED_ENTRY','ASSET_PINS_JSON','ASSET_PINS_SHA256','QUALIFICATION_WORKFLOW_SHA256','OPERATOR_SHA256','PUBLIC_REQUEST_LIMIT'].map(key=>[key,process.env[key]])),null,2)+'\n');
+          JS
+      - name: Rebind successful input run and download its exact artifact before public guard
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh api "/repos/PapiSalgueroM/ballpark-hero/actions/runs/$INPUT_RUN_ID" > "$READBACK_OUT/input-run.json"
+          gh api "/repos/PapiSalgueroM/ballpark-hero/actions/runs/$INPUT_RUN_ID/artifacts?per_page=100" > "$READBACK_OUT/input-artifacts.json"
+          gh api "/repos/PapiSalgueroM/ballpark-hero/actions/runs/$INPUT_RUN_ID/jobs?per_page=100" > "$READBACK_OUT/input-jobs.json"
+          node <<'JS'
+          const fs=require('node:fs'),assert=require('node:assert/strict'),out=process.env.READBACK_OUT;const run=JSON.parse(fs.readFileSync(out+'/input-run.json'));assert.equal(String(run.id),process.env.INPUT_RUN_ID);assert.equal(run.head_sha,process.env.INPUT_OPERATOR_SHA);assert.equal(run.status,'completed');assert.equal(run.conclusion,'success');assert.equal(run.name,process.env.INPUT_WORKFLOW_NAME);assert.equal(run.repository.full_name,'PapiSalgueroM/ballpark-hero');const jobs=JSON.parse(fs.readFileSync(out+'/input-jobs.json'));assert.equal(jobs.total_count,process.env.OPERATOR_MODE==='readback'?1:6);assert.equal(jobs.jobs.length,jobs.total_count);assert(jobs.jobs.every(job=>job.status==='completed'&&job.conclusion==='success'));const listed=JSON.parse(fs.readFileSync(out+'/input-artifacts.json'));assert(listed.total_count>0&&listed.total_count<=100);assert.equal(listed.artifacts.length,listed.total_count);const chosen=listed.artifacts.filter(row=>String(row.id)===process.env.INPUT_ARTIFACT_ID);assert.equal(chosen.length,1);assert.equal(chosen[0].expired,false);assert.equal(chosen[0].digest,'sha256:'+process.env.INPUT_ZIP_SHA256);assert.equal(String(chosen[0].workflow_run.id),process.env.INPUT_RUN_ID);assert.equal(chosen[0].workflow_run.head_sha,process.env.INPUT_OPERATOR_SHA);const prefix=process.env.OPERATOR_MODE!=='readback'?'site-privacy1446-build-final-':'siteprivacy1446-public-intake-';assert(chosen[0].name.startsWith(prefix+process.env.INPUT_RUN_ID+'-'));
+          JS
+          gh api "/repos/PapiSalgueroM/ballpark-hero/actions/artifacts/$INPUT_ARTIFACT_ID/zip" > "$READBACK_OUT/input.zip"
+          printf '%s  %s\n' "$INPUT_ZIP_SHA256" "$READBACK_OUT/input.zip" | sha256sum --check > "$READBACK_OUT/input-zip-hold.log"
+          python <<'PY'
+          import os,pathlib,zipfile,tarfile,hashlib,json,re,stat
+          out=pathlib.Path(os.environ['READBACK_OUT']).resolve();target=out/'input';target.mkdir()
+          def safe(name):
+              part=pathlib.PurePosixPath(name)
+              assert name and not part.is_absolute() and '..' not in part.parts and '\\' not in name and ':' not in name
+              return part
+          with zipfile.ZipFile(out/'input.zip') as archive:
+              names=set()
+              for item in archive.infolist():
+                  safe(item.filename);assert item.filename not in names;names.add(item.filename);assert not stat.S_ISLNK(item.external_attr>>16)
+              archive.extractall(target)
+          manifest={}
+          for line in (target/'evidence.sha256').read_text().splitlines():
+              match=re.fullmatch(r'([a-f0-9]{64})  (?:\./)?(.+)',line);assert match
+              name=str(safe(match[2]));assert name not in manifest and name!='evidence.sha256';manifest[name]=match[1]
+          actual={str(p.relative_to(target)) for p in target.rglob('*') if p.is_file()}-{'evidence.sha256'}
+          assert actual==set(manifest) and actual
+          for name,expected in manifest.items():assert hashlib.sha256((target/name).read_bytes()).hexdigest()==expected
+          if os.environ['OPERATOR_MODE']!='readback':
+              assert (target/'head.txt').read_text().strip()==os.environ['QUALIFIED_BUILD_SHA']
+              assert (target/'phase.txt').read_text().strip()=='final'
+              assert (target/'generated.patch').stat().st_size==0 and (target/'generated-files.txt').stat().st_size==0
+              assert (target/'browser.exit').read_text().strip()=='0'
+              browser=json.loads((target/'browser/report.json').read_text());assert browser['complete'] is True and browser['status']=='PASS' and browser['source']==os.environ['QUALIFIED_BUILD_SHA'] and browser['phase']=='green'
+              assert len(browser['positives'])==4 and len(browser['faults'])==3 and len(browser['restorations'])==3 and not browser['errors'] and browser['actualOutbound']==0 and browser['holds']['unchanged'] is True
+              assert all(r['status']=='PASS' for r in browser['positives']) and all(r['detected'] is True for r in browser['faults']) and all(r['status']=='PASS' and r['wholeByteRestoration'] is True for r in browser['restorations'])
+              source_rows=(target/'source-before.sha256').read_text().splitlines();assert (os.environ['QUALIFICATION_WORKFLOW_SHA256']+'  .github/workflows/site-privacy-followup-1446.yml') in source_rows
+              assert (target/'final-holds.exit').read_text().strip()=='0'
+              assert json.loads((target/'transport-hold.json').read_text())['zeroActualAttempts'] is True
+              assert all(p.stat().st_size==0 for p in target.rglob('*.transport'))
+              dest=out/'input-dist';dest.mkdir()
+              with tarfile.open(target/'dist.tar.gz') as archive:
+                  for item in archive.getmembers():safe(item.name);assert item.isdir() or item.isfile()
+                  archive.extractall(dest,filter='data')
+              dist_manifest={}
+              for line in (target/'dist.sha256').read_text().splitlines():
+                  match=re.fullmatch(r'([a-f0-9]{64})  dist/(.+)',line);assert match
+                  name=str(safe(match[2]));assert name not in dist_manifest;dist_manifest[name]=match[1]
+              actual_dist={str(p.relative_to(dest)) for p in dest.rglob('*') if p.is_file()}
+              assert actual_dist==set(dist_manifest) and actual_dist
+              for name,expected in dist_manifest.items():assert hashlib.sha256((dest/name).read_bytes()).hexdigest()==expected
+          else:
+              prior=json.loads((target/'readback.json').read_text());assert prior['complete'] is True and prior['diagnosticOnly'] is True and prior['mode']=='intake'
+              assert prior['operator']==os.environ['INPUT_OPERATOR_SHA'] and str(prior['run'])==os.environ['INPUT_RUN_ID']
+              assert prior['source']==os.environ['SOURCE_SHA'] and prior['qualified']==os.environ['QUALIFIED_BUILD_SHA'] and prior['deployment']==os.environ['EXPECTED_DEPLOYMENT']
+          (out/'input-provenance.json').write_text(json.dumps({'complete':True,'run':os.environ['INPUT_RUN_ID'],'operator':os.environ['INPUT_OPERATOR_SHA'],'artifact':os.environ['INPUT_ARTIFACT_ID'],'zipSha256':os.environ['INPUT_ZIP_SHA256'],'manifestFiles':len(manifest)},indent=2)+'\n')
+          PY
+      - name: Hold exact published source and qualified generated patch
+        run: |
+          set -euo pipefail
+          git fetch --no-tags --depth=1 origin "$SOURCE_SHA" > "$READBACK_OUT/source-fetch.log" 2>&1
+          git fetch --no-tags --depth=1 origin "$QUALIFIED_BUILD_SHA" >> "$READBACK_OUT/source-fetch.log" 2>&1
+          git show "$QUALIFIED_BUILD_SHA:.github/workflows/site-privacy-followup-1446.yml" > "$READBACK_OUT/qualification-workflow.yml"
+          printf '%s  %s\n' "$QUALIFICATION_WORKFLOW_SHA256" "$READBACK_OUT/qualification-workflow.yml" | sha256sum --check > "$READBACK_OUT/qualification-workflow-hold.log"
+          git diff --exit-code "$SOURCE_SHA" HEAD -- . ':!docs/**' ':!.github/workflows/site-privacy1446-public.yml' > "$READBACK_OUT/published-source-hold.log"
+          git diff --exit-code "$QUALIFIED_BUILD_SHA" "$SOURCE_SHA" -- . ':!docs/**' ':!.github/workflows/site-privacy1446-public.yml' > "$READBACK_OUT/qualified-source-hold.log"
+          qualified_input="$READBACK_OUT/input";if test "$OPERATOR_MODE" = readback;then qualified_input="$READBACK_OUT/input/input";fi
+          test -f "$qualified_input/generated.patch" && test ! -s "$qualified_input/generated.patch"
+          test -f "$qualified_input/generated-files.txt" && test ! -s "$qualified_input/generated-files.txt"
+          sha256sum "$qualified_input/generated.patch" "$qualified_input/generated-files.txt" > "$READBACK_OUT/qualified-fixed-point.sha256"
+          git diff --binary "$QUALIFIED_BUILD_SHA" "$SOURCE_SHA" -- public scripts/data/lastmod.json > "$READBACK_OUT/adopted-generated.patch"
+          cmp "$qualified_input/generated.patch" "$READBACK_OUT/adopted-generated.patch" > "$READBACK_OUT/qualified-generated-patch-hold.log"
+          git ls-files -z -- . | sort -z | xargs -0 sha256sum > "$READBACK_OUT/source-before.sha256"
+      - name: Isolated pinned request and parser tools without an app build or browser installation
+        run: |
+          set -euo pipefail
+          tools="$RUNNER_TEMP/siteprivacy1446-public-tools"
+          npm install --prefix "$tools" --no-save --package-lock=false playwright@1.64.0 jsdom@20.0.3 es-module-lexer@1.7.0 acorn@8.15.0 > "$READBACK_OUT/tooling.log" 2>&1
+          test ! -e node_modules;mkdir node_modules
+          for package in playwright playwright-core jsdom;do ln -s "$tools/node_modules/$package" "node_modules/$package";done
+          echo "NODE_PATH=$tools/node_modules" >> "$GITHUB_ENV"
+      - name: Narrow the pinned historical public guard without editing it
+        run: |
+          set -euo pipefail
+          cat > "$READBACK_OUT/security-cookie-policy.cjs" <<'COOKIEJS'
+          'use strict';
+          
+          function checkNoResponseCookie(headers) {
+            const fail = () => { throw new Error('PUBLIC_RESPONSE_COOKIE'); };
+            const cookie = headers['set-cookie'];
+            if (cookie === undefined) return [];
+            if (typeof cookie !== 'string' || cookie.length > 4096 || /[\r\n]/.test(cookie)) fail();
+            const parts = cookie.split(';').map(part => part.trim());
+            const pair = parts.shift(), separator = pair.indexOf('=');
+            if (separator < 1 || pair.slice(0, separator) !== '__cf_bm' || !/^[A-Za-z0-9._-]{1,2048}$/.test(pair.slice(separator + 1))) fail();
+            const attributes = new Map();
+            for (const part of parts) {
+              const equals = part.indexOf('='), name = (equals < 0 ? part : part.slice(0, equals)).toLowerCase();
+              const value = equals < 0 ? '' : part.slice(equals + 1);
+              if (!name || attributes.has(name)) fail();
+              attributes.set(name, value);
+            }
+            if (attributes.size !== 6 || attributes.get('httponly') !== '' || attributes.get('secure') !== '' || attributes.get('path') !== '/' || attributes.get('domain')?.toLowerCase() !== 'douknowball.com' || attributes.get('samesite')?.toLowerCase() !== 'none') fail();
+            const expires = attributes.get('expires'), date = headers.date;
+            if (typeof expires !== 'string' || typeof date !== 'string' || !/ GMT$/.test(expires) || !/ GMT$/.test(date)) fail();
+            const lifetimeSeconds = (Date.parse(expires) - Date.parse(date)) / 1000;
+            if (!Number.isFinite(lifetimeSeconds) || lifetimeSeconds <= 0 || lifetimeSeconds > 31 * 60) fail();
+            return [{ name: '__cf_bm', purpose: 'hosting bot protection', lifetimeSeconds, httpOnly: true, secure: true, sameSite: 'None', path: '/', domain: 'douknowball.com' }];
+          }
+          
+          module.exports = { checkNoResponseCookie };
+          COOKIEJS
+          cat > "$READBACK_OUT/security-cookie-controls.cjs" <<'COOKIEJS'
+          'use strict';
+          
+          const fs = require('node:fs'), assert = require('node:assert/strict'), { createHash } = require('node:crypto');
+          const path = require('node:path'), out = process.env.READBACK_OUT;
+          const { checkNoResponseCookie } = require('./security-cookie-policy.cjs');
+          const hash = value => createHash('sha256').update(value).digest('hex');
+          const modulePath = path.join(out, 'security-cookie-policy.cjs'), before = fs.readFileSync(modulePath);
+          const fixture = { date: 'Thu, 22 Oct 2026 07:00:00 GMT', 'set-cookie': '__cf_bm=CONTROL_VALUE; HttpOnly; SameSite=None; Secure; Path=/; Domain=douknowball.com; Expires=Thu, 22 Oct 2026 07:30:00 GMT' };
+          const accepted = checkNoResponseCookie(fixture);
+          assert.deepEqual(checkNoResponseCookie({}), []);
+          assert.deepEqual(accepted, [{ name: '__cf_bm', purpose: 'hosting bot protection', lifetimeSeconds: 1800, httpOnly: true, secure: true, sameSite: 'None', path: '/', domain: 'douknowball.com' }]);
+          const lowerCase = { ...fixture, 'set-cookie': fixture['set-cookie'].replace('HttpOnly', 'httponly').replace('SameSite=None', 'samesite=none').replace('Secure', 'secure').replace('Path=/', 'path=/').replace('Domain=', 'domain=').replace('Expires=', 'expires=') };
+          assert.deepEqual(checkNoResponseCookie(lowerCase), accepted);
+          const faults = [
+            ['unexpected-cookie', { ...fixture, 'set-cookie': fixture['set-cookie'].replace('__cf_bm=', '_ga=') }],
+            ['multiple-cookies', { ...fixture, 'set-cookie': fixture['set-cookie'] + '\n_ga=CONTROL' }],
+            ['non-string', { ...fixture, 'set-cookie': [fixture['set-cookie']] }],
+            ['oversize', { ...fixture, 'set-cookie': fixture['set-cookie'] + 'x'.repeat(4097) }],
+            ['missing-pair', { ...fixture, 'set-cookie': '__cf_bm; ' + fixture['set-cookie'].split('; ').slice(1).join('; ') }],
+            ['empty-value', { ...fixture, 'set-cookie': fixture['set-cookie'].replace('CONTROL_VALUE', '') }],
+            ['invalid-value', { ...fixture, 'set-cookie': fixture['set-cookie'].replace('CONTROL_VALUE', 'CONTROL,VALUE') }],
+            ['duplicate-attribute', { ...fixture, 'set-cookie': fixture['set-cookie'] + '; Secure' }],
+            ['unknown-attribute', { ...fixture, 'set-cookie': fixture['set-cookie'] + '; Max-Age=1800' }],
+            ['missing-http-only', { ...fixture, 'set-cookie': fixture['set-cookie'].replace('; HttpOnly', '') }],
+            ['missing-secure', { ...fixture, 'set-cookie': fixture['set-cookie'].replace('; Secure', '') }],
+            ['wrong-path', { ...fixture, 'set-cookie': fixture['set-cookie'].replace('Path=/', 'Path=/other') }],
+            ['wrong-domain', { ...fixture, 'set-cookie': fixture['set-cookie'].replace('Domain=douknowball.com', 'Domain=other.invalid') }],
+            ['wrong-same-site', { ...fixture, 'set-cookie': fixture['set-cookie'].replace('SameSite=None', 'SameSite=Lax') }],
+            ['missing-expiry', { ...fixture, 'set-cookie': fixture['set-cookie'].replace('; Expires=Thu, 22 Oct 2026 07:30:00 GMT', '') }],
+            ['invalid-expiry', { ...fixture, 'set-cookie': fixture['set-cookie'].replace('Expires=Thu, 22 Oct 2026 07:30:00 GMT', 'Expires=CONTROL') }],
+            ['invalid-server-date', { ...fixture, date: 'CONTROL GMT' }],
+            ['missing-server-date', { ...fixture, date: undefined }],
+            ['expired', { ...fixture, 'set-cookie': fixture['set-cookie'].replace('07:30:00 GMT', '06:59:00 GMT') }],
+            ['long-expiry', { ...fixture, 'set-cookie': fixture['set-cookie'].replace('07:30:00 GMT', '08:00:00 GMT') }],
+          ];
+          const rows = [];
+          for (const [name, changed] of faults) {
+            const beforeSha256 = hash(JSON.stringify(fixture)), afterSha256 = hash(JSON.stringify(changed));
+            assert.notEqual(beforeSha256, afterSha256, 'SECURITY_COOKIE_CHANGED_INPUT_REQUIRED');
+            let error;
+            try { checkNoResponseCookie(changed); } catch (caught) { error = caught; }
+            assert.equal(error?.name, 'Error');
+            assert.equal(error?.message, 'PUBLIC_RESPONSE_COOKIE');
+            rows.push({ name, beforeSha256, afterSha256, rejected: true, networkAttempted: false });
+          }
+          assert(fs.readFileSync(modulePath).equals(before));
+          fs.writeFileSync(path.join(out, 'security-cookie-policy-before.sha256'), hash(before) + '  ' + modulePath + '\n');
+          fs.writeFileSync(path.join(out, 'security-cookie-controls.json'), JSON.stringify({ complete: true, absentAccepted: true, exactSecurityShapeAccepted: true, attributeCasingAccepted: true, accepted, faults: rows, moduleSha256: hash(before), moduleHeld: true, networkAttempted: false, scope: 'Recognize one measured host bot cookie. No legal exemption, optional consent or cookie replay inference.' }, null, 2) + '\n');
+          COOKIEJS
+          printf '%s  %s\n' 3f5deb32d6175b50aa0df030df449243a6cf9f208a4ff5727bdfe8ff973c1428 "$READBACK_OUT/security-cookie-policy.cjs" | sha256sum --check > "$READBACK_OUT/security-cookie-policy-initial.log"
+          node "$READBACK_OUT/security-cookie-controls.cjs" > "$READBACK_OUT/security-cookie-controls.log" 2>&1
+          node <<'JS'
+          const fs=require('node:fs'),assert=require('node:assert/strict'),{createHash}=require('node:crypto');const hash=body=>createHash('sha256').update(body).digest('hex'),out=process.env.READBACK_OUT;
+          for(const [file,pin] of Object.entries({'scripts/auditLive.mjs':'26c387c01ba5cb2a993bf5205228d7b451770eed1c4836d052574c9dc5e3f2de','scripts/lib/liveIndexability.mjs':'133365fa307e7548b4367508a91d2629af24d6cca207e127df294c1a3e23ac40'})){const body=fs.readFileSync(file);assert.equal(hash(body),pin);assert.throws(()=>assert.equal(hash(Buffer.concat([body,Buffer.from('\n')])),pin));}
+          const source=fs.readFileSync('.github/workflows/legal-ai-privacy-public-readback.yml','utf8'),pin='37d187d3bc4659ebfdda5d010fb157972c4c8e797b4bab2b3fc27d20ddfe15cb';assert.equal(hash(source),pin);assert.throws(()=>assert.equal(hash(source+'\n'),pin));
+          const start='          cat > "$READBACK_OUT/read-only.cjs" <<\'JS\'\n',end='\n          JS\n';assert.equal(source.split(start).length,2);const rest=source.split(start)[1],finish=rest.indexOf(end);assert(finish>0);let guard=rest.slice(0,finish).replace(/^          /gm,'');assert(guard.trimEnd().endsWith('module.exports = { ORIGIN, checkedURL };'));
+          const from=guard.indexOf('const paths = new Set('),to=guard.indexOf('function checkedURL(');assert(from>=0&&to>from&&guard.slice(from,to).includes("addPublic('public')"));
+          const sitemap=fs.readFileSync('public/sitemap.xml','utf8');const routes=[...new Set([...sitemap.matchAll(/<loc>https?:\/\/[^/]+([^<]*)<\/loc>/g)].map(m=>(m[1]||'/').replace(/\/$/,'')||'/'))].filter(route=>route!=='/');const count=Math.min(24,routes.length),sample=Array.from({length:count},(_,i)=>routes[Math.floor(i*routes.length/count)]);assert.equal(count,24);assert(sample.every(route=>/^\/(?:[a-z0-9-]+\/)*[a-z0-9-]+$/.test(route)));const pages=[...new Set(['/', '/cookie-policy', '/privacy', '/prerender-boot.js',...(process.env.OPERATOR_MODE==='readback'?sample:[])])];assert(!pages.includes('/__siteprivacy1446_unlisted'));
+          guard=guard.slice(0,from)+'const paths = new Set('+JSON.stringify(pages)+');\nconst allowedAssets = () => new Set(JSON.parse(fs.readFileSync(path.join(out, "allowed-assets.json"), "utf8")));\nfunction checkRequestBudget(count) { if (!Number.isSafeInteger(count) || count < 0 || count >= Number(process.env.PUBLIC_REQUEST_LIMIT)) throw new Error("PUBLIC_REQUEST_BUDGET"); }\nconst { checkNoResponseCookie } = require("./security-cookie-policy.cjs");\n'+guard.slice(to);
+          const assetLine=guard.split('\n').filter(line=>line.trim().startsWith('const asset = '));assert.equal(assetLine.length,1);guard=guard.replace(assetLine[0],'  const asset = allowedAssets().has(url.pathname);');
+          const recordLine="    record('public-network.jsonl', { method, origin: url.origin, path: url.pathname });";
+          assert.equal(guard.split(recordLine).length,2);guard=guard.replace(recordLine,'      const recordFile = path.join(out, "public-network.jsonl"), priorCount = fs.existsSync(recordFile) ? fs.readFileSync(recordFile,"utf8").trim().split("\\n").filter(Boolean).length : 0;\n      checkRequestBudget(priorCount);\n'+recordLine);
+          const requestLine='      const response = await native(input, { ...options, maxRedirects: 0, maxRetries: 0 });';assert.equal(guard.split(requestLine).length,2);guard=guard.replace(requestLine,'      const fresh = checkedURL(typeof input === "string" || input instanceof URL ? input : input.url(), method);\n      fresh.searchParams.set("siteprivacy1446_public_audit", process.env.GITHUB_RUN_ID + "." + process.env.GITHUB_RUN_ATTEMPT);\n      const response = await native(fresh.href, { ...options, maxRedirects: 0, maxRetries: 0 });\n      const rawHeaders = response.headers();\n      record("public-response-headers.jsonl", { method: String(method).toUpperCase(), path: fresh.pathname, status: response.status(), headers: rawHeaders });\n      checkNoResponseCookie(rawHeaders);\n      const header = rawHeaders["x-deployment-id"];\n      if (!fresh.pathname.startsWith("/assets/") || header) { const uuid = "[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}"; const match = String(header).match(new RegExp("^("+uuid+")$|^psr2\\\\.("+uuid+")\\\\.[0-9]{10}\\\\.[A-Za-z0-9_-]{43}$", "i")); if (!match || (match[1] || match[2]).toLowerCase() !== process.env.EXPECTED_DEPLOYMENT) throw new Error("Exact deployment header required"); }');
+          const exportsLine='module.exports = { ORIGIN, checkedURL };';assert.equal(guard.split(exportsLine).length,2);guard=guard.replace(exportsLine,'module.exports = { ORIGIN, checkedURL, checkRequestBudget, checkNoResponseCookie };');
+          const assets=process.env.OPERATOR_MODE!=='readback'?[process.env.OBSERVED_ENTRY]:[...new Set(Object.values(JSON.parse(process.env.ASSET_PINS_JSON)).map(row=>row.path))];fs.writeFileSync(out+'/allowed-assets.json',JSON.stringify(assets));fs.writeFileSync(out+'/audit-allowed-pages.json',JSON.stringify({audited:['/','/cookie-policy','/privacy'],chromeSample:process.env.OPERATOR_MODE==='readback'?sample:[],allowed:pages},null,2));fs.writeFileSync(out+'/read-only.cjs',guard);fs.writeFileSync(out+'/preparation.json',JSON.stringify({complete:true,guardSourceSha256:pin,narrowedGuardSha256:hash(guard),changedGuardRejected:1,unchangedAuditPinsHeld:2,source:process.env.SOURCE_SHA,qualified:process.env.QUALIFIED_BUILD_SHA},null,2));
+          JS
+      - name: Read fixed pages and source reachable status assets with strict diagnostics retained
+        run: |
+          set -euo pipefail
+          cat > "$READBACK_OUT/operator.cjs" <<'JS'
+          // Private operator template. Copied into the workflow artifact directory, never app code.
+          const fs = require('node:fs'), path = require('node:path'), assert = require('node:assert/strict');
+          const { createHash } = require('node:crypto');
+          const { spawnSync } = require('node:child_process');
+          const { request } = require('playwright-core'), { JSDOM } = require('jsdom');
+          const lexer = require('es-module-lexer'), acorn = require('acorn');
+          const { ORIGIN, checkedURL, checkRequestBudget, checkNoResponseCookie } = require('./read-only.cjs');
+          const out = process.env.READBACK_OUT, mode = process.env.OPERATOR_MODE;
+          const hash = value => createHash('sha256').update(value).digest('hex');
+          const rolesRequired = ['cookiePolicy', 'entry', 'privacy', 'profile'];
+          const save = (name, value) => fs.writeFileSync(path.join(out, name), typeof value === 'string' || Buffer.isBuffer(value) ? value : JSON.stringify(value, null, 2) + '\n');
+          const report = { complete: false, mode, diagnosticOnly: mode !== 'readback', source: process.env.SOURCE_SHA, qualified: process.env.QUALIFIED_BUILD_SHA, operator: process.env.GITHUB_SHA, run: process.env.GITHUB_RUN_ID, deployment: process.env.EXPECTED_DEPLOYMENT, pages: [], targets: [], imports: [], controls: {}, scope: 'Published source, bounded renderer semantics and exact observed assets. Whole CI binary equality is not asserted.' };
+          const persist = () => save('readback.json', report);
+          function walk(node, visit) { if (!node || typeof node !== 'object') return; if (typeof node.type === 'string') visit(node); for (const value of Object.values(node)) if (Array.isArray(value)) value.forEach(child => walk(child, visit)); else if (value && typeof value === 'object') walk(value, visit); }
+          const parse = source => acorn.parse(source, { ecmaVersion: 'latest', sourceType: 'module', allowHashBang: true });
+          const prop = (object, name) => object?.properties?.find(row => row.type === 'Property' && !row.computed && (row.key.name ?? row.key.value) === name)?.value;
+          function jsxCalls(root) { const result = []; walk(root, node => { if (node.type === 'CallExpression' && node.arguments[0]?.type === 'Literal' && typeof node.arguments[0].value === 'string' && node.arguments[1]?.type === 'ObjectExpression') result.push(node); }); return result; }
+          function text(root) { const values = []; walk(root, node => { if (node.type === 'Literal' && typeof node.value === 'string') values.push(node.value); }); return values.join(' ').replace(/\s+/g, ' ').trim(); }
+          const cookieClaims = [
+            'Analytics is paused while we check its collection settings, so Accept all does not turn it on.',
+            'That period applies to your cookie choice, not a promise to delete game saves or provider records after 180 days.',
+            'Withdrawal does not erase information already received by a provider or remove cookies on another site or outside our code\'s access.',
+            'Pausing Google Analytics does not turn off ordinary hosting logs or hosting-provider usage information.'
+          ];
+          const operatorClaim = 'DoUKnowBall is operated by Anthony Salguero, an individual.';
+          const privacyPauseClaims = ['Analytics is currently paused, and the banner explains why.', 'Analytics stays off while it is paused.', 'Cookie choices shows this paused status.'];
+          const claimsFor = route => route === '/cookie-policy' ? cookieClaims : route === '/privacy' ? [...privacyPauseClaims, operatorClaim] : [];
+          function legalRenderer(source, role) {
+            const phrases = role === 'cookiePolicy' ? cookieClaims : [operatorClaim], ast = parse(source), paragraphs = jsxCalls(ast).filter(node => node.arguments[0].value === 'p');
+            const rows = [];
+            for (const phrase of phrases) {
+              const found = paragraphs.filter(node => text(prop(node.arguments[1], 'children')).includes(phrase));
+              assert.equal(found.length, 1, 'COMPILED_LEGAL_CLAIM_REQUIRED: ' + role + ': ' + phrase);
+              const literals = []; walk(prop(found[0].arguments[1], 'children'), node => { if (node.type === 'Literal' && typeof node.value === 'string' && node.value.includes(phrase)) literals.push(node); });
+              assert.equal(literals.length, 1, 'COMPILED_LEGAL_LITERAL_UNIQUE'); rows.push({ phrase, start: literals[0].start, end: literals[0].end, value: literals[0].value });
+            }
+            return rows;
+          }
+          function legalControls(source, role) {
+            const rows = [];
+            for (const [index, found] of legalRenderer(source, role).entries()) {
+              const original = source.slice(found.start, found.end), replacement = JSON.stringify(found.value.replace(found.phrase, 'CONTROL_REMOVED_LEGAL_' + role + '_' + index));
+              const inert = '\n/*' + found.phrase.replaceAll('*/', '* /') + '*/\nconst __LEGAL1446_INERT_' + role + '_' + index + '=' + JSON.stringify(found.phrase) + ';';
+              assert(!source.includes('__LEGAL1446_INERT_' + role + '_' + index));
+              const changed = source.slice(0, found.start) + replacement + source.slice(found.end) + inert;
+              assert.notEqual(changed, source); parse(changed);
+              assert.equal(changed.slice(0, found.start) + original + changed.slice(found.start + replacement.length, -inert.length), source);
+              let caught; try { legalRenderer(changed, role); } catch (error) { caught = error; }
+              assert.equal(caught?.name, 'AssertionError'); assert(caught.message.startsWith('COMPILED_LEGAL_CLAIM_REQUIRED: ' + role + ': ' + found.phrase));
+              const file = 'control-legal-' + role + '-' + index + '.js'; save(file, changed);
+              rows.push({ role, phrase: found.phrase, start: found.start, end: found.end, original, replacement, inert, changedFile: file, beforeSha256: hash(source), afterSha256: hash(changed), wholeInverseExact: true, inertShadowRejected: true, parserAcceptedFault: true, rejection: { name: caught.name, message: caught.message } });
+            }
+            return rows;
+          }
+          const circleClass = 'rounded-full bg-primary text-primary-foreground flex items-center justify-center text-3xl font-bold';
+          function profileRenderer(source) {
+            const ast = parse(source), calls = jsxCalls(ast), circles = calls.filter(node => node.arguments[0].value === 'div' && prop(node.arguments[1], 'className')?.value === circleClass);
+            assert.equal(circles.length, 1, 'PROFILE_INITIAL_CIRCLE_UNIQUE'); const circle = circles[0], props = circle.arguments[1], style = prop(props, 'style');
+            assert(circle.arguments.length === 2 && props.properties.length === 3 && ['className', 'style', 'children'].every(key => prop(props, key)) && style?.type === 'ObjectExpression' && style.properties.length === 2 && prop(style, 'width')?.value === 72 && prop(style, 'height')?.value === 72, 'PROFILE_INITIAL_PLAIN_CIRCLE');
+            const groups = calls.filter(node => node.arguments[0].value === 'div' && prop(node.arguments[1], 'className')?.value === 'flex items-center gap-4' && prop(node.arguments[1], 'children')?.type === 'ArrayExpression' && prop(node.arguments[1], 'children').elements.length === 2 && prop(node.arguments[1], 'children').elements[0] === circle);
+            assert.equal(groups.length, 1, 'PROFILE_AVATAR_DIRECT_INITIAL_ONLY');
+            const info = prop(groups[0].arguments[1], 'children').elements[1], headings = jsxCalls(info).filter(node => node.arguments[0].value === 'h1' && prop(node.arguments[1], 'className')?.value === 'text-2xl font-display font-bold text-foreground');
+            assert.equal(headings.length, 1, 'PROFILE_SUBJECT_HEADING_UNIQUE');
+            const member = (node, name) => node?.type === 'MemberExpression' && !node.computed && !node.optional && node.property.type === 'Identifier' && node.property.name === name && node.object.type === 'Identifier';
+            const heading = prop(headings[0].arguments[1], 'children');
+            assert(heading?.type === 'LogicalExpression' && heading.operator === '||' && member(heading.left, 'display_name') && heading.right.type === 'Literal' && heading.right.value === 'Anonymous Player', 'PROFILE_SUBJECT_HEADING_SHAPE');
+            const child = prop(props, 'children'), upper = child?.callee, charAt = upper?.object, charMember = charAt?.callee, choice = charMember?.object;
+            assert(child?.type === 'CallExpression' && child.arguments.length === 0 && upper?.type === 'MemberExpression' && !upper.computed && upper.property.name === 'toUpperCase' && charAt?.type === 'CallExpression' && charAt.arguments.length === 1 && charAt.arguments[0].type === 'Literal' && charAt.arguments[0].value === 0 && charMember?.type === 'MemberExpression' && !charMember.computed && charMember.property.name === 'charAt', 'PROFILE_INITIAL_CHARACTER_CHAIN');
+            assert(choice?.type === 'LogicalExpression' && choice.operator === '||' && choice.right.type === 'Literal' && choice.right.value === 'U' && choice.left.type === 'LogicalExpression' && choice.left.operator === '||' && member(choice.left.left, 'display_name') && member(choice.left.right, 'username'), 'PROFILE_INITIAL_MEMBER_FIELDS');
+            const display = choice.left.left, username = choice.left.right;
+            assert(display.object.name === username.object.name && display.object.name === heading.left.object.name, 'PROFILE_INITIAL_SUBJECT_MATCH');
+            return { circleStart: circle.start, circleEnd: circle.end, circleCallee: source.slice(circle.callee.start, circle.callee.end), childStart: child.start, childEnd: child.end, subject: display.object.name, displayObject: { start: display.object.start, end: display.object.end }, usernameObject: { start: username.object.start, end: username.object.end }, usernameProperty: { start: username.property.start, end: username.property.end }, scope: 'One72px avatar child is literal initials from the same subject as this header. Other images and stored avatar fields are outside this bounded predicate.' };
+          }
+          function profileControls(source) {
+            const found = profileRenderer(source), circle = source.slice(found.circleStart, found.circleEnd), child = source.slice(found.childStart, found.childEnd), other = found.subject + '_CONTROL_VIEWER1446';
+            let wrongSubject = child;
+            for (const range of [found.displayObject, found.usernameObject].sort((a, b) => b.start - a.start)) wrongSubject = wrongSubject.slice(0, range.start - found.childStart) + other + wrongSubject.slice(range.end - found.childStart);
+            const email = child.slice(0, found.usernameProperty.start - found.childStart) + 'email' + child.slice(found.usernameProperty.end - found.childStart);
+            const controls = [
+              { name: 'conditional-remote-avatar', start: found.circleStart, end: found.circleEnd, replacement: '("CONTROL_REMOTE_AVATAR"?' + found.circleCallee + '("img",{src:"https://avatar-control.invalid/profile.png"}):' + circle + ')', marker: 'PROFILE_AVATAR_DIRECT_INITIAL_ONLY' },
+              { name: 'different-subject-initial', start: found.childStart, end: found.childEnd, replacement: wrongSubject, marker: 'PROFILE_INITIAL_SUBJECT_MATCH' },
+              { name: 'email-instead-of-subject-username', start: found.childStart, end: found.childEnd, replacement: email, marker: 'PROFILE_INITIAL_MEMBER_FIELDS' }
+            ], rows = [];
+            for (const control of controls) {
+              const original = source.slice(control.start, control.end), changed = source.slice(0, control.start) + control.replacement + source.slice(control.end); assert.notEqual(changed, source); parse(changed);
+              assert.equal(changed.slice(0, control.start) + original + changed.slice(control.start + control.replacement.length), source);
+              let caught; try { profileRenderer(changed); } catch (error) { caught = error; }
+              assert.equal(caught?.name, 'AssertionError'); assert(caught.message.startsWith(control.marker)); const file = 'control-profile-' + control.name + '.js'; save(file, changed);
+              rows.push({ name: control.name, start: control.start, end: control.end, original, replacement: control.replacement, changedFile: file, beforeSha256: hash(source), afterSha256: hash(changed), wholeInverseExact: true, parserAcceptedFault: true, rejection: { name: caught.name, message: caught.message } });
+            }
+            return rows;
+          }
+          function cookieRenderer(source) {
+            const ast = parse(source), calls = jsxCalls(ast);
+            const regions = calls.filter(node => prop(node.arguments[1], 'role')?.value === 'region' && prop(node.arguments[1], 'aria-label')?.value === 'Cookie choices');
+            assert.equal(regions.length, 1, 'COOKIE_REGION_UNIQUE');
+            const nested = jsxCalls(regions[0]);
+            const status = nested.filter(node => prop(node.arguments[1], 'data-analytics-paused-status')?.value === '');
+            assert.equal(status.length, 1, 'STATUS_MARKER_UNIQUE');
+            assert.equal(status[0].arguments[0].value, 'p', 'STATUS_PLAIN_P_REQUIRED');
+            const plainProps = (object, keys) => object?.type === 'ObjectExpression'
+              && object.properties.length === keys.length
+              && object.properties.every(row => row.type === 'Property' && !row.computed && row.kind === 'init' && !row.method && !row.shorthand && keys.includes(row.key.name ?? row.key.value))
+              && new Set(object.properties.map(row => row.key.name ?? row.key.value)).size === keys.length;
+            const props = status[0].arguments[1], children = prop(props, 'children');
+            const strong = children?.elements?.[0], reason = children?.elements?.[1], strongProps = strong?.arguments?.[1];
+            assert(status[0].arguments.length === 2
+              && plainProps(props, ['data-analytics-paused-status', 'children'])
+              && prop(props, 'data-analytics-paused-status')?.type === 'Literal'
+              && children?.type === 'ArrayExpression' && children.elements.length === 2
+              && strong?.type === 'CallExpression' && strong.arguments.length === 2
+              && strong.arguments[0]?.type === 'Literal' && strong.arguments[0].value === 'strong'
+              && plainProps(strongProps, ['children'])
+              && prop(strongProps, 'children')?.type === 'Literal' && prop(strongProps, 'children').value === 'Analytics is paused.'
+              && reason?.type === 'Literal' && typeof reason.value === 'string' && reason.value.trim() === 'Google Analytics is off while we check its privacy settings.'
+              && jsxCalls(status[0]).length === 2, 'STATUS_PLAIN_SHAPE_REQUIRED');
+            const inputs = nested.filter(node => node.arguments[0].value === 'input');
+            assert.equal(inputs.length, 1, 'COOKIE_ONLY_ADVERTISING_INPUT');
+            assert.equal(prop(inputs[0].arguments[1], 'type')?.value, 'checkbox', 'COOKIE_ADVERTISING_CHECKBOX');
+            const labels = nested.filter(node => node.arguments[0].value === 'label');
+            assert.equal(labels.filter(node => /\bAdvertising\b/.test(text(prop(node.arguments[1], 'children')))).length, 1, 'COOKIE_ADVERTISING_LABEL');
+            assert.equal(labels.filter(node => /\bAnalytics\b/.test(text(prop(node.arguments[1], 'children')))).length, 0, 'COOKIE_ANALYTICS_LABEL_REFUSED');
+            return { statusStart: status[0].start, statusEnd: status[0].end, propsStart: props.start, callee: source.slice(status[0].callee.start, status[0].callee.end) };
+          }
+          function cookieControl(source) {
+            const found = cookieRenderer(source), original = source.slice(found.statusStart, found.statusEnd);
+            const replacement = found.callee + '("label",{"data-analytics-paused-status":"",children:[' + found.callee + '("input",{type:"checkbox",checked:false,disabled:true}),"Analytics"]})';
+            const changed = source.slice(0, found.statusStart) + replacement + source.slice(found.statusEnd);
+            assert.notEqual(changed, source); parse(changed);
+            assert.equal(changed.slice(0, found.statusStart) + original + changed.slice(found.statusStart + replacement.length), source);
+            assert.throws(() => cookieRenderer(changed), error => error.name === 'AssertionError' && error.message.startsWith('STATUS_PLAIN_P_REQUIRED'));
+            const handlerAt = found.propsStart + 1, handler = 'onClick:()=>{},';
+            assert.equal(source[found.propsStart], '{');
+            const withHandler = source.slice(0, handlerAt) + handler + source.slice(handlerAt);
+            assert.notEqual(withHandler, source); parse(withHandler);
+            assert.equal(withHandler.slice(0, handlerAt) + withHandler.slice(handlerAt + handler.length), source);
+            assert.throws(() => cookieRenderer(withHandler), error => error.name === 'AssertionError' && error.message.startsWith('STATUS_PLAIN_SHAPE_REQUIRED'));
+            return { originalSha256: hash(source), changedSha256: hash(changed), occurrences: 1, wholeInverseExact: true, parserAcceptedFault: true, rejection: 'STATUS_PLAIN_P_REQUIRED', handler: { changedSha256: hash(withHandler), occurrences: 1, wholeInverseExact: true, parserAcceptedFault: true, rejection: 'STATUS_PLAIN_SHAPE_REQUIRED' } };
+          }
+          function deployment(header) {
+            assert.equal(typeof header, 'string'); const uuid = '[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}';
+            const match = header.match(new RegExp('^(' + uuid + ')$|^psr2\\.(' + uuid + ')\\.[0-9]{10}\\.[A-Za-z0-9_-]{43}$', 'i'));
+            assert(match, 'DEPLOYMENT_FORMAT'); assert.equal((match[1] || match[2]).toLowerCase(), process.env.EXPECTED_DEPLOYMENT, 'DEPLOYMENT_ID');
+          }
+          const pausedBootstrapSha256 = 'c2b7502f066225a879f1ddf8f1d98751624c49511bc4654ad28bba3b55db3ed0';
+          let sourceBootstrapRecord;
+          function designatedBootstrap(html, dom) {
+            const nodes = [...dom.window.document.querySelectorAll('script[data-dukb-consent-bootstrap]')];
+            assert.equal(nodes.length, 1, 'RAW_PAUSED_BOOTSTRAP_UNIQUE'); const node = nodes[0];
+            assert(node.attributes.length === 1 && node.getAttribute('data-dukb-consent-bootstrap') === '', 'RAW_PAUSED_BOOTSTRAP_ATTRIBUTES');
+            const location = dom.nodeLocation(node);
+            assert(location?.startTag && location?.endTag && Number.isInteger(location.startTag.endOffset) && Number.isInteger(location.endTag.startOffset), 'RAW_PAUSED_BOOTSTRAP_LOCATION');
+            return { node, body: html.slice(location.startTag.endOffset, location.endTag.startOffset) };
+          }
+          function verifyPausedBootstrap(body, expected) {
+            assert.equal(body, expected, 'RAW_PAUSED_SOURCE_BYTES');
+            const ast = parse(body), statement = ast.body[0], call = statement?.expression, fn = call?.callee;
+            assert(ast.body.length === 1 && statement.type === 'ExpressionStatement' && call.type === 'CallExpression' && !call.optional && call.arguments.length === 0
+              && fn?.type === 'FunctionExpression' && fn.id === null && !fn.async && !fn.generator && fn.params.length === 0 && fn.body.type === 'BlockStatement', 'RAW_PAUSED_IIFE_REQUIRED');
+            const flag = fn.body.body[0], declaration = flag?.declarations?.[0], gate = fn.body.body[1];
+            assert(flag?.type === 'VariableDeclaration' && flag.kind === 'var' && flag.declarations.length === 1 && declaration?.id.type === 'Identifier'
+              && declaration.id.name === 'ANALYTICS_READY' && declaration.init?.type === 'Literal' && declaration.init.value === false, 'RAW_PAUSED_FLAG_FALSE_REQUIRED');
+            assert(gate?.type === 'IfStatement' && gate.test.type === 'UnaryExpression' && gate.test.operator === '!' && gate.test.prefix === true
+              && gate.test.argument.type === 'Identifier' && gate.test.argument.name === declaration.id.name && gate.alternate === null
+              && gate.consequent.type === 'ReturnStatement' && gate.consequent.argument === null, 'RAW_PAUSED_RETURN_REQUIRED');
+            return { bytes: Buffer.byteLength(body), sha256: hash(body), literalAnalyticsReady: false, gateCondition: true, immediateReturn: true, reachableStatementsAfterGate: 0, proof: 'Strict AST structure, no script execution' };
+          }
+          function sourceBootstrap() {
+            if (sourceBootstrapRecord) return sourceBootstrapRecord;
+            const html = fs.readFileSync('index.html', 'utf8'), dom = new JSDOM(html, { includeNodeLocations: true });
+            try { const { body } = designatedBootstrap(html, dom); assert.equal(hash(body), pausedBootstrapSha256, 'RAW_PAUSED_SOURCE_PIN');
+              sourceBootstrapRecord = { body, sourceIndexSha256: hash(html), proof: verifyPausedBootstrap(body, body) }; return sourceBootstrapRecord;
+            } finally { dom.window.close(); }
+          }
+          function pausedBootstrapControls(body) {
+            const controls = [
+              { name: 'flag-true', old: 'var ANALYTICS_READY = false;', replacement: 'var ANALYTICS_READY = true;', marker: 'RAW_PAUSED_FLAG_FALSE_REQUIRED' },
+              { name: 'missing-return', old: 'if (!ANALYTICS_READY) return;', replacement: 'if (!ANALYTICS_READY) {}', marker: 'RAW_PAUSED_RETURN_REQUIRED' },
+              { name: 'before-gate', old: 'if (!ANALYTICS_READY) return;', replacement: 'window.gtag("config", "CONTROL_ACTIVE_BEFORE_GATE");\n        if (!ANALYTICS_READY) return;', marker: 'RAW_PAUSED_RETURN_REQUIRED' }
+            ], rows = [];
+            for (const control of controls) {
+              assert.equal(body.split(control.old).length, 2); const at = body.indexOf(control.old), changed = body.slice(0, at) + control.replacement + body.slice(at + control.old.length);
+              assert.notEqual(changed, body); parse(changed); assert.equal(changed.slice(0, at) + control.old + changed.slice(at + control.replacement.length), body);
+              let caught; try { verifyPausedBootstrap(changed, changed); } catch (error) { caught = error; }
+              assert.equal(caught?.name, 'AssertionError'); assert(caught.message.startsWith(control.marker));
+              rows.push({ name: control.name, beforeSha256: hash(body), afterSha256: hash(changed), expectedCopyAlsoChanged: true, parserAcceptedFault: true, wholeInverseExact: true, rejection: { name: caught.name, message: caught.message } });
+            }
+            const addition = '\n//CONTROL_DORMANT_BODY_DRIFT', changed = body + addition; assert.notEqual(changed, body); parse(changed); assert.equal(changed.slice(0, -addition.length), body);
+            let caught; try { verifyPausedBootstrap(changed, body); } catch (error) { caught = error; }
+            assert.equal(caught?.name, 'AssertionError'); assert(caught.message.startsWith('RAW_PAUSED_SOURCE_BYTES'));
+            rows.push({ name: 'dormant-body-drift', beforeSha256: hash(body), afterSha256: hash(changed), parserAcceptedFault: true, wholeInverseExact: true, rejection: { name: caught.name, message: caught.message } });
+            return rows;
+          }
+          function raw(html, route) {
+            const dom = new JSDOM(html, { includeNodeLocations: true }), doc = dom.window.document;
+            try {
+              assert.deepEqual([...doc.querySelectorAll('link[rel="canonical"]')].map(node => node.href), [ORIGIN + route], 'OWN_CANONICAL');
+              const entries = [...doc.querySelectorAll('script[type="module"][src]')].map(node => new URL(node.getAttribute('src'), ORIGIN)).filter(url => /^\/assets\/index-[A-Za-z0-9_-]+\.js$/.test(url.pathname));
+              for (const entry of entries) { assert.equal(entry.origin, ORIGIN, 'ENTRY_OWN_ORIGIN'); assert(!entry.search && !entry.hash, 'ENTRY_NO_QUERY_OR_HASH'); }
+              const boot = [...doc.querySelectorAll('script[src]')].filter(node => node.getAttribute('src') === '/prerender-boot.js' && node.hasAttribute('defer'));
+              if (route === '/') assert.equal(entries.length, 1, 'HOME_ENTRY_UNIQUE');
+              else { assert(entries.length <= 1, 'PRIVACY_ENTRY_AT_MOST_ONE'); if (!entries.length) assert.equal(boot.length, 1, 'PRIVACY_SNAPSHOT_BOOT_REQUIRED'); }
+              const designated = designatedBootstrap(html, dom), paused = verifyPausedBootstrap(designated.body, sourceBootstrap().body);
+              for (const node of doc.querySelectorAll('script')) {
+                const src = node.getAttribute('src'); if (src) { const url = new URL(src, ORIGIN); assert(!/(?:^|\.)(?:googletagmanager|google-analytics)\.com$/i.test(url.hostname), 'RAW_GA_LOADER_REFUSED'); }
+                else if (!node.type || /^(?:text|application)\/javascript$|^module$/.test(node.type)) {
+                  if (node === designated.node) continue;
+                  const ast = parse(node.textContent); walk(ast, item => { if (item.type === 'CallExpression' && (item.callee.name === 'gtag' || item.callee.property?.name === 'gtag') && ['js', 'config'].includes(item.arguments[0]?.value)) assert.fail('RAW_GA_BOOTSTRAP_REFUSED'); });
+                }
+              }
+              doc.querySelectorAll('script,style,template').forEach(node => node.remove());
+              const words = doc.body.textContent.replace(/\s+/g, ' ').trim();
+              for (const phrase of claimsFor(route)) assert(words.includes(phrase), 'RAW_LEGAL_CLAIM_REQUIRED: ' + route + ': ' + phrase);
+              return { entry: entries[0]?.pathname ?? null, prerenderBoot: boot.length === 1, readableChars: words.length, pausedBootstrap: paused };
+            } finally { dom.window.close(); }
+          }
+          function rawControl(html, route) {
+            raw(html, route); const rows = [];
+            for (const [index, phrase] of claimsFor(route).entries()) {
+              const dom = new JSDOM(html), doc = dom.window.document, walker = doc.createTreeWalker(doc.body, dom.window.NodeFilter.SHOW_TEXT); let found = 0;
+              while (walker.nextNode()) if (!walker.currentNode.parentElement?.closest('script,style,template') && walker.currentNode.nodeValue.includes(phrase)) { found += 1; walker.currentNode.nodeValue = walker.currentNode.nodeValue.replace(phrase, 'CONTROL_REMOVED_READABLE_LEGAL_' + index); }
+              assert.equal(found, 1); doc.body.append(doc.createComment(phrase));
+              const script = doc.createElement('script'); script.type = 'application/json'; script.textContent = JSON.stringify(phrase); doc.body.append(script);
+              const template = doc.createElement('template'); template.textContent = phrase; doc.body.append(template);
+              const changed = dom.serialize(); dom.window.close(); assert.notEqual(changed, html);
+              let caught; try { raw(changed, route); } catch (error) { caught = error; }
+              assert.equal(caught?.name, 'AssertionError'); assert(caught.message.startsWith('RAW_LEGAL_CLAIM_REQUIRED: ' + route + ': ' + phrase));
+              const file = 'control-raw-' + route.slice(1) + '-' + index + '.html'; save(file, changed);
+              rows.push({ route, phrase, changedFile: file, originalSha256: hash(html), changedSha256: hash(changed), realTextChanged: 1, inertShadowRejected: true, rejection: { name: caught.name, message: caught.message } });
+            }
+            return rows;
+          }
+          function rawBootstrapOutsideControls(html) {
+            const controls = [
+              { name: 'active-outside-bootstrap', addition: '<script>window.gtag("config", "CONTROL_OUTSIDE_BOOTSTRAP");</script>', marker: 'RAW_GA_BOOTSTRAP_REFUSED' },
+              { name: 'external-ga-loader', addition: '<script src="https://www.googletagmanager.com/gtag/js?id=CONTROL"></script>', marker: 'RAW_GA_LOADER_REFUSED' }
+            ], rows = [];
+            for (const control of controls) {
+              assert.equal(html.split('</head>').length, 2); const changed = html.replace('</head>', control.addition + '</head>'); assert.notEqual(changed, html);
+              assert.equal(changed.replace(control.addition + '</head>', '</head>'), html);
+              let caught; try { raw(changed, '/'); } catch (error) { caught = error; }
+              assert.equal(caught?.name, 'AssertionError'); assert(caught.message.startsWith(control.marker));
+              rows.push({ name: control.name, beforeSha256: hash(html), afterSha256: hash(changed), wholeInverseExact: true, rejection: { name: caught.name, message: caught.message } });
+            }
+            return rows;
+          }
+          async function main() {
+            assert(['strict','intake','readback'].includes(mode), 'MODE_REQUIRED');
+            await lexer.init;
+            const sourcePins = { 'src/lib/consentPreferences.ts': 'a7f50b82c4ca1c757ec98b53e30688b91b160e0b3216f0b3ec0b9ee3576ed124', 'src/lib/consentedScripts.ts': '8106f28dcd5faa8546de50e304af41add45b4fd43a15ccaf009dac809ab6be50' };
+            for (const [file, sha] of Object.entries(sourcePins)) { const body = fs.readFileSync(file); assert.equal(hash(body), sha); assert.throws(() => assert.equal(hash(Buffer.concat([body, Buffer.from('\n')])), sha)); }
+            const strip = value => value.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+            assert.match(strip(fs.readFileSync('src/lib/consentPreferences.ts', 'utf8')), /export const ANALYTICS_READY:\s*boolean\s*=\s*false;/);
+            assert.match(strip(fs.readFileSync('src/lib/consentedScripts.ts', 'utf8')), /export function loadAnalytics\(\): void \{\}/);
+            report.sourceFlags = { sourcePins, analyticsReady: false, loadAnalyticsEmpty: true, changedSourceRejected: 2, scope: 'Exact published source hold, no invented minified variable identity' };
+            const dormant = sourceBootstrap(); report.sourceFlags.pausedBootstrap = { sourceIndexSha256: dormant.sourceIndexSha256, ...dormant.proof };
+            report.controls.pausedBootstrap = pausedBootstrapControls(dormant.body);
+            const signed = 'psr2.' + process.env.EXPECTED_DEPLOYMENT + '.1793200847.' + 'A'.repeat(43); deployment(signed); deployment(process.env.EXPECTED_DEPLOYMENT);
+            for (const changed of [signed.replace('psr2.', 'other.'), signed.slice(0, -1), signed.replace(process.env.EXPECTED_DEPLOYMENT, '00000000-0000-0000-0000-000000000000')]) { assert.notEqual(changed, signed); assert.throws(() => deployment(changed)); }
+            const refused = [[ORIGIN + '/', 'POST'], ['https://example.com/', 'GET'], [ORIGIN + '/functions/v1/account-privacy', 'GET'], ['https://name:password@douknowball.com/', 'GET'], [ORIGIN + '/__site_privacy1446_unlisted', 'GET'], [ORIGIN + '/assets/unlisted.js', 'GET']];
+            for (const [url, method] of refused) assert.throws(() => checkedURL(url, method));
+            report.controls.transportRejected = 6; report.controls.deploymentRejected = 3;
+            checkRequestBudget(Number(process.env.PUBLIC_REQUEST_LIMIT)-1);
+            assert.throws(() => checkRequestBudget(Number(process.env.PUBLIC_REQUEST_LIMIT)), error => error.message.startsWith('PUBLIC_REQUEST_BUDGET'));
+            checkNoResponseCookie({}); assert.throws(() => checkNoResponseCookie({ 'set-cookie': 'CONTROL_COOKIE' }), error => error.message.startsWith('PUBLIC_RESPONSE_COOKIE'));
+            report.controls.requestBudgetRejected = 1; report.controls.responseCookieRejected = 1;
+            const api = await request.newContext({ extraHTTPHeaders: { 'User-Agent': 'DoUKnowBall site privacy publication readback' } });
+            async function read(route, filename, method = 'get') {
+              checkedURL(ORIGIN + route, method.toUpperCase());
+              const response = await api[method](ORIGIN + route + '?siteprivacy1446=' + process.env.GITHUB_RUN_ID + '.' + process.env.GITHUB_RUN_ATTEMPT, { maxRedirects: 0, timeout: 30000 });
+              assert.equal(response.status(), 200, 'HTTP_200: ' + route); const headers = response.headers(); delete headers['set-cookie'];
+              if (!route.startsWith('/assets/') || headers['x-deployment-id']) deployment(headers['x-deployment-id']);
+              save(filename + '.headers.json', headers); const body = method === 'get' ? await response.body() : Buffer.alloc(0); if (method === 'get') save(filename, body); return body;
+            }
+            try {
+              const pages = new Map();
+              for (const route of ['/', '/cookie-policy', '/privacy']) { const file = 'page-' + (route.slice(1) || 'home') + '.html', body = await read(route, file); await read(route, file + '.head', 'head'); const observed = raw(body.toString(), route); pages.set(route, { body, observed }); report.pages.push({ route, status: 200, ...observed, sha256: hash(body) }); persist(); }
+              report.controls.rawLegal = ['/cookie-policy','/privacy'].flatMap(route => rawControl(pages.get(route).body.toString(), route));
+              report.controls.rawBootstrapOutside = rawBootstrapOutsideControls(pages.get('/').body.toString());
+              let pins, bodies;
+              if (mode !== 'readback') {
+                const dist = path.join(out, 'input-dist'), files = fs.readdirSync(path.join(dist, 'assets')).filter(file => file.endsWith('.js'));
+                const source = new Map(files.map(file => ['/assets/' + file, fs.readFileSync(path.join(dist, 'assets', file), 'utf8')]));
+                const local = value => { const url = new URL(value, ORIGIN + '/assets/'); assert.equal(url.origin, ORIGIN); assert(!url.search && !url.hash && /^\/assets\/[A-Za-z0-9_.-]+\.js$/.test(url.pathname)); return url.pathname; };
+                const imports = value => lexer.parse(value)[0].filter(row => typeof row.n === 'string' && /\.js$/.test(row.n)).map(row => local(row.n));
+                const graph = new Map([...source].map(([file, value]) => [file, imports(value).filter(child => source.has(child))]));
+                const qualifiedHome = raw(fs.readFileSync(path.join(dist, 'index.html'), 'utf8'), '/'), entry = qualifiedHome.entry;
+                const reachable = new Set(), queue = [entry]; while (queue.length) { const at = queue.shift(); if (reachable.has(at)) continue; reachable.add(at); queue.push(...(graph.get(at) || [])); }
+                const unique = values => { const distinct = [...new Set(values)]; assert.equal(distinct.length, 1); return distinct[0]; };
+                const qualified = { entry, cookiePolicy: unique([...reachable].filter(file => source.get(file)?.includes(cookieClaims[0]))), privacy: unique([...reachable].filter(file => source.get(file)?.includes(operatorClaim))), profile: unique([...reachable].filter(file => source.get(file)?.includes(circleClass))) };
+                cookieRenderer(source.get(qualified.entry)); legalRenderer(source.get(qualified.cookiePolicy), 'cookiePolicy'); legalRenderer(source.get(qualified.privacy), 'privacy'); profileRenderer(source.get(qualified.profile)); report.qualifiedRoles = qualified;
+                const routeTo = target => { const todo = [[entry]], seen = new Set(); while (todo.length) { const route = todo.shift(), at = route.at(-1); if (at === target) return route; if (seen.has(at)) continue; seen.add(at); for (const next of graph.get(at) || []) todo.push([...route, next]); } assert.fail('QUALIFIED_ROLE_UNREACHABLE'); };
+                const routes = Object.fromEntries(Object.entries(qualified).map(([role, file]) => [role, routeTo(file)])), needed = new Set(Object.values(routes).flat()); assert(needed.size <= 16);
+                const observedEntry = process.env.OBSERVED_ENTRY; assert.equal(pages.get('/').observed.entry, observedEntry); for (const route of ['/cookie-policy','/privacy']) if (pages.get(route).observed.entry) assert.equal(pages.get(route).observed.entry, observedEntry);
+                const keyOf = file => { const match = /^(.+)-[A-Za-z0-9_-]{8}\.js$/.exec(path.posix.basename(file)); assert(match); return match[1]; };
+                const allowed = new Set([observedEntry]), mapping = new Map([[entry, observedEntry]]); bodies = new Map();
+                const fetchAsset = async (old, live) => { if (bodies.has(old)) { assert.equal(mapping.get(old), live); return; } assert(needed.has(old) && allowed.has(live)); assert.equal(keyOf(old), keyOf(live)); const liveFile = 'live-' + path.posix.basename(live), qualifiedFile = 'qualified-' + path.posix.basename(old), rawDiff = 'raw-diff-' + path.posix.basename(old) + '.patch'; const body = await read(live, liveFile); save(qualifiedFile, source.get(old)); const rawEqual = hash(body) === hash(source.get(old)); const diff = spawnSync('diff', ['-u', path.join(out, qualifiedFile), path.join(out, liveFile)], { encoding: 'utf8', timeout: 10000, maxBuffer: 20 * 1024 * 1024 }); assert(!diff.error && [0, 1].includes(diff.status), 'RAW_DIFF_COMMAND_COMPLETED'); assert.equal(diff.status === 0, rawEqual); save(rawDiff, diff.stdout); save(rawDiff + '.stderr', diff.stderr); report.targets.push({ qualified: old, live, qualifiedSha256: hash(source.get(old)), liveSha256: hash(body), rawEqual, rawDiff, rawDiffExit: diff.status, bytes: body.length }); mapping.set(old, live); bodies.set(old, body.toString()); persist(); };
+                await fetchAsset(entry, observedEntry);
+                for (const route of Object.values(routes)) for (let index = 1; index < route.length; index += 1) { const parent = route[index - 1], child = route[index], live = unique(imports(bodies.get(parent)).filter(file => keyOf(file) === keyOf(child))); assert(graph.get(parent).includes(child)); allowed.add(live); assert(allowed.size <= needed.size); save('allowed-assets.json', [...allowed]); report.imports.push({ qualifiedParent: parent, liveParent: mapping.get(parent), qualifiedChild: child, liveChild: live }); await fetchAsset(child, live); }
+                pins = Object.fromEntries(Object.entries(qualified).map(([role, file]) => [role, { path: mapping.get(file), sha256: hash(bodies.get(file)) }]));
+                report.qualifiedPaths = routes; report.strictComparison = { entryEqual: entry === observedEntry, allNeededBytesEqual: report.targets.every(row => row.rawEqual), qualification: 'Actual strict comparison result retained, diagnostic only', exit: 0 };
+                try { assert(report.strictComparison.entryEqual && report.strictComparison.allNeededBytesEqual, 'STRICT_QUALIFIED_ASSET_BYTES'); save('strict-comparison.log', 'STRICT_QUALIFIED_ASSET_BYTES: exact entry and all necessary raw bytes match.\n'); }
+                catch (error) { assert.equal(error.name, 'AssertionError'); assert(error.message.startsWith('STRICT_QUALIFIED_ASSET_BYTES')); report.strictComparison.exit = 1; report.strictComparison.error = { name: error.name, message: error.message }; save('strict-comparison.log', error.stack + '\n'); }
+                save('strict-comparison.exit', String(report.strictComparison.exit) + '\n');
+          
+                save('observed-asset-pins.json', pins); report.assetPins = pins; report.assetPinsSerializedSha256 = hash(JSON.stringify(pins));
+              } else {
+                const prior = JSON.parse(fs.readFileSync(path.join(out, 'input', 'readback.json'), 'utf8'));
+                assert.equal(prior.complete, true); assert.equal(prior.mode, 'intake'); assert.equal(prior.diagnosticOnly, true); assert.equal(prior.source, process.env.SOURCE_SHA); assert.equal(prior.qualified, process.env.QUALIFIED_BUILD_SHA); assert.equal(prior.operator, process.env.INPUT_OPERATOR_SHA); assert.equal(String(prior.run), process.env.INPUT_RUN_ID); assert.equal(prior.deployment, process.env.EXPECTED_DEPLOYMENT);
+                assert([0, 1].includes(prior.strictComparison.exit)); assert.equal(fs.readFileSync(path.join(out, 'input', 'strict-comparison.exit'), 'utf8').trim(), String(prior.strictComparison.exit));
+                if (prior.strictComparison.exit === 0) assert(prior.strictComparison.entryEqual && prior.strictComparison.allNeededBytesEqual);
+                else { assert.equal(prior.strictComparison.error.name, 'AssertionError'); assert(prior.strictComparison.error.message.startsWith('STRICT_QUALIFIED_ASSET_BYTES')); }
+                pins = JSON.parse(process.env.ASSET_PINS_JSON); assert.deepEqual(pins, prior.assetPins); assert.equal(hash(process.env.ASSET_PINS_JSON), process.env.ASSET_PINS_SHA256); assert.equal(hash(JSON.stringify(pins)), prior.assetPinsSerializedSha256);
+                assert.deepEqual(Object.keys(pins).sort(), rolesRequired); assert.equal(pages.get('/').observed.entry, pins.entry.path); for (const route of ['/cookie-policy','/privacy']) if (pages.get(route).observed.entry) assert.equal(pages.get(route).observed.entry, pins.entry.path);
+                bodies = new Map(); for (const row of Object.values(pins)) if (!bodies.has(row.path)) { const body = await read(row.path, path.posix.basename(row.path)); assert.equal(hash(body), row.sha256, 'ASSET_PIN_REQUIRED'); const changed = Buffer.concat([body, Buffer.from('\n//CONTROL_CHANGED')]); assert.notEqual(hash(changed), hash(body)); assert.throws(() => assert.equal(hash(changed), row.sha256)); bodies.set(row.path, body.toString()); report.targets.push({ path: row.path, sha256: hash(body), bytes: body.length }); }
+                report.controls.changedAssetRejected = bodies.size; report.assetPins = pins; report.retainedStrictComparison = prior.strictComparison;
+                report.observedPinsProvenance = { run: process.env.INPUT_RUN_ID, operator: process.env.INPUT_OPERATOR_SHA, artifact: process.env.INPUT_ARTIFACT_ID, zipSha256: process.env.INPUT_ZIP_SHA256 };
+              }
+              const roleBody = role => bodies.get(mode === 'readback' ? pins[role].path : report.qualifiedRoles[role]);
+              report.controls.cookie = cookieControl(roleBody('entry'));
+              report.controls.compiledLegal = [...legalControls(roleBody('cookiePolicy'), 'cookiePolicy'), ...legalControls(roleBody('privacy'), 'privacy')];
+              report.profileBoundary = profileRenderer(roleBody('profile')); report.controls.profile = profileControls(roleBody('profile'));
+              const dist = mode === 'readback' ? path.join(out, 'input', 'input-dist') : path.join(out, 'input-dist'), qualifiedBoot = fs.readFileSync(path.join(dist, 'prerender-boot.js'));
+              assert.equal(hash(qualifiedBoot), 'c5da547fd0b4b0920dfeb100f3d5f3f73ca5317e38135ddc132649cd43f85c70', 'QUALIFIED_BOOTSTRAP_PIN');
+              const boot = await read('/prerender-boot.js', 'prerender-boot.js'); assert.equal(hash(boot), hash(qualifiedBoot), 'PUBLIC_BOOTSTRAP_PIN');
+              const changedBoot = Buffer.concat([boot, Buffer.from('\nCONTROL_BOOTSTRAP_CHANGED')]); assert.notEqual(hash(changedBoot), hash(boot)); assert.throws(() => assert.equal(hash(changedBoot), hash(qualifiedBoot)));
+              report.bootstrap = { path: '/prerender-boot.js', sha256: hash(boot), bytes: boot.length, changedRejected: true, changedSha256: hash(changedBoot) };
+              report.requestPlan = { rawPages: 3, pageGets: 3, pageHeads: 3, bootstrapGets: 1, graphAssetLimit: 16, properRoleAssetLimit: 4, operatorLimit: mode === 'readback' ? 11 : 23, auditGetsPerPass: 1 + 3 + 24, auditPasses: mode === 'readback' ? 2 : 0, totalLimit: mode === 'readback' ? 67 : 23 };
+              assert.equal(report.pages.length, 3);
+              if (mode === 'strict') assert.equal(report.strictComparison.exit, 0, 'STRICT_QUALIFIED_ASSET_BYTES_REQUIRED');
+              report.complete = true;
+              console.log('SITE_PRIVACY1446 ' + mode.toUpperCase() + ' COMPLETE: three raw pages, fixed bootstrap and four bounded role semantics; no fetched code execution.');
+            } catch (error) { report.error = { name: error.name, message: error.message, stack: error.stack }; throw error; }
+            finally { try { await api.dispose(); } catch (error) { report.complete = false; report.disposeError = { name: error.name, message: error.message }; process.exitCode = 1; } persist(); }
+          }
+          main().catch(error => { report.error = { name: error.name, message: error.message, stack: error.stack }; persist(); console.error(error); process.exitCode = 1; });
+          JS
+          printf '%s  %s\n' "$OPERATOR_SHA256" "$READBACK_OUT/operator.cjs" | sha256sum --check > "$READBACK_OUT/operator-body-hold.log"
+          export NODE_OPTIONS="--require=$PWD/$READBACK_OUT/read-only.cjs"
+          status=0;timeout --signal=TERM --kill-after=15s 4m node "$READBACK_OUT/operator.cjs" > "$READBACK_OUT/operator.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$READBACK_OUT/operator.exit";cat "$READBACK_OUT/operator.log";test "$status" -eq 0
+          node -e 'const fs=require("node:fs"),assert=require("node:assert/strict"),r=JSON.parse(fs.readFileSync(process.env.READBACK_OUT+"/readback.json"));assert.equal(r.complete,true);assert.equal(r.pages.length,3);assert.equal(r.mode,process.env.OPERATOR_MODE);assert.equal(r.source,process.env.SOURCE_SHA);assert.equal(r.deployment,process.env.EXPECTED_DEPLOYMENT)'
+      - name: Unchanged live audit and its effective thin control over the actual24 page sample
+        if: env.OPERATOR_MODE == 'readback'
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/$READBACK_OUT/read-only.cjs"
+          status=0;timeout --signal=TERM --kill-after=15s 3m node scripts/auditLive.mjs / /cookie-policy /privacy > "$READBACK_OUT/audit-live.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$READBACK_OUT/audit-live.exit";cat "$READBACK_OUT/audit-live.log";test "$status" -eq 0
+          grep -Eq 'shared chrome measured at [0-9]+ readable characters over 24 pages' "$READBACK_OUT/audit-live.log";! grep -Fq 'thin rule skipped' "$READBACK_OUT/audit-live.log";grep -Fq '3 of 3 answered cleanly, 0 did not.' "$READBACK_OUT/audit-live.log"
+          status=0;AUDIT_CONTROL=thin timeout --signal=TERM --kill-after=15s 3m node scripts/auditLive.mjs / /cookie-policy /privacy > "$READBACK_OUT/audit-thin-control.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$READBACK_OUT/audit-thin-control.exit";cat "$READBACK_OUT/audit-thin-control.log";test "$status" -eq 1
+          grep -Fq 'Planting' "$READBACK_OUT/audit-thin-control.log";grep -Fq '(CONTROL plant)' "$READBACK_OUT/audit-thin-control.log";grep -Fq '2 of 3 answered cleanly, 1 did not.' "$READBACK_OUT/audit-thin-control.log"
+      - name: Preserve all hold outcomes and a complete manifest before final exit
+        if: always()
+        run: |
+          set -euo pipefail
+          failed=0
+          status=0;sha256sum --check "$READBACK_OUT/source-before.sha256" > "$READBACK_OUT/source-hold.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$READBACK_OUT/source-hold.exit";test "$status" -eq 0 || failed=1
+          status=0;git diff --exit-code HEAD -- . > "$READBACK_OUT/operator-source-hold.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$READBACK_OUT/operator-source-hold.exit";test "$status" -eq 0 || failed=1
+          status=0;node <<'JS' > "$READBACK_OUT/network-hold.log" 2>&1 || status=$?
+          const fs=require('node:fs'),assert=require('node:assert/strict'),out=process.env.READBACK_OUT;
+          const {createHash}=require('node:crypto'),{checkNoResponseCookie}=require(require('node:path').resolve(out,'security-cookie-policy.cjs'));
+          const cookieControls=JSON.parse(fs.readFileSync(out+'/security-cookie-controls.json','utf8'));
+          assert.equal(createHash('sha256').update(fs.readFileSync(out+'/security-cookie-policy.cjs')).digest('hex'),'3f5deb32d6175b50aa0df030df449243a6cf9f208a4ff5727bdfe8ff973c1428');
+          assert.equal(cookieControls.moduleSha256,'3f5deb32d6175b50aa0df030df449243a6cf9f208a4ff5727bdfe8ff973c1428');assert(cookieControls.complete&&cookieControls.moduleHeld&&cookieControls.networkAttempted===false);assert.equal(cookieControls.faults.length,20);assert(cookieControls.faults.every(row=>row.rejected===true&&row.networkAttempted===false&&row.beforeSha256!==row.afterSha256));
+          const allowedSecurityCookies=[];
+          const load=name=>fs.readFileSync(out+'/'+name,'utf8').trim().split('\n').filter(Boolean).map(line=>JSON.parse(line));
+          const report=JSON.parse(fs.readFileSync(out+'/readback.json')),network=load('public-network.jsonl'),headers=load('public-response-headers.jsonl'),plan=JSON.parse(fs.readFileSync(out+'/audit-allowed-pages.json'));
+          assert.equal(report.source,process.env.SOURCE_SHA);assert.equal(report.qualified,process.env.QUALIFIED_BUILD_SHA);assert.equal(report.deployment,process.env.EXPECTED_DEPLOYMENT);
+          assert(report.requestPlan);assert.equal(report.requestPlan.totalLimit,Number(process.env.PUBLIC_REQUEST_LIMIT));
+          const expected=[['GET','/'],['HEAD','/'],['GET','/cookie-policy'],['HEAD','/cookie-policy'],['GET','/privacy'],['HEAD','/privacy']];
+          for(const asset of report.targets)expected.push(['GET',asset.live||asset.path]);expected.push(['GET','/prerender-boot.js']);
+          if(process.env.OPERATOR_MODE==='readback'){assert.equal(plan.chromeSample.length,24);assert.equal(new Set(plan.chromeSample).size,24);for(let pass=0;pass<2;pass++)for(const route of ['/','/','/cookie-policy','/privacy',...plan.chromeSample])expected.push(['GET',route]);}
+          assert.equal(network.length,expected.length);assert(network.length<=Number(process.env.PUBLIC_REQUEST_LIMIT));assert.equal(headers.length,network.length*2);
+          const deployment=value=>{const uuid='[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}',match=String(value).match(new RegExp('^('+uuid+')$|^psr2\\.('+uuid+')\\.[0-9]{10}\\.[A-Za-z0-9_-]{43}$','i'));assert(match);assert.equal((match[1]||match[2]).toLowerCase(),process.env.EXPECTED_DEPLOYMENT);};
+          for(let i=0;i<network.length;i++){const row=network[i];assert.equal(row.origin,'https://douknowball.com');assert.deepEqual([row.method,row.path],expected[i]);const a=headers[i*2],b=headers[i*2+1];assert.deepEqual(a,b);assert.deepEqual([a.method,a.path],expected[i]);assert.equal(a.status,200);for(const cookie of checkNoResponseCookie(a.headers))allowedSecurityCookies.push({method:row.method,path:row.path,...cookie});if(!row.path.startsWith('/assets/')||a.headers['x-deployment-id'])deployment(a.headers['x-deployment-id']);}
+          fs.writeFileSync(out+'/network-hold.json',JSON.stringify({complete:true,mode:process.env.OPERATOR_MODE,requests:network.length,limit:Number(process.env.PUBLIC_REQUEST_LIMIT),headers:headers.length,allPairsExact:true,expectedSequence:expected,threeFixedRawPages:true,bootstrapGets:1,noBackendOrMutation:true,securityCookiePolicySha256:cookieControls.moduleSha256,allowedSecurityCookies,cookieValuesOmittedHere:true},null,2)+'\n');
+          JS
+          printf '%s\n' "$status" > "$READBACK_OUT/network-hold.exit";test "$status" -eq 0 || failed=1
+          printf '%s\n' "$failed" > "$READBACK_OUT/final-holds.exit"
+          (cd "$READBACK_OUT";find . -type f ! -path ./evidence.sha256 -print0 | sort -z | xargs -0 sha256sum) > "$READBACK_OUT/evidence.sha256"
+          exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: siteprivacy1446-public-readback-${{ github.run_id }}-${{ github.run_attempt }}
+          path: siteprivacy1446-public-artifacts/
+          if-no-files-found: error
+          retention-days: 14
