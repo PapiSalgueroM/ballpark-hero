@@ -1,0 +1,51 @@
+
+prefers-reduced-motion: no-preference
+   rise      animation=cmRise         opacity=0.0614607 display=block
+   slam      animation=cmSlam         opacity=0.272845 display=block
+   glow      animation=cmGoldGlow     opacity=1 display=block
+   confetti  animation=cmConfettiFall opacity=0 display=inline
+
+prefers-reduced-motion: reduce
+   rise      animation=none           opacity=1 display=block
+   slam      animation=none           opacity=1 display=block
+   glow      animation=none           opacity=1 display=block
+   confetti  animation=cmConfettiFall opacity=1 display=none
+
+Round 530 routes under prefers-reduced-motion: reduce, 20 routes served from dist
+   /                   text=22363 keyframeBlocks=3 ours=2 thirdParty=1 unguarded=0 reveal=10 animating=0 invisible=0 slowMotion=0/4601
+   /cfb-dynasty        text=9594 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/463
+   /cbb-dynasty        text=9455 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/449
+   /front-office       text=13882 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/432
+   /nba-front-office   text=13592 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/419
+   /mlb-front-office   text=9540 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/412
+   /nhl-front-office   text=13949 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/431
+   /nfl-my-career      text=28929 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/512
+   /nba-my-career      text=30225 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/513
+   /mlb-my-career      text=26871 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/505
+   /nhl-my-career      text=25969 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/481
+   /club-manager       text=40371 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/485
+   /soccer-career      text=18293 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/394
+   /rebuild            text=16076 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/336
+   /idle-arena         text=12012 keyframeBlocks=3 ours=2 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/375
+   /stadium-tycoon     text=20996 keyframeBlocks=4 ours=3 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/497
+   /wonderkid-factory  text=13563 keyframeBlocks=2 ours=1 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/350
+   /fight-career       text=14330 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/405
+   /fight-gym          text=7519 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/305
+   /fight-promoter     text=10884 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/322
+   Season Centre kick off  text=716 reveal=1 animating=0 invisible=0 slow=0
+   Season Centre matchday  text=573 reveal=1 animating=0 invisible=0 slow=0
+   Season Centre review    text=899 reveal=1 animating=0 invisible=0 slow=0
+   Round 1107 signing scene text=63 checked=5 animating=0 invisible=0 notGone=0 slow=0 confetti=0
+   Release AU    trophy scene  a chance wheel was open: 2 button(s) to answer it, result 27ms after Spin, disk transition 0.001ms, result line whole at 390x844
+   Round 1107 trophy scene  text=77 checked=11 animating=0 invisible=0 notGone=0 slow=0 confetti=0
+   Release AU    chance wheel at 320 by 568 under reduce: result line 417 to 461 before (whole), 417 to 461 after (whole), dialog 34 to 534 of 568, disk 207px whole, 2 button(s) before, reveal 39ms
+   Release AU    chance wheel at 375 by 667: result line 497 to 541 before (whole), 497 to 541 after (whole), dialog 53 to 614 of 667, disk 173px whole, 2 button(s) before, reveal 36ms
+   Release AU    chance wheel at 390 by 664: result line 487 to 531 before (whole), 487 to 531 after (whole), dialog 60 to 604 of 664, disk 173px whole, 2 button(s) before, reveal 60ms
+   Release AU    chance wheel at 390 by 844: result line 587 to 631 before (whole), 587 to 631 after (whole), dialog 140 to 704 of 844, disk 192px whole, 2 button(s) before, reveal 46ms
+   Release AU    chance wheel pictures: /home/runner/work/_temp/rc-out/files
+   our own keyframe CSS was present and guarded on 4 of 20 routes; the rest had not reached a reveal yet
+   no preference /front-office    elements that move for more than 10ms: 73 of 432
+   no preference /fight-career    elements that move for more than 10ms: 60 of 405
+   no preference /stadium-tycoon  elements that move for more than 10ms: 85 of 497
+
+playReducedMotion: green. Motion stops for a visitor who asked for less, content stays visible, every Round 530 route lands its reveals on the final frame, and everyone else keeps the celebration. The chance wheel was answered 1 time(s) on the way to a scene and its result line is whole on 4 screen size(s).

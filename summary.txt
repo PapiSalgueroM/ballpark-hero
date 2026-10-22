@@ -1,0 +1,6 @@
+build exit=0 35s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+playOwnerMandate exit=0 26s | ALL OWNER MANDATE WALK CHECKS PASSED
+playTradeTalks exit=0 18s | ALL TRADE TALKS WALK CHECKS PASSED
+playReducedMotion exit=0 48s | playReducedMotion: green. Motion stops for a visitor who asked for less, content stays visible, every Round 530 route lands its reveals on the final frame, and everyone e
+playGmPress exit=1 83s | playGmPress: 2 failures
+playFoHub exit=0 60s | playFoHub: green. Four front offices, nine live boxes each, and the five the walk opens open what they name.

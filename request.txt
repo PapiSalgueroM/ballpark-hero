@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+playGmPress: ENGINES=chromium node scripts/playGmPress.mjs
+playOwnerMandate: ENGINES=chromium node scripts/playOwnerMandate.mjs
+playReducedMotion: ENGINES=chromium node scripts/playReducedMotion.mjs
+playTradeTalks: ENGINES=chromium node scripts/playTradeTalks.mjs
+playFoHub: ENGINES=chromium node scripts/playFoHub.mjs
