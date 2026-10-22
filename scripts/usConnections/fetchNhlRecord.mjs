@@ -45,7 +45,10 @@ async function tileNames() {
   fs.writeFileSync(path.join(tmp, 'e.mjs'), `export const b = (await import('${R}/src/data/nhlConnectionsPuzzles.ts')).nhlConnectionsPuzzles;`);
   await build({ entryPoints: [path.join(tmp, 'e.mjs')], bundle: true, format: 'esm', platform: 'node', outfile: path.join(tmp, 'o.mjs'), logLevel: 'error' });
   const { b } = await import(pathToFileURL(path.join(tmp, 'o.mjs')).href);
-  return [...new Set([...b.flatMap(x => x.groups.flatMap(g => g.players)), ...EXTRA])].sort();
+  /* NAMES_FROM=<a read only export of the live table>: the record reads every man on the live rows too, so the
+     rows past the file (dealt only from the table) are judged by the same checker */
+  const live = process.env.NAMES_FROM ? JSON.parse(fs.readFileSync(process.env.NAMES_FROM, 'utf8')).flatMap(r => { const v = typeof r.groups_json === 'string' ? JSON.parse(r.groups_json) : r.groups_json; return (Array.isArray(v) ? v : []).flatMap(g => g.players ?? []); }) : [];
+  return [...new Set([...b.flatMap(x => x.groups.flatMap(g => g.players)), ...EXTRA, ...live])].sort();
 }
 
 async function getJson(url) {
