@@ -1,0 +1,7 @@
+vitest exit=0 26s |    Duration  25.48s (transform 4.96s, setup 2.66s, collect 15.30s, tests 27.46s, environment 15.22s, prepare 3.85s)
+earned exit=0 35s | simNbaEarnedDraft: green.
+tsc exit=0 120s | 
+f-r1-1 exit=0 392s | simNbaEarnedDraft: green.
+f-r1-0 exit=0 413s | simNbaEarnedDraft: green.
+f-r1-2 exit=0 382s | simNbaEarnedDraft: green.
+f-r1-3 exit=0 258s | simNbaEarnedDraft: green.
