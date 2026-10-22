@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+cm-probe: node .rc/x/mkCmProbe.mjs && PLAY_CM_SEED=1542433760 VERBOSE=1 MAX_STEPS=60 node scripts/zzCmProbe.mjs > /tmp/cmp.log 2>&1; s=$?; cp /tmp/cmp.log $RC_OUT/cmp.log; grep -E "PROBE|STUCK" /tmp/cmp.log | head -8 | cut -c1-300; exit $s
