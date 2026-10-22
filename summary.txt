@@ -1,0 +1,3 @@
+mut-latest exit=0 5s | MUTANT latest KILLED vitest=1
+mut-top exit=0 5s | MUTANT top KILLED vitest=1
+mut-held exit=0 5s | MUTANT held KILLED vitest=1
