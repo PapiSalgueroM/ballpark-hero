@@ -28,7 +28,18 @@
  * both newer than that, or one retired before 2014). 2,315 of the 5,496 names of 2026 have a row in
  * those seasons. The rest need one read only query on the live table, which only the lead runs (the
  * production rule of 2026-10-02); its answer goes in scripts/data/marketNamesakesLive.json as
- * { "readAt": "YYYY-MM-DD", "query": "...", "names": [...] } and this script merges it.
+ * { "readAt": "YYYY-MM-DD", "query": "...", "names": [...] } and this script merges it. The query
+ * asks all three rules plus a nationality split (Aaron Ramsey: the 2026 row is the English one, the
+ * saved rows hold only the Welsh one), one read only statement:
+ *   with s as (select distinct player_name from public.player_market_values where year = 2026)
+ *   select player_name from public.player_market_values join s using (player_name)
+ *   group by player_name
+ *   having max(year - age) - min(year - age) >= 3 or count(distinct nationality) > 1
+ *   union
+ *   select player_name from public.player_market_values join s using (player_name)
+ *   group by player_name, year
+ *   having count(distinct coalesce(position, '') || ' ' || coalesce(age::text, '')) > 1;
+ * (Rule A is inside the second half: two ages in one season are two shapes.)
  *
  * The list is only ever used to LEAVE A QUESTION OUT. It states nothing about anybody on screen.
  *
