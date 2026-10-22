@@ -1,0 +1,6 @@
+record-a exit=0 10s | RECORDED nfl from 6d2d7a7d: 10 seeds, 48 seasons, fired at ["7:3"], digest 01d932fd8b0b7c3df6ef50b600d6f0359f3e72c9 -> ../../_temp/rc-out/files/gmCareerFixture-a.json
+record-b exit=0 10s | RECORDED nfl from 6d2d7a7d: 10 seeds, 48 seasons, fired at ["7:3"], digest 01d932fd8b0b7c3df6ef50b600d6f0359f3e72c9 -> ../../_temp/rc-out/files/gmCareerFixture-b.json
+board-a exit=0 20s |    Duration  19.02s (transform 2.03s, setup 96ms, collect 189ms, tests 17.56s, environment 443ms, prepare 180ms)
+board-b exit=0 16s |    Duration  15.51s (transform 1.57s, setup 129ms, collect 198ms, tests 13.92s, environment 491ms, prepare 115ms)
+tsc exit=0 86s | 
+measure exit=0 77s | simGmCareer: all checks passed (nfl, sections 4)

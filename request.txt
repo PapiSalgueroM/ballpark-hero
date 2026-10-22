@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+record-a: SIM_GM_CAREER_RECORD=6d2d7a7d SIM_GM_CAREER_OUT=$RC_OUT/gmCareerFixture-a.json node scripts/simGmCareer.mjs
+record-b: SIM_GM_CAREER_RECORD=6d2d7a7d SIM_GM_CAREER_OUT=$RC_OUT/gmCareerFixture-b.json node scripts/simGmCareer.mjs
+measure: SIM_GM_CAREER_ONLY=4 node scripts/simGmCareer.mjs
+board-a: FO_GM_CAREER=record FO_GM_CAREER_FROM=6d2d7a7d FO_GM_CAREER_OUT=$RC_OUT/board-a.json node_modules/.bin/vitest run src/components/front-office-shared/FrontOfficeGmCareer.test.tsx --testTimeout=600000 --hookTimeout=120000
+board-b: FO_GM_CAREER=record FO_GM_CAREER_FROM=6d2d7a7d FO_GM_CAREER_OUT=$RC_OUT/board-b.json node_modules/.bin/vitest run src/components/front-office-shared/FrontOfficeGmCareer.test.tsx --testTimeout=600000 --hookTimeout=120000
