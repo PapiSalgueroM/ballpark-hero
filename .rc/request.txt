@@ -1,0 +1,2 @@
+#!serial
+fold-dom: FOLD=.rc/x node scripts/simCmTactics.mjs > /tmp/fd.log 2>&1; s=$?; cp /tmp/fd.log "$RC_OUT/fold-dom.log"; grep -E "dominance|top |FAIL|ok" /tmp/fd.log | head -20 | cut -c1-220; tail -1 /tmp/fd.log | cut -c1-200; exit $s
