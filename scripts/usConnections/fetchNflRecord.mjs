@@ -28,7 +28,10 @@ const API = 'https://site.web.api.espn.com/apis';
 fs.mkdirSync(WORK, { recursive: true });
 
 /* men a fix may deal in */
-export const EXTRA = [];
+export const EXTRA = [
+  /* the man the round took off nflconn-004: kept, so the live table's row from before the round is judged too */
+  "Le'Veon Bell",
+];
 /* tile name -> ESPN athlete id where the search finds a namesake first */
 export const PICK = {
   /* the service files these men under another name, so a name search finds no one */

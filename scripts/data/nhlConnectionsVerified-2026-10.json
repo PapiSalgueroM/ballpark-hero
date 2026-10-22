@@ -1,0 +1,261 @@
+{
+ "about": "Round 1558. The two host proof behind nhlconn-004, the one NHL Connections board the checker flagged: Erik Karlsson (947) and Brent Burns (948), both still playing, sat in the Sharks group beside \"1,000+ career points\". The record (nhlConnectionsRecord-2026-10.json, the NHL's own service) is one host; hockey-reference.com is the second. Wikis are never a source.",
+ "read": "2026-10-22",
+ "rules": [
+  "A fact names a man, a group label and whether he fits it (holds), and carries two sources on two different hosts, neither a wiki: the record first, the second host after it.",
+  "Every member of a group the checker flagged before the round holds his group on two hosts (flaggedGroups lists those groups under their labels after the round).",
+  "Every finding the checker made before the round (fixed) has the fact behind it on two hosts: the member who did not fit, or the man from another group who did.",
+  "uncheckedCeiling and memberUnknownCeiling may only fall: a label or a member the record cannot judge must not come back."
+ ],
+ "boardsChanged": [
+  "nhlconn-004"
+ ],
+ "flaggedGroups": [
+  [
+   "nhlconn-004",
+   "1,000+ career points"
+  ],
+  [
+   "nhlconn-004",
+   "Played for the Sharks"
+  ]
+ ],
+ "fixed": [
+  "nhlconn-004 | Brent Burns (Played for the Sharks) | 1,000+ career points | active with 948, within a season of 1000",
+  "nhlconn-004 | Erik Karlsson (Played for the Sharks) | 1,000+ career points | active with 947, within a season of 1000"
+ ],
+ "facts": [
+  {
+   "id": "nhlconn-004",
+   "label": "1,000+ career points",
+   "name": "Connor McDavid",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8478402/landing",
+     "says": "career regular season points 1246, still playing"
+    },
+    {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/m/mcdavco01.html",
+     "says": "career NHL points 1246"
+    }
+   ]
+  },
+  {
+   "id": "nhlconn-004",
+   "label": "1,000+ career points",
+   "name": "Leon Draisaitl",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8477934/landing",
+     "says": "career regular season points 1069, still playing"
+    },
+    {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/d/draisle01.html",
+     "says": "career NHL points 1069"
+    }
+   ]
+  },
+  {
+   "id": "nhlconn-004",
+   "label": "1,000+ career points",
+   "name": "Nikita Kucherov",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8476453/landing",
+     "says": "career regular season points 1137, still playing"
+    },
+    {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/k/kucheni01.html",
+     "says": "career NHL points 1137"
+    }
+   ]
+  },
+  {
+   "id": "nhlconn-004",
+   "label": "1,000+ career points",
+   "name": "Nathan MacKinnon",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8477492/landing",
+     "says": "career regular season points 1158, still playing"
+    },
+    {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/m/mackina01.html",
+     "says": "career NHL points 1158"
+    }
+   ]
+  },
+  {
+   "id": "nhlconn-004",
+   "label": "1,000+ career points",
+   "name": "Steven Stamkos",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8474564/landing",
+     "says": "career regular season points 1266, still playing"
+    },
+    {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/s/stamkst01.html",
+     "says": "career NHL points 1266"
+    }
+   ]
+  },
+  {
+   "id": "nhlconn-004",
+   "label": "Played for the Sharks",
+   "name": "Macklin Celebrini",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8484801/landing",
+     "says": "NHL clubs: San Jose Sharks"
+    },
+    {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/c/celebma01.html",
+     "says": "NHL clubs: SJS"
+    }
+   ]
+  },
+  {
+   "id": "nhlconn-004",
+   "label": "Played for the Sharks",
+   "name": "Marc-Edouard Vlasic",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8471709/landing",
+     "says": "NHL clubs: San Jose Sharks"
+    },
+    {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/v/vlasima01.html",
+     "says": "NHL clubs: SJS"
+    }
+   ]
+  },
+  {
+   "id": "nhlconn-004",
+   "label": "Played for the Sharks",
+   "name": "Evander Kane",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8475169/landing",
+     "says": "NHL clubs: Atlanta Thrashers, Winnipeg Jets, Buffalo Sabres, San Jose Sharks, Edmonton Oilers, Vancouver Canucks"
+    },
+    {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/k/kaneev01.html",
+     "says": "NHL clubs: ATL, WPG, BUF, SJS, EDM, VAN"
+    }
+   ]
+  },
+  {
+   "id": "nhlconn-004",
+   "label": "Played for the Sharks",
+   "name": "Logan Couture",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8474053/landing",
+     "says": "NHL clubs: San Jose Sharks"
+    },
+    {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/c/coutulo01.html",
+     "says": "NHL clubs: SJS"
+    }
+   ]
+  },
+  {
+   "id": "nhlconn-004",
+   "label": "Played for the Sharks",
+   "name": "Tomáš Hertl",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8476881/landing",
+     "says": "NHL clubs: San Jose Sharks, Vegas Golden Knights"
+    },
+    {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/h/hertlto01.html",
+     "says": "NHL clubs: SJS, VEG"
+    }
+   ]
+  },
+  {
+   "id": "nhlconn-004",
+   "label": "1,000+ career points",
+   "name": "Brent Burns",
+   "holds": false,
+   "why": "watch",
+   "finding": "nhlconn-004 | Brent Burns (Played for the Sharks) | 1,000+ career points | active with 948, within a season of 1000",
+   "sources": [
+    {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8470613/landing",
+     "says": "career regular season points 948, still playing"
+    },
+    {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/b/burnsbr01.html",
+     "says": "career NHL points 948"
+    }
+   ]
+  },
+  {
+   "id": "nhlconn-004",
+   "label": "1,000+ career points",
+   "name": "Erik Karlsson",
+   "holds": false,
+   "why": "watch",
+   "finding": "nhlconn-004 | Erik Karlsson (Played for the Sharks) | 1,000+ career points | active with 947, within a season of 1000",
+   "sources": [
+    {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8474578/landing",
+     "says": "career regular season points 947, still playing"
+    },
+    {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/k/karlser01.html",
+     "says": "career NHL points 947"
+    }
+   ]
+  }
+ ],
+ "uncheckedCeiling": 0,
+ "memberUnknownCeiling": 0
+}

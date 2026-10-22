@@ -358,7 +358,7 @@ export function makeBaseballChecker({ record, ledger = {} }) {
         if (c.codes.includes('ASMVP')) return null;
         /* the 2026 World Series MVP comes from one of its two clubs (the ledger names them on two hosts);
            without that line every man who played in 2026 is watched */
-        if (c.codes.includes('WSMVP') && ledger.worldSeries2026?.clubs && !(m.c26 ?? []).some(id => ledger.worldSeries2026.clubs.includes(id))) return null;
+        if (c.codes.includes('WSMVP') && ledger.watchLines?.worldSeries2026?.clubs && !(m.c26 ?? []).some(id => ledger.watchLines.worldSeries2026.clubs.includes(id))) return null;
         return `played in 2026; the 2026 ${c.codes.join('/')} is still to be named`;
       case 'awardAt':
         return top && new Set(c.pos).has(top) ? `played most of 2026 at ${top}; the 2026 ${c.codes.join('/')} is still to be named` : null;
@@ -381,7 +381,9 @@ export function makeBaseballChecker({ record, ledger = {} }) {
     }
   }
 
-  return { criterion, fits, watch, has: name => byName.has(fold(name)) };
+  /* the man a tile names, by his league id: two spellings of one man ("Goose Gossage", "Rich Gossage") are one */
+  const identity = name => { const m = byName.get(fold(name)); return m?.id ? `mlb:${m.id}` : fold(name); };
+  return { criterion, fits, watch, identity, has: name => byName.has(fold(name)) };
 }
 
 /* ------------------------------------------------------------------ */
@@ -520,7 +522,8 @@ export function makeNflChecker({ record, grid, ledger = {} }) {
     return have + reach >= c.min ? `active with ${have} ${c.cat} yards, within a season of ${c.min}` : null;
   }
 
-  return { criterion, fits, watch, clubDisagreement, has: name => byName.has(fold(name)) || gridBy.has(fold(name)) };
+  const identity = name => { const m = byName.get(fold(name)); return m?.espn ? `espn:${m.espn}` : fold(name); };
+  return { criterion, fits, watch, identity, clubDisagreement, has: name => byName.has(fold(name)) || gridBy.has(fold(name)) };
 }
 
 /* ------------------------------------------------------------------ */
@@ -572,7 +575,8 @@ export function makeNhlChecker({ record, ledger = {} }) {
     return have + reach >= c.min ? `active with ${have}, within a season of ${c.min}` : null;
   }
 
-  return { criterion, fits, watch, has: name => byName.has(fold(name)) };
+  const identity = name => { const m = byName.get(fold(name)); return m?.nhl ? `nhl:${m.nhl}` : fold(name); };
+  return { criterion, fits, watch, identity, has: name => byName.has(fold(name)) };
 }
 
 /* ------------------------------------------------------------------ */

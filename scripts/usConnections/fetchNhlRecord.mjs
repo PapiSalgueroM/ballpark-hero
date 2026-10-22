@@ -23,6 +23,8 @@ fs.mkdirSync(WORK, { recursive: true });
 export const EXTRA = [
   /* Round 1558's fix of nhlconn-004: two Sharks far from 1,000 points */
   'Marc-Edouard Vlasic', 'Macklin Celebrini',
+  /* the man the round took off nhlconn-004 (Brent Burns stays on nhlconn-003): kept for the live table's old row */
+  'Erik Karlsson',
 ];
 /* tile name -> NHL player id where the search finds a namesake first */
 export const PICK = {

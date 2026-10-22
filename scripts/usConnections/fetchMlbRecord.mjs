@@ -33,6 +33,9 @@ fs.mkdirSync(path.join(WORK, 'person'), { recursive: true });
 export const EXTRA = [
   /* Round 1558's fixes: a Vanderbilt man for bconn-010, an LSU man for bconn-012, a second baseman for bconn-013 */
   'Bryan Reynolds', 'Paul Skenes', 'Brandon Phillips',
+  /* men the round took off the boards: kept, so the live table's rows from before the round are judged too */
+  'Al Simmons', 'Babe Ruth', 'Billy Hamilton', 'CC Sabathia', 'Cole Hamels', 'Dale Murphy', 'Dee Gordon', 'J.D. Martinez',
+  'Justin Turner', 'Kumar Rocker', 'Mike Mussina', 'Nomar Garciaparra', 'Rich Gossage', 'Xander Bogaerts',
 ];
 /* tile name -> statsapi person id, where a namesake would otherwise win */
 export const PICK = {
@@ -100,6 +103,8 @@ if (step === 'search') {
 }
 
 /* the awards a board can name; the rest of the service's list (player of the week and so on) is left out */
+/* where the Lahman id is not baseball-reference's page id (its page answers 404); read off baseball-reference's own search */
+const BBREF_FIX = { 282332: 'sabatc.01', 276371: 'santajo02', 407822: 'rosajo01' };
 const KEEP_AWARDS = new Set(['ALMVP', 'NLMVP', 'ALCY', 'NLCY', 'ALROY', 'NLROY', 'ALGG', 'NLGG', 'ALSS', 'NLSS', 'WSMVP', 'ASMVP', 'MLBHOF', 'WSCHAMP', 'ALAS', 'NLAS']);
 const num = v => (v === undefined || v === null || v === '' ? 0 : Number(v));
 
@@ -111,7 +116,7 @@ export function compact(person) {
     name: p.fullName,
     /* baseball-reference's player id: the service files it as bbref for some men and as the Lahman id (the same
        id) for the rest */
-    bbref: (p.xrefIds ?? []).find(x => x.xrefType === 'bbref')?.xrefId ?? (p.xrefIds ?? []).find(x => x.xrefType === 'lahman')?.xrefId ?? null,
+    bbref: BBREF_FIX[p.id] ?? (p.xrefIds ?? []).find(x => x.xrefType === 'bbref')?.xrefId ?? (p.xrefIds ?? []).find(x => x.xrefType === 'lahman')?.xrefId ?? null,
     born: { country: p.birthCountry ?? null, state: p.birthStateProvince ?? null, city: p.birthCity ?? null, date: p.birthDate ?? null },
     bats: p.batSide?.code ?? null,
     throws: p.pitchHand?.code ?? null,
