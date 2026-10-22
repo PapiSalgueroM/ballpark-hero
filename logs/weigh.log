@@ -1,0 +1,10 @@
+Preparing worktree (detached HEAD c75d04dad)
+HEAD is now at c75d04dad docs: record verified privacy release and indexing receipt (#368)
+The touched routes, base against head (gzipped JS):
+  /sports-millionaire    base 300.8K (308055 B)  head 301.6K (308884 B)  +829 B
+     base chunks: SportsMillionaire-BLpEdLqi.js 7.4K
+     head chunks: SportsMillionaire-DNqHWBDa.js 8.0K, clearWinner-DI3OIXt2.js 0.1K
+  /face-off              base 322.4K (330184 B)  head 322.6K (330330 B)  +146 B
+     base chunks: FaceOff-gAByfvlf.js 9.1K
+     head chunks: FaceOff-B5QKg9u9.js 9.1K, clearWinner-DI3OIXt2.js 0.1K
+weigh1552: done
