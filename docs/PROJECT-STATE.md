@@ -19009,3 +19009,9 @@ The separate ordinary release branch must still pass all six jobs, existing cont
 The shared dialog CSS fix is source-qualified atd9da128d0174405ab8b63ab34bc27feb35a8f389. Matrix39769358433 covered72 contexts,144 Green/restored trusted primary passes and the nine expected old-CSS failures. Ordinary run39773713224 passed all six jobs:9,337 unit passes,58 explicit skips,0 failures across622 files;74 consent/29 account/6 Profile plus existing controls;18 readers and14 unchanged caps. Generated patch/list are empty and complete source/output/transport holds passed.
 
 I retains sole publication ownership. This update records qualification and the handoff, not publication or live verification. Game lanes, earlier failures and785/1441 preservation gaps remain held and unwaived.
+
+## Round1448 copy candidate, 2026-10-22 UTC
+
+Root's separate `codex/site-quality-disclosures-1448` branch starts at actual merged1447 source `3ee0bf6293859740a50654e299232bcd0ff701c3`. Four shared Home/hub/privacy files have nine surgical copy edits, with complete literal inverses and exact preimages preserved. The candidate clarifies factual versus fictional games and discloses the observed hosting security cookie.
+
+Generation, actual derived-output review/adoption and fresh final six-job qualification are still required. No1448 publication or AdSense clearance is claimed. I retains publication and CM/Soccer; J retains its game lanes. Round1447 is merged and publish-ready with its separate complete evidence. All prior failures and preservation gaps remain unwaived.
