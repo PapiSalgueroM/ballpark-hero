@@ -1,0 +1,5 @@
+bindAt: scripts/qa/proveSoccerGridDeadline.mjs bound
+bindAt: 8293c758f428 -> 4d7797c0d365
+runProver: p1407 at c7cacf2676b97b8ac670f6ec5606423a2c60c68b (release BK bound: 89a92d1e888d with its pinned bases bound to the joined tree)
+Soccer Grid deadline fixed: passed; 3 owned arm(s), 2 prior suite run(s), qualified=true
+runProver: p1407 exit 0
