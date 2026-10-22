@@ -1,0 +1,4 @@
+mut-sort exit=0 122s | MUTANT sort KILLED vitest=0 sim=1
+mut-live exit=0 122s | MUTANT live KILLED vitest=1 sim=1
+mut-stale exit=0 122s | MUTANT stale KILLED vitest=0 sim=1
+mut-nocopy exit=1 121s | MUTANT nocopy SURVIVED vitest=0 sim=0

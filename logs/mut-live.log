@@ -1,0 +1,22 @@
+MUTATION live APPLIED in src/components/front-office-shared/useGmEarnedDraft.ts
+[31m   [31m×[31m useGmEarnedDraft[2m > [22mone press at a time until a render takes it, a refused press leaves the plain line, clear leaves nothing[39m[32m 17[2mms[22m[39m
+[31m   [31m×[31m the earned draft night on the NBA board[2m > [22m(g) a reload at the card draws its last frame with Continue live; a reload on the clock is the same slot and class with no draw[39m[33m 1125[2mms[22m[39m
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/components/front-office-shared/useGmEarnedDraft.test.tsx[2m > [22museGmEarnedDraft[2m > [22mone press at a time until a render takes it, a refused press leaves the plain line, clear leaves nothing
+[41m[1m FAIL [22m[49m src/components/nba-front-office/NbaEarnedDraft.test.tsx[2m > [22mthe earned draft night on the NBA board[2m > [22m(g) a reload at the card draws its last frame with Continue live; a reload on the clock is the same slot and class with no draw
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m12 passed[39m[22m[90m (14)[39m
+   36 nights (weakest, middle, champion, traded, bought, nopick; 6 seeds each): 168 saves compared with the libraries' replay, 60 picks by his hand, 30 nights with picks before his first, 34594 draws in all
+   FAIL: weakest, seed 1: a reload at the lottery card played the night again
+   FAIL: weakest, seed 2: a reload at the lottery card played the night again
+   FAIL: weakest, seed 3: a reload at the lottery card played the night again
+   FAIL: weakest, seed 4: a reload at the lottery card played the night again
+   FAIL: weakest, seed 5: a reload at the lottery card played the night again
+   FAIL: weakest, seed 6: a reload at the lottery card played the night again
+   FAIL: middle, seed 1: a reload at the lottery card played the night again
+   FAIL: middle, seed 2: a reload at the lottery card played the night again
+   FAIL: middle, seed 3: a reload at the lottery card played the night again
+   FAIL: middle, seed 4: a reload at the lottery card played the night again
+   FAIL: middle, seed 5: a reload at the lottery card played the night again
+   FAIL: middle, seed 6: a reload at the lottery card played the night again
+   src/components/front-office-shared/GmEarnedDraftScreen.tsx: 8 imports, all allowed; no sport, no draw, no storage
+MUTANT live KILLED vitest=1 sim=1

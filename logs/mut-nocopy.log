@@ -1,0 +1,7 @@
+MUTATION nocopy APPLIED in src/components/nba-front-office/NbaFrontOfficeBoard.tsx
+[2m      Tests [22m [1m[32m14 passed[39m[22m[90m (14)[39m
+   36 nights (weakest, middle, champion, traded, bought, nopick; 6 seeds each): 168 saves compared with the libraries' replay, 60 picks by his hand, 30 nights with picks before his first, 34594 draws in all
+   src/components/front-office-shared/GmEarnedDraftScreen.tsx: 8 imports, all allowed; no sport, no draw, no storage
+   src/components/front-office-shared/useGmEarnedDraft.ts: 4 imports, all allowed; no sport, no draw, no storage
+simNbaDraftBoard: green.
+MUTANT nocopy SURVIVED vitest=0 sim=0

@@ -1,0 +1,17 @@
+MUTATION stale APPLIED in src/components/nba-front-office/NbaFrontOfficeBoard.tsx
+[2m      Tests [22m [1m[32m14 passed[39m[22m[90m (14)[39m
+   FAIL: weakest, seed 1: the save after press 2 differs from the libraries'
+   FAIL: weakest, seed 2: the save after press 2 differs from the libraries'
+   FAIL: weakest, seed 3: the save after press 2 differs from the libraries'
+   FAIL: weakest, seed 4: the save after press 2 differs from the libraries'
+   FAIL: weakest, seed 5: the save after press 2 differs from the libraries'
+   FAIL: weakest, seed 6: the save after press 2 differs from the libraries'
+   FAIL: middle, seed 1: the save after press 2 differs from the libraries'
+   FAIL: middle, seed 2: the save after press 2 differs from the libraries'
+   FAIL: middle, seed 3: the save after press 2 differs from the libraries'
+   FAIL: middle, seed 4: the save after press 2 differs from the libraries'
+   FAIL: middle, seed 5: the save after press 2 differs from the libraries'
+   FAIL: middle, seed 6: the save after press 2 differs from the libraries'
+   36 nights (weakest, middle, champion, traded, bought, nopick; 6 seeds each): 168 saves compared with the libraries' replay, 60 picks by his hand, 30 nights with picks before his first, 34594 draws in all
+   src/components/front-office-shared/GmEarnedDraftScreen.tsx: 8 imports, all allowed; no sport, no draw, no storage
+MUTANT stale KILLED vitest=0 sim=1
