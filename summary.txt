@@ -1,0 +1,5 @@
+build exit=0 35s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+sweepWeight exit=0 35s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+simNoRivalNames exit=0 17s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 65s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 93s | 
