@@ -1,0 +1,3 @@
+#!serial
+refresh: node scripts/simGuideHeadings.mjs --refresh /front-office && cp scripts/data/guideHeadingsFrozen.json "$RC_OUT/guideHeadingsFrozen.json" && git diff --stat scripts/data/guideHeadingsFrozen.json && node scripts/simGuideHeadings.mjs
+search: node scripts/simSiteSearch.mjs
