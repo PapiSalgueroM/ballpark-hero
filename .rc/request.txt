@@ -1,0 +1,2 @@
+thin: node .rc/x/probe-thin.mjs
+thin15: FLOOR=15 node .rc/x/probe-thin.mjs 2>&1 | grep -v "^[A-Z]"
