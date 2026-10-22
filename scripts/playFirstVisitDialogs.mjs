@@ -431,7 +431,14 @@ for (const r of results) {
       else {
         state = 'PASS';
         why = `${head}, ${btn} tappable${r.clear !== null ? ` (${r.clear} px above the banner)` : ''}, ${bannerNote}; tapped, closed, screen usable`;
-        if (r.scene) why += `; the full card (${r.card?.count} results) drawn, the page held at scrollY ${r.after?.y}, height ${r.after?.h}`;
+        if (r.scene) {
+          const want = SCENES.find(sc => sc.key === r.scene)?.seed?.count;
+          const missing = r.card?.missing ?? [];
+          why += r.card?.count === want && !missing.length
+            ? `; the full card (${r.card?.count} results) drawn`
+            : `; the card drew SHORT (${r.card?.count} of ${want} results${missing.length ? `, missing "${missing.join('", "')}"` : ''}), so the run aborts below`;
+          why += `, the page held at scrollY ${r.after?.y}, height ${r.after?.h}`;
+        }
       }
     }
   }
