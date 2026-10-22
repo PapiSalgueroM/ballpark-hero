@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+# Release BP: the weight of the joined head (every row) and of the release base cedd0239 (built in /tmp/wb, served on 4174, r1516-c's recipe), for the budget rows (brief-BPG decision 4).
+weight: SWEEP_OFFLINE=1 ENGINES=chromium node scripts/sweepWeight.mjs > /tmp/w.log 2>&1; s=$?; cp /tmp/w.log "$RC_OUT/weight-head.log"; grep -E "^ +/" /tmp/w.log | cut -c1-120; tail -1 /tmp/w.log | cut -c1-200; exit $s
+weight-base: git worktree add /tmp/wb cedd0239 >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/wb/node_modules && (cd /tmp/wb && node_modules/.bin/vite build >/dev/null 2>&1) && (nohup node scripts/lib/hostLikeServer.mjs /tmp/wb/dist 4174 >/dev/null 2>&1 &) && sleep 4 && cd /tmp/wb && SWEEP_OFFLINE=1 ENGINES=chromium BASE=http://localhost:4174 SWEEP_BASE=http://localhost:4174 node scripts/sweepWeight.mjs > /tmp/wbase.log 2>&1; s=$?; cp /tmp/wbase.log "$RC_OUT/weight-base.log"; grep -E "^ +/" /tmp/wbase.log | cut -c1-120; tail -1 /tmp/wbase.log | cut -c1-200; exit $s
