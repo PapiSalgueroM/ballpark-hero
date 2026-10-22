@@ -1,0 +1,17 @@
+simLiveScores exit=0 | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the databas
+simNoInventedQuotes exit=0 | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simNoInventedConduct exit=0 | simNoInventedConduct: green. A real player can score in your sim and get hurt in it. He cannot fall out with the board i
+simLegalPages exit=0 | simLegalPages: all green
+simSingleFooter exit=0 | simSingleFooter: green. One footer, rendered once, on every page.
+simCompletionOnce exit=0 | simCompletionOnce: all green
+simNoDoubleRecord exit=0 | simNoDoubleRecord: all green (67 rows and checks, each recorded once across the finish, the toggles, the coaching, the r
+simDailyPuzzleContract exit=0 | simDailyPuzzleContract: green. Every caller honours the contract the selection memo depends on.
+simDailySaveHardening exit=0 | simDailySaveHardening: part all green
+simWritesAreSent exit=1 | simWritesAreSent: 2 failures
+simFetchRetry exit=0 | simFetchRetry: green. A transient page failure costs a retry and the rows come back whole.
+simGoogleOnlyReturn exit=0 |    8 of 8 rendered checks pass, no dash in the round's files, and all 11 controls turned exactly their own checks red.
+simNavbarStatsReads exit=0 | Artifacts: /home/runner/work/_temp/t-fences/navbar-stats-72QKAB
+simScoringCoverage exit=0 | simScoringCoverage: all green
+simSiteSearch exit=0 | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+simResultMoment exit=0 | simResultMoment: green. Every live game reaches the shared result moment or is listed with what it draws instead, the pi
+simGuideHeadings exit=0 | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and a
