@@ -1,0 +1,5 @@
+simPhonePanelLifeStories exit=1 8s | Node.js v24.22.1
+simRevealMoments exit=0 11s | simRevealMoments: green. No counting number, a reduced motion rule beside every keyframe, one pace for every stagger, every fact and number on the cards is the fixture's 
+simSoccerCareerAmbitions exit=0 4s | simSoccerCareerAmbitions: all 16 paired careers, exact target results, future rewards once and seven actual interruption paths passed
+simSeasonCentreMotion exit=0 17s | simSeasonCentreMotion: 17 checks, 0 failed
+simSoccerAgentReview exit=0 11s | PASS agent review product and proof source bytes held.
