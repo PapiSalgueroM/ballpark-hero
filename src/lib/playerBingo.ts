@@ -1,4 +1,5 @@
 import { supabase } from '@/integrations/supabase/client';
+import { gameQueryClient } from '@/lib/gameQueryClient';
 import { flagFor } from '@/lib/dealPlayers';
 import { clubKey, isSameMan, normalizeName, positionGroup, primaryNationality } from '@/lib/whoAmI';
 import type { PositionGroup } from '@/lib/whoAmI';
@@ -513,7 +514,7 @@ async function fetchWorldCupSets(signal: AbortSignal): Promise<{ all: Set<string
 /** Normalized names of men's Ballon d'Or winners (rank 1 rows, or unranked winner rows). */
 async function fetchBallonDorWinners(signal: AbortSignal): Promise<Set<string>> {
   checkBingoLoad(signal);
-  const { data, error } = await supabase.from('ballon_dor').select('player_name, rank, award_type').abortSignal(signal);
+  const { data, error } = await gameQueryClient.from('ballon_dor').select('player_name, rank, award_type').abortSignal(signal);
   if (error) throw error;
   const winners = new Set<string>();
   for (const r of data ?? []) {

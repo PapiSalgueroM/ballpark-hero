@@ -1,4 +1,5 @@
 import { supabase } from '@/integrations/supabase/client';
+import { gameQueryClient } from '@/lib/gameQueryClient';
 import { fetchAllRows } from '@/lib/fetchAllRows';
 import { normalizeName, displayName, SOCCER_MARKET_VALUE_SOURCE, type PlayerSourceConfig } from '@/lib/playerSearch';
 import { dailyPrngSeed, dateSeed, getTodayET } from '@/lib/dateUtils';
@@ -256,7 +257,7 @@ async function fetchProminenceMap(names: string[]): Promise<Map<string, number>>
 
 /** Category 1: Ballon d'Or winners (Men), any year. Verified pool size: 69 rows (rank = 1, award_type = 'Men', 1956-2025). */
 async function fetchBallonDorWinners(): Promise<PoolEntry[]> {
-  const { data, error } = await supabase
+  const { data, error } = await gameQueryClient
     .from('ballon_dor')
     .select('player_name, year')
     .eq('rank', 1)

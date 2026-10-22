@@ -1,4 +1,4 @@
-import { supabase } from '@/integrations/supabase/client';
+import { gameQueryClient as supabase } from '@/lib/gameQueryClient';
 import { fetchAllRows } from '@/lib/fetchAllRows';
 
 export type Grade = 'A' | 'B' | 'C' | 'D' | 'F';
