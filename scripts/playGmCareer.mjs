@@ -13,6 +13,11 @@
  * card. Walk C, a closed market: no stay out button, the two tap restart.
  * Walk D: the "?" of each of the three career boxes, and the GM level panel's
  * height on a phone. Each walk runs at 320 by 640, 390 by 844 and 1280 by 900.
+ * Walk E (Round 1550, 390 and 1280): the career kit on a slow line. The pick
+ * screen and a season being played never ask for it; the last week's press
+ * waits for it and then closes the season; a reload on the fired screen holds
+ * and then draws where the box stood; the market and a seat taken; the new
+ * hub's boxes drawn without it, and the GM level box holding until it lands.
  *
  * On every screen: nothing wider than the screen, every control of the out of
  * work screen and the career panels at least 44 px tall, no text under 12 px
@@ -26,6 +31,8 @@
  *   nofallback  the holding box loses its minimum height (the jump check red)
  *   eagerpanel  the Job market chunk is asked for when the board loads (the
  *               chunk check red)
+ *   eagerkit    the career kit's chunk is asked for when the board loads (Walk
+ *               E's pick screen check red; run with PLAY_GM_CAREER_WALKS=E)
  * Supabase is aborted: production is never touched.
  */
 import fs from 'node:fs';
@@ -43,7 +50,7 @@ const ONLY_SIZE = process.env.PLAY_GM_CAREER_SIZE || '';
 const ROUTES = [
   {
     sport: 'nfl', route: '/front-office', key: 'front-office-save-v1', play: 'This week', final: 'Play the final week',
-    ask: 'Win the Super Bowl. Anything less is a failed season upstairs.', chunks: ['GmJobMarketPanel', 'GmCareerPanel', 'GmXpDeskPanel'],
+    ask: 'Win the Super Bowl. Anything less is a failed season upstairs.', chunks: ['GmJobMarketPanel', 'GmCareerPanel', 'GmXpDeskPanel'], kit: 'nflCareerKit',
   },
 ];
 const SIZES = [[320, 640], [390, 844], [1280, 900]].filter(([w]) => !ONLY_SIZE || String(w) === ONLY_SIZE);
@@ -52,12 +59,14 @@ const MUTATIONS = {
   wipebutton: [{ label: 'wipebutton', find: /onClick:\(\)=>[\w$]+\("fired"\)/g, replace: 'onClick:()=>{localStorage.removeItem("front-office-save-v1")}' }],
   nofallback: [{ label: 'nofallback', find: /"data-gm-panel-loading":!0,style:\{minHeight:/g, replace: '"data-gm-panel-loading":!0,style:{minHeightOff:' }],
   eagerpanel: [{ label: 'eagerpanel', find: /^([\s\S]*?)(import\("(\.\/GmJobMarketPanel-[\w-]+\.js)"\))/, replace: (all, pre, imp, file) => `import("${file}");${pre}${imp}` }],
+  /* Round 1550: the career kit's chunk asked for the moment the board loads (Walk E's pick screen check red) */
+  eagerkit: [{ label: 'eagerkit', find: /^([\s\S]*?)(import\("(\.\/nflCareerKit-[\w-]+\.js)"\))/, replace: (all, pre, imp, file) => `import("${file}");${pre}${imp}` }],
 };
 if (CONTROL && !MUTATIONS[CONTROL]) { console.error(`PLAY_GM_CAREER_CONTROL=${CONTROL} is not a control of this walk (${Object.keys(MUTATIONS).join(', ')})`); process.exit(2); }
 const { say, verdict } = controlledChecks(CONTROL);
 /** A check is aimed at one control: under that control it must go red, under any other it must stay green. */
 const aimed = name => CONTROL === name;
-const WALKS = (process.env.PLAY_GM_CAREER_WALKS || 'ABCD').toUpperCase();
+const WALKS = (process.env.PLAY_GM_CAREER_WALKS || 'ABCDE').toUpperCase();
 const proof = {};
 if (OUT) fs.mkdirSync(OUT, { recursive: true });
 
@@ -406,15 +415,146 @@ async function walkD(row, w, h) {
   await ctx.close();
 }
 
+/* ------------------------------ Walk E ------------------------------ */
+/* Round 1550: the career kit (src/components/front-office/nflCareerKit.ts) on a slow connection. The pick screen and
+   a season being played never ask for it; the last week asks, its press waits for it, then closes the season; a
+   reload on the fired screen holds, then draws, the page not moving; the market and a seat taken; the hub's boxes
+   drawn without it after a reload, and the GM level box then holding until it lands. The line is throttled as in
+   Walk A and the kit's own chunk is held back a further 1.5 s, so each holding state is there to be seen rather
+   than raced. 390 and 1280 (the brief's two sizes). */
+async function walkE(row, w, h) {
+  if (w === 320) return;
+  const tag = `${row.sport} ${w}x${h} E`;
+  const { ctx, page, errors, assets } = await openPage(w, h);
+  const kitAsked = (from = 0) => assets.slice(from).filter(u => u.includes(`/${row.kit}-`)).length;
+  let kitDelay = 0;
+  await page.route(u => u.pathname.includes(`/${row.kit}-`), async r => { if (kitDelay) await wait(kitDelay); await r.fallback(); });
+  const cdp = await ctx.newCDPSession(page);
+  await cdp.send('Network.enable');
+  const slow = on => cdp.send('Network.emulateNetworkConditions', on
+    ? { offline: false, latency: 300, downloadThroughput: 400 * 1024 / 8, uploadThroughput: 400 * 1024 / 8 }
+    : { offline: false, latency: 0, downloadThroughput: -1, uploadThroughput: -1 });
+
+  /* the pick screen, a first visit */
+  await page.goto(`${BASE}${row.route}`, { waitUntil: 'networkidle' });
+  await wait(900);
+  await answerConsent(page);
+  say(kitAsked() === 0, `${tag}: the pick screen does not ask for the career kit (${kitAsked()} asks)`, aimed('eagerkit'));
+  /* Under eagerkit every later check of this walk reads the same eager fetch again (measured on r1550-s3w: four more
+     went red for it, and two more for the stylesheet the mutated chunk's bare import never waits for), so the walk
+     stops at the check aimed at it. */
+  if (CONTROL === 'eagerkit') { await ctx.close(); return; }
+  await page.locator('.grid button').first().click();
+  await page.waitForFunction(k => JSON.parse(localStorage.getItem(k) || '{}').phase === 'hub', row.key, { timeout: 30000 });
+  await wait(600);
+  say(kitAsked() >= 1, `${tag}: a new front office brings the kit with its league`);
+
+  /* a season being played, reloaded: the hub and its career boxes, no kit */
+  let s = await readSave(page, row.key);
+  s.league.week = 9;
+  await writeSave(page, row.key, s);
+  let n0 = assets.length;
+  await page.reload({ waitUntil: 'networkidle' });
+  await wait(900);
+  await answerConsent(page);
+  for (const t of ['Career', 'GM level']) say(await careerBox(page, t).count() === 1, `${tag}: mid season, the hub draws the ${t} box without the kit`);
+  await page.locator('button:has(div.uppercase)').filter({ hasText: new RegExp(row.play, 'i') }).first().click();
+  await wait(600);
+  say(kitAsked(n0) === 0, `${tag}: a season being played does not ask for the kit (${kitAsked(n0)} asks)`);
+
+  /* the last week of a doomed season, on a slow line: the press waits for the kit, then closes the season */
+  s = await readSave(page, row.key);
+  s.trust = 5;
+  s.mandate = { tier: 'title', text: row.ask, winFloor: 0, reqLevel: 4, season: s.league.season };
+  for (const p of s.league.teams[s.myTeam].players) p.ovr = 60;
+  s.league.week = 17;
+  await writeSave(page, row.key, s);
+  await slow(true);
+  kitDelay = 1500;
+  n0 = assets.length;
+  await page.reload({ waitUntil: 'domcontentloaded' });
+  await answerConsent(page);
+  const playTile = page.locator('button:has(div.uppercase)').filter({ hasText: new RegExp(row.play, 'i') }).first();
+  await playTile.waitFor({ timeout: 90000 });
+  await playTile.click();
+  const final = page.locator(`button:has-text("${row.final}")`).last();
+  await final.waitFor({ timeout: 60000 });
+  const waited = await final.isDisabled();
+  say(waited, `${tag}: on a slow line the last week's press waits for the kit`);
+  await page.waitForFunction(t => [...document.querySelectorAll('button')].some(b => (b.textContent || '').includes(t) && !b.disabled), row.final, { timeout: 90000 });
+  say(kitAsked(n0) >= 1, `${tag}: the last week asks for the kit`);
+  await final.click();
+  await page.waitForFunction(k => JSON.parse(localStorage.getItem(k) || '{}').fired === true, row.key, { timeout: 60000 });
+  await wait(1600);
+  await page.locator('button:has-text("See who is calling")').first().click();
+  await wait(700);
+  say((await readSave(page, row.key)).phase === 'fired', `${tag}: fired, on the out of work screen`);
+
+  /* a reload on the fired screen: the holding box, then the screen where it stood (from the top, so the browser's
+     own scroll restoring on a reload has nothing to restore) */
+  await page.evaluate(() => window.scrollTo(0, 0));
+  n0 = assets.length;
+  await page.reload({ waitUntil: 'domcontentloaded' });
+  const hold = await page.waitForFunction(() => {
+    const el = document.querySelector('[data-gm-panel-loading]');
+    return el && !document.querySelector('[data-gm-out-of-work]') ? { top: el.getBoundingClientRect().top + window.scrollY, h: el.getBoundingClientRect().height, y: window.scrollY } : null;
+  }, null, { timeout: 90000, polling: 'raf' }).then(r => r.jsonValue(), () => null);
+  say(!!hold, `${tag}: a reload on the fired screen holds while the kit is on its way`);
+  await page.locator('[data-gm-out-of-work]').first().waitFor({ timeout: 90000 });
+  await wait(300);
+  const out = await page.evaluate(() => ({ top: document.querySelector('[data-gm-out-of-work]').getBoundingClientRect().top + window.scrollY, y: window.scrollY }));
+  console.log(`  MEASURED ${tag}: fired reload holding box ${hold ? Math.round(hold.h) : 'none'}px at ${hold ? Math.round(hold.top) : '-'}, out of work screen at ${Math.round(out.top)}, scroll ${out.y}`);
+  say(!!hold && Math.abs(hold.top - out.top) < 2 && out.y === hold.y,`${tag}: the out of work screen lands where the holding box stood, the page not moving`);
+  say(kitAsked(n0) >= 1, `${tag}: the fired screen asks for the kit`);
+  await shot(page, `${row.sport}-${w}-slow-out-of-work`);
+  await screenChecks(page, `${tag} out of work`);
+
+  /* the market and a seat taken, still on the slow line */
+  await careerBox(page, 'Job market').click();
+  await page.locator('[data-gm-market]').first().waitFor({ timeout: 90000 });
+  await wait(300);
+  const ids = await page.locator('[data-gm-offer]').evaluateAll(bs => bs.map(b => b.getAttribute('data-gm-offer')));
+  say(ids.length >= 1, `${tag}: the market opens on the slow line, ${ids.length} offer(s)`);
+  if (!ids.length) { await ctx.close(); return; }
+  await page.locator(`[data-gm-offer="${ids[0]}"]`).click();
+  await wait(300);
+  await page.locator('[data-gm-take]').click();
+  await wait(300);
+  await page.locator('[data-gm-take]').click();
+  await wait(1200);
+  const took = await readSave(page, row.key);
+  say(took.myTeam === ids[0] && took.phase === 'recap' && took.fired === false, `${tag}: a seat taken on the slow line (${took.myTeam}, ${took.phase})`);
+  await answerAndDraft(page, row, tag);
+
+  /* the new club's hub, reloaded: the boxes without the kit, then the GM level box holding until it lands */
+  n0 = assets.length;
+  await page.reload({ waitUntil: 'domcontentloaded' });
+  await careerBox(page, 'GM level').waitFor({ timeout: 90000 });
+  await wait(600);
+  say(kitAsked(n0) === 0, `${tag}: the new club's hub draws its boxes without asking for the kit`);
+  const [, boxHold] = await Promise.all([careerBox(page, 'GM level').click(), page.waitForFunction(() => {
+    const panel = document.querySelector('[data-gm-desk="panel"]');
+    return panel && panel.querySelector('[data-gm-panel-loading]') ? panel.getAttribute('data-gm-panel') : null;
+  }, null, { timeout: 8000, polling: 'raf' }).then(r => r.jsonValue(), () => null)]);
+  say(boxHold === 'xp', `${tag}: the GM level box holds, under its own header, while the kit is on its way (${boxHold})`);
+  await page.locator('[data-gm-tree="ownership"] button').first().waitFor({ timeout: 90000 });
+  say(kitAsked(n0) >= 1, `${tag}: the GM level box asks for the kit`);
+  await shot(page, `${row.sport}-${w}-slow-gm-level`);
+  await screenChecks(page, `${tag} GM level`);
+  await slow(false);
+  say(errors.length === 0, `${tag}: no console error (${errors[0] ?? 'clean'})`);
+  await ctx.close();
+}
+
 for (const row of ROUTES) {
   for (const [w, h] of SIZES) {
     console.log(`${row.route} at ${w} by ${h}`);
-    for (const walk of [walkA, walkB, walkC, walkD].filter(fn => WALKS.includes(fn.name.slice(-1)))) {
+    for (const walk of [walkA, walkB, walkC, walkD, walkE].filter(fn => WALKS.includes(fn.name.slice(-1)))) {
       try { await walk(row, w, h); } catch (e) { say(false, `${row.sport} ${w}x${h} ${walk.name}: the walk could not finish (${String(e).split('\n')[0].slice(0, 160)})`); }
     }
   }
 }
 await browser.close();
 const code = verdict('playGmCareer', CONTROL ? proof : undefined, { minGuarded: 1 });
-if (code === 0 && !CONTROL) console.log(`playGmCareer: green. ${ROUTES.length} board, ${SIZES.length} sizes, four walks each.`);
+if (code === 0 && !CONTROL) console.log(`playGmCareer: green. ${ROUTES.length} board, ${SIZES.length} sizes, four walks each and the slow kit walk at 390 and 1280.`);
 process.exit(code);

@@ -64,6 +64,12 @@
  * switching a desk off save's desk on by looking (lookopens) and the close
  * built on the desk from before the final week's staff tick (deskstale).
  *
+ * Round 1550 added the sixth, src/components/front-office/
+ * FrontOfficeLazyDesk.test.tsx (the career kit fetched when a screen needs
+ * it), and three controls of it: the kit asked for while a season is played
+ * (askalways), the last week's press not waiting for it (nowait) and a save
+ * on the recap never asking for it (recapnever). Every control now runs six
+ * files.
  * `blank` is this file's own control and is not part of `all`: it rewrites a
  * comment and nothing else, so no test may go red, and the run must say DID
  * NOT FIRE and exit 1. If `blank` ever exits 0 this file is lying.
@@ -88,6 +94,8 @@ const TL = 'src/components/front-office/FrontOfficeTile.test.tsx';
 const PS = 'src/components/front-office/FrontOfficePostseason.test.tsx';
 /* Round 1533: the GM's career on the real board (fired is a chapter, not the end) */
 const CA = 'src/components/front-office-shared/FrontOfficeGmCareer.test.tsx';
+/* Round 1550: the career kit fetched when a screen needs it, the board driving the fetch itself */
+const LZ = 'src/components/front-office/FrontOfficeLazyDesk.test.tsx';
 
 /* The tests by the words of their titles. */
 const T = {
@@ -141,6 +149,12 @@ const T = {
   caLookHub: [CA, 'looking at Career and GM level on the hub'],
   caLookOut: [CA, 'looking at all three boxes out of work'],
   caTick: [CA, 'a staff approach that runs out in the final week'],
+  /* Round 1550 */
+  lzSeason: [LZ, 'a season being played never asks for it'],
+  lzBox: [LZ, 'a career box opened asks for it'],
+  lzWeek: [LZ, 'the last week asks for it, its press buttons wait for it'],
+  lzRecap: [LZ, 'a save that loads on the recap waits in a holding box'],
+  lzFired: [LZ, 'a save that loads on the fired screen waits in a holding box'],
 };
 
 const TELL_WEEK = 'const told = games.map(g => nflTell(g, lg.teams, lg.season, nflWhere(lg.week), deskWeek?.edges));';
@@ -213,6 +227,11 @@ const CONTROLS = {
      final week's tick */
   lookopens: ["looking at a career box switches a desk off save's desk on", [['if (key !== null && !gm && league && gmPanelFor(NFL_DESK_PANELS, key)) {', 'if (key !== null && !gm && league) {']], [T.caLookHub, T.caLookOut], [T.caFired]],
   deskstale: ["the close is built on the desk from before the final week's tick", [['const deskNow = gmLive.current;', 'const deskNow = gm;']], [T.caTick], [T.opDeskOn]],
+  /* Round 1550: the kit asked for in the middle of a season; the last week's press not waiting for it; a save on the
+     recap never asking for it (its holding box then never lands) */
+  askalways: ['the board asks for the career kit while a season is played', [['  const kitNeeded = !kit && (', '  const kitNeeded = !kit && (true ||']], [T.lzSeason], [T.lzRecap, T.ordinary]],
+  nowait: ["the last week's press does not wait for the career kit", [["  const closeWaits = !kit && phase === 'hub' && !!league && league.week >= REGULAR_WEEKS;", '  const closeWaits = false;']], [T.lzWeek], [T.lzRecap, T.ordinary]],
+  recapnever: ['a save that loads on the recap never asks for the career kit', [["    phase === 'recap' || phase === 'fired' || presser !== null || careerBoxOpen", "    phase === 'fired' || presser !== null || careerBoxOpen"]], [T.lzRecap], [T.lzFired, T.lzWeek]],
   /* the review's finding 6: "GM XP +0" printed on a season that paid nothing */
   xpzero: ['the recap prints the XP line on a season that paid nothing', [['setXpLine(v.desk && v.award && v.award.total > 0 ? hostXpRecapLine(', 'setXpLine(v.desk && v.award ? hostXpRecapLine(']], [T.caFired], [T.caTake]],
   blank: ["THIS FILE'S OWN CONTROL: a comment is reworded and nothing else, so nothing may fire", [['setGameLog(null); /* the summer */', 'setGameLog(null); /* the summer, as it was */']], [T.week], []],
@@ -254,7 +273,7 @@ function run(name) {
   fs.writeFileSync(copy, src);
   let r, json = null;
   try {
-    r = spawnSync(process.execPath, [path.join(ROOT, 'node_modules', 'vitest', 'vitest.mjs'), 'run', GD, OP, TL, PS, CA, '--reporter=json', `--outputFile=${report}`, '--testTimeout=600000', '--hookTimeout=120000'],
+    r = spawnSync(process.execPath, [path.join(ROOT, 'node_modules', 'vitest', 'vitest.mjs'), 'run', GD, OP, TL, PS, CA, LZ, '--reporter=json', `--outputFile=${report}`, '--testTimeout=600000', '--hookTimeout=120000'],
       { cwd: ROOT, encoding: 'utf8', env: { ...process.env, FO_BOARD_NFL: copy.replaceAll('\\', '/'), CI: '1', FORCE_COLOR: '0', NO_COLOR: '1' }, maxBuffer: 64 * 1024 * 1024 });
     if (fs.existsSync(report)) json = JSON.parse(fs.readFileSync(report, 'utf8'));
   } finally {
@@ -268,7 +287,7 @@ function run(name) {
   console.log(`control ${name} (${why}): vitest exit ${r.status}; ${reds.length} red, ${rows.filter(x => x.status === 'passed').length} green of ${rows.length}`);
   for (const x of reds) console.log(`   red: ${path.basename(x.file)} > ${x.title.slice(0, 150)}`);
   /* a copy that did not load is not a firing */
-  const unloaded = [GD, OP, TL, PS, CA].filter(f => !rows.some(x => x.file.endsWith(f)));
+  const unloaded = [GD, OP, TL, PS, CA, LZ].filter(f => !rows.some(x => x.file.endsWith(f)));
   if (unloaded.length || json.testResults.some(f => LOAD_ERROR.test(f.message || '')) || reds.some(x => LOAD_ERROR.test(x.why))) {
     return { name, fired: false, said: `the copy did not load or a test file did not run (${unloaded.join(', ') || 'a load error in the report'}), so a red here is not the check: ${tail}` };
   }
