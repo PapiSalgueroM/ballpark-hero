@@ -1,0 +1,1 @@
+simGmStaff-main exit=1 4s | GM STAFF: 40 failure(s)
