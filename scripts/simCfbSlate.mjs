@@ -40,16 +40,17 @@
         hosts, neither a wiki (hard);
      7) old saves: a save in the middle of a pre-1554 season finishes it the
         old way (no slate, Notre Dame still in the ACC, five title games, and
-        rivalry week plays the pairs the season started with, the rival the
-        board names among them, never the series table) and the next season
-        starts under the real format and reads the series table (hard);
+        rivalry week plays the games its old table makes, pairs, order and home
+        sides, the rival the board names among them, never the series
+        table) and the next season starts under the real format and reads
+        the series table (hard);
      8) the builder under load: STRESS slates from fresh seeds, none of them
         on the fallback circle (hard), and the time a slate takes (printed);
      9) CBB: its series rows are rivalry pairs, and under its new format the
         conference table goes by league winning percentage, a program with no
         league game yet at .500, checked at the end of every season and after
         rounds 1 to 3 (hard); and an old CBB season in the middle plays its
-        rivalry night on the pairs it started with, as section 7 (hard).
+        rivalry night as its old table makes it, as section 7 (hard).
 
    MEASURED (2026-10-22, see the round's closing report for the runner runs):
    numbers are printed by every run; the hard checks are counts that must be
@@ -153,6 +154,9 @@ function lehmer(seed) {
   return () => { s = (s * 16807) % 2147483647; return (s - 1) / 2147483646; };
 }
 const key = (a, b) => (a < b ? `${a}|${b}` : `${b}|${a}`);
+/* Closing check fixes: a rivalry table as the games it makes in a season, in order, home side first
+   (both engines play the table in order, the first school at home in an even season). */
+const tableGames = (table, season) => table.map(r => (season % 2 === 0 ? `${r.a}>${r.b}` : `${r.b}>${r.a}`)).join(' ');
 const confOf = id => cfb.CFB_SCHOOL_MAP.get(id).conf;
 const LEAGUES = new Set(cfb.CFB_LEAGUES);
 const ids = cfb.CFB_SCHOOLS.map(s => s.id);
@@ -390,15 +394,20 @@ console.log('7) old saves: a season already under way keeps its old draw, groups
   const oldPairs = new Set(oldTable.map(r => key(r.a, r.b)));
   const seriesPairs = new Set(cfb.cfbRivalries().map(r => key(r.a, r.b)));
   const moved = [...oldPairs].filter(k => !seriesPairs.has(k)).length;
-  const played = new Set();
+  const oldSeason = st.season;
+  const played = new Set(); const games = [];
   for (let r = 5; r <= cfb.CFB_ROUNDS; r += 1) {
-    for (const g of cfb.simCfbRound(st, rng).games) if (g.rivalry) played.add(key(g.home, g.away));
+    for (const g of cfb.simCfbRound(st, rng).games) if (g.rivalry) { played.add(key(g.home, g.away)); games.push(`${g.home}>${g.away}`); }
     st.round += 1;
   }
   const offOld = [...played].filter(k => !oldPairs.has(k)).length;
+  const asStarted = games.join(' ') === tableGames(oldTable, oldSeason);
+  const tablesDiffer = tableGames(oldTable, oldSeason) !== tableGames(cfb.cfbRivalries(), oldSeason);
+  console.log(`   its rivalry week in the order and home sides the old table gives: ${asStarted}; the old and series tables make different games: ${tablesDiffer}`);
+  if (!tablesDiffer) fail('the old rivalry table and the series table make the same games, so the old season check proves nothing');
+  if (!asStarted) fail("an old season's rivalry week was not the games its old table makes, in order and home side");
   const noteOff = cfb.CFB_SCHOOLS.filter(t => cfb.cfbRivalOf(t.id, st)?.rival !== prog.rivalOf(oldTable, t.id)?.rival).length;
   console.log(`   its rivalry week: ${played.size} pairs played, ${offOld} off the ${oldPairs.size} it started with (${moved} of those are not on the series table); schools whose rival as the board reads it is not the one it plays: ${noteOff}`);
-  if (moved === 0) fail('the old rivalry table and the series table agree, so the old season check proves nothing');
   if (offOld > 0 || played.size !== oldPairs.size) fail(`an old season's rivalry week played ${offOld} pair(s) off the table it started with (${played.size} of ${oldPairs.size} played)`);
   if (noteOff > 0) fail(`in an old season the board would name another rival than the one played, for ${noteOff} school(s)`);
   st.round = cfb.CFB_ROUNDS;
@@ -497,15 +506,22 @@ console.log('9) CBB: its series rows are rivalry pairs, and the table goes by le
   const rng = lehmer(4242);
   const st = cbb.initCbb('DUKE', rng, { depth: true });
   delete st.format; st.round = 3;
-  const played = new Set();
+  const oldSeason = st.season;
+  const played = new Set(); const games = [];
   for (let r = 3; r <= cbb.CBB_ROUNDS; r += 1) {
-    for (const g of cbb.simCbbRound(st, rng).games) if (g.rivalry) played.add(key(g.home, g.away));
+    for (const g of cbb.simCbbRound(st, rng).games) if (g.rivalry) { played.add(key(g.home, g.away)); games.push(`${g.home}>${g.away}`); }
     if (r < cbb.CBB_ROUNDS) st.round += 1;
   }
   const offOld = [...played].filter(k => !oldPairs.has(k)).length;
+  /* In CBB the series rows are mostly the pairs the old table already made, but they come first and
+     with their own home side, so the night's games and its draws still change: compare the games. */
+  const asStarted = games.join(' ') === tableGames(oldTable, oldSeason);
+  const tablesDiffer = tableGames(oldTable, oldSeason) !== tableGames(cbb.cbbRivalries(), oldSeason);
+  console.log(`   an old CBB season's rivalry night in the order and home sides the old table gives: ${asStarted}; the old and series tables make different games: ${tablesDiffer}`);
+  if (!tablesDiffer) fail('CBB: the old rivalry table and the series table make the same games, so the old season check proves nothing');
+  if (!asStarted) fail("CBB: an old season's rivalry night was not the games its old table makes, in order and home side");
   const noteOff = cbb.CBB_SCHOOLS.filter(t => cbb.cbbRivalOf(t.id, st)?.rival !== prog.rivalOf(oldTable, t.id)?.rival).length;
   console.log(`   an old CBB season: rivalry night ${played.size} pairs, ${offOld} off the ${oldPairs.size} it started with (${moved} not on the series table); rival as the board reads it off for ${noteOff}`);
-  if (moved === 0) fail('CBB: the old rivalry table and the series table agree, so the old season check proves nothing');
   if (offOld > 0 || played.size !== oldPairs.size) fail(`CBB: an old season's rivalry night played ${offOld} pair(s) off the table it started with (${played.size} of ${oldPairs.size} played)`);
   if (noteOff > 0) fail(`CBB: in an old season the board would name another rival than the one played, for ${noteOff} school(s)`);
 }

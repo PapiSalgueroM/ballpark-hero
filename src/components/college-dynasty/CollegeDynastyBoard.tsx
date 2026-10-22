@@ -313,9 +313,13 @@ export default function CollegeDynastyBoard<
   }, [openRecruiting, sport]);
 
   const label = (id: string) => sport.schoolMap.get(id)?.name ?? id;
-  /* Round 1554: the rival the season on screen plays, so an old season's note names its old rival. */
-  const rivalry = (id: string) => rivalryNoteFor(x => sport.rivalOf(x, st ?? undefined), sport.schoolMap, id);
-  const ctx: CollegeWordsContext = { label, rivalry };
+  /* Round 1554: the rival the season in hand plays, so an old season's note names its old rival and a
+     note written about a season just made (a new dynasty, the layer arriving) names that season's. */
+  const ctxFor = (s: S | null): CollegeWordsContext => ({
+    label,
+    rivalry: (id: string) => rivalryNoteFor(x => sport.rivalOf(x, s ?? undefined), sport.schoolMap, id),
+  });
+  const rivalry = ctxFor(st).rivalry;
 
   const start = (id: string) => {
     const state = sport.init(id, Math.random, { depth: true });
@@ -323,7 +327,7 @@ export default function CollegeDynastyBoard<
     /* A new dynasty can meet a market or a bid with the same key as the last one's: it starts unacted. */
     marketActed.current = '';
     setSt(state); setPhase('season'); setTab('team'); setSeatOpen(false);
-    setFeed(w.welcome(state, id, ctx));
+    setFeed(w.welcome(state, id, ctxFor(state)));
     setRecap(null); setWonNow(false);
     persist(state, 'season', null, null);
   };
@@ -339,7 +343,7 @@ export default function CollegeDynastyBoard<
     if (sport.closedBeforeRound(st)) return;
     const state: S = JSON.parse(JSON.stringify(st));
     if (sport.seat) collegeSeatFirstPress(state, sport.seat);
-    const { games, lines } = sport.playRound(state, Math.random, ctx);
+    const { games, lines } = sport.playRound(state, Math.random, ctxFor(state));
     setLastGames(games);
     if (state.round >= sport.rounds) {
       if (sport.closedAtFinal(state)) return;
@@ -463,7 +467,7 @@ export default function CollegeDynastyBoard<
        them now, at the turn of a season, so nothing it already played changes. */
     if (!state.depth) {
       sport.enableDepth(state, Math.random);
-      notes.unshift(...w.depthArrives(state, ctx));
+      notes.unshift(...w.depthArrives(state, ctxFor(state)));
     }
     setSt(state); setPhase('season'); setTab('team');
     setRecruits(null); setPortal(null); setRecap(null); setWonNow(false);
