@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+walkb: node .rc/x/walk1546b.mjs
