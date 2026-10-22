@@ -27,6 +27,11 @@
  *     move by exactly the milestones reached, and no other event pays.
  *   4 Finale waits. Every division, every matchday, with and without a leftover
  *     friendly: no title, promotion or season end, and the final matchday unplayed.
+ *     It does NOT fence the friendly's own slot (a leftover friendly costs no league
+ *     matchday): with that slot dropped every section here stays green (Round 1539
+ *     review, mutation nofriendly). simTycoonScorelines S2's frozen body hash of
+ *     awayMatchdaysPlayable and playFirstVisitDialogs' plant (the friendly plus 17,
+ *     ABORTED otherwise) are what fence it.
  *   5 Outcome against baseline. The frozen V1 lib plays no away matchday; 40
  *     mid-season clubs away eight hours play a mean at or above the fence, and a
  *     squad of 50 wins clearly more of its away matches than a squad of 0.
