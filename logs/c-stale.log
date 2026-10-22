@@ -1,0 +1,6 @@
+1) the field table against the engine it was measured on
+   CONTROL stale: the striker level mean moved from 6.56 to 6.76 in this bundle's table
+   ST level: mean 6.56 (table 6.76), sd 0.95 (table 0.95), n 45363
+   FAIL ST level: the mean moved -0.20, past 0.06
+   ST goals at a top two tier club: mean 14.78 (table 14.71), sd 8.22 (table 8.17), n 33344
+simSoccerSeasonAwards: RED, 1 failure(s)
