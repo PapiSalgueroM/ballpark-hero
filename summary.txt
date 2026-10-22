@@ -1,0 +1,7 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+headsha exit=0 0s | e7fb333469 rc request rBP-trB-main for 3ee0bf6293859740a50654e299232bcd0ff701c3
+playCmDataOnDemand exit=0 30s | playCmDataOnDemand: green. The manager games open without the data they never read, and a past season brings its own.
+hubgrid1089 exit=1 38s | Node.js v24.21.0
+potential-browser exit=0 50s | PASS Soccer potential progress browser
+retire exit=0 10s | []
+dialog exit=0 7s | []
