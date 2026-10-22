@@ -1,0 +1,12 @@
+vitest-readers: node_modules/.bin/vitest run $(git grep -l -E "NbaFrontOfficeBoard|DraftNightCard|nbaEarnedDraft|gmEarnedDraft|GmLotteryCard|gmLazyPanel|GmEarnedDraftScreen|useGmEarnedDraft|nbaGmDesk" -- 'src/*.test.ts' 'src/*.test.tsx') --testTimeout=300000 --hookTimeout=120000
+simNbaDraftBoard: T=$(mktemp -d); TMPDIR=$T TEMP=$T TMP=$T node scripts/simNbaDraftBoard.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+dashes: export LC_ALL=C.UTF-8; c=$(git diff b1eb4e55 HEAD -- src scripts | grep '^+' | grep -c -P '[\x{2013}\x{2014}]'); m=$(git log --first-parent --format=%B b1eb4e55..HEAD | grep -c -P '[\x{2013}\x{2014}]'); echo "added lines with a dash: $c, commit message lines with a dash: $m"; [ "$c" = 0 ] && [ "$m" = 0 ]
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simNbaGmDesk: T=$(mktemp -d); TMPDIR=$T TEMP=$T TMP=$T node scripts/simNbaGmDesk.mjs
+simGmContracts: T=$(mktemp -d); TMPDIR=$T TEMP=$T TMP=$T node scripts/simGmContracts.mjs
+vitest-contracts: node_modules/.bin/vitest run src/lib/gmContracts.test.ts src/components/nba-front-office/NbaGmDeskBoard.test.tsx src/lib/gmDeskHost.test.ts src/components/mlb-front-office/MlbGmDesk.test.tsx src/lib/nhlCareerLifeC.test.ts --testTimeout=300000 --hookTimeout=120000
+simNbaEarnedDraft: T=$(mktemp -d); TMPDIR=$T TEMP=$T TMP=$T node scripts/simNbaEarnedDraft.mjs
