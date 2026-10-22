@@ -52,6 +52,7 @@ import { countOf, nflCareerStatBullet, nflLineAsPrinted, nflMajorAward, nflStatL
 import { raiseWithinPotential, ratingRaiseNote } from './careerHeadroom';
 import { applyUsCareerAnnualBenefits } from './usCareerAnnualBenefits';
 import { settleUsCareerShop, usCareerSeasonCool } from './usCareerAnnualBenefits';
+import { bankUsCareerFee, usCareerSkillSummer } from './usCareerAnnualBenefits';
 import { careerRecoveryRisk } from './usCareerRecovery';
 import { hallCalibrationOf, legacyRead, type HallCalibration, type LegacyRead, type LegacyWeights } from './careerHallOfFame';
 import { moraleForm } from './careerForm';
@@ -1188,9 +1189,9 @@ function buildNflDeck(c: CareerState, rng: () => number, stopAtBig: boolean): { 
     title: 'Offseason focus',
     body: 'Twelve weeks before camp. Where does the work go?',
     options: [
-      { label: 'Skill work', effect: 'Push your ceiling', apply: (cc, r) => { if (cc.age >= 30) { cc.health = Math.min(100, cc.health + 4); return 'At this age the gains are in maintenance. Health +4.'; } const up = 1 + Math.floor(r() * 2); cc.ovr = Math.min(cc.pot + 1, cc.ovr + up); return `Rating +${up}.`; } },
+      { label: 'Skill work', effect: c.age >= 30 ? 'Health +4, up to 100' : 'Rating +1 or +2, up to your ceiling', apply: (cc, r) => usCareerSkillSummer(cc, r, 30, 'At this age the gains are in maintenance.') },
       { label: 'Body work', effect: 'Durability and recovery', apply: (cc) => { cc.health = Math.min(100, cc.health + 10); return 'Health +10. You feel five years younger.'; } },
-      { label: 'Brand work', effect: 'Fame and endorsements', apply: (cc) => { /* Round 1104: the fee reaches the bank (it only ever reached career earnings) and is paid in the era's money. */ const fee = Math.round(3 * nflEraById(cc.eraId).moneyScale * 10) / 10; const bank = cc.netWorth ?? Math.round(cc.earnings * TAKE_HOME * 10) / 10; cc.fanbase = Math.min(100, cc.fanbase + 12); cc.earnings += fee; cc.netWorth = Math.round((bank + fee) * 10) / 10; return `Fanbase +12 and a ${fee}M endorsement, banked.`; } },
+      { label: 'Brand work', effect: 'Fame and endorsements', apply: (cc) => { /* Round 1104: the fee reaches the bank, in the era's money. Round 1538: through the helper all four sports share, which never rounds the balance again. */ cc.fanbase = Math.min(100, cc.fanbase + 12); const fee = bankUsCareerFee(cc, 3, nflEraById(cc.eraId).moneyScale); return `Fanbase +12 and a ${fee}M endorsement, banked.`; } },
     ],
   });
 

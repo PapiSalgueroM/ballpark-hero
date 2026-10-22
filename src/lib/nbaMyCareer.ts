@@ -50,6 +50,7 @@ import type { RivalryChoiceCard } from './careerRivalryChoices';
 import { raiseWithinPotential, ratingRaiseNote } from './careerHeadroom';
 import { applyUsCareerAnnualBenefits } from './usCareerAnnualBenefits';
 import { settleUsCareerShop, usCareerSeasonCool } from './usCareerAnnualBenefits';
+import { bankUsCareerFee, usCareerSkillSummer } from './usCareerAnnualBenefits';
 import { careerRecoveryRisk } from './usCareerRecovery';
 import { hallCalibrationOf, legacyRead, LEGACY_GAME_RULES, type HallCalibration, type LegacyRead, type LegacyStandout, type LegacyWeights } from './careerHallOfFame';
 import { moraleForm } from './careerForm';
@@ -1062,9 +1063,9 @@ function buildNbaDeck(c: NbaCareerState, rng: () => number, stopAtBig: boolean):
     title: 'Summer plan',
     body: 'The offseason belongs to you. What gets the hours?',
     options: [
-      { label: 'Skill grind', effect: 'Push the ceiling', apply: (cc, r) => { if (cc.age >= 31) { cc.health = Math.min(100, cc.health + 4); return 'Maintenance year. Health +4.'; } const up = 1 + Math.floor(r() * 2); cc.ovr = Math.min(cc.pot + 1, cc.ovr + up); return `Rating +${up}.`; } },
+      { label: 'Skill grind', effect: c.age >= 31 ? 'Health +4, up to 100' : 'Rating +1 or +2, up to your ceiling', apply: (cc, r) => usCareerSkillSummer(cc, r, 31, 'Maintenance year.') },
       { label: 'Body work', effect: 'Durability', apply: (cc) => { cc.health = Math.min(100, cc.health + 10); return 'Health +10. Load managed properly.'; } },
-      { label: 'Build the brand', effect: 'Fame and money', apply: (cc) => { cc.fanbase = Math.min(100, cc.fanbase + 12); cc.earnings += 5; return 'Signature shoe talks. 5M endorsement banked.'; } },
+      { label: 'Build the brand', effect: 'Fame and money', apply: (cc) => { cc.fanbase = Math.min(100, cc.fanbase + 12); const fee = bankUsCareerFee(cc, 5, nbaEraById(cc.eraId).moneyScale); return `Signature shoe talks. ${fee}M endorsement banked.`; } },
     ],
   });
   if (c.morale < 55) {

@@ -1,4 +1,4 @@
-import { raiseWithinPotential } from './careerHeadroom';
+import { raiseWithinPotential, ratingRaiseNote } from './careerHeadroom';
 import { keyedRng } from './keyedRng';
 import { summerCareerKey } from './usCareerSummer';
 import type { UsCareerCore } from './usCareerSport';
@@ -174,3 +174,50 @@ export const US_SHOP_HELP_RULE = 'The shop pays what its cards say, at the end o
   + 'it never settles. The Family Office adds 2 percent of your '
   + 'cash every season, and the lawyer makes a clean season cool your heat twice as fast. Selling your lifestyle assets '
   + 'when you go broke sells your investments too.';
+
+/* ─── Round 1538: money a line says was banked reaches the Bank, and the Skill card stops at the ceiling ───
+
+   Fourteen answers said money was paid and only ever moved career earnings, never Cash: the summer brand answers
+   (NBA "Build the brand", MLB "The commercial circuit", NHL "The content summer"; NFL "Brand work" has banked since
+   Round 1104) and ten clean answers of the four corruption decks. The ruling (brief 1534, R2): every one off card
+   payment banks in FULL, the way the decks' own paid(), earn() and bank() always have; the 45 percent take home
+   share is the salary's alone. A brand answer pays its amount in the era's money (moneyScale, NFL 1104's rule); a
+   corruption answer pays the amount its button prints, flat, because the dirty answer beside it is flat too.
+
+   bankUsCareerFee moves earnings and Cash by the same tenth rounded amount and never rounds either total again:
+   between seasons Cash can hold hundredths (the money app and the desk keep two places), and rounding the balance
+   would show a Cash row that is not the fee. With no Cash on the save yet it starts from the take home share of the
+   earnings so far, read before they move, the way the engines' load repair rebuilds it.
+
+   usCareerSkillSummer is the summer Skill answer of all four sports. It drew 1 or 2 and set the rating to
+   min(pot + 1, ovr + up), so a player at his ceiling went one over it (never reintroduce: Rounds 96 and 116). It
+   raises within potential now and says what landed. The draw stays where it was, after the maintenance branch,
+   which draws nothing, so no stream moves. */
+
+/** Bank a one off payment: `amount` in the era's money (pass 1 for a flat amount), rounded to a tenth, into career
+ *  earnings and Cash alike. Returns what landed. */
+export function bankUsCareerFee(c: { earnings: number; netWorth?: number }, amount: number, moneyScale: number): number {
+  const fee = Math.round(amount * moneyScale * 10) / 10;
+  const prior = c.netWorth ?? Math.round(c.earnings * 0.45 * 10) / 10;
+  c.earnings += fee;
+  c.netWorth = Math.round((prior + fee) * 10000) / 10000;
+  return fee;
+}
+
+/** The summer Skill answer: health +4 from the maintenance age on (no draw), held at 100, else one draw for +1 or
+ *  +2, held at the ceiling, and the line says what really landed. `maintenanceLead` opens the maintenance line. */
+export function usCareerSkillSummer(cc: { age: number; health: number; ovr: number; pot: number }, r: () => number, maintenanceAge: number, maintenanceLead: string): string {
+  if (cc.age >= maintenanceAge) {
+    /* Review of 2026-10-22: the line said "Health +4" even when health was at 100 and nothing landed. */
+    const was = cc.health;
+    cc.health = Math.min(100, cc.health + 4);
+    const gain = cc.health - was;
+    if (gain >= 4) return `${maintenanceLead} Health +4.`;
+    if (gain > 0) return `${maintenanceLead} Health +${gain}, and that is full health.`;
+    return `${maintenanceLead} You were already at full health, so it stays at ${cc.health}.`;
+  }
+  const up = 1 + Math.floor(r() * 2);
+  const was = cc.ovr;
+  cc.ovr = raiseWithinPotential(cc.ovr, cc.pot, up);
+  return ratingRaiseNote(was, cc.ovr, up);
+}

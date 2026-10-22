@@ -10,6 +10,7 @@ import { NHL_ARCHETYPES, startNhlCareer, NHL_SPEND_ITEMS, buyNhlItem } from '@/l
 import {
   liquidateUsCareerPurchases, settleUsCareerShop, usCareerSeasonCool, US_SHOP_HELP_RULE, US_SHOP_RETURNS,
 } from '@/lib/usCareerAnnualBenefits';
+import { bankUsCareerFee, usCareerSkillSummer } from '@/lib/usCareerAnnualBenefits';
 import { keyedRng } from '@/lib/keyedRng';
 import { summerCareerKey } from '@/lib/usCareerSummer';
 
@@ -223,5 +224,65 @@ describe('Round 1534: the help rule prints the cards\' own numbers', () => {
     /* Only a season end settles a stake, and retiring by hand in the offseason plays none (review of 2026-10-22). */
     expect(US_SHOP_HELP_RULE).toContain('Retire before you play that season and it never settles.');
     expect(US_SHOP_HELP_RULE).not.toMatch(new RegExp(`[${String.fromCharCode(0x2013)}${String.fromCharCode(0x2014)}]`));
+  });
+});
+
+/* Round 1538: the paid lines and the Skill card's ceiling, on the two shared helpers. The engines' own cards are
+   proved in scripts/simUsShopPromises.mjs sections 6 and 7. */
+describe('Round 1538: a paid line banks what it says, and the Skill card stops at the ceiling', () => {
+  it('banks the fee into earnings and Cash alike and never rounds the balance again', () => {
+    const c = { earnings: 20, netWorth: 10.37 };
+    expect(bankUsCareerFee(c, 5, 1)).toBe(5);
+    expect(c).toEqual({ earnings: 25, netWorth: 15.37 });
+    const old = { earnings: 20, netWorth: 10.37 };
+    const fee = bankUsCareerFee(old, 5, 0.31);
+    expect(fee).toBe(Math.round(5 * 0.31 * 10) / 10);
+    expect(old.earnings).toBe(20 + fee);
+    expect(old.netWorth).toBe(Math.round((10.37 + fee) * 10000) / 10000);
+    const flat = { earnings: 7, netWorth: 3 };
+    expect(bankUsCareerFee(flat, 0.3, 1)).toBe(0.3);
+    expect(flat.netWorth).toBe(3.3);
+  });
+  it('starts Cash from the take home share of the earnings so far when the save has none', () => {
+    const c: { earnings: number; netWorth?: number } = { earnings: 10 };
+    expect(bankUsCareerFee(c, 3, 1)).toBe(3);
+    expect(c).toEqual({ earnings: 13, netWorth: 7.5 });
+  });
+  it('the Skill answer holds the rating at the ceiling and says what landed', () => {
+    const at = { age: 24, health: 70, ovr: 80, pot: 80 };
+    expect(usCareerSkillSummer(at, () => 0.9, 31, 'Maintenance year.')).toBe('You were already at your ceiling, so the rating stays at 80.');
+    expect(at.ovr).toBe(80);
+    const under = { age: 24, health: 70, ovr: 79, pot: 80 };
+    expect(usCareerSkillSummer(under, () => 0.9, 31, 'Maintenance year.')).toBe('Rating +1, and that is your ceiling.');
+    expect(under.ovr).toBe(80);
+    const room = { age: 24, health: 70, ovr: 70, pot: 80 };
+    expect(usCareerSkillSummer(room, () => 0.9, 31, 'Maintenance year.')).toBe('Rating +2.');
+    expect(room.ovr).toBe(72);
+    const top = { age: 24, health: 70, ovr: 99, pot: 99 };
+    usCareerSkillSummer(top, () => 0.9, 31, 'Maintenance year.');
+    expect(top.ovr).toBe(99);
+    /* Another card can leave the rating above the ceiling: the Skill answer keeps it there, never pulls it down. */
+    const over = { age: 24, health: 70, ovr: 83, pot: 80 };
+    expect(usCareerSkillSummer(over, () => 0.9, 31, 'Maintenance year.')).toBe('You were already at your ceiling, so the rating stays at 83.');
+    expect(over.ovr).toBe(83);
+  });
+  it('the Skill answer draws once under the maintenance age and never from it', () => {
+    let draws = 0;
+    const r = () => { draws += 1; return 0; };
+    const young = { age: 30, health: 70, ovr: 70, pot: 80 };
+    expect(usCareerSkillSummer(young, r, 31, 'Maintenance year.')).toBe('Rating +1.');
+    expect(draws).toBe(1);
+    const vet = { age: 31, health: 70, ovr: 70, pot: 80 };
+    expect(usCareerSkillSummer(vet, r, 31, 'Maintenance year.')).toBe('Maintenance year. Health +4.');
+    expect(draws).toBe(1);
+    expect(vet).toEqual({ age: 31, health: 74, ovr: 70, pot: 80 });
+    /* The line says the health that landed (review of 2026-10-22): held at 100, part of the 4 or none of it. */
+    const near = { age: 31, health: 98, ovr: 70, pot: 80 };
+    expect(usCareerSkillSummer(near, r, 31, 'Maintenance year.')).toBe('Maintenance year. Health +2, and that is full health.');
+    expect(near).toEqual({ age: 31, health: 100, ovr: 70, pot: 80 });
+    const full = { age: 33, health: 100, ovr: 70, pot: 80 };
+    expect(usCareerSkillSummer(full, r, 31, 'Maintenance year.')).toBe('Maintenance year. You were already at full health, so it stays at 100.');
+    expect(full).toEqual({ age: 33, health: 100, ovr: 70, pot: 80 });
+    expect(draws).toBe(1);
   });
 });
