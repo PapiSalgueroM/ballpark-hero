@@ -1,3 +1,10 @@
+## 2026-10-22: Round1446 claimed, Profile initials and dedicated Cookie Policy
+
+Root site lane, codex/site-privacy-followup-1446 from observed main0383bd6e0a7912ddbc7a71820a22afd0b4749799. Scope is Profile's remote-image render boundary plus one Cookie Policy page, its site links and required schema/sitemap/saved-page outputs. Initials will use the viewed profile's name/username/U, without deleting stored avatar values. The policy uses already reviewed copy and retains GA paused, advertising opt-in/GPC, withdrawal limits and the180-day choice distinction.
+
+Current phase: original proof authoring. Product behavior is unchanged; no runtime result or live fix yet. New actual-Profile tests and actual-dist route/link browser cases must produce admitted intended RED before product adoption. All runtime stays in new remote offline Actions, with actual types, existing privacy/profile checks, build/readers and14 held caps. Generated outputs require reviewed adoption and a final0B fixed point. Primary source/index and old branches/worktrees stay protected. No game engine/data/save, dependency, provider/DNS, legal identity or analytics readiness change.
+
+The Growth/Nitro audit remains a finite engineering audit, not approval or clean-traffic proof. I/J own game reports and games; this round takes no game lease. Existing785/1441 and historical preservation issues remain unwaived. Plan: docs/ROUND1446.md and the outside site-privacy-followup-1446 implementation plan. Publication remains coordinated against actual main and the publisher's release slot.
 ## 2026-10-21: Round 1443 live, public verified, IndexNow accepted
 
 Club Manager's simulated shirt receipts, paid/pending Finances rows and guide/update copy qualified at a95cdd9f68fa25a5345ac2370a94ed8730e3a0ec/run 39696453260, all seven jobs. Actual 9330 unit cases passed, 58 skipped explicitly, 0 failed across 621 files; 45 focused/15 sim cases, 72 charged prefix weeks and 9 accounting faults passed. Browser 7+3+3,18 readers, 14 unchanged limits, 0 B generated patch/list and complete 219-source/796-dist end holds passed.
