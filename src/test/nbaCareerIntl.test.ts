@@ -6,7 +6,7 @@ import { keyedRng } from '@/lib/keyedRng';
 import {
   INTL_CALL_UP_OVR, INTL_KNOCK_BASE, INTL_LIFT_CAP, INTL_LIFT_PER_POINT, INTL_MAX_AGE, INTL_MIN_HEALTH,
   NBA_CAREER_INTL, NBA_INTL_CALENDAR, nbaIntlCallOf, nbaIntlEditionLabel, nbaIntlHelpRules, nbaIntlLift,
-  nbaIntlPlay, nbaIntlStrength, nbaIntlSummerOf,
+  nbaIntlLine, nbaIntlPlay, nbaIntlStrength, nbaIntlSummerOf,
 } from '@/lib/nbaCareerIntl';
 import { NBA_CAREER_SPORT } from '@/lib/nbaCareerSport';
 import { NFL_CAREER_SPORT } from '@/lib/nflCareerSport';
@@ -63,6 +63,19 @@ describe('the call', () => {
     expect(nbaIntlCallOf(after(2003, 90, { health: INTL_MIN_HEALTH - 1 }))).toBeNull();
     expect(nbaIntlCallOf(after(2003, 90, { health: INTL_MIN_HEALTH }))?.id).toBe('oly-2004');
     expect(nbaIntlCallOf(after(2004, 99))).toBeNull();
+  });
+  it('never comes to a career that ends after this season, by the hard stop or by his own choice', () => {
+    /* the board writes the curtain before it checks the end, so the call must read the end itself */
+    const long = after(2003, 90);
+    long.seasons = Array.from({ length: 21 }, (_, i) => line(1983 + i, 90));
+    expect(nbaIntlCallOf(long)).toBeNull();
+    long.seasons = long.seasons.slice(1);
+    expect(nbaIntlCallOf(long)?.id).toBe('oly-2004');
+    const farewell = Object.assign(after(2003, 90), { retirement: { farewellYear: 2003 } });
+    expect(nbaIntlCallOf(farewell)).toBeNull();
+    expect(NBA_CAREER_INTL.curtainLine(farewell)).toBeNull();
+    expect(nbaIntlCallOf(Object.assign(after(2003, 90), { retirement: { retiredYear: 2003 } }))).toBeNull();
+    expect(nbaIntlCallOf(Object.assign(after(2003, 90), { retirement: { farewellYear: 2004 } }))?.id).toBe('oly-2004');
   });
   it('rest writes the year, the edition and went false, and nothing else', () => {
     const c = after(2003, 90);
@@ -124,12 +137,42 @@ describe('the game', () => {
   });
 });
 
+describe('his line and his medals', () => {
+  it('scales his season to a 40 minute game and a team of stars: 24, 6 and 5 come out near 15, 3.75 and 3.1', () => {
+    /* 24 x 40/48 x 0.75 = 15, 6 x 0.625 = 3.75, 5 x 0.625 = 3.125; the draw's spread is 3 on points and
+       1.5 on the others, so over 4000 games the means have a standard error of about 0.05 and 0.02 */
+    const c = after(2003, 90, {}, { ppg: 24, rpg: 6, apg: 5 });
+    const n = 4000;
+    const sum = { pts: 0, reb: 0, ast: 0 };
+    for (let i = 0; i < n; i += 1) {
+      const l = nbaIntlLine(c, keyedRng(`line:${i}`));
+      sum.pts += l.pts; sum.reb += l.reb; sum.ast += l.ast;
+    }
+    const mean = { pts: sum.pts / n, reb: sum.reb / n, ast: sum.ast / n };
+    console.log(`nbaIntlLine means over ${n} keyed games: pts ${mean.pts.toFixed(3)}, reb ${mean.reb.toFixed(3)}, ast ${mean.ast.toFixed(3)}`);
+    expect(Math.abs(mean.pts - 15)).toBeLessThan(0.25);
+    expect(Math.abs(mean.reb - 3.75)).toBeLessThan(0.15);
+    expect(Math.abs(mean.ast - 3.125)).toBeLessThan(0.15);
+  });
+  it('labels a medal of an edition the ledger lacks by the name its competition went by that summer', () => {
+    const c = Object.assign(after(2007, 90), {
+      intl: { v: 1 as const, summers: [{ year: 2008, edition: 'wc-2008', went: true as const, age: 28, place: 'gold' as const, games: 9, wins: 9, avg: { pts: 15 }, hurt: false }] },
+    });
+    expect(NBA_CAREER_INTL.trophyRows(c)).toEqual([{ label: 'World Championship gold', n: 1, years: [2008] }]);
+  });
+});
+
 describe('the help and the bindings', () => {
   it('quotes the module numbers and never the marks', () => {
     const text = nbaIntlHelpRules().join(' ');
     for (const n of [INTL_CALL_UP_OVR, INTL_MAX_AGE, INTL_MIN_HEALTH, INTL_LIFT_PER_POINT, INTL_LIFT_CAP, Math.round(INTL_KNOCK_BASE * 100)]) expect(text).toContain(String(n));
     expect(text).not.toMatch(/Team USA|USA Basketball|Dream Team/);
     expect(text).toContain('the US national team');
+    /* names read off the ledger: the old name, the real fields' span, every announced host */
+    expect(text).toContain('the World Championship in 2006 and 2010');
+    expect(text).toContain('from Athens 2004 to Paris 2024 use their real hosts and fields');
+    for (const h of ['Qatar 2027', 'Los Angeles 2028', 'France 2031', 'Brisbane 2032']) expect(text).toContain(h);
+    expect(text).not.toMatch(/\ba \d/);
     const dashes = [String.fromCharCode(0x2013), String.fromCharCode(0x2014)];
     for (const d of dashes) expect(text.includes(d)).toBe(false);
   });

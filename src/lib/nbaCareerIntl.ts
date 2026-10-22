@@ -21,6 +21,10 @@
  * after a season rated INTL_CALL_UP_OVR or better, not retired, not serving
  * or facing a suspension, at most INTL_MAX_AGE in the summer and with health
  * of INTL_MIN_HEALTH or more, in a summer with an edition. One call a summer.
+ * A career that ends after this season (the engine's hard stop, or a farewell
+ * or retirement he chose) is never called: the board writes the season's
+ * curtain before it checks the end, so the call reads the end itself rather
+ * than waiting for `retired` to be set.
  *
  * NO REAL PERSON. No player, coach or official of any nation is named; the
  * screens narrate and nobody speaks. The words are "the USA" and "the US
@@ -39,7 +43,8 @@ import {
 } from '@/data/basketballIntl';
 import { keyedRng } from '@/lib/keyedRng';
 import { summerCareerKey } from '@/lib/usCareerSummer';
-import type { NbaCareerState } from '@/lib/nbaMyCareer';
+import { endsAfterSeason } from '@/lib/usCareerRetirementFlow';
+import { nbaShouldRetire, type NbaCareerState } from '@/lib/nbaMyCareer';
 import type { UsIntlSport } from '@/lib/usCareerSport';
 
 /* ─── the game's own rules ───────────────────────────────────────────────── */
@@ -111,7 +116,7 @@ export const nbaIntlKnockChance = (age: number): number => INTL_KNOCK_BASE + INT
 /** The edition he is called up for after his last season, or null (decision 4 of the brief). */
 export function nbaIntlCallOf(c: NbaCareerState): IntlEdition | null {
   const line = lastLine(c);
-  if (!line || c.retired) return null;
+  if (!line || c.retired || nbaShouldRetire(c) || endsAfterSeason(c, line.year)) return null;
   if (line.teamResult === 'SUSPENDED' || (c.suspendedSeasons ?? 0) > 0) return null;
   const e = NBA_INTL_CALENDAR.editionFor(nbaIntlSummerOf(line.year));
   if (!e) return null;
@@ -202,6 +207,14 @@ export function nbaIntlTrophyRows(c: NbaCareerState): { label: string; n: number
 
 const pct = (x: number) => `${Math.round(x * 100)} percent`;
 const LAST_LEDGER_YEAR = Math.max(...BASKETBALL_INTL_EDITIONS.map(r => r[2]));
+const inWords = (xs: string[]) => (xs.length < 2 ? xs.join('') : `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}`);
+/* Read off the ledger, so the help names what the ledger holds and nothing it does not. */
+const OLD_NAME_YEARS = BASKETBALL_INTL_EDITIONS.filter(r => r[3] === 'World Championship').map(r => String(r[2]));
+const PLAYED_ROWS = BASKETBALL_INTL_EDITIONS.filter(r => r[6] !== null);
+const FIRST_PLAYED = PLAYED_ROWS[0];
+const LAST_PLAYED = PLAYED_ROWS[PLAYED_ROWS.length - 1];
+const ANNOUNCED = BASKETBALL_INTL_EDITIONS.filter(r => r[6] === null).map(r => `${r[4]} ${r[2]}`);
+const KNOCK_POINTS = Math.round(INTL_KNOCK_PER_YEAR * 100);
 
 /**
  * The rules behind the page's ?, built from the constants above the way
@@ -211,14 +224,14 @@ const LAST_LEDGER_YEAR = Math.max(...BASKETBALL_INTL_EDITIONS.map(r => r[2]));
 export function nbaIntlHelpRules(): string[] {
   const exOvr = INTL_CALL_UP_OVR + 2;
   return [
-    `International summers: after a season rated ${INTL_CALL_UP_OVR} or better, in a summer with an Olympics or a Basketball World Cup, the US national team calls you up, as long as you are ${INTL_MAX_AGE} or younger that summer, your health is ${INTL_MIN_HEALTH} or more and you are not suspended. In this game every player is eligible for the USA.`,
+    `International summers: after a season rated ${INTL_CALL_UP_OVR} or better, in a summer with an Olympics or a Basketball World Cup (the World Championship in ${inWords(OLD_NAME_YEARS)}), the US national team calls you up, as long as you are ${INTL_MAX_AGE} or younger that summer, your health is ${INTL_MIN_HEALTH} or more, you are not suspended and your career is not ending with that season. In this game every player is eligible for the USA.`,
     'You choose: go and play the tournament, or rest. The call waits for your answer, one call a summer, and it comes before the summer\'s cards.',
-    'The tournament is groups, then a knockout: the best of each group (and the best third placed sides, when the format has them) go through, the knockout is seeded by group finish and record, and the semi-final losers play for bronze. Groups rank by wins, then points for minus against: the game\'s own rule, not FIBA\'s tie rules. A World Cup with a second group round is played as one group round into a round of 16.',
-    `Each nation plays at the strength of where it really finished that summer; you lift the USA by ${INTL_LIFT_PER_POINT} for every rating point over ${INTL_CALL_UP_OVR}, up to ${INTL_LIFT_CAP}. Groups and results are this career's own.`,
-    `Going carries a ${pct(INTL_KNOCK_BASE)} chance of coming home hurt (health drops ${INTL_KNOCK_HEALTH}), ${INTL_KNOCK_PER_YEAR * 100} point more for every year over ${INTL_KNOCK_AGE}. Resting carries nothing and gives nothing.`,
+    'The tournament is groups, then a knockout: the best of each group (and the best third placed sides, when the format has them) go through, and the semi-final losers play for bronze. The knockout is seeded by group finish and record, so you can meet a side from your own group again in the first knockout game. Groups rank by wins, then points for minus against: the game\'s own rule, not FIBA\'s tie rules. A World Cup with a second group round is played as one group round into a round of 16.',
+    `In a summer already played, each nation plays at the strength of where it really finished; in one still to come, at its average finish over the tournaments it really played. You lift the USA by ${INTL_LIFT_PER_POINT} for every rating point over ${INTL_CALL_UP_OVR}, up to ${INTL_LIFT_CAP}. Groups and results are this career's own.`,
+    `If you go, the chance you come home hurt is ${pct(INTL_KNOCK_BASE)} (health drops ${INTL_KNOCK_HEALTH}, never below ${INTL_KNOCK_FLOOR}), plus ${KNOCK_POINTS} percentage point${KNOCK_POINTS === 1 ? '' : 's'} for every year you are over ${INTL_KNOCK_AGE}. Resting carries nothing and gives nothing.`,
     'A medal goes in your Trophy Case. It does not change your legacy, your Hall of Fame case, your morale, your fans or your money.',
-    `Real summers run from Athens 2004 to Brisbane 2032 with their real hosts and fields; a summer still to come draws its field from the nations of that competition's last two tournaments, and past ${LAST_LEDGER_YEAR} the game keeps its own calendar: host and field are the game's own.`,
-    `Example: you finish the 2027-28 season rated ${exOvr}. 2028 is an Olympic summer in Los Angeles and the national team calls players rated ${INTL_CALL_UP_OVR} or better, so you are called. Go: three group games, then a top two finish (or one of the two best thirds) puts you in the quarter-final; win the semi-final and the final for gold, lose the semi-final and you play for bronze. You lift the USA by ${nbaIntlLift(exOvr)}, and the chance you come home hurt is ${pct(nbaIntlKnockChance(27))}. Rest: no games, no risk, nothing on the shelf.`,
+    `Tournaments from ${FIRST_PLAYED[4]} ${FIRST_PLAYED[2]} to ${LAST_PLAYED[4]} ${LAST_PLAYED[2]} use their real hosts and fields. The ones announced after that (${inWords(ANNOUNCED)}) use their real hosts, but their fields are not settled, so the game draws each from the nations of that competition's last two tournaments, the same for every career, and a format not confirmed yet plays as that competition's last known one. Past ${LAST_LEDGER_YEAR} the game keeps its own calendar, with no host. The game puts the USA in every one of these tournaments, with no qualifying.`,
+    `Example: you finish the 2027-28 season rated ${exOvr} and you are 27 that summer. 2028 is an Olympic summer in Los Angeles and the national team calls players rated ${INTL_CALL_UP_OVR} or better, so you are called. Go: three group games, then a top two finish (or one of the two best thirds) puts you in the quarter-final; win it, the semi-final and the final for gold, or lose the semi-final and play for bronze. You lift the USA by ${nbaIntlLift(exOvr)}, and at 27 the chance you come home hurt is ${pct(nbaIntlKnockChance(27))}. Rest: no games, no risk, nothing on the shelf.`,
   ];
 }
 
