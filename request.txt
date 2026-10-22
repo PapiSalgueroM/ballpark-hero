@@ -1,0 +1,2 @@
+#!build
+chunks: node .rc/x/chunks.mjs
