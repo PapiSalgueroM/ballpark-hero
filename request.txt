@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+walk2: WALK_ONLY=w5,w3 node .rc/x/review-run-walk.mjs

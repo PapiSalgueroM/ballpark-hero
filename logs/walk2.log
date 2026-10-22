@@ -1,0 +1,40 @@
+== w3: 390x844 reduced motion on, team tile 12
+NOTE w3: frame one settled=false headline opacity=1 (reduced=true)
+NOTE w3: heading before Continue: The 2027 Draft Lottery night first. Your club goes in seeded 7th of 14. By the table it has a 8.2% chance at the first pick and 34.4% at a top four pick, and it picks no later than 11th.
+NOTE w3: tiles 14, his tile(s): 7 7 Grizzlies Seed 7 · Held · you
+NOTE w3: closing line: Your club's own pick stays 7th.
+NOTE w3: after Continue (scrollY 19 -> 19): You pick 7th and 36th. You are on the clock at 7.
+NOTE w3: run card: ON THE CLOCK Picks 1 to 6 are in. You are on the clock at 7. 1. WAS take Devon Beaudry G 85 2. MIL take Kobi Halverson G 83 3. BKN take Kobi Danforth F 85 4. LAL take Bryce Holiday F 84 5. DAL take Marquis Holiday F 82 6. MIA take Andre Maplewood F 82
+NOTE w3: help panel: THE LEAGUE'S RULE Every club that misses the playoffs is in the lottery, and only those clubs. A lottery club that is not drawn picks after the drawn picks, worst record first. Every playoff club picks after every lottery club in round one, worst record first, whatever it did in the playoffs. Round two is every club by record, worst first. The lottery changes nothing there except the order among lottery clubs level on record. Level records are split by a random drawing. Level lottery clubs share their chances, and the winner of the drawing gets the odd combination. Clubs level on record pick in round two in the reverse of their round one order. The league used this rule from its 2019 draft to its 2026 draft. THIS GAME'S OWN The league switched to a new lottery from its 2027 draft. This game still runs this one for every draft it plays. Every prospect, every record and every draw here is 
+NOTE w3: the panel's own close button at y 1058 to 1102 of a 844 px view
+NOTE w3: picked "Kobi Holiday F · age 20 81"; now stage clock: You pick 7th and 36th. You are on the clock at 36.
+NOTE w3: staff button "Let your staff make your pick"
+NOTE w3: after the staff: stage over: You pick 7th and 36th. Every pick of the draft is in. That is your draft done. The offseason has run and the new season is set up on the hub. | done: ON THE CLOCK Your pick is in at 36. Picks 37 to 60 are in. Every pick of the draft is in. 36. MEM select Sekou Stallworth F · your pick 73 53. NYK take Jaylen Pemberton F 66 54. CLE take Naz Vance F 69 55. PHI take Tarik Maplewood G 67 56. GSW take Emory Holiday F 66 57. OKC take Emory Grissom F 69 58. PHX take Vontae Reeves G 67 59. DEN take Naz Strother G 66 60. BOS take Isaiah Jarreau G 70 Continue to the hub
+NOTE w3: after leaving: phase hub, season 2027 (was 2026), round 1
+== w5: 390x844, team tile 3
+NOTE w5-3: frame one settled=false headline opacity=0 (reduced=false)
+NOTE w5-3: heading before Continue: The 2027 Draft Lottery night first. Your club made the playoffs, so its own first is not in the lottery.
+NOTE w5-3: tiles 14, his tile(s): 
+NOTE w5-3: closing line: Your club is not in the lottery. Its own round one pick is 24th.
+NOTE w5-3: after Continue (scrollY 194 -> 194): You pick 24th and 54th. You are on the clock at 24.
+NOTE w5-3: run card: ON THE CLOCK Picks 1 to 23 are in. You are on the clock at 24. 15. MEM take Zaire Ridgeway F 67 16. HOU take Amari Jarreau C 70 17. PHI take Dashawn Ridgeway C 71 18. GSW take Vontae Danforth F 66 19. UTA take Quentin Coltrane G 66 20. IND take Omari Pemberton G 68 21. TOR take Keon Pemberton F 72 22. MIN take Sekou Northcutt F 67 23. DEN take Zaire Halverson G 71
+NOTE w5: a double press on his first choice: You pick 24th and 54th. You are on the clock at 54. | picks left saved 1 | slots 24,54
+NOTE w5: Back pressed mid night, now at about:blank
+NOTE w5: leaving the page and coming back kept the night where it was
+NOTE w5: staff button "Let your staff make your pick"
+NOTE w5: after the staff: stage over: You pick 24th and 54th. Every pick of the draft is in. That is your draft done. The offseason has run and the new season is set up on the hub. | done: ON THE CLOCK Your pick is in at 54. Picks 55 to 60 are in. Every pick of the draft is in. 54. NYK select Lamar Ridgeway G · your pick 71 55. ATL take Naz Stallworth C 67 56. CHA take Isaiah Fairweather C 66 57. SAS take Vontae Okonkwo G 66 58. CLE take Andre Holiday F 66 59. BOS take Naz Coltrane G 70 60. OKC take Vontae Isley F 66 Continue to the hub
+NOTE w5: after leaving: phase hub, season 2027 (was 2026), round 1
+NOTE w5b: second season reached its draft (season 2027); the desk's draft block before the press is for year 2026
+NOTE w5b: frame one settled=false headline opacity=0 (reduced=false)
+NOTE w5b: heading before Continue: The 2028 Draft Lottery night first. Your club goes in seeded 2nd of 14. By the table it has a 14.0% chance at the first pick and 52.1% at a top four pick, and it picks no later than 6th.
+NOTE w5b: tiles 14, his tile(s): 6 6 Knicks Seed 2 · Down 4 · you
+NOTE w5b: closing line: Your club's own pick lands 6th, down 4 places.
+NOTE w5b: reload at the card: stage lottery, settled true, same tiles true
+NOTE w5b: after Continue (scrollY 0 -> 0): You pick 6th and 31st. You are on the clock at 6.
+NOTE w5b: run card: ON THE CLOCK Picks 1 to 5 are in. You are on the clock at 6. 1. LAL take Vontae Holiday C 85 2. MEM take Vontae Ashgrove F 87 3. BKN take Devon Maplewood F 89 4. PHI take Isaiah Isley G 82 5. MIL take Jaylen Stallworth G 88
+NOTE w5b: picked "Malik Ashgrove G · age 20 86"; now stage clock: You pick 6th and 31st. You are on the clock at 31.
+NOTE w5b: reload on the clock kept the slot and the board
+NOTE w5b: staff button "Let your staff make your pick"
+NOTE w5b: after the staff: stage over: You pick 6th and 31st. Every pick of the draft is in. That is your draft done. The offseason has run and the new season is set up on the hub. | done: ON THE CLOCK Your pick is in at 31. Picks 32 to 60 are in. Every pick of the draft is in. 31. NYK select Marcus Ridgeway C · your pick 72 53. POR take Tyrese Vance F 66 54. IND take Naz Marchand G 71 55. OKC take Amari Okonkwo F 66 56. ORL take Zaire Northcutt G 70 57. PHX take Quentin Ridgeway G 67 58. CLE take Vontae Jarreau F 72 59. BOS take Lamar Castleton F 69 60. SAS take Quentin Whitmore G 66 Continue to t
+NOTE w5b: after leaving: phase hub, season 2028 (was 2027), round 1
+review walk: no BAD lines.
