@@ -1,0 +1,8 @@
+1) Every published franchise board rebuilds from its date seed through the engine
+   132 boards rebuilt across 3 sports
+2) One copy: each lib imports the engine and carries none of the lifted helpers
+   3 libs read as code
+3) The engine's identity: the PRNG constant and the three difficulty branches
+   constant present: true, all libs on the engine: true
+
+simGridEngine: green. One engine, three configurations, every published board still rebuilds.

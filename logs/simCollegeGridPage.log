@@ -1,0 +1,70 @@
+
+1) Judged in memory: the hook imports the lib, judges locally, and never invokes the validator
+   hook, page, lib and engine read as code; the key comes through the static door
+
+2) Only a no costs a guess
+   submitGuess read branch by branch
+
+3) The key's names: COLLEGE_GRID_PLAYER_SOURCE with validateOnly, no typed list
+   search box and its source read as code; the names are held in memory
+
+4) The copy only asks what the pool offers
+   12 example claims parsed from the page and 15 prose claims, 27 judged against the 35598 row key; 2 stated facts read; 12 criteria named in the copy, each checked against the labels the 75 boards deal
+
+5) A save from another board is not shown
+   action shapes, guesses and the stale log read
+
+6) Returning players see the rewritten rules once
+   the rules flag is not 'cg-rules-seen' and storage is read inside a try
+
+7) The Heisman unknown toast only says what is true
+   "A Heisman winner on record has the same last name." checked against all 21 players it can show for
+
+8) The board does not wait for the key
+   the isLoading statement read
+
+Negative controls
+
+invoke) a functions.invoke of college-grid-validate planted in the hook
+   fired: the hook invokes an edge function; the page must judge in memory
+
+pagedread) the staticSource line removed from fetchCollegeGridData, so the engine would page the table
+   fired: the config fetchCollegeGridData hands the engine names no staticSource, so the key would be paged out of the table again
+
+chargeunknown) an addDailyGuess x planted in the unknown branch
+   fired: the unknown branch calls addDailyGuess, so a guess the records cannot settle is charged
+
+notfound) the no-charge early return removed
+   fired: a name the key does not carry no longer returns before judging
+
+duplicate) the no-charge early return removed
+   fired: a player already on the board no longer returns before judging
+
+acceptmissing) an addDailyGuess of an ok action planted in the missing key branch
+   fired: a guess is added before the verdict (the not-found or duplicate branch charges)
+
+typedlist) the nflCareerPlayers import planted in the search box
+   fired: the search box imports the hand typed nflCareerPlayers list again
+
+remotesearch) the old remote source planted back in collegeSearchSource
+   fired: collegeSearchSource defines no local rows, so every search would go to the table
+
+copy) "SEC Conference" planted into the guide intro
+   fired: the guide entry names a retired label (a conference): " [ "Rows can be the SEC Conference.", "The College Footbal"
+
+undealt) "1st Overall Pick", which no board deals, planted into the guide intro
+   fired: the guide entry names 1st Overall Pick, which none of the 75 boards deals
+
+oldseenkey) the rules flag set back to 'cg-rules-seen'
+   fired: the rules dialog is marked seen under 'cg-rules-seen', the flag players set on the pre-611 rules, so returning players never see the new ones
+
+heismanname) the Heisman unknown sentence set back to "A Heisman winner shares his name."
+   fired: the toast says "A Heisman winner shares his name." (a winner has his folded name), which is false for 4 of 21 players it can show for: Clint Frank [Yale]; DaSha
+
+noboardid) the board id comparison removed from the hook
+   fired: no restored action is compared with the board id (staleLog)
+
+gateboard) || !gridData planted on the isLoading line, so the board waits for the key
+   fired: isLoading names gridData: the board waits for the key again
+
+simCollegeGridPage: green. The page judges in memory, charges only a no, offers the key's names from memory, says only what the key holds, drops another board's save, loads the key through the static door and shows the board without it; all 14 of 14 controls fired.

@@ -1,0 +1,19 @@
+1) the club map, 54 entries
+   5 mapped clubs have no fieldable squad in any year: Al Hilal, LA Galaxy, Inter Miami, Al Ittihad, LAFC
+   49 clubs with squads, every map entry resolves, no target shared
+2) 450 club seasons, 2016 to 2026
+   8154 player rows, all on the curve, every squad fieldable
+3) no man appears at two clubs in the same season
+   11 years checked, 0 men in two dressing rooms
+4) the depth chart, across clubs, positions and ratings
+   3066 depth charts, 1042 first choice, 1528 buried three or more deep
+5) no honest answer means the real readers say nothing, and the Squad tile never passes a made squad off as real
+   5 of those pairs get a living squad, none of them passed off as real
+   6 unknown club and season pairs, all null for the real readers; the page mounts the Squad tile once, and the tile draws nothing with no view
+5b) an offer says where you would slot in at THAT club
+   8 offer cards on the page, 8 handed the career
+   35 offer fits resolved against the offering club's own squad
+6) 30 careers played twice, once with the depth chart consulted every season
+   30 pairs on 7 fields each, 30 of them past four seasons, 0 differences
+
+simClubSquads: green. The squad is the real one, you are in the right place in it, and the game never noticed.
