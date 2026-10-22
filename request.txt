@@ -1,0 +1,6 @@
+#!serial
+attr-base-pair: git checkout e3deb2cb -- src/data/conquestDataNba.ts scripts/data/nbaFoRatingInputs2026.json && node scripts/simNbaOpeningRatingInputs.mjs; s=$?; git checkout HEAD -- src scripts; exit $s
+attr-base-receipt-only: git checkout e3deb2cb -- scripts/data/nbaFoRatingInputs2026.json && node scripts/simNbaOpeningRatingInputs.mjs; s=$?; git checkout HEAD -- src scripts; exit $s
+attr-base-receipt-only-ratings: git checkout e3deb2cb -- scripts/data/nbaFoRatingInputs2026.json && node scripts/simNbaOpeningRatings.mjs; s=$?; git checkout HEAD -- src scripts; exit $s
+attr-diff: git diff e3deb2cb HEAD -- scripts/data/nbaFoRatingInputs2026.json | grep "^[-+] " | cut -c1-160
+clean-after: git status --short | wc -l

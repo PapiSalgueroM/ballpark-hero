@@ -1,0 +1,5 @@
+attr-base-pair exit=0 2s | NBA opening inputs normal: 0 intended failed / 10 held, full10. Receipt /home/runner/work/_temp/t-attr-base-pair/dukb-nba-opening895-DJJJFc
+attr-base-receipt-only exit=1 0s | Node.js v24.22.0
+attr-base-receipt-only-ratings exit=1 3s | Node.js v24.22.0
+attr-diff exit=0 0s | 
+clean-after exit=0 0s | 0

@@ -1,0 +1,36 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: exact intended failures, all independent outcomes held
++ actual - expected
+
++ [
++   'all300 exact reviewed grade and salary tuples',
++   'distinct partial provenance and no browser raw observations',
++   'repeat generation deterministic and budget identity',
++   'invalid measured percentage refuses before write',
++   'fitted calibration drift refuses before write',
++   'checkpoint corruption refuses before write',
++   'cheap old price model refuses before write'
++ ]
+- []
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simNbaOpeningRatingInputs.mjs:159:10 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: [
+    'all300 exact reviewed grade and salary tuples',
+    'distinct partial provenance and no browser raw observations',
+    'repeat generation deterministic and budget identity',
+    'invalid measured percentage refuses before write',
+    'fitted calibration drift refuses before write',
+    'checkpoint corruption refuses before write',
+    'cheap old price model refuses before write'
+  ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.22.0
