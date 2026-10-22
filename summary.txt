@@ -1,0 +1,6 @@
+continuity exit=1 24s | AssertionError [ERR_ASSERTION]: Healthy complete outcome groups all pass
+main-continuity exit=1 24s | AssertionError [ERR_ASSERTION]: Healthy complete outcome groups all pass
+unseeded exit=1 138s | simCmUnseededWorld: 113 FAILURE(S)
+main-unseeded exit=1 140s | simCmUnseededWorld: 113 FAILURE(S)
+worldmoves exit=1 838s | simCmWorldMoves: RED, sections 5 (96), 6 (270), 8 (57)
+main-worldmoves exit=1 811s | simCmWorldMoves: RED, sections 5 (96), 6 (270), 8 (57)
