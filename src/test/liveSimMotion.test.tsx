@@ -1112,6 +1112,9 @@ function replayBuild(t: Tally1521, input: PitchInput, plan: PitchPlan) {
     if (!deep.line || deep.side !== beat.side || LINE_RANK[deep.line] >= LINE_RANK[feed.line]) t.chainOffenders++;
   });
 }
+
+const FIVE_CLUBS = [
+  { seed: 110101, club: 'Aston Villa', league: 'Premier League' },
   { seed: 110102, club: 'Real Madrid', league: 'La Liga' },
   { seed: 110103, club: 'Lyon', league: 'Ligue 1' },
   { seed: 110104, club: 'Ajax', league: 'Eredivisie' },
