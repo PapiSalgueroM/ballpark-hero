@@ -1,0 +1,1 @@
+base-simWritesAreSent exit=1 50s | simWritesAreSent: 2 failures
