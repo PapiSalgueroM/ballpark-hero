@@ -99,15 +99,16 @@ export function openNbaDraftNight(desk: GmDesk, league: NbaLeague, series: Serie
   return nbaDraftNightOf(next, league) ? { desk: next, night } : null;
 }
 
-/** The class's two knobs (the brief's A4), on a RIVAL's man only, after he signs, and neither draws a number:
-    `rivalSecondOnMin`, a rival's second round man signs one season at the league minimum instead of the rookie
-    scale; `latePot`, a rival's man taken at overall pick `from` or later has his ceiling capped at `cap`, never
-    under his own rating (null leaves every ceiling as drawn). Tuned on 2026-10-21 against the two arm table of
-    scripts/simNbaEarnedDraft.mjs: both on, and a cap of 66 from pick 13 means a rival's man from there on stays the
-    player he was drafted as (the class never draws under 66). The values and why are in
-    docs/audits/ROUND-1321-NOTES.md. */
-export const NBA_DRAFT_KNOBS: { readonly rivalSecondOnMin: boolean; readonly latePot: { readonly from: number; readonly cap: number } | null } = {
-  rivalSecondOnMin: true,
+/** The class's two knobs (the brief's A4), after a man signs, and neither draws a number. ONE RULE FOR THE LEAGUE:
+    each touches EVERY club's man, his own included (the lead's ruling of 2026-10-21: a rule that held rivals' late
+    picks down while his kept their ceiling would be a hidden privilege). `secondOnMin`, a second round man signs one
+    season at the league minimum instead of the draft's deal; `latePot`, a man taken at overall pick `from` or later
+    has his ceiling capped at `cap`, never under his own rating (null leaves every ceiling as drawn). Tuned on
+    2026-10-21 against the two arm table of scripts/simNbaEarnedDraft.mjs: both on, and a cap of 66 from pick 13
+    means a man from there on stays the player he was drafted as (the class never draws under 66). The values and
+    why are in docs/audits/ROUND-1321-NOTES.md. */
+export const NBA_DRAFT_KNOBS: { readonly secondOnMin: boolean; readonly latePot: { readonly from: number; readonly cap: number } | null } = {
+  secondOnMin: true,
   latePot: { from: 13, cap: 66 },
 };
 
@@ -115,7 +116,7 @@ export interface NbaDraftHostCtx { me: string; season: number; scoutLevel: numbe
 
 /** The NBA's half of a night. Every club spends the marker of the slot's round; a man signs the engine's way
     (nbaProspectToPlayer, one draw a man, in slot order) and, for his club, the rookie scale and a line on
-    `signedMine`. Rivals choose on the engine's own grade; he and his staff choose on his scout's read, and every
+    `signedMine`; then the two knobs, on every club's man alike. Rivals choose on the engine's own grade; he and his staff choose on his scout's read, and every
     grade a card shows is his scout's read. */
 export function nbaDraftHost(ctx: NbaDraftHostCtx): { host: GmDraftHost<NbaLeague, NbaProspect>; signedMine: { id: string; round: number }[] } {
   const signedMine: { id: string; round: number }[] = [];
@@ -131,14 +132,13 @@ export function nbaDraftHost(ctx: NbaDraftHostCtx): { host: GmDraftHost<NbaLeagu
       if (club === ctx.me) {
         nbaSignDraftee(man, slot.round);
         signedMine.push({ id: man.id, round: slot.round });
-      } else {
-        if (NBA_DRAFT_KNOBS.rivalSecondOnMin && slot.round === 2) {
-          man.salary = nbaMinContract(signing.cap);
-          man.years = 1;
-        }
-        const late = NBA_DRAFT_KNOBS.latePot;
-        if (late && slot.overall >= late.from) man.pot = Math.max(man.ovr, Math.min(man.pot, late.cap));
       }
+      if (NBA_DRAFT_KNOBS.secondOnMin && slot.round === 2) {
+        man.salary = nbaMinContract(signing.cap);
+        man.years = 1;
+      }
+      const late = NBA_DRAFT_KNOBS.latePot;
+      if (late && slot.overall >= late.from) man.pot = Math.max(man.ovr, Math.min(man.pot, late.cap));
       league.teams[club].players.push(man);
     },
     need: (league, club) => nbaDraftNeed(league.teams[club]),

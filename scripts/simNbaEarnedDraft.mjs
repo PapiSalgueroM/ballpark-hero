@@ -391,12 +391,12 @@ if (TUNE) {
   }
   if ('second' in tune || 'late' in tune) {
     edit('bind', src => {
-      const re = /  rivalSecondOnMin: (true|false),\n  latePot: [^\n]*,\n/;
+      const re = /  secondOnMin: (true|false),\n  latePot: [^\n]*,\n/;
       const m = src.match(re);
       if (!m) cannotRun('the library holds no knobs to tune');
       const second = 'second' in tune ? !!tune.second : m[1] === 'true';
       const late = 'late' in tune ? (tune.late ? `{ from: ${tune.late.from}, cap: ${tune.late.cap} }` : 'null') : m[0].split('latePot: ')[1].split(',\n')[0];
-      return src.replace(re, `  rivalSecondOnMin: ${second},\n  latePot: ${late},\n`);
+      return src.replace(re, `  secondOnMin: ${second},\n  latePot: ${late},\n`);
     });
   }
 }
