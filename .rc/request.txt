@@ -1,0 +1,12 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simSoccerOwnerTail: SIM_OWNER_BASE=776d10722df4e2b8c735170de02e9762522ce09a node scripts/simSoccerOwnerTail.mjs
+ctl-randomclub: SIM_OWNER_BASE=776d10722df4e2b8c735170de02e9762522ce09a SIM_OWNER_CONTROL=randomclub node scripts/simSoccerOwnerTail.mjs
+ctl-coin: SIM_OWNER_BASE=776d10722df4e2b8c735170de02e9762522ce09a SIM_OWNER_CONTROL=coin node scripts/simSoccerOwnerTail.mjs
+ctl-mathrandom: SIM_OWNER_BASE=776d10722df4e2b8c735170de02e9762522ce09a SIM_OWNER_CONTROL=mathrandom node scripts/simSoccerOwnerTail.mjs
+ctl-squadnoop: SIM_OWNER_BASE=776d10722df4e2b8c735170de02e9762522ce09a SIM_OWNER_CONTROL=squadnoop node scripts/simSoccerOwnerTail.mjs
+ctl-youthnoop: SIM_OWNER_BASE=776d10722df4e2b8c735170de02e9762522ce09a SIM_OWNER_CONTROL=youthnoop node scripts/simSoccerOwnerTail.mjs
+ctl-stadiumnoop: SIM_OWNER_BASE=776d10722df4e2b8c735170de02e9762522ce09a SIM_OWNER_CONTROL=stadiumnoop node scripts/simSoccerOwnerTail.mjs
+ctl-debtnoop: SIM_OWNER_BASE=776d10722df4e2b8c735170de02e9762522ce09a SIM_OWNER_CONTROL=debtnoop node scripts/simSoccerOwnerTail.mjs
+ctl-dominant: SIM_OWNER_BASE=776d10722df4e2b8c735170de02e9762522ce09a SIM_OWNER_CONTROL=dominant node scripts/simSoccerOwnerTail.mjs
+ctl-oldsave: SIM_OWNER_BASE=776d10722df4e2b8c735170de02e9762522ce09a SIM_OWNER_CONTROL=oldsave node scripts/simSoccerOwnerTail.mjs
+ctl-drawshift: SIM_OWNER_BASE=776d10722df4e2b8c735170de02e9762522ce09a SIM_OWNER_CONTROL=drawshift node scripts/simSoccerOwnerTail.mjs
