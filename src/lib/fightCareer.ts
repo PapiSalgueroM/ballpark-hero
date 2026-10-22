@@ -1072,9 +1072,12 @@ export function shouldRetire(st: FightCareerState): boolean {
  *
  * The gate is a number of fights, as the gym's is weeks and the promoter's is
  * shows. Below it a short perfect record could be banked before anybody good
- * was ever met; scripts/simFightCareerRetire.mjs measures that walking out at
- * the gate scores well under playing a career out, so the gate is a door and
- * not a trick.
+ * was ever met. scripts/simFightCareerRetire.mjs measures what the gate buys:
+ * a walkaway at the gate is a Footnote 95 to 97 percent of the time, and the
+ * same careers walked away from ten fights later score 3.8 to 5.2 more, so
+ * the earliest door is never the best one and the gate is a door and not a
+ * trick. It does NOT score under playing a career out to the end: the decline
+ * years cost legacy, so stopping on your own terms is a real choice.
  */
 export const RETIRE_MIN_FIGHTS = 10;
 
