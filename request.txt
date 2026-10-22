@@ -1,0 +1,5 @@
+# Release BP triage, trV: simCmVar with a SCRATCH harness patch (cmVarPatch.mjs: the prior engine takes its own commit's board asks and meters), sent to the BP head and to main.
+#!serial
+headsha: git log --oneline -1
+cmvar-scratch: node .rc/x/cmVarPatch.mjs && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmVar.mjs
+cmvar-all-scratch: node .rc/x/cmVarPatch.mjs && CM_VAR_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmVar.mjs 2>&1 | tee "$TMPDIR/ctl.log"; s=${PIPESTATUS[0]}; [ $s -eq 0 ] && grep -qE 'simCmVar: [0-9]+ actual outcomes and [1-9][0-9]* effective controls passed\.' "$TMPDIR/ctl.log" && ! grep -q '^FAIL VAR ' "$TMPDIR/ctl.log"
