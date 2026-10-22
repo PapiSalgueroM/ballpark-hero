@@ -62,11 +62,11 @@ export interface HomeCopySection {
 }
 
 export interface HomeCopy {
-  /** The page's one h1, the name, exactly as a visitor sees it in both places:
+  /** The page's one descriptive h1, exactly as a visitor sees it in both places:
       the template prints it over the copy and the app prints it in the title
       row (src/pages/Index.tsx). Nothing in either h1 is hidden, so a renderer
-      reads what a person sees. What the site is, in words, sits right under it
-      in the intro (and in the app's hero line). */
+      reads what a person sees. The intro and the app's hero line add
+      detail. */
   readonly h1: string;
   /** the heading the app puts over the copy below the tiles; the template does
       not need it, because there the copy sits right under the h1 */
@@ -82,7 +82,7 @@ const list = (...items: HomeCopyLine[]): HomeCopyBlock => ({ kind: 'list', items
 const question = (text: string): HomeCopyBlock => ({ kind: 'question', text });
 
 export const HOME_COPY: HomeCopy = {
-  h1: 'DoUKnowBall',
+  h1: 'Free sports games',
   aboutHeading: 'About DoUKnowBall',
   intro: [
     `${GAME_COUNT_LABEL} free sports games in the browser: sports trivia, daily quizzes, grid puzzles and career sims. Every game plays without an account, nothing to download or install. New games and content ship almost every week, and the daily quizzes and puzzles reset for everyone at the same time, so you and everyone else get the same board.`,
@@ -94,8 +94,9 @@ export const HOME_COPY: HomeCopy = {
         p('Play a whole career out season by season: contracts, transfers, injuries, international call-ups, the lot.'),
         list(
           [a('/soccer-career', 'Soccer Career'), ', the biggest one here: start at 16 and play until you hang them up'],
-          [a('/club-manager', 'Club Manager'), ', run a club through a season of real fixtures'],
-          [a('/nba-my-career', 'NBA My Career'), ' and ', a('/nfl-my-career', 'NFL My Career'), ', draft night to the rafters'],
+          [a('/club-manager', 'Club Manager'), ', run a club, shape the squad and balance the budget'],
+          [a('/nba-my-career', 'NBA My Career'), ' and ', a('/nfl-my-career', 'NFL My Career'), ', create a prospect and play from draft night to retirement'],
+          [a('/fight-career', 'Fight Career'), ', create a boxer, choose your fights and manage damage that never heals'],
           [a('/stadium-tycoon', 'Stadium Tycoon'), ', ', a('/hall-of-champions', 'Hall of Champions'), ' and ', a('/wonderkid-factory', 'Wonderkid Factory'), ', the idle ones, the last an academy where you grow made up kids and sell at the right moment'],
           [a('/build-your-xi', 'Build Your XI'), ', pick a lineup and get it rated'],
         ),

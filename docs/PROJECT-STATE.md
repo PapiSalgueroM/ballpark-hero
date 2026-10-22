@@ -19009,3 +19009,51 @@ The separate ordinary release branch must still pass all six jobs, existing cont
 The shared dialog CSS fix is source-qualified atd9da128d0174405ab8b63ab34bc27feb35a8f389. Matrix39769358433 covered72 contexts,144 Green/restored trusted primary passes and the nine expected old-CSS failures. Ordinary run39773713224 passed all six jobs:9,337 unit passes,58 explicit skips,0 failures across622 files;74 consent/29 account/6 Profile plus existing controls;18 readers and14 unchanged caps. Generated patch/list are empty and complete source/output/transport holds passed.
 
 I retains sole publication ownership. This update records qualification and the handoff, not publication or live verification. Game lanes, earlier failures and785/1441 preservation gaps remain held and unwaived.
+
+## Round1448 copy candidate, 2026-10-22 UTC
+
+Root's separate `codex/site-quality-disclosures-1448` branch starts at actual merged1447 source `3ee0bf6293859740a50654e299232bcd0ff701c3`. Four shared Home/hub/privacy files have nine surgical copy edits, with complete literal inverses and exact preimages preserved. The candidate clarifies factual versus fictional games and discloses the observed hosting security cookie.
+
+Generation, actual derived-output review/adoption and fresh final six-job qualification are still required. No1448 publication or AdSense clearance is claimed. I retains publication and CM/Soccer; J retains its game lanes. Round1447 is merged and publish-ready with its separate complete evidence. All prior failures and preservation gaps remain unwaived.
+
+## Round1448 generation reviewed, final pending, 2026-10-22 UTC
+
+Source7e2e060a9f6f8e1ce77ece1f5eea4e07d98280d2/run39782582624 passed all six jobs. Native review binds all6 artifacts, all5185 input rows,9,337 unit passes/58 skips/0 failures/622 files, focused74/29/6 and effective controls,4+3+3 browser outcomes,18 readers,14 unchanged caps,798 Tar bodies and exact8 generated outputs. Home/hub copy and hosting-cookie disclosures are generated consistently; unrelated generated data and sitemap rows are held.
+
+This child adopts the exact reviewed outputs and one final-phase workflow change, preserving all prior doc bytes. Final all-six qualification with0B generated patch/list/new-file list is still owed. I retains sole publication. No live, legal completeness, AdSense clearance, game-lane change or old785/1441 waiver is claimed.
+
+## Round1448 source qualified, publication pending, 2026-10-22 UTC
+
+The Home/three-hub accuracy edits and hosting-cookie disclosures are source-qualified at144557287ecfc3873a4a9563e9fe17ca62a12d8e. Final39788124277 passed all six jobs:9,337PASS/58 explicitSKIP/0FAIL/622files, focused74/29/6 and existing owned controls, browser4+3+3,18 readers,14 unchanged caps, HomeCopy/HubDepth/HomeFold and complete source/output/transport holds. All three generated delta files are present0B and four output controls pass; native798 Tar and8 adopted output identities are admitted.
+
+This child only appends qualification notes to three docs. Publication and live verification remain with I, alongside the earlier merged1447 shared-dialog fix. Analytics stays paused. Provider readiness, rights/provenance, traffic quality, AdSense review and old785/1441 preservation gaps remain separate and unwaived.
+
+## Round1449 Home discovery candidate, 2026-10-22 UTC
+
+Root's `codex/home-discovery-1449` starts from mergedf8a7e7618c2c4ed6f504d0e860d75c759916ce59, with all5,185 physical starting source bodies checked. The candidate changes only the Home H1 values to Free sports games and four directly contradictory comments, retaining the header brand. Actual small-screen, signed-in and768-breakpoint fit is still required before any layout fix or qualification.
+
+Fresh remote measurement, generation, exact permitted-output review/adoption and final six-job qualification remain pending. Existing game/data/save code, old walks, shared CSS and all caps are held. I remains sole publisher. The earlier merged1447/1448 publish-ready handoff is separate; no1449 live, AdSense approval or legal completeness is claimed.
+
+## Round1449 authenticated header repair pending, 2026-10-22 UTC
+
+Generation39812401318 at a1cb4337721aaf47c3cdfb513c693ee2381ab6c9 passed all six remote jobs. The three PowerShell numeric-overload, array-shape and Boolean-guard port refusals remain preserved. After those narrow reader repairs, native measurement admission92be21da now passes with all eight native controls; it does not clear the real authenticated header layout defects or qualify the release.
+
+Before any layout adoption, the hash-bound native header check produced owned RED:16 of20 normal authenticated cases fail at320/328/390/768; four1280 cases pass. This child adopts the three-span Index header class/comment change: a reserved second chip row below xl and the fixed inline row at xl. Fresh ordinary verification is pending. Fresh ordinary generation, the same20-case check, unchanged HomeFold/no-shift checks and56 normal plus12 heading-arm pictures remain required. No1449 source qualification or live claim is made; I retains publication.
+
+## Round1449 pipeline setup repair, 2026-10-22 UTC
+
+Run39838483867 at941375b0e1f191bccf028a99e248125e088d31d7 failed the focused ancestry setup. App checks, unit suites and browser work did not run. Failed artifact12452745224 (1,964 bytes, SHA874d1dc8fe7454f4c2f181bf058e96d80f6e45a1913bb1527c43aee529a33cae) is preserved. Root verified the full941375 -> a1cb433 -> 86478a7 -> BASEf8a history; the depth3 fetch can stop before BASE.
+
+This child adopts only the setup repair: focused fetch depth32 and current Index/probe identity pins. The positive ancestry, reverse refusal and existing outcome checks stay unchanged. Index000c61fd and the header layout stay held. Fresh ordinary generation and the existing header, HomeFold/no-shift and visual checks remain owed. No new layout proof, qualified or live result is claimed. I retains publication.
+
+## Round1449 generation admitted, final output adoption, 2026-10-22 UTC
+
+Generation39840573059 attempt1 at4e7f808d83f71831368cbf65ea3f074e14d64013 passed all six CI jobs and seven native evidence components. The same871217 header checker is GREEN in all20 authenticated normal cases, compared with the preserved pre-repair16-of20 RED. All68 pictures are reviewed:20 guest,16 hub and20 authenticated normals, plus12 separate same-build heading arms. The targeted normal auth header is clear in this fixture set; Range-only findings and deliberate long-text overflow remain separate from normal results.
+
+This child adopts exactly two reviewed generated outputs, the Home template and Home ledger hash, plus the workflow generation-to-final flag. The ledger date remains2026-10-22, the sitemap is byte-equal and the five saved-page source bodies stay held with exact build-only transforms. Index000c61fd and probeeb9c3a7d stay unchanged. Fresh final all-six qualification with present0B patch/list/new-files and all four output controls/holds remains owed. I retains publication. No final qualification or live result is claimed.
+
+## Round1449 application source qualified, publication pending, 2026-10-22 UTC
+
+Application source3d081ad2e465c7d98ecb23ad8fb3bfe0526d1384 is qualified by final39846253883 attempt1 and compositec489523352e4b9cae40607a991dd10c93801ea1390acf91cb27858d4ed3dc835. All six CI jobs and seven native components pass. The three generated delta files are present0B, both nonempty-output and both inventory controls pass, and complete source/output/transport holds are admitted. The unchanged header checker passes20/20 authenticated normal cases.
+
+Final picture coverage uses18 freshly viewed changed images and50 exact PNG transfers from prior actual views, not68 new views. Normal header results, Range-only observations and separate text arms stay distinct. This child only appends qualification notes; Root still owns native docs-only commit verification. I retains sole publication and live verification. Unsupported contrast, provider/legal/sports-rights and old preservation limits remain unwaived. No published or live result is claimed.
