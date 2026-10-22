@@ -12,7 +12,9 @@ import { DugoutTableBlock } from "./DugoutTableBlock";
    Two from every price band he can afford, the same list on every visit.
    The prices and the debts are the game's own tier bands, and the card says
    so: never a real club's real valuation. A tile buys a club for good, so it
-   is cm-rise-gated: hidden, and so not pressable, until its reveal starts. */
+   is cm-rise-gated: hidden, and so not pressable, until its reveal starts.
+   The league line is the season's own (leagueSeasonLine, as on the manager's
+   cards), it wraps rather than cutting, and the tier has its own line. */
 export function OwnerClubSale({ career, clubs, onBuy, onBack }: { career: CareerState; clubs: ClubData[]; onBuy: (club: string) => void; onBack: () => void }) {
   const forSale = ownerClubsOnSale(career, clubs);
   return (
@@ -34,7 +36,8 @@ export function OwnerClubSale({ career, clubs, onBuy, onBack }: { career: Career
             style={{ animationDelay: revealDelay(i) }}
           >
             <div className="truncate text-xs font-black">{c.name}</div>
-            <div className="truncate text-[10px] text-muted-foreground">{c.league} · Tier {c.tier}</div>
+            {c.leagueLine && <div className="break-words text-[10px] leading-snug text-muted-foreground">{c.leagueLine}</div>}
+            <div className="text-[10px] text-muted-foreground">Tier {c.tier}</div>
             <div className="text-[11px] font-bold">{money(`€${c.price}M`)}</div>
             <div className="text-[10px] text-muted-foreground">{money(`€${c.debt}M debt`)}</div>
           </button>

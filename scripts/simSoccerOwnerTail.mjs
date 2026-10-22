@@ -9,6 +9,8 @@
  *   1) The clubs for sale: two per price band he can afford (4 at €200M, 6 at €250M or more, none under €50M), every
  *      price and debt is its tier band's, the list is the same on every visit and moves with the save, and the club
  *      he picks is the club he buys, for its price, with no Math.random draw. A name not on the list buys nothing.
+ *      Every tile for a season before 2026-27 prints that season's own league (the ledgers' name for the league the
+ *      club was in), and none when the ledgers place the club in no league, never today's label (review 2026-10-22).
  *   2) Every season's finish is the table's: over a fleet of owner tails through the engine, the result line names
  *      the position the stored table gives him, a title only from first, a promotion only from the top two of a
  *      lower tier, a relegation only from the bottom three, and the counters agree with the rows. The table is drawn
@@ -46,7 +48,8 @@
  * (exit 2 otherwise), each measured red: randomclub (section 1, the old random club), coin (section 2, the old
  * invented finish), mathrandom (section 2, the table off Math.random), squadnoop, youthnoop, stadiumnoop, debtnoop
  * (section 3, each call's effect gone), dominant (section 4, signings that pay), oldsave (section 5, a save with no
- * debt field), drawshift (section 6, one extra draw in the shared table).
+ * debt field), drawshift (section 6, one extra draw in the shared table). Added after the round's reviews:
+ * saleleague (section 1, the tile's old league, today's label or the list's key, put back).
  * Options: SIM_OWNER_BASE=<sha> (default: git merge-base HEAD origin/main), SIM_OWNER_SALT=<n> (default 1),
  * SIM_OWNER_ONLY=<sections, e.g. 3,4>.
  */
@@ -77,6 +80,8 @@ const CONTROLS = {
   dominant: [{ file: OWNER, from: '  squadWages: 0.5,', to: '  squadWages: -3,' }],
   oldsave: [{ file: OWNER, from: '    debt: Math.max(0, num(os.debt)),', to: '    debt: Math.max(0, os.debt as number),' }],
   drawshift: [{ file: LEAGUE, from: '  const games = field.length * 2; // home and away vs each rival', to: '  rng(); const games = field.length * 2;' }],
+  /* added after the round's reviews (2026-10-22) */
+  saleleague: [{ file: OWNER, from: 'leagueLine: leagueSeasonLine(c, input.year),', to: 'leagueLine: leagueKeyInYear(c, input.year) ?? c.league,' }],
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
 
@@ -253,6 +258,29 @@ if (ONLY.has(1)) {
   if (drew > 0) fail(`${drew} purchases drew from Math.random`);
   if (refused !== notForSale) fail('a club that is not for sale was bought');
   if (first.ownerState?.club !== O.ownerClubsOnSale(notForSale, CLUBS)[0].name) fail('a call with no club does not buy the first on the list');
+  /* the league a tile prints is the season's own, as the manager's cards print it: before 2026-27 the ledgers'
+     name for that club's league that season, and none when the ledgers place the club in no league (never today's
+     label, never the list's key where the season had another name) */
+  let tiles = 0, falseLeague = 0, none = 0;
+  const falseEx = [];
+  for (let year = 1995; year < L.LIST_SEASON; year += 1) {
+    for (let k = 0; k < 24; k += 1) {
+      for (const t of O.ownerClubsForSale({ clubs: CLUBS, year, netWorth: 1000, key: `sale${SALT}|${year}|${k}` })) {
+        tiles += 1;
+        const want = L.clubLedgerSeason(t.name, year)?.name ?? null;
+        const printed = typeof t.leagueLine === 'string' ? t.leagueLine.replace(/, \d{4}-\d{2}$/, '') : null;
+        if (printed === null) none += 1;
+        if (printed !== want) {
+          falseLeague += 1;
+          if (falseEx.length < 3) falseEx.push(`${year} ${t.name}: "${printed}" where the ledgers say ${want === null ? 'no league' : `"${want}"`}`);
+        }
+      }
+    }
+  }
+  console.log(`   ${tiles} tiles for the seasons 1995 to ${L.LIST_SEASON - 1}: ${falseLeague} name a league the ledgers do not give that club that season, ${none} name no league`);
+  for (const e of falseEx) console.log(`     e.g. ${e}`);
+  if (tiles < 3000) fail(`only ${tiles} tiles were read before 2026-27`);
+  if (falseLeague > 0) fail(`${falseLeague} of ${tiles} tiles before 2026-27 name a league the club was not in that season`);
 }
 
 /* One owner tail through the engine: buy the i-th save's club, then H seasons, each with a call. */

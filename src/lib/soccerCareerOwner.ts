@@ -22,7 +22,7 @@
    Elite clubs (tier 1) are never for sale; a club gets there by promotion. */
 import type { CareerState, ClubData, OwnerPlan, OwnerSeasonRow, OwnerState } from "./soccerCareerEngine";
 import { adjustClubsForYear } from "./careerEras";
-import { divisionMove, finishZone, keyedStream, leagueKeyInYear, managerLeagueField, ordinal, playDugoutTable } from "./soccerCareerLeague";
+import { divisionMove, finishZone, keyedStream, leagueKeyInYear, leagueSeasonLine, managerLeagueField, ordinal, playDugoutTable } from "./soccerCareerLeague";
 
 /** The game's own money bands by tier, in €M. A price and a debt are the
  *  game's estimate for a club of that tier, never a figure about the real
@@ -129,7 +129,12 @@ export function ownerEdge(os: OwnerState): number {
 export interface OwnerClubForSale {
   name: string;
   tier: number;
+  /** The league the save keeps (the key the table is drawn in); never printed. */
   league: string;
+  /** The league line the tile prints, as the manager's cards print it
+   *  (leagueSeasonLine): that season's own league before 2026-27, and
+   *  nothing when the ledgers place the club in no league that season. */
+  leagueLine: string | null;
   country: string;
   /** The game's estimate for a club of this tier, €M. */
   price: number;
@@ -166,7 +171,7 @@ export function ownerClubsForSale(input: { clubs: readonly ClubData[]; year: num
       if (!picked.includes(c)) picked.push(c);
     }
     for (const c of picked) {
-      out.push({ name: c.name, tier, league: leagueKeyInYear(c, input.year) ?? c.league, country: c.country, price: band.price, debt: band.debt });
+      out.push({ name: c.name, tier, league: leagueKeyInYear(c, input.year) ?? c.league, leagueLine: leagueSeasonLine(c, input.year), country: c.country, price: band.price, debt: band.debt });
     }
   }
   return out;
@@ -190,7 +195,7 @@ export function ownerClubsOnSale(state: CareerState, clubs: readonly ClubData[])
 export function ownerBuy(prev: CareerState, clubs: readonly ClubData[], ownerClub?: string): CareerState | null {
   const forSale = ownerClubsOnSale(prev, clubs);
   const club = ownerClub === undefined
-    ? forSale[0] ?? { name: "Unknown FC", tier: 4, league: "", country: "", price: OWNER_TIERS[4].price, debt: 0 }
+    ? forSale[0] ?? { name: "Unknown FC", tier: 4, league: "", leagueLine: null, country: "", price: OWNER_TIERS[4].price, debt: 0 }
     : forSale.find(c => c.name === ownerClub);
   if (!club) return null;
   return {
