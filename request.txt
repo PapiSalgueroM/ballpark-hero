@@ -1,0 +1,6 @@
+simUsBoardParity: node scripts/simUsBoardParity.mjs
+simUsCareerWeight: node scripts/simUsCareerWeight.mjs
+simUsCareerSaveRetry: node scripts/simUsCareerSaveRetry.mjs
+simUsCareerSkips: node scripts/simUsCareerSkips.mjs
+simUsCareerDefects: node scripts/simUsCareerDefects.mjs
+simNbaCareer: node scripts/simNbaCareer.mjs

@@ -1,0 +1,6 @@
+simUsCareerWeight exit=0 0s | simUsCareerWeight: green. 31 checks: the four wrappers hand the board their own binding, no shared file or binding imports another sport, and every control fired.
+simUsBoardParity exit=0 82s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen with the proved historical main775 coaching Panel.
+simUsCareerDefects exit=0 20s | simUsCareerDefects: 157 tests passed across the stat lines, the era cards and the shop cap.
+simUsCareerSkips exit=0 119s | PASS: ALL US CAREER SKIP CHECKS PASSED
+simNbaCareer exit=0 24s | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, life cards tagged, rivalry beats honest
+simUsCareerSaveRetry exit=0 150s | US career save retry: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/us-career-save-recovery-artifacts/outcomes
