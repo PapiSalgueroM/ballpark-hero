@@ -1,0 +1,15 @@
+vitest-fo exit=0 34s |    Duration  33.36s (transform 5.61s, setup 1.47s, collect 17.01s, tests 58.31s, environment 8.54s, prepare 2.05s)
+vitest-lazy exit=1 6s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeLazyDesk.test.tsx,title=src/components/front-office/FrontOfficeLazyDesk.
+vitest-board exit=0 47s |    Duration  45.92s (transform 6.27s, setup 601ms, collect 7.88s, tests 78.00s, environment 4.04s, prepare 1.27s)
+lazydesk exit=0 31s | simFoLazyDesk: all checks passed
+ctl-eager exit=1 41s | simFoLazyDesk CONTROL eager FIRED: section 1 went red with 8 failures (red sections 1)
+ctl-hostimport exit=1 38s | simFoLazyDesk CONTROL hostimport FIRED: section 1 went red with 3 failures (red sections 1)
+tsc exit=0 115s | 
+gmreload exit=0 7s | simGmReload: all green. Four front offices keep a finished season through a reload, and none of them can play a closed one again.
+ctl-tiertile exit=1 38s | simFoLazyDesk CONTROL tiertile FIRED: section 2 went red with 14904 failures (red sections 2)
+ctl-boxseasons exit=1 42s | simFoLazyDesk CONTROL boxseasons FIRED: section 2 went red with 20736 failures (red sections 2)
+fob-check exit=0 0s | controlFrontOfficeBoard: check passed. Every string of all 47 controls is in the board exactly once.
+deskhost exit=0 74s | simGmDeskHost: all 10 checks passed on seeds 1,2,3 (4 engines, 3 seasons a seed)
+sessionmarks exit=0 1s | simSessionMarks: green. Nine games count the day you play them, none of them invented a score or a streak day to do it.
+anchors exit=0 58s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+career exit=0 180s | simGmCareer: all checks passed (nfl)
