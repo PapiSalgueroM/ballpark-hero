@@ -1,0 +1,18 @@
+dbg7: three debug prints in
+vanished sheet men: 1
+sheet arrivals logged: 18
+--- seed 10 season 2: Cole Strother
+DBG7 DROP 2027 Cole Strother ovr 71 pool 98
+DBG7 DROP 2027 Cole Strother ovr 69 pool 95
+DBG7 DROP 2029 Cole Strother ovr 70 pool 114
+DBG7 DROP 2027 Cole Strother ovr 70 pool 97
+DBG7 DROP 2031 Cole Strother ovr 69 pool 84
+DBG7 DROP 2031 Cole Strother ovr 71 pool 95
+DBG7 SHEET 2027 ORL Cole Strother ovr 66 years 5 roster 17 lowest 66
+DBG7 SHEET 2027 ORL Cole Strother ovr 66 years 5 roster 17 lowest 66
+DBG7 CUT 2027 ORL Cole Strother ovr 66 years 4 roster 16
+DBG7 DROP 2027 Cole Strother ovr 66 pool 98
+DBG7 DROP 2026 Cole Strother ovr 66 pool 65
+sheet arrivals over 15 on arrival: 18, of them the lowest rated man there: 0
+   draftees up: 60 first rounders after the rookie scale, 108 second rounders; 168 restricted cases, 23 sheets (9 matched, 8 gone to the rival on its terms)
+simNbaGmDesk: 4 failure(s) in ["2"]

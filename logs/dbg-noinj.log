@@ -1,0 +1,19 @@
+dbg7: three debug prints in
+vanished sheet men: 1
+sheet arrivals logged: 8
+--- seed 3 season 4: Cole Holiday
+DBG7 DROP 2026 Cole Holiday ovr 67 pool 72
+DBG7 DROP 2035 Cole Holiday ovr 67 pool 92
+DBG7 SHEET 2029 TOR Cole Holiday ovr 67 years 5 roster 17 lowest 66
+DBG7 SHEET 2029 TOR Cole Holiday ovr 67 years 5 roster 17 lowest 66
+DBG7 CUT 2029 TOR Cole Holiday ovr 67 years 4 roster 16
+DBG7 DROP 2029 Cole Holiday ovr 67 pool 103
+DBG7 DROP 2030 Cole Holiday ovr 66 pool 93
+DBG7 DROP 2027 Cole Holiday ovr 67 pool 92
+DBG7 DROP 2031 Cole Holiday ovr 67 pool 84
+DBG7 DROP 2026 Cole Holiday ovr 67 pool 81
+DBG7 DROP 2034 Cole Holiday ovr 67 pool 86
+DBG7 DROP 2026 Cole Holiday ovr 68 pool 66
+sheet arrivals over 15 on arrival: 8, of them the lowest rated man there: 0
+control noinjhook: red in ["2","5"], wanted 5
+simNbaGmDesk: control noinjhook fired (13 failures, as it should)

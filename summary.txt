@@ -1,0 +1,2 @@
+dbg-s6 exit=1 24s | simNbaGmDesk: 4 failure(s) in ["2"]
+dbg-noinj exit=0 23s | simNbaGmDesk: control noinjhook fired (13 failures, as it should)
