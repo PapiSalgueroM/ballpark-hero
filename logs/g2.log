@@ -1,0 +1,22 @@
+Network mode: offline, loopback only, no production probe or database retries.
+Running 15 node harnesses
+  PASS  simCareerInbox.mjs              8.0s
+  PASS  simCareerRealism.mjs           18.0s
+  PASS  simMlbCareer.mjs               37.6s
+  PASS  simNbaAwardsSense.mjs         146.2s
+  PASS  simNbaCareer.mjs               37.1s
+  PASS  simNflCareer.mjs                3.9s
+  FAIL  simNflCoachStaffRecovery.mjs    1.0s
+  PASS  simNflTruth.mjs                84.1s
+  PASS  simNhlCareer.mjs               29.9s
+  PASS  simNoDoubleRecord.mjs          35.1s
+  PASS  simSeasonReveal.mjs             0.5s
+  PASS  simUsCareerActionConfirm.mjs    6.6s
+  PASS  simUsCareerPractice.mjs        15.4s
+  PASS  simUsCareerRecovery.mjs         5.3s
+  PASS  simUsCareerWeight.mjs           0.4s
+
+----- simNflCoachStaffRecovery.mjs (FAIL) -----
+AssertionError [ERR_ASSERTION]: Frozen whole source: scripts/data/usBoardFixture.json
+
+1 harness not green.
