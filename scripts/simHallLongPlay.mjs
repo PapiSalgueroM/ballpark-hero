@@ -1,0 +1,338 @@
+/**
+ * Round 1548 harness: Hall of Champions keeps a deep museum and pays a hidden
+ * tab. Offline on purpose: it never reaches the database (the client module is
+ * replaced by a stub that throws on any use), so it runs anywhere, the runner
+ * included. simHallOfChampions is the harness that checks the exhibits against
+ * the live tables; this one checks what long play does to the save and the
+ * clock, on a fixture catalog with the real wing sizes and made up names.
+ *
+ *   1. A DEEP MUSEUM LOADS. A greedy player (the one simHallOfChampions plays,
+ *      deciding once a minute, buying upgrades too) runs until it owns an
+ *      exhibit priced over 1e15. Every save it writes while holding more than
+ *      1e15 (the saves the old loader refused, so the hook wrote a fresh museum
+ *      over them) must round trip serialize and loadSave with every field
+ *      intact, and so must the final one.
+ *   2. A HIDDEN TAB PAYS THE NIGHT. 600 clock callbacks 60 s apart on a hidden
+ *      page (a throttled background tab, ten hours) must earn at least the away
+ *      rate times eight hours of income, and the absence meter must stop at the
+ *      eight hour cap. Before this round the hook paid a fixed quarter second
+ *      per callback: 150 seconds of income for the whole night.
+ *   3. PRICES PAST T READ AS NUMBERS. fmt names Qa and Qi.
+ *   4. THE REAL HOOK. src/test/hallOfChampionsLongPlay.test.tsx mounts
+ *      useHallOfChampions on fake timers and jsdom's localStorage: a deep save
+ *      loads and is written back, a hidden tab is paid by the away rule with
+ *      the welcome on return, one absence meets one cap across a reload, and a
+ *      refused save is kept aside before the fresh museum.
+ *
+ * NEGATIVE CONTROLS (SIM_HALL_CONTROL=<name>; each must turn its section red):
+ *   ceiling     the loader's old num(o.funds, 0, 1e15) and 1e18      section 1
+ *   fixedstep   advanceClock pays a fixed quarter second             section 2
+ *   fmtstop     fmt stops at T again                                 section 3
+ *   hookfixed   the hook ticks a fixed quarter second per callback   section 4
+ *   hooknocopy  the hook no longer keeps a refused save aside        section 4
+ * A control rewrites a copy of the file, never the file, and aborts if the text
+ * it rewrites is not in the shipped file exactly once.
+ *
+ * MEASURED: see the bottom of this header (filled from the runner).
+ *
+ * Run: node scripts/simHallLongPlay.mjs
+ */
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import { spawnSync } from 'node:child_process';
+import { pathToFileURL, fileURLToPath } from 'node:url';
+import { build } from 'esbuild';
+
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const LIB = path.join(ROOT, 'src/lib/hallOfChampions.ts');
+const HOOK = path.join(ROOT, 'src/hooks/useHallOfChampions.ts');
+const TEST = 'src/test/hallOfChampionsLongPlay.test.tsx';
+const CONTROL = process.env.SIM_HALL_CONTROL || '';
+const ONLY = process.env.SIM_HALL_ONLY || '';
+
+let failures = 0, section = 0, dead = 0, collateral = 0;
+const bySection = {};
+const fail = m => { failures += 1; bySection[section] = (bySection[section] || 0) + 1; console.error('  FAIL: ' + m); };
+/* the section each control must turn red */
+const CONTROL_SECTION = { ceiling: 1, fixedstep: 2, fmtstop: 3, hookfixed: 4, hooknocopy: 4 };
+const abort = m => { console.error(m); process.exit(1); };
+const read = f => fs.readFileSync(f, 'utf8').split('\r\n').join('\n');
+
+/* The exact text each control rewrites, verbatim from the shipped files. */
+const LIB_CONTROLS = {
+  ceiling: {
+    from: 'const funds = num(o.funds, 0, Infinity);\n    const careerEarned = num(o.careerEarned, 0, Infinity);',
+    to: 'const funds = num(o.funds, 0, 1e15);\n    const careerEarned = num(o.careerEarned, 0, 1e18);',
+  },
+  fixedstep: {
+    from: '  if (!visible || gapMs > AWAY_AFTER_MS) return { away: true, earned: applyAway(wings, s, gapMs) };',
+    to: '  { const b0 = s.funds; tick(wings, s, 0.25); return { away: false, earned: s.funds - b0 }; }',
+  },
+  fmtstop: {
+    from: "  [1e33, 'Dc'], [1e30, 'No'], [1e27, 'Oc'], [1e24, 'Sp'], [1e21, 'Sx'], [1e18, 'Qi'], [1e15, 'Qa'],\n",
+    to: '',
+  },
+};
+const HOOK_CONTROLS = {
+  hookfixed: {
+    from: "const step = advanceClock(wings, s, gap, document.visibilityState !== 'hidden');",
+    to: 'const step = advanceClock(wings, s, 250, true);',
+  },
+  hooknocopy: {
+    from: '          keepRefusedSave();\n',
+    to: '',
+  },
+};
+if (CONTROL && !LIB_CONTROLS[CONTROL] && !HOOK_CONTROLS[CONTROL]) abort(`simHallLongPlay: unknown SIM_HALL_CONTROL ${JSON.stringify(CONTROL)}`);
+
+const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'hall-longplay-'));
+process.on('exit', () => { try { fs.rmSync(tmp, { recursive: true, force: true }); } catch { /* best effort */ } });
+
+function rewrite(file, ctl, what) {
+  const text = read(file);
+  if (text.split(ctl.from).length - 1 !== 1) abort(`  control ${CONTROL}: ${what} does not carry exactly one ${JSON.stringify(ctl.from.slice(0, 70))}, so this control would prove nothing. ABORTED`);
+  const out = text.replace(ctl.from, ctl.to);
+  if (out === text) abort(`  control ${CONTROL}: the rewrite changed nothing. ABORTED`);
+  return out;
+}
+
+/* The lib, bundled from the shipped file or from a control's copy. */
+let libFile = LIB;
+if (LIB_CONTROLS[CONTROL]) {
+  libFile = path.join(tmp, 'hallOfChampions.ts');
+  fs.writeFileSync(libFile, rewrite(LIB, LIB_CONTROLS[CONTROL], 'src/lib/hallOfChampions.ts'));
+  console.log(`control ${CONTROL}: the lib is a copy with one rewrite`);
+}
+const entry = path.join(tmp, 'entry.mjs');
+const bundled = path.join(tmp, 'hall.mjs');
+fs.writeFileSync(entry, `export * from '${libFile.replaceAll('\\', '/')}';\n`);
+const noDatabase = {
+  name: 'no-database',
+  setup(b) {
+    b.onResolve({ filter: /integrations\/supabase\/client$/ }, () => ({ path: 'stub', namespace: 'no-db' }));
+    b.onLoad({ filter: /.*/, namespace: 'no-db' }, () => ({
+      contents: "export const SUPABASE_URL = ''; export const SUPABASE_PUBLISHABLE_KEY = '';\n"
+        + "export const supabase = new Proxy({}, { get() { throw new Error('simHallLongPlay never reaches the database'); } });\n",
+      loader: 'js',
+    }));
+  },
+};
+await build({
+  entryPoints: [entry], bundle: true, format: 'esm', platform: 'node', outfile: bundled, logLevel: 'error',
+  alias: { '@': path.join(ROOT, 'src') }, plugins: [noDatabase],
+});
+const lib = await import(pathToFileURL(bundled).href);
+
+/* The real wing sizes, from docs/DATA-VERIFICATION-MAP-2026-09-19.md (the
+   tables simListQuizSources ratchets): 909 exhibits. Names are made up and
+   never shown anywhere; only the counts move the economy. */
+const WING_SIZES = { sb: 60, wnba: 29, cfb: 49, nba: 80, cbb: 87, cup: 110, ws: 121, epl: 127, nrl: 117, afl: 129 };
+const rows = new Map(Object.entries(WING_SIZES).map(([k, n]) => [k, Array.from({ length: n }, (_, i) => ({ year: 1890 + i, team: `Fixture ${k} ${i + 1}` }))]));
+const wings = lib.buildCatalog(rows);
+const exhibits = wings.reduce((a, w) => a + w.artifacts.length, 0);
+if (wings.length !== 10 || exhibits !== 909) abort(`the fixture catalog built ${wings.length} wings and ${exhibits} exhibits, not 10 and 909. ABORTED`);
+/* a control runs only the section it targets */
+const run = n => (CONTROL ? CONTROL_SECTION[CONTROL] === n : !ONLY || ONLY.split(',').includes(String(n)));
+
+/* ------------------------------------------------ 1: a deep museum loads */
+if (run(1)) {
+  section = 1;
+  console.log('1) a greedy museum played past 1e15 saves and loads intact');
+  const t0 = Date.now();
+  const s = lib.freshState(0x1548);
+  const STEP = 60;
+  const LIMIT_DAYS = Number(process.env.SIM_HALL_DAYS || 60);
+  let wall = 1_800_000_000_000;
+  let deepSaves = 0, deepBad = 0, firstDeepDay = null, firstCareerDay = null, ownedOver = null, overBought = 0, peakFunds = 0;
+  const roundTrip = (label) => {
+    const text = lib.serialize(s, wall);
+    const back = lib.loadSave(text);
+    const want = JSON.stringify({ state: s, lastSeen: wall });
+    if (!back || JSON.stringify(back) !== want) { deepBad += 1; if (deepBad <= 3) fail(`${label}: a save holding ${s.funds.toExponential(3)} did not load intact (${back ? 'fields changed' : 'refused'})`); }
+  };
+  for (let t = 0; t < LIMIT_DAYS * 86400 && lib.totalArtifacts(s) < exhibits; t += STEP) {
+    lib.tick(wings, s, STEP);
+    wall += STEP * 1000;
+    lib.startRush(s);
+    for (let guard = 0; guard < 2000; guard++) {
+      const shut = wings.find(w => !s.openWings.includes(w.key));
+      if (shut && lib.canOpenWing(shut, s)) { lib.openWing(shut, s); continue; }
+      let best = null, bestCost = Infinity;
+      for (const w of wings) {
+        if (!s.openWings.includes(w.key)) continue;
+        const n = s.owned[w.key] ?? 0;
+        if (n >= w.artifacts.length) continue;
+        const c = lib.artifactCost(w, n, s);
+        if (c < bestCost) { best = w; bestCost = c; }
+      }
+      if (best && lib.canBuyArtifact(best, s)) {
+        lib.buyArtifact(best, s);
+        if (bestCost > 1e15) {
+          overBought += 1;
+          if (!ownedOver) ownedOver = { wing: best.key, n: s.owned[best.key], cost: bestCost, day: t / 86400 };
+        }
+        continue;
+      }
+      const up = lib.UPGRADES.filter(u => lib.canBuyUpgrade(u.id, s)).sort((a, b) => lib.upgradeCost(a, s.levels[a.id]) - lib.upgradeCost(b, s.levels[b.id]))[0];
+      if (up && (!best || lib.upgradeCost(up, s.levels[up.id]) < bestCost / 10)) { lib.buyUpgrade(up.id, s); continue; }
+      break;
+    }
+    peakFunds = Math.max(peakFunds, s.funds);
+    /* the hook saves every five seconds; one save a simulated minute is the same bytes' shape */
+    if (s.funds > 1e15 || s.careerEarned > 1e18) {
+      if (firstDeepDay === null) firstDeepDay = t / 86400;
+      if (s.careerEarned > 1e18 && firstCareerDay === null) firstCareerDay = t / 86400;
+      deepSaves += 1;
+      roundTrip(`day ${(t / 86400).toFixed(2)}`);
+    }
+  }
+  roundTrip('the final museum');
+  const total = lib.totalArtifacts(s);
+  console.log(`   ${total} of ${exhibits} exhibits in ${LIMIT_DAYS} days, peak funds ${peakFunds.toExponential(2)}, career ${s.careerEarned.toExponential(2)} (${((Date.now() - t0) / 1000).toFixed(1)}s)`);
+  console.log(`   first save over 1e15 funds on day ${firstDeepDay?.toFixed(2)}, over 1e18 career on day ${firstCareerDay?.toFixed(2)}; ${deepSaves} saves past an old ceiling, ${deepBad} refused or changed`);
+  if (!ownedOver) fail(`the greedy museum never bought an exhibit priced over 1e15 in ${LIMIT_DAYS} days, so the deep save was never exercised`);
+  else console.log(`   ${overBought} exhibits bought at over 1e15, the first ${ownedOver.wing} number ${ownedOver.n} for ${ownedOver.cost.toExponential(3)} on day ${ownedOver.day.toFixed(2)}`);
+  if (firstCareerDay === null) fail('career admissions never passed 1e18, so the second old ceiling was never exercised');
+  if (deepSaves < 1000) fail(`only ${deepSaves} saves held past an old ceiling, too few to call the deep path exercised`);
+  if (deepBad === 0 && ownedOver && firstCareerDay !== null) console.log('   every save past both old ceilings loaded with every field intact');
+}
+
+/* ------------------------------------------ 2: a hidden tab pays the night */
+const HOUR_MS = 3600 * 1000;
+const CAP_MS = 8 * HOUR_MS;
+function midMuseum() {
+  const s = lib.freshState(7);
+  s.owned = { sb: 60, wnba: 29, cfb: 20 };
+  s.openWings = ['sb', 'wnba', 'cfb'];
+  s.funds = 1000;
+  s.clock = 5000;
+  s.rushUntil = 0;
+  s.rushReadyAt = 1e9;
+  return s;
+}
+if (run(2)) {
+  section = 2;
+  console.log('2) a hidden tab: 600 callbacks a minute apart');
+  const s = midMuseum();
+  const income = lib.totalIncome(wings, s, s.clock);
+  const awayRate = 0.5;
+  const owed = income * awayRate * (CAP_MS / 1000);
+  let paid = 0;
+  for (let i = 0; i < 600; i += 1) paid += lib.advanceClock(wings, s, 60_000, false).earned;
+  const ratio = paid / owed;
+  console.log(`   income ${income.toFixed(2)}/s; ten hidden hours paid ${paid.toExponential(4)}, the away rate times eight hours is ${owed.toExponential(4)} (x${ratio.toFixed(6)}); meter ${s.awayMs} ms`);
+  if (!(paid >= owed * 0.999)) fail(`a hidden tab left open ten hours earned x${ratio.toFixed(4)} of eight hours at the away rate`);
+  if (!(paid <= owed * 1.001)) fail(`a hidden tab earned x${ratio.toFixed(4)} of the eight hour cap, so the cap leaks`);
+  if (s.awayMs !== CAP_MS) fail(`the absence meter stopped at ${s.awayMs} ms, the cap is ${CAP_MS}`);
+
+  /* a watched minute: full rate, and watching closes the absence */
+  const w = midMuseum();
+  w.awayMs = 3 * HOUR_MS;
+  let seen = 0;
+  for (let i = 0; i < 240; i += 1) seen += lib.advanceClock(wings, w, 250, true).earned;
+  if (Math.abs(seen / (income * 60) - 1) > 1e-9) fail(`a watched minute paid x${(seen / (income * 60)).toFixed(6)} of a minute at full rate`);
+  if (w.awayMs !== 0) fail(`watching left the absence meter at ${w.awayMs} ms`);
+
+  /* one absence, one cap: three hidden hours, then the tab closed for seven */
+  const a = midMuseum();
+  let both = 0;
+  for (let i = 0; i < 180; i += 1) both += lib.advanceClock(wings, a, 60_000, false).earned;
+  const rep = lib.offlineReport(wings, a, 7 * 3600);
+  both += rep.earned;
+  if (Math.abs(both / owed - 1) > 1e-6) fail(`three hidden hours and seven closed paid x${(both / owed).toFixed(4)} of one eight hour absence`);
+  if (!rep.capped) fail('seven closed hours after three hidden ones were not reported as capped');
+
+  /* a visible page that did not run (a laptop asleep two hours) is away time too */
+  const z = midMuseum();
+  const slept = lib.advanceClock(wings, z, 2 * HOUR_MS, true);
+  if (!slept.away || Math.abs(slept.earned / (income * awayRate * 7200) - 1) > 1e-6) fail(`two asleep hours on a visible page paid x${(slept.earned / (income * awayRate * 7200)).toFixed(4)} of two away hours`);
+  console.log(`   watched minute x${(seen / (income * 60)).toFixed(6)} of full rate; 3 h hidden then 7 h closed x${(both / owed).toFixed(6)} of one capped absence; 2 h asleep paid as away: ${slept.away}`);
+}
+
+/* ---------------------------------------- 3: prices past T read as numbers */
+if (run(3)) {
+  section = 3;
+  console.log('3) fmt past T');
+  const want = [[999, '999'], [1500, '1.5K'], [2.5e12, '2.5T'], [9.99e14, '999T'], [1e15, '1.0Qa'], [1.45e17, '145Qa'], [2.49e18, '2.5Qi'], [9e19, '90Qi']];
+  for (const [n, s] of want) if (lib.fmt(n) !== s) fail(`fmt(${n}) printed ${JSON.stringify(lib.fmt(n))}, want ${s}`);
+  let longest = '';
+  for (let n = 1; n < 1e21; n *= 1.7) if (lib.fmt(n).length > longest.length) longest = lib.fmt(n);
+  if (longest.length > 5) fail(`fmt printed ${JSON.stringify(longest)} for a price under 1e21`);
+  console.log(`   ${want.filter(([n, s]) => lib.fmt(n) === s).length} of ${want.length} values exact; the longest label under 1e21 is ${JSON.stringify(longest)}; the last AFL exhibit reads ${lib.fmt(9e19)}`);
+}
+
+/* ------------------------------------------------------ 4: the real hook */
+/* Which tests each hook control must turn red; every other test must stay green. */
+const HOOK_RED = { hookfixed: [2, 3], hooknocopy: [4] };
+const HOOK_TESTS = 6;
+function findUp(rel) {
+  for (let dir = ROOT; ; dir = path.dirname(dir)) {
+    const p = path.join(dir, rel);
+    if (fs.existsSync(p)) return p;
+    if (path.dirname(dir) === dir) return null;
+  }
+}
+function runHookSuite(env, label) {
+  const vitest = findUp('node_modules/vitest/vitest.mjs');
+  if (!vitest) abort('vitest is not installed here, so section 4 cannot run. ABORTED');
+  const out = path.join(tmp, `report-${label}.json`);
+  const r = spawnSync(process.execPath, [vitest, 'run', TEST, '--reporter=json', `--outputFile.json=${out}`, '--reporter=default', '--testTimeout=300000'], {
+    cwd: ROOT, encoding: 'utf8', env: { ...process.env, ...env, CI: '1', FORCE_COLOR: '0', NO_COLOR: '1' }, maxBuffer: 64 * 1024 * 1024,
+  });
+  const text = (r.stdout || '') + (r.stderr || '');
+  for (const m of text.matchAll(/HALL\| (.+)/g)) console.log(`   ${label}: ${m[1].trim()}`);
+  if (!fs.existsSync(out)) { console.error(text.slice(-3000)); return null; }
+  const report = JSON.parse(fs.readFileSync(out, 'utf8'));
+  const rows = [];
+  rows.loadError = /Failed to load|Cannot find module|Failed to resolve import|SyntaxError|Transform failed/.test(text) ? text.slice(-1500) : null;
+  for (const file of report.testResults || []) {
+    for (const a of file.assertionResults || []) rows.push({ n: Number((a.title.match(/^(\d+)/) || [])[1] || 0), title: a.title, status: a.status, msg: (a.failureMessages || []).join('\n').split('\n')[0].slice(0, 240) });
+  }
+  return rows;
+}
+if (run(4) && !LIB_CONTROLS[CONTROL]) {
+  section = 4;
+  console.log('4) the real hook on fake timers');
+  let env = {};
+  if (HOOK_CONTROLS[CONTROL]) {
+    /* The copy sits inside the checkout so its own imports resolve from here. */
+    const dir = path.join(ROOT, 'dist', `.hall-longplay-${CONTROL}`);
+    fs.mkdirSync(dir, { recursive: true });
+    process.on('exit', () => { try { fs.rmSync(dir, { recursive: true, force: true }); } catch { /* best effort */ } });
+    const copy = path.join(dir, 'useHallOfChampions.ts');
+    fs.writeFileSync(copy, rewrite(HOOK, HOOK_CONTROLS[CONTROL], 'src/hooks/useHallOfChampions.ts'));
+    /* vitest.config.ts's generic one module alias (Round 900), off in every ordinary run */
+    env = { US_BOARD_CONTROL_ALIAS: '@/hooks/useHallOfChampions', US_BOARD_CONTROL_FILE: copy };
+    console.log(`control ${CONTROL}: the hook is a copy with one rewrite`);
+  }
+  const rows = runHookSuite(env, CONTROL || 'shipped');
+  if (!rows) fail('the hook suite wrote no report');
+  else if (rows.loadError) fail(`the hook suite did not load, so every red is a crash:\n${rows.loadError}`);
+  else if (rows.length !== HOOK_TESTS) fail(`the hook suite ran ${rows.length} tests, not ${HOOK_TESTS}`);
+  else {
+    const red = HOOK_RED[CONTROL] || [];
+    for (const row of rows) {
+      if (red.includes(row.n)) {
+        if (row.status !== 'failed') { dead += 1; console.error(`  DEAD: "${row.title}" stayed green with the hook control on`); }
+        else fail(`"${row.title}" (red under the control, as it must be): ${row.msg}`);
+      } else if (row.status !== 'passed') {
+        if (CONTROL) collateral += 1;
+        fail(`"${row.title}": ${row.status} ${row.msg}`);
+      }
+    }
+    console.log(`   ${rows.filter(r => r.status === 'passed').length} of ${rows.length} hook tests green`);
+  }
+}
+
+/* ------------------------------------------------------------- summary */
+if (CONTROL) {
+  const target = CONTROL_SECTION[CONTROL];
+  const hits = bySection[target] || 0;
+  if (collateral > 0) { console.log(`simHallLongPlay control ${CONTROL}: MISFIRED, it also turned ${collateral} test${collateral === 1 ? '' : 's'} red that it does not target`); process.exit(1); }
+  if (hits > 0 && dead === 0) { console.log(`simHallLongPlay control ${CONTROL}: FIRED, ${hits} failure${hits === 1 ? '' : 's'} in section ${target} (red is the right answer)`); process.exit(1); }
+  console.log(`simHallLongPlay control ${CONTROL}: DID NOT FIRE (section ${target}: ${hits} failures, ${dead} targeted tests stayed green), so the checks it targets are dead`);
+  process.exit(0);
+}
+if (failures > 0) { console.log(`simHallLongPlay: RED, ${failures} failure${failures === 1 ? '' : 's'}`); process.exit(1); }
+console.log(`simHallLongPlay: green${ONLY ? ` (sections ${ONLY} only)` : ''}`);
