@@ -8,6 +8,7 @@
    (Round 219's live fence has found no name twice on a soccer board since August, and six seeded rows had one).
 
    What it proves:
+     0. every new board in the migration is the shipped file's board (the harnesses judge the file);
      1. every rewritten row whose stored board is the file's pre-round board ends holding the new board;
      2. a row that has drifted from the file is left exactly as it was (the guard), and so is every row the
         migration does not name;
@@ -21,15 +22,18 @@
    PGlite is not a dependency of this repo on purpose. Install it anywhere and say where:
      npm install --prefix /tmp/pgl @electric-sql/pglite
      PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseConnections1553.mjs
-   Negative control, must exit 1: REHEARSE_CONTROL=noguard strips the guard, so the drifted row is overwritten.
+   Negative controls, each must exit 1: REHEARSE_CONTROL=noguard strips the guard, so the drifted row is
+   overwritten; REHEARSE_CONTROL=drift renames one tile of puzzle-10's new board in the migration only, so check 0
+   finds the migration and the file apart. A control that cannot find what it changes exits 2 (ABORTED).
    It is not named sim*: the suite runner must not pick up a script that needs a package the repo does not carry. */
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const CONTROL = process.env.REHEARSE_CONTROL || '';
-if (CONTROL && CONTROL !== 'noguard') { console.error(`REHEARSE_CONTROL=${CONTROL} is not a control this script knows, ABORTED`); process.exit(2); }
+if (CONTROL && CONTROL !== 'noguard' && CONTROL !== 'drift') { console.error(`REHEARSE_CONTROL=${CONTROL} is not a control this script knows, ABORTED`); process.exit(2); }
 const dir = process.env.PGLITE_DIR;
 if (!dir) { console.error('PGLITE_DIR is not set: see the header of this file. Nothing was run.'); process.exit(2); }
 const entry = path.join(dir, 'node_modules', '@electric-sql', 'pglite', 'dist', 'index.js');
@@ -44,6 +48,17 @@ if (CONTROL === 'noguard') {
   if (!MIGRATION.includes(GUARD)) { console.error('control noguard: the guard is not in the migration, ABORTED'); process.exit(2); }
   MIGRATION = MIGRATION.replace(GUARD, ';');
 }
+if (CONTROL === 'drift') {
+  /* one new board in the migration drifts from the file (its first tile renamed), as a data fix that never
+     regenerated the migration would leave it: check 0 must go red, and nothing else */
+  const at = MIGRATION.indexOf("    ('puzzle-10', ");
+  const end = at < 0 ? -1 : MIGRATION.indexOf('\n', at);
+  const line = at < 0 ? '' : MIGRATION.slice(at, end);
+  const cut = line.lastIndexOf("'::jsonb, '");
+  const drifted = cut < 0 ? line : line.slice(0, cut) + line.slice(cut).replace(/"players":\["[^"]*"/, '"players":["A Drifted Player"');
+  if (drifted === line) { console.error('control drift: puzzle-10 is not in the migration, ABORTED'); process.exit(2); }
+  MIGRATION = MIGRATION.slice(0, at) + drifted + MIGRATION.slice(end);
+}
 
 /* the migration's own rows: puzzle_id, the pre-round board, the new board */
 const rows = [];
@@ -53,7 +68,28 @@ for (const line of MIGRATION.split('\n')) {
 }
 let failures = 0;
 const fail = s => { failures += 1; console.error('  FAIL: ' + s); };
-if (rows.length < 50) fail(`the migration carries ${rows.length} rows; this round rewrites 56`);
+if (rows.length < 50) fail(`the migration carries ${rows.length} rows; this round rewrites 57`);
+
+/* 0. every new board in the migration is the shipped file's board, word for word: simConnectionsFacts and
+   simFairPuzzles judge the file, the migration is what players are dealt, and a data fix that skipped
+   regenerating the migration would otherwise ship one board to the file and another to the table */
+const canonTop = v => Array.isArray(v) ? v.map(canonTop) : v && typeof v === 'object' ? Object.fromEntries(Object.keys(v).sort().map(k => [k, canonTop(v[k])])) : v;
+{
+  const { build } = await import('esbuild');
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'rehearse1553-'));
+  fs.writeFileSync(path.join(tmp, 'entry.mjs'), `export { connectionsPuzzles } from '${ROOT.replaceAll('\\', '/')}/src/data/connectionsPuzzles.ts';`);
+  await build({ entryPoints: [path.join(tmp, 'entry.mjs')], bundle: true, format: 'esm', platform: 'node', outfile: path.join(tmp, 'bundle.mjs'), logLevel: 'error', alias: { '@': path.join(ROOT, 'src') } });
+  const { connectionsPuzzles } = await import(pathToFileURL(path.join(tmp, 'bundle.mjs')).href);
+  const fileBoard = new Map(connectionsPuzzles.map(b => [b.id, b.groups.map(g => ({ category: g.category, players: g.players, difficulty: g.difficulty }))]));
+  let tied = 0;
+  for (const r of rows) {
+    const f = fileBoard.get(r.id);
+    if (!f) fail(`${r.id} is in the migration and not in src/data/connectionsPuzzles.ts`);
+    else if (JSON.stringify(canonTop(f)) !== JSON.stringify(canonTop(r.now))) fail(`${r.id}: the migration's new board is not the file's board; regenerate the migration from the file`);
+    else tied += 1;
+  }
+  console.log(`   file: ${tied} of ${rows.length} new boards in the migration equal the shipped file's boards`);
+}
 
 const num = id => Number(id.replace('puzzle-', ''));
 async function scenario(name) {

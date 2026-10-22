@@ -1,5 +1,7 @@
 /**
- * Round 214 harness: every puzzle on this site has exactly one right answer.
+ * Round 214 harness: no puzzle on this site gains a second right answer (the
+ * soccer findings the claim ledger still owes to part B of Round 1553 are the
+ * only ones allowed, and that list may only shrink).
  *
  * The puzzle games all share one failure mode and it is the worst kind,
  * because the better you know the sport the more likely it is to catch
@@ -262,4 +264,4 @@ if (failures > 0) {
   console.error(`simFairPuzzles: ${failures} failure${failures === 1 ? '' : 's'}`);
   process.exit(1);
 }
-console.log('simFairPuzzles: green. Every board on the site has exactly one right answer.');
+console.log('simFairPuzzles: green. No board has a new second right answer; only the soccer findings the ledger owes to part B remain.');
