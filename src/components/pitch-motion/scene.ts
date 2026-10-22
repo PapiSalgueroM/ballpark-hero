@@ -88,7 +88,9 @@ const BUILD = { forward: 0.6, forwardPush: 0.15, reset: 0.08, resetPush: -0.04, 
  *  of its length one way and of its width the other, 105 by 68 metres, so a unit across is shorter than one along.
  *  One drawn pass joins two spells of play a beat apart, so it runs longer than a real one (a median of 31 metres on
  *  the 200 half feeds, p90 54): at 45 the ball goes up on 22 per cent of them (at 32 it was 48, at 50 it is 17,
- *  r1521-s10), about the share of long balls in a real match. */
+ *  r1521-s10). The 45 was picked by eye, for how the picture reads, and is no real match's share: a real match
+ *  plays far more short passes than this picture draws, so its share of long balls is lower. R10 holds the share
+ *  this line gives in a band, so a change to it (or to METRES) is seen. */
 const LONG_PASS = 45;
 const METRES = { x: 0.68, y: 1.05 };
 /** A reset that goes back and this far across is a switch of play; a shorter one is pressure. */
