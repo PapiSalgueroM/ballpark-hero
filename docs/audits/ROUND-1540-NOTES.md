@@ -80,6 +80,9 @@ dukb-handoff/2026-10-10/results-g/finish-1540.md.
   (likely moving its byte equal proof), while one that only spares a sheet arrival from the waiver or the pool cut
   would, by inference, leave the old desk and the NHL streams as they are. The NHL is latent until its earned draft
   bind brings the same trigger.
+- Item 7, FIXED by Round 1556 (branch r1556-nba-sheet-man, the lead's option (c), in the NBA host's summer,
+  gmContractsHostNba.ts nbaSummerKeepingSheets); the old desk, the NHL, NFL and MLB desks and this round's committed
+  stream are byte equal to f276b8a8 (runner r1556-s1a). Its report is results-g/finish-1556.md.
 - Item 8, the Arenas residual: reported in results-g/fix-1540.md, not changed (Round 1018's sheet rule, not this
   round's code; no card line claims the league's limit).
 
@@ -90,7 +93,8 @@ dukb-handoff/2026-10-10/results-g/finish-1540.md.
 - simNbaDraftBoard section 1's fixture is BASE's (7a8750ba). It is never recorded again on a builder's own say.
 - simNbaGmDesk measures the earned night since b6547cda; its green holds on its own committed stream. On about one
   fresh stream in twenty check 2 fails on "is at no rival club" (item 7 above, older code, held for the lead): a
-  red there on a copy under another name is that, not a new defect.
+  red there on a copy under another name is that, not a new defect. Round 1556 fixed it: with that round merged a
+  red there is a new defect.
 - A harness copied under another file name walks another stream: seedRandom seeds Math.random from the file name.
   Numbers from such a copy are a fresh sample, never the committed harness's own.
 
