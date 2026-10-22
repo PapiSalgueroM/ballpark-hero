@@ -1,0 +1,16 @@
+#!serve
+#!playwright
+#!serial
+playClubManager: ENGINES=chromium node scripts/playClubManager.mjs
+playCmFinanceDesk: ENGINES=chromium node scripts/playCmFinanceDesk.mjs
+ctl-desk-small: mkdir -p "$TMPDIR/out" && RC_OUT="$TMPDIR/out" ENGINES=chromium CM_FINANCE_CONTROL=small node scripts/playCmFinanceDesk.mjs 2>&1 | tee "$TMPDIR/ctl.log"; s=${PIPESTATUS[0]}; [ $s -eq 1 ] && grep -qF 'playCmFinanceDesk: CONTROL small FIRED (' "$TMPDIR/ctl.log"
+playSessionMarks: node scripts/playSessionMarks.mjs
+playLiveMatchFit: node scripts/playLiveMatchFit.mjs
+playLiveMatchFit-fresh: LIVE_FIT_SEED=fresh node scripts/playLiveMatchFit.mjs
+livefit-ctl: ok=0; r=""; for k in widelabels digits; do LIVE_FIT_CONTROL=$k node scripts/playLiveMatchFit.mjs > /tmp/lf-$k.log 2>&1; e=$?; r="$r $k=$e"; [ $e = 1 ] || ok=1; echo "$k: last: $(tail -1 /tmp/lf-$k.log | cut -c1-200)"; done; echo "controls (each must be 1):$r"; exit $ok
+ctl-none-playClubManager: ANSWER_CONSENT_CONTROL=none ENGINES=chromium node scripts/playClubManager.mjs
+ctl-none-playCmFinanceDesk: ANSWER_CONSENT_CONTROL=none ENGINES=chromium node scripts/playCmFinanceDesk.mjs
+ctl-none-playSessionMarks: ANSWER_CONSENT_CONTROL=none node scripts/playSessionMarks.mjs
+ctl-none-playLiveMatchFit: ANSWER_CONSENT_CONTROL=none node scripts/playLiveMatchFit.mjs
+ctl-desk-cut: mkdir -p "$TMPDIR/out" && RC_OUT="$TMPDIR/out" ENGINES=chromium CM_FINANCE_CONTROL=cut node scripts/playCmFinanceDesk.mjs 2>&1 | tee "$TMPDIR/ctl.log"; s=${PIPESTATUS[0]}; [ $s -eq 1 ] && grep -qF 'playCmFinanceDesk: CONTROL cut FIRED (' "$TMPDIR/ctl.log"
+ctl-desk-wrap: mkdir -p "$TMPDIR/out" && RC_OUT="$TMPDIR/out" ENGINES=chromium CM_FINANCE_CONTROL=wrap node scripts/playCmFinanceDesk.mjs 2>&1 | tee "$TMPDIR/ctl.log"; s=${PIPESTATUS[0]}; [ $s -eq 1 ] && grep -qF 'playCmFinanceDesk: CONTROL wrap FIRED (' "$TMPDIR/ctl.log"
