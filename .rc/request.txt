@@ -1,0 +1,8 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/components/front-office-shared/DraftNightCard.test.tsx src/components/nba-front-office/NbaDraftNightRivals.test.tsx src/components/front-office/FrontOfficeDraftCapital.test.tsx src/components/mlb-front-office/MlbDraftCapital.test.tsx --testTimeout=300000 --hookTimeout=120000
+simDraftNight: node scripts/simDraftNight.mjs
+simDraftNight-dropai: DRAFT_CONTROL=dropai node scripts/simDraftNight.mjs
+simDraftNight-slowsteps: DRAFT_CONTROL=slowsteps node scripts/simDraftNight.mjs
+simDraftNight-norivals: DRAFT_CONTROL=norivals node scripts/simDraftNight.mjs
+simRevealMoments: node scripts/simRevealMoments.mjs
+simRevealMoments-motion: REVEAL_CONTROL=motion node scripts/simRevealMoments.mjs
