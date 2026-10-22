@@ -1,0 +1,5 @@
+s1-ledger exit=0 1s | simCareerIntl: GREEN, 481 checks over sections 1
+ctl-onesource exit=1 1s | simCareerIntl: control onesource FIRED (section 1, 1 failures)
+simNoRivalNames exit=0 27s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 58s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 84s | 

@@ -1,0 +1,5 @@
+s1-ledger: INTL_SECTIONS=1 node scripts/simCareerIntl.mjs
+ctl-onesource: INTL_SECTIONS=1 INTL_CONTROL=onesource node scripts/simCareerIntl.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
