@@ -1,0 +1,6 @@
+dbg8: one debug print in
+sheets tabled (distinct man and season): 17
+service 1, round 2: 10 sheets, salary 2.6 to 5.5 (median 4.2), share of cap 1.4 to 1.8 percent (median 1.6), rating 66 to 71, years 4
+service 4, round 1: 7 sheets, salary 3.6 to 80.8 (median 10.3), share of cap 1.4 to 25.0 percent (median 3.4), rating 70 to 95, years 4
+simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+harness exit 0, src restored: 0 files dirty
