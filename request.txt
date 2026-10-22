@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+walkf3: node .rc/x/walkf3.mjs
