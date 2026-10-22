@@ -305,6 +305,10 @@
  *   10.33); bestfirst FIRED (S5 outside at 1-5 to 6-10, pick -9.5 and rating -12.4 errors, and at 21-25 to 26-30,
  *   pick -30.4 and rating 0.4 errors). Section 11: 79 known answers, 71 verdicts held. The judge's controls under
  *   that COMBINE: judgestraddle 52 (11), judgerise 4 (11), judgeflip 36 and 3 (11 and 7).
+ *   Quick walk (r1321-fe-b on 38a9129b): exit 0, 11 sections, 212,236 checks, about 28 s; CONTROL=all exit 0, all
+ *   31 fired in exactly their sections, about 553 s: the judge's ten in 11 alone, judgetwo 18, judgerange 14,
+ *   judgefloor 8, judgecap 8, judgeflip 36, judgeres 12, judgestraddle 52, judgerise 4, judgepass 38, judgefleet 2
+ *   (more known answers, so more failures each than on 2026-10-21); every other control as listed for r1321-fx-b.
  */
 import './lib/seedRandom.mjs';
 import fs from 'node:fs';

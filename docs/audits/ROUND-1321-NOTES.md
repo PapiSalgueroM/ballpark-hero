@@ -5,6 +5,14 @@ Branch `r1321-nba-draft-earned-a`, base `48cb9d4b` (origin/main, Release AY). Wr
 
 ## Where it stands
 
+2026-10-22, morning (session J): **the lead's rulings E1 to E5 on the STOP are applied and the table is GREEN.**
+The lead ruled (`dukb-handoff/2026-10-10/briefs/lead-rulings-1321-e.md`) that both red lines below were the judge's
+statistics, not the engine: each run is now held to its band on its own (E1), S5 asserts the pooled rise at every
+band of finish and prints the per set count (E2), and S1 at 10 keeps its lower side of -0.5 (E3). The existing fleet
+files were judged again with no replay (E4): every asserted line PASSES, S5 PASSES at 11.4 errors or more at every
+step, and each new judging rule has a control that fired on a runner. Nothing in the engine, the class or the
+careers changed. See "The lead's rulings E of 2026-10-22, applied" below. PART B can be briefed on that table.
+
 2026-10-22, early (session J, the fix pass of the two step (d) reviews): **a STOP again, for the lead.** Both
 reviews found knob (i) wrote `years = 1` on draft night, before the summer that takes a season off every deal, so no
 club's second rounder ever played his season at the minimum (his own were released by his desk, a CPU club's re-signed
@@ -61,7 +69,9 @@ Nothing in `src` calls the new code but its own tests. No screen, no copy, no Wh
 - `scripts/simNbaEarnedDraft.mjs` (new) and `scripts/data/nbaEarnedDraftFixture.json` (recorded from `48cb9d4b`).
   Since the rulings: the stop lines as ruled, the judge split into `judgeLine` and its one comparison `inBand`,
   section 11 (the judge on known answers) and five judge controls (`judgetwo`, `judgerange`, `judgefloor`,
-  `judgecap`, `judgeflip`), each slipping `inBand` in a copy of the harness.
+  `judgecap`, `judgeflip`), each slipping `inBand` in a copy of the harness. Since the fix pass of 2026-10-22
+  also `judgeres`, `judgepass` and `judgefleet`, and since the lead's rulings E of the same day `judgestraddle` and
+  `judgerise` (E1 and E2), which replace `judgeagree`: ten judge controls, 31 controls in all.
 - `scripts/simGmDraftOrder.mjs`: the two libraries added to `MOUNT_ALLOW`, nothing else.
 - `src/lib/nbaGmDesk.ts`: UNCHANGED (correction 11). The block key lives in nbaEarnedDraft.ts.
 
@@ -69,6 +79,90 @@ Nothing in `src` calls the new code but its own tests. No screen, no copy, no Wh
 
 After a summer the season has rolled, so the `draft` block a night leaves on the desk (about 8 KB: the order and 60
 slots) is never current again. It stays on the save on purpose (advice 25); nobody should "clean" it.
+
+## The lead's rulings E of 2026-10-22, applied (session J, morning)
+
+The rulings: `dukb-handoff/2026-10-10/briefs/lead-rulings-1321-e.md`. The commits: `38a9129b` (the judge, section
+11, the two new controls) and `5a769df6` (S5's steps printed as signed changes, the harness header's measured block),
+then this notes commit. The closing report is `dukb-handoff/2026-10-10/results-g/fix-1321.md` (the report of the
+fix pass before it is kept beside it as `fix-1321-reviews-2026-10-22.md`).
+
+- E1, the two runs. `judgeLine` holds each run's pooled value to the band on its own (`inBand`, the judge's one
+  comparison). Both runs inside is a PASS (each run's error still under a third of the line's `res`); one inside and
+  one outside is RUNS DISAGREE, the runs on opposite sides of a band edge, and the table says the fleet grows once to
+  at most 24 sets, or, on a fleet already grown past twelve sets, that it is a STOP for the lead; neither inside is
+  OUTSIDE. Agreement is never judged by one run's error any more: the gap between the runs and its own error (the
+  root of the two runs' squared errors) are printed in a new column beside every line and decide nothing.
+- E2, S5. `judgeRise` takes every set of both runs, and for each step from one band of finish to the next the per
+  set steps are the replicates: his first selection's pick number must come later and his true rating fall, each
+  pooled step positive by at least two of its own errors (sd over root n). The count of sets that rise at every band
+  is printed beside it and never asserted.
+- E3: S1 at 10 keeps its lower side of -0.5 (its `what` in LINES says so).
+- E4: the existing fleet files judged again with no replay (below), and a negative control for each new rule, each
+  fired on a runner: `judgestraddle` (one run inside carries the line, `every` slipped to `some`: the planted
+  straddles PASS) and `judgerise` (a pooled step passes on any positive mean: the planted step at 1.4 and 1.0 errors
+  PASSES). `judgeagree` went with the rule it slipped.
+- E5, for PART B, not this round: S6 dead money sits at 2.90 / 2.92 against its cap of 3.0 and S4 at 63.8 / 64.9
+  against its floor of 60; both have three errors or more of headroom today, and the per slot rookie scale named in
+  `lead-rulings-1321-d.md` (team options for every club, counting the summer's season) is what brings dead money
+  back under 1.0.
+
+Section 11 now judges 79 known answers and holds the table's assertion to 71 verdicts (it was 46 and 38). New
+since the rulings: two runs a fifth of `res` apart and both inside, a PASS on every asserted line (the old judge
+said RUNS DISAGREE); at every edge of every band two runs on opposite sides, once with their mean inside and once
+outside, RUNS DISAGREE both times, and again on a fleet of 24 sets; and S5 on seven planted fleets: every step
+clear (PASS, 24 of 24 sets), one set backward at the last step with the pool clear (PASS, 23 of 24 printed), a step
+at 2.6 errors (PASS), a step at 1.4 and one at 1.0 error (OUTSIDE), a step backward (OUTSIDE), a band of finish
+empty in every set (OUTSIDE). The two errors of the rule sit between the 2.6 and the 1.4.
+
+Probed on this PC before the push (a light copy of the judge region and section 11 only, under a second): green
+with the code as committed; with `every` slipped to `some` 52 failures; with the rise rule at zero errors 4; with
+`RISE_ERRORS` at 3, 2 (the planted 2.6 errors step); with the old agreement rule put back, 38. So each new known
+answer is reached by the rule it names.
+
+### The two arm table under the rulings E, the same fleet (`r1321-fx-f1`, `r1321-fx-f2`, `r1321-fx-fc` on d25c7c72), judged by `r1321-fe-a` on 38a9129b
+
+`SIM_NBA_EARNED_DRAFT_COMBINE=<the 60 fleet files> node scripts/simNbaEarnedDraft.mjs`: exit 0, "simNbaEarnedDraft:
+green.", 12 sections, 257,666 checks, 17 s. The careers are the same code since d25c7c72, so the files stand.
+
+| line | old (run 1 / run 2) | new | new minus old, run by run (error) | gap between the runs (its error, in errors) | band | verdict |
+|---|---|---|---|---|---|---|
+| S1 at 5 | 83.11 / 83.11 | 83.38 / 83.37 | +0.27 (0.01) / +0.26 (0.01) | 0.004 (0.010, 0.4) | within 0.50 | PASS |
+| S1 at 10 | 82.20 / 82.19 | 83.16 / 83.17 | +0.96 (0.01) / +0.98 (0.01) | 0.022 (0.010, 2.1) | -0.50 to +1.50 | PASS |
+| S2 | 105.9 / 106.0 | 108.1 / 108.3 | +2.2 (0.2) / +2.3 (0.2) | 0.13 (0.28, 0.5) | within 21.2 | PASS |
+| S3 (printed) | 81.8 / 80.9 | 44.1 / 43.4 | -37.7 (1.3) / -37.5 (1.5) | 0.21 (1.93, 0.1) | never asserted | PRINTED |
+| S4 | 100.0 / 100.0 | 63.8 / 64.9 | the arm's own 63.8 (1.0) / 64.9 (0.9) | 1.06 (1.38, 0.8) | at least 60.0 | PASS |
+| S6 dead | 0.13 / 0.13 | 2.90 / 2.92 | the arm's own 2.90 (0.02) / 2.92 (0.03) | 0.015 (0.037, 0.4) | under 3.00 | PASS |
+| S6 payers | 2.29 / 2.29 | 1.93 / 1.93 | -0.36 (0.01) / -0.36 (0.01) | 0.002 (0.020, 0.1) | within 0.50 | PASS |
+
+S5, pooled over the 24 sets of both runs (each step: the change, its error, the rise in errors), 12 sets a run:
+
+| step of finish | pick number | true rating |
+|---|---|---|
+| 1-5 to 6-10 | +3.52 (0.09, 37.8) | -2.42 (0.09, 26.6) |
+| 6-10 to 11-15 | +5.39 (0.11, 48.5) | -7.39 (0.10, 72.2) |
+| 11-15 to 16-20 | +4.54 (0.08, 56.4) | -3.77 (0.09, 43.8) |
+| 16-20 to 21-25 | +5.41 (0.07, 74.7) | -0.55 (0.05, 11.4) |
+| 21-25 to 26-30 | +5.24 (0.03, 181.1) | -0.35 (0.03, 11.9) |
+
+Every step positive by at least two of its errors: PASS. Sets that rise at every band: 23 of 24 (run 2 set 10 is
+level at the last step), printed and never asserted.
+
+Fleet controls on sets 1 to 4 of run 1, the same files (`r1321-fe-a`): fatclass FIRED (exit 1: S1 at 5 by 2.27,
+100.1 errors; S1 at 10 by 3.90, 318.2; S2 by 35.7, 94.7; S6 payers by 10.33); bestfirst FIRED (exit 1: S5 outside
+at 1-5 to 6-10, pick -9.5 and rating -12.4 errors, and at 21-25 to 26-30, pick -30.4 and rating 0.4 errors; 0 of 4
+sets rise at every band). The judge's controls under that COMBINE: judgestraddle FIRED, red in 11 alone (52
+failures); judgerise FIRED, 11 alone (4); judgeflip FIRED, 11 and 7 (36 and 3). Under the rulings the real fleet is
+green, so a judge control that leaves a passing table passing now shows section 11 alone, where in the fix pass it
+could not (section 7 was already red).
+
+Gates on 38a9129b (runner `r1321-fe-b`): `tsc` exit 0 (108 s); `earned` (the quick walk) exit 0, "simNbaEarnedDraft:
+green.", 11 sections, 212,236 checks, 28 s; `earned-ctl` (`SIM_NBA_EARNED_DRAFT_CONTROL=all`) exit 0, "all 31 fired,
+each in exactly its own sections", 553 s: the ten judge controls each red in 11 alone (judgetwo 18, judgerange 14,
+judgefloor 8, judgecap 8, judgeflip 36, judgeres 12, judgestraddle 52, judgerise 4, judgepass 38, judgefleet 2),
+summerdeal 2,075 (12), the other twenty as in the fix pass (`r1321-fx-b`); `fences` exit 0 (simHarnessAnchors
+green, simNoRivalNames 0 findings, simStorageWrites all green with 12 owed). The final head's proof is in the
+closing report.
 
 ## The fix pass of 2026-10-22 (session J): the two reviews of 2c7b0e05, and the table played again
 
@@ -156,6 +250,11 @@ middle, weak) against 19.0, 16.8 and 16.9 plain; the strong starts' title share 
    statistic, and a retune to escape one draw is fitting to noise and moves every other line.
 
 Until then the step (d) STOP stands. The quick lane (the two gate lines of rc-1321.txt) is green.
+
+RULED the same morning (`lead-rulings-1321-e.md`): E1 holds each run to its band on its own (not the proposal of
+z errors of the difference: no agreement test decides at all, the gap is printed), E2 pools S5 (the first proposal,
+at two errors rather than three), E3 keeps S1 at 10's lower side. Applied above, in "The lead's rulings E of
+2026-10-22, applied".
 
 ## The lead's rulings of 2026-10-21, applied (session J, late)
 
