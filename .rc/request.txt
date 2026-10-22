@@ -1,0 +1,11 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/usCareerShopPromises.test.ts src/test/careerDecisionOutcome.test.tsx src/test/careerHallSaves1301.test.ts src/test/usCareerSmallItems1104.test.ts --testTimeout=300000 --hookTimeout=120000
+shop: node scripts/simUsShopPromises.mjs
+shop-pp1: SHOP_CONTROL=potplusone node scripts/simUsShopPromises.mjs
+shop-ppall: SHOP_CONTROL=potplusoneall node scripts/simUsShopPromises.mjs
+shop-basecheck: SHOP_BASE_CHECK=1 SHOP_SECTIONS=1 node scripts/simUsShopPromises.mjs
+press: node scripts/simCareerPressMarket.mjs
+deckc: node scripts/simUsCareerDeckC.mjs
+board: node scripts/simUsBoardParity.mjs
+defects: node scripts/simUsCareerDefects.mjs
+ann905: node scripts/simUsCareerAnnualBenefits.mjs
