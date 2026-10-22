@@ -1,0 +1,16 @@
+#!serial
+contracts: bash .rc/x/cmp.sh contracts 'node scripts/simGmContracts.mjs'
+contracts-coinflip: bash .rc/x/cmp.sh contracts-coinflip 'GM_CONTRACTS_CONTROL=coinflip node scripts/simGmContracts.mjs'
+contracts-askdouble: bash .rc/x/cmp.sh contracts-askdouble 'GM_CONTRACTS_CONTROL=askdouble node scripts/simGmContracts.mjs'
+contracts-nometer: bash .rc/x/cmp.sh contracts-nometer 'GM_CONTRACTS_CONTROL=nometer node scripts/simGmContracts.mjs'
+contracts-optionall: bash .rc/x/cmp.sh contracts-optionall 'GM_CONTRACTS_CONTROL=optionall node scripts/simGmContracts.mjs'
+contracts-nobird: bash .rc/x/cmp.sh contracts-nobird 'GM_CONTRACTS_CONTROL=nobird node scripts/simGmContracts.mjs'
+contracts-noarb: bash .rc/x/cmp.sh contracts-noarb 'GM_CONTRACTS_CONTROL=noarb node scripts/simGmContracts.mjs'
+contracts-resheet: bash .rc/x/cmp.sh contracts-resheet 'GM_CONTRACTS_CONTROL=resheet node scripts/simGmContracts.mjs'
+deskhost: bash .rc/x/cmp.sh deskhost 'node scripts/simGmDeskHost.mjs'
+nfldesk: bash .rc/x/cmp.sh nfldesk 'node scripts/simNflGmDesk.mjs'
+nhldesk: bash .rc/x/cmp.sh nhldesk 'node scripts/simNhlGmDesk.mjs'
+mlbdesk: bash .rc/x/cmp.sh mlbdesk 'node scripts/simMlbGmDesk.mjs'
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+dashes: export LC_ALL=C.UTF-8; c=$(git diff b1eb4e55 70593dd4 -- src scripts docs/audits/ROUND-1540-NOTES.md | grep '^+' | grep -c -P '[\x{2013}\x{2014}]'); m=$(git log --first-parent --format=%B b1eb4e55..70593dd4 | grep -c -P '[\x{2013}\x{2014}]'); echo "added lines with a dash: $c, commit message lines with a dash: $m"; [ "$c" = 0 ] && [ "$m" = 0 ]
