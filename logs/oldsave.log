@@ -1,0 +1,8 @@
+Preparing worktree (detached HEAD bac65fb0b)
+HEAD is now at bac65fb0b Merge remote-tracking branch 'origin/main' into r1543-tycoon-badge-ladder
+oldsave1543: 1365 saves made by the base (120 bot, 1224 boundary, 9 corpus, 12 histories), 1365 load on both
+  loads byte identical 1365 of 1365; no lowered rung reached 223, of them byte identical after the first tick 223
+  lowered rungs granted on the first tick 1142; extra toasts per save {"1":350,"2":401,"3":250,"4":89,"5":52}; bot fleet max 4 toasts, max one off pay 30000 (0.9 s of income)
+  rollback to the base keeps every id 1365 of 1365; one away matchday pays extra milestone money on 38 saves, max 30000
+  ride along badges (a money badge crossed by the extra milestone pay) by kind {"edge":128}, by id {"am10k":128}; failures by kind {}
+oldsave1543: 0 failed

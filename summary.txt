@@ -1,0 +1,5 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+oldsave exit=0 10s | oldsave1543: 0 failed
+walk-ctl exit=1 15s | walk1543 (control nobadge): 1 failure
+oldsave-ctl exit=1 9s | oldsave1543: 1142 failed
+walk exit=0 70s | walk1543: green
