@@ -1,0 +1,6 @@
+sum-no6-head: SIM_SECTIONS=1,2,3,3b,4,5,7,8,9,10,11,12 node scripts/simUsCareerSummer.mjs
+sum-no6-base: R=$(pwd); git worktree add /tmp/b-s 1c7205d059cbcb380ebacaef99ba6751e8c641df > /dev/null 2>&1; ln -sfn $R/node_modules /tmp/b-s/node_modules; cd /tmp/b-s && SIM_SECTIONS=1,2,3,3b,4,5,7,8,9,10,11,12 node scripts/simUsCareerSummer.mjs
+sum6-nhl-head: SIM_SECTIONS=6 SIM_SPORTS=nhl node scripts/simUsCareerSummer.mjs
+sum6-nhl-base: R=$(pwd); git worktree add /tmp/b-s6h 1c7205d059cbcb380ebacaef99ba6751e8c641df > /dev/null 2>&1; ln -sfn $R/node_modules /tmp/b-s6h/node_modules; cd /tmp/b-s6h && SIM_SECTIONS=6 SIM_SPORTS=nhl node scripts/simUsCareerSummer.mjs
+sum6-mlb-head: SIM_SECTIONS=6 SIM_SPORTS=mlb node scripts/simUsCareerSummer.mjs
+sum6-mlb-base: R=$(pwd); git worktree add /tmp/b-s6m 1c7205d059cbcb380ebacaef99ba6751e8c641df > /dev/null 2>&1; ln -sfn $R/node_modules /tmp/b-s6m/node_modules; cd /tmp/b-s6m && SIM_SECTIONS=6 SIM_SPORTS=mlb node scripts/simUsCareerSummer.mjs
