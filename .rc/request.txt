@@ -1,0 +1,9 @@
+#!serial
+m-cutover: node .rc/x/mut1552.mjs cutover && node scripts/simTriviaBank.mjs; s=$?; git checkout -- src scripts; exit $s
+m-fourth: node .rc/x/mut1552.mjs fourth && node scripts/simTriviaBank.mjs; s=$?; git checkout -- src scripts; exit $s
+m-posopts: node .rc/x/mut1552.mjs posopts && node scripts/simTriviaBank.mjs; s=$?; git checkout -- src scripts; exit $s
+m-distract: node .rc/x/mut1552.mjs distract && node scripts/simTriviaBank.mjs; s=$?; git checkout -- src scripts; exit $s
+m-legacyclub: node .rc/x/mut1552.mjs legacyclub && node scripts/simTriviaBank.mjs; s=$?; git checkout -- src scripts; exit $s
+m-loose: node .rc/x/mut1552.mjs loose && node scripts/simTriviaBank.mjs; s=$?; git checkout -- src scripts; exit $s
+m-worthband: node .rc/x/mut1552.mjs worthband && node scripts/simTriviaBank.mjs; s=$?; git checkout -- src scripts; exit $s
+clean-after: git status --short src scripts | head -5; node scripts/simTriviaBank.mjs
