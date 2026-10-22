@@ -455,6 +455,13 @@ export function pitchPlan(input: PitchInput): PitchPlan {
   if (build) input.feed.forEach((e, order) => {
     if ((e.kind === 'corner' || e.kind === 'throwin') && e.side !== 'none') deadWindows.push({ from: placeOf(e), to: placeOf(e) + 2 * BEAT_SPAN, order, foul: false });
   });
+  /* Round 1521 review: a corner or a throw in in the minute before a chance is how the chance came about, and is drawn
+     as that. The man before the feeder already lies under every dead ball; the feeder (and with him the man before
+     him) is left out where he would cover one, so the corner's delivery is drawn and the shooter has it after it. */
+  if (build) {
+    const covering = new Set(layers.filter(l => l.via === 'approach' && l.id.startsWith('a') && deadWindows.some(w => l.start < w.to - EPS && w.from < l.end - EPS)).map(l => l.id.slice(1)));
+    for (let k = layers.length - 1; k >= 0; k--) if (layers[k].via === 'approach' && covering.has(layers[k].id.slice(1))) layers.splice(k, 1);
+  }
   /* ---- corners, throw ins and fouls, each staged from its own place ---- */
   const nearest = (side: PitchSide, spot: PitchPoint, skipKeeper: boolean): PitchFigure | null => {
     let best: PitchFigure | null = null;

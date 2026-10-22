@@ -97,8 +97,8 @@
  *   feederholds  a chance's feeder holds the pitch from a foul again               R11 (no foul hidden while its minute had room)
  *   pinoff       the man who fouled walks back into his shape during the free kick R11 (the man it names by the spot)
  *   facing       the man fouled is of the fouler's own line, not the one he faces  R11 (the line he faces)
- *   reducedlift  under reduced motion the ball travels between pictures, height    the ball leaves the grass (never under reduced motion)
- *                and all
+ *   reducedlift  under reduced motion the ball travels between pictures and a      the ball leaves the grass (never under reduced motion)
+ *                chance plays out, height and all (the travel alone moved nothing: the first run of it stayed green)
  * A control exits 1 when its test went red on an assertion, as it must, and 3 when it did anything else.
  *
  * THE BUNDLE SECTION (clean runs and cmimport): the part must stay a part. src/components/pitch-motion is
@@ -257,7 +257,10 @@ try {
     if (control === 'feederholds') scene = replace(scene, "const holds = (l: Layer) => l.priority >= 2 && l.via !== 'approach';", 'const holds = (l: Layer) => l.priority >= 2;');
     if (control === 'pinoff') scene = replace(scene, 'if (pinned && pin) { pinned.x = pin.x; pinned.y = pin.y; }', 'if (pinned && pin && false) { pinned.x = pin.x; pinned.y = pin.y; }');
     if (control === 'facing') scene = replace(scene, 'const facingMen = by ? outfield.filter(f => f.line === facing[by.line]) : [];', 'const facingMen = by ? outfield.filter(f => f.line === by.line) : [];');
-    if (control === 'reducedlift') motion = replace(motion, 'const base = reduced ? scene : between(', 'const base = false ? scene : between(');
+    if (control === 'reducedlift') {
+      motion = replace(motion, 'const base = reduced ? scene : between(', 'const base = false ? scene : between(');
+      motion = replace(motion, 'reduced ? 1.05 : clock - action.event.at', 'clock - action.event.at');
+    }
     const componentPath = path.join(folder, 'LiveSimMotion.tsx').replaceAll('\\', '/');
     viewer = replace(viewer, "import { LivePitchPlayer, useLiveSimMotion } from '@/components/club-manager/LiveSimMotion';", "import { LivePitchPlayer, useLiveSimMotion } from './LiveSimMotion';");
     viewer = replace(viewer, "import type { MotionEvent } from '@/components/club-manager/LiveSimMotion';", "import type { MotionEvent } from './LiveSimMotion';");

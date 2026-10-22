@@ -933,7 +933,7 @@ interface BuildArm { possessions: number; forward: number; level: number; back: 
 interface Tally1521 {
   passes: Record<'ground' | 'air' | 'cross' | 'throw' | 'placed', number>; liftedGround: number; flatAerial: number; landOffenders: number; passMetres: number[];
   shots: Record<'first' | 'second', number>; shotOffenders: number; shotExamples: string[];
-  fouls: number; atWhistle: number; cues: number; heldOn: number; heldOffenders: number; stayed: number; strayed: number; facingRead: number; facingOffenders: number; waited: number; cueOffenders: number; hidden: number; hiddenOffenders: number; named: number; contacts: number; contactOffenders: number;
+  fouls: number; atWhistle: number; cues: number; heldOn: number; heldOffenders: number; stayed: number; strayed: number; facingRead: number; facingOffenders: number; waited: number; cueOffenders: number; hidden: number; hiddenOffenders: number; hiddenBy: Record<string, number>; named: number; contacts: number; contactOffenders: number;
   cardLines: number; carded: number; cardOffenders: number; statFouls: number; statOffenders: number; foulExamples: string[];
   arms: Record<Arm1521, BuildArm>; pressGap: number[]; calmGap: number[]; chains: number; deepChains: number; chainOffenders: number; chainExamples: string[];
 }
@@ -941,7 +941,7 @@ const buildArm = (): BuildArm => ({ possessions: 0, forward: 0, level: 0, back: 
 const tally1521 = (): Tally1521 => ({
   passes: { ground: 0, air: 0, cross: 0, throw: 0, placed: 0 }, liftedGround: 0, flatAerial: 0, landOffenders: 0, passMetres: [],
   shots: { first: 0, second: 0 }, shotOffenders: 0, shotExamples: [],
-  fouls: 0, atWhistle: 0, cues: 0, heldOn: 0, heldOffenders: 0, stayed: 0, strayed: 0, facingRead: 0, facingOffenders: 0, waited: 0, cueOffenders: 0, hidden: 0, hiddenOffenders: 0, named: 0, contacts: 0, contactOffenders: 0,
+  fouls: 0, atWhistle: 0, cues: 0, heldOn: 0, heldOffenders: 0, stayed: 0, strayed: 0, facingRead: 0, facingOffenders: 0, waited: 0, cueOffenders: 0, hidden: 0, hiddenOffenders: 0, hiddenBy: {}, named: 0, contacts: 0, contactOffenders: 0,
   cardLines: 0, carded: 0, cardOffenders: 0, statFouls: 0, statOffenders: 0, foulExamples: [],
   arms: { defensive: buildArm(), balanced: buildArm(), attacking: buildArm() }, pressGap: [], calmGap: [], chains: 0, deepChains: 0, chainOffenders: 0, chainExamples: [],
 });
@@ -1069,6 +1069,12 @@ function replayFouls(t: Tally1521, input: PitchInput, plan: PitchPlan, live: Non
     t.fouls++;
     if (cued.has(order)) continue;
     t.hidden++;
+    /* What holds its minute, for the record (a foul may count under more than one): a chance being struck or what
+       follows it, a kick off, a corner or a throw in, another foul. */
+    const kinds: Record<string, string> = { c: 'a chance', q: 'a goal kick', h: 'a keeper with the ball', g: 'the kick off after a goal', k: 'a period kick off', f: 'a corner', d: 'a corner', t: 'a throw in', u: 'a throw in', w: 'another foul', x: 'another foul', y: 'another foul' };
+    const minuteOf = placeOfLine(e);
+    const by = new Set(plan.entries.filter(b => b.start < minuteOf + 1 - 1e-9 && minuteOf < b.end - 1e-9 && !(b.via === 'grid' || b.via === 'approach')).map(b => kinds[b.id[0]] ?? b.id[0]));
+    for (const k of by) t.hiddenBy[k] = (t.hiddenBy[k] ?? 0) + 1;
     /* Its reason: through the whole of its minute the pitch is held (a chance's shooter or what follows it, a kick
        off, another dead ball or another foul), so no beat of it was free for a whistle. Read off what is drawn, not
        off the rule: a beat is free when only open play, a chance's build up (the review of 2026-10-22: the feeder is
@@ -1562,7 +1568,7 @@ describe('Round 1521: the live match looks like football', () => {
   it('R11: every foul the plan stages is seen at its own place, on the right two men, with only the card the feed gave', () => {
     const m = buildMaterial();
     const fouls = totals1521(t => t.fouls), cues = totals1521(t => t.cues);
-    console.log(`[1521 R11] foul lines staged ${fouls}, with their cue ${cues} (${(cues / Math.max(1, fouls)).toFixed(3)}; per seed ${fixed(m.looks.map(t => t.cues / Math.max(1, t.fouls)), 3)}), of them waiting inside their minute ${totals1521(t => t.waited)}, held over their spot through the free kick ${totals1521(t => t.heldOn)} (offenders ${totals1521(t => t.heldOffenders)}; the man it names by the spot through it ${totals1521(t => t.stayed)}, away from it ${totals1521(t => t.strayed)}), the man fouled of the line the fouler faces: read ${totals1521(t => t.facingRead)}, offenders ${totals1521(t => t.facingOffenders)}, under a stretch that outranks them ${totals1521(t => t.hidden)}, with no such reason ${totals1521(t => t.hiddenOffenders)}; cue offenders ${totals1521(t => t.cueOffenders)}; named on the grass ${totals1521(t => t.named)}, meetings read ${totals1521(t => t.contacts)}, apart ${totals1521(t => t.contactOffenders)}; cards in the feed ${totals1521(t => t.cardLines)}, carded cues ${totals1521(t => t.carded)}, card offenders ${totals1521(t => t.cardOffenders)}; fouls the stats count ${totals1521(t => t.statFouls)} (at the whistle itself ${totals1521(t => t.atWhistle)}), halves where the feed and the stats differ ${totals1521(t => t.statOffenders)}${m.looks.flatMap(t => t.foulExamples).slice(0, 4).map(s => ` | ${s}`).join('')}`);
+    console.log(`[1521 R11] foul lines staged ${fouls}, with their cue ${cues} (${(cues / Math.max(1, fouls)).toFixed(3)}; per seed ${fixed(m.looks.map(t => t.cues / Math.max(1, t.fouls)), 3)}), of them waiting inside their minute ${totals1521(t => t.waited)}, held over their spot through the free kick ${totals1521(t => t.heldOn)} (offenders ${totals1521(t => t.heldOffenders)}; the man it names by the spot through it ${totals1521(t => t.stayed)}, away from it ${totals1521(t => t.strayed)}), the man fouled of the line the fouler faces: read ${totals1521(t => t.facingRead)}, offenders ${totals1521(t => t.facingOffenders)}, under a stretch that outranks them ${totals1521(t => t.hidden)} (their minute held by: ${Object.entries(m.looks.reduce((all, t) => { for (const [k, v] of Object.entries(t.hiddenBy)) all[k] = (all[k] ?? 0) + v; return all; }, {} as Record<string, number>)).sort((a, b) => b[1] - a[1]).map(([k, v]) => `${k} ${v}`).join(', ')}), with no such reason ${totals1521(t => t.hiddenOffenders)}; cue offenders ${totals1521(t => t.cueOffenders)}; named on the grass ${totals1521(t => t.named)}, meetings read ${totals1521(t => t.contacts)}, apart ${totals1521(t => t.contactOffenders)}; cards in the feed ${totals1521(t => t.cardLines)}, carded cues ${totals1521(t => t.carded)}, card offenders ${totals1521(t => t.cardOffenders)}; fouls the stats count ${totals1521(t => t.statFouls)} (at the whistle itself ${totals1521(t => t.atWhistle)}), halves where the feed and the stats differ ${totals1521(t => t.statOffenders)}${m.looks.flatMap(t => t.foulExamples).slice(0, 4).map(s => ` | ${s}`).join('')}`);
     expect(fouls).toBeGreaterThan(1500);
     /* Every foul whose minute has room is whistled on the grass (no hidden offender); the share that has room is what
        the chances leave, per seed over R11_CUED. */
