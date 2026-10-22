@@ -1,0 +1,41 @@
+CONTROL youthnoop applied: this run is meant to go red
+base 776d10722d
+1) The clubs for sale
+   the ceremony career: phase retirement_ceremony, 21 seasons, last 2014
+   at €49M: 0 clubs (tiers none)
+   at €60M: 2 clubs (tiers 44)
+   at €200M: 4 clubs (tiers 4433)
+   at €249M: 4 clubs (tiers 4433)
+   at €250M: 6 clubs (tiers 443322)
+   at €900M: 6 clubs (tiers 443322)
+   60 saves: 152 different clubs offered, 0 lists that moved between visits or drew Math.random
+   40 purchases: 0 not the club picked at its price, 0 that drew Math.random; a club not for sale buys nothing; no name buys Real Betis
+2) Every finish is the table's
+   640 owner seasons: 0 finishes the table did not produce, 55 titles, 83 promotions, 39 relegations; 630 in a named league, 278 of a verified size
+   30 seasons replayed under two Math.random streams: 0 came out different
+3) Each call moves what it says it moves (against placing nothing, same keyed seasons)
+   600 owner states, 6 seasons, each call where it is open:
+     squad    n 600  points  10.22  money   1.52  this season: points 5.00 money -1.97
+     youth    n 600  points   0.00  money   0.00  this season: points 0.00 money 0.00
+     stadium  n 600  points   0.00  money  11.33  this season: points 0.00 money -1.18
+     debt     n 580  points   4.80  money   7.21  this season: points 0.78 money 1.06
+  FAIL: Fund the academy adds 0.00 points over 6 seasons (need 4)
+  FAIL: Fund the academy adds 0.00M over 6 seasons (need 2)
+4) No dominant choice
+   the 580 states where all four calls are open, 6 seasons:
+     squad    n 580  points  10.24  money   1.55
+     youth    n 580  points   0.00  money   0.00
+     stadium  n 580  points   0.00  money  10.94
+     debt     n 580  points   4.80  money   7.21
+  FAIL: squad is never beaten by youth by a margin at 6 seasons (points -10.24, money -1.55): squad dominates youth
+  FAIL: stadium is never beaten by youth by a margin at 6 seasons (points 0.00, money -10.94): stadium dominates youth
+  FAIL: debt is never beaten by youth by a margin at 6 seasons (points -4.80, money -7.21): debt dominates youth
+   12 ordered pairs: every call is beaten by every other somewhere by 0.5 points or 0.3M
+    3 seasons: most points squad (8.82), most money stadium (3.69)
+    6 seasons: most points squad (10.24), most money stadium (10.94)
+   10 seasons: most points squad (10.94), most money stadium (20.80)
+5) An owner save from before this round plays on
+   12 old owner saves (base 776d1072): 12 load, keep their club and rows, and play on the table; 0 do not
+6) Careers that never buy a club are byte equal to the base
+   16 seeded careers, 790 states and draw counts compared (96 manager seasons among them): 0 careers differ from the base
+simSoccerOwnerTail: 5 failure(s)

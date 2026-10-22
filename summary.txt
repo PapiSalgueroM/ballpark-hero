@@ -1,0 +1,12 @@
+simSoccerOwnerTail exit=0 13s | simSoccerOwnerTail: green. The owner picks his club, plays on the table, and every call has a cost and a reason.
+ctl-randomclub exit=1 13s | simSoccerOwnerTail: 3 failure(s)
+ctl-mathrandom exit=1 13s | simSoccerOwnerTail: 4 failure(s)
+ctl-coin exit=1 13s | simSoccerOwnerTail: 1 failure(s)
+ctl-squadnoop exit=1 12s | simSoccerOwnerTail: 4 failure(s)
+ctl-youthnoop exit=1 12s | simSoccerOwnerTail: 5 failure(s)
+ctl-debtnoop exit=1 9s | simSoccerOwnerTail: 5 failure(s)
+ctl-stadiumnoop exit=1 12s | simSoccerOwnerTail: 4 failure(s)
+ctl-oldsave exit=1 9s | simSoccerOwnerTail: 1 failure(s)
+ctl-dominant exit=1 12s | simSoccerOwnerTail: 6 failure(s)
+ctl-drawshift exit=1 8s | simSoccerOwnerTail: 1 failure(s)
+tsc exit=0 93s | 
