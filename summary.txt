@@ -1,0 +1,15 @@
+tsc exit=0 73s | 
+vitest exit=0 91s |    Duration  90.17s (transform 1.91s, setup 845ms, collect 7.94s, tests 125.51s, environment 5.72s, prepare 1.46s)
+simTycoonSetPiece exit=0 9s | Tycoon set pieces: 8/8 selected sections pass
+retake-head exit=0 1s | this tree: 12 of 12 histories reproduce the committed hashes, 0 differ
+simAllPlayersValue exit=0 52s | simAllPlayersValue: green.
+simTycoonLoads exit=0 17s |    All eleven controls fired exactly where they should.
+simTycoonHelp exit=0 19s |    All 25 controls fired exactly where they should.
+simTycoonAwayMatchdays exit=0 64s |    All 6 controls fired exactly where they should, in node and in the real hook.
+simStadiumTycoon exit=0 0s | simStadiumTycoon: green. The turnstiles spin and the math holds.
+simTycoonRooms exit=0 130s |    All eleven controls fired exactly where they should.
+simAccessibility exit=0 0s | simAccessibility: all green
+simTrustCopy exit=0 1s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+simNoRivalNames exit=0 14s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 37s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simTycoonScorelines exit=0 275s | simTycoonScorelines: 25 checks, 0 failed [275 s]
