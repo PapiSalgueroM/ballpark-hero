@@ -1,0 +1,3 @@
+ctl-hook exit=1 1s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/tycoonBadgeTurns.test.tsx,title=src/test/tycoonBadgeTurns.test.tsx > Stadium Tycoon%3A badges and mile
+restore exit=0 0s | RESTORED
+turns-head exit=0 1s |    Duration  1.14s (transform 215ms, setup 68ms, collect 331ms, tests 38ms, environment 303ms, prepare 138ms)
