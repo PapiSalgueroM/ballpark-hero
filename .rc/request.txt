@@ -1,0 +1,4 @@
+simSoccerCareerLeagueWorld: node scripts/simSoccerCareerLeagueWorld.mjs
+simSoccerCareerPendingPopularity: node scripts/simSoccerCareerPendingPopularity.mjs
+simSoccerCareerSavedLoan: node scripts/simSoccerCareerSavedLoan.mjs
+simSoccerCurrency: node scripts/simSoccerCurrency.mjs
