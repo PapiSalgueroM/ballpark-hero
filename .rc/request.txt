@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+#!serial
+playUsRivalLines: node scripts/playUsRivalLines.mjs
