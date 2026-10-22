@@ -1,0 +1,5 @@
+#!build
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+rankem-copy: a=$(grep -rlF "career totals from the database" dist/assets | wc -l); b=$(grep -rlF "Every ranking is verified career totals, no opinions" dist/assets | wc -l); s=$(git grep -c "career totals from the database" HEAD -- src | wc -l); echo "rankem-copy: dist files with the old sentence $a, dist files with the new sentence $b, src files with the old sentence $s"; test "$a" = 0 && test "$b" -ge 1 && test "$s" = 0
+rankem-ctl: n=$(git show eab881e44:src/pages/RankEm.tsx | grep -cF "career totals from the database"); echo "rankem-ctl: the reviewed head eab881e44 carried the old sentence $n times"; test "$n" -ge 2
+simSeasonDue: node scripts/simSeasonDue.mjs
