@@ -1,0 +1,6 @@
+   reduce        loss  rm-mark:none/0.14 rm-score:none/1 rm-badge:none/1 rm-head:none/1
+   no-preference win   rm-mark:rmMark/0.14 rm-burst:rmBurst/0.9 rm-score:rmPop/0 rm-badge:rmPop/0 rm-head:rmRise/0
+   no-preference close rm-mark:rmMark/0.14 rm-score:rmPop/0 rm-badge:rmPop/0 rm-head:rmRise/0
+   no-preference loss  rm-mark:rmMark/0.14 rm-score:rmSettle/0 rm-badge:rmPop/0 rm-head:rmRise/0
+
+simResultMoment: green. Every live game reaches the shared result moment or is listed with what it draws instead, the pill shows exactly the score it is given, the three states say their own lines in 
