@@ -1,0 +1,10 @@
+#!serve
+#!playwright
+gmcareer: PLAY_GM_CAREER_OUT="$RC_OUT/gmc" node scripts/playGmCareer.mjs
+ctl-wipebutton: PLAY_GM_CAREER_CONTROL=wipebutton PLAY_GM_CAREER_WALKS=A PLAY_GM_CAREER_SIZE=390 node scripts/playGmCareer.mjs
+ctl-nofallback: PLAY_GM_CAREER_CONTROL=nofallback PLAY_GM_CAREER_WALKS=A PLAY_GM_CAREER_SIZE=390 node scripts/playGmCareer.mjs
+ctl-eagerpanel: PLAY_GM_CAREER_CONTROL=eagerpanel PLAY_GM_CAREER_WALKS=A PLAY_GM_CAREER_SIZE=390 node scripts/playGmCareer.mjs
+writessent: node scripts/simWritesAreSent.mjs
+resultmoment: node scripts/simResultMoment.mjs
+weight-head: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+weight-base: git worktree add /tmp/base 6d2d7a7d >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && node_modules/.bin/vite build > /tmp/base-build.log 2>&1) && (node scripts/lib/hostLikeServer.mjs /tmp/base/dist 4174 > /tmp/base-server.log 2>&1 &) && sleep 4 && cd /tmp/base && BASE=http://localhost:4174 SWEEP_BASE=http://localhost:4174 SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
