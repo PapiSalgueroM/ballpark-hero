@@ -19033,3 +19033,9 @@ This child only appends qualification notes to three docs. Publication and live 
 Root's `codex/home-discovery-1449` starts from mergedf8a7e7618c2c4ed6f504d0e860d75c759916ce59, with all5,185 physical starting source bodies checked. The candidate changes only the Home H1 values to Free sports games and four directly contradictory comments, retaining the header brand. Actual small-screen, signed-in and768-breakpoint fit is still required before any layout fix or qualification.
 
 Fresh remote measurement, generation, exact permitted-output review/adoption and final six-job qualification remain pending. Existing game/data/save code, old walks, shared CSS and all caps are held. I remains sole publisher. The earlier merged1447/1448 publish-ready handoff is separate; no1449 live, AdSense approval or legal completeness is claimed.
+
+## Round1449 authenticated header repair pending, 2026-10-22 UTC
+
+Generation39812401318 at a1cb4337721aaf47c3cdfb513c693ee2381ab6c9 passed all six remote jobs. The three PowerShell numeric-overload, array-shape and Boolean-guard port refusals remain preserved. After those narrow reader repairs, native measurement admission92be21da now passes with all eight native controls; it does not clear the real authenticated header layout defects or qualify the release.
+
+Before any layout adoption, the hash-bound native header check produced owned RED:16 of20 normal authenticated cases fail at320/328/390/768; four1280 cases pass. This child adopts the three-span Index header class/comment change: a reserved second chip row below xl and the fixed inline row at xl. Fresh ordinary verification is pending. Fresh ordinary generation, the same20-case check, unchanged HomeFold/no-shift checks and56 normal plus12 heading-arm pictures remain required. No1449 source qualification or live claim is made; I retains publication.

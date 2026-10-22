@@ -247,12 +247,12 @@ export default function Index() {
               simHomeCopy, so a typed figure here would be a second copy with
               no guard behind it.
 
-              The signed-in chips live in the h1's own row, whose height is
-              fixed, so auth resolving (or a streak arriving) moves nothing on
-              the page. playHomeFold section 4 plants a record and holds it. */}
+              The title reserves a second row for signed-in chips below xl,
+              including while auth is loading. At xl it keeps one fixed inline
+              row. Unchanged playHomeFold section 4 holds the no-shift check. */}
           <div className="pt-4 pb-3 md:flex md:items-end md:justify-between md:gap-8 md:pt-7 md:pb-6">
             <div className="min-w-0">
-              <div className="flex h-8 items-center gap-3 md:h-11">
+              <div className="grid grid-rows-[2rem_1.75rem] items-center gap-y-2 md:grid-rows-[2.75rem_1.75rem] xl:flex xl:h-11 xl:gap-3">
                 {/* Round 1449: the page's short descriptive headline. A literal
                     rather than an import, so the copy module stays out of the
                     chunk every page downloads; simHomeCopy part 7 holds it
@@ -574,8 +574,8 @@ function PollsWhenNear() {
   );
 }
 
-/** One signed-in stat in the title row. The unit words drop on a phone so
-    three chips fit beside the h1 without making the row any taller. */
+/** One signed-in stat, in the second row below xl and inline at xl.
+    Unit words drop on phones so all three chips keep their values visible. */
 function StatChip({ icon, label, value, unit }: { icon: ReactNode; label: string; value: string; unit?: string }) {
   return (
     <span className="inline-flex h-7 shrink-0 items-center gap-1 rounded-full border border-border bg-surface-1 px-2 text-xs text-muted-foreground">
