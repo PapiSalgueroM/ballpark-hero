@@ -1,0 +1,37 @@
+fixture: table mode table, unnamed slot 8, first meeting md 12; severe mode results
+ok   [base] 390x844 table: Season Centre opens on Arsenal (Arsenal · 2023/24)
+ok   [base] 390x844 table: kickoff table is shown with Arsenal in it
+ok   [base] 390x844 table: 38 fixtures, 19 opponents twice each, own club never an opponent
+ok   [luton] 390x844 table: Luton Town twice in the fixture list, no placeholder (Luton Town)
+ok   [luton] 390x844 table: review carries the membership note
+ok   [base] 390x844 table: save bytes unchanged
+ok   [base] 390x844 table: no horizontal overflow
+ok   [base] 390x844 table: no page errors
+ok   [base] 390x844 table: league game 12 score bug names Arsenal (Luton Town v Arsenal)
+ok   [luton] 390x844 table: league game 12 is Arsenal v Luton Town
+ok   [base] 390x844 table: the meeting keeps the derived score 1-1
+ok   [base] 390x844 table match: no page errors
+ok   [base] 390x844 severe: severe season stays results only with no table
+390x844 severe: 38 fixtures, Luton 2, placeholder 0
+ok   [luton] 390x844 severe: results season names Luton Town twice (the PR's severe arm)
+ok   [base] 390x844 severe: no page errors
+ok   [base] 1280x900 table: Season Centre opens on Arsenal (Arsenal · 2023/24)
+ok   [luton] 1280x900 table: kickoff table names Luton Town once and no placeholder
+ok   [base] 1280x900 table: kickoff table is shown with Arsenal in it
+ok   [base] 1280x900 table: 38 fixtures, 19 opponents twice each, own club never an opponent
+ok   [luton] 1280x900 table: Luton Town twice in the fixture list, no placeholder (Luton Town)
+ok   [luton] 1280x900 table: review carries the membership note
+ok   [luton] 1280x900 table: final table names Luton Town once and no placeholder
+ok   [base] 1280x900 table: save bytes unchanged
+ok   [base] 1280x900 table: no horizontal overflow
+ok   [base] 1280x900 table: no page errors
+ok   [base] 1280x900 table: league game 12 score bug names Arsenal (Luton Town v Arsenal)
+ok   [luton] 1280x900 table: league game 12 is Arsenal v Luton Town
+ok   [base] 1280x900 table: the meeting keeps the derived score 1-1
+ok   [base] 1280x900 table match: no page errors
+ok   [base] 1280x900 severe: severe season stays results only with no table
+1280x900 severe: 38 fixtures, Luton 2, placeholder 0
+ok   [luton] 1280x900 severe: results season names Luton Town twice (the PR's severe arm)
+ok   [base] 1280x900 severe: no page errors
+lutonWalk: luton checks 10/10, base checks 22/22
+lutonWalk: PASS 32 checks
