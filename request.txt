@@ -1,0 +1,7 @@
+#!serial
+ctl-hook: git show 03f56b56d:src/hooks/useStadiumTycoon.ts > src/hooks/useStadiumTycoon.ts && git diff --stat && node_modules/.bin/vitest run src/test/tycoonBadgeTurns.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src; exit $s
+restore: git diff --quiet && echo RESTORED
+turns-head: node_modules/.bin/vitest run src/test/tycoonBadgeTurns.test.tsx src/test/tycoonHelp.test.tsx src/test/idleFloaterTimers.test.tsx --testTimeout=300000 --hookTimeout=120000
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simTycoonHelp: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonHelp.mjs
+dashscan: n=$(git diff 03f56b56d HEAD | grep '^+' | LC_ALL=C.UTF-8 grep -cP '\x{2013}|\x{2014}'); c=$(printf 'a\xe2\x80\x94b\n' | LC_ALL=C.UTF-8 grep -cP '\x{2013}|\x{2014}'); m=$(git log --first-parent --format=%B 03f56b56d..HEAD | LC_ALL=C.UTF-8 grep -cP '\x{2013}|\x{2014}'); echo "added lines with a dash: $n, commit messages: $m, control (an em dash typed): $c"; [ "$n" = 0 ] && [ "$m" = 0 ] && [ "$c" = 1 ]

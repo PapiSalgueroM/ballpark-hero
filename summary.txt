@@ -1,0 +1,6 @@
+ctl-hook exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/tycoonBadgeTurns.test.tsx,title=src/test/tycoonBadgeTurns.test.tsx > Stadium Tycoon%3A badges and mile
+restore exit=0 0s | RESTORED
+turns-head exit=0 2s |    Duration  2.10s (transform 667ms, setup 234ms, collect 1.69s, tests 516ms, environment 1.16s, prepare 388ms)
+tsc exit=0 63s | 
+simTycoonHelp exit=0 17s |    All 25 controls fired exactly where they should.
+dashscan exit=0 0s | added lines with a dash: 0, commit messages: 0, control (an em dash typed): 1

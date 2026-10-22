@@ -1,0 +1,33 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/tycoonBadgeTurns.test.tsx[2m > [22m[2mStadium Tycoon: badges and milestones that land together[2m > [22m[2m1 every milestone and badge of one tick gets its own moment on the pitch, and no frame draws two on one spot
+[22m[39mTURNS| 3 milestones and 2 badges in one tick, first shown at 0 ms, 1904 ms, 3808 ms, 5712 ms, 7616 ms
+
+[90mstdout[2m | src/test/tycoonBadgeTurns.test.tsx[2m > [22m[2mStadium Tycoon: badges and milestones that land together[2m > [22m[2m2 the badge line names every badge of that tick, one at a time, in order, then clears
+[22m[39mTURNS| the badge line said 🏁 35 career wins, then ⚽ 75 goals
+
+ [32m✓[39m src/test/tycoonBadgeTurns.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[32m 49[2mms[22m[39m
+ [32m✓[39m src/test/idleFloaterTimers.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[32m 24[2mms[22m[39m
+[90mstdout[2m | src/test/tycoonHelp.test.tsx[2m > [22m[2mStadium Tycoon tells the truth[2m > [22m[2m1 every tap floater prints fmtMoney of the money the tap really added, from a dollar to trillions
+[22m[39mHELP| 1196 taps across 13 clubs printed exactly fmtMoney of what they added, covering plain, K, M, B, T
+
+[90mstdout[2m | src/test/tycoonHelp.test.tsx[2m > [22m[2mStadium Tycoon tells the truth[2m > [22m[2m2 goal, win, milestone and promotion floaters print fmtMoney of the event that paid them
+[22m[39mHELP| 553 paying events (milestone, goal, win) each had a floater printing fmtMoney of its amount
+
+[90mstdout[2m | src/test/tycoonHelp.test.tsx[2m > [22m[2mStadium Tycoon tells the truth[2m > [22m[2m3 the rules open before first play and close with Let's go
+[22m[39mHELP| a fresh visitor saw the rules first, and Let's go closed them
+
+[90mstdout[2m | src/test/tycoonHelp.test.tsx[2m > [22m[2mStadium Tycoon tells the truth[2m > [22m[2m4 the rules stay closed for a player who already has a save
+[22m[39mHELP| a returning player went straight to the game, and How it works reopens the rules with a named close button
+
+[90mstdout[2m | src/test/tycoonHelp.test.tsx[2m > [22m[2mStadium Tycoon tells the truth[2m > [22m[2m5 the keyboard tap button pays exactly one tap
+[22m[39mHELP| the keyboard tap button ("Tap the stadium for $3") paid one tap
+
+ [32m✓[39m src/test/tycoonHelp.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 442[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[32m9 passed[39m[22m[90m (9)[39m
+[2m   Start at [22m 20:30:20
+[2m   Duration [22m 2.10s[2m (transform 667ms, setup 234ms, collect 1.69s, tests 516ms, environment 1.16s, prepare 388ms)[22m
+

@@ -1,0 +1,68 @@
+ src/hooks/useStadiumTycoon.ts | 52 +++++++------------------------------------
+ 1 file changed, 8 insertions(+), 44 deletions(-)
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/tycoonBadgeTurns.test.tsx [2m([22m[2m2 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[32m 45[2mms[22m[39m
+[31m   [31m×[31m Stadium Tycoon: badges and milestones that land together[2m > [22m1 every milestone and badge of one tick gets its own moment on the pitch, and no frame draws two on one spot[39m[32m 39[2mms[22m[39m
+[31m     → two floaters share a spot: "🏁 8 wins +$3000" at y 30 and "🏁 35 wins +$30.0K" at y 30, 0 ms after the tick; "🏁 8 wins +$3000" at y 30 and "🏁 10 goals scored +$4000" at y 30, 0 ms after the tick; "🏁 8 wins +$3000" at y 30 and "🏁 35 career wins: +2% forever" at y 36, 0 ms after the tick; "🏁 8 wins +$3000" at y 30 and "⚽ 75 goals: +2% forever" at y 36, 0 ms after the tick: expected [ …(4) ] to deeply equal [][39m
+[31m   [31m×[31m Stadium Tycoon: badges and milestones that land together[2m > [22m2 the badge line names every badge of that tick, one at a time, in order, then clears[39m[32m 4[2mms[22m[39m
+[31m     → the badge line did not name each badge of the tick in turn: expected [ '⚽ 75 goals' ] to deeply equal [ '🏁 35 career wins', '⚽ 75 goals' ][39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/tycoonBadgeTurns.test.tsx[2m > [22mStadium Tycoon: badges and milestones that land together[2m > [22m1 every milestone and badge of one tick gets its own moment on the pitch, and no frame draws two on one spot
+[31m[1mAssertionError[22m: two floaters share a spot: "🏁 8 wins +$3000" at y 30 and "🏁 35 wins +$30.0K" at y 30, 0 ms after the tick; "🏁 8 wins +$3000" at y 30 and "🏁 10 goals scored +$4000" at y 30, 0 ms after the tick; "🏁 8 wins +$3000" at y 30 and "🏁 35 career wins: +2% forever" at y 36, 0 ms after the tick; "🏁 8 wins +$3000" at y 30 and "⚽ 75 goals: +2% forever" at y 36, 0 ms after the tick: expected [ …(4) ] to deeply equal [][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- [][39m
+[31m+ [[39m
+[31m+   "\"🏁 8 wins +$3000\" at y 30 and \"🏁 35 wins +$30.0K\" at y 30, 0 ms after the tick",[39m
+[31m+   "\"🏁 8 wins +$3000\" at y 30 and \"🏁 10 goals scored +$4000\" at y 30, 0 ms after the tick",[39m
+[31m+   "\"🏁 8 wins +$3000\" at y 30 and \"🏁 35 career wins: +2% forever\" at y 36, 0 ms after the tick",[39m
+[31m+   "\"🏁 8 wins +$3000\" at y 30 and \"⚽ 75 goals: +2% forever\" at y 36, 0 ms after the tick",[39m
+[31m+ ][39m
+
+[36m [2m❯[22m src/test/tycoonBadgeTurns.test.tsx:[2m132:73[22m[39m
+    [90m130| [39m      }
+    [90m131| [39m    }
+    [90m132| [39m    expect(clashes, `two floaters share a spot: ${clashes.join('; ')}`…
+    [90m   | [39m                                                                        [31m^[39m
+    [90m133| [39m    [35mconst[39m missing [33m=[39m owed[33m.[39m[34mfilter[39m(o [33m=>[39m [33m![39mfirstSeen[33m.[39m[34mhas[39m(o))[33m;[39m
+    [90m134| [39m    expect(missing, `no floater within ${framesNeeded} frames for ${mi…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/tycoonBadgeTurns.test.tsx[2m > [22mStadium Tycoon: badges and milestones that land together[2m > [22m2 the badge line names every badge of that tick, one at a time, in order, then clears
+[31m[1mAssertionError[22m: the badge line did not name each badge of the tick in turn: expected [ '⚽ 75 goals' ] to deeply equal [ '🏁 35 career wins', '⚽ 75 goals' ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  [[22m
+[32m-   "🏁 35 career wins",[39m
+[2m    "⚽ 75 goals",[22m
+[2m  ][22m
+
+[36m [2m❯[22m src/test/tycoonBadgeTurns.test.tsx:[2m146:80[22m[39m
+    [90m144| [39m      [34mact[39m(() [33m=>[39m { [34mg[39m()[33m.[39m[34mdismissBadge[39m()[33m;[39m })[33m;[39m
+    [90m145| [39m    }
+    [90m146| [39m    expect(said, 'the badge line did not name each badge of the tick i…
+    [90m   | [39m                                                                               [31m^[39m
+    [90m147| [39m    expect(g().badge, 'the badge line stayed after its last badge').to…
+    [90m148| [39m    console[33m.[39m[34mlog[39m([32m`TURNS| the badge line said [39m[36m${[39msaid[33m.[39m[34mjoin[39m([32m', then '[39m)[36m}[39m[32m`[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[90m (2)[39m
+[2m   Start at [22m 20:30:17
+[2m   Duration [22m 1.04s[2m (transform 206ms, setup 59ms, collect 301ms, tests 45ms, environment 264ms, prepare 114ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/tycoonBadgeTurns.test.tsx,title=src/test/tycoonBadgeTurns.test.tsx > Stadium Tycoon%3A badges and milestones that land together > 1 every milestone and badge of one tick gets its own moment on the pitch%2C and no frame draws two on one spot,line=132,column=73::AssertionError: two floaters share a spot: "🏁 8 wins +$3000" at y 30 and "🏁 35 wins +$30.0K" at y 30, 0 ms after the tick; "🏁 8 wins +$3000" at y 30 and "🏁 10 goals scored +$4000" at y 30, 0 ms after the tick; "🏁 8 wins +$3000" at y 30 and "🏁 35 career wins: +2%25 forever" at y 36, 0 ms after the tick; "🏁 8 wins +$3000" at y 30 and "⚽ 75 goals: +2%25 forever" at y 36, 0 ms after the tick: expected [ …(4) ] to deeply equal []%0A%0A- Expected%0A+ Received%0A%0A- []%0A+ [%0A+   "\"🏁 8 wins +$3000\" at y 30 and \"🏁 35 wins +$30.0K\" at y 30, 0 ms after the tick",%0A+   "\"🏁 8 wins +$3000\" at y 30 and \"🏁 10 goals scored +$4000\" at y 30, 0 ms after the tick",%0A+   "\"🏁 8 wins +$3000\" at y 30 and \"🏁 35 career wins: +2%25 forever\" at y 36, 0 ms after the tick",%0A+   "\"🏁 8 wins +$3000\" at y 30 and \"⚽ 75 goals: +2%25 forever\" at y 36, 0 ms after the tick",%0A+ ]%0A%0A ❯ src/test/tycoonBadgeTurns.test.tsx:132:73%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/tycoonBadgeTurns.test.tsx,title=src/test/tycoonBadgeTurns.test.tsx > Stadium Tycoon%3A badges and milestones that land together > 2 the badge line names every badge of that tick%2C one at a time%2C in order%2C then clears,line=146,column=80::AssertionError: the badge line did not name each badge of the tick in turn: expected [ '⚽ 75 goals' ] to deeply equal [ '🏁 35 career wins', '⚽ 75 goals' ]%0A%0A- Expected%0A+ Received%0A%0A  [%0A-   "🏁 35 career wins",%0A    "⚽ 75 goals",%0A  ]%0A%0A ❯ src/test/tycoonBadgeTurns.test.tsx:146:80%0A%0A
