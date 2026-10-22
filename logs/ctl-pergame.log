@@ -1,0 +1,57 @@
+CONTROL pergame ON: the lib is a mutated temp copy
+1) the wheel holds exactly the seven challenges the record can total
+   7 challenges, all 400 spins scoreable
+2) every team the game deals has franchise codes
+  FAIL (section 2): a St. Louis only career on the Atlanta pool gives 1500, want 15
+   30 teams, 50 codes, none shared; 4 relocated franchises carry their old codes
+3) fixed fives against hand computed numbers
+  FAIL (section 3): five A total: got 9100, hand computed 96
+  FAIL (section 3): best five total: got 10750, hand computed 119.5
+  FAIL (section 3): worst five total: got 280, hand computed 5.5
+  FAIL (section 3): five A score, (96.0 - 5.5) / (119.5 - 5.5) = 0.794: got 84, hand computed 79
+  FAIL (section 3): five B total: got 1490, hand computed 16.5
+  FAIL (section 3): five B score, (16.5 - 5.5) / 114 = 0.096: got 12, hand computed 10
+  FAIL (section 3): Oath at PF, best forward on the Heat: got 1950, hand computed 19.5
+   five A 9100 scores 84, five B 1490 scores 12, best 10750, worst 280
+4) Lowest turns the range round
+  FAIL (section 4): five A on a Lowest spin scored 16, hand computed (119.5 - 96.0) / 114 = 21
+  FAIL (section 4): the best Lowest five totals 280, hand computed 5.5
+  FAIL (section 4): Lowest Fixture Ace: best here 30, worst 2500, closeness 0; hand computed 0.5, 25, 0
+  FAIL (section 4): Lowest Fixture Oath: best here 40, worst 1950, closeness 1; hand computed 2, 19.5, 1
+   five A: highest 84, lowest 16; 10 Lowest picks read best here and closeness the right way round; 40 random fives, highest plus lowest within 0 of 100
+5) separation over 300 seeded deals of real looking careers
+   300 deals: best five 100 and worst 0 on 300; random fives average 51.0 over 300
+   the old judge on the same careers: best five average 99.0, worst five 99.0, same band on 300 of 300
+6) the best and worst five equal a brute force over every five
+  FAIL (section 6): the shared name trap: optimizer found 10000, the best five is 30 + 10 + 10 + 10 + 40 = 100
+   120 extremes on 60 deals (27 with a shared name) and 360 on correlated deals match the brute force; the shared name trap totals 10000
+7) the namesake guard
+  FAIL (section 7): Fixture Accent: got 1000, expected 10
+  FAIL (section 7): Fixture O'Dell: got 1000, expected 10
+  FAIL (section 7): Fixture Plain: got 1234, expected 12.3
+  FAIL (section 7): Fixture Solo, on one search row: got 1000, expected 10
+  FAIL (section 7): Fixture Long, 25 seasons: got 10000, expected 10
+  FAIL (section 7): Fixture Long, 23 seasons, the longest real one: got 10000, expected 10
+  FAIL (section 7): Fixture Long, no last season on the row: got 10000, expected 10
+   7 roster names, 8 census and span cases and 5 illegal fives behave
+8) steals and blocks only count careers that began in 1973-74 or later
+  FAIL (section 8): year_from 1973-74 on spg: got 150, expected 1.5
+  FAIL (section 8): year_from 1973-74 on bpg: got 80, expected 0.8
+  FAIL (section 8): year_from 1974 on spg: got 150, expected 1.5
+  FAIL (section 8): year_from 1966-67 on ppg: got 500, expected 5
+  FAIL (section 8): year_from null on ppg: got 500, expected 5
+   9 cases
+9) per game rounds to one decimal, totals stay whole, nothing is invented
+  FAIL (section 9): ppg: got 2049, expected 20.5
+  FAIL (section 9): ppg: got 2044, expected 20.4
+   7 cases
+10) source: no model, no edge function, no NBA offline judge, points follow the score
+   hook and page call no model or edge function; the completion records the score
+11) every refusal names the player and carries no dash
+   28 refusals
+12) points are the score on the old 500 scale, and the hit mark is NBA Stat Line's
+   6 cases; hit mark 90, Stat Line's 90
+13) the hook's half: each pool is the dealt team's own search rows, and the five is scored in the spin's direction
+   fixture five: highest 33, lowest 67; 11 hook checks; reads 11
+
+simNbaStartingFive CONTROL pergame FIRED: section 3 went red as it must (red sections: 2, 3, 4, 6, 7, 8, 9)

@@ -1,0 +1,17 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/xiSelectionHistoryRace.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[32m 63[2mms[22m[39m
+ [32m✓[39m src/test/lineupValidatorClient.test.tsx [2m([22m[2m55 tests[22m[2m)[22m[32m 238[2mms[22m[39m
+ [32m✓[39m src/test/lineupBuilderHistoryRead.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 56[2mms[22m[39m
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/nbaCourtSelection.test.tsx [2m([22m[2m14 tests[22m[2m)[22m[33m 1015[2mms[22m[39m
+ [32m✓[39m src/test/nbaCourtRecap1517.test.tsx [2m([22m[2m19 tests[22m[2m)[22m[33m 477[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m5 passed[39m[22m[90m (5)[39m
+[2m      Tests [22m [1m[32m99 passed[39m[22m[90m (99)[39m
+[2m   Start at [22m 19:42:35
+[2m   Duration [22m 5.02s[2m (transform 2.81s, setup 432ms, collect 5.64s, tests 1.85s, environment 2.29s, prepare 538ms)[22m
+
