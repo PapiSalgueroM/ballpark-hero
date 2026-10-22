@@ -1,0 +1,7 @@
+mutA exit=1 11s | MUT-A harness=1 probe=1
+mutB exit=1 10s | MUT-B harness=1 probe=1
+mutC exit=1 3s | MUT-C harness=1
+mutD exit=1 3s | MUT-D harness=1
+mutF exit=1 9s | MUT-F harness=1 probe=1
+probe-head exit=0 6s | PROBE-HEAD exit=0
+clean exit=0 0s | tree after mutations: 0 changed paths
