@@ -1,0 +1,117 @@
+   [control godmode applied]
+simFightCareer
+   260 careers per policy, deterministic seeds, CONTROL=godmode
+1) no policy dominates the others
+   legacy: aggressive 99.7, balanced 98.4, cautious 14.2   best: aggressive
+   longevity: aggressive 28.5, balanced 29.9, cautious 42.3   best: cautious
+   money: aggressive 82.8, balanced 42.7, cautious 4.1   best: aggressive
+   ok   no policy wins every dimension (legacy to aggressive, longevity to cautious, money to aggressive)
+   for reference, a career managed sensibly: legacy 99.2, 31.7 fights, 100.0% won a title
+   ok   the choice matters: money varies 1902% across policies (floor 50%)
+   damage per fight: aggressive 2.92, cautious 1.49
+   ok   an aggressive night costs 1.96x a cautious one
+2) accumulated damage shortens a career
+   damage per fight: lightest quartile 1.44, heaviest 3.06
+   retirement age: heaviest quartile 30.5, lightest 35.3
+   ok   the hardest road retires 4.8 years earlier (margin 0.8)
+3) a world title is reachable, and not a given
+   257 of 260 balanced careers won a world title (98.8%)
+   ok   the title is winnable, 98.8% of careers
+   FAIL a title is nearly automatic at 98.8%, so winning one means nothing
+   ignoring style entirely: 85.0% won a title
+   ok   reading the fight beats ignoring it (98.8% vs 85.0%)
+4) a year of dailies is winnable and holds its difficulty target
+   rating gap between the two fighters: mean 1.7, p90 4.0
+   playing the style correctly: won 293 of 365, mean score 60.2
+   ok   daily difficulty target holds, p90 gap 4.0 (band 22)
+   ok   293 of 365 dailies won playing the style right
+   ok   the daily is not a gift, mean score 60.2
+5) reading the opponent style beats guessing
+   same fighter, same seed: reading the style wins 78.4%, guessing wins 50.9%
+   ok   reading the style is worth 27.6 points (margin 6)
+6) the condition bars tell the truth about the fight, for every kind of player
+   [random] 4000 bouts from real careers, the player won 67.3%, 12.5 punches landed per man per round
+   [random] 2655 decisions: winner ends 26.6 on average, loser 14.5; loser p10 11, p25 12, p50 14, p75 17, p90 19
+   [random] decision losers on the floor 0 (0.0%), within 4 of it 904 (34.0%), both men on it 0 (0.00%)
+   FAIL [random] these bouts land 12.5 punches a round, outside the 5 to 10 the real game produces, so the bars below are calibrated against a population no player meets
+   ok   [random] every one of the 1133 stopped men ends on an empty bar
+   ok   [random] nobody on his feet reads empty, on any round of any bout
+   ok   [random] condition never rises, across every round of every bout
+   ok   [random] the bar agrees with the cards in 91.6% of 2655 decisions (floor 80)
+   ok   [random] 0.0% of decision losers end on the floor (ceiling 8%)
+   ok   [random] both men end on the floor in 0.00% of decisions (ceiling 1%)
+   [strong] 4000 bouts from real careers, the player won 83.5%, 12.6 punches landed per man per round
+   [strong] 2583 decisions: winner ends 26.5 on average, loser 11.8; loser p10 9, p25 10, p50 11, p75 13, p90 15
+   [strong] decision losers on the floor 7 (0.3%), within 4 of it 1797 (69.6%), both men on it 0 (0.00%)
+   FAIL [strong] these bouts land 12.6 punches a round, outside the 5 to 10 the real game produces, so the bars below are calibrated against a population no player meets
+   ok   [strong] every one of the 1386 stopped men ends on an empty bar
+   ok   [strong] nobody on his feet reads empty, on any round of any bout
+   ok   [strong] condition never rises, across every round of every bout
+   ok   [strong] the bar agrees with the cards in 96.7% of 2583 decisions (floor 80)
+   ok   [strong] 0.3% of decision losers end on the floor (ceiling 8%)
+   ok   [strong] both men end on the floor in 0.00% of decisions (ceiling 1%)
+   [stubborn] 4000 bouts from real careers, the player won 60.6%, 12.5 punches landed per man per round
+   [stubborn] 2592 decisions: winner ends 27.0 on average, loser 14.8; loser p10 11, p25 12, p50 14, p75 17, p90 19
+   [stubborn] decision losers on the floor 0 (0.0%), within 4 of it 796 (30.7%), both men on it 0 (0.00%)
+   FAIL [stubborn] these bouts land 12.5 punches a round, outside the 5 to 10 the real game produces, so the bars below are calibrated against a population no player meets
+   ok   [stubborn] every one of the 1150 stopped men ends on an empty bar
+   ok   [stubborn] nobody on his feet reads empty, on any round of any bout
+   ok   [stubborn] condition never rises, across every round of every bout
+   ok   [stubborn] the bar agrees with the cards in 88.3% of 2592 decisions (floor 80)
+   ok   [stubborn] 0.0% of decision losers end on the floor (ceiling 8%)
+   ok   [stubborn] both men end on the floor in 0.00% of decisions (ceiling 1%)
+   [weak] 1823 bouts from real careers, the player won 27.8%, 12.7 punches landed per man per round
+   [weak] 1340 decisions: winner ends 25.1 on average, loser 15.6; loser p10 11, p25 12, p50 14, p75 18, p90 22
+   [weak] decision losers on the floor 0 (0.0%), within 4 of it 391 (29.2%), both men on it 0 (0.00%)
+   FAIL [weak] these bouts land 12.7 punches a round, outside the 5 to 10 the real game produces, so the bars below are calibrated against a population no player meets
+   ok   [weak] every one of the 382 stopped men ends on an empty bar
+   ok   [weak] nobody on his feet reads empty, on any round of any bout
+   ok   [weak] condition never rises, across every round of every bout
+   ok   [weak] the bar agrees with the cards in 95.3% of 1340 decisions (floor 80)
+   ok   [weak] 0.0% of decision losers end on the floor (ceiling 8%)
+   ok   [weak] both men end on the floor in 0.00% of decisions (ceiling 1%)
+7a) neutral answers leave every fight where it was
+   aggressive: 0 of 260 careers differ; title rate 100.0% base, 100.0% with the life layer; median fights 29 and 29
+   cautious: 0 of 260 careers differ; title rate 0.0% base, 0.0% with the life layer; median fights 42 and 42
+   balanced: 0 of 260 careers differ; title rate 98.8% base, 98.8% with the life layer; median fights 30 and 30
+   adaptive: 0 of 260 careers differ; title rate 100.0% base, 100.0% with the life layer; median fights 32 and 32
+   ok   all 1040 careers identical, fight for fight, across four policies
+   FAIL seed group 1000: the base engine reads 260 titled careers and 32 median fights, recorded 55 and 29
+   FAIL seed group 1000: with the life layer 260 titled careers and 32 median fights, outside the recorded spread 40 to 59 and 28 to 29
+   FAIL seed group 21000: the base engine reads 258 titled careers and 32 median fights, recorded 45 and 28
+   FAIL seed group 21000: with the life layer 258 titled careers and 32 median fights, outside the recorded spread 40 to 59 and 28 to 29
+   FAIL seed group 41000: the base engine reads 259 titled careers and 32 median fights, recorded 55 and 29
+   FAIL seed group 41000: with the life layer 259 titled careers and 32 median fights, outside the recorded spread 40 to 59 and 28 to 29
+   FAIL seed group 61000: the base engine reads 256 titled careers and 32 median fights, recorded 59 and 29
+   FAIL seed group 61000: with the life layer 256 titled careers and 32 median fights, outside the recorded spread 40 to 59 and 28 to 29
+   FAIL seed group 81000: the base engine reads 258 titled careers and 32 median fights, recorded 40 and 29
+   FAIL seed group 81000: with the life layer 258 titled careers and 32 median fights, outside the recorded spread 40 to 59 and 28 to 29
+   adaptive over five seed groups of 260: titled careers 260, 258, 259, 256, 258; median fights 32, 32, 32, 32, 32
+7b) there is a life between fights
+   ok   median 5 decisions between fights over 8245 gaps (floor 4; tenth percentile 4, mean 4.95)
+7c) every button does what its words say
+   ok   121 options across 40 cards, 6 rival choices and 11 rival beats: words, numbers and state agree; 29 texts each carry a neutral reply
+7d) a reload comes back to the same card
+   ok   3456 steps reloaded to the same card and the same answer, none dealt inside its cooldown
+7e) every level of every ladder does something
+   strength on power: 52, 53, 55, 57 after twelve camps at levels 0 to 3
+   roadwork on stamina: 52, 53, 55, 57 after twelve camps at levels 0 to 3
+   padman on defence: 52, 53, 54, 56 after twelve camps at levels 0 to 3
+   padman on speed: 52, 53, 54, 56 after twelve camps at levels 0 to 3
+   puncher's coach: power 55 against 52, defence 50 against 52
+   punches landed over 120 debuts at sharpness -4, -2, 0, 2, 4: 17128, 17305, 17524, 17524, 17524
+   FAIL sharpness 2 landed 17524 punches, the step below landed 17524
+   FAIL sharpness 4 landed 17524 punches, the step below landed 17524
+   cut man: 3.938, 3.78, 3.62, 3.47 damage from the same fight at levels 0 to 3
+7f) a save from before the round opens and plays on
+   ok   an old save keeps its fighter and record, gets a default corner, and fights the same fights on; corrupt blocks reset alone
+7g) what a fight does to the life, and what it leaves behind
+   6 purse options walked into a class move
+   3 manager promises read off the tiles and paid
+   64 text replies read back from their words
+   FAIL the grudge walks saw 6 wins and 0 losses, both are needed
+   FAIL badge fb-ten-wins was earned by 40 and missed by 0 of 40 careers, so the check cannot tell
+   FAIL badge fb-champion was earned by 40 and missed by 0 of 40 careers, so the check cannot tell
+   FAIL badge fb-busy-life was earned by 40 and missed by 0 of 40 careers, so the check cannot tell
+   40 careers, 68 grudge fights, badges earned/missed: first-win 40/0, ten-wins 40/0, ten-kos 11/29, unbeaten 0/40, champion 40/0, rival 31/9, long-road 27/13, busy-life 40/0
+simFightCareer: 21 failure(s)

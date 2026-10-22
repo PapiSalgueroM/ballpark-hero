@@ -1,0 +1,33 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+ids: node scripts/simFightIds.mjs
+ids-base: git worktree add /tmp/base e3deb2cb && FIGHT_IDS_BASE_DIR=/tmp/base node scripts/simFightIds.mjs
+ids-counter: FIGHT_IDS_CONTROL=counter node scripts/simFightIds.mjs
+ids-norepair: FIGHT_IDS_CONTROL=norepair node scripts/simFightIds.mjs
+ids-noclass: FIGHT_IDS_CONTROL=noclass node scripts/simFightIds.mjs
+ids-drawid: FIGHT_IDS_CONTROL=drawid node scripts/simFightIds.mjs
+ids-startone: FIGHT_IDS_CONTROL=startone node scripts/simFightIds.mjs
+retire: node scripts/simFightCareerRetire.mjs
+retire-s21000: RETIRE_SEED0=21000 node scripts/simFightCareerRetire.mjs
+retire-s33000-480: RETIRE_SEED0=33000 RETIRE_CAREERS=480 node scripts/simFightCareerRetire.mjs
+retire-nogate: RETIRE_CONTROL=nogate node scripts/simFightCareerRetire.mjs
+retire-keepcards: RETIRE_CONTROL=keepcards node scripts/simFightCareerRetire.mjs
+retire-twice: RETIRE_CONTROL=twice node scripts/simFightCareerRetire.mjs
+retire-cleanrecord: RETIRE_CONTROL=cleanrecord node scripts/simFightCareerRetire.mjs
+fightcareer: node scripts/simFightCareer.mjs
+fightcareer-godmode: FIGHT_CONTROL=godmode node scripts/simFightCareer.mjs
+gym: node scripts/simFightGym.mjs
+gym-seed1: GYM_SELL_SEED=1 GYM_CAMP_SEED=1 node scripts/simFightGym.mjs
+promoter: node scripts/simFightPromoter.mjs
+promoter-seed1: PROMO_HAND_SEED=1 node scripts/simFightPromoter.mjs
+vitest: node_modules/.bin/vitest run src/test/fightCareerRetireBoard.test.tsx src/lib/fightGym.test.ts src/lib/fightPromoter.test.ts src/lib/fightCareerLife.test.ts src/test/boxingShowForecast.test.tsx src/test/fightCareerLifeBoard.test.tsx src/test/fightCareerRingPlayback.test.tsx --testTimeout=300000 --hookTimeout=120000
+anchors: node scripts/simHarnessAnchors.mjs
+completiononce: node scripts/simCompletionOnce.mjs
+nodoublerecord: node scripts/simNoDoubleRecord.mjs
+guideheadings: node scripts/simGuideHeadings.mjs
+sitesearch: node scripts/simSiteSearch.mjs
+norival: node scripts/simNoRivalNames.mjs
+inventednames: node scripts/simInventedNames.mjs
+noquotes: node scripts/simNoInventedQuotes.mjs
+livescores: node scripts/simLiveScores.mjs
+completionslugs: node scripts/simCompletionSlugs.mjs
+trustcopy: node scripts/simTrustCopy.mjs
