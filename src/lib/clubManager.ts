@@ -4759,7 +4759,7 @@ function capped(key: string, c: NationCount, clubs: number, men: number): Nation
   if (!cap || !away) return c;
   const share = (clubs * (cap[0] - cap[1]) - c.home) / Math.max(1, clubs * cap[0] - men);
   if (share * c.known <= c.home) return c;
-  return share >= 1 ? { ...c, home: c.known } : { ...c, known: away / (1 - share), home: away / (1 - share) - away };
+  return share >= 1 ? { known: c.home, home: c.home, abroad: [] } : { ...c, known: away / (1 - share), home: away / (1 - share) - away };
 }
 
 /** The real count behind a place. Undefined while the world's squads have not arrived. */

@@ -263,9 +263,12 @@ console.log("2c) A league that caps its imports: its squads, real and made up me
     for (let i = 0; i < DRAWS; i += 1) if (m.cm.madeUpNationAt(`Cap Probe ${league} ${i}`, { league, home }, 'now') === home) drawnHome += 1;
     const drawn = drawnHome / DRAWS, slots = Math.max(0, clubs * squad - men), seats = clubs * squad;
     const share = (homeMen + drawn * slots) / seats, floor = (squad - most) / squad;
+    /* Where the real men alone already pass the cap (a green card holder is an MLS domestic player but keeps his
+       country), the made up men can only all be home: the floor asked is what they can reach. */
+    const reach = Math.min(floor, (homeMen + slots) / seats);
     const se = Math.sqrt(Math.max(drawn * (1 - drawn), 0.0025) / DRAWS) * slots / seats;
-    console.log(`   ${league.padEnd(8)} ${home.padEnd(14)} ${clubs} clubs, ${men} real men (${homeMen} home); made up men drawn home ${(drawn * 100).toFixed(1)}%; squads home ${(share * 100).toFixed(1)}% against the cap's floor ${(floor * 100).toFixed(1)}%`);
-    if (share < floor - 4 * se) fail(`${league} (${home}): its squads are ${(share * 100).toFixed(1)}% home, under the cap's floor of ${(floor * 100).toFixed(1)}%`);
+    console.log(`   ${league.padEnd(8)} ${home.padEnd(14)} ${clubs} clubs, ${men} real men (${homeMen} home); made up men drawn home ${(drawn * 100).toFixed(1)}%; squads home ${(share * 100).toFixed(1)}% against the cap's floor ${(floor * 100).toFixed(1)}% (reachable ${(reach * 100).toFixed(1)}%)`);
+    if (share < reach - 4 * se) fail(`${league} (${home}): its squads are ${(share * 100).toFixed(1)}% home, under the cap's floor of ${(reach * 100).toFixed(1)}%`);
     else ok(`${league} (${home}) holds the cap's floor`);
   }
 }
