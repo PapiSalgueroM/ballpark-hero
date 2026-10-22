@@ -106,7 +106,7 @@ export const SPORT_HUBS: SportHub[] = [
     seoDescription:
       'Every free soccer game on DoUKnowBall in one place: daily football trivia and quiz puzzles, grid games, transfer market games, and full career and club management sims. Every game plays without an account.',
     intro:
-      'This is the biggest section on the site, and it runs on real players, real clubs and real transfer values.',
+      'Real-player puzzles, transfer games and career sims. Test your football knowledge or build a career story of your own.',
     whyHere:
       'The thing worth sorting these by is the clock, because a soccer game here can be one guess or a whole career. Footle, Career Quiz and Missing XI are one answer puzzles: a stat line, a career history, a famous lineup with a gap in it. Soccer Grid puts every answer where two conditions meet, so one name has to satisfy both at once. Transfer Path is the one where the season matters, since two players only link through a club they actually shared at the same time, and Soccer Connections buries four groups of four in a pile of names. Then the money games: $1B Budget Builder hands you a billion and eleven slots, Sign the Player drops you into a blind auction against two rivals, Player Stock Market buys you in at real past valuations and then runs a real year at you, and Fantasy Draft, Gauntlet Draft and Dart Draft each build you a squad one pick at a time, with a different catch on how the pick gets made. Soccer Career and Club Manager are not puzzles at all, they are evenings, while Stadium Tycoon and Wonderkid Factory tick along on their own whether you are watching or not.',
     startHere: [
@@ -131,7 +131,7 @@ export const SPORT_HUBS: SportHub[] = [
     deep: {
       heading: '⏳ Soccer career and club manager sims',
       blurb:
-        'Sims you come back to. Soccer Career takes one player from a boyhood club to retirement and then into the dugout. Club Manager hands you any of hundreds of real clubs across twenty leagues, today or in a real past season, and lets the board decide how long you last.',
+        'Sims you come back to. Soccer Career takes one player from a boyhood club to retirement and then into the dugout. Club Manager puts you in charge of a real club, today or in a past season, and lets the board decide how long you last.',
     },
     quick: {
       heading: '⏱️ Five minute soccer trivia and puzzle games',
@@ -159,7 +159,7 @@ export const SPORT_HUBS: SportHub[] = [
     seoDescription:
       'Every free pro basketball game on DoUKnowBall in one place: daily NBA trivia, franchise grids, career-path guessers, connections, and full front office and my career sims. Every game plays without an account.',
     intro:
-      'Franchise grids, career guessers and two long sims, all built on real players and real franchise history.',
+      'Franchise grids and career guessers use real players and franchise history. The long sims let you run a front office or take an invented rookie through a career.',
     whyHere:
       'Four things go on in here. Some games hand you numbers and want the name back: /stat-detective scrubs the name off a real per 36 season, /nba-career sells you clues at 150 points a go, and /missing-five blanks one starter out of a genuine Finals box score. Some are boards you earn a square at a time, like the nine cells of /nba-grid or the twenty names of /nba-connections. Some make you build a lineup under awkward rules, which is /nba-starting-5 pinning a random franchise on every slot and /perfect-season-nba spinning a wheel for the team and season you draft from, six deep, a starting five plus a sixth man who can be anyone. And some run for years: /nba-front-office gives you a cap sheet and 29 rivals, while /nba-my-career takes an invented rookie from draft night to the rafters.',
     startHere: [
@@ -266,12 +266,12 @@ export const SPORT_HUBS: SportHub[] = [
     seoDescription:
       'Every free pro football game on DoUKnowBall in one place: daily NFL trivia, grids with rarity scores, career-path guessers, connections, and full front office and my career sims. Every game plays without an account.',
     intro:
-      'Grid puzzles with rarity scores, career guessers and two long sims, all on real players.',
+      'Grid puzzles with rarity scores, career guessers and long sims. Test your player knowledge, run a front office or build an invented prospect\'s career.',
     whyHere:
       'Three of these run long. NFL Front Office is the desk job: every club in the league, a hard cap, trade partners who hang up on you, an owner who fires you when the mandate slips. NFL My Career runs the same league from the locker room, eight positions, and an envelope that gets passed down the row in a meeting: put your money in and the heat starts climbing toward league security and a file with your name on it. 17-0 NFL Perfect Season drafts one cross era offense off a wheel of real team seasons and simulates whether it runs the table. The other seven are short: NFL Grid, NFL Connections, NFL Connect 4, NFL Career Path and NFL Higher or Lower are recall in five different shapes, Missing Eleven needs ninety seconds to make you doubt a game you watched live, and NFL Conquest plays a season as a land grab.',
     startHere: [
       { path: '/front-office', label: 'NFL Front Office', why: 'The GM chair, and the open ended one: it runs for as many seasons as ownership lets you keep the job. Real rosters against a hard cap, trades where the other side counters or hangs up, draft grades that lie to you. NFL My Career is the same league from a player\'s seat, and 17-0 NFL Perfect Season is one team drafted for one run.' },
-      { path: '/nfl-my-career', label: 'NFL My Career', why: 'Pick this if the roster spreadsheet is the boring part. You create a prospect, a real team drafts you, and each season hands you one decision: the surgery or the season, the money or the contender, your cash in the envelope or telling the coach it stops today. Front Office asks how you build a team. This asks what you do at 28 when the knee starts talking.' },
+      { path: '/nfl-my-career', label: 'NFL My Career', why: 'Pick this if the roster spreadsheet is the boring part. You create a prospect, a real team drafts you, and decisions between seasons ask what matters: the surgery or the season, the money or the contender, your cash in the envelope or telling the coach it stops today. Front Office asks how you build a team. This asks what you do at 28 when the knee starts talking.' },
       { path: '/football-grid', label: 'NFL Grid', why: 'The five minute daily. Every cell has to satisfy its row and its column at the same time, so Packers crossed with Super Bowl winner needs a man who did both, and the rarity score means a forgotten journeyman beats an obvious Hall of Famer. NFL Connections points the same knowledge at grouping, NFL Connect 4 turns it into a two player board.' },
       { path: '/missing-eleven', label: 'Missing Eleven', why: 'The quickest one and the meanest. A genuine Super Bowl starting lineup with one name blanked, three guesses, and the famous player you are about to type was very often watching the kickoff from the sideline. NFL Career Path feeds you clues about a hidden player. This gives you the rest of that lineup and makes you work backwards.' },
     ],
