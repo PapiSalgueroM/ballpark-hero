@@ -1,0 +1,9 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+ownermandate exit=0 27s | ALL OWNER MANDATE WALK CHECKS PASSED
+fohub exit=1 50s | playFoHub: 2 failures
+gmpress exit=1 86s | playGmPress: 2 failures
+gmcareer exit=0 229s | playGmCareer: green. 1 board, 3 sizes, four walks each.
+draftnight exit=0 218s | playDraftNight: ALL GREEN, 49 nights walked
+gmstaff exit=1 3s | GM STAFF: 40 failure(s)
+fogameday exit=0 358s | playFrontOfficeGameDay: 386 checks, 0 failed
+sweep exit=0 899s | Swept 183 routes across 1 engines and 3 viewports (549 checks). 0 findings.
