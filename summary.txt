@@ -1,0 +1,8 @@
+vitest-host exit=0 3s |    Duration  1.91s (transform 392ms, setup 165ms, collect 808ms, tests 975ms, environment 701ms, prepare 256ms)
+host-123 exit=0 34s | simGmDeskHost: all 10 checks passed on seeds 1,2,3 (4 engines, 3 seasons a seed)
+host-456 exit=0 41s | simGmDeskHost: all 10 checks passed on seeds 4,5,6 (4 engines, 3 seasons a seed)
+tsc exit=0 57s | 
+host-789 exit=0 37s | simGmDeskHost: all 10 checks passed on seeds 7,8,9 (4 engines, 3 seasons a seed)
+ctl-onereason exit=1 35s | simGmDeskHost CONTROL onereason FIRED: check 4 went red with 64 failures (red checks 4:64)
+ctl-nofirstcall exit=1 33s | simGmDeskHost CONTROL nofirstcall FIRED: check 4 went red with 639 failures (red checks 4:639)
+simGmCareer exit=0 91s | simGmCareer: all checks passed (nfl)
