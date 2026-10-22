@@ -1,0 +1,5 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/usCareerShopPromises.test.ts src/lib/usCareerAnnualBenefits.test.ts --testTimeout=300000 --hookTimeout=120000
+shop0: SHOP_SECTIONS=0 node scripts/simUsShopPromises.mjs
+ann905: node scripts/simUsCareerAnnualBenefits.mjs
+recovery: node scripts/simUsCareerRecovery.mjs
