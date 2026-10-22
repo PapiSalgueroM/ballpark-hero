@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+probe: node .rc/x/probeOwnerPanelFail.mjs
+base-probe: git worktree add -f /tmp/base fa8671c344b0e2792acca1028c89ce87069d8a6c >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && npm run build > /tmp/base-build.log 2>&1) && PROBE_SERVE_DIR=/tmp/base/dist node .rc/x/probeOwnerPanelFail.mjs
