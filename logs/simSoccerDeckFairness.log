@@ -1,0 +1,43 @@
+The paper holds 44 stories, 23 of them under weight 1
+Driving the fleet: 200 ordinary, 200 elite and 100 loyal careers through the real engine
+   500 careers, 8226 playing seasons, 7457 batches, 7457 papers, 0 crashes
+1) The deck: 40,000 keyed draws, every tenth of the eligible list at its fair rate
+   200212 of 240212 player names set aside because their catalog is not the save's (the routine rotation)
+   save: ST, age 20, 5 rows; 90 eligible cards, 120037 picks over 40000 draws (3.001 a draw)
+   per tenth, observed over fair: 1.014, 0.994, 0.994, 1.011, 1.01, 1.008, 0.976, 0.987, 1.004, 1.003; single cards 0.945 to 1.068 (reported, not asserted)
+2) The paper: a weight 0.5 story prints at half the rate of a weight 1 story
+   4 stories eligible (weights 1 1 0.5 1); over 40000 papers the 0.5 story printed 5599 times, the weight 1 story 11435, others 22966: ratio 0.49 (sd 0.008)
+   the fleet's 7457 papers printed 19 of the 23 stories under weight 1, 3394 prints against a fair 3408.203; REDEMPTION 1 times
+   under weight 1 (weight printed/fair/qualified): Reveals Secret To Succes 0.5 196/183.751/2744; Followers After Viral Mo 0.5 1337/1339.21/6676; Booed By Own Fans After  0.7 316/322.119/816; Wants Out As Contract Ta 0.5 41/37.024/202; Out For Weeks With 0.5 12/7.336/40; Hits Out At Manager In S 0.3 11/10.922/93; Agent Demands Record Dea 0.4 37/46.632/1021; : Another Season Of Riva 0.5 35/34.464/556; M Bid For 0.7 440/456.309/3375; Available On Free Transf 0.5 102/92.808/718; 's Latest Purchase Raise 0.8 0/0/0; Match Is A Show Now 0.9 211/213.115/1072; Never Celebrates, Never  0.9 93/77.696/601; Walks Disciplinary Tight 0.9 48/52.543/239; Breaks The Scouting Apps 0.8 0/0/0; HAPPIEST MAN IN FOOTBALL 0.7 228/229.704/2148; 's Monster Contract 0.7 4/8.878/133; LEADER OF THE NATION: 0.6 176/184.078/2267; Bought Mum The House, An 0.6 0/0/0; Clean Sheets, Strikers I 0.6 18/19.57/196; Is Football's Coldest Wa 0.6 3/2.656/29; 's Money Now Works Harde 0.5 86/89.101/1375; Refuses To Read The Cale 0.5 0/0.286/5
+3) Keyed: the deck and the paper draw nothing from the global stream
+   200 saves: 0 decks drew beyond the catalog build, 0 batches moved with the stream, 0 papers chose other stories under another seed
+   eight seasons a save: the deck dealt 8 different batches on average, 0 of 100 saves under six; the paper printed one story all eight years in 0 of 82 saves with two or more stories
+4) Gates: a card that narrates the season fires only when the row holds it
+   card: fired / fired without its fact / batches whose row held the fact
+   1: 145/0/5977  4: 36/0/2041  7: 86/0/5977  9: 16/0/608  11: 33/0/1396  12: 8/0/423  15: 29/0/1158  17: 0/0/0  18: 10/0/263  19: 7/0/245
+   10 fixed rows asked of the engine and of this file's rules
+5) SOCIAL MEDIA SENSATION prints, and only at a million followers or more
+   printed 1337 times in 7457 papers, 0 of them under a million
+6) Every story, every position: no bare position code, no "In <lower case>" tail
+   440 stories rendered over 10 positions, 0 could not render without their facts
+   "the <nation> international": 0 stories say it of an uncapped player, 2 of a capped one
+7) Before the first paper or deck nothing moves; saves the base wrote still answer here
+  FAIL (section 7): career 70011: the season row in the step that parts the saves (playing) differs in apps, leagueApps, rating
+  FAIL (section 7): career 70025: the season row in the step that parts the saves (playing) differs in apps, leagueApps, goals, yellowCards, rating
+  FAIL (section 7): career 70107: the season row in the step that parts the saves (playing) differs in apps, leagueApps, cleanSheets, rating
+  FAIL (section 7): career 70130: the season row in the step that parts the saves (playing) differs in apps, leagueApps, assists, rating, leagueFinish, derbies
+  FAIL (section 7): career 70145: the season row in the step that parts the saves (playing) differs in apps, leagueApps, assists, rating
+  FAIL (section 7): career 70150: the season row in the step that parts the saves (playing) differs in apps, leagueApps, cleanSheets, rating
+  FAIL (section 7): career 70166: the season row in the step that parts the saves (playing) differs in apps, leagueApps, rating, derbies
+  FAIL (section 7): career 70175: the season row in the step that parts the saves (playing) differs in apps, leagueApps, rating
+   200 careers, 1138 steps compared: 200 reached a paper or deck step, 200 parted there, 192 with the season row byte equal when the paper ran (9 rows differ by the end of that step, from the draws after the paper)
+   19 old saved screens answered here (every choice of cards 1, 4, 7, 9, 11, 12, 15, 17, 18, 19, a newspaper, a transfer window)
+8) The seventh inverse gives the base's engine back byte for byte, and every change sits in this round's hunks
+   Round 1334's rows taken off first: 9 of 9
+   Round 1329's rows taken off first: 5 of 5; the seventh's head is then d21d2f552bf72ab5e24e0fbca03f330b51f1888f529129140824115c3cebc938 (pinned d21d2f552bf72ab5e24e0fbca03f330b51f1888f529129140824115c3cebc938)
+   head d21d2f552bf72ab5e24e0fbca03f330b51f1888f529129140824115c3cebc938; inverse applied 16 of 16 rows
+   base 201f0361c7ec38390b7a5f59ff59b872ecd6b944bd0bf65231a5683d5acf68c6 (module says 201f0361c7ec38390b7a5f59ff59b872ecd6b944bd0bf65231a5683d5acf68c6); inverse gives 201f0361c7ec38390b7a5f59ff59b872ecd6b944bd0bf65231a5683d5acf68c6
+   69 diff hunks against the base, each checked against 6 regions
+9) What a narrating card or story prints is what the row holds
+   18 injuries read; card 11 and INJURY BLOW rendered for 18; the fleet dealt card 11 33, 12 8, 15 29, 19 7 times and printed INJURY BLOW 12, a move story 848 times, each read against its row
+simSoccerDeckFairness: 8 failures in section 7

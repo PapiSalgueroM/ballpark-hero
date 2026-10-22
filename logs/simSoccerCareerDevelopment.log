@@ -1,0 +1,26 @@
+ok   uncopied complete PR208 baseline
+ok   form boundaries
+ok   form eligibility
+ok   form purity and chronology
+FAIL form projections and actual draws: AssertionError [ERR_ASSERTION]: The actual draw applies the saved form swing
+
+34 !== 33
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerCareerDevelopment.mjs:255:30
+    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerCareerDevelopment.mjs:202:17)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerCareerDevelopment.mjs:250:9
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+ok   neutral complete saves and RNG against actual PR208
+ok   plan choice binding and risk
+ok   plan skill caps and once-only settlement
+ok   plan interruptions and foreign targets
+ok   mentor deterministic creation and saved rows
+ok   mentor pauses graduation and moves
+ok   mentor retirement
+ok   actual injury risk
+ok   actual recorded plan growth and mentor credit
+ok   actual interruption paths
+ok   actual moves and retirement
+ok   actual Youth Mentor choice keeps old effects and RNG
+ok   repeated Youth Mentor event preserves every saved spell
+simSoccerCareerDevelopment: 18 outcome groups, 16+16 complete baseline saves/RNG, 0 form draws, 16 played plan seasons, 7 interruption paths, 1 failed
