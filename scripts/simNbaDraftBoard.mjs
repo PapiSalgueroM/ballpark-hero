@@ -14,6 +14,19 @@
  *      own src. Every (1) and (2) save is a closed season (round 20, this season's champion, a real postseason) on
  *      which a desk WOULD open a night (critic correction 6): the harness checks that before it plays, and exits 2
  *      otherwise, so a control that should turn (1) or (2) red can.
+ *   2. THE BIND. Desk on recap saves (his club the weakest, a middle club, the champion, a traded first, a bought first,
+ *      no pick) pressed through the board (Go to the draft, Continue, the first man of his board, which is his scout's
+ *      best, to the hub) AND replayed through the libraries alone on an identical counted stream in a process of its
+ *      own (critic advice 18): the save after the open and after every press (league, desk, class, picks left, ids
+ *      renamed) equal the library's state, the league and desk after the summer equal nbaDeskOffseason's, and the
+ *      board draws exactly as many numbers as the libraries.
+ *   3. RELOADS. Section 2's nights with the board unmounted and mounted again from the save after every press: the
+ *      end save equals section 2's, no reload draws a number, and a reload at a lottery card not yet continued draws
+ *      it on its last frame.
+ *   4. THE WAY OUT. No pick, a last slot at pick 60, his staff from his first slot: each ends on round 1, the hub,
+ *      the next season.
+ *   5. ROLLBACK. A night saved by this build on the clock, and a GM with no pick at the card, mounted on the BASE
+ *      board (SIM_NBA_DRAFT_BOARD_BASE, 7a8750ba by default, laid out by git archive) finishes the old way.
  *   6. FENCES. The shared screen and its hook import only their allowed list and name no sport in code (comments
  *      stripped); the board names no lift module (simGmDraftOrder's LIFT names, anywhere in its code: critic F1);
  *      every board anchor of simNbaDraftCapital's controls, READ from that file, is exactly once in the board's
@@ -29,6 +42,15 @@
  *   deskless     the earned night opens on a fresh desk when the save has none: section 1, case (1) red (exit 3
  *                before the board binds the night: there is nothing to break)
  *   blockedopen  a valid night planted on (2)'s desk: section 1, case (2) red (exit 3 before the bind)
+ *   secondchoice the board hands the libraries the second man of his board: section 2 red
+ *   classtwice   the class drawn twice at the open, the second kept: section 2 red
+ *   unseen       the card is handed the night's own `seen` only (critic correction 14's replay): section 3 red
+ *   redraw       the load path opens the night again and draws a new class: section 3 red
+ *   nofinish     a press that ends the draft skips the summer: sections 2, 3 and 4 red (the three presses share
+ *                one handler, so every night stops short, not only the no pick one)
+ *   zerobatches  the open saves no rival batches left (advice 17): the no pick GM's save is refused on reload and
+ *                by the base board, sections 3 and 5 red
+ *   bigclass     the mid night saves' class grown past 70: the base board refuses them, section 5 red
  *   screensport  an NBA import in a copy of the screen: section 6 red
  *   boardlift    a lift import in a copy of the board: section 6 red
  */
@@ -59,6 +81,7 @@ if (process.argv.includes('--child')) {
 const CONTROL = process.env.SIM_NBA_DRAFT_BOARD_CONTROL || '';
 const FLEET = process.env.SIM_NBA_DRAFT_BOARD_FLEET || 'quick';
 const RECORD = process.env.SIM_NBA_DRAFT_BOARD_RECORD || '';
+const BASE = process.env.SIM_NBA_DRAFT_BOARD_BASE || '7a8750ba';
 const SEEDS = RECORD || FLEET === 'full' ? 30 : 6;
 const read = rel => fs.readFileSync(path.join(ROOT, rel), 'utf8').replaceAll('\r\n', '\n');
 const strip = s => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/.*$/gm, '$1');
@@ -71,6 +94,16 @@ const CONTROLS = {
   extradraw: { expect: [1], cases: ['deskOffRecap', 'preRecap'] },
   deskless: { expect: [1], cases: ['deskOffRecap'] },
   blockedopen: { expect: [1], cases: ['deskOnOpen'] },
+  secondchoice: { expect: [2], swap: ['choices={board.map(pr => (', 'choices={board.slice(1).map(pr => ('] },
+  classtwice: { expect: [2], swap: ['    const cls = nbaEarnedDraftClass(Math.random, opened.night.slots.length, leagueNames(lg));',
+    '    nbaEarnedDraftClass(Math.random, opened.night.slots.length, leagueNames(lg));\n    const cls = nbaEarnedDraftClass(Math.random, opened.night.slots.length, leagueNames(lg));'] },
+  unseen: { expect: [3], swap: ['seen: earnedUi.seen(earnedNight),', 'seen: earnedNight.seen,'] },
+  redraw: { expect: [3], swap: ["      else if (s.phase !== 'recap') setPhase(s.phase);\n",
+    "      else if (s.phase !== 'recap') { setPhase(s.phase); if (s.phase === 'draft' && s.gm && nbaDraftNightOf(readGmDesk(s.gm), s.league)) openEarnedDraft(s.league, s.myTeam, s); }\n"] },
+  nofinish: { expect: [2, 3, 4], swap: ['    if (press.done && night) {', '    if (press.done && night && false) {'] },
+  zerobatches: { expect: [3, 5], swap: ["persist({ ...patch, phase: 'draft', draftClass: cls, picksLeft: slots, draftAiBatchesLeft: 2 }, lg, team);",
+    "persist({ ...patch, phase: 'draft', draftClass: cls, picksLeft: slots, draftAiBatchesLeft: 0 }, lg, team);"] },
+  bigclass: { expect: [5] },
   screensport: { expect: [6] },
   boardlift: { expect: [6] },
 };
@@ -123,6 +156,13 @@ if (CONTROL === 'deskless') {
   board = board.replace(DESK_GUARD, '    const opened = openNbaDraftNight(desk ?? openNbaDesk(lg, team), lg, patch.postseason?.series ?? series, team);');
   console.log('   NEGATIVE CONTROL deskless: the earned night opens on a fresh desk when the save has none; section 1 must go red on (1)');
 }
+if (CONTROLS[CONTROL]?.swap) {
+  const [from, to] = CONTROLS[CONTROL].swap;
+  if (once(board, from) !== 1) { console.log(`simNbaDraftBoard control ${CONTROL}: CANNOT FIRE, its anchor is in the board ${once(board, from)} times, not once.`); process.exit(3); }
+  board = board.replace(from, to);
+  console.log(`   NEGATIVE CONTROL ${CONTROL}: the board's copy is edited; section(s) ${CONTROLS[CONTROL].expect.join(', ')} must go red`);
+}
+if (CONTROL === 'bigclass') console.log('   NEGATIVE CONTROL bigclass: the mid night saves\' class grown past 70 before the base board loads them; section 5 must go red');
 if (CONTROL === 'blockedopen') console.log('   NEGATIVE CONTROL blockedopen: a valid night is planted on (2)\'s desk; section 1 must go red on (2)');
 
 async function bundle(srcRoot, boardText, tag) {
@@ -135,8 +175,10 @@ async function bundle(srcRoot, boardText, tag) {
     "export { default as Board } from '@/components/nba-front-office/NbaFrontOfficeBoard';",
     "export { default as Boundary } from '@/components/RouteErrorBoundary';",
     "export * from '@/lib/nbaFrontOffice';",
-    "export { openNbaDesk, syncNbaPicks, nbaPicksOf } from '@/lib/nbaGmDesk';",
-    "export { openNbaDraftNight, nbaDraftNightOf, NBA_DRAFT_BLOCK } from '@/lib/nbaEarnedDraft';",
+    "export { openNbaDesk, syncNbaPicks, nbaPicksOf, nbaStaffOf, nbaScoutRead, nbaDeskOffseason } from '@/lib/nbaGmDesk';",
+    "export { openNbaDraftNight, nbaDraftNightOf, NBA_DRAFT_BLOCK, nbaDraftContinue, nbaDraftPick, nbaDraftByStaff, slotsLeftFor } from '@/lib/nbaEarnedDraft';",
+    "export { movePicks, pickKey } from '@/lib/gmEarnedDraft';",
+    "export { gmStaffLevel } from '@/lib/gmStaff';",
     "export { withGmBlock } from '@/lib/gmDesk';",
     "export { leagueNames } from '@/lib/foNames';",
     "export { makeIdMinter } from '@/lib/entityIds';",
@@ -212,6 +254,82 @@ const redCases = new Set();
     const calls = mine.map(r => r.calls);
     console.log(`   ${CASE_WORDS[c]}: ${mine.length} plays to the hub, ${mine.reduce((a, r) => a + r.picks, 0)} picks made on his board, ${Math.min(...calls)} to ${Math.max(...calls)} draws a play; ${mine.filter(r => !redCases.has(c) || (fx.cases[c][r.seed].hash === r.hash && fx.cases[c][r.seed].calls === r.calls)).length} equal to ${fx.base}'s`);
   }
+
+  /* ---------------------------------------------------------------- */
+  const seeds = Array.from({ length: SEEDS }, (_, i) => i + 1);
+  const keyOf = r => `${r.kind}:${r.seed}`;
+  const tagOf = r => `${r.kind}, seed ${r.seed}`;
+  const fleet = (kinds, mode, extra = {}) => kinds.flatMap(kind => seeds.map(seed => ({ kind, seed, mode, ...extra })));
+  const preOk = rows => { for (const r of rows) if (r.pre !== true) cannotRun(`${tagOf(r)}: ${r.pre}`); return rows; };
+  const EARNED_FLEET = ['weakest', 'middle', 'champion', 'traded', 'bought', 'nopick'];
+
+  open(2, 'The bind: the board plays each night as the libraries alone do, save for save and draw for draw, to the summer');
+  const boardRows = preOk(play(head, fleet(EARNED_FLEET, 'board')));
+  const replayOf = new Map(preOk(play(head, fleet(EARNED_FLEET, 'replay'))).map(r => [keyOf(r), r]));
+  let compared = 0;
+  for (const b of boardRows) {
+    const r = replayOf.get(keyOf(b));
+    const before = failures.get(2).length;
+    if (b.error) fail(2, `${tagOf(b)}: the board: ${b.error}`);
+    else if (r.error) fail(2, `${tagOf(b)}: the libraries: ${r.error}`);
+    else {
+      const presses = b.writes.slice(0, -1);
+      const at = presses.findIndex((h, i) => h !== r.states[i]);
+      if (presses.length !== r.states.length) fail(2, `${tagOf(b)}: the board saved ${presses.length} times before the summer, the libraries reached ${r.states.length} states`);
+      else if (at >= 0) fail(2, `${tagOf(b)}: the save after ${at === 0 ? 'the open' : `press ${at}`} differs from the libraries'`);
+      if (b.final !== r.final) fail(2, `${tagOf(b)}: the league and desk after the summer differ from the libraries'`);
+      if (b.calls !== r.calls) fail(2, `${tagOf(b)}: the board drew ${b.calls} numbers, the libraries ${r.calls}`);
+      if (b.phase !== 'hub' || b.round !== 1 || b.seasonGain !== 1) fail(2, `${tagOf(b)}: ended on ${b.phase}, round ${b.round}, season +${b.seasonGain}`);
+      compared += presses.length + 1;
+    }
+    if (failures.get(2).length > before) redCases.add(b.kind);
+  }
+  console.log(`   ${boardRows.length} nights (${EARNED_FLEET.join(', ')}; ${SEEDS} seeds each): ${compared} saves compared with the libraries' replay, ${boardRows.reduce((a, r) => a + r.picks, 0)} picks by his hand, ${boardRows.filter(r => r.clockAt.length && r.clockAt[0] > 1).length} nights with picks before his first, ${boardRows.reduce((a, r) => a + r.calls, 0)} draws in all`);
+
+  open(3, 'Reloads: the same nights, the board mounted again from the save after every press');
+  const boardOf = new Map(boardRows.map(r => [keyOf(r), r]));
+  const reloadRows = preOk(play(head, fleet(EARNED_FLEET, 'reload')));
+  for (const r of reloadRows) {
+    const before = failures.get(3).length;
+    if (r.error) fail(3, `${tagOf(r)}: ${r.error}`);
+    for (const f of r.reloadFaults) fail(3, `${tagOf(r)}: ${f}`);
+    if (!r.error && r.finalAll !== boardOf.get(keyOf(r)).finalAll) fail(3, `${tagOf(r)}: the save at the end differs from the same night played without reloads`);
+    if (r.remounts < 2) fail(3, `${tagOf(r)}: only ${r.remounts} reloads, the check would pass empty`);
+    if (failures.get(3).length > before) redCases.add(r.kind);
+  }
+  console.log(`   ${reloadRows.length} nights, ${reloadRows.reduce((a, r) => a + r.remounts, 0)} reloads, ${reloadRows.reduce((a, r) => a + r.cardChecks, 0)} of them at a lottery card not yet continued`);
+  if (reloadRows.reduce((a, r) => a + r.cardChecks, 0) === 0) fail(3, 'no reload landed on a lottery card: the settled check passed empty');
+
+  open(4, 'The way out: no pick, a last slot at pick 60 and his staff from his first slot all reach the hub of the next season');
+  const finRows = [...boardRows.filter(r => r.kind === 'nopick'), ...preOk(play(head, fleet(['last60', 'staff'], 'board')))];
+  for (const r of finRows) {
+    if (r.error) { fail(4, `${tagOf(r)}: ${r.error}`); continue; }
+    if (r.phase !== 'hub' || r.round !== 1 || r.seasonGain !== 1) fail(4, `${tagOf(r)}: ended on ${r.phase}, round ${r.round}, season +${r.seasonGain}`);
+    if (r.kind === 'nopick' && (r.picks !== 0 || r.clockAt.length)) fail(4, `${tagOf(r)}: a GM with no pick was put on the clock`);
+    if (r.kind === 'last60' && (r.clockAt.join() !== '60' || r.picks !== 1)) fail(4, `${tagOf(r)}: on the clock at ${r.clockAt.join(', ') || 'nothing'}, ${r.picks} picks, not once at 60`);
+    if (r.kind === 'staff' && (r.picks !== 0 || r.clockAt.length !== 1)) fail(4, `${tagOf(r)}: the staff press left ${r.picks} picks to him`);
+  }
+  console.log(`   ${finRows.length} nights to the hub: ${finRows.filter(r => r.kind === 'nopick').length} with no pick, ${finRows.filter(r => r.kind === 'last60').length} with only pick 60, ${finRows.filter(r => r.kind === 'staff').length} by his staff`);
+
+  open(5, `Rollback: a night saved by this build, mounted on the BASE board (${BASE}), finishes the old way`);
+  const stops = preOk(play(head, [...fleet(['rollClock'], 'board', { stopAt: 'clock' }), ...fleet(['rollNopick'], 'board', { stopAt: 'open' })]));
+  const baseRoot = baseSrc(BASE);
+  const baseBundle = await bundle(baseRoot, fs.readFileSync(path.join(baseRoot, BOARD.slice(4)), 'utf8'), 'base');
+  const mounts = [];
+  for (const r of stops) {
+    if (!r.saveAt) { fail(5, `${tagOf(r)}: the night was not saved mid way (${r.error ?? 'no stop'})`); continue; }
+    const s = r.saveAt;
+    if (CONTROL === 'bigclass') while (s.draftClass.length <= 70) s.draftClass.push({ ...s.draftClass[0], name: `${s.draftClass[0].name} ${s.draftClass.length}` });
+    const file = path.join(baseBundle.owned, `save-${r.kind}-${r.seed}.json`);
+    fs.writeFileSync(file, JSON.stringify(s));
+    mounts.push({ kind: r.kind, seed: r.seed, mode: 'mount', saveFile: file });
+  }
+  const baseRows = play(baseBundle, mounts);
+  for (const r of baseRows) {
+    if (r.error) fail(5, `${tagOf(r)}: the base board: ${r.error}`);
+    else if (r.phase !== 'hub' || r.seasonGain !== 1) fail(5, `${tagOf(r)}: the base board ended on ${r.phase}, season +${r.seasonGain}, not the hub of the next season`);
+  }
+  console.log(`   ${baseRows.length} mid night saves (on the clock, and a GM with no pick at the card) finished on ${BASE}'s board: ${baseRows.filter(r => !r.error && r.phase === 'hub').length} reached the hub, ${baseRows.reduce((a, r) => a + r.picks, 0)} picks made there`);
 
   /* ---------------------------------------------------------------- */
   open(6, 'Fences: the screen and its hook name no sport, the board names no lift module, every harness anchor is there once');
@@ -340,12 +458,33 @@ async function child() {
   lg.round = E.NBA_ROUNDS;
   const { series, champion } = E.runNbaPlayoffs(lg, rng);
   lg.champions.push({ season: lg.season, team: champion });
-  const me = ids[(job.seed * 7) % ids.length];
+  const OLD = CASES.includes(job.kind);
+  const PICK_ME = {
+    weakest: () => ids[0], middle: () => ids[14], champion: () => champion, traded: () => ids[3], bought: () => ids[22],
+    nopick: () => ids[6], last60: () => ids[20], staff: () => ids[2], rollClock: () => ids[1], rollNopick: () => ids[6],
+  };
+  if (!OLD && !PICK_ME[job.kind]) throw new Error(`no case ${job.kind}`);
+  const me = OLD ? ids[(job.seed * 7) % ids.length] : PICK_ME[job.kind]();
   const post = { series, champion, gradeLine: null };
   const base = { league: lg, myTeam: me, titles: 0, seasonsPlayed: 1 };
   let save;
   let pre = true;
-  if (job.kind === 'deskOffRecap') {
+  if (!OLD) {
+    /* An earned night's save: the desk on, at the recap, with this draft's picks moved on the ledger first. */
+    const order = E.openNbaDraftNight(E.openNbaDesk(clone(lg), me), clone(lg), series, me)?.night.order ?? null;
+    if (!order) pre = 'no night opens on this save';
+    else {
+      const last = order.later[order.later.length - 1];
+      const other = ids.find(c => c !== me && c !== last);
+      const away = [[1, me, other], [2, me, other]];
+      const MOVES = { traded: [[1, me, ids[27]]], bought: [[1, ids[1], me]], nopick: away, rollNopick: away, last60: [...away, [2, last, me]] };
+      const desk0 = E.openNbaDesk(lg, me);
+      let ledger = E.nbaPicksOf(desk0, lg);
+      for (const [round, orig, to] of MOVES[job.kind] ?? []) ledger = E.movePicks(ledger, [E.pickKey({ year: lg.season, round, orig })], to);
+      E.syncNbaPicks(lg, ledger);
+      save = { ...base, phase: 'recap', draftClass: null, picksLeft: 0, postseason: post, gm: E.withGmBlock(desk0, 'picks', ledger) };
+    }
+  } else if (job.kind === 'deskOffRecap') {
     save = { ...base, phase: 'recap', draftClass: null, picksLeft: 0, postseason: post };
     if (!E.openNbaDraftNight(E.openNbaDesk(clone(lg), me), clone(lg), series, me)) pre = 'a desk on this save would open no night';
   } else {
@@ -362,20 +501,76 @@ async function child() {
       save = { ...base, phase: 'recap', draftClass: null, picksLeft: 0, gm: desk };
     }
   }
-  const seasonBefore = lg.season;
-  localStorage.clear();
-  localStorage.setItem(KEY, JSON.stringify(save));
+  if (job.mode === 'mount') save = JSON.parse(fs.readFileSync(job.saveFile, 'utf8'));
+  if (pre !== true || !save) {
+    fs.writeFileSync(process.env.SIM_NBA_DRAFT_BOARD_OUT, JSON.stringify({ kind: job.kind, seed: job.seed, mode: job.mode, pre: pre === true ? 'no save was built' : pre }));
+    dom.window.close();
+    return;
+  }
+  const seasonBefore = save.league.season;
+  const EARNED_KINDS = Object.keys(PICK_ME);
+  const drawSeed = OLD ? 777000 + job.seed * 13 + CASES.indexOf(job.kind) : 888000 + job.seed * 17 + EARNED_KINDS.indexOf(job.kind);
+  const pickOf = s => ({ league: s.league, gm: s.gm, draftClass: s.draftClass, picksLeft: s.picksLeft });
 
-  const draw = lehmer(777000 + job.seed * 13 + CASES.indexOf(job.kind));
+  if (job.mode === 'replay') {
+    /* The libraries alone, on the stream the board drew from: open, the class, Continue, his scout's best (or his
+       staff), to the end, then the desk's summer. Each state is what the board's save after that press holds. */
+    const rr = lehmer(drawSeed);
+    const L = clone(save.league);
+    let desk = save.gm;
+    const opened = E.openNbaDraftNight(desk, L, series, me);
+    const states = [];
+    let error = null;
+    let final = null;
+    if (!opened) error = 'the libraries opened no night';
+    else {
+      desk = opened.desk;
+      let cls = E.nbaEarnedDraftClass(rr, opened.night.slots.length, E.leagueNames(L));
+      const left = () => { const n = E.nbaDraftNightOf(desk, L); return n ? E.slotsLeftFor(n.slots, n.made, me).length : 0; };
+      states.push(hashOf({ league: L, gm: desk, draftClass: cls, picksLeft: left() }));
+      let press = E.nbaDraftContinue(L, desk, me, cls, rr);
+      for (let i = 0; i < 70 && press; i += 1) {
+        desk = press.desk;
+        cls = press.left;
+        states.push(hashOf({ league: L, gm: desk, draftClass: cls, picksLeft: left() }));
+        if (press.done) break;
+        if (job.kind === 'staff') press = E.nbaDraftByStaff(L, desk, me, cls, rr);
+        else {
+          const level = E.gmStaffLevel(E.nbaStaffOf(desk, L, me).block, 'scouting');
+          const read = p => E.nbaScoutRead(p, me, L.season, level);
+          const best = [...cls].sort((a, b) => read(b) - read(a) || a.id.localeCompare(b.id))[0];
+          press = E.nbaDraftPick(L, desk, me, cls, best.id, rr);
+        }
+      }
+      if (!press || !press.done) error = 'the libraries did not reach the end of the draft';
+      else {
+        const summer = E.nbaDeskOffseason(L, desk, me, rr);
+        if (!summer.ok) error = 'the desk refused the summer';
+        final = hashOf({ league: L, gm: summer.desk });
+      }
+    }
+    fs.writeFileSync(process.env.SIM_NBA_DRAFT_BOARD_OUT, JSON.stringify({ kind: job.kind, seed: job.seed, mode: 'replay', pre, error, states, final, calls: rr.calls() }));
+    dom.window.close();
+    return;
+  }
+
+  localStorage.clear();
+  if (save) localStorage.setItem(KEY, JSON.stringify(save));
+  const draw = lehmer(job.mode === 'mount' ? 999000 + job.seed : drawSeed);
   Math.random = draw;
-  const root = createRoot(document.getElementById('root'));
+  let root = createRoot(document.getElementById('root'));
   const buttons = () => [...document.querySelectorAll('button')];
   const byText = text => buttons().find(b => b.textContent.trim() === text);
   const click = async node => { await act(async () => { node.click(); }); };
   const onDraft = () => [...document.querySelectorAll('p.font-display')].some(p => /^The \d{4} Draft$/.test(p.textContent.trim()));
   let picks = 0;
   let error = null;
-  await act(async () => root.render(React.createElement(E.Boundary, { resetKey: '/nba-front-office' }, React.createElement(E.Board))));
+  const render = () => act(async () => root.render(React.createElement(E.Boundary, { resetKey: '/nba-front-office' }, React.createElement(E.Board))));
+  await render();
+  if (!OLD && job.mode !== 'mount') {
+    await earned();
+    return;
+  }
   for (let step = 0; step < 24 && !error; step += 1) {
     if (/This page broke/.test(document.body.textContent)) { error = 'the board crashed (RouteErrorBoundary)'; break; }
     if (!onDraft()) {
@@ -398,5 +593,86 @@ async function child() {
   await act(async () => root.unmount());
   dom.window.close();
   fs.writeFileSync(process.env.SIM_NBA_DRAFT_BOARD_OUT, JSON.stringify(row));
+
+  /* An earned night through the board: Go to the draft, Continue, his scout's best (the first of his board) or his
+     staff, to the hub; with mode `reload`, the board is unmounted and mounted again from the save after every
+     press, and a remount must draw no number and show a lottery card not yet continued on its last frame. */
+  async function earned() {
+    const writes = [];
+    const realSet = window.Storage.prototype.setItem;
+    window.Storage.prototype.setItem = function setItem(k, v) { if (k === KEY) writes.push(v); return realSet.call(this, k, v); };
+    const tick = () => act(async () => { await new Promise(r => setTimeout(r, 0)); });
+    const stageOf = () => document.querySelector('[data-gm-earned-draft]')?.getAttribute('data-gm-earned-draft') ?? null;
+    const waitCard = async () => { for (let i = 0; i < 40 && !document.querySelector('[data-lottery-continue]'); i += 1) await tick(); };
+    const clockAt = [];
+    const reloadFaults = [];
+    let remounts = 0;
+    let cardChecks = 0;
+    let saveAt = null;
+    const remount = async () => {
+      const before = draw.calls();
+      await act(async () => root.unmount());
+      root = createRoot(document.getElementById('root'));
+      await render();
+      const s = JSON.parse(localStorage.getItem(KEY));
+      const n = s.phase === 'draft' ? s.gm?.blocks?.draft : null;
+      if (n && n.seen === false) {
+        cardChecks += 1;
+        await waitCard();
+        if (!document.querySelector('[data-lottery-settled]')) reloadFaults.push('a reload at the lottery card played the night again');
+      }
+      if (draw.calls() !== before) reloadFaults.push(`a reload drew ${draw.calls() - before} numbers`);
+      remounts += 1;
+    };
+    for (let step = 0; step < 90 && !error; step += 1) {
+      if (/This page broke/.test(document.body.textContent)) { error = 'the board crashed (RouteErrorBoundary)'; break; }
+      const stage = stageOf();
+      if (!stage) {
+        if (onDraft()) { error = 'the old draft screen drew on an earned night'; break; }
+        const go = byText('Go to the draft');
+        if (!go || JSON.parse(localStorage.getItem(KEY)).phase !== 'recap') break;
+        await click(go);
+        await waitCard();
+        if (job.stopAt === 'open') { saveAt = JSON.parse(localStorage.getItem(KEY)); break; }
+      } else if (stage === 'lottery') {
+        await waitCard();
+        const c = document.querySelector('[data-lottery-continue]');
+        if (!c) { error = 'the lottery card never loaded'; break; }
+        await click(c);
+      } else if (stage === 'clock') {
+        const line = [...document.querySelectorAll('[data-gm-draft-lines] p')].map(p => p.textContent).find(l => l.startsWith('You are on the clock at '));
+        if (line) clockAt.push(Number(line.slice('You are on the clock at '.length, -1)));
+        if (job.stopAt === 'clock' && line) { saveAt = JSON.parse(localStorage.getItem(KEY)); break; }
+        const choice = document.querySelector('[data-gm-draft-choice]');
+        const staff = document.querySelector('[data-gm-draft-staff]');
+        const finish = document.querySelector('[data-gm-draft-finish]');
+        if (job.kind === 'staff' && staff) await click(staff);
+        else if (choice) { picks += 1; await click(choice); }
+        else if (finish) await click(finish);
+        else if (staff) await click(staff);
+        else { error = 'stuck on the clock with nothing to press'; break; }
+      } else {
+        const out = document.querySelector('[data-draft-continue]') || document.querySelector('[data-gm-draft-leave]');
+        if (!out) { error = 'the closing screen has no way out'; break; }
+        await click(out);
+        continue;
+      }
+      if (job.mode === 'reload') await remount();
+    }
+    window.Storage.prototype.setItem = realSet;
+    const end = JSON.parse(localStorage.getItem(KEY));
+    if (!error && !saveAt && (stageOf() || onDraft())) error = 'still on the draft after 90 presses';
+    const parsed = writes.map(w => JSON.parse(w));
+    const last = parsed[parsed.length - 1];
+    const out = {
+      kind: job.kind, seed: job.seed, mode: job.mode, pre, error, picks, clockAt, remounts, cardChecks, reloadFaults,
+      phase: end.phase, round: end.league.round, seasonGain: end.league.season - seasonBefore, calls: draw.calls(),
+      writes: parsed.map(s => hashOf(pickOf(s))), final: last ? hashOf({ league: last.league, gm: last.gm }) : null, finalAll: hashOf(end),
+      saveAt,
+    };
+    await act(async () => root.unmount());
+    dom.window.close();
+    fs.writeFileSync(process.env.SIM_NBA_DRAFT_BOARD_OUT, JSON.stringify(out));
+  }
 }
 
