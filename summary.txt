@@ -1,0 +1,14 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+pf2 exit=0 253s | playFirstVisitDialogs: green. Every first visit dialog can be started with the cookie banner unanswered.
+pf3 exit=0 260s | playFirstVisitDialogs: green. Every first visit dialog can be started with the cookie banner unanswered.
+pf1 exit=0 276s | playFirstVisitDialogs: green. Every first visit dialog can be started with the cookie banner unanswered.
+abort exit=2 6s | playFirstVisitDialogs control ABORTED: no route in this run opened a dialog with a button, so the cover had nothing to cover
+cover exit=1 38s | playFirstVisitDialogs: PLAYFIRST_CONTROL=cover FIRED. 18 of 18 dialog buttons read as covered and the walk is red
+ratchet exit=1 34s | playFirstVisitDialogs: PLAYFIRST_CONTROL=ratchet FIRED. 15 green or dialog free route widths listed as expected reds each failed the walk
+expected exit=1 54s | playFirstVisitDialogs: PLAYFIRST_CONTROL=expected FIRED. 24 of 24 covered route widths listed in EXPECTED_SITE_RED printed EXPECTED and none failed the walk
+edge exit=1 60s | playFirstVisitDialogs: PLAYFIRST_CONTROL=edge FIRED. 21 of 21 moved dialogs read red for the check it targets
+lift exit=1 60s | playFirstVisitDialogs: PLAYFIRST_CONTROL=lift FIRED. 24 of 24 moved dialogs read red for the check it targets
+stale exit=1 15s | playFirstVisitDialogs: PLAYFIRST_CONTROL=stale FIRED. 3 of 3 seeded lines with a fresh save opened no card and failed the walk
+staleabort exit=2 0s | playFirstVisitDialogs control ABORTED: PLAYFIRST_CONTROL=stale acts on seeded scenes and none is in this run
+jump exit=1 16s | playFirstVisitDialogs: PLAYFIRST_CONTROL=jump FIRED. 3 of 3 moved dialogs read red for the check it targets
+nobanner exit=1 192s | playFirstVisitDialogs: PLAYFIRST_CONTROL=nobanner FIRED. 27 of 27 route widths with the banner hidden were refused as measuring nothing

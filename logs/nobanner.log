@@ -1,0 +1,30 @@
+  NOBANNER /career-ladder 320x640: the cookie banner never came on screen, so this line measured nothing
+  NOBANNER /career-ladder 390x844: the cookie banner never came on screen, so this line measured nothing
+  NOBANNER /career-ladder 1280x900: the cookie banner never came on screen, so this line measured nothing
+  NOBANNER /club-manager 320x640: the cookie banner never came on screen, so this line measured nothing
+  NOBANNER /club-manager 390x844: the cookie banner never came on screen, so this line measured nothing
+  NOBANNER /club-manager 1280x900: the cookie banner never came on screen, so this line measured nothing
+  NOBANNER /soccer-conquest 320x640: the cookie banner never came on screen, so this line measured nothing
+  NOBANNER /soccer-conquest 390x844: the cookie banner never came on screen, so this line measured nothing
+  NOBANNER /soccer-conquest 1280x900: the cookie banner never came on screen, so this line measured nothing
+  NOBANNER /stadium-tycoon 320x640: the cookie banner never came on screen, so this line measured nothing
+  NOBANNER /stadium-tycoon 390x844: the cookie banner never came on screen, so this line measured nothing
+  NOBANNER /stadium-tycoon 1280x900: the cookie banner never came on screen, so this line measured nothing
+  NOBANNER /wonderkid-factory 320x640: the cookie banner never came on screen, so this line measured nothing
+  NOBANNER /wonderkid-factory 390x844: the cookie banner never came on screen, so this line measured nothing
+  NOBANNER /wonderkid-factory 1280x900: the cookie banner never came on screen, so this line measured nothing
+  NOBANNER /build-your-xi 320x640: the cookie banner never came on screen, so this line measured nothing
+  NOBANNER /build-your-xi 390x844: the cookie banner never came on screen, so this line measured nothing
+  NOBANNER /build-your-xi 1280x900: the cookie banner never came on screen, so this line measured nothing
+  NOBANNER /football-grid 320x640: the cookie banner never came on screen, so this line measured nothing
+  NOBANNER /football-grid 390x844: the cookie banner never came on screen, so this line measured nothing
+  NOBANNER /football-grid 1280x900: the cookie banner never came on screen, so this line measured nothing
+  NOBANNER /idle-arena 320x640: the cookie banner never came on screen, so this line measured nothing
+  NOBANNER /idle-arena 390x844: the cookie banner never came on screen, so this line measured nothing
+  NOBANNER /idle-arena 1280x900: the cookie banner never came on screen, so this line measured nothing
+  NOBANNER /stadium-tycoon#away 320x640: the cookie banner never came on screen, so this line measured nothing
+  NOBANNER /stadium-tycoon#away 390x844: the cookie banner never came on screen, so this line measured nothing
+  NOBANNER /stadium-tycoon#away 1280x900: the cookie banner never came on screen, so this line measured nothing
+
+27 route widths walked over 8 routes and 1 seeded scene (3 of the lines): 0 dialogs tapped and closed, 0 expected site reds, 0 without a first visit dialog, 0 red
+playFirstVisitDialogs: PLAYFIRST_CONTROL=nobanner FIRED. 27 of 27 route widths with the banner hidden were refused as measuring nothing
