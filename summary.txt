@@ -1,0 +1,6 @@
+vitest-host exit=0 5s |    Duration  4.36s (transform 892ms, setup 439ms, collect 2.15s, tests 2.69s, environment 2.58s, prepare 799ms)
+vitest-board exit=0 32s |    Duration  31.33s (transform 3.05s, setup 359ms, collect 825ms, tests 37.26s, environment 1.73s, prepare 662ms)
+host-123 exit=0 77s | simGmDeskHost: all 10 checks passed on seeds 1,2,3 (4 engines, 3 seasons a seed)
+tsc exit=0 93s | 
+simGmCareer exit=0 179s | simGmCareer: all checks passed (nfl)
+ctl-hubcounted exit=1 165s | CONTROL hubcounted: 1 rewrite(s) applied, 2 failure(s) in section 7 (FIRED)
