@@ -1,0 +1,13 @@
+vitest-a exit=0 77s |    Duration  76.01s (transform 13.53s, setup 5.15s, collect 47.33s, tests 125.85s, environment 27.09s, prepare 6.62s)
+td-seam exit=0 70s |    Duration  68.47s (transform 2.50s, setup 118ms, collect 3.15s, tests 63.81s, environment 574ms, prepare 122ms)
+vitest-b exit=1 153s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerTruthDigest.test.ts,title=src/test/usCareerTruthDigest.test.ts > Round 1104%3A the US career t
+tsc exit=0 155s | 
+intl-5 exit=0 31s | simCareerIntl: GREEN, 720087 checks over sections 5
+intl-8 exit=0 58s | simCareerIntl: GREEN, 569 checks over sections 8
+intl-default exit=0 109s | simCareerIntl: GREEN, 23295 checks over sections 1,2,3,4,6
+ctl-easyfuture exit=1 27s | simCareerIntl: control easyfuture FIRED (section 5, 40 failures)
+ctl-norepair exit=2 1s | control norepair cannot run: src/lib/careerIntl.ts holds "export function repairIntlOnLoad(c: IntlCareer): boolean {" 0 times, not once, so it would prove nothing
+ctl-lowbar exit=1 113s | simCareerIntl: control lowbar FIRED (section 4, 2150 failures)
+simUsCareerWeight exit=0 0s | simUsCareerWeight: green. 31 checks: the four wrappers hand the board their own binding, no shared file or binding imports another sport, and every control fired.
+ctl-endcall exit=1 118s | simCareerIntl: control endcall FIRED (section 4, 8 failures)
+intl-7 exit=0 424s | simCareerIntl: GREEN, 2706 checks over sections 7
