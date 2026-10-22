@@ -1,0 +1,9 @@
+s5 exit=0 5s | simSoccerOwnerTail: green. The owner picks his club, plays on the table, and every call does what it says and none is best at everything.
+s7 exit=0 5s | simSoccerOwnerTail: green. The owner picks his club, plays on the table, and every call does what it says and none is best at everything.
+s6 exit=0 5s | simSoccerOwnerTail: green. The owner picks his club, plays on the table, and every call does what it says and none is best at everything.
+s8 exit=0 4s | simSoccerOwnerTail: green. The owner picks his club, plays on the table, and every call does what it says and none is best at everything.
+s10 exit=0 5s | simSoccerOwnerTail: green. The owner picks his club, plays on the table, and every call does what it says and none is best at everything.
+s11 exit=0 5s | simSoccerOwnerTail: green. The owner picks his club, plays on the table, and every call does what it says and none is best at everything.
+s12 exit=0 4s | simSoccerOwnerTail: green. The owner picks his club, plays on the table, and every call does what it says and none is best at everything.
+s14 exit=0 5s | simSoccerOwnerTail: green. The owner picks his club, plays on the table, and every call does what it says and none is best at everything.
+s13 exit=0 5s | simSoccerOwnerTail: green. The owner picks his club, plays on the table, and every call does what it says and none is best at everything.
