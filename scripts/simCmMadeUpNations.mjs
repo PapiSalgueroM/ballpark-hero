@@ -16,7 +16,10 @@
         the club's own intake is from the club's country (the review's fix: a minor cannot move abroad).
      4) it stays with him: a bought man keeps the market's country through a loan out and back, the summer, a release
         to the pool and a reload; a man I sell to a club keeps it on that club's market listing (the ledger); a boy a
-        scout found abroad keeps the trip's country when promoted, spelt as the verified map spells it.
+        scout found abroad keeps the trip's country when promoted, spelt as the verified map spells it. The review's
+        fix adds three doors: a deal running out (the boy walks to the pool with it), a deal between two other clubs
+        written to the ledger (recordAiDeals: the buyer lists him under the seller's country) and a man signed back
+        from the pool.
      5) old saves: a save with every country stripped opens with them back, the same twice, the same as the day each
         home man arrived, and nothing else in it changes (against the engine with the draw switched off); the
         committed old save fixtures likewise. 5b) the review's fix: a country ask an engine from before the round
@@ -30,7 +33,7 @@
 
    NEGATIVE CONTROLS (CM_NATIONS_CONTROL), each must turn its section red, and each refuses to run if its edit finds
    nothing to edit: mainstream (1), flat (2), realtouched (3), nocarry, noledger and nopromote (4), noload (5),
-   askoff (6), leak and bloat (7); added by the review's fixes: nocap (2c), awayyouth (3), freeask (5b).
+   askoff (6), leak and bloat (7); added by the review's fixes: nocap (2c), awayyouth (3), aiswap, expiry and fasign (4), freeask (5b).
 
    Run: node scripts/simCmMadeUpNations.mjs      (BASE_ROOT=/tmp/base for the base comparison; SEASONS, LONG)
    Numbers measured on a runner are in the round's report (results-g/finish-1520.md). */
@@ -68,6 +71,10 @@ const CONTROLS = {
   awayyouth: [{ file: E, from: '  if (local) return place.home;\n', to: '' }],
   nocap: [{ file: E, from: '  if (!cap || !away) return c;', to: '  if (cap || !cap) return c;' }],
   freeask: [{ file: A, from: '  if (changed) state.boardObjectives = next;', to: '  if (changed && !changed) state.boardObjectives = next;' }],
+  aiswap: [{ file: E, from: "madeUpNationAt(player.name, from === state.clubName ? careerPlace(state) : clubPlace(from, state.eraId), state.eraId);",
+    to: "madeUpNationAt(player.name, from === state.clubName ? careerPlace(state) : clubPlace(to, state.eraId), state.eraId);" }],
+  expiry: [{ file: E, from: 'generated: madeUp(p) || undefined, ...(p.nation ? { nation: p.nation } : {}), since: career.season + 1,', to: 'generated: madeUp(p) || undefined, since: career.season + 1,' }],
+  fasign: [{ file: E, from: '    value: fa.value, generated: fa.generated, ...(fa.nation ? { nation: fa.nation } : {}),', to: '    value: fa.value, generated: fa.generated,' }],
 };
 if (CONTROL && !CONTROLS[CONTROL]) cannot(`CM_NATIONS_CONTROL=${CONTROL} is not a control this harness knows`);
 /* NONATION is the bridge every kit pinned to an older engine composes (scripts/lib/cmNoMadeUpNations1520.mjs): no
@@ -463,10 +470,52 @@ let moved = null;
     const fa = freed?.freeAgents?.find(f => f.name === 'Nation Probe 3');
     if (!fa || fa.nation !== 'Brazil' || fa.generated !== true) fail(`a released academy boy went to the pool as ${JSON.stringify(fa && { nation: fa.nation, generated: fa.generated })}`);
     else { s = freed; ok('a released academy boy is in the free agent pool marked made up, still Brazilian'); }
-    /* The summer. */
+    /* The summer, with the three scouted boys left on deals that run out (the review's fix: the expiry door). */
+    const expiring = trips.slice(0, 3).map(([, want], i) => [`Nation Probe ${i}`, want]);
+    s = { ...s, squad: s.squad.map(p => (expiring.some(([n]) => n === p.name) ? { ...p, contractYears: 1 } : p)) };
     s = mm.cm.startNextSeason(playSeason(mm, s));
     console.log(`   ${check('after the summer', s)} tracked men checked after the summer`);
+    let walked = 0;
+    for (const [name, want] of expiring) {
+      const fa = (s.freeAgents ?? []).find(f => f.name === name);
+      if (!fa) continue;
+      walked += 1;
+      if (fa.nation !== want || fa.generated !== true) fail(`${name}, scouted as ${want}, walked to the pool as ${JSON.stringify({ nation: fa.nation, generated: fa.generated })}`);
+    }
+    if (walked < 3) fail(`only ${walked} of 3 scouted boys whose deals ran out reached the pool, the expiry door was not tried`);
+    else ok(`${walked} scouted boys whose deals ran out are in the pool marked, with the trip's country`);
     moved = s;
+    /* The review's fix: a deal between two other clubs, written to the ledger (recordAiDeals). Ten made up men listed
+       abroad, each bought by a La Liga club, must be listed at the buyer under the country the seller's listing had. */
+    const buyers = mm.cm.playableClubs('laliga').map(c => c.name);
+    const picks = mm.cm.buildMarket(s).filter(l => l.generated && l.nation && l.club !== s.clubName
+      && mm.cm.careerPlace({ clubName: l.club })?.home !== 'Spain').slice(0, 10);
+    let recorded = 0, keptAi = 0;
+    for (const [i, mp] of picks.entries()) {
+      const to = buyers[i % buyers.length];
+      const next = mm.cm.recordAiDeals(s, [{ mp, to, fee: 1 }]);
+      if (next === s) continue;
+      recorded += 1;
+      const there = mm.cm.buildMarket(next).find(l => l.name === mp.name && l.club === to);
+      if (there?.nation === mp.nation) keptAi += 1;
+      else fail(`${mp.name}, listed at ${mp.club} as ${mp.nation}, is listed at ${to} as "${there?.nation}" after an AI deal`);
+    }
+    if (recorded < 5) fail(`only ${recorded} of ${picks.length} AI deals of made up men were written, the ledger door was not tried`);
+    else ok(`${keptAi} of ${recorded} made up men sold between two other clubs kept their country on the buyer's list`);
+    /* The review's fix: signed back from the pool the season after next, each keeps the trip's country. */
+    let t = mm.cm.startNextSeason(playSeason(mm, s));
+    let back = 0;
+    for (const [name, want] of expiring) {
+      if (!(t.freeAgents ?? []).some(f => f.name === name)) continue;
+      const signed = mm.cm.signFreeAgent({ ...t, budget: 9999, wageCap: 9999 }, name);
+      if (!signed) continue;
+      back += 1;
+      t = mm.cm.playNextEntry(signed, { skipHalftime: true }).state;
+      const got = t.squad.find(p => p.name === name)?.nation;
+      if (got !== want) fail(`${name}, scouted as ${want}, was signed back from the pool as "${got}"`);
+    }
+    if (back < 2) fail(`only ${back} scouted boys could be signed back from the pool, the free agency door was not tried`);
+    else ok(`${back} scouted boys signed back from the pool kept the trip's country through a match`);
   });
   ok(`${tracked.size} men tracked through the moves`);
 }
