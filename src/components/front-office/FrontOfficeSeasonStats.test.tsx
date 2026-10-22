@@ -268,7 +268,7 @@ describe('NFL front office: the season card and the history', () => {
     expect(box.textContent).toContain('Sim seasons, not real NFL history.');
     expect(box.textContent).toContain('Your club has won 1 award here.');
     /* before the close the awards tab sends him to the leaders */
-    expect(document.body.textContent).toContain('Awards are named when the regular season ends.');
+    expect(document.body.textContent).toContain('Awards are named when the season closes, after the playoffs.');
     expect(document.querySelector('[data-sim-note]')!.textContent).toBe("Sim season: every line and award here comes from this save's games, not real NFL stats.");
   });
 

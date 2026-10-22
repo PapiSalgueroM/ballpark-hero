@@ -20,7 +20,7 @@ import type { LeagueState } from './frontOffice';
 export const NFL_SIM_NOTE = "Sim season: every line and award here comes from this save's games, not real NFL stats.";
 export const NFL_STAT_HEADS = ['PTD', 'RTD', 'CTD', 'SK'] as const;
 export const NFL_LEADER_TABLES: readonly [string, NflStatCol][] = [['TD passes', 'ptd'], ['Rushing TDs', 'rtd'], ['Sacks', 'sk']];
-export const NFL_EMPTY_AWARDS = 'Awards are named when the regular season ends. Leaders has the season so far.';
+export const NFL_EMPTY_AWARDS = 'Awards are named when the season closes, after the playoffs. Leaders has the season so far.';
 export const NFL_NO_CLASS = 'rookie awards start with the first class drafted in this save';
 export const NFL_HISTORY_GAP = 'Seasons with no awards here were played before lines were kept, or sat out.';
 
