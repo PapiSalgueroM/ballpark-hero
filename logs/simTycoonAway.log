@@ -1,0 +1,42 @@
+Round 439: Stadium Tycoon away earnings, over the REAL hook at the REAL frame cadence
+   suite: src/test/tycoonAway.test.tsx
+
+A) the shipped hook
+   pass  1 the loop really runs at the frame cadence a browser gives it
+   pass  2 a closed tab reopened hours later settles on the load path
+   pass  3 a backgrounded tab settles the hours when it comes back
+   pass  4 the stated cap applies to a backgrounded tab exactly as to a closed one
+   pass  5 time spent playing is never billed back as time away
+   pass  6 a quick alt tab is not a trip away
+   pass  7 a closed tab plays one matchday per half hour away, and never the final one
+   pass  8 a hidden tab plays as many away matchdays as a closed one
+   what it measured:
+     30s of 16ms frames drove 21 match minutes and earned 135.3 against a header rate of 4.500/s
+     load path, 3h closed: paid 10800.000s of away time, 0.000s off the wall clock, margin 0.5s
+     visibility path, 3h hidden: paid 10800.000s of away time, 0.000s off the wall clock, margin 0.5s
+     visibility path, 3h hidden: the return frame alone would have paid 0.0, worth 0.0s of away time
+     cap: 20h hidden paid 8.0000h against the stated 8h cap; hidden 65520 and closed 65520 are the same number
+     no double bill: 60s of live play then a tab bounce paid 0 more on top of the 24570 already settled
+     floor: 20s behind another window paid nothing, which is the lib rule that a tab refresh is not a trip away
+     away matchdays on the load path: no time: 0, 29 seconds: 0, 1,799 seconds: 0, 1,800 seconds: 1, 3 hours: 6, 8 hours: 16, 8 hours in a 14 matchday league: 13
+     3h hidden played 6 away matchdays, 3h closed played 6
+
+B) negative control: the pre 439 load-only settle is put back
+   wrote a copy of the hook whose only away settle is the mount effect
+   ok   passed 1 the loop really runs at the frame cadence a browser gives it
+   ok   passed 2 a closed tab reopened hours later settles on the load path
+   ok   failed 3 a backgrounded tab settles the hours when it comes back
+         measured: AssertionError: three hours behind another window: the away total reads nothing and the bank moved 9, which is 4.1s of away pay where the rules promise 10800s: expected null not to be null
+   ok   failed 4 the stated cap applies to a backgrounded tab exactly as to a closed one
+         measured: AssertionError: twenty hours behind another window paid nothing at all: expected null not to be null
+   --   failed 5 time spent playing is never billed back as time away
+   --   passed 6 a quick alt tab is not a trip away
+   --   passed 7 a closed tab plays one matchday per half hour away, and never the final one
+   --   failed 8 a hidden tab plays as many away matchdays as a closed one
+   control reported 4 red section(s) out of 8
+
+simTycoonAway: green.
+   A backgrounded tab settles the hours it was hidden for, at the half rate the rules print.
+   The stated cap pays the same whether the tab was closed or only behind another window.
+   Live play is never billed back as time away, and a twenty second alt tab pays nothing.
+   The control put the load-only settle back and sections 3 and 4 went red, so these checks are alive.
