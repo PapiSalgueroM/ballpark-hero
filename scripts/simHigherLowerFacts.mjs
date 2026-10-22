@@ -182,7 +182,7 @@ for (const cfg of SPORTS.filter(s => s.record)) {
       source = rewrite(source, "careerTds: 127, lastSeason: 2025", "careerTds: 111, lastSeason: 2025", 'henrystale puts Henry back to 111');
     } else if (cfg.key === 'nfl-rushYds' && CONTROL === 'apmerge') {
       /* The two Adrian Petersons added together again, which beat Frank Gore. */
-      source = rewrite(source, "P('Adrian Peterson', 'RB', 'MIN, ARI, DET', 14918,", "P('Adrian Peterson', 'RB', 'MIN, ARI, DET', 16204,", 'apmerge merges the two Adrian Petersons');
+      source = rewrite(source, "P('Adrian Peterson', 'RB', 'MIN, NO, ARI, DET, SEA', 14918,", "P('Adrian Peterson', 'RB', 'MIN, NO, ARI, DET, SEA', 16204,", 'apmerge merges the two Adrian Petersons');
     } else if (cfg.key === 'tennis' && CONTROL === 'tennismerge') {
       /* The exact fault the merges guard against: Court counted under one name
          only, 13 instead of 24, which drops her below Graf and Nadal. */
