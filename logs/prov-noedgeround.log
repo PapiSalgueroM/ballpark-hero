@@ -1,0 +1,2 @@
+control noedgeround: red in ["5"], wanted 5
+simNbaGmDesk: control noedgeround fired (9 failures, as it should)

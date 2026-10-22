@@ -1,0 +1,2 @@
+control nodefault: red in ["1","5"], wanted 1
+simNbaGmDesk: control nodefault fired (98 failures, as it should)

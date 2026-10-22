@@ -1,0 +1,2 @@
+control nostepien: red in ["4"], wanted 4
+simNbaGmDesk: control nostepien fired (2 failures, as it should)

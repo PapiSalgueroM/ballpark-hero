@@ -1,0 +1,2 @@
+control noruleblock: red in ["3"], wanted 3
+simNbaGmDesk: control noruleblock fired (1 failures, as it should)

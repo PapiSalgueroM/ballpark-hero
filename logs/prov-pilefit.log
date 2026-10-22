@@ -1,0 +1,2 @@
+control pilefit: red in ["6"], wanted 6
+simNbaGmDesk: control pilefit fired (3 failures, as it should)

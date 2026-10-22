@@ -1,0 +1,2 @@
+control fullbird: red in ["2"], wanted 2
+simNbaGmDesk: control fullbird fired (110 failures, as it should)

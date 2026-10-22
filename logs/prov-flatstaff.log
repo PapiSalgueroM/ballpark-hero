@@ -1,0 +1,2 @@
+control flatstaff: red in ["5","7"], wanted 5
+simNbaGmDesk: control flatstaff fired (65 failures, as it should)
