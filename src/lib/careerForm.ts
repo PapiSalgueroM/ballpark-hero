@@ -59,11 +59,11 @@ export function soccerMoraleRating(morale: number | undefined): number {
   return soccerMoraleStep(morale) / 10;
 }
 
-/** The hub's line under the Morale bar: what this season's morale is worth, after the cap the phone shares. */
-export function soccerMoraleLine(morale: number, phoneSwing: number): string {
-  const step = soccerMoraleStep(morale), games = dressingRoomApps(phoneSwing, morale) - phoneSwing;
-  const sign = (n: number) => (n > 0 ? `+${n}` : `${n}`);
-  const what = step === 0 ? 'no swing'
-    : `${games ? `${sign(games)} league game${Math.abs(games) === 1 ? '' : 's'}, ` : ''}rating ${sign(step / 10)}`;
-  return `Morale ${morale}: ${what} this season.`;
+/** The hub's line under the Morale bar: what this season's morale is worth. The games say "up to" because the
+    dressing room shares the three game cap and the summer's texts can still move the phone at the press, so the
+    hub cannot know the games for sure; the rating it can, and says it exactly (simCareerForm section 3 holds the
+    line against every press). */
+export function soccerMoraleLine(morale: number): string {
+  const s = soccerMoraleStep(morale), n = Math.abs(s);
+  return `Morale ${morale}: ${s ? `up to ${n} ${s > 0 ? 'more' : 'fewer'} league game${n > 1 ? 's' : ''}, rating ${s > 0 ? '+' : ''}${s / 10}` : 'no swing'} this season.`;
 }

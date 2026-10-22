@@ -12,7 +12,9 @@
  *    changes the NFL divisor in careerForm.ts (10 to 11) in this tree's bundle: the replay must part.
  *    Measured 2026-10-21 (remote check r1523-s1): nba 90 careers 1,620 seasons, nfl 144 and 2,592, mlb 198 and
  *    3,564, nhl 108 and 1,944, all byte identical; the control parts the NFL at record 0.
- * 2) Soccer Career's step, its cap with the phone and the hub line, value by value (neutral 81, 15 points a step).
+ * 2) Soccer Career's step, its cap with the phone and the hub line, value by value (neutral 81, 15 points a step),
+ *    and the page's wiring of the line read from its code (comments stripped): fed the save's own morale, shown on a
+ *    playing hub whose season will be played. Control pageline feeds it another number and must fail.
  * 3) A PINNED fleet: every press of 120 house careers (scripts/lib/careerStep.mjs) is played again at morale 20, at
  *    the neutral point and at 90 from one seeded stream. Exact: calcAppearances' league games less the designed
  *    joint step (dressingRoomApps of the phone and the morale he PRESSED on) are one number at all three pins,
@@ -22,6 +24,10 @@
  *    shared cap already holds most of a low morale's cost) and 0.99 to 1.00 (neutral to 90); rating gaps 0.20 to
  *    0.21 and 0.14 to 0.15. Floors are about half of those. Controls: zero (the step is 0, every gap is 0) and
  *    posttext (the season reads the morale after the summer's texts: no press is exact and the top gaps are 0).
+ *    The hub line against the press (review of 2026-10-21): at every pin the games the morale moved against the
+ *    neutral pin (same press, same dice) must fit what the line for that morale says, "up to" the step in its
+ *    direction; the line the round first shipped (the cap worked out with the hub's phone, which the summer's texts
+ *    move at the press) is counted beside it. Control double adds the step a second time and must fail here.
  * 4) The NATURAL fleet, 400 careers to the end, the round against the same tree without the step on the same seeds,
  *    for the house fleet and (SIM_CAREER_FORM_FLEET_KIND=engaged) one that answers every text: the Ballon d'Or
  *    rate, league games, rating and the five legacy tier shares, both blocks printed. A settled head must gain
@@ -47,7 +53,7 @@ import { build } from 'esbuild';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BASE = process.env.SIM_CAREER_FORM_BASE || '2ab9bef153009a3144970e87755225a458ef0c3b';
 const CONTROL = process.env.SIM_CAREER_FORM_CONTROL || '';
-const CONTROLS = { divisor: '1', zero: '3', posttext: '3', per10: '4', nogate: '5' };
+const CONTROLS = { divisor: '1', pageline: '2', zero: '3', posttext: '3', double: '3', per10: '4', nogate: '5' };
 if (CONTROL && !CONTROLS[CONTROL]) { console.log(`ABORT: unknown SIM_CAREER_FORM_CONTROL ${CONTROL}`); process.exit(1); }
 /* A control runs only the section it breaks, unless SIM_CAREER_FORM_SECTIONS names others. */
 const SECTIONS = (process.env.SIM_CAREER_FORM_SECTIONS || (CONTROL ? CONTROLS[CONTROL] : '1,2,3,4,5')).split(',').map(s => s.trim());
@@ -141,7 +147,17 @@ const GATE_LINE = 'if (puskasDrawn && puskasAwardExists(thisYear)) {';
 const PRESS_MARK = 'function generateSeasonStats(state, clubs) {';
 const AT_PRESS = 'const moraleAtPress = (state: CareerState): number => MORALE_AT_PRESS.get(state) ?? state.morale;';
 const APPS_MARK = 'dressingRoomApps(phoneAppsSwing(state), moraleAtPress(state))';
-async function soccer(name, { stepOff = false, noGate = false, postText = false, per10 = false } = {}) {
+const FORM_IMPORT = 'import { dressingRoomApps, soccerMoraleRating } from "./careerForm";';
+/* The hub line on the page (section 2 reads the wiring) and what a line says (sections 2 and 3 hold it to the step). */
+const PAGE = 'src/pages/SoccerCareer.tsx';
+const PAGE_CALL = 'soccerMoraleLine(career.morale)';
+const PAGE_WIRED = `{career.phase === "playing" && !career.retired && !(career.matchFixBanned > 1) && !career.prisonSeasons && ( <p className="text-[10px] text-muted-foreground pl-16" data-morale-line>{${PAGE_CALL}}</p> )}`;
+function sayOf(line) {
+  const m = /^Morale \d+: (?:no swing|up to (\d) (more|fewer) league games?, rating ([+-]?\d(?:\.\d)?)) this season\.$/.exec(line);
+  if (!m) return null;
+  return m[1] ? { games: (m[2] === 'more' ? 1 : -1) * Number(m[1]), rating: Number(m[3]) } : { games: 0, rating: 0 };
+}
+async function soccer(name, { stepOff = false, noGate = false, postText = false, per10 = false, double = false } = {}) {
   const serve = {};
   if (per10) {
     const form = read(FORM), was = 'soccer: { per: 15, neutral: 81 },';
@@ -157,6 +173,14 @@ async function soccer(name, { stepOff = false, noGate = false, postText = false,
     const engine = read(ENGINE);
     if (engine.split(GATE_LINE).length !== 2) { console.log(`ABORT: ${ENGINE} does not hold ${GATE_LINE} once`); process.exit(1); }
     serve[ENGINE] = engine.replace(GATE_LINE, 'if (puskasDrawn) {');
+  }
+  if (double) {
+    let engine = serve[ENGINE] ?? read(ENGINE);
+    for (const [was, now] of [[FORM_IMPORT, FORM_IMPORT.replace(' } from', ', soccerMoraleStep } from')], [APPS_MARK, `${APPS_MARK} + soccerMoraleStep(moraleAtPress(state))`]]) {
+      if (engine.split(was).length !== 2) { console.log(`ABORT: ${ENGINE} does not hold ${was} once`); process.exit(1); }
+      engine = engine.replace(was, now);
+    }
+    serve[ENGINE] = engine;
   }
   if (postText) {
     const engine = serve[ENGINE] ?? read(ENGINE);
@@ -220,13 +244,31 @@ if (runs('2')) {
     if (F.soccerMoraleStep(m) === 0 && got !== phone) fail(`a neutral morale moved the phone's ${phone} games to ${got}`);
   }
   for (const [m, r] of [[20, -0.2], [70, -0.1], [81, 0], [90, 0.1], [100, 0.1]]) if (F.soccerMoraleRating(m) !== r) fail(`soccerMoraleRating(${m}) is ${F.soccerMoraleRating(m)}, not ${r}`);
-  const lines = [[90, 0, 'Morale 90: +1 league game, rating +0.1 this season.'], [100, 0, 'Morale 100: +1 league game, rating +0.1 this season.'],
-    [40, 0, 'Morale 40: -2 league games, rating -0.2 this season.'], [81, 0, 'Morale 81: no swing this season.'],
-    [100, 3, 'Morale 100: rating +0.1 this season.'], [40, -2, 'Morale 40: -1 league game, rating -0.2 this season.']];
-  for (const [m, phone, line] of lines) if (F.soccerMoraleLine(m, phone) !== line) fail(`soccerMoraleLine(${m}, ${phone}) reads "${F.soccerMoraleLine(m, phone)}"`);
+  /* The hub cannot know the phone the season is drawn with (the summer's texts move it at the press), so the line
+     names the step as "up to" and the rating exactly; section 3 holds it against every press. */
+  const lines = [[90, 'Morale 90: up to 1 more league game, rating +0.1 this season.'], [100, 'Morale 100: up to 1 more league game, rating +0.1 this season.'],
+    [40, 'Morale 40: up to 2 fewer league games, rating -0.2 this season.'], [70, 'Morale 70: up to 1 fewer league game, rating -0.1 this season.'],
+    [81, 'Morale 81: no swing this season.']];
+  for (const [m, line] of lines) if (F.soccerMoraleLine(m) !== line) fail(`soccerMoraleLine(${m}) reads "${F.soccerMoraleLine(m)}"`);
   const dash = [String.fromCharCode(0x2013), String.fromCharCode(0x2014)];
-  for (let m = 0; m <= 100; m += 1) for (const phone of [-3, 0, 3]) if (dash.some(d => F.soccerMoraleLine(m, phone).includes(d))) fail(`the hub line for ${m} holds a dash`);
-  console.log(`   neutral ${F.CAREER_FORM.soccer.neutral}, ${F.CAREER_FORM.soccer.per} morale points a step; ${want.length} steps, 15 caps, 5 ratings, ${lines.length} hub lines checked`);
+  for (let m = 0; m <= 100; m += 1) {
+    const said = sayOf(F.soccerMoraleLine(m)), s = F.soccerMoraleStep(m);
+    if (dash.some(d => F.soccerMoraleLine(m).includes(d))) fail(`the hub line for ${m} holds a dash`);
+    if (!said || said.games !== s || said.rating !== s / 10) fail(`the hub line for ${m} does not say step ${s}: "${F.soccerMoraleLine(m)}"`);
+  }
+  /* The page's wiring, read from the code with its comments stripped: one line under the Morale bar, fed the save's
+     own morale, shown on a playing hub that will play its season (not before a ban or prison season). Control
+     pageline feeds it another number and must fail here. */
+  let page = read(PAGE);
+  if (CONTROL === 'pageline') {
+    if (page.split(PAGE_CALL).length !== 2) { console.log(`ABORT: ${PAGE} does not hold ${PAGE_CALL} once`); process.exit(1); }
+    console.log('   CONTROL pageline: the page feeds the line his popularity');
+    page = page.replace(PAGE_CALL, 'soccerMoraleLine(career.popularity)');
+  }
+  const code = page.replace(/\{\/\*[\s\S]*?\*\/\}/g, '').replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '').replace(/\s+/g, ' ');
+  const wired = code.split(PAGE_WIRED).length - 1, marks = code.split('data-morale-line').length - 1;
+  if (wired !== 1 || marks !== 1) fail(`the page draws the morale line ${wired} times as wired (${marks} data-morale-line marks): "${PAGE_WIRED}"`);
+  console.log(`   neutral ${F.CAREER_FORM.soccer.neutral}, ${F.CAREER_FORM.soccer.per} morale points a step; ${want.length} steps, 15 caps, 5 ratings, ${lines.length} hub lines and 101 said steps checked, the page wired ${wired} time(s)`);
 }
 
 /* Play one engine call on a copy of `c` with its own counted stream; the career's own stream is put back after. */
@@ -245,12 +287,14 @@ if (runs('3')) {
   console.log('3) a pinned fleet: every press played again at morale 20, at the neutral point and at 90');
   if (CONTROL === 'zero') console.log('   CONTROL zero: the soccer step is 0 in this tree\'s bundle');
   if (CONTROL === 'posttext') console.log('   CONTROL posttext: the season reads the morale the summer\'s texts leave, not the one he pressed on');
-  const S = await soccer(CONTROL ? `pin-${CONTROL}` : 'pin', { stepOff: CONTROL === 'zero', postText: CONTROL === 'posttext' });
+  if (CONTROL === 'double') console.log('   CONTROL double: calcAppearances adds his morale step a second time, past the cap');
+  const S = await soccer(CONTROL ? `pin-${CONTROL}` : 'pin', { stepOff: CONTROL === 'zero', postText: CONTROL === 'posttext', double: CONTROL === 'double' });
   const OFF = await soccer('pin-off', { stepOff: true });
   const NEUTRAL = S.F.CAREER_FORM.soccer.neutral, PINS = [20, NEUTRAL, 90];
   const N = Number(process.env.SIM_CAREER_FORM_PIN_CAREERS || 120);
   const got = PINS.map(() => ({ league: [], rating: [] }));
   let presses = 0, exact = 0, clamped = 0, mismatch = 0, neutralSame = 0, neutralDiffer = 0, lowDrawsSame = 0, lowDrawsDiffer = 0;
+  let lineChecked = 0, lineWrong = 0, lineShort = 0, oldLineWrong = 0;
   let seen = null;
   globalThis.__sfApps = (leagueApps, st) => { seen = { leagueApps, phone: S.P.phoneAppsSwing(st) }; };
   for (let i = 0; i < N; i += 1) {
@@ -270,6 +314,17 @@ if (runs('3')) {
           if (runsAt.every(r => r.seen.leagueApps > 0 && r.seen.leagueApps < 38)) {
             const rest = runsAt.map((r, j) => r.seen.leagueApps - S.F.dressingRoomApps(r.seen.phone, PINS[j]));
             if (rest.every(v => v === rest[0])) exact += 1; else mismatch += 1;
+            /* the hub line against the press: what the line for the morale he pressed on says ("up to" the step)
+               must hold the games this morale moved against the neutral pin, the same press, the same dice. The
+               line the round first shipped (the cap worked out with the hub's phone) is counted beside it. */
+            const hubPhone = S.P.phoneAppsSwing(JSON.parse(snap));
+            PINS.forEach((p, j) => {
+              const said = sayOf(S.F.soccerMoraleLine(p)), moved = runsAt[j].seen.leagueApps - runsAt[1].seen.leagueApps;
+              lineChecked += 1;
+              if (!said || moved * said.games < 0 || Math.abs(moved) > Math.abs(said.games)) lineWrong += 1;
+              else if (moved !== said.games) lineShort += 1;
+              if (S.F.dressingRoomApps(hubPhone, p) - hubPhone !== moved) oldLineWrong += 1;
+            });
           } else clamped += 1;
           const offNeutral = at(OFF.E, NEUTRAL), offLow = at(OFF.E, 20);
           if (JSON.stringify(offNeutral.value) === JSON.stringify(runsAt[1].value) && offNeutral.draws === runsAt[1].draws) neutralSame += 1; else neutralDiffer += 1;
@@ -291,6 +346,9 @@ if (runs('3')) {
   if (exact < presses * 0.8) fail(`only ${exact} of ${presses} presses were checked exactly`);
   if (mismatch) fail(`${mismatch} presses moved league games by something other than the designed step of the morale he pressed on`);
   if (neutralDiffer) fail(`${neutralDiffer} presses at the neutral point differ from the arm without the step`);
+  console.log(`   the hub line: ${lineChecked} pinned presses read against the games they played, ${lineWrong} did not fit what the line said, ${lineShort} played fewer than "up to" (the shared cap); the cap worked out with the hub's phone would have been wrong in ${oldLineWrong}`);
+  if (lineChecked < exact * 3) fail(`only ${lineChecked} pinned presses were read against the hub line`);
+  if (lineWrong) fail(`the hub line was wrong about the league games in ${lineWrong} pinned presses`);
   /* Floors from measured headroom (see the header): each gap must clear its floor. */
   const FLOORS = { g1: 0.05, g2: 0.5, r1: 0.1, r2: 0.07 };
   const gaps = { g1: lm[1] - lm[0], g2: lm[2] - lm[1], r1: rm[1] - rm[0], r2: rm[2] - rm[1] };
