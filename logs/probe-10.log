@@ -1,0 +1,4 @@
+mutthrow: the hand back now throws when it acts
+  throw new Error(`HANDBACK ACTED on ${h.man.name} at ${h.club}`);
+Error: HANDBACK ACTED on Cole Strother at IND
+harness exit 1

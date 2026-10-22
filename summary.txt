@@ -1,0 +1,5 @@
+probe-10 exit=0 11s | harness exit 1
+probe-35 exit=0 10s | harness exit 1
+probe-def exit=0 37s | harness exit 0
+probe-old exit=0 38s | harness exit 0
+probe-old6 exit=0 30s | harness exit 0

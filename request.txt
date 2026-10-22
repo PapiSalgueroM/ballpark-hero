@@ -1,0 +1,5 @@
+probe-def: git worktree add -q --detach .rcm-def 4ceb55f66 && cd .rcm-def && node ../.rc/x/mutthrow.mjs && node scripts/simNbaGmDesk.mjs; echo "harness exit $?"
+probe-old: git worktree add -q --detach .rcm-old 4ceb55f66 && cd .rcm-old && node ../.rc/x/mutthrow.mjs && git show 70593dd4:scripts/simNbaGmDesk.mjs > scripts/simNbaGmDesk.mjs && node scripts/simNbaGmDesk.mjs; echo "harness exit $?"
+probe-10: git worktree add -q --detach .rcm-10 4ceb55f66 && cd .rcm-10 && node ../.rc/x/mutthrow.mjs && SIM_SEED=10 node scripts/simNbaGmDesk.mjs 2>&1 | grep -E "HANDBACK|checks passed|failure" | head -5; echo "harness exit ${PIPESTATUS[0]}"
+probe-35: git worktree add -q --detach .rcm-35 4ceb55f66 && cd .rcm-35 && node ../.rc/x/mutthrow.mjs && SIM_SEED=35 node scripts/simNbaGmDesk.mjs 2>&1 | grep -E "HANDBACK|checks passed|failure" | head -5; echo "harness exit ${PIPESTATUS[0]}"
+probe-old6: git worktree add -q --detach .rcm-old6 4ceb55f66 && cd .rcm-old6 && node ../.rc/x/mutthrow.mjs && git show 70593dd4:scripts/simNbaGmDesk.mjs > scripts/simNbaGmDesk.mjs && SIM_SEED=6 node scripts/simNbaGmDesk.mjs 2>&1 | tail -2; echo "harness exit ${PIPESTATUS[0]}"
