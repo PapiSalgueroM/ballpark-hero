@@ -1,0 +1,20 @@
+rankem 2026-10-25 390 reduce: played, "5 / 5 correct" true, restored true, scrollWidth 390, page errors 0
+rankem 2026-10-25 390 no-preference: played, "5 / 5 correct" true, restored true, scrollWidth 390, page errors 0
+rankem 2026-10-25 1280 reduce: played, "5 / 5 correct" true, restored true, scrollWidth 1280, page errors 0
+rankem 2026-10-25 1280 no-preference: played, "5 / 5 correct" true, restored true, scrollWidth 1280, page errors 0
+rankem 2026-10-27 390 no-preference: played, "3 / 5 correct" true, restored true, scrollWidth 390, page errors 0
+rankem 2026-10-27 1280 reduce: played, "3 / 5 correct" true, restored true, scrollWidth 1280, page errors 0
+rankem how to play: opened, mentions "from the database": true
+whats-new 390: line found
+whats-new 1280: line found
+/champ-or-not 2026-10-31 rows2026=false: 5458 chars, Brisbane false, couldn't load false, errors 0
+/champ-or-not 2026-10-31 rows2026=true: 5458 chars, Brisbane false, couldn't load false, errors 0
+/champ-or-not 2026-11-01 rows2026=false: 5501 chars, Brisbane false, couldn't load false, errors 0
+/champ-or-not 2026-11-01 rows2026=true: 5501 chars, Brisbane true, couldn't load false, errors 0
+/champ-or-not: 2026-10-31 identical with and without the rows: true; 2026-11-01 identical: false
+/silverware-sort 2026-10-31 rows2026=false: 5834 chars, Brisbane false, couldn't load false, errors 0
+/silverware-sort 2026-10-31 rows2026=true: 5834 chars, Brisbane false, couldn't load false, errors 0
+/silverware-sort 2026-11-01 rows2026=false: 5925 chars, Brisbane true, couldn't load false, errors 0
+/silverware-sort 2026-11-01 rows2026=true: 5925 chars, Brisbane true, couldn't load false, errors 0
+/silverware-sort: 2026-10-31 identical with and without the rows: true; 2026-11-01 identical: true
+walkRun1551: all checks passed
