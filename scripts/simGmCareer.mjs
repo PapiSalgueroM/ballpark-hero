@@ -85,7 +85,7 @@
  *   flatmedia, extradraw (3); firedclub, unkeyed (4)
  *   staffrides, ledgerrides, rostermove, depthstays, askrebuilt (5)
  *   halfseason, notrim, awayxp, lastcall, noawaydraft (6)
- *   overlap, firedlost (7)
+ *   overlap, firedlost, hubcounted (7)
  * Exit 0 green, 1 red (or a control fired), 2 could not run, 3 a control did not fire.
  *
  * MEASURED 2026-10-22 on GitHub runners (r1533-s4b, head 8a1fdbcb), the floors set near 70 percent of each:
@@ -126,7 +126,7 @@ const runs = id => ONLY.length === 0 || ONLY.includes(id);
 const CONTROLS = {
   epoch: '1', addkey: '1', deskoffblock: '2', paytwice: '2', lateseat: '2', emptytile: '8', nameinline: '8',
   flatowner: '2', flatmedia: '3', extradraw: '3', firedclub: '4', unkeyed: '4', staffrides: '5', ledgerrides: '5', rostermove: '5', depthstays: '5', askrebuilt: '5',
-  halfseason: '6', notrim: '6', awayxp: '6', lastcall: '6', noawaydraft: '6', overlap: '7', firedlost: '7',
+  halfseason: '6', notrim: '6', awayxp: '6', lastcall: '6', noawaydraft: '6', overlap: '7', firedlost: '7', hubcounted: '7',
 };
 if (CONTROL && !CONTROLS[CONTROL]) {
   console.error(`SIM_GM_CAREER_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(CONTROLS).join(', ')})`);
@@ -197,6 +197,8 @@ const EDITS = {
   /* Section 7: whole careers. A new stint opened for the league's season instead of the next; the firing not recorded. */
   overlap: ['host', '  const career = startSeatStint(seat.career, offer, market.season);', '  const career = startSeatStint(seat.career, offer, market.season - 1);'],
   firedlost: ['host', "  if (f.fired) career = endSeatStint(career, 'fired');", '  /* the firing not recorded */'],
+  /* Section 7, Round 1533's fix pass: the hub reads the league's season as already on his record. */
+  hubcounted: ['desk', "  if (phase === 'hub' || phase === 'pick') return false;", "  if (phase === 'pick') return false;"],
   /* Section 8: a player's name put into the arrival line. */
   nameinline: ['host', 'return `You take over the ${nameOf(s.team)}. They finished ${row.record}, ${ordinal(row.place)} in the league.`;',
     'return `You take over the ${nameOf(s.team)}. They finished ${row.record}, ${ordinal(row.place)} in the league. ${(league as any).teams?.[s.team]?.players?.[0]?.name ?? \'\'}`;'],
@@ -1089,6 +1091,23 @@ if (runs('7')) {
   begin('7', 'whole careers: the save, the record and the counters agree at every step across firings, takes and years out');
   const host = d.host;
   const S7 = { checks: 0, forced: 0, firings: 0, takes: 0, sits: 0, closed: 0, seasons: 0 };
+  /* Critic correction 8, the row Round 1533's review found half built (only 'fired' was ever asked): the save's
+     counters hold the league's season on the recap, the draft and the fired screen of a season he ran; never on
+     the pick screen or the hub (a season being played: a legacy Career box would start his stint a season late,
+     hostLegacySeat), and never after a year out (control hubcounted). Read off the save, so a desk off save too. */
+  {
+    const ranBlock = { v: 1, career: SEAT.newGmCareer(d.team, 4, 2026) };
+    const awayBlock = { v: 1, career: SEAT.sitOutYear(SEAT.endSeatStint(SEAT.newGmCareer(d.team, 4, 2026), 'fired')) };
+    const ran = G.withGmBlock(G.freshGmDesk(), H.GM_HOST_KEYS.seat, ranBlock);
+    const away = G.withGmBlock(G.freshGmDesk(), H.GM_HOST_KEYS.seat, awayBlock);
+    const ROWS = [['pick', null, false], ['hub', null, false], ['hub', ran, false], ['recap', null, true], ['recap', ran, true],
+      ['draft', null, true], ['draft', ran, true], ['fired', null, true], ['fired', ran, true], ['fired', away, false]];
+    for (const [phase, desk, want] of ROWS) {
+      S7.checks++;
+      const got = D.nflSeasonCounted(phase, desk);
+      if (got !== want) fail(`the season counted on ${phase}, ${desk === away ? 'after a year out' : desk ? 'desk on' : 'desk off'}: ${got}, the save says ${want}`);
+    }
+  }
   for (const seed of S7_SEEDS) {
     const rng = mulberry32(8000 + seed);
     const lg = d.newLeague(rng, d.team);
