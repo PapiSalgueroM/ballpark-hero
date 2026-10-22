@@ -1,0 +1,9 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+mdNew exit=0 24s | simCmMatchDay: all sections green (918 matches: 462 home, 448 away, 8 neutral)
+weight exit=0 30s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+fx-slow exit=0 15s |   page errors: 0 
+fx-fail exit=0 10s |   page errors: 0 
+units exit=0 4s |    Duration  4.11s (transform 2.12s, setup 119ms, collect 3.31s, tests 2.15s, environment 631ms, prepare 233ms)
+pin1081 exit=1 8s | Node.js v24.22.0
+tsc exit=0 64s | 
+walk exit=0 110s | playCmTactics: all green (41 checks)
