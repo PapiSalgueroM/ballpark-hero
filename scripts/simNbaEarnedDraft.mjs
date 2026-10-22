@@ -212,8 +212,26 @@
  *       rating steps 2.42, 7.40, 4.03, 0.60, 0.38 (errors 0.07 to 0.38); gmfirst, bestfirst and playinmade fire
  *       here; flatodds lands its first step at 2.25 and flatclass its last at 0.13, both clear of the floors.
  *   6   steps by ten slots on the tuned curve 11.25, 3.53, 0.33, 0.28, 0.58, 0.25 (floor 0.17).
- *   7   12 sets, two runs, old and new: S1 at 5, S2, S6 payers and S5 PASS; S1 at 10, S3, S4 and S6 dead OUTSIDE
- *       (the table and why: docs/audits/ROUND-1321-NOTES.md). fatclass and bestfirst FIRED on sets 1 to 4.
+ *   7   12 sets, two runs, old and new, the knobs on rivals only: S1 at 5, S2, S6 payers and S5 PASS; S1 at 10, S3,
+ *       S4 and S6 dead OUTSIDE (the STOP; the table and why: docs/audits/ROUND-1321-NOTES.md). fatclass and
+ *       bestfirst FIRED on sets 1 to 4.
+ * MEASURED 2026-10-21, after the lead's rulings (the knobs on every club; fleet r1321-k1 and r1321-k2 on 1db74de3,
+ * judged by r1321-k5 on 2ffb7cc7), 12 sets, two runs, new minus old run by run (error), every line resolved:
+ *   S1 at 5 +0.26 / +0.25 (0.01), band 0.5: PASS.      S1 at 10 +0.98 / +0.98 (0.01), band -0.5 to +1.5: PASS.
+ *   S2 +2.6 / +2.1 (0.2), band 21.2: PASS.              S3 -38.2 / -37.6 (1.4, 1.3): PRINTED (old 81.8 / 80.9).
+ *   S4 the arm's own 65.9 / 64.6 (1.0, 0.8), floor 60: PASS, 5.3 points (about five errors) clear; old 100.0.
+ *   S6 dead the arm's own 2.47 / 2.52 (0.02), under 3.0: PASS.   S6 payers -0.39 / -0.39 (0.02), band 0.5: PASS,
+ *   0.11 from its edge (about five errors).   S5 24 of 24 sets: PASS.   No retune (ruling 5's condition not met).
+ *   Fleet controls on sets 1 to 4: fatclass FIRED (S1 at 5 by 2.22, S1 at 10 by 3.85, S2 by 35.4, payers by
+ *   10.70, S5 in 2 sets); bestfirst FIRED on S5 alone (4 of 4 sets; with S3 printed and its S4 at 70.4 over the
+ *   floor, S5 is the line that holds an order that does not earn, and sections 3 and 5 hold it on the quick walk).
+ *   Section 11: 22 known answers. The judge's controls on the quick walk and under a COMBINE of that fleet
+ *   (r1321-k5): judgetwo 3, judgerange 2, judgefloor 1, judgecap 1 failures (11); judgeflip 12 (11), and 12 and 3
+ *   under the COMBINE (11 and 7: S1 at 5, S2 and payers judged OUTSIDE).
+ *   controls on the quick walk after the rulings, runner r1321-k8 on 2ffb7cc7, all 25 fired in exactly their
+ *       sections; the symmetric knobs moved a few counts from the list below (flatodds 455, gmfirst 60 and 2,
+ *       bestfirst 90 and 4, shownread 465, the rest the same), and the judge's five: judgetwo 3, judgerange 2,
+ *       judgefloor 1, judgecap 1, judgeflip 12 (11).
  *   controls on the quick walk, runner r1321-j6 on f9f28256, all 20 fired in exactly their sections:
  *       touchseason 41 (1); fatclass 3 (6); nocurve 19 (6); flatodds 441 (2); playinmade 32, 32, 1, 12, 1, 4
  *       (2, 3, 4, 5, 8, 9); gmfirst 59 and 2 (3, 5); bestfirst 90 and 5 (3, 5); origholder 192 (3); shortclass
@@ -1549,7 +1567,7 @@ function twoArmTable(table) {
     const { perRun, margin, maxSe, verdict, miss, need } = judgeLine(line, old, vs, runs);
     const said = `${verdict}${verdict === 'OUTSIDE' ? ` by ${fix(miss, line.d)} (${fix(miss / maxSe, 1)} errors)` : ''}${need ? ` (the rule asks ${need} sets)` : ''}`;
     const own = OWN.has(line.kind) ? "(the arm's own) " : '';
-    md.push(`| ${line.id}: ${line.what} | ${perRun.map(p => fix(p.old, line.d)).join(' / ')} | ${perRun.map(p => fix(p.vs, line.d)).join(' / ')} | ${own}${perRun.map(p => `${p.d >= 0 ? '+' : ''}${fix(p.d, line.d)} (${fix(p.se, line.d)})`).join(' / ')} | ${bandText(line, margin)} | ${perRun.map(p => p.k).join(' / ')} | ${said} |`);
+    md.push(`| ${line.id}: ${line.what} | ${perRun.map(p => fix(p.old, line.d)).join(' / ')} | ${perRun.map(p => fix(p.vs, line.d)).join(' / ')} | ${own}${perRun.map(p => `${p.d >= 0 && !own ? '+' : ''}${fix(p.d, line.d)} (${fix(p.se, line.d)})`).join(' / ')} | ${bandText(line, margin)} | ${perRun.map(p => p.k).join(' / ')} | ${said} |`);
     if (verdict === 'OUTSIDE') fleetMisses.push(`${line.id} by ${fix(miss, line.d)}, ${fix(miss / maxSe, 1)} errors`);
     if (!FLEET_CONTROL && line.kind !== 'print') check(verdict === 'PASS', `${line.id} (${line.what}): ${said}`);
   }

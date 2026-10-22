@@ -5,11 +5,16 @@ Branch `r1321-nba-draft-earned-a`, base `48cb9d4b` (origin/main, Release AY). Wr
 
 ## Where it stands
 
-2026-10-21 (session J): step (d) is built and measured. origin/main (85a76241) was merged first with no conflict
-and the old gates rerun green on it (runner `r1321-j1`). The NEW arm runs through the libraries' own presses, the
-curve and the two knobs are tuned, section 5 (the incentive) is in the quick lane, and section 7's two arm table
-judges the lead's stop lines of 2026-10-13. **The table is a STOP: see "Step (d)" below.** Before that the round was
-split at step (d) (advice 19) and stopped for the lead's ruling on S4 and S6 (the OLD arm section below).
+2026-10-21, late (session J): **the lead's rulings on the step (d) STOP are applied and the table is GREEN.** The
+two knobs are one rule for every club, his own included; the stop lines are the ones the lead ruled
+(`dukb-handoff/2026-10-10/briefs/lead-rulings-1321-d.md`); the full fleet ran again (12 sets, twice) with the
+symmetric knobs and every asserted line passes, so nothing was retuned; the judge has known answers (section 11)
+and five controls that slip it. origin/main `c1b39364` was merged first, no conflict, no NBA file moved. See "The
+lead's rulings of 2026-10-21, applied" below. PART B can be briefed on this table.
+
+Earlier the same day: step (d) was built and measured on the lines of 2026-10-13 and was a STOP (four lines outside,
+"Step (d)" below). Before that the round was split at step (d) (advice 19) and stopped for the lead's ruling on S4
+and S6 (the OLD arm section below).
 
 Nothing in `src` calls the new code but its own tests. No screen, no copy, no What's New, no guide edit.
 
@@ -51,7 +56,112 @@ Nothing in `src` calls the new code but its own tests. No screen, no copy, no Wh
 After a summer the season has rolled, so the `draft` block a night leaves on the desk (about 8 KB: the order and 60
 slots) is never current again. It stays on the save on purpose (advice 25); nobody should "clean" it.
 
-## Step (d), 2026-10-21 (session J): the NEW arm, the tuning, the two arm table. A STOP.
+## The lead's rulings of 2026-10-21, applied (session J, late)
+
+What the rulings changed, each in the code:
+
+1. S3 is PRINTED and never asserted (`kind: 'print'`): it measures the old draft's gift to the GM.
+2. S4 is an absolute floor on the new arm's own rate: at least 60 percent of the two strongest starts' seasons 2 to
+   10 are playoff seasons (`kind: 'floor'`), the old arm's figure printed beside it in the table's old column.
+3. S1 at season 10 is accepted up to +1.5: new minus old from -0.5 to +1.5 (`kind: 'range'`). The ruling widened
+   the upper side only, so the lower side keeps the old 0.5 (my reading; a league that came out weaker would be a
+   different cost from the one the lead accepted). S1 at season 5 keeps its 0.5 either side. PART B's brief
+   revisits season 10 with the class curve.
+4. CPU dead money is under 3.0 $M a season (`kind: 'cap'`), with its cause written in the line and the harness:
+   first rounders 13 to 30 sign the four season rookie deal and CPU clubs cut them, which no allowed knob reaches.
+   The real fix is a per slot rookie scale with team options (two guaranteed years and two options, so a late first
+   rounder is declined rather than cut), named for PART B or a PART C, after which this band returns under 1.0.
+5. The knobs are SYMMETRIC (`NBA_DRAFT_KNOBS.secondOnMin` and `latePot`, every club's man, his own included). The
+   full fleet ran again, 12 sets twice; S1 at 5, S2, the payers and S5 stayed in their bands, so nothing was retuned.
+6. Section 5's floors (1.6 places and 0 rating) stand as documented in step (d).
+7. The judge has a negative control. The verdict code is now `judgeLine` and its one comparison `inBand`; section
+   11 judges a synthetic table with known answers (22: every asserted line inside and outside its band on both sides
+   of every edge, S3 never judged); five controls each slip `inBand` in a copy of the harness and run it whole, and
+   every one turned the run red on a runner (below).
+8. The gate lines are in `dukb-handoff/2026-10-10/results-g/rc-1321.txt`.
+
+Each line's resolution scale (`res`, whose third a run's error must beat) stays the old one where the band widened:
+0.5 for S1 at 10, 10 points for S4 (the step (a) margin the fleet was sized on) and 1.0 $M for the dead money, so no
+widened band made its line coarser.
+
+### The two arm table under the rulings, 12 sets, two runs (fleet `r1321-k1` and `r1321-k2` on 1db74de3, judged by `r1321-k5` on 2ffb7cc7)
+
+`SIM_NBA_EARNED_DRAFT_COMBINE=<the 60 fleet files> node scripts/simNbaEarnedDraft.mjs`: exit 0,
+"simNbaEarnedDraft: green." (11 sections). The OLD arm's numbers are the same as `r1321-a1`'s on the base and
+`r1321-j4`'s on 311f2cb0, to the printed digit.
+
+| line | old (run 1 / run 2) | new | new minus old, run by run (error) | band | sets | verdict |
+|---|---|---|---|---|---|---|
+| S1 at 5: mean nbaStrength of the 30 clubs, season 5 tip off | 83.11 / 83.11 | 83.37 / 83.37 | +0.26 (0.01) / +0.25 (0.01) | within 0.50 | 12 / 12 | PASS |
+| S1 at 10: the same, season 10 tip off | 82.20 / 82.19 | 83.18 / 83.17 | +0.98 (0.01) / +0.98 (0.01) | from -0.50 to +1.50 | 12 / 12 | PASS |
+| S2: men rated 85 or more, season 10 tip off | 105.9 / 106.0 | 108.4 / 108.1 | +2.6 (0.2) / +2.1 (0.2) | within 21.2 | 12 / 12 | PASS |
+| S3: two weakest starts' playoff seasons, seasons 2 to 5, per season (n 80 a set) | 81.8 / 80.9 | 43.5 / 43.3 | -38.2 (1.4) / -37.6 (1.3) | printed, never asserted | 12 / 12 | PRINTED |
+| S4: two strongest starts' playoff seasons, seasons 2 to 10, per season (n 180 a set) | 100.0 / 100.0 | 65.9 / 64.6 | (the arm's own) 65.9 (1.0) / 64.6 (0.8) | at least 60.0 | 12 / 12 | PASS |
+| S6 dead: CPU dead money a season ($M), seasons 2 to 10 | 0.13 / 0.13 | 2.47 / 2.52 | (the arm's own) 2.47 (0.02) / 2.52 (0.02) | under 3.00 | 12 / 12 | PASS |
+| S6 payers: tax payers a season, seasons 2 to 10 | 2.29 / 2.29 | 1.90 / 1.90 | -0.39 (0.02) / -0.39 (0.02) | within 0.50 | 12 / 12 | PASS |
+| S5: his first selection later and worse at every band of finish, in every set | flat (pick 1) | 24 of 24 sets | | every set | 24 | PASS |
+
+What the symmetric knobs moved against the rival only table of step (d): S4 fell from 73.2 / 71.9 to 65.9 / 64.6
+(his own late picks no longer grow, so a strong start ages faster), now 5.3 points (about five errors) over its
+floor; the payers moved from -0.21 to -0.39, 0.11 (about five errors) inside their band; S3 from -34.6 to -37.9;
+S1 at 10 from +1.04 to +0.98; his own dead money from 2.15 $M a season to 0.00 (his second rounders now sign one
+season at the minimum). The strong starts' title share over seasons 2 to 10, printed and never asserted: OLD 78.3,
+NEW 5.6 (7.6 with the rival only knobs). Two lines now sit about five errors from their edge, the payers and S4: a
+retune in PART B (the class curve) must watch both.
+
+### The fleet controls under the rulings (sets 1 to 4, run 1; `r1321-k2` played them, `r1321-k5` judged them)
+
+| control | COMBINE | outside (miss, in errors over four sets) |
+|---|---|---|
+| fatclass | exit 1, "FIRED on the fleet" | S1 at 5 by 2.22 (152.8), S1 at 10 by 3.85 (678.5), S2 by 35.4 (230.6), S6 payers by 10.70 (217.6), S5 in 2 of 4 sets |
+| bestfirst | exit 1, "FIRED on the fleet" | S5 in 4 of 4 sets only |
+
+Said plainly: with S3 printed and bestfirst's S4 at 70.4 (over the floor), the table now holds an order that does
+not earn through S5 alone on the fleet; sections 3 and 5 still hold it on every quick walk (bestfirst FIRED there
+in 3 and 5). If PART B ever loosens S5, the table has no other line against that failure.
+
+### The arbitrage arm under the rulings (sets 1 to 4, run 1): a CEILING, never a price
+
+580 forced swaps over 240 careers. His first selection moves from pick 19.2 (strong), 16.9 (middle) and 17.2 (weak)
+in the plain new arm to 3.7, 3.7 and 4.2; the strong starts' playoff seasons over 2 to 10 from 65.3 (pooled) to
+99.7, their title share from 5.6 to 64.6 percent. A first is worth that much at most to a GM who can always get the
+worst club's: a trade window during or before the draft needs a price first (pair 2, out of scope here).
+
+### Beside the lines under the rulings (pooled; printed, never asserted)
+
+| | old | new |
+|---|---|---|
+| strong starts: playoff / title seasons / mean wins (seasons 1 to 10) | 99.5 / 71.7 / 64.6 | 68.2 / 6.3 / 43.0 |
+| middle starts: playoff / title / wins | 94.7 / 63.6 / 61.5 | 60.6 / 3.5 / 41.2 |
+| weak starts: playoff / title / wins | 82.6 / 60.3 / 58.7 | 58.9 / 6.6 / 41.0 |
+| his first selection, pick number (strong, middle, weak) | 1.0, 1.0, 1.0 | 19.2, 16.9, 17.2 |
+| his first selection, true rating (strong, middle, weak) | 85.9, 85.9, 85.9 | 73.9, 74.6, 75.5 |
+| the bottom three: in the sixteen within three seasons (percent) | 89.5 | 83.5 |
+| the bottom three: change in win share after three seasons (points) | 18.8 | 15.3 |
+| spread of nbaStrength over the 30 clubs, season 5 / season 10 | 2.11 / 2.75 | 1.29 / 1.37 |
+| the free agent pool's best ten at tip off, seasons 2 to 10 | 78.66 | 77.95 |
+| his own dead money a season ($M), seasons 2 to 10 | 16.03 | 0.00 |
+| men signed on a draft night | 12.0 | 60.0 |
+
+### The judge's controls (the lead's ruling 7)
+
+Each writes a copy of the harness with one comparison of `inBand` slipped (the target asserted exactly once; the
+copy keeps the harness's file name, because seedRandom seeds Math.random from it, and its two paths pinned to the
+tree), runs the copy whole with no control and reads which sections went red. A first try named the copy otherwise
+and section 1 went red with section 11 in every one (`r1321-k3`), which is how the file name rule was found.
+
+| control | the slip | red on the quick walk | red under a COMBINE of the fleet (`r1321-k5`) |
+|---|---|---|---|
+| judgetwo | the two sided band loses its absolute value | 11 (3 failures) | 11 (3) |
+| judgerange | the range's two ends joined by or | 11 (2) | 11 (2) |
+| judgefloor | the floor compared against its own negative | 11 (1) | 11 (1) |
+| judgecap | the cap compared against the value's negative | 11 (1) | 11 (1) |
+| judgeflip | the two sided band turned inside out | 11 (12) | 11 and 7 (12 and 3: S1 at 5, S2 and the payers judged OUTSIDE) |
+
+The first four make the judge too lenient, which only a known OUTSIDE answer can catch; judgeflip shows the real
+fleet's table going red through the same comparison.
+
+## Step (d), 2026-10-21 (session J): the NEW arm, the tuning, the two arm table. A STOP, since ruled (history: the section above stands)
 
 The lines are the lead's of 2026-10-13 (`dukb-handoff/2026-10-10/briefs/lead-rulings-1319-1320-1321.md`), fixed
 before the NEW arm ran: S1 the mean nbaStrength at seasons 5 and 10 within 0.5; S2 men rated 85 or more at season
@@ -186,7 +296,7 @@ tax payers a season and 32 more men of 85 or better on the league; tuned, -0.2 a
    do not. The fleet measured the round with that edge in it. PART B's words must not hide it, or the lead may
    prefer the knobs on every club (one line in the host; the fleet would have to run again).
 
-Nothing here is argued past its line: the four OUTSIDE lines are the STOP, and PART B waits for the lead's word.
+Nothing here is argued past its line: the four OUTSIDE lines were the STOP. The lead ruled on all four and on point 4 (the knobs on every club) the same evening; the section "The lead's rulings of 2026-10-21, applied" above is what stands.
 
 ## The OLD arm (today's draft, desk on), 12 sets of ten seeds, two runs (runner `r1321-a1`)
 
@@ -253,6 +363,42 @@ Every finding was fixed, each in its own commit. Report: `dukb-handoff/2026-10-1
    table through the NBA desk's `nbaGamePickRules`, never gmPicks itself (advice 17's letter, not only its purpose).
 
 ## Gates on runners (each a `git show origin/rc-results/<name>:logs/<label>.log`)
+
+After the lead's rulings, 2026-10-21 late (session J), newest first. The merge of origin/main `c1b39364` is
+`a04e791c`; the symmetric knobs `1db74de3`; the lines, the judge and section 11 `a717acfc`; the copy's file name
+`2ffb7cc7`.
+
+- `r1321-k8` on 2ffb7cc7: earned exit 0 "simNbaEarnedDraft: green." (10 sections); earned-ctl exit 0 "all 25
+  fired, each in exactly its own sections" (the 20 of step (d), a few counts moved by the symmetric knobs:
+  flatodds 455, gmfirst 60 and 2, bestfirst 90 and 4, shownread 465; and the judge's five in section 11:
+  judgetwo 3, judgerange 2, judgefloor 1, judgecap 1, judgeflip 12); each judge control alone exit 1 FIRED with the
+  same counts.
+- `r1321-k9` on 2ffb7cc7 (#!serve, #!playwright, #!serial): weight, `/nba-front-office` 378.9K gzipped in 38 files
+  and `/front-office` 372.1K in 38 files on this head AND on a build of c1b39364 in the same job, the 76 chunk lines
+  equal; simWritesAreSent exit 1, 2 failures (Guess the Nation's locator timeout, then "no guess was ever
+  submitted") on both; simGmCalendar exit 1, 6 failures (the Everton and Augsburg calendar hashes) on both. Not this
+  round's: red on main itself.
+- `r1321-k5` on 2ffb7cc7 (#!serial): the COMBINE of the 60 fleet files of k1 and k2: combine exit 0 "green" (the
+  table above); fat exit 1 and best exit 1 "FIRED on the fleet"; arb exit 1 "RED in section 7" (the ceiling, its
+  S5 is flat by design); the five judge controls under the COMBINE each exit 1 FIRED (table above).
+- `r1321-k7` on a717acfc (#!serve, #!playwright): build 0; readers1 (12 harnesses) and readers2 (11) exit 0; fences
+  exit 1 on simWritesAreSent only (above), the other 16 exit 0; known: simGmXp exit 0, simGmCalendar exit 1 (above).
+- `r1321-k6` on a717acfc: nbadesk exit 0 "all seven checks passed" and its 18 controls each "fired"; capital-ctl exit
+  0, the plain run and 21 controls each with its own failedIndices; draftorder exit 0, draftorder-all "all 40
+  fired"; singles exit 0 (simGmPicks, simDraftNight, simEngineIds, simInventedNames, simHarnessAnchors,
+  simNoRivalNames "0 findings", simStorageWrites); diffproof exit 0 "diffproof-ok" against c1b39364 (no removed
+  engine line, no growth shape, the four desk off files equal to 48cb9d4b, src lists nbaFrontOffice.ts and the four
+  new files with 883 insertions, simGmDraftOrder.mjs 1 line).
+- `r1321-k4` on a717acfc (#!serial): five mutations of the symmetric knobs, each CAUGHT by a real assertion:
+  rivalonly (his second rounder escapes knob (i): 2 tests, "[4, 3.2, 66] to deeply equal [1, 2.1, 66]"),
+  rivalonlypot (his late first keeps his ceiling: "expected 79 to be 68"), latefrom ("expected 87 to be greater than
+  87"), firsttoo ("expected 1 to be 4", "1 to be 5"), underown ("expected 65 to be 68"); after: 25 of 25 pass.
+- `r1321-k3` on a717acfc: earned exit 0 "green" (10 sections, section 11 green on 22 known answers); earned-ctl exit
+  1: the 20 old controls fired in their own sections, the five judge controls went red in 1 as well as 11 (the copy
+  was named otherwise, so seedRandom gave it another stream): fixed in 2ffb7cc7.
+- `r1321-k1` and `r1321-k2` on 1db74de3: tsc exit 0 (120 s); vitest exit 0; earned exit 0; the fleet, run 1 and run 2
+  in four shards each, every shard exit 0 "green"; fatclass and bestfirst shards exit 1 FIRED in their quick
+  sections (6; 3 and 5); the arbitrage arm's two shards exit 0.
 
 Step (d), 2026-10-21 (session J), newest first:
 
@@ -324,6 +470,8 @@ Before step (d):
 
 ## Weight (decision 6)
 
+After the rulings, runner `r1321-k9` on 2ffb7cc7 against a build of c1b39364 in the same job: `/nba-front-office`
+378.9K gzipped JavaScript in 38 files on both, `/front-office` 372.1K in 38 files on both, the chunk lists equal.
 Step (d), runner `r1321-j8` on f9f28256 against a build of 85a76241 in the same job: `/nba-front-office` 378.9K
 gzipped JavaScript in 38 files on both, `/front-office` 372.0K in 38 files on both (main grew both routes since the
 base; this round moves neither). Before step (d): `/nba-front-office` 375.3K gzipped JavaScript in 37 files on
