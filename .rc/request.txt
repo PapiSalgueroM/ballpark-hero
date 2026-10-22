@@ -1,0 +1,12 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+shop: node scripts/simUsShopPromises.mjs
+shop-earnround: SHOP_CONTROL=earnround node scripts/simUsShopPromises.mjs
+shop-clampdown: SHOP_CONTROL=clampdown node scripts/simUsShopPromises.mjs
+deckc: node scripts/simUsCareerDeckC.mjs
+board: node scripts/simUsBoardParity.mjs
+vitest: node_modules/.bin/vitest run src/lib/usCareerShopPromises.test.ts src/test/careerDecisionOutcome.test.tsx --testTimeout=300000 --hookTimeout=120000
+decision: node scripts/simCareerDecisionOutcome.mjs
+decision-direction: CAREER_DECISION_OUTCOME_CONTROL=direction node scripts/simCareerDecisionOutcome.mjs
+press: node scripts/simCareerPressMarket.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+rival: node scripts/simNoRivalNames.mjs
