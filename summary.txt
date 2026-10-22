@@ -1,0 +1,5 @@
+doc-head exit=0 2s |       Tests  22 passed (22)
+doc-oldtest-head exit=1 2s |       Tests  2 failed | 20 passed (22)
+doc-oldtest-norecon exit=0 2s |       Tests  22 passed (22)
+doc-newtest-mainengine exit=0 2s |       Tests  22 passed (22)
+endings-recon exit=0 31s | PASS: no career ends before the age rules without the player, and the pair is reconciled
