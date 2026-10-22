@@ -1,0 +1,50 @@
+# Release BP (brief-BPG decision 5): s2-attr-1514 and s2-own-1514 DROPPED, red by Round 1516's design (48 each at BO's gate, triage-BO.md section 4; rc-BOa's mapped answers stood for them at BO).
+# Release BN (Round BNG): ROUND 1514's own proof lines (Club Manager: the UEFA Super Cup on its own key from a save's
+# second season, and Germany's Supercup, France's Trophee des Champions and Italy's 2026-27 Supercoppa on Round 1510's
+# one off engine), taken from finish-1514.md section 8 item 3, fix-1514.md and verify-1514.md as the round's own gates
+# ran them on its closed head 64981c0d (r1514-fx2, r1514-fx3, r1514-fx4, r1514-f3, r1514-f5, r1514-gb), and proven on
+# the joined head by rBNp-pa, rBNp-poc, rBNp-pw and rBNp-k (finish-BNG.md).
+# BINDING. B1514 is the head of release-bn-gate before the merge m1 (7d88a81d) brought 1514 in, the merge's first
+# parent: 92290f81 (origin/main, Release BM's record 3d1b7d9a plus the 1514 claim). Every line that compares with a base
+# builds it from B1514, so the line asks "does the joined tree play as the tree did before 1514 joined, but for 1514's
+# own keys". Override with B1514=<sha> in front of a line.
+# THE PROOF AGAINST B1514 (finish-1514.md sections 9 and 10, the right recipe): the UEFA Super Cup's key out of the
+# comparison (--strip worldComps.usc) and its nights alone off (--usc-nights-off). Participants: every journey byte
+# equal (proof-part-1514 must say GREEN). Watchers: exactly the 10 Hoffenheim journeys (a German watcher, five seeds,
+# both coach modes) differ at step 0, because a German save now follows the German Supercup in worldComps.dsc, the new
+# followed row the round's brief allows; proof-watch-1514 exits 0 only when the harness exits 1 with exactly those 10
+# and no other club. proof-hoff-1514 then holds Hoffenheim alone byte equal with both keys stripped and both nights off.
+# These three REPLACE rc-BKa.txt's proof-part and proof-watch (bound to fb50ce9f with no strip), which 1514 moves by
+# design: every today's world save carries worldComps.usc from its second season.
+# CONTROLS. Each loop line exits 0 only when every control in it exits 1 and its last line says FIRED (exit 2 is an
+# abort, and an abort fails the loop). Section 0: twopub and pairing (the other five section 0 controls are in
+# rc-BKc-c.txt's ctl-light). Section 1 on the small fleet (ONE_OFF_SEEDS=1,2 ONE_OFF_SEASONS=2 ONE_OFF_COACH=nocoach):
+# uscswap italyall nodated firstedition carryseen evalundated nocarryusc (wrongyear, seasononeplay, keep, participant,
+# form, tick, countdown, weighs and notrophy are in ctl-light). The walk control nousctile (the UEFA tile and card)
+# beside notile and swap of rc-BKc-d.txt. simOneOffCups by sections is 1514's gate form (rc-BKc-b.txt still runs the
+# whole harness in one line, about 53 minutes now; the lead may drop one of the two).
+# SIMCMDIFFICULTY SECTION 2. Against B1514 it is red by 1514's design (rBNp-pa s2: 36 failures, every today's world
+# and Italian career's worldComps from its season 2, Real Madrid's extra UEFA Super Cup match in its draws and week),
+# and so is rc-BMa.txt's s2 against 580b27f0 for the same reason. s2-attr-1514 is the answer the gate reads: a copy of
+# the head in its own worktree with 1514's two inputs reverted by fix-1514's own mutLR.mjs (kept here as
+# mutLR1514.mjs: the UEFA Super Cup's open at the rollover off, the ger, fra and ita rows dropped; it refuses with
+# exit 2 when an anchor does not stand exactly once) plays Normal byte equal to B1514 (green on rBNp-s2). s2-own-1514
+# holds the head to 1514's closed head 64981c0d (green on rBNp-s2), so the join moved nothing of its own.
+# Not here: simCmLeagueRules and the Round 1081 pin (rc-BKc-c, rc-BLb and rcg-C run them on the committed digest and
+# pin 1514 retook); simWorldUcl and simWorldEuro (rc-BKc-b's gate form, harnesses 1514 updated in tree).
+# Send: bash rc.sh <name> rc-BNa.txt mutLR1514.mjs     (#!serve builds dist and serves it on 4173 for the walk)
+#!serve
+#!playwright
+units-1514: node_modules/.bin/vitest run src/lib/worldOneOffs.test.ts src/lib/worldNights.test.ts src/lib/clubManagerWorldView.test.ts src/lib/clubManagerWorldCompsReload.test.ts src/lib/worldCompetition.test.ts --testTimeout=300000 --hookTimeout=300000 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+oc-s157: ONE_OFF_ONLY=1,5,7 node scripts/simOneOffCups.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+oc-s3: ONE_OFF_ONLY=3 node scripts/simOneOffCups.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+oc-s2: ONE_OFF_ONLY=2 node scripts/simOneOffCups.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+oc-s046: ONE_OFF_ONLY=0,4,6 node scripts/simOneOffCups.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+ctl0-1514: bad=0; for c in twopub pairing; do ONE_OFF_CONTROL=$c node scripts/simOneOffCups.mjs > /tmp/n0-$c.log 2>&1; e=$?; echo "$c exit=$e $(tail -1 /tmp/n0-$c.log | cut -c1-200)"; if [ $e -ne 1 ] || ! tail -1 /tmp/n0-$c.log | grep -q FIRED; then bad=1; fi; done; exit $bad
+ctl1-1514: bad=0; for c in uscswap italyall nodated firstedition carryseen evalundated nocarryusc; do ONE_OFF_SEEDS=1,2 ONE_OFF_SEASONS=2 ONE_OFF_COACH=nocoach ONE_OFF_CONTROL=$c node scripts/simOneOffCups.mjs > /tmp/n1-$c.log 2>&1; e=$?; echo "$c exit=$e $(tail -1 /tmp/n1-$c.log | cut -c1-200)"; if [ $e -ne 1 ] || ! tail -1 /tmp/n1-$c.log | grep -q FIRED; then bad=1; fi; done; exit $bad
+walk-nousctile: PLAY_ONEOFF_CONTROL=nousctile node scripts/playOneOffCups.mjs > /tmp/wu.log 2>&1; e=$?; tail -1 /tmp/wu.log | cut -c1-250; [ $e -eq 1 ] && tail -1 /tmp/wu.log | grep -q FIRED
+proof-part-1514: B1514=${B1514:-92290f81}; node scripts/proofWorldUclFleet.mjs --base $B1514 --fleet participants --coach both --eval --old-saves --strip worldComps.usc --usc-nights-off 2>&1 | tail -6 | cut -c1-250; exit ${PIPESTATUS[0]}
+proof-watch-1514: B1514=${B1514:-92290f81}; node scripts/proofWorldUclFleet.mjs --base $B1514 --fleet watchers --coach both --eval --old-saves --strip worldComps.usc --usc-nights-off > /tmp/pw.log 2>&1; s=$?; tail -3 /tmp/pw.log | cut -c1-200; f=$(grep -c '^FAIL ' /tmp/pw.log); o=$(grep '^FAIL ' /tmp/pw.log | grep -vc '^FAIL Hoffenheim (now, watcher, '); echo "proof exit $s, differing journeys $f (10 expected), of them not Hoffenheim $o (0 expected)"; [ $s -eq 1 ] && [ $f -eq 10 ] && [ $o -eq 0 ]
+proof-hoff-1514: B1514=${B1514:-92290f81}; node scripts/proofWorldUclFleet.mjs --base $B1514 --coach both --eval --only Hoffenheim --strip worldComps.dsc+usc --dsc-nights-off 2>&1 | tail -3 | cut -c1-250; exit ${PIPESTATUS[0]}
+savesize-base-1514:B1514=${B1514:-92290f81}; R=$PWD; git worktree add -q --detach /tmp/bs14 $B1514 && ln -s "$R/node_modules" /tmp/bs14/node_modules && cd /tmp/bs14 && node scripts/simClubManagerSaveSize.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+dashscan-1514: B1514=${B1514:-92290f81}; n=$(git diff $B1514 HEAD | grep -cP '^\+.*(\x{2013}|\x{2014})'); m=$(git log --format=%B $B1514..HEAD | grep -cP '\x{2013}|\x{2014}'); echo "since B1514: added lines with an en or em dash $n, commit message lines with one $m"; [ "$n" = 0 ] && [ "$m" = 0 ]
