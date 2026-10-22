@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simTriviaBank: export TMPDIR=$(mktemp -d); node scripts/simTriviaBank.mjs
+namesakes-check: node scripts/genMarketNamesakes.mjs --check
+simHarnessAnchors: export TMPDIR=$(mktemp -d); node scripts/simHarnessAnchors.mjs
+simNoRivalNames: export TMPDIR=$(mktemp -d); node scripts/simNoRivalNames.mjs
+simStorageWrites: export TMPDIR=$(mktemp -d); node scripts/simStorageWrites.mjs
