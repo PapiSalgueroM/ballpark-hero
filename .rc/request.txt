@@ -1,0 +1,3 @@
+simNbaDraftBoard-controls: SIM_NBA_DRAFT_BOARD_CONTROL=all node scripts/simNbaDraftBoard.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
