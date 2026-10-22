@@ -1,0 +1,5 @@
+1) Every player_market_values chain names a year, or is on the pinned all-year list
+   30 chains scanned, 25 year-scoped, 5 pinned all-year
+   teeth: scanner floor 25 chains, every unscoped chain needs an allowlist entry with an exact count
+
+simMarketYearScope: all green

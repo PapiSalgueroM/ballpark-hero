@@ -1,0 +1,20 @@
+1) goals and assists add up to the team totals, and every player line stays in range
+   400 seasons, 4400 player lines, 4000 months, keepers kept 6323 clean sheets in all, 400 goal of the season opponents read
+2) a stronger eleven finishes higher than a weaker one, on average
+   strong: 2.2th, 109.5 points, scored 103.2 conceded 23.1; weak: 7.9th, 77.8 points, scored 74.1 conceded 37.1 over 200 seasons a side
+   gaps: 5.7 places, 31.7 points, 29.1 goals for, 14.0 goals against (floors 3.5, 25, 18, 8)
+3) the what-if re-simulates on the same rolls
+   460 what-ifs (60 of them in a 3-5-2 two of the eleven do not fit): 395 shape, 22 respin, 43 none
+4) no squad member speaks a line
+   10162 lines, 2736 naming a squad member, 2736 named sentences, every one a result shape (a name is a result, never a speaker)
+5) a report without the new fields renders, and a new one renders every month and player
+   an old report renders to nothing, no throw
+   new report: 10 months and 11 players rendered
+   both pages mount the component, and the World XI share card names the top scorer and the player of the season
+6) every field printed before this round is what the old engine printed
+   30 of 30 seasons print exactly what they printed before (6 of them in a shape two men do not fit)
+7) every number comes off who played which match, and every month line fits its month
+   800 seasons, 68235 goals and 4000 clean sheet lines read against who played, 8000 months, 0 seasons repeating a month line
+   (for the record, not a check: 51 player lines with more goals than appearances)
+
+simWorldXiSeasonReport: green. The report says a great deal more, every number adds up and comes off who played, and nobody real says a word.
