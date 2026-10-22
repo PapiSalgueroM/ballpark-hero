@@ -1,0 +1,2 @@
+# Release BP: rc-BPc2's ctl-fleet-1522 alone (rBPg-kc2 never returned)
+ctl-fleet-1522: bad=0; for c in flat dominant nolegs notempo nowidth noline; do CM_TACTICS_CONTROL=$c TIERS=mid SEEDS=4 PAR=1 node scripts/simCmTactics.mjs > /tmp/cf22-$c.log 2>&1; e=$?; echo "$c exit=$e $(tail -1 /tmp/cf22-$c.log | cut -c1-160)"; if [ $e -ne 1 ] || ! tail -1 /tmp/cf22-$c.log | grep -q "control $c FIRED"; then bad=1; fi; done; exit $bad

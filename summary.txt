@@ -1,0 +1,1 @@
+ctl-fleet-1522 exit=0 615s | noline exit=1 simCmTactics: control noline FIRED (2 failures: effects 2; must turn fleet red)
