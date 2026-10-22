@@ -1,0 +1,4 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+motion: node_modules/.bin/vitest run src/test/liveSimMotion.test.tsx --testTimeout=600000 --hookTimeout=120000
+feederholds: LIVE_MOTION_CONTROL=feederholds node scripts/simLiveSimMotion.mjs
+foulwait: LIVE_MOTION_CONTROL=foulwait node scripts/simLiveSimMotion.mjs
