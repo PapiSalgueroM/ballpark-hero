@@ -1,0 +1,5 @@
+TOUCH ok src/lib/tycoonRewards.ts lines 387 -> 389
+Tycoon draw: 2/2 actual-hook cases passed.
+Win, loss and draw retain complete engine, reward, save, reload and RNG observations.
+1/1 complete old-hook copy rejected by the sole draw-message assertion, with healthy win/loss baseline.
+3919 original source holds; copies, transforms and raw process records retained at /home/runner/work/ballpark-hero/ballpark-hero/tycoon-draw-result-artifacts/outcomes.

@@ -1,0 +1,18 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: No font cache: run node scripts/qa/tycoonGroundGrowth1094.mjs --prefetch-assets-only first (it needs the network, so not under the offline transport)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/checkTycoonGroundGrowth.mjs:18:1
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

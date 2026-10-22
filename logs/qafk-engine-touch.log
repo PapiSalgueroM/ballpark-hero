@@ -1,0 +1,7 @@
+Cached 9 actual template font payloads.
+TOUCH ok src/lib/freeKick.ts lines 229 -> 231
+Finite consumer journeys: 4/4.
+Effective pinned-old controls: 2/2.
+Effective restored visibility controls: 2/2.
+Source, build and asset holds: retained.
+Free Kick consumer proof PASSED; artifacts retained at /home/runner/work/ballpark-hero/ballpark-hero/free-kick-range-artifacts/native.
