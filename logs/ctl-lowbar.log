@@ -1,0 +1,29 @@
+NEGATIVE CONTROL lowbar: the bar is five points lower in the bind (section 4 must fail)
+section 1: the ledger
+  69 facts, 165 reads, partial: oly-2028 oly-2032 wc-2027 wc-2031
+section 2: the calendar
+  2004 to 2050: 23 summers with an edition, 24 without
+  oly-2004 - wc-2006 - oly-2008 - wc-2010 - oly-2012 - wc-2014 - oly-2016 - - wc-2019 - oly-2021 - wc-2023 oly-2024 - - wc-2027 oly-2028 - - wc-2031 oly-2032 - - wc-2035 oly-2036 - - wc-2039 oly-2040 - - wc-2043 oly-2044 - - wc-2047 oly-2048 - -
+section 3: the fields
+  11 played fields, 47 nations, no flag: Puerto Rico, Serbia and Montenegro
+  12 summers 2025 to 2050 draw their field (the same for every career)
+section 6: one engine and the stream
+  1575 src files fenced, 60 tournaments played twice, Math.random calls 0
+sections 2b and 4: the call, 100 careers an era through the real NBA engine
+  FAIL [4] now 0 summer 2031: ovr 82 age 25 health 100 edition wc-2031, called true, the oracle says false
+  FAIL [4] now 0 summer 2032: ovr 83 age 26 health 100 edition oly-2032, called true, the oracle says false
+  FAIL [4] now 1 summer 2031: ovr 81 age 25 health 100 edition wc-2031, called true, the oracle says false
+  FAIL [4] now 1 summer 2032: ovr 82 age 26 health 100 edition oly-2032, called true, the oracle says false
+  FAIL [4] now 1 summer 2040: ovr 84 age 34 health 87 edition oly-2040, called true, the oracle says false
+  FAIL [4] now 2 summer 2032: ovr 82 age 25 health 100 edition oly-2032, called true, the oracle says false
+  FAIL [4] now 2 summer 2035: ovr 85 age 28 health 98 edition wc-2035, called true, the oracle says false
+  FAIL [4] now 2 summer 2043: ovr 85 age 36 health 94 edition wc-2043, called true, the oracle says false
+  FAIL [4] now 3 summer 2031: ovr 82 age 25 health 100 edition wc-2031, called true, the oracle says false
+  FAIL [4] now 3 summer 2032: ovr 83 age 26 health 100 edition oly-2032, called true, the oracle says false
+  FAIL [4] now 3 summer 2035: ovr 84 age 29 health 94 edition wc-2035, called true, the oracle says false
+  FAIL [4] now 3 summer 2040: ovr 84 age 34 health 85 edition oly-2040, called true, the oracle says false
+  now: 100 careers, 1825 summers, first summer 2027; called at least once 95 (95.0 percent), 496 calls (4.96 a career, 5.22 a called career)
+  now: 224 edition summers rated 86 or more; held back by health under 50: 0 (0.0 percent), by age over 36: 2
+  y2004: 100 careers, 1834 summers, first summer 2004; called at least once 93 (93.0 percent), 473 calls (4.73 a career, 5.09 a called career)
+  y2004: 223 edition summers rated 86 or more; held back by health under 50: 0 (0.0 percent), by age over 36: 4
+simCareerIntl: control lowbar FIRED (section 4, 528 failures)

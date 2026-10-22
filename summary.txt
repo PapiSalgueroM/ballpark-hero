@@ -1,0 +1,6 @@
+tsc exit=0 148s | 
+vitest-us exit=0 155s |    Duration  153.24s (transform 7.73s, setup 4.00s, collect 40.90s, tests 265.15s, environment 24.27s, prepare 5.73s)
+simCareerIntl exit=0 170s | simCareerIntl: GREEN, 23682 checks over sections 1,2,3,4,6
+ctl-seasonyear exit=1 37s | simCareerIntl: control seasonyear FIRED (section 2, 473 failures)
+ctl-anyyear exit=1 35s | simCareerIntl: control anyyear FIRED (section 4, 511 failures)
+ctl-lowbar exit=1 28s | simCareerIntl: control lowbar FIRED (section 4, 528 failures)

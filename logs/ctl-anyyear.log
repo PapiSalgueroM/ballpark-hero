@@ -1,0 +1,41 @@
+NEGATIVE CONTROL anyyear: every summer answers an edition (section 4 must fail)
+section 1: the ledger
+  69 facts, 165 reads, partial: oly-2028 oly-2032 wc-2027 wc-2031
+section 2: the calendar
+  2004 to 2050: 23 summers with an edition, 24 without
+  oly-2004 - wc-2006 - oly-2008 - wc-2010 - oly-2012 - wc-2014 - oly-2016 - - wc-2019 - oly-2021 - wc-2023 oly-2024 - - wc-2027 oly-2028 - - wc-2031 oly-2032 - - wc-2035 oly-2036 - - wc-2039 oly-2040 - - wc-2043 oly-2044 - - wc-2047 oly-2048 - -
+section 3: the fields
+  11 played fields, 47 nations, no flag: Puerto Rico, Serbia and Montenegro
+  12 summers 2025 to 2050 draw their field (the same for every career)
+section 6: one engine and the stream
+  1575 src files fenced, 60 tournaments played twice, Math.random calls 0
+sections 2b and 4: the call, 100 careers an era through the real NBA engine
+  FAIL [4] now 0 summer 2034: ovr 87 age 28 health 100 edition none, called true, the oracle says false
+  FAIL [2] now 0: the season labelled 2033 is called to oly-2034, the summer after it is 2034 (none)
+  FAIL [4] now 0 summer 2037: ovr 89 age 31 health 96 edition none, called true, the oracle says false
+  FAIL [2] now 0: the season labelled 2036 is called to oly-2037, the summer after it is 2037 (none)
+  FAIL [4] now 0 summer 2038: ovr 91 age 32 health 97 edition none, called true, the oracle says false
+  FAIL [2] now 0: the season labelled 2037 is called to oly-2038, the summer after it is 2038 (none)
+  FAIL [4] now 0 summer 2041: ovr 89 age 35 health 94 edition none, called true, the oracle says false
+  FAIL [2] now 0: the season labelled 2040 is called to oly-2041, the summer after it is 2041 (none)
+  FAIL [4] now 0 summer 2042: ovr 89 age 36 health 97 edition none, called true, the oracle says false
+  FAIL [2] now 0: the season labelled 2041 is called to oly-2042, the summer after it is 2042 (none)
+  FAIL [4] now 1 summer 2037: ovr 87 age 31 health 95 edition none, called true, the oracle says false
+  FAIL [2] now 1: the season labelled 2036 is called to oly-2037, the summer after it is 2037 (none)
+  FAIL [4] now 1 summer 2038: ovr 87 age 32 health 91 edition none, called true, the oracle says false
+  FAIL [2] now 1: the season labelled 2037 is called to oly-2038, the summer after it is 2038 (none)
+  FAIL [4] now 2 summer 2037: ovr 87 age 30 health 98 edition none, called true, the oracle says false
+  FAIL [2] now 2: the season labelled 2036 is called to oly-2037, the summer after it is 2037 (none)
+  FAIL [4] now 2 summer 2038: ovr 87 age 31 health 100 edition none, called true, the oracle says false
+  FAIL [2] now 2: the season labelled 2037 is called to oly-2038, the summer after it is 2038 (none)
+  FAIL [4] now 2 summer 2041: ovr 88 age 34 health 93 edition none, called true, the oracle says false
+  FAIL [2] now 2: the season labelled 2040 is called to oly-2041, the summer after it is 2041 (none)
+  FAIL [4] now 2 summer 2042: ovr 86 age 35 health 94 edition none, called true, the oracle says false
+  FAIL [2] now 2: the season labelled 2041 is called to oly-2042, the summer after it is 2042 (none)
+  FAIL [4] now 3 summer 2037: ovr 87 age 31 health 92 edition none, called true, the oracle says false
+  FAIL [2] now 3: the season labelled 2036 is called to oly-2037, the summer after it is 2037 (none)
+  now: 100 careers, 1825 summers, first summer 2027; called at least once 60 (60.0 percent), 464 calls (4.64 a career, 7.73 a called career)
+  now: 224 edition summers rated 86 or more; held back by health under 50: 0 (0.0 percent), by age over 36: 2
+  y2004: 100 careers, 1834 summers, first summer 2004; called at least once 64 (64.0 percent), 488 calls (4.88 a career, 7.63 a called career)
+  y2004: 223 edition summers rated 86 or more; held back by health under 50: 0 (0.0 percent), by age over 36: 4
+simCareerIntl: control anyyear FIRED (section 4, 511 failures)
