@@ -1,0 +1,8 @@
+#!serial
+b-simCareerPendingPopularityGates: d=/tmp/b-simCareerPendingPopularityGates; git worktree add $d 529bc3c105b0d365d96961e72587bb7ab36a9a8d >/dev/null 2>&1; ln -sfn "$PWD/node_modules" $d/node_modules; cd $d && node scripts/simCareerPendingPopularityGates.mjs
+b-simPhoneSeasonBudget: d=/tmp/b-simPhoneSeasonBudget; git worktree add $d 529bc3c105b0d365d96961e72587bb7ab36a9a8d >/dev/null 2>&1; ln -sfn "$PWD/node_modules" $d/node_modules; cd $d && node scripts/simPhoneSeasonBudget.mjs
+b-simSoccerCareerPendingLife: d=/tmp/b-simSoccerCareerPendingLife; git worktree add $d 529bc3c105b0d365d96961e72587bb7ab36a9a8d >/dev/null 2>&1; ln -sfn "$PWD/node_modules" $d/node_modules; cd $d && node scripts/simSoccerCareerPendingLife.mjs
+b-simMoney: d=/tmp/b-simMoney; git worktree add $d 529bc3c105b0d365d96961e72587bb7ab36a9a8d >/dev/null 2>&1; ln -sfn "$PWD/node_modules" $d/node_modules; cd $d && node scripts/simMoney.mjs
+b-simSoccerCareerDocumentaryReview: d=/tmp/b-simSoccerCareerDocumentaryReview; git worktree add $d 529bc3c105b0d365d96961e72587bb7ab36a9a8d >/dev/null 2>&1; ln -sfn "$PWD/node_modules" $d/node_modules; cd $d && node scripts/simSoccerCareerDocumentaryReview.mjs
+b-simSoccerCareerPendingMorale: d=/tmp/b-simSoccerCareerPendingMorale; git worktree add $d 529bc3c105b0d365d96961e72587bb7ab36a9a8d >/dev/null 2>&1; ln -sfn "$PWD/node_modules" $d/node_modules; cd $d && node scripts/simSoccerCareerPendingMorale.mjs
+b-simPitchRestartContinuity: d=/tmp/b-simPitchRestartContinuity; git worktree add $d 529bc3c105b0d365d96961e72587bb7ab36a9a8d >/dev/null 2>&1; ln -sfn "$PWD/node_modules" $d/node_modules; cd $d && node scripts/simPitchRestartContinuity.mjs
