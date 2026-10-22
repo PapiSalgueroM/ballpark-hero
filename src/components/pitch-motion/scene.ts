@@ -472,12 +472,18 @@ export function pitchPlan(input: PitchInput): PitchPlan {
          beside the pitch): it neither covers what is drawn there nor holds room from the next foul. */
       let at = p;
       let meets = false;
+      /* Where the two meet: the fouled man's own zone, and the free kick is taken from there. */
+      let spot: PitchPoint | null = null;
       if (build) {
         const meet = keyedRng(`${seed}:w:${order}`);
         const by = lists[event.side].find(f => f.name !== undefined && f.name === event.text) ?? null;
         const outfield = lists[side].filter(f => f.line !== 'keeper');
-        const forwards = outfield.filter(f => f.line === 'attack');
-        const pool = by?.line === 'keeper' && forwards.length ? forwards : outfield;
+        /* The man he fouls is one he would meet: a defender (or the keeper) fouls a forward, a midfielder a midfielder,
+           a forward a defender, so nobody runs the length of the pitch to give a foul away (the walk at 1280 met a
+           centre back fouling at the other side's six yard box). */
+        const facing: Record<PitchLine, PitchLine> = { keeper: 'attack', defence: 'attack', midfield: 'midfield', attack: 'defence' };
+        const facingMen = by ? outfield.filter(f => f.line === facing[by.line]) : [];
+        const pool = facingMen.length ? facingMen : outfield;
         const victim = pool.length ? pool[pickIndex(pool, meet())] : null;
         const over = (a: number, b: number, s: number, e: number) => a < e - EPS && s < b - EPS;
         const held = (s: number, e: number) => layers.some(l => l.priority >= 2 && over(l.start, l.end, s, e)) || deadWindows.some(w => over(w.from, w.to, s, e));
@@ -499,16 +505,17 @@ export function pitchPlan(input: PitchInput): PitchPlan {
         foul = { order, at, by: by?.key ?? null, on: victim?.key ?? null };
         const card = cards.get(order);
         if (card) foul.card = card;
-        if (victim && meets) layers.push({
+        spot = victim ? zoneAnchor(side, victim, meet) : null;
+        if (victim && spot && meets) layers.push({
           start: at - BEAT_SPAN, end: at, priority: 1, order, state: 'open', via: 'dead', side, carrier: victim.key, dead: false,
-          id: `w${order}`, anchor: zoneAnchor(side, victim, meet), line: victim.line, foul: { ...foul, contact: true },
+          id: `w${order}`, anchor: spot, line: victim.line, foul: { ...foul, contact: true },
         });
       }
       const fouled = foul?.on ?? null;
       layers.push({
         start: at, end: at + BEAT_SPAN, priority: 1, order, state: 'freekick', via: 'dead', side, carrier: null,
         carrierFrom: anchor => fouled ?? nearest(side, anchor, true)?.key ?? null, dead: true, id: `x${order}`,
-        anchor: before => ({ x: clamp(before.x, 6, 94), y: clamp(before.y, 8, 92) }),
+        anchor: before => { const where = spot ?? before; return { x: clamp(where.x, 6, 94), y: clamp(where.y, 8, 92) }; },
         ...(foul ? { foul } : {}),
       });
       const rng = keyedRng(`${seed}:x:${order}`);

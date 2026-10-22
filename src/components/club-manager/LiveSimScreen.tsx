@@ -1793,12 +1793,16 @@ export function LiveSimScreen({
                     const cue = motion.cue!;
                     const foulLine = pitchInput.feed[cue.order];
                     const nearTop = (orientation === 'landscape' ? cue.at.x : cue.at.y) < 16;
+                    const spot = pitchSpot({ x: Math.max(14, Math.min(86, cue.at.x)), y: Math.max(8, Math.min(92, cue.at.y)) }, orientation);
+                    /* With the event pill up (top 8%, two short lines), a name high on the pitch goes under the pill, never
+                       behind it: the walk at 1280 met "Booked: ..." drawn over "Foul by ..." at the top of the pitch. */
+                    const underPill = !!banner && (orientation === 'landscape' ? cue.at.x : cue.at.y) < 25;
                     return (
                       <div
                         data-cm-foul-cue={foulLine.side}
                         data-cm-foul-order={cue.order}
                         className="absolute z-20 pointer-events-none rounded-md border border-border bg-background/90 px-1.5 py-0.5 text-[10px] font-bold leading-tight text-foreground whitespace-nowrap"
-                        style={{ ...pitchSpot({ x: Math.max(14, Math.min(86, cue.at.x)), y: Math.max(8, Math.min(92, cue.at.y)) }, orientation), transform: `translate(-50%, ${nearTop ? 16 : -44}px)` }}
+                        style={{ ...spot, ...(underPill ? { top: `max(${spot.top}, calc(8% + 32px))` } : {}), transform: `translate(-50%, ${nearTop || underPill ? 16 : -44}px)` }}
                       >
                         {foulLine.text
                           ? <>Foul by {pitchName(foulLine.text)}{foulLine.side === 'opp' && oppGen(foulLine.text) && <MadeUpTag className="ml-1" />}</>
