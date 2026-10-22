@@ -1,0 +1,13 @@
+slate exit=1 13s | simCfbSlate: 1 failure(s)
+vitest exit=1 18s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/college-dynasty/collegeDynastyFixture.test.tsx,title=src/components/college-dynasty/collegeDynas
+c-oldrivals exit=1 9s | simCfbSlate: 3 failure(s)
+old exit=0 21s | oldsave1554: no break
+cbbstaff exit=0 21s | simCbbStaff: all green
+cbbstaff-rematch exit=0 18s | control "rematch": 1 failure(s) fired as expected, the check works
+cfbdynasty exit=0 3s | simCfbDynasty: all green
+board exit=1 6s | simCollegeDynastyBoard: 3 failure(s)
+tsc exit=0 111s | 
+rival exit=0 17s | No rival product names found. 0 findings.
+storage exit=0 3s | simStorageWrites: all green (owed: 12)
+cfbstaff exit=0 91s | simCfbStaff: all green
+anchors exit=0 65s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.

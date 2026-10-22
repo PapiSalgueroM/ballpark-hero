@@ -1,0 +1,97 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/collegeRecruiting.test.ts [2m([22m[2m24 tests[22m[2m)[22m[32m 245[2mms[22m[39m
+ [32m✓[39m src/lib/collegeSeat.test.ts [2m([22m[2m17 tests[22m[2m)[22m[33m 370[2mms[22m[39m
+ [31m❯[39m src/components/college-dynasty/collegeDynastyFixture.test.tsx [2m([22m[2m4 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[33m 6683[2mms[22m[39m
+[31m   [31m×[31m Round 912: both college dynasty boards hold their recorded behaviour[2m > [22mcfb: every step matches the fixture[39m[33m 3844[2mms[22m[39m
+[31m     → expected 'step 97 (plain: class closed, layer o…' to be '' // Object.is equality[39m
+   [32m✓[39m Round 912: both college dynasty boards hold their recorded behaviour[2m > [22mcfb: the replay ran with the athletic director on, and an old save was offered him and not given him[32m 4[2mms[22m[39m
+[31m   [31m×[31m Round 912: both college dynasty boards hold their recorded behaviour[2m > [22mcbb: every step matches the fixture[39m[33m 2827[2mms[22m[39m
+[31m     → expected 'step 93 (plain: class closed, layer o…' to be '' // Object.is equality[39m
+   [32m✓[39m Round 912: both college dynasty boards hold their recorded behaviour[2m > [22mcbb: the replay ran with the athletic director on, and an old save was offered him and not given him[32m 0[2mms[22m[39m
+ [32m✓[39m src/test/cfbRecruitFilters.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 6207[2mms[22m[39m
+   [33m[2m✓[22m[39m CFB recruiting position and minimum-star targeting[2m > [22mcombines position and inclusive star threshold across both boards in source order [33m 1942[2mms[22m[39m
+   [33m[2m✓[22m[39m CFB recruiting position and minimum-star targeting[2m > [22mresets both no-match boards and restores every remaining row [33m 1142[2mms[22m[39m
+   [33m[2m✓[22m[39m CFB recruiting position and minimum-star targeting[2m > [22mdoes not save, regenerate, mutate pools or expose hidden ability while filtering [33m 828[2mms[22m[39m
+   [33m[2m✓[22m[39m CFB recruiting position and minimum-star targeting[2m > [22msigns only the selected high school ID and pays the unchanged NIL cost [33m 476[2mms[22m[39m
+   [33m[2m✓[22m[39m CFB recruiting position and minimum-star targeting[2m > [22msigns only the selected portal ID as a sophomore and removes the last filtered match [33m 705[2mms[22m[39m
+   [33m[2m✓[22m[39m CFB recruiting position and minimum-star targeting[2m > [22mpreserves the existing unaffordable-sign rejection with no saved roster or NIL change [33m 340[2mms[22m[39m
+   [33m[2m✓[22m[39m CFB recruiting position and minimum-star targeting[2m > [22mholds independent original signing and refusal effects without targeting [33m 583[2mms[22m[39m
+ [32m✓[39m src/components/cbb-dynasty/CbbDynastyDepth.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 1108[2mms[22m[39m
+   [33m[2m✓[22m[39m CBB Dynasty: the program layer on the board[2m > [22mplays a save from before assistant coaches existed without adding anything to it [33m 358[2mms[22m[39m
+ [32m✓[39m src/components/cfb-dynasty/CfbDynastyBoard.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 778[2mms[22m[39m
+   [33m[2m✓[22m[39m CFB Dynasty: the season closes once[2m > [22mdraws the recap again after a reload and does not replay the season [33m 462[2mms[22m[39m
+ [32m✓[39m src/components/cfb-dynasty/CfbDynastyDepth.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 983[2mms[22m[39m
+   [33m[2m✓[22m[39m CFB Dynasty: the program layer on the board[2m > [22mplays a save from before coordinators existed without adding anything to it [33m 324[2mms[22m[39m
+   [33m[2m✓[22m[39m CFB Dynasty: the program layer on the board[2m > [22mgives a new dynasty its coordinators and a schedule with a strength [33m 348[2mms[22m[39m
+[90mstdout[2m | src/components/college-dynasty/CollegeSeat.test.tsx[2m > [22m[2mRound 1320: a buyout bid after a big year[2m > [22m[2mcfb: a second dynasty in one mount takes its own bid, though its key matches the first one's
+[22m[39mcfb: the second dynasty's bid came on try 39 at Miami, of 25 programs that can bid
+
+[90mstdout[2m | src/components/college-dynasty/CollegeSeat.test.tsx[2m > [22m[2mRound 1320: a buyout bid after a big year[2m > [22m[2mcbb: a second dynasty in one mount takes its own bid, though its key matches the first one's
+[22m[39mcbb: the second dynasty's bid came on try 1 at Virginia, of 22 programs that can bid
+
+ [32m✓[39m src/components/college-dynasty/CollegeSeat.test.tsx [2m([22m[2m18 tests[22m[2m)[22m[33m 14641[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1320: the athletic director on the college boards[2m > [22mcfb: a new dynasty starts with him, the tile carries the ask, and the card opens and closes [33m 333[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1320: the athletic director on the college boards[2m > [22mcfb: the live line follows the record, and the recap grades the year and moves trust [33m 647[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1320: the athletic director on the college boards[2m > [22mcfb: Take the job moves him once and opens the new program's trail; Sit the year out plays a season without him [33m 499[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1320: the athletic director on the college boards[2m > [22mcfb: a closed market offers only a new dynasty, and hostile market saves load somewhere sane [33m 402[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1320: the athletic director on the college boards[2m > [22mcbb: a closed market offers only a new dynasty, and hostile market saves load somewhere sane [33m 351[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1320: a buyout bid after a big year[2m > [22mcfb: a second dynasty in one mount takes its own bid, though its key matches the first one's [33m 10308[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/components/college-dynasty/collegeDynastyFixture.test.tsx[2m > [22mRound 912: both college dynasty boards hold their recorded behaviour[2m > [22mcfb: every step matches the fixture
+[31m[1mAssertionError[22m: expected 'step 97 (plain: class closed, layer o…' to be '' // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[31m+ step 97 (plain: class closed, layer on) differs in html, text[39m
+[31m+   was: Alabama2027 · Week 1/12Record 0-0 (0-0)Rank #4Strength 90 Roster Play Schedule Top 25 Conferences🆕 New this season: coordinators, rivalry week and strength of schedule. Your staff: Merritt Lunsford ([39m
+[31m+   now: Alabama2027 · Week 1/12Record 0-0 (0-0)Rank #4Strength 90 Roster Play Schedule Top 25 Conferences🆕 New this season: coordinators, rivalry week and strength of schedule. Your staff: Merritt Lunsford ([39m
+[31m+   was info {"keys":"st,phase,recruits,portal,postseason","phase":"season","season":2027,"round":1,"nil":69,"played":1,"titles":0,"depth":1,"recruits":null,"portal":null}[39m
+[31m+   now info {"keys":"st,phase,recruits,portal,postseason","phase":"season","season":2027,"round":1,"nil":69,"played":1,"titles":0,"depth":1,"recruits":null,"portal":null}[39m
+
+[36m [2m❯[22m src/components/college-dynasty/collegeDynastyFixture.test.tsx:[2m338:21[22m[39m
+    [90m336| [39m        if (off.length) first = `step ${i} (${a.step}) differs in ${of…
+    [90m337| [39m      }
+    [90m338| [39m      [34mexpect[39m(first)[33m.[39m[34mtoBe[39m([32m''[39m)[33m;[39m
+    [90m   | [39m                    [31m^[39m
+    [90m339| [39m    }, 120_000); /* a full scripted dynasty: 3 s on a quiet machine, 1…
+    [90m340| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/college-dynasty/collegeDynastyFixture.test.tsx[2m > [22mRound 912: both college dynasty boards hold their recorded behaviour[2m > [22mcbb: every step matches the fixture
+[31m[1mAssertionError[22m: expected 'step 93 (plain: class closed, layer o…' to be '' // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[31m+ step 93 (plain: class closed, layer on) differs in html, text[39m
+[31m+   was: Kentucky2027-28 · Round 1/10Record 0-0Rank #5Strength 89 Roster Play Schedule Top 25 Leagues🆕 New this season: assistant coaches, rivalry night and strength of schedule. Your bench: Emmett Durrance ([39m
+[31m+   now: Kentucky2027-28 · Round 1/10Record 0-0Rank #5Strength 89 Roster Play Schedule Top 25 Leagues🆕 New this season: assistant coaches, rivalry night and strength of schedule. Your bench: Emmett Durrance ([39m
+[31m+   was info {"keys":"st,phase,recruits,portal,march","phase":"season","season":2027,"round":1,"nil":79,"played":1,"titles":0,"depth":1,"recruits":null,"portal":null}[39m
+[31m+   now info {"keys":"st,phase,recruits,portal,march","phase":"season","season":2027,"round":1,"nil":79,"played":1,"titles":0,"depth":1,"recruits":null,"portal":null}[39m
+
+[36m [2m❯[22m src/components/college-dynasty/collegeDynastyFixture.test.tsx:[2m338:21[22m[39m
+    [90m336| [39m        if (off.length) first = `step ${i} (${a.step}) differs in ${of…
+    [90m337| [39m      }
+    [90m338| [39m      [34mexpect[39m(first)[33m.[39m[34mtoBe[39m([32m''[39m)[33m;[39m
+    [90m   | [39m                    [31m^[39m
+    [90m339| [39m    }, 120_000); /* a full scripted dynasty: 3 s on a quiet machine, 1…
+    [90m340| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m7 passed[39m[22m[90m (8)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m82 passed[39m[22m[90m (84)[39m
+[2m   Start at [22m 19:56:34
+[2m   Duration [22m 17.28s[2m (transform 1.10s, setup 1.03s, collect 5.01s, tests 31.02s, environment 5.95s, prepare 1.50s)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/college-dynasty/collegeDynastyFixture.test.tsx,title=src/components/college-dynasty/collegeDynastyFixture.test.tsx > Round 912%3A both college dynasty boards hold their recorded behaviour > cfb%3A every step matches the fixture,line=338,column=21::AssertionError: expected 'step 97 (plain: class closed, layer o…' to be '' // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A+ step 97 (plain: class closed, layer on) differs in html, text%0A+   was: Alabama2027 · Week 1/12Record 0-0 (0-0)Rank #4Strength 90 Roster Play Schedule Top 25 Conferences🆕 New this season: coordinators, rivalry week and strength of schedule. Your staff: Merritt Lunsford (%0A+   now: Alabama2027 · Week 1/12Record 0-0 (0-0)Rank #4Strength 90 Roster Play Schedule Top 25 Conferences🆕 New this season: coordinators, rivalry week and strength of schedule. Your staff: Merritt Lunsford (%0A+   was info {"keys":"st,phase,recruits,portal,postseason","phase":"season","season":2027,"round":1,"nil":69,"played":1,"titles":0,"depth":1,"recruits":null,"portal":null}%0A+   now info {"keys":"st,phase,recruits,portal,postseason","phase":"season","season":2027,"round":1,"nil":69,"played":1,"titles":0,"depth":1,"recruits":null,"portal":null}%0A%0A ❯ src/components/college-dynasty/collegeDynastyFixture.test.tsx:338:21%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/college-dynasty/collegeDynastyFixture.test.tsx,title=src/components/college-dynasty/collegeDynastyFixture.test.tsx > Round 912%3A both college dynasty boards hold their recorded behaviour > cbb%3A every step matches the fixture,line=338,column=21::AssertionError: expected 'step 93 (plain: class closed, layer o…' to be '' // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A+ step 93 (plain: class closed, layer on) differs in html, text%0A+   was: Kentucky2027-28 · Round 1/10Record 0-0Rank #5Strength 89 Roster Play Schedule Top 25 Leagues🆕 New this season: assistant coaches, rivalry night and strength of schedule. Your bench: Emmett Durrance (%0A+   now: Kentucky2027-28 · Round 1/10Record 0-0Rank #5Strength 89 Roster Play Schedule Top 25 Leagues🆕 New this season: assistant coaches, rivalry night and strength of schedule. Your bench: Emmett Durrance (%0A+   was info {"keys":"st,phase,recruits,portal,march","phase":"season","season":2027,"round":1,"nil":79,"played":1,"titles":0,"depth":1,"recruits":null,"portal":null}%0A+   now info {"keys":"st,phase,recruits,portal,march","phase":"season","season":2027,"round":1,"nil":79,"played":1,"titles":0,"depth":1,"recruits":null,"portal":null}%0A%0A ❯ src/components/college-dynasty/collegeDynastyFixture.test.tsx:338:21%0A%0A

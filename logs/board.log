@@ -1,0 +1,24 @@
+1) the fixture is whole: a named sha, both sports, every station of the scripted path
+   cfb: 104 steps, 78 stations, 0 missing, 0 steps short of a field, 9228 draws at the end
+   cbb: 100 steps, 78 stations, 0 missing, 0 steps short of a field, 9492 draws at the end
+2) the replay: both boards match every recorded step
+   vitest exit 1, 2 failed | 2 passed (4)
+   cfb: red, the athletic director set aside honestly: green
+   cbb: red, the athletic director set aside honestly: green
+   first mismatch: step 97 (plain: class closed, layer o…' to be '' // Object.is equality
+
+- Expected
++ Received
+
++ step 97 (plain: class closed, layer on), in html, text
+   first mismatch: step 93 (plain: class closed, layer o…' to be '' // Object.is equality
+
+- Expected
++ Received
+
++ step 93 (plain: class closed, layer on), in html, text
+  FAIL: cfb no longer replays its recorded behaviour
+  FAIL: cbb no longer replays its recorded behaviour
+  FAIL: vitest exit 1: 2 failed | 2 passed (4)
+
+simCollegeDynastyBoard: 3 failure(s)

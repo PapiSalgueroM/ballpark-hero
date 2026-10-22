@@ -1,0 +1,13 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/components/cfb-dynasty src/components/cbb-dynasty src/components/college-dynasty src/lib/collegeSeat.test.ts src/lib/collegeRecruiting.test.ts src/test/cfbRecruitFilters.test.tsx --testTimeout=300000 --hookTimeout=120000
+slate: node scripts/simCfbSlate.mjs
+c-oldrivals: CFB_SLATE_CONTROL=oldrivals node scripts/simCfbSlate.mjs
+old: git worktree add /tmp/base 3ee0bf629 >/dev/null 2>&1; node .rc/x/oldsave1554.mjs
+cbbstaff: node scripts/simCbbStaff.mjs
+cbbstaff-rematch: CBB_STAFF_CONTROL=rematch node scripts/simCbbStaff.mjs
+cfbstaff: node scripts/simCfbStaff.mjs
+cfbdynasty: node scripts/simCfbDynasty.mjs
+board: node scripts/simCollegeDynastyBoard.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+rival: node scripts/simNoRivalNames.mjs
+storage: node scripts/simStorageWrites.mjs
