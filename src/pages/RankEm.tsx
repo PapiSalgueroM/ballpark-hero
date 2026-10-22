@@ -443,13 +443,13 @@ const RankEm = () => {
           reportControl={<ReportQuestion gameType="rank-em" gameContext={{ round: round.id }} />}
           pageHasOwnH1
           title="Rank 'Em | DoUKnowBall"
-          description="A stat is named and you get five players near the top of it. Put them in the exact order, most to fewest. Every ranking is real career totals from the database, no opinions, one right answer."
+          description="A stat is named and you get five players near the top of it. Put them in the exact order, most to fewest. Every ranking is verified career totals, no opinions, one right answer."
           howToPlay={[
             'A career stat is named, with five players who rank near the top of it',
             'Tap the players in order, highest first, down to fifth',
             'You get one submission per day',
             'Your score is how many you place in the exact right spot (200 each, 1000 for a perfect 5/5)',
-            'Every ranking is exact career totals from the database',
+            'Every ranking is verified career totals',
           ]}
           examples={[
             'Career points: is it Kobe or Dirk on top, and where does Iverson land?',
