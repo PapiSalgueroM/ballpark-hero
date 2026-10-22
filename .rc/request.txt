@@ -1,0 +1,10 @@
+#!serve
+#!playwright
+gmcareer: PLAY_GM_CAREER_OUT="$RC_OUT/gmc" node scripts/playGmCareer.mjs
+ownermandate: node scripts/playOwnerMandate.mjs
+fohub: node scripts/playFoHub.mjs
+fogameday: node scripts/playFrontOfficeGameDay.mjs
+gmpress: node scripts/playGmPress.mjs
+draftnight: node scripts/playDraftNight.mjs
+sweep: ONLY=/front-office ENGINES=chromium node scripts/sweepGames.mjs
+gmstaff: node scripts/simGmStaff.mjs
