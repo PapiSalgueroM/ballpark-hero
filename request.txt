@@ -1,0 +1,12 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simConnectionsFacts: node scripts/simConnectionsFacts.mjs
+ctl-rooney: CONN_CONTROL=rooney node scripts/simConnectionsFacts.mjs
+ctl-zidane: CONN_CONTROL=zidane node scripts/simConnectionsFacts.mjs
+ctl-current: CONN_CONTROL=current node scripts/simConnectionsFacts.mjs
+simFairPuzzles: node scripts/simFairPuzzles.mjs
+fair-secondfit: FAIR_CONTROL=secondfit node scripts/simFairPuzzles.mjs
+rehearse: npm install --prefix /tmp/pgl @electric-sql/pglite >/dev/null 2>&1 && PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseConnections1553.mjs
+rehearse-noguard: npm install --prefix /tmp/pgl2 @electric-sql/pglite >/dev/null 2>&1 && REHEARSE_CONTROL=noguard PGLITE_DIR=/tmp/pgl2 node scripts/qa/rehearseConnections1553.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simConnectionsLoss: node scripts/simConnectionsLoss.mjs
+vitest-daily: node_modules/.bin/vitest run src/test/dailySaveParity.test.tsx src/test/dailySaveShapes.test.tsx --testTimeout=300000 --hookTimeout=120000
