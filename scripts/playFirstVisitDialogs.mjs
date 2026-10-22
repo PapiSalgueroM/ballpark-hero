@@ -47,6 +47,13 @@
  * Measured 2026-10-22 on runners (Round 1536): 399 route widths over 133 routes, 41 routes open a first visit dialog;
  * before the Round 1536 hardening 9 were red (Stadium Tycoon, Idle Arena, Wonderkid Factory at all three widths),
  * after it 0, every button at least 37 px above a pending banner; the cover fired on 123 of 123 dialog buttons.
+ * Headroom of the whole button and box checks, measured on the same 123 passing lines before they were added: no dialog
+ * top above the screen, no button partly off screen, and on all 57 lines with a pending banner outside the dialog its
+ * box ends at least 12 px above the banner (the Radix dialogs exactly 12) and its button at least 37 px above. They
+ * turned two mutations the centre test passed red: the box without its 100% cap (7 of 9 hardened route widths red,
+ * was 4; the two still green keep their whole box on screen above the banner) and Idle Arena's role put back on its
+ * overlay (red at all three widths, its box 165 to 233 px under the banner; it was green). Controls on 8 routes
+ * (24 route widths, 21 dialogs): edge 18 of 18, lift 21 of 21, nobanner 24 of 24, expected 21 of 21.
  *
  * Run: BASE=http://localhost:4173 node scripts/playFirstVisitDialogs.mjs   (a served build, see scripts/lib/hostLikeServer.mjs)
  *      ONLY=/stadium-tycoon,/idle-arena scopes it; PLAYFIRST_SHARD=1/3 runs a third of the routes;
