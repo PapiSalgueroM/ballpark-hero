@@ -1,0 +1,13 @@
+vitest exit=0 7s |    Duration  6.37s (transform 2.42s, setup 530ms, collect 7.90s, tests 2.51s, environment 2.87s, prepare 1.07s)
+ctl-divisor exit=1 6s | simCareerForm: RED, 1 failure(s)
+tsc exit=0 108s | 
+ctl-zero exit=1 137s | simCareerForm: RED, 4 failure(s)
+form-1235 exit=0 160s | simCareerForm: green
+ctl-nogate exit=1 15s | simCareerForm: RED, 1 failure(s)
+ctl-bogus exit=1 0s | ABORT: unknown SIM_CAREER_FORM_CONTROL bogus
+ctl-posttext exit=1 129s | simCareerForm: RED, 4 failure(s)
+form-5-s9001 exit=0 28s | simCareerForm: green
+form-3-s9001 exit=0 128s | simCareerForm: green
+inbox exit=0 59s | simCareerInboxBeats: green. Soccer is unchanged, the NFL, NBA, MLB and NHL inboxes each run on their own calendar, and every rival choice does what it says.
+inbox-flatnba exit=1 56s | simCareerInboxBeats: 2 failures (control flatnba)
+ctl-per10 exit=1 367s | simCareerForm: RED, 1 failure(s)

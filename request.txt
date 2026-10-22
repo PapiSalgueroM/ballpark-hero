@@ -1,0 +1,13 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+form-1235: SIM_CAREER_FORM_SECTIONS=1,2,3,5 node scripts/simCareerForm.mjs
+vitest: node_modules/.bin/vitest run src/test/soccerPuskasYear1523.test.ts src/lib/soccerClubSquad.test.ts src/test/soccerCareerStoryRole.test.ts src/test/soccerCareerDevelopment.test.ts --testTimeout=300000 --hookTimeout=120000
+ctl-divisor: SIM_CAREER_FORM_CONTROL=divisor node scripts/simCareerForm.mjs
+ctl-zero: SIM_CAREER_FORM_CONTROL=zero node scripts/simCareerForm.mjs
+ctl-posttext: SIM_CAREER_FORM_CONTROL=posttext node scripts/simCareerForm.mjs
+ctl-nogate: SIM_CAREER_FORM_CONTROL=nogate node scripts/simCareerForm.mjs
+ctl-per10: SIM_CAREER_FORM_CONTROL=per10 node scripts/simCareerForm.mjs
+ctl-bogus: SIM_CAREER_FORM_CONTROL=bogus node scripts/simCareerForm.mjs
+form-3-s9001: SIM_CAREER_FORM_SECTIONS=3 SIM_CAREER_FORM_SEED=9001 node scripts/simCareerForm.mjs
+form-5-s9001: SIM_CAREER_FORM_SECTIONS=5 SIM_CAREER_FORM_SEED=9001 node scripts/simCareerForm.mjs
+inbox: node scripts/simCareerInboxBeats.mjs
+inbox-flatnba: BEATS_CONTROL=flatnba node scripts/simCareerInboxBeats.mjs
