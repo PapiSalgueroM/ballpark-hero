@@ -1,0 +1,7 @@
+[90mstdout[2m | src/test/usCareerTruthDigest.test.ts[2m > [22m[2mRound 1104: the US career truth digest[2m > [22m[2mevery key equals the committed fixture, or moved only where this step is allowed to move it
+[22m[39mdigest: 53 of 58 keys moved (147 of 464 careers; 0 careers were below zero on the committed code); allow=*; outside the allow list: 0
+digest moved: nfl|now|QB nfl|now|RB nfl|now|WR nfl|now|TE nfl|now|CB nfl|now|EDGE nfl|now|K nfl|y2005|QB nfl|y2005|RB nfl|y2005|EDGE nfl|y2005|K nba|now|PG nba|now|SG nba|now|SF nba|now|PF nba|now|C nba|y2004|PG nba|y2004|SG nba|y2004|SF nba|y2004|PF nba|y2004|C mlb|now|SP mlb|now|RP mlb|now|C mlb|now|1B mlb|now|2B mlb|now|3B mlb|now|SS mlb|now|LF mlb|now|CF mlb|now|RF mlb|now|DH mlb|y2004|SP mlb|y2004|RP mlb|y2004|C mlb|y2004|1B mlb|y2004|2B mlb|y2004|3B mlb|y2004|SS mlb|y2004|LF mlb|y2004|CF mlb|y2004|RF mlb|y2004|DH nhl|now|C nhl|now|LW nhl|now|RW nhl|now|D nhl|now|G nhl|y2006|C nhl|y2006|LW nhl|y2006|RW nhl|y2006|D nhl|y2006|G
+   [33m[2m✓[22m[39m Round 1104: the US career truth digest[2m > [22mevery key equals the committed fixture, or moved only where this step is allowed to move it [33m 39678[2mms[22m[39m
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+td rec: fixture before 53a4c9bf81be12d2353fdad852fa0f09faad3ffc after 266d1d52ac77af6efe9988c4ff00e2c5ce3e208b
+td rec: exit 0

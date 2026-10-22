@@ -1,0 +1,8 @@
+td nof: reverted 9 files to 1c7205d0
+[90mstdout[2m | src/test/usCareerTruthDigest.test.ts[2m > [22m[2mRound 1104: the US career truth digest[2m > [22m[2mevery key equals the committed fixture, or moved only where this step is allowed to move it
+[22m[39mdigest: 0 of 58 keys moved (0 of 464 careers; 0 careers were below zero on the committed code); allow=none; outside the allow list: 0
+digest moved: (none)
+   [33m[2m✓[22m[39m Round 1104: the US career truth digest[2m > [22mevery key equals the committed fixture, or moved only where this step is allowed to move it [33m 51117[2mms[22m[39m
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+td nof: fixture before 53a4c9bf81be12d2353fdad852fa0f09faad3ffc after 53a4c9bf81be12d2353fdad852fa0f09faad3ffc
+td nof: exit 0

@@ -1,0 +1,6 @@
+td-r1534 exit=0 53s | td r1534: exit 0
+td-r1538 exit=1 59s | td r1538: exit 1
+td-head exit=1 61s | td head: exit 1
+td-rec exit=0 45s | td rec: exit 0
+td-m11 exit=0 59s | td m11: exit 0
+td-nof exit=0 57s | td nof: exit 0
