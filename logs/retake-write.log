@@ -1,0 +1,16 @@
+  seed 101: watched same, away same
+  seed 141: watched same, away same
+  seed 181: watched same, away same
+  seed 1610: watched same, away same
+  seed 1650: watched same, away same
+  seed 1690: watched same, away same
+  seed 3119: watched same, away same
+  seed 3159: watched same, away same
+  seed 3199: watched same, away same
+  seed 4628: watched same, away same
+  seed 4668: watched same, away same
+  seed 4708: watched same, away same
+this tree: 12 of 12 histories reproduce the committed hashes, 0 differ
+wrote the twelve histories of this tree into scripts/data/allPlayersValueBaseline.json (0 changed)
+ scripts/data/allPlayersValueBaseline.json | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
