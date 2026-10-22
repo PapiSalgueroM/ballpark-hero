@@ -1,0 +1,23 @@
+NEGATIVE CONTROL ON: power costs no accuracy, the shape the game was first written in
+1) one seed, one run: the daily is the same ten kicks for everyone
+   run 20260904 is stable, differs from the next day, and a replay of seed 777 scores 705 twice
+2) skill beats spam: aiming is worth more than any one fixed input
+   skilled: 954 points, 3.7 of 10 scored
+   always down the middle, full power: 113 points, 0.7 scored
+   always top left, full power: 1865 points, 5.9 scored
+   always bottom right, full power: 0 points, 0.0 scored
+   always the same soft chip: 50 points, 0.3 scored
+   random every time: 534 points, 1.9 scored
+   best fixed input is "always top left, full power" at 1865; skilled is 0.51x that
+  FAIL: the best fixed input scores 1865 against skilled 954 (0.51x); one button is close to optimal, so this is not a game of skill
+3) the run gets harder: the last three kicks are meaner than the first three
+   first three scored 67% of the time, last three 4%
+4) every kick is winnable and none of them is free
+   10 kicks swept over 450 aims each: 0 unwinnable, 0 free
+5) the wall and the keeper both matter
+   low into the wall: Into the wall.; the same spot raised: Keeper got there.
+   a 0.2 keeper saves 22% of what reaches him, a 0.8 keeper 100%
+6) a flawless daily run is worth what the committed leaderboard cap says it is
+   over 1096 real dates a flawless run pays up to 3499; the committed cap is 3499
+
+control "nospray": 1 failure(s) fired as expected, the check works

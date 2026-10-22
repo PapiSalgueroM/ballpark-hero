@@ -1,0 +1,17 @@
+simFreeKick exit=0 0s | simFreeKick: green. The corners pay, one button does not, and the keeper is real.
+simFreeKick-lowcap exit=0 0s | control "lowcap": 1 failure(s) fired as expected, the check works
+simFreeKick-nospray exit=0 0s | control "nospray": 1 failure(s) fired as expected, the check works
+suite4 exit=0 28s | All 4 harnesses green.
+simNoRivalNames exit=0 12s | No rival product names found. 0 findings.
+tsc exit=0 81s | 
+simStorageWrites exit=0 3s | simStorageWrites: all green (owed: 12)
+simTrustCopy exit=0 1s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+simStadiumTycoon exit=0 1s | simStadiumTycoon: green. The turnstiles spin and the math holds.
+simTycoonAway exit=0 4s |    The control put the load-only settle back and sections 3 and 4 went red, so these checks are alive.
+simHarnessAnchors exit=0 46s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simTycoonHelp exit=0 19s |    All 25 controls fired exactly where they should.
+simSessionMarks exit=0 0s | simSessionMarks: green. Nine games count the day you play them, none of them invented a score or a streak day to do it.
+simTycoonClock exit=0 1s | simTycoonClock: green. The match is played, goals are scored, and no play time is dropped.
+vitest-tycoon exit=0 116s |    Duration  115.84s (transform 1.67s, setup 814ms, collect 6.75s, tests 156.35s, environment 4.99s, prepare 1.40s)
+simTycoonAwayMatchdays exit=0 39s |    All 6 controls fired exactly where they should, in node and in the real hook.
+simTycoonLeague exit=0 50s |    Every older save lands in the division it had earned, no club that can compete is walled in, and all ten controls fired.

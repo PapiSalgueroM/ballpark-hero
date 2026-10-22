@@ -1,0 +1,17 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-tycoon: node_modules/.bin/vitest run src/test/tycoon --testTimeout=300000 --hookTimeout=120000
+simFreeKick: node scripts/simFreeKick.mjs
+simFreeKick-lowcap: SIM_FREE_KICK_CONTROL=lowcap node scripts/simFreeKick.mjs
+simFreeKick-nospray: SIM_FREE_KICK_CONTROL=nospray node scripts/simFreeKick.mjs
+suite4: rm -rf tycoon-draw-result-artifacts tycoon-money-display-artifacts free-kick-range-artifacts; CI=1 ONLY=simFreeKick,simFreeKickRange,simTycoonMoneyDisplay,simTycoonDrawResult node scripts/runAllSims.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simStadiumTycoon: node scripts/simStadiumTycoon.mjs
+simTycoonAway: node scripts/simTycoonAway.mjs
+simTycoonAwayMatchdays: node scripts/simTycoonAwayMatchdays.mjs
+simTycoonHelp: node scripts/simTycoonHelp.mjs
+simSessionMarks: node scripts/simSessionMarks.mjs
+simTycoonClock: node scripts/simTycoonClock.mjs
+simTycoonLeague: node scripts/simTycoonLeague.mjs

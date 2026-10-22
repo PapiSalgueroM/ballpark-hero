@@ -1,0 +1,8 @@
+Network mode: offline, loopback only, no production probe or database retries.
+Running 4 node harnesses
+  PASS  simFreeKick.mjs                 0.5s
+  PASS  simFreeKickRange.mjs            8.4s
+  PASS  simTycoonDrawResult.mjs         8.3s
+  PASS  simTycoonMoneyDisplay.mjs      27.0s
+
+All 4 harnesses green.
