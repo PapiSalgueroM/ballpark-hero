@@ -1,0 +1,8 @@
+Prepared 9 actual sale-review font dependencies.
+Network mode: offline, loopback only, no production probe or database retries.
+Running 0 node harnesses
+
+Serving dist on 4195 for 1 browser harnesses
+  PASS  playTycoonSaleReview1083.mjs  100.3s
+
+All 1 harnesses green.
