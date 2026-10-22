@@ -1,0 +1,32 @@
+   NBA: the bake ships no one year deals, so 4 of 4 fixtures put a second man on his last year
+   MLB: the bake ships no one year deals, so 4 of 4 fixtures put a second man on his last year
+   NHL: the bake ships no one year deals, so 4 of 4 fixtures put a second man on his last year
+1) A cut charges dead money: half now, a quarter next season if he had years left, on all four sims
+2) The cutting team cannot sign him back this season, and every other team can
+3) The offseason halves a two season entry, drops a one season entry, and clears the cut list
+4) The exploit replayed: cut, sign back, cut, sign back, on the same man, on all four sims
+   NFL ARI Trey McBride 14.5M x3: room 236 before, peak 243.2, cuts 1, re-signs 0, ledger entries 1, on roster false
+   NBA DEN Nikola Jokic 61.1M x3: room -101.6 before, peak -71.1, cuts 1, re-signs 0, ledger entries 1, on roster false
+   MLB ARI Gabriel Moreno 21.8M x3: room 61.1 before, peak 72, cuts 1, re-signs 0, ledger entries 1, on roster false
+   NHL ANA Leo Carlsson 9.6M x4: room 19.6 before, peak 24.4, cuts 1, re-signs 0, ledger entries 1, on roster false
+5) A league saved before this round behaves exactly like one carrying empty arrays, on all four sims
+6) The season close test and the four board cut test, under vitest, every board row by name
+   vitest exit 0, 44 passed (44)
+7) Every front office engine goes through the helper, read as code, and every one has an adapter here
+   engines discovered: frontOffice.ts, mlbFrontOffice.ts, nbaFrontOffice.ts, nhlFrontOffice.ts
+8) The hub Free agency box never offers a man the sign path refuses, after each club cuts its best man
+   NFL: 32 clubs cut their best man (0 at the floor); without the ledger the box names him on 32, with it on 0
+   NBA: 30 clubs cut their best man (0 at the floor); without the ledger the box names him on 18, with it on 0
+   MLB: 30 clubs cut their best man (0 at the floor); without the ledger the box names him on 30, with it on 0
+   NHL: 32 clubs cut their best man (0 at the floor); without the ledger the box names him on 30, with it on 0
+9) A man cut this season cannot come back by trade after another club signs him, on all four sims
+   1. a cut charges dead money: 368 checks
+   2. no way back this season, for the cutting team only: 224 checks
+   3. the offseason rolls the ledger and clears the list: 224 checks
+   4. the exploit replayed end to end: 96 checks
+   5. a league saved before this round, against its twin: 68 checks
+   6. the boards under vitest: 24 checks
+   7. no engine takes a man off a roster on its own: 43 checks
+   8. the hub box agrees with the sign path: 12 checks
+   9. no way back by trade either: 128 checks
+simFrontOfficeCuts: 1187 checks passed over 4 sims and 4 seeded leagues each. A cut costs dead money, the man waits a season by any door, the hub and the boards say so, and no engine cuts on its own.

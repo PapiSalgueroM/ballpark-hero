@@ -1,0 +1,22 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/components/front-office/FrontOfficeTagDepth.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 1107[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL Front Office: the depth chart and the franchise tag on the board[2m > [22mopens the chart from the Roster box, swaps two men on two taps, saves the order and moves strength [33m 820[2mms[22m[39m
+ [32m✓[39m src/components/front-office/FrontOfficeTile.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[33m 2486[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office: the Game Day tile[2m > [22mthe week box holds a tile: the next game before a press, his saved final after it, and again after a remount [33m 1219[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office: the Game Day tile[2m > [22mNO SPOILER ON THE OWNER CARD: while he watches, its pace line is the one of before the press, and at full time the saved league's [33m 330[2mms[22m[39m
+ [32m✓[39m src/components/front-office/FrontOfficePromotion.test.tsx [2m([22m[2m26 tests[22m[2m)[22m[33m 1632[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL practice promotion cap outcomes[2m > [22mshows the real price and refusal while a rejected Board click leaves the save exact [33m 406[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL practice promotion cap outcomes[2m > [22msaves the exact affordable player and depth and restores that promotion once [33m 523[2mms[22m[39m
+ [32m✓[39m src/components/front-office/FrontOfficeRatingEvidence.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 761[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL saved opening rating evidence[2m > [22mexplains a partial new estimate instead of reusing the old draft-only claim [33m 373[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m4 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[32m43 passed[39m[22m[90m (43)[39m
+[2m   Start at [22m 07:43:55
+[2m   Duration [22m 6.60s[2m (transform 2.51s, setup 417ms, collect 7.99s, tests 5.99s, environment 2.07s, prepare 599ms)[22m
+
