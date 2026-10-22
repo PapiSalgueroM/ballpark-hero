@@ -1,0 +1,8 @@
+simSoccerOwnerTail exit=0 17s | simSoccerOwnerTail: green. The owner picks his club, plays on the table, and every call has a cost and a reason.
+vitest exit=1 24s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerSaveRecovery.test.tsx,title=src/test/soccerCareerSaveRecovery.test.tsx > Soccer Career act
+simCareerMoneyAfterRetirement exit=0 6s | All good: the money app keeps running for the whole retirement tail.
+simScoreShown exit=0 32s | simScoreShown: all sections green
+simManagerCareer exit=0 13s | ALL MANAGER CAREER CHECKS PASSED
+simCareerNoDeadEnd exit=0 0s | simCareerNoDeadEnd: green. A convicted career is still a career, and a stranded save comes back.
+tsc exit=0 88s | 
+simCareerAwardsNight exit=0 75s | simCareerAwardsNight: ALL 179 CHECKS PASSED
