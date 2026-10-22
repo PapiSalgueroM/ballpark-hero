@@ -1,0 +1,8 @@
+simCmTactics: node scripts/simCmTactics.mjs
+c-flat: CM_TACTICS_CONTROL=flat TIERS=mid SEEDS=4 PAR=1 node scripts/simCmTactics.mjs
+c-dominant: CM_TACTICS_CONTROL=dominant TIERS=mid SEEDS=4 PAR=1 node scripts/simCmTactics.mjs
+c-nolegs: CM_TACTICS_CONTROL=nolegs TIERS=mid SEEDS=4 PAR=1 node scripts/simCmTactics.mjs
+c-leak: CM_TACTICS_CONTROL=leak node scripts/simCmTactics.mjs
+c-keyless: CM_TACTICS_CONTROL=keyless node scripts/simCmTactics.mjs
+c-weakpress: CM_TACTICS_CONTROL=weakpress node scripts/simCmTactics.mjs
+c-helpwords: CM_TACTICS_CONTROL=helpwords node scripts/simCmTactics.mjs
