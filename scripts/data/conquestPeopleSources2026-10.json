@@ -1,0 +1,73 @@
+{
+ "about": "Round 1547. Every real world statement NFL and NBA Conquest make about a person's status, with two independent non wiki sources each, read on 2026-10-22. The Sign a Player power up deals a retired great only from this ledger, and only with the last season it lists. scripts/simConquestPeople.mjs holds src/data/conquestPowerups.ts to this file.",
+ "read": "2026-10-22",
+ "rule": "A row needs two sources from two different publishers, neither a wiki. lastSeason is the last season the man played a regular season game in the league; retired is the date his retirement was announced or made official.",
+ "retiredGreats": {
+  "nfl": {
+   "Reggie Wayne": { "position": "WR", "lastSeason": "2014", "retired": "2016-01", "sources": [
+    { "publisher": "RotoWire", "url": "https://www.rotowire.com/football/player.php?id=2221", "says": "2014 with the Colts was his last season; released by New England in September 2015 before a regular season snap; announced his retirement in January 2016" },
+    { "publisher": "Pro Football Rumors", "url": "https://www.profootballrumors.com/page/5862", "says": "Reggie Wayne to retire after 14 seasons" } ] },
+   "Anquan Boldin": { "position": "WR", "lastSeason": "2016", "retired": "2017-08-20", "sources": [
+    { "publisher": "Sports Illustrated", "url": "https://www.si.com/nfl/2017/08/20/anquan-boldin-retirement-buffalo-bills-announcement", "says": "retires after 14 seasons, days after signing with Buffalo" },
+    { "publisher": "Pro Football Rumors", "url": "https://profootballrumors.com/2017/08/anquan-boldin-to-leave-bills-retire", "says": "leaves the Bills to retire; his 2016 Lions season was his 14th and last" } ] },
+   "Vernon Davis": { "position": "TE", "lastSeason": "2019", "retired": "2020-02-03", "sources": [
+    { "publisher": "NBC Washington", "url": "https://www.nbcwashington.com/news/sports/capital-games/redskins-tight-end-vernon-davis-retires-after-14-nfl-seasons/2209203/", "says": "retires after 14 NFL seasons, the last four in Washington" },
+    { "publisher": "Washington Commanders", "url": "https://www.commanders.com/news/redskins-tight-end-vernon-davis-announces-retirement", "says": "announces his retirement after the 2019 season" } ] },
+   "Calvin Johnson": { "position": "WR", "lastSeason": "2015", "retired": "2016-03-08", "sources": [
+    { "publisher": "ABC7 (Associated Press)", "url": "https://abc7news.com/post/calvin-johnson-retires-i-have-played-my-last-game-of-football/1236307/", "says": "files his retirement papers after nine seasons with Detroit" },
+    { "publisher": "FOX 6", "url": "https://www.fox6now.com/sports/detroit-lions-star-wr-calvin-johnson-retires-after-9-seasons", "says": "Lions star WR Calvin Johnson retires after 9 seasons (2007 to 2015)" } ] },
+   "Troy Polamalu": { "position": "S", "lastSeason": "2014", "retired": "2015-04-10", "sources": [
+    { "publisher": "FOX Sports", "url": "https://www.foxsports.com/stories/nfl/steelers-great-troy-polamalu-retiring-after-12-seasons", "says": "retiring after 12 seasons with Pittsburgh (2003 to 2014)" },
+    { "publisher": "ABC7 (Associated Press)", "url": "https://abc7news.com/post/steelers-troy-polamalu-is-retiring-its-all-about-family/646093/", "says": "announces his retirement in April 2015 after the 2014 season" } ] },
+   "Charles Woodson": { "position": "S", "lastSeason": "2015", "retired": "after the 2015 season (announced 2015-12)", "sources": [
+    { "publisher": "Las Vegas Raiders", "url": "https://raiders.com/news/highlights-from-charles-woodson-s-retirement-press-conference-16553230", "says": "retirement press conference; 2015 was his 18th and final season" },
+    { "publisher": "ABC13 (Associated Press)", "url": "https://abc13.com/post/raiders-s-charles-woodson-says-hell-retire-after-season/1131460/", "says": "says he will retire after the 2015 season" } ] },
+   "Tony Gonzalez": { "position": "TE", "lastSeason": "2013", "retired": "after the 2013 season", "sources": [
+    { "publisher": "Atlanta Falcons", "url": "https://www.atlantafalcons.com/news/former-falcons-great-tony-gonzalez-to-be-inducted-into-pro-football-hall-of-fame", "says": "last five seasons with Atlanta, retired after 2013; Hall of Fame class of 2019" },
+    { "publisher": "Pro Football Hall of Fame", "url": "https://profootballhof.com/blogs/2019/06/blogs-hall-of-fame-experiences-5-moments-that-defined-tony-gonzalezs-hall-of-fame-career", "says": "enshrined 2019; final season 2013 with the Falcons" } ] },
+   "Darrelle Revis": { "position": "CB", "lastSeason": "2017", "retired": "2018-07-24", "sources": [
+    { "publisher": "FOX 5 New York", "url": "https://www.fox5ny.com/news/darrelle-revis-signs-1-day-deal-with-jets-and-then-retires", "says": "signs a one day deal with the Jets and retires" },
+    { "publisher": "ESPN", "url": "https://africa.espn.com/nfl/story/_/id/24130233/former-pro-bowl-cornerback-darrelle-revis-announces-retirement", "says": "announces retirement; last played for Kansas City in 2017, released February 2018" } ] },
+   "Luke Kuechly": { "position": "LB", "lastSeason": "2019", "retired": "2020-01-14", "sources": [
+    { "publisher": "NFL.com", "url": "https://www.nfl.com/news/panthers-lb-luke-kuechly-retiring-after-eight-seasons-0ap3000001096753", "says": "retiring after eight seasons (2012 to 2019)" },
+    { "publisher": "NBC News", "url": "https://nbcnews.com/news/sports/carolina-panthers-linebacker-luke-kuechly-28-says-it-s-right-n1115871", "says": "Panthers linebacker Luke Kuechly, 28, says it is the right time to retire" } ] },
+   "Andrew Luck": { "position": "QB", "lastSeason": "2018", "retired": "2019-08-24", "sources": [
+    { "publisher": "CBS Sports", "url": "https://www.cbssports.com/nfl/news/andrew-luck-retires-colts-quarterback-stuns-nfl-with-retirement-decision-at-age-29", "says": "retires at 29 before the 2019 season; 2018 was his last season" },
+    { "publisher": "ABC7 (ESPN)", "url": "https://abc7news.com/post/andrew-luck-announces-retirement-from-nfl-sources-tell-espn/5490971/", "says": "announces his retirement from the NFL in August 2019" } ] }
+  },
+  "nba": {
+   "Pau Gasol": { "position": "F-C", "lastSeason": "2018-19", "retired": "2021-10-05", "sources": [
+    { "publisher": "Sportsnaut", "url": "https://sportsnaut.com/nba/pau-gasol-retires-after-19-nba-seasons", "says": "retires; no NBA game since the 2018-19 season with Milwaukee" },
+    { "publisher": "CBS Sports", "url": "https://www.cbssports.com/fantasy/basketball/news/pau-gasol-storied-career-comes-to-close", "says": "storied career comes to a close, October 2021" } ] },
+   "Tony Parker": { "position": "G", "lastSeason": "2018-19", "retired": "2019-06-10", "sources": [
+    { "publisher": "NBA.com", "url": "https://www.nba.com/news/tony-parker-announces-retirement", "says": "announces his retirement after 18 seasons, the last in Charlotte" },
+    { "publisher": "KRGV (Associated Press)", "url": "https://www.krgv.com/news/tony-parker-says-he-s-retiring-from-nba-after-18-seasons", "says": "spent the 2018-19 season with the Hornets, retiring" } ] },
+   "Manu Ginobili": { "position": "G", "lastSeason": "2017-18", "retired": "2018-08-27", "sources": [
+    { "publisher": "KSAT", "url": "https://www.ksat.com/sports/2018/08/27/manu-ginobili-announces-retirement-after-16-seasons-4-championships-with-spurs/", "says": "announces retirement after 16 seasons with the Spurs" },
+    { "publisher": "ESPN", "url": "https://africa.espn.com/nba/story/_/id/24493528/manu-ginobili-san-antonio-spurs-retiring", "says": "retiring; last game April 2018 in the 2017-18 playoffs" } ] },
+   "Carmelo Anthony": { "position": "F", "lastSeason": "2021-22", "retired": "2023-05-22", "sources": [
+    { "publisher": "CBS News", "url": "https://www.cbsnews.com/news/carmelo-anthony-retires-nba/", "says": "retiring from the NBA after 19 seasons" },
+    { "publisher": "ABC7 (Associated Press)", "url": "https://abc7.com/post/carmelo-anthony-announces-retirement-from-nba-after-19-seasons/13283639/", "says": "last played for the Lakers in 2021-22, did not play in 2022-23" } ] },
+   "Paul Pierce": { "position": "F", "lastSeason": "2016-17", "retired": "2017-07-17", "sources": [
+    { "publisher": "NBA.com", "url": "https://www.nba.com/news/paul-pierce-retirement-after-2016-17-season", "says": "2016-17 with the Clippers is his last season" },
+    { "publisher": "CBS Sports", "url": "https://www.cbssports.com/nba/news/paul-pierce-signs-one-day-contract-to-retire-as-a-member-of-the-boston-celtics", "says": "signs a one day contract to retire as a Celtic, July 2017" } ] },
+   "Ray Allen": { "position": "G", "lastSeason": "2013-14", "retired": "2016-11-01", "sources": [
+    { "publisher": "CBS Sports", "url": "https://www.cbssports.com/nba/news/ray-allen-officially-retires-from-the-nba-at-age-41", "says": "officially retires; walked away after the 2014 Finals" },
+    { "publisher": "ABS-CBN", "url": "https://news.abs-cbn.com/sports/11/01/16/no-comeback-for-jesus-ray-allen-officially-retires", "says": "no comeback: officially retires, last played 2013-14 for Miami" } ] },
+   "Steve Nash": { "position": "G", "lastSeason": "2013-14", "retired": "2015-03-21", "sources": [
+    { "publisher": "ABC7 Chicago (ESPN)", "url": "https://abc7chicago.com/post/steve-nash-announces-retirement/567787/", "says": "announces retirement; sat out 2014-15 hurt" },
+    { "publisher": "NBC Sports", "url": "https://www.nbcsports.com/nba/news/lakers-waive-steve-nash", "says": "Lakers waive Nash after his retirement; last game April 2014" } ] },
+   "Yao Ming": { "position": "C", "lastSeason": "2010-11", "retired": "2011-07-20", "sources": [
+    { "publisher": "Washington Times (Associated Press)", "url": "https://www.washingtontimes.com/news/2011/jul/8/yao-ming-retires-nba/", "says": "tells the league his playing career is over; five games in 2010-11" },
+    { "publisher": "South China Morning Post", "url": "https://www.scmp.com/sport/basketball/article/3359719/chinese-nba-star-yao-ming-retires-basketball-2011-scmp-archive", "says": "announces his retirement in Shanghai, July 2011" } ] },
+   "Derrick Rose": { "position": "G", "lastSeason": "2023-24", "retired": "2024-09-26", "sources": [
+    { "publisher": "CBS Sports", "url": "https://www.cbssports.com/nba/news/former-mvp-derrick-rose-retires-from-nba-after-16-years-my-constant-when-everything-else-seemed-uncertain/", "says": "retires after 16 seasons, the last with Memphis in 2023-24" },
+    { "publisher": "NBC News", "url": "https://www.nbcnews.com/sports/nba/derrick-rose-retires-rcna172837", "says": "announces retirement, September 2024" } ] }
+  }
+ },
+ "deceased": {
+  "Demaryius Thomas": { "died": "2021-12-09", "sources": [
+   { "publisher": "CBS Sports", "url": "https://www.cbssports.com/nfl/news/former-broncos-star-demaryius-thomas-dies-at-33-pro-bowl-wide-receiver-helped-denver-win-super-bowl", "says": "former Broncos star dies at 33" },
+   { "publisher": "GPB (Associated Press)", "url": "https://www.gpb.org/news/2021/12/10/pro-bowler-and-georgia-native-demaryius-thomas-dies-at-33", "says": "found dead at his home on 9 December 2021" } ] }
+ }
+}
