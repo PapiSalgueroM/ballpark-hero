@@ -285,7 +285,7 @@ export default function Index() {
                   account claim stays phrased as what is true, every game plays
                   without one. The legal disclaimer lives in the footer. */}
               <p className="mt-1 text-[13px] leading-5 text-muted-foreground md:mt-1.5 md:text-base md:leading-6">
-                {`${GAME_COUNT_LABEL} free games across every sport. All playable without an account.`}
+                {`Sports trivia, daily puzzles and career sims. ${GAME_COUNT_LABEL} free games, no account needed.`}
               </p>
             </div>
 
