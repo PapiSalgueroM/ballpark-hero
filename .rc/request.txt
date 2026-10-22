@@ -1,0 +1,8 @@
+m0: cp .rc/x/zzF2Staff.mjs scripts/zzF2Staff.mjs && CFB_STAFF_SEED_BASE=0 node scripts/zzF2Staff.mjs
+m1000: cp .rc/x/zzF2Staff.mjs scripts/zzF2Staff.mjs && CFB_STAFF_SEED_BASE=1000 node scripts/zzF2Staff.mjs
+m2000: cp .rc/x/zzF2Staff.mjs scripts/zzF2Staff.mjs && CFB_STAFF_SEED_BASE=2000 node scripts/zzF2Staff.mjs
+m3000: cp .rc/x/zzF2Staff.mjs scripts/zzF2Staff.mjs && CFB_STAFF_SEED_BASE=3000 node scripts/zzF2Staff.mjs
+m4000: cp .rc/x/zzF2Staff.mjs scripts/zzF2Staff.mjs && CFB_STAFF_SEED_BASE=4000 node scripts/zzF2Staff.mjs
+m-doubled: cp .rc/x/zzF2Staff.mjs scripts/zzF2Staff.mjs && CFB_STAFF_CONTROL=doubled node scripts/zzF2Staff.mjs
+m-noslate: cp .rc/x/zzF2Staff.mjs scripts/zzF2Staff.mjs && CFB_STAFF_CONTROL=noslate node scripts/zzF2Staff.mjs
+base: git worktree add /tmp/base 3ee0bf629 >/dev/null 2>&1; ln -s "$PWD/node_modules" /tmp/base/node_modules; cd /tmp/base && for b in 0 1000 2000 3000 4000; do echo "seed base $b"; CFB_STAFF_SEED_BASE=$b node scripts/simCfbStaff.mjs 2>&1 | grep -E "regular season wins|upsets [0-9]"; done
