@@ -1,0 +1,2 @@
+# Release BP attribution on main cedd0239: rc-BNa's proof-watch-1514
+proof-watch-1514: B1514=${B1514:-92290f81}; node scripts/proofWorldUclFleet.mjs --base $B1514 --fleet watchers --coach both --eval --old-saves --strip worldComps.usc --usc-nights-off > /tmp/pw.log 2>&1; s=$?; tail -3 /tmp/pw.log | cut -c1-200; f=$(grep -c '^FAIL ' /tmp/pw.log); o=$(grep '^FAIL ' /tmp/pw.log | grep -vc '^FAIL Hoffenheim (now, watcher, '); echo "proof exit $s, differing journeys $f (10 expected), of them not Hoffenheim $o (0 expected)"; [ $s -eq 1 ] && [ $f -eq 10 ] && [ $o -eq 0 ]
