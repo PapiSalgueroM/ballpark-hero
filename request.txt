@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+weigh: git worktree add /tmp/wb c75d04dad && ln -s "$PWD/node_modules" /tmp/wb/node_modules && (cd /tmp/wb && node_modules/.bin/vite build > /tmp/wb-build.log 2>&1) && (node scripts/lib/hostLikeServer.mjs /tmp/wb/dist 4174 > /tmp/wb-serve.log 2>&1 &) && sleep 3 && BASE_DIST=/tmp/wb/dist node .rc/x/weigh1552.mjs
