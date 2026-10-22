@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+draftnight: node scripts/playDraftNight.mjs
