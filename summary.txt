@@ -1,0 +1,4 @@
+lr-main exit=1 69s | simCmLeagueRules: 47 failure(s)
+lr-no1443 exit=0 72s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+lr-merged exit=1 72s | simCmLeagueRules: 47 failure(s)
+lr-write exit=0 78s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)

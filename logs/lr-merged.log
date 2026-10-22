@@ -1,0 +1,32 @@
+exit 1, 47 failure lines, sha e78a7d741a663a3b
+  FAIL: eras: era2005|bundesliga2005 differs in whole, wholeNext
+  FAIL: eras: era2005|laliga2005 differs in whole, wholeNext
+  FAIL: eras: era2005|ligue12005 differs in whole, wholeNext
+  FAIL: eras: era2005|premier2005 differs in whole, wholeNext
+  FAIL: eras: era2005|seriea2005 differs in whole, wholeNext
+  FAIL: eras: era2010|bundesliga2010 differs in whole, wholeNext
+  FAIL: eras: era2010|laliga2010 differs in whole, wholeNext
+  FAIL: eras: era2010|ligue12010 differs in whole, wholeNext
+  FAIL: eras: era2010|premier2010 differs in whole, wholeNext
+  FAIL: eras: era2010|seriea2010 differs in whole, wholeNext
+  FAIL: eras: era2015|bundesliga2015 differs in whole, wholeNext
+  FAIL: eras: era2015|laliga2015 differs in whole, wholeNext
+  FAIL: eras: era2015|ligue12015 differs in whole, wholeNext
+  FAIL: eras: era2015|premier2015 differs in whole, wholeNext
+  FAIL: eras: era2015|seriea2015 differs in whole, wholeNext
+  FAIL: eras: era2020|bundesliga2020 differs in whole, wholeNext
+  FAIL: eras: era2020|laliga2020 differs in whole, wholeNext
+  FAIL: eras: era2020|ligue12020 differs in whole, wholeNext
+  FAIL: eras: era2020|premier2020 differs in whole, wholeNext
+  FAIL: eras: era2020|seriea2020 differs in whole, wholeNext
+  FAIL: modern: now|aleague differs in whole, wholeNext
+  FAIL: modern: now|austria differs in whole, wholeNext
+  FAIL: modern: now|brasileirao differs in whole, wholeNext
+  FAIL: modern: now|bundesliga differs in whole, wholeNext, s2_whole
+  FAIL: modern: now|bundesliga2 differs in whole, wholeNext, s2_whole
+  FAIL: modern: now|championship differs in whole, wholeNext, s2_whole
+  FAIL: modern: now|croatia differs in whole, wholeNext
+  FAIL: modern: now|denmark differs in whole, wholeNext
+  FAIL: modern: now|eredivisie differs in whole, wholeNext
+  FAIL: modern: now|greece differs in whole, wholeNext
+simCmLeagueRules: 47 failure(s)
