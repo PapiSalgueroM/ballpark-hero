@@ -1,0 +1,12 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simConquestPeople: node scripts/simConquestPeople.mjs
+ctl-dt: CONQUEST_PEOPLE_CONTROL=dt node scripts/simConquestPeople.mjs
+ctl-market: CONQUEST_PEOPLE_CONTROL=market node scripts/simConquestPeople.mjs
+ctl-nflnba: CONQUEST_PEOPLE_CONTROL=nflnba node scripts/simConquestPeople.mjs
+ctl-label: CONQUEST_PEOPLE_CONTROL=label node scripts/simConquestPeople.mjs
+ctl-season: CONQUEST_PEOPLE_CONTROL=season node scripts/simConquestPeople.mjs
+walk: node .rc/x/walk1547.mjs
+weight-head: node .rc/x/weight1547.mjs head
+weight-base: git worktree add /tmp/base e3deb2cb >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && node_modules/.bin/vite build > /tmp/base-build.log 2>&1) && (node scripts/lib/hostLikeServer.mjs /tmp/base/dist 4174 > /tmp/base-server.log 2>&1 &) && sleep 4 && R=$PWD && cd /tmp/base && BASE=http://localhost:4174 node $R/.rc/x/weight1547.mjs base
