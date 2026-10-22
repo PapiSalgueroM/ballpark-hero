@@ -1,0 +1,2 @@
+rech-head exit=0 40s | recordUsBoardFixture: wrote ../../_temp/rc-out/files/fixture-hist-head.json (2298731 bytes)
+rech-unwords exit=0 41s | recordUsBoardFixture: wrote ../../_temp/rc-out/files/fixture-hist-unwords.json (2298731 bytes)

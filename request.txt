@@ -1,0 +1,3 @@
+#!serial
+rech-head: node .rc/x/recHist.mjs $RC_OUT/fixture-hist-head.json
+rech-unwords: node .rc/x/unwords.mjs && node .rc/x/recHist.mjs $RC_OUT/fixture-hist-unwords.json; s=$?; git checkout -- src; exit $s
