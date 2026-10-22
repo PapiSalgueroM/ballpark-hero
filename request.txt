@@ -1,0 +1,3 @@
+os2-main: git worktree add /tmp/basem 0383bd6e0a7912ddbc7a71820a22afd0b4749799 >/dev/null 2>&1 && T=$(mktemp -d) && TMPDIR=$T BASE_ROOT=/tmp/basem SEASON=1 node .rc/x/verify-oldsave2.mjs
+os2-self: T=$(mktemp -d) && TMPDIR=$T BASE_ROOT="$PWD" SEASON=1 node .rc/x/verify-oldsave2.mjs
+os2-prefix-ctl: R="$PWD" && git worktree add /tmp/prefix 5dea4f042d7351ad6ccb20ed2b4a7930de286619 >/dev/null 2>&1 && git worktree add /tmp/base85 85a762419658ed63206cb20ec85f379409e6ac6a >/dev/null 2>&1 && ln -s "$R/node_modules" /tmp/prefix/node_modules && ln -s "$R/node_modules" /tmp/base85/node_modules && cd /tmp/prefix && T=$(mktemp -d) && TMPDIR=$T BASE_ROOT=/tmp/base85 SEASON=1 node "$R/.rc/x/verify-oldsave2.mjs"

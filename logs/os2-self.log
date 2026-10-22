@@ -1,0 +1,27 @@
+  inbox match Liverpool: base only []; branch only []
+  inbox match Liverpool first differing message #0 (drama): id: "msg-1-0-268" | "msg-1-0-267"
+  season differs: era2020 Liverpool: inbox
+  inbox season Liverpool: base only []; branch only []
+  inbox season Liverpool first differing message #0 (intlDuty): id: "msg-1-44-273" | "msg-1-44-272"
+  season differs: era2020 West Brom: inbox
+  inbox season West Brom: base only []; branch only []
+  inbox season West Brom first differing message #0 (intlDuty): id: "msg-1-44-283" | "msg-1-44-281"
+  season differs: era2020 Barcelona: inbox
+  inbox season Barcelona: base only []; branch only []
+  inbox season Barcelona first differing message #0 (intlDuty): id: "msg-1-44-290" | "msg-1-44-287"
+  season differs: era2020 Elche: inbox
+  inbox season Elche: base only []; branch only []
+  inbox season Elche first differing message #0 (intlDuty): id: "msg-1-44-297" | "msg-1-44-293"
+  inbox match Juventus: base only []; branch only []
+  inbox match Juventus first differing message #0 (reporter): id: "msg-1-0-300" | "msg-1-0-295"
+  season differs: era2020 Juventus: inbox
+  inbox match Crotone: base only []; branch only []
+  inbox match Crotone first differing message #0 (startMe): id: "msg-1-0-306" | "msg-1-0-300"
+  season differs: era2020 Crotone: inbox
+  season differs: era2020 Bayern Munich: inbox
+  season differs: era2020 Arminia Bielefeld: inbox
+careers 94; open differs beyond nation 0; after a match 22; after the season 40
+natQuota asks on the base save: 56; graded differently by the branch on load: 0
+differing keys: [["match:inbox",22]]
+season keys: [["inbox",40]]
+verify-oldsave2: careers 94; natQuota asks 56; rebased 0; own ask graded differently 0; season summaries differing beyond objective labels 0

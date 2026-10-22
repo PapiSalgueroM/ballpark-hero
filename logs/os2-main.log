@@ -1,0 +1,30 @@
+  rebased: now Lincoln City: "Have 1 player from England in the squad" -> "Have 15 players from England in the squad"
+  inbox match Lincoln City: base only []; branch only []
+  season differs: now Lincoln City: pendingSummary, boardObjectives
+  inbox season Lincoln City: base only []; branch only []
+  summary Lincoln City.objectives: base [{"label":"Stay up. Avoid relegation","hit":true},{"label":"Win your FA Cup Round of 16 tie","hit":false},{"label":"Finish above Bolton Wanderers","hit":true},{"label":"Concede fewer than 70 league goals","hit":false},{" | branch [{"label":"Stay up. Avoid relegation","hit":true},{"label":"Win your FA Cup Round of 16 tie","hit":false},{"label":"Finish above Bolton Wanderers","hit":true},{"label":"Concede fewer than 70 league goals","hit":false},{"
+  rebased: now Elversberg: "Have 7 players from Germany in the squad" -> "Have 13 players from Germany in the squad"
+  inbox match Elversberg: base only []; branch only []
+  season differs: now Elversberg: pendingSummary, boardObjectives
+  inbox season Elversberg: base only []; branch only []
+  summary Elversberg.objectives: base [{"label":"Stay up. Avoid relegation","hit":false},{"label":"Win your DFB-Pokal Round of 16 tie","hit":false},{"label":"Finish above Paderborn","hit":false},{"label":"Concede fewer than 52 league goals","hit":false},{"la | branch [{"label":"Stay up. Avoid relegation","hit":false},{"label":"Win your DFB-Pokal Round of 16 tie","hit":false},{"label":"Finish above Paderborn","hit":false},{"label":"Concede fewer than 52 league goals","hit":false},{"la
+  rebased: now Excelsior: "Have 1 player from Netherlands in the squad" -> "Have 16 players from Netherlands in the squad"
+  inbox match Excelsior: base only []; branch only []
+  season differs: now Excelsior: pendingSummary, boardObjectives
+  inbox season Excelsior: base only []; branch only []
+  summary Excelsior.objectives: base [{"label":"Stay up. Avoid relegation","hit":true},{"label":"Win your KNVB Cup Round of 16 tie","hit":false},{"label":"Finish above Willem II","hit":true},{"label":"Bank 36+ league points","hit":true},{"label":"Blood 3 un | branch [{"label":"Stay up. Avoid relegation","hit":true},{"label":"Win your KNVB Cup Round of 16 tie","hit":false},{"label":"Finish above Willem II","hit":true},{"label":"Bank 36+ league points","hit":true},{"label":"Blood 3 un
+  rebased: now Al-Hilal: "Have 2 players from Saudi Arabia in the squad" -> "Have 6 players from Saudi Arabia in the squad"
+  season differs: now Al-Hilal: pendingSummary, boardObjectives
+  inbox season Al-Hilal: base only []; branch only []
+  summary Al-Hilal.objectives: base [{"label":"Win the Saudi Pro League","hit":true},{"label":"Reach the King's Cup semi-finals","hit":true},{"label":"Finish above Al-Nassr","hit":true},{"label":"Bank 72+ league points","hit":true},{"label":"Blood 2 under- | branch [{"label":"Win the Saudi Pro League","hit":true},{"label":"Reach the King's Cup semi-finals","hit":true},{"label":"Finish above Al-Nassr","hit":true},{"label":"Bank 72+ league points","hit":true},{"label":"Blood 2 under-
+  rebased: now Inter Miami: "Have 2 players from United States in the squad" -> "Have 4 players from United States in the squad"
+  season differs: now Inter Miami: pendingSummary, boardObjectives
+  rebased: now D.C. United: "Have 2 players from United States in the squad" -> "Have 12 players from United States in the squad"
+  season differs: now D.C. United: pendingSummary, boardObjectives
+  season differs: now Sporting Kansas City: pendingSummary, boardObjectives
+  season differs: now Nacional: pendingSummary, boardObjectives
+careers 94; open differs beyond nation 41; after a match 58; after the season 69
+natQuota asks on the base save: 56; graded differently by the branch on load: 0
+differing keys: [["boardObjectives",41],["match:boardObjectives",41],["match:inbox",22]]
+season keys: [["pendingSummary",41],["boardObjectives",41],["inbox",40]]
+verify-oldsave2: careers 94; natQuota asks 56; rebased 41; own ask graded differently 0; season summaries differing beyond objective labels 0

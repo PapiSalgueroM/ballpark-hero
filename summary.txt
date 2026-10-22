@@ -1,0 +1,3 @@
+os2-main exit=0 104s | verify-oldsave2: careers 94; natQuota asks 56; rebased 41; own ask graded differently 0; season summaries differing beyond objective labels 0
+os2-self exit=0 104s | verify-oldsave2: careers 94; natQuota asks 56; rebased 0; own ask graded differently 0; season summaries differing beyond objective labels 0
+os2-prefix-ctl exit=0 104s | verify-oldsave2: careers 94; natQuota asks 56; rebased 0; own ask graded differently 32; season summaries differing beyond objective labels 32
