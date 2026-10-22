@@ -1,0 +1,20 @@
+build exit=0 23s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+tsc exit=0 49s | 
+pf2 exit=0 244s | playFirstVisitDialogs: green. Every first visit dialog can be started with the cookie banner unanswered.
+pf1 exit=0 254s | playFirstVisitDialogs: green. Every first visit dialog can be started with the cookie banner unanswered.
+cover exit=1 27s | playFirstVisitDialogs: PLAYFIRST_CONTROL=cover FIRED. 15 of 15 dialog buttons read as covered and the walk is red
+ratchet exit=1 24s | playFirstVisitDialogs: PLAYFIRST_CONTROL=ratchet FIRED. 12 green or dialog free route widths listed as expected reds each failed the walk
+abort exit=2 6s | playFirstVisitDialogs control ABORTED: no route in this run opened a dialog with a button, so the cover had nothing to cover
+simAccessibility exit=0 0s | simAccessibility: all green
+howto exit=0 6s | playHowTo: green. Every game can teach a stranger before it tests them.
+simTycoonHelp exit=0 15s |    All 25 controls fired exactly where they should.
+pf3 exit=0 245s | playFirstVisitDialogs: green. Every first visit dialog can be started with the cookie banner unanswered.
+simIdleArena exit=0 10s | simIdleArena: green. The curve climbs, the trophy pays, the cap holds, the save cannot bite.
+simTrustCopy exit=0 1s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+simNoRivalNames exit=0 15s | No rival product names found. 0 findings.
+vitest exit=0 20s |    Duration  19.10s (transform 1.33s, setup 527ms, collect 5.06s, tests 27.34s, environment 2.65s, prepare 800ms)
+expected exit=1 46s | playFirstVisitDialogs: PLAYFIRST_CONTROL=expected FIRED. 21 of 21 covered route widths listed in EXPECTED_SITE_RED printed EXPECTED and none failed the walk
+edge exit=1 50s | playFirstVisitDialogs: PLAYFIRST_CONTROL=edge FIRED. 18 of 18 moved dialogs read red for the check it targets
+lift exit=1 49s | playFirstVisitDialogs: PLAYFIRST_CONTROL=lift FIRED. 21 of 21 moved dialogs read red for the check it targets
+simTycoonPacks exit=0 139s |    All 23 controls fired exactly where they should.
+nobanner exit=1 167s | playFirstVisitDialogs: PLAYFIRST_CONTROL=nobanner FIRED. 24 of 24 route widths with the banner hidden were refused as measuring nothing
