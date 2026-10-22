@@ -41,23 +41,26 @@
      before this round: 20 power up names, 1 of them deceased, NBA dealt all 20
      football names; 0 of 320 NFL key stats with a season.
      after: NFL 10 and NBA 9 retired greats; 64 NFL and 60 NBA states (every rotation
-     of three fallen clubs, every lone survivor), 25 and 27 labelled greats dealt
-     inside the dialog's 30; key stats 146 printed with "2025: ", 174 print none;
-     about 49,400 checks.
+     of three fallen clubs, every lone survivor), 340 and 288 labelled greats dealt
+     (every great not on a standing roster, in every state; 25 and 27 before the
+     review's minor 5 fix, when the fallen stars could push them out of the 30);
+     key stats 146 printed with "2025: ", 174 print none; about 50,000 checks.
 
    NEGATIVE CONTROLS (CONQUEST_PEOPLE_CONTROL=<name>; each asserts its anchor exists
    and that the rewrite changed the bytes, or it aborts with exit 2; a control that
    does not fire exits 3). Measured red counts on the round's head:
-     dt      Demaryius Thomas back in the NFL power up list.        6 red, sections 2, 3, 4
+     dt      Demaryius Thomas back in the NFL power up list.        74 red, sections 2, 3, 4
      market  the market stops skipping legends and retired greats.  2,608 red, section 3
      nflnba  NBA Conquest deals the NFL retired greats again.        2 red, section 4
      label   the NBA board drops the "Retired, last played" label.   1 red, section 4
      season  Mahomes's key stat back to the old unseasoned number.   2 red, section 5
      greatsSet    retiredNames drops the retired greats (one character).   632 red, section 3
-     hookPred     the NFL hook inverts its never on market predicate.      2,238 red, sections 3, 4
-     hookPredNba  the NBA hook inverts its never on market predicate.      2,074 red, sections 3, 4
-   (Added after the adversarial review: before them the harness checked the market
-   against retiredNames itself, so both one character slips stayed green.)
+     hookPred     the NFL hook inverts its never on market predicate.      1,990 red, sections 3, 4
+     hookPredNba  the NBA hook inverts its never on market predicate.      1,844 red, sections 3, 4
+     greatsCap    the fallen stars may push the greats out of the 30 again.  576 red, section 3
+   (The last four were added after the adversarial review: before them the harness
+   checked the market against retiredNames itself, so both one character slips stayed
+   green, and the dialog could offer a retired great while listing none.)
 
    Run: node scripts/simConquestPeople.mjs   (offline; reads files, never the network) */
 import fs from 'node:fs';
@@ -112,6 +115,11 @@ const CONTROLS = {
     file: 'src/hooks/useConquestNba.ts',
     from: 'retiredNames(TEAM_LEGENDS_NBA, RETIRED_GREATS_NBA, n => onTable.has(n));',
     to: 'retiredNames(TEAM_LEGENDS_NBA, RETIRED_GREATS_NBA, n => !onTable.has(n));',
+  },
+  greatsCap: {
+    file: 'src/lib/conquestMarket.ts',
+    from: 'return [...greats, ...fallen.slice(0, Math.max(0, SIGNING_LIST_MAX - greats.length))].sort((a, b) => b.overall - a.overall);',
+    to: 'return [...greats, ...fallen].sort((a, b) => b.overall - a.overall).slice(0, SIGNING_LIST_MAX);',
   },
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.log(`CONTROL ABORTED: unknown control ${CONTROL}`); process.exit(2); }
@@ -255,8 +263,9 @@ for (const [sport, s] of Object.entries(SPORTS)) {
   for (const [id, l] of Object.entries(s.legends)) if (rosters[id] && !rosters[id].includes(l.name)) rosters[id].push(l.name);
   s.greats.forEach((g, i) => rosters[ids[(i * 7) % ids.length]].push(g.name));
 
-  /* Early states (three clubs fallen, every rotation) keep the greats inside the dialog's 30; end states (one club
-     standing) push the list to its cap with fallen stars. */
+  /* Early states (three clubs fallen, every rotation) and end states (one club standing, where the fallen stars alone
+     would fill the dialog's 30): every retired great not on a standing roster must make the list in both, because the
+     dialog offers to call one back (review minor 5: before, end states cut every great). */
   const states = [
     ...ids.map((_, k) => { const gone = [0, 1, 2].map(j => ids[(k + j) % ids.length]); return { tag: `early ${gone.join('+')}`, alive: ids.filter(x => !gone.includes(x)), eliminated: gone }; }),
     ...ids.map(survivor => ({ tag: `end ${survivor}`, alive: [survivor], eliminated: ids.filter(x => x !== survivor) })),
@@ -269,6 +278,9 @@ for (const [sport, s] of Object.entries(SPORTS)) {
     dealt += sign.length; marketSize += pool.length;
     for (const c of [...sign, ...pool]) check(3, !DECEASED.has(c.name), `${sport} ${st.tag}: deals ${c.name}, who is on the deceased list`);
     for (const c of pool) check(3, !retired.has(c.name), `${sport} ${st.tag}: the market offers ${c.name}, a retired man, as a free agent`);
+    const standing = new Set(st.alive.flatMap(id => rosters[id] || []));
+    const signNames = new Set(sign.map(c => c.name));
+    for (const g of s.greats) if (!standing.has(g.name)) check(3, signNames.has(g.name), `${sport} ${st.tag}: the dialog offers to call a retired great back but leaves ${g.name} off the list`);
     for (const c of sign) {
       if (c.lastSeason !== undefined) {
         labelled++;

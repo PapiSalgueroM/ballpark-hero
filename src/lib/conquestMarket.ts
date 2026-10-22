@@ -81,20 +81,24 @@ export function fallenTeamMarket(state: MarketState, teamNameOf: (teamId: string
   return out.sort((a, b) => b.overall - a.overall);
 }
 
-/** The Sign a Player power up's list: the sport's retired greats plus the fallen teams' players, minus anyone on a standing roster, best first. */
+/** The Sign a Player power up's list: the sport's retired greats plus the fallen teams' players, minus anyone on a
+    standing roster, best first. Every great not on a standing roster always makes the list, because the dialog offers
+    to call one back; the fallen teams' best fill the rest of the 30. */
 export function signingList(state: MarketState, retiredGreats: readonly (MarketCard & { lastSeason: string })[]): SigningCard[] {
   const taken = onAliveRosters(state.rosters, state.alive);
-  const out: SigningCard[] = retiredGreats
+  const greats: SigningCard[] = retiredGreats
     .filter(g => !taken.has(g.name))
     .map(g => ({ name: g.name, position: g.position, overall: g.overall, lastSeason: g.lastSeason }));
-  const seen = new Set(out.map(c => c.name));
+  const seen = new Set(greats.map(c => c.name));
+  const fallen: SigningCard[] = [];
   for (const id of state.eliminated) {
     for (const name of state.rosters[id] || []) {
       if (taken.has(name) || seen.has(name) || state.neverOnMarket.has(name)) continue;
       seen.add(name);
       const card = state.cardOf(name);
-      out.push({ name, position: card.position, overall: card.overall });
+      fallen.push({ name, position: card.position, overall: card.overall });
     }
   }
-  return out.sort((a, b) => b.overall - a.overall).slice(0, SIGNING_LIST_MAX);
+  fallen.sort((a, b) => b.overall - a.overall);
+  return [...greats, ...fallen.slice(0, Math.max(0, SIGNING_LIST_MAX - greats.length))].sort((a, b) => b.overall - a.overall);
 }
