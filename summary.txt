@@ -1,0 +1,11 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+tsc exit=0 84s | 
+pf2 exit=0 260s | playFirstVisitDialogs: green. Every first visit dialog can be started with the cookie banner unanswered.
+pf1 exit=0 273s | playFirstVisitDialogs: green. Every first visit dialog can be started with the cookie banner unanswered.
+edge exit=3 50s | playFirstVisitDialogs: PLAYFIRST_CONTROL=edge did NOT fire on 9 of 18 moved dialogs: /soccer-conquest@320, /soccer-conquest@390, /soccer-conquest@1280, /build-your-xi@320
+lift exit=3 51s | playFirstVisitDialogs: PLAYFIRST_CONTROL=lift did NOT fire on 12 of 21 moved dialogs: /career-ladder@320, /career-ladder@390, /career-ladder@1280, /soccer-conquest@320, /
+pf3 exit=0 259s | playFirstVisitDialogs: green. Every first visit dialog can be started with the cookie banner unanswered.
+nobanner exit=3 51s | playFirstVisitDialogs: PLAYFIRST_CONTROL=nobanner did NOT fire: 24 of 24 route widths counted with no banner on screen
+expected exit=1 46s | playFirstVisitDialogs: PLAYFIRST_CONTROL=expected FIRED. 21 of 21 covered route widths listed in EXPECTED_SITE_RED printed EXPECTED and none failed the walk
+cover exit=1 46s | playFirstVisitDialogs: PLAYFIRST_CONTROL=cover FIRED. 21 of 21 dialog buttons read as covered and the walk is red
+ratchet exit=1 50s | playFirstVisitDialogs: PLAYFIRST_CONTROL=ratchet FIRED. 24 green or dialog free route widths listed as expected reds each failed the walk
