@@ -1,0 +1,4 @@
+SIM_SEED 10 exit 1 walk kind 1 full draft kind 1
+  FAIL [2]: seed 10 season 2 full draft: Cole Strother let IND's sheet stand and is not there after the summer
+  FAIL [2]: seed 10 season 2: Cole Strother let his sheet stand and is at no rival club
+simNbaGmDesk: 2 failure(s) in ["2"]

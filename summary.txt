@@ -1,0 +1,10 @@
+head exit=0 0s | f276b8a8cb7df1e9798b816ed828300e5da04177
+vanish-6 exit=1 37s | simNbaGmDesk: 1 failure(s) in ["2"]
+desk-def exit=0 39s | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+vanish-35 exit=1 35s | simNbaGmDesk: 1 failure(s) in ["2"]
+engine exit=0 0s | engine files byte equal to 7a8750ba
+vanish-10 exit=1 36s | simNbaGmDesk: 2 failure(s) in ["2"]
+diff-fx2 exit=0 0s |  2 files changed, 17 insertions(+), 2 deletions(-)
+simNoRivalNames exit=0 27s | No rival product names found. 0 findings.
+tsc exit=0 107s | 
+simHarnessAnchors exit=0 55s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
