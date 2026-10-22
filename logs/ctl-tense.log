@@ -1,0 +1,40 @@
+NEGATIVE CONTROL ON: the club question says "play for" again
+1. the fixture [0.1s]
+   5496 rows of 2026, position real for 2497; easy band 109 players on 17 values (biggest tie 18), medium 990, hard 4397
+   easy: 2 listed namesakes (Gabriel, João Pedro)
+   medium: 13 listed namesakes (Wesley, Éderson, Marquinhos, Rômulo, Luis Suárez, Danilo, ...)
+   hard: 39 listed namesakes (Léo Pereira, Adama Traoré, João Mário, Vitinho, André Almeida, Artur, ...)
+2. 5000 daily ladders from 2026-10-25, and the same dates under the old rules as the baseline [0.1s]
+   old rules: 5000 ladders, 75000 questions (shirt 14232, club 14741, ballon 13823, nationality 14783, worth 4731, position 12690); worth the most by band easy 3100, medium 1176, hard 455
+   old rules: short ladders 0, ties 557, namesakes 1414, present tense 19472, not a club offered 169, wrong answer marked 0, unknown template 0, broken options 0
+      e.g. tense: Which club does Declan Rice play for?
+      e.g. namesake: Which club does Gabriel play for?
+      e.g. notAClub: Which club does Bandile Shandu play for? [Orlando Pirates / Rhode Island FC / FK Pardubice / Unknown]
+      e.g. ties: Ibrahima Konaté 54M / Pablo Barrios 65M / Eduardo Camavinga 54M / Lennart Karl 65M
+   new rules: 5000 ladders, 75000 questions (shirt 14320, club 14648, worth 4737, nationality 14707, position 12739, ballon 13849); worth the most by band easy 3098, medium 1184, hard 455
+   new rules: short ladders 0, ties 0, namesakes 0, present tense 14648, not a club offered 0, wrong answer marked 0, unknown template 0, broken options 0
+      e.g. tense: Which club does Declan Rice play for?
+  FAIL: daily: 14648 tense
+3. 1000 unlimited ladders, and 1000 single questions at every difficulty (what Swap Question deals) [54.0s]
+   unlimited: 1000 ladders, 15000 questions (nationality 2891, shirt 2844, worth 942, position 2639, ballon 2739, club 2945); worth the most by band easy 620, medium 227, hard 95
+   unlimited: short ladders 0, ties 0, namesakes 0, present tense 2945, not a club offered 0, wrong answer marked 0, unknown template 0, broken options 0
+      e.g. tense: Which club does Frenkie de Jong play for?
+   swap: 0 ladders, 15000 questions (position 2548, club 2562, nationality 2545, shirt 2490, ballon 2409, worth 2446); worth the most by band easy 782, medium 833, hard 831
+   swap: short ladders 0, ties 0, namesakes 0, present tense 2562, not a club offered 0, wrong answer marked 0, unknown template 0, broken options 0
+      e.g. tense: Which club does Josko Gvardiol play for?
+  FAIL: unlimited: 2945 tense
+  FAIL: swap: 2562 tense
+4. dates before 2026-10-25 deal exactly what the base generator dealt [62.1s]
+   2026-10-22: 36c088422c3d34a6 (base 36c088422c3d34a6)
+   2026-10-23: 94f0aa2002e3e1d9 (base 94f0aa2002e3e1d9)
+   2026-10-24: 1f6ffa5fd6af80b6 (base 1f6ffa5fd6af80b6)
+5. every band still deals every market question: 500 builds per band and type, new rules against old [62.2s]
+   easy: club 100.0% (was 100.0%), nationality 100.0% (was 100.0%), position 100.0% (was 100.0%), worth 100.0% (was 100.0%); askable names 107 of 109
+   medium: club 100.0% (was 100.0%), nationality 100.0% (was 100.0%), position 100.0% (was 100.0%), worth 100.0% (was 100.0%); askable names 977 of 990
+   hard: club 100.0% (was 100.0%), nationality 100.0% (was 100.0%), position 100.0% (was 100.0%), worth 100.0% (was 100.0%); askable names 4358 of 4397
+6. src/data/marketNamesakes.json is current with scripts/genMarketNamesakes.mjs [66.4s]
+   derived 54 from the saved rows, 0 from a live read; shipped 54
+7. Face Off and the bank read one MIN_RATIO [66.4s]
+   MIN_RATIO 1.04
+
+simTriviaBank: 3 failure(s) (NEGATIVE CONTROL tense ON)

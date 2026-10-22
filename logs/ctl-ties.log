@@ -1,0 +1,40 @@
+NEGATIVE CONTROL ON: worth the most stops checking for a clear top value
+1. the fixture [0.1s]
+   5496 rows of 2026, position real for 2497; easy band 109 players on 17 values (biggest tie 18), medium 990, hard 4397
+   easy: 2 listed namesakes (Gabriel, João Pedro)
+   medium: 13 listed namesakes (Wesley, Éderson, Marquinhos, Rômulo, Luis Suárez, Danilo, ...)
+   hard: 39 listed namesakes (Léo Pereira, Adama Traoré, João Mário, Vitinho, André Almeida, Artur, ...)
+2. 5000 daily ladders from 2026-10-25, and the same dates under the old rules as the baseline [0.1s]
+   old rules: 5000 ladders, 75000 questions (shirt 14232, club 14741, ballon 13823, nationality 14783, worth 4731, position 12690); worth the most by band easy 3100, medium 1176, hard 455
+   old rules: short ladders 0, ties 557, namesakes 1414, present tense 19472, not a club offered 169, wrong answer marked 0, unknown template 0, broken options 0
+      e.g. tense: Which club does Declan Rice play for?
+      e.g. namesake: Which club does Gabriel play for?
+      e.g. notAClub: Which club does Bandile Shandu play for? [Orlando Pirates / Rhode Island FC / FK Pardubice / Unknown]
+      e.g. ties: Ibrahima Konaté 54M / Pablo Barrios 65M / Eduardo Camavinga 54M / Lennart Karl 65M
+   new rules: 5000 ladders, 75000 questions (shirt 14255, club 14521, worth 4737, nationality 14797, position 12793, ballon 13897); worth the most by band easy 3098, medium 1184, hard 455
+   new rules: short ladders 0, ties 529, namesakes 0, present tense 0, not a club offered 0, wrong answer marked 0, unknown template 0, broken options 0
+      e.g. ties: Achraf Hakimi 86M / Martín Zubimendi 81M / Harry Kane 70M / Pau Cubarsí 86M
+  FAIL: daily: 529 ties
+3. 1000 unlimited ladders, and 1000 single questions at every difficulty (what Swap Question deals) [56.9s]
+   unlimited: 1000 ladders, 15000 questions (nationality 2873, shirt 2833, worth 942, position 2627, ballon 2781, club 2944); worth the most by band easy 620, medium 227, hard 95
+   unlimited: short ladders 0, ties 95, namesakes 0, present tense 0, not a club offered 0, wrong answer marked 0, unknown template 0, broken options 0
+      e.g. ties: Cristian Romero 54M / Aurélien Tchouaméni 81M / Alessandro Bastoni 76M / Antoine Semenyo 81M
+   swap: 0 ladders, 15000 questions (position 2492, club 2522, nationality 2560, shirt 2530, ballon 2397, worth 2499); worth the most by band easy 894, medium 802, hard 803
+   swap: short ladders 0, ties 314, namesakes 0, present tense 0, not a club offered 0, wrong answer marked 0, unknown template 0, broken options 0
+      e.g. ties: Nicolò Tresoldi 14M / Castello Lukeba 49M / João Palhinha 16.2M / Matheus Nunes 49M
+  FAIL: unlimited: 95 ties
+  FAIL: swap: 314 ties
+4. dates before 2026-10-25 deal exactly what the base generator dealt [65.0s]
+   2026-10-22: 36c088422c3d34a6 (base 36c088422c3d34a6)
+   2026-10-23: 94f0aa2002e3e1d9 (base 94f0aa2002e3e1d9)
+   2026-10-24: 1f6ffa5fd6af80b6 (base 1f6ffa5fd6af80b6)
+5. every band still deals every market question: 500 builds per band and type, new rules against old [65.0s]
+   easy: club 100.0% (was 100.0%), nationality 100.0% (was 100.0%), position 100.0% (was 100.0%), worth 100.0% (was 100.0%); askable names 107 of 109
+   medium: club 100.0% (was 100.0%), nationality 100.0% (was 100.0%), position 100.0% (was 100.0%), worth 100.0% (was 100.0%); askable names 977 of 990
+   hard: club 100.0% (was 100.0%), nationality 100.0% (was 100.0%), position 100.0% (was 100.0%), worth 100.0% (was 100.0%); askable names 4358 of 4397
+6. src/data/marketNamesakes.json is current with scripts/genMarketNamesakes.mjs [68.8s]
+   derived 54 from the saved rows, 0 from a live read; shipped 54
+7. Face Off and the bank read one MIN_RATIO [68.8s]
+   MIN_RATIO 1.04
+
+simTriviaBank: 3 failure(s) (NEGATIVE CONTROL ties ON)
