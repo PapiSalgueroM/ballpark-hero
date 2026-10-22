@@ -1,0 +1,7 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+tsc-m1: git worktree add /tmp/m1 36c1887a >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/m1/node_modules && cd /tmp/m1 && node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000 > /tmp/va.log 2>&1; s=$?; grep -E "FAIL|Test Files|Tests  " /tmp/va.log | head -30 | cut -c1-250; exit $s
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
