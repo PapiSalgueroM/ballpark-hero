@@ -1,0 +1,23 @@
+# Release BO triage bo, part A: Club Manager walks and the session marks walk, consent patched in scratch on the runner
+#!serve
+#!playwright
+#!serial
+playEra2005: node .rc/x/consentPatch.mjs scripts/playEra2005.mjs && ENGINES=chromium node scripts/playEra2005.mjs
+playEra2010: node .rc/x/consentPatch.mjs scripts/playEra2010.mjs && ENGINES=chromium node scripts/playEra2010.mjs
+playEra2015: node .rc/x/consentPatch.mjs scripts/playEra2015.mjs && ENGINES=chromium node scripts/playEra2015.mjs
+playEra2020: node .rc/x/consentPatch.mjs scripts/playEra2020.mjs && ENGINES=chromium node scripts/playEra2020.mjs
+playNationalities: node .rc/x/consentPatch.mjs scripts/playNationalities.mjs && ENGINES=chromium node scripts/playNationalities.mjs
+playReleaseClause: node .rc/x/consentPatch.mjs scripts/playReleaseClause.mjs && ENGINES=chromium node scripts/playReleaseClause.mjs
+playSponsors: node .rc/x/consentPatch.mjs scripts/playSponsors.mjs && ENGINES=chromium node scripts/playSponsors.mjs
+playNationJob: node .rc/x/consentPatch.mjs scripts/playNationJob.mjs && ENGINES=chromium node scripts/playNationJob.mjs
+playWilderness: node .rc/x/consentPatch.mjs scripts/playWilderness.mjs && ENGINES=chromium node scripts/playWilderness.mjs
+playClubManager: node .rc/x/consentPatch.mjs scripts/playClubManager.mjs && ENGINES=chromium node scripts/playClubManager.mjs
+playCmFinanceDesk: node .rc/x/consentPatch.mjs scripts/playCmFinanceDesk.mjs && ENGINES=chromium node scripts/playCmFinanceDesk.mjs
+playCmHubLanding: node .rc/x/consentPatch.mjs scripts/playCmHubLanding.mjs && node scripts/playCmHubLanding.mjs
+ctl-desk-small: node .rc/x/consentPatch.mjs scripts/playCmFinanceDesk.mjs && mkdir -p "$TMPDIR/out" && RC_OUT="$TMPDIR/out" ENGINES=chromium CM_FINANCE_CONTROL=small node scripts/playCmFinanceDesk.mjs 2>&1 | tee "$TMPDIR/ctl.log"; s=${PIPESTATUS[0]}; [ $s -eq 1 ] && grep -qF 'playCmFinanceDesk: CONTROL small FIRED (' "$TMPDIR/ctl.log"
+ctl-desk-cut: node .rc/x/consentPatch.mjs scripts/playCmFinanceDesk.mjs && mkdir -p "$TMPDIR/out" && RC_OUT="$TMPDIR/out" ENGINES=chromium CM_FINANCE_CONTROL=cut node scripts/playCmFinanceDesk.mjs 2>&1 | tee "$TMPDIR/ctl.log"; s=${PIPESTATUS[0]}; [ $s -eq 1 ] && grep -qF 'playCmFinanceDesk: CONTROL cut FIRED (' "$TMPDIR/ctl.log"
+ctl-desk-wrap: node .rc/x/consentPatch.mjs scripts/playCmFinanceDesk.mjs && mkdir -p "$TMPDIR/out" && RC_OUT="$TMPDIR/out" ENGINES=chromium CM_FINANCE_CONTROL=wrap node scripts/playCmFinanceDesk.mjs 2>&1 | tee "$TMPDIR/ctl.log"; s=${PIPESTATUS[0]}; [ $s -eq 1 ] && grep -qF 'playCmFinanceDesk: CONTROL wrap FIRED (' "$TMPDIR/ctl.log"
+ctl-hub-stale: node .rc/x/consentPatch.mjs scripts/playCmHubLanding.mjs && mkdir -p "$TMPDIR/out" && RC_OUT="$TMPDIR/out" HUB_LANDING_CONTROL=stale HUB_LANDING_SECTIONS=B node scripts/playCmHubLanding.mjs 2>&1 | tee "$TMPDIR/ctl.log"; s=${PIPESTATUS[0]}; [ $s -eq 1 ] && grep -qE 'playCmHubLanding: CONTROL stale FIRED, [1-9][0-9]* B check\(s\) went red' "$TMPDIR/ctl.log"
+hub-walk-noD: node .rc/x/consentPatch.mjs scripts/playCmHubLanding.mjs && mkdir -p "$TMPDIR/out" && RC_OUT="$TMPDIR/out" HEAD_URL=http://localhost:4173 node scripts/playCmHubLanding.mjs 2>&1 | tee "$TMPDIR/ctl.log"; s=${PIPESTATUS[0]}; [ $s -eq 0 ] && grep -qE 'playCmHubLanding: green' "$TMPDIR/ctl.log"
+playSessionMarks: node .rc/x/consentPatch.mjs --preanswer scripts/playSessionMarks.mjs && node scripts/playSessionMarks.mjs
+probe: node .rc/x/probeConsentCover.mjs bo=http://localhost:4173

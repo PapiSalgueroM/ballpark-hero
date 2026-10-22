@@ -1,0 +1,3 @@
+bo 320x640: banner 383 to 640 [Reject all / Accept all / Save choices], dialog 141 to 500 (static, top 191.5px, max 359px), "Let's go" 451 to 499, at its centre: the banner; pending 1, --dukb-consent-height 257px
+bo 390x844: banner 639 to 844 [Reject all / Accept all / Save choices], dialog 115 to 730 (static, top 319.5px, max 615px), "Let's go" 681 to 729, at its centre: the banner; pending 1, --dukb-consent-height 205px
+bo 1280x900: banner 715 to 900 [Reject all / Accept all / Save choices], dialog 105 to 796 (static, top 357.5px, max 691px), "Let's go" 747 to 795, at its centre: the banner; pending 1, --dukb-consent-height 185px
