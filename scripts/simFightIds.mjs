@@ -27,6 +27,9 @@
  *     division he showed, the first holder keeping the id and his training,
  *     the counter above every id minted, and then plays on clean. A save with
  *     nothing to repair loads byte for byte as it was saved.
+ *   3b A save whose counter was removed, made unreadable or set under an id
+ *     it already holds loads with the counter lifted above every id, moves
+ *     nobody, and plays on with no new man wearing an old id.
  *   4 The fix moves no draw: a new gym, a new promotion, a new Fight Career,
  *     its offers and the daily come out identical to the old rule's except for
  *     the ids.
@@ -39,6 +42,7 @@
  *   noclass    the repair forgets the division the man showed     -> 3
  *   drawid     the id costs a draw from the rng                   -> 4
  *   startone   the save counter starts at 1, not 10               -> 5
+ *   nolift     the repair no longer lifts a damaged counter       -> 3b
  *
  * FIGHT_IDS_BASE_DIR=<checkout> takes the OLD rule from that checkout's own
  * engine files (main before this round) instead of rebuilding it here by
@@ -58,6 +62,10 @@
  *     FIGHT_IDS_BASE_DIR), 144 men moved on load, 0 left paired, 0 showing
  *     another division (127 under noclass), 0 first holders moved, 80 clean
  *     saves loaded byte for byte.
+ *   3b (added by the review fix, measured locally) 80 saves with a damaged
+ *     counter: 0 left at or under an id, 0 men moved; played on, 480 gym
+ *     weeks and 836 bouts with 0 faults. Under nolift: 80 counters left
+ *     low, 902 faults (229 gym weeks with a pair, 170 shows with a pair).
  *   4 1440 men and offers compared, 0 moved (1294 under drawid).
  *   5 400 of 400 new promotions open with two matchable pairs (99 short of
  *     two under startone).
@@ -73,7 +81,7 @@ import { fileURLToPath } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.FIGHT_IDS_CONTROL || '';
 const BASE_DIR = process.env.FIGHT_IDS_BASE_DIR || '';
-const KNOWN = ['', 'counter', 'norepair', 'noclass', 'drawid', 'startone'];
+const KNOWN = ['', 'counter', 'norepair', 'noclass', 'drawid', 'startone', 'nolift'];
 if (!KNOWN.includes(CONTROL)) {
   console.log(`   FAIL unknown control ${CONTROL}`);
   process.exit(1);
@@ -141,6 +149,9 @@ if (CONTROL === 'counter') {
   newSrc['fightCareer.ts'] = swap(newSrc['fightCareer.ts'], 'drawid', MAKE_ID, '  const extra = rng();\n  return { id: id ?? `${drawnId(drawn)}${extra}`, ...drawn };');
 } else if (CONTROL === 'startone') {
   newSrc['fightCareer.ts'] = swap(newSrc['fightCareer.ts'], 'startone', 'export const FIRST_FIGHTER_NO = 10;', 'export const FIRST_FIGHTER_NO = 1;');
+} else if (CONTROL === 'nolift') {
+  newSrc['fightCareer.ts'] = swap(newSrc['fightCareer.ts'], 'nolift',
+    '  if (!storedOk && (stored !== undefined || top > 0)) book.nextFighterNo = Math.max(top + 1, FIRST_FIGHTER_NO);\n', '');
 }
 if (CONTROL) console.log(`   [control ${CONTROL} applied]`);
 
@@ -431,6 +442,62 @@ if (after3 || s3gym.weeks < GYMS * 10 || s3pro.bouts < PROMOS * 10) fail(`after 
 else ok('a repaired save plays on through more reloads with nobody confused for anybody');
 if (s3.cleanChanged) fail(`${s3.cleanChanged} saves with nothing to repair loaded different from how they were written`);
 else ok('a save with nothing to repair loads exactly as it was written');
+
+/* ─── 3b. A damaged counter beside the ids a save already minted ─── */
+/* The repair lifts a missing, unreadable or too low counter above every id the
+   save holds before anything is minted. No real flow writes such a counter (a
+   save from before the round holds no g or p ids at all); a hand edited or
+   half written save can, and the Round 1546 review found that removing the
+   lift left this harness green. Each save is played on the fixed engine, its
+   counter damaged one of three ways, loaded, and played on through more weeks
+   and shows with every new man minted off the repaired counter. */
+console.log('\n3b. A counter removed, unreadable or too low beside the ids a save already minted, 40 gyms and 40 promotions');
+const s3b = { saves: 0, counterLow: 0, idsMoved: 0 };
+const s3bgym = gymTally();
+const s3bpro = proTally();
+function dentCounter(book, k, ids, prefix) {
+  const head = `${prefix}${(book.seed >>> 0).toString(36)}-`;
+  const top = Math.max(0, ...ids.filter(id => id.startsWith(head)).map(id => Number(id.slice(head.length))));
+  if (k % 3 === 0) delete book.nextFighterNo;
+  else if (k % 3 === 1) book.nextFighterNo = 'x';
+  else book.nextFighterNo = Math.max(1, top - 2);
+}
+for (let s = 0; s < GYMS; s += 1) {
+  let E = await pageLoad(NEW_BUNDLE);
+  let g = E.gym.newGym(`Dented Gym ${s}`, `fight-ids-dent-gym-${s}`);
+  const scratch = gymTally();
+  for (let week = 1; week <= 12 && !g.closed; week += 1) g = gymWeek(E, g, week, scratch);
+  const saved = roundTrip(g);
+  dentCounter(saved, s, gymIds(saved), 'g');
+  E = await pageLoad(NEW_BUNDLE);
+  let h = E.gym.sanitizeGym(saved);
+  s3b.saves += 1;
+  if (!counterAbove(h, gymIds(h), 'g')) s3b.counterLow += 1;
+  if (JSON.stringify(gymIds(h)) !== JSON.stringify(gymIds(g))) s3b.idsMoved += 1;
+  for (let week = 13; week <= 24 && !h.closed; week += 1) h = gymWeek(E, h, week, s3bgym, week === 13);
+}
+for (let s = 0; s < PROMOS; s += 1) {
+  let E = await pageLoad(NEW_BUNDLE);
+  let st = E.pro.newPromoter(`Dented Promotions ${s}`, `fight-ids-dent-promo-${s}`);
+  const scratch = proTally();
+  for (let show = 1; show <= 8 && !st.closed; show += 1) st = promoterShow(E, st, scratch);
+  const saved = roundTrip(st);
+  dentCounter(saved, s, saved.pool.map(f => f.id), 'p');
+  E = await pageLoad(NEW_BUNDLE);
+  let h = E.pro.sanitizePromoter(saved);
+  s3b.saves += 1;
+  if (!counterAbove(h, h.pool.map(f => f.id), 'p')) s3b.counterLow += 1;
+  if (JSON.stringify(h.pool.map(f => f.id)) !== JSON.stringify(st.pool.map(f => f.id))) s3b.idsMoved += 1;
+  for (let show = 9; show <= 16 && !h.closed; show += 1) h = promoterShow(E, h, s3bpro);
+}
+console.log(`   ${s3b.saves} saves loaded: counters not above the ids ${s3b.counterLow}, saves whose men changed id ${s3b.idsMoved}`);
+console.log(`   played on: gym weeks ${s3bgym.weeks} (pairs ${s3bgym.dupWeeks}, wrong trained ${s3bgym.wrongTrain}, wrong fought ${s3bgym.wrongFight}, bad releases ${s3bgym.badRelease}); shows ${s3bpro.shows}, bouts ${s3bpro.bouts} (pairs ${s3bpro.dupShows}, wrong bouts ${s3bpro.wrongBout})`);
+if (s3b.counterLow) fail(`${s3b.counterLow} saves with a damaged counter loaded with it still at or under an id they hold`);
+else ok('a damaged counter is lifted above every id the save holds');
+if (s3b.idsMoved) fail(`${s3b.idsMoved} saves with nothing paired had men moved to new ids`);
+const after3b = s3bgym.dupWeeks + s3bgym.wrongTrain + s3bgym.wrongFight + s3bgym.badRelease + s3bpro.dupShows + s3bpro.wrongBout;
+if (after3b || s3bgym.weeks < GYMS * 6 || s3bpro.bouts < PROMOS * 6) fail(`after a damaged counter the games did not play on clean (${after3b} faults, ${s3bgym.weeks} weeks, ${s3bpro.bouts} bouts)`);
+else ok('a save with a damaged counter plays on with every new man on an id nobody wears');
 
 /* ─── 4. The fix moves no draw ─── */
 console.log(`\n4. The same names on the old rule${BASE_DIR ? ' (main)' : ''} and the fixed one: everything but the ids, 60 names`);
