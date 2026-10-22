@@ -544,15 +544,17 @@ export function pitchPlan(input: PitchInput): PitchPlan {
         const holds = (l: Layer) => l.priority >= 2 && l.via !== 'approach';
         const latest = Math.min(p + 1 - BEAT_SPAN, to - BEAT_SPAN);
         let found = -1;
-        /* First where no build up has to give way (the first measure took 189 build ups for four more fouls seen); only
-           a foul whose minute has no other room takes a chance's build up. */
+        /* Where the foul needs the pitch to itself: through its free kick, or through its whistle alone. */
+        let need = 0;
+        /* First where no build up has to give way; only a foul whose minute has no other room takes a chance's build up,
+           and only the part of it the foul needs (the first measure took 189 build ups for four more fouls seen). */
         for (const holding of [(l: Layer) => l.priority >= 2, holds]) {
           const held = (s: number, e: number) => layers.some(l => holding(l) && over(l.start, l.end, s, e)) || deadWindows.some(w => over(w.from, w.to, s, e));
           for (const span of victim ? [BEAT_SPAN, 0] : [0]) {
             for (let k = 0; found < 0 && p + k * 0.02 <= latest + EPS; k++) if (!held(p + k * 0.02 - span, p + k * 0.02 + 2 * BEAT_SPAN)) found = p + k * 0.02;
-            if (found >= 0) { meets = span > 0; break; }
+            if (found >= 0) { meets = span > 0; need = found + 2 * BEAT_SPAN; break; }
           }
-          if (found < 0) for (let k = 0; found < 0 && p + k * 0.02 <= latest + EPS; k++) if (!held(p + k * 0.02, p + k * 0.02 + BEAT_SPAN)) found = p + k * 0.02;
+          if (found < 0) for (let k = 0; found < 0 && p + k * 0.02 <= latest + EPS; k++) if (!held(p + k * 0.02, p + k * 0.02 + BEAT_SPAN)) { found = p + k * 0.02; need = found + BEAT_SPAN; }
           if (found >= 0) break;
         }
         if (found < 0) {
@@ -560,10 +562,11 @@ export function pitchPlan(input: PitchInput): PitchPlan {
             && !deadWindows.some(w => (w.foul ? over(w.from, w.to, p, p + 2 * BEAT_SPAN) : w.order > order && over(w.from, w.to, p, p + 1e-6)));
           if (!drawnHere) return;
           found = p;
+          need = p + BEAT_SPAN;
         }
         at = Math.round(found * 1e6) / 1e6;
         deadWindows.push({ from: at - (meets ? BEAT_SPAN : 0), to: at + 2 * BEAT_SPAN, order, foul: true });
-        const taken = new Set(layers.filter(l => l.via === 'approach' && l.id.startsWith('a') && over(l.start, l.end, at - (meets ? BEAT_SPAN : 0), at + 2 * BEAT_SPAN)).map(l => l.id.slice(1)));
+        const taken = new Set(layers.filter(l => l.via === 'approach' && l.id.startsWith('a') && over(l.start, l.end, at - (meets ? BEAT_SPAN : 0), need)).map(l => l.id.slice(1)));
         for (let k = layers.length - 1; k >= 0; k--) if (layers[k].via === 'approach' && taken.has(layers[k].id.slice(1))) layers.splice(k, 1);
         foul = { order, at, by: by?.key ?? null, on: victim?.key ?? null };
         const card = cards.get(order);
