@@ -1,0 +1,7 @@
+#!build
+#!playwright
+#!serial
+m-render: node .rc/x/mutrun.mjs render; m=$?; P="--require=$PWD/scripts/lib/offlineTransport.cjs"; NODE_OPTIONS="$P" node scripts/simTycoonMoneyDisplay.mjs > /tmp/m1a.log 2>&1; a=$?; NODE_OPTIONS="$P" node scripts/simNumberFormatting.mjs > /tmp/m1b.log 2>&1; b=$?; node_modules/.bin/vitest run src/test/tycoon --testTimeout=300000 > /tmp/m1c.log 2>&1; c=$?; tail -4 /tmp/m1a.log; tail -3 /tmp/m1b.log; grep -E "Test Files|Tests " /tmp/m1c.log | tail -2; git checkout -- src scripts; echo "MUT render applied=$m simTycoonMoneyDisplay=$a simNumberFormatting=$b vitest_tycoon=$c"
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
