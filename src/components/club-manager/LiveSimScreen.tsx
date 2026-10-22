@@ -26,7 +26,7 @@ import type { PitchFigure, PitchInput, PitchSide } from '@/components/pitch-moti
 import { goalWindow } from '@/components/pitch-motion/motion';
 import { PitchSurface, pitchSpot } from '@/components/pitch-motion/PitchSurface';
 import { CelebrationStyles } from '@/components/club-manager/CelebrationStyles';
-import { pitchPlan, pitchScene, pitchSceneKey } from '@/components/pitch-motion/scene';
+import { cueManThere, pitchPlan, pitchScene, pitchSceneKey } from '@/components/pitch-motion/scene';
 import { figureLook } from '@/components/pitch-motion/look';
 /* Round 1146: the mark after a goal, the report's own. */
 import { scorerMark } from '@/lib/clubManagerScorerLine';
@@ -1792,6 +1792,10 @@ export function LiveSimScreen({
                   {motion.cue?.kind === 'foul' && pitchInput.feed[motion.cue.order]?.kind === 'foul' && (() => {
                     const cue = motion.cue!;
                     const foulLine = pitchInput.feed[cue.order];
+                    /* Round 1521 closing check: the name goes up once the man it names is at the spot. With no meeting
+                       drawn before the whistle he walks in during its first moments, and his name stood over an empty
+                       spot while he did (the walk's card shot at 390). The whistle itself is on from the start. */
+                    if (!cueManThere(motion)) return null;
                     const nearTop = (orientation === 'landscape' ? cue.at.x : cue.at.y) < 16;
                     const spot = pitchSpot({ x: Math.max(14, Math.min(86, cue.at.x)), y: Math.max(8, Math.min(92, cue.at.y)) }, orientation);
                     /* With the event pill up (top 8%, two short lines), a name high on the pitch goes under the pill, never

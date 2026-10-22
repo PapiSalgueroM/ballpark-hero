@@ -103,6 +103,8 @@
  *   longpass32   a long ball is one over 32 metres again                          R10: the ball travels (the air share band)
  * The closing check (2026-10-22):
  *   chancewait   a chance of a foul's own minute no longer waits for its whistle  R11 (by hand, and the share)
+ *   nomeet       a whistle with no room for its free kick has no meeting before   R11 by hand (the two meet)
+ *   nameearly    the fouler's name is up while he is still walking in            R11 (his name waits for him)
  * A control exits 1 when its test went red on an assertion, as it must, and 3 when it did anything else.
  *
  * THE BUNDLE SECTION (clean runs and cmimport): the part must stay a part. src/components/pitch-motion is
@@ -134,7 +136,7 @@ const HELD = ['castnow'];
 /* Round 1521's review fixes. */
 const FIX = ['mapswap', 'turnback', 'deadrestart', 'feederholds', 'pinoff', 'facing', 'reducedlift', 'metresswap', 'longpass32'];
 /* Round 1521's closing check. */
-const CLOSE = ['chancewait'];
+const CLOSE = ['chancewait', 'nomeet', 'nameearly'];
 const LOOK = ['flatball', 'groundlob', 'shotflat', 'liftnone', 'foulcue', 'foulpair', 'foulcard', 'foulmeet', 'buildrandom', 'buildflat', 'noreason', 'buildchain', 'lookname', 'looknone', 'keepersame', 'pressnone', 'foulwait', 'cueheld'];
 assert.ok(['', ...OLD, ...NEW, ...REVIEW, ...HELD, ...LOOK, ...FIX, ...CLOSE].includes(control), 'Unknown live motion control');
 assert.ok(['', 'bundle'].includes(only), 'Unknown LIVE_MOTION_ONLY');
@@ -268,6 +270,8 @@ try {
     if (control === 'longpass32') scene = replace(scene, 'const LONG_PASS = 45;', 'const LONG_PASS = 32;');
     /* ---- Round 1521's closing check ---- */
     if (control === 'chancewait') scene = replace(scene, 'if (build && foulPlaces.has(c.place)) {', 'if (build && foulPlaces.has(c.place) && false) {');
+    if (control === 'nomeet') scene = replace(scene, '[0, 2 * BEAT_SPAN], [BEAT_SPAN, BEAT_SPAN], [0, BEAT_SPAN]]', '[0, 2 * BEAT_SPAN], [0, BEAT_SPAN]]');
+    if (control === 'nameearly') scene = replace(scene, 'return !man || Math.hypot(man.x - cue.at.x, man.y - cue.at.y) <= 6;', 'return !man || Math.hypot(man.x - cue.at.x, man.y - cue.at.y) <= 600;');
     const componentPath = path.join(folder, 'LiveSimMotion.tsx').replaceAll('\\', '/');
     viewer = replace(viewer, "import { LivePitchPlayer, useLiveSimMotion } from '@/components/club-manager/LiveSimMotion';", "import { LivePitchPlayer, useLiveSimMotion } from './LiveSimMotion';");
     viewer = replace(viewer, "import type { MotionEvent } from '@/components/club-manager/LiveSimMotion';", "import type { MotionEvent } from './LiveSimMotion';");
@@ -316,7 +320,7 @@ try {
     lookname: 'R13|a renamed man the same', looknone: 'a renamed man the same', keepersame: 'a renamed man the same',
     pressnone: 'R12', foulwait: 'R11', cueheld: 'R11',
     mapswap: 'the viewer leans my side', turnback: 'R12', deadrestart: 'R12', feederholds: 'R11', pinoff: 'R11', facing: 'R11', reducedlift: 'the ball leaves the grass', metresswap: 'R10: the ball travels', longpass32: 'R10: the ball travels',
-    chancewait: 'R11',
+    chancewait: 'R11', nomeet: 'R11', nameearly: 'R11',
   };
   let passed = 0;
   if (only !== 'bundle' && control !== 'cmimport' && control !== 'bigpart') {

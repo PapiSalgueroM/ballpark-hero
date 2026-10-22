@@ -13,7 +13,7 @@ export type { MotionPlayer, MotionScene, MotionEvent, MotionFrame, Pose, BallFli
 export { flightPeak, shotLift } from '@/components/pitch-motion/motion';
 export { figureLook } from '@/components/pitch-motion/look';
 export type { FigureLook } from '@/components/pitch-motion/look';
-export { pitchPlan, pitchScene, pitchSceneKey, pitchBeatAt, flightInto } from '@/components/pitch-motion/scene';
+export { pitchPlan, pitchScene, pitchSceneKey, pitchBeatAt, flightInto, cueManThere } from '@/components/pitch-motion/scene';
 export type { PitchPlan, PitchPlaced, PitchBeat, PitchBeatState, PitchStagedAction } from '@/components/pitch-motion/scene';
 export { PitchSurface, pitchSpot } from '@/components/pitch-motion/PitchSurface';
 export type { PitchOrientation, PitchSurfaceProps } from '@/components/pitch-motion/PitchSurface';

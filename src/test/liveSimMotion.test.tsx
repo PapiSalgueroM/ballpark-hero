@@ -6,7 +6,7 @@ import type { CareerState, LiveFeedEvent } from '@/lib/clubManager';
 import { ACTION_SPAN, BEAT_SPAN, GOAL_MOUTH, NET_AT } from '@/components/pitch-motion/contract';
 import type { PitchFigure, PitchInput } from '@/components/pitch-motion/contract';
 import type { MotionScene } from '@/components/pitch-motion/motion';
-import { pitchBeatAt, pitchPlan, pitchScene, pitchSceneKey, PITCH_HELD, PITCH_KICKOFF, PITCH_LATE, PITCH_LEAD, PITCH_RESTART, PITCH_SQUEEZE } from '@/components/pitch-motion/scene';
+import { cueManThere, pitchBeatAt, pitchPlan, pitchScene, pitchSceneKey, PITCH_HELD, PITCH_KICKOFF, PITCH_LATE, PITCH_LEAD, PITCH_RESTART, PITCH_SQUEEZE } from '@/components/pitch-motion/scene';
 import type { PitchBeat, PitchPlaced, PitchPlan } from '@/components/pitch-motion/scene';
 import { scorerMark } from '@/lib/clubManagerScorerLine';
 const motionPath = process.env.LIVE_MOTION_COMPONENT;
@@ -934,7 +934,7 @@ interface Tally1521 {
   passes: Record<'ground' | 'air' | 'cross' | 'throw' | 'placed', number>; liftedGround: number; flatAerial: number; landOffenders: number; passMetres: number[];
   shots: Record<'first' | 'second', number>; shotOffenders: number; shotExamples: string[];
   fouls: number; atWhistle: number; cues: number; heldOn: number; heldOffenders: number; stayed: number; strayed: number; facingRead: number; facingOffenders: number; waited: number; cueOffenders: number; hidden: number; hiddenOffenders: number; hiddenBy: Record<string, number>; named: number; contacts: number; contactOffenders: number;
-  chanceWaits: number;
+  met: number; chanceWaits: number; nameFrames: number; nameHeld: number; nameOffenders: number;
   cardLines: number; carded: number; cardOffenders: number; statFouls: number; statOffenders: number; foulExamples: string[];
   arms: Record<Arm1521, BuildArm>; pressGap: number[]; calmGap: number[]; chains: number; deepChains: number; chainOffenders: number; chainExamples: string[];
 }
@@ -943,7 +943,7 @@ const tally1521 = (): Tally1521 => ({
   passes: { ground: 0, air: 0, cross: 0, throw: 0, placed: 0 }, liftedGround: 0, flatAerial: 0, landOffenders: 0, passMetres: [],
   shots: { first: 0, second: 0 }, shotOffenders: 0, shotExamples: [],
   fouls: 0, atWhistle: 0, cues: 0, heldOn: 0, heldOffenders: 0, stayed: 0, strayed: 0, facingRead: 0, facingOffenders: 0, waited: 0, cueOffenders: 0, hidden: 0, hiddenOffenders: 0, hiddenBy: {}, named: 0, contacts: 0, contactOffenders: 0,
-  chanceWaits: 0,
+  met: 0, chanceWaits: 0, nameFrames: 0, nameHeld: 0, nameOffenders: 0,
   cardLines: 0, carded: 0, cardOffenders: 0, statFouls: 0, statOffenders: 0, foulExamples: [],
   arms: { defensive: buildArm(), balanced: buildArm(), attacking: buildArm() }, pressGap: [], calmGap: [], chains: 0, deepChains: 0, chainOffenders: 0, chainExamples: [],
 });
@@ -1061,8 +1061,21 @@ function replayFouls(t: Tally1521, input: PitchInput, plan: PitchPlan, live: Non
       t.contacts++;
       if (!a || !b || apart(a, b) > 6 || contact.holderKey !== b.key) t.contactOffenders++;
     }
-    /* The closing check of 2026-10-22, counted: a whistle a chance of the same minute waited for. */
+    /* The closing check of 2026-10-22. Counted: a whistle the two met before, and one a chance of the same minute waited
+       for. Read: the name of the man who fouled waits for him. On the hook's frames on the way from the stretch before
+       into the whistle, the name is up only while he is by the spot (within 6), and it is up by the end of that walk. */
+    if (before?.id === `w${cue.order}` && Math.abs(before.end - beat.start) < 1e-6) t.met++;
     if (plan.actions.some(a => placeOfLine(a.event) === placeOfLine(line) && a.at >= beat.end - 1e-9)) t.chanceWaits++;
+    const walkedFrom = before ? pitchScene(plan, before.start) : null;
+    if (walkedFrom) for (let s = 0; s <= 10; s++) {
+      const frame: MotionScene<PitchPlaced> = between(walkedFrom, scene, s / 10);
+      const man = [...frame.mine, ...frame.theirs].find(p => p.key === cue.by);
+      if (!man) continue;
+      t.nameFrames++;
+      const up = cueManThere(frame);
+      if (!up) t.nameHeld++;
+      if (up ? apart(man, cue.at) > 6 : s === 10) t.nameOffenders++;
+    }
   });
   /* Every staged foul has its cue, unless a stretch that outranks it holds its place. */
   for (const [order, e] of input.feed.entries()) {
@@ -1563,6 +1576,7 @@ const R10_AIR = { lo: 0.18, hi: 0.245 } as const;
 const R11_CUED = 0.45;
 /* The closing check of 2026-10-22 (provisional floors, set from the first runner measure below). */
 const R11_CHANCE_WAITS = 0;
+const R11_NAME_HELD = 0;
 const R12_RATIO = 1.8;
 const R12_STEP = 0.02;
 const R12_AHEAD_STEP = 0.05;
@@ -1591,7 +1605,7 @@ describe('Round 1521: the live match looks like football', () => {
     const m = buildMaterial();
     const fouls = totals1521(t => t.fouls), cues = totals1521(t => t.cues);
     console.log(`[1521 R11] foul lines staged ${fouls}, with their cue ${cues} (${(cues / Math.max(1, fouls)).toFixed(3)}; per seed ${fixed(m.looks.map(t => t.cues / Math.max(1, t.fouls)), 3)}), of them waiting inside their minute ${totals1521(t => t.waited)}, held over their spot through the free kick ${totals1521(t => t.heldOn)} (offenders ${totals1521(t => t.heldOffenders)}; the man it names by the spot through it ${totals1521(t => t.stayed)}, away from it ${totals1521(t => t.strayed)}), the man fouled of the line the fouler faces: read ${totals1521(t => t.facingRead)}, offenders ${totals1521(t => t.facingOffenders)}, under a stretch that outranks them ${totals1521(t => t.hidden)} (their minute held by: ${Object.entries(m.looks.reduce((all, t) => { for (const [k, v] of Object.entries(t.hiddenBy)) all[k] = (all[k] ?? 0) + v; return all; }, {} as Record<string, number>)).sort((a, b) => b[1] - a[1]).map(([k, v]) => `${k} ${v}`).join(', ')}), with no such reason ${totals1521(t => t.hiddenOffenders)}; cue offenders ${totals1521(t => t.cueOffenders)}; named on the grass ${totals1521(t => t.named)}, meetings read ${totals1521(t => t.contacts)}, apart ${totals1521(t => t.contactOffenders)}; cards in the feed ${totals1521(t => t.cardLines)}, carded cues ${totals1521(t => t.carded)}, card offenders ${totals1521(t => t.cardOffenders)}; fouls the stats count ${totals1521(t => t.statFouls)} (at the whistle itself ${totals1521(t => t.atWhistle)}), halves where the feed and the stats differ ${totals1521(t => t.statOffenders)}${m.looks.flatMap(t => t.foulExamples).slice(0, 4).map(s => ` | ${s}`).join('')}`);
-    console.log(`[1521 R11 closing check] whistles a chance of the same minute waited for ${totals1521(t => t.chanceWaits)}`);
+    console.log(`[1521 R11 closing check] whistles the two met before ${totals1521(t => t.met)}, whistles a chance of the same minute waited for ${totals1521(t => t.chanceWaits)}; the fouler's name on the walk into the whistle: frames read ${totals1521(t => t.nameFrames)}, held back while he walked in ${totals1521(t => t.nameHeld)}, offenders ${totals1521(t => t.nameOffenders)}`);
     expect(fouls).toBeGreaterThan(1500);
     /* Every foul whose minute has room is whistled on the grass (no hidden offender); the share that has room is what
        the chances leave, per seed over R11_CUED. */
@@ -1607,8 +1621,11 @@ describe('Round 1521: the live match looks like football', () => {
     expect(totals1521(t => t.named)).toBeGreaterThan(cues / 4);
     expect(totals1521(t => t.contacts)).toBeGreaterThan(cues / 4);
     expect(totals1521(t => t.contactOffenders)).toBe(0);
-    /* The closing check of 2026-10-22: a chance of the foul's own minute waits for its whistle. */
+    /* The closing check of 2026-10-22: a chance of the foul's own minute waits for its whistle, and the fouler's name
+       waits for him (never up while he is away from the spot, always up once he has walked there). */
     expect(totals1521(t => t.chanceWaits)).toBeGreaterThan(R11_CHANCE_WAITS);
+    expect(totals1521(t => t.nameHeld)).toBeGreaterThan(R11_NAME_HELD);
+    expect(totals1521(t => t.nameOffenders)).toBe(0);
     expect(totals1521(t => t.carded)).toBeGreaterThan(40);
     expect(totals1521(t => t.cardOffenders)).toBe(0);
     expect(totals1521(t => t.statFouls)).toBe(fouls + totals1521(t => t.atWhistle));
@@ -1616,7 +1633,7 @@ describe('Round 1521: the live match looks like football', () => {
   }, LONG);
 
   /* The closing check of 2026-10-22, on a feed made by hand: each instant is the rule's own arithmetic. */
-  it('R11 by hand: a foul in the minute of a chance is whistled before it, and the chance waits for it inside its minute', () => {
+  it('R11 by hand: a foul in the minute of a chance is whistled before it, after the two meet, and the chance waits for it inside its minute', () => {
     const eleven = (tag: string): PitchFigure[] => [
       { key: `${tag}k`, line: 'keeper', slot: { x: 50, y: 90 }, name: `${tag} keeper` },
       ...[20, 40, 60, 80].map((x, i): PitchFigure => ({ key: `${tag}d${i}`, line: 'defence', slot: { x, y: 72 }, name: `${tag} defender ${i}` })),
@@ -1630,7 +1647,7 @@ describe('Round 1521: the live match looks like football', () => {
     const foul: PitchInput['feed'][number] = { minute: 20, side: 'opp', kind: 'foul', text: 't defender 1' };
     /* Alone, the chance is on time. */
     near(plan([save]).actions[0].at, 20);
-    /* With a foul of its own minute: the whistle goes inside that minute, and only then is the shooter
+    /* With a foul of its own minute: the two meet, the whistle goes inside that minute, and only then is the shooter
        led in, the chance still inside its minute and its shooter on the ball for a lead in. */
     const both = plan([foul, save]);
     const n = both.entries.findIndex(b => b.foul?.order === 0 && b.dead && pitchScene(both, b.start).cue?.order === 0);
@@ -1638,12 +1655,15 @@ describe('Round 1521: the live match looks like football', () => {
     const whistle = both.entries[n];
     expect(whistle.start).toBeGreaterThanOrEqual(20 - 1e-9);
     expect(whistle.start).toBeLessThanOrEqual(20 + 1 - BEAT_SPAN + 1e-9);
+    expect(both.entries[n - 1].id, 'the two meet before the whistle').toBe('w0');
+    expect(both.entries[n - 1].foul?.contact).toBe(true);
     const at = both.actions[0].at;
     expect(at).toBeLessThanOrEqual(20 + PITCH_LATE + 1e-9);
     expect(at - whistle.end).toBeGreaterThanOrEqual(PITCH_SQUEEZE - 1e-9);
     const led = pitchBeatAt(both, whistle.end + 1e-6);
     expect(led.via).toBe('carrier');
     near(led.start, whistle.end);
+    expect(cueManThere(pitchScene(both, whistle.start)), 'the man who fouled is by the spot at the whistle').toBe(true);
     /* When the minute has no room for the whistle as well (a goal the minute before, and its kick off), nothing
        waits: the chance starts where it does with no foul in the feed. */
     const goal: PitchInput['feed'][number] = { minute: 19, side: 'opp', kind: 'goal', text: 't forward 1' };

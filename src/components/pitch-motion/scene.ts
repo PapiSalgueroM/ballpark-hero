@@ -578,11 +578,15 @@ export function pitchPlan(input: PitchInput): PitchPlan {
         let need = 0;
         const search = (holding: (l: Layer) => boolean) => {
           const held = (s: number, e: number) => layers.some(l => holding(l) && over(l.start, l.end, s, e)) || deadWindows.some(w => over(w.from, w.to, s, e));
-          for (const span of victim ? [BEAT_SPAN, 0] : [0]) {
-            for (let k = 0; found < 0 && p + k * 0.02 <= latest + EPS; k++) if (!held(p + k * 0.02 - span, p + k * 0.02 + 2 * BEAT_SPAN)) found = p + k * 0.02;
-            if (found >= 0) { meets = span > 0; need = found + 2 * BEAT_SPAN; return; }
+          /* Round 1521 closing check: the two meeting and the free kick taken, then the free kick with no meeting seen,
+             then (new) the two meeting and the whistle alone, and last the whistle alone, so a whistle with no room for
+             its free kick (one a chance of its own minute waits for, above) still has the man who fouled get there
+             before it rather than walk in under his own name. */
+          const forms: [number, number][] = victim ? [[BEAT_SPAN, 2 * BEAT_SPAN], [0, 2 * BEAT_SPAN], [BEAT_SPAN, BEAT_SPAN], [0, BEAT_SPAN]] : [[0, 2 * BEAT_SPAN], [0, BEAT_SPAN]];
+          for (const [span, length] of forms) {
+            for (let k = 0; found < 0 && p + k * 0.02 <= latest + EPS; k++) if (!held(p + k * 0.02 - span, p + k * 0.02 + length)) found = p + k * 0.02;
+            if (found >= 0) { meets = span > 0; need = found + length; return; }
           }
-          for (let k = 0; found < 0 && p + k * 0.02 <= latest + EPS; k++) if (!held(p + k * 0.02, p + k * 0.02 + BEAT_SPAN)) { found = p + k * 0.02; need = found + BEAT_SPAN; }
         };
         const here = (holding: (l: Layer) => boolean) => {
           const drawnHere = !layers.some(l => holding(l) && over(l.start, l.end, p, p + 1e-6))
@@ -841,6 +845,16 @@ export function pitchScene(plan: PitchPlan, clock: number): MotionScene<PitchPla
     }
   }
   return scene;
+}
+
+/** Round 1521 closing check: whether the man a foul's cue names stands by its spot (within 6) in this scene or in a
+ *  frame on the way to it, so a binder puts his name up only once he is there. A cue that names nobody on the grass
+ *  is ready at once. */
+export function cueManThere<T extends MotionPlayer>(scene: MotionScene<T>): boolean {
+  const cue = scene.cue;
+  if (!cue?.by) return true;
+  const man = [...scene.mine, ...scene.theirs].find(p => p.key === cue.by);
+  return !man || Math.hypot(man.x - cue.at.x, man.y - cue.at.y) <= 6;
 }
 
 /** Round 1521: how the ball travels into a stretch from the one before it. A dead ball is fetched or placed (no
