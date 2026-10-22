@@ -1,0 +1,7 @@
+simFreeKick exit=0 0s | simFreeKick: green. The corners pay, one button does not, and the keeper is real.
+simFreeKick-lowcap exit=0 0s | control "lowcap": 1 failure(s) fired as expected, the check works
+suite4-noci exit=1 0s | 3 harnesses not green.
+simNoRivalNames exit=0 15s | No rival product names found. 0 findings.
+suite4 exit=0 18s | All 4 harnesses green.
+simHarnessAnchors exit=0 35s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 56s | 
