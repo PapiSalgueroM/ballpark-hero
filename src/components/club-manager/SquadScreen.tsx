@@ -1,12 +1,12 @@
 import { useMemo, useState } from 'react';
 import { ArrowDown, ArrowUp, ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
-/* Round 194: real players wear their real flag, from this world's map. */
-import { nationalityOf } from '@/data/playerNationalities';
+/* Round 194: real players wear their real flag, from this world's map.
+   Round 1520: a made up man wears his own (shownNation), beside his MADE UP mark. */
 import { FlagImg } from '@/components/FlagImg';
 import {
   ROLE_INFO, roleOf, promiseMood, playingShare, windowWords, deservedRole, standingGap,
-  sellValue, renewalTerms, moneyIn,
+  sellValue, renewalTerms, moneyIn, shownNation,
 } from '@/lib/clubManager';
 import type { CMPlayer, CareerState, IncomingBid } from '@/lib/clubManager';
 import { staffLevel } from '@/lib/clubManagerStaff';
@@ -395,7 +395,7 @@ function SquadRow({ p, career, eraId, inXI, isCaptain, isOpen, onToggle, sortKey
      shared hook brings the row's top into view and does nothing otherwise. */
   const ref = useRevealScroll<HTMLDivElement>(isOpen ? `open:${p.id}` : 'shut', { enabled: isOpen, skipFirst: false });
   const band = scoutBand(p, scoutLevel);
-  const nat = nationalityOf(eraId, p.name);
+  const nat = shownNation(eraId, p);
   const form = formOf(p);
   const phoneKey: SquadSortKey = PHONE_EXTRA.has(sortKey) ? sortKey : 'pot';
   const mood = promiseMood(p);

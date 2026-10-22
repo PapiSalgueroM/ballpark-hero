@@ -53,6 +53,7 @@ import { raiseWithinPotential, ratingRaiseNote } from './careerHeadroom';
 import { applyUsCareerAnnualBenefits } from './usCareerAnnualBenefits';
 import { careerRecoveryRisk } from './usCareerRecovery';
 import { hallCalibrationOf, legacyRead, type HallCalibration, type LegacyRead, type LegacyWeights } from './careerHallOfFame';
+import { moraleForm } from './careerForm';
 
 export type CareerPos = 'QB' | 'RB' | 'WR' | 'TE' | 'LB' | 'CB' | 'EDGE' | 'K';
 
@@ -539,7 +540,7 @@ export function simSeason(
     notes.push(`🪑 A backup season: ${games} game${games === 1 ? '' : 's'} of real action.`);
   }
   const swing = seasonSwing(rng, c.age);
-  const form = c.ovr + (c.morale - 60) / 10 + (teamQuality - 78) / 5
+  const form = c.ovr + moraleForm('nfl', c.morale) + (teamQuality - 78) / 5
     // Round 98: the season itself gets a say, so career years and lost
     // years both exist. Averages out to zero across a career.
     + swing;

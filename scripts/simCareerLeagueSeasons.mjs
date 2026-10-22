@@ -119,6 +119,10 @@ import { inverseDeckFair, DECK_FAIR_ADDITIONS } from './lib/careerDeckFair1327.m
 import { inverseWorldTruth, worldTruthReceiptProblem } from './lib/careerWorldTruth1329.mjs';
 /* Round 1334: the soccer deck's three engine lines come out first, in front of Round 1329 (scripts/lib/careerSoccerDeck1334.mjs), every row once, in order. */
 import { inverseSoccerDeck, soccerDeckReceiptProblem } from './lib/careerSoccerDeck1334.mjs';
+/* Round 1523: morale that plays and the Puskas year move a career against origin/main on purpose; with that round
+   alone taken out of the engine the tree is origin/main's again (the 1523 arm). SIM_LEAGUE_SEASONS_MORALE= (empty)
+   drops the arm, the unattributed run, red by design. */
+import { inverseSoccerMorale, soccerMoraleOut, soccerMoraleReceiptProblem } from './lib/careerSoccerMorale1523.mjs';
 import { AWARD_GENERATIONS_FILE, inverseAwardGenerations } from './lib/careerAwardGenerations1318.mjs';
 import { readLedgers, buildSeasons, render, identityKey as genIdentity, OUT as GEN_OUT } from './genCareerLeagueSeasons.mjs';
 import { soccerTrainOutPlugin, withoutTrainFields } from './lib/soccerTrain1178.mjs';
@@ -836,6 +840,51 @@ const r1318Out = { name: 'r1318out', setup(b) {
   });
 } };
 const futurePlugins = CONTROL === 'future' ? [controlPlugin] : [];
+const MORALE_ARM = soccerMoraleOut('SIM_LEAGUE_SEASONS_MORALE');
+const r1523Seen = [];
+const r1523Out = { name: 'r1523out', setup(b) {
+  b.onLoad({ filter: /soccerCareerEngine\.ts$/ }, args => {
+    if (!path.resolve(args.path).toLowerCase().startsWith(path.resolve(ROOT, 'src').toLowerCase())) return undefined;
+    let src = fs.readFileSync(args.path, 'utf8').replaceAll('\r\n', '\n');
+    if (CONTROL === 'future') { src = controlEdit(src); controlFired = true; }
+    return { contents: inverseSoccerMorale('src/lib/soccerCareerEngine.ts', src, r1523Seen), loader: 'ts' };
+  });
+} };
+/* The train out arm (Rounds 1169 to 1178) refuses to build on an engine that no longer holds one of its rows (main's
+   engine lost "3-match ban next season, Reputation -5"), and a refusal used to crash the run with a stack trace, so
+   the unattributed control crashed instead of failing a check (review of 2026-10-21). It is a known gap of that arm:
+   the arm now says it cannot be built and decides nothing, and the career falls through to the checks below. */
+async function trainOutArm(plugin) {
+  try { return await bundle(ROOT, 'treetrainout', [plugin]); }
+  catch (e) {
+    /* only the arm's own refusal is a known gap; anything else is a defect and stops the run */
+    const why = String(e?.message ?? e).split('\n').find(l => l.includes('train out refused'));
+    if (!why) throw e;
+    console.log(`  the train out arm cannot be built on this engine, so it decides nothing (${why.trim()})`);
+    return false;
+  }
+}
+/* Release BP: Round 1524 lifted the dugout's table into soccerCareerLeague.ts (playDugoutTable, keyedStream) and the
+   engine imports it, so an arm that reads that file from a base without the lift (Round 1100's, alone or in a
+   combination) cannot be built until the base holds 1524 (main after the release). Like the train out arm's refusal,
+   that known gap decides nothing: the arm says so and the career falls through to the arms and checks below. Any
+   other build failure is a defect and stops the run. */
+async function leagueArm(name, plugins) {
+  try { return await bundle(ROOT, name, plugins); }
+  catch (e) {
+    const why = String(e?.message ?? e).split('\n').find(l => l.includes('No matching export in "src/lib/soccerCareerLeague.ts"'));
+    if (!why) throw e;
+    console.log(`  the ${name} arm cannot be built on this engine, so it decides nothing (${why.trim()})`);
+    return false;
+  }
+}
+async function tree1523Out() {
+  r1523Seen.length = 0;
+  const bundled = await bundle(ROOT, 'tree1523out', [r1523Out]);
+  const problem = soccerMoraleReceiptProblem(r1523Seen);
+  if (problem) { console.error(`Round 1523 arm: ${problem}`); process.exit(2); }
+  return bundled;
+}
 /* Round 1327: the event deck draws on a keyed stream and the paper picks by weight, which moves a career from its
    first deck or paper on, against a base that has neither. This arm reads the engine as the tree's own bundle does
    (any control's edit included, through readSrc and controlPlugin, so an arm without the fault can never call a
@@ -905,6 +954,7 @@ if (baseRoot) {
   const B = await bundle(baseRoot, 'base', [releasePins(true)], false);
   const Bkeep = await bundle(baseRoot, 'basekeep', [releasePins(false)], false);
   let by1327 = 0; let Mout1327 = null; let by1329 = 0; let Mout1329 = null;
+  let by1523 = 0; let Mout1523 = null;
   let same = 0; let differ = 0; let pinsMove = 0; let rows = 0; let by1041 = 0; let by1100 = 0; let by1052 = 0; let byBoth = 0; let by1185 = 0; let by1318 = 0;
   let Mout = null; let Mout1100 = null; let Mout1052 = null; let MoutBoth = null; let Mout1318 = null;
   /* Release AQ: the Soccer Career train (Rounds 1169 to 1178) moves a career
@@ -936,6 +986,7 @@ if (baseRoot) {
     const receipt = { seed, current: retainReplay(seed, 'current', mine), baseReleased: retainReplay(seed, 'base-released', base), baseKept: retainReplay(seed, 'base-kept', kept), attempts: [], acceptedArm: null };
     replayReceipt.cases.push(receipt);
     const tryArm = async (name, T) => {
+      if (!T) return false; /* an arm that could not be built (leagueArm) decides nothing */
       const value = await replay(T, seed);
       const equal = value === base;
       receipt.attempts.push({ arm: name, ...retainReplay(seed, name, value), equal });
@@ -950,7 +1001,7 @@ if (baseRoot) {
           if (others.includes('1041')) plugins.push(r1041Out);
           if (others.includes('1100')) plugins.push(r1100Out);
           if (others.includes('1052')) plugins.push(r1052Out);
-          formBundles.set(name, await bundle(ROOT, `tree-${name}`, plugins));
+          formBundles.set(name, others.includes('1100') ? await leagueArm(`tree-${name}`, plugins) : await bundle(ROOT, `tree-${name}`, plugins));
         }
         if (await tryArm(name, formBundles.get(name))) return true;
       }
@@ -958,17 +1009,18 @@ if (baseRoot) {
     };
     rows += JSON.parse(mine).seasons.length + JSON.parse(mine).dug.length;
     if (mine === base) { same += 1; receipt.acceptedArm = 'raw'; }
+    else if (MORALE_ARM && await tryArm('1523', Mout1523 ??= await tree1523Out())) { same += 1; by1523 += 1; }
     else if (await tryArm('1329', Mout1329 ??= await tree1329Out())) { same += 1; by1329 += 1; }
     else if (await tryArm('1327', Mout1327 ??= await tree1327Out())) { same += 1; by1327 += 1; }
     else if (await tryArm('1318', Mout1318 ??= await bundle(ROOT, 'tree1318out', [r1318Out]))) { same += 1; by1318 += 1; console.log(`  career ${seed}: moved by the saved Ballon d'Or rivals of Rounds 1280 to 1282 and 1318 (equal to the base with them taken out)`); }
     else if (await tryArm('1041', Mout ??= await bundle(ROOT, 'tree1041out', [r1041Out]))) { same += 1; by1041 += 1; console.log(`  career ${seed}: moved by Round 1041's two truth fixes (equal to the base with them taken out)`); }
-    else if (await tryArm('1100', Mout1100 ??= await bundle(ROOT, 'tree1100out', [r1100Out, ...futurePlugins]))) { same += 1; by1100 += 1; }
+    else if (await tryArm('1100', Mout1100 ??= await leagueArm('tree1100out', [r1100Out, ...futurePlugins]))) { same += 1; by1100 += 1; }
     else if (await tryArm('1052', Mout1052 ??= await bundle(ROOT, 'tree1052out', [r1052Out, ...futurePlugins]))) { same += 1; by1052 += 1; console.log(`  career ${seed}: moved by Round 1052's new league in the dugout's job market (equal to the base with the league taken out)`); }
     /* Release AO: a tree that holds both rounds over a base that holds neither. A career whose playing years met
        Round 1100's bigger pool AND whose dugout years met Round 1052's league equals the base only with both taken
        out at once (the two arms read different files: clubManager.ts is not one of Round 1100's seven). */
-    else if (await tryArm('1100+1052', MoutBoth ??= await bundle(ROOT, 'tree1100and1052out', [r1100Out, r1052Out, ...futurePlugins]))) { same += 1; byBoth += 1; console.log(`  career ${seed}: moved by Rounds 1100 and 1052 together (equal to the base only with both taken out)`); }
-    else if (CONTROL !== 'future' && trainStrip(await replay(MoutTrain ??= await bundle(ROOT, 'treetrainout', [trainOut.plugin]), seed)) === trainStrip(base)) { same += 1; byTrain += 1; receipt.acceptedArm = 'train1178'; }
+    else if (await tryArm('1100+1052', MoutBoth ??= await leagueArm('tree1100and1052out', [r1100Out, r1052Out, ...futurePlugins]))) { same += 1; byBoth += 1; console.log(`  career ${seed}: moved by Rounds 1100 and 1052 together (equal to the base only with both taken out)`); }
+    else if (CONTROL !== 'future' && (MoutTrain ??= await trainOutArm(trainOut.plugin)) && trainStrip(await replay(MoutTrain, seed)) === trainStrip(base)) { same += 1; byTrain += 1; receipt.acceptedArm = 'train1178'; }
     else if (await tryFormArms()) { same += 1; by1185 += 1; console.log(`  career ${seed}: moved by Rounds 1185 and 1187's form selection and Youth Mentor catalog (${receipt.acceptedArm}; complete replay equals the base only after the declared copied inverses)`); }
     else {
       differ += 1;
@@ -979,6 +1031,8 @@ if (baseRoot) {
     if (base !== kept) pinsMove += 1;
   }
   console.log(`  ${same} of ${BASELINE_CAREERS} careers from 2025 identical from 2026-27 on (${rows} seasons and dugout rows compared); releasing the seven pins alone moves ${pinsMove} of them (attributed to the release, not the binds); ${by1041} of the identical ones only once Round 1041's two truth fixes are taken out, ${by1100} only once Round 1100's seven files are read from the base (the pool, the rows and the band moved them, on purpose)`);
+  if (by1523) console.log(`  ${by1523} of the identical careers are identical only with Round 1523's morale step and Puskas year taken out`);
+  if (!MORALE_ARM) console.log('  SIM_LEAGUE_SEASONS_MORALE is empty: the Round 1523 arm is off, the unattributed run');
   if (by1329) console.log(`  ${by1329} of the identical careers are identical only with Round 1329's world truth taken out`);
   if (by1327) console.log(`  ${by1327} of the identical careers are identical only with Round 1329's world truth and Round 1327's keyed deck and weighted paper taken out`);
   if (by1052) console.log(`  ${by1052} of the identical careers are identical only with Round 1052's league taken out of the dugout's job market`);

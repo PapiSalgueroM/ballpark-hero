@@ -161,7 +161,8 @@ async function playTen() {
   for (let step = 0; step < 140; step++) {
     const where = await heading();
     if (where === 'FULL TIME') { await tap(/continue|next|carry on|ok/i); await page.waitForTimeout(400); continue; }
-    if (where === 'HALF TIME' || where === 'MATCH LIVE') { await tap(/second half|skip|full report/i); await page.waitForTimeout(400); continue; }
+    /* Release BP seam: Second half by its exact name (Round 1522's Tactics tile mentions the second half). */
+    if (where === 'HALF TIME' || where === 'MATCH LIVE') { await tap(/^\s*Second half\s*$|skip|full report/i); await page.waitForTimeout(400); continue; }
     if (((await saved())?.week ?? 0) >= WEEKS) break;
     if (await tapText(/Quick Sim/i)) { await page.waitForTimeout(700); continue; }
     await clearRoom();

@@ -42,6 +42,7 @@ import {
   ACHIEVEMENTS, ACH_BONUS, achMult, goldenActive, GOLDEN_INFO,
   LEGACY_PERKS, perkLevelOf, perkCostOf, canBuyPerk, legacyPointsOf,
   totalPerkLevels, pointsForSale, HYPE_MULT, AWAY_MATCHDAY_SEC, SET_PIECE_WINDOW_SEC, type TycoonLeague,
+  GOAL_BONUS_SEC, WIN_BONUS_SEC, PROMOTION_BONUS_SEC, scoringFacts,
 } from '@/lib/stadiumTycoon';
 import { useStadiumTycoon } from '@/hooks/useStadiumTycoon';
 import type { LastSeason } from '@/hooks/useStadiumTycoon';
@@ -57,6 +58,7 @@ import type { TapFx } from '@/components/tycoon/TycoonPitch';
 import type { AcademyStatus, Room } from '@/lib/tycoonRooms';
 import { deserialize as deserializeAcademy, applyOffline as applyAcademyOffline, SAVE_KEY as ACADEMY_SAVE_KEY, squadEdge } from '@/lib/wonderkidFactory';
 import type { FactoryState } from '@/lib/wonderkidFactory';
+import { OVERLAY_ABOVE_BANNER, boxInsideOverlay } from '@/components/game/aboveConsentBanner';
 
 const AcademyPanel = lazy(() => import('@/components/tycoon/AcademyPanel'));
 const SetPieceBoard = lazy(() => import('@/components/tycoon/SetPieceBoard').then(module => ({ default: module.WatchedSetPieceBoard })));
@@ -77,7 +79,11 @@ function seatRand(i: number): number {
 }
 
 function fmtMoney(n: number): string {
-  return tycoonMoney(n).replace(/^\$(-?\d+(?:\.\d+)?)([KMBTQ]?)$/, (_text, amount: string, unit: string) => `$${formatNumber(amount)}${unit}`);
+  return formatMoneyText(tycoonMoney(n));
+}
+
+function formatMoneyText(text: string): string {
+  return text.replace(/\$(-?\d+(?:\.\d+)?)([KMBTQ]?)/g, (_text, amount: string, unit: string) => `$${formatNumber(amount)}${unit}`);
 }
 
 /** Round 583: a rate under ten dollars a second keeps its cents, so a new club
@@ -212,6 +218,7 @@ function helpFacts() {
   const maxed = { ...fresh, legacyPerks: Object.fromEntries(LEGACY_PERKS.map(p => [p.id, p.costs.length])) };
   const byId = (id: string) => MILESTONES.find(m => m.id === id)?.label.toLowerCase() ?? '';
   const perk = (id: string) => LEGACY_PERKS.find(p => p.id === id);
+  const scoring = scoringFacts();
   return {
     chargeMin: BOOST_CHARGE_SEC / 60,
     voltage1: boostChargeSecOf({ ...fresh, legacyPerks: { voltage: 1 } }) / 60,
@@ -266,6 +273,13 @@ function helpFacts() {
     rate400: incomePerSec(full),
     goal400: goalBonus(full),
     win400: winBonus(full),
+    /* Round 1532: the scoring law and the bonuses in seconds, read off the engine. */
+    evenFor: scoring.evenFor,
+    evenAgainst: scoring.evenAgainst,
+    levelGoals: scoring.levelGoals,
+    goalSec: GOAL_BONUS_SEC,
+    winSec: WIN_BONUS_SEC,
+    promotionMin: PROMOTION_BONUS_SEC / 60,
   };
 }
 
@@ -457,6 +471,12 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
      timer that knew nothing about the goals. The pitch is TycoonPitch now, and
      everything on it moves with the engine's match. */
 
+  const standBays = useMemo(() => Array.from({ length: Math.min(203, Math.floor(cap / 40)) }, (_, i) => {
+    const column = i % 20;
+    const centered = column % 2 === 0 ? 9 - Math.floor(column / 2) : 10 + Math.floor(column / 2);
+    return { x: 8 + centered * 15, y: 56 - Math.floor(i / 20) * 5 };
+  }), [cap]);
+
   /* The crowd: one dot per ~14 fans, placed deterministically so the stand
      fills seat by seat as attendance really grows. Capped for perf. */
   const crowdDots = useMemo(() => {
@@ -577,6 +597,11 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
         <div ref={pitchRef} onClick={onPitchClick} className="relative rounded-2xl overflow-hidden border border-border cursor-pointer select-none mb-3 group">
           {/* Stand (crowd) */}
           <div className="relative h-16 md:h-20 bg-gradient-to-b from-secondary to-secondary/40 border-b border-border overflow-hidden">
+            <svg data-tycoon-terraces aria-hidden="true" viewBox="0 0 320 64" preserveAspectRatio="none" className="absolute inset-0 h-full w-full pointer-events-none text-muted-foreground/50">
+              {standBays.map((bay, i) => (
+                <rect key={i} x={bay.x} y={bay.y} width="13" height="3" rx="1" fill="currentColor" />
+              ))}
+            </svg>
             {crowdDots.map((d, i) => (
               <span key={i} className={cn('absolute w-1.5 h-1.5 rounded-full transition-opacity duration-700', d.c)} style={{ left: `${d.x}%`, top: `${d.y}%` }} />
             ))}
@@ -612,7 +637,7 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
                 )}
                 style={{ left: `${f.x}%`, top: `${f.y}%` }}
               >
-                {f.text}
+                {formatMoneyText(f.text)}
               </span>
             ))}
             {/* confetti */}
@@ -906,8 +931,8 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
 
       {/* Away earnings modal */}
       {g.awayPay !== null && (
-        <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4" onClick={g.dismissAway}>
-          <div role="dialog" aria-modal="true" aria-label="While you were away" tabIndex={-1} ref={focusDialogOnMount} onKeyDown={escapeCloses(g.dismissAway)} className="bg-card border border-border rounded-2xl p-6 max-w-sm w-full text-center" onClick={e => e.stopPropagation()}>
+        <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4" style={OVERLAY_ABOVE_BANNER} onClick={g.dismissAway}>
+          <div role="dialog" aria-modal="true" aria-label="While you were away" tabIndex={-1} ref={focusDialogOnMount} onKeyDown={escapeCloses(g.dismissAway)} className="bg-card border border-border rounded-2xl p-6 max-w-sm w-full text-center overflow-y-auto" style={boxInsideOverlay('100%')} onClick={e => e.stopPropagation()}>
             <div className="text-4xl mb-2">🏟️</div>
             <div className="text-lg font-bold font-display text-foreground">While you were away</div>
             <p className="text-sm text-muted-foreground mt-1">The turnstiles kept spinning at {Math.round(offlineRateOf(s) * 100)}% speed.</p>
@@ -947,15 +972,15 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
       {showHelp && (() => {
         const h = helpFacts();
         return (
-        <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4" onClick={() => setShowHelp(false)}>
-          <div role="dialog" aria-modal="true" aria-label="How Stadium Tycoon works" tabIndex={-1} ref={focusDialogOnMount} onKeyDown={escapeCloses(() => setShowHelp(false))} className="bg-card border border-border rounded-2xl p-5 max-w-md w-full max-h-[80vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
+        <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4" style={OVERLAY_ABOVE_BANNER} onClick={() => setShowHelp(false)}>
+          <div role="dialog" aria-modal="true" aria-label="How Stadium Tycoon works" tabIndex={-1} ref={focusDialogOnMount} onKeyDown={escapeCloses(() => setShowHelp(false))} className="bg-card border border-border rounded-2xl p-5 max-w-md w-full overflow-y-auto" style={boxInsideOverlay('80vh')} onClick={e => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-2">
               <div className="text-lg font-bold font-display text-foreground">How Stadium Tycoon works</div>
               <button onClick={() => setShowHelp(false)} aria-label="Close the rules"><X className="w-4 h-4 text-muted-foreground" /></button>
             </div>
             <div data-tycoon-rules className="text-sm text-muted-foreground space-y-2">
               <p>You run a tiny club's matchday money machine. Fans show up if there are seats and things to spend on; every fan pays you every second.</p>
-              <p>The match on screen is real: your Squad level drives goals, goals pay a bonus scaled by the crowd, wins extend a streak that multiplies everything and pulls in new fans. A division's rivals stay as strong as they were when you arrived, but every division up is tougher, and the longer the club has played the tougher each new one is.</p>
+              <p>The match on screen is real and plays like football: your Squad against today's rival decides who is favourite, but favourites drop points and plenty of matches end level. Against a rival as strong as you, you expect about {h.evenFor} goals to their {h.evenAgainst}, and each Squad level adds about {h.levelGoals} of a goal a match to your side and takes up to as much off theirs. A goal pays {h.goalSec} seconds of your income, a win {h.winSec} seconds and going up a division {h.promotionMin} minutes, and wins extend a streak that multiplies everything and pulls in new fans. Every division up sends stronger rivals, and they stay that strong until you win the league.</p>
               <p>Tap the stadium for instant cash (Megaphone makes taps stronger). Buy Stands when the ground is full, spending tracks when it is not.</p>
               <p>The Ticket offer tile sets your matchday price, and switching is free at any time. Standard is the regular game. Community takes {h.ticketCommunityCut}% off the gate money each fan pays and your supporters grow {h.ticketCommunityGrowth}% faster. Premium adds {h.ticketPremiumGate}% to the gate money each fan pays, but only {h.ticketPremiumDemand}% of your supporters turn up and they grow {h.ticketPremiumGrowth}% slower. Only the ticket price moves: snacks, the shop, parking and the payroll keep their own rates. Example: a new {h.freshSeats} seat ground with {h.freshFans} supporters draws {h.freshPremiumCrowd} on Premium, so Premium pays less there, and it pays more once {h.ticketPremiumDemand}% of your supporters still fill the ground. Selling up puts the offer back to Standard.</p>
               <p>Matchday Hype charges over {h.chargeMin} minutes of play (Stadium Voltage in the boardroom trims that to {h.voltage1}, then {h.voltage2}). Press it and your income pays double for {h.hypeSec} seconds, and your taps rise with it; goal and win bonuses are not doubled. It does not charge or burn while you are away.</p>

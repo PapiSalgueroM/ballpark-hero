@@ -116,7 +116,7 @@ describe('packs on the real academy', () => {
     expect(ledger().spent, 'the first Scout Pack cost gems').toBe(PACKS[1].price);
     act(() => { fireEvent.click(document.querySelector('[data-pack-reveal] button') as HTMLElement); });
     expect(openButton('scout').textContent, 'the second Scout Pack is still free').toBe(`Open for ${PACKS[0].price} gems`);
-    expect(openButton('scout').disabled, 'the second Scout Pack opens with 30 gems left').toBe(false);
+    expect(openButton('scout').disabled, `the second Scout Pack opens with ${130 - PACKS[1].price} gems left`).toBe(false);
 
     cleanup();
     seed(1000, 5);

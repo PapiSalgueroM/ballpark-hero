@@ -213,7 +213,10 @@ const SCALARS = ['playerName', 'position', 'overall', 'currentClub', 'currentClu
   'frozenOut', 'isClubCaptain', 'phase', 'retired', 'nationality',
   /* Release AT: Round 1190's smaller role is read off the save (the plan, and a loan switches it off), so the
      slim save carries both or it reads four games away from the full one in a season with a role. */
-  'reducedRole', 'loan'];
+  'reducedRole', 'loan',
+  /* Round 1523: morale is read too (the plan adds what his morale is worth, src/lib/careerForm.ts), so the slim
+     save carries it or it reads up to two games away from the full one. */
+  'morale'];
 const ROW_FIELDS = ['year', 'age', 'club', 'clubCountry', 'clubTier', 'type', 'apps', 'leagueApps', 'ovr',
   'injury', 'injuryWeeks', 'onLoanFrom', 'rating'];
 const pick = (o, keys) => { const out = {}; for (const k of keys) if (o[k] !== undefined) out[k] = o[k]; return out; };

@@ -37,7 +37,7 @@ const fitFindings = value => {
 };
 const purityFindings = value => [value.beforeRaw !== value.afterRaw && 'raw-save', JSON.stringify(value.beforeDraws) !== JSON.stringify(value.afterDraws) && 'read-rng'].filter(Boolean);
 const report = { status: 'running', declarations: { widths, cases: 4, controls: ['original-dialog-320', 'read-purity'], pngs: 5 },
-  scope: 'Actual built page with the complete ere fixture and two explicit retired boundary edits. Four actual dialog open/Cancel flows only. No delete, Share, footer-fit, natural-career or full accessibility claim.',
+  scope: 'Actual built page with the complete ere fixture and three explicit retired boundary edits. Four actual dialog open/Cancel flows only. No delete, Share, footer-fit, natural-career or full accessibility claim.',
   qualifications: ['Initial bootstrap draws and all measured values/callers remain complete. Only in-document open/measurement/style-control/Cancel reads must consume no additional draws or change saved bytes.',
     'External transport is intercepted, retained and never forwarded. Web fonts are aborted; actual fallback font readiness is measured.',
     'Both existing h10 buttons use phone flex-none and desktop sm:flex-1. The old-style control restores the original group and both full canonical CVA button classes. There is no 44px rule.',
@@ -67,8 +67,11 @@ try {
   for(const edit of edits){assert.equal(forward.split(edit.from).length-1,1);forward=forward.replace(edit.from,edit.to);}for(const edit of [...edits].reverse()){assert.equal(reverse.split(edit.to).length-1,1);reverse=reverse.replace(edit.to,edit.from);}assert.equal(forward,after);assert.equal(reverse,before);report.page.edits=put('page-edits',edits);
   const fixture = fs.readFileSync(path.join(ROOT, FIXTURE)); report.fixture = bodyRef(fixture, 'fixture'); const selected = JSON.parse(fixture).saves.filter(row => row.id === 'ere'); assert.equal(selected.length, 1);
   const input = copy(selected[0].state); assert.equal(input.phase, 'playing'); assert.equal(input.primeType, 'late');
-  report.boundaryEdits = put('boundary-edits', ['retired', 'phase'].map(key => ({ key, existed: Object.hasOwn(input, key), before: Object.hasOwn(input, key) ? copy(input[key]) : null, after: key === 'retired' ? true : 'retired' })));
-  input.retired = true; input.phase = 'retired'; report.input = put('whole-saved-input', input);
+  /* Release BP seam (Round 1519): a retired screen with nothing behind it is the stray flag Round 1519's repairCareer
+     puts back to play on, so the boundary also carries what the Just retire choice writes (choosePostRetirement:
+     postRetirementChoice 'retire' with the retired phase). No screen reads that field; the retired page is the same. */
+  report.boundaryEdits = put('boundary-edits', ['retired', 'phase', 'postRetirementChoice'].map(key => ({ key, existed: Object.hasOwn(input, key), before: Object.hasOwn(input, key) ? copy(input[key]) : null, after: key === 'retired' ? true : key === 'phase' ? 'retired' : 'retire' })));
+  input.retired = true; input.phase = 'retired'; input.postRetirementChoice = 'retire'; report.input = put('whole-saved-input', input);
   const entry = "export {repairCareer} from './src/lib/soccerCareerEngine';export {isSoccerCareerSave} from './src/lib/soccerCareerSave';export {buttonVariants} from './src/components/ui/button';export {cn} from './src/lib/utils';", expression = '{"DEV":false,"PROD":true,"MODE":"production"}';
   const compiled = await build({ stdin: { contents: entry, resolveDir: ROOT, sourcefile: 'new-career-oracle.ts', loader: 'ts' }, bundle: true, write: false, metafile: true, platform: 'browser', format: 'iife', globalName: '__newCareerOracle', alias: { '@': path.join(ROOT, 'src') }, define: { 'import.meta.env': expression }, logLevel: 'error' });
   assert.equal(compiled.outputFiles.length, 1); report.oracleSource = { entry: bodyRef(Buffer.from(entry), 'source'), code: bodyRef(compiled.outputFiles[0].contents, 'js'), metafile: put('oracle-metafile', compiled.metafile), inputs: Object.keys(compiled.metafile.inputs).map(file => {

@@ -7,6 +7,12 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+/* Round 1537: on a GitHub runner vitest colours its failure messages, so the matcher hint arrives with
+   escape codes between its words, and both controls exited 1 on healthy code. The guard
+   reads the text, never its colouring: every ANSI escape sequence comes out before a message is matched. */
+const ESC = String.fromCharCode(27);
+const ANSI = new RegExp(ESC + '[[][0-9;?]*[ -/]*[@-~]', 'g');
+const plain = text => text.replace(ANSI, '');
 const control = process.env.RULES_GATE_FOCUS_CONTROL || '';
 assert.ok(['', 'host', 'return'].includes(control), 'Known RulesGate focus control');
 const files = ['src/components/game/RulesGate.tsx', 'src/components/CookieConsent.tsx', 'src/lib/consentedScripts.ts'];
@@ -54,11 +60,16 @@ try {
     assert.equal(run.status, 1);
     assert.equal(report.numFailedTests, titles.length);
     assert.equal(report.numPassedTests, 9 - titles.length);
+    let coloured = 0;
     for (const title of titles) {
       const row = rows.find(candidate => candidate.title === title);
       assert.equal(row?.status, 'failed');
-      assert.match(row.failureMessages.join('\n'), /expect\(element\)\.(?:toHaveFocus|toContainElement)/);
+      const message = row.failureMessages.join('\n');
+      if (message.includes(ESC)) coloured += 1;
+      assert.ok(!plain(message).includes(ESC), 'Every escape sequence comes out of the message');
+      assert.match(plain(message), /expect\(element\)\.(?:toHaveFocus|toContainElement)/);
     }
+    console.log(`simRulesGateConsentFocus ${control}: ${coloured} of ${titles.length} failure messages carried colour codes, read with them taken out.`);
     assert.equal(rows.find(row => row.title.startsWith('retains the normal modal trap'))?.status, 'passed');
     assert.equal(rows.find(row => row.title.startsWith('preserves first-entry instructions'))?.status, 'passed');
     console.log(`simRulesGateConsentFocus ${control}: executable ${control === 'host' ? 'cookie host' : 'focus return'} mutation applied once to a disposable component.`);

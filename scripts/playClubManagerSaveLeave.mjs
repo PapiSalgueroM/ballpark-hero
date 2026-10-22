@@ -210,7 +210,8 @@ try {
       continue;
     }
     if (where === 'HALF TIME' || where === 'MATCH LIVE') {
-      await tap(/second half|skip|full report/i, 'through the match');
+      /* Release BP seam: Second half by its exact name (Round 1522's Tactics tile mentions the second half). */
+      await tap(/^\s*Second half\s*$|skip|full report/i, 'through the match');
       await page.waitForTimeout(500);
       continue;
     }

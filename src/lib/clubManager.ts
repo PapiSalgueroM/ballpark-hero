@@ -93,6 +93,9 @@ import {
   eraRostersLoaded,
 } from '@/lib/clubManagerEras';
 import type { ProjectedPlayer, CMEra } from '@/lib/clubManagerEras';
+/* Round 1520: after the eras module, which brings the nationality maps in first, so the chunk keeps its order. */
+import { countNations, drawNation, mapSpelling, type NationCount } from '@/lib/clubManagerMadeUpNations';
+import { nationalityOf } from '@/data/playerNationalities';
 /* Round 467: the facilities and the books. Both modules import from this
    file and this file calls into them; nothing on either side runs at module
    scope, which is the house rule for a cycle. */
@@ -134,7 +137,7 @@ import { subsLeagueBase, subsRuleFor, type SubsRule } from '@/lib/clubManagerSub
 export { subsRuleFor, CM_SUBS_PARTIAL } from '@/lib/clubManagerSubsRule';
 /* Round 474: the five specific board asks, built and graded there for the
    same reason the facilities and the books live in their own files. */
-import { BOARD_ASKS_VERSION, askStatus, buildBoardAsks, ensureBoardAsks, isBoardAsk } from '@/lib/clubManagerBoardAsks';
+import { BOARD_ASKS_VERSION, askStatus, buildBoardAsks, ensureBoardAsks, isBoardAsk, keepCountryAsks } from '@/lib/clubManagerBoardAsks';
 /* Round 1335: the board's verdict, its openings, the kitty band and the offer step, a pure module. */
 import { BOARD_FRESH, VERDICT_LINES, fillLeague, kittyAllocation, offerStepOk, openingConfidence, seasonGrade, type SeasonFate } from '@/lib/clubManagerBoardVerdict';
 export { BOARD_FRESH } from '@/lib/clubManagerBoardVerdict';
@@ -174,6 +177,14 @@ import {
 import { UCL_LEAGUE, drawUclLeaguePhase } from '@/lib/uclLeaguePhase';
 /* Round 781: the match clock with the board in it. The module imports nothing. */
 import { clockOrder, playedBy } from '@/lib/clubManagerClock';
+/* Round 1522: team instructions. The engine carries only the small core (clubManagerTacticsCore.ts): the types,
+   balanced, and the slot clubManagerTactics.ts fills when it loads. Every reader below is a no op on balanced
+   (it adds zero or multiplies by one), and with the slot empty plays balanced, so a career that never sets one
+   plays as it always did. */
+import {
+  BALANCED, isBalanced, logEverSet, readInstructions, tacticsImpl,
+  type AiStyleId, type InstructionStep, type TacticStats, type TeamInstructions,
+} from '@/lib/clubManagerTacticsCore';
 
 /**
  * Club Manager engine.
@@ -450,6 +461,8 @@ export function worldRosterFor(career: CareerState, club: string, onYears = year
     return { n: p.name, p: p.position, a: p.age, v: p.value ?? 0, r: p.rating,
       ...(p.generated || p.academyGrad || p.isYouth ? { g: true } : {}), anchor: original?.anchor ?? p.rating,
       since: p.worldRosterSince ?? original?.since ?? 0,
+      /* Round 1520: only a made up man carries one, and the ledger keeps it. */
+      ...(p.nation ? { nation: p.nation } : {}),
       ...(p.worldRosterKey ? { worldRosterKey: p.worldRosterKey } : {}),
       ...(p.potential === undefined ? {} : { potential: p.potential }) };
   });
@@ -502,7 +515,7 @@ function worldMarket(career: CareerState): MarketPlayer[] {
   for (const club of clubs) {
     if (club === current.clubName) continue;
     for (const p of worldRosterFor(current, club)) out.push({ name: p.n, club, position: p.p, age: p.a, rating: p.r,
-      price: askingPrice(p.v, p.a), value: p.v, generated: p.g || undefined,
+      price: askingPrice(p.v, p.a), value: p.v, generated: p.g || undefined, ...listedNation(p, club, current.eraId),
       ...(p.worldRosterKey ? { worldRosterKey: p.worldRosterKey, worldRosterSince: p.since, potential: p.potential } : {}) });
   }
   out.sort((a, b) => b.rating - a.rating || a.name.localeCompare(b.name));
@@ -531,6 +544,11 @@ function recordActualRosterTransfer(state: CareerState, player: CMPlayer, from: 
      Round 1508: such a career writes once it holds a readable ledger with no seed, which only its first summer on
      this engine gives it (adoptLivingWorld); before that summer it still writes nothing. */
   if (!livingWorldOf(state)) return state;
+  /* Round 1520: a made up man the ledger takes in keeps the country the market showed for him at the club he left. */
+  if (madeUp(player) && player.nation === undefined) {
+    const nation = madeUpNationAt(player.name, from === state.clubName ? careerPlace(state) : clubPlace(from, state.eraId), state.eraId);
+    if (nation) player = { ...player, nation };
+  }
   const held = worldRosterView(state);
   const carried = player.worldRosterKey && held?.records.find(record => record.key === player.worldRosterKey);
   const sources = projectedRoster(from, yearsOn(state), state.eraId ?? 'now', worldSeedOf(state))
@@ -1275,6 +1293,14 @@ export interface CMPlayer {
    */
   generated?: boolean;
   /**
+   * Round 1520: a made up man's own country (generated, youth pad or academy
+   * graduate), drawn once where the save first meets him (madeUpNationAt) and
+   * carried wherever he goes. Never on a real footballer, whose country only
+   * ever comes from the verified map (nationalityOf). Absent on a save from
+   * before the round until ensureMadeUpNations draws the same one.
+   */
+  nation?: string;
+  /**
    * Round 161: the sell-on clause his old club took when you signed him.
    * Sell him later and that percentage of the fee goes straight back to
    * them, off the top.
@@ -1593,6 +1619,8 @@ export interface MarketPlayer {
   value?: number;
   /** Round 132: this game made him up, and the transfer screen says so. */
   generated?: boolean;
+  /** Round 1520: a made up man's own country (CMPlayer.nation). */
+  nation?: string;
   /** Round 1344: another club bought him this season (marketForScreen); listed there, not for sale until the summer. */
   joinedThisSeason?: true;
 }
@@ -1951,6 +1979,10 @@ export interface MatchDetail {
    *  only when extra time was played. Absent on every other match and on
    *  every report written before this round. */
   et?: { from: number; to: number };
+  /** Round 1522: the instructions on the day, set only for a match where mine left balanced at some point: the
+   *  log, the other dugout's style, and the numbers each instruction moves (clubManagerTactics.ts). Absent on
+   *  every other report and on every report written before this round. */
+  tactics?: { log: InstructionStep[]; theirStyle: AiStyleId; stats: TacticStats };
 }
 
 export interface MatchWeekReport {
@@ -2800,6 +2832,10 @@ export interface CareerState {
   xiIds: (string | null)[];
   formationIndex: number;
   mentality: Mentality;
+  /** Round 1522: the four team instructions (clubManagerTactics.ts). Absent means balanced on all four, and a
+   *  save only carries the field while one is off balanced (setInstructions drops it), so every career that
+   *  never touches them saves exactly as before. */
+  instructions?: TeamInstructions;
   /** Round 119: set only while a match is paused at halftime. */
   live?: LiveMatch | null;
   /** The 20 league clubs in scheduling order (shuffled each season). */
@@ -3277,7 +3313,22 @@ export interface LiveMatch {
    *  stretch, so nothing that merges the second half needs to know about it.
    *  Absent means no extra time, which is every save before this round. */
   et?: { from: number; to: number };
+  /** Round 1522: the instructions over the match, kick off (minute 0) and every change on the live sheet, each
+   *  in force from the minute after its own. Absent while the match has been balanced throughout, which is every
+   *  match of a career that never sets one, so those matches save exactly as before. The last entry is what is
+   *  in force now (liveInstructions). */
+  instrLog?: InstructionStep[];
+  /** Round 1522: shape changes made during the match (a new formation, or a duty), each with the order the men
+   *  on the pitch stand in from then on (a man's index is his slot) and the duties of that shape. Absent on a
+   *  match nobody reshaped. formationIndex and duties above are always the shape in force now. */
+  formChanges?: LiveShapeChange[];
+  /** Round 1522: the shape the match kicked off in, written with the first reshape so the eleven that started
+   *  is still read in its own slots. Absent on a match nobody reshaped. */
+  kickoffShape?: { formationIndex: number; duties: (Duty | null)[] };
 }
+
+/** Round 1522: one change of shape during a match. */
+export interface LiveShapeChange { minute: number; plus?: number; formationIndex: number; order: string[]; duties: (Duty | null)[]; }
 
 /** Round 504: a stretch of a half and the full half lambdas that were in force over it. */
 export interface LamSegment { from: number; to: number; lamMine: number; lamOpp: number; }
@@ -3558,7 +3609,11 @@ const SUMMER_2020_CLOSE = { y: 2020, m: 10, d: 5 };
 
 export const LEAGUE_RULES: Record<string, LeagueRules> = {
   premier: { nationId: 'england', flag: 'England', cup: 'FA Cup', europe: { ucl: 4, uel: 5, uecl: 6 }, drop: 3, tiebreak: 'gdGf', secondTier: 'championship', ladder: 'top', season: 'autumnSpring' },
+  /* Round 1520 review: Cardiff City, Swansea City and Wrexham are Welsh clubs in the English league (clwbpeldroed.org,
+     2025-01-13, on the Welsh league cup plan naming the Welsh EFL clubs; hayters.com, "Why Wrexham, Swansea and Cardiff
+     could play in Europe"), so their board asks for Welsh players and their made up men are drawn from Wales. */
   championship: {
+    clubCountry: { 'Cardiff City': 'Wales', 'Swansea City': 'Wales', Wrexham: 'Wales' },
     nationId: 'england', flag: 'England', cup: 'FA Cup', europe: null, drop: 3, ladder: 'promotion',
     playoff: { rankUpTo: 8, target: 6, label: 'Make the promotion playoffs' }, season: 'autumnSpring',
     simplified: 'Three go up and three come down in a straight swap; the real promotion playoff is not played.',
@@ -3589,12 +3644,16 @@ export const LEAGUE_RULES: Record<string, LeagueRules> = {
     nationId: 'saudi', flag: 'Saudi Arabia', cup: "King's Cup", europe: null, drop: 3, ladder: 'top', season: 'autumnSpring',
     continental: { label: 'AFC Champions League Elite', rankUpTo: 5, target: 3 },
   },
+  /* Round 1520 review: Toronto FC, CF Montréal and Vancouver Whitecaps are the Canadian clubs of MLS (CBC, "Major
+     League Soccer Canadian teams 2021 schedule"; footballgroundmap.com, "The Canadian teams in the MLS"). */
   mlsEast: {
+    clubCountry: { 'Toronto FC': 'Canada', 'CF Montréal': 'Canada' },
     nationId: 'usa', flag: 'USA', cup: 'U.S. Open Cup', europe: null, drop: 0, ladder: 'playoffs',
     playoff: { rankUpTo: 9, target: 8, label: 'Make the playoffs' }, floorFromBottom: 4, season: 'calendarYear',
     simplified: 'The playoffs are not played; the conference table settles the season.',
   },
   mlsWest: {
+    clubCountry: { 'Vancouver Whitecaps': 'Canada' },
     nationId: 'usa', flag: 'USA', cup: 'U.S. Open Cup', europe: null, drop: 0, ladder: 'playoffs',
     playoff: { rankUpTo: 9, target: 8, label: 'Make the playoffs' }, floorFromBottom: 4, season: 'calendarYear',
     simplified: 'The playoffs are not played; the conference table settles the season.',
@@ -3902,7 +3961,7 @@ export const LEAGUE_RULES: Record<string, LeagueRules> = {
     simplified: 'The real relegation playoff (sixteenth against the 2. Bundesliga\'s third) is not played: two go straight down.',
   },
   ligue12010: { nationId: 'france', flag: 'France', cup: 'Coupe de France', europe: { ucl: 3, uel: 4, uecl: 0 }, drop: 3, ladder: 'top', season: 'autumnSpring' },
-  premier2015: { nationId: 'england', flag: 'England', cup: 'FA Cup', europe: { ucl: 4, uel: 5, uecl: 0 }, drop: 3, tiebreak: 'gdGf', ladder: 'top', season: 'autumnSpring' },
+  premier2015: { clubCountry: { 'Swansea City': 'Wales' }, nationId: 'england', flag: 'England', cup: 'FA Cup', europe: { ucl: 4, uel: 5, uecl: 0 }, drop: 3, tiebreak: 'gdGf', ladder: 'top', season: 'autumnSpring' },
   laliga2015: { nationId: 'spain', flag: 'Spain', cup: 'Copa del Rey', europe: { ucl: 4, uel: 6, uecl: 0 }, drop: 3, tiebreak: 'h2h', ladder: 'top', season: 'autumnSpring' },
   seriea2015: { nationId: 'italy', flag: 'Italy', cup: 'Coppa Italia', europe: { ucl: 3, uel: 5, uecl: 0 }, drop: 3, tiebreak: 'h2h', ladder: 'top', season: 'autumnSpring' },
   /* Round 899: the 2015-16 Bundesliga and Ligue 1, each fact from two
@@ -4675,6 +4734,132 @@ export function cupSatOutBy(career: Pick<CareerState, 'clubName' | 'eraId'> & { 
   if (lg.cupName !== null) return null;
   const cup = leagueRulesOf(lg.id).cup;
   return cup !== null && !clubEntersCup(lg.id, career.clubName) ? cup : null;
+}
+
+/* ─── Round 1520: a made up man's country (the draw itself is src/lib/clubManagerMadeUpNations.ts) ─── */
+
+/** A league's country spelt the way the verified map spells it. Only one of the league nations disagrees. */
+const LEAGUE_NATION_ALIAS: Record<string, string> = { USA: 'United States' };
+
+/** Where a club plays and the country it is in. A club its league's row places in another country (Auckland FC
+    and Wellington Phoenix in the A-League Men) keeps its own; a created club never has a row of its own. */
+export interface NationPlace { league: string; home: string }
+function placeIn(leagueId: string, club: string | null): NationPlace | null {
+  const own = club === null ? undefined : leagueRulesOf(leagueId).clubCountry?.[club];
+  const raw = own ?? LEAGUE_NATIONS[leagueId];
+  return raw ? { league: leagueId, home: own ?? LEAGUE_NATION_ALIAS[raw] ?? raw } : null;
+}
+
+/** My club's place. Moved here from clubManagerBoardAsks.ts's clubCountry unchanged (Round 964: a real club in
+    today's world takes it from the league it REALLY plays in, so one the world editor moved keeps its own country),
+    so the board's country ask and the flags on a made up man read one rule. */
+export function careerPlace(career: Pick<CareerState, 'clubName' | 'eraId' | 'customClub'>): NationPlace | null {
+  const historic = !!career.eraId && isHistoricEra(career.eraId);
+  const custom = !!career.customClub && career.customClub.name === career.clubName;
+  const home = historic || custom ? undefined : REAL_LEAGUES.find(l => l.clubs.includes(career.clubName));
+  return placeIn((home ?? careerLeagueOf(career)).id, custom ? null : career.clubName);
+}
+
+/** Another club's place in its own world, off the static league lists (never the world editor's), its era's first.
+    Kept per world and club, since a market of thousands asks it once a made up man. */
+const CLUB_PLACES = new Map<string, NationPlace | null>();
+function clubPlace(club: string, eraId: string | undefined): NationPlace | null {
+  const world = isHistoricEra(eraId) ? eraId! : 'now', key = `${world}|${club}`;
+  if (!CLUB_PLACES.has(key)) {
+    const lg = (world === 'now' ? undefined : ERA_LEAGUES[world]?.find(l => l.clubs.includes(club))) ?? REAL_LEAGUES.find(l => l.clubs.includes(club));
+    CLUB_PLACES.set(key, lg ? placeIn(lg.id, club) : null);
+  }
+  return CLUB_PLACES.get(key)!;
+}
+
+/* Each league's real men counted by country, once a world, from the squads and the verified map of that world. */
+const NATION_COUNTS = new Map<string, Map<string, NationCount>>();
+
+/* Round 1520 review: a league whose rules cap its imports keeps the rest of every squad at home. Where its real
+   squads are thin, the data holds a club's best known men, mostly the imports (Al-Hilal: 16 men, one Saudi), so the
+   men this game makes up there are the home players the cap guarantees: they are drawn home at the share that fills
+   the place's squads up to the cap's floor. [squad, most imports]. Saudi Pro League: 10 non-Saudi players in a 25 man
+   squad (Arab News, 2023-12-29, from 2024-25; africasoccer.com, 2026-07-27, for the new season). MLS: 241
+   international slots over 30 clubs in rosters of up to 30 (mlssoccer.com roster rules, 2026-02-03; Sporting KC on
+   its 2026 slots). A Canadian MLS club's domestic men may be American, so only the American places are held. */
+const IMPORT_CAPS: Record<string, [number, number]> = {
+  'saudi|Saudi Arabia': [25, 10], 'mlsEast|United States': [30, 241 / 30], 'mlsWest|United States': [30, 241 / 30],
+};
+function capped(key: string, c: NationCount, clubs: number, men: number): NationCount {
+  const cap = IMPORT_CAPS[key], away = c.known - c.home;
+  if (!cap || !away) return c;
+  const share = (clubs * (cap[0] - cap[1]) - c.home) / Math.max(1, clubs * cap[0] - men);
+  if (share * c.known <= c.home) return c;
+  return share >= 1 ? { known: c.home, home: c.home, abroad: [] } : { ...c, known: away / (1 - share), home: away / (1 - share) - away };
+}
+
+/** The real count behind a place. Undefined while the world's squads have not arrived. */
+export function nationCountsAt(place: NationPlace, eraId: string | undefined): NationCount | null | undefined {
+  if (!eraRostersLoaded(eraId)) return undefined;
+  const world = isHistoricEra(eraId) ? eraId! : 'now';
+  let table = NATION_COUNTS.get(world);
+  if (!table) {
+    const lists = new Map<string, (string | null)[]>(), clubs = new Map<string, number>();
+    for (const [club, roster] of Object.entries(eraRostersRaw(eraId))) {
+      const at = clubPlace(club, eraId);
+      if (!at) continue;
+      const key = `${at.league}|${at.home}`;
+      lists.set(key, (lists.get(key) ?? []).concat(roster.map(b => nationalityOf(eraId, b.n))));
+      clubs.set(key, (clubs.get(key) ?? 0) + 1);
+    }
+    table = new Map([...lists].map(([key, all]) => [key, capped(key, countNations(all, key.slice(key.indexOf('|') + 1)), clubs.get(key)!, all.length)]));
+    NATION_COUNTS.set(world, table);
+  }
+  return table.get(`${place.league}|${place.home}`) ?? null;
+}
+
+/* Each draw, kept once made: the market lists thousands of made up men and is rebuilt after every deal. */
+const DRAWN_NATIONS = new Map<string, string>();
+
+/** A made up man's country, drawn where the save first meets him (madeUpNations.ts says how). Undefined when there
+    is no place to draw from, or the world's squads have not arrived: nothing is stored then, and the next
+    ensureMadeUpNations draws the same one. `local`: a youth pad or a boy of the club's own intake is from the
+    club's country, since the world body's transfer rules (Article 19, on minors) bar a minor's move abroad; the foreign boys come
+    through the scouting trips. */
+export function madeUpNationAt(name: string, place: NationPlace | null, eraId: string | undefined, local = false): string | undefined {
+  if (!place) return undefined;
+  const counts = nationCountsAt(place, eraId);
+  if (counts === undefined) return undefined;
+  if (local) return place.home;
+  const key = `${eraId}|${place.league}|${place.home}|${name}`;
+  if (!DRAWN_NATIONS.has(key)) DRAWN_NATIONS.set(key, drawNation(name, place.home, counts));
+  return DRAWN_NATIONS.get(key);
+}
+
+/** The country a market listing carries off a made up projected or ledger man at `club`; nothing for a real man. */
+function listedNation(p: ProjectedPlayer, club: string, eraId: string | undefined): Pick<MarketPlayer, 'nation'> {
+  const nation = p.g ? p.nation ?? madeUpNationAt(p.n, clubPlace(club, eraId), eraId) : undefined;
+  return nation ? { nation } : {};
+}
+
+function madeUp(p: CMPlayer): boolean {
+  return !!(p.generated || p.isYouth || p.academyGrad);
+}
+
+/** Round 1520: every made up man of mine (squad, out on loan, the free agent pool) carries his country. Draws only
+    for a man with none, so it moves nothing already stored, and replaces the man it changes rather than writing into
+    him. The same draw as the day he arrived, so a save from before the round gets the country it would have had.
+    Registered in loadCareer and playNextEntry, and run where men are made (startCareer, startNextSeason). */
+export function ensureMadeUpNations(state: CareerState): void {
+  const place = careerPlace(state);
+  const stamp = <T extends { name: string; nation?: string; isYouth?: boolean; academyGrad?: boolean }>(p: T): T => {
+    const nation = p.nation === undefined ? madeUpNationAt(p.name, place, state.eraId, !!(p.isYouth || p.academyGrad)) : undefined;
+    return nation ? { ...p, nation } : p;
+  };
+  /* Review fix: the stamp never meets a stored country ask by itself (keepCountryAsks). */
+  if (Array.isArray(state.squad)) keepCountryAsks(state, () => { state.squad = state.squad.map(p => (madeUp(p) ? stamp(p) : p)); });
+  if (Array.isArray(state.loanedOut)) state.loanedOut = state.loanedOut.map(l => (l?.player && madeUp(l.player) ? { ...l, player: stamp(l.player) } : l));
+  if (Array.isArray(state.freeAgents)) state.freeAgents = state.freeAgents.map(f => (f?.generated ? stamp(f) : f));
+}
+
+/** The flag a man shows: a made up man's own country, else the verified map's, which a real man only ever reads. */
+export function shownNation(eraId: string | undefined, p: { name: string; nation?: string }): string | null {
+  return p.nation ?? nationalityOf(eraId, p.name);
 }
 
 /** Best XI average straight off an era bake, same math as bakedXIAvg. */
@@ -5527,6 +5712,7 @@ function bakedToCMPlayer(b: BakedPlayer | ProjectedPlayer): CMPlayer {
     seasonAssists: 0,
     value: b.v,
     generated: gen || undefined,
+    ...((b as ProjectedPlayer).nation ? { nation: (b as ProjectedPlayer).nation } : {}),
     ...((b as ProjectedPlayer).worldRosterKey ? { worldRosterKey: (b as ProjectedPlayer).worldRosterKey,
       worldRosterSince: (b as ProjectedPlayer).since, potential: (b as ProjectedPlayer).potential } : {}),
   };
@@ -7380,6 +7566,8 @@ export interface FreeAgent {
       topUpFreeAgents). Absent on a real man. */
   wage?: number;
   generated?: boolean;
+  /** Round 1520: a made up man's own country travels with him (CMPlayer.nation). */
+  nation?: string;
   /** Round 640 review: a founder's sale ratio travels with him (CMPlayer.founderSaleRatio). */
   founderSaleRatio?: number;
   /** Season he became available, so the pool can age and clear. */
@@ -7594,6 +7782,8 @@ export function topUpFreeAgents(state: CareerState): void {
     const age = cInt(`${seed}|a`, 24, 33);
     const rating = clamp(Math.round(level) - cInt(`${seed}|r`, 20, 26), 40, 99);
     const worth = squadScaledValue(state.squad, rating, age);
+    /* Round 1520: he is out of work in my club's country, so he is drawn from there (madeUpNationAt). */
+    const nation = madeUpNationAt(name, careerPlace(state), state.eraId);
     out.push({
       name, position, age, rating,
       value: JOURNEYMAN_VALUE,
@@ -7601,6 +7791,7 @@ export function topUpFreeAgents(state: CareerState): void {
       generated: true,
       since: state.season,
       reason: 'unattached',
+      ...(nation ? { nation } : {}),
     });
     have += 1;
   }
@@ -7746,7 +7937,8 @@ export function releasePlayer(career: CareerState, playerId: string): CareerStat
     severance: [...(career.severance ?? []), { name: p.name, weekly: sev.weekly, weeksLeft: sev.weeksLeft }],
     freeAgents: addFreeAgent(career.freeAgents ?? [], {
       name: p.name, position: p.position, age: p.age, rating: p.rating,
-      value: p.value, generated: p.generated, since: career.season,
+      /* Round 1520: a youth pad or an academy boy is made up too, so he goes to the pool marked, with his country. */
+      value: p.value, generated: madeUp(p) || undefined, ...(p.nation ? { nation: p.nation } : {}), since: career.season,
       /* Round 640 review: a founder's sale ratio goes with him. */
       founderSaleRatio: p.founderSaleRatio,
       reason: 'released', fromMyClub: true,
@@ -7935,7 +8127,7 @@ export function signFreeAgent(career: CareerState, name: string): CareerState | 
     name: fa.name, position: fa.position, rating: fa.rating, age: fa.age,
     fitness: 100, morale: 70, injuryWeeks: 0, suspendedMatches: 0,
     isYouth: false, seasonGoals: 0, seasonAssists: 0,
-    value: fa.value, generated: fa.generated,
+    value: fa.value, generated: fa.generated, ...(fa.nation ? { nation: fa.nation } : {}),
     contractYears: years,
     wage,
   };
@@ -9467,6 +9659,7 @@ function marketBase(yearsOnNow: number, eraId: string = 'now', worldSeed?: numbe
         price: askingPrice(b.v, b.a),
         value: b.v,
         generated: b.g || undefined,
+        ...listedNation(b, club, eraId),
         ...(b.worldRosterKey ? { worldRosterKey: b.worldRosterKey, worldRosterSince: b.since, potential: b.potential } : {}),
       });
     }
@@ -9659,6 +9852,9 @@ function completeSigning(
     value: mp.value,
     ...(mp.worldRosterKey ? { worldRosterKey: mp.worldRosterKey, worldRosterSince: mp.worldRosterSince,
       potential: mp.potential, generated: mp.generated } : {}),
+    /* Round 1520: a made up man keeps his mark and his country whatever world he was bought in (before the round
+       a career with no world seed bought him unmarked). */
+    ...(mp.generated ? { generated: true, ...(mp.nation ? { nation: mp.nation } : {}) } : {}),
     onLoan: loan || undefined,
     // Round 105: a signing arrives on a real deal.
     contractYears: loan ? 1 : (terms ? terms.years : (mp.age >= 31 ? 2 : 4)),
@@ -15151,7 +15347,7 @@ function liveFormationOf(state: CareerState, live: LiveMatch): Formation {
 
 /** The duty on a live slot: the one frozen at kick off, or the tab's for a
  *  save paused before the match remembered them. */
-function liveDutyAt(state: CareerState, live: LiveMatch, slotIdx: number): Duty | null {
+export function liveDutyAt(state: CareerState, live: LiveMatch, slotIdx: number): Duty | null {
   if (live.duties) return live.duties[slotIdx] ?? null;
   return slotDuty(state, liveFormationOf(state, live), slotIdx);
 }
@@ -15163,7 +15359,16 @@ function liveDutyAt(state: CareerState, live: LiveMatch, slotIdx: number): Duty 
  * man whose id is gone from the squad is skipped, not shifted, so the men
  * after him keep their slots.
  */
-function livePairs(state: CareerState, live: LiveMatch, ids: string[] = live.onPitch): XiSlot[] {
+function livePairs(state: CareerState, live: LiveMatch, ids: string[] = live.onPitch,
+  /** Round 1522: the shape to read the ids in, for the eleven that kicked off a match reshaped since. */
+  shape?: LiveMatch['kickoffShape']): XiSlot[] {
+  if (shape) {
+    const f = FORMATIONS[shape.formationIndex] ?? FORMATIONS[0];
+    return ids.flatMap((id, i) => {
+      const p = state.squad.find(x => x.id === id);
+      return p ? [{ p, slot: f.slots[i] ?? null, duty: shape.duties[i] ?? null }] : [];
+    });
+  }
   const formation = liveFormationOf(state, live);
   const out: XiSlot[] = [];
   ids.forEach((id, i) => {
@@ -15689,10 +15894,13 @@ function drawSegmentOppCards(
 }
 
 /** One injury roll for the minutes (from, to] of a half, at the match's long standing rate. */
-function drawSegmentInjury(state: CareerState, onPitch: CMPlayer[], from: number, to: number, hi: number = to): InjuryLine | null {
+function drawSegmentInjury(state: CareerState, onPitch: CMPlayer[], from: number, to: number, hi: number = to,
+  /** Round 1522: the instructions' knock factor (a high press runs more risk); 1 reads the old line. */
+  knock = 1): InjuryLine | null {
   const len = (to - from) / 45;
   if (!onPitch.length) return null;
-  if (Math.random() >= 1 - Math.pow(1 - INJURY_PER_HALF, len)) return null;
+  const perHalf = INJURY_PER_HALF * knock;
+  if (Math.random() >= 1 - Math.pow(1 - perHalf, len)) return null;
   const victim = pick(onPitch);
   // Round 467: the medical staff read the same draw and write it shorter.
   const weeks = injurySpell(state, ri(1, 5));
@@ -16125,6 +16333,8 @@ interface SegmentPlayIn {
   oppAt: (minute: number) => OppXiLine[] | null;
   myCards: CardLine[];
   oppCards: CardLine[];
+  /** Round 1522: my shots per expected goal, times this (the tempo instruction). Absent on balanced. */
+  myShotMult?: number;
 }
 
 /**
@@ -16158,7 +16368,9 @@ function drawSegmentPlay(inp: SegmentPlayIn): PlayEvent[] {
     side: 'me' | 'opp', lam: number, goals: SegmentPlayIn['myGoals'], cards: CardLine[], pk: Pickers,
   ): void => {
     const xgSeg = Math.max(0.03, 0.55 * lam + 0.45 * goals.length + (Math.random() * 0.5 - 0.22) * len);
-    const shots = clamp(Math.round(xgSeg * 5.5) + Math.round(ri(1, 3) * len), goals.length, 14);
+    /* Round 1522: my tempo's shots for the same expected goals; absent (every balanced stretch) reads 5.5. */
+    const perXg = side === 'me' && inp.myShotMult !== undefined ? 5.5 * inp.myShotMult : 5.5;
+    const shots = clamp(Math.round(xgSeg * perXg) + Math.round(ri(1, 3) * len), goals.length, 14);
     const others = shots - goals.length;
     const onTarget = Math.round(others * 0.36);
     const chances: PlayEvent[] = goals.map(g => ({
@@ -16257,9 +16469,13 @@ function recutSegments(segs: LamSegment[] | undefined, fallback: LamSegment, min
  *  (LiveMatch.possNoise), so a change during the half moves the figure only
  *  through the football it redrew; a save from before the roll existed
  *  draws it here. */
-function possessionOf(lamMine: number, lamOpp: number, noise?: number): number {
-  return clamp(Math.round(50 + (lamMine - lamOpp) * 18 + (noise ?? ri(-3, 3))), 28, 72);
+function possessionOf(lamMine: number, lamOpp: number, noise?: number, shift = 0): number {
+  /* Round 1522: plus the instructions' share of the ball over the half (possShiftOf); adding 0 is exact. */
+  return clamp(Math.round(50 + (lamMine - lamOpp) * 18 + (noise ?? ri(-3, 3)) + shift), 28, 72);
 }
+
+/** Round 1522: the points of the ball my instructions were worth over a half, 0 with no log (or no module). */
+const possShiftOf = (live: LiveMatch, half: 1 | 2): number => (live.instrLog?.length ? tacticsImpl()?.possShift(live, half) ?? 0 : 0);
 
 /** Everyone of mine who has left the pitch for good: sent off, or limped off. */
 function offPitchIds(live: LiveMatch): Set<string> {
@@ -16301,14 +16517,27 @@ export function oppOnPitchAt(live: LiveMatch, minute: number): OppXiLine[] {
 
 /** My eleven on the pitch at a minute (ids in slot order), with my subs applied. */
 export function myOnPitchAt(live: LiveMatch, minute: number): string[] {
-  const ids = [...live.startXi];
+  /* Round 1522: from the last reshape before the minute, whose order already holds every change made before it
+     (a man's index is his slot in that shape, liveShapeAt). A match nobody reshaped starts from the kick off. */
+  const last = [...(live.formChanges ?? [])].reverse().find(f => f.minute < minute) ?? null;
+  const ids = last ? [...last.order] : [...live.startXi];
   for (const s of live.subs ?? []) {
     /* Strictly after the minute he was replaced in: he played that minute. */
     if (s.minute >= minute || !s.offId || !s.onId) continue;
+    if (last && s.minute < last.minute) continue;
     const i = ids.indexOf(s.offId);
     if (i >= 0) ids[i] = s.onId;
   }
   return ids;
+}
+
+/** Round 1522: the shape in force at a minute (myOnPitchAt's order reads in it): the last reshape before the
+ *  minute, or the kick off's. */
+export function liveShapeAt(live: LiveMatch, minute: number): { formationIndex: number | undefined; duties: (Duty | null)[] | undefined } {
+  const last = [...(live.formChanges ?? [])].reverse().find(f => f.minute < minute);
+  if (last) return { formationIndex: last.formationIndex, duties: last.duties };
+  if (live.kickoffShape) return { formationIndex: live.kickoffShape.formationIndex, duties: live.kickoffShape.duties };
+  return { formationIndex: live.formationIndex, duties: live.duties };
 }
 
 /**
@@ -16416,8 +16645,27 @@ function drawOppSubs(live: LiveMatch, from: number, to: number, oppGoalMinutes: 
   return [...made, ...subs];
 }
 
-/** The first half's lambdas, the kick off formula: the talk, the press, the shape, the venue. */
-function firstHalfLambdas(state: CareerState, fx: MyFixture, xi: XiSlot[], mentality: Mentality): { lamMine: number; lamOpp: number; mine: number; oppS: number } {
+/** Round 1522: the instructions in force in a live match now (its log's last entry), balanced when it has none. */
+export function liveInstructions(live: LiveMatch): TeamInstructions {
+  const log = live.instrLog;
+  return log && log.length ? log[log.length - 1].instructions : BALANCED;
+}
+
+/** Round 1522: the career's standing instructions, balanced when it has none (or a junk value). */
+export function instructionsOf(career: CareerState): TeamInstructions {
+  return readInstructions(career.instructions) ?? BALANCED;
+}
+
+/** Round 1522: what my instructions are worth to a half's goal rates (clubManagerTactics.ts), or null on balanced
+ *  and before that module has loaded (the early return). */
+function tacticEdge(state: CareerState, fx: MyFixture, xi: XiSlot[], instr: TeamInstructions, half: 1 | 2): { atk: number; def: number } | null {
+  return isBalanced(instr) ? null : tacticsImpl()?.edge(state, fx, xi, instr, half) ?? null;
+}
+
+/** The first half's lambdas, the kick off formula: the talk, the press, the shape, the venue. Round 1522 review:
+ *  `instr` has no default, so a caller that forgets the instructions in force fails the type gate rather than
+ *  playing balanced football while the log says otherwise. */
+function firstHalfLambdas(state: CareerState, fx: MyFixture, xi: XiSlot[], mentality: Mentality, instr: TeamInstructions): { lamMine: number; lamOpp: number; mine: number; oppS: number } {
   const talk = talkEdgeFor(state, xi, fx, state.teamTalk ?? null);
   const press = state.press;
   const mine = myMatchStrength(state, xi) + talk + (press?.nextSharpen ?? 0);
@@ -16427,7 +16675,9 @@ function firstHalfLambdas(state: CareerState, fx: MyFixture, xi: XiSlot[], menta
   const oppAtk = fx.home === true ? -0.12 : fx.home === false ? 0.28 : 0.08;
   /* Round 505: the duties, wherever the mentality is. */
   const duty = dutyBoost(xi, state);
-  const [lamMine, lamOpp] = halfLambdas(mine, oppS, ment.atk + homeAtk + duty.atk, ment.def + oppAtk + duty.def);
+  /* Round 1522: and the instructions; on balanced they add exactly zero. */
+  const tac = tacticEdge(state, fx, xi, instr, 1);
+  const [lamMine, lamOpp] = halfLambdas(mine, oppS, ment.atk + homeAtk + duty.atk + (tac ? tac.atk : 0), ment.def + oppAtk + duty.def + (tac ? tac.def : 0));
   /* Round 670: a match that can go to extra time draws at the deflator. */
   const k = etScale(fx);
   return { lamMine: lamMine * k, lamOpp: lamOpp * k, mine, oppS };
@@ -16464,7 +16714,9 @@ function secondHalfLambdas(
   const opp2 = oppositionShape(scoreOpp, scoreMine);
   /* Round 505: the duties, the same way the first half adds them. */
   const duty = dutyBoost(xi, state);
-  const [lamMine, lamOpp] = halfLambdas(mine, oppS + fire, ment2.atk + homeAtk + opp2.def + duty.atk, ment2.def + oppAtk + opp2.atk + duty.def);
+  /* Round 1522: the instructions in force now, half two's costs included; on balanced they add exactly zero. */
+  const tac = tacticEdge(state, fx, xi, liveInstructions(live), 2);
+  const [lamMine, lamOpp] = halfLambdas(mine, oppS + fire, ment2.atk + homeAtk + opp2.def + duty.atk + (tac ? tac.atk : 0), ment2.def + oppAtk + opp2.atk + duty.def + (tac ? tac.def : 0));
   /* Round 670: the same deflator as the first half, and extra time's too. */
   const k = etScale(fx);
   return { lamMine: lamMine * k, lamOpp: lamOpp * k, mine, oppS };
@@ -16478,6 +16730,8 @@ function drawMySegment(
   hi: number = to,
   /** Round 781: how busy the board is for a goal (BOARD weight). */
   board?: BoardWeight,
+  /** Round 1522: the instructions' knock factor, 1 on balanced. */
+  knock = 1,
 ): { goals: MyGoalLine[]; cards: CardLine[]; injuries: InjuryLine[] } {
   /* Round 781: the count is drawn by the caller (it sizes the board), the minutes here. */
   const goals = pickMyScorerLines(xi, goalCount, from + 1, hi, taken, dutyOf, board);
@@ -16489,7 +16743,7 @@ function drawMySegment(
   const dismissed = dismissedOf(allCards, c => c.id);
   /* The injury first, after his last goal, so the cards below can be drawn
      off whoever is still standing at the booking's minute. */
-  const inj = drawSegmentInjury(state, xi.filter(p => !dismissed.has(p.id)), from, to, hi);
+  const inj = drawSegmentInjury(state, xi.filter(p => !dismissed.has(p.id)), from, to, hi, knock);
   const injuries = inj ? [inj] : [];
   fixExits([], injuries, goals, hi);
   const onPitchAt = (m: number): CMPlayer[] => xi.filter(p => !injuries.some(x => x.id === p.id && x.minute < m));
@@ -16734,7 +16988,10 @@ function drawSegment(
   const hi = period ? to + boardOf(period, stoppagesIn(live, BOARD[period].from, to) + nMine + nOpp, roll) : to;
   /* Round 781: and how busy a minute of that board is for a goal. */
   const board: BoardWeight | undefined = period ? { to, w: BOARD[period].weight } : undefined;
-  const me = drawMySegment(state, live, xi, from, to, nMine, maxYellows, taken, dutyOf, hi, board);
+  /* Round 1522: the instructions in force over this stretch (always the latest: a stretch starts at a change). */
+  const instr = liveInstructions(live);
+  const seg = isBalanced(instr) ? null : tacticsImpl()?.segment(instr) ?? null;
+  const me = drawMySegment(state, live, xi, from, to, nMine, maxYellows, taken, dutyOf, hi, board, seg ? seg.knock : 1);
   const reviewKey = `${worldYear(state)}:${state.clubName}:${live.week}:${live.opponent}:${from}:${to}`;
   const myReview = reviewKinds.includes('goal') ? settleGoalReviews(me.goals, 'me', reviewKey) : null;
   if (myReview) me.goals = myReview.goals;
@@ -16799,6 +17056,7 @@ function drawSegment(
     myCards: me.cards, oppCards,
     setPieces: state.setPieces ?? null,
     myDuty: dutyOf,
+    ...(seg && seg.shots !== 1 ? { myShotMult: seg.shots } : {}),
   });
   if (live.varReviews) {
     const takerAt = (side: 'me' | 'opp', minute: number): { id?: string; name: string } | null => {
@@ -16876,7 +17134,7 @@ function drawSecondHalf(state: CareerState, entry: CalendarEntry, live: LiveMatc
   live.h2Play = [];
   live.oppSubs = [];
   drawSegment(state, live, fx, 2, 45, 90, lamMine, lamOpp);
-  live.possH2 = possessionOf(lamMine, lamOpp, live.possNoise?.[1]);
+  live.possH2 = possessionOf(lamMine, lamOpp, live.possNoise?.[1], possShiftOf(live, 2));
   live.h2Drawn = true;
 }
 
@@ -16971,7 +17229,7 @@ function drawExtraTime(state: CareerState, entry: CalendarEntry, live: LiveMatch
  */
 function secondPeriodPossession(live: LiveMatch): number {
   const halves = ((live.et ? live.et.to : 90) - 45) / 45;
-  return possessionOf((live.lam2Mine ?? 0) / halves, (live.lam2Opp ?? 0) / halves, live.possNoise?.[1]);
+  return possessionOf((live.lam2Mine ?? 0) / halves, (live.lam2Opp ?? 0) / halves, live.possNoise?.[1], possShiftOf(live, 2));
 }
 
 /**
@@ -16982,11 +17240,11 @@ function secondPeriodPossession(live: LiveMatch): number {
  */
 function ensureFirstHalf(state: CareerState, entry: CalendarEntry, live: LiveMatch): void {
   const fx = fixtureFor(state, entry)!;
-  const startedSlots = livePairs(state, live, live.startXi);
+  const startedSlots = livePairs(state, live, live.startXi, live.kickoffShape);
   const started = men(startedSlots);
   const dutyOf = dutyLookup(startedSlots);
   if (live.lamMine === undefined || live.lamOpp === undefined) {
-    const { lamMine, lamOpp } = firstHalfLambdas(state, fx, startedSlots, live.mentality);
+    const { lamMine, lamOpp } = firstHalfLambdas(state, fx, startedSlots, live.mentality, liveInstructions(live));
     if (live.lamMine === undefined) live.lamMine = lamMine;
     if (live.lamOpp === undefined) live.lamOpp = lamOpp;
   }
@@ -17024,7 +17282,7 @@ function ensureFirstHalf(state: CareerState, entry: CalendarEntry, live: LiveMat
       setPieces: state.setPieces ?? null,
       myDuty: dutyOf,
     });
-    live.possH1 = possessionOf(live.lamMine, live.lamOpp);
+    live.possH1 = possessionOf(live.lamMine, live.lamOpp, undefined, possShiftOf(live, 1));
   }
 }
 
@@ -17041,14 +17299,14 @@ function recutFirstHalf(state: CareerState, entry: CalendarEntry, live: LiveMatc
   live.h1Injuries = keepUpTo(live.h1Injuries, minute);
   const off = offPitchIds(live);
   const xi = livePairs(state, live).filter(x => !off.has(x.p.id));
-  const { lamMine, lamOpp, mine, oppS } = firstHalfLambdas(state, fx, xi, live.mentality);
+  const { lamMine, lamOpp, mine, oppS } = firstHalfLambdas(state, fx, xi, live.mentality, liveInstructions(live));
   const share = (45 - minute) / 45;
   live.h1Segs = recutSegments(live.h1Segs, { from: 0, to: 45, lamMine: live.lamMine ?? lamMine, lamOpp: live.lamOpp ?? lamOpp }, minute, 45, lamMine, lamOpp);
   ({ lamMine: live.lamMine, lamOpp: live.lamOpp } = effectiveLambdas(live.h1Segs));
   drawSegment(state, live, fx, 1, minute, 45, lamMine * share, lamOpp * share);
   live.myGoals = (live.h1My ?? []).length;
   live.oppGoals = (live.h1Opp ?? []).length;
-  live.possH1 = possessionOf(live.lamMine, live.lamOpp, live.possNoise?.[0]);
+  live.possH1 = possessionOf(live.lamMine, live.lamOpp, live.possNoise?.[0], possShiftOf(live, 1));
   live.read = halftimeRead(state, men(xi), live.myGoals, live.oppGoals, mine, oppS);
 }
 
@@ -17130,7 +17388,7 @@ function recutBoard(state: CareerState, entry: CalendarEntry, live: LiveMatch, p
   }
   const off = offPitchIds(live);
   const xi = livePairs(state, live).filter(x => !off.has(x.p.id));
-  const first = period === 'h1' ? firstHalfLambdas(state, fx, xi, live.mentality) : null;
+  const first = period === 'h1' ? firstHalfLambdas(state, fx, xi, live.mentality, liveInstructions(live)) : null;
   const { lamMine, lamOpp } = first
     ?? secondHalfLambdas(state, fx, live, xi, live.myGoals + (live.h2My ?? []).length, live.oppGoals + (live.h2Opp ?? []).length);
   /* A minute of the board counts `weight` times an ordinary one (see BOARD). */
@@ -17548,6 +17806,8 @@ function buildMatchDetail(args: {
    *  A period without one (a save from before this round) is rolled here
    *  the Round 472 way, as it always was. */
   added?: LiveMatch['added'];
+  /** Round 1522: the instructions on the day, for a match where mine left balanced. */
+  tactics?: MatchDetail['tactics'] | null;
 }): MatchDetail {
   const { myGoals, oppGoals, lamMine, lamOpp } = args;
   const round2 = (n: number) => Math.round(n * 100) / 100;
@@ -17799,6 +18059,7 @@ function buildMatchDetail(args: {
     oppCards: args.oppCards,
     ...(args.oppXi ? { oppXi: args.oppXi, oppFormationIndex: args.oppFormationIndex } : {}),
     ...(args.et ? { et: args.et } : {}),
+    ...(args.tactics ? { tactics: args.tactics } : {}),
   };
 }
 
@@ -17920,7 +18181,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
   const halfTone: TalkTone | null = live.talk ?? null;
   const venue = fx.home === true ? 3 : fx.home === false ? -1.5 : 0;
   /* Round 505: both elevens with their slots, the way the strength reads them now. */
-  const started = livePairs(state, live, live.startXi);
+  const started = livePairs(state, live, live.startXi, live.kickoffShape);
   const second = livePairs(state, live);
   /* Round 135: the fit of the pre match talk is judged on the eleven who
      kicked off, and the half time one on the state of the match the men still
@@ -18679,8 +18940,16 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
 
   /* Round 1510 (ruling 2b): a night is not a week. The men who played pay the match and get a midweek's
      recovery (nightSquadTick); nothing else ticks: no wage week, no knock, no countdown, no window week. */
+  /* Round 1522: the instructions on the day, only for a match where mine left balanced at some point: the
+     report's numbers (a keyed stream, never the game's), and the legs every man who played pays for them, after
+     the week's own recovery and match cost below. */
+  const tacticsDay = logEverSet(live.instrLog) ? tacticsImpl()?.day(state, fx, live, second, lastMinute) ?? null : null;
   if (entry.night) nightSquadTick(state, new Set(xi.map(p => p.id)));
   else tickWeek(state, new Set(xi.map(p => p.id)));
+  if (tacticsDay && tacticsDay.stats.legs !== 0) {
+    const played = new Set(xi.map(p => p.id));
+    state.squad = state.squad.map(p => (played.has(p.id) ? { ...p, fitness: clamp(p.fitness - tacticsDay.stats.legs, 20, 100) } : p));
+  }
   /* Round 141: a window no longer slams shut the moment you play a match,
      because real windows run through the early fixtures and because the
      instant sell is gone, so listing a man needs actual weeks for offers to
@@ -18794,6 +19063,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     oppXi: live.oppXi, oppBench: live.oppBench, oppFormationIndex: live.oppFormationIndex,
     oppSubs: live.oppSubs ?? [],
     oppCards: [...(live.h1OppCards ?? []), ...(live.h2OppCards ?? [])],
+    tactics: tacticsDay,
     et: live.et,
     etWords,
     added: live.added,
@@ -19251,6 +19521,10 @@ export function promoteProspect(career: CareerState, prospectId: string): Career
     ratingSum: 0,
     contractYears: 4,
   };
+  /* Round 1520: a boy a scout found abroad keeps that trip's country; a boy of the home intake is from the club's
+     own country (madeUpNationAt's local rule). */
+  const nation = pr.source !== 'Academy' && pr.source ? mapSpelling(pr.source) : madeUpNationAt(pr.name, careerPlace(next), next.eraId, true);
+  if (nation) player.nation = nation;
   player.wage = wageFor(player);
   next.squad = [...next.squad, player];
   next.academyGraduates = (next.academyGraduates ?? 0) + 1;
@@ -19576,6 +19850,8 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
      summer knows how much of the cap is theirs. */
   if (custom) state.founderWageRoom = foundersWageRoom(state) || undefined;
   if (custom) state.wageCap = Math.max(state.wageCap, realCapForBudget(club.budget) + (state.founderWageRoom ?? 0));
+  /* Round 1520: every made up man on day one gets his country, before the board's asks count them. */
+  ensureMadeUpNations(state);
   state.boardObjectives = buildBoardObjectives(club.name, state.uclGroup !== null, league.clubs.length, era.id, custom ? leagueClubs : undefined);
   /* Round 474: and the two specific asks, read off the squad you have just
      been handed and the market this world really has. */
@@ -19662,6 +19938,8 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
   // Round 634: and nobody is on the books twice, nor in the squad and out
   // on loan at once, so the summer cannot bring a second copy of him home.
   ensureOneOfEach(state);
+  // Round 1520: and every made up man of mine carries his country, before the board counts them.
+  ensureMadeUpNations(state);
   // Round 132: and a save made before the world had a clock gets put on one.
   ensureClock(state);
   // Round 135: and one from before the press room existed gets one of those.
@@ -19815,7 +20093,7 @@ function kickOff(state: CareerState, entry: CalendarEntry, varReviews: CmVarAsk 
      microphone this week, is on the pitch with them for the first half.
      Round 157: keep the half's lambdas on the live match, so the full time
      xG line is read off the exact process that produced these goals. */
-  const { lamMine, lamOpp, mine, oppS } = firstHalfLambdas(state, fx, xi, state.mentality);
+  const { lamMine, lamOpp, mine, oppS } = firstHalfLambdas(state, fx, xi, state.mentality, instructionsOf(state));
   const ids = xi.map(x => x.p.id);
   /* Round 504: the other eleven, picked before anyone scores, so their
      scorers are men who are on the pitch and the report rates the same
@@ -19859,6 +20137,8 @@ function kickOff(state: CareerState, entry: CalendarEntry, varReviews: CmVarAsk 
     formationIndex: state.formationIndex,
     duties: (FORMATIONS[state.formationIndex] ?? FORMATIONS[0]).slots.map((_, i) => slotDuty(state, FORMATIONS[state.formationIndex] ?? FORMATIONS[0], i)),
     possNoise: [ri(-3, 3), ri(-3, 3)],
+    /* Round 1522: the instructions it kicks off under, only when one is off balanced. */
+    ...(isBalanced(instructionsOf(state)) ? {} : { instrLog: [{ minute: 0, instructions: instructionsOf(state) }] }),
   };
   /* Round 158: the first half's scorers, decided now so the live viewer
      shows the same football the full time report will. Stats are credited
@@ -19868,7 +20148,7 @@ function kickOff(state: CareerState, entry: CalendarEntry, varReviews: CmVarAsk 
   drawSegment(state, live, fx, 1, 0, 45, lamMine, lamOpp);
   live.myGoals = (live.h1My ?? []).length;
   live.oppGoals = (live.h1Opp ?? []).length;
-  live.possH1 = possessionOf(lamMine, lamOpp, live.possNoise?.[0]);
+  live.possH1 = possessionOf(lamMine, lamOpp, live.possNoise?.[0], possShiftOf(live, 1));
   live.read = halftimeRead(state, men(xi), live.myGoals, live.oppGoals, mine, oppS);
   return live;
 }
@@ -20058,7 +20338,23 @@ export function changeRoom(career: CareerState, live: LiveMatch, minute: number,
 
 export type LiveChange =
   | { kind: 'sub'; outId: string; inId: string }
-  | { kind: 'shape'; mentality: Mentality };
+  | { kind: 'shape'; mentality: Mentality }
+  /* Round 1522: the four instructions, a new formation (the men on the pitch carried across by carryShape's
+     rule), or one slot's duty, for tonight only: the tactics tab keeps your standing plan. */
+  | { kind: 'instructions'; instructions: TeamInstructions }
+  | { kind: 'formation'; formationIndex: number }
+  | { kind: 'duty'; slot: number; duty: Duty | null };
+
+/** Round 1522: the career's standing instructions set (between matches only, never with a match on). All four on
+ *  balanced drops the field, so the save is the one it was before anything was set. Null for a junk value. */
+export function setInstructions(career: CareerState, instructions: TeamInstructions): CareerState | null {
+  const next = readInstructions(instructions);
+  if (!next || career.live) return null;
+  const out: CareerState = { ...career };
+  if (isBalanced(next)) delete out.instructions;
+  else out.instructions = next;
+  return out;
+}
 
 /**
  * Round 504: a change at any minute. The sub or the shape is recorded at
@@ -20128,10 +20424,15 @@ export function changeLive(
       off: going?.name ?? change.outId, on: coming.name, minute: m, offId: change.outId, onId: change.inId,
       ...plusOf({ plus: p }), ...(inPlay ? { stop: true as const } : {}),
     }];
-  } else {
+  } else if (change.kind === 'shape') {
     live.mentality = change.mentality;
     state.mentality = change.mentality;
     live.shapeChanges = [...(live.shapeChanges ?? []), { minute: m, mentality: change.mentality, ...plusOf({ plus: p }) }];
+  } else {
+    /* Round 1522: an instructions, formation or duty change, made by the tactics module (it is loaded whenever
+       the screens that offer one are on), from the next minute; without it the change is refused. */
+    const T = tacticsImpl();
+    if (!T || !T.change(state, live, change, m, p)) return null;
   }
   live.minute = m;
   const entry = state.calendar[live.week];
@@ -20495,8 +20796,12 @@ export function matchFacts(career: CareerState): MatchFacts | null {
     /* Round 670: a decider draws at the extra time deflator, so its odds do too.
        They stay the odds over ninety minutes: a level decider goes on. */
     const k = etScale(fx);
-    const lamMe = clamp(1.25 + (mine - oppS) * 0.055 + ment.atk + homeAtk + duty.atk, 0.12, 4.2) * k;
-    const lamOpp = clamp(1.25 + (oppS - mine) * 0.055 + ment.def + oppAtk + duty.def, 0.12, 4.2) * k;
+    /* Round 1522: and the instructions against their style, the two halves' boosts averaged (a press pays in
+       the second); balanced adds exactly zero. */
+    const t1 = tacticEdge(career, fx, xi, instructionsOf(career), 1);
+    const t2 = tacticEdge(career, fx, xi, instructionsOf(career), 2);
+    const lamMe = clamp(1.25 + (mine - oppS) * 0.055 + ment.atk + homeAtk + duty.atk + (t1 && t2 ? (t1.atk + t2.atk) / 2 : 0), 0.12, 4.2) * k;
+    const lamOpp = clamp(1.25 + (oppS - mine) * 0.055 + ment.def + oppAtk + duty.def + (t1 && t2 ? (t1.def + t2.def) / 2 : 0), 0.12, 4.2) * k;
     let pWin = 0, pDraw = 0, pLoss = 0;
     for (let a = 0; a <= 9; a++) {
       for (let b = 0; b <= 9; b++) {
@@ -21468,7 +21773,7 @@ function fillSquadGaps(
   const letGo = new Set(released);
   const fromReal = realPool
     .filter(f => !letGo.has(f.name) && !taken.has(f.name) && !retired.has(f.name) && band(f.rating))
-    .map(f => ({ name: f.name, club: '', position: f.position, age: f.age, rating: f.rating, price: 0, value: f.value, generated: f.generated, founderSaleRatio: f.founderSaleRatio }));
+    .map(f => ({ name: f.name, club: '', position: f.position, age: f.age, rating: f.rating, price: 0, value: f.value, generated: f.generated, ...(f.nation ? { nation: f.nation } : {}), founderSaleRatio: f.founderSaleRatio }));
   /* A made up journeyman is worth the floor and asks a wage off his squad, so
      the club pays him what he asks rather than what his value would price. */
   const askingWage = new Map(realPool.filter(f => f.wage !== undefined).map(f => [f.name, f.wage as number]));
@@ -21511,6 +21816,7 @@ function fillSquadGaps(
       seasonAssists: 0,
       value: mp.value,
       generated: mp.generated,
+      ...(mp.nation ? { nation: mp.nation } : {}),
       contractYears: mp.age >= 31 ? 2 : 3,
       wage: 0,
     };
@@ -21847,7 +22153,8 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
        for him to walk TO. No severance, because nothing was broken early. */
     walkedFree619.push(...walked.map(p => ({
       name: p.name, position: p.position, age: p.age, rating: p.rating,
-      value: p.value, generated: p.generated, since: career.season + 1,
+      /* Round 1520: marked and with his country, as on a release. */
+      value: p.value, generated: madeUp(p) || undefined, ...(p.nation ? { nation: p.nation } : {}), since: career.season + 1,
       /* Round 640 review: a founder's sale ratio walks with him, or letting a
          deal run out and signing him back would strip it for nothing. */
       founderSaleRatio: p.founderSaleRatio,
@@ -22213,6 +22520,9 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
      the books shares a name with one, and after the decay above cleared last
      season's unsigned ones. */
   topUpFreeAgents(state);
+  /* Round 1520: the summer's new made up men (the intake, the gap fillers, a new club's squad) get their country
+     before the board's new asks count them. */
+  ensureMadeUpNations(state);
   /* Round 436: a new club sets its ceiling off the squad it hands you, which
      is the Round 105 anchor doing its job. Staying carries last season's
      ceiling and moves it on the CLUB's season, never on your own wage bill.
@@ -22668,6 +22978,9 @@ export function loadCareer(): CareerState | null {
       parsed.squad = ensureSquadCoverage(parsed.squad);
       ensureRoles(parsed);
     }
+    /* Round 1520: a made up man of a save from before the round gets his country here, the same draw as the day he
+       arrived would have given him, so the squad screen shows it before a ball is kicked. */
+    ensureMadeUpNations(parsed);
     /* XI ids that name nobody in the squad are cleared, and only those slots
        are filled, by the engine's own auto pick over the men not already in
        the eleven. Pure, no draw. */

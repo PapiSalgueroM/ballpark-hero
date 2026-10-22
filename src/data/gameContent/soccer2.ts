@@ -1856,7 +1856,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         heading: "Physical stats, morale and integrity",
         items: [
           "Height and weight are real numbers, not decoration: a tall heavy player wins more in the air and is stronger, and is slower off the mark and less agile for it.",
-          "Morale runs 0 to 100 and moves with events and choices, while scandals feed an integrity ledger worth minus 30 to plus 20 legacy points at the end.",
+          "Morale runs 0 to 100, moves with events and choices, and counts: 89 and up adds a league game and a tenth on your rating, 73 and under costs the same, 58 and under two of each, never more than three games together with the dressing room. Scandals feed an integrity ledger worth minus 30 to plus 20 legacy points at the end.",
         ],
         subsections: [
           {
@@ -1953,7 +1953,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       },
       {
         q: "What happens after retirement?",
-        a: "Four paths: read your legacy breakdown and walk away, farm controversy as a TV pundit, chase trophies as a manager, or buy a lower league club and run it as owner.",
+        a: "Four paths: read your legacy breakdown and walk away, farm controversy as a TV pundit, chase trophies as a manager, or buy a club that is up for sale and run it as owner.",
       },
       {
         q: "What is the highest legacy score?",
@@ -2628,7 +2628,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       {
         heading: "Ten kicks that get harder as you go",
         items: [
-          "Ten kicks a run, each one further out than the last, with more defenders in the wall and a better keeper.",
+          "Ten kicks a run. After the opening penalty every kick comes from outside the box, and as the run goes on they move further out, with more defenders in the wall and a better keeper.",
         ],
       },
     ],
