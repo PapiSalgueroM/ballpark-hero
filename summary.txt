@@ -1,0 +1,4 @@
+feederholds exit=1 11s | simLiveSimMotion: control feederholds turned "R11" red on an assertion (1 failed), as it must.
+foulwait exit=1 10s | simLiveSimMotion: control foulwait turned "R11" red on an assertion (1 failed), as it must.
+motion exit=0 48s |    Duration  46.82s (transform 2.31s, setup 77ms, collect 2.99s, tests 42.75s, environment 313ms, prepare 118ms)
+tsc exit=0 55s | 
