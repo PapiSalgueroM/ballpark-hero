@@ -1,0 +1,6 @@
+care-66 exit=0 41s | seeds 66..90 (25 careers) harness exit 0, vanish lines 0
+care-91 exit=0 42s | seeds 91..115 (25 careers) harness exit 0, vanish lines 0
+care-41 exit=0 45s | seeds 41..65 (25 careers) harness exit 0, vanish lines 0
+care-116 exit=0 48s | seeds 116..140 (25 careers) harness exit 0, vanish lines 0
+fresh-30 exit=0 304s | fresh streams SIM_SEED 30..44 done
+fresh-45 exit=0 311s | fresh streams SIM_SEED 45..59 done

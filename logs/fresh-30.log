@@ -1,0 +1,17 @@
+SIM_SEED 30 exit 0 vanish 0
+SIM_SEED 31 exit 0 vanish 0
+SIM_SEED 32 exit 0 vanish 0
+SIM_SEED 33 exit 0 vanish 0
+SIM_SEED 34 exit 0 vanish 0
+SIM_SEED 35 exit 1 vanish 1
+  FAIL [2]: seed 7 season 4 full draft: Omari Beaudry let NYK's sheet stand and is not there after the summer
+SIM_SEED 36 exit 0 vanish 0
+SIM_SEED 37 exit 0 vanish 0
+SIM_SEED 38 exit 0 vanish 0
+SIM_SEED 39 exit 0 vanish 0
+SIM_SEED 40 exit 0 vanish 0
+SIM_SEED 41 exit 0 vanish 0
+SIM_SEED 42 exit 0 vanish 0
+SIM_SEED 43 exit 0 vanish 0
+SIM_SEED 44 exit 0 vanish 0
+fresh streams SIM_SEED 30..44 done
