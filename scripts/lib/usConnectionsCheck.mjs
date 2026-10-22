@@ -137,10 +137,32 @@ export function makeBaseballChecker({ record, ledger = {} }) {
   }
   const byName = indexByName(men, ledger.aliases);
   const lists = new Map(Object.entries(ledger.lists ?? {}).map(([k, v]) => [fold(v.label ?? k), v]));
+  /* the record's closed lists, each whole from one page (scripts/usConnections/fetchMlbLists.mjs): a man is on
+     one by his baseball-reference id, his league id, or, off the record, his name */
+  const recordLists = record.lists ?? {};
+  const onList = (key, name, filter = () => true) => {
+    const list = recordLists[key];
+    if (!list) return null;
+    const m = byName.get(fold(name));
+    return list.members.filter(filter).some(x => (m && ((x.id && x.id === m.bbref) || (x.mlb && x.mlb === m.id))) || fold(x.name) === fold(name));
+  };
+  const LIST_LABELS = {
+    threwanohitter: { list: 'noHitters' },
+    wonthebattingtriplecrown: { list: 'tripleCrownBatting' },
+    triplecrownwinners: { list: ['tripleCrownBatting', 'tripleCrownPitching'] },
+    wonbattingtitle2010s2020s: { list: 'battingTitles', filter: x => x.year >= 2010 },
+    wenttothesamecollegevanderbilt: { list: 'vanderbilt' },
+    playedcollegebaseballatlsu: { list: 'lsu' },
+    playedinthe2023worldbaseballclassicfinal: { list: 'wbc2023Final' },
+    fathersonmlbplayers: { list: 'fatherSon' },
+  };
 
   function criterion(label) {
     const f = fold(label);
     if (lists.has(f)) return { kind: 'list', key: f };
+    const rl = LIST_LABELS[f];
+    if (rl && [rl.list].flat().every(k => recordLists[k])) return { kind: 'recordList', keys: [rl.list].flat(), filter: rl.filter };
+    if (f === 'secondbasemen21stcenturystars') return { kind: 'posEra', pos: ['2B'], since: 2001 };
     let m;
     if ((m = label.match(/^Born in (.+?)( \(pitchers\))?$/))) {
       const c = MLB_COUNTRIES[fold(m[1])];
@@ -197,6 +219,10 @@ export function makeBaseballChecker({ record, ledger = {} }) {
       if (what === 'reliefpitchers') return { kind: 'hofPitcher', role: 'relief' };
       if (what === 'lefthandedpitchers') return { kind: 'hofPitcher', hand: 'L' };
       if (what === 'lefthandedstartingpitchers') return { kind: 'hofPitcher', role: 'start', hand: 'L' };
+      if (what === 'righthandedstartingpitchers') return { kind: 'hofPitcher', role: 'start', hand: 'R' };
+      /* "designated hitters / sluggers": the five on the board are designated hitters, and the share rule holds
+         a slugger who rarely hit there out */
+      if (what === 'designatedhitterssluggers') return { kind: 'hofPos', pos: ['DH'] };
       const pos = POSITIONS[what];
       return pos ? { kind: 'hofPos', pos } : null;
     }
@@ -209,9 +235,17 @@ export function makeBaseballChecker({ record, ledger = {} }) {
       if (listSet(list).has(fold(name))) return true;
       return list.closed ? false : null;
     }
+    if (c.kind === 'recordList') return c.keys.some(k => onList(k, name, c.filter));
     const m = byName.get(fold(name));
     if (!m) return null;
     switch (c.kind) {
+      case 'posEra': {
+        const lastYear = m.last ? Number(m.last.slice(0, 4)) : 9999;
+        if (lastYear < c.since) return false;
+        /* a pitcher is no second baseman, whatever his few games elsewhere */
+        if (isPitcher(m)) return false;
+        return shareVerdict(posShare(m, new Set(c.pos)));
+      }
       case 'born': {
         if (!m.country) return null;
         const at = MLB_COUNTRIES[fold(m.country)] ?? fold(m.country);
@@ -261,7 +295,8 @@ export function makeBaseballChecker({ record, ledger = {} }) {
       case 'bats': {
         if (!m.bats) return null;
         if (m.bats !== c.side) return false;
-        return c.pos ? shareVerdict(posShare(m, new Set(c.pos))) : true;
+        if (!c.pos) return true;
+        return isPitcher(m) ? false : shareVerdict(posShare(m, new Set(c.pos)));
       }
       case 'starter': {
         if (!m.throws) return null;
@@ -321,9 +356,27 @@ export function makeBaseballChecker({ record, ledger = {} }) {
         if (c.codes.includes('ALCY') && !isPitcher(m)) return null;
         if (c.codes.includes('ALROY') && m.debut && Number(m.debut.slice(0, 4)) < 2025) return null;
         if (c.codes.includes('ASMVP')) return null;
+        /* the 2026 World Series MVP comes from one of its two clubs (the ledger names them on two hosts);
+           without that line every man who played in 2026 is watched */
+        if (c.codes.includes('WSMVP') && ledger.worldSeries2026?.clubs && !(m.c26 ?? []).some(id => ledger.worldSeries2026.clubs.includes(id))) return null;
         return `played in 2026; the 2026 ${c.codes.join('/')} is still to be named`;
       case 'awardAt':
         return top && new Set(c.pos).has(top) ? `played most of 2026 at ${top}; the 2026 ${c.codes.join('/')} is still to be named` : null;
+      case 'career': {
+        /* a running total one more season can carry over the line */
+        const reach = { HR: 50, H: 200, W: 20, SO: 300, SV: 45 }[c.stat] ?? 0;
+        const have = m.car?.[c.stat] ?? 0;
+        return have + reach >= c.min ? `played in 2026 with ${have}, within a season of ${c.min}` : null;
+      }
+      case 'season': {
+        /* a single season group still open (no end year, or one past 2026): a man who came close in 2025 or 2026 */
+        if (c.to !== undefined && c.to < 2027) return null;
+        /* "Multiple 100+ RBI seasons" needs all but one of its seasons already */
+        const have = Object.values(m.ss ?? {}).filter(row => (row[c.i] ?? 0) >= c.min && (!c.at || row[3] === c.at)).length;
+        if (have < (c.count ?? 1) - 1) return null;
+        const near = ['2025', '2026'].some(y => (m.ss?.[y]?.[c.i] ?? 0) >= c.min * 0.75 && (!c.at || m.ss?.[y]?.[3] === c.at));
+        return near ? `played in 2026 and came within a quarter of ${c.min} in 2025 or 2026` : null;
+      }
       default: return null;
     }
   }

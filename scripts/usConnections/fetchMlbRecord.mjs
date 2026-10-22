@@ -30,7 +30,10 @@ fs.mkdirSync(path.join(WORK, 'search'), { recursive: true });
 fs.mkdirSync(path.join(WORK, 'person'), { recursive: true });
 
 /* men a fix may deal in, read the same way as the board's own */
-export const EXTRA = [];
+export const EXTRA = [
+  /* Round 1558's fixes: a Vanderbilt man for bconn-010, an LSU man for bconn-012, a second baseman for bconn-013 */
+  'Bryan Reynolds', 'Paul Skenes', 'Brandon Phillips',
+];
 /* tile name -> statsapi person id, where a namesake would otherwise win */
 export const PICK = {
   /* the service spells these four another way, so a name search finds no one */
@@ -159,6 +162,8 @@ export function compact(person) {
   }
   out.franchises = [...teams.keys()].sort((a, b) => a - b);
   out.franchiseSeasons = Object.fromEntries([...teams].map(([id, s]) => [id, s.size]));
+  /* the clubs of the season just played: a 2026 World Series MVP can only come from its two clubs */
+  out.clubs2026 = [...teams].filter(([, s]) => s.has("2026")).map(([id]) => id).sort((a, b) => a - b);
   /* each award as [season, club id]: a World Series title names its club, so "with two teams" can be judged */
   for (const a of p.awards ?? []) {
     if (!KEEP_AWARDS.has(a.id)) continue;
@@ -205,7 +210,7 @@ export function trim(c) {
   const pi = c.career.pitching ?? {};
   return {
     id: c.id, bbref: c.bbref, country: c.born.country, bats: c.bats, throws: c.throws, pos: c.pos, debut: c.debut, last: c.last,
-    fr: c.franchiseSeasons, aw: c.awards,
+    fr: c.franchiseSeasons, c26: c.clubs2026, aw: c.awards,
     car: { G: h.G ?? 0, PA: h.PA ?? 0, H: h.H ?? 0, HR: h.HR ?? 0, RBI: h.RBI ?? 0, SB: h.SB ?? 0, AVG: h.AVG ?? null, pG: pi.G ?? 0, GS: pi.GS ?? 0, W: pi.W ?? 0, SO: pi.SO ?? 0, SV: pi.SV ?? 0 },
     posG, ss,
     dr: c.drafts.map(d => [d.year, d.type, d.round, d.pick, d.school]),

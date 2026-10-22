@@ -20,7 +20,10 @@ const MAX = Number(process.env.MAX ?? 40);
 fs.mkdirSync(WORK, { recursive: true });
 
 /* men a fix may deal in */
-export const EXTRA = [];
+export const EXTRA = [
+  /* Round 1558's fix of nhlconn-004: two Sharks far from 1,000 points */
+  'Marc-Edouard Vlasic', 'Macklin Celebrini',
+];
 /* tile name -> NHL player id where the search finds a namesake first */
 export const PICK = {
   /* the search does not match the tile spelling */
