@@ -49,7 +49,7 @@ import { inverseSoccerAwards, soccerAwardsReceiptProblem, SOCCER_AWARDS_BASE } f
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_SEASON_AWARDS_CONTROL || '';
-const CONTROLS = { stale: '1', nogate: '3', dropcoins: '4', usdrift: '5' };
+const CONTROLS = { stale: '1', nogate: '3', dropcoins: '4', usdrift: '5', pool: '2', vanish: '2', fair: '2', comeback: '2', young: '2', grade: '2', key: '2' };
 if (CONTROL && !CONTROLS[CONTROL]) { console.log(`ABORT: unknown SIM_SEASON_AWARDS_CONTROL ${CONTROL}`); process.exit(1); }
 const SECTIONS = (process.env.SIM_SEASON_AWARDS_SECTIONS || (CONTROL ? CONTROLS[CONTROL] : '1,2,3,4,5,6')).split(',').map(s => s.trim());
 const runs = n => SECTIONS.includes(n);
@@ -143,6 +143,21 @@ function chanceOf(W, award, s) {
   const { loc, root } = barOf(Math.max(1.2, cfg.pool / Math.max(1, cfg.slots)));
   return Math.exp(-Math.exp(-(z - (cfg.grade ?? 0) - loc) * root));
 }
+/* The model's chance for a season drawn from its own normal field, with the grade g on the bar: the designed share. */
+function modelShare(n, g) {
+  const { loc, root } = barOf(n);
+  let sum = 0;
+  for (let z = -8; z <= 8; z += 0.002) sum += Math.exp(-z * z / 2 - Math.exp(-(z - g - loc) * root));
+  return sum * 0.002 / Math.sqrt(2 * Math.PI);
+}
+/* Section 2's measured bands, per 100 eligible seasons: every award, and the two votes by group (attack ST LW RW CAM,
+   middle CM CDM, back GK CB LB RB). PROVISIONAL until the seeds are measured. */
+const RATE_BANDS = {
+  'Player of the Year': [0, 100], 'Player of the Year attack': [0, 100], 'Player of the Year middle': [0, 100], 'Player of the Year back': [0, 100],
+  'Young Player of the Year': [0, 100], 'Young Player of the Year attack': [0, 100], 'Young Player of the Year middle': [0, 100], 'Young Player of the Year back': [0, 100],
+  'Golden Boot': [0, 100], 'Golden Glove': [0, 100], 'UEFA Player of the Year': [0, 100], 'Fair Play Award': [0, 100],
+  'Comeback Player of the Year': [0, 100], 'Puskás Award': [0, 100],
+};
 const AWARD_NAMES = ['Player of the Year', 'Puskás Award', 'Golden Boot', 'Golden Glove', 'Young Player of the Year', 'UEFA Player of the Year', 'Comeback Player of the Year', 'Fair Play Award'];
 
 if (runs('1')) {
@@ -185,8 +200,28 @@ if (runs('1')) {
 }
 
 if (runs('2')) {
-  console.log('2) the rates: the engine hands out the model\'s awards, the best seasons win, one winner a league a season');
-  const S = await soccer('rates');
+  console.log('2) the rates: the engine hands out the model\'s awards, each award at its measured rate against the designed one winner a league a season, the year\'s best season wins, every award on its own stream');
+  /* The controls are the mutations the first version of this section passed (review r1525-run-mut and r1525-read-a,
+     2026-10-22): each one moves the model and the engine together, so only a rate, a year's best or a pair of
+     awards can see it. Each must turn this section red. */
+  const MUTS = {
+    pool: [AWARDS, "'Player of the Year': [40, 'vote'", "'Player of the Year': [4, 'vote'", 'the Player of the Year pool typed as 4'],
+    vanish: [AWARDS, "'Player of the Year': [40, 'vote'", "'Player of the Year': [4000, 'vote'", 'the Player of the Year pool typed as 4000 (the award all but gone)'],
+    fair: [AWARDS, "'Fair Play Award': [20, 'level'", "'Fair Play Award': [2, 'level'", 'the Fair Play pool typed as 2'],
+    comeback: [AWARDS, 's.prevRating <= 6.5', 's.prevRating >= 6.5', 'Comeback after a GOOD season'],
+    young: [AWARDS, 's.age < 23 && s.apps >= 20, -1.1]', 's.age < 23 && s.apps >= 20, 1.1]', 'the Young Player grade -1.1 typed as 1.1'],
+    grade: [AWARDS, '{ GK: 0.2, CB: 0.2, LB: 0.2, RB: 0.2, CM: 0.1, CDM: 0.1 }', '{ GK: 2, CB: 2, LB: 2, RB: 2, CM: 0.1, CDM: 0.1 }', 'the vote grade for keepers and the back four typed as 2'],
+    key: [ENGINE, '|award|${award}`)', '|award`)', 'the award left out of the stream key, so all eight awards of a season share one draw'],
+  };
+  let serve = {};
+  if (MUTS[CONTROL]) {
+    const [file, was, now, what] = MUTS[CONTROL];
+    const text = read(file);
+    once(text, was, file);
+    console.log(`   CONTROL ${CONTROL}: ${what}`);
+    serve = { [file]: text.replace(was, now) };
+  }
+  const S = await soccer(MUTS[CONTROL] ? `rates-${CONTROL}` : 'rates', serve);
   const W = S.W;
   const N = Number(process.env.SIM_SEASON_AWARDS_N || 2000);
   const calls = [];
@@ -202,8 +237,15 @@ if (runs('2')) {
   }
   globalThis.__awardCall = null;
   const band = t => (t >= 3 ? '3+' : String(t));
+  const GROUPS = { attack: ['ST', 'LW', 'RW', 'CAM'], middle: ['CM', 'CDM'], back: ['GK', 'CB', 'LB', 'RB'] };
+  const groupOf = p => Object.keys(GROUPS).find(g => GROUPS[g].includes(p));
+  const MEASURE = process.env.SIM_SEASON_AWARDS_MEASURE === '1';
   console.log(`   ${N} house careers (seed ${SEED + 2}), ${calls.length / AWARD_NAMES.length} seasons decided`);
   if (calls.length < N * AWARD_NAMES.length * 8) fail(`only ${calls.length} decisions, too thin to mean anything`);
+  /* rates[award] and rates[`${award} ${group}`]: eligible seasons and wins. seasonsOf: the engine hands every award of
+     one season the same season object, so it keys the season's eligible decisions for the stream check. */
+  const rates = {};
+  const seasonsOf = new Map();
   for (const award of AWARD_NAMES) {
     const mine = calls.filter(c => c.award === award);
     const elig = mine.filter(c => W.soccerAwardEligible(award, c.s));
@@ -214,7 +256,11 @@ if (runs('2')) {
       c.p = p; expected += p; if (c.won) wins += 1;
       const key = `${c.s.position} ${band(c.s.clubTier)}`;
       const b = by.get(key) || { n: 0, w: 0 }; b.n += 1; if (c.won) b.w += 1; by.set(key, b);
+      const g = `${award} ${groupOf(c.s.position)}`;
+      const r = rates[g] || { n: 0, w: 0 }; r.n += 1; if (c.won) r.w += 1; rates[g] = r;
+      const one = seasonsOf.get(c.s) || {}; one[award] = c; seasonsOf.set(c.s, one);
     }
+    rates[award] = { n: elig.length, w: wins };
     const strays = mine.filter(c => c.won && !W.soccerAwardEligible(award, c.s)).length;
     const perCareer = wins / N;
     console.log(`   ${award}: ${elig.length} eligible seasons, ${wins} won (model ${f2(expected)}), ${f2(100 * wins / Math.max(1, elig.length))} per 100 eligible, ${perCareer.toFixed(3)} a career`);
@@ -223,31 +269,88 @@ if (runs('2')) {
     if (strays > 0) fail(`${award}: ${strays} wins on seasons the award may not go to`);
     if (Math.abs(wins - expected) > 4 * Math.sqrt(expected) + 3) fail(`${award}: the engine handed out ${wins}, the model says ${f2(expected)}`);
     if (award === 'Puskás Award') continue;
-    /* the best season: one that beats the field's typical best rival (the bar's median) */
-    const cfgOf = c => W.soccerAwardConfig(award, c.s.position);
-    const best = elig.filter(c => {
+    /* The year's best season: of this fleet's eligible seasons in one calendar year, the one with the highest score
+       the award reads (its z against the field, less the grade the award puts on it). Chosen by score alone, never
+       by the bar, so the model's chance for it is a measurement, not a definition: an award a pool or a grade has
+       made unreachable fails here. Per club tier band it is printed for the lead (one national scale, by design). */
+    const scoreOf = c => {
       const { score, field } = W.soccerAwardScore(award, c.s);
-      const cfg = cfgOf(c); const { loc, root } = barOf(Math.max(1.2, cfg.pool / Math.max(1, cfg.slots)));
-      return (score - field.mean) / field.sd - (cfg.grade ?? 0) >= loc + 0.3665 / root;
-    });
-    const bestWins = best.filter(c => c.won).length;
-    const bestModel = best.reduce((sum, c) => sum + c.p, 0);
-    const bestVar = best.reduce((sum, c) => sum + c.p * (1 - c.p), 0);
-    console.log(`     the best seasons (past the typical best rival): ${best.length}, won ${bestWins} (${f2(100 * bestWins / Math.max(1, best.length))} percent; the model ${f2(100 * bestModel / Math.max(1, best.length))})`);
-    if (best.length > 0 && bestModel * 2 <= best.length) fail(`${award}: the model gives the best seasons ${f2(bestModel)} of ${best.length}, not more often than not`);
-    if (bestWins < bestModel - 3 * Math.sqrt(bestVar) - 1) fail(`${award}: the best seasons won ${bestWins}, well under the model's ${f2(bestModel)}`);
-    if (best.length >= 100 && bestWins * 2 <= best.length) fail(`${award}: the best seasons won ${bestWins} of ${best.length}, not more often than not`);
-    if (best.length < 100) console.log('     (under 100 such seasons: the share is judged on the model and the wins against it)');
+      return (field.sd > 0 ? (score - field.mean) / field.sd : 0) - (W.soccerAwardConfig(award, c.s.position).grade ?? 0);
+    };
+    const bestOf = keyOf => {
+      const top = new Map();
+      for (const c of elig) { const k = keyOf(c), v = scoreOf(c), b = top.get(k); if (!b || v > b.v) top.set(k, { c, v }); }
+      return [...top.values()].map(b => b.c);
+    };
+    const tally = list => ({ n: list.length, w: list.filter(c => c.won).length, m: list.reduce((x, c) => x + c.p, 0), v: list.reduce((x, c) => x + c.p * (1 - c.p), 0) });
+    const best = tally(bestOf(c => c.s.year));
+    const byTier = bestOf(c => `${band(c.s.clubTier)}|${c.s.year}`);
+    const tierLine = ['1', '2', '3+'].map(t => { const x = tally(byTier.filter(c => band(c.s.clubTier) === t)); return `${t}: ${x.w} of ${x.n} (model ${f2(x.m)})`; }).join(', ');
+    console.log(`     the year's best season: ${best.n} years, won ${best.w} (${f2(100 * best.w / Math.max(1, best.n))} percent; the model ${f2(100 * best.m / Math.max(1, best.n))}); per tier band ${tierLine}`);
+    if (best.n < 8) console.log('     (under 8 years with an eligible season: the year\'s best is not judged)');
+    else {
+      if (best.m * 2 <= best.n) fail(`${award}: the model gives the year's best season ${f2(best.m)} wins in ${best.n} years, not more often than not`);
+      if (best.w < best.m - 3 * Math.sqrt(best.v) - 1) fail(`${award}: the year's best season won ${best.w} of ${best.n}, well under the model's ${f2(best.m)}`);
+    }
   }
-  /* one winner a league a season, on the populations the two counting awards' fields were measured on */
-  for (const [award, pos, pop] of [['Golden Boot', 'ST', c => c.s.position === 'ST'], ['Golden Glove', 'GK', c => c.s.position === 'GK']]) {
+  /* Every award on its own stream. On the seasons eligible for two awards, the seasons that won both must match the
+     model's product of the two chances (two independent draws, given the season). One stream shared by the two gives
+     the smaller of the two chances instead (the same draw decides both), which is what the key control does. */
+  let power = -Infinity, sharpest = '';
+  for (let i = 0; i < AWARD_NAMES.length; i += 1) for (let j = i + 1; j < AWARD_NAMES.length; j += 1) {
+    const a = AWARD_NAMES[i], b = AWARD_NAMES[j];
+    let n = 0, both = 0, E = 0, V = 0, shared = 0;
+    for (const one of seasonsOf.values()) {
+      const x = one[a], y = one[b];
+      if (!x || !y) continue;
+      n += 1; if (x.won && y.won) both += 1;
+      const q = x.p * y.p; E += q; V += q * (1 - q); shared += Math.min(x.p, y.p);
+    }
+    if (n === 0) continue;
+    const bound = 4 * Math.sqrt(V) + 3;
+    if (shared - E >= 1) console.log(`   ${a} and ${b}: ${n} seasons eligible for both, ${both} won both (two streams ${f2(E)}, one shared stream ${f2(shared)})`);
+    if (Math.abs(both - E) > bound) fail(`${a} and ${b}: ${both} seasons won both, the model says ${f2(E)} for two streams of their own`);
+    if (shared - E - bound > power) { power = shared - E - bound; sharpest = `${a} and ${b}`; }
+  }
+  if (!(power > 0)) fail('no pair of awards could tell one shared stream from two, so the stream check proves nothing');
+  else console.log(`   one shared stream would show: on ${sharpest} it would sit ${f2(power)} past the bound`);
+  /* One winner a league a season. designed: 100 / (rivals + 1) per eligible season for a season drawn from its own
+     field, moved by the grade the award puts on the bar (the model's share at that grade over its share at none, on
+     a normal field). Held to 0.6 to 1.6 of it where the eligible seasons are the population the field was measured
+     on: the Golden Boot's strikers, the Golden Glove's keepers, and Player of the Year by group. The awards whose
+     eligibility picks out part of a position (Young, UEFA, Fair Play, Comeback) are judged against the whole
+     position's field, so they sit away from it by design: their ratio is printed for the lead, their rate is held by
+     RATE_BANDS below. */
+  const designedPer100 = (award, position) => {
+    const cfg = W.soccerAwardConfig(award, position);
+    const n = Math.max(1.2, cfg.pool / Math.max(1, cfg.slots));
+    return 100 / (n + 1) * modelShare(n, cfg.grade ?? 0) / modelShare(n, 0);
+  };
+  const FIELD_POPS = [
+    ['Golden Boot', 'ST', c => c.s.position === 'ST'], ['Golden Glove', 'GK', c => c.s.position === 'GK'],
+    ...Object.keys(GROUPS).map(g => ['Player of the Year', g, c => groupOf(c.s.position) === g]),
+  ];
+  for (const [award, who, pop] of FIELD_POPS) {
     const e = calls.filter(c => c.award === award && W.soccerAwardEligible(award, c.s) && pop(c));
     const rate = 100 * e.filter(c => c.won).length / Math.max(1, e.length);
-    const cfg = W.soccerAwardConfig(award, pos);
-    const designed = 100 / (cfg.pool / cfg.slots + 1);
-    console.log(`   ${award} (${pos}): ${f2(rate)} per 100 eligible seasons, designed ${f2(designed)}, ratio ${f2(rate / designed)}`);
-    if (e.length < 1000) fail(`${award}: only ${e.length} ${pos} seasons, too thin`);
-    else if (rate / designed < 0.6 || rate / designed > 1.6) fail(`${award}: ${f2(rate)} per 100 is not one winner in ${cfg.pool / cfg.slots} (${f2(designed)})`);
+    const designed = designedPer100(award, GROUPS[who] ? GROUPS[who][0] : who);
+    console.log(`   ${award} (${who}): ${f2(rate)} per 100 eligible seasons, designed ${f2(designed)}, ratio ${f2(rate / designed)}`);
+    if (e.length < 1000) fail(`${award}: only ${e.length} ${who} seasons, too thin`);
+    else if (rate / designed < 0.6 || rate / designed > 1.6) fail(`${award} (${who}): ${f2(rate)} per 100 is not the designed ${f2(designed)}`);
+  }
+  for (const award of ['Young Player of the Year', 'UEFA Player of the Year', 'Fair Play Award', 'Comeback Player of the Year']) {
+    const r = rates[award], designed = designedPer100(award, 'ST'), rate = 100 * r.w / Math.max(1, r.n);
+    console.log(`   ${award}: ${f2(rate)} per 100 eligible against a designed ${f2(designed)} for an attacker, ratio ${f2(rate / designed)} (part of the field is eligible: a design note, held by its band below)`);
+  }
+  /* Every award's rate per 100 eligible seasons, and the two votes' by group, held to the band measured on several
+     seeds (RATE_BANDS, with its recipe). A pool, a grade or an eligibility test typed wrong moves the model and the
+     engine together, so the engine against model check above cannot see it; this can. */
+  for (const [row, [lo, hi]] of Object.entries(RATE_BANDS)) {
+    const r = rates[row] || { n: 0, w: 0 };
+    const rate = r.n ? 100 * r.w / r.n : NaN;
+    console.log(`   rate ${row}: ${f2(rate)} per 100 eligible (${r.w} of ${r.n}), measured band ${lo} to ${hi}`);
+    if (MEASURE) continue;
+    if (!(rate >= lo && rate <= hi)) fail(`${row}: ${f2(rate)} per 100 eligible seasons, outside its measured band ${lo} to ${hi}`);
   }
 }
 
