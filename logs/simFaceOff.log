@@ -1,0 +1,15 @@
+1) the pools can deal
+   17 categories across 10 sports, 1271 athletes
+2) a deal is a deal
+   500 matches, 5000 rounds; sport shares: tennis 9%, football 9%, college 10%, baseball 10%, basketball 10%, soccer 10%, golf 10%, f1 10%, hockey 10%, afl 10%
+3) the daily is the same for everybody and different tomorrow
+   60 days: all distinct, the two most alike days share 1 pair(s)
+4) the rivals are ordered
+   hit rate: rookie 61.5%, pro 74.5%, legend 84.7%; points a round: 86, 116, 140
+   a 72% fan at 4s wins: rookie 78%, pro 49%, legend 17%
+5) the arithmetic
+   8 point cases, right, wrong and late picks, two player picks, totals, sudden death
+6) the save
+   six bad saves load fresh, a real one round trips, three matches book correctly
+
+simFaceOff: green. The deck deals fair, the daily is shared, the rivals climb, and the record holds.

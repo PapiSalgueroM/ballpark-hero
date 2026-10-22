@@ -1,0 +1,87 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mAfl Higher or Lower reveal ownership[2m > [22mholds original whole-game Daily325 exact saves once booking and quiet restore[32m 78[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mAfl Higher or Lower reveal ownership[2m > [22mholds original whole-game Unlimited325 player objects RNG and no daily booking[32m 10[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mAfl Higher or Lower reveal ownership[2m > [22mcancels abandoned mode reveal without scoring or skipping a fresh run[32m 5[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mAfl Higher or Lower reveal ownership[2m > [22mcancels previous reveal before Hard replaces its pairs and score[32m 4[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mAfl Higher or Lower reveal ownership[2m > [22mkeeps the new reveal visible for its own full two seconds after leaving daily[32m 5[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mAfl Higher or Lower reveal ownership[2m > [22mclears the exact owned reveal at unmount with no late callback work[32m 3[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mAfl Higher or Lower reveal ownership[2m > [22mrejects a delivered obsolete callback without clearing a newer accepted reveal[32m 4[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mAfl Higher or Lower reveal ownership[2m > [22mretains original2000ms and one owned timer through quiet rerenders[32m 4[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mAfl Higher or Lower reveal ownership[2m > [22mkeeps accepted immediate daily save after reveal cancellation and quiet reload[32m 3[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mCfb Higher or Lower reveal ownership[2m > [22mholds original whole-game Daily325 exact saves once booking and quiet restore[32m 13[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mCfb Higher or Lower reveal ownership[2m > [22mholds original whole-game Unlimited325 player objects RNG and no daily booking[32m 9[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mCfb Higher or Lower reveal ownership[2m > [22mcancels abandoned mode reveal without scoring or skipping a fresh run[32m 3[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mCfb Higher or Lower reveal ownership[2m > [22mcancels previous reveal before Hard replaces its pairs and score[32m 3[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mCfb Higher or Lower reveal ownership[2m > [22mkeeps the new reveal visible for its own full two seconds after leaving daily[32m 3[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mCfb Higher or Lower reveal ownership[2m > [22mclears the exact owned reveal at unmount with no late callback work[32m 2[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mCfb Higher or Lower reveal ownership[2m > [22mrejects a delivered obsolete callback without clearing a newer accepted reveal[32m 3[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mCfb Higher or Lower reveal ownership[2m > [22mretains original2000ms and one owned timer through quiet rerenders[32m 3[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mCfb Higher or Lower reveal ownership[2m > [22mkeeps accepted immediate daily save after reveal cancellation and quiet reload[32m 4[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mF1 Higher or Lower reveal ownership[2m > [22mholds original whole-game Daily325 exact saves once booking and quiet restore[32m 14[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mF1 Higher or Lower reveal ownership[2m > [22mholds original whole-game Unlimited325 player objects RNG and no daily booking[32m 8[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mF1 Higher or Lower reveal ownership[2m > [22mcancels abandoned mode reveal without scoring or skipping a fresh run[32m 3[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mF1 Higher or Lower reveal ownership[2m > [22mcancels previous reveal before Hard replaces its pairs and score[32m 3[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mF1 Higher or Lower reveal ownership[2m > [22mkeeps the new reveal visible for its own full two seconds after leaving daily[32m 3[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mF1 Higher or Lower reveal ownership[2m > [22mclears the exact owned reveal at unmount with no late callback work[32m 2[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mF1 Higher or Lower reveal ownership[2m > [22mrejects a delivered obsolete callback without clearing a newer accepted reveal[32m 3[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mF1 Higher or Lower reveal ownership[2m > [22mretains original2000ms and one owned timer through quiet rerenders[32m 3[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mF1 Higher or Lower reveal ownership[2m > [22mkeeps accepted immediate daily save after reveal cancellation and quiet reload[32m 4[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mGolf Higher or Lower reveal ownership[2m > [22mholds original whole-game Daily325 exact saves once booking and quiet restore[32m 13[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mGolf Higher or Lower reveal ownership[2m > [22mholds original whole-game Unlimited325 player objects RNG and no daily booking[32m 8[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mGolf Higher or Lower reveal ownership[2m > [22mcancels abandoned mode reveal without scoring or skipping a fresh run[32m 3[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mGolf Higher or Lower reveal ownership[2m > [22mcancels previous reveal before Hard replaces its pairs and score[32m 3[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mGolf Higher or Lower reveal ownership[2m > [22mkeeps the new reveal visible for its own full two seconds after leaving daily[32m 3[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mGolf Higher or Lower reveal ownership[2m > [22mclears the exact owned reveal at unmount with no late callback work[32m 3[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mGolf Higher or Lower reveal ownership[2m > [22mrejects a delivered obsolete callback without clearing a newer accepted reveal[32m 4[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mGolf Higher or Lower reveal ownership[2m > [22mretains original2000ms and one owned timer through quiet rerenders[32m 3[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mGolf Higher or Lower reveal ownership[2m > [22mkeeps accepted immediate daily save after reveal cancellation and quiet reload[32m 11[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mHockey Higher or Lower reveal ownership[2m > [22mholds original whole-game Daily325 exact saves once booking and quiet restore[32m 16[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mHockey Higher or Lower reveal ownership[2m > [22mholds original whole-game Unlimited325 player objects RNG and no daily booking[32m 7[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mHockey Higher or Lower reveal ownership[2m > [22mcancels abandoned mode reveal without scoring or skipping a fresh run[32m 3[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mHockey Higher or Lower reveal ownership[2m > [22mcancels previous reveal before Hard replaces its pairs and score[32m 3[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mHockey Higher or Lower reveal ownership[2m > [22mkeeps the new reveal visible for its own full two seconds after leaving daily[32m 2[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mHockey Higher or Lower reveal ownership[2m > [22mclears the exact owned reveal at unmount with no late callback work[32m 2[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mHockey Higher or Lower reveal ownership[2m > [22mrejects a delivered obsolete callback without clearing a newer accepted reveal[32m 3[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mHockey Higher or Lower reveal ownership[2m > [22mretains original2000ms and one owned timer through quiet rerenders[32m 3[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mHockey Higher or Lower reveal ownership[2m > [22mkeeps accepted immediate daily save after reveal cancellation and quiet reload[32m 2[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mNba Higher or Lower reveal ownership[2m > [22mholds original whole-game Daily325 exact saves once booking and quiet restore[32m 13[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mNba Higher or Lower reveal ownership[2m > [22mholds original whole-game Unlimited325 player objects RNG and no daily booking[32m 10[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mNba Higher or Lower reveal ownership[2m > [22mcancels abandoned mode reveal without scoring or skipping a fresh run[32m 4[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mNba Higher or Lower reveal ownership[2m > [22mcancels previous reveal before Hard replaces its pairs and score[32m 4[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mNba Higher or Lower reveal ownership[2m > [22mkeeps the new reveal visible for its own full two seconds after leaving daily[32m 4[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mNba Higher or Lower reveal ownership[2m > [22mclears the exact owned reveal at unmount with no late callback work[32m 3[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mNba Higher or Lower reveal ownership[2m > [22mrejects a delivered obsolete callback without clearing a newer accepted reveal[32m 4[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mNba Higher or Lower reveal ownership[2m > [22mretains original2000ms and one owned timer through quiet rerenders[32m 4[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mNba Higher or Lower reveal ownership[2m > [22mkeeps accepted immediate daily save after reveal cancellation and quiet reload[32m 4[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mNfl Higher or Lower reveal ownership[2m > [22mholds original whole-game Daily325 exact saves once booking and quiet restore[32m 15[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mNfl Higher or Lower reveal ownership[2m > [22mholds original whole-game Unlimited325 player objects RNG and no daily booking[32m 7[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mNfl Higher or Lower reveal ownership[2m > [22mcancels abandoned mode reveal without scoring or skipping a fresh run[32m 3[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mNfl Higher or Lower reveal ownership[2m > [22mcancels previous reveal before Hard replaces its pairs and score[32m 3[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mNfl Higher or Lower reveal ownership[2m > [22mkeeps the new reveal visible for its own full two seconds after leaving daily[32m 3[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mNfl Higher or Lower reveal ownership[2m > [22mclears the exact owned reveal at unmount with no late callback work[32m 2[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mNfl Higher or Lower reveal ownership[2m > [22mrejects a delivered obsolete callback without clearing a newer accepted reveal[32m 3[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mNfl Higher or Lower reveal ownership[2m > [22mretains original2000ms and one owned timer through quiet rerenders[32m 4[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mNfl Higher or Lower reveal ownership[2m > [22mkeeps accepted immediate daily save after reveal cancellation and quiet reload[32m 4[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mTennis Higher or Lower reveal ownership[2m > [22mholds original whole-game Daily325 exact saves once booking and quiet restore[32m 11[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mTennis Higher or Lower reveal ownership[2m > [22mholds original whole-game Unlimited325 player objects RNG and no daily booking[32m 6[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mTennis Higher or Lower reveal ownership[2m > [22mcancels abandoned mode reveal without scoring or skipping a fresh run[32m 2[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mTennis Higher or Lower reveal ownership[2m > [22mcancels previous reveal before Hard replaces its pairs and score[32m 6[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mTennis Higher or Lower reveal ownership[2m > [22mkeeps the new reveal visible for its own full two seconds after leaving daily[32m 3[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mTennis Higher or Lower reveal ownership[2m > [22mclears the exact owned reveal at unmount with no late callback work[32m 3[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mTennis Higher or Lower reveal ownership[2m > [22mrejects a delivered obsolete callback without clearing a newer accepted reveal[32m 4[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mTennis Higher or Lower reveal ownership[2m > [22mretains original2000ms and one owned timer through quiet rerenders[32m 4[2mms[22m[39m
+ [32m✓[39m src/test/higherLowerReveal.test.tsx[2m > [22mTennis Higher or Lower reveal ownership[2m > [22mkeeps accepted immediate daily save after reveal cancellation and quiet reload[32m 8[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m72 passed[39m[22m[90m (72)[39m
+[2m   Start at [22m 12:17:33
+[2m   Duration [22m 1.78s[2m (transform 263ms, setup 107ms, collect 415ms, tests 442ms, environment 388ms, prepare 156ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.sim-control/hl-reveal-JFgdbX/report.json
+
+simHigherLowerReveal: 72 actual hook outcomes pass across eight original authored pools.
+simHigherLowerReveal: original Daily and Unlimited325, player identity, RNG calls, exact saves, once booking and quiet restore.
+simHigherLowerReveal: canceled mode, Hard and unmount reveals, stale delivery and original2000ms ownership.
+simHigherLowerReveal: 23 source inputs held, owned copies and report cleaned.

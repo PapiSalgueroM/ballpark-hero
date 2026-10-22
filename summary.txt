@@ -1,0 +1,15 @@
+simHigherLowerFacts exit=0 0s | simHigherLowerFacts: green. 32 checks across 5 fenced game(s). Every total matches the source it came from, every matchup is ordered correctly, and every figure nobody co
+simSportsFacts exit=1 1s | Node.js v24.21.0
+simF1Champions exit=0 0s | simF1Champions: green (the record holds together and matches the table as read, the migration is the record's, every constructor note is backed, and both games agree)
+ctl-hlstale exit=1 1s | Node.js v24.21.0
+ctl-hlcutoff exit=1 1s | Node.js v24.21.0
+ctl-crossclue exit=1 1s | Node.js v24.21.0
+ctl-playeduntil exit=1 0s | simHigherLowerFacts: control playeduntil turned section(s) 7 red and nothing else. The check works.
+ctl-tennisstale exit=1 1s | Node.js v24.21.0
+ctl-f1wins exit=1 0s | simF1Champions control wins: fired as it must. Sections 1 and 4 went red (2 and 1 finding(s)) and nothing else did. Exit 1 is the control working.
+simFaceOff exit=0 1s | simFaceOff: green. The deck deals fair, the daily is shared, the rivals climb, and the record holds.
+simHigherLowerReveal exit=0 3s | simHigherLowerReveal: 23 source inputs held, owned copies and report cleaned.
+simNoRivalNames exit=0 16s | No rival product names found. 0 findings.
+vitest exit=0 24s |    Duration  22.57s (transform 3.68s, setup 291ms, collect 2.72s, tests 22.25s, environment 1.71s, prepare 691ms)
+simDateDraws exit=0 62s | simDateDraws: green. Every date-seeded draw reaches its whole pool or is fenced where measured.
+tsc exit=0 73s | 

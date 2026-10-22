@@ -1,0 +1,10 @@
+file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSportsFacts.mjs:1085
+      for (const card of f1Drivers) {
+                         ^
+
+TypeError: f1Drivers is not iterable
+    at runFence (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSportsFacts.mjs:1085:26)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSportsFacts.mjs:1164:18
+
+Node.js v24.21.0

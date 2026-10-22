@@ -1,0 +1,10 @@
+1) The record is one piece: counts, rows, sources, top three, notes, and the digests of the table as read
+   3106 rows across 76 seasons (2950 verified, 18 corrected, 11 filled, 127 marked), 19 changes, 304 digests of the table as read recomputed
+2) The migration is the record's: 26 fingerprints, every update, every insert
+   26 fingerprints recomputed, 18 updates carrying 19 field changes, 11 inserts, all traced to the record
+3) A constructor note says only what the two sources show
+   29 notes: 13 where Jolpica lists more than one constructor, 28 where formula1.com prints a different text from the column
+4) The games agree with the record: Higher or Lower wins and titles, the List Quiz champions
+   44 Higher or Lower drivers agree on wins, titles and seasons; 35 champions, one spelling each, quiz floor 15
+
+simF1Champions: green (the record holds together and matches the table as read, the migration is the record's, every constructor note is backed, and both games agree)
