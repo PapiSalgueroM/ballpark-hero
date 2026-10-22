@@ -1,0 +1,2 @@
+m-linepts: node .rc/x/mutrun.mjs linepts
+m-minutes: node .rc/x/mutrun.mjs minutes
