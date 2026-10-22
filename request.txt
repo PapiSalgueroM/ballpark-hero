@@ -1,0 +1,24 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+motionfull: node scripts/simLiveSimMotion.mjs
+siblings: node_modules/.bin/vitest run src/test/pitchOwnGoal.test.tsx src/test/clubManagerVarScreen.test.tsx src/test/miniPitchScene.test.ts src/test/seasonCentreOwnGoals.test.tsx src/test/tycoonPitch.test.tsx --testTimeout=300000 --hookTimeout=120000
+restartvitest: node_modules/.bin/vitest run src/test/pitchRestartContinuity.test.tsx --testTimeout=300000 --hookTimeout=120000
+cmmatchday: node scripts/simCmMatchDay.mjs
+diff2: git worktree add .rc-base 30b4b3ca >/dev/null 2>&1 && BASE_ROOT=.rc-base SECTION=2 node scripts/simCmDifficulty.mjs
+livematch: node scripts/simLiveMatch.mjs
+livesim: node scripts/simLiveSim.mjs
+celebration: node scripts/simLiveSimCelebration.mjs
+matchcentre: node scripts/simCmMatchCentre.mjs
+stoppage: node scripts/simCmStoppageTime.mjs
+varledger: node scripts/simCmVarLedger.mjs
+extratime: node scripts/simExtraTime.mjs
+flagship: node scripts/simFlagshipWeight.mjs
+matchscreen: node scripts/simMatchScreen.mjs
+owngoal: node scripts/simOwnGoalMotion.mjs
+reveal: node scripts/simRevealMoments.mjs
+seasoncentre: node scripts/simSeasonCentreMotion.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+rival: node scripts/simNoRivalNames.mjs
+storage: node scripts/simStorageWrites.mjs
+invented: node scripts/simInventedNames.mjs
+quotes: node scripts/simNoInventedQuotes.mjs
+fleet: git worktree add /tmp/base 30b4b3ca >/dev/null 2>&1 && FLEET_N=1500 node .rc/x/fleet.mjs /tmp/base
