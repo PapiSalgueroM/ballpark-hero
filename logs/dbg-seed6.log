@@ -1,0 +1,5 @@
+DBG seed 10 season 2 Cole Strother {"club":"ORL","years":4,"salary":2.7,"round":null,"inPool":false,"faOvr":null,"faYears":null,"clubSize":15,"clubOvrs":[68,69,69,69,69,71,73,79,80,81,83,85,86,87,91],"notes":[]}
+  FAIL [2]: seed 10 season 2: Cole Strother let his sheet stand and is at no rival club
+   9 sheets let stand still reached the club written down after a draft that filled every rival roster
+   draftees up: 60 first rounders after the rookie scale, 108 second rounders; 168 restricted cases, 23 sheets (9 matched, 8 gone to the rival on its terms)
+simNbaGmDesk: 1 failure(s) in ["2"]

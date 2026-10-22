@@ -1,0 +1,9 @@
+dbg-seed1 exit=0 29s | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+dbg-seed3 exit=0 38s | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+dbg-seed2 exit=0 39s | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+dbg-seed4 exit=0 33s | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+dbg-seed5 exit=0 34s | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+dbg-seed6 exit=1 36s | simNbaGmDesk: 1 failure(s) in ["2"]
+dbg-seed7 exit=0 35s | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+dbg-seed8 exit=0 31s | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+dbg-seed9 exit=0 33s | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
