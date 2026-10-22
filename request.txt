@@ -1,0 +1,25 @@
+simGmDraftOrder: node scripts/simGmDraftOrder.mjs && SIM_GM_DRAFT_ORDER_CONTROL=all node scripts/simGmDraftOrder.mjs
+simDraftNight: node scripts/simDraftNight.mjs && for c in dropai slowsteps norivals; do DRAFT_CONTROL=$c node scripts/simDraftNight.mjs | tail -1; done
+simRevealMoments: node scripts/simRevealMoments.mjs && REVEAL_CONTROL=motion node scripts/simRevealMoments.mjs | tail -1
+simGmReload: node scripts/simGmReload.mjs && GM_RELOAD_CONTROL=replay node scripts/simGmReload.mjs | tail -1
+simGmPicks: node scripts/simGmPicks.mjs
+simGmDesk: node scripts/simGmDesk.mjs
+simFoHub: node scripts/simFoHub.mjs
+simSessionMarks: node scripts/simSessionMarks.mjs
+simNbaSeasonStats: node scripts/simNbaSeasonStats.mjs
+simFrontOfficeCuts: node scripts/simFrontOfficeCuts.mjs
+simEngineIds: node scripts/simEngineIds.mjs
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+simGmDeskHost: node scripts/simGmDeskHost.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simFrontOfficeSchedule: node scripts/simFrontOfficeSchedule.mjs
+simGmGameDay: node scripts/simGmGameDay.mjs
+simHomeFront: node scripts/simHomeFront.mjs
+simLeagueCaps: node scripts/simLeagueCaps.mjs
+simNbaRatingEvidence: node scripts/simNbaRatingEvidence.mjs
+simNbaRotationReset: node scripts/simNbaRotationReset.mjs
+simNbaRotationUi: node scripts/simNbaRotationUi.mjs
+simNbaTipOffForecast: node scripts/simNbaTipOffForecast.mjs
+simRelatedGames: node scripts/simRelatedGames.mjs

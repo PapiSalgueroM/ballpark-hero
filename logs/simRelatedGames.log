@@ -1,0 +1,12 @@
+1) Picks: no self, no dupes, no dead links, enough of them
+2) Inbound links: everyone gets some, nobody hoards
+3) A crawler landing anywhere can reach everywhere
+4) The same page always shows the same links
+5) A page outside the registry gets an empty block, not a crash
+6) Registering one more game leaves nearly every page's links alone
+   worst case: 12 of 133 pages change when a game joins Tennis
+   the newcomer is linked from 7 page(s) straight away
+7) Each big sim links its other half, both ways
+   10 of 10 directions hold
+
+ALL RELATED GAMES CHECKS PASSED

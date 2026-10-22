@@ -1,0 +1,5 @@
+NBA rotation UI:15/15 real board and panel cases passed, zero skipped cases.
+NBA rotation UI: exact slot swaps, changed strength, distinct selections, save reload and automatic removal held.
+NBA rotation UI: old automatic save stays byte-identical, rejected choices stay quiet, injuries retain preferences and thin bench roles remain in place.
+NBA rotation UI: an explicitly fictional selected bench prospect earns actual simulated games and points against the unchanged automatic baseline.
+NBA rotation UI: exact opener focus uses preventScroll, controls retain native semantics and 44px sizing, earned motion is finite with static reduced motion.

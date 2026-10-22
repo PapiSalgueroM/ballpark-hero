@@ -1,0 +1,30 @@
+1) an id survives a page load, across eight of them
+   NFL Front Office: 8 loads, 588 ids across 34 lists, 0 duplicate, 46 to 46 minted per load
+   MLB Front Office: 8 loads, 862 ids across 32 lists, 0 duplicate, 30 to 30 minted per load
+   NBA Front Office: 8 loads, 382 ids across 32 lists, 0 duplicate, 30 to 30 minted per load
+   NHL Front Office: 8 loads, 498 ids across 34 lists, 0 duplicate, 30 to 30 minted per load
+   CFB Dynasty: 8 loads, 546 ids across 45 lists, 0 duplicate, 18 to 18 minted per load
+   CBB Dynasty: 8 loads, 334 ids across 41 lists, 0 duplicate, 14 to 14 minted per load
+
+1b) a save that is ALREADY corrupted is repaired, first holder keeping his id
+   NFL Front Office: 1 duplicate repaired, 1 id(s) moved, Jacoby Brissett kept pokhizx7d0kil-1, Bam Knight got a fresh one, nobody dropped
+   MLB Front Office: 1 duplicate repaired, 1 id(s) moved, Gabriel Moreno kept m1xeyuvkq0kk29-1, Corbin Carroll got a fresh one, nobody dropped
+   NBA Front Office: 1 duplicate repaired, 1 id(s) moved, Nikola Jokic kept n104658f1ijqn4c-1, Cameron Johnson got a fresh one, nobody dropped
+   NHL Front Office: 1 duplicate repaired, 1 id(s) moved, Leo Carlsson kept h138vd9x1yo3ws7-1, Troy Terry got a fresh one, nobody dropped
+   CFB Dynasty: 1 duplicate repaired, 1 id(s) moved, Landry McCrae kept c10ug4ba1cxhqzg-1, Colt Broussard got a fresh one, nobody dropped
+   CBB Dynasty: 1 duplicate repaired, 1 id(s) moved, Kellan Kingsley kept bkddm0rqc2bsq-1, Isaiah Overton got a fresh one, nobody dropped
+
+2) the consequence: cutting a man cuts THAT man
+   NFL Front Office: cut Nash Draycott, roster 63 to 62, and he is the one who left
+   MLB Front Office: cut Yohan Reyes, roster 74 to 73, and he is the one who left
+   NBA Front Office: cut Jalen Castleton, roster 58 to 57, and he is the one who left
+   NHL Front Office: cut Ilya Vasko, roster 61 to 60, and he is the one who left
+
+3) the two dynasties: the React key space is unique
+   (weaker than section 2 on purpose: neither dynasty engine reads a player id,
+    so a duplicate there is a rendering defect rather than a lost player. It is
+    held anyway because a cut button keyed on p.id would inherit section 2's bug.)
+   CFB Dynasty: every roster's keys are unique and no recruit collides with one
+   CBB Dynasty: every roster's keys are unique and no recruit collides with one
+
+simEngineIds: an id minted in one page load cannot collide with one minted in another, in all six engines.
