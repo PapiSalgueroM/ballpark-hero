@@ -1,0 +1,25 @@
+Section 4: source scan
+  FAIL: src/components/deadline-day/DeadlineDayBoard.tsx: greyInk: "bg-red-500/20 text-red-700 dark:text-red-300"
+  FAIL: src/components/deadline-day/DeadlineDayBoard.tsx: greyInk: "bg-red-500/20 text-red-700 dark:text-red-300"
+  FAIL: src/components/deadline-day/DeadlineDayBoard.tsx: greyInk: "rounded-md border border-red-500/40 bg-red-500/10 px-2 py-1.5 text-xs font-semib"
+  FAIL: src/components/deadline-day/DeadlineDayBoard.tsx: greyInk: "rounded-md border border-red-500/40 bg-red-500/10 px-2 py-1.5 text-xs font-semib"
+  FAIL: src/components/season-centre/CentreTile.tsx: bareOutline: "w-full max-w-sm space-y-3 rounded-2xl border border-border bg-card p-4 text-cent"
+  FAIL: src/components/season-centre/SeasonCentreHelp.tsx: bareOutline: "absolute inset-0 z-10 flex items-start justify-center overflow-y-auto bg-backgro"
+  FAIL: src/components/season-centre/SeasonPicker.tsx: bareOutline: "cm-rise w-full max-w-sm space-y-3 rounded-2xl border border-border bg-card p-4 o"
+  FAIL: src/components/soccer-career/CareerChanceWheel.tsx: bareOutline: "outline-none"
+  FAIL: src/components/soccer-career/CareerRecordsSheet.tsx: bareOutline: "flex max-h-[85dvh] w-full max-w-lg flex-col rounded-2xl border border-border bg-"
+  FAIL: src/components/soccer-career/CareerStory.tsx: bareOutline: "text-lg font-black outline-none"
+  FAIL: src/components/soccer-career/PressRoom.tsx: bareOutline: "flex max-h-[calc(100dvh-1.5rem)] w-full max-w-lg flex-col overflow-hidden rounde"
+  FAIL: src/components/soccer-career/PressRoom.tsx: bareOutline: "text-lg font-black outline-none"
+  FAIL: ...and 6 more source findings
+   source scan: 18 findings
+
+Sections 1 and 3: contrast and names across 181 routes
+  FAIL: /soccer: 1 unreadable run: "12" 3.19 (needs 4.5) [90,99,113 on 11,13,19]
+  FAIL: /pro-basketball: 1 unreadable run: "10" 3.19 (needs 4.5) [90,99,113 on 11,13,19]
+   181 routes measured: 2 unreadable runs, 0 unnamed controls, 0 unlabelled fields
+
+Section 2: keyboard walk on the home page
+   40 tab stops walked, 0 without a ring, skip link first
+
+sweepContrast: 15 failures

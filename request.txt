@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+#!serial
+playTranslatedPage: node scripts/playTranslatedPage.mjs
+bn-base: bash .rc/x/bnsrv.sh scripts/lib/answerConsent.mjs scripts/playFoHub.mjs scripts/playIphone.mjs scripts/sweepPhone.mjs scripts/sweepContrast.mjs
+bn-playFoHub: cd /tmp/wt-bn && BASE=http://localhost:4174 SWEEP_BASE=http://localhost:4174 ENGINES=chromium node scripts/playFoHub.mjs
+bn-playIphone: cd /tmp/wt-bn && BASE=http://localhost:4174 SWEEP_BASE=http://localhost:4174 ENGINES=chromium node scripts/playIphone.mjs
+bn-sweepPhone: cd /tmp/wt-bn && BASE=http://localhost:4174 SWEEP_BASE=http://localhost:4174 ENGINES=chromium node scripts/sweepPhone.mjs
+bn-sweepContrast: cd /tmp/wt-bn && BASE=http://localhost:4174 SWEEP_BASE=http://localhost:4174 node scripts/sweepContrast.mjs

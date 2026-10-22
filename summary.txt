@@ -1,0 +1,7 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playTranslatedPage exit=0 136s | playTranslatedPage: 447 checks, 0 failed
+bn-base exit=0 34s | /tmp/wt-bn
+bn-playFoHub exit=1 48s | playFoHub: 2 failures
+bn-playIphone exit=1 54s | playIphone: 1 failure
+bn-sweepPhone exit=1 111s | sweepPhone: 2 failures
+bn-sweepContrast exit=1 370s | sweepContrast: 15 failures
