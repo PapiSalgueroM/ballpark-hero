@@ -1,0 +1,59 @@
+now     premier         England        clubs 20 men  497 size min 20 med 25 max 29 partial 0 | known  496 home  25.8% | low half home  28.4% | whole(>=20) 20 known 496 home  25.8%
+now     championship    England        clubs 24 men  338 size min 2 med 15 max 27 partial 5 | known  338 home  32.8% | low half home  32.1% | whole(>=20) 5 known 113 home  23.0%
+now     laliga          Spain          clubs 20 men  374 size min 5 med 18 max 30 partial 1 | known  374 home  53.2% | low half home  60.3% | whole(>=20) 9 known 216 home  52.3%
+now     seriea          Italy          clubs 20 men  440 size min 16 med 22 max 28 partial 0 | known  440 home  27.3% | low half home  30.4% | whole(>=20) 15 known 351 home  27.4%
+now     bundesliga      Germany        clubs 18 men  348 size min 10 med 20 max 26 partial 0 | known  348 home  35.6% | low half home  34.5% | whole(>=20) 9 known 205 home  35.1%
+now     ligue1          France         clubs 18 men  285 size min 1 med 17 max 24 partial 2 | known  285 home  32.6% | low half home  31.7% | whole(>=20) 6 known 131 home  29.8%
+now     eredivisie      Netherlands    clubs 18 men  161 size min 0 med 7 max 25 partial 11 | known  161 home  37.9% | low half home  40.5% | whole(>=20) 2 known 47 home  27.7%
+now     saudi           Saudi Arabia   clubs 18 men  117 size min 0 med 5 max 16 partial 11 | known  117 home   7.7% | low half home  16.4% | whole(>=20) 0 known 0 home     -%
+now     mlsEast         United States  clubs 15 men  148 size min 6 med 10 max 16 partial 4 | known  147 home  19.0% | low half home  23.9% | whole(>=20) 0 known 0 home     -%
+now     mlsWest         United States  clubs 15 men  122 size min 4 med 9 max 11 partial 5 | known  122 home  31.1% | low half home  33.3% | whole(>=20) 0 known 0 home     -%
+now     primeira        Portugal       clubs 18 men  166 size min 0 med 7 max 26 partial 10 | known  166 home  27.1% | low half home  34.6% | whole(>=20) 3 known 72 home  27.8%
+now     scottish        Scotland       clubs 12 men   61 size min 0 med 3 max 19 partial 10 | known   61 home  19.7% | low half home  24.1% | whole(>=20) 0 known 0 home     -%
+now     superlig        Türkiye        clubs 18 men  174 size min 0 med 8 max 26 partial 9 | known  174 home  25.9% | low half home  36.9% | whole(>=20) 4 known 94 home  27.7%
+now     bundesliga2     Germany        clubs 18 men   99 size min 0 med 5 max 20 partial 13 | known   99 home  43.4% | low half home  51.1% | whole(>=20) 1 known 20 home  30.0%
+now     proleague       Belgium        clubs 18 men  145 size min 0 med 8 max 19 partial 8 | known  145 home  29.0% | low half home  31.9% | whole(>=20) 0 known 0 home     -%
+now     austria         Austria        clubs 12 men   60 size min 0 med 3 max 15 partial 9 | known   60 home  45.0% | low half home  51.9% | whole(>=20) 0 known 0 home     -%
+now     greece          Greece         clubs 14 men   81 size min 0 med 2 max 19 partial 10 | known   81 home  12.3% | low half home  13.2% | whole(>=20) 0 known 0 home     -%
+now     denmark         Denmark        clubs 12 men   62 size min 0 med 4 max 16 partial 8 | known   62 home  32.3% | low half home  33.3% | whole(>=20) 0 known 0 home     -%
+now     switzerland     Switzerland    clubs 12 men   78 size min 1 med 6 max 14 partial 10 | known   78 home  43.6% | low half home  52.8% | whole(>=20) 0 known 0 home     -%
+now     croatia         Croatia        clubs 10 men   28 size min 0 med 2 max 9 partial 8 | known   28 home  64.3% | low half home  69.2% | whole(>=20) 0 known 0 home     -%
+now     brasileirao     Brazil         clubs 20 men  274 size min 0 med 16 max 22 partial 4 | known  267 home  64.8% | low half home  67.7% | whole(>=20) 3 known 64 home  65.6%
+now     ligamx          Mexico         clubs 18 men  167 size min 0 med 10 max 19 partial 6 | known  164 home  57.9% | low half home  66.7% | whole(>=20) 0 known 0 home     -%
+now     aleague         Australia      clubs 10 men  265 size min 23 med 28 max 31 partial 1 | known  256 home  81.6% | low half home  87.2% | whole(>=20) 10 known 256 home  81.6%
+now     aleague         New Zealand    clubs  2 men   45 size min 21 med 24 max 24 partial 0 | known   43 home  74.4% | low half home  81.0% | whole(>=20) 2 known 43 home  74.4%
+now     serieb          Italy          clubs 20 men   78 size min 0 med 3 max 12 partial 18 | known   78 home  65.4% | low half home  75.0% | whole(>=20) 0 known 0 home     -%
+now     ligue2          France         clubs 18 men   49 size min 0 med 1 max 13 partial 15 | known   49 home  44.9% | low half home  30.0% | whole(>=20) 0 known 0 home     -%
+now     segunda         Spain          clubs 20 men   48 size min 0 med 2 max 10 partial 18 | known   48 home  64.6% | low half home  71.4% | whole(>=20) 0 known 0 home     -%
+now     russia          Russia         clubs 16 men  403 size min 21 med 25 max 33 partial 0 | known  402 home  66.2% | low half home  77.4% | whole(>=20) 16 known 402 home  66.2%
+era2020 premier2020     England        clubs 20 men  442 size min 14 med 23 max 28 partial 0 | known  442 home  29.9% | low half home  31.7% | whole(>=20) 16 known 375 home  28.3%
+era2020 laliga2020      Spain          clubs 20 men  329 size min 4 med 19 max 24 partial 0 | known  329 home  59.0% | low half home  62.7% | whole(>=20) 9 known 201 home  55.7%
+era2020 seriea2020      Italy          clubs 20 men  358 size min 3 med 19 max 27 partial 0 | known  358 home  36.0% | low half home  38.2% | whole(>=20) 9 known 206 home  33.5%
+era2020 bundesliga2020  Germany        clubs 18 men  325 size min 4 med 18 max 28 partial 0 | known  325 home  36.9% | low half home  41.4% | whole(>=20) 6 known 141 home  30.5%
+era2020 ligue12020      France         clubs 20 men  320 size min 10 med 17 max 24 partial 0 | known  320 home  39.1% | low half home  42.3% | whole(>=20) 3 known 67 home  38.8%
+era2015 premier2015     England        clubs 20 men  441 size min 12 med 22 max 30 partial 0 | known  441 home  28.3% | low half home  31.3% | whole(>=20) 18 known 411 home  28.5%
+era2015 laliga2015      Spain          clubs 20 men  355 size min 5 med 19 max 25 partial 0 | known  355 home  58.9% | low half home  65.3% | whole(>=20) 8 known 169 home  51.5%
+era2015 seriea2015      Italy          clubs 20 men  318 size min 4 med 15 max 25 partial 0 | known  317 home  38.2% | low half home  38.6% | whole(>=20) 7 known 155 home  31.0%
+era2015 bundesliga2015  Germany        clubs 18 men  292 size min 7 med 17 max 23 partial 0 | known  292 home  43.8% | low half home  44.3% | whole(>=20) 6 known 126 home  43.7%
+era2015 ligue12015      France         clubs 20 men  253 size min 2 med 14 max 21 partial 0 | known  253 home  43.9% | low half home  43.5% | whole(>=20) 2 known 41 home  41.5%
+era2010 premier2010     England        clubs 20 men  424 size min 6 med 21 max 35 partial 0 | known  424 home  31.6% | low half home  28.2% | whole(>=20) 15 known 350 home  29.7%
+era2010 laliga2010      Spain          clubs 20 men  383 size min 10 med 19 max 30 partial 0 | known  383 home  59.0% | low half home  66.0% | whole(>=20) 9 known 212 home  54.2%
+era2010 seriea2010      Italy          clubs 20 men  314 size min 3 med 16 max 23 partial 0 | known  314 home  52.9% | low half home  56.3% | whole(>=20) 5 known 110 home  45.5%
+era2010 bundesliga2010  Germany        clubs 18 men  311 size min 11 med 18 max 22 partial 0 | known  311 home  42.1% | low half home  47.0% | whole(>=20) 4 known 83 home  41.0%
+era2010 ligue12010      France         clubs 20 men  319 size min 8 med 17 max 21 partial 0 | known  319 home  48.6% | low half home  44.2% | whole(>=20) 3 known 62 home  45.2%
+era2005 premier2005     England        clubs 20 men  420 size min 12 med 21 max 29 partial 0 | known  420 home  35.5% | low half home  36.8% | whole(>=20) 13 known 306 home  32.7%
+era2005 laliga2005      Spain          clubs 20 men  340 size min 1 med 19 max 27 partial 0 | known  340 home  58.5% | low half home  69.7% | whole(>=20) 7 known 155 home  55.5%
+era2005 seriea2005      Italy          clubs 20 men  294 size min 6 med 15 max 23 partial 0 | known  294 home  62.6% | low half home  62.9% | whole(>=20) 3 known 67 home  41.8%
+era2005 bundesliga2005  Germany        clubs 18 men  332 size min 12 med 18 max 25 partial 0 | known  332 home  46.7% | low half home  50.9% | whole(>=20) 7 known 149 home  43.0%
+era2005 ligue12005      France         clubs 20 men  341 size min 3 med 20 max 23 partial 0 | known  341 home  48.1% | low half home  50.3% | whole(>=20) 10 known 209 home  46.9%
+Al-Hilal: 16 men: Martinelli:Brazil, Summerville:Netherlands, Watkins:England, Hernández:France, Núñez:Uruguay, Neves:Portugal, Malcom:Brazil, Leonardo:Brazil, Meïté:Cote d'Ivoire, Mitrović:Serbia, Bouabré:France, Milinković-Savić:Serbia, Akçiçek:Türkiye, Koulibaly:Senegal, Bounou:Morocco, Al-Harbi:Saudi Arabia
+Al-Ittihad: 10 men: Ríos:Colombia, Fernandes:Portugal, Ilenikhena:Nigeria, Simić:Serbia, Bergwijn:Netherlands, Doumbia:Mali, Aouar:Algeria, Rajković:Serbia, Benzema:France, Pereira:Portugal
+Al-Nassr: 14 men: Félix:Portugal, Coman:France, Simakan:France, Costa:Portugal, Ângelo:Brazil, Ronaldo:Portugal, Bento:Brazil, Mané:Senegal, Martínez:Spain, Yahya:Saudi Arabia, Boushal:Saudi Arabia, Al-Ghannam:Saudi Arabia, Ghareeb:Saudi Arabia, Haqawi:Saudi Arabia
+Celtic: 19 men: Nygren:Sweden, Carter-Vickers:United States, Jota:Portugal, Johnston:Canada, Tierney:Scotland, Sørensen:Denmark, Trusty:United States, Yang:Korea, South, Scales:Ireland, Balikwisha:DR Congo, Baur:Germany, Bernardo:Portugal, Palma:Honduras, Johnstone:England, McGregor:Scotland, Ralston:Scotland, Saracchi:Uruguay, Oxlade-Chamberlain:England, Sinisalo:Finland
+Rangers: 18 men: Raskin:Belgium, Bouanani:Algeria, Fernandez:Nigeria, Chermiti:Portugal, Gassama:Mauritania, Diomandé:Cote d'Ivoire, Neil:England, Nedeljkovic:Serbia, Chukwuani:Denmark, Godfrey:England, Rommens:Belgium, Cornelius:Canada, Pandur:Croatia, Antman:Finland, Sterling:England, Bajrami:Albania, Aasgaard:Norway, Curtis:Scotland
+Olympiacos: 18 men: Bailey:Jamaica, Hezze:Argentina, Silva:Portugal, Pirola:Italy, Carmo:Angola, Ortega:Argentina, Retsos:Greece, Kaabi:Morocco, Chiquinho:Portugal, Podence:Portugal, Taremi:Iran, Nascimento:Portugal, Yazıcı:Türkiye, Scipioni:Argentina, Onyemaechi:Nigeria, Martins:Portugal, Saliakas:Greece, Koutsogoulas:Greece
+Toronto FC: 8 men: Mihailovic:United States, Cifuentes:Ecuador, Morgan:Scotland, Dorsch:Germany, Sallói:Hungary, Pereira:?, Corbeanu:Canada, Henry:Canada
+Inter Miami: 16 men: Paul:Argentina, Berterame:Mexico, Messi:Argentina, Casemiro:Brazil, Allende:Argentina, Segovia:Venezuela, Rodríguez:Argentina, Clair:Canada, Micael:Brazil, Reguilón:Spain, Ayala:Argentina, Bright:Italy, Mura:Argentina, Allen:Greece, Weigandt:Argentina, Plambeck:United States
+Cardiff City: 4 men: Salech:Denmark, Ng:England, O'Dowda:Ireland, Trott:England
+Swansea City: 14 men: Vipotnik:Slovenia, Yalcouyé:Cote d'Ivoire, Nunes:Brazil, Monga:England, Cabango:Wales, Idah:Ireland, Inoussa:Sweden, Tymon:England, Franco:Portugal, Walta:Finland, Cullen:Wales, Stamenić:New Zealand, Ronald:Brazil, Cooper:Wales
+Wrexham: 13 men: Patterson:England, Doyle:England, Cleworth:England, Broadhead:Wales, Sheaf:England, O'Brien:England, Worrall:England, Kaboré:Burkina Faso, Okonkwo:Nigeria, Cacace:New Zealand, Longman:England, McClean:Ireland, Ward:Wales

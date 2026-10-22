@@ -1,0 +1,2 @@
+thin15 exit=0 1s | era2005 ligue12005      France         clubs 20 men  341 size min 3 med 20 max 23 partial 0 | known  341 home  48.1% | low half home  50.3% | whole(>=15) 16 known 312 hom
+thin exit=0 1s | Wrexham: 13 men: Patterson:England, Doyle:England, Cleworth:England, Broadhead:Wales, Sheaf:England, O'Brien:England, Worrall:England, Kaboré:Burkina Faso, Okonkwo:Niger
