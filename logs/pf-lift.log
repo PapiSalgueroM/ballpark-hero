@@ -1,0 +1,9 @@
+  FAIL     /stadium-tycoon 320x640: dialog "How Stadium Tycoon works" (static) -20 to 283, "Let's go" (its go label) 214 to 262 sits in a dialog whose top is 20 px above the screen, so its heading and close are out of reach, banner 335 to 640 (pending)
+  FAIL     /stadium-tycoon 390x844: dialog "How Stadium Tycoon works" (static) -20 to 559, "Let's go" (its go label) 490 to 538 sits in a dialog whose top is 20 px above the screen, so its heading and close are out of reach, banner 611 to 844 (pending)
+  FAIL     /stadium-tycoon 1280x900: dialog "How Stadium Tycoon works" (static) -20 to 683, "Let's go" (its go label) 614 to 662 sits in a dialog whose top is 20 px above the screen, so its heading and close are out of reach, banner 735 to 900 (pending)
+  FAIL     /stadium-tycoon#away 320x640: dialog "While you were away" (static) -20 to 283, "Back to work" (its primary style) 214 to 258 sits in a dialog whose top is 20 px above the screen, so its heading and close are out of reach, banner 335 to 640 (pending)
+  FAIL     /stadium-tycoon#away 390x844: dialog "While you were away" (static) -20 to 445, "Back to work" (its primary style) 376 to 420 sits in a dialog whose top is 20 px above the screen, so its heading and close are out of reach, banner 611 to 844 (pending)
+  FAIL     /stadium-tycoon#away 1280x900: dialog "While you were away" (static) -20 to 429, "Back to work" (its primary style) 360 to 404 sits in a dialog whose top is 20 px above the screen, so its heading and close are out of reach, banner 735 to 900 (pending)
+
+6 route widths walked over 1 routes and 1 seeded scene (3 of the lines): 0 dialogs tapped and closed, 0 expected site reds, 0 without a first visit dialog, 6 red
+playFirstVisitDialogs: PLAYFIRST_CONTROL=lift FIRED. 6 of 6 moved dialogs read red for the check it targets

@@ -1,0 +1,9 @@
+  FAIL     /stadium-tycoon 320x640: dialog "How Stadium Tycoon works" (static) 16 to 319, "Let's go" (its go label) 250 to 298 is not tappable: at its centre the control, banner 335 to 640 (pending)
+  FAIL     /stadium-tycoon 390x844: dialog "How Stadium Tycoon works" (static) 16 to 595, "Let's go" (its go label) 526 to 574 is not tappable: at its centre the control, banner 611 to 844 (pending)
+  FAIL     /stadium-tycoon 1280x900: dialog "How Stadium Tycoon works" (static) 16 to 719, "Let's go" (its go label) 650 to 698 is not tappable: at its centre the control, banner 735 to 900 (pending)
+  FAIL     /stadium-tycoon#away 320x640: dialog "While you were away" (static) 16 to 319, "Back to work" (its primary style) 250 to 294 is not tappable: at its centre the control, banner 335 to 640 (pending)
+  FAIL     /stadium-tycoon#away 390x844: dialog "While you were away" (static) 73 to 538, "Back to work" (its primary style) 469 to 513 is not tappable: at its centre the control, banner 611 to 844 (pending)
+  FAIL     /stadium-tycoon#away 1280x900: dialog "While you were away" (static) 143 to 592, "Back to work" (its primary style) 523 to 567 is not tappable: at its centre the control, banner 735 to 900 (pending)
+
+6 route widths walked over 1 routes and 1 seeded scene (3 of the lines): 0 dialogs tapped and closed, 0 expected site reds, 0 without a first visit dialog, 6 red
+playFirstVisitDialogs: PLAYFIRST_CONTROL=cover FIRED. 6 of 6 dialog buttons read as covered and the walk is red

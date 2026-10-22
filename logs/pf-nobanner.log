@@ -1,0 +1,9 @@
+  NOBANNER /stadium-tycoon 320x640: the cookie banner never came on screen, so this line measured nothing
+  NOBANNER /stadium-tycoon 390x844: the cookie banner never came on screen, so this line measured nothing
+  NOBANNER /stadium-tycoon 1280x900: the cookie banner never came on screen, so this line measured nothing
+  NOBANNER /stadium-tycoon#away 320x640: the cookie banner never came on screen, so this line measured nothing
+  NOBANNER /stadium-tycoon#away 390x844: the cookie banner never came on screen, so this line measured nothing
+  NOBANNER /stadium-tycoon#away 1280x900: the cookie banner never came on screen, so this line measured nothing
+
+6 route widths walked over 1 routes and 1 seeded scene (3 of the lines): 0 dialogs tapped and closed, 0 expected site reds, 0 without a first visit dialog, 0 red
+playFirstVisitDialogs: PLAYFIRST_CONTROL=nobanner FIRED. 6 of 6 route widths with the banner hidden were refused as measuring nothing
