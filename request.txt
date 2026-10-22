@@ -1,0 +1,2 @@
+#!playwright
+mutfinal: bash .rc/x/mutRun1539.sh final 4232 .rc/x/mutFinal1539.mjs 'ONLY=/stadium-tycoon node scripts/playFirstVisitDialogs.mjs'
