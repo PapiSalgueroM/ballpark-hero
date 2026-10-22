@@ -1619,9 +1619,9 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
   {
     id: 'puzzle-136',
     groups: [
-      { category: 'Won the 2026 Champions League', players: ['Lamine Yamal', 'Pedri', 'Raphinha', 'Robert Lewandowski'], difficulty: 'easy' },
+      { category: 'Played for Barcelona in 2025-26', players: ['Lamine Yamal', 'Pedri', 'Raphinha', 'Robert Lewandowski'], difficulty: 'easy' },
       { category: 'From Ukraine', players: ['Oleksandr Zinchenko', 'Mykhailo Mudryk', 'Andriy Shevchenko', 'Viktor Tsygankov'], difficulty: 'medium' },
-      { category: 'Played for both Liverpool and Napoli', players: ['Fernando Llorente', 'Allan', 'Dries Mertens', 'Lorenzo Insigne'], difficulty: 'hard' },
+      { category: 'Played for Napoli in 2025-26', players: ['Scott McTominay', 'Kevin De Bruyne', 'Stanislav Lobotka', 'Giovanni Di Lorenzo'], difficulty: 'hard' },
       { category: 'Won the Puskas Award', players: ['Cristiano Ronaldo', 'Neymar Jr', 'Zlatan Ibrahimović', 'Wendell Lira'], difficulty: 'insane' },
     ],
   },

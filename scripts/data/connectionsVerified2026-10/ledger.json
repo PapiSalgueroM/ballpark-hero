@@ -6,6 +6,7 @@
     "refuted: claims two hosts show false. None may appear on any board again.",
     "adjudicated: findings of the cross check that are wrong about the world (a namesake in the site's tables, a gap in the career tables), each with its reason.",
     "owed: findings of the cross check on boards this round did not rebuild. Part B of the round clears them; the list may only shrink.",
+    "datedOwed: groups whose label names a year from 2020 on (\"Won 2024 Euros with Spain\", \"Played for Napoli (2020s)\") that nothing holds to that year yet. Part B checks each on two hosts or retires it; the list may only shrink. puzzle-136 said \"Won the 2026 Champions League\" over four Barcelona men, and PSG won that final.",
     "Wikipedia and every other wiki are never a source here.",
     "uncheckedCeiling: the groups on the shipped boards that nothing judges yet (no checker, no ledger entry). It may only fall; part B ledgers them and lowers it.",
     "rebuilt: boards this round rebuilt whole; every group on them is checked and no finding on them may be owed.",
@@ -188,8 +189,6 @@
     "puzzle-123 | not-a-member | Edinson Cavani | Played for PSG and Chelsea",
     "puzzle-123 | not-a-member | Mauro Icardi | Played for PSG and Chelsea",
     "puzzle-131 | not-a-member | Carlos Tévez | Played for PSG and Manchester City",
-    "puzzle-136 | not-a-member | Dries Mertens | Played for both Liverpool and Napoli",
-    "puzzle-136 | not-a-member | Lorenzo Insigne | Played for both Liverpool and Napoli",
     "puzzle-137 | not-a-member | Andrea Pirlo | Played for both AC Milan and Inter Milan",
     "puzzle-138 | not-a-member | Karim Benzema | Won the Ballon d'Or in the 2010s",
     "puzzle-138 | not-a-member | Mamadou Diallo | From Guinea",
@@ -200,7 +199,7 @@
     "puzzle-211 | second-fit | Luis Suarez | From Colombia | listed under From Uruguay",
     "puzzle-229 | second-fit | Luis Suarez | From Colombia | listed under From Uruguay"
   ],
-  "uncheckedCeiling": 304,
+  "uncheckedCeiling": 303,
   "rebuilt": ["puzzle-1", "puzzle-3", "puzzle-4", "puzzle-5", "puzzle-6", "puzzle-10", "puzzle-11", "puzzle-12", "puzzle-151"],
   "players": {
     "Fabinho": {
@@ -237,5 +236,6 @@
         }
       ]
     }
-  }
+  },
+  "datedOwed": ["puzzle-89 | Played for AC Milan (2020s)", "puzzle-91 | Played in the 2022 World Cup Final", "puzzle-95 | Played for Napoli (2020s)", "puzzle-97 | Played for Borussia Dortmund (2020s)", "puzzle-99 | Played for Juventus (2020s)", "puzzle-108 | Won the Carabao Cup (2020s)", "puzzle-113 | Won the Scudetto with AC Milan (2020s)", "puzzle-119 | Played for PSG (2020s)", "puzzle-127 | Premier League Golden Boot (2020s)", "puzzle-141 | Won 2024 Euros with Spain", "puzzle-149 | Won the 2022 World Cup with Argentina"]
 }

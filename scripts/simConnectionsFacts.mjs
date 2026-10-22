@@ -12,7 +12,12 @@
  * Sections:
  *   1) no group claims the present: a dated group names a past season in
  *      the past tense ("Played for Bayern Munich in 2025-26"), and no label
- *      says Current, now or this season, because a saved board outlives it
+ *      says Current, now or this season, because a saved board outlives it.
+ *      A label naming a year from 2020 on, or the 2020s, is a dated claim
+ *      too: it passes only as a stamped shape the checker holds, a group the
+ *      ledger writes out on two hosts, or an entry of the ledger's
+ *      "datedOwed" (part B's list, which may only shrink). puzzle-136 said
+ *      "Won the 2026 Champions League" over four Barcelona men; PSG won it
  *   2) no refuted claim is on any board (scripts/data/connectionsVerified2026-10/ledger.json
  *      "refuted": a claim two hosts show false, such as Wayne Rooney in a
  *      treble group)
@@ -40,6 +45,8 @@
  *                         of puzzle-1, which carries a Ballon d'Or group: section 4
  *                         must report him as a second answer
  *   CONN_CONTROL=current  writes "Current" back into a dated group (section 1)
+ *   CONN_CONTROL=bareyear writes "Won the 2026 Champions League" back over
+ *                         puzzle-136's Barcelona men (section 1)
  *
  * Run: node scripts/simConnectionsFacts.mjs
  */
@@ -124,6 +131,11 @@ if (CONTROL) {
     const b = boardById('puzzle-76');
     const g = b?.groups.find(x => x.category === 'Played for Arsenal in 2025-26');
     if (g) { g.category = 'Current Arsenal stars (2025-26)'; changed = true; }
+  } else if (CONTROL === 'bareyear') {
+    /* the label puzzle-136 carried before this round, on the four Barcelona men: a bare year nothing holds */
+    const b = boardById('puzzle-136');
+    const g = b?.groups.find(x => x.category === 'Played for Barcelona in 2025-26');
+    if (g) { g.category = 'Won the 2026 Champions League'; changed = true; }
   } else {
     console.error(`unknown CONN_CONTROL=${CONTROL}`);
     process.exit(2);
@@ -144,16 +156,34 @@ const hostsOk = sources => {
 console.log('1) no group claims the present');
 {
   const PRESENT = /\bcurrent\b|\bnow\b|this season|present day|\bactive\b/i;
+  const SEASON = /(19|20)[0-9]{2}-[0-9]{2}/;
+  /* a year from 2020 on, or the 2020s: "Won the 2026 Champions League" was written before that final and named the wrong club */
+  const RECENT = /(^|[^0-9])20[2-9][0-9]/;
+  const ledgeredGroups = new Set((ledger.groups ?? []).map(lg => `${lg.id} | ${lg.category}`));
+  const datedOwed = new Set(ledger.datedOwed ?? []);
+  const datedSeen = new Set();
   let n = 0;
   for (const b of boards) for (const g of b.groups) {
-    if (PRESENT.test(g.category)) { n += 1; fail(`${b.id}: "${g.category}" claims the present, and a saved board outlives it; stamp a past season`); }
-    /* a season in a label is a claim about that season: only the stamped shapes the checker can hold to a squad pass */
-    else if (/(19|20)[0-9]{2}-[0-9]{2}/.test(g.category)) {
-      const c = soccer.criterion(g.category);
-      if (!c || (c.kind !== 'clubSeason' && c.kind !== 'leagueSeason')) { n += 1; fail(`${b.id}: "${g.category}" names a season in a shape nothing holds to that season's squad`); }
-    }
+    if (PRESENT.test(g.category)) { n += 1; fail(`${b.id}: "${g.category}" claims the present, and a saved board outlives it; stamp a past season`); continue; }
+    const season = SEASON.test(g.category);
+    if (!season && !RECENT.test(g.category)) continue;
+    /* a dated label is a claim about that time: the stamped shapes the checker holds to a squad pass */
+    const c = soccer.criterion(g.category);
+    if (c && (c.kind === 'clubSeason' || c.kind === 'leagueSeason')) continue;
+    const key = `${b.id} | ${g.category}`;
+    /* so does a group the ledger writes out member by member (section 3 holds it to two hosts) */
+    if (ledgeredGroups.has(key)) continue;
+    /* and a recent year group part B has not checked yet, from a list that may only shrink */
+    if (!season && datedOwed.has(key) && !process.env.CONN_LIVE) { datedSeen.add(key); continue; }
+    n += 1;
+    fail(season
+      ? `${b.id}: "${g.category}" names a season in a shape nothing holds to that season's squad`
+      : `${b.id}: "${g.category}" names a year from 2020 on and nothing holds the group to it: stamp a season the checker holds, write the group out in the ledger on two hosts, or retire it`);
   }
-  console.log(`   ${n} present tense or unstamped season labels`);
+  if (!process.env.CONN_LIVE && !CONTROL) {
+    for (const key of datedOwed) if (!datedSeen.has(key)) fail(`datedOwed "${key}" is no longer on a board: take it off the list so it cannot come back`);
+  }
+  console.log(`   ${n} present tense, unstamped season or unheld recent year labels; ${datedSeen.size} recent year groups owed to part B`);
 }
 
 console.log('2) no refuted claim is on a board');
