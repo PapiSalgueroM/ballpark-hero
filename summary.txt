@@ -1,0 +1,7 @@
+feederholds exit=1 15s | simLiveSimMotion: control feederholds turned "R11" red on an assertion (1 failed), as it must.
+pinoff exit=1 13s | simLiveSimMotion: control pinoff turned "R11" red on an assertion (1 failed), as it must.
+facing exit=1 13s | simLiveSimMotion: control facing turned "R11" red on an assertion (1 failed), as it must.
+reducedlift exit=3 7s | simLiveSimMotion: control reducedlift did NOT behave: vitest exit 0, 0 failed, 1 passed.
+cueheld exit=1 13s | simLiveSimMotion: control cueheld turned "R11" red on an assertion (1 failed), as it must.
+motion exit=1 83s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/liveSimMotion.test.tsx,title=src/test/liveSimMotion.test.tsx > Round 1521%3A the live match looks like
+tsc exit=0 91s | 

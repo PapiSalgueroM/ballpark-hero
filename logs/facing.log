@@ -1,0 +1,105 @@
+Negative control changed temporary source: facing
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ ↓ src/test/liveSimMotion.test.tsx > Live simcast motion > settlement ID comparison rejects changed payloads, retained IDs and allocator prefixes
+ ↓ src/test/liveSimMotion.test.tsx > Live simcast motion > the committed action puts goals in the correct net and saves at the keeper
+ ↓ src/test/liveSimMotion.test.tsx > Live simcast motion > actual feed triggers player strikes, ball flight, saves and net contact
+ ↓ src/test/liveSimMotion.test.tsx > Live simcast motion > pause freezes the ball and player pose, and the same player still opens changes
+ ↓ src/test/liveSimMotion.test.tsx > Live simcast motion > motion leaves committed state and settled results identical
+ ↓ src/test/liveSimMotion.test.tsx > Live simcast motion > a substitution during a paused action replaces the clickable player immediately
+ ↓ src/test/liveSimMotion.test.tsx > Live simcast motion > speed changes scale action time with the match clock
+ ↓ src/test/liveSimMotion.test.tsx > Live simcast motion > reduced motion shows the committed catch immediately without animated poses
+ ↓ src/test/liveSimMotion.test.tsx > Live simcast motion > terminal goal and save contact precede the unchanged whistle and score (45 'goal' reduced=false)
+ ↓ src/test/liveSimMotion.test.tsx > Live simcast motion > terminal goal and save contact precede the unchanged whistle and score (45 'goal' reduced=true)
+ ↓ src/test/liveSimMotion.test.tsx > Live simcast motion > terminal goal and save contact precede the unchanged whistle and score (45 'save' reduced=false)
+ ↓ src/test/liveSimMotion.test.tsx > Live simcast motion > terminal goal and save contact precede the unchanged whistle and score (45 'save' reduced=true)
+ ↓ src/test/liveSimMotion.test.tsx > Live simcast motion > terminal goal and save contact precede the unchanged whistle and score (90 'goal' reduced=false)
+ ↓ src/test/liveSimMotion.test.tsx > Live simcast motion > terminal goal and save contact precede the unchanged whistle and score (90 'goal' reduced=true)
+ ↓ src/test/liveSimMotion.test.tsx > Live simcast motion > terminal goal and save contact precede the unchanged whistle and score (90 'save' reduced=false)
+ ↓ src/test/liveSimMotion.test.tsx > Live simcast motion > terminal goal and save contact precede the unchanged whistle and score (90 'save' reduced=true)
+ ↓ src/test/liveSimMotion.test.tsx > Live simcast motion > terminal resume shows contact and Skip keeps immediate exactly-once whistle callbacks
+ ↓ src/test/liveSimMotion.test.tsx > Live simcast motion > a tactics redraw cancels a terminal action that is no longer committed
+ ↓ src/test/liveSimMotion.test.tsx > Live simcast motion > the ninetieth minute asks the latest save: refused means full time, never thirty empty minutes
+ ↓ src/test/liveSimMotion.test.tsx > Live simcast motion > the ninetieth minute asks the latest save: extra time drawn there is played, whatever this render was given
+ ↓ src/test/liveSimMotion.test.tsx > Live simcast motion > the extra time banner says what is true: a second leg is level on aggregate
+ ↓ src/test/liveSimMotion.test.tsx > Live simcast motion > the clock runs into the board as 90 plus, with the running aggregate under the score
+ ↓ src/test/liveSimMotion.test.tsx > Live simcast motion > a goal in the board is announced with its plus, GOAL! ... 90+N
+ ↓ src/test/liveSimMotion.test.tsx > Live simcast motion > the extra time clock runs into its own board as ET 120 plus
+ ↓ src/test/liveSimMotion.test.tsx > The pitch part on real feeds > the material is 200 half feeds from five clubs in five leagues
+ ↓ src/test/liveSimMotion.test.tsx > The pitch part on real feeds > R1: the ball is in the goal mouth on goals only
+ ↓ src/test/liveSimMotion.test.tsx > The pitch part on real feeds > R2: nobody stands on a team mate
+ ↓ src/test/liveSimMotion.test.tsx > The pitch part on real feeds > R3: at a kick off each side is in its own half, far from the other keeper
+ ↓ src/test/liveSimMotion.test.tsx > The pitch part on real feeds > R4: the block follows the ball
+ ↓ src/test/liveSimMotion.test.tsx > The pitch part on real feeds > R5: nothing is decided here
+ ↓ src/test/liveSimMotion.test.tsx > The pitch part on real feeds > R6: a chance starts with the ball at the shooter and ends in its follow up
+ ↓ src/test/liveSimMotion.test.tsx > The pitch part on real feeds > R7: every dead ball is taken by the right side from the right place
+ ↓ src/test/liveSimMotion.test.tsx > The pitch part on real feeds > R8: the pitch is handed the right kick off and the right share of the ball
+ ↓ src/test/liveSimMotion.test.tsx > The pitch part on real feeds > R9: a goal gets its kick off before the next chance is led in
+ ↓ src/test/liveSimMotion.test.tsx > Round 1521: the live match looks like football > R10: the ball travels with height and lands at its man, and every chance rises and comes down in the right net
+stdout | src/test/liveSimMotion.test.tsx > Round 1521: the live match looks like football > R11: every foul the plan stages is seen at its own place, on the right two men, with only the card the feed gave
+[1521 R11] foul lines staged 2002, with their cue 1043 (0.521; per seed 0.527 0.520 0.535 0.515 0.508), of them waiting inside their minute 390, held over their spot through the free kick 1043 (offenders 0; the man it names by the spot through it 861, away from it 0), the man fouled of the line the fouler faces: read 861, offenders 581, under a stretch that outranks them 959, with no such reason 30; cue offenders 0; named on the grass 861, meetings read 1307, apart 0; cards in the feed 260, carded cues 152, card offenders 0; fouls the stats count 2016 (at the whistle itself 14), halves where the feed and the stats differ 0 | the foul at 58 (line 8) has no cue, and 58.24 to 58.62 was free: y7@57.52-58.00 f9@58.00-58.24 a10@58.24-58.62 c10@58.62-60.05 | the foul at 16 (line 18) has no cue, and 16.24 to 16.62 was free: y16@15.38-15.86 b20@15.86-16.00 f19@16.00-16.24 a20@16.24-16.62 c20@16.62-18.05 | the foul at 62 (line 14) has no cue, and 62.24 to 62.62 was free: o41@61.58-62.00 f15@62.00-62.24 a17@62.24-62.62 c17@62.62-64.05 | the foul at 78 (line 34) has no cue, and 78.24 to 78.62 was free: o83@77.54-77.86 b36@77.86-78.00 f35@78.00-78.24 a36@78.24-78.62 c36@78.62-80.05
+
+ × src/test/liveSimMotion.test.tsx > Round 1521: the live match looks like football > R11: every foul the plan stages is seen at its own place, on the right two men, with only the card the feed gave 7850ms
+   → expected 30 to be +0 // Object.is equality
+ ↓ src/test/liveSimMotion.test.tsx > Round 1521: the live match looks like football > R12: an attack builds by lines, more directly the more attacking the side, and goes back only as a reset
+ ↓ src/test/liveSimMotion.test.tsx > Round 1521 by hand, and through the viewer > R10 by hand: a pass on the grass stays on it, a long ball and a cross rise and land, and a shot carries higher the further out it is struck
+ ↓ src/test/liveSimMotion.test.tsx > Round 1521 by hand, and through the viewer > R13: every figure is his own generic person, a keyed draw from his id and never from his name or nationality
+ ↓ src/test/liveSimMotion.test.tsx > Round 1521 by hand, and through the viewer > the viewer leans my side the way my mentality says: attacking 1, balanced 0, defensive -1, from kick off and after a change of shape
+ ↓ src/test/liveSimMotion.test.tsx > Round 1521 by hand, and through the viewer > the viewer draws each man in his own look, the two keepers apart, and a renamed man the same
+ ↓ src/test/liveSimMotion.test.tsx > Round 1521 by hand, and through the viewer > the ball leaves the grass on a chance, its element staying where it always was, and never under reduced motion
+ ↓ src/test/liveSimMotion.test.tsx > Round 1521 by hand, and through the viewer > a foul is seen at its minute: the whistle and the name over its spot, and the ball goes up only when it should
+ ↓ src/test/liveSimMotion.test.tsx > The goal sequence > the score waits for the ball and the card lands at net contact
+ ↓ src/test/liveSimMotion.test.tsx > The goal sequence > the card's season count is the settled count
+ ↓ src/test/liveSimMotion.test.tsx > The goal sequence > after Skip the second half opens on the right score, with no card and nothing replayed
+ ↓ src/test/liveSimMotion.test.tsx > The goal sequence > nothing says GOAL before the ball is in: not the list beside the pitch, not the line under it
+ ↓ src/test/liveSimMotion.test.tsx > The goal sequence > no frame draws the new score before the ball is in
+ ↓ src/test/liveSimMotion.test.tsx > The goal sequence > a goal with the last kick of a period takes nothing off the score while it winds up
+ ↓ src/test/liveSimMotion.test.tsx > The goal sequence > a line fired late by Skip is not played again when extra time starts
+ ↓ src/test/liveSimMotion.test.tsx > The goal sequence > under reduced motion the card is held for its first stretch only, and then the match runs on
+ ↓ src/test/liveSimMotion.test.tsx > The goal sequence > a substitution in a goal's wind up takes the card with the action, and the score stops waiting
+ ↓ src/test/liveSimMotion.test.tsx > The goal sequence > a goal still on its way when the line up changes off the clock keeps its net, its card and its men
+ ↓ src/test/liveSimMotion.test.tsx > The goal sequence > a scorer card counts his goals up to this one, and gives a season count only to one of mine
+ ↓ src/test/liveSimMotion.test.tsx > Match mode > a name goes above its figure when another man stands just under him
+ ↓ src/test/liveSimMotion.test.tsx > Match mode > Back folds the match to a card and pauses it, and the card puts it back
+ ↓ src/test/liveSimMotion.test.tsx > Match mode > one panel at a time, and Escape closes what is open before it is Back
+ ↓ src/test/liveSimMotion.test.tsx > Match mode > the stats line a phone keeps in view reads the same count as the full stats
+ ↓ src/test/liveSimMotion.test.tsx > Match mode > away from home the score, the names either side of it and the stats read home side first (Round 1340)
+ ↓ src/test/liveSimMotion.test.tsx > Match mode > level neighbours take a row each, and a wall shows numbers
+ ↓ src/test/liveSimMotion.test.tsx > Match mode > at full time the folded card offers the report as well as the way back
+ ↓ src/test/liveSimMotion.test.tsx > Match mode > a phone on its side gets the pitch on its side
+ ↓ src/test/liveSimMotion.test.tsx > The part and a change of line up > the part drops an action when the line up under it changes
+ ↓ src/test/liveSimMotion.test.tsx > The part and a change of line up > a chance whose line fires in the very commit the line up changes is still played, by the new eleven
+ ↓ src/test/liveSimMotion.test.tsx > The part and an action taken back > the part drops an action the binder has taken back, even with the clock set back before its start
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 64 skipped (65)
+   Start at  09:15:27
+   Duration  12.34s (transform 2.78s, setup 104ms, collect 3.55s, tests 7.85s, environment 349ms, prepare 147ms)
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/liveSimMotion.test.tsx > Round 1521: the live match looks like football > R11: every foul the plan stages is seen at its own place, on the right two men, with only the card the feed gave
+AssertionError: expected 30 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 30
+
+ ❯ src/test/liveSimMotion.test.tsx:1569:48
+    1567|     /* Every foul whose minute has room is whistled on the grass (no h…
+    1568|        the chances leave, per seed over R11_CUED. */
+    1569|     expect(totals1521(t => t.hiddenOffenders)).toBe(0);
+       |                                                ^
+    1570|     for (const t of m.looks) expect(t.cues / Math.max(1, t.fouls)).toB…
+    1571|     expect(totals1521(t => t.cueOffenders)).toBe(0);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+simLiveSimMotion: control facing turned "R11" red on an assertion (1 failed), as it must.
