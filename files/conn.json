@@ -1,0 +1,713 @@
+[
+ {
+  "route": "/connections",
+  "width": 320,
+  "height": 640,
+  "first": {
+   "controls": 9,
+   "rawHits": [],
+   "reachHits": [],
+   "detail": []
+  },
+  "closed": {
+   "controls": 9,
+   "rawHits": [],
+   "reachHits": [],
+   "detail": []
+  },
+  "taps": {
+   "Clear draft": null,
+   "Submit five": null
+  }
+ },
+ {
+  "route": "/baseball-connections",
+  "width": 320,
+  "height": 640,
+  "first": {
+   "controls": 31,
+   "rawHits": [],
+   "reachHits": [],
+   "detail": []
+  },
+  "closed": {
+   "controls": 31,
+   "rawHits": [],
+   "reachHits": [],
+   "detail": []
+  },
+  "taps": {
+   "Clear draft": null,
+   "Submit five": null
+  }
+ },
+ {
+  "route": "/nba-connections",
+  "width": 320,
+  "height": 640,
+  "first": {
+   "controls": 35,
+   "rawHits": [
+    "Michael Jordan over Clear draft",
+    "Kobe Bryant over Submit five"
+   ],
+   "reachHits": [],
+   "detail": [
+    {
+     "text": "Michael Jordan over Clear draft",
+     "a": {
+      "label": "Michael Jordan",
+      "reachablePct": 0
+     },
+     "b": {
+      "label": "Clear draft",
+      "reachablePct": 100
+     }
+    },
+    {
+     "text": "Kobe Bryant over Submit five",
+     "a": {
+      "label": "Kobe Bryant",
+      "reachablePct": 0
+     },
+     "b": {
+      "label": "Submit five",
+      "reachablePct": 100
+     }
+    }
+   ]
+  },
+  "closed": {
+   "controls": 35,
+   "rawHits": [
+    "Michael Jordan over Clear draft",
+    "Kobe Bryant over Submit five"
+   ],
+   "reachHits": [],
+   "detail": [
+    {
+     "text": "Michael Jordan over Clear draft",
+     "a": {
+      "label": "Michael Jordan",
+      "reachablePct": 0
+     },
+     "b": {
+      "label": "Clear draft",
+      "reachablePct": 100
+     }
+    },
+    {
+     "text": "Kobe Bryant over Submit five",
+     "a": {
+      "label": "Kobe Bryant",
+      "reachablePct": 0
+     },
+     "b": {
+      "label": "Submit five",
+      "reachablePct": 100
+     }
+    }
+   ]
+  },
+  "taps": {
+   "Clear draft": {
+    "hitsItself": true,
+    "hit": "Clear draft"
+   },
+   "Submit five": {
+    "hitsItself": true,
+    "hit": "Submit five"
+   },
+   "Michael Jordan": {
+    "hitsItself": true,
+    "hit": "Michael Jordan"
+   },
+   "Kobe Bryant": {
+    "hitsItself": true,
+    "hit": "Kobe Bryant"
+   }
+  }
+ },
+ {
+  "route": "/nfl-connections",
+  "width": 320,
+  "height": 640,
+  "first": {
+   "controls": 31,
+   "rawHits": [],
+   "reachHits": [],
+   "detail": []
+  },
+  "closed": {
+   "controls": 31,
+   "rawHits": [],
+   "reachHits": [],
+   "detail": []
+  },
+  "taps": {
+   "Clear draft": null,
+   "Submit five": null
+  }
+ },
+ {
+  "route": "/nhl-connections",
+  "width": 320,
+  "height": 640,
+  "first": {
+   "controls": 35,
+   "rawHits": [
+    "Evgeni Malkin over Clear draft",
+    "Mario Lemieux over Submit five"
+   ],
+   "reachHits": [],
+   "detail": [
+    {
+     "text": "Evgeni Malkin over Clear draft",
+     "a": {
+      "label": "Evgeni Malkin",
+      "reachablePct": 0
+     },
+     "b": {
+      "label": "Clear draft",
+      "reachablePct": 100
+     }
+    },
+    {
+     "text": "Mario Lemieux over Submit five",
+     "a": {
+      "label": "Mario Lemieux",
+      "reachablePct": 0
+     },
+     "b": {
+      "label": "Submit five",
+      "reachablePct": 100
+     }
+    }
+   ]
+  },
+  "closed": {
+   "controls": 35,
+   "rawHits": [
+    "Evgeni Malkin over Clear draft",
+    "Mario Lemieux over Submit five"
+   ],
+   "reachHits": [],
+   "detail": [
+    {
+     "text": "Evgeni Malkin over Clear draft",
+     "a": {
+      "label": "Evgeni Malkin",
+      "reachablePct": 0
+     },
+     "b": {
+      "label": "Clear draft",
+      "reachablePct": 100
+     }
+    },
+    {
+     "text": "Mario Lemieux over Submit five",
+     "a": {
+      "label": "Mario Lemieux",
+      "reachablePct": 0
+     },
+     "b": {
+      "label": "Submit five",
+      "reachablePct": 100
+     }
+    }
+   ]
+  },
+  "taps": {
+   "Clear draft": {
+    "hitsItself": true,
+    "hit": "Clear draft"
+   },
+   "Submit five": {
+    "hitsItself": true,
+    "hit": "Submit five"
+   },
+   "Evgeni Malkin": {
+    "hitsItself": true,
+    "hit": "Evgeni Malkin"
+   },
+   "Mario Lemieux": {
+    "hitsItself": true,
+    "hit": "Mario Lemieux"
+   }
+  }
+ },
+ {
+  "route": "/connections",
+  "width": 375,
+  "height": 812,
+  "first": {
+   "controls": 9,
+   "rawHits": [],
+   "reachHits": [],
+   "detail": []
+  },
+  "closed": {
+   "controls": 9,
+   "rawHits": [],
+   "reachHits": [],
+   "detail": []
+  },
+  "taps": {
+   "Clear draft": null,
+   "Submit five": null
+  }
+ },
+ {
+  "route": "/baseball-connections",
+  "width": 375,
+  "height": 812,
+  "first": {
+   "controls": 31,
+   "rawHits": [],
+   "reachHits": [],
+   "detail": []
+  },
+  "closed": {
+   "controls": 31,
+   "rawHits": [],
+   "reachHits": [],
+   "detail": []
+  },
+  "taps": {
+   "Clear draft": null,
+   "Submit five": null
+  }
+ },
+ {
+  "route": "/nba-connections",
+  "width": 375,
+  "height": 812,
+  "first": {
+   "controls": 35,
+   "rawHits": [
+    "Michael Jordan over Clear draft",
+    "Kobe Bryant over Submit five"
+   ],
+   "reachHits": [],
+   "detail": [
+    {
+     "text": "Michael Jordan over Clear draft",
+     "a": {
+      "label": "Michael Jordan",
+      "reachablePct": 0
+     },
+     "b": {
+      "label": "Clear draft",
+      "reachablePct": 100
+     }
+    },
+    {
+     "text": "Kobe Bryant over Submit five",
+     "a": {
+      "label": "Kobe Bryant",
+      "reachablePct": 0
+     },
+     "b": {
+      "label": "Submit five",
+      "reachablePct": 100
+     }
+    }
+   ]
+  },
+  "closed": {
+   "controls": 35,
+   "rawHits": [
+    "Michael Jordan over Clear draft",
+    "Kobe Bryant over Submit five"
+   ],
+   "reachHits": [],
+   "detail": [
+    {
+     "text": "Michael Jordan over Clear draft",
+     "a": {
+      "label": "Michael Jordan",
+      "reachablePct": 0
+     },
+     "b": {
+      "label": "Clear draft",
+      "reachablePct": 100
+     }
+    },
+    {
+     "text": "Kobe Bryant over Submit five",
+     "a": {
+      "label": "Kobe Bryant",
+      "reachablePct": 0
+     },
+     "b": {
+      "label": "Submit five",
+      "reachablePct": 100
+     }
+    }
+   ]
+  },
+  "taps": {
+   "Clear draft": {
+    "hitsItself": true,
+    "hit": "Clear draft"
+   },
+   "Submit five": {
+    "hitsItself": true,
+    "hit": "Submit five"
+   },
+   "Michael Jordan": {
+    "hitsItself": true,
+    "hit": "Michael Jordan"
+   },
+   "Kobe Bryant": {
+    "hitsItself": true,
+    "hit": "Kobe Bryant"
+   }
+  }
+ },
+ {
+  "route": "/nfl-connections",
+  "width": 375,
+  "height": 812,
+  "first": {
+   "controls": 31,
+   "rawHits": [],
+   "reachHits": [],
+   "detail": []
+  },
+  "closed": {
+   "controls": 31,
+   "rawHits": [],
+   "reachHits": [],
+   "detail": []
+  },
+  "taps": {
+   "Clear draft": null,
+   "Submit five": null
+  }
+ },
+ {
+  "route": "/nhl-connections",
+  "width": 375,
+  "height": 812,
+  "first": {
+   "controls": 35,
+   "rawHits": [
+    "Evgeni Malkin over Clear draft",
+    "Mario Lemieux over Submit five"
+   ],
+   "reachHits": [],
+   "detail": [
+    {
+     "text": "Evgeni Malkin over Clear draft",
+     "a": {
+      "label": "Evgeni Malkin",
+      "reachablePct": 0
+     },
+     "b": {
+      "label": "Clear draft",
+      "reachablePct": 100
+     }
+    },
+    {
+     "text": "Mario Lemieux over Submit five",
+     "a": {
+      "label": "Mario Lemieux",
+      "reachablePct": 0
+     },
+     "b": {
+      "label": "Submit five",
+      "reachablePct": 100
+     }
+    }
+   ]
+  },
+  "closed": {
+   "controls": 35,
+   "rawHits": [
+    "Evgeni Malkin over Clear draft",
+    "Mario Lemieux over Submit five"
+   ],
+   "reachHits": [],
+   "detail": [
+    {
+     "text": "Evgeni Malkin over Clear draft",
+     "a": {
+      "label": "Evgeni Malkin",
+      "reachablePct": 0
+     },
+     "b": {
+      "label": "Clear draft",
+      "reachablePct": 100
+     }
+    },
+    {
+     "text": "Mario Lemieux over Submit five",
+     "a": {
+      "label": "Mario Lemieux",
+      "reachablePct": 0
+     },
+     "b": {
+      "label": "Submit five",
+      "reachablePct": 100
+     }
+    }
+   ]
+  },
+  "taps": {
+   "Clear draft": {
+    "hitsItself": true,
+    "hit": "Clear draft"
+   },
+   "Submit five": {
+    "hitsItself": true,
+    "hit": "Submit five"
+   },
+   "Evgeni Malkin": {
+    "hitsItself": true,
+    "hit": "Evgeni Malkin"
+   },
+   "Mario Lemieux": {
+    "hitsItself": true,
+    "hit": "Mario Lemieux"
+   }
+  }
+ },
+ {
+  "route": "/connections",
+  "width": 390,
+  "height": 844,
+  "first": {
+   "controls": 9,
+   "rawHits": [],
+   "reachHits": [],
+   "detail": []
+  },
+  "closed": {
+   "controls": 9,
+   "rawHits": [],
+   "reachHits": [],
+   "detail": []
+  },
+  "taps": {
+   "Clear draft": null,
+   "Submit five": null
+  }
+ },
+ {
+  "route": "/baseball-connections",
+  "width": 390,
+  "height": 844,
+  "first": {
+   "controls": 31,
+   "rawHits": [],
+   "reachHits": [],
+   "detail": []
+  },
+  "closed": {
+   "controls": 31,
+   "rawHits": [],
+   "reachHits": [],
+   "detail": []
+  },
+  "taps": {
+   "Clear draft": null,
+   "Submit five": null
+  }
+ },
+ {
+  "route": "/nba-connections",
+  "width": 390,
+  "height": 844,
+  "first": {
+   "controls": 35,
+   "rawHits": [
+    "Michael Jordan over Clear draft",
+    "Kobe Bryant over Submit five"
+   ],
+   "reachHits": [],
+   "detail": [
+    {
+     "text": "Michael Jordan over Clear draft",
+     "a": {
+      "label": "Michael Jordan",
+      "reachablePct": 0
+     },
+     "b": {
+      "label": "Clear draft",
+      "reachablePct": 100
+     }
+    },
+    {
+     "text": "Kobe Bryant over Submit five",
+     "a": {
+      "label": "Kobe Bryant",
+      "reachablePct": 0
+     },
+     "b": {
+      "label": "Submit five",
+      "reachablePct": 100
+     }
+    }
+   ]
+  },
+  "closed": {
+   "controls": 35,
+   "rawHits": [
+    "Michael Jordan over Clear draft",
+    "Kobe Bryant over Submit five"
+   ],
+   "reachHits": [],
+   "detail": [
+    {
+     "text": "Michael Jordan over Clear draft",
+     "a": {
+      "label": "Michael Jordan",
+      "reachablePct": 0
+     },
+     "b": {
+      "label": "Clear draft",
+      "reachablePct": 100
+     }
+    },
+    {
+     "text": "Kobe Bryant over Submit five",
+     "a": {
+      "label": "Kobe Bryant",
+      "reachablePct": 0
+     },
+     "b": {
+      "label": "Submit five",
+      "reachablePct": 100
+     }
+    }
+   ]
+  },
+  "taps": {
+   "Clear draft": {
+    "hitsItself": true,
+    "hit": "Clear draft"
+   },
+   "Submit five": {
+    "hitsItself": true,
+    "hit": "Submit five"
+   },
+   "Michael Jordan": {
+    "hitsItself": true,
+    "hit": "Michael Jordan"
+   },
+   "Kobe Bryant": {
+    "hitsItself": true,
+    "hit": "Kobe Bryant"
+   }
+  }
+ },
+ {
+  "route": "/nfl-connections",
+  "width": 390,
+  "height": 844,
+  "first": {
+   "controls": 31,
+   "rawHits": [],
+   "reachHits": [],
+   "detail": []
+  },
+  "closed": {
+   "controls": 31,
+   "rawHits": [],
+   "reachHits": [],
+   "detail": []
+  },
+  "taps": {
+   "Clear draft": null,
+   "Submit five": null
+  }
+ },
+ {
+  "route": "/nhl-connections",
+  "width": 390,
+  "height": 844,
+  "first": {
+   "controls": 35,
+   "rawHits": [
+    "Evgeni Malkin over Clear draft",
+    "Mario Lemieux over Submit five"
+   ],
+   "reachHits": [],
+   "detail": [
+    {
+     "text": "Evgeni Malkin over Clear draft",
+     "a": {
+      "label": "Evgeni Malkin",
+      "reachablePct": 0
+     },
+     "b": {
+      "label": "Clear draft",
+      "reachablePct": 100
+     }
+    },
+    {
+     "text": "Mario Lemieux over Submit five",
+     "a": {
+      "label": "Mario Lemieux",
+      "reachablePct": 0
+     },
+     "b": {
+      "label": "Submit five",
+      "reachablePct": 100
+     }
+    }
+   ]
+  },
+  "closed": {
+   "controls": 35,
+   "rawHits": [
+    "Evgeni Malkin over Clear draft",
+    "Mario Lemieux over Submit five"
+   ],
+   "reachHits": [],
+   "detail": [
+    {
+     "text": "Evgeni Malkin over Clear draft",
+     "a": {
+      "label": "Evgeni Malkin",
+      "reachablePct": 0
+     },
+     "b": {
+      "label": "Clear draft",
+      "reachablePct": 100
+     }
+    },
+    {
+     "text": "Mario Lemieux over Submit five",
+     "a": {
+      "label": "Mario Lemieux",
+      "reachablePct": 0
+     },
+     "b": {
+      "label": "Submit five",
+      "reachablePct": 100
+     }
+    }
+   ]
+  },
+  "taps": {
+   "Clear draft": {
+    "hitsItself": true,
+    "hit": "Clear draft"
+   },
+   "Submit five": {
+    "hitsItself": true,
+    "hit": "Submit five"
+   },
+   "Evgeni Malkin": {
+    "hitsItself": true,
+    "hit": "Evgeni Malkin"
+   },
+   "Mario Lemieux": {
+    "hitsItself": true,
+    "hit": "Mario Lemieux"
+   }
+  }
+ }
+]

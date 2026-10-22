@@ -1,0 +1,7 @@
+CONTROL counthidden is on: visually hidden controls are measured like visible ones, so the sweep is SUPPOSED to fail.
+Sweeping 1 routes at 390x844 with touch
+  FAIL: /stadium-tycoon: 1 control under 30px: Tap the stadium for $3 (1px)
+
+   1 routes swept, worst overflow 0px
+   1 small tap targets, 0 runs of tiny text, 0 overlapping controls
+sweepPhone: 1 failure

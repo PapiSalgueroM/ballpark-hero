@@ -1,0 +1,5 @@
+simHelpConsentFocus: seven real-dialog outcomes pass for both choices, unchanged script gate, one region, dismissal, reopening, storage updates and normal trap.
+simHelpConsentFocus: both initial-rules choices preserve their storage value, script gate and single consent-change event.
+simHelpConsentFocus: three pending-choice lifecycle cases pass for dismissal, reopening and cross-tab storage updates.
+simHelpConsentFocus: two independent baselines pass for the answered-consent modal trap and focused ordinary bottom banner.
+simHelpConsentFocus: real source held, disposable copies cleaned, no vendor requests.
