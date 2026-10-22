@@ -1,0 +1,81 @@
+mutEarns: GmXpPanel now ignores earns
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/lib/gmXp.test.ts [2m([22m[2m13 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 200[2mms[22m[39m
+   [32m✓[39m the shared curve[2m > [22mis Club Manager's at every level and either side of every threshold[32m 5[2mms[22m[39m
+   [32m✓[39m the shared curve[2m > [22mkeeps Club Manager's constants reachable where they always were[32m 0[2mms[22m[39m
+   [32m✓[39m the GM block[2m > [22mcannot conjure a point, caps a tree at five and refuses a made up tree[32m 1[2mms[22m[39m
+   [32m✓[39m the GM block[2m > [22mreads an absent or mangled block as a fresh one and a sound one as itself[32m 1[2mms[22m[39m
+   [32m✓[39m the GM effects[2m > [22mhand back exactly what they were given at zero points[32m 0[2mms[22m[39m
+   [32m✓[39m the GM effects[2m > [22mmove at every point, not only at the cap, after the board rounds them[32m 1[2mms[22m[39m
+   [32m✓[39m the GM effects[2m > [22mhand back whole ratings and money in tenths[32m 4[2mms[22m[39m
+   [32m✓[39m the GM effects[2m > [22mnever grows a player past his ceiling, never asks under the floor, and never touches a gain or a decline[32m 5[2mms[22m[39m
+   [32m✓[39m GmXpPanel[2m > [22msells points only in the trees the board feeds[32m 138[2mms[22m[39m
+[31m   [31m×[31m GmXpPanel[2m > [22mprints no source sentence of its own when the desk hands in what it pays for (Round 1533)[39m[32m 21[2mms[22m[39m
+[31m     → expected '🎖️ GM level 41,249 XP450 XP to level…' not to contain 'finishing higher than anyone expected'[39m
+   [32m✓[39m GmXpPanel[2m > [22msays nothing is full at the top level while points sit unspent[32m 9[2mms[22m[39m
+   [32m✓[39m GmXpPanel[2m > [22mdoes not offer points to spend when no tile on the desk can take one[32m 6[2mms[22m[39m
+   [32m✓[39m GmXpPanel[2m > [22mdraws a mangled block as a fresh one rather than crashing[32m 8[2mms[22m[39m
+ [31m❯[39m src/components/front-office-shared/GmCareerDesk.test.tsx [2m([22m[2m15 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 183[2mms[22m[39m
+   [32m✓[39m the three boxes[2m > [22mare one module level list, and the Job market box shows only between seats[32m 6[2mms[22m[39m
+   [32m✓[39m the job market panel[2m > [22mdraws one tile an offer and takes a job on the second tap only[32m 56[2mms[22m[39m
+   [32m✓[39m the job market panel[2m > [22mstays out a year on the second tap only, and says when that opens the desk[32m 9[2mms[22m[39m
+   [32m✓[39m the job market panel[2m > [22mdrops an armed tap when the market under it changes, so no year out ever takes one tap[32m 8[2mms[22m[39m
+   [32m✓[39m the job market panel[2m > [22moffers no year out when the calls on the table are the last ones, and the line says so[32m 4[2mms[22m[39m
+   [32m✓[39m the job market panel[2m > [22moffers no year out on a closed market, and its "?" opens the rules[32m 6[2mms[22m[39m
+   [32m✓[39m the job market panel[2m > [22mdraws something sane while he holds a seat[32m 2[2mms[22m[39m
+   [32m✓[39m the career panel[2m > [22mdraws a box a stint with a mark a graded season[32m 3[2mms[22m[39m
+   [32m✓[39m the career panel[2m > [22mleaves the tier off a record older than the block and counts the seasons it cannot grade[32m 4[2mms[22m[39m
+[31m   [31m×[31m the GM level panel[2m > [22msells a point only in a tree this desk routes[39m[32m 35[2mms[22m[39m
+[31m     → expected 'You earn XP every season for your win…' not to contain 'finishing higher than anyone expected'[39m
+   [32m✓[39m the GM level panel[2m > [22msays XP has not started on a save whose desk is off, and the "?" then carries the earn line[32m 8[2mms[22m[39m
+   [32m✓[39m a panel that loads on demand[2m > [22mshows a fixed height box first, then the panel, and keeps the panel across a save[32m 17[2mms[22m[39m
+   [32m✓[39m a panel that loads on demand[2m > [22mcontrol: built inside a render, the open panel is remounted by a save and loses what it held[32m 16[2mms[22m[39m
+   [32m✓[39m a panel that loads on demand[2m > [22mdraws its fallback under a server render and never throws[32m 6[2mms[22m[39m
+   [32m✓[39m a panel that loads on demand[2m > [22mevery loader resolves to a component[32m 0[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/gmXp.test.ts[2m > [22mGmXpPanel[2m > [22mprints no source sentence of its own when the desk hands in what it pays for (Round 1533)
+[31m[1mAssertionError[22m: expected '🎖️ GM level 41,249 XP450 XP to level…' not to contain 'finishing higher than anyone expected'[39m
+
+Expected: [32m"finishing higher than anyone expected"[39m
+Received: [31m"🎖️ GM level 41,249 XP450 XP to level 5, which is one more point.3 points to spendYou earn XP every season for your win share, plus titles, playoff rounds, meeting or beating the owner's ask, finishing higher than anyone expected and bringing a prospect through. Points are yours for good: nothing here can be taken back.🏛️ Ownership○○○○○Spend a point (0/5)?🔭 Scouting○○○○○Not here yet?🤝 Negotiation○○○○○Not here yet?🧮 Cap craft○○○○○Not here yet?🌱 Development○○○○○Not here yet?🔁 Trading○○○○○Not here yet?🎤 Media○○○○○Not here yet?"[39m
+
+[36m [2m❯[22m src/lib/gmXp.test.ts:[2m121:39[22m[39m
+    [90m119| [39m  it('prints no source sentence of its own when the desk hands in what…
+    [90m120| [39m    const { container } = render(createElement(GmXpPanel, { block: ric…
+    [90m121| [39m    expect(container.textContent).not.toContain('finishing higher than…
+    [90m   | [39m                                      [31m^[39m
+    [90m122| [39m    expect(container.textContent).not.toContain('bringing a prospect t…
+    [90m123| [39m    [34mexpect[39m(container[33m.[39m[34mquerySelector[39m([32m'[data-gm-xp-sources]'[39m))[33m.[39m[34mtoBeNull[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/front-office-shared/GmCareerDesk.test.tsx[2m > [22mthe GM level panel[2m > [22msells a point only in a tree this desk routes
+[31m[1mAssertionError[22m: expected 'You earn XP every season for your win…' not to contain 'finishing higher than anyone expected'[39m
+
+Expected: [32m"finishing higher than anyone expected"[39m
+Received: [31m"You earn XP every season for your win share, titles, playoff rounds won and meeting or beating the ask from upstairs. Points are yours for good: nothing here can be taken back.?Level 2 costs 400 XP and every level after it costs a little more. Each level is one point, and 5 points fill a tree.A .500 season that meets the ask pays 110 XP, so at that pace the first point is about 4 seasons away. Playoff rounds, a title and beating the ask bring it sooner.A tree marked Not here yet takes no points on this desk, so a point is never spent where it moves nothing.Worked example: a .600 season that met the ask and won one playoff round pays 170 XP. And with two Ownership points, missing the ask on trust 16 costs 14, not 16, so you keep the job on trust 2.🎖️ GM level 41,249 XP450 XP to level 5, which is one more point.3 points to spendYou earn XP every season for your win share, plus titles, playoff rounds, meeting or beating the owner's ask, finishing higher than anyone expected and bringing a prospect through. Points are yours for good: nothing here can be taken back.🏛️ Ownership○○○○○Spend a point (0/5)?🎤 Media○○○○○Spend a point (0/5)?🔭 Scouting○○○○○Not here yet?🤝 Negotiation○○○○○Not here yet?🧮 Cap craft○○○○○Not here yet?🌱 Development○○○○○Not here yet?🔁 Trading○○○○○Not here yet?"[39m
+
+[36m [2m❯[22m src/components/front-office-shared/GmCareerDesk.test.tsx:[2m249:39[22m[39m
+    [90m247| [39m    /* Round 1533, the 1223 notes' condition 1: the panel under the ea…
+    [90m248| [39m       feed (GmXpPanel's own six source sentence is not drawn when `ea…
+    [90m249| [39m    expect(container.textContent).not.toContain('finishing higher than…
+    [90m   | [39m                                      [31m^[39m
+    [90m250| [39m    expect(container.textContent).not.toContain('bringing a prospect t…
+    [90m251| [39m    [34mexpect[39m(container[33m.[39m[34mquerySelector[39m([32m'[data-gm-xp-sources]'[39m))[33m.[39m[34mtoBeNull[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m2 failed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m26 passed[39m[22m[90m (28)[39m
+[2m   Start at [22m 04:37:53
+[2m   Duration [22m 1.32s[2m (transform 247ms, setup 109ms, collect 590ms, tests 383ms, environment 568ms, prepare 264ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmXp.test.ts,title=src/lib/gmXp.test.ts > GmXpPanel > prints no source sentence of its own when the desk hands in what it pays for (Round 1533),line=121,column=39::AssertionError: expected '🎖️ GM level 41,249 XP450 XP to level…' not to contain 'finishing higher than anyone expected'%0A%0AExpected: "finishing higher than anyone expected"%0AReceived: "🎖️ GM level 41,249 XP450 XP to level 5, which is one more point.3 points to spendYou earn XP every season for your win share, plus titles, playoff rounds, meeting or beating the owner's ask, finishing higher than anyone expected and bringing a prospect through. Points are yours for good: nothing here can be taken back.🏛️ Ownership○○○○○Spend a point (0/5)?🔭 Scouting○○○○○Not here yet?🤝 Negotiation○○○○○Not here yet?🧮 Cap craft○○○○○Not here yet?🌱 Development○○○○○Not here yet?🔁 Trading○○○○○Not here yet?🎤 Media○○○○○Not here yet?"%0A%0A ❯ src/lib/gmXp.test.ts:121:39%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmCareerDesk.test.tsx,title=src/components/front-office-shared/GmCareerDesk.test.tsx > the GM level panel > sells a point only in a tree this desk routes,line=249,column=39::AssertionError: expected 'You earn XP every season for your win…' not to contain 'finishing higher than anyone expected'%0A%0AExpected: "finishing higher than anyone expected"%0AReceived: "You earn XP every season for your win share, titles, playoff rounds won and meeting or beating the ask from upstairs. Points are yours for good: nothing here can be taken back.?Level 2 costs 400 XP and every level after it costs a little more. Each level is one point, and 5 points fill a tree.A .500 season that meets the ask pays 110 XP, so at that pace the first point is about 4 seasons away. Playoff rounds, a title and beating the ask bring it sooner.A tree marked Not here yet takes no points on this desk, so a point is never spent where it moves nothing.Worked example: a .600 season that met the ask and won one playoff round pays 170 XP. And with two Ownership points, missing the ask on trust 16 costs 14, not 16, so you keep the job on trust 2.🎖️ GM level 41,249 XP450 XP to level 5, which is one more point.3 points to spendYou earn XP every season for your win share, plus titles, playoff rounds, meeting or beating the owner's ask, finishing higher than anyone expected and bringing a prospect through. Points are yours for good: nothing here can be taken back.🏛️ Ownership○○○○○Spend a point (0/5)?🎤 Media○○○○○Spend a point (0/5)?🔭 Scouting○○○○○Not here yet?🤝 Negotiation○○○○○Not here yet?🧮 Cap craft○○○○○Not here yet?🌱 Development○○○○○Not here yet?🔁 Trading○○○○○Not here yet?"%0A%0A ❯ src/components/front-office-shared/GmCareerDesk.test.tsx:249:39%0A%0A
