@@ -1,0 +1,43 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/lib/usCareerAnnualBenefits.test.ts [2m([22m[2m28 tests[22m[2m)[22m[32m 183[2mms[22m[39m
+ [32m✓[39m src/lib/usCareerShopPromises.test.ts [2m([22m[2m32 tests[22m[2m)[22m[33m 304[2mms[22m[39m
+ [32m✓[39m src/test/usCareerSmallItems1104.test.ts [2m([22m[2m12 tests[22m[2m)[22m[33m 378[2mms[22m[39m
+[90mstdout[2m | src/test/usCareerShopCap.test.ts[2m > [22m[2ma bought rating raise stops at potential[2m > [22m[2m'NFL Vision Training': seeded careers that reach the ceiling stay under it for good
+[22m[39mNFL Vision Training: 1 of 300 seeded careers came within one of potential, 0 seasons above it after buying
+
+[90mstdout[2m | src/test/usCareerShopCap.test.ts[2m > [22m[2ma bought rating raise stops at potential[2m > [22m[2m'NBA Biomechanics Team': seeded careers that reach the ceiling stay under it for good
+[22m[39mNBA Biomechanics Team: 4 of 300 seeded careers came within one of potential, 0 seasons above it after buying
+
+[90mstdout[2m | src/test/usCareerShopCap.test.ts[2m > [22m[2ma bought rating raise stops at potential[2m > [22m[2m'MLB Biomechanics Team': seeded careers that reach the ceiling stay under it for good
+[22m[39mMLB Biomechanics Team: 0 of 300 seeded careers came within one of potential, 0 seasons above it after buying
+
+[90mstdout[2m | src/test/usCareerShopCap.test.ts[2m > [22m[2ma bought rating raise stops at potential[2m > [22m[2m'NHL Biomechanics Team': seeded careers that reach the ceiling stay under it for good
+[22m[39mNHL Biomechanics Team: 12 of 300 seeded careers came within one of potential, 0 seasons above it after buying
+
+[90mstdout[2m | src/test/usCareerShopCap.test.ts[2m > [22m[2ma bought rating raise stops at potential[2m > [22m[2m'NHL Home Shooting Room': seeded careers that reach the ceiling stay under it for good
+[22m[39mNHL Home Shooting Room: 12 of 300 seeded careers came within one of potential, 0 seasons above it after buying
+
+ [32m✓[39m src/test/usCareerShopCap.test.ts [2m([22m[2m25 tests[22m[2m)[22m[33m 2730[2mms[22m[39m
+   [33m[2m✓[22m[39m a bought rating raise stops at potential[2m > [22m'NFL Vision Training': seeded careers that reach the ceiling stay under it for good [33m 647[2mms[22m[39m
+   [33m[2m✓[22m[39m a bought rating raise stops at potential[2m > [22m'NBA Biomechanics Team': seeded careers that reach the ceiling stay under it for good [33m 745[2mms[22m[39m
+   [33m[2m✓[22m[39m a bought rating raise stops at potential[2m > [22m'MLB Biomechanics Team': seeded careers that reach the ceiling stay under it for good [33m 552[2mms[22m[39m
+   [33m[2m✓[22m[39m a bought rating raise stops at potential[2m > [22m'NHL Biomechanics Team': seeded careers that reach the ceiling stay under it for good [33m 408[2mms[22m[39m
+   [33m[2m✓[22m[39m a bought rating raise stops at potential[2m > [22m'NHL Home Shooting Room': seeded careers that reach the ceiling stay under it for good [33m 361[2mms[22m[39m
+ [32m✓[39m src/test/careerDecisionOutcome.test.tsx [2m([22m[2m11 tests[22m[2m)[22m[33m 4986[2mms[22m[39m
+   [33m[2m✓[22m[39m ordinary career decision outcomes[2m > [22mapplies the real third-season NBA trade once before its quality draw and keeps the full save on return [33m 1088[2mms[22m[39m
+   [33m[2m✓[22m[39m ordinary career decision outcomes[2m > [22mshows each real sport choice as the actual capped change and saves it once [33m 884[2mms[22m[39m
+   [33m[2m✓[22m[39m ordinary career decision outcomes[2m > [22mreports negative effects and real endorsement earnings without calling them cash [33m 760[2mms[22m[39m
+   [33m[2m✓[22m[39m ordinary career decision outcomes[2m > [22mconsumes same-frame choices once and accepts the next ordinary event [33m 345[2mms[22m[39m
+   [33m[2m✓[22m[39m ordinary career decision outcomes[2m > [22mcontinues with no extra draws writes season or completion and restores Play focus [33m 1003[2mms[22m[39m
+   [33m[2m✓[22m[39m ordinary career decision outcomes[2m > [22mreloads the applied career without replaying its transient receipt or choice [33m 510[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m5 passed[39m[22m[90m (5)[39m
+[2m      Tests [22m [1m[32m108 passed[39m[22m[90m (108)[39m
+[2m   Start at [22m 14:06:38
+[2m   Duration [22m 9.97s[2m (transform 3.68s, setup 568ms, collect 9.68s, tests 8.58s, environment 3.18s, prepare 1.17s)[22m
+
