@@ -1,0 +1,5 @@
+   total 600853 characters across 5 keys (budget 532500)
+  FAIL: 5 Club Manager keys on the device, not three saves and an index
+  FAIL: three season 15 careers take 600853 characters, over the 532500 budget
+  FAIL: slot 3 to 1: the incoming career was refused and the store changed (now Everton s15 | Lincoln City s15 | Barcelona s15, was Everton s15 | Lincoln City s15 | Barcelona s15)
+CONTROL FIRED: SLOTS_CONTROL=dupe turned section 2 red through its budget check (red sections: 2, 3), as it must

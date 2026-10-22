@@ -1,0 +1,3 @@
+   total 533033 characters across 4 keys (budget 532500)
+  FAIL: three season 15 careers take 533033 characters, over the 532500 budget
+simClubManagerSlots: RED, sections 2 (1 failures)

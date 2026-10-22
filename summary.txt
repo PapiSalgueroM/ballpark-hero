@@ -1,0 +1,8 @@
+headsha exit=0 0s | 5e4201cba8 rc request rBP-trS-main for 3ee0bf6293859740a50654e299232bcd0ff701c3
+s2-seed1 exit=0 92s | simClubManagerSlots: all sections green
+s2-default exit=0 105s | simClubManagerSlots: all sections green
+s2-seed2 exit=0 104s | simClubManagerSlots: RED, sections 2 (1 failures)
+s2-seed5 exit=0 87s | simClubManagerSlots: all sections green
+s2-seed3 exit=0 103s | simClubManagerSlots: all sections green
+s2-seed4 exit=0 104s | simClubManagerSlots: RED, sections 2 (1 failures)
+s2-dupe exit=0 71s | CONTROL FIRED: SLOTS_CONTROL=dupe turned section 2 red through its budget check (red sections: 2, 3), as it must
