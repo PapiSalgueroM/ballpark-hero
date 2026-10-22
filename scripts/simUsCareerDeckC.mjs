@@ -70,6 +70,19 @@
    its line is the same. Measured commit by commit too: the banked lines
    alone (f5cc075a, r1538-s2) moved NFL 7, NBA 35, MLB 45 and NHL 22; the
    Skill change on top (fbe4f4ed, r1538-s3) took them to 33, 44, 78 and 31.
+   The review of 2026-10-22 proved the "both reasons" draws (r1538x-rra,
+   deckc-nobs): the tree of 4530c049 recorded with the brand AND the Skill
+   answers put back restores all 40 of them (NBA 7, MLB 23, NHL 10), where
+   no single part did.
+   Re-recorded on purpose once more in Round 1538's fix pass, on 2026-10-22,
+   on a GitHub runner from fb4ba543 (r1538x-rra, deckc-rec). The review found
+   the maintenance Skill answer's button and line said "Health +4" at full
+   health; commit c85ccd6a makes the button "Health +4, up to 100" and the
+   line say the health that landed. With that commit's five source files put
+   back (the four engines and usCareerAnnualBenefits.ts, deckc-nof1) the head
+   replays the recording before it green; as shipped it is red on 14 of 1,920
+   NFL draws, 8 of 1,200 NBA, 7 of 2,640 MLB and 11 of 1,200 NHL (deckc-head).
+   No deck C card changed in any sport.
 
    Section 2, WORDS AGAINST EFFECTS (see its own comment below): the log,
    the button, the gamble's odds, the era's money, the trade's league and
