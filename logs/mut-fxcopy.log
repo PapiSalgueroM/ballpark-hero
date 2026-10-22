@@ -1,0 +1,3 @@
+mut1347fix: fxcopy applied to src/lib/clubManager.ts
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m67 passed[39m[22m[90m (68)[39m
+fxcopy FIRED as it must: the one writing check caught the engine copy
