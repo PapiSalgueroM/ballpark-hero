@@ -1,0 +1,12 @@
+vitest-hall exit=0 2s |    Duration  1.29s (transform 171ms, setup 66ms, collect 275ms, tests 187ms, environment 319ms, prepare 119ms)
+ctl-ceiling exit=1 17s | simHallLongPlay control ceiling: FIRED, 3 failures in section 1 (red is the right answer)
+simHallLongPlay exit=0 19s | simHallLongPlay: green
+ctl-fmtstop exit=1 0s | simHallLongPlay control fmtstop: FIRED, 5 failures in section 3 (red is the right answer)
+ctl-fixedstep exit=1 0s | simHallLongPlay control fixedstep: FIRED, 6 failures in section 2 (red is the right answer)
+ctl-hookfixed exit=1 2s | simHallLongPlay control hookfixed: FIRED, 2 failures in section 4 (red is the right answer)
+ctl-hooknocopy exit=1 2s | simHallLongPlay control hooknocopy: FIRED, 1 failure in section 4 (red is the right answer)
+simTrustCopy exit=0 0s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+simAccessibility exit=0 0s | simAccessibility: all green
+simSaveKeeper exit=0 3s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+simNoRivalNames exit=0 10s | No rival product names found. 0 findings.
+tsc exit=0 48s | 

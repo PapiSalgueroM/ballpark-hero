@@ -1,0 +1,9 @@
+4) the real hook on fake timers
+control hooknocopy: the hook is a copy with one rewrite
+   hooknocopy: deep: a save holding 3.20e+16 funds and 4.10e+18 career loaded and was written back with 3.2001e+16
+   hooknocopy: hidden: 600 wakes a minute apart paid x1.000000 of eight hours at the away rate; meter 0 ms; welcome 4.7768e+7
+   hooknocopy: reload: 3 h hidden then 7 h closed paid x1.000000 of one eight hour absence
+   hooknocopy: watched: 240 callbacks paid x1.000000000 of a minute at full rate
+  FAIL: "4 a save the loader refuses is kept aside once before the fresh museum is written" (red under the control, as it must be): AssertionError: the refused save was not kept aside: expected [] to deeply equal [ Array(1) ]
+   5 of 6 hook tests green
+simHallLongPlay control hooknocopy: FIRED, 1 failure in section 4 (red is the right answer)

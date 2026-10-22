@@ -1,0 +1,12 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-hall: node_modules/.bin/vitest run src/test/hallOfChampionsLongPlay.test.tsx --testTimeout=300000 --hookTimeout=120000
+simHallLongPlay: node scripts/simHallLongPlay.mjs
+ctl-ceiling: SIM_HALL_CONTROL=ceiling node scripts/simHallLongPlay.mjs
+ctl-fixedstep: SIM_HALL_CONTROL=fixedstep node scripts/simHallLongPlay.mjs
+ctl-fmtstop: SIM_HALL_CONTROL=fmtstop node scripts/simHallLongPlay.mjs
+ctl-hookfixed: SIM_HALL_CONTROL=hookfixed node scripts/simHallLongPlay.mjs
+ctl-hooknocopy: SIM_HALL_CONTROL=hooknocopy node scripts/simHallLongPlay.mjs
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
