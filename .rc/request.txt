@@ -1,0 +1,4 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+motion: node_modules/.bin/vitest run src/test/liveSimMotion.test.tsx --testTimeout=300000 --hookTimeout=120000
+siblings: node_modules/.bin/vitest run src/test/pitchOwnGoal.test.tsx src/test/pitchRestartContinuity.test.tsx src/test/liveSimCelebration.test.tsx src/test/miniPitchScene.test.ts src/test/seasonCentreOwnGoals.test.tsx src/test/clubManagerVarScreen.test.tsx --testTimeout=300000 --hookTimeout=120000
+bundle: LIVE_MOTION_ONLY=bundle node scripts/simLiveSimMotion.mjs
