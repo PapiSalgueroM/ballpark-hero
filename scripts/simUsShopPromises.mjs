@@ -646,9 +646,13 @@ if (runs('8')) {
        differ and later summers may follow from it), and it must sit where the rider acts (critic 4b): a deal under the
        maintenance age with the rating at min(99, pot) or above (there the old answer moved the rating, so the card
        counted as a rating card; above pot + 1 it even lowered it), or the Skill answer applied under that age with
-       the rating at min(99, pot) - 1 or above. Any other first divergence is red. */
+       the rating at min(99, pot) - 1 or above, or (found on the runner, r1538-rec: NHL career 1538/69) any answer
+       under that age that leaves the rating at min(99, pot) or above while the training card waits in a later slot:
+       the summer then probes the Skill answer to decide whether to skip it (laterAnswerMovesRating), and the old
+       answer pulled a rating above pot + 1 back down, so it counted as a move and the card was skipped. Any other
+       first divergence is red. */
 const SKILL_LABELS = new Set(['Skill grind', 'Skill work', 'New pitch lab', 'Swing rebuild', 'Skills coach']);
-const FLEET_SETS = (process.env.SHOP_FLEET_SETS || '1538').split(',').map(Number);
+const FLEET_SETS = (process.env.SHOP_FLEET_SETS || '1538,2024').split(',').map(Number);
 const FLEET_CAREERS = Number(process.env.SHOP_FLEET_CAREERS || 120);
 const digestOf = s => createHash('sha1').update(s).digest('base64');
 let fleetParted = 0;
@@ -698,8 +702,10 @@ function summerLife(X, sport, set, k) {
       while (ev) {
         const option = ev.options.find(o => !paid.includes(o.label));
         if (!option) { trail.push({ rec: `unanswered ${ev.id}`, ctx: at('unanswered', c) }); break; }
-        const before = at('answer', c, { skill: ev.id === 'training' && SKILL_LABELS.has(option.label) });
+        const later = (c.summer?.ids ?? []).slice((c.summer?.at ?? 0) + 1).includes('training');
+        const before = at('answer', c, { skill: ev.id === 'training' && SKILL_LABELS.has(option.label), later });
         const out = X.answerSummerCard(c, SB, ev, ev.options.indexOf(option), rng);
+        before.after = { ovr: c.ovr, pot: c.pot };
         trail.push({ rec: `${ev.id} ${option.label} ${JSON.stringify(out.line)} ${digestOf(JSON.stringify(c))} ${rng.count()}`, ctx: before });
         ev = out.next;
       }
@@ -723,7 +729,7 @@ if (runs('7')) {
     skillCase(sport, 'at 99', { ovr: 99, pot: 99 }, 0.9, { ovr: 99, says: 'already at your ceiling' });
     skillCase(sport, 'at the maintenance age', { age, ovr: 70 }, 0.9, { ovr: 70, health: 74, says: 'Health +4.' });
     skillCase(sport, 'one year under it', { age: age - 1, ovr: 70 }, 0, { ovr: 71, says: 'Rating +1.' });
-    const kinds = { deal: 0, answer: 0 };
+    const kinds = { deal: 0, answer: 0, later: 0 };
     let careers = 0, offseasons = 0, parted = 0;
     for (const set of FLEET_SETS) for (let k = 0; k < FLEET_CAREERS; k += 1) {
       const a = summerLife(H, sport, set, k), b = summerLife(B, sport, set, k);
@@ -733,11 +739,13 @@ if (runs('7')) {
       if (i < 0) continue;
       parted += 1; fleetParted += 1;
       const ctx = a[i]?.ctx ?? b[i]?.ctx, cap = ctx ? Math.min(99, ctx.pot) : 0;
-      const ok = ctx && ctx.age < age && ((ctx.kind === 'deal' && ctx.ovr >= cap) || (ctx.kind === 'answer' && ctx.skill && ctx.ovr >= cap - 1));
-      if (ok) kinds[ctx.kind] += 1;
+      const skillAt = ctx && ctx.kind === 'answer' && ctx.skill && ctx.ovr >= cap - 1;
+      const laterAt = ctx && ctx.kind === 'answer' && ctx.later && ctx.after && ctx.after.ovr >= Math.min(99, ctx.after.pot);
+      const ok = ctx && ctx.age < age && ((ctx.kind === 'deal' && ctx.ovr >= cap) || skillAt || laterAt);
+      if (ok) kinds[ctx.kind === 'deal' ? 'deal' : skillAt ? 'answer' : 'later'] += 1;
       else fail('7', `${sport.id} fleet ${set}/${k}`, `first parts at record ${i} (${ctx?.kind ?? 'end'}, rating ${ctx?.ovr} of ${ctx?.pot}, age ${ctx?.age}), where the rider does not act; head [${a[i - 1]?.rec.slice(0, 90)}] then [${a[i]?.rec.slice(0, 160)}], base then [${b[i]?.rec.slice(0, 160)}]`);
     }
-    console.log(`   ${sport.id}: (a) 6 cases; fleet ${careers} careers, ${offseasons} offseasons, ${parted} parted from the base arm, ${kinds.deal} first at a deal at the ceiling and ${kinds.answer} at the Skill answer`);
+    console.log(`   ${sport.id}: (a) 6 cases; fleet ${careers} careers, ${offseasons} offseasons, ${parted} parted from the base arm, ${kinds.deal} first at a deal at the ceiling, ${kinds.answer} at the Skill answer and ${kinds.later} at an answer before a later training card`);
   }
 }
 
