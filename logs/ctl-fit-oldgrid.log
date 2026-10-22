@@ -1,0 +1,14 @@
+PART 1, CSS: built dist/assets (41 file(s)), every request blocked
+   the old grid's rule, written by hand: @media (min-width: 768px) { [class~="md:grid-cols-[2.25rem_minmax(0,1fr)_1.75rem_2rem_3.25rem_2rem_2.75rem_2.25rem_3.5rem_3rem_1.5rem_1rem]"] { grid-template-columns: 2.25rem minmax(0,1fr) 1.75rem 2rem 3.25rem 2rem 2.75rem 2.25rem 3.5rem 3rem 1.5rem 1rem; } }
+CONTROL oldgrid: SquadScreen.tsx changed in the bundle only
+control oldgrid: 82 findings (heads 82)
+   heads at 768: squad liverpool: "OVR" is cut (24 of 18 px wide)
+   heads at 768: squad liverpool: "Mood" is cut (33 of 24 px wide)
+   heads at 768: squad liverpool sorted by pos: the pos head's word is cut (24 of 22 px)
+   heads at 768: squad liverpool sorted by pos: the mood head's word is cut (33 of 24 px)
+   heads at 768: squad liverpool sorted by name: the mood head's word is cut (33 of 24 px)
+   heads at 768: squad liverpool sorted by age: the age head's word is cut (24 of 14 px)
+   heads at 768: squad liverpool sorted by age: the mood head's word is cut (33 of 24 px)
+   heads at 768: squad liverpool sorted by ovr: the ovr head's word is cut (24 of 18 px)
+CONTROL oldgrid FIRED: 41 heads findings at 1280, first: squad liverpool: "OVR" is cut (24 of 18 px wide)
+Shots and part1.json: /home/runner/work/_temp/t-ctl-fit-oldgrid/out/shots
