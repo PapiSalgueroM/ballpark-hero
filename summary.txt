@@ -1,0 +1,9 @@
+build exit=0 23s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+boxing-fonts exit=0 0s | 
+why-staleKey-boxing exit=1 2s | boxErr case 1440: complete=false Trusted essential-only choice precedes the protected game preview |  | null !== 'rejected'
+why-swapLists-boxing exit=1 2s | boxErr case 1440: complete=false Trusted essential-only choice precedes the protected game preview | + actual - expected | 
+open-head exit=0 17s | playStorageBlocked (control open): 52 checks, 0 failed
+open-staleKey exit=1 17s | playStorageBlocked (control open): 52 checks, 2 failed
+bn-base exit=0 23s | /tmp/wt-bn
+bn-open-ours exit=0 17s | playStorageBlocked (control open): 52 checks, 0 failed
+bn-open-own exit=0 17s | playStorageBlocked (control open): 52 checks, 0 failed

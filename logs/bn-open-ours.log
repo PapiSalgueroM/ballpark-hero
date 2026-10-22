@@ -1,0 +1,3 @@
+  PASS  cookie banner OPEN "essential": the answer is in the browser's real storage (rejected)
+  PASS  cookie banner OPEN "accept": the answer is in the browser's real storage (accepted)
+playStorageBlocked (control open): 52 checks, 0 failed

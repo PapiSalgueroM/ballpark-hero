@@ -1,0 +1,5 @@
+MUTATION swapLists applied to scripts/lib/answerConsent.mjs
+boxErr case 320: complete=false Trusted essential-only choice precedes the protected game preview | + actual - expected | 
+boxErr case 390: complete=false Trusted essential-only choice precedes the protected game preview | + actual - expected | 
+boxErr case 430: complete=false Trusted essential-only choice precedes the protected game preview | + actual - expected | 
+boxErr case 1440: complete=false Trusted essential-only choice precedes the protected game preview | + actual - expected | 

@@ -1,0 +1,19 @@
+  PASS  cookie banner OPEN "essential": the banner is up on a first visit
+  PASS  cookie banner OPEN "essential": 0 analytics or ad requests before any choice
+  PASS  cookie banner OPEN "essential": the banner left
+  PASS  cookie banner OPEN "essential": still gone on the next page of the visit, and that page drew (/whats-new, "What's New" in 110 ms)
+  PASS  cookie banner OPEN "essential": on to /footle inside the same page load, drawn ("FOOTLE"), banner still gone
+  PASS  cookie banner OPEN "essential": the answer held, no ad slot (false) and 0 requests for the ad script on /footle
+  PASS  cookie banner OPEN "essential": 0 analytics or ad requests after Essential only
+  PASS  cookie banner OPEN "essential": no uncaught error
+  PASS  cookie banner OPEN "essential": the answer is in the browser's real storage (rejected)
+  PASS  cookie banner OPEN "accept": the banner is up on a first visit
+  PASS  cookie banner OPEN "accept": 0 analytics or ad requests before any choice
+  PASS  cookie banner OPEN "accept": the banner left
+  PASS  cookie banner OPEN "accept": still gone on the next page of the visit, and that page drew (/whats-new, "What's New" in 110 ms)
+  PASS  cookie banner OPEN "accept": on to /footle inside the same page load, drawn ("FOOTLE"), banner still gone
+  PASS  cookie banner OPEN "accept": the answer held, /footle mounted its ad slot (true) and asked for the ad script 1 time(s)
+  PASS  cookie banner OPEN "accept": 1 analytics or ad requests after Accept
+  PASS  cookie banner OPEN "accept": no uncaught error
+  PASS  cookie banner OPEN "accept": the answer is in the browser's real storage (accepted)
+playStorageBlocked (control open): 52 checks, 0 failed

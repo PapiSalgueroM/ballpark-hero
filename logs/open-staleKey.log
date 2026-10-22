@@ -1,0 +1,4 @@
+MUTATION staleKey applied to scripts/lib/answerConsent.mjs
+  FAIL  cookie banner OPEN "essential": the answer is in the browser's real storage (null)
+  FAIL  cookie banner OPEN "accept": the answer is in the browser's real storage (null)
+playStorageBlocked (control open): 52 checks, 2 failed

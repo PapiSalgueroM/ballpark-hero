@@ -1,0 +1,210 @@
+{
+ "base": "http://localhost:4174",
+ "control": "open",
+ "arms": [
+  "blocked",
+  "full"
+ ],
+ "walked": [
+  {
+   "route": "/",
+   "view": "phone",
+   "isGame": false,
+   "mountOnly": false,
+   "open": {
+    "route": "/",
+    "view": "phone",
+    "mode": "open",
+    "presses": [],
+    "changed": 0,
+    "first": {
+     "buttons": 173,
+     "links": 329,
+     "inputs": 1,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 89,
+     "firstTile": {
+      "p": "/soccer-career",
+      "top": 315
+     },
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "pageErrors": [],
+    "storageConsole": [],
+    "thirdParty": 0
+   },
+   "arms": [
+    {
+     "route": "/",
+     "view": "phone",
+     "mode": "open",
+     "presses": [],
+     "changed": 0,
+     "first": {
+      "buttons": 173,
+      "links": 329,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": null,
+      "mainTop": 89,
+      "firstTile": {
+       "p": "/soccer-career",
+       "top": 315
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0,
+     "label": "open again (blocked arm)"
+    },
+    {
+     "route": "/",
+     "view": "phone",
+     "mode": "open",
+     "presses": [],
+     "changed": 0,
+     "first": {
+      "buttons": 173,
+      "links": 329,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": null,
+      "mainTop": 89,
+      "firstTile": {
+       "p": "/soccer-career",
+       "top": 315
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0,
+     "label": "open again (full arm)"
+    }
+   ]
+  },
+  {
+   "route": "/",
+   "view": "desktop",
+   "isGame": false,
+   "mountOnly": false,
+   "open": {
+    "route": "/",
+    "view": "desktop",
+    "mode": "open",
+    "presses": [],
+    "changed": 0,
+    "first": {
+     "buttons": 177,
+     "links": 329,
+     "inputs": 1,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 89,
+     "firstTile": {
+      "p": "/soccer-career",
+      "top": 281
+     },
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "pageErrors": [],
+    "storageConsole": [],
+    "thirdParty": 0
+   },
+   "arms": [
+    {
+     "route": "/",
+     "view": "desktop",
+     "mode": "open",
+     "presses": [],
+     "changed": 0,
+     "first": {
+      "buttons": 177,
+      "links": 329,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": null,
+      "mainTop": 89,
+      "firstTile": {
+       "p": "/soccer-career",
+       "top": 281
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0,
+     "label": "open again (blocked arm)"
+    },
+    {
+     "route": "/",
+     "view": "desktop",
+     "mode": "open",
+     "presses": [],
+     "changed": 0,
+     "first": {
+      "buttons": 177,
+      "links": 329,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": null,
+      "mainTop": 89,
+      "firstTile": {
+       "p": "/soccer-career",
+       "top": 281
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0,
+     "label": "open again (full arm)"
+    }
+   ]
+  }
+ ]
+}
