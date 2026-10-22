@@ -1,0 +1,9 @@
+#!serial
+head: git rev-parse HEAD~1
+setup: git worktree add -q --detach .rcw-base f276b8a8c && git -C .rcw-base rev-parse --short HEAD && node .rc/x/dumpsave.mjs .rcw-base -
+dump-def: (cd .rcw-base && DUMP_FILE=/tmp/d-def.jsonl node scripts/simNbaGmDeskDump.mjs > /tmp/d-def.log 2>&1; echo "base exit $?"); tail -1 /tmp/d-def.log; wc -l < /tmp/d-def.jsonl
+dump-s6: (cd .rcw-base && SIM_SEED=6 DUMP_FILE=/tmp/d-s6.jsonl node scripts/simNbaGmDeskDump.mjs > /tmp/d-s6.log 2>&1; echo "base exit $?"); tail -1 /tmp/d-s6.log; wc -l < /tmp/d-s6.jsonl
+dump-s10: (cd .rcw-base && SIM_SEED=10 DUMP_FILE=/tmp/d-s10.jsonl node scripts/simNbaGmDeskDump.mjs > /tmp/d-s10.log 2>&1; echo "base exit $?"); tail -1 /tmp/d-s10.log; wc -l < /tmp/d-s10.jsonl
+dump-s35: (cd .rcw-base && SIM_SEED=35 DUMP_FILE=/tmp/d-s35.jsonl node scripts/simNbaGmDeskDump.mjs > /tmp/d-s35.log 2>&1; echo "base exit $?"); tail -1 /tmp/d-s35.log; wc -l < /tmp/d-s35.jsonl
+dump-old: node .rc/x/dumpsave.mjs .rcw-base 70593dd4 && (cd .rcw-base && DUMP_FILE=/tmp/d-old.jsonl node scripts/simNbaGmDeskDump.mjs > /tmp/d-old.log 2>&1; echo "base exit $?"); tail -1 /tmp/d-old.log; wc -l < /tmp/d-old.jsonl
+replay: node .rc/x/replay.mjs .rcw-base /tmp/d-def.jsonl /tmp/d-s6.jsonl /tmp/d-s10.jsonl /tmp/d-s35.jsonl /tmp/d-old.jsonl
