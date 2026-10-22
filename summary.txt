@@ -1,0 +1,19 @@
+build exit=0 23s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+chain-1524 exit=0 0s | CHAIN OK (8 checks)
+owner-1524 exit=0 8s | simSoccerOwnerTail: green. The owner picks his club, plays on the table, and every call does what it says and none is best at everything.
+units-1524 exit=0 17s |    Duration  16.68s (transform 5.42s, setup 218ms, collect 11.39s, tests 17.61s, environment 1.30s, prepare 447ms)
+moneyafter-1524 exit=0 3s | All good: the money app keeps running for the whole retirement tail.
+managercareer-1524 exit=0 6s | ALL MANAGER CAREER CHECKS PASSED
+nodeadend-1524 exit=0 1s | simCareerNoDeadEnd: green. A convicted career is still a career, and a stranded save comes back.
+scoreshown-1524 exit=0 21s | simScoreShown: all sections green
+leaguefinish-1524 exit=0 14s | simCareerLeagueFinish: green. 756 careers, 6048 seasons, 4815 in a verified league; finish and title agree, the ladder holds, the historical stream holds after documented
+socialbrands-1524 exit=0 22s | ALL SOCIAL AND BRAND CHECKS PASSED
+awardsnight-1524 exit=0 60s | simCareerAwardsNight: ALL 179 CHECKS PASSED
+trophyruns-1524 exit=0 4s | Trophy campaigns: 9 groups, 24 full AR season pairs, 192 full campaign/RNG pairs, 0 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/ca
+ctl-1524 exit=0 100s | debtfree exit=1 1 fails | simSoccerOwnerTail: 1 failure(s)
+programme-1524 exit=0 52s | Career programme:50 original/compatibility/full product season pairs with exact RNG,240 opted gameplay seasons,21 effective loaded faults,163 unchanged chance outcomes an
+probe-1524 exit=0 3s | probeOwnerPanelFail (head): green
+walkOwner-1524 exit=0 52s | walkOwner: green, 94 checks
+flagship-1524 exit=0 0s | simFlagshipWeight: green. The flagship carries its own game and nobody else's.
+landing-bar-1524 exit=0 45s | playSoccerLanding: green at 320x640, 390x844, 1280x900 (also bar 360x780, bar 375x667; bar), HEAD ONLY
+walkRun-1524 exit=0 136s | walkRun1524: green, 388 checks
