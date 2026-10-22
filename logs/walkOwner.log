@@ -1,0 +1,96 @@
+save: Walk Owner, phase retirement_ceremony, 15 seasons, net worth 320
+390x844
+  ok: 390x844: six clubs for sale at €320M (6)
+  ok: 390x844: the list says its prices are the game's estimates
+  ok: 390x844: every club tile inside the screen
+  ok: 390x844: no sideways scroll on the list
+  ok: 390x844: bought the club picked (Brentford), the save says Brentford
+  ok: 390x844: the season waits for the season's call
+  ok: 390x844: season 1 offers Sign players
+  ok: 390x844: picking squad does not move the page (148 to 148)
+  ok: 390x844: squad shows as picked
+  ok: 390x844: the call squad is saved
+  ok: 390x844: season 1 (squad) is on the table: Finished 2nd of 20 on 74 points. Brentford move up to Tier 3. Loss €0.
+  ok: 390x844: season 1 shows the final table
+  ok: 390x844: season 1's table rows are on screen (5)
+  ok: 390x844: the panel shows the saved result line
+  ok: 390x844: no sideways scroll after season 1
+  ok: 390x844: season 2 offers Fund the academy
+  ok: 390x844: picking youth does not move the page (451 to 451)
+  ok: 390x844: youth shows as picked
+  ok: 390x844: the call youth is saved
+  ok: 390x844: season 2 (youth) is on the table: Finished 4th of 20 on 68 points. Income €1.8M.
+  ok: 390x844: season 2 shows the final table
+  ok: 390x844: season 2's table rows are on screen (5)
+  ok: 390x844: the panel shows the saved result line
+  ok: 390x844: no sideways scroll after season 2
+  ok: 390x844: season 3 offers Grow the ground
+  ok: 390x844: picking stadium does not move the page (587 to 587)
+  ok: 390x844: stadium shows as picked
+  ok: 390x844: the call stadium is saved
+  ok: 390x844: after a reload the call stadium is still picked
+  ok: 390x844: season 3 (stadium) is on the table: Finished 10th of 20 on 63 points. Income €1.5M.
+  ok: 390x844: season 3 shows the final table
+  ok: 390x844: season 3's table rows are on screen (5)
+  ok: 390x844: the panel shows the saved result line
+  ok: 390x844: no sideways scroll after season 3
+  ok: 390x844: season 4 offers Pay down the debt
+  ok: 390x844: picking debt does not move the page (635 to 635)
+  ok: 390x844: debt shows as picked
+  ok: 390x844: the call debt is saved
+  ok: 390x844: season 4 (debt) is on the table: Finished 7th of 20 on 63 points. Income €5.1M.
+  ok: 390x844: season 4 shows the final table
+  ok: 390x844: season 4's table rows are on screen (5)
+  ok: 390x844: the panel shows the saved result line
+  ok: 390x844: no sideways scroll after season 4
+  ok: 390x844: a reload keeps the owner's save as it was
+  ok: 390x844: after the reload the panel is on season 4
+  ok: 390x844: no page errors ()
+1280x900
+  ok: 1280x900: six clubs for sale at €320M (6)
+  ok: 1280x900: the list says its prices are the game's estimates
+  ok: 1280x900: every club tile inside the screen
+  ok: 1280x900: no sideways scroll on the list
+  ok: 1280x900: bought the club picked (Brentford), the save says Brentford
+  ok: 1280x900: the season waits for the season's call
+  ok: 1280x900: season 1 offers Sign players
+  ok: 1280x900: picking squad does not move the page (0 to 0)
+  ok: 1280x900: squad shows as picked
+  ok: 1280x900: the call squad is saved
+  ok: 1280x900: season 1 (squad) is on the table: Finished 2nd of 20 on 74 points. Brentford move up to Tier 3. Loss €0.
+  ok: 1280x900: season 1 shows the final table
+  ok: 1280x900: season 1's table rows are on screen (5)
+  ok: 1280x900: the panel shows the saved result line
+  ok: 1280x900: no sideways scroll after season 1
+  ok: 1280x900: season 2 offers Fund the academy
+  ok: 1280x900: picking youth does not move the page (243 to 243)
+  ok: 1280x900: youth shows as picked
+  ok: 1280x900: the call youth is saved
+  ok: 1280x900: season 2 (youth) is on the table: Finished 4th of 20 on 68 points. Income €1.8M.
+  ok: 1280x900: season 2 shows the final table
+  ok: 1280x900: season 2's table rows are on screen (5)
+  ok: 1280x900: the panel shows the saved result line
+  ok: 1280x900: no sideways scroll after season 2
+  ok: 1280x900: season 3 offers Grow the ground
+  ok: 1280x900: picking stadium does not move the page (349 to 349)
+  ok: 1280x900: stadium shows as picked
+  ok: 1280x900: the call stadium is saved
+  ok: 1280x900: after a reload the call stadium is still picked
+  ok: 1280x900: season 3 (stadium) is on the table: Finished 10th of 20 on 63 points. Income €1.5M.
+  ok: 1280x900: season 3 shows the final table
+  ok: 1280x900: season 3's table rows are on screen (5)
+  ok: 1280x900: the panel shows the saved result line
+  ok: 1280x900: no sideways scroll after season 3
+  ok: 1280x900: season 4 offers Pay down the debt
+  ok: 1280x900: picking debt does not move the page (381 to 381)
+  ok: 1280x900: debt shows as picked
+  ok: 1280x900: the call debt is saved
+  ok: 1280x900: season 4 (debt) is on the table: Finished 7th of 20 on 63 points. Income €5.1M.
+  ok: 1280x900: season 4 shows the final table
+  ok: 1280x900: season 4's table rows are on screen (5)
+  ok: 1280x900: the panel shows the saved result line
+  ok: 1280x900: no sideways scroll after season 4
+  ok: 1280x900: a reload keeps the owner's save as it was
+  ok: 1280x900: after the reload the panel is on season 4
+  ok: 1280x900: no page errors ()
+walkOwner: green, 92 checks
