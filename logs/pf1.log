@@ -1,0 +1,138 @@
+  NONE     /budget-builder 320x640: no first visit dialog, banner 335 to 640 (pending)
+  NONE     /budget-builder 390x844: no first visit dialog, banner 611 to 844 (pending)
+  NONE     /budget-builder 1280x900: no first visit dialog, banner 735 to 900 (pending)
+  PASS     /career-ladder 320x640: dialog "How to Play Career Ladder" (fixed) 48 to 592, "Let's Play!" (its go label) 523 to 567 tappable, banner 49 to 367 (inside the dialog); tapped, closed, screen usable
+  PASS     /career-ladder 390x844: dialog "How to Play Career Ladder" (fixed) 63 to 781, "Let's Play!" (its go label) 711 to 755 tappable, banner 136 to 434 (inside the dialog); tapped, closed, screen usable
+  PASS     /career-ladder 1280x900: dialog "How to Play Career Ladder" (fixed) 68 to 833, "Let's Play!" (its go label) 764 to 808 tappable, banner 141 to 367 (inside the dialog); tapped, closed, screen usable
+  PASS     /manager-hot-seat 320x640: dialog "How to Play Manager Hot Seat" (fixed) 48 to 592, "Let's Play!" (its go label) 523 to 567 tappable, banner 49 to 367 (inside the dialog); tapped, closed, screen usable
+  PASS     /manager-hot-seat 390x844: dialog "How to Play Manager Hot Seat" (fixed) 63 to 781, "Let's Play!" (its go label) 711 to 755 tappable, banner 136 to 434 (inside the dialog); tapped, closed, screen usable
+  PASS     /manager-hot-seat 1280x900: dialog "How to Play Manager Hot Seat" (fixed) 68 to 833, "Let's Play!" (its go label) 764 to 808 tappable, banner 141 to 367 (inside the dialog); tapped, closed, screen usable
+  PASS     /stadium-tycoon 320x640: dialog "How Stadium Tycoon works" (static) 16 to 319, "Let's go" (its go label) 250 to 298 tappable (37 px above the banner), banner 335 to 640 (pending); tapped, closed, screen usable
+  PASS     /stadium-tycoon 390x844: dialog "How Stadium Tycoon works" (static) 16 to 595, "Let's go" (its go label) 526 to 574 tappable (37 px above the banner), banner 611 to 844 (pending); tapped, closed, screen usable
+  PASS     /stadium-tycoon 1280x900: dialog "How Stadium Tycoon works" (static) 16 to 719, "Let's go" (its go label) 650 to 698 tappable (37 px above the banner), banner 735 to 900 (pending); tapped, closed, screen usable
+  NONE     /world-xi 320x640: no first visit dialog, banner 335 to 640 (pending)
+  NONE     /world-xi 390x844: no first visit dialog, banner 611 to 844 (pending)
+  NONE     /world-xi 1280x900: no first visit dialog, banner 735 to 900 (pending)
+  NONE     /alphabet-sprint 320x640: no first visit dialog, banner 335 to 640 (pending)
+  NONE     /alphabet-sprint 390x844: no first visit dialog, banner 611 to 844 (pending)
+  NONE     /alphabet-sprint 1280x900: no first visit dialog, banner 735 to 900 (pending)
+  PASS     /missing-xi 320x640: dialog "How to Play Missing XI" (fixed) 48 to 592, "Let's Play!" (its go label) 523 to 567 tappable, banner 49 to 367 (inside the dialog); tapped, closed, screen usable
+  PASS     /missing-xi 390x844: dialog "How to Play Missing XI" (fixed) 63 to 781, "Let's Play!" (its go label) 711 to 755 tappable, banner 136 to 434 (inside the dialog); tapped, closed, screen usable
+  PASS     /missing-xi 1280x900: dialog "How to Play Missing XI" (fixed) 68 to 833, "Let's Play!" (its go label) 764 to 808 tappable, banner 141 to 367 (inside the dialog); tapped, closed, screen usable
+  PASS     /career 320x640: dialog "How to Play: Career Quiz" (fixed) 48 to 592, "Let's Play!" (its go label) 523 to 567 tappable, banner 49 to 367 (inside the dialog); tapped, closed, screen usable
+  PASS     /career 390x844: dialog "How to Play: Career Quiz" (fixed) 63 to 781, "Let's Play!" (its go label) 711 to 755 tappable, banner 136 to 434 (inside the dialog); tapped, closed, screen usable
+  PASS     /career 1280x900: dialog "How to Play: Career Quiz" (fixed) 68 to 833, "Let's Play!" (its go label) 764 to 808 tappable, banner 141 to 367 (inside the dialog); tapped, closed, screen usable
+  PASS     /build-your-xi 320x640: dialog "How to Play: Build Your XI" (fixed) 12 to 323, "Got it!" (its go label) 254 to 298 tappable (37 px above the banner), banner 335 to 640 (pending); tapped, closed, screen usable
+  PASS     /build-your-xi 390x844: dialog "How to Play: Build Your XI" (fixed) 12 to 599, "Got it!" (its go label) 530 to 574 tappable (37 px above the banner), banner 611 to 844 (pending); tapped, closed, screen usable
+  PASS     /build-your-xi 1280x900: dialog "How to Play: Build Your XI" (fixed) 12 to 723, "Got it!" (its go label) 654 to 698 tappable (37 px above the banner), banner 735 to 900 (pending); tapped, closed, screen usable
+  PASS     /soccer-grid 320x640: dialog "How to Play Soccer Grid" (fixed) 48 to 592, "Let's Play!" (its go label) 523 to 567 tappable, banner 49 to 367 (inside the dialog); tapped, closed, screen usable
+  PASS     /soccer-grid 390x844: dialog "How to Play Soccer Grid" (fixed) 63 to 781, "Let's Play!" (its go label) 711 to 755 tappable, banner 136 to 434 (inside the dialog); tapped, closed, screen usable
+  PASS     /soccer-grid 1280x900: dialog "How to Play Soccer Grid" (fixed) 68 to 833, "Let's Play!" (its go label) 764 to 808 tappable, banner 141 to 367 (inside the dialog); tapped, closed, screen usable
+  NONE     /fantasy-draft 320x640: no first visit dialog, banner 335 to 640 (pending)
+  NONE     /fantasy-draft 390x844: no first visit dialog, banner 611 to 844 (pending)
+  NONE     /fantasy-draft 1280x900: no first visit dialog, banner 735 to 900 (pending)
+  NONE     /search-and-discard 320x640: no first visit dialog, banner 335 to 640 (pending)
+  NONE     /search-and-discard 390x844: no first visit dialog, banner 611 to 844 (pending)
+  NONE     /search-and-discard 1280x900: no first visit dialog, banner 735 to 900 (pending)
+  NONE     /perfect-season-nfl 320x640: no first visit dialog, banner 335 to 640 (pending)
+  NONE     /perfect-season-nfl 390x844: no first visit dialog, banner 611 to 844 (pending)
+  NONE     /perfect-season-nfl 1280x900: no first visit dialog, banner 735 to 900 (pending)
+  PASS     /football-grid 320x640: dialog "How to Play" (fixed) 12 to 323, "Close" (its close label) 21 to 53 tappable (282 px above the banner), banner 335 to 640 (pending); tapped, closed, screen usable
+  PASS     /football-grid 390x844: dialog "How to Play" (fixed) 91 to 520, "Close" (its close label) 100 to 132 tappable (479 px above the banner), banner 611 to 844 (pending); tapped, closed, screen usable
+  PASS     /football-grid 1280x900: dialog "How to Play" (fixed) 163 to 572, "Close" (its close label) 172 to 204 tappable (531 px above the banner), banner 735 to 900 (pending); tapped, closed, screen usable
+  PASS     /nfl-connections 320x640: dialog "🏈 How to Play" (fixed) 12 to 323, "Close" (its close label) 21 to 53 tappable (282 px above the banner), banner 335 to 640 (pending); tapped, closed, screen usable
+  PASS     /nfl-connections 390x844: dialog "🏈 How to Play" (fixed) 24 to 588, "Close" (its close label) 33 to 65 tappable (547 px above the banner), banner 611 to 844 (pending); tapped, closed, screen usable
+  PASS     /nfl-connections 1280x900: dialog "🏈 How to Play" (fixed) 106 to 630, "Close" (its close label) 115 to 147 tappable (589 px above the banner), banner 735 to 900 (pending); tapped, closed, screen usable
+  NONE     /conquest 320x640: no first visit dialog, banner 335 to 640 (pending)
+  NONE     /conquest 390x844: no first visit dialog, banner 611 to 844 (pending)
+  NONE     /conquest 1280x900: no first visit dialog, banner 735 to 900 (pending)
+  NONE     /guess-the-college 320x640: no first visit dialog, banner 335 to 640 (pending)
+  NONE     /guess-the-college 390x844: no first visit dialog, banner 611 to 844 (pending)
+  NONE     /guess-the-college 1280x900: no first visit dialog, banner 735 to 900 (pending)
+  NONE     /cfb-higher-lower 320x640: no first visit dialog, banner 335 to 640 (pending)
+  NONE     /cfb-higher-lower 390x844: no first visit dialog, banner 611 to 844 (pending)
+  NONE     /cfb-higher-lower 1280x900: no first visit dialog, banner 735 to 900 (pending)
+  NONE     /buzzer-beater 320x640: no first visit dialog, banner 335 to 640 (pending)
+  NONE     /buzzer-beater 390x844: no first visit dialog, banner 611 to 844 (pending)
+  NONE     /buzzer-beater 1280x900: no first visit dialog, banner 735 to 900 (pending)
+  NONE     /nba-stat-line 320x640: no first visit dialog, banner 335 to 640 (pending)
+  NONE     /nba-stat-line 390x844: no first visit dialog, banner 611 to 844 (pending)
+  NONE     /nba-stat-line 1280x900: no first visit dialog, banner 735 to 900 (pending)
+  NONE     /nba-chain 320x640: no first visit dialog, banner 335 to 640 (pending)
+  NONE     /nba-chain 390x844: no first visit dialog, banner 611 to 844 (pending)
+  NONE     /nba-chain 1280x900: no first visit dialog, banner 735 to 900 (pending)
+  PASS     /nba-connections 320x640: dialog "🏀 How to Play" (fixed) 12 to 323, "Close" (its close label) 21 to 65 tappable (270 px above the banner), banner 335 to 640 (pending); tapped, closed, screen usable
+  PASS     /nba-connections 390x844: dialog "🏀 How to Play" (fixed) 12 to 599, "Close" (its close label) 21 to 65 tappable (546 px above the banner), banner 611 to 844 (pending); tapped, closed, screen usable
+  PASS     /nba-connections 1280x900: dialog "🏀 How to Play" (fixed) 12 to 723, "Close" (its close label) 21 to 65 tappable (670 px above the banner), banner 735 to 900 (pending); tapped, closed, screen usable
+  NONE     /perfect-lineup-nba 320x640: no first visit dialog, banner 335 to 640 (pending)
+  NONE     /perfect-lineup-nba 390x844: no first visit dialog, banner 611 to 844 (pending)
+  NONE     /perfect-lineup-nba 1280x900: no first visit dialog, banner 735 to 900 (pending)
+  PASS     /nba-my-career 320x640: dialog "How to play" (fixed) 48 to 592, "Let's Play!" (its go label) 523 to 567 tappable, banner 49 to 367 (inside the dialog); tapped, closed, screen usable
+  PASS     /nba-my-career 390x844: dialog "How to play" (fixed) 63 to 781, "Let's Play!" (its go label) 711 to 755 tappable, banner 136 to 434 (inside the dialog); tapped, closed, screen usable
+  PASS     /nba-my-career 1280x900: dialog "How to play" (fixed) 68 to 833, "Let's Play!" (its go label) 764 to 808 tappable, banner 141 to 367 (inside the dialog); tapped, closed, screen usable
+  PASS     /baseball-career 320x640: dialog "⚾ How to Play" (fixed) 12 to 323, "Close" (its close label) 21 to 53 tappable (282 px above the banner), banner 335 to 640 (pending); tapped, closed, screen usable
+  PASS     /baseball-career 390x844: dialog "⚾ How to Play" (fixed) 36 to 576, "Close" (its close label) 45 to 77 tappable (535 px above the banner), banner 611 to 844 (pending); tapped, closed, screen usable
+  PASS     /baseball-career 1280x900: dialog "⚾ How to Play" (fixed) 98 to 638, "Close" (its close label) 107 to 139 tappable (597 px above the banner), banner 735 to 900 (pending); tapped, closed, screen usable
+  NONE     /mlb-connect-4 320x640: no first visit dialog, banner 335 to 640 (pending)
+  NONE     /mlb-connect-4 390x844: no first visit dialog, banner 611 to 844 (pending)
+  NONE     /mlb-connect-4 1280x900: no first visit dialog, banner 735 to 900 (pending)
+  PASS     /mlb-my-career 320x640: dialog "How to play" (fixed) 48 to 592, "Let's Play!" (its go label) 523 to 567 tappable, banner 49 to 367 (inside the dialog); tapped, closed, screen usable
+  PASS     /mlb-my-career 390x844: dialog "How to play" (fixed) 63 to 781, "Let's Play!" (its go label) 711 to 755 tappable, banner 136 to 434 (inside the dialog); tapped, closed, screen usable
+  PASS     /mlb-my-career 1280x900: dialog "How to play" (fixed) 68 to 833, "Let's Play!" (its go label) 764 to 808 tappable, banner 141 to 367 (inside the dialog); tapped, closed, screen usable
+  PASS     /baseball-connections 320x640: dialog "⚾ How to Play" (fixed) 12 to 323, "Close" (its close label) 21 to 53 tappable (282 px above the banner), banner 335 to 640 (pending); tapped, closed, screen usable
+  PASS     /baseball-connections 390x844: dialog "⚾ How to Play" (fixed) 24 to 588, "Close" (its close label) 33 to 65 tappable (547 px above the banner), banner 611 to 844 (pending); tapped, closed, screen usable
+  PASS     /baseball-connections 1280x900: dialog "⚾ How to Play" (fixed) 96 to 640, "Close" (its close label) 105 to 137 tappable (599 px above the banner), banner 735 to 900 (pending); tapped, closed, screen usable
+  NONE     /hockey-grid 320x640: no first visit dialog, banner 335 to 640 (pending)
+  NONE     /hockey-grid 390x844: no first visit dialog, banner 611 to 844 (pending)
+  NONE     /hockey-grid 1280x900: no first visit dialog, banner 735 to 900 (pending)
+  PASS     /nhl-connections 320x640: dialog "🏒 How to Play" (fixed) 12 to 323, "Close" (its close label) 21 to 65 tappable (270 px above the banner), banner 335 to 640 (pending); tapped, closed, screen usable
+  PASS     /nhl-connections 390x844: dialog "🏒 How to Play" (fixed) 12 to 599, "Close" (its close label) 21 to 65 tappable (546 px above the banner), banner 611 to 844 (pending); tapped, closed, screen usable
+  PASS     /nhl-connections 1280x900: dialog "🏒 How to Play" (fixed) 12 to 723, "Close" (its close label) 21 to 65 tappable (670 px above the banner), banner 735 to 900 (pending); tapped, closed, screen usable
+  NONE     /nhl-front-office 320x640: no first visit dialog, banner 335 to 640 (pending)
+  NONE     /nhl-front-office 390x844: no first visit dialog, banner 611 to 844 (pending)
+  NONE     /nhl-front-office 1280x900: no first visit dialog, banner 735 to 900 (pending)
+  NONE     /nhl-gauntlet-draft 320x640: no first visit dialog, banner 335 to 640 (pending)
+  NONE     /nhl-gauntlet-draft 390x844: no first visit dialog, banner 611 to 844 (pending)
+  NONE     /nhl-gauntlet-draft 1280x900: no first visit dialog, banner 735 to 900 (pending)
+  NONE     /f1-constructor 320x640: no first visit dialog, banner 335 to 640 (pending)
+  NONE     /f1-constructor 390x844: no first visit dialog, banner 611 to 844 (pending)
+  NONE     /f1-constructor 1280x900: no first visit dialog, banner 735 to 900 (pending)
+  NONE     /tennis-chain 320x640: no first visit dialog, banner 335 to 640 (pending)
+  NONE     /tennis-chain 390x844: no first visit dialog, banner 611 to 844 (pending)
+  NONE     /tennis-chain 1280x900: no first visit dialog, banner 735 to 900 (pending)
+  NONE     /golf-higher-lower 320x640: no first visit dialog, banner 335 to 640 (pending)
+  NONE     /golf-higher-lower 390x844: no first visit dialog, banner 611 to 844 (pending)
+  NONE     /golf-higher-lower 1280x900: no first visit dialog, banner 735 to 900 (pending)
+  NONE     /guess-nascar-driver 320x640: no first visit dialog, banner 335 to 640 (pending)
+  NONE     /guess-nascar-driver 390x844: no first visit dialog, banner 611 to 844 (pending)
+  NONE     /guess-nascar-driver 1280x900: no first visit dialog, banner 735 to 900 (pending)
+  NONE     /fight-career 320x640: no first visit dialog, banner 335 to 640 (pending)
+  NONE     /fight-career 390x844: no first visit dialog, banner 611 to 844 (pending)
+  NONE     /fight-career 1280x900: no first visit dialog, banner 735 to 900 (pending)
+  PASS     /ufc 320x640: dialog "How to Play 🥊" (fixed) 12 to 323, "Close" (its close label) 21 to 53 tappable (282 px above the banner), banner 335 to 640 (pending); tapped, closed, screen usable
+  PASS     /ufc 390x844: dialog "How to Play 🥊" (fixed) 42 to 569, "Close" (its close label) 51 to 83 tappable (528 px above the banner), banner 611 to 844 (pending); tapped, closed, screen usable
+  PASS     /ufc 1280x900: dialog "How to Play 🥊" (fixed) 122 to 613, "Close" (its close label) 131 to 163 tappable (572 px above the banner), banner 735 to 900 (pending); tapped, closed, screen usable
+  NONE     /teammates 320x640: no first visit dialog, banner 335 to 640 (pending)
+  NONE     /teammates 390x844: no first visit dialog, banner 611 to 844 (pending)
+  NONE     /teammates 1280x900: no first visit dialog, banner 735 to 900 (pending)
+  NONE     /guess-the-nation 320x640: no first visit dialog, banner 335 to 640 (pending)
+  NONE     /guess-the-nation 390x844: no first visit dialog, banner 611 to 844 (pending)
+  NONE     /guess-the-nation 1280x900: no first visit dialog, banner 735 to 900 (pending)
+  PASS     /whod-they-beat 320x640: dialog "How to Play Who'd They Beat?" (fixed) 48 to 592, "Let's Play!" (its go label) 523 to 567 tappable, banner 49 to 367 (inside the dialog); tapped, closed, screen usable
+  PASS     /whod-they-beat 390x844: dialog "How to Play Who'd They Beat?" (fixed) 63 to 781, "Let's Play!" (its go label) 711 to 755 tappable, banner 136 to 434 (inside the dialog); tapped, closed, screen usable
+  PASS     /whod-they-beat 1280x900: dialog "How to Play Who'd They Beat?" (fixed) 68 to 833, "Let's Play!" (its go label) 764 to 808 tappable, banner 141 to 367 (inside the dialog); tapped, closed, screen usable
+  PASS     /idle-arena 320x640: dialog "How Idle Arena works" (static) 0 to 319, "Start tapping" (its go label) 250 to 298 tappable (37 px above the banner), banner 335 to 640 (pending); tapped, closed, screen usable
+  PASS     /idle-arena 390x844: dialog "How Idle Arena works" (static) 0 to 595, "Start tapping" (its go label) 526 to 574 tappable (37 px above the banner), banner 611 to 844 (pending); tapped, closed, screen usable
+  PASS     /idle-arena 1280x900: dialog "How Idle Arena works" (static) 0 to 719, "Start tapping" (its go label) 650 to 698 tappable (38 px above the banner), banner 735 to 900 (pending); tapped, closed, screen usable
+  NONE     /list-quiz 320x640: no first visit dialog, banner 335 to 640 (pending)
+  NONE     /list-quiz 390x844: no first visit dialog, banner 611 to 844 (pending)
+  NONE     /list-quiz 1280x900: no first visit dialog, banner 735 to 900 (pending)
+  NONE     /quiz-board 320x640: no first visit dialog, banner 335 to 640 (pending)
+  NONE     /quiz-board 390x844: no first visit dialog, banner 611 to 844 (pending)
+  NONE     /quiz-board 1280x900: no first visit dialog, banner 735 to 900 (pending)
+  NONE     /mystery-box 320x640: no first visit dialog, banner 335 to 640 (pending)
+  NONE     /mystery-box 390x844: no first visit dialog, banner 611 to 844 (pending)
+  NONE     /mystery-box 1280x900: no first visit dialog, banner 735 to 900 (pending)
+
+135 route widths walked over 45 routes: 54 dialogs tapped and closed, 0 expected site reds, 81 without a first visit dialog, 0 red
+playFirstVisitDialogs: green. Every first visit dialog can be started with the cookie banner unanswered.

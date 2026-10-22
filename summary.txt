@@ -1,0 +1,9 @@
+build exit=0 23s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+tsc exit=0 50s | 
+pf2 exit=0 244s | playFirstVisitDialogs: green. Every first visit dialog can be started with the cookie banner unanswered.
+pf1 exit=0 254s | playFirstVisitDialogs: green. Every first visit dialog can be started with the cookie banner unanswered.
+ratchet exit=1 24s | playFirstVisitDialogs: PLAYFIRST_CONTROL=ratchet FIRED. 12 green or dialog free route widths listed as expected reds each failed the walk
+simNoRivalNames exit=0 10s | No rival product names found. 0 findings.
+cover exit=1 28s | playFirstVisitDialogs: PLAYFIRST_CONTROL=cover FIRED. 15 of 15 dialog buttons read as covered and the walk is red
+pf3 exit=0 244s | playFirstVisitDialogs: green. Every first visit dialog can be started with the cookie banner unanswered.
+simHarnessAnchors exit=0 31s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
