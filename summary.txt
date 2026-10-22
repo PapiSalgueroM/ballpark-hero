@@ -1,0 +1,5 @@
+guide-refresh exit=0 2s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+simSiteSearch exit=0 3s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+vitest-intl exit=1 7s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerIntlBoard.test.tsx,title=src/test/usCareerIntlBoard.test.tsx > the board fixture's fixed NBA s
+simNoRivalNames exit=0 18s | No rival product names found. 0 findings.
+tsc exit=0 73s | 
