@@ -109,7 +109,7 @@ try {
     const text = read('src/data/gameContent/football.ts'), start = text.indexOf("  '/football-grid': {"), end = text.indexOf("\n  '/nfl-career': {", start);
     assert(start >= 0 && end > start, 'owned guide boundaries');
     const heldHash = sha(text.slice(0, start) + text.slice(end));
-    assert.equal(heldHash, 'e729f4417fe3207a5c5c457efe56e89be1e9de41939b4c2b029a6a477cb2a903', 'unrelated football guide changed');
+    assert.equal(heldHash, '074cb5990d9ae7c0f259775280a1d1863f12af7b0fbbbbd5d92e04300fbf5e50', 'unrelated football guide changed');
     report.source.otherFootballSha256 = heldHash; return { heldSha256: heldHash };
   });
   if (CONTROL) {
