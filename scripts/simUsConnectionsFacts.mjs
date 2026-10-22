@@ -226,6 +226,10 @@ for (const s of SPORTS) {
   }
   unchecked[s] = cross.unchecked;
   memberUnknown[s] = cross.memberUnknown;
+  if (live.has(s)) {
+    const off = [...new Set(boards[s].flatMap(b => b.groups.flatMap(g => g.players)).filter(p => !sports[s].checker.has(p)))];
+    if (off.length) console.log(`   ${s}: ${off.length} MEN ON THE LIVE ROWS ARE NOT IN THE RECORD, SO THEIR GROUPS ARE NOT FULLY CHECKED. Extend the record with NAMES_FROM=<export> (scripts/usConnections/fetch*Record.mjs) and run again. First of them: ${off.slice(0, 8).join(', ')}`);
+  }
   console.log(`   ${s}: ${cross.boards} boards, ${cross.checked} of ${cross.groups} groups judged; members ${cross.memberChecks} judged (${cross.memberUnknown} unknown), other tiles ${cross.otherChecks} judged (${cross.otherUnknown} unknown); ${cross.findings.length} findings`);
 }
 
