@@ -16542,3 +16542,7 @@ This child adds only thirteen getPollDayET regression cases, their ordinary bran
 ## Root1450 shared poll helper, Green proof pending, 2026-10-22 UTC
 
 Original source3dcc9c8e/run39857298617 has preliminary expected4error/9healthy output; the complete native Original admission must pass and be pinned before this child is adopted. Preparation adds only the reviewed two-span civil-day helper, Green workflow and these notes. Thirteen tests and all caller/game/config/dependency files remain held. Green has not run. Exact old-body control, restoration and release checks remain owed. No user-facing query/rollover, qualified or live claim. I retains publication/game ownership.
+
+## Root1450 pure daily method, first Green failure retained, 2026-10-22 UTC
+
+Run39859333398/sourcea6d0a919 failed focused only after the raw13normal/old4owned9healthy/13restored/8poll results passed. Existing simDateDraws needs live data, which the strict guard blocked. saved_pages CI succeeded; native release qualification is not claimed. This child changes only WF+3appendnotes to run unchanged simDaily and explicitly mark simDateDraws NOT_RUN/unverified. No guard, helper, test, harness, cap or game changes, live mode, fake data or main integration. Preserve the failed run. Fresh Green/native checks and I publication remain pending.
