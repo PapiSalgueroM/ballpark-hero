@@ -24,6 +24,8 @@ try {
     alias: { '@': path.join(ROOT, 'src') }, logLevel: 'error',
   });
   const { E, S, H, A } = await import(pathToFileURL(bundle).href);
+  /* Round 1524: the owner tail is a lazy chunk, and before it lands choosing 'owner' returns the ceremony unchanged */
+  await E.loadOwnerTail();
   const hasCodec = typeof S.serializeSoccerCareerSave === 'function' && typeof S.parseSoccerCareerSave === 'function';
   const plain = CONTROL === 'plain' || !hasCodec;
   const serialize = plain ? JSON.stringify : S.serializeSoccerCareerSave;
@@ -75,7 +77,11 @@ try {
       assert(career.retired, `seed ${seed} completed through actual career APIs`);
       assert(career.seasons.some(row => row.type === 'playing'), 'actual professional seasons were played');
       largest.set('retired', JSON.stringify(E.choosePostRetirement(clone(career), 'retire', E.FALLBACK_CLUBS)));
-      for (const tail of ['manager', 'pundit', 'owner']) largest.set(`${tail}_season`, JSON.stringify(E.choosePostRetirement(clone(career), tail, E.FALLBACK_CLUBS)));
+      for (const tail of ['manager', 'pundit', 'owner']) {
+        const after = E.choosePostRetirement(clone(career), tail, E.FALLBACK_CLUBS);
+        if (tail === 'owner') assert(after.phase === 'owner_season' && after.ownerState, `seed ${seed}: the owner fixture is an owner save, not ${after.phase}`);
+        largest.set(`${tail}_season`, JSON.stringify(after));
+      }
       return [...largest].map(([phase, raw]) => ({ id: `${seed}-${position}-${phase}`, seed, position, phase, raw }));
     });
     fixtures.push(...generated.value);
