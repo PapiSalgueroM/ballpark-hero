@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+weight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+walk: node .rc/x/walkMorale.mjs
