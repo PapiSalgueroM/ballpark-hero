@@ -5,6 +5,16 @@ Branch `r1321-nba-draft-earned-a`, base `48cb9d4b` (origin/main, Release AY). Wr
 
 ## Where it stands
 
+2026-10-22, early (session J, the fix pass of the two step (d) reviews): **a STOP again, for the lead.** Both
+reviews found knob (i) wrote `years = 1` on draft night, before the summer that takes a season off every deal, so no
+club's second rounder ever played his season at the minimum (his own were released by his desk, a CPU club's re-signed
+for four seasons or gone). Fixed in the code (years 2: one season plus the summer's), held by a unit test that runs
+the summer and by a new harness section 12 with a control; the judge now refuses a fleet short of two runs of twelve
+sets and has known answers for every verdict. The full fleet was played again on the fixed engine (12 sets, twice)
+and the redrawn table is **red on two lines**: S1 at 10 RUNS DISAGREE and S5 OUTSIDE in one set of 24. Both are
+measured below as coin tosses of the judge as ruled, not effects of the fix; nothing was retuned and no ruled
+statistic was changed. The lead rules (see "The fix pass of 2026-10-22" below) before PART B is briefed.
+
 2026-10-21, late (session J): **the lead's rulings on the step (d) STOP are applied and the table is GREEN.** The
 two knobs are one rule for every club, his own included; the stop lines are the ones the lead ruled
 (`dukb-handoff/2026-10-10/briefs/lead-rulings-1321-d.md`); the full fleet ran again (12 sets, twice) with the
@@ -38,10 +48,14 @@ Nothing in `src` calls the new code but its own tests. No screen, no copy, no Wh
   night already open for the season as it stands (fix pass). Step (d) adds `NBA_DRAFT_KNOBS`, the class's two
   knobs of A4 in the host, drawing no number. Since the lead's ruling 5 of 2026-10-21 they are ONE RULE FOR EVERY
   CLUB, his own included (they were a rival's man only in step (d)): `secondOnMin: true` (renamed from
-  `rivalSecondOnMin`; a second round man signs one season at `nbaMinContract`) and `latePot: { from: 13, cap: 66 }`
+  `rivalSecondOnMin`; a second round man plays one season at `nbaMinContract`, written since the fix pass of
+  2026-10-22 as `NBA_SECOND_ROUND_SEASONS + NBA_DRAFT_NIGHT_SUMMER` = 2 on draft night, because the summer right
+  after the draft takes a season off every deal before he plays) and `latePot: { from: 13, cap: 66 }`
   (a man from pick 13 on has his ceiling capped at 66, never under his own rating, so he stays the player he was
-  drafted as). His first rounder still signs the league's first round scale (`nbaSignDraftee`), which is the
-  league's deal and not a knob.
+  drafted as). His first rounder still signs the first round scale (`nbaSignDraftee`, four seasons plus the
+  summer's), and that is HIS CLUB'S ALONE, not the league's: a CPU club's first rounder keeps the engine's deal of
+  four (`nbaProspectToPlayer`) and so plays three. Not a knob in this round; a rookie scale for every club is a
+  later round's, and it must count the summer's season the same way.
 - `src/lib/gmEarnedDraft.test.ts` (10 tests) and `src/lib/nbaEarnedDraft.test.ts` (15 tests since step (d), which added the knobs test; since the rulings it holds his own late first and second rounder to the same knobs as a rival's); both reach the lift,
   the pick ledger of gmPicks included, only through gmEarnedDraft's re-exports (`movePicks`, `newLedger`, `pickKey`).
 - `scripts/simNbaEarnedDraft.mjs` (new) and `scripts/data/nbaEarnedDraftFixture.json` (recorded from `48cb9d4b`).
@@ -56,6 +70,93 @@ Nothing in `src` calls the new code but its own tests. No screen, no copy, no Wh
 After a summer the season has rolled, so the `draft` block a night leaves on the desk (about 8 KB: the order and 60
 slots) is never current again. It stays on the save on purpose (advice 25); nobody should "clean" it.
 
+## The fix pass of 2026-10-22 (session J): the two reviews of 2c7b0e05, and the table played again
+
+The reviews: `dukb-handoff/2026-10-10/results-g/review-run-1321.md` and `review-read-1321.md` (both FIX: one major
+the two found independently, five minors). The commits: `d25c7c72` (F1, F3), `26fe2f39` (F2, F5, F7), `4703ecc5`
+(merge of origin/main `776d1072`, clean, no NBA engine, desk, lift or round file moved) and this notes commit. The
+closing report is `dukb-handoff/2026-10-10/results-g/fix-1321.md`.
+
+What was fixed:
+
+- F1 (the major): knob (i) now writes `NBA_SECOND_ROUND_SEASONS + NBA_DRAFT_NIGHT_SUMMER` (1 + 1) on draft night,
+  the same `+ 1` nbaSignDraftee gives the first round scale, so every club's second rounder is on his club for one
+  season at the minimum after the summer. Held three ways: a unit test that runs the night to its end with the staff
+  button, then `nbaDeskOffseason` (which runs the engine's summer for the league), and follows all 60 men (his two
+  kept and never on his re-sign desk; a rival's kept on his deal less the summer's season unless the summer's roster
+  trim waived him; every kept second rounder on one season at the minimum); harness section 12, THE DEALS SURVIVE
+  THE SUMMER, on every quick walk (1,800 deals, 46 his, 1,745 kept, 55 trimmed, 858 second rounders of which 30
+  his); and control `summerdeal` (the knob written back to one season: 2,075 failures, red in 12 alone). Mutation
+  `years` on runner `r1321-fx-m`: vitest exit 1 and the harness exit 1.
+- F3: the knobs test holds pick 12 uncapped and pick 13 capped. Mutations `k1` (`>=` to `>`, so the cap starts at
+  pick 14) and `k0` (`>= late.from - 1`, so it starts at pick 12):
+  vitest exit 1 each (`r1321-fx-m`; the harness stays 0 on both, one man a draft, so the unit test is the guard).
+- F2 and F5: one run is NOT TWO RUNS; a fleet short of two runs of twelve sets in both arms is refused
+  (`fleetShort`, control `judgefleet`); the table's one assertion is `lineHolds` (control `judgepass`); section 11
+  adds UNRESOLVED, RUNS DISAGREE, NOT TWO RUNS and the fleet's size as known answers (46 known answers, 38 verdicts
+  held), with controls `judgeres` and `judgeagree`. A COMBINE of run 1 alone, or of two sets, is now red
+  (`r1321-fx-c` lines `onerun` and `partial`, exit 1). The judge's controls fire on the quick walk (`r1321-fx-b`,
+  CONTROL=all, all 30): judgeres 12, judgeagree 12, judgepass 18, judgefleet 2. Under a COMBINE of this fleet they
+  cannot show their own section alone while section 7 is already red (`r1321-fx-c`, exit 2 each, red in 11 and 7).
+- F7: S6 dead's cause says a CPU first rounder plays three seasons (LINES, the header, these notes); the scale of
+  four played is his club's alone (the Files list above).
+- F6 (S1 at 10's lower side, -0.5): unchanged, the lead's call.
+
+### The two arm table on the fixed engine, 12 sets, two runs (fleet `r1321-fx-f1` and `r1321-fx-f2` on d25c7c72, judged by `r1321-fx-c` on 26fe2f39)
+
+`SIM_NBA_EARNED_DRAFT_COMBINE=<the 60 fleet files> node scripts/simNbaEarnedDraft.mjs`: exit 1, "RED in section 7"
+(2 failures). The careers are the same code since d25c7c72 (26fe2f39 touches the judge, sections 11 and 12 and
+comments only). The OLD arm's numbers equal the earlier table's to the printed digit.
+
+| line | old (run 1 / run 2) | new | new minus old, run by run (error) | band | sets | verdict |
+|---|---|---|---|---|---|---|
+| S1 at 5 | 83.11 / 83.11 | 83.38 / 83.37 | +0.27 (0.01) / +0.26 (0.01) | within 0.50 | 12 / 12 | PASS |
+| S1 at 10 | 82.20 / 82.19 | 83.16 / 83.17 | +0.96 (0.01) / +0.98 (0.01) | from -0.50 to +1.50 | 12 / 12 | RUNS DISAGREE |
+| S2 | 105.9 / 106.0 | 108.1 / 108.3 | +2.2 (0.2) / +2.3 (0.2) | within 21.2 | 12 / 12 | PASS |
+| S3 (printed) | 81.8 / 80.9 | 44.1 / 43.4 | -37.7 (1.3) / -37.5 (1.5) | printed, never asserted | 12 / 12 | PRINTED |
+| S4 | 100.0 / 100.0 | 63.8 / 64.9 | (the arm's own) 63.8 (1.0) / 64.9 (0.9) | at least 60.0 | 12 / 12 | PASS |
+| S6 dead | 0.13 / 0.13 | 2.90 / 2.92 | (the arm's own) 2.90 (0.02) / 2.92 (0.03) | under 3.00 | 12 / 12 | PASS |
+| S6 payers | 2.29 / 2.29 | 1.93 / 1.93 | -0.36 (0.01) / -0.36 (0.01) | within 0.50 | 12 / 12 | PASS |
+| S5 | flat (pick 1) | 23 of 24 sets | | every set | 24 | OUTSIDE in run 2 set 10 |
+
+Against the table of 2026-10-21 (the knob that released them): CPU dead money rose from 2.47 / 2.52 to 2.90 / 2.92
+(a CPU second rounder now holds a season at the minimum, and the summer's roster trim waives some of them), now
+0.08 to 0.10 under its cap, about three errors; S4 63.8 / 64.9 (was 65.9 / 64.6), about four errors over its floor;
+the payers -0.36 (was -0.39); his own dead money 0.02 $M a season (was the false 0.00). The rest within errors.
+Fleet controls on sets 1 to 4 (`r1321-fx-fc`, judged by `r1321-fx-c`): fatclass FIRED (S1 at 5 by 2.27, 100.1
+errors; S1 at 10 by 3.90, 318.2; S2 by 35.7, 94.7; S6 payers by 10.33); bestfirst FIRED (S5 in 4 of 4 sets). The
+arbitrage arm (4 sets, 578 forced swaps, a CEILING): his first selection at picks 3.7, 3.7 and 4.3 (strong,
+middle, weak) against 19.0, 16.8 and 16.9 plain; the strong starts' title share 67.2 against 5.7.
+
+### Why the two red lines are coin tosses of the judge, measured (nothing retuned, no ruled statistic changed)
+
+- RUNS DISAGREE. The rule as ruled: the two runs' pooled differences within 2 times the larger run's error. The
+  runs are the same seeds played twice, but ids carry a per process epoch and the scout read hashes them, so the
+  careers part after the first draft and the runs are independent replicates. Their gap then has the error
+  root(se1 squared plus se2 squared), about 1.41 times one run's, and the rule fires on a correct fleet about 13 to
+  16 percent of the time on each line, and more often than not on at least one of the six asserted lines. Measured
+  on the per set lines of both fleets, the gap in errors of the difference: before the fix 0.78, 0.06, 1.38, 0.96,
+  1.60, 0.07; after it 0.34, 2.19, 0.35, 0.76, 0.40, 0.04 (mean 0.74; 0.80 is what independent runs give). The
+  table of 2026-10-21 passed with S2 at 95 percent and S6 dead at 93 percent of the allowed gap. S1 at 10 now: run 1
+  +0.954 (0.007), run 2 +0.977 (0.008), gap 0.0225 against 0.0154 allowed, and over 60 errors inside its band.
+- S5 IN EVERY SET. Pooled over the 24 sets every step is right by many errors (rating down 2.41, 7.39, 3.78, 0.54
+  and 0.35, errors 0.09 to 0.03; pick up 3.53 to 5.42; before the fix 2.65, 7.01, 3.91, 0.57 and 0.30). The last
+  step (finish 21 to 25 against 26 to 30) is about 0.3 rating points with a per set sd of 0.15, so one set at or
+  under zero turns up in about one table in four or five; before the fix the smallest set was 0.1, now run 2 set 10
+  is 0.0. The fix did not weaken the incentive: that pooled step rose from 0.30 to 0.35.
+
+### What the lead rules before PART B
+
+1. The agreement half of correction 8 (b). Proposed: the two runs within z errors of THEIR DIFFERENCE (root of the
+   two squared errors), z = 3 (0.3 percent a line, about 2 percent a table of six). Under it every line of this
+   table agrees (S1 at 10 is 2.19). Section 11's RUNS DISAGREE known answer moves with it.
+2. S5. Proposed: each band's step judged on the pooled fleet and resolved (over three of its errors), with the count
+   of sets printed beside it; or keep "every set" and retune the curve's top so the last step clears zero by several
+   sds (ruling 5 allows a retune within the knobs when S5 leaves its band). The fixer did neither: one is the lead's
+   statistic, and a retune to escape one draw is fitting to noise and moves every other line.
+
+Until then the step (d) STOP stands. The quick lane (the two gate lines of rc-1321.txt) is green.
+
 ## The lead's rulings of 2026-10-21, applied (session J, late)
 
 What the rulings changed, each in the code:
@@ -68,7 +169,8 @@ What the rulings changed, each in the code:
    different cost from the one the lead accepted). S1 at season 5 keeps its 0.5 either side. PART B's brief
    revisits season 10 with the class curve.
 4. CPU dead money is under 3.0 $M a season (`kind: 'cap'`), with its cause written in the line and the harness:
-   first rounders 13 to 30 sign the four season rookie deal and CPU clubs cut them, which no allowed knob reaches.
+   CPU clubs' first rounders 13 to 30 sign the engine's four season deal (three played: the summer after the draft
+   takes one, corrected in the fix pass) and CPU clubs cut them, which no allowed knob reaches.
    The real fix is a per slot rookie scale with team options (two guaranteed years and two options, so a late first
    rounder is declined rather than cut), named for PART B or a PART C, after which this band returns under 1.0.
 5. The knobs are SYMMETRIC (`NBA_DRAFT_KNOBS.secondOnMin` and `latePot`, every club's man, his own included). The
@@ -104,8 +206,9 @@ widened band made its line coarser.
 What the symmetric knobs moved against the rival only table of step (d): S4 fell from 73.2 / 71.9 to 65.9 / 64.6
 (his own late picks no longer grow, so a strong start ages faster), now 5.3 points (about five errors) over its
 floor; the payers moved from -0.21 to -0.39, 0.11 (about five errors) inside their band; S3 from -34.6 to -37.9;
-S1 at 10 from +1.04 to +0.98; his own dead money from 2.15 $M a season to 0.00 (his second rounders now sign one
-season at the minimum). The strong starts' title share over seasons 2 to 10, printed and never asserted: OLD 78.3,
+S1 at 10 from +1.04 to +0.98; his own dead money from 2.15 $M a season to 0.00 (FALSE CAUSE, corrected by the fix
+pass of 2026-10-22: it fell to zero because his second rounders were released by his desk the summer they were
+drafted, before they played; see that section). The strong starts' title share over seasons 2 to 10, printed and never asserted: OLD 78.3,
 NEW 5.6 (7.6 with the rival only knobs). Two lines now sit about five errors from their edge, the payers and S4: a
 retune in PART B (the class curve) must watch both.
 

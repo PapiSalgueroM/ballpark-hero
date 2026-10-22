@@ -259,6 +259,19 @@
  *       1,515 and 30 (6, 3); shownread 479 (3); redraw 30 (4); reopen 30 (4); trustblock 284 and 100 (3, 8);
  *       noneed 4, rivalscout 2, bigneed 3 (9); sportname 1, foreignimport 1 (10); elevenhead 1,502 (6);
  *       flatclass 2 (6).
+ * MEASURED 2026-10-22, the fix pass of the two step (d) reviews (knob (i) at one season plus the summer's; fleet
+ * r1321-fx-f1 and r1321-fx-f2 on d25c7c72, judged by r1321-fx-c on 26fe2f39), 12 sets, two runs:
+ *   S1 at 5 +0.27 / +0.26 (0.01): PASS.   S1 at 10 +0.96 / +0.98 (0.01): RUNS DISAGREE (gap 0.0225 against
+ *   0.0154 allowed, 2.19 errors of the difference; over 60 errors inside its band).   S2 +2.2 / +2.3 (0.2): PASS.
+ *   S3 -37.7 / -37.5: PRINTED.   S4 63.8 / 64.9 (1.0, 0.9): PASS.   S6 dead 2.90 / 2.92 (0.02, 0.03), under 3.0:
+ *   PASS, about three errors from the cap.   S6 payers -0.36 / -0.36 (0.01): PASS.   S5 23 of 24 sets: OUTSIDE in
+ *   run 2 set 10 (its last rating step 0.0; pooled 0.35, error 0.03, per set sd 0.15). Both reds measured as coin
+ *   tosses of the judge as ruled (docs/audits/ROUND-1321-NOTES.md, the fix pass): a STOP for the lead, no retune.
+ *   Fleet controls (sets 1 to 4, r1321-fx-fc): fatclass FIRED (S1 at 5 by 2.27, S1 at 10 by 3.90, S2 by 35.7,
+ *   payers by 10.33); bestfirst FIRED (S5 in 4 sets). Quick walk (r1321-fx-b on 26fe2f39): 11 sections, 212,168
+ *   checks; section 12 1,800 deals (46 his, 1,745 kept, 55 trimmed, 858 second rounders, 30 his); section 11 46
+ *   known answers, 38 verdicts held; CONTROL=all 30 fired, the new ones summerdeal 2,075 (12), judgeres 12,
+ *   judgeagree 12, judgepass 18, judgefleet 2 (11); the rest as listed for r1321-k8.
  */
 import './lib/seedRandom.mjs';
 import fs from 'node:fs';
