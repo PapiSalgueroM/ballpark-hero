@@ -39,7 +39,7 @@ const { PGlite } = await import(pathToFileURL(entry).href);
 const read = p => fs.readFileSync(path.join(ROOT, p), 'utf8').replace(/\r\n/g, '\n');
 const SEED = read('supabase/migrations/20260526000004_connections_puzzles.sql');
 let MIGRATION = read('supabase/migrations/20261022130000_round_1553_connections_truth.sql');
-const GUARD = '         and c.groups_json = r.old_groups;';
+const GUARD = '         and c.groups_json in (select o.old_groups from r1553_rows o where o.puzzle_id = r.puzzle_id);';
 if (CONTROL === 'noguard') {
   if (!MIGRATION.includes(GUARD)) { console.error('control noguard: the guard is not in the migration, ABORTED'); process.exit(2); }
   MIGRATION = MIGRATION.replace(GUARD, ';');
