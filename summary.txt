@@ -1,0 +1,7 @@
+simTycoonAwayMatchdays exit=0 92s |    All 6 controls fired exactly where they should, in node and in the real hook.
+tsc exit=0 103s | 
+simNoRivalNames exit=0 24s | No rival product names found. 0 findings.
+simStorageWrites exit=0 6s | simStorageWrites: all green (owed: 12)
+retake-head exit=0 1s | this tree: 12 of 12 histories reproduce the committed hashes, 0 differ
+simHarnessAnchors exit=0 58s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simTycoonScorelines exit=0 509s | simTycoonScorelines: 37 checks, 0 failed [509 s]
