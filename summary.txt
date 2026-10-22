@@ -1,0 +1,3 @@
+continuity-1508 exit=2 0s | treeWithoutMerge: taking the piece out conflicts in src/components/club-manager/ClubManagerHelp.tsx, src/lib/clubManager.ts: no honest base
+cont-nobridge-1508 exit=2 0s | mutCont1508: the bridged line stands 0 times in scripts/simManagerWorldContinuity.mjs, not once
+held-1508 exit=0 0s | src and scripts held after every line
