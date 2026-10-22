@@ -1,0 +1,7 @@
+c-nogate exit=1 32s | simSoccerSeasonAwards: RED, 3 failure(s)
+c-usdrift exit=1 5s | simSoccerSeasonAwards: RED, 1 failure(s)
+c-form-nogate exit=1 15s | simCareerForm: RED, 1 failure(s)
+c-stale exit=1 61s | simSoccerSeasonAwards: RED, 1 failure(s)
+c-dropcoins exit=1 156s | simSoccerSeasonAwards: RED, 1 failure(s)
+vitest-head exit=0 232s | vitest head exit 0
+vitest-base exit=0 230s | vitest base exit 0

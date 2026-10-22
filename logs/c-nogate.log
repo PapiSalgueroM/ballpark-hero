@@ -1,0 +1,9 @@
+3) the years: no award in a season it was not given for
+   CONTROL nogate: the three year gates are gone from this bundle
+   Golden Glove: 65 outside 2004 on, 325 inside (360 careers from 1990 to 2015, seed 1528)
+   FAIL 65 Golden Glove awards in seasons it was not given for
+   UEFA Player of the Year: 97 outside 2010 to 2022, 60 inside (360 careers from 1990 to 2015, seed 1528)
+   FAIL 97 UEFA Player of the Year awards in seasons it was not given for
+   Puskás Award: 8 outside 2008 on, 23 inside (360 careers from 1990 to 2015, seed 1528)
+   FAIL 8 Puskás Award awards in seasons it was not given for
+simSoccerSeasonAwards: RED, 3 failure(s)

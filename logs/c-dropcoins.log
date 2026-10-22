@@ -1,0 +1,5 @@
+4) the main stream: every season draws as the base did, to the end of the awards block
+   CONTROL dropcoins: the eight old coins are no longer drawn in this tree's bundle
+   160 careers, 3705 seasons played by both trees from one state and one seed: draws parted at 995, the season row at 0, the awards block ran in one tree only 0 times; the season's awards differ in 543 (the round's own change)
+   FAIL the main stream moved: 995 draw counts, 0 season rows, 0 blocks part from the base
+simSoccerSeasonAwards: RED, 1 failure(s)
