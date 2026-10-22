@@ -1,0 +1,5 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+motionfull: node scripts/simLiveSimMotion.mjs
+chancewait: LIVE_MOTION_CONTROL=chancewait node scripts/simLiveSimMotion.mjs
+nomeet: LIVE_MOTION_CONTROL=nomeet node scripts/simLiveSimMotion.mjs
+nameearly: LIVE_MOTION_CONTROL=nameearly node scripts/simLiveSimMotion.mjs

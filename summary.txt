@@ -1,0 +1,5 @@
+chancewait exit=1 16s | simLiveSimMotion: control chancewait turned "R11" red on an assertion (2 failed), as it must.
+nomeet exit=1 15s | simLiveSimMotion: control nomeet turned "R11" red on an assertion (2 failed), as it must.
+nameearly exit=1 14s | simLiveSimMotion: control nameearly turned "R11" red on an assertion (1 failed), as it must.
+motionfull exit=1 78s | simLiveSimMotion: RED. vitest exit 1, 2 failed, 64 passed.
+tsc exit=0 90s | 
