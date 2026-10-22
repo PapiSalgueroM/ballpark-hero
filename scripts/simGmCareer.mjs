@@ -27,6 +27,15 @@
  *      the one below on every losing season, the same on every winning one;
  *      the worked example (trust 16, a missed season: fired at level 0, kept
  *      on trust 1 at level 1).
+ *   3  MEDIA (step 3): the board's answerPress read off its source (comments
+ *      out) is one hostPressOption over hostXpEffects of its desk handed to
+ *      applyGmPressChoice with one Math.random; then that call over every
+ *      presser buildGmPresser makes for the NFL's words (four kinds) and every
+ *      answer, at levels 0 to 5, on a half step roll grid of 1000: each gamble
+ *      lands exactly GM_PRESS_ODDS_PER_POINT x 1000 more times a level (read,
+ *      never typed), level 0 lands at its own odds, a safe answer is the same
+ *      object and the same trust at every level, the tilt never moves, and
+ *      the draws an answer takes never move.
  *   4  the market after a real firing (MEASURE): twenty seeds, twelve
  *      seasons, one league a seed played in the board's order with every club
  *      graded as a GM's club: its own mandate from its strength rank each
@@ -73,7 +82,7 @@
  *   epoch (1)    the id epoch is not pinned before the bundle is evaluated
  *   addkey (1)   the host's close writes a third block
  *   deskoffblock, paytwice, lateseat, flatowner (2); emptytile, nameinline (8)
- *   firedclub, unkeyed (4)
+ *   flatmedia, extradraw (3); firedclub, unkeyed (4)
  *   staffrides, ledgerrides, rostermove, depthstays, askrebuilt (5)
  *   halfseason, notrim, awayxp, lastcall, noawaydraft (6)
  *   overlap, firedlost (7)
@@ -115,7 +124,7 @@ const ONLY = (process.env.SIM_GM_CAREER_ONLY || '').split(',').filter(Boolean);
 const runs = id => ONLY.length === 0 || ONLY.includes(id);
 const CONTROLS = {
   epoch: '1', addkey: '1', deskoffblock: '2', paytwice: '2', lateseat: '2', emptytile: '8', nameinline: '8',
-  flatowner: '2', firedclub: '4', unkeyed: '4', staffrides: '5', ledgerrides: '5', rostermove: '5', depthstays: '5', askrebuilt: '5',
+  flatowner: '2', flatmedia: '3', extradraw: '3', firedclub: '4', unkeyed: '4', staffrides: '5', ledgerrides: '5', rostermove: '5', depthstays: '5', askrebuilt: '5',
   halfseason: '6', notrim: '6', awayxp: '6', lastcall: '6', noawaydraft: '6', overlap: '7', firedlost: '7',
 };
 if (CONTROL && !CONTROLS[CONTROL]) {
@@ -160,6 +169,10 @@ const EDITS = {
   paytwice: ['host', '  if (seat.last !== undefined && f.season <= seat.last) return same;', '  if (false) return same;'],
   lateseat: ['host', 'titles: i.titles, fired: i.fired, seasonCounted: false,', 'titles: i.titles, fired: i.fired, seasonCounted: true,'],
   emptytile: ['host', "value: 'No more calls',", "value: '',"],
+  /* Section 3: Media. The option handed through unchanged at every level; the board's press drawing twice. */
+  flatmedia: ['host', '  if (!g || fx.points.media <= 0) return opt;', '  if (!g || fx.points.media <= 9) return opt;'],
+  extradraw: ['board', "    const res = applyGmPressChoice(trust, hostPressOption(presser.options[i], hostXpEffects(gm, 'nfl')), Math.random);",
+    "    const res = applyGmPressChoice(trust, hostPressOption(presser.options[i], hostXpEffects(gm, 'nfl')), () => (Math.random(), Math.random()));"],
   /* Section 2: Ownership's cushion not applied. */
   flatowner: ['host', '  const trustDelta = fx.trustDelta(grade.trustDelta) + movers;', '  const trustDelta = grade.trustDelta + movers;'],
   /* Section 4: the feed. The fired club let back into it; the feed drawn from Math.random, not its key. */
@@ -224,6 +237,7 @@ export { FO_TEAMS } from '${ROOT_URL}/src/data/frontOfficePlayers.ts';
 export * as S from ${lib('gmStaff')};
 export * as X from ${lib('gmXp')};
 export * as P from ${lib('gmPicks')};
+export * as FP from ${lib('foGmPress')};
 export { isFrontOfficeSave } from ${lib('frontOfficeSave')};
 `);
 const esbuild = createRequire(`${NM}/`)('esbuild');
@@ -272,7 +286,7 @@ if (CONTROL === 'epoch') {
 }
 const M = createRequire(import.meta.url)(BUNDLE);
 Math.random = realRandom;
-const { E, D, H, FM, SEAT, G, K, S, X, P, isFrontOfficeSave, nflDeskHost, leagueNames, FO_DEPTH, FO_TEAMS } = M;
+const { E, D, H, FM, FP, SEAT, G, K, S, X, P, isFrontOfficeSave, nflDeskHost, leagueNames, FO_DEPTH, FO_TEAMS } = M;
 const EPOCH = (() => { const id = M.makeIdMinter('x')(); return id.slice(1, id.lastIndexOf('-')); })();
 const unEpoch = s => s.split(EPOCH).join('E');
 
@@ -595,6 +609,71 @@ if (runs('2')) {
   }
   console.log(`   OWNERSHIP: ${O.losing} losing and ${O.winning} winning club seasons walked at levels 0 to 5; from trust 60 a season costs ${Object.entries(O.ladders).map(([r, c]) => `${r} ${c}`).join('; ')}; ${O.example ?? ''}`);
   ok(O.losing >= 100 && O.winning >= 100, `too few seasons walked (${O.losing} losing, ${O.winning} winning)`);
+}
+
+/* ================================================================== */
+/* 3. Media, through the board's own call                               */
+/* ================================================================== */
+if (runs('3')) {
+  begin('3', 'Media: every gamble lands exactly one step more often a level, the safe answers and the tilt never move, one draw an answer');
+  /* The board's answerPress, read off its source with the comments out: one hostPressOption over hostXpEffects of
+     its own desk, handed to applyGmPressChoice with ONE Math.random (control extradraw: the board draws twice). */
+  const boardSrc = lf(overrides.get(path.resolve(FILES.board).toLowerCase()) ?? fs.readFileSync(FILES.board, 'utf8'));
+  const from = boardSrc.indexOf('const answerPress = ');
+  const body = from < 0 ? '' : boardSrc.slice(from, boardSrc.indexOf('\n  };', from));
+  const code = body.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, '');
+  const count = s => code.split(s).length - 1;
+  ok(count('Math.random') === 1 && count('hostPressOption(') === 1 && count("hostXpEffects(gm, 'nfl')") === 1 && count('applyGmPressChoice(') === 1,
+    `the board's answerPress is not one eased option and one draw (${J({ random: count('Math.random'), option: count('hostPressOption('), effects: count("hostXpEffects(gm, 'nfl')") })})`);
+  /* The same call over every presser the board can build, at every Media level, on a half step roll grid. */
+  const deskWith = k => {
+    let b = X.addXp(X.defaultGmXp(), 1e6);
+    for (let i = 0; i < k; i++) b = X.spendGmPoint(b, 'media');
+    return G.withGmBlock(G.freshGmDesk(), H.GM_HOST_KEYS.xp, b);
+  };
+  const answer = (trust, opt, desk, rng) => FP.applyGmPressChoice(trust, H.hostPressOption(opt, H.hostXpEffects(desk, 'nfl')), rng);
+  const base = { justHired: false, teamLabel: 'Kansas City Chiefs', fired: false, wonTitle: false, gradeResult: null, tradeLine: null, seasonsPlayed: 3 };
+  const kinds = new Map();
+  for (const f of [{ justHired: true }, { wonTitle: true, gradeResult: 'title' }, { gradeResult: 'missed' }, { gradeResult: 'badly' },
+    { gradeResult: 'met', tradeLine: 'a deal for a pass rusher' }, { gradeResult: 'overachieved', tradeLine: 'a deal' }]) {
+    const p = FP.buildGmPresser(NFL_WORDS, { ...base, ...f });
+    if (p) kinds.set(p.id, p);
+  }
+  ok(kinds.size === 4, `the board builds ${kinds.size} kinds of presser, the press file names four`);
+  const step = Math.round(X.GM_PRESS_ODDS_PER_POINT * 1000);
+  const ladders = [];
+  let gambles = 0, safes = 0;
+  for (const p of kinds.values()) {
+    for (const opt of p.options) {
+      const lands = [], drawn = [], tilts = new Set(), trusts = new Set();
+      for (let k = 0; k <= 5; k++) {
+        const desk = deskWith(k);
+        let landed = 0, draws = 0;
+        for (let n = 0; n < 1000; n++) {
+          const roll = (n + 0.5) / 1000;
+          const res = answer(50, opt, desk, () => { draws++; return roll; });
+          if (opt.effect.gamble && res.trust === Math.min(100, 50 + opt.effect.trust + opt.effect.gamble.gain)) landed++;
+          tilts.add(res.tilt);
+          if (!opt.effect.gamble) trusts.add(res.trust);
+        }
+        lands.push(landed); drawn.push(draws);
+      }
+      const at = `${p.id} "${opt.label}"`;
+      ok(new Set(drawn).size === 1 && drawn[0] === (opt.effect.gamble ? 1000 : 0), `${at}: the draws an answer takes move with the level (${drawn.join(', ')})`);
+      ok(tilts.size === 1, `${at}: the tilt moves with Media`);
+      if (!opt.effect.gamble) {
+        safes++;
+        ok(trusts.size === 1 && H.hostPressOption(opt, H.hostXpEffects(deskWith(5), 'nfl')) === opt, `${at}: a safe answer moves with Media`);
+        continue;
+      }
+      gambles++;
+      ok(lands[0] === Math.round(opt.effect.gamble.odds * 1000), `${at}: level 0 lands ${lands[0]} of 1000, the odds say ${opt.effect.gamble.odds}`);
+      for (let k = 1; k <= 5; k++) if (lands[k] - lands[k - 1] !== step) fail(`${at}: level ${k} lands ${lands[k]}, level ${k - 1} ${lands[k - 1]}: not ${step} more`);
+      ladders.push(`${p.id.replace('gmPress', '')} ${lands.join('/')}`);
+    }
+  }
+  console.log(`   ${kinds.size} pressers, ${gambles} gambles and ${safes} safe answers at levels 0 to 5; landed of 1000: ${ladders.join('; ')}`);
+  ok(gambles >= 6 && safes >= 4, `too few answers walked (${gambles} gambles, ${safes} safe)`);
 }
 
 /* ================================================================== */

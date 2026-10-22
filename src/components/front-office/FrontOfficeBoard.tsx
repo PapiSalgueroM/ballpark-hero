@@ -44,8 +44,8 @@ import {
 /* Round 1533: the GM's career. The desk host is the one place it lives for all four front offices
    (src/lib/gmDeskHost.ts); this board binds it through the NFL's read adapter and src/lib/nflGmDesk.ts. */
 import {
-  GM_HOST_KEYS, hostArrivalLine, hostArriving, hostEarnsLine, hostMarket, hostNewSeat, hostOutOfWorkCard, hostSeasonAway, hostSeasonVerdict,
-  hostSeatOf, hostSeatTeams, hostSpendPoint, hostSummerMandate, hostXpRecapLine, type GmCareerBinding,
+  GM_HOST_KEYS, hostArrivalLine, hostArriving, hostEarnsLine, hostMarket, hostNewSeat, hostOutOfWorkCard, hostPressOption, hostSeasonAway, hostSeasonVerdict,
+  hostSeatOf, hostSeatTeams, hostSpendPoint, hostSummerMandate, hostXpEffects, hostXpRecapLine, type GmCareerBinding,
 } from '@/lib/gmDeskHost';
 import { GmOutOfWork } from '@/components/front-office-shared/GmOutOfWork';
 import { nflDeskHost } from '@/lib/gmDeskHostNfl';
@@ -505,7 +505,8 @@ export default function FrontOfficeBoard() {
      waits for the next mandate build. */
   const answerPress = (i: 0 | 1 | 2) => {
     if (!presser || !league) return;
-    const res = applyGmPressChoice(trust, presser.options[i], Math.random);
+    /* Round 1533: Media eases a gamble's odds (the same option when he has no point or it does not gamble); one draw either way. */
+    const res = applyGmPressChoice(trust, hostPressOption(presser.options[i], hostXpEffects(gm, 'nfl')), Math.random);
     setTrust(res.trust);
     setPressTilt(res.tilt);
     setNewsFeed(f => [res.line, ...f].slice(0, 6));

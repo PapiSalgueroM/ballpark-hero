@@ -652,7 +652,7 @@ export function nflOutcome(league: LeagueState, team: string, rounds: PlayoffRou
  * ahead of the route: a tree off the list sells no point (hostSpendPoint
  * refuses it whatever a screen allows).
  */
-export const NFL_XP_LIVE: readonly GmTree[] = ['ownership'];
+export const NFL_XP_LIVE: readonly GmTree[] = ['ownership', 'media'];
 
 /** What this board's save holds the facts for, so the GM level screen promises nothing more. */
 export const NFL_XP_SOURCES: readonly HostXpSource[] = ['wins', 'titles', 'playoffs', 'mandate'];
