@@ -1,0 +1,5 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-box: node_modules/.bin/vitest run src/components/nba-front-office/NbaRosterBoxTipOff.test.tsx --testTimeout=300000 --hookTimeout=120000
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
