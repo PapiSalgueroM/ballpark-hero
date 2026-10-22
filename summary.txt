@@ -1,0 +1,6 @@
+vitest-a exit=0 50s |    Duration  48.96s (transform 9.88s, setup 2.82s, collect 33.69s, tests 77.04s, environment 15.71s, prepare 3.85s)
+vitest-b exit=1 92s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerTruthDigest.test.ts,title=src/test/usCareerTruthDigest.test.ts > Round 1104%3A the US career t
+tsc exit=0 95s | 
+simUsCareerWeight exit=0 0s | simUsCareerWeight: green. 31 checks: the four wrappers hand the board their own binding, no shared file or binding imports another sport, and every control fired.
+simUsBoardParity exit=0 56s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen with the proved historical main775 coaching Panel.
+simUsCareerDeckC exit=0 26s | simUsCareerDeckC: all checks passed
