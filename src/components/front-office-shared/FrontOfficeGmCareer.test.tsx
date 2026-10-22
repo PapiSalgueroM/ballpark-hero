@@ -291,6 +291,11 @@ for (const row of BOARDS) {
       completion.calls.length = 0;
       const view = await doomedSave(row, Board);
       expect(buttonNamed(/Take another front office/), 'no button on the recap deletes the save').toBeNull();
+      /* A new save starts at 0 XP and has closed one season, so its XP is that season's pay: the recap's XP line
+         shows only when the season paid (controlFrontOfficeBoard xpzero). */
+      const paid = readSave(row).gm.blocks.xp.xp;
+      console.log(`FO_GM_CAREER|fired recap|season paid ${paid} XP`);
+      expect(!!document.querySelector('[data-gm-xp-recap]'), `the XP line on a season that paid ${paid}`).toBe(paid > 0);
       const call = buttonNamed('See who is calling');
       expect(call, 'the recap offers who is calling').not.toBeNull();
       fireEvent.click(call!);

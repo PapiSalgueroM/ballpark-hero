@@ -600,7 +600,7 @@ export default function FrontOfficeBoard() {
       setGradeLine(grade.verdict);
       gradeVerdict = grade.verdict;
       if (v.desk && v.desk !== deskNow) setGm(v.desk);
-      setXpLine(v.desk && v.award ? hostXpRecapLine({ award: v.award, levelAfter: v.levelAfter, desk: v.desk }, NFL_XP_LIVE) : null);
+      setXpLine(v.desk && v.award && v.award.total > 0 ? hostXpRecapLine({ award: v.award, levelAfter: v.levelAfter, desk: v.desk }, NFL_XP_LIVE) : null);
     }
     /* Round 192: the room reacts to the season that actually happened.
        A fired GM gets no presser (the door shuts with one shake), and a

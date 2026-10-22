@@ -213,6 +213,8 @@ const CONTROLS = {
      final week's tick */
   lookopens: ["looking at a career box switches a desk off save's desk on", [['if (key !== null && !gm && league && gmPanelFor(NFL_DESK_PANELS, key)) {', 'if (key !== null && !gm && league) {']], [T.caLookHub, T.caLookOut], [T.caFired]],
   deskstale: ["the close is built on the desk from before the final week's tick", [['const deskNow = gmLive.current;', 'const deskNow = gm;']], [T.caTick], [T.opDeskOn]],
+  /* the review's finding 6: "GM XP +0" printed on a season that paid nothing */
+  xpzero: ['the recap prints the XP line on a season that paid nothing', [['setXpLine(v.desk && v.award && v.award.total > 0 ? hostXpRecapLine(', 'setXpLine(v.desk && v.award ? hostXpRecapLine(']], [T.caFired], [T.caTake]],
   blank: ["THIS FILE'S OWN CONTROL: a comment is reworded and nothing else, so nothing may fire", [['setGameLog(null); /* the summer */', 'setGameLog(null); /* the summer, as it was */']], [T.week], []],
 };
 
