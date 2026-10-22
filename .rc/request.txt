@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+weight-base: node .rc/x/weight1534.mjs base
