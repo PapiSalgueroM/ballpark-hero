@@ -111,7 +111,7 @@ const CONTROLS = {
       '              <td className="py-0.5 pl-2 text-right tabular-nums whitespace-nowrap text-muted-foreground">{signed(k.coverProjected)}</td>',
       '            </tr>',
       '            <tr className="border-t border-border" data-projection-total="kitty">',
-      '              <td className="py-0.5 font-bold text-foreground">Kitty change</td>',
+      '              <td className="py-0.5 font-bold text-foreground">{incompleteIncome ? \'Kitty change (known rows)\' : \'Kitty change\'}</td>',
       "              <td className={cn('py-0.5 text-right tabular-nums whitespace-nowrap', k.kittyActual < 0 ? 'text-red-400' : 'text-emerald-400')}>{signed(k.kittyActual)}</td>",
       "              <td className={cn('py-0.5 pl-2 text-right tabular-nums whitespace-nowrap font-bold', k.kittyProjected < 0 ? 'text-red-400' : 'text-emerald-400')}>{signed(k.kittyProjected)}</td>",
       '            </tr>',
