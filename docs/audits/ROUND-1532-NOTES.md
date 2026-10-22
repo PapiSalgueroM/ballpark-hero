@@ -3,10 +3,23 @@
 Brief: dukb-handoff/2026-10-10/briefs/brief-1532.md (section 0 binds), critic-1532.md beside it. Full step 1 record:
 dukb-handoff/2026-10-10/results-g/finish-1532.md.
 
-## Status (2026-10-21)
+## Status (2026-10-21, step 2a done)
 
-STEP 1 DONE (measure and hand back). STEP 2 HAS NOT STARTED. No src file changed. The lead rules knob 4 and the
-findings below before step 2a.
+STEP 1 DONE. The lead ruled (brief section 4, S1 to S6): overinvest is the over4 bot and SQUAD_POINTS is 0.85; R0
+starts at 1; Round 586 and 587's shared fixture moves to division 3's par plus ceil(6 / SQUAD_POINTS) levels; the slower
+badges are printed, not tuned; the predictor stays.
+
+STEP 2a DONE (no src change). scripts/lib/tycoonLaw.mjs lays the law and the bonuses onto the lib as one text patch;
+scripts/tuneTycoonScorelines.mjs ran the recipe on a runner (remote check r1532-s2a, exit 0, 58 s) and wrote
+scripts/data/tycoonScorelineTuning.json. The table: SQUAD_POINTS 0.85, R0 1, ARRIVAL_EDGE 4, rivalStrength
+1 25 40 46 54 58 61 65 67 69. Every target of brief 1.3 met on calibration and holdout:
+- knob 4 at R0 1: section 4 promotion 10.5 against Sell up 13.10; season one title share 0.90 (8 of 10, 18 of 20);
+  section 3 Squad 30 1.00 against Squad 0 0.20 (gap 0.80, needs 0.476), neutral arm 0.05; section 9 stuck 0 and 0.
+- knob 3 grid (pace win share 15 to 120, cal): AE -2 53.9, 0 57.5, 2 59.5, 4 64.6, 6 68.7, 8 73.6; pick 4.
+- pace holdout 66.6 (se 1.45, headroom needed 4.36); over4 76.4 cal, 78.7 hold; draws 20.9 and 20.5; goals 2.57 and
+  2.60; titles a season 15 to 240 0.733 and 0.727; windows 72 / 68 / 61 (cal), 75 / 68 / 64 (hold); nosquad 18.
+- S8: first Sell up 12.77 (base 13.37); a win at two hours pays 20 seconds of income (base 0.13); income at 30 / 60 /
+  120 minutes 17.9K / 25.6K / 41.7K (base 21.2K / 34.4K / 81.0K); pace reaches division 5 by 120 (base 6).
 
 ## Step 1: what was added
 
@@ -33,9 +46,3 @@ findings below before step 2a.
 - tycoonPacks.test 205 plants Squad 200: holds at every candidate.
 - The law slows the goal badges: ag100 27 to 111 minutes, ag500 96 to beyond 300, as10 23 to 48 (SP 0.85 AE 4).
   First Sell up, first order: 13.37 to about 13.1 to 13.3 minutes.
-
-## Rulings owed by the lead before step 2a
-
-1. Which overinvest variant sets SQUAD_POINTS (builder's recommendation: over4, SP 0.85).
-2. Knob 4: R0 (recommendation at SP 0.85: 1).
-3. Keep Round 586 and 587's fixture at Squad 40 or re-anchor to division 3's par plus 6 points (recommendation: re-anchor).
