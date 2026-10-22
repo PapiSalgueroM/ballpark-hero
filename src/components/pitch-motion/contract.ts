@@ -45,6 +45,13 @@ export interface PitchInput {
   /** The share of the ball 'me' has over this stretch, 0 to 1. Defaults to 0.5. */
   possession?: number;
   seed?: number;
+  /** Round 1521, optional: the fuller picture of open play. With it, a side on the ball builds by lines (defence
+   *  to midfield to attack) and goes back only as a reset with a reason the pitch shows (pressure, or a switch of
+   *  play), a chance is reached by a build up that ends at its shooter, a foul is met on the grass (the man it
+   *  was on has the ball, the man it names comes to him) and its whistle carries a cue, and every pass says how
+   *  it travels (on the ground, in the air, a cross, a throw). `me` and `opp` are how directly each side plays,
+   *  -1 to 1 (a binder's mentality). Left out, the plan is exactly what it was without it. */
+  build?: { me: number; opp: number };
 }
 export type PitchMoment = 'kickoff' | 'strike' | 'net' | 'caught' | 'wide' | 'corner' | 'throwin' | 'freekick';
 export interface PitchMotionProps extends PitchInput {

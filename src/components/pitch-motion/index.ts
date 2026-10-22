@@ -9,8 +9,11 @@ export type {
   PitchMoment, PitchMotionProps,
 } from '@/components/pitch-motion/contract';
 export { actionFrame, between, useLiveSimMotion, LivePitchPlayer, goalWindow, ownGoalFigure } from '@/components/pitch-motion/motion';
-export type { MotionPlayer, MotionScene, MotionEvent, MotionFrame, Pose } from '@/components/pitch-motion/motion';
-export { pitchPlan, pitchScene, pitchSceneKey, pitchBeatAt } from '@/components/pitch-motion/scene';
+export type { MotionPlayer, MotionScene, MotionEvent, MotionFrame, Pose, BallFlight, PitchCue } from '@/components/pitch-motion/motion';
+export { flightPeak, shotLift } from '@/components/pitch-motion/motion';
+export { figureLook } from '@/components/pitch-motion/look';
+export type { FigureLook } from '@/components/pitch-motion/look';
+export { pitchPlan, pitchScene, pitchSceneKey, pitchBeatAt, flightInto } from '@/components/pitch-motion/scene';
 export type { PitchPlan, PitchPlaced, PitchBeat, PitchBeatState, PitchStagedAction } from '@/components/pitch-motion/scene';
 export { PitchSurface, pitchSpot } from '@/components/pitch-motion/PitchSurface';
 export type { PitchOrientation, PitchSurfaceProps } from '@/components/pitch-motion/PitchSurface';
