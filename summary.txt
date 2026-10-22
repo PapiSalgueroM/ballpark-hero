@@ -1,0 +1,4 @@
+bigpart exit=1 1s | simLiveSimMotion: control bigpart made the part 37158 bytes and the bundle section went red on its size ceiling alone, as it must.
+bundle exit=0 1s | simLiveSimMotion: the bundle section alone is green. The part is 29137 bytes minified, 12239 gzipped, and carries nothing of Club Manager.
+rival exit=0 17s | No rival product names found. 0 findings.
+tsc exit=0 68s | 
