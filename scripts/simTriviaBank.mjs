@@ -94,7 +94,7 @@ const BANK_FILE = process.env.TRIVIA_BANK_FILE ? path.resolve(process.env.TRIVIA
 const SWAPS = {
   ties: ['    if (rules.oneAnswer && !clearlyAhead(sorted[0].market_value_usd, sorted[1].market_value_usd)) continue;\n', '', 'worth the most stops checking for a clear top value'],
   namesake: ['return rules.oneAnswer ? band.filter((p) => !MARKET_NAMESAKES.has(p.player_name)) : band;', 'return band;', 'the namesake filter is gone'],
-  tense: ['`Which club was ${correct.player_name} at in the 2026 market values?`', '`Which club does ${correct.player_name} play for?`', 'the club question says "play for" again'],
+  tense: ['`Which club was ${correct.player_name} at in the ${CURRENT_YEAR} market values?`','`Which club does ${correct.player_name} play for?`', 'the club question says "play for" again'],
   legacy: ['return dateStr < ONE_ANSWER_FROM ? LEGACY : ONE_ANSWER;', 'return ONE_ANSWER;', 'dates before ONE_ANSWER_FROM get the new rules'],
 };
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'dukb-trivia-'));

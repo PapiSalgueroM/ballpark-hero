@@ -136,6 +136,7 @@ export interface DealRules {
 const ONE_ANSWER: DealRules = { oneAnswer: true };
 const LEGACY: DealRules = { oneAnswer: false };
 
+/** Derived from the 2026 slice: when CURRENT_YEAR moves, rerun scripts/genMarketNamesakes.mjs over the new one. */
 export const MARKET_NAMESAKES: ReadonlySet<string> = new Set(namesakeList.names);
 
 /** The rules a daily ladder for this ET date is dealt under. */
@@ -311,7 +312,7 @@ function firstOfEachName(rows: MarketRow[]): MarketRow[] {
 }
 
 // ---------------------------------------------------------------------------
-// Question type 1: "Which club was X at in the 2026 market values?"
+// Question type 1: "Which club was X at in the CURRENT_YEAR market values?"
 // ---------------------------------------------------------------------------
 
 export function buildClubQuestion(
@@ -337,7 +338,7 @@ export function buildClubQuestion(
   const options = shuffleWithRng([correct.club as string, ...distractors], rng);
   return {
     question: rules.oneAnswer
-      ? `Which club was ${correct.player_name} at in the 2026 market values?`
+      ? `Which club was ${correct.player_name} at in the ${CURRENT_YEAR} market values?`
       : `Which club does ${correct.player_name} play for?`,
     options,
     correctIndex: options.indexOf(correct.club as string),
@@ -490,7 +491,7 @@ export function buildWorthMoreQuestion(
     const options = shuffleWithRng(four.map((p) => p.player_name), rng);
     return {
       question: rules.oneAnswer
-        ? 'Who was worth the most in the 2026 market values?'
+        ? `Who was worth the most in the ${CURRENT_YEAR} market values?`
         : 'Who is worth more right now (highest market value)?',
       options,
       correctIndex: options.indexOf(mostValuable.player_name),
