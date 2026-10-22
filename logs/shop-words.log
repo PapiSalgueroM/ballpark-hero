@@ -1,0 +1,8 @@
+1) words: the table against the printed cards, the reworded cards, the summer camp and the help rule
+   FAIL [1] nba signature_shoe: still says "real royalties"
+   nba: 4 paying cards match their words; the summer camp lands what it prints
+   nfl: 5 paying cards match their words
+   mlb: 4 paying cards match their words; the summer camp lands what it prints
+   nhl: 4 paying cards match their words; the summer camp lands what it prints
+   control words: section 1 turned 1 red
+simUsShopPromises: CONTROL words FIRED (red sections 1)

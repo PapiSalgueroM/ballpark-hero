@@ -1,0 +1,7 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simUsShopPromises: node scripts/simUsShopPromises.mjs
+shop-basecheck: SHOP_BASE_CHECK=1 SHOP_SECTIONS=1,2 node scripts/simUsShopPromises.mjs
+shop-rate: SHOP_CONTROL=rate node scripts/simUsShopPromises.mjs
+shop-words: SHOP_CONTROL=words node scripts/simUsShopPromises.mjs
+shop-camp: SHOP_CONTROL=camp node scripts/simUsShopPromises.mjs
+simCareerPressMarket: node scripts/simCareerPressMarket.mjs

@@ -1,0 +1,7 @@
+shop-basecheck exit=0 0s | simUsShopPromises: green (sections 1, 2)
+shop-rate exit=1 0s | simUsShopPromises: CONTROL rate FIRED (red sections 1, 2)
+shop-words exit=1 0s | simUsShopPromises: CONTROL words FIRED (red sections 1)
+shop-camp exit=1 0s | simUsShopPromises: CONTROL camp FIRED (red sections 1)
+simCareerPressMarket exit=0 8s | Press/Market:6 outcomes,27 full original state/RNG pairs,6 effective copied source controls,18 native fixture branches.
+simUsShopPromises exit=0 22s | simUsShopPromises: green (sections 0, 1, 2, 3, 4, 5, 8, 9)
+tsc exit=0 60s | 
