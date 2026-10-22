@@ -719,8 +719,8 @@ export const COLLEGE_CONTENT: GameContentMap = {
       {
         heading: "Playing one week of the season at a time",
         items: [
-          "Play one week at a time: 12 games, weeks 1 to 4 out of conference, weeks 5 to 11 in it, and week 12 is rivalry week.",
-          "Week 12 is rivalry week, and every program plays its rival, even one from another conference. Your rival is a school from your own state when one is free to pair with you, otherwise a pairing the game made, and the game tells you which. Florida has three schools on the board, so Florida and Miami get each other and Florida State gets a pairing the game made.",
+          "Play one week at a time: 12 games, all set before kickoff and never the same opponent twice. Weeks 1 to 4 are out of conference, weeks 5 to 11 hold six conference games and one non-conference date, and week 12 is rivalry week.",
+          "Week 12 is rivalry week, and every program plays its rival, even one from another conference. Your rival is your real rivalry series when both schools are on the board (Ohio State and Michigan, Alabama and Auburn, Florida and Florida State), otherwise a school from your own state, otherwise a pairing the game made, and the game tells you which.",
           "The rivalry winner carries 0.5 to 1.5 points of extra strength into the title games and the Playoff, the loser drops the same, and a margin of 21 or more swings the full 1.5.",
         ],
       },
@@ -754,8 +754,9 @@ export const COLLEGE_CONTENT: GameContentMap = {
       {
         heading: "Twelve teams make the Playoff field",
         items: [
-          "The Playoff field is 12: the 5 conference champions plus 7 at-larges, seeded by ranking, byes for the top four.",
-          "On the same record the better resume ranks higher: strength of schedule, the average strength of every opponent actually played, title game included, plus the team's own strength. The 7 at-large spots and the seeds come off that ranking, and the Schedule tab shows your number and where it ranks.",
+          "The Playoff field is 12: the 4 conference champions, the best ranked Group of Five school, Notre Dame if it ranks in the top 12, and at-larges to fill it, seeded by ranking, byes for the top four.",
+          "Notre Dame plays as an independent, the way it really does: no conference title game, and five ACC opponents a season. The four Group of Five schools are not one conference, so they play no title game either.",
+          "On the same record the better resume ranks higher: strength of schedule, the average strength of every opponent actually played, title game included, plus the team's own strength. The at-large spots and the seeds come off that ranking, and the Schedule tab shows your number and where it ranks.",
         ],
       },
       {
@@ -783,8 +784,8 @@ export const COLLEGE_CONTENT: GameContentMap = {
       {
         heading: "Boise State runs the table for an automatic bid",
         paragraphs: [
-          "You take Boise State, prestige 78. One September loss, then you run the league, finish 11-1, and win the conference title game for the automatic bid.",
-          "Week 12 is rivalry week against Tulane, a pairing the game made because no other Idaho school is on the board. You win it by 24, so Boise State carries 1.5 extra points of strength into the title game and the Playoff, and the trail opens with 8 more budget points.",
+          "You take Boise State, prestige 78. One September loss, then you win out: 11-1 is the best record of the four Group of Five schools, so you rank highest of them and take the fifth automatic spot.",
+          "Week 12 is rivalry week against Tulane, a pairing the game made because no other Idaho school is on the board. You win it by 24, so Boise State carries 1.5 extra points of strength into the Playoff, and the trail opens with 8 more budget points.",
         ],
       },
       {
@@ -825,7 +826,7 @@ export const COLLEGE_CONTENT: GameContentMap = {
       },
       {
         q: "Can a Group of Five team win it all?",
-        a: "Yes. Its champion is one of the 5 automatic qualifiers, and single elimination does not care about prestige.",
+        a: "Yes. The best ranked of the four Group of Five schools takes the fifth automatic spot, and single elimination does not care about prestige.",
       },
     ],
   },
@@ -853,14 +854,14 @@ export const COLLEGE_CONTENT: GameContentMap = {
         heading: "Playing two games in every round",
         items: [
           "Play 10 rounds of two games each, one league matchup and one cross-country test.",
-          "Round 10's league night is rivalry night, and every program plays its rival, even one from another league. Your rival is a school from your own state when one is free to pair with you, otherwise a pairing the game made, and the game tells you which. Duke and North Carolina, Kentucky and Louisville, and Purdue and Indiana are in-state games; UConn has no state on file here, so its rival is a pairing the game made.",
+          "Round 10's league night is rivalry night, and every program plays its rival, even one from another league. Your rival is your real rivalry series when both schools are on the board (Duke and North Carolina, Kentucky and Louisville, Indiana and Purdue), otherwise a school from your own state, otherwise a pairing the game made, and the game tells you which. UConn has no series or state on file here, so its rival is a pairing the game made.",
           "The rivalry winner carries 0.5 to 1.5 points of extra strength into the conference tournament and March, the loser drops the same, and a margin of 25 or more swings the full 1.5.",
         ],
       },
       {
         heading: "Dancing automatically as a tournament champion",
         items: [
-          "Finish top four in your league for the conference tournament; win it and you dance automatically.",
+          "Finish top four in your league table, which goes by league record, for the conference tournament; win it and you dance automatically.",
         ],
         subsections: [
           {
