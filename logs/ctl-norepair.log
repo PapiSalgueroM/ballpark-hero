@@ -1,0 +1,7 @@
+NEGATIVE CONTROL norepair: the repair on load does nothing (section 8 must fail)
+section 8: saves
+  FAIL [8] a broken block was not dropped alone
+  FAIL [8] a broken row was not dropped alone
+  FAIL [8] a broken last was not dropped alone
+  2 played NBA saves repaired byte identical; four planted blocks checked
+simCareerIntl: control norepair FIRED (section 8, 3 failures)

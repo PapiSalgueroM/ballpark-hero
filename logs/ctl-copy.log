@@ -1,0 +1,7 @@
+NEGATIVE CONTROL copy: a private copy of the bracket runner planted in a sport file (section 6 must fail)
+section 6: one engine and the stream
+  FAIL [6] src/lib/nbaCareerIntl.ts (planted copy) holds the runner's fingerprint "semiLosers": bind careerIntl.ts, never copy it
+  FAIL [6] src/lib/nbaCareerIntl.ts (planted copy) holds the runner's fingerprint "seeded.slice(p * shape.groups": bind careerIntl.ts, never copy it
+  FAIL [6] src/lib/nbaCareerIntl.ts (planted copy) holds the runner's fingerprint "slice(0, (n * (n - 1)) / 2)": bind careerIntl.ts, never copy it
+  1576 src files fenced, 60 tournaments played twice, Math.random calls 0
+simCareerIntl: control copy FIRED (section 6, 3 failures)
