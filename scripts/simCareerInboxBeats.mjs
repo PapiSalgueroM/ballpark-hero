@@ -256,7 +256,8 @@ const PATCHES = {
   nochoicenba: ['src/lib/nbaCareerRivalryEvents.ts', 'export const NBA_RIVALRY_CHOICE_CHANCE = 0.45;', 'export const NBA_RIVALRY_CHOICE_CHANCE = 0;'],
   nochoicemlb: ['src/lib/mlbCareerRivalryEvents.ts', 'export const MLB_RIVALRY_CHOICE_CHANCE = 0.45;', 'export const MLB_RIVALRY_CHOICE_CHANCE = 0;'],
   nochoicenhl: ['src/lib/nhlCareerRivalryEvents.ts', 'export const NHL_RIVALRY_CHOICE_CHANCE = 0.45;', 'export const NHL_RIVALRY_CHOICE_CHANCE = 0;'],
-  flatnba: ['src/lib/nbaMyCareer.ts', 'const form = c.ovr + (c.morale - 60) / 12 +', 'const form = c.ovr + (60 - 60) / 12 +'],
+  /* Round 1523: the NBA's morale term is bound from src/lib/careerForm.ts now, the same number from one line */
+  flatnba: ['src/lib/nbaMyCareer.ts', "const form = c.ovr + moraleForm('nba', c.morale) +", "const form = c.ovr + moraleForm('nba', 60) +"],
   streamnba: ['src/lib/nbaMyCareer.ts', 'else nbaRivalryChoiceTick(c);', 'else nbaRivalryChoiceTick(c, rng);'],
   inboxstream: ['src/lib/nflMyCareer.ts', 'receiveNflInboxTexts(c, !shouldRetire(c));', 'receiveNflInboxTexts(c, !shouldRetire(c), rng);'],
   aheadretire: ['src/lib/nflMyCareer.ts', 'receiveNflInboxTexts(c, !shouldRetire(c));', 'receiveNflInboxTexts(c, true);'],

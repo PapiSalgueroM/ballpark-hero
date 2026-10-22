@@ -331,7 +331,8 @@ describe('the living squad', () => {
   });
 
   it('reads trust from the band, the phone and the freeze', () => {
-    const base = save('Leeds', 'England', 2, 74, 2030);
+    /* Round 1523: morale at the measured neutral point (81), so this test reads the phone alone */
+    const base = { ...save('Leeds', 'England', 2, 74, 2030), morale: 81 } as CareerState;
     const at = squadNow(base);
     if (!at) throw new Error('no club');
     const warm = { ...base, phone: { threads: [{ rel: 90 }] } } as unknown as CareerState;
@@ -349,6 +350,21 @@ describe('the living squad', () => {
       'You are 2 above the level this squad expects (72).',
       'The dressing room has your back: about 3 more league games.',
     ]);
+  });
+
+  it('reads his morale beside the phone, the two capped together at three games (Round 1523)', () => {
+    const base = { ...save('Leeds', 'England', 2, 74, 2030), morale: 81 } as CareerState;
+    const at = squadNow(base);
+    if (!at) throw new Error('no club');
+    const happy = { ...base, morale: 95 } as CareerState;
+    const low = { ...base, morale: 40 } as CareerState;
+    const warmHappy = { ...happy, phone: { threads: [{ rel: 90 }] } } as unknown as CareerState;
+    expect(managerTrust(base, at)).toMatchObject({ expected: 25, moraleGames: 0 });
+    expect(managerTrust(happy, at)).toMatchObject({ expected: 26, moraleGames: 1 });
+    expect(managerTrust(low, at)).toMatchObject({ expected: 23, moraleGames: -2 });
+    expect(managerTrust(warmHappy, at)).toMatchObject({ expected: 28, swing: 3, moraleGames: 0 });
+    /* the plan line carries it (the hub's line under the Morale bar says what it is worth) */
+    expect(trustLines(low, at, managerTrust(low, at))[0]).toBe(`The plan is about ${managerTrust(low, at).band.min - 2} to ${managerTrust(low, at).band.max - 2} league games if you stay fit.`);
   });
 
   it('explains a thin season from the saved row', () => {

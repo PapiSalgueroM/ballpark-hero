@@ -26,8 +26,14 @@
  * Every row is required exactly once at its turn, so this cannot go quietly idle when the source moves under it.
  * Line endings are read as LF by every caller. Rows are regenerated, never hand edited, after any change to the
  * engine (docs/audits/ROUND-1334-NOTES.md holds the recipe).
+ *
+ * Round 1523 (morale that plays, the Puskas year) moved the engine after this file was written. Its rows live in
+ * their own file, scripts/lib/careerSoccerMorale1523.mjs (the tenth inverse, with its own pins), and come off FIRST
+ * inside the functions below, so every importer of this file takes 1523 and then 1334 out, in that order, with one
+ * receipt. This file's own rows and pins are unchanged: the tenth gives back exactly the head pinned above.
  */
 import assert from 'node:assert/strict';
+import { SOCCER_MORALE_ROWS } from './careerSoccerMorale1523.mjs';
 
 export const SOCCER_DECK_BASE = 'e814c2def671e07bd6163462dff8ab1230be2000';
 export const SOCCER_DECK_SHA256 = {
@@ -39,7 +45,7 @@ export const SOCCER_DECK_SHA256 = {
 const ENGINE = 'src/lib/soccerCareerEngine.ts';
 
 /* The rows, in the order they must be applied: each turns one block of this round's engine back into the base's. */
-const EDITS = [
+const OWN_EDITS = [
   { name: "engine-1", file: "src/lib/soccerCareerEngine.ts",
     from: "import { personalGoalMilestone } from \"./soccerCareerMilestone\";\n/* Round 1334: the lazy soccer deck, reached only through its gate (src/lib/soccerDeckGate.ts says why); inert until loaded. */\nimport { soccerDeckPending, soccerDeckSlot } from \"./soccerDeckGate\";\n",
     to: "import { personalGoalMilestone } from \"./soccerCareerMilestone\";\n" },
@@ -62,6 +68,8 @@ const EDITS = [
     from: "  if (prev.phase !== \"retirement_suggestion\" || prev.retired) {\n    /* Round 1519: a retirement the repair stood up keeps its screen, never retired on Next Season. */\n    if (!s.retired) s.phase = \"playing\";\n    return s;",
     to: "  if (prev.phase !== \"retirement_suggestion\" || prev.retired) {\n    s.phase = \"playing\";\n    return s;" },
 ];
+/* Round 1523: the tenth inverse's rows first, then this round's, every row once at its turn. */
+const EDITS = [...SOCCER_MORALE_ROWS, ...OWN_EDITS];
 
 export const SOCCER_DECK_FILES = Object.keys(SOCCER_DECK_SHA256);
 export const SOCCER_DECK_ADDITIONS = EDITS.map(row => row.name);
