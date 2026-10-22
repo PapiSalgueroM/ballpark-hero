@@ -1,0 +1,2 @@
+probe280 exit=0 1s | probe280: 2 of 20 seeds reached a full ground of 280+ in division 0; goal bonus before any streak min 25864 median 25864 max 25864 (guide says 70)
+ticketctl exit=0 45s | Ticket policy: 21/21 normal outcomes; 24/24 effective copied faults, each with independent purchase baseline. Raw reports, logs, copied sources and hashes retained at /ho

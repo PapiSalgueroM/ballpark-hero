@@ -1,0 +1,2 @@
+ticketctl: TYCOON_TICKET_POLICY_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonTicketPolicy.mjs
+probe280: node .rc/x/probe280.mjs
