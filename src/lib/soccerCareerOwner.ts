@@ -197,7 +197,7 @@ export function ownerBuy(prev: CareerState, clubs: readonly ClubData[], ownerClu
     ...prev,
     netWorth: prev.netWorth - club.price,
     ownerState: ownerStart(club),
-    events: [...prev.events, `🏟️ Bought ${club.name} for €${club.price}M, the game's price for a Tier ${club.tier} club${club.debt > 0 ? `, with €${club.debt}M of debt` : ""}.`],
+    events: [...prev.events, `🏟️ Bought ${club.name} for €${club.price}M${club.debt > 0 ? ` with €${club.debt}M of debt` : ""}, the game's figures for a Tier ${club.tier} club.`],
     phase: "owner_season",
   };
 }
