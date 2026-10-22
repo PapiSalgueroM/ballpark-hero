@@ -116,7 +116,7 @@
         "The daily puzzle is the same for everyone and flips at midnight Eastern. Unlimited deals random puzzles from the pool."
       ],
       "example": [
-        "You spot five obvious Yankees and nearly submit, then notice one of them also fits a cluster of 500 homer guys. That overlap is the whole puzzle. So you chase the safest read first, and it locks in yellow.",
+        "You spot five obvious Yankees and nearly submit, then notice one of them could pass for one of the 500 homer guys. That doubt is the whole puzzle. So you chase the safest read first, and it locks in yellow.",
         "A life dies on the Yankees trap later, but the miss exposes the decoy. You work the leftovers backward and purple falls last, two lives to spare."
       ],
       "tips": [
@@ -2391,7 +2391,7 @@
         "Lose all lives and the remaining groups reveal themselves. Daily is one shared puzzle with saved progress, and Unlimited pulls random ones."
       ],
       "example": [
-        "You spot five players who all wore a Patriots uniform and lock the yellow group. Then an LSU group looks obvious, except six names fit, which means one of them belongs somewhere else.",
+        "You spot five players who all wore a Patriots uniform and lock the yellow group. Then an LSU group looks obvious, except six names seem to fit, which means one of them belongs somewhere else.",
         "You guess wrong once, swap the receiver for the safety you forgot went to LSU, and it locks. From ten names the rest sorts itself, and you finish with 2 lives left."
       ],
       "tips": [
@@ -2545,7 +2545,7 @@
       ],
       "tips": [
         "Submit the group where you can name all five, not the one with three locks and two hopes.",
-        "Assume the overlap is intentional. The player who fits two themes is the trap.",
+        "Assume the overlap is intentional. The player who seems to fit two themes is the trap.",
         "Think about purple early. Spotting the sneaky link protects your easy groups.",
         "When two groups fight over one name, solve the other group first and let elimination decide."
       ]
