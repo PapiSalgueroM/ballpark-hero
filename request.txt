@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+writes-branch-again: node scripts/simWritesAreSent.mjs
+writes-on-base: B=$(git merge-base HEAD origin/main) && echo base $B && git worktree add /tmp/base $B > /dev/null 2>&1 && ln -s $PWD/node_modules /tmp/base/node_modules && cd /tmp/base && (node_modules/.bin/vite build > /tmp/base-build.log 2>&1; tail -1 /tmp/base-build.log) && node scripts/simWritesAreSent.mjs
