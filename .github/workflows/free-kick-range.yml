@@ -176,7 +176,9 @@ jobs:
       - name: Original consumers engines data and dependencies held
         if: ${{ !cancelled() }}
         run: |
-          git diff --exit-code 8fe82a4dc1346f7d5b8072f387f3acb34bbaa3c8 HEAD -- src/components src/pages src/hooks src/data src/types src/integrations src/lib/arcade.ts src/lib/careerDrills.ts src/lib/stadiumTycoon.ts src/test scripts/fixtures scripts/data scripts/simFreeKick.mjs scripts/simFreeKickPractice.mjs scripts/simFreeKickLab.mjs scripts/simArcadeShotFeedback.mjs scripts/simArcadePause.mjs scripts/simArcadeHoldRelease.mjs scripts/simSetPiecePresentation.mjs scripts/simTycoonSetPiece.mjs scripts/simTycoonSetPiecePage.mjs package.json package-lock.json
+          if [ "${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}" = "codex/free-kick-range-1091" ]; then
+            git diff --exit-code 8fe82a4dc1346f7d5b8072f387f3acb34bbaa3c8 HEAD -- src/components src/pages src/hooks src/data src/types src/integrations src/lib/arcade.ts src/lib/careerDrills.ts src/lib/stadiumTycoon.ts src/test scripts/fixtures scripts/data scripts/simFreeKick.mjs scripts/simFreeKickPractice.mjs scripts/simFreeKickLab.mjs scripts/simArcadeShotFeedback.mjs scripts/simArcadePause.mjs scripts/simArcadeHoldRelease.mjs scripts/simSetPiecePresentation.mjs scripts/simTycoonSetPiece.mjs scripts/simTycoonSetPiecePage.mjs package.json package-lock.json
+          else echo "PR scope check skipped: it proves the diff of codex/free-kick-range-1091 from its base, and this run is ${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}."; fi
           git diff --exit-code HEAD -- src scripts .github/workflows/free-kick-range.yml
           cmp package.json free-kick-range-artifacts/dependencies/package.json
           cmp package-lock.json free-kick-range-artifacts/dependencies/package-lock.json

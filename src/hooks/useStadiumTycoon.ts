@@ -232,7 +232,9 @@ export function useStadiumTycoon(getEdge?: () => number) {
             totalMatches: next.totalMatches ?? 0, result: ft.kind as FullTime['result'], away: false,
             position: season?.position, division: season?.kind === 'title' ? playedDivision : undefined,
           }], allowGear, () => setGearSaveBlocked(true));
-          if (gems > 0) pushFloater(`+${gems} gems`, 'money', 62, 10);
+          /* Round 1531: below the full time line, not beside it. At (62, 10) a
+             phone's FULL TIME WIN or DRAW covered the "+N gems" under it. */
+          if (gems > 0) pushFloater(`+${gems} gems`, 'money', 62, 56);
         }
         setState(next);
         /* Round 162: the golden whistle. One drifts in every couple of
