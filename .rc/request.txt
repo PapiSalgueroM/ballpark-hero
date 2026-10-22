@@ -1,0 +1,6 @@
+shop67: SHOP_SECTIONS=6,7 node scripts/simUsShopPromises.mjs
+shop-earnround: SHOP_CONTROL=earnround node scripts/simUsShopPromises.mjs
+shop-clampdown: SHOP_CONTROL=clampdown node scripts/simUsShopPromises.mjs
+shop-nobank: SHOP_CONTROL=nobank node scripts/simUsShopPromises.mjs
+shop-pp1: SHOP_CONTROL=potplusone node scripts/simUsShopPromises.mjs
+shop-ppall: SHOP_CONTROL=potplusoneall node scripts/simUsShopPromises.mjs
