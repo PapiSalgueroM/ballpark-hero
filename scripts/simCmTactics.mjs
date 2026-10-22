@@ -66,6 +66,11 @@
      line+   their offsides 4.65 against 2.01 (x2.31), goals conceded on the break 0.469 against 0.255 (x1.84)
      line-   offsides x0.40, break goals x0.22
    Every band in EFFECT_BANDS holds with room; the closest is tempo+ shots, 0.882 against a ceiling of 0.93.
+   Once set pieces and own goals stopped counting for the break and the wing (the review fixes, r1522-fx6 on
+   ac75f858, the same fleet), the two shares measure: width+ share from wide 0.407 against 0.251 (+0.156), width-
+   0.117 (-0.134); line+ goals conceded on the break 0.396 against 0.222 (x1.78), line- 0.049 (x0.22). The other
+   figures above came back within a hundredth (adapt +4.42%, +3.30 | +5.54; misread -0.36%; the singles' dominance
+   green).
    Dominance, every fixed set, mid table clubs only (Brentford, Espanyol and Torino, the middle of their leagues'
    playableClubs by expectation), seeds 0 to 15, 48 mid seasons an arm (r1522-d0 to d3 on
    ebabc291, 16 shards, folded): expected points a league game against balanced, paired. Top pooled press- line-
