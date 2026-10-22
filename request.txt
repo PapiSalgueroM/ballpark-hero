@@ -1,0 +1,5 @@
+#!build
+#!serial
+get: mkdir -p /tmp/fl && for n in r1321-fx-f1 r1321-fx-f2 r1321-fx-fc; do git fetch -q origin "+refs/heads/rc-results/$n:refs/remotes/origin/rc-results/$n" && for f in $(git ls-tree --name-only origin/rc-results/$n:files/fleet/); do git show origin/rc-results/$n:files/fleet/$f > /tmp/fl/$f; done; done; ls /tmp/fl | wc -l
+combine: SIM_NBA_EARNED_DRAFT_COMBINE=/tmp/fl node scripts/simNbaEarnedDraft.mjs > /tmp/combine.log 2>&1; e=$?; grep -E "fleet judged|FAIL \[|^\| S" /tmp/combine.log | cut -c1-90; tail -1 /tmp/combine.log; exit $e
+fences: s=0; for h in simLiveScores simNoRivalNames simInventedNames simHarnessAnchors simNoInventedQuotes simNoInventedConduct simLegalPages simSingleFooter simCompletionOnce simNoDoubleRecord simDailyPuzzleContract simDailySaveHardening simWritesAreSent simFetchRetry simGoogleOnlyReturn simNavbarStatsReads simScoringCoverage simSiteSearch simResultMoment simGuideHeadings; do node scripts/$h.mjs > /tmp/f-$h.log 2>&1; e=$?; echo "$h exit=$e | $(tail -1 /tmp/f-$h.log | cut -c1-120)"; [ $e -ne 0 ] && s=1; done; exit $s
