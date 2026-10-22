@@ -1,0 +1,34 @@
+   w390-rm-g1: Ghost refused (/can.t match Ghost [A-Za-z0-9]+ to a career line/)
+   w390-rm-g1: Twin refused (/More than one/)
+   w390-rm-g1: highest GP, teams Wizards/Hawks/Cavaliers/Rockets/Pistons, expected score 31, Your five: 2401 GP. The best five your teams allowed: 3132. The worst: 2078. grid ⬜⬜⬜⬜⬜
+   w390-rm-g1: best five teams Pistons, Hawks, Rockets, Cavaliers, Wizards
+   w390-rm-g2: Ghost refused (/can.t match Ghost [A-Za-z0-9]+ to a career line/)
+   w390-rm-g2: Twin refused (/More than one/)
+   w390-rm-g2: lowest APG, teams Mavericks/Pistons/Bucks/Suns/Thunder, expected score 52, Your five: 31.5 APG. The best five your teams allowed: 15. The worst: 49.5. grid 🟩🟨⬜⬜⬜
+   w390-rm-g2: best five teams Thunder, Suns, Bucks, Mavericks, Pistons
+   w390-anim-g1: Ghost refused (/can.t match Ghost [A-Za-z0-9]+ to a career line/)
+   w390-anim-g1: Twin refused (/More than one/)
+   w390-anim-g1: highest RPG, teams Pelicans/Bulls/Hornets/Thunder/Grizzlies, expected score 55, Your five: 52.5 RPG. The best five your teams allowed: 76.3. The worst: 23.8. grid ⬜⬜⬜🟩⬜
+   w390-anim-g1: best five teams Pelicans, Bulls, Hornets, Thunder, Grizzlies
+   w390-anim-g2: Ghost refused (/can.t match Ghost [A-Za-z0-9]+ to a career line/)
+   w390-anim-g2: Twin refused (/More than one/)
+   w390-anim-g2: lowest PPG, teams Hornets/Nuggets/Lakers/Pistons/Bulls, expected score 74, Your five: 56 PPG. The best five your teams allowed: 38. The worst: 107. grid 🟨🟨🟩🟩⬜
+   w390-anim-g2: best five teams Bulls, Lakers, Nuggets, Hornets, Pistons
+   w1280-rm-g1: Ghost refused (/can.t match Ghost [A-Za-z0-9]+ to a career line/)
+   w1280-rm-g1: Twin refused (/More than one/)
+   w1280-rm-g1: highest 3PM, teams Hawks/Pistons/Nuggets/Wizards/Warriors, expected score 24, Your five: 1927 3PM. The best five your teams allowed: 4059. The worst: 1271. grid ⬜⬜⬜🟩🟩
+   w1280-rm-g1: best five teams Pistons, Hawks, Warriors, Nuggets, Wizards
+   w1280-rm-g2: Ghost refused (/can.t match Ghost [A-Za-z0-9]+ to a career line/)
+   w1280-rm-g2: Twin refused (/More than one/)
+   w1280-rm-g2: lowest RPG, teams Nets/76ers/Heat/Grizzlies/Hawks, expected score 68, Your five: 31.5 RPG. The best five your teams allowed: 14. The worst: 68.6. grid 🟨⬜🟩🟩⬜
+   w1280-rm-g2: best five teams Hawks, 76ers, Nets, Grizzlies, Heat
+   w1280-anim-g1: Ghost refused (/can.t match Ghost [A-Za-z0-9]+ to a career line/)
+   w1280-anim-g1: Twin refused (/More than one/)
+   w1280-anim-g1: lowest APG, teams Hawks/Raptors/Pelicans/Warriors/Suns, expected score 64, Your five: 23 APG. The best five your teams allowed: 10. The worst: 46. grid 🟨🟨🟩⬜⬜
+   w1280-anim-g1: best five teams Suns, Warriors, Pelicans, Raptors, Hawks
+   w1280-anim-g2: Ghost refused (/can.t match Ghost [A-Za-z0-9]+ to a career line/)
+   w1280-anim-g2: Twin refused (/More than one/)
+   w1280-anim-g2: highest 3PM, teams 76ers/Hornets/Magic/Lakers/Celtics, expected score 6, Your five: 1640 3PM. The best five your teams allowed: 4346. The worst: 1476. grid ⬜⬜⬜🟩⬜
+   w1280-anim-g2: best five teams Celtics, Lakers, Magic, Hornets, 76ers
+   directions played: highest 4, lowest 4; 188 mocked reads, 4 of them the name census
+walkrun1555: green. Every result matched the walk's own brute force.
