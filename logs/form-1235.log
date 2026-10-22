@@ -1,0 +1,9 @@
+1) the four US careers replay byte identical through careerForm.ts
+   nba: 90 careers, 1620 seasons replayed, byte identical
+   nfl: 144 careers, 2592 seasons replayed, byte identical
+   mlb: 198 careers, 3564 seasons replayed, byte identical
+   nhl: 108 careers, 1944 seasons replayed, byte identical
+2) the soccer step, the cap it shares with the phone, and the hub line
+   neutral 81, 15 morale points a step; 13 steps, 15 caps, 5 ratings, 6 hub lines checked
+3) a pinned fleet: every press played again at morale 20, at the neutral point and at 90
+ABORT: src/lib/careerForm.ts does not hold const step = Math.round(moraleForm('soccer', morale)); once

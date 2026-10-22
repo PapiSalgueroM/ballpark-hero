@@ -1,0 +1,3 @@
+3) a pinned fleet: every press played again at morale 20, at the neutral point and at 90
+   CONTROL posttext: the season reads the morale the summer's texts leave, not the one he pressed on
+ABORT: src/lib/careerForm.ts does not hold const step = Math.round(moraleForm('soccer', morale)); once

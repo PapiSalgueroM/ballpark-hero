@@ -1,0 +1,10 @@
+form-1235 exit=1 8s | ABORT: src/lib/careerForm.ts does not hold const step = Math.round(moraleForm('soccer', morale)); once
+form-4-house exit=1 0s | ABORT: src/lib/careerForm.ts does not hold const step = Math.round(moraleForm('soccer', morale)); once
+form-4-engaged exit=1 0s | ABORT: src/lib/careerForm.ts does not hold const step = Math.round(moraleForm('soccer', morale)); once
+vitest exit=0 15s |    Duration  13.90s (transform 7.40s, setup 1.37s, collect 16.69s, tests 8.20s, environment 7.54s, prepare 1.69s)
+ctl-zero exit=1 0s | ABORT: src/lib/careerForm.ts does not hold const step = Math.round(moraleForm('soccer', morale)); once
+ctl-posttext exit=1 1s | ABORT: src/lib/careerForm.ts does not hold const step = Math.round(moraleForm('soccer', morale)); once
+ctl-divisor exit=1 6s | simCareerForm: RED, 1 failure(s)
+ctl-per10 exit=1 0s | ABORT: src/lib/careerForm.ts does not hold const step = Math.round(moraleForm('soccer', morale)); once
+ctl-nogate exit=1 12s | simCareerForm: RED, 1 failure(s)
+tsc exit=0 79s | 

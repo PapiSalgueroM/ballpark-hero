@@ -1,0 +1,2 @@
+4) the natural fleet (engaged): the round against the same tree without the morale step, same seeds
+ABORT: src/lib/careerForm.ts does not hold const step = Math.round(moraleForm('soccer', morale)); once

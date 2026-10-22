@@ -1,0 +1,10 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/soccerClubSquad.test.ts src/test/soccerPuskasYear1523.test.ts src/test/soccerCareerDevelopment.test.ts src/test/soccerCareerStoryRole.test.ts src/test/soccerEventDeckIntegrity.test.ts src/lib/usCareerAnnualBenefits.test.ts src/lib/usCareerRecovery.test.ts src/test/nbaOldSaveLines.test.ts src/test/nbaStatLineColumns.test.ts src/test/myCareerRestore.test.tsx src/test/careerHall.test.tsx --testTimeout=300000 --hookTimeout=120000
+form-1235: SIM_CAREER_FORM_SECTIONS=1,2,3,5 node scripts/simCareerForm.mjs
+form-4-house: SIM_CAREER_FORM_SECTIONS=4 node scripts/simCareerForm.mjs
+form-4-engaged: SIM_CAREER_FORM_FLEET_KIND=engaged SIM_CAREER_FORM_SECTIONS=4 node scripts/simCareerForm.mjs
+ctl-divisor: SIM_CAREER_FORM_CONTROL=divisor node scripts/simCareerForm.mjs
+ctl-zero: SIM_CAREER_FORM_CONTROL=zero node scripts/simCareerForm.mjs
+ctl-posttext: SIM_CAREER_FORM_CONTROL=posttext node scripts/simCareerForm.mjs
+ctl-nogate: SIM_CAREER_FORM_CONTROL=nogate node scripts/simCareerForm.mjs
+ctl-per10: SIM_CAREER_FORM_CONTROL=per10 node scripts/simCareerForm.mjs
