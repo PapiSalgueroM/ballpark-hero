@@ -6,15 +6,22 @@
  *
  * 1) THE FIELD is fresh. The house fleet (scripts/lib/careerStep.mjs) is played at every position and the season
  *    at the awards block is read the way the table was measured (20 or more games; strikers' goals at a top two
- *    tier club; keepers' clean sheets; the level per position). Every mean and sd of the
- *    table must sit within BOUNDS of what this run measures. Fails when the engine moves under the table. Control
+ *    tier club; keepers' clean sheets; the level per position; the strikers on four times the careers, their goals
+ *    being the noisiest row). Every mean and sd of the table must sit within BOUNDS of what this run measures. Fails when the engine moves under the table. Control
  *    stale (the striker level mean moved by 0.2 in the table) must fail on the strikers.
  * 2) THE RATES. A natural fleet (every position, eras 1990 to 2020): for every decision the engine made, the
  *    model's own chance of it (from the season's score, the table and the config); the wins the engine handed out
- *    must match the chances summed (binomial bound), the top of each award (its designed share of eligible
- *    seasons, by score) must win more often than not, and the rate per 100 eligible seasons on the population a
- *    field was measured on must sit near the designed one winner a league a season (100 / (rivals + 1)). Prints
- *    rates per position and tier band and per career against the old bars and coins on the same seasons.
+ *    must match the chances summed (binomial bound). That alone cannot see a pool, a grade or an eligibility test
+ *    typed wrong (the model moves with the engine), so four more checks: (a) every award's rate per 100 eligible
+ *    seasons, and the two votes' by group, sits in the band measured on several seeds (RATE_BANDS); (b) where the
+ *    eligible seasons are the population the field was measured on (the Golden Boot's strikers, the Golden Glove's
+ *    keepers, Player of the Year by group) the rate sits near the designed one winner a league a season, 100 /
+ *    (rivals + 1) moved by the award's grade; (c) the year's best season (the best score among the fleet's eligible
+ *    seasons of each calendar year, chosen by score alone) wins more often than not by the model, and the engine
+ *    keeps up with the model on those seasons; (d) on seasons eligible for two awards, the seasons that won both
+ *    match two independent streams (one shared stream would give the smaller chance instead). Prints rates per
+ *    position and tier band, and the year's best per tier band (for the lead: every vote reads one national scale).
+ *    Controls pool, vanish, fair, comeback, young, grade and key (the reviews' mutations) must each turn it red.
  * 3) THE YEARS. An era fleet (starts 1990 to 2015, strong starts, keepers in it) holds no Golden Glove before
  *    2004-05, no UEFA Player of the Year outside 2010-11 to 2022-23 and no Puskas before 2008-09, and some inside
  *    each window. Control nogate (the three year gates gone from the eligibility) must find early ones.
@@ -33,8 +40,9 @@
  * Environment: SIM_SEASON_AWARDS_SECTIONS (comma separated, default all), SIM_SEASON_AWARDS_SEED,
  * SIM_SEASON_AWARDS_POS (section 1: one position), SIM_SEASON_AWARDS_FIELD_N (section 1 careers a position),
  * SIM_SEASON_AWARDS_N (section 2 careers), SIM_SEASON_AWARDS_ERA (section 3 careers), SIM_SEASON_AWARDS_LOCK
- * (section 4 careers), SIM_SEASON_AWARDS_CONTROL (stale, nogate, dropcoins, usdrift), SIM_SEASON_AWARDS_MEASURE=1
- * (section 1 prints and judges nothing). Never reads the network. Every career's name carries the seed: an award's
+ * (section 4 careers), SIM_SEASON_AWARDS_CONTROL (stale, nogate, dropcoins, usdrift, and section 2's pool, vanish,
+ * fair, comeback, young, grade, key), SIM_SEASON_AWARDS_MEASURE=1 (section 1 prints and judges nothing; section 2
+ * prints its rates and skips RATE_BANDS, the rest still judged). Never reads the network. Every career's name carries the seed: an award's
  * stream is keyed to the career's identity and the season, so under one name every seed would replay the same draws
  * (three seeds of r1525-final-a agreed on every award's sign against the model for exactly that reason).
  * Exit 1 on any failure; the last line says green or red.
@@ -187,7 +195,10 @@ if (runs('1')) {
   for (const pos of only) {
     const rows = [];
     globalThis.__awardCall = (award, s) => { if (award === 'Player of the Year') rows.push({ ...s }); };
-    for (let i = 0; i < N; i += 1) {
+    /* The strikers' goals are the noisiest row (a goals season clusters by career): four times the careers, never a
+       wider bound (r1525-run-s1 found it red on 6 of 12 seeds at 600). */
+    const careersOf = pos === 'ST' ? 4 * N : N;
+    for (let i = 0; i < careersOf; i += 1) {
       const [era, start] = ERAS[Math.floor(i / 5) % ERAS.length];
       wholeCareer(S, i, SEED + 1 + pos.charCodeAt(0) * 3 + pos.charCodeAt(1), { era, start, pos, name: `Field ${SEED} ${pos} ${i}` });
     }
