@@ -1,0 +1,3 @@
+#!serial
+pin-head: node scripts/simManagerAppealIsolation.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+pin-revert: git checkout eb39afea -- src/lib/clubManager.ts && node scripts/simManagerAppealIsolation.mjs 2>&1 | tail -3; s=${PIPESTATUS[0]}; git checkout HEAD -- src; exit $s
