@@ -50,6 +50,15 @@
  * screens read them from the ledger by edition id. An edition id is the
  * competition and the summer ('oly-2028'), a save key never renamed, and a
  * row whose id the ledger no longer lists is kept and rendered from its parse.
+ *
+ * ONE EDITION A SUMMER. The calendar keys editions by year (editionFor), a
+ * summer counts as answered by its year (pendingCallUp) and the repair keeps
+ * one row a year. That is right for basketball, whose Olympics and World Cup
+ * never share a summer (simCareerIntl section 2 holds it), but a sport with
+ * two competitions in one summer (the NHL's Olympics and Worlds, both in 2026)
+ * could only ever be called to one of them and its save could not hold both
+ * rows: before such a sport binds this module, those three places must key by
+ * year and edition.
  */
 
 import { roundRobinCalendar } from '@/lib/leagueCore';
@@ -138,11 +147,24 @@ export function intlCalendar(ledger: IntlLedger): IntlCalendar {
     for (const e of rows.values()) if (e.comp === comp && (!best || e.year > best.year)) best = e;
     return best;
   };
+  /* The name a competition went by in a summer: its latest ledger edition at
+     or before that summer (so a wc-2010 the ledger stopped listing still reads
+     World Championship), or its earliest when the summer is older than all. */
+  const nameAt = (comp: string, year: number): string | null => {
+    let at: IntlEdition | null = null;
+    let first: IntlEdition | null = null;
+    for (const e of rows.values()) {
+      if (e.comp !== comp) continue;
+      if (e.year <= year && (!at || e.year > at.year)) at = e;
+      if (!first || e.year < first.year) first = e;
+    }
+    return (at ?? first)?.name ?? null;
+  };
   const projected = (comp: string, year: number): IntlEdition | null => {
     const last = lastOf(comp);
     if (!last) return null;
     return {
-      id: `${comp}-${year}`, comp, year, name: last.name, host: null, games: null, kind: 'projected',
+      id: `${comp}-${year}`, comp, year, name: nameAt(comp, year) ?? last.name, host: null, games: null, kind: 'projected',
       shape: last.shape, play: last.play, field: null, places: null, partial: false,
     };
   };
@@ -496,10 +518,30 @@ function rowOk(r: unknown): r is IntlSummerEntry {
     && isObj(avg) && Object.values(avg).every(v => typeof v === 'number' && Number.isFinite(v));
 }
 
+const ROUNDS = new Set<string>(['group', 'R16', 'QF', 'SF', 'bronze', 'final']);
+const TABLE_NUMBERS = ['played', 'won', 'drawn', 'lost', 'pf', 'pa', 'pts', 'coin'] as const;
+const isStr = (x: unknown): x is string => typeof x === 'string';
+const isNum = (x: unknown): x is number => typeof x === 'number' && Number.isFinite(x);
+
+function gameOk(g: unknown): boolean {
+  return isObj(g) && isStr(g.round) && ROUNDS.has(g.round) && isStr(g.a) && isStr(g.b) && isNum(g.sa) && isNum(g.sb)
+    && isInt(g.ot) && (g.winner === null || isStr(g.winner)) && (g.group === undefined || isInt(g.group));
+}
+
+function groupOk(gr: unknown): boolean {
+  return isObj(gr) && Array.isArray(gr.teams) && gr.teams.every(isStr) && Array.isArray(gr.table)
+    && gr.table.every(r => isObj(r) && isStr(r.nation) && TABLE_NUMBERS.every(k => isNum(r[k])));
+}
+
+/* `last` is drawn whole by the result screen, so every entry is checked, not only the arrays holding them. */
 function lastOk(t: unknown, rows: IntlSummerEntry[]): boolean {
   if (!isObj(t) || t.v !== 1 || !parseIntlId(t.edition) || typeof t.nation !== 'string') return false;
   if (!Array.isArray(t.field) || !Array.isArray(t.groups) || !Array.isArray(t.games) || !Array.isArray(t.his) || !isObj(t.places)) return false;
-  if (typeof t.champion !== 'string' || typeof t.hurt !== 'boolean') return false;
+  if (typeof t.champion !== 'string' || typeof t.hurt !== 'boolean' || typeof t.generated !== 'boolean') return false;
+  const games = t.games as unknown[];
+  if (!t.field.every(isStr) || !t.groups.every(groupOk) || !games.every(gameOk)) return false;
+  if (!Object.values(t.places).every(p => isStr(p) && PLACES.has(p as IntlPlace))) return false;
+  if (!t.his.every(h => isObj(h) && isInt(h.game) && (h.game as number) < games.length && isObj(h.line) && Object.values(h.line).every(isNum))) return false;
   return rows.some(r => r.went && r.edition === t.edition);
 }
 

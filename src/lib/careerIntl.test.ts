@@ -7,7 +7,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
   answerCallUp, intlCalendar, intlFieldOf, intlGeneratedField, intlSeedOrder, intlStatsOf, parseIntlId,
   pendingCallUp, repairIntlOnLoad, runIntlTournament,
-  type IntlCareer, type IntlEdition, type IntlLedger, type IntlSportBind, type IntlTournament, type Rng,
+  type IntlCareer, type IntlEdition, type IntlLedger, type IntlSportBind, type IntlTableRow, type IntlTournament, type Rng,
 } from './careerIntl';
 import { keyedRng } from './keyedRng';
 
@@ -102,6 +102,16 @@ describe('the calendar', () => {
     expect(parseIntlId('Tokyo 2020')).toBeNull();
     expect(CAL.byId('oly-2035')).toMatchObject({ id: 'oly-2035', comp: 'oly', year: 2035, kind: 'projected' });
   });
+  it('names an id the ledger lacks after the edition of its competition at or before it', () => {
+    const renamed = intlCalendar({ ...LEDGER, editions: [
+      ['wc-2006', 'wc', 2006, 'World Championship', 'Japan', 'b-4x6', NATIONS.slice(0, 24), null],
+      ['wc-2014', 'wc', 2014, 'World Cup', 'Spain', 'b-2r', null, null],
+    ] });
+    expect(renamed.byId('wc-2010')?.name).toBe('World Championship');
+    expect(renamed.byId('wc-2002')?.name).toBe('World Championship');
+    expect(renamed.byId('wc-2022')?.name).toBe('World Cup');
+    expect(renamed.editionFor(2022)?.name).toBe('World Cup');
+  });
   it('seeds a bracket 1 v 8, 4 v 5, 2 v 7, 3 v 6', () => {
     expect(intlSeedOrder(8)).toEqual([1, 8, 4, 5, 2, 7, 3, 6]);
     expect(intlSeedOrder(16)).toEqual([1, 16, 8, 9, 4, 13, 5, 12, 2, 15, 7, 10, 3, 14, 6, 11]);
@@ -174,6 +184,30 @@ describe('the tournament', () => {
       expect(medal('fourth')).toHaveLength(1);
     }
   });
+  for (const [label, bind] of [['never level', HOOPS], ['groups may draw', SOCCER]] as const) {
+    it(`sends the best two of three thirds through by the sport's table order, ${label}`, () => {
+      /* oly-2020 plays a-3x4: three groups of four, two through and the two best thirds */
+      const order = (x: IntlTableRow, y: IntlTableRow) => bind.tableOrder(x, y) || y.coin - x.coin;
+      let notGroupOrder = 0;
+      for (let s = 0; s < 200; s += 1) {
+        const t = run('oly-2020', s, bind);
+        expect(t.groups).toHaveLength(3);
+        for (const gr of t.groups) {
+          expect(t.places[gr.table[0].nation]).not.toBe('group');
+          expect(t.places[gr.table[1].nation]).not.toBe('group');
+          expect(t.places[gr.table[3].nation]).toBe('group');
+        }
+        const thirds = t.groups.map(gr => gr.table[2]);
+        const best = [...thirds].sort(order);
+        expect(t.places[best[0].nation]).not.toBe('group');
+        expect(t.places[best[1].nation]).not.toBe('group');
+        expect(t.places[best[2].nation]).toBe('group');
+        if (best[2] !== thirds[2]) notGroupOrder += 1;
+      }
+      /* the worst third is often not the last group's, so taking thirds in group order would be seen */
+      expect(notGroupOrder).toBeGreaterThan(80);
+    });
+  }
   it('gives both semi-final losers a semi place when the shape has no bronze game', () => {
     const t = run('cup-2016', 3);
     expect(t.games.some(g => g.round === 'bronze')).toBe(false);
@@ -233,6 +267,9 @@ describe('the save', () => {
       expect(row.games).toBe(a.tournament.his.length);
       expect(row.hurt).toBe(a.tournament.hurt);
       expect(c.health).toBe(row.hurt ? 72 : 80);
+      /* the averages a row keeps are his lines' means, to one decimal */
+      const pts = a.tournament.his.map(h => h.line.pts);
+      expect(row.avg.pts).toBe(Math.round((pts.reduce((s, x) => s + x, 0) / pts.length) * 10) / 10);
       if (row.hurt) hurtSeen += 1;
     }
     expect(hurtSeen).toBeGreaterThan(0);
@@ -291,6 +328,27 @@ describe('repair on load', () => {
     expect(repairIntlOnLoad(c)).toBe(true);
     expect(c.intl?.summers).toHaveLength(2);
     expect(c.intl?.last).toBeUndefined();
+  });
+  it('drops a last whose games, groups, lines or places are malformed, and only the last', () => {
+    const breaks: ((l: Record<string, unknown>) => void)[] = [
+      l => { (l.games as unknown[])[0] = { round: 'group', a: 'USA' }; },
+      l => { (l.games as unknown[]).push(null); },
+      l => { ((l.games as Record<string, unknown>[])[0]).round = 'semi'; },
+      l => { (l.groups as unknown[])[0] = { teams: ['USA'], table: [{ nation: 'USA', won: 'two' }] }; },
+      l => { (l.his as unknown[]).push({ game: 999, line: { pts: 20 } }); },
+      l => { (l.his as Record<string, unknown>[])[0].line = { pts: 'lots' }; },
+      l => { (l.places as Record<string, unknown>).USA = 'champions'; },
+      l => { (l.field as unknown[]).push(7); },
+      l => { delete l.generated; },
+    ];
+    for (const [i, brk] of breaks.entries()) {
+      const c = played();
+      const summers = JSON.stringify(c.intl?.summers);
+      brk(c.intl?.last as unknown as Record<string, unknown>);
+      expect(repairIntlOnLoad(c), `break ${i}`).toBe(true);
+      expect(c.intl?.last, `break ${i}`).toBeUndefined();
+      expect(JSON.stringify(c.intl?.summers), `break ${i}`).toBe(summers);
+    }
   });
   it('keeps a row whose edition the ledger stopped listing, medal and all', () => {
     const c = toy({ year: 2034 });
