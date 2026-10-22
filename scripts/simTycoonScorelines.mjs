@@ -128,6 +128,15 @@
  *   0.825 / 0.86, goals 1.842 / 1.772 against 14.281 / 14.263, so aw150 125 sits at x1.088
  *   / x1.167 of its scaled old 150, aw400 300 at x0.979 / x1.05, ag2000 250 at x0.969 /
  *   x1.006 (the tightest, aw150 on holdout, 0.083 under 1.25).
+ * MEASURED again after the round's review (remote check r1543-x1, head d3180ab7, the band
+ * 35 percent or three matches, the streak rungs exempt; the medians are the same runs):
+ *   headroom (error) calibration / holdout: win1 6.3 (0.15) / 4.2 (1.03); win10 8.09 (0.93) /
+ *   7.35 (1.25); win50 37.5 (3.62) / 36.8 (3.89); goals25 6.07 (0.72) / 6.02 (0.97); ag100
+ *   7.38 (1.34) / 8.58 (2.57); ag500 19.3 (2.79) / 17.8 (3.86). Each keeps its distance plus
+ *   one match plus two errors (the tightest, win1 on holdout, needs 6.26 of its 6.3 arm).
+ *   The long rungs' room (error): aw150 0.162 (0.042) / 0.083 (0.053), aw400 0.179 (0.038) /
+ *   0.2 (0.048), ag2000 0.169 (0.029) / 0.206 (0.046). goalstwenty: the goal pair at 20
+ *   lands at 18.36 against 9.75, 8.61 off a 6.3 arm.
  *
  * Exit 0 green; 1 a check failed or a control turned the wrong sections; 2 could
  * not run; 3 a control did not fire. Green is the closing summary line AND exit 0.
@@ -837,7 +846,7 @@ function S9c(sets, libText) {
     }
     lines.push(`${k}: ${parts.join('; ')}`);
   }
-  return { out, note: `every rung but as10 within ${LADDER_BAND.pct * 100} percent or ${LADDER_BAND.matches} matches of its base minute, the long rungs within ${RATE_BAND.join(' to ')} of old x the per match rate ratio`, lines };
+  return { out, note: `every rung but ${EXEMPT_RUNGS.join(', ')} (the lead's, exempt) within ${LADDER_BAND.pct * 100} percent or ${LADDER_BAND.matches} matches of its base minute, the long rungs within ${RATE_BAND.join(' to ')} of old x the per match rate ratio`, lines };
 }
 
 /* S9d kept: a lowered rung takes no badge from anybody, and fires exactly at its threshold. */
