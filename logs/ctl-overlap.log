@@ -1,0 +1,13 @@
+NEGATIVE CONTROL ON: overlap; section 7 must go red
+7) whole careers: the save, the record and the counters agree at every step across firings, takes and years out
+  FAIL [7]: seed 2 take (2028): stint 2 overlaps the one before it
+  FAIL [7]: seed 2 summer after a take (2029): stint 2 overlaps the one before it
+  FAIL [7]: seed 2 close (2029): stint 2 overlaps the one before it
+  FAIL [7]: seed 2 summer (2030): stint 2 overlaps the one before it
+  FAIL [7]: seed 2 close (2030): stint 2 overlaps the one before it
+  FAIL [7]: seed 2 summer (2031): stint 2 overlaps the one before it
+  FAIL [7]: seed 2 close (2031): stint 2 overlaps the one before it
+  FAIL [7]: seed 2 year out (2032): stint 2 overlaps the one before it
+  FAIL [7]: (further failures in this check not printed)
+   10 careers, 64 seasons run: 23 sackings forced, 23 firings, 15 seats taken, 16 years out, 7 closed for good; 161 checkpoints
+CONTROL overlap: 1 rewrite(s) applied, 55 failure(s) in section 7 (FIRED)

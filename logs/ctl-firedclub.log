@@ -1,0 +1,11 @@
+NEGATIVE CONTROL ON: firedclub; section 4 must go red
+4) the market after real firings: every club graded as a GM's club, the first out of work screen and the next two
+  FAIL [4]: seed 2 season 12 PHI: the club that fired him is in his feed
+  FAIL [4]: seed 13 season 6 KC: the club that fired him is in his feed
+   MEASURE 20 seeds x 12 seasons: 475 firings
+   first screen with the host's rule: offers 475 (100.0%), quiet 0 (0.0%), closed 0 (0.0%); first calls 283
+   first screen on the raw feed:      offers 192 (40.4%), quiet 228 (48.0%), closed 55 (11.6%)
+   of the screens with offers, last calls: host 87 of 475 (18.3%), raw 32 of 192 (16.7%)
+   re hired within three feeds (firings with two seasons left to read, 377): host 377 (100.0%), raw 209 (55.4%); 249 later feeds read
+   ASSERTED on 475 first feeds (311 straight after a badly season): never the club that fired him, no top tier after badly, every ask for next season, keyed
+CONTROL firedclub: 1 rewrite(s) applied, 2 failure(s) in section 4 (FIRED)

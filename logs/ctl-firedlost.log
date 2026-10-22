@@ -1,0 +1,13 @@
+NEGATIVE CONTROL ON: firedlost; section 7 must go red
+7) whole careers: the save, the record and the counters agree at every step across firings, takes and years out
+  FAIL [7]: seed 1 close (2028): the record does not fit the save
+  FAIL [7]: seed 1 close (2031): the record does not fit the save
+  FAIL [7]: seed 1 close (2034): the record does not fit the save
+  FAIL [7]: seed 2 close (2028): the record does not fit the save
+  FAIL [7]: seed 2 close (2031): the record does not fit the save
+  FAIL [7]: seed 3 close (2028): the record does not fit the save
+  FAIL [7]: seed 4 close (2028): the record does not fit the save
+  FAIL [7]: seed 4 close (2033): the record does not fit the save
+  FAIL [7]: (further failures in this check not printed)
+   10 careers, 73 seasons run: 27 sackings forced, 27 firings, 19 seats taken, 27 years out, 7 closed for good; 194 checkpoints
+CONTROL firedlost: 1 rewrite(s) applied, 27 failure(s) in section 7 (FIRED)

@@ -1,0 +1,5 @@
+NEGATIVE CONTROL ON: notrim; section 6 must go red
+6) a season out: the league plays a whole season without him, his record gains a year out and nothing else, and refusals touch nothing
+   60 years out over 20 seeds (0 stopped early); refusals: 20 in a seat, 20 closed, 20 last calls
+   drafted men on the other clubs' rosters after the years out: away 1055, idle GM 1080 (ratio 0.977); mean roster after a summer: away 52.24, idle GM 52.26
+CONTROL notrim: 1 rewrite(s) applied, 0 failure(s) in section 6 (DID NOT FIRE)
