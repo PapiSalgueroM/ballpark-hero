@@ -1,0 +1,10 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+ctl-none-tt-all exit=1 539s | playTwoTabs: RED, 12 findings
+ctl-none-NewCountries exit=1 149s | playClubManagerNewCountries: 9 failure(s)
+ctl-none-SaveLeave exit=1 16s | playClubManagerSaveLeave: 1 failure
+ctl-none-Slots exit=1 16s | playClubManagerSlots: RED, 1 failures
+ctl-none-BoardVerdict exit=0 61s | playCmBoardVerdict GREEN: 48 of 48 checks green
+ctl-none-Conquest exit=0 66s | ALL CONQUEST SCENE SCREEN CHECKS PASSED
+ctl-none-DealDesk exit=1 34s | playDealDesk: blocked before the deal desk, so nothing below it was tested.
+ctl-none-SoccerLanding exit=1 246s | playSoccerLanding: RED, no base arm (set SOCCER_LANDING_BASE_DIST); a head arm alone is not a proof
+ctl-none-RevealScroll exit=1 113s |   FAIL: /clue-auction: only 0 presses landed (ran out of controls after 0 presses, screen was offering: Try again | Cookie choices | Light mode | Sound: off), so this gam

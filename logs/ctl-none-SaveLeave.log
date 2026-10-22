@@ -1,0 +1,4 @@
+1) Taking a job
+  FAIL: could not get past the club picker, so nothing below ran
+
+playClubManagerSaveLeave: 1 failure
