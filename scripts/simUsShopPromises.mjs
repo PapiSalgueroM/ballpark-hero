@@ -13,7 +13,8 @@
  *   1  words: every card that prints a percent, a chance or a payout is a table row with the printed numbers
  *   2  steady: two index funds and the steady one time card against a twin, two seasons through sim and progress
  *   3  stakes: 2,000 careers per gamble per sport, the win share inside the printed chance plus or minus 4 sd
- *   4  the family office: 2 percent of Cash above zero, after the steady returns; nothing at zero or below
+ *   4  the family office: 2 percent of Cash above zero, after the steady returns; nothing at zero or below; and the
+ *      settle lands before the money app's tick, whose thin buffer rule reads Cash (a holder keeps 3 morale)
  *   5  heat: the lawyer cools a clean season twice as fast; with dirty money held nothing changes
  *   8  digest: careers that hold nothing that pays replay byte identical to the base arm, draw for draw
  *   9  old saves: a base arm save that bought everything earns one season per season on the head, no back pay
@@ -31,6 +32,7 @@
  *   leak     a career that holds nothing that pays gets 0.1M -> section 8 in all four sports
  *   coolall  everybody cools twice as fast                 -> section 8 (it reaches the clean heat path)
  *   backpay  the first settle of a save without a carry pays twice -> section 9
+ *   settleafter  the settle moved below the money app's tick in all four engines -> section 4's thin buffer case only
  *
  * Exit 0 green, 1 red or a control fired, 2 could not run, 3 a control did not fire. The last line says which.
  * Nothing here reaches the network.
@@ -46,7 +48,7 @@ import { build } from 'esbuild';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SHOP_BASE = process.env.SHOP_BASE || '413685149bed816a5c384242aa8c40f412b1d523';
 const CONTROL = process.env.SHOP_CONTROL || '';
-const CONTROL_SECTIONS = { rate: ['1', '2'], words: ['1'], camp: ['1'], nocall: ['2', '3', '4', '9'], chance: ['3'], twice: ['3'], office: ['4'], lawyer: ['5'], leak: ['8'], coolall: ['8'], backpay: ['9'] };
+const CONTROL_SECTIONS = { rate: ['1', '2'], words: ['1'], camp: ['1'], nocall: ['2', '3', '4', '9'], chance: ['3'], twice: ['3'], office: ['4'], lawyer: ['5'], leak: ['8'], coolall: ['8'], backpay: ['9'], settleafter: ['4'] };
 if (CONTROL && !CONTROL_SECTIONS[CONTROL]) { console.log(`simUsShopPromises: could not run, unknown SHOP_CONTROL ${CONTROL}`); process.exit(2); }
 const SECTIONS = (process.env.SHOP_SECTIONS || (CONTROL ? CONTROL_SECTIONS[CONTROL].join(',') : '0,1,2,3,4,5,8,9')).split(',').map(s => s.trim());
 const runs = s => SECTIONS.includes(s);
@@ -146,6 +148,10 @@ function headServe() {
     serve['src/lib/nbaMyCareer.ts'] = patchOnce(nba, `${at[0]}\n`, '', 'nbaMyCareer.ts');
   }
   if (CONTROL === 'nocall') for (const sport of US) serve[sport.file] = patchOnce(read(sport.file), SETTLE_LINES(sport.S), '', sport.file);
+  if (CONTROL === 'settleafter') for (const sport of US) {
+    const tick = `  for (const line of ${sport.id}MoneySeasonTick(c).events) notes.push(line);\n`;
+    serve[sport.file] = patchOnce(patchOnce(read(sport.file), SETTLE_LINES(sport.S), '', sport.file), tick, tick + SETTLE_LINES(sport.S), sport.file);
+  }
   return serve;
 }
 
@@ -394,7 +400,21 @@ if (runs('4')) {
       const pay = ot.c.netWorth - ot0, steady = printed(index).rate * index.cost;
       const want = steady + (on + pay + steady) * OFFICE_PRINTED, got = (cash(o.c) - o0) - pay;
       if (!near(got, want, 1e-6)) fail('4', `${sport.id} order`, `the index fund and the office earned ${got.toFixed(6)}, in the documented order ${want.toFixed(6)}`);
-      console.log(`   ${sport.id}: the office alone earned ${seen.join(' then ')}; at ${under}M nothing moved; with the index fund ${got.toFixed(4)} (wanted ${want.toFixed(4)})`);
+      /* (d) the settle lands BEFORE the money app's season (review of 2026-10-22, run lens finding 1). careerMoney.ts
+         step 4 reads Cash: a balance under three quarters of the bill (the bill is at least 0.2M) with no savings or
+         holdings costs 3 morale. From 0.1M after the pay, two index funds bank 0.2M first, so the holder clears that
+         band and keeps the 3 morale a bare twin loses. Settled after the tick, both lose it (control settleafter). */
+      const thin = funds => {
+        const r = career(H, sport, 'Fictional thin buffer', 1538);
+        r.c.netWorth = 0.1 - r.c.salary * 0.45; r.c.yearlyCosts = 0; r.c.morale = 70;
+        r.c.purchased = funds ? [index.id, index.id] : [];
+        lib[sport.progress](r.c, r.rng);
+        return r.c;
+      };
+      const th = thin(true), tt = thin(false);
+      if (!(tt.netWorth < 0.2 * 0.75)) fail('4', `${sport.id} before the tick`, `the bare twin ended on ${tt.netWorth}M, outside the band the money app stresses, so this case has no power`);
+      else if (th.morale - tt.morale !== 3) fail('4', `${sport.id} before the tick`, `the holder ended on morale ${th.morale} and the bare twin on ${tt.morale}; with the returns banked before the money app the holder keeps 3`);
+      console.log(`   ${sport.id}: the office alone earned ${seen.join(' then ')}; at ${under}M nothing moved; with the index fund ${got.toFixed(4)} (wanted ${want.toFixed(4)}); thin buffer: the holder ends on ${th.netWorth}M and morale ${th.morale}, the bare twin on ${tt.netWorth}M and ${tt.morale}`);
     });
   }
 }
@@ -562,6 +582,7 @@ if (CONTROL) {
   if (CONTROL === 'nocall') for (const s of ['2', '4', '9']) fired = fired && US.every(sp => [...red.get(s) ?? []].some(k => k.startsWith(`${sp.id} `)));
   if (CONTROL === 'chance') fired = fired && US.every(sp => red.get('3')?.has(`${sp.id} ${byName(itemsOf(H, sp), 'Crypto Punt').id} band`));
   if (CONTROL === 'leak') fired = fired && US.every(sp => [...red.get('8') ?? []].some(k => k.startsWith(`${sp.id} `)));
+  if (CONTROL === 'settleafter') fired = fired && US.every(sp => red.get('4')?.has(`${sp.id} before the tick`)) && [...red.get('4') ?? []].every(k => k.endsWith(' before the tick'));
   console.log(fired ? `simUsShopPromises: CONTROL ${CONTROL} FIRED (red sections ${redSections.join(', ')})` : `simUsShopPromises: CONTROL ${CONTROL} DID NOT FIRE (red sections ${redSections.join(', ') || 'none'})`);
   process.exit(fired ? 1 : 3);
 }
