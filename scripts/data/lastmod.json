@@ -136,6 +136,10 @@
     "hash": "ccd75e13a7a82412",
     "date": "2026-09-30"
   },
+  "/cookie-policy": {
+    "hash": "9f48ea206b344eab",
+    "date": "2026-10-22"
+  },
   "/dart-draft": {
     "hash": "6ca9dd8bf14827c6",
     "date": "2026-10-09"
@@ -489,8 +493,8 @@
     "date": "2026-10-13"
   },
   "/privacy": {
-    "hash": "7be1ccce29f899a9",
-    "date": "2026-10-21"
+    "hash": "f55f441ec3b5b2db",
+    "date": "2026-10-22"
   },
   "/pro-basketball": {
     "hash": "442114160c5d5786",
