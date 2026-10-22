@@ -1,0 +1,15 @@
+simBallonDorFairness exit=0 5s | PASS: 100.0% of must-win seasons won, every monster season podiumed, every night on the ballot judged the rivals it seats
+simCareerCleanSheets exit=0 14s | simCareerCleanSheets: green. 24 careers a position, 8 seasons each. Defenders keep clean sheets at the keeper's rate, forwards keep none.
+simCareerEngaged exit=0 33s | ALL ENGAGED CAREER CHECKS PASSED
+simCareerDilemmaReach exit=0 70s | simCareerDilemmaReach: all green
+simCareerNoDeadEnd exit=0 0s | simCareerNoDeadEnd: green. A convicted career is still a career, and a stranded save comes back.
+simCareerPendingPopularityGates exit=1 0s | Node.js v24.21.0
+simCareerInboxBeats exit=0 60s | simCareerInboxBeats: green. Soccer is unchanged, the NFL, NBA, MLB and NHL inboxes each run on their own calendar, and every rival choice does what it says.
+simCareerRecordedStats exit=0 5s | simCareerRecordedStats: 8 actual outcomes passed.
+simCareerTransferBrief exit=0 10s | Transfer Brief:9 healthy outcome groups,60 full original state/RNG pairs,8 effective copied source controls,9 prepared native branches.
+simClubSquads exit=0 6s | simClubSquads: green. The squad is the real one, you are in the right place in it, and the game never noticed.
+simFlagshipWeight exit=0 1s | simFlagshipWeight: green. The flagship carries its own game and nobody else's.
+simInventedNames exit=0 15s | simInventedNames: green. Every invented man on this site is invented all the way down.
+simMoney exit=1 284s | 1 FAILURES
+simCareerSquad exit=0 390s | simCareerSquad: 2218 checks, 0 failed
+simCareerLeagueWorld exit=0 596s | simCareerLeagueWorld: all sections green (596.2 s)

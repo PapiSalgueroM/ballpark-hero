@@ -1,0 +1,15 @@
+
+=== BALLON D'OR FAIRNESS ===
+seed 737552: must-win 31/31, must-podium 111/111, judged the seated rivals on 351/351 nights on the ballot
+seed 745471: must-win 24/24, must-podium 88/88, judged the seated rivals on 359/359 nights on the ballot
+seed 753390: must-win 29/29, must-podium 97/97, judged the seated rivals on 353/353 nights on the ballot
+seed 761309: must-win 34/34, must-podium 91/91, judged the seated rivals on 367/367 nights on the ballot
+must-win seasons tested : 118   (outscored the field on screen by 5+ AND won a major, 4 seeds pooled)
+  won the award         : 118   (100.0%, floor 95%)
+  finished lower        : 0
+must-podium seasons     : 387   (45+ goals or 55+ goal involvements)
+  finished top 3        : 387
+  PUSHED OFF PODIUM     : 0
+judged field = seated   : 1430 of 1430 nights on the ballot (0 of 4 seeds with a mismatch)
+
+PASS: 100.0% of must-win seasons won, every monster season podiumed, every night on the ballot judged the rivals it seats
