@@ -1,0 +1,70 @@
+
+a. FILE: the generated file is the ledgers, and the lookup answers them
+  released clubs whose old and new league share a size, so no saved finish is placed for them: Hertha Berlin
+  216 seasons, 3303 named places; 16560 club seasons answered (3303 in a league); 454 market clubs placed in 3615 club seasons; 9990 printed names keyed alike; 3551 club seasons hold the old save guard
+
+b. PLAYED: seeded careers from 1990 to 2019, to retirement and into the dugout
+  40 careers, 939 playing seasons (662 before 2026-27: 225 finishes sized from the ledgers, 13 of them in the Championship, 431 in no ledger league, 63 titles there), 172 past derbies
+  2119 offer and loan cards (836 past ones with no league), 979 club cards, 37 dugout jobs (6 with no league); dugout 177 past seasons: 100 from the ledgers naming 314 rivals, 77 unknown (23 of them a club the ledgers put in none of the six), 22 seated by the game's own seasons; 0 stuck
+  years held to the record: 763 offer seasons, 25 dugout jobs; 12 forced jobs (69 ledger seasons, 23 unplaced, 21 seated); phone against the card 2631 times (403 club seasons whose label is not that season's league)
+
+c. BASELINE: from 2026-27 on, nothing moves against origin/main
+✘ [ERROR] train out refused: src/lib/soccerCareerEngine.ts does not contain "consequence: \"3-match ban next season, Reputation -5\"" [plugin soccer-train-out]
+
+    node_modules/esbuild/lib/main.js:1275:27:
+      1275 │         let result = await callback({
+           ╵                            ^
+
+    at Object.rewrite (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/lib/soccerTrain1178.mjs:46:41)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/lib/soccerTrain1178.mjs:68:32
+    at requestCallbacks.on-load (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1275:28)
+    at handleRequest (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:647:17)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:672:7)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:569:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:520:3)
+    at Readable.push (node:internal/streams/readable:400:5)
+
+  This error came from the "onLoad" callback registered here:
+
+    node_modules/esbuild/lib/main.js:1150:20:
+      1150 │       let promise = setup({
+           ╵                     ^
+
+    at setup (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/lib/soccerTrain1178.mjs:63:9)
+    at handlePlugins (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1150:21)
+    at buildOrContextImpl (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:873:5)
+    at Object.buildOrContext (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:699:5)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:2023:15
+    at new Promise (<anonymous>)
+    at Object.build (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:2022:25)
+    at build (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1873:51)
+    at bundle (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCareerLeagueSeasons.mjs:262:9)
+
+  The plugin "soccer-train-out" was triggered by this import
+
+    ../../_temp/t-leagueseasons-unattributed/simLeagueSeasons-KnFmlX/treetrainout-entry.mjs:2:19:
+      2 │ ... as E from '/home/runner/work/ballpark-hero/ballpark-hero/src/li...
+        ╵               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  the train out arm cannot be built on this engine, so it decides nothing (node_modules/esbuild/lib/main.js:1275:27: ERROR: [plugin: soccer-train-out] train out refused: src/lib/soccerCareerEngine.ts does not contain "consequence: \"3-match ban next season, Reputation -5\"")
+  FAIL [c]: career 7777: from 2026-27 it plays differently from origin/main (first at season 2027 Newcastle)
+  FAIL [c]: career 112506: from 2026-27 it plays differently from origin/main (first at season 2027 PSV)
+  FAIL [c]: career 217235: from 2026-27 it plays differently from origin/main (first at season 2027 Napoli)
+  FAIL [c]: career 321964: from 2026-27 it plays differently from origin/main (first at season 2027 Tigres UANL)
+  FAIL [c]: career 426693: from 2026-27 it plays differently from origin/main (first at season 2027 Galatasaray)
+  FAIL [c]: career 531422: from 2026-27 it plays differently from origin/main (first at season 2027 Napoli)
+  FAIL [c]: career 636151: from 2026-27 it plays differently from origin/main (first at season 2027 Celtic)
+  FAIL [c]: career 740880: from 2026-27 it plays differently from origin/main (first at season 2027 Samsunspor)
+  FAIL [c]: career 845609: from 2026-27 it plays differently from origin/main (first at season 2027 Sevilla)
+  FAIL [c]: career 950338: from 2026-27 it plays differently from origin/main (first at season 2027 Como)
+  FAIL [c]: career 1055067: from 2026-27 it plays differently from origin/main (first at season 2027 Lyon)
+  FAIL [c]: career 1159796: from 2026-27 it plays differently from origin/main (first at season 2027 Napoli)
+  0 of 12 careers from 2025 identical from 2026-27 on (428 seasons and dugout rows compared); releasing the seven pins alone moves 0 of them (attributed to the release, not the binds); 0 of the identical ones only once Round 1041's two truth fixes are taken out, 0 only once Round 1100's seven files are read from the base (the pool, the rows and the band moved them, on purpose)
+  SIM_LEAGUE_SEASONS_MORALE is empty: the Round 1523 arm is off, the unattributed run
+
+d. WIRING: the page prints a past season's league only through the lookup
+  5 raw label prints absent, 8 lookups present, both loan screens wired
+
+simCareerLeagueSeasons: 12 failures (sections c)

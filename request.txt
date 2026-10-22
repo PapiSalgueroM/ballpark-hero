@@ -1,0 +1,4 @@
+deck-unattributed: SIM_SOCCER_DECK_MORALE= node scripts/simSoccerDeck.mjs
+leagueseasons-unattributed: SIM_LEAGUE_SEASONS_MORALE= node scripts/simCareerLeagueSeasons.mjs
+fairness-unattributed: SIM_DECK_FAIRNESS_MORALE= node scripts/simSoccerDeckFairness.mjs
+worldtruth-unattributed: SIM_WORLD_TRUTH_MORALE= node scripts/simSoccerWorldTruth.mjs

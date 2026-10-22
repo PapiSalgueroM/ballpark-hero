@@ -1,0 +1,4 @@
+fairness-unattributed exit=1 3s | Node.js v24.22.0
+worldtruth-unattributed exit=1 86s | simSoccerWorldTruth: 5 FAILURES (section 2: 5)
+leagueseasons-unattributed exit=1 90s | simCareerLeagueSeasons: 12 failures (sections c)
+deck-unattributed exit=1 197s | simSoccerDeck: 4 failures, red sections 2, 4, 9
