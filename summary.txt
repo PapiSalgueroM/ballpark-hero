@@ -1,0 +1,9 @@
+build exit=0 23s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+tt-all exit=0 442s | playTwoTabs: green at 320x640, 390x844, 1280x900
+simTactics exit=0 34s | ALL TACTICS CHECKS PASSED
+simMobileChrome exit=1 173s |   - 1440 signed in  /soccer-career: the bar does not show games played, it reads "DOUKNOWBALL Back Games completed today: 0/133 Points today: Points: 98,765 Day streak: 3
+playCmSubsRule exit=0 54s | playCmSubsRule GREEN: 30 of 30 checks green; pictures in /home/runner/work/_temp/rc-out/files/head
+playCmRetire exit=0 88s | playCmRetire: all 60 checks passed. Pictures in /home/runner/work/_temp/rc-out/files/head
+playGames-club-manager exit=0 47s | Played 1 games. 0 findings, 0 the harness could not drive.
+playGames-front-office exit=0 48s | Played 1 games. 0 findings, 0 the harness could not drive.
+ctl-none-tt exit=0 56s | playTwoTabs: green at 320x640, 390x844, 1280x900
