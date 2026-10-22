@@ -1452,6 +1452,7 @@ for (const sport of SPORTS) {
   const pack = DRIVE[sport].host.pack, earns = H.hostEarnsLine(['wins', 'titles', 'playoffs', 'mandate']);
   for (const s of [...H.hostMarketHelp(pack), ...H.hostCareerHelp(pack), ...H.hostXpHelp(), earns, H.hostEarnsLine([]), H.hostEarnsLine(['wins']),
     H.hostEarnsLine(['wins', 'titles', 'playoffs', 'mandate', 'overperformance', 'prospects']),
+    ...['in-seat', 'season-open', 'market-closed', 'last-call', 'broken-adapter'].map(r => H.hostAwayRefusalLine(pack, r)),
     ...['open', 'climb', 'shut'].flatMap(nextYear => [0, 1, 3].flatMap(n => [true, false].map(on => H.hostSitArmLine({ nextYear, offers: Array(n).fill(null) }, on))))]) judge(s, `${sport} help`);
   for (const [desk, live, on] of [[null, LIVE, false], [deskWith({}), LIVE, true], [deskWith({}), [], true], [G.freshGmDesk(), LIVE, true], [deskWith(Object.fromEntries(LIVE.map(t => [t, 5]))), LIVE, true]]) {
     box(H.hostXpTile(desk, live, on), `${sport} GM level`);

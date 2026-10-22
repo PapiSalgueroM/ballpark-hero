@@ -726,6 +726,7 @@ if (runs('8')) {
     for (const deskOn of [true, false]) boxes.push([H.hostXpTile(null, D.NFL_XP_LIVE ?? [], deskOn), `the GM level box, desk ${deskOn ? 'on' : 'off'}`]);
   }
   for (const l of [...H.hostMarketHelp(d.host.pack), ...H.hostCareerHelp(d.host.pack), ...H.hostXpHelp(), H.hostEarnsLine(D.NFL_XP_SOURCES ?? [])]) WORDS.push([l, 'a help line', new Set()]);
+  for (const r of ['in-seat', 'season-open', 'market-closed', 'last-call', 'broken-adapter']) WORDS.push([H.hostAwayRefusalLine(d.host.pack, r), 'a year out refused', new Set()]);
   for (const l of RECAP_LINES) WORDS.push([l, 'the recap XP line', new Set()]);
   const NOT_ALLOWED = [[String.fromCharCode(0x2013), 'an en dash'], [String.fromCharCode(0x2014), 'an em dash'], ['"', 'a quote mark'],
     [String.fromCharCode(0x201c), 'a quote mark'], [String.fromCharCode(0x201d), 'a quote mark']];

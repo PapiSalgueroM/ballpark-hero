@@ -44,7 +44,7 @@ import {
 /* Round 1533: the GM's career. The desk host is the one place it lives for all four front offices
    (src/lib/gmDeskHost.ts); this board binds it through the NFL's read adapter and src/lib/nflGmDesk.ts. */
 import {
-  GM_HOST_KEYS, hostArrivalLine, hostArriving, hostEarnsLine, hostMarket, hostNewSeat, hostOutOfWorkCard, hostPressOption, hostSeasonAway, hostSeasonVerdict,
+  GM_HOST_KEYS, hostArrivalLine, hostArriving, hostAwayRefusalLine, hostEarnsLine, hostMarket, hostNewSeat, hostOutOfWorkCard, hostPressOption, hostSeasonAway, hostSeasonVerdict,
   hostSeatOf, hostSeatTeams, hostSpendPoint, hostSummerMandate, hostXpEffects, hostXpRecapLine, type GmCareerBinding,
 } from '@/lib/gmDeskHost';
 import { GmOutOfWork } from '@/components/front-office-shared/GmOutOfWork';
@@ -1256,7 +1256,7 @@ export default function FrontOfficeBoard() {
       mandate, rounds: playoffRounds, champion,
     });
     const r = hostSeasonAway({ host: nflDeskHost, away: nflAwayHost(myTeam), league: lg, desk, legacy, rng: Math.random });
-    if (r.ok === false) { setNewsFeed(f => ['The year out could not be played. Nothing was saved.', ...f].slice(0, 6)); return; }
+    if (r.ok === false) { const why = hostAwayRefusalLine(nflDeskHost.pack, r.reason); setNewsFeed(f => [why, ...f].slice(0, 6)); return; }
     setLeague(lg);
     setGm(r.desk);
     setGameLog(null);

@@ -3,7 +3,7 @@
    scripts/simGmDeskHost.mjs. This file holds the same properties small. */
 import { describe, expect, it } from 'vitest';
 import {
-  GM_HOST_KEYS, HOST_BLOCK_RULES, HOST_FIRST_CALL_REASON, HOST_FIRST_CALL_REASON_NEAR, HOST_TILE_SUB_MAX, HOST_TILE_VALUE_MAX, hostArriving, hostCanSitOut, hostCanSpend, hostCareerHelp, hostCareerTile, hostCloseSeason,
+  GM_HOST_KEYS, HOST_BLOCK_RULES, HOST_FIRST_CALL_REASON, HOST_FIRST_CALL_REASON_NEAR, HOST_TILE_SUB_MAX, HOST_TILE_VALUE_MAX, hostArriving, hostAwayRefusalLine, hostCanSitOut, hostCanSpend, hostCareerHelp, hostCareerTile, hostCloseSeason,
   hostCraftCut, hostCutQuote, hostDeskCases, hostEarnsLine, hostFeedKey, hostKey, hostLastGrade, hostLegacy,
   hostLegacySeat, hostMarket, hostMarketHelp, hostMarketTile, hostMoveBlocks, hostNewSeat, hostOutOfWorkCard,
   hostPressOption, hostSeasonAway, hostSeasonVerdict, hostSeasonsRecorded, hostSeatOf, hostSitArmLine, hostSitOut, hostSpendPoint,
@@ -804,6 +804,11 @@ describe('the words on the boxes', () => {
     const seats = [firedFrom(BOTTOM, WINNER), firedFrom(BOTTOM, WRECK), firedFrom(BOTTOM, ['badly', 'badly']), firedFrom(TOP, ['met'], 2026, 2)];
     for (const pack of [GM_SEAT_PACKS.nfl, GM_SEAT_PACKS.nba, GM_SEAT_PACKS.mlb, GM_SEAT_PACKS.nhl]) {
       [...hostMarketHelp(pack), ...hostCareerHelp(pack), ...hostXpHelp()].forEach(clean);
+      /* A refused year out says why, one line a reason, each its own. */
+      const refusals = (['in-seat', 'season-open', 'market-closed', 'last-call', 'broken-adapter'] as const).map(r => hostAwayRefusalLine(pack, r));
+      refusals.forEach(clean);
+      refusals.forEach(l => expect(l).toMatch(/^No year out: .+\. Nothing was saved\.$/));
+      expect(new Set(refusals).size).toBe(refusals.length);
       for (const seat of seats) {
         const m = hostMarket({ ...host, pack }, lg, seat, nameOf)!;
         clean(m.line);

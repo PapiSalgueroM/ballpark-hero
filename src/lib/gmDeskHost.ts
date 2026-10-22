@@ -943,6 +943,18 @@ export interface HostAwayReport {
  */
 export type HostAwayRefusal = 'in-seat' | 'season-open' | 'market-closed' | 'last-call' | 'broken-adapter';
 
+/** Round 1533's fix pass: why a year out was refused, in the game's words, for the board's feed. A refusal saves nothing. */
+export function hostAwayRefusalLine(pack: GmSeatPack, reason: HostAwayRefusal): string {
+  const why: Record<HostAwayRefusal, string> = {
+    'in-seat': `you already run a ${pack.seat}`,
+    'season-open': 'the season is still being played',
+    'market-closed': 'the phone has stopped for good, so a year out leads nowhere',
+    'last-call': 'the offers in front of you are the last calls you will get',
+    'broken-adapter': 'the league did not come out exactly one season on',
+  };
+  return `No year out: ${why[reason]}. Nothing was saved.`;
+}
+
 /* Narrow it with `=== false` (or `=== true`): this app compiles without strict
    null checks, where a bare `!r.ok` does not tell the two halves apart. */
 export type HostAwayResult =
