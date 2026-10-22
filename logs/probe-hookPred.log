@@ -1,0 +1,5 @@
+MUT APPLIED hookPred in src/hooks/useConquest.ts (anchor seen 1 time(s), first replaced)
+hook predicate: n => !onTable.has(n); never-on-market set 0 names; market 22; power up list 30
+  market: Calvin Johnson ? 75, "Hit the market when the Chiefs fell"
+  market: Walter Payton ? 75, "Hit the market when the Bears fell"
+MARKET OFFERS RETIRED MEN: Calvin Johnson, Walter Payton

@@ -1,0 +1,7 @@
+#!serial
+probe-head: node .rc/x/marketProbe.mjs
+probe-greatsSet: node .rc/x/mut1547.mjs greatsSet && node .rc/x/marketProbe.mjs; s=$?; git checkout -- src scripts; exit $s
+probe-greatsSet-people: node .rc/x/mut1547.mjs greatsSet && node scripts/simConquestPeople.mjs; s=$?; git checkout -- src scripts; exit $s
+probe-hookPred: node .rc/x/mut1547.mjs hookPred && node .rc/x/marketProbe.mjs; s=$?; git checkout -- src scripts; exit $s
+probe-hookPred-people: node .rc/x/mut1547.mjs hookPred && node scripts/simConquestPeople.mjs; s=$?; git checkout -- src scripts; exit $s
+clean-after: git status --short | wc -l

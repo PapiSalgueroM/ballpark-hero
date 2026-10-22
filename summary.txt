@@ -1,0 +1,6 @@
+probe-head exit=0 1s | market clean: neither Calvin Johnson (retired great) nor Walter Payton (CHI legend) is offered
+probe-greatsSet exit=1 1s | MARKET OFFERS RETIRED MEN: Calvin Johnson
+probe-greatsSet-people exit=0 1s | simConquestPeople: 50682 checks, all green
+probe-hookPred exit=1 1s | MARKET OFFERS RETIRED MEN: Calvin Johnson, Walter Payton
+probe-hookPred-people exit=0 1s | simConquestPeople: 49426 checks, all green
+clean-after exit=0 1s | 0
