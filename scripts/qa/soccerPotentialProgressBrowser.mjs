@@ -78,7 +78,10 @@ function boundary(kind) {
     set('pendingSummary', season); set('pendingBallonDor', { year: 2030, playerRank: 3, playerPoints: 70, playerNominated: true, nominees: [], moved: '' });
   }
   if (kind === 'wall99') { set('potential', 99); set('potentialEarned', 0); set('eliteStreak', 5); set('overall', 95); }
-  if (kind === 'retired') { set('retired', true); set('phase', 'retired'); set('potential', 85); set('potentialEarned', 2); set('eliteStreak', 2); }
+  /* Release BP seam (Round 1519): a retired screen with nothing behind it is the stray flag Round 1519's repairCareer
+     puts back to play on, so the retired boundary also carries what the Just retire choice writes (postRetirementChoice
+     'retire'). No screen reads that field. */
+  if (kind === 'retired') { set('retired', true); set('phase', 'retired'); set('postRetirementChoice', 'retire'); set('potential', 85); set('potentialEarned', 2); set('eliteStreak', 2); }
   return { value, edits };
 }
 const privacyFindings = value => value.mode !== 'waiting' || value.progressCount !== 1 || value.ceilingCount || value.runCount || value.nextCount || value.summaryCount || value.revealed || value.text !== 'Potential progress is waiting for the award reveal.' ? ['pending-progress-exposure'] : [];
