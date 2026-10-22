@@ -1,0 +1,9 @@
+vitest-nat exit=0 4s |    Duration  3.71s (transform 1.90s, setup 102ms, collect 2.32s, tests 297ms, environment 383ms, prepare 253ms)
+tsc exit=0 69s | 
+nat exit=1 108s | simCmMadeUpNations: RED, 2 failure(s)
+nat-nocap exit=1 103s | simCmMadeUpNations: RED, 3 failure(s)
+simWorldEditor exit=0 8s | simWorldEditor: 2478 checks, 0 failures
+we-homecountry exit=1 8s | simWorldEditor (control homecountry): 2478 checks, 2 failures
+simClubManagerALeague exit=0 9s | simClubManagerALeague: all checks passed
+simBoardAsks exit=0 41s | simBoardAsks: green. Every ask a board makes can be met, and nobody real is quoted.
+nat-awayyouth exit=1 90s | simCmMadeUpNations: RED, 11 failure(s)

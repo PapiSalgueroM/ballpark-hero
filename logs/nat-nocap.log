@@ -1,0 +1,9 @@
+NEGATIVE CONTROL ON: nocap
+   now     eredivisie     Netherlands    real men  161  home  37.9% drawn  37.9%  then Germany 5%, Denmark 4%, Belgium 4%
+2c) A league that caps its imports: its squads, real and made up men together, hold the cap's home floor
+  FAIL: saudi (Saudi Arabia): its squads are 7.3% home, under the cap's floor of 60.0%
+  FAIL: mlsEast (United States): its squads are 19.7% home, under the cap's floor of 73.2%
+  FAIL: mlsWest (United States): its squads are 29.0% home, under the cap's floor of 73.2%
+   now     eredivisie       124 made up men, home  40.3% (real 37.9%)
+  ok: Erik Paredes sold to Real Madrid is listed there as New Zealand
+simCmMadeUpNations: RED, 3 failure(s)

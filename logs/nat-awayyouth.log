@@ -1,0 +1,17 @@
+NEGATIVE CONTROL ON: awayyouth
+  FAIL: now mlsEast (United States): drawn home 100.0% against real 100.0%, top foreign Argentina 0.0% against 12.0%
+   now     eredivisie     Netherlands    real men  161  home  37.9% drawn  37.9%  then Germany 5%, Denmark 4%, Belgium 4%
+  FAIL: mlsEast (United States): its squads are 72.6% home, under the cap's floor of 73.2%
+   now     eredivisie       128 made up men, home  37.5% (real 37.9%)
+3) Every made up man carries a country, and no real man is touched
+  FAIL: now Lincoln City: youth Andres Nyman (Youth) is "Germany", the club is in England
+  FAIL: now Lincoln City: youth Hugo Achebe (Youth) is "Slovakia", the club is in England
+  FAIL: now Lincoln City: youth Emeka Ravenhill (Youth) is "Peru", the club is in England
+  FAIL: now Lincoln City: youth Mats Weston (Youth) is "Scotland", the club is in England
+  FAIL: now Lincoln City: youth Aleks Ferreira (Youth) is "France", the club is in England
+  FAIL: now Lincoln City: youth Aleks Achebe (Youth) is "Denmark", the club is in England
+  FAIL: now Lincoln City: youth Mats Ferreira (Youth) is "Austria", the club is in England
+  FAIL: now Lincoln City: youth Aleks Silva (Youth) is "Ireland", the club is in England
+  FAIL: 297 of 574 youth pads are not from their club's country
+  ok: Erik Paredes sold to Real Madrid is listed there as New Zealand
+simCmMadeUpNations: RED, 11 failure(s)

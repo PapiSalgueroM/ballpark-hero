@@ -1,0 +1,6 @@
+2) full seasons play the edited world
+   Celtic in the Premier League: 38 league rounds, 15 cup ties, season one Europe true, next field 32 (Celtic moved premier to championship), 0.7s
+   Real Madrid in the Championship for Lincoln City: 46 league rounds, 15 cup ties, season one Europe true, next field 32 (Real Madrid moved championship to premier), 1.3s
+   Brisbane Roar in premier on a 246 move world: 38 league rounds, 15 cup ties, season one Europe false, next field 32 (Brisbane Roar moved premier to championship), 0.9s
+
+simWorldEditor: 2478 checks, 0 failures
