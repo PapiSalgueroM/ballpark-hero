@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+walkOwner: node .rc/x/walkOwner.mjs
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+simFlagshipWeight: node scripts/simFlagshipWeight.mjs
