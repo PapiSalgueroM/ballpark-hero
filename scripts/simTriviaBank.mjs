@@ -8,8 +8,9 @@ import './lib/seedRandom.mjs';
      TIES      "worth the most" drew four players and marked the first of a sort right. The top band
                of 2026 is 109 players on 17 values, so two of four sharing the top value was routine.
                Held: every worth the most question's top value beats the second by MIN_RATIO.
-     TENSE     "Which club does X play for?" and "right now" over a dated snapshot. Held: no question
-               says "play for" or "right now".
+     TENSE     "Which club does X play for?", "right now" and "Which of these players plays X?" over a
+               dated snapshot. Held: no question says "play for", "right now" or "plays" (the position
+               question was added after the Round 1552 review).
      NAMESAKES the pool keeps one row per name, so a name two players share is one of them. Held: no
                question built from the market pool has a name of src/data/marketNamesakes.json as its
                subject or as an option.
@@ -49,6 +50,7 @@ import './lib/seedRandom.mjs';
      TRIVIA_CONTROL=ties      the clear winner check is removed from worth the most   (section 2)
      TRIVIA_CONTROL=namesake  the namesake filter is removed                          (section 2)
      TRIVIA_CONTROL=tense     the club question says "play for" again                 (section 2)
+     TRIVIA_CONTROL=postense  the position question says "plays" again                (section 2)
      TRIVIA_CONTROL=legacy    dates before ONE_ANSWER_FROM get the new rules          (section 4)
      TRIVIA_CONTROL=rulec     a copy of scripts/genMarketNamesakes.mjs loses rule C   (sections 6 and 6b)
    Re-measure the legacy hashes from any copy of the bank (the base of this round was c75d04dad):
@@ -61,7 +63,7 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const CONTROLS = ['ties', 'namesake', 'tense', 'legacy', 'rulec'];
+const CONTROLS = ['ties', 'namesake', 'tense', 'postense', 'legacy', 'rulec'];
 const CONTROL = process.env.TRIVIA_CONTROL || '';
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`TRIVIA_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
 const PRINT_LEGACY = process.argv.includes('--print-legacy');
@@ -106,6 +108,7 @@ const SWAPS = {
   ties: ['    if (rules.oneAnswer && !clearlyAhead(sorted[0].market_value_usd, sorted[1].market_value_usd)) continue;\n', '', 'worth the most stops checking for a clear top value'],
   namesake: ['return rules.oneAnswer ? band.filter((p) => !MARKET_NAMESAKES.has(p.player_name)) : band;', 'return band;', 'the namesake filter is gone'],
   tense: ['`Which club was ${correct.player_name} at in the ${CURRENT_YEAR} market values?`','`Which club does ${correct.player_name} play for?`', 'the club question says "play for" again'],
+  postense: ['? `Who was listed at ${correct.position} in the ${CURRENT_YEAR} market values?`', '? `Which of these players plays ${correct.position}?`', 'the position question says "plays" again'],
   legacy: ['return dateStr < ONE_ANSWER_FROM ? LEGACY : ONE_ANSWER;', 'return ONE_ANSWER;', 'dates before ONE_ANSWER_FROM get the new rules'],
 };
 /* a control on the namesake generator edits a copy of it, which section 6 then derives the list from */
@@ -173,12 +176,16 @@ if (biggestTie < 2) fail('the easy band has no tied values, so this harness coul
 if (NAMESAKES.size < 40) fail(`the namesake list has ${NAMESAKES.size} names, well short of the 62 the saved rows show`);
 
 /* ---------------- the one right answer checker every ladder goes through ---------------- */
+/* the year is the bank's own CURRENT_YEAR, so a year bump does not need this harness edited */
+const YEAR = Number(T.CURRENT_YEAR);
+if (!(YEAR >= 2026)) fail(`the bank's CURRENT_YEAR reads ${T.CURRENT_YEAR}, so the dated templates cannot be checked`);
 const TEMPLATES = [
-  ['club', /^Which club was (.+) at in the 2026 market values\?$/],
+  ['club', new RegExp(`^Which club was (.+) at in the ${YEAR} market values\\?$`)],
   ['club', /^Which club does (.+) play for\?$/],
   ['nationality', /^What nationality is (.+)\?$/],
+  ['position', new RegExp(`^Who was listed at (.+) in the ${YEAR} market values\\?$`)],
   ['position', /^Which of these players plays (.+)\?$/],
-  ['worth', /^Who was worth the most in the 2026 market values\?$/],
+  ['worth', new RegExp(`^Who was worth the most in the ${YEAR} market values\\?$`)],
   ['worth', /^Who is worth more right now \(highest market value\)\?$/],
   ['ballon', /^Who won the Ballon d'Or in (\d{4})\?$/],
   ['shirt', /^What shirt number has (.+) worn at (.+)\?$/],
@@ -191,7 +198,7 @@ function note(t, key, text) { t[key] += 1; if (!t.examples[key]) t.examples[key]
 function checkQuestion(q, t) {
   t.questions += 1;
   const { question, options, correctIndex } = q;
-  if (/play for|right now/i.test(question)) note(t, 'tense', question);
+  if (/play for|right now|\bplays\b/i.test(question)) note(t, 'tense', question);
   if (new Set(options).size !== options.length || options.length !== 4 || !(correctIndex >= 0 && correctIndex < options.length)) note(t, 'dupOptions', question);
   const hit = TEMPLATES.map(([type, re]) => [type, re.exec(question)]).find(([, m]) => m);
   if (!hit) { note(t, 'unknown', question); return; }

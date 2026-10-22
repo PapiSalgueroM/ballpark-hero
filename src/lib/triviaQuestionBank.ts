@@ -94,7 +94,8 @@ interface ShirtRow {
   kit_number: number;
 }
 
-const CURRENT_YEAR = 2026;
+/** the year of the market values the questions read; exported so simTriviaBank reads its templates off it */
+export const CURRENT_YEAR = 2026;
 
 // ---------------------------------------------------------------------------
 // Round 1552: one right answer a question
@@ -111,8 +112,9 @@ const CURRENT_YEAR = 2026;
  *    Off's MIN_RATIO (src/lib/clearWinner.ts).
  * 2. THE TENSE. "Which club does X play for?" and "right now" read a dated
  *    snapshot (the 2026 rows), so every window since it was taken turns some of
- *    them false. Round 661 fixed the same thing for shirt numbers. The club and
- *    value questions now name the data they come from instead of today.
+ *    them false. Round 661 fixed the same thing for shirt numbers. The club,
+ *    position and value questions now name the data they come from instead of
+ *    today ("plays" was the last present tense one, moved after review).
  * 3. NAMESAKES. The pool keeps one row per name, so when two footballers share
  *    a display name the row is one of them and the question cannot say which.
  *    src/data/marketNamesakes.json lists those names (scripts/genMarketNamesakes.mjs
@@ -435,7 +437,7 @@ export function buildBallonDorQuestion(
 }
 
 // ---------------------------------------------------------------------------
-// Question type 4: "Which of these players plays POSITION?"
+// Question type 4: "Who was listed at POSITION in the CURRENT_YEAR market values?"
 // ---------------------------------------------------------------------------
 
 export function buildPositionQuestion(
@@ -456,7 +458,9 @@ export function buildPositionQuestion(
   const optionPlayers = shuffleWithRng([correct, ...distractors], rng);
   const options = optionPlayers.map((p) => p.player_name);
   return {
-    question: `Which of these players plays ${correct.position}?`,
+    question: rules.oneAnswer
+      ? `Who was listed at ${correct.position} in the ${CURRENT_YEAR} market values?`
+      : `Which of these players plays ${correct.position}?`,
     options,
     correctIndex: optionPlayers.findIndex((p) => p.player_name === correct.player_name),
     difficulty,
