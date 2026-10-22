@@ -220,6 +220,8 @@ describe('Round 1534: the help rule prints the cards\' own numbers', () => {
     expect(US_SHOP_HELP_RULE).toContain('one time in 5 you get 5M back on your 1M, otherwise it is gone');
     expect(US_SHOP_HELP_RULE).toContain('Family Office adds 2 percent of your cash every season');
     expect(US_SHOP_HELP_RULE).toContain('sells your investments too');
+    /* Only a season end settles a stake, and retiring by hand in the offseason plays none (review of 2026-10-22). */
+    expect(US_SHOP_HELP_RULE).toContain('Retire before you play that season and it never settles.');
     expect(US_SHOP_HELP_RULE).not.toMatch(new RegExp(`[${String.fromCharCode(0x2013)}${String.fromCharCode(0x2014)}]`));
   });
 });

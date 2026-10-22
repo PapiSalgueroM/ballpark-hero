@@ -68,7 +68,10 @@ export function liquidateUsCareerPurchases(c: Pick<SupportedCareer, 'purchased' 
      payout, the whole amount back into Cash, or nothing. Every buy is its own stake with its own roll, drawn on
      keyedRng keyed to the career (summerCareerKey), the id, the year AFTER the season end moved it and the stake's
      index, so the season's own stream never moves and a reload cannot re-roll. A settled stake leaves
-     `purchased` (cashed out or gone), so a one time stake can be bought again once it has settled.
+     `purchased` (cashed out or gone), so a one time stake can be bought again once it has settled. Only a season
+     end settles a stake: a career ended by hand in the offseason (the board's "Hang them up now" and the
+     retirement talk's Retire now play no season end) never settles one bought that summer, and the help rule
+     below says so.
    - THE FAMILY OFFICE adds 2 percent of Cash a season when Cash is above zero, read after the pay, the upkeep,
      the stakes and the steady returns, the order Soccer Career's office runs in (its card: "+2% net worth growth
      per season").
@@ -164,6 +167,7 @@ export function settleUsCareerShop(c: ShopCareer, items: readonly ShopItem[]): s
 export const US_SHOP_HELP_RULE = 'The shop pays what its cards say, at the end of every season you play. Put 2M in the Boring Index Fund '
   + 'and it pays 7 percent, 0.14M, every season. Cash moves in tenths, so 0.1M lands this season and the 0.04M waits for the '
   + 'next one. A stake like the Crypto Punt settles once, at the end of your next season: one time in 5 you get 5M back on '
-  + 'your 1M, otherwise it is gone, and once it has settled you can buy another. The Family Office adds 2 percent of your '
+  + 'your 1M, otherwise it is gone, and once it has settled you can buy another. Retire before you play that season and '
+  + 'it never settles. The Family Office adds 2 percent of your '
   + 'cash every season, and the lawyer makes a clean season cool your heat twice as fast. Selling your lifestyle assets '
   + 'when you go broke sells your investments too.';
