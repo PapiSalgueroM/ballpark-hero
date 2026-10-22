@@ -1,0 +1,1 @@
+guide-refresh exit=0 0s | simGuideHeadings: refreshed /cfb-dynasty from its actual guide (howToPlay 12, rules 8, example 3, tips 3)

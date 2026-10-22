@@ -1,0 +1,1 @@
+guide-refresh: node scripts/simGuideHeadings.mjs --refresh /cfb-dynasty; s=$?; cp scripts/data/guideHeadingsFrozen.json $RC_OUT/guideHeadingsFrozen.json; exit $s
