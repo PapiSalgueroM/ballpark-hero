@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+playUsRivalLines: node scripts/playUsRivalLines.mjs
+playStartingXi: ENGINES=chromium node scripts/playStartingXi.mjs
