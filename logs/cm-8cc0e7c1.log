@@ -1,0 +1,9 @@
+served 8cc0e7c1 on 4177: 200
+/tmp/wt-8cc0e7c1/dist
+  BROKEN   the live viewer never reached full time
+  STUCK    the live viewer offered neither a skip nor a way out
+  SHALLOW  only reached 1 matches, so most of the season was never exercised
+  SHALLOW  only 1 matches were played, which is too few to have exercised much
+  BROKEN   never reached a single half time, so Round 119 is not covered by this run
+  SHALLOW  4 transfer window(s) opened and not one signing completed, so the market was not exercised either
+Played Club Manager through its own screens. 6 findings.

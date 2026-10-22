@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+#!serial
+cm-head: node scripts/playClubManager.mjs > /tmp/cmh.log 2>&1; s=$?; grep -E "BROKEN|STUCK|SHALLOW|BLOCKED|findings" /tmp/cmh.log | head -10 | cut -c1-200; exit $s
+cm-6c63ce98: bash .rc/x/basesrv1535.sh 6c63ce98 4175 && SWEEP_BASE=http://localhost:4175 node scripts/playClubManager.mjs > /tmp/cm6c63ce98.log 2>&1; s=$?; grep -E "BROKEN|STUCK|SHALLOW|BLOCKED|findings" /tmp/cm6c63ce98.log | head -10 | cut -c1-200; exit $s
+cm-c1a58e1c: bash .rc/x/basesrv1535.sh c1a58e1c 4176 && SWEEP_BASE=http://localhost:4176 node scripts/playClubManager.mjs > /tmp/cmc1a58e1c.log 2>&1; s=$?; grep -E "BROKEN|STUCK|SHALLOW|BLOCKED|findings" /tmp/cmc1a58e1c.log | head -10 | cut -c1-200; exit $s
+cm-8cc0e7c1: bash .rc/x/basesrv1535.sh 8cc0e7c1 4177 && SWEEP_BASE=http://localhost:4177 node scripts/playClubManager.mjs > /tmp/cm8cc0e7c1.log 2>&1; s=$?; grep -E "BROKEN|STUCK|SHALLOW|BLOCKED|findings" /tmp/cm8cc0e7c1.log | head -10 | cut -c1-200; exit $s
+cm-a9b19870: bash .rc/x/basesrv1535.sh a9b19870 4178 && SWEEP_BASE=http://localhost:4178 node scripts/playClubManager.mjs > /tmp/cma9b19870.log 2>&1; s=$?; grep -E "BROKEN|STUCK|SHALLOW|BLOCKED|findings" /tmp/cma9b19870.log | head -10 | cut -c1-200; exit $s

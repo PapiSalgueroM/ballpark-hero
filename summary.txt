@@ -1,0 +1,6 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+cm-head exit=1 19s | Played Club Manager through its own screens. 6 findings.
+cm-6c63ce98 exit=1 50s | Played Club Manager through its own screens. 6 findings.
+cm-c1a58e1c exit=0 319s | Played Club Manager through its own screens. 0 findings.
+cm-8cc0e7c1 exit=1 50s | Played Club Manager through its own screens. 6 findings.
+cm-a9b19870 exit=0 320s | Played Club Manager through its own screens. 0 findings.
