@@ -1,0 +1,5 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simTycoonScorelines: node scripts/simTycoonScorelines.mjs
+simTycoonAwayMatchdays: node scripts/simTycoonAwayMatchdays.mjs
+ctl-streakfour: SCORELINES_CONTROL=streakfour node scripts/simTycoonScorelines.mjs
+ctl-raiseone: SCORELINES_CONTROL=raiseone node scripts/simTycoonScorelines.mjs

@@ -1,0 +1,5 @@
+tsc exit=0 78s | 
+simTycoonAwayMatchdays exit=0 86s |    All 6 controls fired exactly where they should, in node and in the real hook.
+ctl-streakfour exit=0 16s | simTycoonScorelines: 1 checks, 0 failed [16 s]
+ctl-raiseone exit=0 13s | simTycoonScorelines: 1 checks, 0 failed [13 s]
+simTycoonScorelines exit=0 440s | simTycoonScorelines: 37 checks, 0 failed [441 s]

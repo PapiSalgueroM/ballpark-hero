@@ -1,0 +1,9 @@
+Round 1532: Stadium Tycoon scorelines at the hook's cadence (dt 0.2s), control raiseone alone
+
+control raiseone: 2 places rewritten in a copy of the lib
+   sections red: S9b (expected S9b) [13 s]
+     S9b: win1 rose to 2 from 1: a threshold may only go down
+     says S9b: win1 rose to 2 from 1: a threshold may only go down
+     says S9b: aw1 rose to 2 from 1: a threshold may only go down
+
+simTycoonScorelines: 1 checks, 0 failed [13 s]

@@ -1,0 +1,9 @@
+Round 1532: Stadium Tycoon scorelines at the hook's cadence (dt 0.2s), control streakfour alone
+
+control streakfour: 2 places rewritten in a copy of the lib
+   sections red: S9b (expected S9b) [16 s]
+     S9b: streak5 is 4, but the lead fixed it at 5 (brief-1543 1.2)
+     says S9b: streak5 is 4, but the lead fixed it at 5 (brief-1543 1.2)
+     says S9b: as5 is 4, but the lead fixed it at 5 (brief-1543 1.2)
+
+simTycoonScorelines: 1 checks, 0 failed [16 s]
