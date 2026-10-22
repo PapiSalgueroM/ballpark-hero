@@ -1,0 +1,82 @@
+{
+  "measures": {
+    "phone-rm": {
+      "keepY": 539,
+      "retireVisible": 0,
+      "yesY": 474,
+      "sideVerdict": 0,
+      "completions": [
+        0,
+        1,
+        1
+      ],
+      "sideSetup": 0,
+      "setupHeight": 11658,
+      "turnProY": 337,
+      "errors": []
+    },
+    "phone": {
+      "keepY": 539,
+      "retireVisible": 0,
+      "yesY": 474,
+      "sideVerdict": 0,
+      "completions": [
+        0,
+        1,
+        1
+      ],
+      "sideSetup": 0,
+      "setupHeight": 11658,
+      "turnProY": 337,
+      "errors": []
+    },
+    "desk-rm": {
+      "keepY": 535,
+      "retireVisible": 0,
+      "yesY": 486,
+      "sideVerdict": 0,
+      "completions": [
+        0,
+        1,
+        1
+      ],
+      "sideSetup": 0,
+      "setupHeight": 8028,
+      "turnProY": 365,
+      "errors": []
+    },
+    "desk": {
+      "keepY": 535,
+      "retireVisible": 0,
+      "yesY": 486,
+      "sideVerdict": 0,
+      "completions": [
+        0,
+        1,
+        1
+      ],
+      "sideSetup": 0,
+      "setupHeight": 8028,
+      "turnProY": 365,
+      "errors": []
+    }
+  },
+  "notes": [
+    "ten fight save: fightNo 10, retired false, pending cards 2, rivalry choice true, beat false",
+    "phone-rm: Retire buttons on the hub with the life layer as saved: 0",
+    "phone-rm: local completion mentions before, after retire, after reload: 0, 1, 1",
+    "phone-rm: setup page height 11658, Turn professional at y 337",
+    "phone-rm: gym roster cards 3; first card line \"Featherweight · Swarmer · age 21 · 0-0\", third \"Featherweight · Swarmer · age 22 · 0-0\"",
+    "phone: Retire buttons on the hub with the life layer as saved: 0",
+    "phone: local completion mentions before, after retire, after reload: 0, 1, 1",
+    "phone: setup page height 11658, Turn professional at y 337",
+    "desk-rm: Retire buttons on the hub with the life layer as saved: 0",
+    "desk-rm: local completion mentions before, after retire, after reload: 0, 1, 1",
+    "desk-rm: setup page height 8028, Turn professional at y 365",
+    "desk: Retire buttons on the hub with the life layer as saved: 0",
+    "desk: local completion mentions before, after retire, after reload: 0, 1, 1",
+    "desk: setup page height 8028, Turn professional at y 365",
+    "desk: gym roster cards 3; first card line \"Featherweight · Swarmer · age 21 · 0-0\", third \"Featherweight · Swarmer · age 22 · 0-0\""
+  ],
+  "fails": []
+}

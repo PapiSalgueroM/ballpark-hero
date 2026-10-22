@@ -1,0 +1,80 @@
+   note ten fight save: fightNo 10, retired false, pending cards 2, rivalry choice true, beat false
+
+phone-rm
+   ok   phone-rm: Retire is shut at 3 fights
+   ok   phone-rm: the shut card says how many to go
+   ok   phone-rm: the Start again confirm is on screen (y 539)
+   ok   phone-rm: Keep this career keeps it
+   note phone-rm: Retire buttons on the hub with the life layer as saved: 0
+   ok   phone-rm: Retire is open at 10 fights
+   ok   phone-rm: the retire confirm is on screen (y 474)
+   ok   phone-rm: the verdict says he called it
+   ok   phone-rm: no sideways scroll on the verdict (0)
+   note phone-rm: local completion mentions before, after retire, after reload: 0, 1, 1
+   ok   phone-rm: a reload of the verdict pays nothing again
+   ok   phone-rm: the past list says he walked away
+   ok   phone-rm: no sideways scroll with eight long past names (0)
+   note phone-rm: setup page height 11658, Turn professional at y 337
+   ok   phone-rm: the repaired man still shows the division he showed before the fix (Featherweight; "Featherweight · Swarmer · age 22 · 0-0")
+   note phone-rm: gym roster cards 3; first card line "Featherweight · Swarmer · age 21 · 0-0", third "Featherweight · Swarmer · age 22 · 0-0"
+   ok   phone-rm: the old gym shows its three men (3)
+   ok   phone-rm: letting the man who shared an id go lets exactly one man go (3 to 2)
+   ok   phone-rm: the first holder kept f1 and the save is unique (f1,f2)
+   ok   phone-rm: no page errors ()
+
+phone
+   ok   phone: Retire is shut at 3 fights
+   ok   phone: the shut card says how many to go
+   ok   phone: the Start again confirm is on screen (y 539)
+   ok   phone: Keep this career keeps it
+   note phone: Retire buttons on the hub with the life layer as saved: 0
+   ok   phone: Retire is open at 10 fights
+   ok   phone: the retire confirm is on screen (y 474)
+   ok   phone: the verdict says he called it
+   ok   phone: no sideways scroll on the verdict (0)
+   note phone: local completion mentions before, after retire, after reload: 0, 1, 1
+   ok   phone: a reload of the verdict pays nothing again
+   ok   phone: the past list says he walked away
+   ok   phone: no sideways scroll with eight long past names (0)
+   note phone: setup page height 11658, Turn professional at y 337
+   ok   phone: no page errors ()
+
+desk-rm
+   ok   desk-rm: Retire is shut at 3 fights
+   ok   desk-rm: the shut card says how many to go
+   ok   desk-rm: the Start again confirm is on screen (y 535)
+   ok   desk-rm: Keep this career keeps it
+   note desk-rm: Retire buttons on the hub with the life layer as saved: 0
+   ok   desk-rm: Retire is open at 10 fights
+   ok   desk-rm: the retire confirm is on screen (y 486)
+   ok   desk-rm: the verdict says he called it
+   ok   desk-rm: no sideways scroll on the verdict (0)
+   note desk-rm: local completion mentions before, after retire, after reload: 0, 1, 1
+   ok   desk-rm: a reload of the verdict pays nothing again
+   ok   desk-rm: the past list says he walked away
+   ok   desk-rm: no sideways scroll with eight long past names (0)
+   note desk-rm: setup page height 8028, Turn professional at y 365
+   ok   desk-rm: no page errors ()
+
+desk
+   ok   desk: Retire is shut at 3 fights
+   ok   desk: the shut card says how many to go
+   ok   desk: the Start again confirm is on screen (y 535)
+   ok   desk: Keep this career keeps it
+   note desk: Retire buttons on the hub with the life layer as saved: 0
+   ok   desk: Retire is open at 10 fights
+   ok   desk: the retire confirm is on screen (y 486)
+   ok   desk: the verdict says he called it
+   ok   desk: no sideways scroll on the verdict (0)
+   note desk: local completion mentions before, after retire, after reload: 0, 1, 1
+   ok   desk: a reload of the verdict pays nothing again
+   ok   desk: the past list says he walked away
+   ok   desk: no sideways scroll with eight long past names (0)
+   note desk: setup page height 8028, Turn professional at y 365
+   ok   desk: the repaired man still shows the division he showed before the fix (Featherweight; "Featherweight · Swarmer · age 22 · 0-0")
+   note desk: gym roster cards 3; first card line "Featherweight · Swarmer · age 21 · 0-0", third "Featherweight · Swarmer · age 22 · 0-0"
+   ok   desk: the old gym shows its three men (3)
+   ok   desk: letting the man who shared an id go lets exactly one man go (3 to 2)
+   ok   desk: the first holder kept f1 and the save is unique (f1,f2)
+   ok   desk: no page errors ()
+walk1546: all checks passed
