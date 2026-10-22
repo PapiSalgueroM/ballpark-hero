@@ -1,0 +1,11 @@
+nat-mainstream: CM_NATIONS_CONTROL=mainstream node scripts/simCmMadeUpNations.mjs 2>&1 | grep -E 'FAIL|CANNOT|NEGATIVE|simCmMadeUpNations:' | tail -8; exit ${PIPESTATUS[0]}
+nat-flat: CM_NATIONS_CONTROL=flat node scripts/simCmMadeUpNations.mjs 2>&1 | grep -E 'FAIL|CANNOT|NEGATIVE|simCmMadeUpNations:' | tail -8; exit ${PIPESTATUS[0]}
+nat-realtouched: CM_NATIONS_CONTROL=realtouched node scripts/simCmMadeUpNations.mjs 2>&1 | grep -E 'FAIL|CANNOT|NEGATIVE|simCmMadeUpNations:' | tail -8; exit ${PIPESTATUS[0]}
+nat-nocarry: CM_NATIONS_CONTROL=nocarry node scripts/simCmMadeUpNations.mjs 2>&1 | grep -E 'FAIL|CANNOT|NEGATIVE|simCmMadeUpNations:' | tail -8; exit ${PIPESTATUS[0]}
+nat-noledger: CM_NATIONS_CONTROL=noledger node scripts/simCmMadeUpNations.mjs 2>&1 | grep -E 'FAIL|CANNOT|NEGATIVE|simCmMadeUpNations:' | tail -8; exit ${PIPESTATUS[0]}
+nat-nopromote: CM_NATIONS_CONTROL=nopromote node scripts/simCmMadeUpNations.mjs 2>&1 | grep -E 'FAIL|CANNOT|NEGATIVE|simCmMadeUpNations:' | tail -8; exit ${PIPESTATUS[0]}
+nat-noload: CM_NATIONS_CONTROL=noload node scripts/simCmMadeUpNations.mjs 2>&1 | grep -E 'FAIL|CANNOT|NEGATIVE|simCmMadeUpNations:' | tail -8; exit ${PIPESTATUS[0]}
+nat-askoff: CM_NATIONS_CONTROL=askoff node scripts/simCmMadeUpNations.mjs 2>&1 | grep -E 'FAIL|CANNOT|NEGATIVE|simCmMadeUpNations:' | tail -8; exit ${PIPESTATUS[0]}
+nat-leak: CM_NATIONS_CONTROL=leak node scripts/simCmMadeUpNations.mjs 2>&1 | grep -E 'FAIL|CANNOT|NEGATIVE|simCmMadeUpNations:' | tail -8; exit ${PIPESTATUS[0]}
+nat-bloat: CM_NATIONS_CONTROL=bloat node scripts/simCmMadeUpNations.mjs 2>&1 | grep -E 'FAIL|CANNOT|NEGATIVE|simCmMadeUpNations:' | tail -8; exit ${PIPESTATUS[0]}
+nat-awayyouth: CM_NATIONS_CONTROL=awayyouth node scripts/simCmMadeUpNations.mjs 2>&1 | grep -E 'FAIL|CANNOT|NEGATIVE|simCmMadeUpNations:' | tail -8; exit ${PIPESTATUS[0]}
