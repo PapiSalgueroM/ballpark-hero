@@ -1,0 +1,6 @@
+  PASS  1280 squad: youth kid Yusuf Keane (Youth) shows England (England)
+  PASS  1280 market: the nationality filter offers New Zealand
+  PASS  1280 market: the page held still while typing (0 then 0)
+  PASS  1280 market: filtered to New Zealand, Erik Paredes is listed with New Zealand and the MADE UP mark
+  PASS  1280: no page error
+playCmMadeUpNations: green. Made up men wear their country on the squad and the market.
