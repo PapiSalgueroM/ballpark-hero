@@ -1,0 +1,15 @@
+simTycoonAwayMatchdays exit=0 102s |    All 6 controls fired exactly where they should, in node and in the real hook.
+tsc exit=0 130s | 
+simTycoonHelp exit=0 28s |    All 25 controls fired exactly where they should.
+simGuideHeadings exit=0 2s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+simSiteSearch exit=0 3s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+keywordsFresh exit=0 1s | searchKeywords.json is what the generator writes
+vitest exit=0 191s |    Duration  191.10s (transform 2.52s, setup 1.49s, collect 10.40s, tests 256.79s, environment 9.76s, prepare 2.35s)
+simHarnessAnchors exit=0 69s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simNoRivalNames exit=0 18s | No rival product names found. 0 findings.
+oldsaves exit=0 83s | oldsaves1539: green, every leg holds
+simTycoonPackPace exit=0 23s | simTycoonPackPace: green. Both policies measured; every applied price control broke its pace check.
+simTycoonAway exit=0 6s |    The control put the load-only settle back and sections 3 and 4 went red, so these checks are alive.
+simTycoonLoads exit=0 27s |    All eleven controls fired exactly where they should.
+simStadiumTycoon exit=0 1s | simStadiumTycoon: green. The turnstiles spin and the math holds.
+simTycoonRooms exit=0 143s |    All eleven controls fired exactly where they should.

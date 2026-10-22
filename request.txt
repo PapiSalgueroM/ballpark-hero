@@ -1,0 +1,15 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/firstTeam.test.tsx src/test/tycoonAway.test.tsx src/test/tycoonGear.test.tsx src/test/tycoonHelp.test.tsx src/test/tycoonLatestSeason.test.tsx src/test/tycoonLoads.test.tsx src/test/tycoonPacks.test.tsx src/test/tycoonPitch.test.tsx src/test/tycoonRooms.test.tsx src/test/tycoonSaleReview.test.tsx src/test/tycoonSetPieceBoard.test.tsx src/test/tycoonSetPiecePage.test.tsx src/test/tycoonTicketPolicy.test.tsx --testTimeout=300000 --hookTimeout=120000
+simTycoonAwayMatchdays: node scripts/simTycoonAwayMatchdays.mjs
+simTycoonHelp: node scripts/simTycoonHelp.mjs
+oldsaves: node .rc/x/oldsaves1539.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+keywordsFresh: node scripts/genSearchKeywords.mjs && git diff --exit-code --stat src/data/searchKeywords.json && echo "searchKeywords.json is what the generator writes"
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simTycoonPackPace: node scripts/simTycoonPackPace.mjs
+simTycoonLoads: node scripts/simTycoonLoads.mjs
+simTycoonRooms: node scripts/simTycoonRooms.mjs
+simTycoonAway: node scripts/simTycoonAway.mjs
+simStadiumTycoon: node scripts/simStadiumTycoon.mjs

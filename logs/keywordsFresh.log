@@ -1,0 +1,4 @@
+searchKeywords.json: 133 of 133 games covered, 1215 keywords, 10980 bytes
+  filters: tf >= 2, df <= 33 of 133 guides, max 12 per game
+  guide source hash 059d146a08395c93
+searchKeywords.json is what the generator writes
