@@ -4505,9 +4505,10 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           </div>
         ) : career.phase === "owner_season" ? (
           <div className="flex-1 flex gap-2">
-            {/* Round 1524: the season waits for the season's call */}
+            {/* Round 1524: the season waits for the season's call (the panel asks
+                for it); the label stays the base's, which fits a 320 bar */}
             <Button onClick={onAdvanceOwner} disabled={!career.ownerState?.plan} className="flex-1 h-12 text-base font-bold bg-emerald-600 hover:bg-emerald-500 text-black gap-2 max-[399px]:px-3 max-[399px]:text-sm">
-              {career.ownerState?.plan ? "Next Owner Season" : "Pick where the budget goes"} <ChevronRight className="w-5 h-5 max-[399px]:hidden" />
+              Next Owner Season <ChevronRight className="w-5 h-5 max-[399px]:hidden" />
             </Button>
             <Button onClick={onEndOwner} variant="outline" className="h-12 text-sm font-bold max-[399px]:px-3">Sell Club</Button>
           </div>
