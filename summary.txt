@@ -1,0 +1,6 @@
+mut-noscale exit=1 240s | MUT noscale: shop=1 vitest=1 deckc=1 board=0 defects=0 summer=skip -> CAUGHT
+mut-ageoff exit=1 242s | MUT ageoff: shop=1 vitest=1 deckc=1 board=0 defects=0 summer=skip -> CAUGHT
+mut-clampdown exit=1 408s | MUT clampdown: shop=0 vitest=0 deckc=1 board=0 defects=0 summer=0 -> CAUGHT
+mut-earnround exit=0 241s | MUT earnround: shop=0 vitest=0 deckc=0 board=0 defects=0 summer=skip -> ESCAPED
+mut-corramt exit=1 242s | MUT corramt: shop=1 vitest=0 deckc=1 board=0 defects=0 summer=skip -> CAUGHT
+mut-nofallback exit=1 241s | MUT nofallback: shop=1 vitest=1 deckc=0 board=0 defects=0 summer=skip -> CAUGHT

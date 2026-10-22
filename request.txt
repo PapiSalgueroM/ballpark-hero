@@ -1,0 +1,7 @@
+#!serial
+mut-noscale: bash .rc/x/mutrun.sh noscale
+mut-ageoff: bash .rc/x/mutrun.sh ageoff
+mut-clampdown: bash .rc/x/mutrun.sh clampdown summer
+mut-earnround: bash .rc/x/mutrun.sh earnround
+mut-corramt: bash .rc/x/mutrun.sh corramt
+mut-nofallback: bash .rc/x/mutrun.sh nofallback

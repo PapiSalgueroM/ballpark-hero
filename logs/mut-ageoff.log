@@ -1,0 +1,20 @@
+mut1538: ageoff applied to src/lib/usCareerAnnualBenefits.ts
+ src/lib/usCareerAnnualBenefits.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+shop: simUsShopPromises: red in sections 0, 7
+   FAIL [0] the Skill answer draws once under the maintenance age and never from it: AssertionError: expected 'Rating +1.' to be 'Maintenance year. Health +4.' // Object.is equality
+   FAIL [7] nba skill at the maintenance age: it drew 1 times at age 31
+   FAIL [7] nba skill at the maintenance age: rating 70 to 72 (want 70), health 70
+   FAIL [7] nba skill at the maintenance age: the line "Rating +2." does not say "Health +4."
+   FAIL [7] nba fleet 1538/2: first parts at record 45 (answer, rating 95 of 95, age 31), where the rider does not act; head [nbaA_analyst_beef Go on his show and sit across from him "He had done this for 15 years an] then [training Skill grind "You were alrea
+   FAIL [7] nba fleet 1538/7: first parts at record 55 (deal, rating 82 of 90, age 31), where the rider does not act; head [season JQkIQAq3pnTHdUaROvaxr2XVDDs= 405] then [deal ["nbaA_teammate_loan","nbaC_vet_player_rep","nbaB_hofPush"] nbaA_teammate_loan], bas
+   FAIL [7] nba fleet 1538/14: first parts at record 40 (answer, rating 89 of 92, age 31), where the rider does not act; head [deal ["training"] training] then [training Skill grind "Rating +1." /UvDeFcM4vq88qdxpzXeS9xtDCk= 471], base then [training Skill grin
+   FAIL [7] nba fleet 1538/21: first parts at record 44 (deal, rating 93 of 97, age 31), where the rider does not act; head [season rDaQ0NFHng2g8+EQ4ExBhoTRFU8= 401] then [deal ["nbaA_podcast_take"] nbaA_podcast_take], base then [deal ["nbaA_podcast_take","tra
+vitest: [31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/lib/usCareerShopPromises.test.ts[2m > [22mRound 1538: a paid line banks what it says, and the Skill card stops at the ceiling[2m > [22mthe Skill answer draws once under the maintenance a
+[31m[1mAssertionError[22m: expected 'Rating +1.' to be 'Maintenance year. Health +4.' // Object.is equality[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/usCareerShopPromises.test.ts,title=src/lib/usCareerShopPromises.test.ts > Round 1538%3A a paid line banks what it says%2C and the Skill card stops at the
+deckc: simUsCareerDeckC: 1 failure(s)
+board: simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen with the proved historical main775 coaching Panel.
+defects: simUsCareerDefects: 157 tests passed across the stat lines, the era cards and the shop cap.
+MUT ageoff: shop=1 vitest=1 deckc=1 board=0 defects=0 summer=skip -> CAUGHT

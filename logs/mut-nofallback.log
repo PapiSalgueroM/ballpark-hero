@@ -1,0 +1,13 @@
+mut1538: nofallback applied to src/lib/usCareerAnnualBenefits.ts
+ src/lib/usCareerAnnualBenefits.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+shop: simUsShopPromises: red in sections 0
+   FAIL [0] starts Cash from the take home share of the earnings so far when the save has none: AssertionError: expected { earnings: 13, netWorth: 3 } to deeply equal { earnings: 13, netWorth: 7.5 }
+vitest: [31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/lib/usCareerShopPromises.test.ts[2m > [22mRound 1538: a paid line banks what it says, and the Skill card stops at the ceiling[2m > [22mstarts Cash from the take home share of the earning
+[31m[1mAssertionError[22m: expected { earnings: 13, netWorth: 3 } to deeply equal { earnings: 13, netWorth: 7.5 }[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/usCareerShopPromises.test.ts,title=src/lib/usCareerShopPromises.test.ts > Round 1538%3A a paid line banks what it says%2C and the Skill card stops at the
+deckc: simUsCareerDeckC: all checks passed
+board: simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen with the proved historical main775 coaching Panel.
+defects: simUsCareerDefects: 157 tests passed across the stat lines, the era cards and the shop cap.
+MUT nofallback: shop=1 vitest=1 deckc=0 board=0 defects=0 summer=skip -> CAUGHT

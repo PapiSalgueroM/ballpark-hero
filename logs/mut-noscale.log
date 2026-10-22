@@ -1,0 +1,23 @@
+mut1538: noscale applied to src/lib/usCareerAnnualBenefits.ts
+ src/lib/usCareerAnnualBenefits.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+shop: simUsShopPromises: red in sections 0, 6
+   FAIL [0] banks the fee into earnings and Cash alike and never rounds the balance again: AssertionError: expected 5 to be 1.6 // Object.is equality
+   FAIL [6] nba y2004 Build the brand: earnings moved 5, the line pays 1.6
+   FAIL [6] nba y2004 Build the brand: Cash went 10.37 to 15.37, not by the 1.6M that landed
+   FAIL [6] nba y2004 Build the brand: the line "Signature shoe talks. 5M endorsement banked." does not print the 1.6M that landed
+   FAIL [6] nba y2004 Build the brand: the outcome card's Cash row is {"key":"netWorth","label":"Cash","before":"$10.37M","after":"$15.37M","delta":"+$5M"}, not +$1.6M
+   FAIL [6] nfl y2005 Brand work: earnings moved 3, the line pays 1
+   FAIL [6] nfl y2005 Brand work: Cash went 10.37 to 13.37, not by the 1M that landed
+   FAIL [6] nfl y2005 Brand work: the line "Fanbase +12 and a 3M endorsement, banked." does not print the 1M that landed
+vitest: [31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/lib/usCareerShopPromises.test.ts[2m > [22mRound 1538: a paid line banks what it says, and the Skill card stops at the ceiling[2m > [22mbanks the fee into earnings and Cash alike and neve
+[31m[1mAssertionError[22m: expected 5 to be 1.6 // Object.is equality[39m
+[41m[1m FAIL [22m[49m src/test/usCareerSmallItems1104.test.ts[2m > [22mRound 1104: Brand work pays the bank[2m > [22mbanks the fee in the era money and says what it paid
+[31m[1mAssertionError[22m: expected 5 to be 3 // Object.is equality[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/usCareerShopPromises.test.ts,title=src/lib/usCareerShopPromises.test.ts > Round 1538%3A a paid line banks what it says%2C and the Skill card stops at the
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerSmallItems1104.test.ts,title=src/test/usCareerSmallItems1104.test.ts > Round 1104%3A Brand work pays the bank > banks the fee in the era money a
+deckc: simUsCareerDeckC: 4 failure(s)
+board: simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen with the proved historical main775 coaching Panel.
+defects: simUsCareerDefects: 157 tests passed across the stat lines, the era cards and the shop cap.
+MUT noscale: shop=1 vitest=1 deckc=1 board=0 defects=0 summer=skip -> CAUGHT

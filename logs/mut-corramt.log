@@ -1,0 +1,17 @@
+mut1538: corramt applied to src/lib/nbaCareerCorruption.ts
+ src/lib/nbaCareerCorruption.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+shop: simUsShopPromises: red in sections 6
+   FAIL [6] nba now ncorr_exhibition: earnings moved 0.8000000000000007, the line pays 0.9
+   FAIL [6] nba now ncorr_exhibition: Cash went 10.37 to 11.17, not by the 0.9M that landed
+   FAIL [6] nba now ncorr_exhibition: the line "You played it straight, banked the smaller fee (0.8M) and went home. The promoter never called again." does not print the 0.9M that landed
+   FAIL [6] nba now ncorr_exhibition: the outcome card's Cash row is {"key":"netWorth","label":"Cash","before":"$10.37M","after":"$11.17M","delta":"+$0.8M"}, not +$0.9M
+   FAIL [6] nba y2004 ncorr_exhibition: earnings moved 0.8000000000000007, the line pays 0.9
+   FAIL [6] nba y2004 ncorr_exhibition: Cash went 10.37 to 11.17, not by the 0.9M that landed
+   FAIL [6] nba y2004 ncorr_exhibition: the line "You played it straight, banked the smaller fee (0.8M) and went home. The promoter never called again." does not print the 0.9M that landed
+   FAIL [6] nba y2004 ncorr_exhibition: the outcome card's Cash row is {"key":"netWorth","label":"Cash","before":"$10.37M","after":"$11.17M","delta":"+$0.8M"}, not +$0.9M
+vitest: 
+deckc: simUsCareerDeckC: 1 failure(s)
+board: simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen with the proved historical main775 coaching Panel.
+defects: simUsCareerDefects: 157 tests passed across the stat lines, the era cards and the shop cap.
+MUT corramt: shop=1 vitest=0 deckc=1 board=0 defects=0 summer=skip -> CAUGHT
