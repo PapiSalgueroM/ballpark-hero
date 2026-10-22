@@ -1,0 +1,4 @@
+headsha exit=0 0s | 77568a1cd1 Release BP: the build output from the runner (rBP-seo, build:seo on the merged head d87049dd)
+wf285 exit=0 235s | wfrun club-detail-fixtures.yml: 8 steps ran, 0 failed
+wf287x exit=0 320s | wfrun manager-handover-desk.yml: 9 steps ran, 0 failed
+wf301x exit=0 889s | wfrun manager-decision-method.yml: 5 steps ran, 0 failed
