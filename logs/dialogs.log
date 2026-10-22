@@ -1,0 +1,12 @@
+main529 /hall-of-champions 320x640: banner 335 to 640 pending 1; no open dialog
+main529 /hall-of-champions 390x844: banner 611 to 844 pending 1; no open dialog
+main529 /idle-arena 320x640: banner 335 to 640 pending 1; dialog "How Idle Arena works" 168 to 479 (fixed, top 167.5px, max 311px); buttons Close the rules@72:covered by MAIN | Start tapping@1374:off screen
+main529 /idle-arena 390x844: banner 611 to 844 pending 1; dialog "How Idle Arena works" 306 to 844 (fixed, top 305.5px, max 587px); buttons Close the rules@237:covered by BUTTON | Start tapping@1292:off screen
+main529 /stadium-tycoon 320x640: banner 335 to 640 pending 1; dialog "How Stadium Tycoon works" 165 to 476 (static, top 167.5px, max 311px); buttons Close the rules@206:tappable | Let's go@3554:off screen
+main529 /stadium-tycoon 390x844: banner 611 to 844 pending 1; dialog "How Stadium Tycoon works" 129 to 716 (static, top 305.5px, max 587px); buttons Close the rules@156:tappable | Let's go@2770:off screen
+pre1442 /hall-of-champions 320x640: banner 491 to 640 pending 1; no open dialog
+pre1442 /hall-of-champions 390x844: banner 695 to 844 pending 1; no open dialog
+pre1442 /idle-arena 320x640: banner 491 to 640 pending 1; dialog "How Idle Arena works" 0 to 410 (fixed, top 0px, max 410px); buttons Close the rules@-46:off screen | Start tapping@1256:off screen
+pre1442 /idle-arena 390x844: banner 695 to 844 pending 1; dialog "How Idle Arena works" 0 to 614 (fixed, top 0px, max 614px); buttons Close the rules@-31:off screen | Start tapping@1024:off screen
+pre1442 /stadium-tycoon 320x640: banner 491 to 640 pending 1; dialog "How Stadium Tycoon works" 115 to 525 (static, top auto, max 410px); buttons Close the rules@156:tappable | Let's go@3504:off screen
+pre1442 /stadium-tycoon 390x844: banner 695 to 844 pending 1; dialog "How Stadium Tycoon works" 115 to 729 (static, top auto, max 614px); buttons Close the rules@142:tappable | Let's go@2756:off screen

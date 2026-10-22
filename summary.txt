@@ -1,0 +1,4 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+pre exit=0 38s | pre served 200
+dialogs exit=0 29s | pre1442 /stadium-tycoon 390x844: banner 695 to 844 pending 1; dialog "How Stadium Tycoon works" 115 to 729 (static, top auto, max 614px); buttons Close the rules@142:tapp
+tycoon exit=0 15s | pre1442 1280x900: banner 823 to 900 [Essential only / Accept], dialog 115 to 785 (static, top auto, max 670px), "Let's go" 736 to 784, at its centre: Let's go; pending 1,
