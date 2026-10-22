@@ -1,0 +1,3 @@
+truth: node scripts/simSoccerWorldTruth.mjs
+truth-unattributed: SIM_WORLD_TRUTH_MORALE= node scripts/simSoccerWorldTruth.mjs
+ls: node scripts/simCareerLeagueSeasons.mjs
