@@ -1,0 +1,44 @@
+MUTATION armed APPLIED to src/components/fight-career/FightCareerBoard.tsx
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/fightCareerRetireBoard.test.tsx [2m([22m[2m4 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 764[2mms[22m[39m
+   [32m✓[39m Fight Career board, hanging them up[2m > [22mkeeps the door shut below the gate[32m 155[2mms[22m[39m
+   [32m✓[39m Fight Career board, hanging them up[2m > [22mretires on the verdict, pays it once across a reload, and keeps the career on the list[32m 205[2mms[22m[39m
+[31m   [31m×[31m Fight Career board, hanging them up[2m > [22mdisarms a waiting Retire or Start again when a fight is picked[39m[32m 213[2mms[22m[39m
+[31m     → expected <button …(1)></button> to be null[39m
+   [32m✓[39m Fight Career board, hanging them up[2m > [22masks before starting again, and starting again records nothing[32m 189[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/fightCareerRetireBoard.test.tsx[2m > [22mFight Career board, hanging them up[2m > [22mdisarms a waiting Retire or Start again when a fight is picked
+[31m[1mAssertionError[22m: expected <button …(1)></button> to be null[39m
+
+[32m- Expected:[39m 
+null
+
+[31m+ Received:[39m 
+<button
+  class="min-h-[44px] flex-1 rounded-md bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground"
+>
+  Yes, hang them up
+</button>
+
+[36m [2m❯[22m src/test/fightCareerRetireBoard.test.tsx:[2m89:59[22m[39m
+    [90m 87| [39m      fireEvent.click(await view.findByRole('button', { name: /Back/ }…
+    [90m 88| [39m      [35mawait[39m view[33m.[39m[34mfindByText[39m([32m'Changed Mind'[39m)[33m;[39m
+    [90m 89| [39m      [34mexpect[39m(view[33m.[39m[34mqueryByRole[39m([32m'button'[39m[33m,[39m { name[33m:[39m armed }))[33m.[39m[34mtoBeNull[39m()[33m;[39m
+    [90m   | [39m                                                          [31m^[39m
+    [90m 90| [39m    }
+    [90m 91| [39m    expect(JSON.parse(localStorage.getItem(KEY)!).st.retired).toBe(fal…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m3 passed[39m[22m[90m (4)[39m
+[2m   Start at [22m 11:28:40
+[2m   Duration [22m 1.84s[2m (transform 253ms, setup 56ms, collect 446ms, tests 764ms, environment 246ms, prepare 101ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/fightCareerRetireBoard.test.tsx,title=src/test/fightCareerRetireBoard.test.tsx > Fight Career board%2C hanging them up > disarms a waiting Retire or Start again when a fight is picked,line=89,column=59::AssertionError: expected <button …(1)></button> to be null%0A%0A- Expected: %0Anull%0A%0A+ Received: %0A<button%0A  class="min-h-[44px] flex-1 rounded-md bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground"%0A>%0A  Yes, hang them up%0A</button>%0A%0A ❯ src/test/fightCareerRetireBoard.test.tsx:89:59%0A%0A

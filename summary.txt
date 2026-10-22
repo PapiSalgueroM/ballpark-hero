@@ -1,0 +1,8 @@
+mut-armed-vitest exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/fightCareerRetireBoard.test.tsx,title=src/test/fightCareerRetireBoard.test.tsx > Fight Career board%2C
+proof-guide-old exit=0 0s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+proof-guide-neg exit=1 0s | simGuideHeadings: RED, 2 failures in section 1
+proof-search-old exit=0 1s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+proof-search-neg exit=1 1s | simSiteSearch: 1 failure
+retake-guide exit=0 0s | simGuideHeadings: refreshed /fight-career from its actual guide (howToPlay 10, rules 14, example 6, tips 5)
+retake-search exit=0 0s |   guide source hash 491c2dc948a1735f
+clean exit=0 0s | 
