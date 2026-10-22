@@ -1,0 +1,58 @@
+Round 582: the Stadium Tycoon league, at the hook's cadence (dt 0.2s)
+1) Promoted if and only if champion
+   23 titles and 23 promotions across 96 seasons; 73 seasons finished below the top and none of those went up
+2) Table integrity
+   60 matchday tables checked: every club played every matchday, points are 3W+D, goals balance, your row matches your match events
+3) Strength decides the title
+   title rate squad 30 100%, squad 0 20% (gap 0.80); neutral arm 25% vs 20% (gap 0.05)
+4) Pace against the first Sell up and the old ladder
+   median first promotion 10.50 min against first Sell up 13.10 min (promotion first in 8/10); before the league: 14.7 and 13.44
+5) No reroll across a reload
+   6 seasons reloaded mid-match finished with tables identical to the runs that never reloaded
+6) Migration from V1 saves
+   251 V1 saves from 0 to 250 home wins loaded into the division their win count reached, everything else as V1 loads it, and each loads back in V1 with its league
+7) Names
+   1470 leagues across 21 reps, 10 divisions and 7 seasons: names unique, short enough, from the bank, never one of 483 real clubs; the picker never offers a taken name
+8) Rebuild still plays the shared calendar
+   rebuildDeck imports the shared calendar, leagueCore imports nothing, 4 of 4 Rebuild harnesses green
+9) No wall: a club that can compete gets promoted in time
+   never promoted in three hours: squad 3 0/30, squad 6 0/30; median first promotion 42.0 and 31.5 min
+10) The loader keeps divisions, refuses doctored leagues, and ties go your way
+  FAIL: section 10: the climb only reached division 2, so the fallback was not tested high enough
+9b) No club is walled: saved clubs and clubs behind the ladder win a title in time
+   save fresh (division 0, Squad 0): 30/30, median 10.5 min; save midGame (division 2, Squad 25): 30/30, median 21.9 min; save preBoardroom (division 2, Squad 25): 30/30, median 21.9 min; save doctored (division 2, Squad 0): 30/30, median 10.5 min; division 1 on arrival, Squad 36 cut to 26: 30/30, median 10.5 min; division 2 on arrival, Squad 53 cut to 43: 30/30, median 10.5 min; division 3 on arrival, Squad 60 cut to 50: 30/30, median 29.4 min; division 4 on arrival, Squad 69 cut to 59: 30/30, median 58.8 min; division 5 on arrival, Squad 73 cut to 63: 30/30, median 29.4 min; division 6 on arrival, Squad 77 cut to 67: 30/30, median 37.8 min; division 7 on arrival, Squad 82 cut to 72: 30/30, median 37.8 min; division 8 on arrival, Squad 84 cut to 74: 30/30, median 37.8 min; division 9 on arrival, Squad 87 cut to 77: 30/30, median 75.6 min
+
+control threshold: a club that did not win the league goes up when its home win count would have promoted it
+   ok, section 1 went red: a club that finished 6 went up
+
+control flat: the squad stops changing either side's scoring chance
+   ok, section 3 went red: a squad of 30 won 25% of titles and a squad of 0 won 20%, a gap of 0.05, under the 0.35 fence
+
+control doubleleg: the bottom divisions play home and away, a 21 minute season
+   ok, section 4 went red: the first promotion comes at a median 21.00 minutes, after the first reachable Sell up at 13.77
+
+control reroll: the other fixtures roll Math.random instead of the league's seeded stream
+   ok, section 5 went red: seed 1: reloading mid-match finished the season with a different table
+
+control spread: the league latch reads the spread save, which always carries a fresh bottom league
+   ok, section 6 went red: 6 home wins loaded into division 0, V1 had it in 1
+
+control globalclimb: opponents are strengthened by the career match count again, the first draft
+   ok, section 9 went red: a club with a squad of 3 never left the bottom league in 28 of 30 three hour runs
+
+control globalclimb: opponents are strengthened by the career match count again, so a club behind the ladder never catches it
+   ok, section 9b went red: save midGame (division 2, Squad 25) won a title in only 0 of the seeds it played, under 27 of 30
+
+control dropdivision: a league that fails a check is rebuilt from the old win count again
+   ok, section 10 went red: the climb only reached division 2, so the fallback was not tested high enough
+
+control uncapped: a stored league above the career best is trusted
+   ok, section 10 went red: the climb only reached division 2, so the fallback was not tested high enough
+
+control lopsided: a stored table that cannot add up is trusted
+   ok, section 10 went red: the climb only reached division 2, so the fallback was not tested high enough
+
+control nametie: a dead heat at the top is settled by name again
+   ok, section 10 went red: the climb only reached division 2, so the fallback was not tested high enough
+
+simTycoonLeague: 1 failure

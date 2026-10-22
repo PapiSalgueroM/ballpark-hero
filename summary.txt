@@ -1,0 +1,12 @@
+simSeasonLaw exit=0 0s | simSeasonLaw: 14 checks, 0 failed
+simStadiumTycoon exit=0 1s | simStadiumTycoon: green. The turnstiles spin and the math holds.
+simTycoonAwayMatchdays exit=1 81s | simTycoonAwayMatchdays: 6 failures
+simTycoonSetPiece exit=1 14s | Tycoon set pieces: 6/8 selected sections pass
+tsc exit=0 102s | 
+simTycoonGear exit=0 3s | simTycoonGear: all sections passed; artifacts /home/runner/work/_temp/t-simTycoonGear/tycoon-gear-Nx0ll9
+simTycoonLeague exit=1 148s | simTycoonLeague: 1 failure
+simTycoonPackPace exit=1 14s |   RED afterFinal, 4x prices: Club by day 5, after a paid Scout: 0/100; p10/median/p90 visit >10/>10/>10
+simAllPlayersValue exit=1 75s |   PASS pace: twelve greedy runs reach star 6, median 96.949h (trigger 100h from start); one representative continuation reaches all 60 stars at 704.769h
+simTycoonTicketPolicy exit=0 7s | Ticket policy: 21/21 normal outcomes; 0/0 effective copied faults, each with independent purchase baseline. Raw reports, logs, copied sources and hashes retained at /home
+simTycoonHelp exit=1 26s | simTycoonHelp: 16 failures
+simTycoonPacks exit=1 210s | simTycoonPacks: 1 failure
