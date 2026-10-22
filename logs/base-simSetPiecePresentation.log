@@ -1,0 +1,12 @@
+Network mode: offline, loopback only, no production probe or database retries.
+Running 0 node harnesses
+
+Serving dist on 4191 for 1 browser harnesses
+  EMPTY simSetPiecePresentation.mjs     4.3s
+        printed 1 line, so its checks did not run
+
+----- simSetPiecePresentation.mjs (EMPTY) -----
+simSetPiecePresentation: PASS. 36 rendered cases. Evidence: /home/runner/work/_temp/t-base-simSetPiecePresentation/dukb-setpiece-presentation-j6MrDw
+
+
+1 harness not green.
