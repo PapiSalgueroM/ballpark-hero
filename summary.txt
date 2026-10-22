@@ -1,0 +1,14 @@
+simCfbDynasty exit=0 6s | simCfbDynasty: all green
+vitest exit=0 17s |    Duration  16.00s (transform 1.24s, setup 987ms, collect 4.88s, tests 28.69s, environment 5.26s, prepare 1.65s)
+simCbbStaff exit=0 21s | simCbbStaff: all green
+simCollegeDynastyBoard exit=0 6s | simCollegeDynastyBoard: all green
+simCfbStaff exit=0 74s | simCfbStaff: all green
+simEngineIds exit=0 1s | simEngineIds: an id minted in one page load cannot collide with one minted in another, in all six engines.
+simSaveKeeper exit=0 6s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+tsc exit=0 111s | 
+simGuideHeadings exit=0 1s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+simSiteSearch exit=0 2s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+simNoRivalNames exit=0 17s | No rival product names found. 0 findings.
+simHomeFront exit=0 1s | simHomeFront: green. The home front shows real games, real saves and a sport you can tell apart without colour.
+simHarnessAnchors exit=0 59s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simCollegeSeat exit=0 355s | simCollegeSeat: all sections green (S1 to S9 and SY)

@@ -1,0 +1,38 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/collegeRecruiting.test.ts [2m([22m[2m24 tests[22m[2m)[22m[32m 256[2mms[22m[39m
+ [32m✓[39m src/components/college-dynasty/collegeDynastyFixture.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 7103[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 912: both college dynasty boards hold their recorded behaviour[2m > [22mcfb: every step matches the fixture [33m 3953[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 912: both college dynasty boards hold their recorded behaviour[2m > [22mcbb: every step matches the fixture [33m 3142[2mms[22m[39m
+ [32m✓[39m src/test/cfbRecruitFilters.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 6064[2mms[22m[39m
+   [33m[2m✓[22m[39m CFB recruiting position and minimum-star targeting[2m > [22mcombines position and inclusive star threshold across both boards in source order [33m 1786[2mms[22m[39m
+   [33m[2m✓[22m[39m CFB recruiting position and minimum-star targeting[2m > [22mresets both no-match boards and restores every remaining row [33m 1105[2mms[22m[39m
+   [33m[2m✓[22m[39m CFB recruiting position and minimum-star targeting[2m > [22mdoes not save, regenerate, mutate pools or expose hidden ability while filtering [33m 493[2mms[22m[39m
+   [33m[2m✓[22m[39m CFB recruiting position and minimum-star targeting[2m > [22msigns only the selected high school ID and pays the unchanged NIL cost [33m 387[2mms[22m[39m
+   [33m[2m✓[22m[39m CFB recruiting position and minimum-star targeting[2m > [22msigns only the selected portal ID as a sophomore and removes the last filtered match [33m 1007[2mms[22m[39m
+   [33m[2m✓[22m[39m CFB recruiting position and minimum-star targeting[2m > [22mpreserves the existing unaffordable-sign rejection with no saved roster or NIL change [33m 483[2mms[22m[39m
+   [33m[2m✓[22m[39m CFB recruiting position and minimum-star targeting[2m > [22mholds independent original signing and refusal effects without targeting [33m 622[2mms[22m[39m
+ [32m✓[39m src/components/cbb-dynasty/CbbDynastyDepth.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 1087[2mms[22m[39m
+   [33m[2m✓[22m[39m CBB Dynasty: the program layer on the board[2m > [22mplays a save from before assistant coaches existed without adding anything to it [33m 363[2mms[22m[39m
+ [32m✓[39m src/components/cfb-dynasty/CfbDynastyDepth.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 816[2mms[22m[39m
+   [33m[2m✓[22m[39m CFB Dynasty: the program layer on the board[2m > [22mplays a save from before coordinators existed without adding anything to it [33m 382[2mms[22m[39m
+ [32m✓[39m src/components/cfb-dynasty/CfbDynastyBoard.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 410[2mms[22m[39m
+[90mstdout[2m | src/components/college-dynasty/CollegeSeat.test.tsx[2m > [22m[2mRound 1320: a buyout bid after a big year[2m > [22m[2mcfb: a second dynasty in one mount takes its own bid, though its key matches the first one's
+[22m[39mcfb: the second dynasty's bid came on try 39 at Miami, of 25 programs that can bid
+
+[90mstdout[2m | src/components/college-dynasty/CollegeSeat.test.tsx[2m > [22m[2mRound 1320: a buyout bid after a big year[2m > [22m[2mcbb: a second dynasty in one mount takes its own bid, though its key matches the first one's
+[22m[39mcbb: the second dynasty's bid came on try 1 at Virginia, of 22 programs that can bid
+
+ [32m✓[39m src/components/college-dynasty/CollegeSeat.test.tsx [2m([22m[2m18 tests[22m[2m)[22m[33m 12955[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1320: the athletic director on the college boards[2m > [22mcfb: a new dynasty starts with him, the tile carries the ask, and the card opens and closes [33m 367[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1320: the athletic director on the college boards[2m > [22mcfb: the live line follows the record, and the recap grades the year and moves trust [33m 383[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1320: the athletic director on the college boards[2m > [22mcfb: Take the job moves him once and opens the new program's trail; Sit the year out plays a season without him [33m 362[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1320: the athletic director on the college boards[2m > [22mcfb: a closed market offers only a new dynasty, and hostile market saves load somewhere sane [33m 434[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1320: a buyout bid after a big year[2m > [22mcfb: a second dynasty in one mount takes its own bid, though its key matches the first one's [33m 9303[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m7 passed[39m[22m[90m (7)[39m
+[2m      Tests [22m [1m[32m67 passed[39m[22m[90m (67)[39m
+[2m   Start at [22m 14:17:23
+[2m   Duration [22m 16.00s[2m (transform 1.24s, setup 987ms, collect 4.88s, tests 28.69s, environment 5.26s, prepare 1.65s)[22m
+
