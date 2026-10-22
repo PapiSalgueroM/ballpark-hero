@@ -1,0 +1,17 @@
+parsed greats nfl 10 nba 9, legends nfl 32 nba 29
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('[role="dialog"]').filter({ hasText: 'Power-Up Found' }).getByRole('button', { name: /Save for Later/ }).first()
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/.rc/x/walkSign1547.mjs:70:74 {
+  log: [
+    `  - waiting for locator('[role="dialog"]').filter({ hasText: 'Power-Up Found' }).getByRole('button', { name: /Save for Later/ }).first()`
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v24.22.0
