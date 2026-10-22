@@ -1,0 +1,7 @@
+  tactics chunk requests on a fresh /club-manager load: 0 ()
+  tactics chunk requests by the hub: 0
+  save after the tap: {"week":0,"played":0,"instr":{"press":1,"tempo":0,"width":0,"line":0}}
+  clicked Quick Sim 376 ms after the reload; chunk requests 1
+  before {"week":0,"played":0,"instr":{"press":1,"tempo":0,"width":0,"line":0}}; 1.5 s after the click {"week":1,"played":1,"instr":{"press":1,"tempo":0,"width":0,"line":0}} report false; 7.5 s after {"week":1,"played":1,"instr":{"press":1,"tempo":0,"width":0,"line":0}} report false
+slowload: the click played or queued the match
+  page errors: 0 
