@@ -1,0 +1,4 @@
+MUTATION settleafter applied to src/lib/nbaMyCareer.ts
+0) src/lib/usCareerShopPromises.test.ts in a vitest child
+   28 rows, 28 passed, exit 0
+simUsShopPromises: could not run, src/lib/nbaMyCareer.ts does not hold this round's hunk exactly once:   /* Round 1534: the shop pays what its cards print (src/lib/usCareerA

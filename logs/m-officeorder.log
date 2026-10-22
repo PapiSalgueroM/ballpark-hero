@@ -1,0 +1,59 @@
+MUTATION officeorder applied to src/lib/usCareerAnnualBenefits.ts
+0) src/lib/usCareerShopPromises.test.ts in a vitest child
+   28 rows, 27 passed, exit 1
+   FAIL [0] adds 2 percent of cash above zero, after the steady returns: AssertionError: expected 0.04 to be 0.0428 // Object.is equality
+    at /home/runner/work/ballpark-hero/ballpark-hero/src/lib/usCareerShopPromises.test.ts:96:25
+    at file:///home/runner/work/ballpar
+1) words: the table against the printed cards, the reworded cards, the summer camp and the help rule
+   nba: 4 paying cards match their words; the summer camp lands what it prints
+   nfl: 5 paying cards match their words
+   mlb: 4 paying cards match their words; the summer camp lands what it prints
+   nhl: 4 paying cards match their words; the summer camp lands what it prints
+2) steady: two index funds and the one time steady card against a twin that bought nothing
+   nba: 2 x index_nba and wine_label print 0.4800M a season; measured 0.4800, 0.4800, 0.0000 (the third after the sale)
+   nfl: 2 x index_fund and car_dealership print 0.5500M a season; measured 0.5500, 0.5500, 0.0000 (the third after the sale)
+   mlb: 2 x index_mlb and wine_label print 0.4800M a season; measured 0.4800, 0.4800, 0.0000 (the third after the sale)
+   nhl: 2 x index_nhl and wine_label print 0.4800M a season; measured 0.4800, 0.4800, 0.0000 (the third after the sale)
+3) stakes: 2000 careers per gamble per sport, one season end each
+   nba restaurant_group: printed 35 percent for 3M; won 687 (0.344, band 0.307 to 0.393)
+   nba crypto_nba: printed 20 percent for 5M; won 417 (0.208, band 0.164 to 0.236)
+   nfl wing_franchise: printed 35 percent for 2.5M; won 694 (0.347, band 0.307 to 0.393)
+   nfl crypto_punt: printed 20 percent for 5M; won 379 (0.190, band 0.164 to 0.236)
+   nfl esports_team: printed 30 percent for 12M; won 589 (0.294, band 0.259 to 0.341)
+   mlb restaurant_group: printed 35 percent for 3M; won 717 (0.358, band 0.307 to 0.393)
+   mlb crypto_mlb: printed 20 percent for 5M; won 375 (0.188, band 0.164 to 0.236)
+   nhl restaurant_group: printed 35 percent for 3M; won 707 (0.353, band 0.307 to 0.393)
+   nhl crypto_nhl: printed 20 percent for 5M; won 373 (0.186, band 0.164 to 0.236)
+4) the family office: 2 percent of Cash above zero, after the steady returns
+   FAIL [4] nba order: the index fund and the office earned 0.462000, in the documented order 0.464800
+   nba: the office alone earned 0.4220 then 0.4520; at -4.1M nothing moved; with the index fund 0.4620 (wanted 0.4648)
+   FAIL [4] nfl order: the index fund and the office earned 0.462000, in the documented order 0.464800
+   nfl: the office alone earned 0.4220 then 0.4520; at -3.9M nothing moved; with the index fund 0.4620 (wanted 0.4648)
+   FAIL [4] mlb order: the index fund and the office earned 0.448000, in the documented order 0.450800
+   mlb: the office alone earned 0.4080 then 0.4240; at -3.4M nothing moved; with the index fund 0.4480 (wanted 0.4508)
+   FAIL [4] nhl order: the index fund and the office earned 0.448000, in the documented order 0.450800
+   nhl: the office alone earned 0.4080 then 0.4240; at -3.4M nothing moved; with the index fund 0.4480 (wanted 0.4508)
+5) heat: from 72 with no dirty money, the lawyer reaches 0 in 4 seasons and a twin in 8
+   nba: clean from 72, zero after 4 seasons with the lawyer and 8 without; dirty from 30, 33,36,39 both ways
+   nfl: clean from 72, zero after 4 seasons with the lawyer and 8 without; dirty from 30, 33,36,39 both ways
+   mlb: clean from 72, zero after 4 seasons with the lawyer and 8 without; dirty from 30, 33,36,39 both ways
+   nhl: clean from 72, zero after 4 seasons with the lawyer and 8 without; dirty from 30, 33,36,39 both ways
+8) digest: 240 careers a set on sets 1534 and 2024, holding nothing that pays, base arm against head arm
+   nba: 480 careers, 9693 seasons, 6341 items bought, 865 seasons with heat and no dirty money; 0 parted
+   nfl: 480 careers, 8150 seasons, 6184 items bought, 625 seasons with heat and no dirty money; 0 parted
+   mlb: 480 careers, 9843 seasons, 3435 items bought, 979 seasons with heat and no dirty money; 0 parted
+   nhl: 480 careers, 10351 seasons, 4040 items bought, 1006 seasons with heat and no dirty money; 0 parted
+9) old saves: one season paid per season, each stake settled once, nothing paid back
+   FAIL [9] nba season 1: the old save earned 9.282000, one season of its cards is 9.291600
+   FAIL [9] nba season 2: the old save earned 1.316000, one season of its cards is 1.325600
+   nba: steady 0.48M a season; the old save earned 9.2820 (stakes 8), then 1.3160 (stakes 0)
+   FAIL [9] nfl season 1: the old save earned 1.188000, one season of its cards is 1.199000
+   FAIL [9] nfl season 2: the old save earned 1.220000, one season of its cards is 1.231000
+   nfl: steady 0.55M a season; the old save earned 1.1880 (stakes 0), then 1.2200 (stakes 0)
+   FAIL [9] mlb season 1: the old save earned 4.134000, one season of its cards is 4.143600
+   FAIL [9] mlb season 2: the old save earned 1.150000, one season of its cards is 1.159600
+   mlb: steady 0.48M a season; the old save earned 4.1340 (stakes 3), then 1.1500 (stakes 0)
+   FAIL [9] nhl season 1: the old save earned 1.080000, one season of its cards is 1.089600
+   FAIL [9] nhl season 2: the old save earned 1.096000, one season of its cards is 1.105600
+   nhl: steady 0.48M a season; the old save earned 1.0800 (stakes 0), then 1.0960 (stakes 0)
+simUsShopPromises: red in sections 0, 4, 9

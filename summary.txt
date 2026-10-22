@@ -1,0 +1,10 @@
+m-officeorder exit=1 11s | simUsShopPromises: red in sections 0, 4, 9
+m-onetime exit=1 11s | simUsShopPromises: red in sections 0
+m-stakeindex exit=1 10s | simUsShopPromises: red in sections 9
+m-nhllawyer exit=1 11s | simUsShopPromises: red in sections 0, 5
+m-carryround exit=1 10s | simUsShopPromises: red in sections 0, 2, 9
+m-settleafter exit=2 1s | simUsShopPromises: could not run, src/lib/nbaMyCareer.ts does not hold this round's hunk exactly once:   /* Round 1534: the shop pays what its cards print (src/lib/usCare
+m-desknow exit=1 29s | simUsDirtyMoney: 64 failures in sections 9
+m-desknow-unit exit=0 4s |    Duration  3.37s (transform 1.20s, setup 79ms, collect 2.17s, tests 2.77s, environment 364ms, prepare 86ms)
+m-deskfree exit=1 29s | simUsDirtyMoney: 112 failures in sections 9
+clean exit=0 0s | 0
