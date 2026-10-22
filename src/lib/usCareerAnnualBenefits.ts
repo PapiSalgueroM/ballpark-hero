@@ -86,6 +86,9 @@ export function liquidateUsCareerPurchases(c: Pick<SupportedCareer, 'purchased' 
      such season replays byte for byte as it did before this round (scripts/simUsShopPromises.mjs section 8).
    - Old saves: the first season end after this round pays one season of every steady card and the office and
      settles each stake once. Nothing is paid for seasons already played.
+   - A SUSPENDED season ends through the same progress call (the board's banned year path), so the shop pays and
+     stakes settle in a year he sits out too. That is meant and favours the player: the words "every season you
+     play" are the loose ones, so never narrow the code to them (review of 2026-10-22, read lens finding 7).
    Every number below is the card's own printed number; none is a real world fact. */
 
 /** What each paying card prints. Steady: its yearly rate on what was paid. Stake: its chance, and either a flat
