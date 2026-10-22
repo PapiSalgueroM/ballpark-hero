@@ -1,0 +1,2 @@
+#!build
+weigh: R=$PWD && git worktree add /tmp/base c75d04dad >/dev/null 2>&1 && cd /tmp/base && ln -s "$R/node_modules" node_modules && node_modules/.bin/vite build --logLevel error >/dev/null && cd "$R" && node .rc/x/weigh1551.mjs /tmp/base/dist dist
