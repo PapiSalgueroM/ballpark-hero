@@ -1,0 +1,12 @@
+simCfbSlate exit=0 6s | simCfbSlate: all green
+c-random exit=1 8s | simCfbSlate: 4 failure(s)
+c-top12 exit=1 6s | simCfbSlate: 2 failure(s)
+c-g5title exit=1 8s | simCfbSlate: 2 failure(s)
+simCfbSlate-big exit=0 32s | simCfbSlate: all green
+c-nofifth exit=1 8s | simCfbSlate: 1 failure(s)
+c-rivals exit=1 6s | simCfbSlate: 15 failure(s)
+c-source exit=1 8s | simCfbSlate: 1 failure(s)
+c-cbbraw exit=1 6s | simCfbSlate: 1 failure(s)
+c-midseason exit=1 8s | simCfbSlate: 3 failure(s)
+c-bogus exit=1 0s | CFB_SLATE_CONTROL=bogus is not a control this harness knows
+c-ndacc exit=1 65s | simCfbSlate: 6 failure(s)
