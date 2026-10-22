@@ -1,0 +1,11 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/nbaCourtSelection.test.tsx src/test/lineupValidatorClient.test.tsx --testTimeout=300000 --hookTimeout=120000
+simNbaCourtSelection: node scripts/simNbaCourtSelection.mjs
+simNbaStartingFive: node scripts/simNbaStartingFive.mjs
+ctl-oldjudge: NBA_FIVE_CONTROL=oldjudge node scripts/simNbaStartingFive.mjs
+ctl-noinvert: NBA_FIVE_CONTROL=noinvert node scripts/simNbaStartingFive.mjs
+ctl-greedy: NBA_FIVE_CONTROL=greedy node scripts/simNbaStartingFive.mjs
+ctl-nonamesake: NBA_FIVE_CONTROL=nonamesake node scripts/simNbaStartingFive.mjs
+ctl-pergame: NBA_FIVE_CONTROL=pergame node scripts/simNbaStartingFive.mjs
+ctl-aiverdict: NBA_FIVE_CONTROL=aiverdict node scripts/simNbaStartingFive.mjs
+ctl-flatpoints: NBA_FIVE_CONTROL=flatpoints node scripts/simNbaStartingFive.mjs
