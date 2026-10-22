@@ -1,0 +1,24 @@
+[33m
+[1m(!)[22m outDir [37m[2m/tmp/base-dist[22m[33m is not inside project root and will not be emptied.
+Use --emptyOutDir to override.
+[39m
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+[1m[33mwarn[39m[22m - The class `duration-[800ms]` is ambiguous and matches multiple utilities.
+[1m[33mwarn[39m[22m - If this is content and not a class, replace it with `duration-&lsqb;800ms&rsqb;` to silence this warning.
+[33m
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
+head /nba-starting-5: 312.3K over 33 files; own chunks: NbaLineup-Cwxjn5w9.js 11.2K
+base /nba-starting-5: 306.6K over 29 files; own chunks: NbaLineup-DGollL__.js 8.3K
+weigh1555 /nba-starting-5: head 312.3K, base 306.6K, growth 5.65K
+head /whats-new: 359.6K over 3 files; own chunks: WhatsNew-C0wITaNj.js 122.0K
+base /whats-new: 359.4K over 3 files; own chunks: WhatsNew-B84h8xSp.js 121.8K
+weigh1555 /whats-new: head 359.6K, base 359.4K, growth 0.16K
+head /nba-stat-line: 301.0K over 26 files; own chunks: NbaStatLine-C59-PRZ6.js 7.2K
+base /nba-stat-line: 301.0K over 26 files; own chunks: NbaStatLine-B-Z2__j9.js 7.2K
+weigh1555 /nba-stat-line: head 301.0K, base 301.0K, growth 0.02K
