@@ -19039,3 +19039,9 @@ Fresh remote measurement, generation, exact permitted-output review/adoption and
 Generation39812401318 at a1cb4337721aaf47c3cdfb513c693ee2381ab6c9 passed all six remote jobs. The three PowerShell numeric-overload, array-shape and Boolean-guard port refusals remain preserved. After those narrow reader repairs, native measurement admission92be21da now passes with all eight native controls; it does not clear the real authenticated header layout defects or qualify the release.
 
 Before any layout adoption, the hash-bound native header check produced owned RED:16 of20 normal authenticated cases fail at320/328/390/768; four1280 cases pass. This child adopts the three-span Index header class/comment change: a reserved second chip row below xl and the fixed inline row at xl. Fresh ordinary verification is pending. Fresh ordinary generation, the same20-case check, unchanged HomeFold/no-shift checks and56 normal plus12 heading-arm pictures remain required. No1449 source qualification or live claim is made; I retains publication.
+
+## Round1449 pipeline setup repair, 2026-10-22 UTC
+
+Run39838483867 at941375b0e1f191bccf028a99e248125e088d31d7 failed the focused ancestry setup. App checks, unit suites and browser work did not run. Failed artifact12452745224 (1,964 bytes, SHA874d1dc8fe7454f4c2f181bf058e96d80f6e45a1913bb1527c43aee529a33cae) is preserved. Root verified the full941375 -> a1cb433 -> 86478a7 -> BASEf8a history; the depth3 fetch can stop before BASE.
+
+This child adopts only the setup repair: focused fetch depth32 and current Index/probe identity pins. The positive ancestry, reverse refusal and existing outcome checks stay unchanged. Index000c61fd and the header layout stay held. Fresh ordinary generation and the existing header, HomeFold/no-shift and visual checks remain owed. No new layout proof, qualified or live result is claimed. I retains publication.

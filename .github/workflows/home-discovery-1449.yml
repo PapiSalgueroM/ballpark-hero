@@ -50,7 +50,7 @@ jobs:
           node <<'JS'
           const assert=require('node:assert/strict');for(const key of ['BASE_SOURCE','PROFILE_CONTROL_SOURCE'])assert.match(process.env[key]||'',/^[a-f0-9]{40}$/);assert.match(process.env.GREEN_CSS_SHA256||'',/^[a-f0-9]{64}$/);assert.notEqual(process.env.BASE_SOURCE,process.env.GITHUB_SHA);
           JS
-          git fetch --no-tags --depth=3 origin "$GITHUB_SHA" > "$OUT/base-fetch.log" 2>&1
+          git fetch --no-tags --depth=32 origin "$GITHUB_SHA" > "$OUT/base-fetch.log" 2>&1
           for anchor in "$BASE_SOURCE" "$PROFILE_CONTROL_SOURCE";do
             git fetch --no-tags --depth=1 origin "$anchor" >> "$OUT/base-fetch.log" 2>&1
             git cat-file -e "$anchor^{commit}"
@@ -62,7 +62,7 @@ jobs:
           git diff --exit-code "$BASE_SOURCE" HEAD -- . ':!src/data/homeCopy.ts' ':!src/pages/Index.tsx' ':!scripts/qa/measureHomeDiscovery1449.mjs' ':!index.html' ':!public/sitemap.xml' ':!scripts/data/lastmod.json' ':!.github/workflows/home-discovery-1449.yml' ':!docs/ROUND1449.md' ':!docs/PROJECT-STATE.md' ':!docs/WORKBOARD.md' > "$OUT/protected-product-hold.log"
           cat > "$OUT/copy-inputs.expected.sha256" <<'PINS'
           eacf353622e5e6591c9f57dffdf40ae69ac12fe1e7a4843115cf0ae837595ba4  src/data/homeCopy.ts
-          a77bdd7d1c4a9dffedc01d3046702b61249aa945c4fe9c17a8fc9a0584ac4112  src/pages/Index.tsx
+          000c61fdad48c6501adc431f24a470013dc0b8d182154e28d4156f7039725f51  src/pages/Index.tsx
           f1473f7af5309b762abcf96ac9719d3beb389adb4e2feb71a62399f0c5e0a9ec  src/lib/sportHub.ts
           a8bb800c635b4b979d76c56f1ed8c8ae7e657abfa2aab7c3d8a31d4396788ead  src/pages/CookiePolicy.tsx
           3b0179c5fc68c3499091d0861b75a201ece62ade820c31cbd62858a2ae763d0e  src/pages/PrivacyPolicy.tsx
@@ -741,7 +741,7 @@ jobs:
             };
           }
           CJS
-          printf '%s  %s\n' 11d5cbf0c011624184c2b58079d1ec260307aa85dda5dc17f03e01b1a0ebbb26 scripts/qa/measureHomeDiscovery1449.mjs 4991cda9d702e461051857df7ab2b3cbf9544c059b9a412455fc41db53645519 "$out/measure1449-cached-fonts.cjs" > "$out/measurement1449-inputs.sha256"
+          printf '%s  %s\n' eb9c3a7d46f3c56b5c18a32e567a07e1fb1bbc6edb998e1f5047f91eb046b379 scripts/qa/measureHomeDiscovery1449.mjs 4991cda9d702e461051857df7ab2b3cbf9544c059b9a412455fc41db53645519 "$out/measure1449-cached-fonts.cjs" > "$out/measurement1449-inputs.sha256"
           sha256sum --check "$out/measurement1449-inputs.sha256" > "$out/measurement1449-input-start-hold.log"
           export MEASUREMENT1449_FONT_PRELOAD="$out/measure1449-cached-fonts.cjs"
           export SIM_OFFLINE_RECEIPT="$out/measurement1449.transport" FONT_CACHE_USE_RECEIPT="$out/measurement1449-font-cache-use.jsonl"
