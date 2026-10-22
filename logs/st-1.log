@@ -1,0 +1,5 @@
+1) the field table against the engine it was measured on
+   ST level: mean 6.56 (table 6.53), sd 0.94 (table 0.95), n 11365
+   ST goals at a top two tier club: mean 14.72 (table 14.55), sd 8.23 (table 8.08), n 8355
+   FAIL ST goals at a top two tier club: the sd moved 0.15, past 0.15
+simSoccerSeasonAwards: RED, 1 failure(s)
