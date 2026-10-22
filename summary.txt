@@ -1,0 +1,5 @@
+simSharedResultChallenge exit=0 3s | simSharedResultChallenge: production modules remain unchanged; controls use only owned temporary copies.
+simAccessibility exit=0 0s | simAccessibility: all green
+simResultMoment exit=0 7s | simResultMoment: green. Every live game reaches the shared result moment or is listed with what it draws instead, the pill shows exactly the score it is given, the three 
+simNbaCourtRecap exit=0 13s | NBA court: PASS, 19 actual outcomes and three effective copied faults.
+simResultPillComparison exit=0 13s | simResultPillComparison: green. 34 finished states on a 390 wide phone: every pill reads the hook's score, on one line inside its fixed pill, nothing scrolls sideways, no

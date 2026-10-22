@@ -1,0 +1,6 @@
+#!playwright
+simResultMoment: node scripts/simResultMoment.mjs
+simNbaCourtRecap: node scripts/simNbaCourtRecap.mjs
+simSharedResultChallenge: node scripts/simSharedResultChallenge.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simResultPillComparison: node scripts/simResultPillComparison.mjs
