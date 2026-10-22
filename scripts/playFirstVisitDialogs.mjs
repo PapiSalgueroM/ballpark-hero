@@ -113,10 +113,13 @@ if (routes.length === 0) { console.error('playFirstVisitDialogs: no routes match
    is built only then. On top of the usual checks a scene line FAILS when no dialog opens ("the planted save opened no
    card"), when the top dialog is not its label, when the picked button is not its button, and when the page jumps
    (scrollY or the document height differ between the card measured and the card closed). A card that opens but draws
-   less than its full content (its `full` table) ABORTS the run (exit 2): the line would measure a smaller card. */
+   less than its full content (its `full` table) ABORTS the run (exit 2): the line would measure a smaller card.
+   A scene's plant returns a JSON save and the localStorage key it lives under, and the row's `age` names the top
+   level field of that save its game measures time away from (Stadium Tycoon's savedAt; Idle Arena's would be
+   lastTick), so a game on another clock field joins with a row, not a change to plantInPage. */
 const SCENES = [
   {
-    key: '/stadium-tycoon#away', route: '/stadium-tycoon', label: 'While you were away', button: 'Back to work', plant: plantTycoonAway,
+    key: '/stadium-tycoon#away', route: '/stadium-tycoon', label: 'While you were away', button: 'Back to work', plant: plantTycoonAway, age: 'savedAt',
     full: {
       count: '[data-away-results] [role="img"]',
       lines: ['The faded result was a friendly', 'Milestones reached on the road', 'Away wins earned', 'the final matchday is waiting for you'],
@@ -191,6 +194,7 @@ async function plantTycoonAway() {
   return { key: T.TYCOON_SAVE_KEY, save: T.serializeTycoon(s, t0), awayMs, seed: 1539, count: want };
 }
 for (const sc of sceneRuns) {
+  if (typeof sc.age !== 'string' || !sc.age) { console.log(`playFirstVisitDialogs ABORTED: the scene ${sc.key} names no \`age\` field to age its save by`); process.exit(2); }
   try { sc.seed = await sc.plant(); } catch (e) { console.log(`playFirstVisitDialogs ABORTED: ${String(e.message || e)}`); process.exit(2); }
 }
 if (['stale', 'jump'].includes(CONTROL) && !sceneRuns.length) { console.log(`playFirstVisitDialogs control ABORTED: PLAYFIRST_CONTROL=${CONTROL} acts on seeded scenes and none is in this run`); process.exit(2); }
@@ -295,14 +299,15 @@ function afterTapInPage({ BANNER }) {
   return { closed: !d || !vis(d), blocker };
 }
 
-/* Runs in the page before any of its scripts (a seeded scene): writes the planted save `awayMs` old (or fresh, under
+/* Runs in the page before any of its scripts (a seeded scene): writes the planted save `awayMs` old by its scene's
+   `age` field (or fresh, under
    PLAYFIRST_CONTROL=stale, so no away settle can open the card) and pins Math.random to the seeded stream until the
    scene's card is in the document, then to 0.999, so nothing behind the card scores or offers a whistle while it is
    measured. The away settle plays the whole trip before it sets the card (useStadiumTycoon's settleAway), so the trip
    draws only seeded rolls. 5,000 calls is the backstop for a line whose card never opens (the largest trip draws at
    most 18 matches x 90 minutes x 2 rolls = 3,240, playMinute in src/lib/stadiumTycoon.ts). */
-function plantInPage({ key, save, awayMs, seed, stale, label }) {
-  try { const s = JSON.parse(save); s.savedAt = Date.now() - (stale ? 0 : awayMs); localStorage.setItem(key, JSON.stringify(s)); } catch { /* the line then opens no card and fails */ }
+function plantInPage({ key, save, awayMs, seed, stale, label, age }) {
+  try { const s = JSON.parse(save); s[age] = Date.now() - (stale ? 0 : awayMs); localStorage.setItem(key, JSON.stringify(s)); } catch { /* the line then opens no card and fails */ }
   let a = seed | 0, n = 0, opened = false;
   const next = () => { a = (a + 0x6d2b79f5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
   Math.random = () => (!opened && n++ < 5000 ? next() : 0.999);
@@ -336,7 +341,7 @@ for (const { route, w, h, key, scene } of lines) {
   const page = await ctx.newPage();
   await page.route(/supabase\.co/, r => r.abort());
   try {
-    if (scene) await page.addInitScript(plantInPage, { ...scene.seed, stale: CONTROL === 'stale', label: scene.label });
+    if (scene) await page.addInitScript(plantInPage, { ...scene.seed, stale: CONTROL === 'stale', label: scene.label, age: scene.age });
     await page.goto(`${BASE}${route}`, { waitUntil: 'domcontentloaded', timeout: 30000 });
     if (CONTROL === 'nobanner') await page.addStyleTag({ content: '[aria-label="Cookie choices"] { display: none !important; }' });
     await page.waitForFunction(() => (document.body?.innerText ?? '').trim().length > 80, null, { timeout: 15000 }).catch(() => {});
