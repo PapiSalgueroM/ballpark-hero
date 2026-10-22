@@ -65,10 +65,11 @@ export function oneOffPartialWhy(nation: string, year: number): string | null {
 }
 
 /** Round 1514: the edition of row `id` that starts in `edition` (a season's start year) where the ledger dates it:
- *  its date, its venue that season and its ground. Null for any other. */
-export function oneOffEdition(id: string, edition: number): { date: CalDate; venue: OneOffVenue; ground: string } | null {
+ *  its date, its venue that season and its ground. Null for any other. Round 1516: and its own place where the
+ *  edition has one (the UEFA Super Cup's 2026 edition, 'dated'). */
+export function oneOffEdition(id: string, edition: number): { date: CalDate; venue: OneOffVenue; ground: string; place?: OneOffPlace } | null {
   const e = CM_ONE_OFF_EDITIONS.find(x => x[0] === id && x[1] === edition);
-  return e ? { date: parseIsoDate(e[2]), venue: e[3], ground: e[4] } : null;
+  return e ? { date: parseIsoDate(e[2]), venue: e[3], ground: e[4], ...(e[5] ? { place: e[5] } : {}) } : null;
 }
 /** Round 1514: whether row `id` is played in the season starting in `edition`: every season, or only its dated
  *  editions for a row in CM_ONE_OFF_EDITION_ONLY. */
@@ -76,11 +77,12 @@ export function oneOffPlayedIn(id: string, edition: number): boolean {
   return !CM_ONE_OFF_EDITION_ONLY.includes(id) || oneOffEdition(id, edition) !== null;
 }
 /** Round 1514: row `id` as played in the season starting in `edition`: a dated edition's venue and date over the
- *  row's rule. The row as it stands for every other season (England's FA Community Shield is never dated). */
+ *  row's rule. The row as it stands for every other season (England's FA Community Shield is never dated). Round
+ *  1516: a dated edition's own place too, where it has one. */
 export function oneOffRowAt(id: string, edition: number): OneOffRow | null {
   const row = oneOffRowById(id);
   const ed = row ? oneOffEdition(id, edition) : null;
-  return row && ed ? { ...row, venue: ed.venue, on: ed.date } : row;
+  return row && ed ? { ...row, venue: ed.venue, on: ed.date, ...(ed.place ? { place: ed.place } : {}) } : row;
 }
 
 /** Why a season's cup is not followed or not played: no finished season to read, a cup with no final, the manager
