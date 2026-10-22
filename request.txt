@@ -1,0 +1,4 @@
+#!serial
+fetch: python3 .rc/x/fetchTailInputs.py /tmp/tail-inputs
+tails: SC_TAIL_PHASE=fixed SC_TAIL_INPUT=/tmp/tail-inputs SC_TAIL_OUT=/tmp/tail-out NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/soccerCareerSaveTails.mjs
+tails-original: SC_TAIL_PHASE=fixed SC_TAIL_CONTROL=original SC_TAIL_INPUT=/tmp/tail-inputs SC_TAIL_OUT=/tmp/tail-ctl NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/soccerCareerSaveTails.mjs

@@ -1,0 +1,3 @@
+fetch exit=0 3s | Twelve retained career inputs held from the artifact, every hash checked.
+tails exit=0 225s | Soccer Career extended saves: PASS.
+tails-original exit=0 102s | Expected size RED only; restoration, metadata, real-step and RNG checks passed.
