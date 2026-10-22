@@ -1,0 +1,7 @@
+Sweeping 181 routes at 390x844 with touch
+  FAIL: /nba-connections: controls sitting on top of each other: Paul Pierce over Clear draft, Kevin McHale over Submit five
+  FAIL: /nhl-connections: controls sitting on top of each other: Brendan Gallagher over Clear draft, Shea Weber over Submit five
+
+   181 routes swept, worst overflow 0px
+   0 small tap targets, 0 runs of tiny text, 4 overlapping controls
+sweepPhone: 2 failures

@@ -1,0 +1,21 @@
+1) discovery: which of 181 routes keep state
+   ...20 of 181 visited
+   ...40 of 181 visited
+   ...60 of 181 visited
+   ...80 of 181 visited
+   ...100 of 181 visited
+   ...120 of 181 visited
+   ...140 of 181 visited
+   ...160 of 181 visited
+   ...180 of 181 visited
+   44 routes keep state (48 keys); 137 keep nothing and are excused from the tamper pass
+2) the tamper sweep: six kinds of wreckage per key
+   garbage: swept
+   truncated: swept
+   hostileVersion: swept
+   emptyObject: swept
+   bareNull: swept
+   emptyArray: swept
+
+   264 tampered loads across 44 stateful routes
+sweepSaves: green. Every save on the site survives being garbage.

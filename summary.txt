@@ -1,0 +1,8 @@
+build exit=0 24s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playSoccerCareer exit=1 478s |   - 6. no console or page errors across the walk: Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to 
+playTranslatedPage exit=1 0s | Node.js v24.21.0
+playStorageBlocked exit=0 264s | playStorageBlocked: 826 checks, 0 failed
+playUsCareerSaveSeam exit=0 31s | playUsCareerSaveSeam: 15 journeys, 67 checks, 0 failed
+sweepPhone exit=1 109s | sweepPhone: 2 failures
+sweepContrast exit=1 365s | sweepContrast: 15 failures
+sweepSaves exit=0 404s | sweepSaves: green. Every save on the site survives being garbage.

@@ -1,0 +1,14 @@
+playTranslatedPage: http://localhost:4173, 10 page(s), views phone and desktop, text keep and alter
+  PASS  0. the served entry chunk (/assets/index-DRbtYDL7.js) holds the guard's off switch __DUKB_NO_TRANSLATE_GUARD__
+  PASS  0. the served entry chunk holds the guard's console line
+  PASS  0. the served entry chunk holds layer two's off switch __DUKB_NO_TRANSLATE_LIVE__
+file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playTranslatedPage.mjs:607
+  if (!skipLine) throw new Error('cannot find SKIP in playSoccerCareer.mjs');
+                       ^
+
+Error: cannot find SKIP in playSoccerCareer.mjs
+    at walkerRule (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playTranslatedPage.mjs:607:24)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playTranslatedPage.mjs:611:14
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+
+Node.js v24.21.0
