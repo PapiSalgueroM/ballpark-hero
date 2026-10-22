@@ -1,0 +1,10 @@
+f-r2-0 exit=0 394s | simNbaEarnedDraft: green.
+f-r2-2 exit=0 409s | simNbaEarnedDraft: green.
+f-r2-1 exit=0 416s | simNbaEarnedDraft: green.
+fat-0 exit=1 158s | simNbaEarnedDraft: CONTROL fatclass FIRED. Red in section 6 (3 failures).
+fat-1 exit=1 174s | simNbaEarnedDraft: CONTROL fatclass FIRED. Red in section 6 (3 failures).
+best-0 exit=1 175s | simNbaEarnedDraft: CONTROL bestfirst FIRED. Red in section 3 and 5 (270 and 5 failures).
+best-1 exit=1 178s | simNbaEarnedDraft: CONTROL bestfirst FIRED. Red in section 3 and 5 (270 and 5 failures).
+f-r2-3 exit=0 403s | simNbaEarnedDraft: green.
+arb-0 exit=0 138s | simNbaEarnedDraft: green.
+arb-1 exit=0 130s | simNbaEarnedDraft: green.
