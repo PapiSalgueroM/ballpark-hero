@@ -1,5 +1,5 @@
 {
- "recordedFrom": "71fea19b6",
+ "recordedFrom": "ed51c2adb",
  "seeds": [
   912,
   913,
@@ -34,8 +34,8 @@
    },
    {
     "step": "new dynasty: tab Play",
-    "html": "23dd3eb47b0a7619",
-    "text": "9db788b4da919735",
+    "html": "440793d2c84b7266",
+    "text": "724ff2ebd14ce83b",
     "save": "0846b3bf460400aa",
     "draws": 3432,
     "info": "{\"keys\":\"st,phase,recruits,portal,postseason\",\"phase\":\"season\",\"season\":2026,\"round\":1,\"nil\":95,\"played\":0,\"titles\":0,\"depth\":1,\"recruits\":null,\"portal\":null}",
@@ -70,8 +70,8 @@
    },
    {
     "step": "new dynasty: tab Conferences",
-    "html": "8cdffcb4146a238d",
-    "text": "2a767b958802cbf6",
+    "html": "ba75a4531443f125",
+    "text": "f3e218f54bfc0751",
     "save": "0846b3bf460400aa",
     "draws": 3432,
     "info": "{\"keys\":\"st,phase,recruits,portal,postseason\",\"phase\":\"season\",\"season\":2026,\"round\":1,\"nil\":95,\"played\":0,\"titles\":0,\"depth\":1,\"recruits\":null,\"portal\":null}",
@@ -94,8 +94,8 @@
    },
    {
     "step": "season one: tab Play",
-    "html": "23dd3eb47b0a7619",
-    "text": "9db788b4da919735",
+    "html": "440793d2c84b7266",
+    "text": "724ff2ebd14ce83b",
     "save": "0846b3bf460400aa",
     "draws": 3432,
     "info": "{\"keys\":\"st,phase,recruits,portal,postseason\",\"phase\":\"season\",\"season\":2026,\"round\":1,\"nil\":95,\"played\":0,\"titles\":0,\"depth\":1,\"recruits\":null,\"portal\":null}",
@@ -106,44 +106,44 @@
    },
    {
     "step": "season one: Play Week 1",
-    "html": "7bcb450ced09bae8",
-    "text": "d9c3b220af59ce59",
+    "html": "cf7ce3ec1cda3396",
+    "text": "4df8e0c9c10a9105",
     "save": "e2e76dc8bba83f49",
     "draws": 3498,
     "info": "{\"keys\":\"st,phase,recruits,portal,postseason\",\"phase\":\"season\",\"season\":2026,\"round\":2,\"nil\":95,\"played\":0,\"titles\":0,\"depth\":1,\"recruits\":null,\"portal\":null}",
     "share": null,
     "completion": "[\"cfb-dynasty\",false,0]",
     "reveal": "season:22:OSU:OU",
-    "head": "Alabama2026 · Week 2/12Record 1-0 (0-0)Rank #1Strength 90 Roster Play Schedule Top 25 Conferences✅ Week 1: beat Oregon 49-26.All 12 games are set before kickoff and nobody plays the same team twice. W"
+    "head": "Alabama2026 · Week 2/12Record 1-0 (0-0)Rank #1Strength 90 Roster Play Schedule Top 25 Conferences✅ Week 1: beat Oregon 49-26.All 12 games are set before kickoff and nobody plays the same team twice in"
    },
    {
     "step": "season one: Play Week 2",
-    "html": "524d07bbcfffde2a",
-    "text": "4311dafe90a8e8e9",
+    "html": "acef98acf65f7886",
+    "text": "30793b6b8547b769",
     "save": "73e9329a555c0d90",
     "draws": 3564,
     "info": "{\"keys\":\"st,phase,recruits,portal,postseason\",\"phase\":\"season\",\"season\":2026,\"round\":3,\"nil\":95,\"played\":0,\"titles\":0,\"depth\":1,\"recruits\":null,\"portal\":null}",
     "share": null,
     "completion": "[\"cfb-dynasty\",false,0]",
     "reveal": "season:22:ND:OU",
-    "head": "Alabama2026 · Week 3/12Record 2-0 (0-0)Rank #3Strength 90 Roster Play Schedule Top 25 Conferences✅ Week 2: beat Indiana 51-12.All 12 games are set before kickoff and nobody plays the same team twice. "
+    "head": "Alabama2026 · Week 3/12Record 2-0 (0-0)Rank #3Strength 90 Roster Play Schedule Top 25 Conferences✅ Week 2: beat Indiana 51-12.All 12 games are set before kickoff and nobody plays the same team twice i"
    },
    {
     "step": "season one: Play Week 3",
-    "html": "01e3e91ae430992a",
-    "text": "01c8a52799e27bce",
+    "html": "f300003dcc2f313e",
+    "text": "160744ef3acfdd59",
     "save": "4269543bd14ba466",
     "draws": 3630,
     "info": "{\"keys\":\"st,phase,recruits,portal,postseason\",\"phase\":\"season\",\"season\":2026,\"round\":4,\"nil\":95,\"played\":0,\"titles\":0,\"depth\":1,\"recruits\":null,\"portal\":null}",
     "share": null,
     "completion": "[\"cfb-dynasty\",false,0]",
     "reveal": "season:22:ND:CLEM",
-    "head": "Alabama2026 · Week 4/12Record 3-0 (0-0)Rank #3Strength 90 Roster Play Schedule Top 25 Conferences✅ Week 3: beat Colorado 33-14.All 12 games are set before kickoff and nobody plays the same team twice."
+    "head": "Alabama2026 · Week 4/12Record 3-0 (0-0)Rank #3Strength 90 Roster Play Schedule Top 25 Conferences✅ Week 3: beat Colorado 33-14.All 12 games are set before kickoff and nobody plays the same team twice "
    },
    {
     "step": "season one: Play Week 4",
-    "html": "00513888c91c0e3c",
-    "text": "3fdd95bf7b2edc20",
+    "html": "fb189309b97cc371",
+    "text": "21a6ffc22a007811",
     "save": "47563d43c230a710",
     "draws": 3696,
     "info": "{\"keys\":\"st,phase,recruits,portal,postseason\",\"phase\":\"season\",\"season\":2026,\"round\":5,\"nil\":95,\"played\":0,\"titles\":0,\"depth\":1,\"recruits\":null,\"portal\":null}",
@@ -154,8 +154,8 @@
    },
    {
     "step": "season one: Play Week 5",
-    "html": "34bc1f28f49a2c9b",
-    "text": "87f413d3ced54dbb",
+    "html": "a1a7c1f0520a4044",
+    "text": "d656656d37b267be",
     "save": "840e8b93e33efa2d",
     "draws": 3762,
     "info": "{\"keys\":\"st,phase,recruits,portal,postseason\",\"phase\":\"season\",\"season\":2026,\"round\":6,\"nil\":95,\"played\":0,\"titles\":0,\"depth\":1,\"recruits\":null,\"portal\":null}",
@@ -166,8 +166,8 @@
    },
    {
     "step": "season one: before Play Week 6: tab Play",
-    "html": "34bc1f28f49a2c9b",
-    "text": "87f413d3ced54dbb",
+    "html": "a1a7c1f0520a4044",
+    "text": "d656656d37b267be",
     "save": "840e8b93e33efa2d",
     "draws": 3762,
     "info": "{\"keys\":\"st,phase,recruits,portal,postseason\",\"phase\":\"season\",\"season\":2026,\"round\":6,\"nil\":95,\"played\":0,\"titles\":0,\"depth\":1,\"recruits\":null,\"portal\":null}",
@@ -202,8 +202,8 @@
    },
    {
     "step": "season one: before Play Week 6: tab Conferences",
-    "html": "4a7c9e89db8270de",
-    "text": "19b8191dd0f218c3",
+    "html": "14a1589f2079fed7",
+    "text": "ff6acb96838b4072",
     "save": "840e8b93e33efa2d",
     "draws": 3762,
     "info": "{\"keys\":\"st,phase,recruits,portal,postseason\",\"phase\":\"season\",\"season\":2026,\"round\":6,\"nil\":95,\"played\":0,\"titles\":0,\"depth\":1,\"recruits\":null,\"portal\":null}",
@@ -226,8 +226,8 @@
    },
    {
     "step": "season one: back to Play",
-    "html": "34bc1f28f49a2c9b",
-    "text": "87f413d3ced54dbb",
+    "html": "a1a7c1f0520a4044",
+    "text": "d656656d37b267be",
     "save": "840e8b93e33efa2d",
     "draws": 3762,
     "info": "{\"keys\":\"st,phase,recruits,portal,postseason\",\"phase\":\"season\",\"season\":2026,\"round\":6,\"nil\":95,\"played\":0,\"titles\":0,\"depth\":1,\"recruits\":null,\"portal\":null}",
@@ -238,8 +238,8 @@
    },
    {
     "step": "season one: Play Week 6",
-    "html": "610fceefee7b3a46",
-    "text": "7cb6c33c29635c32",
+    "html": "f9f25d95752d69c0",
+    "text": "fadb40b0b04a4e20",
     "save": "1adf4f3009e24bf5",
     "draws": 3828,
     "info": "{\"keys\":\"st,phase,recruits,portal,postseason\",\"phase\":\"season\",\"season\":2026,\"round\":7,\"nil\":95,\"played\":0,\"titles\":0,\"depth\":1,\"recruits\":null,\"portal\":null}",
@@ -250,8 +250,8 @@
    },
    {
     "step": "season one: Play Week 7",
-    "html": "85f5c7dfd8552d94",
-    "text": "f8bb00cd26636d5f",
+    "html": "34d415a8af5a3ddf",
+    "text": "7b2298631c903d2e",
     "save": "a2ec3077885be5a4",
     "draws": 3894,
     "info": "{\"keys\":\"st,phase,recruits,portal,postseason\",\"phase\":\"season\",\"season\":2026,\"round\":8,\"nil\":95,\"played\":0,\"titles\":0,\"depth\":1,\"recruits\":null,\"portal\":null}",
@@ -262,8 +262,8 @@
    },
    {
     "step": "season one: Play Week 8",
-    "html": "366398c6ff626f52",
-    "text": "8c3b84dcb8d38970",
+    "html": "873cf8569d2c19bf",
+    "text": "ad9abfae305dc52c",
     "save": "485ee5dacd6a47da",
     "draws": 3960,
     "info": "{\"keys\":\"st,phase,recruits,portal,postseason\",\"phase\":\"season\",\"season\":2026,\"round\":9,\"nil\":95,\"played\":0,\"titles\":0,\"depth\":1,\"recruits\":null,\"portal\":null}",
@@ -274,8 +274,8 @@
    },
    {
     "step": "season one: Play Week 9",
-    "html": "a42e629f0cdb5638",
-    "text": "182720a91d32d8f3",
+    "html": "14e96a3eab140cc1",
+    "text": "46c362679d9f903a",
     "save": "ebf8e4dd19ebac79",
     "draws": 4026,
     "info": "{\"keys\":\"st,phase,recruits,portal,postseason\",\"phase\":\"season\",\"season\":2026,\"round\":10,\"nil\":95,\"played\":0,\"titles\":0,\"depth\":1,\"recruits\":null,\"portal\":null}",
@@ -286,20 +286,20 @@
    },
    {
     "step": "season one: Play Week 10",
-    "html": "38a20eefe02401ff",
-    "text": "370abe6e6f1a5328",
+    "html": "7b85d7ab135c1181",
+    "text": "53139bf4aeb77c60",
     "save": "69ff9ced0d1c9c09",
     "draws": 4092,
     "info": "{\"keys\":\"st,phase,recruits,portal,postseason\",\"phase\":\"season\",\"season\":2026,\"round\":11,\"nil\":95,\"played\":0,\"titles\":0,\"depth\":1,\"recruits\":null,\"portal\":null}",
     "share": null,
     "completion": "[\"cfb-dynasty\",false,0]",
     "reveal": "season:22:UGA:TEX",
-    "head": "Alabama2026 · Week 11/12Record 10-0 (5-0)Rank #1Strength 90 Roster Play Schedule Top 25 Conferences✅ Week 10: beat Miami 41-4.All 12 games are set before kickoff and nobody plays the same team twice. "
+    "head": "Alabama2026 · Week 11/12Record 10-0 (5-0)Rank #1Strength 90 Roster Play Schedule Top 25 Conferences✅ Week 10: beat Miami 41-4.All 12 games are set before kickoff and nobody plays the same team twice i"
    },
    {
     "step": "season one: Play Week 11",
-    "html": "8e00de570cf32d9d",
-    "text": "ebd5fc4241a5f180",
+    "html": "143bd45ab1c787bd",
+    "text": "2dc062866a58e67d",
     "save": "ec213ae3efa03d03",
     "draws": 4158,
     "info": "{\"keys\":\"st,phase,recruits,portal,postseason\",\"phase\":\"season\",\"season\":2026,\"round\":12,\"nil\":95,\"played\":0,\"titles\":0,\"depth\":1,\"recruits\":null,\"portal\":null}",
@@ -310,8 +310,8 @@
    },
    {
     "step": "season one: before Final week + the Playoff: tab Play",
-    "html": "8e00de570cf32d9d",
-    "text": "ebd5fc4241a5f180",
+    "html": "143bd45ab1c787bd",
+    "text": "2dc062866a58e67d",
     "save": "ec213ae3efa03d03",
     "draws": 4158,
     "info": "{\"keys\":\"st,phase,recruits,portal,postseason\",\"phase\":\"season\",\"season\":2026,\"round\":12,\"nil\":95,\"played\":0,\"titles\":0,\"depth\":1,\"recruits\":null,\"portal\":null}",
@@ -346,8 +346,8 @@
    },
    {
     "step": "season one: before Final week + the Playoff: tab Conferences",
-    "html": "5dc8a681a99ebcd4",
-    "text": "ecde2fd0bb0ad0ac",
+    "html": "c2a63c3d42d007db",
+    "text": "973bc42057c50b8d",
     "save": "ec213ae3efa03d03",
     "draws": 4158,
     "info": "{\"keys\":\"st,phase,recruits,portal,postseason\",\"phase\":\"season\",\"season\":2026,\"round\":12,\"nil\":95,\"played\":0,\"titles\":0,\"depth\":1,\"recruits\":null,\"portal\":null}",
@@ -370,8 +370,8 @@
    },
    {
     "step": "season one: back to Play",
-    "html": "8e00de570cf32d9d",
-    "text": "ebd5fc4241a5f180",
+    "html": "143bd45ab1c787bd",
+    "text": "2dc062866a58e67d",
     "save": "ec213ae3efa03d03",
     "draws": 4158,
     "info": "{\"keys\":\"st,phase,recruits,portal,postseason\",\"phase\":\"season\",\"season\":2026,\"round\":12,\"nil\":95,\"played\":0,\"titles\":0,\"depth\":1,\"recruits\":null,\"portal\":null}",
@@ -658,15 +658,15 @@
    },
    {
     "step": "season two: tab Play",
-    "html": "2a201adc60ae17b0",
-    "text": "1cf630dfd56fdf1c",
+    "html": "dca7e9e84c4c4581",
+    "text": "3b8dadad0a84620e",
     "save": "7aed6c9e38f85b3b",
     "draws": 5933,
     "info": "{\"keys\":\"st,phase,recruits,portal,postseason\",\"phase\":\"season\",\"season\":2027,\"round\":1,\"nil\":6,\"played\":1,\"titles\":0,\"depth\":1,\"recruits\":null,\"portal\":null}",
     "share": "e25d075452aedd39",
     "completion": "[\"cfb-dynasty\",false,5]",
     "reveal": "season:0::",
-    "head": "Alabama2027 · Week 1/12Record 0-0 (0-0)Rank #5Strength 88 Roster Play Schedule Top 25 ConferencesAll 12 games are set before kickoff and nobody plays the same team twice. Weeks 1-4 are out of conferen"
+    "head": "Alabama2027 · Week 1/12Record 0-0 (0-0)Rank #5Strength 88 Roster Play Schedule Top 25 ConferencesAll 12 games are set before kickoff and nobody plays the same team twice in the regular season. Weeks 1"
    },
    {
     "step": "season two: tab Schedule",
@@ -694,8 +694,8 @@
    },
    {
     "step": "season two: tab Conferences",
-    "html": "1ff74b0ee198b05f",
-    "text": "21c78a08d46854a1",
+    "html": "23069002c61a68f7",
+    "text": "3d20325f1da697f0",
     "save": "7aed6c9e38f85b3b",
     "draws": 5933,
     "info": "{\"keys\":\"st,phase,recruits,portal,postseason\",\"phase\":\"season\",\"season\":2027,\"round\":1,\"nil\":6,\"played\":1,\"titles\":0,\"depth\":1,\"recruits\":null,\"portal\":null}",
@@ -718,39 +718,39 @@
    },
    {
     "step": "season two: tab Play",
-    "html": "2a201adc60ae17b0",
-    "text": "1cf630dfd56fdf1c",
+    "html": "dca7e9e84c4c4581",
+    "text": "3b8dadad0a84620e",
     "save": "7aed6c9e38f85b3b",
     "draws": 5933,
     "info": "{\"keys\":\"st,phase,recruits,portal,postseason\",\"phase\":\"season\",\"season\":2027,\"round\":1,\"nil\":6,\"played\":1,\"titles\":0,\"depth\":1,\"recruits\":null,\"portal\":null}",
     "share": "e25d075452aedd39",
     "completion": "[\"cfb-dynasty\",false,5]",
     "reveal": "season:0::",
-    "head": "Alabama2027 · Week 1/12Record 0-0 (0-0)Rank #5Strength 88 Roster Play Schedule Top 25 ConferencesAll 12 games are set before kickoff and nobody plays the same team twice. Weeks 1-4 are out of conferen"
+    "head": "Alabama2027 · Week 1/12Record 0-0 (0-0)Rank #5Strength 88 Roster Play Schedule Top 25 ConferencesAll 12 games are set before kickoff and nobody plays the same team twice in the regular season. Weeks 1"
    },
    {
     "step": "season two: first round",
-    "html": "4611db695e23a1ee",
-    "text": "4231b21acf2874fb",
+    "html": "b3a5b3953b16f860",
+    "text": "347ee7d927674503",
     "save": "54869a0906c79fb0",
     "draws": 5999,
     "info": "{\"keys\":\"st,phase,recruits,portal,postseason\",\"phase\":\"season\",\"season\":2027,\"round\":2,\"nil\":6,\"played\":1,\"titles\":0,\"depth\":1,\"recruits\":null,\"portal\":null}",
     "share": "e25d075452aedd39",
     "completion": "[\"cfb-dynasty\",false,5]",
     "reveal": "season:22:MIA:ND",
-    "head": "Alabama2027 · Week 2/12Record 1-0 (0-0)Rank #8Strength 88 Roster Play Schedule Top 25 Conferences✅ Week 1: beat SMU 54-10.All 12 games are set before kickoff and nobody plays the same team twice. Week"
+    "head": "Alabama2027 · Week 2/12Record 1-0 (0-0)Rank #8Strength 88 Roster Play Schedule Top 25 Conferences✅ Week 1: beat SMU 54-10.All 12 games are set before kickoff and nobody plays the same team twice in th"
    },
    {
     "step": "season two: second round",
-    "html": "6407c64d4539856d",
-    "text": "092816beb1d30196",
+    "html": "3b83acf5c0c7d0b5",
+    "text": "31ecbe89b08173ad",
     "save": "ab7794570ce47de6",
     "draws": 6065,
     "info": "{\"keys\":\"st,phase,recruits,portal,postseason\",\"phase\":\"season\",\"season\":2027,\"round\":3,\"nil\":6,\"played\":1,\"titles\":0,\"depth\":1,\"recruits\":null,\"portal\":null}",
     "share": "e25d075452aedd39",
     "completion": "[\"cfb-dynasty\",false,5]",
     "reveal": "season:22:ND:VT",
-    "head": "Alabama2027 · Week 3/12Record 2-0 (0-0)Rank #7Strength 88 Roster Play Schedule Top 25 Conferences✅ Week 2: beat Memphis 58-10.All 12 games are set before kickoff and nobody plays the same team twice. "
+    "head": "Alabama2027 · Week 3/12Record 2-0 (0-0)Rank #7Strength 88 Roster Play Schedule Top 25 Conferences✅ Week 2: beat Memphis 58-10.All 12 games are set before kickoff and nobody plays the same team twice i"
    },
    {
     "step": "season two: schedule",
@@ -1186,8 +1186,8 @@
    },
    {
     "step": "plain season two: tab Play",
-    "html": "cd6ef706641602cd",
-    "text": "f569210d297628de",
+    "html": "ee925501cff2b013",
+    "text": "278d7499a616a696",
     "save": "0eab406d69b08842",
     "draws": 9228,
     "info": "{\"keys\":\"st,phase,recruits,portal,postseason\",\"phase\":\"season\",\"season\":2027,\"round\":1,\"nil\":69,\"played\":1,\"titles\":0,\"depth\":1,\"recruits\":null,\"portal\":null}",
@@ -1222,8 +1222,8 @@
    },
    {
     "step": "plain season two: tab Conferences",
-    "html": "c6884a6a14e914ba",
-    "text": "f24485a32f1a2451",
+    "html": "27c315aea9a22776",
+    "text": "832d4da967b369d6",
     "save": "0eab406d69b08842",
     "draws": 9228,
     "info": "{\"keys\":\"st,phase,recruits,portal,postseason\",\"phase\":\"season\",\"season\":2027,\"round\":1,\"nil\":69,\"played\":1,\"titles\":0,\"depth\":1,\"recruits\":null,\"portal\":null}",
@@ -1452,8 +1452,8 @@
    },
    {
     "step": "season one: before Play Round 6: tab Leagues",
-    "html": "23d4465debeb5faf",
-    "text": "30cd55af41ac317b",
+    "html": "883caa415f3f2d8d",
+    "text": "3d44e269fc17e735",
     "save": "ecf8df4b844237d9",
     "draws": 3149,
     "info": "{\"keys\":\"st,phase,recruits,portal,march\",\"phase\":\"season\",\"season\":2026,\"round\":6,\"nil\":82,\"played\":0,\"titles\":0,\"depth\":1,\"recruits\":null,\"portal\":null}",
@@ -1572,8 +1572,8 @@
    },
    {
     "step": "season one: before Final round + March: tab Leagues",
-    "html": "ad6bf62a85969950",
-    "text": "c35f5cfdee4eed4d",
+    "html": "1005bce1ffa1d937",
+    "text": "82ea2b2081d33c18",
     "save": "f6fa372354474611",
     "draws": 3940,
     "info": "{\"keys\":\"st,phase,recruits,portal,march\",\"phase\":\"season\",\"season\":2026,\"round\":10,\"nil\":82,\"played\":0,\"titles\":0,\"depth\":1,\"recruits\":null,\"portal\":null}",

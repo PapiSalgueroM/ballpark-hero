@@ -51,6 +51,18 @@
  * first dynasty's path draws less. Its screen first changes at 'plain: class
  * closed, layer on', the first season it plays under the real format. The CBB
  * plain save path matches on every field through its old season.
+ *
+ * TAKEN AGAIN BY THE ROUND 1554 REVIEW FIXES (runner r1554-fx-rr, from
+ * ed51c2adb), for two intended words changes and one table rule: the Play
+ * tab intro (never the same team twice in the regular season, and what a
+ * school outside a conference chases), the Conferences note under the format
+ * (rivalry week adds a league game), and CBB's league table, where a program
+ * with no league game yet sits at .500. Proof on that runner: with only
+ * CfbDynastyBoard.tsx and cbbDynasty.ts put back as they were at 1a21a9c28,
+ * the previous recording replays green on every step of both sports; with only
+ * the board put back, CFB is green and CBB parts at its Leagues tab. Moved:
+ * 27 CFB steps and 2 CBB steps, each on the markup, the text and at most the
+ * head, never the save, the draws, the share, the completion or the reveal.
  */
 import type { ComponentType } from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
