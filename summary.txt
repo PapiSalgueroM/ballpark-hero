@@ -1,0 +1,6 @@
+held-diff exit=0 0s | 4
+earned-s1 exit=1 24s | not restricted lines: 0
+earned-s2 exit=1 23s | not restricted lines: 0
+earned-s3 exit=1 23s | not restricted lines: 0
+earned-fullbird exit=0 22s | not restricted lines: 8
+restored exit=0 0s | scripts restored to the head
