@@ -37,8 +37,11 @@ const enginePins = {
      Round 1538 (paid lines and the Skill card's ceiling) moved it again (1534's file was b8c5787a): one import line,
      the summer training card's brand answer banking through the shared fee helper, and its Skill answer through the
      shared Skill helper with new button words. Both answers live on the offseason's training card, and this kit plays
-     one season and answers only a rivalry choice, never a summer card, so neither hunk reaches it. */
-  'src/lib/nbaMyCareer.ts': '6d8db33bd9670ac9d6fd36cf56fe16f5ab9bd70aff154c97b298bfb38add5055',
+     one season and answers only a rivalry choice, never a summer card, so neither hunk reaches it.
+     Round 1538's fix pass moved it once more (the round's file was 6d8db33b): the same Skill answer's line, from
+     the maintenance age its button reads "Health +4, up to 100" and the helper is handed the line's lead. Still the
+     training card only, which this kit never answers. */
+  'src/lib/nbaMyCareer.ts': 'bec7cbe6818b17ad219aacea05fcd0445d76cdaac05b0ce3320b1808c62278b2',
   'src/lib/nbaCareerSport.ts': '17c511ff6cd160975a245e1e85dc3b685e35a0d36dfec82958b218c37fe34ae1',
   'src/lib/fightCareer.ts': 'ccdd83dfbbf41597a5d1890a45c9013ca82a234c7fa9786c00161c949063f5c3',
   'src/lib/fightCareerLifeFlow.ts': '0670e2903f91c4761fa3bc6b035748a391d53260179099d82a3f4b0577037dab',
