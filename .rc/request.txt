@@ -1,0 +1,16 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+career: node scripts/simGmCareer.mjs
+nflgmdesk: node scripts/simNflGmDesk.mjs
+lazydesk: node scripts/simFoLazyDesk.mjs
+vitest-board: node_modules/.bin/vitest run src/components/front-office/FrontOfficeOnePress.test.tsx src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx src/components/front-office-shared/FrontOfficeGmCareer.test.tsx src/test/frontOfficeSaveRecovery.test.tsx src/components/front-office/FrontOfficeLazyDesk.test.tsx --testTimeout=600000 --hookTimeout=120000
+vitest-fo: node_modules/.bin/vitest run src/components/front-office/FrontOfficeCuts.test.tsx src/components/front-office/FrontOfficeDraftCapital.test.tsx src/components/front-office/FrontOfficeFullRoster.test.tsx src/components/front-office/FrontOfficeGameDay.test.tsx src/components/front-office/FrontOfficePostseason.test.tsx src/components/front-office/FrontOfficePromotion.test.tsx src/components/front-office/FrontOfficeRatingEvidence.test.tsx src/components/front-office/FrontOfficeTagDepth.test.tsx src/components/front-office/FrontOfficeTile.test.tsx --testTimeout=600000 --hookTimeout=120000
+ctl-staffrides: SIM_GM_CAREER_CONTROL=staffrides SIM_GM_CAREER_ONLY=5 node scripts/simGmCareer.mjs
+ctl-rostermove: SIM_GM_CAREER_CONTROL=rostermove SIM_GM_CAREER_ONLY=5 node scripts/simGmCareer.mjs
+ctl-askrebuilt: SIM_GM_CAREER_CONTROL=askrebuilt SIM_GM_CAREER_ONLY=5 node scripts/simGmCareer.mjs
+ctl-notrim: SIM_GM_CAREER_CONTROL=notrim SIM_GM_CAREER_ONLY=6 node scripts/simGmCareer.mjs
+ctl-halfseason: SIM_GM_CAREER_CONTROL=halfseason SIM_GM_CAREER_ONLY=6 node scripts/simGmCareer.mjs
+ctl-noawaydraft: SIM_GM_CAREER_CONTROL=noawaydraft SIM_GM_CAREER_ONLY=6 node scripts/simGmCareer.mjs
+ctl-emptytile: SIM_GM_CAREER_CONTROL=emptytile SIM_GM_CAREER_ONLY=8 node scripts/simGmCareer.mjs
+gmreload: node scripts/simGmReload.mjs
+fob-check: node scripts/controlFrontOfficeBoard.mjs check
+deskhost-anchors: SIM_GM_DESK_HOST_ANCHORS=1 node scripts/simGmDeskHost.mjs
