@@ -1,0 +1,6 @@
+nat-freeask exit=1 153s | simCmMadeUpNations: RED, 3 failure(s)
+nat-leak exit=1 155s | simCmMadeUpNations: RED, 14 failure(s)
+nat-nocap exit=1 156s | simCmMadeUpNations: RED, 3 failure(s)
+we-homecountry exit=1 13s | simWorldEditor (control homecountry): 2478 checks, 2 failures
+nat-mainstream exit=1 116s | simCmMadeUpNations: RED, 13 failure(s)
+nat-awayyouth exit=1 116s | simCmMadeUpNations: RED, 9 failure(s)
