@@ -62,6 +62,8 @@ const CONTROLS = {
   norepair: { section: '8', note: 'the repair on load does nothing', edits: [{ file: INTL, from: 'export function repairIntlOnLoad(c: IntlCareer): boolean {', to: 'export function repairIntlOnLoad(c: IntlCareer): boolean {\n  if (c) return false;' }] },
   nolift: { section: '5', note: 'he lifts the USA by nothing', edits: [{ file: NBA, from: 'liftOf: c => nbaIntlLift(lastLine(c)?.ovr ?? 0),', to: 'liftOf: () => 0,' }] },
   nobronze: { section: '5', note: 'no bronze game is played', edits: [{ file: INTL, from: 'if (shape.bronze && semiLosers.length === 2) {', to: 'if (false && shape.bronze && semiLosers.length === 2) {' }] },
+  knockflip: { section: '5', note: 'the knock comparison is flipped, so he comes home hurt from most tournaments', edits: [{ file: INTL, from: 'const hurt = rng() < bind.knockChance(c);', to: 'const hurt = rng() > bind.knockChance(c);' }] },
+  knockage: { section: '5', note: 'the knock forgets his age', edits: [{ file: NBA, from: 'INTL_KNOCK_BASE + INTL_KNOCK_PER_YEAR * Math.max(0, age - INTL_KNOCK_AGE)', to: 'INTL_KNOCK_BASE' }] },
   mathrandom: { section: '6', note: 'the pot draw uses Math.random', edits: [{ file: INTL, from: 'const j = Math.floor(rng() * (i + 1));', to: 'const j = Math.floor(Math.random() * (i + 1));' }] },
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown control "${CONTROL}": use ${Object.keys(CONTROLS).join(', ')}`); process.exit(2); }
@@ -423,34 +425,59 @@ if (SECTIONS.has('2') || SECTIONS.has('4')) {
 /* ─── 5. the tournament, by rating tier ──────────────────────────────────── */
 /* TOURNEYS tournaments an edition kind a seed set (played, still to come,
    projected), ten seed sets: sets 1 to 5 set the bands (BANDS below, read off
-   their printed rates on the runner with headroom), sets 6 to 10 are held out
-   and must sit inside them. A career at the call is a season line at a tier's
-   rating and nothing else, so the tier is the only thing that moves. */
+   their printed rates with headroom), sets 6 to 10 are held out and must sit
+   inside them. A career at the call is a season line at a tier's rating and
+   nothing else, so the tier is the only thing that moves a rate. Tournament k
+   plays tier k mod 4 and edition (k div 4) mod the kind's editions, so every
+   tier meets every edition of its kind (Round 1541's fix: the edition used to
+   run on k itself, which locked each tier of the 4 future and 8 projected
+   editions to one competition, World Cups for two tiers and Olympics for the
+   other two, and measured the competition instead of the tier). */
 const TOURNEYS = Number(process.env.INTL_TOURNEYS || 2000);
 const TIERS = [[86, 88], [89, 91], [92, 94], [95, 99]];
 const KINDS = ['played', 'future', 'projected'];
 /* Gold and medal bands a tier, a kind (percent): [gold low, gold high, medal low, medal high].
-   Measured on a runner (r1541-s3b, head a8ebb59d, 2000 tournaments an edition kind a set, so 500 a tier):
-   sets 1 to 5 ranged, gold then medal, by tier 86-88, 89-91, 92-94, 95-99:
-     played     gold 45.2-48.0, 54.8-57.4, 62.6-65.4, 65.0-67.8   medal 77.4-80.2, 81.8-85.8, 88.4-90.2, 88.6-90.6
-     future     gold 61.2-66.6, 72.8-80.4, 86.4-88.6, 92.4-95.0   medal 86.8-90.6, 95.6-96.8, 96.2-97.4, 98.6-99.6
-     projected  gold 64.4-66.2, 79.4-85.0, 88.2-90.6, 91.4-95.0   medal 87.0-90.2, 96.0-98.6, 96.2-97.4, 99.2-99.6
+   Measured after the fix (head 9902783d plus the fix, 2000 tournaments an edition kind a set, so 500 a
+   tier; the same numbers on a runner, see the round's fix report): sets 1 to 5 ranged, gold then medal, by
+   tier 86-88, 89-91, 92-94, 95-99:
+     played     gold 45.0-49.4, 53.6-59.8, 60.8-64.0, 63.0-66.2   medal 77.8-80.4, 82.0-85.4, 88.2-89.2, 90.2-91.0
+     future     gold 66.8-70.4, 77.8-81.0, 86.0-90.4, 89.8-91.8   medal 90.4-93.4, 93.6-96.2, 97.0-98.2, 98.0-98.6
+     projected  gold 68.4-73.2, 78.0-84.2, 87.4-89.8, 89.4-92.2   medal 90.6-93.4, 94.8-97.2, 96.8-98.8, 97.4-98.6
    A rate over 500 tournaments has a standard error of about 2.2 points, so each band is the sets 1 to 5
    range widened by 6 points (close to three errors) on both sides, capped at 100. The held out sets 6 to 10
-   then measured: played gold 45.0-48.6, 53.2-55.0, 63.2-65.4, 65.2-68.4; future gold 66.0-71.0, 75.6-78.4,
-   84.2-88.4, 91.6-95.8; projected gold 62.0-66.8, 79.8-83.4, 86.6-90.0, 90.4-95.8 (all inside). */
+   then measured: played gold 44.2-48.2, 52.8-58.6, 62.6-66.8, 65.2-67.4; future gold 66.8-72.4, 76.4-82.6,
+   87.0-90.6, 88.8-90.2; projected gold 66.0-74.4, 78.6-83.0, 88.6-90.2, 89.6-91.8 (all inside, medals too). */
 const BANDS = {
-  played: [[39.2, 54.0, 71.4, 86.2], [48.8, 63.4, 75.8, 91.8], [56.6, 71.4, 82.4, 96.2], [59.0, 73.8, 82.6, 96.6]],
-  future: [[55.2, 72.6, 80.8, 96.6], [66.8, 86.4, 89.6, 100], [80.4, 94.6, 90.2, 100], [86.4, 100, 92.6, 100]],
-  projected: [[58.4, 72.2, 81.0, 96.2], [73.4, 91.0, 90.0, 100], [82.2, 96.6, 90.2, 100], [85.4, 100, 93.2, 100]],
+  played: [[39.0, 55.4, 71.8, 86.4], [47.6, 65.8, 76.0, 91.4], [54.8, 70.0, 82.2, 95.2], [57.0, 72.2, 84.2, 97.0]],
+  future: [[60.8, 76.4, 84.4, 99.4], [71.8, 87.0, 87.6, 100], [80.0, 96.4, 91.0, 100], [83.8, 97.8, 92.0, 100]],
+  projected: [[62.4, 79.2, 84.6, 99.4], [72.0, 90.2, 88.8, 100], [81.4, 95.8, 90.8, 100], [83.4, 98.2, 91.4, 100]],
 };
 /* Gold must rise from tier to tier (the first three) by at least this many points, pooled over the held out
    sets (2500 a tier, a standard error on a difference of about 1.4 points). Sets 1 to 5 pooled rose at least
-   7.4 (projected, 89-91 to 92-94); the held out sets at least 7.6. The 95-99 tier is not held to a rise: the
-   lift is capped at 4, reached at 94, so it measured 2.4 to 7.1 over 92-94 and could tie. */
+   5.8 (played, 89-91 to 92-94); the held out sets at least 8.4 (projected, 89-91 to 92-94). The 95-99 tier is
+   not held to a rise: the lift is capped at 4, reached at 94, so it measured 1.0 to 1.7 over 92-94 and could
+   tie. */
 const RISE = 3;
-const tierCareer = (ovr, k) => ({
-  name: `band ${k}`, pos: 'SF', draftPick: 1, age: 28, health: 80, retired: false,
+/* The knock: the share of tournaments he comes home hurt from, by his age that
+   summer (the NBA bind's rule: 8 percent, plus 1 point a year over 30, so 8, 8,
+   11 and 14 at the four ages). Age moves nothing in a tournament but its last
+   draw, so the tiers' rates above do not see it; the age runs on
+   (k div 4) div the kind's editions, so every age meets every tier and edition.
+   Measured with the bands above (about 1,500 tournaments an age a set): sets 1
+   to 5 ranged 7.7-9.0, 7.6-9.0, 10.2-11.7, 13.0-15.3 (pooled 8.2, 8.2, 10.6,
+   14.1); a set's rate has a standard error of 0.7 to 0.9 points, so each band
+   is that range widened by 3 points (three to four errors). The held out sets
+   measured 6.8-8.6, 6.8-7.9, 10.2-12.5, 13.2-14.1 (all inside), pooled 7.6,
+   7.3, 11.2, 13.7. The rise from 26 to 36, pooled over the held out sets
+   (a standard error of about 0.5 points), measured 6.1 (5.9 over sets 1 to 5)
+   and must be at least KNOCK_RISE. Controls: knockflip (the comparison flipped,
+   so he comes home hurt from most tournaments) and knockage (the age term
+   dropped). */
+const KNOCK_AGES = [26, 30, 33, 36];
+const KNOCK_BANDS = [[4.7, 12.0], [4.6, 12.0], [7.2, 14.7], [10.0, 18.3]];
+const KNOCK_RISE = 3;
+const tierCareer = (ovr, k, age) => ({
+  name: `band ${k}`, pos: 'SF', draftPick: 1, age, health: 80, retired: false,
   seasons: [{ year: 2000, ovr, ppg: 24, rpg: 6, apg: 5, teamResult: 'band', games: 70 }],
 });
 if (SECTIONS.has('5')) {
@@ -459,18 +486,29 @@ if (SECTIONS.has('5')) {
   const editions = { played: cal.played(), future: [], projected: [] };
   for (let y = 2025; y <= 2050; y += 1) { const e = cal.editionFor(y); if (e && e.kind !== 'played') editions[e.kind].push(e); }
   const rates = {};
+  const hurtTally = {};
   let invariants = 0;
   for (let set = 1; set <= 10; set += 1) {
+    hurtTally[set] = KNOCK_AGES.map(() => ({ n: 0, hurt: 0 }));
     for (const kind of KINDS) {
       const eds = editions[kind];
       const tally = TIERS.map(() => ({ n: 0, gold: 0, medal: 0 }));
+      const kt = hurtTally[set];
       for (let k = 0; k < TOURNEYS; k += 1) {
+        /* Three counters that never move together: the tier is k mod 4, the
+           edition and the rating inside the tier run on j = k div 4 (so every
+           tier plays every edition of the kind), and the age runs on j div the
+           number of editions (so every age meets every edition and tier). */
         const ti = k % TIERS.length;
+        const j = Math.floor(k / TIERS.length);
         const [lo, hi] = TIERS[ti];
-        const ovr = lo + (Math.floor(k / TIERS.length) % (hi - lo + 1));
-        const e = eds[k % eds.length];
-        const t = intl.runIntlTournament(e, 'USA', nbaIntl.NBA_INTL_BIND, tierCareer(ovr, k), keyed.keyedRng(`band:${set}:${kind}:${k}`));
+        const ovr = lo + (j % (hi - lo + 1));
+        const e = eds[j % eds.length];
+        const ai = Math.floor(j / eds.length) % KNOCK_AGES.length;
+        const t = intl.runIntlTournament(e, 'USA', nbaIntl.NBA_INTL_BIND, tierCareer(ovr, k, KNOCK_AGES[ai]), keyed.keyedRng(`band:${set}:${kind}:${k}`));
         if (!t) { check('5', false, `${e.id} played no tournament`); continue; }
+        kt[ai].n += 1;
+        if (t.hurt) kt[ai].hurt += 1;
         const place = t.places.USA;
         tally[ti].n += 1;
         if (place === 'gold') tally[ti].gold += 1;
@@ -507,6 +545,26 @@ if (SECTIONS.has('5')) {
     }
     if (RISE !== null) for (let ti = 1; ti < 3; ti += 1) check('5', held[ti] - held[ti - 1] >= RISE, `${kind}: gold rises ${(held[ti] - held[ti - 1]).toFixed(1)} from tier ${TIERS[ti - 1].join('-')} to ${TIERS[ti].join('-')}, under ${RISE}`);
   }
+  const hurtPct = x => (100 * x.hurt) / Math.max(1, x.n);
+  console.log(`  the knock (hurt percent by age ${KNOCK_AGES.join(', ')}; the rule says ${KNOCK_AGES.map(a => (100 * nbaIntl.nbaIntlKnockChance(a)).toFixed(0)).join(', ')}):`);
+  for (let set = 1; set <= 10; set += 1) console.log(`    set ${set}${set > 5 ? ' (held out)' : ''}: ${hurtTally[set].map(x => `${hurtPct(x).toFixed(1)} of ${x.n}`).join('  ')}`);
+  const pool = sets => KNOCK_AGES.map((_, ai) => {
+    const x = sets.reduce((s, set) => ({ n: s.n + hurtTally[set][ai].n, hurt: s.hurt + hurtTally[set][ai].hurt }), { n: 0, hurt: 0 });
+    return hurtPct(x);
+  });
+  const kLo = KNOCK_AGES.map((_, ai) => Math.min(...[1, 2, 3, 4, 5].map(s => hurtPct(hurtTally[s][ai]))));
+  const kHi = KNOCK_AGES.map((_, ai) => Math.max(...[1, 2, 3, 4, 5].map(s => hurtPct(hurtTally[s][ai]))));
+  console.log(`    sets 1 to 5 range by age: ${kLo.map((x, i) => `${x.toFixed(1)} to ${kHi[i].toFixed(1)}`).join(', ')}; pooled ${pool([1, 2, 3, 4, 5]).map(x => x.toFixed(1)).join(', ')}`);
+  const kHeld = pool([6, 7, 8, 9, 10]);
+  console.log(`    held out pooled by age: ${kHeld.map(x => x.toFixed(1)).join(', ')}; rise from ${KNOCK_AGES[0]} to ${KNOCK_AGES[KNOCK_AGES.length - 1]}: ${(kHeld[kHeld.length - 1] - kHeld[0]).toFixed(1)}`);
+  if (KNOCK_BANDS) {
+    for (let s = 6; s <= 10; s += 1) KNOCK_AGES.forEach((age, ai) => {
+      const [b0, b1] = KNOCK_BANDS[ai];
+      const r = hurtPct(hurtTally[s][ai]);
+      check('5', r >= b0 && r <= b1, `the knock, set ${s} age ${age}: hurt ${r.toFixed(1)} percent outside ${b0}-${b1}`);
+    });
+  }
+  if (KNOCK_RISE !== null) check('5', kHeld[kHeld.length - 1] - kHeld[0] >= KNOCK_RISE, `the knock rises ${(kHeld[kHeld.length - 1] - kHeld[0]).toFixed(1)} from age ${KNOCK_AGES[0]} to ${KNOCK_AGES[KNOCK_AGES.length - 1]}, under ${KNOCK_RISE}`);
   console.log(`  ${invariants} tournaments held to the invariants`);
 }
 
