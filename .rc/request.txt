@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+box-head: node scripts/playBoxingShowForecast1086.mjs --prefetch-fonts-only && node scripts/playBoxingShowForecast1086.mjs; s=$?; cp boxing-show-forecast-artifacts/native/report.json $RC_OUT/box-head-report.json; exit $s
+box-base: R=$PWD && git worktree add /tmp/base e3deb2cb >/dev/null 2>&1 && ln -s $R/node_modules /tmp/base/node_modules && cd /tmp/base && node_modules/.bin/vite build >/dev/null 2>&1 && node scripts/playBoxingShowForecast1086.mjs --prefetch-fonts-only && node scripts/playBoxingShowForecast1086.mjs; s=$?; cp /tmp/base/boxing-show-forecast-artifacts/native/report.json $RC_OUT/box-base-report.json; exit $s
