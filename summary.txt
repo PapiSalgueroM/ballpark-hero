@@ -1,0 +1,3 @@
+date-1026 exit=0 66s | simTriviaBank: all checks passed
+date-1105 exit=0 65s | simTriviaBank: all checks passed
+date-1105-legacy exit=1 66s | simTriviaBank: 4 failure(s) (NEGATIVE CONTROL legacy ON)
