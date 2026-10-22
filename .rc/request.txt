@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+walk: node .rc/x/walk1321.mjs
+basebuild: git worktree add /tmp/base 0383bd6e > /dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && node_modules/.bin/vite build > /tmp/b.log 2>&1) && node .rc/x/cmpdist.mjs dist /tmp/base/dist
