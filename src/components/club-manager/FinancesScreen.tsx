@@ -3,14 +3,16 @@ import { TICKET_TIERS, gatePricePerFan, money, moneyIn } from '@/lib/clubManager
 import type { CareerState } from '@/lib/clubManager';
 import {
   CONCESSION_TIERS, booksOf, concessionPerFan, concessionReaction, projectFinances,
-  sponsorTable, ticketPerFan, ticketReaction,
+  readShirtSales, shirtPendingPence, sponsorTable, ticketPerFan, ticketReaction,
 } from '@/lib/clubManagerFinances';
 /* The one word about the fans anywhere on the game, the same one the header
    meter prints. This desk used to print a second one from its own stored
    number and the two disagreed on screen. */
 import { fanMeter } from '@/lib/clubManagerMeters';
 import { kittyChange } from '@/lib/clubManagerHubLines';
-import type { ConcessionTier, FinanceProjection, ProjectionLine } from '@/lib/clubManagerFinances';
+import type { ConcessionTier, FinanceProjection, ProjectionLine, ShirtSalesLedger } from '@/lib/clubManagerFinances';
+import { currencySymbol } from '@/lib/clubManagerStart';
+import { formatNumber } from '@/lib/formatNumber';
 
 /* ─── Round 467: the finances desk. ───
    The projection first, because it is the screen he asked for and it has to
@@ -41,20 +43,46 @@ function Row({ line, tone, fmt }: { line: ProjectionLine; tone: 'in' | 'out'; fm
         {line.label}
         {line.note && <span className="text-muted-foreground"> · {line.note}</span>}
       </td>
-      <td className="py-0.5 text-right tabular-nums text-muted-foreground">{fmt(line.actual)}</td>
-      <td className={cn('py-0.5 pl-2 text-right tabular-nums font-bold', tone === 'in' ? 'text-emerald-400' : 'text-foreground')}>{fmt(line.projected)}</td>
+      <td className="py-0.5 text-right tabular-nums text-muted-foreground">{line.unavailable ? 'Unavailable' : fmt(line.actual)}</td>
+      <td className={cn('py-0.5 pl-2 text-right tabular-nums font-bold', tone === 'in' ? 'text-emerald-400' : 'text-foreground')}>{line.unavailable || line.projectionUnavailable ? 'Unavailable' : fmt(line.projected)}</td>
     </tr>
   );
 }
 
 const BONUS_FOR: Record<string, string> = { title: 'winning the league', europe: 'reaching Europe', topHalf: 'a top half finish' };
 
+function ShirtTotals({ ledger, period, fmt }: { ledger: ShirtSalesLedger; period: 'current' | 'last'; fmt: (pence: number) => string }) {
+  const amounts: [string, string, number][] = [
+    ['gross', 'Gross sales', ledger.grossPence],
+    ['production', 'Production cost', ledger.costPence],
+    ['net', 'Net earned', ledger.grossPence - ledger.costPence],
+    ['paid', 'Paid to the kitty', ledger.paidPence],
+    ['pending', 'Pending net', shirtPendingPence(ledger)],
+  ];
+  if (ledger.openingPence > 0) amounts.push(['opening', 'Carried in', ledger.openingPence]);
+  return (
+    <dl data-shirt-totals={period} className="grid grid-cols-2 gap-x-3 gap-y-1 text-xs">
+      {amounts.map(([id, label, amount]) => (
+        <div key={id} data-shirt-amount={id} className="min-w-0">
+          <dt className="text-muted-foreground">{label}</dt>
+          <dd className="font-bold text-foreground tabular-nums break-words">{fmt(amount)}</dd>
+        </div>
+      ))}
+    </dl>
+  );
+}
+
 export function FinancesScreen({ career: c, onTickets, onConcessions, onSponsor, onPush }: FinancesScreenProps) {
   /* Round 514: the money symbol follows the start option. Shadowing the
      import here is one line instead of a career argument on every call. */
   const money = moneyIn(c);
   const books = booksOf(c);
+  const shirts = readShirtSales(books.season.shirts);
+  const lastShirts = books.lastSeason ? readShirtSales(books.lastSeason.shirts) : null;
+  const minor = (pence: number) => `${currencySymbol(c)}${formatNumber(Math.floor(pence / 100))}.${String(pence % 100).padStart(2, '0')}`;
   const p = projectFinances(c);
+  const incompleteIncome = p.income.some(line => line.unavailable || line.projectionUnavailable);
+  const shirtEstimateUnavailable = p.income.some(line => line.id === 'shirtSales' && line.projectionUnavailable);
   /* Round 1326 and Round 1328 joined: what the board covers and what that
      leaves the kitty. The kitty change is kittyChange, the one place the
      hub's Finances tile reads too, so the tile and this desk cannot
@@ -72,6 +100,7 @@ export function FinancesScreen({ career: c, onTickets, onConcessions, onSponsor,
   const bad = table.find(o => o.rep === 'bad');
   return (
     <div className="space-y-2">
+      <style hidden data-finance-scroll-anchor>{'html:has([data-finance-projection]) { overflow-anchor: none; }'}</style>
       {/* Round 467: the projection. */}
       <div className="bg-card border border-border rounded-xl p-3" data-finance-projection>
         <div className="flex items-baseline justify-between gap-2 mb-1">
@@ -89,7 +118,7 @@ export function FinancesScreen({ career: c, onTickets, onConcessions, onSponsor,
           <tbody>
             {p.income.map(l => <Row key={l.id} line={l} tone="in" fmt={money} />)}
             <tr className="border-t border-border" data-projection-total="income">
-              <td className="py-0.5 font-bold text-foreground">Income</td>
+              <td className="py-0.5 font-bold text-foreground">{incompleteIncome ? 'Income (known rows)' : 'Income'}</td>
               <td className="py-0.5 text-right tabular-nums text-muted-foreground">{money(p.incomeActual)}</td>
               <td className="py-0.5 pl-2 text-right tabular-nums font-bold text-emerald-400">{money(p.incomeProjected)}</td>
             </tr>
@@ -106,16 +135,44 @@ export function FinancesScreen({ career: c, onTickets, onConcessions, onSponsor,
               <td className="py-0.5 pl-2 text-right tabular-nums whitespace-nowrap text-muted-foreground">{signed(k.coverProjected)}</td>
             </tr>
             <tr className="border-t border-border" data-projection-total="kitty">
-              <td className="py-0.5 font-bold text-foreground">Kitty change</td>
+              <td className="py-0.5 font-bold text-foreground">{incompleteIncome ? 'Kitty change (known rows)' : 'Kitty change'}</td>
               <td className={cn('py-0.5 text-right tabular-nums whitespace-nowrap', k.kittyActual < 0 ? 'text-red-400' : 'text-emerald-400')}>{signed(k.kittyActual)}</td>
               <td className={cn('py-0.5 pl-2 text-right tabular-nums whitespace-nowrap font-bold', k.kittyProjected < 0 ? 'text-red-400' : 'text-emerald-400')}>{signed(k.kittyProjected)}</td>
             </tr>
           </tbody>
         </table>
         <p className="text-xs text-muted-foreground mt-1.5">
-          Tickets, food, the sponsor, deals, the builders and staff fees move the transfer kitty ({money(c.budget)} now). Wages and travel are the club's running costs: the board covers them and holds you to the wage ceiling on the contracts desk, so they never leave the kitty, and the kitty change adds them back. Not counted above, and they move the kitty too: a ground expansion, the academy, scout trips, promoted prospects, contract renewals, role settlements, loan recalls and broken loans, fines, the board's top ups and the decisions desk. {p.caveat}
+          Tickets, food, paid net shirt sales, the sponsor, deals, the builders and staff fees move the transfer kitty ({money(c.budget)} now). Wages and travel are the club's running costs: the board covers them and holds you to the wage ceiling on the contracts desk, so they never leave the kitty, and the kitty change adds them back. Not counted above, and they move the kitty too: a ground expansion, the academy, scout trips, promoted prospects, contract renewals, role settlements, loan recalls and broken loans, fines, the board's top ups and the decisions desk. {p.caveat}
           {p.possibleBonus > 0 && c.sponsor?.bonusFor ? ` A ${money(p.possibleBonus)} sponsor bonus pays at the summer for ${BONUS_FOR[c.sponsor.bonusFor]}, not counted until it is earned.` : ''}
         </p>
+      </div>
+
+      <div data-shirt-sales className="bg-card border border-border rounded-xl p-3 space-y-1.5">
+        <div className="text-xs text-muted-foreground uppercase tracking-wider">Shirt sales</div>
+        <p className="text-xs text-muted-foreground">Simulated sales use club stature and your shown fan meter. One receipt per club week, no extra midweek pay.</p>
+        {shirts ? (
+          <>
+            {books.season.shirts === undefined && <p className="text-xs text-muted-foreground">Older save: tracking starts with the next club week. No earlier shirt sales are added.</p>}
+            <ShirtTotals ledger={shirts} period="current" fmt={minor} />
+            {shirtEstimateUnavailable && <p data-shirt-projection-unavailable className="text-xs text-muted-foreground">Future shirt sales cannot be estimated safely. Current figures are shown; season totals use only known amounts.</p>}
+          </>
+        ) : (
+          <p data-shirt-current-unavailable className="text-xs text-muted-foreground">Shirt sales totals are unavailable in this save. Income and kitty totals above include only known rows, excluding unknown shirt income. The existing club books and transfer kitty stay as they are. New shirt sales are paused while this record is unavailable.</p>
+        )}
+        <p className="text-xs text-muted-foreground">Production is already deducted. Net pays the kitty in {minor(1_000_000)} batches; smaller amounts stay pending. Pending carries at this club and stays behind if you leave. Opening or loading never pays.</p>
+        <p className="text-xs text-muted-foreground">Example: earning {minor(600_000)} net a week over 2 weeks earns {minor(1_200_000)}: {minor(1_000_000)} paid and {minor(200_000)} pending. Season estimates use today's demand and the club weeks left.</p>
+        {books.lastSeason && (
+          <details className="text-xs text-muted-foreground">
+            <summary className="min-h-[44px] flex items-center cursor-pointer font-semibold text-foreground">Last season's shirt sales</summary>
+            {books.lastSeason.shirts === undefined ? (
+              <p data-shirt-last-status>Last season's shirt sales were not recorded in this save.</p>
+            ) : lastShirts ? (
+              <ShirtTotals ledger={lastShirts} period="last" fmt={minor} />
+            ) : (
+              <p data-shirt-last-status>Last season's shirt sales totals are unavailable in this save. That season's income and result include only known rows, excluding unknown shirt income.</p>
+            )}
+          </details>
+        )}
       </div>
 
       {/* Round 171's ticket policy, Round 467's food, and the reactions. */}

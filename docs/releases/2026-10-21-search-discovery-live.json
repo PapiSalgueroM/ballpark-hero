@@ -1,0 +1,499 @@
+{
+  "status": "LIVE_PRODUCT_VERIFIED_PUBLIC_READBACK_AND_INDEXNOW_ACCEPTED_OPERATORS_DOCS_RECORDED",
+  "round": 1444,
+  "date": "2026-10-21",
+  "productPublished": true,
+  "productPublicVerificationComplete": true,
+  "repositoryClosureWritten": true,
+  "mainOperatorDocsClosureHeld": false,
+  "qualified": {
+    "allSixArtifactRootRows": 171,
+    "generatedPatchBytes": 0,
+    "allSixJobsSuccess": true,
+    "effectiveFinalOutputControls": 4,
+    "browserFaults": 3,
+    "completeSourceOutputPaths": 219,
+    "caps": 14,
+    "pr": 363,
+    "browserPositives": 7,
+    "distFiles": 797,
+    "run": 39691108696,
+    "endHoldsAllZero": true,
+    "browserRestorations": 3,
+    "buildManifestRows": 88,
+    "readers": 18,
+    "generatedFilesBytes": 0,
+    "buildArtifact": 12389240256,
+    "zipSha256": "450d806d76040135e6ef70680a56a58f2c7390a7781da558dacf9b93f35874fb",
+    "zipBytes": 8215217,
+    "nestedBrowserRows": 9,
+    "merge": "58a0dac142980cdfb2135d3b2174a26cd5eeede3",
+    "source": "a94c1b397b720c297600bdc5a52c7daaba375757",
+    "artifacts": [
+      {
+        "id": 12389240256,
+        "name": "seo1444-build-39691108696-1",
+        "bytes": 8215217,
+        "sha256": "450d806d76040135e6ef70680a56a58f2c7390a7781da558dacf9b93f35874fb",
+        "head": "a94c1b397b720c297600bdc5a52c7daaba375757",
+        "expired": false
+      },
+      {
+        "id": 12388945700,
+        "name": "seo1444-baseline-simHomeCopy-39691108696-1",
+        "bytes": 28211,
+        "sha256": "9b5ab23bfdec7e37b5063eb8e20396330ea7b9e2b9605b779f23af66153e7f40",
+        "head": "a94c1b397b720c297600bdc5a52c7daaba375757",
+        "expired": false
+      },
+      {
+        "id": 12388597672,
+        "name": "seo1444-current-39691108696-1",
+        "bytes": 19659,
+        "sha256": "823628201c8cffcbf2dbe476d7ac9c83fc893b65ddf2c5b8cc7131749fbd21ba",
+        "head": "a94c1b397b720c297600bdc5a52c7daaba375757",
+        "expired": false
+      },
+      {
+        "id": 12388497798,
+        "name": "seo1444-baseline-simTrustCopy-39691108696-1",
+        "bytes": 23220,
+        "sha256": "a9df7595be9a8f27c16e288ffb887ce89c392617d28332d67c2da9d32b0d17c1",
+        "head": "a94c1b397b720c297600bdc5a52c7daaba375757",
+        "expired": false
+      },
+      {
+        "id": 12388328530,
+        "name": "seo1444-baseline-simNflGridPage-39691108696-1",
+        "bytes": 22438,
+        "sha256": "b058bb348aab1ec3b2eade021c60b32ba5f33e60a09a43cc6ecde3473428dc30",
+        "head": "a94c1b397b720c297600bdc5a52c7daaba375757",
+        "expired": false
+      },
+      {
+        "id": 12387824249,
+        "name": "seo1444-baseline-simNflGrid-39691108696-1",
+        "bytes": 22058,
+        "sha256": "ce5f99ac8c0bd100cbc61cf4bf6cfee28c986bfca13ada3045b33433da409ae6",
+        "head": "a94c1b397b720c297600bdc5a52c7daaba375757",
+        "expired": false
+      }
+    ],
+    "comparisonBase": "554a3b18641044ec5164bff9acab4d338237078c",
+    "finalWorkflowSha256": "767331e893ead0c733dc5bdb2a5075d30733e42997fc2bba924dd88da1fa9019",
+    "sourceOutputInventorySha256": "1bf73412adb5a4c9bf660ea11e208e066169238e2f829ce4ce1be8df4a4b7f06",
+    "distInventorySha256": "4e7247e924a70aa64d73392b334d70dcf869d6814062a5961092887c14747385"
+  },
+  "publication": {
+    "source": "529bc3c105b0d365d96961e72587bb7ab36a9a8d",
+    "deployment": "d8a5f804-b134-42a1-bd51-04926c0d184a",
+    "observedUtc": "2026-10-21T23:29:09Z",
+    "entry": "/assets/index-C5TTnBHb.js",
+    "qualifiedApplicationAndGeneratedSourceHeldByActualProperReader": true,
+    "wholeBinaryEquivalence": false,
+    "strict": {
+      "status": "ACTUAL_STRICT_ENTRY_DRIFT_FAILURE_ADMITTED_NOT_WAIVED",
+      "run": 39693963662,
+      "operator": "8927738e1c796f7c2e4d9c90e681b7851fc99d58",
+      "source": "529bc3c105b0d365d96961e72587bb7ab36a9a8d",
+      "deployment": "d8a5f804-b134-42a1-bd51-04926c0d184a",
+      "artifact": 12390126917,
+      "zipBytes": 24260844,
+      "zipSha256": "8efd87d6f7509e7503e209591aebb21883452600da81d497741eb212e06d1b35",
+      "rootManifestRows": 928,
+      "zipRegularFiles": 929,
+      "safeUniqueRegularZipNodes": true,
+      "nestedQualifiedManifestRows": 88,
+      "nestedBrowserManifestRows": 9,
+      "qualifiedDistRegularFiles": 797,
+      "tarRegularFiles": 797,
+      "completeAllHashBindings": true,
+      "failureMarker": "SEO_PUBLIC_ENTRY_DRIFT",
+      "expected": "/assets/index-DRbtYDL7.js",
+      "observed": "/assets/index-C5TTnBHb.js",
+      "actualAssertionError": true,
+      "readbackExit": 1,
+      "finalHoldsExit": 0,
+      "complete": false,
+      "networkRequests": 11,
+      "responseHeaderRows": 22,
+      "responseHeaderRowsPairwiseDuplicated": true,
+      "all11NetworkRequestsFixedOriginGetHead": true,
+      "all22HeaderReceiptsSameExpectedDeployment": true,
+      "fetchedStaticAndBootstrapMatchQualifiedBytes": true,
+      "assetsFetched": 0,
+      "ownEntryURLControls": 4,
+      "headerControls": 3,
+      "forbiddenTargetControls": 6,
+      "laterGuideAndAssetControlsNotReached": true,
+      "auditSkipped": true,
+      "sourceAndGeneratedHoldsEmpty": true
+    }
+  },
+  "intake": {
+    "status": "ACTUAL_BOUNDED_INTAKE_ADMITTED",
+    "run": 39695080560,
+    "operator": "553c58e6bc956a1bede85b1fc7f9971fa16efa1a",
+    "source": "529bc3c105b0d365d96961e72587bb7ab36a9a8d",
+    "deployment": "d8a5f804-b134-42a1-bd51-04926c0d184a",
+    "artifact": 12390550388,
+    "zipBytes": 73023255,
+    "zipSha256": "818f20193b108b1c0fc41d82dffbda1fa22e4b67b33f893fbdcb80f95cbccefe",
+    "rootManifestRows": 1868,
+    "zipRegularFiles": 1869,
+    "nestedManifests": [
+      {
+        "path": "qualified",
+        "rows": 88
+      },
+      {
+        "path": "qualified/browser",
+        "rows": 9
+      },
+      {
+        "path": "prior",
+        "rows": 928
+      },
+      {
+        "path": "prior/qualified",
+        "rows": 88
+      },
+      {
+        "path": "prior/qualified/browser",
+        "rows": 9
+      }
+    ],
+    "allRootNestedZipHashBindingsExact": true,
+    "qualifiedDistFiles": 797,
+    "tarRegularFiles": 797,
+    "allDistHashesExact": true,
+    "networkRequests": 15,
+    "responseHeaderRows": 30,
+    "headerReceiptsPairwiseDuplicated": true,
+    "allRequestsFixedOriginGetHead": true,
+    "allRequiredHeadersSameDeployment": true,
+    "readbackExit": 0,
+    "finalHoldsExit": 0,
+    "sourceGeneratedHoldsEmpty": true,
+    "diagnosticOnly": true,
+    "assets": 4,
+    "observedPinsBytes": 375,
+    "observedPinsSha256": "37d1d224b42b846664900faf65175051dad31729096d8e6f071be294e26e3a1a",
+    "observedPins": {
+      "Index": {
+        "path": "/assets/index-C5TTnBHb.js",
+        "sha256": "cb532b797946ae2102ddc6305517a9a21668b1c2ebbbadecc651feda4a500fcb"
+      },
+      "entry": {
+        "path": "/assets/index-C5TTnBHb.js",
+        "sha256": "cb532b797946ae2102ddc6305517a9a21668b1c2ebbbadecc651feda4a500fcb"
+      },
+      "footballGuide": {
+        "path": "/assets/football-DwCm5RIA.js",
+        "sha256": "596d51d0c3a45c99fb3cbed104e73f94ae437bd7df5df9b730828dfdaae5735c"
+      }
+    },
+    "actualObservedImportChainTextConfirmed": true,
+    "compiledDescriptorSubstringsPresent": true,
+    "guideRoleWholeBytesEqualQualifiedCI": true,
+    "controls": {
+      "header": 3,
+      "forbiddenTargets": 6,
+      "entryURL": 4,
+      "changedGuide": 1,
+      "changedAsset": 1
+    },
+    "guideWholeInverseExact": true,
+    "strictFailureRetained": true,
+    "wholeBinaryEquivalence": false
+  },
+  "properReadback": {
+    "status": "PROPER_PUBLIC_READBACK_ADMITTED",
+    "run": 39695657018,
+    "operator": "27ab2c9ca7e76bffd5c5a823a355e4021ad95a98",
+    "source": "529bc3c105b0d365d96961e72587bb7ab36a9a8d",
+    "qualified": "a94c1b397b720c297600bdc5a52c7daaba375757",
+    "deployment": "d8a5f804-b134-42a1-bd51-04926c0d184a",
+    "artifact": 12391060713,
+    "zipBytes": 170474006,
+    "zipSha256": "28622f49b0c0cdd7fd889db4d16d0700401dcba68b41c379c8ba1b035942a65a",
+    "rootManifestRows": 2808,
+    "zipRegularFiles": 2809,
+    "nestedManifests": [
+      {
+        "path": "prior",
+        "rows": 1868
+      },
+      {
+        "path": "prior/prior",
+        "rows": 928
+      },
+      {
+        "path": "prior/prior/qualified",
+        "rows": 88
+      },
+      {
+        "path": "prior/prior/qualified/browser",
+        "rows": 9
+      },
+      {
+        "path": "prior/qualified",
+        "rows": 88
+      },
+      {
+        "path": "prior/qualified/browser",
+        "rows": 9
+      },
+      {
+        "path": "qualified",
+        "rows": 88
+      },
+      {
+        "path": "qualified/browser",
+        "rows": 9
+      }
+    ],
+    "allRootNestedZipHashBindingsExact": true,
+    "qualifiedDistFiles": 797,
+    "tarRegularFiles": 797,
+    "allDistHashesExact": true,
+    "rawPages": [
+      {
+        "route": "/",
+        "bytes": 43472,
+        "sha256": "e03343e687c77492e8bc1e72c138c19aa735103d735a7f37d1266ff63123e738",
+        "canonical": "https://douknowball.com/",
+        "descriptions": 1
+      },
+      {
+        "route": "/football-grid",
+        "bytes": 35419,
+        "sha256": "12811812250beb167f96858bfde562949a8339a53a3c7cb799498bd12ecd8947",
+        "canonical": "https://douknowball.com/football-grid",
+        "descriptions": 1
+      }
+    ],
+    "fixedStaticFilesMatchSource": true,
+    "bootstrapMatchesSource": true,
+    "assets": [
+      {
+        "path": "/assets/index-C5TTnBHb.js",
+        "sha256": "cb532b797946ae2102ddc6305517a9a21668b1c2ebbbadecc651feda4a500fcb"
+      },
+      {
+        "path": "/assets/football-DwCm5RIA.js",
+        "sha256": "596d51d0c3a45c99fb3cbed104e73f94ae437bd7df5df9b730828dfdaae5735c"
+      }
+    ],
+    "threeRolesExact": true,
+    "entryIndexAlias": true,
+    "operatorRequests": 13,
+    "auditRequests": 54,
+    "networkRequests": 67,
+    "requestBudget": 68,
+    "exactExpectedRequestSequence": true,
+    "responseHeaderRows": 134,
+    "headerReceiptsPairwiseDuplicated": true,
+    "all67NetworkResponses200": true,
+    "allRequiredHeadersSameDeployment": true,
+    "allRequestsFixedOriginGetHead": true,
+    "backendVendorBrowserRequests": 0,
+    "readbackExit": 0,
+    "finalHoldsExit": 0,
+    "sourceGeneratedHoldsEmpty": true,
+    "auditExit": 0,
+    "auditNormalClean": 2,
+    "auditTargets": 2,
+    "chromeSample": 24,
+    "sharedChrome": 1073,
+    "thinBar": 1502,
+    "thinExit": 1,
+    "thinClean": 1,
+    "thinRejected": 1,
+    "thinHealthyGuideLength": 6945,
+    "thinPlantedLength": 1073,
+    "controls": {
+      "header": 3,
+      "forbiddenTargets": 6,
+      "entryURL": 4,
+      "changedGuide": 1,
+      "changedAsset": 1,
+      "thin": 1
+    },
+    "guideWholeInverseExact": true,
+    "compiledChecksScope": "Exact pinned bytes and bounded substring role checks with qualified source/browser evidence, not renderer or whole-binary equivalence",
+    "strictFailureRetained": true,
+    "wholeBinaryEquivalence": false,
+    "dashboardAndGSCAccountUnverified": true
+  },
+  "observedRolePins": {
+    "serializedBytes": 375,
+    "serializedSha256": "37d1d224b42b846664900faf65175051dad31729096d8e6f071be294e26e3a1a",
+    "pins": {
+      "Index": {
+        "path": "/assets/index-C5TTnBHb.js",
+        "sha256": "cb532b797946ae2102ddc6305517a9a21668b1c2ebbbadecc651feda4a500fcb"
+      },
+      "entry": {
+        "path": "/assets/index-C5TTnBHb.js",
+        "sha256": "cb532b797946ae2102ddc6305517a9a21668b1c2ebbbadecc651feda4a500fcb"
+      },
+      "footballGuide": {
+        "path": "/assets/football-DwCm5RIA.js",
+        "sha256": "596d51d0c3a45c99fb3cbed104e73f94ae437bd7df5df9b730828dfdaae5735c"
+      }
+    },
+    "entryAndIndexAlias": true,
+    "roleFiles": 2,
+    "roles": 3
+  },
+  "indexNow": {
+    "status": "ACTUAL_INDEXNOW_HTTP200_ACCEPTANCE_ADMITTED",
+    "run": 39697351266,
+    "operator": "03cee4f8474fe846c88bc8bef87a50ee5592466a",
+    "workflowName": "Index verified SEO1444 pages",
+    "workflowBytes": 2910,
+    "workflowSha256": "f6c8db2747242f4cd694a9a431ad39c1933b3776845ee5a1059d0fff888c3ab5",
+    "actualCommittedWorkflowFetchedAtExactHeadAndEqualsCandidate": true,
+    "requiredProperRun": 39695657018,
+    "requiredProperOperator": "27ab2c9ca7e76bffd5c5a823a355e4021ad95a98",
+    "actualProperPrerequisiteTSVVerified": true,
+    "publishedSource": "529bc3c105b0d365d96961e72587bb7ab36a9a8d",
+    "artifact": 12391502150,
+    "zipBytes": 2337,
+    "zipSha256": "76607152c63af8b961ac774daa4951f4c5130cea98cc32e78b33a70aac039fac",
+    "rootManifestRows": 9,
+    "regularZipFiles": 10,
+    "allManifestHashesExact": true,
+    "safeUniqueRegularZipNodes": true,
+    "artifactRootManifestSha256": "ffb674cb9bccd330129d4483862062a49f05cf3dadafdd7932498187481e6881",
+    "actualSubmitExit": 0,
+    "actualURLCount": 2,
+    "workflowURLS": "/,/football-grid",
+    "urlScope": [
+      "https://douknowball.com/",
+      "https://douknowball.com/football-grid"
+    ],
+    "actualKeyPreflightLogged": true,
+    "actualAcceptedHTTP": 200,
+    "submitScriptSha256": "b2bea64932bb38d764c6dd84a897dfa603338fa42e9756bcc512ae5f5fec62d6",
+    "publicKeyFileSha256": "c42c3c91e0aee24ae111f71483a082a99c0289ef43c7d1c3fa5c925b5d1529a3",
+    "scriptKeyBeforeAfterFinalHeld": true,
+    "sourceDiffZeroBytes": true,
+    "separatePayloadCapture": false,
+    "URLScopeEvidence": "Exact committed workflow URLS literal, held operational script mapping and actual two-URL count. No separate payload capture inferred.",
+    "indexingOrRankingGuaranteed": false,
+    "strictBinaryFailureUnwaived": true,
+    "dashboardAndGSCAccountUnverified": true
+  },
+  "retainedFailures": [
+    {
+      "run": 39667758349,
+      "scope": "First Green proof failures, including HomeCopy anchor and browser expectations",
+      "status": "FAILED_RETAINED"
+    },
+    {
+      "run": 39669595699,
+      "scope": "Second Green ambiguous readiness and ineffective moving-viewport overflow control",
+      "status": "FAILED_RETAINED"
+    },
+    {
+      "run": 39693963662,
+      "scope": "Strict public entry differs from qualified CI entry",
+      "status": "FAILED_RETAINED_NOT_WAIVED"
+    }
+  ],
+  "initialGeneratedRuns": {
+    "originalExpectedRED": 39664392357,
+    "initialGreen": 39672164076,
+    "initialGeneratedPatchBytes": 31576,
+    "integratedRegeneration": 39688732949,
+    "integratedGeneratedPatchBytes": 726,
+    "finalFixedPointRun": 39691108696,
+    "finalGeneratedPatchBytes": 0,
+    "finalGeneratedFilesBytes": 0,
+    "oldNonzeroArtifactsPreserved": true
+  },
+  "shirtQualification": {
+    "source": "a95cdd9f68fa25a5345ac2370a94ed8730e3a0ec",
+    "run": 39696453260,
+    "allSevenJobsSuccess": true,
+    "generatedPatchBytes": 0,
+    "generatedFilesBytes": 0,
+    "pullRequest": 361,
+    "merge": "b0feca59983a6946142ca29f20f16f1ba1540f6c",
+    "qualifiedToMergeWorkboardLinesReportedByRoot": 12,
+    "applicationAndGeneratedBytesHeldReportedByRoot": true,
+    "closureMergeCleanReportedByRoot": true,
+    "closureProductDiffVsMergedShirtBytesReportedByRoot": 0,
+    "published": false,
+    "publicReadbackComplete": false,
+    "publicationPending": true,
+    "publicProofPending": true,
+    "qualificationReceipt": {
+      "file": "shirt1443-final-39696453260-all-seven-admission.json",
+      "bytes": 6656,
+      "sha256": "ae590cf9f1b441719f09a80047b6ada3c16781285aad20a2ad5e27394312d9ad"
+    }
+  },
+  "closureOrder": [
+    "Shirt final run39696453260 passed all seven jobs and fixed-point checks; PR361 merged b0feca59983a6946142ca29f20f16f1ba1540f6c.",
+    "SEO operators/docs closure is recorded after that merge and before shirt publication.",
+    "Shirt publication and public proof remain pending at this record.",
+    "Preserve existing complete PROJECT-STATE prefix/history when prepending and append WORKBOARD only.",
+    "Operators/docs closure needs no product republish."
+  ],
+  "openLimits": [
+    "All earlier failed runs remain failed and retained; diagnostic intake does not waive strict entry drift.",
+    "Whole CI/hosting binary equivalence and the cause of differing whole bundles remain unproved.",
+    "Compiled descriptor/guide checks are bounded substring role checks at exact pinned bytes, with qualified source/browser evidence, not a renderer/AST equivalence proof.",
+    "No separate IndexNow payload capture is inferred; URL scope rests on exact committed workflow, held script mapping and actual two-URL log.",
+    "IndexNow HTTP200 is acceptance, not crawling, indexing, ranking or traffic improvement.",
+    "Current GSC account verification and Lovable dashboard scan status remain unverified. No sitemap workaround or informative-alt defect/repair is claimed.",
+    "Google Analytics remains paused under the separate1445 release; this SEO release changes no tracking readiness or loader.",
+    "The broader785-harness audit and older1441 missing-folder preservation blocker remain open and unwaived.",
+    "IndexNow retains its inherited directory/package source guard; it adds no independent root-index/build-config equality assertion.",
+    "Only scoped checks are credited. No backend, real account, user-data, sports-data or full game-suite audit is implied."
+  ],
+  "evidenceSupports": [
+    {
+      "file": "seo1444-review-39691108696/classification.json",
+      "bytes": 1088,
+      "sha256": "628b31064577c0fd414fdb15b616d063f2f29e2d4113acd5b987d6b3c592b548"
+    },
+    {
+      "file": "seo1444-review-39691108696/admission-review.md",
+      "bytes": 8079,
+      "sha256": "7a6aed7a797753d10ccaa2b97d45f2c6de213ce56fcb82f7474cf2507b59ccb8"
+    },
+    {
+      "file": "seo1444-public-strict-39693963662-admission.json",
+      "bytes": 1722,
+      "sha256": "50fb2b022093412533485bbf1fbe0d17dd22496a7d0c4739b3b0d7fa5ded76e2"
+    },
+    {
+      "file": "seo1444-public-intake-39695080560-admission.json",
+      "bytes": 2418,
+      "sha256": "6174e2d5c061beece523cbe89e81be17f3aeb132602fc84da6c0f55af42e8185"
+    },
+    {
+      "file": "seo1444-public-proper-39695657018-admission.json",
+      "bytes": 3763,
+      "sha256": "ae94e58dcdcdd2155ef63202803ee2a644c34527631a934158ff580a0b605fc2"
+    },
+    {
+      "file": "seo1444-indexnow-39697351266-admission.json",
+      "bytes": 1886,
+      "sha256": "c2a420050f191942a3a8e942e7b35e78d3acac4eaa33920359487c5ebe7efdea"
+    }
+  ],
+  "evidenceAuthoring": {
+    "mode": "Native source text, hashes, JSON, ZIP/TAR and actual remote workflow artifacts",
+    "repositoryWrites": 0,
+    "localAppParserRuntime": false,
+    "additionalPublicProbeOrSubmission": false,
+    "workflowTriggerRetryCancel": false,
+    "allActualEvidenceBound": true,
+    "placeholders": 0
+  }
+}
