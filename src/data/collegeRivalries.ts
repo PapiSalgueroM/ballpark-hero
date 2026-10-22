@@ -53,7 +53,7 @@ export const CFB_RIVALRY_SERIES: RivalrySeries[] = [
   { a: 'CLEM', b: 'SCAR', name: 'the Palmetto Bowl' },
   // sources: https://abc7.com/15570925
   //          https://www.nbclosangeles.com/news/sports/usc-ucla-football-rivalry-game/3567219
-  { a: 'USC', b: 'UCLA', name: 'the Victory Bell game' },
+  { a: 'USC', b: 'UCLA' },
   // sources: https://huskers.com/news/2016/11/21/huskers-hawkeyes-battle-for-heroes-trophy-on-abc
   //          https://lastwordonsports.com/collegefootball/2022/11/23/heroes-game-two-trophies-on-the-line-iowa/
   { a: 'IOWA', b: 'NEB', name: 'the Heroes Game' },
