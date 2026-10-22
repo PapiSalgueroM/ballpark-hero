@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+walk: node scripts/playUsShopPromises.mjs
+walk-jump: PLAY_SHOP_CONTROL=jump node scripts/playUsShopPromises.mjs
