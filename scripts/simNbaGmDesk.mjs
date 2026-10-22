@@ -162,7 +162,7 @@
  * at no rival club". Traced on runner r1540-f3-a with debug prints: the desk's
  * summer (gmContracts.ts runDeskOffseason, Round 1018) puts him on the club
  * written down, which the draft after the decision has taken over fifteen
- * (every arrival logged landed on a roster of 17 with him); the engine's
+ * (every arrival logged landed on a roster of 16 or 17 with him); the engine's
  * summer (nbaFrontOffice.ts, Round 722) waives a club above fifteen by its
  * lowest rated man, who was he (a one season second rounder at his ceiling,
  * 66 and 67); and the pool keeps its best 30 only, so he left the league. The
