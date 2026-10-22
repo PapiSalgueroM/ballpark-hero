@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+simVictoryMoment: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simVictoryMoment.mjs
+seasonReview: node scripts/qa/tycoonSeasonReview1095.mjs --prefetch-assets-only && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonSeasonReview.mjs
