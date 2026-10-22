@@ -1,0 +1,7 @@
+served e2e84aed on 4175: 200
+/tmp/wt-e2e84aed/dist
+   /nba-front-office   380K gz over  38 files (budget 9999K, 379.8K to the tenth)
+   /club-manager       633K gz over  42 files (budget 634K, 632.8K to the tenth)
+   /soccer-career      838K gz over  50 files (budget 837K, 837.5K to the tenth)
+   /stadium-tycoon     303K gz over  25 files (budget 304K, 303.4K to the tenth)
+weightProbe: measured /nba-front-office (rows added: 1), sweep exit 1

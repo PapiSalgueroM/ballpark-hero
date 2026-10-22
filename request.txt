@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+weight-head: WEIGHT_PROBE_ROUTES=/nba-front-office node .rc/x/weightProbe.mjs
+weight-base1537: bash .rc/x/basesrv1535.sh e2e84aed 4175 && H=$PWD && cd /tmp/wt-e2e84aed && BASE=http://localhost:4175 WEIGHT_PROBE_ROUTES=/nba-front-office node $H/.rc/x/weightProbe.mjs
+saleReview-alone: node scripts/playTycoonSaleReview1083.mjs --prefetch-fonts-only && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" PORT=4193 ONLY=playTycoonSaleReview1083 node scripts/runAllSims.mjs --browser
