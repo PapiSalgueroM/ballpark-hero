@@ -1,0 +1,1 @@
+base-tworolls: git worktree add /tmp/bt bac65fb0b && ln -s "$PWD/node_modules" /tmp/bt/node_modules && X="$PWD/.rc/x/mut1543.mjs" && cd /tmp/bt && node "$X" tworolls && NODE_OPTIONS="--require=/tmp/bt/scripts/lib/offlineTransport.cjs" node scripts/simTycoonScorelines.mjs
