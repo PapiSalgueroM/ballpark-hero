@@ -1,0 +1,30 @@
+#!serve
+#!playwright
+pf1: PLAYFIRST_SHARD=1/3 node scripts/playFirstVisitDialogs.mjs
+pf2: PLAYFIRST_SHARD=2/3 node scripts/playFirstVisitDialogs.mjs
+pf3: PLAYFIRST_SHARD=3/3 node scripts/playFirstVisitDialogs.mjs
+pf-cover: ONLY=/stadium-tycoon,/idle-arena,/wonderkid-factory,/footle,/build-your-xi PLAYFIRST_CONTROL=cover node scripts/playFirstVisitDialogs.mjs
+pf-ratchet: ONLY=/stadium-tycoon,/idle-arena,/footle,/club-manager PLAYFIRST_CONTROL=ratchet node scripts/playFirstVisitDialogs.mjs
+pf-abort: ONLY=/club-manager PLAYFIRST_CONTROL=cover node scripts/playFirstVisitDialogs.mjs
+pf-expected: ONLY=/stadium-tycoon,/idle-arena,/wonderkid-factory,/build-your-xi,/soccer-conquest,/career-ladder,/football-grid,/club-manager PLAYFIRST_CONTROL=expected node scripts/playFirstVisitDialogs.mjs
+pf-edge: ONLY=/stadium-tycoon,/idle-arena,/wonderkid-factory,/build-your-xi,/soccer-conquest,/career-ladder,/football-grid,/club-manager PLAYFIRST_CONTROL=edge node scripts/playFirstVisitDialogs.mjs
+pf-lift: ONLY=/stadium-tycoon,/idle-arena,/wonderkid-factory,/build-your-xi,/soccer-conquest,/career-ladder,/football-grid,/club-manager PLAYFIRST_CONTROL=lift node scripts/playFirstVisitDialogs.mjs
+pf-nobanner: ONLY=/stadium-tycoon,/idle-arena,/wonderkid-factory,/build-your-xi,/soccer-conquest,/career-ladder,/football-grid,/club-manager PLAYFIRST_CONTROL=nobanner node scripts/playFirstVisitDialogs.mjs
+pf-stale: ONLY=/stadium-tycoon PLAYFIRST_CONTROL=stale node scripts/playFirstVisitDialogs.mjs
+pf-jump: ONLY=/stadium-tycoon PLAYFIRST_CONTROL=jump node scripts/playFirstVisitDialogs.mjs
+pf-staleabort: ONLY=/club-manager PLAYFIRST_CONTROL=stale node scripts/playFirstVisitDialogs.mjs
+walk: node scripts/playTycoonScorelines.mjs
+walk-crowd-must-be-red: PLAY_SCORELINES_CONTROL=crowd node scripts/playTycoonScorelines.mjs
+playLeagueTableFit: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" PORT=4181 ONLY=playLeagueTableFit node scripts/runAllSims.mjs --browser
+playTycoonSetPieceFit: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" PORT=4182 ONLY=playTycoonSetPieceFit node scripts/runAllSims.mjs --browser
+playFirstTeamFit: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" PORT=4183 ONLY=playFirstTeamFit node scripts/runAllSims.mjs --browser
+playTycoonGearFit: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" PORT=4184 ONLY=playTycoonGearFit node scripts/runAllSims.mjs --browser
+simTycoonGoalFlight: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" PORT=4186 ONLY=simTycoonGoalFlight node scripts/runAllSims.mjs --browser
+simSetPiecePresentation: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" PORT=4187 ONLY=simSetPiecePresentation node scripts/runAllSims.mjs --browser
+playHomeFold: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" PORT=4188 ONLY=playHomeFold node scripts/runAllSims.mjs --browser
+checkTycoonGroundGrowth: node scripts/qa/tycoonGroundGrowth1094.mjs --prefetch-assets-only && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/checkTycoonGroundGrowth.mjs
+qaFreeKickRange: node scripts/qa/freeKickRange1091.mjs --prefetch-assets-only && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/freeKickRange1091.mjs
+saleReview: node scripts/playTycoonSaleReview1083.mjs --prefetch-fonts-only && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" PORT=4193 ONLY=playTycoonSaleReview1083 node scripts/runAllSims.mjs --browser
+simResultMoment: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simResultMoment.mjs
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+weight-base: git worktree add /tmp/base 268e3b97 >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && node_modules/.bin/vite build > /tmp/base-build.log 2>&1) && (node scripts/lib/hostLikeServer.mjs /tmp/base/dist 4174 > /tmp/base-server.log 2>&1 &) && sleep 4 && cd /tmp/base && BASE=http://localhost:4174 SWEEP_BASE=http://localhost:4174 SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
