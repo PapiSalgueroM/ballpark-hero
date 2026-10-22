@@ -17,7 +17,9 @@
  *      written down on his decision, even on a copy where the draft filled
  *      every rival roster before the summer. A first
  *      round pick drafted with the desk on comes up after exactly the rookie
- *      scale's four seasons, a second rounder after the engine's three, and
+ *      scale's four seasons, a second rounder after his first deal (the
+ *      engine's three on a draft opened the old way, NBA_SECOND_ROUND_SEASONS
+ *      on the earned night, Round 1540), and
  *      every one of them comes up restricted, with any sheet inside the
  *      league's limits (no picks, his maximum, four seasons)
  *   3  no trade lands after the deadline, and deals do land before it; the
@@ -139,20 +141,33 @@
  *                          111 / 89 / 93 after exactly NBA_SECOND_ROUND_SEASONS (one)
  *   restricted cases       171 / 149 / 152, sheets 26 / 18 / 17 (matched 7 / 4 / 6, gone to the
  *                          club written down on its terms 7 / 4 / 5; full draft copies 7 / 4 / 5)
- * Three floors in T were measured on the old desk and fail here: minSheets 34,
- * minSheetGone 11 and minSheetFull 11. STOP FOR THE LEAD (critic 1540
- * correction 10 c, the lead's ruling item 4): never re-banded by a builder.
- * On fresh streams (copies under other names, SIM_SEED 1..9) sheets ran 13 to
- * 27, gone and full draft copies 3 to 10, so 70 percent of the lowest would be
- * 9, 2 and 2. Twice
- * in about 40 runs check 2 also failed on its own assertion, a man let go on a
- * sheet "is at no rival club" (SIM_SEED 6 seed 10 season 2; the noinjhook
- * control's stream, seed 3 season 4): he was neither at the club written down
- * nor in the pool after the summer, and the club ended it at fifteen with its
- * lowest man at 68, so its summer waiver of the lowest man is the likely cause
- * (not traced further). Control fullbird (full Bird rights asked again) fires
- * 115 failures in check 2 alone on set 1, every one "is not restricted", with
- * 60 restricted cases and 6 sheets: the numbers before the ruling.
+ * Three floors in T were measured on the old desk and failed here: minSheets
+ * 34, minSheetGone 11 and minSheetFull 11 (the GM picked first in every round
+ * there, so his men drew more sheets).
+ * THE LEAD'S SECOND RULING ON ROUND 1540 (2026-10-22 10:45 EDT, item 6): those
+ * three are existence floors (the sheet machinery works), so they are re-banded
+ * from measured headroom on the earned night: half the smallest calibration
+ * set, rounded down, never below 1, and a held out set must clear every floor.
+ * Calibration sets 1..10 / 11..20 / 21..30 (runner r1540-f3-c, head 923fbfbe,
+ * this file's own name): sheets 26 / 18 / 17, gone to the club written down
+ * 7 / 4 / 5, full draft copies 7 / 4 / 5. So minSheets 8 (old desk 34),
+ * minSheetGone 2 (old desk 11), minSheetFull 2 (old desk 11); check 2 prints
+ * the old floors beside the new ones. Held out set 31..40 (same runner): 23
+ * sheets, 7 gone, 7 full draft copies, every floor cleared. Fresh streams
+ * (SIM_SEED 1..29, runners r1540-rule-g and r1540-f3-b): sheets 13 to 27, gone
+ * and full draft copies 3 to 9, every one over the floors. No other floor moved.
+ * THE VANISHING SHEET MAN (item 7), held for the lead: on 2 of those 29 fresh
+ * streams (SIM_SEED 6 seed 10 season 2, SIM_SEED 10) and on the noinjhook
+ * control's stream, check 2's own assertion fails: a man let go on a sheet "is
+ * at no rival club". Traced on runner r1540-f3-a with debug prints: the desk's
+ * summer (gmContracts.ts runDeskOffseason, Round 1018) puts him on the club
+ * written down, which the draft after the decision has taken over fifteen
+ * (every arrival logged landed on a roster of 17 with him); the engine's
+ * summer (nbaFrontOffice.ts, Round 722) waives a club above fifteen by its
+ * lowest rated man, who was he (a one season second rounder at his ceiling,
+ * 66 and 67); and the pool keeps its best 30 only, so he left the league. The
+ * old desk on 30 fresh streams (531 men let go on a sheet) never lost
+ * one. The cause is older code outside this round, so it is not fixed here.
  */
 import './lib/seedRandom.mjs';
 import fs from 'node:fs';
@@ -184,12 +199,15 @@ if (CONTROL && !CONTROLS[CONTROL]) {
 const SEEDS = (process.env.SIM_NBA_GM_DESK_SEEDS || '1,2,3,4,5,6,7,8,9,10').split(',').map(Number);
 const SEASONS = Number(process.env.SIM_NBA_GM_DESK_SEASONS || 10);
 
-/* Floors: the measured size of each walk, see MEASURED in the header. */
+/* Floors: the measured size of each walk, see MEASURED in the header. The three sheet floors are existence floors
+   re-banded for the earned night by the lead's second ruling on Round 1540 (half the smallest calibration set);
+   OLD_SHEET_FLOORS are the ones measured on the old desk, printed beside them. */
 const T = {
   minDecisions: 288, minGm: 160, minAuto: 126, minEarlyDeals: 163, minLateTries: 490, minPickMoves: 162,
-  minScaleUp: 42, minSecondUp: 44, minRestricted: 86, minSheets: 34, minSheetGone: 11,
-  minOldDeals: 42, minSheetFull: 11,
+  minScaleUp: 42, minSecondUp: 44, minRestricted: 86, minSheets: 8, minSheetGone: 2,
+  minOldDeals: 42, minSheetFull: 2,
 };
+const OLD_SHEET_FLOORS = { minSheets: 34, minSheetGone: 11, minSheetFull: 11 };
 
 function modulesDir() {
   let d = ROOT;
@@ -779,6 +797,7 @@ if (stats.sheets < T.minSheets) fail(`only ${stats.sheets} offer sheets, floor $
 if (stats.sheetGone < T.minSheetGone) fail(`only ${stats.sheetGone} men left on a sheet and found at the rival, floor ${T.minSheetGone}`);
 if (stats.sheetFull < T.minSheetFull) fail(`only ${stats.sheetFull} sheets let stand reached their club after a draft that filled every roster, floor ${T.minSheetFull}`);
 console.log(`   ${stats.sheetFull} sheets let stand still reached the club written down after a draft that filled every rival roster`);
+console.log(`   sheet floors on the earned night (the lead's ruling, 2026-10-22): sheets ${T.minSheets} (old desk ${OLD_SHEET_FLOORS.minSheets}), gone to the rival ${T.minSheetGone} (old desk ${OLD_SHEET_FLOORS.minSheetGone}), full draft copies ${T.minSheetFull} (old desk ${OLD_SHEET_FLOORS.minSheetFull})`);
 console.log(`   ${stats.applyChecks} expiring men: ${stats.gm} decided by the GM, ${stats.auto} by the staff's rule`);
 console.log(`   draftees up: ${stats.scaleUp} first rounders after the rookie scale, ${stats.secondUp} second rounders; ${stats.restricted} restricted cases, ${stats.sheets} sheets (${stats.sheetMatched} matched, ${stats.sheetGone} gone to the rival on its terms)`);
 
