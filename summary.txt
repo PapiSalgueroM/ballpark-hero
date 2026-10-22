@@ -1,0 +1,9 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simTycoonHelp exit=0 20s |    All 25 controls fired exactly where they should.
+guideHeadings exit=0 1s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+walk-crowd exit=1 39s | playTycoonScorelines (control crowd): 2 failures
+walk exit=1 39s | playTycoonScorelines: 2 failures
+vitest exit=0 9s |    Duration  8.41s (transform 1.93s, setup 448ms, collect 4.35s, tests 11.96s, environment 2.29s, prepare 739ms)
+simSiteSearch exit=0 2s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+sweepWeight exit=0 29s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+tsc exit=0 67s | 
