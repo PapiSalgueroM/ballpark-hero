@@ -1,0 +1,9 @@
+ctl-knockflip exit=1 8s | simCareerIntl: control knockflip FIRED (section 5, 21 failures)
+s5 exit=0 10s | simCareerIntl: GREEN, 180087 checks over sections 5
+ctl-knockage exit=1 8s | simCareerIntl: control knockage FIRED (section 5, 7 failures)
+ctl-nolift exit=1 9s | simCareerIntl: control nolift FIRED (section 5, 51 failures)
+unit exit=0 5s |    Duration  4.45s (transform 1.98s, setup 175ms, collect 2.60s, tests 3.34s, environment 938ms, prepare 518ms)
+s8 exit=0 2s | simCareerIntl: GREEN, 7 checks over sections 8
+tsc exit=0 110s | 
+s1 exit=0 127s | simCareerIntl: GREEN, 23672 checks over sections 1,2,3,4,6
+s7 exit=0 396s | simCareerIntl: GREEN, 2973 checks over sections 7
