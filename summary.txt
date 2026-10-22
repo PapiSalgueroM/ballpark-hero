@@ -1,0 +1,3 @@
+bundle exit=1 0s | simLiveSimMotion: RED. The bundle section found 1 problem.
+motion exit=1 2s |    Duration  1.16s (transform 50ms, setup 101ms, collect 0ms, tests 0ms, environment 469ms, prepare 249ms)
+tsc exit=2 6s | src/test/liveSimMotion.test.tsx(1119,3): error TS1434: Unexpected keyword or identifier.

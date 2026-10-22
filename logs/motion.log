@@ -1,0 +1,33 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+
+[31m⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Suites 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/liveSimMotion.test.tsx[2m [ src/test/liveSimMotion.test.tsx ][22m
+[31m[1mError[22m:   x Expected ';', '}' or <eof>
+      ,-[/home/runner/work/ballpark-hero/ballpark-hero/src/test/liveSimMotion.test.tsx:1115:1]
+ 1112 |     if (!deep.line || deep.side !== beat.side || LINE_RANK[deep.line] >= LINE_RANK[feed.line]) t.chainOffenders++;
+ 1113 |   });
+ 1114 | }
+ 1115 |   { seed: 110102, club: 'Real Madrid', league: 'La Liga' },
+      :           ^^^^^^|^^^^^^
+      :                 `-- This is the expression part of an expression statement
+ 1116 |   { seed: 110103, club: 'Lyon', league: 'Ligue 1' },
+ 1117 |   { seed: 110104, club: 'Ajax', league: 'Eredivisie' },
+ 1118 |   { seed: 110105, club: 'Celtic', league: 'Scottish Premiership' },
+      `----
+
+
+Caused by:
+    Syntax Error[39m
+  Plugin: [35mvite:react-swc[39m
+  File: [36m/home/runner/work/ballpark-hero/ballpark-hero/src/test/liveSimMotion.test.tsx[39m
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [2mno tests[22m
+[2m   Start at [22m 05:15:35
+[2m   Duration [22m 1.16s[2m (transform 50ms, setup 101ms, collect 0ms, tests 0ms, environment 469ms, prepare 249ms)[22m
+

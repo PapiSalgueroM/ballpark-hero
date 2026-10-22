@@ -1,0 +1,3 @@
+[1101 bundle] the part alone: 27940 bytes minified, 11687 gzipped (ceiling 23133 and 9693); 7 files, 35 import specifiers read; problems 1
+  FAIL: the part is 27940 bytes minified and 11687 gzipped, over its ceiling of 23133 and 9693 (measured 19277 and 8077, plus a fifth)
+simLiveSimMotion: RED. The bundle section found 1 problem.

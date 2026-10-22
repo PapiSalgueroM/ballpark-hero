@@ -1,0 +1,14 @@
+src/test/liveSimMotion.test.tsx(1115,23): error TS1005: ';' expected.
+src/test/liveSimMotion.test.tsx(1115,46): error TS1005: ';' expected.
+src/test/liveSimMotion.test.tsx(1115,59): error TS1128: Declaration or statement expected.
+src/test/liveSimMotion.test.tsx(1116,23): error TS1005: ';' expected.
+src/test/liveSimMotion.test.tsx(1116,39): error TS1005: ';' expected.
+src/test/liveSimMotion.test.tsx(1116,52): error TS1128: Declaration or statement expected.
+src/test/liveSimMotion.test.tsx(1117,23): error TS1005: ';' expected.
+src/test/liveSimMotion.test.tsx(1117,39): error TS1005: ';' expected.
+src/test/liveSimMotion.test.tsx(1117,55): error TS1128: Declaration or statement expected.
+src/test/liveSimMotion.test.tsx(1118,23): error TS1005: ';' expected.
+src/test/liveSimMotion.test.tsx(1118,41): error TS1005: ';' expected.
+src/test/liveSimMotion.test.tsx(1118,67): error TS1128: Declaration or statement expected.
+src/test/liveSimMotion.test.tsx(1119,1): error TS1128: Declaration or statement expected.
+src/test/liveSimMotion.test.tsx(1119,3): error TS1434: Unexpected keyword or identifier.
