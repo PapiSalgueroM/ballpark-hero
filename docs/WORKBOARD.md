@@ -16443,3 +16443,15 @@ Actual browser4healthy+3specificserved-bytefaults+3exactrestorations,18saved-pag
 Actualmaincedd02399673fb5ef307129a3a6165bc208fe1a8 is integrated atc0d1c2583d6bf62846dc105139a606e02939ada4, only18WORKBOARD lines with both full prior bodies preserved. The final candidate takes only the four reviewed generated legal/sitemap/ledger outputs and the exact one-line default to final mode on the existing Green branch. Workflow8bc53a9567b49f18bf0e56d8930f01690ca70b12891840433abcde074cc2caf5 preserves all other workflow bytes and requires both generated patch/list empty, effective copied nonempty controls and complete final inventories.
 
 Fresh final all-six qualification and actual0Bpatch/list are still required before PR367 integration, coordinated publication, public readback and the two-URL IndexNow submission. No live1446 claim yet. Profile stored data/account behavior stay held. Anthony Salguero appears only in Privacy's operator notice. Analytics remains paused; provider/traffic/console/rights and ongoing legal operations are unverified. Root1447 shared consent CSS remains separate source-only preparation, J retains game dialog hardening. Primarysource/index, all oldbranches/checkouts and broader785/1441/historical preservation gaps remain protected and unwaived.
+
+## Root Round1446 final site closure, 2026-10-22 UTC
+
+LIVE scope: viewed-subject Profile initials with no avatar image sink or stored-avatar deletion; dedicated Cookie Policy and real Footer/Privacy navigation; operator name limited to the Privacy contact notice. Existing account/noindex/edit/share, consent and paused Analytics behavior are held. No game implementation is claimed.
+
+Final `0dc98659137ead9a6a237d64f1a279e5afee7976` passed all six jobs in39732838642 with generated patch/list/new-files0B and complete final output/source holds. PR367 merged as published source `4b4d99ebd64f50ffb45bca9d8f56fba6b7e4dcee`. Proper readback39747821847 at `dc4ee9f89d711555af76b2ce8f4ed97b5ccb8c49` verified deployment `16a8e658-6527-43a1-85ff-d5c3c7d896a4`:67requests/134pairedheaders, three raw pages/four observed assets, audit3/3 and effective thin2/3.
+
+IndexNow39759337399 at `2947aaf092668d9621968dea14fcb34065c1565d` accepted exactly /cookie-policy and /privacy with HTTP200 after live-key verification. Old39751387404 remains a failed fixture setup, with no submission credit. All earlier setup/comparison failures and raw asset differences stay retained; no whole CI binary equality or indexing/ranking guarantee.
+
+Closure adopts only two proof workflows plus these three documentation additions on a separate closure branch. It must not add a commit to either IndexNow trigger branch or republish the product. Current main `e3deb2cb30ad1dc92a2e9fc3cef03fc096261d15` differed from published4b4 only by20 WORKBOARD additions when checked. Recheck actual main before adoption and preserve every existing documentation byte.
+
+I retains publication ownership. Root1447 and J game work remain separate; no app/game/engine/save, provider, GA activation or historical785/1441 waiver is part of this closure.
