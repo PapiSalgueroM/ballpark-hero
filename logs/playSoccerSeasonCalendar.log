@@ -1,0 +1,8 @@
+Calendar native: 6 cases, 301 checks, 1 effective copied observation control
+case 320-advance: ok=true 
+case 320-exit: ok=true 
+case 390-advance: ok=true 
+case 390-exit: ok=true 
+case 1280-advance: ok=true 
+case 1280-exit: ok=true 
+checks 301, controls 1
