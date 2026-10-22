@@ -1,0 +1,6 @@
+seeds456: SIM_COLLEGE_SEAT_SPORTS=cfb SIM_COLLEGE_SEAT_SEEDS=4,5,6 node scripts/simCollegeSeat.mjs
+seeds789: SIM_COLLEGE_SEAT_SPORTS=cfb SIM_COLLEGE_SEAT_SEEDS=7,8,9 node scripts/simCollegeSeat.mjs
+seeds101112: SIM_COLLEGE_SEAT_SPORTS=cfb SIM_COLLEGE_SEAT_SEEDS=10,11,12 node scripts/simCollegeSeat.mjs
+seeds131415: SIM_COLLEGE_SEAT_SPORTS=cfb SIM_COLLEGE_SEAT_SEEDS=13,14,15 node scripts/simCollegeSeat.mjs
+seeds161718: SIM_COLLEGE_SEAT_SPORTS=cfb SIM_COLLEGE_SEAT_SEEDS=16,17,18 node scripts/simCollegeSeat.mjs
+noease456: SIM_COLLEGE_SEAT_SPORTS=cfb SIM_COLLEGE_SEAT_SEEDS=4,5,6 SIM_COLLEGE_SEAT_TILT=ease-0 node scripts/simCollegeSeat.mjs
