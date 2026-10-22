@@ -1,0 +1,11 @@
+vitest exit=0 12s |    Duration  10.88s (transform 4.05s, setup 573ms, collect 10.88s, tests 5.85s, environment 2.75s, prepare 896ms)
+tsc exit=0 112s | 
+shop-pp1 exit=3 115s | simUsShopPromises: CONTROL potplusone DID NOT FIRE (red sections 7)
+shop-basecheck exit=0 1s | simUsShopPromises: green (sections 1)
+shop exit=1 133s | simUsShopPromises: red in sections 7
+press exit=0 10s | Press/Market:6 outcomes,27 full original state/RNG pairs,6 effective copied source controls,18 native fixture branches.
+deckc exit=1 69s | simUsCareerDeckC: 4 failure(s)
+shop-ppall exit=1 104s | simUsShopPromises: CONTROL potplusoneall FIRED (red sections 7)
+defects exit=0 18s | simUsCareerDefects: 157 tests passed across the stat lines, the era cards and the shop cap.
+ann905 exit=0 5s | Career yearly support: fictional offline engine fixtures only, no native UI, full career completion or historical-data validation claim.
+board exit=1 83s | simUsBoardParity: 3 failures
