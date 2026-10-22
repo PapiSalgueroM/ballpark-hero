@@ -111,7 +111,7 @@ const NflBracket = lazyPart<GmBracketMount>(() => import('@/components/front-off
    close and the readers are static: they run in the press's own tick and at load); the season card, its leaders, its
    words and the award history are one chunk the recap and Standings ask for. */
 import {
-  nflAwardList, nflAwardsOf, nflCleanSave, nflCloseSeasonStats, nflMarkRookies, nflRecordGame, nflRecordWeek, NFL_AWARD_LABEL,
+  nflAwardList, nflAwardsOf, nflCleanSave, nflCloseSeasonStats, nflMarkRookies, nflPlaysFor, nflRecordGame, nflRecordWeek, NFL_AWARD_LABEL,
 } from '@/lib/nflSeasonStats';
 import { FoAwardBadge } from '@/components/front-office-shared/FoAwardBadge';
 import type { NflSeasonCardProps } from '@/components/front-office/NflSeasonStats';
@@ -2554,6 +2554,9 @@ export default function FrontOfficeBoard() {
                 onWatched={() => setHeld(null)}
                 standing={bracketRow ? null : { table: conf, seed: seedsNow.includes(myTeam) ? seedsNow.indexOf(myTeam) + 1 : null, seeds: seedsNow.length }}
                 helpHost={helpHost}
+                /* Round 1542: who scored, read from the CURRENT league (a held league would not yet hold the game being
+                   watched, and the card draws nothing of a result while the clock runs) */
+                credits={key => nflPlaysFor(league, key)}
               />
               )}
             </div>

@@ -17,6 +17,8 @@
    middle give the same game, no engine generator and no Math.random moves,
    and nothing but a game's final has to be saved to tell it again. TEAM
    LEVEL ONLY: a line names a club, never a man, and there is no speaker.
+   (Since Round 1542 a card may name who scored beside the story, from the
+   board's own credits: src/lib/gmGameDayView.ts, `scorers`.)
 
    FAILS CLOSED: a final with no winner, a final with a side above the
    sport's own `maxScore` or above GM_SCORE_CEILING (src/lib/gmGameScore.ts
@@ -49,6 +51,10 @@ export interface GameDayLaw {
   periods: { count: number; regulation?: number; of(minute: number): number; name(i: number): string };
   /** THIS SIM'S OWN: the margin that makes a rout, the deficit that makes a comeback, and the sentence for each shape. */
   shape: { rout: number; comeback: number; say(shape: StoryShape, winner: string, loser: string): string };
+  /** Round 1542: the kind of play a board credits to a man (the NFL's 'td'), and the words for one credit; both absent
+   *  in a sport whose board credits nobody. The names come from the board's credits, never from the story law. */
+  credited?: string;
+  creditWords?(passer: string | null, scorer: string): string;
 }
 
 export interface GameStory {

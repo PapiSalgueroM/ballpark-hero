@@ -59,6 +59,9 @@ export const NFL_GAME_DAY: GameDayLaw = {
     name: i => `Q${i + 1}`,
   },
   shape: { rout: NFL_ROUT, comeback: NFL_COMEBACK, say: nflShapeWords },
+  /* Round 1542: the press credits every touchdown to a man (src/lib/nflSeasonStats.ts); the tile names them so */
+  credited: 'td',
+  creditWords: (passer, scorer) => (passer ? `${passer} to ${scorer}` : `${scorer} runs it in`),
 };
 
 /** The "?" of an NFL Game Day card: what is real, what is this sim's own, one worked example. */
@@ -76,7 +79,7 @@ export const NFL_GAME_DAY_HELP: HelpWords = {
   examples: [
     {
       head: 'A worked example',
-      body: 'The final is 24 to 17. The winners went 7, 7, 7 and 3 by quarter and the losers 7, 7, 0 and 3. It was level at 14 at the half, the winners went ahead for good with a touchdown in the third quarter, and that touchdown is the play the card calls the one that decided it.',
+      body: 'The final is 24 to 17. The winners went 7, 7, 7 and 3 by quarter and the losers 7, 7, 0 and 3. It was level at 14 at the half, the winners went ahead for good with a touchdown in the third quarter, and that touchdown is the play the card calls the one that decided it. Under the plays, the card lists every touchdown of the game with the man who threw it and the man who caught it, or the man who ran it in.',
     },
   ],
   footnote: 'Field goals and safeties count for the club: kickers and punters are not on these rosters.',

@@ -99,14 +99,14 @@ const CLOSE = 'src/lib/foSeasonClose.ts';
 const CONTROLS = {
   liftdrift: { section: 1, labels: ['tells the same story on this tree as on the base'], everySet: true, needs: [1], patches: [{ file: DRIVES, from: 'export const MAX_FG = 6;', to: 'export const MAX_FG = 5;' }] },
   dropone: { section: 2, labels: ["credited and unclaimed touchdowns are the story's"], everySet: true, needs: [2], patches: [{ file: STATS, from: '    for (let i = 0; i < s.tds; i += 1) {', to: '    for (let i = 0; i < s.tds - 1; i += 1) {' }] },
-  nocatch: { section: 2, labels: ['thrown equals caught'], everySet: true, needs: [2], patches: [{ file: STATS, from: "        if (cr.passer) { bump(lines.get(cr.passer.id)!.tot, 'ptd'); bump(lines.get(cr.scorer.id)!.tot, 'ctd'); }", to: "        if (cr.passer) { bump(lines.get(cr.passer.id)!.tot, 'ptd'); }" }] },
+  nocatch: { section: 2, labels: ['thrown equals caught'], everySet: true, needs: [2], patches: [{ file: STATS, from: "        if (cr.passer) { bump(men[cr.passer.id], 'ptd'); bump(men[cr.scorer.id], 'ctd'); }", to: "        if (cr.passer) { bump(men[cr.passer.id], 'ptd'); }" }] },
   injured: { section: 2, labels: ['healthy starter of his club'], everySet: true, needs: [2], patches: [{ file: STATS, from: 'skill: unitStarters(team, SKILL_POS, SKILL_SLOTS),', to: 'skill: unitStarters({ ...team, players: team.players.map(p => ({ ...p, out: 0 })) }, SKILL_POS, SKILL_SLOTS),' }] },
   swapsides: { section: 2, labels: ["credited and unclaimed touchdowns are the story's"], everySet: true, needs: [2], patches: [{ file: STATS, from: 'nflDrivePair(told.homeScore, told.awayScore, keyedRng(gmStoryKey(told)))', to: 'nflDrivePair(told.awayScore, told.homeScore, keyedRng(gmStoryKey(told)))' }] },
   extradraw: { section: 3, labels: ['the same generator state and draw count after Week 17'], everySet: true, needs: [3], patches: [{ file: STATS, from: '  const rng = keyedRng(`${told.key}|credit`);', to: '  const rng = keyedRng(`${told.key}|credit`); Math.random();' }] },
   unkeyed: { section: 3, labels: ['the same week recorded twice gives the same block'], everySet: true, needs: [3], patches: [{ file: STATS, from: '  const rng = keyedRng(`${told.key}|credit`);', to: '  const rng = keyedRng(`${told.key}|credit|${(globalThis.__nflCreditCalls = (globalThis.__nflCreditCalls ?? 0) + 1)}`);' }] },
   randomcredit: { section: 4, labels: ["lift over a rating blind credit climbs with his rating"], everySet: true, needs: [4], patches: [{ file: STATS, from: '  const ws = men.map(m => Math.max(0, weight(m)));', to: '  const ws = men.map(m => (weight(m) > 0 ? 1 : 0));' }] },
   tiebreak: { section: 5, labels: ['a tie goes to more games, then the id'], needs: [5], patches: [{ file: FO_STATS, from: '.sort((a, b) => b.s - a.s || b.p.g - a.p.g || a.p.id.localeCompare(b.p.id))', to: '.sort((a, b) => b.s - a.s)' }] },
-  rookieall: { section: 5, labels: ['the rookie lines are the first year men the harness drafted'], needs: [5], patches: [{ file: STATS, from: '...(m.rookieSeason === lg.season ? { rookie: true } : {})', to: '...(m.rookieSeason !== undefined ? { rookie: true } : {})' }] },
+  rookieall: { section: 5, labels: ['the rookie lines are the first year men the harness drafted'], needs: [5], patches: [{ file: STATS, from: 'const line: NflSavedLine = men[m.id] ?? (m.rookieSeason === lg.season ?', to: 'const line: NflSavedLine = men[m.id] ?? (m.rookieSeason !== undefined ?' }] },
   closetwice: { section: 5, labels: ['a second close writes no card twice'], needs: [5], patches: [{ file: CLOSE, from: '  if (done) return done;', to: '' }] },
   oldopen: { section: 6, labels: ['recording nothing and throwing nothing'], needs: [6], patches: [{ file: STATS, from: '  if (lg.week === 1 && !nflLiveStats(lg)) lg.stats = nflNewStats(lg.season);', to: '  if (!nflLiveStats(lg)) lg.stats = nflNewStats(lg.season);' }] },
   wholeroster: { section: 7, labels: ["every line is a man who was in his club's pool"], needs: [7], patches: [{ file: STATS, from: '      for (const m of nflPoolMen(s.pool)) {', to: '      for (const m of lg.teams[s.team].players) {' }] },
@@ -389,7 +389,7 @@ if (SECTIONS.some(s => s === 2 || s === 3 || s === 4 || s === 7)) {
           onPlayoff: (lg, g) => { if (SECTIONS.includes(2)) identity(lg, g, false, {}); if (g.home === A.user || g.away === A.user) his.push(g); },
         });
         if (SECTIONS.includes(2)) {
-          const st = A.lg.stats;
+          const st = M.stats.nflFoStats(A.lg.stats);
           for (const team of Object.keys(A.lg.teams)) {
             const ls = Object.values(st.lines).filter(l => l.team === team);
             const sum = col => ls.reduce((x, l) => x + (l.tot[col] ?? 0), 0);
@@ -409,7 +409,7 @@ if (SECTIONS.some(s => s === 2 || s === 3 || s === 4 || s === 7)) {
           delete bare.awards;
           for (const p of S.nflEveryMan(bare).flat()) { delete p.awards; delete p.rookieSeason; }
           sizes.bases.push(JSON.stringify({ league: bare, myTeam: A.user, phase: 'recap', gameLog: { v: 1, season: A.lg.season, team: A.user, games: his } }).length);
-          const ls = Object.values(A.lg.stats.lines);
+          const ls = Object.values(M.stats.nflFoStats(A.lg.stats).lines);
           sizes.lines.push(ls.length);
           sizes.statLines.push(ls.filter(l => Object.values(l.tot).some(v => v > 0)).length);
           for (const l of ls) count(sizes.pool, !!seasonPools[l.team] && seasonPools[l.team].has(l.id), () => `${seasonId(set, kind, i)}: ${l.team} ${l.name} (${l.pos})`);
@@ -632,10 +632,11 @@ if (SECTIONS.includes(5)) {
       const historyBefore = (lg.awards ?? []).length;
       const res = boardSeason(s, true, { onRecorded: (l, _t, week) => { if (week === 1) count(t5.opened, l.stats && l.stats.season === l.season && Object.keys(l.stats.lines).length > 0 && (l.awards ?? []).length === historyBefore, () => id); } });
       const closed = res.closed;
-      const own = ownAwards(lg.stats, drafted);
+      const fo = S.nflFoStats(lg.stats);
+      const own = ownAwards(fo, drafted);
       count(t5.rule, !!closed && (closed.mvp?.id ?? null) === own.mvp && (closed.oroy?.id ?? null) === own.oroy && (closed.droy?.id ?? null) === own.droy, () => `${id}: the lib ${closed?.mvp?.id}/${closed?.oroy?.id}/${closed?.droy?.id}, the harness ${own.mvp}/${own.oroy}/${own.droy}`);
-      const flagged = new Set(Object.values(lg.stats.lines).filter(l => l.rookie).map(l => l.id));
-      const playedKids = new Set(Object.values(lg.stats.lines).filter(l => drafted.has(l.id)).map(l => l.id));
+      const flagged = new Set(Object.values(fo.lines).filter(l => l.rookie).map(l => l.id));
+      const playedKids = new Set(Object.values(fo.lines).filter(l => drafted.has(l.id)).map(l => l.id));
       count(t5.rookies, [...flagged].every(x => drafted.has(x)) && [...playedKids].every(x => flagged.has(x)) && closed.rookies === (y > 0), () => `${id}: ${flagged.size} flagged, ${playedKids.size} of the harness's draftees played`);
       if (y > 0) count(t5.later, playedKids.size > 0, () => id);
       tell.rookieLines.push(playedKids.size);
@@ -665,8 +666,8 @@ if (SECTIONS.includes(5)) {
   /* the tie fixture: the man who should LOSE each tie is listed first, so a sort with no tie rule names him */
   const fx = (ls, clubs) => {
     const st = S.nflNewStats(2030);
-    for (const l of ls) st.lines[`${l[0]}|${l[1]}`] = { id: l[1], name: l[1], team: l[0], pos: 'QB', g: l[2], gs: l[2], tot: l[3] };
-    for (const [t, w, g] of clubs) st.teams[t] = { g, w, pts: 0, opp: 0 };
+    for (const l of ls) (st.lines[l[0]] ??= {})[l[1]] = [l[1], 'QB', l[2], l[3].ptd ?? 0, l[3].rtd ?? 0, l[3].ctd ?? 0, l[3].sk ?? 0];
+    for (const [t, w, g] of clubs) st.clubs[t] = [g, w, 0, 0, 0, 0, 0];
     return { season: 2030, stats: st, teams: {}, freeAgents: [] };
   };
   const byGames = S.nflSeasonAwards(fx([['AAA', 'm1', 16, { ptd: 12 }], ['AAA', 'm2', 17, { ptd: 12 }]], [['AAA', 9, 17]]));
@@ -716,6 +717,12 @@ if (SECTIONS.includes(8)) {
   check(8, 'the badge says Sim on every award and its title says they are this save\'s sim awards', badge.includes('`Sim ${a}`') && badge.includes("This save's sim awards, not real ${league} ones"));
   check(8, 'the history says its seasons are sim seasons', hist.includes('Sim seasons, not real ${league} history.'));
   check(8, "the feed line names the award in this save's season", board.includes("in this save's ${closedStats.season} season."));
+  /* the tile's list: a marked heading of its own (a real man beside one game's scoring play), and the law's credit
+     words for a pass and a run have no quotation mark and no verb of speech */
+  const card = codeOf(readSrc('src/components/front-office-shared/GmGameDayCard.tsx'));
+  check(8, "the tile's Touchdowns list has a heading that says it is this save's game", card.includes("Touchdowns in this save's game"));
+  const credit = [M.NFL_GAME_DAY.creditWords('A Passer', 'A Catcher'), M.NFL_GAME_DAY.creditWords(null, 'A Back')];
+  check(8, `the tile's credit words have no quotation mark and no verb of speech (${credit.join(' / ')})`, credit.every(w => !QUOTES.test(w) && !SPEECH.test(w)) && credit[0] === 'A Passer to A Catcher' && credit[1] === 'A Back runs it in');
 }
 
 /* ─── Closing ─── */
