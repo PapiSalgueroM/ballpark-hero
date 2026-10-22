@@ -16467,3 +16467,40 @@ IndexNow39759337399 at `2947aaf092668d9621968dea14fcb34065c1565d` accepted exact
 Closure adopts only two proof workflows plus these three documentation additions on a separate closure branch. It must not add a commit to either IndexNow trigger branch or republish the product. Current main `e3deb2cb30ad1dc92a2e9fc3cef03fc096261d15` differed from published4b4 only by20 WORKBOARD additions when checked. Recheck actual main before adoption and preserve every existing documentation byte.
 
 I retains publication ownership. Root1447 and J game work remain separate; no app/game/engine/save, provider, GA activation or historical785/1441 waiver is part of this closure.
+
+
+### Round1447 dialog layout matrix candidate pending, 2026-10-22
+
+The measured old-CSS baselines are separate and remain preserved: Original9 at86fb/run39746799578 has3 Stadium cookie interceptions,3 Idle pending-shell clipping outcomes and3 healthy Front Office cases. Academy3 at3a5/run39754554795 has3 measured cookie interceptions and3 passing answered actions. Radix12 at16883/run39764128344 is fully admitted healthy, including36 trusted primary dismissals and the real help reopen after Reject all.
+
+The new `codex/consent-dialog-layout-1447` candidate starts from exact mainc75d04dad21dae05bb110aa10e9e99d670adc38e. Only the reviewed global CSS span, pinned proof inputs and append-only status notes are authorized. The remote matrix must build once, then collect72 fresh contexts across Green, admitted old CSS and restored Green. The exact nine old causes must return only in the old arm; all Green/restored cases and all Radix preservation cases must pass. Source, generated output, completed dist, font, proof input and offline transport holds remain required. The matrix cannot grant product qualification by itself: Root must review the complete compiled CSS diff and finish the broader release gates. No game or data change, merge, publication or live claim is included. I retains publication coordination.
+
+## Root Round1447 ordinary release gates pending, 2026-10-22 UTC
+
+Matrix35d9e57ab680f4ef24e011809b39c3412e7abbbe/run39769358433 attempt1 is successful:72 complete contexts,144 Green/restored trusted primary passes, expected old arm54 passes/9 owned failures/9 not attempted, and36 Radix primary passes per arm. Root and independent review bound the complete compiled CSS difference to the approved single source tail span. ROUND1447 carries the full native matrix admission binding.
+
+Root's next scope is only the separate `codex/consent-dialog-release-1447` ordinary qualifier plus these three append-only notes, preserving the admitted matrix source and all existing gates. All six jobs and zero generated changes remain required before integration. I retains sole publication ownership; no new public operation, game implementation or historical785/1441 waiver is authorized by this matrix result.
+
+## Root Round1447 qualified source handoff, 2026-10-22 UTC
+
+Shared dialog CSS source `d9da128d0174405ab8b63ab34bc27feb35a8f389` passed ordinary39773713224, all six jobs. Raw units:9,337PASS/58explicitSKIP/0FAIL/622files. Focused74/29/6 and existing owned controls,18 readers,14 unchanged caps, zero generated patch/list and complete final holds passed. Matrix39769358433 had72 contexts,144 Green/restored trusted primary passes and exactly nine owned old-CSS failures; native compiled CSS/Tar/output evidence is retained outside the repo.
+
+I alone owns publication and the later live/readback decision. Root's changes here append only these three status notes to the qualified source. No game implementation, live claim, earlier failure waiver or785/1441 clearance follows from this handoff.
+
+## Root1448 candidate, generation still required, 2026-10-22 UTC
+
+Root owns four shared copy files on `codex/site-quality-disclosures-1448`, based on merged3ee. Nine exact copy hunks clarify Home/three hubs and add the Cloudflare security-cookie disclosure to both policies. No game, save, engine, provider or consent-behavior change is included.
+
+The candidate must earn a fresh offline generation run, actual eight-path-bounded generated review, and a separate final fixed point with all existing controls and unchanged caps. It is unqualified and unpublished. I retains publication. Root1447's merged3ee publish-ready handoff and complete prior evidence remain separate; all old failures and785/1441 preservation gaps stay held.
+
+## Root1448 generation admitted, final pending, 2026-10-22 UTC
+
+All six generation39782582624 jobs passed at7e2e060a9f6f8e1ce77ece1f5eea4e07d98280d2. Root admitted exact8 outputs after full native ZIP/source/Tar/patch/ledger/sitemap review. Raw9,337PASS/58SKIP/0FAIL/622files, focused74/29/6 and controls, browser4+3+3,18 readers,14 unchanged caps and HomeCopy/HubDepth/HomeFold remain bound.
+
+This child changes only those8 source outputs, one final workflow phase and these3 append-only notes. Fresh final six-job zero-output qualification remains required. I owns publication and CM/Soccer; J keeps its game lanes. No publication, provider approval, earlier failure waiver or785/1441 clearance is implied.
+
+## Root1448 qualified source handoff, 2026-10-22 UTC
+
+Source144557287ecfc3873a4a9563e9fe17ca62a12d8e passed final39788124277 attempt1, all six jobs. Complete native admission79408275f56d04c574416ccfab743ecf6bb074a9c3940da37a2fa9b8b03c31f0 binds actual9,337PASS/58SKIP/0FAIL/622files, focused74/29/6 and owned controls, browser4+3+3, HomeCopy/HubDepth/HomeFold,18 readers/14 unchanged caps, all5185 source rows/outputs and798 Tar bodies. Final patch/list/newfiles are present0B with two nonempty and two inventory controls.
+
+This child appends only three truthful qualification notes. I retains sole publication and live/readback, plus CM/Soccer; J keeps its game lanes. Root does not claim publication, provider/AdSense clearance, game fixes, prior failure waivers or785/1441 preservation clearance. The prior1447 merged3ee publish-ready handoff remains valid.

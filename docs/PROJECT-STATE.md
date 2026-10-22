@@ -18990,3 +18990,40 @@ Qualified source `0dc9865` passed all six jobs in run39732838642, including 9,33
 Proper public run39747821847 verified published deployment `16a8e658-6527-43a1-85ff-d5c3c7d896a4`, three raw pages, four observed assets, 67 guarded requests and normal3/3 with effective thin2/3. IndexNow run39759337399 accepted only Cookie Policy and Privacy with HTTP200. Acceptance is not an indexing guarantee. Earlier failed runs and raw CI/public differences remain retained.
 
 Analytics remains paused. Provider readiness, broader legal/operational dependencies and the old785/1441 preservation gaps remain open. Round1447 is separate. I retains publication ownership; this operators/docs closure needs no product republish.
+
+
+### Round1447 dialog layout matrix candidate pending, 2026-10-22
+
+The measured old-CSS baselines are separate and remain preserved: Original9 at86fb/run39746799578 has3 Stadium cookie interceptions,3 Idle pending-shell clipping outcomes and3 healthy Front Office cases. Academy3 at3a5/run39754554795 has3 measured cookie interceptions and3 passing answered actions. Radix12 at16883/run39764128344 is fully admitted healthy, including36 trusted primary dismissals and the real help reopen after Reject all.
+
+The new `codex/consent-dialog-layout-1447` candidate starts from exact mainc75d04dad21dae05bb110aa10e9e99d670adc38e. Only the reviewed global CSS span, pinned proof inputs and append-only status notes are authorized. The remote matrix must build once, then collect72 fresh contexts across Green, admitted old CSS and restored Green. The exact nine old causes must return only in the old arm; all Green/restored cases and all Radix preservation cases must pass. Source, generated output, completed dist, font, proof input and offline transport holds remain required. The matrix cannot grant product qualification by itself: Root must review the complete compiled CSS diff and finish the broader release gates. No game or data change, merge, publication or live claim is included. I retains publication coordination.
+
+## Round1447 matrix observed, ordinary qualification pending, 2026-10-22 UTC
+
+Source35d9e57ab680f4ef24e011809b39c3412e7abbbe/run39769358433 attempt1 passed the72-context matrix. Root observed144 trusted primary passes across Green/restored, with the exact9 owned old-CSS failures and9 not-attempted old actions retained; all arms preserved36 Radix primary passes each. Complete compiled CSS attribution and the native envelope are reviewed. ROUND1447 records the full native admission binding.
+
+The separate ordinary release branch must still pass all six jobs, existing controls, four unit partitions,18 readers,14 unchanged caps, zero generated changes and complete final holds at its actual source. No merge, publication or live claim follows from matrix success alone. I retains sole publication ownership. Game lanes and old785/1441 preservation gaps remain unchanged and unwaived.
+
+## Round1447 source qualified, publication pending, 2026-10-22 UTC
+
+The shared dialog CSS fix is source-qualified atd9da128d0174405ab8b63ab34bc27feb35a8f389. Matrix39769358433 covered72 contexts,144 Green/restored trusted primary passes and the nine expected old-CSS failures. Ordinary run39773713224 passed all six jobs:9,337 unit passes,58 explicit skips,0 failures across622 files;74 consent/29 account/6 Profile plus existing controls;18 readers and14 unchanged caps. Generated patch/list are empty and complete source/output/transport holds passed.
+
+I retains sole publication ownership. This update records qualification and the handoff, not publication or live verification. Game lanes, earlier failures and785/1441 preservation gaps remain held and unwaived.
+
+## Round1448 copy candidate, 2026-10-22 UTC
+
+Root's separate `codex/site-quality-disclosures-1448` branch starts at actual merged1447 source `3ee0bf6293859740a50654e299232bcd0ff701c3`. Four shared Home/hub/privacy files have nine surgical copy edits, with complete literal inverses and exact preimages preserved. The candidate clarifies factual versus fictional games and discloses the observed hosting security cookie.
+
+Generation, actual derived-output review/adoption and fresh final six-job qualification are still required. No1448 publication or AdSense clearance is claimed. I retains publication and CM/Soccer; J retains its game lanes. Round1447 is merged and publish-ready with its separate complete evidence. All prior failures and preservation gaps remain unwaived.
+
+## Round1448 generation reviewed, final pending, 2026-10-22 UTC
+
+Source7e2e060a9f6f8e1ce77ece1f5eea4e07d98280d2/run39782582624 passed all six jobs. Native review binds all6 artifacts, all5185 input rows,9,337 unit passes/58 skips/0 failures/622 files, focused74/29/6 and effective controls,4+3+3 browser outcomes,18 readers,14 unchanged caps,798 Tar bodies and exact8 generated outputs. Home/hub copy and hosting-cookie disclosures are generated consistently; unrelated generated data and sitemap rows are held.
+
+This child adopts the exact reviewed outputs and one final-phase workflow change, preserving all prior doc bytes. Final all-six qualification with0B generated patch/list/new-file list is still owed. I retains sole publication. No live, legal completeness, AdSense clearance, game-lane change or old785/1441 waiver is claimed.
+
+## Round1448 source qualified, publication pending, 2026-10-22 UTC
+
+The Home/three-hub accuracy edits and hosting-cookie disclosures are source-qualified at144557287ecfc3873a4a9563e9fe17ca62a12d8e. Final39788124277 passed all six jobs:9,337PASS/58 explicitSKIP/0FAIL/622files, focused74/29/6 and existing owned controls, browser4+3+3,18 readers,14 unchanged caps, HomeCopy/HubDepth/HomeFold and complete source/output/transport holds. All three generated delta files are present0B and four output controls pass; native798 Tar and8 adopted output identities are admitted.
+
+This child only appends qualification notes to three docs. Publication and live verification remain with I, alongside the earlier merged1447 shared-dialog fix. Analytics stays paused. Provider readiness, rights/provenance, traffic quality, AdSense review and old785/1441 preservation gaps remain separate and unwaived.
