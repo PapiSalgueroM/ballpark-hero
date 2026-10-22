@@ -36,14 +36,20 @@ import './lib/seedRandom.mjs';
    one value) and the listed namesakes in every band (the harness refuses to run without both).
    Nothing here reaches the network: the database client is swapped for one that throws.
 
-   MEASURED (runner r1552-a, 2026-10-22, 5,000 daily dates from 2026-10-25): the OLD rules on those
-   dates dealt 557 tied worth the most questions out of 4,731, 1,414 questions about a listed
-   namesake, 19,472 in the present tense and 169 with a non club offered as a club; the new rules 0 of
-   each, with worth the most dealt 4,737 times (easy 3,098, medium 1,184, hard 455 against 3,100,
-   1,176, 455), so dropping the ties starved no band. Every builder succeeds 100% in every band under
-   both rules, which is why the floors of section 5 sit at 100% (99% for worth the most, whose twelve
+   MEASURED (runner r1552-fix-a, 2026-10-22, after the review fixes, 5,000 daily dates from
+   2026-10-25): the OLD rules on those dates dealt 557 tied worth the most questions out of 4,731,
+   1,579 questions about a listed namesake (62 names), 32,162 in the present tense ("plays" counted),
+   169 with a non club offered as a club and 6 with a club's reserve side or first team offered beside
+   it; the new rules 0 of each, with worth the most dealt 4,745 times (easy 3,071, medium 1,231, hard
+   443 against 3,100, 1,176, 455), so dropping the ties starved no band. The same at 15,000 dates
+   (SIM_SEED=4242 TRIVIA_LADDERS=15000): old 1,593 ties, 4,643 namesakes, 96,672 present tense, 563
+   non clubs, 18 club partners; new 0 of each. Every builder succeeds 100% in every band under both
+   rules, which is why the floors of section 5 sit at 100% (99% for worth the most, whose twelve
    draws could in principle all tie). The checks of sections 2 and 3 are zero tolerance because each
-   one is a question with two right answers or none, and the baseline proves each is visible.
+   one is a question with two right answers or none, and the baseline proves each is visible (the
+   club partner, too rare in the slice to prove it there, is proved by section 8's planted pool: 72
+   of 500 under the old rules, 0 under the new). Section 6b finds 50 names whose saved rows put two
+   men in one season, every one listed.
 
    Run: node scripts/simTriviaBank.mjs
    Negative controls (each edits a copy of the bank, refuses to run if its target string is not
