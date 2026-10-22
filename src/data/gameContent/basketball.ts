@@ -847,7 +847,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       {
         heading: "Reading the two player cards",
         items: [
-          "Look at the two player cards: name, position, franchises and final season.",
+          "Look at the two player cards: name, position and franchises.",
         ],
       },
       {

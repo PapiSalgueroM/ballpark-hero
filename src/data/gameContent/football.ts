@@ -866,7 +866,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       {
         heading: "Checking each player before you tap",
         items: [
-          "Check each player's position, teams, and final season, then tap the one with the bigger career number.",
+          "Check each player's position and teams, then tap the one with the bigger career number.",
         ],
       },
       {
@@ -898,7 +898,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       {
         heading: "Why careers start in 2000 or later",
         items: [
-          "Career numbers come from real play by play data, using careers that started in 2000 or later so every total is complete.",
+          "The pool was built from play by play data that starts in 1999, so it uses careers that started in 2000 or later, and every number is the official regular season total through the last finished season.",
         ],
         subsections: [
           {

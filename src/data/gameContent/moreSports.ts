@@ -138,7 +138,7 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
       {
         heading: "A first guess at Michael Schumacher",
         paragraphs: [
-          "Imagine the vibe word is Dominant. That fits a handful of drivers, so you take a swing at Michael Schumacher. Wrong, and the next clue slides out: 105 race wins, the all-time record.",
+          "Imagine the vibe word is Dominant. That fits a handful of drivers, so you take a swing at Michael Schumacher. Wrong, and the next clue slides out: the most race wins in F1 history.",
         ],
       },
       {
@@ -193,7 +193,7 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
   '/f1-higher-lower': {
     intro: [
       "Two drivers, one question: who won more Grands Prix? Simple, until the pairings leave the obvious names behind.",
-      "The pool is every driver in F1 history with at least 8 career wins, 42 of them, from the 1950s through 2025. Points systems changed too much across eras to compare fairly, so the game runs on race wins, a stat that travels.",
+      "The pool is every driver in F1 history with at least 8 career wins, from the 1950s to today's grid, and the card says which race the counts run through. Points systems changed too much across eras to compare fairly, so the game runs on race wins, a stat that travels.",
     ],
     headings: {
       howToPlay: "How to play F1 Higher or Lower, a daily Formula 1 trivia game",
@@ -861,7 +861,7 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
   '/tennis-higher-lower': {
     intro: [
       "Serena or Federer: who won more Grand Slam singles titles? This game asks that kind of question 10 times, and it mixes both tours in one pool on purpose, because cross-tour matchups are where the arguments live.",
-      "The pool holds 44 champions, from the pioneers of the 1920s to active stars, with title counts frozen through the 2026 Australian Open.",
+      "The pool holds 44 champions, from the pioneers of the 1920s to active stars, with title counts through the 2026 US Open.",
     ],
     headings: {
       howToPlay: "How to play Tennis Higher or Lower, a daily Grand Slam trivia game",
