@@ -1,0 +1,5 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+units: node_modules/.bin/vitest run src/lib/clubManagerTactics.test.ts --testTimeout=300000 --hookTimeout=120000
+quick: SECTION=table,styles,balanced node scripts/simCmTactics.mjs
+c-mirror: CM_TACTICS_CONTROL=mirror node scripts/simCmTactics.mjs
+c-helpwords: CM_TACTICS_CONTROL=helpwords node scripts/simCmTactics.mjs
