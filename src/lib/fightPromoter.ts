@@ -31,6 +31,7 @@
 import { rngFrom, hashLabel, clamp, clampi } from '@/lib/careerEngine';
 import {
   makeFighter, ratingOf, simBout, weightById, WEIGHT_CLASSES,
+  mintFighterId, fighterClass, repairFighterIds,
   type Fighter, type WeightId, type Tactic, type BoutResult, type Method,
 } from '@/lib/fightCareer';
 
@@ -117,11 +118,20 @@ export interface PromoterState {
   exit?: PromoterExit;
   /** Round 955: what the buyer paid, in millions, when the promotion was handed over. */
   handedFor?: number;
+  /**
+   * Round 1546: the number the next man into the pool will carry in his id
+   * (mintFighterId). Absent on a promotion started before this round, whose
+   * men all wear "f" ids that no id minted from here on can equal.
+   */
+  nextFighterNo?: number;
 }
 
 export type PromoterExit = 'handed' | 'broke';
 
 const POOL_TARGET = 10;
+
+/** Round 1546: the prefix of every fighter id a promotion mints. Never "f". */
+const PROMOTER_ID = 'p';
 
 export function newPromoter(name: string, seedLabel?: string): PromoterState {
   const seed = hashLabel(seedLabel ?? `promoter|${name}`);
@@ -141,7 +151,7 @@ export function newPromoter(name: string, seedLabel?: string): PromoterState {
   };
   for (let i = 0; i < POOL_TARGET; i += 1) {
     const w = WEIGHT_CLASSES[Math.floor(rng() * WEIGHT_CLASSES.length)].id;
-    const f = makeFighter(rng, 38 + rng() * 18, w);
+    const f = makeFighter(rng, 38 + rng() * 18, w, undefined, mintFighterId(st, PROMOTER_ID));
     f.wins = Math.floor(rng() * 8);
     f.losses = Math.floor(rng() * 4);
     st.pool.push(f);
@@ -154,9 +164,9 @@ function stream(st: PromoterState): { rng: () => number; done: (n: number) => vo
   return { rng, done: (n: number) => { st.rngTick += Math.max(1, n); } };
 }
 
-/** A fighter's weight class, derived rather than stored twice. */
+/** A fighter's weight class, derived rather than stored twice. Round 1546: the gym's rule, kept once in fightCareer.ts. */
 export function weightOf(f: Fighter): WeightId {
-  return WEIGHT_CLASSES[Math.abs(hashLabel(f.id)) % WEIGHT_CLASSES.length].id;
+  return fighterClass(f);
 }
 
 /**
@@ -425,7 +435,7 @@ function refreshPool(st: PromoterState): Fighter[] {
   const tier = 36 + (st.reputation / 100) * 36;
   while (out.length < POOL_TARGET) {
     const w = WEIGHT_CLASSES[Math.floor(rng() * WEIGHT_CLASSES.length)].id;
-    const f = makeFighter(rng, clamp(tier + (rng() - 0.45) * 15, 28, 92), w);
+    const f = makeFighter(rng, clamp(tier + (rng() - 0.45) * 15, 28, 92), w, undefined, mintFighterId(st, PROMOTER_ID));
     f.wins = Math.floor(rng() * 6);
     out.push(f);
   }
@@ -494,6 +504,13 @@ export function sanitizePromoter(st: PromoterState): PromoterState {
   const out: PromoterState = { ...st };
   if (out.exit !== undefined && out.exit !== 'handed' && out.exit !== 'broke') delete out.exit;
   if (out.handedFor !== undefined && !(typeof out.handedFor === 'number' && Number.isFinite(out.handedFor))) delete out.handedFor;
+  /* Round 1546: a promotion saved before the fix can hold two men under one id
+     (a newcomer after a reload). The first keeps it; the newcomer gets his own
+     and keeps the division he was showing, so a card books the man it shows. */
+  if (Array.isArray(out.pool)) {
+    const fixed = repairFighterIds(out, PROMOTER_ID, [out.pool]);
+    if (fixed.moved > 0) out.pool = fixed.lists[0];
+  }
   return out;
 }
 

@@ -142,6 +142,12 @@ export interface Fighter {
   potential: number;
   /** 1 is the number one contender. 0 means he holds the title. 99 is unranked. */
   rank: number;
+  /**
+   * Round 1546: the division a gym or promotion man was showing when his id
+   * had to be repaired (repairFighterIds). Absent on everybody else, whose
+   * class is still read off his id (fighterClass).
+   */
+  weight?: WeightId;
 }
 
 /* Generated names. Deliberately a wide international pool, and deliberately
@@ -172,10 +178,112 @@ export function genFighterName(rng: () => number): string {
   return genPersonName(rng, FIRST, LAST);
 }
 
-let seq = 0;
-function nextId(): string {
-  seq += 1;
-  return `f${seq}`;
+/*
+ * Round 1546: A FIGHTER'S ID NEVER COMES FROM MODULE STATE.
+ *
+ * Until this round every id was "f" plus a counter that lived in this module.
+ * The counter went back to 0 on every page load while the gym's roster and the
+ * promoter's pool kept the ids it had handed out before, so after a reload the
+ * next man minted wore an id a saved man already had: the man you clicked was
+ * not always the man who fought, his training went to the other one, and
+ * letting one man go let both go. Round 568's bug (src/lib/entityIds.ts) in
+ * the three fight games.
+ *
+ * Two kinds of caller, two answers, and neither touches the rng, so every draw
+ * is the draw it was. Fight Gym and Fight Promoter keep their men for months,
+ * so they pass an id minted off their own save (mintFighterId below), unique by
+ * construction. Fight Career keys nothing on a fighter id (an opponent belongs
+ * to one offer, the daily is two men), so when no id is passed the man is
+ * named by what was drawn for him.
+ */
+function drawnId(f: Omit<Fighter, 'id'>): string {
+  const a = f.attrs;
+  const key = [f.name, f.style, a.power, a.chin, a.speed, a.stamina, a.defence, a.ringIq, f.age, f.potential].join('|');
+  return `x${hashLabel(key).toString(36)}`;
+}
+
+/** Round 1546: a save that mints fighter ids. Both the gym and the promoter are one. */
+export interface FighterIdBook { seed: number; nextFighterNo?: number }
+
+/**
+ * Round 1546: the next id off a save's own counter. The counter is written into
+ * the save beside the men, so a reload carries on from it rather than from 0,
+ * and the save's seed is part of the id, so two saves never mint the same id
+ * and the division (read off the id) is not the same first man in every gym.
+ * The prefix is never "f", so no id minted here can equal an id minted before
+ * this round. It writes the counter on the book it is handed, which is always
+ * the fresh state the caller is building, as stream() does with rngTick.
+ *
+ * Numbers start at 10, so a new promotion's first ten men all carry ids of
+ * one length. The division is a hash of the id, and over ten ids of one
+ * length it lands on ten classes in a row, which is the spread every new
+ * promotion has always opened with: two pairs who can be matched on the first
+ * card. Starting at 1 crossed from "-9" to "-10" inside the first ten and left
+ * one new promotion in four (measured, 2000 names) with a single legal pair.
+ */
+export const FIRST_FIGHTER_NO = 10;
+
+export function mintFighterId(book: FighterIdBook, prefix: string): string {
+  const stored = book.nextFighterNo;
+  const n = typeof stored === 'number' && Number.isInteger(stored) && stored >= 1 ? stored : FIRST_FIGHTER_NO;
+  book.nextFighterNo = n + 1;
+  return `${prefix}${(book.seed >>> 0).toString(36)}-${n}`;
+}
+
+/**
+ * Round 1546: a gym or promotion man's division. It is read off his id, as it
+ * always has been (a gym has men at several classes and a Round 620 fighter
+ * stores none), except for a man whose id was repaired: he keeps the class he
+ * was showing, stored on him at the repair.
+ */
+export function fighterClass(f: Fighter): WeightId {
+  if (f.weight !== undefined && WEIGHT_CLASSES.some(w => w.id === f.weight)) return f.weight;
+  return WEIGHT_CLASSES[Math.abs(hashLabel(f.id)) % WEIGHT_CLASSES.length].id;
+}
+
+/**
+ * Round 1546: the repair, for a save written before the fix. FIRST HOLDER WINS,
+ * Round 568's rule (ensureUniqueIds in src/lib/entityIds.ts), written out here
+ * rather than imported because the fight harnesses bundle these engine files
+ * on their own. The earlier man keeps the id, and with it the training and the
+ * bookings already written against it; only the man shadowing him moves, to a
+ * fresh id off the save's counter, and he keeps the division he was showing.
+ * The counter is first lifted above every id the save already minted, so a
+ * hand edited or damaged counter cannot mint an id somebody wears. Returns new
+ * lists and never edits the men it was handed; the book's counter is updated.
+ */
+export function repairFighterIds(
+  book: FighterIdBook, prefix: string, lists: Fighter[][],
+): { lists: Fighter[][]; moved: number } {
+  const head = `${prefix}${(book.seed >>> 0).toString(36)}-`;
+  let top = 0;
+  for (const list of lists) {
+    for (const f of list) {
+      if (!f || typeof f.id !== 'string' || !f.id.startsWith(head)) continue;
+      const n = Number(f.id.slice(head.length));
+      if (Number.isInteger(n) && n > top) top = n;
+    }
+  }
+  const stored = book.nextFighterNo;
+  const storedOk = typeof stored === 'number' && Number.isInteger(stored) && stored > top;
+  if (!storedOk && (stored !== undefined || top > 0)) book.nextFighterNo = Math.max(top + 1, FIRST_FIGHTER_NO);
+  const seen = new Set<string>();
+  let moved = 0;
+  const out = lists.map(list => list.map(f => {
+    if (!f) return f;
+    const named = typeof f.id === 'string' && f.id !== '';
+    if (named && !seen.has(f.id)) {
+      seen.add(f.id);
+      return f;
+    }
+    const shown = named ? fighterClass(f) : undefined;
+    const fixed: Fighter = { ...f, id: mintFighterId(book, prefix) };
+    if (shown) fixed.weight = shown;
+    seen.add(fixed.id);
+    moved += 1;
+    return fixed;
+  }));
+  return { lists: out, moved };
 }
 
 /**
@@ -185,8 +293,12 @@ function nextId(): string {
  * drawn around it and then pulled apart by the style, so an out-boxer really
  * is quicker and a slugger really does hit harder at the same tier. Without
  * that the styles would be labels on identical men.
+ *
+ * Round 1546: `id` is the caller's (a gym or a promotion mints one off its
+ * save). Without one the man is named by what was drawn for him, never by a
+ * counter in this module.
  */
-export function makeFighter(rng: () => number, tier: number, weight: WeightId, style?: FightStyle): Fighter {
+export function makeFighter(rng: () => number, tier: number, weight: WeightId, style?: FightStyle, id?: string): Fighter {
   const st = style ?? STYLES[Math.floor(rng() * STYLES.length)].id;
   const base = clamp(tier, 20, 99);
   const jitter = () => (rng() - 0.5) * 10;
@@ -198,8 +310,7 @@ export function makeFighter(rng: () => number, tier: number, weight: WeightId, s
   };
   const s = shape[st];
   const mk = (k: keyof Attrs) => clampi(base + (s[k] ?? 0) + jitter(), 15, 99);
-  return {
-    id: nextId(),
+  const drawn: Omit<Fighter, 'id'> = {
     name: genPersonName(rng, FIRST, LAST),
     style: st,
     attrs: {
@@ -210,6 +321,7 @@ export function makeFighter(rng: () => number, tier: number, weight: WeightId, s
     wins: 0, losses: 0, draws: 0, kos: 0, damage: 0, rank: 99,
     potential: clampi(base + 10 + rng() * 16, 30, 99),
   };
+  return { id: id ?? drawnId(drawn), ...drawn };
 }
 
 /**
