@@ -25,11 +25,12 @@ const planned = [
 const sourceFiles = ['src/pages/Index.tsx', 'src/data/homeCopy.ts', 'src/index.css', 'src/App.tsx', 'src/lib/sportHub.ts', 'src/pages/SportHub.tsx',
   'src/components/hub/HubExperience.tsx', 'src/components/hub/HubExperience.module.css', 'src/lib/theme.ts', 'src/components/CookieConsent.tsx',
   'src/lib/consentPreferences.ts', 'src/contexts/AuthContext.tsx', 'src/hooks/useStreaks.ts', 'src/lib/completions.ts', 'src/integrations/supabase/client.ts',
+  'src/components/home/PollOfTheDay.tsx', 'src/lib/dateUtils.ts',
   'scripts/lib/offlineTransport.cjs', 'scripts/lib/hostLikeServer.mjs', 'scripts/lib/playwrightLoader.mjs', 'scripts/playHomeFold.mjs', 'package.json', 'package-lock.json', 'index.html'];
 const report = { v: 1, source: SOURCE, status: 'RUNNING', applicationQualified: false, complete: false,
   planned: { contexts: 36, normalSnapshots: 56, headingExtraSnapshots: 12, snapshots: 68 }, cases: [], errors: [],
   transportPredicateControls: [], fixturePredicateControls: [], fontControls: [], recordControls: [], holds: {},
-  scope: 'Three routes, explicit initial viewports and two presets. Synthetic account only. Unsupported paint stays unresolved. Hit samples do not prove navigation.' };
+  scope: 'Three routes, explicit initial viewports and two presets. Every main control retains its source index and client rects; detailed control and hit measurements cover every positive-area owner intersecting the viewport, not offscreen controls. Synthetic account and flagless poll only. Unsupported paint stays unresolved. Hit samples do not prove navigation.' };
 let browser, staticFiles, fonts, cacheBefore, adapter, before, deadline, firstControls = false;
 assert.equal(path.dirname(OUT), ROOT, 'MEASURE1449_SETUP: direct-root artifact directory');
 assert.match(path.basename(OUT), /^home-hub1449-[a-z0-9-]+$/);
@@ -94,6 +95,37 @@ function shellFixture(request, url) {
       return { id: 'source-live-scores-12h-20h-limit150', body: '[]', date: new Date(Date.parse(times[0].slice(4)) + 12 * 3600 * 1000).toUTCString() };
   }
   return null;
+}
+const POLL_SELECT = 'poll_key,question,option_a,option_a_emoji,option_a_flag,option_b,option_b_emoji,option_b_flag,option_c,option_c_emoji,option_c_flag,option_d,option_d_emoji,option_d_flag,sort_order';
+const POLL_BODY = JSON.stringify([{ poll_key: 'measurement1449-local-only', question: 'Local browser fixture only',
+  option_a: 'Choice A', option_a_emoji: '', option_a_flag: '', option_b: 'Choice B', option_b_emoji: '', option_b_flag: '',
+  option_c: null, option_c_emoji: '', option_c_flag: '', option_d: null, option_d_emoji: '', option_d_flag: '', sort_order: 1 }]);
+function pollFixture(request, url, spec) {
+  if (spec.route !== '/' || url.origin !== BACKEND || url.username || url.password || url.hash || request.method() !== 'GET' || request.postData() !== null || url.pathname !== '/rest/v1/daily_polls') return null;
+  const q = url.searchParams;
+  if ([...q.keys()].sort().join('|') !== 'order|poll_date|select' || q.get('select') !== POLL_SELECT || q.get('poll_date') !== 'eq.' + spec.pollDay || q.get('order') !== 'sort_order.asc') return null;
+  return { id: 'source-home-daily-poll', body: POLL_BODY, pollDay: spec.pollDay };
+}
+function pollFixtureControls() {
+  const spec = { route: '/', pollDay: '2026-10-21' }, q = new URLSearchParams({ select: POLL_SELECT, poll_date: 'eq.' + spec.pollDay, order: 'sort_order.asc' }), href = BACKEND + '/rest/v1/daily_polls?' + q;
+  const request = (method = 'GET', body = null) => ({ method: () => method, postData: () => body });
+  assert.equal(pollFixture(request(), new URL(href), spec)?.id, 'source-home-daily-poll');
+  for (const [name, changed] of [
+    ['poll-select', { href: href.replace(encodeURIComponent(POLL_SELECT), '*') }],
+    ['poll-extra-query', { href: href + '&limit=1' }],
+    ['poll-order', { href: href.replace('sort_order.asc', 'sort_order.desc') }],
+    ['poll-duplicate-query', { href: href + '&order=sort_order.asc' }],
+    ['poll-day', { href: href.replace('eq.2026-10-21', 'eq.2026-10-20') }],
+    ['poll-path', { href: href.replace('/daily_polls?', '/poll_votes?') }],
+    ['poll-route', { route: '/soccer' }],
+    ['poll-method', { method: 'POST' }],
+    ['poll-body', { body: '{}' }],
+  ]) {
+    const baseline = { href, method: 'GET', body: null, route: spec.route }, mutant = { ...baseline, ...changed };
+    const beforeSha256 = sha(JSON.stringify(baseline)), afterSha256 = sha(JSON.stringify(mutant)); assert.notEqual(beforeSha256, afterSha256);
+    assert.equal(pollFixture(request(mutant.method, mutant.body), new URL(mutant.href), { ...spec, route: mutant.route }), null, 'MEASURE1449_POLL_FIXTURE: refuse changed ' + name);
+    report.fixturePredicateControls.push({ name, beforeSha256, afterSha256, refused: true, networkAttempted: false });
+  }
 }
 function personalFixture(request, url, spec) {
   if (!spec.auth || url.origin !== BACKEND || url.username || url.password || url.hash) return null;
@@ -198,6 +230,15 @@ function wholeControl(record, nodes) {
   assert(owner && ['A', 'BUTTON'].includes(owner.tag), 'MEASURE1449_CONTROL: independently captured control node');
   assert.deepEqual(record.rects, owner.rects, 'MEASURE1449_CONTROL: measured bounds equal independent owner-node client rects');
 }
+function completeViewportControls(sample) {
+  const scope = sample.controlScope, screen = { x: 0, y: 0, right: sample.viewport.innerWidth, bottom: sample.viewport.innerHeight };
+  const intersects = box => box.width > 0 && box.height > 0 && box.x < screen.right && box.right > screen.x && box.y < screen.bottom && box.bottom > screen.y;
+  assert(scope?.kind === 'all-positive-area-viewport-owner-client-rects' && scope.matchedCount === scope.sources.length && scope.sources.every((owner, index) => owner.sourceIndex === index), 'MEASURE1449_CONTROL_COVERAGE: complete indexed source geometry');
+  const expected = scope.sources.filter(owner => owner.rects.some(intersects)).map(owner => owner.sourceIndex), actual = sample.controls.map(control => control.sourceIndex);
+  assert.deepEqual(actual, expected, 'MEASURE1449_CONTROL_COVERAGE: every viewport-intersecting owner exactly once');
+  assert(scope.selectedCount === expected.length && scope.offscreenCount === scope.matchedCount - expected.length && expected.length <= 400, 'MEASURE1449_CONTROL_COVERAGE: exact counts, selected ceiling and no truncation');
+  for (const control of sample.controls) assert.deepEqual(control.rects, scope.sources[control.sourceIndex].rects, 'MEASURE1449_CONTROL_COVERAGE: selected owner keeps original source client rects');
+}
 function foundation(sample, spec, expectedText) {
   assert.equal(sample.viewport.innerWidth, spec.width, 'MEASURE1449_SETUP: actual viewport width');
   assert.equal(sample.viewport.innerHeight, spec.height, 'MEASURE1449_SETUP: actual viewport height');
@@ -210,7 +251,7 @@ function foundation(sample, spec, expectedText) {
   assert(sample.firstPlayable?.href?.startsWith('/'), 'MEASURE1449_SETUP: actual playable link');
   if (spec.auth) { assert.equal(sample.seededLocalUserId, USER, 'MEASURE1449_SETUP: same seeded local account'); assert.equal(sample.stats.length, 3, 'MEASURE1449_SETUP: exactly three synthetic chips'); assert.deepEqual(Object.fromEntries(sample.stats.map(chip => [chip.label, chip.value])), { 'Days in a row:': '365', 'Played today:': '106', 'World rank:': '#12,345' }, 'MEASURE1449_SETUP: all three real displayed synthetic chips'); for (const chip of sample.stats) { const value = sample.nodes.find(node => node.id === chip.valueNode); assert(value.rect.width > 0 && value.rect.height > 0 && value.style.display !== 'none' && value.style.visibility === 'visible' && Number(value.style.opacity) > 0, 'MEASURE1449_SETUP: displayed chip value, units may be hidden'); } }
   else { assert.equal(sample.seededLocalUserId, null, 'MEASURE1449_SETUP: actual guest local session'); assert.equal(sample.stats.length, 0, 'MEASURE1449_SETUP: guest has no signed-in chips'); }
-  verifyFontFaces(sample.fonts); sample.controls.forEach(control => wholeControl(control, sample.nodes));
+  verifyFontFaces(sample.fonts); completeViewportControls(sample); sample.controls.forEach(control => wholeControl(control, sample.nodes));
 }
 function recordControls(sample, spec) {
   const save = (name, before, changed, evaluator, check) => {
@@ -223,6 +264,10 @@ function recordControls(sample, spec) {
   save('wrong-theme', sample, { ...sample, theme: { ...sample.theme, light: !sample.theme.light } }, reject, result => result?.name === 'AssertionError' && result.message.startsWith('MEASURE1449_SETUP: actual root theme'));
   const control = sample.controls.find(item => item.labelRects.length && JSON.stringify(item.labelRects) !== JSON.stringify(item.rects)); assert(control, 'MEASURE1449_CONTROL: actual padded control has different label bounds');
   save('label-is-not-whole-control', control, { ...control, rects: control.labelRects }, changed => { try { wholeControl(changed, sample.nodes); } catch (error) { return failure(error); } return null; }, result => result?.name === 'AssertionError' && result.message.startsWith('MEASURE1449_CONTROL: measured bounds equal independent owner-node client rects'));
+  assert(sample.controls.length > 0, 'MEASURE1449_CONTROL: actual viewport owner for omission control');
+  const omitted = { ...sample, controls: sample.controls.slice(1) };
+  assert.equal(sha(JSON.stringify(omitted.controlScope)), sha(JSON.stringify(sample.controlScope)), 'MEASURE1449_CONTROL: omission keeps all source geometry and counts');
+  save('missing-viewport-owner', sample, omitted, changed => { try { completeViewportControls(changed); } catch (error) { return failure(error); } return null; }, result => result?.name === 'AssertionError' && result.message.startsWith('MEASURE1449_CONTROL_COVERAGE: every viewport-intersecting owner exactly once'));
   const paint = sample.textPaint.find(item => item.contrast.status === 'resolved-solid'); assert(paint, 'MEASURE1449_CONTROL: one actual resolvable solid text record');
   const beforePaint = paint.input, opaque = 'rgba(' + paint.contrast.background.join(', ') + ')';
   save('equal-solid-ink', beforePaint, { ...beforePaint, style: { ...beforePaint.style, color: opaque, webkitTextFillColor: opaque } }, solidContrast, result => result.status === 'resolved-solid' && result.ratio === 1 && result.belowThreshold);
@@ -269,11 +314,14 @@ function collect({ expectedNode }) {
   const viewport = { innerWidth, innerHeight, clientWidth: document.documentElement.clientWidth, clientHeight: document.documentElement.clientHeight, scrollWidth: document.documentElement.scrollWidth, scrollHeight: document.documentElement.scrollHeight, scrollX, scrollY, dpr: devicePixelRatio, visual: visualViewport ? { width: visualViewport.width, height: visualViewport.height, scale: visualViewport.scale, offsetLeft: visualViewport.offsetLeft, offsetTop: visualViewport.offsetTop } : null };
   const screen = { x: 0, y: 0, right: innerWidth, bottom: innerHeight };
   const hit = (x, y, owner) => { const visible = x >= 0 && y >= 0 && x < innerWidth && y < innerHeight; if (!visible) return { x, y, tested: false, reason: 'offscreen' }; const actual = document.elementFromPoint(x, y); return { x, y, tested: true, ownerHit: !!actual && (actual === owner || owner.contains(actual)), actual: nodeRecord(actual), clickable: nodeRecord(actual?.closest('a,button')) }; };
-  const controls = [...main.querySelectorAll('a,button')].map(control => {
-    const box = control.getBoundingClientRect(), card = control.closest('[data-hub-game], [data-home-game-card]'), cardBox = card?.getBoundingClientRect(), labelRects = ranges(control), after = getComputedStyle(control, '::after');
-    return { measureKind: 'element-control', rectSource: 'control.getClientRects', boxOwnerMatchesControl: control === control.closest('a,button'), node: nodeRecord(control), tag: control.tagName, role: control.getAttribute('role'), href: control.getAttribute('href'), text: control.textContent, ariaLabel: control.getAttribute('aria-label'), disabled: control.matches(':disabled,[aria-disabled="true"]'), inline: getComputedStyle(control).display.startsWith('inline'), rects: [...control.getClientRects()].map(rect), labelRects, clickableAncestor: nodeRecord(control.closest('a,button')), card: nodeRecord(card), onScreen: intersects(box, screen), center: hit(box.x + box.width / 2, box.y + box.height / 2, control), stretchedPseudo: after.position === 'absolute' && after.top === '0px' && after.right === '0px' && after.bottom === '0px' && after.left === '0px' ? { after: styleRecord(after, pseudoProperties), containingCard: nodeRecord(card), sampledOwnershipOnly: true, samples: cardBox ? [0.1, 0.5, 0.9].flatMap(x => [0.1, 0.5, 0.9].map(y => hit(cardBox.x + cardBox.width * x, cardBox.y + cardBox.height * y, control))) : [] } : null };
+  const sourceControls = [...main.querySelectorAll('a,button')], sources = sourceControls.map((control, sourceIndex) => ({ sourceIndex, tag: control.tagName, rects: [...control.getClientRects()].map(rect) }));
+  const selected = sources.filter(owner => owner.rects.some(box => box.width > 0 && box.height > 0 && intersects(box, screen)));
+  const controlScope = { kind: 'all-positive-area-viewport-owner-client-rects', matchedCount: sources.length, selectedCount: selected.length, offscreenCount: sources.length - selected.length, sources };
+  if (selected.length > 400) throw new Error('MEASURE1449_SETUP: viewport control ceiling, no truncation; matched=' + sources.length + ', selected=' + selected.length);
+  const controls = selected.map(owner => {
+    const control = sourceControls[owner.sourceIndex], box = control.getBoundingClientRect(), card = control.closest('[data-hub-game], [data-home-game-card]'), cardBox = card?.getBoundingClientRect(), labelRects = ranges(control), after = getComputedStyle(control, '::after');
+    return { sourceIndex: owner.sourceIndex, measureKind: 'element-control', rectSource: 'control.getClientRects', boxOwnerMatchesControl: control === control.closest('a,button'), node: nodeRecord(control), tag: control.tagName, role: control.getAttribute('role'), href: control.getAttribute('href'), text: control.textContent, ariaLabel: control.getAttribute('aria-label'), disabled: control.matches(':disabled,[aria-disabled="true"]'), inline: getComputedStyle(control).display.startsWith('inline'), rects: owner.rects, labelRects, clickableAncestor: nodeRecord(control.closest('a,button')), card: nodeRecord(card), onScreen: true, center: hit(box.x + box.width / 2, box.y + box.height / 2, control), stretchedPseudo: after.position === 'absolute' && after.top === '0px' && after.right === '0px' && after.bottom === '0px' && after.left === '0px' ? { after: styleRecord(after, pseudoProperties), containingCard: nodeRecord(card), sampledOwnershipOnly: true, samples: cardBox ? [0.1, 0.5, 0.9].flatMap(x => [0.1, 0.5, 0.9].map(y => hit(cardBox.x + cardBox.width * x, cardBox.y + cardBox.height * y, control))) : [] } : null };
   });
-  if (controls.length > 400) throw new Error('MEASURE1449_SETUP: control ceiling, no truncation');
   const painted = [...main.querySelectorAll('img,svg,video,canvas')].map(node => ({ node: nodeRecord(node), kind: node.tagName, rect: rect(node.getBoundingClientRect()) })).filter(item => item.rect.width && item.rect.height);
   const texts = [], walker = document.createTreeWalker(main, NodeFilter.SHOW_TEXT); let text;
   while ((text = walker.nextNode())) {
@@ -290,10 +338,10 @@ function collect({ expectedNode }) {
   return { at: performance.now(), url: location.href, viewport, theme: { light: document.documentElement.classList.contains('light'), stored: localStorage.getItem('dukb-theme'), tokens: Object.fromEntries(['background', 'foreground', 'primary', 'muted-foreground'].map(key => [key, getComputedStyle(document.documentElement).getPropertyValue('--' + key)])), bodyBackground: getComputedStyle(document.body).backgroundColor, bodyForeground: getComputedStyle(document.body).color },
     fonts: { status: document.fonts.status, inter: document.fonts.check('16px Inter'), display: document.fonts.check('16px "Space Grotesk"'), faces: [...document.fonts].map(face => ({ family: face.family, status: face.status, weight: face.weight })) }, h1Count: headings.length,
     heading: { node: nodeRecord(h1), sameNode: h1 === expectedNode, text: h1.textContent, shown: h1.innerText, rects: headingRects, union: union(headingRects), ancestry, row: nodeRecord(row), parent: nodeRecord(row.parentElement), outer: nodeRecord(row.parentElement.parentElement), intro: nodeRecord(row.nextElementSibling?.tagName === 'P' ? row.nextElementSibling : null), search: nodeRecord(main.querySelector('[aria-label="Search games"]')) }, stats,
-    firstPlayable: first ? { node: nodeRecord(first), href: first.getAttribute('href'), text: first.textContent, card: nodeRecord(firstCard), documentTop: first.getBoundingClientRect().top + scrollY } : null, controls, texts, nodes,
+    firstPlayable: first ? { node: nodeRecord(first), href: first.getAttribute('href'), text: first.textContent, card: nodeRecord(firstCard), documentTop: first.getBoundingClientRect().top + scrollY } : null, controlScope, controls, texts, nodes,
     seededLocalUserId: JSON.parse(localStorage.getItem('sb-flawuiqbvjobmkfkauhw-auth-token') || 'null')?.user?.id ?? null,
     storesRaw: { local: Object.fromEntries(Object.keys(localStorage).sort().map(key => [key, localStorage.getItem(key)])), session: Object.fromEntries(Object.keys(sessionStorage).sort().map(key => [key, sessionStorage.getItem(key)])) },
-    consent: { count: consent.length, region: nodeRecord(consent[0]), pending: document.body.dataset.consentPending ?? null, height: document.body.style.getPropertyValue('--dukb-consent-height'), choice: localStorage.getItem('cookie-consent-v2'), rejectEvents: window.__measure1449Reject }, utcDay: new Date().toISOString().slice(0, 10), etDay: new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date()) };
+    consent: { count: consent.length, region: nodeRecord(consent[0]), pending: document.body.dataset.consentPending ?? null, height: document.body.style.getPropertyValue('--dukb-consent-height'), choice: localStorage.getItem('cookie-consent-v2'), rejectEvents: window.__measure1449Reject }, utcDay: new Date().toISOString().slice(0, 10), etDay: new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date()), pollDay: new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York' }).format(new Date(Date.now() - 12 * 60 * 60 * 1000)) };
 }
 function enrich(sample) {
   const nodes = new Map(sample.nodes.map(node => [node.id, node])), byId = id => nodes.get(id), heading = sample.heading, box = heading.union;
@@ -320,7 +368,7 @@ async function snapshot(page, handle, spec, row, state, text = spec.h1) {
   let one, two; const end = Date.now() + Math.min(3000, bounded());
   do { one = await limit('first geometry sample', () => page.evaluate(collect, { expectedNode: handle })); await limit('two actual paint frames', () => page.evaluate(() => new Promise(resolve => requestAnimationFrame(first => requestAnimationFrame(second => resolve([first, second])))))); two = await limit('second geometry sample', () => page.evaluate(collect, { expectedNode: handle })); if (stable(one) === stable(two)) break; } while (Date.now() < end);
   assert.equal(stable(one), stable(two), 'MEASURE1449_SETUP: settled actual title, fonts, state and first tile');
-  foundation(two, spec, text); assert.equal(two.utcDay, spec.utcDay, 'MEASURE1449_SETUP: no UTC crossover'); assert.equal(two.etDay, spec.etDay, 'MEASURE1449_SETUP: no ET crossover');
+  foundation(two, spec, text); assert.equal(two.utcDay, spec.utcDay, 'MEASURE1449_SETUP: no UTC crossover'); assert.equal(two.etDay, spec.etDay, 'MEASURE1449_SETUP: no ET crossover'); assert.equal(two.pollDay, spec.pollDay, 'MEASURE1449_SETUP: no noon ET poll crossover');
   if (state === 'pending') assert(two.consent.count === 1 && two.consent.pending === '1' && two.consent.height, 'MEASURE1449_SETUP: actual pending consent shell');
   else { const choice = JSON.parse(two.consent.choice || 'null'); assert(two.consent.count === 0 && two.consent.pending === null && two.consent.height === '' && choice?.version === 2 && choice.advertising === false && choice.analytics === false && two.consent.rejectEvents.some(event => event.trusted && event.label.trim() === 'Reject all'), 'MEASURE1449_SETUP: actual trusted Reject all and current stored denial'); }
   const firstSignature = sha(stable(one)), secondSignature = sha(stable(two));
@@ -331,7 +379,7 @@ async function snapshot(page, handle, spec, row, state, text = spec.h1) {
   return sample;
 }
 async function walk(input, index) {
-  const clock = Date.now(), spec = { ...input, clock, utcDay: new Date(clock).toISOString().slice(0, 10), etDay: etDay(clock), user: USER };
+  const clock = Date.now(), spec = { ...input, clock, utcDay: new Date(clock).toISOString().slice(0, 10), etDay: etDay(clock), pollDay: etDay(clock - 12 * 60 * 60 * 1000), user: USER };
   const row = { id: spec.id, spec, expectedFontContextId: index + 1, contextCreated: false, complete: false, snapshots: [], allowedRequests: [], delegatedFonts: [], fixtures: [], blocked: [], http: [], css: [], responseErrors: [], pageErrors: [], consoleErrors: [] };
   report.cases.push(row); let context, page; const reads = [];
   try {
@@ -342,8 +390,8 @@ async function walk(input, index) {
         row.attemptedRequests = (row.attemptedRequests || 0) + 1; assert(row.attemptedRequests <= 2048, 'MEASURE1449_SETUP: bounded requests');
         if (url.origin === BASE) { staticRequest(url, request.method()); row.allowedRequests.push({ method: request.method(), path: url.pathname, type: request.resourceType() }); return await route.continue(); }
         if (request.method() === 'GET' && fonts.has(url.href) && ['font', 'stylesheet'].includes(request.resourceType())) { row.delegatedFonts.push({ url: url.href, type: request.resourceType(), sha256: fonts.get(url.href).sha256 }); return await route.fallback(); }
-        const fixture = shellFixture(request, url) || personalFixture(request, url, spec);
-        if (fixture) { row.fixtures.push({ id: fixture.id, method: request.method(), path: url.pathname, query: url.search, requestBodySha256: fixture.requestBodySha256 ?? null, responseSha256: sha(fixture.body), forwarded: false }); return await route.fulfill({ status: 200, contentType: 'application/json', body: fixture.body, headers: { 'access-control-allow-origin': '*', ...(fixture.date ? { date: fixture.date } : {}) } }); }
+        const fixture = shellFixture(request, url) || personalFixture(request, url, spec) || pollFixture(request, url, spec);
+        if (fixture) { row.fixtures.push({ id: fixture.id, method: request.method(), path: url.pathname, query: url.search, requestBodySha256: fixture.requestBodySha256 ?? null, responseSha256: sha(fixture.body), ...(fixture.pollDay ? { pollDay: fixture.pollDay, observedPollDay: url.searchParams.get('poll_date')?.slice(3), expectedQuery: new URLSearchParams({ select: POLL_SELECT, poll_date: 'eq.' + spec.pollDay, order: 'sort_order.asc' }).toString() } : {}), forwarded: false }); return await route.fulfill({ status: 200, contentType: 'application/json', body: fixture.body, headers: { 'access-control-allow-origin': '*', ...(fixture.date ? { date: fixture.date } : {}) } }); }
         throw new Error('MEASURE1449_TRANSPORT: not exact static/cache/source-owned read fixture');
       } catch (error) { row.blocked.push({ method: request.method(), origin: url.origin, path: url.pathname, query: url.search, error: failure(error) }); await route.abort('blockedbyclient'); }
     });
@@ -385,11 +433,13 @@ try {
   for (const receipt of ['SIM_OFFLINE_RECEIPT', 'FONT_CACHE_USE_RECEIPT']) assert(process.env[receipt] && fs.statSync(process.env[receipt]).isFile() && fs.statSync(process.env[receipt]).size === 0, 'MEASURE1449_SETUP: fresh existing ' + receipt);
   assert.equal(sha(fs.readFileSync(path.join(ROOT, 'src/pages/Index.tsx'))), 'a77bdd7d1c4a9dffedc01d3046702b61249aa945c4fe9c17a8fc9a0584ac4112', 'MEASURE1449_SETUP: reviewed candidate Index');
   assert.equal(sha(fs.readFileSync(path.join(ROOT, 'src/data/homeCopy.ts'))), 'eacf353622e5e6591c9f57dffdf40ae69ac12fe1e7a4843115cf0ae837595ba4', 'MEASURE1449_SETUP: reviewed candidate home copy');
+  for (const [file, expected] of [['src/components/home/PollOfTheDay.tsx', '61763f32d48db1687eb3f3144738330c3df1c24850e6a4f4ae1c83f4de837454'], ['src/lib/dateUtils.ts', 'b580faa88089a5d6a15aef0a1fc08f0f1444b38c273d458e3c74a43a7f72781e']]) assert.equal(sha(fs.readFileSync(path.join(ROOT, file))), expected, 'MEASURE1449_SETUP: exact source-owned poll reader and clock ' + file);
+  report.pollFixture = { path: '/rest/v1/daily_polls', select: POLL_SELECT, order: 'sort_order.asc', responseSha256: sha(POLL_BODY), dayRule: 'America/New_York date at context clock minus twelve hours', synthetic: true, flagless: true, votingAttempted: false };
   const template = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8'), blocks = template.split('<div id="dukb-home-copy">'); assert.equal(blocks.length, 2);
   const actualTemplateH1 = (blocks[1].replace(/<!--[\s\S]*?-->/g, ' ').match(/<h1>([^<]{1,200})<\/h1>/) || [])[1]; assert.equal(actualTemplateH1, HEADING, 'MEASURE1449_SETUP: actual generated template candidate H1'); report.homeFoldOwnedText = HEADING + ' Home';
   report.holds.sourceBefore = sourceHold(); before = inventory(DIST); assert(before.length > 100); staticFiles = new Map(before.map(item => ['/' + item.file, item])); write('source-before.json', report.holds.sourceBefore); write('dist-before.sha256', before.map(item => item.sha256 + '  ' + item.file).join('\n') + '\n');
   const fontManifest = fs.readFileSync(path.join(process.env.FREE_KICK_FONT_CACHE, 'manifest.json')); assert.equal(sha(fontManifest), process.env.FONT_CACHE_MANIFEST_SHA256); report.fontManifestSha256 = sha(fontManifest); cacheBefore = inventory(process.env.FREE_KICK_FONT_CACHE); fonts = new Map(JSON.parse(fontManifest).map(item => [item.url, item])); assert.equal(fonts.size, JSON.parse(fontManifest).length);
-  predicateControls(); fixtureControls(); browser = await chromium.launch({ headless: true, timeout: 10000 }); report.browserVersion = browser.version(); for (const [index, spec] of planned.entries()) await walk(spec, index);
+  predicateControls(); fixtureControls(); pollFixtureControls(); browser = await chromium.launch({ headless: true, timeout: 10000 }); report.browserVersion = browser.version(); for (const [index, spec] of planned.entries()) await walk(spec, index);
 } catch (error) { report.errors.push(failure(error)); }
 finally {
   try { if (browser) await limit('browser close', () => browser.close(), 5000, true); } catch (error) { report.errors.push(failure(error)); }
@@ -402,7 +452,7 @@ finally {
     assert.equal(new Set(uses.map(item => item.contextId)).size, 36, 'MEASURE1449_HOLD: no extra or missing cache context'); report.holds.unchanged = true;
   } catch (error) { report.errors.push(failure(error)); }
   report.actual = { contexts: report.cases.filter(row => row.contextCreated).length, completeContexts: report.cases.filter(row => row.complete).length, snapshots: report.cases.reduce((sum, row) => sum + row.snapshots.length, 0), headingArms: report.cases.reduce((sum, row) => sum + (row.headingArms?.length || 0), 0), findings: report.cases.flatMap(row => row.snapshots).reduce((sum, sample) => sum + sample.findings.length, 0) };
-  report.complete = report.errors.length === 0 && report.holds.unchanged === true && report.cases.length === 36 && report.actual.contexts === 36 && report.actual.completeContexts === 36 && report.actual.snapshots === 68 && report.actual.headingArms === 12 && report.transportPredicateControls.length === 6 && report.fixturePredicateControls.length === 9 && report.fontControls.length === 2 && report.recordControls.length === 13;
+  report.complete = report.errors.length === 0 && report.holds.unchanged === true && report.cases.length === 36 && report.actual.contexts === 36 && report.actual.completeContexts === 36 && report.actual.snapshots === 68 && report.actual.headingArms === 12 && report.transportPredicateControls.length === 6 && report.fixturePredicateControls.length === 18 && report.fontControls.length === 2 && report.recordControls.length === 14;
   report.status = report.complete ? 'MEASUREMENTS_COMPLETE' : 'INCOMPLETE_OR_SETUP_FAILURE'; report.exit = report.complete ? 0 : 1; write('report.json', report);
   const files = fs.readdirSync(OUT).filter(name => name !== 'evidence.sha256').sort(); assert(files.every(name => fs.lstatSync(path.join(OUT, name)).isFile() && !fs.lstatSync(path.join(OUT, name)).isSymbolicLink()), 'MEASURE1449_EVIDENCE: flat regular files'); write('evidence.sha256', files.map(name => sha(fs.readFileSync(path.join(OUT, name))) + '  ' + name).join('\n') + '\n');
 }
