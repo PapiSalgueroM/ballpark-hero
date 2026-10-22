@@ -1,0 +1,10 @@
+#!serve
+#!playwright
+#!serial
+simVictoryMoment: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simVictoryMoment.mjs
+seasonReview: node scripts/qa/tycoonSeasonReview1095.mjs --prefetch-assets-only && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonSeasonReview.mjs
+saleReview: node scripts/playTycoonSaleReview1083.mjs --prefetch-fonts-only && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" PORT=4193 ONLY=playTycoonSaleReview1083 node scripts/runAllSims.mjs --browser
+base-build: git worktree add /tmp/b 77c00798 && ln -s "$PWD/node_modules" /tmp/b/node_modules && cd /tmp/b && npm run build > "$RC_OUT/b-build.log" 2>&1 && echo built
+base-simVictoryMoment: cd /tmp/b && (node scripts/lib/hostLikeServer.mjs /tmp/b/dist 4194 > /dev/null 2>&1 &) && sleep 2 && BASE=http://localhost:4194 SWEEP_BASE=http://localhost:4194 NODE_OPTIONS="--require=/tmp/b/scripts/lib/offlineTransport.cjs" node scripts/simVictoryMoment.mjs
+base-seasonReview: cd /tmp/b && node scripts/qa/tycoonSeasonReview1095.mjs --prefetch-assets-only && BASE=http://localhost:4194 SWEEP_BASE=http://localhost:4194 NODE_OPTIONS="--require=/tmp/b/scripts/lib/offlineTransport.cjs" node scripts/simTycoonSeasonReview.mjs
+base-saleReview: cd /tmp/b && node scripts/playTycoonSaleReview1083.mjs --prefetch-fonts-only && NODE_OPTIONS="--require=/tmp/b/scripts/lib/offlineTransport.cjs" PORT=4195 ONLY=playTycoonSaleReview1083 node scripts/runAllSims.mjs --browser
