@@ -345,8 +345,9 @@ export function pitchPlan(input: PitchInput): PitchPlan {
       ...(build && shooter ? { line: shooter.line } : {}),
     });
     /* Round 1521: with `build`, the chance is reached by a build up that ends at the shooter: a man deeper than the
-       feeder, then the feeder, then the shooter, each stretch running straight into the next. */
-    if (build && feeder && feederAnchor) {
+       feeder, then the feeder, then the shooter, each stretch running straight into the next. A shooter with nobody
+       at or behind his line (the keeper, now and then the man a line names) is not built up to: he just has it. */
+    if (build && feeder && feederAnchor && behind.length) {
       layers.push({
         start: lead - BEAT_SPAN, end: lead, priority: 2, order: n, state: 'open', via: 'approach', side,
         carrier: feeder.key, dead: false, id: `a${a.order}`, anchor: feederAnchor, line: feeder.line,

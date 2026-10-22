@@ -933,7 +933,7 @@ interface BuildArm { possessions: number; forward: number; level: number; back: 
 interface Tally1521 {
   passes: Record<'ground' | 'air' | 'cross' | 'throw', number>; liftedGround: number; flatAerial: number; landOffenders: number;
   shots: Record<'first' | 'second', number>; shotOffenders: number; shotExamples: string[];
-  fouls: number; cues: number; waited: number; cueOffenders: number; hidden: number; hiddenOffenders: number; named: number; contacts: number; contactOffenders: number;
+  fouls: number; atWhistle: number; cues: number; waited: number; cueOffenders: number; hidden: number; hiddenOffenders: number; named: number; contacts: number; contactOffenders: number;
   cardLines: number; carded: number; cardOffenders: number; statFouls: number; statOffenders: number; foulExamples: string[];
   arms: Record<Arm1521, BuildArm>; pressGap: number[]; calmGap: number[]; chains: number; deepChains: number; chainOffenders: number; chainExamples: string[];
 }
@@ -941,7 +941,7 @@ const buildArm = (): BuildArm => ({ possessions: 0, forward: 0, level: 0, back: 
 const tally1521 = (): Tally1521 => ({
   passes: { ground: 0, air: 0, cross: 0, throw: 0 }, liftedGround: 0, flatAerial: 0, landOffenders: 0,
   shots: { first: 0, second: 0 }, shotOffenders: 0, shotExamples: [],
-  fouls: 0, cues: 0, waited: 0, cueOffenders: 0, hidden: 0, hiddenOffenders: 0, named: 0, contacts: 0, contactOffenders: 0,
+  fouls: 0, atWhistle: 0, cues: 0, waited: 0, cueOffenders: 0, hidden: 0, hiddenOffenders: 0, named: 0, contacts: 0, contactOffenders: 0,
   cardLines: 0, carded: 0, cardOffenders: 0, statFouls: 0, statOffenders: 0, foulExamples: [],
   arms: { defensive: buildArm(), balanced: buildArm(), attacking: buildArm() }, pressGap: [], calmGap: [], chains: 0, deepChains: 0, chainOffenders: 0, chainExamples: [],
 });
@@ -1037,7 +1037,10 @@ function replayFouls(t: Tally1521, input: PitchInput, plan: PitchPlan, live: Non
   });
   /* Every staged foul has its cue, unless a stretch that outranks it holds its place. */
   for (const [order, e] of input.feed.entries()) {
-    if (e.kind !== 'foul' || e.side === 'none' || placeOfLine(e) < from - 1e-9 || placeOfLine(e) >= to - 1e-9) continue;
+    if (e.kind !== 'foul' || e.side === 'none') continue;
+    /* A foul at the whistle itself is past the last stretch the pitch draws: counted, never staged. */
+    if (placeOfLine(e) >= to - 1e-9) { t.atWhistle++; continue; }
+    if (placeOfLine(e) < from - 1e-9) continue;
     t.fouls++;
     if (cued.has(order)) continue;
     t.hidden++;
@@ -1490,6 +1493,9 @@ const R10_FLOOR = { ground: 4000, air: 400, cross: 250, throw: 400 } as const;
    under the least of the five): forward over back at least 2.14 times in every arm (defensive seed 1), all passes
    attacking over defensive 0.035 to 0.082, with a line ahead each step 0.105 to 0.157, resets per possession each
    step 0.050 to 0.110. */
+/* R11: the share of the foul lines of the span whistled on the grass, 0.508 to 0.533 per seed on a GitHub runner
+   (r1521-s6); the rest fall in minutes a chance, a kick off or another dead ball holds all through. */
+const R11_CUED = 0.45;
 const R12_RATIO = 1.8;
 const R12_STEP = 0.02;
 const R12_AHEAD_STEP = 0.05;
@@ -1512,9 +1518,11 @@ describe('Round 1521: the live match looks like football', () => {
   it('R11: every foul the plan stages is seen at its own place, on the right two men, with only the card the feed gave', () => {
     const m = buildMaterial();
     const fouls = totals1521(t => t.fouls), cues = totals1521(t => t.cues);
-    console.log(`[1521 R11] foul lines staged ${fouls}, with their cue ${cues} (${(cues / Math.max(1, fouls)).toFixed(3)}; per seed ${fixed(m.looks.map(t => t.cues / Math.max(1, t.fouls)), 3)}), of them waiting inside their minute ${totals1521(t => t.waited)}, under a stretch that outranks them ${totals1521(t => t.hidden)}, with no such reason ${totals1521(t => t.hiddenOffenders)}; cue offenders ${totals1521(t => t.cueOffenders)}; named on the grass ${totals1521(t => t.named)}, meetings read ${totals1521(t => t.contacts)}, apart ${totals1521(t => t.contactOffenders)}; cards in the feed ${totals1521(t => t.cardLines)}, carded cues ${totals1521(t => t.carded)}, card offenders ${totals1521(t => t.cardOffenders)}; fouls the stats count ${totals1521(t => t.statFouls)}, halves where the feed and the stats differ ${totals1521(t => t.statOffenders)}${m.looks.flatMap(t => t.foulExamples).slice(0, 4).map(s => ` | ${s}`).join('')}`);
+    console.log(`[1521 R11] foul lines staged ${fouls}, with their cue ${cues} (${(cues / Math.max(1, fouls)).toFixed(3)}; per seed ${fixed(m.looks.map(t => t.cues / Math.max(1, t.fouls)), 3)}), of them waiting inside their minute ${totals1521(t => t.waited)}, under a stretch that outranks them ${totals1521(t => t.hidden)}, with no such reason ${totals1521(t => t.hiddenOffenders)}; cue offenders ${totals1521(t => t.cueOffenders)}; named on the grass ${totals1521(t => t.named)}, meetings read ${totals1521(t => t.contacts)}, apart ${totals1521(t => t.contactOffenders)}; cards in the feed ${totals1521(t => t.cardLines)}, carded cues ${totals1521(t => t.carded)}, card offenders ${totals1521(t => t.cardOffenders)}; fouls the stats count ${totals1521(t => t.statFouls)} (at the whistle itself ${totals1521(t => t.atWhistle)}), halves where the feed and the stats differ ${totals1521(t => t.statOffenders)}${m.looks.flatMap(t => t.foulExamples).slice(0, 4).map(s => ` | ${s}`).join('')}`);
     expect(fouls).toBeGreaterThan(1500);
-    expect(cues * 2).toBeGreaterThan(fouls);
+    /* Every foul whose minute has room is whistled on the grass (hiddenOffenders, below); the share that has room is
+       what the chances leave, per seed over R11_CUED. */
+    for (const t of m.looks) expect(t.cues / Math.max(1, t.fouls)).toBeGreaterThan(R11_CUED);
     expect(totals1521(t => t.cueOffenders)).toBe(0);
     expect(totals1521(t => t.hiddenOffenders)).toBe(0);
     expect(totals1521(t => t.named)).toBeGreaterThan(cues / 4);
@@ -1522,7 +1530,7 @@ describe('Round 1521: the live match looks like football', () => {
     expect(totals1521(t => t.contactOffenders)).toBe(0);
     expect(totals1521(t => t.carded)).toBeGreaterThan(40);
     expect(totals1521(t => t.cardOffenders)).toBe(0);
-    expect(totals1521(t => t.statFouls)).toBe(fouls);
+    expect(totals1521(t => t.statFouls)).toBe(fouls + totals1521(t => t.atWhistle));
     expect(totals1521(t => t.statOffenders)).toBe(0);
   }, LONG);
 
@@ -1717,6 +1725,8 @@ describe('Round 1521 by hand, and through the viewer', () => {
       if (container.querySelector('[data-cm-ball-lift]')) lifted++;
       const cue = container.querySelector('[data-pm-cue="foul"]');
       const label = container.querySelector('[data-cm-foul-cue]');
+      /* Read a step on: the whistle starts on the instant of its minute, and the clock can be a float's breadth short of it. */
+      if (cue && label) await step(40);
       if (cue && label) seen = { text: label.textContent ?? '', side: label.getAttribute('data-cm-foul-cue'), minute: container.querySelector('[data-cm-live-minute]')?.getAttribute('data-cm-live-minute') ?? null, card: cue.getAttribute('data-pm-cue-card'), order: label.getAttribute('data-cm-foul-order') };
     }
     expect(seen, 'the whistle was never drawn').not.toBeNull();
