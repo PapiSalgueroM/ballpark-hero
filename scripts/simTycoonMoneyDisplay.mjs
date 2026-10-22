@@ -41,7 +41,12 @@ const sourceEngine = read(path.join(ROOT, ENGINE)), sourceHook = read(path.join(
 // These whole historical copies change only the reviewed display leaves.
 assert.equal(sourceEngine.match(/export function fmtCash\(n: number\): string \{[\s\S]*?\n\}/g)?.length, 1);
 for (const anchor of ["💵 ${kid.name} sold for $${price.toLocaleString('en-US')}", "💵 ${player.name} sold for $${price.toLocaleString('en-US')}"]) assert.equal(sourceHook.split(anchor).length, 2, 'Unique executable sale-text leaf');
-assert.equal(sourceEngine.replace("import { formatNumber } from '@/lib/formatNumber';\n", '').replace(/export function fmtCash\(n: number\): string \{[\s\S]*?\n\}/, oldEngine.match(/export function fmtCash\(n: number\): string \{[\s\S]*?\n\}/)[0]), oldEngine);
+// Round 1532 narrowing (brief-1532 R6, critic item 5): this PR claims only the money display leaves. The pack
+// price rule of the scoring round may lower the three PACKS prices, so the price numbers of those rows are
+// blanked on both sides before the whole file comparison; every other byte of the file stays pinned.
+const noPackPrices = text => text.replace(/(\{ id: '(?:scout|club|elite)', name: '[^']*', emoji: '[^']*', price: )\d+(, firstFree:)/g, '$1N$2');
+assert.equal(noPackPrices(oldEngine).split("price: N, firstFree:").length - 1, 3, 'The three pack price rows are found in the pinned engine');
+assert.equal(noPackPrices(sourceEngine.replace("import { formatNumber } from '@/lib/formatNumber';\n", '').replace(/export function fmtCash\(n: number\): string \{[\s\S]*?\n\}/, oldEngine.match(/export function fmtCash\(n: number\): string \{[\s\S]*?\n\}/)[0])), noPackPrices(oldEngine));
 assert.equal(sourceHook.replace("💵 ${kid.name} sold for $${price.toLocaleString('en-US')}", '💷 ${kid.name} sold for ${price.toLocaleString()}').replace("💵 ${player.name} sold for $${price.toLocaleString('en-US')}", '💷 ${player.name} sold for ${price.toLocaleString()}'), oldHook);
 
 const testPath = path.join(OUT, 'money.test.tsx');
