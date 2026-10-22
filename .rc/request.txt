@@ -1,0 +1,6 @@
+#!playwright
+#!serial
+e-help1740: bash .rc/x/mutshow.sh clock1740 'node scripts/simTycoonHelp.mjs'
+e-modal30: bash .rc/x/mutshow.sh modal30 'node scripts/simTycoonHelp.mjs'
+e-plant-nofriendly: bash .rc/x/mutshow.sh nofriendly 'ONLY=/stadium-tycoon BASE=http://localhost:9 node scripts/playFirstVisitDialogs.mjs'
+e-plant-head: ONLY=/stadium-tycoon BASE=http://localhost:9 timeout 100 node scripts/playFirstVisitDialogs.mjs 2>&1 | tail -4; echo "(head, no server: the plant passes and the lines fail to load, expected)"
