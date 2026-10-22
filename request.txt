@@ -1,0 +1,4 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/scoreShown.test.tsx src/test/soccerCareerDugoutTable.test.tsx src/test/soccerCareerSaveRecovery.test.tsx src/test/soccerCareerDebutLegacy.test.tsx --testTimeout=300000 --hookTimeout=120000
+simSoccerOwnerTail: SIM_OWNER_BASE=cedd02399673fb5ef307129a3a6165bc208fe1a8 node scripts/simSoccerOwnerTail.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs

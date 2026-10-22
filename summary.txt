@@ -1,0 +1,4 @@
+simSoccerOwnerTail exit=0 16s | simSoccerOwnerTail: green. The owner picks his club, plays on the table, and every call has a cost and a reason.
+vitest exit=0 24s |    Duration  22.91s (transform 8.04s, setup 497ms, collect 17.47s, tests 23.64s, environment 2.91s, prepare 1.26s)
+simNoRivalNames exit=0 17s | No rival product names found. 0 findings.
+tsc exit=0 73s | 
