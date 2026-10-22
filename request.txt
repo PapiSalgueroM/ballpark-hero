@@ -1,0 +1,6 @@
+#!serial
+rr-proof: git checkout 1a21a9c28 -- src/components/cfb-dynasty/CfbDynastyBoard.tsx src/lib/cbbDynasty.ts && node_modules/.bin/vitest run src/components/college-dynasty/collegeDynastyFixture.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout HEAD -- src; exit $s
+rr-proof-cfbonly: git checkout 1a21a9c28 -- src/components/cfb-dynasty/CfbDynastyBoard.tsx && node_modules/.bin/vitest run src/components/college-dynasty/collegeDynastyFixture.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout HEAD -- src; exit $s
+rr-head-old: node_modules/.bin/vitest run src/components/college-dynasty/collegeDynastyFixture.test.tsx --testTimeout=300000 --hookTimeout=120000
+rr-record: cp src/components/college-dynasty/collegeDynastyFixture.json $RC_OUT/collegeDynastyFixture.old.json && COLLEGE_FIXTURE_SHA=ed51c2adb COLLEGE_FIXTURE_RECORD=1 node_modules/.bin/vitest run src/components/college-dynasty/collegeDynastyFixture.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; cp src/components/college-dynasty/collegeDynastyFixture.json $RC_OUT/collegeDynastyFixture.json; exit $s
+rr-replay: node_modules/.bin/vitest run src/components/college-dynasty/collegeDynastyFixture.test.tsx --testTimeout=300000 --hookTimeout=120000

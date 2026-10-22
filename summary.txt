@@ -1,0 +1,5 @@
+rr-proof exit=0 5s |    Duration  3.61s (transform 268ms, setup 72ms, collect 473ms, tests 2.31s, environment 316ms, prepare 144ms)
+rr-proof-cfbonly exit=1 5s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/college-dynasty/collegeDynastyFixture.test.tsx,title=src/components/college-dynasty/collegeDynas
+rr-head-old exit=1 4s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/college-dynasty/collegeDynastyFixture.test.tsx,title=src/components/college-dynasty/collegeDynas
+rr-record exit=0 5s |    Duration  3.62s (transform 282ms, setup 68ms, collect 476ms, tests 2.39s, environment 293ms, prepare 112ms)
+rr-replay exit=0 4s |    Duration  3.66s (transform 280ms, setup 66ms, collect 473ms, tests 2.39s, environment 290ms, prepare 64ms)
