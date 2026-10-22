@@ -7,8 +7,10 @@ dukb-handoff/2026-10-10/results-g/finish-1539.md, proof lines in results-g/rc-15
 ## Status
 
 Branch r1539-tycoon-after-law, from origin/r1532-tycoon-scorelines c50eb038, with origin/r1536-dialogs-over-banner
-ae2c9f05 (0d22beb0) and origin/main 30d123fd (268e3b97) merged in step 0. 268e3b97 is the round's starting commit
-(the base of every base against head comparison, sweepWeight included).
+ae2c9f05 (0d22beb0) and origin/main 0846f9c5 (268e3b97) merged in step 0. 268e3b97 is the round's starting commit
+(the base of every base against head comparison, sweepWeight included). The message of 268e3b97 names 30d123fd, but
+its second parent is 0846f9c5 (`git log -1 --format=%P 268e3b97`), main's head one commit later (a board claim only);
+the pushed message is left as it is rather than rewriting history. origin/main e3deb2cb was merged later (4de87a10).
 
 ## Part A: the away clock
 
