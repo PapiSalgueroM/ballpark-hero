@@ -1,0 +1,7 @@
+vitest-a exit=1 50s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/careerSeasonReview.test.tsx,title=src/test/careerSeasonReview.test.tsx > saved career season review > 
+vitest-b exit=1 92s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerTruthDigest.test.ts,title=src/test/usCareerTruthDigest.test.ts > Round 1104%3A the US career t
+tsc exit=0 96s | 
+simUsCareerWeight exit=0 0s | simUsCareerWeight: green. 31 checks: the four wrappers hand the board their own binding, no shared file or binding imports another sport, and every control fired.
+simUsBoardParity exit=1 46s | simUsBoardParity: 2 failures
+intl-12 exit=0 0s | simCareerIntl: GREEN, 13 checks over sections 12
+simUsCareerDeckC exit=0 26s | simUsCareerDeckC: all checks passed
