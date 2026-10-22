@@ -1,0 +1,12 @@
+ [32m✓[39m src/test/careerAwardsNightCard.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 6143[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the Ballon d'Or ceremony card[2m > [22mkeeps the actual true ballot out of newspaper, summary, timeline and cabinet until its list [33m 1639[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the Ballon d'Or ceremony card[2m > [22mkeeps the actual false ballot out of newspaper, summary, timeline and cabinet until its list [33m 651[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the Ballon d'Or ceremony card[2m > [22ma win offers the speech once, then shows what it did, and Continue leaves [33m 688[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the Ballon d'Or ceremony card[2m > [22man old save holding a ceremony from a past season is not offered a speech for it [33m 374[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the tournament winner's speech[2m > [22mstays on the card, shows what it really moved, a second tap does nothing, Continue leaves [33m 873[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m5 passed[39m[22m[90m (5)[39m
+[2m      Tests [22m [1m[32m57 passed[39m[22m[90m (57)[39m
+[2m   Start at [22m 16:23:46
+[2m   Duration [22m 13.58s[2m (transform 6.73s, setup 580ms, collect 19.44s, tests 12.97s, environment 2.91s, prepare 782ms)[22m
+
