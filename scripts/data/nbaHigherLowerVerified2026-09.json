@@ -1,12 +1,17 @@
 {
- "about": "NBA Higher or Lower career points, Round 663. Values come from public.nba_player_stats read on 2026-09-22, through the year_to recorded per player. scripts/simHigherLowerFacts.mjs holds the shipped file to this record.",
+ "about": "NBA Higher or Lower career points, Round 663, refreshed by Round 1549. Values come from public.nba_player_stats read on 2026-09-22, through the year_to recorded per player, except the ten men who played in 2025-26: their official regular season totals through 2025-26 were read on 2026-10-22 on StatMuse and on ESPN, which agreed every time, and each carries both URLs. scripts/simHigherLowerFacts.mjs holds the shipped file to this record and requires two sources on two hosts for every man of the latest season.",
  "read": "2026-09-22",
- "source": "public.nba_player_stats",
- "note": "The table holds no career that began before 1965-66, so twelve players are absent from it entirely and are listed under heldFromFile with the values the file already carried, which are correct. This is the same shape as Gordie Howe in the NHL record, where the table truncates rather than omits.",
+ "source": "public.nba_player_stats (2026-09-22); StatMuse and ESPN, URLs per player, for every man of the latest season (2026-10-22)",
+ "note": "The table holds no career that began before 1965-66, so twelve players are absent from it entirely and are listed under heldFromFile with the values the file already carried, which are correct. This is the same shape as Gordie Howe in the NHL record, where the table truncates rather than omits. Round 1549 found the table short for five of the ten men of 2025-26 (LeBron James 43,394 against 43,440, Kevin Durant 32,564 against 32,597, James Harden 29,319 against 29,339, Stephen Curry 26,493 against 26,528, Paul George 19,306 against 19,338), as if read before the last games of that regular season. Curry at 26,493 sat 3 under Tim Duncan instead of 32 over him, so that pair marked the right pick wrong. ESPN career rows already include a 2026-27 game for some men; each entry says what was taken off.",
  "players": {
   "LeBron James": {
-   "points": 43394,
-   "lastSeason": "2025-26"
+   "points": 43440,
+   "lastSeason": "2025-26",
+   "src": [
+    "https://www.statmuse.com/nba/ask/most-career-regular-season-points-through-2025-26-season",
+    "https://www.espn.com/nba/player/stats/_/id/1966/lebron-james"
+   ],
+   "how": "ESPN career 43,454 minus 14 in 2026-27"
   },
   "Kareem Abdul-Jabbar": {
    "points": 38387,
@@ -21,8 +26,13 @@
    "lastSeason": "2015-16"
   },
   "Kevin Durant": {
-   "points": 32564,
-   "lastSeason": "2025-26"
+   "points": 32597,
+   "lastSeason": "2025-26",
+   "src": [
+    "https://www.statmuse.com/nba/ask/most-career-regular-season-points-through-2025-26-season",
+    "https://www.espn.com/nba/player/stats/_/id/3202/kevin-durant"
+   ],
+   "how": "ESPN career 32,627 minus 30 in 2026-27"
   },
   "Michael Jordan": {
    "points": 32292,
@@ -33,8 +43,13 @@
    "lastSeason": "2018-19"
   },
   "James Harden": {
-   "points": 29319,
-   "lastSeason": "2025-26"
+   "points": 29339,
+   "lastSeason": "2025-26",
+   "src": [
+    "https://www.statmuse.com/nba/ask/most-career-regular-season-points-through-2025-26-season",
+    "https://www.espn.com/nba/player/stats/_/id/3992/james-harden"
+   ],
+   "how": "ESPN career 29,339, no 2026-27 row"
   },
   "Shaquille O'Neal": {
    "points": 28596,
@@ -54,7 +69,12 @@
   },
   "Russell Westbrook": {
    "points": 27176,
-   "lastSeason": "2025-26"
+   "lastSeason": "2025-26",
+   "src": [
+    "https://www.statmuse.com/nba/ask/most-career-regular-season-points-through-2025-26-season",
+    "https://www.espn.com/nba/player/stats/_/id/3468/russell-westbrook"
+   ],
+   "how": "ESPN career 27,176, no 2026-27 row"
   },
   "Hakeem Olajuwon": {
    "points": 26946,
@@ -62,7 +82,12 @@
   },
   "DeMar DeRozan": {
    "points": 26711,
-   "lastSeason": "2025-26"
+   "lastSeason": "2025-26",
+   "src": [
+    "https://www.statmuse.com/nba/ask/most-career-regular-season-points-through-2025-26-season",
+    "https://www.espn.com/nba/player/stats/_/id/3978/demar-derozan"
+   ],
+   "how": "ESPN career 26,711, no 2026-27 row"
   },
   "Dominique Wilkins": {
    "points": 26668,
@@ -73,8 +98,13 @@
    "lastSeason": "2015-16"
   },
   "Stephen Curry": {
-   "points": 26493,
-   "lastSeason": "2025-26"
+   "points": 26528,
+   "lastSeason": "2025-26",
+   "src": [
+    "https://www.statmuse.com/nba/ask/most-career-regular-season-points-through-2025-26-season",
+    "https://www.espn.com/nba/player/stats/_/id/3975/stephen-curry"
+   ],
+   "how": "ESPN career 26,551 minus 23 in 2026-27"
   },
   "Paul Pierce": {
    "points": 26397,
@@ -126,7 +156,12 @@
   },
   "Chris Paul": {
    "points": 23058,
-   "lastSeason": "2025-26"
+   "lastSeason": "2025-26",
+   "src": [
+    "https://www.statmuse.com/nba/ask/career-regular-season-points-through-2025-26-for-chris-paul-giannis-antetokounmpo-anthony-davis-paul-george",
+    "https://www.espn.com/nba/player/stats/_/id/2779/chris-paul"
+   ],
+   "how": "ESPN career 23,058, no 2026-27 row"
   },
   "Damian Lillard": {
    "points": 22598,
@@ -146,7 +181,12 @@
   },
   "Giannis Antetokounmpo": {
    "points": 21531,
-   "lastSeason": "2025-26"
+   "lastSeason": "2025-26",
+   "src": [
+    "https://www.statmuse.com/nba/ask/career-regular-season-points-through-2025-26-for-chris-paul-giannis-antetokounmpo-anthony-davis-paul-george",
+    "https://www.espn.com/nba/player/stats/_/id/3032977/giannis-antetokounmpo"
+   ],
+   "how": "ESPN career 21,566 minus 35 in 2026-27"
   },
   "Pau Gasol": {
    "points": 20894,
@@ -214,11 +254,21 @@
   },
   "Anthony Davis": {
    "points": 19385,
-   "lastSeason": "2025-26"
+   "lastSeason": "2025-26",
+   "src": [
+    "https://www.statmuse.com/nba/ask/career-regular-season-points-through-2025-26-for-chris-paul-giannis-antetokounmpo-anthony-davis-paul-george",
+    "https://www.espn.com/nba/player/stats/_/id/6583/anthony-davis"
+   ],
+   "how": "ESPN career 19,419 minus 34 in 2026-27"
   },
   "Paul George": {
-   "points": 19306,
-   "lastSeason": "2025-26"
+   "points": 19338,
+   "lastSeason": "2025-26",
+   "src": [
+    "https://www.statmuse.com/nba/ask/career-regular-season-points-through-2025-26-for-chris-paul-giannis-antetokounmpo-anthony-davis-paul-george",
+    "https://www.espn.com/nba/player/stats/_/id/4251/paul-george"
+   ],
+   "how": "ESPN career 19,376 minus 38 in 2026-27"
   },
   "Bob Lanier": {
    "points": 19248,

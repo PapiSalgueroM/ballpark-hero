@@ -19,6 +19,9 @@
  *   unverifiedMarker  the asOf value meaning "nobody could check this"
  *   cannotBeChecked   (player) => boolean, the sport's own rule for a row its
  *                     source cannot cover, for example a goalie in a skater table
+ *   twoSources   optional: 'all' (every verified row names two source URLs on
+ *                two hosts, no wiki) or 'latest' (only the men of the latest
+ *                season in the record, the rows a web read refreshed)
  *
  * THE CHECK THAT MATTERS IS ORDERING, not the values. A wrong number is only
  * harmful in this game when it reorders a pair, so section 3 counts inverted
@@ -120,16 +123,26 @@ export function checkSport(cfg, players, record) {
     if (overlap.length) { fail(`${overlap.join(', ')} is both verified and not`); bad++; }
     if (!record.read || !record.source) { fail('the record does not say when it was read or what from'); bad++; }
     /* Round 1549: a record read from the web names two sources per player, on
-       two different hosts, neither of them a wiki. */
-    if (record.perPlayerSources) {
+       two different hosts, neither of them a wiki. WHICH rows must is the
+       sport's config (twoSources: 'all', or 'latest' for every man of the
+       latest season in the record), not a flag in the record under test: a
+       record that drops its own flag must not stop being checked. */
+    const latest = Object.values(verified).map(v => String(v.lastSeason)).filter(s => /^\d{4}/.test(s)).sort().pop();
+    const mustCarryTwo = (v) => cfg.twoSources === 'all' || record.perPlayerSources
+      || (cfg.twoSources === 'latest' && String(v.lastSeason) === latest);
+    let onTwo = 0;
+    if (cfg.twoSources || record.perPlayerSources) {
       for (const [name, v] of Object.entries(verified)) {
+        if (!mustCarryTwo(v)) continue;
+        onTwo++;
         const hosts = (v.src || []).map((u) => { try { return new URL(u).hostname.replace(/^www\./, ''); } catch { return null; } });
         if (hosts.length < 2 || hosts.some(h => !h)) { fail(`${name} carries ${hosts.length} usable source(s), two are required`); bad++; continue; }
         if (new Set(hosts).size < 2) { fail(`${name}: every source is on ${hosts[0]}, which is one source twice`); bad++; }
         if (hosts.some(h => /wiki/.test(h))) { fail(`${name}: a source is Wikipedia or a copy of it`); bad++; }
       }
+      if (!onTwo) { fail(`the rule says rows must carry two sources (${cfg.twoSources || 'the record flag'}) and it matched none, so it checked nothing`); bad++; }
     }
-    if (!bad) ok(`${Object.keys(verified).length} verified, ${Object.keys(held).length} held from the file, ${unverified.length} unverified, together exactly the ${names.size} shipped players, read ${record.read} from ${record.source}`);
+    if (!bad) ok(`${Object.keys(verified).length} verified, ${Object.keys(held).length} held from the file, ${unverified.length} unverified, together exactly the ${names.size} shipped players, read ${record.read} from ${record.source}${onTwo ? `; ${onTwo} of them each on two sources on two hosts` : ''}`);
   }
 
   section = 2;

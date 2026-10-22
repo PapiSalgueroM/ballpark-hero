@@ -52,6 +52,15 @@
  *   apmerge     nfl rushing yards: the two Adrian Petersons added
  *               together again (16,204), which beats Frank Gore           2, 3
  *   durantteam  nba: Durant's card loses Houston, his 2025-26 team        8
+ *   curryshort  nba: Curry back to the table's short 26,493, 3 under
+ *               Tim Duncan, so that pair marks the right pick wrong     2, 3
+ *   nbaonesource nba record: LeBron's 2025-26 total keeps one source     1
+ *   flagless    nfl record: drops its own two source flag and Henry's
+ *               rushing yards stand on nfl.com twice (the rule is the
+ *               sport's config, so it still holds)                      1
+ *   throughprop the NBA card hands the line player.position              7
+ *   componentuntil the shared line itself prints "played until"         7
+ *   examplestale a worked example quotes Brady's old 89,216 again        9
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -60,10 +69,15 @@ import { loadSport, readSource, rewrite, checkSport } from './lib/higherLowerFen
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.HL_FACTS_CONTROL || '';
-const EXPECT = { stale: [2], inversion: [2, 3], nolast: [4], goalieok: [5], heldfix: [3, 6], nbastale: [2, 3], mlbstale: [2], nflstale: [2, 3], tennismerge: [2, 3], playeduntil: [7], henrystale: [2, 3], apmerge: [2, 3], durantteam: [8] };
+const EXPECT = { stale: [2], inversion: [2, 3], nolast: [4], goalieok: [5], heldfix: [3, 6], nbastale: [2, 3], mlbstale: [2], nflstale: [2, 3], tennismerge: [2, 3], playeduntil: [7], henrystale: [2, 3], apmerge: [2, 3], durantteam: [8], curryshort: [2, 3], nbaonesource: [1], flagless: [1], throughprop: [7], componentuntil: [7], examplestale: [9] };
 /* Exit 2, never 1: 1 is a control that fired, and a mistyped name must not read as one. */
 if (CONTROL && !(CONTROL in EXPECT)) {
   console.log(`   FAIL unknown control ${CONTROL} (known: ${Object.keys(EXPECT).join(', ')})`);
+  process.exit(2);
+}
+function stopControl(why) {
+  console.log(`   FAIL ${why}`);
+  console.log('simHigherLowerFacts: stopped, the control proved nothing');
   process.exit(2);
 }
 
@@ -86,6 +100,8 @@ const SPORTS = [
     record: 'scripts/data/nbaHigherLowerVerified2026-09.json',
     unverifiedMarker: 'unverified',
     cannotBeChecked: null,
+    /* Round 1549: every man of the latest season names StatMuse and ESPN. */
+    twoSources: 'latest',
   },
   /* STILL OPEN. cfb_qb_stats holds only 32 of the file's 65 quarterbacks; Flutie,
      Herbert, Eli Manning, Andrew Luck and 29 more are simply not in it, so a record
@@ -107,7 +123,7 @@ const SPORTS = [
     /* Round 1549: the official totals through 2025 on two web sources per
        player, every category, in place of the nflfastr read of 2026-09. */
     record: NFL_RECORD, recordKey: 'tds',
-    unverifiedMarker: 'unverified', cannotBeChecked: null,
+    unverifiedMarker: 'unverified', cannotBeChecked: null, twoSources: 'all',
   },
   /* Round 1549: the other five NFL categories, each its own fenced game. They
      had no record at all, and two of them carried a value that was two men
@@ -117,7 +133,7 @@ const SPORTS = [
     file: 'src/data/nflHLCategories.ts', exportName: 'NFL_HL_CATEGORIES', category: cat,
     metric: 'value', asOf: 'lastSeason',
     record: NFL_RECORD, recordKey: cat,
-    unverifiedMarker: 'unverified', cannotBeChecked: null,
+    unverifiedMarker: 'unverified', cannotBeChecked: null, twoSources: 'all',
   })),
   {
     key: 'tennis', label: 'Tennis Higher or Lower',
@@ -169,7 +185,11 @@ for (const cfg of SPORTS.filter(s => s.record)) {
       else if (CONTROL === 'goalieok') source = rewrite(source, "careerPoints: 46, teams: 'New York Rangers', lastSeason: 'unverified'", "careerPoints: 46, teams: 'New York Rangers', lastSeason: '2019-20'", 'goalieok dresses a goalie up as checked');
       else if (CONTROL === 'heldfix') source = rewrite(source, 'careerPoints: 1850', 'careerPoints: 349', 'heldfix uses the truncated table value');
     } else if (cfg.key === 'nba' && CONTROL === 'nbastale') {
-      source = rewrite(source, 'careerPoints: 32564', 'careerPoints: 30571', 'nbastale puts Durant back a season');
+      source = rewrite(source, 'careerPoints: 32597', 'careerPoints: 30571', 'nbastale puts Durant back a season');
+    } else if (cfg.key === 'nba' && CONTROL === 'curryshort') {
+      /* The total the site's table gave until Round 1549's fix: 3 under Tim
+         Duncan's 26,496, so Curry against Duncan marked the right pick wrong. */
+      source = rewrite(source, 'careerPoints: 26528', 'careerPoints: 26493', 'curryshort puts Curry back to the short table total');
     } else if (cfg.key === 'mlb' && CONTROL === 'mlbstale') {
       /* Bonds is 7 clear of Aaron, so a nudge of 2 reorders nothing: section 2 alone. */
       source = rewrite(source, 'careerHrs: 762', 'careerHrs: 760', 'mlbstale nudges Bonds');
@@ -201,6 +221,24 @@ for (const cfg of SPORTS.filter(s => s.record)) {
     continue;
   }
   const full = JSON.parse(fs.readFileSync(path.join(ROOT, cfg.record), 'utf8'));
+  /* Record controls edit the in memory record, each refusing to run when its
+     target is not there to edit. */
+  if (CONTROL === 'nbaonesource' && cfg.key === 'nba') {
+    const e = full.players?.['LeBron James'];
+    if (!e || !Array.isArray(e.src) || e.src.length !== 2) stopControl('nbaonesource: LeBron James carries no two source entry to cut');
+    e.src = e.src.slice(0, 1);
+  }
+  if (CONTROL === 'flagless' && cfg.key.startsWith('nfl')) {
+    /* The RUN review's m3b: the record drops its own flag and Henry's rushing
+       yards stand on nfl.com twice. The rule is the sport's, so it still holds. */
+    if (full.perPlayerSources !== true) stopControl('flagless: the NFL record carries no perPlayerSources flag to drop');
+    delete full.perPlayerSources;
+    if (cfg.key === 'nfl-rushYds') {
+      const e = full.categories?.rushYds?.players?.['Derrick Henry'];
+      if (!e || !Array.isArray(e.src)) stopControl('flagless: Derrick Henry has no rushing yards sources to collapse');
+      e.src = ['https://www.nfl.com/players/derrick-henry/stats/career', 'https://www.nfl.com/players/derrick-henry/stats/logs/2025/'];
+    }
+  }
   /* A record that holds several categories hands each its own block, with the
      record's read date, source and source rule. */
   const record = cfg.recordKey
@@ -220,12 +258,15 @@ for (const cfg of SPORTS.filter(s => s.record)) {
    total mounts the shared line (Round 662's hockey wording), and none may say
    "played until". Read from the code with comments stripped, so this comment
    cannot satisfy it. */
-const PAGES = ['HockeyHigherLower', 'NbaHigherLower', 'NflHigherLower', 'TennisHigherLower', 'F1HigherLower'];
+/* Each page hands the line the value its total really runs through (the RUN
+   review's m4 passed player.position and stayed green), and the shared line
+   itself is read too (its m6 made the component say "played until"). */
+const PAGES = { HockeyHigherLower: 'player.lastSeason', NbaHigherLower: 'player.lastSeason', NflHigherLower: 'player.lastSeason', TennisHigherLower: 'TENNIS_HL_THROUGH', F1HigherLower: 'F1_HL_THROUGH' };
+const strip = (t) => t.replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/(^|[^:'"`])\/\/[^\n]*/g, '$1');
 console.log('7) every Higher or Lower card says what its total runs through, and none says "played until"');
 {
   let bad = 0;
-  const strip = (t) => t.replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/(^|[^:'"`])\/\/[^\n]*/g, '$1');
-  for (const page of PAGES) {
+  for (const [page, expr] of Object.entries(PAGES)) {
     const rel = `src/pages/${page}.tsx`;
     let code = fs.readFileSync(path.join(ROOT, rel), 'utf8').replaceAll('\r\n', '\n');
     if (CONTROL === 'playeduntil' && page === 'NflHigherLower') {
@@ -237,13 +278,28 @@ console.log('7) every Higher or Lower card says what its total runs through, and
         process.exit(2);
       }
     }
+    if (CONTROL === 'throughprop' && page === 'NbaHigherLower') {
+      try {
+        code = rewrite(code, '<HigherLowerThrough through={player.lastSeason} />', '<HigherLowerThrough through={player.position} />', 'throughprop hands the NBA line the position');
+      } catch (e) { stopControl(e.message); }
+    }
     code = strip(code);
     if (/played until/i.test(code)) { console.log(`   FAIL ${rel} still prints "played until"`); bad++; }
-    if (!/<HigherLowerThrough through=\{[^}]+\} \/>/.test(code)) { console.log(`   FAIL ${rel} reveals a total without the shared line saying what it runs through`); bad++; }
+    if (!code.includes(`<HigherLowerThrough through={${expr}} />`)) { console.log(`   FAIL ${rel} does not hand the shared line ${expr}, the value its total runs through`); bad++; }
   }
+  const compRel = 'src/components/game/HigherLowerThrough.tsx';
+  let comp = fs.readFileSync(path.join(ROOT, compRel), 'utf8').replaceAll('\r\n', '\n');
+  if (CONTROL === 'componentuntil') {
+    try {
+      comp = rewrite(comp, '`through ${through}`', '`played until ${through}`', 'componentuntil makes the shared line say played until');
+    } catch (e) { stopControl(e.message); }
+  }
+  comp = strip(comp);
+  if (/played until/i.test(comp)) { console.log(`   FAIL ${compRel} prints "played until"`); bad++; }
+  if (!comp.includes('`through ${through}`') || !comp.includes("'season not confirmed'")) { console.log(`   FAIL ${compRel} no longer prints "through" plus the season, or "season not confirmed" for an unchecked row`); bad++; }
   checks++;
   if (bad) { failures += bad; red.add(7); }
-  else console.log(`   ok   ${PAGES.length} pages mount the shared line and none says "played until"`);
+  else console.log(`   ok   ${Object.keys(PAGES).length} pages hand the shared line the value their total runs through, the line prints "through" it, and nothing says "played until"`);
 }
 
 /* ---------- section 8: an NBA man still playing lists his current team ---------- */
