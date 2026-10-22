@@ -222,8 +222,9 @@ export function makeBaseballChecker({ record, ledger = {} }) {
       case 'club': {
         const seasons = m.fr?.[c.id] ?? 0;
         if (!c.legend) return seasons > 0;
-        /* a legend is not a man who passed through: three seasons or more fits, none does not, one or two is unknown */
-        if (seasons >= 3) return true;
+        /* a legend is not a man who passed through: five seasons or more fits, none does not, one to four is
+           unknown (the board cannot say whether four years make a legend, so neither can the checker) */
+        if (seasons >= 5) return true;
         return seasons === 0 ? false : null;
       }
       case 'mvpBoth': return hasAward(m, ['ALMVP']) && hasAward(m, ['NLMVP']);
@@ -328,4 +329,218 @@ export function makeBaseballChecker({ record, ledger = {} }) {
   }
 
   return { criterion, fits, watch, has: name => byName.has(fold(name)) };
+}
+
+/* ------------------------------------------------------------------ */
+/* NFL                                                                 */
+/* ------------------------------------------------------------------ */
+
+/* Board nickname -> ESPN abbreviations and the NFL Grid table's codes (moves folded into the franchise). */
+const NFL_CLUBS = {
+  cardinals: [['ARI'], ['ARI']], falcons: [['ATL'], ['ATL']], ravens: [['BAL'], ['BAL']], bills: [['BUF'], ['BUF']],
+  panthers: [['CAR'], ['CAR']], bears: [['CHI'], ['CHI']], bengals: [['CIN'], ['CIN']], browns: [['CLE'], ['CLE']],
+  cowboys: [['DAL'], ['DAL']], broncos: [['DEN'], ['DEN']], lions: [['DET'], ['DET']], packers: [['GB'], ['GB']],
+  texans: [['HOU'], ['HOU']], colts: [['IND'], ['IND']], jaguars: [['JAX'], ['JAX']], chiefs: [['KC'], ['KC']],
+  raiders: [['LV', 'OAK'], ['LV']], chargers: [['LAC', 'SD'], ['LAC']], rams: [['LAR', 'STL', 'LA'], ['LA']],
+  dolphins: [['MIA'], ['MIA']], vikings: [['MIN'], ['MIN']], patriots: [['NE'], ['NE']], saints: [['NO'], ['NO']],
+  giants: [['NYG'], ['NYG']], jets: [['NYJ'], ['NYJ']], eagles: [['PHI'], ['PHI']], steelers: [['PIT'], ['PIT']],
+  '49ers': [['SF'], ['SF']], seahawks: [['SEA'], ['SEA']], buccaneers: [['TB'], ['TB']],
+  titans: [['TEN'], ['TEN']], commanders: [['WSH'], ['WAS']],
+};
+/* Board wording -> the folded college names the two records use. */
+const NFL_COLLEGES = {
+  alabama: ['alabama'], lsu: ['lsu', 'louisianastate'], ohiostate: ['ohiostate'], clemson: ['clemson'],
+  michigan: ['michigan'], georgia: ['georgia'], usc: ['usc', 'southerncalifornia'], miami: ['miami', 'miamifl'],
+  notredame: ['notredame'], oklahoma: ['oklahoma'], texas: ['texas'], florida: ['florida'],
+};
+const FIRST_OVERALL = /Rd 1, Pk 1 \(/;
+
+/**
+ * NFL's checker. record: ESPN's rows; grid: the NFL Grid table; ledger: the round's two host ledger.
+ * Clubs are the union of the two records (ESPN lists a club only where he has a stat line, so a lineman's
+ * seasons are short there; the roster table lists every roster season), and the ledger's overlay adds a
+ * stint both missed.
+ */
+export function makeNflChecker({ record, grid, ledger = {} }) {
+  const men = { ...record.men };
+  for (const [name, o] of Object.entries(ledger.overlay ?? {})) men[name] = { ...(men[name] ?? {}), ...(o.set ?? {}) };
+  const byName = indexByName(men, ledger.aliases);
+  const gridBy = new Map();
+  for (const p of grid?.players ?? []) {
+    for (const k of new Set([fold(p.name), fold(p.display ?? p.name)])) {
+      if (!gridBy.has(k)) gridBy.set(k, []);
+      gridBy.get(k).push(p);
+    }
+  }
+  /* the table's row for the man ESPN means: the namesake who shares the most clubs with ESPN's seasons, and
+     none at all when ESPN lists clubs and no row shares one (Clay Matthews the father played for Cleveland
+     and Atlanta; the son on the board for Green Bay and the Rams) */
+  const asGrid = a => Object.values(NFL_CLUBS).find(([e]) => e.includes(a))?.[1][0] ?? a;
+  const gridRow = (name, m) => {
+    const cands = gridBy.get(fold(name)) ?? [];
+    const espnClubs = new Set(Object.values(m?.seasons ?? {}).flat().map(asGrid));
+    if (!espnClubs.size) return cands.length === 1 ? cands[0] : null;
+    const shared = p => p.teams.filter(t => espnClubs.has(t)).length;
+    const best = [...cands].sort((a, b) => shared(b) - shared(a))[0];
+    return best && shared(best) > 0 ? best : null;
+  };
+  const lists = new Map(Object.entries(ledger.lists ?? {}).map(([k, v]) => [fold(v.label ?? k), v]));
+
+  function criterion(label) {
+    const f = fold(label);
+    if (lists.has(f)) return { kind: 'list', key: f };
+    let m;
+    if ((m = label.match(/^Played for the (.+)$/))) {
+      const club = NFL_CLUBS[fold(m[1])];
+      return club ? { kind: 'club', espn: club[0], grid: club[1] } : null;
+    }
+    if ((m = label.match(/^Played college ball at (.+)$/))) {
+      const c = NFL_COLLEGES[fold(m[1])];
+      return c ? { kind: 'college', names: c } : null;
+    }
+    if (f === 'drafted1overall') return { kind: 'firstPick' };
+    if ((m = label.replace(/,/g, '').match(/^(\d+)\+ career (passing|rushing|receiving) yards$/))) return { kind: 'yards', cat: m[2], min: Number(m[1]) };
+    return null;
+  }
+
+  function fits(name, c) {
+    if (c.kind === 'list') {
+      const list = lists.get(c.key);
+      if (listSet(list).has(fold(name))) return true;
+      return list.closed ? false : null;
+    }
+    const m = byName.get(fold(name));
+    const g = gridRow(name, m);
+    if (!m && !g) return null;
+    switch (c.kind) {
+      case 'club': {
+        const espn = new Set(Object.values(m?.seasons ?? {}).flat());
+        const extra = new Set(m?.clubsAlso ?? []);
+        if (c.espn.some(a => espn.has(a) || extra.has(a))) return true;
+        if (g && c.grid.some(a => g.teams.includes(a))) return true;
+        return m ? false : null;
+      }
+      case 'college': {
+        const names = [m?.college, g?.college].filter(Boolean).map(fold);
+        if (!names.length) return null;
+        return names.some(n => c.names.includes(n));
+      }
+      case 'firstPick': {
+        if (m?.draft) return FIRST_OVERALL.test(m.draft);
+        if (g?.draft && typeof g.draft === 'object') return g.draft.round === 1 && g.draft.pick === 1;
+        return m || g ? false : null;
+      }
+      case 'yards': {
+        if (!m) return null;
+        return (m.yards?.[c.cat] ?? 0) >= c.min;
+      }
+      default: return null;
+    }
+  }
+
+  /** Clubs the two records disagree on (the table's codes), for the harness to show. */
+  function clubDisagreement(name) {
+    const m = byName.get(fold(name));
+    const g = gridRow(name, m);
+    if (!m || !g) return null;
+    const espnAsGrid = new Set();
+    for (const a of Object.values(m.seasons ?? {}).flat()) {
+      const club = Object.values(NFL_CLUBS).find(([e]) => e.includes(a));
+      if (club) espnAsGrid.add(club[1][0]);
+    }
+    for (const a of m.clubsAlso ?? []) {
+      const club = Object.values(NFL_CLUBS).find(([e]) => e.includes(a));
+      if (club) espnAsGrid.add(club[1][0]);
+    }
+    return { onlyGrid: g.teams.filter(t => !espnAsGrid.has(t)), onlyEspn: [...espnAsGrid].filter(t => !g.teams.includes(t)) };
+  }
+
+  /* NFL boards hold no award or running total a season in progress can change, except the yard milestones:
+     an active man inside one season's reach of a yards group is a watch */
+  function watch(name, c) {
+    if (c.kind !== 'yards') return null;
+    const m = byName.get(fold(name));
+    if (!m || !m.seasons?.['2026'] && !m.seasons?.['2025']) return null;
+    if (fits(name, c) !== false) return null;
+    const have = m.yards?.[c.cat] ?? 0;
+    const reach = { passing: 5000, rushing: 2000, receiving: 1900 }[c.cat];
+    return have + reach >= c.min ? `active with ${have} ${c.cat} yards, within a season of ${c.min}` : null;
+  }
+
+  return { criterion, fits, watch, clubDisagreement, has: name => byName.has(fold(name)) || gridBy.has(fold(name)) };
+}
+
+/* ------------------------------------------------------------------ */
+/* NHL                                                                 */
+/* ------------------------------------------------------------------ */
+
+/**
+ * NHL's checker. record: the league's own rows; ledger: the round's two host ledger.
+ * "Played for the Penguins" matches a season row whose club name ends with that nickname.
+ */
+export function makeNhlChecker({ record, ledger = {} }) {
+  const men = { ...record.men };
+  for (const [name, o] of Object.entries(ledger.overlay ?? {})) men[name] = { ...(men[name] ?? {}), ...(o.set ?? {}) };
+  const byName = indexByName(men, ledger.aliases);
+  const lists = new Map(Object.entries(ledger.lists ?? {}).map(([k, v]) => [fold(v.label ?? k), v]));
+
+  function criterion(label) {
+    const f = fold(label);
+    if (lists.has(f)) return { kind: 'list', key: f };
+    let m;
+    if ((m = label.match(/^Played for the (.+)$/))) return { kind: 'club', nick: fold(m[1]) };
+    if ((m = label.replace(/,/g, '').match(/^(\d+)\+ career (points|goals|assists|games)$/))) {
+      return { kind: 'career', stat: { points: 'P', goals: 'G', assists: 'A', games: 'GP' }[m[2]], min: Number(m[1]) };
+    }
+    return null;
+  }
+
+  function fits(name, c) {
+    if (c.kind === 'list') {
+      const list = lists.get(c.key);
+      if (listSet(list).has(fold(name))) return true;
+      return list.closed ? false : null;
+    }
+    const m = byName.get(fold(name));
+    if (!m) return null;
+    if (c.kind === 'club') return Object.values(m.seasons ?? {}).flat().some(t => fold(t).endsWith(c.nick));
+    if (c.kind === 'career') return (m.career?.[c.stat] ?? 0) >= c.min;
+    return null;
+  }
+
+  /** An active man close enough to a career milestone to reach it before the season ends. */
+  function watch(name, c) {
+    if (c.kind !== 'career') return null;
+    const m = byName.get(fold(name));
+    if (!m || !m.active || fits(name, c) !== false) return null;
+    const have = m.career?.[c.stat] ?? 0;
+    /* a season's worth: 110 points, 60 goals, 80 assists, 82 games */
+    const reach = { P: 110, G: 60, A: 80, GP: 82 }[c.stat] ?? 0;
+    return have + reach >= c.min ? `active with ${have}, within a season of ${c.min}` : null;
+  }
+
+  return { criterion, fits, watch, has: name => byName.has(fold(name)) };
+}
+
+/* ------------------------------------------------------------------ */
+/* the record files                                                    */
+/* ------------------------------------------------------------------ */
+
+/** Read one sport's record and ledger: sport is 'baseball', 'nfl' or 'nhl'. */
+export function loadUsConnectionsRecord(root, sport) {
+  const read = f => JSON.parse(fs.readFileSync(path.join(root, 'scripts', 'data', f), 'utf8'));
+  const ledgerFile = path.join(root, 'scripts', 'data', `${sport}ConnectionsVerified-2026-10.json`);
+  const ledger = fs.existsSync(ledgerFile) ? JSON.parse(fs.readFileSync(ledgerFile, 'utf8')) : {};
+  const record = read(`${sport}ConnectionsRecord-2026-10.json`);
+  const grid = sport === 'nfl' ? read('nflGridPlayers.json') : null;
+  return { record, ledger, grid };
+}
+
+/** The checker for a sport, from its record files. */
+export function makeUsChecker(root, sport) {
+  const { record, ledger, grid } = loadUsConnectionsRecord(root, sport);
+  if (sport === 'baseball') return { ledger, checker: makeBaseballChecker({ record, ledger }) };
+  if (sport === 'nfl') return { ledger, checker: makeNflChecker({ record, grid, ledger }) };
+  if (sport === 'nhl') return { ledger, checker: makeNhlChecker({ record, ledger }) };
+  throw new Error(`no checker for ${sport}`);
 }

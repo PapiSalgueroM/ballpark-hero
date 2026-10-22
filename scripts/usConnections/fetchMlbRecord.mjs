@@ -106,7 +106,9 @@ export function compact(person) {
   const out = {
     id: p.id,
     name: p.fullName,
-    bbref: (p.xrefIds ?? []).find(x => x.xrefType === 'bbref')?.xrefId ?? null,
+    /* baseball-reference's player id: the service files it as bbref for some men and as the Lahman id (the same
+       id) for the rest */
+    bbref: (p.xrefIds ?? []).find(x => x.xrefType === 'bbref')?.xrefId ?? (p.xrefIds ?? []).find(x => x.xrefType === 'lahman')?.xrefId ?? null,
     born: { country: p.birthCountry ?? null, state: p.birthStateProvince ?? null, city: p.birthCity ?? null, date: p.birthDate ?? null },
     bats: p.batSide?.code ?? null,
     throws: p.pitchHand?.code ?? null,
