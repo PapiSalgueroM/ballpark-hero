@@ -1,0 +1,2 @@
+s2-raw exit=1 123s | simCmDifficulty: 88 FAILURES (sections 2)
+s2-attr exit=0 125s | simCmDifficulty: all green (sections 2)
