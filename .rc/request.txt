@@ -1,0 +1,1 @@
+summer6-nba: SIM_SPORTS=nba SIM_SECTIONS=6 node scripts/simUsCareerSummer.mjs
