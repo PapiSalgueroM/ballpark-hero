@@ -1,0 +1,8 @@
+slate: node scripts/simCfbSlate.mjs
+slate-big: SIM_SEEDS=60 SIM_SEASONS=10 SIM_STRESS=1500 node scripts/simCfbSlate.mjs
+c-window: CFB_SLATE_CONTROL=window node scripts/simCfbSlate.mjs
+c-ndsix: CFB_SLATE_CONTROL=ndsix node scripts/simCfbSlate.mjs
+c-g5sort: CFB_SLATE_CONTROL=g5sort node scripts/simCfbSlate.mjs
+c-cbbzero: CFB_SLATE_CONTROL=cbbzero node scripts/simCfbSlate.mjs
+c-source: CFB_SLATE_CONTROL=source node scripts/simCfbSlate.mjs
+c-cbbraw: CFB_SLATE_CONTROL=cbbraw node scripts/simCfbSlate.mjs
