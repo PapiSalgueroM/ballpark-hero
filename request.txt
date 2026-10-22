@@ -1,0 +1,10 @@
+set1: node scripts/simNbaGmDesk.mjs
+set2: SIM_NBA_GM_DESK_SEEDS=11,12,13,14,15,16,17,18,19,20 node scripts/simNbaGmDesk.mjs
+set3: SIM_NBA_GM_DESK_SEEDS=21,22,23,24,25,26,27,28,29,30 node scripts/simNbaGmDesk.mjs
+held: SIM_NBA_GM_DESK_SEEDS=31,32,33,34,35,36,37,38,39,40 node scripts/simNbaGmDesk.mjs
+ctl-dropone: SIM_NBA_GM_DESK_CONTROL=dropone node scripts/simNbaGmDesk.mjs
+ctl-nohandback: SIM_NBA_GM_DESK_CONTROL=nohandback node scripts/simNbaGmDesk.mjs
+ctl-overlimit: SIM_NBA_GM_DESK_CONTROL=overlimit node scripts/simNbaGmDesk.mjs
+ctl-sheetrepick: SIM_NBA_GM_DESK_CONTROL=sheetrepick node scripts/simNbaGmDesk.mjs
+ctl-fullbird: SIM_NBA_GM_DESK_CONTROL=fullbird node scripts/simNbaGmDesk.mjs
+anchors: node scripts/simHarnessAnchors.mjs
