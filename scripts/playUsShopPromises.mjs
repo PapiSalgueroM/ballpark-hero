@@ -9,11 +9,16 @@
  *       upkeep plus the banked amount, worked out here from the printed rates.
  *   (d) after every step: no sideways scroll, no page error, the office's effect line no smaller than its
  *       description line (both 11 px on the base, critic advice 20) and not cut, the returns line not cut.
+ *   (c) Round 1538: the board's NFL mid career save (2026 money) with its summer standing on the training card and
+ *       Cash holding hundredths: Brand work, and the outcome card shows Career earnings +$3M and Cash +$3M (the
+ *       card's 3M in 2026 money, banked in full and the balance not rounded again), and the save's Cash moved by 3.
  * A screenshot after every step goes to $RC_OUT (or .tmp-fx/play-us-shop): LOOK at them.
  *
  * The live database host is aborted; anything else off the served origin gets an empty answer.
  * Control PLAY_SHOP_CONTROL=nocall runs against a second build (PLAY_SHOP_DIST) made from a copy of the tree with
  * the four settle calls removed: (b) must turn red, exit 1 with "CONTROL nocall FIRED", else 3.
+ * Control PLAY_SHOP_CONTROL=nobank (Round 1538) runs (c) alone against a build whose fee helper moves earnings only:
+ * (c) must turn red on the Cash row, exit 1 with "CONTROL nobank FIRED", else 3.
  * Needs dist/ (a plain vite build is enough). Run: node scripts/playUsShopPromises.mjs
  */
 import fs from 'node:fs';
@@ -25,7 +30,7 @@ import { chromium } from './lib/playwrightLoader.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.PLAY_SHOP_CONTROL || '';
-if (CONTROL && CONTROL !== 'nocall') { console.log(`playUsShopPromises: could not run, unknown control ${CONTROL}`); process.exit(2); }
+if (CONTROL && CONTROL !== 'nocall' && CONTROL !== 'nobank') { console.log(`playUsShopPromises: could not run, unknown control ${CONTROL}`); process.exit(2); }
 const DIST = process.env.PLAY_SHOP_DIST || 'dist';
 const OUT = path.resolve(process.env.RC_OUT || path.join(ROOT, '.tmp-fx/play-us-shop'));
 fs.mkdirSync(OUT, { recursive: true });
@@ -34,6 +39,9 @@ const fixture = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/data/usBoard
 const keyLine = fs.readFileSync(path.join(ROOT, 'src/lib/nbaCareerSport.ts'), 'utf8').match(/const SAVE_KEY = '([^']+)';/);
 if (!keyLine) { console.log('playUsShopPromises: could not run, the NBA binding no longer names its SAVE_KEY'); process.exit(2); }
 const SAVE_KEY = keyLine[1];
+const nflKeyLine = fs.readFileSync(path.join(ROOT, 'src/lib/nflCareerSport.ts'), 'utf8').match(/const SAVE_KEY = '([^']+)';/);
+if (!nflKeyLine) { console.log('playUsShopPromises: could not run, the NFL binding no longer names its SAVE_KEY'); process.exit(2); }
+const NFL_SAVE_KEY = nflKeyLine[1];
 
 let failures = 0;
 const red = new Set();
@@ -56,7 +64,7 @@ await new Promise((resolve, reject) => {
 });
 
 const SIZES = [{ width: 320, height: 640, touch: true }, { width: 390, height: 844, touch: true }, { width: 1280, height: 900, touch: false }];
-async function open(browser, size, storage) {
+async function open(browser, size, storage, route = '/nba-my-career') {
   const context = await browser.newContext({
     viewport: { width: size.width, height: size.height }, isMobile: size.touch, hasTouch: size.touch, deviceScaleFactor: 1, serviceWorkers: 'block',
     storageState: { cookies: [], origins: [{ origin: BASE, localStorage: [{ name: 'cookie-consent', value: 'essential' }, ...storage] }] },
@@ -72,7 +80,7 @@ async function open(browser, size, storage) {
   page.setDefaultTimeout(15000);
   const errors = [];
   page.on('pageerror', e => errors.push(String(e)));
-  await page.goto(`${BASE}/nba-my-career`, { waitUntil: 'domcontentloaded' });
+  await page.goto(`${BASE}${route}`, { waitUntil: 'domcontentloaded' });
   return { context, page, errors };
 }
 function kit(walk, size, page, errors) {
@@ -166,12 +174,51 @@ async function walkB(browser, size) {
   } catch (error) { fail(walk, `${size.width}: ${String(error.message || error).split('\n')[0]}`, 'crash'); } finally { await context.close(); }
 }
 
+/* (c) Round 1538: the NFL brand answer banks its 3M (2026 money) in full, and the outcome card says so. */
+const BRAND_FEE = 3;
+async function walkC(browser, size) {
+  const walk = 'c';
+  const save = JSON.parse(fixture.sports.nfl.saves.mid);
+  if (save.phase !== 'season' || save.c.eraId || !(save.c.age < 30)) { fail(walk, 'the fixture\'s NFL mid save is no longer a young 2026 season'); return; }
+  save.c.netWorth = 15.37;
+  save.c.summer = { year: save.c.seasons.at(-1).year, ids: ['training'], at: 0 };
+  const { context, page, errors } = await open(browser, size, [{ name: NFL_SAVE_KEY, value: JSON.stringify(save) }, { name: 'rules-gate-seen:/nfl-my-career', value: '1' }], '/nfl-my-career');
+  const { tap, check } = kit(walk, size, page, errors);
+  try {
+    const brand = page.locator('[data-career-decision-option="2"]');
+    await brand.waitFor();
+    if (!(await brand.innerText()).includes('Brand work')) fail(walk, `${size.width}: the training card's third answer is "${await brand.innerText()}"`);
+    await check('training-card');
+    const before = save.c;
+    await tap(brand);
+    const outcome = page.locator('[data-career-decision-outcome]');
+    await outcome.waitFor();
+    const delta = async key => { const row = outcome.locator(`[data-decision-change="${key}"] [data-change-delta]`); return (await row.count()) ? (await row.first().innerText()).trim() : null; };
+    const earned = await delta('earnings'), cash = await delta('netWorth');
+    if (earned !== `+$${BRAND_FEE}M`) fail(walk, `${size.width}: the Career earnings row says ${earned}`, 'promise');
+    if (cash !== `+$${BRAND_FEE}M`) fail(walk, `${size.width}: the Cash row says ${cash}`, 'promise');
+    const after = JSON.parse(await page.evaluate(k => localStorage.getItem(k), NFL_SAVE_KEY)).c;
+    const want = Math.round((before.netWorth + BRAND_FEE) * 10000) / 10000;
+    notes.push(`c ${size.width}: earnings row ${earned}, Cash row ${cash}, saved Cash ${before.netWorth} to ${after.netWorth} (want ${want})`);
+    if (after.netWorth !== want) fail(walk, `${size.width}: the saved Cash is ${after.netWorth}, not ${want}`, 'promise');
+    await outcome.screenshot({ path: path.join(OUT, `${walk}-${size.width}-outcome-card.png`) });
+    const m0 = await page.evaluate(() => ({ y: Math.round(scrollY), h: document.documentElement.scrollHeight }));
+    await check('outcome');
+    await tap(page.locator('[data-decision-continue]'));
+    await page.waitForTimeout(600);
+    const m1 = await page.evaluate(() => ({ y: Math.round(scrollY), h: document.documentElement.scrollHeight }));
+    notes.push(`c ${size.width}: scrollY ${m0.y} to ${m1.y}, document height ${m0.h} to ${m1.h} across the outcome card's Continue`);
+    await check('after-outcome');
+  } catch (error) { fail(walk, `${size.width}: ${String(error.message || error).split('\n')[0]}`, 'crash'); } finally { await context.close(); }
+}
+
 const browser = await chromium.launch();
 let walks = 0;
 try {
   for (const size of SIZES) {
     if (!CONTROL) { await walkA(browser, size); walks += 1; }
-    await walkB(browser, size); walks += 1;
+    if (CONTROL !== 'nobank') { await walkB(browser, size); walks += 1; }
+    if (CONTROL !== 'nocall') { await walkC(browser, size); walks += 1; }
   }
 } finally {
   await browser.close();
@@ -181,8 +228,9 @@ for (const line of notes) console.log(`  ${line}`);
 console.log(`  screenshots: ${fs.readdirSync(OUT).filter(f => f.endsWith('.png')).length} in ${OUT}`);
 if (CONTROL) {
   /* It fires only on the promise itself (no returns line, or Cash not moved by it), never on a crash or a timeout. */
-  const fired = red.has('b') && why.has('promise') && !why.has('crash');
-  console.log(fired ? `playUsShopPromises: CONTROL ${CONTROL} FIRED, (b) red` : `playUsShopPromises: CONTROL ${CONTROL} DID NOT FIRE, (b) stayed green`);
+  const walked = CONTROL === 'nobank' ? 'c' : 'b';
+  const fired = red.has(walked) && why.has('promise') && !why.has('crash');
+  console.log(fired ? `playUsShopPromises: CONTROL ${CONTROL} FIRED, (${walked}) red` : `playUsShopPromises: CONTROL ${CONTROL} DID NOT FIRE, (${walked}) stayed green`);
   process.exit(fired ? 1 : 3);
 }
 console.log(failures === 0 ? `playUsShopPromises: green, ${walks} walks` : `playUsShopPromises: red, ${failures} failures`);

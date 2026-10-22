@@ -735,7 +735,7 @@ if (runs('7')) {
       const ctx = a[i]?.ctx ?? b[i]?.ctx, cap = ctx ? Math.min(99, ctx.pot) : 0;
       const ok = ctx && ctx.age < age && ((ctx.kind === 'deal' && ctx.ovr >= cap) || (ctx.kind === 'answer' && ctx.skill && ctx.ovr >= cap - 1));
       if (ok) kinds[ctx.kind] += 1;
-      else fail('7', `${sport.id} fleet ${set}/${k}`, `first parts at record ${i} (${ctx?.kind ?? 'end'}, rating ${ctx?.ovr} of ${ctx?.pot}, age ${ctx?.age}), where the rider does not act`);
+      else fail('7', `${sport.id} fleet ${set}/${k}`, `first parts at record ${i} (${ctx?.kind ?? 'end'}, rating ${ctx?.ovr} of ${ctx?.pot}, age ${ctx?.age}), where the rider does not act; head [${a[i - 1]?.rec.slice(0, 90)}] then [${a[i]?.rec.slice(0, 160)}], base then [${b[i]?.rec.slice(0, 160)}]`);
     }
     console.log(`   ${sport.id}: (a) 6 cases; fleet ${careers} careers, ${offseasons} offseasons, ${parted} parted from the base arm, ${kinds.deal} first at a deal at the ceiling and ${kinds.answer} at the Skill answer`);
   }
