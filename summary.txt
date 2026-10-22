@@ -1,0 +1,2 @@
+wn exit=1 0s | NO dist/sitemap.xml. BUILD AND PRERENDER FIRST. NOT CHECKED.
+head exit=1 0s | NO dist/sitemap.xml. BUILD AND PRERENDER FIRST. NOT CHECKED.
