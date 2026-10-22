@@ -37,6 +37,7 @@ import type { AcademyStatus } from '@/lib/tycoonRooms';
 import { useTycoonRewards } from '@/hooks/useTycoonRewards';
 import { balance, priceOf, canOpen } from '@/lib/tycoonRewards';
 import { PACKS, TIERS, bedFree } from '@/lib/wonderkidFactory';
+import { OVERLAY_ABOVE_BANNER, boxInsideOverlay } from '@/components/game/aboveConsentBanner';
 
 let decorationReady = false;
 const CelebrationStyles = lazy(() => import('@/components/club-manager/CelebrationStyles').then(m => { decorationReady = true; return { default: m.CelebrationStyles }; }));
@@ -329,10 +330,10 @@ export default function AcademyPanel({ visible = true, stylesReady = false, onSt
 
       {/* rules modal, shown before first play and reopenable from the ? */}
       {showHelp && (
-        <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4" onClick={() => setShowHelp(false)}>
+        <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4" style={OVERLAY_ABOVE_BANNER} onClick={() => setShowHelp(false)}>
           {/* Round 220: a real dialog to the platform, not just a styled div,
               and the house bottom button every rules screen carries. */}
-          <div role="dialog" data-state="open" aria-modal="true" aria-label="How Wonderkid Factory works" className="bg-card border border-border rounded-2xl p-5 max-w-md w-full max-h-[80vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
+          <div role="dialog" data-state="open" aria-modal="true" aria-label="How Wonderkid Factory works" className="bg-card border border-border rounded-2xl p-5 max-w-md w-full overflow-y-auto" style={boxInsideOverlay('80vh')} onClick={e => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-2">
               <div className="text-lg font-bold font-display text-foreground">How Wonderkid Factory works</div>
               <button onClick={() => setShowHelp(false)} aria-label="Close the rules"><X className="w-4 h-4 text-muted-foreground" /></button>

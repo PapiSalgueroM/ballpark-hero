@@ -121,6 +121,8 @@ function measureInPage({ BANNER, control }) {
     : hit.hasAttribute('data-playfirst-cover') ? 'the control' : `covered by ${describe(hit)}`;
   const bb = banner && bannerFixed ? banner.getBoundingClientRect() : null;
   out.overlap = bb && r.right > bb.left && r.left < bb.right ? Math.max(0, Math.round(Math.min(r.bottom, bb.bottom) - Math.max(r.top, bb.top))) : 0;
+  out.depth = out.overlap ? Math.round(r.bottom - bb.top) : 0;
+  out.clear = bb && !out.overlap ? Math.round(bb.top - r.bottom) : null;
   Object.assign(out, { button: label(pick), how, buttonBox: box(r), cx: Math.round(cx), cy: Math.round(cy), whole: r.top >= -1 && r.bottom <= H + 1 && r.left >= -1 && r.right <= W + 1 });
   return out;
 }
@@ -193,10 +195,10 @@ for (const r of results) {
       withButton += 1;
       if (r.at === 'the control') fired += 1;
       const btn = `"${r.button}" (${r.how}) ${span(r.buttonBox)}${r.whole ? '' : ' (partly off screen)'}`;
-      if (r.at !== 'tappable') { state = 'FAIL'; why = `${head}, ${btn} is not tappable: at its centre ${r.at}${r.overlap ? `, ${r.overlap} px under the banner` : ''}, ${bannerNote}`; }
+      if (r.at !== 'tappable') { state = 'FAIL'; why = `${head}, ${btn} is not tappable: at its centre ${r.at}${r.overlap ? `, ${r.overlap} of its ${r.buttonBox.bottom - r.buttonBox.top} px under the banner (its bottom ${r.depth} px below the banner's top)` : ''}, ${bannerNote}`; }
       else if (!r.closed) { state = 'FAIL'; why = `${head}, ${btn} tapped but the dialog did not close, ${bannerNote}`; }
       else if (r.blocker) { state = 'FAIL'; why = `${head}, ${btn} tapped and closed, but ${r.blocker} still covers the screen, ${bannerNote}`; }
-      else { state = 'PASS'; why = `${head}, ${btn} tappable, ${bannerNote}; tapped, closed, screen usable`; }
+      else { state = 'PASS'; why = `${head}, ${btn} tappable${r.clear !== null ? ` (${r.clear} px above the banner)` : ''}, ${bannerNote}; tapped, closed, screen usable`; }
     }
   }
   const note = EXPECTED_SITE_RED[r.key];
