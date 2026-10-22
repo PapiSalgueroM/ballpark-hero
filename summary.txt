@@ -1,0 +1,6 @@
+shop-earnround exit=1 1s | simUsShopPromises: CONTROL earnround FIRED (red sections 6)
+shop-nobank exit=1 0s | simUsShopPromises: CONTROL nobank FIRED (red sections 6)
+shop-pp1 exit=1 220s | simUsShopPromises: CONTROL potplusone FIRED (red sections 7)
+shop-clampdown exit=1 232s | simUsShopPromises: CONTROL clampdown FIRED (red sections 7)
+shop67 exit=0 238s | simUsShopPromises: green (sections 6, 7)
+shop-ppall exit=1 159s | simUsShopPromises: CONTROL potplusoneall FIRED (red sections 7)

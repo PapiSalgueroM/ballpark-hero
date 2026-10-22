@@ -1,0 +1,23 @@
+7) the Skill card: (a) its answer in every sport; (b) 120 careers a set on sets 1538 and 2024 through the summer deal, base arm against head arm
+   FAIL [7] nba skill at the ceiling: the button says "Push the ceiling" at age 24
+   FAIL [7] nba skill at the ceiling: rating 80 to 81 (want 80), health 70
+   FAIL [7] nba skill at the ceiling: the line "Rating +2." does not say "already at your ceiling"
+   FAIL [7] nba skill one under: the button says "Push the ceiling" at age 24
+   FAIL [7] nba skill one under: rating 79 to 81 (want 80), health 70
+   FAIL [7] nba skill one under: the line "Rating +2." does not say "and that is your ceiling"
+   FAIL [7] nba skill with room: the button says "Push the ceiling" at age 24
+   FAIL [7] nba skill at 99: the button says "Push the ceiling" at age 24
+   FAIL [7] nba skill at 99: rating 99 to 100 (want 99), health 70
+   FAIL [7] nba skill at 99: the line "Rating +2." does not say "already at your ceiling"
+   FAIL [7] nba skill above the ceiling: the button says "Push the ceiling" at age 24
+   FAIL [7] nba skill above the ceiling: rating 83 to 81 (want 83), health 70
+   FAIL [7] nba skill above the ceiling: the line "Rating +2." does not say "so the rating stays at 83."
+   FAIL [7] nba skill at the maintenance age: the button says "Push the ceiling" at age 31
+   FAIL [7] nba skill one year under it: the button says "Push the ceiling" at age 30
+   FAIL [7] nba skill answer 1538/57: the Skill answer took the rating 96 to 97 with the ceiling at 96
+   nba: (a) 7 cases; fleet 240 careers, 4518 offseasons, 0 parted from the base arm, 0 first at a deal at the ceiling, 0 at the Skill answer and 0 at an answer before a later training card; 41 young Skill answers on the head, 7 of them above the ceiling
+   nfl: (a) 7 cases; fleet 240 careers, 3824 offseasons, 0 parted from the base arm, 0 first at a deal at the ceiling, 0 at the Skill answer and 0 at an answer before a later training card; 28 young Skill answers on the head, 0 of them above the ceiling
+   mlb: (a) 7 cases; fleet 240 careers, 4694 offseasons, 0 parted from the base arm, 0 first at a deal at the ceiling, 0 at the Skill answer and 0 at an answer before a later training card; 33 young Skill answers on the head, 3 of them above the ceiling
+   nhl: (a) 7 cases; fleet 240 careers, 4876 offseasons, 0 parted from the base arm, 0 first at a deal at the ceiling, 0 at the Skill answer and 0 at an answer before a later training card; 53 young Skill answers on the head, 7 of them above the ceiling
+   control potplusoneall: section 7 turned 36 red
+simUsShopPromises: CONTROL potplusoneall FIRED (red sections 7)
