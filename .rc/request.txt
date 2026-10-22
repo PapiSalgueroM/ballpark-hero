@@ -1,0 +1,16 @@
+#!serve
+#!playwright
+#!serial
+walk: node scripts/playUsShopPromises.mjs
+playUsDirtyMoney: node scripts/playUsDirtyMoney.mjs
+playNflTruth: node scripts/playNflTruth.mjs
+playUsCareerReports: node scripts/playUsCareerReports.mjs
+playUsMarketTalk: node scripts/playUsMarketTalk.mjs
+weight-final: node .rc/x/weight1534.mjs final
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+qa-entry1031: node scripts/qa/careerEntryGuide1031.mjs
+qa-outcome1009: node scripts/qa/careerDecisionOutcome1009.mjs
+qa-review1008: node scripts/qa/careerSeasonReview1008.mjs
+qa-look996: node scripts/qa/careerLook996.mjs
+walk-nobank: node .rc/x/nobank.mjs && node_modules/.bin/vite build --outDir dist-nobank --emptyOutDir > /dev/null; git checkout -- src; PLAY_SHOP_DIST=dist-nobank PLAY_SHOP_CONTROL=nobank node scripts/playUsShopPromises.mjs
+walk-base: git checkout 1c7205d059cbcb380ebacaef99ba6751e8c641df -- src && node_modules/.bin/vite build --outDir dist-base --emptyOutDir > /dev/null; git checkout HEAD -- src; PLAY_SHOP_DIST=dist-base PLAY_SHOP_CONTROL=nobank node scripts/playUsShopPromises.mjs
