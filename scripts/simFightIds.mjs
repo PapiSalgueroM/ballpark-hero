@@ -45,7 +45,22 @@
  * putting the module counter back. Use it once to prove sections 3 and 4
  * against the real thing.
  *
- * MEASURED (filled in below the sections when set).
+ * MEASURED (2026-10-22, GitHub runner, remote check rc-1546b).
+ *   1 Gym: 200 reloads, 2400 weeks, 640 signed (320 after the first reload),
+ *     2400 blocks, 2400 fights, 480 released: 0 pairs, 0 wrong man trained,
+ *     0 wrong man fought, 0 bad releases. Under counter (main's rule): 520
+ *     weeks with a pair, 148 blocks and 160 fights to a man nobody clicked,
+ *     40 releases that let two go.
+ *   2 Promoter: 160 reloads, 3185 bouts (1611 after the first reload): 0
+ *     pairs, 0 wrong bouts. Under counter: 252 shows with a pair, 210 bouts
+ *     not the pair booked.
+ *   3 76 of 80 old rule saves broken (the same on main's own files through
+ *     FIGHT_IDS_BASE_DIR), 144 men moved on load, 0 left paired, 0 showing
+ *     another division (127 under noclass), 0 first holders moved, 80 clean
+ *     saves loaded byte for byte.
+ *   4 1440 men and offers compared, 0 moved (1294 under drawid).
+ *   5 400 of 400 new promotions open with two matchable pairs (99 short of
+ *     two under startone).
  */
 import './lib/seedRandom.mjs';
 import os from 'node:os';
