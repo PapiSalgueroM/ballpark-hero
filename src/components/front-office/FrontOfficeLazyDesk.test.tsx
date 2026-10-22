@@ -39,7 +39,11 @@ async function fresh() {
   const E = await import('@/lib/frontOffice');
   const { openNflDesk } = await import('@/lib/nflGmDesk');
   const loader = await import('@/components/front-office/nflCareerKitLoad');
-  const { default: Board } = (await import('@/components/front-office/FrontOfficeBoard')) as { default: ComponentType };
+  /* scripts/controlFrontOfficeBoard.mjs points this at a board with one thing broken (askalways, nowait, recapnever) */
+  const override = process.env.FO_BOARD_NFL;
+  const { default: Board } = (override
+    ? await import(/* @vite-ignore */ override)
+    : await import('@/components/front-office/FrontOfficeBoard')) as { default: ComponentType };
   return { E, openNflDesk, loader, Board };
 }
 type Fresh = Awaited<ReturnType<typeof fresh>>;
@@ -57,10 +61,12 @@ function saveAt(G: Fresh, week: number, phase: string, extra: Record<string, unk
   return { save, team, league };
 }
 
+/** The hub box titled `title`, by its title line (the uppercase one), the way a player reads it. */
+const boxButton = (title: string): HTMLButtonElement | undefined => Array.from(document.querySelectorAll('button')).find(b =>
+  Array.from(b.querySelectorAll('div')).some(dv => (dv.textContent ?? '').trim() === title && dv.className.includes('uppercase')));
 /** The text of the hub box titled `title` (its value and its sub), or null when there is no such box. */
 const boxText = (title: string): string | null => {
-  const box = Array.from(document.querySelectorAll('button')).find(b =>
-    Array.from(b.querySelectorAll('div')).some(dv => (dv.textContent ?? '').trim() === title && dv.className.includes('uppercase')));
+  const box = boxButton(title);
   return box ? (box.textContent ?? '').trim() : null;
 };
 const tick = () => act(async () => { await new Promise(r => setTimeout(r, 30)); });
@@ -96,7 +102,7 @@ describe('NFL front office: the GM career kit loads when it is needed', () => {
     render(<G.Board />);
     await tick();
     expect(G.loader.nflCareerKitState()).toBe('idle');
-    const box = Array.from(document.querySelectorAll('button')).find(b => (b.textContent ?? '').trim().startsWith('GM level'));
+    const box = boxButton('GM level');
     expect(box, 'no GM level box on the hub').toBeTruthy();
     fireEvent.click(box!);
     const panel = document.querySelector('[data-gm-desk="panel"]');
