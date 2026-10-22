@@ -1,0 +1,5 @@
+#!serial
+board-head: node scripts/simUsBoardParity.mjs
+board-nof1: git checkout f0cb24756 -- src/lib/usCareerAnnualBenefits.ts src/lib/nbaMyCareer.ts src/lib/nflMyCareer.ts src/lib/mlbMyCareer.ts src/lib/nhlMyCareer.ts && node scripts/simUsBoardParity.mjs; s=$?; git checkout HEAD -- src; exit $s
+rech-head: node .rc/x/recHist.mjs $RC_OUT/fixture-new.json
+rech-nof1: git checkout f0cb24756 -- src/lib/usCareerAnnualBenefits.ts src/lib/nbaMyCareer.ts src/lib/nflMyCareer.ts src/lib/mlbMyCareer.ts src/lib/nhlMyCareer.ts && node .rc/x/recHist.mjs $RC_OUT/fixture-nof1.json; s=$?; git checkout HEAD -- src; exit $s
