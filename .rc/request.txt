@@ -1,0 +1,8 @@
+# Release BJ, Round 1503's walk on the final tree. Each control patches one line of src, builds its own dist and puts
+# the file back; held-1503 checks src is back. Each control must exit 1 with "FIRED".
+#!serve
+#!playwright
+#!serial
+ucl-walk: node scripts/playWorldUcl.mjs
+ucl-ctl: ok=0; r=""; for k in notile ahead oldcols legflip swapfinal r16help instandin inswap legturn; do PLAY_WORLD_CONTROL=$k node scripts/playWorldUcl.mjs > /tmp/pw-$k.log 2>&1; e=$?; r="$r $k=$e"; [ $e = 1 ] || ok=1; echo "$k: last: $(tail -1 /tmp/pw-$k.log | cut -c1-200)"; done; echo "controls (each must be 1):$r"; exit $ok
+held-1503: git status --porcelain --untracked-files=no | head -5; git diff --exit-code HEAD -- src scripts && echo "src and scripts held after every control"
