@@ -1,0 +1,9 @@
+cmmatchday exit=0 27s | simCmMatchDay: all sections green (918 matches: 462 home, 448 away, 8 neutral)
+rival exit=0 12s | No rival product names found. 0 findings.
+motionfull exit=0 57s | simLiveSimMotion: green. 65 tests passed (the viewer on real feeds, the pitch part's rules on 200 half feeds and on feeds made by hand, the goal sequence, match mode), an
+storage exit=0 3s | simStorageWrites: all green (owed: 12)
+trust exit=0 0s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+access exit=0 0s | simAccessibility: all green
+tsc exit=0 66s | 
+quotes exit=0 15s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+anchors exit=0 38s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.

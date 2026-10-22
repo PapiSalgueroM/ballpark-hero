@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+motionfull: node scripts/simLiveSimMotion.mjs
+cmmatchday: node scripts/simCmMatchDay.mjs
+rival: node scripts/simNoRivalNames.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+storage: node scripts/simStorageWrites.mjs
+trust: node scripts/simTrustCopy.mjs
+access: node scripts/simAccessibility.mjs
+quotes: node scripts/simNoInventedQuotes.mjs
