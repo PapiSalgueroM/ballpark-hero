@@ -1,0 +1,21 @@
+#!serve
+#!playwright
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simTycoonAway: node scripts/simTycoonAway.mjs
+simTycoonHelp: node scripts/simTycoonHelp.mjs
+simIdleArena: node scripts/simIdleArena.mjs
+simIdleArenaCap: node scripts/simIdleArenaCap.mjs
+simHelpDialogFocus: node scripts/simHelpDialogFocus.mjs
+vitest: node_modules/.bin/vitest run src/test/tycoonAway.test.tsx src/test/tycoonHelp.test.tsx src/test/idleArenaTrophyRoom.test.tsx --testTimeout=300000 --hookTimeout=120000
+vitest2: node_modules/.bin/vitest run src/test/tycoonRooms.test.tsx src/test/firstTeam.test.tsx src/test/tycoonLatestSeason.test.tsx --testTimeout=300000 --hookTimeout=120000
+away-head: bash .rc/x/mut.sh a0 4211 - 'node .rc/x/away.mjs'
+away-old: bash .rc/x/mut.sh a1 4212 oldaway 'AWAY_TAG=old node .rc/x/away.mjs'
+m2: bash .rc/x/mut.sh m2 4203 nocap 'ONLY=/stadium-tycoon,/idle-arena,/wonderkid-factory node scripts/playFirstVisitDialogs.mjs'
+m3: bash .rc/x/mut.sh m3 4204 roleback 'ONLY=/stadium-tycoon,/idle-arena,/wonderkid-factory node scripts/playFirstVisitDialogs.mjs'
+prerender-head: node scripts/simPrerender.mjs
+prerender-nowhatsnew: bash .rc/x/mut.sh w1 4221 nowhatsnew 'node scripts/simPrerender.mjs'
+play: node .rc/x/play.mjs
+hoc-mock: node .rc/x/apply.mjs mockdb && ONLY=/hall-of-champions node scripts/_rvMockWalk.mjs
