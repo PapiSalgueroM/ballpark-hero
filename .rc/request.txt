@@ -1,0 +1,33 @@
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simSeasonLaw: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSeasonLaw.mjs
+simTycoonScorelines: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonScorelines.mjs
+simTycoonLeague: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonLeague.mjs
+simStadiumTycoon: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simStadiumTycoon.mjs
+simTycoonAway: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonAway.mjs
+simTycoonAwayMatchdays: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonAwayMatchdays.mjs
+simTycoonClock: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonClock.mjs
+simTycoonSetPiece: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonSetPiece.mjs
+simTycoonSetPiecePage: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonSetPiecePage.mjs
+simAllPlayersValue: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simAllPlayersValue.mjs
+simTycoonGear: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonGear.mjs
+simTycoonGearPage: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonGearPage.mjs
+simTycoonPacks: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonPacks.mjs
+simTycoonPackPace: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonPackPace.mjs
+simTycoonHelp: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonHelp.mjs
+simTycoonLoads: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonLoads.mjs
+simTycoonRooms: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonRooms.mjs
+simTycoonPitch: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonPitch.mjs
+simTycoonSaleReview: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonSaleReview.mjs
+simTycoonTicketPolicy: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonTicketPolicy.mjs
+simFirstTeamPage: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simFirstTeamPage.mjs
+simRevealMoments: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simRevealMoments.mjs
+simSessionMarks: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSessionMarks.mjs
+simContractChaos: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simContractChaos.mjs
+simHomeFront: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simHomeFront.mjs
+simWonderkid: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simWonderkid.mjs
+simTycoonDrawResult: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonDrawResult.mjs
+simTycoonMoneyDisplay: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonMoneyDisplay.mjs
+simFreeKickRange: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simFreeKickRange.mjs
+retake-head: node scripts/retakeTycoonHistories.mjs
+simVictoryMoment: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simVictoryMoment.mjs
