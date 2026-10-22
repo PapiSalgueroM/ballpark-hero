@@ -164,15 +164,15 @@ const NflHigherLower = () => {
           description="A different stat every round: passing yards, passing TDs, rushing yards, receiving yards, receptions and touchdowns scored. Which NFL star has the bigger career number?"
           howToPlay={[
             'Every round names a stat category at the top of the board',
-            'Two players shown side by side with position, era, and teams',
+            'Two players shown side by side with position and teams',
             'Tap the player you think has the BIGGER career number in that stat',
             '10 rounds per game: 10 points per correct answer, +5 per streak step',
             'Daily challenge (same rounds for everyone) or unlimited random mode',
           ]}
           examples={[
-            'Passing yards: Brady (89,216) vs Brees (80,428), closer than you think',
+            'Passing yards: Brady (89,214) vs Brees (80,358), closer than you think',
             'TDs scored: LaDainian Tomlinson (162) vs Adrian Peterson (126)',
-            'Receptions: Fitzgerald (1,430) vs Jason Witten (1,228)',
+            'Receptions: Fitzgerald (1,432) vs Jason Witten (1,228)',
             'Rushing yards: Frank Gore quietly sits at 16,000',
           ]}
         />

@@ -144,7 +144,7 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
       {
         heading: "Landing on Lewis Hamilton for 800 points",
         paragraphs: [
-          "Only one driver owns that number. You type Lewis Hamilton on clue two and bank 800 points.",
+          "Only one driver holds that record. You type Lewis Hamilton on clue two and bank 800 points.",
         ],
       },
       {
@@ -983,7 +983,7 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
       },
       {
         q: "How current are the title counts?",
-        a: "They're locked in through the 2026 Australian Open, so results after that may not be reflected yet.",
+        a: "They run through the 2026 US Open, so results after that may not be reflected yet.",
       },
     ],
   },
