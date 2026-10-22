@@ -1,0 +1,15 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simSportsFacts: node scripts/simSportsFacts.mjs
+simHigherLowerFacts: node scripts/simHigherLowerFacts.mjs
+simF1Champions: node scripts/simF1Champions.mjs
+ctl-hlstale: SPORTS_FACTS_CONTROL=hlstale node scripts/simSportsFacts.mjs
+ctl-crossclue: SPORTS_FACTS_CONTROL=crossclue node scripts/simSportsFacts.mjs
+ctl-hlcutoff: SPORTS_FACTS_CONTROL=hlcutoff node scripts/simSportsFacts.mjs
+ctl-tennisstale: SPORTS_FACTS_CONTROL=tennisstale node scripts/simSportsFacts.mjs
+ctl-playeduntil: HL_FACTS_CONTROL=playeduntil node scripts/simHigherLowerFacts.mjs
+ctl-f1wins: F1_CONTROL=wins node scripts/simF1Champions.mjs
+simFaceOff: node scripts/simFaceOff.mjs
+simDateDraws: node scripts/simDateDraws.mjs
+simHigherLowerReveal: node scripts/simHigherLowerReveal.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+vitest: node_modules/.bin/vitest run src/test/dailySaveShapes.test.tsx src/test/faceOffDeadline.test.tsx src/test/resultScorePillComparison.test.tsx --testTimeout=300000 --hookTimeout=120000
