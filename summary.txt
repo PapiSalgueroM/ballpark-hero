@@ -1,0 +1,11 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+simMobileChrome exit=0 214s | GREEN: 34 top bar measurements and 134 scroll stops, no overlaps, nothing off the side of the screen, controls reachable everywhere, footer never covered.
+playClubManagerNewCountries exit=1 396s | playClubManagerNewCountries: 3 failure(s)
+playClubManagerSaveLeave exit=0 22s | playClubManagerSaveLeave: green, the career survived leaving the page and the banner behaves
+playClubManagerSlots exit=0 11s | playClubManagerSlots: green
+playCmBoardVerdict exit=0 80s | playCmBoardVerdict GREEN: 48 of 48 checks green
+playConquestScenes exit=0 75s | ALL CONQUEST SCENE SCREEN CHECKS PASSED
+playDealDesk exit=0 14s | playDealDesk: green. The desk opens, the meter reads the typed number, the fee table hands off to the terms table without signing anybody, and meeting his terms closes it
+playSoccerLanding exit=1 285s | playSoccerLanding: RED, no base arm (set SOCCER_LANDING_BASE_DIST); a head arm alone is not a proof
+simRevealScroll exit=0 213s | Green. 53 presses measured, nothing dragged the page down on content that was already readable, no panel lost its top, and 5 presses proved the feature still does its job
+careerLook996 exit=0 23s | soccer-1440-keyboard-reduced: own sport copy, footwear and pose changes, tab retention, empty saves and layout passed; 857615 gzip bytes.
