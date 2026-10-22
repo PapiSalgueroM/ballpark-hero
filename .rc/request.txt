@@ -1,0 +1,18 @@
+# Release BJ, the other lane's packets, merged in Round BJG: m6 PR305 e2f9b337 (final 93730ed2, tested 27a39d32, run
+# 38972459492), m7 PR306 0d3f4d3b (final ddffe5af, tested 439a23dd, run 38976601107), m8 PR303 6814e231 (final b5f54aaa,
+# tested 719aace3, run 38963406618).
+# PR305 and PR306: each packet's OWN paired prover, unchanged but for its one BASE constant, rebound (x/rebind.mjs) to
+# the full tree original reference its recipe asks for (2026-10-16/URGENT-305-306-INTEGRATION-RECIPE.md): the joined
+# tree with only that packet's product lines reversed (x/pktMinus.sh). PR306's prover also asserts that BASE is an
+# ancestor of HEAD, so its line checks out a throwaway commit of the same tree with the reference as a second parent
+# (the tree, and so every file the prover reads, is HEAD's) and goes back after. The retained baseline raw SHAs held
+# byte for byte on the joined tree (runners bjg-m6, bjg-m7b), so they stand as the packets set them.
+# PR303: its own workflow through x/wfrun.mjs with every base bound to this tree minus exactly that packet
+# (x/lifeMinus.sh, which since Round BJG knows 303). KNOWN: its readers step fails on simPrerender (/whats-new snapshot
+# is the lead's to redraw) and its weights step on the lead's rows; every other step must be green (runner bjg-m8).
+# Send with x/pktMinus.sh x/rebind.mjs x/lifeMinus.sh x/wfrun.mjs.
+#!serial
+prove305: B=$(bash .rc/x/pktMinus.sh 305) || exit 2; echo "reference $B"; mkdir -p "$RC_OUT/c305"; CI=1 SIM_NETWORK=offline SAFARI_REPORT_PHASE=fixed SAFARI_REPORT_OUT="$RC_OUT/c305" SC_CREATION_BASELINE_RAW_SHA256=a26072a4a0666a129cd28125e3b81e165f702baca3d554be37a25be74c398d84 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node .rc/x/rebind.mjs scripts/qa/proveSoccerCreation1388.mjs $B
+prove306: B=$(bash .rc/x/pktMinus.sh 306) || exit 2; H=$(git rev-parse HEAD); M=$(git -c user.name=gate -c user.email=gate@invalid commit-tree "$H^{tree}" -p "$H" -p "$B" -m "gate: this tree with the PR306 reference as a parent"); git checkout -q --detach "$M"; mkdir -p "$RC_OUT/c306"; CI=1 SIM_NETWORK=offline XI_SELECTION_RACE_PHASE=fixed XI_RACE_OUT="$RC_OUT/c306" XI_RACE_BASELINE_RAW_SHA256=7c65d7f1a66eb9a2f29fb5c24fce53bb91aec76abb59e4131c5de923fb7d65bf SIM_OFFLINE_RECEIPT="$RC_OUT/c306/new.transport" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node .rc/x/rebind.mjs scripts/qa/proveXiSelectionRaceFixed.mjs $B; s=$?; git checkout -q --detach "$H"; exit $s
+wf303x: O=$(bash .rc/x/lifeMinus.sh 303) || exit 2; M=$(bash .rc/x/lifeMinus.sh 302) || exit 2; P=$(bash .rc/x/lifeMinus.sh 286) || exit 2; echo "303 base $O 302 base $M 286 base $P"; WFRUN_WORKTREE=1 node .rc/x/wfrun.mjs .github/workflows/career-pending-overall-gates.yml --set SC_PENDING_OVERALL_BASE=$O --set SC_PENDING_MONEY_BASE=$M --set SC_PENDING_POPULARITY_BASE=$P
+vitest-packets: node_modules/.bin/vitest run src/test/soccerCareerCreationRoll.test.tsx src/test/xiSelectionHistoryRace.test.tsx src/test/careerPendingOverallGates.test.ts --testTimeout=300000 --hookTimeout=120000
