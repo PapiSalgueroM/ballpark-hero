@@ -1,0 +1,8 @@
+s1: node scripts/simCareerIntl.mjs
+ctl-endcall: INTL_SECTIONS=4 INTL_CONTROL=endcall node scripts/simCareerIntl.mjs
+ctl-lowbar: INTL_SECTIONS=4 INTL_CONTROL=lowbar node scripts/simCareerIntl.mjs
+ctl-anyyear: INTL_SECTIONS=4 INTL_CONTROL=anyyear node scripts/simCareerIntl.mjs
+ctl-seasonyear: INTL_SECTIONS=2 INTL_CONTROL=seasonyear node scripts/simCareerIntl.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json

@@ -1,0 +1,8 @@
+ctl-endcall exit=1 122s | simCareerIntl: control endcall FIRED (section 4, 10 failures)
+s1 exit=0 128s | simCareerIntl: GREEN, 23672 checks over sections 1,2,3,4,6
+ctl-lowbar exit=1 134s | simCareerIntl: control lowbar FIRED (section 4, 2172 failures)
+simHarnessAnchors exit=0 66s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simNoRivalNames exit=0 22s | No rival product names found. 0 findings.
+ctl-seasonyear exit=1 131s | simCareerIntl: control seasonyear FIRED (section 2, 1709 failures)
+ctl-anyyear exit=1 141s | simCareerIntl: control anyyear FIRED (section 4, 1810 failures)
+tsc exit=0 79s | 
