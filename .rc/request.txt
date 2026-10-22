@@ -1,0 +1,11 @@
+#!serve
+#!playwright
+#!serial
+# Release BQ, Round 1553: verify-1553.md's r1553-vf-m (rc-vf-m.txt): the fixer's walk (database host aborted) and the run
+# reviewer's three gap mutations, each restoring src, scripts and supabase; every m- line must exit 1, clean-after 0.
+# The walk is the same file as fix-1553.md's r1553-fx-w, so rc-fx-w.txt is not repeated. mut.mjs is sent as mut1553.mjs.
+walk: node .rc/x/walkFix1553.mjs
+m-refuted-case: node .rc/x/mut1553.mjs refuted-case && node scripts/simConnectionsFacts.mjs && node scripts/simFairPuzzles.mjs; s=$?; git checkout -- src scripts supabase; exit $s
+m-mig-drift: npm install --prefix /tmp/pglm @electric-sql/pglite >/dev/null 2>&1 && node .rc/x/mut1553.mjs mig-drift && PGLITE_DIR=/tmp/pglm node scripts/qa/rehearseConnections1553.mjs && node scripts/simConnectionsFacts.mjs && node scripts/simFairPuzzles.mjs; s=$?; git checkout -- src scripts supabase; exit $s
+m-twohost-onehost: node .rc/x/mut1553.mjs twohost-code && CONN_CONTROL=onehost node scripts/simConnectionsFacts.mjs; s=$?; git checkout -- src scripts supabase; exit $s
+clean-after: git status --short | head -5; echo "tree clean check done"; node scripts/simConnectionsFacts.mjs
