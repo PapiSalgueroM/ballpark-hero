@@ -429,10 +429,26 @@ if (SECTIONS.has('2') || SECTIONS.has('4')) {
 const TOURNEYS = Number(process.env.INTL_TOURNEYS || 2000);
 const TIERS = [[86, 88], [89, 91], [92, 94], [95, 99]];
 const KINDS = ['played', 'future', 'projected'];
-/* Gold and medal bands a tier, a kind (percent), from sets 1 to 5 (null: not set yet, the section only prints). */
-const BANDS = null;
-/* Gold must rise from tier to tier (the first three) by at least this many points, pooled over the held out sets. */
-const RISE = null;
+/* Gold and medal bands a tier, a kind (percent): [gold low, gold high, medal low, medal high].
+   Measured on a runner (r1541-s3b, head a8ebb59d, 2000 tournaments an edition kind a set, so 500 a tier):
+   sets 1 to 5 ranged, gold then medal, by tier 86-88, 89-91, 92-94, 95-99:
+     played     gold 45.2-48.0, 54.8-57.4, 62.6-65.4, 65.0-67.8   medal 77.4-80.2, 81.8-85.8, 88.4-90.2, 88.6-90.6
+     future     gold 61.2-66.6, 72.8-80.4, 86.4-88.6, 92.4-95.0   medal 86.8-90.6, 95.6-96.8, 96.2-97.4, 98.6-99.6
+     projected  gold 64.4-66.2, 79.4-85.0, 88.2-90.6, 91.4-95.0   medal 87.0-90.2, 96.0-98.6, 96.2-97.4, 99.2-99.6
+   A rate over 500 tournaments has a standard error of about 2.2 points, so each band is the sets 1 to 5
+   range widened by 6 points (close to three errors) on both sides, capped at 100. The held out sets 6 to 10
+   then measured: played gold 45.0-48.6, 53.2-55.0, 63.2-65.4, 65.2-68.4; future gold 66.0-71.0, 75.6-78.4,
+   84.2-88.4, 91.6-95.8; projected gold 62.0-66.8, 79.8-83.4, 86.6-90.0, 90.4-95.8 (all inside). */
+const BANDS = {
+  played: [[39.2, 54.0, 71.4, 86.2], [48.8, 63.4, 75.8, 91.8], [56.6, 71.4, 82.4, 96.2], [59.0, 73.8, 82.6, 96.6]],
+  future: [[55.2, 72.6, 80.8, 96.6], [66.8, 86.4, 89.6, 100], [80.4, 94.6, 90.2, 100], [86.4, 100, 92.6, 100]],
+  projected: [[58.4, 72.2, 81.0, 96.2], [73.4, 91.0, 90.0, 100], [82.2, 96.6, 90.2, 100], [85.4, 100, 93.2, 100]],
+};
+/* Gold must rise from tier to tier (the first three) by at least this many points, pooled over the held out
+   sets (2500 a tier, a standard error on a difference of about 1.4 points). Sets 1 to 5 pooled rose at least
+   7.4 (projected, 89-91 to 92-94); the held out sets at least 7.6. The 95-99 tier is not held to a rise: the
+   lift is capped at 4, reached at 94, so it measured 2.4 to 7.1 over 92-94 and could tie. */
+const RISE = 3;
 const tierCareer = (ovr, k) => ({
   name: `band ${k}`, pos: 'SF', draftPick: 1, age: 28, health: 80, retired: false,
   seasons: [{ year: 2000, ovr, ppg: 24, rpg: 6, apg: 5, teamResult: 'band', games: 70 }],
@@ -521,6 +537,7 @@ if (SECTIONS.has('7')) {
   for (const [era, eraId] of ERAS) {
     const n = { never: 0, rested: 0, went: 0, hurt: 0, unhurt: 0 };
     const leg = { go: [], rest: [], goHof: 0, restHof: 0 };
+    const sizes = [];
     for (let i = 0; i < FLEET; i += 1) {
       const o = { key: `intl7:${era}:${i}`, pos: POS[i % POS.length], arch: i, eraId, seasons: 30 };
       const baseJson = base.drive.driveCareer(base.NBA_CAREER_SPORT, o).json;
@@ -540,6 +557,7 @@ if (SECTIONS.has('7')) {
       const rows = gc.intl?.summers ?? [];
       const firstHurt = rows.find(r => r.went && r.hurt);
       n.went += 1;
+      if (gc.seasons.length >= 21) sizes.push([baseJson.length, go.json.length, gc.intl?.summers?.length ?? 0]);
       if (!firstHurt) {
         n.unhurt += 1;
         check('7', same(strip(go.json), JSON.parse(baseJson)), `${era} ${i}: went and never came home hurt, yet more than the block moved`);
@@ -558,6 +576,7 @@ if (SECTIONS.has('7')) {
     }
     check('7', n.rested > 0 && n.never > 0 && n.unhurt > 0, `${era}: the fleet has no called, never called or unhurt career, so the section proves nothing`);
     console.log(`  ${era}: never called ${n.never}, called ${n.rested} (went and never hurt ${n.unhurt}, hurt at least once ${n.hurt})`);
+    if (sizes.length) console.log(`  ${era}: save bytes of a career of 21 seasons or more that went every time it was called: first ${sizes[0][0]} on the base, ${sizes[0][1]} on this head (${sizes[0][2]} summers); the save grows by ${median(sizes.map(x => x[1] - x[0]))} bytes at the median, ${Math.max(...sizes.map(x => x[1] - x[0]))} at most, over ${sizes.length} careers`);
     console.log(`  ${era}: called careers, legacy median always go ${median(leg.go)} vs always rest ${median(leg.rest)}; Hall share ${(100 * leg.goHof / Math.max(1, leg.go.length)).toFixed(1)} vs ${(100 * leg.restHof / Math.max(1, leg.rest.length)).toFixed(1)} percent (measured, never asserted)`);
   }
 }
