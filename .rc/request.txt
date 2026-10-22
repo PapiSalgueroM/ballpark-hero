@@ -1,0 +1,4 @@
+simUsSeasonCentre: node scripts/simUsSeasonCentre.mjs
+simCareerHall: node scripts/simCareerHall.mjs
+simNbaAwardsSense: node scripts/simNbaAwardsSense.mjs
+simUsCareerSummer: node scripts/simUsCareerSummer.mjs
