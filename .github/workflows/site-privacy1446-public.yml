@@ -151,7 +151,7 @@ jobs:
           set -euo pipefail
           cat > "$READBACK_OUT/security-cookie-policy.cjs" <<'COOKIEJS'
           'use strict';
-          
+
           function checkNoResponseCookie(headers) {
             const fail = () => { throw new Error('PUBLIC_RESPONSE_COOKIE'); };
             const cookie = headers['set-cookie'];
@@ -174,12 +174,12 @@ jobs:
             if (!Number.isFinite(lifetimeSeconds) || lifetimeSeconds <= 0 || lifetimeSeconds > 31 * 60) fail();
             return [{ name: '__cf_bm', purpose: 'hosting bot protection', lifetimeSeconds, httpOnly: true, secure: true, sameSite: 'None', path: '/', domain: 'douknowball.com' }];
           }
-          
+
           module.exports = { checkNoResponseCookie };
           COOKIEJS
           cat > "$READBACK_OUT/security-cookie-controls.cjs" <<'COOKIEJS'
           'use strict';
-          
+
           const fs = require('node:fs'), assert = require('node:assert/strict'), { createHash } = require('node:crypto');
           const path = require('node:path'), out = process.env.READBACK_OUT;
           const { checkNoResponseCookie } = require('./security-cookie-policy.cjs');
@@ -552,7 +552,7 @@ jobs:
                 try { assert(report.strictComparison.entryEqual && report.strictComparison.allNeededBytesEqual, 'STRICT_QUALIFIED_ASSET_BYTES'); save('strict-comparison.log', 'STRICT_QUALIFIED_ASSET_BYTES: exact entry and all necessary raw bytes match.\n'); }
                 catch (error) { assert.equal(error.name, 'AssertionError'); assert(error.message.startsWith('STRICT_QUALIFIED_ASSET_BYTES')); report.strictComparison.exit = 1; report.strictComparison.error = { name: error.name, message: error.message }; save('strict-comparison.log', error.stack + '\n'); }
                 save('strict-comparison.exit', String(report.strictComparison.exit) + '\n');
-          
+
                 save('observed-asset-pins.json', pins); report.assetPins = pins; report.assetPinsSerializedSha256 = hash(JSON.stringify(pins));
               } else {
                 const prior = JSON.parse(fs.readFileSync(path.join(out, 'input', 'readback.json'), 'utf8'));

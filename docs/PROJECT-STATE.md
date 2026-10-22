@@ -18990,4 +18990,3 @@ Qualified source `0dc9865` passed all six jobs in run39732838642, including 9,33
 Proper public run39747821847 verified published deployment `16a8e658-6527-43a1-85ff-d5c3c7d896a4`, three raw pages, four observed assets, 67 guarded requests and normal3/3 with effective thin2/3. IndexNow run39759337399 accepted only Cookie Policy and Privacy with HTTP200. Acceptance is not an indexing guarantee. Earlier failed runs and raw CI/public differences remain retained.
 
 Analytics remains paused. Provider readiness, broader legal/operational dependencies and the old785/1441 preservation gaps remain open. Round1447 is separate. I retains publication ownership; this operators/docs closure needs no product republish.
-
