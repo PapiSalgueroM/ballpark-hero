@@ -1,0 +1,7 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playStorageBlocked exit=0 272s | playStorageBlocked: 826 checks, 0 failed
+sweepSaves exit=0 413s | sweepSaves: green. Every save on the site survives being garbage.
+playTranslatedPage exit=0 137s | playTranslatedPage: 447 checks, 0 failed
+playWc2026Reset exit=0 30s | playWc2026Reset: all green
+sweepContrast exit=1 365s | sweepContrast: 16 failures
+sweepPhone exit=1 113s | sweepPhone: 2 failures

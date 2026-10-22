@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+#!serial
+playStorageBlocked: node scripts/playStorageBlocked.mjs
+sweepSaves: node scripts/sweepSaves.mjs
+playTranslatedPage: node scripts/playTranslatedPage.mjs
+playWc2026Reset: node scripts/playWc2026Reset.mjs
+sweepContrast: node scripts/sweepContrast.mjs 2>&1 | grep -E "^FAIL|sweepContrast" | cut -c1-200; exit ${PIPESTATUS[0]}
+sweepPhone: ENGINES=chromium node scripts/sweepPhone.mjs
