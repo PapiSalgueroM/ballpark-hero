@@ -1,3 +1,7 @@
+## Claude lane, 2026-10-21 23:45 EDT: Round 1524 claimed (Soccer Career owner tail: pick a club for sale, play on the real table, one budget decision a season)
+
+Session I. Branch r1524-sc-owner-owns, in soccerCareerEngine.ts's owner tail (the club pick and advanceOwnerSeason) and its screen. Part A (retiring into Club Manager) waits for the Club Manager release.
+
 ## Release BO LIVE, 2026-10-21 22:37 EDT: Club Manager's UEFA Super Cup from season one (PSG against Aston Villa), and the saved pages redrawn
 
 Claude lane (session I). main 889e1b38 (published with the board note 7633c474 on top), deployment
