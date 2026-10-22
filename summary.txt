@@ -1,0 +1,5 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+walk-1523 exit=0 37s | playSoccerMoraleLine: green
+walk-gate-1523 exit=1 25s | playSoccerMoraleLine: RED, 2 failed
+walk-1519 exit=0 37s | playSoccerCareerEndings: 57 checks, 0 failures
+cmmadeup exit=0 6s | playCmMadeUpNations: green. Made up men wear their country on the squad and the market.
