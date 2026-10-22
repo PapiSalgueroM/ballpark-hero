@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+career: node scripts/simGmCareer.mjs
+ctl-flatmedia: SIM_GM_CAREER_CONTROL=flatmedia SIM_GM_CAREER_ONLY=3 node scripts/simGmCareer.mjs
+ctl-extradraw: SIM_GM_CAREER_CONTROL=extradraw SIM_GM_CAREER_ONLY=3 node scripts/simGmCareer.mjs
+vitest-board: node_modules/.bin/vitest run src/components/front-office/FrontOfficeOnePress.test.tsx src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx src/components/front-office-shared/FrontOfficeGmCareer.test.tsx --testTimeout=600000 --hookTimeout=120000
+vitest-shared: node_modules/.bin/vitest run src/lib/gmDeskHost.test.ts src/components/front-office-shared/GmCareerDesk.test.tsx src/lib/gmXp.test.ts --testTimeout=300000 --hookTimeout=120000
+fob-check: node scripts/controlFrontOfficeBoard.mjs check
+anchors: node scripts/simHarnessAnchors.mjs
+deskhost: node scripts/simGmDeskHost.mjs

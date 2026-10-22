@@ -1,0 +1,9 @@
+ctl-flatmedia exit=1 11s | CONTROL flatmedia: 1 rewrite(s) applied, 30 failure(s) in section 3 (FIRED)
+ctl-extradraw exit=1 9s | CONTROL extradraw: 1 rewrite(s) applied, 1 failure(s) in section 3 (FIRED)
+vitest-board exit=0 31s |    Duration  30.05s (transform 4.51s, setup 429ms, collect 4.88s, tests 44.76s, environment 2.34s, prepare 655ms)
+vitest-shared exit=0 3s |    Duration  3.24s (transform 644ms, setup 416ms, collect 1.74s, tests 2.14s, environment 2.04s, prepare 414ms)
+fob-check exit=0 0s | controlFrontOfficeBoard: check passed. Every string of all 44 controls is in the board exactly once.
+tsc exit=0 110s | 
+anchors exit=0 61s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+deskhost exit=0 46s | simGmDeskHost: all 10 checks passed on seeds 1,2,3 (4 engines, 3 seasons a seed)
+career exit=0 207s | simGmCareer: all checks passed (nfl)
