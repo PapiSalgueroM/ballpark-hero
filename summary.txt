@@ -1,0 +1,3 @@
+sum6-nba-head exit=0 2765s | simUsCareerSummer: green. Sections 6 held.
+sum6-nfl-head exit=0 3096s | simUsCareerSummer: green. Sections 6 held.
+sum6-nfl-base exit=0 3200s | simUsCareerSummer: green. Sections 6 held.
