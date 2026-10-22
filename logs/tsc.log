@@ -1,0 +1,2 @@
+src/pages/SoccerCareer.tsx(34,26): error TS2300: Duplicate identifier 'OwnerState'.
+src/pages/SoccerCareer.tsx(45,79): error TS2300: Duplicate identifier 'OwnerState'.

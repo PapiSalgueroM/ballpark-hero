@@ -1,0 +1,5 @@
+simSiteSearch exit=0 4s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+vitest exit=0 24s |    Duration  24.16s (transform 8.48s, setup 513ms, collect 15.93s, tests 28.32s, environment 2.97s, prepare 2.04s)
+simNoRivalNames exit=0 22s | No rival product names found. 0 findings.
+simManagerCareer exit=0 10s | ALL MANAGER CAREER CHECKS PASSED
+tsc exit=2 79s | src/pages/SoccerCareer.tsx(45,79): error TS2300: Duplicate identifier 'OwnerState'.
