@@ -93,7 +93,10 @@ for (const [label, size] of [['390', { width: 390, height: 844 }], ['1280', { wi
   await page.getByRole('tab', { name: 'Squad', exact: true }).click();
   await page.locator('[data-cm-squad-row]').first().waitFor({ timeout: 30000 });
   const rows = await page.locator('[data-cm-squad-row]').evaluateAll(list => list.map(r => ({
-    text: r.textContent ?? '', flag: r.querySelector('img[alt]')?.getAttribute('alt') ?? null,
+    /* England is drawn inline (FlagImg's INLINE_FLAGS: flagcdn's copy was blank), an svg with no alt, so it is read
+       by its drawing; since the review's fix a youth pad at an English club is English. */
+    text: r.textContent ?? '', flag: r.querySelector('img[alt]')?.getAttribute('alt')
+      ?? (r.querySelector('svg[viewBox="0 0 60 36"] rect[fill="#CE1124"]') ? 'England' : null),
     italic: !!r.querySelector('.italic'),
   })));
   const marked = rows.filter(r => r.text.includes('MADE UP'));
@@ -119,7 +122,8 @@ for (const [label, size] of [['390', { width: 390, height: 844 }], ['1280', { wi
   check(after === before, `${label} market: the page held still while typing (${before} then ${after})`);
   const hit = await page.locator('span', { hasText: target.name }).first().evaluate(el => {
     const row = el.closest('div.flex.items-center.gap-2') ?? el.parentElement;
-    return { text: row?.textContent ?? '', flag: row?.querySelector('img[alt]')?.getAttribute('alt') ?? null };
+    return { text: row?.textContent ?? '', flag: row?.querySelector('img[alt]')?.getAttribute('alt')
+      ?? (row?.querySelector('svg[viewBox="0 0 60 36"] rect[fill="#CE1124"]') ? 'England' : null) };
   }).catch(() => null);
   check(!!hit && hit.text.includes('MADE UP') && hit.flag === target.nation,
     `${label} market: filtered to ${target.nation}, ${target.name} is listed${hit ? ` with ${hit.flag ?? 'no flag'}${hit.text.includes('MADE UP') ? ' and the MADE UP mark' : ', no MADE UP mark'}` : ': not found'}`);
