@@ -1,0 +1,102 @@
+walk1556: seed 15, GM DAL, Cooper Flagg (60) has a sheet from GSW (14 men): 4y at 2.7
+walk 390
+  ok 390 1-recap: no sideways scroll, nothing cut ()
+  note 390 1-recap: buttons under 44 px: Go to the draft (40), 📋 Copy Score Card (42), 🖼️ Save Image (42), Awards (27)
+  ok 390 2-desk: no sideways scroll, nothing cut ()
+  note 390 2-desk: buttons under 44 px: Hub (34),  (36), Report a problem (32)
+  ok 390 the sheet is on his table
+  ok 390 3-sheet: no sideways scroll, nothing cut ()
+  note 390 3-sheet: buttons under 44 px: Hub (34),  (36), Report a problem (32)
+  ok 390 decided line: "Gone to the rival on its sheet: 4 seasons at $2.7M."
+  ok 390 4-let-go: no sideways scroll, nothing cut ()
+  note 390 4-let-go: buttons under 44 px: Hub (34),  (36), Report a problem (32)
+  ok 390 5-desk-after: no sideways scroll, nothing cut ()
+  note 390 5-desk-after: buttons under 44 px: Hub (34),  (36), Report a problem (32)
+  ok 390 6-lottery: no sideways scroll, nothing cut ()
+  note 390 6-lottery: buttons under 44 px: Report a problem (32)
+  ok 390 7-after-summer: no sideways scroll, nothing cut ()
+  note 390 7-after-summer: buttons under 44 px: Report a problem (32)
+  ok 390 the summer ran (phase hub, season 2027)
+  ok 390 Cooper Flagg after the summer: at GSW on 4y at 2.7, the sheet said GSW 4y at 2.7
+  ok 390 GSW ends the summer at 15
+  ok 390 GSW carries no dead money for him
+  ok 390 8-hub-next-season: no sideways scroll, nothing cut ()
+  note 390 8-hub-next-season: buttons under 44 px: Abandon franchise and restart (17), Report a problem (32)
+  note 390: his name on the hub after the summer: false
+  ok 390 page errors: 
+walk 390-rm
+  ok 390-rm 1-recap: no sideways scroll, nothing cut ()
+  note 390-rm 1-recap: buttons under 44 px: Go to the draft (40), 📋 Copy Score Card (42), 🖼️ Save Image (42), Awards (27)
+  ok 390-rm 2-desk: no sideways scroll, nothing cut ()
+  note 390-rm 2-desk: buttons under 44 px: Hub (34),  (36), Report a problem (32)
+  ok 390-rm the sheet is on his table
+  ok 390-rm 3-sheet: no sideways scroll, nothing cut ()
+  note 390-rm 3-sheet: buttons under 44 px: Hub (34),  (36), Report a problem (32)
+  ok 390-rm decided line: "Gone to the rival on its sheet: 4 seasons at $2.7M."
+  ok 390-rm 4-let-go: no sideways scroll, nothing cut ()
+  note 390-rm 4-let-go: buttons under 44 px: Hub (34),  (36), Report a problem (32)
+  ok 390-rm 5-desk-after: no sideways scroll, nothing cut ()
+  note 390-rm 5-desk-after: buttons under 44 px: Hub (34),  (36), Report a problem (32)
+  ok 390-rm 6-lottery: no sideways scroll, nothing cut ()
+  note 390-rm 6-lottery: buttons under 44 px: Report a problem (32)
+  ok 390-rm 7-after-summer: no sideways scroll, nothing cut ()
+  note 390-rm 7-after-summer: buttons under 44 px: Report a problem (32)
+  ok 390-rm the summer ran (phase hub, season 2027)
+  ok 390-rm Cooper Flagg after the summer: at GSW on 4y at 2.7, the sheet said GSW 4y at 2.7
+  ok 390-rm GSW ends the summer at 15
+  ok 390-rm GSW carries no dead money for him
+  ok 390-rm 8-hub-next-season: no sideways scroll, nothing cut ()
+  note 390-rm 8-hub-next-season: buttons under 44 px: Abandon franchise and restart (17), Report a problem (32)
+  note 390-rm: his name on the hub after the summer: false
+  ok 390-rm page errors: 
+walk 1280
+  ok 1280 1-recap: no sideways scroll, nothing cut ()
+  note 1280 1-recap: buttons under 44 px: 📋 Copy Score Card (42), 🖼️ Save Image (42), Awards (27), Leaders (27)
+  ok 1280 2-desk: no sideways scroll, nothing cut ()
+  note 1280 2-desk: buttons under 44 px: Hub (34),  (40), Report a problem (32)
+  ok 1280 the sheet is on his table
+  ok 1280 3-sheet: no sideways scroll, nothing cut ()
+  note 1280 3-sheet: buttons under 44 px: Hub (34),  (40), Report a problem (32)
+  ok 1280 decided line: "Gone to the rival on its sheet: 4 seasons at $2.7M."
+  ok 1280 4-let-go: no sideways scroll, nothing cut ()
+  note 1280 4-let-go: buttons under 44 px: Hub (34),  (40), Report a problem (32)
+  ok 1280 5-desk-after: no sideways scroll, nothing cut ()
+  note 1280 5-desk-after: buttons under 44 px: Hub (34),  (40), Report a problem (32)
+  ok 1280 6-lottery: no sideways scroll, nothing cut ()
+  note 1280 6-lottery: buttons under 44 px: Report a problem (32)
+  ok 1280 7-after-summer: no sideways scroll, nothing cut ()
+  note 1280 7-after-summer: buttons under 44 px: Report a problem (32)
+  ok 1280 the summer ran (phase hub, season 2027)
+  ok 1280 Cooper Flagg after the summer: at GSW on 4y at 2.7, the sheet said GSW 4y at 2.7
+  ok 1280 GSW ends the summer at 15
+  ok 1280 GSW carries no dead money for him
+  ok 1280 8-hub-next-season: no sideways scroll, nothing cut ()
+  note 1280 8-hub-next-season: buttons under 44 px: Abandon franchise and restart (17), Report a problem (32)
+  note 1280: his name on the hub after the summer: false
+  ok 1280 page errors: 
+walk 1280-rm
+  ok 1280-rm 1-recap: no sideways scroll, nothing cut ()
+  note 1280-rm 1-recap: buttons under 44 px: 📋 Copy Score Card (42), 🖼️ Save Image (42), Awards (27), Leaders (27)
+  ok 1280-rm 2-desk: no sideways scroll, nothing cut ()
+  note 1280-rm 2-desk: buttons under 44 px: Hub (34),  (40), Report a problem (32)
+  ok 1280-rm the sheet is on his table
+  ok 1280-rm 3-sheet: no sideways scroll, nothing cut ()
+  note 1280-rm 3-sheet: buttons under 44 px: Hub (34),  (40), Report a problem (32)
+  ok 1280-rm decided line: "Gone to the rival on its sheet: 4 seasons at $2.7M."
+  ok 1280-rm 4-let-go: no sideways scroll, nothing cut ()
+  note 1280-rm 4-let-go: buttons under 44 px: Hub (34),  (40), Report a problem (32)
+  ok 1280-rm 5-desk-after: no sideways scroll, nothing cut ()
+  note 1280-rm 5-desk-after: buttons under 44 px: Hub (34),  (40), Report a problem (32)
+  ok 1280-rm 6-lottery: no sideways scroll, nothing cut ()
+  note 1280-rm 6-lottery: buttons under 44 px: Report a problem (32)
+  ok 1280-rm 7-after-summer: no sideways scroll, nothing cut ()
+  note 1280-rm 7-after-summer: buttons under 44 px: Report a problem (32)
+  ok 1280-rm the summer ran (phase hub, season 2027)
+  ok 1280-rm Cooper Flagg after the summer: at GSW on 4y at 2.7, the sheet said GSW 4y at 2.7
+  ok 1280-rm GSW ends the summer at 15
+  ok 1280-rm GSW carries no dead money for him
+  ok 1280-rm 8-hub-next-season: no sideways scroll, nothing cut ()
+  note 1280-rm 8-hub-next-season: buttons under 44 px: Abandon franchise and restart (17), Report a problem (32)
+  note 1280-rm: his name on the hub after the summer: false
+  ok 1280-rm page errors: 
+walk1556: green
