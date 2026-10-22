@@ -1,0 +1,12 @@
+build exit=0 27s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+draw-touch exit=0 4s | 3912 original source holds; copies, transforms and raw process records retained at /home/runner/work/ballpark-hero/ballpark-hero/tycoon-draw-result-artifacts/outcomes.
+money-touch exit=0 14s | Original source holds: 3912; full copies, executable transforms and raw process records retained at /home/runner/work/ballpark-hero/ballpark-hero/tycoon-money-display-art
+money-render exit=1 0s | Node.js v24.22.0
+fk-base exit=0 5s | simFreeKickRange: 3916 original source hashes held; copies, bundles and raw reports retained.
+fk-touch exit=0 5s | simFreeKickRange: 3916 original source hashes held; copies, bundles and raw reports retained.
+qafk-base exit=0 21s | Free Kick consumer proof PASSED; artifacts retained at /home/runner/work/ballpark-hero/ballpark-hero/free-kick-range-artifacts/native.
+qafk-touch exit=0 19s | Free Kick consumer proof PASSED; artifacts retained at /home/runner/work/ballpark-hero/ballpark-hero/free-kick-range-artifacts/native.
+gg-base exit=0 32s | Original source, build and actual template font cache stayed byte-identical.
+gg-touch exit=0 33s | Original source, build and actual template font cache stayed byte-identical.
+gg-nocache exit=1 0s | Node.js v24.22.0
+suite3 exit=0 17s | All 3 harnesses green.
