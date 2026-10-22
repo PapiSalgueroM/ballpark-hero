@@ -1,0 +1,98 @@
+simCmDifficulty: sections 2
+  table: veryeasy {"gain":1.4,"pain":0.6,"cut":0,"cheque":1.5,"wageRoom":1.12,"mark":0.8,"edge":-3}; easy {"gain":1.2,"pain":0.8,"cut":0,"cheque":1.2,"wageRoom":1.06,"mark":0.87,"edge":-1.5}; normal {"gain":1,"pain":1,"cut":0,"cheque":1,"wageRoom":1,"mark":1,"edge":0}; hard {"gain":0.8,"pain":1.25,"cut":8,"cheque":0.8,"wageRoom":0.94,"mark":1.15,"edge":2.2}; legend {"gain":0.65,"pain":1.5,"cut":14,"cheque":0.65,"wageRoom":0.9,"mark":1.3,"edge":3.9}
+2) Normal plays as the base tree /tmp/base: 2 seeds, 2 seasons, coach and noCoach
+  FAIL: Arsenal seed 0 coach: season 1 differs from the base, first at key freeAgents
+  FAIL: Arsenal seed 0 noCoach: season 1 differs from the base, first at key freeAgents
+  FAIL: Arsenal seed 1 coach: season 1 differs from the base, first at key freeAgents
+  FAIL: Arsenal seed 1 noCoach: season 1 differs from the base, first at key freeAgents
+  FAIL: Brentford seed 0 coach: season 1 differs from the base, first at key freeAgents
+  FAIL: Brentford seed 0 noCoach: season 1 differs from the base, first at key freeAgents
+  FAIL: Brentford seed 1 coach: season 1 differs from the base, first at key freeAgents
+  FAIL: Brentford seed 1 noCoach: season 1 differs from the base, first at key freeAgents
+  FAIL: Hull City seed 0 coach: season 1 differs from the base, first at key freeAgents
+  FAIL: Hull City seed 0 noCoach: season 1 differs from the base, first at key freeAgents
+  FAIL: Hull City seed 1 coach: season 1 differs from the base, first at key freeAgents
+  FAIL: Hull City seed 1 noCoach: season 1 differs from the base, first at key freeAgents
+  FAIL: Real Madrid seed 0 coach: season 1 differs from the base, first at key freeAgents
+  FAIL: Real Madrid seed 0 noCoach: season 1 differs from the base, first at key freeAgents
+  FAIL: Real Madrid seed 1 coach: season 1 differs from the base, first at key freeAgents
+  FAIL: Real Madrid seed 1 noCoach: season 1 differs from the base, first at key freeAgents
+  FAIL: Espanyol seed 0 coach: season 1 differs from the base, first at key squad
+  FAIL: Espanyol seed 0 noCoach: season 1 differs from the base, first at key squad
+  FAIL: Espanyol seed 1 coach: season 1 differs from the base, first at key squad
+  FAIL: Espanyol seed 1 noCoach: season 1 differs from the base, first at key squad
+  FAIL: Málaga seed 0 coach: season 1 differs from the base, first at key squad
+  FAIL: Málaga seed 0 noCoach: season 1 differs from the base, first at key squad
+  FAIL: Málaga seed 1 coach: season 1 differs from the base, first at key squad
+  FAIL: Málaga seed 1 noCoach: season 1 differs from the base, first at key squad
+  FAIL: Inter Milan seed 0 coach: season 1 differs from the base, first at key freeAgents
+  FAIL: Inter Milan seed 0 noCoach: season 1 differs from the base, first at key freeAgents
+  FAIL: Inter Milan seed 1 coach: season 1 differs from the base, first at key freeAgents
+  FAIL: Inter Milan seed 1 noCoach: season 1 differs from the base, first at key freeAgents
+  FAIL: Torino seed 0 coach: season 1 differs from the base, first at key freeAgents
+  FAIL: Torino seed 0 noCoach: season 1 differs from the base, first at key freeAgents
+  FAIL: Torino seed 1 coach: season 1 differs from the base, first at key freeAgents
+  FAIL: Torino seed 1 noCoach: season 1 differs from the base, first at key freeAgents
+  FAIL: Frosinone seed 0 coach: season 1 differs from the base, first at key squad
+  FAIL: Frosinone seed 0 noCoach: season 1 differs from the base, first at key squad
+  FAIL: Frosinone seed 1 coach: season 1 differs from the base, first at key squad
+  FAIL: Frosinone seed 1 noCoach: season 1 differs from the base, first at key squad
+  FAIL: Everton 2005-06 seed 0 coach: season 1 differs from the base, first at key squad
+  FAIL: Everton 2005-06 seed 0 noCoach: season 1 differs from the base, first at key squad
+  FAIL: Everton 2005-06 seed 1 coach: season 1 differs from the base, first at key squad
+  FAIL: Everton 2005-06 seed 1 noCoach: season 1 differs from the base, first at key squad
+  FAIL: a created club seed 0 coach: season 1 differs from the base, first at key squad
+  FAIL: a created club seed 0 noCoach: season 1 differs from the base, first at key squad
+  FAIL: a created club seed 1 coach: season 1 differs from the base, first at key squad
+  FAIL: a created club seed 1 noCoach: season 1 differs from the base, first at key squad
+  FAIL: Brentford, New year takeover seed 0 coach: season 1 differs from the base, first at key freeAgents
+  FAIL: Brentford, New year takeover seed 0 noCoach: season 1 differs from the base, first at key freeAgents
+  FAIL: Brentford, New year takeover seed 1 coach: season 1 differs from the base, first at key freeAgents
+  FAIL: Brentford, New year takeover seed 1 noCoach: season 1 differs from the base, first at key freeAgents
+  FAIL: Brentford, a joinClubNow move seed 0 coach: season 1 differs from the base, first at key freeAgents
+  FAIL: Brentford, a joinClubNow move seed 0 noCoach: season 1 differs from the base, first at key freeAgents
+  FAIL: Brentford, a joinClubNow move seed 1 coach: season 1 differs from the base, first at key freeAgents
+  FAIL: Brentford, a joinClubNow move seed 1 noCoach: season 1 differs from the base, first at key freeAgents
+  FAIL: Hull City, a wilderness job seed 0 coach: season 1 differs from the base, first at key squad
+  FAIL: Hull City, a wilderness job seed 0 noCoach: season 1 differs from the base, first at key squad
+  FAIL: Hull City, a wilderness job seed 1 coach: season 1 differs from the base, first at key squad
+  FAIL: Hull City, a wilderness job seed 1 noCoach: season 1 differs from the base, first at key squad
+  ok: 56 Normal careers compared with the base, 3904394 draws, in 124 s
+  ok: Brentford, a joinClubNow move: reached the new job all 8 times, on both trees
+  ok: Hull City, a wilderness job: reached the new job all 8 times, on both trees
+  ok: setUpCareer on Normal with No sacking off returns its argument
+  FAIL: 2c Arsenal: the base's save opens differently here, first at key freeAgents
+  FAIL: 2c Brentford: the base's save opens differently here, first at key freeAgents
+  FAIL: 2c Hull City: the base's save opens differently here, first at key freeAgents
+  FAIL: 2c Real Madrid: the base's save opens differently here, first at key freeAgents
+  FAIL: 2c Espanyol: the base's save opens differently here, first at key squad
+  FAIL: 2c Málaga: the base's save opens differently here, first at key squad
+  FAIL: 2c Inter Milan: the base's save opens differently here, first at key freeAgents
+  FAIL: 2c Torino: the base's save opens differently here, first at key freeAgents
+  FAIL: 2c Frosinone: the base's save opens differently here, first at key squad
+  FAIL: 2c Everton 2005-06: the base's save opens differently here, first at key squad
+  FAIL: 2c a created club: the base's save opens differently here, first at key squad
+  FAIL: 2c Brentford, New year takeover: the base's save opens differently here, first at key freeAgents
+  FAIL: 2c Brentford, a joinClubNow move: the base's save opens differently here, first at key freeAgents
+  FAIL: 2c Hull City, a wilderness job: the base's save opens differently here, first at key squad
+  ok: 2c: 0 of 14 saves the base wrote open here as they open there, Normal with No sacking off
+  FAIL: 2d cmBookSaveEvertonFixture: opens differently here, first at key freeAgents
+  FAIL: 2d cmBookSaveEvertonFixture keyed hard: opens differently here, first at key freeAgents
+  FAIL: 2d cmBookSaveEvertonFixture keyed legend: opens differently here, first at key freeAgents
+  FAIL: 2d cmBookSaveHerthaFixture: opens differently here, first at key squad
+  FAIL: 2d cmBookSaveHerthaFixture keyed hard: opens differently here, first at key squad
+  FAIL: 2d cmBookSaveHerthaFixture keyed legend: opens differently here, first at key squad
+  FAIL: 2d cmOldSave1052Fixture: opens differently here, first at key squad
+  FAIL: 2d cmOldSave1052Fixture keyed hard: opens differently here, first at key squad
+  FAIL: 2d cmOldSave1052Fixture keyed legend: opens differently here, first at key squad
+  FAIL: 2d cmSecondTierOldSaveFixture: opens differently here, first at key freeAgents
+  FAIL: 2d cmSecondTierOldSaveFixture keyed hard: opens differently here, first at key freeAgents
+  FAIL: 2d cmSecondTierOldSaveFixture keyed legend: opens differently here, first at key freeAgents
+  FAIL: 2d Arsenal, a hard season the base wrote: opens differently here, first at key freeAgents
+  FAIL: 2d Brentford, a hard season the base wrote: opens differently here, first at key freeAgents
+  FAIL: 2d Hull City, a hard season the base wrote: opens differently here, first at key freeAgents
+  FAIL: 2d Arsenal, a legend season the base wrote: opens differently here, first at key freeAgents
+  FAIL: 2d Brentford, a legend season the base wrote: opens differently here, first at key freeAgents
+  FAIL: 2d Hull City, a legend season the base wrote: opens differently here, first at key freeAgents
+  ok: 2b: 18 of 18 Hard careers on Normal's dials play as Normal, the key aside
+simCmDifficulty: 88 FAILURES (sections 2)

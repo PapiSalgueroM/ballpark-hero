@@ -1,0 +1,2 @@
+diff2-base exit=1 185s | simCmDifficulty: 88 FAILURES (sections 2)
+diff2-self exit=0 187s | simCmDifficulty: all green (sections 2)
