@@ -26,7 +26,8 @@
         Montenegro is kept as it played; an edition still to come has no field,
         and the field the game draws for it is the same for every career.
      4. the call, INTL_FLEET careers an era (default 400) through the real NBA
-        engine: called exactly when the oracle (86, 36, 50, an edition) says so.
+        engine: called exactly when the oracle (86, 36, 50, an edition, a
+        career not ending with that season) says so.
      5. the tournament, INTL_TOURNEYS tournaments an edition kind (default 2000)
         in ten seed sets: gold and medal rates by rating tier and kind inside
         BANDS, gold rising tier to tier (RISE), the knock's hurt share by age
@@ -54,6 +55,7 @@
      genfield     a drawn field keyed to the career, not the edition     (3 red)
      anyyear      every summer answers an edition                        (4 red)
      lowbar       the bar is five points lower in the bind               (4 red)
+     endcall      the call ignores a career ending with this season      (4 red)
      nolift       he lifts the USA by nothing                            (5 red)
      nobronze     no bronze game is played                               (5 red)
      knockflip    the knock comparison flipped                           (5 red)
@@ -93,6 +95,7 @@ const CONTROLS = {
   copy: { section: '6', note: 'a private copy of the bracket runner planted in a sport file' },
   seasonyear: { section: '2', note: 'the call reads the season label itself, not the summer after it', edits: [{ file: NBA, from: 'NBA_INTL_CALENDAR.editionFor(nbaIntlSummerOf(line.year))', to: 'NBA_INTL_CALENDAR.editionFor(line.year)' }] },
   anyyear: { section: '4', note: 'every summer answers an edition', edits: [{ file: NBA, from: 'const e = NBA_INTL_CALENDAR.editionFor(nbaIntlSummerOf(line.year));', to: 'const e = NBA_INTL_CALENDAR.editionFor(nbaIntlSummerOf(line.year)) ?? NBA_INTL_CALENDAR.byId(`oly-${nbaIntlSummerOf(line.year)}`);' }] },
+  endcall: { section: '4', note: 'the call ignores a career that ends with this season', edits: [{ file: NBA, from: ' || nbaShouldRetire(c) || endsAfterSeason(c, line.year)) return null;', to: ') return null;' }] },
   lowbar: { section: '4', note: 'the bar is five points lower in the bind', edits: [{ file: NBA, from: 'line.ovr < INTL_CALL_UP_OVR', to: 'line.ovr < INTL_CALL_UP_OVR - 5' }] },
   legacyreads: { section: '7', note: 'legacy counts his medals' },
   restwrites: { section: '7', note: 'resting takes a point of health', edits: [{ file: NBA, from: 'answer: (c, choice) => answerCallUp(c as NbaIntlCareer, NBA_INTL_BIND, choice),', to: "answer: (c, choice) => { if (choice === 'rest') c.health -= 1; return answerCallUp(c as NbaIntlCareer, NBA_INTL_BIND, choice); }," }] },
@@ -408,7 +411,11 @@ if (SECTIONS.has('6')) {
    then the call, then the cards, then the team roll), FLEET careers an era,
    seeds 0 to FLEET - 1. The oracle states the bar itself (86, 36, 50) rather
    than reading the bind's constants, so a control that moves the bind's
-   comparison cannot move the oracle with it. */
+   comparison cannot move the oracle with it. It also states the end of a
+   career: the board ends a career after a season his farewell or retirement
+   names before any summer (UsCareerBoard.tsx, endsAfterSeason), but the drive
+   only stops on the engine's hard stop, so it reaches summers the board never
+   does; such a summer is never called (control endcall). */
 const FLEET = Number(process.env.INTL_FLEET || 400);
 const ERAS = [['now', undefined, 2027], ['y2004', 'y2004', 2004]];
 const POS = ['PG', 'SG', 'SF', 'PF', 'C'];
@@ -416,7 +423,7 @@ const ORACLE = { ovr: 86, age: 36, health: 50 };
 if (SECTIONS.has('2') || SECTIONS.has('4')) {
   console.log(`sections 2b and 4: the call, ${FLEET} careers an era through the real NBA engine`);
   for (const [era, eraId, firstSummer] of ERAS) {
-    let careers = 0; let called = 0; let calls = 0; let summers = 0; let rated = 0; let hurtBlocked = 0; let oldBlocked = 0;
+    let careers = 0; let called = 0; let calls = 0; let summers = 0; let rated = 0; let hurtBlocked = 0; let oldBlocked = 0; let endBlocked = 0;
     const firsts = new Map();
     const bests = [];
     for (let i = 0; i < FLEET; i += 1) {
@@ -430,13 +437,16 @@ if (SECTIONS.has('2') || SECTIONS.has('4')) {
         summers += 1;
         const ed = resolve(summer);
         const suspended = line.teamResult === 'SUSPENDED' || (c.suspendedSeasons ?? 0) > 0;
+        const r = c.retirement;
+        const ending = !!r && ((r.retiredYear !== undefined && line.year >= r.retiredYear) || (r.farewellYear !== undefined && line.year >= r.farewellYear));
         if (ed && !suspended && line.ovr >= ORACLE.ovr) {
           rated += 1;
+          if (ending) endBlocked += 1;
           if (c.health < ORACLE.health) hurtBlocked += 1;
           if (c.age > ORACLE.age) oldBlocked += 1;
         }
-        if (ed && !suspended && c.age <= ORACLE.age && c.health >= ORACLE.health) best = Math.max(best, line.ovr);
-        const meets = !!ed && !c.retired && !suspended && line.ovr >= ORACLE.ovr && c.age <= ORACLE.age && c.health >= ORACLE.health;
+        if (ed && !suspended && !ending && c.age <= ORACLE.age && c.health >= ORACLE.health) best = Math.max(best, line.ovr);
+        const meets = !!ed && !c.retired && !ending && !suspended && line.ovr >= ORACLE.ovr && c.age <= ORACLE.age && c.health >= ORACLE.health;
         const call = nbaIntl.NBA_CAREER_INTL.pending(c);
         check('4', !!call === meets, `${era} ${i} summer ${summer}: ovr ${line.ovr} age ${c.age} health ${c.health} edition ${ed?.id ?? 'none'}, called ${!!call}, the oracle says ${meets}`);
         if (call) {
@@ -455,7 +465,7 @@ if (SECTIONS.has('2') || SECTIONS.has('4')) {
     check('4', called > 0, `${era}: nobody was ever called, so the section proves nothing`);
     console.log(`  ${era}: ${careers} careers, ${summers} summers, first summer ${[...firsts.keys()].join(' ')}; called at least once ${called} (${(100 * called / careers).toFixed(1)} percent), ${calls} calls (${(calls / careers).toFixed(2)} a career, ${(calls / Math.max(1, called)).toFixed(2)} a called career)`);
     console.log(`  ${era}: share of careers ever called if the bar were 84 to 92: ${[84, 85, 86, 87, 88, 89, 90, 91, 92].map(b => `${b} ${(100 * bests.filter(x => x >= b).length / careers).toFixed(1)}`).join(", ")}`);
-    console.log(`  ${era}: ${rated} edition summers rated ${ORACLE.ovr} or more; held back by health under ${ORACLE.health}: ${hurtBlocked} (${(100 * hurtBlocked / Math.max(1, rated)).toFixed(1)} percent), by age over ${ORACLE.age}: ${oldBlocked}`);
+    console.log(`  ${era}: ${rated} edition summers rated ${ORACLE.ovr} or more; held back by health under ${ORACLE.health}: ${hurtBlocked} (${(100 * hurtBlocked / Math.max(1, rated)).toFixed(1)} percent), by age over ${ORACLE.age}: ${oldBlocked}; by a career ending with that season: ${endBlocked}`);
   }
 }
 
