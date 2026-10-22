@@ -1,0 +1,5 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+guide-refresh: node scripts/simGuideHeadings.mjs --refresh /nba-my-career && cp scripts/data/guideHeadingsFrozen.json "$RC_OUT/guideHeadingsFrozen.json" && node scripts/simGuideHeadings.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+vitest-intl: node_modules/.bin/vitest run src/test/usCareerIntlBoard.test.tsx src/test/nbaCareerIntl.test.ts src/lib/careerIntl.test.ts --testTimeout=300000 --hookTimeout=120000
+simNoRivalNames: node scripts/simNoRivalNames.mjs
