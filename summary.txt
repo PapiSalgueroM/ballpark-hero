@@ -1,0 +1,11 @@
+build exit=0 24s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+tsc exit=0 41s | 
+vitest-readers exit=0 10s |    Duration  9.57s (transform 1.97s, setup 687ms, collect 5.91s, tests 13.11s, environment 4.56s, prepare 1.04s)
+simNbaDraftBoard exit=0 103s | simNbaDraftBoard: green.
+playNbaLotteryNight exit=0 41s | playNbaLotteryNight: green.
+pnl-backfold exit=1 22s | playNbaLotteryNight control backfold: FIRED, section H red, the others green.
+simNoRivalNames exit=0 10s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 31s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simStorageWrites exit=0 2s | simStorageWrites: all green (owed: 12)
+simTrustCopy exit=0 0s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+dashes exit=0 0s | added lines with a dash: 0, commit message lines with a dash: 0

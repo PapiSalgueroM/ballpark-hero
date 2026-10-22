@@ -1,0 +1,13 @@
+#!serve
+#!playwright
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-readers: node_modules/.bin/vitest run $(git grep -l -E "NbaFrontOfficeBoard|DraftNightCard|nbaEarnedDraft|gmEarnedDraft|GmLotteryCard|gmLazyPanel|GmEarnedDraftScreen|useGmEarnedDraft|nbaGmDesk" -- 'src/*.test.ts' 'src/*.test.tsx') --testTimeout=300000 --hookTimeout=120000
+simNbaDraftBoard: T=$(mktemp -d); TMPDIR=$T TEMP=$T TMP=$T node scripts/simNbaDraftBoard.mjs
+playNbaLotteryNight: node scripts/playNbaLotteryNight.mjs
+pnl-backfold: PLAY_NBA_LOTTERY_CONTROL=backfold node scripts/playNbaLotteryNight.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+dashes: export LC_ALL=C.UTF-8; c=$(git diff 62f7f3b1 HEAD -- src scripts | grep '^+' | grep -c -P '[\x{2013}\x{2014}]'); m=$(git log --first-parent --format=%B 62f7f3b1..HEAD | grep -c -P '[\x{2013}\x{2014}]'); echo "added lines with a dash: $c, commit message lines with a dash: $m"; [ "$c" = 0 ] && [ "$m" = 0 ]
