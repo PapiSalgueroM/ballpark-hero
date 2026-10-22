@@ -1,0 +1,8 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/gmEarnedDraft.test.ts src/lib/nbaEarnedDraft.test.ts --testTimeout=300000 --hookTimeout=120000
+earned: node scripts/simNbaEarnedDraft.mjs
+summerdeal: SIM_NBA_EARNED_DRAFT_CONTROL=summerdeal node scripts/simNbaEarnedDraft.mjs
+judgeres: SIM_NBA_EARNED_DRAFT_CONTROL=judgeres node scripts/simNbaEarnedDraft.mjs
+judgeagree: SIM_NBA_EARNED_DRAFT_CONTROL=judgeagree node scripts/simNbaEarnedDraft.mjs
+judgepass: SIM_NBA_EARNED_DRAFT_CONTROL=judgepass node scripts/simNbaEarnedDraft.mjs
+judgefleet: SIM_NBA_EARNED_DRAFT_CONTROL=judgefleet node scripts/simNbaEarnedDraft.mjs

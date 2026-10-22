@@ -1,0 +1,8 @@
+vitest exit=0 3s |    Duration  2.53s (transform 802ms, setup 292ms, collect 1.32s, tests 352ms, environment 1.43s, prepare 365ms)
+earned exit=0 30s | simNbaEarnedDraft: green.
+summerdeal exit=1 26s | simNbaEarnedDraft: CONTROL summerdeal FIRED. Red in section 12 (2075 failures).
+judgeagree exit=1 21s | simNbaEarnedDraft: CONTROL judgeagree FIRED. Red in section 11 (12 failures).
+judgeres exit=1 29s | simNbaEarnedDraft: CONTROL judgeres FIRED. Red in section 11 (12 failures).
+judgepass exit=1 22s | simNbaEarnedDraft: CONTROL judgepass FIRED. Red in section 11 (18 failures).
+judgefleet exit=1 24s | simNbaEarnedDraft: CONTROL judgefleet FIRED. Red in section 11 (2 failures).
+tsc exit=0 95s | 

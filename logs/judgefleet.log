@@ -1,0 +1,16 @@
+NEGATIVE CONTROL ON: judgefleet, a copy of this harness with its judge slipped (/home/runner/work/_temp/t-judgefleet/simNbaEarnedDraft-judgefleet-Txr4mY/simNbaEarnedDraft.mjs). Sections 11 must go red and no other.
+   section 1: green
+   section 6: green
+   section 2: green
+   section 3: green
+   section 4: green
+   section 5: green
+   section 8: green
+   section 9: green
+   section 10: green
+   section 12: green
+   section 11: 2 failures
+  FAIL [11]: a fleet of old 2 runs of 12 sets and new 2 of 11 was judged whole, the known answer is short
+  FAIL [11]: a fleet of old 2 runs of 2 sets and new 2 of 2 was judged whole, the known answer is short
+   the copy exited 1: simNbaEarnedDraft: RED in section 11.
+simNbaEarnedDraft: CONTROL judgefleet FIRED. Red in section 11 (2 failures).

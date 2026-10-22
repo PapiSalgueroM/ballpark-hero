@@ -1,0 +1,22 @@
+NEGATIVE CONTROL ON: judgeagree, a copy of this harness with its judge slipped (/home/runner/work/_temp/t-judgeagree/simNbaEarnedDraft-judgeagree-gQeIP7/simNbaEarnedDraft.mjs). Sections 11 must go red and no other.
+   section 1: green
+   section 6: green
+   section 2: green
+   section 3: green
+   section 4: green
+   section 5: green
+   section 8: green
+   section 9: green
+   section 10: green
+   section 12: green
+   section 11: 12 failures
+  FAIL [11]: S1 at 5 (two): the new arm at 83.25 against 83.00 (spread 0.01 res, runs 2, 0.1 res apart) was judged PASS, the known answer is RUNS DISAGREE
+  FAIL [11]: S1 at 5: the table would hold a line judged PASS (known answer RUNS DISAGREE)
+  FAIL [11]: S1 at 10 (range): the new arm at 83.30 against 82.00 (spread 0.01 res, runs 2, 0.1 res apart) was judged PASS, the known answer is RUNS DISAGREE
+  FAIL [11]: S1 at 10: the table would hold a line judged PASS (known answer RUNS DISAGREE)
+  FAIL [11]: S2 (two): the new arm at 110.0 against 100.0 (spread 0.01 res, runs 2, 0.1 res apart) was judged PASS, the known answer is RUNS DISAGREE
+  FAIL [11]: S2: the table would hold a line judged PASS (known answer RUNS DISAGREE)
+  FAIL [11]: S4 (floor): the new arm at 65.0 (spread 0.01 res, runs 2, 0.1 res apart) was judged PASS, the known answer is RUNS DISAGREE
+  FAIL [11]: S4: the table would hold a line judged PASS (known answer RUNS DISAGREE)
+   the copy exited 1: simNbaEarnedDraft: RED in section 11.
+simNbaEarnedDraft: CONTROL judgeagree FIRED. Red in section 11 (12 failures).
