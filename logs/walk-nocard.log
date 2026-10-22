@@ -1,0 +1,6 @@
+  FAIL A: 320: the lottery card drew after Go to the draft
+  FAIL A: 390: the lottery card drew after Go to the draft
+  FAIL A: 1280: the lottery card drew after Go to the draft
+  section A: 0 passed, 3 failed
+  6 screenshots in /home/runner/work/_temp/rc-out/files
+playNbaLotteryNight control nocard: FIRED, section A red, the others green.

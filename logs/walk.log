@@ -1,0 +1,19 @@
+   save bytes at the lottery card: 89069
+   save bytes on the clock at 6: 89288
+   save bytes on the old draft screen (desk off): 56637
+   J 320: the lazy box 553.0 px, the card's first frame 589.0 px, a jump of 36.0 px
+   J 390: the lazy box 553.0 px, the card's first frame 553.0 px, a jump of 0.0 px
+   J 1280: the lazy box 553.0 px, the card's first frame 537.0 px, a jump of -16.0 px
+  section A: 78 passed, 0 failed
+  section B: 3 passed, 0 failed
+  section C: 2 passed, 0 failed
+  section D: 2 passed, 0 failed
+  section E: 2 passed, 0 failed
+  section F: 1 passed, 0 failed
+  section G: 1 passed, 0 failed
+  section H: 3 passed, 0 failed
+  section I: 1 passed, 0 failed
+  section J: 4 passed, 0 failed
+  section N: 12 passed, 0 failed
+  34 screenshots in /home/runner/work/_temp/rc-out/files
+playNbaLotteryNight: green.
