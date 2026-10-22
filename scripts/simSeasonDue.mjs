@@ -19,9 +19,14 @@
  *   3. THE DUE FENCE: 21 days after a final is over (`decidedBy`), its season
  *      must be held. Today is ET, or SEASON_DUE_TODAY=YYYY-MM-DD.
  *   4. COUNTS FROM: a season in the migrations that the saved page has not
- *      shown yet carries a counts from date, and the games' own fetches
+ *      shown yet carries a counts from date, later than its final's
+ *      `decidedBy` and later than today (a date that has come while the saved
+ *      page still lacks the season means the release slipped, or the Record
+ *      Books were not regenerated after the apply). The games' own fetches
  *      (fetchCompetitionRows, fetchFinalsRows, run against a stub client
- *      under a moved clock) hold it out the day before and deal it that day.
+ *      under a moved clock) hold it out the day before and deal it that day,
+ *      keep the day they were called on when the response lands after
+ *      midnight, and obey a day the hook hands them.
  *   5. RANK 'EM: a round naming anyone not on the retired list below says
  *      which finished season its totals run through ("through 2025-26").
  *
@@ -38,6 +43,9 @@
  *   unheld     the AFL's 2026 INSERT is dropped from the migration evidence
  *   nocounts   the AFL loses its counts from date
  *   unfiltered fetchCompetitionRows is built without its seasonCounts guard
+ *   late       fetchCompetitionRows reads the day again after its network wait
+ *   past       the AFL's 2026 counts from date is moved to today
+ *   early      the AFL's 2026 counts from date is moved to its decidedBy date
  * Each must exit 1, and its last line names the first failure.
  *
  * Run: node scripts/simSeasonDue.mjs
@@ -50,7 +58,7 @@ import { build } from 'esbuild';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SLASH = p => p.replaceAll('\\', '/');
-const CONTROLS = ['nextyear', 'strip', 'unheld', 'nocounts', 'unfiltered'];
+const CONTROLS = ['nextyear', 'strip', 'unheld', 'nocounts', 'unfiltered', 'late', 'past', 'early'];
 const CONTROL = process.env.SEASON_DUE_CONTROL || '';
 if (CONTROL && !CONTROLS.includes(CONTROL)) {
   console.error(`simSeasonDue: unknown control ${CONTROL}, ABORTED`);
@@ -107,11 +115,14 @@ const plugin = {
   name: 'season-due',
   setup(b) {
     b.onResolve({ filter: /integrations[\\/]supabase[\\/]client(\.ts)?$/ }, () => ({ path: STUB }));
-    if (CONTROL === 'unfiltered') {
+    if (CONTROL === 'unfiltered' || CONTROL === 'late') {
       b.onLoad({ filter: /champOrNot\.ts$/ }, args => {
         const text = readFileSync(args.path, 'utf8').replaceAll('\r\n', '\n');
-        if (!text.includes(GUARD)) throw new Error('control unfiltered: the guard is not in champOrNot.ts');
-        return { contents: text.replace(GUARD, ') {'), loader: 'ts' };
+        if (!text.includes(GUARD)) throw new Error(`control ${CONTROL}: the guard is not in champOrNot.ts`);
+        /* late: the guard reads the clock again after the network wait, the
+           shape this round first shipped. */
+        const to = CONTROL === 'late' ? '\n      && seasonCounts(def.table, year, getTodayET())) {' : ') {';
+        return { contents: text.replace(GUARD, to), loader: 'ts' };
       });
     }
   },
@@ -198,6 +209,13 @@ if (CONTROL === 'nocounts') {
   if (!afl || !afl.countsFrom || !afl.countsFrom[2026]) { console.error('control nocounts: the AFL has no 2026 counts from date to drop, ABORTED'); process.exit(2); }
   delete afl.countsFrom;
 }
+if (CONTROL === 'past' || CONTROL === 'early') {
+  /* The four AU tables share one object, so the AFL gets its own copy. */
+  const afl = FINALS.find(f => f.table === 'afl_premiers');
+  if (!afl || !afl.countsFrom || !afl.countsFrom[2026]) { console.error(`control ${CONTROL}: the AFL has no 2026 counts from date to move, ABORTED`); process.exit(2); }
+  const to = CONTROL === 'past' ? TODAY : ymd(2026, afl.decidedBy.month, afl.decidedBy.day);
+  afl.countsFrom = { ...afl.countsFrom, 2026: to };
+}
 for (const f of FINALS) {
   const last = pageLast.get(f.table);
   if (last == null) continue;
@@ -206,8 +224,13 @@ for (const f of FINALS) {
     const decided = ymd(y + (f.decidedBy.seasonOffset ?? 0), f.decidedBy.month, f.decidedBy.day);
     if (!from) {
       fail(`${f.table} ${y} is in the migrations but not yet on the saved page and has no counts from date: landing mid day would reshuffle every board already dealt that day`);
-    } else if (!/^\d{4}-\d{2}-\d{2}$/.test(from) || from <= addDays(decided, -60)) {
-      fail(`${f.table} ${y}: counts from ${from} is not a date after its season`);
+    } else if (!/^\d{4}-\d{2}-\d{2}$/.test(from) || from <= decided) {
+      fail(`${f.table} ${y}: counts from ${from} is not a date after its final (over by ${decided})`);
+    } else if (from <= TODAY) {
+      /* Not on the saved page yet means not released, or released without
+         genRecordBooks. Either way a date that has come is a date the rows
+         would land on mid day, after boards were dealt. */
+      fail(`${f.table} ${y}: counts from ${from} has come (today ${TODAY}) and the saved Record Books page still stops at ${last}: if the rows are not applied yet, move countsFrom to the day after the apply; if they are, run genRecordBooks and redraw the page`);
     } else ok();
   }
 }
@@ -216,12 +239,15 @@ for (const f of FINALS) {
    the day. The Who'd They Beat tables carry no counts from date today, so a
    far season is injected into one of them for the length of the check. */
 const RealDate = Date;
-const withClock = async (day, fn) => {
+const setClock = day => {
   const t = RealDate.parse(`${day}T17:00:00Z`);
   globalThis.Date = class extends RealDate {
     constructor(...a) { super(...(a.length ? a : [t])); }
     static now() { return t; }
   };
+};
+const withClock = async (day, fn) => {
+  setClock(day);
   try { return await fn(); } finally { globalThis.Date = RealDate; }
 };
 const fakeRows = (cols, years) => years.map((year, i) => {
@@ -242,6 +268,18 @@ const probe = async (kind, def, year, from) => {
   if (before.some(r => r.year === year)) fail(`${name} dealt ${def.table} ${year} on ${addDays(from, -1)}, before it counts (${from})`); else ok();
   if (!onDay.some(r => r.year === year)) fail(`${name} still holds ${def.table} ${year} out on ${from}, the day it counts`); else ok();
   if (before.length !== years.length - 1 || onDay.length !== years.length) fail(`${name} on ${def.table}: ${before.length} then ${onDay.length} rows, expected ${years.length - 1} then ${years.length}`); else ok();
+  /* The board's day is fixed when the fetch is made, not when its response
+     lands: a page opened on the eve whose response arrives after midnight
+     still gets the eve's rows, and a day the hook hands in beats the clock. */
+  const eve = addDays(from, -1);
+  setClock(eve);
+  const pending = fetch(def);
+  setClock(from);
+  let late;
+  try { late = await pending; } finally { globalThis.Date = RealDate; }
+  if (late.some(r => r.year === year)) fail(`${name} read the day after its response landed: opened on ${eve}, it dealt ${def.table} ${year} once midnight passed`); else ok();
+  const handed = await withClock(from, () => fetch(def, eve));
+  if (handed.some(r => r.year === year)) fail(`${name} ignored the day it was handed (${eve}) and dealt ${def.table} ${year} by the clock`); else ok();
 };
 let probes = 0;
 for (const f of FINALS) {
