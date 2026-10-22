@@ -1,0 +1,111 @@
+mutation promoold: applied once to src/lib/stadiumTycoon.ts
+Round 1532: Stadium Tycoon scorelines at the hook's cadence (dt 0.2s)
+S1) the law, read not restated
+   1085133 chances equal the law at the engine's own gap (Squad 0 to 200, ten divisions, every rival, the edge 0 to 0.40 and NaN, -1, 1, every rival fixture both ways); the rival's chance falls at every step of the edge; the lib imports goalLambda and types neither 0.055 nor 4.2
+S2) the shape
+   28 frozen bodies hash to the base record; 200 matches drew 180 rolls each; 620 other fixtures over 189 matchdays replay on their own stream at 180 rolls; 40 perfect set pieces added no roll
+S3) goals
+   cal 2.566 goals a match (windows 15 to 30 2.643, 30 to 60 2.696, 60 to 120 2.484, 120 to 240 2.608); away matchdays from pace at 30 / 60 / 120 minutes none (the final matchday waits) / 2.569 goals, 82.353% won of 51 / 2.572 goals, 58.889% won of 180; hold 2.597 goals a match (windows 15 to 30 2.643, 30 to 60 2.564, 60 to 120 2.602, 120 to 240 2.573); away matchdays from pace at 30 / 60 / 120 minutes none (the final matchday waits) / 2.24 goals, 68% won of 50 / 2.91 goals, 63.333% won of 210
+S4) results
+   3741 gaps read the Squad, the division and the rival exactly; cal: pace 64.4% (se 1.389; 72.143 / 67.857 / 60.862), draws 21%, gap 8.678; overinvest 76.3% (gap 13.68); nosquad 18% (gap -14.523); hold: pace 66.6% (se 1.452; 75 / 67.857 / 63.966), draws 20.5%, gap 8.764; overinvest 78.6% (gap 13.533); nosquad 17.2% (gap -15.113)
+S5) titles
+   cal 0.733 titles a season; hold 0.727 titles a season; season one won in 36 of 40; title share at gaps 0 / 4 / 8 / 12 / 14 through the engine's own playMinute and playMatchday, 500 seasons a cell: 6 clubs one leg: 0.232 / 0.466 / 0.654 / 0.824 / 0.908; 8 clubs two legs: 0.184 / 0.562 / 0.836 / 0.946 / 0.982; 10 clubs two legs: 0.222 / 0.5 / 0.85 / 0.96 / 0.99
+S6) never 99
+   our chance never passed 0.046667 a minute over 5289 states (highest 0.046667); the exact ceiling wins 98.189% and 98.645% with a rival who never scores; the engine's Squad 200 club with a 0.39 edge wins 98.189%
+S7) bonuses
+  FAIL: S7: a title in division 8 paid a promotion of 6515, 120 seconds of The Summit's income is 8143
+S8) the economy beside the base record (printed, no fence) [87 s]
+   pace first Sell up 12.837 min (base 13.37); over4 14.303 (base 14.77)
+   pace income a second at 30 / 60 / 120 min: 17861.742 (base 21155.507) / 25641.771 (base 34433.314) / 41685.296 (base 81037.765)
+   pace division at 30 / 60 / 120 / 240: 2 (base 2) / 3 (base 3) / 5 (base 6) / 7 (base 9)
+   pace minutes to reach divisions 1 to 9: 10.5, 21, 42, 71.4, 121.8, 159.6, 207.9, later, later
+   mean capped streak 15 to 120: pace 4.075, over4 6.262, nosquad 0.482; watched gems an hour: pace 107.143
+   paceSell stars 1 / 2 / 3 at 21 (base 21) / 42 (base 42) / 73.5 (base 73.5) min
+   milestones and badges, pace: win1 4.2 (4.2), win10 27.3 (23.1), win50 161.7 (107.1), goals25 22.447 (9.753), streak5 12.6 (12.6), fans500 7.263 (7.343), fans2k 12.733 (12.903), fans10k 35.077 (32.557), full 13.867 (13.827), allTracks 3.337 (3.337), ag25 22.447 (9.753), ag100 115.593 (27.23), ag500 later (96.11), ag2000 later (later), aw1 4.2 (4.2), aw10 27.3 (23.1), aw50 161.7 (107.1), aw150 later (later), aw400 later (later), as5 12.6 (12.6), as10 29.4 (23.1)
+   mean matchGap per window, pace: 15 to 30 12.919, 30 to 60 9.748, 60 to 120 7.137, 120 to 240 6.847
+
+control copy: 1 place rewritten in a copy of the lib
+   sections red: S1 S7 (expected S1) [100 s]
+     S1: division 0 Squad 0: our chance 0.014555555555555554 is not the law's 0.014583333333333334
+     S7: a title in division 8 paid a promotion of 6515, 120 seconds of The Summit's income is 8143
+  FAIL: control copy: S7 went red too
+
+control noscale: 1 place rewritten in a copy of the lib
+   sections red: S1 S7 (expected S1) [112 s]
+     S1: division 0 Squad 0 edge 0.002: the rival's chance 0.014527777777777777 is not the law's 0.01449872222222222
+     S7: a title in division 8 paid a promotion of 6515, 120 seconds of The Summit's income is 8143
+  FAIL: control noscale: S7 went red too
+
+control tworolls: 1 place rewritten in a copy of the lib
+   sections red: S2 S7 (expected S2) [127 s]
+     S2: the body of playMinute moved (61 lines, 60 on the base)
+     S7: a title in division 8 paid a promotion of 6515, 120 seconds of The Summit's income is 8143
+  FAIL: control tworolls: S7 went red too
+
+control linear: 3 places rewritten in a copy of the lib
+   sections red: S1 S3 S4 S5 S6 S7 (expected S1 S3 S4 S5 S6) [139 s]
+     S1: division 0 Squad 0: our chance 0.028 is not the law's 0.014583333333333334
+     S3: ctl: pace's watched league matches over minutes 15 to 120 held 14.475 goals, outside 2.5 to 3.0
+     S4: ctl: pace won 99.2% over minutes 15 to 120, outside 55 to 75
+     S5: ctl: pace took 0.975 titles a season over minutes 15 to 240, outside 0.40 to 0.90
+     S6: Squad 15 in division 0 scores at 0.052000000000000005 a minute, past the law's ceiling 0.04666666666666667
+     S7: a title in division 8 paid a promotion of 6515, 120 seconds of The Summit's income is 8143
+  FAIL: control linear: S7 went red too
+
+control flat: 1 place rewritten in a copy of the lib
+   sections red: S4 S5 S7 (expected S4 S5) [153 s]
+     S4: division 0 Squad 7: the gap reads -2.5000000000000004, the Squad, the division and the rival make 3.4499999999999997
+     S5: ctl: pace took 0.04 titles a season over minutes 15 to 240, outside 0.40 to 0.90
+     S7: a title in division 8 paid a promotion of 6515, 120 seconds of The Summit's income is 8143
+  FAIL: control flat: S7 went red too
+
+control matchno: 1 place rewritten in a copy of the lib
+   sections red: S3 S4 S5 S7 (expected S3 S4 S5) [167 s]
+     S3: ctl: pace's watched league matches over minutes 15 to 120 held 3.425 goals, outside 2.5 to 3.0
+     S4: ctl: pace won 8.8% over minutes 15 to 120, outside 55 to 75
+     S5: ctl: pace took 0.036 titles a season over minutes 15 to 240, outside 0.40 to 0.90
+     S7: a title in division 8 paid a promotion of 6515, 120 seconds of The Summit's income is 8143
+  FAIL: control matchno: S7 went red too
+
+control noclamp: 1 place rewritten in a copy of the lib
+   sections red: S1 S6 S7 (expected S1 S6) [179 s]
+     S1: division 0 Squad 65: our chance 0.04834722222222222 is not the law's 0.04666666666666667
+     S6: Squad 65 in division 0 scores at 0.04834722222222222 a minute, past the law's ceiling 0.04666666666666667
+     S7: a title in division 8 paid a promotion of 6515, 120 seconds of The Summit's income is 8143
+  FAIL: control noclamp: S7 went red too
+
+control crowd: the lib carries 0 of "  const pay = Math.round(unboostedIncomePerSec({ ...st, league: next }) * PROMOT", not exactly one, so this control would prove nothing
+1) Something is always affordable soon
+   worst wait pre-prestige: 8.2s, post (the intended wall): 177.7s
+2) The curve moves and the carrot arrives
+   income at 1 min: 32.2/s, at 30 min: 21404.6/s (665.1x)
+   first prestige reachable at minute 13
+   star kept the counters, reset the money, and pays x1.5
+3) Pure idling progresses too
+   45 min no-tap income: 10027.2/s, lifetime 16233549
+4) Away earnings are capped and honest
+   blip $0, hour $4655307, week capped at $37242459
+5) Save plumbing
+   roundtrip identity holds, corruption falls back safely
+6) The boost is honest
+   x2.00 while lit, no stacking, burns out on time, away pay unchanged
+7) Milestones are exactly-once and exploit-proof
+   6 milestones fired on the way to the first prestige
+   exactly-once holds through prestige and saves; payouts match their labels
+8) The opposition is invented, provably
+   every league of n clubs meets its n-1 rivals, once a leg
+   288 possible names (167 short enough for the table) checked against 483 real clubs, 0 collisions
+9) Ten divisions, exact multipliers, promotion pays
+  FAIL: promotion paid 763, the formula says 878
+   x2.25 exact at Silverline, promotion paid 763 to the champion only, ladder resets on sale, record survives
+10) Payroll math is exact and resets on sale
+   steward pays back in 167s, delta exact to the rate card, payroll resets on sale
+11) Golden whistle effects are exact, unstackable, and save-safe
+   x7 exact for 77s, taps x25 exact, windfall 160537 on the nose, no stacking, saves sane
+12) Badges pay 2% each and never fire twice
+   14 badges in 30 min, x1.28 exact, exactly-once, forever, tamper-proof
+13) Legacy points pay by the climb and every perk does exactly what it says
+   board costs exactly 100, Summit sale pays 10, every effect exact, migration seeds once
+
+simStadiumTycoon: 1 failure
+MUT promoold: simTycoonScorelines=2 simStadiumTycoon=1

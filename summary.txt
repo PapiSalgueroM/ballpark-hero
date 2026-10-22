@@ -1,0 +1,4 @@
+m-facts exit=0 87s | MUT facts: simTycoonHelp=0 vitest-tycoonHelp=0 simHarnessAnchors=0
+m-promoold exit=0 179s | MUT promoold: simTycoonScorelines=2 simStadiumTycoon=1
+m-venue exit=0 196s | MUT venue: simTycoonScorelines=1
+m-gapsign exit=0 196s | MUT gapsign: simTycoonScorelines=1
