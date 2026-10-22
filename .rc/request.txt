@@ -1,0 +1,33 @@
+#!serve
+#!playwright
+# Round 1536 proof kit (first visit dialogs over the cookie banner). Send from a checkout of r1536-dialogs-over-banner
+# (or main after it merges):
+#   bash /c/Users/antho/dukb-handoff/2026-10-08/rc/rc.sh <name> rc-1536.txt
+# Measured on runners: before ec15efb4 as r1536-before (9 red: Stadium Tycoon, Idle Arena, Wonderkid Factory x3 widths),
+# after b687051f as r1536-after (0 red, 399 route widths), controls on 67c610f6 as r1536-ctl (cover FIRED 123 of 123,
+# abort exit 2, unknown control exit 2), final head 676d0812 as r1536-final. Expected exit codes:
+#   pf1..pf3 0 (green), cover 1 with last line "FIRED", ratchet 1 with last line "FIRED", abort 2 ("ABORTED"), tsc 0.
+# Not here on purpose: simSchemaNames, simLeaderboardCaps and simHallOfChampions read the live database, which the
+# runner blocks (red there for that reason alone). simWritesAreSent (Guess the Nation) is red on base 52007745 the same
+# way (r1536-base2), see finish-1536.md section 7. simPrerender's What's New check is owed a build:seo redraw.
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+pf1: PLAYFIRST_SHARD=1/3 node scripts/playFirstVisitDialogs.mjs
+pf2: PLAYFIRST_SHARD=2/3 node scripts/playFirstVisitDialogs.mjs
+pf3: PLAYFIRST_SHARD=3/3 node scripts/playFirstVisitDialogs.mjs
+cover: ONLY=/stadium-tycoon,/idle-arena,/wonderkid-factory,/footle,/build-your-xi PLAYFIRST_CONTROL=cover node scripts/playFirstVisitDialogs.mjs
+ratchet: ONLY=/stadium-tycoon,/idle-arena,/footle,/club-manager PLAYFIRST_CONTROL=ratchet node scripts/playFirstVisitDialogs.mjs
+abort: ONLY=/club-manager PLAYFIRST_CONTROL=cover node scripts/playFirstVisitDialogs.mjs
+howto: ONLY=/stadium-tycoon,/idle-arena,/wonderkid-factory,/hall-of-champions node scripts/playHowTo.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simTycoonHelp: node scripts/simTycoonHelp.mjs
+simIdleArena: node scripts/simIdleArena.mjs
+simTycoonPacks: node scripts/simTycoonPacks.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+vitest: node_modules/.bin/vitest run src/test/tycoonHelp.test.tsx src/test/tycoonTicketPolicy.test.tsx src/test/idleArenaTrophyRoom.test.tsx src/test/idleFloaterTimers.test.tsx src/test/tycoonPacks.test.tsx src/test/tycoonRooms.test.tsx src/test/firstTeam.test.tsx --testTimeout=300000 --hookTimeout=120000
+# Added by the fixer (2026-10-22, fix-1536.md): the walk's new controls. Each exits 1 with a last line "FIRED";
+# exit 3 means it did not fire, exit 2 that it had nothing to act on. Measured on ae2c9f05 as r1536-fix-g1.
+expected: ONLY=/stadium-tycoon,/idle-arena,/wonderkid-factory,/build-your-xi,/soccer-conquest,/career-ladder,/football-grid,/club-manager PLAYFIRST_CONTROL=expected node scripts/playFirstVisitDialogs.mjs
+edge: ONLY=/stadium-tycoon,/idle-arena,/wonderkid-factory,/build-your-xi,/soccer-conquest,/career-ladder,/football-grid,/club-manager PLAYFIRST_CONTROL=edge node scripts/playFirstVisitDialogs.mjs
+lift: ONLY=/stadium-tycoon,/idle-arena,/wonderkid-factory,/build-your-xi,/soccer-conquest,/career-ladder,/football-grid,/club-manager PLAYFIRST_CONTROL=lift node scripts/playFirstVisitDialogs.mjs
+nobanner: ONLY=/stadium-tycoon,/idle-arena,/wonderkid-factory,/build-your-xi,/soccer-conquest,/career-ladder,/football-grid,/club-manager PLAYFIRST_CONTROL=nobanner node scripts/playFirstVisitDialogs.mjs
