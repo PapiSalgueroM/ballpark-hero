@@ -19,7 +19,9 @@
  *    the fleet (the 272 regular season games and the 13 playoff games of every season) is told by the Game Day law
  *    from both sides on this tree and on LIFT_BASE (a worktree of the commit before the move, its path in the env
  *    var, never committed), and every GameStory, minutes included, must be the same JSON. Skipped, and said so in
- *    the closing line, when LIFT_BASE is not set: it is the receipt of the move, not a standing fence.
+ *    the closing line, when LIFT_BASE is not set: it is the receipt of the move, not a standing fence. On the first
+ *    seed set run it also holds that A TILE WITH NO CREDITS IS THE TILE IT WAS: this tree's Game Day view of every
+ *    told final, given no credits and its empty `scorers` taken out, is the base's view of it, deep equal.
  *  2 IDENTITIES, every game of the fleet (regular and playoff), the rosters as it was played: per side, credited
  *    touchdowns plus unclaimed are the story's 'td' events (the Game Day law tells the story: a harness may read it,
  *    a board may not); field goals and safeties are the story's; the drive counts are the cheapest list of the score
@@ -148,6 +150,7 @@ async function bundleAt(root, entry, tag) {
 const STORY_ENTRY = [
   "export * as day from './src/lib/gmGameDay.ts';",
   "export { NFL_GAME_DAY } from './src/lib/gameLaws/nflGameDay.ts';",
+  "export * as tile from './src/lib/gmGameDayView.ts';",
 ];
 const HEAD_ENTRY = [
   ...ENGINE_ENTRY,
@@ -203,6 +206,7 @@ if (SECTIONS.includes(1)) {
       const t = tally();
       let told = 0;
       let stories = 0;
+      const tileSame = tally();
       const lines = [];
       for (const kind of FLEET.kinds) {
         for (let i = 0; i < PER_KIND; i += 1) {
@@ -214,10 +218,19 @@ if (SECTIONS.includes(1)) {
               if (head !== 'null') stories += 1;
               lines.push(head);
               count(t, head === base, () => `${g.key} from the ${view} side`);
+              /* A TILE WITH NO CREDITS IS THE TILE IT WAS: this tree's view with no credits, its empty list taken out,
+                 is the base's view of the same game, on the first seed set run */
+              if (set === SEEDSETS[0]) {
+                const club = view === 'home' ? g.home : g.away;
+                const mine = M.tile.gameDayView(M.NFL_GAME_DAY, g, club, id => id);
+                const { scorers, ...rest } = mine;
+                count(tileSame, JSON.stringify(rest) === JSON.stringify(B.tile.gameDayView(B.NFL_GAME_DAY, g, club, id => id)) && Array.isArray(scorers) && scorers.length === 0 && !('creditsMissing' in mine), () => `${g.key} for ${club}`);
+              }
             }
           }
         }
       }
+      if (set === SEEDSETS[0]) settle(1, `set ${set}: with no credits the tile's view is the base's, its empty list taken out`, tileSame);
       const want = FLEET.kinds.length * PER_KIND * (272 + 13);
       check(1, `set ${set}: the fleet told ${told} finals, every game of every season (want ${want})`, told === want);
       check(1, `set ${set}: ${stories} of ${told * 2} tellings are a story, not the final alone`, stories > told * 2 * 0.99);
