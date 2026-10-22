@@ -1,0 +1,12 @@
+#!serve
+#!playwright
+#!serial
+playBoxingShowForecast1086: node scripts/playBoxingShowForecast1086.mjs
+playWc2026Reset: node scripts/playWc2026Reset.mjs
+playWorldUcl: node scripts/playWorldUcl.mjs
+playAdRoutes: node scripts/playAdRoutes.mjs
+simHelpConsentFocus: node scripts/simHelpConsentFocus.mjs
+simHelpConsentFocus-external: HELP_CONSENT_FOCUS_CONTROL=external node scripts/simHelpConsentFocus.mjs
+simRulesGateConsentFocus: node scripts/simRulesGateConsentFocus.mjs
+simRulesGateConsentFocus-host: RULES_GATE_FOCUS_CONTROL=host node scripts/simRulesGateConsentFocus.mjs
+simRulesGateConsentFocus-return: RULES_GATE_FOCUS_CONTROL=return node scripts/simRulesGateConsentFocus.mjs
