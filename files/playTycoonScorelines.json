@@ -1,0 +1,58 @@
+{
+  "rules-320x640": {
+    "paragraph": "The match on screen is real and plays like football: your Squad against today's rival decides who is favourite, but favourites drop points and plenty of matches end level. Against a rival as strong as you, you expect about 1.45 goals to their 1.17, and each Squad level adds about 0.05 of a goal a match to your side and takes up to as much off theirs. A goal pays 5 seconds of your income, a win 20 seconds and going up a division 2 minutes, and wins extend a streak that multiplies everything and pulls in new fans. Every division up sends stronger rivals, and they stay that strong until you win the league.",
+    "overflow": 0,
+    "cut": false,
+    "closeButton": "16 x 16"
+  },
+  "rules-320x640-reduced": {
+    "paragraph": "The match on screen is real and plays like football: your Squad against today's rival decides who is favourite, but favourites drop points and plenty of matches end level. Against a rival as strong as you, you expect about 1.45 goals to their 1.17, and each Squad level adds about 0.05 of a goal a match to your side and takes up to as much off theirs. A goal pays 5 seconds of your income, a win 20 seconds and going up a division 2 minutes, and wins extend a streak that multiplies everything and pulls in new fans. Every division up sends stronger rivals, and they stay that strong until you win the league.",
+    "overflow": 0,
+    "cut": false,
+    "closeButton": "16 x 16"
+  },
+  "rules-390x844": {
+    "paragraph": "The match on screen is real and plays like football: your Squad against today's rival decides who is favourite, but favourites drop points and plenty of matches end level. Against a rival as strong as you, you expect about 1.45 goals to their 1.17, and each Squad level adds about 0.05 of a goal a match to your side and takes up to as much off theirs. A goal pays 5 seconds of your income, a win 20 seconds and going up a division 2 minutes, and wins extend a streak that multiplies everything and pulls in new fans. Every division up sends stronger rivals, and they stay that strong until you win the league.",
+    "overflow": 0,
+    "cut": false,
+    "closeButton": "16 x 16"
+  },
+  "rules-390x844-reduced": {
+    "paragraph": "The match on screen is real and plays like football: your Squad against today's rival decides who is favourite, but favourites drop points and plenty of matches end level. Against a rival as strong as you, you expect about 1.45 goals to their 1.17, and each Squad level adds about 0.05 of a goal a match to your side and takes up to as much off theirs. A goal pays 5 seconds of your income, a win 20 seconds and going up a division 2 minutes, and wins extend a streak that multiplies everything and pulls in new fans. Every division up sends stronger rivals, and they stay that strong until you win the league.",
+    "overflow": 0,
+    "cut": false,
+    "closeButton": "16 x 16"
+  },
+  "rules-1280x900": {
+    "paragraph": "The match on screen is real and plays like football: your Squad against today's rival decides who is favourite, but favourites drop points and plenty of matches end level. Against a rival as strong as you, you expect about 1.45 goals to their 1.17, and each Squad level adds about 0.05 of a goal a match to your side and takes up to as much off theirs. A goal pays 5 seconds of your income, a win 20 seconds and going up a division 2 minutes, and wins extend a streak that multiplies everything and pulls in new fans. Every division up sends stronger rivals, and they stay that strong until you win the league.",
+    "overflow": 0,
+    "cut": false,
+    "closeButton": "16 x 16"
+  },
+  "rules-1280x900-reduced": {
+    "paragraph": "The match on screen is real and plays like football: your Squad against today's rival decides who is favourite, but favourites drop points and plenty of matches end level. Against a rival as strong as you, you expect about 1.45 goals to their 1.17, and each Squad level adds about 0.05 of a goal a match to your side and takes up to as much off theirs. A goal pays 5 seconds of your income, a win 20 seconds and going up a division 2 minutes, and wins extend a streak that multiplies everything and pulls in new fans. Every division up sends stronger rivals, and they stay that strong until you win the league.",
+    "overflow": 0,
+    "cut": false,
+    "closeButton": "16 x 16"
+  },
+  "draw-390x844": {
+    "want": "FULL TIME DRAW",
+    "seen": "FULL TIME DRAW",
+    "scroll": "0 to 0, height 10872 to 10872"
+  },
+  "win-390x844": {
+    "want": "FULL TIME WIN +$2,904",
+    "seen": "FULL TIME WIN +$3,969",
+    "scroll": "0 to 0, height 10872 to 10872"
+  },
+  "draw-1280x900": {
+    "want": "FULL TIME DRAW",
+    "seen": "FULL TIME DRAW",
+    "scroll": "0 to 0, height 7493 to 7493"
+  },
+  "win-1280x900": {
+    "want": "FULL TIME WIN +$2,904",
+    "seen": "FULL TIME WIN +$3,969",
+    "scroll": "0 to 0, height 7493 to 7493"
+  }
+}

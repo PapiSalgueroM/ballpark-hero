@@ -1,0 +1,20 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simTycoonScorelines: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonScorelines.mjs
+simTycoonPacks: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonPacks.mjs
+simTycoonHelp: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonHelp.mjs
+simStadiumTycoon: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simStadiumTycoon.mjs
+simAllPlayersValue: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simAllPlayersValue.mjs
+simTycoonSetPiece: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonSetPiece.mjs
+simGuideHeadings: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simGuideHeadings.mjs
+simSiteSearch: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSiteSearch.mjs
+simNoRivalNames: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simNoRivalNames.mjs
+simHarnessAnchors: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simHarnessAnchors.mjs
+simStorageWrites: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simStorageWrites.mjs
+ticketpolicy-all: TYCOON_TICKET_POLICY_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonTicketPolicy.mjs
+retake-head: node scripts/retakeTycoonHistories.mjs
+vitest: node_modules/.bin/vitest run src/test/tycoonPacks.test.tsx src/test/tycoonTicketPolicy.test.tsx src/test/tycoonHelp.test.tsx --testTimeout=300000 --hookTimeout=120000
+walk: node scripts/playTycoonScorelines.mjs
+walk-crowd-must-be-red: PLAY_SCORELINES_CONTROL=crowd node scripts/playTycoonScorelines.mjs
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
