@@ -1,0 +1,3 @@
+ctl-debtfree exit=1 7s | simSoccerOwnerTail: 1 failure(s)
+owner exit=0 11s | simSoccerOwnerTail: green. The owner picks his club, plays on the table, and every call does what it says and none is best at everything.
+tsc exit=0 73s | 
