@@ -1,0 +1,29 @@
+src/lib/usCareerAnnualBenefits.ts: the fee helper's Cash line removed
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+[1m[33mwarn[39m[22m - The class `duration-[800ms]` is ambiguous and matches multiple utilities.
+[1m[33mwarn[39m[22m - If this is content and not a class, replace it with `duration-&lsqb;800ms&rsqb;` to silence this warning.
+[33m
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
+  FAIL c: 320: the Cash row says null
+  FAIL c: 320: the saved Cash is 15.37, not 18.37
+  FAIL c: 390: the Cash row says null
+  FAIL c: 390: the saved Cash is 15.37, not 18.37
+  FAIL c: 1280: the Cash row says null
+  FAIL c: 1280: the saved Cash is 15.37, not 18.37
+  c 320: earnings row +$3M, Cash row null, saved Cash 15.37 to 15.37 (want 18.37)
+  c 320: the card's body shows 124px of 124px; the Cash row sits null to nullpx into it
+  c 320: scrollY 0 to 0, document height 15433 to 16170 across the outcome card's Continue
+  c 390: earnings row +$3M, Cash row null, saved Cash 15.37 to 15.37 (want 18.37)
+  c 390: the card's body shows 104px of 104px; the Cash row sits null to nullpx into it
+  c 390: scrollY 0 to 0, document height 12531 to 13257 across the outcome card's Continue
+  c 1280: earnings row +$3M, Cash row null, saved Cash 15.37 to 15.37 (want 18.37)
+  c 1280: the card's body shows 104px of 104px; the Cash row sits null to nullpx into it
+  c 1280: scrollY 0 to 0, document height 8159 to 8655 across the outcome card's Continue
+  screenshots: 144 in /home/runner/work/_temp/rc-out/files
+playUsShopPromises: CONTROL nobank FIRED, (c) red

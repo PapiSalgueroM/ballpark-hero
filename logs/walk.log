@@ -1,0 +1,14 @@
+  b 320: Cash 15.8 to 31.2 (pay less upkeep 30.4, banked 0.8, waiting 0.0936); wanted 31.2 and 0.0936
+  c 320: earnings row +$3M, Cash row +$3M, saved Cash 15.37 to 18.37 (want 18.37)
+  c 320: the card's body shows 232px of 232px; the Cash row sits 120 to 220px into it
+  c 320: scrollY 0 to 0, document height 15541 to 16170 across the outcome card's Continue
+  b 390: Cash 15.8 to 31.2 (pay less upkeep 30.4, banked 0.8, waiting 0.0936); wanted 31.2 and 0.0936
+  c 390: earnings row +$3M, Cash row +$3M, saved Cash 15.37 to 18.37 (want 18.37)
+  c 390: the card's body shows 212px of 212px; the Cash row sits 100 to 200px into it
+  c 390: scrollY 0 to 0, document height 12639 to 13257 across the outcome card's Continue
+  b 1280: Cash 15.8 to 31.2 (pay less upkeep 30.4, banked 0.8, waiting 0.0936); wanted 31.2 and 0.0936
+  c 1280: earnings row +$3M, Cash row +$3M, saved Cash 15.37 to 18.37 (want 18.37)
+  c 1280: the card's body shows 192px of 192px; the Cash row sits 100 to 180px into it
+  c 1280: scrollY 0 to 0, document height 8247 to 8655 across the outcome card's Continue
+  screenshots: 30 in /home/runner/work/_temp/rc-out/files
+playUsShopPromises: green, 9 walks
