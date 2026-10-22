@@ -1,0 +1,11 @@
+   SHOP_BASE_CHECK: the four rebuilt base engines equal 41368514's files to the byte
+1) words: the table against the printed cards, the reworded cards, the summer camp and the help rule
+file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simUsShopPromises.mjs:263
+        if (!m || Number(m[1]) / 100 !== H.shop.US_FAMILY_OFFICE_RATE || Number(m[1]) / 100 !== OFFICE_PRINTED) fail('1', `${sport.id} ${card.id}`, `the office prints ${m?.[1]} percent, the rule pays ${H.shop.US_FAMILY_OFFICE_RATE}`);
+                                                                                                ^
+
+ReferenceError: Cannot access 'OFFICE_PRINTED' before initialization
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simUsShopPromises.mjs:263:97
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+
+Node.js v24.22.0
