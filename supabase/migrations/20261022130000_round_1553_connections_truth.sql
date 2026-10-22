@@ -21,10 +21,14 @@
 --
 -- The guard: a row is rewritten only while it still holds the exact board the
 -- file held before this round (jsonb equality, so key order and spacing do not
--- matter). The live table was seeded from the file (puzzle-1 to 155 by
--- migration 20260526000004; the rest later and outside the repo), and a row
--- that has drifted from it is left alone and named in a NOTICE, never
--- overwritten blind. Before applying, the lead exports the table once with a
+-- matter). A row that holds anything else is left alone and named in a NOTICE,
+-- never
+-- overwritten blind. Six rows are known to differ already: puzzle-4, 10, 12, 75,
+-- 104 and 112 as migration 20260526000004 seeded them each list one man in two
+-- groups, so useConnections filters them out of the pool. If the live table
+-- still holds those seeded boards they stay out: rewriting them would add
+-- valid boards, change the pool size and reshuffle every daily. The pool size
+-- this migration leaves is the pool size it found. Before applying, the lead exports the table once with a
 -- read only SELECT (puzzle_id, sort_order, groups_json order by sort_order) and
 -- runs CONN_LIVE=<export.json> node scripts/simConnectionsFacts.mjs, which
 -- names every live board still carrying a refuted claim or a present tense
@@ -46,8 +50,8 @@ declare
   missing text[] := '{}';
   r record;
 begin
-  for r in
-    select * from (values
+  create temp table r1553_rows (puzzle_id text, old_groups jsonb, new_groups jsonb) on commit drop;
+  insert into r1553_rows (puzzle_id, old_groups, new_groups) values
     ('puzzle-1', '[{"category":"Won the Ballon d''Or","players":["Lionel Messi","Cristiano Ronaldo","Luka Modrić","Karim Benzema"],"difficulty":"easy"},{"category":"Played for Chelsea","players":["Eden Hazard","Didier Drogba","Frank Lampard","John Terry"],"difficulty":"medium"},{"category":"Scored in a World Cup Final","players":["Kylian Mbappé","Zinedine Zidane","Mario Götze","Andrés Iniesta"],"difficulty":"hard"},{"category":"Over 100 Premier League assists","players":["Cesc Fàbregas","Kevin De Bruyne","Ryan Giggs","Wayne Rooney"],"difficulty":"insane"}]'::jsonb, '[{"category":"Won the Ballon d''Or","players":["Kaká","Cristiano Ronaldo","Luka Modrić","Karim Benzema"],"difficulty":"easy"},{"category":"Played for Chelsea in 2025-26","players":["Cole Palmer","Reece James","Marc Cucurella","Enzo Fernández"],"difficulty":"medium"},{"category":"Won the Premier League with Leicester City 2015-16","players":["Jamie Vardy","Wes Morgan","Danny Drinkwater","Shinji Okazaki"],"difficulty":"hard"},{"category":"Over 100 Premier League assists","players":["Cesc Fàbregas","Ryan Giggs","Wayne Rooney","Frank Lampard"],"difficulty":"insane"}]'::jsonb),
     ('puzzle-3', '[{"category":"Played for Manchester United","players":["David Beckham","Paul Scholes","Robin van Persie","Eric Cantona"],"difficulty":"easy"},{"category":"Won the Champions League with 2+ clubs","players":["Xabi Alonso","Samuel Eto''o","Clarence Seedorf","Dani Alves"],"difficulty":"medium"},{"category":"From Argentina","players":["Diego Maradona","Sergio Agüero","Ángel Di María","Gabriel Batistuta"],"difficulty":"hard"},{"category":"Scored a famous bicycle kick goal","players":["Wayne Rooney","Zlatan Ibrahimović","Gareth Bale","Olivier Giroud"],"difficulty":"insane"}]'::jsonb, '[{"category":"Played for Manchester United in 2025-26","players":["Bruno Fernandes","Casemiro","Harry Maguire","Amad Diallo"],"difficulty":"easy"},{"category":"Played for Barcelona in 2025-26","players":["Frenkie de Jong","Jules Koundé","Dani Olmo","Ferran Torres"],"difficulty":"medium"},{"category":"Won the European Golden Shoe","players":["Thierry Henry","Ronaldo Nazário","Henrik Larsson","Diego Forlán"],"difficulty":"hard"},{"category":"Won the MLS MVP","players":["Carlos Vela","Sebastian Giovinco","Josef Martínez","Diego Valeri"],"difficulty":"insane"}]'::jsonb),
     ('puzzle-4', '[{"category":"Won the World Cup","players":["Miroslav Klose","Zinedine Zidane","Franz Beckenbauer","Lothar Matthäus"],"difficulty":"easy"},{"category":"Played for Liverpool","players":["Steven Gerrard","Luis Suárez","Fernando Torres","Mohamed Salah"],"difficulty":"medium"},{"category":"Scored 90th-minute winners in the Champions League","players":["Sergio Agüero","Ole Gunnar Solskjær","Sergio Ramos","Sergi Roberto"],"difficulty":"hard"},{"category":"Known by a single name","players":["Ronaldinho Gaúcho","Ricardo Kaká","Neymar Jr","Pelé"],"difficulty":"insane"}]'::jsonb, '[{"category":"Played for Liverpool in 2025-26","players":["Dominik Szoboszlai","Cody Gakpo","Curtis Jones","Alexis Mac Allister"],"difficulty":"easy"},{"category":"Played for Real Madrid in 2025-26","players":["Thibaut Courtois","Aurélien Tchouaméni","Eduardo Camavinga","Rodrygo"],"difficulty":"medium"},{"category":"Won the Premier League Player of the Season","players":["Alan Shearer","Patrick Vieira","Nemanja Vidić","Vincent Kompany"],"difficulty":"hard"},{"category":"Won the MLS MVP","players":["Landon Donovan","David Villa","Robbie Keane","Chris Wondolowski"],"difficulty":"insane"}]'::jsonb),
@@ -104,8 +108,9 @@ begin
     ('puzzle-153', '[{"category":"Current Barcelona stars 2025-26","players":["Lamine Yamal","Raphinha","Pedri","Pau Cubarsí"],"difficulty":"easy"},{"category":"From Serbia","players":["Dušan Vlahović","Aleksandar Mitrović","Sergej Milinković-Savić","Filip Kostić"],"difficulty":"medium"},{"category":"Played for Arsenal AND Manchester City","players":["Samir Nasri","Emmanuel Adebayor","Gaël Clichy","Bacary Sagna"],"difficulty":"hard"},{"category":"Scored a goal from their own half in a competitive match","players":["David Beckham","Wayne Rooney","Xabi Alonso","Charlie Adam"],"difficulty":"insane"}]'::jsonb, '[{"category":"Played for Barcelona in 2025-26","players":["Lamine Yamal","Raphinha","Pedri","Pau Cubarsí"],"difficulty":"easy"},{"category":"From Serbia","players":["Dušan Vlahović","Aleksandar Mitrović","Sergej Milinković-Savić","Filip Kostić"],"difficulty":"medium"},{"category":"Played for Arsenal AND Manchester City","players":["Samir Nasri","Emmanuel Adebayor","Gaël Clichy","Bacary Sagna"],"difficulty":"hard"},{"category":"Scored a goal from their own half in a competitive match","players":["David Beckham","Wayne Rooney","Xabi Alonso","Charlie Adam"],"difficulty":"insane"}]'::jsonb),
     ('puzzle-154', '[{"category":"Current Inter Milan stars 2025-26","players":["Lautaro Martínez","Marcus Thuram","Nicolò Barella","Hakan Çalhanoğlu"],"difficulty":"easy"},{"category":"From South Korea","players":["Son Heung-min","Lee Kang-in","Park Ji-sung","Hwang Hee-chan"],"difficulty":"medium"},{"category":"Won the Champions League with TWO different clubs","players":["Clarence Seedorf","Samuel Eto''o","Xabi Alonso","Dani Alves"],"difficulty":"hard"},{"category":"Scored 5 goals in a single Champions League match","players":["Lionel Messi","Luiz Adriano","Robert Lewandowski","Cristiano Ronaldo"],"difficulty":"insane"}]'::jsonb, '[{"category":"Played for Inter Milan in 2025-26","players":["Lautaro Martínez","Marcus Thuram","Nicolò Barella","Hakan Çalhanoğlu"],"difficulty":"easy"},{"category":"From South Korea","players":["Son Heung-min","Lee Kang-in","Park Ji-sung","Hwang Hee-chan"],"difficulty":"medium"},{"category":"Won the Champions League with TWO different clubs","players":["Clarence Seedorf","Samuel Eto''o","Xabi Alonso","Dani Alves"],"difficulty":"hard"},{"category":"Scored 5 goals in a single Champions League match","players":["Lionel Messi","Luiz Adriano","Robert Lewandowski","Cristiano Ronaldo"],"difficulty":"insane"}]'::jsonb),
     ('puzzle-155', '[{"category":"Current Juventus stars 2025-26","players":["Dušan Vlahović","Kenan Yıldız","Teun Koopmeiners","Andrea Cambiaso"],"difficulty":"easy"},{"category":"From Morocco","players":["Achraf Hakimi","Hakim Ziyech","Youssef En-Nesyri","Sofiane Boufal"],"difficulty":"medium"},{"category":"Played for both Manchester United AND Chelsea","players":["Juan Mata","Nemanja Matić","Mark Hughes","Radamel Falcao"],"difficulty":"hard"},{"category":"Won the Ballon d''Or before turning 22","players":["Ronaldo Nazário","Michael Owen","Lionel Messi","George Best"],"difficulty":"insane"}]'::jsonb, '[{"category":"Played for Juventus in 2025-26","players":["Dušan Vlahović","Kenan Yıldız","Teun Koopmeiners","Andrea Cambiaso"],"difficulty":"easy"},{"category":"From Morocco","players":["Achraf Hakimi","Hakim Ziyech","Youssef En-Nesyri","Sofiane Boufal"],"difficulty":"medium"},{"category":"Played for both Manchester United AND Chelsea","players":["Juan Mata","Nemanja Matić","Mark Hughes","Radamel Falcao"],"difficulty":"hard"},{"category":"Won the Ballon d''Or before turning 22","players":["Ronaldo Nazário","Michael Owen","Lionel Messi","George Best"],"difficulty":"insane"}]'::jsonb)
-    ) as t(puzzle_id, old_groups, new_groups)
-  loop
+  ;
+
+  for r in select distinct puzzle_id, new_groups from r1553_rows loop
     if not exists (select 1 from public.connections_puzzles c where c.puzzle_id = r.puzzle_id) then
       missing := missing || r.puzzle_id;
     elsif exists (select 1 from public.connections_puzzles c where c.puzzle_id = r.puzzle_id and c.groups_json = r.new_groups) then
@@ -114,7 +119,7 @@ begin
       update public.connections_puzzles c
          set groups_json = r.new_groups
        where c.puzzle_id = r.puzzle_id
-         and c.groups_json = r.old_groups;
+         and c.groups_json in (select o.old_groups from r1553_rows o where o.puzzle_id = r.puzzle_id);
       if found then
         rewritten := rewritten + 1;
       else
@@ -122,7 +127,8 @@ begin
       end if;
     end if;
   end loop;
-  raise notice 'Round 1553: % boards rewritten, % already current, % drifted from the file (left alone): %, % not in the table: %',
+  drop table r1553_rows;
+  raise notice 'Round 1553: % boards rewritten, % already current, % drifted from both known boards (left alone): %, % not in the table: %',
     rewritten, already, coalesce(array_length(drifted, 1), 0), drifted, coalesce(array_length(missing, 1), 0), missing;
 end
 $$;
