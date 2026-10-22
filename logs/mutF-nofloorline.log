@@ -1,0 +1,26 @@
+mutFo nofloorline: applied to src/lib/foHub.ts
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+=== playFoHub on the nofloorline build
+  FAIL  NBA: a short roster says so on the box (reads "👔 / ROSTER / 10 under contract / Nikola Jokic leads them at 94")
+  FAIL  NBA: a short roster lights the box
+  PASS  NBA: the roster is topped up to the 14 man floor (4 free agents signed, 10 before)
+  PASS  NBA: the roster box counted the injury (reads "👔 / ROSTER / 1 unavailable / Nikola Jokic is out 3 rounds")
+  PASS  NBA: the roster box names Nikola Jokic
+  PASS  NBA: an injury lights the box (1 dots)
+  PASS  NBA: a fit squad puts the dot out
+  PASS  NBA: a fit squad counts the contracts instead
+playFoHub: 2 failures
+=== playFoHub nofloor on the nofloorline build
+playFoHub: green. Four front offices, nine live boxes each, and the five the walk opens open what they name.
+=== simNbaLuxuryTax on the nofloorline source
+   1. the bracket formula, against the published table: 108 checks
+   2. over pays, under does not, more pays more, a repeater pays most: 34 checks
+   3. fourteen to fifteen men at every tip off, ten franchises, five seasons: 100 checks
+   4. an old save tips off, closes and is assessed: 18 checks
+   5. the tax binds: payers against their twins in a league with no tax: 12 checks
+   6. the shared descriptor says so: 34 checks, 1 FAILED
+   7. a league that looks like a real one: taxpayers, the biggest bill, the typical bill, a way under: 36 checks
+   8. ten seasons: from season three payrolls hold against the line, the league keeps taxpayers, the pool asks in each season's money: 5 checks
+simNbaLuxuryTax: 1 of 347 checks FAILED
+  [6] two short of the floor: the Roster box says so and pulses: {"key":"team","icon":"👔","title":"Roster","value":"12 under contract","sub":"Man 12 leads them at 81","accent":false}
+MUTFO nofloorline: playFoHub exit=1, playFoHub-nofloor exit=0, simNbaLuxuryTax exit=1

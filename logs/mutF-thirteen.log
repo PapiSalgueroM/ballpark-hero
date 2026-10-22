@@ -1,0 +1,27 @@
+mutFo thirteen: applied to src/lib/foHub.ts
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+=== playFoHub on the thirteen build
+  PASS  NBA: a short roster says so on the box (reads "👔 / ROSTER / 10 under contract / 4 short of the 14 man floor. Filled on minimum deals at tip off.")
+  PASS  NBA: a short roster lights the box
+  PASS  NBA: the roster is topped up to the 14 man floor (4 free agents signed, 10 before)
+  PASS  NBA: the roster box counted the injury (reads "👔 / ROSTER / 1 unavailable / Nikola Jokic is out 3 rounds")
+  PASS  NBA: the roster box names Nikola Jokic
+  PASS  NBA: an injury lights the box (1 dots)
+  PASS  NBA: a fit squad puts the dot out
+  PASS  NBA: a fit squad counts the contracts instead
+playFoHub: green. Four front offices, nine live boxes each, and the five the walk opens open what they name.
+=== playFoHub nofloor on the thirteen build
+  FAIL  NBA: the roster box names Nikola Jokic
+  FAIL  NBA: a fit squad puts the dot out
+playFoHub: 2 failures
+=== simNbaLuxuryTax on the thirteen source
+   1. the bracket formula, against the published table: 108 checks
+   2. over pays, under does not, more pays more, a repeater pays most: 34 checks
+   3. fourteen to fifteen men at every tip off, ten franchises, five seasons: 100 checks
+   4. an old save tips off, closes and is assessed: 18 checks
+   5. the tax binds: payers against their twins in a league with no tax: 12 checks
+   6. the shared descriptor says so: 34 checks
+   7. a league that looks like a real one: taxpayers, the biggest bill, the typical bill, a way under: 36 checks
+   8. ten seasons: from season three payrolls hold against the line, the league keeps taxpayers, the pool asks in each season's money: 5 checks
+simNbaLuxuryTax: 347 checks passed over 10 seeded franchises and 5 seasons each. The bill is the published formula, a dollar over pays, every season tips off on fourteen to fifteen men, an old save closes, and clubs that pay tax shed for it.
+MUTFO thirteen: playFoHub exit=0, playFoHub-nofloor exit=1, simNbaLuxuryTax exit=0

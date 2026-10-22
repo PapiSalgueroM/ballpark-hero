@@ -1,0 +1,14 @@
+#!serve
+#!playwright
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+playFoHub: ENGINES=chromium node scripts/playFoHub.mjs
+playFoHub-nofloor: PLAY_FO_HUB_CONTROL=nofloor ENGINES=chromium node scripts/playFoHub.mjs
+playFoHub-bogus: PLAY_FO_HUB_CONTROL=bogus ENGINES=chromium node scripts/playFoHub.mjs
+simNbaLuxuryTax: node scripts/simNbaLuxuryTax.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+mutF-nofloorline: bash .rc/x/mutFo.sh nofloorline 4191
+mutF-offbyone: bash .rc/x/mutFo.sh offbyone 4192
+mutF-thirteen: bash .rc/x/mutFo.sh thirteen 4193
+src-clean: git status --porcelain -- src | wc -l

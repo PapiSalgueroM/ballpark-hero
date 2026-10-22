@@ -1,0 +1,12 @@
+build exit=0 23s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+tsc exit=0 39s | 
+playFoHub exit=0 49s | playFoHub: green. Four front offices, nine live boxes each, and the five the walk opens open what they name.
+playFoHub-nofloor exit=1 47s | playFoHub: 2 failures
+playFoHub-bogus exit=2 0s | PLAY_FO_HUB_CONTROL=bogus is not a control this walk knows (nofloor)
+simNbaLuxuryTax exit=0 8s | simNbaLuxuryTax: 347 checks passed over 10 seeded franchises and 5 seasons each. The bill is the published formula, a dollar over pays, every season tips off on fourteen 
+simHarnessAnchors exit=0 32s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simNoRivalNames exit=0 10s | No rival product names found. 0 findings.
+mutF-nofloorline exit=0 134s | MUTFO nofloorline: playFoHub exit=1, playFoHub-nofloor exit=0, simNbaLuxuryTax exit=1
+mutF-offbyone exit=0 134s | MUTFO offbyone: playFoHub exit=1, playFoHub-nofloor exit=1, simNbaLuxuryTax exit=1
+mutF-thirteen exit=0 134s | MUTFO thirteen: playFoHub exit=0, playFoHub-nofloor exit=1, simNbaLuxuryTax exit=0
+src-clean exit=0 0s | 0
