@@ -1,0 +1,18 @@
+simDraftNight: node scripts/simDraftNight.mjs && DRAFT_CONTROL=dropai node scripts/simDraftNight.mjs | tail -1 && DRAFT_CONTROL=slowsteps node scripts/simDraftNight.mjs | tail -1 && DRAFT_CONTROL=norivals node scripts/simDraftNight.mjs | tail -1
+simGmReload: node scripts/simGmReload.mjs && GM_RELOAD_CONTROL=replay node scripts/simGmReload.mjs; echo "replay control exit $?"
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNbaGmDesk: node scripts/simNbaGmDesk.mjs
+simNbaEarnedDraft: node scripts/simNbaEarnedDraft.mjs
+simFoHub: node scripts/simFoHub.mjs
+simSessionMarks: node scripts/simSessionMarks.mjs
+simGmDesk: node scripts/simGmDesk.mjs
+simFrontOfficeCuts: node scripts/simFrontOfficeCuts.mjs
+simNbaSeasonStats: node scripts/simNbaSeasonStats.mjs
+simEngineIds: node scripts/simEngineIds.mjs
+simGmDeskHost: node scripts/simGmDeskHost.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simPrerender: node scripts/simPrerender.mjs
