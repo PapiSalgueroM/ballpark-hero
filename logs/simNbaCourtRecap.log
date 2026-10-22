@@ -1,0 +1,5 @@
+NBA court: actual, 19 selected outcomes, 0 failures, expected exit 0.
+NBA court: sideflip, 1 selected outcomes, 1 failures, expected exit 1.
+NBA court: future, 1 selected outcomes, 1 failures, expected exit 1.
+NBA court: rest, 1 selected outcomes, 1 failures, expected exit 1.
+NBA court: PASS, 19 actual outcomes and three effective copied faults.

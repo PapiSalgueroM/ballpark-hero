@@ -1,0 +1,15 @@
+simAwards exit=0 10s | PASS: ALL AWARD SCARCITY CHECKS PASSED
+simCareerRealism exit=0 9s | ALL CAREER REALISM CHECKS PASSED
+simDepthChart exit=0 2s | ALL DEPTH CHART CHECKS PASSED
+simHomeFront exit=0 1s | simHomeFront: green. The home front shows real games, real saves and a sport you can tell apart without colour.
+simCareerPreDraft exit=0 31s | simCareerPreDraft [seed set a]: ALL GREEN
+simNbaCourtRecap exit=0 18s | NBA court: PASS, 19 actual outcomes and three effective copied faults.
+simSaveKeeper exit=0 6s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+simNhlCareer exit=0 21s | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, life cards tagged
+simUsCareerBank exit=0 232s | simUsCareerBank: green. No call leaves a bank below zero in any of the four careers, savings pay a bill before anything is written off, and a reload never adds money.
+simUsCareerProspect exit=0 23s | simUsCareerProspect: 36 actual-board outcomes passed across all four sports
+simTycoonPacks exit=0 271s |    All 23 controls fired exactly where they should.
+simUsCoachRetirement exit=0 46s | PASS: ALL US COACHING RETIREMENT CHECKS PASSED
+simUsPostseason exit=0 24s | simUsPostseason: 33 checks, 0 failed, 0 findings for the lead
+simCareerHall exit=124 1200s | simCareerHall mlb: all 34 checks green
+simUsCareerSummer exit=124 1200s | 6) balance: one child per sport, careers a seed nfl 12000, nba 8000, mlb 8000, nhl 2000, 3 seeds
