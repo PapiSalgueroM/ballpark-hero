@@ -1,0 +1,54 @@
+Round 1532 tuning at dt 0.2: SQUAD_POINTS 0.85 (6 / G over4 7 = 0.85); A_d 34 52 59 68 73 77 81 83 86
+knob 4 (division 0), measured at ARRIVAL_EDGE 4, the predictor's pick:
+  knob 4 at R0 1 (AE 4): (i) ok sec4 promo 10.5 vs Sell up 13.103, season one 0.9 (8/10, 18/20); (ii) ok 1 - 0.2 = 0.8 need 0.476, neutral 0.05; (iii) ok stuck 0 and 0 of 30
+  R0 = 1 [4 s]
+knob 3 (ARRIVAL_EDGE), pace on calibration seeds, minutes 15 to 120:
+  AE -2: 1 31 46 52 60 64 67 71 73 75 -> win 53.9 (se 1.573), draw 24.1, goals 2.615, gap 4.934 [7 s]
+  AE 0: 1 29 44 50 58 62 65 69 71 73 -> win 57.5 (se 1.368), draw 23.1, goals 2.602, gap 6.04 [10 s]
+  AE 2: 1 27 42 48 56 60 63 67 69 71 -> win 59.5 (se 0.961), draw 23.4, goals 2.581, gap 7.149 [14 s]
+  AE 4: 1 25 40 46 54 58 61 65 67 69 -> win 64.6 (se 1.377), draw 20.9, goals 2.569, gap 8.716 [17 s]
+  AE 6: 1 23 38 44 52 56 59 63 65 67 -> win 68.7 (se 1.216), draw 20, goals 2.575, gap 10.723 [20 s]
+  AE 8: 1 21 36 42 50 54 57 61 63 65 -> win 73.6 (se 1.404), draw 17.4, goals 2.567, gap 12.539 [23 s]
+  pick ARRIVAL_EDGE 4: rivalStrength 1 25 40 46 54 58 61 65 67 69
+the final table:
+  played pace [35 s]
+  played over4 [41 s]
+  played nosquad [46 s]
+  played paceSell [58 s]
+  ok   holdout pace wins 55 to 75 with headroom: 66.6 (se 1.452), headroom needed 4.356
+  ok   cal overinvest (over4) wins 76 to 86: 76.4
+  ok   cal overinvest at least 4 above pace: 11.8
+  ok   cal pace window 15-30 inside 50 to 80: 72.143
+  ok   cal pace window 30-60 inside 50 to 80: 67.857
+  ok   cal pace window 60-120 inside 50 to 80: 61.207
+  ok   cal overinvest window 15-30 under 90: 78.571
+  ok   cal overinvest window 30-60 under 90: 80.714
+  ok   cal overinvest window 60-120 under 90: 73.793
+  ok   cal pace draws 15 to 27: 20.9
+  ok   cal pace goals 2.5 to 3.0: 2.569
+  ok   cal pace titles a season 15 to 240 in 0.40 to 0.90: 0.733 (pooled 0.729)
+  ok   cal nosquad clearly under pace: pace 64.6 nosquad 18
+  ok   hold overinvest (over4) wins 76 to 86: 78.7
+  ok   hold overinvest at least 4 above pace: 12.1
+  ok   hold pace window 15-30 inside 50 to 80: 75
+  ok   hold pace window 30-60 inside 50 to 80: 67.857
+  ok   hold pace window 60-120 inside 50 to 80: 63.966
+  ok   hold overinvest window 15-30 under 90: 84.286
+  ok   hold overinvest window 30-60 under 90: 80.714
+  ok   hold overinvest window 60-120 under 90: 76.379
+  ok   hold pace draws 15 to 27: 20.5
+  ok   hold pace goals 2.5 to 3.0: 2.6
+  ok   hold pace titles a season 15 to 240 in 0.40 to 0.90: 0.727 (pooled 0.725)
+  ok   hold nosquad clearly under pace: pace 66.6 nosquad 17.2
+  ok   knob 4 holds on the final table: season one 0.9, sec4 10.5 vs 13.103, sec3 gap 0.8 need 0.476, sec9 0 and 0
+S8, the economy (calibration medians, head against base):
+  pace first Sell up 12.77 (base 13.37); first promotion 10.5 (base 10.5); win bonus at 120 = 20 s of income (base 0.1322)
+  pace income at 30 / 60 / 120: 17861.742 (base 21155.507) / 25591.793 (base 34433.314) / 41685.296 (base 81037.765)
+  pace Squad at 15 / 30 / 60 / 120: 45 (44) / 58 (59) / 67 (68) / 75 (77); division 1 (1) / 2 (2) / 3 (3) / 5 (6)
+  pace minute of reaching divisions 1 to 9: 10.5 21 42 71.4 121.8 159.6 207.9  
+  mean capped streak: pace 4.082, over4 6.239, nosquad 0.482; gems an hour: pace 107.286, over4 122.857, nosquad 30.657
+  paceSell stars at 21 (21) / 42 (42) / 73.5 (73.5) minutes; first Sell up over4 14.27 (14.77)
+  milestones and badges: win1 4.2 (4.2), win10 27.3 (23.1), win50 161.7 (107.1), goals25 22.447 (9.753), streak5 12.6 (12.6), fans500 7.263 (7.343), fans2k 12.723 (12.903), fans10k 34.903 (32.557), full 13.773 (13.827), allTracks 3.337 (3.337), ag25 22.447 (9.753), ag100 113.937 (27.23), ag500 later (96.11), ag2000 later (later), aw1 4.2 (4.2), aw10 27.3 (23.1), aw50 161.7 (107.1), aw150 later (later), aw400 later (later), as5 12.6 (12.6), as10 29.4 (23.1)
+  matchGap per window (critic item 21), calibration: pace 15-30 12.955, 30-60 9.803, 60-120 7.169, 120-240 6.873; over4 15-30 15.82, 30-60 14.946, 60-120 12.483; nosquad 15-30 -5.618, 30-60 -11.72, 60-120 -18.025
+wrote scripts/data/tycoonScorelineTuning.json in 58 s
+tuneTycoonScorelines: table chosen (SQUAD_POINTS 0.85, R0 1, ARRIVAL_EDGE 4: 1 25 40 46 54 58 61 65 67 69), every target of brief 1.3 met

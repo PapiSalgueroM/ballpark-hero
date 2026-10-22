@@ -1,0 +1,2 @@
+tune: node scripts/tuneTycoonScorelines.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
