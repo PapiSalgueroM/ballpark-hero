@@ -854,10 +854,12 @@ const r1523Out = { name: 'r1523out', setup(b) {
    engine lost "3-match ban next season, Reputation -5"), and a refusal used to crash the run with a stack trace, so
    the unattributed control crashed instead of failing a check (review of 2026-10-21). It is a known gap of that arm:
    the arm now says it cannot be built and decides nothing, and the career falls through to the checks below. */
-async function trainOutArm() {
-  try { return await bundle(ROOT, 'treetrainout', [trainOut.plugin]); }
+async function trainOutArm(plugin) {
+  try { return await bundle(ROOT, 'treetrainout', [plugin]); }
   catch (e) {
-    const why = String(e?.message ?? e).split('\n').find(l => l.includes('refused')) ?? String(e).slice(0, 200);
+    /* only the arm's own refusal is a known gap; anything else is a defect and stops the run */
+    const why = String(e?.message ?? e).split('\n').find(l => l.includes('train out refused'));
+    if (!why) throw e;
     console.log(`  the train out arm cannot be built on this engine, so it decides nothing (${why.trim()})`);
     return false;
   }
@@ -1003,7 +1005,7 @@ if (baseRoot) {
        Round 1100's bigger pool AND whose dugout years met Round 1052's league equals the base only with both taken
        out at once (the two arms read different files: clubManager.ts is not one of Round 1100's seven). */
     else if (await tryArm('1100+1052', MoutBoth ??= await bundle(ROOT, 'tree1100and1052out', [r1100Out, r1052Out, ...futurePlugins]))) { same += 1; byBoth += 1; console.log(`  career ${seed}: moved by Rounds 1100 and 1052 together (equal to the base only with both taken out)`); }
-    else if (CONTROL !== 'future' && (MoutTrain ??= await trainOutArm()) && trainStrip(await replay(MoutTrain, seed)) === trainStrip(base)) { same += 1; byTrain += 1; receipt.acceptedArm = 'train1178'; }
+    else if (CONTROL !== 'future' && (MoutTrain ??= await trainOutArm(trainOut.plugin)) && trainStrip(await replay(MoutTrain, seed)) === trainStrip(base)) { same += 1; byTrain += 1; receipt.acceptedArm = 'train1178'; }
     else if (await tryFormArms()) { same += 1; by1185 += 1; console.log(`  career ${seed}: moved by Rounds 1185 and 1187's form selection and Youth Mentor catalog (${receipt.acceptedArm}; complete replay equals the base only after the declared copied inverses)`); }
     else {
       differ += 1;
