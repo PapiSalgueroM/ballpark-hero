@@ -123,6 +123,10 @@ import { inverseWorldTruth, worldTruthReceiptProblem, WORLD_TRUTH_ADDITIONS } fr
 /* Round 1334 adds three engine lines after both (the soccer deck's gate import, its catalog spread, its slot): section 8
    takes the ninth inverse off first, then the eighth, then proves the seventh. */
 import { inverseSoccerDeck, soccerDeckReceiptProblem, SOCCER_DECK_ADDITIONS } from './lib/careerSoccerDeck1334.mjs';
+/* Round 1523: its morale step and Puskas year move seeded careers on purpose, so section 7's lockstep with the base
+   reads this tree with that round taken out as well (scripts/lib/careerSoccerMorale1523.mjs, an attribution).
+   SIM_DECK_FAIRNESS_MORALE= (empty) keeps it in, the unattributed run, red in section 7 by design. */
+import { inverseSoccerMorale, soccerMoraleOut, soccerMoraleReceiptProblem } from './lib/careerSoccerMorale1523.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 /* The tree this round was cut from. Section 7 bundles it from git.
@@ -227,7 +231,7 @@ function mark(source) {
   }
   return `${out}\nexport { generateRandomEvents as __r1327Deck, generateNewsArticles as __r1327News };\n`;
 }
-async function bundle(tag, { ref = null, control = null, truthOut = null } = {}) {
+async function bundle(tag, { ref = null, control = null, truthOut = null, moraleOut = null } = {}) {
   let hits = 0;
   const plugin = { name: 'r1327-source', setup(b) {
     b.onLoad({ filter: /\.(ts|tsx)$/ }, args => {
@@ -237,6 +241,7 @@ async function bundle(tag, { ref = null, control = null, truthOut = null } = {})
         ? execFileSync('git', ['show', `${ref}:${rel}`], { cwd: ROOT, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 }).replace(/\r\n/g, '\n')
         : fs.readFileSync(args.path, 'utf8').replace(/\r\n/g, '\n');
       if (control && rel === ENGINE) { source = control; hits += 1; }
+      if (moraleOut) source = inverseSoccerMorale(rel, source, moraleOut);
       if (truthOut) source = inverseWorldTruth(rel, source, truthOut);
       if (rel === ENGINE) source = mark(source);
       return { contents: source, loader: rel.endsWith('.tsx') ? 'tsx' : 'ts', resolveDir: path.dirname(args.path) };
@@ -264,7 +269,10 @@ const B = await bundle('base', { ref: BASE });
    paper or deck runs: section 7's lockstep with the base reads this tree with Round 1329 taken out (the eighth
    inverse, scripts/lib/careerWorldTruth1329.mjs), every row of every file it loads once, in order. */
 const truthOutReceipt = [];
-const E7 = await bundle('head-1329out', { control: controlSource, truthOut: truthOutReceipt });
+const MORALE_OUT = soccerMoraleOut('SIM_DECK_FAIRNESS_MORALE'), moraleOut7 = [];
+const E7 = await bundle('head-1329out', { control: controlSource, truthOut: truthOutReceipt, moraleOut: MORALE_OUT ? moraleOut7 : null });
+if (MORALE_OUT) assert.equal(soccerMoraleReceiptProblem(moraleOut7), '', 'section 7\'s bundle takes Round 1523 out of the engine, every row once, in order');
+else console.log('SIM_DECK_FAIRNESS_MORALE is empty: section 7 keeps Round 1523 in, the unattributed run');
 assert.equal(worldTruthReceiptProblem(truthOutReceipt), '', 'section 7\'s bundle takes Round 1329 out of every file it loads, once, in order');
 
 /* ─── seeded streams ───────────────────────────────────────────────────── */

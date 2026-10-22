@@ -114,6 +114,11 @@ import { fileURLToPath } from 'node:url';
 import { inverseWorldTruth, worldTruthReceiptProblem, WORLD_TRUTH_SHA256, WORLD_TRUTH_FILES, WORLD_TRUTH_ADDITIONS } from './lib/careerWorldTruth1329.mjs';
 /* Round 1334 adds three engine lines after this round: section 6 takes the ninth inverse off the tree's engine first. */
 import { inverseSoccerDeck, soccerDeckReceiptProblem, SOCCER_DECK_ADDITIONS } from './lib/careerSoccerDeck1334.mjs';
+/* Round 1523: its morale step and Puskas year move a season's league games, and with them later draws, on purpose,
+   so the head bundle that is held to the base takes that round out first (scripts/lib/careerSoccerMorale1523.mjs, an
+   attribution). SIM_WORLD_TRUTH_MORALE= (empty) keeps it in, the unattributed run, red in section 2 by design. */
+import { inverseSoccerMorale, soccerMoraleOut, soccerMoraleReceiptProblem } from './lib/careerSoccerMorale1523.mjs';
+const MORALE_OUT = soccerMoraleOut('SIM_WORLD_TRUTH_MORALE'), moraleReceipt = [];
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const require = createRequire(path.join(ROOT, 'package.json'));
@@ -276,6 +281,7 @@ export const render = {
       else if (ref && !BASE_FROM_HEAD.has(rel)) source = execFileSync('git', ['show', `${ref}:${rel}`], { cwd: ROOT, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
       else source = fs.readFileSync(args.path, 'utf8');
       source = source.replace(/\r\n/g, '\n');
+      if (!ref && MORALE_OUT) source = inverseSoccerMorale(rel, source, moraleReceipt);
       for (const [file, from, to] of MARKS) if (rel === file) source = mark(source, from, to, `${tag} ${file}`);
       return { contents: source, loader: rel.endsWith('.tsx') ? 'tsx' : 'ts', resolveDir: path.dirname(args.path) };
     });
@@ -299,6 +305,8 @@ globalThis.localStorage = {
   removeItem: k => { store.delete(k); }, key: i => [...store.keys()][i] ?? null, get length() { return store.size; }, clear: () => store.clear(),
 };
 const HEAD = await bundle('head');
+if (MORALE_OUT) { if (soccerMoraleReceiptProblem(moraleReceipt)) { console.error(`ABORT: ${soccerMoraleReceiptProblem(moraleReceipt)}`); process.exit(1); } }
+else console.log('SIM_WORLD_TRUTH_MORALE is empty: the head keeps Round 1523 in, the unattributed run');
 const BASEB = await bundle('base', BASE);
 /* The harness judges with its own copy of the boundary and the rule, written here as literals, never with the
    module's own functions alone: judging by HEAD.truth let a wrong constant or rule inside soccerWorldTruth.ts
