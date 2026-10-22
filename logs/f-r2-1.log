@@ -1,0 +1,67 @@
+1) what must not move: the season before the draft, and the desk off fixture
+   1a: 30 seasons to the draft, desk on, every club the user once: league, desk and 315516 draws held to the base 48cb9d4b
+   1b: git diff --quiet 48cb9d4b -- scripts/data/nbaGmDeskFixture.json scripts/simNbaGmDesk.mjs scripts/simNbaDraftCapital.mjs src/lib/nbaGmDesk.ts: exit 0, all equal to the base (printed, not a check)
+6) the class: today's twelve, then the curve, slots plus four, never over 70
+   1500 classes of 64 for 60 slots: today's twelve found in every one, 78000 men after them held to the curve rating by rating (worst 1.41 standard errors, band 4.5)
+   mean true rating by ten slots: 83.05, 71.80, 68.27, 67.94, 67.66, 67.08, 66.84; steps 11.25, 3.53, 0.33, 0.28, 0.58, 0.25
+2) the lottery through the bind: the sixteen off the numbers, drawn every season, the table's chances
+   90 closed seasons, a lottery drawn on 90 (0 with no level records in the field); 20 of them, 40000 keyed lotteries each: 280 club shares, the worst 2.82 standard errors from the table (band 4.5)
+3) the slot is the truth: every pick used once by its holder at its first owner's place
+   90 drafts, 5400 picks: 451 of the year's picks moved first (56 his), a club with three or more 90 times, a club with none 90 times; on the clock 144 times; 1737 rival rows shown, every one on its club at his scout's read
+4) drawn once: the block survives a round trip, every press, a second open and a swapped table
+   90 nights: each opened twice to the same block, read back after a JSON round trip, unchanged by every press; 90 opened again after Continue and answered as they stood; 30 drafts replayed with the table swapped under the block
+5) the incentive: the worse the finish, the earlier and the better his first selection
+   2700 nights over 90 seasons x 1 classes (450 a band), each club the GM once a class, in 11.2 s
+   new, by finish worst first, his first selection's pick and true rating: 1-5: #4.1 84.8, 6-10: #7.6 82.3, 11-15: #13.1 75.0, 16-20: #17.5 71.1, 21-25: #22.8 70.5, 26-30: #27.9 70.2
+   old, the same clubs today: 1-5: #1.0 85.8, 6-10: #1.0 85.8, 11-15: #1.0 85.9, 16-20: #1.0 85.8, 21-25: #1.0 85.8, 26-30: #1.0 85.9
+   new steps: later by 3.45, 5.53, 4.44, 5.26, 5.14 places (errors 0.17, 0.21, 0.18, 0.12, 0.07); worse by 2.44, 7.34, 3.85, 0.67, 0.24 rating (errors 0.24, 0.30, 0.24, 0.11, 0.07)
+8) the fallback: a block broken mid draft finishes the old way on a valid league
+   150 blocks broken mid draft (year, order, a slot, made past the end, seen): never current, no press ran, 150 finished the old way to a valid league
+9) need: a club short at a position leans to it, and never past a better read by more than the weight
+   5256 rival choices, 5256 of them the rule's man on the engine's grade; none passed a better grade by more than 2; taken when short vs not, in points: G 40.1 (706/4550), F 41.0 (2002/3254), C 31.9 (2617/2639)
+10) the shared half names no sport; neither library draws from Math.random or carries an address
+   src/lib/gmEarnedDraft.ts: 17 imports, all the lift's; no sport named; neither library draws from Math.random or carries an address
+11) the judge on known answers: the two arm table's verdict on both sides of every edge of every band
+   22 known answers judged over 7 lines (S1 at 5 two, S1 at 10 range, S2 two, S3 print, S4 floor, S6 dead cap, S6 payers two)
+7) the table: the old and new arms on the fleet, and the stop lines (FLEET=full plays, COMBINE judges)
+   the six user clubs by opening strength: BOS strong 85.62, CLE strong 85.34, POR middle 83.26, CHI middle 83.05, MIL weak 79.49, BKN weak 78.23
+   old set 2 (seeds 11 to 20), run 2: 60 careers in 53.9 s
+   new set 2 (seeds 11 to 20), run 2: 60 careers in 57.8 s
+   old set 6 (seeds 51 to 60), run 2: 60 careers in 55.1 s
+   new set 6 (seeds 51 to 60), run 2: 60 careers in 57.0 s
+   old set 10 (seeds 91 to 100), run 2: 60 careers in 56.1 s
+   new set 10 (seeds 91 to 100), run 2: 60 careers in 58.4 s
+   shard 1/4: 360 careers in 338.3 s; Math.random called 0 times while the fleet played
+   new run 2 set 10: S1 83.39 / 83.15, S2 109.2, S3 48.8 (n 80), S4 70.0 titles 6.1 (n 180), S6 dead 2.81 payers 1.96, signed a night 60.0
+      S5, worst finish first: 1-5 #4.3 85.0 (67), 6-10 #7.3 82.7 (83), 11-15 #13.0 75.4 (76), 16-20 #17.9 71.2 (93), 21-25 #22.9 70.4 (97), 26-30 #28.0 70.4 (184)
+   new run 2 set 2: S1 83.40 / 83.22, S2 108.4, S3 41.3 (n 80), S4 63.9 titles 5.6 (n 180), S6 dead 2.76 payers 1.86, signed a night 60.0
+      S5, worst finish first: 1-5 #3.7 85.2 (96), 6-10 #7.2 82.4 (60), 11-15 #13.0 74.7 (102), 16-20 #17.7 70.9 (95), 21-25 #22.9 70.6 (121), 26-30 #28.3 70.2 (126)
+   new run 2 set 6: S1 83.34 / 83.11, S2 106.8, S3 40.0 (n 80), S4 64.4 titles 4.4 (n 180), S6 dead 2.83 payers 1.91, signed a night 60.0
+      S5, worst finish first: 1-5 #4.1 84.5 (93), 6-10 #8.1 82.3 (68), 11-15 #13.4 74.0 (88), 16-20 #17.6 71.1 (89), 21-25 #23.2 70.7 (108), 26-30 #28.2 70.4 (154)
+   old run 2 set 10: S1 83.15 / 82.16, S2 106.0, S3 78.8 (n 80), S4 100.0 titles 80.0 (n 180), S6 dead 0.11 payers 2.27, signed a night 12.0
+      S5, worst finish first: 1-5 #1.0 85.7 (25), 6-10 #1.0 85.8 (11), 11-15 #1.0 84.7 (10), 16-20 #1.0 86.3 (15), 21-25 #1.0 85.8 (18), 26-30 #1.0 85.8 (521)
+   old run 2 set 2: S1 83.13 / 82.20, S2 106.3, S3 86.3 (n 80), S4 100.0 titles 78.9 (n 180), S6 dead 0.13 payers 2.33, signed a night 12.0
+      S5, worst finish first: 1-5 #1.0 86.0 (23), 6-10 #1.0 85.3 (7), 11-15 #1.0 85.9 (14), 16-20 #1.0 85.9 (15), 21-25 #1.0 86.2 (20), 26-30 #1.0 86.0 (521)
+   old run 2 set 6: S1 83.12 / 82.14, S2 105.7, S3 78.8 (n 80), S4 100.0 titles 75.0 (n 180), S6 dead 0.12 payers 2.19, signed a night 12.0
+      S5, worst finish first: 1-5 #1.0 85.9 (23), 6-10 #1.0 86.1 (14), 11-15 #1.0 86.0 (11), 16-20 #1.0 85.7 (15), 21-25 #1.0 85.8 (13), 26-30 #1.0 86.0 (524)
+   over 3 sets, S1 mean strength at season 5 tip off: mean 83.14, per set sd 0.01
+   over 3 sets, S1 mean strength at season 10 tip off: mean 82.17, per set sd 0.03
+   over 3 sets, S2 men rated 85 or more at season 10 tip off: mean 106.0, per set sd 0.3
+   over 3 sets, S3 weak starts' playoff seasons, seasons 2 to 5, per season (n 80 a set): mean 81.3, per set sd 4.3
+   over 3 sets, S4 strong starts' playoff seasons, seasons 2 to 10, per season (n 180 a set): mean 100.0, per set sd 0.0
+   over 3 sets, S6 CPU dead money a season, seasons 2 to 10: mean 0.1, per set sd 0.0
+   over 3 sets, S6 tax payers a season, seasons 2 to 10: mean 2.26, per set sd 0.07
+   the fleet by decision 2's rule: S3 needs 12 sets, S4 needs 12, so 12 sets of ten (never fewer than 12)
+   section 1: green
+   section 6: green
+   section 2: green
+   section 3: green
+   section 4: green
+   section 5: green
+   section 8: green
+   section 9: green
+   section 10: green
+   section 11: green
+   section 7: green
+   11 sections ran (1, 6, 2, 3, 4, 5, 8, 9, 10, 11, 7), 216611 checks
+simNbaEarnedDraft: green.
