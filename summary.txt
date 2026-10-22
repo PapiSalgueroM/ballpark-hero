@@ -1,0 +1,11 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+simNoRivalNames exit=0 35s | No rival product names found. 0 findings.
+simStorageWrites exit=0 8s | simStorageWrites: all green (owed: 12)
+tsc exit=0 208s | 
+simGuideHeadings exit=0 4s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+simSiteSearch exit=0 6s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+simTycoonAwayMatchdays exit=0 184s |    All 6 controls fired exactly where they should, in node and in the real hook.
+pf-tycoon exit=0 25s | playFirstVisitDialogs: green. Every first visit dialog can be started with the cookie banner unanswered.
+stale exit=1 23s | playFirstVisitDialogs: PLAYFIRST_CONTROL=stale FIRED. 3 of 3 seeded lines with a fresh save opened no card and failed the walk
+jump exit=1 22s | playFirstVisitDialogs: PLAYFIRST_CONTROL=jump FIRED. 3 of 3 moved dialogs read red for the check it targets
+simHarnessAnchors exit=0 293s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.

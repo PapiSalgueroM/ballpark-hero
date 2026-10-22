@@ -1,0 +1,12 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simHarnessAnchors: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simHarnessAnchors.mjs
+simNoRivalNames: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simNoRivalNames.mjs
+simStorageWrites: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simStorageWrites.mjs
+simTycoonAwayMatchdays: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonAwayMatchdays.mjs
+simGuideHeadings: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simGuideHeadings.mjs
+simSiteSearch: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSiteSearch.mjs
+pf-tycoon: ONLY=/stadium-tycoon node scripts/playFirstVisitDialogs.mjs
+stale: ONLY=/stadium-tycoon PLAYFIRST_CONTROL=stale node scripts/playFirstVisitDialogs.mjs
+jump: ONLY=/stadium-tycoon PLAYFIRST_CONTROL=jump node scripts/playFirstVisitDialogs.mjs
