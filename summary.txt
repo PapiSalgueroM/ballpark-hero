@@ -1,0 +1,13 @@
+build exit=0 23s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simCmMatchCentre exit=0 3s | simCmMatchCentre: PASS. Every stat on the report and the live strip is counted off the committed play and lines, and every timeline row is an event the engine drew.
+simLiveMatch exit=0 7s | simLiveMatch: PASS. Each half is committed as one stream, the report is counted off it, a change keeps the past and redraws the future, and the other dugout fields eleven
+simMatchDetail exit=0 8s | simMatchDetail: all green
+weight exit=0 30s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+simClubManagerSave exit=0 21s | simClubManagerSave: all sections green
+vitest-cm exit=0 124s |    Duration  123.28s (transform 5.27s, setup 2.44s, collect 24.17s, tests 281.08s, environment 19.93s, prepare 4.36s)
+simTacticsEngine exit=0 107s | simTacticsEngine: PASS. A man is read in his slot, a second position is earned over counted weeks, the armband and the takers reach the stream, a duty moves the football 
+simClubManagerSaveSize exit=0 76s | simClubManagerSaveSize: all sections green
+simInventedNames exit=0 9s | simInventedNames: green. Every invented man on this site is invented all the way down.
+simNoInventedQuotes exit=0 22s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simExtraTime exit=0 59s | simExtraTime: PASS. A level Champions League decider plays thirty minutes of extra time before penalties, nothing else does, goals per decider hold, the AI plays it too (
+simHalftime exit=0 465s | ALL HALFTIME CHECKS PASSED
