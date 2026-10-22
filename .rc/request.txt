@@ -1,0 +1,12 @@
+#!serve
+#!playwright
+#!serial
+walk-head: LABEL=head node .rc/x/walkConsent.mjs
+walk-control: ANSWER_CONSENT_CONTROL=none LABEL=ctl node .rc/x/walkConsent.mjs 2>&1 | tail -12; exit ${PIPESTATUS[0]}
+bn-base: bash .rc/x/bnsrv.sh scripts/lib/answerConsent.mjs scripts/playUsCareerSaveSeam.mjs scripts/playStorageBlocked.mjs scripts/playBoxingShowForecast1086.mjs scripts/playCmHubLanding.mjs
+bn-same-walks: for f in playUsCareerSaveSeam playStorageBlocked playBoxingShowForecast1086 playCmHubLanding; do git diff --quiet c3309e67 529bc3c1 -- scripts/$f.mjs && echo "$f: identical on BN and on the branch cut" || echo "$f: DIFFERS between BN and the branch cut"; done
+walk-bn: BASE=http://localhost:4174 LABEL=bn node .rc/x/walkConsent.mjs
+bn-playUsCareerSaveSeam: cd /tmp/wt-bn && node scripts/playUsCareerSaveSeam.mjs
+bn-playCmHubLanding: cd /tmp/wt-bn && BASE=http://localhost:4174 SWEEP_BASE=http://localhost:4174 node scripts/playCmHubLanding.mjs
+bn-boxing: cd /tmp/wt-bn && node scripts/playBoxingShowForecast1086.mjs --prefetch-fonts-only > /dev/null 2>&1; node scripts/playBoxingShowForecast1086.mjs
+bn-playStorageBlocked: cd /tmp/wt-bn && BASE=http://localhost:4174 SWEEP_BASE=http://localhost:4174 node scripts/playStorageBlocked.mjs
