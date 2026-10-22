@@ -1,0 +1,4 @@
+#!serial
+digest-head: node scripts/simCmLeagueRules.mjs
+digest-revert: git checkout 6d2d7a7d -- src/lib/clubManager.ts src/lib/clubManagerBoardAsks.ts src/lib/clubManagerEras.ts && git diff --stat HEAD -- src | tail -1 && node scripts/simCmLeagueRules.mjs; s=$?; git checkout HEAD -- src scripts; exit $s
+digest-write: node scripts/simCmLeagueRules.mjs --part=modern,eras,pure --write && git diff --stat -- scripts/data/cmLeagueRulesDigest.json | tail -1 && cp scripts/data/cmLeagueRulesDigest.json "$RC_OUT/cmLeagueRulesDigest.json" && node scripts/simCmLeagueRules.mjs; s=$?; git checkout HEAD -- scripts; exit $s
