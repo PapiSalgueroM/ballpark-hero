@@ -1,0 +1,43 @@
+  flip: now Lincoln City: ask "Have 1 player from England in the squad" target 1 England: base onTrack, branch done
+  season differs: now Lincoln City: pendingSummary
+  inbox season Lincoln City: base only []; branch only []
+  summary Lincoln City.seasonScore: base 40 | branch 46
+  summary Lincoln City.seasonScoreParts: base {"form":16,"title":0,"cup":0,"euro":0,"objectives":24,"total":40} | branch {"form":16,"title":0,"cup":0,"euro":0,"objectives":30,"total":46}
+  summary Lincoln City.objectives: base [{"label":"Stay up. Avoid relegation","hit":true},{"label":"Win your FA Cup Round of 16 tie","hit":false},{"label":"Finish above Bolton Wanderers","hit":true},{"label":"Concede fewer than 70 league goals","hit":false},{" | branch [{"label":"Stay up. Avoid relegation","hit":true},{"label":"Win your FA Cup Round of 16 tie","hit":false},{"label":"Finish above Bolton Wanderers","hit":true},{"label":"Concede fewer than 70 league goals","hit":false},{"
+  flip: now Elversberg: ask "Have 7 players from Germany in the squad" target 7 Germany: base onTrack, branch done
+  season differs: now Elversberg: pendingSummary
+  inbox season Elversberg: base only []; branch only []
+  summary Elversberg.objectives: base [{"label":"Stay up. Avoid relegation","hit":false},{"label":"Win your DFB-Pokal Round of 16 tie","hit":false},{"label":"Finish above Paderborn","hit":false},{"label":"Concede fewer than 52 league goals","hit":false},{"la | branch [{"label":"Stay up. Avoid relegation","hit":false},{"label":"Win your DFB-Pokal Round of 16 tie","hit":false},{"label":"Finish above Paderborn","hit":false},{"label":"Concede fewer than 52 league goals","hit":false},{"la
+  flip: now Excelsior: ask "Have 1 player from Netherlands in the squad" target 1 Netherlands: base onTrack, branch done
+  season differs: now Excelsior: pendingSummary
+  inbox season Excelsior: base only []; branch only []
+  summary Excelsior.objectives: base [{"label":"Stay up. Avoid relegation","hit":true},{"label":"Win your KNVB Cup Round of 16 tie","hit":false},{"label":"Finish above Willem II","hit":true},{"label":"Bank 36+ league points","hit":true},{"label":"Blood 3 un | branch [{"label":"Stay up. Avoid relegation","hit":true},{"label":"Win your KNVB Cup Round of 16 tie","hit":false},{"label":"Finish above Willem II","hit":true},{"label":"Bank 36+ league points","hit":true},{"label":"Blood 3 un
+  flip: now Inter Miami: ask "Have 2 players from United States in the squad" target 2 United States: base onTrack, branch done
+  season differs: now Inter Miami: pendingSummary
+  inbox season Inter Miami: base only []; branch only []
+  summary Inter Miami.seasonScore: base 52 | branch 58
+  summary Inter Miami.seasonScoreParts: base {"form":23,"title":0,"cup":5,"euro":0,"objectives":24,"total":52} | branch {"form":23,"title":0,"cup":5,"euro":0,"objectives":30,"total":58}
+  summary Inter Miami.objectives: base [{"label":"Win the MLS Eastern Conference","hit":false},{"label":"Win your U.S. Open Cup Round of 16 tie","hit":true},{"label":"Finish above Orlando City","hit":true},{"label":"Bank 59+ league points","hit":false},{"labe | branch [{"label":"Win the MLS Eastern Conference","hit":false},{"label":"Win your U.S. Open Cup Round of 16 tie","hit":true},{"label":"Finish above Orlando City","hit":true},{"label":"Bank 59+ league points","hit":false},{"labe
+  flip: now D.C. United: ask "Have 2 players from United States in the squad" target 2 United States: base onTrack, branch done
+  season differs: now D.C. United: pendingSummary
+  flip: now Sporting Kansas City: ask "Have 2 players from United States in the squad" target 2 United States: base onTrack, branch done
+  season differs: now Sporting Kansas City: pendingSummary
+  flip: now Nacional: ask "Have 1 player from Portugal in the squad" target 1 Portugal: base onTrack, branch done
+  season differs: now Nacional: pendingSummary
+  flip: now Dundee: ask "Have 1 player from Scotland in the squad" target 1 Scotland: base onTrack, branch done
+  season differs: now Dundee: pendingSummary
+  flip: now Erzurumspor: ask "Have 1 player from Türkiye in the squad" target 1 Türkiye: base onTrack, branch done
+  flip: now Club Brugge: ask "Have 7 players from Belgium in the squad" target 7 Belgium: base onTrack, branch done
+  flip: now Beveren: ask "Have 1 player from Belgium in the squad" target 1 Belgium: base onTrack, branch done
+  flip: now RB Salzburg: ask "Have 3 players from Austria in the squad" target 3 Austria: base onTrack, branch done
+  inbox match Liverpool: base only []; branch only []
+  inbox match Liverpool first differing message #0 (drama): id: "msg-1-0-268" | "msg-1-0-267"
+  inbox match Juventus: base only []; branch only []
+  inbox match Juventus first differing message #0 (reporter): id: "msg-1-0-300" | "msg-1-0-295"
+  inbox match Crotone: base only []; branch only []
+  inbox match Crotone first differing message #0 (startMe): id: "msg-1-0-306" | "msg-1-0-300"
+careers 94; open differs beyond nation 0; after a match 22; after the season 63
+natQuota asks on the base save: 56; graded differently by the branch on load: 32
+differing keys: [["match:inbox",22]]
+season keys: [["pendingSummary",32],["inbox",40]]
+review-oldsave: DIFFERS
