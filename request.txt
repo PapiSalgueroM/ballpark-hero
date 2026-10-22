@@ -1,0 +1,12 @@
+#!serial
+mut-late: node .rc/x/mut1551.mjs late && node scripts/simSeasonDue.mjs; s=$?; git checkout -- src scripts supabase; exit $s
+mut-latewhod: node .rc/x/mut1551.mjs latewhod && node scripts/simSeasonDue.mjs; s=$?; git checkout -- src scripts supabase; exit $s
+mut-past: node .rc/x/mut1551.mjs past && node scripts/simSeasonDue.mjs; s=$?; git checkout -- src scripts supabase; exit $s
+mut-early: node .rc/x/mut1551.mjs early && node scripts/simSeasonDue.mjs; s=$?; git checkout -- src scripts supabase; exit $s
+mut-ge: node .rc/x/mut1551.mjs ge && node scripts/simSeasonDue.mjs; s=$?; git checkout -- src scripts supabase; exit $s
+mut-key: node .rc/x/mut1551.mjs key && node scripts/simSeasonDue.mjs; s=$?; git checkout -- src scripts supabase; exit $s
+mut-whod: node .rc/x/mut1551.mjs whod && node scripts/simSeasonDue.mjs; s=$?; git checkout -- src scripts supabase; exit $s
+mut-main1022: node .rc/x/mut1551.mjs mainstate && SEASON_DUE_TODAY=2026-10-22 node scripts/simSeasonDue.mjs; s=$?; git checkout -- src scripts supabase; exit $s
+mut-main1021: node .rc/x/mut1551.mjs mainstate && SEASON_DUE_TODAY=2026-10-21 node scripts/simSeasonDue.mjs; s=$?; git checkout -- src scripts supabase; exit $s
+mut-sqlname: npm install --silent --no-save --prefix /tmp/pgl @electric-sql/pglite >/dev/null 2>&1; node .rc/x/mut1551.mjs sqlname && PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseSeasonRows1551.mjs; s=$?; git checkout -- src scripts supabase; exit $s
+clean: git status --short | head -5; echo "tree clean check done"
