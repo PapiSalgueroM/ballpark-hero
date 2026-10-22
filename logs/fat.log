@@ -1,0 +1,207 @@
+1) what must not move: the season before the draft, and the desk off fixture
+   1a: 30 seasons to the draft, desk on, every club the user once: league, desk and 315516 draws held to the base 48cb9d4b
+   1b: git diff --quiet 48cb9d4b -- scripts/data/nbaGmDeskFixture.json scripts/simNbaGmDesk.mjs scripts/simNbaDraftCapital.mjs src/lib/nbaGmDesk.ts: exit 0, all equal to the base (printed, not a check)
+6) the class: today's twelve, then the curve, slots plus four, never over 70
+   1500 classes of 64 for 60 slots: today's twelve found in every one, 78000 men after them held to the curve rating by rating (worst 1.41 standard errors, band 4.5)
+   mean true rating by ten slots: 83.05, 71.80, 68.27, 67.94, 67.66, 67.08, 66.84; steps 11.25, 3.53, 0.33, 0.28, 0.58, 0.25
+2) the lottery through the bind: the sixteen off the numbers, drawn every season, the table's chances
+   30 closed seasons, a lottery drawn on 30 (0 with no level records in the field); 20 of them, 10000 keyed lotteries each: 280 club shares, the worst 2.99 standard errors from the table (band 4.5)
+3) the slot is the truth: every pick used once by its holder at its first owner's place
+   30 drafts, 1800 picks: 150 of the year's picks moved first (16 his), a club with three or more 30 times, a club with none 30 times; on the clock 46 times; 566 rival rows shown, every one on its club at his scout's read
+4) drawn once: the block survives a round trip, every press, a second open and a swapped table
+   30 nights: each opened twice to the same block, read back after a JSON round trip, unchanged by every press; 30 opened again after Continue and answered as they stood; 10 drafts replayed with the table swapped under the block
+5) the incentive: the worse the finish, the earlier and the better his first selection
+   2700 nights over 30 seasons x 3 classes (450 a band), each club the GM once a class, in 4.3 s
+   new, by finish worst first, his first selection's pick and true rating: 1-5: #3.9 85.0, 6-10: #7.5 82.8, 11-15: #13.3 74.8, 16-20: #17.4 71.1, 21-25: #22.9 70.7, 26-30: #27.9 70.3
+   old, the same clubs today: 1-5: #1.0 85.8, 6-10: #1.0 85.7, 11-15: #1.0 85.8, 16-20: #1.0 85.7, 21-25: #1.0 85.7, 26-30: #1.0 85.7
+   new steps: later by 3.59, 5.79, 4.15, 5.50, 5.01 places (errors 0.26, 0.29, 0.30, 0.21, 0.09); worse by 2.19, 7.98, 3.70, 0.45, 0.33 rating (errors 0.27, 0.33, 0.26, 0.13, 0.08)
+8) the fallback: a block broken mid draft finishes the old way on a valid league
+   50 blocks broken mid draft (year, order, a slot, made past the end, seen): never current, no press ran, 50 finished the old way to a valid league
+9) need: a club short at a position leans to it, and never past a better read by more than the weight
+   1754 rival choices, 1754 of them the rule's man on the engine's grade; none passed a better grade by more than 2; taken when short vs not, in points: G 39.3 (247/1507), F 41.3 (655/1099), C 31.0 (872/882)
+10) the shared half names no sport; neither library draws from Math.random or carries an address
+   src/lib/gmEarnedDraft.ts: 17 imports, all the lift's; no sport named; neither library draws from Math.random or carries an address
+12) the deals survive the summer: every draft night deal is played, a second rounder's one season at the minimum
+   1800 draft night deals followed through the summer after them: 46 his own (every one still his, none on his re-sign desk), 1745 on their clubs with the deal less one season, 55 rivals' men waived by the summer's trim; 858 second rounders (30 his) into their one season at the minimum
+11) the judge on known answers: the two arm table's verdict on both sides of every edge of every band
+   79 known answers judged over 7 lines (S1 at 5 two, S1 at 10 range, S2 two, S3 print, S4 floor, S6 dead cap, S6 payers two), the fleet's size and S5's pooled rise; the table's assertion held to 71 verdicts
+7) the table: the old and new arms on the fleet, and the stop lines (FLEET=full plays, COMBINE judges)
+   combined 3600 careers from /tmp/fl: arb, new-bestfirst, new-fatclass, new, old
+   arb run 1 set 1: S1 83.35 / 82.94, S2 108.8, S3 46.3 (n 80), S4 99.4 titles 71.1 (n 180), S6 dead 2.80 payers 2.26, signed a night 60.0
+      S5, worst finish first: 1-5 #4.1 84.6 (47), 6-10 #5.9 83.5 (17), 11-15 #4.4 83.8 (17), 16-20 #3.5 85.0 (20), 21-25 #4.3 84.5 (36), 26-30 #3.9 85.0 (463)
+   arb run 1 set 2: S1 83.29 / 82.90, S2 108.2, S3 55.0 (n 80), S4 99.4 titles 64.4 (n 180), S6 dead 2.88 payers 2.14, signed a night 60.0
+      S5, worst finish first: 1-5 #4.4 84.6 (41), 6-10 #2.7 85.4 (11), 11-15 #4.2 84.3 (20), 16-20 #4.2 84.4 (32), 21-25 #3.5 85.3 (30), 26-30 #3.7 85.0 (466)
+   arb run 1 set 3: S1 83.27 / 82.87, S2 108.6, S3 53.8 (n 80), S4 100.0 titles 66.7 (n 180), S6 dead 3.00 payers 2.16, signed a night 60.0
+      S5, worst finish first: 1-5 #4.0 84.9 (36), 6-10 #4.6 84.4 (22), 11-15 #4.6 84.7 (18), 16-20 #5.5 83.9 (17), 21-25 #4.3 84.5 (44), 26-30 #3.7 85.1 (463)
+   arb run 1 set 4: S1 83.23 / 82.91, S2 107.8, S3 52.5 (n 80), S4 100.0 titles 66.7 (n 180), S6 dead 2.87 payers 2.04, signed a night 60.0
+      S5, worst finish first: 1-5 #4.0 84.4 (40), 6-10 #5.7 84.9 (17), 11-15 #4.1 84.8 (20), 16-20 #3.6 85.4 (17), 21-25 #4.0 84.4 (34), 26-30 #3.9 84.9 (472)
+   new-bestfirst run 1 set 1: S1 83.32 / 83.04, S2 107.4, S3 13.8 (n 80), S4 67.2 titles 6.1 (n 180), S6 dead 2.88 payers 2.49, signed a night 60.0
+      S5, worst finish first: 1-5 #12.0 75.2 (121), 6-10 #8.4 82.3 (88), 11-15 #14.4 78.3 (77), 16-20 #21.3 73.8 (79), 21-25 #21.8 70.7 (104), 26-30 #16.8 71.0 (131)
+   new-bestfirst run 1 set 2: S1 83.29 / 83.04, S2 109.0, S3 18.8 (n 80), S4 68.9 titles 6.7 (n 180), S6 dead 2.82 payers 2.38, signed a night 60.0
+      S5, worst finish first: 1-5 #11.6 76.1 (120), 6-10 #9.1 82.3 (66), 11-15 #15.4 78.0 (81), 16-20 #19.7 74.5 (91), 21-25 #21.1 71.2 (114), 26-30 #16.8 71.3 (128)
+   new-bestfirst run 1 set 3: S1 83.28 / 83.05, S2 109.2, S3 7.5 (n 80), S4 68.9 titles 3.3 (n 180), S6 dead 2.85 payers 2.47, signed a night 60.0
+      S5, worst finish first: 1-5 #12.1 74.6 (134), 6-10 #9.4 81.0 (72), 11-15 #15.9 78.0 (91), 16-20 #20.3 74.3 (90), 21-25 #21.4 71.0 (92), 26-30 #17.0 71.0 (121)
+   new-bestfirst run 1 set 4: S1 83.28 / 83.04, S2 109.2, S3 11.3 (n 80), S4 69.4 titles 9.4 (n 180), S6 dead 2.94 payers 2.50, signed a night 60.0
+      S5, worst finish first: 1-5 #12.7 73.5 (150), 6-10 #8.9 82.3 (69), 11-15 #17.0 77.2 (74), 16-20 #19.4 74.4 (84), 21-25 #21.0 71.7 (83), 26-30 #16.6 70.9 (140)
+   new-fatclass run 1 set 1: S1 85.88 / 87.63, S2 163.1, S3 45.0 (n 80), S4 63.9 titles 3.3 (n 180), S6 dead 1.88 payers 13.09, signed a night 60.0
+      S5, worst finish first: 1-5 #4.2 86.3 (79), 6-10 #7.5 85.9 (58), 11-15 #12.5 85.8 (73), 16-20 #16.7 85.0 (78), 21-25 #23.1 84.0 (107), 26-30 #28.3 82.7 (205)
+   new-fatclass run 1 set 2: S1 85.94 / 87.64, S2 163.4, S3 48.8 (n 80), S4 67.2 titles 9.4 (n 180), S6 dead 1.79 payers 13.26, signed a night 60.0
+      S5, worst finish first: 1-5 #4.7 86.5 (71), 6-10 #8.3 86.0 (76), 11-15 #13.6 85.7 (65), 16-20 #18.0 85.1 (104), 21-25 #22.8 84.2 (113), 26-30 #28.3 82.8 (171)
+   new-fatclass run 1 set 3: S1 85.88 / 87.60, S2 161.9, S3 50.0 (n 80), S4 69.4 titles 4.4 (n 180), S6 dead 1.93 payers 12.98, signed a night 60.0
+      S5, worst finish first: 1-5 #3.9 86.2 (73), 6-10 #7.5 85.8 (55), 11-15 #12.7 85.8 (74), 16-20 #17.8 84.9 (103), 21-25 #23.2 84.1 (119), 26-30 #28.2 82.7 (176)
+   new-fatclass run 1 set 4: S1 85.85 / 87.62, S2 162.7, S3 48.8 (n 80), S4 62.2 titles 5.6 (n 180), S6 dead 1.78 payers 13.14, signed a night 60.0
+      S5, worst finish first: 1-5 #4.4 86.2 (66), 6-10 #7.7 86.1 (73), 11-15 #12.8 85.9 (91), 16-20 #17.6 85.0 (90), 21-25 #22.9 83.9 (85), 26-30 #28.5 82.6 (195)
+   new run 1 set 1: S1 83.38 / 83.17, S2 108.6, S3 46.3 (n 80), S4 60.6 titles 7.2 (n 180), S6 dead 2.98 payers 2.00, signed a night 60.0
+      S5, worst finish first: 1-5 #4.1 84.6 (97), 6-10 #7.0 82.7 (63), 11-15 #12.9 74.9 (85), 16-20 #17.0 71.3 (105), 21-25 #22.9 70.8 (101), 26-30 #28.0 70.2 (149)
+   new run 1 set 10: S1 83.44 / 83.14, S2 108.1, S3 45.0 (n 80), S4 66.1 titles 6.7 (n 180), S6 dead 2.88 payers 1.93, signed a night 60.0
+      S5, worst finish first: 1-5 #4.5 84.9 (80), 6-10 #8.3 81.4 (79), 11-15 #13.0 74.7 (78), 16-20 #17.8 71.2 (102), 21-25 #22.8 70.6 (116), 26-30 #28.1 70.3 (145)
+   new run 1 set 11: S1 83.41 / 83.23, S2 108.1, S3 42.5 (n 80), S4 60.6 titles 1.7 (n 180), S6 dead 3.03 payers 1.99, signed a night 60.0
+      S5, worst finish first: 1-5 #3.7 84.9 (93), 6-10 #8.5 81.7 (66), 11-15 #12.5 75.1 (86), 16-20 #17.5 71.2 (94), 21-25 #22.8 70.8 (102), 26-30 #28.0 70.4 (159)
+   new run 1 set 12: S1 83.36 / 83.18, S2 108.6, S3 46.3 (n 80), S4 70.0 titles 7.8 (n 180), S6 dead 2.88 payers 1.93, signed a night 60.0
+      S5, worst finish first: 1-5 #3.8 84.8 (79), 6-10 #7.5 82.5 (76), 11-15 #13.1 74.7 (70), 16-20 #17.6 70.8 (101), 21-25 #23.0 70.6 (106), 26-30 #28.4 70.2 (168)
+   new run 1 set 2: S1 83.40 / 83.16, S2 108.2, S3 38.8 (n 80), S4 58.9 titles 3.3 (n 180), S6 dead 2.97 payers 1.90, signed a night 60.0
+      S5, worst finish first: 1-5 #3.7 85.0 (88), 6-10 #7.6 82.5 (68), 11-15 #12.8 75.7 (93), 16-20 #17.3 71.3 (94), 21-25 #23.1 70.6 (112), 26-30 #28.2 70.4 (145)
+   new run 1 set 3: S1 83.36 / 83.16, S2 108.5, S3 47.5 (n 80), S4 59.4 titles 6.1 (n 180), S6 dead 2.87 payers 1.97, signed a night 60.0
+      S5, worst finish first: 1-5 #4.2 84.9 (94), 6-10 #7.6 82.3 (75), 11-15 #12.9 75.2 (65), 16-20 #17.4 71.2 (100), 21-25 #22.7 70.5 (128), 26-30 #28.3 70.4 (138)
+   new run 1 set 4: S1 83.33 / 83.17, S2 108.3, S3 45.0 (n 80), S4 66.1 titles 2.8 (n 180), S6 dead 2.91 payers 1.85, signed a night 60.0
+      S5, worst finish first: 1-5 #4.2 84.5 (86), 6-10 #7.7 82.8 (69), 11-15 #13.4 74.9 (85), 16-20 #17.9 71.1 (87), 21-25 #23.0 70.8 (111), 26-30 #28.2 70.3 (162)
+   new run 1 set 5: S1 83.36 / 83.12, S2 106.8, S3 47.5 (n 80), S4 63.9 titles 7.2 (n 180), S6 dead 2.90 payers 1.91, signed a night 60.0
+      S5, worst finish first: 1-5 #4.2 85.0 (87), 6-10 #7.8 82.3 (76), 11-15 #13.2 74.9 (77), 16-20 #17.6 71.2 (114), 21-25 #23.0 70.6 (109), 26-30 #28.2 70.3 (137)
+   new run 1 set 6: S1 83.36 / 83.10, S2 106.8, S3 45.0 (n 80), S4 65.0 titles 6.1 (n 180), S6 dead 2.83 payers 1.86, signed a night 60.0
+      S5, worst finish first: 1-5 #3.9 85.0 (89), 6-10 #7.3 82.8 (68), 11-15 #13.0 74.7 (86), 16-20 #17.6 71.3 (99), 21-25 #22.9 70.6 (111), 26-30 #28.2 70.2 (147)
+   new run 1 set 7: S1 83.39 / 83.13, S2 107.5, S3 40.0 (n 80), S4 67.8 titles 6.7 (n 180), S6 dead 2.86 payers 1.96, signed a night 60.0
+      S5, worst finish first: 1-5 #4.0 84.4 (92), 6-10 #8.0 81.7 (71), 11-15 #13.4 74.7 (92), 16-20 #17.3 71.0 (87), 21-25 #22.9 70.6 (103), 26-30 #28.3 70.5 (155)
+   new run 1 set 8: S1 83.39 / 83.22, S2 109.2, S3 42.5 (n 80), S4 62.2 titles 6.1 (n 180), S6 dead 2.99 payers 1.99, signed a night 60.0
+      S5, worst finish first: 1-5 #3.8 85.0 (70), 6-10 #7.6 82.6 (91), 11-15 #13.1 74.9 (82), 16-20 #17.4 71.4 (76), 21-25 #22.9 70.6 (105), 26-30 #28.1 70.2 (176)
+   new run 1 set 9: S1 83.36 / 83.11, S2 108.0, S3 42.5 (n 80), S4 65.0 titles 3.9 (n 180), S6 dead 2.74 payers 1.87, signed a night 60.0
+      S5, worst finish first: 1-5 #4.1 84.5 (92), 6-10 #7.8 82.4 (76), 11-15 #13.1 74.9 (68), 16-20 #17.2 71.5 (101), 21-25 #23.1 70.7 (99), 26-30 #28.4 70.5 (164)
+   new run 2 set 1: S1 83.37 / 83.17, S2 108.5, S3 41.3 (n 80), S4 61.7 titles 6.1 (n 180), S6 dead 2.98 payers 1.99, signed a night 60.0
+      S5, worst finish first: 1-5 #4.5 84.7 (91), 6-10 #7.4 82.7 (73), 11-15 #13.2 74.9 (80), 16-20 #17.4 71.1 (91), 21-25 #23.2 70.7 (101), 26-30 #28.3 70.4 (164)
+   new run 2 set 10: S1 83.39 / 83.15, S2 109.2, S3 48.8 (n 80), S4 70.0 titles 6.1 (n 180), S6 dead 2.81 payers 1.96, signed a night 60.0
+      S5, worst finish first: 1-5 #4.3 85.0 (67), 6-10 #7.3 82.7 (83), 11-15 #13.0 75.4 (76), 16-20 #17.9 71.2 (93), 21-25 #22.9 70.4 (97), 26-30 #28.0 70.4 (184)
+   new run 2 set 11: S1 83.40 / 83.23, S2 108.7, S3 42.5 (n 80), S4 62.8 titles 3.9 (n 180), S6 dead 3.00 payers 1.99, signed a night 60.0
+      S5, worst finish first: 1-5 #4.1 84.6 (82), 6-10 #8.1 81.9 (82), 11-15 #12.7 74.8 (79), 16-20 #17.7 71.1 (103), 21-25 #22.8 70.8 (100), 26-30 #28.0 70.2 (154)
+   new run 2 set 12: S1 83.37 / 83.14, S2 108.7, S3 45.0 (n 80), S4 63.3 titles 8.3 (n 180), S6 dead 2.95 payers 1.98, signed a night 60.0
+      S5, worst finish first: 1-5 #4.2 84.9 (80), 6-10 #8.1 82.0 (81), 11-15 #12.8 74.7 (74), 16-20 #17.9 70.9 (94), 21-25 #23.0 70.7 (95), 26-30 #28.3 70.3 (176)
+   new run 2 set 2: S1 83.40 / 83.22, S2 108.4, S3 41.3 (n 80), S4 63.9 titles 5.6 (n 180), S6 dead 2.76 payers 1.86, signed a night 60.0
+      S5, worst finish first: 1-5 #3.7 85.2 (96), 6-10 #7.2 82.4 (60), 11-15 #13.0 74.7 (102), 16-20 #17.7 70.9 (95), 21-25 #22.9 70.6 (121), 26-30 #28.3 70.2 (126)
+   new run 2 set 3: S1 83.37 / 83.17, S2 108.8, S3 53.8 (n 80), S4 58.9 titles 5.6 (n 180), S6 dead 2.91 payers 1.95, signed a night 60.0
+      S5, worst finish first: 1-5 #4.4 84.6 (87), 6-10 #8.0 82.0 (73), 11-15 #13.1 75.0 (94), 16-20 #17.8 71.1 (93), 21-25 #22.9 70.6 (101), 26-30 #28.2 70.3 (152)
+   new run 2 set 4: S1 83.36 / 83.19, S2 108.1, S3 43.8 (n 80), S4 67.2 titles 6.1 (n 180), S6 dead 3.01 payers 1.86, signed a night 60.0
+      S5, worst finish first: 1-5 #4.3 84.6 (81), 6-10 #7.5 82.5 (69), 11-15 #12.4 75.5 (81), 16-20 #16.9 71.8 (86), 21-25 #23.2 70.8 (122), 26-30 #28.1 70.3 (161)
+   new run 2 set 5: S1 83.36 / 83.16, S2 108.2, S3 43.8 (n 80), S4 64.4 titles 5.6 (n 180), S6 dead 2.86 payers 1.92, signed a night 60.0
+      S5, worst finish first: 1-5 #4.0 85.2 (81), 6-10 #7.0 83.2 (68), 11-15 #12.1 76.1 (84), 16-20 #17.8 71.0 (94), 21-25 #22.8 70.7 (128), 26-30 #27.9 70.3 (145)
+   new run 2 set 6: S1 83.34 / 83.11, S2 106.8, S3 40.0 (n 80), S4 64.4 titles 4.4 (n 180), S6 dead 2.83 payers 1.91, signed a night 60.0
+      S5, worst finish first: 1-5 #4.1 84.5 (93), 6-10 #8.1 82.3 (68), 11-15 #13.4 74.0 (88), 16-20 #17.6 71.1 (89), 21-25 #23.2 70.7 (108), 26-30 #28.2 70.4 (154)
+   new run 2 set 7: S1 83.38 / 83.14, S2 108.0, S3 37.5 (n 80), S4 70.0 titles 7.2 (n 180), S6 dead 2.83 payers 1.96, signed a night 60.0
+      S5, worst finish first: 1-5 #4.2 84.5 (87), 6-10 #7.3 82.6 (74), 11-15 #13.3 74.5 (74), 16-20 #17.6 71.2 (102), 21-25 #23.0 70.8 (102), 26-30 #28.3 70.3 (161)
+   new run 2 set 8: S1 83.38 / 83.21, S2 108.2, S3 43.8 (n 80), S4 64.4 titles 5.0 (n 180), S6 dead 3.10 payers 1.91, signed a night 60.0
+      S5, worst finish first: 1-5 #4.0 84.7 (84), 6-10 #7.0 82.1 (67), 11-15 #13.0 75.5 (85), 16-20 #17.3 71.4 (82), 21-25 #23.2 70.7 (118), 26-30 #28.3 70.2 (164)
+   new run 2 set 9: S1 83.37 / 83.12, S2 107.7, S3 40.0 (n 80), S4 67.2 titles 6.7 (n 180), S6 dead 2.98 payers 1.90, signed a night 60.0
+      S5, worst finish first: 1-5 #3.8 84.8 (90), 6-10 #6.9 82.9 (69), 11-15 #13.3 75.2 (78), 16-20 #17.6 71.6 (81), 21-25 #22.8 70.6 (108), 26-30 #28.3 70.2 (174)
+   old run 1 set 1: S1 83.13 / 82.21, S2 105.9, S3 81.3 (n 80), S4 100.0 titles 83.3 (n 180), S6 dead 0.12 payers 2.31, signed a night 12.0
+      S5, worst finish first: 1-5 #1.0 85.6 (21), 6-10 #1.0 85.6 (14), 11-15 #1.0 85.9 (9), 16-20 #1.0 86.3 (10), 21-25 #1.0 86.1 (23), 26-30 #1.0 85.9 (523)
+   old run 1 set 10: S1 83.13 / 82.20, S2 106.4, S3 81.3 (n 80), S4 100.0 titles 80.0 (n 180), S6 dead 0.11 payers 2.35, signed a night 12.0
+      S5, worst finish first: 1-5 #1.0 85.4 (25), 6-10 #1.0 86.0 (11), 11-15 #1.0 86.2 (5), 16-20 #1.0 85.9 (17), 21-25 #1.0 85.9 (16), 26-30 #1.0 85.9 (526)
+   old run 1 set 11: S1 83.13 / 82.23, S2 106.5, S3 82.5 (n 80), S4 100.0 titles 79.4 (n 180), S6 dead 0.13 payers 2.29, signed a night 12.0
+      S5, worst finish first: 1-5 #1.0 86.2 (22), 6-10 #1.0 85.7 (12), 11-15 #1.0 86.7 (7), 16-20 #1.0 85.9 (17), 21-25 #1.0 86.0 (21), 26-30 #1.0 85.9 (521)
+   old run 1 set 12: S1 83.10 / 82.19, S2 106.2, S3 83.8 (n 80), S4 100.0 titles 80.6 (n 180), S6 dead 0.12 payers 2.31, signed a night 12.0
+      S5, worst finish first: 1-5 #1.0 86.0 (23), 6-10 #1.0 86.4 (14), 11-15 #1.0 84.8 (8), 16-20 #1.0 85.7 (11), 21-25 #1.0 85.7 (18), 26-30 #1.0 85.9 (526)
+   old run 1 set 2: S1 83.10 / 82.21, S2 105.7, S3 87.5 (n 80), S4 100.0 titles 76.1 (n 180), S6 dead 0.12 payers 2.25, signed a night 12.0
+      S5, worst finish first: 1-5 #1.0 86.1 (22), 6-10 #1.0 86.0 (8), 11-15 #1.0 85.9 (13), 16-20 #1.0 85.8 (14), 21-25 #1.0 86.0 (23), 26-30 #1.0 85.8 (520)
+   old run 1 set 3: S1 83.12 / 82.22, S2 106.1, S3 80.0 (n 80), S4 100.0 titles 73.3 (n 180), S6 dead 0.13 payers 2.30, signed a night 12.0
+      S5, worst finish first: 1-5 #1.0 86.4 (24), 6-10 #1.0 86.3 (10), 11-15 #1.0 86.1 (12), 16-20 #1.0 86.1 (16), 21-25 #1.0 85.8 (21), 26-30 #1.0 85.9 (517)
+   old run 1 set 4: S1 83.10 / 82.23, S2 105.9, S3 81.3 (n 80), S4 100.0 titles 78.3 (n 180), S6 dead 0.15 payers 2.28, signed a night 12.0
+      S5, worst finish first: 1-5 #1.0 86.0 (28), 6-10 #1.0 85.4 (5), 11-15 #1.0 86.4 (13), 16-20 #1.0 85.6 (22), 21-25 #1.0 85.8 (21), 26-30 #1.0 86.0 (511)
+   old run 1 set 5: S1 83.09 / 82.17, S2 106.5, S3 80.0 (n 80), S4 100.0 titles 81.1 (n 180), S6 dead 0.13 payers 2.31, signed a night 12.0
+      S5, worst finish first: 1-5 #1.0 86.0 (24), 6-10 #1.0 85.8 (10), 11-15 #1.0 85.9 (16), 16-20 #1.0 85.8 (12), 21-25 #1.0 85.9 (30), 26-30 #1.0 86.0 (508)
+   old run 1 set 6: S1 83.12 / 82.17, S2 105.2, S3 81.3 (n 80), S4 100.0 titles 78.9 (n 180), S6 dead 0.11 payers 2.22, signed a night 12.0
+      S5, worst finish first: 1-5 #1.0 86.0 (23), 6-10 #1.0 86.1 (10), 11-15 #1.0 86.1 (13), 16-20 #1.0 85.9 (14), 21-25 #1.0 86.4 (16), 26-30 #1.0 86.0 (524)
+   old run 1 set 7: S1 83.11 / 82.19, S2 105.1, S3 78.8 (n 80), S4 100.0 titles 82.2 (n 180), S6 dead 0.13 payers 2.32, signed a night 12.0
+      S5, worst finish first: 1-5 #1.0 86.0 (24), 6-10 #1.0 85.6 (8), 11-15 #1.0 85.9 (14), 16-20 #1.0 86.0 (14), 21-25 #1.0 85.8 (18), 26-30 #1.0 86.0 (522)
+   old run 1 set 8: S1 83.12 / 82.24, S2 105.9, S3 83.8 (n 80), S4 100.0 titles 75.6 (n 180), S6 dead 0.16 payers 2.29, signed a night 12.0
+      S5, worst finish first: 1-5 #1.0 85.7 (23), 6-10 #1.0 86.4 (11), 11-15 #1.0 85.2 (11), 16-20 #1.0 85.4 (17), 21-25 #1.0 85.4 (18), 26-30 #1.0 86.0 (520)
+   old run 1 set 9: S1 83.09 / 82.18, S2 105.0, S3 80.0 (n 80), S4 100.0 titles 77.2 (n 180), S6 dead 0.13 payers 2.27, signed a night 12.0
+      S5, worst finish first: 1-5 #1.0 85.6 (21), 6-10 #1.0 85.6 (19), 11-15 #1.0 85.9 (7), 16-20 #1.0 85.9 (16), 21-25 #1.0 85.7 (13), 26-30 #1.0 86.0 (524)
+   old run 2 set 1: S1 83.12 / 82.18, S2 105.6, S3 80.0 (n 80), S4 100.0 titles 78.9 (n 180), S6 dead 0.14 payers 2.34, signed a night 12.0
+      S5, worst finish first: 1-5 #1.0 86.0 (23), 6-10 #1.0 85.5 (13), 11-15 #1.0 85.2 (9), 16-20 #1.0 86.6 (9), 21-25 #1.0 86.2 (18), 26-30 #1.0 85.9 (528)
+   old run 2 set 10: S1 83.15 / 82.16, S2 106.0, S3 78.8 (n 80), S4 100.0 titles 80.0 (n 180), S6 dead 0.11 payers 2.27, signed a night 12.0
+      S5, worst finish first: 1-5 #1.0 85.7 (25), 6-10 #1.0 85.8 (11), 11-15 #1.0 84.7 (10), 16-20 #1.0 86.3 (15), 21-25 #1.0 85.8 (18), 26-30 #1.0 85.8 (521)
+   old run 2 set 11: S1 83.14 / 82.25, S2 106.5, S3 82.5 (n 80), S4 100.0 titles 78.3 (n 180), S6 dead 0.13 payers 2.38, signed a night 12.0
+      S5, worst finish first: 1-5 #1.0 86.1 (21), 6-10 #1.0 85.8 (12), 11-15 #1.0 86.3 (10), 16-20 #1.0 86.1 (15), 21-25 #1.0 85.5 (25), 26-30 #1.0 85.9 (517)
+   old run 2 set 12: S1 83.10 / 82.19, S2 106.0, S3 85.0 (n 80), S4 100.0 titles 78.9 (n 180), S6 dead 0.12 payers 2.30, signed a night 12.0
+      S5, worst finish first: 1-5 #1.0 86.0 (22), 6-10 #1.0 85.6 (11), 11-15 #1.0 85.6 (14), 16-20 #1.0 85.8 (10), 21-25 #1.0 86.0 (16), 26-30 #1.0 86.0 (527)
+   old run 2 set 2: S1 83.13 / 82.20, S2 106.3, S3 86.3 (n 80), S4 100.0 titles 78.9 (n 180), S6 dead 0.13 payers 2.33, signed a night 12.0
+      S5, worst finish first: 1-5 #1.0 86.0 (23), 6-10 #1.0 85.3 (7), 11-15 #1.0 85.9 (14), 16-20 #1.0 85.9 (15), 21-25 #1.0 86.2 (20), 26-30 #1.0 86.0 (521)
+   old run 2 set 3: S1 83.11 / 82.22, S2 106.5, S3 81.3 (n 80), S4 100.0 titles 75.6 (n 180), S6 dead 0.14 payers 2.33, signed a night 12.0
+      S5, worst finish first: 1-5 #1.0 85.8 (23), 6-10 #1.0 85.8 (10), 11-15 #1.0 86.4 (12), 16-20 #1.0 85.7 (18), 21-25 #1.0 85.8 (15), 26-30 #1.0 85.9 (522)
+   old run 2 set 4: S1 83.08 / 82.18, S2 106.0, S3 78.8 (n 80), S4 100.0 titles 76.7 (n 180), S6 dead 0.16 payers 2.23, signed a night 12.0
+      S5, worst finish first: 1-5 #1.0 85.9 (28), 6-10 #1.0 86.0 (5), 11-15 #1.0 86.0 (16), 16-20 #1.0 86.1 (19), 21-25 #1.0 85.6 (16), 26-30 #1.0 85.9 (516)
+   old run 2 set 5: S1 83.07 / 82.16, S2 105.3, S3 77.5 (n 80), S4 100.0 titles 75.6 (n 180), S6 dead 0.15 payers 2.33, signed a night 12.0
+      S5, worst finish first: 1-5 #1.0 86.0 (22), 6-10 #1.0 85.8 (12), 11-15 #1.0 86.4 (16), 16-20 #1.0 86.2 (13), 21-25 #1.0 85.7 (24), 26-30 #1.0 86.0 (513)
+   old run 2 set 6: S1 83.12 / 82.14, S2 105.7, S3 78.8 (n 80), S4 100.0 titles 75.0 (n 180), S6 dead 0.12 payers 2.19, signed a night 12.0
+      S5, worst finish first: 1-5 #1.0 85.9 (23), 6-10 #1.0 86.1 (14), 11-15 #1.0 86.0 (11), 16-20 #1.0 85.7 (15), 21-25 #1.0 85.8 (13), 26-30 #1.0 86.0 (524)
+   old run 2 set 7: S1 83.13 / 82.18, S2 105.8, S3 80.0 (n 80), S4 100.0 titles 81.7 (n 180), S6 dead 0.15 payers 2.31, signed a night 12.0
+      S5, worst finish first: 1-5 #1.0 85.7 (24), 6-10 #1.0 85.9 (10), 11-15 #1.0 85.5 (12), 16-20 #1.0 85.7 (11), 21-25 #1.0 86.1 (23), 26-30 #1.0 85.9 (520)
+   old run 2 set 8: S1 83.12 / 82.24, S2 106.3, S3 82.5 (n 80), S4 100.0 titles 78.9 (n 180), S6 dead 0.14 payers 2.26, signed a night 12.0
+      S5, worst finish first: 1-5 #1.0 85.7 (23), 6-10 #1.0 86.5 (10), 11-15 #1.0 85.2 (13), 16-20 #1.0 85.8 (19), 21-25 #1.0 85.5 (19), 26-30 #1.0 85.8 (516)
+   old run 2 set 9: S1 83.06 / 82.19, S2 105.8, S3 80.0 (n 80), S4 100.0 titles 75.6 (n 180), S6 dead 0.12 payers 2.25, signed a night 12.0
+      S5, worst finish first: 1-5 #1.0 85.5 (23), 6-10 #1.0 85.7 (17), 11-15 #1.0 86.2 (9), 16-20 #1.0 85.6 (12), 21-25 #1.0 85.1 (17), 26-30 #1.0 85.9 (522)
+   the fleet judged: run 1 4 sets (SHORT: 1 run held by both arms, the fleet is 2; run 1 holds 4 sets in both arms, the fleet is at least 12)
+TABLE BEGIN
+| line | old | new-fatclass | new-fatclass minus old, run by run (error) | the gap between the runs (its error, the gap in errors) | band | sets | verdict |
+|---|---|---|---|---|---|---|---|
+| S1 at 5: mean nbaStrength of the 30 clubs, season 5 tip off | 83.11 | 85.88 | +2.77 (0.02) | one run | within 0.50 | 4 | OUTSIDE by 2.27 (100.1 errors) |
+| S1 at 10: mean nbaStrength of the 30 clubs, season 10 tip off (ruled 2026-10-21: up to +1.5; its lower side of -0.5 confirmed 2026-10-22) | 82.22 | 87.62 | +5.40 (0.01) | one run | from -0.50 to +1.50 | 4 | OUTSIDE by 3.90 (318.2 errors) |
+| S2: men rated 85 or more, season 10 tip off (20 percent of the old arm) | 105.9 | 162.8 | +56.9 (0.4) | one run | within 21.2 | 4 | OUTSIDE by 35.7 (94.7 errors) |
+| S3: two weakest starts' playoff seasons, seasons 2 to 5, per season (ruled 2026-10-21: printed) | 82.5 | 48.1 | -34.4 (1.9) | one run | printed, never asserted | 4 | PRINTED |
+| S4: two strongest starts' playoff seasons, seasons 2 to 10, per season (ruled 2026-10-21: the arm's own, at least 60) | 100.0 | 65.7 | (the arm's own) 65.7 (1.6) | one run | the arm's own at least 60.0 | 4 | NOT TWO RUNS |
+| S6 dead: CPU dead money a season ($M), seasons 2 to 10 (ruled 2026-10-21: under 3.0; cause: CPU firsts 13 to 30 on the engine's four season deal, three played, cut) | 0.13 | 1.84 | (the arm's own) 1.84 (0.04) | one run | the arm's own under 3.00 | 4 | NOT TWO RUNS |
+| S6 payers: tax payers a season, seasons 2 to 10 | 2.29 | 13.12 | +10.83 (0.07) | one run | within 0.50 | 4 | OUTSIDE by 10.33 (146.2 errors) |
+| S5: his first selection later and worse from each band of finish to the next, pooled over every set of both runs (ruled 2026-10-22) | flat (pick 1) | 4 of 4 sets rise at every band (printed, never asserted) | 1-5 to 6-10: pick +3.40 (0.08, 42.8 errors), rating -0.37 (0.07, 5.4 errors), 4 sets; 6-10 to 11-15: pick +5.17 (0.06, 84.9 errors), rating -0.16 (0.07, 2.4 errors), 4 sets; 11-15 to 16-20: pick +4.63 (0.21, 22.5 errors), rating -0.78 (0.07, 11.7 errors), 4 sets; 16-20 to 21-25: pick +5.48 (0.33, 16.8 errors), rating -0.95 (0.06, 16.7 errors), 4 sets; 21-25 to 26-30: pick +5.32 (0.11, 49.3 errors), rating -1.34 (0.04, 30.0 errors), 4 sets | | each step positive by at least 2 of its errors | 4 | PASS |
+TABLE END
+   EVERY ARM ON THE LINES, minus the old arm on the same sets and runs (S4 and S6 dead are the arm's own), pooled:
+   new-fatclass (4 sets): S1 at 5 2.77, S1 at 10 5.40, S2 56.9, S3 -34.4, S4 65.7, S6 dead 1.84, S6 payers 10.83, S5 in 4 of 4 sets
+   arb (4 sets): S1 at 5 0.17, S1 at 10 0.69, S2 2.4, S3 -30.6, S4 99.7, S6 dead 2.89, S6 payers -0.14, S5 in 0 of 4 sets
+   new-bestfirst (4 sets): S1 at 5 0.18, S1 at 10 0.82, S2 2.8, S3 -69.7, S4 68.6, S6 dead 2.87, S6 payers 0.17, S5 in 0 of 4 sets
+   new (24 sets): S1 at 5 0.26, S1 at 10 0.97, S2 2.3, S3 -37.6, S4 64.3, S6 dead 2.91, S6 payers -0.36, S5 in 23 of 24 sets
+   BESIDE THE LINES (pooled, printed, never asserted):
+   strong starts' title share, seasons 2 to 10 (per season): old 78.3, new-fatclass 5.7, arb 67.2, new-bestfirst 6.4, new 5.7
+   strong starts: playoff seasons: old 99.5, new-fatclass 68.8, arb 99.4, new-bestfirst 71.4, new 67.4
+   strong starts: title seasons: old 71.7, new-fatclass 6.5, arb 61.9, new-bestfirst 7.1, new 6.3
+   strong starts: mean wins: old 64.6, new-fatclass 43.1, arb 60.6, new-bestfirst 44.0, new 43.0
+   strong starts: his first selection, pick number: old 1.0, new-fatclass 19.5, arb 3.7, new-bestfirst 16.9, new 19.0
+   strong starts: his first selection, true rating: old 85.9, new-fatclass 84.4, arb 85.1, new-bestfirst 74.3, new 73.9
+   middle starts: playoff seasons: old 94.7, new-fatclass 64.8, arb 91.8, new-bestfirst 66.6, new 60.0
+   middle starts: title seasons: old 63.6, new-fatclass 5.1, arb 47.1, new-bestfirst 4.5, new 3.8
+   middle starts: mean wins: old 61.5, new-fatclass 42.0, arb 56.4, new-bestfirst 43.4, new 41.2
+   middle starts: his first selection, pick number: old 1.0, new-fatclass 17.9, arb 3.7, new-bestfirst 16.6, new 16.8
+   middle starts: his first selection, true rating: old 85.9, new-fatclass 84.6, arb 84.9, new-bestfirst 75.0, new 74.6
+   weak starts: playoff seasons: old 82.6, new-fatclass 64.6, arb 70.8, new-bestfirst 29.1, new 57.9
+   weak starts: title seasons: old 60.3, new-fatclass 7.0, arb 39.5, new-bestfirst 1.5, new 6.1
+   weak starts: mean wins: old 58.7, new-fatclass 41.7, arb 50.7, new-bestfirst 32.4, new 40.7
+   weak starts: his first selection, pick number: old 1.0, new-fatclass 18.4, arb 4.3, new-bestfirst 14.1, new 16.9
+   weak starts: his first selection, true rating: old 85.9, new-fatclass 84.5, arb 84.7, new-bestfirst 74.5, new 75.5
+   the bottom three: in the sixteen within three seasons (percent): old 89.5, new-fatclass 84.0, arb 62.1, new-bestfirst 29.3, new 83.7
+   the bottom three: change in win share after three seasons (points): old 18.8, new-fatclass 14.0, arb 9.9, new-bestfirst 4.3, new 15.3
+   the spread of nbaStrength over the 30 clubs, season 5: old 2.11, new-fatclass 0.91, arb 1.88, new-bestfirst 2.08, new 1.30
+   the spread of nbaStrength over the 30 clubs, season 10: old 2.75, new-fatclass 0.95, arb 2.82, new-bestfirst 2.69, new 1.38
+   the free agent pool's best ten at tip off, seasons 2 to 10: old 78.66, new-fatclass 81.64, arb 77.93, new-bestfirst 78.15, new 77.96
+   his own dead money a season ($M), seasons 2 to 10: old 16.03, new-fatclass 0.20, arb 0.06, new-bestfirst 0.02, new 0.02
+   men signed on a draft night: old 12.0, new-fatclass 60.0, arb 60.0, new-bestfirst 60.0, new 60.0
+   forced swaps of firsts a set (arb only): old 0, new-fatclass 0, arb 578, new-bestfirst 0, new 0
+   CONTROL fatclass on the fleet: outside S1 at 5 by 2.27, 100.1 errors; S1 at 10 by 3.90, 318.2 errors; S2 by 35.7, 94.7 errors; S6 payers by 10.33, 146.2 errors
+   section 1: green
+   section 6: green
+   section 2: green
+   section 3: green
+   section 4: green
+   section 5: green
+   section 8: green
+   section 9: green
+   section 10: green
+   section 12: green
+   section 11: green
+   section 7: green
+   12 sections ran (1, 6, 2, 3, 4, 5, 8, 9, 10, 12, 11, 7), 257658 checks
+simNbaEarnedDraft: CONTROL fatclass FIRED on the fleet: outside S1 at 5 by 2.27, 100.1 errors; S1 at 10 by 3.90, 318.2 errors; S2 by 35.7, 94.7 errors; S6 payers by 10.33, 146.2 errors.
