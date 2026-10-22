@@ -45,6 +45,11 @@ const BOXES = [
   ['Standings', /-\d/],
 ];
 
+/* Round 1535: since the GM desks every hub has nine boxes, the five the walk opens below and the desk's own
+   four (the board's Release AX note, "playFoHub nine boxes"). Each is named, so a missing or extra box fails. */
+const DESK_BOXES = ['Staff', 'Re-sign desk', 'Draft picks', 'Trade desk'];
+const hubBoxes = desk => [...BOXES.map(([word]) => word), desk.play, ...DESK_BOXES];
+
 /** One box on the hub, by the word on it. Boxes only: see the note below. */
 const tile = (page, word) =>
   page.locator('button:has(div.uppercase)').filter({ hasText: new RegExp(word, 'i') }).first();
@@ -68,7 +73,8 @@ for (const desk of DESKS) {
   /* ---- the hub is boxes, and the pills are gone ---- */
   const tiles = page.locator('button:has(div.uppercase)');
   const nTiles = await tiles.count();
-  say(nTiles === 5, `${desk.name}: the hub opens on five boxes (saw ${nTiles})`);
+  const want = hubBoxes(desk);
+  say(nTiles === want.length, `${desk.name}: the hub opens on ${want.length} boxes (saw ${nTiles})`);
   /* The box captions are uppercased by CSS, and CSS uppercase changes what
      innerText returns, so every read of them here is caseless on purpose. */
   const hubText = (await page.locator('body').innerText()).toLowerCase();
@@ -87,7 +93,7 @@ for (const desk of DESKS) {
     }
     return out;
   });
-  say(filled.length === 5 && filled.every(f => f.lines >= 3),
+  say(filled.length === want.length && want.every(w => filled.some(f => f.title.toLowerCase() === w.toLowerCase())) && filled.every(f => f.lines >= 3),
     `${desk.name}: every box carries a fact, not just a label (${filled.map(f => `${f.title}:${f.lines}`).join(' ')})`);
 
   /* ---- nothing hangs off the side at phone width (Round 203's rule) ---- */
@@ -115,7 +121,7 @@ for (const desk of DESKS) {
     say(!!box && box.height >= 30, `${desk.name}: the back control is thumb sized (${Math.round(box?.height ?? 0)}px)`);
     await back.first().click();
     await page.waitForTimeout(400);
-    say(await page.locator('button:has(div.uppercase)').count() === 5, `${desk.name}: back returned to all five boxes`);
+    say(await page.locator('button:has(div.uppercase)').count() === want.length, `${desk.name}: back returned to all ${want.length} boxes`);
   }
 
   /* ---- the play box reaches the button you came for ---- */
@@ -176,4 +182,4 @@ if (failures > 0) {
   console.error(`playFoHub: ${failures} failure${failures === 1 ? '' : 's'}`);
   process.exit(1);
 }
-console.log('playFoHub: green. Four front offices, five live boxes each, every one of them opening what it names.');
+console.log('playFoHub: green. Four front offices, nine live boxes each, and the five the walk opens open what they name.');
