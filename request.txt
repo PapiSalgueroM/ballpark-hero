@@ -1,0 +1,6 @@
+#!build
+#!playwright
+#!serial
+simHomeSearchRecovery: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simHomeSearchRecovery.mjs
+simWritesAreSent: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simWritesAreSent.mjs
+simWritesAreSent-base: git worktree add /tmp/base bac65fb0b >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/base/node_modules && cd /tmp/base && node_modules/.bin/vite build > /tmp/base-build.log 2>&1 && NODE_OPTIONS="--require=/tmp/base/scripts/lib/offlineTransport.cjs" node scripts/simWritesAreSent.mjs
