@@ -559,10 +559,11 @@ export function pitchPlan(input: PitchInput): PitchPlan {
             && !deadWindows.some(w => (w.foul ? over(w.from, w.to, p, p + 2 * BEAT_SPAN) : w.order > order && over(w.from, w.to, p, p + 1e-6)));
           if (drawnHere) { found = p; need = p + BEAT_SPAN; }
         };
-        /* In this order, so every foul staged before a build up could give way is staged exactly where it was: room no
-           build up has to give, then its own place with no build up on it, and only then room a chance's build up gives
-           (only the part of it the foul needs), then its own place over one. Taking the first free instant over a build
-           up cost 189 build ups and showed four more fouls. */
+        /* In this order, so every foul is staged at the instant it was before a build up could give way: room no build
+           up has to give, then its own place with no build up on it, and only then room a chance's build up gives, then
+           its own place over one. A build up that the foul's whistle or free kick runs into gives way to them, so a
+           whistle is never cut short by one (r1521-fx9: 1,295 build ups drawn against 1,483, every whistle held over its
+           spot through the free kick, 1,043 of 1,043 against 855 of 1,039, and four more fouls seen). */
         const firm = (l: Layer) => l.priority >= 2;
         search(firm);
         if (found < 0) here(firm);
