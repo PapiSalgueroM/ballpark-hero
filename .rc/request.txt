@@ -1,0 +1,11 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-cm: node_modules/.bin/vitest run src/lib/clubManager src/test/clubManager src/test/cm --testTimeout=300000 --hookTimeout=120000 2>&1 | tail -8; exit ${PIPESTATUS[0]}
+nat: node scripts/simCmMadeUpNations.mjs
+nat-base: git worktree add -q /tmp/base c1b39364 && BASE_ROOT=/tmp/base node scripts/simCmMadeUpNations.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+simManagerAppealIsolation: node scripts/simManagerAppealIsolation.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+simBoardAsks: node scripts/simBoardAsks.mjs
+simClubManagerALeague: node scripts/simClubManagerALeague.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+simNoRivalNames: node scripts/simNoRivalNames.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+simStorageWrites: node scripts/simStorageWrites.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
