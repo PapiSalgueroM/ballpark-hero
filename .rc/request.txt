@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+#!serial
+guideHeadings: node scripts/simGuideHeadings.mjs --refresh /stadium-tycoon && cp scripts/data/guideHeadingsFrozen.json "$RC_OUT/" && node scripts/simGuideHeadings.mjs
+walk: node scripts/playTycoonScorelines.mjs
+walk-crowd: PLAY_SCORELINES_CONTROL=crowd node scripts/playTycoonScorelines.mjs
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+weight-base: git worktree add /tmp/wb 77c00798 && ln -s "$PWD/node_modules" /tmp/wb/node_modules && cd /tmp/wb && npm run build > "$RC_OUT/wb-build.log" 2>&1 && (node scripts/lib/hostLikeServer.mjs /tmp/wb/dist 4174 > "$RC_OUT/wb-server.log" 2>&1 &) && sleep 3 && SWEEP_OFFLINE=1 BASE=http://localhost:4174 SWEEP_BASE=http://localhost:4174 node scripts/sweepWeight.mjs
