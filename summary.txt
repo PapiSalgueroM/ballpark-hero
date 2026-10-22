@@ -1,0 +1,10 @@
+vitest-conquest exit=0 5s |    Duration  3.86s (transform 623ms, setup 316ms, collect 1.61s, tests 4.50s, environment 1.90s, prepare 542ms)
+simFoRatingOrder exit=0 7s | simFoRatingOrder: green, 52 checks. One number per man: 2163 men, 0 with two numbers (main: 459). Marked on active rosters: 940 (main: 930).
+simConquestNbaArcade exit=0 4s | NBA Arcade: 2 of 2 real hook and board outcomes green
+simConquestScenes exit=0 9s | ALL CONQUEST SCENE CHECKS PASSED
+simTrustCopy exit=0 0s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+simAccessibility exit=0 0s | simAccessibility: all green
+simNoRivalNames exit=0 14s | No rival product names found. 0 findings.
+genConquestKeyStats-check exit=0 0s | players 320, {"printed":146,"no stat for this position":167,"held":2,"no 2025 row":5}, differing from the committed file 0
+simConquestMap exit=0 44s | ALL CONQUEST MAP CHECKS PASSED
+tsc exit=0 66s | 

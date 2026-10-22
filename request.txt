@@ -1,0 +1,10 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-conquest: node_modules/.bin/vitest run src/hooks/useConquestNba.test.tsx src/test/conquestExplore.test.tsx src/test/conquestRegionDetails.test.tsx --testTimeout=300000 --hookTimeout=120000
+simFoRatingOrder: node scripts/simFoRatingOrder.mjs
+simConquestNbaArcade: node scripts/simConquestNbaArcade.mjs
+simConquestMap: node scripts/simConquestMap.mjs
+simConquestScenes: node scripts/simConquestScenes.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+genConquestKeyStats-check: node scripts/genConquestKeyStats.mjs --check
