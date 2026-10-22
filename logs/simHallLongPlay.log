@@ -1,0 +1,23 @@
+1) a greedy museum played past 1e15 saves and loads intact
+   859 of 909 exhibits in 60 days, peak funds 1.45e+17, career 2.49e+18 (26.1s)
+   first save over 1e15 funds on day 3.66, over 1e18 career on day 36.01; 75646 saves past an old ceiling, 0 refused or changed
+   86 exhibits bought at over 1e15, the first afl number 83 for 1.037e+15 on day 3.66
+   every save past both old ceilings loaded with every field intact
+2) a hidden tab: 600 callbacks a minute apart
+   income 3317.25/s; ten hidden hours paid 4.7768e+7, the away rate times eight hours is 4.7768e+7 (x1.000000); meter 28800000 ms
+   watched minute x1.000000 of full rate; 3 h hidden then 7 h closed x1.000000 of one capped absence; 2 h asleep paid as away: true
+   30 hidden wakes a second apart: 30 paid as away, x1.000000 of the away rule, meter 30000 ms
+   visible gaps: 5 s watched, 10 s away (AWAY_AFTER_MS 5000)
+3) fmt past T
+   8 of 8 values exact; the longest label under 1e21 is "1.6Qa"; the last AFL exhibit reads 90Qi
+4) the real hook on fake timers
+   shipped: deep: a save holding 3.20e+16 funds and 4.10e+18 career loaded and was written back with 3.2001e+16
+   shipped: hidden: 600 wakes a minute apart paid x1.000000 of eight hours at the away rate; meter 28800000 ms while hidden; welcome 4.7768e+7
+   shipped: reload: 3 h hidden then 7 h closed paid x1.000000 of one eight hour absence; the note says x1.000000 of it
+   shipped: refused: the bytes were kept aside once, 286 characters
+   shipped: watched: 240 callbacks paid x1.000000000 of a minute at full rate
+   shipped: glance: 30 hidden wakes a second apart paid x0.500000 of 30 watched seconds; meter 30000 ms while hidden
+   shipped: closed after hidden: 9 h hidden then 48 h closed paid x1.000000 of one eight hour absence; the note says x1.000000 of it
+   shipped: stamp: a save written 40 s after the last callback carries lastSeen 0 ms from it; the reload paid the away rule exactly
+   8 of 8 hook tests green
+simHallLongPlay: green

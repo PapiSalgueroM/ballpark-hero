@@ -1,0 +1,5 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+vitest exit=0 3s |    Duration  2.09s (transform 251ms, setup 138ms, collect 396ms, tests 360ms, environment 517ms, prepare 329ms)
+walk3 exit=0 12s | walk3: green
+simHallLongPlay exit=0 28s | simHallLongPlay: green
+tsc exit=0 78s | 
