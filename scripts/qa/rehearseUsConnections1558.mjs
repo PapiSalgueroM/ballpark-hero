@@ -141,9 +141,10 @@ async function scenario(sport, name, driftId) {
   const afterById = new Map(after.map(r => [r.puzzle_id, r]));
   const beforeById = new Map(before.map(r => [r.puzzle_id, r]));
   let rewritten = 0;
+  let overwritten = false;
   for (const id of ids(sport)) {
     const got = afterById.get(id)?.groups_json;
-    if (id === driftId) { if (!same(got, drifted)) fail(`${sport} ${name}: ${id} had drifted and was overwritten anyway`); continue; }
+    if (id === driftId) { if (!same(got, drifted)) { overwritten = true; fail(`${sport} ${name}: ${id} had drifted and was overwritten anyway`); } continue; }
     const now = rows[sport].find(r => r.id === id).now;
     if (same(got, now)) rewritten += 1; else fail(`${sport} ${name}: ${id} does not hold the new board`);
   }
@@ -152,7 +153,7 @@ async function scenario(sport, name, driftId) {
   void beforeById;
   await db.exec(own);
   if (!same(await snapshot(), after)) fail(`${sport} ${name}: a second run changed the table`);
-  console.log(`   ${sport} ${name}: ${before.length} rows, ${poolBefore} valid before and ${poolAfter} after; ${rewritten} rewritten in place${driftId ? `; ${driftId} drifted on purpose and left alone` : ''}`);
+  console.log(`   ${sport} ${name}: ${before.length} rows, ${poolBefore} valid before and ${poolAfter} after; ${rewritten} rewritten in place${driftId ? `; ${driftId} drifted on purpose and ${overwritten ? "OVERWRITTEN" : "left alone"}` : ''}`);
 }
 
 await scenario('baseball', 'seed', 'bconn-016');
