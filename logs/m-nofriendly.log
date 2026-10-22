@@ -1,0 +1,16 @@
+mutrun: nofriendly applied to src/lib/stadiumTycoon.ts
+ src/lib/stadiumTycoon.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+== nofriendly plant exit=1
+
+Node.js v24.21.0
+== nofriendly away exit=0
+         measured: 1,680 seconds away played 0 matchdays, the rule says 1: expected +0 to be 1 // Object.is equality
+         measured: three hours behind another window played no away matchdays: expected 0 to be greater than 0
+         measured: three hours behind another window: the away total reads 24570 and the bank moved 25105, which is 11035.2s of away pay where the rules promise 10800s: expected 10925.274725274725 to be less than 10800.5
+B.counter) negative control: a matchday ends when the match counter moves, the review's overrun on a doctored counter
+         measured: 8 hours in a 14 matchday league away played 14 matchdays, the rule says 13: expected 14 to be 13 // Object.is equality
+   All 6 controls fired exactly where they should, in node and in the real hook.
+   They pay no goal or win bonus, keep what they reach, and the final matchday of every season waits for you.
+   All 6 controls fired exactly where they should, in node and in the real hook.
+MUTATION nofriendly: 1 of 2 checks stayed green

@@ -1,0 +1,20 @@
+mutrun: hookround applied to src/hooks/useStadiumTycoon.ts
+ src/hooks/useStadiumTycoon.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+== hookround away exit=1
+   RED  S2: the hook no longer counts away matchdays as Math.floor(awaySecondsOf(trip, now) / AWAY_MATCHDAY_SEC), so this section is not reading the game's rule
+  FAIL: S2: the hook no longer counts away matchdays as Math.floor(awaySecondsOf(trip, now) / AWAY_MATCHDAY_SEC), so this section is not reading the game's rule
+   FAIL  7 a closed tab plays one matchday per AWAY_MATCHDAY_SEC away, and never the final one
+  FAIL: 7 a closed tab plays one matchday per AWAY_MATCHDAY_SEC away, and never the final one: 1,679 seconds away played 1 matchdays, the rule says 0: expected 1 to be +0 // Object.is equality
+   RED  S2: the hook no longer counts away matchdays as Math.floor(awaySecondsOf(trip, now) / AWAY_MATCHDAY_SEC), so this section is not reading the game's rule
+         measured: 1,680 seconds away played 0 matchdays, the rule says 1: expected +0 to be 1 // Object.is equality
+
+simTycoonAwayMatchdays: 10 failures
+== hookround vaway exit=1
+[31m   [31m×[31m Stadium Tycoon away earnings[2m > [22m7 a closed tab plays one matchday per AWAY_MATCHDAY_SEC away, and never the final one[39m[32m 18[2mms[22m[39m
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/tycoonAway.test.tsx[2m > [22mStadium Tycoon away earnings[2m > [22m7 a closed tab plays one matchday per AWAY_MATCHDAY_SEC away, and never the final one
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m7 passed[39m[22m[90m (8)[39m
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/tycoonAway.test.tsx,title=src/test/tycoonAway.test.tsx > Stadium Tycoon away earnings > 7 a closed tab plays one matchday per AWAY_MATCHDAY_SEC away%2C and never the final one,line=288,column=
+MUTATION hookround: 0 of 2 checks stayed green

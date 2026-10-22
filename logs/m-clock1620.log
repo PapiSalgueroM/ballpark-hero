@@ -1,0 +1,29 @@
+mutrun: clock1620 applied to src/lib/stadiumTycoon.ts
+ src/lib/stadiumTycoon.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+== clock1620 away exit=1
+  FAIL: S2: 1679s away in division 6 played 1 matchdays (the count said 1), the rule says 0
+   FAIL  7 a closed tab plays one matchday per AWAY_MATCHDAY_SEC away, and never the final one
+  FAIL: 7 a closed tab plays one matchday per AWAY_MATCHDAY_SEC away, and never the final one: 1,679 seconds away played 1 matchdays, the rule says 0: expected 1 to be +0 // Object.is equality
+         measured: 1,680 seconds away played 0 matchdays, the rule says 1: expected +0 to be 1 // Object.is equality
+         measured: three hours behind another window played no away matchdays: expected 0 to be greater than 0
+  FAIL: control copy: S2 went red too (1679s away in division 6 played 1 matchdays (the count said 1), the rule says 0)
+
+simTycoonAwayMatchdays: 10 failures
+== clock1620 help exit=1
+   what it measured:
+         measured: AssertionError: a tap that added 3 printed "+3", fmtMoney says "+$3"; a tap that added 3 printed "+3", fmtMoney says "+$3"; a tap that added 3 printed "+3", fmtMoney says "+$3"; a tap that added 3 printed "+3", fmtMoney says "+$3"; a tap th
+         measured: AssertionError: goal paid 2368456072 and no floater read "GOAL 81' +$2.37B"; goal paid 2368456072 and no floater read "GOAL 82' +$2.37B"; goal paid 2368456072 and no floater read "GOAL 83' +$2.37B"; goal paid 2368456072 and no floater read 
+A.nohelp) negative control: the rules no longer open before first play
+         measured: AssertionError: a player with no save was not shown the rules: expected null not to be null
+         measured: AssertionError: the keyboard tap did not pay exactly one tap: expected +0 to be 1 // Object.is equality
+
+simTycoonHelp: 16 failures
+== clock1620 vaway exit=1
+[31m   [31m×[31m Stadium Tycoon away earnings[2m > [22m7 a closed tab plays one matchday per AWAY_MATCHDAY_SEC away, and never the final one[39m[32m 14[2mms[22m[39m
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/tycoonAway.test.tsx[2m > [22mStadium Tycoon away earnings[2m > [22m7 a closed tab plays one matchday per AWAY_MATCHDAY_SEC away, and never the final one
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m7 passed[39m[22m[90m (8)[39m
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/tycoonAway.test.tsx,title=src/test/tycoonAway.test.tsx > Stadium Tycoon away earnings > 7 a closed tab plays one matchday per AWAY_MATCHDAY_SEC away%2C and never the final one,line=288,column=
+MUTATION clock1620: 0 of 3 checks stayed green

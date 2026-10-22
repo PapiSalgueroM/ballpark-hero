@@ -1,0 +1,21 @@
+mutrun: modal30 applied to src/pages/StadiumTycoon.tsx
+ src/pages/StadiumTycoon.tsx | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+== modal30 help exit=1
+   what it measured:
+         measured: AssertionError: a tap that added 3 printed "+3", fmtMoney says "+$3"; a tap that added 3 printed "+3", fmtMoney says "+$3"; a tap that added 3 printed "+3", fmtMoney says "+$3"; a tap that added 3 printed "+3", fmtMoney says "+$3"; a tap th
+         measured: AssertionError: goal paid 2368456072 and no floater read "GOAL 81' +$2.37B"; goal paid 2368456072 and no floater read "GOAL 82' +$2.37B"; goal paid 2368456072 and no floater read "GOAL 83' +$2.37B"; goal paid 2368456072 and no floater read 
+A.nohelp) negative control: the rules no longer open before first play
+         measured: AssertionError: a player with no save was not shown the rules: expected null not to be null
+         measured: AssertionError: the keyboard tap did not pay exactly one tap: expected +0 to be 1 // Object.is equality
+
+simTycoonHelp: 20 failures
+== modal30 vhelp exit=0
+[2m      Tests [22m [1m[32m5 passed[39m[22m[90m (5)[39m
+[2m   Duration [22m 2.14s[2m (transform 443ms, setup 72ms, collect 778ms, tests 529ms, environment 310ms, prepare 69ms)[22m
+
+== modal30 vaway exit=0
+[2m      Tests [22m [1m[32m8 passed[39m[22m[90m (8)[39m
+[2m   Duration [22m 1.38s[2m (transform 206ms, setup 69ms, collect 339ms, tests 229ms, environment 306ms, prepare 72ms)[22m
+
+MUTATION modal30: 2 of 3 checks stayed green

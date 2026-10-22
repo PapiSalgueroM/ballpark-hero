@@ -1,0 +1,24 @@
+mutrun: guidehalf applied to src/data/gameContent/stadiumManagement.ts
+ src/data/gameContent/stadiumManagement.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+== guidehalf help exit=1
+   what it measured:
+         measured: AssertionError: a tap that added 3 printed "+3", fmtMoney says "+$3"; a tap that added 3 printed "+3", fmtMoney says "+$3"; a tap that added 3 printed "+3", fmtMoney says "+$3"; a tap that added 3 printed "+3", fmtMoney says "+$3"; a tap th
+         measured: AssertionError: goal paid 2368456072 and no floater read "GOAL 81' +$2.37B"; goal paid 2368456072 and no floater read "GOAL 82' +$2.37B"; goal paid 2368456072 and no floater read "GOAL 83' +$2.37B"; goal paid 2368456072 and no floater read 
+A.nohelp) negative control: the rules no longer open before first play
+         measured: AssertionError: a player with no save was not shown the rules: expected null not to be null
+         measured: AssertionError: the keyboard tap did not pay exactly one tap: expected +0 to be 1 // Object.is equality
+
+simTycoonHelp: 38 failures
+== guidehalf headings exit=1
+  FAIL: /stadium-tycoon: the rules sentence "Matchdays keep playing while you are away, one for every 28 minutes of..." appears 0 times after the conversion, it must appear once
+  FAIL: /stadium-tycoon: the rules sentence "Matchdays keep playing while you are away, one for every half hour of ..." is not in the frozen original, so it was invented or edited
+4) the saved pages match the render once prerendered
+
+simGuideHeadings: RED, 2 failures in section 1
+== guidehalf search exit=1
+   20/20 non-empty queries answered with something other than the whole catalog
+  FAIL: the guides have changed since the keyword index was built (index 059d146a08395c93, guides now 1e780260af31a794). Rerun: node scripts/genSearchKeywords.mjs
+
+simSiteSearch: 1 failure
+MUTATION guidehalf: 0 of 3 checks stayed green
