@@ -1,0 +1,12 @@
+mutation years applied to src/lib/nbaEarnedDraft.ts
+   11 sections ran (1, 6, 2, 3, 4, 5, 8, 9, 10, 12, 11), 212168 checks
+simNbaEarnedDraft: RED in section 12.
+[31m     → expected [ 1, 2.1, 66 ] to deeply equal [ 2, 2.1, 66 ][39m
+[31m     → expected [ 1, 2.1 ] to deeply equal [ 2, 2.1 ][39m
+[31m     → expected true to be false // Object.is equality[39m
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 3 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/lib/nbaEarnedDraft.test.ts[2m > [22mthe host and the three presses[2m > [22mthe two knobs are one rule for every club, his own included: a second rounder plays one season at the minimum, a man from pick 13 never grows
+[31m[1mAssertionError[22m: expected [ 1, 2.1, 66 ] to deeply equal [ 2, 2.1, 66 ][39m
+[41m[1m FAIL [22m[49m src/lib/nbaEarnedDraft.test.ts[2m > [22mthe host and the three presses[2m > [22mthe staff press is done, and every man of his reaches the re-sign ledger with his round
+[31m[1mAssertionError[22m: expected [ 1, 2.1 ] to deeply equal [ 2, 2.1 ][39m
+MUT years CAUGHT: vitest 1, harness 1
