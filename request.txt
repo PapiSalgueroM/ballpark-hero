@@ -1,0 +1,4 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+earned: node scripts/simNbaEarnedDraft.mjs
+straddle-q: SIM_NBA_EARNED_DRAFT_CONTROL=judgestraddle node scripts/simNbaEarnedDraft.mjs
+rise-q: SIM_NBA_EARNED_DRAFT_CONTROL=judgerise node scripts/simNbaEarnedDraft.mjs

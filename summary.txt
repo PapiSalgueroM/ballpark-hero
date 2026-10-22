@@ -1,0 +1,4 @@
+earned exit=0 26s | simNbaEarnedDraft: green.
+straddle-q exit=1 29s | simNbaEarnedDraft: CONTROL judgestraddle FIRED. Red in section 11 (52 failures).
+rise-q exit=1 19s | simNbaEarnedDraft: CONTROL judgerise FIRED. Red in section 11 (4 failures).
+tsc exit=0 82s | 

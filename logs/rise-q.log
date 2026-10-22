@@ -1,0 +1,18 @@
+NEGATIVE CONTROL ON: judgerise, a copy of this harness with its judge slipped (/home/runner/work/_temp/t-rise-q/simNbaEarnedDraft-judgerise-c8t5Dp/simNbaEarnedDraft.mjs). Sections 11 must go red and no other.
+   section 1: green
+   section 6: green
+   section 2: green
+   section 3: green
+   section 4: green
+   section 5: green
+   section 8: green
+   section 9: green
+   section 10: green
+   section 12: green
+   section 11: 4 failures
+  FAIL [11]: S5, the last rating step 1.4 errors over zero: judged PASS (1-5 to 6-10 pick 38.4 rating 19.2 errors; 6-10 to 11-15 pick 38.4 rating 19.2 errors; 11-15 to 16-20 pick 38.4 rating 19.2 errors; 16-20 to 21-25 pick 38.4 rating 19.2 errors; 21-25 to 26-30 pick 38.4 rating 1.4 errors), the known answer is OUTSIDE
+  FAIL [11]: S5, the last rating step 1.4 errors over zero: the table would hold it on PASS (known answer OUTSIDE)
+  FAIL [11]: S5, the third pick step 1.0 error over zero: judged PASS (1-5 to 6-10 pick 38.4 rating 19.2 errors; 6-10 to 11-15 pick 38.4 rating 19.2 errors; 11-15 to 16-20 pick 1.0 rating 19.2 errors; 16-20 to 21-25 pick 38.4 rating 19.2 errors; 21-25 to 26-30 pick 38.4 rating 19.2 errors), the known answer is OUTSIDE
+  FAIL [11]: S5, the third pick step 1.0 error over zero: the table would hold it on PASS (known answer OUTSIDE)
+   the copy exited 1: simNbaEarnedDraft: RED in section 11.
+simNbaEarnedDraft: CONTROL judgerise FIRED. Red in section 11 (4 failures).
