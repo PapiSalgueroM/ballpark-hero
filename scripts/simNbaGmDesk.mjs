@@ -67,6 +67,8 @@
  *   noruleblock the trade finder's accept skips the pick rules                (3)
  *   dayonestature day one hands your club the staff its size attracts         (5)
  *   sheetrepick the summer picks a let go sheet's club again, after the draft  (2)
+ *   fullbird    restricted free agency asks full Bird rights again, so the earned night's
+ *               one season second rounder comes up unrestricted (Round 1540)  (2)
  * Recording the fixture: SIM_NBA_GM_DESK_RECORD=<git ref of the engine before
  * this round> rewrites scripts/data/nbaGmDeskFixture.json from that engine.
  *
@@ -126,6 +128,30 @@
  * in 5 (3 of 90 clubs played the same under the old anchor too), sheetrepick 34 in 2 (on the
  * walk itself, not only the full draft copies, the summer sent a let go man
  * to another club than the one written down).
+ * Round 1540, 2026-10-22: draft night with the desk on is the earned night the
+ * board now runs (earnedNight above), and restricted free agency follows the
+ * lead's ruling (gmContracts.ts nbaRestricted: his own draftee at the end of
+ * his first deal, whatever its length). Measured on runners r1540-rule-c, d, f
+ * and g (head 82b60919), sets 1..10 / 11..20 / 21..30, under this file's own
+ * name (seedRandom seeds the stream from the file name):
+ *   expiring men decided   645 / 604 / 597   (by the GM 349 / 324 / 320, by the staff's rule 296 / 280 / 277)
+ *   draftees come up       first rounders 60 / 60 / 59 after exactly four seasons, second rounders
+ *                          111 / 89 / 93 after exactly NBA_SECOND_ROUND_SEASONS (one)
+ *   restricted cases       171 / 149 / 152, sheets 26 / 18 / 17 (matched 7 / 4 / 6, gone to the
+ *                          club written down on its terms 7 / 4 / 5; full draft copies 7 / 4 / 5)
+ * Three floors in T were measured on the old desk and fail here: minSheets 34,
+ * minSheetGone 11 and minSheetFull 11. STOP FOR THE LEAD (critic 1540
+ * correction 10 c, the lead's ruling item 4): never re-banded by a builder.
+ * On fresh streams (copies under other names, SIM_SEED 1..9) sheets ran 14 to
+ * 27 and gone 3 to 10, so 70 percent of the lowest would be 9, 2 and 2. Twice
+ * in about 40 runs check 2 also failed on its own assertion, a man let go on a
+ * sheet "is at no rival club" (SIM_SEED 6 seed 10 season 2; the noinjhook
+ * control's stream, seed 3 season 4): he was neither at the club written down
+ * nor in the pool after the summer, and the club ended it at fifteen with its
+ * lowest man at 68, so its summer waiver of the lowest man is the likely cause
+ * (not traced further). Control fullbird (full Bird rights asked again) fires
+ * 115 failures in check 2 alone on set 1, every one "is not restricted", with
+ * 60 restricted cases and 6 sheets: the numbers before the ruling.
  */
 import './lib/seedRandom.mjs';
 import fs from 'node:fs';
@@ -148,7 +174,7 @@ const CONTROLS = {
   coinflip: '2', shortscale: '2', norfa: '2', latetrade: '3', noguard: '3', droppick: '4',
   flatstaff: '5', flatgrowth: '5', nodefault: '1', pilefit: '6',
   noedgeround: '5', noedgepo: '5', noinjhook: '5', nomirror: '4', nostepien: '4', noruleblock: '3',
-  sheetrepick: '2', dayonestature: '5',
+  sheetrepick: '2', dayonestature: '5', fullbird: '2',
 };
 if (CONTROL && !CONTROLS[CONTROL]) {
   console.error(`SIM_NBA_GM_DESK_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(CONTROLS).join(', ')})`);
@@ -231,6 +257,8 @@ const EDITS = {
   /* Day one hands the user's club the staff its size attracts, an edge the other clubs never get. */
   dayonestature: ['desk', '  block: gmDefaultStaff(NBA_STAFF_PACK.rules, { ...nbaStaffCtx(league, team), anchor: () => 1 }),', '  block: gmDefaultStaff(NBA_STAFF_PACK.rules, nbaStaffCtx(league, team)),'],
   sheetrepick: ['contracts', '        ? (named ?? sheetClubFor(host, league, ledger.team, man.id)) : null;', '        ? sheetClubFor(host, league, ledger.team, man.id) : null;'],
+  /* nbaRestricted as it was before the lead's ruling of 2026-10-22: full Bird rights or no restricted free agency. */
+  fullbird: ['contracts', '  if (service == null) return false;', "  if (service == null || birdTier(ledger, league, man) !== 'full') return false;"],
 };
 const overrides = new Map();
 if (CONTROL) {
@@ -260,6 +288,7 @@ const BUNDLE = `${WORK}/bundle.cjs`;
 fs.writeFileSync(ENTRY, `
 export * as E from '${ROOT_URL}/src/lib/nbaFrontOffice.ts';
 export * as D from '${ROOT_URL}/src/lib/nbaGmDesk.ts';
+export * as N from '${ROOT_URL}/src/lib/nbaEarnedDraft.ts';
 export * as C from '${ROOT_URL}/src/lib/gmContracts.ts';
 export * as P from '${ROOT_URL}/src/lib/gmPicks.ts';
 export * as S from '${ROOT_URL}/src/lib/gmStaff.ts';
@@ -298,7 +327,7 @@ await esbuild.build({
   }
 }
 const M = createRequire(import.meta.url)(BUNDLE);
-const { E, D, C, P, S, G, F, NBA_STAFF_PACK, nbaContractHost: HOST, leagueNames, NBA_OPENING_RATINGS, nbaCloseSeasonStats } = M;
+const { E, D, N, C, P, S, G, F, NBA_STAFF_PACK, nbaContractHost: HOST, leagueNames, NBA_OPENING_RATINGS, nbaCloseSeasonStats } = M;
 
 /* ---- seeded draws and the board's own call order ---- */
 function mulberry32(seed) {
@@ -327,8 +356,41 @@ function trimForTipOff(lg, team) {
   }
 }
 
-/** Draft night as the board runs it: the user takes the best grade he sees, the CPU clubs go in batches. */
-function draftNight(lg, team, rng, desk) {
+/** Round 1540: draft night with the desk on, as the board now runs it: the earned night of nbaEarnedDraft.ts, opened
+    on the season's own playoff field, the class drawn once, Continue, then at each of his slots the best man on his
+    scout's read, to the end (the way simNbaEarnedDraft's NEW arm drives the libraries). Each of his draftees is
+    written down with the round of his slot and `earned`, so check 2 reads his first deal's length from the knobs.
+    Null when no night opens, and the old draft below runs, as on the board. */
+function earnedNight(lg, team, rng, desk, series) {
+  const opened = N.openNbaDraftNight(desk, lg, series, team);
+  if (!opened) return null;
+  desk = opened.desk;
+  const roundOf = new Map(opened.night.slots.map(s => [s.overall, s.round]));
+  let cls = E.nbaEarnedDraftClass(rng, opened.night.slots.length, leagueNames(lg));
+  let press = N.nbaDraftContinue(lg, desk, team, cls, rng);
+  for (let i = 0; i < 70 && press; i += 1) {
+    desk = press.desk;
+    cls = press.left;
+    for (const s of press.steps.filter(x => x.mine)) {
+      const man = lg.teams[team].players.find(p => p.name === s.playerName);
+      if (man) draftedIn.set(man.id, { season: lg.season, round: roundOf.get(s.overall), earned: true });
+    }
+    if (press.done) return desk;
+    const level = S.gmStaffLevel(D.nbaStaffOf(desk, lg, team).block, 'scouting');
+    const read = pr => D.nbaScoutRead(pr, team, lg.season, level);
+    const best = [...cls].sort((a, b) => read(b) - read(a) || a.id.localeCompare(b.id))[0];
+    press = best ? N.nbaDraftPick(lg, desk, team, cls, best.id, rng) : N.nbaDraftByStaff(lg, desk, team, cls, rng);
+  }
+  throw new Error('the earned night did not reach its end');
+}
+
+/** Draft night as the board runs it: the user takes the best grade he sees, the CPU clubs go in batches. With the
+    desk on and the season's series handed in, the earned night above (Round 1540). */
+function draftNight(lg, team, rng, desk, series = null) {
+  if (desk && series) {
+    const earned = earnedNight(lg, team, rng, desk, series);
+    if (earned) return earned;
+  }
   const mine = lg.teams[team];
   const capital = E.nbaDraftCapital(mine) ?? 0;
   const rivalCapital = Object.values(lg.teams).filter(t => t.abbr !== team).reduce((s, t) => s + (E.nbaDraftCapital(t) ?? 0), 0);
@@ -363,12 +425,14 @@ function draftNight(lg, team, rng, desk) {
   return desk;
 }
 
-/** The close of a season as the board runs it: the playoffs, the champion, the tax and the season's lines. */
+/** The close of a season as the board runs it: the playoffs, the champion, the tax and the season's lines. Answers
+    the playoffs' series, which the earned night opens on (Round 1540; check 1 ignores it). */
 function closeSeason(lg, rng, edges) {
   const po = E.runNbaPlayoffs(lg, rng, edges);
   lg.champions.push({ season: lg.season, team: po.champion });
   E.nbaAssessTax(lg);
   nbaCloseSeasonStats(lg);
+  return po.series;
 }
 
 /** A season with the desk off: the exact calls the board makes on a save from before the desk. */
@@ -608,21 +672,24 @@ function seasonDesk(lg, team, desk, rng, s, where) {
     if (lg.round >= E.NBA_ROUNDS) break;
     lg.round += 1;
   }
-  closeSeason(lg, rng, D.nbaDeskEdges(desk, lg, team));
+  const series = closeSeason(lg, rng, D.nbaDeskEdges(desk, lg, team));
   /* The board's order: the re-sign desk is offered in the season and on the
      recap, before draft night, and finishDraft runs the summer straight after
      the last pick. So the GM decides first and the clubs draft after him. */
   desk = gmDecides(lg, team, desk, where);
-  desk = draftNight(lg, team, rng, desk);
+  desk = draftNight(lg, team, rng, desk, series);
   const closed = lg.season;
   const up = C.expiringMen(HOST, lg, team).map(m => ({ id: m.id, name: m.name }));
   /* A man drafted with the desk on comes up when his first deal has run: the
-     rookie scale's four seasons in round one, the engine's three in round two. */
+     rookie scale's four seasons in round one, the engine's three in round two.
+     Round 1540: on the earned night a second rounder signs the league wide
+     knob's deal instead, NBA_SECOND_ROUND_SEASONS at the minimum (written with
+     the summer's season on top, so he comes up after exactly those seasons). */
   const upIds = new Set(up.map(m => m.id));
   const rosterNow = new Set(lg.teams[team].players.map(p => p.id));
   for (const [id, at] of [...draftedIn]) {
     const playedHere = closed - at.season;
-    const want = at.round === 1 ? 4 : 3;
+    const want = at.round === 1 ? 4 : at.earned && N.NBA_DRAFT_KNOBS.secondOnMin ? N.NBA_SECOND_ROUND_SEASONS : 3;
     if (!rosterNow.has(id)) { if (playedHere >= want) draftedIn.delete(id); continue; }
     if (upIds.has(id)) {
       if (at.round === 1) stats.scaleUp++; else stats.secondUp++;
@@ -690,8 +757,8 @@ for (const seed of SEEDS) {
       if (lg.round >= E.NBA_ROUNDS) break;
       lg.round += 1;
     }
-    closeSeason(lg, rng, D.nbaDeskEdges(desk, lg, TEAM));
-    desk = draftNight(lg, TEAM, rng, desk);
+    const series = closeSeason(lg, rng, D.nbaDeskEdges(desk, lg, TEAM));
+    desk = draftNight(lg, TEAM, rng, desk, series);
     const summer = D.nbaDeskOffseason(lg, desk, TEAM, rng);
     if (!summer.ok) { problems.s4.push(`${where}: the desk summer refused to run (${summer.lines.join(' ')})`); break; }
     desk = summer.desk;
