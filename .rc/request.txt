@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+#!serial
+playStorageBlocked: node scripts/playStorageBlocked.mjs
+playStorageBlocked-open: PLAY_STORAGE_CONTROL=open node scripts/playStorageBlocked.mjs
+playUsCareerSaveSeam: node scripts/playUsCareerSaveSeam.mjs
+boxing-fonts: node scripts/playBoxingShowForecast1086.mjs --prefetch-fonts-only 2>&1 | tail -3
+playBoxingShowForecast1086: node scripts/playBoxingShowForecast1086.mjs
+playTranslatedPage: node scripts/playTranslatedPage.mjs
