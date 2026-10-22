@@ -199,7 +199,7 @@ globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: 
 
 /* ─── section 0: the unit file, in a vitest child ─── */
 const UNIT = 'src/lib/usCareerShopPromises.test.ts';
-const UNIT_ROWS = 28;
+const UNIT_ROWS = 32;
 if (runs('0')) {
   console.log(`0) ${UNIT} in a vitest child`);
   const report = path.join(TMP, 'unit.json');
