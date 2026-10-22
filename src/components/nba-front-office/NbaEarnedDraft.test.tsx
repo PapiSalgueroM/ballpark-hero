@@ -6,7 +6,8 @@
  * old draft; (c) he holds pick 1, and pick 60; (d) he holds no pick, and an emptied class; (e) a traded first and a
  * bought first; (f) a night broken mid draft finishes the old way; (g) reloads at the card and on the clock;
  * (h) two presses in one act; (i) the heading "?" over the stage; (j) every slot used and the summer not run;
- * (k) abandoning the franchise. A summer the desk refuses cannot be built from the engine (runDeskOffseason ends
+ * (k) abandoning the franchise; (l) the copy of the league each press is handed, and his board best first on his
+ * scout's read (review 1540, run m2 and m6). A summer the desk refuses cannot be built from the engine (runDeskOffseason ends
  * every man's case before it checks), so (j) plants the state such a refusal leaves.
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -24,6 +25,14 @@ vi.mock('@/hooks/useGameCompletion', () => ({ useGameCompletion: () => undefined
 vi.mock('@/lib/completions', () => ({ recordActivity: () => undefined }));
 vi.mock('@/components/game/ShareButtons', () => ({ default: () => null }));
 vi.mock('@/hooks/useRevealScroll', () => ({ useRevealScroll: () => ({ current: null }) }));
+/* The three presses pass straight through; each keeps the league it was handed, so case (l) can hold the copy the
+   board must hand them (brief 1540 3.10: the presses mutate what they are handed; review 1540 run m2). */
+const handed = vi.hoisted(() => [] as unknown[]);
+vi.mock('@/lib/nbaEarnedDraft', async importOriginal => {
+  const real = await importOriginal<typeof import('@/lib/nbaEarnedDraft')>();
+  const keep = <A extends unknown[], R>(f: (...a: A) => R) => (...a: A): R => { handed.push(a[0]); return f(...a); };
+  return { ...real, nbaDraftContinue: keep(real.nbaDraftContinue), nbaDraftPick: keep(real.nbaDraftPick), nbaDraftByStaff: keep(real.nbaDraftByStaff) };
+});
 import NbaFrontOfficeBoard from '@/components/nba-front-office/NbaFrontOfficeBoard';
 
 vi.setConfig({ testTimeout: 180_000 });
@@ -322,5 +331,26 @@ describe('the earned draft night on the NBA board', () => {
     expect(localStorage.getItem(KEY)).toBeNull();
     expect($('[data-gm-earned-draft]')).toBeNull();
     expect(document.body.textContent).toContain('Take over a front office');
+  });
+
+  it('(l) each press hands the library its own copy of the league, and his board runs best first on his scout\'s read', async () => {
+    const b = closedSave(11, ids => ids[2]);
+    mount(b.save);
+    await goToDraft();
+    /* The grades on his buttons are his scout's reads, so best first is a run that never rises (review 1540 run
+       m6: a board sorted by the true rating passed every other case here). */
+    const grades = () => [...document.querySelectorAll('[data-gm-draft-choice]')].map(x => Number(x.lastElementChild?.textContent));
+    handed.length = 0;
+    press('[data-lottery-continue]');
+    expect(grades()).toHaveLength(14);
+    expect(grades()).toEqual([...grades()].sort((x, y) => y - x));
+    press('[data-gm-draft-choice]');
+    expect(grades()).toEqual([...grades()].sort((x, y) => y - x));
+    press('[data-gm-draft-staff]');
+    expect(saved().phase).toBe('hub');
+    /* Three presses, three leagues, none of them handed twice: a press handed the board's own league would mutate
+       it in place and hand the same object to the next press. */
+    expect(handed).toHaveLength(3);
+    expect(new Set(handed).size).toBe(3);
   });
 });
