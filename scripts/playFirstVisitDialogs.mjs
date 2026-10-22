@@ -61,7 +61,9 @@
  * over 200 seeded streams before any page opens. It is walked at the three widths with the banner pending and judged by
  * the same checks, and it also FAILS when no dialog opens, when the top dialog is not "While you were away", when the
  * picked button is not "Back to work", and when scrollY or the document height move between the card measured and the
- * card closed. A card that draws less than its full content ABORTS the run (exit 2). The answered banner case is not a
+ * card closed. A card that draws less than its full content ABORTS the run (exit 2), and that abort, unlike the others,
+ * is a page defect until shown otherwise (its line says so: the plant drew the full card in node first), so a gate
+ * never reruns it as a flake. The answered banner case is not a
  * line here (the walk refuses a line with no banner on screen); Round 1536's probe measured it once, box 214 to 630 at
  * 390 by 844. PLAYFIRST_CONTROL=stale plants the scenes' saves fresh, so no card can open, and every seeded line must
  * fail as "opened no card". PLAYFIRST_CONTROL=jump makes the scene's button also push the page 40 px, and every tapped
@@ -450,8 +452,11 @@ if (process.env.PLAYFIRST_JSON) fs.writeFileSync(process.env.PLAYFIRST_JSON, JSO
 console.log('');
 const seeded = results.filter(r => r.scene);
 console.log(`${results.length} route widths walked over ${routes.length} routes${seeded.length ? ` and ${sceneRuns.length} seeded scene${sceneRuns.length === 1 ? '' : 's'} (${seeded.length} of the lines)` : ''}: ${passed} dialogs tapped and closed, ${expected} expected site reds, ${none} without a first visit dialog, ${failures.length} red`);
+/* Exit 2 as the brief's design asked (a smaller card is never measured), but this abort is NOT the environment: the
+   plant already drew the full card in node on 200 of 200 seeded streams, so a short count or a missing line is the
+   page's until shown otherwise (a mutation that drops the "final matchday" line lands here). The line says so. */
 if (sceneAborted.length) {
-  console.log(`playFirstVisitDialogs ABORTED: the planted trip did not draw the full card on ${sceneAborted.length} line${sceneAborted.length === 1 ? '' : 's'}, so they would measure a smaller card: ${sceneAborted.join('; ')}`);
+  console.log(`playFirstVisitDialogs ABORTED: the planted trip did not draw the full card on ${sceneAborted.length} line${sceneAborted.length === 1 ? '' : 's'}, so they would measure a smaller card. A PAGE DEFECT until shown otherwise, not the environment: node drew this plant's full card on 200 of 200 seeded streams: ${sceneAborted.join('; ')}`);
   process.exit(2);
 }
 /* PLAYFIRST_CONTROL=stale plants every scene's save fresh, so no away settle can open its card: every seeded line must
