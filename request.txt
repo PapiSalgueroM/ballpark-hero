@@ -1,0 +1,18 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/fightCareerRetireBoard.test.tsx src/lib/fightGym.test.ts src/lib/fightPromoter.test.ts src/lib/fightCareerLife.test.ts src/test/boxingShowForecast.test.tsx src/test/fightCareerLifeBoard.test.tsx src/test/fightCareerRingPlayback.test.tsx src/test/noDoubleRecord.test.tsx --testTimeout=300000 --hookTimeout=120000
+simFightIds: node scripts/simFightIds.mjs
+ids-nolift: FIGHT_IDS_CONTROL=nolift node scripts/simFightIds.mjs
+simFightCareerRetire: node scripts/simFightCareerRetire.mjs
+retire-gate1: RETIRE_CONTROL=gate1 node scripts/simFightCareerRetire.mjs
+retire-keyseed: RETIRE_CONTROL=keyseed node scripts/simFightCareerRetire.mjs
+retire-copy: RETIRE_CONTROL=copy node scripts/simFightCareerRetire.mjs
+simFightCareer: node scripts/simFightCareer.mjs
+simFightGym: node scripts/simFightGym.mjs
+simFightPromoter: node scripts/simFightPromoter.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+simSaveFence: node scripts/simSaveFence.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
