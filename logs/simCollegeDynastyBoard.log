@@ -1,0 +1,9 @@
+1) the fixture is whole: a named sha, both sports, every station of the scripted path
+   cfb: 104 steps, 78 stations, 0 missing, 0 steps short of a field, 9471 draws at the end
+   cbb: 100 steps, 78 stations, 0 missing, 0 steps short of a field, 9492 draws at the end
+2) the replay: both boards match every recorded step
+   vitest exit 0, 4 passed (4)
+   cfb: green, the athletic director set aside honestly: green
+   cbb: green, the athletic director set aside honestly: green
+
+simCollegeDynastyBoard: all green
