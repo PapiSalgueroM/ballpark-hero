@@ -1,0 +1,4 @@
+#!build
+#!playwright
+#!serial
+money-render-msg: rm -rf tycoon-money-display-artifacts; node .rc/x/mutfix.mjs render && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonMoneyDisplay.mjs > /tmp/mr.log 2>&1; s=$?; grep -nE "AssertionError|Unique|message:" /tmp/mr.log | head -6 | cut -c1-240; git checkout -- src scripts; echo "money-render exit=$s"; exit $s

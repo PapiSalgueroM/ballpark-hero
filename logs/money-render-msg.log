@@ -1,0 +1,3 @@
+MUT ok render src/pages/StadiumTycoon.tsx lines 1004 -> 1004
+5:AssertionError [ERR_ASSERTION]: Unique floater render site
+money-render exit=1
