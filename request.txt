@@ -1,0 +1,26 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+s1: node scripts/simCareerIntl.mjs
+s5: INTL_SECTIONS=5 node scripts/simCareerIntl.mjs
+s8: INTL_SECTIONS=8 node scripts/simCareerIntl.mjs
+s7-800: mkdir -p /tmp/bs && git archive e3deb2cb3 | tar -x -C /tmp/bs && INTL_BASE_DIR=/tmp/bs INTL_SECTIONS=7 INTL_FLEET=800 node scripts/simCareerIntl.mjs
+unit: node_modules/.bin/vitest run src/lib/careerIntl.test.ts src/test/nbaCareerIntl.test.ts src/test/usCareerTruthDigest.test.ts src/test/usBoardFixture.test.tsx src/test/nbaTrophyTile.test.ts --testTimeout=300000 --hookTimeout=120000
+ctl-onesource: INTL_SECTIONS=1 INTL_CONTROL=onesource node scripts/simCareerIntl.mjs
+ctl-shiftyear: INTL_SECTIONS=2 INTL_CONTROL=shiftyear node scripts/simCareerIntl.mjs
+ctl-seasonyear: INTL_SECTIONS=2 INTL_CONTROL=seasonyear node scripts/simCareerIntl.mjs
+ctl-dupnation: INTL_SECTIONS=3 INTL_CONTROL=dupnation node scripts/simCareerIntl.mjs
+ctl-fieldsize: INTL_SECTIONS=3 INTL_CONTROL=fieldsize node scripts/simCareerIntl.mjs
+ctl-genfield: INTL_SECTIONS=3 INTL_CONTROL=genfield node scripts/simCareerIntl.mjs
+ctl-anyyear: INTL_SECTIONS=4 INTL_CONTROL=anyyear node scripts/simCareerIntl.mjs
+ctl-lowbar: INTL_SECTIONS=4 INTL_CONTROL=lowbar node scripts/simCareerIntl.mjs
+ctl-nolift: INTL_SECTIONS=5 INTL_CONTROL=nolift node scripts/simCareerIntl.mjs
+ctl-nobronze: INTL_SECTIONS=5 INTL_CONTROL=nobronze node scripts/simCareerIntl.mjs
+ctl-copy: INTL_SECTIONS=6 INTL_CONTROL=copy node scripts/simCareerIntl.mjs
+ctl-mathrandom: INTL_SECTIONS=6 INTL_CONTROL=mathrandom node scripts/simCareerIntl.mjs
+ctl-norepair: INTL_SECTIONS=8 INTL_CONTROL=norepair node scripts/simCareerIntl.mjs
+ctl-legacyreads: mkdir -p /tmp/bs-l && git archive e3deb2cb3 | tar -x -C /tmp/bs-l && INTL_BASE_DIR=/tmp/bs-l INTL_SECTIONS=7 INTL_CONTROL=legacyreads node scripts/simCareerIntl.mjs
+ctl-restwrites: mkdir -p /tmp/bs-r && git archive e3deb2cb3 | tar -x -C /tmp/bs-r && INTL_BASE_DIR=/tmp/bs-r INTL_SECTIONS=7 INTL_CONTROL=restwrites node scripts/simCareerIntl.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simUsCareerWeight: node scripts/simUsCareerWeight.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs

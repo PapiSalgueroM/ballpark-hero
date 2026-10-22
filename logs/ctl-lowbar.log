@@ -1,0 +1,21 @@
+NEGATIVE CONTROL lowbar: the bar is five points lower in the bind (section 4 must fail)
+sections 2b and 4: the call, 400 careers an era through the real NBA engine
+  FAIL [4] now 0 summer 2031: ovr 82 age 25 health 100 edition wc-2031, called true, the oracle says false
+  FAIL [4] now 0 summer 2032: ovr 83 age 26 health 100 edition oly-2032, called true, the oracle says false
+  FAIL [4] now 1 summer 2031: ovr 81 age 25 health 100 edition wc-2031, called true, the oracle says false
+  FAIL [4] now 1 summer 2032: ovr 82 age 26 health 100 edition oly-2032, called true, the oracle says false
+  FAIL [4] now 1 summer 2040: ovr 84 age 34 health 87 edition oly-2040, called true, the oracle says false
+  FAIL [4] now 2 summer 2032: ovr 82 age 25 health 100 edition oly-2032, called true, the oracle says false
+  FAIL [4] now 2 summer 2035: ovr 85 age 28 health 98 edition wc-2035, called true, the oracle says false
+  FAIL [4] now 2 summer 2043: ovr 85 age 36 health 94 edition wc-2043, called true, the oracle says false
+  FAIL [4] now 3 summer 2031: ovr 82 age 25 health 100 edition wc-2031, called true, the oracle says false
+  FAIL [4] now 3 summer 2032: ovr 83 age 26 health 100 edition oly-2032, called true, the oracle says false
+  FAIL [4] now 3 summer 2035: ovr 84 age 29 health 94 edition wc-2035, called true, the oracle says false
+  FAIL [4] now 3 summer 2040: ovr 84 age 34 health 85 edition oly-2040, called true, the oracle says false
+  now: 400 careers, 7337 summers, first summer 2027; called at least once 382 (95.5 percent), 1960 calls (4.90 a career, 5.13 a called career)
+  now: share of careers ever called if the bar were 84 to 92: 84 75.3, 85 66.3, 86 57.5, 87 48.8, 88 37.3, 89 27.0, 90 19.0, 91 11.5, 92 5.3
+  now: 851 edition summers rated 86 or more; held back by health under 50: 3 (0.4 percent), by age over 36: 6
+  y2004: 400 careers, 7324 summers, first summer 2004; called at least once 384 (96.0 percent), 1867 calls (4.67 a career, 4.86 a called career)
+  y2004: share of careers ever called if the bar were 84 to 92: 84 81.3, 85 69.8, 86 59.5, 87 47.3, 88 37.3, 89 28.5, 90 19.5, 91 12.3, 92 4.5
+  y2004: 811 edition summers rated 86 or more; held back by health under 50: 2 (0.2 percent), by age over 36: 5
+simCareerIntl: control lowbar FIRED (section 4, 2181 failures)

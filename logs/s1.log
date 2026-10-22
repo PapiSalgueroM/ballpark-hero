@@ -1,0 +1,18 @@
+section 1: the ledger
+  69 facts, 165 reads, partial: oly-2028 oly-2032 wc-2027 wc-2031
+section 2: the calendar
+  2004 to 2050: 23 summers with an edition, 24 without
+  oly-2004 - wc-2006 - oly-2008 - wc-2010 - oly-2012 - wc-2014 - oly-2016 - - wc-2019 - oly-2021 - wc-2023 oly-2024 - - wc-2027 oly-2028 - - wc-2031 oly-2032 - - wc-2035 oly-2036 - - wc-2039 oly-2040 - - wc-2043 oly-2044 - - wc-2047 oly-2048 - -
+section 3: the fields
+  11 played fields, 47 nations, no flag: Puerto Rico, Serbia and Montenegro
+  12 summers 2025 to 2050 draw their field (the same for every career)
+section 6: one engine and the stream
+  1575 src files fenced, 60 tournaments played twice, Math.random calls 0
+sections 2b and 4: the call, 400 careers an era through the real NBA engine
+  now: 400 careers, 7337 summers, first summer 2027; called at least once 230 (57.5 percent), 842 calls (2.10 a career, 3.66 a called career)
+  now: share of careers ever called if the bar were 84 to 92: 84 75.3, 85 66.3, 86 57.5, 87 48.8, 88 37.3, 89 27.0, 90 19.0, 91 11.5, 92 5.3
+  now: 851 edition summers rated 86 or more; held back by health under 50: 3 (0.4 percent), by age over 36: 6
+  y2004: 400 careers, 7324 summers, first summer 2004; called at least once 238 (59.5 percent), 804 calls (2.01 a career, 3.38 a called career)
+  y2004: share of careers ever called if the bar were 84 to 92: 84 81.3, 85 69.8, 86 59.5, 87 47.3, 88 37.3, 89 28.5, 90 19.5, 91 12.3, 92 4.5
+  y2004: 811 edition summers rated 86 or more; held back by health under 50: 2 (0.2 percent), by age over 36: 5
+simCareerIntl: GREEN, 23682 checks over sections 1,2,3,4,6
