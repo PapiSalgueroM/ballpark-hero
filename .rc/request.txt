@@ -1,0 +1,18 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-new: node_modules/.bin/vitest run src/components/nba-front-office/NbaEarnedDraft.test.tsx src/lib/nbaEarnedDraft.test.ts src/lib/gmEarnedDraft.test.ts src/components/front-office-shared/GmEarnedDraftScreen.test.tsx src/components/front-office-shared/useGmEarnedDraft.test.tsx src/components/front-office-shared/DraftNightCard.test.tsx --testTimeout=300000 --hookTimeout=120000
+vitest-readers: node_modules/.bin/vitest run $(git grep -l -E "NbaFrontOfficeBoard|DraftNightCard|nbaEarnedDraft|gmEarnedDraft|GmLotteryCard|gmLazyPanel|GmEarnedDraftScreen|useGmEarnedDraft|nbaGmDesk" -- 'src/*.test.ts' 'src/*.test.tsx') --testTimeout=300000 --hookTimeout=120000
+simNbaDraftCapital: T=$(mktemp -d); TMPDIR=$T TEMP=$T TMP=$T node scripts/simNbaDraftCapital.mjs
+simGmDraftOrder: T=$(mktemp -d); TMPDIR=$T TEMP=$T TMP=$T node scripts/simGmDraftOrder.mjs
+simGmDraftOrder-mounted: T=$(mktemp -d); TMPDIR=$T TEMP=$T TMP=$T SIM_GM_DRAFT_ORDER_CONTROL=mounted node scripts/simGmDraftOrder.mjs
+simNbaEarnedDraft: T=$(mktemp -d); TMPDIR=$T TEMP=$T TMP=$T node scripts/simNbaEarnedDraft.mjs
+simGmReload: T=$(mktemp -d); TMPDIR=$T TEMP=$T TMP=$T node scripts/simGmReload.mjs
+simGmReload-replay: T=$(mktemp -d); TMPDIR=$T TEMP=$T TMP=$T GM_RELOAD_CONTROL=replay node scripts/simGmReload.mjs
+simDraftNight: T=$(mktemp -d); TMPDIR=$T TEMP=$T TMP=$T node scripts/simDraftNight.mjs
+simRevealMoments: T=$(mktemp -d); TMPDIR=$T TEMP=$T TMP=$T node scripts/simRevealMoments.mjs
+simNbaGmDesk: T=$(mktemp -d); TMPDIR=$T TEMP=$T TMP=$T node scripts/simNbaGmDesk.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
