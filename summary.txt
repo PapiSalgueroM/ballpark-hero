@@ -1,0 +1,8 @@
+tsc exit=0 183s | 
+simDailyDeals exit=0 10s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+saveSize exit=0 153s | simClubManagerSaveSize: all sections green
+slots exit=1 161s | simClubManagerSlots: RED, sections 2 (1 failures)
+simStorageWrites exit=0 7s | simStorageWrites: all green (owed: 12)
+dashscan exit=0 1s | commit message lines with one: 0
+fences exit=1 567s | simGuideHeadings exit=0 | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a c
+vitest-all exit=0 1033s |  Test Files  627 passed | 2 skipped (629)
