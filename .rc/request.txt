@@ -1,0 +1,10 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+pf1: PLAYFIRST_SHARD=1/3 node scripts/playFirstVisitDialogs.mjs
+pf2: PLAYFIRST_SHARD=2/3 node scripts/playFirstVisitDialogs.mjs
+pf3: PLAYFIRST_SHARD=3/3 node scripts/playFirstVisitDialogs.mjs
+ratchet: ONLY=/stadium-tycoon,/idle-arena,/footle,/club-manager PLAYFIRST_CONTROL=ratchet node scripts/playFirstVisitDialogs.mjs
+cover: ONLY=/stadium-tycoon,/idle-arena,/wonderkid-factory,/footle,/build-your-xi PLAYFIRST_CONTROL=cover node scripts/playFirstVisitDialogs.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
