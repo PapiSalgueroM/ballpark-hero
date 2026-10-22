@@ -1,0 +1,8 @@
+build exit=0 23s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+headsha exit=0 0s | 8701d9c719 rc request rBP-trF2 for 7b55242f763e5e8935c43c277e92fb90bbc07988
+playCmDataOnDemand exit=0 28s | playCmDataOnDemand: green. The manager games open without the data they never read, and a past season brings its own.
+cmdata-abort exit=0 2s | CONTROL abort FIRED: the career did not open, the retry notice showed, the save is untouched and the flags went red
+potential-browser exit=0 36s | PASS Soccer potential progress browser
+retire exit=0 6s | PASS Soccer retirement actions browser
+dialog exit=0 4s | []
+potential-1337 exit=0 35s | PASS Soccer potential progress browser
