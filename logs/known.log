@@ -1,0 +1,2 @@
+simGmXp exit=0 | simGmXp: all checks passed
+simGmCalendar exit=1 | simGmCalendar: 6 failure(s)
