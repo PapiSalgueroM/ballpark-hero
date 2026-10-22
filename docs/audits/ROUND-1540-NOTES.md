@@ -61,7 +61,8 @@ dukb-handoff/2026-10-10/results-g/finish-1540.md.
   runner r1540-f3-a with debug prints: gmContracts.ts runDeskOffseason (Round 1018) puts a man let go on a sheet on the
   club written down even when the draft has taken it over fifteen (every arrival logged, 18 of 18 and 8 of 8, landed on
   a roster of 16 or 17 with him); the engine's summer (nbaFrontOffice.ts, Round 722) waives a CPU club above fifteen by its
-  lowest rated man, which was he (a one season second rounder at 66 or 67); the pool keeps its best 30, so he left the
+  lowest rated man, which was he (a one season second rounder at 66 or 67); the pool keeps its best 30 (a cut older
+  than Round 722: it has been in nbaFrontOffice.ts since the file's first commit, 7bb8c39d, 2026-08-11), so he left the
   league. Earned streams SIM_SEED 10..29 (runner r1540-f3-b): it happened on SIM_SEED 10 only; the old desk over
   SIM_SEED 1..30 never lost a man. Every fix point is outside this round (the engine is must not touch, and
   runDeskOffseason is shared by all four desks, so a fix there moves the old desk's byte equal proof), so nothing is

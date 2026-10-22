@@ -165,7 +165,9 @@
  * (every arrival logged landed on a roster of 16 or 17 with him); the engine's
  * summer (nbaFrontOffice.ts, Round 722) waives a club above fifteen by its
  * lowest rated man, who was he (a one season second rounder at his ceiling,
- * 66 and 67); and the pool keeps its best 30 only, so he left the league. The
+ * 66 and 67); and the pool keeps its best 30 only (a cut older than Round 722:
+ * it has been in nbaFrontOffice.ts since the file's first commit, 7bb8c39d,
+ * 2026-08-11), so he left the league. The
  * old desk on 30 fresh streams (531 men let go on a sheet) never lost
  * one. The cause is older code outside this round, so it is not fixed here.
  */
