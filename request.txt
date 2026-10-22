@@ -1,0 +1,5 @@
+dev: node scripts/simSoccerCareerDevelopment.mjs
+fair: node scripts/simSoccerDeckFairness.mjs
+fair-unattributed: SIM_DECK_FAIRNESS_MORALE= node scripts/simSoccerDeckFairness.mjs
+truth: node scripts/simSoccerWorldTruth.mjs
+truth-unattributed: SIM_WORLD_TRUTH_MORALE= node scripts/simSoccerWorldTruth.mjs
