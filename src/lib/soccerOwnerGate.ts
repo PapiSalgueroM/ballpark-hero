@@ -31,8 +31,8 @@ export function loadOwnerTail(): Promise<void> {
   if (!OWNER_INFLIGHT) {
     const inflight: Promise<void> = import('./soccerCareerOwner').then(m => {
       const mod = m as Partial<OwnerTailModule> | null | undefined;
-      if (!mod || typeof mod.playOwnerSeason !== 'function' || typeof mod.ownerClubsOnSale !== 'function') {
-        throw new Error('owner tail: the chunk loaded without the owner tail in it');
+      if (!mod || typeof mod.ownerBuy !== 'function' || typeof mod.ownerSeason !== 'function') {
+        throw new Error('owner tail missing');
       }
       OWNER = mod as OwnerTailModule;
     }).catch(e => { if (OWNER_INFLIGHT === inflight) OWNER_INFLIGHT = null; throw e; });

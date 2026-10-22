@@ -8745,18 +8745,7 @@ export function choosePostRetirement(prev: CareerState, choice: PostRetirementCh
        (ownerClubsOnSale); a caller that names none gets the list's first,
        and a name that is not for sale buys nothing. Nothing is bought while
        the owner tail is not loaded (the page awaits loadOwnerTail first). */
-    const tail = ownerTail();
-    if (!tail) return prev;
-    const forSale = tail.ownerClubsOnSale(prev, clubs);
-    const club = ownerClub === undefined
-      ? forSale[0] ?? { name: "Unknown FC", tier: 4, league: "", country: "", price: tail.OWNER_TIERS[4].price, debt: 0 }
-      : forSale.find(c => c.name === ownerClub);
-    if (!club) return prev;
-    s.netWorth -= club.price;
-    s.ownerState = tail.ownerStart(club);
-    s.events = [...s.events, `🏟️ Bought ${club.name} for €${club.price}M, the game's price for a Tier ${club.tier} club${club.debt > 0 ? `, with €${club.debt}M of debt` : ""}.`];
-    s.phase = "owner_season";
-    return s;
+    return ownerTail()?.ownerBuy(s, clubs, ownerClub) ?? prev;
   }
   
   return s;
@@ -9243,18 +9232,9 @@ export function endPunditCareer(prev: CareerState): CareerState {
    sale and the season's call live there too); this is the season itself,
    which waits for the tail to be loaded. */
 export function advanceOwnerSeason(prev: CareerState, clubs: readonly ClubData[] = []): CareerState {
-  const tail = ownerTail();
-  if (!tail) return prev;
-  const s = { ...prev };
-  if (!s.ownerState) return s;
-  const season = s.ownerState.season + 1;
-  const year = (s.seasons[s.seasons.length - 1]?.year ?? 2024) + season;
-  const { os, result, income } = tail.playOwnerSeason(s.ownerState, { clubs, year, key: `${tail.ownerSaveKey(s)}|${s.ownerState.club}|${season}` });
-  s.netWorth += income;
-  s.ownerState = os;
-  s.events = [...s.events, `🏟️ Owner Season ${os.season} at ${os.club}: ${result}`];
-  applyRetirementMoneySeason(s, os.season);
-
+  const s = ownerTail()?.ownerSeason(prev, clubs);
+  if (!s) return prev;
+  applyRetirementMoneySeason(s, s.ownerState!.season);
   return s;
 }
 

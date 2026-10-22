@@ -185,6 +185,34 @@ export function ownerClubsOnSale(state: CareerState, clubs: readonly ClubData[])
   return ownerClubsForSale({ clubs, year: firstYear, netWorth: state.netWorth, key: ownerSaveKey(state) });
 }
 
+/** He buys the club he picked off the list for sale, for its band's price, with its band's debt. A caller that
+ *  names no club gets the list's first; a name that is not for sale buys nothing (null). */
+export function ownerBuy(prev: CareerState, clubs: readonly ClubData[], ownerClub?: string): CareerState | null {
+  const forSale = ownerClubsOnSale(prev, clubs);
+  const club = ownerClub === undefined
+    ? forSale[0] ?? { name: "Unknown FC", tier: 4, league: "", country: "", price: OWNER_TIERS[4].price, debt: 0 }
+    : forSale.find(c => c.name === ownerClub);
+  if (!club) return null;
+  return {
+    ...prev,
+    netWorth: prev.netWorth - club.price,
+    ownerState: ownerStart(club),
+    events: [...prev.events, `🏟️ Bought ${club.name} for €${club.price}M, the game's price for a Tier ${club.tier} club${club.debt > 0 ? `, with €${club.debt}M of debt` : ""}.`],
+    phase: "owner_season",
+  };
+}
+
+/** One season of ownership for the career: the season (playOwnerSeason) keyed to his save, its pay into his
+ *  account and its line in his log. Null when he owns no club. The engine adds the season of money. */
+export function ownerSeason(prev: CareerState, clubs: readonly ClubData[]): CareerState | null {
+  const own = prev.ownerState;
+  if (!own) return null;
+  const season = own.season + 1;
+  const year = (prev.seasons[prev.seasons.length - 1]?.year ?? 2024) + season;
+  const { os, result, income } = playOwnerSeason(own, { clubs, year, key: `${ownerSaveKey(prev)}|${own.club}|${season}` });
+  return { ...prev, netWorth: prev.netWorth + income, ownerState: os, events: [...prev.events, `🏟️ Owner Season ${os.season} at ${os.club}: ${result}`] };
+}
+
 /** Where the coming season's budget goes; a call that is not open this season changes nothing. */
 export function chooseOwnerPlan(prev: CareerState, plan: OwnerPlan): CareerState {
   if (prev.phase !== "owner_season" || !prev.ownerState || !ownerPlanOpen(prev.ownerState, plan)) return prev;

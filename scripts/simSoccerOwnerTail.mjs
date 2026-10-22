@@ -52,7 +52,7 @@ const ENGINE = 'src/lib/soccerCareerEngine.ts';
 const LEAGUE = 'src/lib/soccerCareerLeague.ts';
 const OWNER = 'src/lib/soccerCareerOwner.ts';
 const CONTROLS = {
-  randomclub: [{ file: ENGINE, from: 'if (!club) return prev;', to: 'if (!club) return prev; { const old = clubs.filter(c => c.tier >= 3); if (old.length) club.name = pick(old).name; }' }],
+  randomclub: [{ file: OWNER, from: '  if (!club) return null;', to: '  if (!club) return null; { const old = clubs.filter(c => c.tier >= 3); if (old.length) club.name = old[Math.floor(Math.random() * old.length)].name; }' }],
   coin: [{ file: OWNER, from: '    : (sizeUnknown ? `Finished ${finishZone(me.pos, leagueSize)}.` : `Finished ${ordinal(me.pos)}${ofSize} on ${me.pts} points.`);',
     to: '    : `Finished ${["3rd", "5th", "8th", "mid-table", "lower half"][Math.floor(Math.random() * 5)]}`;' }],
   mathrandom: [{ file: OWNER, from: 'const rng = keyedStream(`${input.key}|table`);', to: 'const rng = Math.random;' }],
