@@ -1,0 +1,17 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/usCareerShopPromises.test.ts src/lib/usCareerAnnualBenefits.test.ts src/lib/careerDirtyMoney.test.ts src/test/careerEntryGuide.test.tsx src/test/usCareerHelpRules1104.test.tsx src/test/usCareerShopCap.test.ts src/test/usBoardFixture.test.tsx src/test/careerDecisionOutcome.test.tsx src/test/usCareerSmallItems1104.test.ts src/test/usCareerDirtyMoney.test.tsx --testTimeout=300000 --hookTimeout=120000
+simUsShopPromises: node scripts/simUsShopPromises.mjs
+shop-basecheck: SHOP_BASE_CHECK=1 SHOP_SECTIONS=1,2 node scripts/simUsShopPromises.mjs
+shop-rate: SHOP_CONTROL=rate node scripts/simUsShopPromises.mjs
+shop-words: SHOP_CONTROL=words node scripts/simUsShopPromises.mjs
+shop-camp: SHOP_CONTROL=camp node scripts/simUsShopPromises.mjs
+simCareerPressMarket: node scripts/simCareerPressMarket.mjs
+simUsBoardParity: node scripts/simUsBoardParity.mjs
+simNbaAwardsSense: node scripts/simNbaAwardsSense.mjs
+simUsDirtyMoney: node scripts/simUsDirtyMoney.mjs
+simUsCareerAnnualBenefits: node scripts/simUsCareerAnnualBenefits.mjs
+simUsCareerDefects: node scripts/simUsCareerDefects.mjs
+simNflTruth: node scripts/simNflTruth.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simCareerEntryGuide: node scripts/simCareerEntryGuide.mjs
