@@ -373,7 +373,7 @@ for (const row of BOARDS) {
         const tier = SEAT.leagueTiers(H.hostSeatTeams(nflDeskHost, s0.league, (id: string) => id)).get(s0.myTeam) ?? 4;
         let c = SEAT.newGmCareer(s0.myTeam, tier, s0.league.season - grades.length + 1);
         for (const g of grades) c = SEAT.recordSeatSeason(c, g);
-        const seat = { v: 1, career: SEAT.endSeatStint(c, 'fired'), last: s0.league.season };
+        const seat = { v: 1 as const, career: SEAT.endSeatStint(c, 'fired'), last: s0.league.season };
         if (H.hostCanSitOut(H.hostMarket(nflDeskHost, s0.league, seat, (id: string) => id))) { plantRecord(row, seat, grades.length); planted = true; break; }
       }
       expect(planted, 'a record with next year open').toBe(true);
@@ -393,6 +393,32 @@ for (const row of BOARDS) {
       expect(outScreen()?.textContent ?? '', 'the card says the year').toContain('Out of work, 1 season');
     });
 
+    it('a point spent in Ownership survives a remount, and a tree off the live list sells nothing', async () => {
+      const { Board } = await freshBoard(row, 15);
+      let view = render(<Board />);
+      clickText(row.clubLabel);
+      await waitFor(() => expect(readSave(row)?.phase).toBe('hub'), { timeout: 120_000 });
+      answerPresser();
+      view.unmount();
+      const X = await import('@/lib/gmXp');
+      const s = readSave(row);
+      s.gm.blocks.xp = X.addXp(X.defaultGmXp(), 2000);
+      localStorage.setItem(row.saveKey, JSON.stringify(s));
+      view = render(<Board />);
+      const tree = (t: string) => document.querySelector(`[data-gm-tree="${t}"] button`) as HTMLButtonElement | null;
+      openTile('GM level');
+      await waitFor(() => expect(tree('ownership')).not.toBeNull(), { timeout: 30_000 });
+      expect(tree('scouting')!.disabled, 'a tree off the live list sells nothing').toBe(true);
+      fireEvent.click(tree('ownership')!);
+      expect(readSave(row).gm.blocks.xp.points.ownership).toBe(1);
+      view.unmount();
+      render(<Board />);
+      expect(readSave(row).gm.blocks.xp.points.ownership, 'the point is in the save after a remount').toBe(1);
+      openTile('GM level');
+      await waitFor(() => expect(tree('ownership')).not.toBeNull(), { timeout: 30_000 });
+      expect(tree('ownership')!.textContent).toContain('(1/5)');
+    });
+
     it('a closed market draws no stay out button, and the new front office link deletes the save on the second tap only', async () => {
       const { Board } = await freshBoard(row, 14);
       const view = await doomedSave(row, Board);
@@ -409,7 +435,7 @@ for (const row of BOARDS) {
           for (const g of grades) c = SEAT.recordSeatSeason(c, g);
           c = SEAT.endSeatStint(c, 'fired');
           for (let i = 0; i < out; i += 1) c = SEAT.sitOutYear(c);
-          const seat = { v: 1, career: c, last: s0.league.season - out };
+          const seat = { v: 1 as const, career: c, last: s0.league.season - out };
           if (!planted && H.hostMarket(nflDeskHost, s0.league, seat, (id: string) => id)?.state === 'closed') { plantRecord(row, seat, grades.length); planted = true; }
         }
       }

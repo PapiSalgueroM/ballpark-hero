@@ -79,6 +79,16 @@
  *   overlap, firedlost (7)
  * Exit 0 green, 1 red (or a control fired), 2 could not run, 3 a control did not fire.
  *
+ * MEASURED 2026-10-22 on GitHub runners (r1533-s4b, head 8a1fdbcb), the floors set near 70 percent of each:
+ *   section 4: 475 first feeds asserted, 311 straight after a badly season (floors 300, 200)
+ *   section 5: 493 offers in the first feeds, 475 firings followed (floors 400, 300)
+ *   section 6: 60 years out on each of three seed sets; bands beside S6_BAND
+ *   section 7: 17 firings, 8 seats taken, 17 years out, 9 careers closed for good (floors 12, 5, 10)
+ *   controls: firedclub 2, unkeyed 580, staffrides 503, ledgerrides 505, rostermove 934, depthstays 503,
+ *   askrebuilt 326, halfseason 60, awayxp 60, lastcall 20, noawaydraft 1, overlap 55, firedlost 27,
+ *   nameinline 128 failures. notrim did not fire on the roster limit alone (the old club never passed 53), so
+ *   section 6 replays every away summer against the engine's offseason with no user club, which it must equal.
+ *
  * Recording: SIM_GM_CAREER_RECORD=<sha of the base> writes the fixture
  * (scripts/data/gmCareerFixture.json, or SIM_GM_CAREER_OUT) and stops.
  * Recorded twice in two processes on a runner; both printed one digest.
@@ -679,14 +689,19 @@ const pickCount = lg => Object.values(lg.teams).reduce((n, t) => n + t.picks.len
  * new club's fresh ones. The first offer is then followed through his new club's draft and summer: he is arriving
  * until the summer has run, and the ask he is graded on is the offer's.
  */
-function takeChecks(lgAtFiring, old, g, seat, m, salt) {
+function takeChecks(lgAtFiring, old, g, seat, m0, salt) {
   const prev = check;
   check = '5';
+  /* The depth chart he saved is part of the league the market reads (a chart moves the club's strength), so the
+     feed he chooses from is read on the league with it, as the board reads it. */
+  const planted = clone(lgAtFiring);
+  const pt = planted.teams[old];
+  const qbs = pt.players.filter(p => p.pos === 'QB');
+  const hasChart = qbs.length >= 2 && E.swapDepth(pt, 'QB', qbs[0].id, qbs[1].id) && !!pt.depth;
+  const m = H.hostMarket(d.host, planted, seat, label) ?? m0;
   for (const [k, offer] of m.offers.entries()) {
-    const lg = clone(lgAtFiring);
-    const t = lg.teams[old];
-    const qbs = t.players.filter(p => p.pos === 'QB');
-    if (qbs.length >= 2 && E.swapDepth(t, 'QB', qbs[0].id, qbs[1].id) && t.depth) S5.planted++;
+    const lg = clone(planted);
+    if (hasChart) S5.planted++;
     let desk = D.openNflDesk(lg, old);
     D.syncNflPicks(lg, D.nflPicksOf(desk, lg));
     desk = G.withGmBlock(desk, H.GM_HOST_KEYS.seat, g.desk.blocks.seat);
@@ -695,6 +710,8 @@ function takeChecks(lgAtFiring, old, g, seat, m, salt) {
     const legacy = H.hostLegacy(d.host, lg, { team: old, seasonsPlayed: g.seasonsPlayed, titles: g.titles, fired: true, seasonCounted: true });
     const at = `${old} to ${offer.teamId} (${salt})`;
     const lgBefore = withoutDepth(lg, old), picksBefore = pickCount(lg), deskBefore = J(desk);
+    /* The new club's own blocks, opened on the league as the take reads it (before the old chart goes back). */
+    const fresh = D.openNflDesk(clone(lg), offer.teamId);
     const r = D.nflTakeSeat(lg, desk, save, legacy, offer.teamId, label);
     if (!r) { S5.refused++; fail(`${at}: an offer on the table was refused`); continue; }
     S5.takes++;
@@ -705,7 +722,6 @@ function takeChecks(lgAtFiring, old, g, seat, m, salt) {
     ok(J(r.desk.blocks.xp) === J(desk.blocks.xp), `${at}: his XP moved`);
     ok(J(r.save) === J(SEAT.takeSeat(save, offer)) && r.save.myTeam === offer.teamId && r.save.trust === FM.FO_TRUST_START
       && r.save.fired === false && J(r.save.mandate) === J(offer.ask), `${at}: the save's six fields are not takeSeat's`);
-    const fresh = D.openNflDesk(lg, offer.teamId);
     ok(J(r.desk.blocks.contracts) === J(fresh.blocks.contracts), `${at}: the re-sign ledger is not the new club's own`);
     ok(J(r.desk.blocks.staff) === J(fresh.blocks.staff), `${at}: the staff is not the new club's own`);
     const ns = r.desk.blocks.seat, st = SEAT.currentStint(ns.career), before = ns.career.stints.at(-2);
@@ -825,7 +841,7 @@ if (runs('4') || runs('5')) {
   ok(S4.firings > 0, 'no club was fired in the measuring run, so it measured nothing');
   if (runs('4')) {
     console.log(`   ASSERTED on ${S4.asserted} first feeds (${S4.badly} straight after a badly season): never the club that fired him, no top tier after badly, every ask for next season, keyed`);
-    ok(S4.asserted >= 300 && S4.badly >= 50, `only ${S4.asserted} feeds (${S4.badly} after badly) asserted, too few to hold the rules`);
+    ok(S4.asserted >= 300 && S4.badly >= 200, `only ${S4.asserted} feeds (${S4.badly} after badly) asserted, too few to hold the rules`);
   }
   if (runs('5')) {
     check = '5';
@@ -839,11 +855,16 @@ if (runs('4') || runs('5')) {
 /* ================================================================== */
 const S6_SEEDS = (process.env.SIM_GM_CAREER_AWAY_SEEDS || '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20').split(',').map(Number);
 const S6_YEARS = 3;
-/* PROVISIONAL until measured on three seed sets (see the header): the away draft's share of the idle GM baseline's
-   draftees on the other 31 clubs, and the mean roster after a summer, away less baseline. */
-const S6_BAND = { draft: [0.6, 1.4], roster: [-1.5, 1.5] };
+/* MEASURED 2026-10-22 on a GitHub runner (r1533-s4b, head 8a1fdbcb), three seed sets of twenty, three years out each:
+     seeds  1-20: drafted men on the other 31 clubs away 1066, idle GM 1080, ratio 0.987; mean roster 52.25 vs 52.23
+     seeds 21-40: away 1059, idle GM 1080, ratio 0.981; mean roster 52.26 vs 52.25
+     seeds 41-60: away 1064, idle GM 1080, ratio 0.985; mean roster 52.26 vs 52.25
+   The idle GM's rivals take exactly 18 a season (three batches of six), so 1080 is a ceiling the away path cannot
+   pass (its old club picks among them): the band's top is that ceiling, its floor sits well under the lowest of
+   the three. noawaydraft measured ratio 0.000 and a roster 0.19 short. */
+const S6_BAND = { draft: [0.95, 1.01], roster: [-0.1, 0.1] };
 const S6 = {
-  years: 0, stopped: 0, over: 0, minted: 0, inSeat: 0, closed: 0, lastCall: 0,
+  years: 0, stopped: 0, over: 0, minted: 0, inSeat: 0, closed: 0, lastCall: 0, shadows: 0,
   away: { drafted: 0, rosters: 0, clubSummers: 0 }, base: { drafted: 0, rosters: 0, clubSummers: 0 },
 };
 const rosterIds = (lg, skip) => new Set(Object.entries(lg.teams).filter(([a]) => a !== skip).flatMap(([, t]) => [...t.players, ...(t.practice ?? [])].map(p => p.id)));
@@ -913,7 +934,18 @@ if (runs('6')) {
       const wrapped = {
         awayDraft(lg, r, dk) { const b = rosterIds(lg, null); const out = away.awayDraft(lg, r, dk); for (const id of rosterIds(lg, null)) if (!b.has(id)) drafted.add(id); return out; },
         awaySummer(lg, r, dk) {
-          const out = away.awaySummer(lg, r, dk);
+          /* The summer with nobody in the chair is the engine's offseason with NO user club, then the ledger rolled:
+             replayed on a copy with the same draws, it must be the league the away host left (control notrim: the
+             old club named as the user club, so the CPU neither cuts nor tags it). */
+          const shadow = clone(lg), draws = [];
+          const before = D.nflPicksOf(dk, shadow), closed = shadow.season, ids = Object.keys(shadow.teams);
+          const out = away.awaySummer(lg, () => { const x = r(); draws.push(x); return x; }, dk);
+          let i = 0;
+          E.runOffseason(shadow, () => (i < draws.length ? draws[i++] : NaN));
+          D.syncNflPicks(shadow, P.rollLedger(before, ids, closed, D.nflGamePickRules()));
+          S6.shadows++;
+          const noIds = v => JSON.stringify(v, (key, x) => (key === 'id' ? undefined : x)); /* the restock mints ids from a counter the copy has moved on */
+          if (i !== draws.length || noIds(shadow) !== noIds(lg)) fail(`${at}: the away summer is not the engine's offseason with no user club (${i} of ${draws.length} draws replayed)`);
           for (const [abbr, t] of Object.entries(lg.teams)) {
             if (E.deepOverLimit(t) > 0) { S6.over++; fail(`${at}: ${abbr} is over the roster limit after the summer`); }
             if (abbr !== team) { S6.away.rosters += t.players.length; S6.away.clubSummers++; }
@@ -958,7 +990,7 @@ if (runs('6')) {
   const rosterA = S6.away.rosters / Math.max(1, S6.away.clubSummers), rosterB = S6.base.rosters / Math.max(1, S6.base.clubSummers);
   console.log(`   ${S6.years} years out over ${S6_SEEDS.length} seeds (${S6.stopped} stopped early); refusals: ${S6.inSeat} in a seat, ${S6.closed} closed, ${S6.lastCall} last calls`);
   console.log(`   drafted men on the other clubs' rosters after the years out: away ${S6.away.drafted}, idle GM ${S6.base.drafted} (ratio ${draftRatio.toFixed(3)}); mean roster after a summer: away ${rosterA.toFixed(2)}, idle GM ${rosterB.toFixed(2)}`);
-  ok(S6.years >= 0.9 * S6_SEEDS.length * S6_YEARS, `only ${S6.years} years out played`);
+  ok(S6.years >= 0.9 * S6_SEEDS.length * S6_YEARS && S6.shadows === S6.years, `only ${S6.years} years out played (${S6.shadows} summers replayed)`);
   ok(S6.closed >= 1 && S6.lastCall >= 1, `no closed market or no last call found to refuse (${S6.closed}, ${S6.lastCall})`);
   ok(draftRatio >= S6_BAND.draft[0] && draftRatio <= S6_BAND.draft[1], `the away draft put ${draftRatio.toFixed(3)} of the idle GM baseline's draftees on the other clubs, band ${J(S6_BAND.draft)}`);
   ok(rosterA - rosterB >= S6_BAND.roster[0] && rosterA - rosterB <= S6_BAND.roster[1], `the mean roster after an away summer differs from the baseline by ${(rosterA - rosterB).toFixed(2)}, band ${J(S6_BAND.roster)}`);
@@ -1044,7 +1076,7 @@ if (runs('7')) {
     }
   }
   console.log(`   ${S7_SEEDS.length} careers, ${S7.seasons} seasons run: ${S7.forced} sackings forced, ${S7.firings} firings, ${S7.takes} seats taken, ${S7.sits} years out, ${S7.closed} closed for good; ${S7.checks} checkpoints`);
-  ok(S7.firings >= 15 && S7.takes >= 5 && S7.sits >= 3, `too few firings (${S7.firings}), takes (${S7.takes}) or years out (${S7.sits}) to hold a career`);
+  ok(S7.firings >= 12 && S7.takes >= 5 && S7.sits >= 10, `too few firings (${S7.firings}), takes (${S7.takes}) or years out (${S7.sits}) to hold a career`);
 }
 
 /* ================================================================== */
