@@ -1,0 +1,7 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk exit=1 44s | playNbaLotteryNight: red in J.
+walk-nocard exit=1 51s | playNbaLotteryNight control nocard: FIRED, section A red, the others green.
+walk-spoil exit=1 20s | playNbaLotteryNight control spoil: FIRED, section A red, the others green.
+walk-jump exit=1 5s | playNbaLotteryNight control jump: FIRED, section J red, the others green.
+walk-fold exit=1 20s | playNbaLotteryNight control fold: FIRED, section N red, the others green.
+playGames exit=0 47s | Played 1 games. 0 findings, 0 the harness could not drive.

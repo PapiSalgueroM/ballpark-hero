@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+#!serial
+walk: node scripts/playNbaLotteryNight.mjs
+walk-nocard: PLAY_NBA_LOTTERY_CONTROL=nocard node scripts/playNbaLotteryNight.mjs
+walk-spoil: PLAY_NBA_LOTTERY_CONTROL=spoil node scripts/playNbaLotteryNight.mjs
+walk-jump: PLAY_NBA_LOTTERY_CONTROL=jump node scripts/playNbaLotteryNight.mjs
+walk-fold: PLAY_NBA_LOTTERY_CONTROL=fold node scripts/playNbaLotteryNight.mjs
+playGames: ENGINES=chromium ONLY=/nba-front-office node scripts/playGames.mjs

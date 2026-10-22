@@ -1,0 +1,7 @@
+  FAIL A: 320: the heading gives away his pick 6 before Continue: "The 2027 DraftLottery night first.Your first landed 6th."
+  FAIL A: 390: the heading gives away his pick 6 before Continue: "The 2027 DraftLottery night first.Your first landed 6th."
+  FAIL A: 1280: the heading gives away his pick 6 before Continue: "The 2027 DraftLottery night first.Your first landed 6th."
+  section A: 75 passed, 3 failed
+  section N: 12 passed, 0 failed
+  21 screenshots in /home/runner/work/_temp/rc-out/files
+playNbaLotteryNight control spoil: FIRED, section A red, the others green.
