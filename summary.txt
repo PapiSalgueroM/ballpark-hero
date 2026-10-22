@@ -1,0 +1,5 @@
+groundlob exit=1 14s | simLiveSimMotion: control groundlob turned "R10: the ball travels" red on an assertion (1 failed), as it must.
+simCmMatchDay exit=0 41s | simCmMatchDay: all sections green (918 matches: 462 home, 448 away, 8 neutral)
+lineupsBase exit=1 1s | Node.js v24.22.0
+motion exit=0 81s |    Duration  80.77s (transform 3.42s, setup 126ms, collect 4.32s, tests 74.73s, environment 517ms, prepare 297ms)
+tsc exit=0 92s | 
