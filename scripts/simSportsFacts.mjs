@@ -1098,7 +1098,12 @@ export const SUPABASE_PUBLISHABLE_KEY = 'stub';
         if (!r?.careerWins) continue;
         const total = r.careerWins.v;
         const before2026 = total - wins26(card.driverName);
+        /* Only a clue the F1 Driver record holds word for word is judged here.
+           A file clue that differs from its record is section 5's failure, and
+           judging it twice would make one break look like two. */
+        const verifiedClues = new Set((record.f1Drivers?.[card.id]?.clues ?? []).map(c => c.text));
         for (const clue of card.clues) {
+          if (!verifiedClues.has(clue)) continue;
           const m = clue.match(COUNT);
           if (!m) {
             if (ANY_COUNT.test(clue)) fail('cross', `${card.driverName}'s clue "${clue}" counts wins in a shape this fence cannot place`);
