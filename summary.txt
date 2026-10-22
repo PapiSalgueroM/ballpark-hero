@@ -1,0 +1,6 @@
+headsha exit=0 0s | 705f576c2a Record Release BP: live at 17:53 EDT on 2026-10-22 (main 5ba8a1c6, deployment e12d7e79), with the board note for the other lane
+wf286x exit=1 745s | wfrun career-pending-popularity-gates.yml: 8 steps ran, 1 failed: Complete build and all rebuilt-site readers
+wf302x exit=1 182s | wfrun career-pending-money-gates.yml: 13 steps ran, 1 failed: Complete build and all rebuilt-site readers
+wf288 exit=1 214s | wfrun career-life-stories.yml: 10 steps ran, 1 failed: Fixed phase all fifteen rebuilt-site readers
+wf289x exit=1 247s | wfrun career-phone-season-budget.yml: 10 steps ran, 1 failed: Complete build and all rebuilt-site readers
+wf297x exit=1 248s | wfrun career-phone-state-isolation.yml: 11 steps ran, 1 failed: Complete build and all rebuilt-site readers
