@@ -1,0 +1,19 @@
+#!serial
+head: git rev-parse HEAD && git log --oneline -1
+people: node scripts/simConquestPeople.mjs
+mut-greatsSet: node .rc/x/mut1547.mjs greatsSet && node scripts/simConquestPeople.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-hookPred: node .rc/x/mut1547.mjs hookPred && node scripts/simConquestPeople.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-greatsTaken: node .rc/x/mut1547.mjs greatsTaken && node scripts/simConquestPeople.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-marketTaken: node .rc/x/mut1547.mjs marketTaken && node scripts/simConquestPeople.mjs; s=$?; git checkout -- src scripts; exit $s
+clean-mid: git status --short | wc -l
+ctl-greatsSet: CONQUEST_PEOPLE_CONTROL=greatsSet node scripts/simConquestPeople.mjs
+ctl-hookPred: CONQUEST_PEOPLE_CONTROL=hookPred node scripts/simConquestPeople.mjs
+ctl-hookPredNba: CONQUEST_PEOPLE_CONTROL=hookPredNba node scripts/simConquestPeople.mjs
+ctl-greatsCap: CONQUEST_PEOPLE_CONTROL=greatsCap node scripts/simConquestPeople.mjs
+ctl-taken: CONQUEST_PEOPLE_CONTROL=taken node scripts/simConquestPeople.mjs
+ctl-greatsTaken: CONQUEST_PEOPLE_CONTROL=greatsTaken node scripts/simConquestPeople.mjs
+ctl-sortAsc: CONQUEST_PEOPLE_CONTROL=sortAsc node scripts/simConquestPeople.mjs
+ctl-pickWorst: CONQUEST_PEOPLE_CONTROL=pickWorst node scripts/simConquestPeople.mjs
+ctl-marketAsc: CONQUEST_PEOPLE_CONTROL=marketAsc node scripts/simConquestPeople.mjs
+ctl-bogus: CONQUEST_PEOPLE_CONTROL=bogus node scripts/simConquestPeople.mjs
+clean-after: git status --short | wc -l
