@@ -51,7 +51,9 @@
  * (section 3, each call's effect gone), dominant (section 4, signings that pay), oldsave (section 5, a save with no
  * debt field), drawshift (section 6, one extra draw in the shared table). Added after the round's reviews:
  * saleleague (section 1, the tile's old league, today's label or the list's key, put back), stalekey (section 2,
- * the season dropped from the season's key, so every season of a club replays the last one's rivals).
+ * the season dropped from the season's key, so every season of a club replays the last one's rivals), eager
+ * (section 0, the owner tail in memory before it is loaded), bands (section 1, three clubs a band), overprice
+ * (section 1, a band offered to a man 60M short of its price).
  * Options: SIM_OWNER_BASE=<sha> (default: git merge-base HEAD origin/main), SIM_OWNER_SALT=<n> (default 1),
  * SIM_OWNER_ONLY=<sections, e.g. 3,4>.
  */
@@ -70,6 +72,7 @@ const ONLY = new Set((process.env.SIM_OWNER_ONLY || '1,2,3,4,5,6').split(',').ma
 const ENGINE = 'src/lib/soccerCareerEngine.ts';
 const LEAGUE = 'src/lib/soccerCareerLeague.ts';
 const OWNER = 'src/lib/soccerCareerOwner.ts';
+const GATE = 'src/lib/soccerOwnerGate.ts';
 const CONTROLS = {
   randomclub: [{ file: OWNER, from: '  if (!club) return null;', to: '  if (!club) return null; { const old = clubs.filter(c => c.tier >= 3); if (old.length) club.name = old[Math.floor(Math.random() * old.length)].name; }' }],
   coin: [{ file: OWNER, from: '    : (sizeUnknown ? `Finished ${finishZone(me.pos, leagueSize)}.` : `Finished ${ordinal(me.pos)}${ofSize} on ${me.pts} points.`);',
@@ -85,6 +88,9 @@ const CONTROLS = {
   /* added after the round's reviews (2026-10-22) */
   saleleague: [{ file: OWNER, from: 'leagueLine: leagueSeasonLine(c, input.year),', to: 'leagueLine: leagueKeyInYear(c, input.year) ?? c.league,' }],
   stalekey: [{ file: OWNER, from: '|${own.club}|${season}`', to: '|${own.club}`' }],
+  eager: [{ file: GATE, from: 'let OWNER: OwnerTailModule | null = null;', to: 'import * as EAGER from "./soccerCareerOwner";\nlet OWNER: OwnerTailModule | null = EAGER as unknown as OwnerTailModule;' }],
+  bands: [{ file: OWNER, from: 'export const OWNER_PER_BAND = 2;', to: 'export const OWNER_PER_BAND = 3;' }],
+  overprice: [{ file: OWNER, from: '    if (!(num(input.netWorth) >= band.price)) continue;', to: '    if (!(num(input.netWorth) + 60 >= band.price)) continue;' }],
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
 
