@@ -1,0 +1,11 @@
+MUTATION render applied to src/pages/StadiumTycoon.tsx
+Tycoon money: 4/4 finite mounted/function cases passed.
+Actual hook sales retained full engine, save, reload and unscored session observations.
+Display controls: 3/3 mapped AssertionErrors with the unchanged purchase baseline.
+Original source holds: 3912; full copies, executable transforms and raw process records retained at /home/runner/work/ballpark-hero/ballpark-hero/tycoon-money-display-artifacts/outcomes.
+Copied controls: 28/28 actual mapped AssertionErrors with unchanged independent baseline.
+Source and fixture holds: 3915; complete reports, actual transforms, source copies and hashes retained.
+Number formatting: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/number-formatting-artifacts/outcomes
+[2m Test Files [22m [1m[32m12 passed[39m[22m[90m (12)[39m
+[2m      Tests [22m [1m[32m94 passed[39m[22m[90m (94)[39m
+MUT render applied=0 simTycoonMoneyDisplay=0 simNumberFormatting=0 vitest_tycoon=0

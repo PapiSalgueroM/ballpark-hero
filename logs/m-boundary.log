@@ -1,0 +1,6 @@
+MUTATION boundary applied to src/lib/wonderkidFactory.ts
+5:AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+}
+
+Node.js v24.22.0
+MUT boundary applied=0 simTycoonMoneyDisplay=1

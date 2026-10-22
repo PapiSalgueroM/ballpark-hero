@@ -1,0 +1,4 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+m-render exit=0 267s | MUT render applied=0 simTycoonMoneyDisplay=0 simNumberFormatting=0 vitest_tycoon=0
+m-boundary exit=0 3s | MUT boundary applied=0 simTycoonMoneyDisplay=1
+m-staledeps exit=0 6s | MUT staledeps applied=0 prefetch=0 simTycoonGroundGrowth=1
