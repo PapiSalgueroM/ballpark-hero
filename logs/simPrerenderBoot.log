@@ -1,0 +1,21 @@
+1) every snapshot in public/ is hash free
+   162 snapshots, 162 referencing the stable boot script, 0 hashed paths
+   11 retired signposts, none booting the app
+2) the app boots on a snapshot served against a build it never saw
+   /soccer-career   snapshot 18251 chars, booted yes, 392 nodes / 232 styled, 1 stylesheet(s), 0 failed requests
+   /records         snapshot 13303 chars, booted yes, 1093 nodes / 975 styled, 1 stylesheet(s), 0 failed requests
+   /whats-new       snapshot 339913 chars, booted yes, 1322 nodes / 797 styled, 1 stylesheet(s), 0 failed requests
+4) every retired address lands on its destination in a real browser
+   /deal-or-no-deal       -> /squad-deal          3 navigation(s), 228 styled nodes
+   /football-draft        -> /                    3 navigation(s), 2962 styled nodes
+   /grade-transfer        -> /                    3 navigation(s), 2962 styled nodes
+   /guess-soccer-club     -> /                    3 navigation(s), 2962 styled nodes
+   /guess-transfer-value  -> /                    3 navigation(s), 2962 styled nodes
+   /jeopardy              -> /quiz-board          3 navigation(s), 141 styled nodes
+   /overrated-underrated  -> /face-off            3 navigation(s), 220 styled nodes
+   /perfect-lineup        -> /                    3 navigation(s), 2962 styled nodes
+   /tier-list             -> /                    3 navigation(s), 2962 styled nodes
+   /world-cup             -> /                    3 navigation(s), 2962 styled nodes
+   /world-cup-predictor   -> /world-cup-bracket   3 navigation(s), 951 styled nodes
+
+simPrerenderBoot: green. The snapshots read like documents and still turn into the app.
