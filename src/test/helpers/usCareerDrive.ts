@@ -65,8 +65,9 @@ export interface DriveResult {
   /** How many calls left the balance below zero. */
   below: number;
   seasons: number;
-  /** Round 1541: each call answered, with the summer's dealt cards at that moment. */
-  intlLog: { year: number; edition: string; dealt: string }[];
+  /** Round 1541: each call answered, with the summer's dealt cards at that moment
+   *  and (Round 1544) the tournament the answer played, as JSON ('null' for rest). */
+  intlLog: { year: number; edition: string; dealt: string; played: string }[];
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -115,8 +116,9 @@ export function driveCareer(sport: UsCareerSport, o: DriveOptions): DriveResult 
       o.onSummer?.(c);
       const call = o.intl && sport.intl ? sport.intl.pending(c) : null;
       if (call && o.intl && sport.intl) {
-        intlLog.push({ year: call.year, edition: call.edition.id, dealt: JSON.stringify(c.summer ?? null) });
-        sport.intl.answer(c, o.intl); see(c);
+        const dealt = JSON.stringify(c.summer ?? null);
+        const res = sport.intl.answer(c, o.intl); see(c);
+        intlLog.push({ year: call.year, edition: call.edition.id, dealt, played: JSON.stringify(res?.tournament ?? null) });
       }
       while (ev) {
         const k = Math.floor(pick() * ev.options.length);

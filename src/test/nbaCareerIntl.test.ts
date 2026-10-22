@@ -50,9 +50,10 @@ describe('the summer after a season', () => {
 });
 
 describe('the call', () => {
-  it(`comes at ${INTL_CALL_UP_OVR} and not one below`, () => {
-    expect(nbaIntlCallOf(after(2003, INTL_CALL_UP_OVR))?.id).toBe('oly-2004');
-    expect(nbaIntlCallOf(after(2003, INTL_CALL_UP_OVR - 1))).toBeNull();
+  it('comes at 87 and not at 86 (the lead\'s ruling L1 of Round 1544)', () => {
+    expect(INTL_CALL_UP_OVR).toBe(87);
+    expect(nbaIntlCallOf(after(2003, 87))?.id).toBe('oly-2004');
+    expect(nbaIntlCallOf(after(2003, 86))).toBeNull();
   });
   it('never comes when retired, suspended, too old or too hurt, or in a summer with no edition', () => {
     expect(nbaIntlCallOf(after(2003, 90, { retired: true }))).toBeNull();
@@ -88,18 +89,23 @@ describe('the call', () => {
     expect(NBA_CAREER_INTL.pending(c)).toBeNull();
     expect(NBA_CAREER_INTL.curtainLine(c)).toBeNull();
   });
-  it('go writes the row and the snapshot, and only health moves outside the block', () => {
+  it('go writes the row and never the tournament, which the save plays again; only health moves outside the block', () => {
     const c = after(2003, 92);
     const before = { ...c, health: 0 };
     expect(NBA_CAREER_INTL.curtainLine(c)).toBe('The national team wants you for the 2004 Olympics in Athens. You decide next.');
     const spy = vi.spyOn(Math, 'random');
     const a = NBA_CAREER_INTL.answer(c, 'go');
-    expect(spy).not.toHaveBeenCalled();
     expect(a?.row.went).toBe(true);
-    const ic = c as NbaCareerState & { intl?: { summers: unknown[]; last?: { edition: string; field: string[] } } };
+    const ic = c as NbaCareerState & { intl?: { summers: unknown[]; last?: unknown } };
     expect(ic.intl?.summers).toHaveLength(1);
-    expect(ic.intl?.last?.edition).toBe('oly-2004');
-    expect(ic.intl?.last?.field).toContain('Serbia and Montenegro');
+    expect(ic.intl && 'last' in ic.intl).toBe(false);
+    /* a later season on the save moves nothing: the replay reads the season before that summer */
+    const later = { ...c, seasons: [...c.seasons, line(2004, 70)], age: c.age + 1 };
+    const t = NBA_CAREER_INTL.tournamentOf(later, 2004);
+    expect(spy).not.toHaveBeenCalled();
+    expect(JSON.stringify(t)).toBe(JSON.stringify(a?.tournament));
+    expect(t?.field).toContain('Serbia and Montenegro');
+    expect(NBA_CAREER_INTL.tournamentOf(c, 2008)).toBeNull();
     const { intl: _i, ...rest } = ic;
     expect(JSON.stringify({ ...rest, health: 0 })).toBe(JSON.stringify(before));
     expect(NBA_CAREER_INTL.pending(c)).toBeNull();
@@ -122,17 +128,22 @@ describe('the game', () => {
       expect(r.a).toBeGreaterThanOrEqual(45);
     }
   });
-  it('gives each nation its real rung in a played summer and its mean before one to come', () => {
+  it('gives each nation its real rung in a played summer, drawing nothing, and a rung it really reached before one to come', () => {
+    const never = () => { throw new Error('a played summer drew from the stream'); };
     const athens = NBA_INTL_CALENDAR.editionFor(2004);
     if (!athens) throw new Error('no Athens');
-    expect(nbaIntlStrength(athens, 'Argentina')).toBe(92);
-    expect(nbaIntlStrength(athens, 'USA')).toBe(87);
-    expect(nbaIntlStrength(athens, 'Angola')).toBe(76);
+    expect(nbaIntlStrength(athens, 'Argentina', never)).toBe(92);
+    expect(nbaIntlStrength(athens, 'USA', never)).toBe(87);
+    expect(nbaIntlStrength(athens, 'Angola', never)).toBe(76);
     const qatar = NBA_INTL_CALENDAR.editionFor(2027);
     if (!qatar) throw new Error('no 2027');
-    expect(nbaIntlStrength(qatar, 'USA')).toBeGreaterThan(88);
-    expect(nbaIntlLift(86)).toBe(0);
-    expect(nbaIntlLift(88)).toBe(1);
+    /* the USA really finished gold, bronze, fourth and in the quarter-finals: a draw lands on one of those */
+    const seen = new Set<number>();
+    for (let i = 0; i < 400; i += 1) seen.add(nbaIntlStrength(qatar, 'USA', keyedRng(`s:${i}`)));
+    expect([...seen].sort()).toEqual([82, 85, 87, 92]);
+    expect(nbaIntlStrength(qatar, 'Nowhere', never)).toBe(76);
+    expect(nbaIntlLift(INTL_CALL_UP_OVR)).toBe(0);
+    expect(nbaIntlLift(INTL_CALL_UP_OVR + 2)).toBe(1);
     expect(nbaIntlLift(99)).toBe(INTL_LIFT_CAP);
   });
 });

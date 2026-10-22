@@ -125,6 +125,10 @@ export interface UsIntlSport<C> {
   answer(c: C, choice: 'go' | 'rest'): { row: IntlSummerEntry; tournament: IntlTournament | null } | null;
   /** The house repair on load; whether anything changed. */
   repairOnLoad(c: C): boolean;
+  /** Round 1544: the tournament of a summer he went to, played again from the
+   *  save (nothing of it is stored), or null when it no longer agrees with the
+   *  summer's row, which stays the record. */
+  tournamentOf(c: C, year: number): IntlTournament | null;
   /** The curtain's line when a call is waiting, or null. */
   curtainLine(c: C): string | null;
   /** The Trophy Case's medal rows. */

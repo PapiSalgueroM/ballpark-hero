@@ -37,16 +37,24 @@
  *
  * THE DRAW ORDER, fixed, so a later bind that hands in another stream gets
  * the same order: the generated field (on the EDITION's own stream, so every
- * career sees the same field), then on the career's stream: the pots, the
- * group games in table order with each group's tie coins after its games,
+ * career sees the same field), then on the career's stream: the strengths of
+ * an edition still to come in field order (Round 1544; a played edition reads
+ * its real finishes and draws nothing, so its stream is as it was), the pots,
+ * the group games in table order with each group's tie coins after its games,
  * the knockout round by round, the bronze game, his lines game by game, the
  * knock. Never Math.random: every draw comes from the stream handed in.
  *
- * THE SAVE. One optional block on the career, `intl` = { v: 1, summers, last }.
+ * THE SAVE. One optional block on the career, `intl` = { v: 1, summers }.
  * A summer row is written only when he answers a call: { year, edition,
- * went: false } for rest, the whole row for go. `last` is a snapshot of the
- * latest tournament he played, kept whole for the result screen; older
- * summers keep the row only. Hosts and names are never copied into a save:
+ * went: false } for rest, the whole row for go. The row is the record of the
+ * medal. Since Round 1544 the tournament itself is never stored: every input
+ * of it is on the save (the season line before that summer, his age on the
+ * row, the career's key, the edition id) and every draw is keyed, so
+ * intlTournamentOf plays it again on read (Club Manager's "nothing stored but
+ * the slice" pattern, src/lib/worldCompetition.ts), and shows it only while it
+ * agrees with the row. A save from before that kept the latest tournament in
+ * `last`; the repair drops it when the replay equals it and keeps it as a
+ * snapshot when it does not. Hosts and names are never copied into a save:
  * screens read them from the ledger by edition id. An edition id is the
  * competition and the summer ('oly-2028'), a save key never renamed, and a
  * row whose id the ledger no longer lists is kept and rendered from its parse.
@@ -272,7 +280,11 @@ export interface IntlSportBind<C extends IntlCareer> {
   nationOf(c: C): string;
   /** the edition he is called up for after his last season, or null. */
   callOf(c: C): IntlEdition | null;
-  strengthOf(e: IntlEdition, nation: string): number;
+  /** a nation's strength in an edition. A played edition reads where it
+      really finished and must draw nothing; one still to come may draw from
+      rng, the career's stream, which the runner hands in field order before
+      the pots. */
+  strengthOf(e: IntlEdition, nation: string, rng: Rng): number;
   /** what he adds to his nation's strength. */
   liftOf(c: C): number;
   play(a: number, b: number, rng: Rng, knockout: boolean): IntlScore;
@@ -289,6 +301,10 @@ export interface IntlSportBind<C extends IntlCareer> {
   ageOf(c: C): number;
   careerKey(c: C): string;
   rng(key: string): Rng;
+  /** the career as it stood when it answered the call of `summer` at `age`
+      (the season before that summer as its last), or null when the save no
+      longer holds that season: what intlTournamentOf plays again. */
+  careerAt(c: C, summer: number, age: number): C | null;
 }
 
 const ROUND_OF: Record<number, IntlGameRound> = { 16: 'R16', 8: 'QF', 4: 'SF', 2: 'final' };
@@ -322,7 +338,7 @@ export function runIntlTournament<C extends IntlCareer>(e: IntlEdition, nation: 
   if (!got) return null;
   const { field, generated } = got;
   const shape = e.play;
-  const strength = new Map(field.map(t => [t, bind.strengthOf(e, t)]));
+  const strength = new Map(field.map(t => [t, bind.strengthOf(e, t, rng)]));
   strength.set(nation, (strength.get(nation) ?? 0) + bind.liftOf(c));
   const games: IntlGame[] = [];
   const places: Record<string, IntlPlace> = {};
@@ -412,7 +428,14 @@ export type IntlSummerEntry =
     year: number; edition: string; went: true; age: number; place: IntlPlace;
     games: number; wins: number; avg: Record<string, number>; hurt: boolean;
   };
-export interface CareerIntlBlock { v: 1; summers: IntlSummerEntry[]; last?: IntlTournament }
+export interface CareerIntlBlock {
+  v: 1; summers: IntlSummerEntry[];
+  /** a snapshot, never written since Round 1544: a save from Round 1541's
+      dark code kept its latest tournament here, and the repair drops it once
+      the replay equals it (intlTournamentOf), so only a snapshot the replay
+      disagrees with is ever left on a save. */
+  last?: IntlTournament;
+}
 export interface IntlCareer { intl?: CareerIntlBlock }
 export interface IntlCall { edition: IntlEdition; year: number }
 
@@ -432,9 +455,10 @@ const round1 = (x: number) => Math.round(x * 10) / 10;
 
 /**
  * He answers. Rest writes { year, edition, went: false } and nothing else; go
- * plays the tournament on the career's keyed stream, writes the row and the
- * snapshot in `last`, and a knock goes through the sport. Mutates c (the
- * board's own copy). Null when nothing is pending.
+ * plays the tournament on the career's keyed stream, writes the row (never the
+ * tournament: intlTournamentOf plays it again from the save) and a knock goes
+ * through the sport. Mutates c (the board's own copy). Null when nothing is
+ * pending. The tournament comes back for the screen that shows it at once.
  */
 export function answerCallUp<C extends IntlCareer>(c: C, bind: IntlSportBind<C>, choice: 'go' | 'rest'): { row: IntlSummerEntry; tournament: IntlTournament | null } | null {
   const call = pendingCallUp(c, bind);
@@ -459,10 +483,45 @@ export function answerCallUp<C extends IntlCareer>(c: C, bind: IntlSportBind<C>,
     place: t.places[nation] ?? 'group', games: mine.length, wins: mine.filter(g => g.winner === nation).length, avg, hurt: t.hurt,
   };
   block.summers.push(row);
-  block.last = t;
   c.intl = block;
   if (t.hurt) bind.knock(c);
   return { row, tournament: t };
+}
+
+/** The row a tournament makes: the same numbers answerCallUp writes. */
+function rowAgrees(t: IntlTournament, r: Extract<IntlSummerEntry, { went: true }>): boolean {
+  const mine = t.games.filter(g => g.a === t.nation || g.b === t.nation);
+  const sums: Record<string, number> = {};
+  for (const h of t.his) for (const [k, v] of Object.entries(h.line)) sums[k] = (sums[k] ?? 0) + v;
+  const avg = Object.entries(sums).map(([k, v]) => [k, round1(v / Math.max(1, t.his.length))] as const);
+  return t.edition === r.edition && (t.places[t.nation] ?? 'group') === r.place && mine.length === r.games
+    && mine.filter(g => g.winner === t.nation).length === r.wins && t.hurt === r.hurt
+    && avg.length === Object.keys(r.avg).length && avg.every(([k, v]) => r.avg[k] === v);
+}
+
+/** The tournament a career played, played again from the save: the season
+ *  before that summer (bind.careerAt), the age on the row, the career's key
+ *  and the edition, on the same keyed stream answerCallUp used. Shown only
+ *  while it agrees with the row, which stays the record of the medal: a data
+ *  round that corrects a field or a finish makes a replay differ, and then the
+ *  screens show the row alone. A save that still holds a snapshot of this
+ *  summer (`last`, kept by the repair because the replay differs) shows the
+ *  snapshot. Null for a summer he rested or never answered. */
+export function intlTournamentOf<C extends IntlCareer>(c: C, bind: IntlSportBind<C>, year: number): IntlTournament | null {
+  const r = (c.intl?.summers ?? []).find(s => s.year === year);
+  if (!r || !r.went) return null;
+  const kept = c.intl?.last;
+  if (kept && kept.edition === r.edition) return kept;
+  const replay = replayIntl(c, bind, r);
+  return replay && rowAgrees(replay, r) ? replay : null;
+}
+
+function replayIntl<C extends IntlCareer>(c: C, bind: IntlSportBind<C>, r: IntlSummerEntry): IntlTournament | null {
+  if (!r.went) return null;
+  const e = bind.calendar.byId(r.edition);
+  const then = e ? bind.careerAt(c, r.year, r.age) : null;
+  if (!e || !then) return null;
+  return runIntlTournament(e, bind.nationOf(then), bind, then, bind.rng(intlStreamKey(bind.slug, bind.careerKey(then), e.id)));
 }
 
 /** Round 1329's rule: a tournament he played is the career's own and prints whole; a summer he rested prints nothing. */
@@ -551,9 +610,12 @@ function lastOk(t: unknown, rows: IntlSummerEntry[]): boolean {
  * A row is never dropped because the ledger stopped listing its edition: the
  * id is a save key, and a screen renders an unknown one from its parse. A
  * block left with no rows goes, so a career never called carries none.
+ * With the bind handed in (Round 1544), a sound `last` is dropped when the
+ * replay of its summer equals it byte for byte, and kept as a snapshot when
+ * it does not, so no tournament the player saw is ever lost to a data round.
  * Returns whether anything changed.
  */
-export function repairIntlOnLoad(c: IntlCareer): boolean {
+export function repairIntlOnLoad<C extends IntlCareer>(c: C, bind?: IntlSportBind<C>): boolean {
   if (!('intl' in c) || c.intl === undefined) return false;
   const b: unknown = c.intl;
   if (!isObj(b) || b.v !== 1 || !Array.isArray(b.summers)) { delete c.intl; return true; }
@@ -566,7 +628,11 @@ export function repairIntlOnLoad(c: IntlCareer): boolean {
   if (!rows.length) { delete c.intl; return true; }
   const block: CareerIntlBlock = { v: 1, summers: rows };
   if ('last' in b && b.last !== undefined) {
-    if (lastOk(b.last, rows)) block.last = b.last as IntlTournament; else changed = true;
+    const last = b.last as IntlTournament;
+    const row = lastOk(b.last, rows) ? rows.find(r => r.went && r.edition === last.edition) : undefined;
+    if (!row) changed = true;
+    else if (bind && JSON.stringify(replayIntl(c, bind, row)) === JSON.stringify(last)) changed = true;
+    else block.last = last;
   }
   if (changed) c.intl = block;
   return changed;

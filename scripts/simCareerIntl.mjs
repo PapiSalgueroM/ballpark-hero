@@ -26,14 +26,16 @@
         Montenegro is kept as it played; an edition still to come has no field,
         and the field the game draws for it is the same for every career.
      4. the call, INTL_FLEET careers an era (default 400) through the real NBA
-        engine: called exactly when the oracle (86, 36, 50, an edition, a
-        career not ending with that season) says so.
-     5. the tournament, INTL_TOURNEYS tournaments an edition kind (default 2000)
-        in ten seed sets: gold and medal rates by rating tier and kind inside
-        BANDS, gold rising tier to tier (RISE), the knock's hurt share by age
-        inside KNOCK_BANDS and rising with age (KNOCK_RISE). Sets 1 to 5 set
-        the bands, sets 6 to 10 are held out; the measured numbers sit in the
-        comments above BANDS and KNOCK_BANDS.
+        engine: called exactly when the oracle (87 since Round 1544, 36, 50,
+        an edition, a career not ending with that season) says so.
+     5. the tournament, INTL_TOURNEYS tournaments an edition kind (default 8000
+        since Round 1544) in ten seed sets: gold and medal rates by rating tier
+        inside the PLAYED editions' BANDS for every kind (played, still to
+        come, projected: Round 1544's ruling L3), gold rising tier to tier
+        (RISE), the knock's hurt share by age inside KNOCK_BANDS and rising
+        with age (KNOCK_RISE). Sets 1 to 5 set the bands, sets 6 to 10 are held
+        out; the measured numbers sit in the comments above BANDS and
+        KNOCK_BANDS.
      6. one engine and the stream: the bracket runner's fingerprints live in
         careerIntl.ts alone, and a tournament never calls Math.random.
      7. what must not move (needs INTL_BASE_DIR, a worktree of the base): the
@@ -42,7 +44,11 @@
         and what follows; deals before the first knock agree; legacy never
         reads the block.
      8. saves: the repair leaves every real NBA save byte identical and drops a
-        broken block, row or last alone.
+        broken block, row or last alone; (Round 1544) every tournament a go
+        fleet played is played again, byte for byte, from the final save (so
+        nothing of it is stored), a stored last the replay equals is dropped and
+        one it does not equal is kept; with INTL_OLD_DIR (a tree of Round 1541's
+        closing head) the saves that code wrote are repaired and counted.
 
    Controls (INTL_CONTROL=<name>; run each with INTL_SECTIONS set to its own
    section, or it also runs the default sections). Each is asserted to change
@@ -60,6 +66,8 @@
      nobronze     no bronze game is played                               (5 red)
      knockflip    the knock comparison flipped                           (5 red)
      knockage     the knock forgets his age                              (5 red)
+     easyfuture   a summer still to come gives each nation the mean of its
+                  rungs again (Round 1541's field)                       (5 red)
      copy         a copy of the runner planted in a sport file           (6 red)
      mathrandom   the pot draw uses Math.random                          (6 red)
      restwrites   resting takes a point of health                        (7 red)
@@ -104,6 +112,7 @@ const CONTROLS = {
   nobronze: { section: '5', note: 'no bronze game is played', edits: [{ file: INTL, from: 'if (shape.bronze && semiLosers.length === 2) {', to: 'if (false && shape.bronze && semiLosers.length === 2) {' }] },
   knockflip: { section: '5', note: 'the knock comparison is flipped, so he comes home hurt from most tournaments', edits: [{ file: INTL, from: 'const hurt = rng() < bind.knockChance(c);', to: 'const hurt = rng() > bind.knockChance(c);' }] },
   knockage: { section: '5', note: 'the knock forgets his age', edits: [{ file: NBA, from: 'INTL_KNOCK_BASE + INTL_KNOCK_PER_YEAR * Math.max(0, age - INTL_KNOCK_AGE)', to: 'INTL_KNOCK_BASE' }] },
+  easyfuture: { section: '5', note: "a summer still to come gives each nation the mean of its rungs again (Round 1541's field)", edits: [{ file: NBA, from: 'return INTL_RUNG_STRENGTH[past[Math.min(past.length - 1, Math.floor(rng() * past.length))]];', to: 'return past.reduce((s, r) => s + INTL_RUNG_STRENGTH[r], 0) / past.length;' }] },
   mathrandom: { section: '6', note: 'the pot draw uses Math.random', edits: [{ file: INTL, from: 'const j = Math.floor(rng() * (i + 1));', to: 'const j = Math.floor(Math.random() * (i + 1));' }] },
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown control "${CONTROL}": use ${Object.keys(CONTROLS).join(', ')}`); process.exit(2); }
@@ -409,7 +418,7 @@ if (SECTIONS.has('6')) {
 /* The fleet drives the NBA binding through src/test/helpers/usCareerDrive.ts,
    the drive that mirrors the board (camp, season, progress, the summer dealt,
    then the call, then the cards, then the team roll), FLEET careers an era,
-   seeds 0 to FLEET - 1. The oracle states the bar itself (86, 36, 50) rather
+   seeds 0 to FLEET - 1. The oracle states the bar itself (87, 36, 50) rather
    than reading the bind's constants, so a control that moves the bind's
    comparison cannot move the oracle with it. It also states the end of a
    career: the board ends a career after a season his farewell or retirement
@@ -419,7 +428,8 @@ if (SECTIONS.has('6')) {
 const FLEET = Number(process.env.INTL_FLEET || 400);
 const ERAS = [['now', undefined, 2027], ['y2004', 'y2004', 2004]];
 const POS = ['PG', 'SG', 'SF', 'PF', 'C'];
-const ORACLE = { ovr: 86, age: 36, health: 50 };
+/* Round 1544 (the lead's ruling L1): the bar is 87. */
+const ORACLE = { ovr: 87, age: 36, health: 50 };
 if (SECTIONS.has('2') || SECTIONS.has('4')) {
   console.log(`sections 2b and 4: the call, ${FLEET} careers an era through the real NBA engine`);
   for (const [era, eraId, firstSummer] of ERAS) {
@@ -479,25 +489,36 @@ if (SECTIONS.has('2') || SECTIONS.has('4')) {
    tier meets every edition of its kind (Round 1541's fix: the edition used to
    run on k itself, which locked each tier of the 4 future and 8 projected
    editions to one competition, World Cups for two tiers and Olympics for the
-   other two, and measured the competition instead of the tier). */
-const TOURNEYS = Number(process.env.INTL_TOURNEYS || 2000);
-const TIERS = [[86, 88], [89, 91], [92, 94], [95, 99]];
+   other two, and measured the competition instead of the tier).
+   ROUND 1544. The tiers are read from the bar (87: 87-89, 90-92, 93-95,
+   96-99), so each tier's lift is what it was at 86 and the played editions'
+   rates are the same to the decimal (the rating moves nothing else). The
+   default is 8000 tournaments a kind a set (2000 a tier): Round 1541's 2000
+   left a held out set's standard error at 2.2 points, so a calibrated future
+   kind sat a coin toss from the band; more tournaments, never a wider band. */
+const TOURNEYS = Number(process.env.INTL_TOURNEYS || 8000);
+const TIERS = [[ORACLE.ovr, ORACLE.ovr + 2], [ORACLE.ovr + 3, ORACLE.ovr + 5], [ORACLE.ovr + 6, ORACLE.ovr + 8], [ORACLE.ovr + 9, 99]];
 const KINDS = ['played', 'future', 'projected'];
-/* Gold and medal bands a tier, a kind (percent): [gold low, gold high, medal low, medal high].
-   Measured after the fix (head 9902783d plus the fix, 2000 tournaments an edition kind a set, so 500 a
-   tier; the same numbers on a runner, see the round's fix report): sets 1 to 5 ranged, gold then medal, by
-   tier 86-88, 89-91, 92-94, 95-99:
-     played     gold 45.0-49.4, 53.6-59.8, 60.8-64.0, 63.0-66.2   medal 77.8-80.4, 82.0-85.4, 88.2-89.2, 90.2-91.0
-     future     gold 66.8-70.4, 77.8-81.0, 86.0-90.4, 89.8-91.8   medal 90.4-93.4, 93.6-96.2, 97.0-98.2, 98.0-98.6
-     projected  gold 68.4-73.2, 78.0-84.2, 87.4-89.8, 89.4-92.2   medal 90.6-93.4, 94.8-97.2, 96.8-98.8, 97.4-98.6
-   A rate over 500 tournaments has a standard error of about 2.2 points, so each band is the sets 1 to 5
-   range widened by 6 points (close to three errors) on both sides, capped at 100. The held out sets 6 to 10
-   then measured: played gold 44.2-48.2, 52.8-58.6, 62.6-66.8, 65.2-67.4; future gold 66.8-72.4, 76.4-82.6,
-   87.0-90.6, 88.8-90.2; projected gold 66.0-74.4, 78.6-83.0, 88.6-90.2, 89.6-91.8 (all inside, medals too). */
+/* Gold and medal bands a tier (percent): [gold low, gold high, medal low, medal high], the PLAYED
+   editions' bands, held to every kind since Round 1544 (the lead's ruling L3: summers still to come and
+   projected ones must sit inside what played summers measure). Measured by Round 1541's fix (2000
+   tournaments a kind a set, so 500 a tier): played sets 1 to 5 ranged, gold then medal, by tier,
+   gold 45.0-49.4, 53.6-59.8, 60.8-64.0, 63.0-66.2, medal 77.8-80.4, 82.0-85.4, 88.2-89.2, 90.2-91.0; each
+   band is that range widened by 6 points (close to three errors at 500 a tier) on both sides. These numbers
+   do not move in Round 1544. What Round 1544 measured at 8000 a set (2000 a tier), gold percent:
+     played     sets 1 to 5 46.6-47.8, 54.3-57.1, 62.4-65.0, 64.2-66.7; held out 46.1-48.0, 54.5-57.0,
+                63.7-64.6, 65.0-66.5 (pooled 47.4, 55.7, 64.2, 65.5)
+     future     sets 1 to 5 41.8-45.5, 54.0-57.0, 62.6-64.3, 65.1-69.8; held out 43.9-47.0, 54.3-56.2,
+                64.0-67.0, 66.0-68.8 (pooled 44.9, 55.4, 65.3, 67.3)
+     projected  sets 1 to 5 44.5-48.1, 55.0-57.7, 64.7-67.3, 67.8-69.0; held out 44.9-47.9, 56.1-58.6,
+                64.4-67.3, 65.6-70.0 (pooled 46.4, 57.3, 65.7, 68.0)
+   and medal percent held out: played 77.8-79.0, 83.3-84.5, 87.8-89.4, 89.0-90.3; future 75.2-77.7,
+   82.9-84.8, 89.0-90.0, 88.8-90.7; projected 77.0-79.3, 85.3-85.8, 88.5-90.6, 89.7-92.5. All inside. The
+   closest edge is projected 96-99 gold at 70.0 against 72.2 (a standard error of about 1.0 at 2000 a tier).
+   Before Round 1544 (each nation at the MEAN of its rungs) the future kind's held out gold pooled 69.4,
+   79.8, 88.4, 89.4: control easyfuture puts that back and must go red. */
 const BANDS = {
   played: [[39.0, 55.4, 71.8, 86.4], [47.6, 65.8, 76.0, 91.4], [54.8, 70.0, 82.2, 95.2], [57.0, 72.2, 84.2, 97.0]],
-  future: [[60.8, 76.4, 84.4, 99.4], [71.8, 87.0, 87.6, 100], [80.0, 96.4, 91.0, 100], [83.8, 97.8, 92.0, 100]],
-  projected: [[62.4, 79.2, 84.6, 99.4], [72.0, 90.2, 88.8, 100], [81.4, 95.8, 90.8, 100], [83.4, 98.2, 91.4, 100]],
 };
 /* Gold must rise from tier to tier (the first three) by at least this many points, pooled over the held out
    sets (2500 a tier, a standard error on a difference of about 1.4 points). Sets 1 to 5 pooled rose at least
@@ -585,9 +606,9 @@ if (SECTIONS.has('5')) {
     console.log(`    held out pooled gold by tier: ${held.map(x => x.toFixed(1)).join(', ')}; rises ${held.slice(1).map((x, i) => (x - held[i]).toFixed(1)).join(', ')}`);
     if (BANDS) {
       for (let s = 6; s <= 10; s += 1) TIERS.forEach((_, ti) => {
-        const [g0, g1, m0, m1] = BANDS[kind][ti];
+        const [g0, g1, m0, m1] = BANDS.played[ti];
         const r = rates[`${s}:${kind}`][ti];
-        check('5', r.gold >= g0 && r.gold <= g1 && r.medal >= m0 && r.medal <= m1, `${kind} set ${s} tier ${TIERS[ti].join('-')}: gold ${r.gold.toFixed(1)} medal ${r.medal.toFixed(1)} outside ${g0}-${g1} / ${m0}-${m1}`);
+        check('5', r.gold >= g0 && r.gold <= g1 && r.medal >= m0 && r.medal <= m1, `${kind} set ${s} tier ${TIERS[ti].join('-')}: gold ${r.gold.toFixed(1)} medal ${r.medal.toFixed(1)} outside the played band ${g0}-${g1} / ${m0}-${m1}`);
       });
     }
     if (RISE !== null) for (let ti = 1; ti < 3; ti += 1) check('5', held[ti] - held[ti - 1] >= RISE, `${kind}: gold rises ${(held[ti] - held[ti - 1]).toFixed(1)} from tier ${TIERS[ti - 1].join('-')} to ${TIERS[ti].join('-')}, under ${RISE}`);
@@ -725,6 +746,74 @@ if (SECTIONS.has('8')) {
     check('8', nbaIntl.NBA_CAREER_INTL.repairOnLoad(d) === false && d.intl.summers.length === 1, 'a projected summer was dropped');
   }
   console.log(`  ${saves.length} played NBA saves repaired byte identical; four planted blocks checked`);
+
+  /* Round 1544 (the lead's ruling L4): nothing of a tournament is stored. A go fleet, each answer's
+     tournament captured as it was played, then played again from the career's FINAL save (seasons later,
+     health knocked, older): byte for byte the same. A save the way Round 1541's code wrote it (the latest
+     tournament kept in last) loses that last when the replay equals it, and keeps it, as what the screens
+     show, when it does not. */
+  const RF = Number(process.env.INTL_REPLAY_FLEET || 60);
+  let replays = 0; let dropped = 0; let kept = 0;
+  for (const [era, eraId] of ERAS) {
+    for (let i = 0; i < RF; i += 1) {
+      const r = drive.driveCareer(NBA_CAREER_SPORT, { key: `intl8:${era}:${i}`, pos: POS[i % POS.length], arch: i, eraId, seasons: 30, intl: 'go' });
+      const c = JSON.parse(r.json);
+      check('8', !c.intl || !('last' in c.intl), `${era} ${i}: a save stores a tournament`);
+      for (const x of r.intlLog) {
+        if (x.played === 'null') continue;
+        replays += 1;
+        check('8', JSON.stringify(nbaIntl.NBA_CAREER_INTL.tournamentOf(c, x.year)) === x.played, `${era} ${i} summer ${x.year}: the replay from the final save differs from the tournament played`);
+      }
+      const latest = [...r.intlLog].reverse().find(x => x.played !== 'null');
+      if (!latest) continue;
+      const old = JSON.parse(r.json);
+      old.intl.last = JSON.parse(latest.played);
+      const rows = JSON.stringify(old.intl.summers);
+      check('8', nbaIntl.NBA_CAREER_INTL.repairOnLoad(old) === true && !('last' in old.intl) && JSON.stringify(old.intl.summers) === rows, `${era} ${i}: a stored last the replay equals was not dropped alone`);
+      dropped += 1;
+      const odd = JSON.parse(r.json);
+      odd.intl.last = JSON.parse(latest.played);
+      odd.intl.last.games[0].sa += 1;
+      const was = JSON.stringify(odd);
+      check('8', nbaIntl.NBA_CAREER_INTL.repairOnLoad(odd) === false && JSON.stringify(odd) === was, `${era} ${i}: a stored last the replay does not equal was not kept`);
+      check('8', JSON.stringify(nbaIntl.NBA_CAREER_INTL.tournamentOf(odd, latest.year)) === JSON.stringify(odd.intl.last), `${era} ${i}: a kept snapshot is not what the screens show`);
+      kept += 1;
+    }
+  }
+  check('8', replays >= 100 && dropped > 0 && kept > 0, `only ${replays} tournaments were played again (${dropped} dropped, ${kept} kept), so the section proves little`);
+  console.log(`  ${replays} tournaments of ${RF} go careers an era played again from the final save, byte identical; planted lasts: ${dropped} equal to the replay dropped, ${kept} unequal kept`);
+
+  /* With INTL_OLD_DIR (a tree of Round 1541's closing head, 74ece9992): the saves THAT code wrote, repaired
+     here. Measured, never banded: how many keep their last, and the reason, by kind of summer. */
+  if (process.env.INTL_OLD_DIR) {
+    const O = path.resolve(process.env.INTL_OLD_DIR).replaceAll('\\', '/');
+    const OENTRY = path.join(TMP, 'old-entry.mjs');
+    const OOUT = path.join(TMP, 'old-bundle.mjs');
+    fs.writeFileSync(OENTRY, `export { NBA_CAREER_SPORT } from '${O}/src/lib/nbaCareerSport.ts';\nexport * as drive from '${O}/src/test/helpers/usCareerDrive.ts';\n`);
+    await build({ entryPoints: [OENTRY], bundle: true, format: 'esm', platform: 'node', outfile: OOUT, logLevel: 'error', absWorkingDir: path.resolve(O), alias: { '@': path.join(path.resolve(O), 'src') }, nodePaths: [path.join(ROOT, 'node_modules')] });
+    const oldCode = await import(pathToFileURL(OOUT).href);
+    const tally = {};
+    let withLast = 0;
+    for (const [era, eraId] of ERAS) {
+      for (let i = 0; i < RF; i += 1) {
+        const r = oldCode.drive.driveCareer(oldCode.NBA_CAREER_SPORT, { key: `intl8old:${era}:${i}`, pos: POS[i % POS.length], arch: i, eraId, seasons: 30, intl: 'go' });
+        const c = JSON.parse(r.json);
+        if (!c.intl?.last) continue;
+        withLast += 1;
+        const rows = JSON.stringify(c.intl.summers);
+        const kind = nbaIntl.NBA_INTL_CALENDAR.byId(c.intl.last.edition)?.kind ?? 'unknown';
+        const row = c.intl.summers.find(x => x.went && x.edition === c.intl.last.edition);
+        const ovr = c.seasons.filter(s => nbaIntl.nbaIntlSummerOf(s.year) === row?.year).pop()?.ovr ?? 0;
+        nbaIntl.NBA_CAREER_INTL.repairOnLoad(c);
+        check('8', JSON.stringify(c.intl.summers) === rows, `old ${era} ${i}: the repair moved a summer row`);
+        const key = `${kind} ${ovr >= 95 ? 'rated 95 or more' : 'rated under 95'}`;
+        tally[key] ??= { dropped: 0, kept: 0 };
+        tally[key][c.intl.last ? 'kept' : 'dropped'] += 1;
+      }
+    }
+    check('8', withLast > 0, 'Round 1541\'s code wrote no save with a stored last, so 8c proves nothing');
+    console.log(`  8c, ${withLast} saves Round 1541's code wrote with a stored last, repaired here: ${Object.entries(tally).map(([k, v]) => `${k}: ${v.dropped} dropped, ${v.kept} kept`).join('; ')}`);
+  }
 }
 
 /* ─── summary ────────────────────────────────────────────────────────────── */

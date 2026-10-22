@@ -33,7 +33,7 @@
  */
 
 import {
-  answerCallUp, intlCalendar, intlRungHistory, intlRungOf, intlStatsOf, intlStreamKey, parseIntlId, pendingCallUp,
+  answerCallUp, intlCalendar, intlRungHistory, intlRungOf, intlStatsOf, intlStreamKey, intlTournamentOf, parseIntlId, pendingCallUp,
   repairIntlOnLoad, type CareerIntlBlock, type IntlCall, type IntlCareer, type IntlEdition, type IntlRung,
   type IntlSportBind, type IntlSummerEntry, type IntlTournament, type Rng,
 } from '@/lib/careerIntl';
@@ -49,8 +49,9 @@ import type { UsIntlSport } from '@/lib/usCareerSport';
 
 /* ─── the game's own rules ───────────────────────────────────────────────── */
 
-/** The game's own rule: the season's rating that earns a call. */
-export const INTL_CALL_UP_OVR = 86;
+/** The game's own rule: the season's rating that earns a call (Round 1544, the lead's ruling L1: 87, about
+ *  one career in two ever called; 86 called 57.5 and 59.5 percent). */
+export const INTL_CALL_UP_OVR = 87;
 /** The game's own rule: the oldest he can be in the summer of a call. */
 export const INTL_MAX_AGE = 36;
 /** The game's own rule: the least health he can carry into a call. */
@@ -100,12 +101,32 @@ function normal(rng: Rng): number {
   return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
 }
 
-/** A nation's strength: its real rung in a played edition, the mean of its rungs before one still to come. */
-export function nbaIntlStrength(e: IntlEdition, nation: string): number {
+/**
+ * A nation's strength. In a played edition, its real rung, and nothing is
+ * drawn. In one still to come (Round 1544, the lead's ruling L3), a rung drawn
+ * from the ones it really reached, one per tournament it played, on the
+ * career's stream; a nation that never played one is a field side. Round 1541
+ * gave it the MEAN of its rungs, which pulled every rival toward the middle
+ * while the USA sat at 89.5, so a 92 to 94 player won gold 88 to 90 percent of
+ * the time there against 64.5 in played editions. The draw keeps each nation's
+ * real spread: measured, gold by tier sits inside the played editions' bands
+ * (scripts/simCareerIntl.mjs section 5, control easyfuture). Taking the mean of
+ * the last two played editions was measured too and left medals at 89 to 99
+ * percent; drawing once per edition for every career fixed twelve draws and
+ * left the band to luck.
+ */
+export function nbaIntlStrength(e: IntlEdition, nation: string, rng: Rng): number {
   if (e.kind === 'played') return INTL_RUNG_STRENGTH[intlRungOf(e, nation) ?? 'field'];
   const past = intlRungHistory(NBA_INTL_CALENDAR, nation);
   if (!past.length) return INTL_RUNG_STRENGTH.field;
-  return past.reduce((s, r) => s + INTL_RUNG_STRENGTH[r], 0) / past.length;
+  return INTL_RUNG_STRENGTH[past[Math.min(past.length - 1, Math.floor(rng() * past.length))]];
+}
+
+/** The career as it stood at the call of `summer`: the season before it as its last, at the age on the row. */
+export function nbaIntlCareerAt(c: NbaCareerState, summer: number, age: number): NbaCareerState | null {
+  let i = c.seasons.length - 1;
+  while (i >= 0 && nbaIntlSummerOf(c.seasons[i].year) !== summer) i -= 1;
+  return i < 0 ? null : { ...c, seasons: c.seasons.slice(0, i + 1), age };
 }
 
 export const nbaIntlLift = (ovr: number): number => Math.max(0, Math.min(INTL_LIFT_CAP, (ovr - INTL_CALL_UP_OVR) * INTL_LIFT_PER_POINT));
@@ -169,6 +190,7 @@ export const NBA_INTL_BIND: IntlSportBind<NbaIntlCareer> = {
   ageOf: c => c.age,
   careerKey: c => summerCareerKey(c),
   rng: keyedRng,
+  careerAt: (c, summer, age) => nbaIntlCareerAt(c, summer, age) as NbaIntlCareer | null,
 };
 
 /** The stream a career's tournament draws on (the brief's intl:nba:<career key>:<edition>). */
@@ -227,7 +249,7 @@ export function nbaIntlHelpRules(): string[] {
     `International summers: after a season rated ${INTL_CALL_UP_OVR} or better, in a summer with an Olympics or a Basketball World Cup (the World Championship in ${inWords(OLD_NAME_YEARS)}), the US national team calls you up, as long as you are ${INTL_MAX_AGE} or younger that summer, your health is ${INTL_MIN_HEALTH} or more, you are not suspended and your career is not ending with that season. In this game every player is eligible for the USA.`,
     'You choose: go and play the tournament, or rest. The call waits for your answer, one call a summer, and it comes before the summer\'s cards.',
     'The tournament is groups, then a knockout: the best of each group (and the best third placed sides, when the format has them) go through, and the semi-final losers play for bronze. The knockout is seeded by group finish and record, so you can meet a side from your own group again in the first knockout game. Groups rank by wins, then points for minus against: the game\'s own rule, not FIBA\'s tie rules. A World Cup with a second group round is played as one group round into a round of 16.',
-    `In a summer already played, each nation plays at the strength of where it really finished; in one still to come, at its average finish over the tournaments it really played. You lift the USA by ${INTL_LIFT_PER_POINT} for every rating point over ${INTL_CALL_UP_OVR}, up to ${INTL_LIFT_CAP}. Groups and results are this career's own.`,
+    `In a summer already played, each nation plays at the strength of where it really finished; in one still to come, the game draws each nation's strength for your career from where it really finished in the tournaments it played (a nation new to this stage plays as an outsider). You lift the USA by ${INTL_LIFT_PER_POINT} for every rating point over ${INTL_CALL_UP_OVR}, up to ${INTL_LIFT_CAP}. Groups and results are this career's own.`,
     `If you go, the chance you come home hurt is ${pct(INTL_KNOCK_BASE)} (health drops ${INTL_KNOCK_HEALTH}, never below ${INTL_KNOCK_FLOOR}), plus ${KNOCK_POINTS} percentage point${KNOCK_POINTS === 1 ? '' : 's'} for every year you are over ${INTL_KNOCK_AGE}. Resting carries nothing and gives nothing.`,
     'A medal goes in your Trophy Case. It does not change your legacy, your Hall of Fame case, your morale, your fans or your money.',
     `Tournaments from ${FIRST_PLAYED[4]} ${FIRST_PLAYED[2]} to ${LAST_PLAYED[4]} ${LAST_PLAYED[2]} use their real hosts and fields. The ones announced after that (${inWords(ANNOUNCED)}) use their real hosts, but their fields are not settled, so the game draws each from the nations of that competition's last two tournaments, the same for every career, and a format not confirmed yet plays as that competition's last known one. Past ${LAST_LEDGER_YEAR} the game keeps its own calendar, with no host. The game puts the USA in every one of these tournaments, with no qualifying.`,
@@ -240,7 +262,8 @@ export function nbaIntlHelpRules(): string[] {
 export const NBA_CAREER_INTL: UsIntlSport<NbaCareerState> = {
   pending: c => pendingCallUp(c as NbaIntlCareer, NBA_INTL_BIND),
   answer: (c, choice) => answerCallUp(c as NbaIntlCareer, NBA_INTL_BIND, choice),
-  repairOnLoad: c => repairIntlOnLoad(c as NbaIntlCareer),
+  repairOnLoad: c => repairIntlOnLoad(c as NbaIntlCareer, NBA_INTL_BIND),
+  tournamentOf: (c, year) => intlTournamentOf(c as NbaIntlCareer, NBA_INTL_BIND, year),
   curtainLine: nbaIntlCurtainLine,
   trophyRows: nbaIntlTrophyRows,
   medalCount: c => intlStatsOf((c as NbaIntlCareer).intl).medals,

@@ -5,7 +5,7 @@
    take a sport it was not written for. */
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
-  answerCallUp, intlCalendar, intlFieldOf, intlGeneratedField, intlSeedOrder, intlStatsOf, parseIntlId,
+  answerCallUp, intlCalendar, intlFieldOf, intlGeneratedField, intlSeedOrder, intlStatsOf, intlTournamentOf, parseIntlId,
   pendingCallUp, repairIntlOnLoad, runIntlTournament,
   type IntlCareer, type IntlEdition, type IntlLedger, type IntlSportBind, type IntlTableRow, type IntlTournament, type Rng,
 } from './careerIntl';
@@ -69,6 +69,8 @@ function bindOf(draws: boolean): IntlSportBind<Toy> {
     ageOf: c => c.age,
     careerKey: c => c.name,
     rng: keyedRng,
+    /* the toy holds no seasons: as it stood is the summer before, at the row's age */
+    careerAt: (c, summer, age) => ({ ...c, year: summer - 1, age }),
   };
 }
 const HOOPS = bindOf(false);
@@ -254,7 +256,7 @@ describe('the save', () => {
     expect(pendingCallUp(c, HOOPS)).toBeNull();
     expect(answerCallUp(c, HOOPS, 'go')).toBeNull();
   });
-  it('go writes the row and the snapshot, and a knock goes through the sport', () => {
+  it('go writes the row and never the tournament, which the save plays again, and a knock goes through the sport', () => {
     let hurtSeen = 0;
     for (let i = 0; i < 60; i += 1) {
       const c = toy({ name: `Toy ${i}` });
@@ -262,7 +264,8 @@ describe('the save', () => {
       const row = c.intl?.summers[0];
       expect(row?.went).toBe(true);
       if (!row || !row.went || !a?.tournament) throw new Error('no row');
-      expect(c.intl?.last).toBe(a.tournament);
+      expect(c.intl && 'last' in c.intl).toBe(false);
+      expect(JSON.stringify(intlTournamentOf(c, HOOPS, 2004))).toBe(JSON.stringify(a.tournament));
       expect(row.place).toBe(a.tournament.places.USA);
       expect(row.games).toBe(a.tournament.his.length);
       expect(row.hurt).toBe(a.tournament.hurt);
@@ -299,14 +302,51 @@ describe('the save', () => {
 
 describe('repair on load', () => {
   const played = () => { const c = toy(); answerCallUp(c, HOOPS, 'go'); c.year = 2005; answerCallUp(c, HOOPS, 'rest'); return c; };
+  /* A save from Round 1541's dark code: the latest tournament kept whole in `last`. */
+  const withLast = () => {
+    const c = played();
+    const t = intlTournamentOf(c, HOOPS, 2004);
+    if (!t || !c.intl) throw new Error('no tournament');
+    c.intl.last = JSON.parse(JSON.stringify(t)) as IntlTournament;
+    return c;
+  };
   it('leaves an old save and a sound block untouched', () => {
     const old = toy();
     expect(repairIntlOnLoad(old)).toBe(false);
+    expect(repairIntlOnLoad(old, HOOPS)).toBe(false);
     expect('intl' in old).toBe(false);
     const c = played();
     const was = JSON.stringify(c);
     expect(repairIntlOnLoad(c)).toBe(false);
+    expect(repairIntlOnLoad(c, HOOPS)).toBe(false);
     expect(JSON.stringify(c)).toBe(was);
+  });
+  it('drops a stored last the replay equals, and keeps one it does not as a snapshot', () => {
+    const c = withLast();
+    const summers = JSON.stringify(c.intl?.summers);
+    expect(repairIntlOnLoad(c)).toBe(false);
+    expect(c.intl?.last?.edition).toBe('oly-2004');
+    expect(repairIntlOnLoad(c, HOOPS)).toBe(true);
+    expect(c.intl && 'last' in c.intl).toBe(false);
+    expect(JSON.stringify(c.intl?.summers)).toBe(summers);
+    const d = withLast();
+    const kept = d.intl?.last;
+    if (!kept) throw new Error('no last');
+    kept.games[0].sa += 1;
+    const was = JSON.stringify(d);
+    expect(repairIntlOnLoad(d, HOOPS)).toBe(false);
+    expect(JSON.stringify(d)).toBe(was);
+    expect(intlTournamentOf(d, HOOPS, 2004)).toBe(kept);
+  });
+  it('shows a replay only while it agrees with the row, and nothing for a rested summer', () => {
+    const c = played();
+    expect(intlTournamentOf(c, HOOPS, 2004)?.edition).toBe('oly-2004');
+    expect(intlTournamentOf(c, HOOPS, 2006)).toBeNull();
+    expect(intlTournamentOf(c, HOOPS, 2008)).toBeNull();
+    const row = c.intl?.summers[0];
+    if (!row || !row.went) throw new Error('no row');
+    row.wins = row.wins === 0 ? 1 : row.wins - 1;
+    expect(intlTournamentOf(c, HOOPS, 2004)).toBeNull();
   });
   it('drops a broken block alone', () => {
     const c = toy();
@@ -316,14 +356,14 @@ describe('repair on load', () => {
     expect(c.health).toBe(80);
   });
   it('drops a broken row alone and keeps the rest', () => {
-    const c = played();
+    const c = withLast();
     (c.intl?.summers as unknown[]).push({ year: 2009, edition: 'oly-2008', went: false }, { year: 'x' }, { year: 2012, edition: 'oly-2012', went: true, place: 'gold' });
     expect(repairIntlOnLoad(c)).toBe(true);
     expect(c.intl?.summers.map(r => r.year)).toEqual([2004, 2006]);
     expect(c.intl?.last?.edition).toBe('oly-2004');
   });
   it('drops a broken last alone', () => {
-    const c = played();
+    const c = withLast();
     (c.intl as { last: unknown }).last = { v: 1, edition: 'oly-2004' };
     expect(repairIntlOnLoad(c)).toBe(true);
     expect(c.intl?.summers).toHaveLength(2);
@@ -342,7 +382,7 @@ describe('repair on load', () => {
       l => { delete l.generated; },
     ];
     for (const [i, brk] of breaks.entries()) {
-      const c = played();
+      const c = withLast();
       const summers = JSON.stringify(c.intl?.summers);
       brk(c.intl?.last as unknown as Record<string, unknown>);
       expect(repairIntlOnLoad(c), `break ${i}`).toBe(true);
