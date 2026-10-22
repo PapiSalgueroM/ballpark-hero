@@ -1,0 +1,13 @@
+headsha exit=0 0s | 705f576c2a Record Release BP: live at 17:53 EDT on 2026-10-22 (main 5ba8a1c6, deployment e12d7e79), with the board note for the other lane
+vitest-bh exit=0 8s |    Duration  8.16s (transform 2.47s, setup 1.26s, collect 5.94s, tests 6.03s, environment 4.53s, prepare 1.16s)
+rodri-proof exit=0 10s | simPlayerBingoRodriHonour: fixed proof passed; complete raw reports and changed-copy receipts retained. Offline only.
+simSportsBingo exit=0 0s | simSportsBingo: green. Every card can be finished, and the packs play fair.
+simBingoSeats exit=0 1s | simBingoSeats: all checks passed
+simMarketYearScope exit=0 0s | simMarketYearScope: all green
+wx-original-ctl exit=0 4s | wxOriginal: CONTROL FIRED-OK on base 5b630266: 3 display tests failed on their markers, the season test passed, both files restored
+simWorldXiSeasonReport exit=0 2s | simWorldXiSeasonReport: green. The report says a great deal more, every number adds up and comes off who played, and nobody real says a word.
+simWorldXiReport exit=0 1s | simWorldXiReport: green. The report says more and the season it describes did not move.
+life-original-ctl exit=0 2s | lifeOriginal: CONTROL FIRED-OK on base 33ee6161: exactly the 8 preview cases failed, 10 preserved, both files restored
+simCareerLife exit=0 22s | simCareerLife: green. Every peak is reachable, the critic has an opinion and it is about the football, and nothing about either of them is on the save.
+simCareerDilemmaTruth exit=0 5s | simCareerDilemmaTruth: all green
+held-after exit=0 0s | src and scripts held after every line
