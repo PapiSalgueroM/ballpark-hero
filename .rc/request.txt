@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/hallOfChampionsLongPlay.test.tsx --testTimeout=300000 --hookTimeout=120000
+simHallLongPlay: node scripts/simHallLongPlay.mjs
+walk3: node .rc/x/r1548fix_walk3.mjs
