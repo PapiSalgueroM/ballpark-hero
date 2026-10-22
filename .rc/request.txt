@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000 > /tmp/va.log 2>&1; s=$?; grep -E "FAIL|Test Files|Tests  " /tmp/va.log | head -30 | cut -c1-250; exit $s
+norival: node scripts/simNoRivalNames.mjs
+sitesearch: node scripts/simSiteSearch.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+storage: node scripts/simStorageWrites.mjs
+cookie-1446: export FREE_KICK_FONT_CACHE=/tmp/ckfc; node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > /tmp/ckf.log 2>&1 || { tail -3 /tmp/ckf.log; exit 2; }; export FONT_CACHE_MANIFEST_SHA256=$(sha256sum /tmp/ckfc/manifest.json | cut -d' ' -f1); export SIM_OFFLINE_RECEIPT=/tmp/ck.transport; : > "$SIM_OFFLINE_RECEIPT"; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" BASE=http://127.0.0.1:4173 SOURCE_SHA=$(git rev-parse HEAD) COOKIE_POLICY_BROWSER_OUT=/tmp/ckout node scripts/playCookiePolicy1446.mjs > /tmp/ck.log 2>&1; s=$?; grep -oE '"message": *"[^"]{0,200}' /tmp/ckout/report.json | head -4; tail -1 /tmp/ck.log | cut -c1-250; exit $s
