@@ -1649,6 +1649,21 @@ describe('Round 1521 by hand, and through the viewer', () => {
     expect(lookKeyOf({ ...theirs, number: 5 }, 'Club', 'Opponent')).not.toBe(lookKeyOf(theirs, 'Club', 'Opponent'));
   });
 
+  /* The review of 2026-10-22: R12 sets the lean itself, so a viewer that leaned Attacking the defensive way passed it.
+     This reads the lean the viewer hands the pitch, from the same function the screen calls. */
+  it('the viewer leans my side the way my mentality says: attacking 1, balanced 0, defensive -1, from kick off and after a change of shape', () => {
+    const base = fixtures.get('goal')!.career;
+    const lean = (c: CareerState) => stagePitchInput(c, c.live!, null, 'first', 1, 0, 45 + boardAt(c, 45)).build;
+    for (const [mentality, me] of [['attacking', 1], ['balanced', 0], ['defensive', -1]] as const) {
+      const kickoff = structuredClone(base);
+      kickoff.live!.mentality = mentality;
+      expect(lean(kickoff), mentality).toEqual({ me, opp: 0 });
+      const changed = changeLive(base, 0, { kind: 'shape', mentality })!;
+      expect(changed.live!.mentality, mentality).toBe(mentality);
+      expect(lean(changed), `${mentality}, changed in the match`).toEqual({ me, opp: 0 });
+    }
+  });
+
   /** The parts of a drawn figure that are his look: the style, the skin, the boots, and the keeper's shirt. */
   const lookOf = (svg: Element) => [svg.getAttribute('data-pm-look'), svg.querySelector('ellipse[cy="-20"]')?.getAttribute('fill'), svg.querySelectorAll('g > path')[1]?.getAttribute('stroke'), svg.querySelectorAll('g > path')[2]?.getAttribute('stroke')].join('|');
   it('the viewer draws each man in his own look, the two keepers apart, and a renamed man the same', async () => {

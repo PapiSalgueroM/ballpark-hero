@@ -88,6 +88,8 @@
  *   pressnone    a man closed down before a reset has nobody on him                R12 (pressure is drawn)
  *   foulwait     a foul is looked for a place at its own instant only              R11 (no foul hidden while its minute had room)
  *   cueheld      the whistle is gone as soon as the free kick is taken             R11 (held over its spot through the free kick)
+ * The reviews' fixes (2026-10-22), each a change a reviewer made and saw survive, or the fix's own revert:
+ *   mapswap      the viewer leans Attacking the defensive way and back             the viewer leans my side
  * A control exits 1 when its test went red on an assertion, as it must, and 3 when it did anything else.
  *
  * THE BUNDLE SECTION (clean runs and cmimport): the part must stay a part. src/components/pitch-motion is
@@ -116,8 +118,10 @@ const REVIEW = ['scorelead', 'samecommit', 'crowd', 'turns', 'restartbeat', 'kic
 /* Release AR: the cast a chance started with is held while it plays. */
 const HELD = ['castnow'];
 /* Round 1521. */
+/* Round 1521's review fixes. */
+const FIX = ['mapswap'];
 const LOOK = ['flatball', 'groundlob', 'shotflat', 'liftnone', 'foulcue', 'foulpair', 'foulcard', 'foulmeet', 'buildrandom', 'buildflat', 'noreason', 'buildchain', 'lookname', 'looknone', 'keepersame', 'pressnone', 'foulwait', 'cueheld'];
-assert.ok(['', ...OLD, ...NEW, ...REVIEW, ...HELD, ...LOOK].includes(control), 'Unknown live motion control');
+assert.ok(['', ...OLD, ...NEW, ...REVIEW, ...HELD, ...LOOK, ...FIX].includes(control), 'Unknown live motion control');
 assert.ok(['', 'bundle'].includes(only), 'Unknown LIVE_MOTION_ONLY');
 /* Minified bytes and gzip bytes of the part alone, and the ceiling: each plus a fifth. */
 /* Round 1521 retook it: the ball's height, the foul cue, the build up by lines and the figures' looks took the part
@@ -237,6 +241,8 @@ try {
     if (control === 'pressnone') scene = replace(scene, 'if (presser && beat.pressed) {', 'if (presser && beat.pressed && false) {');
     if (control === 'foulwait') scene = replace(scene, 'const latest = Math.min(p + 1 - BEAT_SPAN, to - BEAT_SPAN);', 'const latest = p;');
     if (control === 'cueheld') scene = replace(scene, 'beat.id === `y${before.foul!.order}`', "beat.id === 'none'");
+    /* ---- Round 1521's review fixes ---- */
+    if (control === 'mapswap') viewer = replace(viewer, "build: { me: mentality === 'attacking' ? 1 : mentality === 'defensive' ? -1 : 0, opp: 0 },", "build: { me: mentality === 'attacking' ? -1 : mentality === 'defensive' ? 1 : 0, opp: 0 },");
     const componentPath = path.join(folder, 'LiveSimMotion.tsx').replaceAll('\\', '/');
     viewer = replace(viewer, "import { LivePitchPlayer, useLiveSimMotion } from '@/components/club-manager/LiveSimMotion';", "import { LivePitchPlayer, useLiveSimMotion } from './LiveSimMotion';");
     viewer = replace(viewer, "import type { MotionEvent } from '@/components/club-manager/LiveSimMotion';", "import type { MotionEvent } from './LiveSimMotion';");
@@ -284,6 +290,7 @@ try {
     buildrandom: 'R12', buildflat: 'R12', noreason: 'R12', buildchain: 'R12',
     lookname: 'R13|a renamed man the same', looknone: 'a renamed man the same', keepersame: 'a renamed man the same',
     pressnone: 'R12', foulwait: 'R11', cueheld: 'R11',
+    mapswap: 'the viewer leans my side',
   };
   let passed = 0;
   if (only !== 'bundle' && control !== 'cmimport' && control !== 'bigpart') {
