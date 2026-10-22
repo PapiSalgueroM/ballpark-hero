@@ -1,0 +1,14 @@
+head: git log --oneline -3 && git rev-parse HEAD~1
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+desk-def: node scripts/simNbaGmDesk.mjs
+sweep-1: bash .rc/x/sweep.sh 1 20
+sweep-2: bash .rc/x/sweep.sh 21 40
+sweep-3: bash .rc/x/sweep.sh 41 59
+ctl-dropone: SIM_NBA_GM_DESK_CONTROL=dropone node scripts/simNbaGmDesk.mjs
+ctl-nohandback: SIM_NBA_GM_DESK_CONTROL=nohandback node scripts/simNbaGmDesk.mjs
+ctl-overlimit: SIM_NBA_GM_DESK_CONTROL=overlimit node scripts/simNbaGmDesk.mjs
+vitest: node_modules/.bin/vitest run src/lib/gmContracts.test.ts src/components/nba-front-office/NbaGmDeskBoard.test.tsx src/components/nba-front-office/NbaEarnedDraft.test.tsx --testTimeout=300000 --hookTimeout=120000
+norival: node scripts/simNoRivalNames.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+dashes: node .rc/x/dashes.mjs f276b8a8c
+src-since-fix: git diff --stat 4ceb55f66 HEAD~1 -- src; git diff --quiet 4ceb55f66 HEAD~1 -- src && echo "src unchanged since the fix commit 4ceb55f66"
