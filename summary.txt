@@ -1,0 +1,3 @@
+field-1525 exit=0 557s | simSoccerSeasonAwards: green
+field-77 exit=0 565s | simSoccerSeasonAwards: green
+field-2024 exit=0 587s | simSoccerSeasonAwards: green
