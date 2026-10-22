@@ -14,8 +14,8 @@ every control on exactly its sections), the twelve histories retaken by their le
 re-derived as the lead ruled (R2 wins floor 0.53125, was 1.828125; R3 band 11.6125 to 34.8375, was 5.8125 to 17.4375)
 at the moved fixture (S3, Squad 62), the pack price rule (Scout 21, Club 71, Elite 178), the rules paragraph and
 helpFacts, six guide sentences (R4), What's New, contract section 21, NEW playTycoonScorelines (green), the weight
-(/stadium-tycoon 302.6K on base, 303.2K on head). Merged origin/r1531-tycoon-held-fixes 7252242c and origin/main
-c1b39364. The full record: dukb-handoff/2026-10-10/results-g/finish-1532.md (step 1's: finish-1532-step1.md).
+(/stadium-tycoon 302.6K on base, 303.1K on the final head). Merged origin/r1531-tycoon-held-fixes 00bffb93 and origin/main
+6d2d7a7d (head 041f3f0a, proved on r1532-f5a2, f5b, f5c, f6, f7). The full record: dukb-handoff/2026-10-10/results-g/finish-1532.md (step 1's: finish-1532-step1.md).
 
 Owed to the lead: the /stadium-tycoon weight row (+0.6K, over the +0.3K allowance); simTycoonPacks' dear control is
 dead on S15 (titles now bound the dry spell, measured) and its S2 sample moved with the price seed; the /whats-new and
