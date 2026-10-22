@@ -1,0 +1,3 @@
+   seed: 155 rows, 129 valid before and 129 after; 49 rewritten in place; puzzle-151 drifted on purpose and left alone; 6 seeded rows already differ from the pre-round file and were left alone: puzzle-4 puzzle-10 puzzle-12 puzzle-75 puzzle-104 puzzle-112
+   file: 155 rows, 135 valid before and 135 after; 55 rewritten in place; puzzle-151 drifted on purpose and left alone; 0 seeded rows already differ from the pre-round file and were left alone
+rehearseConnections1553: green. The rows land in place, a drifted row is left alone, and a second run is a no-op.
