@@ -1,0 +1,13 @@
+simGmXp exit=0 1s | simGmXp: all checks passed
+simGmDeskHost exit=0 67s | simGmDeskHost: all 10 checks passed on seeds 1,2,3 (4 engines, 3 seasons a seed)
+tsc exit=0 91s | 
+simGmReload exit=0 8s | simGmReload: all green. Four front offices keep a finished season through a reload, and none of them can play a closed one again.
+simGmSeat exit=0 101s | simGmSeat: all checks passed
+simNflGmDesk exit=0 38s | simNflGmDesk: all seven checks passed (10 seeds x 10 seasons)
+vitest-1223 exit=0 3s |    Duration  2.71s (transform 505ms, setup 214ms, collect 1.09s, tests 1.38s, environment 1.03s, prepare 366ms)
+vitest-onepress exit=0 8s |    Duration  7.83s (transform 2.10s, setup 108ms, collect 290ms, tests 6.23s, environment 441ms, prepare 174ms)
+vitest-seasonclose exit=0 9s |    Duration  8.33s (transform 2.64s, setup 205ms, collect 3.65s, tests 3.95s, environment 1.10s, prepare 612ms)
+simSessionMarks exit=0 0s | simSessionMarks: green. Nine games count the day you play them, none of them invented a score or a streak day to do it.
+simGmStaff exit=1 6s | GM STAFF: 40 failure(s)
+simHarnessAnchors exit=0 49s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simCollegeSeat exit=0 209s | simCollegeSeat: all sections green (S1 to S9 and SY)

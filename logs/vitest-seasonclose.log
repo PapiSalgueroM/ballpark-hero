@@ -1,0 +1,30 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/gmXp.test.ts [2m([22m[2m12 tests[22m[2m)[22m[33m 412[2mms[22m[39m
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx[2m > [22m[2mNFL Front Office: the season closes once[2m > [22m[2mREPRO: what a reload on the recap lets the player do today
+[22m[39mNFL Front Office: after finishing the season and reloading, hub shown=false, seasonsPlayed 1 -> 1, titles 0 -> 0, league games 544 -> 544, period 17, phase recap -> recap
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx[2m > [22m[2mNFL Front Office, full rosters: the season closes once[2m > [22m[2mREPRO: what a reload on the recap lets the player do today
+[22m[39mNFL Front Office, full rosters: after finishing the season and reloading, hub shown=false, seasonsPlayed 1 -> 1, titles 0 -> 0, league games 544 -> 544, period 17, phase recap -> recap
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx[2m > [22m[2mNBA Front Office: the season closes once[2m > [22m[2mREPRO: what a reload on the recap lets the player do today
+[22m[39mNBA Front Office: after finishing the season and reloading, hub shown=false, seasonsPlayed 1 -> 1, titles 0 -> 0, league games 2400 -> 2400, period 20, phase recap -> recap
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx[2m > [22m[2mMLB Front Office: the season closes once[2m > [22m[2mREPRO: what a reload on the recap lets the player do today
+[22m[39mMLB Front Office: after finishing the season and reloading, hub shown=false, seasonsPlayed 1 -> 1, titles 0 -> 0, league games 4860 -> 4860, period 27, phase recap -> recap
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx[2m > [22m[2mNHL Front Office: the season closes once[2m > [22m[2mREPRO: what a reload on the recap lets the player do today
+[22m[39mNHL Front Office: after finishing the season and reloading, hub shown=false, seasonsPlayed 1 -> 1, titles 0 -> 0, league games 2560 -> 2560, period 20, phase recap -> recap
+
+ [32m✓[39m src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx [2m([22m[2m25 tests[22m[2m)[22m[33m 3534[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL Front Office, full rosters: the season closes once[2m > [22mplays the next season after the draft: the record refuses only the closed one [33m 796[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m37 passed[39m[22m[90m (37)[39m
+[2m   Start at [22m 03:32:29
+[2m   Duration [22m 8.33s[2m (transform 2.64s, setup 205ms, collect 3.65s, tests 3.95s, environment 1.10s, prepare 612ms)[22m
+
