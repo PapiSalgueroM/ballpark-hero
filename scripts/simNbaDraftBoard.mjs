@@ -291,7 +291,10 @@ const redCases = new Set();
       if (presses.length !== r.states.length) fail(2, `${tagOf(b)}: the board saved ${presses.length} times before the summer, the libraries reached ${r.states.length} states`);
       else if (at >= 0) {
         fail(2, `${tagOf(b)}: the save after ${at === 0 ? 'the open' : `press ${at}`} differs from the libraries'`);
-        if (at === 0 && b.debugOpen && r.debugOpen && failures.get(2).length === 1) console.log(`   first difference (SIM_NBA_DRAFT_BOARD_DEBUG): ${firstDiff(b.debugOpen, r.debugOpen, '')}`);
+        if (at === 0 && b.debugOpen && r.debugOpen && failures.get(2).length === 1) {
+          console.log(`   first difference (SIM_NBA_DRAFT_BOARD_DEBUG, ids renamed): ${firstDiff(b.debugOpen, r.debugOpen, '')}`);
+          console.log(`   the board drew ${b.callsBeforeOpen} numbers before the open${b.earlyStacks?.length ? `, first from: ${b.earlyStacks.join(' || ')}` : ''}`);
+        }
       }
       if (b.final !== r.final) fail(2, `${tagOf(b)}: the league and desk after the summer differ from the libraries'`);
       if (b.calls !== r.calls) fail(2, `${tagOf(b)}: the board drew ${b.calls} numbers, the libraries ${r.calls}`);
@@ -454,15 +457,16 @@ async function child() {
   const probe = E.makeIdMinter('q')();
   const EPOCH = probe.slice(1, probe.lastIndexOf('-'));
   /* Every id renamed in the order it first appears (keys too), then hashed. */
-  const hashOf = value => {
+  const canonOf = value => {
     const ids = new Map();
     const re = new RegExp(`[a-z]*${EPOCH}-\\d+`, 'g');
     const fix = s => s.replace(re, m => { if (!ids.has(m)) ids.set(m, `#${ids.size + 1}`); return ids.get(m); });
     const walk = v => (Array.isArray(v) ? v.map(walk)
       : v && typeof v === 'object' ? Object.fromEntries(Object.entries(v).map(([k, x]) => [fix(k), walk(x)]))
         : typeof v === 'string' ? fix(v) : v);
-    return createHash('sha256').update(JSON.stringify(walk(value))).digest('hex');
+    return walk(value);
   };
+  const hashOf = value => createHash('sha256').update(JSON.stringify(canonOf(value))).digest('hex');
 
   /* The season, by construction: thirty clubs on distinct records, a real postseason, the champion pushed. */
   const rng = lehmer(15400 + job.seed * 101);
@@ -548,7 +552,7 @@ async function child() {
       let cls = E.nbaEarnedDraftClass(rr, opened.night.slots.length, E.leagueNames(L));
       const left = () => { const n = E.nbaDraftNightOf(desk, L); return n ? E.slotsLeftFor(n.slots, n.made, me).length : 0; };
       states.push(hashOf({ league: L, gm: desk, draftClass: cls, picksLeft: left() }));
-      if (process.env.SIM_NBA_DRAFT_BOARD_DEBUG) debugOpen = clone({ league: L, gm: desk, draftClass: cls, picksLeft: left() });
+      if (process.env.SIM_NBA_DRAFT_BOARD_DEBUG) debugOpen = canonOf(clone({ league: L, gm: desk, draftClass: cls, picksLeft: left() }));
       let press = E.nbaDraftContinue(L, desk, me, cls, rr);
       for (let i = 0; i < 70 && press; i += 1) {
         desk = press.desk;
@@ -578,7 +582,12 @@ async function child() {
   localStorage.clear();
   if (save) localStorage.setItem(KEY, JSON.stringify(save));
   const draw = lehmer(job.mode === 'mount' ? 999000 + job.seed : drawSeed);
-  Math.random = draw;
+  /* SIM_NBA_DRAFT_BOARD_DEBUG: where the board drew before the open, if it did. */
+  const earlyStacks = [];
+  let opening = false;
+  Math.random = process.env.SIM_NBA_DRAFT_BOARD_DEBUG
+    ? () => { if (!opening && earlyStacks.length < 3) earlyStacks.push(new Error().stack.split('\n').slice(2, 7).map(s => s.trim()).join(' < ')); return draw(); }
+    : draw;
   let root = createRoot(document.getElementById('root'));
   const buttons = () => [...document.querySelectorAll('button')];
   const byText = text => buttons().find(b => b.textContent.trim() === text);
@@ -629,6 +638,7 @@ async function child() {
     const reloadFaults = [];
     let remounts = 0;
     let cardChecks = 0;
+    let callsBeforeOpen = null;
     let saveAt = null;
     const remount = async () => {
       const before = draw.calls();
@@ -652,6 +662,8 @@ async function child() {
         if (onDraft()) { error = 'the old draft screen drew on an earned night'; break; }
         const go = byText('Go to the draft');
         if (!go || JSON.parse(localStorage.getItem(KEY)).phase !== 'recap') break;
+        callsBeforeOpen = draw.calls();
+        opening = true;
         await click(go);
         await waitCard();
         if (job.stopAt === 'open') { saveAt = JSON.parse(localStorage.getItem(KEY)); break; }
@@ -689,7 +701,8 @@ async function child() {
       kind: job.kind, seed: job.seed, mode: job.mode, pre, error, picks, clockAt, remounts, cardChecks, reloadFaults,
       phase: end.phase, round: end.league.round, seasonGain: end.league.season - seasonBefore, calls: draw.calls(),
       writes: parsed.map(s => hashOf(pickOf(s))), final: last ? hashOf({ league: last.league, gm: last.gm }) : null, finalAll: hashOf(end),
-      saveAt, debugOpen: process.env.SIM_NBA_DRAFT_BOARD_DEBUG && parsed[0] ? pickOf(parsed[0]) : undefined,
+      saveAt, callsBeforeOpen, earlyStacks,
+      debugOpen: process.env.SIM_NBA_DRAFT_BOARD_DEBUG && parsed[0] ? canonOf(pickOf(parsed[0])) : undefined,
     };
     await act(async () => root.unmount());
     dom.window.close();
