@@ -566,9 +566,10 @@ export function superCupView(career: CareerState, key: OneOffKey = 'dsc'): Super
   /* Fix-1514: next season's edition, keyed by its start year as the engine keys it (oneOffEditionYear). */
   view.later = oneOffPlayedIn(row.id, (typeof career.startYear === 'number' ? career.startYear : 2026) + career.season);
   if (!slice) {
-    /* Round 1514: season one's UEFA Super Cup is never opened (the 2025-26 Europa League winner is not in the game). */
+    /* Round 1516: a new career opens season one's UEFA Super Cup, so a season one save without one started before
+       the game had it. */
     view.stub = key === 'usc' && career.season === 1
-      ? `This year's ${row.name} is not played here: the game does not hold last season's Europa League winner. It opens next summer, when this season is done.`
+      ? `Your save started before the game had this one, so this season's is not followed here. It opens next summer, when this season is done.`
       : view.later ? 'It opens next summer, when this season is done.'
       : `Your save started before the game had this one, so this season's is not followed here. ${ONLY_THIS_EDITION}`;
     return view;
