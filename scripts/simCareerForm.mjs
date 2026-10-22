@@ -5,8 +5,9 @@
  * moraleForm with those divisors.
  *
  * 1) The four US careers replay BYTE IDENTICAL. Each engine is bundled twice: as this tree has it (bound to
- *    careerForm.ts) and with its own file read at BASE (origin/main when the round started, the copies still
- *    inline). Seeded careers for every position and archetype are played season by season with morale and team
+ *    careerForm.ts) and as this tree's own file with the one lifted line put back inline (the import gone, the
+ *    divisor the copy had at BASE, origin/main when the round started, which is checked), so a later round's edits
+ *    to a US engine sit in both arms and only the lift is compared. Seeded careers for every position and archetype are played season by season with morale and team
  *    quality swept across their whole range from a stream of their own, and the whole state after every season
  *    and every progress step must be the same string in both arms. Control SIM_CAREER_FORM_CONTROL=divisor
  *    changes the NFL divisor in careerForm.ts (10 to 11) in this tree's bundle: the replay must part.
@@ -88,13 +89,22 @@ const mulberry = seed => { let s = seed | 0; return () => { s = (s + 0x6d2b79f5)
 
 /* Section 1 */
 const US = [
-  { id: 'nba', file: 'src/lib/nbaMyCareer.ts', arch: 'NBA_ARCHETYPES', start: 'startNbaCareer', season: 'simNbaSeason', progress: 'nbaProgress' },
-  { id: 'nfl', file: 'src/lib/nflMyCareer.ts', arch: 'ARCHETYPES', start: 'startCareer', season: 'simSeason', progress: 'progress' },
-  { id: 'mlb', file: 'src/lib/mlbMyCareer.ts', arch: 'MLB_ARCHETYPES', start: 'startMlbCareer', season: 'simMlbSeason', progress: 'mlbProgress' },
-  { id: 'nhl', file: 'src/lib/nhlMyCareer.ts', arch: 'NHL_ARCHETYPES', start: 'startNhlCareer', season: 'simNhlSeason', progress: 'nhlProgress' },
+  { id: 'nba', file: 'src/lib/nbaMyCareer.ts', arch: 'NBA_ARCHETYPES', start: 'startNbaCareer', season: 'simNbaSeason', progress: 'nbaProgress', k: 12 },
+  { id: 'nfl', file: 'src/lib/nflMyCareer.ts', arch: 'ARCHETYPES', start: 'startCareer', season: 'simSeason', progress: 'progress', k: 10 },
+  { id: 'mlb', file: 'src/lib/mlbMyCareer.ts', arch: 'MLB_ARCHETYPES', start: 'startMlbCareer', season: 'simMlbSeason', progress: 'mlbProgress', k: 12 },
+  { id: 'nhl', file: 'src/lib/nhlMyCareer.ts', arch: 'NHL_ARCHETYPES', start: 'startNhlCareer', season: 'simNhlSeason', progress: 'nhlProgress', k: 12 },
 ];
 const FORM = 'src/lib/careerForm.ts';
 const NFL_DIVISOR = 'nfl: { per: 10, neutral: 60 },';
+/* The base arm is this tree's own engine file with the one lifted line put back inline, with the divisor the copy
+   had at BASE (k above, checked against BASE), so a later round's edits to the US engines sit in both arms and only
+   the lift is compared (review of 2026-10-21: a whole file read at BASE would go red on the next US engine round). */
+const LIFT_IMPORT = "import { moraleForm } from './careerForm';\n";
+const unLift = (sport, head) => {
+  const call = `moraleForm('${sport.id}', c.morale)`;
+  if (head.split(LIFT_IMPORT).length !== 2 || head.split(call).length !== 2) return null;
+  return head.replace(LIFT_IMPORT, '').replace(call, `(c.morale - 60) / ${sport.k}`);
+};
 /* Every position and archetype, SEEDS careers each, YEARS seasons; morale and team quality from a stream of their own. */
 function replay(lib, sport, seeds, years) {
   const trail = [];
@@ -125,10 +135,11 @@ if (runs('1')) {
   const formServe = CONTROL === 'divisor' ? { [FORM]: form.replace(NFL_DIVISOR, 'nfl: { per: 11, neutral: 60 },') } : {};
   if (CONTROL === 'divisor') console.log('   CONTROL divisor: the NFL divisor is 11 in this tree\'s bundle');
   for (const sport of US) {
-    const head = read(sport.file), base = atBase(sport.file);
+    const head = read(sport.file), base = unLift(sport, head);
     if (head.includes('(c.morale - 60) /')) fail(`${sport.id}: ${sport.file} still carries its own copy of the morale term`);
     if (!head.includes(`moraleForm('${sport.id}', c.morale)`)) fail(`${sport.id}: ${sport.file} does not bind moraleForm('${sport.id}', c.morale)`);
-    if (!base.includes('(c.morale - 60) /')) fail(`${sport.id}: the base ${BASE.slice(0, 8)} has no inline morale term, so it is not the tree before the lift`);
+    if (!atBase(sport.file).includes(`(c.morale - 60) / ${sport.k}`)) fail(`${sport.id}: at ${BASE.slice(0, 8)} the inline morale term did not divide by ${sport.k}, so the base arm is not the tree before the lift`);
+    if (base === null) { fail(`${sport.id}: ${sport.file} does not hold the lift (its import and one moraleForm call) once`); continue; }
     const now = await bundle(`${sport.id}-head`, sport.file, formServe);
     const was = await bundle(`${sport.id}-base`, sport.file, { [sport.file]: base });
     const a = replay(now, sport, 6, 18), b = replay(was, sport, 6, 18);
@@ -137,7 +148,7 @@ if (runs('1')) {
     const careers = Object.values(now[sport.arch]).reduce((n, list) => n + list.length, 0) * 6;
     console.log(`   ${sport.id}: ${careers} careers, ${a.length / 4} seasons replayed, ${first < 0 ? 'byte identical' : `parts at record ${first}`}`);
     if (a.length < careers * 8) fail(`${sport.id}: only ${a.length / 4} seasons were played, the replay is too thin to mean anything`);
-    if (first >= 0) fail(`${sport.id}: this tree parts from ${BASE.slice(0, 8)} at record ${first} of ${a.length}`);
+    if (first >= 0) fail(`${sport.id}: this tree parts from its own engine with the morale term inline at record ${first} of ${a.length}`);
   }
 }
 
