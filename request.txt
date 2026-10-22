@@ -1,0 +1,21 @@
+#!serve
+#!playwright
+sweep-nba: ROUTE=/nba-connections ENGINES=chromium node scripts/sweepPhone.mjs
+sweep-nhl: ROUTE=/nhl-connections ENGINES=chromium node scripts/sweepPhone.mjs
+noclip-nba: SWEEP_PHONE_CONTROL=noclip ROUTE=/nba-connections ENGINES=chromium node scripts/sweepPhone.mjs
+noclip-nhl: SWEEP_PHONE_CONTROL=noclip ROUTE=/nhl-connections ENGINES=chromium node scripts/sweepPhone.mjs
+counthidden: SWEEP_PHONE_CONTROL=counthidden ROUTE=/stadium-tycoon ENGINES=chromium node scripts/sweepPhone.mjs
+sweep-bogus: SWEEP_PHONE_CONTROL=bogus ROUTE=/nba-connections ENGINES=chromium node scripts/sweepPhone.mjs
+mutS-noscroll: ENGINES=chromium node .rc/x/mutSweep.mjs noscroll
+mutS-hiddenrow: ENGINES=chromium node .rc/x/mutSweep.mjs hiddenrow
+mutS-hiddenrow-noclip: SWEEP_PHONE_CONTROL=noclip ENGINES=chromium node .rc/x/mutSweep.mjs hiddenrow
+mutS-visiblerow: ENGINES=chromium node .rc/x/mutSweep.mjs visiblerow
+noclip-all: SWEEP_PHONE_CONTROL=noclip ENGINES=chromium node scripts/sweepPhone.mjs
+mutS-count: ENGINES=chromium node .rc/x/mutSweep.mjs count
+walk: ENGINES=chromium node .rc/x/walk1537.mjs
+help: env -u NO_COLOR node scripts/simHelpConsentFocus.mjs
+help-external: env -u NO_COLOR HELP_CONSENT_FOCUS_CONTROL=external node scripts/simHelpConsentFocus.mjs
+help-external-nocolor: NO_COLOR=1 HELP_CONSENT_FOCUS_CONTROL=external node scripts/simHelpConsentFocus.mjs
+rules: env -u NO_COLOR node scripts/simRulesGateConsentFocus.mjs
+rules-host: env -u NO_COLOR RULES_GATE_FOCUS_CONTROL=host node scripts/simRulesGateConsentFocus.mjs
+rules-return: env -u NO_COLOR RULES_GATE_FOCUS_CONTROL=return node scripts/simRulesGateConsentFocus.mjs

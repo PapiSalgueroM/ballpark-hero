@@ -1,0 +1,25 @@
+mutSweep count: css "" route all control none
+Sweeping 181 routes at 390x844 with touch
+  CLIP /: 393 kept, 80 dropped (🎓College GridCollege | 🏀Buzzer BeaterNBA | ⚾MLB Career PathMLB | 🏒Puck DetectiveNHL), 3 cut (🪑Manager Hot SeatSocc | 🏈NFL GridNFL | MLB)
+  CLIP /nba-connect-4: 29 kept, 28 dropped (Champion | MVP Winner | 500+ Career Blocks | 1000+ Career Steals), 0 cut ()
+  CLIP /football-connect-4: 45 kept, 14 dropped (Goalkeeper | Won the Ballon d'Or |  | ), 7 cut (Played for Atletico Ma |  | )
+  CLIP /profile: 393 kept, 80 dropped (🎓College GridCollege | 🏀Buzzer BeaterNBA | ⚾MLB Career PathMLB | 🏒Puck DetectiveNHL), 3 cut (🪑Manager Hot SeatSocc | 🏈NFL GridNFL | MLB)
+  CLIP /soccer-career: 23 kept, 0 dropped (), 1 cut ()
+  CLIP /stadium-tycoon: 23 kept, 1 dropped (Let's go), 0 cut ()
+  CLIP /wonderkid-factory: 12 kept, 1 dropped (Let's go), 0 cut ()
+  CLIP /nfl-my-career: 39 kept, 0 dropped (), 1 cut ()
+  CLIP /nba-my-career: 36 kept, 0 dropped (), 1 cut ()
+  CLIP /mlb-my-career: 42 kept, 0 dropped (), 1 cut ()
+  CLIP /nhl-my-career: 37 kept, 0 dropped (), 1 cut ()
+  CLIP /nba-connections: 25 kept, 10 dropped (Michael Jordan | Kobe Bryant | Karl Malone | Chris Paul), 2 cut (Carmelo Anthony | Dirk Nowitzki)
+  CLIP /nhl-connections: 25 kept, 10 dropped (Evgeni Malkin | Mario Lemieux | Sidney Crosby | Gabriel Landeskog), 2 cut (Jake Guentzel | Kris Letang)
+  CLIP /mlb-connect-4: 29 kept, 28 dropped (Cubs | White Sox | Twins | Guardians), 0 cut ()
+  CLIP /nfl-connect-4: 29 kept, 28 dropped (Bengals | Lions | Texans | Jaguars), 0 cut ()
+  CLIP /rank-em: 21 kept, 9 dropped (↑ | ↓ | Remove | ↑), 3 cut (↑ | ↓ | Remove)
+  CLIP /nhl-connect-4: 29 kept, 28 dropped (1,000+ Career Points | Rocket Richard Winner | All-Star | Stanley Cup Champion), 0 cut ()
+CLIP TOTAL: 17 routes have clipped controls, 317 dropped, 25 cut
+
+   181 routes swept, worst overflow 0px
+   0 small tap targets, 0 runs of tiny text, 0 overlapping controls
+sweepPhone: green. Every page of the site fits the phone it is played on.
+mutSweep count: sweep copy exited 0

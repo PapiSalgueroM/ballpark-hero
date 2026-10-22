@@ -1,0 +1,8 @@
+mutSweep visiblerow: css "[aria-label="Available players"] > div > button:nth-child(3) { transform: translateY(-60px) !important; }" route /nba-connections control none
+Sweeping 1 routes at 390x844 with touch
+  FAIL: /nba-connections: controls sitting on top of each other: Steve Nash over Udonis Haslem
+
+   1 routes swept, worst overflow 0px
+   0 small tap targets, 0 runs of tiny text, 1 overlapping controls
+sweepPhone: 1 failure
+mutSweep visiblerow: sweep copy exited 1

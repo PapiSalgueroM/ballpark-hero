@@ -1,0 +1,7 @@
+mutSweep hiddenrow: css "[aria-label="Available players"] > div > button:nth-child(17) { transform: translateY(-60px) !important; }" route /nba-connections control none
+Sweeping 1 routes at 390x844 with touch
+
+   1 routes swept, worst overflow 0px
+   0 small tap targets, 0 runs of tiny text, 0 overlapping controls
+sweepPhone: green. Every page of the site fits the phone it is played on.
+mutSweep hiddenrow: sweep copy exited 0

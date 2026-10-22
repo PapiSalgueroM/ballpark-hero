@@ -1,0 +1,8 @@
+CONTROL noclip is on: controls scrolled out of their box are measured where they would sit, so the sweep is SUPPOSED to fail.
+Sweeping 181 routes at 390x844 with touch
+  FAIL: /nba-connections: controls sitting on top of each other: Michael Jordan over Clear draft, Kobe Bryant over Submit five
+  FAIL: /nhl-connections: controls sitting on top of each other: Evgeni Malkin over Clear draft, Mario Lemieux over Submit five
+
+   181 routes swept, worst overflow 0px
+   0 small tap targets, 0 runs of tiny text, 4 overlapping controls
+sweepPhone: 2 failures

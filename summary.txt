@@ -1,0 +1,20 @@
+build exit=0 22s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+noclip-nba exit=1 4s | sweepPhone: 1 failure
+sweep-nhl exit=0 4s | sweepPhone: green. Every page of the site fits the phone it is played on.
+sweep-nba exit=0 4s | sweepPhone: green. Every page of the site fits the phone it is played on.
+sweep-bogus exit=2 1s | SWEEP_PHONE_CONTROL=bogus is not a control this sweep knows (counthidden, noclip)
+counthidden exit=1 3s | sweepPhone: 1 failure
+noclip-nhl exit=1 3s | sweepPhone: 1 failure
+mutS-noscroll exit=1 3s | mutSweep noscroll: sweep copy exited 1
+mutS-hiddenrow-noclip exit=1 3s | mutSweep hiddenrow: sweep copy exited 1
+mutS-visiblerow exit=1 3s | mutSweep visiblerow: sweep copy exited 1
+mutS-hiddenrow exit=0 5s | mutSweep hiddenrow: sweep copy exited 0
+walk exit=0 77s | walk1537: done, every reading above, shots in RC_OUT
+help exit=0 1s | simHelpConsentFocus: real source held, disposable copies cleaned, no vendor requests.
+help-external exit=0 3s | simHelpConsentFocus: real source held, disposable copies cleaned, no vendor requests.
+help-external-nocolor exit=0 3s | simHelpConsentFocus: real source held, disposable copies cleaned, no vendor requests.
+rules exit=0 1s | simRulesGateConsentFocus: source held, owned copies cleaned, no backend or vendor requests.
+rules-host exit=0 3s | simRulesGateConsentFocus: source held, owned copies cleaned, no backend or vendor requests.
+rules-return exit=0 4s | simRulesGateConsentFocus: source held, owned copies cleaned, no backend or vendor requests.
+noclip-all exit=1 119s | sweepPhone: 2 failures
+mutS-count exit=0 119s | mutSweep count: sweep copy exited 0

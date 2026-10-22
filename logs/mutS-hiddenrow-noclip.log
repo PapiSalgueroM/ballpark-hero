@@ -1,0 +1,9 @@
+mutSweep hiddenrow: css "[aria-label="Available players"] > div > button:nth-child(17) { transform: translateY(-60px) !important; }" route /nba-connections control noclip
+CONTROL noclip is on: controls scrolled out of their box are measured where they would sit, so the sweep is SUPPOSED to fail.
+Sweeping 1 routes at 390x844 with touch
+  FAIL: /nba-connections: controls sitting on top of each other: Michael Jordan over Clear draft, Kobe Bryant over Submit five, Allen Iverson over Dwight Howard
+
+   1 routes swept, worst overflow 0px
+   0 small tap targets, 0 runs of tiny text, 3 overlapping controls
+sweepPhone: 1 failure
+mutSweep hiddenrow: sweep copy exited 1

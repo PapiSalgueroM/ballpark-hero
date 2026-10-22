@@ -1,0 +1,8 @@
+mutSweep noscroll: css "[aria-label="Available players"] { overflow: visible !important; }" route /nba-connections control none
+Sweeping 1 routes at 390x844 with touch
+  FAIL: /nba-connections: controls sitting on top of each other: Michael Jordan over Clear draft, Kobe Bryant over Submit five
+
+   1 routes swept, worst overflow 0px
+   0 small tap targets, 0 runs of tiny text, 2 overlapping controls
+sweepPhone: 1 failure
+mutSweep noscroll: sweep copy exited 1
