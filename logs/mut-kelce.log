@@ -1,0 +1,4 @@
+MUT APPLIED kelce in src/data/conquestData.ts (anchor seen 1 time(s), first replaced)
+FAIL [5] KC Travis Kelce: key stat "2025: 815 rec yds", the two sourced 2025 line says "2025: 851 rec yds" (agree KC|Travis Kelce|TE)
+measured: {"nflGreats":10,"nbaGreats":9,"nflStates":64,"nflDealt":1920,"nflMarket":10880,"nflLabelled":25,"nbaStates":60,"nbaDealt":1800,"nbaMarket":9596,"nbaLabelled":27,"conquestFilesScanned":32,"nflKeyStats":320,"nflPrinted":146,"nbaKeyStats":300}
+simConquestPeople: FAIL, 1 of 49426 checks red

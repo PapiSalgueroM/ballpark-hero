@@ -1,0 +1,14 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/conquestRegionDetails.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[33m 606[2mms[22m[39m
+ [32m✓[39m src/hooks/useConquestNba.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[33m 1028[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA Conquest Arcade territory resolution[2m > [22mtells the player that the failed away raid was repelled [33m 974[2mms[22m[39m
+ [32m✓[39m src/test/conquestExplore.test.tsx [2m([22m[2m10 tests[22m[2m)[22m[33m 1608[2mms[22m[39m
+   [33m[2m✓[22m[39m actual Conquest map Explore[2m > [22muses a bounded manual viewport with a stable identity camera and restores the automatic camera on exit [33m 679[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[32m21 passed[39m[22m[90m (21)[39m
+[2m   Start at [22m 10:11:46
+[2m   Duration [22m 2.86s[2m (transform 539ms, setup 231ms, collect 1.38s, tests 3.24s, environment 1.27s, prepare 269ms)[22m
+

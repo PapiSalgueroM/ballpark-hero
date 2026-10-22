@@ -1,0 +1,6 @@
+FAIL [2] nfl Demaryius Thomas: not in the sources ledger
+FAIL [2] nfl Demaryius Thomas: on the deceased list
+FAIL [3] nfl kick off: the power up deals Demaryius Thomas, who is on the deceased list
+FAIL [4] src/data/conquestPowerups.ts: names Demaryius Thomas, who is on the deceased list
+measured: {"nflGreats":11,"nbaGreats":9,"nflStates":64,"nflDealt":1920,"nflMarket":10880,"nflLabelled":23,"nbaStates":60,"nbaDealt":1800,"nbaMarket":9596,"nbaLabelled":27,"conquestFilesScanned":32,"nflKeyStats":320,"nflPrinted":146,"nbaKeyStats":300}
+simConquestPeople: FAIL, 4 of 49431 checks red (control dt fired)

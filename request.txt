@@ -1,0 +1,28 @@
+#!serial
+head: git rev-parse HEAD && git log --oneline -1
+people: node scripts/simConquestPeople.mjs
+ctl-dt: CONQUEST_PEOPLE_CONTROL=dt node scripts/simConquestPeople.mjs
+ctl-market: CONQUEST_PEOPLE_CONTROL=market node scripts/simConquestPeople.mjs
+ctl-nflnba: CONQUEST_PEOPLE_CONTROL=nflnba node scripts/simConquestPeople.mjs
+ctl-label: CONQUEST_PEOPLE_CONTROL=label node scripts/simConquestPeople.mjs
+ctl-season: CONQUEST_PEOPLE_CONTROL=season node scripts/simConquestPeople.mjs
+ctl-bogus: CONQUEST_PEOPLE_CONTROL=bogus node scripts/simConquestPeople.mjs
+keystats-check: node scripts/genConquestKeyStats.mjs --check
+mut-greatsSet: node .rc/x/mut1547.mjs greatsSet && node scripts/simConquestPeople.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-greatsSet-vitest: node .rc/x/mut1547.mjs greatsSet && node_modules/.bin/vitest run src/hooks/useConquestNba.test.tsx src/test/conquestExplore.test.tsx src/test/conquestRegionDetails.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
+mut-hookPred: node .rc/x/mut1547.mjs hookPred && node scripts/simConquestPeople.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-greatsTaken: node .rc/x/mut1547.mjs greatsTaken && node scripts/simConquestPeople.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-marketTaken: node .rc/x/mut1547.mjs marketTaken && node scripts/simConquestPeople.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-sortAsc: node .rc/x/mut1547.mjs sortAsc && node scripts/simConquestPeople.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-signNever: node .rc/x/mut1547.mjs signNever && node scripts/simConquestPeople.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-nflLabel: node .rc/x/mut1547.mjs nflLabel && node scripts/simConquestPeople.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-kelce: node .rc/x/mut1547.mjs kelce && node scripts/simConquestPeople.mjs; s=$?; git checkout -- src scripts; exit $s
+clean-after: git status --short | wc -l
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-conquest: node_modules/.bin/vitest run src/hooks/useConquestNba.test.tsx src/test/conquestExplore.test.tsx src/test/conquestRegionDetails.test.tsx --testTimeout=300000 --hookTimeout=120000
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simFoRatingOrder: node scripts/simFoRatingOrder.mjs
+simNbaOpeningRatingInputs: node scripts/simNbaOpeningRatingInputs.mjs
+simNbaOpeningRatings: node scripts/simNbaOpeningRatings.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simConquestNbaArcade: node scripts/simConquestNbaArcade.mjs

@@ -1,0 +1,3 @@
+MUT APPLIED greatsSet in src/lib/conquestMarket.ts (anchor seen 1 time(s), first replaced)
+measured: {"nflGreats":10,"nbaGreats":9,"nflStates":64,"nflDealt":1920,"nflMarket":11220,"nflLabelled":25,"nbaStates":60,"nbaDealt":1800,"nbaMarket":9884,"nbaLabelled":27,"conquestFilesScanned":32,"nflKeyStats":320,"nflPrinted":146,"nbaKeyStats":300}
+simConquestPeople: 50682 checks, all green
