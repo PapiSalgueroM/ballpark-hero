@@ -1,0 +1,8 @@
+   [33m[2m✓[22m[39m rarity-round[2m > [22mrarity-round: a mixed Rarity run records what every line shows, and Crowd Says records a play with no score and says so [33m 697[2mms[22m[39m
+   [33m[2m✓[22m[39m nfl-career[2m > [22mnfl-career: a daily loss, reported for Round 645 [33m 315[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m7 passed[39m[22m[90m (7)[39m
+[2m      Tests [22m [1m[32m116 passed[39m[22m[90m (116)[39m
+[2m   Start at [22m 10:28:35
+[2m   Duration [22m 25.88s[2m (transform 9.25s, setup 969ms, collect 20.02s, tests 34.64s, environment 4.88s, prepare 1.26s)[22m
+

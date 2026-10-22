@@ -1,0 +1,19 @@
+chain exit=0 0s | CHAIN OK (8 checks)
+owner-1524 exit=0 18s | simSoccerOwnerTail: green. The owner picks his club, plays on the table, and every call does what it says and none is best at everything.
+vitest-1524 exit=0 26s |    Duration  25.88s (transform 9.25s, setup 969ms, collect 20.02s, tests 34.64s, environment 4.88s, prepare 1.26s)
+owner-mergebase exit=1 11s | simSoccerOwnerTail: 1 failure(s)
+scoreshown exit=0 32s | simScoreShown: all sections green
+moneyafter exit=0 6s | All good: the money app keeps running for the whole retirement tail.
+managercareer exit=0 13s | ALL MANAGER CAREER CHECKS PASSED
+nodeadend exit=0 1s | simCareerNoDeadEnd: green. A convicted career is still a career, and a stranded save comes back.
+tsc exit=0 109s | 
+endings-1519 exit=1 95s | FAIL: 1 check(s) failed
+ctl-1524 exit=0 181s | debtfree exit=1 1 fails | simSoccerOwnerTail: 1 failure(s)
+sitesearch exit=0 3s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+norival exit=0 25s | No rival product names found. 0 findings.
+storage exit=0 4s | simStorageWrites: all green (owed: 12)
+form-1235 exit=0 177s | simCareerForm: green
+indexnow exit=0 0s | simIndexNow: green. The key file, the script and the sitemap agree.
+sitemap exit=0 1s | simSitemap: green. Google only ever hears about real pages.
+vitest-1446 exit=0 42s |    Duration  41.02s (transform 20.05s, setup 1.91s, collect 6.04s, tests 75.84s, environment 8.34s, prepare 2.25s)
+anchors exit=0 68s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
