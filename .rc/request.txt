@@ -1,0 +1,10 @@
+diff2: git worktree add .rc-base 30b4b3ca >/dev/null 2>&1 && BASE_ROOT=.rc-base SECTION=2 node scripts/simCmDifficulty.mjs
+motionfull: node scripts/simLiveSimMotion.mjs
+siblings: node_modules/.bin/vitest run src/test/pitchOwnGoal.test.tsx src/test/pitchRestartContinuity.test.tsx src/test/liveSimCelebration.test.tsx src/test/miniPitchScene.test.ts src/test/seasonCentreOwnGoals.test.tsx src/test/clubManagerVarScreen.test.tsx --testTimeout=300000 --hookTimeout=120000
+simLiveMatch: node scripts/simLiveMatch.mjs
+simLiveSim: node scripts/simLiveSim.mjs
+simLiveSimCelebration: node scripts/simLiveSimCelebration.mjs
+simCmMatchDay: node scripts/simCmMatchDay.mjs
+simCmMatchCentre: node scripts/simCmMatchCentre.mjs
+simManagerLiveLineups: node scripts/simManagerLiveLineups.mjs
+rival: node scripts/simNoRivalNames.mjs
