@@ -1,0 +1,30 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simFightIds: node scripts/simFightIds.mjs
+simFightIds-base: git worktree add /tmp/base e3deb2cb && FIGHT_IDS_BASE_DIR=/tmp/base node scripts/simFightIds.mjs
+ctl-counter: FIGHT_IDS_CONTROL=counter node scripts/simFightIds.mjs
+ctl-norepair: FIGHT_IDS_CONTROL=norepair node scripts/simFightIds.mjs
+ctl-noclass: FIGHT_IDS_CONTROL=noclass node scripts/simFightIds.mjs
+ctl-drawid: FIGHT_IDS_CONTROL=drawid node scripts/simFightIds.mjs
+ctl-startone: FIGHT_IDS_CONTROL=startone node scripts/simFightIds.mjs
+simFightCareerRetire: node scripts/simFightCareerRetire.mjs
+retire-seed9000: RETIRE_SEED0=9000 node scripts/simFightCareerRetire.mjs
+retire-seed15000: RETIRE_SEED0=15000 node scripts/simFightCareerRetire.mjs
+ctl-nogate: RETIRE_CONTROL=nogate node scripts/simFightCareerRetire.mjs
+ctl-keepcards: RETIRE_CONTROL=keepcards node scripts/simFightCareerRetire.mjs
+ctl-twice: RETIRE_CONTROL=twice node scripts/simFightCareerRetire.mjs
+ctl-cleanrecord: RETIRE_CONTROL=cleanrecord node scripts/simFightCareerRetire.mjs
+simFightCareer: node scripts/simFightCareer.mjs
+simFightGym: node scripts/simFightGym.mjs
+simFightPromoter: node scripts/simFightPromoter.mjs
+simBoxingShowForecast: node scripts/simBoxingShowForecast.mjs
+simFightRingPlayback: node scripts/simFightRingPlayback.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+vitest: node_modules/.bin/vitest run src/test/fightCareerRetireBoard.test.tsx src/lib/fightGym.test.ts src/lib/fightPromoter.test.ts src/lib/fightCareerLife.test.ts src/test/boxingShowForecast.test.tsx src/test/fightCareerLifeBoard.test.tsx src/test/fightCareerRingPlayback.test.tsx --testTimeout=300000 --hookTimeout=120000
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs

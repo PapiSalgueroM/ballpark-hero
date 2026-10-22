@@ -1,0 +1,22 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/fightCareerRingPlayback.test.tsx[2m > [22mFight Career ring playback[2m > [22mshows a boxing ring when the real saved-plan Fight action starts its recap[32m 270[2mms[22m[39m
+ [32m✓[39m src/test/fightCareerRingPlayback.test.tsx[2m > [22mFight Career ring playback[2m > [22mlets Pause hold the unrevealed round without changing the saved bout[32m 125[2mms[22m[39m
+ [32m✓[39m src/test/fightCareerRingPlayback.test.tsx[2m > [22mFight Career ring playback[2m > [22mlets Next round reveal one round and hold it without replaying the saved fight[32m 98[2mms[22m[39m
+ [32m✓[39m src/test/fightCareerRingPlayback.test.tsx[2m > [22mFight Career revealed round truth[2m > [22mputs only the actual knockdown victim down[32m 7[2mms[22m[39m
+ [32m✓[39m src/test/fightCareerRingPlayback.test.tsx[2m > [22mFight Career revealed round truth[2m > [22mshows a completed KO loser down and a TKO without a knockdown stopped upright[32m 13[2mms[22m[39m
+ [32m✓[39m src/test/fightCareerRingPlayback.test.tsx[2m > [22mFight Career revealed round truth[2m > [22mleaves both figures upright after a decision even when the last round had a knockdown[32m 3[2mms[22m[39m
+ [32m✓[39m src/test/fightCareerRingPlayback.test.tsx[2m > [22mFight Career revealed round truth[2m > [22mdoes not let later rounds change the first revealed recap[32m 149[2mms[22m[39m
+ [32m✓[39m src/test/fightCareerRingPlayback.test.tsx[2m > [22mFight Career revealed round truth[2m > [22mwaits a full readable interval after Play before revealing the next round[32m 184[2mms[22m[39m
+ [32m✓[39m src/test/fightCareerRingPlayback.test.tsx[2m > [22mFight Career revealed round truth[2m > [22mskips to the saved verdict and keeps earlier cards collapsed by default[32m 148[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m9 passed[39m[22m[90m (9)[39m
+[2m   Start at [22m 09:54:30
+[2m   Duration [22m 2.10s[2m (transform 287ms, setup 48ms, collect 509ms, tests 998ms, environment 232ms, prepare 79ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/fight-ring-artifacts/normal-report.json
+
+simFightRingPlayback normal: intended outcomes verified.
+simFightRingPlayback: 1 actual/fault runs verified; 14 source inputs held byte for byte.
