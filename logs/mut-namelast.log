@@ -1,0 +1,108 @@
+mutation namelast applied to src/lib/careerIntl.ts
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/lib/careerIntl.test.ts [2m([22m[2m26 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 1667[2mms[22m[39m
+   [32m✓[39m the calendar[2m > [22manswers a ledger summer, a projected one, and none[32m 4[2mms[22m[39m
+   [32m✓[39m the calendar[2m > [22mplays an unplayable shape as its playedAs and keeps the real one[32m 0[2mms[22m[39m
+   [32m✓[39m the calendar[2m > [22mrenders an id the ledger lacks from its parse[32m 1[2mms[22m[39m
+[31m   [31m×[31m the calendar[2m > [22mnames an id the ledger lacks after the edition of its competition at or before it[39m[32m 11[2mms[22m[39m
+[31m     → expected 'World Cup' to be 'World Championship' // Object.is equality[39m
+   [32m✓[39m the calendar[2m > [22mseeds a bracket 1 v 8, 4 v 5, 2 v 7, 3 v 6[32m 1[2mms[22m[39m
+   [32m✓[39m the field[2m > [22mis the same for two careers and drawn only from the last two played fields[32m 2[2mms[22m[39m
+   [32m✓[39m the field[2m > [22mfails closed when even the widest pool is short[32m 0[2mms[22m[39m
+   [32m✓[39m the field[2m > [22mgives no tournament when his nation is not in a played field[32m 1[2mms[22m[39m
+   [33m[2m✓[22m[39m the tournament[2m > [22mplays every shape to one champion, never level [33m 954[2mms[22m[39m
+   [33m[2m✓[22m[39m the tournament[2m > [22mplays every shape to one champion, groups may draw [33m 512[2mms[22m[39m
+   [32m✓[39m the tournament[2m > [22mplays the bronze game between the two semi-final losers, three distinct medallists[32m 10[2mms[22m[39m
+   [32m✓[39m the tournament[2m > [22msends the best two of three thirds through by the sport's table order, never level[32m 78[2mms[22m[39m
+   [32m✓[39m the tournament[2m > [22msends the best two of three thirds through by the sport's table order, groups may draw[32m 54[2mms[22m[39m
+   [32m✓[39m the tournament[2m > [22mgives both semi-final losers a semi place when the shape has no bronze game[32m 0[2mms[22m[39m
+   [32m✓[39m the tournament[2m > [22magrees his place with his games[32m 17[2mms[22m[39m
+   [32m✓[39m the tournament[2m > [22mgives the same tournament for the same key, and never calls Math.random[32m 5[2mms[22m[39m
+   [32m✓[39m the save[2m > [22masks until he answers; rest writes the year, the edition and went false, and nothing else[32m 1[2mms[22m[39m
+   [32m✓[39m the save[2m > [22mgo writes the row and the snapshot, and a knock goes through the sport[32m 8[2mms[22m[39m
+   [32m✓[39m the save[2m > [22mnever calls a player below the bar or in a summer with no edition[32m 0[2mms[22m[39m
+   [32m✓[39m the save[2m > [22mderives the totals from the summers[32m 1[2mms[22m[39m
+   [32m✓[39m repair on load[2m > [22mleaves an old save and a sound block untouched[32m 1[2mms[22m[39m
+   [32m✓[39m repair on load[2m > [22mdrops a broken block alone[32m 0[2mms[22m[39m
+   [32m✓[39m repair on load[2m > [22mdrops a broken row alone and keeps the rest[32m 0[2mms[22m[39m
+   [32m✓[39m repair on load[2m > [22mdrops a broken last alone[32m 0[2mms[22m[39m
+   [32m✓[39m repair on load[2m > [22mdrops a last whose games, groups, lines or places are malformed, and only the last[32m 3[2mms[22m[39m
+   [32m✓[39m repair on load[2m > [22mkeeps a row whose edition the ledger stopped listing, medal and all[32m 0[2mms[22m[39m
+[90mstdout[2m | src/test/nbaCareerIntl.test.ts[2m > [22m[2mhis line and his medals[2m > [22m[2mscales his season to a 40 minute game and a team of stars: 24, 6 and 5 come out near 15, 3.75 and 3.1
+[22m[39mnbaIntlLine means over 4000 keyed games: pts 15.011, reb 3.754, ast 3.103
+
+ [31m❯[39m src/test/nbaCareerIntl.test.ts [2m([22m[2m15 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 178[2mms[22m[39m
+   [32m✓[39m the summer after a season[2m > [22mmaps the season labelled Y to the summer Y + 1[32m 2[2mms[22m[39m
+   [32m✓[39m the summer after a season[2m > [22mhas no edition in the summers between[32m 1[2mms[22m[39m
+   [32m✓[39m the summer after a season[2m > [22mlabels an edition from the ledger, Tokyo with the year it was held, a projected one with no host[32m 1[2mms[22m[39m
+   [32m✓[39m the call[2m > [22mcomes at 86 and not one below[32m 1[2mms[22m[39m
+   [32m✓[39m the call[2m > [22mnever comes when retired, suspended, too old or too hurt, or in a summer with no edition[32m 1[2mms[22m[39m
+   [32m✓[39m the call[2m > [22mnever comes to a career that ends after this season, by the hard stop or by his own choice[32m 1[2mms[22m[39m
+   [32m✓[39m the call[2m > [22mrest writes the year, the edition and went false, and nothing else[32m 1[2mms[22m[39m
+   [32m✓[39m the call[2m > [22mgo writes the row and the snapshot, and only health moves outside the block[32m 5[2mms[22m[39m
+   [32m✓[39m the call[2m > [22mplays the same tournament for the same career twice[32m 1[2mms[22m[39m
+   [32m✓[39m the game[2m > [22mis never level, and goes to overtime only from level[32m 142[2mms[22m[39m
+   [32m✓[39m the game[2m > [22mgives each nation its real rung in a played summer and its mean before one to come[32m 0[2mms[22m[39m
+   [32m✓[39m his line and his medals[2m > [22mscales his season to a 40 minute game and a team of stars: 24, 6 and 5 come out near 15, 3.75 and 3.1[32m 6[2mms[22m[39m
+[31m   [31m×[31m his line and his medals[2m > [22mlabels a medal of an edition the ledger lacks by the name its competition went by that summer[39m[32m 12[2mms[22m[39m
+[31m     → expected [ { label: 'World Cup gold', …(2) } ] to deeply equal [ { …(3) } ][39m
+   [32m✓[39m the help and the bindings[2m > [22mquotes the module numbers and never the marks[32m 1[2mms[22m[39m
+   [32m✓[39m the help and the bindings[2m > [22mbinds the NBA alone[32m 0[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/careerIntl.test.ts[2m > [22mthe calendar[2m > [22mnames an id the ledger lacks after the edition of its competition at or before it
+[31m[1mAssertionError[22m: expected 'World Cup' to be 'World Championship' // Object.is equality[39m
+
+Expected: [32m"World C[7mhampionshi[27mp"[39m
+Received: [31m"World C[7mu[27mp"[39m
+
+[36m [2m❯[22m src/lib/careerIntl.test.ts:[2m110:43[22m[39m
+    [90m108| [39m      ['wc-2014', 'wc', 2014, 'World Cup', 'Spain', 'b-2r', null, null…
+    [90m109| [39m    ] })[33m;[39m
+    [90m110| [39m    [34mexpect[39m(renamed[33m.[39m[34mbyId[39m([32m'wc-2010'[39m)[33m?.[39mname)[33m.[39m[34mtoBe[39m([32m'World Championship'[39m)[33m;[39m
+    [90m   | [39m                                          [31m^[39m
+    [90m111| [39m    [34mexpect[39m(renamed[33m.[39m[34mbyId[39m([32m'wc-2002'[39m)[33m?.[39mname)[33m.[39m[34mtoBe[39m([32m'World Championship'[39m)[33m;[39m
+    [90m112| [39m    [34mexpect[39m(renamed[33m.[39m[34mbyId[39m([32m'wc-2022'[39m)[33m?.[39mname)[33m.[39m[34mtoBe[39m([32m'World Cup'[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/nbaCareerIntl.test.ts[2m > [22mhis line and his medals[2m > [22mlabels a medal of an edition the ledger lacks by the name its competition went by that summer
+[31m[1mAssertionError[22m: expected [ { label: 'World Cup gold', …(2) } ] to deeply equal [ { …(3) } ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[33m@@ -1,8 +1,8 @@[39m
+[2m  [[22m
+[2m    {[22m
+[32m-     "label": "World Championship gold",[39m
+[31m+     "label": "World Cup gold",[39m
+[2m      "n": 1,[22m
+[2m      "years": [[22m
+[2m        2008,[22m
+[2m      ],[22m
+[2m    },[22m
+
+[36m [2m❯[22m src/test/nbaCareerIntl.test.ts:[2m161:43[22m[39m
+    [90m159| [39m      intl: { v: 1 as const, summers: [{ year: 2008, edition: 'wc-2008…
+    [90m160| [39m    })[33m;[39m
+    [90m161| [39m    expect(NBA_CAREER_INTL.trophyRows(c)).toEqual([{ label: 'World Cha…
+    [90m   | [39m                                          [31m^[39m
+    [90m162| [39m  })[33m;[39m
+    [90m163| [39m})[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m2 failed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m39 passed[39m[22m[90m (41)[39m
+[2m   Start at [22m 12:54:30
+[2m   Duration [22m 2.67s[2m (transform 1.36s, setup 138ms, collect 1.76s, tests 1.84s, environment 669ms, prepare 149ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/careerIntl.test.ts,title=src/lib/careerIntl.test.ts > the calendar > names an id the ledger lacks after the edition of its competition at or before it,line=110,column=43::AssertionError: expected 'World Cup' to be 'World Championship' // Object.is equality%0A%0AExpected: "World Championship"%0AReceived: "World Cup"%0A%0A ❯ src/lib/careerIntl.test.ts:110:43%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/nbaCareerIntl.test.ts,title=src/test/nbaCareerIntl.test.ts > his line and his medals > labels a medal of an edition the ledger lacks by the name its competition went by that summer,line=161,column=43::AssertionError: expected [ { label: 'World Cup gold', …(2) } ] to deeply equal [ { …(3) } ]%0A%0A- Expected%0A+ Received%0A%0A@@ -1,8 +1,8 @@%0A  [%0A    {%0A-     "label": "World Championship gold",%0A+     "label": "World Cup gold",%0A      "n": 1,%0A      "years": [%0A        2008,%0A      ],%0A    },%0A%0A ❯ src/test/nbaCareerIntl.test.ts:161:43%0A%0A

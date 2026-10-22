@@ -1,0 +1,113 @@
+mutation callend applied to src/lib/nbaCareerIntl.ts
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/nbaCareerIntl.test.ts[2m > [22m[2mhis line and his medals[2m > [22m[2mscales his season to a 40 minute game and a team of stars: 24, 6 and 5 come out near 15, 3.75 and 3.1
+[22m[39mnbaIntlLine means over 4000 keyed games: pts 15.011, reb 3.754, ast 3.103
+
+ [31m❯[39m src/test/nbaCareerIntl.test.ts [2m([22m[2m15 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 145[2mms[22m[39m
+   [32m✓[39m the summer after a season[2m > [22mmaps the season labelled Y to the summer Y + 1[32m 2[2mms[22m[39m
+   [32m✓[39m the summer after a season[2m > [22mhas no edition in the summers between[32m 1[2mms[22m[39m
+   [32m✓[39m the summer after a season[2m > [22mlabels an edition from the ledger, Tokyo with the year it was held, a projected one with no host[32m 1[2mms[22m[39m
+   [32m✓[39m the call[2m > [22mcomes at 86 and not one below[32m 1[2mms[22m[39m
+   [32m✓[39m the call[2m > [22mnever comes when retired, suspended, too old or too hurt, or in a summer with no edition[32m 1[2mms[22m[39m
+[31m   [31m×[31m the call[2m > [22mnever comes to a career that ends after this season, by the hard stop or by his own choice[39m[32m 8[2mms[22m[39m
+[31m     → expected { id: 'oly-2004', comp: 'oly', …(10) } to be null[39m
+   [32m✓[39m the call[2m > [22mrest writes the year, the edition and went false, and nothing else[32m 1[2mms[22m[39m
+   [32m✓[39m the call[2m > [22mgo writes the row and the snapshot, and only health moves outside the block[32m 4[2mms[22m[39m
+   [32m✓[39m the call[2m > [22mplays the same tournament for the same career twice[32m 1[2mms[22m[39m
+   [32m✓[39m the game[2m > [22mis never level, and goes to overtime only from level[32m 116[2mms[22m[39m
+   [32m✓[39m the game[2m > [22mgives each nation its real rung in a played summer and its mean before one to come[32m 1[2mms[22m[39m
+   [32m✓[39m his line and his medals[2m > [22mscales his season to a 40 minute game and a team of stars: 24, 6 and 5 come out near 15, 3.75 and 3.1[32m 6[2mms[22m[39m
+   [32m✓[39m his line and his medals[2m > [22mlabels a medal of an edition the ledger lacks by the name its competition went by that summer[32m 1[2mms[22m[39m
+   [32m✓[39m the help and the bindings[2m > [22mquotes the module numbers and never the marks[32m 1[2mms[22m[39m
+   [32m✓[39m the help and the bindings[2m > [22mbinds the NBA alone[32m 0[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/nbaCareerIntl.test.ts[2m > [22mthe call[2m > [22mnever comes to a career that ends after this season, by the hard stop or by his own choice
+[31m[1mAssertionError[22m: expected { id: 'oly-2004', comp: 'oly', …(10) } to be null[39m
+
+[32m- Expected:[39m 
+null
+
+[31m+ Received:[39m 
+{
+  "comp": "oly",
+  "field": [
+    "Argentina",
+    "Italy",
+    "USA",
+    "Lithuania",
+    "Greece",
+    "Puerto Rico",
+    "Spain",
+    "China",
+    "Australia",
+    "New Zealand",
+    "Serbia and Montenegro",
+    "Angola",
+  ],
+  "games": null,
+  "host": "Athens",
+  "id": "oly-2004",
+  "kind": "played",
+  "name": "Olympics",
+  "partial": false,
+  "places": [
+    "Argentina",
+    "Italy",
+    "USA",
+    "Lithuania",
+    [
+      "Spain",
+      "China",
+      "Puerto Rico",
+      "Greece",
+    ],
+  ],
+  "play": {
+    "bronze": true,
+    "firstKnockout": "QF",
+    "groupSize": 6,
+    "groups": 2,
+    "id": "oly-2x6",
+    "playable": true,
+    "playedAs": null,
+    "teams": 12,
+    "thirdsThrough": 0,
+    "through": 4,
+  },
+  "shape": {
+    "bronze": true,
+    "firstKnockout": "QF",
+    "groupSize": 6,
+    "groups": 2,
+    "id": "oly-2x6",
+    "playable": true,
+    "playedAs": null,
+    "teams": 12,
+    "thirdsThrough": 0,
+    "through": 4,
+  },
+  "year": 2004,
+}
+
+[36m [2m❯[22m src/test/nbaCareerIntl.test.ts:[2m71:33[22m[39m
+    [90m 69| [39m    [35mconst[39m long [33m=[39m [34mafter[39m([34m2003[39m[33m,[39m [34m90[39m)[33m;[39m
+    [90m 70| [39m    long.seasons = Array.from({ length: 21 }, (_, i) => line(1983 + i,…
+    [90m 71| [39m    [34mexpect[39m([34mnbaIntlCallOf[39m(long))[33m.[39m[34mtoBeNull[39m()[33m;[39m
+    [90m   | [39m                                [31m^[39m
+    [90m 72| [39m    long[33m.[39mseasons [33m=[39m long[33m.[39mseasons[33m.[39m[34mslice[39m([34m1[39m)[33m;[39m
+    [90m 73| [39m    [34mexpect[39m([34mnbaIntlCallOf[39m(long)[33m?.[39mid)[33m.[39m[34mtoBe[39m([32m'oly-2004'[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m14 passed[39m[22m[90m (15)[39m
+[2m   Start at [22m 12:54:24
+[2m   Duration [22m 2.31s[2m (transform 1.06s, setup 67ms, collect 1.35s, tests 145ms, environment 298ms, prepare 74ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/nbaCareerIntl.test.ts,title=src/test/nbaCareerIntl.test.ts > the call > never comes to a career that ends after this season%2C by the hard stop or by his own choice,line=71,column=33::AssertionError: expected { id: 'oly-2004', comp: 'oly', …(10) } to be null%0A%0A- Expected: %0Anull%0A%0A+ Received: %0A{%0A  "comp": "oly",%0A  "field": [%0A    "Argentina",%0A    "Italy",%0A    "USA",%0A    "Lithuania",%0A    "Greece",%0A    "Puerto Rico",%0A    "Spain",%0A    "China",%0A    "Australia",%0A    "New Zealand",%0A    "Serbia and Montenegro",%0A    "Angola",%0A  ],%0A  "games": null,%0A  "host": "Athens",%0A  "id": "oly-2004",%0A  "kind": "played",%0A  "name": "Olympics",%0A  "partial": false,%0A  "places": [%0A    "Argentina",%0A    "Italy",%0A    "USA",%0A    "Lithuania",%0A    [%0A      "Spain",%0A      "China",%0A      "Puerto Rico",%0A      "Greece",%0A    ],%0A  ],%0A  "play": {%0A    "bronze": true,%0A    "firstKnockout": "QF",%0A    "groupSize": 6,%0A    "groups": 2,%0A    "id": "oly-2x6",%0A    "playable": true,%0A    "playedAs": null,%0A    "teams": 12,%0A    "thirdsThrough": 0,%0A    "through": 4,%0A  },%0A  "shape": {%0A    "bronze": true,%0A    "firstKnockout": "QF",%0A    "groupSize": 6,%0A    "groups": 2,%0A    "id": "oly-2x6",%0A    "playable": true,%0A    "playedAs": null,%0A    "teams": 12,%0A    "thirdsThrough": 0,%0A    "through": 4,%0A  },%0A  "year": 2004,%0A}%0A%0A ❯ src/test/nbaCareerIntl.test.ts:71:33%0A%0A

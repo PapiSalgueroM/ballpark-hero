@@ -1,0 +1,47 @@
+mutation linepts applied to src/lib/nbaCareerIntl.ts
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/nbaCareerIntl.test.ts[2m > [22m[2mhis line and his medals[2m > [22m[2mscales his season to a 40 minute game and a team of stars: 24, 6 and 5 come out near 15, 3.75 and 3.1
+[22m[39mnbaIntlLine means over 4000 keyed games: pts 3.908, reb 3.754, ast 3.103
+
+ [31m❯[39m src/test/nbaCareerIntl.test.ts [2m([22m[2m15 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 141[2mms[22m[39m
+   [32m✓[39m the summer after a season[2m > [22mmaps the season labelled Y to the summer Y + 1[32m 2[2mms[22m[39m
+   [32m✓[39m the summer after a season[2m > [22mhas no edition in the summers between[32m 1[2mms[22m[39m
+   [32m✓[39m the summer after a season[2m > [22mlabels an edition from the ledger, Tokyo with the year it was held, a projected one with no host[32m 1[2mms[22m[39m
+   [32m✓[39m the call[2m > [22mcomes at 86 and not one below[32m 1[2mms[22m[39m
+   [32m✓[39m the call[2m > [22mnever comes when retired, suspended, too old or too hurt, or in a summer with no edition[32m 1[2mms[22m[39m
+   [32m✓[39m the call[2m > [22mnever comes to a career that ends after this season, by the hard stop or by his own choice[32m 0[2mms[22m[39m
+   [32m✓[39m the call[2m > [22mrest writes the year, the edition and went false, and nothing else[32m 1[2mms[22m[39m
+   [32m✓[39m the call[2m > [22mgo writes the row and the snapshot, and only health moves outside the block[32m 4[2mms[22m[39m
+   [32m✓[39m the call[2m > [22mplays the same tournament for the same career twice[32m 1[2mms[22m[39m
+   [32m✓[39m the game[2m > [22mis never level, and goes to overtime only from level[32m 114[2mms[22m[39m
+   [32m✓[39m the game[2m > [22mgives each nation its real rung in a played summer and its mean before one to come[32m 1[2mms[22m[39m
+[31m   [31m×[31m his line and his medals[2m > [22mscales his season to a 40 minute game and a team of stars: 24, 6 and 5 come out near 15, 3.75 and 3.1[39m[32m 12[2mms[22m[39m
+[31m     → expected 11.0925 to be less than 0.25[39m
+   [32m✓[39m his line and his medals[2m > [22mlabels a medal of an edition the ledger lacks by the name its competition went by that summer[32m 1[2mms[22m[39m
+   [32m✓[39m the help and the bindings[2m > [22mquotes the module numbers and never the marks[32m 1[2mms[22m[39m
+   [32m✓[39m the help and the bindings[2m > [22mbinds the NBA alone[32m 0[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/nbaCareerIntl.test.ts[2m > [22mhis line and his medals[2m > [22mscales his season to a 40 minute game and a team of stars: 24, 6 and 5 come out near 15, 3.75 and 3.1
+[31m[1mAssertionError[22m: expected 11.0925 to be less than 0.25[39m
+[36m [2m❯[22m src/test/nbaCareerIntl.test.ts:[2m153:37[22m[39m
+    [90m151| [39m    const mean = { pts: sum.pts / n, reb: sum.reb / n, ast: sum.ast / …
+    [90m152| [39m    console.log(`nbaIntlLine means over ${n} keyed games: pts ${mean.p…
+    [90m153| [39m    [34mexpect[39m([33mMath[39m[33m.[39m[34mabs[39m(mean[33m.[39mpts [33m-[39m [34m15[39m))[33m.[39m[34mtoBeLessThan[39m([34m0.25[39m)[33m;[39m
+    [90m   | [39m                                    [31m^[39m
+    [90m154| [39m    [34mexpect[39m([33mMath[39m[33m.[39m[34mabs[39m(mean[33m.[39mreb [33m-[39m [34m3.75[39m))[33m.[39m[34mtoBeLessThan[39m([34m0.15[39m)[33m;[39m
+    [90m155| [39m    [34mexpect[39m([33mMath[39m[33m.[39m[34mabs[39m(mean[33m.[39mast [33m-[39m [34m3.125[39m))[33m.[39m[34mtoBeLessThan[39m([34m0.15[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m14 passed[39m[22m[90m (15)[39m
+[2m   Start at [22m 12:54:18
+[2m   Duration [22m 2.28s[2m (transform 1.07s, setup 67ms, collect 1.34s, tests 141ms, environment 299ms, prepare 68ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/nbaCareerIntl.test.ts,title=src/test/nbaCareerIntl.test.ts > his line and his medals > scales his season to a 40 minute game and a team of stars%3A 24%2C 6 and 5 come out near 15%2C 3.75 and 3.1,line=153,column=37::AssertionError: expected 11.0925 to be less than 0.25%0A ❯ src/test/nbaCareerIntl.test.ts:153:37%0A%0A

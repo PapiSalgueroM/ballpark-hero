@@ -1,0 +1,10 @@
+unit-real exit=0 3s |    Duration  2.67s (transform 1.29s, setup 145ms, collect 1.66s, tests 1.83s, environment 733ms, prepare 361ms)
+mut-thirds exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/careerIntl.test.ts,title=src/lib/careerIntl.test.ts > the tournament > sends the best two of three thir
+mut-linepts exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/nbaCareerIntl.test.ts,title=src/test/nbaCareerIntl.test.ts > his line and his medals > scales his seas
+mut-minutes exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/nbaCareerIntl.test.ts,title=src/test/nbaCareerIntl.test.ts > his line and his medals > scales his seas
+mut-callend exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/nbaCareerIntl.test.ts,title=src/test/nbaCareerIntl.test.ts > the call > never comes to a career that e
+mut-lastshallow exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/careerIntl.test.ts,title=src/lib/careerIntl.test.ts > repair on load > drops a last whose games%2C grou
+mut-namelast exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/nbaCareerIntl.test.ts,title=src/test/nbaCareerIntl.test.ts > his line and his medals > labels a medal 
+mut-avgsum exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/careerIntl.test.ts,title=src/lib/careerIntl.test.ts > the save > go writes the row and the snapshot%2C 
+mut-knock-s5 exit=1 5s | simCareerIntl: RED, 180087 checks, section 5: 21
+unit-after exit=0 3s |    Duration  2.66s (transform 1.24s, setup 136ms, collect 1.61s, tests 1.83s, environment 673ms, prepare 153ms)

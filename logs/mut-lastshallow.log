@@ -1,0 +1,62 @@
+mutation lastshallow applied to src/lib/careerIntl.ts
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/lib/careerIntl.test.ts [2m([22m[2m26 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 1305[2mms[22m[39m
+   [32m✓[39m the calendar[2m > [22manswers a ledger summer, a projected one, and none[32m 3[2mms[22m[39m
+   [32m✓[39m the calendar[2m > [22mplays an unplayable shape as its playedAs and keeps the real one[32m 0[2mms[22m[39m
+   [32m✓[39m the calendar[2m > [22mrenders an id the ledger lacks from its parse[32m 1[2mms[22m[39m
+   [32m✓[39m the calendar[2m > [22mnames an id the ledger lacks after the edition of its competition at or before it[32m 0[2mms[22m[39m
+   [32m✓[39m the calendar[2m > [22mseeds a bracket 1 v 8, 4 v 5, 2 v 7, 3 v 6[32m 1[2mms[22m[39m
+   [32m✓[39m the field[2m > [22mis the same for two careers and drawn only from the last two played fields[32m 2[2mms[22m[39m
+   [32m✓[39m the field[2m > [22mfails closed when even the widest pool is short[32m 0[2mms[22m[39m
+   [32m✓[39m the field[2m > [22mgives no tournament when his nation is not in a played field[32m 1[2mms[22m[39m
+   [33m[2m✓[22m[39m the tournament[2m > [22mplays every shape to one champion, never level [33m 723[2mms[22m[39m
+   [33m[2m✓[22m[39m the tournament[2m > [22mplays every shape to one champion, groups may draw [33m 416[2mms[22m[39m
+   [32m✓[39m the tournament[2m > [22mplays the bronze game between the two semi-final losers, three distinct medallists[32m 9[2mms[22m[39m
+   [32m✓[39m the tournament[2m > [22msends the best two of three thirds through by the sport's table order, never level[32m 57[2mms[22m[39m
+   [32m✓[39m the tournament[2m > [22msends the best two of three thirds through by the sport's table order, groups may draw[32m 48[2mms[22m[39m
+   [32m✓[39m the tournament[2m > [22mgives both semi-final losers a semi place when the shape has no bronze game[32m 0[2mms[22m[39m
+   [32m✓[39m the tournament[2m > [22magrees his place with his games[32m 19[2mms[22m[39m
+   [32m✓[39m the tournament[2m > [22mgives the same tournament for the same key, and never calls Math.random[32m 4[2mms[22m[39m
+   [32m✓[39m the save[2m > [22masks until he answers; rest writes the year, the edition and went false, and nothing else[32m 0[2mms[22m[39m
+   [32m✓[39m the save[2m > [22mgo writes the row and the snapshot, and a knock goes through the sport[32m 7[2mms[22m[39m
+   [32m✓[39m the save[2m > [22mnever calls a player below the bar or in a summer with no edition[32m 0[2mms[22m[39m
+   [32m✓[39m the save[2m > [22mderives the totals from the summers[32m 1[2mms[22m[39m
+   [32m✓[39m repair on load[2m > [22mleaves an old save and a sound block untouched[32m 1[2mms[22m[39m
+   [32m✓[39m repair on load[2m > [22mdrops a broken block alone[32m 0[2mms[22m[39m
+   [32m✓[39m repair on load[2m > [22mdrops a broken row alone and keeps the rest[32m 0[2mms[22m[39m
+   [32m✓[39m repair on load[2m > [22mdrops a broken last alone[32m 0[2mms[22m[39m
+[31m   [31m×[31m repair on load[2m > [22mdrops a last whose games, groups, lines or places are malformed, and only the last[39m[32m 8[2mms[22m[39m
+[31m     → break 0: expected false to be true // Object.is equality[39m
+   [32m✓[39m repair on load[2m > [22mkeeps a row whose edition the ledger stopped listing, medal and all[32m 1[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/careerIntl.test.ts[2m > [22mrepair on load[2m > [22mdrops a last whose games, groups, lines or places are malformed, and only the last
+[31m[1mAssertionError[22m: break 0: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/lib/careerIntl.test.ts:[2m348:49[22m[39m
+    [90m346| [39m      [35mconst[39m summers [33m=[39m [33mJSON[39m[33m.[39m[34mstringify[39m(c[33m.[39mintl[33m?.[39msummers)[33m;[39m
+    [90m347| [39m      [34mbrk[39m(c[33m.[39mintl[33m?.[39mlast [35mas[39m unknown [35mas[39m [33mRecord[39m[33m<[39mstring[33m,[39m unknown[33m>[39m)[33m;[39m
+    [90m348| [39m      [34mexpect[39m([34mrepairIntlOnLoad[39m(c)[33m,[39m [32m`break [39m[36m${[39mi[36m}[39m[32m`[39m)[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m   | [39m                                                [31m^[39m
+    [90m349| [39m      [34mexpect[39m(c[33m.[39mintl[33m?.[39mlast[33m,[39m [32m`break [39m[36m${[39mi[36m}[39m[32m`[39m)[33m.[39m[34mtoBeUndefined[39m()[33m;[39m
+    [90m350| [39m      expect(JSON.stringify(c.intl?.summers), `break ${i}`).toBe(summe…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m25 passed[39m[22m[90m (26)[39m
+[2m   Start at [22m 12:54:27
+[2m   Duration [22m 2.19s[2m (transform 95ms, setup 71ms, collect 78ms, tests 1.31s, environment 301ms, prepare 67ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/careerIntl.test.ts,title=src/lib/careerIntl.test.ts > repair on load > drops a last whose games%2C groups%2C lines or places are malformed%2C and only the last,line=348,column=49::AssertionError: break 0: expected false to be true // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- true%0A+ false%0A%0A ❯ src/lib/careerIntl.test.ts:348:49%0A%0A

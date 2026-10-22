@@ -1,0 +1,70 @@
+mutation thirds applied to src/lib/careerIntl.ts
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/lib/careerIntl.test.ts [2m([22m[2m26 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[33m 1222[2mms[22m[39m
+   [32m✓[39m the calendar[2m > [22manswers a ledger summer, a projected one, and none[32m 3[2mms[22m[39m
+   [32m✓[39m the calendar[2m > [22mplays an unplayable shape as its playedAs and keeps the real one[32m 0[2mms[22m[39m
+   [32m✓[39m the calendar[2m > [22mrenders an id the ledger lacks from its parse[32m 1[2mms[22m[39m
+   [32m✓[39m the calendar[2m > [22mnames an id the ledger lacks after the edition of its competition at or before it[32m 0[2mms[22m[39m
+   [32m✓[39m the calendar[2m > [22mseeds a bracket 1 v 8, 4 v 5, 2 v 7, 3 v 6[32m 0[2mms[22m[39m
+   [32m✓[39m the field[2m > [22mis the same for two careers and drawn only from the last two played fields[32m 1[2mms[22m[39m
+   [32m✓[39m the field[2m > [22mfails closed when even the widest pool is short[32m 0[2mms[22m[39m
+   [32m✓[39m the field[2m > [22mgives no tournament when his nation is not in a played field[32m 1[2mms[22m[39m
+   [33m[2m✓[22m[39m the tournament[2m > [22mplays every shape to one champion, never level [33m 737[2mms[22m[39m
+   [33m[2m✓[22m[39m the tournament[2m > [22mplays every shape to one champion, groups may draw [33m 421[2mms[22m[39m
+   [32m✓[39m the tournament[2m > [22mplays the bronze game between the two semi-final losers, three distinct medallists[32m 10[2mms[22m[39m
+[31m   [31m×[31m the tournament[2m > [22msends the best two of three thirds through by the sport's table order, never level[39m[32m 7[2mms[22m[39m
+[31m     → expected 'group' not to be 'group' // Object.is equality[39m
+[31m   [31m×[31m the tournament[2m > [22msends the best two of three thirds through by the sport's table order, groups may draw[39m[32m 1[2mms[22m[39m
+[31m     → expected 'group' not to be 'group' // Object.is equality[39m
+   [32m✓[39m the tournament[2m > [22mgives both semi-final losers a semi place when the shape has no bronze game[32m 0[2mms[22m[39m
+   [32m✓[39m the tournament[2m > [22magrees his place with his games[32m 17[2mms[22m[39m
+   [32m✓[39m the tournament[2m > [22mgives the same tournament for the same key, and never calls Math.random[32m 4[2mms[22m[39m
+   [32m✓[39m the save[2m > [22masks until he answers; rest writes the year, the edition and went false, and nothing else[32m 1[2mms[22m[39m
+   [32m✓[39m the save[2m > [22mgo writes the row and the snapshot, and a knock goes through the sport[32m 9[2mms[22m[39m
+   [32m✓[39m the save[2m > [22mnever calls a player below the bar or in a summer with no edition[32m 0[2mms[22m[39m
+   [32m✓[39m the save[2m > [22mderives the totals from the summers[32m 1[2mms[22m[39m
+   [32m✓[39m repair on load[2m > [22mleaves an old save and a sound block untouched[32m 1[2mms[22m[39m
+   [32m✓[39m repair on load[2m > [22mdrops a broken block alone[32m 0[2mms[22m[39m
+   [32m✓[39m repair on load[2m > [22mdrops a broken row alone and keeps the rest[32m 0[2mms[22m[39m
+   [32m✓[39m repair on load[2m > [22mdrops a broken last alone[32m 0[2mms[22m[39m
+   [32m✓[39m repair on load[2m > [22mdrops a last whose games, groups, lines or places are malformed, and only the last[32m 3[2mms[22m[39m
+   [32m✓[39m repair on load[2m > [22mkeeps a row whose edition the ledger stopped listing, medal and all[32m 0[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/careerIntl.test.ts[2m > [22mthe tournament[2m > [22msends the best two of three thirds through by the sport's table order, never level
+[31m[1mAssertionError[22m: expected 'group' not to be 'group' // Object.is equality[39m
+[36m [2m❯[22m src/lib/careerIntl.test.ts:[2m203:46[22m[39m
+    [90m201| [39m        [35mconst[39m best [33m=[39m [[33m...[39mthirds][33m.[39m[34msort[39m(order)[33m;[39m
+    [90m202| [39m        [34mexpect[39m(t[33m.[39mplaces[best[[34m0[39m][33m.[39mnation])[33m.[39mnot[33m.[39m[34mtoBe[39m([32m'group'[39m)[33m;[39m
+    [90m203| [39m        [34mexpect[39m(t[33m.[39mplaces[best[[34m1[39m][33m.[39mnation])[33m.[39mnot[33m.[39m[34mtoBe[39m([32m'group'[39m)[33m;[39m
+    [90m   | [39m                                             [31m^[39m
+    [90m204| [39m        [34mexpect[39m(t[33m.[39mplaces[best[[34m2[39m][33m.[39mnation])[33m.[39m[34mtoBe[39m([32m'group'[39m)[33m;[39m
+    [90m205| [39m        [35mif[39m (best[[34m2[39m] [33m!==[39m thirds[[34m2[39m]) notGroupOrder [33m+=[39m [34m1[39m[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/lib/careerIntl.test.ts[2m > [22mthe tournament[2m > [22msends the best two of three thirds through by the sport's table order, groups may draw
+[31m[1mAssertionError[22m: expected 'group' not to be 'group' // Object.is equality[39m
+[36m [2m❯[22m src/lib/careerIntl.test.ts:[2m202:46[22m[39m
+    [90m200| [39m        [35mconst[39m thirds [33m=[39m t[33m.[39mgroups[33m.[39m[34mmap[39m(gr [33m=>[39m gr[33m.[39mtable[[34m2[39m])[33m;[39m
+    [90m201| [39m        [35mconst[39m best [33m=[39m [[33m...[39mthirds][33m.[39m[34msort[39m(order)[33m;[39m
+    [90m202| [39m        [34mexpect[39m(t[33m.[39mplaces[best[[34m0[39m][33m.[39mnation])[33m.[39mnot[33m.[39m[34mtoBe[39m([32m'group'[39m)[33m;[39m
+    [90m   | [39m                                             [31m^[39m
+    [90m203| [39m        [34mexpect[39m(t[33m.[39mplaces[best[[34m1[39m][33m.[39mnation])[33m.[39mnot[33m.[39m[34mtoBe[39m([32m'group'[39m)[33m;[39m
+    [90m204| [39m        [34mexpect[39m(t[33m.[39mplaces[best[[34m2[39m][33m.[39mnation])[33m.[39m[34mtoBe[39m([32m'group'[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m24 passed[39m[22m[90m (26)[39m
+[2m   Start at [22m 12:54:15
+[2m   Duration [22m 2.08s[2m (transform 96ms, setup 67ms, collect 79ms, tests 1.22s, environment 304ms, prepare 137ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/careerIntl.test.ts,title=src/lib/careerIntl.test.ts > the tournament > sends the best two of three thirds through by the sport's table order%2C never level,line=203,column=46::AssertionError: expected 'group' not to be 'group' // Object.is equality%0A ❯ src/lib/careerIntl.test.ts:203:46%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/careerIntl.test.ts,title=src/lib/careerIntl.test.ts > the tournament > sends the best two of three thirds through by the sport's table order%2C groups may draw,line=202,column=46::AssertionError: expected 'group' not to be 'group' // Object.is equality%0A ❯ src/lib/careerIntl.test.ts:202:46%0A%0A
