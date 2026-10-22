@@ -1,0 +1,2 @@
+mdOld exit=0 24s | simCmMatchDay: all sections green (918 matches: 462 home, 448 away, 8 neutral)
+mdRevert exit=0 24s | simCmMatchDay: all sections green (918 matches: 462 home, 448 away, 8 neutral)
