@@ -1,0 +1,74 @@
+[
+ {
+  "tag": "nfl-390-rm",
+  "kick": 10,
+  "mid": 30,
+  "midLabelled": 6,
+  "market": 27,
+  "battles": 12,
+  "errors": 0
+ },
+ {
+  "tag": "nfl-390-motion",
+  "kick": 10,
+  "mid": 30,
+  "midLabelled": 5,
+  "market": 27,
+  "battles": 5,
+  "errors": 0
+ },
+ {
+  "tag": "nfl-1280-rm",
+  "kick": 10,
+  "mid": 30,
+  "midLabelled": 6,
+  "market": 25,
+  "battles": 9,
+  "errors": 0
+ },
+ {
+  "tag": "nfl-1280-motion",
+  "kick": 10,
+  "mid": 30,
+  "midLabelled": 6,
+  "market": 27,
+  "battles": 5,
+  "errors": 0
+ },
+ {
+  "tag": "nba-390-rm",
+  "kick": 9,
+  "mid": null,
+  "midLabelled": null,
+  "market": null,
+  "battles": 0,
+  "errors": 0
+ },
+ {
+  "tag": "nba-390-motion",
+  "kick": 9,
+  "mid": null,
+  "midLabelled": null,
+  "market": null,
+  "battles": 0,
+  "errors": 0
+ },
+ {
+  "tag": "nba-1280-rm",
+  "kick": 9,
+  "mid": null,
+  "midLabelled": null,
+  "market": null,
+  "battles": 0,
+  "errors": 0
+ },
+ {
+  "tag": "nba-1280-motion",
+  "kick": 9,
+  "mid": null,
+  "midLabelled": null,
+  "market": null,
+  "battles": 0,
+  "errors": 0
+ }
+]
