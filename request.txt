@@ -1,0 +1,20 @@
+# Release BI, Round 1347 (the world competition engine, dark: E0 and E1), merged as 4c867c54. Send with
+# x/mut1347fix.mjs. golden-check-head records advanceUclBracket from HEAD's clubManager.ts and must say SAME against
+# the committed golden (a sibling that edits advanceUclBracket or groupFixtures is caught here); golden-base records
+# the round's base d4f2c6f6 and must equal the committed file. The five mut lines write into src and restore it
+# (#!serial) and must each exit 1 (a vitest failure); clean-after must be 0 with nothing left in src or scripts.
+# Accepted debt by the lead's ruling: settleTie and groupFixtures exist twice until Round 1502's first step (E2).
+#!serial
+vitest-world: node_modules/.bin/vitest run src/lib/worldCompetition.test.ts --testTimeout=300000 --hookTimeout=120000
+simWorldUcl: node scripts/simWorldUcl.mjs
+golden-check-head: node scripts/recordWorldTieGolden1347.mjs --ref HEAD --check
+golden-base: node scripts/recordWorldTieGolden1347.mjs --out /tmp/gbase.json && cmp /tmp/gbase.json scripts/data/worldTieGolden1347.json && echo GOLDEN-BASE-SAME
+dry: git rev-parse HEAD; node .rc/x/mut1347fix.mjs --dry
+mut-tieleg1: node .rc/x/mut1347fix.mjs tieleg1 && node_modules/.bin/vitest run src/lib/worldCompetition.test.ts --testTimeout=300000 --hookTimeout=120000 && node scripts/simWorldUcl.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-tieagg: node .rc/x/mut1347fix.mjs tieagg && node_modules/.bin/vitest run src/lib/worldCompetition.test.ts --testTimeout=300000 --hookTimeout=120000 && node scripts/simWorldUcl.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-finalone: node .rc/x/mut1347fix.mjs finalone && node_modules/.bin/vitest run src/lib/worldCompetition.test.ts --testTimeout=300000 --hookTimeout=120000 && node scripts/simWorldUcl.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-finalnights: node .rc/x/mut1347fix.mjs finalnights && node_modules/.bin/vitest run src/lib/worldCompetition.test.ts --testTimeout=300000 --hookTimeout=120000 && node scripts/simWorldUcl.mjs; s=$?; git checkout -- src scripts; exit $s
+# RETIRED for Release BJ by the triage (rBJ-tr): mut-fxorder survived (exit 0, simWorldUcl green) because its subject is gone by design. Round 1502 (m3 65126da0) did Round 1347s E2: clubManager.ts imports groupFixtures from worldCompetition.ts, so there is one writing, and the unit check the mutation used to break ("the module groupFixtures plays the engine matchday table, line for line, until E2 deletes the copy") was replaced by "the participant engine plays groupFixtures and settleTie from this module, one writing each". mut-fxcopy below is its successor and must exit 0 (it wraps its own fire: vitest exit 1 with exactly that test failed).
+# mut-fxorder: node .rc/x/mut1347fix.mjs fxorder && node_modules/.bin/vitest run src/lib/worldCompetition.test.ts --testTimeout=300000 --hookTimeout=120000 && node scripts/simWorldUcl.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-fxcopy: node .rc/x/mut1347fix.mjs fxcopy && node_modules/.bin/vitest run src/lib/worldCompetition.test.ts --testTimeout=300000 --hookTimeout=120000 > /tmp/fxcopy.log 2>&1; s=$?; git checkout -- src scripts; grep -E "Tests .*(failed|passed)" /tmp/fxcopy.log | tail -1; [ $s = 1 ] && grep -q "the participant engine plays groupFixtures and settleTie from this module, one writing each" /tmp/fxcopy.log && grep -qE "Tests +.*[^0-9]1 failed" /tmp/fxcopy.log && echo "fxcopy FIRED as it must: the one writing check caught the engine copy" && exit 0; echo "fxcopy did not fire as it must (vitest exit $s)"; exit 1
+clean-after: git status --short src scripts | head -5; node_modules/.bin/vitest run src/lib/worldCompetition.test.ts --testTimeout=300000 --hookTimeout=120000
