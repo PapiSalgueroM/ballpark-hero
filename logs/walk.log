@@ -1,0 +1,60 @@
+FAIL striker-390-rm: journey threw locator.waitFor: Timeout 45000ms exceeded.
+Call log:
+  - waiting for getByRole('button', { name: /Next Season|Next Year|Continue/ }).first() to be visible
+
+    at journey (/home/runner/work/ballpark-hero/ballpark-hero/.rc/x/walk1525.mjs:86:88)
+    at async file:///home/runner/work/ballpark-hero/ball
+FAIL striker-390-motion: journey threw locator.waitFor: Timeout 45000ms exceeded.
+Call log:
+  - waiting for getByRole('button', { name: /Next Season|Next Year|Continue/ }).first() to be visible
+
+    at journey (/home/runner/work/ballpark-hero/ballpark-hero/.rc/x/walk1525.mjs:86:88)
+    at async file:///home/runner/work/ballpark-hero/ball
+ok   keeper-390-rm: season summary 1 has no horizontal overflow
+ok   keeper-390-rm: every named award gained sits inside its years
+ok   keeper-390-rm: at least one season was played through the page
+ok   keeper-390-rm: no page errors
+ok   keeper-390-rm: no horizontal overflow at the end
+ok   old1100-390-motion: season summary 1 has no horizontal overflow
+ok   old1100-390-motion: every named award gained sits inside its years
+ok   old1100-390-motion: at least one season was played through the page
+ok   old1100-390-motion: no page errors
+ok   old1100-390-motion: no horizontal overflow at the end
+ok   whats-new 390: the new entry holds no em or en dash
+ok   whats-new 390: no horizontal overflow
+FAIL striker-1280-rm: journey threw locator.waitFor: Timeout 45000ms exceeded.
+Call log:
+  - waiting for getByRole('button', { name: /Next Season|Next Year|Continue/ }).first() to be visible
+
+    at journey (/home/runner/work/ballpark-hero/ballpark-hero/.rc/x/walk1525.mjs:86:88)
+    at async file:///home/runner/work/ballpark-hero/ball
+FAIL striker-1280-motion: journey threw locator.waitFor: Timeout 45000ms exceeded.
+Call log:
+  - waiting for getByRole('button', { name: /Next Season|Next Year|Continue/ }).first() to be visible
+
+    at journey (/home/runner/work/ballpark-hero/ballpark-hero/.rc/x/walk1525.mjs:86:88)
+    at async file:///home/runner/work/ballpark-hero/ball
+ok   keeper-1280-rm: season summary 1 has no horizontal overflow
+ok   keeper-1280-rm: every named award gained sits inside its years
+ok   keeper-1280-rm: at least one season was played through the page
+ok   keeper-1280-rm: no page errors
+ok   keeper-1280-rm: no horizontal overflow at the end
+ok   old1100-1280-motion: season summary 1 has no horizontal overflow
+ok   old1100-1280-motion: every named award gained sits inside its years
+ok   old1100-1280-motion: at least one season was played through the page
+ok   old1100-1280-motion: no page errors
+ok   old1100-1280-motion: no horizontal overflow at the end
+ok   whats-new 1280: the new entry holds no em or en dash
+ok   whats-new 1280: no horizontal overflow
+NOTE striker save: phase playing, Liverpool tier 1, overall 84, last season 2012, awards 1
+NOTE keeper save: phase playing, Man United tier 1, overall 82, last season 2001
+NOTE keeper-390-rm: summary 1 (2002, 0 goals, 13 clean sheets, rating 7.1, tier 1) award lines: none
+NOTE keeper-390-rm: 140 steps, 1 seasons, phase social_media_action, awards gained: none
+NOTE old1100-390-motion: summary 1 (2029, 4 goals, 0 clean sheets, rating 8.5, tier 4) award lines: Young Player of the Year / ⭐ Young Player of the Year
+NOTE old1100-390-motion: 140 steps, 1 seasons, phase social_media_action, awards gained: Player of the Month 2029, Player of the Month 2029, Player of the Month 2029, Player of the Month 2029
+NOTE whats-new entry: Soccer Career: season awards you have to beat somebody for. In Soccer Career the Golden Boot, Player of the Year and the other season awards used to be a bar and a coin flip, so a 40 goal season lost the Golden Boot seven times in ten and a 24 goal one could never win it. Now every award is decided against the best rival season of that year: at a top club 40 goals wins it almost every time, 30 about half the time, and a good season can still lose to a better one. Named awards also stick to the years they were really given, so the Golden Glove starts in 2004-05 and UEFA Player of the Year runs from 2010-11 to 2022-23.
+NOTE keeper-1280-rm: summary 1 (2002, 0 goals, 11 clean sheets, rating 7.3, tier 1) award lines: none
+NOTE keeper-1280-rm: 140 steps, 1 seasons, phase social_media_action, awards gained: none
+NOTE old1100-1280-motion: summary 1 (2029, 8 goals, 0 clean sheets, rating 8.4, tier 4) award lines: Young Player of the Year / ⭐ Young Player of the Year
+NOTE old1100-1280-motion: 140 steps, 1 seasons, phase social_media_action, awards gained: Player of the Month 2029, Player of the Month 2029, Player of the Month 2029, Player of the Month 2029
+walk1525: 28 checks, 4 failed
