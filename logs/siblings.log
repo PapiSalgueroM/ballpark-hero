@@ -1,0 +1,238 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstderr[2m | src/test/tycoonPitch.test.tsx[2m > [22m[2mthe pitch plays the engine's match[2m > [22m[2m1 over 30 matches every goal the engine commits is replayed once, at its end, stamped with its minute
+[22m[39mWarning: An update to PageSeo inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at PageSeo (/home/runner/work/ballpark-hero/ballpark-hero/src/components/seo/PageSeo.tsx:101:27)
+    at div
+    at StadiumTycoon (/home/runner/work/ballpark-hero/ballpark-hero/src/pages/StadiumTycoon.tsx:93:50)
+    at Router (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7134:13)
+    at MemoryRouter (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7044:3)
+    at _HelmetProvider (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-helmet-async/lib/index.esm.js:460:5)
+Warning: An update to GameSeoContent inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at GameSeoContent (/home/runner/work/ballpark-hero/ballpark-hero/src/components/seo/GameSeoContent.tsx:162:27)
+    at div
+    at div
+    at StadiumTycoon (/home/runner/work/ballpark-hero/ballpark-hero/src/pages/StadiumTycoon.tsx:93:50)
+    at Router (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7134:13)
+    at MemoryRouter (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7044:3)
+    at _HelmetProvider (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-helmet-async/lib/index.esm.js:460:5)
+
+[90mstdout[2m | src/test/pitchOwnGoal.test.tsx[2m > [22m[2mRound 1216: an own goal on real feeds[2m > [22m[2mthe material is a dense fleet of own goals, each on the cast the viewer holds for it
+[22m[39m[1216 material] fleet 0 (Aston Villa 110101, Real Madrid 110102, Lyon 110103, Ajax 110104, Celtic 110105): 100 matches, 200 half feeds; own goals staged 178 (goals left as they were: 107), for me 96, against me 82; the named man on the viewer's cast 178, not on it 0; by a back 155, by the keeper 23; actions that start outside the goal's own minute 0, wound up as a last kick 0
+
+[90mstdout[2m | src/test/pitchOwnGoal.test.tsx[2m > [22m[2mRound 1216: an own goal on real feeds[2m > [22m[2mOG1: the ball goes in off the man the line names
+[22m[39m[1216 OG1] own goals with the man on the grass 178; at the touch the figure nearest the ball is the named man, within 1: own goal arm 178, baseline arm 0; the man's gap to the ball at the touch: least 0.0, median 0.1, 90th percentile 0.1, most 0.1
+
+[90mstdout[2m | src/test/pitchOwnGoal.test.tsx[2m > [22m[2mRound 1216: an own goal on real feeds[2m > [22m[2mOG9: from the touch to the net the ball passes nobody else
+[22m[39m[1216 OG9] own goals whose ball comes within 2 of another figure between the touch and the net: 0 of 178 (a keeper 0, a man of the side that got it 0); the man placed on that line by hand is never nearer the ball than 3.60
+
+[90mstdout[2m | src/test/pitchOwnGoal.test.tsx[2m > [22m[2mRound 1216: an own goal on real feeds[2m > [22m[2mOG2: the instants are the goal it always was
+[22m[39m[1216 OG2] own goals 178, samples 7654; samples whose phase, action, net, net pulse or holder differ from the baseline arm's 0; frames with the ball in the goal mouth 2336, outside flight and net 0; own goals with a frame in the net 178
+
+[90mstdout[2m | src/test/pitchOwnGoal.test.tsx[2m > [22m[2mRound 1216: an own goal on real feeds[2m > [22m[2mOG3: nobody is the scorer, and the man holds his head
+[22m[39m[1216 OG3] own goals 178; with a hop on a net frame: own goal arm 0, baseline arm 178; net frames where the man has no rue 0, where he celebrates 0, where a man of his side celebrates 0, where the raised arms are more than three or not alike 0, where a man with raised arms has moved 0; net frames with arms raised 2136; keepers who put it in 23: not on their feet holding their head on the last frame 0, leaning back down on the way up 0; the same keeper lying in his dive on the baseline arm's last frame 23
+
+[90mstdout[2m | src/test/pitchOwnGoal.test.tsx[2m > [22m[2mRound 1216: an own goal on real feeds[2m > [22m[2mOG4: nobody stands on a team mate while it plays
+[22m[39m[1216 OG4] own goals 178; pairs of one side overlapping two samples running 0; the scene made by hand: the man covers 28.0 past a team mate, pairs overlapping two samples running 0
+
+[90mstdout[2m | src/test/pitchOwnGoal.test.tsx[2m > [22m[2mRound 1216: an own goal on real feeds[2m > [22m[2mOG5: the turn can be seen, and the ball comes to the man
+[22m[39m[1216 OG5] fleet 0: the sharpest turn of the ball in flight, degrees: off a back (155) least 28.4, median 63.4, 90th percentile 123.8, most 130.2; off a keeper (23) least 61.0, median 70.3, 90th percentile 97.8, most 108.5; baseline arm least 1.1, median 3.0, 90th percentile 3.2, most 3.3; the floor is 20 | under 30: back 28.5 Real Madrid 90+3' me Santiago Mouriño; back 28.4 Real Madrid 86' me Kike Salas
+[1216 OG5 walk] fleet 0: how far a back goes to meet it (155): least 0.0, median 0.0, 90th percentile 3.3, most 33.4; standing outside the band when it starts 62; brought further than into the band and 5 across 0; shown by his number alone at the touch 2
+[1216 OG5 geometry] swept by hand: off a keeper (1500 scenes) least 43.3, median 96.9, 90th percentile 115.0, most 121.6, the corner on the far side from where it came 0; off a back (4420 scenes) least 27.1, median 100.6, 90th percentile 129.9, most 134.8; the scene the review worked by hand 103.8
+
+[90mstdout[2m | src/test/pitchOwnGoal.test.tsx[2m > [22m[2mRound 1216: an own goal on scenes made by hand[2m > [22m[2mOG10: a back meets it in a band in front of his own goal, wherever he stands
+[22m[39m[1216 OG10] the band a back meets it in, read on 216 scenes made by hand: 13 to 18 from his own line, 24 to 76 across, 5 off the straight line
+
+[90mstdout[2m | src/test/pitchOwnGoal.test.tsx[2m > [22m[2mRound 1216: the recorded own goal[2m > [22m[2mOWN: every own goal frame of the hand made scenes is the recorded one
+[22m[39m[1216 digest] OWN c648618c
+
+[90mstdout[2m | src/test/pitchOwnGoal.test.tsx[2m > [22m[2mRound 1216: the recorded own goal[2m > [22m[2mRUE: the figure with his head in his hands is the recorded one, and at rue 0 it is the figure it was
+[22m[39m[1216 digest] RUE c9817b1a
+
+[90mstdout[2m | src/test/pitchOwnGoal.test.tsx[2m > [22m[2mRound 1216: an own goal in the live match[2m > [22m[2mthe live match draws an own goal for me off the man on its card
+[22m[39m[1216 viewer] an own goal for me, match 2 of the search, 11' Piero Hincapié: card "GOAL! Piero Hincapié 11' (O.G)" under "Aston Villa"
+
+[90mstdout[2m | src/test/pitchOwnGoal.test.tsx[2m > [22m[2mRound 1216: an own goal in the live match[2m > [22m[2mthe live match draws an own goal for opp off the man on its card
+[22m[39m[1216 viewer] an own goal for opp, match 11 of the search, 34' Zion Suzuki: card "GOAL! Zion Suzuki 34' (O.G)" under "Manchester City"
+
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2mthe last minute of a half, a goal of mine at 44 and theirs ruled out at 45: the card never sits on my goal
+[22m[39mclubManagerVarScreen: the 44 and 45 case was found on seed 2042, whistle 50
+
+[90mstderr[2m | src/test/tycoonPitch.test.tsx[2m > [22m[2mthe pitch plays the engine's match[2m > [22m[2m1 over 30 matches every goal the engine commits is replayed once, at its end, stamped with its minute
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstdout[2m | src/test/pitchOwnGoal.test.tsx[2m > [22m[2mRound 1216: an own goal and a change of line up off the clock[2m > [22m[2man own goal still on its way when the line up changes off the clock keeps its net, its card and its men
+[22m[39m[1216 held cast] 1406 halves redrawn (cap 4000); the own goal found on attempt 41; one whose man is the one leaving on attempt 1405
+
+[90mstdout[2m | src/test/pitchOwnGoal.test.tsx[2m > [22m[2mRound 1216: an own goal and a change of line up off the clock[2m > [22m[2man own goal still on its way when the line up changes off the clock keeps its net, its card and its men
+[22m[39m[1216 held cast] 56' for opp, Aaron Wan-Bissaka: staged at 56.300, the ball in at 57.056, card "GOAL! Aaron Wan-Bissaka 56' (O.G)"
+
+[90mstdout[2m | src/test/pitchOwnGoal.test.tsx[2m > [22m[2mRound 1216: an own goal and a change of line up off the clock[2m > [22m[2man own goal still on its way when the line up changes off the clock keeps its net, its card and its men
+[22m[39m[1216 held cast] 73' for opp, Taylor Harwood-Bellis (he is the man who leaves at 74): staged at 73.300, the ball in at 74.056, card "GOAL! Taylor Harwood-Bellis 73' (O.G)"
+
+ [32m✓[39m src/test/pitchOwnGoal.test.tsx [2m([22m[2m16 tests[22m[2m)[22m[33m 24842[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1216: an own goal on real feeds[2m > [22mthe material is a dense fleet of own goals, each on the cast the viewer holds for it [33m 3199[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1216: an own goal on real feeds[2m > [22mOG1: the ball goes in off the man the line names [33m 546[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1216: an own goal on real feeds[2m > [22mOG9: from the touch to the net the ball passes nobody else [33m 538[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1216: an own goal on real feeds[2m > [22mOG2: the instants are the goal it always was [33m 311[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1216: an own goal on real feeds[2m > [22mOG3: nobody is the scorer, and the man holds his head [33m 410[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1216: an own goal on real feeds[2m > [22mOG4: nobody stands on a team mate while it plays [33m 332[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1216: an own goal on real feeds[2m > [22mOG5: the turn can be seen, and the ball comes to the man [33m 3548[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1216: an own goal in the live match[2m > [22mthe live match draws an own goal for me off the man on its card [33m 1357[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1216: an own goal in the live match[2m > [22mthe live match draws an own goal for opp off the man on its card [33m 907[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1216: an own goal and a change of line up off the clock[2m > [22man own goal still on its way when the line up changes off the clock keeps its net, its card and its men [33m 13374[2mms[22m[39m
+ [32m✓[39m src/test/seasonCentreOwnGoals.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 2018[2mms[22m[39m
+   [33m[2m✓[22m[39m Season Centre: own goals on the page (Round 1167, read after the Release AP merge)[2m > [22mprints an own goal for side "us" with who did it and the club that got it, the same live, held and replayed [33m 737[2mms[22m[39m
+   [33m[2m✓[22m[39m Season Centre: own goals on the page (Round 1167, read after the Release AP merge)[2m > [22mprints an own goal for side "them" with who did it and the club that got it, the same live, held and replayed [33m 362[2mms[22m[39m
+   [33m[2m✓[22m[39m Season Centre: own goals on the page (Round 1167, read after the Release AP merge)[2m > [22mleaves a return match alone in a replay exactly as it does live (the moments are planned, offered or not) [33m 426[2mms[22m[39m
+ [32m✓[39m src/test/miniPitchScene.test.ts [2m([22m[2m23 tests[22m[2m)[22m[32m 111[2mms[22m[39m
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2mtwo goals ruled out in back to back minutes (staged by hand): each card on its own goal, the second not before its minute
+[22m[39mclubManagerVarScreen: back to back (staged by hand) on seed 2460: reviews at 9 and 10, cards at 9 and 11, 2 goal(s) played, starting at 1024 ms (minute 9) and 4864 ms (minute 10), first card up from 1792 to 4288 ms
+
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2ma goal ruled out at the end of a half that real chances fill ('a real goal is the last kick after it…'): it is drawn, in its own net, and nothing real gives way
+[22m[39mclubManagerVarScreen: at the card 1 real goal(s) of that clock place had been told (Brennan Johnson)
+clubManagerVarScreen: the crowded end was found on seed 42322, whistle 49, review at 48, card at 49, played shot goal goal goal
+
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2ma goal ruled out at the end of a half that real chances fill ('it is at the whistle and a real chanc…'): it is drawn, in its own net, and nothing real gives way
+[22m[39mclubManagerVarScreen: at the card 0 real goal(s) of that clock place had been told (none there)
+clubManagerVarScreen: the crowded end was found on seed 6203, whistle 49, review at 49, card at 49, played shot save shot goal
+
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2ma goal ruled out at the end of a half that real chances fill ('a real chance has its own place, one …'): it is drawn, in its own net, and nothing real gives way
+[22m[39mclubManagerVarScreen: at the card 0 real goal(s) of that clock place had been told (none there)
+clubManagerVarScreen: the crowded end was found on seed 4670, whistle 50, review at 49, card at 50, played shot save shot save goal
+
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2ma goal ruled out at the end of a half that real chances fill ('it is at the whistle and so is a real…'): it is drawn, in its own net, and nothing real gives way
+[22m[39mclubManagerVarScreen: at the card 0 real goal(s) of that clock place had been told (none there)
+clubManagerVarScreen: the crowded end was found on seed 2219, whistle 49, review at 49, card at 49, played shot shot goal
+
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2ma goal ruled out at the end of a half that real chances fill ('a real last kick follows it and the p…'): it is drawn, in its own net, and nothing real gives way
+[22m[39mclubManagerVarScreen: at the card 0 real goal(s) of that clock place had been told (none there)
+clubManagerVarScreen: the crowded end was found on seed 1987, whistle 49, review at 48, card at 47, played goal shot
+
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2ma review at the very end of a crowded half is still shown once, and the half ends on the engine score
+[22m[39mclubManagerVarScreen: the crowded end with a penalty given was found on seed 2483, whistle 50, review at 50, card at 48, under the card pass/pass, score under it 1 - 3, at the whistle 1 - 4, played shot, goal (after the card), chances from 44 on opp shot at 47, opp goal at 50 (P)
+
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2ma penalty a review gives at the end of a half that real chances fill ('a real goal is the last kick after it…'): one card, the score still under it
+[22m[39mclubManagerVarScreen: a penalty given at a crowded end, seed 10321 of match 2: whistle 50, review at 49 (opp), card at 49, under the card goal/net in the top net, score under it 3 - 0, at the whistle 4 - 1, played goal, goal, goal, the kick NOT played out (goal pictures between the card and the whistle: net), chances from 44 on opp save at 47, me goal at 47, me goal at 48, opp goal at 49 (P), me goal at 50
+
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2ma penalty a review gives at the end of a half that real chances fill ('a real last kick follows it and the p…'): one card, the score still under it
+[22m[39mclubManagerVarScreen: a penalty given at a crowded end, seed 2287 of match 2: whistle 50, review at 49 (opp), card at 48, under the card pass/pass, score under it 2 - 2, at the whistle 2 - 3, played goal (after the card), shot (after the card), the kick played after the card, chances from 44 on me goal at 44, opp goal at 49 (P), me shot at 50
+
+[90mstdout[2m | src/test/tycoonPitch.test.tsx[2m > [22m[2mthe pitch plays the engine's match[2m > [22m[2m1 over 30 matches every goal the engine commits is replayed once, at its end, stamped with its minute
+[22m[39mPITCH| 30 matches: 202 goals committed (107 yours, 95 theirs), 202 replayed one for one by end and minute; 197 on the frame they were scored, the longest wait 7 frames
+
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2ma penalty a review gives at the end of a half that real chances fill ('a real chance shares its place and an…'): one card, the score still under it
+[22m[39mclubManagerVarScreen: a penalty given at a crowded end, seed 6428 of match 2: whistle 50, review at 49 (opp), card at 49, under the card shot/wide, score under it 2 - 0, at the whistle 2 - 1, played shot, shot, shot, goal (after the card), the kick NOT played out (goal pictures between the card and the whistle: plant), chances from 44 on opp shot at 46, me shot at 48, me shot at 49, opp goal at 49 (P)
+
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2ma penalty a review gives at the end of a half that real chances fill ('two places before the whistle, a real…'): one card, the score still under it
+[22m[39mclubManagerVarScreen: a penalty given at a crowded end, seed 2022 of match 11: whistle 50, review at 48 (opp), card at 48, under the card pass/pass, score under it 0 - 3, at the whistle 0 - 4, played shot, shot, goal (after the card), save (after the card), the kick played after the card, chances from 44 on me shot at 45, opp shot at 46, opp shot at 48, opp goal at 48 (P), opp save at 49
+
+[90mstdout[2m | src/test/tycoonPitch.test.tsx[2m > [22m[2mthe pitch plays the engine's match[2m > [22m[2m2 goals scored while you are in another room are on the scoreboard when you come back, and never replayed late
+[22m[39mPITCH| 16 goals while the League tab showed, 0 replayed on return; the scoreboard read YOU 0; the 4 goals after the return replayed one for one
+
+[90mstdout[2m | src/test/tycoonPitch.test.tsx[2m > [22m[2mthe pitch plays the engine's match[2m > [22m[2m3 under reduced motion no replay runs and no spark or pop is drawn, while the score and the floaters still land
+[22m[39mPITCH| reduced motion: 30 goals over 5 matches, the ball never left play, 0 sparks and no pop after 8 taps, up to 4 floaters on screen
+
+[90mstdout[2m | src/test/tycoonPitch.test.tsx[2m > [22m[2mthe pitch plays the engine's match[2m > [22m[2m4 a tap pops the pitch and throws six sparks, and the taps chip counts and then clears
+[22m[39mPITCH| 12 taps: the chip read "12 taps", 6 sparks, the pitch popped, the chip cleared at 1.5s idle; 22 players on the pitch
+
+[90mstdout[2m | src/test/tycoonPitch.test.tsx[2m > [22m[2mthe pitch plays the engine's match[2m > [22m[2m5 the office is six tiles, one panel at a time, Upgrades first
+[22m[39mPITCH| six tiles: Upgrades open on arrival, and Ticket offer, Payroll, Legacy, Badges and Records each replaced it with their own panel
+
+[90mstdout[2m | src/test/tycoonPitch.test.tsx[2m > [22m[2mthe pitch plays the engine's match[2m > [22m[2m6 in a goal storm the older replays land on their final frame, so the pitch never falls behind the match
+[22m[39mPITCH| goal storm: 360 goals in 2 matches, all shown in order, 179 landed on their final frame, the longest wait 11 frames
+
+ [32m✓[39m src/test/tycoonPitch.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 100452[2mms[22m[39m
+   [33m[2m✓[22m[39m the pitch plays the engine's match[2m > [22m1 over 30 matches every goal the engine commits is replayed once, at its end, stamped with its minute [33m 75853[2mms[22m[39m
+   [33m[2m✓[22m[39m the pitch plays the engine's match[2m > [22m2 goals scored while you are in another room are on the scoreboard when you come back, and never replayed late [33m 6383[2mms[22m[39m
+   [33m[2m✓[22m[39m the pitch plays the engine's match[2m > [22m3 under reduced motion no replay runs and no spark or pop is drawn, while the score and the floaters still land [33m 11897[2mms[22m[39m
+   [33m[2m✓[22m[39m the pitch plays the engine's match[2m > [22m6 in a goal storm the older replays land on their final frame, so the pitch never falls behind the match [33m 6177[2mms[22m[39m
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the last kick of a half (finding 6 of Round 1302, mended in Round 1303)[2m > [22m[2ma real goal that is the last kick of a first half gets its scorer card, and the whistle waits for it (seed 1742, reduced motion false)
+[22m[39mclubManagerVarScreen: the last kick of the half, hint 1742, found on seed 1742: whistle 49, me goal by Kiernan Dewsbury-Hall, score at the end 1 - 1, scorer cards seen 115 frames
+
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the last kick of a half (finding 6 of Round 1302, mended in Round 1303)[2m > [22m[2ma real goal that is the last kick of a first half gets its scorer card, and the whistle waits for it (seed 1860, reduced motion false)
+[22m[39mclubManagerVarScreen: the last kick of the half, hint 1860, found on seed 1860: whistle 48, opp goal by Alexander Isak, score at the end 1 - 1, scorer cards seen 115 frames
+
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the last kick of a half (finding 6 of Round 1302, mended in Round 1303)[2m > [22m[2ma real goal that is the last kick of a first half gets its scorer card, and the whistle waits for it (seed 1742, reduced motion true)
+[22m[39mclubManagerVarScreen: the last kick of the half, hint 1742, found on seed 1742: whistle 49, me goal by Kiernan Dewsbury-Hall, score at the end 1 - 1, scorer cards seen 115 frames
+
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the last kick of a half (finding 6 of Round 1302, mended in Round 1303)[2m > [22m[2mtwo goals in the last two clock places of a first half are both drawn, each with its own card, in order (seed 1773)
+[22m[39mclubManagerVarScreen: two goals in the last two places, hint 1773, found on seed 1773: whistle 48, goals at 47 and 48, goals drawn 2, score at the end 2 - 0
+
+ [32m✓[39m src/test/clubManagerVarScreen.test.tsx [2m([22m[2m46 tests[22m[2m)[22m[33m 112027[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma goal a review rules out is drawn first, and its review opens with the ball in the net [33m 2673[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review never opens over another action: the goal of the minute before is in and counted first ('disallowed') [33m 3550[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review never opens over another action: the goal of the minute before is in and counted first ('awarded') [33m 3093[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mthe last minute of a half, a goal of mine at 44 and theirs ruled out at 45: the card never sits on my goal [33m 4390[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma penalty a review gives: the foul is told, the card opens at its minute, and the kick is played after it [33m 3337[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma penalty a review gives that is saved: the save is drawn after the card and the score stays [33m 2149[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mtwo reviews in one half each get their own card, in turn [33m 6680[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mtwo goals ruled out in one minute (staged by hand): each is drawn before its own card, one card at a time [33m 2883[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mtwo goals ruled out in back to back minutes (staged by hand): each card on its own goal, the second not before its minute [33m 3096[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mSkip to the whistle during a review takes the card away and leaves the half as the engine has it [33m 777[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mleaving the site in the middle of a review and coming back shows the review again, then its penalty [33m 2086[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mreduced motion: a short wait, nothing moves under the card, and the decision stays up as long as with motion [33m 520[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma penalty a review gives in the last minute of a half is still played before the whistle [33m 2987[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma goal ruled out 'at the whistle' is drawn before its card, at its own minute, and its review closes before the half ends [33m 2071[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma goal ruled out 'one clock place before the whistle' is drawn before its card, at its own minute, and its review closes before the half ends [33m 2931[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mreduced motion, a goal ruled out 'at the whistle': the card opens at its own minute on the ball in the net [33m 1629[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mreduced motion, a goal ruled out 'one clock place before the whistle': the card opens at its own minute on the ball in the net [33m 2482[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('a real goal is the last kick after it…'): it is drawn, in its own net, and nothing real gives way [33m 3466[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('it is at the whistle and a real chanc…'): it is drawn, in its own net, and nothing real gives way [33m 2391[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('a real chance has its own place, one …'): it is drawn, in its own net, and nothing real gives way [33m 2863[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('it is at the whistle and so is a real…'): it is drawn, in its own net, and nothing real gives way [33m 2397[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('a real last kick follows it and the p…'): it is drawn, in its own net, and nothing real gives way [33m 2480[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review at the very end of a crowded half is still shown once, and the half ends on the engine score [33m 3329[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma penalty a review gives at the end of a half that real chances fill ('a real goal is the last kick after it…'): one card, the score still under it [33m 5128[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma penalty a review gives at the end of a half that real chances fill ('a real last kick follows it and the p…'): one card, the score still under it [33m 3926[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma penalty a review gives at the end of a half that real chances fill ('a real chance shares its place and an…'): one card, the score still under it [33m 2450[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma penalty a review gives at the end of a half that real chances fill ('two places before the whistle, a real…'): one card, the score still under it [33m 3100[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22man own goal the minute after a ruled out goal: the review first, then the own goal as an own goal [33m 2393[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review in the same minute as the other side's 'injury' (a chance at the same place: false): both are told, and the card sits over nothing [33m 2323[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review in the same minute as the other side's 'injury' (a chance at the same place: true): both are told, and the card sits over nothing [33m 2174[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review in the same minute as the other side's 'red' (a chance at the same place: false): both are told, and the card sits over nothing [33m 2217[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review in the same minute as the other side's substitution: the change is told and the review is whole [33m 2771[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review in extra time ('disallowed'): its own card, over nothing, on the score the engine has [33m 9185[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review in extra time ('awarded'): its own card, over nothing, on the score the engine has [33m 2135[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the last kick of a half (finding 6 of Round 1302, mended in Round 1303)[2m > [22ma real goal that is the last kick of a first half gets its scorer card, and the whistle waits for it (seed 1742, reduced motion false) [33m 2216[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the last kick of a half (finding 6 of Round 1302, mended in Round 1303)[2m > [22ma real goal that is the last kick of a first half gets its scorer card, and the whistle waits for it (seed 1860, reduced motion false) [33m 1509[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the last kick of a half (finding 6 of Round 1302, mended in Round 1303)[2m > [22ma real goal that is the last kick of a first half gets its scorer card, and the whistle waits for it (seed 1742, reduced motion true) [33m 1900[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the last kick of a half (finding 6 of Round 1302, mended in Round 1303)[2m > [22mtwo goals in the last two clock places of a first half are both drawn, each with its own card, in order (seed 1773) [33m 2280[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the last kick of a half (finding 6 of Round 1302, mended in Round 1303)[2m > [22mSkip during the card of the last kick ends the half at once, on the engine score (seed 1742) [33m 1806[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m5 passed[39m[22m[90m (5)[39m
+[2m      Tests [22m [1m[32m98 passed[39m[22m[90m (98)[39m
+[2m   Start at [22m 09:50:40
+[2m   Duration [22m 116.18s[2m (transform 5.52s, setup 537ms, collect 11.72s, tests 239.45s, environment 2.04s, prepare 470ms)[22m
+
