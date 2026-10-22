@@ -1,0 +1,8 @@
+hall-nfl-head exit=1 175s | simCareerHall nfl: RED [base]
+hall-nba-base exit=0 258s | simCareerHall nba: all 34 checks green
+hall-nba-head exit=0 278s | simCareerHall nba: all 34 checks green
+hall-nfl-base exit=1 221s | simCareerHall nfl: RED [base]
+hall-mlb-head exit=0 282s | simCareerHall mlb: all 34 checks green
+hall-mlb-base exit=0 270s | simCareerHall mlb: all 34 checks green
+hall-nhl-head exit=0 338s | simCareerHall nhl: all 35 checks green
+hall-nhl-base exit=0 270s | simCareerHall nhl: all 35 checks green

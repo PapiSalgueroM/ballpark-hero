@@ -1,0 +1,8 @@
+hall-nba-head: node scripts/simCareerHall.mjs nba
+hall-nba-base: R=$(pwd); git worktree add /tmp/b-hnba 1c7205d059cbcb380ebacaef99ba6751e8c641df > /dev/null 2>&1; ln -sfn $R/node_modules /tmp/b-hnba/node_modules; cd /tmp/b-hnba && node scripts/simCareerHall.mjs nba
+hall-nfl-head: node scripts/simCareerHall.mjs nfl
+hall-nfl-base: R=$(pwd); git worktree add /tmp/b-hnfl 1c7205d059cbcb380ebacaef99ba6751e8c641df > /dev/null 2>&1; ln -sfn $R/node_modules /tmp/b-hnfl/node_modules; cd /tmp/b-hnfl && node scripts/simCareerHall.mjs nfl
+hall-mlb-head: node scripts/simCareerHall.mjs mlb
+hall-mlb-base: R=$(pwd); git worktree add /tmp/b-hmlb 1c7205d059cbcb380ebacaef99ba6751e8c641df > /dev/null 2>&1; ln -sfn $R/node_modules /tmp/b-hmlb/node_modules; cd /tmp/b-hmlb && node scripts/simCareerHall.mjs mlb
+hall-nhl-head: node scripts/simCareerHall.mjs nhl
+hall-nhl-base: R=$(pwd); git worktree add /tmp/b-hnhl 1c7205d059cbcb380ebacaef99ba6751e8c641df > /dev/null 2>&1; ln -sfn $R/node_modules /tmp/b-hnhl/node_modules; cd /tmp/b-hnhl && node scripts/simCareerHall.mjs nhl
