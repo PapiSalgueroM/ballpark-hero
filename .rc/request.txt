@@ -1,0 +1,5 @@
+simPhonePanelLifeStories: node scripts/simPhonePanelLifeStories.mjs
+simRevealMoments: node scripts/simRevealMoments.mjs
+simSeasonCentreMotion: node scripts/simSeasonCentreMotion.mjs
+simSoccerAgentReview: node scripts/simSoccerAgentReview.mjs
+simSoccerCareerAmbitions: node scripts/simSoccerCareerAmbitions.mjs
