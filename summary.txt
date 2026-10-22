@@ -1,0 +1,29 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+pf2 exit=0 255s | playFirstVisitDialogs: green. Every first visit dialog can be started with the cookie banner unanswered.
+pf3 exit=0 256s | playFirstVisitDialogs: green. Every first visit dialog can be started with the cookie banner unanswered.
+pf1 exit=0 276s | playFirstVisitDialogs: green. Every first visit dialog can be started with the cookie banner unanswered.
+pf-abort exit=2 7s | playFirstVisitDialogs control ABORTED: no route in this run opened a dialog with a button, so the cover had nothing to cover
+pf-ratchet exit=1 36s | playFirstVisitDialogs: PLAYFIRST_CONTROL=ratchet FIRED. 15 green or dialog free route widths listed as expected reds each failed the walk
+pf-cover exit=1 39s | playFirstVisitDialogs: PLAYFIRST_CONTROL=cover FIRED. 18 of 18 dialog buttons read as covered and the walk is red
+pf-expected exit=1 56s | playFirstVisitDialogs: PLAYFIRST_CONTROL=expected FIRED. 24 of 24 covered route widths listed in EXPECTED_SITE_RED printed EXPECTED and none failed the walk
+pf-edge exit=1 61s | playFirstVisitDialogs: PLAYFIRST_CONTROL=edge FIRED. 21 of 21 moved dialogs read red for the check it targets
+pf-lift exit=1 60s | playFirstVisitDialogs: PLAYFIRST_CONTROL=lift FIRED. 24 of 24 moved dialogs read red for the check it targets
+pf-stale exit=1 15s | playFirstVisitDialogs: PLAYFIRST_CONTROL=stale FIRED. 3 of 3 seeded lines with a fresh save opened no card and failed the walk
+pf-staleabort exit=2 0s | playFirstVisitDialogs control ABORTED: PLAYFIRST_CONTROL=stale acts on seeded scenes and none is in this run
+pf-jump exit=1 16s | playFirstVisitDialogs: PLAYFIRST_CONTROL=jump FIRED. 3 of 3 moved dialogs read red for the check it targets
+walk exit=0 39s | playTycoonScorelines: green
+walk-crowd-must-be-red exit=1 39s | playTycoonScorelines (control crowd): 2 failures
+playLeagueTableFit exit=0 6s | All 1 harnesses green.
+playFirstTeamFit exit=0 7s | All 1 harnesses green.
+playTycoonGearFit exit=0 9s | All 1 harnesses green.
+simTycoonGoalFlight exit=1 2s | 1 harness not green.
+simSetPiecePresentation exit=1 6s | 1 harness not green.
+playTycoonSetPieceFit exit=0 29s | All 1 harnesses green.
+playHomeFold exit=0 34s | All 1 harnesses green.
+checkTycoonGroundGrowth exit=0 46s | Original source, build and actual template font cache stayed byte-identical.
+saleReview exit=1 5s | 1 harness not green.
+qaFreeKickRange exit=0 24s | Free Kick consumer proof PASSED; artifacts retained at /home/runner/work/ballpark-hero/ballpark-hero/free-kick-range-artifacts/native.
+simResultMoment exit=0 6s | simResultMoment: green. Every live game reaches the shared result moment or is listed with what it draws instead, the pill shows exactly the score it is given, the three 
+sweepWeight exit=0 30s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+pf-nobanner exit=1 196s | playFirstVisitDialogs: PLAYFIRST_CONTROL=nobanner FIRED. 27 of 27 route widths with the banner hidden were refused as measuring nothing
+weight-base exit=0 69s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.

@@ -1,0 +1,7 @@
+Network mode: offline, loopback only, no production probe or database retries.
+Running 0 node harnesses
+
+Serving dist on 4183 for 1 browser harnesses
+  PASS  playFirstTeamFit.mjs            5.4s
+
+All 1 harnesses green.

@@ -1,0 +1,11 @@
+Prepared 9 actual sale-review font dependencies.
+Network mode: offline, loopback only, no production probe or database retries.
+Running 0 node harnesses
+
+Serving dist on 4193 for 1 browser harnesses
+  FAIL  playTycoonSaleReview1083.mjs    3.5s
+
+----- playTycoonSaleReview1083.mjs (FAIL) -----
+AssertionError [ERR_ASSERTION]: The single paused clock command starts both monotonic clocks at zero
+
+1 harness not green.
