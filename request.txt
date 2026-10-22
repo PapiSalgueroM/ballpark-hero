@@ -1,0 +1,7 @@
+walk: bash .rc/x/beq.sh walk f276b8a8c - "set -o pipefail; node scripts/simNbaGmDesk.mjs 2>&1 | grep -v -F '(Round 1556)'"
+desk-old: bash .rc/x/beq.sh desk-old f276b8a8c 70593dd4 node scripts/simNbaGmDesk.mjs
+nhl: bash .rc/x/beq.sh nhl f276b8a8c - node scripts/simNhlGmDesk.mjs
+contracts: bash .rc/x/beq.sh contracts f276b8a8c - node scripts/simGmContracts.mjs
+deskhost: bash .rc/x/beq.sh deskhost f276b8a8c - node scripts/simGmDeskHost.mjs
+nfl: bash .rc/x/beq.sh nfl f276b8a8c - node scripts/simNflGmDesk.mjs
+mlb: bash .rc/x/beq.sh mlb f276b8a8c - node scripts/simMlbGmDesk.mjs

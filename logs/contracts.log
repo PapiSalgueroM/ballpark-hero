@@ -1,0 +1,6 @@
+head 378d604719, base f276b8a8c, old harness -
+base tree f276b8a8cb
+head exit 0, base exit 0
+head last line: simGmContracts: PASS, 4 engines, 20 runs of 10 seasons, nobody left on a flip
+base last line: simGmContracts: PASS, 4 engines, 20 runs of 10 seasons, nobody left on a flip
+BYTE EQUAL contracts (43 lines)
