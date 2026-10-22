@@ -1,0 +1,7 @@
+ctl-debtfree exit=1 7s | simSoccerOwnerTail: 1 failure(s)
+owner exit=0 13s | simSoccerOwnerTail: green. The owner picks his club, plays on the table, and every call does what it says and none is best at everything.
+simNoRivalNames exit=0 22s | No rival product names found. 0 findings.
+simStorageWrites exit=0 4s | simStorageWrites: all green (owed: 12)
+vitest exit=0 22s |    Duration  21.06s (transform 7.94s, setup 515ms, collect 15.15s, tests 22.57s, environment 2.35s, prepare 857ms)
+simHarnessAnchors exit=0 62s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 90s | 

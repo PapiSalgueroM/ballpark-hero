@@ -1,0 +1,11 @@
+CONTROL debtfree applied: this run is meant to go red
+0) the owner tail loads on demand: before the load nothing is bought, after it it is ready
+3) Each call moves what it says it moves (against placing nothing, same keyed seasons)
+   600 owner states, 6 seasons, each call where it is open:
+     squad    n 600  points  10.29  money   2.29  this season: points 5.00 money -2.00
+     youth    n 600  points   7.69  money   6.28  this season: points 0.00 money 0.00
+     stadium  n 600  points   0.00  money  11.95  this season: points 0.00 money -1.20
+     debt     n 576  points   4.73  money   7.20  this season: points 0.77 money 1.06
+   the debt payment's first season: 7.06M paid off on average over 576 states, its money -0.00M short of the interest that saves (-0.00 percent of the payment)
+  FAIL: Pay down the debt costs -0.00 percent of the payment this season (the lenders' fee, need 5)
+simSoccerOwnerTail: 1 failure(s)
