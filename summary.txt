@@ -1,0 +1,4 @@
+foulwait exit=1 9s | simLiveSimMotion: control foulwait turned "R11" red on an assertion (1 failed), as it must.
+bigpart exit=1 0s | simLiveSimMotion: control bigpart made the part 37020 bytes and the bundle section went red on its size ceiling alone, as it must.
+motionfull exit=0 46s | simLiveSimMotion: green. 64 tests passed (the viewer on real feeds, the pitch part's rules on 200 half feeds and on feeds made by hand, the goal sequence, match mode), an
+tsc exit=0 54s | 

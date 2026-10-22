@@ -1,0 +1,4 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+motionfull: node scripts/simLiveSimMotion.mjs
+foulwait: LIVE_MOTION_CONTROL=foulwait node scripts/simLiveSimMotion.mjs
+bigpart: LIVE_MOTION_CONTROL=bigpart node scripts/simLiveSimMotion.mjs
