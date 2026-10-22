@@ -1,0 +1,12 @@
+m-promo3 exit=1 6s | simSoccerOwnerTail: 2 failure(s)
+m-releg4 exit=1 5s | simSoccerOwnerTail: 1 failure(s)
+m-stalekey exit=0 5s | simSoccerOwnerTail: green. The owner picks his club, plays on the table, and every call has a cost and a reason.
+m-youthnow exit=1 5s | simSoccerOwnerTail: 1 failure(s)
+m-plankeep exit=1 5s | simSoccerOwnerTail: 3 failure(s)
+m-plankeep-vitest exit=0 13s |    Duration  12.97s (transform 3.48s, setup 118ms, collect 4.47s, tests 12.51s, environment 576ms, prepare 220ms)
+m-revenue4 exit=1 5s | simSoccerOwnerTail: 1 failure(s)
+m-revenue4-money exit=0 3s | All good: the money app keeps running for the whole retirement tail.
+m-tiebreak exit=1 5s | simSoccerOwnerTail: 1 failure(s)
+m-tiebreak-mgr exit=1 6s | 4 FAILURES
+m-dragsign exit=1 5s | simSoccerOwnerTail: 3 failure(s)
+m-stalekey-vitest exit=0 13s |    Duration  12.82s (transform 3.52s, setup 110ms, collect 4.37s, tests 12.45s, environment 503ms, prepare 218ms)
