@@ -1,0 +1,5 @@
+tsc exit=0 66s | 
+motion exit=0 56s |    Duration  55.04s (transform 1.80s, setup 70ms, collect 2.28s, tests 51.94s, environment 306ms, prepare 141ms)
+long40 exit=0 9s |    Duration  7.67s (transform 1.77s, setup 66ms, collect 2.24s, tests 4.67s, environment 288ms, prepare 115ms)
+long45 exit=0 9s |    Duration  7.78s (transform 1.79s, setup 65ms, collect 2.27s, tests 4.76s, environment 289ms, prepare 118ms)
+long50 exit=0 9s |    Duration  7.79s (transform 1.77s, setup 65ms, collect 2.24s, tests 4.80s, environment 288ms, prepare 122ms)

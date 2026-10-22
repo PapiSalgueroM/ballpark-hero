@@ -1,0 +1,18 @@
+sweep2: LONG_PASS 45
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstdout[2m | src/test/liveSimMotion.test.tsx[2m > [22m[2mRound 1521: the live match looks like football[2m > [22m[2mR10: the ball travels with height and lands at its man, and every chance rises and comes down in the right net
+[22m[39m[1521 R10] passes drawn: on the grass 10929, in the air 3121, crosses 658, throws 1121, dead balls placed 4573; open play passes in the air 0.222, their length in metres p25 21.5, p50 30.9, p75 41.8, p90 53.8; on the grass but lifted 0, in the air but never rose 0, not landing at their man 0; chances read: first halves 1085, second halves 1071, offenders 0
+
+ [32m✓[39m src/test/liveSimMotion.test.tsx [2m([22m[2m64 tests[22m[2m | [22m[33m63 skipped[39m[2m)[22m[33m 4764[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1521: the live match looks like football[2m > [22mR10: the ball travels with height and lands at its man, and every chance rises and comes down in the right net [33m 4763[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m1 passed[39m[22m[2m | [22m[33m63 skipped[39m[90m (64)[39m
+[2m   Start at [22m 07:11:46
+[2m   Duration [22m 7.78s[2m (transform 1.79s, setup 65ms, collect 2.27s, tests 4.76s, environment 289ms, prepare 118ms)[22m
+

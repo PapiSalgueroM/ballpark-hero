@@ -1,0 +1,6 @@
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+motion: node_modules/.bin/vitest run src/test/liveSimMotion.test.tsx --testTimeout=300000 --hookTimeout=120000
+long40: node .rc/x/sweep2.mjs 40 && node_modules/.bin/vitest run src/test/liveSimMotion.test.tsx -t "R10: the ball travels" --testTimeout=300000; s=$?; git checkout -- src; exit $s
+long45: node .rc/x/sweep2.mjs 45 && node_modules/.bin/vitest run src/test/liveSimMotion.test.tsx -t "R10: the ball travels" --testTimeout=300000; s=$?; git checkout -- src; exit $s
+long50: node .rc/x/sweep2.mjs 50 && node_modules/.bin/vitest run src/test/liveSimMotion.test.tsx -t "R10: the ball travels" --testTimeout=300000; s=$?; git checkout -- src; exit $s
