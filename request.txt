@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+#!serial
+cm: node scripts/playClubManager.mjs > /tmp/c0.log 2>&1; s=$?; grep -E "BROKEN|STUCK|SHALLOW|BLOCKED|half times" /tmp/c0.log | head -8 | cut -c1-200; tail -1 /tmp/c0.log | cut -c1-200; exit $s
+cm-ctl-none: ANSWER_CONSENT_CONTROL=none node scripts/playClubManager.mjs > /tmp/c1.log 2>&1; s=$?; grep -E "BLOCKED" /tmp/c1.log | head -2 | cut -c1-200; tail -1 /tmp/c1.log | cut -c1-200; exit $s
+cm-nodoctor: CM_CONTROL=nodoctor node scripts/playClubManager.mjs > /tmp/c-nodoctor.log 2>&1; s=$?; grep -E "control:" /tmp/c-nodoctor.log | tail -2 | cut -c1-220; exit $s
+cm-nosave: CM_CONTROL=nosave node scripts/playClubManager.mjs > /tmp/c-nosave.log 2>&1; s=$?; grep -E "control:" /tmp/c-nosave.log | tail -2 | cut -c1-220; exit $s
+cm-nobusiness: CM_CONTROL=nobusiness node scripts/playClubManager.mjs > /tmp/c-nobusiness.log 2>&1; s=$?; grep -E "control:" /tmp/c-nobusiness.log | tail -2 | cut -c1-220; exit $s
+anchors: node scripts/simHarnessAnchors.mjs

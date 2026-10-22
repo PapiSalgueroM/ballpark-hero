@@ -1,0 +1,2 @@
+   control: 1 served asset(s) rewritten, 2 signing(s), 2 of 2 target checks fired, 0 other finding(s)
+playClubManager control: green. With the transfer business block cut out of the review, exactly the two checks that read it fired, so a review that drops a signed manager's business goes red. Exiting non zero, because a 

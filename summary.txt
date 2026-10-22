@@ -1,0 +1,7 @@
+build exit=0 22s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+cm exit=0 288s | Played Club Manager through its own screens. 0 findings.
+cm-ctl-none exit=1 17s | Played Club Manager through its own screens. 6 findings.
+cm-nodoctor exit=1 6s | playClubManager control: green. With the doctored value never written, exactly the one doctoring check fired ("the doctored board did not land: the slot screen reads "Boa
+cm-nosave exit=1 6s | playClubManager control: green. With the save looked for under a key the game never writes, exactly the one doctoring check fired ("the save was not there to doctor, so t
+cm-nobusiness exit=1 290s | playClubManager control: green. With the transfer business block cut out of the review, exactly the two checks that read it fired, so a review that drops a signed manager
+anchors exit=0 31s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
