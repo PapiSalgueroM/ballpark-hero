@@ -1,0 +1,3 @@
+simHarnessAnchors exit=0 | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simNoRivalNames exit=0 | No rival product names found. 0 findings.
+simInventedNames exit=0 | simInventedNames: green. Every invented man on this site is invented all the way down.

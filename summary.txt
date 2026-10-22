@@ -1,0 +1,7 @@
+vitest exit=0 28s |    Duration  27.69s (transform 6.83s, setup 2.81s, collect 18.99s, tests 30.06s, environment 15.65s, prepare 3.76s)
+earned exit=0 36s | simNbaEarnedDraft: green.
+fleetjudge exit=0 76s | best exit=1 | simNbaEarnedDraft: CONTROL bestfirst FIRED on the fleet: outside S5 in 4 sets.
+tsc exit=0 125s | 
+diffproof exit=0 0s | diffproof-ok
+anchors exit=0 80s | simInventedNames exit=0 | simInventedNames: green. Every invented man on this site is invented all the way down.
+earned-ctl exit=0 452s | simNbaEarnedDraft controls: all 25 fired, each in exactly its own sections.
