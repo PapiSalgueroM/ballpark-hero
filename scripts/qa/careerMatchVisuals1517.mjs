@@ -28,8 +28,13 @@ const report = { source: SOURCE, baseline: '076091ac870db38b953ddf71d3252cf1ac55
 const writeReport = () => fs.writeFileSync(path.join(OUT, 'report.json'), JSON.stringify(report, null, 2) + '\n');
 const enginePins = {
   /* Round 1523 lifted the NBA morale term into src/lib/careerForm.ts with a one line change; the NBA engine replays
-     byte identical (scripts/simCareerForm.mjs section 1), so only this pin moves (main's file was 026be724). */
-  'src/lib/nbaMyCareer.ts': '1190c2915f04cffb3876acc8fe7a64c26aa76e94d3cc5b35abafd7442fc38a6c',
+     byte identical (scripts/simCareerForm.mjs section 1), so only this pin moves (main's file was 026be724).
+     Round 1534 (the US shop keeps its promises) moved it again (1523's file was 1190c291): one import line, the
+     shop's settle call after the pay line, the heat drift reading the lawyer, five card words and the summer camp's
+     buy case. This kit's fixture is a fresh career that buys nothing and holds no heat, played one season, so the
+     settle call returns nothing and writes nothing and the drift is never reached (scripts/simUsShopPromises.mjs
+     section 8: careers that hold nothing that pays replay byte identical); none of the hunks reaches it. */
+  'src/lib/nbaMyCareer.ts': 'b8c5787ad990bad1fdfc42cb20bb8c9da753eb80474437173dca1e2b041a1930',
   'src/lib/nbaCareerSport.ts': '17c511ff6cd160975a245e1e85dc3b685e35a0d36dfec82958b218c37fe34ae1',
   'src/lib/fightCareer.ts': 'ccdd83dfbbf41597a5d1890a45c9013ca82a234c7fa9786c00161c949063f5c3',
   'src/lib/fightCareerLifeFlow.ts': '0670e2903f91c4761fa3bc6b035748a391d53260179099d82a3f4b0577037dab',

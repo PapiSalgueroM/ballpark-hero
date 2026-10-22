@@ -318,6 +318,28 @@
  * with it every later save hash of that career and the markup of the screens
  * that show his avatar. No other click, no text excerpt, no length, no
  * coverage count and none of the 76 fixed saves moved. 2,298,731 bytes.
+ * Round 1534 (the US shop keeps its promises) re-recorded it on purpose on
+ * 2026-10-22, by the Round 988 method, for the card words alone: the family
+ * office's effect line prints its 2 percent, the minority stake and the shoe
+ * line lose "The retirement plan" and "real royalties", and the nightclub and
+ * the offshore account (never opened here) lose their unkept promises. The
+ * branch head 3c62e88c replays the Release BL recording red at exactly 55
+ * steps, each the markup after a press on the Invest or Flex aisle (r1534-s3a).
+ * Recorded on a runner from the branch head 07686793, with the proved
+ * historical Panel aliased in exactly as this replay runs since Round 1424,
+ * twice: with the five card lines of each sport put back (r1534-s3g
+ * rech-unwords) the recording equals the Release BL fixture byte for byte,
+ * header aside, in all four sports; with them as shipped (rech-head) exactly
+ * 55 steps differ, each in its markup hash alone: 45 presses of the Invest
+ * aisle (every fixed save of all four sports that opens the shop: 11 each in
+ * the NFL, the MLB and the NHL, 12 in the NBA, whose "rookie" save opens it
+ * too), the NBA's 9 presses of the Flex aisle, which shows the signature shoe,
+ * and the NHL's one Invest box (its fixed save "faTalk", step 29). No click,
+ * save, text excerpt, length, coverage count or fixed save moved, and no path
+ * step. A plain recordUsBoardFixture run (no Panel alias) gives the same bytes
+ * twice and, against itself without the words, the same 55 plus one Family
+ * box on the NFL path (step 354, the office card), a path the replay never
+ * walks because it is the current Panel's (r1534-s3f). 2,298,731 bytes.
  *
  * Controls, one per run (each is a full replay, about three minutes):
  *   US_BOARD_PARITY_CONTROL=label    one label changed in a copy of the shared

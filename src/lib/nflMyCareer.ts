@@ -51,6 +51,7 @@ import type { RivalryChoiceCard } from './careerRivalryChoices';
 import { countOf, nflCareerStatBullet, nflLineAsPrinted, nflMajorAward, nflStatLine, type NflCareerSums, type NflPrintedStats } from './usCareerStatLine';
 import { raiseWithinPotential, ratingRaiseNote } from './careerHeadroom';
 import { applyUsCareerAnnualBenefits } from './usCareerAnnualBenefits';
+import { settleUsCareerShop, usCareerSeasonCool } from './usCareerAnnualBenefits';
 import { careerRecoveryRisk } from './usCareerRecovery';
 import { hallCalibrationOf, legacyRead, type HallCalibration, type LegacyRead, type LegacyWeights } from './careerHallOfFame';
 import { moraleForm } from './careerForm';
@@ -910,7 +911,7 @@ export function progress(c: CareerState, rng: () => number): string[] {
   if (heat > 0) {
     // Unexplained money keeps the file warm. Clean years cool it down.
     const dm = c.dirtyMoney ?? 0;
-    const drift = dm > 0 ? Math.min(8, 2 + dm * 0.5) : -9;
+    const drift = dm > 0 ? Math.min(8, 2 + dm * 0.5) : -usCareerSeasonCool(c.purchased, 9);
     c.heat = Math.max(0, Math.min(100, heat + drift));
 
     if ((c.heat ?? 0) >= 90 && (c.suspendedSeasons ?? 0) === 0) {
@@ -944,6 +945,9 @@ export function progress(c: CareerState, rng: () => number): string[] {
   const upkeep = c.yearlyCosts ?? 0;
   const priorNet = c.netWorth ?? Math.round(Math.max(0, c.earnings - c.salary) * TAKE_HOME * 10) / 10;
   c.netWorth = Math.round((priorNet + c.salary * TAKE_HOME - upkeep) * 10) / 10;
+  /* Round 1534: the shop pays what its cards print (src/lib/usCareerAnnualBenefits.ts), straight after the pay
+     line so Cash is in tenths, and before the money app. Stakes draw on their own keyed stream, never this rng. */
+  for (const line of settleUsCareerShop(c, NFL_SPEND_ITEMS)) notes.push(line);
   /* Round 469: the money app's season, after the pay and the upkeep have
      landed, the same place in the loop Soccer Career runs it. Savings pays,
      every price moves, and a balance the upkeep has pushed under the floor
@@ -1007,7 +1011,7 @@ export const NFL_SPEND_ITEMS: NflSpendItem[] = [
   { id: 'training_academy', name: 'Youth Training Academy', emoji: '🎓', category: 'invest', cost: 2.5, yearly: 0.1, desc: 'Where the next you comes from, 2.5M', oneTime: true, minNetWorth: 4, effect: 'Fanbase +8' },
   { id: 'crypto_punt', name: 'Crypto Punt', emoji: '🪙', category: 'invest', cost: 1, desc: '20 percent chance of 5x, 80 percent chance of a lesson', oneTime: false },
   { id: 'esports_team', name: 'Esports Team', emoji: '🎮', category: 'invest', cost: 4, desc: '30 percent chance of 3x, and you get to be at the tournaments', oneTime: true, minNetWorth: 8 },
-  { id: 'minority_stake', name: 'Minority Stake In A Pro Team', emoji: '🏆', category: 'invest', cost: 25, desc: 'A real piece of a real franchise, 25M', oneTime: true, minNetWorth: 45, effect: 'The retirement plan, fanbase +10' },
+  { id: 'minority_stake', name: 'Minority Stake In A Pro Team', emoji: '🏆', category: 'invest', cost: 25, desc: 'A real piece of a real franchise, 25M', oneTime: true, minNetWorth: 45, effect: 'Fanbase +10' },
   // ── Body ──
   { id: 'private_chef', name: 'Private Chef', emoji: '👨‍🍳', category: 'body', cost: 0, yearly: 0.12, desc: 'Every meal built for the season, 120k a year', oneTime: true, effect: 'Health +4 a year' },
   { id: 'recovery_suite', name: 'Recovery Suite', emoji: '🧊', category: 'body', cost: 1.5, yearly: 0.1, desc: 'Cryo, hyperbaric, the whole circus, 1.5M. Injuries can still happen.', oneTime: true, minNetWorth: 2, effect: '25% lower simulated injury risk' },
@@ -1020,23 +1024,23 @@ export const NFL_SPEND_ITEMS: NflSpendItem[] = [
   { id: 'grill', name: 'Diamond Grill', emoji: '😬', category: 'flex', cost: 0.2, desc: 'Your mother has opinions, 200k', oneTime: true, minFanbase: 45 },
   { id: 'watch_collection', name: 'Watch Collection', emoji: '⌚', category: 'flex', cost: 1.5, desc: 'Six figures on each wrist, 1.5M', oneTime: true, minNetWorth: 4 },
   { id: 'music_video', name: 'Fund Your Own Music Video', emoji: '🎤', category: 'flex', cost: 0.8, desc: 'You cannot rap. You are doing it anyway, 800k', oneTime: true, minFanbase: 55, effect: 'Fanbase +10 and endless jokes' },
-  { id: 'shoe_line', name: 'Signature Cleat Line', emoji: '👟', category: 'flex', cost: 2, desc: 'Your silhouette on a shoe, 2M', oneTime: true, minFanbase: 70, effect: 'Fanbase +12, real royalties' },
+  { id: 'shoe_line', name: 'Signature Cleat Line', emoji: '👟', category: 'flex', cost: 2, desc: 'Your silhouette on a shoe, 2M', oneTime: true, minFanbase: 70, effect: 'Fanbase +12' },
   { id: 'gold_locker', name: 'Gold Plate Your Locker', emoji: '🚪', category: 'flex', cost: 0.3, desc: 'The equipment staff hate you, 300k', oneTime: true, minFanbase: 60 },
   { id: 'super_bowl_ring_copy', name: 'Second Ring, Bigger', emoji: '💍', category: 'flex', cost: 0.4, desc: 'A custom copy with more diamonds than the real one, 400k', oneTime: true, minNetWorth: 6 },
   // ── Family ──
   { id: 'mom_house', name: 'Buy Your Mother A House', emoji: '❤️', category: 'family', cost: 1.8, desc: 'The reason most people do any of this, 1.8M', oneTime: true, minNetWorth: 2, effect: 'Morale +15' },
   { id: 'siblings_college', name: 'Pay For Your Siblings College', emoji: '🎓', category: 'family', cost: 0.6, desc: 'All of them, all four years, 600k', oneTime: true, effect: 'Morale +10' },
-  { id: 'family_office', name: 'Family Office', emoji: '🏦', category: 'family', cost: 0, yearly: 0.15, desc: 'Professionals so relatives stop asking you directly, 150k a year', oneTime: true, effect: 'Protects your money' },
+  { id: 'family_office', name: 'Family Office', emoji: '🏦', category: 'family', cost: 0, yearly: 0.15, desc: 'Professionals so relatives stop asking you directly, 150k a year', oneTime: true, effect: 'Adds 2 percent to your cash every season' },
   { id: 'foundation', name: 'Start A Foundation', emoji: '🤝', category: 'family', cost: 3, yearly: 0.2, desc: 'Your name doing good in your city, 3M', oneTime: true, minNetWorth: 6, effect: 'Fanbase +10 a year' },
   { id: 'family_thanksgiving', name: 'Fly The Whole Family In, Every Year', emoji: '🦃', category: 'family', cost: 0, yearly: 0.08, desc: 'Forty people, one table, 80k a year', oneTime: true, effect: 'Morale +6 a year' },
   { id: 'trust_fund', name: 'Set Up Trusts For Your Kids', emoji: '🧸', category: 'family', cost: 5, desc: 'They will never have to do this, 5M', oneTime: true, minNetWorth: 12 },
   // ── Shady (hidden until you have heat or dirty money) ──
   { id: 'shady_carwash', name: 'Car Wash Chain', emoji: '🧼', category: 'shady', cost: 1, desc: 'Remarkable revenue for a street with no traffic, 1M', oneTime: true, requiresDirty: true, effect: 'Washes 2M of dirty money' },
   { id: 'shady_barbershops', name: 'Barbershop Chain', emoji: '💈', category: 'shady', cost: 0.8, desc: 'Nine chairs, three customers, endless cash, 800k', oneTime: true, requiresDirty: true, effect: 'Washes 1.5M of dirty money' },
-  { id: 'shady_club', name: 'The Nightclub', emoji: '🍾', category: 'shady', cost: 3, yearly: 0.2, desc: 'Bottle service and a very flexible ledger, 3M', oneTime: true, requiresDirty: true, effect: 'Washes 4M, heat +5 a year' },
+  { id: 'shady_club', name: 'The Nightclub', emoji: '🍾', category: 'shady', cost: 3, yearly: 0.2, desc: 'Bottle service and a very flexible ledger, 3M', oneTime: true, requiresDirty: true, effect: 'Washes 4M, heat +3' },
   { id: 'shady_lawyer', name: 'The Lawyer Who Never Loses', emoji: '⚖️', category: 'shady', cost: 0, yearly: 0.4, desc: 'On retainer, answers at 3am, 400k a year', oneTime: true, effect: 'Heat cools twice as fast' },
   { id: 'shady_fixer', name: 'A Guy Who Handles Things', emoji: '🕶️', category: 'shady', cost: 0, yearly: 0.25, desc: 'You do not ask how, 250k a year', oneTime: true, effect: 'Heat -8 immediately' },
-  { id: 'shady_offshore', name: 'Offshore Account', emoji: '🏝️', category: 'shady', cost: 0.5, desc: 'An island, a bank, a form nobody files, 500k', oneTime: true, requiresDirty: true, effect: 'Hides money, heat +6' },
+  { id: 'shady_offshore', name: 'Offshore Account', emoji: '🏝️', category: 'shady', cost: 0.5, desc: 'An island, a bank, a form nobody files, 500k', oneTime: true, requiresDirty: true, effect: 'Heat +6' },
 ];
 
 export function getNflSpendItem(id: string): NflSpendItem | undefined {
