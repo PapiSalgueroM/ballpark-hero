@@ -32,6 +32,16 @@
  *      every board anchor of simNbaDraftCapital's controls, READ from that file, is exactly once in the board's
  *      executable source, and so are simGmReload's restore line and simDraftNight's norivals anchor.
  *
+ * MEASURED 2026-10-22 on GitHub runners (every check is an equality, so there is no band to set):
+ *   the fixture: 90 plays recorded from 7a8750ba's own src (r1540-s4), equal on that commit's board (quick and full)
+ *   and still equal after the bind (r1540-s5a, r1540-s5b5 full: 30 of 30 in each of the three cases)
+ *   full fleet (r1540-s5b5, 760 s): section 2 180 nights, 840 saves compared, 300 picks by his hand, 147 nights with
+ *   picks before his first, 172,426 draws; section 3 660 reloads, 180 at a card not yet continued; section 4 90
+ *   nights; section 5 60 mid night saves finished on the base board. Quick (r1540-s5b4): 36 nights, 168 saves.
+ *   Controls on the quick walk (r1540-s5b5, redraw on r1540-p6), each red only in its own sections, failures:
+ *   extradraw 12, deskless 12, blockedopen 12, secondchoice 60, classtwice 108, unseen 36, redraw 168, nofinish 90
+ *   (sections 2, 3 and 4), zerobatches 24 (sections 3 and 5), bigclass 12, screensport 2, boardlift 1.
+ *
  * RUNS. Seeds 1 to 6 by default, 1 to 30 with SIM_NBA_DRAFT_BOARD_FLEET=full. Green is the closing line
  * "simNbaDraftBoard: green." and exit 0. Exit 1 red (or a control that fired), 2 could not run, 3 a control that did
  * not fire.
