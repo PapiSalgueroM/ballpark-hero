@@ -1,0 +1,15 @@
+  [390 figures] {"scrollW":390,"clientW":390,"scrollY":101,"minute":"1","pitch":{"x":0,"y":82,"w":390,"h":668},"label":{"x":240,"y":342,"w":78,"h":19},"cue":{"x":269,"y":363,"w":20,"h":12},"labelText":"Foul by Barry","lift":null,"phase":"pass","looks":22,"figures":22}
+  ok: 390: all 22 figures carry their own look
+  [390 foul] {"scrollW":390,"clientW":390,"scrollY":101,"minute":"1","pitch":{"x":0,"y":82,"w":390,"h":668},"label":{"x":240,"y":342,"w":78,"h":19},"cue":{"x":269,"y":363,"w":20,"h":12},"labelText":"Foul by Barry","lift":null,"phase":"pass","looks":22,"figures":22}
+  ok: 390: the foul's label "Foul by Barry" is inside the pitch
+  [390 air] {"scrollW":390,"clientW":390,"scrollY":101,"minute":"2","pitch":{"x":0,"y":82,"w":390,"h":668},"label":null,"cue":null,"labelText":null,"lift":"3.83","phase":"pass","looks":22,"figures":22}
+  [390 shot] {"scrollW":390,"clientW":390,"scrollY":101,"minute":"9","pitch":{"x":0,"y":82,"w":390,"h":668},"label":null,"cue":null,"labelText":null,"lift":"0.18","phase":"flight","looks":22,"figures":22}
+  ok: 390: no page errors
+  [1280 figures] {"scrollW":1280,"clientW":1280,"scrollY":113,"minute":"1","pitch":{"x":183,"y":74,"w":542,"h":722},"label":null,"cue":null,"labelText":null,"lift":null,"phase":"pass","looks":22,"figures":22}
+  ok: 1280: all 22 figures carry their own look
+  [1280 foul] {"scrollW":1280,"clientW":1280,"scrollY":113,"minute":"13","pitch":{"x":183,"y":74,"w":542,"h":722},"label":{"x":430,"y":155,"w":86,"h":19},"cue":{"x":463,"y":116,"w":20,"h":12},"labelText":"Foul by Ahanor","lift":null,"phase":"pass","looks":22,"figures":22}
+  ok: 1280: the foul's label "Foul by Ahanor" is inside the pitch
+  [1280 air] {"scrollW":1280,"clientW":1280,"scrollY":113,"minute":"13","pitch":{"x":183,"y":74,"w":542,"h":722},"label":null,"cue":null,"labelText":null,"lift":"3.97","phase":"pass","looks":22,"figures":22}
+  [1280 shot] {"scrollW":1280,"clientW":1280,"scrollY":113,"minute":"17","pitch":{"x":183,"y":74,"w":542,"h":722},"label":null,"cue":null,"labelText":null,"lift":"0.23","phase":"flight","looks":22,"figures":22}
+  ok: 1280: no page errors
+walk1521: green, both sizes walked, screenshots in RC_OUT
