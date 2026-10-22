@@ -1,0 +1,13 @@
+# Release BO triage main, part F: the soccer walks with the setup lines that write their fixtures, and the no sack walk and its controls (rgBId), consent patched in scratch
+#!serve
+#!playwright
+#!serial
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+simCareerProgramme-forwalk: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerProgramme.mjs
+playCareerProgramme: node .rc/x/consentPatch.mjs scripts/playCareerProgramme.mjs && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCareerProgramme.mjs
+playSoccerSeasonCalendar: node .rc/x/consentPatch.mjs scripts/playSoccerSeasonCalendar.mjs && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerSeasonCalendar.mjs
+simSoccerVeteranTalks: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerVeteranTalks.mjs
+playSoccerVeteranTalks: node .rc/x/consentPatch.mjs scripts/playSoccerVeteranTalks.mjs && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" ENGINES=chromium NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerVeteranTalks.mjs
+nosack-walk: node .rc/x/consentPatch.mjs scripts/playCmNoSack.mjs && node scripts/playCmNoSack.mjs
+nosack-walk-nopill: node .rc/x/consentPatch.mjs scripts/playCmNoSack.mjs && WIDTHS=390 PLAY_NOSACK_CONTROL=nopill node scripts/playCmNoSack.mjs
+nosack-walk-sack: node .rc/x/consentPatch.mjs scripts/playCmNoSack.mjs && WIDTHS=390 PLAY_NOSACK_CONTROL=sack node scripts/playCmNoSack.mjs
