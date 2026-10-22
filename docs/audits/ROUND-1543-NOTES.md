@@ -54,4 +54,27 @@ pay earlier in the played histories. Proof on remote check r1543-s2a (head 6195a
 - retake-head: 4 of 12 reproduce, 8 differ, exit 1.
 - retake-write, then 12 of 12, exit 0; committed alone as e8338d0aa.
 No other recording moved: tycoonScorelineBaseline.json, tycoonScorelineTuning.json and
-src/test/fixtures/tycoonSaves.json are unchanged.
+src/test/fixtures/tycoonSaves.json are unchanged. The review fixes touched no src/lib file, and retake-head stays 12
+of 12 on their head (remote check r1543-x1), so nothing was retaken again.
+
+## The review (results-g/review-run-1543.md and review-read-1543.md) and what it changed
+
+The fence is S9a to S9d of scripts/simTycoonScorelines.mjs. The review found S9b's eight assertions behind one control
+whose firing was over determined, and the lead's fixed "streak5 and as5 stay at five" not fenced there (read F1,
+major); S9c's five match arm, set by the fixed streak5, wider than goals25's whole base minute, so the goal pair at 20
+passed (run F1, read F2); no error beside the long rungs' ratio (read F3); a row parser that a row across two lines
+would escape (read F4); and a boundary fleet that played a match minute at roll 0.999 (run F4). What changed:
+- S9b fences streak5 and as5 at five (typed, FIXED_RUNGS) beside as10 at streakMult's cap (called).
+- S9c no longer judges the three fixed streak rungs (printed, exempt) and its band is 35 percent or three matches:
+  every judged rung keeps its distance plus one match plus two bootstrap errors (the tightest, win1 on holdout, 6.26
+  of 6.3). The long rungs print their room and error (aw150 on holdout: room 0.083, error 0.053).
+- S9a checks each rung reads its own counter, and that the rows it parsed are all the rows the lib exports.
+- S9d's boundary fleet settles through settleFirsts, with no minute played.
+- Every S9 control names the words its sections must print (says), and an unmet says counts as a control that did
+  not fire. Twelve new controls give every assertion its own: split, wrongcounter, dropid, pay, bonus, unpair,
+  raiseone, falls, streakfour, asnine, label, goalstwenty (the goal pair at 20: red S9c, 8.61 off a 6.3 arm).
+- Proof: remote check r1543-x1, "simTycoonScorelines: 37 checks, 0 failed", every S9 control with its exact red set
+  and its own words; S9a to S9d stay green, and all sixteen S9 controls still fire, under the roll stream reshuffles
+  rollfirst (r1543-x1n), flipgoal and tworolls (r1543-x1m).
+- Not changed: the badge floaters pile up when several rungs land in one tick (run F3), a hook matter older than this
+  round, left for the next round that edits src/hooks/useStadiumTycoon.ts.
