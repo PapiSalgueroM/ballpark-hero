@@ -1,0 +1,6 @@
+noinjhook exit 0 | simNbaGmDesk: control noinjhook fired (124 failures, as it should)
+nomirror exit 0 | simNbaGmDesk: control nomirror fired (175 failures, as it should)
+nostepien exit 0 | simNbaGmDesk: control nostepien fired (117 failures, as it should)
+noruleblock exit 0 | simNbaGmDesk: control noruleblock fired (116 failures, as it should)
+dayonestature exit 0 | simNbaGmDesk: control dayonestature fired (205 failures, as it should)
+sheetrepick exit 0 | simNbaGmDesk: control sheetrepick fired (117 failures, as it should)

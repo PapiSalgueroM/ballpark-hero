@@ -1,0 +1,7 @@
+set3 exit=1 22s | simNbaGmDesk: 105 failure(s) in ["2"]
+set1 exit=1 27s | simNbaGmDesk: 115 failure(s) in ["2"]
+set2 exit=1 27s | simNbaGmDesk: 99 failure(s) in ["2"]
+base-set1 exit=0 24s | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+controls-a exit=0 147s | droppick exit 0 | simNbaGmDesk: control droppick fired (186 failures, as it should)
+controls-b exit=0 154s | noedgepo exit 0 | simNbaGmDesk: control noedgepo fired (122 failures, as it should)
+controls-c exit=0 151s | sheetrepick exit 0 | simNbaGmDesk: control sheetrepick fired (117 failures, as it should)

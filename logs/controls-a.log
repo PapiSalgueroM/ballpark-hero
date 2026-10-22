@@ -1,0 +1,6 @@
+coinflip exit 0 | simNbaGmDesk: control coinflip fired (247 failures, as it should)
+shortscale exit 0 | simNbaGmDesk: control shortscale fired (184 failures, as it should)
+norfa exit 0 | simNbaGmDesk: control norfa fired (176 failures, as it should)
+latetrade exit 0 | simNbaGmDesk: control latetrade fired (816 failures, as it should)
+noguard exit 0 | simNbaGmDesk: control noguard fired (116 failures, as it should)
+droppick exit 0 | simNbaGmDesk: control droppick fired (186 failures, as it should)

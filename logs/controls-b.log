@@ -1,0 +1,6 @@
+flatstaff exit 0 | simNbaGmDesk: control flatstaff fired (180 failures, as it should)
+flatgrowth exit 0 | simNbaGmDesk: control flatgrowth fired (134 failures, as it should)
+nodefault exit 0 | simNbaGmDesk: control nodefault fired (213 failures, as it should)
+pilefit exit 0 | simNbaGmDesk: control pilefit fired (115 failures, as it should)
+noedgeround exit 0 | simNbaGmDesk: control noedgeround fired (126 failures, as it should)
+noedgepo exit 0 | simNbaGmDesk: control noedgepo fired (122 failures, as it should)
