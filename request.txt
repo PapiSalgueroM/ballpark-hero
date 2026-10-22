@@ -1,0 +1,4 @@
+#!build
+#!serial
+wn: node .rc/x/apply.mjs nowhatsnew && node scripts/simPrerender.mjs; s=$?; git checkout -- src; exit $s
+head: node scripts/simPrerender.mjs

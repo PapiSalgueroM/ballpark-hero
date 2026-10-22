@@ -1,0 +1,3 @@
+build exit=0 35s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+wn exit=0 1s | simPrerender: green. Every page answers with its own words, no JavaScript required.
+head exit=1 0s | simPrerender: 1 failure
