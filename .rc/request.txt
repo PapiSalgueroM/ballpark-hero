@@ -1,0 +1,11 @@
+simUsShopPromises: node scripts/simUsShopPromises.mjs
+shop-basecheck: SHOP_BASE_CHECK=1 SHOP_SECTIONS=2 node scripts/simUsShopPromises.mjs
+shop-rate: SHOP_CONTROL=rate node scripts/simUsShopPromises.mjs
+shop-nocall: SHOP_CONTROL=nocall node scripts/simUsShopPromises.mjs
+shop-chance: SHOP_CONTROL=chance node scripts/simUsShopPromises.mjs
+shop-twice: SHOP_CONTROL=twice node scripts/simUsShopPromises.mjs
+shop-office: SHOP_CONTROL=office node scripts/simUsShopPromises.mjs
+shop-lawyer: SHOP_CONTROL=lawyer node scripts/simUsShopPromises.mjs
+shop-leak: SHOP_CONTROL=leak node scripts/simUsShopPromises.mjs
+shop-coolall: SHOP_CONTROL=coolall node scripts/simUsShopPromises.mjs
+shop-backpay: SHOP_CONTROL=backpay node scripts/simUsShopPromises.mjs
