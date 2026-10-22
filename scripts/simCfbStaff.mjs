@@ -65,6 +65,11 @@
         layer leans a little toward the strong. BAL_SEASONS seasons run on the
         legacy engine and with the layer on, same seeds, and the drift in the
         upset rate and in the weakest program's wins must sit in its band.
+        Round 1554 gave a new dynasty the real season too, so the layer arm
+        runs twice: once on the old draw (a second bundle whose slate is never
+        built, the layer exactly as it stood before the round) and once on
+        the slate. The layer's drift, old draw minus legacy, keeps Round 728's
+        bands; the slate's own cost, slate minus old draw, has its own.
 
    MEASURED HEADROOM, written down before the bands were set (Round 728,
    2026-10-01, 300 seeds a batch, five batches at CFB_STAFF_SEED_BASE 0, 1000,
@@ -101,19 +106,27 @@
        with the layer (printed, too few titles to band). UPSET_DRIFT_BAND
        [-3.5, -0.5] and WEAK_DRIFT_BAND [-0.8, 0.1];
      RE-MEASURED IN ROUND 1554 (2026-10-22, runner r1554-s4, the same five
-       seed bases). A new dynasty now also plays the real season: a slate
-       set at kickoff with no repeated opponent (src/lib/collegeProgram.ts
-       collegeSlate). The legacy arm still plays the old random draw, so this
-       drift is the layer plus the schedule. Upset rate -3.36, -3.43, -3.45,
-       -3.10, -3.59 (spread 0.49); UNLV regular season wins -1.34, -1.46,
-       -1.41, -1.37, -1.36 (spread 0.12): UNLV, the weakest program, used to
-       meet the other three Group of Five schools about eight times a season
-       and now meets each once, its other games against bigger programs, and a
-       slate with more mismatches has fewer upsets. Top six title share 91.5
-       to 93.2% legacy, 95.2 to 95.8% with the layer. UPSET_DRIFT_BAND
-       [-5.0, -1.8] and WEAK_DRIFT_BAND [-1.9, -0.9], about 1.4 and 0.45
-       either side of the measured range (the old bands sat 1.0 to 1.5 and
-       0.35 to 0.4 out);
+       seed bases) when a new dynasty began to play the real season (a slate
+       set at kickoff with no repeated opponent, src/lib/collegeProgram.ts
+       collegeSlate) while the legacy arm kept the old draw, so one drift held
+       the layer and the schedule together: upsets -3.10 to -3.59, UNLV -1.34
+       to -1.46. The closing check split it (runner r1554-f2-b, the same five
+       seed bases) into three arms. The layer on the old draw, a second bundle
+       whose slate is never built, reproduces the pre-1554 layer arm digit for
+       digit (origin/main at 3ee0bf629 printed the same upset rates, UNLV wins
+       and title shares at all five bases), so its drift keeps Round 728's
+       bands above: upsets -1.93, -1.90, -2.03, -1.53, -2.01; UNLV -0.41,
+       -0.37, -0.35, -0.24, -0.35. The slate, slate minus old draw with the
+       layer on in both: upsets -1.42, -1.53, -1.43, -1.57, -1.58 (spread
+       0.16); UNLV regular season wins -0.93, -1.09, -1.06, -1.13, -1.01
+       (spread 0.20). UNLV, the weakest program, used to meet the other three
+       Group of Five schools about eight times a season and now meets each
+       once, its other games against bigger programs, and a slate with more
+       mismatches has fewer upsets. Top six title share 91.5 to 93.2% legacy,
+       91.8 to 94.7% on the old draw, 95.2 to 95.8% on the slate (printed).
+       SLATE_UPSET_BAND [-2.6, -0.4] and SLATE_WEAK_BAND [-1.55, -0.5], about
+       1.0 and 0.42 either side of the measured range, the way Round 728 set
+       its own; with no slate (control noslate) both drifts are exactly 0;
      provoked payroll walk: someone walked in 4 of 10 seeds (a 95 is
        sometimes poached first); conference seasons with uneven league game
        counts 990 of 1000, title games the percentage rule picked differently
@@ -134,6 +147,7 @@
      CFB_STAFF_CONTROL=doubled    their effect on it doubles       -> 1, 2, 3 red
      CFB_STAFF_CONTROL=nowalk     payroll never makes anyone walk  -> 4 red
      CFB_STAFF_CONTROL=confraw    the table goes back to raw wins  -> 5 red
+     CFB_STAFF_CONTROL=noslate    a new dynasty never gets a slate -> 9 red
 
    Run: node scripts/simCfbStaff.mjs
 */
@@ -149,6 +163,9 @@ import { legacyScenario } from './lib/cfbLegacyDigest.mjs';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_URL = ROOT.replaceAll('\\', '/');
 const CONTROL = process.env.CFB_STAFF_CONTROL || '';
+/* Round 1554 closing check: the bundled head of the function that builds a season's slate. Cutting it
+   short gives section 9 its old draw arm (the layer as it stood before the round) and the noslate control. */
+const SLATE_ANCHOR = 'function ensureCfbSlate(st) {';
 const SEED_BASE = Number(process.env.CFB_STAFF_SEED_BASE || 0);
 const GOLDEN = '58ee7ea0fd820e94c655378833b5590eb539cb235856f6ff10456c410c657569';
 
@@ -161,8 +178,10 @@ const UPLIFT_BAND = [8.5, 13.5];
 const WIN_BAND = [0.6, 1.3];
 const FIELDS_FLOOR = 5;
 const BAL_SEASONS = 600;
-const UPSET_DRIFT_BAND = [-5.0, -1.8];
-const WEAK_DRIFT_BAND = [-1.9, -0.9];
+const UPSET_DRIFT_BAND = [-3.5, -0.5];
+const WEAK_DRIFT_BAND = [-0.8, 0.1];
+const SLATE_UPSET_BAND = [-2.6, -0.4];
+const SLATE_WEAK_BAND = [-1.55, -0.5];
 
 /* Each control: the exact bundled text it rewrites and what it becomes. */
 const CONTROLS = {
@@ -177,6 +196,8 @@ const CONTROLS = {
   nostaff: ['const staffPart = staff ? (staff.off + staff.def) / 2 : 0;', 'const staffPart = 0;'],
   doubled: ['const staffPart = staff ? (staff.off + staff.def) / 2 : 0;', 'const staffPart = staff ? staff.off + staff.def : 0;'],
   nowalk: ['while (staffPayroll(staff) > pot) {', 'while (false) {'],
+  /* Round 1554 closing check: a new dynasty never gets its slate, so the slate costs nothing. */
+  noslate: [SLATE_ANCHOR, SLATE_ANCHOR + ' return;'],
   confraw: ['pct(b) - pct(a) || b.confWins - a.confWins', 'b.confWins - a.confWins'],
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`CFB_STAFF_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
@@ -203,6 +224,14 @@ if (CONTROL) {
   console.log(`NEGATIVE CONTROL ON: ${CONTROL}`);
 }
 const { cfb, prog, colleges } = await import(pathToFileURL(BUNDLE).href);
+const BUNDLE_OLD = path.join(TMP, 'bundle-olddraw.mjs');
+{
+  const text = fs.readFileSync(BUNDLE, 'utf8');
+  const hits = text.split(SLATE_ANCHOR).length - 1;
+  if (hits !== 1) { console.error(`section 9 cannot run: "${SLATE_ANCHOR}" is in the bundle ${hits} times, not once`); process.exit(1); }
+  fs.writeFileSync(BUNDLE_OLD, text.replace(SLATE_ANCHOR, SLATE_ANCHOR + ' return;'));
+}
+const { cfb: cfbOld } = await import(pathToFileURL(BUNDLE_OLD).href);
 const { CFB_SCHOOLS, CFB_SCHOOL_MAP, CFB_ROUNDS, CFB_RIVALRY_ROUND, CFB_POINTS_PER_EDGE } = cfb;
 const { STAFF_UNIT_EDGE_MAX, RIVAL_MORALE_MIN, RIVAL_MORALE_MAX, RIVAL_RECRUIT_MIN, RIVAL_RECRUIT_MAX } = prog;
 
@@ -716,7 +745,7 @@ console.log('8) the board: an old save loads, a new dynasty has its staff, the w
   }
 }
 
-console.log(`9) league balance: over ${BAL_SEASONS} seasons the program layer tilts the league no further than measured`);
+console.log(`9) league balance: over ${BAL_SEASONS} seasons the program layer tilts the league no further than measured, and the slate costs what it was measured to`);
 {
   /* AI staff are hired at each program's own level, so the layer leans a
      little toward the strong, and a new dynasty starts with it on. The same
@@ -729,13 +758,18 @@ console.log(`9) league balance: over ${BAL_SEASONS} seasons the program layer ti
   const weakest = byPrestige[0].id;
   const top6 = new Set(byPrestige.slice(-6).map(s => s.id));
   const stats = {};
-  for (const depth of [false, true]) {
+  /* Round 1554: three arms on the same seeds. The old draw arm is the second bundle, whose slate is
+     never built, so its seasons have no format and play the pre-1554 draw and rivalry pairs. */
+  const arms = [['legacy', cfb, false], ['olddraw', cfbOld, true], ['slate', cfb, true]];
+  const formatSeasons = { legacy: 0, olddraw: 0, slate: 0 };
+  for (const [arm, eng, depth] of arms) {
     let titles = 0; let upsets = 0; let games = 0; let weakWins = 0;
     for (let seed = 1; seed <= BAL_SEASONS; seed += 1) {
       const rng = lehmer(SEED_BASE + seed * 3571 + 11);
-      const st = cfb.initCfb(weakest, rng, { depth });
+      const st = eng.initCfb(weakest, rng, { depth });
+      if (st.format === 1 && st.slate) formatSeasons[arm] += 1;
       for (let r = 1; r <= CFB_ROUNDS; r += 1) {
-        for (const g of cfb.simCfbRound(st, rng).games) {
+        for (const g of eng.simCfbRound(st, rng).games) {
           games += 1;
           const ph = CFB_SCHOOL_MAP.get(g.home).prestige; const pa = CFB_SCHOOL_MAP.get(g.away).prestige;
           if (ph !== pa && g.winner === (ph < pa ? g.home : g.away)) upsets += 1;
@@ -743,16 +777,27 @@ console.log(`9) league balance: over ${BAL_SEASONS} seasons the program layer ti
         if (r < CFB_ROUNDS) st.round += 1;
       }
       weakWins += st.teams[weakest].wins;
-      if (top6.has(cfb.runCfbPostseason(st, rng).champion)) titles += 1;
+      if (top6.has(eng.runCfbPostseason(st, rng).champion)) titles += 1;
     }
-    stats[depth] = { upsets: 100 * upsets / games, weak: weakWins / BAL_SEASONS, top6: 100 * titles / BAL_SEASONS };
+    stats[arm] = { upsets: 100 * upsets / games, weak: weakWins / BAL_SEASONS, top6: 100 * titles / BAL_SEASONS };
   }
-  const L = stats[false]; const D = stats[true];
-  const upDrift = D.upsets - L.upsets; const weakDrift = D.weak - L.weak;
-  console.log(`   upsets ${L.upsets.toFixed(2)}% legacy, ${D.upsets.toFixed(2)}% with the layer, drift ${upDrift.toFixed(2)} (band ${UPSET_DRIFT_BAND.join(' to ')})`);
-  console.log(`   ${weakest} regular season wins ${L.weak.toFixed(2)} legacy, ${D.weak.toFixed(2)} with the layer, drift ${weakDrift.toFixed(2)} (band ${WEAK_DRIFT_BAND.join(' to ')}); top six prestige titles ${L.top6.toFixed(1)}% and ${D.top6.toFixed(1)}%`);
+  const L = stats.legacy; const O = stats.olddraw; const D = stats.slate;
+  console.log(`   seasons started on the slate: legacy ${formatSeasons.legacy}, layer on the old draw ${formatSeasons.olddraw}, layer on the slate ${formatSeasons.slate} (of ${BAL_SEASONS} each)`);
+  if (formatSeasons.legacy || formatSeasons.olddraw) fail('the legacy or the old draw arm started a season on the slate, so it is not the arm it claims to be');
+  if (formatSeasons.slate !== BAL_SEASONS) fail(`only ${formatSeasons.slate} of ${BAL_SEASONS} new dynasties started on the slate`);
+  /* The layer, as Round 728 measured it: old draw minus legacy. */
+  const upDrift = O.upsets - L.upsets; const weakDrift = O.weak - L.weak;
+  console.log(`   the layer: upsets ${L.upsets.toFixed(2)}% legacy, ${O.upsets.toFixed(2)}% with the layer on the old draw, drift ${upDrift.toFixed(2)} (band ${UPSET_DRIFT_BAND.join(' to ')})`);
+  console.log(`   the layer: ${weakest} regular season wins ${L.weak.toFixed(3)} legacy, ${O.weak.toFixed(3)} with the layer on the old draw, drift ${weakDrift.toFixed(3)} (band ${WEAK_DRIFT_BAND.join(' to ')})`);
   if (upDrift < UPSET_DRIFT_BAND[0] || upDrift > UPSET_DRIFT_BAND[1]) fail(`the program layer moved the upset rate by ${upDrift.toFixed(2)} points, band ${UPSET_DRIFT_BAND.join(' to ')}`);
   if (weakDrift < WEAK_DRIFT_BAND[0] || weakDrift > WEAK_DRIFT_BAND[1]) fail(`the program layer moved ${weakest}'s wins by ${weakDrift.toFixed(2)} a season, band ${WEAK_DRIFT_BAND.join(' to ')}`);
+  /* The slate, Round 1554: slate minus old draw, the layer on in both. */
+  const slUp = D.upsets - O.upsets; const slWeak = D.weak - O.weak;
+  console.log(`   the slate: upsets ${D.upsets.toFixed(2)}% with the layer on the slate, drift ${slUp.toFixed(2)} (band ${SLATE_UPSET_BAND.join(' to ')})`);
+  console.log(`   the slate: ${weakest} regular season wins ${D.weak.toFixed(3)} on the slate, drift ${slWeak.toFixed(3)} (band ${SLATE_WEAK_BAND.join(' to ')}); both together ${(D.weak - L.weak).toFixed(2)}`);
+  console.log(`   top six prestige titles ${L.top6.toFixed(1)}% legacy, ${O.top6.toFixed(1)}% on the old draw, ${D.top6.toFixed(1)}% on the slate (printed, too few titles to band)`);
+  if (slUp < SLATE_UPSET_BAND[0] || slUp > SLATE_UPSET_BAND[1]) fail(`the slate moved the upset rate by ${slUp.toFixed(2)} points, band ${SLATE_UPSET_BAND.join(' to ')}`);
+  if (slWeak < SLATE_WEAK_BAND[0] || slWeak > SLATE_WEAK_BAND[1]) fail(`the slate moved ${weakest}'s wins by ${slWeak.toFixed(2)} a season, band ${SLATE_WEAK_BAND.join(' to ')}`);
 }
 
 fs.rmSync(TMP, { recursive: true, force: true });
