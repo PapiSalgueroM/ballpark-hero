@@ -1,0 +1,4 @@
+m-grade exit=1 78s | MUT grade vitest=0 harness=1
+mut-poy exit=1 78s | simSoccerSeasonAwards: RED, 7 failure(s)
+mut-fair exit=1 77s | simSoccerSeasonAwards: RED, 1 failure(s)
+mut-grade exit=1 75s | simSoccerSeasonAwards: RED, 3 failure(s)
