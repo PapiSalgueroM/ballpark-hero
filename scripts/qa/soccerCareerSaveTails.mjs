@@ -100,7 +100,7 @@ try {
           return E.advanceManagerSeason(current, E.FALLBACK_CLUBS);
         }
         if (tail === 'pundit') return E.advancePunditSeason(current, 'bold_prediction');
-        return E.advanceOwnerSeason(current);
+        return E.advanceOwnerSeason(current, E.FALLBACK_CLUBS);
       };
       let firstFailure = null;
       for (let year = 0; year <= 100; year += 1) {
