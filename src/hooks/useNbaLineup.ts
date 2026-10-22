@@ -8,7 +8,7 @@ import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { NBA_PLAYER_SOURCE, normalizeName, type PlayerEntity, type PlayerSourceConfig } from '@/lib/playerSearch';
 import {
   NBA_FIVE_FRANCHISE_CODES, NBA_FIVE_HIT_SCORE, buildTeamPool, challengeByStat, findPoolEntry, isPositionEligibleForSlot,
-  nbaFivePoints, refusalText, scoreFive, valueFor,
+  nbaFiveNameCounts, nbaFiveNameKey, nbaFivePoints, refusalText, scoreFive, valueFor,
   type NbaFiveRecordRow, type NbaFiveRosterRow, type NbaFiveScore, type NbaFiveTeamPool, type NbaFiveValue,
 } from '@/lib/nbaStartingFiveScore';
 
@@ -85,13 +85,32 @@ async function readPages<T>(page: (from: number) => PromiseLike<{ data: unknown;
   }
 }
 
+/* nba_player_stats keeps one row per display name, so a name the search
+   table carries on two rows (two men, each on his own team) would hand both
+   men one career. Every name in the search table is counted once per visit
+   and buildTeamPool holds any name counted twice. A failed read is dropped
+   so the next pick tries again, like a pool. */
+let censusLoad: Promise<Map<string, number>> | null = null;
+
+function loadNameCensus(): Promise<Map<string, number>> {
+  if (censusLoad) return censusLoad;
+  const load = readPages<NbaFiveRosterRow>(from => supabase
+    .from('nba_players_extended_v2')
+    .select('first_name, last_name, position')
+    .order('player_id', { ascending: true })
+    .range(from, from + POOL_PAGE - 1)).then(nbaFiveNameCounts);
+  censusLoad = load;
+  load.catch(() => { if (censusLoad === load) censusLoad = null; });
+  return load;
+}
+
 export function loadTeamPool(team: string): Promise<NbaFiveTeamPool> {
   const cached = poolCache.get(team);
   if (cached) return cached;
   const codes = NBA_FIVE_FRANCHISE_CODES[team] ?? [];
   const load = (async () => {
     if (codes.length === 0) throw new Error(`no franchise codes for ${team}`);
-    const [roster, records] = await Promise.all([
+    const [roster, records, census] = await Promise.all([
       readPages<NbaFiveRosterRow>(from => supabase
         .from('nba_players_extended_v2')
         .select('first_name, last_name, position')
@@ -100,19 +119,52 @@ export function loadTeamPool(team: string): Promise<NbaFiveTeamPool> {
         .range(from, from + POOL_PAGE - 1)),
       readPages<NbaFiveRecordRow>(from => supabase
         .from('nba_player_stats')
-        .select('player_name, teams, year_from, games, points, trb, ast, stl, blk, three_p')
+        .select('player_name, teams, year_from, year_to, games, points, trb, ast, stl, blk, three_p')
         .or(codes.map(c => `teams.ilike.%${c}%`).join(','))
         .order('id', { ascending: true })
         .range(from, from + POOL_PAGE - 1)),
+      loadNameCensus(),
     ]);
-    if (roster.length === 0 || records.length === 0) throw new Error(`empty record for ${team}`);
-    return buildTeamPool(team, roster, records);
+    if (roster.length === 0 || records.length === 0 || census.size === 0) throw new Error(`empty record for ${team}`);
+    return buildTeamPool(team, roster, records, census);
   })();
   poolCache.set(team, load);
   load.catch(() => { if (poolCache.get(team) === load) poolCache.delete(team); });
   return load;
 }
 
+/**
+ * Scores a full five from the pools of the teams its picks were made from,
+ * in the spin's own direction. Null when the challenge has no record. Out of
+ * the hook so scripts/simNbaStartingFive.mjs section 13 can drive it, and
+ * loadTeamPool, through a stub client.
+ */
+export async function scoreNbaLineup(slots: NbaFilledSlot[], challenge: StatChallenge): Promise<NbaFiveScore | null> {
+  const def = challengeByStat(challenge.stat);
+  if (!def) return null;
+  /* The pools are the teams the picks were made from, so a five is always
+     judged against the teams it was really dealt. */
+  const pools = await Promise.all(slots.map(s => loadTeamPool(s.assignedTeam)));
+  return scoreFive(
+    slots.map(s => ({ team: s.assignedTeam, role: s.role, name: s.playerName })),
+    pools,
+    def,
+    challenge.direction,
+  );
+}
+
+/**
+ * A pick already in the five, by the search's key and by the scorer's own
+ * ("J.J. X" and "JJ X" are one man to the record), so a five the page
+ * accepts can always be scored.
+ */
+export function alreadyPicked(slots: Iterable<NbaFilledSlot>, name: string): boolean {
+  const normalized = normalizeName(name), fiveKey = nbaFiveNameKey(name);
+  for (const s of slots) {
+    if (normalizeName(s.excludeName) === normalized || nbaFiveNameKey(s.playerName) === fiveKey) return true;
+  }
+  return false;
+}
 
 export function useNbaLineup() {
   const [phase, setPhase] = useState<NbaGamePhase>('challenge');
@@ -237,8 +289,7 @@ export function useNbaLineup() {
          first name, which would now produce "Stephen Stephen Curry". */
       const fullDisplayName = entity.name;
 
-      const normalized = normalizeName(entity.name);
-      if (filledNormalizedNames.has(normalized)) {
+      if (alreadyPicked(filledSlots.values(), entity.name)) {
         setValidationError(`${fullDisplayName} is already in your lineup!`);
         return;
       }
@@ -299,7 +350,7 @@ export function useNbaLineup() {
         setIsTeamSpinning(true);
       }
     },
-    [selectedPosition, currentTeam, filledCount, filledNormalizedNames, challenge]
+    [selectedPosition, currentTeam, filledCount, filledSlots, challenge]
   );
 
   const filledSlotsArray = useMemo(() => {
@@ -322,20 +373,10 @@ export function useNbaLineup() {
        same pools its numbers came from, against the best five the dealt
        teams allowed. Anything that cannot be scored says so and keeps the
        lineup for another try; it is never given a made up verdict. */
-    const def = challengeByStat(challenge.stat);
     setIsEvaluating(true);
     setEvaluationError(null);
     try {
-      if (!def) throw new Error('challenge has no record');
-      /* The pools are the teams the picks were made from, so a five is always
-         judged against the teams it was really dealt. */
-      const pools = await Promise.all(filledSlotsArray.map(s => loadTeamPool(s.assignedTeam)));
-      const scored = scoreFive(
-        filledSlotsArray.map(s => ({ team: s.assignedTeam, role: s.role, name: s.playerName })),
-        pools,
-        def,
-        challenge.direction,
-      );
+      const scored = await scoreNbaLineup(filledSlotsArray, challenge);
       if (!scored) throw new Error('five could not be scored');
       setResult(scored);
       setPhase('result');
