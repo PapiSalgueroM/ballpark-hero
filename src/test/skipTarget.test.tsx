@@ -31,6 +31,13 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { resetMocks } from './dailyReload/mocks';
 
+/* These DOM checks use an unavailable optional answer key.
+   Key transport, decoding and judging stay covered by their own suites. */
+vi.mock('@/lib/collegeGrid', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('@/lib/collegeGrid')>()),
+  fetchCollegeGridData: async () => null,
+}));
+
 const ROOT = process.cwd();
 const app = fs.readFileSync(path.join(ROOT, 'src/App.tsx'), 'utf8').replace(/\{\/\*[\s\S]*?\*\/\}/g, '').replace(/\/\*[\s\S]*?\*\//g, '');
 const sitemap = fs.readFileSync(path.join(ROOT, 'public/sitemap.xml'), 'utf8');

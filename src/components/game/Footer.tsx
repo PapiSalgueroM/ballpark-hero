@@ -80,6 +80,10 @@ export function Footer() {
           Privacy Policy
         </Link>
         <span>·</span>
+        <Link to="/cookie-policy" className="underline hover:text-foreground transition-colors">
+          Cookie Policy
+        </Link>
+        <span>·</span>
         <Link to="/terms" className="underline hover:text-foreground transition-colors">
           Terms of Service
         </Link>
