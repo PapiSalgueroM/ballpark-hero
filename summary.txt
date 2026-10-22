@@ -1,0 +1,2 @@
+trust exit=0 55s | All 3 harnesses green.
+tsc exit=0 63s | 
