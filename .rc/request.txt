@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+three: ONLY=/stadium-tycoon,/idle-arena,/hall-of-champions PLAYFIRST_JSON=$RC_OUT/three.json node scripts/playFirstVisitDialogs.mjs
+three-cover: ONLY=/stadium-tycoon,/idle-arena,/hall-of-champions PLAYFIRST_CONTROL=cover node scripts/playFirstVisitDialogs.mjs
