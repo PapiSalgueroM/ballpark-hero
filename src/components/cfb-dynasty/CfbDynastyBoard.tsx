@@ -149,7 +149,7 @@ const CFB_WORDS: CollegeSport<CfbTeam, CfbState, CfbGame, CfbRecruit, Postseason
   rankingsNote: () => '• the twelve in the Playoff picture right now',
   standingsCut: 2,
   standingsMark: ' (CCG)',
-  standingsNote: (depth, st) => `${depth ? 'Ranked by conference win percentage, since rivalry week takes a league game off some teams. ' : ''}Top two in each conference meet in the championship game; the winner books a Playoff spot.${st.format ? ' The four Group of Five schools here are not one conference, so they play no title game: the best ranked of them takes the fifth automatic spot. Notre Dame is independent and gets in if it ranks in the top 12.' : ''}`,
+  standingsNote: (depth, st) => `${depth ? `Ranked by conference win percentage, since rivalry week ${st.format ? 'adds a league game for' : 'takes a league game off'} some teams. ` : ''}Top two in each conference meet in the championship game; the winner books a Playoff spot.${st.format ? ' The four Group of Five schools here are not one conference, so they play no title game: the best ranked of them takes the fifth automatic spot. Notre Dame is independent and gets in if it ranks in the top 12.' : ''}`,
 };
 
 /* Built on first use rather than at import, so nothing imported is read
