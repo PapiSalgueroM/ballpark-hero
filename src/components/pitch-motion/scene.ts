@@ -174,9 +174,11 @@ export function pitchPlan(input: PitchInput): PitchPlan {
      across the same line, or back as a reset with its reason), anything else starts a new possession deep. Every
      roll is the stretch's own keyed stream, so no stretch depends on how many draws another made. */
   const build = input.build;
-  /* Round 1521 review: the stretch a possession carries on from is the same side's open play drawn just before,
-     whatever drew it (the grid, a chance's build up, a throw in's or a free kick's receiver, a corner's delivery):
-     a man of a line on the ball, with nothing dead in between. The other side or a dead ball is a new possession. */
+  /* Round 1521 review: the same side's open play drawn just before a stretch, whatever drew it (the grid, a chance's
+     build up, the man a throw in, a free kick or a corner is played to): a man of a line on the ball, with nothing
+     dead in between. Open play carries on from the grid's own stretches; after anything else it starts a new
+     possession deep, as it always did, and when that is behind the man a dead ball was just played to, he is closed
+     down and it goes back from him (drawn so), never as a turn for nothing. */
   const joinedOpen = (prev: Layer | null, side: PitchSide): Layer | null =>
     (prev && !prev.dead && prev.state === 'open' && prev.side === side && prev.line && prev.carrier !== null ? prev : null);
   /** The same, read by a chance's build up and its shooter (see where a chance is staged). */
@@ -186,11 +188,12 @@ export function pitchPlan(input: PitchInput): PitchPlan {
     if (!build) return rawOpen(i);
     const known = built.get(i);
     if (known) return known;
-    const layer = builtOpen(i, joinedOpen(previous, spell(i)), build);
+    const joined = joinedOpen(previous, spell(i));
+    const layer = builtOpen(i, joined?.via === 'grid' ? joined : null, build, joined?.via === 'grid' ? null : joined);
     built.set(i, layer);
     return layer;
   };
-  const builtOpen = (i: number, last: Layer | null, push: { me: number; opp: number }): Layer => {
+  const builtOpen = (i: number, last: Layer | null, push: { me: number; opp: number }, came: Layer | null): Layer => {
     const side = spell(i);
     const list = lists[side];
     const rng = keyedRng(`${seed}:b:${i}`);
@@ -221,16 +224,14 @@ export function pitchPlan(input: PitchInput): PitchPlan {
     let figure: PitchFigure | null = men.length ? men[pickIndex(men, rng())] : null;
     let anchor: PitchPoint = figure ? zoneAnchor(side, figure, rng) : { x: 50, y: 50 };
     const at = prior && typeof prior.anchor !== 'function' ? prior.anchor : null;
-    if (figure && prior && rank(figure.line) < priorRank) {
+    if (figure && prior && rank(figure.line) < priorRank && at) {
       /* A reset, never a turn for nothing: across to the far side when a man of that line is out there (a switch
-         of play), else back because the man on the ball was closed down (his stretch is marked, and drawn so).
-         After a throw in, whose spot is worked out only when it is drawn, there is nothing to measure a switch
-         from, so it is pressure. */
-      const far = at ? [...men].sort((a, b) => Math.abs(turn(side, b.slot).x - at.x) - Math.abs(turn(side, a.slot).x - at.x))[0] : null;
-      const farAnchor = far ? zoneAnchor(side, far, rng) : null;
-      if (far && farAnchor && at && rng() < 0.5 && Math.abs(farAnchor.x - at.x) >= SWITCH_ACROSS) { figure = far; anchor = farAnchor; reset = 'switch'; }
+         of play), else back because the man on the ball was closed down (his stretch is marked, and drawn so). */
+      const far = [...men].sort((a, b) => Math.abs(turn(side, b.slot).x - at.x) - Math.abs(turn(side, a.slot).x - at.x))[0];
+      const farAnchor = zoneAnchor(side, far, rng);
+      if (rng() < 0.5 && Math.abs(farAnchor.x - at.x) >= SWITCH_ACROSS) { figure = far; anchor = farAnchor; reset = 'switch'; }
       else { reset = 'press'; prior.pressed = true; }
-    }
+    } else if (figure && !prior && came?.line && rank(figure.line) < rank(came.line)) { reset = 'press'; came.pressed = true; }
     const layer: Layer = {
       start: from + i * BEAT_SPAN, end: from + (i + 1) * BEAT_SPAN, priority: 0, order: i,
       state: 'open', via: 'grid', side, carrier: figure?.key ?? null, dead: false, id: `o${i}`, anchor,

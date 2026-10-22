@@ -92,8 +92,8 @@
  *   mapswap      the viewer leans Attacking the defensive way and back             the viewer leans my side
  *   turnback     a chance's build up and shooter take no notice of where the ball  R12 (every pass: turned back for nothing)
  *                is (the review's turn back before a chance, put back)
- *   deadrestart  after a throw in's, a free kick's or a corner's man, open play   R12 (every pass: turned back for nothing)
- *                starts a new possession deep again
+ *   deadrestart  after a throw in's, a free kick's or a corner's man, the new     R12 (every pass: turned back for nothing)
+ *                possession starts deep with no reason drawn, as it did
  * A control exits 1 when its test went red on an assertion, as it must, and 3 when it did anything else.
  *
  * THE BUNDLE SECTION (clean runs and cmimport): the part must stay a part. src/components/pitch-motion is
@@ -248,7 +248,7 @@ try {
     /* ---- Round 1521's review fixes ---- */
     if (control === 'mapswap') viewer = replace(viewer, "build: { me: mentality === 'attacking' ? 1 : mentality === 'defensive' ? -1 : 0, opp: 0 },", "build: { me: mentality === 'attacking' ? -1 : mentality === 'defensive' ? 1 : 0, opp: 0 },");
     if (control === 'turnback') scene = replace(scene, 'const leadIn = (prev: Layer | null, side: PitchSide): Layer | null => joinedOpen(prev, side);', 'const leadIn = (prev: Layer | null, side: PitchSide): Layer | null => (void prev, void side, null);');
-    if (control === 'deadrestart') scene = replace(scene, 'const layer = builtOpen(i, joinedOpen(previous, spell(i)), build);', "const layer = builtOpen(i, previous && previous.via === 'grid' ? joinedOpen(previous, spell(i)) : null, build);");
+    if (control === 'deadrestart') scene = replace(scene, "} else if (figure && !prior && came?.line && rank(figure.line) < rank(came.line)) { reset = 'press'; came.pressed = true; }", '} else if (figure && !prior && came?.line && false) { void came; }');
     const componentPath = path.join(folder, 'LiveSimMotion.tsx').replaceAll('\\', '/');
     viewer = replace(viewer, "import { LivePitchPlayer, useLiveSimMotion } from '@/components/club-manager/LiveSimMotion';", "import { LivePitchPlayer, useLiveSimMotion } from './LiveSimMotion';");
     viewer = replace(viewer, "import type { MotionEvent } from '@/components/club-manager/LiveSimMotion';", "import type { MotionEvent } from './LiveSimMotion';");
