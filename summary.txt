@@ -1,0 +1,14 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+playLeagueTableFit exit=0 6s | All 1 harnesses green.
+playFirstTeamFit exit=0 6s | All 1 harnesses green.
+simTycoonGoalFlight exit=1 2s | 1 harness not green.
+playTycoonGearFit exit=0 9s | All 1 harnesses green.
+simSetPiecePresentation exit=1 5s | 1 harness not green.
+playTycoonSetPieceFit exit=0 30s | All 1 harnesses green.
+playHomeFold exit=0 32s | All 1 harnesses green.
+saleReview exit=1 5s | 1 harness not green.
+qaFreeKickRange exit=0 28s | Free Kick consumer proof PASSED; artifacts retained at /home/runner/work/ballpark-hero/ballpark-hero/free-kick-range-artifacts/native.
+checkTycoonGroundGrowth exit=0 49s | Original source, build and actual template font cache stayed byte-identical.
+walk exit=0 41s | playTycoonScorelines: green
+sweepWeight exit=0 32s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+walk-crowd-must-be-red exit=1 41s | playTycoonScorelines (control crowd): 2 failures
