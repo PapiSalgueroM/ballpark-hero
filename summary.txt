@@ -1,0 +1,8 @@
+head exit=0 0s | 378d6047193e3bb96128cc87ae3f0b1ff929f9e3
+probe exit=0 5s | hbprobe: green, every invariant held
+mut-deadoff exit=0 28s | MUT deadoff: simNbaGmDesk exit 0 | hbprobe exit 1
+mut-noroll exit=0 28s | MUT noroll: simNbaGmDesk exit 0 | hbprobe exit 1
+mut-overcut exit=0 28s | MUT overcut: simNbaGmDesk exit 0 | hbprobe exit 1
+mut-poolcopy exit=1 27s | MUT poolcopy: simNbaGmDesk exit 1 | hbprobe exit 1
+mut-onlyself exit=0 27s | MUT onlyself: simNbaGmDesk exit 0 | hbprobe exit 1
+clean exit=0 0s | tree restored

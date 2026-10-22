@@ -1,0 +1,13 @@
+MUTATION overcut applied to src/lib/gmContractsHostNba.ts
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+desk last: simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+probe:
+    seed 1 HOU (bottom): club ends at 14, the engine ended it at 15
+    seed 2 MIN (bottom): club ends at 14, the engine ended it at 15
+    seed 4 BKN (bottom): club ends at 14, the engine ended it at 15
+  FAIL waived: 200
+    seed 1 HOU (bottom): 2 men waived for 1 arrivals
+    seed 2 MIN (bottom): 2 men waived for 1 arrivals
+    seed 4 BKN (bottom): 2 men waived for 1 arrivals
+hbprobe: RED, 400 failures in count, waived
+MUT overcut: simNbaGmDesk exit 0 | hbprobe exit 1
