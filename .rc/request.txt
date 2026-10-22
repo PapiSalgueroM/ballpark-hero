@@ -1,0 +1,11 @@
+#!serial
+unit-real: node_modules/.bin/vitest run src/lib/careerIntl.test.ts src/test/nbaCareerIntl.test.ts --testTimeout=300000
+mut-thirds: node .rc/x/mut1541.mjs thirds && node_modules/.bin/vitest run src/lib/careerIntl.test.ts --testTimeout=300000; s=$?; git checkout -- src scripts; exit $s
+mut-linepts: node .rc/x/mut1541.mjs linepts && node_modules/.bin/vitest run src/test/nbaCareerIntl.test.ts --testTimeout=300000; s=$?; git checkout -- src scripts; exit $s
+mut-minutes: node .rc/x/mut1541.mjs minutes && node_modules/.bin/vitest run src/test/nbaCareerIntl.test.ts --testTimeout=300000; s=$?; git checkout -- src scripts; exit $s
+mut-callend: node .rc/x/mut1541.mjs callend && node_modules/.bin/vitest run src/test/nbaCareerIntl.test.ts --testTimeout=300000; s=$?; git checkout -- src scripts; exit $s
+mut-lastshallow: node .rc/x/mut1541.mjs lastshallow && node_modules/.bin/vitest run src/lib/careerIntl.test.ts --testTimeout=300000; s=$?; git checkout -- src scripts; exit $s
+mut-namelast: node .rc/x/mut1541.mjs namelast && node_modules/.bin/vitest run src/lib/careerIntl.test.ts src/test/nbaCareerIntl.test.ts --testTimeout=300000; s=$?; git checkout -- src scripts; exit $s
+mut-avgsum: node .rc/x/mut1541.mjs avgsum && node_modules/.bin/vitest run src/lib/careerIntl.test.ts --testTimeout=300000; s=$?; git checkout -- src scripts; exit $s
+mut-knock-s5: node .rc/x/mut1541.mjs knock && INTL_SECTIONS=5 node scripts/simCareerIntl.mjs; s=$?; git checkout -- src scripts; exit $s
+unit-after: git status --short src scripts | head -5; node_modules/.bin/vitest run src/lib/careerIntl.test.ts src/test/nbaCareerIntl.test.ts --testTimeout=300000
