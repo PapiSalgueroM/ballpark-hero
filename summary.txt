@@ -1,0 +1,6 @@
+f4-engaged-s5 exit=0 337s | simCareerForm: green
+f4-engaged-s123 exit=0 359s | simCareerForm: green
+f4-engaged-s777 exit=1 374s | simCareerForm: RED, 1 failure(s)
+f4-engaged-s2026 exit=0 353s | simCareerForm: green
+f4-engaged-s55555 exit=0 332s | simCareerForm: green
+f4-engaged-s8080 exit=0 349s | simCareerForm: green
