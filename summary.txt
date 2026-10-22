@@ -1,0 +1,2 @@
+head-writes exit=1 0s | simWritesAreSent: 1 failure
+base-writes exit=1 0s | simWritesAreSent: 1 failure
