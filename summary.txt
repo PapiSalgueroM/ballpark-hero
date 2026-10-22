@@ -1,0 +1,10 @@
+set1 exit=0 29s | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+set2 exit=0 36s | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+held exit=0 27s | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+set3 exit=0 37s | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+walk-beq exit=0 73s | BYTE EQUAL walk (26 lines)
+ctl-dropone exit=0 30s | simNbaGmDesk: control dropone fired (20 failures, as it should)
+ctl-nohandback exit=0 35s | simNbaGmDesk: control nohandback fired (12 failures, as it should)
+ctl-overlimit exit=0 39s | simNbaGmDesk: control overlimit fired (8 failures, as it should)
+ctl-sheetrepick exit=0 33s | simNbaGmDesk: control sheetrepick fired (51 failures, as it should)
+anchors exit=0 50s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
