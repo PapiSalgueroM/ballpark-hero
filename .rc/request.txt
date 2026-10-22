@@ -1,0 +1,13 @@
+quick: T=$(mktemp -d); TMPDIR=$T TEMP=$T TMP=$T node scripts/simNbaDraftBoard.mjs
+c-extradraw: T=$(mktemp -d); TMPDIR=$T TEMP=$T TMP=$T SIM_NBA_DRAFT_BOARD_CONTROL=extradraw node scripts/simNbaDraftBoard.mjs
+c-deskless: T=$(mktemp -d); TMPDIR=$T TEMP=$T TMP=$T SIM_NBA_DRAFT_BOARD_CONTROL=deskless node scripts/simNbaDraftBoard.mjs
+c-blockedopen: T=$(mktemp -d); TMPDIR=$T TEMP=$T TMP=$T SIM_NBA_DRAFT_BOARD_CONTROL=blockedopen node scripts/simNbaDraftBoard.mjs
+c-secondchoice: T=$(mktemp -d); TMPDIR=$T TEMP=$T TMP=$T SIM_NBA_DRAFT_BOARD_CONTROL=secondchoice node scripts/simNbaDraftBoard.mjs
+c-classtwice: T=$(mktemp -d); TMPDIR=$T TEMP=$T TMP=$T SIM_NBA_DRAFT_BOARD_CONTROL=classtwice node scripts/simNbaDraftBoard.mjs
+c-unseen: T=$(mktemp -d); TMPDIR=$T TEMP=$T TMP=$T SIM_NBA_DRAFT_BOARD_CONTROL=unseen node scripts/simNbaDraftBoard.mjs
+c-redraw: T=$(mktemp -d); TMPDIR=$T TEMP=$T TMP=$T SIM_NBA_DRAFT_BOARD_CONTROL=redraw node scripts/simNbaDraftBoard.mjs
+c-nofinish: T=$(mktemp -d); TMPDIR=$T TEMP=$T TMP=$T SIM_NBA_DRAFT_BOARD_CONTROL=nofinish node scripts/simNbaDraftBoard.mjs
+c-zerobatches: T=$(mktemp -d); TMPDIR=$T TEMP=$T TMP=$T SIM_NBA_DRAFT_BOARD_CONTROL=zerobatches node scripts/simNbaDraftBoard.mjs
+c-bigclass: T=$(mktemp -d); TMPDIR=$T TEMP=$T TMP=$T SIM_NBA_DRAFT_BOARD_CONTROL=bigclass node scripts/simNbaDraftBoard.mjs
+c-screensport: T=$(mktemp -d); TMPDIR=$T TEMP=$T TMP=$T SIM_NBA_DRAFT_BOARD_CONTROL=screensport node scripts/simNbaDraftBoard.mjs
+c-boardlift: T=$(mktemp -d); TMPDIR=$T TEMP=$T TMP=$T SIM_NBA_DRAFT_BOARD_CONTROL=boardlift node scripts/simNbaDraftBoard.mjs
