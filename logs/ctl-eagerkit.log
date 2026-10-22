@@ -1,0 +1,30 @@
+/front-office at 390 by 844
+  CAUGHT  nfl 390x844 E: the pick screen does not ask for the career kit (1 asks)
+  PASS  nfl 390x844 E: a new front office brings the kit with its league
+  PASS  nfl 390x844 E: mid season, the hub draws the Career box without the kit
+  PASS  nfl 390x844 E: mid season, the hub draws the GM level box without the kit
+  FAIL  nfl 390x844 E: a season being played does not ask for the kit (1 asks)
+  FAIL  nfl 390x844 E: on a slow line the last week's press waits for the kit
+  PASS  nfl 390x844 E: the last week asks for the kit
+  PASS  nfl 390x844 E: fired, on the out of work screen
+  PASS  nfl 390x844 E: a reload on the fired screen holds while the kit is on its way
+  MEASURED nfl 390x844 E: fired reload holding box 320px at 274, out of work screen at 307, scroll 0
+  FAIL  nfl 390x844 E: the out of work screen lands where the holding box stood, the page not moving
+  PASS  nfl 390x844 E: the fired screen asks for the kit
+  PASS  nfl 390x844 E out of work: nothing wider than the screen (0px over)
+  FAIL  nfl 390x844 E out of work: every control at least 44 px tall (Start a new front office 21px)
+  PASS  nfl 390x844 E out of work: no text under its floor (none)
+  PASS  nfl 390x844 E: the market opens on the slow line, 1 offer(s)
+  PASS  nfl 390x844 E: a seat taken on the slow line (CLE, recap)
+  PASS  nfl 390x844 E: the arrival recap holds the re-sign box
+  PASS  nfl 390x844 E: the new club's re-sign box opens
+  PASS  nfl 390x844 E: the new club's draft runs to the hub
+  FAIL  nfl 390x844 E: the new club's hub draws its boxes without asking for the kit
+  PASS  nfl 390x844 E: the GM level box holds, under its own header, while the kit is on its way (xp)
+  PASS  nfl 390x844 E: the GM level box asks for the kit
+  PASS  nfl 390x844 E GM level: nothing wider than the screen (0px over)
+  FAIL  nfl 390x844 E GM level: every control at least 44 px tall (? 21px; Spend a point (0/5) 21px; ? 21px)
+  PASS  nfl 390x844 E GM level: no text under its floor (none)
+  PASS  nfl 390x844 E: no console error (clean)
+
+playGmCareer control eagerkit: 1/1 guarded checks fired, 0 missed, 6 unrelated failure(s)

@@ -1,0 +1,12 @@
+build exit=0 27s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+ctl-wipebutton exit=0 14s | playGmCareer control wipebutton: all 1 guarded checks fired (mutations landed: {"wipebutton":2})
+ctl-eagerkit exit=1 33s | playGmCareer control eagerkit: 1/1 guarded checks fired, 0 missed, 6 unrelated failure(s)
+ctl-nofallback exit=0 30s | playGmCareer control nofallback: all 1 guarded checks fired (mutations landed: {"nofallback":4})
+ctl-eagerpanel exit=0 30s | playGmCareer control eagerpanel: all 1 guarded checks fired (mutations landed: {"eagerpanel":16})
+ownermandate exit=0 25s | ALL OWNER MANDATE WALK CHECKS PASSED
+fohub exit=1 48s | playFoHub: 2 failures
+gmpress exit=1 84s | playGmPress: 2 failures
+draftnight exit=0 210s | playDraftNight: ALL GREEN, 49 nights walked
+fogameday exit=0 353s | playFrontOfficeGameDay: 386 checks, 0 failed
+gmcareer exit=0 461s | playGmCareer: green. 1 board, 3 sizes, four walks each and the slow kit walk at 390 and 1280.
+sweep exit=0 888s | Swept 184 routes across 1 engines and 3 viewports (552 checks). 0 findings.
