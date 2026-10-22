@@ -1,0 +1,14 @@
+#!serve
+#!playwright
+gmcareer: PLAY_GM_CAREER_OUT="$RC_OUT/gmc" node scripts/playGmCareer.mjs
+ownermandate: node scripts/playOwnerMandate.mjs
+fohub: node scripts/playFoHub.mjs
+fogameday: node scripts/playFrontOfficeGameDay.mjs
+gmpress: node scripts/playGmPress.mjs
+draftnight: node scripts/playDraftNight.mjs
+probe: node .rc/x/rv-probe-focus.mjs
+revealscroll: node scripts/simRevealScroll.mjs
+ctl-nofallback: PLAY_GM_CAREER_CONTROL=nofallback PLAY_GM_CAREER_WALKS=A PLAY_GM_CAREER_SIZE=390 node scripts/playGmCareer.mjs
+ctl-eagerpanel: PLAY_GM_CAREER_CONTROL=eagerpanel PLAY_GM_CAREER_WALKS=A PLAY_GM_CAREER_SIZE=390 node scripts/playGmCareer.mjs
+weight-head: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+gmstaff: node scripts/simGmStaff.mjs
