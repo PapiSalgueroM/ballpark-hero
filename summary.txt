@@ -1,0 +1,8 @@
+head exit=0 0s | 378d6047193e3bb96128cc87ae3f0b1ff929f9e3
+setup exit=0 1s | dumpsave: wrote .rcw-base/scripts/simNbaGmDeskDump.mjs from the tree
+dump-def exit=0 22s | 101
+dump-s6 exit=0 22s | 101
+dump-s10 exit=0 22s | 101
+dump-s35 exit=0 22s | 101
+dump-old exit=0 22s | 101
+replay exit=0 11s | replay: green
