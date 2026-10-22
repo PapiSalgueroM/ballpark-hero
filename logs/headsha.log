@@ -1,0 +1,6 @@
+7214ae0e70 rc request rBQi-sims for 3cca8400bd0d4d104ecfae5d3eeece92186778cc
+3cca8400bd Release BQ m16: merge origin/main at 705f576c (Release BP live: main 5ba8a1c6 and its record), BP's triage seams kept
+705f576c2a Record Release BP: live at 17:53 EDT on 2026-10-22 (main 5ba8a1c6, deployment e12d7e79), with the board note for the other lane
+5ba8a1c6e1 Release BP m16: merge origin/main again at e030cc1f (a board commit only, docs/WORKBOARD.md)
+77ff98abe4 Release BQ m15: merge origin/main at e030cc1f (a board-only commit: docs/WORKBOARD.md claims 1558 and 1559), last
+e030cc1ff4 Board: claim 1558 (US Connections truth) and 1559 (GM career for NBA, NHL, MLB, designing)

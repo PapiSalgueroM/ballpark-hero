@@ -1,0 +1,18 @@
+headsha exit=0 0s | e030cc1ff4 Board: claim 1558 (US Connections truth) and 1559 (GM career for NBA, NHL, MLB, designing)
+ctl-motion-whistle exit=0 18s | simLiveSimMotion: control whistle turned "the ninetieth minute asks the latest save" red on an assertion (2 failed), as it must.
+ctl-motion-banner exit=0 14s | simLiveSimMotion: control banner turned "the extra time banner says what is true" red on an assertion (1 failed), as it must.
+simCmShootoutOrder exit=0 35s | simCmShootoutOrder: all sections passed
+simLiveSimMotion exit=0 97s | simLiveSimMotion: green. 66 tests passed (the viewer on real feeds, the pitch part's rules on 200 half feeds and on feeds made by hand, the goal sequence, match mode), an
+ctl-shootout-unsetpath exit=0 38s | simCmShootoutOrder: 3 FAILURE(S)
+tsc exit=0 113s | 
+ctl-shootout-keepleague exit=0 25s | simCmShootoutOrder: 3 FAILURE(S)
+appeal1081 exit=0 57s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+simClubManagerSlots exit=0 107s | simClubManagerSlots: all sections green
+slots-dupe exit=0 110s | CONTROL FIRED: SLOTS_CONTROL=dupe turned section 2 red through its budget check (red sections: 2, 3), as it must
+simUsCareerDeckC exit=0 68s | simUsCareerDeckC: all checks passed
+simUsBoardParity exit=0 88s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen with the proved historical main775 coaching Panel.
+simNoRivalNames exit=0 22s | No rival product names found. 0 findings.
+dashscan-bqi exit=0 0s | since 77ff98ab: added lines with an en or em dash 0, commit message lines with one 0
+dashscan-bq exit=0 0s | since 212b9069: added lines with an en or em dash 0, commit message lines with one 0
+simHarnessAnchors exit=0 57s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+sizediag exit=0 513s | DIAGNOSTIC complete: original/current unchanged historical budgets, full raw states, storage and unfiltered action vectors retained
