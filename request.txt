@@ -1,0 +1,16 @@
+#!serve
+#!playwright
+pf-tycoon: ONLY=/stadium-tycoon node scripts/playFirstVisitDialogs.mjs
+pf1: PLAYFIRST_SHARD=1/3 node scripts/playFirstVisitDialogs.mjs
+pf2: PLAYFIRST_SHARD=2/3 node scripts/playFirstVisitDialogs.mjs
+pf3: PLAYFIRST_SHARD=3/3 node scripts/playFirstVisitDialogs.mjs
+stale: ONLY=/stadium-tycoon PLAYFIRST_CONTROL=stale node scripts/playFirstVisitDialogs.mjs
+jump: ONLY=/stadium-tycoon PLAYFIRST_CONTROL=jump node scripts/playFirstVisitDialogs.mjs
+staleabort: ONLY=/club-manager PLAYFIRST_CONTROL=stale node scripts/playFirstVisitDialogs.mjs
+cover: ONLY=/stadium-tycoon,/idle-arena,/wonderkid-factory,/footle,/build-your-xi PLAYFIRST_CONTROL=cover node scripts/playFirstVisitDialogs.mjs
+ratchet: ONLY=/stadium-tycoon,/idle-arena,/footle,/club-manager PLAYFIRST_CONTROL=ratchet node scripts/playFirstVisitDialogs.mjs
+expected: ONLY=/stadium-tycoon,/idle-arena,/wonderkid-factory,/build-your-xi,/soccer-conquest,/career-ladder,/football-grid,/club-manager PLAYFIRST_CONTROL=expected node scripts/playFirstVisitDialogs.mjs
+edge: ONLY=/stadium-tycoon,/idle-arena,/wonderkid-factory,/build-your-xi,/soccer-conquest,/career-ladder,/football-grid,/club-manager PLAYFIRST_CONTROL=edge node scripts/playFirstVisitDialogs.mjs
+lift: ONLY=/stadium-tycoon,/idle-arena,/wonderkid-factory,/build-your-xi,/soccer-conquest,/career-ladder,/football-grid,/club-manager PLAYFIRST_CONTROL=lift node scripts/playFirstVisitDialogs.mjs
+nobanner: ONLY=/stadium-tycoon,/idle-arena,/wonderkid-factory,/build-your-xi,/soccer-conquest,/career-ladder,/football-grid,/club-manager PLAYFIRST_CONTROL=nobanner node scripts/playFirstVisitDialogs.mjs
+flip: node .rc/x/flipprobe1539.mjs && ONLY=/stadium-tycoon node scripts/pfFlipProbe1539.mjs; a=$?; ONLY=/stadium-tycoon PLAYFIRST_CONTROL=stale node scripts/pfFlipProbe1539.mjs; b=$?; echo "flip probe exits: card $a (want 0), stale $b (want 1)"; [ "$a" = 0 ] && [ "$b" = 1 ]
