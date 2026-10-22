@@ -1,0 +1,1 @@
+pre: mkdir -p /tmp/pre && for n in r1321-k1 r1321-k2; do git fetch -q origin "+refs/heads/rc-results/$n:refs/remotes/origin/rc-results/$n" && for f in $(git ls-tree --name-only origin/rc-results/$n:files/fleet/); do git show origin/rc-results/$n:files/fleet/$f > /tmp/pre/$f; done; done; ls /tmp/pre | wc -l; SIM_NBA_EARNED_DRAFT_COMBINE=/tmp/pre node scripts/simNbaEarnedDraft.mjs

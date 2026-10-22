@@ -1,0 +1,1 @@
+pre exit=0 18s | simNbaEarnedDraft: green.
