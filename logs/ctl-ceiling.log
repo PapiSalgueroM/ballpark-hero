@@ -1,0 +1,9 @@
+control ceiling: the lib is a copy with one rewrite
+1) a greedy museum played past 1e15 saves and loads intact
+  FAIL: day 3.66: a save holding 1.000e+15 did not load intact (refused)
+  FAIL: day 3.66: a save holding 1.005e+15 did not load intact (refused)
+  FAIL: day 3.66: a save holding 1.010e+15 did not load intact (refused)
+   859 of 909 exhibits in 60 days, peak funds 1.45e+17, career 2.49e+18 (11.2s)
+   first save over 1e15 funds on day 3.66, over 1e18 career on day 36.01; 75646 saves past an old ceiling, 75647 refused or changed
+   86 exhibits bought at over 1e15, the first afl number 83 for 1.037e+15 on day 3.66
+simHallLongPlay control ceiling: FIRED, 3 failures in section 1 (red is the right answer)

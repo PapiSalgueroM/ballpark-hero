@@ -1,0 +1,12 @@
+4) the real hook on fake timers
+control hookstampnow: the hook is a copy with one rewrite
+   hookstampnow: deep: a save holding 3.20e+16 funds and 4.10e+18 career loaded and was written back with 3.2001e+16
+   hookstampnow: hidden: 600 wakes a minute apart paid x1.000000 of eight hours at the away rate; meter 28800000 ms while hidden; welcome 4.7768e+7
+   hookstampnow: reload: 3 h hidden then 7 h closed paid x1.000000 of one eight hour absence; the note says x1.000000 of it
+   hookstampnow: refused: the bytes were kept aside once, 286 characters
+   hookstampnow: watched: 240 callbacks paid x1.000000000 of a minute at full rate
+   hookstampnow: glance: 30 hidden wakes a second apart paid x0.500000 of 30 watched seconds; meter 30000 ms while hidden
+   hookstampnow: closed after hidden: 9 h hidden then 48 h closed paid x1.000000 of one eight hour absence; the note says x1.000000 of it
+  FAIL: "8 a save is stamped with the time the museum was paid through, so a reload pays the rest" (red under the control, as it must be): AssertionError: the save was stamped with the time it was written, not the time the museum was paid through: expected 40000 to be +0 // Object.is equality
+   7 of 8 hook tests green
+simHallLongPlay control hookstampnow: FIRED, 1 failure in section 4 (red is the right answer)

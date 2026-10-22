@@ -1,0 +1,12 @@
+4) the real hook on fake timers
+control hookvisible: the hook is a copy with one rewrite
+   hookvisible: deep: a save holding 3.20e+16 funds and 4.10e+18 career loaded and was written back with 3.2001e+16
+   hookvisible: hidden: 600 wakes a minute apart paid x1.000000 of eight hours at the away rate; meter 28800000 ms while hidden; welcome 4.7768e+7
+   hookvisible: reload: 3 h hidden then 7 h closed paid x1.000000 of one eight hour absence; the note says x1.000000 of it
+   hookvisible: refused: the bytes were kept aside once, 286 characters
+   hookvisible: watched: 240 callbacks paid x1.000000000 of a minute at full rate
+   hookvisible: closed after hidden: 9 h hidden then 48 h closed paid x1.000000 of one eight hour absence; the note says x1.000000 of it
+   hookvisible: stamp: a save written 40 s after the last callback carries lastSeen 0 ms from it; the reload paid the away rule exactly
+  FAIL: "6 half a minute in another tab pays as away time and shows no welcome" (red under the control, as it must be): AssertionError: thirty hidden seconds paid x1.0000 of thirty watched ones, not the away rule: expected 103834.81447219702 to be 54076.03327597265 // Object.is equality
+   7 of 8 hook tests green
+simHallLongPlay control hookvisible: FIRED, 1 failure in section 4 (red is the right answer)
