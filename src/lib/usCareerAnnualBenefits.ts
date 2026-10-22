@@ -1,4 +1,7 @@
 import { raiseWithinPotential } from './careerHeadroom';
+import { keyedRng } from './keyedRng';
+import { summerCareerKey } from './usCareerSummer';
+import type { UsCareerCore } from './usCareerSport';
 
 type Sport = 'nfl' | 'nba' | 'mlb' | 'nhl';
 type SupportedCareer = {
@@ -50,3 +53,128 @@ export function liquidateUsCareerPurchases(c: Pick<SupportedCareer, 'purchased' 
   });
   c.yearlyCosts = 0;
 }
+
+/* ─── Round 1534: the shop keeps its promises ───
+
+   The Invest aisle of the four US My Careers sold "Steady 7 percent", "35 percent chance it prints 3M" and
+   "20 percent chance of 5x", the Family Office said "Protects your money" and the lawyer "Heat cools twice as
+   fast", and no code read any of it: the money left Cash and nothing ever came back. This block is the one rule
+   for all four sports, called once from each engine's season end, straight after the pay line.
+
+   - STEADY cards pay their printed percent of what was paid, every season held. A repeatable card (the index
+     funds) pays per buy, so two buys pay twice; a one time card (the wine label, the car dealership) counts once
+     even if an old save holds its id twice.
+   - STAKES settle once, at the end of the first season played after the buy: the printed chance of the printed
+     payout, the whole amount back into Cash, or nothing. Every buy is its own stake with its own roll, drawn on
+     keyedRng keyed to the career (summerCareerKey), the id, the year AFTER the season end moved it and the stake's
+     index, so the season's own stream never moves and a reload cannot re-roll. A settled stake leaves
+     `purchased` (cashed out or gone), so a one time stake can be bought again once it has settled.
+   - THE FAMILY OFFICE adds 2 percent of Cash a season when Cash is above zero, read after the pay, the upkeep,
+     the stakes and the steady returns, the order Soccer Career's office runs in (its card: "+2% net worth growth
+     per season").
+   - THE LAWYER makes a clean season cool the heat twice as fast: usCareerSeasonCool, read by the four engines'
+     heat drift and by the Dirty Money desk's printed bans (careerDirtyMoney.ts), so both say the same thing.
+   - ROUNDING. The pay line leaves Cash in tenths. A steady return rarely is one (7 percent of 2M is 0.14M), so
+     the steady money and the office go through one carry: the season's amount plus the carry is floored to the
+     tenth and banked, and the rest (under 0.1M, kept to 0.0001M) waits in `shopCarry` for the next season. Over
+     the seasons Cash gains the printed rate exactly, less at most 0.0999M waiting. Stake payouts are whole tenths
+     and land in full.
+   - A career that holds nothing that pays gets [] back and nothing written: no `shopCarry` key appears, so every
+     such season replays byte for byte as it did before this round (scripts/simUsShopPromises.mjs section 8).
+   - Old saves: the first season end after this round pays one season of every steady card and the office and
+     settles each stake once. Nothing is paid for seasons already played.
+   Every number below is the card's own printed number; none is a real world fact. */
+
+/** What each paying card prints. Steady: its yearly rate on what was paid. Stake: its chance, and either a flat
+ *  payout or a multiple of what was paid. One row per id: restaurant_group and wine_label are the same card, with
+ *  the same numbers, in every sport that sells them. */
+export const US_SHOP_RETURNS: Readonly<Record<string, { rate: number } | { chance: number; flat?: number; times?: number }>> = {
+  index_fund: { rate: 0.07 }, index_nba: { rate: 0.07 }, index_mlb: { rate: 0.07 }, index_nhl: { rate: 0.07 },
+  wine_label: { rate: 0.10 }, car_dealership: { rate: 0.09 },
+  restaurant_group: { chance: 0.35, flat: 3 }, wing_franchise: { chance: 0.35, flat: 2.5 },
+  crypto_punt: { chance: 0.2, times: 5 }, crypto_nba: { chance: 0.2, times: 5 },
+  crypto_mlb: { chance: 0.2, times: 5 }, crypto_nhl: { chance: 0.2, times: 5 },
+  esports_team: { chance: 0.3, times: 3 },
+};
+export const US_FAMILY_OFFICES: readonly string[] = ['family_office', 'family_office_nba', 'family_office_mlb', 'family_office_nhl'];
+export const US_FAMILY_OFFICE_RATE = 0.02;
+export const US_LAWYERS: readonly string[] = ['shady_lawyer', 'nshady_lawyer', 'mshady_lawyer', 'hshady_lawyer'];
+
+/** The heat a season with no dirty money cools by: twice the usual with a lawyer on retainer. */
+export function usCareerSeasonCool(purchased: readonly string[] | undefined, cool: number): number {
+  return (purchased ?? []).some(id => US_LAWYERS.includes(id)) ? cool * 2 : cool;
+}
+
+type ShopCareer = UsCareerCore & { shopCarry?: number };
+type ShopItem = { id: string; name: string; cost: number; oneTime: boolean };
+const shopMoney = (v: number): string => `$${Number(v.toFixed(4))}M`;
+
+/** The season end of the shop: steady returns, stakes and the family office into Cash. Call it once per season
+ *  end, after the pay line and before the money app's tick. Mutates like applyUsCareerAnnualBenefits and returns
+ *  the feed lines. */
+export function settleUsCareerShop(c: ShopCareer, items: readonly ShopItem[]): string[] {
+  const held = c.purchased ?? [];
+  const holds = (id: string) => held.reduce((n, x) => (x === id ? n + 1 : n), 0);
+  const office = held.some(id => US_FAMILY_OFFICES.includes(id));
+  let steady = 0;
+  let payouts = 0;
+  const settled = new Set<string>();
+  const lines: string[] = [];
+  for (const card of items) {
+    const row = US_SHOP_RETURNS[card.id];
+    const count = row ? holds(card.id) : 0;
+    if (!row || count === 0) continue;
+    if ('rate' in row) { steady += card.cost * row.rate * (card.oneTime ? 1 : count); continue; }
+    settled.add(card.id);
+    for (let i = 0; i < count; i++) {
+      const won = keyedRng(`${summerCareerKey(c)}|shop|${card.id}|${c.year}|${i}`)() < row.chance;
+      const pay = row.flat ?? card.cost * (row.times ?? 0);
+      if (won) payouts += pay;
+      lines.push(won
+        ? `🎰 Your ${card.name} came through: ${shopMoney(pay)} back on the ${shopMoney(card.cost)} you put in.`
+        : `💸 Your ${card.name} did not come through. The ${shopMoney(card.cost)} you put in is gone.`);
+    }
+  }
+  if (!office && steady === 0 && settled.size === 0) return lines;
+  if (settled.size) c.purchased = held.filter(id => !settled.has(id));
+  const cash = (c.netWorth ?? 0) + payouts;
+  const added = office && cash + steady > 0 ? (cash + steady) * US_FAMILY_OFFICE_RATE : 0;
+  const earned = steady + added;
+  if (earned > 0) {
+    const prior = c.shopCarry;
+    const carry = typeof prior === 'number' && Number.isFinite(prior) && prior >= 0 && prior < 0.1 ? prior : 0;
+    const exact = Math.round((carry + earned) * 10000);
+    const tenths = Math.floor(exact / 1000);
+    c.shopCarry = (exact - tenths * 1000) / 10000;
+    c.netWorth = Math.round((cash + tenths / 10) * 10) / 10;
+    const what = [steady > 0 ? `your investments earned ${shopMoney(steady)}` : '', added > 0 ? `the family office added ${shopMoney(added)}` : '']
+      .filter(Boolean).join(' and ');
+    const waits = c.shopCarry > 0 ? `, and ${shopMoney(c.shopCarry)} waits for next season` : '';
+    lines.unshift(`💵 This season ${what}. ${shopMoney(tenths / 10)} went into the Bank${waits}.`);
+  } else if (payouts > 0) {
+    c.netWorth = Math.round(cash * 10) / 10;
+  }
+  return lines;
+}
+
+/** The worked example's prices: the index fund's and the crypto punt's own price in all four sports (the unit
+ *  test reads the eight cards and holds these to them). */
+const HELP_INDEX_COST = 2;
+const HELP_CRYPTO_COST = 1;
+
+/** The rule behind each page's "?", built from the table above so it can never print another number. */
+export const US_SHOP_HELP_RULE: string = (() => {
+  const index = US_SHOP_RETURNS.index_nba as { rate: number };
+  const crypto = US_SHOP_RETURNS.crypto_nba as { chance: number; times: number };
+  const pct = (v: number) => `${Math.round(v * 100)} percent`;
+  const earned = Math.round(HELP_INDEX_COST * index.rate * 10000) / 10000;
+  const banked = Math.floor(earned * 10 + 1e-9) / 10;
+  const waits = Math.round((earned - banked) * 10000) / 10000;
+  const odds = Math.round(1 / crypto.chance);
+  return `The shop pays what its cards say, at the end of every season you play. Put ${HELP_INDEX_COST}M in the Boring Index Fund `
+    + `and it pays ${pct(index.rate)}, ${earned}M, every season. Cash moves in tenths, so ${banked}M lands this season and the `
+    + `${waits}M waits for the next one. A stake like the Crypto Punt settles once, at the end of your next season: one time in `
+    + `${odds} you get ${crypto.times * HELP_CRYPTO_COST}M back on your ${HELP_CRYPTO_COST}M, otherwise it is gone, and once it has settled you can buy another. The `
+    + `Family Office adds ${pct(US_FAMILY_OFFICE_RATE)} of your cash every season, and the lawyer makes a clean season cool your `
+    + 'heat twice as fast. Selling your lifestyle assets when you go broke sells your investments too.';
+})();
