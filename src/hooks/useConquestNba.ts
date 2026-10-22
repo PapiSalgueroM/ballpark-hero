@@ -9,8 +9,9 @@
 // depends on (geometry, adjacency, direction/compass math shape) is still
 // shared via conquestData.ts's exports (STATE_POSITIONS, DIRECTIONS,
 // DIR_ANGLES, DIR_LABELS, STATE_GEO_COORDS, isLightColor) and
-// conquestPowerups.ts's POWERUPS/getRandomPowerup/FREE_AGENTS, so nothing
-// sport-agnostic is copy-pasted twice.
+// conquestPowerups.ts's POWERUPS/getRandomPowerup, so nothing sport-agnostic
+// is copy-pasted twice. Who a team can sign comes from src/lib/conquestMarket.ts,
+// the one rule the NFL hook uses too (Round 1547).
 
 import { useState, useRef, useCallback, useEffect } from 'react';
 import {
@@ -18,14 +19,15 @@ import {
 } from '@/data/conquestData';
 import {
   NBA_TEAMS, NBA_TEAM_MAP, INITIAL_TERRITORIES_NBA,
-  CONQUEST_FREE_AGENCY_POOL_NBA, ConquestFreeAgentCandidateNba,
+  ConquestFreeAgentCandidateNba,
   TEAM_LEGENDS_NBA,
 } from '@/data/conquestDataNba';
 import { NBA_STATES } from '@/data/usStatesPaths';
 import {
   PowerupId, PowerupDef, POWERUPS, getRandomPowerup,
-  FREE_AGENTS, FreeAgent,
+  RETIRED_GREATS_NBA, FreeAgent,
 } from '@/data/conquestPowerups';
+import { fallenTeamMarket, retiredNames, signingList } from '@/lib/conquestMarket';
 import { simulateDetailedBattleNba, BattleSimulation, PlayEvent, BoxScore, TeamStatLine, TeamRatingOverride } from '@/lib/conquestBattleNba';
 
 export type Phase =
@@ -66,7 +68,7 @@ export interface PowerRankEntry {
 }
 
 export type { PowerupId, PowerupDef, FreeAgent, BattleSimulation, PlayEvent, BoxScore, TeamStatLine, TeamRatingOverride, ConquestFreeAgentCandidateNba };
-export { POWERUPS, FREE_AGENTS, TEAM_LEGENDS_NBA, CONQUEST_FREE_AGENCY_POOL_NBA };
+export { POWERUPS, RETIRED_GREATS_NBA, TEAM_LEGENDS_NBA };
 
 const POWER_RANK_WIN_BUMP = 1.5;
 const POWER_RANK_LOSS_BUMP = -1.5;
@@ -97,6 +99,33 @@ function pickRandomPowerupStates(): Set<string> {
   const count = 4 + Math.floor(Math.random() * 4);
   const shuffled = neutralIds.sort(() => Math.random() - 0.5);
   return new Set(shuffled.slice(0, count));
+}
+
+// A player's card wherever he travels (steals, signings, a fallen team's
+// market): team tables first, then the retired greats, then franchise legends.
+// Built on first use, not at module scope.
+let playerInfoNba: Map<string, { position: string; overall: number }> | null = null;
+function lookupPlayerInfoNba(name: string): { position: string; overall: number } {
+  if (!playerInfoNba) {
+    const m = new Map<string, { position: string; overall: number }>();
+    const add = (p: { name: string; position: string; overall: number }) => { if (!m.has(p.name)) m.set(p.name, { position: p.position, overall: p.overall }); };
+    NBA_TEAMS.forEach(t => (t.players || []).forEach(add));
+    RETIRED_GREATS_NBA.forEach(add);
+    Object.values(TEAM_LEGENDS_NBA).forEach(add);
+    playerInfoNba = m;
+  }
+  return playerInfoNba.get(name) || { position: '?', overall: 75 };
+}
+
+// Franchise legends and retired greats: they can join a roster in a run but
+// never hit the market (src/lib/conquestMarket.ts). Built on first use.
+let neverOnMarketNba: Set<string> | null = null;
+function nbaNeverOnMarket(): Set<string> {
+  if (!neverOnMarketNba) {
+    const onTable = new Set(NBA_TEAMS.flatMap(t => (t.players || []).map(p => p.name)));
+    neverOnMarketNba = retiredNames(TEAM_LEGENDS_NBA, RETIRED_GREATS_NBA, n => onTable.has(n));
+  }
+  return neverOnMarketNba;
 }
 
 function buildInitialRosters(): Record<string, string[]> {
@@ -314,27 +343,18 @@ export function useConquestNba() {
     [territories],
   );
 
-  const buildFreeAgentList = useCallback(() => {
-    const activeRosterNames = new Set<string>();
-    const alive = getAliveTeamsFrom(territories);
-    for (const tid of alive) {
-      for (const name of (rosters[tid] || [])) activeRosterNames.add(name);
-    }
+  // Round 1547: the power up deals basketball's retired greats plus every
+  // fallen team's final roster (it used to deal the NFL list, football players
+  // onto NBA rosters); the docked Free Agency tab is that market alone.
+  const buildFreeAgentList = useCallback((): FreeAgent[] => signingList(
+    { rosters, alive: getAliveTeamsFrom(territories), eliminated, cardOf: lookupPlayerInfoNba, neverOnMarket: nbaNeverOnMarket() },
+    RETIRED_GREATS_NBA,
+  ), [territories, rosters, eliminated]);
 
-    const agents: FreeAgent[] = FREE_AGENTS.filter(fa => !activeRosterNames.has(fa.name));
-
-    for (const elimId of eliminated) {
-      const team = NBA_TEAM_MAP.get(elimId);
-      if (!team) continue;
-      for (const p of (team.players || [])) {
-        if (!activeRosterNames.has(p.name)) {
-          agents.push({ name: p.name, position: p.position, overall: p.overall });
-        }
-      }
-    }
-
-    return agents.sort((a, b) => b.overall - a.overall).slice(0, 30);
-  }, [territories, rosters, eliminated]);
+  const freeAgencyPool = useCallback((): ConquestFreeAgentCandidateNba[] => fallenTeamMarket(
+    { rosters, alive: getAliveTeamsFrom(territories), eliminated, cardOf: lookupPlayerInfoNba, neverOnMarket: nbaNeverOnMarket() },
+    id => NBA_TEAM_MAP.get(id)?.name || id,
+  ), [territories, rosters, eliminated]);
 
   const executePowerup = useCallback((teamId: string, puId: PowerupId) => {
     switch (puId) {
@@ -838,7 +858,7 @@ export function useConquestNba() {
     stealModalOpen, pendingBattleApply, playerConfirmed,
     powerRankings,
     favoriteTeam, setFavoriteTeam, conquestsSinceSign, signedFreeAgents,
-    canSignFreeAgent, signFreeAgencyCandidate,
+    canSignFreeAgent, signFreeAgencyCandidate, freeAgencyPool,
     freeAgencyCooldownRemaining: Math.max(0, FREE_AGENCY_SIGN_COOLDOWN - conquestsSinceSign),
     canSkipBattle, skipToResult,
     startBattle, stealPlayer, reset, aliveTeams, getTeamTerritoryCount,

@@ -493,7 +493,9 @@ console.log(`   men with two numbers: ${twoNumbers.length} shipped (${numbersOf.
   const pair = compareNumbers([conquest, everyone]);
   const { elsewhere, nowhere } = strangers(conquest, everyone);
   const freeAgents = [];
-  for (const [file, from, to] of [['src/data/conquestData.ts', 'export const CONQUEST_FREE_AGENCY_POOL', '];'], ['src/data/conquestPowerups.ts', 'export const FREE_AGENTS', '];']]) {
+  /* Round 1547: Conquest's two hand typed free agent lists are gone; the one list of real names a Conquest team can sign
+     outside the rosters is the power up's retired greats. */
+  for (const [file, from, to] of [['src/data/conquestPowerups.ts', 'export const RETIRED_GREATS_NFL', '];']]) {
     const text = stripComments(read(file));
     const start = text.indexOf(from), list = text.slice(start, text.indexOf(to, start));
     for (const m of list.matchAll(new RegExp(`\\{ name: ${QUOTED}, position: '(\\w+)', overall: (\\d+)`, 'g'))) freeAgents.push({ file, name: unq(m[1] ?? m[2]), number: Number(m[4]) });
