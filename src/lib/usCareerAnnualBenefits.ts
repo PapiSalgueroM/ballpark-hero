@@ -204,10 +204,18 @@ export function bankUsCareerFee(c: { earnings: number; netWorth?: number }, amou
   return fee;
 }
 
-/** The summer Skill answer: health +4 from the maintenance age on (no draw), else one draw for +1 or +2, held at
- *  the ceiling, and the line says what the rating really did. */
-export function usCareerSkillSummer(cc: { age: number; health: number; ovr: number; pot: number }, r: () => number, maintenanceAge: number, maintenanceLine: string): string {
-  if (cc.age >= maintenanceAge) { cc.health = Math.min(100, cc.health + 4); return maintenanceLine; }
+/** The summer Skill answer: health +4 from the maintenance age on (no draw), held at 100, else one draw for +1 or
+ *  +2, held at the ceiling, and the line says what really landed. `maintenanceLead` opens the maintenance line. */
+export function usCareerSkillSummer(cc: { age: number; health: number; ovr: number; pot: number }, r: () => number, maintenanceAge: number, maintenanceLead: string): string {
+  if (cc.age >= maintenanceAge) {
+    /* Review of 2026-10-22: the line said "Health +4" even when health was at 100 and nothing landed. */
+    const was = cc.health;
+    cc.health = Math.min(100, cc.health + 4);
+    const gain = cc.health - was;
+    if (gain >= 4) return `${maintenanceLead} Health +4.`;
+    if (gain > 0) return `${maintenanceLead} Health +${gain}, and that is full health.`;
+    return `${maintenanceLead} You were already at full health, so it stays at ${cc.health}.`;
+  }
   const up = 1 + Math.floor(r() * 2);
   const was = cc.ovr;
   cc.ovr = raiseWithinPotential(cc.ovr, cc.pot, up);

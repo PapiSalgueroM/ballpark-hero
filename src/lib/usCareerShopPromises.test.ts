@@ -250,27 +250,39 @@ describe('Round 1538: a paid line banks what it says, and the Skill card stops a
   });
   it('the Skill answer holds the rating at the ceiling and says what landed', () => {
     const at = { age: 24, health: 70, ovr: 80, pot: 80 };
-    expect(usCareerSkillSummer(at, () => 0.9, 31, 'Maintenance year. Health +4.')).toBe('You were already at your ceiling, so the rating stays at 80.');
+    expect(usCareerSkillSummer(at, () => 0.9, 31, 'Maintenance year.')).toBe('You were already at your ceiling, so the rating stays at 80.');
     expect(at.ovr).toBe(80);
     const under = { age: 24, health: 70, ovr: 79, pot: 80 };
-    expect(usCareerSkillSummer(under, () => 0.9, 31, 'Maintenance year. Health +4.')).toBe('Rating +1, and that is your ceiling.');
+    expect(usCareerSkillSummer(under, () => 0.9, 31, 'Maintenance year.')).toBe('Rating +1, and that is your ceiling.');
     expect(under.ovr).toBe(80);
     const room = { age: 24, health: 70, ovr: 70, pot: 80 };
-    expect(usCareerSkillSummer(room, () => 0.9, 31, 'Maintenance year. Health +4.')).toBe('Rating +2.');
+    expect(usCareerSkillSummer(room, () => 0.9, 31, 'Maintenance year.')).toBe('Rating +2.');
     expect(room.ovr).toBe(72);
     const top = { age: 24, health: 70, ovr: 99, pot: 99 };
-    usCareerSkillSummer(top, () => 0.9, 31, 'Maintenance year. Health +4.');
+    usCareerSkillSummer(top, () => 0.9, 31, 'Maintenance year.');
     expect(top.ovr).toBe(99);
+    /* Another card can leave the rating above the ceiling: the Skill answer keeps it there, never pulls it down. */
+    const over = { age: 24, health: 70, ovr: 83, pot: 80 };
+    expect(usCareerSkillSummer(over, () => 0.9, 31, 'Maintenance year.')).toBe('You were already at your ceiling, so the rating stays at 83.');
+    expect(over.ovr).toBe(83);
   });
   it('the Skill answer draws once under the maintenance age and never from it', () => {
     let draws = 0;
     const r = () => { draws += 1; return 0; };
     const young = { age: 30, health: 70, ovr: 70, pot: 80 };
-    expect(usCareerSkillSummer(young, r, 31, 'Maintenance year. Health +4.')).toBe('Rating +1.');
+    expect(usCareerSkillSummer(young, r, 31, 'Maintenance year.')).toBe('Rating +1.');
     expect(draws).toBe(1);
-    const vet = { age: 31, health: 98, ovr: 70, pot: 80 };
-    expect(usCareerSkillSummer(vet, r, 31, 'Maintenance year. Health +4.')).toBe('Maintenance year. Health +4.');
+    const vet = { age: 31, health: 70, ovr: 70, pot: 80 };
+    expect(usCareerSkillSummer(vet, r, 31, 'Maintenance year.')).toBe('Maintenance year. Health +4.');
     expect(draws).toBe(1);
-    expect(vet).toEqual({ age: 31, health: 100, ovr: 70, pot: 80 });
+    expect(vet).toEqual({ age: 31, health: 74, ovr: 70, pot: 80 });
+    /* The line says the health that landed (review of 2026-10-22): held at 100, part of the 4 or none of it. */
+    const near = { age: 31, health: 98, ovr: 70, pot: 80 };
+    expect(usCareerSkillSummer(near, r, 31, 'Maintenance year.')).toBe('Maintenance year. Health +2, and that is full health.');
+    expect(near).toEqual({ age: 31, health: 100, ovr: 70, pot: 80 });
+    const full = { age: 33, health: 100, ovr: 70, pot: 80 };
+    expect(usCareerSkillSummer(full, r, 31, 'Maintenance year.')).toBe('Maintenance year. You were already at full health, so it stays at 100.');
+    expect(full).toEqual({ age: 33, health: 100, ovr: 70, pot: 80 });
+    expect(draws).toBe(1);
   });
 });

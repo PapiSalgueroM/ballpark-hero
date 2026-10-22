@@ -129,11 +129,13 @@ const BRAND_1538 = {
 /* and the summer Skill answer through the shared Skill helper, with its new button words (critic 8). */
 const SKILL_TAIL_1538 = 'const up = 1 + Math.floor(r() * 2); cc.ovr = Math.min(cc.pot + 1, cc.ovr + up); return `Rating +${up}.`; } },';
 const SKILL_AGE = { nba: 31, nfl: 30, mlb: 32, nhl: 31 };
-const SKILL_SAYS = { nba: 'Maintenance year. Health +4.', nfl: 'At this age the gains are in maintenance. Health +4.', mlb: 'Veteran maintenance. Health +4.', nhl: 'Maintenance summer. Health +4.' };
+/* The maintenance line opens with the lead and says the health that landed (review of 2026-10-22, minors 1 and 5). */
+const SKILL_LEAD = { nba: 'Maintenance year.', nfl: 'At this age the gains are in maintenance.', mlb: 'Veteran maintenance.', nhl: 'Maintenance summer.' };
+const SKILL_SAYS = Object.fromEntries(Object.entries(SKILL_LEAD).map(([id, lead]) => [id, `${lead} Health +4.`]));
 const SKILL_WAS_EFFECT = { nba: 'Push the ceiling', nfl: 'Push your ceiling', mlb: 'Push the ceiling', nhl: 'Push the ceiling' };
 const SKILL_1538 = sport => {
   const age = SKILL_AGE[sport.id], says = SKILL_SAYS[sport.id];
-  return [`effect: c.age >= ${age} ? 'Health +4' : 'Rating +1 or +2, up to your ceiling', apply: (cc, r) => usCareerSkillSummer(cc, r, ${age}, '${says}') },`,
+  return [`effect: c.age >= ${age} ? 'Health +4, up to 100' : 'Rating +1 or +2, up to your ceiling', apply: (cc, r) => usCareerSkillSummer(cc, r, ${age}, '${SKILL_LEAD[sport.id]}') },`,
     `effect: '${SKILL_WAS_EFFECT[sport.id]}', apply: (cc, r) => { if (cc.age >= ${age}) { cc.health = Math.min(100, cc.health + 4); return '${says}'; } ${SKILL_TAIL_1538}`];
 };
 const unshopHunks = sport => [
@@ -649,7 +651,8 @@ if (runs('8')) {
    (a) Every sport's Skill answer from a fixed state: at the ceiling the rating stays and the line says so; above
        it the rating stays where it is, never pulled down, and the line says so; one
        under it with a draw of 2 it lands one and says that is the ceiling; with room it lands the draw; under the
-       maintenance age it draws once, from that age it draws nothing and gives health +4 (critic 5), and its button
+       maintenance age it draws once, from that age it draws nothing and gives health +4 (critic 5), held at 100,
+       with a line that says how much landed (review of 2026-10-22, minors 1 and 5), and its button
        says what lands at each age (critic 8). Ages and words are literals.
    (b) The summer fleet: careers through the board's own summer deal (startSummer and answerSummerCard on the sport
        binding, the way simCareerHall sections 9 to 14 drive it), base arm against head arm, on section 8's policy
@@ -664,7 +667,10 @@ if (runs('8')) {
        answer pulled a rating above pot + 1 back down, so it counted as a move and the card was skipped. Any other
        first divergence is red. A first divergence at the Skill answer only says where the trees parted, not that the
        head was right there, so every young Skill answer the head gives is also checked on its own: the rating never
-       goes down, never past max(rating, min(99, pot)), never by more than 2 (run lens finding 2). */
+       goes down, never past max(rating, min(99, pot)), never by more than 2 (run lens finding 2), and from the
+       maintenance age it moves health by min(100, health + 4) and nothing else. Since the review of 2026-10-22 the
+       maintenance line says the health that landed, so a first divergence at that answer with health above 96 is
+       the line's own change and counted as such. */
 const SKILL_LABELS = new Set(['Skill grind', 'Skill work', 'New pitch lab', 'Swing rebuild', 'Skills coach']);
 const FLEET_SETS = (process.env.SHOP_FLEET_SETS || '1538,2024').split(',').map(Number);
 const FLEET_CAREERS = Number(process.env.SHOP_FLEET_CAREERS || 120);
@@ -681,7 +687,7 @@ function skillCase(sport, who, over, draw, want) {
   const c = clone(run.c);
   const line = option.apply(c, () => { n += 1; return draw; });
   const young = run.c.age < SKILL_AGE[sport.id];
-  if (option.effect !== (young ? 'Rating +1 or +2, up to your ceiling' : 'Health +4')) fail('7', `${sport.id} skill ${who}`, `the button says "${option.effect}" at age ${run.c.age}`);
+  if (option.effect !== (young ? 'Rating +1 or +2, up to your ceiling' : 'Health +4, up to 100')) fail('7', `${sport.id} skill ${who}`, `the button says "${option.effect}" at age ${run.c.age}`);
   if (n !== (young ? 1 : 0)) fail('7', `${sport.id} skill ${who}`, `it drew ${n} times at age ${run.c.age}`);
   if (c.ovr !== want.ovr || (want.health !== undefined && c.health !== want.health)) fail('7', `${sport.id} skill ${who}`, `rating ${run.c.ovr} to ${c.ovr} (want ${want.ovr}), health ${c.health}`);
   if (!String(line).includes(want.says)) fail('7', `${sport.id} skill ${who}`, `the line "${line}" does not say "${want.says}"`);
@@ -744,9 +750,12 @@ if (runs('7')) {
     /* A rating already above the ceiling (another card can put it there: NHL career 1538/69's oversized pads took
        it to 93 over 90) keeps it, and the line says so (run lens finding 2; control clampdown). */
     skillCase(sport, 'above the ceiling', { ovr: 83 }, 0.9, { ovr: 83, says: 'so the rating stays at 83.' });
-    skillCase(sport, 'at the maintenance age', { age, ovr: 70 }, 0.9, { ovr: 70, health: 74, says: 'Health +4.' });
+    skillCase(sport, 'at the maintenance age', { age, ovr: 70 }, 0.9, { ovr: 70, health: 74, says: `${SKILL_LEAD[sport.id]} Health +4.` });
+    /* Health is held at 100, and the line says what landed (review of 2026-10-22, minors 1 and 5). */
+    skillCase(sport, 'two short of full health', { age, ovr: 70, health: 98 }, 0.9, { ovr: 70, health: 100, says: `${SKILL_LEAD[sport.id]} Health +2, and that is full health.` });
+    skillCase(sport, 'at full health', { age, ovr: 70, health: 100 }, 0.9, { ovr: 70, health: 100, says: `${SKILL_LEAD[sport.id]} You were already at full health, so it stays at 100.` });
     skillCase(sport, 'one year under it', { age: age - 1, ovr: 70 }, 0, { ovr: 71, says: 'Rating +1.' });
-    const kinds = { deal: 0, answer: 0, later: 0 };
+    const kinds = { deal: 0, answer: 0, later: 0, health: 0 };
     let careers = 0, offseasons = 0, parted = 0, skillAnswers = 0, overCap = 0;
     for (const set of FLEET_SETS) for (let k = 0; k < FLEET_CAREERS; k += 1) {
       const a = summerLife(H, sport, set, k), b = summerLife(B, sport, set, k);
@@ -754,7 +763,11 @@ if (runs('7')) {
       /* Every Skill answer the head arm gives under the maintenance age, not only a first divergence (run lens
          finding 2): it never lowers the rating, never lifts it past max(rating, min(99, pot)), never by more than 2. */
       for (const { ctx } of a) {
-        if (ctx.kind !== 'answer' || !ctx.skill || ctx.age >= age) continue;
+        if (ctx.kind !== 'answer' || !ctx.skill) continue;
+        if (ctx.age >= age) {
+          if (ctx.after.ovr !== ctx.ovr || ctx.after.health !== Math.min(100, ctx.health + 4)) fail('7', `${sport.id} skill answer ${set}/${k}`, `the maintenance answer took health ${ctx.health} to ${ctx.after.health} and the rating ${ctx.ovr} to ${ctx.after.ovr}`);
+          continue;
+        }
         skillAnswers += 1;
         const cap = Math.min(99, ctx.pot);
         if (ctx.ovr > cap) overCap += 1;
@@ -767,11 +780,14 @@ if (runs('7')) {
       const ctx = a[i]?.ctx ?? b[i]?.ctx, cap = ctx ? Math.min(99, ctx.pot) : 0;
       const skillAt = ctx && ctx.kind === 'answer' && ctx.skill && ctx.ovr >= cap - 1;
       const laterAt = ctx && ctx.kind === 'answer' && ctx.later && ctx.after && ctx.after.ovr >= Math.min(99, ctx.after.pot);
-      const ok = ctx && ctx.age < age && ((ctx.kind === 'deal' && ctx.ovr >= cap) || skillAt || laterAt);
-      if (ok) kinds[ctx.kind === 'deal' ? 'deal' : skillAt ? 'answer' : 'later'] += 1;
+      /* From the maintenance age the answer's line now says the health that landed, so near full health (above 96)
+         the two trees print different lines for the same move (review of 2026-10-22, minors 1 and 5). */
+      const healthAt = ctx && ctx.kind === 'answer' && ctx.skill && ctx.age >= age && ctx.health > 96;
+      const ok = ctx && ((ctx.age < age && ((ctx.kind === 'deal' && ctx.ovr >= cap) || skillAt || laterAt)) || healthAt);
+      if (ok) kinds[healthAt ? 'health' : ctx.kind === 'deal' ? 'deal' : skillAt ? 'answer' : 'later'] += 1;
       else fail('7', `${sport.id} fleet ${set}/${k}`, `first parts at record ${i} (${ctx?.kind ?? 'end'}, rating ${ctx?.ovr} of ${ctx?.pot}, age ${ctx?.age}), where the rider does not act; head [${a[i - 1]?.rec.slice(0, 90)}] then [${a[i]?.rec.slice(0, 160)}], base then [${b[i]?.rec.slice(0, 160)}]`);
     }
-    console.log(`   ${sport.id}: (a) 7 cases; fleet ${careers} careers, ${offseasons} offseasons, ${parted} parted from the base arm, ${kinds.deal} first at a deal at the ceiling, ${kinds.answer} at the Skill answer and ${kinds.later} at an answer before a later training card; ${skillAnswers} young Skill answers on the head, ${overCap} of them above the ceiling`);
+    console.log(`   ${sport.id}: (a) 9 cases; fleet ${careers} careers, ${offseasons} offseasons, ${parted} parted from the base arm, ${kinds.deal} first at a deal at the ceiling, ${kinds.answer} at the Skill answer and ${kinds.later} at an answer before a later training card, ${kinds.health} at a maintenance answer near full health; ${skillAnswers} young Skill answers on the head, ${overCap} of them above the ceiling`);
   }
 }
 

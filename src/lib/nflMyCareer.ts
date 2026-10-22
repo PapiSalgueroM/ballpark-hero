@@ -1189,7 +1189,7 @@ function buildNflDeck(c: CareerState, rng: () => number, stopAtBig: boolean): { 
     title: 'Offseason focus',
     body: 'Twelve weeks before camp. Where does the work go?',
     options: [
-      { label: 'Skill work', effect: c.age >= 30 ? 'Health +4' : 'Rating +1 or +2, up to your ceiling', apply: (cc, r) => usCareerSkillSummer(cc, r, 30, 'At this age the gains are in maintenance. Health +4.') },
+      { label: 'Skill work', effect: c.age >= 30 ? 'Health +4, up to 100' : 'Rating +1 or +2, up to your ceiling', apply: (cc, r) => usCareerSkillSummer(cc, r, 30, 'At this age the gains are in maintenance.') },
       { label: 'Body work', effect: 'Durability and recovery', apply: (cc) => { cc.health = Math.min(100, cc.health + 10); return 'Health +10. You feel five years younger.'; } },
       { label: 'Brand work', effect: 'Fame and endorsements', apply: (cc) => { /* Round 1104: the fee reaches the bank, in the era's money. Round 1538: through the helper all four sports share, which never rounds the balance again. */ cc.fanbase = Math.min(100, cc.fanbase + 12); const fee = bankUsCareerFee(cc, 3, nflEraById(cc.eraId).moneyScale); return `Fanbase +12 and a ${fee}M endorsement, banked.`; } },
     ],

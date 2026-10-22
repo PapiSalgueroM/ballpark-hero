@@ -100,7 +100,9 @@ function unlift1534(rel, text) {
 
 /* Round 1538 (money a line says was banked reaches the Bank; the Skill card stops at the ceiling) edits the same two
    engines: one import line, the summer brand answer through the shared fee helper, and the summer Skill answer
-   through the shared Skill helper with its new button words. Decided again the same way: each hunk is put back
+   through the shared Skill helper with its new button words (since the review of 2026-10-22 the maintenance button
+   reads "Health +4, up to 100" and the helper is handed the line's lead, so it can say the health that landed).
+   Decided again the same way: each hunk is put back
    first, required exactly once, before the 1534 hunks and the byte check against 1313's closed head. */
 const BRAND_1538 = {
   'src/lib/mlbMyCareer.ts': ['const fee = bankUsCareerFee(cc, 3, mlbEraById(cc.eraId).moneyScale); return `National ads all winter. ${fee}M banked.`;', "cc.earnings += 3; return 'National ads all winter. 3M banked.';"],
@@ -108,9 +110,9 @@ const BRAND_1538 = {
 };
 const SKILL_TAIL_1538 = 'const up = 1 + Math.floor(r() * 2); cc.ovr = Math.min(cc.pot + 1, cc.ovr + up); return `Rating +${up}.`; } },';
 const SKILL_1538 = {
-  'src/lib/mlbMyCareer.ts': ["effect: c.age >= 32 ? 'Health +4' : 'Rating +1 or +2, up to your ceiling', apply: (cc, r) => usCareerSkillSummer(cc, r, 32, 'Veteran maintenance. Health +4.') },",
+  'src/lib/mlbMyCareer.ts': ["effect: c.age >= 32 ? 'Health +4, up to 100' : 'Rating +1 or +2, up to your ceiling', apply: (cc, r) => usCareerSkillSummer(cc, r, 32, 'Veteran maintenance.') },",
     "effect: 'Push the ceiling', apply: (cc, r) => { if (cc.age >= 32) { cc.health = Math.min(100, cc.health + 4); return 'Veteran maintenance. Health +4.'; } " + SKILL_TAIL_1538],
-  'src/lib/nhlMyCareer.ts': ["effect: c.age >= 31 ? 'Health +4' : 'Rating +1 or +2, up to your ceiling', apply: (cc, r) => usCareerSkillSummer(cc, r, 31, 'Maintenance summer. Health +4.') },",
+  'src/lib/nhlMyCareer.ts': ["effect: c.age >= 31 ? 'Health +4, up to 100' : 'Rating +1 or +2, up to your ceiling', apply: (cc, r) => usCareerSkillSummer(cc, r, 31, 'Maintenance summer.') },",
     "effect: 'Push the ceiling', apply: (cc, r) => { if (cc.age >= 31) { cc.health = Math.min(100, cc.health + 4); return 'Maintenance summer. Health +4.'; } " + SKILL_TAIL_1538],
 };
 const LIFT_1538 = Object.fromEntries(Object.entries(BRAND_1538).map(([rel, brand]) => [rel, [
