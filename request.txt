@@ -1,0 +1,14 @@
+simCareerPendingMoneyGates: node scripts/simCareerPendingMoneyGates.mjs
+simSoccerCareerPendingLife: node scripts/simSoccerCareerPendingLife.mjs
+simCareerPendingOverallGates: node scripts/simCareerPendingOverallGates.mjs
+simSoccerCareerDocumentaryReview: node scripts/simSoccerCareerDocumentaryReview.mjs
+simSoccerCareerPendingMorale: node scripts/simSoccerCareerPendingMorale.mjs
+simPhoneSeasonBudget: node scripts/simPhoneSeasonBudget.mjs
+simSoccerCareerColdContext: node scripts/simSoccerCareerColdContext.mjs
+simSoccerCareerStatRewards: node scripts/simSoccerCareerStatRewards.mjs
+simPhone2: node scripts/simPhone2.mjs
+simMoney: node scripts/simMoney.mjs
+simCareerPendingPopularityGates: node scripts/simCareerPendingPopularityGates.mjs
+simSoccerCareerPendingPopularity: node scripts/simSoccerCareerPendingPopularity.mjs
+simSoccerCareerSavedLoan: node scripts/simSoccerCareerSavedLoan.mjs
+simPhonePanelLifeStories: node scripts/simPhonePanelLifeStories.mjs

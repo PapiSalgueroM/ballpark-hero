@@ -1,0 +1,14 @@
+simCareerPendingMoneyGates exit=1 0s | Node.js v24.21.0
+simSoccerCareerPendingLife exit=1 0s | Node.js v24.21.0
+simCareerPendingOverallGates exit=1 0s | Node.js v24.21.0
+simSoccerCareerPendingMorale exit=1 0s | Node.js v24.21.0
+simPhoneSeasonBudget exit=1 0s | Node.js v24.21.0
+simSoccerCareerDocumentaryReview exit=1 0s | Node.js v24.21.0
+simSoccerCareerStatRewards exit=1 0s | Node.js v24.21.0
+simSoccerCareerColdContext exit=1 0s | Node.js v24.21.0
+simCareerPendingPopularityGates exit=1 0s | Node.js v24.21.0
+simSoccerCareerPendingPopularity exit=1 0s | Node.js v24.21.0
+simSoccerCareerSavedLoan exit=1 0s | Node.js v24.21.0
+simPhonePanelLifeStories exit=1 8s | Node.js v24.21.0
+simPhone2 exit=1 121s | 1 FAILURES
+simMoney exit=1 193s | 1 FAILURES
