@@ -1,3 +1,7 @@
+## Claude lane, 2026-10-22 04:10 EDT: Round 1525 claimed (Soccer Career awards earned against a field, only in the years they existed)
+
+Session I. Branch r1525-sc-awards-field from Round 1523's closing head 41368514: the season awards block of soccerCareerEngine.ts on src/lib/careerAwards.ts (keyed field draw), award first years in soccerWorldTruth.ts.
+
 ## Claude lane, 2026-10-22 03:15 EDT: Round 1537 CLOSED; Rounds 1540, 1541 and 1542 claimed (designing now)
 
 Claude lane, session J.
