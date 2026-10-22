@@ -1,0 +1,4 @@
+seat-anchors exit=0 0s | simCollegeSeat anchors: 20 rewrites of 14 controls and 6 variants checked, 0 cannot run
+vitest-seat exit=0 11s |    Duration  10.48s (transform 605ms, setup 225ms, collect 1.03s, tests 8.68s, environment 1.04s, prepare 448ms)
+seat-noease exit=1 274s | simCollegeSeat CONTROL noease FIRED: S2 went red with 3 failures (red: S1 (456), S2 (3))
+seat exit=0 366s | simCollegeSeat: all sections green (S1 to S9 and SY)

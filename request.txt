@@ -1,0 +1,4 @@
+seat: node scripts/simCollegeSeat.mjs
+seat-noease: SIM_COLLEGE_SEAT_SPORTS=cfb SIM_COLLEGE_SEAT_CONTROL=noease node scripts/simCollegeSeat.mjs
+seat-anchors: SIM_COLLEGE_SEAT_ANCHORS=1 node scripts/simCollegeSeat.mjs
+vitest-seat: node_modules/.bin/vitest run src/lib/collegeSeat.test.ts src/components/college-dynasty/CollegeSeat.test.tsx --testTimeout=300000 --hookTimeout=120000

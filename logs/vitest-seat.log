@@ -1,0 +1,18 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/collegeSeat.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 231[2mms[22m[39m
+[90mstdout[2m | src/components/college-dynasty/CollegeSeat.test.tsx[2m > [22m[2mRound 1320: a buyout bid after a big year[2m > [22m[2mcfb: a second dynasty in one mount takes its own bid, though its key matches the first one's
+[22m[39mcfb: the second dynasty's bid came on try 39 at Miami, of 25 programs that can bid
+
+[90mstdout[2m | src/components/college-dynasty/CollegeSeat.test.tsx[2m > [22m[2mRound 1320: a buyout bid after a big year[2m > [22m[2mcbb: a second dynasty in one mount takes its own bid, though its key matches the first one's
+[22m[39mcbb: the second dynasty's bid came on try 1 at Virginia, of 22 programs that can bid
+
+ [32m✓[39m src/components/college-dynasty/CollegeSeat.test.tsx [2m([22m[2m18 tests[22m[2m)[22m[33m 8449[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1320: a buyout bid after a big year[2m > [22mcfb: a second dynasty in one mount takes its own bid, though its key matches the first one's [33m 5966[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m35 passed[39m[22m[90m (35)[39m
+[2m   Start at [22m 19:11:32
+[2m   Duration [22m 10.48s[2m (transform 605ms, setup 225ms, collect 1.03s, tests 8.68s, environment 1.04s, prepare 448ms)[22m
+
