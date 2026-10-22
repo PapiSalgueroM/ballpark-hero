@@ -1,0 +1,7 @@
+vitest exit=0 26s |    Duration  25.25s (transform 5.32s, setup 2.42s, collect 14.95s, tests 28.87s, environment 15.01s, prepare 3.39s)
+earned exit=0 36s | simNbaEarnedDraft: green.
+judgeagree exit=1 31s | simNbaEarnedDraft: CONTROL judgeagree FIRED. Red in section 11 (12 failures).
+fxcombine exit=1 32s | simNbaEarnedDraft: RED in section 7.
+sameproof exit=0 1s | sameproof-ok
+tsc exit=0 109s | 
+anchors exit=0 94s | simDraftNight exit=0 | simDraftNight: green. Every pick the engine made is shown, none is invented, and the run cannot become a wait.

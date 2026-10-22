@@ -1,0 +1,14 @@
+files 60
+   the fleet judged: run 1 12 sets, run 2 12 sets
+  FAIL [7]: S1 at 10 (mean nbaStrength of the 30 clubs, season 10 tip off (ruled 2026-10-21: up to +1.5)): RUNS DISAGREE
+  FAIL [7]: S5: the rise is not positive at every band in run 2 set 10
+| S1 at 5: mean nbaStrength of the 30 clubs, season 5 tip off | 83.11 / 83.11 | 83.38 / 83.37 | +0.27 (0.01) / +0.26 (0.
+| S1 at 10: mean nbaStrength of the 30 clubs, season 10 tip off (ruled 2026-10-21: up to +1.5) | 82.20 / 82.19 | 83.16 /
+| S2: men rated 85 or more, season 10 tip off (20 percent of the old arm) | 105.9 / 106.0 | 108.1 / 108.3 | +2.2 (0.2) /
+| S3: two weakest starts' playoff seasons, seasons 2 to 5, per season (ruled 2026-10-21: printed) | 81.8 / 80.9 | 44.1 /
+| S4: two strongest starts' playoff seasons, seasons 2 to 10, per season (ruled 2026-10-21: the arm's own, at least 60) 
+| S6 dead: CPU dead money a season ($M), seasons 2 to 10 (ruled 2026-10-21: under 3.0; cause: CPU firsts 13 to 30 on the
+| S6 payers: tax payers a season, seasons 2 to 10 | 2.29 / 2.29 | 1.93 / 1.93 | -0.36 (0.01) / -0.36 (0.01) | within 0.5
+| S5: his first selection later and worse at every band of finish, in every set | flat (pick 1) | 23 of 24 sets | | ever
+   section 7: 2 failures
+simNbaEarnedDraft: RED in section 7.

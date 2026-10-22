@@ -1,0 +1,14 @@
+src and scripts equal 2bf891ca
+ src/lib/gmEarnedDraft.test.ts  | 174 ++++++++++++++++++++++
+ src/lib/gmEarnedDraft.ts       | 139 ++++++++++++++++++
+ src/lib/nbaEarnedDraft.test.ts | 322 +++++++++++++++++++++++++++++++++++++++++
+ src/lib/nbaEarnedDraft.ts      | 241 ++++++++++++++++++++++++++++++
+ src/lib/nbaFrontOffice.ts      |  83 +++++++++++
+ 5 files changed, 959 insertions(+)
+src/lib/gmEarnedDraft.test.ts
+src/lib/gmEarnedDraft.ts
+src/lib/nbaEarnedDraft.test.ts
+src/lib/nbaEarnedDraft.ts
+ scripts/simGmDraftOrder.mjs | 1 +
+ 1 file changed, 1 insertion(+)
+sameproof-ok
