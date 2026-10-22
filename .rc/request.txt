@@ -1,0 +1,6 @@
+ease2: SIM_COLLEGE_SEAT_SPORTS=cfb node scripts/simCollegeSeat.mjs
+ease1: SIM_COLLEGE_SEAT_SPORTS=cfb SIM_COLLEGE_SEAT_TILT=ease-1 node scripts/simCollegeSeat.mjs
+ease3: SIM_COLLEGE_SEAT_SPORTS=cfb SIM_COLLEGE_SEAT_TILT=ease-3 node scripts/simCollegeSeat.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+ease0: SIM_COLLEGE_SEAT_SPORTS=cfb SIM_COLLEGE_SEAT_TILT=ease-0 node scripts/simCollegeSeat.mjs
+anchors: SIM_COLLEGE_SEAT_ANCHORS=1 node scripts/simCollegeSeat.mjs
