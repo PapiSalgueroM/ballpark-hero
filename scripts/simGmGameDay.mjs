@@ -1136,6 +1136,9 @@ for (const set of SEEDSETS) {
     /* its board tests read the log, the bind's words for a week and the quick path's final */
     ['src/components/front-office/FrontOfficeGameDay.test.tsx', new Set([noExt(LOG), noExt(BIND), noExt(SCORE)])],
     ['src/components/front-office/FrontOfficeOnePress.test.tsx', new Set([noExt(LOG)])],
+    /* Round 1542, who scored: the season lines split a told final into drives on the story's own stream, so they read
+       the quick path's key (gmStoryKey) and its saved shape, and nothing else of Game Day */
+    ['src/lib/nflSeasonStats.ts', new Set([noExt(SCORE)])],
   ]);
   /* an import's path from the repo root: the alias, or a path from the importing file; a package is nobody's */
   const target = (from, spec) => {

@@ -20,30 +20,85 @@
  *    from both sides on this tree and on LIFT_BASE (a worktree of the commit before the move, its path in the env
  *    var, never committed), and every GameStory, minutes included, must be the same JSON. Skipped, and said so in
  *    the closing line, when LIFT_BASE is not set: it is the receipt of the move, not a standing fence.
+ *  2 IDENTITIES, every game of the fleet (regular and playoff), the rosters as it was played: per side, credited
+ *    touchdowns plus unclaimed are the story's 'td' events (the Game Day law tells the story: a harness may read it,
+ *    a board may not); field goals and safeties are the story's; the drive counts are the cheapest list of the score
+ *    by the harness's own copy of the rule; every credited man is a healthy starter of his club (the engine's own
+ *    starterIds, never a lineman). Per club and season: thrown equals caught; run and caught plus unclaimed equal the
+ *    club line's touchdowns; the told points sit between 6 and 8 a touchdown plus the kicks. Unclaimed is zero.
+ *  3 DETERMINISM: each season played twice in the seeded Math.random, recording and not: the generator's state and
+ *    draw count after Week 17 and after the postseason and close, the winners, injuries, computer moves, records,
+ *    bracket and champion are the same, and the league is the same once the new keys are taken out (ids named by
+ *    first appearance: the engine's minter counts on across two runs of one process). Weeks 1 and 9 recorded again
+ *    on a copy through JSON give the board's block.
+ *  4 THE RATING EFFECT, the strongest signal: for each club game the WR1 (the first healthy receiver on the chart)
+ *    and his LIFT, his touchdown catches over what a credit blind to rating and slot gives him in the same games
+ *    (one in k of the pool's receivers; 1 is no effect), in two bands of his rating. Asserted: the lift of the band
+ *    HIGH_4 and up exceeds the lift of the band LOW_4 and under by MARGIN_4. Printed: the brief's share and his
+ *    catches a game per band (a WR1 rated high sits on a club that scores more, so a per game gap is no proof), the
+ *    pass share by QB1 rating and the sacks a club game by rush less block. THE LOW BAND IS 73, NOT THE BRIEF'S 72:
+ *    the fleet is the real 2026 rosters at their opening, and a WR1 of 72 or under is 4 club games in 16 seasons
+ *    (CLE's, when its receivers are hurt); 73 is MIA's WR1, about 1,400 club games a set. Lead's to rule on.
+ *  5 AWARDS AND THE CLOSE, NFL_STATS_FRANCHISES (10) deep franchises over four seasons the board's way, the draft
+ *    (his picks the top graded, the computer batches, nflMarkRookies) and runOffseason in: the lib names the same
+ *    three men as the harness's own copy of the rules with the harness's OWN record of whom it drafted; the rookie
+ *    lines are exactly those men; a second close changes nothing; the history grows by one a season; cards carry
+ *    each award once and survive the summer by id; Week 1 opens a clean block and keeps the history; first year men
+ *    record lines in every later season; a tie fixture (the loser listed first) goes to games, then the id.
+ *    Printed: seasons naming each rookie award, the MVP by position.
+ *  8 COPY AND PURITY: the lib, nflDrives.ts and foSeasonClose.ts hold no Math.random, Date or localStorage
+ *    (comments taken out); every sentence the lib builds has no quotation mark and no verb of speech.
  *
  * CONTROLS
- *   liftdrift   MAX_FG 6 to 5 in this tree's nflDrives.ts                      -> section 1, red on every set
+ *   liftdrift    MAX_FG 6 to 5 in this tree's nflDrives.ts                     -> section 1, red on every set
+ *   dropone      a side's last touchdown is not credited                         -> section 2, red on every set
+ *   nocatch      a pass credits the thrower only                                 -> section 2, red on every set
+ *   injured      the pool keeps injured skill men                                -> section 2, red on every set
+ *   swapsides    the press splits the final with the away score first           -> section 2, red on every set
+ *   extradraw    a Math.random() in nflCreditGame                                -> section 3, red on every set
+ *   unkeyed      the credit stream keyed to a counter at module scope            -> section 3, red on every set
+ *   randomcredit every credit uniform over the eligible men, ratings ignored     -> section 4, red on every set
+ *   tiebreak     foRankAward with no games and id tie rule                       -> section 5
+ *   rookieall    a line is a rookie's for every man ever drafted in the save     -> section 5
+ *   closetwice   the once a season rule taken out of the shared close            -> section 5
+ *   quote        a help sentence given a speaker and a quotation                 -> section 8
  */
 import { build } from 'esbuild';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { ENGINE_ENTRY, FLEET, ROOT, bundle, enginePostseason, norm, playRegularSeason, sha1 } from './lib/gmGameDayFleet.mjs';
+import { ENGINE_ENTRY, FLEET, ROOT, bundle, enginePostseason, norm, playRegularSeason, readSrc, seasonId, seededGen, sha1 } from './lib/gmGameDayFleet.mjs';
 
 const CONTROL = process.env.NFL_STATS_CONTROL || '';
 const SEEDSETS = process.env.SEEDSET !== undefined && process.env.SEEDSET !== '' ? process.env.SEEDSET.split(',').map(Number) : FLEET.sets;
 if (SEEDSETS.some(s => !FLEET.sets.includes(s))) { console.error(`SEEDSET must be among ${FLEET.sets.join(', ')}`); process.exit(2); }
-const ALL_SECTIONS = [1];
+const ALL_SECTIONS = [1, 2, 3, 4, 5, 8];
 const SECTIONS = process.env.NFL_STATS_SECTIONS ? process.env.NFL_STATS_SECTIONS.split(',').map(Number) : ALL_SECTIONS;
 const LIFT_BASE = process.env.LIFT_BASE || '';
+/* seasons a kind and a set (a quick look only: every gate runs the whole fleet) */
+const PER_KIND = Number(process.env.NFL_STATS_SEASONS || FLEET.perKind);
 
 const DRIVES = 'src/lib/gameLaws/nflDrives.ts';
+const STATS = 'src/lib/nflSeasonStats.ts';
+const FO_STATS = 'src/lib/foSeasonStats.ts';
+const CLOSE = 'src/lib/foSeasonClose.ts';
 
 /* `labels`: pieces of check labels that must ALL be among the reds of the control's section. `everySet`: the
    control must turn the section's check red on every seed set run. `needs`: the sections it cannot fire without. */
 const CONTROLS = {
   liftdrift: { section: 1, labels: ['tells the same story on this tree as on the base'], everySet: true, needs: [1], patches: [{ file: DRIVES, from: 'export const MAX_FG = 6;', to: 'export const MAX_FG = 5;' }] },
+  dropone: { section: 2, labels: ["credited and unclaimed touchdowns are the story's"], everySet: true, needs: [2], patches: [{ file: STATS, from: '    for (let i = 0; i < s.tds; i += 1) {', to: '    for (let i = 0; i < s.tds - 1; i += 1) {' }] },
+  nocatch: { section: 2, labels: ['thrown equals caught'], everySet: true, needs: [2], patches: [{ file: STATS, from: "        if (cr.passer) { bump(lines.get(cr.passer.id)!.tot, 'ptd'); bump(lines.get(cr.scorer.id)!.tot, 'ctd'); }", to: "        if (cr.passer) { bump(lines.get(cr.passer.id)!.tot, 'ptd'); }" }] },
+  injured: { section: 2, labels: ['healthy starter of his club'], everySet: true, needs: [2], patches: [{ file: STATS, from: 'skill: unitStarters(team, SKILL_POS, SKILL_SLOTS),', to: 'skill: unitStarters({ ...team, players: team.players.map(p => ({ ...p, out: 0 })) }, SKILL_POS, SKILL_SLOTS),' }] },
+  swapsides: { section: 2, labels: ["credited and unclaimed touchdowns are the story's"], everySet: true, needs: [2], patches: [{ file: STATS, from: 'nflDrivePair(told.homeScore, told.awayScore, keyedRng(gmStoryKey(told)))', to: 'nflDrivePair(told.awayScore, told.homeScore, keyedRng(gmStoryKey(told)))' }] },
+  extradraw: { section: 3, labels: ['the same generator state and draw count after Week 17'], everySet: true, needs: [3], patches: [{ file: STATS, from: '  const rng = keyedRng(`${told.key}|credit`);', to: '  const rng = keyedRng(`${told.key}|credit`); Math.random();' }] },
+  unkeyed: { section: 3, labels: ['the same week recorded twice gives the same block'], everySet: true, needs: [3], patches: [{ file: STATS, from: '  const rng = keyedRng(`${told.key}|credit`);', to: '  const rng = keyedRng(`${told.key}|credit|${(globalThis.__nflCreditCalls = (globalThis.__nflCreditCalls ?? 0) + 1)}`);' }] },
+  randomcredit: { section: 4, labels: ["lift over a rating blind credit climbs with his rating"], everySet: true, needs: [4], patches: [{ file: STATS, from: '  const ws = men.map(m => Math.max(0, weight(m)));', to: '  const ws = men.map(m => (weight(m) > 0 ? 1 : 0));' }] },
+  tiebreak: { section: 5, labels: ['a tie goes to more games, then the id'], needs: [5], patches: [{ file: FO_STATS, from: '.sort((a, b) => b.s - a.s || b.p.g - a.p.g || a.p.id.localeCompare(b.p.id))', to: '.sort((a, b) => b.s - a.s)' }] },
+  rookieall: { section: 5, labels: ['the rookie lines are the first year men the harness drafted'], needs: [5], patches: [{ file: STATS, from: '...(m.rookieSeason === lg.season ? { rookie: true } : {})', to: '...(m.rookieSeason !== undefined ? { rookie: true } : {})' }] },
+  closetwice: { section: 5, labels: ['a second close writes no card twice'], needs: [5], patches: [{ file: CLOSE, from: '  if (done) return done;', to: '' }] },
+  quote: { section: 8, labels: ['no quotation mark and no verb of speech'], needs: [8], patches: [{ file: STATS, from: '"Sacks come from the pass rush', to: '"The coach said: \\"Sacks come from the pass rush' }] },
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown control ${CONTROL}: ${Object.keys(CONTROLS).join(', ')}`); process.exit(2); }
 if (CONTROL && CONTROLS[CONTROL].needs.some(s => !SECTIONS.includes(s))) { console.error(`control ${CONTROL} needs sections ${CONTROLS[CONTROL].needs.join(', ')}`); process.exit(2); }
@@ -86,6 +141,9 @@ const HEAD_ENTRY = [
   ...ENGINE_ENTRY,
   ...STORY_ENTRY,
   "export * as bind from './src/lib/frontOfficeGameDay.ts';",
+  "export * as stats from './src/lib/nflSeasonStats.ts';",
+  "export * as fo from './src/lib/foSeasonStats.ts';",
+  "export { leagueNames } from './src/lib/foNames.ts';",
 ];
 
 const t0 = Date.now();
@@ -134,7 +192,7 @@ if (SECTIONS.includes(1)) {
       let stories = 0;
       const lines = [];
       for (const kind of FLEET.kinds) {
-        for (let i = 0; i < FLEET.perKind; i += 1) {
+        for (let i = 0; i < PER_KIND; i += 1) {
           for (const g of toldSeason(set, kind, i).told) {
             told += 1;
             for (const view of ['home', 'away']) {
@@ -147,13 +205,395 @@ if (SECTIONS.includes(1)) {
           }
         }
       }
-      const want = FLEET.kinds.length * FLEET.perKind * (272 + 13);
+      const want = FLEET.kinds.length * PER_KIND * (272 + 13);
       check(1, `set ${set}: the fleet told ${told} finals, every game of every season (want ${want})`, told === want);
       check(1, `set ${set}: ${stories} of ${told * 2} tellings are a story, not the final alone`, stories > told * 2 * 0.99);
       settle(1, `set ${set}: every told final tells the same story on this tree as on the base`, t);
       console.log(`  set ${set}: receipt ${sha1(lines.join('\n'))}`);
     }
   }
+}
+
+/* ─── The board's season: Week 1 to the close, inside the seeded Math.random ─── */
+/** Run fn with gen standing in for Math.random; fn is handed a reader of the draws so far. */
+function seeded(gen, fn) {
+  const real = Math.random;
+  let calls = 0;
+  Math.random = () => { calls += 1; return gen.next(); };
+  try { return fn(() => calls); } finally { Math.random = real; }
+}
+/** The fleet's season opened as scripts/lib/gmGameDayFleet.mjs opens it: the same generator and the same GM club. */
+function openFleetSeason(set, kind, i) {
+  const E = M.engine;
+  const gen = seededGen(`gm game day fleet|${seasonId(set, kind, i)}`);
+  const user = M.FO_TEAMS[(set * 7 + i * 3 + (kind === 'deep' ? 11 : 0)) % M.FO_TEAMS.length].abbr;
+  const lg = seeded(gen, () => {
+    const league = E.initLeague(Math.random, kind === 'deep' ? { depth: M.FO_DEPTH, userTeam: user } : {});
+    if (kind === 'deep' && E.deepOverLimit(league.teams[user]) > 0) E.cutDownToMax(league.teams[user], league.freeAgents);
+    return league;
+  });
+  return { gen, user, lg };
+}
+/** A season the board's way from the week the league is at: playWeek to Week 17 (the injury pass, the computer clubs'
+ *  moves, the games, nflTell, then the recorder), the one press postseason (his playoff games credited for the tile)
+ *  and closeSeason's close. `record` false plays it with no recorder at all. Hooks: onWeek(lg, told, week) before the
+ *  week is recorded, onRecorded(lg, told, week) after it, onPlayoff(lg, told) before a playoff game is recorded. */
+function boardSeason(s, record, hooks = {}) {
+  const E = M.engine, B = M.bind, S = M.stats;
+  const { lg, user, gen } = s;
+  return seeded(gen, draws => {
+    const winners = [], hurt = [], moves = [];
+    for (;;) {
+      hurt.push(JSON.stringify(E.injuryPass(lg.teams, Math.random)));
+      moves.push(JSON.stringify(E.aiWeeklyMoves(lg, user, Math.random)));
+      const games = lg.schedule[lg.week - 1].map(g => E.simGame(g, lg.teams, Math.random));
+      const told = games.map(g => B.nflTell(g, lg.teams, lg.season, B.nflWhere(lg.week))).flatMap(t => (t.last ? [t.last] : []));
+      winners.push(...games.map(g => g.winner));
+      if (hooks.onWeek) hooks.onWeek(lg, told, lg.week);
+      if (record) S.nflRecordWeek(lg, told, user);
+      if (hooks.onRecorded) hooks.onRecorded(lg, told, lg.week);
+      if (lg.week >= E.REGULAR_WEEKS) break;
+      lg.week += 1;
+    }
+    const week17 = `${gen.state} ${draws()}`;
+    const { rounds, champion } = E.runPlayoffs(lg.teams, Math.random);
+    for (const r of rounds) for (const g of r.games) {
+      const t = B.nflTell(g, lg.teams, lg.season, r.name);
+      if (!t.last) continue;
+      if (hooks.onPlayoff) hooks.onPlayoff(lg, t.last);
+      if (record && (g.home === user || g.away === user)) S.nflRecordGame(lg, t.last, user, false);
+    }
+    lg.champions.push({ season: lg.season, team: champion });
+    const closed = record ? S.nflCloseSeasonStats(lg) : null;
+    const records = Object.keys(lg.teams).sort().map(a => `${a} ${lg.teams[a].wins}-${lg.teams[a].losses}`).join(',');
+    return { week17, after: `${gen.state} ${draws()}`, winners: winners.join(','), hurt: sha1(hurt.join('|')), moves: sha1(moves.join('|')), records, champion, rounds: sha1(JSON.stringify(rounds)), closed };
+  });
+}
+/** The league with this round's keys taken out: the block, the history, a man's awards and first year. */
+function stripped(lg) {
+  const c = JSON.parse(JSON.stringify(lg));
+  delete c.stats;
+  delete c.awards;
+  for (const list of M.stats.nflEveryMan(c)) for (const p of list) { delete p.awards; delete p.rookieSeason; }
+  /* the engine's id minter counts on across the two runs of one process, so ids are named by first appearance */
+  const ids = new Map();
+  return JSON.stringify(c).replace(/"(p[0-9a-z]+-\d+)"/g, (_, id) => {
+    if (!ids.has(id)) ids.set(id, `#${ids.size}`);
+    return `"${ids.get(id)}"`;
+  });
+}
+/** THE HARNESS'S OWN COPY of the drive rule (src/lib/gameLaws/nflDrives.ts): the cheapest list of sevens, threes, at
+ *  most one safety, at most six field goals. Today every score has exactly one cheapest list. */
+function cheapest(points) {
+  let best = null;
+  let ties = 0;
+  for (let s = 0; s <= 1; s += 1) for (let f = 0; f <= 6; f += 1) for (let t = 0; t <= 12; t += 1) {
+    const rest = points - 3 * f - 2 * s;
+    if (rest < 6 * t || rest > 8 * t) continue;
+    const cost = Math.abs(rest - 7 * t) + 4 * s;
+    if (!best || cost < best.cost) { best = { t, f, s, cost }; ties = 0; } else if (cost === best.cost) ties += 1;
+  }
+  return best ? { ...best, ties } : null;
+}
+
+/* ─── 2. IDENTITIES, 3. DETERMINISM, 4. THE RATING EFFECT: one pass over the fleet ─── */
+const MARGIN_4 = 0.02;
+const HIGH_4 = 85;
+const LOW_4 = Number(process.env.NFL_STATS_LOW_BAND || 73);
+const measured4 = [];
+if (SECTIONS.some(s => s === 2 || s === 3 || s === 4)) {
+  const E = M.engine, S = M.stats;
+  for (const set of SEEDSETS) {
+    const t2 = { td: tally(), kicks: tally(), cheap: tally(), pool: tally(), thrown: tally(), club: tally(), bounds: tally() };
+    const t3 = { w17: tally(), after: tally(), results: tally(), league: tally(), twice: tally() };
+    const r4 = { hi: { games: 0, pass: 0, wr1: 0, blind: 0 }, lo: { games: 0, pass: 0, wr1: 0, blind: 0 }, qb: {}, sack: {}, dist: {} };
+    let unclaimed = 0;
+    let gamesSeen = 0;
+    /* one game's credit beside its story, the rosters as it was played */
+    const identity = (lg, g, regular, unclaimedBy) => {
+      const c = S.nflCreditGame(g, lg.teams);
+      gamesSeen += 1;
+      if (!c) { count(t2.td, false, `${g.key}: the credit refused a told final`); return; }
+      const st = M.day.gameStory(M.NFL_GAME_DAY, g, 'home');
+      const n = (side, kind) => (st ? st.game.events.filter(e => e.side === side && e.kind === kind).length : -1);
+      count(t2.td, c.home.credits.length + c.home.unclaimed === n('us', 'td') && c.away.credits.length + c.away.unclaimed === n('them', 'td'), () => `${g.key}: credited ${c.home.credits.length}+${c.home.unclaimed} and ${c.away.credits.length}+${c.away.unclaimed}, story ${n('us', 'td')} and ${n('them', 'td')}`);
+      count(t2.kicks, c.home.fgs === n('us', 'fg') && c.away.fgs === n('them', 'fg') && c.home.safeties === n('us', 'safety') && c.away.safeties === n('them', 'safety'), () => g.key);
+      const want = [cheapest(g.homeScore), cheapest(g.awayScore)];
+      count(t2.cheap, [c.home, c.away].every((sd, k) => want[k] && want[k].ties === 0 && sd.tds === want[k].t && sd.fgs === want[k].f && sd.safeties === want[k].s), () => `${g.key} ${g.homeScore}-${g.awayScore}`);
+      for (const [sd, other] of [[c.home, c.away], [c.away, c.home]]) {
+        const team = lg.teams[sd.team];
+        const starters = E.starterIds(team);
+        const fit = id => { const p = team.players.find(m => m.id === id); return !!p && p.out === 0 && p.pos !== 'OL' && starters.has(id); };
+        const ids = [...sd.credits.flatMap(cr => [cr.scorer.id, ...(cr.passer ? [cr.passer.id] : [])]), ...Object.keys(sd.sacks)];
+        count(t2.pool, ids.every(fit), () => `${g.key}: ${sd.team} credited ${ids.filter(id => !fit(id)).join(', ')}`);
+        unclaimed += sd.unclaimed;
+        if (!regular) continue;
+        unclaimedBy[sd.team] = (unclaimedBy[sd.team] ?? 0) + sd.unclaimed;
+        /* section 4: the WR1 of the club at this game, the first healthy receiver on its chart */
+        const wr1 = E.depthOrder(team, 'WR').find(p => p.out === 0);
+        const passes = sd.credits.filter(cr => cr.passer);
+        if (wr1) r4.dist[wr1.ovr] = (r4.dist[wr1.ovr] ?? 0) + 1;
+        const band = wr1 && wr1.ovr >= HIGH_4 ? r4.hi : wr1 && wr1.ovr <= LOW_4 ? r4.lo : null;
+        /* blind: the WR1 catches a credit blind to rating and slot would give him, one in k of the eligible receivers */
+        const eligible = sd.pool.skill.filter(p => M.stats.nflCatchWeight(p) > 0).length;
+        const inPool = wr1 && sd.pool.skill.some(p => p.id === wr1.id);
+        if (band && inPool) { band.games += 1; band.pass += passes.length; band.blind += passes.length / eligible; band.wr1 += passes.filter(cr => cr.scorer.id === wr1.id).length; }
+        if (sd.pool.qb) { const b = Math.floor(sd.pool.qb.ovr / 5) * 5; const q = (r4.qb[b] ??= { pass: 0, all: 0 }); q.pass += passes.length; q.all += sd.credits.length; }
+        const rushers = sd.pool.def.filter(p => p.pos === 'DL' || p.pos === 'LB');
+        const line = E.unitStarters(lg.teams[other.team], ['OL'], E.OL_SLOTS);
+        const avg = (xs, none) => (xs.length ? xs.reduce((a, b) => a + b, 0) / xs.length : none);
+        const gap = Math.round((avg(rushers.map(p => p.ovr), 60) - avg(line.map(p => p.ovr), 64)) / 5) * 5;
+        const k = (r4.sack[gap] ??= { games: 0, sacks: 0 }); k.games += 1; k.sacks += Object.values(sd.sacks).reduce((a, b) => a + b, 0);
+      }
+    };
+    for (const kind of FLEET.kinds) {
+      for (let i = 0; i < PER_KIND; i += 1) {
+        const A = openFleetSeason(set, kind, i);
+        const unclaimedBy = {};
+        let pending = null;
+        const a = boardSeason(A, true, {
+          onWeek: (lg, told, week) => {
+            if (SECTIONS.includes(2) || SECTIONS.includes(4)) for (const g of told) identity(lg, g, true, unclaimedBy);
+            /* section 3: the same week recorded on a copy through JSON must give the block the board's record gives */
+            if (SECTIONS.includes(3) && (week === 1 || week === 9)) {
+              const copy = JSON.parse(JSON.stringify(lg));
+              S.nflRecordWeek(copy, told, A.user);
+              pending = JSON.stringify(copy.stats);
+            }
+          },
+          onRecorded: (lg, _t, week) => { if (pending !== null) { count(t3.twice, JSON.stringify(lg.stats) === pending, () => `${seasonId(set, kind, i)} week ${week}`); pending = null; } },
+          onPlayoff: (lg, g) => { if (SECTIONS.includes(2)) identity(lg, g, false, {}); },
+        });
+        if (SECTIONS.includes(2)) {
+          const st = A.lg.stats;
+          for (const team of Object.keys(A.lg.teams)) {
+            const ls = Object.values(st.lines).filter(l => l.team === team);
+            const sum = col => ls.reduce((x, l) => x + (l.tot[col] ?? 0), 0);
+            const [td, fg, sf] = st.club[team];
+            count(t2.thrown, sum('ptd') === sum('ctd'), () => `${seasonId(set, kind, i)} ${team}: thrown ${sum('ptd')}, caught ${sum('ctd')}`);
+            count(t2.club, sum('rtd') + sum('ctd') + (unclaimedBy[team] ?? 0) === td, () => `${seasonId(set, kind, i)} ${team}`);
+            const pts = st.teams[team].pts;
+            count(t2.bounds, 6 * td + 3 * fg + 2 * sf <= pts && pts <= 8 * td + 3 * fg + 2 * sf && st.teams[team].g === E.REGULAR_WEEKS, () => `${seasonId(set, kind, i)} ${team}`);
+          }
+        }
+        if (SECTIONS.includes(3)) {
+          const Bs = openFleetSeason(set, kind, i);
+          const b = boardSeason(Bs, false);
+          const id = seasonId(set, kind, i);
+          count(t3.w17, a.week17 === b.week17, () => `${id}: ${a.week17} against ${b.week17}`);
+          count(t3.after, a.after === b.after, () => id);
+          count(t3.results, a.winners === b.winners && a.hurt === b.hurt && a.moves === b.moves && a.records === b.records && a.champion === b.champion && a.rounds === b.rounds, () => id);
+          count(t3.league, stripped(A.lg) === stripped(Bs.lg), () => id);
+        }
+      }
+    }
+    if (SECTIONS.includes(2)) {
+      console.log('');
+      console.log(`2. IDENTITIES, set ${set} (${gamesSeen} told games)`);
+      settle(2, `set ${set}: credited and unclaimed touchdowns are the story's, side by side`, t2.td);
+      settle(2, `set ${set}: field goals and safeties are the story's`, t2.kicks);
+      settle(2, `set ${set}: each side's drive counts are the cheapest list of its score, by the harness's own copy of the rule`, t2.cheap);
+      settle(2, `set ${set}: every credited man is a healthy starter of his club at the game, never a lineman`, t2.pool);
+      settle(2, `set ${set}: per club and season, thrown equals caught`, t2.thrown);
+      settle(2, `set ${set}: per club and season, run and caught touchdowns plus unclaimed are the club line's`, t2.club);
+      settle(2, `set ${set}: per club and season, the told points sit between six and eight a touchdown plus the kicks, over 17 games`, t2.bounds);
+      check(2, `set ${set}: no touchdown went unclaimed on the fleet (${unclaimed})`, unclaimed === 0);
+    }
+    if (SECTIONS.includes(3)) {
+      console.log('');
+      console.log(`3. DETERMINISM, set ${set}`);
+      settle(3, `set ${set}: the same generator state and draw count after Week 17, recording or not`, t3.w17);
+      settle(3, `set ${set}: the same generator state and draw count after the postseason and the close`, t3.after);
+      settle(3, `set ${set}: the same winners, injuries, computer moves, records, bracket and champion`, t3.results);
+      settle(3, `set ${set}: the same league once the new keys are taken out`, t3.league);
+      settle(3, `set ${set}: the same week recorded twice gives the same block, once through JSON`, t3.twice);
+    }
+    if (SECTIONS.includes(4)) {
+      const share = b => (b.pass ? b.wr1 / b.pass : 0);
+      /* the lift: his catches over what a rating blind credit gives him in the same games; 1 is no rating effect */
+      const lift = b => (b.blind ? b.wr1 / b.blind : 0);
+      const gap = lift(r4.hi) - lift(r4.lo);
+      measured4.push({ set, gap, hi: r4.hi, lo: r4.lo, qb: r4.qb, sack: r4.sack });
+      console.log('');
+      console.log(`4. THE RATING EFFECT, set ${set}: WR1 ${HIGH_4} and up ${r4.hi.games} club games, ${r4.hi.pass} touchdown passes, ${r4.hi.wr1} his (${share(r4.hi).toFixed(3)}); WR1 ${LOW_4} and under ${r4.lo.games} club games, ${r4.lo.pass} passes, ${r4.lo.wr1} his (${share(r4.lo).toFixed(3)})`);
+      console.log(`  receiving touchdowns a game for the WR1 (printed, not asserted): ${HIGH_4} and up ${(r4.hi.wr1 / Math.max(1, r4.hi.games)).toFixed(3)}, ${LOW_4} and under ${(r4.lo.wr1 / Math.max(1, r4.lo.games)).toFixed(3)}`);
+      console.log(`  the lift (his catches over a rating blind credit's): ${HIGH_4} and up ${lift(r4.hi).toFixed(3)}, ${LOW_4} and under ${lift(r4.lo).toFixed(3)}`);
+      check(4, `set ${set}: the WR1's lift over a rating blind credit climbs with his rating (gap ${gap.toFixed(4)}, margin ${MARGIN_4})`, gap > MARGIN_4);
+      check(4, `set ${set}: the low band holds 500 club games or more (${r4.lo.games})`, r4.lo.games >= 500);
+      console.log(`  WR1 ratings over the club games (printed): ${Object.keys(r4.dist).map(Number).sort((x, y) => x - y).map(k => `${k}: ${r4.dist[k]}`).join(", ")}`);
+    }
+  }
+  if (measured4.length) {
+    const qb = {};
+    const sk = {};
+    for (const m of measured4) {
+      for (const [b, v] of Object.entries(m.qb)) { const q = (qb[b] ??= { pass: 0, all: 0 }); q.pass += v.pass; q.all += v.all; }
+      for (const [b, v] of Object.entries(m.sack)) { const q = (sk[b] ??= { games: 0, sacks: 0 }); q.games += v.games; q.sacks += v.sacks; }
+    }
+    console.log(`  pass share of credited touchdowns by QB1 rating (printed): ${Object.keys(qb).map(Number).sort((x, y) => x - y).map(b => `${b}: ${(qb[b].pass / Math.max(1, qb[b].all)).toFixed(3)} of ${qb[b].all}`).join(' | ')}`);
+    console.log(`  sacks a club game by rush less block, to the nearest 5 (printed): ${Object.keys(sk).map(Number).sort((x, y) => x - y).map(b => `${b}: ${(sk[b].sacks / sk[b].games).toFixed(2)} over ${sk[b].games}`).join(' | ')}`);
+    console.log(`  gaps by set: ${measured4.map(m => `${m.set} ${m.gap.toFixed(4)}`).join(', ')}`);
+  }
+}
+
+/* ─── 5. AWARDS AND THE CLOSE: deep franchises over several seasons, the board's way, the draft and the summer in ─── */
+const FRANCHISES = Number(process.env.NFL_STATS_FRANCHISES || 10);
+const YEARS = 4;
+/** THE HARNESS'S OWN COPY of the three award rules (src/lib/nflSeasonStats.ts header), over a block's lines, with
+ *  `rookies` the ids of the first year men the harness itself drafted. Ties: more games, then the id. */
+function ownAwards(stats, rookies) {
+  const men = new Map();
+  for (const l of Object.values(stats.lines)) {
+    if (l.g <= 0) continue;
+    const m = men.get(l.id) ?? { id: l.id, g: 0, tot: {}, clubs: [] };
+    m.g += l.g;
+    m.clubs.push([l.team, l.g]);
+    for (const [k, v] of Object.entries(l.tot)) m.tot[k] = (m.tot[k] ?? 0) + v;
+    men.set(l.id, m);
+  }
+  const all = [...men.values()].map(m => ({ ...m, team: [...m.clubs].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))[0][0] }));
+  const td = m => (m.tot.ptd ?? 0) + (m.tot.rtd ?? 0) + (m.tot.ctd ?? 0);
+  const share = t => (stats.teams[t] && stats.teams[t].g ? stats.teams[t].w / stats.teams[t].g : 0);
+  const best = (pool, score) => {
+    let top = null;
+    for (const m of pool) {
+      const s = Math.round(score(m) * 1000) / 1000;
+      if (!top || s > top.s || (s === top.s && (m.g > top.m.g || (m.g === top.m.g && m.id.localeCompare(top.m.id) < 0)))) top = { m, s };
+    }
+    return top ? top.m.id : null;
+  };
+  const kids = all.filter(m => rookies.has(m.id));
+  return {
+    mvp: best(all, m => td(m) + (m.tot.sk ?? 0) / 2 + 10 * share(m.team)),
+    oroy: best(kids.filter(m => td(m) > 0), td),
+    droy: best(kids.filter(m => (m.tot.sk ?? 0) > 0), m => m.tot.sk ?? 0),
+  };
+}
+/** Every man's cards, by id, wherever he is. */
+const cardsOf = lg => JSON.stringify(M.stats.nflEveryMan(lg).flat().filter(p => p.awards).map(p => [p.id, p.awards]).sort());
+/** The draft the board's way at a close: his picks the top graded prospect each, a computer batch after each of
+ *  them and the rest after his last (draftProspect), every man drafted stamped for next season (nflMarkRookies), then
+ *  the summer (finishDraft: runOffseason). Returns the ids of the men drafted: the harness's own record, read off the
+ *  rosters before and after each pick, never off the stamp. */
+function boardDraft(s) {
+  const E = M.engine, S = M.stats;
+  const { lg, user, gen } = s;
+  return seeded(gen, () => {
+    const ids = new Set();
+    const before = () => new Set(Object.values(lg.teams).flatMap(t => t.players.map(p => p.id)));
+    const note = was => { for (const t of Object.values(lg.teams)) for (const p of t.players) if (!was.has(p.id)) ids.add(p.id); };
+    const mine = lg.teams[user].picks.length;
+    const batches = Math.max(3, mine);
+    const rivalCapital = Object.values(lg.teams).filter(t => t.abbr !== user).reduce((a, t) => a + t.picks.length, 0);
+    let cls = E.generateDraftClass(Math.random, Math.max(40, mine + Math.min(rivalCapital, batches * 6)), M.leagueNames(lg));
+    let left = batches;
+    for (let k = 0; k < mine; k += 1) {
+      const pr = [...cls].sort((a, b) => b.grade - a.grade)[0];
+      if (!pr || !E.consumeDraftPick(lg.teams[user])) break;
+      const was = before();
+      const pl = E.prospectToPlayer(pr, Math.random);
+      if (pl) lg.teams[user].players.push(pl);
+      S.nflMarkRookies(lg, [{ team: user, playerName: pr.name }], lg.season + 1);
+      cls = cls.filter(p => p.id !== pr.id);
+      const last = k === mine - 1;
+      const n = last ? left : Math.min(1, left);
+      for (let b = 0; b < n; b += 1) {
+        const r = E.nflAiDraftPicks(lg, cls, user, Math.random);
+        cls = r.remaining;
+        S.nflMarkRookies(lg, r.picks, lg.season + 1);
+      }
+      left -= n;
+      note(was);
+    }
+    E.runOffseason(lg, Math.random, user);
+    if (E.deepOverLimit(lg.teams[user]) > 0) E.cutDownToMax(lg.teams[user], lg.freeAgents);
+    return ids;
+  });
+}
+
+if (SECTIONS.includes(5)) {
+  const E = M.engine, S = M.stats;
+  console.log('');
+  console.log(`5. AWARDS AND THE CLOSE (${FRANCHISES} deep franchises, ${YEARS} seasons each)`);
+  const t5 = { rule: tally(), rookies: tally(), later: tally(), twice: tally(), cards: tally(), history: tally(), opened: tally(), survive: tally() };
+  const tell = { seasons: 0, oroy: 0, droy: 0, mvpPos: {}, rookieLines: [] };
+  for (let f = 0; f < FRANCHISES; f += 1) {
+    const gen = seededGen(`nfl season stats franchise|${f}`);
+    const user = M.FO_TEAMS[(f * 5 + 2) % M.FO_TEAMS.length].abbr;
+    const lg = seeded(gen, () => {
+      const league = E.initLeague(Math.random, { depth: M.FO_DEPTH, userTeam: user });
+      if (E.deepOverLimit(league.teams[user]) > 0) E.cutDownToMax(league.teams[user], league.freeAgents);
+      return league;
+    });
+    const s = { lg, user, gen };
+    let drafted = new Set();
+    for (let y = 0; y < YEARS; y += 1) {
+      const id = `franchise ${f} season ${lg.season}`;
+      const historyBefore = (lg.awards ?? []).length;
+      const res = boardSeason(s, true, { onRecorded: (l, _t, week) => { if (week === 1) count(t5.opened, l.stats && l.stats.season === l.season && Object.keys(l.stats.lines).length > 0 && (l.awards ?? []).length === historyBefore, () => id); } });
+      const closed = res.closed;
+      const own = ownAwards(lg.stats, drafted);
+      count(t5.rule, !!closed && (closed.mvp?.id ?? null) === own.mvp && (closed.oroy?.id ?? null) === own.oroy && (closed.droy?.id ?? null) === own.droy, () => `${id}: the lib ${closed?.mvp?.id}/${closed?.oroy?.id}/${closed?.droy?.id}, the harness ${own.mvp}/${own.oroy}/${own.droy}`);
+      const flagged = new Set(Object.values(lg.stats.lines).filter(l => l.rookie).map(l => l.id));
+      const playedKids = new Set(Object.values(lg.stats.lines).filter(l => drafted.has(l.id)).map(l => l.id));
+      count(t5.rookies, [...flagged].every(x => drafted.has(x)) && [...playedKids].every(x => flagged.has(x)) && closed.rookies === (y > 0), () => `${id}: ${flagged.size} flagged, ${playedKids.size} of the harness's draftees played`);
+      if (y > 0) count(t5.later, playedKids.size > 0, () => id);
+      tell.rookieLines.push(playedKids.size);
+      const cards = cardsOf(lg);
+      count(t5.twice, S.nflCloseSeasonStats(lg) === closed && cardsOf(lg) === cards && lg.awards.length === historyBefore + 1, () => id);
+      count(t5.history, lg.awards.length === Math.min(y + 1, 40) && lg.awards[lg.awards.length - 1].season === lg.season, () => id);
+      const winners = S.nflAwardList(closed).map(([k, m]) => [m.id, `${closed.season} ${S.NFL_AWARD_LABEL[k]}`]);
+      const man = x => M.stats.nflEveryMan(lg).flat().find(p => p.id === x);
+      count(t5.cards, winners.every(([x, label]) => !man(x) || (man(x).awards ?? []).filter(a => a === label).length === 1), () => id);
+      tell.seasons += 1;
+      if (closed.oroy) tell.oroy += 1;
+      if (closed.droy) tell.droy += 1;
+      if (closed.mvp) tell.mvpPos[closed.mvp.pos] = (tell.mvpPos[closed.mvp.pos] ?? 0) + 1;
+      drafted = boardDraft(s);
+      /* a winner's card and a draftee's first year survive the summer, the trades and the free agent pool, by id */
+      count(t5.survive, winners.every(([x, label]) => !man(x) || (man(x).awards ?? []).includes(label)) && [...drafted].every(x => !man(x) || man(x).rookieSeason === lg.season), () => `${id} into ${lg.season}`);
+    }
+  }
+  settle(5, "the lib names the same three men as the harness's own copy of the rules, its rookies the harness's own draftees", t5.rule);
+  settle(5, 'the rookie lines are the first year men the harness drafted, every one that played, and no class in a first season', t5.rookies);
+  settle(5, 'first year men recorded lines in every season after a franchise\'s first', t5.later);
+  settle(5, 'a second close returns the same awards and a second close writes no card twice', t5.twice);
+  settle(5, 'the history grows by one a season', t5.history);
+  settle(5, "every winner's card carries his award once", t5.cards);
+  settle(5, "Week 1 opens a clean block for the season and keeps the history", t5.opened);
+  settle(5, "a winner's card and a draftee's first year survive the summer, by id", t5.survive);
+  /* the tie fixture: the man who should LOSE each tie is listed first, so a sort with no tie rule names him */
+  const fx = (ls, clubs) => {
+    const st = S.nflNewStats(2030);
+    for (const l of ls) st.lines[`${l[0]}|${l[1]}`] = { id: l[1], name: l[1], team: l[0], pos: 'QB', g: l[2], gs: l[2], tot: l[3] };
+    for (const [t, w, g] of clubs) st.teams[t] = { g, w, pts: 0, opp: 0 };
+    return { season: 2030, stats: st, teams: {}, freeAgents: [] };
+  };
+  const byGames = S.nflSeasonAwards(fx([['AAA', 'm1', 16, { ptd: 12 }], ['AAA', 'm2', 17, { ptd: 12 }]], [['AAA', 9, 17]]));
+  const byId = S.nflSeasonAwards(fx([['AAA', 'z9', 17, { ptd: 12 }], ['AAA', 'a1', 17, { ptd: 12 }]], [['AAA', 9, 17]]));
+  check(5, `a tie goes to more games, then the id (${byGames?.mvp?.id}, ${byId?.mvp?.id})`, byGames?.mvp?.id === 'm2' && byId?.mvp?.id === 'a1');
+  console.log(`  seasons ${tell.seasons}: an Offensive Rookie of the Year named in ${tell.oroy}, a Defensive in ${tell.droy}; the MVP by position ${JSON.stringify(tell.mvpPos)}; first year men with lines a season ${tell.rookieLines.join(',')}`);
+}
+
+/* ─── 8. COPY AND PURITY ─── */
+/** Code with its comments taken out, so a guard reads the code and never the prose that explains it. */
+const codeOf = src => src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:'"`])\/\/[^\n]*/g, '$1');
+const SPEECH = /\b(said|says|saying|insisted|insists|claimed|claims|admitted|admits|replied|replies|shouted|whispered|declared|tells reporters|told reporters)\b/i;
+const QUOTES = /["“”]/;
+if (SECTIONS.includes(8)) {
+  const S = M.stats;
+  console.log('');
+  console.log('8. COPY AND PURITY');
+  for (const rel of [STATS, DRIVES, CLOSE]) {
+    const code = codeOf(readSrc(rel));
+    check(8, `${rel} holds no Math.random, no Date and no localStorage, comments taken out`, !/Math\.random|\bDate\b|localStorage/.test(code));
+  }
+  /* the anchors the guard reads exist in the files it guards, so it is not green for want of a target */
+  check(8, 'the comment stripper keeps the code: the credit stream is still in the stripped lib', codeOf(readSrc(STATS)).includes('`${told.key}|credit`'));
+  const words = [...S.nflStatsHelp(), ...Object.values(S.NFL_AWARD_LABEL), ...Object.values(S.NFL_AWARD_RULE)];
+  const bad = words.filter(w => QUOTES.test(w) || SPEECH.test(w));
+  check(8, `every sentence the lib builds has no quotation mark and no verb of speech (${words.length} read)`, bad.length === 0, bad[0] ?? '');
+  check(8, "the page's rules say the numbers are this save's sim season", S.nflStatsHelp().some(w => w.includes("this save's sim season")));
 }
 
 /* ─── Closing ─── */
@@ -169,7 +609,7 @@ if (CONTROL) {
   const bled = [...failsBy.keys()].filter(k => k !== String(c.section) && !(c.elsewhere ?? []).includes(Number(k)));
   const ok = named.length === c.labels.length && setsRed.length === SEEDSETS.length && bled.length === 0;
   console.log(ok
-    ? `control ${CONTROL}: FIRED at section ${c.section} (${named.length} of ${c.labels.length} named checks red on ${setsRed.length} of ${SEEDSETS.length} sets)`
+    ? `control ${CONTROL}: FIRED at section ${c.section} (${named.length} of ${c.labels.length} named checks red${c.everySet ? ` on ${setsRed.length} of ${SEEDSETS.length} sets` : ""})`
     : `control ${CONTROL}: DID NOT FIRE as aimed (${named.length} of ${c.labels.length} named checks, red on ${setsRed.length} of ${SEEDSETS.length} sets, other sections red: ${bled.join(', ') || 'none'})`);
   console.log(`simNflSeasonStats: ${checks} checks, ${failed} failed (control ${CONTROL})${tail}`);
   process.exit(ok ? 1 : 3);
