@@ -1,0 +1,49 @@
+CONTROL nextyear
+today (ET) 2027-10-22
+1) the calendar covers every competition a daily reads
+   12 competitions, 5 finals tables inside them
+2) heldThrough matches what the repo records each table holding
+   super_bowls: held through 2026 (migrations none, saved page 2026)
+   nba_finals: held through 2026 (migrations none, saved page 2026)
+   world_series_v2: held through 2025 (migrations none, saved page 2025)
+   stanley_cup_finals_v2: held through 2026 (migrations none, saved page 2026)
+   wnba_finals: held through 2025 (migrations none, saved page 2025)
+   cfb_national_champions: held through 2025 (migrations 2025, saved page 2025)
+   ncaa_basketball_champions: held through 2026 (migrations none, saved page 2026)
+   soccer_league_champions: held through 2026 (migrations none, saved page 2026)
+   afl_premiers: held through 2026 (migrations 2026, saved page 2025)
+   nrl_premiers: held through 2026 (migrations 2026, saved page 2025)
+   afl_brownlow: held through 2026 (migrations 2026, saved page 2025)
+   nrl_dally_m: held through 2026 (migrations 2026, saved page 2025)
+3) every final over 21 days ago has its row
+  FAIL: Super Bowl 2027: over by 2027-02-20, its row has been due in super_bowls since 2027-03-13 and the table is held through 2026
+   super_bowls: latest due 2027, held 2026, next due 2028 on 2028-03-12
+  FAIL: NBA Finals 2027: over by 2027-06-25, its row has been due in nba_finals since 2027-07-16 and the table is held through 2026
+   nba_finals: latest due 2027, held 2026, next due 2028 on 2028-07-16
+  FAIL: World Series 2026: over by 2026-11-05, its row has been due in world_series_v2 since 2026-11-26 and the table is held through 2025
+   world_series_v2: latest due 2026, held 2025, next due 2027 on 2027-11-26
+  FAIL: Stanley Cup Final 2027: over by 2027-06-30, its row has been due in stanley_cup_finals_v2 since 2027-07-21 and the table is held through 2026
+   stanley_cup_finals_v2: latest due 2027, held 2026, next due 2028 on 2028-07-21
+  FAIL: WNBA Finals 2026: over by 2026-10-31, its row has been due in wnba_finals since 2026-11-21 and the table is held through 2025
+   wnba_finals: latest due 2026, held 2025, next due 2027 on 2027-11-21
+  FAIL: college football title game 2026: over by 2027-01-25, its row has been due in cfb_national_champions since 2027-02-15 and the table is held through 2025
+   cfb_national_champions: latest due 2026, held 2025, next due 2027 on 2028-02-15
+  FAIL: men's NCAA tournament 2027: over by 2027-04-10, its row has been due in ncaa_basketball_champions since 2027-05-01 and the table is held through 2026
+   ncaa_basketball_champions: latest due 2027, held 2026, next due 2028 on 2028-05-01
+  FAIL: English top flight 2027: over by 2027-05-31, its row has been due in soccer_league_champions since 2027-06-21 and the table is held through 2026
+   soccer_league_champions: latest due 2027, held 2026, next due 2028 on 2028-06-21
+   afl_premiers: latest due 2026, held 2026, next due 2027 on 2027-10-26
+   nrl_premiers: latest due 2026, held 2026, next due 2027 on 2027-10-31
+  FAIL: Brownlow Medal count 2027: over by 2027-10-01, its row has been due in afl_brownlow since 2027-10-22 and the table is held through 2026
+   afl_brownlow: latest due 2027, held 2026, next due 2028 on 2028-10-22
+   nrl_dally_m: latest due 2026, held 2026, next due 2027 on 2027-10-26
+4) a season the saved pages have not shown yet counts from a day boundary
+  FAIL: afl_premiers 2026: counts from 2026-11-01 has come (today 2027-10-22) and the saved Record Books page still stops at 2025: if the rows are not applied yet, move countsFrom to the day after the apply; if they are, run genRecordBooks and redraw the page
+  FAIL: nrl_premiers 2026: counts from 2026-11-01 has come (today 2027-10-22) and the saved Record Books page still stops at 2025: if the rows are not applied yet, move countsFrom to the day after the apply; if they are, run genRecordBooks and redraw the page
+  FAIL: afl_brownlow 2026: counts from 2026-11-01 has come (today 2027-10-22) and the saved Record Books page still stops at 2025: if the rows are not applied yet, move countsFrom to the day after the apply; if they are, run genRecordBooks and redraw the page
+  FAIL: nrl_dally_m 2026: counts from 2026-11-01 has come (today 2027-10-22) and the saved Record Books page still stops at 2025: if the rows are not applied yet, move countsFrom to the day after the apply; if they are, run genRecordBooks and redraw the page
+   6 fetch probes under a moved clock
+5) every Rank 'Em round naming an active player says which season it runs through
+   15 rounds, 2 stamped
+
+simSeasonDue: 13 failures (control nextyear); first: Super Bowl 2027: over by 2027-02-20, its row has been due in super_bowls since 2027-03-13 and the table is held through 2026

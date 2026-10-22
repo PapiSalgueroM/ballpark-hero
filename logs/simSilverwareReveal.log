@@ -1,0 +1,6 @@
+Silverware reveal: 10/10 actual-hook/page cases passed: manual progression, scores, locked greens, daily booking, reload, mode/replay isolation, midnight and focused Next.
+Silverware reveal: daily and Unlimited boards stayed readable beyond ten seconds, then advanced through the actual player action.
+Silverware reveal: wrong first/final tries retained locked greens and earned scores; repeated Next did not erase the next arrangement.
+Silverware reveal: final daily saved/booked immediately, restored once and retained its dealt date across midnight.
+Silverware reveal: mode/replay cleared pending results; actual page announced earned points and focused Next/See results.
+Silverware reveal cleanup: owned temporary folder removed; production bytes preserved.
