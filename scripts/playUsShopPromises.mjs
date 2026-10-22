@@ -138,6 +138,7 @@ async function walkB(browser, size) {
       if (m.ef < m.df) fail(walk, `${size.width}: the office's effect line is ${m.ef}px, under its description's ${m.df}px`);
       if (m.cut || m.right > m.iw) fail(walk, `${size.width}: the office's effect line is cut`);
     }
+    await card.screenshot({ path: path.join(OUT, `${walk}-${size.width}-office-card.png`) });
     await check('family-aisle');
     await tap(page.getByRole('button', { name: 'Hub', exact: true }).first());
     await play.waitFor();
@@ -158,6 +159,9 @@ async function walkB(browser, size) {
       const cut = await line.evaluate(el => el.scrollWidth > el.clientWidth + 1 || el.getBoundingClientRect().right > innerWidth);
       if (cut) fail(walk, `${size.width}: the returns line is cut`);
     }
+    /* The curtain's lines tick in on a stagger: let them land, then picture the whole card to LOOK at the line. */
+    await page.waitForTimeout(3500);
+    await page.locator('[data-season-reveal]').screenshot({ path: path.join(OUT, `${walk}-${size.width}-curtain.png`) });
     await check('season-played');
   } catch (error) { fail(walk, `${size.width}: ${String(error.message || error).split('\n')[0]}`, 'crash'); } finally { await context.close(); }
 }
