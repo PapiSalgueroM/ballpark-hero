@@ -92,7 +92,12 @@ for (const [w, h] of [[320, 640], [390, 844], [1280, 900]]) {
     const close = await dialog.locator('button[aria-label="Close the rules"]').boundingBox();
     f.closeButton = close ? `${Math.round(close.width)} x ${Math.round(close.height)}` : 'missing';
     if (errors.length) fail(`${tag}: page errors ${errors.join(' | ')}`);
-    await para.scrollIntoViewIfNeeded();
+    /* The consent banner covers the lower half of a phone; answer it (reject) so the
+       picture shows the rules, and reopen them if the answer closed the dialog. */
+    await dismissConsent(page);
+    await page.waitForTimeout(300);
+    if (!(await dialog.isVisible())) await page.getByRole('button', { name: 'How it works' }).first().click({ noWaitAfter: true }).catch(() => {});
+    await para.scrollIntoViewIfNeeded().catch(() => {});
     await page.screenshot({ path: path.join(OUT, `rules-${tag}.png`) });
     await ctx.close();
   }
@@ -116,6 +121,11 @@ for (const [w, h] of [[390, 844], [1280, 900]]) {
       ...fresh, levels: { ...fresh.levels, squad: par3, stands: 30 }, fanbase: 50000, streak: 0,
       league: T.newLeague(fresh.rep ?? 0, 3, 0), bestDivision: 3, minute: 89, matchSec: 0,
       goalsFor: 1, goalsAgainst: result === 'win' ? 0 : 1,
+      /* Every badge and milestone already earned: a planted ground this big would earn
+         several in its first ticks (+2 percent income each), and the win would then be
+         paid on more income than the planted save holds (the first run read 2,332 for
+         2,046, seven badges). */
+      ach: T.ACHIEVEMENTS.map(a => a.id), claimed: T.MILESTONES.map(m => m.id),
     };
     const now = Date.now();
     const loaded = T.deserializeTycoon(JSON.stringify({ ...seed, savedAt: now }), now);
