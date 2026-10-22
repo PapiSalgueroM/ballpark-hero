@@ -1,0 +1,28 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/champOrNotReveal.test.tsx src/test/silverwareReveal.test.tsx src/test/rugbyLeagueChallenge.test.tsx src/test/rugbyLeagueReview.test.tsx src/test/whodTheyBeatReveal.test.tsx src/test/rankEmCircuit.test.tsx src/test/rankEmOrder.test.tsx src/test/dailySaveParity.test.tsx src/test/noDoubleRecord.test.tsx src/test/resultScorePillComparison.test.tsx src/test/storageBlockedBoot.test.tsx src/test/saveKeeper.test.ts --testTimeout=300000 --hookTimeout=120000
+simSeasonDue: node scripts/simSeasonDue.mjs
+due-nextyear: SEASON_DUE_CONTROL=nextyear node scripts/simSeasonDue.mjs
+due-strip: SEASON_DUE_CONTROL=strip node scripts/simSeasonDue.mjs
+due-unheld: SEASON_DUE_CONTROL=unheld node scripts/simSeasonDue.mjs
+due-nocounts: SEASON_DUE_CONTROL=nocounts node scripts/simSeasonDue.mjs
+due-unfiltered: SEASON_DUE_CONTROL=unfiltered node scripts/simSeasonDue.mjs
+due-nov20: SEASON_DUE_TODAY=2026-11-20 node scripts/simSeasonDue.mjs
+due-nov21: SEASON_DUE_TODAY=2026-11-21 node scripts/simSeasonDue.mjs
+due-nov26: SEASON_DUE_TODAY=2026-11-26 node scripts/simSeasonDue.mjs
+simChampOrNot: node scripts/simChampOrNot.mjs
+simSilverwareSort: node scripts/simSilverwareSort.mjs
+simWhodTheyBeat: node scripts/simWhodTheyBeat.mjs
+simHallOfChampions: node scripts/simHallOfChampions.mjs
+simRugbyLeagueChallenge: node scripts/simRugbyLeagueChallenge.mjs
+simRugbyLeagueReview: node scripts/simRugbyLeagueReview.mjs
+simChampOrNotReveal: node scripts/simChampOrNotReveal.mjs
+simWhodTheyBeatReveal: node scripts/simWhodTheyBeatReveal.mjs
+simRankEmCircuit: node scripts/simRankEmCircuit.mjs
+simRankEmOrder: node scripts/simRankEmOrder.mjs
+simDaily: node scripts/simDaily.mjs
+simFairPuzzles: node scripts/simFairPuzzles.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
