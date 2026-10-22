@@ -122,8 +122,8 @@ assert.ok(['', 'bundle'].includes(only), 'Unknown LIVE_MOTION_ONLY');
 /* Minified bytes and gzip bytes of the part alone, and the ceiling: each plus a fifth. */
 /* Round 1521 retook it: the ball's height, the foul cue, the build up by lines and the figures' looks took the part
    from 19,277 and 8,077 (r1521-s1 on 9737fe27 read 27,939 and 11,683) to the numbers below, read on a GitHub runner
-   on the round's code (r1521-fina on c6e5a9b3, the round merged with main 30d123fd). The part is only ever in the lazy match and season centre chunks, so no route's first load moves. */
-const BUNDLE_MEASURED = { min: 28999, gzip: 12178 };
+   on the round's code (r1521-fin3 on f0534960, the round merged with main 30d123fd). The part is only ever in the lazy match and season centre chunks, so no route's first load moves. */
+const BUNDLE_MEASURED = { min: 29137, gzip: 12239 };
 const BUNDLE_CEILING = { min: Math.ceil(BUNDLE_MEASURED.min * 1.2), gzip: Math.ceil(BUNDLE_MEASURED.gzip * 1.2) };
 const PART = path.join(root, 'src/components/pitch-motion');
 const lf = async file => (await readFile(file, 'utf8')).replaceAll('\r\n', '\n');
