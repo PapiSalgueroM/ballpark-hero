@@ -1,0 +1,6 @@
+anchor count 1
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/test/useSaveFenceWatch.test.tsx > useSaveFenceWatch > a storage event for the fence key sets moved after another tab wrote
+ FAIL  src/test/useSaveFenceWatch.test.tsx > useSaveFenceWatch > once moved it stays moved
+      Tests  2 failed | 7 passed (9)
+vitest exit 1, src files still changed after the restore: 0

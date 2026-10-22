@@ -1,0 +1,716 @@
+FAIL VAR normal
+
+/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 3 errors:
+src/lib/clubManagerBoardAsks.ts:60:35: ERROR: No matching export in ".sim-control/cm-var-ZRB0g2/prior.ts" for import "careerPlace"
+src/lib/clubManagerBoardAsks.ts:60:64: ERROR: No matching export in ".sim-control/cm-var-ZRB0g2/prior.ts" for import "shownNation"
+src/lib/clubManagerMeters.ts:50:40: ERROR: No matching export in ".sim-control/cm-var-ZRB0g2/prior.ts" for import "weighedTrophies"
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:897:52
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0
+FAIL VAR counted
+
+/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 3 errors:
+src/lib/clubManagerBoardAsks.ts:60:35: ERROR: No matching export in ".sim-control/cm-var-NR9N1X/prior.ts" for import "careerPlace"
+src/lib/clubManagerBoardAsks.ts:60:64: ERROR: No matching export in ".sim-control/cm-var-NR9N1X/prior.ts" for import "shownNation"
+src/lib/clubManagerMeters.ts:50:40: ERROR: No matching export in ".sim-control/cm-var-NR9N1X/prior.ts" for import "weighedTrophies"
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:897:52
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0
+FAIL VAR decorative
+
+/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 3 errors:
+src/lib/clubManagerBoardAsks.ts:60:35: ERROR: No matching export in ".sim-control/cm-var-LNRk2T/prior.ts" for import "careerPlace"
+src/lib/clubManagerBoardAsks.ts:60:64: ERROR: No matching export in ".sim-control/cm-var-LNRk2T/prior.ts" for import "shownNation"
+src/lib/clubManagerMeters.ts:50:40: ERROR: No matching export in ".sim-control/cm-var-LNRk2T/prior.ts" for import "weighedTrophies"
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:897:52
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0
+FAIL VAR penalty
+
+/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 3 errors:
+src/lib/clubManagerBoardAsks.ts:60:35: ERROR: No matching export in ".sim-control/cm-var-2vTi5V/prior.ts" for import "careerPlace"
+src/lib/clubManagerBoardAsks.ts:60:64: ERROR: No matching export in ".sim-control/cm-var-2vTi5V/prior.ts" for import "shownNation"
+src/lib/clubManagerMeters.ts:50:40: ERROR: No matching export in ".sim-control/cm-var-2vTi5V/prior.ts" for import "weighedTrophies"
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:897:52
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0
+FAIL VAR awards
+
+/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 3 errors:
+src/lib/clubManagerBoardAsks.ts:60:35: ERROR: No matching export in ".sim-control/cm-var-xtCcRZ/prior.ts" for import "careerPlace"
+src/lib/clubManagerBoardAsks.ts:60:64: ERROR: No matching export in ".sim-control/cm-var-xtCcRZ/prior.ts" for import "shownNation"
+src/lib/clubManagerMeters.ts:50:40: ERROR: No matching export in ".sim-control/cm-var-xtCcRZ/prior.ts" for import "weighedTrophies"
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:897:52
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0
+FAIL VAR resolution
+
+/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 3 errors:
+src/lib/clubManagerBoardAsks.ts:60:35: ERROR: No matching export in ".sim-control/cm-var-3ixJxk/prior.ts" for import "careerPlace"
+src/lib/clubManagerBoardAsks.ts:60:64: ERROR: No matching export in ".sim-control/cm-var-3ixJxk/prior.ts" for import "shownNation"
+src/lib/clubManagerMeters.ts:50:40: ERROR: No matching export in ".sim-control/cm-var-3ixJxk/prior.ts" for import "weighedTrophies"
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:897:52
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0
+FAIL VAR past
+
+/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 3 errors:
+src/lib/clubManagerBoardAsks.ts:60:35: ERROR: No matching export in ".sim-control/cm-var-7HDr2E/prior.ts" for import "careerPlace"
+src/lib/clubManagerBoardAsks.ts:60:64: ERROR: No matching export in ".sim-control/cm-var-7HDr2E/prior.ts" for import "shownNation"
+src/lib/clubManagerMeters.ts:50:40: ERROR: No matching export in ".sim-control/cm-var-7HDr2E/prior.ts" for import "weighedTrophies"
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:897:52
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0
+FAIL VAR reveal
+
+/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 3 errors:
+src/lib/clubManagerBoardAsks.ts:60:35: ERROR: No matching export in ".sim-control/cm-var-QltoqI/prior.ts" for import "careerPlace"
+src/lib/clubManagerBoardAsks.ts:60:64: ERROR: No matching export in ".sim-control/cm-var-QltoqI/prior.ts" for import "shownNation"
+src/lib/clubManagerMeters.ts:50:40: ERROR: No matching export in ".sim-control/cm-var-QltoqI/prior.ts" for import "weighedTrophies"
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:897:52
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0
+FAIL VAR resume
+
+/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 3 errors:
+src/lib/clubManagerBoardAsks.ts:60:35: ERROR: No matching export in ".sim-control/cm-var-wQvHPZ/prior.ts" for import "careerPlace"
+src/lib/clubManagerBoardAsks.ts:60:64: ERROR: No matching export in ".sim-control/cm-var-wQvHPZ/prior.ts" for import "shownNation"
+src/lib/clubManagerMeters.ts:50:40: ERROR: No matching export in ".sim-control/cm-var-wQvHPZ/prior.ts" for import "weighedTrophies"
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:897:52
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0
+FAIL VAR announce
+
+/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 3 errors:
+src/lib/clubManagerBoardAsks.ts:60:35: ERROR: No matching export in ".sim-control/cm-var-vFoMEp/prior.ts" for import "careerPlace"
+src/lib/clubManagerBoardAsks.ts:60:64: ERROR: No matching export in ".sim-control/cm-var-vFoMEp/prior.ts" for import "shownNation"
+src/lib/clubManagerMeters.ts:50:40: ERROR: No matching export in ".sim-control/cm-var-vFoMEp/prior.ts" for import "weighedTrophies"
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:897:52
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0
+FAIL VAR disabled
+
+/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 3 errors:
+src/lib/clubManagerBoardAsks.ts:60:35: ERROR: No matching export in ".sim-control/cm-var-zjQs9G/prior.ts" for import "careerPlace"
+src/lib/clubManagerBoardAsks.ts:60:64: ERROR: No matching export in ".sim-control/cm-var-zjQs9G/prior.ts" for import "shownNation"
+src/lib/clubManagerMeters.ts:50:40: ERROR: No matching export in ".sim-control/cm-var-zjQs9G/prior.ts" for import "weighedTrophies"
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:897:52
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0
+FAIL VAR everywhere
+
+/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 3 errors:
+src/lib/clubManagerBoardAsks.ts:60:35: ERROR: No matching export in ".sim-control/cm-var-2KPmVJ/prior.ts" for import "careerPlace"
+src/lib/clubManagerBoardAsks.ts:60:64: ERROR: No matching export in ".sim-control/cm-var-2KPmVJ/prior.ts" for import "shownNation"
+src/lib/clubManagerMeters.ts:50:40: ERROR: No matching export in ".sim-control/cm-var-2KPmVJ/prior.ts" for import "weighedTrophies"
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:897:52
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0
+FAIL VAR historic
+
+/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 3 errors:
+src/lib/clubManagerBoardAsks.ts:60:35: ERROR: No matching export in ".sim-control/cm-var-hC9zGX/prior.ts" for import "careerPlace"
+src/lib/clubManagerBoardAsks.ts:60:64: ERROR: No matching export in ".sim-control/cm-var-hC9zGX/prior.ts" for import "shownNation"
+src/lib/clubManagerMeters.ts:50:40: ERROR: No matching export in ".sim-control/cm-var-hC9zGX/prior.ts" for import "weighedTrophies"
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:897:52
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0
+FAIL VAR streamgoal
+
+/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 3 errors:
+src/lib/clubManagerBoardAsks.ts:60:35: ERROR: No matching export in ".sim-control/cm-var-jIbmKz/prior.ts" for import "careerPlace"
+src/lib/clubManagerBoardAsks.ts:60:64: ERROR: No matching export in ".sim-control/cm-var-jIbmKz/prior.ts" for import "shownNation"
+src/lib/clubManagerMeters.ts:50:40: ERROR: No matching export in ".sim-control/cm-var-jIbmKz/prior.ts" for import "weighedTrophies"
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:897:52
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0
+FAIL VAR streamfoul
+
+/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 3 errors:
+src/lib/clubManagerBoardAsks.ts:60:35: ERROR: No matching export in ".sim-control/cm-var-wS0j7C/prior.ts" for import "careerPlace"
+src/lib/clubManagerBoardAsks.ts:60:64: ERROR: No matching export in ".sim-control/cm-var-wS0j7C/prior.ts" for import "shownNation"
+src/lib/clubManagerMeters.ts:50:40: ERROR: No matching export in ".sim-control/cm-var-wS0j7C/prior.ts" for import "weighedTrophies"
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:897:52
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0
+FAIL VAR oldgoalreview
+
+/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 3 errors:
+src/lib/clubManagerBoardAsks.ts:60:35: ERROR: No matching export in ".sim-control/cm-var-Ck2O6S/prior.ts" for import "careerPlace"
+src/lib/clubManagerBoardAsks.ts:60:64: ERROR: No matching export in ".sim-control/cm-var-Ck2O6S/prior.ts" for import "shownNation"
+src/lib/clubManagerMeters.ts:50:40: ERROR: No matching export in ".sim-control/cm-var-Ck2O6S/prior.ts" for import "weighedTrophies"
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:897:52
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0
+FAIL VAR oldoverturn
+
+/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 3 errors:
+src/lib/clubManagerBoardAsks.ts:60:35: ERROR: No matching export in ".sim-control/cm-var-D9fQkj/prior.ts" for import "careerPlace"
+src/lib/clubManagerBoardAsks.ts:60:64: ERROR: No matching export in ".sim-control/cm-var-D9fQkj/prior.ts" for import "shownNation"
+src/lib/clubManagerMeters.ts:50:40: ERROR: No matching export in ".sim-control/cm-var-D9fQkj/prior.ts" for import "weighedTrophies"
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:897:52
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0
+FAIL VAR oldpenaltyreview
+
+/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 3 errors:
+src/lib/clubManagerBoardAsks.ts:60:35: ERROR: No matching export in ".sim-control/cm-var-Da6Ia6/prior.ts" for import "careerPlace"
+src/lib/clubManagerBoardAsks.ts:60:64: ERROR: No matching export in ".sim-control/cm-var-Da6Ia6/prior.ts" for import "shownNation"
+src/lib/clubManagerMeters.ts:50:40: ERROR: No matching export in ".sim-control/cm-var-Da6Ia6/prior.ts" for import "weighedTrophies"
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:897:52
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0
+FAIL VAR oldmissedfoul
+
+/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 3 errors:
+src/lib/clubManagerBoardAsks.ts:60:35: ERROR: No matching export in ".sim-control/cm-var-4r1Gqh/prior.ts" for import "careerPlace"
+src/lib/clubManagerBoardAsks.ts:60:64: ERROR: No matching export in ".sim-control/cm-var-4r1Gqh/prior.ts" for import "shownNation"
+src/lib/clubManagerMeters.ts:50:40: ERROR: No matching export in ".sim-control/cm-var-4r1Gqh/prior.ts" for import "weighedTrophies"
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:897:52
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0
+FAIL VAR oldpenaltyscores
+
+/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 3 errors:
+src/lib/clubManagerBoardAsks.ts:60:35: ERROR: No matching export in ".sim-control/cm-var-Bgyd9V/prior.ts" for import "careerPlace"
+src/lib/clubManagerBoardAsks.ts:60:64: ERROR: No matching export in ".sim-control/cm-var-Bgyd9V/prior.ts" for import "shownNation"
+src/lib/clubManagerMeters.ts:50:40: ERROR: No matching export in ".sim-control/cm-var-Bgyd9V/prior.ts" for import "weighedTrophies"
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:897:52
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0
+FAIL VAR oldpenaltyontarget
+
+/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 3 errors:
+src/lib/clubManagerBoardAsks.ts:60:35: ERROR: No matching export in ".sim-control/cm-var-fjEpT4/prior.ts" for import "careerPlace"
+src/lib/clubManagerBoardAsks.ts:60:64: ERROR: No matching export in ".sim-control/cm-var-fjEpT4/prior.ts" for import "shownNation"
+src/lib/clubManagerMeters.ts:50:40: ERROR: No matching export in ".sim-control/cm-var-fjEpT4/prior.ts" for import "weighedTrophies"
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:897:52
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0
+FAIL VAR penaltyband
+
+/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 3 errors:
+src/lib/clubManagerBoardAsks.ts:60:35: ERROR: No matching export in ".sim-control/cm-var-1Pbwcx/prior.ts" for import "careerPlace"
+src/lib/clubManagerBoardAsks.ts:60:64: ERROR: No matching export in ".sim-control/cm-var-1Pbwcx/prior.ts" for import "shownNation"
+src/lib/clubManagerMeters.ts:50:40: ERROR: No matching export in ".sim-control/cm-var-1Pbwcx/prior.ts" for import "weighedTrophies"
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:897:52
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0
+FAIL VAR nolift
+
+/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 3 errors:
+src/lib/clubManagerBoardAsks.ts:60:35: ERROR: No matching export in ".sim-control/cm-var-DrQgky/prior.ts" for import "careerPlace"
+src/lib/clubManagerBoardAsks.ts:60:64: ERROR: No matching export in ".sim-control/cm-var-DrQgky/prior.ts" for import "shownNation"
+src/lib/clubManagerMeters.ts:50:40: ERROR: No matching export in ".sim-control/cm-var-DrQgky/prior.ts" for import "weighedTrophies"
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:897:52
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0
+FAIL VAR liftpens
+
+/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 3 errors:
+src/lib/clubManagerBoardAsks.ts:60:35: ERROR: No matching export in ".sim-control/cm-var-OGKAkE/prior.ts" for import "careerPlace"
+src/lib/clubManagerBoardAsks.ts:60:64: ERROR: No matching export in ".sim-control/cm-var-OGKAkE/prior.ts" for import "shownNation"
+src/lib/clubManagerMeters.ts:50:40: ERROR: No matching export in ".sim-control/cm-var-OGKAkE/prior.ts" for import "weighedTrophies"
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:897:52
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0
+FAIL VAR liftkind
+
+/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 3 errors:
+src/lib/clubManagerBoardAsks.ts:60:35: ERROR: No matching export in ".sim-control/cm-var-Lv4E5c/prior.ts" for import "careerPlace"
+src/lib/clubManagerBoardAsks.ts:60:64: ERROR: No matching export in ".sim-control/cm-var-Lv4E5c/prior.ts" for import "shownNation"
+src/lib/clubManagerMeters.ts:50:40: ERROR: No matching export in ".sim-control/cm-var-Lv4E5c/prior.ts" for import "weighedTrophies"
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:897:52
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0
+FAIL VAR kindgoal
+
+/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 3 errors:
+src/lib/clubManagerBoardAsks.ts:60:35: ERROR: No matching export in ".sim-control/cm-var-B24DTE/prior.ts" for import "careerPlace"
+src/lib/clubManagerBoardAsks.ts:60:64: ERROR: No matching export in ".sim-control/cm-var-B24DTE/prior.ts" for import "shownNation"
+src/lib/clubManagerMeters.ts:50:40: ERROR: No matching export in ".sim-control/cm-var-B24DTE/prior.ts" for import "weighedTrophies"
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:897:52
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0
+FAIL VAR kindpenalty
+
+/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 3 errors:
+src/lib/clubManagerBoardAsks.ts:60:35: ERROR: No matching export in ".sim-control/cm-var-P7Gdxg/prior.ts" for import "careerPlace"
+src/lib/clubManagerBoardAsks.ts:60:64: ERROR: No matching export in ".sim-control/cm-var-P7Gdxg/prior.ts" for import "shownNation"
+src/lib/clubManagerMeters.ts:50:40: ERROR: No matching export in ".sim-control/cm-var-P7Gdxg/prior.ts" for import "weighedTrophies"
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:897:52
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0
+FAIL VAR kindsaved
+
+/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 3 errors:
+src/lib/clubManagerBoardAsks.ts:60:35: ERROR: No matching export in ".sim-control/cm-var-EdvNMv/prior.ts" for import "careerPlace"
+src/lib/clubManagerBoardAsks.ts:60:64: ERROR: No matching export in ".sim-control/cm-var-EdvNMv/prior.ts" for import "shownNation"
+src/lib/clubManagerMeters.ts:50:40: ERROR: No matching export in ".sim-control/cm-var-EdvNMv/prior.ts" for import "weighedTrophies"
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:897:52
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Normal proof and every effective control execute
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:208:12)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:752:46 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

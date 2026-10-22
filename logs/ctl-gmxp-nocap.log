@@ -1,0 +1,154 @@
+1) Club Manager XP replays the fixture recorded before the lift
+  FAIL: section spend: 7200 lines (want 7200), hash differs
+      first kept line that differs, #10
+      want: w=0 s=5 negotiation free=19 spent=14 -> {"v":1,"xp":27960,"points":{"tactics":5,"recruitment":4,"negotiation":1,"youth":2,"manManagement":1,"finance":1,"media":1}}
+      got:  w=0 s=5 negotiation free=18 spent=15 -> {"v":1,"xp":27960,"points":{"tactics":6,"recruitment":4,"negotiation":1,"youth":2,"manManagement":1,"finance":1,"media":1}}
+2) The GM curve is Club Manager's, at every level, and so is every spend
+  FAIL: walk 0 spend 22: the boards diverged
+  FAIL: walk 2 spend 24: the boards diverged
+  FAIL: walk 3 spend 26: the boards diverged
+  FAIL: walk 4 spend 18: the boards diverged
+  FAIL: walk 5 spend 21: the boards diverged
+  FAIL: walk 6 spend 23: the boards diverged
+  FAIL: walk 9 spend 21: the boards diverged
+  FAIL: walk 10 spend 18: the boards diverged
+  FAIL: walk 13 spend 29: the boards diverged
+  FAIL: walk 18 spend 13: the boards diverged
+  FAIL: walk 20 spend 20: the boards diverged
+  FAIL: walk 25 spend 23: the boards diverged
+  FAIL: walk 28 spend 20: the boards diverged
+  FAIL: walk 29 spend 23: the boards diverged
+  FAIL: walk 30 spend 16: the boards diverged
+  FAIL: walk 31 spend 13: the boards diverged
+  FAIL: walk 32 spend 19: the boards diverged
+  FAIL: walk 33 spend 19: the boards diverged
+  FAIL: walk 36 spend 19: the boards diverged
+  FAIL: walk 40 spend 21: the boards diverged
+  FAIL: walk 43 spend 19: the boards diverged
+  FAIL: walk 44 spend 9: the boards diverged
+  FAIL: walk 48 spend 29: the boards diverged
+  FAIL: walk 50 spend 24: the boards diverged
+  FAIL: walk 51 spend 23: the boards diverged
+  FAIL: walk 52 spend 23: the boards diverged
+  FAIL: walk 56 spend 24: the boards diverged
+  FAIL: walk 57 spend 20: the boards diverged
+  FAIL: walk 58 spend 23: the boards diverged
+  FAIL: walk 59 spend 15: the boards diverged
+  FAIL: walk 61 spend 25: the boards diverged
+  FAIL: walk 62 spend 26: the boards diverged
+  FAIL: walk 65 spend 25: the boards diverged
+  FAIL: walk 67 spend 19: the boards diverged
+  FAIL: walk 69 spend 18: the boards diverged
+  FAIL: walk 70 spend 24: the boards diverged
+  FAIL: walk 73 spend 18: the boards diverged
+  FAIL: walk 74 spend 15: the boards diverged
+  FAIL: walk 75 spend 17: the boards diverged
+  FAIL: walk 77 spend 20: the boards diverged
+  FAIL: walk 78 spend 15: the boards diverged
+  FAIL: walk 80 spend 23: the boards diverged
+  FAIL: walk 82 spend 15: the boards diverged
+  FAIL: walk 83 spend 21: the boards diverged
+  FAIL: walk 85 spend 22: the boards diverged
+  FAIL: walk 86 spend 26: the boards diverged
+  FAIL: walk 87 spend 16: the boards diverged
+  FAIL: walk 89 spend 19: the boards diverged
+  FAIL: walk 91 spend 18: the boards diverged
+  FAIL: walk 93 spend 22: the boards diverged
+  FAIL: walk 94 spend 25: the boards diverged
+  FAIL: walk 98 spend 22: the boards diverged
+  FAIL: walk 99 spend 23: the boards diverged
+  FAIL: walk 100 spend 11: the boards diverged
+  FAIL: walk 101 spend 23: the boards diverged
+  FAIL: walk 103 spend 27: the boards diverged
+  FAIL: walk 104 spend 20: the boards diverged
+  FAIL: walk 105 spend 18: the boards diverged
+  FAIL: walk 106 spend 17: the boards diverged
+  FAIL: walk 108 spend 14: the boards diverged
+  FAIL: walk 111 spend 17: the boards diverged
+  FAIL: walk 113 spend 25: the boards diverged
+  FAIL: walk 114 spend 23: the boards diverged
+  FAIL: walk 115 spend 21: the boards diverged
+  FAIL: walk 118 spend 19: the boards diverged
+  FAIL: walk 119 spend 19: the boards diverged
+  FAIL: walk 120 spend 15: the boards diverged
+  FAIL: walk 121 spend 19: the boards diverged
+  FAIL: walk 122 spend 26: the boards diverged
+  FAIL: walk 124 spend 25: the boards diverged
+  FAIL: walk 126 spend 22: the boards diverged
+  FAIL: walk 127 spend 14: the boards diverged
+  FAIL: walk 131 spend 19: the boards diverged
+  FAIL: walk 132 spend 22: the boards diverged
+  FAIL: walk 133 spend 22: the boards diverged
+  FAIL: walk 134 spend 13: the boards diverged
+  FAIL: walk 138 spend 20: the boards diverged
+  FAIL: walk 140 spend 24: the boards diverged
+  FAIL: walk 142 spend 30: the boards diverged
+  FAIL: walk 144 spend 19: the boards diverged
+  FAIL: walk 145 spend 18: the boards diverged
+  FAIL: walk 150 spend 24: the boards diverged
+  FAIL: walk 151 spend 25: the boards diverged
+  FAIL: walk 152 spend 23: the boards diverged
+  FAIL: walk 153 spend 19: the boards diverged
+  FAIL: walk 154 spend 27: the boards diverged
+  FAIL: walk 155 spend 11: the boards diverged
+  FAIL: walk 157 spend 19: the boards diverged
+  FAIL: walk 159 spend 19: the boards diverged
+  FAIL: walk 163 spend 29: the boards diverged
+  FAIL: walk 165 spend 26: the boards diverged
+  FAIL: walk 166 spend 18: the boards diverged
+  FAIL: walk 168 spend 19: the boards diverged
+  FAIL: walk 169 spend 10: the boards diverged
+  FAIL: walk 170 spend 22: the boards diverged
+  FAIL: walk 171 spend 18: the boards diverged
+  FAIL: walk 173 spend 15: the boards diverged
+  FAIL: walk 175 spend 17: the boards diverged
+  FAIL: walk 177 spend 19: the boards diverged
+  FAIL: walk 181 spend 23: the boards diverged
+  FAIL: walk 183 spend 11: the boards diverged
+  FAIL: walk 184 spend 21: the boards diverged
+  FAIL: walk 186 spend 18: the boards diverged
+  FAIL: walk 187 spend 18: the boards diverged
+  FAIL: walk 188 spend 14: the boards diverged
+  FAIL: walk 189 spend 19: the boards diverged
+  FAIL: walk 191 spend 16: the boards diverged
+  FAIL: walk 192 spend 23: the boards diverged
+  FAIL: walk 193 spend 19: the boards diverged
+  FAIL: walk 194 spend 26: the boards diverged
+  FAIL: walk 197 spend 18: the boards diverged
+  FAIL: walk 198 spend 19: the boards diverged
+   real inputs: 136 opening asks over five price lists, 197 dead money figures, growth draws NFL 1/2, NBA 1/2/3, MLB 1/2/3, NHL 1/2/3
+3) A GM who has spent nothing gets exactly the numbers the front office produced
+  ok: 266 readings at zero points hand back exactly what they were given; fresh and absent blocks are empty
+4) Every GM tree point moves the number it feeds, at every step from 1 to the cap
+   scouting (expected read error of a prospect, per scouting error the draft drew (a perfect read has nothing to fix)), mean over 8 real inputs: 2.5000 > 2.2750 > 2.0500 > 1.8250 > 1.6000 > 1.3750
+  ok: scouting: smallest step over every input and level 0.1500 (floor 0.07)
+   negotiation (opening ask once kept in tenths, as a share of the agent figure, on every ask clear of its floor), mean over 131 real inputs: 1.0000 > 0.9800 > 0.9600 > 0.9400 > 0.9200 > 0.9000
+  ok: negotiation: smallest step over every input and level 0.0200 (floor 0.01)
+   capCraft (dead money once kept in tenths, as a share of the cut engine figure), mean over 197 real inputs: 1.0000 > 0.9600 > 0.9200 > 0.8800 > 0.8400 > 0.8000
+  ok: capCraft: smallest step over every input and level 0.0400 (floor 0.02)
+   development (rating points a young player gains in a year once stored as a whole number, per engine growth draw, one point of room left), mean over 11 real inputs: 1.9091 < 2.0091 < 2.1091 < 2.2091 < 2.3091 < 2.4091
+  ok: development: smallest step over every input and level 0.1000 (floor 0.05)
+   trading (a rival premium over value, as a share of the firm and sour premiums), mean over 2 real inputs: 1.0000 > 0.9200 > 0.8400 > 0.7600 > 0.6800 > 0.6000
+  ok: trading: smallest step over every input and level 0.0800 (floor 0.04)
+   ownership (trust lost to a missed and a badly missed mandate), mean over 2 real inputs: 22.0000 > 20.5000 > 19.0000 > 17.5000 > 16.0000 > 14.0000
+  ok: ownership: smallest step over every input and level 1.0000 (floor 0.5)
+   media (odds each answer that gambles lands), mean over 5 real inputs: 0.5600 < 0.5900 < 0.6200 < 0.6500 < 0.6800 < 0.7100
+  ok: media: smallest step over every input and level 0.0300 (floor 0.015)
+   (an ends only check passes 7 of 7 trees)
+4b) Every effect hands back a number a board can store, and never crosses its line
+  ok: 1930080 readings: whole ratings, money in tenths, no ask under its floor, nobody past his ceiling, no trust gain touched
+5) Each tile's "at the cap" line matches what five points actually do
+  ok: scouting: "a little over half" and five points give 0.550
+  ok: negotiation: "about a tenth off" and five points give 0.900
+  ok: capCraft: "about a fifth less" and five points give 0.800
+  ok: development: "an even chance of one extra rating point" and five points give 0.500
+  ok: trading: "about 40 percent less" and five points give 0.600
+  ok: ownership: "about a third less" and five points give 0.636
+  ok: media: "15 points more often" and five points give 0.150
+6) Spending rules hold for a GM, and a mangled block resets alone
+  FAIL: a rich GM put 6 points into one tree, the cap is 5
+7) A GM earns at Club Manager's pace, and achievements outpay volume
+   good season: GM 540 XP, Club Manager 580; whole board 29508 XP = 54.6 GM seasons, 50.9 Club Manager seasons
+  ok: every source pays, a title beats a .700 season (170 to 70), pace ratio 1.07
+
+simGmXp: 114 failure(s) under GMXP_CONTROL=nocap

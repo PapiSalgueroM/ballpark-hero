@@ -1,0 +1,14 @@
+control onesource FIRED: 1 of 22 checks red
+control oldcap FIRED: 9 of 17 checks red
+control nostops FIRED: 1 of 17 checks red
+control htstop FIRED: 6 of 17 checks red
+control ht45 FIRED: 1 of 17 checks red
+control yearplus FIRED: 1 of 17 checks red
+control etbreak FIRED: 1 of 4 checks red
+control cutover FIRED: 1 of 2 checks red
+control pressedge FIRED: 1 of 4 checks red
+control pressold FIRED: 3 of 4 checks red
+control opproom FIRED: 2 of 3 checks red
+control coachall FIRED: 1 of 3 checks red
+control etfrozen FIRED: 1 of 4 checks red
+simCmSubs: 13 of 13 Round 1331 controls fired

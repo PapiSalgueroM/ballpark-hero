@@ -1,0 +1,12 @@
+expirefall (sections 7) exit=1 | simEventDeck: 3 failures, red sections 7 (CONTROL=expirefall fired)
+expireoff (sections 7) exit=1 | simEventDeck: 7 failures, red sections 7 (CONTROL=expireoff fired)
+expirefx (sections 7) exit=1 | simEventDeck: 4 failures, red sections 7 (CONTROL=expirefx fired)
+settledoff (sections 7) exit=1 | simEventDeck: 1 failure, red sections 7 (CONTROL=settledoff fired)
+panelexpiry (sections 7) exit=1 | simEventDeck: 1 failure, red sections 7 (CONTROL=panelexpiry fired)
+neutral (sections 8) exit=1 | simEventDeck: 1 failure, red sections 8 (CONTROL=neutral fired)
+heavy (sections 10) exit=1 | simEventDeck: 1 failure, red sections 10 (CONTROL=heavy fired)
+fxsilent (sections 11) exit=1 | simEventDeck: 1 failure, red sections 11 (CONTROL=fxsilent fired)
+fxdrop (sections 11) exit=1 | simEventDeck: 1 failure, red sections 11 (CONTROL=fxdrop fired)
+fxunbound (sections 11) exit=1 | simEventDeck: 1 failure, red sections 11 (CONTROL=fxunbound fired)
+fxneutral (sections 11) exit=1 | simEventDeck: 1 failure, red sections 11 (CONTROL=fxneutral fired)
+kctl: every control exited 1 and fired

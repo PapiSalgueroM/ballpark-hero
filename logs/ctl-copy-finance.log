@@ -1,0 +1,9 @@
+CONTROL finance: one line of src/components/club-manager/FinancesScreen.tsx rewritten, section 5 must go red
+5) the money card: what the board covers and what that leaves the kitty
+  FAIL: Liverpool, week 18: the desk still prints "Season result"
+  FAIL: Liverpool, week 18: the desk has no cover kitty row
+  FAIL: the same week with a 400m signing: the desk still prints "Season result"
+  FAIL: the same week with a 400m signing: the desk has no cover kitty row
+  FAIL: a fresh career, week 0: the desk still prints "Season result"
+  FAIL: a fresh career, week 0: the desk has no cover kitty row
+simCmCopy: CONTROL finance FIRED (6 failures, as it must)

@@ -1,0 +1,20 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Control anchor must occur exactly once:   liveFeed, liveStatsAt, myOnPitchAt, oppOnPitchAt, squadNumbers, benchFor, changeRoom, liveGoneIds,
+
+
+0 !== 1
+
+    at replace (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simLiveSimMotion.mjs:117:57)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simLiveSimMotion.mjs:134:16 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 0,
+  expected: 1,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

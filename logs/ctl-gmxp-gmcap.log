@@ -1,0 +1,170 @@
+1) Club Manager XP replays the fixture recorded before the lift
+  ok: 7796 lines over 7 sections match the recording from 64d5be42
+2) The GM curve is Club Manager's, at every level, and so is every spend
+  FAIL: the GM curve is not Club Manager's as recorded from 64d5be42
+  FAIL: the GM levels is not Club Manager's as recorded from 64d5be42: want xp=Infinity level=36 earned=35 progress=1, got xp=Infinity level=43 earned=42 progress=1
+  FAIL: GM max level 43, Club Manager 36
+  FAIL: GM tree cap 6, Club Manager 5
+  FAIL: at 29508 XP the GM reads level, points, progress 36 35 0; Club Manager 36 35 1
+  FAIL: at 29509 XP the GM reads level, points, progress 36 35 0.0006325110689437065; Club Manager 36 35 1
+  FAIL: at 31088 XP the GM reads level, points, progress 36 35 0.9993674889310563; Club Manager 36 35 1
+  FAIL: at 31089 XP the GM reads level, points, progress 37 36 0; Club Manager 36 35 1
+  FAIL: at 31090 XP the GM reads level, points, progress 37 36 0.0006082725060827251; Club Manager 36 35 1
+  FAIL: at 32732 XP the GM reads level, points, progress 37 36 0.9993917274939172; Club Manager 36 35 1
+  FAIL: at 32733 XP the GM reads level, points, progress 38 37 0; Club Manager 36 35 1
+  FAIL: at 32734 XP the GM reads level, points, progress 38 37 0.0005847953216374269; Club Manager 36 35 1
+  FAIL: at 34442 XP the GM reads level, points, progress 38 37 0.9994152046783625; Club Manager 36 35 1
+  FAIL: at 34443 XP the GM reads level, points, progress 39 38 0; Club Manager 36 35 1
+  FAIL: at 34444 XP the GM reads level, points, progress 39 38 0.0005624296962879641; Club Manager 36 35 1
+  FAIL: walk 0 spend 22: Club Manager refused it, the GM took it
+  FAIL: walk 2 spend 24: Club Manager refused it, the GM took it
+  FAIL: walk 3 spend 0: the boards diverged
+  FAIL: walk 4 spend 24: Club Manager refused it, the GM took it
+  FAIL: walk 5 spend 18: Club Manager refused it, the GM took it
+  FAIL: walk 6 spend 21: Club Manager refused it, the GM took it
+  FAIL: walk 7 spend 23: Club Manager refused it, the GM took it
+  FAIL: walk 10 spend 21: Club Manager refused it, the GM took it
+  FAIL: walk 11 spend 18: Club Manager refused it, the GM took it
+  FAIL: walk 14 spend 29: Club Manager refused it, the GM took it
+  FAIL: walk 19 spend 13: Club Manager refused it, the GM took it
+  FAIL: walk 21 spend 20: Club Manager refused it, the GM took it
+  FAIL: walk 26 spend 23: Club Manager refused it, the GM took it
+  FAIL: walk 29 spend 0: the boards diverged
+  FAIL: walk 30 spend 18: Club Manager refused it, the GM took it
+  FAIL: walk 31 spend 23: Club Manager refused it, the GM took it
+  FAIL: walk 32 spend 0: the boards diverged
+  FAIL: walk 33 spend 14: Club Manager refused it, the GM took it
+  FAIL: walk 34 spend 13: Club Manager refused it, the GM took it
+  FAIL: walk 35 spend 19: Club Manager refused it, the GM took it
+  FAIL: walk 36 spend 0: the boards diverged
+  FAIL: walk 38 spend 18: Club Manager refused it, the GM took it
+  FAIL: walk 39 spend 21: Club Manager refused it, the GM took it
+  FAIL: walk 41 spend 26: Club Manager refused it, the GM took it
+  FAIL: walk 42 spend 20: Club Manager refused it, the GM took it
+  FAIL: walk 43 spend 22: Club Manager refused it, the GM took it
+  FAIL: walk 44 spend 23: Club Manager refused it, the GM took it
+  FAIL: walk 46 spend 27: Club Manager refused it, the GM took it
+  FAIL: walk 48 spend 22: Club Manager refused it, the GM took it
+  FAIL: walk 49 spend 17: Club Manager refused it, the GM took it
+  FAIL: walk 51 spend 21: Club Manager refused it, the GM took it
+  FAIL: walk 52 spend 12: Club Manager refused it, the GM took it
+  FAIL: walk 54 spend 16: Club Manager refused it, the GM took it
+  FAIL: walk 55 spend 22: Club Manager refused it, the GM took it
+  FAIL: walk 56 spend 26: Club Manager refused it, the GM took it
+  FAIL: walk 57 spend 25: Club Manager refused it, the GM took it
+  FAIL: walk 58 spend 20: Club Manager refused it, the GM took it
+  FAIL: walk 60 spend 22: Club Manager refused it, the GM took it
+  FAIL: walk 62 spend 28: Club Manager refused it, the GM took it
+  FAIL: walk 63 spend 17: Club Manager refused it, the GM took it
+  FAIL: walk 64 spend 21: Club Manager refused it, the GM took it
+  FAIL: walk 65 spend 26: Club Manager refused it, the GM took it
+  FAIL: walk 70 spend 21: Club Manager refused it, the GM took it
+  FAIL: walk 71 spend 0: the boards diverged
+  FAIL: walk 72 spend 0: the boards diverged
+  FAIL: walk 73 spend 17: Club Manager refused it, the GM took it
+  FAIL: walk 74 spend 24: Club Manager refused it, the GM took it
+  FAIL: walk 75 spend 18: Club Manager refused it, the GM took it
+  FAIL: walk 76 spend 27: Club Manager refused it, the GM took it
+  FAIL: walk 78 spend 23: Club Manager refused it, the GM took it
+  FAIL: walk 79 spend 19: Club Manager refused it, the GM took it
+  FAIL: walk 80 spend 24: Club Manager refused it, the GM took it
+  FAIL: walk 83 spend 18: Club Manager refused it, the GM took it
+  FAIL: walk 84 spend 15: Club Manager refused it, the GM took it
+  FAIL: walk 85 spend 17: Club Manager refused it, the GM took it
+  FAIL: walk 87 spend 20: Club Manager refused it, the GM took it
+  FAIL: walk 88 spend 15: Club Manager refused it, the GM took it
+  FAIL: walk 89 spend 24: Club Manager refused it, the GM took it
+  FAIL: walk 90 spend 21: Club Manager refused it, the GM took it
+  FAIL: walk 91 spend 22: Club Manager refused it, the GM took it
+  FAIL: walk 93 spend 11: Club Manager refused it, the GM took it
+  FAIL: walk 98 spend 17: Club Manager refused it, the GM took it
+  FAIL: walk 101 spend 23: Club Manager refused it, the GM took it
+  FAIL: walk 103 spend 19: Club Manager refused it, the GM took it
+  FAIL: walk 106 spend 14: Club Manager refused it, the GM took it
+  FAIL: walk 111 spend 23: Club Manager refused it, the GM took it
+  FAIL: walk 112 spend 22: Club Manager refused it, the GM took it
+  FAIL: walk 113 spend 17: Club Manager refused it, the GM took it
+  FAIL: walk 114 spend 17: Club Manager refused it, the GM took it
+  FAIL: walk 115 spend 15: Club Manager refused it, the GM took it
+  FAIL: walk 118 spend 28: Club Manager refused it, the GM took it
+  FAIL: walk 119 spend 18: Club Manager refused it, the GM took it
+  FAIL: walk 125 spend 11: Club Manager refused it, the GM took it
+  FAIL: walk 126 spend 15: Club Manager refused it, the GM took it
+  FAIL: walk 127 spend 15: Club Manager refused it, the GM took it
+  FAIL: walk 128 spend 19: Club Manager refused it, the GM took it
+  FAIL: walk 129 spend 26: Club Manager refused it, the GM took it
+  FAIL: walk 131 spend 25: Club Manager refused it, the GM took it
+  FAIL: walk 133 spend 22: Club Manager refused it, the GM took it
+  FAIL: walk 134 spend 14: Club Manager refused it, the GM took it
+  FAIL: walk 138 spend 19: Club Manager refused it, the GM took it
+  FAIL: walk 139 spend 0: the boards diverged
+  FAIL: walk 140 spend 23: Club Manager refused it, the GM took it
+  FAIL: walk 141 spend 19: Club Manager refused it, the GM took it
+  FAIL: walk 142 spend 13: Club Manager refused it, the GM took it
+  FAIL: walk 146 spend 20: Club Manager refused it, the GM took it
+  FAIL: walk 148 spend 24: Club Manager refused it, the GM took it
+  FAIL: walk 150 spend 30: Club Manager refused it, the GM took it
+  FAIL: walk 152 spend 19: Club Manager refused it, the GM took it
+  FAIL: walk 153 spend 18: Club Manager refused it, the GM took it
+  FAIL: walk 158 spend 24: Club Manager refused it, the GM took it
+  FAIL: walk 159 spend 0: the boards diverged
+  FAIL: walk 161 spend 20: Club Manager refused it, the GM took it
+  FAIL: walk 164 spend 13: Club Manager refused it, the GM took it
+  FAIL: walk 165 spend 14: Club Manager refused it, the GM took it
+  FAIL: walk 167 spend 18: Club Manager refused it, the GM took it
+  FAIL: walk 171 spend 29: Club Manager refused it, the GM took it
+  FAIL: walk 173 spend 0: the boards diverged
+  FAIL: walk 175 spend 15: Club Manager refused it, the GM took it
+  FAIL: walk 176 spend 0: the boards diverged
+  FAIL: walk 178 spend 16: Club Manager refused it, the GM took it
+  FAIL: walk 180 spend 20: Club Manager refused it, the GM took it
+  FAIL: walk 181 spend 12: Club Manager refused it, the GM took it
+  FAIL: walk 182 spend 16: Club Manager refused it, the GM took it
+  FAIL: walk 183 spend 17: Club Manager refused it, the GM took it
+  FAIL: walk 185 spend 18: Club Manager refused it, the GM took it
+  FAIL: walk 187 spend 18: Club Manager refused it, the GM took it
+  FAIL: walk 189 spend 14: Club Manager refused it, the GM took it
+  FAIL: walk 191 spend 0: the boards diverged
+  FAIL: walk 192 spend 16: Club Manager refused it, the GM took it
+  FAIL: walk 194 spend 19: Club Manager refused it, the GM took it
+  FAIL: walk 195 spend 12: Club Manager refused it, the GM took it
+  FAIL: walk 196 spend 18: Club Manager refused it, the GM took it
+  FAIL: walk 198 spend 18: Club Manager refused it, the GM took it
+  FAIL: walk 199 spend 18: Club Manager refused it, the GM took it
+   real inputs: 136 opening asks over five price lists, 197 dead money figures, growth draws NFL 1/2, NBA 1/2/3, MLB 1/2/3, NHL 1/2/3
+3) A GM who has spent nothing gets exactly the numbers the front office produced
+  ok: 266 readings at zero points hand back exactly what they were given; fresh and absent blocks are empty
+4) Every GM tree point moves the number it feeds, at every step from 1 to the cap
+   scouting (expected read error of a prospect, per scouting error the draft drew (a perfect read has nothing to fix)), mean over 8 real inputs: 2.5000 > 2.2750 > 2.0500 > 1.8250 > 1.6000 > 1.3750 > 1.1500
+  ok: scouting: smallest step over every input and level 0.1500 (floor 0.07)
+   negotiation (opening ask once kept in tenths, as a share of the agent figure, on every ask clear of its floor), mean over 131 real inputs: 1.0000 > 0.9800 > 0.9600 > 0.9400 > 0.9200 > 0.9000 > 0.8800
+  ok: negotiation: smallest step over every input and level 0.0200 (floor 0.01)
+   capCraft (dead money once kept in tenths, as a share of the cut engine figure), mean over 197 real inputs: 1.0000 > 0.9600 > 0.9200 > 0.8800 > 0.8400 > 0.8000 > 0.7600
+  ok: capCraft: smallest step over every input and level 0.0400 (floor 0.02)
+   development (rating points a young player gains in a year once stored as a whole number, per engine growth draw, one point of room left), mean over 11 real inputs: 1.9091 < 2.0091 < 2.1091 < 2.2091 < 2.3091 < 2.4091 < 2.5091
+  ok: development: smallest step over every input and level 0.1000 (floor 0.05)
+   trading (a rival premium over value, as a share of the firm and sour premiums), mean over 2 real inputs: 1.0000 > 0.9200 > 0.8400 > 0.7600 > 0.6800 > 0.6000 > 0.5200
+  ok: trading: smallest step over every input and level 0.0800 (floor 0.04)
+   ownership (trust lost to a missed and a badly missed mandate), mean over 2 real inputs: 22.0000 > 20.5000 > 19.0000 > 17.5000 > 16.0000 > 14.0000 > 12.5000
+  ok: ownership: smallest step over every input and level 1.0000 (floor 0.5)
+   media (odds each answer that gambles lands), mean over 5 real inputs: 0.5600 < 0.5900 < 0.6200 < 0.6500 < 0.6800 < 0.7100 < 0.7400
+  ok: media: smallest step over every input and level 0.0300 (floor 0.015)
+   (an ends only check passes 7 of 7 trees)
+4b) Every effect hands back a number a board can store, and never crosses its line
+  ok: 2316096 readings: whole ratings, money in tenths, no ask under its floor, nobody past his ceiling, no trust gain touched
+5) Each tile's "at the cap" line matches what five points actually do
+  FAIL: scouting: the tile says "a little over half" but five points give 0.460
+  ok: negotiation: "about a tenth off" and five points give 0.880
+  ok: capCraft: "about a fifth less" and five points give 0.760
+  FAIL: development: the tile says "an even chance of one extra rating point" but five points give 0.600
+  FAIL: trading: the tile says "about 40 percent less" but five points give 0.520
+  FAIL: ownership: the tile says "about a third less" but five points give 0.568
+  FAIL: media: the tile says "15 points more often" but five points give 0.180
+6) Spending rules hold for a GM, and a mangled block resets alone
+  FAIL: garbage #11 passed as a GM block
+  FAIL: garbage #11 did not read as a fresh block
+7) A GM earns at Club Manager's pace, and achievements outpay volume
+   good season: GM 540 XP, Club Manager 580; whole board 41993 XP = 77.8 GM seasons, 72.4 Club Manager seasons
+  ok: every source pays, a title beats a .700 season (170 to 70), pace ratio 1.07
+
+simGmXp: 137 failure(s) under GMXP_CONTROL=gmcap
