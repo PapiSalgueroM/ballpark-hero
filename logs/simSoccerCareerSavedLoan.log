@@ -1,0 +1,23 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Only the fixed236 gate may differ from the whole held parent app
++ actual - expected
+
++ '66805cfe259b84fafd971cbae2cc3e796c07d5fa0fc8b94f12e62513ab31a7b7'
+- '0d9ab4a21241ca1d993fbc7a7176d3ed0de988d6cd2e6989d662c6a1307730ea'
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerCareerSavedLoan.mjs:279:99
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: '66805cfe259b84fafd971cbae2cc3e796c07d5fa0fc8b94f12e62513ab31a7b7',
+  expected: '0d9ab4a21241ca1d993fbc7a7176d3ed0de988d6cd2e6989d662c6a1307730ea',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.22.0

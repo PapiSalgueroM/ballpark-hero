@@ -1,0 +1,4 @@
+simSoccerCareerPendingPopularity exit=1 0s | Node.js v24.22.0
+simSoccerCareerSavedLoan exit=1 0s | Node.js v24.22.0
+simSoccerCurrency exit=0 7s | simSoccerCurrency: green. The money reads in your currency and the game underneath it never noticed.
+simSoccerCareerLeagueWorld exit=0 77s | simSoccerCareerLeagueWorld: seventeen outcome tests and two engine career tests green, all twelve effective negative controls caught
