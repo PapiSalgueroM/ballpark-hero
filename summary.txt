@@ -1,0 +1,2 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playSoccerCareerPendingMorale exit=0 123s | Soccer pending-morale browser: passed; 2189 checks, 14 played cases, 2 controls, 54 originals, 0 failures, 0 setup failures.
