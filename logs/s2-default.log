@@ -1,0 +1,4 @@
+   seasons played: 15, 15, 15; keys: dukb-club-manager-save 130304, dukb-cm-slot-1 204054, dukb-cm-slots 31, dukb-cm-slot-2 200914
+   total 535303 characters across 4 keys (budget 532500)
+  FAIL: three season 15 careers take 535303 characters, over the 532500 budget
+simClubManagerSlots: RED, sections 2 (1 failures)
