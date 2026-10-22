@@ -65,11 +65,9 @@ export function soccerMoraleRating(morale: number | undefined): number {
 
 /** The hub's line under the Morale bar: what this season's morale is worth, after the cap the phone shares. */
 export function soccerMoraleLine(morale: number, phoneSwing: number): string {
-  const step = soccerMoraleStep(morale);
-  if (step === 0) return `Morale ${morale}: settled, no swing in games or rating this season.`;
-  const games = dressingRoomApps(phoneSwing, morale) - phoneSwing;
+  const step = soccerMoraleStep(morale), games = dressingRoomApps(phoneSwing, morale) - phoneSwing;
   const sign = (n: number) => (n > 0 ? `+${n}` : `${n}`);
-  const rating = `rating ${sign(step / 10)}`;
-  if (games === 0) return `Morale ${morale}: ${rating} this season (the dressing room already has your games at the limit).`;
-  return `Morale ${morale}: ${sign(games)} league game${Math.abs(games) === 1 ? '' : 's'}, ${rating} this season.`;
+  const what = step === 0 ? 'no swing'
+    : `${games ? `${sign(games)} league game${Math.abs(games) === 1 ? '' : 's'}, ` : ''}rating ${sign(step / 10)}`;
+  return `Morale ${morale}: ${what} this season.`;
 }

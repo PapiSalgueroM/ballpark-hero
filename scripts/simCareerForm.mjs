@@ -221,8 +221,8 @@ if (runs('2')) {
   }
   for (const [m, r] of [[20, -0.2], [70, -0.1], [81, 0], [90, 0.1], [100, 0.1]]) if (F.soccerMoraleRating(m) !== r) fail(`soccerMoraleRating(${m}) is ${F.soccerMoraleRating(m)}, not ${r}`);
   const lines = [[90, 0, 'Morale 90: +1 league game, rating +0.1 this season.'], [100, 0, 'Morale 100: +1 league game, rating +0.1 this season.'],
-    [40, 0, 'Morale 40: -2 league games, rating -0.2 this season.'], [81, 0, 'Morale 81: settled, no swing in games or rating this season.'],
-    [100, 3, 'Morale 100: rating +0.1 this season (the dressing room already has your games at the limit).'], [40, -2, 'Morale 40: -1 league game, rating -0.2 this season.']];
+    [40, 0, 'Morale 40: -2 league games, rating -0.2 this season.'], [81, 0, 'Morale 81: no swing this season.'],
+    [100, 3, 'Morale 100: rating +0.1 this season.'], [40, -2, 'Morale 40: -1 league game, rating -0.2 this season.']];
   for (const [m, phone, line] of lines) if (F.soccerMoraleLine(m, phone) !== line) fail(`soccerMoraleLine(${m}, ${phone}) reads "${F.soccerMoraleLine(m, phone)}"`);
   const dash = [String.fromCharCode(0x2013), String.fromCharCode(0x2014)];
   for (let m = 0; m <= 100; m += 1) for (const phone of [-3, 0, 3]) if (dash.some(d => F.soccerMoraleLine(m, phone).includes(d))) fail(`the hub line for ${m} holds a dash`);

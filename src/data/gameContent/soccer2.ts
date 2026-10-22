@@ -1856,7 +1856,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         heading: "Physical stats, morale and integrity",
         items: [
           "Height and weight are real numbers, not decoration: a tall heavy player wins more in the air and is stronger, and is slower off the mark and less agile for it.",
-          "Morale runs 0 to 100, moves with events and choices, and counts on the pitch: 89 and up is worth an extra league game and a tenth on your season rating, 73 and under costs you the same, 58 and under costs two of each, and with the dressing room it never moves more than three games either way. Scandals feed an integrity ledger worth minus 30 to plus 20 legacy points at the end.",
+          "Morale runs 0 to 100, moves with events and choices, and counts: 89 and up adds a league game and a tenth on your rating, 73 and under costs the same, 58 and under two of each. Scandals feed an integrity ledger worth minus 30 to plus 20 legacy points at the end.",
         ],
         subsections: [
           {
