@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+walk: git worktree add /tmp/base 3ee0bf629 >/dev/null 2>&1; node .rc/x/walkrev1554.mjs
