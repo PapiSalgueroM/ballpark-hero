@@ -1,0 +1,5 @@
+cfbstaff-noslate exit=0 18s | control "noslate": 3 failure(s) fired as expected, the check works
+cfbstaff exit=0 67s | simCfbStaff: all green
+tsc exit=0 85s | 
+seat-noease exit=1 214s | simCollegeSeat CONTROL noease FIRED: S2 went red with 3 failures (red: S1 (456), S2 (3))
+seat exit=0 307s | simCollegeSeat: all sections green (S1 to S9 and SY)
