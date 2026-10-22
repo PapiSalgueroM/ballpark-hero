@@ -1,0 +1,1 @@
+fixture-replay-base: git worktree add -f --detach /tmp/fxbase e3deb2cb3 >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/fxbase/node_modules && cd /tmp/fxbase && US_BOARD_FIXTURE=replay node_modules/.bin/vitest run src/test/usBoardFixture.test.tsx --testTimeout=600000 --hookTimeout=120000
