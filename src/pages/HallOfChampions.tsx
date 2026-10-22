@@ -325,7 +325,7 @@ const HallOfChampions = () => {
       </main>
 
       {showHelp && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4" style={OVERLAY_ABOVE_BANNER}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4" style={OVERLAY_ABOVE_BANNER}>
           <div className="max-w-md w-full rounded-2xl border border-border bg-card p-5 overflow-y-auto" style={boxInsideOverlay('85vh')} role="dialog" aria-modal="true" aria-label="How Hall of Champions works">
             <div className="flex items-center justify-between mb-3">
               <h2 className="text-xl font-bold text-primary font-display">HOW IT WORKS</h2>
