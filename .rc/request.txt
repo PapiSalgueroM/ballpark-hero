@@ -1,0 +1,9 @@
+# Release BP triage, trS: simClubManagerSlots section 2 measured the way Rounds 1052 and 1311 set its BUDGET (default stream and SIM_SEED 1 to 5, plus the dupe control), on whatever head this is sent to.
+headsha: git log --oneline -1
+s2-default: node scripts/simClubManagerSlots.mjs 2>&1 | grep -E "total .* characters|keys:|FAIL|RED|green"
+s2-seed1: SIM_SEED=1 node scripts/simClubManagerSlots.mjs 2>&1 | grep -E "total .* characters|FAIL|RED|green"
+s2-seed2: SIM_SEED=2 node scripts/simClubManagerSlots.mjs 2>&1 | grep -E "total .* characters|FAIL|RED|green"
+s2-seed3: SIM_SEED=3 node scripts/simClubManagerSlots.mjs 2>&1 | grep -E "total .* characters|FAIL|RED|green"
+s2-seed4: SIM_SEED=4 node scripts/simClubManagerSlots.mjs 2>&1 | grep -E "total .* characters|FAIL|RED|green"
+s2-seed5: SIM_SEED=5 node scripts/simClubManagerSlots.mjs 2>&1 | grep -E "total .* characters|FAIL|RED|green"
+s2-dupe: SLOTS_CONTROL=dupe node scripts/simClubManagerSlots.mjs 2>&1 | grep -E "total .* characters|FAIL|RED|green|FIRED"
