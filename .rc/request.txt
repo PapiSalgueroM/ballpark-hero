@@ -1,0 +1,6 @@
+td-head: bash .rc/x/td.sh head 578994a5 none
+td-r1538: bash .rc/x/td.sh r1538 32e8f7da none
+td-r1534: bash .rc/x/td.sh r1534 1c7205d0 none
+td-m11: bash .rc/x/td.sh m11 7d57fe80 none
+td-nof: bash .rc/x/td.sh nof 578994a5 none revert
+td-rec: bash .rc/x/td.sh rec 578994a5 '*'
