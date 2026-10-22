@@ -1,0 +1,12 @@
+get exit=0 2s |      12 old-run2
+combine exit=1 13s | simNbaEarnedDraft: RED in section 7.
+fat exit=1 13s | simNbaEarnedDraft: CONTROL fatclass FIRED on the fleet: outside S1 at 5 by 2.27, 100.1 errors; S1 at 10 by 3.90, 318.2 errors; S2 by 35.7, 94.7 errors; S6 payers by 10.33
+best exit=1 13s | simNbaEarnedDraft: CONTROL bestfirst FIRED on the fleet: outside S5 in 4 sets.
+arb exit=1 13s | simNbaEarnedDraft: RED in section 7.
+judgeflip-c exit=1 13s | simNbaEarnedDraft: CONTROL judgeflip FIRED. Red in section 11 and 7 (33 failures and 5 failures).
+judgeres-c exit=2 13s | simNbaEarnedDraft: CONTROL judgeres DID NOT FIRE as expected: the copy exited 1, red in [11, 7], expected [11].
+judgeagree-c exit=2 13s | simNbaEarnedDraft: CONTROL judgeagree DID NOT FIRE as expected: the copy exited 1, red in [11, 7], expected [11].
+judgepass-c exit=2 13s | simNbaEarnedDraft: CONTROL judgepass DID NOT FIRE as expected: the copy exited 1, red in [11, 7], expected [11].
+judgefleet-c exit=2 13s | simNbaEarnedDraft: CONTROL judgefleet DID NOT FIRE as expected: the copy exited 1, red in [11, 7], expected [11].
+partial exit=1 13s | simNbaEarnedDraft: RED in section 7.
+onerun exit=1 13s | simNbaEarnedDraft: RED in section 7.
