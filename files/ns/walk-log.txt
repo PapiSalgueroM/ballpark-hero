@@ -1,0 +1,50 @@
+ns-pablo-390: daily Today's ladder, 2027-02-14.
+ns-pablo-390 Q1 [worth] Who was worth the most in the 2026 market values? :: Rafael Leão / Nico Paz / Enzo Fernández / Phil Foden :: 70M / 70M / 97M / 86M
+ns-pablo-390 Q2 [club] Which club was Pablo Barrios at in the 2026 market values? :: Vancouver Whitecaps FC / Atlético de Madrid / Eintracht Frankfurt / RC Lens
+ns-pablo-390 Q3 [ballon] Who won the Ballon d'Or in 2013? :: Luka Modrić / Kaká / Cristiano Ronaldo / Lionel Messi
+ns-pablo-390 Q4 [ballon] Who won the Ballon d'Or in 2023? :: Lionel Messi / Cristiano Ronaldo / Rodri / Karim Benzema
+ns-pablo-390 Q5 [position] Which of these players plays Left Winger? :: Jérémy Doku / Rodri / Pedro Neto / Marc Guéhi
+ns-pablo-390 Q6 [position] Which of these players plays Right-Back? :: Georgiy Sudakov / Brais Méndez / Trai Hume / Julian Brandt
+ns-pablo-390 Q7 [club] Which club was Mohamed Simakan at in the 2026 market values? :: Al-Nassr FC / RC Strasbourg Alsace / Hapoel Beer Sheva / Latina Calcio 1932
+ns-pablo-390 Q8 [club] Which club was Daichi Kamada at in the 2026 market values? :: Degerfors IF / Crystal Palace / FK Varnsdorf / Lucchese Calcio
+ns-pablo-390 Q9 [club] Which club was Pablo at in the 2026 market values? :: West Ham United / Torpedo Miass / Port Vale FC / Maccabi Tel Aviv
+ns-pablo-390 Q10 [ballon] Who won the Ballon d'Or in 1990? :: Marco van Basten / Lothar Matthäus / Michel Platini / Matthias Sammer
+ns-pablo-390 Q11 [club] Which club was Giovani Lo Celso at in the 2026 market values? :: Stade Brestois 29 / Real Betis Balompié / FC Kaluga / Houston Dynamo FC
+ns-pablo-390 Q12 [club] Which club was Vitaliy Dakhnovskyi at in the 2026 market values? :: AS Monaco / Shakhter Soligorsk / FC Legnago Salus / NK Veres Rivne
+ns-pablo-390 Q13 [position] Which of these players plays Central Midfield? :: Emil Forsberg / Gabriel Slonina / Luis Malagón / Agustín Almendra
+ns-pablo-390 Q14 [nationality] What nationality is Filip Matijasevic? :: Serbia / Costa Rica / United States / Congo
+ns-pablo-390 Q15 [position] Which of these players plays Centre-Forward? :: Brandon Soppy / Gabriel Pereira / Vedat Muriqi / Tomás Pochettino
+ns-alisson-390: daily Today's ladder, 2027-01-25.
+ns-alisson-390 Q1 [position] Which of these players plays Central Midfield? :: Elliot Anderson / Dani Olmo / Cristian Romero / Dean Huijsen
+ns-alisson-390 Q2 [position] Which of these players plays Right Winger? :: Nick Woltemade / Federico Dimarco / Michael Olise / Álvaro Carreras
+ns-alisson-390 Q3 [club] Which club was Dean Huijsen at in the 2026 market values? :: US Sassuolo / Santos FC U20 / Real Madrid / Málaga CF
+ns-alisson-390 Q4 [position] Which of these players plays Right-Back? :: Trent Alexander-Arnold / Luis Díaz / Enzo Fernández / Kobbie Mainoo
+ns-alisson-390 Q5 [ballon] Who won the Ballon d'Or in 2025? :: Lionel Messi / Rodri / Karim Benzema / Ousmane Dembélé
+ns-alisson-390 Q6 [worth] Who was worth the most in the 2026 market values? :: Daichi Kamada / Yeremay Hernández / Oumar Solet / Veljko Milosavljevic :: 13M / 27M / 22M / 22M
+ns-alisson-390 Q7 [nationality] What nationality is Breel Embolo? :: Switzerland / Czech Republic / Armenia / Iraq
+ns-alisson-390 Q8 [club] Which club was Alisson at in the 2026 market values? :: SKA Khabarovsk / Pau FC / Liverpool FC / Charlotte Independence
+ns-alisson-390 Q9 [nationality] What nationality is Enzo Millot? :: Serbia / France / Albania / Croatia
+ns-alisson-390 Q10 [ballon] Who won the Ballon d'Or in 1996? :: Roberto Baggio / Luís Figo / Jean-Pierre Papin / Matthias Sammer
+ns-alisson-390 Q11 [nationality] What nationality is Nikola Vlašić? :: Rwanda / Mauritania / Croatia / Slovakia
+ns-alisson-390 Q12 [nationality] What nationality is Modou Kéba Cissé? :: Tajikistan / Russia / Armenia / Senegal
+ns-alisson-390 Q13 [ballon] Who won the Ballon d'Or in 1973? :: Johan Cruyff / Kevin Keegan / Allan Simonsen / Gianni Rivera
+ns-alisson-390 Q14 [position] Which of these players plays Goalkeeper? :: Gabriel Slonina / Sergi Palencia / Ken Nkuba / Lukas Kübler
+ns-alisson-390 Q15 [position] Which of these players plays Left Winger? :: Félix Correia / Mohamed Ihattaren / Facundo Colidio / Arnaud Nordin
+ns-alissoncm-1280: daily Today's ladder, 2026-11-07.
+ns-alissoncm-1280 Q1 [club] Which club was Pedro Neto at in the 2026 market values? :: Chelsea FC / UTA Arad / CA Atlanta / US Hostert
+ns-alissoncm-1280 Q2 [nationality] What nationality is Jules Koundé? :: Bolivia / Guatemala / France / Romania
+ns-alissoncm-1280 Q3 [position] Which of these players plays Left-Back? :: Álvaro Carreras / Harry Kane / Kobbie Mainoo / Alessandro Bastoni
+ns-alissoncm-1280 Q4 [position] Which of these players plays Right Winger? :: Désiré Doué / Morgan Rogers / Manu Koné / Nico Schlotterbeck
+ns-alissoncm-1280 Q5 [worth] Who was worth the most in the 2026 market values? :: Arda Güler / Bruno Guimarães / Yan Diomande / Pablo Barrios :: 97M / 81M / 81M / 65M
+ns-alissoncm-1280 Q6 [club] Which club was Ismael Saibari at in the 2026 market values? :: Epicentr Kamyanets-Podilskyi / Botev Vratsa / Deportivo A Coruña / Bayern Munich
+ns-alissoncm-1280 Q7 [ballon] Who won the Ballon d'Or in 1987? :: Paolo Rossi / Igor Belanov / Ruud Gullit / Marco van Basten
+ns-alissoncm-1280 Q8 [position] Which of these players plays Goalkeeper? :: Donyell Malen / Jan Oblak / Christian Kofane / Mason Mount
+ns-alissoncm-1280 Q9 [nationality] What nationality is Callum Hudson-Odoi? :: Qatar / England / Cyprus / Sudan
+ns-alissoncm-1280 Q10 [position] Which of these players plays Central Midfield? :: Jacob Ramsey / Gianluca Mancini / Ibrahim Maza / Alisson
+ns-alissoncm-1280 Q11 [ballon] Who won the Ballon d'Or in 1959? :: Eusébio / Denis Law / Stanley Matthews / Alfredo Di Stéfano
+ns-alissoncm-1280 Q12 [position] Which of these players plays Left Midfield? :: Rúben Vinagre / Victor Lindelöf / Marco Farfán / Hugo Siquet
+ns-alissoncm-1280 Q13 [nationality] What nationality is Jakub Apolinarski? :: Poland / Guinea / Equatorial Guinea / Slovenia
+ns-alissoncm-1280 Q14 [ballon] Who won the Ballon d'Or in 1960? :: Alfredo Di Stéfano / Raymond Kopa / Luis Suárez / Denis Law
+ns-alissoncm-1280 Q15 [club] Which club was Tommy Doyle at in the 2026 market values? :: Birmingham City / CA Chaco For Ever / FC Emmen / Újpest FC
+
+ISSUES:

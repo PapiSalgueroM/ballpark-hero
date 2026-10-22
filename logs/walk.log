@@ -1,0 +1,91 @@
+p390-reduce-daily: daily Today's ladder, 2026-10-26.
+p390-reduce-daily Q1 [nationality] What nationality is Nico Schlotterbeck? :: Germany / Morocco / Grenada / Jordan
+p390-reduce-daily Q2 [position] Which of these players plays Centre-Back? :: Alessandro Bastoni / Antoine Semenyo / Yan Diomande / Morgan Rogers
+p390-reduce-daily Q3 SWAP: "Which club was Marc Guéhi at in the 2026 market values?" -> "Which of these players plays Left Winger?"
+p390-reduce-daily Q3 [position] Which of these players plays Left Winger? :: Pau Cubarsí / Raphinha / Victor Osimhen / Bruno Guimarães
+p390-reduce-daily Q4 [ballon] Who won the Ballon d'Or in 2024? :: Lionel Messi / Ousmane Dembélé / Rodri / Luka Modrić
+p390-reduce-daily Q5 [position] Which of these players plays Left Winger? :: Aurélien Tchouaméni / Morgan Rogers / Pablo Barrios / Jérémy Doku
+p390-reduce-daily Q6 [worth] Who was worth the most in the 2026 market values? :: Odilon Kossounou / Callum Hudson-Odoi / Haji Wright / Kang-in Lee :: 19M / 32M / 15M / 30M
+p390-reduce-daily Q7 [position] Which of these players plays Central Midfield? :: Fabrício Bruno / Lewis Hall / Andrey Santos / Tomás Araújo
+p390-reduce-daily Q8 [position] Which of these players plays Attacking Midfield? :: Youssef En-Nesyri / Rodrigo Garro / Pascal Struijk / Nico O'Reilly
+p390-reduce-daily Q9 [nationality] What nationality is Alysson? :: Timor-Leste / Brazil / Syria / Libya
+p390-reduce-daily Q10 [nationality] What nationality is Givairo Read? :: Netherlands / Tajikistan / Syria / England
+p390-reduce-daily Q11 [nationality] What nationality is Harrison Ashby? :: Scotland / Chad / Benin / Venezuela
+p390-reduce-daily Q12 [position] Which of these players plays Right Midfield? :: Ilaix Moriba / John Tolkin / Brandon Soppy / Jakub Piotrowski
+p390-reduce-daily Q13 [position] Which of these players plays Left-Back? :: Ryan Manning / Gaizka Larrazabal / Doğan Alemdar / Clément Lenglet
+p390-reduce-daily Q14 [club] Which club was Sipho Chaine at in the 2026 market values? :: Orlando Pirates / Samsunspor / Al-Rayyan SC / FC Bayern Munich II
+p390-reduce-daily Q15 [nationality] What nationality is Mustafa Hekimoğlu? :: Niger / Chad / Jordan / Türkiye
+p390-motion-unl: unlimited 
+p390-motion-unl Q1 [worth] Who was worth the most in the 2026 market values? :: Bukayo Saka / Christian Pulisic / Pedri / Rayan Cherki :: 130M / 54M / 162M / 70M
+p390-motion-unl Q2 [nationality] What nationality is Erling Haaland? :: Saudi Arabia / Norway / Chile / Japan
+p390-motion-unl Q3 [ballon] Who won the Ballon d'Or in 2022? :: Luka Modrić / Lionel Messi / Rodri / Karim Benzema
+p390-motion-unl Q4 [nationality] What nationality is Christian Pulisic? :: Norway / United States / Syria / France
+p390-motion-unl Q5 [ballon] Who won the Ballon d'Or in 2018? :: Luka Modrić / Karim Benzema / Lionel Messi / Cristiano Ronaldo
+p390-motion-unl Q6 [club] Which club was Ainsley Maitland-Niles at in the 2026 market values? :: Patro Eisden Maasmechelen / Criciúma EC / Olympique Lyon / Cagliari Primavera
+p390-motion-unl Q7 [position] Which of these players plays Goalkeeper? :: David Raya / Moise Kean / Rico Lewis / Fikayo Tomori
+p390-motion-unl Q8 [position] Which of these players plays Left-Back? :: Morato / Wesley Fofana / Amine Adli / Theo Hernández
+p390-motion-unl Q9 [position] Which of these players plays Right Winger? :: Takumi Minamino / Arnaud Kalimuendo / Geny Catamo / Evanilson
+p390-motion-unl Q10 [club] Which club was Gustav Isaksen at in the 2026 market values? :: SS Lazio / Sheffield Wednesday / Kashima Antlers / CR Flamengo
+p390-motion-unl Q11 [nationality] What nationality is Halldor Stenevik? :: Algeria / Equatorial Guinea / Norway / Venezuela
+p390-motion-unl Q12 SWAP: "Which of these players plays Left Winger?" -> "Who was worth the most in the 2026 market values?"
+p390-motion-unl Q12 [worth] Who was worth the most in the 2026 market values? :: Gino Santilli / Negueba / Nestory Irankunda / Pep Chavarría :: 1M / 3M / 6M / 11M
+p390-motion-unl Q13 [position] Which of these players plays Centre-Back? :: Hugo Vetlesen / Vítor Tormena / Marcelo Weigandt / Danil Prutsev
+p390-motion-unl Q14 [nationality] What nationality is Felix Cejka? :: Czech Republic / Iceland / Egypt / Netherlands
+p390-motion-unl Q15 [club] Which club was Hamari Traoré at in the 2026 market values? :: Paris FC / Motherwell FC / FK Banga Gargzdai / AC Perugia Calcio
+d1280-motion-daily: daily Today's ladder, 2026-10-27.
+d1280-motion-daily Q1 [nationality] What nationality is Rúben Dias? :: Serbia / Algeria / Vietnam / Portugal
+d1280-motion-daily Q2 [worth] Who was worth the most in the 2026 market values? :: Khvicha Kvaratskhelia / Alexander Isak / Pedri / Pablo Barrios :: 97M / 108M / 162M / 65M
+d1280-motion-daily Q3 [nationality] What nationality is Morgan Rogers? :: Serbia / Finland / England / Tunisia
+d1280-motion-daily Q4 [club] Which club was Harry Kane at in the 2026 market values? :: FC Kosice / FC Buxoro / Bayern Munich / St. Patrick's Athletic
+d1280-motion-daily Q5 [club] Which club was William Saliba at in the 2026 market values? :: Arsenal FC / Lokomotiv Moscow / FC Milsami Orhei / El Merriekh FC Bentiu
+d1280-motion-daily Q6 [position] Which of these players plays Left-Back? :: Caio Henrique / Eliesse Ben Seghir / Marcos Antônio / Franck Kessié
+d1280-motion-daily Q7 [club] Which club was Frenkie de Jong at in the 2026 market values? :: FC Barcelona / FC Annecy / Juventus / Pharco FC
+d1280-motion-daily Q8 [ballon] Who won the Ballon d'Or in 1985? :: Michel Platini / Lothar Matthäus / Jean-Pierre Papin / Marco van Basten
+d1280-motion-daily Q9 SWAP: "Which club was Yunus Musah at in the 2026 market values?" -> "Which of these players plays Attacking Midfield?"
+d1280-motion-daily Q9 [position] Which of these players plays Attacking Midfield? :: Paul Wanner / Noni Madueke / Thiago Almada / Ricardo Pepi
+d1280-motion-daily Q10 [club] Which club was Antony at in the 2026 market values? :: FK Panevezys / Real Betis Balompié / New England Revolution / Dinamo Bryansk
+d1280-motion-daily Q11 [ballon] Who won the Ballon d'Or in 1972? :: Kevin Keegan / Franz Beckenbauer / George Best / Johan Cruyff
+d1280-motion-daily Q12 [club] Which club was Donat Rrudhani at in the 2026 market values? :: Club Deportivo Riestra / IK Start / Tokyo Verdy / FC Sion
+d1280-motion-daily Q13 [position] Which of these players plays Centre-Back? :: Morgan Guilavogui / Hamari Traoré / Gilberto / Bruno Méndez
+d1280-motion-daily Q14 [nationality] What nationality is Everton? :: Niger / Benin / Honduras / Brazil
+d1280-motion-daily Q15 [nationality] What nationality is Diogo Nascimento? :: Guinea-Bissau / Portugal / Uruguay / Zambia
+d1280-reduce-unl: unlimited 
+d1280-reduce-unl Q1 [position] Which of these players plays Right Winger? :: Jérémy Jacquet / Cristian Romero / Cody Gakpo / Amad Diallo
+d1280-reduce-unl Q2 SWAP: "Which of these players plays Centre-Back?" -> "Which of these players plays Centre-Forward?"
+d1280-reduce-unl Q2 [position] Which of these players plays Centre-Forward? :: Alexander Isak / Michael Olise / Warren Zaïre-Emery / Christian Pulisic
+d1280-reduce-unl Q3 [club] Which club was Lautaro Martínez at in the 2026 market values? :: Bukovyna Chernivtsi / Dorados de Sinaloa / Manisa FK / Inter Milan
+d1280-reduce-unl Q4 [ballon] Who won the Ballon d'Or in 2009? :: Pavel Nedvěd / Ronaldinho / Kaká / Lionel Messi
+d1280-reduce-unl Q5 [position] Which of these players plays Centre-Forward? :: Marc Guéhi / Hugo Ekitiké / Micky van de Ven / Leny Yoro
+d1280-reduce-unl Q6 [position] Which of these players plays Attacking Midfield? :: Brajan Gruda / Joël Piroe / Malang Sarr / Wilfried Gnonto
+d1280-reduce-unl Q7 [ballon] Who won the Ballon d'Or in 2000? :: Matthias Sammer / Luís Figo / Pavel Nedvěd / Fabio Cannavaro
+d1280-reduce-unl Q8 [nationality] What nationality is Christopher Bonsu Baah? :: Martinique / Liberia / Ecuador / Ghana
+d1280-reduce-unl Q9 [worth] Who was worth the most in the 2026 market values? :: Guéla Doué / John McGinn / Anthony Rouault / Kevin Danso :: 19M / 16M / 13M / 22M
+d1280-reduce-unl Q10 [ballon] Who won the Ballon d'Or in 2001? :: Rivaldo / Ronaldinho / Michael Owen / Pavel Nedvěd
+d1280-reduce-unl Q11 [nationality] What nationality is Soumaïla Coulibaly? :: Russia / France / Mexico / New Caledonia
+d1280-reduce-unl Q12 [nationality] What nationality is Yassine Bounou? :: Qatar / Serbia / Morocco / Northern Ireland
+d1280-reduce-unl Q13 [nationality] What nationality is Kirill Pechenin? :: Palestine / Faroe Islands / Syria / Belarus
+d1280-reduce-unl Q14 [position] Which of these players plays Left-Back? :: Anton Nedyalkov / Ramiro Sordo / Darius Olaru / Ben Godfrey
+d1280-reduce-unl Q15 [nationality] What nationality is Matteo Tramoni? :: Mexico / Burkina Faso / France / Mali
+p390-legacy-today: daily Today's ladder, 2026-10-23.
+p390-legacy-today Q1 [nationality] What nationality is Alexander Isak? :: Guatemala / Türkiye / Albania / Sweden
+p390-legacy-today Q2 [club] Which club does Cristian Romero play for? :: Calcio Foggia 1920 / Atlético de Madrid / Fluminense / AFC Bournemouth
+p390-legacy-today Q3 [position] Which of these players plays Right-Back? :: Dean Huijsen / Mason Greenwood / Trent Alexander-Arnold / Pau Cubarsí
+p390-legacy-today Q4 [nationality] What nationality is Hugo Ekitiké? :: England / Israel / South Africa / France
+p390-legacy-today Q5 [club] Which club does Achraf Hakimi play for? :: Danubio FC / Paris Saint-Germain / FC St. Gallen 1879 / SC Freiburg
+p390-legacy-today Q6 [ballon] Who won the Ballon d'Or in 1988? :: Ruud Gullit / Paolo Rossi / Marco van Basten / Lothar Matthäus
+p390-legacy-today Q7 [worth] Who is worth more right now (highest market value)? :: Franculino / Martin Baturina / Mateus Mané / Sepp van den Berg :: 24M / 26M / 22M / 35M
+p390-legacy-today Q8 [nationality] What nationality is Ernest Muci? :: Central African Republic / Austria / Albania / Honduras
+p390-legacy-today Q9 [club] Which club does Andreas Pereira play for? :: Sociedade Esportiva Palmeiras / CA Ferrocarril Midland / Newcastle United / Al-Nasr SC (UAE)
+p390-legacy-today Q10 [ballon] Who won the Ballon d'Or in 1999? :: Matthias Sammer / Rivaldo / Zinedine Zidane / Roberto Baggio
+p390-legacy-today Q11 [club] Which club does Pablo Ibáñez play for? :: Harrogate Town / Deportivo Alavés / CD Santa Clara / CD Malacateco
+p390-legacy-today Q12 [nationality] What nationality is Mady Camara? :: Guinea / Martinique / Sudan / Mauritania
+p390-legacy-today Q13 [position] Which of these players plays Left Winger? :: Alban Lafont / Daniel Iversen / Josh Murphy / Robin Gosens
+p390-legacy-today Q14 [position] Which of these players plays Defensive Midfield? :: Keven Schlotterbeck / Axel Witsel / Fábio Martins / Aarón Martín
+p390-legacy-today Q15 [nationality] What nationality is Danylo Sikan? :: Ukraine / Kazakhstan / Bosnia-Herzegovina / Brazil
+ISSUES:
+p390-legacy-today Q2: present tense: Which club does Cristian Romero play for? [Calcio Foggia 1920 / Atlético de Madrid / Fluminense / AFC Bournemouth]
+p390-legacy-today Q5: present tense: Which club does Achraf Hakimi play for? [Danubio FC / Paris Saint-Germain / FC St. Gallen 1879 / SC Freiburg]
+p390-legacy-today Q7: present tense: Who is worth more right now (highest market value)? [Franculino / Martin Baturina / Mateus Mané / Sepp van den Berg]
+p390-legacy-today Q9: present tense: Which club does Andreas Pereira play for? [Sociedade Esportiva Palmeiras / CA Ferrocarril Midland / Newcastle United / Al-Nasr SC (UAE)]
+p390-legacy-today Q11: present tense: Which club does Pablo Ibáñez play for? [Harrogate Town / Deportivo Alavés / CD Santa Clara / CD Malacateco]
+walk1552: 5 issue(s)
