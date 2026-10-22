@@ -1,0 +1,19 @@
+NEGATIVE CONTROL ON: notrim; section 6 must go red
+6) a season out: the league plays a whole season without him, his record gains a year out and nothing else, and refusals touch nothing
+  FAIL [6]: seed 1 year out 2: the away summer is not the engine's offseason with no user club (1528 of 1528 draws replayed)
+/home/runner/work/_temp/t-ctl-notrim/simGmCareer-CGhBka/bundle.cjs:1016
+    const a = [...arr];
+                  ^
+
+TypeError: arr is not iterable
+    at shuffle (/home/runner/work/_temp/t-ctl-notrim/simGmCareer-CGhBka/bundle.cjs:1016:19)
+    at /home/runner/work/_temp/t-ctl-notrim/simGmCareer-CGhBka/bundle.cjs:1028:50
+    at Array.map (<anonymous>)
+    at buildSchedule (/home/runner/work/_temp/t-ctl-notrim/simGmCareer-CGhBka/bundle.cjs:1028:35)
+    at Object.runOffseason (/home/runner/work/_temp/t-ctl-notrim/simGmCareer-CGhBka/bundle.cjs:1572:21)
+    at Object.awaySummer (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simGmCareer.mjs:944:13)
+    at Object.hostSeasonAway (/home/runner/work/_temp/t-ctl-notrim/simGmCareer-CGhBka/bundle.cjs:5137:22)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simGmCareer.mjs:960:19
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+
+Node.js v24.22.0

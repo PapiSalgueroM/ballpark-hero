@@ -1,0 +1,21 @@
+1) the default path: a desk on save graded through the host is the base's, season for season, and gains only seat and xp
+   95 checkpoints over 48 seasons against 6d2d7a7d (0 moved); fired at ["7:3"]; digest 01d932fd8b0b7c3df6ef50b600d6f0359f3e72c9
+2) the verdict on every club's real season: desk off it is today's two calls, desk on it records once and pays once
+   1152 desk off closes equal today's two calls; 384 desk on closes recorded once (42599 XP paid, the median club 111 a season), 384 reloads paid nothing, 384 older saves started on time
+   OWNERSHIP: 211 losing and 173 winning club seasons walked at levels 0 to 5; from trust 60 a season costs badly 28, 26, 24, 22, 20, 18; missed 16, 15, 14, 13, 12, 10; trust 16, missed: level 0 fired (0), level 1 keeps the job on 1
+8) the words: never empty, no dash, no quote, no placeholder, no player's name, a closed line never says sit, every box fits
+   24101 strings and 3976 boxes read over 4 leagues, every roster name checked
+4) the market after real firings: every club graded as a GM's club, the first out of work screen and the next two
+   MEASURE 20 seeds x 12 seasons: 475 firings
+   first screen with the host's rule: offers 475 (100.0%), quiet 0 (0.0%), closed 0 (0.0%); first calls 283
+   first screen on the raw feed:      offers 192 (40.4%), quiet 228 (48.0%), closed 55 (11.6%)
+   of the screens with offers, last calls: host 87 of 475 (18.3%), raw 32 of 192 (16.7%)
+   re hired within three feeds (firings with two seasons left to read, 377): host 377 (100.0%), raw 209 (55.4%); 249 later feeds read
+   ASSERTED on 475 first feeds (311 straight after a badly season): never the club that fired him, no top tier after badly, every ask for next season, keyed
+5) taking a seat: 487 offers taken (487 with a planted depth chart), 475 followed through the draft and the summer, 0 refused
+6) a season out: the league plays a whole season without him, his record gains a year out and nothing else, and refusals touch nothing
+   60 years out over 20 seeds (0 stopped early); refusals: 20 in a seat, 20 closed, 20 last calls
+   drafted men on the other clubs' rosters after the years out: away 1063, idle GM 1080 (ratio 0.984); mean roster after a summer: away 52.22, idle GM 52.27
+7) whole careers: the save, the record and the counters agree at every step across firings, takes and years out
+   10 careers, 70 seasons run: 24 sackings forced, 21 firings, 14 seats taken, 15 years out, 6 closed for good; 172 checkpoints
+simGmCareer: all checks passed (nfl)

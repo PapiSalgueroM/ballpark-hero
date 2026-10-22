@@ -1,0 +1,7 @@
+NEGATIVE CONTROL ON: noawaydraft; section 6 must go red
+6) a season out: the league plays a whole season without him, his record gains a year out and nothing else, and refusals touch nothing
+   60 years out over 20 seeds (0 stopped early); refusals: 20 in a seat, 20 closed, 20 last calls
+   drafted men on the other clubs' rosters after the years out: away 0, idle GM 1080 (ratio 0.000); mean roster after a summer: away 52.06, idle GM 52.26
+  FAIL [6]: the away draft put 0.000 of the idle GM baseline's draftees on the other clubs, band [0.95,1.01]
+  FAIL [6]: the mean roster after an away summer differs from the baseline by -0.20, band [-0.1,0.1]
+CONTROL noawaydraft: 1 rewrite(s) applied, 2 failure(s) in section 6 (FIRED)

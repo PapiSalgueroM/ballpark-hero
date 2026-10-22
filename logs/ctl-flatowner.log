@@ -1,0 +1,14 @@
+NEGATIVE CONTROL ON: flatowner; section 2 must go red
+2) the verdict on every club's real season: desk off it is today's two calls, desk on it records once and pays once
+   1152 desk off closes equal today's two calls; 384 desk on closes recorded once (42599 XP paid, the median club 111 a season), 384 reloads paid nothing, 384 older saves started on time
+  FAIL [2]: BUF badly trust 60 level 1: the verdict reads 32/false, the cushion 34/false
+  FAIL [2]: BUF badly trust 60 level 2: the verdict reads 32/false, the cushion 36/false
+  FAIL [2]: BUF badly trust 60 level 3: the verdict reads 32/false, the cushion 38/false
+  FAIL [2]: BUF badly trust 60 level 4: the verdict reads 32/false, the cushion 40/false
+  FAIL [2]: BUF badly trust 60 level 5: the verdict reads 32/false, the cushion 42/false
+  FAIL [2]: BUF badly: level 1 costs 28, level 0 cost 28: not gentler
+  FAIL [2]: BUF badly: level 2 costs 28, level 1 cost 28: not gentler
+  FAIL [2]: BUF badly: level 3 costs 28, level 2 cost 28: not gentler
+  FAIL [2]: (further failures in this check not printed)
+   OWNERSHIP: 211 losing and 173 winning club seasons walked at levels 0 to 5; from trust 60 a season costs badly 28, 28, 28, 28, 28, 28; missed 16, 16, 16, 16, 16, 16; trust 16, missed: level 0 fired (0), level 1 keeps the job on 0
+CONTROL flatowner: 1 rewrite(s) applied, 2741 failure(s) in section 2 (FIRED)

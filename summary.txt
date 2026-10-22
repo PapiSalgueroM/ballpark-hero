@@ -1,0 +1,12 @@
+vitest-board exit=0 15s |    Duration  14.24s (transform 4.76s, setup 543ms, collect 7.82s, tests 27.53s, environment 2.29s, prepare 807ms)
+vitest-shared exit=0 6s |    Duration  4.41s (transform 813ms, setup 646ms, collect 1.98s, tests 3.01s, environment 2.77s, prepare 926ms)
+vitest-career exit=0 34s |    Duration  32.78s (transform 2.77s, setup 166ms, collect 441ms, tests 30.47s, environment 681ms, prepare 335ms)
+ctl-notrim exit=1 13s | Node.js v24.22.0
+ctl-flatowner exit=1 46s | CONTROL flatowner: 1 rewrite(s) applied, 2741 failure(s) in section 2 (FIRED)
+tsc exit=0 109s | 
+ctl-noawaydraft exit=1 32s | CONTROL noawaydraft: 1 rewrite(s) applied, 2 failure(s) in section 6 (FIRED)
+gmxp exit=0 1s | simGmXp: all checks passed
+nflgmdesk exit=0 31s | simNflGmDesk: all seven checks passed (10 seeds x 10 seasons)
+gmreload exit=0 8s | simGmReload: all green. Four front offices keep a finished season through a reload, and none of them can play a closed one again.
+ctl-depthstays exit=1 116s | CONTROL depthstays: 1 rewrite(s) applied, 487 failure(s) in section 5 (FIRED)
+career exit=0 205s | simGmCareer: all checks passed (nfl)
