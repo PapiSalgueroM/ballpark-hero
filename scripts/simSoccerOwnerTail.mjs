@@ -14,7 +14,8 @@
  *   2) Every season's finish is the table's: over a fleet of owner tails through the engine, the result line names
  *      the position the stored table gives him, a title only from first, a promotion only from the top two of a
  *      lower tier, a relegation only from the bottom three, and the counters agree with the rows. The table is drawn
- *      from the save's own stream: the same season replays the same row whatever Math.random holds.
+ *      from the save's own stream: the same season replays the same row whatever Math.random holds, and the next
+ *      season is a new table (two seasons in a row in one league never show the same four rivals on the same points).
  *   3) Each call moves what it says it moves, paired against placing nothing on the same keyed seasons (common
  *      random numbers, so the only difference is the call): Sign players adds points this season and costs wages
  *      now; Fund the academy adds nothing this season, then points and money later; Grow the ground costs money
@@ -49,7 +50,8 @@
  * invented finish), mathrandom (section 2, the table off Math.random), squadnoop, youthnoop, stadiumnoop, debtnoop
  * (section 3, each call's effect gone), dominant (section 4, signings that pay), oldsave (section 5, a save with no
  * debt field), drawshift (section 6, one extra draw in the shared table). Added after the round's reviews:
- * saleleague (section 1, the tile's old league, today's label or the list's key, put back).
+ * saleleague (section 1, the tile's old league, today's label or the list's key, put back), stalekey (section 2,
+ * the season dropped from the season's key, so every season of a club replays the last one's rivals).
  * Options: SIM_OWNER_BASE=<sha> (default: git merge-base HEAD origin/main), SIM_OWNER_SALT=<n> (default 1),
  * SIM_OWNER_ONLY=<sections, e.g. 3,4>.
  */
@@ -82,6 +84,7 @@ const CONTROLS = {
   drawshift: [{ file: LEAGUE, from: '  const games = field.length * 2; // home and away vs each rival', to: '  rng(); const games = field.length * 2;' }],
   /* added after the round's reviews (2026-10-22) */
   saleleague: [{ file: OWNER, from: 'leagueLine: leagueSeasonLine(c, input.year),', to: 'leagueLine: leagueKeyInYear(c, input.year) ?? c.league,' }],
+  stalekey: [{ file: OWNER, from: '|${own.club}|${season}`', to: '|${own.club}`' }],
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
 
@@ -301,6 +304,8 @@ const ord = n => L.ordinal(n);
 if (ONLY.has(2)) {
   console.log('2) Every finish is the table\'s');
   let rows = 0, wrong = 0, titles = 0, promos = 0, rels = 0, named_ = 0, verified = 0, counters = 0;
+  let pairs = 0, replayed = 0;
+  const rivals = t => (Array.isArray(t) ? t : []).filter(r => !r.you).slice(0, 4).map(r => `${r.club}:${r.pts}`).join('|');
   const examples = [];
   for (let i = 0; i < 80; i += 1) {
     let tailTitles = 0, tailPromos = 0;
@@ -330,6 +335,13 @@ if (ONLY.has(2)) {
       if (typeof row.league === 'string') named_ += 1;
       if (row.sizeVerified) verified += 1;
       if (problems.length) { wrong += 1; if (examples.length < 3) examples.push(`${os.club} S${row.year}: ${problems[0]}`); }
+      /* a new season is a new table: two seasons in a row of one club in one league never show the same four
+         rivals on the same points (a key without the season replays last season's rivals) */
+      const last = prev.seasonResults[prev.seasonResults.length - 1];
+      if (last && last.club === row.club && last.league === row.league && last.leagueSize === row.leagueSize) {
+        pairs += 1;
+        if (rivals(last.table) === rivals(table)) replayed += 1;
+      }
     });
     if (end.ownerState.trophies !== tailTitles || end.ownerState.promotions !== tailPromos) counters += 1;
   }
@@ -339,6 +351,9 @@ if (ONLY.has(2)) {
   if (wrong > 0) fail(`${wrong} of ${rows} owner seasons carry a finish, title or move the table did not produce`);
   if (counters > 0) fail(`${counters} tails whose trophy or promotion counters disagree with their rows`);
   if (titles === 0 || promos === 0 || rels === 0) fail('a fleet with no title, no promotion or no relegation proves nothing about them');
+  console.log(`   ${pairs} back to back seasons in one league: ${replayed} show last season's top four rivals on the same points`);
+  if (pairs < 300) fail(`only ${pairs} back to back seasons in one league were compared`);
+  if (replayed * 100 > pairs) fail(`${replayed} of ${pairs} seasons replay last season's rivals on the same points: the season is not in the table's key`);
   /* the table is the save's own: the same season under two different Math.random streams is the same season */
   let moved = 0;
   for (let i = 0; i < 30; i += 1) {
