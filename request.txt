@@ -1,0 +1,10 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simConnectionsFacts: node scripts/simConnectionsFacts.mjs
+ctl-rooney: CONN_CONTROL=rooney node scripts/simConnectionsFacts.mjs
+ctl-zidane: CONN_CONTROL=zidane node scripts/simConnectionsFacts.mjs
+ctl-current: CONN_CONTROL=current node scripts/simConnectionsFacts.mjs
+simFairPuzzles: node scripts/simFairPuzzles.mjs
+simConnectionsLoss: node scripts/simConnectionsLoss.mjs
+simConnectionsShake: node scripts/simConnectionsShake.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+vitest-daily: node_modules/.bin/vitest run src/test/dailySaveParity.test.tsx src/test/dailySaveShapes.test.tsx --testTimeout=300000 --hookTimeout=120000
