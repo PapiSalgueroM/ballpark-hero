@@ -1,0 +1,12 @@
+simCfbSlate: node scripts/simCfbSlate.mjs
+simCfbSlate-big: SIM_SEEDS=60 SIM_SEASONS=10 SIM_STRESS=1500 node scripts/simCfbSlate.mjs
+c-random: CFB_SLATE_CONTROL=random node scripts/simCfbSlate.mjs
+c-ndacc: CFB_SLATE_CONTROL=ndacc node scripts/simCfbSlate.mjs
+c-top12: CFB_SLATE_CONTROL=top12 node scripts/simCfbSlate.mjs
+c-g5title: CFB_SLATE_CONTROL=g5title node scripts/simCfbSlate.mjs
+c-nofifth: CFB_SLATE_CONTROL=nofifth node scripts/simCfbSlate.mjs
+c-rivals: CFB_SLATE_CONTROL=rivals node scripts/simCfbSlate.mjs
+c-source: CFB_SLATE_CONTROL=source node scripts/simCfbSlate.mjs
+c-midseason: CFB_SLATE_CONTROL=midseason node scripts/simCfbSlate.mjs
+c-cbbraw: CFB_SLATE_CONTROL=cbbraw node scripts/simCfbSlate.mjs
+c-bogus: CFB_SLATE_CONTROL=bogus node scripts/simCfbSlate.mjs
