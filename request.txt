@@ -1,0 +1,8 @@
+form-1235: SIM_CAREER_FORM_SECTIONS=1,2,3,5 node scripts/simCareerForm.mjs
+form-4-house: SIM_CAREER_FORM_SECTIONS=4 node scripts/simCareerForm.mjs
+form-4-engaged: SIM_CAREER_FORM_FLEET_KIND=engaged SIM_CAREER_FORM_SECTIONS=4 node scripts/simCareerForm.mjs
+ctl-divisor: SIM_CAREER_FORM_CONTROL=divisor node scripts/simCareerForm.mjs
+ctl-zero: SIM_CAREER_FORM_CONTROL=zero node scripts/simCareerForm.mjs
+ctl-posttext: SIM_CAREER_FORM_CONTROL=posttext node scripts/simCareerForm.mjs
+ctl-nogate: SIM_CAREER_FORM_CONTROL=nogate node scripts/simCareerForm.mjs
+ctl-per10: SIM_CAREER_FORM_CONTROL=per10 node scripts/simCareerForm.mjs

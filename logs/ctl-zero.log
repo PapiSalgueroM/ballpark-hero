@@ -1,0 +1,13 @@
+3) a pinned fleet: every press played again at morale 20, at the neutral point and at 90
+   CONTROL zero: the soccer step is 0 in this tree's bundle
+   120 careers, 2447 presses played three ways (seed 1523)
+   league games: morale 20 22.58, 81 22.58, 90 22.58; rating 6.81, 6.81, 6.81
+   gaps: games 0.00 and 0.00, rating 0.00 and 0.00
+   exact: 2447 presses moved by exactly the designed step at every pin, 0 did not, 0 left out where 0 or 38 bit
+   at the neutral point the round's arm and the arm without the step: 2447 presses byte identical with the same draws, 0 not
+   at morale 20 the two arms made the same number of draws in 2447 presses and a different number in 0 (draws after the league games move with them)
+   FAIL gap g1 is 0.00, under its floor 0.05
+   FAIL gap g2 is 0.00, under its floor 0.5
+   FAIL gap r1 is 0.00, under its floor 0.1
+   FAIL gap r2 is 0.00, under its floor 0.07
+simCareerForm: RED, 4 failure(s)

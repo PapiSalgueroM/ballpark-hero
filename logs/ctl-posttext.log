@@ -1,0 +1,13 @@
+3) a pinned fleet: every press played again at morale 20, at the neutral point and at 90
+   CONTROL posttext: the season reads the morale the summer's texts leave, not the one he pressed on
+   120 careers, 2444 presses played three ways (seed 1523)
+   league games: morale 20 22.49, 81 22.59, 90 22.59; rating 6.61, 6.82, 6.82
+   gaps: games 0.10 and 0.00, rating 0.20 and 0.00
+   exact: 0 presses moved by exactly the designed step at every pin, 2444 did not, 0 left out where 0 or 38 bit
+   at the neutral point the round's arm and the arm without the step: 2444 presses byte identical with the same draws, 0 not
+   at morale 20 the two arms made the same number of draws in 2259 presses and a different number in 185 (draws after the league games move with them)
+   FAIL only 0 of 2444 presses were checked exactly
+   FAIL 2444 presses moved league games by something other than the designed step of the morale he pressed on
+   FAIL gap g2 is 0.00, under its floor 0.5
+   FAIL gap r2 is 0.00, under its floor 0.07
+simCareerForm: RED, 4 failure(s)

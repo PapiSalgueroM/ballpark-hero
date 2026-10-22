@@ -1,0 +1,8 @@
+form-1235 exit=0 154s | simCareerForm: green
+ctl-divisor exit=1 4s | simCareerForm: RED, 1 failure(s)
+ctl-zero exit=1 127s | simCareerForm: RED, 4 failure(s)
+ctl-posttext exit=1 135s | simCareerForm: RED, 4 failure(s)
+ctl-nogate exit=1 13s | simCareerForm: RED, 1 failure(s)
+form-4-engaged exit=0 458s | simCareerForm: green
+form-4-house exit=0 473s | simCareerForm: green
+ctl-per10 exit=1 330s | simCareerForm: RED, 1 failure(s)
