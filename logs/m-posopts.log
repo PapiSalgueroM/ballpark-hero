@@ -1,0 +1,40 @@
+MUTATION posopts APPLIED to src/lib/triviaQuestionBank.ts
+1. the fixture [0.0s]
+   5496 rows of 2026, position real for 2497; easy band 109 players on 17 values (biggest tie 18), medium 990, hard 4397
+   easy: 2 listed namesakes (Gabriel, João Pedro)
+   medium: 13 listed namesakes (Wesley, Éderson, Marquinhos, Rômulo, Luis Suárez, Danilo, ...)
+   hard: 39 listed namesakes (Léo Pereira, Adama Traoré, João Mário, Vitinho, André Almeida, Artur, ...)
+2. 5000 daily ladders from 2026-10-25, and the same dates under the old rules as the baseline [0.0s]
+   old rules: 5000 ladders, 75000 questions (shirt 14232, club 14741, ballon 13823, nationality 14783, worth 4731, position 12690); worth the most by band easy 3100, medium 1176, hard 455
+   old rules: short ladders 0, ties 557, namesakes 1414, present tense 19472, not a club offered 169, wrong answer marked 0, unknown template 0, broken options 0
+      e.g. tense: Which club does Declan Rice play for?
+      e.g. namesake: Which club does Gabriel play for?
+      e.g. notAClub: Which club does Bandile Shandu play for? [Orlando Pirates / Rhode Island FC / FK Pardubice / Unknown]
+      e.g. ties: Ibrahima Konaté 54M / Pablo Barrios 65M / Eduardo Camavinga 54M / Lennart Karl 65M
+   new rules: 5000 ladders, 75000 questions (shirt 14154, club 14741, worth 4737, nationality 14807, position 12687, ballon 13874); worth the most by band easy 3102, medium 1178, hard 457
+   new rules: short ladders 0, ties 0, namesakes 466, present tense 0, not a club offered 0, wrong answer marked 0, unknown template 0, broken options 0
+      e.g. namesake: Which of these players plays Left Winger? [João Pedro / Bukayo Saka / Christian Pulisic / Rafael Leão]
+  FAIL: daily: 466 namesake
+3. 1000 unlimited ladders, and 1000 single questions at every difficulty (what Swap Question deals) [25.8s]
+   unlimited: 1000 ladders, 15000 questions (nationality 2908, shirt 2831, worth 950, position 2589, ballon 2834, club 2888); worth the most by band easy 626, medium 230, hard 94
+   unlimited: short ladders 0, ties 0, namesakes 98, present tense 0, not a club offered 0, wrong answer marked 0, unknown template 0, broken options 0
+      e.g. namesake: Which of these players plays Defensive Midfield? [Aurélien Tchouaméni / Maghnes Akliouche / João Pedro / Nico Paz]
+   swap: 0 ladders, 15000 questions (position 2476, nationality 2490, worth 2539, ballon 2422, club 2547, shirt 2526); worth the most by band easy 856, medium 810, hard 873
+   swap: short ladders 0, ties 0, namesakes 104, present tense 0, not a club offered 0, wrong answer marked 0, unknown template 0, broken options 0
+      e.g. namesake: Which of these players plays Centre-Forward? [Florian Wirtz / Gabriel / Kobbie Mainoo / Victor Osimhen]
+  FAIL: unlimited: 98 namesake
+  FAIL: swap: 104 namesake
+4. dates before 2026-10-25 deal exactly what the base generator dealt [30.5s]
+   2026-10-22: 36c088422c3d34a6 (base 36c088422c3d34a6)
+   2026-10-23: 94f0aa2002e3e1d9 (base 94f0aa2002e3e1d9)
+   2026-10-24: 1f6ffa5fd6af80b6 (base 1f6ffa5fd6af80b6)
+5. every band still deals every market question: 500 builds per band and type, new rules against old [30.5s]
+   easy: club 100.0% (was 100.0%), nationality 100.0% (was 100.0%), position 100.0% (was 100.0%), worth 100.0% (was 100.0%); askable names 107 of 109
+   medium: club 100.0% (was 100.0%), nationality 100.0% (was 100.0%), position 100.0% (was 100.0%), worth 100.0% (was 100.0%); askable names 977 of 990
+   hard: club 100.0% (was 100.0%), nationality 100.0% (was 100.0%), position 100.0% (was 100.0%), worth 100.0% (was 100.0%); askable names 4358 of 4397
+6. src/data/marketNamesakes.json is current with scripts/genMarketNamesakes.mjs [32.3s]
+   derived 54 from the saved rows, 0 from a live read; shipped 54
+7. Face Off and the bank read one MIN_RATIO [32.3s]
+   MIN_RATIO 1.04
+
+simTriviaBank: 3 failure(s)

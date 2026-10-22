@@ -1,0 +1,37 @@
+MUTATION legacyclub APPLIED to src/lib/triviaQuestionBank.ts
+1. the fixture [0.0s]
+   5496 rows of 2026, position real for 2497; easy band 109 players on 17 values (biggest tie 18), medium 990, hard 4397
+   easy: 2 listed namesakes (Gabriel, João Pedro)
+   medium: 13 listed namesakes (Wesley, Éderson, Marquinhos, Rômulo, Luis Suárez, Danilo, ...)
+   hard: 39 listed namesakes (Léo Pereira, Adama Traoré, João Mário, Vitinho, André Almeida, Artur, ...)
+2. 5000 daily ladders from 2026-10-25, and the same dates under the old rules as the baseline [0.0s]
+   old rules: 5000 ladders, 75000 questions (shirt 14370, club 14780, worth 4714, ballon 13827, nationality 14554, position 12755); worth the most by band easy 3101, medium 1185, hard 428
+   old rules: short ladders 0, ties 543, namesakes 1360, present tense 19494, not a club offered 0, wrong answer marked 0, unknown template 0, broken options 0
+      e.g. tense: Which club does Declan Rice play for?
+      e.g. ties: Nico Schlotterbeck 59M / Nico Paz 70M / Antoine Semenyo 81M / Victor Osimhen 81M
+      e.g. namesake: Which club does Lucas Silva play for?
+   new rules: 5000 ladders, 75000 questions (shirt 14320, club 14648, worth 4737, nationality 14707, position 12739, ballon 13849); worth the most by band easy 3098, medium 1184, hard 455
+   new rules: short ladders 0, ties 0, namesakes 0, present tense 0, not a club offered 0, wrong answer marked 0, unknown template 0, broken options 0
+  FAIL: the old rules dealt no notAClub over 5000 dates, so this checker may be blind to it
+3. 1000 unlimited ladders, and 1000 single questions at every difficulty (what Swap Question deals) [26.3s]
+   unlimited: 1000 ladders, 15000 questions (nationality 2891, shirt 2844, worth 942, position 2639, ballon 2739, club 2945); worth the most by band easy 620, medium 227, hard 95
+   unlimited: short ladders 0, ties 0, namesakes 0, present tense 0, not a club offered 0, wrong answer marked 0, unknown template 0, broken options 0
+   swap: 0 ladders, 15000 questions (position 2548, club 2562, nationality 2545, shirt 2490, ballon 2409, worth 2446); worth the most by band easy 782, medium 833, hard 831
+   swap: short ladders 0, ties 0, namesakes 0, present tense 0, not a club offered 0, wrong answer marked 0, unknown template 0, broken options 0
+4. dates before 2026-10-25 deal exactly what the base generator dealt [31.0s]
+   2026-10-22: 9815cddd1439ecbb (base 36c088422c3d34a6)
+  FAIL: the daily for 2026-10-22 is not the ladder the base dealt: a release that day would re-deal it
+   2026-10-23: 6917c23522cc5aef (base 94f0aa2002e3e1d9)
+  FAIL: the daily for 2026-10-23 is not the ladder the base dealt: a release that day would re-deal it
+   2026-10-24: adffaa82c665dc94 (base 1f6ffa5fd6af80b6)
+  FAIL: the daily for 2026-10-24 is not the ladder the base dealt: a release that day would re-deal it
+5. every band still deals every market question: 500 builds per band and type, new rules against old [31.0s]
+   easy: club 100.0% (was 100.0%), nationality 100.0% (was 100.0%), position 100.0% (was 100.0%), worth 100.0% (was 100.0%); askable names 107 of 109
+   medium: club 100.0% (was 100.0%), nationality 100.0% (was 100.0%), position 100.0% (was 100.0%), worth 100.0% (was 100.0%); askable names 977 of 990
+   hard: club 100.0% (was 100.0%), nationality 100.0% (was 100.0%), position 100.0% (was 100.0%), worth 100.0% (was 100.0%); askable names 4358 of 4397
+6. src/data/marketNamesakes.json is current with scripts/genMarketNamesakes.mjs [32.9s]
+   derived 54 from the saved rows, 0 from a live read; shipped 54
+7. Face Off and the bank read one MIN_RATIO [32.9s]
+   MIN_RATIO 1.04
+
+simTriviaBank: 4 failure(s)

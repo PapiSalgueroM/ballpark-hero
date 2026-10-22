@@ -1,0 +1,8 @@
+m-cutover exit=1 31s | simTriviaBank: 3 failure(s)
+m-fourth exit=1 32s | simTriviaBank: 3 failure(s)
+m-posopts exit=1 33s | simTriviaBank: 3 failure(s)
+m-distract exit=1 30s | simTriviaBank: 3 failure(s)
+m-legacyclub exit=1 33s | simTriviaBank: 4 failure(s)
+m-loose exit=1 32s | simTriviaBank: 3 failure(s)
+m-worthband exit=1 28s | simTriviaBank: 3 failure(s)
+clean-after exit=0 31s | simTriviaBank: all checks passed
