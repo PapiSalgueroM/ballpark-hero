@@ -1,0 +1,4 @@
+#!serial
+mutH: bash .rc/x/mrun.sh H "node_modules/.bin/vitest run src/test/soccerPuskasYear1523.test.ts src/lib/soccerClubSquad.test.ts src/test/soccerCareerStoryRole.test.ts src/test/soccerCareerDevelopment.test.ts --testTimeout=300000 --hookTimeout=120000" "node scripts/simCareerSquad.mjs" "node scripts/simCareerStoryRole.mjs"
+mutI: bash .rc/x/mrun.sh I "SIM_CAREER_FORM_SECTIONS=1 node scripts/simCareerForm.mjs" "node scripts/simCareerInboxBeats.mjs"
+mutJ: bash .rc/x/mrun.sh J "SIM_CAREER_FORM_SECTIONS=2,3 node scripts/simCareerForm.mjs" "node_modules/.bin/vitest run src/test/soccerPuskasYear1523.test.ts src/lib/soccerClubSquad.test.ts src/test/soccerCareerStoryRole.test.ts src/test/soccerCareerDevelopment.test.ts --testTimeout=300000 --hookTimeout=120000"

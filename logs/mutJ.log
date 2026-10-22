@@ -1,0 +1,21 @@
+MUTATION J applied to src/lib/careerForm.ts
+---- [J.1] exit=1: SIM_CAREER_FORM_SECTIONS=2,3 node scripts/simCareerForm.mjs
+   FAIL soccerMoraleStep(58) is 0, not -2
+   FAIL soccerMoraleStep(59) is 0, not -1
+   FAIL soccerMoraleStep(73) is 1, not -1
+   FAIL soccerMoraleStep(74) is 1, not 0
+   FAIL soccerMoraleStep(81) is 1, not 0
+   FAIL soccerMoraleStep(88) is 2, not 0
+   FAIL soccerMoraleStep(89) is 2, not 1
+   FAIL soccerMoraleStep(95) is 2, not 1
+   at morale 20 the two arms made the same number of draws in 2272 presses and a different number in 185 (draws after the league games move with them)
+simCareerForm: RED, 19 failure(s)
+---- [J.2] exit=1: node_modules/.bin/vitest run src/test/soccerPuskasYear1523.test.ts src/lib/soccerClubSquad.test.ts src/test/soccerCareerStoryRole.test.ts src/test/soccerCareerDevelopment.test.ts --testTimeout=300000 --hookTimeout=120000
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/lib/soccerClubSquad.test.ts[2m > [22mthe living squad[2m > [22mreads trust from the band, the phone and the freeze
+[41m[1m FAIL [22m[49m src/lib/soccerClubSquad.test.ts[2m > [22mthe living squad[2m > [22mreads his morale beside the phone, the two capped together at three games (Round 1523)
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m3 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m113 passed[39m[22m[90m (115)[39m
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/soccerClubSquad.test.ts,title=src/lib/soccerClubSquad.test.ts > the living squad > reads his morale beside the phone%2C the two capped together at three games (Round 1523),line=362,column=36::AssertionError: expected { pct: 68, expected: 26, …(9) } to match object { expected: 25, moraleGames: +0 }%0A(14 matching properties omitted from actual)%0A%0A- Expected%0A+ Received%0A%0A  {%0A-   "expected": 25,%0A-   "moraleGames": 0,%0A+   "expected": 26,%0A+   "moraleGames": 1,%0A  }%0A%0A ❯ src/lib/soccerClubSquad.test.ts:362:36%0A%0A
+MUTATION J CAUGHT: 1=1 2=1

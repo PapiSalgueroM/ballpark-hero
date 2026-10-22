@@ -1,0 +1,18 @@
+MUTATION H applied to src/lib/soccerClubSquad.ts
+---- [H.1] exit=1: node_modules/.bin/vitest run src/test/soccerPuskasYear1523.test.ts src/lib/soccerClubSquad.test.ts src/test/soccerCareerStoryRole.test.ts src/test/soccerCareerDevelopment.test.ts --testTimeout=300000 --hookTimeout=120000
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 3 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/lib/soccerClubSquad.test.ts[2m > [22mthe living squad[2m > [22mreads his morale beside the phone, the two capped together at three games (Round 1523)
+[41m[1m FAIL [22m[49m src/test/soccerCareerDevelopment.test.ts[2m > [22mSoccer Career development selection[2m > [22mquotes the same form swing and freeze order without changing the base role
+[41m[1m FAIL [22m[49m src/test/soccerCareerStoryRole.test.ts[2m > [22mSoccer Career reduced manager role[2m > [22mshows the same role range and explains it separately from the phone
+[2m Test Files [22m [1m[31m3 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[31m3 failed[39m[22m[2m | [22m[1m[32m112 passed[39m[22m[90m (115)[39m
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerStoryRole.test.ts,title=src/test/soccerCareerStoryRole.test.ts > Soccer Career reduced manager role > shows the same role range and explains it separately from the phone,line=97,column=28::AssertionError: expected 31 to be 32 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 32%0A+ 31%0A%0A ❯ src/test/soccerCareerStoryRole.test.ts:97:28%0A%0A
+---- [H.2] exit=0: node scripts/simCareerSquad.mjs
+   (278 s, work folder /home/runner/work/_temp/t-mutH/careersquad-246wws)
+simCareerSquad: 2212 checks, 0 failed
+---- [H.3] exit=1: node scripts/simCareerStoryRole.mjs
+FAIL [role squad display] AssertionError: display reads the held four-game reduction
+PASS [source held]
+simCareerStoryRole: 16 groups, 1 failed, 48 full AR pairs
+MUTATION H CAUGHT: 1=1 2=0 3=1

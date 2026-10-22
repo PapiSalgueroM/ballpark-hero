@@ -1,0 +1,12 @@
+MUTATION I applied to src/lib/nflMyCareer.ts
+---- [I.1] exit=1: SIM_CAREER_FORM_SECTIONS=1 node scripts/simCareerForm.mjs
+   FAIL nfl: src/lib/nflMyCareer.ts does not bind moraleForm('nfl', c.morale)
+   FAIL nfl: this tree parts from 2ab9bef1 at record 0 of 10368
+simCareerForm: RED, 2 failure(s)
+   nhl: 108 careers, 1944 seasons replayed, byte identical
+simCareerForm: RED, 2 failure(s)
+---- [I.2] exit=0: node scripts/simCareerInboxBeats.mjs
+simCareerInboxBeats: green. Soccer is unchanged, the NFL, NBA, MLB and NHL inboxes each run on their own calendar, and every rival choice does what it says.
+
+simCareerInboxBeats: green. Soccer is unchanged, the NFL, NBA, MLB and NHL inboxes each run on their own calendar, and every rival choice does what it says.
+MUTATION I CAUGHT: 1=1 2=0
