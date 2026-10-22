@@ -1,0 +1,11 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simSeasonDue: node scripts/simSeasonDue.mjs
+due-nextyear: SEASON_DUE_CONTROL=nextyear node scripts/simSeasonDue.mjs
+due-strip: SEASON_DUE_CONTROL=strip node scripts/simSeasonDue.mjs
+due-unheld: SEASON_DUE_CONTROL=unheld node scripts/simSeasonDue.mjs
+due-nocounts: SEASON_DUE_CONTROL=nocounts node scripts/simSeasonDue.mjs
+due-unfiltered: SEASON_DUE_CONTROL=unfiltered node scripts/simSeasonDue.mjs
+due-bogus: SEASON_DUE_CONTROL=bogus node scripts/simSeasonDue.mjs
+due-1031: SEASON_DUE_TODAY=2026-10-31 node scripts/simSeasonDue.mjs
+due-1121: SEASON_DUE_TODAY=2026-11-21 node scripts/simSeasonDue.mjs
+rehearse: npm install --silent --no-save --prefix /tmp/pgl @electric-sql/pglite >/dev/null 2>&1; PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseSeasonRows1551.mjs; s=$?; REHEARSE_CONTROL=noafl PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseSeasonRows1551.mjs; echo "CONTROL noafl exit=$?"; exit $s
