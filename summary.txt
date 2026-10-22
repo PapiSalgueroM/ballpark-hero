@@ -1,0 +1,6 @@
+build exit=0 24s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+saleReview exit=0 84s | All 1 harnesses green.
+base-build exit=0 25s | base built
+saleReview-base exit=0 83s | All 1 harnesses green.
+goalFlight-base exit=1 2s | 1 harness not green.
+setPiecePresentation-base exit=1 4s | 1 harness not green.
