@@ -1,0 +1,6 @@
+simHarnessAnchors exit=0 58s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simTycoonAwayMatchdays exit=0 71s |    All 6 controls fired exactly where they should, in node and in the real hook.
+simGuideHeadings exit=0 1s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+tsc exit=0 76s | 
+simTycoonHelp exit=0 19s |    All 25 controls fired exactly where they should.
+simNoRivalNames exit=0 11s | No rival product names found. 0 findings.
