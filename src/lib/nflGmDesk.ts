@@ -55,13 +55,17 @@ import { NFL_ROOKIE_DEAL_YEARS } from './gmContractRules';
 import { NFL_STAFF_PACK, type NflStaffPost } from '@/data/gmStaff/packs';
 import {
   DEEP_ROSTER_MAX, NFL_ROSTER_MIN, REGULAR_WEEKS, capUsed, conferenceOf, conferenceSeeds, teamStrength, tradeValue,
+  DEPTH_GROUPS, resetDepth, aiWeeklyMoves, generateDraftClass, injuryPass, nflAiDraftPicks, runOffseason, runPlayoffs, simGame,
   type GmPlayer, type GmTeamState, type LeagueState, type OffseasonNews, type PlayoffRound, type Prospect,
 } from './frontOffice';
 /* Round 1533: the GM's career (the desk host, bound to this board). */
 import {
-  GM_HOST_KEYS, hostLastGrade, hostLegacy, isGmSeatBlock, type HostLegacy, type HostXpSource,
+  GM_HOST_KEYS, HOST_BLOCK_RULES, hostLastGrade, hostLegacy, hostTakeSeat, isGmSeatBlock,
+  type GmAwayHost, type HostBlockRule, type HostLegacy, type HostXpSource,
 } from './gmDeskHost';
+import type { SeatOffer, SeatSave } from './gmSeat';
 import { nflDeskHost } from './gmDeskHostNfl';
+import { leagueNames } from './foNames';
 import { nflPostseason, type FoSeasonOutcome, type OwnerMandate } from './foOwnerMandate';
 import type { GmTree } from './gmXp';
 
@@ -676,4 +680,101 @@ export function nflLegacy(league: LeagueState, f: {
     team: f.team, seasonsPlayed: f.seasonsPlayed, titles: f.titles, fired: f.fired, seasonCounted: f.seasonCounted,
     lastGrade: f.seasonCounted ? hostLastGrade(nflDeskHost, league, f.mandate, outcome) : null,
   });
+}
+
+/**
+ * Who owns each block when he changes clubs: the host's two rows (his record
+ * and his XP travel with him), then the NFL's three. The re-sign ledger and
+ * the staff are the club's (Club Manager's rule: the club he joins hands him
+ * its own), the pick ledger is the league's and stays as it is.
+ */
+export function nflDeskBlockRules(): HostBlockRule<LeagueState>[] {
+  return [
+    ...(HOST_BLOCK_RULES as HostBlockRule<LeagueState>[]),
+    { key: NFL_DESK_KEYS.contracts, owner: 'club', fresh: (league, team) => openLedger(league, team) },
+    { key: NFL_DESK_KEYS.staff, owner: 'club', fresh: (league, team) => freshStaff(league, team) },
+    { key: NFL_DESK_KEYS.picks, owner: 'league' },
+  ];
+}
+
+/**
+ * Take a job in the same league. MUTATES the league handed in (the board
+ * hands a copy), and only once the move is made: null, and the league as it
+ * was, when the host refuses (he holds a seat, or that club is not in the
+ * feed the market reads today).
+ *
+ * A save whose desk is off opens it here, on his old club, as the first tap
+ * on a desk box would (the arm line said so). Then on the league, and nothing
+ * else: the pick lists rebuilt from the ledger when the desk was just opened,
+ * and his old club's saved depth chart handed back to automatic (a club with
+ * nobody in the chair orders its own depth). A roster, a pick, a standing or a
+ * rival's chart: none of it moves.
+ */
+export function nflTakeSeat<S extends SeatSave>(
+  league: LeagueState, desk: GmDesk | null, save: S, legacy: HostLegacy, teamId: string, nameOf: (id: string) => string,
+): { save: S; desk: GmDesk; offer: SeatOffer; opened: boolean } | null {
+  const opened = desk === null;
+  const start = desk ?? openNflDesk(league, legacy.team);
+  const r = hostTakeSeat({ host: nflDeskHost, league, desk: start, save, legacy, teamId, nameOf, blocks: nflDeskBlockRules() });
+  if (!r) return null;
+  if (opened) syncNflPicks(league, nflPicksOf(r.desk, league));
+  const old = league.teams[legacy.team];
+  if (old) for (const pos of DEPTH_GROUPS) resetDepth(old, pos);
+  return { ...r, opened };
+}
+
+/**
+ * The write side of a season with nobody in his chair (the host's
+ * hostSeasonAway calls these in its own order). The board's own engine calls
+ * in the board's own order, with no user club: the id '' is no club's, and
+ * every engine call that takes one skips only that id. A factory, because the
+ * first step hands the club that let him go its depth chart back.
+ *
+ * - The draft: the class openDraft deals when the chair is empty (its size
+ *   rule with no picks of his), then draftWithoutPicks's three batches of the
+ *   rivals' picks with nobody left out.
+ * - The summer: the pick ledger read before the engine runs (the desk
+ *   summer's order), the engine's offseason with no user club (so every club
+ *   is cut and tagged by the CPU's rule, the old one too), then the ledger
+ *   rolled and every engine list rebuilt from it. The re-sign ledger and the
+ *   staff are the old club's and stay as they are: taking a seat opens both
+ *   again for the club he joins.
+ * - A week: playWeek's order (injuries, the rivals' moves, every game), the
+ *   week moved on below the last one as playWeek moves it.
+ * - The playoffs: the bracket runPlayoffs plays, the champion recorded as
+ *   closeSeason records it.
+ * Nothing here draws from Math.random: the board hands its stream in.
+ */
+export function nflAwayHost(oldTeam: string): GmAwayHost<LeagueState> {
+  return {
+    awayDraft(league, rng) {
+      const old = league.teams[oldTeam];
+      if (old) for (const pos of DEPTH_GROUPS) resetDepth(old, pos);
+      const batches = 3;
+      const capital = Object.values(league.teams).reduce((sum, t) => sum + t.picks.length, 0);
+      let cls = generateDraftClass(rng, Math.max(40, Math.min(capital, batches * 6)), leagueNames(league));
+      for (let i = 0; i < batches; i++) cls = nflAiDraftPicks(league, cls, '', rng).remaining;
+    },
+    awaySummer(league, rng, desk) {
+      const closed = league.season;
+      const ids = Object.keys(league.teams);
+      const before = nflPicksOf(desk, league);
+      runOffseason(league, rng);
+      const picks = rollLedger(before, ids, closed, nflGamePickRules());
+      syncNflPicks(league, picks);
+      return withGmBlock(desk, NFL_DESK_KEYS.picks, picks);
+    },
+    periods: () => REGULAR_WEEKS,
+    playRound(league, rng) {
+      injuryPass(league.teams, rng);
+      aiWeeklyMoves(league, '', rng);
+      for (const g of league.schedule[league.week - 1]) simGame(g, league.teams, rng);
+      if (league.week < REGULAR_WEEKS) league.week += 1;
+    },
+    playoffs(league, rng) {
+      const { champion } = runPlayoffs(league.teams, rng);
+      league.champions.push({ season: league.season, team: champion });
+      return champion;
+    },
+  };
 }

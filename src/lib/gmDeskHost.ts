@@ -12,8 +12,8 @@
  * engine calls and a few board hunks.
  *
  * THIS ROUND IS THE LIFT. New files only: nothing under src imports this file
- * except its own tests, its four read adapters and its panels. No board mounts
- * anything yet, so no player sees a change.
+ * except its own tests, its four read adapters and its panels. Round 1533
+ * bound it to the NFL board first; the other three boards mount it next.
  *
  * THE RULES OF THE HOST.
  *   1. It imports no engine. A league is read only through the adapter it is
@@ -615,6 +615,20 @@ export function hostSummerMandate(stored: OwnerMandate | null | undefined, built
 export function hostArriving(seat: GmSeatBlock, leagueSeason: number): boolean {
   const s = currentStint(seat.career);
   return !s.ended && s.from > leagueSeason;
+}
+
+/**
+ * Round 1533: the line under the title on the arrival recap, the day he takes
+ * another club's seat (the season on the screen was not his). Null unless he
+ * is arriving. Read off the league through the adapter: the club's own record
+ * and place, no player and no person.
+ */
+export function hostArrivalLine<L>(host: GmDeskHost<L>, league: L, seat: GmSeatBlock, nameOf: (id: string) => string): string | null {
+  if (!hostArriving(seat, host.season(league))) return null;
+  const s = currentStint(seat.career);
+  const row = host.clubs(league).find(c => c.id === s.team);
+  if (!row) return null;
+  return `You take over the ${nameOf(s.team)}. They finished ${row.record}, ${ordinal(row.place)} in the league.`;
 }
 
 /* ================================================================== */
