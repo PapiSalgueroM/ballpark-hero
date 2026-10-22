@@ -1,0 +1,36 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ ✓ src/test/sharedResultChallenge.test.tsx > public result challenge links > copies only the public score and registered path, then displays that exact result 229ms
+ ✓ src/test/sharedResultChallenge.test.tsx > public result challenge links > reports clipboard failure and restores the challenge action for a retry 166ms
+ ✓ src/test/sharedResultChallenge.test.tsx > public result challenge links > prevents repeat challenge copies while the clipboard operation is pending 47ms
+ ✓ src/test/sharedResultChallenge.test.tsx > public result challenge links > keeps the existing native custom-text override and default emoji payload unchanged 125ms
+ ✓ src/test/sharedResultChallenge.test.tsx > public result challenge links > keeps score-card and social destination text separate from the new challenge URL 123ms
+ ✓ src/test/sharedResultChallenge.test.tsx > public result challenge links > round-trips Unicode, percent signs and the full maximum-length score 31ms
+ ✓ src/test/sharedResultChallenge.test.tsx > public result challenge links > renders markup-shaped input as literal text without creating injected elements 20ms
+ ✓ src/test/sharedResultChallenge.test.tsx > public result challenge links > dismisses only its own parameter, preserves other values and hash, and returns focus 73ms
+ ✓ src/test/sharedResultChallenge.test.tsx > public result challenge links > displays a registered game with a trailing slash and preserves that URL on dismissal 55ms
+ ✓ src/test/sharedResultChallenge.test.tsx > public result challenge links > does not show a challenge action for unknown paths or invalid source scores 243ms
+ ✓ src/test/sharedResultChallenge.test.tsx > public result challenge links > rejects the absent field without displaying a shared result 5ms
+ ✓ src/test/sharedResultChallenge.test.tsx > public result challenge links > rejects the empty field without displaying a shared result 3ms
+ ✓ src/test/sharedResultChallenge.test.tsx > public result challenge links > rejects the blank field without displaying a shared result 3ms
+ ✓ src/test/sharedResultChallenge.test.tsx > public result challenge links > rejects the duplicate field without displaying a shared result 3ms
+ ✓ src/test/sharedResultChallenge.test.tsx > public result challenge links > rejects the encoded duplicate field without displaying a shared result 2ms
+ ✓ src/test/sharedResultChallenge.test.tsx > public result challenge links > rejects the oversized field without displaying a shared result 2ms
+ ✓ src/test/sharedResultChallenge.test.tsx > public result challenge links > rejects the newline field without displaying a shared result 2ms
+ ✓ src/test/sharedResultChallenge.test.tsx > public result challenge links > rejects the null control field without displaying a shared result 2ms
+ ✓ src/test/sharedResultChallenge.test.tsx > public result challenge links > rejects the C1 control field without displaying a shared result 2ms
+ ✓ src/test/sharedResultChallenge.test.tsx > public result challenge links > rejects the bidi control field without displaying a shared result 2ms
+ ✓ src/test/sharedResultChallenge.test.tsx > public result challenge links > rejects the bad percent escape field without displaying a shared result 3ms
+ ✓ src/test/sharedResultChallenge.test.tsx > public result challenge links > rejects the bad UTF8 field without displaying a shared result 2ms
+ ✓ src/test/sharedResultChallenge.test.tsx > public result challenge links > rejects the unbounded encoded field field without displaying a shared result 2ms
+ ✓ src/test/sharedResultChallenge.test.tsx > public result challenge links > rejects non-game and unknown paths even when the score is valid 8ms
+
+ Test Files  1 passed (1)
+      Tests  24 passed (24)
+   Start at  14:26:01
+   Duration  3.15s (transform 253ms, setup 114ms, collect 554ms, tests 1.16s, environment 533ms, prepare 224ms)
+
+
+simSharedResultChallenge: 24 actual clipboard, URL round-trip, privacy, bounds, plaintext, dismissal, focus and existing-sharing checks passed.
+simSharedResultChallenge: production modules remain unchanged; controls use only owned temporary copies.
