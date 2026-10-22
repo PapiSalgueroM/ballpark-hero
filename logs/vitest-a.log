@@ -1,0 +1,157 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/lib/mlbCareerLifeC.test.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 88[2mms[22m[39m
+ [2m[90m↓[39m[22m src/test/usBoardFixture.test.tsx [2m([22m[2m4 tests[22m[2m | [22m[33m4 skipped[39m[2m)[22m
+ [32m✓[39m src/lib/usCareerAnnualBenefits.test.ts [2m([22m[2m28 tests[22m[2m)[22m[32m 250[2mms[22m[39m
+ [32m✓[39m src/lib/usCareerShopPromises.test.ts [2m([22m[2m28 tests[22m[2m)[22m[33m 423[2mms[22m[39m
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mopens each opted-in career guide and remembers only its dismissal
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ [32m✓[39m src/lib/nbaCareerLifeC.test.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 108[2mms[22m[39m
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mopens each opted-in career guide and remembers only its dismissal
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mopens each opted-in career guide and remembers only its dismissal
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mopens each opted-in career guide and remembers only its dismissal
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mreturns quietly and reopens the guide without changing career progress
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mreturns quietly and reopens the guide without changing career progress
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2misolates route receipts and ignores a late guide from the previous route
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2misolates route receipts and ignores a late guide from the previous route
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mwaits for usable instructions without recording an unseen guide
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mkeeps blocked-storage guides dismissible and reopenable without changing saves
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ [32m✓[39m src/test/careerDecisionOutcome.test.tsx [2m([22m[2m11 tests[22m[2m)[22m[33m 8101[2mms[22m[39m
+   [33m[2m✓[22m[39m ordinary career decision outcomes[2m > [22mapplies the real third-season NBA trade once before its quality draw and keeps the full save on return [33m 1454[2mms[22m[39m
+   [33m[2m✓[22m[39m ordinary career decision outcomes[2m > [22mshows each real sport choice as the actual capped change and saves it once [33m 1177[2mms[22m[39m
+   [33m[2m✓[22m[39m ordinary career decision outcomes[2m > [22mreports negative effects and real endorsement earnings without calling them cash [33m 1028[2mms[22m[39m
+   [33m[2m✓[22m[39m ordinary career decision outcomes[2m > [22mconsumes same-frame choices once and accepts the next ordinary event [33m 388[2mms[22m[39m
+   [33m[2m✓[22m[39m ordinary career decision outcomes[2m > [22mcontinues with no extra draws writes season or completion and restores Play focus [33m 1671[2mms[22m[39m
+   [33m[2m✓[22m[39m ordinary career decision outcomes[2m > [22mreloads the applied career without replaying its transient receipt or choice [33m 1463[2mms[22m[39m
+   [33m[2m✓[22m[39m ordinary career decision outcomes[2m > [22mpreserves real ordinary engine choices and the existing rivalry receipt independently [33m 688[2mms[22m[39m
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mkeeps blocked-storage guides dismissible and reopenable without changing saves
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mkeeps blocked-storage guides dismissible and reopenable without changing saves
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mreuses real instructions for saved season reviews and actual decision results
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mreuses real instructions for saved season reviews and actual decision results
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mreuses real instructions for saved season reviews and actual decision results
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mreuses real instructions for saved season reviews and actual decision results
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mleaves default GameHelp manual and independent career bytes unchanged
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ [32m✓[39m src/test/careerEntryGuide.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 5939[2mms[22m[39m
+   [33m[2m✓[22m[39m career entry guides[2m > [22mopens each opted-in career guide and remembers only its dismissal [33m 2714[2mms[22m[39m
+   [33m[2m✓[22m[39m career entry guides[2m > [22mreturns quietly and reopens the guide without changing career progress [33m 1154[2mms[22m[39m
+   [33m[2m✓[22m[39m career entry guides[2m > [22mkeeps blocked-storage guides dismissible and reopenable without changing saves [33m 577[2mms[22m[39m
+   [33m[2m✓[22m[39m career entry guides[2m > [22mreuses real instructions for saved season reviews and actual decision results [33m 951[2mms[22m[39m
+ [32m✓[39m src/lib/usCareerRecovery.test.ts [2m([22m[2m25 tests[22m[2m)[22m[33m 5158[2mms[22m[39m
+   [33m[2m✓[22m[39m 937 active career Recovery Suite simulation benefit[2m > [22m'nfl' reduces injury selection across every supported position and depleted through full health [33m 1745[2mms[22m[39m
+   [33m[2m✓[22m[39m 937 active career Recovery Suite simulation benefit[2m > [22m'nba' reduces injury selection across every supported position and depleted through full health [33m 1002[2mms[22m[39m
+   [33m[2m✓[22m[39m 937 active career Recovery Suite simulation benefit[2m > [22m'mlb' reduces injury selection across every supported position and depleted through full health [33m 1439[2mms[22m[39m
+   [33m[2m✓[22m[39m 937 active career Recovery Suite simulation benefit[2m > [22m'nhl' reduces injury selection across every supported position and depleted through full health [33m 732[2mms[22m[39m
+ [32m✓[39m src/lib/nhlCareerLifeC.test.ts [2m([22m[2m18 tests[22m[2m)[22m[32m 180[2mms[22m[39m
+ [32m✓[39m src/test/usCareerSmallItems1104.test.ts [2m([22m[2m12 tests[22m[2m)[22m[33m 466[2mms[22m[39m
+ [32m✓[39m src/test/usCareerDirtyMoney.test.tsx [2m([22m[2m16 tests[22m[2m)[22m[33m 5783[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1500: deal with dirty money on the real board[2m > [22mnfl: every washer owned, the desk previews, holds a second tap, and Come clean saves exactly the rule [33m 1671[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1500: deal with dirty money on the real board[2m > [22mnba: every washer owned, the desk previews, holds a second tap, and Come clean saves exactly the rule [33m 834[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1500: deal with dirty money on the real board[2m > [22mmlb: every washer owned, the desk previews, holds a second tap, and Come clean saves exactly the rule [33m 1003[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1500: deal with dirty money on the real board[2m > [22mnhl: every washer owned, the desk previews, holds a second tap, and Come clean saves exactly the rule [33m 1008[2mms[22m[39m
+[90mstderr[2m | src/test/usCareerHelpRules1104.test.tsx[2m > [22m[2mRound 1104: the changed rules are on the "?" screen[2m > [22m[2mNFL My Career shows slot pay, the kicker rule, the 16 game throwback and the bank, once each
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/usCareerHelpRules1104.test.tsx[2m > [22m[2mRound 1104: the changed rules are on the "?" screen[2m > [22m[2mthe NBA, MLB and NHL pages show the bank line once
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/usCareerHelpRules1104.test.tsx[2m > [22m[2mRound 1104: the changed rules are on the "?" screen[2m > [22m[2mthe NBA, MLB and NHL pages show the bank line once
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/usCareerHelpRules1104.test.tsx[2m > [22m[2mRound 1104: the changed rules are on the "?" screen[2m > [22m[2mthe NBA, MLB and NHL pages show the bank line once
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/usCareerHelpRules1104.test.tsx[2m > [22m[2mRound 1104: the changed rules are on the "?" screen[2m > [22m[2mall four pages show the coaching retirement line once
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/usCareerHelpRules1104.test.tsx[2m > [22m[2mRound 1104: the changed rules are on the "?" screen[2m > [22m[2mall four pages show the coaching retirement line once
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/usCareerHelpRules1104.test.tsx[2m > [22m[2mRound 1104: the changed rules are on the "?" screen[2m > [22m[2mall four pages show the coaching retirement line once
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/usCareerHelpRules1104.test.tsx[2m > [22m[2mRound 1104: the changed rules are on the "?" screen[2m > [22m[2mall four pages show the coaching retirement line once
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/usCareerHelpRules1104.test.tsx[2m > [22m[2mRound 1104: the changed rules are on the "?" screen[2m > [22m[2mall four pages show the dirty money line once
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/usCareerHelpRules1104.test.tsx[2m > [22m[2mRound 1104: the changed rules are on the "?" screen[2m > [22m[2mall four pages show the dirty money line once
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstdout[2m | src/test/usCareerShopCap.test.ts[2m > [22m[2ma bought rating raise stops at potential[2m > [22m[2m'NFL Vision Training': seeded careers that reach the ceiling stay under it for good
+[22m[39mNFL Vision Training: 1 of 300 seeded careers came within one of potential, 0 seasons above it after buying
+
+[90mstderr[2m | src/test/usCareerHelpRules1104.test.tsx[2m > [22m[2mRound 1104: the changed rules are on the "?" screen[2m > [22m[2mall four pages show the dirty money line once
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/usCareerHelpRules1104.test.tsx[2m > [22m[2mRound 1104: the changed rules are on the "?" screen[2m > [22m[2mall four pages show the dirty money line once
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ [32m✓[39m src/test/usCareerHelpRules1104.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 2253[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1104: the changed rules are on the "?" screen[2m > [22mNFL My Career shows slot pay, the kicker rule, the 16 game throwback and the bank, once each [33m 444[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1104: the changed rules are on the "?" screen[2m > [22mthe NBA, MLB and NHL pages show the bank line once [33m 539[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1104: the changed rules are on the "?" screen[2m > [22mall four pages show the coaching retirement line once [33m 625[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1104: the changed rules are on the "?" screen[2m > [22mall four pages show the dirty money line once [33m 629[2mms[22m[39m
+[90mstdout[2m | src/test/usCareerShopCap.test.ts[2m > [22m[2ma bought rating raise stops at potential[2m > [22m[2m'NBA Biomechanics Team': seeded careers that reach the ceiling stay under it for good
+[22m[39mNBA Biomechanics Team: 4 of 300 seeded careers came within one of potential, 0 seasons above it after buying
+
+[90mstdout[2m | src/test/usCareerShopCap.test.ts[2m > [22m[2ma bought rating raise stops at potential[2m > [22m[2m'MLB Biomechanics Team': seeded careers that reach the ceiling stay under it for good
+[22m[39mMLB Biomechanics Team: 0 of 300 seeded careers came within one of potential, 0 seasons above it after buying
+
+[90mstdout[2m | src/test/usCareerShopCap.test.ts[2m > [22m[2ma bought rating raise stops at potential[2m > [22m[2m'NHL Biomechanics Team': seeded careers that reach the ceiling stay under it for good
+[22m[39mNHL Biomechanics Team: 12 of 300 seeded careers came within one of potential, 0 seasons above it after buying
+
+[90mstdout[2m | src/test/usCareerShopCap.test.ts[2m > [22m[2ma bought rating raise stops at potential[2m > [22m[2m'NHL Home Shooting Room': seeded careers that reach the ceiling stay under it for good
+[22m[39mNHL Home Shooting Room: 12 of 300 seeded careers came within one of potential, 0 seasons above it after buying
+
+ [32m✓[39m src/test/usCareerShopCap.test.ts [2m([22m[2m25 tests[22m[2m)[22m[33m 3976[2mms[22m[39m
+   [33m[2m✓[22m[39m a bought rating raise stops at potential[2m > [22m'NFL Vision Training': seeded careers that reach the ceiling stay under it for good [33m 908[2mms[22m[39m
+   [33m[2m✓[22m[39m a bought rating raise stops at potential[2m > [22m'NBA Biomechanics Team': seeded careers that reach the ceiling stay under it for good [33m 911[2mms[22m[39m
+   [33m[2m✓[22m[39m a bought rating raise stops at potential[2m > [22m'MLB Biomechanics Team': seeded careers that reach the ceiling stay under it for good [33m 776[2mms[22m[39m
+   [33m[2m✓[22m[39m a bought rating raise stops at potential[2m > [22m'NHL Biomechanics Team': seeded careers that reach the ceiling stay under it for good [33m 735[2mms[22m[39m
+   [33m[2m✓[22m[39m a bought rating raise stops at potential[2m > [22m'NHL Home Shooting Room': seeded careers that reach the ceiling stay under it for good [33m 598[2mms[22m[39m
+ [32m✓[39m src/lib/careerDirtyMoney.test.ts [2m([22m[2m9 tests[22m[2m)[22m[33m 10279[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1500: every way does exactly what its button prints[2m > [22mthe preview numbers are the applied change, over a grid of money, heat, karma and cash [33m 10254[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m13 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (14)[39m
+[2m      Tests [22m [1m[32m225 passed[39m[22m[2m | [22m[33m4 skipped[39m[90m (229)[39m
+[2m   Start at [22m 07:58:06
+[2m   Duration [22m 31.58s[2m (transform 6.21s, setup 2.36s, collect 22.37s, tests 43.00s, environment 12.21s, prepare 3.24s)[22m
+

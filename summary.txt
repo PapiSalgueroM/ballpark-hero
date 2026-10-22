@@ -1,0 +1,5 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+vitest-a exit=0 32s |    Duration  31.58s (transform 6.21s, setup 2.36s, collect 22.37s, tests 43.00s, environment 12.21s, prepare 3.24s)
+vitest-b exit=0 70s |    Duration  69.62s (transform 15.39s, setup 2.93s, collect 40.98s, tests 116.98s, environment 19.01s, prepare 4.50s)
+tsc exit=0 159s | 
+g1 exit=0 275s | All 12 harnesses green.
