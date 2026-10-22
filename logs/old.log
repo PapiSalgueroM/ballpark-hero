@@ -1,0 +1,13 @@
+A) school order unchanged true
+   legacy steps compared 1680, differing 1680, seasons with another draw count 0, first seed 1 season 0 round 1
+  BREAK: the legacy (no layer) CFB path is not byte identical to the base
+B) CFB base saves with the layer on, loaded on head: 240 loads, 0 crashes
+   first step where head parts from base (format and slate fields ignored): k=1 round 1: 40; k=2 round 12: 40; k=5 round 12: 40; k=9 round 12: 40; k=12 round 12: 40; k=13 offseason: 40
+   old season: rivalry week pairs changed 200 of 240, my week 12 opponent changed 102; ND out of the ACC table 0; title games not 5 0
+   next two seasons: format with slate 480 of 480; repeats 0; title games not 4 0; ND in a title game 0
+C) CBB legacy steps compared 1440, differing 1440, first seed 1 season 0 round 1
+  BREAK: the legacy (no layer) CBB path is not byte identical to the base
+   CBB base saves with the layer on: 160 loads, 0 crashes; next season under the format 160
+   first step where head parts from base (format ignored): k=1 round 1: 40; k=2 round 10: 40; k=6 round 10: 40; k=10 round 10: 40
+
+oldsave1554: 2 break(s)
