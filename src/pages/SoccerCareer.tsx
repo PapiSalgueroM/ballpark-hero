@@ -64,6 +64,7 @@ import { careerBeforeBallonDorReveal, revealBallonDorResult, ballonDorAwaitingRe
 import { readLeagueWorldSeason } from "@/lib/soccerCareerLeagueWorld";
 import { soccerExtensionQuote } from "@/lib/soccerCareerContracts";
 import { farewellEligibility, readSoccerFarewell } from "@/lib/soccerCareerFarewell";
+import { retirementReason } from "@/lib/soccerCareerRetirementReason";
 import { FarewellSeasonCard } from "@/components/soccer-career/FarewellSeasonCard";
 import AgentBrief from '@/components/soccer-career/AgentBrief';
 import { readTransferBrief, transferBriefResult } from '@/lib/soccerCareerTransferBrief';
@@ -2920,6 +2921,7 @@ function BallonDorCeremonyCard({ bdor, career, onDismiss, onSpeech, onReveal }: 
 /* ─── Retirement Ceremony Card ─── */
 function RetirementCeremonyCard({ career, totals, onPostRetirement }: { career: CareerState; totals: ReturnType<typeof getCareerTotals>; onPostRetirement: (c: PostRetirementChoice) => void }) {
   const legacy = career.legacy!;
+  const reason = retirementReason(career);
   const tierColors: Record<LegacyTier, string> = { "GOAT": "text-amber-400", "LEGEND": "text-purple-400", "GREAT": "text-emerald-400", "SOLID PRO": "text-blue-400", "JOURNEYMAN": "text-muted-foreground" };
   const tierEmoji: Record<LegacyTier, string> = { "GOAT": "🐐", "LEGEND": "🏛️", "GREAT": "⭐", "SOLID PRO": "💪", "JOURNEYMAN": "🎒" };
   
@@ -2948,6 +2950,8 @@ function RetirementCeremonyCard({ career, totals, onPostRetirement }: { career: 
         )}
         <h3 className="text-xl font-black tracking-tight">RETIREMENT</h3>
         <p className="text-sm text-muted-foreground flex items-center justify-center gap-1"><FlagImg name={career.nationality} />{career.playerName} retires at age {career.age}</p>
+        {/* Round 1519: the reason, in plain words, so an ending is never a mystery. */}
+        {reason && <p data-retirement-reason className="text-xs text-muted-foreground">{reason}</p>}
       </div>
 
       {/* Career summary grid */}
@@ -3789,8 +3793,11 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
               career are way too small". Real buttons now: bordered, readable,
               44px tall on touch, still quiet enough not to fight the OVR.
               Round 1330: h-11, the 44px this promised (h-10 was 40), now
-              that this Retire is the only one on the hub. */}
-          {career.phase !== "retired" && career.phase !== "retirement_ceremony" && career.phase !== "post_retirement" && (
+              that this Retire is the only one on the hub.
+              Round 1519: the player's Retire only while he still plays; a
+              manager, pundit or owner season has its own, and this one sent
+              that career back to the player's send off. */}
+          {!career.retired && (
             <Button onClick={() => setShowRetireConfirm(true)} variant="outline" className="text-xs font-bold px-3 h-11 border-border text-muted-foreground hover:text-red-400 hover:border-red-400/60">
               🚪 Retire
             </Button>

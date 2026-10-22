@@ -10,9 +10,15 @@
  * section 2 holds every save and the Math.random count byte equal to the base), but any engine byte moves the
  * eighth inverse's head pin, so the harnesses that check it need these rows taken out first.
  *
+ * Round 1519 regenerated the rows by the recipe below, after its engine change (reconcileRetirement and its call
+ * in repairCareer, the summary's Continue, the declined suggestion on a retired career). Those hunks are rows here
+ * too, so the chain still ends on the same base pins; scripts/simSoccerCareerEndings.mjs section D holds that no
+ * seeded career on the default path moves. The page's new import, retirementReason, lives in its own module
+ * (src/lib/soccerCareerRetirementReason.ts), so a page bundled with the older engine still finds it.
+ *
  * Applied IN ORDER to this round's engine they give the base's engine byte for byte (LF):
  *   src/lib/soccerCareerEngine.ts
- *     head sha256 0b3d35bc584867da38ced517c5d2ed9c2507fbced8c200c916f5b830ed39d5a1
+ *     head sha256 90e8fc573532e8388b7d3a745e88550031ceca990e1717b43651ec281ace115a
  *     base sha256 e37b73f25a17e4c63718430365de87cd1d5a001960ba8257ac674834e691dd90
  * (base: git show e814c2de:<file>, origin/main when the round started, whose engine is the eighth
  * inverse's head), so the recordings and the base pins stay as they were taken: an attribution, not a new recording.
@@ -26,7 +32,7 @@ import assert from 'node:assert/strict';
 export const SOCCER_DECK_BASE = 'e814c2def671e07bd6163462dff8ab1230be2000';
 export const SOCCER_DECK_SHA256 = {
   "src/lib/soccerCareerEngine.ts": {
-    "head": "0b3d35bc584867da38ced517c5d2ed9c2507fbced8c200c916f5b830ed39d5a1",
+    "head": "90e8fc573532e8388b7d3a745e88550031ceca990e1717b43651ec281ace115a",
     "base": "e37b73f25a17e4c63718430365de87cd1d5a001960ba8257ac674834e691dd90"
   }
 };
@@ -38,11 +44,23 @@ const EDITS = [
     from: "import { personalGoalMilestone } from \"./soccerCareerMilestone\";\n/* Round 1334: the lazy soccer deck, reached only through its gate (src/lib/soccerDeckGate.ts says why); inert until loaded. */\nimport { soccerDeckPending, soccerDeckSlot } from \"./soccerDeckGate\";\n",
     to: "import { personalGoalMilestone } from \"./soccerCareerMilestone\";\n" },
   { name: "engine-2", file: "src/lib/soccerCareerEngine.ts",
+    from: "\n/**\n * Round 1519, a player report: \"i retired at 26 no injury no choice\". No step of\n * the engine ends a career before the age rules (33 with an overall under 50, or\n * 45) without the player: every way in is listed and driven in\n * scripts/simSoccerCareerEndings.mjs. The save could. isSoccerCareerSave checks\n * the retired flag and the phase one at a time and nothing put a pair that\n * disagrees back together, so a flag left on a playing career sent it straight\n * to the retired screen at the next summary, at any age, with no ceremony and no\n * choice of what comes next.\n *\n * So the rest of the save decides, never the flag alone. Every real retirement\n * leaves its legacy, and most leave a retired season row or the after career it\n * chose. With any of those the retirement stands: the flag comes back if it was\n * lost, and a playing phase goes back to the ceremony and its choices (or to the\n * after career already chosen: its season, or the retired screen). With none of\n * them the flag is the stray part, and the career plays on from Next Season,\n * including a save the old hop already put on the retired screen. A ceremony\n * that lost its legacy gets it back, since the card cannot draw without it. Any\n * other save whose flag and phase agree is left exactly as it is. Returns\n * whether the career is retired afterwards.\n *\n * Measured over 720 seeded careers in six ways of playing (three seed bases):\n * none ended before the age rules unless the player retired, took the\n * suggestion or played out a farewell he announced, and all 720 were alive at\n * 26 and 27; bans, drug test bans, trials and prison years all played on.\n */\nconst POST_CAREER_PHASES: CareerState[\"phase\"][] = [\"retirement_ceremony\", \"post_retirement\", \"retired\", \"manager_season\", \"pundit_season\", \"owner_season\"];\nfunction reconcileRetirement(s: CareerState): boolean {\n  /* A state with no flag at all (a hand built harness fixture; the loader refuses a save like that) says\n     nothing about the pair, so it is left alone. */\n  if (typeof s.retired !== \"boolean\") return false;\n  const post = POST_CAREER_PHASES.includes(s.phase);\n  const backed = !!(s.legacy || s.postRetirementChoice || s.managerState || s.punditState || s.ownerState\n    || s.seasons?.some(row => row?.type === \"retired\"));\n  /* The old summary hop wrote the flag AND the retired screen, a pair that agrees. Every real road to that\n     screen leaves a legacy or a chosen after career, so the screen with nothing behind it is the stray flag's\n     too, and that career plays on as well. A lost phase on a chosen manager, pundit or owner career goes back\n     to that career's season, never to the end. */\n  if (s.retired !== post || (s.phase === \"retired\" && !backed)) {\n    s.retired = backed;\n    const c = s.postRetirementChoice;\n    if (backed && !post) s.phase = !c ? \"retirement_ceremony\" : c !== \"retire\" && s[`${c}State` as const] ? `${c}_season` as const : \"retired\";\n    if (!backed && post) s.phase = s.seasons?.[s.seasons.length - 1]?.type === \"youth\" ? \"youth\" : \"playing\";\n  }\n  if (s.retired && s.phase === \"retirement_ceremony\" && !s.legacy) s.legacy = calculateLegacy(s);\n  return s.retired;\n}\n\n/**",
+    to: "\n/**" },
+  { name: "engine-3", file: "src/lib/soccerCareerEngine.ts",
+    from: "  if (s.phase === \"season_summary\" && !s.pendingSummary) s.phase = \"playing\";\n  reconcileRetirement(s);\n  if (!s.primeType) s.primeType = rollPrimeType();",
+    to: "  if (s.phase === \"season_summary\" && !s.pendingSummary) s.phase = \"playing\";\n  if (!s.primeType) s.primeType = rollPrimeType();" },
+  { name: "engine-4", file: "src/lib/soccerCareerEngine.ts",
     from: "    ...getBootEvents(state, (SPONSORSHIP_TIERS.find(t => t.tier === \"global_ambassador\")?.minFollowers ?? 15_000_000) / 1_000_000),\n    /* Round 1334: a soccer deck card waiting in the batch, so its answer finds its apply ([] unless the deck is loaded). */\n    ...soccerDeckPending(state),\n  ];",
     to: "    ...getBootEvents(state, (SPONSORSHIP_TIERS.find(t => t.tier === \"global_ambassador\")?.minFollowers ?? 15_000_000) / 1_000_000),\n  ];" },
-  { name: "engine-3", file: "src/lib/soccerCareerEngine.ts",
+  { name: "engine-5", file: "src/lib/soccerCareerEngine.ts",
     from: "  }\n  /* Round 1334: at most one soccer deck card a summer, from its own keyed stream, FIRST: the old batch keeps its\n     order behind it and the last card answered stays the old batch's last ([] unless the deck is loaded). */\n  picked.unshift(...soccerDeckSlot(state, season, `${soccerDeckIdentity(state)}|${season}|deckslot`, picked));\n  /* Round 725: stamp the season on everything that is about to be shown.",
     to: "  }\n  /* Round 725: stamp the season on everything that is about to be shown." },
+  { name: "engine-6", file: "src/lib/soccerCareerEngine.ts",
+    from: "  const s = { ...prev }; s.pendingSummary = null;\n  /* Round 1519: a retired career goes to its ceremony and its choices (or the screen it already chose),\n     and a stray flag with nothing behind it plays on. This used to send any flag straight to the retired\n     screen, which is the one way a career could end at 26 with no choice (reconcileRetirement says why). */\n  if (s.retired && reconcileRetirement(s)) return s;\n  return advanceToNextPhase(s, clubs);",
+    to: "  const s = { ...prev }; s.pendingSummary = null;\n  if (s.retired) { s.phase = \"retired\"; return s; }\n  return advanceToNextPhase(s, clubs);" },
+  { name: "engine-7", file: "src/lib/soccerCareerEngine.ts",
+    from: "  if (prev.phase !== \"retirement_suggestion\" || prev.retired) {\n    /* Round 1519: a retirement the repair stood up keeps its screen, never retired on Next Season. */\n    if (!s.retired) s.phase = \"playing\";\n    return s;",
+    to: "  if (prev.phase !== \"retirement_suggestion\" || prev.retired) {\n    s.phase = \"playing\";\n    return s;" },
 ];
 
 export const SOCCER_DECK_FILES = Object.keys(SOCCER_DECK_SHA256);

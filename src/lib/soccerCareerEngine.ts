@@ -2782,6 +2782,54 @@ export function archiveSeasonStory(s: CareerState): CareerStorySeason[] {
 }
 
 /**
+ * Round 1519, a player report: "i retired at 26 no injury no choice". No step of
+ * the engine ends a career before the age rules (33 with an overall under 50, or
+ * 45) without the player: every way in is listed and driven in
+ * scripts/simSoccerCareerEndings.mjs. The save could. isSoccerCareerSave checks
+ * the retired flag and the phase one at a time and nothing put a pair that
+ * disagrees back together, so a flag left on a playing career sent it straight
+ * to the retired screen at the next summary, at any age, with no ceremony and no
+ * choice of what comes next.
+ *
+ * So the rest of the save decides, never the flag alone. Every real retirement
+ * leaves its legacy, and most leave a retired season row or the after career it
+ * chose. With any of those the retirement stands: the flag comes back if it was
+ * lost, and a playing phase goes back to the ceremony and its choices (or to the
+ * after career already chosen: its season, or the retired screen). With none of
+ * them the flag is the stray part, and the career plays on from Next Season,
+ * including a save the old hop already put on the retired screen. A ceremony
+ * that lost its legacy gets it back, since the card cannot draw without it. Any
+ * other save whose flag and phase agree is left exactly as it is. Returns
+ * whether the career is retired afterwards.
+ *
+ * Measured over 720 seeded careers in six ways of playing (three seed bases):
+ * none ended before the age rules unless the player retired, took the
+ * suggestion or played out a farewell he announced, and all 720 were alive at
+ * 26 and 27; bans, drug test bans, trials and prison years all played on.
+ */
+const POST_CAREER_PHASES: CareerState["phase"][] = ["retirement_ceremony", "post_retirement", "retired", "manager_season", "pundit_season", "owner_season"];
+function reconcileRetirement(s: CareerState): boolean {
+  /* A state with no flag at all (a hand built harness fixture; the loader refuses a save like that) says
+     nothing about the pair, so it is left alone. */
+  if (typeof s.retired !== "boolean") return false;
+  const post = POST_CAREER_PHASES.includes(s.phase);
+  const backed = !!(s.legacy || s.postRetirementChoice || s.managerState || s.punditState || s.ownerState
+    || s.seasons?.some(row => row?.type === "retired"));
+  /* The old summary hop wrote the flag AND the retired screen, a pair that agrees. Every real road to that
+     screen leaves a legacy or a chosen after career, so the screen with nothing behind it is the stray flag's
+     too, and that career plays on as well. A lost phase on a chosen manager, pundit or owner career goes back
+     to that career's season, never to the end. */
+  if (s.retired !== post || (s.phase === "retired" && !backed)) {
+    s.retired = backed;
+    const c = s.postRetirementChoice;
+    if (backed && !post) s.phase = !c ? "retirement_ceremony" : c !== "retire" && s[`${c}State` as const] ? `${c}_season` as const : "retired";
+    if (!backed && post) s.phase = s.seasons?.[s.seasons.length - 1]?.type === "youth" ? "youth" : "playing";
+  }
+  if (s.retired && s.phase === "retirement_ceremony" && !s.legacy) s.legacy = calculateLegacy(s);
+  return s.retired;
+}
+
+/**
  * Round 127's lesson, applied again: repairing a save only inside the step
  * function is not enough, because a screen can be opened before any step is
  * taken. This runs on load AND at the top of both step functions, and it is
@@ -2797,6 +2845,7 @@ export function repairCareer<T extends CareerState>(state: T): T {
      it is in localStorage, and every reload restores the same blank screen.
      This is the only place that runs on load, so it is where they come back. */
   if (s.phase === "season_summary" && !s.pendingSummary) s.phase = "playing";
+  reconcileRetirement(s);
   if (!s.primeType) s.primeType = rollPrimeType();
   /* Round 217: saves from before the loan move have neither field. Null is
      the exact old behaviour: no loan running, no offers pending. */
@@ -7746,7 +7795,10 @@ function advanceToNextPhase(s: CareerState, clubs: ClubData[]): CareerState {
 export function dismissSummary(prev: CareerState, clubs: ClubData[]): CareerState {
   if (readSoccerFarewell(prev) && prev.retired) return prev;
   const s = { ...prev }; s.pendingSummary = null;
-  if (s.retired) { s.phase = "retired"; return s; }
+  /* Round 1519: a retired career goes to its ceremony and its choices (or the screen it already chose),
+     and a stray flag with nothing behind it plays on. This used to send any flag straight to the retired
+     screen, which is the one way a career could end at 26 with no choice (reconcileRetirement says why). */
+  if (s.retired && reconcileRetirement(s)) return s;
   return advanceToNextPhase(s, clubs);
 }
 
@@ -8807,7 +8859,8 @@ export function declineRetirementSuggestion(prev: CareerState, clubs: ClubData[]
   const s = repairCareer({ ...prev });
   s.events = [...s.events, "💪 Decided to push on, not ready to hang up the boots yet"];
   if (prev.phase !== "retirement_suggestion" || prev.retired) {
-    s.phase = "playing";
+    /* Round 1519: a retirement the repair stood up keeps its screen, never retired on Next Season. */
+    if (!s.retired) s.phase = "playing";
     return s;
   }
   return playPendingProSeason(s, clubs);
