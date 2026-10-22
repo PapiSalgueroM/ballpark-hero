@@ -1,0 +1,2 @@
+simWorldUcl exit=0 1032s | simWorldUcl: green, 495862 checks, 0 failures
+simOneOffCups exit=0 1659s | simOneOffCups: green, 270647 checks (1659 s)
