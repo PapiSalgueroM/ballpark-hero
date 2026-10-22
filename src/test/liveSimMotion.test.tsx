@@ -1055,12 +1055,12 @@ function replayFouls(t: Tally1521, input: PitchInput, plan: PitchPlan, live: Non
     t.fouls++;
     if (cued.has(order)) continue;
     t.hidden++;
-    /* Its reason: through the whole of its minute the pitch is held (a chance's feeder, its shooter or what follows
-       it, a kick off, another dead ball or another foul), so no beat of it was free for a whistle. Read off what is
-       drawn, not off the rule: a beat is free when only open play, a build up's first man or this foul's own
-       stretches are on it. */
+    /* Its reason: through the whole of its minute the pitch is held (a chance's shooter or what follows it, a kick
+       off, another dead ball or another foul), so no beat of it was free for a whistle. Read off what is drawn, not
+       off the rule: a beat is free when only open play, a chance's build up (the review of 2026-10-22: the feeder is
+       presentation, and a foul takes his place) or this foul's own stretches are on it. */
     const own = new Set([`w${order}`, `x${order}`, `y${order}`]);
-    const holds = (b: PitchBeat) => !(b.via === 'grid' || (b.via === 'approach' && b.id.startsWith('b')) || own.has(b.id));
+    const holds = (b: PitchBeat) => !(b.via === 'grid' || b.via === 'approach' || own.has(b.id));
     const p = placeOfLine(e), last = Math.min(p + 1 - BEAT_SPAN, to - BEAT_SPAN);
     for (let s = p; s <= last + 1e-9; s += 0.02) {
       if (plan.entries.some(b => b.start < s + BEAT_SPAN - 1e-9 && s < b.end - 1e-9 && holds(b))) continue;

@@ -520,8 +520,11 @@ export function pitchPlan(input: PitchInput): PitchPlan {
          beats, another foul's), its meeting and its whistle if both fit, its whistle alone if only that does. Failing
          that, at its own place as every dead ball always was (of two at one place the later line is drawn), when its
          whistle is still what is drawn at that instant and it takes no room from another foul. Failing that too, the
-         pitch is held all through its minute and the foul is not drawn on the grass at all (it is still in the list
-         beside the pitch): it neither covers what is drawn there nor holds room from the next foul. */
+         pitch is held all through its minute and the foul is not drawn on the grass at all (it is still in the match's
+         lines): it neither covers what is drawn there nor holds room from the next foul.
+         Round 1521 review: a chance's build up (the feeder and the man before him) is only how the picture gets the
+         ball to the shooter, nothing the engine decided, so it never holds the pitch from a foul. A foul staged over a
+         feeder takes the build up's place: the foul, its free kick, and then the shooter has the ball. */
       let at = p;
       let meets = false;
       /* Where the two meet: the fouled man's own zone, and the free kick is taken from there. */
@@ -538,7 +541,8 @@ export function pitchPlan(input: PitchInput): PitchPlan {
         const pool = facingMen.length ? facingMen : outfield;
         const victim = pool.length ? pool[pickIndex(pool, meet())] : null;
         const over = (a: number, b: number, s: number, e: number) => a < e - EPS && s < b - EPS;
-        const held = (s: number, e: number) => layers.some(l => l.priority >= 2 && over(l.start, l.end, s, e)) || deadWindows.some(w => over(w.from, w.to, s, e));
+        const holds = (l: Layer) => l.priority >= 2 && l.via !== 'approach';
+        const held = (s: number, e: number) => layers.some(l => holds(l) && over(l.start, l.end, s, e)) || deadWindows.some(w => over(w.from, w.to, s, e));
         const latest = Math.min(p + 1 - BEAT_SPAN, to - BEAT_SPAN);
         let found = -1;
         for (const span of victim ? [BEAT_SPAN, 0] : [0]) {
@@ -547,13 +551,15 @@ export function pitchPlan(input: PitchInput): PitchPlan {
         }
         if (found < 0) for (let k = 0; found < 0 && p + k * 0.02 <= latest + EPS; k++) if (!held(p + k * 0.02, p + k * 0.02 + BEAT_SPAN)) found = p + k * 0.02;
         if (found < 0) {
-          const drawnHere = !layers.some(l => l.priority >= 2 && over(l.start, l.end, p, p + 1e-6))
+          const drawnHere = !layers.some(l => holds(l) && over(l.start, l.end, p, p + 1e-6))
             && !deadWindows.some(w => (w.foul ? over(w.from, w.to, p, p + 2 * BEAT_SPAN) : w.order > order && over(w.from, w.to, p, p + 1e-6)));
           if (!drawnHere) return;
           found = p;
         }
         at = Math.round(found * 1e6) / 1e6;
         deadWindows.push({ from: at - (meets ? BEAT_SPAN : 0), to: at + 2 * BEAT_SPAN, order, foul: true });
+        const taken = new Set(layers.filter(l => l.via === 'approach' && l.id.startsWith('a') && over(l.start, l.end, at - (meets ? BEAT_SPAN : 0), at + 2 * BEAT_SPAN)).map(l => l.id.slice(1)));
+        for (let k = layers.length - 1; k >= 0; k--) if (layers[k].via === 'approach' && taken.has(layers[k].id.slice(1))) layers.splice(k, 1);
         foul = { order, at, by: by?.key ?? null, on: victim?.key ?? null };
         const card = cards.get(order);
         if (card) foul.card = card;
