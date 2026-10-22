@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+contrast-career-head: ROUTE=/career node scripts/sweepContrast.mjs > /tmp/ch.log 2>&1; s=$?; grep -E "/career|source scan|routes measured" /tmp/ch.log | head -4 | cut -c1-200; exit $s
+contrast-career-main: bash .rc/x/basesrv1535.sh c75d04da 4175 && cd /tmp/wt-c75d04da && BASE=http://localhost:4175 ROUTE=/career node scripts/sweepContrast.mjs > /tmp/cm.log 2>&1; s=$?; grep -E "/career|source scan|routes measured" /tmp/cm.log | head -4 | cut -c1-200; exit $s
