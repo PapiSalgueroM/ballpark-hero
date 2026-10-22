@@ -1,0 +1,5 @@
+mut-allclubs exit=0 1s | allclubs CAUGHT
+mut-latefrom exit=0 1s | latefrom CAUGHT
+mut-firsttoo exit=0 1s | firsttoo CAUGHT
+mut-underown exit=0 1s | underown CAUGHT
+after exit=0 1s |       Tests  25 passed (25)

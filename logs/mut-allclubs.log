@@ -1,0 +1,5 @@
+MUTATION allclubs APPLIED
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[31m[1mAssertionError[22m: expected 1 not to be 1 // Object.is equality[39m
+[31m[1mAssertionError[22m: expected 1 to be 4 // Object.is equality[39m
+allclubs CAUGHT
