@@ -80,6 +80,14 @@
  *  10. THE SHARED HALF KNOWS NO SPORT. gmEarnedDraft.ts imports only the lift
  *      and names no sport in its code (comments stripped); neither library
  *      draws from Math.random or carries an address.
+ *  12. THE DEALS SURVIVE THE SUMMER (the reviews of 2026-10-22, F1). Every
+ *      man a walk's night signed, followed through the summer right after it:
+ *      none signed under two seasons (the summer takes one off before he
+ *      plays); his own all still his and none on his re-sign desk; a rival's
+ *      still on his club unless the trim of a club over fifteen waived him;
+ *      each still there on his deal less one season at the same money; and
+ *      with knob (i) on, every second rounder at the minimum with exactly one
+ *      season left. The ones are this harness's own, never the library's.
  *   7. THE TABLE. FLEET=full PLAYS the fleet below and writes each set's
  *      careers; SIM_NBA_EARNED_DRAFT_COMBINE=<dir> JUDGES the files. The arms:
  *      old (the board's draft of today, replayed as simNbaGmDesk's draftNight
@@ -97,9 +105,11 @@
  *      strongest starts' PLAYOFF seasons, seasons 2 to 10, the new arm's own
  *      AT LEAST 60 percent, the old arm printed beside it (their title share
  *      printed, never asserted); S5 section 5's rise at every band in every
- *      set; S6 CPU dead money a season under 3.0 $M (its cause: firsts 13 to
- *      30 on the four season deal, cut by CPU clubs; a per slot rookie scale
- *      with team options is the fix, after which the band returns under 1.0)
+ *      set; S6 CPU dead money a season under 3.0 $M (its cause: CPU firsts 13
+ *      to 30 on the engine's four season deal, three of them played after the
+ *      summer's season, cut by CPU clubs; a per slot rookie scale with team
+ *      options for every club is the fix, after which the band returns under
+ *      1.0)
  *      and tax payers a season within 0.5 of the old arm. The resolution rule
  *      (correction 8 (b)): the per set differences (the arm's own values for
  *      S4 and S6 dead) are the replicates, the error of the pooled value is
@@ -113,7 +123,13 @@
  *      through (judgeLine and its one comparison, inBand) judges a synthetic
  *      table whose answers are known: every asserted line inside and outside
  *      its band on both sides of every edge, S3 never judged. Without it the
- *      judge could only ever be seen to pass (the lead's ruling 7).
+ *      judge could only ever be seen to pass (the lead's ruling 7). Since the
+ *      review of 2026-10-22 (F2) also the other half of the verdict: every
+ *      asserted line UNRESOLVED (a spread of two res), RUNS DISAGREE (two
+ *      runs a fifth of res apart) and NOT TWO RUNS (one run); what the table
+ *      asserts of each verdict (lineHolds: PASS only); and the fleet's size
+ *      (fleetShort: two runs of at least twelve sets, which the table now
+ *      checks before any verdict, a fleet control's reduced fleet exempt).
  *
  * THE FLEET. Six user clubs, the two strongest, the two middle and the two
  * weakest by opening nbaStrength, on seed sets of ten seeds: 60 careers of ten
@@ -150,7 +166,7 @@
  * one fired.
  *   touchseason  one stray draw before the playoffs                    (1)
  *   flatodds     the bound pick rules hand every club one weight          (2)
- *   playinmade   a play-in game counts as the playoffs: no night opens    (2, 3, 4, 5, 8, 9)
+ *   playinmade   a play-in game counts as the playoffs: no night opens    (2, 3, 4, 5, 8, 9, 12)
  *   gmfirst      the night is drawn as if his club had the worst record   (3, 5)
  *   bestfirst    the order drawn best record first (records swapped)      (3, 5)
  *   origholder   every slot used by its first owner                       (3)
@@ -168,6 +184,7 @@
  *   sportname    the shared half names a sport (in memory)                (10)
  *   foreignimport the shared half imports a module outside the lift      (10)
  *   elevenhead   the class's head is eleven of today's men, not twelve    (6)
+ *   summerdeal   knob (i) writes the old one season deal on draft night   (12)
  * The judge's controls slip inBand in a COPY of this file (each target found
  * exactly once, the copy's paths pinned to this tree) and run the copy whole
  * with no control; section 11 must go red, and judgeflip under a COMBINE also
@@ -177,6 +194,10 @@
  *   judgefloor   the floor compared against its own negative             (11)
  *   judgecap     the cap compared against the value's negative           (11)
  *   judgeflip    the two sided band turned inside out                    (11; 11 and 7 under a COMBINE)
+ *   judgeres     the resolution rule at three res, not a third            (11)
+ *   judgeagree   the two runs agree within 200 errors, not two            (11)
+ *   judgepass    the table holds a line on any verdict but OUTSIDE        (11)
+ *   judgefleet   a fleet of one set a run is whole                        (11)
  * Two checks have no control, on purpose: section 4's JSON round trip (the
  * block is the lift's plain data, which no edit outside the lift can make
  * change under JSON) and its swapped table (no press reads the table today,
@@ -293,6 +314,7 @@ const SECTION_NAMES = {
   8: 'the fallback: a block broken mid draft finishes the old way on a valid league',
   9: 'need: a club short at a position leans to it, and never past a better read by more than the weight',
   10: 'the shared half names no sport; neither library draws from Math.random or carries an address',
+  12: 'the deals survive the summer: every draft night deal is played, a second rounder\'s one season at the minimum',
   11: 'the judge on known answers: the two arm table\'s verdict on both sides of every edge of every band',
   7: 'the table: the old and new arms on the fleet, and the stop lines (FLEET=full plays, COMBINE judges)',
 };
@@ -311,8 +333,9 @@ const CONTROLS = {
   /* the bound pick rules hand every club one weight under the same table name */
   flatodds: { expect: [2], swaps: { bind: [['  return buildDraftOrder(season, rules, nbaGamePickRules(), key ?? draftSeasonKey(season, rules.id));',
     '  return buildDraftOrder(season, rules, { ...nbaGamePickRules(), lottery: { ...nbaGamePickRules().lottery!, odds: nbaGamePickRules().lottery!.odds.map(() => 100 / 14) } }, key ?? draftSeasonKey(season, rules.id));']] } },
-  /* a play-in game counts as making the playoffs, so no season is drawn and no night opens */
-  playinmade: { expect: [2, 3, 4, 5, 8, 9], swaps: { bind: [['    if (s && (s.homeWins === 4 || s.awayWins === 4)) { made.add(s.home); made.add(s.away); }',
+  /* a play-in game counts as making the playoffs, so no season is drawn and no night opens (and section 12, which
+     never passes empty, has no draft night deal to follow) */
+  playinmade: { expect: [2, 3, 4, 5, 8, 9, 12], swaps: { bind: [['    if (s && (s.homeWins === 4 || s.awayWins === 4)) { made.add(s.home); made.add(s.away); }',
     '    if (s && (s.homeWins >= 1 || s.awayWins >= 1)) { made.add(s.home); made.add(s.away); }']] } },
   /* his slots put first: the night is drawn on a season where his club had the worst record */
   gmfirst: { expect: [3, 5], swaps: { bind: [['  const season = nbaDraftSeason(league, series);\n  const order = season ? nbaDraftOrder(season) : null;',
@@ -350,6 +373,9 @@ const CONTROLS = {
   foreignimport: { expect: [10] },
   /* the class's head is eleven of today's men, not twelve (review 2026-10-12, mutation m7) */
   elevenhead: { expect: [6], swaps: { engine: [['  const out = nbaDraftClass(rng, 24, taken).slice(0, Math.min(12, size));', '  const out = nbaDraftClass(rng, 24, taken).slice(0, Math.min(11, size));']] } },
+  /* knob (i) back to the one season deal on draft night, which the summer after takes off before he plays (the
+     reviews of 2026-10-22, F1: every second rounder released, re-signed or gone before a game) */
+  summerdeal: { expect: [12], swaps: { bind: [['        man.years = NBA_SECOND_ROUND_SEASONS + NBA_DRAFT_NIGHT_SUMMER;', '        man.years = NBA_SECOND_ROUND_SEASONS;']] } },
   /* the curve flattened: every band one range */
   flatclass: { expect: [6], swaps: { engine: [
     ['  { from: 13, to: 30, ovr: [67, 72] },', '  { from: 13, to: 30, ovr: [66, 72] },'],
@@ -367,6 +393,14 @@ const CONTROLS = {
   judgefloor: { expect: [11], self: [['  if (line.kind === \'floor\') return dbar >= line.floor;', '  if (line.kind === \'floor\') return dbar >= -line.floor;']] },
   judgecap: { expect: [11], self: [['  if (line.kind === \'cap\') return dbar < margin;', '  if (line.kind === \'cap\') return -dbar < margin;']] },
   judgeflip: { expect: COMBINE ? [11, 7] : [11], self: [['  if (line.kind === \'two\') return Math.abs(dbar) <= margin;', '  if (line.kind === \'two\') return Math.abs(dbar) > margin;']] },
+  /* The rest of the verdict (review 2026-10-22, F2): the resolution rule, the two runs' agreement, what the table
+     asserts of a verdict, and the fleet's size. Each target is split in two strings here so that the line it names
+     is in this file exactly once. A real fleet that passes is untouched by all four, so under a COMBINE only
+     section 11 goes red. */
+  judgeres: { expect: [11], self: [['p.se < res' + ' / 3', 'p.se < res * 3']] },
+  judgeagree: { expect: [11], self: [['perRun[1].d) <= 2' + ' * maxSe', 'perRun[1].d) <= 200 * maxSe']] },
+  judgepass: { expect: [11], self: [['  return verdict === \'PASS\';', '  return verdict !== \'OUTSIDE\';']] },
+  judgefleet: { expect: [11], self: [['const FLEET_MIN_SETS' + ' = 12;', 'const FLEET_MIN_SETS = 1;']] },
 };
 
 if (CONTROL === 'all') {
@@ -765,7 +799,7 @@ const LOTTERIES = FLEET === 'full' && !PROBE ? 40000 : 10000;
    whose reads are within a few points; the engine's 2 is that number. A tuned weight is a change to this line
    too, said in the notes. */
 const NEED_WEIGHT = 2;
-const Q = { 2: [], 3: [], 4: [], 8: [] };
+const Q = { 2: [], 3: [], 4: [], 8: [], 12: [] };
 const W = { seasons: 0, drawn: 0, tieFree: 0, drafts: 0, opened: 0, moved: 0, mineMoved: 0, three: 0, none: 0, clocks: 0, steps: 0, rivalRows: 0, swaps: 0, breaks: 0, fallbacks: 0, reopens: 0 };
 const seasonsForLotteries = [];
 const needRows = [];
@@ -958,6 +992,8 @@ function walkDraft(lg, team, rng, desk, series, where, first) {
   }
   let signed = 0;
   let firstPick = null;
+  /* Section 12: every man the night signs, with the deal he signed, to follow through the summer after it. */
+  const deals = [];
   const press = (res, label) => {
     if (!res) { Q[3].push(`${where}: ${label} was refused`); return null; }
     const night = N.nbaDraftNightOf(res.desk, lg);
@@ -969,6 +1005,8 @@ function walkDraft(lg, team, rng, desk, series, where, first) {
       if (!slot || slot.holder !== st.team || st.mine !== (st.team === team)) Q[3].push(`${where}: pick ${st.overall} made by ${st.team}, the slot is ${slot?.holder}'s`);
       if (!lg.teams[st.team]?.players.some(p => p.name === st.playerName)) Q[3].push(`${where}: ${st.playerName}, pick ${st.overall}, is not on ${st.team}`);
       if (st.mine && !firstPick) firstPick = { overall: st.overall, trueOvr: byName.get(st.playerName)?.trueOvr };
+      const man = lg.teams[st.team]?.players.find(p => p.name === st.playerName);
+      if (man && slot) deals.push({ id: man.id, club: st.team, round: slot.round, overall: st.overall, years: man.years, salary: man.salary });
     }
     for (const row of N.nbaDraftRun(res.steps, res.onClock).night.picks) {
       if (!row.mine) W.rivalRows += 1;
@@ -1003,7 +1041,46 @@ function walkDraft(lg, team, rng, desk, series, where, first) {
   if (new Set(ids).size !== ids.length) Q[3].push(`${where}: a man is on two rosters`);
   W.drafts += 1;
   W.steps += signed;
-  return { desk, first: firstPick, signed };
+  return { desk, first: firstPick, signed, deals };
+}
+
+/* 12. THE DEALS SURVIVE THE SUMMER (the reviews of 2026-10-22, F1). The draft is held before the summer, and the
+   summer takes a season off every deal and puts his men with one season left on his re-sign desk, so a deal signed
+   on draft night must run at least two to be played at all. Every man a night signed is followed through the summer
+   right after it: none signed fewer than two seasons; his own are all still on his club and none was settled on his
+   desk; a rival's is still on his club unless the summer's trim of a club over fifteen waived him (his club then
+   ends the summer at fifteen); whoever is still there has his draft night deal less ONE season at the same money;
+   and with knob (i) on, every second rounder signed at the minimum and has exactly ONE season left, the one he
+   plays at the minimum. The ones are this harness's own, never the library's constants, so a retune of the library
+   cannot move both sides of the check. Control `summerdeal` writes the old one season deal. */
+const DEALS = { signed: 0, mine: 0, kept: 0, trimmed: 0, secondsKept: 0, mineSeconds: 0 };
+function checkDeals(lg, team, deals, summer, min, where) {
+  const knob = N.NBA_DRAFT_KNOBS.secondOnMin === true;
+  const settled = new Set([...summer.autoSettled, ...summer.applied].map(d => d.id));
+  for (const d of deals) {
+    DEALS.signed += 1;
+    const label = `${where}: ${d.club}'s pick ${d.overall} (round ${d.round})`;
+    if (d.years < 2) Q[12].push(`${label} signed ${d.years} season${d.years === 1 ? '' : 's'} on draft night, and the summer right after takes one off before he plays`);
+    if (knob && d.round === 2 && d.salary !== min) Q[12].push(`${label} signed at ${d.salary}, not the minimum of ${min}`);
+    const man = lg.teams[d.club]?.players.find(p => p.id === d.id);
+    if (d.club === team) {
+      DEALS.mine += 1;
+      if (settled.has(d.id)) Q[12].push(`${label}: his re-sign desk settled him the summer he was drafted`);
+      if (!man) { Q[12].push(`${label}: his own draftee is gone after the summer he was drafted`); continue; }
+      if (d.round === 2) DEALS.mineSeconds += 1;
+    } else if (!man) {
+      DEALS.trimmed += 1;
+      const left = lg.teams[d.club]?.players.length ?? 0;
+      if (left < E.NBA_ROSTER_MAX) Q[12].push(`${label}: gone after the summer and not by the trim (his club ends it with ${left} men)`);
+      continue;
+    }
+    DEALS.kept += 1;
+    if (man.years !== d.years - 1 || man.salary !== d.salary) Q[12].push(`${label}: ${man.years} seasons at ${man.salary} after the summer; he signed ${d.years} at ${d.salary} on draft night`);
+    if (knob && d.round === 2) {
+      DEALS.secondsKept += 1;
+      if (man.years !== 1) Q[12].push(`${label}: a second rounder with ${man.years} seasons left after the summer, not the one at the minimum`);
+    }
+  }
 }
 
 for (let seed = 1; seed <= WALK_SEEDS; seed += 1) {
@@ -1020,9 +1097,12 @@ for (let seed = 1; seed <= WALK_SEEDS; seed += 1) {
     desk = movePicksBeforeDraft(lg, team, desk, mulberry32(71000 + seed * 10 + s));
     const done = walkDraft(lg, team, rng, desk, closedSeason.series, where, s === 1);
     desk = done ? done.desk : oldDraft(M, lg, team, rng, desk).desk;
+    /* the minimum in the season the class signs into, worked out before the summer moves the cap */
+    const min = E.nbaMinContract(E.nbaDraftSigning(lg).cap);
     const summer = D.nbaDeskOffseason(lg, desk, team, rng);
     if (!summer.ok) { Q[3].push(`${where}: the desk's summer refused`); break; }
     desk = summer.desk;
+    if (done) checkDeals(lg, team, done.deals, summer, min, where);
   }
 }
 
@@ -1212,6 +1292,15 @@ open(10);
     check(!/https?:\/\/|www\.[a-z0-9-]+\.[a-z]/i.test(raw(rel)), `${rel} carries an address`);
   }
   console.log(`   ${FILES.shared}: ${froms.length} imports, all the lift's; no sport named; neither library draws from Math.random or carries an address`);
+}
+
+open(12);
+{
+  for (const p of Q[12]) fail(p);
+  /* Never passes empty: the walk's nights signed men, his own among them, and second rounders were followed. */
+  check(DEALS.signed > 0 && DEALS.mine > 0 && DEALS.kept > 0, `${DEALS.signed} draft night deals followed through the summer, ${DEALS.mine} his own, ${DEALS.kept} still on their clubs`);
+  check(N.NBA_DRAFT_KNOBS.secondOnMin !== true || (DEALS.secondsKept > 0 && DEALS.mineSeconds > 0), `knob (i) on, and ${DEALS.secondsKept} second rounders (${DEALS.mineSeconds} his) were followed into their season at the minimum`);
+  console.log(`   ${DEALS.signed} draft night deals followed through the summer after them: ${DEALS.mine} his own (every one still his, none on his re-sign desk), ${DEALS.kept} on their clubs with the deal less one season, ${DEALS.trimmed} rivals' men waived by the summer's trim; ${DEALS.secondsKept} second rounders (${DEALS.mineSeconds} his) into their one season at the minimum`);
 }
 
 /* ================================================================== */
@@ -1410,10 +1499,14 @@ const MARGIN = { S3: 10, S4: 10 };
      exists to remove, not a level to protect.
    - S4 is an ABSOLUTE FLOOR on the new arm's own rate (ruling 2): at least 60 percent of the two strongest starts'
      seasons 2 to 10 are playoff seasons (contention protected, a dynasty not), the old arm printed beside it.
-   - S6 dead is under 3.0 $M a season (ruling 4). ITS CAUSE, written beside it as the lead asked: first rounders 13
-     to 30 sign the four season rookie deal and CPU clubs cut them; no allowed knob reaches that deal. The real fix
-     is a per slot rookie scale with team options (two guaranteed years and two options, so a late first rounder is
-     declined rather than cut), named for PART B or a PART C, after which this band returns under 1.0.
+   - S6 dead is under 3.0 $M a season (ruling 4). ITS CAUSE, written beside it as the lead asked: CPU clubs' first
+     rounders 13 to 30 sign the engine's four season deal (nbaProspectToPlayer), which the summer right after the
+     draft cuts to three played, and CPU clubs cut them; no allowed knob reaches that deal. Only HIS club's first
+     rounders get the rookie scale's four played (nbaSignDraftee adds the summer's season), so that scale is his
+     club's alone today, not the league's (review 2026-10-22). The real fix is a per slot rookie scale with team
+     options for every club (two guaranteed years and two options, so a late first rounder is declined rather than
+     cut), counting the summer's season as nbaSignDraftee and knob (i) do, named for PART B or a PART C, after which
+     this band returns under 1.0.
    Kinds: `two` is |d| <= margin; `range` is lo <= d <= hi; `floor` is the arm's own mean >= floor; `cap` is the
    arm's own mean < margin; `print` is computed and printed with no verdict. `res` is the scale whose third a run's
    error must beat (the resolution rule, correction 8 (b)): the margin for `two`, the narrower side for `range`, the
@@ -1425,7 +1518,7 @@ const LINES = [
   { id: 'S2', get: L => L.S2, kind: 'two', margin: old => 0.2 * old, d: 1, what: 'men rated 85 or more, season 10 tip off (20 percent of the old arm)' },
   { id: 'S3', get: L => L.S3.rate, kind: 'print', margin: () => 10, d: 1, what: "two weakest starts' playoff seasons, seasons 2 to 5, per season (ruled 2026-10-21: printed)" },
   { id: 'S4', get: L => L.S4.rate, kind: 'floor', floor: 60, margin: () => 60, res: () => 10, d: 1, what: "two strongest starts' playoff seasons, seasons 2 to 10, per season (ruled 2026-10-21: the arm's own, at least 60)" },
-  { id: 'S6 dead', get: L => L.S6dead, kind: 'cap', margin: () => 3.0, res: () => 1.0, d: 2, what: "CPU dead money a season ($M), seasons 2 to 10 (ruled 2026-10-21: under 3.0; cause: firsts 13 to 30 on the four season deal, cut)" },
+  { id: 'S6 dead', get: L => L.S6dead, kind: 'cap', margin: () => 3.0, res: () => 1.0, d: 2, what: "CPU dead money a season ($M), seasons 2 to 10 (ruled 2026-10-21: under 3.0; cause: CPU firsts 13 to 30 on the engine's four season deal, three played, cut)" },
   { id: 'S6 payers', get: L => L.S6payers, kind: 'two', margin: () => 0.5, d: 2, what: 'tax payers a season, seasons 2 to 10' },
 ];
 /* The kinds whose value is the arm's own per set mean rather than its difference from the old arm. */
@@ -1458,10 +1551,13 @@ function judgeLine(line, old, vs, runs) {
   const dbar = mean(perRun.map(p => p.d));
   const maxSe = Math.max(...perRun.map(p => p.se));
   const resolved = perRun.length > 0 && perRun.every(p => Number.isFinite(p.se) && p.se < res / 3);
-  const agree = perRun.length < 2 || Math.abs(perRun[0].d - perRun[1].d) <= 2 * maxSe;
+  /* Correction 8 (b) wants the two runs within two errors of each other, so one run is never a verdict (review
+     2026-10-22, F2: with one run this used to be true by construction). */
+  const two = perRun.length === 2;
+  const agree = two && Math.abs(perRun[0].d - perRun[1].d) <= 2 * maxSe;
   if (line.kind === 'print') return { perRun, margin, res, dbar, maxSe, verdict: 'PRINTED', miss: NaN, need: 0 };
   const inside = inBand(line, dbar, margin);
-  const verdict = !inside ? 'OUTSIDE' : !resolved ? 'UNRESOLVED' : !agree ? 'RUNS DISAGREE' : 'PASS';
+  const verdict = !inside ? 'OUTSIDE' : !resolved ? 'UNRESOLVED' : !two ? 'NOT TWO RUNS' : !agree ? 'RUNS DISAGREE' : 'PASS';
   const miss = line.kind === 'two' ? Math.abs(dbar) - margin
     : line.kind === 'range' ? (dbar > line.hi ? dbar - line.hi : line.lo - dbar)
     : line.kind === 'floor' ? line.floor - dbar : dbar - margin;
@@ -1469,6 +1565,30 @@ function judgeLine(line, old, vs, runs) {
   const sdd = Math.max(...perRun.map(p => p.sdd));
   if (verdict === 'UNRESOLVED' && Number.isFinite(sdd)) { need = perRun[0].k; while (need < 24 && sdd / Math.sqrt(need) >= res / 3) need += 1; }
   return { perRun, margin, res, dbar, maxSe, verdict, miss, need };
+}
+
+/** What the table asserts of an asserted line's verdict: PASS and nothing else (OUTSIDE is a STOP, UNRESOLVED grows
+    the fleet, NOT TWO RUNS and RUNS DISAGREE are no verdict). Section 11 holds it to every known answer and control
+    judgepass loosens it (review 2026-10-22, F2: this assertion had no control). */
+function lineHolds(verdict) {
+  return verdict === 'PASS';
+}
+
+/* The fleet a table may be judged on (the lead's decision 2 and correction 8 (b)): two runs of the same sets, each
+   holding at least twelve sets in both arms. Anything less is not a verdict (review 2026-10-22, F2: a COMBINE of one
+   run of two sets once judged every line PASS). A fleet control's own reduced fleet (advice 20) is exempt; it is
+   judged on its misses, not on a PASS. Control judgefleet loosens it. */
+const FLEET_RUNS = 2;
+const FLEET_MIN_SETS = 12;
+function fleetShort(old, vs) {
+  const runs = [...vs.keys()].filter(r => old.has(r)).sort((a, b) => a - b);
+  const short = [];
+  if (runs.length !== FLEET_RUNS) short.push(`${runs.length} run${runs.length === 1 ? '' : 's'} held by both arms, the fleet is ${FLEET_RUNS}`);
+  for (const r of runs) {
+    const k = [...vs.get(r).keys()].filter(s => old.get(r).has(s)).length;
+    if (k < FLEET_MIN_SETS) short.push(`run ${r} holds ${k} sets in both arms, the fleet is at least ${FLEET_MIN_SETS}`);
+  }
+  return short;
 }
 
 const bandText = (line, margin) => (line.kind === 'two' ? `within ${fix(margin, line.d)}`
@@ -1562,6 +1682,9 @@ function twoArmTable(table) {
   check(!!old && !!vs, `COMBINE holds ${VS} against the old arm and found ${[...table.keys()].join(', ')}`);
   if (!old || !vs) return;
   const runs = [...vs.keys()].filter(r => old.has(r)).sort((a, b) => a - b);
+  const short = fleetShort(old, vs);
+  console.log(`   the fleet judged: ${runs.map(r => `run ${r} ${[...vs.get(r).keys()].filter(s => old.get(r).has(s)).length} sets`).join(', ')}${short.length ? ` (SHORT: ${short.join('; ')})` : ''}`);
+  if (!FLEET_CONTROL) check(short.length === 0, `the fleet is short of the ruled size: ${short.join('; ')}`);
   const md = ['TABLE BEGIN', `| line | old | ${VS} | ${VS} minus old, run by run (error) | band | sets | verdict |`, '|---|---|---|---|---|---|---|'];
   for (const line of LINES) {
     const { perRun, margin, maxSe, verdict, miss, need } = judgeLine(line, old, vs, runs);
@@ -1569,7 +1692,7 @@ function twoArmTable(table) {
     const own = OWN.has(line.kind) ? "(the arm's own) " : '';
     md.push(`| ${line.id}: ${line.what} | ${perRun.map(p => fix(p.old, line.d)).join(' / ')} | ${perRun.map(p => fix(p.vs, line.d)).join(' / ')} | ${own}${perRun.map(p => `${p.d >= 0 && !own ? '+' : ''}${fix(p.d, line.d)} (${fix(p.se, line.d)})`).join(' / ')} | ${bandText(line, margin)} | ${perRun.map(p => p.k).join(' / ')} | ${said} |`);
     if (verdict === 'OUTSIDE') fleetMisses.push(`${line.id} by ${fix(miss, line.d)}, ${fix(miss / maxSe, 1)} errors`);
-    if (!FLEET_CONTROL && line.kind !== 'print') check(verdict === 'PASS', `${line.id} (${line.what}): ${said}`);
+    if (!FLEET_CONTROL && line.kind !== 'print') check(lineHolds(verdict), `${line.id} (${line.what}): ${said}`);
   }
   /* S5: in every set of every run of VS, his first selection comes later and is worse at every band of finish. */
   const s5bad = [];
@@ -1633,9 +1756,10 @@ open(11);
 {
   const base = { S1at5: 83, S1at10: 82, S2: 100, S3: { n: 80, rate: 80 }, S4: { n: 180, rate: 100 }, S6dead: 0.1, S6payers: 2.3 };
   const field = { 'S1 at 5': 'S1at5', 'S1 at 10': 'S1at10', S2: 'S2', S3: 'S3', S4: 'S4', 'S6 dead': 'S6dead', 'S6 payers': 'S6payers' };
-  const runsOf = setL => new Map([1, 2].map(r => [r, new Map(Array.from({ length: 12 }, (_, i) => [i + 1, setL(i)]))]));
+  const runsOf = (setL, runs = [1, 2], sets = 12) => new Map(runs.map(r => [r, new Map(Array.from({ length: sets }, (_, i) => [i + 1, setL(i, r)]))]));
   const old = runsOf(() => base);
   let known = 0;
+  let held = 0;
   for (const line of LINES) {
     const key = field[line.id];
     check(!!key && line.get(base) !== undefined, `section 11 has no synthetic field for line ${line.id}`);
@@ -1649,19 +1773,48 @@ open(11);
       : line.kind === 'floor' ? [[line.floor + 5, 'PASS'], [line.floor - 5, 'OUTSIDE']]
       : line.kind === 'cap' ? [[0.5 * margin, 'PASS'], [1.5 * margin, 'OUTSIDE']]
       : [[line.get(base) - 50, 'PRINTED'], [line.get(base), 'PRINTED']];
-    for (const [value, want] of cases) {
-      /* a small jitter set to set (a hundredth of the resolution scale, mean zero) so the errors are real */
-      const vs = runsOf(i => {
-        const v = value + (i % 2 ? 1 : -1) * res / 100;
+    /* The resolution and agreement half (review 2026-10-22, F2), on the value of the first PASS case, for every
+       asserted line: a set to set spread of two `res` either side puts the error near 0.6 of `res`, over the third
+       the rule allows (UNRESOLVED); two runs a tenth of `res` either side of it, each resolved, are farther apart than
+       two errors (RUNS DISAGREE); and one run alone is no verdict (NOT TWO RUNS). Each is inside its band, so only
+       the half under test can keep it from PASS. */
+    const inside = cases.find(c => c[1] === 'PASS')?.[0];
+    const shapes = [{ value: null, want: null, spread: 1 / 100, apart: 0, runs: [1, 2] }];
+    if (line.kind !== 'print') {
+      shapes.push({ value: inside, want: 'UNRESOLVED', spread: 2, apart: 0, runs: [1, 2] });
+      shapes.push({ value: inside, want: 'RUNS DISAGREE', spread: 1 / 100, apart: 1 / 10, runs: [1, 2] });
+      shapes.push({ value: inside, want: 'NOT TWO RUNS', spread: 1 / 100, apart: 0, runs: [1] });
+    }
+    const all = [...cases.map(([value, want]) => ({ ...shapes[0], value, want })), ...shapes.slice(1)];
+    for (const c of all) {
+      /* a jitter set to set (mean zero over the twelve sets) and, for the two runs, an offset either side */
+      const vs = runsOf((i, r) => {
+        const v = c.value + (i % 2 ? 1 : -1) * c.spread * res + (r === 1 ? -1 : 1) * c.apart * res;
         return { ...base, [key]: typeof base[key] === 'object' ? { ...base[key], rate: v } : v };
-      });
-      const got = judgeLine(line, old, vs, [1, 2]).verdict;
+      }, c.runs);
+      const got = judgeLine(line, runsOf(() => base, c.runs), vs, c.runs).verdict;
       known += 1;
-      check(got === want, `${line.id} (${line.kind}): the new arm at ${fix(value, line.d)}${own ? '' : ` against ${fix(line.get(base), line.d)}`} was judged ${got}, the known answer is ${want}`);
+      check(got === c.want, `${line.id} (${line.kind}): the new arm at ${fix(c.value, line.d)}${own ? '' : ` against ${fix(line.get(base), line.d)}`} (spread ${c.spread} res, runs ${c.runs.length}${c.apart ? `, ${c.apart} res apart` : ''}) was judged ${got}, the known answer is ${c.want}`);
+      /* and what the table asserts of that verdict: it holds a line only on PASS */
+      if (line.kind !== 'print') {
+        held += 1;
+        check(lineHolds(got) === (c.want === 'PASS'), `${line.id}: the table would ${lineHolds(got) ? 'hold' : 'refuse'} a line judged ${got} (known answer ${c.want})`);
+      }
     }
   }
-  check(known >= 20, `section 11 judged only ${known} known answers`);
-  console.log(`   ${known} known answers judged over ${LINES.length} lines (${LINES.map(l => `${l.id} ${l.kind}`).join(', ')})`);
+  check(known >= 40, `section 11 judged only ${known} known answers`);
+  /* The fleet's size (review 2026-10-22, F2): two runs of twelve sets or more is a fleet; one run, or a run short of
+     twelve sets, is not. */
+  const sized = [
+    [[1, 2], 12, [1, 2], 12, true], [[1, 2], 24, [1, 2], 24, true], [[1], 12, [1], 12, false],
+    [[1, 2], 12, [1, 2], 11, false], [[1, 2], 2, [1, 2], 2, false], [[1, 2], 12, [1], 12, false],
+  ];
+  for (const [oRuns, oSets, vRuns, vSets, whole] of sized) {
+    const short = fleetShort(runsOf(() => base, oRuns, oSets), runsOf(() => base, vRuns, vSets));
+    known += 1;
+    check((short.length === 0) === whole, `a fleet of old ${oRuns.length} runs of ${oSets} sets and new ${vRuns.length} of ${vSets} was judged ${short.length ? `short (${short.join('; ')})` : 'whole'}, the known answer is ${whole ? 'whole' : 'short'}`);
+  }
+  console.log(`   ${known} known answers judged over ${LINES.length} lines (${LINES.map(l => `${l.id} ${l.kind}`).join(', ')}) and the fleet's size; the table's assertion held to ${held} verdicts`);
 }
 
 if (FLEET === 'full' || COMBINE) {
