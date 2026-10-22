@@ -1,0 +1,13 @@
+units-1516 exit=0 10s |    Duration  8.98s (transform 3.86s, setup 358ms, collect 6.81s, tests 6.75s, environment 2.08s, prepare 670ms)
+ctl-1516 exit=0 86s | nouscrow exit=1 simOneOffCups: control nouscrow FIRED (74 failures, all its own: 1 usc season one: a new career at PSG holds noWinner, not the seasonOne stub)
+tsc exit=0 108s | 
+appeal1081 exit=0 55s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+simCmShirtSales exit=0 2s | CM_SHIRTS_RESULT status=passed cases=15/15 passed=15 failed=0 prefixes=6/6 chargedWeeks=72/72 sourceHold=true network=0
+leagueRules exit=1 89s | simCmLeagueRules: 47 failure(s)
+simClubManagerFinances exit=0 80s | simClubManagerFinances: PASS. The books add up, the projection lands, prices move the fans and the board, and the sponsor desk pays what it says.
+simFinance exit=0 11s | ALL FINANCE CHECKS PASSED
+simCmCopy exit=0 51s | simCmCopy: green on this tree. Sections 1, 2, 3, 4, 5: Club Manager says what it means.
+budget-simClubManagerSaveSize exit=0 89s | simClubManagerSaveSize: all sections green
+units-1443 exit=0 6s |    Duration  5.20s (transform 2.44s, setup 215ms, collect 5.52s, tests 2.30s, environment 1.05s, prepare 365ms)
+budget-simMoney exit=1 235s | 1 FAILURES
+simOneOffCups exit=0 2656s | simOneOffCups: green, 270647 checks (2655 s)

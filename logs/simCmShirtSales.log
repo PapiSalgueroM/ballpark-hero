@@ -1,0 +1,3 @@
+CM_SHIRTS_PASS no-passive-time-or-random-income
+CM_SHIRTS_PASS real-charged-prefixes
+CM_SHIRTS_RESULT status=passed cases=15/15 passed=15 failed=0 prefixes=6/6 chargedWeeks=72/72 sourceHold=true network=0
