@@ -16262,3 +16262,15 @@ PR 363 qualified a94c1b397b720c297600bdc5a52c7daaba375757/run 39691108696 all si
 IndexNow 39697351266/03cee4f8474fe846c88bc8bef87a50ee5592466a: two URLs, key verified, HTTP 200 accepted, artifact 12391502150/2337 B/SHA 76607152c63af8b961ac774daa4951f4c5130cea98cc32e78b33a70aac039fac, all nine hashes held. Home and Football Grid only, no inferred payload capture or indexing guarantee.
 
 SEO operators/docs record the admitted release after shirt final run 39696453260 and PR 361 merge b0feca59983a6946142ca29f20f16f1ba1540f6c. Shirt publication/public proof remain pending. SEO closes before shirt publication. No product republish. GA paused, GSC/dashboard unverified, broader 785 audit/1441 preservation and all failures unwaived. No engine/data/dependency/cap change or I-lane claim.
+
+
+
+## Codex Root Round 1443 live and verified, operators/docs recorded, 2026-10-21
+
+Qualified a95cdd9f68fa25a5345ac2370a94ed8730e3a0ec/run 39696453260 all seven; 243 artifact hashes; 9330 passing unit cases/58 explicit skips/0 failures, 621 files; 45 focused, 15 sim, 72 charged weeks, 9 accounting faults. Browser 7+3+3,18 readers, 14 unchanged limits, patch/list 0 B and complete 219-source/796-dist end holds/four output controls passed.
+
+Published c1b393644e00c560a0ca6a5f5dea47e57c252160/deployment 54960975-4002-4472-a779-8afc2ce6cf3b observed 2026-10-22T00:31:50.8877427Z. Strict 39700397308 entry drift stays FAILED; intake 39700897922 diagnostic admitted 1944 hashes/16 requests/nine assets/6+17 controls, four raw differences preserved. No whole-binary equivalence.
+
+Proper 39701646234/3dd49ce7298dfc49c3f7243304d3c161616d9a00 fully Root+two-peer admitted: 2928 hashes, 68 public requests, five exact roles, source/header holds, audit 3/3 and intended thin 2/3 over 24 samples. IndexNow 39703683105/06ff651216512661d31cebb4fd34318ce28f0e35: key verified live, two scoped URLs acceptedHTTP 200, artifact 12393997679/2341 B/SHA 1eaa6425b9039a170f66280eab73c0a00befd781691a7769620ef9591b43b218, all nine hashes held. Targets only /club-manager,/whats-new; no payload capture/indexing claim.
+
+Operators/docs closure needs no product republish. Stale build-run metadata is corrected supplementally, original frozen. All failures and broader 785-harness audit/1441 preservation blocker remain unwaived. Analytics paused. No all-site/roster, browser played-week/payment, full-season, ranking or legal guarantee.

@@ -1,0 +1,514 @@
+{
+  "status": "LIVE_PRODUCT_PUBLIC_VERIFIED_INDEXNOW_ACCEPTED_OPERATORS_DOCS_RECORDED",
+  "round": 1443,
+  "recordDateLocal": "2026-10-21",
+  "repositoryClosureWritten": true,
+  "productPublished": true,
+  "finalPublicVerificationComplete": true,
+  "qualified": {
+    "source": "a95cdd9f68fa25a5345ac2370a94ed8730e3a0ec",
+    "run": 39696453260,
+    "allSevenJobsSuccess": true,
+    "historicalJobsSkippedAsDesigned": 3,
+    "artifacts": 7,
+    "manifestRows": 243,
+    "buildArtifact": 12391561803,
+    "buildZipBytes": 27522286,
+    "buildZipSha256": "dfab379b0baacfa504533739c0eb094d2b57bad2b24056dae4cb5149bdb3d67e",
+    "buildManifestRows": 123,
+    "unitPassed": 9330,
+    "unitExplicitSkips": 58,
+    "unitFailures": 0,
+    "unitFiles": 621,
+    "focusedCases": 45,
+    "simCases": 15,
+    "chargedPrefixWeeks": 72,
+    "effectiveAccountingFaults": 9,
+    "browserPositive": 7,
+    "browserFaults": 3,
+    "browserRestorations": 3,
+    "browserActualOutbound": 0,
+    "readers": 18,
+    "unchangedCaps": 14,
+    "generatedPatchBytes": 0,
+    "generatedFileListBytes": 0,
+    "completeSourcePaths": 219,
+    "distFiles": 796,
+    "sourceDistEndInventoriesExact": true,
+    "effectiveCopiedOutputControls": 4,
+    "allFinalExitsZero": true
+  },
+  "publication": {
+    "source": "c1b393644e00c560a0ca6a5f5dea47e57c252160",
+    "qualifiedProductGeneratedDiffBytesReportedByRoot": 0,
+    "deployment": "54960975-4002-4472-a779-8afc2ce6cf3b",
+    "observedUtc": "2026-10-22T00:31:50.8877427Z",
+    "observedEntry": "/assets/index-B7hQWbeb.js",
+    "oldDeploymentObservationsRetained": 3,
+    "wholeHostedBinaryEquality": false
+  },
+  "strict": {
+    "status": "ACTUAL_FAILED_STRICT_ENTRY_DRIFT_ADMITTED_UNWAIVED",
+    "run": 39700397308,
+    "operator": "99261d894b437d7959529f1049257185a752f120",
+    "artifact": 12392213898,
+    "zipBytes": 63009013,
+    "zipSha256": "f8572d9730ea2c8e8aa0e3dd71d8af0fbc09a7374fa97309eafeb08982edffb0",
+    "rootManifestRows": 956,
+    "nestedQualifiedManifestRows": 123,
+    "qualifiedDistFiles": 796,
+    "rootNestedAndDistExact": true,
+    "marker": "CM_SHIRT_PUBLIC_ENTRY_DRIFT",
+    "expected": "/assets/index-n_O3Xw2P.js",
+    "observed": "/assets/index-B7hQWbeb.js",
+    "errorType": "AssertionError",
+    "readbackExit": 1,
+    "finalHoldsExit": 0,
+    "sourceGeneratedHoldLogsZero": true,
+    "requests": 7,
+    "get": 4,
+    "head": 3,
+    "pairedHeaderRows": 14,
+    "pages": 3,
+    "assets": 0,
+    "normalThinAuditsReached": false,
+    "readableCompiledControlsReached": false,
+    "controlsObserved": {
+      "headerFormats": 2,
+      "changedHeaders": 3,
+      "forbiddenTargets": 6,
+      "changedEntryUrls": 4,
+      "changedBootstrap": 1
+    }
+  },
+  "intake": {
+    "status": "ACTUAL_DIAGNOSTIC_INTAKE_ADMITTED_STRICT_DRIFT_RETAINED",
+    "run": 39700897922,
+    "operator": "17b4a39fc7f89ebbc5bf157950fe8b7682dde818",
+    "artifact": 12392683172,
+    "zipBytes": 191411724,
+    "zipSha256": "a330026db17301a54b09cc770f956146b60648f0e6977031d9ac99ae9519edaa",
+    "manifestRows": 1944,
+    "requests": 16,
+    "graphAssets": 9,
+    "observedPinsJsonBytes": 646,
+    "observedPinsJsonSha256": "2b13c02e9a51fc7d122f63f3dff977318cf99ff8c13dc811ed6d0e366e32a3ed",
+    "diagnosticOnly": true,
+    "automaticQualification": false,
+    "catalogConclusionReportedByRoot": "success",
+    "fullArtifactAdmitted": true,
+    "transferStatusReportedByRoot": "Initial transfer timeout before file creation retained; a fresh native transfer succeeded. Artifact fully admitted, no CI retry.",
+    "nestedManifestRows": [
+      123,
+      956,
+      123
+    ],
+    "distInventories": [
+      796,
+      796
+    ],
+    "allRootNestedDistHashesExact": true,
+    "headerRows": 32,
+    "identicalHeaderPairs": 16,
+    "get": 13,
+    "head": 3,
+    "readbackExit": 0,
+    "finalHoldsExit": 0,
+    "allSourceGeneratedRepositoryHoldsExact": true,
+    "rawReadableControls": 6,
+    "compiledControls": 17,
+    "otherControls": {
+      "headerFormats": 2,
+      "changedHeaders": 3,
+      "forbiddenTargets": 6,
+      "changedEntryUrls": 4,
+      "changedBootstrap": 1,
+      "changedAsset": 1
+    },
+    "observedPins": {
+      "clubEngine": {
+        "path": "/assets/clubManager-DgSuSMC2.js",
+        "sha256": "c80901d969f76491fd7affbb0cf0c43c2e666237a0fe6335796cfc0373641959"
+      },
+      "clubGuide": {
+        "path": "/assets/clubManagement-DAaOtgj7.js",
+        "sha256": "376c546d4daa560a448ca321a2b2839d39a2e703c2aab05a17c853a8ed909434"
+      },
+      "entry": {
+        "path": "/assets/index-B7hQWbeb.js",
+        "sha256": "e2c76b9f181bf27250598ca88c440399229a11251782e2ac1c4166ce43c8600f"
+      },
+      "finance": {
+        "path": "/assets/FinancesScreen-DqXuOlCU.js",
+        "sha256": "ea844c2858a1829a870a2c3f4053e4b837338fd5068b565d87d443236fe0dc32"
+      },
+      "updates": {
+        "path": "/assets/WhatsNew-Bsf9yES2.js",
+        "sha256": "c0f3d419dd732b1b1c316953035757687cde9897d1fc14059092691438cf97fd"
+      }
+    },
+    "roleComparisons": [
+      {
+        "role": "clubEngine",
+        "wholeForwardInverseExact": true,
+        "rawEqual": false,
+        "qualified": {
+          "path": "/assets/clubManager-BIhlEaFz.js",
+          "sha256": "de2756f48424645932ad72cae8ad9211198f630461add976682652561c79f181"
+        },
+        "diffExit": 1,
+        "observed": {
+          "path": "/assets/clubManager-DgSuSMC2.js",
+          "sha256": "c80901d969f76491fd7affbb0cf0c43c2e666237a0fe6335796cfc0373641959"
+        },
+        "diffSha256": "a3fd3988a4db9351075d879bf3fdb6478d68daea610a8fca71632d808ebed94c"
+      },
+      {
+        "role": "clubGuide",
+        "wholeForwardInverseExact": true,
+        "rawEqual": true,
+        "qualified": {
+          "path": "/assets/clubManagement-DAaOtgj7.js",
+          "sha256": "376c546d4daa560a448ca321a2b2839d39a2e703c2aab05a17c853a8ed909434"
+        },
+        "diffExit": 0,
+        "observed": {
+          "path": "/assets/clubManagement-DAaOtgj7.js",
+          "sha256": "376c546d4daa560a448ca321a2b2839d39a2e703c2aab05a17c853a8ed909434"
+        },
+        "diffSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "role": "entry",
+        "wholeForwardInverseExact": true,
+        "rawEqual": false,
+        "qualified": {
+          "path": "/assets/index-n_O3Xw2P.js",
+          "sha256": "e615ea1de7d827ae9fd5cc071696891002a6b594b4fd1db876b76453ed85e800"
+        },
+        "diffExit": 1,
+        "observed": {
+          "path": "/assets/index-B7hQWbeb.js",
+          "sha256": "e2c76b9f181bf27250598ca88c440399229a11251782e2ac1c4166ce43c8600f"
+        },
+        "diffSha256": "bb4a1b7b89e842c7246e7fc620ccb5aadfda41b75e310f742ce9cc098a8c9ff3"
+      },
+      {
+        "role": "finance",
+        "wholeForwardInverseExact": true,
+        "rawEqual": false,
+        "qualified": {
+          "path": "/assets/FinancesScreen-CnG1n05f.js",
+          "sha256": "5ac0db3e48c2f98fb1c0fd682fec6baef3afa7278b65ca76e39f46ece064191d"
+        },
+        "diffExit": 1,
+        "observed": {
+          "path": "/assets/FinancesScreen-DqXuOlCU.js",
+          "sha256": "ea844c2858a1829a870a2c3f4053e4b837338fd5068b565d87d443236fe0dc32"
+        },
+        "diffSha256": "9c546daad8b474b391c100ad657fd38dcbb804f0421dc59067d0e96705ef8acd"
+      },
+      {
+        "role": "updates",
+        "wholeForwardInverseExact": true,
+        "rawEqual": false,
+        "qualified": {
+          "path": "/assets/WhatsNew-DhX1Dh6l.js",
+          "sha256": "216e5b648036acedcc20106f51e5cfa2847e035334b87fd81d84ef7cf7c6fc66"
+        },
+        "diffExit": 1,
+        "observed": {
+          "path": "/assets/WhatsNew-Bsf9yES2.js",
+          "sha256": "c0f3d419dd732b1b1c316953035757687cde9897d1fc14059092691438cf97fd"
+        },
+        "diffSha256": "27acb12a2ce80e4c3ff61e4e947ef2e97a6d873b7cd939ced0e345276fb4c8c7"
+      }
+    ],
+    "allFourChangedRawDiffsWholeForwardInverseExact": true,
+    "guideRawBytesEqual": true,
+    "wholeBinaryEquality": false,
+    "normalThinAuditsSkipped": true,
+    "strictFailureRetainedUnwaived": true
+  },
+  "proper": {
+    "status": "ACTUAL_PROPER_FULLY_ROOT_AND_TWO_PEERS_ADMITTED",
+    "run": 39701646234,
+    "operator": "3dd49ce7298dfc49c3f7243304d3c161616d9a00",
+    "artifact": 12392489679,
+    "zipBytes": 447725749,
+    "zipSha256": "114945a2c3c8d858cf283d0518b9aa58904c95f808e5e1ee19271eaf02b82f2b",
+    "manifestRows": 2928,
+    "actualRequests": 68,
+    "actualUniqueAssets": 5,
+    "sourceDeploymentAndObservedPins": "ACTUAL_EXACT_ROOT_ADMITTED_C1_5496_JSON646_2B13",
+    "controls": {
+      "readable": 6,
+      "compiled": 17,
+      "changedEntryUrls": 4,
+      "changedHeaders": 3,
+      "forbiddenTargets": 6,
+      "changedBootstrap": 1,
+      "changedAsset": 1
+    },
+    "auditNormal": "ACTUAL_3_OF_3_EXIT0",
+    "auditThin": "ACTUAL_2_OF_3_EXIT1_WITH_CM_PLANT",
+    "sitemapSample": 24,
+    "maximumProperRequests": 68,
+    "maximumIntakeRequests": 23,
+    "qualificationScope": "Published source plus exact observed role asset pins, whole CI binary equality is not asserted",
+    "preparedPushedOperatorReportedByRoot": "3dd49ce7298dfc49c3f7243304d3c161616d9a00",
+    "preparedWorkflowBytes": 19375,
+    "preparedWorkflowSha256": "88b6a93f0367d15ec1250dc81badd5a5627aedd3bedef08c1b3e66aa0719d7ec",
+    "rootAdmissionComplete": true,
+    "independentPeerAdmissionComplete": true,
+    "qualifiedAndPriorZipsExact": true,
+    "operatorRequests": 12,
+    "auditRequests": 56,
+    "get": 65,
+    "head": 3,
+    "pairedHeaderRows": 136,
+    "allRequiredHeadersExpectedDeployment": true,
+    "allRequestsOwnOriginGetHead": true,
+    "observedPinsJsonBytes": 646,
+    "observedPinsJsonSha256": "2b13c02e9a51fc7d122f63f3dff977318cf99ff8c13dc811ed6d0e366e32a3ed",
+    "roles": 5,
+    "pages": 3,
+    "readbackExit": 0,
+    "finalHoldsExit": 0,
+    "sourceGeneratedHoldsZero": true,
+    "sharedChrome": 1067,
+    "thinBar": 1494,
+    "actualHealthyCmReadableCharacters": 39076,
+    "actualThinPlantReadableCharacters": 1067,
+    "rawRoleDifferencesRetained": true,
+    "wholeBinaryEquality": false,
+    "strictFailureUnwaived": true,
+    "independentPeerReceipts": [
+      {
+        "file": "shirt1443-public-proper-39701646234-independent-admission.json",
+        "bytes": 4537,
+        "sha256": "e6c22f34bc64faf043855e7d664c947b262446d992b1f7a2d29bb461f7d16ee4"
+      },
+      {
+        "file": "shirt1443-public-proper-39701646234-cm-map-admission.json",
+        "bytes": 5479,
+        "sha256": "e205e9f404c3c280411c2f59efa2223986afc21009bb66a3c17e2a66e301d733"
+      }
+    ],
+    "nestedZipsIndependentlyVerified": 5,
+    "manifestsIndependentlyVerified": 6,
+    "allNestedManifestAndDistBindingsHeld": true
+  },
+  "indexNow": {
+    "status": "ACTUAL_INDEXNOW_HTTP200_ACCEPTANCE_ROOT_AND_CM_ADMITTED",
+    "run": 39703683105,
+    "operator": "06ff651216512661d31cebb4fd34318ce28f0e35",
+    "artifact": 12393997679,
+    "zipBytes": 2341,
+    "zipSha256": "1eaa6425b9039a170f66280eab73c0a00befd781691a7769620ef9591b43b218",
+    "manifestRows": 9,
+    "regularFiles": 10,
+    "allManifestHashesExact": true,
+    "http": 200,
+    "accepted": true,
+    "actualExit": 0,
+    "actualUrlCount": 2,
+    "keyVerification": "ACTUAL_LIVE_KEY_VERIFIED_LOG",
+    "readbackPrerequisite": {
+      "run": 39701646234,
+      "operator": "3dd49ce7298dfc49c3f7243304d3c161616d9a00",
+      "actualTsvExactSuccess": true,
+      "rootAndTwoPeersAdmitted": true
+    },
+    "workflowName": "Index verified CM shirt sales pages",
+    "workflowBytes": 2969,
+    "workflowSha256": "8467672f22d3764d653d184a8099fd8641c3628b10538b0ceaed05f46c2d2036",
+    "branch": "codex/cm-shirt-sales-indexnow",
+    "publicBranchRepushed": false,
+    "urlScope": [
+      "https://douknowball.com/club-manager",
+      "https://douknowball.com/whats-new"
+    ],
+    "homeSubmitted": false,
+    "separatePayloadCapture": false,
+    "urlScopeEvidence": "Exact executed reviewed workflow literal, held script mapping and actual two-URL log. No separate payload capture inferred.",
+    "source": "c1b393644e00c560a0ca6a5f5dea47e57c252160",
+    "sourceHoldBytes": 0,
+    "submitScriptSha256": "b2bea64932bb38d764c6dd84a897dfa603338fa42e9756bcc512ae5f5fec62d6",
+    "keyFileSha256": "c42c3c91e0aee24ae111f71483a082a99c0289ef43c7d1c3fa5c925b5d1529a3",
+    "afterAndFinalChecksExact": true,
+    "rootAdmitted": true,
+    "cmPeerAdmitted": true,
+    "closureAuthorNativeAllNineZipRowsRebound": true,
+    "indexingOrRankingGuaranteed": false
+  },
+  "frozenReceiptCorrection": {
+    "originalFile": "shirt1443-final-39696453260-build-admission.json",
+    "originalBytes": 43180,
+    "originalSha256": "7c006900388288497c916baca316a3b27ffbfcdca7e6de3be86fee6d8766a9c3",
+    "field": "run",
+    "staleValue": 39694139889,
+    "correctActualValue": 39696453260,
+    "originalReceiptRewritten": false,
+    "actualSource": "a95cdd9f68fa25a5345ac2370a94ed8730e3a0ec",
+    "actualArtifact": 12391561803,
+    "actualZipSha256": "dfab379b0baacfa504533739c0eb094d2b57bad2b24056dae4cb5149bdb3d67e",
+    "provenance": [
+      "All-seven receipt ae590cf9f1b441719f09a80047b6ada3c16781285aad20a2ad5e27394312d9ad",
+      "Root final source qualification506a9364c1cf84fa1b6095feba252a70e83ac549893fccd9d967a6879509a77c",
+      "Actual final run/artifact metadata admitted by Root and strict qualified-run input",
+      "Supplemental correction shirt1443-final-39696453260-build-admission-run-correction.json1187B/e66ac2fefce801d212a77911fc25c3292dbb58cdc71e027d8b25441fc8118bfa"
+    ],
+    "effect": "Metadata correction only, no evidence rewrite or qualification/predicate waiver",
+    "rootSupplementalReceipt": {
+      "file": "ROOT-shirt1443-final-build-run-correction.json",
+      "bytes": 1143,
+      "sha256": "d56661c4f4bdccf0aad2f9de6b7c9a936896b00838adf6f72eb0957057a0bbe4",
+      "freshCatalogRebound": true,
+      "originalPreserved": true
+    }
+  },
+  "retainedFailures": [
+    {
+      "run": 39662369995,
+      "reason": "Original positive Finance late movement",
+      "status": "FAILED_RETAINED"
+    },
+    {
+      "run": 39680041296,
+      "reason": "Overflow control missed moving viewport and reached wrong TimeoutError",
+      "status": "FAILED_RETAINED"
+    },
+    {
+      "run": 39683227608,
+      "reason": "Paired trace final-frame time receipt failed despite driver complete",
+      "status": "FAILED_RETAINED"
+    },
+    {
+      "run": 39700397308,
+      "reason": "Strict hosting entry differs from qualified entry",
+      "status": "FAILED_RETAINED_UNWAIVED"
+    }
+  ],
+  "limits": [
+    "Only scoped product/source, observed public assets/copy, unchanged live audit and accepted IndexNow notification are credited. Operators/docs record closure on Root adoption and require no product republish.",
+    "Strict failure is not waived by admitted diagnostic intake; no normalized bundle equivalence is claimed.",
+    "Browser saved-fixture UI proof does not demonstrate a newly played week/payment or real-roster data correctness.",
+    "No full-season balance, all-site, ranking, legal immunity or compliance guarantee.",
+    "Google Analytics remains paused, unrelated dashboard/GSC account state unverified.",
+    "Broad785 audit and old1441 preservation blocker remain open and unwaived.",
+    "Closure docs/operators need no product republish, and must preserve current histories when finally adopted."
+  ],
+  "evidenceSupports": [
+    {
+      "file": "shirt1443-final-39696453260-all-seven-admission.json",
+      "bytes": 6656,
+      "sha256": "ae590cf9f1b441719f09a80047b6ada3c16781285aad20a2ad5e27394312d9ad"
+    },
+    {
+      "file": "ROOT-shirt1443-final-source-qualification.json",
+      "bytes": 1422,
+      "sha256": "506a9364c1cf84fa1b6095feba252a70e83ac549893fccd9d967a6879509a77c"
+    },
+    {
+      "file": "shirt1443-final-39696453260-build-admission.json",
+      "bytes": 43180,
+      "sha256": "7c006900388288497c916baca316a3b27ffbfcdca7e6de3be86fee6d8766a9c3"
+    },
+    {
+      "file": "shirt1443-final-39696453260-build-admission-run-correction.json",
+      "bytes": 1187,
+      "sha256": "e66ac2fefce801d212a77911fc25c3292dbb58cdc71e027d8b25441fc8118bfa"
+    },
+    {
+      "file": "shirt1443-published-home-fourth.json",
+      "bytes": 639,
+      "sha256": "bb00ce111ca1f342defb44b208a3f627a8e62118070e53785973208140d47202"
+    },
+    {
+      "file": "ROOT-shirt1443-strict-39700397308-admission.json",
+      "bytes": 1291,
+      "sha256": "dee2ddb2c9948b0a5af42c6e14a68c6eeba6ad56c1b46b14f88b54248433abc7"
+    },
+    {
+      "file": "shirt1443-public-strict-39700397308-admission.json",
+      "bytes": 2967,
+      "sha256": "3b3dbced5e125d3b0b9985d498ddc8aaef0e4e388df020ea9eff07d581cfddbd"
+    },
+    {
+      "file": "ROOT-shirt1443-final-build-run-correction.json",
+      "bytes": 1143,
+      "sha256": "d56661c4f4bdccf0aad2f9de6b7c9a936896b00838adf6f72eb0957057a0bbe4"
+    },
+    {
+      "file": "shirt1443-public-intake-39700897922-admission.json",
+      "bytes": 6638,
+      "sha256": "5d2eec4385f7e0b9d5f682da650a90c9f0737417258908eb7cf81bb4639200d0"
+    },
+    {
+      "file": "ROOT-shirt1443-intake-39700897922-admission.json",
+      "bytes": 2474,
+      "sha256": "fc2ce77b479a67c39ae70f6259c57a04a6225a04e14bc63c99d0b30509b199ff"
+    },
+    {
+      "file": "shirt1443-public-intake-39700897922-observed-pins.json",
+      "bytes": 646,
+      "sha256": "2b13c02e9a51fc7d122f63f3dff977318cf99ff8c13dc811ed6d0e366e32a3ed"
+    },
+    {
+      "file": "ROOT-shirt1443-intake-39700897922-zip.json",
+      "bytes": 406,
+      "sha256": "b88588b8c1ec5c82e49e988171d88edcff1c4387048428dae37fb55df8b8055a"
+    },
+    {
+      "file": "ROOT-shirt1443-proper-39701646234-admission.json",
+      "bytes": 1481,
+      "sha256": "e7ad4678f17b04e86840c74cc035cd0ca541bf7bdea4b612730e111cf076ad9f"
+    },
+    {
+      "file": "ROOT-shirt1443-proper-39701646234-zip.json",
+      "bytes": 406,
+      "sha256": "a24a85ce4098682d4f3a6337700a4dde1963b46171f34b4beb65a168fdd27662"
+    },
+    {
+      "file": "shirt1443-public-proper-39701646234-independent-admission.json",
+      "bytes": 4537,
+      "sha256": "e6c22f34bc64faf043855e7d664c947b262446d992b1f7a2d29bb461f7d16ee4"
+    },
+    {
+      "file": "shirt1443-public-proper-39701646234-cm-map-admission.json",
+      "bytes": 5479,
+      "sha256": "e205e9f404c3c280411c2f59efa2223986afc21009bb66a3c17e2a66e301d733"
+    },
+    {
+      "file": "shirt1443-indexnow-39703683105-cm-map-admission.json",
+      "bytes": 1635,
+      "sha256": "cbe5ad5e73b54047cb5b0f0aeaff1e4517d386232f9d036357ad5430140c296a"
+    },
+    {
+      "file": "ROOT-shirt1443-indexnow-39703683105-admission.json",
+      "bytes": 983,
+      "sha256": "a8cad18393c3604f4aec3b8b6390e76b42bbf8fe7bec812a516bb4d25eee4c94"
+    }
+  ],
+  "authoring": {
+    "privateOnly": true,
+    "repositoryWrites": 0,
+    "gitOperations": 0,
+    "localAppRuntime": false,
+    "publicProbes": 0,
+    "ciOperations": 0
+  },
+  "intendedStateOnRootAdoption": true,
+  "productRepublishNeededForClosure": false,
+  "closureAdoption": {
+    "owner": "Root",
+    "branch": "codex/cm-shirt-sales-closure",
+    "parent": "06ff651216512661d31cebb4fd34318ce28f0e35",
+    "childRepositoryWrites": 0,
+    "stateBecomesRecordedOnRootAdoption": true,
+    "preserveCurrentStateHistory": true,
+    "workboardAppendOnly": true,
+    "productRepublish": false
+  }
+}
