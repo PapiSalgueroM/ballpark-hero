@@ -1,0 +1,5 @@
+#!build
+#!playwright
+#!serial
+weigh-head: node .rc/x/weigh.mjs dist 4471 | tee $RC_OUT/weigh-head.txt
+weigh-base: git worktree add -q /tmp/base c75d04dad && ln -s $PWD/node_modules /tmp/base/node_modules && (cd /tmp/base && node_modules/.bin/vite build > /tmp/base-build.log 2>&1) && node .rc/x/weigh.mjs /tmp/base/dist 4472 | tee $RC_OUT/weigh-base.txt
