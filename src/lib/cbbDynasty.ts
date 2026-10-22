@@ -5,6 +5,7 @@ import {
   type Coordinator, type ProgramSport, type ProgramStaff, type RivalKind, type RivalryResult, type Rivalry,
   type SlateGame, type StaffRole, type StaffWindow,
 } from './collegeProgram';
+import { CBB_RIVALRY_SERIES } from '@/data/collegeRivalries';
 /**
  * CBB Dynasty engine (2026-08-05). College basketball sibling of
  * cfbDynasty.ts. Real programs, fully fictional generated players (class
@@ -130,10 +131,11 @@ let rivalryCache: Rivalry[] | null = null;
 /** Every school's rivalry night opponent. Built on first use rather than at
  *  module scope, the house rule for anything computed from an import. */
 export function cbbRivalries(): Rivalry[] {
-  if (!rivalryCache) rivalryCache = buildRivalries(CBB_SCHOOLS, CBB_SCHOOL_STATES);
+  /* Round 1554: the real series first (src/data/collegeRivalries.ts), the same table football reads. */
+  if (!rivalryCache) rivalryCache = buildRivalries(CBB_SCHOOLS, CBB_SCHOOL_STATES, CBB_RIVALRY_SERIES);
   return rivalryCache;
 }
-export function cbbRivalOf(id: string): { rival: string; kind: RivalKind; state?: string } | null {
+export function cbbRivalOf(id: string): { rival: string; kind: RivalKind; state?: string; name?: string } | null {
   return rivalOf(cbbRivalries(), id);
 }
 
@@ -170,6 +172,9 @@ export interface CbbTeam {
   morale?: number;
   /** Everyone this team has played in the regular season, the games in its record. */
   opps?: string[];
+  /** Round 1554: league games won and lost, kept from the first season that starts under CbbState.format. */
+  confWins?: number;
+  confLosses?: number;
 }
 
 /** Round 823: my rivalry night result, kept until the offseason spends its recruiting swing. */
@@ -195,6 +200,10 @@ export interface CbbState {
   lastRivalry?: CbbRivalryResult | null;
   mySlate?: CbbSlateGame[];
   staffWindow?: CbbStaffWindow | null;
+  /** Round 1554: 1 once a season has started keeping league records, which
+   *  the conference table then goes by. Absent on every older save, which
+   *  finishes the season it is in the old way. */
+  format?: number;
 }
 
 /* Round 568: this counter used to live at module scope, which restarts on
@@ -244,6 +253,19 @@ export function initCbb(myTeam: string, rng: () => number = Math.random, opts: {
  */
 export function cbbEnableDepth(st: CbbState, rng: () => number): void {
   enableProgramLayer(st, CBB_PROGRAM, rng);
+  ensureCbbFormat(st);
+}
+
+/**
+ * Round 1554: league records start with a season, never in the middle of
+ * one. With the program layer on and before round 1 is played, the season is
+ * marked and every program's league record starts at 0-0; a season already
+ * under way keeps its old table. Idempotent.
+ */
+export function ensureCbbFormat(st: CbbState): void {
+  if (!st.depth || st.round !== 1 || st.format) return;
+  st.format = 1;
+  for (const t of Object.values(st.teams)) { t.confWins = 0; t.confLosses = 0; }
 }
 
 function initCbbLegacy(myTeam: string, rng: () => number): CbbState {
@@ -337,6 +359,13 @@ function playGame(aId: string, bId: string, st: CbbState, rng: () => number, rec
   if (record) {
     st.teams[g.winner].wins += 1;
     st.teams[g.winner === aId ? bId : aId].losses += 1;
+    /* Round 1554: a league game goes on the league record too. */
+    if (st.format && CBB_SCHOOL_MAP.get(aId)!.conf === CBB_SCHOOL_MAP.get(bId)!.conf) {
+      const w = st.teams[g.winner];
+      const l = st.teams[g.winner === aId ? bId : aId];
+      w.confWins = (w.confWins ?? 0) + 1;
+      l.confLosses = (l.confLosses ?? 0) + 1;
+    }
   }
   return g;
 }
@@ -344,6 +373,7 @@ function playGame(aId: string, bId: string, st: CbbState, rng: () => number, rec
 /** One round: every program plays two games, one in-conference, one cross.
  *  Round 823: with the program layer on, the last round is rivalry night. */
 export function simCbbRound(st: CbbState, rng: () => number): { games: CbbGame[]; myGames: CbbGame[] } {
+  ensureCbbFormat(st);
   const games: CbbGame[] = [];
   if (st.depth && st.round === CBB_RIVALRY_ROUND) {
     playRivalryNight(st, rng, games);
@@ -441,9 +471,19 @@ export function cbbRankings(st: CbbState): CbbTeam[] {
 }
 
 export function cbbConfStandings(st: CbbState, conf: string): CbbTeam[] {
-  return Object.values(st.teams)
-    .filter(t => CBB_SCHOOL_MAP.get(t.id)!.conf === conf)
-    .sort((a, b) => b.wins - a.wins || a.losses - b.losses || cbbStrength(b) - cbbStrength(a));
+  const teams = Object.values(st.teams).filter(t => CBB_SCHOOL_MAP.get(t.id)!.conf === conf);
+  if (st.format) {
+    /* Round 1554: the table goes by the league record, the way a real one
+       does. Winning percentage first, since rivalry night takes a league game
+       off a program whose rival is in another league; then overall record. */
+    const pct = (t: CbbTeam) => {
+      const n = (t.confWins ?? 0) + (t.confLosses ?? 0);
+      return n ? (t.confWins ?? 0) / n : 0;
+    };
+    return teams.sort((a, b) => pct(b) - pct(a) || (b.confWins ?? 0) - (a.confWins ?? 0)
+      || b.wins - a.wins || a.losses - b.losses || cbbStrength(b) - cbbStrength(a));
+  }
+  return teams.sort((a, b) => b.wins - a.wins || a.losses - b.losses || cbbStrength(b) - cbbStrength(a));
 }
 
 export interface CbbBracketGame { name: string; home: string; away: string; hs: number; as: number; winner: string; homeSeed: number; awaySeed: number }
@@ -663,9 +703,11 @@ export function cbbOffseason(st: CbbState, rng: () => number): string[] {
     t.wins = 0; t.losses = 0; t.confChamp = false;
     /* Round 823: a new season's log, and rivalry night's morale is spent. */
     if (st.depth) { t.opps = []; t.morale = 0; }
+    if (st.format) { t.confWins = 0; t.confLosses = 0; }
   }
   if (st.depth) st.mySlate = [];
   st.season += 1;
   st.round = 1;
+  ensureCbbFormat(st);
   return notes;
 }

@@ -35,6 +35,7 @@
  * schedule. scripts/simCfbStaff.mjs and scripts/simCbbStaff.mjs hold each
  * binding to the same promises.
  */
+import { roundRobinCalendar } from './leagueCore';
 
 /* ---------------------------------------------------------------- staff */
 
@@ -221,7 +222,8 @@ export function staffCarousel(
 
 /* -------------------------------------------------------------- rivalry */
 
-export type RivalKind = 'in-state' | 'generated';
+/** Round 1554: 'series' is a real rivalry series from src/data/collegeRivalries.ts. */
+export type RivalKind = 'series' | 'in-state' | 'generated';
 
 export interface Rivalry {
   a: string;
@@ -229,6 +231,8 @@ export interface Rivalry {
   kind: RivalKind;
   /** Only on an in-state pair: the state both schools are in. */
   state?: string;
+  /** Round 1554: only on a real series, and only where both of its sources name it. */
+  name?: string;
 }
 
 export interface RivalSchool { id: string; conf: string; prestige: number }
@@ -237,6 +241,8 @@ const byPrestige = (a: RivalSchool, b: RivalSchool) => b.prestige - a.prestige |
 
 /**
  * Pair every school with one rival for rivalry week. Deterministic, no dice:
+ *   0. Round 1554: a real rivalry series (src/data/collegeRivalries.ts, two
+ *      sources a row) comes first, when both schools are on the board;
  *   1. schools sharing a state, strongest with strongest, are in-state pairs;
  *   2. everyone left is paired inside their conference by prestige, marked
  *      'generated';
@@ -244,11 +250,22 @@ const byPrestige = (a: RivalSchool, b: RivalSchool) => b.prestige - a.prestige |
  * A school with no state on file is never called in-state. With an odd
  * number of schools exactly one is left without a rival.
  */
-export function buildRivalries(schools: RivalSchool[], stateOf: Record<string, string | undefined>): Rivalry[] {
+export function buildRivalries(
+  schools: RivalSchool[],
+  stateOf: Record<string, string | undefined>,
+  series: readonly { a: string; b: string; name?: string }[] = [],
+): Rivalry[] {
   const out: Rivalry[] = [];
   const taken = new Set<string>();
+  const onBoard = new Set(schools.map(s => s.id));
+  for (const r of series) {
+    if (!onBoard.has(r.a) || !onBoard.has(r.b) || r.a === r.b || taken.has(r.a) || taken.has(r.b)) continue;
+    out.push(r.name ? { a: r.a, b: r.b, kind: 'series', name: r.name } : { a: r.a, b: r.b, kind: 'series' });
+    taken.add(r.a); taken.add(r.b);
+  }
   const byState = new Map<string, RivalSchool[]>();
   for (const s of schools) {
+    if (taken.has(s.id)) continue;
     const st = stateOf[s.id];
     if (!st) continue;
     if (!byState.has(st)) byState.set(st, []);
@@ -278,10 +295,12 @@ export function buildRivalries(schools: RivalSchool[], stateOf: Record<string, s
   return out;
 }
 
-export function rivalOf(rivalries: Rivalry[], id: string): { rival: string; kind: RivalKind; state?: string } | null {
+export function rivalOf(rivalries: Rivalry[], id: string): { rival: string; kind: RivalKind; state?: string; name?: string } | null {
   const r = rivalries.find(x => x.a === id || x.b === id);
   if (!r) return null;
-  return { rival: r.a === id ? r.b : r.a, kind: r.kind, state: r.state };
+  return r.name
+    ? { rival: r.a === id ? r.b : r.a, kind: r.kind, state: r.state, name: r.name }
+    : { rival: r.a === id ? r.b : r.a, kind: r.kind, state: r.state };
 }
 
 /** The swing a rivalry result carries, in its stated range: morale between
@@ -331,7 +350,12 @@ export interface ProgramTeam {
 }
 
 /** A finished game, the way both engines report one. */
-export interface ProgramGame { home: string; away: string; hs: number; as: number; winner: string; rivalry?: boolean }
+export interface ProgramGame {
+  home: string; away: string; hs: number; as: number; winner: string; rivalry?: boolean;
+  /** Round 1554: the engine's own call, when it makes one (football's Group of Five and independents are
+   *  not a league); otherwise a game between two schools of one conference is a conference game. */
+  conference?: boolean;
+}
 
 /** My rivalry result, kept until the offseason spends its recruiting swing. */
 export interface RivalryResult {
@@ -434,7 +458,7 @@ export function recordProgramRound(st: ProgramLeague, games: ProgramGame[], spor
     const them = home_ ? g.as : g.hs;
     const opp = home_ ? g.away : g.home;
     const won = g.winner === st.myTeam;
-    const conference = confOf.get(g.home) === confOf.get(g.away);
+    const conference = g.conference ?? confOf.get(g.home) === confOf.get(g.away);
     (st.mySlate ??= []).push({ round: st.round, opp, home: home_, us, them, won, conference, rivalry: !!g.rivalry });
     if (swing) {
       const rival = sport.rivalOf(st.myTeam);
@@ -523,4 +547,276 @@ export function windowFire(st: ProgramLeague, role: StaffRole): Coordinator | nu
   const staff = st.teams[st.myTeam]?.staff;
   if (!st.depth || !win || win.season !== st.season || !staff) return null;
   return fireCoordinator(st, staff, role);
+}
+
+/* ------------------------------------------------------------ the slate */
+
+/* Round 1554: a season's whole schedule, fixed before the first kickoff.
+
+   CFB Dynasty used to draw each week's opponent at random from whoever was
+   still unpaired, so a school could meet the same conference opponent two or
+   three times a season (an eight school conference has seven opponents for
+   eight conference weeks, and the four school Group of Five bucket played
+   itself about eight times). A real season never repeats an opponent.
+
+   collegeSlate builds the season up front, every school one game a round and
+   no pair ever twice:
+     1. rivalry week is the rivalry table, home side as given;
+     2. each league's conference games fill the window rounds off the circle
+        method (roundRobinCalendar, the calendar Aussie Rules binds), its
+        in-league rivalry pairs held out for rivalry week, and every member
+        gets exactly one non-league date inside the window. That date is
+        what makes a season possible at all: the schools outside every league
+        (Notre Dame, the Group of Five bucket) need somebody to play while the
+        leagues are busy, and with every league full they would have nobody
+        (four schools have three opponents among themselves);
+     3. every other date is a non-league game, matched round by round with no
+        pair repeated, the partner school (Notre Dame) meeting its league (the
+        ACC) exactly the agreed number of times.
+   A dead end is retried. If the tries ever ran out it falls back on the plain
+   circle over every school, which cannot repeat a pair either, and says so
+   (`fallback`). scripts/simCfbSlate.mjs holds the result. Nothing here knows
+   which sport it is, so CBB can take it rather than copy it. */
+
+export interface SlateSpec {
+  /** Every school, in a fixed order. */
+  ids: readonly string[];
+  /** The league a school plays a conference schedule in, or null (an independent, a bucket of schools from different leagues). */
+  leagueOf: (id: string) => string | null;
+  rounds: number;
+  /** The first round of league play, counted from 1. The window runs to the round before rivalry week. */
+  windowStart: number;
+  /** Rivalry week, counted from 1. */
+  rivalryRound: number;
+  /** Rivalry week's games, home side first. */
+  rivals: readonly (readonly [string, string])[];
+  /** A school bound to meet one league's schools a set number of times a season. */
+  partner?: { id: string; league: string; games: number };
+}
+
+export interface SlateBuild {
+  /** Round by round (index 0 is round 1), each game home side first. */
+  rounds: [string, string][][];
+  /** True only if every try failed and the plain circle was used. */
+  fallback: boolean;
+}
+
+const SLATE_TRIES = 80;
+const ROUND_TRIES = 40;
+
+export function slatePairKey(a: string, b: string): string {
+  return a < b ? `${a}|${b}` : `${b}|${a}`;
+}
+
+function shuffled<T>(xs: readonly T[], rng: () => number): T[] {
+  const out = [...xs];
+  for (let i = out.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(rng() * (i + 1));
+    [out[i], out[j]] = [out[j], out[i]];
+  }
+  return out;
+}
+
+/** The circle method's first leg over `ids`, round by round, with `first` placed so all of it falls in round 0. */
+function circleRounds(ids: readonly string[], first: readonly (readonly [string, string])[], rng: () => number): [string, string][][] {
+  const n = ids.length;
+  if (n < 2) return [];
+  const odd = n % 2 === 1;
+  /* roundRobinCalendar pairs slot k with slot (size - 1 - k) in round 0, the
+     bye being the last slot when the count is odd (so slot 0 sits out). */
+  const size = odd ? n + 1 : n;
+  const pos: (string | null)[] = new Array(n).fill(null);
+  const placed = new Set<string>();
+  let k = odd ? 1 : 0;
+  for (const [x, y] of first) {
+    if (k >= size - 1 - k) break;
+    if (placed.has(x) || placed.has(y) || !ids.includes(x) || !ids.includes(y)) continue;
+    pos[k] = x; pos[size - 1 - k] = y;
+    placed.add(x); placed.add(y);
+    k += 1;
+  }
+  const rest = shuffled(ids.filter(id => !placed.has(id)), rng);
+  for (let i = 0; i < n; i += 1) if (pos[i] === null) pos[i] = rest.shift()!;
+  const flat = roundRobinCalendar(n);
+  const per = Math.floor(n / 2);
+  const legs = odd ? n : n - 1;
+  const out: [string, string][][] = [];
+  for (let r = 0; r < legs; r += 1) {
+    out.push(flat.slice(r * per, (r + 1) * per).map(([a, b]): [string, string] => [pos[a]!, pos[b]!]));
+  }
+  return out;
+}
+
+/** One pair from each of distinct rounds, covering every member once: the
+ *  games left out so that each member gets one open date. */
+function rainbowDrop(rounds: [string, string][][], members: readonly string[], rng: () => number): Set<string> | null {
+  const partner = rounds.map(r => {
+    const m = new Map<string, string>();
+    for (const [a, b] of r) { m.set(a, b); m.set(b, a); }
+    return m;
+  });
+  const order = shuffled(rounds.map((_, i) => i), rng);
+  const covered = new Set<string>();
+  const usedRound = new Set<number>();
+  const drop: string[] = [];
+  const solve = (): boolean => {
+    const t = members.find(m => !covered.has(m));
+    if (t === undefined) return true;
+    for (const ri of order) {
+      if (usedRound.has(ri)) continue;
+      const p = partner[ri].get(t);
+      if (p === undefined || covered.has(p)) continue;
+      covered.add(t); covered.add(p); usedRound.add(ri); drop.push(slatePairKey(t, p));
+      if (solve()) return true;
+      covered.delete(t); covered.delete(p); usedRound.delete(ri); drop.pop();
+    }
+    return false;
+  };
+  return solve() ? new Set(drop) : null;
+}
+
+/** A league's games for `w` window rounds: each member plays every round but
+ *  one (an odd league's bye, an even league's dropped pair or empty round),
+ *  and never meets an in-league rival before rivalry week. */
+function leagueGrid(members: readonly string[], inside: readonly (readonly [string, string])[], w: number, rng: () => number): [string, string][][] | null {
+  const grid: [string, string][][] = [];
+  if (members.length >= 2 && w > 0) {
+    const cal = circleRounds(members, inside, rng);
+    const rival = new Set(inside.map(([a, b]) => slatePairKey(a, b)));
+    if (members.length % 2 === 1) {
+      /* Every round already has a bye; round 0's rival pairs sit out and meet in rivalry week. */
+      grid.push(...shuffled(cal.map(r => r.filter(([a, b]) => !rival.has(slatePairKey(a, b)))), rng).slice(0, w));
+    } else {
+      /* Round 0 holds every in-league rival pair, so it is left out whole and everyone plays the same count. */
+      const pool = inside.length ? cal.slice(1) : cal;
+      if (pool.length >= w) {
+        const chosen = shuffled(pool, rng).slice(0, w);
+        const drop = rainbowDrop(chosen, members, rng);
+        if (!drop) return null;
+        grid.push(...chosen.map(r => r.filter(([a, b]) => !drop.has(slatePairKey(a, b)))));
+      } else {
+        grid.push(...pool);
+      }
+    }
+  }
+  while (grid.length < w) grid.push([]);
+  return grid;
+}
+
+/** A perfect matching of `open` under `allowed`, most constrained school first. */
+function matchRound(open: readonly string[], allowed: (a: string, b: string) => boolean, rng: () => number): [string, string][] | null {
+  for (let t = 0; t < ROUND_TRIES; t += 1) {
+    const left = new Set(open);
+    const out: [string, string][] = [];
+    let stuck = false;
+    while (left.size > 0) {
+      let pick: string | null = null;
+      let pickCands: string[] = [];
+      for (const x of left) {
+        const cands = [...left].filter(y => y !== x && allowed(x, y));
+        if (pick === null || cands.length < pickCands.length) { pick = x; pickCands = cands; }
+      }
+      if (pick === null || pickCands.length === 0) { stuck = true; break; }
+      const y = pickCands[Math.floor(rng() * pickCands.length)];
+      out.push([pick, y]);
+      left.delete(pick); left.delete(y);
+    }
+    if (!stuck) return out;
+  }
+  return null;
+}
+
+function trySlate(spec: SlateSpec, rng: () => number): [string, string][][] | null {
+  const R = spec.rounds;
+  const rr = spec.rivalryRound - 1;
+  const games: [string, string][][] = Array.from({ length: R }, () => []);
+  const busy: Set<string>[] = Array.from({ length: R }, () => new Set<string>());
+  const used = new Set<string>();
+  const add = (r: number, a: string, b: string) => {
+    games[r].push([a, b]); busy[r].add(a); busy[r].add(b); used.add(slatePairKey(a, b));
+  };
+  for (const [a, b] of spec.rivals) {
+    if (busy[rr].has(a) || busy[rr].has(b) || used.has(slatePairKey(a, b))) return null;
+    add(rr, a, b);
+  }
+  const window: number[] = [];
+  for (let r = spec.windowStart - 1; r < rr; r += 1) window.push(r);
+  const leagues = new Map<string, string[]>();
+  for (const id of spec.ids) {
+    const league = spec.leagueOf(id);
+    if (league === null) continue;
+    if (!leagues.has(league)) leagues.set(league, []);
+    leagues.get(league)!.push(id);
+  }
+  for (const [league, members] of leagues) {
+    const inside = spec.rivals.filter(([a, b]) => spec.leagueOf(a) === league && spec.leagueOf(b) === league);
+    const grid = leagueGrid(members, inside, window.length, rng);
+    if (!grid) return null;
+    const at = shuffled(window, rng);
+    grid.forEach((pairs, i) => { for (const [a, b] of pairs) add(at[i], a, b); });
+  }
+  const p = spec.partner;
+  let partnerRounds = new Set<number>();
+  if (p) {
+    const rivalInLeague = spec.rivals.some(([a, b]) => (a === p.id && spec.leagueOf(b) === p.league) || (b === p.id && spec.leagueOf(a) === p.league));
+    const free = Array.from({ length: R }, (_, r) => r).filter(r => r !== rr && !busy[r].has(p.id));
+    partnerRounds = new Set(shuffled(free, rng).slice(0, Math.max(0, p.games - (rivalInLeague ? 1 : 0))));
+  }
+  const allowed = (r: number) => (a: string, b: string): boolean => {
+    if (used.has(slatePairKey(a, b))) return false;
+    const la = spec.leagueOf(a);
+    const lb = spec.leagueOf(b);
+    if (la !== null && la === lb) return false;
+    if (p && a === p.id && (lb === p.league) !== partnerRounds.has(r)) return false;
+    if (p && b === p.id && (la === p.league) !== partnerRounds.has(r)) return false;
+    return true;
+  };
+  const others = Array.from({ length: R }, (_, r) => r).filter(r => r !== rr && !window.includes(r));
+  for (const r of [...shuffled(window, rng), ...shuffled(others, rng), rr]) {
+    const open = spec.ids.filter(id => !busy[r].has(id));
+    if (open.length === 0) continue;
+    if (open.length % 2 === 1) return null;
+    const m = matchRound(open, allowed(r), rng);
+    if (!m) return null;
+    for (const [a, b] of m) add(r, a, b);
+  }
+  /* Home and away: whoever has hosted less so far hosts, round by round, so
+     a season comes out close to six and six. Rivalry week keeps its own. */
+  const homes = new Map<string, number>();
+  for (let r = 0; r < R; r += 1) {
+    if (r !== rr) {
+      games[r] = games[r].map(([a, b]): [string, string] => {
+        const ha = homes.get(a) ?? 0;
+        const hb = homes.get(b) ?? 0;
+        return ha < hb || (ha === hb && rng() < 0.5) ? [a, b] : [b, a];
+      });
+    }
+    for (const [h] of games[r]) homes.set(h, (homes.get(h) ?? 0) + 1);
+  }
+  return games;
+}
+
+/** The plain circle over every school, rivalry week in its round 0: no pair can repeat. */
+function circleSlate(spec: SlateSpec, rng: () => number): [string, string][][] {
+  const cal = circleRounds(spec.ids, spec.rivals, rng);
+  const rr = spec.rivalryRound - 1;
+  const given = new Map(spec.rivals.map(([a, b]) => [slatePairKey(a, b), [a, b] as [string, string]]));
+  const out: [string, string][][] = Array.from({ length: spec.rounds }, () => []);
+  out[rr] = (cal[0] ?? []).map(([a, b]) => given.get(slatePairKey(a, b)) ?? [a, b]);
+  let next = 1;
+  for (let r = 0; r < spec.rounds; r += 1) {
+    if (r === rr) continue;
+    out[r] = cal[next] ?? [];
+    next += 1;
+  }
+  return out;
+}
+
+/** Round 1554: a whole season's schedule, every school once a round, no pair twice. */
+export function collegeSlate(spec: SlateSpec, rng: () => number): SlateBuild {
+  for (let t = 0; t < SLATE_TRIES; t += 1) {
+    const rounds = trySlate(spec, rng);
+    if (rounds) return { rounds, fallback: false };
+  }
+  return { rounds: circleSlate(spec, rng), fallback: true };
 }

@@ -1,10 +1,12 @@
 import { makeIdMinter, ensureLeagueEntityIds } from './entityIds';
 import {
-  buildRivalries, enableProgramLayer, openProgramOffseason, recordProgramRound, rivalOf, sosTable,
+  buildRivalries, collegeSlate, enableProgramLayer, openProgramOffseason, recordProgramRound, rivalOf, sosTable,
   staffEdges, staffPayroll, strengthOfSchedule, windowFire, windowHire,
   type Coordinator, type ProgramSport, type ProgramStaff, type RivalKind, type RivalryResult, type Rivalry,
-  type SlateGame, type StaffRole, type StaffWindow,
+  type SlateGame, type SlateSpec, type StaffRole, type StaffWindow,
 } from './collegeProgram';
+import { hash32, mulberry32 } from './leagueCore';
+import { CFB_RIVALRY_SERIES } from '@/data/collegeRivalries';
 /**
  * CFB Dynasty engine (2026-08-05). The college pillar of the sim suite.
  *
@@ -20,6 +22,27 @@ import {
  * seven at-larges fill the field, straight seeding by ranking (the 2025
  * format), byes for the top four, single elimination to the title.
  *
+ * Round 1554, the real season (CfbState.format 1, from the first season that
+ * starts after it ships; a season already under way finishes the old way):
+ *   - the whole slate is set at kickoff and no regular season pair repeats
+ *     (src/lib/collegeProgram.ts collegeSlate): weeks 1 to 4 out of
+ *     conference, weeks 5 to 11 six conference games and one non-conference
+ *     date each, week 12 rivalry week;
+ *   - Notre Dame is an independent, as it really is: no conference, so no
+ *     conference title game, and five ACC opponents a season, the average its
+ *     ACC scheduling deal sets (ACC release 2014-10-21, theacc.com; WNDU
+ *     2017-05-11 on the deal running 2026 to 2037; independence kept: NBC
+ *     Sports 2014-05-22). Its real 2026 slate has six (fightingirish.com
+ *     2026-01-23), so five is the average, not every year;
+ *   - the 2026 Playoff: the four power conference champions get automatic
+ *     spots, one more goes to the Group of Five, and Notre Dame is in if it
+ *     ranks in the top 12 (fbschedules.com 2026-01-23, FootballScoop
+ *     2026-08-06, Front Office Sports 2026-02-02). The sources differ on
+ *     whether that fifth spot needs a conference title; the four Group of
+ *     Five schools here are not one conference and play no title game, so the
+ *     best ranked of them takes it, and the board says it in those words.
+ *     There is no "G5 Championship" any more: no such game exists.
+ *
  * Offseason: classes advance (FR to SR), seniors graduate, elite juniors
  * declare early, a 2-to-5-star recruiting board with scouting error and an
  * NIL budget that scales with prestige and success, plus a transfer portal.
@@ -33,7 +56,8 @@ export interface CfbSchool {
   name: string;
   color: string;
   prestige: number; // 60-97 editorial
-  conf: 'SEC' | 'B1G' | 'ACC' | 'B12' | 'G5';
+  /** Round 1554: 'IND' is Notre Dame, an independent. */
+  conf: 'SEC' | 'B1G' | 'ACC' | 'B12' | 'G5' | 'IND';
 }
 
 /** Curated subset, post-2024 realignment memberships (Texas and Oklahoma in
@@ -66,11 +90,16 @@ export const CFB_SCHOOLS: CfbSchool[] = [
   { id: 'NEB', name: 'Nebraska', color: '#E41C38', prestige: 80, conf: 'B1G' },
   { id: 'IND', name: 'Indiana', color: '#990000', prestige: 79, conf: 'B1G' },
   { id: 'MSU', name: 'Michigan State', color: '#18453B', prestige: 77, conf: 'B1G' },
-  // ACC (8)
+  // ACC (7, with Notre Dame listed among them)
   { id: 'CLEM', name: 'Clemson', color: '#F56600', prestige: 89, conf: 'ACC' },
   { id: 'FSU', name: 'Florida State', color: '#782F40', prestige: 85, conf: 'ACC' },
   { id: 'MIA', name: 'Miami', color: '#F47321', prestige: 86, conf: 'ACC' },
-  { id: 'ND', name: 'Notre Dame', color: '#0C2340', prestige: 92, conf: 'ACC' },
+  /* Round 1554: Notre Dame is an independent in football and has never joined
+     the ACC there. It keeps its place in this list on purpose: every engine
+     loop walks this order, so moving it would reshuffle every older save. A
+     season played before the round's format still counts it in the ACC
+     (cfbConfOf). */
+  { id: 'ND', name: 'Notre Dame', color: '#0C2340', prestige: 92, conf: 'IND' },
   { id: 'UNC', name: 'North Carolina', color: '#7BAFD4', prestige: 78, conf: 'ACC' },
   { id: 'LOU', name: 'Louisville', color: '#AD0000', prestige: 79, conf: 'ACC' },
   { id: 'SMU', name: 'SMU', color: '#0033A0', prestige: 80, conf: 'ACC' },
@@ -92,7 +121,16 @@ export const CFB_SCHOOLS: CfbSchool[] = [
 ];
 
 export const CFB_SCHOOL_MAP = new Map(CFB_SCHOOLS.map(s => [s.id, s]));
-export const CFB_CONFS = ['SEC', 'B1G', 'ACC', 'B12', 'G5'] as const;
+/** Every group a school is listed under, in the order the board shows them. */
+export const CFB_CONFS = ['SEC', 'B1G', 'ACC', 'B12', 'G5', 'IND'] as const;
+/** Round 1554: the conferences that play a league schedule and a title game. */
+export const CFB_LEAGUES = ['SEC', 'B1G', 'ACC', 'B12'] as const;
+/** The groups a season before Round 1554's format played under, Notre Dame inside the ACC. */
+const LEGACY_CONFS = ['SEC', 'B1G', 'ACC', 'B12', 'G5'] as const;
+/** Round 1554: Notre Dame's ACC opponents a season, the average of its scheduling deal. */
+export const ND_ACC_GAMES = 5;
+/** Round 1554: an independent ranked this high is in the Playoff field (the 2026 rule). */
+export const CFB_INDEPENDENT_CUT = 12;
 export const CFB_ROUNDS = 12;
 export const CONF_GAMES_START = 5; // rounds 5-12 are conference play
 
@@ -124,10 +162,11 @@ let rivalryCache: Rivalry[] | null = null;
 /** Every school's rivalry week opponent. Built on first use rather than at
  *  module scope, the house rule for anything computed from an import. */
 export function cfbRivalries(): Rivalry[] {
-  if (!rivalryCache) rivalryCache = buildRivalries(CFB_SCHOOLS, CFB_SCHOOL_STATES);
+  /* Round 1554: the real series first (src/data/collegeRivalries.ts). */
+  if (!rivalryCache) rivalryCache = buildRivalries(CFB_SCHOOLS, CFB_SCHOOL_STATES, CFB_RIVALRY_SERIES);
   return rivalryCache;
 }
-export function cfbRivalOf(id: string): { rival: string; kind: RivalKind; state?: string } | null {
+export function cfbRivalOf(id: string): { rival: string; kind: RivalKind; state?: string; name?: string } | null {
   return rivalOf(cfbRivalries(), id);
 }
 
@@ -193,6 +232,20 @@ export interface CfbState {
   lastRivalry?: CfbRivalryResult | null;
   mySlate?: CfbSlateGame[];
   staffWindow?: CfbStaffWindow | null;
+  /** Round 1554: 1 once a season has started under the real format (a fixed
+   *  slate, Notre Dame independent, no Group of Five title game). Absent on
+   *  every older save, which finishes the season it is in the old way. */
+  format?: number;
+  /** Round 1554: this season's whole schedule, built at kickoff. */
+  slate?: CfbSlate | null;
+}
+
+/** Round 1554: a season's schedule. rounds[0] is week 1, each game home side first. */
+export interface CfbSlate {
+  season: number;
+  rounds: [string, string][][];
+  /** Present only if the slate builder ran out of tries and used the plain circle. */
+  fallback?: boolean;
 }
 
 /* Round 568: this counter used to live at module scope, which restarts on
@@ -226,7 +279,8 @@ function starsFor(prestige: number, rng: () => number): number {
 export function initCfb(myTeam: string, rng: () => number = Math.random, opts: { depth?: boolean } = {}): CfbState {
   const st = initCfbLegacy(myTeam, rng);
   /* Round 728: every draw the pre-728 start made is made first and in the
-     same order, so a legacy start is the same league it always was. */
+     same order, so a legacy start is the same league it always was.
+     Round 1554: switching the layer on builds the first season's slate. */
   if (opts.depth) cfbEnableDepth(st, rng);
   return st;
 }
@@ -240,6 +294,8 @@ export function initCfb(myTeam: string, rng: () => number = Math.random, opts: {
  */
 export function cfbEnableDepth(st: CfbState, rng: () => number): void {
   enableProgramLayer(st, CFB_PROGRAM, rng);
+  /* Round 1554: the layer comes on at the turn of a season, so the slate can start with it. */
+  ensureCfbSlate(st);
 }
 
 function initCfbLegacy(myTeam: string, rng: () => number): CfbState {
@@ -258,6 +314,90 @@ function initCfbLegacy(myTeam: string, rng: () => number): CfbState {
 }
 
 function clampi(v: number, lo: number, hi: number): number { return Math.max(lo, Math.min(hi, v)); }
+
+/** Round 1554: the group a school counts in this season. A season played
+ *  before the real format still has Notre Dame inside the ACC, the way it
+ *  started. */
+export function cfbConfOf(st: CfbState, id: string): string {
+  const conf = CFB_SCHOOL_MAP.get(id)!.conf;
+  return !st.format && conf === 'IND' ? 'ACC' : conf;
+}
+
+const LEAGUE_SET: ReadonlySet<string> = new Set(CFB_LEAGUES);
+
+/** Round 1554: a conference game is two schools of one league. The Group of
+ *  Five bucket is schools from different real conferences, and an
+ *  independent has none, so neither plays a conference game here. */
+export function cfbConferenceGame(st: CfbState, a: string, b: string): boolean {
+  const ca = cfbConfOf(st, a);
+  if (ca !== cfbConfOf(st, b)) return false;
+  return !st.format || LEAGUE_SET.has(ca);
+}
+
+/** Round 1554: what the season's slate is built from. Rivalry week's home
+ *  side alternates by season, the way a series does. */
+export function cfbSlateSpec(st: CfbState): SlateSpec {
+  return {
+    ids: CFB_SCHOOLS.map(s => s.id),
+    leagueOf: id => {
+      const conf = CFB_SCHOOL_MAP.get(id)!.conf;
+      return LEAGUE_SET.has(conf) ? conf : null;
+    },
+    rounds: CFB_ROUNDS,
+    windowStart: CONF_GAMES_START,
+    rivalryRound: CFB_RIVALRY_ROUND,
+    rivals: cfbRivalries()
+      .filter(r => st.teams[r.a] && st.teams[r.b])
+      .map(r => (st.season % 2 === 0 ? [r.a, r.b] as const : [r.b, r.a] as const)),
+    partner: { id: 'ND', league: 'ACC', games: ND_ACC_GAMES },
+  };
+}
+
+/** A number the league's own rosters give, so two dynasties get different
+ *  slates without the slate taking a single draw from the game's stream. */
+function slateSeed(st: CfbState): number {
+  const parts = [st.season];
+  for (const s of CFB_SCHOOLS) {
+    let x = 0;
+    for (const p of st.teams[s.id]?.players ?? []) x = (Math.imul(x, 31) + p.ovr * 7 + p.pot + p.name.length) | 0;
+    parts.push(x);
+  }
+  return hash32(...parts);
+}
+
+/**
+ * Round 1554: build this season's slate if it is due. Only with the program
+ * layer on and only before week 1 is played, so a season already under way
+ * finishes exactly as it started and the slate starts with the next one.
+ * Idempotent: a second call in the same season changes nothing. It draws from
+ * its own seeded stream, never the game's.
+ */
+export function ensureCfbSlate(st: CfbState): void {
+  if (!st.depth || st.round !== 1) return;
+  if (st.slate && st.slate.season === st.season) return;
+  st.format = 1;
+  const built = collegeSlate(cfbSlateSpec(st), mulberry32(slateSeed(st)));
+  st.slate = built.fallback
+    ? { season: st.season, rounds: built.rounds, fallback: true }
+    : { season: st.season, rounds: built.rounds };
+}
+
+/** Round 1554: the weeks of my schedule not yet played, for the Schedule tab. */
+export function cfbFixtures(st: CfbState): { round: number; opp: string; home: boolean; conference: boolean; rivalry: boolean }[] {
+  const slate = st.slate;
+  if (!slate || slate.season !== st.season) return [];
+  const played = new Set((st.mySlate ?? []).map(g => g.round));
+  const out: { round: number; opp: string; home: boolean; conference: boolean; rivalry: boolean }[] = [];
+  for (let r = 1; r <= CFB_ROUNDS; r += 1) {
+    if (r < st.round || played.has(r)) continue;
+    const g = (slate.rounds[r - 1] ?? []).find(([h, a]) => h === st.myTeam || a === st.myTeam);
+    if (!g) continue;
+    const home = g[0] === st.myTeam;
+    const opp = home ? g[1] : g[0];
+    out.push({ round: r, opp, home, conference: cfbConferenceGame(st, g[0], g[1]), rivalry: r === CFB_RIVALRY_ROUND && cfbRivalOf(st.myTeam)?.rival === opp });
+  }
+  return out;
+}
 
 export function cfbStrength(t: CfbTeam): number {
   const sorted = [...t.players].sort((a, b) => b.ovr - a.ovr);
@@ -345,7 +485,7 @@ export function simCfbRound(st: CfbState, rng: () => number): { games: CfbGame[]
   const play = (homeId: string, awayId: string, rivalry: boolean) => {
     paired.add(homeId); paired.add(awayId);
     const r = playCfbGame(st, homeId, awayId, rng);
-    const isConf = CFB_SCHOOL_MAP.get(homeId)!.conf === CFB_SCHOOL_MAP.get(awayId)!.conf;
+    const isConf = cfbConferenceGame(st, homeId, awayId);
     const g: CfbGame = { home: homeId, away: awayId, hs: r.hs, as: r.as, winner: r.winner, conference: isConf };
     if (rivalry) g.rivalry = true;
     games.push(g);
@@ -354,7 +494,17 @@ export function simCfbRound(st: CfbState, rng: () => number): { games: CfbGame[]
     w.wins += 1; l.losses += 1;
     if (isConf) { w.confWins += 1; l.confLosses += 1; }
   };
-  if (st.depth && st.round === CFB_RIVALRY_ROUND) {
+  /* Round 1554: a season that started under the real format plays its slate,
+     set at kickoff. One already under way plays on with the draw below. */
+  ensureCfbSlate(st);
+  const slate = st.slate && st.slate.season === st.season ? st.slate : null;
+  if (slate) {
+    for (const [h, a] of slate.rounds[st.round - 1] ?? []) {
+      if (!st.teams[h] || !st.teams[a] || paired.has(h) || paired.has(a)) continue;
+      play(h, a, st.round === CFB_RIVALRY_ROUND && cfbRivalOf(h)?.rival === a);
+    }
+  }
+  if (!slate && st.depth && st.round === CFB_RIVALRY_ROUND) {
     /* Home field alternates by season, the way a series does. */
     for (const r of cfbRivalries()) {
       if (!st.teams[r.a] || !st.teams[r.b]) continue;
@@ -364,7 +514,7 @@ export function simCfbRound(st: CfbState, rng: () => number): { games: CfbGame[]
   for (const s of pool) {
     if (paired.has(s.id)) continue;
     const candidates = pool.filter(o =>
-      o.id !== s.id && !paired.has(o.id) && (conference ? o.conf === s.conf : o.conf !== s.conf));
+      o.id !== s.id && !paired.has(o.id) && (conference ? cfbConfOf(st, o.id) === cfbConfOf(st, s.id) : cfbConfOf(st, o.id) !== cfbConfOf(st, s.id)));
     const opp = candidates.length
       ? candidates[Math.floor(rng() * candidates.length)]
       : pool.find(o => o.id !== s.id && !paired.has(o.id));
@@ -406,7 +556,14 @@ export function cfbRankings(st: CfbState): CfbTeam[] {
 }
 
 export function confStandings(st: CfbState, conf: string): CfbTeam[] {
-  const teams = Object.values(st.teams).filter(t => CFB_SCHOOL_MAP.get(t.id)!.conf === conf);
+  const teams = Object.values(st.teams).filter(t => cfbConfOf(st, t.id) === conf);
+  /* Round 1554: the Group of Five bucket and an independent play no
+     conference games, so their table goes by the ranking, the order the
+     fifth automatic spot and Notre Dame's top 12 rule read. */
+  if (st.format && !LEAGUE_SET.has(conf)) {
+    const order = new Map(cfbRankings(st).map((t, i) => [t.id, i]));
+    return teams.sort((a, b) => order.get(a.id)! - order.get(b.id)!);
+  }
   if (!st.depth) {
     return teams.sort((a, b) => b.confWins - a.confWins || a.confLosses - b.confLosses || b.wins - a.wins || cfbStrength(b) - cfbStrength(a));
   }
@@ -421,11 +578,15 @@ export function confStandings(st: CfbState, conf: string): CfbTeam[] {
 
 export interface CfbPlayoffGame { name: string; home: string; away: string; hs: number; as: number; winner: string }
 
-/** Conference title games, then the real 12-team CFP (5 champs + 7 at-large, straight seeding, byes for 1-4). */
-export function runCfbPostseason(st: CfbState, rng: () => number): { ccgs: CfbPlayoffGame[]; bracket: CfbPlayoffGame[]; champion: string; field: string[] } {
+/** Conference title games, then the real 12-team CFP (5 champs + 7 at-large, straight seeding, byes for 1-4).
+ *  Round 1554, under the real format: four title games (no Group of Five
+ *  one, no Notre Dame in the ACC's), the four champions plus the best ranked
+ *  Group of Five school plus Notre Dame if it ranks in the top 12, at-larges
+ *  to twelve. `fifth` is the Group of Five school that took its spot. */
+export function runCfbPostseason(st: CfbState, rng: () => number): { ccgs: CfbPlayoffGame[]; bracket: CfbPlayoffGame[]; champion: string; field: string[]; fifth?: string } {
   const ccgs: CfbPlayoffGame[] = [];
   const champs: string[] = [];
-  for (const conf of CFB_CONFS) {
+  for (const conf of st.format ? CFB_LEAGUES : LEGACY_CONFS) {
     const table = confStandings(st, conf);
     const a = table[0], b = table[1];
     const { hs, as: as2, winner } = playCfbGame(st, a.id, b.id, rng);
@@ -438,8 +599,16 @@ export function runCfbPostseason(st: CfbState, rng: () => number): { ccgs: CfbPl
     if (st.depth) { (a.opps ??= []).push(b.id); (b.opps ??= []).push(a.id); }
   }
   const ranked = cfbRankings(st).map(t => t.id);
+  let fifth: string | undefined;
+  if (st.format) {
+    fifth = ranked.find(id => CFB_SCHOOL_MAP.get(id)!.conf === 'G5');
+    if (fifth && !champs.includes(fifth)) champs.push(fifth);
+    for (const id of ranked.slice(0, CFB_INDEPENDENT_CUT)) {
+      if (CFB_SCHOOL_MAP.get(id)!.conf === 'IND' && !champs.includes(id)) champs.push(id);
+    }
+  }
   const champSet = new Set(champs);
-  const atLarge = ranked.filter(id => !champSet.has(id)).slice(0, 7);
+  const atLarge = ranked.filter(id => !champSet.has(id)).slice(0, 12 - champs.length);
   const field = ranked.filter(id => champSet.has(id) || atLarge.includes(id)).slice(0, 12);
   const seed = (i: number) => st.teams[field[i]];
 
@@ -468,7 +637,7 @@ export function runCfbPostseason(st: CfbState, rng: () => number): { ccgs: CfbPl
   const sf1 = playPair('CFP Semifinal', qf[0], qf[3], st, rng, bracket);
   const sf2 = playPair('CFP Semifinal', qf[1], qf[2], st, rng, bracket);
   const champion = playPair('National Championship', sf1, sf2, st, rng, bracket);
-  return { ccgs, bracket, champion, field };
+  return fifth ? { ccgs, bracket, champion, field, fifth } : { ccgs, bracket, champion, field };
 }
 
 function playPair(name: string, aId: string, bId: string, st: CfbState, rng: () => number, out: CfbPlayoffGame[]): string {
@@ -634,5 +803,7 @@ export function cfbOffseason(st: CfbState, rng: () => number): string[] {
   if (st.depth) st.mySlate = [];
   st.season += 1;
   st.round = 1;
+  /* Round 1554: the new season's slate, set before its first kickoff. */
+  ensureCfbSlate(st);
   return notes;
 }
