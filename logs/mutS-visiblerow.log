@@ -1,0 +1,10 @@
+mutSweep2 visiblerow: css "[aria-label="Available players"] > div > button:nth-child(3) { transform: translateY(-60px) !important; }" route /nba-connections control none
+Sweeping 1 routes at 390x844 with touch
+  FAIL: /nba-connections: controls sitting on top of each other: Steve Nash over Udonis Haslem
+  NOTE: /nba-connections: 2 pairs collide only where a scroll box hides one of the two: Michael Jordan over Clear draft, Kobe Bryant over Submit five
+
+   1 routes swept, worst overflow 0px
+   0 small tap targets, 0 runs of tiny text, 1 overlapping controls
+   2 pairs on 1 route collide only where a scroll box hides one of the two (not failures, see the header)
+sweepPhone: 1 failure
+mutSweep2 visiblerow: sweep copy exited 1
