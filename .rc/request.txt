@@ -1,0 +1,5 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simNbaEarnedDraft: node scripts/simNbaEarnedDraft.mjs
+simNbaEarnedDraft-controls: SIM_NBA_EARNED_DRAFT_CONTROL=all node scripts/simNbaEarnedDraft.mjs
+vitest-1321: node_modules/.bin/vitest run src/lib/gmEarnedDraft.test.ts src/lib/nbaEarnedDraft.test.ts src/test/FrontOfficeSeasonClose.test.tsx --testTimeout=300000 --hookTimeout=120000
+simGmDraftOrder: node scripts/simGmDraftOrder.mjs
