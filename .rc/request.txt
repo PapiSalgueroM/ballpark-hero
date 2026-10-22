@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+s5: INTL_SECTIONS=5 node scripts/simCareerIntl.mjs
+ctl-knockflip: INTL_SECTIONS=5 INTL_CONTROL=knockflip node scripts/simCareerIntl.mjs
+ctl-knockage: INTL_SECTIONS=5 INTL_CONTROL=knockage node scripts/simCareerIntl.mjs
+ctl-nolift: INTL_SECTIONS=5 INTL_CONTROL=nolift node scripts/simCareerIntl.mjs
+unit: node_modules/.bin/vitest run src/lib/careerIntl.test.ts src/test/nbaCareerIntl.test.ts --testTimeout=300000 --hookTimeout=120000
+s1: node scripts/simCareerIntl.mjs
+s8: INTL_SECTIONS=8 node scripts/simCareerIntl.mjs
+s7: mkdir -p /tmp/bs7v && git archive 3ee0bf6293859740a50654e299232bcd0ff701c3 | tar -x -C /tmp/bs7v && INTL_BASE_DIR=/tmp/bs7v INTL_SECTIONS=7 node scripts/simCareerIntl.mjs
