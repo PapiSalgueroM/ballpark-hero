@@ -1,0 +1,7 @@
+  FAIL [2]: only 23 offer sheets, floor 34
+  FAIL [2]: only 7 men left on a sheet and found at the rival, floor 11
+  FAIL [2]: only 7 sheets let stand reached their club after a draft that filled every roster, floor 11
+   7 sheets let stand still reached the club written down after a draft that filled every rival roster
+   643 expiring men: 349 decided by the GM, 294 by the staff's rule
+   draftees up: 60 first rounders after the rookie scale, 91 second rounders; 151 restricted cases, 23 sheets (7 matched, 7 gone to the rival on its terms)
+simNbaGmDesk: 3 failure(s) in ["2"]

@@ -1,0 +1,4 @@
+cal-s2 exit=1 24s | simNbaGmDesk: 3 failure(s) in ["2"]
+cal-s1 exit=1 24s | simNbaGmDesk: 3 failure(s) in ["2"]
+cal-s3 exit=1 26s | simNbaGmDesk: 3 failure(s) in ["2"]
+held-s4 exit=1 17s | simNbaGmDesk: 3 failure(s) in ["2"]
