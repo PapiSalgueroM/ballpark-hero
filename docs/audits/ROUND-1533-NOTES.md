@@ -65,5 +65,5 @@ new shared gmXp chunk 2.3K (clubManager 0.3K lighter), the Phone icon 0.4K. The 
 (GmXpDeskPanel 2.5K, GmJobMarketPanel 2.1K, GmCareerPanel 1.4K) and are not on the route.
 
 ## What a later session must not trust
-- runAllSims (r1533-s7a, sent on fb3d5eb5) was still running when this was written; read it before the release.
+- runAllSims (r1533-s7a on fb3d5eb5) timed out on the runner (exit 124 at 4200 s, 791 harnesses, no output): not a result. The sharded release gate runs the full suite.
 - The adversarial review the brief asks for has not run.
