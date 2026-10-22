@@ -1,0 +1,5 @@
+desk-s1: T=$(mktemp -d); TMPDIR=$T TEMP=$T TMP=$T node scripts/simNbaGmDesk.mjs > $RC_OUT/desk-s1.txt 2>&1; a=$?; grep -E 'sheet floors|draftees up|^simNbaGmDesk' $RC_OUT/desk-s1.txt | cut -c1-240; exit $a
+ctl-fullbird: T=$(mktemp -d); TMPDIR=$T TEMP=$T TMP=$T SIM_NBA_GM_DESK_CONTROL=fullbird node scripts/simNbaGmDesk.mjs > $RC_OUT/ctl-fullbird.txt 2>&1; a=$?; grep -E '^control |^simNbaGmDesk' $RC_OUT/ctl-fullbird.txt | cut -c1-200; exit $a
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs > $RC_OUT/anch.txt 2>&1; a=$?; tail -2 $RC_OUT/anch.txt | cut -c1-200; exit $a
+simNoRivalNames: node scripts/simNoRivalNames.mjs > $RC_OUT/nr.txt 2>&1; a=$?; tail -2 $RC_OUT/nr.txt | cut -c1-200; exit $a
+dashes: node .rc/x/dashes.mjs

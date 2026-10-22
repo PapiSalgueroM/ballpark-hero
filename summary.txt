@@ -1,0 +1,5 @@
+desk-s1 exit=0 36s | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+ctl-fullbird exit=0 42s | simNbaGmDesk: control fullbird fired (115 failures, as it should)
+dashes exit=0 0s | added lines read: 66, with a dash: 0; commit messages read: 4, with a dash: 0
+simNoRivalNames exit=0 16s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 58s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
