@@ -1,0 +1,4 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+walk exit=0 173s | reviewWalk: 42 checks, 0 failed
+walkE exit=0 241s | playGmCareer: green. 1 board, 3 sizes, four walks each and the slow kit walk at 390 and 1280.
+eagerkit exit=0 3s | playGmCareer control eagerkit: all 1 guarded checks fired (mutations landed: {"eagerkit":4})

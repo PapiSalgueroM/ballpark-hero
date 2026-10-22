@@ -1,0 +1,63 @@
+ok   390 reduce P1: the pick screen asks for no kit (0)
+ok   390 reduce P1: on the out of work screen
+ok   390 reduce P1: the market has 1 offer(s)
+ok   390 reduce P1: the new club's draft runs to the hub
+  MEASURED 390 reduce P1: seasonsPlayed 1, titles 0, stints [["ARI",1,"fired"],["CLE",0,"open"]], myTeam CLE
+ok   390 reduce P1: the new club's hub after a reload asks for no kit (0)
+  MEASURED 390 reduce P1: Career box with kit in tab "📖 CAREER Season 1 With the Cleveland Browns", after reload before kit "📖 CAREER Season 1 With the Cleveland Browns", after kit "📖 CAREER Season 1 With the Cleveland Browns"
+ok   390 reduce P1: the Career box reads the same with the kit, before it and after it
+ok   390 reduce P1: no page error (clean)
+ok   390 reduce P2: mid season after a reload, no kit asked (0)
+ok   390 reduce P2: offline, the GM level box shows the retry card
+  MEASURED 390 reduce P2: back online, after Try again: screen drawn true, kit requests after the click 1, retry card still shown 0
+ok   390 reduce P2: back online, Try again draws the GM level screen
+  MEASURED 390 reduce P2: a direct import() of nflCareerKit-DKSYroNm.js in the same page, online: resolved
+ok   390 reduce P2: control, after a plain reload the GM level screen draws
+  MEASURED 390 reduce P2: page errors 0 (none)
+  MEASURED 390 reduce P3: kit chunk aborted: main frame navigations 2 (one is mine), retry card true, final press disabled true
+ok   390 reduce P3: the last week shows the retry card when the kit fails twice in the tab
+  MEASURED 390 reduce P3: chunk back, after Try again: press enabled true, kit requests after the click 1, retry card still shown 0
+ok   390 reduce P3: chunk back, Try again brings the last week's press back
+ok   390 reduce P3: control, after a plain reload the last week's press is enabled
+  MEASURED 390 reduce P3: page errors 0 (none)
+ok   1280 no-preference P1: the pick screen asks for no kit (0)
+ok   1280 no-preference P1: on the out of work screen
+ok   1280 no-preference P1: the market has 1 offer(s)
+ok   1280 no-preference P1: the new club's draft runs to the hub
+  MEASURED 1280 no-preference P1: seasonsPlayed 1, titles 0, stints [["ARI",1,"fired"],["MIA",0,"open"]], myTeam MIA
+ok   1280 no-preference P1: the new club's hub after a reload asks for no kit (0)
+  MEASURED 1280 no-preference P1: Career box with kit in tab "📖 CAREER Season 1 With the Miami Dolphins", after reload before kit "📖 CAREER Season 1 With the Miami Dolphins", after kit "📖 CAREER Season 1 With the Miami Dolphins"
+ok   1280 no-preference P1: the Career box reads the same with the kit, before it and after it
+ok   1280 no-preference P1: no page error (clean)
+ok   1280 no-preference P2: mid season after a reload, no kit asked (0)
+ok   1280 no-preference P2: offline, the GM level box shows the retry card
+  MEASURED 1280 no-preference P2: back online, after Try again: screen drawn true, kit requests after the click 1, retry card still shown 0
+ok   1280 no-preference P2: back online, Try again draws the GM level screen
+  MEASURED 1280 no-preference P2: a direct import() of nflCareerKit-DKSYroNm.js in the same page, online: resolved
+ok   1280 no-preference P2: control, after a plain reload the GM level screen draws
+  MEASURED 1280 no-preference P2: page errors 0 (none)
+  MEASURED 1280 no-preference P3: kit chunk aborted: main frame navigations 2 (one is mine), retry card true, final press disabled true
+ok   1280 no-preference P3: the last week shows the retry card when the kit fails twice in the tab
+  MEASURED 1280 no-preference P3: chunk back, after Try again: press enabled true, kit requests after the click 1, retry card still shown 0
+ok   1280 no-preference P3: chunk back, Try again brings the last week's press back
+ok   1280 no-preference P3: control, after a plain reload the last week's press is enabled
+  MEASURED 1280 no-preference P3: page errors 0 (none)
+ok   390 no-preference P1: the pick screen asks for no kit (0)
+ok   390 no-preference P1: on the out of work screen
+ok   390 no-preference P1: the market has 1 offer(s)
+ok   390 no-preference P1: the new club's draft runs to the hub
+  MEASURED 390 no-preference P1: seasonsPlayed 1, titles 0, stints [["ARI",1,"fired"],["CLE",0,"open"]], myTeam CLE
+ok   390 no-preference P1: the new club's hub after a reload asks for no kit (0)
+  MEASURED 390 no-preference P1: Career box with kit in tab "📖 CAREER Season 1 With the Cleveland Browns", after reload before kit "📖 CAREER Season 1 With the Cleveland Browns", after kit "📖 CAREER Season 1 With the Cleveland Browns"
+ok   390 no-preference P1: the Career box reads the same with the kit, before it and after it
+ok   390 no-preference P1: no page error (clean)
+ok   1280 reduce P1: the pick screen asks for no kit (0)
+ok   1280 reduce P1: on the out of work screen
+ok   1280 reduce P1: the market has 1 offer(s)
+ok   1280 reduce P1: the new club's draft runs to the hub
+  MEASURED 1280 reduce P1: seasonsPlayed 1, titles 0, stints [["ARI",1,"fired"],["CLE",0,"open"]], myTeam CLE
+ok   1280 reduce P1: the new club's hub after a reload asks for no kit (0)
+  MEASURED 1280 reduce P1: Career box with kit in tab "📖 CAREER Season 1 With the Cleveland Browns", after reload before kit "📖 CAREER Season 1 With the Cleveland Browns", after kit "📖 CAREER Season 1 With the Cleveland Browns"
+ok   1280 reduce P1: the Career box reads the same with the kit, before it and after it
+ok   1280 reduce P1: no page error (clean)
+reviewWalk: 42 checks, 0 failed
