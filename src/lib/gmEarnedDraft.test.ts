@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   buildDraftOrder, draftRulesFor, draftSlots, earnedByStaff, earnedContinue, earnedDraftHeading, earnedDraftHelp,
   earnedPick, lotteryChancesLine, lotteryRangeLine, movePicks, newLedger, openDraftNight, ordinal, pickKey,
-  LOTTERY_ODDS_BUDGET, lotteryChancesBefore, lotteryOdds,
+  LOTTERY_ODDS_BUDGET, lotteryChancesBefore, lotteryOdds, shareArticle,
   type DraftSeason, type EarnedSlot, type GmDraftHost, type GmDraftNight, type GmLotteryRules, type LotteryOdds, type SavedDraftOrder,
 } from './gmEarnedDraft';
 import { nbaGamePickRules } from './nbaGmDesk';
@@ -354,6 +354,17 @@ describe('lotteryChancesBefore: the lines before the draw cannot give the draw a
   it('no line without a drawn lottery on this table', () => {
     expect(lotteryChancesBefore(order, slotsOn(order), 'C03', { ...NBA_LOTTERY, table: 'another' }, label)).toEqual([]);
     expect(lotteryChancesBefore({ ...order, lottery: null }, slotsOn(order), 'C03', NBA_LOTTERY, label)).toEqual([]);
+  });
+
+  it('a share read with a vowel sound takes "an" (review 1540 run m3: "it has a 8.2% chance")', () => {
+    for (const s of ['8.2%', '8.0%', '80.0%', '11.0%', '11.5%', '18.5%']) expect(shareArticle(s), s).toBe('an');
+    for (const s of ['1.8%', '1.1%', '14.0%', '0.5%', '9.0%', '12.5%', '10.5%']) expect(shareArticle(s), s).toBe('a');
+    /* Seeds 4 and 5 level on one shared chance, 11.5% each, as two clubs level on their records share theirs. */
+    const pct = [...NBA_LOTTERY.odds];
+    pct[3] = pct[4] = (NBA_LOTTERY.odds[3] + NBA_LOTTERY.odds[4]) / 2;
+    const level: GmLotteryRules = { ...NBA_LOTTERY, table: 'level' };
+    expect(lotteryChancesBefore(toyOrder(pct, 'level'), [], 'T04', level, label)[0]).toContain('seeded 4th of 14. By the table it has an 11.5% chance at the first pick');
+    expect(lotteryChancesBefore(toyOrder(pct, 'level'), [], 'T01', level, label)[0]).toContain('seeded 1st of 14. By the table it has a 14.0% chance at the first pick');
   });
 });
 

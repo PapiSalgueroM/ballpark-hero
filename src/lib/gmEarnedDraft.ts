@@ -202,6 +202,10 @@ export function lotteryOdds(order: SavedDraftOrder, lottery: GmLotteryRules | nu
 const NUMBER_WORDS = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
 const percent = (p: number): string => `${(Math.round(p * 1000) / 10).toFixed(1)}%`;
 
+/** "a" or "an" before a share as it is read aloud: an 8.2%, an 11.0%, an 18.5%, an 80.0%, but a 1.8% and a 14.0%
+    (review 1540 run m3: "it has a 8.2% chance"). */
+export const shareArticle = (share: string): 'a' | 'an' => (/^(8|11(?![0-9])|18(?![0-9]))/.test(share) ? 'an' : 'a');
+
 /** One club's figures: the chance at the first pick, at a pick the draws hand out, and the latest place it can land. */
 function chanceFigures(odds: LotteryOdds, club: string): { seed: number; first: string; top: string | null; latest: number } | null {
   const row = odds.clubs.find(c => c.club === club);
@@ -229,7 +233,7 @@ export function lotteryChancesBefore(
   const mine = chanceFigures(odds, me);
   if (mine) {
     const top = mine.top ? ` and ${mine.top}` : '';
-    lines.push(`Your club goes in seeded ${ordinal(mine.seed)} of ${field.length}. By the table it has a ${mine.first} chance at the first pick${top}, and it picks no later than ${ordinal(mine.latest)}.`);
+    lines.push(`Your club goes in seeded ${ordinal(mine.seed)} of ${field.length}. By the table it has ${shareArticle(mine.first)} ${mine.first} chance at the first pick${top}, and it picks no later than ${ordinal(mine.latest)}.`);
     const own = firstOf(me);
     if (own && own.holder !== me) lines.push(`That pick is ${whose(labelOf(own.holder))} tonight, wherever it lands.`);
   } else {
