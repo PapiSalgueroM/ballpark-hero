@@ -1770,11 +1770,13 @@ const fleetMisses = [];
 
 /** THE TWO ARM TABLE AND ITS STOP LINES (COMBINE only). For every line and every run, the per set differences of
     the arm VS minus the old arm on the same sets are the replicates: the pooled difference is their mean and its
-    error their sd over root k (correction 8 (b)). A line PASSES when the mean of the runs' pooled differences is
-    inside its band (inBand, the judge's one comparison), every run's error is under a third of the line's `res`,
-    and the two runs' pooled differences are within two errors (the larger run's) of each other. OUTSIDE is a STOP;
-    UNRESOLVED grows the fleet once, to the printed size and at most 24 sets. A `floor` or `cap` line holds the
-    arm's own per set means the same way; a `print` line (S3) is printed and never asserted. */
+    error their sd over root k (correction 8 (b)). As the lead ruled on 2026-10-22 (E1), a line PASSES when BOTH
+    runs' pooled differences are inside its band (inBand, the judge's one comparison) and every run's error is
+    under a third of the line's `res`; one run inside and one outside is RUNS DISAGREE (the fleet grows once, and a
+    line that still straddles is a STOP); neither inside is OUTSIDE, a STOP; UNRESOLVED grows the fleet once, to
+    the printed size and at most 24 sets. The gap between the runs and its own error are printed and decide nothing.
+    A `floor` or `cap` line holds the arm's own per set means the same way; a `print` line (S3) is printed and never
+    asserted; S5 is judged by judgeRise (E2). */
 function twoArmTable(table) {
   const old = table.get('old');
   const vs = table.get(VS);
