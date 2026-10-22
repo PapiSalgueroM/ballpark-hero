@@ -1,0 +1,4 @@
+board-head exit=1 47s | simUsBoardParity: 3 failures
+board-nof1 exit=0 47s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen with the proved historical main775 coaching Panel.
+rech-head exit=0 47s | recordUsBoardFixture: wrote ../../_temp/rc-out/files/fixture-new.json (2298769 bytes)
+rech-nof1 exit=0 47s | recordUsBoardFixture: wrote ../../_temp/rc-out/files/fixture-nof1.json (2298769 bytes)
