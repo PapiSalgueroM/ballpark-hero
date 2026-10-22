@@ -1,0 +1,12 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/usCareerShopPromises.test.ts src/lib/usCareerAnnualBenefits.test.ts src/lib/careerDirtyMoney.test.ts src/lib/usCareerRecovery.test.ts src/lib/mlbCareerLifeC.test.ts src/lib/nbaCareerLifeC.test.ts src/lib/nhlCareerLifeC.test.ts src/test/careerDecisionOutcome.test.tsx src/test/usCareerSmallItems1104.test.ts src/test/usCareerShopCap.test.ts src/test/usBoardFixture.test.tsx src/test/usCareerDirtyMoney.test.tsx src/test/careerHall.test.tsx src/test/careerHallSaves1301.test.ts src/test/careerHallV1Replay.test.ts src/test/myCareerRestore.test.tsx src/test/nbaOldSaveLines.test.ts src/test/nflTruthRules1104.test.ts src/test/noDoubleRecord.test.tsx src/test/usCareerActionConfirm.test.tsx src/test/usCareerEraLifeMoney.test.ts src/test/usCareerHelpRules1104.test.tsx src/test/usCareerReveals.test.tsx src/test/usSeason.test.ts src/test/usSeasonCentre.test.tsx --testTimeout=300000 --hookTimeout=120000
+simUsDirtyMoney: node scripts/simUsDirtyMoney.mjs
+simUsDirtyMoney-lawyerdesk: US_DIRTY_MONEY_CONTROL=lawyerdesk node scripts/simUsDirtyMoney.mjs
+simUsDirtyMoney-cool8: US_DIRTY_MONEY_CONTROL=cool8 node scripts/simUsDirtyMoney.mjs
+simUsCareerAnnualBenefits: node scripts/simUsCareerAnnualBenefits.mjs
+simCareerForm: node scripts/simCareerForm.mjs
+simCareerPressMarket: node scripts/simCareerPressMarket.mjs
+simUsBoardParity: node scripts/simUsBoardParity.mjs
+simUsCareerDeckC: node scripts/simUsCareerDeckC.mjs
+simUsCareerDefects: node scripts/simUsCareerDefects.mjs
+simCareerParity: node scripts/simCareerParity.mjs
