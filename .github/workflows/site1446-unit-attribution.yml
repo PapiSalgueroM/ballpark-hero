@@ -1,0 +1,117 @@
+name: Site1446 unit attribution
+
+on:
+  push:
+    branches: [codex/site1446-unit-attribution]
+
+permissions:
+  contents: read
+concurrency:
+  group: site1446-unit-attribution-${{ github.sha }}
+  cancel-in-progress: false
+
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+  TZ: UTC
+  SOURCE_SHA: 8381c876c5515284e870587246becf85ef64a66e
+
+jobs:
+  unit_suite:
+    if: github.ref == 'refs/heads/codex/site1446-unit-attribution'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1,2,4]
+    defaults:
+      run:
+        shell: bash
+    env:
+      OUT: site-privacy-unit-artifacts
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Full unit partition and literal result counts
+        run: |
+          set -euo pipefail
+          mkdir "$OUT"
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          git rev-parse HEAD > "$OUT/head.txt"
+          git fetch --no-tags --depth=1 origin "$SOURCE_SHA" > "$OUT/source-fetch.log" 2>&1
+          git cat-file -e "$SOURCE_SHA^{commit}"
+          git diff --exit-code "$SOURCE_SHA" HEAD -- . ':!.github/workflows/site1446-unit-attribution.yml' > "$OUT/source-base-hold.log"
+          git ls-files -z -- . | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          npm ci > "$OUT/install.log" 2>&1
+          for anchor in 56356be9a5d4d310f1759c09ba8e3811a8a05c1b e8b39ccc39f763351d4439c833b853c2e3ed2188 6b7596d2c009802e6c011492ae1cefa8af29c62a 31a4ec01f13dde6ce5614d371f5aa135e08ef8da 2b7dda2951fb9b63e76a2af66970cb682f312105 0c66a55929dfe8d6493a86aa00a28ef0ed2db25d;do
+            git fetch --no-tags --depth=1 origin "$anchor"
+            git cat-file -e "$anchor^{commit}"
+          done > "$OUT/historical-inputs.log" 2>&1
+          cat > "$OUT/unit-fetch-attribution.cjs" <<'TRACE'
+          const fs = require('node:fs');
+          const path = require('node:path');
+          const receipt = process.env.SITE1446_UNIT_TRACE;
+          const repoRoot = process.env.SITE1446_UNIT_ROOT;
+          if (typeof repoRoot !== 'string' || !path.isAbsolute(repoRoot) || receipt !== path.join(repoRoot, 'site-privacy-unit-artifacts', 'unit-fetch-attribution.jsonl')) throw new Error('UNIT_TRACE_PATH_REFUSED');
+          const guardedFetch = globalThis.fetch;
+          if (typeof guardedFetch !== 'function') throw new Error('UNIT_TRACE_GUARDED_FETCH_MISSING');
+          let call = 0;
+          function targetClass(input) {
+            if (typeof input !== 'string') return 'uninspected-' + typeof input;
+            try {
+              const url = new URL(input);
+              if (!/^https?:$/.test(url.protocol)) return 'other-protocol-string';
+              if (['127.0.0.1', 'localhost', '[::1]'].includes(url.hostname)) return 'loopback-string';
+              if (/\.supabase\.co$/i.test(url.hostname)) return 'database-string';
+              return 'external-string';
+            } catch { return 'relative-or-invalid-string'; }
+          }
+          fs.appendFileSync(receipt, JSON.stringify({ event: 'installed', pid: process.pid, guardedFetchCaptured: true, observationalTimingNotNeutral: true }) + '\n');
+          globalThis.fetch = function (...args) {
+            try {
+              const stack = new Error('UNIT1446_FETCH_CALLER').stack;
+              fs.appendFileSync(receipt, JSON.stringify({ event: 'fetch', pid: process.pid, call: ++call, at: Date.now(), argumentType: typeof args[0], targetClass: targetClass(args[0]), stack: typeof stack === 'string' ? stack.split(repoRoot).join('<repo>') : null }) + '\n');
+            } catch { /* Diagnostic logging cannot change the guarded call's result or exception. */ }
+            return Reflect.apply(guardedFetch, this, args);
+          };
+          TRACE
+          sha256sum "$OUT/unit-fetch-attribution.cjs" > "$OUT/trace-source.sha256"
+          export SITE1446_UNIT_ROOT="$PWD"
+          export SITE1446_UNIT_TRACE="$PWD/$OUT/unit-fetch-attribution.jsonl"
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs --require=$PWD/$OUT/unit-fetch-attribution.cjs"
+          export SIM_OFFLINE_RECEIPT="$PWD/$OUT/unit.transport";: > "$SIM_OFFLINE_RECEIPT"
+          status=0;timeout --signal=TERM --kill-after=15s 38m npm test -- --shard=${{ matrix.shard }}/4 --maxWorkers=2 --reporter=json --outputFile="$OUT/unit.json" > "$OUT/unit.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$OUT/unit.exit";test "$status" -eq 0
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const r=JSON.parse(fs.readFileSync(process.env.OUT+'/unit.json','utf8')),rows=r.testResults.flatMap(s=>s.assertionResults);assert.equal(r.success,true);assert.equal(r.numFailedTests,0);assert.equal(r.numRuntimeErrorTestSuites??0,0);assert.equal(r.numUnhandledErrors??0,0);assert.deepEqual(r.unhandledErrors??[],[]);assert(r.testResults.length>0&&r.numTotalTests>0);assert.equal(rows.filter(t=>t.status==='failed').length,0);assert.equal(rows.length,r.numTotalTests);assert.equal(rows.filter(t=>t.status==='passed').length,r.numPassedTests);fs.writeFileSync(process.env.OUT+'/literal-counts.json',JSON.stringify({source:process.env.GITHUB_SHA,files:r.testResults.length,cases:rows.length,passed:r.numPassedTests,pending:r.numPendingTests,todo:r.numTodoTests,failed:0},null,2)+'\n');
+          JS
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+      - name: Always retain partition source and transport evidence
+        if: always()
+        run: |
+          set -euo pipefail
+          mkdir -p "$OUT";failed=0
+          status=0;sha256sum --check "$OUT/source-before.sha256" > "$OUT/source-hold.log" 2>&1 || status=$?;printf '%s\n' "$status" > "$OUT/source-hold.exit";test "$status" -eq 0 || failed=1
+          status=0;git diff --exit-code HEAD -- . > "$OUT/operator-source-hold.log" 2>&1 || status=$?;printf '%s\n' "$status" > "$OUT/operator-source-hold.exit";test "$status" -eq 0 || failed=1
+          status=0;sha256sum --check "$OUT/trace-source.sha256" > "$OUT/trace-source-hold.log" 2>&1 || status=$?;printf '%s\n' "$status" > "$OUT/trace-source-hold.exit";test "$status" -eq 0 || failed=1
+          test -f "$OUT/unit-fetch-attribution.jsonl" && test -s "$OUT/unit-fetch-attribution.jsonl" || failed=1
+          test -f "$OUT/unit.transport" && test ! -s "$OUT/unit.transport" || failed=1
+          printf '%s\n' "$failed" > "$OUT/final-holds.exit"
+          (cd "$OUT";find . -type f ! -path ./evidence.sha256 -print0 | sort -z | xargs -0 sha256sum) > "$OUT/evidence.sha256"
+          exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: site1446-unit-attribution-${{ matrix.shard }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: site-privacy-unit-artifacts/
+          if-no-files-found: error
+          retention-days: 14
+
