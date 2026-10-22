@@ -1,0 +1,2 @@
+#!playwright
+mutaway: bash .rc/x/mut1539.sh away 4231 'ONLY=/stadium-tycoon node scripts/playFirstVisitDialogs.mjs'
