@@ -1,0 +1,6 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+pf2 exit=0 253s | playFirstVisitDialogs: green. Every first visit dialog can be started with the cookie banner unanswered.
+pf3 exit=0 253s | playFirstVisitDialogs: green. Every first visit dialog can be started with the cookie banner unanswered.
+howto exit=0 7s | playHowTo: green. Every game can teach a stranger before it tests them.
+pf1 exit=0 264s | playFirstVisitDialogs: green. Every first visit dialog can be started with the cookie banner unanswered.
+cover exit=3 42s | playFirstVisitDialogs: PLAYFIRST_CONTROL=cover did NOT fire on 12 of 21 dialog buttons
