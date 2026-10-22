@@ -75,6 +75,9 @@ export async function answerConsent(page, { wait = 3000, timeout = 5000, press, 
  * moved the answer from cookie-consent ('essential' or 'accepted') to cookie-consent-v2 (JSON with advertising and
  * analytics), so a walk that read the old key alone reads null on the new build. store names a window global to
  * read instead of localStorage (a walk that wraps storage keeps the real one aside, as playStorageBlocked does).
+ * A v2 record counts only when the app's own reader would take it (parseConsentPreferences in
+ * src/lib/consentPreferences.ts: version 2, both purposes boolean, a finite updatedAt that is not in the future and
+ * younger than 180 days); anything else is no answer to the app, the banner comes back, and so it is none here.
  */
 export async function storedConsent(page, { store } = {}) {
   return page.evaluate(name => {
@@ -84,7 +87,12 @@ export async function storedConsent(page, { store } = {}) {
       const v2 = local.getItem('cookie-consent-v2');
       if (v2) {
         const value = JSON.parse(v2);
-        if (value && typeof value.advertising === 'boolean') return value.advertising || value.analytics ? 'accepted' : 'rejected';
+        const now = Date.now();
+        const valid = value && value.version === 2 && typeof value.advertising === 'boolean'
+          && typeof value.analytics === 'boolean' && typeof value.updatedAt === 'number'
+          && Number.isFinite(value.updatedAt) && value.updatedAt >= 0 && value.updatedAt <= now
+          && now - value.updatedAt < 180 * 24 * 60 * 60 * 1000;
+        if (valid) return value.advertising || value.analytics ? 'accepted' : 'rejected';
       }
       const old = local.getItem('cookie-consent');
       if (old === 'essential') return 'rejected';
