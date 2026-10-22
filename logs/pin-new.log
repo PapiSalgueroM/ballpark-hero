@@ -1,0 +1,6 @@
+1
+pinned 05de3cfca8d978e6117979fb29b82b2ece7b9fb6ee1f2ce3c051e379e36de86e
+Compatibility: 13 outcome groups, 16 effective mapped controls.
+Whole-source holds: 3939 exact files; 24 executed bundles retained.
+Product correctness: true; differing pairs: 0.
+Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
