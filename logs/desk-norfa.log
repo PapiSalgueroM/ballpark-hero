@@ -1,0 +1,6 @@
+cmp desk-norfa: exit base=0 head=0 head2=0
+  base last line: simNbaGmDesk: control norfa fired (125 failures, as it should)
+  head last line: simNbaGmDesk: control norfa fired (125 failures, as it should)
+  lines: base 36, head 36
+  sha1 base 63728e3b5a6c head 63728e3b5a6c head2 63728e3b5a6c
+cmp desk-norfa: BYTE EQUAL to 7a8750ba

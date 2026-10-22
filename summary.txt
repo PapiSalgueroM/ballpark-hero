@@ -1,0 +1,17 @@
+tsc exit=0 66s | 
+desk exit=0 70s | cmp desk: BYTE EQUAL to 7a8750ba
+desk-norfa exit=0 67s | cmp desk-norfa: BYTE EQUAL to 7a8750ba
+desk-shortscale exit=0 67s | cmp desk-shortscale: BYTE EQUAL to 7a8750ba
+desk-sheetrepick exit=0 67s | cmp desk-sheetrepick: BYTE EQUAL to 7a8750ba
+desk-coinflip exit=0 68s | cmp desk-coinflip: BYTE EQUAL to 7a8750ba
+desk-s2 exit=0 69s | cmp desk-s2: BYTE EQUAL to 7a8750ba
+desk-s3 exit=0 69s | cmp desk-s3: BYTE EQUAL to 7a8750ba
+contracts exit=0 2s | cmp contracts: BYTE EQUAL to 7a8750ba
+contracts-coinflip exit=0 2s | cmp contracts-coinflip: BYTE EQUAL to 7a8750ba
+contracts-askdouble exit=0 2s | cmp contracts-askdouble: BYTE EQUAL to 7a8750ba
+contracts-nometer exit=0 2s | cmp contracts-nometer: BYTE EQUAL to 7a8750ba
+contracts-optionall exit=0 2s | cmp contracts-optionall: BYTE EQUAL to 7a8750ba
+contracts-nobird exit=0 2s | cmp contracts-nobird: BYTE EQUAL to 7a8750ba
+contracts-noarb exit=0 2s | cmp contracts-noarb: BYTE EQUAL to 7a8750ba
+contracts-resheet exit=0 2s | cmp contracts-resheet: BYTE EQUAL to 7a8750ba
+vitest-contracts exit=0 4s |    Duration  4.10s (transform 2.00s, setup 376ms, collect 3.33s, tests 2.19s, environment 2.20s, prepare 671ms)

@@ -1,0 +1,6 @@
+cmp contracts: exit base=0 head=0 head2=0
+  base last line: simGmContracts: PASS, 4 engines, 20 runs of 10 seasons, nobody left on a flip
+  head last line: simGmContracts: PASS, 4 engines, 20 runs of 10 seasons, nobody left on a flip
+  lines: base 43, head 43
+  sha1 base 8cfbf4a6daa1 head 8cfbf4a6daa1 head2 8cfbf4a6daa1
+cmp contracts: BYTE EQUAL to 7a8750ba

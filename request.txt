@@ -1,0 +1,18 @@
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+desk: bash .rc/x/cmp.sh desk 'node scripts/simNbaGmDesk.mjs'
+desk-norfa: bash .rc/x/cmp.sh desk-norfa 'SIM_NBA_GM_DESK_CONTROL=norfa node scripts/simNbaGmDesk.mjs'
+desk-shortscale: bash .rc/x/cmp.sh desk-shortscale 'SIM_NBA_GM_DESK_CONTROL=shortscale node scripts/simNbaGmDesk.mjs'
+desk-sheetrepick: bash .rc/x/cmp.sh desk-sheetrepick 'SIM_NBA_GM_DESK_CONTROL=sheetrepick node scripts/simNbaGmDesk.mjs'
+desk-coinflip: bash .rc/x/cmp.sh desk-coinflip 'SIM_NBA_GM_DESK_CONTROL=coinflip node scripts/simNbaGmDesk.mjs'
+desk-s2: bash .rc/x/cmp.sh desk-s2 'SIM_NBA_GM_DESK_SEEDS=11,12,13,14,15,16,17,18,19,20 node scripts/simNbaGmDesk.mjs'
+desk-s3: bash .rc/x/cmp.sh desk-s3 'SIM_NBA_GM_DESK_SEEDS=21,22,23,24,25,26,27,28,29,30 node scripts/simNbaGmDesk.mjs'
+contracts: bash .rc/x/cmp.sh contracts 'node scripts/simGmContracts.mjs'
+contracts-coinflip: bash .rc/x/cmp.sh contracts-coinflip 'GM_CONTRACTS_CONTROL=coinflip node scripts/simGmContracts.mjs'
+contracts-askdouble: bash .rc/x/cmp.sh contracts-askdouble 'GM_CONTRACTS_CONTROL=askdouble node scripts/simGmContracts.mjs'
+contracts-nometer: bash .rc/x/cmp.sh contracts-nometer 'GM_CONTRACTS_CONTROL=nometer node scripts/simGmContracts.mjs'
+contracts-optionall: bash .rc/x/cmp.sh contracts-optionall 'GM_CONTRACTS_CONTROL=optionall node scripts/simGmContracts.mjs'
+contracts-nobird: bash .rc/x/cmp.sh contracts-nobird 'GM_CONTRACTS_CONTROL=nobird node scripts/simGmContracts.mjs'
+contracts-noarb: bash .rc/x/cmp.sh contracts-noarb 'GM_CONTRACTS_CONTROL=noarb node scripts/simGmContracts.mjs'
+contracts-resheet: bash .rc/x/cmp.sh contracts-resheet 'GM_CONTRACTS_CONTROL=resheet node scripts/simGmContracts.mjs'
+vitest-contracts: node_modules/.bin/vitest run src/lib/gmContracts.test.ts src/components/nba-front-office/NbaGmDeskBoard.test.tsx src/lib/gmDeskHost.test.ts src/components/mlb-front-office/MlbGmDesk.test.tsx src/lib/nhlCareerLifeC.test.ts --testTimeout=300000 --hookTimeout=120000

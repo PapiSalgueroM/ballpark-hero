@@ -1,0 +1,6 @@
+cmp desk-s2: exit base=0 head=0 head2=0
+  base last line: simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+  head last line: simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+  lines: base 25, head 25
+  sha1 base dc281c4e6dd2 head dc281c4e6dd2 head2 dc281c4e6dd2
+cmp desk-s2: BYTE EQUAL to 7a8750ba

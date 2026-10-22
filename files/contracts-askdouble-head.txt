@@ -1,0 +1,50 @@
+simGmContracts: 4 engines x 5 seeds (11, 22, 33, 44, 55) x 10 seasons, CONTROL askdouble
+
+NFL
+  0) baseline, no desk: 31 of 227 expiring men left on the engine's flip (13.7%)
+  1) desk: 219 cases, 125 kept on their agreed terms, 91 let go, 3 kept then retired by the engine, 0 left without a decision; 219 expiring by the roster, 0 of them never at the desk
+  2) ask / cap: p05 0.012, median 0.049, p95 0.115; lowest in any season 0.003, highest 0.148; seasons with cases 10 of 10 (empty: none)
+     season medians from 0.012 to 0.082 (seasons with five or more asks)
+  3) meter steps walked: 72270
+  4) rule counts: tagged 48, tag year men at the desk 42, let go men repriced 83, guaranteed men re-signed 33, laterRoundsAsked 76, options 33, first rounders past their rookie deal 34, first rounders back with the option unused 18; picks owed and paid 0
+     doors: kept at ask 52, let go 38, option declined 2, option holder re-signed for one season 20, option 11, push 0.4: walkout 20, push 0.65: insulted 31, push 0.86: counter 45
+
+NBA
+  0) baseline, no desk: 10 of 122 expiring men left on the engine's flip (8.2%)
+  1) desk: 163 cases, 81 kept on their agreed terms, 82 let go, 0 kept then retired by the engine, 0 left without a decision; 163 expiring by the roster, 0 of them never at the desk
+  2) ask / cap: p05 0.093, median 0.250, p95 0.350; lowest in any season 0.052, highest 0.350; seasons with cases 9 of 10 (empty: 0)
+     season medians from 0.129 to 0.255 (seasons with five or more asks)
+  3) meter steps walked: 50886
+  4) rule counts: cases with dead money on the books 162, cases with a tax cheque held back 111, last word over an imposed ceiling 272, pushes over the rules 136, tier full 119, capped 99, tier non 25, overCeiling 32, capped men kept 46, last word over the ceiling 2, tier early 19, sheet men at the rival 15, early bird exception 11; picks owed and paid 0
+     doors: capped by rule 4, kept at ask 35, let go 22, push 0.4: walkout 10, push 0.65: insulted 16, push 0.65: walkout 7, push 0.86: counter 17, push 0.86: walkout 8, qualified rfa 17, sheet matched 12, sheet picks 15
+
+MLB
+  0) baseline, no desk: 69 of 431 expiring men left on the engine's flip (16%)
+  1) desk: 707 cases, 442 kept on their agreed terms, 258 let go, 7 kept then retired by the engine, 0 left without a decision; 707 expiring by the roster, 0 of them never at the desk
+  2) ask / cap: p05 0.003, median 0.045, p95 0.123; lowest in any season 0.002, highest 0.173; seasons with cases 10 of 10 (empty: none)
+     season medians from 0.029 to 0.050 (seasons with five or more asks)
+  3) meter steps walked: 233310
+  4) rule counts: free-agent 500, mid season arrivals at the desk 50, qualifyingOffers 270, pre-arbitration 75, pre-arbitration tenders priced 75, let go men repriced 155, men back after a qualifying offer 191, qualifying offer refusers signed back 16, arbitration 132, arbitration tenders priced 132, arbitration tenders set by the step 132, qualifying offer refusers signed by a rival 13; picks owed and paid 11
+     doors: kept at ask 87, let go 74, non tender 39, push 0.4: walkout 56, push 0.65: insulted 60, push 0.86: counter 81, qo accepted 113, qo rejected 29, tender 168
+
+NHL
+  0) baseline, no desk: 4 of 198 expiring men left on the engine's flip (2%)
+  1) desk: 270 cases, 161 kept on their agreed terms, 106 let go, 3 kept then retired by the engine, 0 left without a decision; 270 expiring by the roster, 0 of them never at the desk
+  2) ask / cap: p05 0.018, median 0.041, p95 0.099; lowest in any season 0.004, highest 0.179; seasons with cases 9 of 10 (empty: 0)
+     season medians from 0.033 to 0.059 (seasons with five or more asks)
+  3) meter steps walked: 89100
+  4) rule counts: restricted 139, sheets 66, sheets priced off the published ladder 66, sheet men at the rival 39; picks owed and paid 42
+     doors: kept at ask 53, let go 32, push 0.4: walkout 15, push 0.65: insulted 20, push 0.86: counter 40, qualified rfa 44, sheet matched 27, sheet picks 39
+
+4) NHL offer sheet ladder: 33 rung edges and middles walked against the published 2025-26 table
+
+5) 11 rules on the books, 0 marked as resting partly on one source
+  FAIL (2): nfl season 4: the median ask is 0.071 of the cap, outside 0.004 to 0.07
+  FAIL (2): nfl season 7: the median ask is 0.082 of the cap, outside 0.004 to 0.07
+  FAIL (2): nfl season 8: the median ask is 0.072 of the cap, outside 0.004 to 0.07
+  FAIL (2): nfl: the 95th percentile ask is 0.115 of the cap, over 0.085
+  FAIL (2): nba: the 95th percentile ask is 0.350 of the cap, over 0.33
+  FAIL (2): mlb: the 95th percentile ask is 0.123 of the cap, over 0.09
+
+section 2: 7 finding(s)
+simGmContracts: CONTROL askdouble FIRED, section 2 went red as it must (7 findings, exit 1)

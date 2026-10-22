@@ -1,0 +1,6 @@
+cmp contracts-optionall: exit base=1 head=1 head2=1
+  base last line: simGmContracts: CONTROL optionall FIRED, section 4 went red as it must (64 findings, exit 1)
+  head last line: simGmContracts: CONTROL optionall FIRED, section 4 went red as it must (64 findings, exit 1)
+  lines: base 50, head 50
+  sha1 base dee3b95ac63f head dee3b95ac63f head2 dee3b95ac63f
+cmp contracts-optionall: BYTE EQUAL to 7a8750ba

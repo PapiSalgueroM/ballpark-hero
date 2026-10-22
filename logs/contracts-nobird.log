@@ -1,0 +1,6 @@
+cmp contracts-nobird: exit base=1 head=1 head2=1
+  base last line: simGmContracts: CONTROL nobird FIRED, section 4 went red as it must (22 findings, exit 1)
+  head last line: simGmContracts: CONTROL nobird FIRED, section 4 went red as it must (22 findings, exit 1)
+  lines: base 50, head 50
+  sha1 base 3dffd4625778 head 3dffd4625778 head2 3dffd4625778
+cmp contracts-nobird: BYTE EQUAL to 7a8750ba
