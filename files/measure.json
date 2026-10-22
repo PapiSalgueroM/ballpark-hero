@@ -1,0 +1,1353 @@
+[
+ {
+  "tag": "nba-390-rm",
+  "problems": [
+   "the summer camp buy printed no line the player can see on the hub"
+  ],
+  "m": {
+   "invest": [
+    "🍽️ Restaurant Group 35 percent chance it prints 3M, otherwise it limps $1.2M",
+    "📈 Boring Index Fund Steady 7 percent. Your accountant weeps with joy $2M",
+    "🪙 Crypto Punt 20 percent chance of 5x, 80 percent chance of a lesson $1M",
+    "🍷 Wine Label Steady 10 percent and very good dinners $2M",
+    "🏆 Minority Stake In A Franchise A real piece of a real team, 40M ⚡ Fanbase +10 🔒 Needs $70M banked $40M"
+   ],
+   "flex": [
+    "🎤 Fund Your Own Album You cannot rap. You are doing it anyway, 1M ⚡ Fanbase +10 and endless jokes 🔒 Needs 55 fanbase $1M",
+    "👟 Signature Shoe Line Your silhouette on a shoe, 2.5M ⚡ Fanbase +12 🔒 Needs 70 fanbase $2.5M"
+   ],
+   "family": [
+    "🏦 Family Office OWNED Professionals so relatives stop asking you directly, 180k a year ⚡ Adds 2 percent to your cash every season + $0.18M a year upkeep",
+    "🤝 Start A Foundation Your name doing good in your city, 3.5M ⚡ Fanbase +10 a year + $0.25M a year upkeep $3.5M",
+    "⛹️ Free Summer Camp Two weeks, 400 kids, no fee, 1M ⚡ Fanbase +8, morale +6 + $0.15M a year upkeep $1M"
+   ],
+   "shady": [
+    "🍾 The Nightclub Bottle service and a flexible ledger, 3M ⚡ Washes 4M, heat +3 🔒 Needs untraceable money to move + $0.25M a year upkeep $3M",
+    "⚖️ The Lawyer Who Never Loses OWNED On retainer, answers at 3am, 450k a year ⚡ Heat cools twice as fast + $0.45M a year upkeep",
+    "🤐 A Guy Who Handles Things You do not ask how, 300k a year ⚡ Heat -8 immediately + $0.30M a year upkeep Hire",
+    "🏝️ Offshore Account An island, a bank, a form nobody files, 500k ⚡ Heat +6 🔒 Needs untraceable money to move $0.5M"
+   ],
+   "camp": {
+    "fanbase": [
+     46,
+     54
+    ],
+    "morale": [
+     84,
+     90
+    ],
+    "cash": [
+     30,
+     29
+    ],
+    "upkeep": [
+     0.63,
+     0.78
+    ]
+   },
+   "campWant": "Fanbase +8, morale +6.",
+   "cryptoBuy": {
+    "cash": [
+     29,
+     28
+    ],
+    "held": 1
+   },
+   "campLine": null,
+   "lines": [
+    "💵 This season your investments earned $0.28M and the family office added $0.8456M. $1.1M went into the Bank, and $0.0256M waits for next season.",
+    "💸 Your Restaurant Group did not come through. The $1.2M you put in is gone.",
+    "💸 Your Crypto Punt did not come through. The $1M you put in is gone."
+   ],
+   "scroll": [
+    0,
+    0
+   ],
+   "after": {
+    "cash": 43.1,
+    "carry": 0.0256,
+    "heat": [
+     40,
+     22
+    ],
+    "dirty": 0,
+    "held": [
+     "index_nba",
+     "index_nba",
+     "family_office_nba",
+     "nshady_lawyer"
+    ],
+    "year": [
+     2031,
+     2032
+    ],
+    "salary": [
+     32.9,
+     32.9
+    ],
+    "upkeep": 0.78
+   },
+   "expect": {
+    "pay": 42,
+    "payouts": 0,
+    "cash": 43.1,
+    "carry": 0.0256
+   },
+   "help": {
+    "fs": 14,
+    "box": [
+     25,
+     292,
+     365,
+     552
+    ],
+    "vp": [
+     390,
+     844
+    ]
+   }
+  }
+ },
+ {
+  "tag": "nba-390-anim",
+  "problems": [
+   "the summer camp buy printed no line the player can see on the hub"
+  ],
+  "m": {
+   "invest": [
+    "🍽️ Restaurant Group 35 percent chance it prints 3M, otherwise it limps $1.2M",
+    "📈 Boring Index Fund Steady 7 percent. Your accountant weeps with joy $2M",
+    "🪙 Crypto Punt 20 percent chance of 5x, 80 percent chance of a lesson $1M",
+    "🍷 Wine Label Steady 10 percent and very good dinners $2M",
+    "🏆 Minority Stake In A Franchise A real piece of a real team, 40M ⚡ Fanbase +10 🔒 Needs $70M banked $40M"
+   ],
+   "flex": [
+    "🎤 Fund Your Own Album You cannot rap. You are doing it anyway, 1M ⚡ Fanbase +10 and endless jokes 🔒 Needs 55 fanbase $1M",
+    "👟 Signature Shoe Line Your silhouette on a shoe, 2.5M ⚡ Fanbase +12 🔒 Needs 70 fanbase $2.5M"
+   ],
+   "family": [
+    "🏦 Family Office OWNED Professionals so relatives stop asking you directly, 180k a year ⚡ Adds 2 percent to your cash every season + $0.18M a year upkeep",
+    "🤝 Start A Foundation Your name doing good in your city, 3.5M ⚡ Fanbase +10 a year + $0.25M a year upkeep $3.5M",
+    "⛹️ Free Summer Camp Two weeks, 400 kids, no fee, 1M ⚡ Fanbase +8, morale +6 + $0.15M a year upkeep $1M"
+   ],
+   "shady": [
+    "🍾 The Nightclub Bottle service and a flexible ledger, 3M ⚡ Washes 4M, heat +3 🔒 Needs untraceable money to move + $0.25M a year upkeep $3M",
+    "⚖️ The Lawyer Who Never Loses OWNED On retainer, answers at 3am, 450k a year ⚡ Heat cools twice as fast + $0.45M a year upkeep",
+    "🤐 A Guy Who Handles Things You do not ask how, 300k a year ⚡ Heat -8 immediately + $0.30M a year upkeep Hire",
+    "🏝️ Offshore Account An island, a bank, a form nobody files, 500k ⚡ Heat +6 🔒 Needs untraceable money to move $0.5M"
+   ],
+   "camp": {
+    "fanbase": [
+     46,
+     54
+    ],
+    "morale": [
+     84,
+     90
+    ],
+    "cash": [
+     30,
+     29
+    ],
+    "upkeep": [
+     0.63,
+     0.78
+    ]
+   },
+   "campWant": "Fanbase +8, morale +6.",
+   "cryptoBuy": {
+    "cash": [
+     29,
+     28
+    ],
+    "held": 1
+   },
+   "campLine": null,
+   "lines": [
+    "💵 This season your investments earned $0.28M and the family office added $0.8456M. $1.1M went into the Bank, and $0.0256M waits for next season.",
+    "💸 Your Restaurant Group did not come through. The $1.2M you put in is gone.",
+    "💸 Your Crypto Punt did not come through. The $1M you put in is gone."
+   ],
+   "scroll": [
+    0,
+    0
+   ],
+   "after": {
+    "cash": 43.1,
+    "carry": 0.0256,
+    "heat": [
+     40,
+     22
+    ],
+    "dirty": 0,
+    "held": [
+     "index_nba",
+     "index_nba",
+     "family_office_nba",
+     "nshady_lawyer"
+    ],
+    "year": [
+     2031,
+     2032
+    ],
+    "salary": [
+     32.9,
+     32.9
+    ],
+    "upkeep": 0.78
+   },
+   "expect": {
+    "pay": 42,
+    "payouts": 0,
+    "cash": 43.1,
+    "carry": 0.0256
+   },
+   "help": {
+    "fs": 14,
+    "box": [
+     25,
+     292,
+     365,
+     552
+    ],
+    "vp": [
+     390,
+     844
+    ]
+   }
+  }
+ },
+ {
+  "tag": "nba-1280-rm",
+  "problems": [
+   "the summer camp buy printed no line the player can see on the hub"
+  ],
+  "m": {
+   "invest": [
+    "🍽️ Restaurant Group 35 percent chance it prints 3M, otherwise it limps $1.2M",
+    "📈 Boring Index Fund Steady 7 percent. Your accountant weeps with joy $2M",
+    "🪙 Crypto Punt 20 percent chance of 5x, 80 percent chance of a lesson $1M",
+    "🍷 Wine Label Steady 10 percent and very good dinners $2M",
+    "🏆 Minority Stake In A Franchise A real piece of a real team, 40M ⚡ Fanbase +10 🔒 Needs $70M banked $40M"
+   ],
+   "flex": [
+    "🎤 Fund Your Own Album You cannot rap. You are doing it anyway, 1M ⚡ Fanbase +10 and endless jokes 🔒 Needs 55 fanbase $1M",
+    "👟 Signature Shoe Line Your silhouette on a shoe, 2.5M ⚡ Fanbase +12 🔒 Needs 70 fanbase $2.5M"
+   ],
+   "family": [
+    "🏦 Family Office OWNED Professionals so relatives stop asking you directly, 180k a year ⚡ Adds 2 percent to your cash every season + $0.18M a year upkeep",
+    "🤝 Start A Foundation Your name doing good in your city, 3.5M ⚡ Fanbase +10 a year + $0.25M a year upkeep $3.5M",
+    "⛹️ Free Summer Camp Two weeks, 400 kids, no fee, 1M ⚡ Fanbase +8, morale +6 + $0.15M a year upkeep $1M"
+   ],
+   "shady": [
+    "🍾 The Nightclub Bottle service and a flexible ledger, 3M ⚡ Washes 4M, heat +3 🔒 Needs untraceable money to move + $0.25M a year upkeep $3M",
+    "⚖️ The Lawyer Who Never Loses OWNED On retainer, answers at 3am, 450k a year ⚡ Heat cools twice as fast + $0.45M a year upkeep",
+    "🤐 A Guy Who Handles Things You do not ask how, 300k a year ⚡ Heat -8 immediately + $0.30M a year upkeep Hire",
+    "🏝️ Offshore Account An island, a bank, a form nobody files, 500k ⚡ Heat +6 🔒 Needs untraceable money to move $0.5M"
+   ],
+   "camp": {
+    "fanbase": [
+     46,
+     54
+    ],
+    "morale": [
+     84,
+     90
+    ],
+    "cash": [
+     30,
+     29
+    ],
+    "upkeep": [
+     0.63,
+     0.78
+    ]
+   },
+   "campWant": "Fanbase +8, morale +6.",
+   "cryptoBuy": {
+    "cash": [
+     29,
+     28
+    ],
+    "held": 1
+   },
+   "campLine": null,
+   "lines": [
+    "💵 This season your investments earned $0.28M and the family office added $0.8456M. $1.1M went into the Bank, and $0.0256M waits for next season.",
+    "💸 Your Restaurant Group did not come through. The $1.2M you put in is gone.",
+    "💸 Your Crypto Punt did not come through. The $1M you put in is gone."
+   ],
+   "scroll": [
+    0,
+    0
+   ],
+   "after": {
+    "cash": 43.1,
+    "carry": 0.0256,
+    "heat": [
+     40,
+     22
+    ],
+    "dirty": 0,
+    "held": [
+     "index_nba",
+     "index_nba",
+     "family_office_nba",
+     "nshady_lawyer"
+    ],
+    "year": [
+     2031,
+     2032
+    ],
+    "salary": [
+     32.9,
+     32.9
+    ],
+    "upkeep": 0.78
+   },
+   "expect": {
+    "pay": 42,
+    "payouts": 0,
+    "cash": 43.1,
+    "carry": 0.0256
+   },
+   "help": {
+    "fs": 14,
+    "box": [
+     441,
+     340,
+     839,
+     560
+    ],
+    "vp": [
+     1280,
+     900
+    ]
+   }
+  }
+ },
+ {
+  "tag": "nba-1280-anim",
+  "problems": [
+   "the summer camp buy printed no line the player can see on the hub"
+  ],
+  "m": {
+   "invest": [
+    "🍽️ Restaurant Group 35 percent chance it prints 3M, otherwise it limps $1.2M",
+    "📈 Boring Index Fund Steady 7 percent. Your accountant weeps with joy $2M",
+    "🪙 Crypto Punt 20 percent chance of 5x, 80 percent chance of a lesson $1M",
+    "🍷 Wine Label Steady 10 percent and very good dinners $2M",
+    "🏆 Minority Stake In A Franchise A real piece of a real team, 40M ⚡ Fanbase +10 🔒 Needs $70M banked $40M"
+   ],
+   "flex": [
+    "🎤 Fund Your Own Album You cannot rap. You are doing it anyway, 1M ⚡ Fanbase +10 and endless jokes 🔒 Needs 55 fanbase $1M",
+    "👟 Signature Shoe Line Your silhouette on a shoe, 2.5M ⚡ Fanbase +12 🔒 Needs 70 fanbase $2.5M"
+   ],
+   "family": [
+    "🏦 Family Office OWNED Professionals so relatives stop asking you directly, 180k a year ⚡ Adds 2 percent to your cash every season + $0.18M a year upkeep",
+    "🤝 Start A Foundation Your name doing good in your city, 3.5M ⚡ Fanbase +10 a year + $0.25M a year upkeep $3.5M",
+    "⛹️ Free Summer Camp Two weeks, 400 kids, no fee, 1M ⚡ Fanbase +8, morale +6 + $0.15M a year upkeep $1M"
+   ],
+   "shady": [
+    "🍾 The Nightclub Bottle service and a flexible ledger, 3M ⚡ Washes 4M, heat +3 🔒 Needs untraceable money to move + $0.25M a year upkeep $3M",
+    "⚖️ The Lawyer Who Never Loses OWNED On retainer, answers at 3am, 450k a year ⚡ Heat cools twice as fast + $0.45M a year upkeep",
+    "🤐 A Guy Who Handles Things You do not ask how, 300k a year ⚡ Heat -8 immediately + $0.30M a year upkeep Hire",
+    "🏝️ Offshore Account An island, a bank, a form nobody files, 500k ⚡ Heat +6 🔒 Needs untraceable money to move $0.5M"
+   ],
+   "camp": {
+    "fanbase": [
+     46,
+     54
+    ],
+    "morale": [
+     84,
+     90
+    ],
+    "cash": [
+     30,
+     29
+    ],
+    "upkeep": [
+     0.63,
+     0.78
+    ]
+   },
+   "campWant": "Fanbase +8, morale +6.",
+   "cryptoBuy": {
+    "cash": [
+     29,
+     28
+    ],
+    "held": 1
+   },
+   "campLine": null,
+   "lines": [
+    "💵 This season your investments earned $0.28M and the family office added $0.8456M. $1.1M went into the Bank, and $0.0256M waits for next season.",
+    "💸 Your Restaurant Group did not come through. The $1.2M you put in is gone.",
+    "💸 Your Crypto Punt did not come through. The $1M you put in is gone."
+   ],
+   "scroll": [
+    0,
+    0
+   ],
+   "after": {
+    "cash": 43.1,
+    "carry": 0.0256,
+    "heat": [
+     40,
+     22
+    ],
+    "dirty": 0,
+    "held": [
+     "index_nba",
+     "index_nba",
+     "family_office_nba",
+     "nshady_lawyer"
+    ],
+    "year": [
+     2031,
+     2032
+    ],
+    "salary": [
+     32.9,
+     32.9
+    ],
+    "upkeep": 0.78
+   },
+   "expect": {
+    "pay": 42,
+    "payouts": 0,
+    "cash": 43.1,
+    "carry": 0.0256
+   },
+   "help": {
+    "fs": 14,
+    "box": [
+     441,
+     340,
+     839,
+     560
+    ],
+    "vp": [
+     1280,
+     900
+    ]
+   }
+  }
+ },
+ {
+  "tag": "nfl-390-rm",
+  "problems": [],
+  "m": {
+   "invest": [
+    "🍗 Wing Franchise 35 percent chance it prints 2.5M, otherwise it limps $0.8M",
+    "🚗 Car Dealership Steady 9 percent a year, your face on the billboard $3M",
+    "📈 Boring Index Fund Steady 7 percent. Your accountant weeps with joy $2M",
+    "🪙 Crypto Punt 20 percent chance of 5x, 80 percent chance of a lesson $1M",
+    "🎮 Esports Team 30 percent chance of 3x, and you get to be at the tournaments $4M",
+    "🏆 Minority Stake In A Pro Team A real piece of a real franchise, 25M ⚡ Fanbase +10 🔒 Needs $45M banked $25M"
+   ],
+   "flex": [
+    "🎤 Fund Your Own Music Video You cannot rap. You are doing it anyway, 800k ⚡ Fanbase +10 and endless jokes $0.8M",
+    "👟 Signature Cleat Line Your silhouette on a shoe, 2M ⚡ Fanbase +12 $2M"
+   ],
+   "family": [
+    "🏦 Family Office OWNED Professionals so relatives stop asking you directly, 150k a year ⚡ Adds 2 percent to your cash every season + $0.15M a year upkeep",
+    "🤝 Start A Foundation Your name doing good in your city, 3M ⚡ Fanbase +10 a year + $0.20M a year upkeep $3M"
+   ],
+   "shady": [
+    "🍾 The Nightclub Bottle service and a very flexible ledger, 3M ⚡ Washes 4M, heat +3 🔒 Needs untraceable money to move + $0.20M a year upkeep $3M",
+    "⚖️ The Lawyer Who Never Loses OWNED On retainer, answers at 3am, 400k a year ⚡ Heat cools twice as fast + $0.40M a year upkeep",
+    "🕶️ A Guy Who Handles Things You do not ask how, 250k a year ⚡ Heat -8 immediately + $0.25M a year upkeep Hire",
+    "🏝️ Offshore Account An island, a bank, a form nobody files, 500k ⚡ Heat +6 🔒 Needs untraceable money to move $0.5M"
+   ],
+   "cryptoBuy": {
+    "cash": [
+     30,
+     29
+    ],
+    "held": 1
+   },
+   "lines": [
+    "💵 This season your investments earned $0.28M and the family office added $0.6936M. $0.9M went into the Bank, and $0.0736M waits for next season.",
+    "💸 Your Wing Franchise did not come through. The $0.8M you put in is gone.",
+    "💸 Your Crypto Punt did not come through. The $1M you put in is gone."
+   ],
+   "scroll": [
+    0,
+    0
+   ],
+   "after": {
+    "cash": 35.3,
+    "carry": 0.0736,
+    "heat": [
+     40,
+     22
+    ],
+    "dirty": 0,
+    "held": [
+     "index_fund",
+     "index_fund",
+     "family_office",
+     "shady_lawyer"
+    ],
+    "year": [
+     2031,
+     2032
+    ],
+    "salary": [
+     13.3,
+     13.3
+    ],
+    "upkeep": 0.55
+   },
+   "expect": {
+    "pay": 34.4,
+    "payouts": 0,
+    "cash": 35.3,
+    "carry": 0.0736
+   },
+   "help": {
+    "fs": 14,
+    "box": [
+     25,
+     292,
+     365,
+     552
+    ],
+    "vp": [
+     390,
+     844
+    ]
+   }
+  }
+ },
+ {
+  "tag": "nfl-390-anim",
+  "problems": [],
+  "m": {
+   "invest": [
+    "🍗 Wing Franchise 35 percent chance it prints 2.5M, otherwise it limps $0.8M",
+    "🚗 Car Dealership Steady 9 percent a year, your face on the billboard $3M",
+    "📈 Boring Index Fund Steady 7 percent. Your accountant weeps with joy $2M",
+    "🪙 Crypto Punt 20 percent chance of 5x, 80 percent chance of a lesson $1M",
+    "🎮 Esports Team 30 percent chance of 3x, and you get to be at the tournaments $4M",
+    "🏆 Minority Stake In A Pro Team A real piece of a real franchise, 25M ⚡ Fanbase +10 🔒 Needs $45M banked $25M"
+   ],
+   "flex": [
+    "🎤 Fund Your Own Music Video You cannot rap. You are doing it anyway, 800k ⚡ Fanbase +10 and endless jokes $0.8M",
+    "👟 Signature Cleat Line Your silhouette on a shoe, 2M ⚡ Fanbase +12 $2M"
+   ],
+   "family": [
+    "🏦 Family Office OWNED Professionals so relatives stop asking you directly, 150k a year ⚡ Adds 2 percent to your cash every season + $0.15M a year upkeep",
+    "🤝 Start A Foundation Your name doing good in your city, 3M ⚡ Fanbase +10 a year + $0.20M a year upkeep $3M"
+   ],
+   "shady": [
+    "🍾 The Nightclub Bottle service and a very flexible ledger, 3M ⚡ Washes 4M, heat +3 🔒 Needs untraceable money to move + $0.20M a year upkeep $3M",
+    "⚖️ The Lawyer Who Never Loses OWNED On retainer, answers at 3am, 400k a year ⚡ Heat cools twice as fast + $0.40M a year upkeep",
+    "🕶️ A Guy Who Handles Things You do not ask how, 250k a year ⚡ Heat -8 immediately + $0.25M a year upkeep Hire",
+    "🏝️ Offshore Account An island, a bank, a form nobody files, 500k ⚡ Heat +6 🔒 Needs untraceable money to move $0.5M"
+   ],
+   "cryptoBuy": {
+    "cash": [
+     30,
+     29
+    ],
+    "held": 1
+   },
+   "lines": [
+    "💵 This season your investments earned $0.28M and the family office added $0.6936M. $0.9M went into the Bank, and $0.0736M waits for next season.",
+    "💸 Your Wing Franchise did not come through. The $0.8M you put in is gone.",
+    "💸 Your Crypto Punt did not come through. The $1M you put in is gone."
+   ],
+   "scroll": [
+    0,
+    0
+   ],
+   "after": {
+    "cash": 35.3,
+    "carry": 0.0736,
+    "heat": [
+     40,
+     22
+    ],
+    "dirty": 0,
+    "held": [
+     "index_fund",
+     "index_fund",
+     "family_office",
+     "shady_lawyer"
+    ],
+    "year": [
+     2031,
+     2032
+    ],
+    "salary": [
+     13.3,
+     13.3
+    ],
+    "upkeep": 0.55
+   },
+   "expect": {
+    "pay": 34.4,
+    "payouts": 0,
+    "cash": 35.3,
+    "carry": 0.0736
+   },
+   "help": {
+    "fs": 14,
+    "box": [
+     25,
+     292,
+     365,
+     552
+    ],
+    "vp": [
+     390,
+     844
+    ]
+   }
+  }
+ },
+ {
+  "tag": "nfl-1280-rm",
+  "problems": [],
+  "m": {
+   "invest": [
+    "🍗 Wing Franchise 35 percent chance it prints 2.5M, otherwise it limps $0.8M",
+    "🚗 Car Dealership Steady 9 percent a year, your face on the billboard $3M",
+    "📈 Boring Index Fund Steady 7 percent. Your accountant weeps with joy $2M",
+    "🪙 Crypto Punt 20 percent chance of 5x, 80 percent chance of a lesson $1M",
+    "🎮 Esports Team 30 percent chance of 3x, and you get to be at the tournaments $4M",
+    "🏆 Minority Stake In A Pro Team A real piece of a real franchise, 25M ⚡ Fanbase +10 🔒 Needs $45M banked $25M"
+   ],
+   "flex": [
+    "🎤 Fund Your Own Music Video You cannot rap. You are doing it anyway, 800k ⚡ Fanbase +10 and endless jokes $0.8M",
+    "👟 Signature Cleat Line Your silhouette on a shoe, 2M ⚡ Fanbase +12 $2M"
+   ],
+   "family": [
+    "🏦 Family Office OWNED Professionals so relatives stop asking you directly, 150k a year ⚡ Adds 2 percent to your cash every season + $0.15M a year upkeep",
+    "🤝 Start A Foundation Your name doing good in your city, 3M ⚡ Fanbase +10 a year + $0.20M a year upkeep $3M"
+   ],
+   "shady": [
+    "🍾 The Nightclub Bottle service and a very flexible ledger, 3M ⚡ Washes 4M, heat +3 🔒 Needs untraceable money to move + $0.20M a year upkeep $3M",
+    "⚖️ The Lawyer Who Never Loses OWNED On retainer, answers at 3am, 400k a year ⚡ Heat cools twice as fast + $0.40M a year upkeep",
+    "🕶️ A Guy Who Handles Things You do not ask how, 250k a year ⚡ Heat -8 immediately + $0.25M a year upkeep Hire",
+    "🏝️ Offshore Account An island, a bank, a form nobody files, 500k ⚡ Heat +6 🔒 Needs untraceable money to move $0.5M"
+   ],
+   "cryptoBuy": {
+    "cash": [
+     30,
+     29
+    ],
+    "held": 1
+   },
+   "lines": [
+    "💵 This season your investments earned $0.28M and the family office added $0.6936M. $0.9M went into the Bank, and $0.0736M waits for next season.",
+    "💸 Your Wing Franchise did not come through. The $0.8M you put in is gone.",
+    "💸 Your Crypto Punt did not come through. The $1M you put in is gone."
+   ],
+   "scroll": [
+    0,
+    0
+   ],
+   "after": {
+    "cash": 35.3,
+    "carry": 0.0736,
+    "heat": [
+     40,
+     22
+    ],
+    "dirty": 0,
+    "held": [
+     "index_fund",
+     "index_fund",
+     "family_office",
+     "shady_lawyer"
+    ],
+    "year": [
+     2031,
+     2032
+    ],
+    "salary": [
+     13.3,
+     13.3
+    ],
+    "upkeep": 0.55
+   },
+   "expect": {
+    "pay": 34.4,
+    "payouts": 0,
+    "cash": 35.3,
+    "carry": 0.0736
+   },
+   "help": {
+    "fs": 14,
+    "box": [
+     441,
+     340,
+     839,
+     560
+    ],
+    "vp": [
+     1280,
+     900
+    ]
+   }
+  }
+ },
+ {
+  "tag": "mlb-390-rm",
+  "problems": [
+   "the summer camp buy printed no line the player can see on the hub"
+  ],
+  "m": {
+   "invest": [
+    "🍽️ Restaurant Group 35 percent chance it prints 3M, otherwise it limps $1.2M",
+    "📈 Boring Index Fund Steady 7 percent. Your accountant weeps with joy $2M",
+    "🪙 Crypto Punt 20 percent chance of 5x, 80 percent chance of a lesson $1M",
+    "🍷 Wine Label Steady 10 percent and very good dinners $2M",
+    "🏆 Minority Stake In A Franchise A real piece of a real team, 40M ⚡ Fanbase +10 🔒 Needs $70M banked $40M"
+   ],
+   "flex": [
+    "🎤 Fund Your Own Album You cannot rap. You are doing it anyway, 1M ⚡ Fanbase +10 and endless jokes 🔒 Needs 55 fanbase $1M",
+    "👟 Signature Shoe Line Your silhouette on a shoe, 2.5M ⚡ Fanbase +12 🔒 Needs 70 fanbase $2.5M"
+   ],
+   "family": [
+    "🏦 Family Office OWNED Professionals so relatives stop asking you directly, 180k a year ⚡ Adds 2 percent to your cash every season + $0.18M a year upkeep",
+    "🤝 Start A Foundation Your name doing good in your city, 3.5M ⚡ Fanbase +10 a year + $0.25M a year upkeep $3.5M",
+    "⛹️ Free Youth Baseball Camp Two weeks, 400 kids, no fee, 1M ⚡ Fanbase +8, morale +6 + $0.15M a year upkeep $1M"
+   ],
+   "shady": [
+    "🍾 The Nightclub Bottle service and a flexible ledger, 3M ⚡ Washes 4M, heat +3 🔒 Needs untraceable money to move + $0.25M a year upkeep $3M",
+    "⚖️ The Lawyer Who Never Loses OWNED On retainer, answers at 3am, 450k a year ⚡ Heat cools twice as fast + $0.45M a year upkeep",
+    "🤐 A Guy Who Handles Things You do not ask how, 300k a year ⚡ Heat -8 immediately + $0.30M a year upkeep Hire",
+    "🏝️ Offshore Account An island, a bank, a form nobody files, 500k ⚡ Heat +6 🔒 Needs untraceable money to move $0.5M"
+   ],
+   "camp": {
+    "fanbase": [
+     40,
+     48
+    ],
+    "morale": [
+     98,
+     100
+    ],
+    "cash": [
+     30,
+     29
+    ],
+    "upkeep": [
+     0.63,
+     0.78
+    ]
+   },
+   "campWant": "Fanbase +8, morale +2.",
+   "cryptoBuy": {
+    "cash": [
+     29,
+     28
+    ],
+    "held": 1
+   },
+   "campLine": null,
+   "lines": [
+    "💵 This season your investments earned $0.28M and the family office added $0.7076M. $0.9M went into the Bank, and $0.0876M waits for next season.",
+    "💸 Your Restaurant Group did not come through. The $1.2M you put in is gone.",
+    "💸 Your Crypto Punt did not come through. The $1M you put in is gone."
+   ],
+   "scroll": [
+    0,
+    0
+   ],
+   "after": {
+    "cash": 36,
+    "carry": 0.0876,
+    "heat": [
+     40,
+     22
+    ],
+    "dirty": 0,
+    "held": [
+     "index_mlb",
+     "index_mlb",
+     "family_office_mlb",
+     "mshady_lawyer"
+    ],
+    "year": [
+     2032,
+     2033
+    ],
+    "salary": [
+     17.6,
+     17.6
+    ],
+    "upkeep": 0.78
+   },
+   "expect": {
+    "pay": 35.1,
+    "payouts": 0,
+    "cash": 36,
+    "carry": 0.0876
+   },
+   "help": {
+    "fs": 14,
+    "box": [
+     25,
+     292,
+     365,
+     552
+    ],
+    "vp": [
+     390,
+     844
+    ]
+   }
+  }
+ },
+ {
+  "tag": "mlb-390-anim",
+  "problems": [
+   "the summer camp buy printed no line the player can see on the hub"
+  ],
+  "m": {
+   "invest": [
+    "🍽️ Restaurant Group 35 percent chance it prints 3M, otherwise it limps $1.2M",
+    "📈 Boring Index Fund Steady 7 percent. Your accountant weeps with joy $2M",
+    "🪙 Crypto Punt 20 percent chance of 5x, 80 percent chance of a lesson $1M",
+    "🍷 Wine Label Steady 10 percent and very good dinners $2M",
+    "🏆 Minority Stake In A Franchise A real piece of a real team, 40M ⚡ Fanbase +10 🔒 Needs $70M banked $40M"
+   ],
+   "flex": [
+    "🎤 Fund Your Own Album You cannot rap. You are doing it anyway, 1M ⚡ Fanbase +10 and endless jokes 🔒 Needs 55 fanbase $1M",
+    "👟 Signature Shoe Line Your silhouette on a shoe, 2.5M ⚡ Fanbase +12 🔒 Needs 70 fanbase $2.5M"
+   ],
+   "family": [
+    "🏦 Family Office OWNED Professionals so relatives stop asking you directly, 180k a year ⚡ Adds 2 percent to your cash every season + $0.18M a year upkeep",
+    "🤝 Start A Foundation Your name doing good in your city, 3.5M ⚡ Fanbase +10 a year + $0.25M a year upkeep $3.5M",
+    "⛹️ Free Youth Baseball Camp Two weeks, 400 kids, no fee, 1M ⚡ Fanbase +8, morale +6 + $0.15M a year upkeep $1M"
+   ],
+   "shady": [
+    "🍾 The Nightclub Bottle service and a flexible ledger, 3M ⚡ Washes 4M, heat +3 🔒 Needs untraceable money to move + $0.25M a year upkeep $3M",
+    "⚖️ The Lawyer Who Never Loses OWNED On retainer, answers at 3am, 450k a year ⚡ Heat cools twice as fast + $0.45M a year upkeep",
+    "🤐 A Guy Who Handles Things You do not ask how, 300k a year ⚡ Heat -8 immediately + $0.30M a year upkeep Hire",
+    "🏝️ Offshore Account An island, a bank, a form nobody files, 500k ⚡ Heat +6 🔒 Needs untraceable money to move $0.5M"
+   ],
+   "camp": {
+    "fanbase": [
+     40,
+     48
+    ],
+    "morale": [
+     98,
+     100
+    ],
+    "cash": [
+     30,
+     29
+    ],
+    "upkeep": [
+     0.63,
+     0.78
+    ]
+   },
+   "campWant": "Fanbase +8, morale +2.",
+   "cryptoBuy": {
+    "cash": [
+     29,
+     28
+    ],
+    "held": 1
+   },
+   "campLine": null,
+   "lines": [
+    "💵 This season your investments earned $0.28M and the family office added $0.7076M. $0.9M went into the Bank, and $0.0876M waits for next season.",
+    "💸 Your Restaurant Group did not come through. The $1.2M you put in is gone.",
+    "💸 Your Crypto Punt did not come through. The $1M you put in is gone."
+   ],
+   "scroll": [
+    0,
+    0
+   ],
+   "after": {
+    "cash": 36,
+    "carry": 0.0876,
+    "heat": [
+     40,
+     22
+    ],
+    "dirty": 0,
+    "held": [
+     "index_mlb",
+     "index_mlb",
+     "family_office_mlb",
+     "mshady_lawyer"
+    ],
+    "year": [
+     2032,
+     2033
+    ],
+    "salary": [
+     17.6,
+     17.6
+    ],
+    "upkeep": 0.78
+   },
+   "expect": {
+    "pay": 35.1,
+    "payouts": 0,
+    "cash": 36,
+    "carry": 0.0876
+   },
+   "help": {
+    "fs": 14,
+    "box": [
+     25,
+     292,
+     365,
+     552
+    ],
+    "vp": [
+     390,
+     844
+    ]
+   }
+  }
+ },
+ {
+  "tag": "mlb-1280-rm",
+  "problems": [
+   "the summer camp buy printed no line the player can see on the hub"
+  ],
+  "m": {
+   "invest": [
+    "🍽️ Restaurant Group 35 percent chance it prints 3M, otherwise it limps $1.2M",
+    "📈 Boring Index Fund Steady 7 percent. Your accountant weeps with joy $2M",
+    "🪙 Crypto Punt 20 percent chance of 5x, 80 percent chance of a lesson $1M",
+    "🍷 Wine Label Steady 10 percent and very good dinners $2M",
+    "🏆 Minority Stake In A Franchise A real piece of a real team, 40M ⚡ Fanbase +10 🔒 Needs $70M banked $40M"
+   ],
+   "flex": [
+    "🎤 Fund Your Own Album You cannot rap. You are doing it anyway, 1M ⚡ Fanbase +10 and endless jokes 🔒 Needs 55 fanbase $1M",
+    "👟 Signature Shoe Line Your silhouette on a shoe, 2.5M ⚡ Fanbase +12 🔒 Needs 70 fanbase $2.5M"
+   ],
+   "family": [
+    "🏦 Family Office OWNED Professionals so relatives stop asking you directly, 180k a year ⚡ Adds 2 percent to your cash every season + $0.18M a year upkeep",
+    "🤝 Start A Foundation Your name doing good in your city, 3.5M ⚡ Fanbase +10 a year + $0.25M a year upkeep $3.5M",
+    "⛹️ Free Youth Baseball Camp Two weeks, 400 kids, no fee, 1M ⚡ Fanbase +8, morale +6 + $0.15M a year upkeep $1M"
+   ],
+   "shady": [
+    "🍾 The Nightclub Bottle service and a flexible ledger, 3M ⚡ Washes 4M, heat +3 🔒 Needs untraceable money to move + $0.25M a year upkeep $3M",
+    "⚖️ The Lawyer Who Never Loses OWNED On retainer, answers at 3am, 450k a year ⚡ Heat cools twice as fast + $0.45M a year upkeep",
+    "🤐 A Guy Who Handles Things You do not ask how, 300k a year ⚡ Heat -8 immediately + $0.30M a year upkeep Hire",
+    "🏝️ Offshore Account An island, a bank, a form nobody files, 500k ⚡ Heat +6 🔒 Needs untraceable money to move $0.5M"
+   ],
+   "camp": {
+    "fanbase": [
+     40,
+     48
+    ],
+    "morale": [
+     98,
+     100
+    ],
+    "cash": [
+     30,
+     29
+    ],
+    "upkeep": [
+     0.63,
+     0.78
+    ]
+   },
+   "campWant": "Fanbase +8, morale +2.",
+   "cryptoBuy": {
+    "cash": [
+     29,
+     28
+    ],
+    "held": 1
+   },
+   "campLine": null,
+   "lines": [
+    "💵 This season your investments earned $0.28M and the family office added $0.7076M. $0.9M went into the Bank, and $0.0876M waits for next season.",
+    "💸 Your Restaurant Group did not come through. The $1.2M you put in is gone.",
+    "💸 Your Crypto Punt did not come through. The $1M you put in is gone."
+   ],
+   "scroll": [
+    0,
+    0
+   ],
+   "after": {
+    "cash": 36,
+    "carry": 0.0876,
+    "heat": [
+     40,
+     22
+    ],
+    "dirty": 0,
+    "held": [
+     "index_mlb",
+     "index_mlb",
+     "family_office_mlb",
+     "mshady_lawyer"
+    ],
+    "year": [
+     2032,
+     2033
+    ],
+    "salary": [
+     17.6,
+     17.6
+    ],
+    "upkeep": 0.78
+   },
+   "expect": {
+    "pay": 35.1,
+    "payouts": 0,
+    "cash": 36,
+    "carry": 0.0876
+   },
+   "help": {
+    "fs": 14,
+    "box": [
+     441,
+     340,
+     839,
+     560
+    ],
+    "vp": [
+     1280,
+     900
+    ]
+   }
+  }
+ },
+ {
+  "tag": "nhl-390-rm",
+  "problems": [
+   "the summer camp buy printed no line the player can see on the hub"
+  ],
+  "m": {
+   "invest": [
+    "🍽️ Restaurant Group 35 percent chance it prints 3M, otherwise it limps $1.2M",
+    "📈 Boring Index Fund Steady 7 percent. Your accountant weeps with joy $2M",
+    "🪙 Crypto Punt 20 percent chance of 5x, 80 percent chance of a lesson $1M",
+    "🍷 Wine Label Steady 10 percent and very good dinners $2M",
+    "🏆 Minority Stake In A Franchise A real piece of a real team, 40M ⚡ Fanbase +10 🔒 Needs $70M banked $40M"
+   ],
+   "flex": [
+    "🎤 Fund Your Own Album You cannot rap. You are doing it anyway, 1M ⚡ Fanbase +10 and endless jokes 🔒 Needs 55 fanbase $1M",
+    "👟 Signature Shoe Line Your silhouette on a shoe, 2.5M ⚡ Fanbase +12 🔒 Needs 70 fanbase $2.5M"
+   ],
+   "family": [
+    "🏦 Family Office OWNED Professionals so relatives stop asking you directly, 180k a year ⚡ Adds 2 percent to your cash every season + $0.18M a year upkeep",
+    "🤝 Start A Foundation Your name doing good in your city, 3.5M ⚡ Fanbase +10 a year + $0.25M a year upkeep $3.5M",
+    "⛹️ Free Youth Hockey Camp Two weeks, 400 kids, no fee, 1M ⚡ Fanbase +8, morale +6 + $0.15M a year upkeep $1M"
+   ],
+   "shady": [
+    "🍾 The Nightclub Bottle service and a flexible ledger, 3M ⚡ Washes 4M, heat +3 🔒 Needs untraceable money to move + $0.25M a year upkeep $3M",
+    "⚖️ The Lawyer Who Never Loses OWNED On retainer, answers at 3am, 450k a year ⚡ Heat cools twice as fast + $0.45M a year upkeep",
+    "🤐 A Guy Who Handles Things You do not ask how, 300k a year ⚡ Heat -8 immediately + $0.30M a year upkeep Hire",
+    "🏝️ Offshore Account An island, a bank, a form nobody files, 500k ⚡ Heat +6 🔒 Needs untraceable money to move $0.5M"
+   ],
+   "camp": {
+    "fanbase": [
+     49,
+     57
+    ],
+    "morale": [
+     93,
+     99
+    ],
+    "cash": [
+     30,
+     29
+    ],
+    "upkeep": [
+     0.63,
+     0.78
+    ]
+   },
+   "campWant": "Fanbase +8, morale +6.",
+   "cryptoBuy": {
+    "cash": [
+     29,
+     28
+    ],
+    "held": 1
+   },
+   "campLine": null,
+   "lines": [
+    "💵 This season your investments earned $0.28M and the family office added $0.5956M. $0.8M went into the Bank, and $0.0756M waits for next season.",
+    "💸 Your Restaurant Group did not come through. The $1.2M you put in is gone.",
+    "💸 Your Crypto Punt did not come through. The $1M you put in is gone."
+   ],
+   "scroll": [
+    0,
+    0
+   ],
+   "after": {
+    "cash": 30.3,
+    "carry": 0.0756,
+    "heat": [
+     40,
+     22
+    ],
+    "dirty": 0,
+    "held": [
+     "index_nhl",
+     "index_nhl",
+     "family_office_nhl",
+     "hshady_lawyer"
+    ],
+    "year": [
+     2031,
+     2032
+    ],
+    "salary": [
+     5.1,
+     5.1
+    ],
+    "upkeep": 0.78
+   },
+   "expect": {
+    "pay": 29.5,
+    "payouts": 0,
+    "cash": 30.3,
+    "carry": 0.0756
+   },
+   "help": {
+    "fs": 14,
+    "box": [
+     25,
+     292,
+     365,
+     552
+    ],
+    "vp": [
+     390,
+     844
+    ]
+   }
+  }
+ },
+ {
+  "tag": "nhl-390-anim",
+  "problems": [
+   "the summer camp buy printed no line the player can see on the hub"
+  ],
+  "m": {
+   "invest": [
+    "🍽️ Restaurant Group 35 percent chance it prints 3M, otherwise it limps $1.2M",
+    "📈 Boring Index Fund Steady 7 percent. Your accountant weeps with joy $2M",
+    "🪙 Crypto Punt 20 percent chance of 5x, 80 percent chance of a lesson $1M",
+    "🍷 Wine Label Steady 10 percent and very good dinners $2M",
+    "🏆 Minority Stake In A Franchise A real piece of a real team, 40M ⚡ Fanbase +10 🔒 Needs $70M banked $40M"
+   ],
+   "flex": [
+    "🎤 Fund Your Own Album You cannot rap. You are doing it anyway, 1M ⚡ Fanbase +10 and endless jokes 🔒 Needs 55 fanbase $1M",
+    "👟 Signature Shoe Line Your silhouette on a shoe, 2.5M ⚡ Fanbase +12 🔒 Needs 70 fanbase $2.5M"
+   ],
+   "family": [
+    "🏦 Family Office OWNED Professionals so relatives stop asking you directly, 180k a year ⚡ Adds 2 percent to your cash every season + $0.18M a year upkeep",
+    "🤝 Start A Foundation Your name doing good in your city, 3.5M ⚡ Fanbase +10 a year + $0.25M a year upkeep $3.5M",
+    "⛹️ Free Youth Hockey Camp Two weeks, 400 kids, no fee, 1M ⚡ Fanbase +8, morale +6 + $0.15M a year upkeep $1M"
+   ],
+   "shady": [
+    "🍾 The Nightclub Bottle service and a flexible ledger, 3M ⚡ Washes 4M, heat +3 🔒 Needs untraceable money to move + $0.25M a year upkeep $3M",
+    "⚖️ The Lawyer Who Never Loses OWNED On retainer, answers at 3am, 450k a year ⚡ Heat cools twice as fast + $0.45M a year upkeep",
+    "🤐 A Guy Who Handles Things You do not ask how, 300k a year ⚡ Heat -8 immediately + $0.30M a year upkeep Hire",
+    "🏝️ Offshore Account An island, a bank, a form nobody files, 500k ⚡ Heat +6 🔒 Needs untraceable money to move $0.5M"
+   ],
+   "camp": {
+    "fanbase": [
+     49,
+     57
+    ],
+    "morale": [
+     93,
+     99
+    ],
+    "cash": [
+     30,
+     29
+    ],
+    "upkeep": [
+     0.63,
+     0.78
+    ]
+   },
+   "campWant": "Fanbase +8, morale +6.",
+   "cryptoBuy": {
+    "cash": [
+     29,
+     28
+    ],
+    "held": 1
+   },
+   "campLine": null,
+   "lines": [
+    "💵 This season your investments earned $0.28M and the family office added $0.5956M. $0.8M went into the Bank, and $0.0756M waits for next season.",
+    "💸 Your Restaurant Group did not come through. The $1.2M you put in is gone.",
+    "💸 Your Crypto Punt did not come through. The $1M you put in is gone."
+   ],
+   "scroll": [
+    0,
+    0
+   ],
+   "after": {
+    "cash": 30.3,
+    "carry": 0.0756,
+    "heat": [
+     40,
+     22
+    ],
+    "dirty": 0,
+    "held": [
+     "index_nhl",
+     "index_nhl",
+     "family_office_nhl",
+     "hshady_lawyer"
+    ],
+    "year": [
+     2031,
+     2032
+    ],
+    "salary": [
+     5.1,
+     5.1
+    ],
+    "upkeep": 0.78
+   },
+   "expect": {
+    "pay": 29.5,
+    "payouts": 0,
+    "cash": 30.3,
+    "carry": 0.0756
+   },
+   "help": {
+    "fs": 14,
+    "box": [
+     25,
+     292,
+     365,
+     552
+    ],
+    "vp": [
+     390,
+     844
+    ]
+   }
+  }
+ },
+ {
+  "tag": "nhl-1280-rm",
+  "problems": [
+   "the summer camp buy printed no line the player can see on the hub"
+  ],
+  "m": {
+   "invest": [
+    "🍽️ Restaurant Group 35 percent chance it prints 3M, otherwise it limps $1.2M",
+    "📈 Boring Index Fund Steady 7 percent. Your accountant weeps with joy $2M",
+    "🪙 Crypto Punt 20 percent chance of 5x, 80 percent chance of a lesson $1M",
+    "🍷 Wine Label Steady 10 percent and very good dinners $2M",
+    "🏆 Minority Stake In A Franchise A real piece of a real team, 40M ⚡ Fanbase +10 🔒 Needs $70M banked $40M"
+   ],
+   "flex": [
+    "🎤 Fund Your Own Album You cannot rap. You are doing it anyway, 1M ⚡ Fanbase +10 and endless jokes 🔒 Needs 55 fanbase $1M",
+    "👟 Signature Shoe Line Your silhouette on a shoe, 2.5M ⚡ Fanbase +12 🔒 Needs 70 fanbase $2.5M"
+   ],
+   "family": [
+    "🏦 Family Office OWNED Professionals so relatives stop asking you directly, 180k a year ⚡ Adds 2 percent to your cash every season + $0.18M a year upkeep",
+    "🤝 Start A Foundation Your name doing good in your city, 3.5M ⚡ Fanbase +10 a year + $0.25M a year upkeep $3.5M",
+    "⛹️ Free Youth Hockey Camp Two weeks, 400 kids, no fee, 1M ⚡ Fanbase +8, morale +6 + $0.15M a year upkeep $1M"
+   ],
+   "shady": [
+    "🍾 The Nightclub Bottle service and a flexible ledger, 3M ⚡ Washes 4M, heat +3 🔒 Needs untraceable money to move + $0.25M a year upkeep $3M",
+    "⚖️ The Lawyer Who Never Loses OWNED On retainer, answers at 3am, 450k a year ⚡ Heat cools twice as fast + $0.45M a year upkeep",
+    "🤐 A Guy Who Handles Things You do not ask how, 300k a year ⚡ Heat -8 immediately + $0.30M a year upkeep Hire",
+    "🏝️ Offshore Account An island, a bank, a form nobody files, 500k ⚡ Heat +6 🔒 Needs untraceable money to move $0.5M"
+   ],
+   "camp": {
+    "fanbase": [
+     49,
+     57
+    ],
+    "morale": [
+     93,
+     99
+    ],
+    "cash": [
+     30,
+     29
+    ],
+    "upkeep": [
+     0.63,
+     0.78
+    ]
+   },
+   "campWant": "Fanbase +8, morale +6.",
+   "cryptoBuy": {
+    "cash": [
+     29,
+     28
+    ],
+    "held": 1
+   },
+   "campLine": null,
+   "lines": [
+    "💵 This season your investments earned $0.28M and the family office added $0.5956M. $0.8M went into the Bank, and $0.0756M waits for next season.",
+    "💸 Your Restaurant Group did not come through. The $1.2M you put in is gone.",
+    "💸 Your Crypto Punt did not come through. The $1M you put in is gone."
+   ],
+   "scroll": [
+    0,
+    0
+   ],
+   "after": {
+    "cash": 30.3,
+    "carry": 0.0756,
+    "heat": [
+     40,
+     22
+    ],
+    "dirty": 0,
+    "held": [
+     "index_nhl",
+     "index_nhl",
+     "family_office_nhl",
+     "hshady_lawyer"
+    ],
+    "year": [
+     2031,
+     2032
+    ],
+    "salary": [
+     5.1,
+     5.1
+    ],
+    "upkeep": 0.78
+   },
+   "expect": {
+    "pay": 29.5,
+    "payouts": 0,
+    "cash": 30.3,
+    "carry": 0.0756
+   },
+   "help": {
+    "fs": 14,
+    "box": [
+     441,
+     340,
+     839,
+     560
+    ],
+    "vp": [
+     1280,
+     900
+    ]
+   }
+  }
+ }
+]
