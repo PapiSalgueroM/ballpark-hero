@@ -1080,7 +1080,11 @@ function replayFouls(t: Tally1521, input: PitchInput, plan: PitchPlan, live: Non
        off the rule: a beat is free when only open play, a chance's build up (the review of 2026-10-22: the feeder is
        presentation, and a foul takes his place) or this foul's own stretches are on it. */
     const own = new Set([`w${order}`, `x${order}`, `y${order}`]);
-    const holds = (b: PitchBeat) => !(b.via === 'grid' || b.via === 'approach' || own.has(b.id));
+    /* A feeder drawn over a corner's or a throw in's two beats (the ball goes from the flag or the line to him) still
+       holds them: they are the feed's own dead ball, and a foul never steps on one. */
+    const deadBalls = input.feed.filter(x => (x.kind === 'corner' || x.kind === 'throwin') && x.side !== 'none').map(placeOfLine);
+    const overDead = (b: PitchBeat) => deadBalls.some(q => b.start < q + 2 * BEAT_SPAN - 1e-9 && q < b.end - 1e-9);
+    const holds = (b: PitchBeat) => !(b.via === 'grid' || (b.via === 'approach' && !overDead(b)) || own.has(b.id));
     const p = placeOfLine(e), last = Math.min(p + 1 - BEAT_SPAN, to - BEAT_SPAN);
     for (let s = p; s <= last + 1e-9; s += 0.02) {
       if (plan.entries.some(b => b.start < s + BEAT_SPAN - 1e-9 && s < b.end - 1e-9 && holds(b))) continue;
@@ -1539,8 +1543,10 @@ const totals1521 = (pick: (t: Tally1521) => number) => sum(buildMaterial().looks
 const R10_FLOOR = { ground: 4000, air: 400, cross: 250, throw: 400 } as const;
 /* The review of 2026-10-22: the share of open play passes that go up (the long ball line, LONG_PASS metres on a 105 by
    68 pitch) is held in a band, not only by floors, so the round's own two earlier defects (the metres swapped across
-   and along, and the line back at 32) cannot come back green. Measured on a GitHub runner over the five seeds: (to be filled from r1521-fx5). */
-const R10_AIR = { lo: 0.17, hi: 0.255 } as const;
+   and along, and the line back at 32) cannot come back green. Measured on a GitHub runner over the five seeds (r1521-fx5):
+   0.203 to 0.224 on the round's code, 0.265 to 0.277 with the metres swapped, 0.453 to 0.479 with the line at 32. The band
+   sits about 0.02 clear of each side. */
+const R10_AIR = { lo: 0.18, hi: 0.245 } as const;
 /* R12, set from the five seeds on a GitHub runner at the shares in scene.ts's BUILD (r1521-sw1, cfgD; the bars sit
    under the least of the five): forward over back at least 2.14 times in every arm (defensive seed 1), all passes
    attacking over defensive 0.035 to 0.082, with a line ahead each step 0.105 to 0.157, resets per possession each
