@@ -1,0 +1,3 @@
+  FAIL Hoffenheim (now, watcher, coach, seed 5, 3 seasons) at step 1 s1-e1: the state differs, books: base ...ages":0.37,"staffWages":0.121,"travel":0},"lastSeason":null,"pushed":{},"walked"... tree ...ages":0.37,"staffWages":0.121,"travel":0,"shirts
+journeys 10, steps compared 1254, tree journeys whose save carried worldComps 10, evaluations on the live state 1254, 52 s
+proofWorldUclFleet: RED, 10 journeys differ from 92290f81 (of 10)
