@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/firstTeam.test.tsx src/test/tycoonAway.test.tsx src/test/tycoonGear.test.tsx src/test/tycoonHelp.test.tsx src/test/tycoonLatestSeason.test.tsx src/test/tycoonLoads.test.tsx src/test/tycoonPacks.test.tsx src/test/tycoonPitch.test.tsx src/test/tycoonRooms.test.tsx src/test/tycoonSaleReview.test.tsx src/test/tycoonSetPieceBoard.test.tsx src/test/tycoonSetPiecePage.test.tsx src/test/tycoonTicketPolicy.test.tsx --testTimeout=300000 --hookTimeout=120000
+simTycoonScorelines: node scripts/simTycoonScorelines.mjs
+simTycoonAwayMatchdays: node scripts/simTycoonAwayMatchdays.mjs
+simTycoonPackPace: node scripts/simTycoonPackPace.mjs
+simTycoonHelp: node scripts/simTycoonHelp.mjs
