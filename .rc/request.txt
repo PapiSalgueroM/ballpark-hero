@@ -1,0 +1,6 @@
+#!serial
+earned-head: git show 822bd75d:scripts/simNbaGmDesk.mjs > scripts/simNbaGmDesk.mjs; T=$(mktemp -d); TMPDIR=$T TEMP=$T TMP=$T node scripts/simNbaGmDesk.mjs > /tmp/s.txt 2>&1; a=$?; grep -v -E '^\s*$' /tmp/s.txt | grep -v 'is not restricted' | tail -40; grep -c 'is not restricted' /tmp/s.txt; git checkout -- src scripts; exit $a
+m1b-earned: node .rc/x/m1b.mjs || exit 2; git show 822bd75d:scripts/simNbaGmDesk.mjs > scripts/simNbaGmDesk.mjs; T=$(mktemp -d); TMPDIR=$T TEMP=$T TMP=$T node scripts/simNbaGmDesk.mjs > /tmp/s.txt 2>&1; a=$?; grep -v -E '^\s*$' /tmp/s.txt | tail -40; git checkout -- src scripts; exit $a
+m1b-olddesk: node .rc/x/m1b.mjs || exit 2; T=$(mktemp -d); TMPDIR=$T TEMP=$T TMP=$T node scripts/simNbaGmDesk.mjs > /tmp/s.txt 2>&1; a=$?; grep -v -E '^\s*$' /tmp/s.txt | tail -25; git checkout -- src scripts; exit $a
+m1b-simGmContracts: node .rc/x/m1b.mjs || exit 2; T=$(mktemp -d); TMPDIR=$T TEMP=$T TMP=$T node scripts/simGmContracts.mjs > /tmp/s.txt 2>&1; a=$?; grep -v -E '^\s*$' /tmp/s.txt | tail -25; git checkout -- src scripts; exit $a
+simGmContracts: T=$(mktemp -d); TMPDIR=$T TEMP=$T TMP=$T node scripts/simGmContracts.mjs > /tmp/s.txt 2>&1; a=$?; tail -6 /tmp/s.txt; exit $a
