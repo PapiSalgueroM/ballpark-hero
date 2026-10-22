@@ -1,0 +1,10 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+weight: ENGINES=chromium SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+mdNew: node scripts/simCmMatchDay.mjs
+fx-slow: MODE=slow node .rc/x/fx-slowload.mjs
+fx-fail: MODE=fail node .rc/x/fx-slowload.mjs
+walk: node scripts/playCmTactics.mjs
+units: node_modules/.bin/vitest run src/lib/clubManagerTactics.test.ts src/hooks/useClubManager.test.ts --testTimeout=300000 --hookTimeout=120000
+pin1081: node scripts/simManagerAppealIsolation.mjs
