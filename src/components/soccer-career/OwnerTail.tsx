@@ -62,8 +62,8 @@ export function OwnerPanel({ owner, onCareer }: { owner: OwnerState; onCareer?: 
           {owner.seasonResults.slice(-5).map((r, i) => (
             <div key={`${r.year}-${i}`} className="cm-tick-in flex items-center justify-between gap-2 text-xs bg-muted/20 rounded-lg px-3 py-1.5" style={{ animationDelay: revealDelay(i) }}>
               <span className="shrink-0 text-muted-foreground">S{r.year}</span>
-              <span className="truncate font-semibold">{r.club}</span>
-              <span className={`text-right text-[10px] ${r.trophy ? "text-amber-400" : "text-muted-foreground"}`}>{money(r.result)}</span>
+              <span className="shrink-0 font-semibold">{r.club}</span>
+              <span className={`min-w-0 text-right text-[10px] ${r.trophy ? "text-amber-400" : "text-muted-foreground"}`}>{money(r.result)}</span>
             </div>
           ))}
         </div>

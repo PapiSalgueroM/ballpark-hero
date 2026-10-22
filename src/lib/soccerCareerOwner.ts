@@ -299,8 +299,9 @@ export function playOwnerSeason(prev: OwnerState, input: { clubs: readonly ClubD
   let newTier = tier;
   if (promoted) newTier = tier - 1;
   else if (relegated) newTier = tier + 1;
-  if (promoted) result += move && move.up ? ` Promoted${dest(move.to)}!` : ` Up to Tier ${newTier}!`;
-  else if (relegated) result += move && !move.up ? ` Relegated${dest(move.to)}.` : ` Down to Tier ${newTier}.`;
+  /* the manager tail's words (Round 1029): in a named league the tier is the club's standing, not a division */
+  if (promoted) result += move && move.up ? ` Promoted${dest(move.to)}!` : lf.league ? ` ${os.club} move up to Tier ${newTier}.` : ` Promoted to Tier ${newTier}!`;
+  else if (relegated) result += move && !move.up ? ` Relegated${dest(move.to)}.` : lf.league ? ` Down to Tier ${newTier}.` : ` Relegated to Tier ${newTier}.`;
   else if (move) result += move.up ? ` Promoted${dest(move.to)}!` : ` Relegated${dest(move.to)}.`;
 
   /* the money: the tier's revenue, the ground, the academy's sales, less the
@@ -309,7 +310,7 @@ export function playOwnerSeason(prev: OwnerState, input: { clubs: readonly ClubD
     - e.interest * debt
     - (plan === "squad" ? u * e.squadWages : 0)
     - (plan === "stadium" ? u * e.stadiumWorks : 0));
-  result += ` Income €${income}M.`;
+  result += income >= 0 ? ` Income €${income}M.` : ` Loss €${tenth(-income)}M.`;
 
   playing.academy = plan === "youth" ? Math.min(e.maxLevel, lv.academy + 1) : lv.academy;
   playing.stadium = plan === "stadium" ? Math.min(e.maxLevel, lv.stadium + 1) : lv.stadium;
