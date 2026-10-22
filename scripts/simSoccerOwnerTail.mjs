@@ -25,8 +25,22 @@
  *      pundit and walk away tails, on the base engine and this one, every state after every step and the
  *      Math.random count equal.
  *
- * Measured on this branch (fleet salt 1, the numbers below each section's printout; salts 1 to 3 for the spread):
- *   [filled in from the runner's output, see the round's finish report]
+ * Measured on this branch (runner r1524-s4 and r1524-s7a for salt 1, this PC for salts 2 and 3; the bands below sit
+ * well inside every salt):
+ *   1) 4 clubs at €200M and €249M (tiers 4 4 3 3), 6 at €250M and €900M, 2 at €60M, none at €49M; 152 different clubs
+ *      across 60 saves; 40 of 40 purchases the club picked, at its price, with no draw.
+ *   2) 640 owner seasons: 0 finishes the table did not produce, 68 titles, 96 promotions, 33 relegations, 630 in a
+ *      named league, 278 of a verified size; 30 of 30 seasons the same under two Math.random streams.
+ *   3) at 6 seasons, against placing nothing (salts 1, 2, 3): Sign players +10.29, +10.19, +10.00 points and this
+ *      season +5.00 points, -2.00M; Fund the academy +7.69, +7.49, +7.51 points and +6.28, +5.95, +5.62M, this season
+ *      exactly 0 and 0; Grow the ground exactly 0 points, +11.95, +11.35, +11.29M, this season -1.20M; Pay down the
+ *      debt +4.73, +4.87, +4.89 points and +7.20, +7.24, +7.05M, this season +0.77 points and +1.06M.
+ *      Bands: 4 points and -0.5M (signings now), 4 points and 2M (academy over 6), -0.5M now and 5M over 6 (ground),
+ *      0.3 points and 0.4M now (debt).
+ *   4) the closest pair at 6 seasons is the academy against the debt: the debt pays 1.25M to 1.9M more, the academy
+ *      gives 2.6 points more, against margins of 0.3M and 0.5 points. Most points and most money: squad and stadium at
+ *      3 and 6 seasons, youth and stadium at 10.
+ *   5) 12 of 12 old saves play on.  6) 16 careers, 790 states and draw counts, 96 manager seasons: 0 differ.
  *
  * Negative controls, SIM_OWNER_CONTROL=<name>, each asserting the string it mutates is in its file exactly once
  * (exit 2 otherwise), each measured red: randomclub (section 1, the old random club), coin (section 2, the old
