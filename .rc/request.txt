@@ -1,0 +1,13 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simGmXp: node scripts/simGmXp.mjs
+simGmDeskHost: node scripts/simGmDeskHost.mjs
+simGmSeat: node scripts/simGmSeat.mjs
+simNflGmDesk: node scripts/simNflGmDesk.mjs
+simGmReload: node scripts/simGmReload.mjs
+simCollegeSeat: node scripts/simCollegeSeat.mjs
+vitest-1223: node_modules/.bin/vitest run src/lib/gmDeskHost.test.ts src/components/front-office-shared/GmCareerDesk.test.tsx --testTimeout=300000 --hookTimeout=120000
+vitest-onepress: node_modules/.bin/vitest run src/components/front-office/FrontOfficeOnePress.test.tsx --testTimeout=300000 --hookTimeout=120000
+vitest-seasonclose: node_modules/.bin/vitest run src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx src/lib/gmXp.test.ts --testTimeout=300000 --hookTimeout=120000
+simSessionMarks: node scripts/simSessionMarks.mjs
+simGmStaff: node scripts/simGmStaff.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
