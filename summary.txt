@@ -1,0 +1,1 @@
+fixture-replay-base exit=1 48s | ::error file=/tmp/fxbase/src/test/usBoardFixture.test.tsx,title=src/test/usBoardFixture.test.tsx > the four US career boards against the recorded fixture > nfl,line=719,c

@@ -1,0 +1,52 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/tmp/fxbase[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [31m❯[39m src/test/usBoardFixture.test.tsx [2m([22m[2m4 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 43917[2mms[22m[39m
+[31m   [31m×[31m the four US career boards against the recorded fixture[2m > [22mnfl[39m[33m 12108[2mms[22m[39m
+[31m     → expected [ …(9) ] to deeply equal [][39m
+   [33m[2m✓[22m[39m the four US career boards against the recorded fixture[2m > [22mnba [33m 11412[2mms[22m[39m
+   [33m[2m✓[22m[39m the four US career boards against the recorded fixture[2m > [22mmlb [33m 10375[2mms[22m[39m
+   [33m[2m✓[22m[39m the four US career boards against the recorded fixture[2m > [22mnhl [33m 10021[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/usBoardFixture.test.tsx[2m > [22mthe four US career boards against the recorded fixture[2m > [22mnfl
+[31m[1mAssertionError[22m: expected [ …(9) ] to deeply equal [][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- [][39m
+[31m+ [[39m
+[31m+   "nfl click path step 188 (after \"coach: Sit out the 2044 season\"): the screen reads \"🧢 Coach Ryder BlazeOut of work2045Standing 30📪2 seasons without oneNo automatic offers right now. You can take a staff role or wait for an\", fixture \"🧢 Coach Ryder BlazeOut of work2045Standing 30📪2 seasons without oneQuiet cycle. The jobs that opened were not jobs you could take. It happ\"",[39m
+[31m+   "nfl click path step 189 (after \"coach: 🗞️The Market13 jobs open · 0 for you\"): pressed \"coach: 📪Out Of WorkNobody has hired you\", fixture pressed \"coach: 🗞️The Market13 jobs open · 0 for you\"; the screen reads \"‹ Back📪 Out Of Work📪2 seasons without one2 seasons on the couch. Every one of them costs you.A seat on a staff, working for somebody else.\", fixture \"‹ Back🗞️ The Market13 jobs opened around the league this cycle. 8 were at a level that would even look at you.Quiet cycle. The jobs that op\"",[39m
+[31m+   "nfl click path step 190 (after \"coach: ‹ Back\"): the screen reads \"🧢 Coach Ryder BlazeOut of work2045Standing 30📪2 seasons without oneNo automatic offers right now. You can take a staff role or wait for an\", fixture \"🧢 Coach Ryder BlazeOut of work2045Standing 30📪2 seasons without oneQuiet cycle. The jobs that opened were not jobs you could take. It happ\"",[39m
+[31m+   "nfl click path step 191 (after \"coach: Where You Stand30 · can reach T4 Staff job\"): pressed \"coach: 🗞️The Market13 jobs open · 0 for you\", fixture pressed \"coach: Where You Stand30 · can reach T4 Staff job\"; the screen reads \"‹ Back🗞️ The Market13 jobs opened around the league this cycle. 8 were at a level that would even look at you.No automatic offers right now\", fixture \"‹ Back📈 Where You Stand30standing in the sportBest job you can getT4 Staff jobA seat on a staff, working for somebody else. That is where n\"",[39m
+[31m+   "nfl save \"coach\" step 0 (after \"MOUNT\"): the screen reads \"🧢 Coach Ryder BlazeOut of work2055Standing 0📪12 seasons without oneNo automatic offers right now. You can take a staff role or wait for an\", fixture \"🧢 Coach Ryder BlazeOut of work2055Standing 0📪12 seasons without oneNobody is calling and nobody is going to. The sport has closed the file\"",[39m
+[31m+   "nfl save \"coach\" step 2 (after \"retired: Back to the sideline\"): the screen reads \"🧢 Coach Ryder BlazeOut of work2055Standing 0📪12 seasons without oneNo automatic offers right now. You can take a staff role or wait for an\", fixture \"🧢 Coach Ryder BlazeOut of work2055Standing 0📪12 seasons without oneNobody is calling and nobody is going to. The sport has closed the file\"",[39m
+[31m+   "nfl save \"coach\" step 4 (after \"coach: ‹ Back\"): the screen reads \"🧢 Coach Ryder BlazeOut of work2055Standing 0📪12 seasons without oneNo automatic offers right now. You can take a staff role or wait for an\", fixture \"🧢 Coach Ryder BlazeOut of work2055Standing 0📪12 seasons without oneNobody is calling and nobody is going to. The sport has closed the file\"",[39m
+[31m+   "nfl save \"coach\" step 6 (after \"coach: ‹ Back\"): the screen reads \"🧢 Coach Ryder BlazeOut of work2055Standing 0📪12 seasons without oneNo automatic offers right now. You can take a staff role or wait for an\", fixture \"🧢 Coach Ryder BlazeOut of work2055Standing 0📪12 seasons without oneNobody is calling and nobody is going to. The sport has closed the file\"",[39m
+[31m+   "nfl coverage: {\"seasons\":24,\"event\":19,\"extension\":10,\"freeagency\":14,\"rivalryBeat\":11,\"rivalryChoice\":4,\"retireCancel\":1,\"retireConfirm\":1,\"restartCancel\":2,\"restartConfirm\":2,\"retired\":2,\"coach\":8,\"coachSeasons\":19,\"panels\":27,\"remounts\":8,\"throwback\":1}, fixture {\"seasons\":24,\"event\":20,\"extension\":11,\"freeagency\":13,\"rivalryBeat\":10,\"rivalryChoice\":5,\"retireCancel\":1,\"retireConfirm\":1,\"restartCancel\":2,\"restartConfirm\":2,\"retired\":2,\"coach\":8,\"coachSeasons\":11,\"panels\":26,\"remounts\":7,\"throwback\":1}",[39m
+[31m+ ][39m
+
+[36m [2m❯[22m src/test/usBoardFixture.test.tsx:[2m719:22[22m[39m
+    [90m717| [39m    if (JSON.stringify(want.coverage) !== JSON.stringify(got.coverage)…
+    [90m718| [39m    if (process.env.US_BOARD_FIXTURE_REPORT) fs.appendFileSync(process…
+    [90m719| [39m    [34mexpect[39m(problems)[33m.[39m[34mtoEqual[39m([])[33m;[39m
+    [90m   | [39m                     [31m^[39m
+    [90m720| [39m  }[33m,[39m [34m600_000[39m)[33m;[39m
+    [90m721| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m3 passed[39m[22m[90m (4)[39m
+[2m   Start at [22m 12:05:34
+[2m   Duration [22m 46.82s[2m (transform 1.53s, setup 70ms, collect 2.11s, tests 43.92s, environment 312ms, prepare 112ms)[22m
+
+
+::error file=/tmp/fxbase/src/test/usBoardFixture.test.tsx,title=src/test/usBoardFixture.test.tsx > the four US career boards against the recorded fixture > nfl,line=719,column=22::AssertionError: expected [ …(9) ] to deeply equal []%0A%0A- Expected%0A+ Received%0A%0A- []%0A+ [%0A+   "nfl click path step 188 (after \"coach: Sit out the 2044 season\"): the screen reads \"🧢 Coach Ryder BlazeOut of work2045Standing 30📪2 seasons without oneNo automatic offers right now. You can take a staff role or wait for an\", fixture \"🧢 Coach Ryder BlazeOut of work2045Standing 30📪2 seasons without oneQuiet cycle. The jobs that opened were not jobs you could take. It happ\"",%0A+   "nfl click path step 189 (after \"coach: 🗞️The Market13 jobs open · 0 for you\"): pressed \"coach: 📪Out Of WorkNobody has hired you\", fixture pressed \"coach: 🗞️The Market13 jobs open · 0 for you\"; the screen reads \"‹ Back📪 Out Of Work📪2 seasons without one2 seasons on the couch. Every one of them costs you.A seat on a staff, working for somebody else.\", fixture \"‹ Back🗞️ The Market13 jobs opened around the league this cycle. 8 were at a level that would even look at you.Quiet cycle. The jobs that op\"",%0A+   "nfl click path step 190 (after \"coach: ‹ Back\"): the screen reads \"🧢 Coach Ryder BlazeOut of work2045Standing 30📪2 seasons without oneNo automatic offers right now. You can take a staff role or wait for an\", fixture \"🧢 Coach Ryder BlazeOut of work2045Standing 30📪2 seasons without oneQuiet cycle. The jobs that opened were not jobs you could take. It happ\"",%0A+   "nfl click path step 191 (after \"coach: Where You Stand30 · can reach T4 Staff job\"): pressed \"coach: 🗞️The Market13 jobs open · 0 for you\", fixture pressed \"coach: Where You Stand30 · can reach T4 Staff job\"; the screen reads \"‹ Back🗞️ The Market13 jobs opened around the league this cycle. 8 were at a level that would even look at you.No automatic offers right now\", fixture \"‹ Back📈 Where You Stand30standing in the sportBest job you can getT4 Staff jobA seat on a staff, working for somebody else. That is where n\"",%0A+   "nfl save \"coach\" step 0 (after \"MOUNT\"): the screen reads \"🧢 Coach Ryder BlazeOut of work2055Standing 0📪12 seasons without oneNo automatic offers right now. You can take a staff role or wait for an\", fixture \"🧢 Coach Ryder BlazeOut of work2055Standing 0📪12 seasons without oneNobody is calling and nobody is going to. The sport has closed the file\"",%0A+   "nfl save \"coach\" step 2 (after \"retired: Back to the sideline\"): the screen reads \"🧢 Coach Ryder BlazeOut of work2055Standing 0📪12 seasons without oneNo automatic offers right now. You can take a staff role or wait for an\", fixture \"🧢 Coach Ryder BlazeOut of work2055Standing 0📪12 seasons without oneNobody is calling and nobody is going to. The sport has closed the file\"",%0A+   "nfl save \"coach\" step 4 (after \"coach: ‹ Back\"): the screen reads \"🧢 Coach Ryder BlazeOut of work2055Standing 0📪12 seasons without oneNo automatic offers right now. You can take a staff role or wait for an\", fixture \"🧢 Coach Ryder BlazeOut of work2055Standing 0📪12 seasons without oneNobody is calling and nobody is going to. The sport has closed the file\"",%0A+   "nfl save \"coach\" step 6 (after \"coach: ‹ Back\"): the screen reads \"🧢 Coach Ryder BlazeOut of work2055Standing 0📪12 seasons without oneNo automatic offers right now. You can take a staff role or wait for an\", fixture \"🧢 Coach Ryder BlazeOut of work2055Standing 0📪12 seasons without oneNobody is calling and nobody is going to. The sport has closed the file\"",%0A+   "nfl coverage: {\"seasons\":24,\"event\":19,\"extension\":10,\"freeagency\":14,\"rivalryBeat\":11,\"rivalryChoice\":4,\"retireCancel\":1,\"retireConfirm\":1,\"restartCancel\":2,\"restartConfirm\":2,\"retired\":2,\"coach\":8,\"coachSeasons\":19,\"panels\":27,\"remounts\":8,\"throwback\":1}, fixture {\"seasons\":24,\"event\":20,\"extension\":11,\"freeagency\":13,\"rivalryBeat\":10,\"rivalryChoice\":5,\"retireCancel\":1,\"retireConfirm\":1,\"restartCancel\":2,\"restartConfirm\":2,\"retired\":2,\"coach\":8,\"coachSeasons\":11,\"panels\":26,\"remounts\":7,\"throwback\":1}",%0A+ ]%0A%0A ❯ src/test/usBoardFixture.test.tsx:719:22%0A%0A
