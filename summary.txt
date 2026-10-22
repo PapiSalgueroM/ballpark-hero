@@ -1,0 +1,10 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fonts exit=0 0s | Prepared 9 declared font dependencies for local fulfillment.
+simCareerProgramme-forwalk exit=0 79s | Career programme:50 original/compatibility/full product season pairs with exact RNG,240 opted gameplay seasons,21 effective loaded faults,163 unchanged chance outcomes an
+playCareerProgramme exit=0 136s | Career programme native: 1154 checks, 21/21 completed gameplay journeys
+playSoccerSeasonCalendar exit=0 50s | Calendar native: 6 cases, 301 checks, 1 effective copied observation control
+simSoccerVeteranTalks exit=0 64s | ok   five production browser fixtures including USD, all raw amounts remain EUR
+playSoccerVeteranTalks exit=0 167s | ok   strict geometry and three effective copied observation detectors
+nosack-walk exit=0 262s |   PASS  no page errors
+nosack-walk-nopill exit=0 73s | playCmNoSack control nopill: all 3 guarded checks fired (mutations landed: {"pill":7})
+nosack-walk-sack exit=0 56s | playCmNoSack control sack: all 3 guarded checks fired (mutations landed: {"readNoSack":2})
