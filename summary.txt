@@ -1,0 +1,3 @@
+headsha exit=0 0s | 077932a0fc rc request rBP-trV-bp for 212b9069f010799e4b79574e5f144b190d7a1342
+cmvar-scratch exit=0 154s | simCmVar normal: actual review outcomes and full prior baseline passed.
+cmvar-all-scratch exit=0 669s | simCmVar: 13 actual outcomes and 27 effective controls passed.
