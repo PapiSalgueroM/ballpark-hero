@@ -1,0 +1,16 @@
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+== MAIN (6d2d7a7d)
+sweepWeight exit 0
+   /club-manager       630K gz over  42 files (budget 630K, 629.8K to the tenth)
+   /manager-hot-seat   645K gz over  44 files (budget 645K, 644.5K to the tenth)
+   /deadline-day       654K gz over  47 files (budget 655K, 654.4K to the tenth)
+
+sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+== HEAD (HEAD)
+sweepWeight exit 1
+   /club-manager       631K gz over  42 files (budget 630K, 631.2K to the tenth)
+   /manager-hot-seat   646K gz over  44 files (budget 645K, 645.9K to the tenth)
+   /deadline-day       656K gz over  47 files (budget 655K, 655.8K to the tenth)
+
+sweepWeight: 3 failures

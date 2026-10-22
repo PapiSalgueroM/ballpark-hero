@@ -1,0 +1,3 @@
+#!playwright
+#!serial
+weight-two: P="src index.html package.json vite.config.ts public"; R='^ +/(club-manager|manager-hot-seat|deadline-day|whats-new) '; for pair in "MAIN 6d2d7a7d 4176" "HEAD HEAD 4178"; do set -- $pair; git checkout -q $2 -- $P && npm run build > /tmp/b-$1.log 2>&1; tail -1 /tmp/b-$1.log; (nohup node scripts/lib/hostLikeServer.mjs dist $3 > /tmp/s-$1.log 2>&1 &); sleep 5; echo "== $1 ($2)"; SWEEP_OFFLINE=1 BASE=http://localhost:$3 node scripts/sweepWeight.mjs > /tmp/w-$1.log 2>&1; echo "sweepWeight exit $?"; grep -E "$R" /tmp/w-$1.log; tail -2 /tmp/w-$1.log; mv dist /tmp/dist-$1; done; git checkout -q HEAD -- $P
