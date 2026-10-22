@@ -1,0 +1,7 @@
+seed6 exit=0 36s | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+seed10 exit=0 37s | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+vitest exit=0 7s |    Duration  6.35s (transform 1.76s, setup 469ms, collect 4.06s, tests 3.86s, environment 1.89s, prepare 685ms)
+norival exit=0 19s | No rival product names found. 0 findings.
+seed35 exit=0 42s | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+tsc exit=0 99s | 
+anchors exit=0 52s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.

@@ -1,0 +1,18 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/gmContracts.test.ts [2m([22m[2m25 tests[22m[2m)[22m[32m 100[2mms[22m[39m
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/components/nba-front-office/NbaGmDeskBoard.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 602[2mms[22m[39m
+ [32m✓[39m src/components/nba-front-office/NbaEarnedDraft.test.tsx [2m([22m[2m12 tests[22m[2m)[22m[33m 3154[2mms[22m[39m
+   [33m[2m✓[22m[39m the earned draft night on the NBA board[2m > [22m(a) from the recap: the chances first and no spoiler, Continue to his slot, his two picks, the summer, the hub [33m 795[2mms[22m[39m
+   [33m[2m✓[22m[39m the earned draft night on the NBA board[2m > [22m(f) a night broken mid draft, at each field, finishes the old way with the rivals' batches [33m 707[2mms[22m[39m
+   [33m[2m✓[22m[39m the earned draft night on the NBA board[2m > [22m(g) a reload at the card draws its last frame with Continue live; a reload on the clock is the same slot and class with no draw [33m 360[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[32m41 passed[39m[22m[90m (41)[39m
+[2m   Start at [22m 20:19:56
+[2m   Duration [22m 6.35s[2m (transform 1.76s, setup 469ms, collect 4.06s, tests 3.86s, environment 1.89s, prepare 685ms)[22m
+
