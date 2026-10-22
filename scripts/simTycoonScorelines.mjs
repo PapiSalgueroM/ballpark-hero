@@ -40,6 +40,22 @@
  *     exactly; offlineEarnings is Object.is the base record on its 52 inputs; at two
  *     hours every seed's last watched win paid 19.5 to 20.5 seconds of income.
  *  S8 the economy beside the base record: printed, no fence.
+ *  S9 the ladder (Round 1543, brief-1543, critic-1539 items 2 to 4), four sections kept out
+ *     of NAMES so 1532's checks and control map stay exactly as they were:
+ *     S9a found: every ACHIEVEMENTS or MILESTONES row whose hit reads totalGoals,
+ *         totalWins or streak (the code, comments stripped) is one of the sixteen rungs;
+ *         a seventeenth fails "a new rung needs an anchor".
+ *     S9b shape: every base id is still there (a save key), ACH_BONUS 0.02, every milestone
+ *         pays its base pay, each rung's threshold at or below its old one, pairs shared, each
+ *         family rising, as10 at the streak where streakMult stops rising (called, not typed),
+ *         every label carries its number ("First" reads as one).
+ *     S9c minutes: on calibration and holdout every rung but as10 lands within LADDER_BAND
+ *         (35 percent or five matches, whichever is wider) of its base minute, S8's median;
+ *         aw150, aw400 and ag2000 (never reached by the base) sit within 0.8 to 1.25 of old x
+ *         this run's per match rate against the base record's (120 to 240 minutes).
+ *     S9d kept: a veteran save holding every rung keeps all 47 and 10 through load and a 2
+ *         second tick at roll 0.999, so do the corpus saves and the twelve histories, and a
+ *         boundary fleet earns nothing one under each threshold and exactly its rungs at it.
  *
  * Controls, each a patched copy of the lib in the OS temp folder, calibration seeds:
  *   copy      a private goalLambda with perPoint 0.056          red S1 (run against S1 S2 S6 S7)
@@ -54,6 +70,11 @@
  *   offsetunit RIVAL_OFFSET_POINTS 50, not 500                  red S1 (run against S1 S2 S6 S7)
  * (facts and offsetunit were added after the round's review: each mutation was green
  * on every check of the round, remote checks r1532-run-mut1 and r1532-run-mut2.)
+ * Round 1543's four, each run against S9a to S9d alone:
+ *   newrung   astall's hit also reads totalWins (always true)  red S9a
+ *   raise     goals25 at 30, one nice value over its old 25     red S9b S9c
+ *   oldladder the eleven moved rows back to their old numbers   red S9c
+ *   offbyone  ag2000's >= written as >                         red S9d
  * R7's sets name S3 S4 S5 for linear; S1 and S6 go red too by construction (S1
  * asserts the law's formula and S6 the law's ceiling, both of which the base lines
  * break), and noclamp breaks S1's clamp for the same reason.
@@ -75,6 +96,20 @@
  *   seed's last win before two hours paid 20 seconds of income (base 0.13).
  *   S8: first Sell up 12.77 minutes (base 13.37); income at 30 / 60 / 120 minutes
  *   17.9K / 25.6K / 41.7K a second (base 21.2K / 34.4K / 81.0K).
+ *
+ * MEASURED 2026-10-22 for S9 (remote check r1543-s2a, head 6195a597, the ladder moved; the
+ * runs are this harness's own pace runs, so S9c prints the same medians), head against
+ * base minutes calibration / holdout, then S9c's headroom (bootstrap error):
+ *   win1 4.2 / 4.2 against 4.2 / 2.1, headroom 10.5 (0.15) / 8.4 (1.03); win10 at 8 23.1 /
+ *   21 against 23.1 / 21, 10.5 (0.93) / 10.5 (1.25); win50 at 35 107.1 / 105 against 107.1
+ *   / 105, 37.5 (3.62) / 36.8 (3.89); goals25 at 10 9.52 / 9.33 against 9.75 / 9.61, 10.3
+ *   (0.72) / 10.2 (0.97); ag100 at 30 29.4 / 26.2 against 27.2 / 25.8, 8.4 (1.34) / 10.1
+ *   (2.57); ag500 at 75 81.7 / 79.5 against 96.1 / 94.9, 19.3 (2.79) / 17.8 (3.86);
+ *   streak5 12.6 / 14.7 against 12.6 / 10.5, 10.5 (1.12) / 6.3 (1.41); as10 (exempt) 29.4 /
+ *   29.4 against 23.1 / 21. Per match rates 120 to 240 minutes: wins 0.632 / 0.614 against
+ *   0.825 / 0.86, goals 1.842 / 1.772 against 14.281 / 14.263, so aw150 125 sits at x1.088
+ *   / x1.167 of its scaled old 150, aw400 300 at x0.979 / x1.05, ag2000 250 at x0.969 /
+ *   x1.006 (the tightest, aw150 on holdout, 0.083 under 1.25).
  *
  * Exit 0 green; 1 a check failed or a control turned the wrong sections; 2 could
  * not run; 3 a control did not fire. Green is the closing summary line AND exit 0.
@@ -118,6 +153,48 @@ const TABLE_SEASONS = 500;
 
 const OLD_BOOST = '[0, 0.006, 0.012, 0.019, 0.027, 0.036, 0.046, 0.057, 0.069, 0.082][divisionIndex(s)]';
 const OLD_MATCH_NO = '(Number.isFinite(s.league?.baseMatchNo) ? Math.min(s.matchNo, s.league.baseMatchNo) : s.matchNo)';
+/* ---------- Round 1543: the ladder (S9a to S9d), outside NAMES so 1532's control map stays as it was ---------- */
+const S9_NAMES = ['S9a', 'S9b', 'S9c', 'S9d'];
+/* The goal, win and streak rungs before Round 1543, typed from c50eb038 (unchanged
+   through Round 1539, 1afe5364): each row's ids, the counter its hit reads, its old
+   threshold. Pairs that share a threshold share a row; rows rise within a counter. */
+const OLD_LADDER = [
+  { ids: ['win1', 'aw1'], counter: 'wins', old: 1 },
+  { ids: ['win10', 'aw10'], counter: 'wins', old: 10 },
+  { ids: ['win50', 'aw50'], counter: 'wins', old: 50 },
+  { ids: ['aw150'], counter: 'wins', old: 150 },
+  { ids: ['aw400'], counter: 'wins', old: 400 },
+  { ids: ['goals25', 'ag25'], counter: 'goals', old: 25 },
+  { ids: ['ag100'], counter: 'goals', old: 100 },
+  { ids: ['ag500'], counter: 'goals', old: 500 },
+  { ids: ['ag2000'], counter: 'goals', old: 2000 },
+  { ids: ['streak5', 'as5'], counter: 'streak', old: 5 },
+  { ids: ['as10'], counter: 'streak', old: 10 },
+];
+const LADDER_IDS = OLD_LADDER.flatMap(r => r.ids);
+const COUNTER_FIELD = { goals: 'totalGoals', wins: 'totalWins', streak: 'streak' };
+/* Anchored on matches, not minutes: the base never reached them in its 300 minutes. */
+const LONG_RUNGS = ['aw150', 'aw400', 'ag2000'];
+/* The lead's ruling Q2: ten is where streakMult and the fan pull stop rising. Printed. */
+const EXEMPT_RUNGS = ['as10'];
+/* Every base id, typed from c50eb038. S9b pins presence, never order or count (critic-1539
+   item 13: the count is pinned by simStadiumTycoon and simTycoonHelp already). */
+const BASE_ACH_IDS = ['af500', 'af2k', 'af10k', 'af50k', 'af250k', 'af1m', 'ac500', 'ac2000', 'ac8000', 'aw1', 'aw10', 'aw50', 'aw150', 'aw400',
+  'ag25', 'ag100', 'ag500', 'ag2000', 'as5', 'as10', 'at100', 'at1k', 'at10k', 'am10k', 'am1m', 'am100m', 'am10b', 'am1t', 'amt25', 'amt100', 'amt400',
+  'ast10', 'ast50', 'ast150', 'astall', 'ad2', 'ad4', 'ad6', 'ad8', 'ad9', 'ar1', 'ar3', 'ar6', 'ab3', 'ab20', 'agw5', 'agw25'];
+const BASE_PAY = { fans500: 400, fans2k: 2500, fans10k: 20000, full: 600, win1: 250, win10: 3000, win50: 30000, goals25: 4000, streak5: 6000, allTracks: 8000 };
+/* S9c's permanent band (critic-1539 item 2): set from measured headroom, never the picking
+   rule (25 percent or two matches), which win and streak minutes, moving in whole 2.1 minute
+   matches, would turn into a coin toss. Measured on remote check r1543-s2a (head 6195a597, the
+   moved ladder, 20 seeds a set, bootstrap errors of the median over 1,000 resamples): every
+   rung must keep one whole match plus two errors to its edge. Five matches is the least that
+   gives the five win streak its room on holdout (14.7 against 10.5, error 1.41: needs 9.12);
+   35 percent gives ag500 (79.5 against 94.9 on holdout, error 3.86: needs 25.2 of its 33.2)
+   room to spare, where 25 percent would not (23.7). The header lists every rung's headroom. */
+const LADDER_BAND = { pct: 0.35, matches: 5 };
+const RATE_BAND = [0.8, 1.25];
+const MATCH_MIN = 2.1;
+
 /* The exact sections. A control aimed at one of them is run against these alone, as
    critic item 2 has crowd run: S3 to S5 are means over seeds, and a mutation that
    only reshuffles the rolls (tworolls) or nudges a constant (copy) moves them by
@@ -146,6 +223,29 @@ const CONTROLS = {
     ['    const pay = Math.round(unboostedIncomePerSec(st) * PROMOTION_BONUS_SEC);', '    const pay = Math.round(attendance(st) * 8 * d.incomeMult * repMult(st));'],
     ['  const pay = Math.round(unboostedIncomePerSec({ ...st, league: next }) * PROMOTION_BONUS_SEC);', '  const pay = Math.round(attendance(st) * 8 * nd.incomeMult * repMult(st));'],
   ] },
+  /* Round 1543, the ladder's four, each run against S9a to S9d alone (critic-1539 item 3). */
+  newrung: { red: ['S9a'], only: S9_NAMES, rewrites: [[
+    "{ id: 'astall', label: 'Every role filled at least once', emoji: '📋', hit: s => STAFF.every(t => staffLevelOf(s, t.id) >= 1) },",
+    "{ id: 'astall', label: 'Every role filled at least once', emoji: '📋', hit: s => STAFF.every(t => staffLevelOf(s, t.id) >= 1) && s.totalWins >= 0 },"]] },
+  raise: { red: ['S9b', 'S9c'], only: S9_NAMES, rewrites: [[
+    "{ id: 'goals25', label: '10 goals scored', pay: 4000, hit: s => s.totalGoals >= 10 },",
+    "{ id: 'goals25', label: '10 goals scored', pay: 4000, hit: s => s.totalGoals >= 30 },"]] },
+  oldladder: { red: ['S9c'], only: S9_NAMES, rewrites: [
+    ["{ id: 'aw10', label: '8 career wins', emoji: '🏁', hit: s => s.totalWins >= 8 },", "{ id: 'aw10', label: '10 career wins', emoji: '🏁', hit: s => s.totalWins >= 10 },"],
+    ["{ id: 'aw50', label: '35 career wins', emoji: '🏁', hit: s => s.totalWins >= 35 },", "{ id: 'aw50', label: '50 career wins', emoji: '🏁', hit: s => s.totalWins >= 50 },"],
+    ["{ id: 'aw150', label: '125 career wins', emoji: '🏆', hit: s => s.totalWins >= 125 },", "{ id: 'aw150', label: '150 career wins', emoji: '🏆', hit: s => s.totalWins >= 150 },"],
+    ["{ id: 'aw400', label: '300 career wins', emoji: '🏆', hit: s => s.totalWins >= 300 },", "{ id: 'aw400', label: '400 career wins', emoji: '🏆', hit: s => s.totalWins >= 400 },"],
+    ["{ id: 'ag25', label: '10 goals', emoji: '⚽', hit: s => s.totalGoals >= 10 },", "{ id: 'ag25', label: '25 goals', emoji: '⚽', hit: s => s.totalGoals >= 25 },"],
+    ["{ id: 'ag100', label: '30 goals', emoji: '⚽', hit: s => s.totalGoals >= 30 },", "{ id: 'ag100', label: '100 goals', emoji: '⚽', hit: s => s.totalGoals >= 100 },"],
+    ["{ id: 'ag500', label: '75 goals', emoji: '⚽', hit: s => s.totalGoals >= 75 },", "{ id: 'ag500', label: '500 goals', emoji: '⚽', hit: s => s.totalGoals >= 500 },"],
+    ["{ id: 'ag2000', label: '250 goals', emoji: '🥅', hit: s => s.totalGoals >= 250 },", "{ id: 'ag2000', label: '2,000 goals', emoji: '🥅', hit: s => s.totalGoals >= 2000 },"],
+    ["{ id: 'win10', label: '8 wins', pay: 3000, hit: s => s.totalWins >= 8 },", "{ id: 'win10', label: '10 wins', pay: 3000, hit: s => s.totalWins >= 10 },"],
+    ["{ id: 'win50', label: '35 wins', pay: 30000, hit: s => s.totalWins >= 35 },", "{ id: 'win50', label: '50 wins', pay: 30000, hit: s => s.totalWins >= 50 },"],
+    ["{ id: 'goals25', label: '10 goals scored', pay: 4000, hit: s => s.totalGoals >= 10 },", "{ id: 'goals25', label: '25 goals scored', pay: 4000, hit: s => s.totalGoals >= 25 },"],
+  ] },
+  offbyone: { red: ['S9d'], only: S9_NAMES, rewrites: [[
+    "{ id: 'ag2000', label: '250 goals', emoji: '🥅', hit: s => s.totalGoals >= 250 },",
+    "{ id: 'ag2000', label: '250 goals', emoji: '🥅', hit: s => s.totalGoals > 250 },"]] },
 };
 if (ONLY && !CONTROLS[ONLY]) abort(`unknown SCORELINES_CONTROL ${ONLY}`);
 
@@ -554,12 +654,156 @@ function S8(sets) {
   return lines;
 }
 
+/* ---------- S9 the ladder (Round 1543) ---------- */
+/** simTycoonAwayMatchdays' stripComments: the code, never the prose. */
+const stripComments = code => code.replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/(^|[^:'"`])\/\/.*$/gm, '$1');
+/** Every ACHIEVEMENTS and MILESTONES row of the lib's code: its id, its hit's text, the
+ *  counter the hit reads (if a ladder one) and the number it compares that counter with. */
+function ladderRows(libText) {
+  const code = stripComments(libText); const rows = [];
+  for (const name of ['ACHIEVEMENTS', 'MILESTONES']) {
+    const start = code.indexOf(`export const ${name}`); const end = code.indexOf('\n];', start);
+    if (start < 0 || end < 0) return null;
+    for (const line of code.slice(start, end).split('\n')) {
+      const m = line.match(/\{\s*id:\s*'([^']+)'.*hit:\s*(.+?)\s*\},?\s*$/);
+      if (!m) continue;
+      const reads = m[2].match(/\.(totalGoals|totalWins|streak)\b/);
+      const lit = m[2].match(/s\.(totalGoals|totalWins|streak)\s*>=?\s*(\d+)/);
+      rows.push({ array: name, id: m[1], hit: m[2], reads: reads ? reads[1] : null, n: lit ? Number(lit[2]) : NaN });
+    }
+  }
+  return rows;
+}
+const WORDS = { first: 1, one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10, eleven: 11, twelve: 12 };
+const labelNumber = label => { const d = label.match(/^([0-9][0-9,]*)/); return d ? Number(d[1].split(',').join('')) : WORDS[label.split(' ')[0].toLowerCase()] ?? NaN; };
+const med9 = xs => { const v = xs.map(x => (x === null || x === undefined ? Infinity : x)).sort((a, b) => a - b); return v[Math.floor(v.length / 2)]; };
+function bootSE(xs) {
+  const roll = mulberry(1543); const meds = [];
+  for (let i = 0; i < 1000; i += 1) meds.push(med9(xs.map(() => xs[Math.floor(roll() * xs.length)])));
+  if (!meds.every(Number.isFinite)) return NaN;
+  const m = meds.reduce((a, b) => a + b, 0) / meds.length;
+  return Math.sqrt(meds.reduce((a, b) => a + (b - m) ** 2, 0) / (meds.length - 1));
+}
+
+/* S9a found: the rungs are found by the hit functions' code, so a rung added later cannot skip the fence. */
+function S9a(libText) {
+  const rows = ladderRows(libText);
+  if (!rows) return { out: ['cannot find ACHIEVEMENTS or MILESTONES in the lib'], note: '' };
+  const found = rows.filter(r => r.reads).map(r => r.id);
+  const out = [...found.filter(id => !LADDER_IDS.includes(id)).map(id => `${id} reads a goal, win or streak counter: a new rung needs an anchor`),
+    ...LADDER_IDS.filter(id => !found.includes(id)).map(id => `${id} no longer reads its counter`)];
+  return { out, note: `${found.length} rungs found by the hit functions' code (comments stripped): ${found.join(' ')}` };
+}
+
+/* S9b shape: what keeps every saved badge true and the ladder honest. */
+function S9b(E, libText) {
+  const T = E.T; const out = []; const rows = ladderRows(libText) ?? [];
+  const n = id => rows.find(r => r.id === id)?.n ?? NaN;
+  for (const id of BASE_ACH_IDS) if (!T.ACHIEVEMENTS.some(a => a.id === id)) out.push(`badge ${id} is gone, and it is a save key`);
+  for (const id of Object.keys(BASE_PAY)) { const m = T.MILESTONES.find(x => x.id === id); if (!m) out.push(`milestone ${id} is gone, and it is a save key`); else if (m.pay !== BASE_PAY[id]) out.push(`milestone ${id} pays ${m.pay}, the base paid ${BASE_PAY[id]}`); }
+  if (T.ACH_BONUS !== 0.02) out.push(`ACH_BONUS is ${T.ACH_BONUS}, not 0.02`);
+  let cap = 0; const fresh = T.newTycoon(0);
+  while (cap < 50 && T.streakMult({ ...fresh, streak: cap + 1 }) > T.streakMult({ ...fresh, streak: cap })) cap += 1;
+  for (const r of OLD_LADDER) {
+    const v = r.ids.map(n);
+    if (!v.every(Number.isFinite)) { out.push(`cannot read the threshold of ${r.ids.join(' or ')} out of the code`); continue; }
+    if (v.some(x => x !== v[0])) out.push(`${r.ids.join(' and ')} are a pair and no longer share a threshold (${v.join(', ')})`);
+    for (const [i, x] of v.entries()) if (x > r.old) out.push(`${r.ids[i]} rose to ${x} from ${r.old}: a threshold may only go down`);
+  }
+  for (const c of Object.keys(COUNTER_FIELD)) {
+    const v = OLD_LADDER.filter(r => r.counter === c).map(r => n(r.ids[0]));
+    if (v.some((x, i) => i > 0 && !(x > v[i - 1]))) out.push(`the ${c} rungs no longer rise: ${v.join(', ')}`);
+  }
+  if (n('as10') !== cap) out.push(`as10 is ${n('as10')}, but streakMult stops rising at ${cap}`);
+  for (const id of LADDER_IDS) {
+    const row = [...T.ACHIEVEMENTS, ...T.MILESTONES].find(x => x.id === id);
+    if (row && labelNumber(row.label) !== n(id)) out.push(`${id}'s label "${row.label}" does not carry its threshold ${n(id)}`);
+  }
+  const fam = c => OLD_LADDER.filter(r => r.counter === c).map(r => n(r.ids[0])).join(', ');
+  return { out, note: `every base id present (${BASE_ACH_IDS.length} badges, ${Object.keys(BASE_PAY).length} milestones), ACH_BONUS 0.02, every milestone pays its base pay; wins ${fam('wins')}, goals ${fam('goals')}, streak ${fam('streak')}, each at or below its old threshold, pairs shared, as10 at streakMult's cap (${cap}), every label carries its threshold` };
+}
+
+/* S9c minutes: each rung lands about when it did before the law (the band from measured
+   headroom, LADDER_BAND); the long rungs sit at old x this run's per match rate ratio. */
+function S9c(sets, libText) {
+  const out = []; const lines = []; const rows = ladderRows(libText) ?? [];
+  const n = id => rows.find(r => r.id === id)?.n ?? NaN;
+  const rate = (cps, f) => med9(cps.map(c => (c[240][f] - c[120][f]) / (c[240].matches - c[120].matches)));
+  for (const [k, R] of Object.entries(sets)) {
+    const seeds = R.pace.map(r => r.seed);
+    const base = BASE.policies.pace.filter(b => seeds.includes(b.seed));
+    if (base.length !== seeds.length) { out.push(`${k}: the base record lacks some of seeds ${seeds.join(', ')}`); continue; }
+    const parts = [];
+    for (const r of OLD_LADDER) for (const id of r.ids) {
+      if (LONG_RUNGS.includes(id)) continue;
+      const head = med9(R.pace.map(x => x.firsts[id])); const was = med9(base.map(b => b.firsts[id]));
+      const se = bootSE(R.pace.map(x => x.firsts[id] ?? Infinity));
+      const show = `${id} ${r3(head)} (${r3(head / MATCH_MIN)} m) against ${r3(was)}, x${r3(head / was)}`;
+      if (EXEMPT_RUNGS.includes(id)) { parts.push(`${show} (exempt)`); continue; }
+      const tol = Math.max(LADDER_BAND.pct * was, LADDER_BAND.matches * MATCH_MIN);
+      const room = Number.isFinite(head) ? tol - Math.abs(head - was) : -Infinity;
+      parts.push(`${show}, headroom ${r3(room)} (se ${r3(se)})`);
+      if (!(room >= -1e-6)) out.push(`${k}: ${id} lands at ${r3(head)} minutes against the base's ${r3(was)}, outside ${LADDER_BAND.pct * 100} percent or ${LADDER_BAND.matches} matches`);
+    }
+    for (const id of LONG_RUNGS) {
+      const r = OLD_LADDER.find(x => x.ids.includes(id)); const f = r.counter === 'goals' ? 'goals' : 'wins';
+      const hr = rate(R.pace.map(x => x.checkpoints), f); const br = rate(base.map(b => b.checkpoints), f);
+      const ratio = n(id) / ((r.old * hr) / br);
+      parts.push(`${id} ${n(id)} = x${r3(ratio)} of ${r.old} x ${r3(hr)} / ${r3(br)} a match`);
+      if (!(ratio >= RATE_BAND[0] && ratio <= RATE_BAND[1])) out.push(`${k}: ${id} at ${n(id)} is x${r3(ratio)} of old x the per match rate ratio, outside ${RATE_BAND.join(' to ')}`);
+    }
+    lines.push(`${k}: ${parts.join('; ')}`);
+  }
+  return { out, note: `every rung but as10 within ${LADDER_BAND.pct * 100} percent or ${LADDER_BAND.matches} matches of its base minute, the long rungs within ${RATE_BAND.join(' to ')} of old x the per match rate ratio`, lines };
+}
+
+/* S9d kept: a lowered rung takes no badge from anybody, and fires exactly at its threshold. */
+const CORPUS9 = JSON.parse(read(path.join(ROOT, 'src/test/fixtures/tycoonSaves.json')));
+const HISTORIES9 = JSON.parse(read(path.join(ROOT, 'scripts/data/allPlayersValueBaseline.json'))).cases;
+function S9d(E, libText) {
+  const T = E.T; const out = []; const now = CORPUS9.now; const still = () => 0.999;
+  const rows = ladderRows(libText) ?? []; const n = id => rows.find(r => r.id === id)?.n ?? NaN;
+  const lost = (before, after, what) => {
+    const gone = [...(before.ach ?? []).filter(id => !(after.ach ?? []).includes(id)), ...(before.claimed ?? []).filter(id => !(after.claimed ?? []).includes(id))];
+    if (gone.length) out.push(`${what} lost ${gone.join(' ')} through load and one tick`);
+  };
+  const fresh = T.newTycoon(0);
+  const vet = { ...fresh, totalGoals: 2000, totalWins: 400, streak: 10, ach: T.ACHIEVEMENTS.map(a => a.id), claimed: T.MILESTONES.map(m => m.id) };
+  const vetAfter = T.tick(T.deserializeTycoon(T.serializeTycoon(vet, now), now), 2, still).state;
+  lost({ ach: BASE_ACH_IDS, claimed: Object.keys(BASE_PAY) }, vetAfter, 'the veteran save');
+  let corpus = 0;
+  for (const e of CORPUS9.entries) {
+    if (e.current === null || e.current === undefined) continue;
+    const loaded = T.deserializeTycoon(e.raw, now);
+    if (!loaded) { out.push(`corpus save ${e.name} no longer loads`); continue; }
+    lost(JSON.parse(e.current), T.tick(loaded, 2, still).state, `corpus save ${e.name}`); corpus += 1;
+  }
+  for (const [i, c] of HISTORIES9.entries()) lost(c.initial, T.tick(T.deserializeTycoon(T.serializeTycoon(c.initial, now), now), 2, still).state, `history ${i + 1}`);
+  const all = [...T.ACHIEVEMENTS.map(a => a.id), ...T.MILESTONES.map(m => m.id)];
+  let fleet = 0;
+  for (const c of Object.keys(COUNTER_FIELD)) {
+    const ids = OLD_LADDER.filter(r => r.counter === c).flatMap(r => r.ids);
+    for (const k of [...new Set(ids.map(n))]) {
+      const held = all.filter(id => !(ids.includes(id) && n(id) >= k));
+      const at = v => { const s = { ...fresh, totalGoals: 0, totalWins: 0, streak: 0, [COUNTER_FIELD[c]]: v, ach: held.filter(id => T.ACHIEVEMENTS.some(a => a.id === id)), claimed: held.filter(id => T.MILESTONES.some(m => m.id === id)) };
+        const after = T.tick(s, 2, still).state; return [...(after.ach ?? []), ...(after.claimed ?? [])].filter(id => !held.includes(id)).sort(); };
+      const under = at(k - 1); const on = at(k); const want = ids.filter(id => n(id) === k).sort();
+      if (under.length) out.push(`${c} at ${k - 1} earned ${under.join(' ')}, one under its threshold`);
+      if (on.join(' ') !== want.join(' ')) out.push(`${c} at ${k} earned ${on.join(' ') || 'nothing'}, the rungs at ${k} are ${want.join(' ')}`);
+      fleet += 1;
+    }
+  }
+  return { out, note: `a veteran save (2,000 goals, 400 wins, a streak of 10, every id) keeps all ${BASE_ACH_IDS.length} badges and ${Object.keys(BASE_PAY).length} milestones through load and a 2 second tick; ${corpus} corpus saves and ${HISTORIES9.length} histories lose no id; ${fleet} thresholds each earn nothing one under and exactly their rungs at it` };
+}
+
 /* ---------- run ---------- */
 const NAMES = ['S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7'];
 const TITLES = { S1: 'the law, read not restated', S2: 'the shape', S3: 'goals', S4: 'results', S5: 'titles', S6: 'never 99', S7: 'bonuses' };
+const S9_TITLES = { S9a: 'the ladder: its rungs, found by code', S9b: 'the ladder: its shape', S9c: 'the ladder: its minutes', S9d: 'the ladder: every badge kept' };
 async function evaluate(E, libText, seedSets, names, main) {
   const sets = Object.fromEntries(Object.entries(seedSets).map(([k, seeds]) => [k, playRuns(E.T, seeds, main, (main && OVER[k]) || seeds)]));
-  const run = { S1: () => S1(E, libText), S2: () => S2(E, libText), S3: () => S3(E, sets), S4: () => S4(E, sets), S5: () => S5(E, sets, main), S6: () => S6(E), S7: () => S7(E, sets) };
+  const run = { S1: () => S1(E, libText), S2: () => S2(E, libText), S3: () => S3(E, sets), S4: () => S4(E, sets), S5: () => S5(E, sets, main), S6: () => S6(E), S7: () => S7(E, sets),
+    S9a: () => S9a(libText), S9b: () => S9b(E, libText), S9c: () => S9c(sets, libText), S9d: () => S9d(E, libText) };
   return { res: Object.fromEntries(names.map(n => [n, run[n]()])), sets };
 }
 let checks = 0; let failed = 0; let dead = 0;
@@ -568,7 +812,7 @@ const secs = () => `${((Date.now() - started) / 1000).toFixed(0)} s`;
 console.log(`Round 1532: Stadium Tycoon scorelines at the hook's cadence (dt ${DT}s)${ONLY ? `, control ${ONLY} alone` : ''}`);
 if (!ONLY) {
   const live = await engines('live', LIB);
-  const { res, sets } = await evaluate(live, read(LIB), { cal: CAL, hold: HOLD }, NAMES, true);
+  const { res, sets } = await evaluate(live, read(LIB), { cal: CAL, hold: HOLD }, [...NAMES, ...S9_NAMES], true);
   for (const n of NAMES) {
     checks += 1;
     console.log(`${n}) ${TITLES[n]}`);
@@ -576,6 +820,12 @@ if (!ONLY) {
   }
   console.log(`S8) the economy beside the base record (printed, no fence) [${secs()}]`);
   for (const line of S8(sets)) console.log(`   ${line}`);
+  for (const n of S9_NAMES) {
+    checks += 1;
+    console.log(`${n}) ${S9_TITLES[n]}`);
+    for (const line of res[n].lines ?? []) console.log(`   ${line}`);
+    if (res[n].out.length) { failed += 1; for (const m of res[n].out.slice(0, 8)) console.error(`  FAIL: ${n}: ${m}`); } else console.log(`   ${res[n].note}`);
+  }
 }
 for (const name of ONLY ? [ONLY] : Object.keys(CONTROLS)) {
   const control = CONTROLS[name];

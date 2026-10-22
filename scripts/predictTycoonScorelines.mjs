@@ -26,6 +26,9 @@
  *
  *   node scripts/predictTycoonScorelines.mjs --probe586 <probe586.json> [--quick]
  * Its name does not start with sim, so runAllSims skips it.
+ * Round 1543: ID_RULE below types the goal, win and streak rungs as they stood before that
+ * round; the ladder has moved since (contract section 23), so those predictions describe the
+ * old thresholds. A tool, not a gate: left as Round 1532 used it.
  */
 import fs from 'node:fs';
 import path from 'node:path';
