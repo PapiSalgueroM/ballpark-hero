@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+chunkgz: node .rc/x/chunkgz.mjs
+simFlagshipWeight: node scripts/simFlagshipWeight.mjs
