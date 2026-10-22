@@ -6,6 +6,7 @@
     "refuted: claims two hosts show false. None may appear on any board again.",
     "adjudicated: findings of the cross check that are wrong about the world (a namesake in the site's tables, a gap in the career tables), each with its reason.",
     "owed: findings of the cross check on boards this round did not rebuild. Part B of the round clears them; the list may only shrink.",
+    "watches: a watch on a closed award list the checker holds, naming the men who may join it soon (the 2026 Ballon d'Or shortlist, on two hosts). None of them may share a board with that list's group outside the group itself, until the result is in the verified record.",
     "datedOwed: groups whose label names a year from 2020 on (\"Won 2024 Euros with Spain\", \"Played for Napoli (2020s)\") that nothing holds to that year yet. Part B checks each on two hosts or retires it; the list may only shrink. puzzle-136 said \"Won the 2026 Champions League\" over four Barcelona men, and PSG won that final.",
     "Wikipedia and every other wiki are never a source here.",
     "uncheckedCeiling: the groups on the shipped boards that nothing judges yet (no checker, no ledger entry). It may only fall; part B ledgers them and lowers it.",
@@ -233,6 +234,28 @@
           "url": "https://www.espn.com/soccer/player/_/id/218104/enis-bardhi",
           "read": "2026-10-22",
           "says": "player page: North Macedonia midfielder"
+        }
+      ]
+    }
+  },
+  "watches": {
+    "ballonDor": {
+      "label": "Won the Ballon d'Or",
+      "asOf": "2026-10-22",
+      "why": "The 2026 men's Ballon d'Or is presented on 26 October 2026 in London and any of these 30 nominees may win it. Until the 2026 row is in scripts/data/ballonDorVerified2026-09.json on two hosts, none of them may share a board with a Won the Ballon d'Or group outside that group, or the board gets a second right answer the night of the ceremony. Rodri, Messi and Dembele are past winners and may sit inside the group.",
+      "names": ["Jude Bellingham", "Pau Cubarsí", "Marc Cucurella", "Ousmane Dembélé", "Luis Díaz", "Bruno Fernandes", "Gabriel Magalhães", "Erling Haaland", "Achraf Hakimi", "Harry Kane", "Khvicha Kvaratskhelia", "Lamine Yamal", "Sadio Mané", "Marquinhos", "Lautaro Martínez", "Kylian Mbappé", "Nuno Mendes", "Lionel Messi", "João Neves", "Michael Olise", "Willian Pacho", "Julián Quiñones", "Declan Rice", "Rodri", "Fabián Ruiz", "William Saliba", "Ferran Torres", "Dayot Upamecano", "Vinícius Júnior", "Vitinha"],
+      "sources": [
+        {
+          "host": "si.com",
+          "url": "https://www.si.com/soccer/ballon-dor-2026-full-list-nominees",
+          "read": "2026-10-22",
+          "says": "8 September 2026: the 30 men's nominees, the same 30 names as here; ceremony 26 October in London"
+        },
+        {
+          "host": "beinsports.com",
+          "url": "https://www.beinsports.com/en-us/soccer/articles/all-2026-ballon-d-or-nominees-revealed-2026-09-08",
+          "read": "2026-10-22",
+          "says": "the 30 men's nominees revealed on 8 September, the same 30 names (Gabriel listed as Gabriel Magalhaes); ceremony Monday 26 October 2026 in London"
         }
       ]
     }

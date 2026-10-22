@@ -11,7 +11,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
       },
       {
         category: 'Played for Chelsea in 2025-26',
-        players: ['Cole Palmer', 'Reece James', 'Marc Cucurella', 'Enzo Fernández'],
+        players: ['Cole Palmer', 'Reece James', 'Moisés Caicedo', 'Enzo Fernández'],
         difficulty: 'medium',
       },
       {
@@ -131,7 +131,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
     groups: [
       {
         category: 'Played for PSG in 2025-26',
-        players: ['Achraf Hakimi', 'Désiré Doué', 'João Neves', 'Lucas Hernández'],
+        players: ['Bradley Barcola', 'Désiré Doué', 'Warren Zaïre-Emery', 'Lucas Hernández'],
         difficulty: 'easy',
       },
       {
@@ -236,7 +236,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
       },
       {
         category: 'Played for Inter Milan in 2025-26',
-        players: ['Lautaro Martínez', 'Marcus Thuram', 'Federico Dimarco', 'Piotr Zieliński'],
+        players: ['Nicolò Barella', 'Marcus Thuram', 'Federico Dimarco', 'Piotr Zieliński'],
         difficulty: 'medium',
       },
       {
@@ -281,7 +281,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
     groups: [
       {
         category: 'Played for PSG in 2025-26',
-        players: ['Fabián Ruiz', 'Willian Pacho', 'Nuno Mendes', 'Warren Zaïre-Emery'],
+        players: ['Gonçalo Ramos', 'Lee Kang-in', 'Lucas Chevalier', 'Warren Zaïre-Emery'],
         difficulty: 'easy',
       },
       {
@@ -1252,7 +1252,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
     groups: [
       { category: 'Played for Newcastle in 2025-26', players: ['Nick Pope', 'Aaron Ramsdale', 'Dan Burn', 'Kieran Trippier'], difficulty: 'easy' },
       { category: 'From Chile', players: ['Alexis Sánchez', 'Arturo Vidal', 'Claudio Bravo', 'Gary Medel'], difficulty: 'medium' },
-      { category: 'Played for Napoli (2020s)', players: ['Victor Osimhen', 'Khvicha Kvaratskhelia', 'Kim Min-jae', 'Piotr Zieliński'], difficulty: 'hard' },
+      { category: 'Played for Napoli (2020s)', players: ['Victor Osimhen', 'Giovanni Di Lorenzo', 'Kim Min-jae', 'Piotr Zieliński'], difficulty: 'hard' },
       { category: 'Won the Ballon d\'Or and Champions League in same year', players: ['Cristiano Ronaldo', 'Kaká', 'Lionel Messi', 'Luka Modrić'], difficulty: 'insane' },
     ],
   },
@@ -1754,7 +1754,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
   {
     id: 'puzzle-151',
     groups: [
-      { category: 'Played for Bayern Munich in 2025-26', players: ['Harry Kane', 'Michael Olise', 'Luis Díaz', 'Dayot Upamecano'], difficulty: 'easy' },
+      { category: 'Played for Bayern Munich in 2025-26', players: ['Joshua Kimmich', 'Jamal Musiala', 'Alphonso Davies', 'Jonathan Tah'], difficulty: 'easy' },
       { category: 'Played for Manchester City in 2025-26', players: ['Antoine Semenyo', 'Jérémy Doku', 'Tijjani Reijnders', 'Nico O\'Reilly'], difficulty: 'medium' },
       { category: 'Won the Ballon d\'Or', players: ['Lionel Messi', 'Kaká', 'Ousmane Dembélé', 'Luka Modrić'], difficulty: 'hard' },
       { category: 'Over 100 Premier League assists', players: ['Ryan Giggs', 'Kevin De Bruyne', 'Wayne Rooney', 'Frank Lampard'], difficulty: 'insane' },

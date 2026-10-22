@@ -45,6 +45,9 @@
  *                         of puzzle-1, which carries a Ballon d'Or group: section 4
  *                         must report him as a second answer
  *   CONN_CONTROL=current  writes "Current" back into a dated group (section 1)
+ *   CONN_CONTROL=nominee  deals Harry Kane, a 2026 Ballon d'Or nominee, back into
+ *                         puzzle-151's Bayern group beside its Ballon d'Or group
+ *                         (section 3, the ledger's watch on the award list)
  *   CONN_CONTROL=bareyear writes "Won the 2026 Champions League" back over
  *                         puzzle-136's Barcelona men (section 1)
  *
@@ -56,7 +59,7 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
 import { crossCheckBoards, findingKey } from './lib/connectionsCrossCheck.mjs';
-import { makeSoccerChecker, fold, loadConnectionsRecord } from './lib/soccerConnectionsCheck.mjs';
+import { makeSoccerChecker, fold, keysOf, loadConnectionsRecord } from './lib/soccerConnectionsCheck.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const R = ROOT.replaceAll('\\', '/');
@@ -131,6 +134,11 @@ if (CONTROL) {
     const b = boardById('puzzle-76');
     const g = b?.groups.find(x => x.category === 'Played for Arsenal in 2025-26');
     if (g) { g.category = 'Current Arsenal stars (2025-26)'; changed = true; }
+  } else if (CONTROL === 'nominee') {
+    /* Harry Kane (Bayern 2025-26, a 2026 Ballon d'Or nominee) back on puzzle-151, beside its Ballon d'Or group */
+    const b = boardById('puzzle-151');
+    const g = b?.groups.find(x => x.category === 'Played for Bayern Munich in 2025-26');
+    if (g && b.groups.some(x => x.category === "Won the Ballon d'Or") && !b.groups.some(x => x.players.includes('Harry Kane'))) { g.players[0] = 'Harry Kane'; changed = true; }
   } else if (CONTROL === 'bareyear') {
     /* the label puzzle-136 carried before this round, on the four Barcelona men: a bare year nothing holds */
     const b = boardById('puzzle-136');
@@ -219,14 +227,29 @@ console.log('3) every group this round wrote stands on two hosts');
 {
   /* the ledger's own facts first: a list, a squad, a title, a man's nation or clubs */
   for (const [key, list] of Object.entries(ledger.lists ?? {})) if (!hostsOk(list.sources)) fail(`list ${key} does not stand on two hosts`);
-  /* a list that is still moving names the men about to join it: none may share a board with it */
-  for (const [key, list] of Object.entries(ledger.lists ?? {})) {
-    const watch = new Set((list.watchNames ?? []).map(fold));
-    if (!watch.size) continue;
-    for (const b of boards) if (b.groups.some(g => list.labels.includes(g.category))) {
-      for (const g of b.groups) for (const p of g.players) if (watch.has(fold(p))) fail(`${b.id}: ${p} is about to join "${list.labels[0]}" (${key} watch), so he cannot share a board with it`);
+  /* a list that is still moving names the men about to join it: none may share a board with it outside
+     its own group. The round's own lists carry watchNames; ledger.watches put a watch on a closed award
+     list the checker holds (the 2026 Ballon d'Or shortlist, until the ceremony is in the verified record) */
+  const watches = [];
+  for (const [key, list] of Object.entries(ledger.lists ?? {})) if ((list.watchNames ?? []).length) watches.push({ key, label: list.labels[0], names: list.watchNames });
+  for (const [key, w] of Object.entries(ledger.watches ?? {})) {
+    if (!hostsOk(w.sources)) fail(`watch ${key} does not stand on two hosts`);
+    if (!awardLists[key]) fail(`watch ${key} names no award list the checker holds`);
+    watches.push({ key, label: w.label, names: w.names ?? [] });
+  }
+  let watched = 0;
+  for (const w of watches) {
+    const watch = new Set(w.names.map(fold));
+    watched += watch.size;
+    for (const b of boards) {
+      const own = b.groups.filter(g => soccer.criterion(g.category)?.key === w.key);
+      if (!own.length) continue;
+      for (const g of b.groups) if (!own.includes(g)) for (const p of g.players) {
+        if (keysOf(p).some(k => watch.has(k))) fail(`${b.id}: ${p} in "${g.category}" may soon join "${w.label}" (${w.key} watch), so he cannot share a board with it`);
+      }
     }
   }
+  console.log(`   ${watches.length} watches over ${watched} men about to join a list`);
   for (const [key, sq] of Object.entries(ledger.squads ?? {})) {
     if (!hostsOk(sq.sources)) fail(`squad ${key} does not stand on two hosts`);
     if (sq.wonLeague && !hostsOk(sq.wonLeague)) fail(`the title of ${key} does not stand on two hosts`);
