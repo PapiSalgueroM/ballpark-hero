@@ -525,7 +525,10 @@ for (let step = 0; step < MAX_STEPS; step++) {
         note('BROKEN ', 'tapping a player on the pitch did not open the bench');
       }
     }
-    if (!await tap(/Second half/i, 'second half')) {
+    /* Release BP seam (Round 1522 beside Round 1535): the dressing room's Tactics tile reads "Instructions, formation and
+       duties for the second half", so an open match on the words took that tile first and opened the tactics sheet.
+       The way out is the button named exactly Second half. */
+    if (!await tap(/^\s*Second half\s*$/i, 'second half')) {
       note('BROKEN ', 'there was no way out of the half time screen');
       break;
     }
@@ -713,7 +716,7 @@ for (let step = 0; step < MAX_STEPS; step++) {
       tw = await screen();
       if (!/Half time/i.test(tw)) note('BROKEN ', 'skipping the first half did not reach the interval');
       if (!/SIT IN|AS YOU WERE|GO AT THEM/i.test(tw)) note('BROKEN ', 'the embedded interval has no shape controls');
-      if (!await tap(/second half/i, 'second half inside the viewer')) {
+      if (!await tap(/^\s*Second half\s*$/i, 'second half inside the viewer')) {
         note('BROKEN ', 'no second half button inside the live viewer');
       } else {
         await page.waitForTimeout(800);
