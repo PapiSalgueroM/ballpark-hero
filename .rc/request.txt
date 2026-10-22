@@ -1,0 +1,5 @@
+#!build
+#!playwright
+#!serial
+writesaresent: node scripts/simWritesAreSent.mjs > /tmp/wr.log 2>&1; e=$?; tail -6 /tmp/wr.log | cut -c1-200; exit $e
+resultmoment: node scripts/simResultMoment.mjs > /tmp/rm.log 2>&1; e=$?; tail -6 /tmp/rm.log | cut -c1-200; exit $e
