@@ -1,0 +1,6 @@
+f4-house-s31337 exit=0 260s | simCareerForm: green
+f4-house-s9001 exit=0 270s | simCareerForm: green
+f4-engaged-s9001 exit=0 275s | simCareerForm: green
+f4-house-s4242 exit=0 243s | simCareerForm: green
+f4-house-s606 exit=0 246s | simCareerForm: green
+f4-engaged-s31337 exit=1 259s | simCareerForm: RED, 1 failure(s)
