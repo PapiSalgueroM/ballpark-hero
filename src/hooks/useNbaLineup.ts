@@ -328,7 +328,9 @@ export function useNbaLineup() {
     setEvaluationError(null);
     try {
       if (!def) throw new Error('challenge has no record');
-      const pools = await Promise.all(teamAssignments.slice(0, 5).map(t => loadTeamPool(t.name)));
+      /* The pools are the teams the picks were made from, so a five is always
+         judged against the teams it was really dealt. */
+      const pools = await Promise.all(filledSlotsArray.map(s => loadTeamPool(s.assignedTeam)));
       const scored = scoreFive(
         filledSlotsArray.map(s => ({ team: s.assignedTeam, role: s.role, name: s.playerName })),
         pools,
@@ -344,7 +346,7 @@ export function useNbaLineup() {
     } finally {
       setIsEvaluating(false);
     }
-  }, [filledSlotsArray, challenge, teamAssignments]);
+  }, [filledSlotsArray, challenge]);
 
   const resetGame = useCallback(() => {
     setPhase('challenge');

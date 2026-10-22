@@ -190,6 +190,7 @@ const NbaLineup = () => {
                 {!isTeamSpinning && currentTeam && (
                   <button
                     onClick={rerollTeam}
+                    disabled={isValidating}
                     className="absolute top-3 right-3 p-2 rounded-lg bg-secondary hover:bg-secondary/80 text-muted-foreground hover:text-foreground transition-all"
                     title="Reroll: get a different team"
                   >
