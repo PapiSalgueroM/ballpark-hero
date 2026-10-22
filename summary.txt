@@ -1,0 +1,9 @@
+vitest-host exit=0 4s |    Duration  2.51s (transform 444ms, setup 262ms, collect 934ms, tests 1.17s, environment 1.02s, prepare 443ms)
+vitest-career exit=0 23s |    Duration  22.14s (transform 1.77s, setup 109ms, collect 263ms, tests 20.60s, environment 449ms, prepare 289ms)
+host-123 exit=0 46s | simGmDeskHost: all 10 checks passed on seeds 1,2,3 (4 engines, 3 seasons a seed)
+host-456 exit=0 50s | simGmDeskHost: all 10 checks passed on seeds 4,5,6 (4 engines, 3 seasons a seed)
+tsc exit=0 78s | 
+simSeoDiscovery1444 exit=0 0s | SEO_DISCOVERY_RESULT {"status":"passed","foundations":5,"outcomes":3,"failed":0,"errors":0,"sourceUnchanged":true,"networkAttempts":0,"control":null,"detected":false}
+head-sha exit=0 0s | 7f6b33d8c Round 1533: merge origin/main (e3deb2cb) into the fix pass
+host-789 exit=0 42s | simGmDeskHost: all 10 checks passed on seeds 7,8,9 (4 engines, 3 seasons a seed)
+host-onereason exit=1 38s | simGmDeskHost CONTROL onereason FIRED: check 4 went red with 64 failures (red checks 4:64)
