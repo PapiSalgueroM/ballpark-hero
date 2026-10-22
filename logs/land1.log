@@ -1,0 +1,46 @@
+MUTATION landscape applied to scripts/playFirstVisitDialogs.mjs (written to scripts/_rvLandscape1.mjs)
+  PASS     /career-ladder 844x390: dialog "How to Play Career Ladder" (fixed) 29 to 361, "Let's Play!" (its go label) 292 to 336 tappable, banner 30 to 256 (inside the dialog); tapped, closed, screen usable
+  PASS     /career-ladder 640x360: dialog "How to Play Career Ladder" (fixed) 27 to 333, "Let's Play!" (its go label) 264 to 308 tappable, banner 28 to 254 (inside the dialog); tapped, closed, screen usable
+  PASS     /career-ladder 568x320: dialog "How to Play Career Ladder" (fixed) 24 to 296, "Let's Play!" (its go label) 227 to 271 tappable, banner 25 to 251 (inside the dialog); tapped, closed, screen usable
+  PASS     /deadline-day 844x390: dialog "How to Play Deadline Day" (fixed) 29 to 361, "Let's Play!" (its go label) 292 to 336 tappable, banner 30 to 256 (inside the dialog); tapped, closed, screen usable
+  PASS     /deadline-day 640x360: dialog "How to Play Deadline Day" (fixed) 27 to 333, "Let's Play!" (its go label) 264 to 308 tappable, banner 28 to 254 (inside the dialog); tapped, closed, screen usable
+  PASS     /deadline-day 568x320: dialog "How to Play Deadline Day" (fixed) 24 to 296, "Let's Play!" (its go label) 227 to 271 tappable, banner 25 to 251 (inside the dialog); tapped, closed, screen usable
+  PASS     /wonderkid-factory 844x390: dialog "How Wonderkid Factory works" (static) 16 to 209, "Let's go" (its go label) 140 to 188 tappable (37 px above the banner), banner 225 to 390 (pending); tapped, closed, screen usable
+  PASS     /wonderkid-factory 640x360: dialog "How Wonderkid Factory works" (static) 16 to 131, "Let's go" (its go label) 62 to 110 tappable (37 px above the banner), banner 147 to 360 (pending); tapped, closed, screen usable
+  PASS     /wonderkid-factory 568x320: dialog "How Wonderkid Factory works" (static) 16 to 112, "Let's go" (its go label) 43 to 91 tappable (37 px above the banner), banner 128 to 320 (pending); tapped, closed, screen usable
+  PASS     /missing-xi 844x390: dialog "How to Play Missing XI" (fixed) 29 to 361, "Let's Play!" (its go label) 292 to 336 tappable, banner 30 to 256 (inside the dialog); tapped, closed, screen usable
+  PASS     /missing-xi 640x360: dialog "How to Play Missing XI" (fixed) 27 to 333, "Let's Play!" (its go label) 264 to 308 tappable, banner 28 to 254 (inside the dialog); tapped, closed, screen usable
+  PASS     /missing-xi 568x320: dialog "How to Play Missing XI" (fixed) 24 to 296, "Let's Play!" (its go label) 227 to 271 tappable, banner 25 to 251 (inside the dialog); tapped, closed, screen usable
+  PASS     /connections 844x390: dialog "How to Play" (fixed) 12 to 213, "Close" (its close label) 21 to 53 tappable (172 px above the banner), banner 225 to 390 (pending); tapped, closed, screen usable
+  PASS     /connections 640x360: dialog "How to Play" (fixed) 12 to 135, "Close" (its close label) 21 to 53 tappable (94 px above the banner), banner 147 to 360 (pending); tapped, closed, screen usable
+  PASS     /connections 568x320: dialog "How to Play" (fixed) 12 to 116, "Close" (its close label) 21 to 53 tappable (75 px above the banner), banner 128 to 320 (pending); tapped, closed, screen usable
+  PASS     /nfl-my-career 844x390: dialog "How to play" (fixed) 29 to 361, "Let's Play!" (its go label) 292 to 336 tappable, banner 30 to 256 (inside the dialog); tapped, closed, screen usable
+  PASS     /nfl-my-career 640x360: dialog "How to play" (fixed) 27 to 333, "Let's Play!" (its go label) 264 to 308 tappable, banner 28 to 254 (inside the dialog); tapped, closed, screen usable
+  PASS     /nfl-my-career 568x320: dialog "How to play" (fixed) 24 to 296, "Let's Play!" (its go label) 227 to 271 tappable, banner 25 to 251 (inside the dialog); tapped, closed, screen usable
+  PASS     /college-grid 844x390: dialog "How to Play" (fixed) 12 to 213, "Close" (its close label) 21 to 53 tappable (172 px above the banner), banner 225 to 390 (pending); tapped, closed, screen usable
+  PASS     /college-grid 640x360: dialog "How to Play" (fixed) 12 to 135, "Close" (its close label) 21 to 53 tappable (94 px above the banner), banner 147 to 360 (pending); tapped, closed, screen usable
+  PASS     /college-grid 568x320: dialog "How to Play" (fixed) 12 to 116, "Close" (its close label) 21 to 53 tappable (75 px above the banner), banner 128 to 320 (pending); tapped, closed, screen usable
+  PASS     /nba-my-career 844x390: dialog "How to play" (fixed) 29 to 361, "Let's Play!" (its go label) 292 to 336 tappable, banner 30 to 256 (inside the dialog); tapped, closed, screen usable
+  PASS     /nba-my-career 640x360: dialog "How to play" (fixed) 27 to 333, "Let's Play!" (its go label) 264 to 308 tappable, banner 28 to 254 (inside the dialog); tapped, closed, screen usable
+  PASS     /nba-my-career 568x320: dialog "How to play" (fixed) 24 to 296, "Let's Play!" (its go label) 227 to 271 tappable, banner 25 to 251 (inside the dialog); tapped, closed, screen usable
+  PASS     /mlb-my-career 844x390: dialog "How to play" (fixed) 29 to 361, "Let's Play!" (its go label) 292 to 336 tappable, banner 30 to 256 (inside the dialog); tapped, closed, screen usable
+  PASS     /mlb-my-career 640x360: dialog "How to play" (fixed) 27 to 333, "Let's Play!" (its go label) 264 to 308 tappable, banner 28 to 254 (inside the dialog); tapped, closed, screen usable
+  PASS     /mlb-my-career 568x320: dialog "How to play" (fixed) 24 to 296, "Let's Play!" (its go label) 227 to 271 tappable, banner 25 to 251 (inside the dialog); tapped, closed, screen usable
+  PASS     /hockey-career 844x390: dialog "🏒 How to Play" (fixed) 12 to 213, "Close" (its close label) 21 to 53 tappable (172 px above the banner), banner 225 to 390 (pending); tapped, closed, screen usable
+  PASS     /hockey-career 640x360: dialog "🏒 How to Play" (fixed) 12 to 135, "Close" (its close label) 21 to 53 tappable (94 px above the banner), banner 147 to 360 (pending); tapped, closed, screen usable
+  PASS     /hockey-career 568x320: dialog "🏒 How to Play" (fixed) 12 to 116, "Close" (its close label) 21 to 53 tappable (75 px above the banner), banner 128 to 320 (pending); tapped, closed, screen usable
+  PASS     /conquest-nhl 844x390: dialog "How to Play" (fixed) 12 to 213, "Got it, let's play NHL Imperia" (its go label) 144 to 188 tappable (37 px above the banner), banner 225 to 390 (pending); tapped, closed, screen usable
+  PASS     /conquest-nhl 640x360: dialog "How to Play" (fixed) 12 to 135, "Got it, let's play NHL Imperia" (its go label) 66 to 110 tappable (37 px above the banner), banner 147 to 360 (pending); tapped, closed, screen usable
+  PASS     /conquest-nhl 568x320: dialog "How to Play" (fixed) 12 to 116, "Got it, let's play NHL Imperia" (its go label) 47 to 91 tappable (37 px above the banner), banner 128 to 320 (pending); tapped, closed, screen usable
+  PASS     /aussie-rules-manager 844x390: dialog "How to Play Aussie Rules Manager" (fixed) 29 to 361, "Let's Play!" (its go label) 292 to 336 tappable, banner 30 to 256 (inside the dialog); tapped, closed, screen usable
+  PASS     /aussie-rules-manager 640x360: dialog "How to Play Aussie Rules Manager" (fixed) 27 to 333, "Let's Play!" (its go label) 264 to 308 tappable, banner 28 to 254 (inside the dialog); tapped, closed, screen usable
+  PASS     /aussie-rules-manager 568x320: dialog "How to Play Aussie Rules Manager" (fixed) 24 to 296, "Let's Play!" (its go label) 227 to 271 tappable, banner 25 to 251 (inside the dialog); tapped, closed, screen usable
+  PASS     /whod-they-beat 844x390: dialog "How to Play Who'd They Beat?" (fixed) 29 to 361, "Let's Play!" (its go label) 292 to 336 tappable, banner 30 to 256 (inside the dialog); tapped, closed, screen usable
+  PASS     /whod-they-beat 640x360: dialog "How to Play Who'd They Beat?" (fixed) 27 to 333, "Let's Play!" (its go label) 264 to 308 tappable, banner 28 to 254 (inside the dialog); tapped, closed, screen usable
+  PASS     /whod-they-beat 568x320: dialog "How to Play Who'd They Beat?" (fixed) 24 to 296, "Let's Play!" (its go label) 227 to 271 tappable, banner 25 to 251 (inside the dialog); tapped, closed, screen usable
+  PASS     /face-off 844x390: dialog "How to Play Face Off" (fixed) 29 to 361, "Let's Play!" (its go label) 292 to 336 tappable, banner 30 to 256 (inside the dialog); tapped, closed, screen usable
+  PASS     /face-off 640x360: dialog "How to Play Face Off" (fixed) 27 to 333, "Let's Play!" (its go label) 264 to 308 tappable, banner 28 to 254 (inside the dialog); tapped, closed, screen usable
+  PASS     /face-off 568x320: dialog "How to Play Face Off" (fixed) 24 to 296, "Let's Play!" (its go label) 227 to 271 tappable, banner 25 to 251 (inside the dialog); tapped, closed, screen usable
+
+42 route widths walked over 14 routes: 42 dialogs tapped and closed, 0 expected site reds, 0 without a first visit dialog, 0 red
+playFirstVisitDialogs: green. Every first visit dialog can be started with the cookie banner unanswered.

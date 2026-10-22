@@ -1,0 +1,7 @@
+MUTATION nocap applied to src/components/game/aboveConsentBanner.ts
+ src/components/game/aboveConsentBanner.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+MUT m2s: built
+nocap-stadium-tycoon-390x844: {"dialog":"How Stadium Tycoon works","box":[-32,643],"boxH":675,"contentH":2708,"button":"Let's go","btn":[594,642],"banner":[611,844],"at":"BANNER"}
+nocap-stadium-tycoon-1280x900: {"dialog":"How Stadium Tycoon works","box":[8,728],"boxH":720,"contentH":2188,"button":"Let's go","btn":[679,727],"banner":[735,900],"at":"button"}
+shots done

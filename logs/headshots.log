@@ -1,0 +1,10 @@
+land-stadium-tycoon-844x390: {"dialog":"How Stadium Tycoon works","box":[16,209],"boxH":193,"contentH":2188,"button":"Let's go","btn":[160,208],"banner":[225,390],"at":"button"}
+land-stadium-tycoon-640x360: {"dialog":"How Stadium Tycoon works","box":[16,131],"boxH":115,"contentH":2188,"button":"Let's go","btn":[82,130],"banner":[147,360],"at":"button"}
+land-stadium-tycoon-568x320: {"dialog":"How Stadium Tycoon works","box":[16,112],"boxH":96,"contentH":2188,"button":"Let's go","btn":[63,111],"banner":[128,320],"at":"button"}
+land-idle-arena-844x390: {"dialog":"How Idle Arena works","box":[0,209],"boxH":209,"contentH":935,"button":"Start tapping","btn":[160,208],"banner":[225,390],"at":"button"}
+land-idle-arena-640x360: {"dialog":"How Idle Arena works","box":[0,131],"boxH":131,"contentH":935,"button":"Start tapping","btn":[82,130],"banner":[147,360],"at":"button"}
+land-idle-arena-568x320: {"dialog":"How Idle Arena works","box":[0,112],"boxH":112,"contentH":935,"button":"Start tapping","btn":[63,111],"banner":[128,320],"at":"button"}
+land-build-your-xi-844x390: {"dialog":"","box":[12,213],"boxH":201,"contentH":1744,"button":"Got it!","btn":[168,212],"banner":[225,390],"at":"button"}
+land-build-your-xi-640x360: {"dialog":"","box":[12,135],"boxH":123,"contentH":1744,"button":"Got it!","btn":[90,134],"banner":[147,360],"at":"button"}
+land-build-your-xi-568x320: {"dialog":"","box":[12,116],"boxH":104,"contentH":1744,"button":"Got it!","btn":[71,115],"banner":[128,320],"at":"button"}
+shots done

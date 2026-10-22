@@ -1,0 +1,46 @@
+MUTATION landscape applied to scripts/playFirstVisitDialogs.mjs (written to scripts/_rvLandscape2.mjs)
+  PASS     /who-am-i 844x390: dialog "How to Play Who Am I?" (fixed) 29 to 361, "Let's Play!" (its go label) 292 to 336 tappable, banner 30 to 256 (inside the dialog); tapped, closed, screen usable
+  PASS     /who-am-i 640x360: dialog "How to Play Who Am I?" (fixed) 27 to 333, "Let's Play!" (its go label) 264 to 308 tappable, banner 28 to 254 (inside the dialog); tapped, closed, screen usable
+  PASS     /who-am-i 568x320: dialog "How to Play Who Am I?" (fixed) 24 to 296, "Let's Play!" (its go label) 227 to 271 tappable, banner 25 to 251 (inside the dialog); tapped, closed, screen usable
+  PASS     /soccer-conquest 844x390: dialog "How to Play" (fixed) 12 to 213, "Got it, let's play Soccer Conq" (its go label) 144 to 188 tappable (37 px above the banner), banner 225 to 390 (pending); tapped, closed, screen usable
+  PASS     /soccer-conquest 640x360: dialog "How to Play" (fixed) 12 to 135, "Got it, let's play Soccer Conq" (its go label) 66 to 110 tappable (37 px above the banner), banner 147 to 360 (pending); tapped, closed, screen usable
+  PASS     /soccer-conquest 568x320: dialog "How to Play" (fixed) 12 to 116, "Got it, let's play Soccer Conq" (its go label) 47 to 91 tappable (37 px above the banner), banner 128 to 320 (pending); tapped, closed, screen usable
+  PASS     /contract-chaos 844x390: dialog "How to Play Contract Chaos" (fixed) 29 to 361, "Let's Play!" (its go label) 292 to 336 tappable, banner 30 to 256 (inside the dialog); tapped, closed, screen usable
+  PASS     /contract-chaos 640x360: dialog "How to Play Contract Chaos" (fixed) 27 to 333, "Let's Play!" (its go label) 264 to 308 tappable, banner 28 to 254 (inside the dialog); tapped, closed, screen usable
+  PASS     /contract-chaos 568x320: dialog "How to Play Contract Chaos" (fixed) 24 to 296, "Let's Play!" (its go label) 227 to 271 tappable, banner 25 to 251 (inside the dialog); tapped, closed, screen usable
+  PASS     /footle 844x390: dialog "How to Play Footle" (fixed) 29 to 361, "Let's Play!" (its go label) 292 to 336 tappable, banner 30 to 256 (inside the dialog); tapped, closed, screen usable
+  PASS     /footle 640x360: dialog "How to Play Footle" (fixed) 27 to 333, "Let's Play!" (its go label) 264 to 308 tappable, banner 28 to 254 (inside the dialog); tapped, closed, screen usable
+  PASS     /footle 568x320: dialog "How to Play Footle" (fixed) 24 to 296, "Let's Play!" (its go label) 227 to 271 tappable, banner 25 to 251 (inside the dialog); tapped, closed, screen usable
+  PASS     /build-your-xi 844x390: dialog "How to Play: Build Your XI" (fixed) 12 to 213, "Got it!" (its go label) 144 to 188 tappable (37 px above the banner), banner 225 to 390 (pending); tapped, closed, screen usable
+  PASS     /build-your-xi 640x360: dialog "How to Play: Build Your XI" (fixed) 12 to 135, "Got it!" (its go label) 66 to 110 tappable (37 px above the banner), banner 147 to 360 (pending); tapped, closed, screen usable
+  PASS     /build-your-xi 568x320: dialog "How to Play: Build Your XI" (fixed) 12 to 116, "Got it!" (its go label) 47 to 91 tappable (37 px above the banner), banner 128 to 320 (pending); tapped, closed, screen usable
+  PASS     /football-grid 844x390: dialog "How to Play" (fixed) 12 to 213, "Close" (its close label) 21 to 53 tappable (172 px above the banner), banner 225 to 390 (pending); tapped, closed, screen usable
+  PASS     /football-grid 640x360: dialog "How to Play" (fixed) 12 to 135, "Close" (its close label) 21 to 53 tappable (94 px above the banner), banner 147 to 360 (pending); tapped, closed, screen usable
+  PASS     /football-grid 568x320: dialog "How to Play" (fixed) 12 to 116, "Close" (its close label) 21 to 53 tappable (75 px above the banner), banner 128 to 320 (pending); tapped, closed, screen usable
+  PASS     /nba-connections 844x390: dialog "🏀 How to Play" (fixed) 12 to 213, "Close" (its close label) 21 to 65 tappable (160 px above the banner), banner 225 to 390 (pending); tapped, closed, screen usable
+  PASS     /nba-connections 640x360: dialog "🏀 How to Play" (fixed) 12 to 135, "Close" (its close label) 21 to 65 tappable (82 px above the banner), banner 147 to 360 (pending); tapped, closed, screen usable
+  PASS     /nba-connections 568x320: dialog "🏀 How to Play" (fixed) 12 to 116, "Close" (its close label) 21 to 65 tappable (63 px above the banner), banner 128 to 320 (pending); tapped, closed, screen usable
+  PASS     /baseball-career 844x390: dialog "⚾ How to Play" (fixed) 12 to 213, "Close" (its close label) 21 to 53 tappable (172 px above the banner), banner 225 to 390 (pending); tapped, closed, screen usable
+  PASS     /baseball-career 640x360: dialog "⚾ How to Play" (fixed) 12 to 135, "Close" (its close label) 21 to 53 tappable (94 px above the banner), banner 147 to 360 (pending); tapped, closed, screen usable
+  PASS     /baseball-career 568x320: dialog "⚾ How to Play" (fixed) 12 to 116, "Close" (its close label) 21 to 53 tappable (75 px above the banner), banner 128 to 320 (pending); tapped, closed, screen usable
+  PASS     /baseball-connections 844x390: dialog "⚾ How to Play" (fixed) 12 to 213, "Close" (its close label) 21 to 53 tappable (172 px above the banner), banner 225 to 390 (pending); tapped, closed, screen usable
+  PASS     /baseball-connections 640x360: dialog "⚾ How to Play" (fixed) 12 to 135, "Close" (its close label) 21 to 53 tappable (94 px above the banner), banner 147 to 360 (pending); tapped, closed, screen usable
+  PASS     /baseball-connections 568x320: dialog "⚾ How to Play" (fixed) 12 to 116, "Close" (its close label) 21 to 53 tappable (75 px above the banner), banner 128 to 320 (pending); tapped, closed, screen usable
+  PASS     /hockey-higher-lower 844x390: dialog "🏒 How to Play" (fixed) 12 to 213, "Close" (its close label) 21 to 53 tappable (172 px above the banner), banner 225 to 390 (pending); tapped, closed, screen usable
+  PASS     /hockey-higher-lower 640x360: dialog "🏒 How to Play" (fixed) 12 to 135, "Close" (its close label) 21 to 53 tappable (94 px above the banner), banner 147 to 360 (pending); tapped, closed, screen usable
+  PASS     /hockey-higher-lower 568x320: dialog "🏒 How to Play" (fixed) 12 to 116, "Close" (its close label) 21 to 53 tappable (75 px above the banner), banner 128 to 320 (pending); tapped, closed, screen usable
+  PASS     /nhl-my-career 844x390: dialog "How to play" (fixed) 29 to 361, "Let's Play!" (its go label) 292 to 336 tappable, banner 30 to 256 (inside the dialog); tapped, closed, screen usable
+  PASS     /nhl-my-career 640x360: dialog "How to play" (fixed) 27 to 333, "Let's Play!" (its go label) 264 to 308 tappable, banner 28 to 254 (inside the dialog); tapped, closed, screen usable
+  PASS     /nhl-my-career 568x320: dialog "How to play" (fixed) 24 to 296, "Let's Play!" (its go label) 227 to 271 tappable, banner 25 to 251 (inside the dialog); tapped, closed, screen usable
+  PASS     /ufc 844x390: dialog "How to Play 🥊" (fixed) 12 to 213, "Close" (its close label) 21 to 53 tappable (172 px above the banner), banner 225 to 390 (pending); tapped, closed, screen usable
+  PASS     /ufc 640x360: dialog "How to Play 🥊" (fixed) 12 to 135, "Close" (its close label) 21 to 53 tappable (94 px above the banner), banner 147 to 360 (pending); tapped, closed, screen usable
+  PASS     /ufc 568x320: dialog "How to Play 🥊" (fixed) 12 to 116, "Close" (its close label) 21 to 53 tappable (75 px above the banner), banner 128 to 320 (pending); tapped, closed, screen usable
+  PASS     /silverware-sort 844x390: dialog "How to Play Silverware Sort" (fixed) 29 to 361, "Let's Play!" (its go label) 292 to 336 tappable, banner 30 to 256 (inside the dialog); tapped, closed, screen usable
+  PASS     /silverware-sort 640x360: dialog "How to Play Silverware Sort" (fixed) 27 to 333, "Let's Play!" (its go label) 264 to 308 tappable, banner 28 to 254 (inside the dialog); tapped, closed, screen usable
+  PASS     /silverware-sort 568x320: dialog "How to Play Silverware Sort" (fixed) 24 to 296, "Let's Play!" (its go label) 227 to 271 tappable, banner 25 to 251 (inside the dialog); tapped, closed, screen usable
+  PASS     /sports-millionaire 844x390: dialog "How to Play Sports Millionaire" (fixed) 29 to 361, "Let's Play!" (its go label) 292 to 336 tappable, banner 30 to 256 (inside the dialog); tapped, closed, screen usable
+  PASS     /sports-millionaire 640x360: dialog "How to Play Sports Millionaire" (fixed) 27 to 333, "Let's Play!" (its go label) 264 to 308 tappable, banner 28 to 254 (inside the dialog); tapped, closed, screen usable
+  PASS     /sports-millionaire 568x320: dialog "How to Play Sports Millionaire" (fixed) 24 to 296, "Let's Play!" (its go label) 227 to 271 tappable, banner 25 to 251 (inside the dialog); tapped, closed, screen usable
+
+42 route widths walked over 14 routes: 42 dialogs tapped and closed, 0 expected site reds, 0 without a first visit dialog, 0 red
+playFirstVisitDialogs: green. Every first visit dialog can be started with the cookie banner unanswered.

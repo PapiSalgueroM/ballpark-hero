@@ -1,0 +1,7 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+land3 exit=0 83s | playFirstVisitDialogs: green. Every first visit dialog can be started with the cookie banner unanswered.
+land1 exit=0 92s | playFirstVisitDialogs: green. Every first visit dialog can be started with the cookie banner unanswered.
+land2 exit=0 92s | playFirstVisitDialogs: green. Every first visit dialog can be started with the cookie banner unanswered.
+headshots exit=0 19s | shots done
+m2shots exit=0 54s | shots done
+m3shots exit=0 56s | shots done

@@ -1,0 +1,8 @@
+MUTATION roleback applied to src/pages/IdleArena.tsx
+ src/pages/IdleArena.tsx | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+MUT m3s: built
+roleback-idle-arena-320x640: {"dialog":"How Idle Arena works","box":[168,489],"boxH":321,"contentH":342,"button":"Start tapping","btn":[148,196],"banner":[335,640],"at":"button"}
+roleback-idle-arena-390x844: {"dialog":"How Idle Arena works","box":[306,844],"boxH":539,"contentH":539,"button":"Start tapping","btn":[546,594],"banner":[611,844],"at":"button"}
+roleback-idle-arena-1280x900: {"dialog":"How Idle Arena works","box":[368,900],"boxH":533,"contentH":533,"button":"Start tapping","btn":[670,718],"banner":[735,900],"at":"button"}
+shots done
