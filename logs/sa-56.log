@@ -1,0 +1,9 @@
+5) the US careers: every module that reads careerAwards.ts bundles the same with the base's file
+   src/lib/nbaMyCareer.ts: reads careerAwards.ts, 482048 bytes, byte identical
+   src/lib/nflMyCareer.ts: reads careerAwards.ts, 406809 bytes, byte identical
+   src/lib/mlbMyCareer.ts: reads careerAwards.ts, 449047 bytes, byte identical
+   src/lib/nhlMyCareer.ts: reads careerAwards.ts, 451369 bytes, byte identical
+   src/lib/nbaCareerAwards.ts: reads careerAwards.ts, 15471 bytes, byte identical
+6) legacy: calculateLegacy reads no awards and no popularity
+   calculateLegacy: 167 lines, reads neither; a copy that reads state.awards is caught
+simSoccerSeasonAwards: green

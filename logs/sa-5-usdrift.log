@@ -1,0 +1,9 @@
+5) the US careers: every module that reads careerAwards.ts bundles the same with the base's file
+   CONTROL usdrift: the NFL quarterback All-Pro grade moved in this round's file
+   src/lib/nbaMyCareer.ts: reads careerAwards.ts, 482048 bytes, PARTS
+   src/lib/nflMyCareer.ts: reads careerAwards.ts, 406809 bytes, PARTS
+   src/lib/mlbMyCareer.ts: reads careerAwards.ts, 449047 bytes, PARTS
+   src/lib/nhlMyCareer.ts: reads careerAwards.ts, 451369 bytes, PARTS
+   src/lib/nbaCareerAwards.ts: reads careerAwards.ts, 15471 bytes, byte identical
+   FAIL 4 US modules bundle differently with this round's src/lib/careerAwards.ts
+simSoccerSeasonAwards: RED, 1 failure(s)

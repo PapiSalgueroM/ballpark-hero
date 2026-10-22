@@ -1,0 +1,6 @@
+5) the era fleet: no Puskas Award before 2008-09, and the draw before it is kept
+   240 careers from 1990, 1995, 2000 and 2005 (seed 1528): 0 awards before 2008-09, 0 from it, 0 on a year without a goal
+   the ungated tree won one before 2008-09 in 0 lockstep careers; the gated tree made the same draws and kept the same state in 0
+   FAIL nobody won a Puskas Award from 2008-09 on either, so the fleet proves nothing
+   FAIL no lockstep career reached a pre 2008 award on the ungated tree, so the kept draw is unproven
+simCareerForm: RED, 2 failure(s)
