@@ -40,25 +40,58 @@ import { build } from 'esbuild';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_URL = ROOT.replaceAll('\\', '/');
 const CONTROL = process.env.INTL_CONTROL || '';
-const SECTIONS = new Set((process.env.INTL_SECTIONS || '1,2,3').split(',').map(s => s.trim()));
+const SECTIONS = new Set((process.env.INTL_SECTIONS || '1,2,3,6').split(',').map(s => s.trim()));
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'careerIntl-'));
 process.on('exit', () => { try { fs.rmSync(TMP, { recursive: true, force: true }); } catch { /* best effort */ } });
 
+const INTL = 'src/lib/careerIntl.ts';
 const CONTROLS = {
   onesource: { section: '1', note: 'one calendar fact of oly-2008 keeps one read' },
   shiftyear: { section: '2', note: "oly-2008's src year moved by one" },
   dupnation: { section: '3', note: "oly-2012's field holds Spain twice" },
   fieldsize: { section: '3', note: "wc-2014's field loses a nation" },
+  genfield: { section: '3', note: 'a generated field is drawn on a stream keyed to the career, not the edition', edits: [{ file: INTL, from: 'bind.rng(`intl-field:${e.id}`)', to: 'bind.rng(`intl-field:${e.id}:${Math.random()}`)' }] },
+  copy: { section: '6', note: 'a private copy of the bracket runner planted in a sport file' },
+  mathrandom: { section: '6', note: 'the pot draw uses Math.random', edits: [{ file: INTL, from: 'const j = Math.floor(rng() * (i + 1));', to: 'const j = Math.floor(Math.random() * (i + 1));' }] },
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown control "${CONTROL}": use ${Object.keys(CONTROLS).join(', ')}`); process.exit(2); }
 if (CONTROL && !SECTIONS.has(CONTROLS[CONTROL].section)) SECTIONS.add(CONTROLS[CONTROL].section);
 
+/* Source rewrites at bundle time, never on disk; each anchor must be there once. */
+const rewrites = new Map();
+for (const ed of (CONTROL && CONTROLS[CONTROL].edits) || []) {
+  const abs = path.join(ROOT, ed.file);
+  const src = rewrites.get(abs) ?? fs.readFileSync(abs, 'utf8').split('\r\n').join('\n');
+  const hits = src.split(ed.from).length - 1;
+  if (hits !== 1) { console.error(`control ${CONTROL} cannot run: ${ed.file} holds "${ed.from}" ${hits} times, not once, so it would prove nothing`); process.exit(2); }
+  rewrites.set(abs, src.replace(ed.from, ed.to));
+}
+const controlPlugin = {
+  name: 'career-intl-control',
+  setup(b) {
+    if (!rewrites.size) return;
+    b.onLoad({ filter: /\.tsx?$/ }, args => {
+      const abs = path.resolve(args.path);
+      if (!rewrites.has(abs)) return undefined;
+      return { contents: rewrites.get(abs), loader: abs.endsWith('x') ? 'tsx' : 'ts', resolveDir: path.dirname(abs) };
+    });
+  },
+};
+
 /* ─── bundle ─────────────────────────────────────────────────────────────── */
 const ENTRY = path.join(TMP, 'entry.mjs');
 const OUT = path.join(TMP, 'bundle.mjs');
-fs.writeFileSync(ENTRY, `export * as data from '${ROOT_URL}/src/data/basketballIntl.ts';\n`);
-await build({ entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node', outfile: OUT, logLevel: 'error', absWorkingDir: ROOT, alias: { '@': path.join(ROOT, 'src') } });
-const { data } = await import(`file://${OUT.replaceAll('\\', '/')}`);
+fs.writeFileSync(ENTRY, [
+  `export * as data from '${ROOT_URL}/src/data/basketballIntl.ts';`,
+  `export * as intl from '${ROOT_URL}/src/lib/careerIntl.ts';`,
+  `export * as keyed from '${ROOT_URL}/src/lib/keyedRng.ts';`,
+].join('\n'));
+await build({ entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node', outfile: OUT, logLevel: 'error', absWorkingDir: ROOT, alias: { '@': path.join(ROOT, 'src') }, plugins: [controlPlugin] });
+const { data, intl, keyed } = await import(`file://${OUT.replaceAll('\\', '/')}`);
+const LEDGER = () => ({ shapes: data.BASKETBALL_INTL_SHAPES, editions: data.BASKETBALL_INTL_EDITIONS, cycles: data.BASKETBALL_INTL_CYCLES, partial: data.BASKETBALL_INTL_PARTIAL, lastPlayed: data.BASKETBALL_LAST_PLAYED_SUMMER });
+let MATH_RANDOM_CALLS = 0;
+const realRandom = Math.random;
+Math.random = () => { MATH_RANDOM_CALLS += 1; return realRandom(); };
 const ledger = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/data/basketballIntlSources.json'), 'utf8'));
 
 /* ─── controls, applied in memory and proven to change something ─────────── */
@@ -222,6 +255,99 @@ if (SECTIONS.has('3')) {
     }
   }
   console.log(`  ${data.BASKETBALL_INTL_EDITIONS.filter(r => r[6]).length} played fields, ${nations.size} nations, no flag: ${[...nations].filter(n => !flags.has(n)).join(', ') || 'none'}`);
+}
+
+/* A sport free bind the harness owns, on the real calendar, for the sections
+   that need the module before (or beside) the NBA bind. */
+const RUNG = { gold: 92, silver: 89, bronze: 87, fourth: 85, quarter: 82, field: 76 };
+function harnessBind(cal) {
+  const norm = r => { let u = 0; let v = 0; while (u === 0) u = r(); while (v === 0) v = r(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); };
+  return {
+    slug: 'sim', calendar: cal, nationOf: () => 'USA',
+    callOf: c => cal.editionFor(c.year + 1),
+    strengthOf: (e, n) => RUNG[intl.intlRungOf(e, n) ?? 'field'],
+    liftOf: () => 1,
+    play(a, b, rng) {
+      let sa = Math.round(80 + 1.2 * (a - b) + 9 * norm(rng));
+      let sb = Math.round(80 + 1.2 * (b - a) + 9 * norm(rng));
+      let ot = 0;
+      while (sa === sb) { ot += 1; sa += Math.round(10 + 3 * norm(rng)); sb += Math.round(10 + 3 * norm(rng)); }
+      return { a: sa, b: sb, ot };
+    },
+    groupDraws: false, groupPoints: [2, 1, 1],
+    tableOrder: (x, y) => y.won - x.won || (y.pf - y.pa) - (x.pf - x.pa),
+    lineOf: (_c, rng) => ({ pts: Math.round(20 + 5 * rng()) }),
+    knockChance: () => 0.1, knock: c => { c.health -= 8; }, ageOf: c => c.age, careerKey: c => c.name, rng: keyed.keyedRng,
+  };
+}
+
+/* ─── 3, second half: the fields the game draws ──────────────────────────── */
+if (SECTIONS.has('3')) {
+  const cal = intl.intlCalendar(LEDGER());
+  const bind = harnessBind(cal);
+  let drawn = 0;
+  for (let y = 2025; y <= 2050; y += 1) {
+    const e = cal.editionFor(y);
+    if (!e || e.field) continue;
+    drawn += 1;
+    const f1 = intl.intlFieldOf(bind, e, 'USA');
+    const f2 = intl.intlFieldOf({ ...bind, careerKey: () => 'another career' }, e, 'USA');
+    check('3', !!f1 && f1.generated, `${e.id} draws no field`);
+    if (!f1) continue;
+    const past = cal.played().filter(x => x.comp === e.comp);
+    const near = new Set(past.slice(-2).flatMap(x => x.field));
+    const wide = new Set(past.flatMap(x => x.field));
+    check('3', near.size >= e.play.teams, `${e.id} pool of the last two fields holds ${near.size}, short of ${e.play.teams}`);
+    check('3', f1.field.length === e.play.teams && new Set(f1.field).size === f1.field.length && f1.field.includes('USA'), `${e.id} drawn field is ${f1.field.length} nations, the shape ${e.play.teams}, or lacks the USA`);
+    check('3', f1.field.every(n => wide.has(n)), `${e.id} drawn field names a nation from no played field`);
+    check('3', same(f1.field, f2?.field), `${e.id} drawn field differs between two careers`);
+  }
+  console.log(`  ${drawn} summers 2025 to 2050 draw their field (the same for every career)`);
+}
+
+/* ─── 6. one engine and the stream ───────────────────────────────────────── */
+/* The runner's fingerprints: code shapes only a copy of the bracket runner
+   would hold. They must live in careerIntl.ts and nowhere else in src. */
+const FINGERPRINTS = ['semiLosers', 'm + 1 - s', 'seeded.slice(p * shape.groups', 'slice(0, (n * (n - 1)) / 2)'];
+const stripComments = s => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/.*$/gm, '$1');
+function srcFiles(dir, out = []) {
+  for (const d of fs.readdirSync(path.join(ROOT, dir), { withFileTypes: true })) {
+    const rel = `${dir}/${d.name}`;
+    if (d.isDirectory()) { if (rel !== 'src/test') srcFiles(rel, out); }
+    else if (/\.tsx?$/.test(d.name) && !/\.test\.tsx?$/.test(d.name)) out.push(rel);
+  }
+  return out;
+}
+if (SECTIONS.has('6')) {
+  console.log('section 6: one engine and the stream');
+  const home = stripComments(fs.readFileSync(path.join(ROOT, INTL), 'utf8'));
+  for (const f of FINGERPRINTS) check('6', home.includes(f), `careerIntl.ts no longer holds the fingerprint "${f}", so the fence would prove nothing`);
+  const files = srcFiles('src').filter(f => f !== INTL).map(f => [f, stripComments(fs.readFileSync(path.join(ROOT, f), 'utf8'))]);
+  if (CONTROL === 'copy') {
+    const raw = fs.readFileSync(path.join(ROOT, INTL), 'utf8');
+    const at = raw.indexOf('export function runIntlTournament');
+    const body = raw.slice(at, raw.indexOf('/* ─── the save', at));
+    if (at < 0 || body.length < 500) { console.error('control copy cannot run: runIntlTournament was not found to copy'); process.exit(2); }
+    files.push(['src/lib/nbaCareerIntl.ts (planted copy)', stripComments(body.replace('export function runIntlTournament', 'function privateRunner'))]);
+  }
+  for (const [f, text] of files) for (const fp of FINGERPRINTS) check('6', !text.includes(fp), `${f} holds the runner's fingerprint "${fp}": bind careerIntl.ts, never copy it`);
+  const cal = intl.intlCalendar(LEDGER());
+  const bind = harnessBind(cal);
+  const before = MATH_RANDOM_CALLS;
+  let went = 0;
+  for (let i = 0; i < 120; i += 1) {
+    const year = 2003 + (i % 44);
+    const a = { name: `career ${i}`, year, age: 27, health: 90 };
+    const b = JSON.parse(JSON.stringify(a));
+    if (!intl.pendingCallUp(a, bind)) continue;
+    intl.answerCallUp(a, bind, 'go');
+    intl.answerCallUp(b, bind, 'go');
+    went += 1;
+    check('6', same(a, b), `career ${i} played ${a.intl?.summers[0]?.edition} two ways`);
+  }
+  check('6', MATH_RANDOM_CALLS === before, `Math.random was called ${MATH_RANDOM_CALLS - before} times in pending, answer and the run`);
+  check('6', went >= 50, `only ${went} careers were called, too few to prove anything`);
+  console.log(`  ${files.length} src files fenced, ${went} tournaments played twice, Math.random calls ${MATH_RANDOM_CALLS - before}`);
 }
 
 /* ─── summary ────────────────────────────────────────────────────────────── */
