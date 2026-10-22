@@ -1,0 +1,13 @@
+MUTATION oldaway applied: the away card lost OVERLAY_ABOVE_BANNER and boxInsideOverlay (2 edits)
+ src/pages/StadiumTycoon.tsx | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+MUT away: built
+  PASS     /stadium-tycoon 320x640: dialog "How Stadium Tycoon works" (static) 16 to 319, "Let's go" (its go label) 250 to 298 tappable (37 px above the banner), banner 335 to 640 (pending); tapped, closed, screen usable
+  PASS     /stadium-tycoon 390x844: dialog "How Stadium Tycoon works" (static) 16 to 595, "Let's go" (its go label) 526 to 574 tappable (37 px above the banner), banner 611 to 844 (pending); tapped, closed, screen usable
+  PASS     /stadium-tycoon 1280x900: dialog "How Stadium Tycoon works" (static) 16 to 719, "Let's go" (its go label) 650 to 698 tappable (37 px above the banner), banner 735 to 900 (pending); tapped, closed, screen usable
+  FAIL     /stadium-tycoon#away 320x640: dialog "While you were away" (static) 165 to 476, "Back to work" (its primary style) 407 to 451 is not tappable: at its centre the banner; has 44 of its 44 px under the banner (its bottom 116 px below the banner's top); sits in a dialog whose own box runs 141 px under the banner, banner 335 to 640 (pending)
+  FAIL     /stadium-tycoon#away 390x844: dialog "While you were away" (static) 190 to 654, "Back to work" (its primary style) 585 to 629 has 18 of its 44 px under the banner (its bottom 18 px below the banner's top); sits in a dialog whose own box runs 43 px under the banner, banner 611 to 844 (pending)
+  PASS     /stadium-tycoon#away 1280x900: dialog "While you were away" (static) 226 to 674, "Back to work" (its primary style) 605 to 649 tappable (86 px above the banner), banner 735 to 900 (pending); tapped, closed, screen usable; the full card (18 results) drawn, the page held at scrollY 0, height 7493
+
+6 route widths walked over 1 routes and 1 seeded scene (3 of the lines): 4 dialogs tapped and closed, 0 expected site reds, 0 without a first visit dialog, 2 red
+playFirstVisitDialogs: RED. 2 route widths: /stadium-tycoon#away 320x640, /stadium-tycoon#away 390x844
