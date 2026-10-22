@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+analyze: R1550_TAG=head node_modules/.bin/vite build --config .rc/x/vite.analyze.mts --outDir /tmp/an > /tmp/an.log 2>&1; s=$?; tail -3 /tmp/an.log; [ $s = 0 ] && node .rc/x/chunkReport.mjs "$RC_OUT/head-chunks.json" /tmp/an
+weight-head: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+gmcareer: PLAY_GM_CAREER_OUT="$RC_OUT/gmc" node scripts/playGmCareer.mjs
