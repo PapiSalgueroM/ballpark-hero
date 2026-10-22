@@ -16,7 +16,9 @@
  *     expected goals over 90 at the engine's own gap (Object.is), over Squad 0 to
  *     200, every division, every drawn rival, the first team edge 0 to 0.40 and
  *     NaN, -1, 1; the opponent's chance strictly falls with the edge; the lib
- *     imports goalLambda from the law and types neither 0.055 nor 4.2.
+ *     imports goalLambda from the law and types neither 0.055 nor 4.2; the rules'
+ *     worked numbers (scoringFacts) are the law's; every division's rivals spread
+ *     exactly 3 law points either side of it (the offset unit, brief 3.3).
  *  S2 the shape: the bodies brief 1.2 and critic item 14 freeze hash to the base
  *     record (scripts/data/tycoonScorelineBaseline.json); a match draws exactly 180
  *     rolls, a perfect set piece none, and each matchday's own stream exactly 180
@@ -48,6 +50,10 @@
  *   matchno   rivals gain 1.8 law points a career match         red S3 S4 S5
  *   noclamp   our chance from the raw law, no clamp             red S1 S6 (run against S1 S2 S6 S7)
  *   crowd     the base engine's crowd scaled bonuses            red S7 (run against S1 S2 S6 S7)
+ *   facts     the rules' even match reads the rival at home     red S1 (run against S1 S2 S6 S7)
+ *   offsetunit RIVAL_OFFSET_POINTS 50, not 500                  red S1 (run against S1 S2 S6 S7)
+ * (facts and offsetunit were added after the round's review: each mutation was green
+ * on every check of the round, remote checks r1532-run-mut1 and r1532-run-mut2.)
  * R7's sets name S3 S4 S5 for linear; S1 and S6 go red too by construction (S1
  * asserts the law's formula and S6 the law's ceiling, both of which the base lines
  * break), and noclamp breaks S1's clamp for the same reason.
@@ -56,9 +62,10 @@
  * calibration / holdout seed means over minutes 15 to 120 unless named:
  *   goals a match 2.569 / 2.600; pace wins 64.6 (se 1.38) / 66.6 (se 1.45), windows
  *   15 to 30, 30 to 60, 60 to 120: 72.1, 67.9, 61.2 / 75.0, 67.9, 64.0; draws 20.9 /
- *   20.5; overinvest (over4) 76.4 / 78.7 (0.4 over its floor on calibration: the
- *   seeds are fixed, so it is stable run to run, but any table change must remeasure
- *   it); nosquad 18.0 / 17.2; mean matchGap pace 8.7, over4 13.6, nosquad -14.5;
+ *   20.5; overinvest (over4) 76.4 / 78.7 on seeds 1 to 20 / 21 to 40 (0.4 over its
+ *   floor on calibration, a coin toss the review flipped with two unrelated mutations;
+ *   since the review over4 plays 100 seeds a set, see OVER: 77.44 (se 0.58) on
+ *   calibration by the per seed shares of remote check fx1532-p1); nosquad 18.0 / 17.2; mean matchGap pace 8.7, over4 13.6, nosquad -14.5;
  *   titles a season over 15 to 240 0.733 / 0.727; season one won in 36 of 40.
  *   S5's table at gaps 0 / 4 / 8 / 12 / 14 (500 seasons a cell): 6 clubs one leg
  *   0.232 / 0.466 / 0.654 / 0.824 / 0.908; 8 clubs two legs 0.184 / 0.562 / 0.836 /
@@ -96,6 +103,16 @@ const HOLD = Array.from({ length: 20 }, (_, i) => i + 21);
 /* The controls play the calibration seeds: on seeds 1 to 10 alone a control that changes
    nothing the bots read put overinvest at 75.4, under its band, a coin toss. */
 const CONTROL_SEEDS = CAL;
+/* Round 1532 review (run lens m2, read lens minor 2): overinvest's floor of 76 sat 0.4 over
+   its calibration mean of 76.4 on 20 seeds (se 1.24), so changes that only reshuffle a stream
+   (the venue mutation, the offset unit) turned that line red at 75.4 and nothing else. By the
+   rule "more careers, never a wider bound" the over4 bot plays 100 seeds a set in the main
+   run: calibration 1 to 20 plus 41 to 120, holdout 21 to 40 plus 121 to 200. Measured on
+   remote check fx1532-p1 (head 71c29ff2): seeds 1 to 160 average 77.65 with sd 5.75, so a
+   set's se is about 0.58 and the floor sits about 2.9 of them under the mean. The band, the
+   window ceiling and the pace margin are unchanged; the controls keep CONTROL_SEEDS. */
+const range = (a, b) => Array.from({ length: b - a + 1 }, (_, i) => a + i);
+const OVER = { cal: [...CAL, ...range(41, 120)], hold: [...HOLD, ...range(121, 200)] };
 /* S5 prints the title share at fixed gaps; 500 seasons a cell keeps the run inside a few minutes. */
 const TABLE_SEASONS = 500;
 
@@ -121,6 +138,8 @@ const CONTROLS = {
   flat: { red: ['S4', 'S5'], rewrites: [["  return levelOf(s, 'squad') * SQUAD_POINTS;", '  return 0;']] },
   matchno: { red: ['S3', 'S4', 'S5'], rewrites: [['  return divisionOf(s).rivalStrength;', '  return divisionOf(s).rivalStrength + s.matchNo * 1.8;']] },
   noclamp: { red: ['S1', 'S6'], only: EXACT, rewrites: [['  return goalLambda(matchGap(s), LAW.home) / 90;', '  return (LAW.base + matchGap(s) * LAW.perPoint + LAW.home) / 90;']] },
+  facts: { red: ['S1'], only: EXACT, rewrites: [['evenAgainst: r2(goalLambda(0, LAW.away))', 'evenAgainst: r2(goalLambda(0, LAW.home))']] },
+  offsetunit: { red: ['S1'], only: EXACT, rewrites: [['export const RIVAL_OFFSET_POINTS = 500;', 'export const RIVAL_OFFSET_POINTS = 50;']] },
   crowd: { red: ['S7'], only: EXACT, rewrites: [
     ['  return Math.round(unboostedIncomePerSec(s) * GOAL_BONUS_SEC);', '  return Math.round(attendance(s) * 0.6 * repMult(s) * streakMult(s));'],
     ['  return Math.round(unboostedIncomePerSec(s) * WIN_BONUS_SEC);', '  return Math.round(attendance(s) * 2.2 * repMult(s));'],
@@ -242,7 +261,26 @@ function S1(E, libText) {
   const code = stripCode(libText);
   if (/(^|[^\w.])0\.055(?!\d)/m.test(code)) out.push('the lib types 0.055 as a number: the law is restated, not read');
   if (/(^|[^\w.])4\.2(?!\d)/m.test(code)) out.push('the lib types 4.2 as a number: the law is restated, not read');
-  return { out, note: `${checked} chances equal the law at the engine's own gap (Squad 0 to 200, ten divisions, every rival, the edge 0 to 0.40 and NaN, -1, 1, every rival fixture both ways); the rival's chance falls at every step of the edge; the lib imports goalLambda and types neither 0.055 nor 4.2` };
+  /* Round 1532 review (run lens m1): the rules modal's worked numbers are scoringFacts(), and
+     the page walk compares the page with scoringFacts() itself, so they are pinned to the law
+     here: each side's expected goals when level (you at home, the rival away) and one Squad
+     level's worth, rounded to two decimals the way the helper says. Control: facts. */
+  const r2 = x => Math.round(x * 100) / 100;
+  const facts = T.scoringFacts();
+  const wantFacts = { evenFor: r2(goalLambda(0, LAW.home)), evenAgainst: r2(goalLambda(0, LAW.away)), levelGoals: r2(T.SQUAD_POINTS * LAW.perPoint) };
+  for (const k of Object.keys(wantFacts)) if (!Object.is(facts[k], wantFacts[k])) out.push(`scoringFacts().${k} is ${facts[k]}, the law says ${wantFacts[k]}`);
+  /* Round 1532 review (run lens m2): every other check reads RIVAL_OFFSET_POINTS back from the
+     engine, so the unit is pinned literally: the stored offsets (plus or minus OFFSET_SPREAD)
+     put a division's strongest and weakest rival 3 law points either side of it (brief 3.3).
+     Control: offsetunit. */
+  let spread = '';
+  for (let d = 0; d < T.DIVISIONS.length; d += 1) {
+    const pts = T.newLeague(0, d, 0).clubs.slice(1).map(c => c.offset * T.RIVAL_OFFSET_POINTS);
+    const lo = Math.min(...pts); const hi = Math.max(...pts);
+    if (!(Math.abs(hi - 3) < 1e-9 && Math.abs(lo + 3) < 1e-9)) { out.push(`division ${d}: its rivals sit ${r3(lo)} to ${r3(hi)} law points from the division, not minus 3 to plus 3`); break; }
+    spread = `${r3(lo)} to ${r3(hi)}`;
+  }
+  return { out, note: `${checked} chances equal the law at the engine's own gap (Squad 0 to 200, ten divisions, every rival, the edge 0 to 0.40 and NaN, -1, 1, every rival fixture both ways); the rival's chance falls at every step of the edge; the lib imports goalLambda and types neither 0.055 nor 4.2; the rules' facts ${facts.evenFor}, ${facts.evenAgainst} and ${facts.levelGoals} are the law's; every division's rivals spread ${spread} law points` };
 }
 
 /* ---------- S2 the shape ---------- */
@@ -304,10 +342,10 @@ function S2(E, libText) {
 
 /* ---------- the bots ---------- */
 const WINDOWS = [[15, 30], [30, 60], [60, 120], [120, 240]];
-function playRuns(T, seeds, econ) {
+function playRuns(T, seeds, econ, overSeeds = seeds) {
   const runs = {
     pace: seeds.map(seed => runBot(T, { policy: 'pace', seed, minutes: 240, dt: DT, keepStates: true })),
-    over4: seeds.map(seed => runBot(T, { policy: 'over4', seed, minutes: 120, dt: DT })),
+    over4: overSeeds.map(seed => runBot(T, { policy: 'over4', seed, minutes: 120, dt: DT })),
     nosquad: seeds.map(seed => runBot(T, { policy: 'nosquad', seed, minutes: 120, dt: DT })),
   };
   if (econ) runs.paceSell = seeds.map(seed => runBot(T, { policy: 'paceSell', seed, minutes: 240, dt: DT }));
@@ -371,7 +409,7 @@ function S4(E, sets) {
     for (const [a, b] of WINDOWS.slice(0, 3)) { const w = results(R.over4, a, b).w.mean; if (!(w < 90)) out.push(`${name}: overinvest won ${w}% in minutes ${a} to ${b}, at 90 or more`); }
     if (!(p - none.w.mean >= NOSQUAD_FENCE)) out.push(`${name}: pace won ${r3(p - none.w.mean)} points more than a club that never buys Squad, under ${NOSQUAD_FENCE}`);
     if (!(pace.d.mean >= 15 && pace.d.mean <= 27)) out.push(`${name}: pace drew ${pace.d.mean}% of its matches, outside 15 to 27`);
-    notes.push(`${name}: pace ${p}% (se ${pace.w.se}; ${WINDOWS.slice(0, 3).map(([a, b]) => results(R.pace, a, b).w.mean).join(' / ')}), draws ${pace.d.mean}%, gap ${pace.gap.mean}; overinvest ${o}% (gap ${over.gap.mean}); nosquad ${none.w.mean}% (gap ${none.gap.mean})`);
+    notes.push(`${name}: pace ${p}% (se ${pace.w.se}; ${WINDOWS.slice(0, 3).map(([a, b]) => results(R.pace, a, b).w.mean).join(' / ')}), draws ${pace.d.mean}%, gap ${pace.gap.mean}; overinvest ${o}% over ${R.over4.length} seeds (se ${over.w.se}, gap ${over.gap.mean}); nosquad ${none.w.mean}% (gap ${none.gap.mean})`);
   }
   return { out, note: `${composed} gaps read the Squad, the division and the rival exactly; ${notes.join('; ')}` };
 }
@@ -505,7 +543,7 @@ function S8(sets) {
   const baseCal = p => BASE.policies[p].filter(r => r.seed <= 20);
   const R = sets.cal;
   const lines = [];
-  lines.push(`pace first Sell up ${med(R.pace.map(r => r.sellUp))} min (base ${med(baseCal('pace').map(r => r.sellUp))}); over4 ${med(R.over4.map(r => r.sellUp))} (base ${med(baseCal('over4').map(r => r.sellUp))})`);
+  lines.push(`pace first Sell up ${med(R.pace.map(r => r.sellUp))} min (base ${med(baseCal('pace').map(r => r.sellUp))}); over4 ${med(R.over4.filter(r => r.seed <= 20).map(r => r.sellUp))} (base ${med(baseCal('over4').map(r => r.sellUp))})`);
   lines.push(`pace income a second at 30 / 60 / 120 min: ${[30, 60, 120].map(c => `${med(R.pace.map(r => r.checkpoints[c]?.income))} (base ${med(baseCal('pace').map(r => r.checkpoints[c]?.income))})`).join(' / ')}`);
   lines.push(`pace division at 30 / 60 / 120 / 240: ${[30, 60, 120, 240].map(c => `${med(R.pace.map(r => r.checkpoints[c]?.div))} (base ${med(baseCal('pace').map(r => r.checkpoints[c]?.div))})`).join(' / ')}`);
   lines.push(`pace minutes to reach divisions 1 to 9: ${Array.from({ length: 9 }, (_, i) => med(R.pace.map(r => r.promotions.find(p => p.div === i + 1)?.t))).join(', ')}`);
@@ -520,7 +558,7 @@ function S8(sets) {
 const NAMES = ['S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7'];
 const TITLES = { S1: 'the law, read not restated', S2: 'the shape', S3: 'goals', S4: 'results', S5: 'titles', S6: 'never 99', S7: 'bonuses' };
 async function evaluate(E, libText, seedSets, names, main) {
-  const sets = Object.fromEntries(Object.entries(seedSets).map(([k, seeds]) => [k, playRuns(E.T, seeds, main)]));
+  const sets = Object.fromEntries(Object.entries(seedSets).map(([k, seeds]) => [k, playRuns(E.T, seeds, main, (main && OVER[k]) || seeds)]));
   const run = { S1: () => S1(E, libText), S2: () => S2(E, libText), S3: () => S3(E, sets), S4: () => S4(E, sets), S5: () => S5(E, sets, main), S6: () => S6(E), S7: () => S7(E, sets) };
   return { res: Object.fromEntries(names.map(n => [n, run[n]()])), sets };
 }
