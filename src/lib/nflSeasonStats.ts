@@ -64,7 +64,10 @@ export const NFL_PASS_PIVOT = 75;
 export const NFL_PASS_RANGE: readonly [number, number] = [0.35, 0.75];
 /** Who catches a touchdown pass and who runs one in, by slot (times usage). */
 export const NFL_CATCH_WEIGHT: Readonly<Record<string, number>> = { WR: 1, TE: 0.7, RB: 0.35 };
-export const NFL_RUN_WEIGHT: Readonly<Record<string, number>> = { RB: 1, QB: 0.15 };
+/* Round 1542, step 2's tuning: a receiver or a tight end runs one in now and then (an end around), so a club whose
+   quarterback and backs are all hurt still has somebody to take a touchdown. The brief's first tuning (backs and the
+   quarterback alone) left 3 to 11 touchdowns a seed set unclaimed on the fleet, where the brief holds it at zero. */
+export const NFL_RUN_WEIGHT: Readonly<Record<string, number>> = { RB: 1, QB: 0.15, WR: 0.04, TE: 0.04 };
 /** Usage: 1 at a rating of NFL_USAGE_PIVOT, NFL_USAGE_SLOPE a point either side, never under NFL_USAGE_FLOOR. */
 export const NFL_USAGE_PIVOT = 72;
 export const NFL_USAGE_SLOPE = 0.06;
@@ -460,7 +463,7 @@ export function nflStatsHelp(): string[] {
   const share = (ovr: number) => Math.round(nflPassChance(ovr) * 100);
   const odds = Number((nflUsage(85) / nflUsage(NFL_USAGE_PIVOT)).toFixed(2));
   return [
-    "Who scored: every touchdown of a game goes to one of the club's starters that week. It is a pass from the quarterback or a run, and the better the quarterback the more of them he throws. A pass is caught by one of the five skill starters, receivers most often, then tight ends, then backs, the better rated more often. A run is a back's, now and then the quarterback's. Injured men, the line and the bench never score.",
+    "Who scored: every touchdown of a game goes to one of the club's starters that week. It is a pass from the quarterback or a run, and the better the quarterback the more of them he throws. A pass is caught by one of the five skill starters, receivers most often, then tight ends, then backs, the better rated more often. A run is a back's, now and then the quarterback's, and once in a long while a receiver's. Injured men, the line and the bench never score.",
     "Sacks come from the pass rush against the other side's line: the better the rushers are rated against the blockers, the more of them land, and a defensive lineman takes more than a linebacker or a defensive back. Field goals and safeties count for the club, because kickers and punters are not on these rosters.",
     `The season's leaders (touchdown passes, rushing touchdowns, sacks) are in Standings. When the regular season ends this save names an ${NFL_AWARD_LABEL.mvp} (${NFL_AWARD_RULE.mvp}), an ${NFL_AWARD_LABEL.oroy} (${NFL_AWARD_RULE.oroy}) and a ${NFL_AWARD_LABEL.droy} (${NFL_AWARD_RULE.droy}). A rookie award needs at least one, and ties go to more games played. Playoff games are not in the lines or the awards.`,
     "Every line and award is this save's sim season, not real NFL stats. A save from before season lines starts keeping them at its next Week 1.",

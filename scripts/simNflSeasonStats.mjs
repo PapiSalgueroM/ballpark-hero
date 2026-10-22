@@ -46,6 +46,14 @@
  *    each award once and survive the summer by id; Week 1 opens a clean block and keeps the history; first year men
  *    record lines in every later season; a tie fixture (the loser listed first) goes to games, then the id.
  *    Printed: seasons naming each rookie award, the MVP by position.
+ *  6 OLD SAVE: three deep leagues stripped of the new keys at Week 5 (a save from before this round) play to their
+ *    close recording nothing and throwing nothing; their next Week 1 opens lines and that season closes with awards.
+ *  7 SIZE: over the fleet, the board's save (the league with its block and history, his club, the season's log of
+ *    his games) against simNflFullRosters.mjs's budget, read by its anchor (stats.maxSave, 700K). The brief's 600K
+ *    stop line is PRINTED with the same save without this round's keys beside it, never asserted: a deep league
+ *    opens at about 620K of its own (every man carries his opening rating evidence), so the line was passed before
+ *    this round. Printed too: the block's bytes (median, largest) and the lines a season both ways (the pool's, and
+ *    men with a stat only: the brief's open question 1). Asserted: every line is a man who was in his club's pool.
  *  8 COPY AND PURITY: the lib, nflDrives.ts and foSeasonClose.ts hold no Math.random, Date or localStorage
  *    (comments taken out); every sentence the lib builds has no quotation mark and no verb of speech.
  *
@@ -61,6 +69,8 @@
  *   tiebreak     foRankAward with no games and id tie rule                       -> section 5
  *   rookieall    a line is a rookie's for every man ever drafted in the save     -> section 5
  *   closetwice   the once a season rule taken out of the shared close            -> section 5
+ *   oldopen      the block opens at any week, not only Week 1                    -> section 6
+ *   wholeroster  a line for every man on every roster                            -> section 7
  *   quote        a help sentence given a speaker and a quotation                 -> section 8
  */
 import { build } from 'esbuild';
@@ -73,7 +83,7 @@ import { ENGINE_ENTRY, FLEET, ROOT, bundle, enginePostseason, norm, playRegularS
 const CONTROL = process.env.NFL_STATS_CONTROL || '';
 const SEEDSETS = process.env.SEEDSET !== undefined && process.env.SEEDSET !== '' ? process.env.SEEDSET.split(',').map(Number) : FLEET.sets;
 if (SEEDSETS.some(s => !FLEET.sets.includes(s))) { console.error(`SEEDSET must be among ${FLEET.sets.join(', ')}`); process.exit(2); }
-const ALL_SECTIONS = [1, 2, 3, 4, 5, 8];
+const ALL_SECTIONS = [1, 2, 3, 4, 5, 6, 7, 8];
 const SECTIONS = process.env.NFL_STATS_SECTIONS ? process.env.NFL_STATS_SECTIONS.split(',').map(Number) : ALL_SECTIONS;
 const LIFT_BASE = process.env.LIFT_BASE || '';
 /* seasons a kind and a set (a quick look only: every gate runs the whole fleet) */
@@ -98,6 +108,8 @@ const CONTROLS = {
   tiebreak: { section: 5, labels: ['a tie goes to more games, then the id'], needs: [5], patches: [{ file: FO_STATS, from: '.sort((a, b) => b.s - a.s || b.p.g - a.p.g || a.p.id.localeCompare(b.p.id))', to: '.sort((a, b) => b.s - a.s)' }] },
   rookieall: { section: 5, labels: ['the rookie lines are the first year men the harness drafted'], needs: [5], patches: [{ file: STATS, from: '...(m.rookieSeason === lg.season ? { rookie: true } : {})', to: '...(m.rookieSeason !== undefined ? { rookie: true } : {})' }] },
   closetwice: { section: 5, labels: ['a second close writes no card twice'], needs: [5], patches: [{ file: CLOSE, from: '  if (done) return done;', to: '' }] },
+  oldopen: { section: 6, labels: ['recording nothing and throwing nothing'], needs: [6], patches: [{ file: STATS, from: '  if (lg.week === 1 && !nflLiveStats(lg)) lg.stats = nflNewStats(lg.season);', to: '  if (!nflLiveStats(lg)) lg.stats = nflNewStats(lg.season);' }] },
+  wholeroster: { section: 7, labels: ["every line is a man who was in his club's pool"], needs: [7], patches: [{ file: STATS, from: '      for (const m of nflPoolMen(s.pool)) {', to: '      for (const m of lg.teams[s.team].players) {' }] },
   quote: { section: 8, labels: ['no quotation mark and no verb of speech'], needs: [8], patches: [{ file: STATS, from: '"Sacks come from the pass rush', to: '"The coach said: \\"Sacks come from the pass rush' }] },
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown control ${CONTROL}: ${Object.keys(CONTROLS).join(', ')}`); process.exit(2); }
@@ -297,11 +309,18 @@ function cheapest(points) {
 }
 
 /* ─── 2. IDENTITIES, 3. DETERMINISM, 4. THE RATING EFFECT: one pass over the fleet ─── */
-const MARGIN_4 = 0.02;
+/* MEASURED 2026-10-22 on a runner (rc r1542-s2, head 39038a73), all five seed sets, the whole fleet, band 73: the gap
+   0.503, 0.486, 0.568, 0.416, 0.535 (smallest 0.416); under randomcredit 0.121, 0.023, 0.080, -0.017, 0.094 (largest
+   0.121). The margin sits half way, 0.15 from each. */
+const MARGIN_4 = 0.27;
 const HIGH_4 = 85;
 const LOW_4 = Number(process.env.NFL_STATS_LOW_BAND || 73);
 const measured4 = [];
-if (SECTIONS.some(s => s === 2 || s === 3 || s === 4)) {
+/* section 7: the saves and blocks the fleet writes, and whether every line is a man who was in his club's pool */
+const sizes = { saves: [], bases: [], blocks: [], lines: [], statLines: [], pool: null };
+if (SECTIONS.includes(7)) sizes.pool = tally();
+let seasonPools = {};
+if (SECTIONS.some(s => s === 2 || s === 3 || s === 4 || s === 7)) {
   const E = M.engine, S = M.stats;
   for (const set of SEEDSETS) {
     const t2 = { td: tally(), kicks: tally(), cheap: tally(), pool: tally(), thrown: tally(), club: tally(), bounds: tally() };
@@ -321,6 +340,7 @@ if (SECTIONS.some(s => s === 2 || s === 3 || s === 4)) {
       const want = [cheapest(g.homeScore), cheapest(g.awayScore)];
       count(t2.cheap, [c.home, c.away].every((sd, k) => want[k] && want[k].ties === 0 && sd.tds === want[k].t && sd.fgs === want[k].f && sd.safeties === want[k].s), () => `${g.key} ${g.homeScore}-${g.awayScore}`);
       for (const [sd, other] of [[c.home, c.away], [c.away, c.home]]) {
+        if (regular) { const set7 = (seasonPools[sd.team] ??= new Set()); for (const p of S.nflPoolMen(sd.pool)) set7.add(p.id); }
         const team = lg.teams[sd.team];
         const starters = E.starterIds(team);
         const fit = id => { const p = team.players.find(m => m.id === id); return !!p && p.out === 0 && p.pos !== 'OL' && starters.has(id); };
@@ -351,9 +371,12 @@ if (SECTIONS.some(s => s === 2 || s === 3 || s === 4)) {
         const A = openFleetSeason(set, kind, i);
         const unclaimedBy = {};
         let pending = null;
+        seasonPools = {};
+        const his = [];
         const a = boardSeason(A, true, {
           onWeek: (lg, told, week) => {
-            if (SECTIONS.includes(2) || SECTIONS.includes(4)) for (const g of told) identity(lg, g, true, unclaimedBy);
+            if (SECTIONS.includes(2) || SECTIONS.includes(4) || SECTIONS.includes(7)) for (const g of told) identity(lg, g, true, unclaimedBy);
+            his.push(...told.filter(g => g.home === A.user || g.away === A.user));
             /* section 3: the same week recorded on a copy through JSON must give the block the board's record gives */
             if (SECTIONS.includes(3) && (week === 1 || week === 9)) {
               const copy = JSON.parse(JSON.stringify(lg));
@@ -362,7 +385,7 @@ if (SECTIONS.some(s => s === 2 || s === 3 || s === 4)) {
             }
           },
           onRecorded: (lg, _t, week) => { if (pending !== null) { count(t3.twice, JSON.stringify(lg.stats) === pending, () => `${seasonId(set, kind, i)} week ${week}`); pending = null; } },
-          onPlayoff: (lg, g) => { if (SECTIONS.includes(2)) identity(lg, g, false, {}); },
+          onPlayoff: (lg, g) => { if (SECTIONS.includes(2)) identity(lg, g, false, {}); if (g.home === A.user || g.away === A.user) his.push(g); },
         });
         if (SECTIONS.includes(2)) {
           const st = A.lg.stats;
@@ -375,6 +398,20 @@ if (SECTIONS.some(s => s === 2 || s === 3 || s === 4)) {
             const pts = st.teams[team].pts;
             count(t2.bounds, 6 * td + 3 * fg + 2 * sf <= pts && pts <= 8 * td + 3 * fg + 2 * sf && st.teams[team].g === E.REGULAR_WEEKS, () => `${seasonId(set, kind, i)} ${team}`);
           }
+        }
+        if (SECTIONS.includes(7)) {
+          /* the board's save: the league (block and history in it), his club and the season's log of his games */
+          sizes.saves.push(JSON.stringify({ league: A.lg, myTeam: A.user, phase: 'recap', gameLog: { v: 1, season: A.lg.season, team: A.user, games: his } }).length);
+          sizes.blocks.push(JSON.stringify(A.lg.stats).length);
+          const bare = JSON.parse(JSON.stringify(A.lg));
+          delete bare.stats;
+          delete bare.awards;
+          for (const p of S.nflEveryMan(bare).flat()) { delete p.awards; delete p.rookieSeason; }
+          sizes.bases.push(JSON.stringify({ league: bare, myTeam: A.user, phase: 'recap', gameLog: { v: 1, season: A.lg.season, team: A.user, games: his } }).length);
+          const ls = Object.values(A.lg.stats.lines);
+          sizes.lines.push(ls.length);
+          sizes.statLines.push(ls.filter(l => Object.values(l.tot).some(v => v > 0)).length);
+          for (const l of ls) count(sizes.pool, !!seasonPools[l.team] && seasonPools[l.team].has(l.id), () => `${seasonId(set, kind, i)}: ${l.team} ${l.name} (${l.pos})`);
         }
         if (SECTIONS.includes(3)) {
           const Bs = openFleetSeason(set, kind, i);
@@ -434,6 +471,68 @@ if (SECTIONS.some(s => s === 2 || s === 3 || s === 4)) {
     console.log(`  sacks a club game by rush less block, to the nearest 5 (printed): ${Object.keys(sk).map(Number).sort((x, y) => x - y).map(b => `${b}: ${(sk[b].sacks / sk[b].games).toFixed(2)} over ${sk[b].games}`).join(' | ')}`);
     console.log(`  gaps by set: ${measured4.map(m => `${m.set} ${m.gap.toFixed(4)}`).join(', ')}`);
   }
+}
+
+/* ─── 7. SIZE: the save budget is simNflFullRosters.mjs's, read by its anchor ─── */
+const BUDGET_FILE = 'scripts/simNflFullRosters.mjs';
+const BUDGET_ANCHOR = /stats\.maxSave <= (\d+) \* 1024/;
+if (SECTIONS.includes(7)) {
+  console.log('');
+  console.log('7. SIZE');
+  const m = readSrc(BUDGET_FILE).match(BUDGET_ANCHOR);
+  check(7, `the save budget is read from ${BUDGET_FILE} by its anchor`, !!m);
+  const budget = m ? Number(m[1]) * 1024 : 0;
+  const sorted = xs => [...xs].sort((a, b) => a - b);
+  const med = xs => sorted(xs)[Math.floor(xs.length / 2)];
+  const k = n => `${(n / 1024).toFixed(1)}K`;
+  const maxSave = Math.max(...sizes.saves);
+  console.log(`  over ${sizes.saves.length} seasons: the biggest save ${k(maxSave)}, the block median ${k(med(sizes.blocks))} and largest ${k(Math.max(...sizes.blocks))}`);
+  console.log(`  lines a season: the pool's ${Math.min(...sizes.lines)} to ${Math.max(...sizes.lines)} (median ${med(sizes.lines)}); men with a stat only ${Math.min(...sizes.statLines)} to ${Math.max(...sizes.statLines)} (median ${med(sizes.statLines)})`);
+  check(7, `the biggest save with lines, ${k(maxSave)}, is inside the NFL save budget of ${k(budget)}`, sizes.saves.length > 0 && maxSave <= budget);
+  /* THE BRIEF'S STOP LINE (600K) WAS PASSED BEFORE THIS ROUND: a deep league opens at about 620K of its own (every
+     man carries his opening rating evidence since a later round of the roster), so it is printed with the save
+     without this round's keys beside it, never asserted here; the lead rules on the budget. */
+  const maxBase = Math.max(...sizes.bases);
+  console.log(`  LEAD: the brief's stop line is 600K. The biggest save WITHOUT this round's keys is ${k(maxBase)} on its own; with the block and the history it is ${k(maxSave)}, ${k(maxSave - maxBase)} more`);
+  settle(7, 'every line is a man who was in his club\'s pool in a game of the season, never the line, the bench or the practice squad', sizes.pool);
+}
+
+/* ─── 6. OLD SAVE: a league with no lines in the middle of its season ─── */
+if (SECTIONS.includes(6)) {
+  const E = M.engine, S = M.stats, B = M.bind;
+  console.log('');
+  console.log('6. OLD SAVE');
+  const t6 = { quiet: tally(), opens: tally() };
+  for (let f = 0; f < 3; f += 1) {
+    const gen = seededGen(`nfl season stats old save|${f}`);
+    const user = M.FO_TEAMS[(f * 9 + 4) % M.FO_TEAMS.length].abbr;
+    const lg = seeded(gen, () => {
+      const league = E.initLeague(Math.random, { depth: M.FO_DEPTH, userTeam: user });
+      if (E.deepOverLimit(league.teams[user]) > 0) E.cutDownToMax(league.teams[user], league.freeAgents);
+      for (let w = 1; w <= 4; w += 1) {
+        E.injuryPass(league.teams, Math.random);
+        E.aiWeeklyMoves(league, user, Math.random);
+        const games = league.schedule[league.week - 1].map(g => E.simGame(g, league.teams, Math.random));
+        S.nflRecordWeek(league, games.map(g => B.nflTell(g, league.teams, league.season, B.nflWhere(league.week)).last).filter(Boolean), user);
+        league.week += 1;
+      }
+      return league;
+    });
+    /* a save from before this round, at Week 5 */
+    delete lg.stats;
+    delete lg.awards;
+    const s = { lg, user, gen };
+    const id = `old save ${f}`;
+    let res = null;
+    let threw = '';
+    try { res = boardSeason(s, true); } catch (e) { threw = e.message; }
+    count(t6.quiet, !threw && res && res.closed === null && lg.stats === undefined && lg.awards === undefined, () => `${id}: ${threw || `a block of ${lg.stats?.season}, ${(lg.awards ?? []).length} awards`}`);
+    boardDraft(s);
+    const next = boardSeason(s, true);
+    count(t6.opens, !!next.closed && !!next.closed.mvp && lg.stats.season === lg.season && lg.awards.length === 1, () => id);
+  }
+  settle(6, 'a save from before season lines plays from Week 5 to its close recording nothing and throwing nothing', t6.quiet);
+  settle(6, 'its next Week 1 opens the lines, and that season closes with awards', t6.opens);
 }
 
 /* ─── 5. AWARDS AND THE CLOSE: deep franchises over several seasons, the board's way, the draft and the summer in ─── */

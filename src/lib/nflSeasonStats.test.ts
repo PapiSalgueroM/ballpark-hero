@@ -95,7 +95,7 @@ describe('the credit adds up', () => {
     const credits = games('AAA', 'BBB', 120).map(g => nflCreditGame(g, lg.teams)!);
     expect(credits.flatMap(c => c.home.credits).length).toBeGreaterThan(0);
     expect(credits.flatMap(c => c.home.credits).every(c => c.passer === null)).toBe(true);
-    for (const p of noQb.players) if (p.pos === 'RB') p.out = 3;
+    for (const p of noQb.players) if (p.pos === 'RB' || p.pos === 'WR' || p.pos === 'TE') p.out = 3;
     const none = games('AAA', 'BBB', 120).map(g => nflCreditGame(g, lg.teams)!);
     expect(none.flatMap(c => c.home.credits)).toHaveLength(0);
     expect(none.reduce((a, c) => a + c.home.unclaimed, 0)).toBeGreaterThan(0);
@@ -181,7 +181,7 @@ describe('rookies, readers and the clean load', () => {
     expect(readNflAwards([{ season: 2026, mvp: null, oroy: null, droy: null }])).toBeNull();
     expect(readNflAwards(Array.from({ length: FO_HISTORY_CAP + 1 }, (_, i) => ({ ...hist[0], season: i })))).toBeNull();
     const damaged = league([fifteen('AAA')], { stats: { season: 2027, lines: 5 } as unknown as NflSeasonStats, awards: 'x' as unknown as NflSeasonAwards[] });
-    const man = damaged.teams.AAA.players[0] as GmPlayer & { awards: unknown; rookieSeason: unknown };
+    const man = damaged.teams.AAA.players[0] as unknown as Record<string, unknown>;
     man.awards = [3];
     man.rookieSeason = 'soon';
     damaged.teams.AAA.players[1].awards = ['2026 MVP'];
