@@ -1,0 +1,4 @@
+headsha exit=0 0s | c15f3e5165 rc request rBP-trH-bp for 212b9069f010799e4b79574e5f144b190d7a1342
+shoot exit=0 23s | simCmShootoutOrder: all sections passed
+ctl-unsetpath exit=0 23s | simCmShootoutOrder: 3 FAILURE(S)
+ctl-keepleague exit=0 18s | simCmShootoutOrder: 3 FAILURE(S)

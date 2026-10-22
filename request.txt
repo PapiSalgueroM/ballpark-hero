@@ -1,0 +1,6 @@
+# Release BP triage, trH: the edited simCmShootoutOrder (Round 1520's bridge composed into the arm), sent as an extra and copied over the checkout's own, on the BP head. Normal, its unsetpath and keepleague controls.
+#!serial
+headsha: git log --oneline -1
+shoot: cp .rc/x/simCmShootoutOrder.mjs scripts/simCmShootoutOrder.mjs && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmShootoutOrder.mjs
+ctl-unsetpath: cp .rc/x/simCmShootoutOrder.mjs scripts/simCmShootoutOrder.mjs && CM_SHOOTOUT_CONTROL=unsetpath node scripts/simCmShootoutOrder.mjs 2>&1 | tee "$TMPDIR/ctl.log"; s=${PIPESTATUS[0]}; [ $s -eq 1 ] && grep -qE 'simCmShootoutOrder: [1-9][0-9]* FAILURE\(S\)' "$TMPDIR/ctl.log"
+ctl-keepleague: cp .rc/x/simCmShootoutOrder.mjs scripts/simCmShootoutOrder.mjs && CM_SHOOTOUT_CONTROL=keepleague node scripts/simCmShootoutOrder.mjs 2>&1 | tail -12
