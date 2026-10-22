@@ -1,0 +1,68 @@
+2) the rates: the engine hands out the model's awards, each award at its measured rate against the designed one winner a league a season, the year's best season wins, every award on its own stream
+   2000 house careers (seed 11), 44279 seasons decided
+   Player of the Year: 37707 eligible seasons, 490 won (model 478.99), 1.30 per 100 eligible, 0.245 a career
+     per 100 eligible by position and tier band: ST 1:3.76(1488) 2:0.93(1294) 3+:0.00(988) | CM 1:2.55(1531) 2:0.24(1251) 3+:0.00(1044) | CB 1:1.00(1306) 2:0.20(1472) 3+:0.00(930) | GK 1:1.67(1558) 2:0.41(1210) 3+:0.00(935) | LW 1:6.77(1550) 2:1.02(1277) 3+:0.22(928) | CAM 1:3.81(1628) 2:1.14(964) 3+:0.16(1227) | CDM 1:0.91(1427) 2:0.23(1333) 3+:0.00(974) | RB 1:0.62(1459) 2:0.08(1223) 3+:0.00(1133) | RW 1:5.18(1526) 2:1.00(1396) 3+:0.00(868) | LB 1:1.07(1491) 2:0.17(1184) 3+:0.09(1112)
+     the year's best season: 57 years, won 37 (64.91 percent; the model 62.33); per tier band 1: 36 of 57 (model 34.67), 2: 17 of 57 (model 18.42), 3+: 5 of 57 (model 4.58)
+   Puskás Award: 27141 eligible seasons, 84 won (model 76.41), 0.31 per 100 eligible, 0.042 a career
+     per 100 eligible by position and tier band: ST 1:1.20(1506) 2:0.26(1144) 3+:0.41(725) | CM 1:0.47(1505) 2:0.29(1047) 3+:0.00(815) | CB 1:0.11(891) 2:0.00(937) 3+:0.00(486) | GK 1:- 2:- 3+:- | LW 1:0.80(1504) 2:0.17(1199) 3+:0.46(657) | CAM 1:0.49(1648) 2:0.65(773) 3+:0.31(954) | CDM 1:0.21(1396) 2:0.09(1138) 3+:0.00(681) | RB 1:0.00(1019) 2:0.13(751) 3+:0.00(649) | RW 1:0.42(1431) 2:0.15(1295) 3+:0.16(607) | LB 1:0.00(1056) 2:0.14(700) 3+:0.16(627)
+   Golden Boot: 27005 eligible seasons, 430 won (model 412.89), 1.59 per 100 eligible, 0.215 a career
+     per 100 eligible by position and tier band: ST 1:10.14(1775) 2:1.78(1627) 3+:- | CM 1:0.00(1852) 2:0.00(1481) 3+:- | CB 1:0.00(1099) 2:0.00(1265) 3+:- | GK 1:- 2:- 3+:- | LW 1:5.54(1860) 2:0.82(1585) 3+:- | CAM 1:0.05(1996) 2:0.09(1142) 3+:- | CDM 1:0.00(1688) 2:0.00(1560) 3+:- | RB 1:0.00(1262) 2:0.00(1037) 3+:- | RW 1:4.87(1786) 2:0.94(1708) 3+:- | LB 1:0.00(1284) 2:0.00(998) 3+:-
+     the year's best season: 57 years, won 40 (70.18 percent; the model 71.62); per tier band 1: 40 of 57 (model 40.61), 2: 21 of 57 (model 26.24), 3+: 0 of 0 (model 0.00)
+   Golden Glove: 3071 eligible seasons, 185 won (model 174.45), 6.02 per 100 eligible, 0.092 a career
+     per 100 eligible by position and tier band: ST 1:- 2:- 3+:- | CM 1:- 2:- 3+:- | CB 1:- 2:- 3+:- | GK 1:9.22(1366) 2:5.06(948) 3+:1.45(757) | LW 1:- 2:- 3+:- | CAM 1:- 2:- 3+:- | CDM 1:- 2:- 3+:- | RB 1:- 2:- 3+:- | RW 1:- 2:- 3+:- | LB 1:- 2:- 3+:-
+     the year's best season: 44 years, won 34 (77.27 percent; the model 73.79); per tier band 1: 32 of 44 (model 31.23), 2: 25 of 41 (model 23.04), 3+: 8 of 44 (model 6.53)
+   Young Player of the Year: 8468 eligible seasons, 141 won (model 146.42), 1.67 per 100 eligible, 0.070 a career
+     per 100 eligible by position and tier band: ST 1:7.38(122) 2:2.87(349) 3+:1.12(356) | CM 1:7.35(136) 2:1.90(315) 3+:0.23(428) | CB 1:1.87(107) 2:0.91(328) 3+:0.85(355) | GK 1:5.76(191) 2:2.83(283) 3+:0.24(424) | LW 1:6.40(125) 2:1.81(332) 3+:0.27(376) | CAM 1:7.19(167) 2:3.06(229) 3+:0.43(460) | CDM 1:3.51(114) 2:0.80(373) 3+:0.00(343) | RB 1:3.90(154) 2:0.42(237) 3+:0.62(481) | RW 1:1.54(130) 2:1.17(343) 3+:0.28(360) | LB 1:4.69(128) 2:1.52(264) 3+:0.66(458)
+     the year's best season: 20 years, won 12 (60.00 percent; the model 54.99); per tier band 1: 11 of 20 (model 9.08), 2: 11 of 20 (model 9.86), 3+: 5 of 20 (model 4.18)
+   UEFA Player of the Year: 94 eligible seasons, 24 won (model 20.58), 25.53 per 100 eligible, 0.012 a career
+     per 100 eligible by position and tier band: ST 1:28.57(14) 2:- 3+:- | CM 1:75.00(4) 2:- 3+:- | CB 1:50.00(6) 2:- 3+:- | GK 1:27.27(11) 2:- 3+:- | LW 1:25.00(8) 2:- 3+:- | CAM 1:16.67(6) 2:0.00(1) 3+:- | CDM 1:21.43(14) 2:- 3+:- | RB 1:37.50(8) 2:- 3+:- | RW 1:20.00(10) 2:- 3+:- | LB 1:0.00(10) 2:0.00(2) 3+:-
+     the year's best season: 13 years, won 8 (61.54 percent; the model 65.13); per tier band 1: 8 of 13 (model 8.47), 2: 0 of 3 (model 0.58), 3+: 0 of 0 (model 0.00)
+   Comeback Player of the Year: 8861 eligible seasons, 63 won (model 59.48), 0.71 per 100 eligible, 0.032 a career
+     per 100 eligible by position and tier band: ST 1:0.88(341) 2:0.34(292) 3+:0.00(224) | CM 1:1.39(433) 2:0.31(321) 3+:0.00(196) | CB 1:1.06(378) 2:0.27(369) 3+:0.00(219) | GK 1:1.66(301) 2:0.00(195) 3+:0.00(136) | LW 1:1.61(373) 2:0.38(263) 3+:0.00(218) | CAM 1:0.85(469) 2:1.38(218) 3+:0.00(201) | CDM 1:2.40(417) 2:0.34(295) 3+:0.00(219) | RB 1:1.82(439) 2:0.35(287) 3+:0.00(196) | RW 1:1.10(364) 2:0.00(351) 3+:0.00(218) | LB 1:0.85(471) 2:0.00(244) 3+:0.00(213)
+     the year's best season: 55 years, won 21 (38.18 percent; the model 33.55); per tier band 1: 18 of 55 (model 16.97), 2: 9 of 55 (model 6.64), 3+: 0 of 55 (model 0.50)
+   FAIL Comeback Player of the Year: the model gives the year's best season 18.45 wins in 55 years, not more often than not
+   Fair Play Award: 6876 eligible seasons, 279 won (model 280.05), 4.06 per 100 eligible, 0.140 a career
+     per 100 eligible by position and tier band: ST 1:9.42(276) 2:4.55(220) 3+:0.99(202) | CM 1:10.16(246) 2:0.91(219) 3+:0.00(199) | CB 1:9.24(238) 2:3.08(260) 3+:0.60(168) | GK 1:6.58(304) 2:0.47(212) 3+:0.56(178) | LW 1:11.15(287) 2:1.79(223) 3+:0.00(176) | CAM 1:9.18(294) 2:1.67(180) 3+:0.37(271) | CDM 1:4.69(256) 2:2.68(224) 3+:0.62(161) | RB 1:3.57(252) 2:3.08(227) 3+:0.00(213) | RW 1:11.96(276) 2:3.16(253) 3+:0.59(170) | LB 1:6.02(266) 2:0.00(214) 3+:0.47(211)
+     the year's best season: 56 years, won 37 (66.07 percent; the model 59.67); per tier band 1: 36 of 53 (model 32.66), 2: 17 of 53 (model 19.66), 3+: 6 of 56 (model 4.73)
+   Player of the Year and Puskás Award: 23014 seasons eligible for both, 5 won both (two streams 3.70, one shared stream 14.75)
+   Player of the Year and Golden Boot: 22677 seasons eligible for both, 150 won both (two streams 148.47, one shared stream 207.90)
+   Player of the Year and Golden Glove: 3071 seasons eligible for both, 19 won both (two streams 21.43, one shared stream 26.60)
+   Player of the Year and UEFA Player of the Year: 94 seasons eligible for both, 6 won both (two streams 5.62, one shared stream 6.70)
+   Player of the Year and Fair Play Award: 6876 seasons eligible for both, 71 won both (two streams 65.57, one shared stream 98.56)
+   Puskás Award and Golden Boot: 20940 seasons eligible for both, 3 won both (two streams 4.72, one shared stream 11.02)
+   Puskás Award and Young Player of the Year: 3473 seasons eligible for both, 1 won both (two streams 0.26, one shared stream 1.74)
+   Puskás Award and Comeback Player of the Year: 6009 seasons eligible for both, 0 won both (two streams 0.16, one shared stream 1.58)
+   Puskás Award and Fair Play Award: 4120 seasons eligible for both, 2 won both (two streams 1.55, one shared stream 5.10)
+   Golden Boot and Comeback Player of the Year: 5713 seasons eligible for both, 0 won both (two streams 1.90, one shared stream 2.93)
+   Golden Boot and Fair Play Award: 4063 seasons eligible for both, 50 won both (two streams 48.46, one shared stream 65.80)
+   Golden Glove and Young Player of the Year: 602 seasons eligible for both, 4 won both (two streams 3.58, one shared stream 6.00)
+   Golden Glove and Fair Play Award: 574 seasons eligible for both, 9 won both (two streams 11.38, one shared stream 15.50)
+   Young Player of the Year and Comeback Player of the Year: 1978 seasons eligible for both, 3 won both (two streams 2.42, one shared stream 6.08)
+   Comeback Player of the Year and Fair Play Award: 1232 seasons eligible for both, 0 won both (two streams 0.75, one shared stream 1.88)
+   one shared stream would show: on Player of the Year and Golden Boot it would sit 21.44 past the bound
+   Golden Boot (ST): 6.14 per 100 eligible seasons, designed 4.76, ratio 1.29
+   Golden Glove (GK): 6.02 per 100 eligible seasons, designed 4.76, ratio 1.27
+   Player of the Year (attack): 2.35 per 100 eligible seasons, designed 2.44, ratio 0.96
+   Player of the Year (middle): 0.77 per 100 eligible seasons, designed 1.93, ratio 0.40
+   FAIL Player of the Year (middle): 0.77 per 100 is not the designed 1.93
+   Player of the Year (back): 0.51 per 100 eligible seasons, designed 1.52, ratio 0.33
+   FAIL Player of the Year (back): 0.51 per 100 is not the designed 1.52
+   Young Player of the Year: 1.67 per 100 eligible against a designed 18.55 for an attacker, ratio 0.09 (part of the field is eligible: a design note, held by its band below)
+   UEFA Player of the Year: 25.53 per 100 eligible against a designed 9.09 for an attacker, ratio 2.81 (part of the field is eligible: a design note, held by its band below)
+   Fair Play Award: 4.06 per 100 eligible against a designed 4.76 for an attacker, ratio 0.85 (part of the field is eligible: a design note, held by its band below)
+   Comeback Player of the Year: 0.71 per 100 eligible against a designed 9.09 for an attacker, ratio 0.08 (part of the field is eligible: a design note, held by its band below)
+   rate Player of the Year: 1.30 per 100 eligible (490 of 37707), measured band 0 to 100
+   rate Player of the Year attack: 2.35 per 100 eligible (356 of 15134), measured band 0 to 100
+   rate Player of the Year middle: 0.77 per 100 eligible (58 of 7560), measured band 0 to 100
+   rate Player of the Year back: 0.51 per 100 eligible (76 of 15013), measured band 0 to 100
+   rate Young Player of the Year: 1.67 per 100 eligible (141 of 8468), measured band 0 to 100
+   rate Young Player of the Year attack: 1.97 per 100 eligible (66 of 3349), measured band 0 to 100
+   rate Young Player of the Year middle: 1.40 per 100 eligible (24 of 1709), measured band 0 to 100
+   rate Young Player of the Year back: 1.50 per 100 eligible (51 of 3410), measured band 0 to 100
+   rate Golden Boot: 1.59 per 100 eligible (430 of 27005), measured band 0 to 100
+   rate Golden Glove: 6.02 per 100 eligible (185 of 3071), measured band 0 to 100
+   rate UEFA Player of the Year: 25.53 per 100 eligible (24 of 94), measured band 0 to 100
+   rate Fair Play Award: 4.06 per 100 eligible (279 of 6876), measured band 0 to 100
+   rate Comeback Player of the Year: 0.71 per 100 eligible (63 of 8861), measured band 0 to 100
+   rate Puskás Award: 0.31 per 100 eligible (84 of 27141), measured band 0 to 100
+simSoccerSeasonAwards: RED, 3 failure(s)
