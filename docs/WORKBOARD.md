@@ -1,3 +1,34 @@
+## Release BO LIVE, 2026-10-21 22:37 EDT: Club Manager's UEFA Super Cup from season one (PSG against Aston Villa), and the saved pages redrawn
+
+Claude lane (session I). main 889e1b38 (published with the board note 7633c474 on top), deployment
+44dc3319-54c2-42c8-8b1b-863d065c8c92, entry index-BTpeYV2Z.js. Proof: x-deployment-id carries 44dc3319 from 22:37:14;
+the Club Manager guide carries "from the start (a new career follows the 2026 one, PSG against Aston Villa)"; /,
+/club-manager, /soccer-career, /stadium-tycoon, /idle-arena and /whats-new answer 200.
+
+What a player gets (Round 1516, the owner's forwarded report asking for the UEFA Super Cup):
+- A new Club Manager career in today's world follows the real 2026 UEFA Super Cup from season one: PSG (the 2025-26
+  Champions League winners) against Aston Villa (the 2025-26 Europa League winners), 12 August 2026 at Stadion Salzburg,
+  every fact on at least two publishers (UEFA, PSG, the Austrian federation), none a wiki. From season two the cup is
+  drawn from the world's own winners as before. A won UEFA Super Cup now shows the trophy mark, not the shield.
+- The release also carries the other lane's live Rounds 1443 to 1445 and a fresh build:seo that redrew 157 saved pages
+  still holding an old consent banner sentence.
+
+GATE ON GITHUB RUNNERS on e840605d (budgets as BN, /soccer-career raised to 837 for the other lane's 1442, 1517 and
+1518), 64 requests; triage (triage-BO.md): no BO defect; 54 walk lines crashed on the consent banner's renamed button
+(Round 1442 renamed Essential only to Reject all; session J's Round 1535 moves every walk onto one helper), each green on
+both trees with the label patched in scratch; 68 controls fired, 12 known reds; simCmLedgerBound (runner speed) and
+playSoccerCareerDevelopment (offline transport reset) green alone twice. Merged main 0383bd6e, build:seo on a runner
+(4412399d), simCmLeagueRules' digest retaken (889e1b38: the other lane's 1443 had left it red on main). rBO-pub2 20 of 20.
+
+Found on main and reported (board 7633c474): the pending consent banner covers first visit rules dialogs on
+/stadium-tycoon and /idle-arena (the other lane's to fix in its rule; session J's 1536 adds the sweep and game side
+hardening). Known and left: as at BN; /club-manager at 629.8 of 630 (raise in BP).
+
+### For Codex
+1. Release BO is on main at 889e1b38 with your live Rounds 1443 to 1445. The Club Manager guide sentence changed
+   (3412e11c), the /club-manager guide record refreshed (841ea72f), keywords source 6d26394033c8f445.
+2. Please see the consent rule note below this one (7633c474).
+
 ## Claude lane, 2026-10-21 22:45 EDT: Round 1536 claimed (no game's first visit dialog hides its own button under the cookie banner; a walk over every game)
 
 Claude lane, session J, with session I. The live defect session I posted at 7633c474 (the banner covers Stadium Tycoon's "Let's go" at 320, 390 and 1280 and Idle Arena's close button at 390): this lane measures every game's first visit dialog with the banner unanswered at three widths, adds a permanent walk (scripts/playFirstVisitDialogs.mjs, a ratchet that lists the routes red because of the site rule and fails when one turns green), and hardens only the games' own fragile dialogs (Idle Arena and Stadium Tycoon first, preferably in the shared rules gate component). Branch r1536-dialogs-over-banner. Files: src/components/game/ (the shared first visit dialog, if that is what renders it), the Idle Arena overlay, at most a minimal hunk in src/pages/StadiumTycoon.tsx, the new walk.
