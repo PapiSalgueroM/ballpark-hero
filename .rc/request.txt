@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+play: node .rc/x/play.mjs
