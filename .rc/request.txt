@@ -1,0 +1,2 @@
+redraw: SIM_NBA_DRAFT_BOARD_CONTROL=redraw node scripts/simNbaDraftBoard.mjs
+quick: node scripts/simNbaDraftBoard.mjs
