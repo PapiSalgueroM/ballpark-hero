@@ -1,0 +1,7 @@
+/nfl-higher-lower 300.4K gzipped JS in 32 files
+/nba-higher-lower 305.1K gzipped JS in 32 files
+/f1-higher-lower 302.7K gzipped JS in 32 files
+/tennis-higher-lower 302.2K gzipped JS in 32 files
+/hockey-higher-lower 300.4K gzipped JS in 34 files
+/face-off 323.9K gzipped JS in 40 files
+/whats-new 360.8K gzipped JS in 4 files
