@@ -1,0 +1,4 @@
+tsc exit=0 69s | 
+stop-earned exit=1 23s |       1   FAIL [N]: seed N season N: Amari Okonkwo, drafted here in round N, came up at the end of his first deal and is not restricted
+simNbaGmDesk exit=0 23s | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+contract-files exit=0 0s | simNbaGmDesk, gmContractRules, gmContracts byte equal to 7a8750ba
