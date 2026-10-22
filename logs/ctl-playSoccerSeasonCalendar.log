@@ -1,0 +1,10 @@
+}
+
+Node.js v24.22.0
+case 320-advance: ok=false TimeoutError: locator.waitFor: Timeout 30000ms exceeded.
+case 320-exit: ok=false TimeoutError: locator.waitFor: Timeout 30000ms exceeded.
+case 390-advance: ok=false TimeoutError: locator.waitFor: Timeout 30000ms exceeded.
+case 390-exit: ok=false TimeoutError: locator.waitFor: Timeout 30000ms exceeded.
+case 1280-advance: ok=false TimeoutError: locator.waitFor: Timeout 30000ms exceeded.
+case 1280-exit: ok=false TimeoutError: locator.waitFor: Timeout 30000ms exceeded.
+checks 30, controls 0

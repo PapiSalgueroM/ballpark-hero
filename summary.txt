@@ -1,0 +1,4 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fonts exit=0 1s | Prepared 9 declared font dependencies for local fulfillment.
+simCareerProgramme-forwalk exit=0 76s | Career programme:50 original/compatibility/full product season pairs with exact RNG,240 opted gameplay seasons,21 effective loaded faults,163 unchanged chance outcomes an
+ctl-playSoccerSeasonCalendar exit=1 187s | checks 30, controls 0
