@@ -1,0 +1,4 @@
+mutNoNations1520: Round 1520 taken out of src/lib/clubManager.ts and src/lib/clubManagerBoardAsks.ts (its twelve bridge edits)
+  ok: 56 Normal careers compared with the base, 3904394 draws, in 99 s
+  ok: 2b: 18 of 18 Hard careers on Normal's dials play as Normal, the key aside
+simCmDifficulty: all green (sections 2)

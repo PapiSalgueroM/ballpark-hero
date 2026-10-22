@@ -1,0 +1,11 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+units-1520 exit=0 5s |    Duration  4.04s (transform 3.82s, setup 209ms, collect 2.42s, tests 3.54s, environment 804ms, prepare 306ms)
+nat-1520 exit=0 112s | simCmMadeUpNations: green. Made up men carry a country of their own, drawn and kept honestly.
+editor-1520 exit=0 10s | simWorldEditor: 2478 checks, 0 failures
+nat-base-1520 exit=0 131s | simCmMadeUpNations: green. Made up men carry a country of their own, drawn and kept honestly.
+aleague-1520 exit=0 10s | simClubManagerALeague: all checks passed
+walk-1520 exit=0 7s | playCmMadeUpNations: green. Made up men wear their country on the squad and the market.
+asks-1520 exit=0 50s | simBoardAsks: green. Every ask a board makes can be met, and nobody real is quoted.
+s6-attr-1520 exit=0 3s | simCmDifficulty: all green (sections 6)
+s2-attr-1520 exit=0 143s | simCmDifficulty: all green (sections 2)
+ctl-1520 exit=0 450s | homecountry exit=1 simWorldEditor (control homecountry): 2478 checks, 2 failures

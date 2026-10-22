@@ -1,0 +1,28 @@
+# Release BP (Round BPG): ROUND 1520's own proof lines (Club Manager: made up players get a country), from
+# finish-1520.md section 13, fix-1520.md section 8 and fix2-1520.md section 5 as the round's runners ran them
+# (r1520-cc-final, r1520-cc-ctl, r1520-v2-a), proven on the release head by rBPg-m2 (merge m2) and on the final head.
+# BINDING. B1520 is a tree without Round 1520: cedd0239 (origin/main, the release's base; m2's first parent 25e94416
+# adds only Round 1519, no Club Manager file). nat-base holds the draw against that tree (BASE_ROOT, a worktree).
+# s2-attr-1520 is the release's simCmDifficulty section 2 attribution (brief-BPG decision 3): a copy of the head with
+# Round 1520 taken out by its own bridge (scripts/lib/cmNoMadeUpNations1520.mjs through mutNoNations1520.mjs, every
+# anchor exactly once or exit 2) plays Normal equal to B1520 on every key and every draw count; so on this head only
+# 1520's nations move a Medium career (1522's tactics move none: rBPg-m3 bytes-m2 green against m2's head).
+# s6-attr-1520 is the same for section 6: the Hot Seat and Deadline Day days differ from any base before 1520 only by
+# the made up men's countries (s6 raw against cedd0239: 6 failures, 3 of 3 each; with the bridge 0 of 3 each, rBPg-doc).
+# Both copies are git archives (no worktree, so the lines cannot race on git's worktree lock).
+# CONTROLS. ctl-1520 exits 0 only when each CM_NATIONS_CONTROL exits 1 and closes on "RED, N failure(s)" (nocap 3,
+# freeask 3, leak 14, mainstream 13, awayyouth 9 on rBPg-m2) and SIM_WORLD_EDITOR_CONTROL=homecountry exits 1 with
+# 2 failures (section 3, "Celtic moved by the editor are asked for players from England").
+# WEIGHT is not here: the release's sweepWeight rows were set from rBPg's final measurement (finish-BPG.md).
+#!serve
+#!playwright
+units-1520: node_modules/.bin/vitest run src/test/cmMadeUpNations.test.ts src/test/cmWorldIdentity1052.test.ts --testTimeout=300000 --hookTimeout=120000 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+nat-1520: node scripts/simCmMadeUpNations.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+nat-base-1520: git worktree add -q .rcb1520 ${B1520:-cedd0239} && BASE_ROOT=.rcb1520 node scripts/simCmMadeUpNations.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+ctl-1520: bad=0; for c in nocap freeask leak mainstream awayyouth; do CM_NATIONS_CONTROL=$c node scripts/simCmMadeUpNations.mjs > /tmp/c20-$c.log 2>&1; e=$?; echo "$c exit=$e $(tail -1 /tmp/c20-$c.log | cut -c1-160)"; if [ $e -ne 1 ] || ! tail -1 /tmp/c20-$c.log | grep -q 'RED, '; then bad=1; fi; done; SIM_WORLD_EDITOR_CONTROL=homecountry node scripts/simWorldEditor.mjs > /tmp/c20-we.log 2>&1; e=$?; echo "homecountry exit=$e $(tail -1 /tmp/c20-we.log | cut -c1-160)"; if [ $e -ne 1 ] || ! tail -1 /tmp/c20-we.log | grep -q ' 2 failures'; then bad=1; fi; exit $bad
+editor-1520: node scripts/simWorldEditor.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+aleague-1520: node scripts/simClubManagerALeague.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+asks-1520: node scripts/simBoardAsks.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+walk-1520: node scripts/playCmMadeUpNations.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+s2-attr-1520: R=$PWD; mkdir -p /tmp/n20 /tmp/n20b && git archive HEAD | tar -x -C /tmp/n20 && ln -s "$R/node_modules" /tmp/n20/node_modules && git archive ${B1520:-cedd0239} | tar -x -C /tmp/n20b && cd /tmp/n20 && node "$R/.rc/x/mutNoNations1520.mjs" && BASE_ROOT=/tmp/n20b SECTION=2 node scripts/simCmDifficulty.mjs > /tmp/s2a.log 2>&1; s=$?; grep -E "Normal careers compared|^  ok: 2b|FAILURE" /tmp/s2a.log | head -4 | cut -c1-200; tail -1 /tmp/s2a.log | cut -c1-200; exit $s
+s6-attr-1520: R=$PWD; mkdir -p /tmp/n26 /tmp/n26b && git archive HEAD | tar -x -C /tmp/n26 && ln -s "$R/node_modules" /tmp/n26/node_modules && git archive ${B1520:-cedd0239} | tar -x -C /tmp/n26b && cd /tmp/n26 && node "$R/.rc/x/mutNoNations1520.mjs" && BASE_ROOT=/tmp/n26b SECTION=6 node scripts/simCmDifficulty.mjs > /tmp/s6a.log 2>&1; s=$?; grep -E "FAIL|red per" /tmp/s6a.log | head -8 | cut -c1-200; tail -1 /tmp/s6a.log | cut -c1-200; exit $s
