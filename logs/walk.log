@@ -1,0 +1,46 @@
+  s1-390-rm: buttons ["Skill grind Rating +1 or +2, up to your ceiling","Body work Durability","Build the brand Fame and money"]
+  s1-390-rm: outcome "YOUR DECISION Summer plan You chose: Skill grind No rating, money, team or status changes to show. Continue"
+  FAIL s1-390-rm: the outcome does not say the rating stays at the ceiling
+  s2-390-rm: buttons ["Skill grind Rating +1 or +2, up to your ceiling","Body work Durability","Build the brand Fame and money"]
+  s2-390-rm: earnings +$5M, Cash +$5M; outcome "YOUR DECISION Summer plan You chose: Build the brand Fanbase 46 → to 58 +12 Career earnings $42.9M → to $47.9M +$5M Cash $10.37M → to $15.37M +$5M Continue"
+  s3-390-rm: buttons ["Skills coach Health +4","Strength block Durability","The content summer Fame"]
+  s3-390-rm: outcome "YOUR DECISION Summer plan You chose: Skills coach No rating, money, team or status changes to show. Continue"
+  s4-390-rm: buttons ["Sign it, 7M 7M dirty, heat +20","Sign the cleaned up version, 2.5M 2.5M clean","Turn it down entirely Fanbase +8"]
+  s4-390-rm: Cash +$2.5M; outcome "YOUR DECISION The sportsbook wants your face You chose: Sign the cleaned up version, 2.5M Career earnings $42.9M → to $45.4M +$2.5M Cash $10.37M → to $12.87M +$2.5M Continue"
+  s5-390-rm: buttons ["Skills coach Rating +1 or +2, up to your ceiling","Strength block Durability","The content summer Fame"]
+  s5-390-rm: Cash +$0.8M; outcome "YOUR DECISION Summer plan You chose: The content summer Fanbase 49 → to 61 +12 Career earnings $12.9M → to $13.7M +$0.8M Cash $10.37M → to $11.17M +$0.8M Continue"
+  s1-390-mo: buttons ["Skill grind Rating +1 or +2, up to your ceiling","Body work Durability","Build the brand Fame and money"]
+  s1-390-mo: outcome "YOUR DECISION Summer plan You chose: Skill grind No rating, money, team or status changes to show. Continue"
+  FAIL s1-390-mo: the outcome does not say the rating stays at the ceiling
+  s2-390-mo: buttons ["Skill grind Rating +1 or +2, up to your ceiling","Body work Durability","Build the brand Fame and money"]
+  s2-390-mo: earnings +$5M, Cash +$5M; outcome "YOUR DECISION Summer plan You chose: Build the brand Fanbase 46 → to 58 +12 Career earnings $42.9M → to $47.9M +$5M Cash $10.37M → to $15.37M +$5M Continue"
+  s3-390-mo: buttons ["Skills coach Health +4","Strength block Durability","The content summer Fame"]
+  s3-390-mo: outcome "YOUR DECISION Summer plan You chose: Skills coach No rating, money, team or status changes to show. Continue"
+  s4-390-mo: buttons ["Sign it, 7M 7M dirty, heat +20","Sign the cleaned up version, 2.5M 2.5M clean","Turn it down entirely Fanbase +8"]
+  s4-390-mo: Cash +$2.5M; outcome "YOUR DECISION The sportsbook wants your face You chose: Sign the cleaned up version, 2.5M Career earnings $42.9M → to $45.4M +$2.5M Cash $10.37M → to $12.87M +$2.5M Continue"
+  s5-390-mo: buttons ["Skills coach Rating +1 or +2, up to your ceiling","Strength block Durability","The content summer Fame"]
+  s5-390-mo: Cash +$0.8M; outcome "YOUR DECISION Summer plan You chose: The content summer Fanbase 49 → to 61 +12 Career earnings $12.9M → to $13.7M +$0.8M Cash $10.37M → to $11.17M +$0.8M Continue"
+  s1-1280-rm: buttons ["Skill grind Rating +1 or +2, up to your ceiling","Body work Durability","Build the brand Fame and money"]
+  s1-1280-rm: outcome "YOUR DECISION Summer plan You chose: Skill grind No rating, money, team or status changes to show. Continue"
+  FAIL s1-1280-rm: the outcome does not say the rating stays at the ceiling
+  s2-1280-rm: buttons ["Skill grind Rating +1 or +2, up to your ceiling","Body work Durability","Build the brand Fame and money"]
+  s2-1280-rm: earnings +$5M, Cash +$5M; outcome "YOUR DECISION Summer plan You chose: Build the brand Fanbase 46 → to 58 +12 Career earnings $42.9M → to $47.9M +$5M Cash $10.37M → to $15.37M +$5M Continue"
+  s3-1280-rm: buttons ["Skills coach Health +4","Strength block Durability","The content summer Fame"]
+  s3-1280-rm: outcome "YOUR DECISION Summer plan You chose: Skills coach No rating, money, team or status changes to show. Continue"
+  s4-1280-rm: buttons ["Sign it, 7M 7M dirty, heat +20","Sign the cleaned up version, 2.5M 2.5M clean","Turn it down entirely Fanbase +8"]
+  s4-1280-rm: Cash +$2.5M; outcome "YOUR DECISION The sportsbook wants your face You chose: Sign the cleaned up version, 2.5M Career earnings $42.9M → to $45.4M +$2.5M Cash $10.37M → to $12.87M +$2.5M Continue"
+  s5-1280-rm: buttons ["Skills coach Rating +1 or +2, up to your ceiling","Strength block Durability","The content summer Fame"]
+  s5-1280-rm: Cash +$0.8M; outcome "YOUR DECISION Summer plan You chose: The content summer Fanbase 49 → to 61 +12 Career earnings $12.9M → to $13.7M +$0.8M Cash $10.37M → to $11.17M +$0.8M Continue"
+  s1-1280-mo: buttons ["Skill grind Rating +1 or +2, up to your ceiling","Body work Durability","Build the brand Fame and money"]
+  s1-1280-mo: outcome "YOUR DECISION Summer plan You chose: Skill grind No rating, money, team or status changes to show. Continue"
+  FAIL s1-1280-mo: the outcome does not say the rating stays at the ceiling
+  s2-1280-mo: buttons ["Skill grind Rating +1 or +2, up to your ceiling","Body work Durability","Build the brand Fame and money"]
+  s2-1280-mo: earnings +$5M, Cash +$5M; outcome "YOUR DECISION Summer plan You chose: Build the brand Fanbase 46 → to 58 +12 Career earnings $42.9M → to $47.9M +$5M Cash $10.37M → to $15.37M +$5M Continue"
+  s3-1280-mo: buttons ["Skills coach Health +4","Strength block Durability","The content summer Fame"]
+  s3-1280-mo: outcome "YOUR DECISION Summer plan You chose: Skills coach No rating, money, team or status changes to show. Continue"
+  s4-1280-mo: buttons ["Sign it, 7M 7M dirty, heat +20","Sign the cleaned up version, 2.5M 2.5M clean","Turn it down entirely Fanbase +8"]
+  s4-1280-mo: Cash +$2.5M; outcome "YOUR DECISION The sportsbook wants your face You chose: Sign the cleaned up version, 2.5M Career earnings $42.9M → to $45.4M +$2.5M Cash $10.37M → to $12.87M +$2.5M Continue"
+  s5-1280-mo: buttons ["Skills coach Rating +1 or +2, up to your ceiling","Strength block Durability","The content summer Fame"]
+  s5-1280-mo: Cash +$0.8M; outcome "YOUR DECISION Summer plan You chose: The content summer Fanbase 49 → to 61 +12 Career earnings $12.9M → to $13.7M +$0.8M Cash $10.37M → to $11.17M +$0.8M Continue"
+  screenshots: 70 in /home/runner/work/_temp/rc-out/files
+walk1538: red, 4 failures
