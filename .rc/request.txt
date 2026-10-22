@@ -1,0 +1,7 @@
+# Release BO triage: the cookie banner over open dialogs on a first visit, main 529bc3c1 (live code) against the tree before the 1442 consent change (e01bcd5a)
+#!serve
+#!playwright
+#!serial
+pre: git fetch -q origin e01bcd5a 2>/dev/null; git worktree add -q --detach /tmp/pre e01bcd5a && ln -s "$PWD/node_modules" /tmp/pre/node_modules && (cd /tmp/pre && node_modules/.bin/vite build --outDir /tmp/pre-dist > /tmp/pre-build.log 2>&1; tail -1 /tmp/pre-build.log) && (nohup node scripts/lib/hostLikeServer.mjs /tmp/pre-dist 4176 > /tmp/pre-srv.log 2>&1 &) && sleep 4 && curl -s -o /dev/null -w "pre served %{http_code}\n" http://localhost:4176/stadium-tycoon
+dialogs: node .rc/x/probeDialogs.mjs main529=http://localhost:4173 pre1442=http://localhost:4176
+tycoon: node .rc/x/probeConsentCover.mjs main529=http://localhost:4173 pre1442=http://localhost:4176
