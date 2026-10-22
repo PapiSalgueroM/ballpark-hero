@@ -32,7 +32,8 @@
  *      name twice on a roster or on two records is held, accents and dots
  *      fold, a suffix never does. A name the search table carries on two
  *      rows anywhere is held (the record keeps one row per name), and so is
- *      a record spanning more seasons than any one career.
+ *      a record spanning more seasons than any one career, or holding more
+ *      games than one career fits in its span (82 a season plus 24).
  *   8. Steals and blocks only count careers that began in 1973-74 or later.
  *   9. Per game numbers round to one decimal, totals stay whole, nothing is
  *      invented for a missing column.
@@ -71,6 +72,7 @@
  *   hooknocensus the hook builds pools without the name census       section 13
  *   hooknoyearto the hook's record read drops year_to                section 13
  *   hookrepeat  a repeat is checked by the search's key only         section 13
+ *   nodensity   a record with more games than one career is no longer held   section 7
  *
  * MEASURED (2026-10-22, here and on a runner alike): section 5, seed 20261022, 300 deals: the best five 100 and the
  * worst 0 on 300 of 300, random fives average 49.7; the old judge rated the best fives 99.0 and the worst 99.0 on
@@ -79,6 +81,8 @@
  * Fix round (2026-10-22): section 6's correlated sets (seeds 71, 83, 97, 60 deals each): 360 extremes, all equal to
  * the brute force on the head; with fourcands 15 of 360 disagree (5 of 180 at 30 deals, so the deal count was doubled
  * for headroom). The whole run is about 5 seconds here.
+ * Closing check (2026-10-22): section 7's games rule is exact arithmetic, no sampling: 1,874 and 1,829 games inside
+ * 22 seasons are held, 1,828 (the bound) and one 88 game season are not; nodensity frees the first two.
  *
  * Run: node scripts/simNbaStartingFive.mjs
  */
@@ -94,6 +98,7 @@ const CONTROLS = {
   oldjudge: [3, 5], noinvert: [4], greedy: [6], nonamesake: [7], pergame: [3], aiverdict: [10], flatpoints: [10], hitdrift: [12],
   slotflip: [4], gainflip: [4], fourcands: [6], hookhighest: [13], hookleague: [13], hookbypass: [13],
   nostl: [2], notablewide: [7], nospan: [7], hooknocensus: [13], hooknoyearto: [13], hookrepeat: [13],
+  nodensity: [7],
 };
 /* Section 13's controls edit the hook as esbuild loads it (and the copy the
    source fence reads). */
@@ -109,7 +114,8 @@ const HOOK_MUTATIONS = {
 const LIB_MUTATIONS = {
   nostl: ["'Atlanta Hawks': ['ATL', 'STL'],", "'Atlanta Hawks': ['ATL'],"],
   notablewide: ['\n      || (tableNames?.get(key) ?? 0) > 1', ''],
-  nospan: ['\n      || matches.some(r => (careerSeasons(r) ?? 0) > NBA_FIVE_MAX_CAREER_SEASONS);', ';'],
+  nospan: ['\n      || matches.some(r => (careerSeasons(r) ?? 0) > NBA_FIVE_MAX_CAREER_SEASONS)', ''],
+  nodensity: ['\n      || matches.some(moreGamesThanOneCareer);', ';'],
   fourcands: ['    return list.slice(0, NBA_FIVE_ROLES.length);', '    return list.slice(0, NBA_FIVE_ROLES.length - 1);'],
   slotflip: ['const slotBest = up ? hi : lo, slotWorst = up ? lo : hi;', 'const slotBest = hi, slotWorst = lo;'],
   gainflip: ['const gainedHere = up ? own.value - lo : hi - own.value;', 'const gainedHere = own.value - lo;'],
@@ -565,6 +571,8 @@ begin(7, 'the namesake guard');
     fail(`the name census counts ${JSON.stringify([...census])}, want fixture wide 2, jj fixture 2, fixture solo 1`);
   }
   const span = (yearFrom, yearTo) => ({ ...rec('Fixture Long', 'ATL', 1000, { points: 10000 }, yearFrom), year_to: yearTo });
+  const dense = (games, yearFrom, yearTo) => buildTeamPool('Atlanta Hawks', [ros('Fixture Dense')],
+    [{ ...rec('Fixture Dense', 'ATL', games, { points: games * 10 }, yearFrom), year_to: yearTo }]);
   const held = [
     ['on two search rows, two teams', buildTeamPool('Atlanta Hawks', [ros('Fixture Wide')], [rec('Fixture Wide', 'ATL', 100, { points: 1000 })], census), 'Fixture Wide', 'namesake'],
     ['dotted and bare on two rows', buildTeamPool('Atlanta Hawks', [ros('JJ Fixture')], [rec('JJ Fixture', 'ATL', 100, { points: 1000 })], census), 'JJ Fixture', 'namesake'],
@@ -574,6 +582,14 @@ begin(7, 'the namesake guard');
     ['25 seasons', buildTeamPool('Atlanta Hawks', [ros('Fixture Long')], [span('1990-91', '2014-15')]), 'Fixture Long', 10],
     ['23 seasons, the longest real one', buildTeamPool('Atlanta Hawks', [ros('Fixture Long')], [span('2003-04', '2025-26')]), 'Fixture Long', 10],
     ['no last season on the row', buildTeamPool('Atlanta Hawks', [ros('Fixture Long')], [span('1979-80', null)]), 'Fixture Long', 10],
+    /* Two careers that overlap in time stay inside the span rule, but their
+       games do not fit one man: 82 a season over the span plus
+       NBA_FIVE_GAMES_SLACK (24) is the most one career holds. */
+    ['1,874 games inside 22 seasons, two careers', dense(1874, '1977-78', '1998-99'), 'Fixture Dense', 'namesake'],
+    ['1,829 games inside 22 seasons, one over the bound', dense(1829, '1977-78', '1998-99'), 'Fixture Dense', 'namesake'],
+    ['1,828 games inside 22 seasons, at the bound', dense(1828, '1977-78', '1998-99'), 'Fixture Dense', 10],
+    ['88 games in one season, the NBA record', dense(88, '1968-69', '1968-69'), 'Fixture Dense', 10],
+    ['5,000 games and no last season', dense(5000, '1977-78', null), 'Fixture Dense', 10],
   ];
   for (const [label, p, name, expected] of held) {
     const entry = findPoolEntry(p, name);
@@ -594,7 +610,7 @@ begin(7, 'the namesake guard');
   for (const [label, five] of Object.entries(refusals)) {
     if (scoreFive(five, pools, PPG, 'highest') !== null) fail(`scoreFive scored ${label}`);
   }
-  console.log(`   ${Object.keys(want).length} roster names, ${held.length} census and span cases and ${Object.keys(refusals).length} illegal fives behave`);
+  console.log(`   ${Object.keys(want).length} roster names, ${held.length} census, span and games cases and ${Object.keys(refusals).length} illegal fives behave`);
 }
 
 begin(8, 'steals and blocks only count careers that began in 1973-74 or later');

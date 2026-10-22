@@ -213,6 +213,25 @@ export function careerSeasons(row: NbaFiveRecordRow): number | null {
   return first === null || last === null ? null : last - first + 1;
 }
 
+/**
+ * No NBA schedule has been longer than 82 games (82 since 1967-68: nba.com's
+ * 1967-68 season review and Fox Business on the 82 game schedule), and the
+ * most anyone has played in one NBA season is 88, Walt Bellamy in 1968-69
+ * after a trade (nba.com's 1968-69 season review and Basketball Reference's
+ * single season games leaders). So one man cannot pass 82 games a season over
+ * his span by more than a few trades' worth; the slack is four seasons at that
+ * record's six extra. A row past it is two careers summed under one name, the
+ * merge the span rule misses when the two careers overlap in time.
+ */
+export const NBA_FIVE_GAMES_SLACK = 24;
+
+/** True when the row holds more games than one career could fit in its span. */
+export function moreGamesThanOneCareer(row: NbaFiveRecordRow): boolean {
+  const seasons = careerSeasons(row);
+  const games = Number(row.games);
+  return seasons !== null && Number.isFinite(games) && games > 82 * seasons + NBA_FIVE_GAMES_SLACK;
+}
+
 /** How many nba_players_extended_v2 rows carry each name key, table wide. */
 export function nbaFiveNameCounts(rows: NbaFiveRosterRow[]): Map<string, number> {
   const counts = new Map<string, number>();
@@ -229,7 +248,7 @@ export function nbaFiveNameCounts(rows: NbaFiveRosterRow[]): Map<string, number>
  * one row anywhere (tableNames, from nbaFiveNameCounts: the record keeps one
  * row per name, so two men on two teams would both get it), when it matches
  * two record rows listing the franchise, or when its record spans more
- * seasons than any one career has: the game cannot tell whose numbers are
+ * seasons, or holds more games, than any one career has: the game cannot tell whose numbers are
  * whose, so it scores none of them. A record row that does not list the
  * franchise is never used.
  */
@@ -262,7 +281,8 @@ export function buildTeamPool(
     const matches = byKey.get(key) ?? [];
     const twice = (rosterCount.get(key) ?? 0) > 1 || matches.length > 1
       || (tableNames?.get(key) ?? 0) > 1
-      || matches.some(r => (careerSeasons(r) ?? 0) > NBA_FIVE_MAX_CAREER_SEASONS);
+      || matches.some(r => (careerSeasons(r) ?? 0) > NBA_FIVE_MAX_CAREER_SEASONS)
+      || matches.some(moreGamesThanOneCareer);
     entries.push({
       key,
       name,
