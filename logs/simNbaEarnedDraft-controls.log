@@ -1,0 +1,32 @@
+   fired  exit 1  touchseason    simNbaEarnedDraft: CONTROL touchseason FIRED. Red in section 1 (41 failures).
+   fired  exit 1  fatclass       simNbaEarnedDraft: CONTROL fatclass FIRED. Red in section 6 (3 failures).
+   fired  exit 1  nocurve        simNbaEarnedDraft: CONTROL nocurve FIRED. Red in section 6 (19 failures).
+   fired  exit 1  flatodds       simNbaEarnedDraft: CONTROL flatodds FIRED. Red in section 2 (437 failures).
+   fired  exit 1  playinmade     simNbaEarnedDraft: CONTROL playinmade FIRED. Red in section 2 and 3 and 4 and 5 and 8 and 9 and 12 (32 and 32 and 1 and 12 and 1 and 4 and 2 failures)
+   fired  exit 1  gmfirst        simNbaEarnedDraft: CONTROL gmfirst FIRED. Red in section 3 and 5 (59 and 2 failures).
+   fired  exit 1  bestfirst      simNbaEarnedDraft: CONTROL bestfirst FIRED. Red in section 3 and 5 (90 and 4 failures).
+   fired  exit 1  origholder     simNbaEarnedDraft: CONTROL origholder FIRED. Red in section 3 (192 failures).
+   fired  exit 1  shortclass     simNbaEarnedDraft: CONTROL shortclass FIRED. Red in section 6 and 3 (1515 and 30 failures).
+   fired  exit 1  shownread      simNbaEarnedDraft: CONTROL shownread FIRED. Red in section 3 (445 failures).
+   fired  exit 1  redraw         simNbaEarnedDraft: CONTROL redraw FIRED. Red in section 4 (30 failures).
+   fired  exit 1  reopen         simNbaEarnedDraft: CONTROL reopen FIRED. Red in section 4 (30 failures).
+   fired  exit 1  trustblock     simNbaEarnedDraft: CONTROL trustblock FIRED. Red in section 3 and 8 (284 and 100 failures).
+   fired  exit 1  noneed         simNbaEarnedDraft: CONTROL noneed FIRED. Red in section 9 (4 failures).
+   fired  exit 1  rivalscout     simNbaEarnedDraft: CONTROL rivalscout FIRED. Red in section 9 (2 failures).
+   fired  exit 1  bigneed        simNbaEarnedDraft: CONTROL bigneed FIRED. Red in section 9 (3 failures).
+   fired  exit 1  sportname      simNbaEarnedDraft: CONTROL sportname FIRED. Red in section 10 (1 failures).
+   fired  exit 1  foreignimport  simNbaEarnedDraft: CONTROL foreignimport FIRED. Red in section 10 (1 failures).
+   fired  exit 1  elevenhead     simNbaEarnedDraft: CONTROL elevenhead FIRED. Red in section 6 (1502 failures).
+   fired  exit 1  summerdeal     simNbaEarnedDraft: CONTROL summerdeal FIRED. Red in section 12 (2075 failures).
+   fired  exit 1  flatclass      simNbaEarnedDraft: CONTROL flatclass FIRED. Red in section 6 (2 failures).
+   fired  exit 1  judgetwo       simNbaEarnedDraft: CONTROL judgetwo FIRED. Red in section 11 (18 failures).
+   fired  exit 1  judgerange     simNbaEarnedDraft: CONTROL judgerange FIRED. Red in section 11 (14 failures).
+   fired  exit 1  judgefloor     simNbaEarnedDraft: CONTROL judgefloor FIRED. Red in section 11 (8 failures).
+   fired  exit 1  judgecap       simNbaEarnedDraft: CONTROL judgecap FIRED. Red in section 11 (8 failures).
+   fired  exit 1  judgeflip      simNbaEarnedDraft: CONTROL judgeflip FIRED. Red in section 11 (36 failures).
+   fired  exit 1  judgeres       simNbaEarnedDraft: CONTROL judgeres FIRED. Red in section 11 (12 failures).
+   fired  exit 1  judgestraddle  simNbaEarnedDraft: CONTROL judgestraddle FIRED. Red in section 11 (52 failures).
+   fired  exit 1  judgerise      simNbaEarnedDraft: CONTROL judgerise FIRED. Red in section 11 (4 failures).
+   fired  exit 1  judgepass      simNbaEarnedDraft: CONTROL judgepass FIRED. Red in section 11 (38 failures).
+   fired  exit 1  judgefleet     simNbaEarnedDraft: CONTROL judgefleet FIRED. Red in section 11 (2 failures).
+simNbaEarnedDraft controls: all 31 fired, each in exactly its own sections.

@@ -1,0 +1,3 @@
+{"mode":"normal","passed":29,"failed":0,"failedIndices":[],"intendedFailureTitles":[],"physicalOriginalCommit":null,"receipt":"/home/runner/work/_temp/t-simNbaDraftCapital/dukb-nba939-proof-9ZUkQ8"}
+NBA draft-capital actual29 outcomes, independent baselines, CRLF controls, source holds and owned cleanup completed.
+simNbaDraftCapital: green and all 21 controls red in exactly their own checks

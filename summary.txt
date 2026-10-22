@@ -1,0 +1,10 @@
+decision10a exit=0 0s | diffproof control exit 1
+vitest exit=0 39s |    Duration  38.66s (transform 7.36s, setup 2.80s, collect 19.08s, tests 60.43s, environment 18.02s, prepare 4.01s)
+simNbaEarnedDraft exit=0 42s | simNbaEarnedDraft: green.
+tsc exit=0 118s | 
+simNbaDraftBoard exit=0 175s | simNbaDraftBoard: green.
+simNbaEarnedDraft-controls exit=0 816s | simNbaEarnedDraft controls: all 31 fired, each in exactly its own sections.
+simNbaDraftCapital exit=0 60s | simNbaDraftCapital: green and all 21 controls red in exactly their own checks
+simNbaDraftBoard-full exit=0 895s | simNbaDraftBoard: green.
+simNbaGmDesk exit=0 521s | sheetrepick exit 0 | simNbaGmDesk: control sheetrepick fired (34 failures, as it should)
+simNbaDraftBoard-controls exit=1 1945s | simNbaDraftBoard controls: 1 of 12 did not fire as they must (redraw).
