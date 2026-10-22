@@ -1,0 +1,7 @@
+MUTATION level applied to src/lib/soccerCareerEngine.ts
+1) the field table against the engine it was measured on
+   CB level: mean 6.92 (table 6.41), sd 0.71 (table 0.75), n 11235
+   FAIL CB level: the mean moved 0.51, past 0.06
+   FAIL CB level: the sd moved -0.04, past 0.04
+simSoccerSeasonAwards: RED, 2 failure(s)
+MUT level harness=1
