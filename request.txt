@@ -1,0 +1,2 @@
+#!build
+weight: node .rc/x/weight1558.mjs

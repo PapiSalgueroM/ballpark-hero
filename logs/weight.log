@@ -1,0 +1,30 @@
+head baseballData BaseballConnections-CIhE6gQu.js raw=49190 gzip=12226
+head nflData NflConnections-Bu2rISH2.js raw=15212 gzip=5699
+head nhlData NhlConnections-MgvbGFvW.js raw=22046 gzip=8188
+head whatsNew WhatsNew-BmTEm3uP.js raw=399202 gzip=124924
+head baseballGuide baseball-BY3wd-W6.js raw=55296 gzip=19437
+head footballGuide football-CHcXrce1.js raw=64784 gzip=22848
+head hockeyGuide hockey-D5SFDb30.js raw=61504 gzip=21525
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+[1m[33mwarn[39m[22m - The class `duration-[800ms]` is ambiguous and matches multiple utilities.
+[1m[33mwarn[39m[22m - If this is content and not a class, replace it with `duration-&lsqb;800ms&rsqb;` to silence this warning.
+[dukb] preload wrapper: a cancelled chunk error waits for the reload (vite 5.4.21)
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+base baseballData BaseballConnections-CzjDRRKf.js raw=49204 gzip=12252
+base nflData NflConnections-BdyUhVQK.js raw=15206 gzip=5695
+base nhlData NhlConnections-Tcfb6z9d.js raw=22034 gzip=8158
+base whatsNew WhatsNew-DA42AstV.js raw=398224 gzip=124598
+base baseballGuide baseball-C94Eb-PF.js raw=55295 gzip=19434
+base footballGuide football-DwCm5RIA.js raw=64754 gzip=22836
+base hockeyGuide hockey-D-_8KTQs.js raw=61496 gzip=21519
+delta baseballData: raw -14 gzip -26 (head raw 49190 gzip 12226)
+delta nflData: raw 6 gzip 4 (head raw 15212 gzip 5699)
+delta nhlData: raw 12 gzip 30 (head raw 22046 gzip 8188)
+delta whatsNew: raw 978 gzip 326 (head raw 399202 gzip 124924)
+delta baseballGuide: raw 1 gzip 3 (head raw 55296 gzip 19437)
+delta footballGuide: raw 30 gzip 12 (head raw 64784 gzip 22848)
+delta hockeyGuide: raw 8 gzip 6 (head raw 61504 gzip 21525)
+weight1558: done
