@@ -1,0 +1,5 @@
+#!serial
+split1: SIM_CAREER_FORM_SECTIONS=4 SIM_CAREER_FORM_FLEET=120 SIM_CAREER_FORM_WORKERS=1 node scripts/simCareerForm.mjs
+split4: SIM_CAREER_FORM_SECTIONS=4 SIM_CAREER_FORM_FLEET=120 SIM_CAREER_FORM_WORKERS=4 node scripts/simCareerForm.mjs
+f4-house-s1523: SIM_CAREER_FORM_SECTIONS=4 node scripts/simCareerForm.mjs
+f4-engaged-s1523: SIM_CAREER_FORM_FLEET_KIND=engaged SIM_CAREER_FORM_SECTIONS=4 node scripts/simCareerForm.mjs
