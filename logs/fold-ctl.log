@@ -1,0 +1,4 @@
+foldflat exit=1 simCmDifficulty: 7 FAILURES (fold)
+foldblock exit=1 simCmDifficulty: 3 FAILURES (fold)
+foldbig exit=1 simCmDifficulty: 1 FAILURES (fold)
+foldhalf exit=1 simCmDifficulty: 1 FAILURES (fold)

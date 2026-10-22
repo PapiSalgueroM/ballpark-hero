@@ -1,0 +1,2 @@
+fold exit=0 0s | simCmDifficulty: all green (fold)
+fold-ctl exit=0 0s | foldhalf exit=1 simCmDifficulty: 1 FAILURES (fold)

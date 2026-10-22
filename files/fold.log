@@ -1,0 +1,32 @@
+simCmDifficulty: sections 1, 2, 3, 6, 7, 8
+4) outcomes folded from 40 files, 8640 seasons
+  level  tier  driver   n   ppg  vsExp titles10 troph10   fees  sign  balance over  bMin bMean sacked matches xiS  xiE  clauseU loanU
+  veryeasy big   engaged 576 2.26   0.57    7.17   18.30  74.59  0.83   303.40 0.68 66.31 93.28 0.00  53.07 90.64 91.14     0     0
+  veryeasy mid   engaged 576 1.75  -5.65    1.32    4.10  30.08  1.52    53.82 0.68 68.82 92.64 0.00  45.76 82.22 82.89     0     0
+  veryeasy small engaged 576 1.45  -9.41    1.34    1.84  10.35  1.76    16.95 0.80 65.01 88.40 0.00  42.62 77.53 78.30     0     0
+  easy   big   engaged 576 2.14   1.01    5.35   13.32  69.15  0.99   212.55 0.70 56.95 84.24 0.02  51.61 90.27 90.73     0     0
+  easy   mid   engaged 576 1.54  -3.32    0.61    1.84  22.22  1.79    31.48 0.68 53.99 79.38 0.05  43.20 81.41 81.96     0     0
+  easy   small engaged 576 1.40  -8.89    1.68    2.05   7.19  2.01    10.88 0.78 48.17 75.83 0.06  42.17 76.60 77.26     0     0
+  normal big   engaged 576 2.05   1.22    4.06   10.42  61.28  1.15   161.59 0.70 44.07 72.31 0.13  48.96 89.72 90.08     0     0
+  normal mid   engaged 576 1.36  -2.10    0.14    0.76  16.42  2.00    22.84 0.67 35.33 64.06 0.26  38.95 80.40 80.77     0     1
+  normal small engaged 576 1.09  -8.05    0.64    0.76   7.35  2.58     8.66 0.80 23.79 57.82 0.42  37.62 74.79 75.48     0     0
+  hard   big   engaged 576 1.87   1.19    1.65    3.96  47.72  1.70   127.68 1.00 18.85 54.29 0.51  38.38 88.76 88.95     0     0
+  hard   mid   engaged 576 1.12  -1.27    0.02    0.14  13.81  2.15    16.65 0.90 10.59 47.94 0.71  28.51 79.45 79.57     0     0
+  hard   small engaged 576 0.61  -5.92    0.02    0.03   5.68  2.46     6.56 0.79  2.57 40.54 0.91  26.00 73.49 73.76     0     0
+  legend big   engaged 576 1.73   1.04    0.63    1.75  32.25  2.06   111.23 1.00  6.67 45.23 0.80  28.66 88.28 88.30     0    17
+  legend mid   engaged 576 0.98  -1.60    0.02    0.05  11.61  1.92     6.98 0.99  1.82 39.73 0.93  19.94 79.18 79.23     0    28
+  legend small engaged 576 0.48  -8.20    0.00    0.00   2.71  1.91     5.56 0.97  0.25 36.81 0.99  18.13 73.28 73.41     0     0
+  block seeds 0 to 15: veryeasy mid 1.75 (28.61%), sacked 0.00 (0.00x), spend 38.76m, big titles 7.22, small ppg 1.46; easy mid 1.53 (12.14%), sacked 0.04 (0.16x), spend 32.41m, big titles 5.45, small ppg 1.41; normal mid 1.36 (0.00%), sacked 0.28 (1.00x), spend 28.45m, big titles 3.89, small ppg 1.03; hard mid 1.11 (-18.12%), sacked 0.70 (2.53x), spend 22.24m, big titles 1.70, small ppg 0.63; legend mid 0.98 (-27.67%), sacked 0.90 (3.28x), spend 15.56m, big titles 0.69, small ppg 0.47
+  block seeds 16 to 31: veryeasy mid 1.76 (28.85%), sacked 0.00 (0.00x), spend 37.93m, big titles 7.12, small ppg 1.44; easy mid 1.55 (13.24%), sacked 0.04 (0.16x), spend 33.30m, big titles 5.24, small ppg 1.40; normal mid 1.37 (0.00%), sacked 0.26 (1.00x), spend 28.26m, big titles 4.24, small ppg 1.14; hard mid 1.12 (-18.05%), sacked 0.73 (2.79x), spend 22.57m, big titles 1.60, small ppg 0.59; legend mid 0.97 (-28.87%), sacked 0.91 (3.48x), spend 15.49m, big titles 0.56, small ppg 0.50
+  Normal: mid points per game 1.36, sacked 463 of 1728 seasons (0.27), spend 28.35m a season, big club titles 4.06 in ten
+  Normal against Normal (even seeds against odd): mid points per game 1.35 and 1.37, a gap of 1.23 percent
+  hard: mid points per game 1.12 (down 18.08 percent), sacked 1228 of 1728 (0.71, 2.65 times Normal), spend 22.40m (down 20.97 percent), big club titles 1.65 in ten
+  ok: hard in seeds 0 to 15: down 18.12 percent, inside 13 to 20
+  ok: hard in seeds 16 to 31: down 18.05 percent, inside 13 to 20
+  legend: mid points per game 0.98 (down 28.26 percent), sacked 1564 of 1728 (0.91, 3.38 times Normal), spend 15.52m (down 45.24 percent), big club titles 0.63 in ten
+  ok: legend in seeds 0 to 15: down 27.67 percent, inside 23 to 32
+  ok: legend in seeds 16 to 31: down 28.87 percent, inside 23 to 32
+  easy: mid points per game 1.54 (up 12.69 percent), sacked 75 of 1728 (0.04, 0.16 times Medium), spend 32.86m (up 15.89 percent), big club titles 5.35 in ten, small club points a game 1.40
+  veryeasy: mid points per game 1.75 (up 28.73 percent), sacked 1 of 1728 (0.00, 0.00 times Medium), spend 38.34m (up 35.24 percent), big club titles 7.17 in ten, small club points a game 1.45
+  ok: every level sits inside the bands the lead set
+simCmDifficulty: all green (fold)
