@@ -215,3 +215,85 @@ describe('Round 1522 review: a change in play moves the football, not just the l
     expect(charged.squad.length).toBeGreaterThan(moved.length);
   });
 });
+
+/* Round 1522 review (run lens, mutation D): every interaction the harness header lists, through tacticBoost, against
+   the sum TACTIC_TABLE says it is. A trigger that belongs to the other side must never fire off my own setting, so
+   the last rows put the trigger on my side and expect nothing extra. */
+describe('Round 1522 review: every row of the table, through tacticBoost', () => {
+  const T = TACTIC_TABLE;
+  const P = T.press, M = T.tempo, W = T.width, L = T.line;
+  interface Row { name: string; mine: Partial<TeamInstructions>; theirs?: Partial<TeamInstructions>; half?: 1 | 2; fit?: number; duties?: Duty[]; atk: number; def: number; }
+  const rows: Row[] = [
+    { name: 'high press, first half, fresh legs', mine: { press: 1 }, atk: P.high.atkH1, def: P.high.defH1 },
+    { name: 'high press, first half, half the legs', mine: { press: 1 }, fit: 75, atk: P.high.atkH1 / 2, def: P.high.defH1 },
+    { name: 'high press, first half, no legs', mine: { press: 1 }, fit: 55, atk: 0, def: P.high.defH1 },
+    { name: 'high press, second half', mine: { press: 1 }, half: 2, atk: P.high.atkH2, def: P.high.defH2 },
+    { name: 'high press against a patient side', mine: { press: 1 }, theirs: { tempo: -1 }, half: 2, atk: P.high.atkH2 + P.high.vsPatientAtk, def: P.high.defH2 },
+    { name: 'high press against a direct side', mine: { press: 1 }, theirs: { tempo: 1 }, half: 2, atk: P.high.atkH2, def: P.high.defH2 + P.high.vsDirectDef },
+    { name: 'stand off', mine: { press: -1 }, atk: P.off.atk, def: P.off.def },
+    { name: 'stand off against a patient side', mine: { press: -1 }, theirs: { tempo: -1 }, atk: P.off.atk + P.off.vsPatientAtk, def: P.off.def },
+    { name: 'stand off against a direct side', mine: { press: -1 }, theirs: { tempo: 1 }, atk: P.off.atk, def: P.off.def + P.off.vsDirectDef },
+    { name: 'direct', mine: { tempo: 1 }, atk: M.direct.atk, def: M.direct.def },
+    { name: 'direct against a high line', mine: { tempo: 1 }, theirs: { line: 1 }, atk: M.direct.atk + M.direct.vsHighLineAtk, def: M.direct.def },
+    { name: 'direct against a deep line', mine: { tempo: 1 }, theirs: { line: -1 }, atk: M.direct.atk + M.direct.vsDeepLineAtk, def: M.direct.def },
+    { name: 'direct with three target men and poachers (two count)', mine: { tempo: 1 }, duties: ['targetMan', 'poacher', 'targetMan'], atk: M.direct.atk + 2 * M.direct.perDutyAtk, def: M.direct.def },
+    { name: 'patient', mine: { tempo: -1 }, atk: M.patient.atk, def: M.patient.def },
+    { name: 'patient against a side that stands off', mine: { tempo: -1 }, theirs: { press: -1 }, atk: M.patient.atk + M.patient.vsStandOffAtk, def: M.patient.def },
+    { name: 'patient against a press', mine: { tempo: -1 }, theirs: { press: 1 }, atk: M.patient.atk, def: M.patient.def + M.patient.vsPressDef },
+    { name: 'patient with three builders (two count)', mine: { tempo: -1 }, duties: ['deepPlaymaker', 'playmaker', 'falseNine'], atk: M.patient.atk + 2 * M.patient.perDutyAtk, def: M.patient.def },
+    { name: 'wide', mine: { width: 1 }, atk: W.wide.atk, def: W.wide.def },
+    { name: 'wide against a narrow side', mine: { width: 1 }, theirs: { width: -1 }, atk: W.wide.atk + W.wide.vsNarrowAtk, def: W.wide.def },
+    { name: 'wide with four wide duties (three count)', mine: { width: 1 }, duties: ['winger', 'winger', 'attackingFullBack', 'attackingFullBack'], atk: W.wide.atk + 3 * W.wide.perDutyAtk, def: W.wide.def },
+    { name: 'narrow', mine: { width: -1 }, atk: W.narrow.atk, def: W.narrow.def },
+    { name: 'narrow against a wide side', mine: { width: -1 }, theirs: { width: 1 }, atk: W.narrow.atk, def: W.narrow.def + W.narrow.vsWideDef },
+    { name: 'narrow with four central duties (three count)', mine: { width: -1 }, duties: ['insideForward', 'playmaker', 'creator', 'shadowStriker'], atk: W.narrow.atk + 3 * W.narrow.perDutyAtk, def: W.narrow.def },
+    { name: 'high line', mine: { line: 1 }, atk: L.high.atk, def: L.high.def },
+    { name: 'high line against a direct side', mine: { line: 1 }, theirs: { tempo: 1 }, atk: L.high.atk, def: L.high.def + L.high.vsDirectDef },
+    { name: 'high line against a patient side', mine: { line: 1 }, theirs: { tempo: -1 }, atk: L.high.atk + L.high.vsPatientAtk, def: L.high.def },
+    { name: 'high line with nobody pressing', mine: { line: 1, press: -1 }, atk: L.high.atk + P.off.atk, def: L.high.def + P.off.def + L.high.noPressDef },
+    { name: 'deep line', mine: { line: -1 }, atk: L.deep.atk, def: L.deep.def },
+    { name: 'deep line against a patient side', mine: { line: -1 }, theirs: { tempo: -1 }, atk: L.deep.atk, def: L.deep.def + L.deep.vsPatientDef },
+    { name: 'deep line against a direct side', mine: { line: -1 }, theirs: { tempo: 1 }, atk: L.deep.atk, def: L.deep.def + L.deep.vsDirectDef },
+    { name: 'deep line behind a high press (a gap)', mine: { line: -1, press: 1 }, half: 2, atk: L.deep.atk + P.high.atkH2, def: L.deep.def + P.high.defH2 + L.deep.pressGapDef },
+    /* The trigger on my own side: nothing extra. */
+    { name: 'a high line with my own direct tempo is no direct opponent', mine: { line: 1, tempo: 1 }, atk: L.high.atk + M.direct.atk, def: L.high.def + M.direct.def },
+    { name: 'a deep line with my own patient tempo is no patient opponent', mine: { line: -1, tempo: -1 }, atk: L.deep.atk + M.patient.atk, def: L.deep.def + M.patient.def },
+    { name: 'a high press with my own patient tempo is no patient opponent', mine: { press: 1, tempo: -1 }, half: 2, atk: P.high.atkH2 + M.patient.atk, def: P.high.defH2 + M.patient.def },
+    { name: 'direct with my own high line is no high line of theirs', mine: { tempo: 1, line: 1 }, atk: M.direct.atk + L.high.atk, def: M.direct.def + L.high.def },
+    { name: 'patient while I stand off is no side that stands off', mine: { tempo: -1, press: -1 }, atk: M.patient.atk + P.off.atk, def: M.patient.def + P.off.def },
+  ];
+  for (const r of rows) {
+    it(r.name, () => {
+      const got = tacticBoost({
+        mine: { ...BALANCED, ...r.mine }, theirs: { ...BALANCED, ...(r.theirs ?? {}) },
+        half: r.half ?? 1, fit: r.fit ?? 90, duties: r.duties ?? [],
+      });
+      expect(got.atk).toBeCloseTo(r.atk, 10);
+      expect(got.def).toBeCloseTo(r.def, 10);
+    });
+  }
+
+  /* Every style's read on the preview says what tends to work against it; each claim must hold on the table (net
+     goals a match, both halves, at 85 fitness). Review finding: the Counter attack read used to say go wide. */
+  const net = (mine: Partial<TeamInstructions>, theirs: TeamInstructions, duties: Duty[] = []): number => {
+    const [a, b] = ([1, 2] as const).map(half => tacticBoost({ mine: { ...BALANCED, ...mine }, theirs, half, fit: 85, duties }));
+    return (a.atk + b.atk - a.def - b.def) / 2;
+  };
+  const READS: Record<AiStyleId, [Partial<TeamInstructions>, 'gain' | 'loss', Duty[]?][]> = {
+    gegenpress: [[{ tempo: 1 }, 'gain'], [{ tempo: -1 }, 'loss']],
+    possession: [[{ tempo: 1 }, 'gain'], [{ press: 1 }, 'gain']],
+    patient: [[{ press: 1 }, 'gain'], [{ line: -1 }, 'loss']],
+    wingplay: [[{ width: -1 }, 'loss']],
+    direct: [[{ line: -1 }, 'gain'], [{ press: 1 }, 'loss']],
+    counter: [[{ line: 1 }, 'loss'], [{ line: -1 }, 'gain'], [{ tempo: -1 }, 'gain']],
+    lowblock: [[{ tempo: -1 }, 'gain'], [{ tempo: 1 }, 'loss'], [{ width: 1 }, 'gain', ['winger', 'winger']]],
+    balanced: [],
+  };
+  it('every style read says what the table does against that style', () => {
+    for (const id of Object.keys(READS) as AiStyleId[]) for (const [mine, way, duties] of READS[id]) {
+      const v = net(mine, AI_STYLES[id].instructions, duties ?? []);
+      expect({ id, mine, ok: way === 'gain' ? v > 0.005 : v < -0.005 }).toEqual({ id, mine, ok: true });
+    }
+    expect(AI_STYLES.counter.read).not.toMatch(/wide/i);
+  });
+});

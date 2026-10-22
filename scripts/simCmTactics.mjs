@@ -90,6 +90,22 @@
      weakpress  strong sides press less than weak ones                    styles
      leak       setInstructions keeps an all balanced set on the save     balanced
      helpwords  a deep line concedes more against a direct side          table (the help's worked example)
+     mirror     a high line pays for MY direct tempo, not theirs          table (the example through tacticBoost)
+   The controls above edit the table's constants or patch the module; every row of the table is also pinned through
+   tacticBoost by src/lib/clubManagerTactics.test.ts (each interaction against the sum the table says it is, and the
+   trigger put on my own side, which must add nothing), and each style's read is held to the table there too.
+
+   READ THESE BANDS FOR WHAT THEY ARE (Round 1522 review). Five of the eight effects stats (won high, crosses,
+   offsides, goals conceded on the break, share of my goals from wide) are the report's own numbers, made by
+   tacticStatsOf off TACTIC_TABLE's multipliers on a keyed stream, not counted off the football the engine played;
+   their bands prove the table reaches the report and can only go red when a constant changes (which is all nowidth
+   and noline do). Possession, shots, fitness at kick off, knocks, late goals and expected points are the engine's
+   own outputs.
+   The default run checks dominance over the eight single settings only; the 80 fixed sets run with ARMS=all in
+   shards (SHARD=k/16, TIERS=mid, folded with FOLD), and a table edit wants that run too before it ships.
+   The adapt band is a sanity line, not the check: with tacticBoost zero (the flat control) adapt still measured
+   +2.17% and +1.82% on two runs, on either side of ADAPT_GAIN, because stand off's legs and knocks alone pay. The
+   read band is the check that turns a flat table red, every time (read falls to exactly 0.00).
    Run: node scripts/simCmTactics.mjs (the default fleet: singles, adapt and misread, seeds 0 to 15, in PARTS=4
    children PAR=2 at a time, about 15 minutes on a runner). SECTION=fleet SEEDS=16 SEED_OFFSET=0 SEASONS=1 ARMS=all SHARD=k/n
    OUT_JSON=<file>; FOLD=<dir> folds shards). Offline: bundles the engine from src, reads no network.
@@ -110,7 +126,7 @@ const num = (k, d) => (process.env[k] !== undefined && process.env[k] !== '' ? N
 const ALL_SECTIONS = ['table', 'styles', 'balanced', 'fleet'];
 const CONTROL_SECTIONS = {
   flat: ['fleet'], dominant: ['fleet'], nolegs: ['fleet'], notempo: ['fleet'], nowidth: ['fleet'], noline: ['fleet'],
-  keyless: ['styles'], weakpress: ['styles'], leak: ['balanced'], helpwords: ['table'],
+  keyless: ['styles'], weakpress: ['styles'], leak: ['balanced'], helpwords: ['table'], mirror: ['table'],
 };
 if (CONTROL && !CONTROL_SECTIONS[CONTROL]) cannot(`CM_TACTICS_CONTROL=${CONTROL} is not a control this harness knows`);
 const FOLD = process.env.FOLD || '';
@@ -155,6 +171,8 @@ const PATCHES = {
   flat: { file: 'clubManagerTactics.ts', from: 'export function tacticBoost(r: TacticRead): { atk: number; def: number } {\n', to: 'export function tacticBoost(r: TacticRead): { atk: number; def: number } {\n  if (r) return { atk: 0, def: 0 };\n' },
   keyless: { file: 'clubManagerTactics.ts', from: '  let u = keyedRng(`cm-style|${club}`)() * total;', to: '  let u = Math.random() * total;' },
   leak: { file: 'clubManager.ts', from: '  if (isBalanced(next)) delete out.instructions;\n  else out.instructions = next;', to: '  out.instructions = next;' },
+  /* The review's mutation D: a high line punished for my own direct tempo instead of theirs. */
+  mirror: { file: 'clubManagerTactics.ts', from: '    if (t.tempo === 1) def += T.line.high.vsDirectDef;', to: '    if (m.tempo === 1) def += T.line.high.vsDirectDef;' },
 };
 /** Controls made in memory on the loaded table, after every load. */
 const MEM = {
@@ -307,11 +325,21 @@ function sectionTable() {
      front, and a deep one gives up a little up front and concedes fewer: hold those signs, and that the block
      still reads the table rather than typed numbers. */
   const L = tac.TACTIC_TABLE.line;
+  /* Round 1522 review (run lens, mutation D): the example's numbers are also what the engine plays. tacticBoost
+     against the Counter attack style, both halves, must come to exactly the sums the help prints off the table, so
+     an interaction applied to the wrong side (my tempo for theirs) makes the example false and this red. */
+  const counter = tac.AI_STYLES.counter.instructions;
+  const vs = (line, half) => tac.tacticBoost({ mine: { ...tac.BALANCED, line }, theirs: counter, half, fit: 85, duties: [] });
+  const same = (a, b) => Math.abs(a - b) < 1e-9;
+  const engine = [1, 2].every(h => same(vs(1, h).def, L.high.def + L.high.vsDirectDef) && same(vs(1, h).atk, L.high.atk)
+    && same(vs(-1, h).def, L.deep.def + L.deep.vsDirectDef) && same(vs(-1, h).atk, L.deep.atk));
   const claims = [
+    ['a Counter attack side sits deep and goes direct', counter.tempo === 1 && counter.line === -1],
     ['a high line concedes more against a direct side', L.high.def + L.high.vsDirectDef > 0],
     ['a high line scores more', L.high.atk > 0],
     ['a deep line scores less', L.deep.atk < 0],
     ['a deep line concedes less against a direct side', L.deep.def + L.deep.vsDirectDef < 0],
+    ['the engine plays the numbers it prints against a Counter attack side (tacticBoost)', engine],
   ];
   for (const [what, holds] of claims) if (!holds) fail('table', `the help's worked example says ${what}, and the table no longer does`);
   const help = fs.readFileSync(path.join(ROOT, 'src/components/club-manager/ClubManagerHelp.tsx'), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');

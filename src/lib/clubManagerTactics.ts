@@ -113,8 +113,8 @@ export const AI_STYLES: Record<AiStyleId, AiStyle> = {
   patient: { label: 'Patient build up', emoji: '🧩', blurb: 'They pass it round and wait for the gap.', read: 'Press them. Sitting deep only invites them on.', instructions: { press: 0, tempo: -1, width: 0, line: 0 }, base: 0.12, slope: 0.02 },
   wingplay: { label: 'Wing play', emoji: '🪽', blurb: 'Everything goes wide and into the box.', read: 'Do not go narrow against it: your full backs get overrun.', instructions: { press: 0, tempo: 0, width: 1, line: 0 }, base: 0.14, slope: 0 },
   direct: { label: 'Direct', emoji: '🎯', blurb: 'Long and wide, early balls, no messing about.', read: 'Keep your line deep and do not press into it.', instructions: { press: 0, tempo: 1, width: 1, line: 0 }, base: 0.12, slope: -0.04 },
-  counter: { label: 'Counter attack', emoji: '🗡️', blurb: 'They sit deep and break fast.', read: 'A high line is asking for trouble. Go wide rather than through.', instructions: { press: -1, tempo: 1, width: 0, line: -1 }, base: 0.12, slope: -0.06 },
-  lowblock: { label: 'Low block', emoji: '🚌', blurb: 'Two banks, no gaps, happy with a point.', read: 'Go wide and be patient. There is no space in behind to hit.', instructions: { press: -1, tempo: 0, width: -1, line: -1 }, base: 0.10, slope: -0.08 },
+  counter: { label: 'Counter attack', emoji: '🗡️', blurb: 'They sit deep and break fast.', read: 'A high line is asking for trouble. Sit deeper and be patient.', instructions: { press: -1, tempo: 1, width: 0, line: -1 }, base: 0.12, slope: -0.06 },
+  lowblock: { label: 'Low block', emoji: '🚌', blurb: 'Two banks, no gaps, happy with a point.', read: 'Be patient, and go wide if you have the wingers. There is no space in behind to hit.', instructions: { press: -1, tempo: 0, width: -1, line: -1 }, base: 0.10, slope: -0.08 },
   balanced: { label: 'Balanced', emoji: '⚖️', blurb: 'No extremes. They play what the afternoon asks for.', read: 'Nothing special to exploit. Play your own game.', instructions: { ...BALANCED }, base: 0.18, slope: 0 },
 };
 
