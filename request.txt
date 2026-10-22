@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+probe2: node .rc/x/probeDoubleTap.mjs
