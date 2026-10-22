@@ -1,0 +1,28 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/nbaCourtSelection.test.tsx src/test/lineupValidatorClient.test.tsx src/test/lineupBuilderHistoryRead.test.tsx src/test/xiSelectionHistoryRace.test.tsx --testTimeout=300000 --hookTimeout=120000
+sim: node scripts/simNbaStartingFive.mjs
+ctl-oldjudge: NBA_FIVE_CONTROL=oldjudge node scripts/simNbaStartingFive.mjs
+ctl-noinvert: NBA_FIVE_CONTROL=noinvert node scripts/simNbaStartingFive.mjs
+ctl-greedy: NBA_FIVE_CONTROL=greedy node scripts/simNbaStartingFive.mjs
+ctl-nonamesake: NBA_FIVE_CONTROL=nonamesake node scripts/simNbaStartingFive.mjs
+ctl-pergame: NBA_FIVE_CONTROL=pergame node scripts/simNbaStartingFive.mjs
+ctl-aiverdict: NBA_FIVE_CONTROL=aiverdict node scripts/simNbaStartingFive.mjs
+ctl-flatpoints: NBA_FIVE_CONTROL=flatpoints node scripts/simNbaStartingFive.mjs
+ctl-hitdrift: NBA_FIVE_CONTROL=hitdrift node scripts/simNbaStartingFive.mjs
+ctl-bogus: NBA_FIVE_CONTROL=bogus node scripts/simNbaStartingFive.mjs
+probe: node .rc/x/probe1555.mjs 120
+simNbaCourtSelection: node scripts/simNbaCourtSelection.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simScoringCoverage: node scripts/simScoringCoverage.mjs
+simCompletionSlugs: node scripts/simCompletionSlugs.mjs
+simCompletionOnce: node scripts/simCompletionOnce.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simLineupValidatorClient: node scripts/simLineupValidatorClient.mjs
+simNbaLineupSearch: node scripts/simNbaLineupSearch.mjs
+dashes: c=$(git diff origin/main...HEAD | grep '^+' | grep -cP '[\x{2013}\x{2014}]'); echo "added lines with an en or em dash: $c"; test "$c" = 0

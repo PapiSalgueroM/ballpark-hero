@@ -1,0 +1,19 @@
+1) the lineup uses the shared source and keeps no copy
+   local copy: none; spreads the shared source: yes
+2) a full name finds the right player
+  FAIL: typing "LeBron James" on a Los Angeles Lakers slot returns nothing usable, and that is the only way to fill the slot
+   Los Angeles Lakers      "LeBron James" -> 0 rows
+  FAIL: typing "Stephen Curry" on a Golden State Warriors slot returns nothing usable, and that is the only way to fill the slot
+   Golden State Warriors   "Stephen Curry" -> 0 rows
+  FAIL: typing "Kobe Bryant" on a Los Angeles Lakers slot returns nothing usable, and that is the only way to fill the slot
+   Los Angeles Lakers      "Kobe Bryant" -> 0 rows
+  FAIL: typing "Giannis Antetokounmpo" on a Milwaukee Bucks slot returns nothing usable, and that is the only way to fill the slot
+   Milwaukee Bucks         "Giannis Antetokounmpo" -> 0 rows
+   0/4 full names resolve
+3) teammates who share a surname are told apart
+  FAIL: on a Golden State Warriors slot, "Curry" does not offer seth or stephen: nothing
+   Golden State Warriors   "Curry" -> nothing
+  FAIL: on a Los Angeles Lakers slot, "James" does not offer lebron or bronny: nothing
+   Los Angeles Lakers      "James" -> nothing
+
+simNbaLineupSearch: 6 finding(s).
