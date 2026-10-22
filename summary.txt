@@ -1,0 +1,8 @@
+build exit=0 35s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk-head exit=0 58s | floaterwalk clear: result and gems floaters apart at 390x844 and 1280x900, draw and win
+old-overlap exit=0 95s | floaterwalk overlap: the old hook covers the gems floater at 390 for a draw and a win (control fired)
+gg-base exit=0 41s | Original source, build and actual template font cache stayed byte-identical.
+gg-squash exit=0 40s | Original source, build and actual template font cache stayed byte-identical.
+gg-widescope exit=1 2s | Only the declared page changes from the parent
+draw-base exit=0 6s | 3919 original source holds; copies, transforms and raw process records retained at /home/runner/work/ballpark-hero/ballpark-hero/tycoon-draw-result-artifacts/outcomes.
+money-base exit=0 20s | Original source holds: 3919; full copies, executable transforms and raw process records retained at /home/runner/work/ballpark-hero/ballpark-hero/tycoon-money-display-art
