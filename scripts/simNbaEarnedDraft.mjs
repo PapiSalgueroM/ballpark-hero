@@ -192,6 +192,12 @@
  *   6   steps by ten slots on the tuned curve 11.25, 3.53, 0.33, 0.28, 0.58, 0.25 (floor 0.17).
  *   7   12 sets, two runs, old and new: S1 at 5, S2, S6 payers and S5 PASS; S1 at 10, S3, S4 and S6 dead OUTSIDE
  *       (the table and why: docs/audits/ROUND-1321-NOTES.md). fatclass and bestfirst FIRED on sets 1 to 4.
+ *   controls on the quick walk, runner r1321-j6 on f9f28256, all 20 fired in exactly their sections:
+ *       touchseason 41 (1); fatclass 3 (6); nocurve 19 (6); flatodds 441 (2); playinmade 32, 32, 1, 12, 1, 4
+ *       (2, 3, 4, 5, 8, 9); gmfirst 59 and 2 (3, 5); bestfirst 90 and 5 (3, 5); origholder 192 (3); shortclass
+ *       1,515 and 30 (6, 3); shownread 479 (3); redraw 30 (4); reopen 30 (4); trustblock 284 and 100 (3, 8);
+ *       noneed 4, rivalscout 2, bigneed 3 (9); sportname 1, foreignimport 1 (10); elevenhead 1,502 (6);
+ *       flatclass 2 (6).
  */
 import './lib/seedRandom.mjs';
 import fs from 'node:fs';

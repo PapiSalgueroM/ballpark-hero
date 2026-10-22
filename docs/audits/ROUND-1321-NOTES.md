@@ -175,6 +175,11 @@ tax payers a season and 32 more men of 85 or better on the league; tuned, -0.2 a
    first rounder from pick 13 on signs a shorter deal), which is the pricing of a pick by its slot that A8 put out of
    scope.
 
+4. **Not a line, but the lead should know it:** both knobs touch a RIVAL's man only (brief 3.3, "for a rival the two
+   knobs"), so his own late picks keep their ceiling and his second rounders the four season deal while a CPU club's
+   do not. The fleet measured the round with that edge in it. PART B's words must not hide it, or the lead may
+   prefer the knobs on every club (one line in the host; the fleet would have to run again).
+
 Nothing here is argued past its line: the four OUTSIDE lines are the STOP, and PART B waits for the lead's word.
 
 ## The OLD arm (today's draft, desk on), 12 sets of ten seeds, two runs (runner `r1321-a1`)
@@ -243,6 +248,34 @@ Every finding was fixed, each in its own commit. Report: `dukb-handoff/2026-10-1
 
 ## Gates on runners (each a `git show origin/rc-results/<name>:logs/<label>.log`)
 
+Step (d), 2026-10-21 (session J), newest first:
+
+- `r1321-j9` on f9f28256 (#!serial): a bounded review of the knobs, four mutations of src/lib/nbaEarnedDraft.ts
+  (`.rc/x/mut.mjs`), all four CAUGHT by real assertion failures: allclubs (the knobs on his men too: 2 tests),
+  latefrom (the cap from pick 1: "expected 87 to be greater than 87"), firsttoo (first rounders on the minimum:
+  "expected 1 to be 4"), underown (a cap under his own rating: "expected 65 to be 68"); `after`: 25 of 25 pass.
+- `r1321-j8` on f9f28256 (#!serve, #!playwright, #!serial): weight, both routes equal to 85a76241 (below);
+  simWritesAreSent exit 1 with 2 failures ("could not drive Guess the Nation to a finish", "no guess was ever
+  submitted") on this head AND on a worktree of 85a76241 built in the same job; simGmCalendar exit 1 with 6
+  failures (the Everton seasonDays and monthGrid hashes) on both. Neither is this round's.
+- `r1321-j7` on f9f28256 (#!serve, #!playwright): readers1 (12) and readers2 (11) exit 0; fences exit 1 only on
+  simWritesAreSent (above), the other 16 exit 0 (with simNoRivalNames, simInventedNames and simHarnessAnchors in
+  j6: 20 of the 24 rule fences); simGmXp exit 0 (Round 1314's fix is on main); fleetget exit 0: the COMBINE of the
+  60 fleet files on the runner itself, "RED in section 7." (the STOP), fatclass and bestfirst "FIRED on the fleet".
+- `r1321-j6` on f9f28256: tsc exit 0; vitest exit 0, 22 files, 237 tests; earned exit 0 "simNbaEarnedDraft:
+  green." (9 sections, 1a "315516 draws held to the base 48cb9d4b"); earned-ctl exit 0 "all 20 fired, each in
+  exactly its own sections"; nbadesk exit 0 and its 18 controls fired; capital-ctl exit 0, 21 controls with their
+  own failed indices; draftorder exit 0 and draftorder-all "all 40 fired"; singles exit 0 (simGmPicks,
+  simDraftNight, simEngineIds, simInventedNames, simHarnessAnchors, simNoRivalNames "0 findings",
+  simStorageWrites); diffproof exit 0 "diffproof-ok" (no removed engine line against 85a76241, no growth shape,
+  the four desk off files equal to 48cb9d4b, src lists nbaFrontOffice.ts and the four new files, 876 insertions).
+- `r1321-j4` and `r1321-j5` on 311f2cb0: the fleet (every shard exit 0), the two fleet controls and the arbitrage
+  arm; j4's earned-ctl had flatodds and flatclass landing on section 5's old floors (fixed in f9f28256).
+- `r1321-j2` and `r1321-j3` on e7bdbb40: the untuned new arm and the six tuning variants on sets 1 and 2.
+- `r1321-j1` on the merge 2f0a9447: every line of the old gate exit 0.
+
+Before step (d):
+
 - `r1321-a1` on eca5bd25: simNbaEarnedDraft quick exit 0, all controls exit 0 (1 of 1), 8 fleet shards exit 0.
 - `r1321-b1` on 4635d88d: tsc exit 0; simNbaEarnedDraft exit 0 and its 4 controls fired; simNbaGmDesk exit 0 and
   all 18 controls fired in their own checks (that harness exits 0 when a control fires); simNbaDraftCapital exit 0
@@ -285,9 +318,12 @@ Every finding was fixed, each in its own commit. Report: `dukb-handoff/2026-10-1
 
 ## Weight (decision 6)
 
-`/nba-front-office` 375.3K gzipped JavaScript in 37 files on this branch and on 48cb9d4b; `/front-office` 363.4K
-in 36 files on both, the chunk lists the same file for file (runner `r1321-w1`, a plain build served like the host,
-iPhone 13, the database blocked). No budget row added or edited.
+Step (d), runner `r1321-j8` on f9f28256 against a build of 85a76241 in the same job: `/nba-front-office` 378.9K
+gzipped JavaScript in 38 files on both, `/front-office` 372.0K in 38 files on both (main grew both routes since the
+base; this round moves neither). Before step (d): `/nba-front-office` 375.3K gzipped JavaScript in 37 files on
+this branch and on 48cb9d4b; `/front-office` 363.4K in 36 files on both, the chunk lists the same file for file
+(runner `r1321-w1`, a plain build served like the host, iPhone 13, the database blocked). No budget row added or
+edited.
 
 The reader list: `git grep -l -E "nbaFrontOffice|gmDraftNight|gmDraftOrder|gmLotteryNight|simGmDraftOrder" -- scripts src`.
 
