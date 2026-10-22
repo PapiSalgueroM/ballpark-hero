@@ -1,0 +1,11 @@
+build exit=0 36s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+units-1514 exit=0 11s |    Duration  10.64s (transform 3.81s, setup 916ms, collect 7.95s, tests 11.68s, environment 3.01s, prepare 822ms)
+oc-s2 exit=0 522s | simOneOffCups: green, 6458 checks (522 s)
+oc-s046 exit=0 86s | simOneOffCups: green, 723 checks (85 s)
+ctl0-1514 exit=0 0s | pairing exit=1 simOneOffCups: control pairing FIRED (2 failures, all its own: cup-seriea-2025-26: the constant names Roma, the ledger Lazio)
+ctl1-1514 exit=0 613s | nocarryusc exit=1 simOneOffCups: control nocarryusc FIRED (17 failures, all its own: 1 never falls: Chelsea (now) seed 1 nocoach at s1-join: 0 UEFA Super Cup nights shown
+walk-nousctile exit=0 199s | playOneOffCups: control nousctile FIRED (8 findings of "UEFA Super Cup tile", 8 in all)
+savesize-base-1514 exit=0 101s | simClubManagerSaveSize: all sections green
+dashscan-1514 exit=0 0s | since B1514: added lines with an en or em dash 0, commit message lines with one 0
+oc-s3 exit=0 1621s | simOneOffCups: green, 15353 checks (1621 s)
+oc-s157 exit=0 1628s | simOneOffCups: green, 248113 checks (1628 s)
