@@ -1,0 +1,15 @@
+6) paid lines: the four brand answers and the ten clean corruption answers bank what they say, both eras
+   FAIL [6] nba now Build the brand: earnings went 41.27 to 46.3, not 41.27 plus the 5M that landed, unrounded
+   FAIL [6] nba now ncorr_sneaks: earnings went 41.27 to 43.3, not 41.27 plus the 2M that landed, unrounded
+   FAIL [6] nba now ncorr_memorabilia: earnings went 41.27 to 42.2, not 41.27 plus the 0.9M that landed, unrounded
+   FAIL [6] nba now ncorr_sportsbook: earnings went 41.27 to 43.8, not 41.27 plus the 2.5M that landed, unrounded
+   FAIL [6] nba now ncorr_exhibition: earnings went 41.27 to 42.2, not 41.27 plus the 0.9M that landed, unrounded
+   FAIL [6] nba y2004 Build the brand: earnings went 41.27 to 42.9, not 41.27 plus the 1.6M that landed, unrounded
+   FAIL [6] nba y2004 ncorr_sneaks: earnings went 41.27 to 43.3, not 41.27 plus the 2M that landed, unrounded
+   FAIL [6] nba y2004 ncorr_memorabilia: earnings went 41.27 to 42.2, not 41.27 plus the 0.9M that landed, unrounded
+   nba: 10 paid answers played (2026 and y2004), each banks what it says
+   nfl: 6 paid answers played (2026 and y2005), each banks what it says
+   mlb: 6 paid answers played (2026 and y2004), each banks what it says
+   nhl: 6 paid answers played (2026 and y2006), each banks what it says
+   control earnround: section 6 turned 28 red
+simUsShopPromises: CONTROL earnround FIRED (red sections 6)

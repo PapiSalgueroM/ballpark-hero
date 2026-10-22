@@ -1,0 +1,7 @@
+CONTROL FIRED press-repeat: press-answer-once
+CONTROL FIRED press-pay-twice: press-settlement-once
+CONTROL FIRED press-wrong-club: press-context
+CONTROL FIRED market-repeat: market-push-once
+CONTROL FIRED market-wrong-year: market-context
+CONTROL FIRED market-ack-rewrites: market-ack-and-comparison
+Press/Market:6 outcomes,27 full original state/RNG pairs,6 effective copied source controls,18 native fixture branches.
