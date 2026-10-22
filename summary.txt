@@ -1,0 +1,5 @@
+build exit=0 35s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+weight exit=1 28s | sweepWeight: 3 failures
+m1-nat exit=1 106s | simCmMadeUpNations: RED, 10 failure(s)
+m2-nat exit=1 106s | simCmMadeUpNations: RED, 2 failure(s)
+after-restore exit=0 0s | 0

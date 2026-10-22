@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+#!serial
+weight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+m1-nat: node .rc/x/review-run-mut.mjs aiswap && node scripts/simCmMadeUpNations.mjs; s=$?; git checkout -- src; exit $s
+m2-nat: node .rc/x/review-run-mut.mjs fasign && node scripts/simCmMadeUpNations.mjs; s=$?; git checkout -- src; exit $s
+after-restore: git status --short src | wc -l
