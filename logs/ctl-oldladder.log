@@ -1,0 +1,7 @@
+Round 1532: Stadium Tycoon scorelines at the hook's cadence (dt 0.2s), control oldladder alone
+
+control oldladder: 11 places rewritten in a copy of the lib
+   sections red: S9c (expected S9c) [12 s]
+     S9c: ctl: win50 lands at 161.7 minutes against the base's 107.1, outside 35 percent or 5 matches
+
+simTycoonScorelines: 1 checks, 0 failed [12 s]

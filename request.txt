@@ -1,0 +1,16 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+scorelines: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonScorelines.mjs
+ctl-newrung: SCORELINES_CONTROL=newrung NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonScorelines.mjs
+ctl-raise: SCORELINES_CONTROL=raise NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonScorelines.mjs
+ctl-oldladder: SCORELINES_CONTROL=oldladder NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonScorelines.mjs
+ctl-offbyone: SCORELINES_CONTROL=offbyone NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonScorelines.mjs
+ctl-bogus: SCORELINES_CONTROL=nosuchcontrol NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonScorelines.mjs
+simTycoonAwayMatchdays: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonAwayMatchdays.mjs
+simAllPlayersValue: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simAllPlayersValue.mjs
+simTycoonSetPiece: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonSetPiece.mjs
+simTycoonHelp: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonHelp.mjs
+simStadiumTycoon: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simStadiumTycoon.mjs
+retake-head: node scripts/retakeTycoonHistories.mjs
+ladder: node scripts/measureTycoonLadder.mjs
+vitest: node_modules/.bin/vitest run src/test/firstTeam.test.tsx src/test/tycoonAway.test.tsx src/test/tycoonGear.test.tsx src/test/tycoonHelp.test.tsx src/test/tycoonLatestSeason.test.tsx src/test/tycoonLoads.test.tsx src/test/tycoonPacks.test.tsx src/test/tycoonPitch.test.tsx src/test/tycoonRooms.test.tsx src/test/tycoonSaleReview.test.tsx src/test/tycoonSetPieceBoard.test.tsx src/test/tycoonSetPiecePage.test.tsx src/test/tycoonTicketPolicy.test.tsx --testTimeout=300000 --hookTimeout=120000
+simNoRivalNames: node scripts/simNoRivalNames.mjs

@@ -1,0 +1,7 @@
+Round 1532: Stadium Tycoon scorelines at the hook's cadence (dt 0.2s), control offbyone alone
+
+control offbyone: 1 place rewritten in a copy of the lib
+   sections red: S9d (expected S9d) [11 s]
+     S9d: goals at 250 earned nothing, the rungs at 250 are ag2000
+
+simTycoonScorelines: 1 checks, 0 failed [11 s]

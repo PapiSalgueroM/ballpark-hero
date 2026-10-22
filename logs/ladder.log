@@ -1,0 +1,61 @@
+Round 1543: the ladder, pace at dt 0.2s, 240 minutes, seeds 1 to 60 [29 s]
+
+win1 / aw1 (wins, old 1, lib 1): base cal 4.2 (2 m), hold 2.1 (1 m); head at 1: cal 4.2 (2 m), hold 4.2 (2 m), third 4.2 (2 m)
+   ON TARGET at 1, not moved; headroom cal 4.2 (se 0.148), hold 2.1 (se 1.029), third 4.2 (se 0.694)
+   => unchanged
+
+win10 / aw10 (wins, old 10, lib 8): base cal 23.1 (11 m), hold 21 (10 m); head at 8: cal 23.1 (11 m), hold 21 (10 m), third 21 (10 m)
+   candidates, head cal median: 2 6.3, 3 8.4, 4 10.5, 5 12.6, 6 16.8, 7 18.9, 8 23.1, 9 25.2, 10 27.3
+   PICK 8: cal 23.1 (11 m), hold 21 (10 m), third 21 (10 m); on target cal true, hold true, third true
+   headroom to the picking edge cal 5.775 (se 0.928), hold 5.25 (se 1.25), third 3.675 (se 1.248)
+   => kept: the lib already carries the pick
+
+win50 / aw50 (wins, old 50, lib 35): base cal 107.1 (51 m), hold 105 (50 m); head at 35: cal 107.1 (51 m), hold 105 (50 m), third 107.1 (51 m)
+   candidates, head cal median: 9 25.2, 10 27.3, 12 33.6, 15 42, 20 58.8, 25 75.6, 30 92.4, 35 107.1, 40 128.1, 50 157.5
+   PICK 35: cal 107.1 (51 m), hold 105 (50 m), third 107.1 (51 m); on target cal true, hold true, third true
+   headroom to the picking edge cal 26.775 (se 3.619), hold 26.25 (se 3.885), third 26.775 (se 2.687)
+   => kept: the lib already carries the pick
+
+aw150 (wins, old 150, lib 125): base cal later, hold later; head at 125: cal later, hold later, third later
+   MATCH anchored: per match base 0.825 (hold 0.86), head 0.632 (hold 0.614); old x head / base 114.894 (hold 107.143): PICK 125 (the hold rates pick 100)
+   head at 125: cal later, hold later, third later
+   => kept: the lib already carries the pick
+
+aw400 (wins, old 400, lib 300): base cal later, hold later; head at 300: cal later, hold later, third later
+   MATCH anchored: per match base 0.825 (hold 0.86), head 0.632 (hold 0.614); old x head / base 306.383 (hold 285.714): PICK 300 (the hold rates pick 300)
+   head at 300: cal later, hold later, third later
+   => kept: the lib already carries the pick
+
+goals25 / ag25 (goals, old 25, lib 10): base cal 9.753 (4.644 m), hold 9.613 (4.578 m); head at 10: cal 9.52 (4.533 m), hold 9.333 (4.444 m), third 9.007 (4.289 m)
+   candidates, head cal median: 1 1.447, 2 2.707, 3 3.687, 4 4.223, 5 4.923, 6 6.393, 7 7.63, 8 8.213, 9 8.68, 10 9.52, 12 11.433, 15 13.16, 20 18.363, 25 22.447
+   PICK 10: cal 9.52 (4.533 m), hold 9.333 (4.444 m), third 9.007 (4.289 m); on target cal true, hold true, third true
+   headroom to the picking edge cal 3.967 (se 0.716), hold 3.92 (se 0.974), third 3.453 (se 0.684)
+   => kept: the lib already carries the pick
+
+ag100 (goals, old 100, lib 30): base cal 27.23 (12.967 m), hold 25.783 (12.278 m); head at 30: cal 29.377 (13.989 m), hold 26.227 (12.489 m), third 28.467 (13.556 m)
+   candidates, head cal median: 12 11.433, 15 13.16, 20 18.363, 25 22.447, 30 29.377, 35 33.763, 40 40.25, 50 50.213, 60 61.67, 75 81.737, 100 113.937
+   PICK 30: cal 29.377 (13.989 m), hold 26.227 (12.489 m), third 28.467 (13.556 m); on target cal true, hold true, third true
+   headroom to the picking edge cal 4.661 (se 1.344), hold 6.002 (se 2.566), third 5.571 (se 1.921)
+   => kept: the lib already carries the pick
+
+ag500 (goals, old 500, lib 75): base cal 96.11 (45.767 m), hold 94.897 (45.189 m); head at 75: cal 81.737 (38.922 m), hold 79.497 (37.856 m), third 79.707 (37.956 m)
+   candidates, head cal median: 35 33.763, 40 40.25, 50 50.213, 60 61.67, 75 81.737, 100 113.937, 125 140.397, 150 168.397, 200 227.687, 250 later, 300 later, 400 later, 500 later
+   PICK 75: cal 81.737 (38.922 m), hold 79.497 (37.856 m), third 79.707 (37.956 m); on target cal true, hold true, third true
+   headroom to the picking edge cal 9.654 (se 2.792), hold 8.324 (se 3.864), third 7.624 (se 2.715)
+   => kept: the lib already carries the pick
+
+ag2000 (goals, old 2000, lib 250): base cal later, hold later; head at 250: cal later, hold later, third later
+   MATCH anchored: per match base 14.281 (hold 14.263), head 1.842 (hold 1.772); old x head / base 257.985 (hold 248.462): PICK 250 (the hold rates pick 250)
+   head at 250: cal later, hold later, third later
+   => kept: the lib already carries the pick
+
+streak5 / as5 (streak, old 5, lib 5): base cal 12.6 (6 m), hold 10.5 (5 m); head at 5: cal 12.6 (6 m), hold 14.7 (7 m), third 14.7 (7 m)
+   FIXED at 5: the lead: five stays five (Q2, critic item 4); on target cal true, hold true (printed, not a verdict)
+   => unchanged
+
+as10 (streak, old 10, lib 10): base cal 23.1 (11 m), hold 21 (10 m); head at 10: cal 29.4 (14 m), hold 29.4 (14 m), third 31.5 (15 m)
+   FIXED at 10: the lead: ten is where streakMult and the fan pull stop rising (Q2); streakMult stops rising at 10; on target cal false, hold false (printed, not a verdict)
+   => unchanged
+
+chosen: win1/aw1 1 -> 1, win10/aw10 10 -> 8, win50/aw50 50 -> 35, aw150 150 -> 125, aw400 400 -> 300, goals25/ag25 25 -> 10, ag100 100 -> 30, ag500 500 -> 75, ag2000 2000 -> 250, streak5/as5 5 -> 5, as10 10 -> 10
+measureTycoonLadder: every rung resolves, 0 row(s) to move [29 s]

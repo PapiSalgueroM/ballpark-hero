@@ -1,0 +1,16 @@
+ctl-newrung exit=0 16s | simTycoonScorelines: 1 checks, 0 failed [16 s]
+ctl-raise exit=0 16s | simTycoonScorelines: 1 checks, 0 failed [16 s]
+ctl-oldladder exit=0 12s | simTycoonScorelines: 1 checks, 0 failed [12 s]
+ctl-offbyone exit=0 11s | simTycoonScorelines: 1 checks, 0 failed [11 s]
+ctl-bogus exit=2 0s | unknown SCORELINES_CONTROL nosuchcontrol
+tsc exit=0 74s | 
+simTycoonAwayMatchdays exit=0 72s |    All 6 controls fired exactly where they should, in node and in the real hook.
+simAllPlayersValue exit=0 58s | simAllPlayersValue: green.
+simTycoonSetPiece exit=0 10s | Tycoon set pieces: 8/8 selected sections pass
+simStadiumTycoon exit=0 1s | simStadiumTycoon: green. The turnstiles spin and the math holds.
+retake-head exit=0 1s | this tree: 12 of 12 histories reproduce the committed hashes, 0 differ
+simTycoonHelp exit=0 21s |    All 25 controls fired exactly where they should.
+ladder exit=0 29s | measureTycoonLadder: every rung resolves, 0 row(s) to move [29 s]
+simNoRivalNames exit=0 19s | No rival product names found. 0 findings.
+vitest exit=0 98s |    Duration  96.75s (transform 1.97s, setup 1.08s, collect 7.85s, tests 142.56s, environment 6.37s, prepare 1.72s)
+scorelines exit=0 315s | simTycoonScorelines: 25 checks, 0 failed [315 s]

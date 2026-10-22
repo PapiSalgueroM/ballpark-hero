@@ -1,0 +1,8 @@
+Round 1532: Stadium Tycoon scorelines at the hook's cadence (dt 0.2s), control raise alone
+
+control raise: 1 place rewritten in a copy of the lib
+   sections red: S9b S9c (expected S9b S9c) [16 s]
+     S9b: goals25 and ag25 are a pair and no longer share a threshold (30, 10)
+     S9c: ctl: goals25 lands at 29.377 minutes against the base's 9.753, outside 35 percent or 5 matches
+
+simTycoonScorelines: 1 checks, 0 failed [16 s]
