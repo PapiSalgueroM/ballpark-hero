@@ -1,0 +1,26 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+shop: node scripts/simUsShopPromises.mjs
+vitest-shop: node_modules/.bin/vitest run src/lib/usCareerShopPromises.test.ts src/lib/usCareerAnnualBenefits.test.ts src/lib/careerDirtyMoney.test.ts src/test/usCareerShopCap.test.ts src/test/usCareerDirtyMoney.test.tsx --testTimeout=300000 --hookTimeout=120000
+shop-basecheck: SHOP_BASE_CHECK=1 SHOP_SECTIONS=1,2 node scripts/simUsShopPromises.mjs
+shop-rate: SHOP_CONTROL=rate node scripts/simUsShopPromises.mjs
+shop-words: SHOP_CONTROL=words node scripts/simUsShopPromises.mjs
+shop-camp: SHOP_CONTROL=camp node scripts/simUsShopPromises.mjs
+shop-nocall: SHOP_CONTROL=nocall node scripts/simUsShopPromises.mjs
+shop-chance: SHOP_CONTROL=chance node scripts/simUsShopPromises.mjs
+shop-twice: SHOP_CONTROL=twice node scripts/simUsShopPromises.mjs
+shop-office: SHOP_CONTROL=office node scripts/simUsShopPromises.mjs
+shop-lawyer: SHOP_CONTROL=lawyer node scripts/simUsShopPromises.mjs
+shop-leak: SHOP_CONTROL=leak node scripts/simUsShopPromises.mjs
+shop-coolall: SHOP_CONTROL=coolall node scripts/simUsShopPromises.mjs
+shop-backpay: SHOP_CONTROL=backpay node scripts/simUsShopPromises.mjs
+shop-allsets: SHOP_DIGEST_SETS=1534,2024,7,99 SHOP_STAKE_CAREERS=4000 node scripts/simUsShopPromises.mjs
+dirty: node scripts/simUsDirtyMoney.mjs
+dirty-lawyerdesk: US_DIRTY_MONEY_CONTROL=lawyerdesk node scripts/simUsDirtyMoney.mjs
+dirty-cool8: US_DIRTY_MONEY_CONTROL=cool8 node scripts/simUsDirtyMoney.mjs
+annual: node scripts/simUsCareerAnnualBenefits.mjs
+pressmarket: node scripts/simCareerPressMarket.mjs
+defects: node scripts/simUsCareerDefects.mjs
+boardparity: node scripts/simUsBoardParity.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+rival: node scripts/simNoRivalNames.mjs
+deckc: node scripts/simUsCareerDeckC.mjs

@@ -1,0 +1,62 @@
+2) steady: two index funds and the one time steady card against a twin that bought nothing
+   FAIL [2] nba season 1: Cash plus the carry moved 0.000000 more than the twin's, the cards print 0.4800
+   FAIL [2] nba season 2: Cash plus the carry moved -0.000000 more than the twin's, the cards print 0.4800
+   nba: 2 x index_nba and wine_label print 0.4800M a season; measured 0.0000, -0.0000, 0.0000 (the third after the sale)
+   FAIL [2] nfl season 1: Cash plus the carry moved 0.000000 more than the twin's, the cards print 0.5500
+   FAIL [2] nfl season 2: Cash plus the carry moved -0.000000 more than the twin's, the cards print 0.5500
+   nfl: 2 x index_fund and car_dealership print 0.5500M a season; measured 0.0000, -0.0000, 0.0000 (the third after the sale)
+   FAIL [2] mlb season 1: Cash plus the carry moved 0.000000 more than the twin's, the cards print 0.4800
+   FAIL [2] mlb season 2: Cash plus the carry moved 0.000000 more than the twin's, the cards print 0.4800
+   mlb: 2 x index_mlb and wine_label print 0.4800M a season; measured 0.0000, 0.0000, 0.0000 (the third after the sale)
+   FAIL [2] nhl season 1: Cash plus the carry moved 0.000000 more than the twin's, the cards print 0.4800
+   FAIL [2] nhl season 2: Cash plus the carry moved 0.000000 more than the twin's, the cards print 0.4800
+   nhl: 2 x index_nhl and wine_label print 0.4800M a season; measured 0.0000, 0.0000, 0.0000 (the third after the sale)
+3) stakes: 2000 careers per gamble per sport, one season end each
+   nba restaurant_group: printed 35 percent for 3M; won 0 (0.000, band 0.307 to 0.393)
+   FAIL [3] nba restaurant_group band: won 0.000 of the time, the card prints 0.35
+   FAIL [3] nba restaurant_group settles once: 2000 stakes stayed in the save and 0 paid on a second season end
+   nba crypto_nba: printed 20 percent for 5M; won 0 (0.000, band 0.164 to 0.236)
+   FAIL [3] nba crypto_nba band: won 0.000 of the time, the card prints 0.2
+   FAIL [3] nba crypto_nba settles once: 2000 stakes stayed in the save and 0 paid on a second season end
+   nfl wing_franchise: printed 35 percent for 2.5M; won 0 (0.000, band 0.307 to 0.393)
+   FAIL [3] nfl wing_franchise band: won 0.000 of the time, the card prints 0.35
+   FAIL [3] nfl wing_franchise settles once: 2000 stakes stayed in the save and 0 paid on a second season end
+   nfl crypto_punt: printed 20 percent for 5M; won 0 (0.000, band 0.164 to 0.236)
+   FAIL [3] nfl crypto_punt band: won 0.000 of the time, the card prints 0.2
+   FAIL [3] nfl crypto_punt settles once: 2000 stakes stayed in the save and 0 paid on a second season end
+   nfl esports_team: printed 30 percent for 12M; won 0 (0.000, band 0.259 to 0.341)
+   mlb restaurant_group: printed 35 percent for 3M; won 0 (0.000, band 0.307 to 0.393)
+   mlb crypto_mlb: printed 20 percent for 5M; won 0 (0.000, band 0.164 to 0.236)
+   nhl restaurant_group: printed 35 percent for 3M; won 0 (0.000, band 0.307 to 0.393)
+   nhl crypto_nhl: printed 20 percent for 5M; won 0 (0.000, band 0.164 to 0.236)
+4) the family office: 2 percent of Cash above zero, after the steady returns
+   FAIL [4] nba office season 1: the office added 0.000000, 2 percent of 21.10 is 0.422000
+   FAIL [4] nba office season 2: the office added 0.000000, 2 percent of 22.20 is 0.444000
+   FAIL [4] nba order: the index fund and the office earned 0.000000, in the documented order 0.464800
+   nba: the office alone earned 0.0000 then 0.0000; at -4.1M nothing moved; with the index fund 0.0000 (wanted 0.4648)
+   FAIL [4] nfl office season 1: the office added 0.000000, 2 percent of 21.10 is 0.422000
+   FAIL [4] nfl office season 2: the office added 0.000000, 2 percent of 22.20 is 0.444000
+   FAIL [4] nfl order: the index fund and the office earned 0.000000, in the documented order 0.464800
+   nfl: the office alone earned 0.0000 then 0.0000; at -3.9M nothing moved; with the index fund 0.0000 (wanted 0.4648)
+   FAIL [4] mlb office season 1: the office added 0.000000, 2 percent of 20.40 is 0.408000
+   FAIL [4] mlb office season 2: the office added 0.000000, 2 percent of 20.80 is 0.416000
+   mlb: the office alone earned 0.0000 then 0.0000; at -3.4M nothing moved; with the index fund 0.0000 (wanted 0.4508)
+   nhl: the office alone earned 0.0000 then 0.0000; at -3.4M nothing moved; with the index fund 0.0000 (wanted 0.4508)
+9) old saves: one season paid per season, each stake settled once, nothing paid back
+   FAIL [9] nba settle: a stake is still held after its first season end
+   FAIL [9] nba season 1: the old save earned 0.000000, one season of its cards is 9.291600
+   FAIL [9] nba season 2: the old save earned 0.000000, one season of its cards is 1.141600
+   nba: steady 0.48M a season; the old save earned 0.0000 (stakes 8), then 0.0000 (stakes 0)
+   FAIL [9] nfl settle: a stake is still held after its first season end
+   FAIL [9] nfl season 1: the old save earned 0.000000, one season of its cards is 1.199000
+   FAIL [9] nfl season 2: the old save earned 0.000000, one season of its cards is 1.209000
+   nfl: steady 0.55M a season; the old save earned 0.0000 (stakes 0), then 0.0000 (stakes 0)
+   FAIL [9] mlb settle: a stake is still held after its first season end
+   FAIL [9] mlb season 1: the old save earned 0.000000, one season of its cards is 4.143600
+   mlb: steady 0.48M a season; the old save earned 0.0000 (stakes 3), then 0.0000 (stakes 0)
+   nhl: steady 0.48M a season; the old save earned 0.0000 (stakes 0), then 0.0000 (stakes 0)
+   control nocall: section 2 turned 8 red
+   control nocall: section 3 turned 18 red
+   control nocall: section 4 turned 12 red
+   control nocall: section 9 turned 12 red
+simUsShopPromises: CONTROL nocall FIRED (red sections 2, 3, 4, 9)

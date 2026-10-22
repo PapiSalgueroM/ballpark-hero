@@ -1,0 +1,16 @@
+3) stakes: 2000 careers per gamble per sport, one season end each
+   nba restaurant_group: printed 35 percent for 3M; won 687 (0.344, band 0.307 to 0.393)
+   nba crypto_nba: printed 20 percent for 5M; won 604 (0.302, band 0.164 to 0.236)
+   FAIL [3] nba crypto_nba band: won 0.302 of the time, the card prints 0.2
+   nfl wing_franchise: printed 35 percent for 2.5M; won 694 (0.347, band 0.307 to 0.393)
+   nfl crypto_punt: printed 20 percent for 5M; won 565 (0.282, band 0.164 to 0.236)
+   FAIL [3] nfl crypto_punt band: won 0.282 of the time, the card prints 0.2
+   nfl esports_team: printed 30 percent for 12M; won 589 (0.294, band 0.259 to 0.341)
+   mlb restaurant_group: printed 35 percent for 3M; won 717 (0.358, band 0.307 to 0.393)
+   mlb crypto_mlb: printed 20 percent for 5M; won 568 (0.284, band 0.164 to 0.236)
+   FAIL [3] mlb crypto_mlb band: won 0.284 of the time, the card prints 0.2
+   nhl restaurant_group: printed 35 percent for 3M; won 707 (0.353, band 0.307 to 0.393)
+   nhl crypto_nhl: printed 20 percent for 5M; won 566 (0.283, band 0.164 to 0.236)
+   FAIL [3] nhl crypto_nhl band: won 0.283 of the time, the card prints 0.2
+   control chance: section 3 turned 4 red
+simUsShopPromises: CONTROL chance FIRED (red sections 3)

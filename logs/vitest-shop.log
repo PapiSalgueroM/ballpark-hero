@@ -1,0 +1,42 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/lib/usCareerAnnualBenefits.test.ts [2m([22m[2m28 tests[22m[2m)[22m[32m 230[2mms[22m[39m
+ [32m✓[39m src/lib/usCareerShopPromises.test.ts [2m([22m[2m28 tests[22m[2m)[22m[32m 284[2mms[22m[39m
+[90mstdout[2m | src/test/usCareerShopCap.test.ts[2m > [22m[2ma bought rating raise stops at potential[2m > [22m[2m'NFL Vision Training': seeded careers that reach the ceiling stay under it for good
+[22m[39mNFL Vision Training: 1 of 300 seeded careers came within one of potential, 0 seasons above it after buying
+
+[90mstdout[2m | src/test/usCareerShopCap.test.ts[2m > [22m[2ma bought rating raise stops at potential[2m > [22m[2m'NBA Biomechanics Team': seeded careers that reach the ceiling stay under it for good
+[22m[39mNBA Biomechanics Team: 4 of 300 seeded careers came within one of potential, 0 seasons above it after buying
+
+[90mstdout[2m | src/test/usCareerShopCap.test.ts[2m > [22m[2ma bought rating raise stops at potential[2m > [22m[2m'MLB Biomechanics Team': seeded careers that reach the ceiling stay under it for good
+[22m[39mMLB Biomechanics Team: 0 of 300 seeded careers came within one of potential, 0 seasons above it after buying
+
+[90mstdout[2m | src/test/usCareerShopCap.test.ts[2m > [22m[2ma bought rating raise stops at potential[2m > [22m[2m'NHL Biomechanics Team': seeded careers that reach the ceiling stay under it for good
+[22m[39mNHL Biomechanics Team: 12 of 300 seeded careers came within one of potential, 0 seasons above it after buying
+
+[90mstdout[2m | src/test/usCareerShopCap.test.ts[2m > [22m[2ma bought rating raise stops at potential[2m > [22m[2m'NHL Home Shooting Room': seeded careers that reach the ceiling stay under it for good
+[22m[39mNHL Home Shooting Room: 12 of 300 seeded careers came within one of potential, 0 seasons above it after buying
+
+ [32m✓[39m src/test/usCareerShopCap.test.ts [2m([22m[2m25 tests[22m[2m)[22m[33m 3373[2mms[22m[39m
+   [33m[2m✓[22m[39m a bought rating raise stops at potential[2m > [22m'NFL Vision Training': seeded careers that reach the ceiling stay under it for good [33m 720[2mms[22m[39m
+   [33m[2m✓[22m[39m a bought rating raise stops at potential[2m > [22m'NBA Biomechanics Team': seeded careers that reach the ceiling stay under it for good [33m 992[2mms[22m[39m
+   [33m[2m✓[22m[39m a bought rating raise stops at potential[2m > [22m'MLB Biomechanics Team': seeded careers that reach the ceiling stay under it for good [33m 652[2mms[22m[39m
+   [33m[2m✓[22m[39m a bought rating raise stops at potential[2m > [22m'NHL Biomechanics Team': seeded careers that reach the ceiling stay under it for good [33m 577[2mms[22m[39m
+   [33m[2m✓[22m[39m a bought rating raise stops at potential[2m > [22m'NHL Home Shooting Room': seeded careers that reach the ceiling stay under it for good [33m 408[2mms[22m[39m
+ [32m✓[39m src/test/usCareerDirtyMoney.test.tsx [2m([22m[2m16 tests[22m[2m)[22m[33m 4548[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1500: deal with dirty money on the real board[2m > [22mnfl: every washer owned, the desk previews, holds a second tap, and Come clean saves exactly the rule [33m 1237[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1500: deal with dirty money on the real board[2m > [22mnba: every washer owned, the desk previews, holds a second tap, and Come clean saves exactly the rule [33m 913[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1500: deal with dirty money on the real board[2m > [22mmlb: every washer owned, the desk previews, holds a second tap, and Come clean saves exactly the rule [33m 636[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1500: deal with dirty money on the real board[2m > [22mnhl: every washer owned, the desk previews, holds a second tap, and Come clean saves exactly the rule [33m 981[2mms[22m[39m
+ [32m✓[39m src/lib/careerDirtyMoney.test.ts [2m([22m[2m9 tests[22m[2m)[22m[33m 7691[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1500: every way does exactly what its button prints[2m > [22mthe preview numbers are the applied change, over a grid of money, heat, karma and cash [33m 7672[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m5 passed[39m[22m[90m (5)[39m
+[2m      Tests [22m [1m[32m106 passed[39m[22m[90m (106)[39m
+[2m   Start at [22m 09:30:33
+[2m   Duration [22m 14.75s[2m (transform 4.10s, setup 698ms, collect 11.01s, tests 16.13s, environment 3.86s, prepare 1.52s)[22m
+
