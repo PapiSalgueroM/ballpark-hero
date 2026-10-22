@@ -1,0 +1,7 @@
+build exit=0 23s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+due-1101 exit=1 0s | simSeasonDue: 4 failures; first: afl_premiers 2026: counts from 2026-11-01 has come (today 2026-11-01) and the saved Record Books page still stops at 2025: if the rows ar
+simSeasonDue exit=0 0s | simSeasonDue: green. 93 checks.
+guard-literal exit=0 0s | chunks carrying the guard date = 1
+due-1031 exit=0 0s | simSeasonDue: green. 93 checks.
+rankem-saved exit=0 0s | saved rank-em old sentence = 1, source old sentence = 0
+tsc exit=0 43s | 
