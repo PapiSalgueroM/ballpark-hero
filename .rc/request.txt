@@ -1,0 +1,28 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-us: node_modules/.bin/vitest run src/lib/careerIntl.test.ts src/lib/usCareerMarket.test.ts src/lib/usCareerProgramme.test.ts src/test/careerDecisionOutcome.test.tsx src/test/careerEntryGuide.test.tsx src/test/careerHallV1Replay.test.ts src/test/careerSeasonReview.test.tsx src/test/myCareerRestore.test.tsx src/test/nbaCareerIntl.test.ts src/test/nbaCourtRecap1517.test.tsx src/test/nbaOldSaveLines.test.ts src/test/nbaTrophyTile.test.ts src/test/nflTruthRules1104.test.ts src/test/rivalryChoiceBoard.test.tsx src/test/seasonCentreWords.test.tsx src/test/usBoardFixture.test.tsx src/test/usCareerActionConfirm.test.tsx src/test/usCareerBank.test.ts src/test/usCareerDirtyMoney.test.tsx src/test/usCareerDraftNightBoard.test.tsx src/test/usCareerHallBoard.test.tsx src/test/usCareerHelpRules1104.test.tsx src/test/usCareerMarketBoard.test.tsx src/test/usCareerMarketSecondTab.test.tsx src/test/usCareerPractice.test.tsx src/test/usCareerProspect.test.tsx src/test/usCareerReports1346.test.tsx src/test/usCareerReveals.test.tsx src/test/usCareerSaveRetry.test.tsx src/test/usCareerSmallItems1104.test.ts src/test/usCareerStatLines.test.tsx src/test/usCareerSummer.test.tsx src/test/usCareerTruthDigest.test.ts src/test/usProgrammeCardTruth.test.ts src/test/usRivalOldSaves.test.ts src/test/usRivalOldSavesB.test.ts src/test/usSeasonCentre.test.tsx src/test/usSeasonCentreEntry.test.tsx src/test/usSeasonCentreScreens.test.tsx src/test/usSeasonMlb.test.ts src/test/usTrophyTile.test.ts --testTimeout=300000 --hookTimeout=120000
+s1: node scripts/simCareerIntl.mjs
+s5: INTL_SECTIONS=5 node scripts/simCareerIntl.mjs
+s8: INTL_SECTIONS=8 node scripts/simCareerIntl.mjs
+s7: mkdir -p /tmp/bs7 && git archive 3ee0bf6293859740a50654e299232bcd0ff701c3 | tar -x -C /tmp/bs7 && INTL_BASE_DIR=/tmp/bs7 INTL_SECTIONS=7 node scripts/simCareerIntl.mjs
+ctl-restwrites: mkdir -p /tmp/bs7r && git archive 3ee0bf6293859740a50654e299232bcd0ff701c3 | tar -x -C /tmp/bs7r && INTL_BASE_DIR=/tmp/bs7r INTL_SECTIONS=7 INTL_CONTROL=restwrites node scripts/simCareerIntl.mjs
+ctl-legacyreads: mkdir -p /tmp/bs7l && git archive 3ee0bf6293859740a50654e299232bcd0ff701c3 | tar -x -C /tmp/bs7l && INTL_BASE_DIR=/tmp/bs7l INTL_SECTIONS=7 INTL_CONTROL=legacyreads node scripts/simCareerIntl.mjs
+ctl-knockflip: INTL_SECTIONS=5 INTL_CONTROL=knockflip node scripts/simCareerIntl.mjs
+ctl-knockage: INTL_SECTIONS=5 INTL_CONTROL=knockage node scripts/simCareerIntl.mjs
+ctl-nolift: INTL_SECTIONS=5 INTL_CONTROL=nolift node scripts/simCareerIntl.mjs
+ctl-nobronze: INTL_SECTIONS=5 INTL_CONTROL=nobronze node scripts/simCareerIntl.mjs
+ctl-onesource: INTL_SECTIONS=1 INTL_CONTROL=onesource node scripts/simCareerIntl.mjs
+ctl-shiftyear: INTL_SECTIONS=2 INTL_CONTROL=shiftyear node scripts/simCareerIntl.mjs
+ctl-seasonyear: INTL_SECTIONS=2 INTL_CONTROL=seasonyear node scripts/simCareerIntl.mjs
+ctl-dupnation: INTL_SECTIONS=3 INTL_CONTROL=dupnation node scripts/simCareerIntl.mjs
+ctl-fieldsize: INTL_SECTIONS=3 INTL_CONTROL=fieldsize node scripts/simCareerIntl.mjs
+ctl-genfield: INTL_SECTIONS=3 INTL_CONTROL=genfield node scripts/simCareerIntl.mjs
+ctl-anyyear: INTL_SECTIONS=4 INTL_CONTROL=anyyear node scripts/simCareerIntl.mjs
+ctl-lowbar: INTL_SECTIONS=4 INTL_CONTROL=lowbar node scripts/simCareerIntl.mjs
+ctl-copy: INTL_SECTIONS=6 INTL_CONTROL=copy node scripts/simCareerIntl.mjs
+ctl-mathrandom: INTL_SECTIONS=6 INTL_CONTROL=mathrandom node scripts/simCareerIntl.mjs
+ctl-norepair: INTL_SECTIONS=8 INTL_CONTROL=norepair node scripts/simCareerIntl.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simUsBoardParity: node scripts/simUsBoardParity.mjs
+simUsCareerWeight: node scripts/simUsCareerWeight.mjs
