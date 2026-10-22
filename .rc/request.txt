@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+#!serial
+keeper-hall-base: git worktree add /tmp/kbase fb8d6811 > /dev/null 2>&1 && ln -s $PWD/node_modules /tmp/kbase/node_modules && (cd /tmp/kbase && node_modules/.bin/vite build > /tmp/kbase-build.log 2>&1; tail -1 /tmp/kbase-build.log) && ONLY=/hall-of-champions KEEPER_BASE_DIST=/tmp/kbase/dist node scripts/playSaveKeeper.mjs
