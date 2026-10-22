@@ -1,0 +1,1 @@
+fleet: git worktree add /tmp/base 30b4b3ca >/dev/null 2>&1 && FLEET_N=1500 node .rc/x/fleet.mjs /tmp/base
