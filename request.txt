@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+pfST: ONLY=/stadium-tycoon node scripts/playFirstVisitDialogs.mjs
+pf-stale: ONLY=/stadium-tycoon PLAYFIRST_CONTROL=stale node scripts/playFirstVisitDialogs.mjs
+walk: node scripts/playTycoonScorelines.mjs

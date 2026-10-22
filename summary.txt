@@ -1,0 +1,4 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+pf-stale exit=1 16s | playFirstVisitDialogs: PLAYFIRST_CONTROL=stale FIRED. 3 of 3 seeded lines with a fresh save opened no card and failed the walk
+pfST exit=0 17s | playFirstVisitDialogs: green. Every first visit dialog can be started with the cookie banner unanswered.
+walk exit=0 40s | playTycoonScorelines: green
