@@ -1,0 +1,10 @@
+tsc exit=0 65s | 
+rehearse exit=0 5s | rehearseSeasonRows1551: green. The migration lands the four rows, re-runs as a no-op and refuses a wrong table whole.
+rehearse-noafl exit=1 4s | rehearseSeasonRows1551: 4 failures (control noafl)
+simSeasonDue exit=0 0s | simSeasonDue: green. 81 checks.
+hall-head exit=1 1s | simHallOfChampions: 1 failure
+hall-base exit=1 1s | simHallOfChampions: 1 failure
+vitest exit=0 28s |    Duration  27.27s (transform 6.65s, setup 470ms, collect 12.08s, tests 36.73s, environment 3.12s, prepare 842ms)
+simAccessibility exit=0 0s | simAccessibility: all green
+simNoInventedQuotes exit=0 22s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simInventedNames exit=0 10s | simInventedNames: green. Every invented man on this site is invented all the way down.

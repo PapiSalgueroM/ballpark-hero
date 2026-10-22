@@ -1,0 +1,11 @@
+CONTROL noafl
+1) the rows land on the real rolls
+  FAIL: post counts: 129/118/113/48, want 130/118/113/48
+  FAIL: Brisbane Lions flags: 5, want 6
+  FAIL: afl 2026: undefined, want Brisbane Lions
+2) a second run changes nothing
+  FAIL: counts after a re-run: 129/118/113/48, want 130/118/113/48
+3) a wrong pre count in the last block writes nothing anywhere
+4) a different 2026 winner already present raises
+
+rehearseSeasonRows1551: 4 failures (control noafl)
