@@ -1,0 +1,3 @@
+#!serial
+f4-house-s2024: SIM_CAREER_FORM_SEED=2024 SIM_CAREER_FORM_SECTIONS=4 node scripts/simCareerForm.mjs
+f4-engaged-s2024: SIM_CAREER_FORM_SEED=2024 SIM_CAREER_FORM_FLEET_KIND=engaged SIM_CAREER_FORM_SECTIONS=4 node scripts/simCareerForm.mjs
