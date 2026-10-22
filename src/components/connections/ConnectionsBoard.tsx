@@ -16,6 +16,19 @@ interface ConnectionsBoardProps {
   onToggle: (player: string) => void;
 }
 
+/** A group label with its season ("2025-26") kept on one line, so a phone never breaks it at the hyphen. */
+export function GroupLabel({ text }: { text: string }) {
+  const m = text.match(/^(.*?)((?:19|20)\d{2}-\d{2})(.*)$/);
+  if (!m) return <>{text}</>;
+  return (
+    <>
+      {m[1]}
+      <span className="whitespace-nowrap">{m[2]}</span>
+      {m[3]}
+    </>
+  );
+}
+
 export function ConnectionsBoard({
   remainingPlayers,
   selected,
@@ -37,7 +50,7 @@ export function ConnectionsBoard({
               colors.text
             )}
           >
-            <p className="font-bold text-sm uppercase tracking-wide">{group.category}</p>
+            <p className="font-bold text-sm uppercase tracking-wide"><GroupLabel text={group.category} /></p>
             <p className="text-sm mt-1 opacity-90">{group.players.join(', ')}</p>
           </div>
         );
