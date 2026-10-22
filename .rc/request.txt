@@ -1,0 +1,18 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/nflSeasonStats.test.ts src/test/gameLawNfl.test.ts --testTimeout=300000 --hookTimeout=120000
+sim: node scripts/simNflSeasonStats.mjs
+simGmGameDay: node scripts/simGmGameDay.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+c-dropone: NFL_STATS_CONTROL=dropone node scripts/simNflSeasonStats.mjs
+c-nocatch: NFL_STATS_CONTROL=nocatch node scripts/simNflSeasonStats.mjs
+c-injured: NFL_STATS_CONTROL=injured node scripts/simNflSeasonStats.mjs
+c-swapsides: NFL_STATS_CONTROL=swapsides node scripts/simNflSeasonStats.mjs
+c-extradraw: NFL_STATS_CONTROL=extradraw node scripts/simNflSeasonStats.mjs
+c-unkeyed: NFL_STATS_CONTROL=unkeyed node scripts/simNflSeasonStats.mjs
+c-randomcredit: NFL_STATS_CONTROL=randomcredit node scripts/simNflSeasonStats.mjs
+c-tiebreak: NFL_STATS_CONTROL=tiebreak node scripts/simNflSeasonStats.mjs
+c-rookieall: NFL_STATS_CONTROL=rookieall node scripts/simNflSeasonStats.mjs
+c-closetwice: NFL_STATS_CONTROL=closetwice node scripts/simNflSeasonStats.mjs
+c-quote: NFL_STATS_CONTROL=quote node scripts/simNflSeasonStats.mjs
+band77: NFL_STATS_LOW_BAND=77 NFL_STATS_SECTIONS=4 node scripts/simNflSeasonStats.mjs
+band77-random: NFL_STATS_LOW_BAND=77 NFL_STATS_SECTIONS=4 NFL_STATS_CONTROL=randomcredit node scripts/simNflSeasonStats.mjs
