@@ -1,0 +1,4 @@
+board exit=0 6s | simCollegeDynastyBoard: all green
+slate exit=0 7s | simCfbSlate: all green
+c-oldrivals exit=1 8s | simCfbSlate: 4 failure(s)
+old exit=0 14s | oldsave1554: no break
