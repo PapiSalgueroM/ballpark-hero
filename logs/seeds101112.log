@@ -1,0 +1,39 @@
+simCollegeSeat: cfb over seeds 10,11,12, 300 dynasties a sport a seed, 10 seasons, 222 s
+S1) the ask is the roster's, in the pack's words
+   cfb: 8737 season starts, 8550 against the oracle, 187 first seasons kept the offer's ask, 7665 with a roster rank other than the prestige rank; his place checked against the engine's ranking 17474 times
+S2) the outcome is the engine's, and the grade is gradeSeason's
+   cfb: 8737 graded seasons. Grade shares by ask tier:
+     contend    527  title 11.6%, overachieved 12.1%, met 42.1%, missed 24.7%, badly 9.5%
+     playoffs  2622  title 1.0%, overachieved 26.4%, met 21.4%, missed 51.2%, badly 0.0%
+     respect   4896  title 0.0%, overachieved 18.9%, met 62.0%, missed 10.7%, badly 8.4%
+     rebuild    692  title 0.0%, overachieved 9.1%, met 50.3%, missed 23.6%, badly 17.1%
+     fired within the run, by first ask tier: contend 2.8% of 106, playoffs 10.2% of 166, respect 13.1% of 467, rebuild 21.1% of 161
+     fired within the run, by starting tier: tier 1 2.7%, tier 2 16.9%, tier 3 8.9%, tier 4 22.7%
+     first feeds already closed, by starting tier: tier 1 0 of 6, tier 2 5 of 42, tier 3 7 of 21, tier 4 28 of 51
+     fired within the run, by starting group: league 12.7% of 804, Group of Five 16.7% of 78, independent 0.0% of 18
+     fired within the run, first ask respect, by group: league 13.4% of 456, Group of Five 0.0% of 11
+     fired within the run, first ask rebuild, by group: league 22.3% of 94, Group of Five 19.4% of 67
+     Group of Five, rebuild asks 544: overachieved 11.4%, met 52.8%, missed 24.6%, badly 11.2%; wins 0:61 1:134 2:156 3:111 4:52 5:22 6:7 7:1
+     Group of Five, respect asks 270: overachieved 88.9%, met 8.1%, missed 2.2%, badly 0.7%; wins 1:2 2:8 3:11 4:38 5:50 6:55 7:44 8:29 9:24 10:8 11:1
+     independent, respect asks 45: overachieved 57.8%, met 42.2%, missed 0.0%, badly 0.0%; wins 6:3 7:6 8:7 9:13 10:11 11:4 12:1
+     league, rebuild asks 148: overachieved 0.7%, met 41.2%, missed 19.6%, badly 38.5%; wins 0:5 1:23 2:29 3:29 4:28 5:16 6:10 7:6 8:1 9:1
+     league, respect asks 4581: overachieved 14.3%, met 65.4%, missed 11.4%, badly 8.9%; wins 0:2 1:23 2:104 3:280 4:520 5:699 6:843 7:811 8:574 9:406 10:189 11:102 12:23 13:5
+S3) trust moves by gradeSeason, never rising with the shortfall
+   cfb: floor:2:0 n287 move 14; floor:2:1 n134 move -16; floor:2:2 n61 move -28; floor:3:0 n22 move 14; floor:3:1 n6 move -16; floor:3:2 n2 move -28; floor:4:0 n61 move 14; floor:4:1 n29 move -16; floor:4:2 n29 move -28; floor:4:3 n23 move -28; floor:4:4 n5 move -28; floor:5:0 n3014 move 14; floor:5:1 n520 move -16; floor:5:2 n280 move -28; floor:5:3 n104 move -28; floor:5:4 n25 move -28; floor:in n986 move 22; post:-1 n706 move 22; post:-2 n50 move 22; post:0 n783 move 14; post:1 n1473 move -16; post:2 n50 move -28; title n87 move 40
+S4) a firing at zero trust opens a market, never the end
+   cfb: 120 firings, 70 jobs taken off the market, 30 years out, 50 dynasties that met a closed market
+S5) a program that let him go never calls again
+   cfb: 150 feeds holding 77 offers; this game's wider rule removed 0 offers (0.0% of what seatOffers drew) and 2 bids (0.5% of the bids drawn)
+   cfb, twice fired over every pair of programs: 1892 markets, 46 in which gmSeat drew the first program that let him go (2.4%), 46 removed; 119 bids drawn from a program that let him go, 119 dropped
+S6) a bid comes from one tier up after a big year
+   cfb: 415 bids; after a title 1 of 87 (1.1%), after beating the ask 414 of 1742 (23.8%); 136 taken (even dynasties go, odd ones stay)
+S7) keyed, never random
+   47274 seat calls under a Math.random that throws; 0 drew from it
+S8) the seat watches: the same games with it and without it
+   cfb: 87274 rounds and 14968 closes and offseasons compared byte for byte before a move or a firing
+S9) one rule for next year
+   ladder of 40320 careers: hostNextYear e3b0c4481b69e5a822e4f8bb953bcb35481fd2a9, seatNextYear e3b0c4481b69e5a822e4f8bb953bcb35481fd2a9, the base printed e3b0c4481b69e5a822e4f8bb953bcb35481fd2a9
+   collegeNextYear checked against seatNextYear over 41220 careers (900 from the fleets)
+SY) the year out
+   cfb: 30 years out played; refused in a seat 8617, on an open season 120, with next year shut 74; chairs left empty at the program that let him go during a year out 9
+simCollegeSeat: all sections green (S1 to S9 and SY)

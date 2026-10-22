@@ -1,0 +1,6 @@
+seeds456 exit=0 211s | simCollegeSeat: all sections green (S1 to S9 and SY)
+seeds789 exit=0 220s | simCollegeSeat: all sections green (S1 to S9 and SY)
+seeds101112 exit=0 222s | simCollegeSeat: all sections green (S1 to S9 and SY)
+noease456 exit=0 191s | simCollegeSeat: all sections green (S1 to S9 and SY)
+seeds161718 exit=0 215s | simCollegeSeat: all sections green (S1 to S9 and SY)
+seeds131415 exit=0 223s | simCollegeSeat: all sections green (S1 to S9 and SY)
