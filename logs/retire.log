@@ -1,0 +1,20 @@
+Retirement action states: 0/8 declared.
+Retirement confirmations: 0/4 actual Cancel flows.
+Retirement controls: 0/2 effective with full undo.
+FAIL Soccer retirement actions browser
+[
+ {
+  "width": 320,
+  "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert(observed.controls[0].text.includes('Share Legacy'))\n\n    at requireHealthy (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/soccerRetirementActionsBrowser.mjs:162:92)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/soccerRetirementActionsBrowser.mjs:171:181"
+ },
+ {
+  "width": 390,
+  "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert(observed.controls[0].text.includes('Share Legacy'))\n\n    at requireHealthy (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/soccerRetirementActionsBrowser.mjs:162:92)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/soccerRetirementActionsBrowser.mjs:171:181"
+ },
+ {
+  "width": 430,
+  "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert(observed.controls[0].text.includes('Share Legacy'))\n\n    at requireHealthy (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/soccerRetirementActionsBrowser.mjs:162:92)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/soccerRetirementActionsBrowser.mjs:171:181"
+ },
+ {
+  "width": 1440,
+  "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert(observed.controls[0].text.includes('Share Legacy'))\n\n    at requireHealthy (file:///home/runner/work/ballpar
