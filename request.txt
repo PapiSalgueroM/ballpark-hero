@@ -1,0 +1,4 @@
+#!serial
+fixture-record: cp src/components/college-dynasty/collegeDynastyFixture.json $RC_OUT/collegeDynastyFixture.old.json && COLLEGE_FIXTURE_RECORD=1 node_modules/.bin/vitest run src/components/college-dynasty/collegeDynastyFixture.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; cp src/components/college-dynasty/collegeDynastyFixture.json $RC_OUT/collegeDynastyFixture.json; exit $s
+fixture-replay: node_modules/.bin/vitest run src/components/college-dynasty/collegeDynastyFixture.test.tsx --testTimeout=300000 --hookTimeout=120000
+guide-refresh: node scripts/simGuideHeadings.mjs --refresh /cfb-dynasty && node scripts/simGuideHeadings.mjs --refresh /cbb-dynasty; s=$?; cp scripts/data/guideHeadingsFrozen.json $RC_OUT/guideHeadingsFrozen.json; exit $s
