@@ -1,0 +1,16 @@
+nflgmdesk exit=0 38s | simNflGmDesk: all seven checks passed (10 seeds x 10 seasons)
+lazydesk exit=0 38s | simFoLazyDesk: all checks passed
+vitest-board exit=0 33s |    Duration  32.54s (transform 5.13s, setup 564ms, collect 6.36s, tests 56.67s, environment 3.32s, prepare 814ms)
+tsc exit=0 111s | 
+vitest-fo exit=0 26s |    Duration  25.51s (transform 4.37s, setup 1.20s, collect 12.62s, tests 42.26s, environment 5.90s, prepare 1.57s)
+career exit=0 253s | simGmCareer: all checks passed (nfl)
+ctl-staffrides exit=1 148s | CONTROL staffrides: 1 rewrite(s) applied, 487 failure(s) in section 5 (FIRED)
+ctl-rostermove exit=1 136s | CONTROL rostermove: 1 rewrite(s) applied, 487 failure(s) in section 5 (FIRED)
+ctl-notrim exit=1 25s | CONTROL notrim: 1 rewrite(s) applied, 17 failure(s) in section 6 (FIRED)
+ctl-halfseason exit=1 30s | CONTROL halfseason: 1 rewrite(s) applied, 60 failure(s) in section 6 (FIRED)
+ctl-noawaydraft exit=1 23s | CONTROL noawaydraft: 1 rewrite(s) applied, 1 failure(s) in section 6 (FIRED)
+gmreload exit=0 8s | simGmReload: all green. Four front offices keep a finished season through a reload, and none of them can play a closed one again.
+fob-check exit=0 0s | controlFrontOfficeBoard: check passed. Every string of all 50 controls is in the board exactly once.
+deskhost-anchors exit=0 0s | simGmDeskHost anchors: 52 rewrites of 49 controls checked, 0 cannot run
+ctl-emptytile exit=1 20s | CONTROL emptytile: 1 rewrite(s) applied, 659 failure(s) in section 8 (FIRED)
+ctl-askrebuilt exit=1 122s | CONTROL askrebuilt: 1 rewrite(s) applied, 269 failure(s) in section 5 (FIRED)
