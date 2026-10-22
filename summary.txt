@@ -1,0 +1,7 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fonts exit=0 0s | Prepared 9 declared font dependencies for local fulfillment.
+ctl-playEra2005 exit=1 42s | Node.js v24.22.0
+ctl-playNationJob exit=1 36s | Node.js v24.22.0
+ctl-playFoHub exit=1 48s | playFoHub: 2 failures
+ctl-playCmHubLanding exit=1 90s | playCmHubLanding: 1 failure(s) (A 8 pass 0 fail, B 63 pass 1 fail, C 112 pass 0 fail, E 65 pass 0 fail, F 9 pass 0 fail)
+ctl-playSoccerSeasonCalendar exit=1 1s | Node.js v24.22.0
