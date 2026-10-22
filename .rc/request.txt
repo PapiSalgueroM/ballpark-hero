@@ -1,0 +1,8 @@
+# Release BJ, Round 1501's walks on the final tree (#!serve). Each control must exit 0 with "all 1 guarded checks fired".
+#!serve
+#!playwright
+#!serial
+diff-walk: node scripts/playCmDifficulty.mjs
+diff-jump: WIDTHS=320 PLAY_DIFF_CONTROL=jump node scripts/playCmDifficulty.mjs
+diff-nopill: WIDTHS=390 PLAY_DIFF_CONTROL=nopill node scripts/playCmDifficulty.mjs
+nosack-walk: node scripts/playCmNoSack.mjs
