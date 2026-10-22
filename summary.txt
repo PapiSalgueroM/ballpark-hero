@@ -1,0 +1,15 @@
+build exit=0 22s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+ctl-eagerkit exit=0 4s | playGmCareer control eagerkit: all 1 guarded checks fired (mutations landed: {"eagerkit":4})
+ctl-wipebutton exit=0 13s | playGmCareer control wipebutton: all 1 guarded checks fired (mutations landed: {"wipebutton":2})
+ctl-nofallback exit=0 29s | playGmCareer control nofallback: all 1 guarded checks fired (mutations landed: {"nofallback":4})
+ctl-eagerpanel exit=0 29s | playGmCareer control eagerpanel: all 1 guarded checks fired (mutations landed: {"eagerpanel":16})
+ownermandate exit=0 25s | ALL OWNER MANDATE WALK CHECKS PASSED
+fohub exit=1 47s | playFoHub: 2 failures
+gmpress exit=1 82s | playGmPress: 2 failures
+draftnight exit=1 208s | playDraftNight: 1 FAILURE(S) in 49 nights
+fogameday exit=0 349s | playFrontOfficeGameDay: 386 checks, 0 failed
+weight-head exit=1 26s | sweepWeight: 4 failures
+analyze exit=0 24s | dynamic imports of the route chunk: assets/nflCareerKit-DeRFCesg.js:2.5K assets/GmJobMarketPanel-DnjCyiBt.js:2.0K assets/GmCareerPanel-BvG03z0C.js:1.4K assets/GmXpDeskPan
+gmcareer exit=0 465s | playGmCareer: green. 1 board, 3 sizes, four walks each and the slow kit walk at 390 and 1280.
+base-walks exit=0 157s | gmpress on 1533 head exit=1
+sweep exit=0 878s | Swept 184 routes across 1 engines and 3 viewports (552 checks). 0 findings.

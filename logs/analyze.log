@@ -1,0 +1,41 @@
+[32m✓ built in 23.53s[39m
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+0.8K assets/Celebration-C7mvaNcA.js | club-manager/Celebration.tsx:1909
+0.7K assets/CelebrationStyles-DNzQ_5Mz.js | club-manager/CelebrationStyles.tsx:2112
+1.6K assets/DraftNightCard-AdeKTLa5.js | front-office-shared/DraftNightCard.tsx:4326 lib/draftNight.ts:1468
+40.0K assets/FrontOffice-C-3iYSMx.js | front-office/FrontOfficeBoard.tsx:119794 lib/frontOffice.ts:32340 lib/nflGmDesk.ts:15637 front-office/NflGmDesk.tsx:9577 lib/gmBracket.ts:8752 pages/FrontOffice.tsx:7252 lib/gmCareerFace.ts:6105 lib/gmGameScore.ts:2725 gmBrackets/nfl.ts:1626 lib/frontOfficePostseason.ts:1374 lib/gmGameLog.ts:1321 lib/frontOfficeGameDay.ts:1135 lib/gmPostseason.ts:1068 lib/gmContractsHostNfl.ts:1061
+0.8K assets/GameHelp-wgbbZZSQ.js | game/GameHelp.tsx:3021
+1.7K assets/GameNav-ATwHBQVy.js | game/GameNav.tsx:7008 game/DailyCountdown.tsx:2474
+3.7K assets/GameNavbar-R6pERno3.js | game/GameNavbar.tsx:7516 hooks/useGameNavbarStats.ts:3568 hooks/useDailyLegend.ts:2829 game/SharedResultCard.tsx:1902 lib/sharedResult.ts:1499 icons/user-plus.js:503
+3.0K assets/GameReportContext-CtUTNRfd.js | gameContent/loader.ts:6522 game/ReportQuestion.tsx:5864 gameContent/guideShape.ts:876 game/GameReportContext.tsx:57
+2.4K assets/GameSeoContent-CoVphqhH.js | seo/GameSeoContent.tsx:10536 lib/relatedGames.ts:2102
+33.1K assets/GmTradeBuilder-VpQL_1xR.js | lib/gmContracts.ts:21982 lib/gmContractRules.ts:20868 front-office-shared/GmResignDesk.tsx:16929 gmStaff/packs.ts:16167 front-office-shared/GmStaffPanel.tsx:15645 lib/gmPicks.ts:9902 lib/foHub.ts:6667 lib/gmTradePackage.ts:6273 front-office-shared/GmPicksCard.tsx:4224 front-office-shared/GmTradeBuilder.tsx:3865 lib/foGmPress.ts:3671 front-office-shared/TradeTalksCard.tsx:3325 lib/gmDeadline.ts:3135 front-office-shared/GmPressCard.tsx:2939
+0.8K assets/HowToPlayPopover-bgV8sPom.js | game/HowToPlayPopover.tsx:2429
+0.6K assets/HubTiles-pCd4TD3s.js | hub/HubTiles.tsx:2068
+4.4K assets/ShareButtons-DLqnSIzn.js | game/ShareButtons.tsx:12788 game/ShareCard.tsx:3610 icons/share-2.js:565 lib/share.ts:510 icons/image.js:449 icons/mail.js:379
+0.3K assets/arrow-left-Bw5ovJAJ.js | icons/arrow-left.js:325
+2.2K assets/badges-D3BjVwkD.js | lib/badges.ts:8966
+0.3K assets/briefcase-B8sy9HMY.js | icons/briefcase.js:389
+0.3K assets/circle-help-D_IWCf10.js | icons/circle-help.js:413
+0.3K assets/copy-UUuAl3K8.js | icons/copy.js:402
+0.4K assets/crown-DPeMAhXd.js | icons/crown.js:547
+0.3K assets/entityIds-L4Nd6Y8C.js | lib/entityIds.ts:856
+0.6K assets/finalsBracket-DQg8LGI5.js | lib/finalsBracket.ts:1890
+0.3K assets/flag-B1_Tjh4O.js | icons/flag.js:381
+1.8K assets/foOwnerMandate-D56Wi5Cm.js | lib/foOwnerMandate.ts:4969 icons/shield-half.js:503
+8.1K assets/frontOfficePlayers-BMdaeFxZ.js | data/frontOfficePlayers.ts:43805
+1.0K assets/frontOfficeSave-LTb4SYA5.js | lib/frontOfficeSave.ts:3808
+0.4K assets/gmDealTable-DYyD4N4_.js | lib/gmDealTable.ts:1524
+0.7K assets/gmSeatRecord-Cnr4rCr3.js | lib/gmSeatRecord.ts:2389
+3.8K assets/gmStaff-CQgWbtVe.js | lib/gmStaff.ts:15050
+2.2K assets/gmXp-C7Mhtk-f.js | lib/gmXp.ts:8585
+0.2K assets/keyedRng-BKZQ2UGv.js | lib/keyedRng.ts:365
+0.4K assets/medal-DWvt7FTj.js | icons/medal.js:660
+0.3K assets/nflScore-B7Uc3qH4.js | gameLaws/nflScore.ts:964
+0.3K assets/rotate-ccw-BuPTSrpN.js | icons/rotate-ccw.js:360
+0.4K assets/star-DjWSo74x.js | icons/star.js:647
+0.6K assets/usCareerReveal-BW47Ke0-.js | lib/usCareerReveal.ts:1427
+0.5K assets/useGameCompletion-CEXZdSuK.js | hooks/useGameCompletion.ts:1213 lib/restoredFinish.ts:335
+0.8K assets/useRevealScroll-CXkkUz2f.js | hooks/useRevealScroll.ts:3277
+route-own 119.9K in 37 files; entry closure 237.5K in 1 files
+dynamic imports of the route chunk: assets/nflCareerKit-DeRFCesg.js:2.5K assets/GmJobMarketPanel-DnjCyiBt.js:2.0K assets/GmCareerPanel-BvG03z0C.js:1.4K assets/GmXpDeskPanel-OKOKyo0K.js:2.4K assets/NflGameDay-eWPUQWux.js:5.3K assets/NflBracket-BXLTPbA2.js:4.2K assets/frontOfficeDepth-hFZ-rvc7.js:55.1K
