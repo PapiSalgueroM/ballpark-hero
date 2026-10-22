@@ -1,0 +1,9 @@
+#!serial
+head: git log --oneline -2 | cut -c1-80 && git diff --quiet 7a8750ba65c0c6682f69ea48e6400d2f9fc5bf04 HEAD -- src scripts docs && echo "src scripts docs equal 7a8750ba"
+get: mkdir -p /tmp/fl && for n in r1321-fx-f1 r1321-fx-f2 r1321-fx-fc; do git fetch -q origin "+refs/heads/rc-results/$n:refs/remotes/origin/rc-results/$n" && for f in $(git ls-tree --name-only origin/rc-results/$n:files/fleet/); do git show origin/rc-results/$n:files/fleet/$f > /tmp/fl/$f; done; done; ls /tmp/fl | wc -l
+combine: SIM_NBA_EARNED_DRAFT_COMBINE=/tmp/fl node scripts/simNbaEarnedDraft.mjs
+fat: SIM_NBA_EARNED_DRAFT_COMBINE=/tmp/fl SIM_NBA_EARNED_DRAFT_VS=new-fatclass node scripts/simNbaEarnedDraft.mjs
+best: SIM_NBA_EARNED_DRAFT_COMBINE=/tmp/fl SIM_NBA_EARNED_DRAFT_VS=new-bestfirst node scripts/simNbaEarnedDraft.mjs
+straddle-c: SIM_NBA_EARNED_DRAFT_COMBINE=/tmp/fl SIM_NBA_EARNED_DRAFT_CONTROL=judgestraddle node scripts/simNbaEarnedDraft.mjs
+rise-c: SIM_NBA_EARNED_DRAFT_COMBINE=/tmp/fl SIM_NBA_EARNED_DRAFT_CONTROL=judgerise node scripts/simNbaEarnedDraft.mjs
+flip-c: SIM_NBA_EARNED_DRAFT_COMBINE=/tmp/fl SIM_NBA_EARNED_DRAFT_CONTROL=judgeflip node scripts/simNbaEarnedDraft.mjs
