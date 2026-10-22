@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+walkOwner: node .rc/x/walkOwner.mjs
