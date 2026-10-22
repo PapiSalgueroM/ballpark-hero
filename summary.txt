@@ -1,0 +1,6 @@
+sum-no6-head exit=0 209s | simUsCareerSummer: green. Sections 1, 2, 3, 3b, 4, 5, 7, 8, 9, 10, 11, 12 held over 400 careers a sport.
+sum-no6-base exit=0 214s | simUsCareerSummer: green. Sections 1, 2, 3, 3b, 4, 5, 7, 8, 9, 10, 11, 12 held over 400 careers a sport.
+sum6-nhl-head exit=0 647s | simUsCareerSummer: green. Sections 6 held.
+sum6-nhl-base exit=0 707s | simUsCareerSummer: green. Sections 6 held.
+sum6-mlb-head exit=0 2196s | simUsCareerSummer: green. Sections 6 held.
+sum6-mlb-base exit=0 2068s | simUsCareerSummer: green. Sections 6 held.
