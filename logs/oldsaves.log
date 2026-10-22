@@ -1,0 +1,72 @@
+[32m✓ built in 33.07s[39m
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+made on the base: midseason (hub, week 9, fired false); pre1533mid (hub, week 9, fired false); week17 (hub, week 17, fired false); recapFired (fired, week 17, fired true); fired (fired, week 17, fired true); pre1533fired (fired, week 17, fired true); arrival (recap, week 17, fired false); draft (draft, week 17, fired false)
+ok   midseason: the head settles (no holding box, no retry card) within 30 s
+ok   midseason: tiles the same on the base and the head
+ok   midseason: out the same on the base and the head
+ok   midseason: heads the same on the base and the head
+ok   midseason: chip the same on the base and the head
+ok   midseason: buttons the same on the base and the head
+   midseason tiles: 📋 STAFF 5 of 5 jobs filled +1.03 team strength from the coaches ✍️ RE-SIGN DESK 3 deals end this spring 3 still waiting on you 🎟️ DRAFT PICKS 3 picks in the 2026 draft 9 picks over 3 drafts 🔁 TRADE DESK 1 week to the deadline Players and picks, dead money s
+ok   midseason: the save written back after the load is the same on both (identical)
+ok   midseason: no page error on the head (clean)
+ok   pre1533mid: the head settles (no holding box, no retry card) within 30 s
+ok   pre1533mid: tiles the same on the base and the head
+ok   pre1533mid: out the same on the base and the head
+ok   pre1533mid: heads the same on the base and the head
+ok   pre1533mid: chip the same on the base and the head
+ok   pre1533mid: buttons the same on the base and the head
+   pre1533mid tiles: 📋 STAFF 5 of 5 jobs filled +1.03 team strength from the coaches ✍️ RE-SIGN DESK 3 deals end this spring 3 still waiting on you 🎟️ DRAFT PICKS 3 picks in the 2026 draft 9 picks over 3 drafts 🔁 TRADE DESK 1 week to the deadline Players and picks, dead money s
+ok   pre1533mid: the save written back after the load is the same on both (identical)
+ok   pre1533mid: no page error on the head (clean)
+ok   week17: the head settles (no holding box, no retry card) within 30 s
+ok   week17: tiles the same on the base and the head
+ok   week17: out the same on the base and the head
+ok   week17: heads the same on the base and the head
+ok   week17: chip the same on the base and the head
+ok   week17: buttons the same on the base and the head
+ok   week17: the save written back after the load is the same on both (identical)
+ok   week17: no page error on the head (clean)
+ok   recapFired: the head settles (no holding box, no retry card) within 30 s
+ok   recapFired: tiles the same on the base and the head
+ok   recapFired: out the same on the base and the head
+ok   recapFired: heads the same on the base and the head
+ok   recapFired: chip the same on the base and the head
+ok   recapFired: buttons the same on the base and the head
+ok   recapFired: the save written back after the load is the same on both (identical)
+ok   recapFired: no page error on the head (clean)
+ok   fired: the head settles (no holding box, no retry card) within 30 s
+ok   fired: tiles the same on the base and the head
+ok   fired: out the same on the base and the head
+ok   fired: heads the same on the base and the head
+ok   fired: chip the same on the base and the head
+ok   fired: buttons the same on the base and the head
+   fired tiles: 📞 JOB MARKET 1 offer Next year hangs on your old club 📖 CAREER Out of work 1 club, no titles 🎖️ GM LEVEL GM level 1 400 XP to level 2
+ok   fired: the save written back after the load is the same on both (identical)
+ok   fired: no page error on the head (clean)
+ok   pre1533fired: the head settles (no holding box, no retry card) within 30 s
+ok   pre1533fired: tiles the same on the base and the head
+ok   pre1533fired: out the same on the base and the head
+ok   pre1533fired: heads the same on the base and the head
+ok   pre1533fired: chip the same on the base and the head
+ok   pre1533fired: buttons the same on the base and the head
+   pre1533fired tiles: 📞 JOB MARKET 1 offer Next year hangs on your old club 📖 CAREER Out of work 1 club, no titles 🎖️ GM LEVEL GM level 1 400 XP to level 2
+ok   pre1533fired: the save written back after the load is the same on both (identical)
+ok   pre1533fired: no page error on the head (clean)
+ok   arrival: the head settles (no holding box, no retry card) within 30 s
+ok   arrival: tiles the same on the base and the head
+ok   arrival: out the same on the base and the head
+ok   arrival: heads the same on the base and the head
+ok   arrival: chip the same on the base and the head
+ok   arrival: buttons the same on the base and the head
+ok   arrival: the save written back after the load is the same on both (identical)
+ok   arrival: no page error on the head (clean)
+ok   draft: the head settles (no holding box, no retry card) within 30 s
+ok   draft: tiles the same on the base and the head
+ok   draft: out the same on the base and the head
+ok   draft: heads the same on the base and the head
+ok   draft: chip the same on the base and the head
+ok   draft: buttons the same on the base and the head
+ok   draft: the save written back after the load is the same on both (identical)
+ok   draft: no page error on the head (clean)
+oldSaves: 64 checks, 0 failed
