@@ -1,0 +1,18 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ ✓ src/test/cbbRecruitFilters.test.tsx > CBB recruiting position and minimum-star targeting > combines position and inclusive star threshold across both boards in source order 323ms
+ ✓ src/test/cbbRecruitFilters.test.tsx > CBB recruiting position and minimum-star targeting > resets both no-match boards and restores every remaining row 262ms
+ ✓ src/test/cbbRecruitFilters.test.tsx > CBB recruiting position and minimum-star targeting > reports depleted pools honestly even when selections are active 52ms
+ ✓ src/test/cbbRecruitFilters.test.tsx > CBB recruiting position and minimum-star targeting > does not save, regenerate, mutate pools or expose hidden ability while filtering 124ms
+ ✓ src/test/cbbRecruitFilters.test.tsx > CBB recruiting position and minimum-star targeting > signs only the selected high school ID and pays the unchanged NIL cost 81ms
+ ✓ src/test/cbbRecruitFilters.test.tsx > CBB recruiting position and minimum-star targeting > signs only the selected portal ID as a sophomore and removes the last filtered match 172ms
+ ✓ src/test/cbbRecruitFilters.test.tsx > CBB recruiting position and minimum-star targeting > preserves the existing unaffordable-sign rejection with no saved roster or NIL change 107ms
+
+ Test Files  1 passed (1)
+      Tests  7 passed (7)
+   Start at  13:25:37
+   Duration  2.42s (transform 287ms, setup 92ms, collect 473ms, tests 1.12s, environment 273ms, prepare 174ms)
+
+
+simCbbRecruitFilters: seven actual-Board combination, order, reset, empty, no-write, hidden-ability, signing-ID and NIL checks passed.

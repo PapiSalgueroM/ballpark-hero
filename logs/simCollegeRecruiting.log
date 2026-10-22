@@ -1,0 +1,77 @@
+
+== cfb: programs UNLV, LOU, MIA, OSU, 120 seeds each
+-- 1) the right pitch: top priority beats a random pitch, and both beat no effort
+     class score: top 105.75  random 23.85  none 0.00
+  ok   top over random 81.90 >= 40
+  ok   random over none 23.85 >= 12
+-- 2) equal budget: a balanced coach beats all NIL and no contact
+     class score: balanced 113.86  all NIL 4.39
+  ok   balanced over all NIL 109.47 >= 55
+     cold money: 120 of 120 offers moved him less than the same offer after a call, cold worth 0.50 of warm
+  ok   a cold offer moves him less than a warm one on every case
+-- 3) a low prestige program: working in-state three stars beats chasing the stars
+     UNLV: in-state threes 81.24  chasing stars 32.61
+  ok   in-state over chase 48.63 >= 24
+
+== cbb: programs CUSE, LOU, BAMA, KU, 120 seeds each
+-- 1) the right pitch: top priority beats a random pitch, and both beat no effort
+     class score: top 68.03  random 21.23  none 0.00
+  ok   top over random 46.79 >= 22
+  ok   random over none 21.23 >= 11
+-- 2) equal budget: a balanced coach beats all NIL and no contact
+     class score: balanced 70.43  all NIL 3.28
+  ok   balanced over all NIL 67.15 >= 35
+     cold money: 120 of 120 offers moved him less than the same offer after a call, cold worth 0.50 of warm
+  ok   a cold offer moves him less than a warm one on every case
+-- 3) a low prestige program: working in-state three stars beats chasing the stars
+     CUSE: in-state threes 63.49  chasing stars 19.16
+  ok   in-state over chase 44.33 >= 16
+
+-- 4) on every run: every man signs once, and no cap, pot, hour or visit limit is ever broken
+     6240 runs, 0.02 flips a run, greedy coach spent 95.88 a run before signing day
+  ok   unsigned: 0 runs broke it
+  ok   cap: 0 runs broke it
+  ok   count: 0 runs broke it
+  ok   pot: 0 runs broke it
+  ok   paid: 0 runs broke it
+  ok   hours: 0 runs broke it
+  ok   visits: 0 runs broke it
+  ok   revisit: 0 runs broke it
+  ok   after: 0 runs broke it
+  ok   again: 0 runs broke it
+  ok   the greedy coach did reach the pot, so the pot check was exercised
+
+-- 4b) a commitment can still flip: a coach who stops working his commits loses more of them than one who keeps at it
+     cfb: commits flipped away a run, steady 0.00  neglect 2.40
+  ok   neglect loses 2.40 more a run >= 1.2
+     cbb: commits flipped away a run, steady 0.00  neglect 0.84
+  ok   neglect loses 0.84 more a run >= 0.4
+
+-- 5) the scouting band: only evaluation narrows it, every step halves it, and it always holds the truth
+     6480 narrowing steps walked
+  ok   evaluation did narrow bands, so the checks below saw real steps
+  ok   truth: 0
+  ok   ladder: 0
+  ok   outside: 0
+  ok   moved: 0
+
+-- 6) the portal: a sit down keeps a man, real tape, a short window, and its own cap
+     left when nobody sat down: stuck men 0.31 of 1003, starters 0.02 of 1526
+  ok   keptLeft: 0
+  ok   crn: 0
+  ok   senior: 0
+  ok   oneAndDone: 0
+  ok   tape: 0
+  ok   window: 0
+  ok   positions: 0
+  ok   fastLine: 0
+  ok   unsigned: 0
+  ok   cap: 0
+  ok   a good man stuck behind a starter leaves at 0.31, inside [0.25, 0.37]
+  ok   stuck men leave more than starters by 0.29 >= 0.2
+
+-- 7) the official visit: a home win week is worth more than a week away, which is worth more than a home loss
+     240 visits priced three ways, a home win worth 1.70 of an away week
+  ok   home win > away > home loss > 0 on every case
+
+simCollegeRecruiting: all checks green
