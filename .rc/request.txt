@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+walk: node scripts/playUsShopPromises.mjs
+weight-head3c: node .rc/x/weight1534.mjs head3c
