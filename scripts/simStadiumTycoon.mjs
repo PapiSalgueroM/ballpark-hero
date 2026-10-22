@@ -428,7 +428,8 @@ console.log('9) Ten divisions, exact multipliers, promotion pays');
   if (!promo) fail('winning the league on the last matchday did not raise a promotion');
   else {
     if (divisionOf(r.state) !== DIVISIONS[1]) fail('the promoted club is not in division 1');
-    const expect = Math.round(T.unboostedIncomePerSec({ ...r.state, ach: day.ach }) * T.PROMOTION_BONUS_SEC);    if (promo.amount !== expect) fail(`promotion paid ${promo.amount}, the formula says ${expect}`);
+    const expect = Math.round(T.unboostedIncomePerSec({ ...r.state, ach: day.ach }) * T.PROMOTION_BONUS_SEC);
+    if (promo.amount !== expect) fail(`promotion paid ${promo.amount}, the formula says ${expect}`);
     if (!promo.label.includes('Gravel Lane')) fail(`promotion label reads "${promo.label}"`);
     if (r.state.bestDivision !== 1) fail('bestDivision did not record the climb');
     if (divisionIndex(r.state) !== 1 || r.state.league.matchday !== 0) fail('the champion did not start the new division at matchday 1');
