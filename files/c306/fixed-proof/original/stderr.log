@@ -1,0 +1,22 @@
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/xiSelectionHistoryRace.test.tsx > Build Your XI history selection ownership > history race missing: a late history cannot replace the latest enabled-picker selection
+AssertionError: XI_SELECTION_RACE_OWNERSHIP: late history replaced the most recent pick accepted by the enabled picker: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ src/test/xiSelectionHistoryRace.test.tsx:115:89
+    113|     const afterHistory = state(view.result), expectedOwner = retryEnab…
+    114|     retain('overlap', { before, duringHistory, retryEnabled, afterRetr…
+    115|     expect(view.result.current.filledSlots.get(9)?.playerName === expe…
+       |                                                                                         ^
+    116|     expect(view.result.current.filledSlots.size).toBe(1);
+    117|     expect(view.result.current.isValidating).toBe(false);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
