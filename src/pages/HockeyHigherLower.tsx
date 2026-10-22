@@ -4,6 +4,7 @@ import { useHockeyHL } from '@/hooks/useHockeyHL';
 import { GameNav } from '@/components/game/GameNav';
 import { GameShell } from '@/components/game/GameShell';
 import { ResultScreen } from '@/components/game/ResultScreen';
+import { HigherLowerThrough } from '@/components/game/HigherLowerThrough';
 import PostGameStats from '@/components/game/PostGameStats';
 import { HIGHER_LOWER_SCORE_BUCKETS } from '@/lib/higherLowerScore';
 import AdBanner from '@/components/ads/AdBanner';
@@ -122,17 +123,10 @@ const HockeyHigherLower = () => {
                       <span className="text-2xl font-bold text-[hsl(var(--hk-silver))]">
                         {player.careerPoints} pts
                       </span>
-                      {/* Round 662: say what the total runs through. A career
-                          total with no season on it is a fact with an expiry
-                          date, and these had gone stale by up to 312 points
-                          before anybody noticed. The two goalies say so
-                          plainly rather than borrowing a season they were
-                          never checked against. */}
-                      <span className="text-[10px] text-muted-foreground">
-                        {player.lastSeason === 'unverified'
-                          ? 'season not confirmed'
-                          : `through ${player.lastSeason}`}
-                      </span>
+                      {/* Round 662: say what the total runs through; the two
+                          goalies say their season is not confirmed. Round 1549
+                          lifted the line into the shared component. */}
+                      <HigherLowerThrough through={player.lastSeason} />
                     </span>
                   ) : (
                     <span className="flex items-center gap-1 text-sm font-semibold text-[hsl(var(--hk-silver))]">

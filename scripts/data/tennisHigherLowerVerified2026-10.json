@@ -1,12 +1,13 @@
 {
- "about": "Tennis Higher or Lower Grand Slam singles titles, Round 665. Each count is the number of rows in public.tennis_grand_slam_winners where the player is champion in a singles category, read on 2026-09-28. scripts/simHigherLowerFacts.mjs holds the shipped file to this record.",
- "read": "2026-09-28",
- "source": "public.tennis_grand_slam_winners",
- "note": "The table records a champion under the name she used that year, so four players are split across maiden and married names and are summed here: Margaret Court (13 as Court, 11 as Smith), Helen Wills (9 as Wills, 5 as Moody, 5 as Wills Moody), Molla Mallory (4 as Bjurstedt, 4 as Mallory) and Margaret Osborne duPont (4 as Osborne, 2 as Osborne duPont). Every one of the 44 agreed with the file once merged: 0 values differing, 0 of 867 matchups inverted. Active players are through the last slam in the table: Alcaraz 7 (2026), Sinner 4 (2025), Swiatek 6 (2025), Sabalenka 4 (2025).",
+ "about": "Tennis Higher or Lower Grand Slam singles titles, Round 1549. Each count is the number of singles rows in scripts/data/tennisSlamsVerified2026-09.json (Round 732: every row of public.tennis_grand_slam_winners checked on two sources, the 2026 French Open, Wimbledon and US Open filled or corrected) where the player is champion, dropped rows left out. lastSeason is the year of the most recent title. scripts/simHigherLowerFacts.mjs holds the shipped file to this record and scripts/simSportsFacts.mjs section 12 recounts it from the slam record itself.",
+ "read": "2026-10-22",
+ "source": "scripts/data/tennisSlamsVerified2026-09.json",
+ "through": "the 2026 US Open",
+ "note": "Supersedes tennisHigherLowerVerified2026-09.json, which was read from the live table before Round 732 wrote the 2026 French Open, Wimbledon and US Open. Only Jannik Sinner moves: 5, with Wimbledon 2026. The married name merges are the 2026-09 record's, unchanged.",
  "merges": {
-  "Margaret Court": "Margaret Court(13)+Margaret Smith(11)",
-  "Helen Wills": "Helen Wills(9)+Helen Moody(5)+Helen Wills Moody(5)",
-  "Margaret Osborne duPont": "Margaret Osborne(4)+Margaret Osborne duPont(2)"
+  "Margaret Court": "Margaret Court + Margaret Smith",
+  "Helen Wills": "Helen Wills + Helen Moody + Helen Wills Moody",
+  "Margaret Osborne duPont": "Margaret Osborne + Margaret Osborne duPont"
  },
  "players": {
   "Novak Djokovic": {
@@ -170,8 +171,8 @@
    "lastSeason": "2014"
   },
   "Jannik Sinner": {
-   "points": 4,
-   "lastSeason": "2025"
+   "points": 5,
+   "lastSeason": "2026"
   },
   "Aryna Sabalenka": {
    "points": 4,

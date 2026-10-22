@@ -34,7 +34,10 @@
  *      it fails; a row note claiming a second team fails.
  *   4. THE GAMES AGREE WITH THE RECORD. Every row of src/data/f1HLDrivers.ts (Higher or
  *      Lower and Face Off) matches the record on career wins, titles, first and last
- *      season, every record driver with eight or more wins is in that file, and the List
+ *      season (since Round 1549 its wins are this record's plus his 2026 wins, and a
+ *      driver on the 2026 grid ends in 2026, both from the two source 2026 race list in
+ *      scripts/data/sportsFactsVerified2026-10.json), every record driver with eight or
+ *      more wins is in that file, and the List
  *      Quiz still reads driver_name at position 1, where the record has exactly one
  *      champion per season and one spelling per champion.
  *
@@ -63,6 +66,7 @@ import { fileURLToPath } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const RECORD = path.join(ROOT, 'scripts', 'data', 'f1ChampionsVerified2026-09.json');
 const HL = path.join(ROOT, 'src', 'data', 'f1HLDrivers.ts');
+const HL_2026 = path.join(ROOT, 'scripts', 'data', 'sportsFactsVerified2026-10.json');
 const LIST_QUIZ = path.join(ROOT, 'src', 'lib', 'listQuiz.ts');
 
 const CONTROL = process.env.F1_CONTROL || '';
@@ -392,12 +396,23 @@ console.log('4) The games agree with the record: Higher or Lower wins and titles
   let m;
   while ((m = rowRe.exec(hl))) hlRows.push({ name: m[1], wins: Number(m[2]), titles: Number(m[3]), first: Number(m[4]), last: Number(m[5]) });
   if (hlRows.length < 40) fail(`only ${hlRows.length} rows read from f1HLDrivers.ts (42 when this was written)`);
+  /* Round 1549: the file now counts through a race of 2026, which this record
+     (1950 to 2025) does not hold. The 2026 race winners and the 2026 grid come
+     from the two source record beside it, so each card must be this record's
+     total plus his 2026 wins, and a driver on the 2026 grid must end in 2026. */
+  const hl2026 = JSON.parse(fs.readFileSync(HL_2026, 'utf8')).f1HigherLower;
+  const won2026 = (name) => hl2026.races2026.v.filter((r) => r.winner === name).length;
+  /* The table spells one pool driver by his full name; the card uses the name
+     formula1.com and the F1 Driver game print. One entry, by exact spelling. */
+  const TABLE_NAME = { 'Kimi Antonelli': 'Andrea Kimi Antonelli' };
   for (const h of hlRows) {
-    const d = byName.get(h.name);
+    const d = byName.get(h.name) ?? byName.get(TABLE_NAME[h.name]);
     if (!d) { fail(`${h.name}: in f1HLDrivers.ts, not in the record under that spelling`); continue; }
-    if (d.wins !== h.wins) fail(`${h.name}: careerWins ${h.wins}, the record sums ${d.wins}`);
+    const w26 = won2026(h.name);
+    const last = hl2026.drivers[h.name]?.team2026 ? 2026 : d.last;
+    if (d.wins + w26 !== h.wins) fail(`${h.name}: careerWins ${h.wins}, the record sums ${d.wins} to the end of 2025 and ${w26} more in 2026`);
     if (d.titles !== h.titles) fail(`${h.name}: titles ${h.titles}, the record has ${d.titles} seasons at position 1`);
-    if (d.first !== h.first || d.last !== h.last) fail(`${h.name}: seasons ${h.first} to ${h.last}, the record spans ${d.first} to ${d.last}`);
+    if (d.first !== h.first || last !== h.last) fail(`${h.name}: seasons ${h.first} to ${h.last}, the record spans ${d.first} to ${last}`);
   }
   const POOL_WINS = 8; /* the file's own rule: every driver with eight or more wins */
   for (const [id, d] of byDriver) if (d.wins >= POOL_WINS && !hlRows.some((h) => d.names.has(h.name))) fail(`${[...d.names][0]} (${id}) has ${d.wins} wins in the record and is not in f1HLDrivers.ts`);

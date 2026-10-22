@@ -2,6 +2,7 @@ import { useNbaHL } from '@/hooks/useNbaHL';
 import { GameNav } from '@/components/game/GameNav';
 import { GameShell } from '@/components/game/GameShell';
 import { ResultScreen } from '@/components/game/ResultScreen';
+import { HigherLowerThrough } from '@/components/game/HigherLowerThrough';
 import PostGameStats from '@/components/game/PostGameStats';
 import { HIGHER_LOWER_SCORE_BUCKETS } from '@/lib/higherLowerScore';
 import AdBanner from '@/components/ads/AdBanner';
@@ -98,12 +99,15 @@ const NbaHigherLower = () => {
                 >
                   <span className="text-3xl">🏀</span>
                   <span className="text-lg font-bold text-foreground font-display">{player.name}</span>
-                  <span className="text-xs text-muted-foreground">{player.position} · played until {player.lastSeason}</span>
+                  <span className="text-xs text-muted-foreground">{player.position}</span>
                   <span className="text-xs text-muted-foreground">{player.teams}</span>
 
                   {showingResult ? (
-                    <span className="text-2xl font-bold text-gold animate-cell-reveal">
-                      {player.careerPoints.toLocaleString()} pts
+                    <span className="flex flex-col items-center animate-cell-reveal">
+                      <span className="text-2xl font-bold text-gold">
+                        {player.careerPoints.toLocaleString()} pts
+                      </span>
+                      <HigherLowerThrough through={player.lastSeason} />
                     </span>
                   ) : (
                     <span className="flex items-center gap-1 text-sm font-semibold text-primary">

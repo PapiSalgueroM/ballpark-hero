@@ -2,6 +2,8 @@ import { useF1HL } from '@/hooks/useF1HL';
 import { GameNav } from '@/components/game/GameNav';
 import { GameShell } from '@/components/game/GameShell';
 import { ResultScreen } from '@/components/game/ResultScreen';
+import { HigherLowerThrough } from '@/components/game/HigherLowerThrough';
+import { F1_HL_THROUGH } from '@/data/f1HLDrivers';
 import PostGameStats from '@/components/game/PostGameStats';
 import { HIGHER_LOWER_SCORE_BUCKETS } from '@/lib/higherLowerScore';
 import AdBanner from '@/components/ads/AdBanner';
@@ -104,8 +106,11 @@ const F1HigherLower = () => {
                   <span className="text-xs text-muted-foreground">{driver.constructors}</span>
 
                   {showingResult ? (
-                    <span className="text-2xl font-bold text-gold animate-cell-reveal">
-                      {driver.careerWins} wins
+                    <span className="flex flex-col items-center animate-cell-reveal">
+                      <span className="text-2xl font-bold text-gold">
+                        {driver.careerWins} wins
+                      </span>
+                      <HigherLowerThrough through={F1_HL_THROUGH} />
                     </span>
                   ) : (
                     <span className="flex items-center gap-1 text-sm font-semibold text-primary">

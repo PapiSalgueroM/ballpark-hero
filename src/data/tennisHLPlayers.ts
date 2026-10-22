@@ -26,17 +26,27 @@
  *
  * Anchors verified vs canonical: Djokovic 24, Court 24, Serena 23, Nadal 22,
  * Graf 22, Federer 20, Wills 19, Evert/Navratilova 18, Sampras 14.
- * Active players (Alcaraz, Sinner, Świątek, Sabalenka) are snapshots through
- * AO 2026 and will need a re-bake after future slams.
+ * Active players (Alcaraz, Sinner, Świątek, Sabalenka) were snapshots through
+ * AO 2026 when this was baked.
+ *
+ * Round 1549: every count now runs through the 2026 US Open, the last slam of
+ * 2026, and the card says so (TENNIS_HL_THROUGH). The 2026 French Open,
+ * Wimbledon and US Open champions came from Round 732's two source record
+ * (scripts/data/tennisSlamsVerified2026-09.json): only Sinner moves, to 5 with
+ * Wimbledon 2026. scripts/simSportsFacts.mjs section 12 now recounts every row
+ * of this file from that record, so the next slam that changes a count fails
+ * the fence until the file is rebaked.
  *
  * NOTE: this pool intentionally mixes men's and women's champions, the axis
  * is total major titles, and cross-tour matchups (Serena 23 vs Federer 20)
  * are the fun ones. Ties (24/24, 22/22, 18/18…) are common; the HL hooks
  * score a tie as correct for either pick.
  */
+export const TENNIS_HL_THROUGH = 'the 2026 US Open';
+
 export interface TennisHLPlayer {
   name: string;
-  /** Career Grand Slam singles titles (through AO 2026 for active players). */
+  /** Career Grand Slam singles titles, through TENNIS_HL_THROUGH. */
   slams: number;
   /** Year of first slam title. */
   firstYear: number;
@@ -91,7 +101,7 @@ export const tennisHLPlayers: TennisHLPlayer[] = [
   // ── modern stars below the legacy cutoff ────────────────────────────
   { name: 'Martina Hingis', slams: 5, firstYear: 1997, lastYear: 1999, tour: 'W' },
   { name: 'Maria Sharapova', slams: 5, firstYear: 2004, lastYear: 2014, tour: 'W' },
-  { name: 'Jannik Sinner', slams: 4, firstYear: 2024, lastYear: 2025, tour: 'M' },
+  { name: 'Jannik Sinner', slams: 5, firstYear: 2024, lastYear: 2026, tour: 'M' },
   { name: 'Aryna Sabalenka', slams: 4, firstYear: 2023, lastYear: 2025, tour: 'W' },
   { name: 'Naomi Osaka', slams: 4, firstYear: 2018, lastYear: 2021, tour: 'W' },
   { name: 'Kim Clijsters', slams: 4, firstYear: 2005, lastYear: 2011, tour: 'W' },

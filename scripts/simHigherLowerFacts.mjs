@@ -47,6 +47,7 @@
  *   mlbstale    mlb: Bonds nudged 2, and he is 7 clear of Aaron           2
  *   nflstale    nfl: Tomlinson dropped from 162 to 100                    2, 3
  *   tennismerge tennis: Court counted under one name only, 13 not 24      2, 3
+ *   playeduntil the NFL card prints "played until" again                  7
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -55,7 +56,7 @@ import { loadSport, readSource, rewrite, checkSport } from './lib/higherLowerFen
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.HL_FACTS_CONTROL || '';
-const EXPECT = { stale: [2], inversion: [2, 3], nolast: [4], goalieok: [5], heldfix: [3, 6], nbastale: [2, 3], mlbstale: [2], nflstale: [2, 3], tennismerge: [2, 3] };
+const EXPECT = { stale: [2], inversion: [2, 3], nolast: [4], goalieok: [5], heldfix: [3, 6], nbastale: [2, 3], mlbstale: [2], nflstale: [2, 3], tennismerge: [2, 3], playeduntil: [7] };
 /* Exit 2, never 1: 1 is a control that fired, and a mistyped name must not read as one. */
 if (CONTROL && !(CONTROL in EXPECT)) {
   console.log(`   FAIL unknown control ${CONTROL} (known: ${Object.keys(EXPECT).join(', ')})`);
@@ -107,7 +108,9 @@ const SPORTS = [
     key: 'tennis', label: 'Tennis Higher or Lower',
     file: 'src/data/tennisHLPlayers.ts', exportName: 'tennisHLPlayers',
     metric: 'slams', asOf: 'lastYear',
-    record: 'scripts/data/tennisHigherLowerVerified2026-09.json',
+    /* Round 1549: derived from Round 732's two source slam record rather than a
+       read of the live table, which it supersedes (Sinner's Wimbledon 2026). */
+    record: 'scripts/data/tennisHigherLowerVerified2026-10.json',
     unverifiedMarker: 'unverified', cannotBeChecked: null,
   },
 ];
@@ -180,6 +183,40 @@ for (const cfg of SPORTS.filter(s => s.record)) {
   for (const l of r.lines) console.log(l);
   checks += r.checks; failures += r.failures;
   for (const s of r.red) red.add(s);
+}
+
+/* ---------- section 7: the card says what its total runs through ---------- */
+/* Round 1549. "played until 2024" sat under Mahomes, Allen and Henry through a
+   whole season, and "played until 2025-26" under every NBA man still playing.
+   A total runs THROUGH a season; whether a man has stopped playing is another
+   fact these files never held. Every Higher or Lower page that reveals a career
+   total mounts the shared line (Round 662's hockey wording), and none may say
+   "played until". Read from the code with comments stripped, so this comment
+   cannot satisfy it. */
+const PAGES = ['HockeyHigherLower', 'NbaHigherLower', 'NflHigherLower', 'TennisHigherLower', 'F1HigherLower'];
+console.log('7) every Higher or Lower card says what its total runs through, and none says "played until"');
+{
+  let bad = 0;
+  const strip = (t) => t.replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/(^|[^:'"`])\/\/[^\n]*/g, '$1');
+  for (const page of PAGES) {
+    const rel = `src/pages/${page}.tsx`;
+    let code = fs.readFileSync(path.join(ROOT, rel), 'utf8').replaceAll('\r\n', '\n');
+    if (CONTROL === 'playeduntil' && page === 'NflHigherLower') {
+      try {
+        code = rewrite(code, '{player.position}</span>', '{player.position} · played until {player.lastSeason}</span>', 'playeduntil puts the old card line back');
+      } catch (e) {
+        console.log(`   FAIL ${e.message}`);
+        console.log('simHigherLowerFacts: stopped, the control proved nothing');
+        process.exit(2);
+      }
+    }
+    code = strip(code);
+    if (/played until/i.test(code)) { console.log(`   FAIL ${rel} still prints "played until"`); bad++; }
+    if (!/<HigherLowerThrough through=\{[^}]+\} \/>/.test(code)) { console.log(`   FAIL ${rel} reveals a total without the shared line saying what it runs through`); bad++; }
+  }
+  checks++;
+  if (bad) { failures += bad; red.add(7); }
+  else console.log(`   ok   ${PAGES.length} pages mount the shared line and none says "played until"`);
 }
 
 if (CONTROL) {
