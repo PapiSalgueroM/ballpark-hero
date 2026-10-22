@@ -144,9 +144,12 @@ export const COLLEGE_ASK_TILT: Record<CollegeSeatSport, Partial<Record<FoTier, -
  * whose binding marks its schedule hardSlate, in a season played on the fixed slate. In CFB that is
  * the Group of Five: on the slate it plays mostly power schools (before, the four of them drew each
  * other most weeks), and the ladder's win totals were set on the old draw. Measured over 900 ten
- * season dynasties a run (simCollegeSeat, CFB, seeds 1,2,3): a Group of Five coach was let go within
- * the run 9.0 percent of the time on the old draw and 70.5 on the slate with no ease (runner
- * r1554-fx-g1). The number and its measurement are in scripts/simCollegeSeat.mjs's header.
+ * season dynasties a run (simCollegeSeat, CFB, seeds 1,2,3): a coach who started at a Group of Five
+ * school was let go within the run 9.0 percent of the time on the old draw, 70.5 on the slate with no
+ * ease, 57.7 with one win off, 17.9 with two and 1.3 with three; a coach whose first ask was a rebuild
+ * 21.7 on the old draw, 47.0, 41.0, 22.3 and 14.5 (runners r1554-fx-g1 and r1554-fx-e1). Two is the
+ * ease that puts the bottom of the country back where the old draw had it. The bands that hold it are
+ * in scripts/simCollegeSeat.mjs.
  */
 export const COLLEGE_SLATE_EASE: Record<CollegeSeatSport, number> = { cfb: 2, cbb: 0 };
 
