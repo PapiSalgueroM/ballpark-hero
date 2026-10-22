@@ -115,8 +115,15 @@ const TABLE_GEMS = pos => (pos === 1 ? 20 : pos === 2 ? 6 : 0);
  * minute each tracked milestone and badge was first earned. Gem pay is GEM_PAY's
  * (src/lib/tycoonRewards.ts 30), credited per watched full time; no ledger is
  * written.
+ *
+ * Round 1543: with `counts` (default false) it also returns countFirsts, the first
+ * minute totalGoals, totalWins and the streak reach each k (goals to 1000, wins to
+ * 500, a streak to 12), checked after every tick exactly where `firsts` is, so a
+ * rung's minute there and its badge's minute in `firsts` agree to the tick. Read
+ * by scripts/measureTycoonLadder.mjs; with the flag off the output is unchanged.
  */
-export function runBot(T, { policy, seed, minutes, dt, keepStates = false }) {
+const COUNTS = [['goals', 'totalGoals', 1000], ['wins', 'totalWins', 500], ['streak', 'streak', 12]];
+export function runBot(T, { policy, seed, minutes, dt, keepStates = false, counts = false }) {
   if (!POLICIES.includes(policy) && SQUAD_WEIGHT[policy] === undefined) throw new Error(`unknown policy ${policy}`);
   const roll = mulberry(seed);
   let s = T.newTycoon(0);
@@ -124,6 +131,8 @@ export function runBot(T, { policy, seed, minutes, dt, keepStates = false }) {
   const steps = Math.round((minutes * 60) / dt);
   const matches = []; const seasons = []; const promotions = []; const stars = []; const winBonusSec = [];
   const checkpoints = {}; const firsts = {}; const states = {};
+  const countFirsts = counts ? { goals: {}, wins: {}, streak: {} } : null;
+  const countTop = { goals: 0, wins: 0, streak: 0 };
   let sellUp = null;
   let acc = { sq: 0, off: 0, gap: 0, mins: 0, gf: 0, ga: 0 };
   const hasGap = typeof T.matchGap === 'function';
@@ -163,6 +172,12 @@ export function runBot(T, { policy, seed, minutes, dt, keepStates = false }) {
     if (sellUp === null && T.canPrestige(s)) sellUp = t;
     if ((s.claimed?.length ?? 0) !== (prev.claimed?.length ?? 0)) for (const id of s.claimed) if (firsts[id] === undefined) firsts[id] = t;
     if ((s.ach?.length ?? 0) !== (prev.ach?.length ?? 0)) for (const id of s.ach) if (firsts[id] === undefined) firsts[id] = t;
+    if (countFirsts) {
+      for (const [key, field, cap] of COUNTS) {
+        const v = Math.min(s[field] ?? 0, cap);
+        while (countTop[key] < v) { countTop[key] += 1; countFirsts[key][countTop[key]] = t; }
+      }
+    }
     if (policy === 'paceSell' && T.canPrestige(s) && r.events.some(e => e.kind === 'title' || e.kind === 'seasonEnd')) {
       s = T.prestige(s, Math.round(t * 60000));
       stars.push({ t, rep: s.rep });
@@ -179,5 +194,5 @@ export function runBot(T, { policy, seed, minutes, dt, keepStates = false }) {
       }
     }
   }
-  return { policy, seed, minutes, matches, seasons, promotions, sellUp, stars, checkpoints, winBonusSec, firsts, ...(keepStates ? { states } : {}) };
+  return { policy, seed, minutes, matches, seasons, promotions, sellUp, stars, checkpoints, winBonusSec, firsts, ...(keepStates ? { states } : {}), ...(countFirsts ? { countFirsts } : {}) };
 }
