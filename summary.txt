@@ -1,0 +1,9 @@
+cfbstaff-noslate exit=0 24s | control "noslate": 3 failure(s) fired as expected, the check works
+cfbstaff-legacy exit=0 78s | control "legacy": 1 failure(s) fired as expected, the check works
+cfbstaff exit=0 83s | simCfbStaff: all green
+cbbstaff exit=0 19s | simCbbStaff: all green
+cfbdynasty exit=0 4s | simCfbDynasty: all green
+cbbstaff-rematch exit=0 19s | control "rematch": 1 failure(s) fired as expected, the check works
+engineids exit=0 1s | simEngineIds: an id minted in one page load cannot collide with one minted in another, in all six engines.
+savekeeper exit=0 6s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+seat exit=0 385s | simCollegeSeat: all sections green (S1 to S9 and SY)
