@@ -1,0 +1,11 @@
+#!serve
+#!playwright
+#!serial
+tt-all: mkdir -p "$TMPDIR/out" && RC_OUT="$TMPDIR/out" ENGINES=chromium node scripts/playTwoTabs.mjs 2>&1 | tee "$TMPDIR/ctl.log"; s=${PIPESTATUS[0]}; [ $s -eq 0 ] && grep -qF 'playTwoTabs: green at ' "$TMPDIR/ctl.log"
+simTactics: node scripts/simTactics.mjs
+simMobileChrome: node scripts/simMobileChrome.mjs
+playCmSubsRule: ENGINES=chromium node scripts/playCmSubsRule.mjs
+playCmRetire: node scripts/playCmRetire.mjs
+playGames-club-manager: ONLY=/club-manager node scripts/playGames.mjs
+playGames-front-office: ONLY=/front-office node scripts/playGames.mjs
+ctl-none-tt: ANSWER_CONSENT_CONTROL=none ENGINES=chromium CASES=9 node scripts/playTwoTabs.mjs
