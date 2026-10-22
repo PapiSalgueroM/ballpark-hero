@@ -1,0 +1,7 @@
+c-stale: SIM_SEASON_AWARDS_CONTROL=stale node scripts/simSoccerSeasonAwards.mjs
+c-nogate: SIM_SEASON_AWARDS_CONTROL=nogate node scripts/simSoccerSeasonAwards.mjs
+c-dropcoins: SIM_SEASON_AWARDS_CONTROL=dropcoins node scripts/simSoccerSeasonAwards.mjs
+c-usdrift: SIM_SEASON_AWARDS_CONTROL=usdrift node scripts/simSoccerSeasonAwards.mjs
+c-form-nogate: SIM_CAREER_FORM_CONTROL=nogate node scripts/simCareerForm.mjs
+vitest-head: node_modules/.bin/vitest run $(cat .rc/x/vlist.txt) --testTimeout=300000 --hookTimeout=120000 > $TMP/v.log 2>&1; s=$?; grep -E "FAIL|Test Files|Tests  " $TMP/v.log | head -80; echo "vitest head exit $s"; exit $s
+vitest-base: R=$PWD; git worktree add /tmp/base 41368514 >/dev/null 2>&1 && ln -s $R/node_modules /tmp/base/node_modules && cd /tmp/base && L=$(for f in $(cat $R/.rc/x/vlist.txt); do [ -f "$f" ] && printf '%s ' "$f"; done) && node_modules/.bin/vitest run $L --testTimeout=300000 --hookTimeout=120000 > $TMP/v.log 2>&1; s=$?; grep -E "FAIL|Test Files|Tests  " $TMP/v.log | head -80; echo "vitest base exit $s"; exit $s
