@@ -1,0 +1,5 @@
+head exit=0 0s | src and scripts equal 2bf891ca
+tsc exit=0 69s | 
+earned exit=0 17s | simNbaEarnedDraft: green.
+fxcombine exit=1 19s | simNbaEarnedDraft: RED in section 7.
+fleetk exit=0 18s | simNbaEarnedDraft: green.
