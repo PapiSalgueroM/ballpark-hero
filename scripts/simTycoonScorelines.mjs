@@ -44,18 +44,22 @@
  *     of NAMES so 1532's checks and control map stay exactly as they were:
  *     S9a found: every ACHIEVEMENTS or MILESTONES row whose hit reads totalGoals,
  *         totalWins or streak (the code, comments stripped) is one of the sixteen rungs;
- *         a seventeenth fails "a new rung needs an anchor".
+ *         a seventeenth fails "a new rung needs an anchor"; each rung reads its own counter;
+ *         the rows read equal the rows the lib exports (a row across lines cannot hide).
  *     S9b shape: every base id is still there (a save key), ACH_BONUS 0.02, every milestone
  *         pays its base pay, each rung's threshold at or below its old one, pairs shared, each
  *         family rising, as10 at the streak where streakMult stops rising (called, not typed),
- *         every label carries its number ("First" reads as one).
- *     S9c minutes: on calibration and holdout every rung but as10 lands within LADDER_BAND
- *         (35 percent or five matches, whichever is wider) of its base minute, S8's median;
- *         aw150, aw400 and ag2000 (never reached by the base) sit within 0.8 to 1.25 of old x
- *         this run's per match rate against the base record's (120 to 240 minutes).
+ *         streak5 and as5 at the lead's five (typed), every label carries its number ("First"
+ *         reads as one).
+ *     S9c minutes: on calibration and holdout every rung but the lead's fixed three (streak5,
+ *         as5, as10: printed, never judged) lands within LADDER_BAND (35 percent or three
+ *         matches, whichever is wider) of its base minute, S8's median; aw150, aw400 and ag2000
+ *         (never reached by the base) sit within 0.8 to 1.25 of old x this run's per match
+ *         rate against the base record's (120 to 240 minutes), printed with its room and error.
  *     S9d kept: a veteran save holding every rung keeps all 47 and 10 through load and a 2
  *         second tick at roll 0.999, so do the corpus saves and the twelve histories, and a
- *         boundary fleet earns nothing one under each threshold and exactly its rungs at it.
+ *         boundary fleet, settled by settleFirsts with no minute played, earns nothing one
+ *         under each threshold and exactly its rungs at it.
  *
  * Controls, each a patched copy of the lib in the OS temp folder, calibration seeds:
  *   copy      a private goalLambda with perPoint 0.056          red S1 (run against S1 S2 S6 S7)
@@ -70,11 +74,25 @@
  *   offsetunit RIVAL_OFFSET_POINTS 50, not 500                  red S1 (run against S1 S2 S6 S7)
  * (facts and offsetunit were added after the round's review: each mutation was green
  * on every check of the round, remote checks r1532-run-mut1 and r1532-run-mut2.)
- * Round 1543's four, each run against S9a to S9d alone:
+ * Round 1543's, each run against S9a to S9d alone, each with the words its sections must
+ * print (says), so a section red for another of its assertions does not count:
  *   newrung   astall's hit also reads totalWins (always true)  red S9a
  *   raise     goals25 at 30, one nice value over its old 25     red S9b S9c
- *   oldladder the eleven moved rows back to their old numbers   red S9c
+ *   oldladder the eleven moved rows back to their old numbers   red S9c (win50 and ag2000)
  *   offbyone  ag2000's >= written as >                         red S9d
+ * and, after the round's review, one for each assertion that had none:
+ *   split       agw25's row written across two lines           red S9a (rows read)
+ *   wrongcounter win1 reads totalGoals                         red S9a S9d
+ *   dropid      agw25 and allTracks renamed                    red S9b S9d (save keys)
+ *   pay         full pays 601                                  red S9b
+ *   bonus       ACH_BONUS 0.021                                red S9b
+ *   unpair      aw10 at 7, its label honest                    red S9b (pairs)
+ *   raiseone    win1 and aw1 at 2, labels honest               red S9b (never raised)
+ *   falls       ag100 at 10, its label honest                  red S9b S9c (rising)
+ *   streakfour  streak5 and as5 at 4, labels honest            red S9b (the lead's five)
+ *   asnine      as10 at 9, its label honest                    red S9b (streakMult's cap)
+ *   label       aw50's label says 50                           red S9b (labels)
+ *   goalstwenty goals25 and ag25 at 20, labels honest          red S9c (the band's arm)
  * R7's sets name S3 S4 S5 for linear; S1 and S6 go red too by construction (S1
  * asserts the law's formula and S6 the law's ceiling, both of which the base lines
  * break), and noclamp breaks S1's clamp for the same reason.
@@ -175,8 +193,12 @@ const LADDER_IDS = OLD_LADDER.flatMap(r => r.ids);
 const COUNTER_FIELD = { goals: 'totalGoals', wins: 'totalWins', streak: 'streak' };
 /* Anchored on matches, not minutes: the base never reached them in its 300 minutes. */
 const LONG_RUNGS = ['aw150', 'aw400', 'ag2000'];
-/* The lead's ruling Q2: ten is where streakMult and the fan pull stop rising. Printed. */
-const EXEMPT_RUNGS = ['as10'];
+/* The lead's ruling Q2 (brief-1543 1.2): streak5 and as5 stay at five and as10 at ten, where
+   streakMult and the fan pull stop rising. S9c prints their minutes and never judges them, so
+   they cannot set its band (Round 1543 review, run F1 and read F2); S9b fences their values. */
+const EXEMPT_RUNGS = ['streak5', 'as5', 'as10'];
+/* The fixed five, typed (as10's ten is called from streakMult in S9b, never typed). */
+const FIXED_RUNGS = { streak5: 5, as5: 5 };
 /* Every base id, typed from c50eb038. S9b pins presence, never order or count (critic-1539
    item 13: the count is pinned by simStadiumTycoon and simTycoonHelp already). */
 const BASE_ACH_IDS = ['af500', 'af2k', 'af10k', 'af50k', 'af250k', 'af1m', 'ac500', 'ac2000', 'ac8000', 'aw1', 'aw10', 'aw50', 'aw150', 'aw400',
@@ -187,11 +209,15 @@ const BASE_PAY = { fans500: 400, fans2k: 2500, fans10k: 20000, full: 600, win1: 
    rule (25 percent or two matches), which win and streak minutes, moving in whole 2.1 minute
    matches, would turn into a coin toss. Measured on remote check r1543-s2a (head 6195a597, the
    moved ladder, 20 seeds a set, bootstrap errors of the median over 1,000 resamples): every
-   rung must keep one whole match plus two errors to its edge. Five matches is the least that
-   gives the five win streak its room on holdout (14.7 against 10.5, error 1.41: needs 9.12);
-   35 percent gives ag500 (79.5 against 94.9 on holdout, error 3.86: needs 25.2 of its 33.2)
-   room to spare, where 25 percent would not (23.7). The header lists every rung's headroom. */
-const LADDER_BAND = { pct: 0.35, matches: 5 };
+   judged rung must keep one whole match plus two errors to its edge. The fixed streak rungs
+   are not judged (EXEMPT_RUNGS): the first band, five matches, was set by streak5 on holdout,
+   and its 10.5 minute arm was wider than goals25's whole base minute (9.75), so the goal pair
+   at 20 passed (Round 1543 review, run lens r1543-run-b). Three matches is the least that
+   gives win1 its room on holdout (4.2 against 2.1, error 1.03: needs 2.1 + 2.1 + 2.06 = 6.26 of
+   6.3); 35 percent gives ag500 (79.5 against 94.9 on holdout, error 3.86: needs 25.2 of its
+   33.2) room to spare, where 25 percent would not (23.7). The goalstwenty control proves the
+   arm now splits the goal pair at 20 from its pick of 10. The header lists the headroom. */
+const LADDER_BAND = { pct: 0.35, matches: 3 };
 const RATE_BAND = [0.8, 1.25];
 const MATCH_MIN = 2.1;
 
@@ -223,14 +249,17 @@ const CONTROLS = {
     ['    const pay = Math.round(unboostedIncomePerSec(st) * PROMOTION_BONUS_SEC);', '    const pay = Math.round(attendance(st) * 8 * d.incomeMult * repMult(st));'],
     ['  const pay = Math.round(unboostedIncomePerSec({ ...st, league: next }) * PROMOTION_BONUS_SEC);', '  const pay = Math.round(attendance(st) * 8 * nd.incomeMult * repMult(st));'],
   ] },
-  /* Round 1543, the ladder's four, each run against S9a to S9d alone (critic-1539 item 3). */
-  newrung: { red: ['S9a'], only: S9_NAMES, rewrites: [[
+  /* Round 1543, the ladder's controls, each run against S9a to S9d alone (critic-1539 item 3).
+     Each also names, in says, the words its sections must print, so a section that goes red
+     for another of its assertions does not count as this one firing (Round 1543 review, read
+     F1: raise alone went red on the pair check, so it proved nothing about the others). */
+  newrung: { red: ['S9a'], only: S9_NAMES, says: { S9a: ['astall reads totalWins: a new rung needs an anchor'] }, rewrites: [[
     "{ id: 'astall', label: 'Every role filled at least once', emoji: '📋', hit: s => STAFF.every(t => staffLevelOf(s, t.id) >= 1) },",
     "{ id: 'astall', label: 'Every role filled at least once', emoji: '📋', hit: s => STAFF.every(t => staffLevelOf(s, t.id) >= 1) && s.totalWins >= 0 },"]] },
-  raise: { red: ['S9b', 'S9c'], only: S9_NAMES, rewrites: [[
+  raise: { red: ['S9b', 'S9c'], only: S9_NAMES, says: { S9b: ['goals25 rose to 30 from 25'], S9c: ['goals25 lands at'] }, rewrites: [[
     "{ id: 'goals25', label: '10 goals scored', pay: 4000, hit: s => s.totalGoals >= 10 },",
     "{ id: 'goals25', label: '10 goals scored', pay: 4000, hit: s => s.totalGoals >= 30 },"]] },
-  oldladder: { red: ['S9c'], only: S9_NAMES, rewrites: [
+  oldladder: { red: ['S9c'], only: S9_NAMES, says: { S9c: ['win50 lands at', 'ag2000 at 2000 is x'] }, rewrites: [
     ["{ id: 'aw10', label: '8 career wins', emoji: '🏁', hit: s => s.totalWins >= 8 },", "{ id: 'aw10', label: '10 career wins', emoji: '🏁', hit: s => s.totalWins >= 10 },"],
     ["{ id: 'aw50', label: '35 career wins', emoji: '🏁', hit: s => s.totalWins >= 35 },", "{ id: 'aw50', label: '50 career wins', emoji: '🏁', hit: s => s.totalWins >= 50 },"],
     ["{ id: 'aw150', label: '125 career wins', emoji: '🏆', hit: s => s.totalWins >= 125 },", "{ id: 'aw150', label: '150 career wins', emoji: '🏆', hit: s => s.totalWins >= 150 },"],
@@ -243,9 +272,44 @@ const CONTROLS = {
     ["{ id: 'win50', label: '35 wins', pay: 30000, hit: s => s.totalWins >= 35 },", "{ id: 'win50', label: '50 wins', pay: 30000, hit: s => s.totalWins >= 50 },"],
     ["{ id: 'goals25', label: '10 goals scored', pay: 4000, hit: s => s.totalGoals >= 10 },", "{ id: 'goals25', label: '25 goals scored', pay: 4000, hit: s => s.totalGoals >= 25 },"],
   ] },
-  offbyone: { red: ['S9d'], only: S9_NAMES, rewrites: [[
+  offbyone: { red: ['S9d'], only: S9_NAMES, says: { S9d: ['goals at 250 earned nothing'] }, rewrites: [[
     "{ id: 'ag2000', label: '250 goals', emoji: '🥅', hit: s => s.totalGoals >= 250 },",
     "{ id: 'ag2000', label: '250 goals', emoji: '🥅', hit: s => s.totalGoals > 250 },"]] },
+  /* Added after the round's review (read F1 and F4, run F1 and F2), one per assertion. */
+  split: { red: ['S9a'], only: S9_NAMES, says: { S9a: ['rows in the code'] }, rewrites: [[
+    "{ id: 'agw25', label: 'Twenty five golden whistles caught', emoji: '🪙', hit: s => (s.goldenCaught ?? 0) >= 25 },",
+    "{ id: 'agw25', label: 'Twenty five golden whistles caught', emoji: '🪙',\n    hit: s => (s.goldenCaught ?? 0) >= 25 },"]] },
+  wrongcounter: { red: ['S9a', 'S9d'], only: S9_NAMES, says: { S9a: ['win1 reads totalGoals, not totalWins'], S9d: ['wins at 1 earned aw1'] }, rewrites: [[
+    "{ id: 'win1', label: 'First win', pay: 250, hit: s => s.totalWins >= 1 },",
+    "{ id: 'win1', label: 'First win', pay: 250, hit: s => s.totalGoals >= 1 },"]] },
+  dropid: { red: ['S9b', 'S9d'], only: S9_NAMES, says: { S9b: ['badge agw25 is gone', 'milestone allTracks is gone'], S9d: ['the veteran save lost agw25'] }, rewrites: [
+    ["{ id: 'agw25', label: 'Twenty five golden whistles caught', emoji: '🪙', hit: s => (s.goldenCaught ?? 0) >= 25 },",
+      "{ id: 'agw30', label: 'Twenty five golden whistles caught', emoji: '🪙', hit: s => (s.goldenCaught ?? 0) >= 25 },"],
+    ["{ id: 'allTracks', label: 'Every upgrade owned at least once', pay: 8000,", "{ id: 'allTracks2', label: 'Every upgrade owned at least once', pay: 8000,"],
+  ] },
+  pay: { red: ['S9b'], only: S9_NAMES, says: { S9b: ['milestone full pays 601, the base paid 600'] }, rewrites: [[
+    "{ id: 'full', label: 'First full house', pay: 600,", "{ id: 'full', label: 'First full house', pay: 601,"]] },
+  bonus: { red: ['S9b'], only: S9_NAMES, says: { S9b: ['ACH_BONUS is 0.021'] }, rewrites: [['export const ACH_BONUS = 0.02;', 'export const ACH_BONUS = 0.021;']] },
+  unpair: { red: ['S9b'], only: S9_NAMES, says: { S9b: ['win10 and aw10 are a pair and no longer share a threshold (8, 7)'] }, rewrites: [[
+    "{ id: 'aw10', label: '8 career wins', emoji: '🏁', hit: s => s.totalWins >= 8 },", "{ id: 'aw10', label: '7 career wins', emoji: '🏁', hit: s => s.totalWins >= 7 },"]] },
+  raiseone: { red: ['S9b'], only: S9_NAMES, says: { S9b: ['win1 rose to 2 from 1', 'aw1 rose to 2 from 1'] }, rewrites: [
+    ["{ id: 'win1', label: 'First win', pay: 250, hit: s => s.totalWins >= 1 },", "{ id: 'win1', label: '2 wins', pay: 250, hit: s => s.totalWins >= 2 },"],
+    ["{ id: 'aw1', label: 'First career win', emoji: '🏁', hit: s => s.totalWins >= 1 },", "{ id: 'aw1', label: '2 career wins', emoji: '🏁', hit: s => s.totalWins >= 2 },"],
+  ] },
+  falls: { red: ['S9b', 'S9c'], only: S9_NAMES, says: { S9b: ['the goals rungs no longer rise: 10, 10, 75, 250'], S9c: ['ag100 lands at'] }, rewrites: [[
+    "{ id: 'ag100', label: '30 goals', emoji: '⚽', hit: s => s.totalGoals >= 30 },", "{ id: 'ag100', label: '10 goals', emoji: '⚽', hit: s => s.totalGoals >= 10 },"]] },
+  streakfour: { red: ['S9b'], only: S9_NAMES, says: { S9b: ['streak5 is 4, but the lead fixed it at 5', 'as5 is 4, but the lead fixed it at 5'] }, rewrites: [
+    ["{ id: 'streak5', label: 'Five wins in a row', pay: 6000, hit: s => s.streak >= 5 },", "{ id: 'streak5', label: 'Four wins in a row', pay: 6000, hit: s => s.streak >= 4 },"],
+    ["{ id: 'as5', label: 'Five straight wins', emoji: '🔥', hit: s => s.streak >= 5 },", "{ id: 'as5', label: 'Four straight wins', emoji: '🔥', hit: s => s.streak >= 4 },"],
+  ] },
+  asnine: { red: ['S9b'], only: S9_NAMES, says: { S9b: ['as10 is 9, but streakMult stops rising at 10'] }, rewrites: [[
+    "{ id: 'as10', label: 'Ten straight wins', emoji: '🔥', hit: s => s.streak >= 10 },", "{ id: 'as10', label: 'Nine straight wins', emoji: '🔥', hit: s => s.streak >= 9 },"]] },
+  label: { red: ['S9b'], only: S9_NAMES, says: { S9b: ['aw50\'s label "50 career wins" does not carry its threshold 35'] }, rewrites: [[
+    "{ id: 'aw50', label: '35 career wins', emoji: '🏁', hit: s => s.totalWins >= 35 },", "{ id: 'aw50', label: '50 career wins', emoji: '🏁', hit: s => s.totalWins >= 35 },"]] },
+  goalstwenty: { red: ['S9c'], only: S9_NAMES, says: { S9c: ['goals25 lands at', 'ag25 lands at'] }, rewrites: [
+    ["{ id: 'goals25', label: '10 goals scored', pay: 4000, hit: s => s.totalGoals >= 10 },", "{ id: 'goals25', label: '20 goals scored', pay: 4000, hit: s => s.totalGoals >= 20 },"],
+    ["{ id: 'ag25', label: '10 goals', emoji: '⚽', hit: s => s.totalGoals >= 10 },", "{ id: 'ag25', label: '20 goals', emoji: '⚽', hit: s => s.totalGoals >= 20 },"],
+  ] },
 };
 if (ONLY && !CONTROLS[ONLY]) abort(`unknown SCORELINES_CONTROL ${ONLY}`);
 
@@ -686,13 +750,20 @@ function bootSE(xs) {
 }
 
 /* S9a found: the rungs are found by the hit functions' code, so a rung added later cannot skip the fence. */
-function S9a(libText) {
+function S9a(E, libText) {
   const rows = ladderRows(libText);
   if (!rows) return { out: ['cannot find ACHIEVEMENTS or MILESTONES in the lib'], note: '' };
-  const found = rows.filter(r => r.reads).map(r => r.id);
-  const out = [...found.filter(id => !LADDER_IDS.includes(id)).map(id => `${id} reads a goal, win or streak counter: a new rung needs an anchor`),
-    ...LADDER_IDS.filter(id => !found.includes(id)).map(id => `${id} no longer reads its counter`)];
-  return { out, note: `${found.length} rungs found by the hit functions' code (comments stripped): ${found.join(' ')}` };
+  const T = E.T; const exported = T.ACHIEVEMENTS.length + T.MILESTONES.length;
+  const found = rows.filter(r => r.reads);
+  const out = [...found.filter(r => !LADDER_IDS.includes(r.id)).map(r => `${r.id} reads ${r.reads}: a new rung needs an anchor`)];
+  for (const r of OLD_LADDER) for (const id of r.ids) {
+    const row = rows.find(x => x.id === id);
+    if (row?.reads !== COUNTER_FIELD[r.counter]) out.push(`${id} reads ${row?.reads ?? 'no counter'}, not ${COUNTER_FIELD[r.counter]}`);
+  }
+  /* Read lens F4: the parser reads one row a line, so a row written across lines would
+     escape it unseen; every row the lib exports must be one this section read. */
+  if (rows.length !== exported) out.push(`${rows.length} rows in the code, but the lib exports ${exported}: a row written across lines escapes this fence`);
+  return { out, note: `${found.length} rungs found by the hit functions' code (comments stripped), each reading its own counter: ${found.map(r => r.id).join(' ')}; ${rows.length} rows read, all ${exported} the lib exports` };
 }
 
 /* S9b shape: what keeps every saved badge true and the ladder honest. */
@@ -715,12 +786,13 @@ function S9b(E, libText) {
     if (v.some((x, i) => i > 0 && !(x > v[i - 1]))) out.push(`the ${c} rungs no longer rise: ${v.join(', ')}`);
   }
   if (n('as10') !== cap) out.push(`as10 is ${n('as10')}, but streakMult stops rising at ${cap}`);
+  for (const [id, v] of Object.entries(FIXED_RUNGS)) if (n(id) !== v) out.push(`${id} is ${n(id)}, but the lead fixed it at ${v} (brief-1543 1.2)`);
   for (const id of LADDER_IDS) {
     const row = [...T.ACHIEVEMENTS, ...T.MILESTONES].find(x => x.id === id);
     if (row && labelNumber(row.label) !== n(id)) out.push(`${id}'s label "${row.label}" does not carry its threshold ${n(id)}`);
   }
   const fam = c => OLD_LADDER.filter(r => r.counter === c).map(r => n(r.ids[0])).join(', ');
-  return { out, note: `every base id present (${BASE_ACH_IDS.length} badges, ${Object.keys(BASE_PAY).length} milestones), ACH_BONUS 0.02, every milestone pays its base pay; wins ${fam('wins')}, goals ${fam('goals')}, streak ${fam('streak')}, each at or below its old threshold, pairs shared, as10 at streakMult's cap (${cap}), every label carries its threshold` };
+  return { out, note: `every base id present (${BASE_ACH_IDS.length} badges, ${Object.keys(BASE_PAY).length} milestones), ACH_BONUS 0.02, every milestone pays its base pay; wins ${fam('wins')}, goals ${fam('goals')}, streak ${fam('streak')}, each at or below its old threshold, pairs shared, as10 at streakMult's cap (${cap}), ${Object.keys(FIXED_RUNGS).join(' and ')} at the lead's ${Object.values(FIXED_RUNGS)[0]}, every label carries its threshold` };
 }
 
 /* S9c minutes: each rung lands about when it did before the law (the band from measured
@@ -728,7 +800,17 @@ function S9b(E, libText) {
 function S9c(sets, libText) {
   const out = []; const lines = []; const rows = ladderRows(libText) ?? [];
   const n = id => rows.find(r => r.id === id)?.n ?? NaN;
-  const rate = (cps, f) => med9(cps.map(c => (c[240][f] - c[120][f]) / (c[240].matches - c[120].matches)));
+  const perSeed = (cps, f) => cps.map(c => (c[240][f] - c[120][f]) / (c[240].matches - c[120].matches));
+  const rate = (cps, f) => med9(perSeed(cps, f));
+  /* Read lens F3: the ratio's bootstrap error, head and base seeds resampled apart. */
+  const ratioSE = (k, hx, bx) => {
+    const roll = mulberry(1543); const xs = [];
+    const pick = v => v.map(() => v[Math.floor(roll() * v.length)]);
+    for (let i = 0; i < 1000; i += 1) xs.push(k / (med9(pick(hx)) / med9(pick(bx))));
+    if (!xs.every(Number.isFinite)) return NaN;
+    const m = xs.reduce((a, b) => a + b, 0) / xs.length;
+    return Math.sqrt(xs.reduce((a, b) => a + (b - m) ** 2, 0) / (xs.length - 1));
+  };
   for (const [k, R] of Object.entries(sets)) {
     const seeds = R.pace.map(r => r.seed);
     const base = BASE.policies.pace.filter(b => seeds.includes(b.seed));
@@ -749,7 +831,8 @@ function S9c(sets, libText) {
       const r = OLD_LADDER.find(x => x.ids.includes(id)); const f = r.counter === 'goals' ? 'goals' : 'wins';
       const hr = rate(R.pace.map(x => x.checkpoints), f); const br = rate(base.map(b => b.checkpoints), f);
       const ratio = n(id) / ((r.old * hr) / br);
-      parts.push(`${id} ${n(id)} = x${r3(ratio)} of ${r.old} x ${r3(hr)} / ${r3(br)} a match`);
+      const se = ratioSE(n(id) / r.old, perSeed(R.pace.map(x => x.checkpoints), f), perSeed(base.map(b => b.checkpoints), f));
+      parts.push(`${id} ${n(id)} = x${r3(ratio)} of ${r.old} x ${r3(hr)} / ${r3(br)} a match, room ${r3(Math.min(ratio - RATE_BAND[0], RATE_BAND[1] - ratio))} (se ${r3(se)})`);
       if (!(ratio >= RATE_BAND[0] && ratio <= RATE_BAND[1])) out.push(`${k}: ${id} at ${n(id)} is x${r3(ratio)} of old x the per match rate ratio, outside ${RATE_BAND.join(' to ')}`);
     }
     lines.push(`${k}: ${parts.join('; ')}`);
@@ -785,8 +868,11 @@ function S9d(E, libText) {
     const ids = OLD_LADDER.filter(r => r.counter === c).flatMap(r => r.ids);
     for (const k of [...new Set(ids.map(n))]) {
       const held = all.filter(id => !(ids.includes(id) && n(id) >= k));
+      /* Settled the way tick() settles, with no match minute played, so the planted counter
+         is the one judged (run lens F4: a 2 second tick played a minute at roll 0.999, and a
+         goal roll written the other way round, same odds, scored and crossed the line). */
       const at = v => { const s = { ...fresh, totalGoals: 0, totalWins: 0, streak: 0, [COUNTER_FIELD[c]]: v, ach: held.filter(id => T.ACHIEVEMENTS.some(a => a.id === id)), claimed: held.filter(id => T.MILESTONES.some(m => m.id === id)) };
-        const after = T.tick(s, 2, still).state; return [...(after.ach ?? []), ...(after.claimed ?? [])].filter(id => !held.includes(id)).sort(); };
+        T.settleFirsts(s, []); return [...(s.ach ?? []), ...(s.claimed ?? [])].filter(id => !held.includes(id)).sort(); };
       const under = at(k - 1); const on = at(k); const want = ids.filter(id => n(id) === k).sort();
       if (under.length) out.push(`${c} at ${k - 1} earned ${under.join(' ')}, one under its threshold`);
       if (on.join(' ') !== want.join(' ')) out.push(`${c} at ${k} earned ${on.join(' ') || 'nothing'}, the rungs at ${k} are ${want.join(' ')}`);
@@ -803,7 +889,7 @@ const S9_TITLES = { S9a: 'the ladder: its rungs, found by code', S9b: 'the ladde
 async function evaluate(E, libText, seedSets, names, main) {
   const sets = Object.fromEntries(Object.entries(seedSets).map(([k, seeds]) => [k, playRuns(E.T, seeds, main, (main && OVER[k]) || seeds)]));
   const run = { S1: () => S1(E, libText), S2: () => S2(E, libText), S3: () => S3(E, sets), S4: () => S4(E, sets), S5: () => S5(E, sets, main), S6: () => S6(E), S7: () => S7(E, sets),
-    S9a: () => S9a(libText), S9b: () => S9b(E, libText), S9c: () => S9c(sets, libText), S9d: () => S9d(E, libText) };
+    S9a: () => S9a(E, libText), S9b: () => S9b(E, libText), S9c: () => S9c(sets, libText), S9d: () => S9d(E, libText) };
   return { res: Object.fromEntries(names.map(n => [n, run[n]()])), sets };
 }
 let checks = 0; let failed = 0; let dead = 0;
@@ -838,6 +924,13 @@ for (const name of ONLY ? [ONLY] : Object.keys(CONTROLS)) {
   console.log(`   sections red: ${red.join(' ') || 'none'} (expected ${control.red.join(' ')}) [${secs()}]`);
   for (const n of red) console.log(`     ${n}: ${res[n].out[0].slice(0, 220)}`);
   if (!control.red.some(n => red.includes(n))) { dead += 1; console.error(`  FAIL: control ${name} did not fire: none of ${control.red.join(' ')} went red`); continue; }
+  /* A section red for another of its assertions is not this control firing (Round 1543 review). */
+  const unsaid = [];
+  for (const [sec, texts] of Object.entries(control.says ?? {})) for (const t of texts) {
+    const hit = (res[sec]?.out ?? []).find(m => m.includes(t));
+    if (hit) console.log(`     says ${sec}: ${hit.slice(0, 200)}`); else unsaid.push(`${sec} never printed "${t}"`);
+  }
+  if (unsaid.length) { dead += 1; console.error(`  FAIL: control ${name} did not fire for its own reason: ${unsaid.join('; ')}`); continue; }
   const wrong = [...control.red.filter(n => !red.includes(n)).map(n => `${n} stayed green`), ...red.filter(n => !control.red.includes(n)).map(n => `${n} went red too`)];
   if (wrong.length) { failed += 1; console.error(`  FAIL: control ${name}: ${wrong.join(', ')}`); }
 }
