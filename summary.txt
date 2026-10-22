@@ -1,0 +1,6 @@
+old exit=1 4s | old1534: red, 16 failures
+old-basehead exit=1 3s | old1534: red, 580 failures
+old-seeda exit=1 1s | old1534: red, 397 failures
+m-settleafter exit=0 12s | simUsShopPromises: green (sections 0, 1, 2, 3, 4, 5, 8, 9)
+m-settlebeforepay exit=1 12s | simUsShopPromises: red in sections 4, 9
+clean exit=0 0s | 0

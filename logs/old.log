@@ -1,0 +1,21 @@
+  FAIL B nba 6/0: field morale
+  FAIL B nba 20/2: field morale
+  FAIL B nba 52/2: field morale
+  FAIL B nba 122/2: field morale
+  FAIL B nba 132/3: field morale
+  FAIL B nba 146/2: field morale
+  FAIL B nba 146/3: field morale
+nba: A 352 old saves holding nothing that pays, continued 4 seasons, 0 parted; B 248 old saves holding paying cards (217 compared field by field), 7 wrong; 191 stakes settled (64 won, at most 3 held by one save); Cash moved 257.62 against 257.62 printed; fields that differed: {"morale":7}
+  FAIL B nfl 4/3: field morale
+  FAIL B nfl 52/3: field morale
+  FAIL B nfl 62/2: field morale
+  FAIL B nfl 100/3: field morale
+nfl: A 325 old saves holding nothing that pays, continued 4 seasons, 0 parted; B 256 old saves holding paying cards (240 compared field by field), 4 wrong; 294 stakes settled (72 won, at most 4 held by one save); Cash moved 305.25 against 305.25 printed; fields that differed: {"morale":4}
+  FAIL B mlb 52/1: field morale
+  FAIL B mlb 148/3: field morale
+mlb: A 401 old saves holding nothing that pays, continued 4 seasons, 0 parted; B 199 old saves holding paying cards (187 compared field by field), 2 wrong; 44 stakes settled (9 won, at most 2 held by one save); Cash moved 40.31 against 40.31 printed; fields that differed: {"morale":2}
+  FAIL B nhl 24/0: field morale
+  FAIL B nhl 24/1: field morale
+  FAIL B nhl 24/3: field morale
+nhl: A 440 old saves holding nothing that pays, continued 4 seasons, 0 parted; B 160 old saves holding paying cards (149 compared field by field), 3 wrong; 65 stakes settled (20 won, at most 4 held by one save); Cash moved 73.93 against 73.93 printed; fields that differed: {"morale":3}
+old1534: red, 16 failures

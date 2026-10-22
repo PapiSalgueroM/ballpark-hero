@@ -1,0 +1,35 @@
+  FAIL B nba 0/1: 0 stake lines for 1 stakes; purchased after settle
+  FAIL B nba 0/2: 0 stake lines for 2 stakes; purchased after settle
+  FAIL B nba 0/3: 0 stake lines for 2 stakes; purchased after settle
+  FAIL B nba 2/1: lawyer heat 14 to 5 (base 5)
+  FAIL B nba 4/1: Cash moved 0.0000, the cards print 0.2000 (steady 0.2000, stakes 0, office 0.0000)
+  FAIL B nba 4/2: Cash moved 0.0000, the cards print 0.2000 (steady 0.2000, stakes 0, office 0.0000)
+  FAIL B nba 4/3: Cash moved 0.0000, the cards print 0.2000 (steady 0.2000, stakes 0, office 0.0000)
+  FAIL B nba 6/0: 0 stake lines for 1 stakes; purchased after settle
+  FAIL B nba 6/1: 0 stake lines for 1 stakes; purchased after settle
+  FAIL B nba 6/2: 0 stake lines for 1 stakes; purchased after settle
+  FAIL B nba 6/3: 0 stake lines for 1 stakes; purchased after settle
+  FAIL B nba 8/2: Cash moved 0.0000, the cards print 0.0600 (steady 0.0000, stakes 0, office 0.0600)
+  FAIL B nba 12/0: Cash moved 0.0000, the cards print 0.1400 (steady 0.1400, stakes 0, office 0.0000)
+  FAIL B nba 12/1: Cash moved 0.0000, the cards print 0.5648 (steady 0.3400, stakes 0, office 0.2248)
+  FAIL B nba 12/2: Cash moved 0.0000, the cards print 0.7248 (steady 0.3400, stakes 0, office 0.3848)
+  FAIL B nba 12/3: Cash moved 0.0000, the cards print 0.8956 (steady 0.4800, stakes 0, office 0.4156)
+  FAIL B nba 14/1: 0 stake lines for 1 stakes; purchased after settle; Cash moved 0.0000, the cards print 0.2440 (steady 0.0000, stakes 0, office 0.2440)
+  FAIL B nba 14/2: 0 stake lines for 1 stakes; purchased after settle; Cash moved 0.0000, the cards print 0.2888 (steady 0.1400, stakes 0, office 0.1488)
+  FAIL B nba 14/3: 0 stake lines for 1 stakes; purchased after settle; Cash moved 0.0000, the cards print 0.1808 (steady 0.1400, stakes 0, office 0.0408)
+  FAIL B nba 16/1: Cash moved 0.0000, the cards print 0.0080 (steady 0.0000, stakes 0, office 0.0080)
+  FAIL B nba 16/2: Cash moved 0.0000, the cards print 0.0080 (steady 0.0000, stakes 0, office 0.0080)
+  FAIL B nba 16/3: Cash moved 0.0000, the cards print 0.1400 (steady 0.1400, stakes 0, office 0.0000)
+  FAIL B nba 18/0: 0 stake lines for 1 stakes; purchased after settle
+  FAIL B nba 18/1: 0 stake lines for 3 stakes; purchased after settle; Cash moved 0.0000, the cards print 0.0400 (steady 0.0000, stakes 0, office 0.0400)
+  FAIL B nba 18/2: 0 stake lines for 3 stakes; purchased after settle; Cash moved 0.0000, the cards print 0.1400 (steady 0.1400, stakes 0, office 0.0000)
+  FAIL B nba 18/3: 0 stake lines for 3 stakes; purchased after settle; Cash moved 0.0000, the cards print 0.1400 (steady 0.1400, stakes 0, office 0.0000)
+  FAIL B nba 20/0: Cash moved 0.0000, the cards print 0.0720 (steady 0.0000, stakes 0, office 0.0720)
+  FAIL B nba 20/1: 0 stake lines for 1 stakes; purchased after settle; Cash moved 0.0000, the cards print 0.0220 (steady 0.0000, stakes 0, office 0.0220)
+  FAIL B nba 20/2: 0 stake lines for 1 stakes; purchased after settle; Cash moved 0.0000, the cards print 0.0120 (steady 0.0000, stakes 0, office 0.0120)
+  FAIL B nba 20/3: 0 stake lines for 1 stakes; purchased after settle; Cash moved 0.0000, the cards print 0.0020 (steady 0.0000, stakes 0, office 0.0020)
+nba: A 352 old saves holding nothing that pays, continued 4 seasons, 0 parted; B 248 old saves holding paying cards (217 compared field by field), 199 wrong; 191 stakes settled (0 won, at most 3 held by one save); Cash moved 0.00 against 19.58 printed; fields that differed: {}
+nfl: A 325 old saves holding nothing that pays, continued 4 seasons, 0 parted; B 256 old saves holding paying cards (240 compared field by field), 246 wrong; 294 stakes settled (0 won, at most 4 held by one save); Cash moved 0.00 against 41.56 printed; fields that differed: {}
+mlb: A 401 old saves holding nothing that pays, continued 4 seasons, 0 parted; B 199 old saves holding paying cards (187 compared field by field), 62 wrong; 44 stakes settled (0 won, at most 2 held by one save); Cash moved 0.00 against 3.04 printed; fields that differed: {}
+nhl: A 440 old saves holding nothing that pays, continued 4 seasons, 0 parted; B 160 old saves holding paying cards (149 compared field by field), 73 wrong; 65 stakes settled (0 won, at most 4 held by one save); Cash moved 0.00 against 3.31 printed; fields that differed: {}
+old1534: red, 580 failures

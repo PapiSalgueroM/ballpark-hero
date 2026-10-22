@@ -1,0 +1,35 @@
+  FAIL A nba 1/0: parts at record 0 of 58
+  FAIL A nba 1/1: parts at record 0 of 58
+  FAIL A nba 1/2: parts at record 0 of 56
+  FAIL A nba 1/3: parts at record 0 of 56
+  FAIL A nba 2/0: parts at record 0 of 63
+  FAIL A nba 3/0: parts at record 0 of 57
+  FAIL A nba 3/1: parts at record 0 of 56
+  FAIL A nba 3/2: parts at record 0 of 56
+  FAIL A nba 3/3: parts at record 0 of 56
+  FAIL A nba 4/0: parts at record 0 of 60
+  FAIL A nba 5/0: parts at record 0 of 59
+  FAIL A nba 5/1: parts at record 0 of 60
+  FAIL A nba 5/2: parts at record 0 of 64
+  FAIL A nba 5/3: parts at record 0 of 60
+  FAIL B nba 6/0: field morale
+  FAIL A nba 7/0: parts at record 0 of 57
+  FAIL A nba 7/1: parts at record 0 of 59
+  FAIL A nba 7/2: parts at record 0 of 56
+  FAIL A nba 7/3: parts at record 0 of 58
+  FAIL A nba 9/0: parts at record 0 of 58
+  FAIL A nba 9/1: parts at record 0 of 56
+  FAIL A nba 9/2: parts at record 0 of 56
+  FAIL A nba 9/3: parts at record 0 of 56
+  FAIL A nba 11/0: parts at record 0 of 57
+  FAIL A nba 11/1: parts at record 0 of 56
+  FAIL A nba 11/2: parts at record 0 of 58
+  FAIL A nba 11/3: parts at record 0 of 56
+  FAIL A nba 13/0: parts at record 0 of 60
+  FAIL A nba 13/1: parts at record 0 of 59
+  FAIL A nba 13/2: parts at record 0 of 58
+nba: A 89 old saves holding nothing that pays, continued 4 seasons, 89 parted; B 71 old saves holding paying cards (59 compared field by field), 2 wrong; 42 stakes settled (11 won, at most 3 held by one save); Cash moved 50.67 against 50.67 printed; fields that differed: {"morale":2}
+nfl: A 86 old saves holding nothing that pays, continued 4 seasons, 86 parted; B 69 old saves holding paying cards (67 compared field by field), 1 wrong; 85 stakes settled (19 won, at most 3 held by one save); Cash moved 113.66 against 113.66 printed; fields that differed: {"morale":1}
+mlb: A 101 old saves holding nothing that pays, continued 4 seasons, 101 parted; B 59 old saves holding paying cards (54 compared field by field), 0 wrong; 9 stakes settled (3 won, at most 2 held by one save); Cash moved 15.23 against 15.23 printed; fields that differed: {}
+nhl: A 115 old saves holding nothing that pays, continued 4 seasons, 115 parted; B 45 old saves holding paying cards (38 compared field by field), 3 wrong; 28 stakes settled (10 won, at most 3 held by one save); Cash moved 34.45 against 34.45 printed; fields that differed: {"morale":3}
+old1534: red, 397 failures
