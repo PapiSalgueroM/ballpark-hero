@@ -546,24 +546,29 @@ export function pitchPlan(input: PitchInput): PitchPlan {
         let found = -1;
         /* Where the foul needs the pitch to itself: through its free kick, or through its whistle alone. */
         let need = 0;
-        /* First where no build up has to give way; only a foul whose minute has no other room takes a chance's build up,
-           and only the part of it the foul needs (the first measure took 189 build ups for four more fouls seen). */
-        for (const holding of [(l: Layer) => l.priority >= 2, holds]) {
+        const search = (holding: (l: Layer) => boolean) => {
           const held = (s: number, e: number) => layers.some(l => holding(l) && over(l.start, l.end, s, e)) || deadWindows.some(w => over(w.from, w.to, s, e));
           for (const span of victim ? [BEAT_SPAN, 0] : [0]) {
             for (let k = 0; found < 0 && p + k * 0.02 <= latest + EPS; k++) if (!held(p + k * 0.02 - span, p + k * 0.02 + 2 * BEAT_SPAN)) found = p + k * 0.02;
-            if (found >= 0) { meets = span > 0; need = found + 2 * BEAT_SPAN; break; }
+            if (found >= 0) { meets = span > 0; need = found + 2 * BEAT_SPAN; return; }
           }
-          if (found < 0) for (let k = 0; found < 0 && p + k * 0.02 <= latest + EPS; k++) if (!held(p + k * 0.02, p + k * 0.02 + BEAT_SPAN)) { found = p + k * 0.02; need = found + BEAT_SPAN; }
-          if (found >= 0) break;
-        }
-        if (found < 0) {
-          const drawnHere = !layers.some(l => holds(l) && over(l.start, l.end, p, p + 1e-6))
+          for (let k = 0; found < 0 && p + k * 0.02 <= latest + EPS; k++) if (!held(p + k * 0.02, p + k * 0.02 + BEAT_SPAN)) { found = p + k * 0.02; need = found + BEAT_SPAN; }
+        };
+        const here = (holding: (l: Layer) => boolean) => {
+          const drawnHere = !layers.some(l => holding(l) && over(l.start, l.end, p, p + 1e-6))
             && !deadWindows.some(w => (w.foul ? over(w.from, w.to, p, p + 2 * BEAT_SPAN) : w.order > order && over(w.from, w.to, p, p + 1e-6)));
-          if (!drawnHere) return;
-          found = p;
-          need = p + BEAT_SPAN;
-        }
+          if (drawnHere) { found = p; need = p + BEAT_SPAN; }
+        };
+        /* In this order, so every foul staged before a build up could give way is staged exactly where it was: room no
+           build up has to give, then its own place with no build up on it, and only then room a chance's build up gives
+           (only the part of it the foul needs), then its own place over one. Taking the first free instant over a build
+           up cost 189 build ups and showed four more fouls. */
+        const firm = (l: Layer) => l.priority >= 2;
+        search(firm);
+        if (found < 0) here(firm);
+        if (found < 0) search(holds);
+        if (found < 0) here(holds);
+        if (found < 0) return;
         at = Math.round(found * 1e6) / 1e6;
         deadWindows.push({ from: at - (meets ? BEAT_SPAN : 0), to: at + 2 * BEAT_SPAN, order, foul: true });
         const taken = new Set(layers.filter(l => l.via === 'approach' && l.id.startsWith('a') && over(l.start, l.end, at - (meets ? BEAT_SPAN : 0), need)).map(l => l.id.slice(1)));
