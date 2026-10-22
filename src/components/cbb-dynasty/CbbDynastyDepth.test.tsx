@@ -106,7 +106,8 @@ describe('CBB Dynasty: the program layer on the board', () => {
     expect(s.st.depth).toBe(1);
     expect(s.st.teams.DUKE.staff.OC.name).toBeTruthy();
     expect(s.st.teams.DUKE.staff.DC.name).toBeTruthy();
-    expect(screen.getByText(/rivalry night: North Carolina, the in-state game \(both in North Carolina\)/)).toBeTruthy();
+    /* Round 1554: Duke and North Carolina are a real series now (src/data/collegeRivalries.ts). */
+    expect(screen.getByText(/rivalry night: North Carolina, a real rivalry series/)).toBeTruthy();
     fireEvent.click(screen.getByText('Play'));
     fireEvent.click(screen.getByText('Play Round 1'));
     expect(read().st.mySlate).toHaveLength(2);

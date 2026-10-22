@@ -260,6 +260,9 @@ for (const row of seriesRows) {
   const r = cfb.cfbRivalOf(row.a);
   if (!r || r.rival !== row.b || r.kind !== 'series') fail(`${row.a} and ${row.b} are a series in the table but not a series pair in the engine`);
 }
+for (const r of cfb.cfbRivalries()) {
+  if (r.kind === 'series' && !seriesRows.some(s => key(s.a, s.b) === key(r.a, r.b))) fail(`the engine calls ${r.a} and ${r.b} a real series, but no row of the table says so`);
+}
 if (m.rivalMiss > 0) fail(`${m.rivalMiss} week 12 game(s) left a real series unplayed`);
 if (m.seriesUnplayed > 0) fail(`${m.seriesUnplayed} season pair(s) of the series table never met`);
 if (m.confBad > 0) fail(`${m.confBad} school season(s) off the conference count, first: ${m.firstConf}`);
@@ -341,6 +344,9 @@ console.log('9) CBB: its series rows are rivalry pairs, and the table goes by le
   for (const row of riv.CBB_RIVALRY_SERIES) {
     const r = cbb.cbbRivalOf(row.a);
     if (!r || r.rival !== row.b || r.kind !== 'series') fail(`CBB: ${row.a} and ${row.b} are a series in the table but not in the engine`);
+  }
+  for (const r of cbb.cbbRivalries()) {
+    if (r.kind === 'series' && !riv.CBB_RIVALRY_SERIES.some(s => key(s.a, s.b) === key(r.a, r.b))) fail(`CBB: the engine calls ${r.a} and ${r.b} a real series, but no row of the table says so`);
   }
   let unsorted = 0; let checked = 0; let differs = 0;
   for (let seed = 1; seed <= 5; seed += 1) {

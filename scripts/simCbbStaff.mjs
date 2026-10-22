@@ -639,9 +639,14 @@ console.log('5) rivalry night: one rival each, in-state pairs are real geography
     if (cbb.CBB_SCHOOL_STATES[id]) fail(`${id} has a state the college table never gave it`);
     if (stateOf.has(name)) fail(`the college table now holds ${name}: give ${id} its state in CBB_SCHOOL_STATES and move it into the join`);
   }
-  let inState = 0; let generated = 0;
+  let inState = 0; let generated = 0; let series = 0;
   for (const r of rivalries) {
-    if (r.kind === 'in-state') {
+    /* Round 1554: a real series from src/data/collegeRivalries.ts comes first;
+       scripts/simCfbSlate.mjs holds every one of them to its two sources. */
+    if (r.kind === 'series') {
+      series += 1;
+      if (r.state) fail(`${r.a} and ${r.b} are a real series but carry a state`);
+    } else if (r.kind === 'in-state') {
       inState += 1;
       const sa = stateOf.get(NAME[r.a]); const sb = stateOf.get(NAME[r.b]);
       if (!sa || sa !== sb || r.state !== sa) fail(`${r.a} and ${r.b} are called an in-state game, the college table says ${sa} and ${sb}`);
@@ -650,7 +655,7 @@ console.log('5) rivalry night: one rival each, in-state pairs are real geography
       if (r.kind !== 'generated' || r.state) fail(`${r.a} and ${r.b} carry no shared state but are not marked generated`);
     }
   }
-  console.log(`   ${rivalries.length} pairs: ${inState} in-state, ${generated} generated; in-state ${rivalries.filter(r => r.kind === 'in-state').map(r => `${r.a}-${r.b}`).join(', ')}`);
+  console.log(`   ${rivalries.length} pairs: ${series} real series, ${inState} in-state, ${generated} generated; in-state ${rivalries.filter(r => r.kind === 'in-state').map(r => `${r.a}-${r.b}`).join(', ')}`);
   console.log(`   ${dyn.rivalryGames} rivalry games played: swings out of range ${dyn.swingOut}, morale not reaching strength ${dyn.moraleMiss}, budgets off the swing ${dyn.budgetMiss} (over ${dyn.myRivalry} of my own), rivals not meeting exactly once ${dyn.rematches}, rivalry nights not two games each ${dyn.nightBroke}`);
   if (dyn.rivalryGames === 0) fail('no rivalry game was ever played');
   if (dyn.swingOut) fail(`${dyn.swingOut} rivalry swings out of range, first: ${dyn.firstSwing}`);
