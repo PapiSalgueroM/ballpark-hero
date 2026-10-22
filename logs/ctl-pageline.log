@@ -1,0 +1,5 @@
+2) the soccer step, the cap it shares with the phone, and the hub line
+   CONTROL pageline: the page feeds the line his popularity
+   FAIL the page draws the morale line 0 times as wired (1 data-morale-line marks): "{career.phase === "playing" && !career.retired && !(career.matchFixBanned > 1) && !career.prisonSeasons && ( <p className="text-[10px] text-muted-foreground pl-16" data-morale-line>{soccerMoraleLine(career.morale)}</p> )}"
+   neutral 81, 15 morale points a step; 13 steps, 15 caps, 5 ratings, 5 hub lines and 101 said steps checked, the page wired 0 time(s)
+simCareerForm: RED, 1 failure(s)

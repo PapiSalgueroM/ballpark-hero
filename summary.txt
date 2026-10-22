@@ -1,0 +1,6 @@
+ctl-nogate exit=1 16s | simCareerForm: RED, 1 failure(s)
+ctl-pageline exit=1 1s | simCareerForm: RED, 1 failure(s)
+ctl-double exit=1 112s | simCareerForm: RED, 3 failure(s)
+ctl-divisor exit=1 5s | simCareerForm: RED, 1 failure(s)
+ctl-posttext exit=1 139s | simCareerForm: RED, 4 failure(s)
+ctl-zero exit=1 139s | simCareerForm: RED, 4 failure(s)
