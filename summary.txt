@@ -1,0 +1,5 @@
+endings-trial exit=1 79s | FAIL: 50 check(s) failed
+endings-ped exit=1 95s | FAIL: 18 check(s) failed
+endings-pedoff exit=1 97s | FAIL: 2 check(s) failed
+endings-trialoff exit=1 75s | FAIL: 3 check(s) failed
+endings-prison exit=1 63s | FAIL: 50 check(s) failed
