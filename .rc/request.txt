@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+walk: node .rc/x/walk1534.mjs
+shopwalk: node scripts/playUsShopPromises.mjs
