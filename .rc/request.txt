@@ -1,0 +1,37 @@
+# Release BI, Round 1335 (the board judges the season you had, and the job market), merged as ea937568 (first parent
+# 420902cd). Send with x/minus1335.sh, x/calImport1344.mjs, x/mkbase.sh and x/ctlPatch2.mjs (Round BIH: since Round 1344
+# put SAVE_CAPS beside 1335's calendar import, x/minus1335.sh also moves that one import onto its own line in the ref
+# it hands treeWithoutMerge, through x/calImport1344.mjs; see the helper's header). Every simCmBoardVerdict line binds its base:
+# BASE_SHA is this tree WITHOUT Round 1335 (x/minus1335.sh: treeWithoutMerge ea937568 420902cd, with the one help
+# file conflict handled as its header explains; it fails closed otherwise), which x/mkbase.sh checks out as
+# CM_BOARD_BASE (mkbase.sh's own default, 1027b08c, is the round's original base). Controls (take-nopin,
+# take-keepfailed, dailies-hscard, dailies-hotstart, title-played, title-weights) must exit 1 with FIRED; the walk's
+# controls (walk-noconfirm, walk-nofate, walk-rise) must exit 1 with FIRED. The digest and the Round 1081 pin are
+# retaken once on the release's final tree (part two); their plain lines live in rcg-C.
+# Round BII: in rBIi-m14c (three wide) small and take-nopin exited 2 "treeWithoutMerge: conflicts in clubManagerCalendar.ts" while other lines formed the same base: concurrency in the shared checkout. A line that exits 2 that way is rerun alone with #!serial (rBIi-c35 on c2f8d746: small 0, takeover 0, take-nopin FIRED).
+# Round BIK (part five): Round 1508 added livingWorldOf to the same calendar import line; x/calImport1344.mjs now takes either form (exactly one, exactly once) and moves livingWorldOf with SAVE_CAPS. No line here changed.
+#!build
+#!playwright
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simAcademy: node scripts/simAcademy.mjs
+simEras: node scripts/simEras.mjs
+simPress: node scripts/simPress.mjs
+simRoles: node scripts/simRoles.mjs
+simWilderness: node scripts/simWilderness.mjs
+simClubManagerALeague: node scripts/simClubManagerALeague.mjs
+simClubManagerBudget: node scripts/simClubManagerBudget.mjs
+simClubManagerMeters: node scripts/simClubManagerMeters.mjs
+simClubManagerScore: node scripts/simClubManagerScore.mjs
+simCmLeagueFixtures: node scripts/simCmLeagueFixtures.mjs
+simCmVarLedger: node scripts/simCmVarLedger.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+unitset: node_modules/.bin/vitest run src/lib/clubManagerBoardVerdict.test.ts src/test/clubManagerOfferConfirm.test.tsx src/test/cmLeagueLeadersCard.test.tsx src/test/managerHotSeatCarryOnCard.test.tsx src/test/dailyMenuResume.test.tsx --testTimeout=300000 --hookTimeout=120000
+walk: node scripts/playCmBoardVerdict.mjs
+walk-noconfirm: git worktree add -q .claude/worktrees/ctl1 HEAD && node .rc/x/ctlPatch2.mjs .claude/worktrees/ctl1 noconfirm && (cd .claude/worktrees/ctl1 && ../../../node_modules/.bin/vite build --outDir "$OLDPWD/dist-noconfirm" --emptyOutDir --logLevel error) && DIST=dist-noconfirm PLAY_BOARD_CONTROL=noconfirm node scripts/playCmBoardVerdict.mjs
+walk-nofate: sleep 4 && git worktree add -q .claude/worktrees/ctl2 HEAD && node .rc/x/ctlPatch2.mjs .claude/worktrees/ctl2 nofate && (cd .claude/worktrees/ctl2 && ../../../node_modules/.bin/vite build --outDir "$OLDPWD/dist-nofate" --emptyOutDir --logLevel error) && DIST=dist-nofate PLAY_BOARD_CONTROL=nofate node scripts/playCmBoardVerdict.mjs
+walk-rise: sleep 8 && git worktree add -q .claude/worktrees/ctl3 HEAD && node .rc/x/ctlPatch2.mjs .claude/worktrees/ctl3 rise && (cd .claude/worktrees/ctl3 && ../../../node_modules/.bin/vite build --outDir "$OLDPWD/dist-rise" --emptyOutDir --logLevel error) && DIST=dist-rise PLAY_BOARD_CONTROL=rise node scripts/playCmBoardVerdict.mjs
+simDailyClubPool: node scripts/simDailyClubPool.mjs
+simMidSeasonStart: node scripts/simMidSeasonStart.mjs
+simCmApplications: node scripts/simCmApplications.mjs
+worldbrowser-head: MANAGER_WORLD_BROWSER_CONTROL=all node scripts/simManagerWorldBrowser.mjs
