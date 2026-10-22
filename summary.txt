@@ -1,0 +1,6 @@
+namesakes-check exit=0 0s | src/data/marketNamesakes.json is current: 62 names
+simHarnessAnchors exit=0 52s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simTriviaBank exit=0 67s | simTriviaBank: all checks passed
+simNoRivalNames exit=0 15s | No rival product names found. 0 findings.
+simStorageWrites exit=0 2s | simStorageWrites: all green (owed: 12)
+tsc exit=0 80s | 
