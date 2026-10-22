@@ -1,0 +1,37 @@
+1) the wheel holds exactly the seven challenges the record can total
+   7 challenges, all 400 spins scoreable
+2) every team the game deals has franchise codes
+   30 teams, 50 codes, none shared; 4 relocated franchises carry their old codes
+3) fixed fives against hand computed numbers
+   five A 96 scores 79, five B 16.5 scores 10, best 119.5, worst 5.5
+4) Lowest turns the range round
+   five A: highest 79, lowest 21; 10 Lowest picks read best here and closeness the right way round; 40 random fives, highest plus lowest within 0 of 100
+5) separation over 300 seeded deals of real looking careers
+   300 deals: best five 100 and worst 0 on 300; random fives average 49.7 over 300
+   the old judge on the same careers: best five average 99.0, worst five 99.0, same band on 300 of 300
+6) the best and worst five equal a brute force over every five
+   120 extremes on 60 deals (27 with a shared name) and 360 on correlated deals match the brute force; the shared name trap totals 100
+7) the namesake guard
+   7 roster names, 13 census, span and games cases and 5 illegal fives behave
+8) steals and blocks only count careers that began in 1973-74 or later
+   9 cases
+9) per game rounds to one decimal, totals stay whole, nothing is invented
+   7 cases
+10) source: no model, no edge function, no NBA offline judge, points follow the score
+   hook and page call no model or edge function; the completion records the score
+11) every refusal names the player and carries no dash
+   28 refusals
+12) points are the score on the old 500 scale, and the hit mark is NBA Stat Line's
+   6 cases; hit mark 90, Stat Line's 90
+13) the hook's half: each pool is the dealt team's own search rows, and the five is scored in the spin's direction
+CONTROL hookleague ON: the hook is loaded from a mutated copy
+  FAIL (section 13): Atlanta Hawks: the hook's pool holds [Hook ATL1:ok, Hook ATL2:ok, Hook ATL3:ok, Hook BOS1:no-record, Hook BOS2:no-record, Hook BOS3:no-record, Hook CHI1:no-record, Hook CHI2:no-record, Hook CHI3:no-record, Hook DEN1:no-record, Hook DEN2:no-record, Hook DEN3:no-record, Hook Long:no-record, Hook MIA1:no-record, Hook MIA2:no-record, Hook MIA3:no-record, Hook Twin:namesake, Hook Visitor:ok], the search offers [Hook ATL1:ok, Hook ATL2:ok, Hook ATL3:ok, Hook Twin:namesake]
+  FAIL (section 13): Boston Celtics: the hook's pool holds [Hook ATL1:no-record, Hook ATL2:no-record, Hook ATL3:no-record, Hook BOS1:ok, Hook BOS2:ok, Hook BOS3:ok, Hook CHI1:no-record, Hook CHI2:no-record, Hook CHI3:no-record, Hook DEN1:no-record, Hook DEN2:no-record, Hook DEN3:no-record, Hook Long:no-record, Hook MIA1:no-record, Hook MIA2:no-record, Hook MIA3:no-record, Hook Twin:namesake, Hook Visitor:ok], the search offers [Hook BOS1:ok, Hook BOS2:ok, Hook BOS3:ok, Hook Visitor:ok]
+  FAIL (section 13): Chicago Bulls: the hook's pool holds [Hook ATL1:no-record, Hook ATL2:no-record, Hook ATL3:no-record, Hook BOS1:no-record, Hook BOS2:no-record, Hook BOS3:no-record, Hook CHI1:ok, Hook CHI2:ok, Hook CHI3:ok, Hook DEN1:no-record, Hook DEN2:no-record, Hook DEN3:no-record, Hook Long:no-record, Hook MIA1:no-record, Hook MIA2:no-record, Hook MIA3:no-record, Hook Twin:namesake, Hook Visitor:no-record], the search offers [Hook CHI1:ok, Hook CHI2:ok, Hook CHI3:ok, Hook Twin:namesake]
+  FAIL (section 13): Denver Nuggets: the hook's pool holds [Hook ATL1:no-record, Hook ATL2:no-record, Hook ATL3:no-record, Hook BOS1:no-record, Hook BOS2:no-record, Hook BOS3:no-record, Hook CHI1:no-record, Hook CHI2:no-record, Hook CHI3:no-record, Hook DEN1:ok, Hook DEN2:ok, Hook DEN3:ok, Hook Long:namesake, Hook MIA1:no-record, Hook MIA2:no-record, Hook MIA3:no-record, Hook Twin:namesake, Hook Visitor:no-record], the search offers [Hook DEN1:ok, Hook DEN2:ok, Hook DEN3:ok, Hook Long:namesake]
+  FAIL (section 13): Miami Heat: the hook's pool holds [Hook ATL1:no-record, Hook ATL2:no-record, Hook ATL3:no-record, Hook BOS1:no-record, Hook BOS2:no-record, Hook BOS3:no-record, Hook CHI1:no-record, Hook CHI2:no-record, Hook CHI3:no-record, Hook DEN1:no-record, Hook DEN2:no-record, Hook DEN3:no-record, Hook Long:no-record, Hook MIA1:ok, Hook MIA2:ok, Hook MIA3:ok, Hook Twin:namesake, Hook Visitor:no-record], the search offers [Hook MIA1:ok, Hook MIA2:ok, Hook MIA3:ok]
+  FAIL (section 13): highest: the hook scored 33|63|152|20|50/0.583,50/0.149,26/0.364,24/0.000,22/0.000, the pools give 33|63|152|20|30/1.000,50/0.149,26/0.364,24/0.000,22/0.000
+  FAIL (section 13): lowest: the hook scored 67|63|20|152|2/0.417,3/0.851,4/0.636,5/1.000,6/1.000, the pools give 67|63|20|152|2/0.000,3/0.851,4/0.636,5/1.000,6/1.000
+   fixture five: highest 33, lowest 67; 11 hook checks; reads 11
+
+simNbaStartingFive CONTROL hookleague FIRED: section 13 went red as it must (red sections: 13)
