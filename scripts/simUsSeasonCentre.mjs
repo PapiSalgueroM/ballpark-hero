@@ -103,7 +103,9 @@
  * Since the move the controls minutes, points, forty, level and oddtd (and
  * lawdrift) patch the law where it lives, src/lib/gameLaws/nflScore.ts and
  * src/lib/gameLaws/nfl.ts; every other NFL control still patches the
- * number file.
+ * number file. Since Round 1542 the drive arithmetic lives in
+ * src/lib/gameLaws/nflDrives.ts (moved out of nfl.ts with every body
+ * unchanged), so oddtd patches it there; minutes still patches nfl.ts.
  *
  * Round 1300 (usPlayoffLay lifted out of usPlayoffPath): the same mode keeps a
  * second RECEIPT, chosen with US_SEASON_DIGEST_RECEIPT=lay (the default, law,
@@ -280,6 +282,8 @@ const NFL = 'src/lib/season/nfl.ts';
 /* Round 1221: the NFL's score law lives in two files of its own; the controls that change the law patch it there */
 const NFL_SCORE = 'src/lib/gameLaws/nflScore.ts';
 const NFL_STORY = 'src/lib/gameLaws/nfl.ts';
+/* Round 1542: the story's drive arithmetic moved to a file of its own; the control on it patches it there */
+const NFL_DRIVES = 'src/lib/gameLaws/nflDrives.ts';
 /* Round 1212: baseball's number file, its eager held words and its ledger */
 const MLB = 'src/lib/season/mlb.ts';
 const MLB_HELD = 'src/lib/mlbSeasonHeld.ts';
@@ -322,7 +326,7 @@ const CONTROLS = {
   points: { section: 7, label: 'points a team game', patches: [{ file: NFL_SCORE, from: 'const TD_A_GAME = 2.6;', to: 'const TD_A_GAME = 3.4;' }] },
   forty: { section: 7, label: 'scores 40 or more', patches: [{ file: NFL_SCORE, from: '(TD_A_GAME + 0.05 * e) / DRIVES', to: '(TD_A_GAME + 0.4 * e) / DRIVES' }] },
   level: { section: 7, label: 'level games stay under', patches: [{ file: NFL_SCORE, from: '    if (home) us += more; else them += more;', to: '    if (home) us += 0 * more; else them += 0 * more;' }] },
-  oddtd: { section: 7, label: 'touchdowns not worth seven', patches: [{ file: NFL_STORY, from: '        out.push({ t, f, s, cost: Math.abs(rest - 7 * t) + 4 * s });', to: '        out.push({ t, f, s, cost: 4 * s });' }] },
+  oddtd: { section: 7, label: 'touchdowns not worth seven', patches: [{ file: NFL_DRIVES, from: '        out.push({ t, f, s, cost: Math.abs(rest - 7 * t) + 4 * s });', to: '        out.push({ t, f, s, cost: 4 * s });' }] },
   bigkick: { section: 7, label: 'makes five or six', patches: [{ file: NFL, from: '    const need = left / (n - k);', to: '    const need = MAX_FG;' }] },
   /* Release AP: the line an engine that only makes halves no longer needs, and every older save does */
   oddsack: { section: 3, label: 'sacks in tenths still opens', patches: [{ file: NFL, from: '    if (left % 5 > 0) t[t.indexOf(Math.max(...t))] += left % 5;\n', to: '' }] },

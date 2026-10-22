@@ -32,7 +32,7 @@
    path in src/lib/gmGameScore.ts and this file rides with a card alone.
    `gameStory` takes what `readGmLastGame` hands back as it is. */
 import { keyedRng } from './keyedRng';
-import { isGmScore, quickGame, type GameDayFixture, type ToldGame } from './gmGameScore';
+import { gmStoryKey, isGmScore, quickGame, type GameDayFixture, type ToldGame } from './gmGameScore';
 import type { DerivedGame, SeasonEvent } from './season/core';
 import type { ScoreLaw, StoryLaw } from './gameLaws/types';
 
@@ -109,7 +109,7 @@ function storyOf(law: GameDayLaw, g: ToldGame, viewAs: 'home' | 'away', md: numb
   if (typeof law.maxScore !== 'number' || !(g.homeScore <= law.maxScore) || !(g.awayScore <= law.maxScore)) return null;
   const past = g.beyond === true;
   if (past && typeof law.storyBeyond !== 'function') return null;
-  const rng = keyedRng(`${g.key}|story|${g.homeScore}-${g.awayScore}`);
+  const rng = keyedRng(gmStoryKey(g));
   const raw = past ? law.storyBeyond!(g.homeScore, g.awayScore, rng) : law.story.events(g.homeScore, g.awayScore, rng);
   if (!Array.isArray(raw)) return null;
   const length = law.story.clock.length;
