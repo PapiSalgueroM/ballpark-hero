@@ -1,0 +1,16 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run $(cat .rc/x/vlist.txt) --testTimeout=300000 --hookTimeout=120000 > /tmp/v.log 2>&1; s=$?; grep -E "FAIL|Test Files|Tests  " /tmp/v.log | head -40; echo "vitest exit $s"; exit $s
+sa-1: SIM_SEASON_AWARDS_SECTIONS=1 node scripts/simSoccerSeasonAwards.mjs
+sa-2: SIM_SEASON_AWARDS_SECTIONS=2 node scripts/simSoccerSeasonAwards.mjs
+sa-2-s11: SIM_SEASON_AWARDS_SECTIONS=2 SIM_SEASON_AWARDS_SEED=11 node scripts/simSoccerSeasonAwards.mjs
+sa-2-s13: SIM_SEASON_AWARDS_SECTIONS=2 SIM_SEASON_AWARDS_SEED=13 node scripts/simSoccerSeasonAwards.mjs
+sa-3: SIM_SEASON_AWARDS_SECTIONS=3 node scripts/simSoccerSeasonAwards.mjs
+sa-4: SIM_SEASON_AWARDS_SECTIONS=4 node scripts/simSoccerSeasonAwards.mjs
+sa-56: SIM_SEASON_AWARDS_SECTIONS=5,6 node scripts/simSoccerSeasonAwards.mjs
+rival: node scripts/simNoRivalNames.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+storage: node scripts/simStorageWrites.mjs
+awards: node scripts/simAwards.mjs
+trust: node scripts/simTrustCopy.mjs
+worldtruth: node scripts/simSoccerWorldTruth.mjs
+form-15: SIM_CAREER_FORM_SECTIONS=1,5 node scripts/simCareerForm.mjs
