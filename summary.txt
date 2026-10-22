@@ -1,0 +1,3 @@
+owner-saleleague exit=1 2s | simSoccerOwnerTail: 1 failure(s)
+owner-s1 exit=0 2s | simSoccerOwnerTail: green. The owner picks his club, plays on the table, and every call has a cost and a reason.
+tsc exit=0 70s | 
