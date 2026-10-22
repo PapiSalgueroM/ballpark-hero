@@ -1,0 +1,9 @@
+cfbstaff: node scripts/simCfbStaff.mjs
+cfbstaff-noslate: CFB_STAFF_CONTROL=noslate node scripts/simCfbStaff.mjs
+cfbstaff-legacy: CFB_STAFF_CONTROL=legacy node scripts/simCfbStaff.mjs
+seat: node scripts/simCollegeSeat.mjs
+cbbstaff: node scripts/simCbbStaff.mjs
+cbbstaff-rematch: CBB_STAFF_CONTROL=rematch node scripts/simCbbStaff.mjs
+cfbdynasty: node scripts/simCfbDynasty.mjs
+savekeeper: node scripts/simSaveKeeper.mjs
+engineids: node scripts/simEngineIds.mjs
