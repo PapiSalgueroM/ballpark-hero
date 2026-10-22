@@ -907,8 +907,8 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
 
       {/* Away earnings modal */}
       {g.awayPay !== null && (
-        <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4" onClick={g.dismissAway}>
-          <div role="dialog" aria-modal="true" aria-label="While you were away" tabIndex={-1} ref={focusDialogOnMount} onKeyDown={escapeCloses(g.dismissAway)} className="bg-card border border-border rounded-2xl p-6 max-w-sm w-full text-center" onClick={e => e.stopPropagation()}>
+        <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4" style={OVERLAY_ABOVE_BANNER} onClick={g.dismissAway}>
+          <div role="dialog" aria-modal="true" aria-label="While you were away" tabIndex={-1} ref={focusDialogOnMount} onKeyDown={escapeCloses(g.dismissAway)} className="bg-card border border-border rounded-2xl p-6 max-w-sm w-full text-center overflow-y-auto" style={boxInsideOverlay('100%')} onClick={e => e.stopPropagation()}>
             <div className="text-4xl mb-2">🏟️</div>
             <div className="text-lg font-bold font-display text-foreground">While you were away</div>
             <p className="text-sm text-muted-foreground mt-1">The turnstiles kept spinning at {Math.round(offlineRateOf(s) * 100)}% speed.</p>
