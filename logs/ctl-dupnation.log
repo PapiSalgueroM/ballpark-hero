@@ -1,0 +1,14 @@
+NEGATIVE CONTROL dupnation: oly-2012's field holds Spain twice (section 3 must fail)
+section 1: the ledger
+  FAIL [1] oly-2012 field differs from the ledger
+  69 facts, 165 reads, partial: oly-2028 oly-2032 wc-2027 wc-2031
+section 2: the calendar
+  2004 to 2050: 23 summers with an edition, 24 without
+  oly-2004 - wc-2006 - oly-2008 - wc-2010 - oly-2012 - wc-2014 - oly-2016 - - wc-2019 - oly-2021 - wc-2023 oly-2024 - - wc-2027 oly-2028 - - wc-2031 oly-2032 - - wc-2035 oly-2036 - - wc-2039 oly-2040 - - wc-2043 oly-2044 - - wc-2047 oly-2048 - -
+section 3: the fields
+  FAIL [3] oly-2012 field holds a nation twice
+  11 played fields, 46 nations, no flag: Puerto Rico, Serbia and Montenegro
+  12 summers 2025 to 2050 draw their field (the same for every career)
+section 6: one engine and the stream
+  1574 src files fenced, 60 tournaments played twice, Math.random calls 0
+simCareerIntl: control dupnation FIRED (section 3, 1 failures)

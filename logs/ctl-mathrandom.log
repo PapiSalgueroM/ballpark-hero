@@ -1,0 +1,36 @@
+NEGATIVE CONTROL mathrandom: the pot draw uses Math.random (section 6 must fail)
+section 1: the ledger
+  69 facts, 165 reads, partial: oly-2028 oly-2032 wc-2027 wc-2031
+section 2: the calendar
+  2004 to 2050: 23 summers with an edition, 24 without
+  oly-2004 - wc-2006 - oly-2008 - wc-2010 - oly-2012 - wc-2014 - oly-2016 - - wc-2019 - oly-2021 - wc-2023 oly-2024 - - wc-2027 oly-2028 - - wc-2031 oly-2032 - - wc-2035 oly-2036 - - wc-2039 oly-2040 - - wc-2043 oly-2044 - - wc-2047 oly-2048 - -
+section 3: the fields
+  11 played fields, 47 nations, no flag: Puerto Rico, Serbia and Montenegro
+  FAIL [3] wc-2027 drawn field differs between two careers
+  FAIL [3] oly-2028 drawn field differs between two careers
+  FAIL [3] wc-2031 drawn field differs between two careers
+  FAIL [3] oly-2032 drawn field differs between two careers
+  FAIL [3] wc-2035 drawn field differs between two careers
+  FAIL [3] oly-2036 drawn field differs between two careers
+  FAIL [3] wc-2039 drawn field differs between two careers
+  FAIL [3] oly-2040 drawn field differs between two careers
+  FAIL [3] wc-2043 drawn field differs between two careers
+  FAIL [3] oly-2044 drawn field differs between two careers
+  FAIL [3] wc-2047 drawn field differs between two careers
+  FAIL [3] oly-2048 drawn field differs between two careers
+  12 summers 2025 to 2050 draw their field (the same for every career)
+section 6: one engine and the stream
+  FAIL [6] career 0 played oly-2004 two ways
+  FAIL [6] career 2 played wc-2006 two ways
+  FAIL [6] career 4 played oly-2008 two ways
+  FAIL [6] career 6 played wc-2010 two ways
+  FAIL [6] career 8 played oly-2012 two ways
+  FAIL [6] career 10 played wc-2014 two ways
+  FAIL [6] career 12 played oly-2016 two ways
+  FAIL [6] career 15 played wc-2019 two ways
+  FAIL [6] career 17 played oly-2021 two ways
+  FAIL [6] career 19 played wc-2023 two ways
+  FAIL [6] career 20 played oly-2024 two ways
+  FAIL [6] career 23 played wc-2027 two ways
+  1574 src files fenced, 60 tournaments played twice, Math.random calls 5817
+simCareerIntl: control mathrandom FIRED (section 6, 61 failures)

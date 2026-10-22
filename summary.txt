@@ -1,0 +1,11 @@
+simCareerIntl exit=0 1s | simCareerIntl: GREEN, 7367 checks over sections 1,2,3,6
+ctl-onesource exit=1 1s | simCareerIntl: control onesource FIRED (section 1, 1 failures)
+ctl-shiftyear exit=1 1s | simCareerIntl: control shiftyear FIRED (section 2, 3 failures)
+vitest-intl exit=0 3s |    Duration  2.28s (transform 147ms, setup 98ms, collect 105ms, tests 1.27s, environment 362ms, prepare 149ms)
+ctl-dupnation exit=1 1s | simCareerIntl: control dupnation FIRED (section 3, 1 failures)
+ctl-fieldsize exit=1 1s | simCareerIntl: control fieldsize FIRED (section 3, 1 failures)
+ctl-genfield exit=1 1s | simCareerIntl: control genfield FIRED (section 3, 12 failures)
+ctl-copy exit=1 1s | simCareerIntl: control copy FIRED (section 6, 3 failures)
+ctl-mathrandom exit=1 1s | simCareerIntl: control mathrandom FIRED (section 6, 61 failures)
+simNoRivalNames exit=0 13s | No rival product names found. 0 findings.
+tsc exit=2 55s | src/lib/careerIntl.test.ts(276,22): error TS2322: Type 'string' is not assignable to type 'IntlSummerEntry[]'.

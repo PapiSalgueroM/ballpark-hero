@@ -1,0 +1,11 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-intl: node_modules/.bin/vitest run src/lib/careerIntl.test.ts --testTimeout=300000 --hookTimeout=120000
+simCareerIntl: node scripts/simCareerIntl.mjs
+ctl-onesource: INTL_CONTROL=onesource node scripts/simCareerIntl.mjs
+ctl-shiftyear: INTL_CONTROL=shiftyear node scripts/simCareerIntl.mjs
+ctl-dupnation: INTL_CONTROL=dupnation node scripts/simCareerIntl.mjs
+ctl-fieldsize: INTL_CONTROL=fieldsize node scripts/simCareerIntl.mjs
+ctl-genfield: INTL_CONTROL=genfield node scripts/simCareerIntl.mjs
+ctl-copy: INTL_CONTROL=copy node scripts/simCareerIntl.mjs
+ctl-mathrandom: INTL_CONTROL=mathrandom node scripts/simCareerIntl.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
