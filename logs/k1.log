@@ -1,0 +1,7 @@
+MUTATION k1 APPLIED (1 edits)
+simNbaEarnedDraft: green.
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[31m[1mAssertionError[22m: expected 78 to be 72 // Object.is equality[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m25 passed[39m[22m[90m (26)[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/nbaEarnedDraft.test.ts,title=src/lib/nbaEarnedDraft.test.ts > the host and the three presses > the two knobs are one rule for every club%2C his own included%3A a second rounder plays one season at the minimum%2C a man from pick 13 never grows,line=172,column=28::AssertionError: expected 78 to be 72 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 72%0A+ 78%0A%0A ❯ src/lib/nbaEarnedDraft.test.ts:172:28%0A%0A
+k1 CAUGHT: harness 0, vitest 1

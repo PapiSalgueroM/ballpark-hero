@@ -1,0 +1,10 @@
+fleet exit=0 14s | simNbaEarnedDraft: green.
+partial exit=1 13s | PARTIAL CAUGHT: exit 1
+oneset exit=1 13s | simNbaEarnedDraft: RED in section 7.
+j1 exit=1 27s | j1 CAUGHT: quick 1, combine 1
+probe exit=0 24s | PROBE2  108  old HIS 5 season deal -> kept his deal (years 4, salary unchanged)
+k1 exit=1 15s | k1 CAUGHT: harness 0, vitest 1
+mut-years exit=0 15s | MUT years CAUGHT: vitest 1, harness 1
+fxget exit=0 2s |      12 old-run2
+fxcombine exit=1 13s | simNbaEarnedDraft: RED in section 7.
+after exit=0 13s | simNbaEarnedDraft: green.

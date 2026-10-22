@@ -1,0 +1,15 @@
+MUTATION probe APPLIED (3 edits)
+PROBE2   80  new CPU 2 season deal -> gone
+PROBE2 3052  new CPU 2 season deal -> kept his deal (years 1, salary unchanged)
+PROBE2   24  new CPU 4 season deal -> gone
+PROBE2 3108  new CPU 4 season deal -> kept his deal (years 3, salary unchanged)
+PROBE2  108  new HIS 2 season deal -> kept his deal (years 1, salary unchanged)
+PROBE2  108  new HIS 5 season deal -> kept his deal (years 4, salary unchanged)
+PROBE2 1080  old CPU 4 season deal -> kept his deal (years 3, salary unchanged)
+PROBE2  108  old HIS 4 season deal -> kept his deal (years 3, salary unchanged)
+PROBE2  108  old HIS 5 season deal -> kept his deal (years 4, salary unchanged)
+   old set 1 (seeds 1 to 10), run 1: 12 careers in 5.1 s
+   new set 1 (seeds 1 to 10), run 1: 12 careers in 5.4 s
+   shard 0/1: 24 careers in 10.5 s; Math.random called 0 times while the fleet played
+PROBE2  108  old HIS 4 season deal -> kept his deal (years 3, salary unchanged)
+PROBE2  108  old HIS 5 season deal -> kept his deal (years 4, salary unchanged)
