@@ -100,6 +100,20 @@
        prestige programs' title share 91.5 to 93.2% legacy and 91.8 to 94.7%
        with the layer (printed, too few titles to band). UPSET_DRIFT_BAND
        [-3.5, -0.5] and WEAK_DRIFT_BAND [-0.8, 0.1];
+     RE-MEASURED IN ROUND 1554 (2026-10-22, runner r1554-s4, the same five
+       seed bases). A new dynasty now also plays the real season: a slate
+       set at kickoff with no repeated opponent (src/lib/collegeProgram.ts
+       collegeSlate). The legacy arm still plays the old random draw, so this
+       drift is the layer plus the schedule. Upset rate -3.36, -3.43, -3.45,
+       -3.10, -3.59 (spread 0.49); UNLV regular season wins -1.34, -1.46,
+       -1.41, -1.37, -1.36 (spread 0.12): UNLV, the weakest program, used to
+       meet the other three Group of Five schools about eight times a season
+       and now meets each once, its other games against bigger programs, and a
+       slate with more mismatches has fewer upsets. Top six title share 91.5
+       to 93.2% legacy, 95.2 to 95.8% with the layer. UPSET_DRIFT_BAND
+       [-5.0, -1.8] and WEAK_DRIFT_BAND [-1.9, -0.9], about 1.4 and 0.45
+       either side of the measured range (the old bands sat 1.0 to 1.5 and
+       0.35 to 0.4 out);
      provoked payroll walk: someone walked in 4 of 10 seeds (a 95 is
        sometimes poached first); conference seasons with uneven league game
        counts 990 of 1000, title games the percentage rule picked differently
@@ -147,8 +161,8 @@ const UPLIFT_BAND = [8.5, 13.5];
 const WIN_BAND = [0.6, 1.3];
 const FIELDS_FLOOR = 5;
 const BAL_SEASONS = 600;
-const UPSET_DRIFT_BAND = [-3.5, -0.5];
-const WEAK_DRIFT_BAND = [-0.8, 0.1];
+const UPSET_DRIFT_BAND = [-5.0, -1.8];
+const WEAK_DRIFT_BAND = [-1.9, -0.9];
 
 /* Each control: the exact bundled text it rewrites and what it becomes. */
 const CONTROLS = {
@@ -158,7 +172,8 @@ const CONTROLS = {
   swing: ['const share = Math.min(1, Math.max(0, margin) / fullMargin);', 'const share = Math.max(0, margin) / fullMargin;'],
   sos: ['(home.opps ??= []).push(g.away);', '(home.opps ??= []).push(g.home);'],
   rank: ['(strengthOfSchedule(t.opps, (oid) => str.get(oid) ?? 60) ?? str.get(t.id)) + str.get(t.id)', 'str.get(t.id) + str.get(t.id)'],
-  legacy: ['if (st.depth && st.round === CFB_RIVALRY_ROUND) {', 'if (st.round === CFB_RIVALRY_ROUND) {'],
+  /* Round 1554: the old draw's rivalry week now also waits on there being no slate. */
+  legacy: ['if (!slate && st.depth && st.round === CFB_RIVALRY_ROUND) {', 'if (!slate && st.round === CFB_RIVALRY_ROUND) {'],
   nostaff: ['const staffPart = staff ? (staff.off + staff.def) / 2 : 0;', 'const staffPart = 0;'],
   doubled: ['const staffPart = staff ? (staff.off + staff.def) / 2 : 0;', 'const staffPart = staff ? staff.off + staff.def : 0;'],
   nowalk: ['while (staffPayroll(staff) > pot) {', 'while (false) {'],
