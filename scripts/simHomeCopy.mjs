@@ -157,8 +157,8 @@ indexBundled = controlledRe('hiddenh1', indexBundled, /DoUKnowBall(\s*<\/h1>)/,
 indexBundled = controlled('staticimport', indexBundled, "import { FavouriteSport } from '@/components/home/FavouriteSport';",
   "import { FavouriteSport } from '@/components/home/FavouriteSport';\nimport { HOME_COPY } from '@/data/homeCopy';");
 indexBundled = controlledRe('staticimport', indexBundled, />(\s*)DoUKnowBall(\s*<\/h1>)/, '>$1{HOME_COPY.h1}$2');
-indexBundled = controlled('srsource', indexBundled, 'All playable without an account.`}',
-  'All playable without an account.`}<span className="sr-only"> Free sports trivia, quizzes and career sims.</span>');
+indexBundled = controlledRe('srsource', indexBundled, /<\/h1>/,
+  '</h1><span className="sr-only"> Free sports trivia, quizzes and career sims.</span>');
 let homeAboutSrc = readFileSync(path.join(ROOT, 'src/components/home/HomeAbout.tsx'), 'utf8');
 homeAboutSrc = controlled('srabout', homeAboutSrc, '<Line parts={HOME_COPY.intro} />',
   '<Line parts={HOME_COPY.intro} /><span className="sr-only"> Free sports trivia games, sports quizzes and career sims.</span>');

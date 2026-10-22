@@ -1,0 +1,573 @@
+name: Search discovery1444 verification
+
+on:
+  push:
+    branches: [codex/seo-search-1444, codex/seo-search-1444-red]
+    paths-ignore: ['docs/**']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+concurrency:
+  group: seo-discovery1444-${{ github.sha }}
+  cancel-in-progress: false
+
+# The admitted original proof is retained on the dedicated red branch.
+# A successful original job means three specified assertions failed after
+# valid foundations. It never means the product is implemented or qualified.
+jobs:
+  original_outcomes:
+    if: github.ref == 'refs/heads/codex/seo-search-1444-red'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      TZ: UTC
+      BASE_SOURCE: bc79b526cb69a4e913416c77c6dba00fe9401a16
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Hold original product and install locked dependencies
+        run: |
+          set -euo pipefail
+          mkdir -p seo-original-artifacts
+          git rev-parse HEAD > seo-original-artifacts/head.txt
+          git rev-parse 'HEAD^{tree}' > seo-original-artifacts/tree.txt
+          sha256sum package.json package-lock.json > seo-original-artifacts/dependencies-before.sha256
+          git fetch --no-tags --depth=1 origin "$BASE_SOURCE" > seo-original-artifacts/base-fetch.log 2>&1
+          git cat-file -e "$BASE_SOURCE^{commit}"
+          git diff --exit-code "$BASE_SOURCE" HEAD -- src public supabase index.html package.json package-lock.json > seo-original-artifacts/original-product-hold.log
+          git diff --exit-code "$BASE_SOURCE" HEAD -- scripts/simHomeCopy.mjs scripts/simTrustCopy.mjs scripts/simNflGridPage.mjs scripts/simNflGrid.mjs scripts/lib/retiredRoutes.mjs scripts/lib/offlineTransport.cjs > seo-original-artifacts/original-baselines-hold.log
+          npm ci > seo-original-artifacts/install.log 2>&1
+      - name: Real app type gate
+        run: |
+          set -euo pipefail
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json > seo-original-artifacts/types.log 2>&1
+      - name: Observe exactly three intended original assertions
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$PWD/seo-original-artifacts/transport.txt"
+          export SEO_DISCOVERY_ARTIFACTS="$PWD/seo-original-artifacts/outcomes"
+          unset SEO_DISCOVERY_CONTROL
+          status=0
+          node scripts/simSeoDiscovery1444.mjs > seo-original-artifacts/original.log 2>&1 || status=$?
+          printf '%s\n' "$status" > seo-original-artifacts/original.exit
+          cat seo-original-artifacts/original.log
+          test "$status" -eq 1
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const r = JSON.parse(fs.readFileSync('seo-original-artifacts/outcomes/report.json', 'utf8'));
+          assert.equal(r.status, 'failed');
+          assert.equal(r.control, null);
+          assert.deepEqual(r.errors, []);
+          assert.equal(r.foundations.length, 5);
+          assert(r.foundations.every(x => x.status === 'passed'));
+          assert.equal(r.outcomes.length, 3);
+          const wanted = {
+            'home-description': 'SEO_HOME_DESCRIPTION_MISSING',
+            'summary-career-discovery': 'SEO_SUMMARY_CAREERS_MISSING',
+            'nfl-guide-honest-strategy': 'SEO_GRID_RARITY_PROMISE',
+          };
+          assert.deepEqual(r.outcomes.map(x => x.id).sort(), Object.keys(wanted).sort());
+          for (const row of r.outcomes) {
+            assert.equal(row.status, 'failed');
+            assert.equal(row.errorType, 'AssertionError');
+            assert.equal(row.marker, wanted[row.id]);
+            assert(row.error.includes(wanted[row.id]));
+            assert.doesNotMatch(row.error, /Cannot find|Failed to resolve|SyntaxError|ReferenceError|TypeError/);
+            console.log('INTENDED ORIGINAL RED: ' + row.id + ' -> ' + wanted[row.id]);
+          }
+          assert.equal(r.source.unchanged, true);
+          assert.equal(r.source.before.length, 14);
+          assert.deepEqual(r.source.before, r.source.after);
+          assert.equal(r.source.otherFootballSha256, 'e729f4417fe3207a5c5c457efe56e89be1e9de41939b4c2b029a6a477cb2a903');
+          assert.equal(r.transport.attempts, 0);
+          fs.writeFileSync('seo-original-artifacts/admission.json', JSON.stringify({
+            status: 'ORIGINAL_OUTCOMES_ADMITTED', productQualified: false,
+            foundationsPassed: 5, intendedFailedAssertions: wanted,
+            sourceUnchanged: true, networkAttempts: 0,
+          }, null, 2) + '\n');
+          JS
+      - name: Preserve original source and all evidence
+        if: always()
+        run: |
+          set -euo pipefail
+          mkdir -p seo-original-artifacts
+          status=0
+          sha256sum --check seo-original-artifacts/dependencies-before.sha256 > seo-original-artifacts/dependencies-hold.log 2>&1 || status=$?
+          git diff --exit-code HEAD -- src scripts public supabase package.json package-lock.json index.html .github > seo-original-artifacts/source-hold.log 2>&1 || status=$?
+          test ! -s seo-original-artifacts/transport.txt || status=1
+          (cd seo-original-artifacts; find . -type f ! -path './evidence.sha256' -print0 | sort -z | xargs -0 sha256sum) > seo-original-artifacts/evidence.sha256
+          exit "$status"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: seo1444-original-${{ github.run_id }}-${{ github.run_attempt }}
+          path: seo-original-artifacts/
+          if-no-files-found: error
+          retention-days: 14
+
+  unchanged_baselines:
+    if: github.ref == 'refs/heads/codex/seo-search-1444'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        guard: [simHomeCopy, simTrustCopy, simNflGridPage, simNflGrid]
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      TZ: UTC
+      BASE_SOURCE: 554a3b18641044ec5164bff9acab4d338237078c
+      GUARD: ${{ matrix.guard }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Hold the baseline and install locked dependencies
+        run: |
+          set -euo pipefail
+          mkdir -p seo-baseline-artifacts
+          git rev-parse HEAD > seo-baseline-artifacts/head.txt
+          sha256sum package.json package-lock.json > seo-baseline-artifacts/dependencies-before.sha256
+          git fetch --no-tags --depth=1 origin "$BASE_SOURCE" > seo-baseline-artifacts/base-fetch.log 2>&1
+          git diff --exit-code "$BASE_SOURCE" HEAD -- src/lib src/hooks src/components src/data/gameRegistry.ts supabase index.html package.json package-lock.json scripts/simTrustCopy.mjs scripts/simNflGridPage.mjs scripts/simNflGrid.mjs scripts/lib > seo-baseline-artifacts/unchanged-engines-baselines-hold.log
+          git show "$BASE_SOURCE:scripts/simHomeCopy.mjs" > seo-baseline-artifacts/original-home-guard.txt
+          npm ci > seo-baseline-artifacts/install.log 2>&1
+      - name: Exact two-line home-control adaptation and original actual comparison
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import{createHash}from'node:crypto';
+          const old=fs.readFileSync('seo-baseline-artifacts/original-home-guard.txt','utf8'),current=fs.readFileSync('scripts/simHomeCopy.mjs','utf8');
+          const from="indexBundled = controlled('srsource', indexBundled, 'All playable without an account.`}',\n  'All playable without an account.`}<span className=\"sr-only\"> Free sports trivia, quizzes and career sims.</span>');";
+          const to="indexBundled = controlledRe('srsource', indexBundled, /<\\/h1>/,\n  '</h1><span className=\"sr-only\"> Free sports trivia, quizzes and career sims.</span>');";
+          assert.equal(old.split(from).length-1,1);assert.equal(current.split(to).length-1,1);assert.equal(old.replace(from,to),current);assert.equal(current.replace(to,from),old);
+          const hash=x=>createHash('sha256').update(x).digest('hex');fs.writeFileSync('seo-baseline-artifacts/home-control-adaptation.json',JSON.stringify({oldSha256:hash(old),currentSha256:hash(current),twoLineOnly:true,wholeInverseExact:true},null,2));
+          JS
+          if test "$GUARD" = simHomeCopy; then
+            baseline="$RUNNER_TEMP/seo1444-original-home"
+            mkdir "$baseline";git archive "$BASE_SOURCE" | tar -x -C "$baseline"
+            ln -s "$PWD/node_modules" "$baseline/node_modules"
+            out="$PWD/seo-baseline-artifacts"
+            for control in normal hiddenh1 srsource;do
+              status=0
+              (cd "$baseline";export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/original-home.transport";unset HOME_COPY_CONTROL;if test "$control" != normal;then export HOME_COPY_CONTROL="$control";fi;node scripts/simHomeCopy.mjs) > "$out/original-home-$control.log" 2>&1 || status=$?
+              printf '%s\t%s\n' "$control" "$status" >> "$out/original-home-results.tsv"
+              test "$status" -eq 0
+              if test "$control" = normal;then grep -F 'simHomeCopy: green.' "$out/original-home-$control.log";else grep -F "simHomeCopy control $control: green." "$out/original-home-$control.log";grep -F '  FAIL:' "$out/original-home-$control.log";fi
+            done
+            test ! -s "$out/original-home.transport"
+          fi
+      - name: Run the actual guard and effective existing faults
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$PWD/seo-baseline-artifacts/transport.txt"
+          unset HOME_COPY_CONTROL TRUST_CONTROL SIM_NFLPAGE_CONTROL SIM_NFLGRID_CONTROL
+          case "$GUARD" in
+            simHomeCopy) controls='HOME_COPY_CONTROL:hiddenh1 HOME_COPY_CONTROL:srsource' ;;
+            simTrustCopy) controls='TRUST_CONTROL:typedcount TRUST_CONTROL:staleliteral' ;;
+            simNflGridPage) controls='SIM_NFLPAGE_CONTROL:copy SIM_NFLPAGE_CONTROL:invoke' ;;
+            simNflGrid) controls='SIM_NFLGRID_CONTROL:thin' ;;
+            *) exit 1 ;;
+          esac
+          status=0
+          node "scripts/$GUARD.mjs" > seo-baseline-artifacts/normal.log 2>&1 || status=$?
+          printf 'normal\tnone\t%s\n' "$status" > seo-baseline-artifacts/results.tsv
+          tail -n 18 seo-baseline-artifacts/normal.log
+          test "$status" -eq 0
+          grep -F "$GUARD: green." seo-baseline-artifacts/normal.log
+          for pair in $controls; do
+            variable=$(printf '%s' "$pair" | cut -d: -f1)
+            control=$(printf '%s' "$pair" | cut -d: -f2)
+            status=0
+            env "$variable=$control" node "scripts/$GUARD.mjs" > "seo-baseline-artifacts/control-$control.log" 2>&1 || status=$?
+            printf 'control\t%s\t%s\n' "$control" "$status" >> seo-baseline-artifacts/results.tsv
+            tail -n 10 "seo-baseline-artifacts/control-$control.log"
+            test "$status" -eq 0
+            case "$GUARD" in
+              simHomeCopy|simTrustCopy) grep -F "$GUARD control $control: green." "seo-baseline-artifacts/control-$control.log" ;;
+              simNflGridPage|simNflGrid)
+                grep -F "control \"$control\":" "seo-baseline-artifacts/control-$control.log"
+                grep -F 'failure(s) fired in section' "seo-baseline-artifacts/control-$control.log"
+                grep -F 'as expected, the check works' "seo-baseline-artifacts/control-$control.log" ;;
+            esac
+          done
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const guard = process.env.GUARD;
+          const wanted = { simHomeCopy: ['hiddenh1', 'srsource'], simTrustCopy: ['typedcount', 'staleliteral'],
+            simNflGridPage: ['copy', 'invoke'], simNflGrid: ['thin'] }[guard];
+          const rows = fs.readFileSync('seo-baseline-artifacts/results.tsv', 'utf8').trim().split('\n').map(x => {
+            const [kind, selector, exit] = x.split('\t'); return { kind, selector, exit: Number(exit) };
+          });
+          assert.equal(rows.length, wanted.length + 1);
+          assert.deepEqual(rows[0], { kind: 'normal', selector: 'none', exit: 0 });
+          assert.deepEqual(rows.slice(1).map(x => x.selector), wanted);
+          assert(rows.every(x => x.exit === 0));
+          fs.writeFileSync('seo-baseline-artifacts/baseline.json', JSON.stringify({
+            guard, status: 'passed', unchangedBaseline: guard !== 'simHomeCopy', rows,
+            assertionsUnchanged: true, anchorAdapted: guard === 'simHomeCopy',
+            controlConvention: 'existing guards exit0 only after reporting the planted defect',
+          }, null, 2) + '\n');
+          JS
+      - name: Preserve source and complete baseline evidence
+        if: always()
+        run: |
+          set -euo pipefail
+          mkdir -p seo-baseline-artifacts
+          status=0
+          sha256sum --check seo-baseline-artifacts/dependencies-before.sha256 > seo-baseline-artifacts/dependencies-hold.log 2>&1 || status=$?
+          git diff --exit-code HEAD -- src scripts public supabase package.json package-lock.json index.html .github > seo-baseline-artifacts/source-hold.log 2>&1 || status=$?
+          test ! -s seo-baseline-artifacts/transport.txt || status=1
+          (cd seo-baseline-artifacts; find . -type f ! -path './evidence.sha256' -print0 | sort -z | xargs -0 sha256sum) > seo-baseline-artifacts/evidence.sha256
+          exit "$status"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: seo1444-baseline-${{ matrix.guard }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: seo-baseline-artifacts/
+          if-no-files-found: error
+          retention-days: 14
+
+  current_outcomes:
+    if: github.ref == 'refs/heads/codex/seo-search-1444'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      TZ: UTC
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Locked dependencies and real app types
+        run: |
+          set -euo pipefail
+          mkdir -p seo-current-artifacts
+          git rev-parse HEAD > seo-current-artifacts/head.txt
+          git rev-parse 'HEAD^{tree}' > seo-current-artifacts/tree.txt
+          sha256sum package.json package-lock.json > seo-current-artifacts/dependencies-before.sha256
+          npm ci > seo-current-artifacts/install.log 2>&1
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json > seo-current-artifacts/types.log 2>&1
+      - name: Actual three outcomes and three effective in-memory faults
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          mkdir -p seo-current-artifacts
+          for control in normal home-generic summary-unlinked guide-promised-rarity; do
+            export SEO_DISCOVERY_ARTIFACTS="$PWD/seo-current-artifacts/$control"
+            export SIM_OFFLINE_RECEIPT="$PWD/seo-current-artifacts/transport-$control.txt"
+            unset SEO_DISCOVERY_CONTROL
+            if test "$control" != normal; then export SEO_DISCOVERY_CONTROL="$control"; fi
+            status=0
+            node scripts/simSeoDiscovery1444.mjs > "seo-current-artifacts/$control.log" 2>&1 || status=$?
+            printf '%s\t%s\n' "$control" "$status" >> seo-current-artifacts/results.tsv
+          done
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const root = 'seo-current-artifacts/';
+          const rows = fs.readFileSync(root + 'results.tsv', 'utf8').trim().split('\n').map(x => x.split('\t'));
+          assert.deepEqual(rows.map(x => x[0]), ['normal', 'home-generic', 'summary-unlinked', 'guide-promised-rarity']);
+          const wanted = {
+            'home-generic': 'SEO_HOME_DESCRIPTION_MISSING',
+            'summary-unlinked': 'SEO_SUMMARY_CAREERS_MISSING',
+            'guide-promised-rarity': 'SEO_GRID_RARITY_PROMISE',
+          };
+          for (const [name, exit] of rows) {
+            const r = JSON.parse(fs.readFileSync(root + name + '/report.json', 'utf8'));
+            assert.deepEqual(r.errors, []);
+            assert.equal(r.foundations.length, 5);
+            assert(r.foundations.every(x => x.status === 'passed'));
+            assert.equal(r.outcomes.length, 3);
+            assert.deepEqual(r.outcomes.map(x => x.id).sort(),
+              ['home-description', 'nfl-guide-honest-strategy', 'summary-career-discovery']);
+            assert.equal(r.source.unchanged, true);
+            assert.equal(r.source.before.length, 14);
+            assert.deepEqual(r.source.before, r.source.after);
+            assert.equal(r.source.otherFootballSha256,
+              'e729f4417fe3207a5c5c457efe56e89be1e9de41939b4c2b029a6a477cb2a903');
+            assert.equal(r.transport.attempts, 0);
+            const failed = r.outcomes.filter(x => x.status === 'failed');
+            if (name === 'normal') {
+              assert.equal(Number(exit), 0);
+              assert.equal(r.status, 'passed');
+              assert.equal(r.control, null);
+              assert.equal(failed.length, 0);
+            } else {
+              assert.equal(Number(exit), 1);
+              assert.equal(r.status, 'failed');
+              assert.equal(r.control.name, name);
+              assert.equal(r.control.changed, true);
+              assert.equal(r.control.detected, true);
+              assert.match(r.control.beforeSha256, /^[0-9a-f]{64}$/);
+              assert.match(r.control.afterSha256, /^[0-9a-f]{64}$/);
+              assert.notEqual(r.control.beforeSha256, r.control.afterSha256);
+              assert.equal(failed.length, 1);
+              assert.equal(failed[0].marker, wanted[name]);
+              assert.equal(failed[0].errorType, 'AssertionError');
+              assert(failed[0].error.includes(wanted[name]));
+              assert.equal(r.outcomes.filter(x => x.status === 'passed').length, 2);
+            }
+          }
+          console.log('Three actual outcomes pass; all three changed faults fail exactly their actual assertion');
+          JS
+      - name: Preserve source and every nested evidence manifest
+        if: always()
+        run: |
+          set -euo pipefail
+          mkdir -p seo-current-artifacts
+          status=0
+          sha256sum --check seo-current-artifacts/dependencies-before.sha256 > seo-current-artifacts/dependencies-hold.log 2>&1 || status=$?
+          git diff --exit-code HEAD -- src scripts public supabase package.json package-lock.json index.html .github > seo-current-artifacts/source-hold.log 2>&1 || status=$?
+          (cd seo-current-artifacts; find . -type f ! -path './evidence.sha256' -print0 | sort -z | xargs -0 sha256sum) > seo-current-artifacts/evidence.sha256
+          exit "$status"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: seo1444-current-${{ github.run_id }}-${{ github.run_attempt }}
+          path: seo-current-artifacts/
+          if-no-files-found: error
+          retention-days: 14
+
+  build_browser:
+    if: github.ref == 'refs/heads/codex/seo-search-1444'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      TZ: UTC
+      PRERENDER_ONLY: /football-grid
+      SEO_SPLIT_BASE_REF: 554a3b18641044ec5164bff9acab4d338237078c
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Unchanged engines, locked app and isolated verification tools
+        run: |
+          set -euo pipefail
+          mkdir -p seo-build-artifacts
+          out="$PWD/seo-build-artifacts"
+          git rev-parse HEAD > "$out/head.txt"
+          git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
+          git fetch --no-tags --depth=1 origin "$SEO_SPLIT_BASE_REF" > "$out/base-fetch.log" 2>&1
+          sha256sum package.json package-lock.json > "$out/dependencies-before.sha256"
+          git diff --exit-code "$SEO_SPLIT_BASE_REF" HEAD -- src/lib src/hooks src/components src/data/gameRegistry.ts src/data/gameContent ':!src/data/gameContent/football.ts' src/pages ':!src/pages/Index.tsx' supabase package.json package-lock.json scripts/sweepWeight.mjs public/robots.txt index.html > "$out/engine-dependency-caps-hold.log"
+          npm ci > "$out/install.log" 2>&1
+          browser_tools="$RUNNER_TEMP/seo1444-browser"
+          npm install --prefix "$browser_tools" --no-save --package-lock=false playwright@1.64.0 > "$out/browser-install.log" 2>&1
+          test ! -e node_modules/playwright; test ! -e node_modules/playwright-core
+          ln -s "$browser_tools/node_modules/playwright" node_modules/playwright
+          ln -s "$browser_tools/node_modules/playwright-core" node_modules/playwright-core
+          node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium > "$out/chromium-install.log" 2>&1
+          python -m pip install fonttools pillow > "$out/python-install.log" 2>&1
+          export FREE_KICK_FONT_CACHE="$RUNNER_TEMP/seo1444-fonts"
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > "$out/fonts.log" 2>&1
+          echo "FREE_KICK_FONT_CACHE=$FREE_KICK_FONT_CACHE" >> "$GITHUB_ENV"
+      - name: Complete scoped production and SEO build
+        id: build
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$PWD/seo-build-artifacts"
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$out/types.log" 2>&1
+          node scripts/simGuideHeadings.mjs --refresh /football-grid > "$out/guide-refresh.log" 2>&1
+          node scripts/genSearchKeywords.mjs > "$out/search-keywords.log" 2>&1
+          npm run build:seo > "$out/build.log" 2>&1
+          git diff --binary HEAD -- public scripts/data/lastmod.json scripts/data/guideHeadingsFrozen.json src/data/searchKeywords.json > "$out/generated.patch"
+          { git diff --name-only HEAD -- public scripts/data/lastmod.json scripts/data/guideHeadingsFrozen.json src/data/searchKeywords.json; git ls-files --others -- public scripts/data/lastmod.json scripts/data/guideHeadingsFrozen.json src/data/searchKeywords.json; } | sort -u > "$out/generated-files.txt"
+          for file in generated.patch generated-files.txt; do
+            test -f "$out/$file"; test ! -s "$out/$file"
+            cp "$out/$file" "$out/$file.nonempty-control"
+            printf '%s\n' 'CONTROL_NONEMPTY_FINAL_GENERATED_OUTPUT' >> "$out/$file.nonempty-control"
+            status=0; test ! -s "$out/$file.nonempty-control" || status=$?
+            printf '%s\n' "$status" > "$out/$file.nonempty-control.exit"; test "$status" -eq 1
+            status=0; cmp "$out/$file" "$out/$file.nonempty-control" > "$out/$file.nonempty-control.changed.log" 2>&1 || status=$?
+            printf '%s\n' "$status" > "$out/$file.nonempty-control.changed.exit"; test "$status" -eq 1
+            sha256sum "$out/$file" "$out/$file.nonempty-control" > "$out/$file.nonempty-control.sha256"
+          done
+          git diff --exit-code HEAD -- index.html public ':!public/football-grid/index.html' ':!public/sitemap.xml' > "$out/unrelated-public-template-hold.log"
+          node --input-type=module <<'JS' > "$out/generated-holds.log" 2>&1
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import { execFileSync } from 'node:child_process';
+          const oldText = p => execFileSync('git', ['show', 'HEAD:' + p], { encoding: 'utf8' });
+          const currentText = p => fs.readFileSync(p, 'utf8');
+          for (const [file, nested] of [['scripts/data/lastmod.json', null], ['scripts/data/guideHeadingsFrozen.json', 'routes'], ['src/data/searchKeywords.json', 'k']]) {
+            const a = JSON.parse(oldText(file)), b = JSON.parse(currentText(file));
+            const before = nested ? a[nested] : a, after = nested ? b[nested] : b;
+            const keys = [...new Set([...Object.keys(before), ...Object.keys(after)])].filter(k => k !== '/football-grid').sort();
+            for (const key of keys) assert.deepEqual(after[key], before[key], file + ' unrelated entry ' + key);
+            if (file.includes('guideHeadings')) assert.equal(a.about, b.about);
+            if (file.includes('searchKeywords')) assert.equal(a.v, b.v);
+            console.log('HELD unrelated entries: ' + file + ' ' + keys.length);
+          }
+          const rows = text => new Map([...text.matchAll(/<url>([\s\S]*?)<\/url>/g)].map(x => {
+            const match = /<loc>([^<]+)<\/loc>/.exec(x[1]); assert(match); return [match[1], x[1]];
+          }));
+          const before = rows(oldText('public/sitemap.xml')), after = rows(currentText('public/sitemap.xml'));
+          assert.equal(after.size, before.size);
+          assert(before.size >= 150);
+          for (const [url, row] of before) if (url !== 'https://douknowball.com/football-grid') assert.equal(after.get(url), row, 'unrelated sitemap row ' + url);
+          console.log('HELD unrelated sitemap rows: ' + (before.size - 1));
+          JS
+          find public scripts/data/lastmod.json scripts/data/guideHeadingsFrozen.json src/data/searchKeywords.json ! -type d ! -type f -print > "$out/generated-source-nonregular-before.txt"
+          test ! -s "$out/generated-source-nonregular-before.txt"
+          find public scripts/data/lastmod.json scripts/data/guideHeadingsFrozen.json src/data/searchKeywords.json -type f -print0 | sort -z | xargs -0 sha256sum > "$out/generated-source-before.sha256"
+          find dist ! -type d ! -type f -print > "$out/dist-nonregular-before.txt"
+          test ! -s "$out/dist-nonregular-before.txt"
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dist.sha256"
+          for inventory in generated-source-before.sha256 dist.sha256; do
+            test -s "$out/$inventory"
+            cp "$out/$inventory" "$out/$inventory.control"
+            printf '%s\n' 'CONTROL_DIFFERENT_INVENTORY_LINE' >> "$out/$inventory.control"
+            status=0; cmp "$out/$inventory" "$out/$inventory.control" > "$out/$inventory.control.log" 2>&1 || status=$?
+            printf '%s\n' "$status" > "$out/$inventory.control.exit"; test "$status" -eq 1
+          done
+      - name: All18 completed-build readers and all14 unchanged caps
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$PWD/seo-build-artifacts"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$out/server.log" 2>&1 &
+          server=$!; trap 'kill "$server" 2>/dev/null || true' EXIT
+          ready=0; for attempt in 1 2 3 4 5; do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then ready=1; break; fi; sleep 1; done; test "$ready" -eq 1
+          failed=0
+          for method in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simSiteSearch simGuideHeadings simLegalPages; do
+            status=0
+            BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node "scripts/$method.mjs" > "$out/$method.log" 2>&1 || status=$?
+            printf '%s\t%s\n' "$method" "$status" >> "$out/readers.tsv"
+            tail -n 3 "$out/$method.log"
+            test "$status" -eq 0 || failed=1
+          done
+          status=0
+          SWEEP_OFFLINE=1 BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node scripts/sweepWeight.mjs > "$out/weights.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/weights.exit"
+          cat "$out/weights.log"
+          test "$status" -eq 0 || failed=1
+          test "$(wc -l < "$out/readers.tsv")" -eq 18 || failed=1
+          exit "$failed"
+      - name: Existing home fold and actual seven pages with three faults
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$PWD/seo-build-artifacts"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$out/browser-server.log" 2>&1 &
+          server=$!; trap 'kill "$server" 2>/dev/null || true' EXIT
+          ready=0; for attempt in 1 2 3 4 5; do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then ready=1; break; fi; sleep 1; done; test "$ready" -eq 1
+          BASE=http://127.0.0.1:4173 node scripts/playHomeFold.mjs > "$out/home-fold.log" 2>&1
+          grep -F 'playHomeFold: green.' "$out/home-fold.log"
+          export SEO_DISCOVERY_BROWSER_OUT="$out/browser"
+          export SIM_OFFLINE_RECEIPT="$out/browser-transport.txt"
+          BASE=http://127.0.0.1:4173 node scripts/qa/playSeoDiscovery1444.mjs > "$out/browser.log" 2>&1
+          cat "$out/browser.log"
+          test ! -s "$out/browser-transport.txt"
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const r = JSON.parse(fs.readFileSync('seo-build-artifacts/browser/report.json', 'utf8'));
+          assert.equal(r.status, 'passed'); assert.deepEqual(r.errors, []);
+          assert.equal(r.holds.unchanged, true); assert.deepEqual(r.holds.before, r.holds.after);
+          assert.equal(r.holds.before.length, 15);
+          assert.equal(r.positives.length, 7); assert(r.positives.every(x => x.status === 'passed'));
+          assert.equal(r.faults.length, 3); assert(r.faults.every(x => x.status === 'passed' && x.detected));
+          assert.equal(r.restorations.length, 3); assert(r.restorations.every(x => x.status === 'passed'));
+          assert.equal(r.remoteTransport, 0); assert(r.staticReadRequests > 0);
+          for (const row of r.positives) {
+            assert.deepEqual(row.errors, []); assert.deepEqual(row.transportErrors, []);
+            assert.equal(row.checks.length, 4); assert(row.checks.every(x => x.status === 'passed'));
+            assert(fs.statSync('seo-build-artifacts/browser/' + row.screenshot).size > 1000);
+          }
+          for (const row of r.faults) {
+            assert.deepEqual(row.errors, []); assert.deepEqual(row.transportErrors, []);
+            assert.match(row.beforeSha256, /^[0-9a-f]{64}$/); assert.match(row.afterSha256, /^[0-9a-f]{64}$/);
+            assert.notEqual(row.beforeSha256, row.afterSha256);
+            const failed = row.checks.filter(x => x.status === 'failed');
+            assert.equal(failed.length, 1); assert.equal(failed[0].marker, row.expectedMarker);
+            assert.equal(failed[0].errorType, 'AssertionError'); assert(failed[0].error.includes(row.expectedMarker));
+          }
+          console.log('BROWSER: seven actual cases, three targeted changed faults and three exact restorations');
+          JS
+      - name: Preserve source, exact completed build and nested evidence
+        if: always()
+        run: |
+          set -euo pipefail
+          out="$PWD/seo-build-artifacts"
+          mkdir -p "$out"
+          failed=0
+          status=0
+          {
+            find public scripts/data/lastmod.json scripts/data/guideHeadingsFrozen.json src/data/searchKeywords.json ! -type d ! -type f -print > "$out/generated-source-nonregular-after.txt" &&
+            test ! -s "$out/generated-source-nonregular-after.txt" &&
+            find public scripts/data/lastmod.json scripts/data/guideHeadingsFrozen.json src/data/searchKeywords.json -type f -print0 | sort -z | xargs -0 sha256sum > "$out/generated-source-after.sha256" &&
+            cmp "$out/generated-source-before.sha256" "$out/generated-source-after.sha256"
+          } > "$out/generated-output-hold.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/generated-output-hold.exit"; test "$status" -eq 0 || failed=1
+          status=0
+          {
+            find dist ! -type d ! -type f -print > "$out/dist-nonregular-after.txt" &&
+            test ! -s "$out/dist-nonregular-after.txt" &&
+            find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dist-after.sha256" &&
+            cmp "$out/dist.sha256" "$out/dist-after.sha256"
+          } > "$out/dist-output-hold.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/dist-output-hold.exit"; test "$status" -eq 0 || failed=1
+          sha256sum --check "$out/dependencies-before.sha256" > "$out/dependencies-hold.log" 2>&1 || failed=1
+          git diff --exit-code HEAD -- src scripts supabase package.json package-lock.json index.html .github ':!scripts/data/lastmod.json' ':!scripts/data/guideHeadingsFrozen.json' ':!src/data/searchKeywords.json' > "$out/source-hold.log" 2>&1 || failed=1
+          if test -f "$out/dist.sha256"; then sha256sum --check "$out/dist.sha256" > "$out/dist-hold.log" 2>&1 || failed=1; fi
+          status=0
+          if test -d dist; then tar -czf "$out/dist.tar.gz" -C dist . > "$out/dist-archive.log" 2>&1 || status=$?; else status=1; fi
+          printf '%s\n' "$status" > "$out/dist-archive.exit"; test "$status" -eq 0 || failed=1
+          printf '%s\n' "$failed" > "$out/final-holds.exit"
+          (cd "$out"; find . -type f ! -path './evidence.sha256' -print0 | sort -z | xargs -0 sha256sum) > "$out/evidence.sha256"
+          exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: seo1444-build-${{ github.run_id }}-${{ github.run_attempt }}
+          path: seo-build-artifacts/
+          if-no-files-found: error
+          retention-days: 14
