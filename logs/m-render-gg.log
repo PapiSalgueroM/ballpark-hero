@@ -1,0 +1,4 @@
+MUTATION render applied to src/pages/StadiumTycoon.tsx
+5:AssertionError [ERR_ASSERTION]: node:internal/modules/run_main:107
+9:AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+MUT render applied=0 simTycoonGroundGrowth=1

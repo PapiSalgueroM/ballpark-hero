@@ -1,0 +1,1326 @@
+[
+  {
+    "id": "purchase",
+    "actual": {
+      "result": true,
+      "state": {
+        "v": 1,
+        "seed": 1701,
+        "cash": 9831,
+        "lifetime": 0,
+        "careerEarned": 0,
+        "rep": 0,
+        "levels": {
+          "scouting": 0,
+          "coaching": 1,
+          "dorms": 0,
+          "agents": 10
+        },
+        "prospects": [
+          {
+            "id": 1,
+            "name": "Halvor Bjørkli",
+            "nation": "Sweden",
+            "pos": "FW",
+            "age": 18,
+            "ageClock": 103.76427511218935,
+            "rating": 85,
+            "potential": 94
+          }
+        ],
+        "scoutProgress": 0,
+        "showcaseCooldown": 0,
+        "showcaseLeft": 0,
+        "deadlineIn": 360,
+        "deadlineLeft": 0,
+        "sold": 0,
+        "soldCareer": 0,
+        "best": 0,
+        "leftFree": 0,
+        "lastSeen": 1791374400000,
+        "nextId": 2
+      },
+      "serialized": "{\"v\":1,\"seed\":1701,\"cash\":9831,\"lifetime\":0,\"careerEarned\":0,\"rep\":0,\"levels\":{\"scouting\":0,\"coaching\":1,\"dorms\":0,\"agents\":10},\"prospects\":[{\"id\":1,\"name\":\"Halvor Bjørkli\",\"nation\":\"Sweden\",\"pos\":\"FW\",\"age\":18,\"ageClock\":103.76427511218935,\"rating\":85,\"potential\":94}],\"scoutProgress\":0,\"showcaseCooldown\":0,\"showcaseLeft\":0,\"deadlineIn\":360,\"deadlineLeft\":0,\"sold\":0,\"soldCareer\":0,\"best\":0,\"leftFree\":0,\"lastSeen\":1791374400000,\"nextId\":2}",
+      "environment": {
+        "storage": {
+          "local": {
+            "dukb-guest-handle": "MoneyProof-10",
+            "protected-other-career": "{\"untouched\":true}"
+          },
+          "session": {
+            "protected-session": "held"
+          }
+        },
+        "writes": [],
+        "draws": 0,
+        "now": 1791374400000,
+        "requests": [],
+        "errors": []
+      }
+    },
+    "expected": {
+      "result": true,
+      "state": {
+        "v": 1,
+        "seed": 1701,
+        "cash": 9831,
+        "lifetime": 0,
+        "careerEarned": 0,
+        "rep": 0,
+        "levels": {
+          "scouting": 0,
+          "coaching": 1,
+          "dorms": 0,
+          "agents": 10
+        },
+        "prospects": [
+          {
+            "id": 1,
+            "name": "Halvor Bjørkli",
+            "nation": "Sweden",
+            "pos": "FW",
+            "age": 18,
+            "ageClock": 103.76427511218935,
+            "rating": 85,
+            "potential": 94
+          }
+        ],
+        "scoutProgress": 0,
+        "showcaseCooldown": 0,
+        "showcaseLeft": 0,
+        "deadlineIn": 360,
+        "deadlineLeft": 0,
+        "sold": 0,
+        "soldCareer": 0,
+        "best": 0,
+        "leftFree": 0,
+        "lastSeen": 1791374400000,
+        "nextId": 2
+      },
+      "serialized": "{\"v\":1,\"seed\":1701,\"cash\":9831,\"lifetime\":0,\"careerEarned\":0,\"rep\":0,\"levels\":{\"scouting\":0,\"coaching\":1,\"dorms\":0,\"agents\":10},\"prospects\":[{\"id\":1,\"name\":\"Halvor Bjørkli\",\"nation\":\"Sweden\",\"pos\":\"FW\",\"age\":18,\"ageClock\":103.76427511218935,\"rating\":85,\"potential\":94}],\"scoutProgress\":0,\"showcaseCooldown\":0,\"showcaseLeft\":0,\"deadlineIn\":360,\"deadlineLeft\":0,\"sold\":0,\"soldCareer\":0,\"best\":0,\"leftFree\":0,\"lastSeen\":1791374400000,\"nextId\":2}",
+      "environment": {
+        "storage": {
+          "local": {
+            "dukb-guest-handle": "MoneyProof-10",
+            "protected-other-career": "{\"untouched\":true}"
+          },
+          "session": {
+            "protected-session": "held"
+          }
+        },
+        "writes": [],
+        "draws": 0,
+        "now": 1791374400000,
+        "requests": [],
+        "errors": []
+      }
+    },
+    "before": {
+      "v": 1,
+      "seed": 1701,
+      "cash": 9876,
+      "lifetime": 0,
+      "careerEarned": 0,
+      "rep": 0,
+      "levels": {
+        "scouting": 0,
+        "coaching": 0,
+        "dorms": 0,
+        "agents": 10
+      },
+      "prospects": [
+        {
+          "id": 1,
+          "name": "Halvor Bjørkli",
+          "nation": "Sweden",
+          "pos": "FW",
+          "age": 18,
+          "ageClock": 103.76427511218935,
+          "rating": 85,
+          "potential": 94
+        }
+      ],
+      "scoutProgress": 0,
+      "showcaseCooldown": 0,
+      "showcaseLeft": 0,
+      "deadlineIn": 360,
+      "deadlineLeft": 0,
+      "sold": 0,
+      "soldCareer": 0,
+      "best": 0,
+      "leftFree": 0,
+      "lastSeen": 1791374400000,
+      "nextId": 2
+    }
+  },
+  {
+    "id": "academy-boundaries",
+    "actual": [
+      "$-1,235",
+      "$0",
+      "$999",
+      "$1,000",
+      "$9,999",
+      "$10,000",
+      "$1,000.0K",
+      "$1.00M",
+      "$1,000.00M",
+      "$1.00B",
+      "$1,000.00B",
+      "$1.00T",
+      "$1,234.57T"
+    ],
+    "expected": [
+      "$-1,235",
+      "$0",
+      "$999",
+      "$1,000",
+      "$9,999",
+      "$10.0K",
+      "$1,000.0K",
+      "$1.00M",
+      "$1,000.00M",
+      "$1.00B",
+      "$1,000.00B",
+      "$1.00T",
+      "$1,234.57T"
+    ],
+    "inputs": [
+      -1234.2,
+      0,
+      999.9,
+      1000,
+      9999.9,
+      10000,
+      999999,
+      1000000,
+      999999999,
+      1000000000,
+      999999999999,
+      1000000000000,
+      1234567890123456
+    ],
+    "pinned": [
+      "£-1,235",
+      "£0",
+      "£999",
+      "£1,000",
+      "£9,999",
+      "£10.0K",
+      "£1000.0K",
+      "£1.00M",
+      "£1000.00M",
+      "£1.00B",
+      "£1000.00B",
+      "£1.00T",
+      "£1234.57T"
+    ]
+  },
+  {
+    "id": "page-text",
+    "actual": [
+      "GOAL 2-1 at 90m: +$1,234,567",
+      "+$-1,234.50 bonus, 58% share",
+      "$1,234,567.00Q and $9,999",
+      "2-1 at 90m, 58%, 1092 gems",
+      "$9,999 already grouped"
+    ],
+    "expected": [
+      "GOAL 2-1 at 90m: +$1,234,567",
+      "+$-1,234.50 bonus, 58% share",
+      "$1,234,567.00Q and $9,999",
+      "2-1 at 90m, 58%, 1092 gems",
+      "$9,999 already grouped"
+    ],
+    "inputs": [
+      "GOAL 2-1 at 90m: +$1234567",
+      "+$-1234.50 bonus, 58% share",
+      "$1234567.00Q and $9999",
+      "2-1 at 90m, 58%, 1092 gems",
+      "$9,999 already grouped"
+    ]
+  },
+  {
+    "id": "page-header",
+    "actual": [
+      "$-1,235",
+      "$9,999",
+      "$1,000.00Q"
+    ],
+    "expected": [
+      "$-1,235",
+      "$9,999",
+      "$1,000.00Q"
+    ]
+  },
+  {
+    "id": "page-read-only",
+    "actual": {
+      "storage": {
+        "local": {
+          "dukb-guest-handle": "MoneyProof-10",
+          "protected-other-career": "{\"untouched\":true}"
+        },
+        "session": {
+          "protected-session": "held"
+        }
+      },
+      "writes": [],
+      "draws": 0,
+      "now": 1791374400000,
+      "requests": [],
+      "errors": []
+    },
+    "expected": {
+      "storage": {
+        "local": {
+          "dukb-guest-handle": "MoneyProof-10",
+          "protected-other-career": "{\"untouched\":true}"
+        },
+        "session": {
+          "protected-session": "held"
+        }
+      },
+      "writes": [],
+      "draws": 0,
+      "now": 1791374400000,
+      "requests": [],
+      "errors": []
+    }
+  },
+  {
+    "id": "loaded-false",
+    "actual": {
+      "v": 1,
+      "seed": 1701,
+      "cash": 9876,
+      "lifetime": 0,
+      "careerEarned": 0,
+      "rep": 0,
+      "levels": {
+        "scouting": 0,
+        "coaching": 0,
+        "dorms": 0,
+        "agents": 10
+      },
+      "prospects": [
+        {
+          "id": 1,
+          "name": "Halvor Bjørkli",
+          "nation": "Sweden",
+          "pos": "FW",
+          "age": 18,
+          "ageClock": 103.76427511218935,
+          "rating": 85,
+          "potential": 94
+        }
+      ],
+      "scoutProgress": 0,
+      "showcaseCooldown": 0,
+      "showcaseLeft": 0,
+      "deadlineIn": 360,
+      "deadlineLeft": 0,
+      "sold": 0,
+      "soldCareer": 0,
+      "best": 0,
+      "leftFree": 0,
+      "lastSeen": 1791374400000,
+      "nextId": 2,
+      "awayMs": 0
+    },
+    "expected": {
+      "v": 1,
+      "seed": 1701,
+      "cash": 9876,
+      "lifetime": 0,
+      "careerEarned": 0,
+      "rep": 0,
+      "levels": {
+        "scouting": 0,
+        "coaching": 0,
+        "dorms": 0,
+        "agents": 10
+      },
+      "prospects": [
+        {
+          "id": 1,
+          "name": "Halvor Bjørkli",
+          "nation": "Sweden",
+          "pos": "FW",
+          "age": 18,
+          "ageClock": 103.76427511218935,
+          "rating": 85,
+          "potential": 94
+        }
+      ],
+      "scoutProgress": 0,
+      "showcaseCooldown": 0,
+      "showcaseLeft": 0,
+      "deadlineIn": 360,
+      "deadlineLeft": 0,
+      "sold": 0,
+      "soldCareer": 0,
+      "best": 0,
+      "leftFree": 0,
+      "lastSeen": 1791374400000,
+      "nextId": 2,
+      "awayMs": 0
+    },
+    "staged": {
+      "v": 1,
+      "seed": 1701,
+      "cash": 9876,
+      "lifetime": 0,
+      "careerEarned": 0,
+      "rep": 0,
+      "levels": {
+        "scouting": 0,
+        "coaching": 0,
+        "dorms": 0,
+        "agents": 10
+      },
+      "prospects": [
+        {
+          "id": 1,
+          "name": "Halvor Bjørkli",
+          "nation": "Sweden",
+          "pos": "FW",
+          "age": 18,
+          "ageClock": 103.76427511218935,
+          "rating": 85,
+          "potential": 94
+        }
+      ],
+      "scoutProgress": 0,
+      "showcaseCooldown": 0,
+      "showcaseLeft": 0,
+      "deadlineIn": 360,
+      "deadlineLeft": 0,
+      "sold": 0,
+      "soldCareer": 0,
+      "best": 0,
+      "leftFree": 0,
+      "lastSeen": 1791374400000,
+      "nextId": 2
+    },
+    "stageNote": "Actual generated prospect, age 18, rating 85 and agent office level 10 explicitly staged; senior uses actual promote."
+  },
+  {
+    "id": "sale-false",
+    "actual": {
+      "state": {
+        "v": 1,
+        "seed": 1701,
+        "cash": 11204,
+        "lifetime": 1328,
+        "careerEarned": 1328,
+        "rep": 0,
+        "levels": {
+          "scouting": 0,
+          "coaching": 0,
+          "dorms": 0,
+          "agents": 10
+        },
+        "prospects": [],
+        "scoutProgress": 0,
+        "showcaseCooldown": 0,
+        "showcaseLeft": 0,
+        "deadlineIn": 360,
+        "deadlineLeft": 0,
+        "sold": 1,
+        "soldCareer": 1,
+        "best": 1328,
+        "leftFree": 0,
+        "lastSeen": 1791374400000,
+        "nextId": 2,
+        "awayMs": 0
+      },
+      "immediate": "{\"v\":1,\"seed\":1701,\"cash\":9876,\"lifetime\":0,\"careerEarned\":0,\"rep\":0,\"levels\":{\"scouting\":0,\"coaching\":0,\"dorms\":0,\"agents\":10},\"prospects\":[{\"id\":1,\"name\":\"Halvor Bjørkli\",\"nation\":\"Sweden\",\"pos\":\"FW\",\"age\":18,\"ageClock\":103.76427511218935,\"rating\":85,\"potential\":94}],\"scoutProgress\":0,\"showcaseCooldown\":0,\"showcaseLeft\":0,\"deadlineIn\":360,\"deadlineLeft\":0,\"sold\":0,\"soldCareer\":0,\"best\":0,\"leftFree\":0,\"lastSeen\":1791374400000,\"nextId\":2}",
+      "draws": 0,
+      "now": 1791374400000,
+      "errors": []
+    },
+    "expected": {
+      "state": {
+        "v": 1,
+        "seed": 1701,
+        "cash": 11204,
+        "lifetime": 1328,
+        "careerEarned": 1328,
+        "rep": 0,
+        "levels": {
+          "scouting": 0,
+          "coaching": 0,
+          "dorms": 0,
+          "agents": 10
+        },
+        "prospects": [],
+        "scoutProgress": 0,
+        "showcaseCooldown": 0,
+        "showcaseLeft": 0,
+        "deadlineIn": 360,
+        "deadlineLeft": 0,
+        "sold": 1,
+        "soldCareer": 1,
+        "best": 1328,
+        "leftFree": 0,
+        "lastSeen": 1791374400000,
+        "nextId": 2,
+        "awayMs": 0
+      },
+      "immediate": "{\"v\":1,\"seed\":1701,\"cash\":9876,\"lifetime\":0,\"careerEarned\":0,\"rep\":0,\"levels\":{\"scouting\":0,\"coaching\":0,\"dorms\":0,\"agents\":10},\"prospects\":[{\"id\":1,\"name\":\"Halvor Bjørkli\",\"nation\":\"Sweden\",\"pos\":\"FW\",\"age\":18,\"ageClock\":103.76427511218935,\"rating\":85,\"potential\":94}],\"scoutProgress\":0,\"showcaseCooldown\":0,\"showcaseLeft\":0,\"deadlineIn\":360,\"deadlineLeft\":0,\"sold\":0,\"soldCareer\":0,\"best\":0,\"leftFree\":0,\"lastSeen\":1791374400000,\"nextId\":2}",
+      "draws": 0,
+      "now": 1791374400000,
+      "errors": []
+    },
+    "price": 1328,
+    "before": {
+      "v": 1,
+      "seed": 1701,
+      "cash": 9876,
+      "lifetime": 0,
+      "careerEarned": 0,
+      "rep": 0,
+      "levels": {
+        "scouting": 0,
+        "coaching": 0,
+        "dorms": 0,
+        "agents": 10
+      },
+      "prospects": [
+        {
+          "id": 1,
+          "name": "Halvor Bjørkli",
+          "nation": "Sweden",
+          "pos": "FW",
+          "age": 18,
+          "ageClock": 103.76427511218935,
+          "rating": 85,
+          "potential": 94
+        }
+      ],
+      "scoutProgress": 0,
+      "showcaseCooldown": 0,
+      "showcaseLeft": 0,
+      "deadlineIn": 360,
+      "deadlineLeft": 0,
+      "sold": 0,
+      "soldCareer": 0,
+      "best": 0,
+      "leftFree": 0,
+      "lastSeen": 1791374400000,
+      "nextId": 2,
+      "awayMs": 0
+    },
+    "requests": [
+      {
+        "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+        "method": "POST",
+        "body": "{\"game\":\"wonderkid-factory\",\"player_name\":\"MoneyProof-10\"}",
+        "locallyFulfilled": true
+      }
+    ]
+  },
+  {
+    "id": "saved-false",
+    "actual": {
+      "storage": {
+        "local": {
+          "dukb-guest-handle": "MoneyProof-10",
+          "dukb-local-completions": "{\"date\":\"2026-10-07\",\"slugs\":[\"wonderkid-factory\"]}",
+          "dukb-play-diary-v1": "{\"version\":1,\"keptSince\":\"2026-10-07\",\"global\":{\"from\":null,\"days\":[\"2026-10-07\"]},\"perGame\":{\"wonderkid-factory\":{\"from\":null,\"days\":[\"2026-10-07\"]}},\"heldAtStart\":{\"longest\":0,\"bestGameStreak\":0}}",
+          "dukb-streaks-v1": "{\"version\":1,\"global\":{\"current\":1,\"longest\":1,\"lastDate\":\"2026-10-07\"},\"perGame\":{\"wonderkid-factory\":{\"current\":1,\"longest\":1,\"lastDate\":\"2026-10-07\"}},\"loginDates\":[],\"totalPlays\":1,\"totalPoints\":0}",
+          "protected-other-career": "{\"untouched\":true}",
+          "wonderkidFactoryV1": "{\"v\":1,\"seed\":1701,\"cash\":11204,\"lifetime\":1328,\"careerEarned\":1328,\"rep\":0,\"levels\":{\"scouting\":0,\"coaching\":0,\"dorms\":0,\"agents\":10},\"prospects\":[],\"scoutProgress\":0,\"showcaseCooldown\":0,\"showcaseLeft\":0,\"deadlineIn\":360,\"deadlineLeft\":0,\"sold\":1,\"soldCareer\":1,\"best\":1328,\"leftFree\":0,\"lastSeen\":1791374400000,\"nextId\":2,\"awayMs\":0}"
+        },
+        "session": {
+          "protected-session": "held"
+        }
+      },
+      "saved": "{\"v\":1,\"seed\":1701,\"cash\":11204,\"lifetime\":1328,\"careerEarned\":1328,\"rep\":0,\"levels\":{\"scouting\":0,\"coaching\":0,\"dorms\":0,\"agents\":10},\"prospects\":[],\"scoutProgress\":0,\"showcaseCooldown\":0,\"showcaseLeft\":0,\"deadlineIn\":360,\"deadlineLeft\":0,\"sold\":1,\"soldCareer\":1,\"best\":1328,\"leftFree\":0,\"lastSeen\":1791374400000,\"nextId\":2,\"awayMs\":0}",
+      "saveWrites": [
+        {
+          "scope": "local",
+          "op": "set",
+          "key": "wonderkidFactoryV1",
+          "value": "{\"v\":1,\"seed\":1701,\"cash\":11204,\"lifetime\":1328,\"careerEarned\":1328,\"rep\":0,\"levels\":{\"scouting\":0,\"coaching\":0,\"dorms\":0,\"agents\":10},\"prospects\":[],\"scoutProgress\":0,\"showcaseCooldown\":0,\"showcaseLeft\":0,\"deadlineIn\":360,\"deadlineLeft\":0,\"sold\":1,\"soldCareer\":1,\"best\":1328,\"leftFree\":0,\"lastSeen\":1791374400000,\"nextId\":2,\"awayMs\":0}"
+        }
+      ],
+      "requests": [
+        {
+          "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+          "method": "POST",
+          "body": "{\"game\":\"wonderkid-factory\",\"player_name\":\"MoneyProof-10\"}",
+          "locallyFulfilled": true
+        }
+      ],
+      "errors": []
+    },
+    "expected": {
+      "storage": {
+        "local": {
+          "dukb-guest-handle": "MoneyProof-10",
+          "dukb-local-completions": "{\"date\":\"2026-10-07\",\"slugs\":[\"wonderkid-factory\"]}",
+          "dukb-play-diary-v1": "{\"version\":1,\"keptSince\":\"2026-10-07\",\"global\":{\"from\":null,\"days\":[\"2026-10-07\"]},\"perGame\":{\"wonderkid-factory\":{\"from\":null,\"days\":[\"2026-10-07\"]}},\"heldAtStart\":{\"longest\":0,\"bestGameStreak\":0}}",
+          "dukb-streaks-v1": "{\"version\":1,\"global\":{\"current\":1,\"longest\":1,\"lastDate\":\"2026-10-07\"},\"perGame\":{\"wonderkid-factory\":{\"current\":1,\"longest\":1,\"lastDate\":\"2026-10-07\"}},\"loginDates\":[],\"totalPlays\":1,\"totalPoints\":0}",
+          "protected-other-career": "{\"untouched\":true}",
+          "wonderkidFactoryV1": "{\"v\":1,\"seed\":1701,\"cash\":11204,\"lifetime\":1328,\"careerEarned\":1328,\"rep\":0,\"levels\":{\"scouting\":0,\"coaching\":0,\"dorms\":0,\"agents\":10},\"prospects\":[],\"scoutProgress\":0,\"showcaseCooldown\":0,\"showcaseLeft\":0,\"deadlineIn\":360,\"deadlineLeft\":0,\"sold\":1,\"soldCareer\":1,\"best\":1328,\"leftFree\":0,\"lastSeen\":1791374400000,\"nextId\":2,\"awayMs\":0}"
+        },
+        "session": {
+          "protected-session": "held"
+        }
+      },
+      "saved": "{\"v\":1,\"seed\":1701,\"cash\":11204,\"lifetime\":1328,\"careerEarned\":1328,\"rep\":0,\"levels\":{\"scouting\":0,\"coaching\":0,\"dorms\":0,\"agents\":10},\"prospects\":[],\"scoutProgress\":0,\"showcaseCooldown\":0,\"showcaseLeft\":0,\"deadlineIn\":360,\"deadlineLeft\":0,\"sold\":1,\"soldCareer\":1,\"best\":1328,\"leftFree\":0,\"lastSeen\":1791374400000,\"nextId\":2,\"awayMs\":0}",
+      "saveWrites": [
+        {
+          "scope": "local",
+          "op": "set",
+          "key": "wonderkidFactoryV1",
+          "value": "{\"v\":1,\"seed\":1701,\"cash\":11204,\"lifetime\":1328,\"careerEarned\":1328,\"rep\":0,\"levels\":{\"scouting\":0,\"coaching\":0,\"dorms\":0,\"agents\":10},\"prospects\":[],\"scoutProgress\":0,\"showcaseCooldown\":0,\"showcaseLeft\":0,\"deadlineIn\":360,\"deadlineLeft\":0,\"sold\":1,\"soldCareer\":1,\"best\":1328,\"leftFree\":0,\"lastSeen\":1791374400000,\"nextId\":2,\"awayMs\":0}"
+        }
+      ],
+      "requests": [
+        {
+          "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+          "method": "POST",
+          "body": "{\"game\":\"wonderkid-factory\",\"player_name\":\"MoneyProof-10\"}",
+          "locallyFulfilled": true
+        }
+      ],
+      "errors": []
+    },
+    "beforeHideWrites": 0,
+    "allWrites": [
+      {
+        "scope": "local",
+        "op": "set",
+        "key": "dukb-play-diary-v1",
+        "value": "{\"version\":1,\"keptSince\":\"2026-10-07\",\"global\":{\"from\":null,\"days\":[\"2026-10-07\"]},\"perGame\":{\"wonderkid-factory\":{\"from\":null,\"days\":[\"2026-10-07\"]}},\"heldAtStart\":{\"longest\":0,\"bestGameStreak\":0}}"
+      },
+      {
+        "scope": "local",
+        "op": "set",
+        "key": "dukb-streaks-v1",
+        "value": "{\"version\":1,\"global\":{\"current\":1,\"longest\":1,\"lastDate\":\"2026-10-07\"},\"perGame\":{\"wonderkid-factory\":{\"current\":1,\"longest\":1,\"lastDate\":\"2026-10-07\"}},\"loginDates\":[],\"totalPlays\":1,\"totalPoints\":0}"
+      },
+      {
+        "scope": "local",
+        "op": "set",
+        "key": "dukb-local-completions",
+        "value": "{\"date\":\"2026-10-07\",\"slugs\":[\"wonderkid-factory\"]}"
+      },
+      {
+        "scope": "local",
+        "op": "set",
+        "key": "wonderkidFactoryV1",
+        "value": "{\"v\":1,\"seed\":1701,\"cash\":11204,\"lifetime\":1328,\"careerEarned\":1328,\"rep\":0,\"levels\":{\"scouting\":0,\"coaching\":0,\"dorms\":0,\"agents\":10},\"prospects\":[],\"scoutProgress\":0,\"showcaseCooldown\":0,\"showcaseLeft\":0,\"deadlineIn\":360,\"deadlineLeft\":0,\"sold\":1,\"soldCareer\":1,\"best\":1328,\"leftFree\":0,\"lastSeen\":1791374400000,\"nextId\":2,\"awayMs\":0}"
+      }
+    ],
+    "completionOracle": {
+      "storage": {
+        "local": {
+          "dukb-guest-handle": "MoneyProof-10",
+          "dukb-local-completions": "{\"date\":\"2026-10-07\",\"slugs\":[\"wonderkid-factory\"]}",
+          "dukb-play-diary-v1": "{\"version\":1,\"keptSince\":\"2026-10-07\",\"global\":{\"from\":null,\"days\":[\"2026-10-07\"]},\"perGame\":{\"wonderkid-factory\":{\"from\":null,\"days\":[\"2026-10-07\"]}},\"heldAtStart\":{\"longest\":0,\"bestGameStreak\":0}}",
+          "dukb-streaks-v1": "{\"version\":1,\"global\":{\"current\":1,\"longest\":1,\"lastDate\":\"2026-10-07\"},\"perGame\":{\"wonderkid-factory\":{\"current\":1,\"longest\":1,\"lastDate\":\"2026-10-07\"}},\"loginDates\":[],\"totalPlays\":1,\"totalPoints\":0}",
+          "protected-other-career": "{\"untouched\":true}",
+          "wonderkidFactoryV1": "{\"v\":1,\"seed\":1701,\"cash\":9876,\"lifetime\":0,\"careerEarned\":0,\"rep\":0,\"levels\":{\"scouting\":0,\"coaching\":0,\"dorms\":0,\"agents\":10},\"prospects\":[{\"id\":1,\"name\":\"Halvor Bjørkli\",\"nation\":\"Sweden\",\"pos\":\"FW\",\"age\":18,\"ageClock\":103.76427511218935,\"rating\":85,\"potential\":94}],\"scoutProgress\":0,\"showcaseCooldown\":0,\"showcaseLeft\":0,\"deadlineIn\":360,\"deadlineLeft\":0,\"sold\":0,\"soldCareer\":0,\"best\":0,\"leftFree\":0,\"lastSeen\":1791374400000,\"nextId\":2}"
+        },
+        "session": {
+          "protected-session": "held"
+        }
+      },
+      "writes": [
+        {
+          "scope": "local",
+          "op": "set",
+          "key": "wonderkidFactoryV1",
+          "value": "{\"v\":1,\"seed\":1701,\"cash\":9876,\"lifetime\":0,\"careerEarned\":0,\"rep\":0,\"levels\":{\"scouting\":0,\"coaching\":0,\"dorms\":0,\"agents\":10},\"prospects\":[{\"id\":1,\"name\":\"Halvor Bjørkli\",\"nation\":\"Sweden\",\"pos\":\"FW\",\"age\":18,\"ageClock\":103.76427511218935,\"rating\":85,\"potential\":94}],\"scoutProgress\":0,\"showcaseCooldown\":0,\"showcaseLeft\":0,\"deadlineIn\":360,\"deadlineLeft\":0,\"sold\":0,\"soldCareer\":0,\"best\":0,\"leftFree\":0,\"lastSeen\":1791374400000,\"nextId\":2}"
+        },
+        {
+          "scope": "local",
+          "op": "set",
+          "key": "dukb-play-diary-v1",
+          "value": "{\"version\":1,\"keptSince\":\"2026-10-07\",\"global\":{\"from\":null,\"days\":[\"2026-10-07\"]},\"perGame\":{\"wonderkid-factory\":{\"from\":null,\"days\":[\"2026-10-07\"]}},\"heldAtStart\":{\"longest\":0,\"bestGameStreak\":0}}"
+        },
+        {
+          "scope": "local",
+          "op": "set",
+          "key": "dukb-streaks-v1",
+          "value": "{\"version\":1,\"global\":{\"current\":1,\"longest\":1,\"lastDate\":\"2026-10-07\"},\"perGame\":{\"wonderkid-factory\":{\"current\":1,\"longest\":1,\"lastDate\":\"2026-10-07\"}},\"loginDates\":[],\"totalPlays\":1,\"totalPoints\":0}"
+        },
+        {
+          "scope": "local",
+          "op": "set",
+          "key": "dukb-local-completions",
+          "value": "{\"date\":\"2026-10-07\",\"slugs\":[\"wonderkid-factory\"]}"
+        }
+      ],
+      "draws": 0,
+      "now": 1791374400000,
+      "requests": [
+        {
+          "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+          "method": "POST",
+          "body": "{\"game\":\"wonderkid-factory\",\"player_name\":\"MoneyProof-10\"}",
+          "locallyFulfilled": true
+        }
+      ],
+      "errors": []
+    }
+  },
+  {
+    "id": "reload-false",
+    "actual": {
+      "state": {
+        "v": 1,
+        "seed": 1701,
+        "cash": 11204,
+        "lifetime": 1328,
+        "careerEarned": 1328,
+        "rep": 0,
+        "levels": {
+          "scouting": 0,
+          "coaching": 0,
+          "dorms": 0,
+          "agents": 10
+        },
+        "prospects": [],
+        "scoutProgress": 0,
+        "showcaseCooldown": 0,
+        "showcaseLeft": 0,
+        "deadlineIn": 360,
+        "deadlineLeft": 0,
+        "sold": 1,
+        "soldCareer": 1,
+        "best": 1328,
+        "leftFree": 0,
+        "lastSeen": 1791374400000,
+        "nextId": 2,
+        "awayMs": 0
+      },
+      "storage": {
+        "local": {
+          "dukb-guest-handle": "MoneyProof-10",
+          "dukb-local-completions": "{\"date\":\"2026-10-07\",\"slugs\":[\"wonderkid-factory\"]}",
+          "dukb-play-diary-v1": "{\"version\":1,\"keptSince\":\"2026-10-07\",\"global\":{\"from\":null,\"days\":[\"2026-10-07\"]},\"perGame\":{\"wonderkid-factory\":{\"from\":null,\"days\":[\"2026-10-07\"]}},\"heldAtStart\":{\"longest\":0,\"bestGameStreak\":0}}",
+          "dukb-streaks-v1": "{\"version\":1,\"global\":{\"current\":1,\"longest\":1,\"lastDate\":\"2026-10-07\"},\"perGame\":{\"wonderkid-factory\":{\"current\":1,\"longest\":1,\"lastDate\":\"2026-10-07\"}},\"loginDates\":[],\"totalPlays\":1,\"totalPoints\":0}",
+          "protected-other-career": "{\"untouched\":true}",
+          "wonderkidFactoryV1": "{\"v\":1,\"seed\":1701,\"cash\":11204,\"lifetime\":1328,\"careerEarned\":1328,\"rep\":0,\"levels\":{\"scouting\":0,\"coaching\":0,\"dorms\":0,\"agents\":10},\"prospects\":[],\"scoutProgress\":0,\"showcaseCooldown\":0,\"showcaseLeft\":0,\"deadlineIn\":360,\"deadlineLeft\":0,\"sold\":1,\"soldCareer\":1,\"best\":1328,\"leftFree\":0,\"lastSeen\":1791374400000,\"nextId\":2,\"awayMs\":0}"
+        },
+        "session": {
+          "protected-session": "held"
+        }
+      },
+      "draws": 0,
+      "now": 1791374400000,
+      "requests": [
+        {
+          "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+          "method": "POST",
+          "body": "{\"game\":\"wonderkid-factory\",\"player_name\":\"MoneyProof-10\"}",
+          "locallyFulfilled": true
+        }
+      ]
+    },
+    "expected": {
+      "state": {
+        "v": 1,
+        "seed": 1701,
+        "cash": 11204,
+        "lifetime": 1328,
+        "careerEarned": 1328,
+        "rep": 0,
+        "levels": {
+          "scouting": 0,
+          "coaching": 0,
+          "dorms": 0,
+          "agents": 10
+        },
+        "prospects": [],
+        "scoutProgress": 0,
+        "showcaseCooldown": 0,
+        "showcaseLeft": 0,
+        "deadlineIn": 360,
+        "deadlineLeft": 0,
+        "sold": 1,
+        "soldCareer": 1,
+        "best": 1328,
+        "leftFree": 0,
+        "lastSeen": 1791374400000,
+        "nextId": 2,
+        "awayMs": 0
+      },
+      "storage": {
+        "local": {
+          "dukb-guest-handle": "MoneyProof-10",
+          "dukb-local-completions": "{\"date\":\"2026-10-07\",\"slugs\":[\"wonderkid-factory\"]}",
+          "dukb-play-diary-v1": "{\"version\":1,\"keptSince\":\"2026-10-07\",\"global\":{\"from\":null,\"days\":[\"2026-10-07\"]},\"perGame\":{\"wonderkid-factory\":{\"from\":null,\"days\":[\"2026-10-07\"]}},\"heldAtStart\":{\"longest\":0,\"bestGameStreak\":0}}",
+          "dukb-streaks-v1": "{\"version\":1,\"global\":{\"current\":1,\"longest\":1,\"lastDate\":\"2026-10-07\"},\"perGame\":{\"wonderkid-factory\":{\"current\":1,\"longest\":1,\"lastDate\":\"2026-10-07\"}},\"loginDates\":[],\"totalPlays\":1,\"totalPoints\":0}",
+          "protected-other-career": "{\"untouched\":true}",
+          "wonderkidFactoryV1": "{\"v\":1,\"seed\":1701,\"cash\":11204,\"lifetime\":1328,\"careerEarned\":1328,\"rep\":0,\"levels\":{\"scouting\":0,\"coaching\":0,\"dorms\":0,\"agents\":10},\"prospects\":[],\"scoutProgress\":0,\"showcaseCooldown\":0,\"showcaseLeft\":0,\"deadlineIn\":360,\"deadlineLeft\":0,\"sold\":1,\"soldCareer\":1,\"best\":1328,\"leftFree\":0,\"lastSeen\":1791374400000,\"nextId\":2,\"awayMs\":0}"
+        },
+        "session": {
+          "protected-session": "held"
+        }
+      },
+      "draws": 0,
+      "now": 1791374400000,
+      "requests": [
+        {
+          "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+          "method": "POST",
+          "body": "{\"game\":\"wonderkid-factory\",\"player_name\":\"MoneyProof-10\"}",
+          "locallyFulfilled": true
+        }
+      ]
+    },
+    "savedBytes": "{\"v\":1,\"seed\":1701,\"cash\":11204,\"lifetime\":1328,\"careerEarned\":1328,\"rep\":0,\"levels\":{\"scouting\":0,\"coaching\":0,\"dorms\":0,\"agents\":10},\"prospects\":[],\"scoutProgress\":0,\"showcaseCooldown\":0,\"showcaseLeft\":0,\"deadlineIn\":360,\"deadlineLeft\":0,\"sold\":1,\"soldCareer\":1,\"best\":1328,\"leftFree\":0,\"lastSeen\":1791374400000,\"nextId\":2,\"awayMs\":0}"
+  },
+  {
+    "id": "loaded-true",
+    "actual": {
+      "v": 1,
+      "seed": 1701,
+      "cash": 9876,
+      "lifetime": 0,
+      "careerEarned": 0,
+      "rep": 0,
+      "levels": {
+        "scouting": 0,
+        "coaching": 0,
+        "dorms": 0,
+        "agents": 10
+      },
+      "prospects": [],
+      "scoutProgress": 0,
+      "showcaseCooldown": 0,
+      "showcaseLeft": 0,
+      "deadlineIn": 360,
+      "deadlineLeft": 0,
+      "sold": 0,
+      "soldCareer": 0,
+      "best": 0,
+      "leftFree": 0,
+      "lastSeen": 1791374400000,
+      "nextId": 2,
+      "firstTeam": [
+        {
+          "id": "srqa4qnfqa4qnf-1",
+          "name": "Halvor Bjørkli",
+          "nation": "Sweden",
+          "pos": "FW",
+          "age": 18,
+          "ageClock": 311.29282533656806,
+          "rating": 85,
+          "potential": 94
+        }
+      ],
+      "awayMs": 0
+    },
+    "expected": {
+      "v": 1,
+      "seed": 1701,
+      "cash": 9876,
+      "lifetime": 0,
+      "careerEarned": 0,
+      "rep": 0,
+      "levels": {
+        "scouting": 0,
+        "coaching": 0,
+        "dorms": 0,
+        "agents": 10
+      },
+      "prospects": [],
+      "scoutProgress": 0,
+      "showcaseCooldown": 0,
+      "showcaseLeft": 0,
+      "deadlineIn": 360,
+      "deadlineLeft": 0,
+      "sold": 0,
+      "soldCareer": 0,
+      "best": 0,
+      "leftFree": 0,
+      "lastSeen": 1791374400000,
+      "nextId": 2,
+      "firstTeam": [
+        {
+          "id": "srqa4qnfqa4qnf-1",
+          "name": "Halvor Bjørkli",
+          "nation": "Sweden",
+          "pos": "FW",
+          "age": 18,
+          "ageClock": 311.29282533656806,
+          "rating": 85,
+          "potential": 94
+        }
+      ],
+      "awayMs": 0
+    },
+    "staged": {
+      "v": 1,
+      "seed": 1701,
+      "cash": 9876,
+      "lifetime": 0,
+      "careerEarned": 0,
+      "rep": 0,
+      "levels": {
+        "scouting": 0,
+        "coaching": 0,
+        "dorms": 0,
+        "agents": 10
+      },
+      "prospects": [],
+      "scoutProgress": 0,
+      "showcaseCooldown": 0,
+      "showcaseLeft": 0,
+      "deadlineIn": 360,
+      "deadlineLeft": 0,
+      "sold": 0,
+      "soldCareer": 0,
+      "best": 0,
+      "leftFree": 0,
+      "lastSeen": 1791374400000,
+      "nextId": 2,
+      "firstTeam": [
+        {
+          "id": "srqa4qnfqa4qnf-1",
+          "name": "Halvor Bjørkli",
+          "nation": "Sweden",
+          "pos": "FW",
+          "age": 18,
+          "ageClock": 311.29282533656806,
+          "rating": 85,
+          "potential": 94
+        }
+      ]
+    },
+    "stageNote": "Actual generated prospect, age 18, rating 85 and agent office level 10 explicitly staged; senior uses actual promote."
+  },
+  {
+    "id": "sale-true",
+    "actual": {
+      "state": {
+        "v": 1,
+        "seed": 1701,
+        "cash": 11204,
+        "lifetime": 1328,
+        "careerEarned": 1328,
+        "rep": 0,
+        "levels": {
+          "scouting": 0,
+          "coaching": 0,
+          "dorms": 0,
+          "agents": 10
+        },
+        "prospects": [],
+        "scoutProgress": 0,
+        "showcaseCooldown": 0,
+        "showcaseLeft": 0,
+        "deadlineIn": 360,
+        "deadlineLeft": 0,
+        "sold": 1,
+        "soldCareer": 1,
+        "best": 1328,
+        "leftFree": 0,
+        "lastSeen": 1791374400000,
+        "nextId": 2,
+        "firstTeam": [],
+        "awayMs": 0
+      },
+      "immediate": "{\"v\":1,\"seed\":1701,\"cash\":11204,\"lifetime\":1328,\"careerEarned\":1328,\"rep\":0,\"levels\":{\"scouting\":0,\"coaching\":0,\"dorms\":0,\"agents\":10},\"prospects\":[],\"scoutProgress\":0,\"showcaseCooldown\":0,\"showcaseLeft\":0,\"deadlineIn\":360,\"deadlineLeft\":0,\"sold\":1,\"soldCareer\":1,\"best\":1328,\"leftFree\":0,\"lastSeen\":1791374400000,\"nextId\":2,\"firstTeam\":[],\"awayMs\":0}",
+      "draws": 0,
+      "now": 1791374400000,
+      "errors": []
+    },
+    "expected": {
+      "state": {
+        "v": 1,
+        "seed": 1701,
+        "cash": 11204,
+        "lifetime": 1328,
+        "careerEarned": 1328,
+        "rep": 0,
+        "levels": {
+          "scouting": 0,
+          "coaching": 0,
+          "dorms": 0,
+          "agents": 10
+        },
+        "prospects": [],
+        "scoutProgress": 0,
+        "showcaseCooldown": 0,
+        "showcaseLeft": 0,
+        "deadlineIn": 360,
+        "deadlineLeft": 0,
+        "sold": 1,
+        "soldCareer": 1,
+        "best": 1328,
+        "leftFree": 0,
+        "lastSeen": 1791374400000,
+        "nextId": 2,
+        "firstTeam": [],
+        "awayMs": 0
+      },
+      "immediate": "{\"v\":1,\"seed\":1701,\"cash\":11204,\"lifetime\":1328,\"careerEarned\":1328,\"rep\":0,\"levels\":{\"scouting\":0,\"coaching\":0,\"dorms\":0,\"agents\":10},\"prospects\":[],\"scoutProgress\":0,\"showcaseCooldown\":0,\"showcaseLeft\":0,\"deadlineIn\":360,\"deadlineLeft\":0,\"sold\":1,\"soldCareer\":1,\"best\":1328,\"leftFree\":0,\"lastSeen\":1791374400000,\"nextId\":2,\"firstTeam\":[],\"awayMs\":0}",
+      "draws": 0,
+      "now": 1791374400000,
+      "errors": []
+    },
+    "price": 1328,
+    "before": {
+      "v": 1,
+      "seed": 1701,
+      "cash": 9876,
+      "lifetime": 0,
+      "careerEarned": 0,
+      "rep": 0,
+      "levels": {
+        "scouting": 0,
+        "coaching": 0,
+        "dorms": 0,
+        "agents": 10
+      },
+      "prospects": [],
+      "scoutProgress": 0,
+      "showcaseCooldown": 0,
+      "showcaseLeft": 0,
+      "deadlineIn": 360,
+      "deadlineLeft": 0,
+      "sold": 0,
+      "soldCareer": 0,
+      "best": 0,
+      "leftFree": 0,
+      "lastSeen": 1791374400000,
+      "nextId": 2,
+      "firstTeam": [
+        {
+          "id": "srqa4qnfqa4qnf-1",
+          "name": "Halvor Bjørkli",
+          "nation": "Sweden",
+          "pos": "FW",
+          "age": 18,
+          "ageClock": 311.29282533656806,
+          "rating": 85,
+          "potential": 94
+        }
+      ],
+      "awayMs": 0
+    },
+    "requests": [
+      {
+        "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+        "method": "POST",
+        "body": "{\"game\":\"wonderkid-factory\",\"player_name\":\"MoneyProof-10\"}",
+        "locallyFulfilled": true
+      }
+    ]
+  },
+  {
+    "id": "saved-true",
+    "actual": {
+      "storage": {
+        "local": {
+          "dukb-guest-handle": "MoneyProof-10",
+          "dukb-local-completions": "{\"date\":\"2026-10-07\",\"slugs\":[\"wonderkid-factory\"]}",
+          "dukb-play-diary-v1": "{\"version\":1,\"keptSince\":\"2026-10-07\",\"global\":{\"from\":null,\"days\":[\"2026-10-07\"]},\"perGame\":{\"wonderkid-factory\":{\"from\":null,\"days\":[\"2026-10-07\"]}},\"heldAtStart\":{\"longest\":0,\"bestGameStreak\":0}}",
+          "dukb-streaks-v1": "{\"version\":1,\"global\":{\"current\":1,\"longest\":1,\"lastDate\":\"2026-10-07\"},\"perGame\":{\"wonderkid-factory\":{\"current\":1,\"longest\":1,\"lastDate\":\"2026-10-07\"}},\"loginDates\":[],\"totalPlays\":1,\"totalPoints\":0}",
+          "protected-other-career": "{\"untouched\":true}",
+          "wonderkidFactoryV1": "{\"v\":1,\"seed\":1701,\"cash\":11204,\"lifetime\":1328,\"careerEarned\":1328,\"rep\":0,\"levels\":{\"scouting\":0,\"coaching\":0,\"dorms\":0,\"agents\":10},\"prospects\":[],\"scoutProgress\":0,\"showcaseCooldown\":0,\"showcaseLeft\":0,\"deadlineIn\":360,\"deadlineLeft\":0,\"sold\":1,\"soldCareer\":1,\"best\":1328,\"leftFree\":0,\"lastSeen\":1791374400000,\"nextId\":2,\"firstTeam\":[],\"awayMs\":0}"
+        },
+        "session": {
+          "protected-session": "held"
+        }
+      },
+      "saved": "{\"v\":1,\"seed\":1701,\"cash\":11204,\"lifetime\":1328,\"careerEarned\":1328,\"rep\":0,\"levels\":{\"scouting\":0,\"coaching\":0,\"dorms\":0,\"agents\":10},\"prospects\":[],\"scoutProgress\":0,\"showcaseCooldown\":0,\"showcaseLeft\":0,\"deadlineIn\":360,\"deadlineLeft\":0,\"sold\":1,\"soldCareer\":1,\"best\":1328,\"leftFree\":0,\"lastSeen\":1791374400000,\"nextId\":2,\"firstTeam\":[],\"awayMs\":0}",
+      "saveWrites": [
+        {
+          "scope": "local",
+          "op": "set",
+          "key": "wonderkidFactoryV1",
+          "value": "{\"v\":1,\"seed\":1701,\"cash\":11204,\"lifetime\":1328,\"careerEarned\":1328,\"rep\":0,\"levels\":{\"scouting\":0,\"coaching\":0,\"dorms\":0,\"agents\":10},\"prospects\":[],\"scoutProgress\":0,\"showcaseCooldown\":0,\"showcaseLeft\":0,\"deadlineIn\":360,\"deadlineLeft\":0,\"sold\":1,\"soldCareer\":1,\"best\":1328,\"leftFree\":0,\"lastSeen\":1791374400000,\"nextId\":2,\"firstTeam\":[],\"awayMs\":0}"
+        },
+        {
+          "scope": "local",
+          "op": "set",
+          "key": "wonderkidFactoryV1",
+          "value": "{\"v\":1,\"seed\":1701,\"cash\":11204,\"lifetime\":1328,\"careerEarned\":1328,\"rep\":0,\"levels\":{\"scouting\":0,\"coaching\":0,\"dorms\":0,\"agents\":10},\"prospects\":[],\"scoutProgress\":0,\"showcaseCooldown\":0,\"showcaseLeft\":0,\"deadlineIn\":360,\"deadlineLeft\":0,\"sold\":1,\"soldCareer\":1,\"best\":1328,\"leftFree\":0,\"lastSeen\":1791374400000,\"nextId\":2,\"firstTeam\":[],\"awayMs\":0}"
+        }
+      ],
+      "requests": [
+        {
+          "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+          "method": "POST",
+          "body": "{\"game\":\"wonderkid-factory\",\"player_name\":\"MoneyProof-10\"}",
+          "locallyFulfilled": true
+        }
+      ],
+      "errors": []
+    },
+    "expected": {
+      "storage": {
+        "local": {
+          "dukb-guest-handle": "MoneyProof-10",
+          "dukb-local-completions": "{\"date\":\"2026-10-07\",\"slugs\":[\"wonderkid-factory\"]}",
+          "dukb-play-diary-v1": "{\"version\":1,\"keptSince\":\"2026-10-07\",\"global\":{\"from\":null,\"days\":[\"2026-10-07\"]},\"perGame\":{\"wonderkid-factory\":{\"from\":null,\"days\":[\"2026-10-07\"]}},\"heldAtStart\":{\"longest\":0,\"bestGameStreak\":0}}",
+          "dukb-streaks-v1": "{\"version\":1,\"global\":{\"current\":1,\"longest\":1,\"lastDate\":\"2026-10-07\"},\"perGame\":{\"wonderkid-factory\":{\"current\":1,\"longest\":1,\"lastDate\":\"2026-10-07\"}},\"loginDates\":[],\"totalPlays\":1,\"totalPoints\":0}",
+          "protected-other-career": "{\"untouched\":true}",
+          "wonderkidFactoryV1": "{\"v\":1,\"seed\":1701,\"cash\":11204,\"lifetime\":1328,\"careerEarned\":1328,\"rep\":0,\"levels\":{\"scouting\":0,\"coaching\":0,\"dorms\":0,\"agents\":10},\"prospects\":[],\"scoutProgress\":0,\"showcaseCooldown\":0,\"showcaseLeft\":0,\"deadlineIn\":360,\"deadlineLeft\":0,\"sold\":1,\"soldCareer\":1,\"best\":1328,\"leftFree\":0,\"lastSeen\":1791374400000,\"nextId\":2,\"firstTeam\":[],\"awayMs\":0}"
+        },
+        "session": {
+          "protected-session": "held"
+        }
+      },
+      "saved": "{\"v\":1,\"seed\":1701,\"cash\":11204,\"lifetime\":1328,\"careerEarned\":1328,\"rep\":0,\"levels\":{\"scouting\":0,\"coaching\":0,\"dorms\":0,\"agents\":10},\"prospects\":[],\"scoutProgress\":0,\"showcaseCooldown\":0,\"showcaseLeft\":0,\"deadlineIn\":360,\"deadlineLeft\":0,\"sold\":1,\"soldCareer\":1,\"best\":1328,\"leftFree\":0,\"lastSeen\":1791374400000,\"nextId\":2,\"firstTeam\":[],\"awayMs\":0}",
+      "saveWrites": [
+        {
+          "scope": "local",
+          "op": "set",
+          "key": "wonderkidFactoryV1",
+          "value": "{\"v\":1,\"seed\":1701,\"cash\":11204,\"lifetime\":1328,\"careerEarned\":1328,\"rep\":0,\"levels\":{\"scouting\":0,\"coaching\":0,\"dorms\":0,\"agents\":10},\"prospects\":[],\"scoutProgress\":0,\"showcaseCooldown\":0,\"showcaseLeft\":0,\"deadlineIn\":360,\"deadlineLeft\":0,\"sold\":1,\"soldCareer\":1,\"best\":1328,\"leftFree\":0,\"lastSeen\":1791374400000,\"nextId\":2,\"firstTeam\":[],\"awayMs\":0}"
+        },
+        {
+          "scope": "local",
+          "op": "set",
+          "key": "wonderkidFactoryV1",
+          "value": "{\"v\":1,\"seed\":1701,\"cash\":11204,\"lifetime\":1328,\"careerEarned\":1328,\"rep\":0,\"levels\":{\"scouting\":0,\"coaching\":0,\"dorms\":0,\"agents\":10},\"prospects\":[],\"scoutProgress\":0,\"showcaseCooldown\":0,\"showcaseLeft\":0,\"deadlineIn\":360,\"deadlineLeft\":0,\"sold\":1,\"soldCareer\":1,\"best\":1328,\"leftFree\":0,\"lastSeen\":1791374400000,\"nextId\":2,\"firstTeam\":[],\"awayMs\":0}"
+        }
+      ],
+      "requests": [
+        {
+          "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+          "method": "POST",
+          "body": "{\"game\":\"wonderkid-factory\",\"player_name\":\"MoneyProof-10\"}",
+          "locallyFulfilled": true
+        }
+      ],
+      "errors": []
+    },
+    "beforeHideWrites": 1,
+    "allWrites": [
+      {
+        "scope": "local",
+        "op": "set",
+        "key": "wonderkidFactoryV1",
+        "value": "{\"v\":1,\"seed\":1701,\"cash\":11204,\"lifetime\":1328,\"careerEarned\":1328,\"rep\":0,\"levels\":{\"scouting\":0,\"coaching\":0,\"dorms\":0,\"agents\":10},\"prospects\":[],\"scoutProgress\":0,\"showcaseCooldown\":0,\"showcaseLeft\":0,\"deadlineIn\":360,\"deadlineLeft\":0,\"sold\":1,\"soldCareer\":1,\"best\":1328,\"leftFree\":0,\"lastSeen\":1791374400000,\"nextId\":2,\"firstTeam\":[],\"awayMs\":0}"
+      },
+      {
+        "scope": "local",
+        "op": "set",
+        "key": "dukb-play-diary-v1",
+        "value": "{\"version\":1,\"keptSince\":\"2026-10-07\",\"global\":{\"from\":null,\"days\":[\"2026-10-07\"]},\"perGame\":{\"wonderkid-factory\":{\"from\":null,\"days\":[\"2026-10-07\"]}},\"heldAtStart\":{\"longest\":0,\"bestGameStreak\":0}}"
+      },
+      {
+        "scope": "local",
+        "op": "set",
+        "key": "dukb-streaks-v1",
+        "value": "{\"version\":1,\"global\":{\"current\":1,\"longest\":1,\"lastDate\":\"2026-10-07\"},\"perGame\":{\"wonderkid-factory\":{\"current\":1,\"longest\":1,\"lastDate\":\"2026-10-07\"}},\"loginDates\":[],\"totalPlays\":1,\"totalPoints\":0}"
+      },
+      {
+        "scope": "local",
+        "op": "set",
+        "key": "dukb-local-completions",
+        "value": "{\"date\":\"2026-10-07\",\"slugs\":[\"wonderkid-factory\"]}"
+      },
+      {
+        "scope": "local",
+        "op": "set",
+        "key": "wonderkidFactoryV1",
+        "value": "{\"v\":1,\"seed\":1701,\"cash\":11204,\"lifetime\":1328,\"careerEarned\":1328,\"rep\":0,\"levels\":{\"scouting\":0,\"coaching\":0,\"dorms\":0,\"agents\":10},\"prospects\":[],\"scoutProgress\":0,\"showcaseCooldown\":0,\"showcaseLeft\":0,\"deadlineIn\":360,\"deadlineLeft\":0,\"sold\":1,\"soldCareer\":1,\"best\":1328,\"leftFree\":0,\"lastSeen\":1791374400000,\"nextId\":2,\"firstTeam\":[],\"awayMs\":0}"
+      }
+    ],
+    "completionOracle": {
+      "storage": {
+        "local": {
+          "dukb-guest-handle": "MoneyProof-10",
+          "dukb-local-completions": "{\"date\":\"2026-10-07\",\"slugs\":[\"wonderkid-factory\"]}",
+          "dukb-play-diary-v1": "{\"version\":1,\"keptSince\":\"2026-10-07\",\"global\":{\"from\":null,\"days\":[\"2026-10-07\"]},\"perGame\":{\"wonderkid-factory\":{\"from\":null,\"days\":[\"2026-10-07\"]}},\"heldAtStart\":{\"longest\":0,\"bestGameStreak\":0}}",
+          "dukb-streaks-v1": "{\"version\":1,\"global\":{\"current\":1,\"longest\":1,\"lastDate\":\"2026-10-07\"},\"perGame\":{\"wonderkid-factory\":{\"current\":1,\"longest\":1,\"lastDate\":\"2026-10-07\"}},\"loginDates\":[],\"totalPlays\":1,\"totalPoints\":0}",
+          "protected-other-career": "{\"untouched\":true}",
+          "wonderkidFactoryV1": "{\"v\":1,\"seed\":1701,\"cash\":9876,\"lifetime\":0,\"careerEarned\":0,\"rep\":0,\"levels\":{\"scouting\":0,\"coaching\":0,\"dorms\":0,\"agents\":10},\"prospects\":[],\"scoutProgress\":0,\"showcaseCooldown\":0,\"showcaseLeft\":0,\"deadlineIn\":360,\"deadlineLeft\":0,\"sold\":0,\"soldCareer\":0,\"best\":0,\"leftFree\":0,\"lastSeen\":1791374400000,\"nextId\":2,\"firstTeam\":[{\"id\":\"srqa4qnfqa4qnf-1\",\"name\":\"Halvor Bjørkli\",\"nation\":\"Sweden\",\"pos\":\"FW\",\"age\":18,\"ageClock\":311.29282533656806,\"rating\":85,\"potential\":94}]}"
+        },
+        "session": {
+          "protected-session": "held"
+        }
+      },
+      "writes": [
+        {
+          "scope": "local",
+          "op": "set",
+          "key": "wonderkidFactoryV1",
+          "value": "{\"v\":1,\"seed\":1701,\"cash\":9876,\"lifetime\":0,\"careerEarned\":0,\"rep\":0,\"levels\":{\"scouting\":0,\"coaching\":0,\"dorms\":0,\"agents\":10},\"prospects\":[],\"scoutProgress\":0,\"showcaseCooldown\":0,\"showcaseLeft\":0,\"deadlineIn\":360,\"deadlineLeft\":0,\"sold\":0,\"soldCareer\":0,\"best\":0,\"leftFree\":0,\"lastSeen\":1791374400000,\"nextId\":2,\"firstTeam\":[{\"id\":\"srqa4qnfqa4qnf-1\",\"name\":\"Halvor Bjørkli\",\"nation\":\"Sweden\",\"pos\":\"FW\",\"age\":18,\"ageClock\":311.29282533656806,\"rating\":85,\"potential\":94}]}"
+        },
+        {
+          "scope": "local",
+          "op": "set",
+          "key": "dukb-play-diary-v1",
+          "value": "{\"version\":1,\"keptSince\":\"2026-10-07\",\"global\":{\"from\":null,\"days\":[\"2026-10-07\"]},\"perGame\":{\"wonderkid-factory\":{\"from\":null,\"days\":[\"2026-10-07\"]}},\"heldAtStart\":{\"longest\":0,\"bestGameStreak\":0}}"
+        },
+        {
+          "scope": "local",
+          "op": "set",
+          "key": "dukb-streaks-v1",
+          "value": "{\"version\":1,\"global\":{\"current\":1,\"longest\":1,\"lastDate\":\"2026-10-07\"},\"perGame\":{\"wonderkid-factory\":{\"current\":1,\"longest\":1,\"lastDate\":\"2026-10-07\"}},\"loginDates\":[],\"totalPlays\":1,\"totalPoints\":0}"
+        },
+        {
+          "scope": "local",
+          "op": "set",
+          "key": "dukb-local-completions",
+          "value": "{\"date\":\"2026-10-07\",\"slugs\":[\"wonderkid-factory\"]}"
+        }
+      ],
+      "draws": 0,
+      "now": 1791374400000,
+      "requests": [
+        {
+          "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+          "method": "POST",
+          "body": "{\"game\":\"wonderkid-factory\",\"player_name\":\"MoneyProof-10\"}",
+          "locallyFulfilled": true
+        }
+      ],
+      "errors": []
+    }
+  },
+  {
+    "id": "reload-true",
+    "actual": {
+      "state": {
+        "v": 1,
+        "seed": 1701,
+        "cash": 11204,
+        "lifetime": 1328,
+        "careerEarned": 1328,
+        "rep": 0,
+        "levels": {
+          "scouting": 0,
+          "coaching": 0,
+          "dorms": 0,
+          "agents": 10
+        },
+        "prospects": [],
+        "scoutProgress": 0,
+        "showcaseCooldown": 0,
+        "showcaseLeft": 0,
+        "deadlineIn": 360,
+        "deadlineLeft": 0,
+        "sold": 1,
+        "soldCareer": 1,
+        "best": 1328,
+        "leftFree": 0,
+        "lastSeen": 1791374400000,
+        "nextId": 2,
+        "firstTeam": [],
+        "awayMs": 0
+      },
+      "storage": {
+        "local": {
+          "dukb-guest-handle": "MoneyProof-10",
+          "dukb-local-completions": "{\"date\":\"2026-10-07\",\"slugs\":[\"wonderkid-factory\"]}",
+          "dukb-play-diary-v1": "{\"version\":1,\"keptSince\":\"2026-10-07\",\"global\":{\"from\":null,\"days\":[\"2026-10-07\"]},\"perGame\":{\"wonderkid-factory\":{\"from\":null,\"days\":[\"2026-10-07\"]}},\"heldAtStart\":{\"longest\":0,\"bestGameStreak\":0}}",
+          "dukb-streaks-v1": "{\"version\":1,\"global\":{\"current\":1,\"longest\":1,\"lastDate\":\"2026-10-07\"},\"perGame\":{\"wonderkid-factory\":{\"current\":1,\"longest\":1,\"lastDate\":\"2026-10-07\"}},\"loginDates\":[],\"totalPlays\":1,\"totalPoints\":0}",
+          "protected-other-career": "{\"untouched\":true}",
+          "wonderkidFactoryV1": "{\"v\":1,\"seed\":1701,\"cash\":11204,\"lifetime\":1328,\"careerEarned\":1328,\"rep\":0,\"levels\":{\"scouting\":0,\"coaching\":0,\"dorms\":0,\"agents\":10},\"prospects\":[],\"scoutProgress\":0,\"showcaseCooldown\":0,\"showcaseLeft\":0,\"deadlineIn\":360,\"deadlineLeft\":0,\"sold\":1,\"soldCareer\":1,\"best\":1328,\"leftFree\":0,\"lastSeen\":1791374400000,\"nextId\":2,\"firstTeam\":[],\"awayMs\":0}"
+        },
+        "session": {
+          "protected-session": "held"
+        }
+      },
+      "draws": 0,
+      "now": 1791374400000,
+      "requests": [
+        {
+          "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+          "method": "POST",
+          "body": "{\"game\":\"wonderkid-factory\",\"player_name\":\"MoneyProof-10\"}",
+          "locallyFulfilled": true
+        }
+      ]
+    },
+    "expected": {
+      "state": {
+        "v": 1,
+        "seed": 1701,
+        "cash": 11204,
+        "lifetime": 1328,
+        "careerEarned": 1328,
+        "rep": 0,
+        "levels": {
+          "scouting": 0,
+          "coaching": 0,
+          "dorms": 0,
+          "agents": 10
+        },
+        "prospects": [],
+        "scoutProgress": 0,
+        "showcaseCooldown": 0,
+        "showcaseLeft": 0,
+        "deadlineIn": 360,
+        "deadlineLeft": 0,
+        "sold": 1,
+        "soldCareer": 1,
+        "best": 1328,
+        "leftFree": 0,
+        "lastSeen": 1791374400000,
+        "nextId": 2,
+        "firstTeam": [],
+        "awayMs": 0
+      },
+      "storage": {
+        "local": {
+          "dukb-guest-handle": "MoneyProof-10",
+          "dukb-local-completions": "{\"date\":\"2026-10-07\",\"slugs\":[\"wonderkid-factory\"]}",
+          "dukb-play-diary-v1": "{\"version\":1,\"keptSince\":\"2026-10-07\",\"global\":{\"from\":null,\"days\":[\"2026-10-07\"]},\"perGame\":{\"wonderkid-factory\":{\"from\":null,\"days\":[\"2026-10-07\"]}},\"heldAtStart\":{\"longest\":0,\"bestGameStreak\":0}}",
+          "dukb-streaks-v1": "{\"version\":1,\"global\":{\"current\":1,\"longest\":1,\"lastDate\":\"2026-10-07\"},\"perGame\":{\"wonderkid-factory\":{\"current\":1,\"longest\":1,\"lastDate\":\"2026-10-07\"}},\"loginDates\":[],\"totalPlays\":1,\"totalPoints\":0}",
+          "protected-other-career": "{\"untouched\":true}",
+          "wonderkidFactoryV1": "{\"v\":1,\"seed\":1701,\"cash\":11204,\"lifetime\":1328,\"careerEarned\":1328,\"rep\":0,\"levels\":{\"scouting\":0,\"coaching\":0,\"dorms\":0,\"agents\":10},\"prospects\":[],\"scoutProgress\":0,\"showcaseCooldown\":0,\"showcaseLeft\":0,\"deadlineIn\":360,\"deadlineLeft\":0,\"sold\":1,\"soldCareer\":1,\"best\":1328,\"leftFree\":0,\"lastSeen\":1791374400000,\"nextId\":2,\"firstTeam\":[],\"awayMs\":0}"
+        },
+        "session": {
+          "protected-session": "held"
+        }
+      },
+      "draws": 0,
+      "now": 1791374400000,
+      "requests": [
+        {
+          "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+          "method": "POST",
+          "body": "{\"game\":\"wonderkid-factory\",\"player_name\":\"MoneyProof-10\"}",
+          "locallyFulfilled": true
+        }
+      ]
+    },
+    "savedBytes": "{\"v\":1,\"seed\":1701,\"cash\":11204,\"lifetime\":1328,\"careerEarned\":1328,\"rep\":0,\"levels\":{\"scouting\":0,\"coaching\":0,\"dorms\":0,\"agents\":10},\"prospects\":[],\"scoutProgress\":0,\"showcaseCooldown\":0,\"showcaseLeft\":0,\"deadlineIn\":360,\"deadlineLeft\":0,\"sold\":1,\"soldCareer\":1,\"best\":1328,\"leftFree\":0,\"lastSeen\":1791374400000,\"nextId\":2,\"firstTeam\":[],\"awayMs\":0}"
+  },
+  {
+    "id": "sale-floaters",
+    "actual": [
+      [
+        {
+          "text": "💵 Halvor Bjørkli sold for $1,328",
+          "kind": "sale"
+        }
+      ],
+      [
+        {
+          "text": "💵 Halvor Bjørkli sold for $1,328",
+          "kind": "sale"
+        }
+      ]
+    ],
+    "expected": [
+      [
+        {
+          "text": "💵 Halvor Bjørkli sold for $1,328",
+          "kind": "sale"
+        }
+      ],
+      [
+        {
+          "text": "💵 Halvor Bjørkli sold for $1,328",
+          "kind": "sale"
+        }
+      ]
+    ]
+  }
+]

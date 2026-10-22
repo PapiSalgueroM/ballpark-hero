@@ -1,0 +1,6 @@
+MUTATION boundary applied to src/lib/wonderkidFactory.ts
+stdout | tycoon-money-display-artifacts/outcomes/money.test.tsx > Academy dollar boundaries
+TYCOON_MONEY_RECORD|{"id":"academy-boundaries","actual":["$-1,235","$0","$999","$1,000","$9,999","$10,000","$1,000.0K","$1.00M","$1,000.00M","$1.00B","$1,000.00B","$1.00T","$1,234.57T"],"expected":["$-1,235","$0","$999","$1,000","$9,999","$10.0K","$1,000.0K","$1.00M","$1,000.00M","$1.00B","$1,000.00
+   × Academy dollar boundaries 14ms
+     → academy-boundaries: expected [ '$-1,235', '$0', '$999', …(10) ] to deeply equal [ '$-1,235', '$0', '$999', …(10) ]
+MUT boundary applied=0 simTycoonMoneyDisplay=1

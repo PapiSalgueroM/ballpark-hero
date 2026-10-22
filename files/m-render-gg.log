@@ -1,0 +1,416 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
++ actual - expected
+... Skipped lines
+
+  '/**\n' +
+    " * Stadium Tycoon (Round 146): the idle game, animation first. The owner's\n" +
+    ' * ask: an idle sports tycoon of our own, "add more animation especially to\n' +
+    ' * the idle game. Suprise me." The surprises are all motion: a live toy match\n' +
+    ' * with player dots that actually chase the ball, a crowd that fills the\n' +
+...
+    '          pageHasOwnH1\n' +
++   '    '... 55457 more characters
+-   '    '... 55474 more characters
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGroundGrowth1094.mjs:90:107
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: '/**\n' +
+    " * Stadium Tycoon (Round 146): the idle game, animation first. The owner's\n" +
+    ' * ask: an idle sports tycoon of our own, "add more animation especially to\n' +
+    ' * the idle game. Suprise me." The surprises are all motion: a live toy match\n' +
+    ' * with player dots that actually chase the ball, a crowd that fills the\n' +
+    ' * stands seat by seat as the real attendance number grows, money that\n' +
+    ' * physically floats off everything, confetti on goals, pulse rings on every\n' +
+    ' * purchase, and a streak flame that grows with the run. The balance itself\n' +
+    " * never counts up: it is the engine's number, always (Round 147).\n" +
+    ' *\n' +
+    ' * No scroll on the core loop (pitch + upgrades fit a phone screen), tiles\n' +
+    ' * per the house style, "?" rules modal, everything original.\n' +
+    ' *\n' +
+    ' * Round 580: two tabs, one tycoon. The page holds the h1 and a Stadium and\n' +
+    ' * Academy tab strip; the ground itself is StadiumRoom below, moved here\n' +
+    " * unchanged, and the Academy tab is Wonderkid Factory's academy panel on its\n" +
+    ' * own save (docs/design/round-580-tycoon-merge.md). The stadium hook lives on\n' +
+    ' * the PAGE, not in the room, so the match clock never stops while you are in\n' +
+    ' * the Academy, and the academy panel stays mounted once opened so its clock\n' +
+    ' * never stops while you are at the ground. scripts/simTycoonRooms.mjs holds\n' +
+    ' * both to it, and its controls rewrite the exact lines marked below.\n' +
+    ' */\n' +
+    "import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';\n" +
+    "import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';\n" +
+    "import { cn } from '@/lib/utils';\n" +
+    "import { formatNumber } from '@/lib/formatNumber';\n" +
+    "import { HelpCircle, Star, X } from 'lucide-react';\n" +
+    "import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from '@/components/ui/dialog';\n" +
+    "import { GameNavbar } from '@/components/game/GameNavbar';\n" +
+    "import PageSeo from '@/components/seo/PageSeo';\n" +
+    "import GameSeoContent from '@/components/seo/GameSeoContent';\n" +
+    'import {\n' +
+    '  TRACKS, levelOf, costOf, canBuy, capacity, attendance, incomePerSec,\n' +
+    '  ticketPolicyOf, TICKET_POLICIES,\n' +
+    '  tapValue, repMult, streakMult, prestigeThreshold, canPrestige, fmtMoney as tycoonMoney,\n' +
+    '  boostReady, boostActive, boostChargeSecOf, MILESTONES, opponentName,\n' +
+    '  DIVISIONS, divisionOf, divisionIndex, leagueShape, leagueStandings, leaguePosition,\n' +
+    '  clubNameOptions, ordinal, SINGLE_LEG_BELOW, YOUR_CLUB,\n' +
+    '  newTycoon, newLeague, goalBonus, winBonus, BOOST_CHARGE_SEC, BOOST_DURATION_SEC, WINDFALL_SEC,\n' +
+    '  GOLDEN_CATCH_SEC, offlineRateOf, offlineCapHoursOf, TYCOON_SAVE_KEY, swayMult,\n' +
+    '  STAFF, staffLevelOf, staffCostOf, canHire, totalStaffLevels,\n' +
+    '  ACHIEVEMENTS, ACH_BONUS, achMult, goldenActive, GOLDEN_INFO,\n' +
+    '  LEGACY_PERKS, perkLevelOf, perkCostOf, canBuyPerk, legacyPointsOf,\n' +
+    '  totalPerkLevels, pointsForSale, HYPE_MULT, AWAY_MATCHDAY_SEC, SET_PIECE_WINDOW_SEC, type TycoonLeague,\n' +
+    "} from '@/lib/stadiumTycoon';\n" +
+    "import { useStadiumTycoon } from '@/hooks/useStadiumTycoon';\n" +
+    "import type { LastSeason } from '@/hooks/useStadiumTycoon';\n" +
+    "import { ConfettiBurst, CelebrationStyles } from '@/components/club-manager/Celebration';\n" +
+    "import VictoryMoment from '@/components/tycoon/TycoonVictoryMoment';\n" +
+    "import { LeagueTableCard } from '@/components/club-manager/LeagueTableCard';\n" +
+    "import TycoonPitch from '@/components/tycoon/TycoonPitch';\n" +
+    "import TicketPolicyCard from '@/components/tycoon/TicketPolicyCard';\n" +
+    "import TycoonSaleReview from '@/components/tycoon/TycoonSaleReview';\n" +
+    "import { useTycoonRewards } from '@/hooks/useTycoonRewards';\n" +
+    "import { balance, GEM_PAY, loadLedger } from '@/lib/tycoonRewards';\n" +
+    "import type { TapFx } from '@/components/tycoon/TycoonPitch';\n" +
+    "import type { AcademyStatus, Room } from '@/lib/tycoonRooms';\n" +
+    "import { deserialize as deserializeAcademy, applyOffline as applyAcademyOffline, SAVE_KEY as ACADEMY_SAVE_KEY, squadEdge } from '@/lib/wonderkidFactory';\n" +
+    "import type { FactoryState } from '@/lib/wonderkidFactory';\n" +
+    '\n' +
+    "const AcademyPanel = lazy(() => import('@/components/tycoon/AcademyPanel'));\n" +
+    "const SetPieceBoard = lazy(() => import('@/components/tycoon/SetPieceBoard').then(module => ({ default: module.WatchedSetPieceBoard })));\n" +
+    '\n' +
+    '/* ---------- tiny animation helpers ---------- */\n' +
+    '\n' +
+    '/* Round 530 review: the balance used to ease toward s.money by 18 percent a\n' +
+    '   frame, so the printed number walked through amounts the club never held,\n' +
+    "   most visibly after a purchase and after an away settle. Round 147's rule is\n" +
+    "   that emphasis animates and a number never does. The balance is the engine's\n" +
+    '   own now, and the arrival still has all its theatre: the money floats off\n' +
+    '   the pitch, the pulse rings fire and the confetti lands. */\n' +
+    '\n' +
+    '/** Deterministic pseudo-random for stable crowd seat positions. */\n' +
+    'function seatRand(i: number): number {\n' +
+    '  const x = Math.sin(i * 127.1 + 311.7) * 43758.5453;\n' +
+    '  return x - Math.floor(x);\n' +
+    '}\n' +
+    '\n' +
+    'function fmtMoney(n: number): string {\n' +
+    '  return formatMoneyText(tycoonMoney(n));\n' +
+    '}\n' +
+    '\n' +
+    'function formatMoneyText(text: string): string {\n' +
+    '  return text.replace(/\\$(-?\\d+(?:\\.\\d+)?)([KMBTQ]?)/g, (_text, amount: string, unit: string) => `$${formatNumber(amount)}${unit}`);\n' +
+    '}\n' +
+    '\n' +
+    '/** Round 583: a rate under ten dollars a second keeps its cents, so a new club\n' +
+    ' *  reads $4.50 a second as the rules say, and a Turnstile Steward $0.60, not $0. */\n' +
+    'function fmtRate(n: number): string {\n' +
+    '  return n < 10 ? `$${n.toFixed(2)}` : fmtMoney(n);\n' +
+    '}\n' +
+    '\n' +
+    "const CONFETTI_COLORS = ['#22c55e', '#eab308', '#3b82f6', '#ef4444', '#a855f7', '#f97316'];\n" +
+    '\n' +
+    "/** Round 583: the Stadium tab's office panels, one open at a time. */\n" +
+    "type OfficePanel = 'upgrades' | 'tickets' | 'payroll' | 'ach' | 'legacy' | 'stats';\n" +
+    '\n' +
+    'export default function StadiumTycoon() {\n' +
+    '  const [savedAcademy] = useState(() => {\n' +
+    '    try {\n' +
+    '      const now = Date.now();\n' +
+    '      const snapshot = deserializeAcademy(localStorage.getItem(ACADEMY_SAVE_KEY), now, loadLedger().gearLevel);\n' +
+    '      if (snapshot) applyAcademyOffline(snapshot, now);\n' +
+    '      return snapshot;\n' +
+    '    }\n' +
+    '    catch { return null; }\n' +
+    '  });\n' +
+    '  const academyRef = useRef(savedAcademy);\n' +
+    '  const getEdge = useCallback(() => academyRef.current ? squadEdge(academyRef.current, loadLedger().gearLevel) : 0, []);\n' +
+    '  const onAcademySnapshot = useCallback((snapshot: FactoryState) => { academyRef.current = snapshot; }, []);\n' +
+    '  const g = useStadiumTycoon(getEdge);\n' +
+    "  const [room, setRoom] = useState<Room>('stadium');\n" +
+    '  /* A returning first team keeps its clock even before the Academy tab opens. */\n' +
+    '  const [academyOpened, setAcademyOpened] = useState(() => Boolean(savedAcademy?.firstTeam?.length));\n' +
+    '  const [academyStatus, setAcademyStatus] = useState<AcademyStatus | null>(null);\n' +
+    '  const [stadiumNeedsYou, setStadiumNeedsYou] = useState(false);\n' +
+    '\n' +
+    '  const openRoom = (next: Room) => {\n' +
+    "    if (next === 'academy') setAcademyOpened(true);\n" +
+    '    setRoom(next);\n' +
+    '  };\n' +
+    '  /* A tab lights when the room behind it needs you. Never the room you are in. */\n' +
+    "  const academyAccent = room !== 'academy' && academyStatus !== null\n" +
+    '    && (academyStatus.deadline || academyStatus.bedsFull || academyStatus.moveUp || academyStatus.leavingSoon);\n' +
+    "  const stadiumAccent = room !== 'stadium' && stadiumNeedsYou;\n" +
+    '  const tabs: { id: Room; label: string; emoji: string; accent: boolean }[] = [\n' +
+    "    { id: 'stadium', label: 'Stadium', emoji: '🏟️', accent: stadiumAccent },\n" +
+    "    { id: 'academy', label: 'Academy', emoji: '🎓', accent: academyAccent },\n" +
+    "    { id: 'league', label: 'League', emoji: '🏆', accent: false },\n" +
+    '  ];\n' +
+    '\n' +
+    '  return (\n' +
+    '    <div id="dukb-main" tabIndex={-1} className="min-h-screen bg-background">\n' +
+    '      <GameNavbar />\n' +
+    '      <PageSeo\n' +
+    '        title="Stadium Tycoon: Free Idle Soccer Club Game | DoUKnowBall"\n' +
+    '        description="Grow a tiny football club into an empire. Live toy matches, ten divisions, a staff payroll, golden whistles, 47 badges, reputation stars and a legacy boardroom of permanent perks. Free idle game, no sign-up."\n' +
+    '        path="/stadium-tycoon"\n' +
+    '      />\n' +
+    '      <div className="max-w-2xl mx-auto px-4 py-4 md:py-8">\n' +
+    '        <CelebrationStyles />\n' +
+    '        <header className="text-center mb-2">\n' +
+    '          <h1 className="text-3xl md:text-5xl font-bold tracking-[0.08em] text-primary font-display">STADIUM TYCOON</h1>\n' +
+    '        </header>\n' +
+    '\n' +
+    '        {/* Round 580: the rooms. Each keeps its own clock whichever one is on screen. */}\n' +
+    '        <div className="grid grid-cols-3 gap-2 mb-2" role="group" aria-label="Tycoon rooms">\n' +
+    '          {tabs.map(t => (\n' +
+    '            <button\n' +
+    '              key={t.id}\n' +
+    '              type="button"\n' +
+    '              data-room={t.id}\n' +
+    "              data-accent={t.accent ? 'true' : 'false'}\n" +
+    '              aria-pressed={room === t.id}\n' +
+    '              onClick={() => openRoom(t.id)}\n' +
+    '              className={cn(\n' +
+    "                'relative min-h-[40px] rounded-xl border text-sm font-bold transition-all',\n" +
+    "                room === t.id ? 'bg-primary text-primary-foreground border-primary' : 'bg-card border-border text-foreground hover:border-primary',\n" +
+    '              )}\n' +
+    '            >\n' +
+    '              {t.emoji} {t.label}\n' +
+    '              {t.accent && (\n' +
+    '                <>\n' +
+    '                  <span aria-hidden="true" className="absolute top-1.5 right-2 h-2.5 w-2.5 rounded-full bg-yellow-400 motion-safe:animate-pulse" />\n' +
+    '                  <span className="sr-only"> (needs you)</span>\n' +
+    '                </>\n' +
+    '              )}\n' +
+    '            </button>\n' +
+    '          ))}\n' +
+    '        </div>\n' +
+    '\n' +
+    '        {g.gearSaveBlocked && <p role="alert" data-no-prerender className="mb-3 rounded-xl border border-destructive/40 bg-destructive/10 p-3 text-xs">Title equipment could not be saved, so no new equipment was added. Your existing pairs are safe. Allow device storage before earning another title.</p>}\n' +
+    "        <StadiumRoom g={g} visible={room === 'stadium'} onNeedsYou={setStadiumNeedsYou} />\n" +
+    "        <LeagueRoom g={g} visible={room === 'league'} />\n" +
+    '        {academyOpened && (\n' +
+    '          <Suspense fallback={<div className="h-40" />}>\n' +
+    "            <AcademyPanel stylesReady visible={room === 'academy'} onStatus={setAcademyStatus} onSnapshot={onAcademySnapshot} />\n" +
+    '          </Suspense>\n' +
+    '        )}\n' +
+    '\n' +
+    '        <GameSeoContent\n' +
+    '          pageHasOwnH1\n' +
+    '    '... 55457 more characters,
+  expected: '/**\n' +
+    " * Stadium Tycoon (Round 146): the idle game, animation first. The owner's\n" +
+    ' * ask: an idle sports tycoon of our own, "add more animation especially to\n' +
+    ' * the idle game. Suprise me." The surprises are all motion: a live toy match\n' +
+    ' * with player dots that actually chase the ball, a crowd that fills the\n' +
+    ' * stands seat by seat as the real attendance number grows, money that\n' +
+    ' * physically floats off everything, confetti on goals, pulse rings on every\n' +
+    ' * purchase, and a streak flame that grows with the run. The balance itself\n' +
+    " * never counts up: it is the engine's number, always (Round 147).\n" +
+    ' *\n' +
+    ' * No scroll on the core loop (pitch + upgrades fit a phone screen), tiles\n' +
+    ' * per the house style, "?" rules modal, everything original.\n' +
+    ' *\n' +
+    ' * Round 580: two tabs, one tycoon. The page holds the h1 and a Stadium and\n' +
+    ' * Academy tab strip; the ground itself is StadiumRoom below, moved here\n' +
+    " * unchanged, and the Academy tab is Wonderkid Factory's academy panel on its\n" +
+    ' * own save (docs/design/round-580-tycoon-merge.md). The stadium hook lives on\n' +
+    ' * the PAGE, not in the room, so the match clock never stops while you are in\n' +
+    ' * the Academy, and the academy panel stays mounted once opened so its clock\n' +
+    ' * never stops while you are at the ground. scripts/simTycoonRooms.mjs holds\n' +
+    ' * both to it, and its controls rewrite the exact lines marked below.\n' +
+    ' */\n' +
+    "import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';\n" +
+    "import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';\n" +
+    "import { cn } from '@/lib/utils';\n" +
+    "import { formatNumber } from '@/lib/formatNumber';\n" +
+    "import { HelpCircle, Star, X } from 'lucide-react';\n" +
+    "import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from '@/components/ui/dialog';\n" +
+    "import { GameNavbar } from '@/components/game/GameNavbar';\n" +
+    "import PageSeo from '@/components/seo/PageSeo';\n" +
+    "import GameSeoContent from '@/components/seo/GameSeoContent';\n" +
+    'import {\n' +
+    '  TRACKS, levelOf, costOf, canBuy, capacity, attendance, incomePerSec,\n' +
+    '  ticketPolicyOf, TICKET_POLICIES,\n' +
+    '  tapValue, repMult, streakMult, prestigeThreshold, canPrestige, fmtMoney as tycoonMoney,\n' +
+    '  boostReady, boostActive, boostChargeSecOf, MILESTONES, opponentName,\n' +
+    '  DIVISIONS, divisionOf, divisionIndex, leagueShape, leagueStandings, leaguePosition,\n' +
+    '  clubNameOptions, ordinal, SINGLE_LEG_BELOW, YOUR_CLUB,\n' +
+    '  newTycoon, newLeague, goalBonus, winBonus, BOOST_CHARGE_SEC, BOOST_DURATION_SEC, WINDFALL_SEC,\n' +
+    '  GOLDEN_CATCH_SEC, offlineRateOf, offlineCapHoursOf, TYCOON_SAVE_KEY, swayMult,\n' +
+    '  STAFF, staffLevelOf, staffCostOf, canHire, totalStaffLevels,\n' +
+    '  ACHIEVEMENTS, ACH_BONUS, achMult, goldenActive, GOLDEN_INFO,\n' +
+    '  LEGACY_PERKS, perkLevelOf, perkCostOf, canBuyPerk, legacyPointsOf,\n' +
+    '  totalPerkLevels, pointsForSale, HYPE_MULT, AWAY_MATCHDAY_SEC, SET_PIECE_WINDOW_SEC, type TycoonLeague,\n' +
+    "} from '@/lib/stadiumTycoon';\n" +
+    "import { useStadiumTycoon } from '@/hooks/useStadiumTycoon';\n" +
+    "import type { LastSeason } from '@/hooks/useStadiumTycoon';\n" +
+    "import { ConfettiBurst, CelebrationStyles } from '@/components/club-manager/Celebration';\n" +
+    "import VictoryMoment from '@/components/tycoon/TycoonVictoryMoment';\n" +
+    "import { LeagueTableCard } from '@/components/club-manager/LeagueTableCard';\n" +
+    "import TycoonPitch from '@/components/tycoon/TycoonPitch';\n" +
+    "import TicketPolicyCard from '@/components/tycoon/TicketPolicyCard';\n" +
+    "import TycoonSaleReview from '@/components/tycoon/TycoonSaleReview';\n" +
+    "import { useTycoonRewards } from '@/hooks/useTycoonRewards';\n" +
+    "import { balance, GEM_PAY, loadLedger } from '@/lib/tycoonRewards';\n" +
+    "import type { TapFx } from '@/components/tycoon/TycoonPitch';\n" +
+    "import type { AcademyStatus, Room } from '@/lib/tycoonRooms';\n" +
+    "import { deserialize as deserializeAcademy, applyOffline as applyAcademyOffline, SAVE_KEY as ACADEMY_SAVE_KEY, squadEdge } from '@/lib/wonderkidFactory';\n" +
+    "import type { FactoryState } from '@/lib/wonderkidFactory';\n" +
+    '\n' +
+    "const AcademyPanel = lazy(() => import('@/components/tycoon/AcademyPanel'));\n" +
+    "const SetPieceBoard = lazy(() => import('@/components/tycoon/SetPieceBoard').then(module => ({ default: module.WatchedSetPieceBoard })));\n" +
+    '\n' +
+    '/* ---------- tiny animation helpers ---------- */\n' +
+    '\n' +
+    '/* Round 530 review: the balance used to ease toward s.money by 18 percent a\n' +
+    '   frame, so the printed number walked through amounts the club never held,\n' +
+    "   most visibly after a purchase and after an away settle. Round 147's rule is\n" +
+    "   that emphasis animates and a number never does. The balance is the engine's\n" +
+    '   own now, and the arrival still has all its theatre: the money floats off\n' +
+    '   the pitch, the pulse rings fire and the confetti lands. */\n' +
+    '\n' +
+    '/** Deterministic pseudo-random for stable crowd seat positions. */\n' +
+    'function seatRand(i: number): number {\n' +
+    '  const x = Math.sin(i * 127.1 + 311.7) * 43758.5453;\n' +
+    '  return x - Math.floor(x);\n' +
+    '}\n' +
+    '\n' +
+    'function fmtMoney(n: number): string {\n' +
+    '  return formatMoneyText(tycoonMoney(n));\n' +
+    '}\n' +
+    '\n' +
+    'function formatMoneyText(text: string): string {\n' +
+    '  return text.replace(/\\$(-?\\d+(?:\\.\\d+)?)([KMBTQ]?)/g, (_text, amount: string, unit: string) => `$${formatNumber(amount)}${unit}`);\n' +
+    '}\n' +
+    '\n' +
+    '/** Round 583: a rate under ten dollars a second keeps its cents, so a new club\n' +
+    ' *  reads $4.50 a second as the rules say, and a Turnstile Steward $0.60, not $0. */\n' +
+    'function fmtRate(n: number): string {\n' +
+    '  return n < 10 ? `$${n.toFixed(2)}` : fmtMoney(n);\n' +
+    '}\n' +
+    '\n' +
+    "const CONFETTI_COLORS = ['#22c55e', '#eab308', '#3b82f6', '#ef4444', '#a855f7', '#f97316'];\n" +
+    '\n' +
+    "/** Round 583: the Stadium tab's office panels, one open at a time. */\n" +
+    "type OfficePanel = 'upgrades' | 'tickets' | 'payroll' | 'ach' | 'legacy' | 'stats';\n" +
+    '\n' +
+    'export default function StadiumTycoon() {\n' +
+    '  const [savedAcademy] = useState(() => {\n' +
+    '    try {\n' +
+    '      const now = Date.now();\n' +
+    '      const snapshot = deserializeAcademy(localStorage.getItem(ACADEMY_SAVE_KEY), now, loadLedger().gearLevel);\n' +
+    '      if (snapshot) applyAcademyOffline(snapshot, now);\n' +
+    '      return snapshot;\n' +
+    '    }\n' +
+    '    catch { return null; }\n' +
+    '  });\n' +
+    '  const academyRef = useRef(savedAcademy);\n' +
+    '  const getEdge = useCallback(() => academyRef.current ? squadEdge(academyRef.current, loadLedger().gearLevel) : 0, []);\n' +
+    '  const onAcademySnapshot = useCallback((snapshot: FactoryState) => { academyRef.current = snapshot; }, []);\n' +
+    '  const g = useStadiumTycoon(getEdge);\n' +
+    "  const [room, setRoom] = useState<Room>('stadium');\n" +
+    '  /* A returning first team keeps its clock even before the Academy tab opens. */\n' +
+    '  const [academyOpened, setAcademyOpened] = useState(() => Boolean(savedAcademy?.firstTeam?.length));\n' +
+    '  const [academyStatus, setAcademyStatus] = useState<AcademyStatus | null>(null);\n' +
+    '  const [stadiumNeedsYou, setStadiumNeedsYou] = useState(false);\n' +
+    '\n' +
+    '  const openRoom = (next: Room) => {\n' +
+    "    if (next === 'academy') setAcademyOpened(true);\n" +
+    '    setRoom(next);\n' +
+    '  };\n' +
+    '  /* A tab lights when the room behind it needs you. Never the room you are in. */\n' +
+    "  const academyAccent = room !== 'academy' && academyStatus !== null\n" +
+    '    && (academyStatus.deadline || academyStatus.bedsFull || academyStatus.moveUp || academyStatus.leavingSoon);\n' +
+    "  const stadiumAccent = room !== 'stadium' && stadiumNeedsYou;\n" +
+    '  const tabs: { id: Room; label: string; emoji: string; accent: boolean }[] = [\n' +
+    "    { id: 'stadium', label: 'Stadium', emoji: '🏟️', accent: stadiumAccent },\n" +
+    "    { id: 'academy', label: 'Academy', emoji: '🎓', accent: academyAccent },\n" +
+    "    { id: 'league', label: 'League', emoji: '🏆', accent: false },\n" +
+    '  ];\n' +
+    '\n' +
+    '  return (\n' +
+    '    <div id="dukb-main" tabIndex={-1} className="min-h-screen bg-background">\n' +
+    '      <GameNavbar />\n' +
+    '      <PageSeo\n' +
+    '        title="Stadium Tycoon: Free Idle Soccer Club Game | DoUKnowBall"\n' +
+    '        description="Grow a tiny football club into an empire. Live toy matches, ten divisions, a staff payroll, golden whistles, 47 badges, reputation stars and a legacy boardroom of permanent perks. Free idle game, no sign-up."\n' +
+    '        path="/stadium-tycoon"\n' +
+    '      />\n' +
+    '      <div className="max-w-2xl mx-auto px-4 py-4 md:py-8">\n' +
+    '        <CelebrationStyles />\n' +
+    '        <header className="text-center mb-2">\n' +
+    '          <h1 className="text-3xl md:text-5xl font-bold tracking-[0.08em] text-primary font-display">STADIUM TYCOON</h1>\n' +
+    '        </header>\n' +
+    '\n' +
+    '        {/* Round 580: the rooms. Each keeps its own clock whichever one is on screen. */}\n' +
+    '        <div className="grid grid-cols-3 gap-2 mb-2" role="group" aria-label="Tycoon rooms">\n' +
+    '          {tabs.map(t => (\n' +
+    '            <button\n' +
+    '              key={t.id}\n' +
+    '              type="button"\n' +
+    '              data-room={t.id}\n' +
+    "              data-accent={t.accent ? 'true' : 'false'}\n" +
+    '              aria-pressed={room === t.id}\n' +
+    '              onClick={() => openRoom(t.id)}\n' +
+    '              className={cn(\n' +
+    "                'relative min-h-[40px] rounded-xl border text-sm font-bold transition-all',\n" +
+    "                room === t.id ? 'bg-primary text-primary-foreground border-primary' : 'bg-card border-border text-foreground hover:border-primary',\n" +
+    '              )}\n' +
+    '            >\n' +
+    '              {t.emoji} {t.label}\n' +
+    '              {t.accent && (\n' +
+    '                <>\n' +
+    '                  <span aria-hidden="true" className="absolute top-1.5 right-2 h-2.5 w-2.5 rounded-full bg-yellow-400 motion-safe:animate-pulse" />\n' +
+    '                  <span className="sr-only"> (needs you)</span>\n' +
+    '                </>\n' +
+    '              )}\n' +
+    '            </button>\n' +
+    '          ))}\n' +
+    '        </div>\n' +
+    '\n' +
+    '        {g.gearSaveBlocked && <p role="alert" data-no-prerender className="mb-3 rounded-xl border border-destructive/40 bg-destructive/10 p-3 text-xs">Title equipment could not be saved, so no new equipment was added. Your existing pairs are safe. Allow device storage before earning another title.</p>}\n' +
+    "        <StadiumRoom g={g} visible={room === 'stadium'} onNeedsYou={setStadiumNeedsYou} />\n" +
+    "        <LeagueRoom g={g} visible={room === 'league'} />\n" +
+    '        {academyOpened && (\n' +
+    '          <Suspense fallback={<div className="h-40" />}>\n' +
+    "            <AcademyPanel stylesReady visible={room === 'academy'} onStatus={setAcademyStatus} onSnapshot={onAcademySnapshot} />\n" +
+    '          </Suspense>\n' +
+    '        )}\n' +
+    '\n' +
+    '        <GameSeoContent\n' +
+    '          pageHasOwnH1\n' +
+    '    '... 55474 more characters,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.22.0
+
+
+1 !== 0
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simTycoonGroundGrowth.mjs:15:76
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.22.0
