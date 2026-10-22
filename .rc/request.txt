@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+#!serial
+oldsave: node .rc/x/walkSave1553.mjs
+vd-head: node_modules/.bin/vitest run src/test/dailySaveShapes.test.tsx --testTimeout=300000 --hookTimeout=120000
+vd-main: git checkout 3ee0bf629 -- src && git status --short | head -5 && node_modules/.bin/vitest run src/test/dailySaveShapes.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout HEAD -- src; exit $s
+vd-head-again: node_modules/.bin/vitest run src/test/dailySaveShapes.test.tsx --testTimeout=300000 --hookTimeout=120000
