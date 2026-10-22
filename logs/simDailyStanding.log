@@ -1,0 +1,12 @@
+1) the rows fit the scale each game records
+   Higher or Lower, all 1024 ten round days: 38 recordable scores from 0 to 325, rows 300-325 225-299 150-224 75-149 0-74
+   Footle, a win in 1 to 8 or a miss: 8 recordable scores from 0 to 700, rows 700 500-600 300-400 100-200 0
+   Guess The Value, a win in 1 to 6 or a miss: 7 recordable scores from 0 to 900, rows 900 600-750 300-450 150 0
+2) the client rules
+   20 players: you 150, beat 11 of 19 (58%), median 130, top 325; 19 players: hidden
+3) the database function
+   supabase/migrations/20260930_round_716_daily_score_standing.sql: invoker, stable, reads game_completions and game_score_caps, returns (players integer, below integer, median numeric, top integer, bucket_counts integer[]), floor 20
+4) the mounts
+   11 pages wired, 9 of them live daily games on the registry
+
+simDailyStanding: green. Ten daily results carry today's standing, each on its own scale, counted in the database, hidden under 20 players.

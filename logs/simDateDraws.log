@@ -1,0 +1,41 @@
+1) Grade the Transfer deals the whole bank now
+[fetchTransferGrades] empty/error {
+  message: 'TypeError: fetch failed',
+  details: 'TypeError: fetch failed\n' +
+    '\n' +
+    'Caused by: Error: connect ECONNREFUSED 127.0.0.1:443 (ECONNREFUSED)\n' +
+    'Error: connect ECONNREFUSED 127.0.0.1:443\n' +
+    '    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:2083:16)',
+  hint: '',
+  code: ''
+}
+   SKIPPED, SUPABASE UNREACHABLE. THE TRANSFER BANK WAS NOT CHECKED.
+2) Emoji Guess reaches its whole bank
+   bank of 64 (24/27/13 by difficulty), 64 reached, 0 identical days
+3) Ball IQ's twelve slots each roam their whole tier
+[fetchQuizBoardClues] empty/error {
+  message: 'TypeError: fetch failed',
+  details: 'TypeError: fetch failed\n' +
+    '\n' +
+    'Caused by: Error: connect ECONNREFUSED 127.0.0.1:443 (ECONNREFUSED)\n' +
+    'Error: connect ECONNREFUSED 127.0.0.1:443\n' +
+    '    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:2083:16)',
+  hint: '',
+  code: ''
+}
+   SKIPPED, SUPABASE UNREACHABLE. THE CLUE BANK WAS NOT CHECKED.
+4) Mystery Box tier sequences and per-slot rolls
+   365/365 distinct tier sequences; slot 0 reached 121 of a 130 bucket
+5) the seven Higher/Lower dailies: adequate, and held there
+   nba: pool 80, 0 identical boards, 0 identical opening pairs
+   mlb: pool 55, 0 identical boards, 1 identical opening pairs
+   tennis: pool 44, 0 identical boards, 0 identical opening pairs
+   cfb: pool 65, 0 identical boards, 1 identical opening pairs
+   f1: pool 44, 0 identical boards, 0 identical opening pairs
+   golf: pool 61, 0 identical boards, 0 identical opening pairs
+   hockey: pool 45, 0 identical boards, 0 identical opening pairs
+   afl: pool 60, 0 identical boards, 0 identical opening pairs
+6) the overflow constant is allowlisted, everywhere else it is banned
+   10 measured carriers allowed, 0 offenders
+
+simDateDraws: green. Every date-seeded draw reaches its whole pool or is fenced where measured.
