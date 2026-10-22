@@ -1,0 +1,8 @@
+CONTROL stalekey applied: this run is meant to go red
+0) the owner tail loads on demand: before the load nothing is bought, after it it is ready
+2) Every finish is the table's
+   640 owner seasons: 0 finishes the table did not produce, 55 titles, 33 promotions, 15 relegations; 630 in a named league, 278 of a verified size
+   556 back to back seasons in one league: 319 show last season's top four rivals on the same points
+  FAIL: 319 of 556 seasons replay last season's rivals on the same points: the season is not in the table's key
+   30 seasons replayed under two Math.random streams: 0 came out different
+simSoccerOwnerTail: 1 failure(s)

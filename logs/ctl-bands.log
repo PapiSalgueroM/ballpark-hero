@@ -1,0 +1,19 @@
+CONTROL bands applied: this run is meant to go red
+0) the owner tail loads on demand: before the load nothing is bought, after it it is ready
+1) The clubs for sale
+   the ceremony career: phase retirement_ceremony, 21 seasons, last 2014
+   at €49M: 0 clubs (tiers none)
+   at €60M: 3 clubs (tiers 444)
+  FAIL: at €60M the list holds 3 clubs, not 2
+   at €200M: 6 clubs (tiers 444333)
+  FAIL: at €200M the list holds 6 clubs, not 4
+   at €249M: 6 clubs (tiers 444333)
+  FAIL: at €249M the list holds 6 clubs, not 4
+   at €250M: 9 clubs (tiers 444333222)
+  FAIL: at €250M the list holds 9 clubs, not 6
+   at €900M: 9 clubs (tiers 444333222)
+  FAIL: at €900M the list holds 9 clubs, not 6
+   60 saves: 176 different clubs offered, 0 lists that moved between visits or drew Math.random
+   40 purchases: 0 not the club picked at its price, 0 that drew Math.random; a club not for sale buys nothing; no name buys Real Betis
+   6696 tiles for the seasons 1995 to 2025: 0 name a league the ledgers do not give that club that season, 4673 name no league
+simSoccerOwnerTail: 5 failure(s)

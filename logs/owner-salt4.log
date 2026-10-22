@@ -1,0 +1,38 @@
+base 4b4d99ebd6
+0) the owner tail loads on demand: before the load nothing is bought, after it it is ready
+1) The clubs for sale
+   the ceremony career: phase retirement_ceremony, 21 seasons, last 2014
+   at €49M: 0 clubs (tiers none)
+   at €60M: 2 clubs (tiers 44)
+   at €200M: 4 clubs (tiers 4433)
+   at €249M: 4 clubs (tiers 4433)
+   at €250M: 6 clubs (tiers 443322)
+   at €900M: 6 clubs (tiers 443322)
+   60 saves: 159 different clubs offered, 0 lists that moved between visits or drew Math.random
+   40 purchases: 0 not the club picked at its price, 0 that drew Math.random; a club not for sale buys nothing; no name buys Nottingham Forest
+   4464 tiles for the seasons 1995 to 2025: 0 name a league the ledgers do not give that club that season, 3086 name no league
+2) Every finish is the table's
+   640 owner seasons: 0 finishes the table did not produce, 67 titles, 108 promotions, 38 relegations; 629 in a named league, 181 of a verified size
+   550 back to back seasons in one league: 0 show last season's top four rivals on the same points
+   30 seasons replayed under two Math.random streams: 0 came out different
+3) Each call moves what it says it moves (against placing nothing, same keyed seasons)
+   600 owner states, 6 seasons, each call where it is open:
+     squad    n 600  points  10.57  money   2.47  this season: points 5.00 money -2.03
+     youth    n 600  points   7.63  money   5.97  this season: points 0.00 money 0.00
+     stadium  n 600  points   0.00  money  11.72  this season: points 0.00 money -1.22
+     debt     n 574  points   5.03  money   7.59  this season: points 0.77 money 1.06
+4) No dominant choice
+   the 574 states where all four calls are open, 6 seasons:
+     squad    n 574  points  10.63  money   2.56
+     youth    n 574  points   7.66  money   5.79
+     stadium  n 574  points   0.00  money  11.11
+     debt     n 574  points   5.03  money   7.59
+   12 ordered pairs: every call is beaten by every other somewhere by 0.5 points or 0.3M
+    3 seasons: most points squad (8.89), most money stadium (3.63)
+    6 seasons: most points squad (10.63), most money stadium (11.11)
+   10 seasons: most points youth (13.80), most money stadium (21.33)
+5) An owner save from before this round plays on
+   12 old owner saves (base 4b4d99eb): 12 load, keep their club and rows, and play on the table; 0 do not
+6) Careers that never buy a club are byte equal to the base
+   16 seeded careers, 790 states and draw counts compared (96 manager seasons among them): 0 careers differ from the base
+simSoccerOwnerTail: green. The owner picks his club, plays on the table, and every call does what it says and none is best at everything.

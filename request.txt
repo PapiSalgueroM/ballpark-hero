@@ -1,0 +1,18 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+owner: node scripts/simSoccerOwnerTail.mjs
+owner-salt4: SIM_OWNER_SALT=4 node scripts/simSoccerOwnerTail.mjs
+owner-salt9: SIM_OWNER_SALT=9 node scripts/simSoccerOwnerTail.mjs
+ctl-saleleague: SIM_OWNER_ONLY=1 SIM_OWNER_CONTROL=saleleague node scripts/simSoccerOwnerTail.mjs
+ctl-stalekey: SIM_OWNER_ONLY=2 SIM_OWNER_CONTROL=stalekey node scripts/simSoccerOwnerTail.mjs
+ctl-eager: SIM_OWNER_ONLY=1 SIM_OWNER_CONTROL=eager node scripts/simSoccerOwnerTail.mjs
+ctl-bands: SIM_OWNER_ONLY=1 SIM_OWNER_CONTROL=bands node scripts/simSoccerOwnerTail.mjs
+ctl-overprice: SIM_OWNER_ONLY=1 SIM_OWNER_CONTROL=overprice node scripts/simSoccerOwnerTail.mjs
+vitest: node_modules/.bin/vitest run src/test/scoreShown.test.tsx src/test/soccerCareerDugoutTable.test.tsx src/test/soccerCareerSaveRecovery.test.tsx src/test/soccerCareerDebutLegacy.test.tsx --testTimeout=300000 --hookTimeout=120000
+saveSize: node scripts/simSoccerCareerSaveSize.mjs
+saveSize-plain: SC_SAVE_CONTROL=plain SC_SAVE_EXPECT_RED=1 node scripts/simSoccerCareerSaveSize.mjs
+simScoreShown: node scripts/simScoreShown.mjs
+simCareerMoneyAfterRetirement: node scripts/simCareerMoneyAfterRetirement.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
