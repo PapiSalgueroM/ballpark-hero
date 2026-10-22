@@ -123,6 +123,38 @@ export function puskasAwardExists(seasonYear: number): boolean {
   return seasonYear >= PUSKAS_FIRST_SEASON;
 }
 
+/* ─── The other named season awards' years (Round 1525) ───
+   Golden Glove. The Premier League's Golden Glove goes to the keeper with the most league clean sheets, and it was
+   first given for the 2004-05 season: premierleague.com (news 4316253, 25 May 2025) says the award "launched in
+   2004/05", and Guinness World Records (record 772763, most Premier League Golden Glove awards) says it was "First
+   awarded in 2004/05". Both read 2026-10-22. The game gives its Golden Glove in every league under that one name,
+   so it is held to that first season everywhere: an earlier season never names a Golden Glove.
+
+   UEFA Player of the Year. UEFA's Best Player in Europe award (renamed Men's Player of the Year from the 2017
+   edition) was first given in August 2011, for the 2010-11 season: uefa.com ("History and procedure", 13 August
+   2014) says it was "given for the first time in 2011", and Reuters (as ft.lk carried it, 27 August 2011) calls
+   that night's award the "inaugural" one. Its last edition was for 2022-23 (uefa.com, 31 August 2023, the
+   2022/23 award announced at the Champions League draw in Monaco): when UEFA joined the Ballon d'Or from 2024 it
+   dropped the award, Associated Press ("UEFA scrap its own player of the year awards", 3 November 2023) and
+   Reuters ("UEFA's awards for the best player and best coach will cease to exist", the same day, as Gulf News
+   carried it). All read 2026-10-22. So the game names a UEFA Player of the Year only for the seasons 2010-11 to
+   2022-23, in the real past and in its own future alike, since the award is gone. HELD: the club footballer of the
+   year prize UEFA gave from 1997-98 to 2009-10 under another name; only UEFA's own pages could be read for its
+   years, so those seasons name no UEFA award until a second source is read. */
+export const GOLDEN_GLOVE_FIRST_SEASON = 2004;
+export const UEFA_PLAYER_FIRST_SEASON = 2010;
+export const UEFA_PLAYER_LAST_SEASON = 2022;
+
+/** The Golden Glove had been given for the season starting in `seasonYear`. */
+export function goldenGloveAwardExists(seasonYear: number): boolean {
+  return seasonYear >= GOLDEN_GLOVE_FIRST_SEASON;
+}
+
+/** UEFA gave its player of the year award for the season starting in `seasonYear`. */
+export function uefaPlayerAwardExists(seasonYear: number): boolean {
+  return seasonYear >= UEFA_PLAYER_FIRST_SEASON && seasonYear <= UEFA_PLAYER_LAST_SEASON;
+}
+
 /* ─── Player of the Month ───
    The award used to be a goals lottery: a month with no goal still won 2
    percent of the time, so a keeper who never scored won it about once every

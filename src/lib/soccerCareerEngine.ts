@@ -55,9 +55,10 @@ import {
   worldSeasonTick, worldClubOf, phoneAppsSwing, takePhoneOffers, unreadThreads,
 } from "./soccerPhone";
 import type { PhoneState, WorldSeason } from "./soccerPhone";
-/* Round 1523: morale that plays (src/lib/careerForm.ts) and the first season the Puskas Award was given for. */
+/* Round 1523: morale that plays (src/lib/careerForm.ts). */
 import { dressingRoomApps, soccerMoraleRating } from "./careerForm";
-import { puskasAwardExists } from "./soccerWorldTruth";
+/* Round 1525: the season awards, won against a field, only in the seasons they were given for. */
+import { soccerAwardWon, type SoccerAwardSeason, type SoccerSeasonAward } from "./soccerSeasonAwards";
 /* Round 134: money stops being a number that only goes up. A savings account,
    a market of five things whose prices move every season whether you are
    watching or not, a statement with a limit on it, and the two small things
@@ -4126,10 +4127,17 @@ export function defensiveRatingCredit(position: string, apps: number, cleanSheet
   if (position === "CDM") return apps * CDM_EXPECTED_SHEET_SHARE * DEFENSIVE_SHEET_CREDIT * CDM_CREDIT_SHARE;
   return 0;
 }
+/* Round 1525: a season's rating reads his overall against his club's average, this much a point. */
+const RATING_PER_OVERALL = 0.06;
+/** Round 1525: the rating the same season would carry at an elite club, so a national award reads one scale
+ *  whatever club he plays for (soccerSeasonAwards.ts). */
+export function seasonLevel(rating: number, clubTier: number): number {
+  return rating - RATING_PER_OVERALL * (clubAverageRating(1) - clubAverageRating(clubTier));
+}
 function calcSeasonRating(position: string, apps: number, goals: number, assists: number, cleanSheets: number, overall: number, clubTier: number, buildDelta = 0): number {
   const clubAvg = clubAverageRating(clubTier);
   const diff = overall - clubAvg;
-  let base = 6.0 + diff * 0.06;
+  let base = 6.0 + diff * RATING_PER_OVERALL;
   if (position === "GK") { base += cleanSheets * 0.08; }
   else if (["ST", "LW", "RW", "CAM"].includes(position)) { base += goals * 0.04 + assists * 0.03; }
   else { base += goals * 0.06 + assists * 0.04; }
@@ -5746,8 +5754,24 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
     s.events.push(`🏆 Won Player of the Month (${month} ${monthYear(month, thisYear)})!`);
   }
 
+  /* Round 1525: the season awards were a bar on his own numbers and a coin (a 40 goal season lost the Golden Boot
+     seven times in ten). Each is now won against a field drawn on a stream keyed to the career, the season and
+     the award (soccerSeasonAwards.ts, on careerAwards.ts's draw), and only in the seasons it was given for. Every
+     old coin is still drawn, the same ones in the same order, and thrown away (the Round 1329 rule): the sum of
+     them feeds a branch the bundler cannot rule out, so nothing later in the season moves. */
+  const playedBefore = s.seasons.filter(ss => ss.type === "playing");
+  const awardSeason: SoccerAwardSeason = {
+    year: thisYear, apps: season.apps, goals: season.goals, cleanSheets: season.cleanSheets, rating: season.rating,
+    yellowCards: season.yellowCards, redCards: season.redCards, championsLeague: season.championsLeague,
+    clubTier: season.clubTier, position: s.position, age: s.age, level: seasonLevel(season.rating, season.clubTier),
+    prevRating: playedBefore.length >= 2 ? (playedBefore[playedBefore.length - 1]?.rating || 0) : null,
+  };
+  const wonSeasonAward = (award: SoccerSeasonAward): boolean =>
+    soccerAwardWon(award, awardSeason, keyedRng(`${soccerDeckIdentity(s)}|${season.year}|award|${award}`));
+
   // Player of the Year (domestic)
-  if (season.rating >= 8.0 && s.overall >= 82 && Math.random() < 0.25) {
+  const poyCoin = season.rating >= 8.0 && s.overall >= 82 ? Math.random() : 0;
+  if (wonSeasonAward("Player of the Year")) {
     s.awards = [...s.awards, { year: thisYear, name: "Player of the Year", emoji: "🌟" }];
     s.events.push(`🌟 Won Domestic Player of the Year!`);
     s.popularity = clamp(s.popularity + 10, 0, 100);
@@ -5761,48 +5785,47 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
 
   // --- NEW AWARDS ---
 
-  /* Puskás Award (best goal of the year), random chance for high-performing attackers. Round 1523: only from the
-     season it was first given for (soccerWorldTruth.ts puskasAwardExists, with its two sources). An earlier
-     season still makes the same draw and throws it away, the Round 1329 rule, so nothing later moves. */
-  const puskasDrawn = season.goals >= 15 && s.overall >= 80 && Math.random() < 0.08;
-  if (puskasDrawn && puskasAwardExists(thisYear)) {
+  // Puskás Award (goal of the season): every goal he scored is a chance at it, from 2008-09 (Round 1523's two sources)
+  const puskasCoin = season.goals >= 15 && s.overall >= 80 ? Math.random() : 0;
+  if (wonSeasonAward("Puskás Award")) {
     s.awards = [...s.awards, { year: thisYear, name: "Puskás Award", emoji: "🎯" }];
     s.events.push(`🎯 Won the Puskás Award for Goal of the Year!`);
   }
 
-  // Golden Boot (top league scorer), must be top scorer caliber
-  if (season.goals >= 25 && s.currentClubTier <= 2 && Math.random() < 0.3) {
+  // Golden Boot (top league scorer), at a club of the top two tiers
+  const bootCoin = season.goals >= 25 && s.currentClubTier <= 2 ? Math.random() : 0;
+  if (wonSeasonAward("Golden Boot")) {
     s.awards = [...s.awards, { year: thisYear, name: "Golden Boot", emoji: "👟" }];
     s.events.push(`👟 Won the League Golden Boot with ${season.goals} goals!`);
   }
 
-  // Golden Glove (goalkeeper of the year), GK only
-  if (s.position === "GK" && season.cleanSheets >= 12 && season.rating >= 7.5 && Math.random() < 0.3) {
+  // Golden Glove (most clean sheets), keepers only, from 2004-05
+  const gloveCoin = s.position === "GK" && season.cleanSheets >= 12 && season.rating >= 7.5 ? Math.random() : 0;
+  if (wonSeasonAward("Golden Glove")) {
     s.awards = [...s.awards, { year: thisYear, name: "Golden Glove", emoji: "🧤" }];
     s.events.push(`🧤 Won the Golden Glove Award!`);
   }
 
   // Young Player of the Year, under 23 only
-  if (s.age < 23 && season.rating >= 7.5 && s.overall >= 75 && Math.random() < 0.2) {
+  const youngCoin = s.age < 23 && season.rating >= 7.5 && s.overall >= 75 ? Math.random() : 0;
+  if (wonSeasonAward("Young Player of the Year")) {
     s.awards = [...s.awards, { year: thisYear, name: "Young Player of the Year", emoji: "⭐" }];
     s.events.push(`⭐ Named Young Player of the Year!`);
     s.popularity = clamp(s.popularity + 5, 0, 100);
   }
 
-  // UEFA Player of the Year, elite performances in European competition
-  if (season.championsLeague && season.rating >= 8.0 && s.overall >= 85 && Math.random() < 0.25) {
+  // UEFA Player of the Year, a Champions League winner, only in the seasons UEFA gave it (2010-11 to 2022-23)
+  const uefaCoin = season.championsLeague && season.rating >= 8.0 && s.overall >= 85 ? Math.random() : 0;
+  if (wonSeasonAward("UEFA Player of the Year")) {
     s.awards = [...s.awards, { year: thisYear, name: "UEFA Player of the Year", emoji: "🇪🇺" }];
     s.events.push(`🇪🇺 Named UEFA Player of the Year!`);
   }
 
-  // Comeback Player of the Year, significant OVR recovery after a dip
-  const prevSeasons = s.seasons.filter(ss => ss.type === "playing");
-  if (prevSeasons.length >= 2) {
-    const prevRating = prevSeasons[prevSeasons.length - 1]?.rating || 0;
-    if (prevRating <= 6.5 && season.rating >= 7.8 && Math.random() < 0.3) {
-      s.awards = [...s.awards, { year: thisYear, name: "Comeback Player of the Year", emoji: "💪" }];
-      s.events.push(`💪 Won Comeback Player of the Year!`);
-    }
+  // Comeback Player of the Year, after a season rated 6.5 or less
+  const comebackCoin = awardSeason.prevRating !== null && awardSeason.prevRating <= 6.5 && season.rating >= 7.8 ? Math.random() : 0;
+  if (wonSeasonAward("Comeback Player of the Year")) {
+    s.awards = [...s.awards, { year: thisYear, name: "Comeback Player of the Year", emoji: "💪" }];
+    s.events.push(`💪 Won Comeback Player of the Year!`);
   }
 
   // Club Legend status, 300+ appearances for one club
@@ -5818,14 +5841,16 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
     s.popularity = clamp(s.popularity + 15, 0, 100);
   }
 
-  // Fair Play Award, good conduct season (low cards, high rating)
-  if (season.yellowCards <= 1 && season.redCards === 0 && season.rating >= 7.5 && season.apps >= 25 && Math.random() < 0.1) {
+  // Fair Play Award, a full season with at most one booking and no red card
+  const fairCoin = season.yellowCards <= 1 && season.redCards === 0 && season.rating >= 7.5 && season.apps >= 25 ? Math.random() : 0;
+  if (wonSeasonAward("Fair Play Award")) {
     const alreadyFairPlayThisYear = s.awards.some(a => a.name === "Fair Play Award" && a.year === thisYear);
     if (!alreadyFairPlayThisYear) {
       s.awards = [...s.awards, { year: thisYear, name: "Fair Play Award", emoji: "🤝" }];
       s.events.push(`🤝 Won the Fair Play Award for exemplary conduct!`);
     }
   }
+  if (poyCoin + puskasCoin + bootCoin + gloveCoin + youngCoin + uefaCoin + comebackCoin + fairCoin < 0) s.events.push("");
 
 
   const totalGoals = s.seasons.reduce((sum, ss) => sum + ss.goals, 0) + season.goals;

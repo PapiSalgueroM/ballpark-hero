@@ -297,6 +297,19 @@ export function beatsField(
   return z > bestOfN(rivals, rng) + (cfg.grade ?? 0);
 }
 
+/**
+ * Round 1525: the same question for a career whose field table lives beside its own engine (Soccer Career,
+ * soccerSeasonAwards.ts), so the four US tables above stay exactly as they are. Same z, same rival count, one
+ * draw from the stream it is handed.
+ */
+export function beatsFieldOf(
+  rng: () => number, base: { mean: number; sd: number }, score: number, cfg: FieldConfig,
+): boolean {
+  const z = base.sd > 0 ? (score - base.mean) / base.sd : 0;
+  const rivals = Math.max(1.2, cfg.pool / Math.max(1, cfg.slots));
+  return z > bestOfN(rivals, rng) + (cfg.grade ?? 0);
+}
+
 /* ================================================================== */
 /* Who you are actually up against, sport by sport                    */
 /* ================================================================== */
