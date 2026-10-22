@@ -1,0 +1,7 @@
+  ok [table]: balanced is exactly zero in all 48 reads (8 styles, both halves, three fitness levels)
+  ok [table]: the help's worked example reads the table and its words still hold
+  ok [styles]: Everton: the preview's Crystal Palace plays gegenpress, the style the engine's goal rates read
+  ok [styles]: Real Madrid: the preview's Rayo Vallecano plays direct, the style the engine's goal rates read
+  ok [styles]: Napoli: the preview's Cagliari plays patient, the style the engine's goal rates read
+  ok [dominance]: none of 8 fixed sets beats balanced by over +6.00% at a mid table club in either block (top tempo+)
+simCmTactics: all green (sections table, styles, balanced, fleet)
