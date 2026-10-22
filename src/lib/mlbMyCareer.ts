@@ -1322,7 +1322,7 @@ export function buyMlbItem(c: MlbCareerState, itemId: string): { state: MlbCaree
     case 'mshady_club': { const w = Math.min(4, c.dirtyMoney ?? 0); s.dirtyMoney = Math.max(0, Math.round(((s.dirtyMoney ?? 0) - 4) * 10) / 10); s.netWorth = Math.round((s.netWorth + w) * 10) / 10; s.heat = Math.min(100, (s.heat ?? 0) + 3); log = 'The club opened. Four million cleaned and a line around the block.'; break; }
     case 'mshady_fixer': s.heat = Math.max(0, (s.heat ?? 0) - 8); log = 'You have a guy now. Heat -8, and you genuinely do not want to know how.'; break;
     case 'mshady_offshore': s.heat = Math.min(100, (s.heat ?? 0) + 6); log = 'The account is open. An island, a bank, and a form nobody will ever file. Heat +6.'; break;
-    case 'summer_camp': { const fans = Math.max(0, Math.min(100, s.fanbase + 8) - s.fanbase); const mood = Math.max(0, Math.min(100, s.morale + 6) - s.morale); s.fanbase += fans; s.morale += mood; log = `Two weeks, 400 kids, no fee, and every one of them went home with a glove. Fanbase +${fans}, morale +${mood}.`; break; }
+    case 'summer_camp': { const fans = Math.max(0, Math.min(100, s.fanbase + 8) - s.fanbase); const mood = Math.max(0, Math.min(100, s.morale + 6) - s.morale); s.fanbase += fans; s.morale += mood; log = `Two weeks, 400 kids, no fee. Fanbase +${fans}, morale +${mood}.`; break; }
     default: break;
   }
   return { state: s, log };

@@ -1230,7 +1230,7 @@ export function buyNhlItem(c: NhlCareerState, itemId: string): { state: NhlCaree
     case 'junior_stake': s.fanbase = Math.min(100, s.fanbase + 8); log = 'You own a piece of the barn you came up in. Fanbase +8.'; break;
     case 'outdoor_rink': s.fanbase = Math.min(100, s.fanbase + 10); log = 'The outdoor rink opened in November. It has not been empty since. Fanbase +10.'; break;
     case 'lake_cabin': s.morale = Math.min(100, s.morale + 8); log = 'No cell service, one dock, June through August. Morale +8.'; break;
-    case 'summer_camp': { const fans = Math.max(0, Math.min(100, s.fanbase + 8) - s.fanbase); const mood = Math.max(0, Math.min(100, s.morale + 6) - s.morale); s.fanbase += fans; s.morale += mood; log = `Two weeks, 400 kids, no fee, and the rink was full from the first whistle. Fanbase +${fans}, morale +${mood}.`; break; }
+    case 'summer_camp': { const fans = Math.max(0, Math.min(100, s.fanbase + 8) - s.fanbase); const mood = Math.max(0, Math.min(100, s.morale + 6) - s.morale); s.fanbase += fans; s.morale += mood; log = `Two weeks, 400 kids, no fee. Fanbase +${fans}, morale +${mood}.`; break; }
     default: break;
   }
   return { state: s, log };

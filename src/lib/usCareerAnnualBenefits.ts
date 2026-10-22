@@ -157,24 +157,13 @@ export function settleUsCareerShop(c: ShopCareer, items: readonly ShopItem[]): s
   return lines;
 }
 
-/** The worked example's prices: the index fund's and the crypto punt's own price in all four sports (the unit
- *  test reads the eight cards and holds these to them). */
-const HELP_INDEX_COST = 2;
-const HELP_CRYPTO_COST = 1;
-
-/** The rule behind each page's "?", built from the table above so it can never print another number. */
-export const US_SHOP_HELP_RULE: string = (() => {
-  const index = US_SHOP_RETURNS.index_nba as { rate: number };
-  const crypto = US_SHOP_RETURNS.crypto_nba as { chance: number; times: number };
-  const pct = (v: number) => `${Math.round(v * 100)} percent`;
-  const earned = Math.round(HELP_INDEX_COST * index.rate * 10000) / 10000;
-  const banked = Math.floor(earned * 10 + 1e-9) / 10;
-  const waits = Math.round((earned - banked) * 10000) / 10000;
-  const odds = Math.round(1 / crypto.chance);
-  return `The shop pays what its cards say, at the end of every season you play. Put ${HELP_INDEX_COST}M in the Boring Index Fund `
-    + `and it pays ${pct(index.rate)}, ${earned}M, every season. Cash moves in tenths, so ${banked}M lands this season and the `
-    + `${waits}M waits for the next one. A stake like the Crypto Punt settles once, at the end of your next season: one time in `
-    + `${odds} you get ${crypto.times * HELP_CRYPTO_COST}M back on your ${HELP_CRYPTO_COST}M, otherwise it is gone, and once it has settled you can buy another. The `
-    + `Family Office adds ${pct(US_FAMILY_OFFICE_RATE)} of your cash every season, and the lawyer makes a clean season cool your `
-    + 'heat twice as fast. Selling your lifestyle assets when you go broke sells your investments too.';
-})();
+/** The rule behind each page's "?", with a worked example. Written out rather than built at load (the NFL route's
+ *  weight row has about a kilobyte of room); every number in it is held to the cards' own printed words by
+ *  src/lib/usCareerShopPromises.test.ts and scripts/simUsShopPromises.mjs section 1, so it cannot drift from
+ *  them, and the table above is held to the same words. */
+export const US_SHOP_HELP_RULE = 'The shop pays what its cards say, at the end of every season you play. Put 2M in the Boring Index Fund '
+  + 'and it pays 7 percent, 0.14M, every season. Cash moves in tenths, so 0.1M lands this season and the 0.04M waits for the '
+  + 'next one. A stake like the Crypto Punt settles once, at the end of your next season: one time in 5 you get 5M back on '
+  + 'your 1M, otherwise it is gone, and once it has settled you can buy another. The Family Office adds 2 percent of your '
+  + 'cash every season, and the lawyer makes a clean season cool your heat twice as fast. Selling your lifestyle assets '
+  + 'when you go broke sells your investments too.';

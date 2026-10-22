@@ -229,6 +229,7 @@ function printed(card) {
   return null;
 }
 const cash = c => (c.netWorth ?? 0) + (c.shopCarry ?? 0);
+const OFFICE_PRINTED = 0.02; /* Soccer Career's office rule, "+2% net worth growth per season" (literal on purpose) */
 const byName = (items, name) => items.find(card => card.name === name);
 const steadyCards = items => items.filter(card => printed(card)?.rate);
 const stakeCards = items => items.filter(card => printed(card)?.chance);
@@ -359,7 +360,6 @@ if (runs('3')) {
 }
 
 /* ─── section 4: the family office, after the steady returns ─── */
-const OFFICE_PRINTED = 0.02; /* Soccer Career's office rule, "+2% net worth growth per season" (literal on purpose) */
 if (runs('4')) {
   console.log('4) the family office: 2 percent of Cash above zero, after the steady returns');
   for (const sport of US) {
