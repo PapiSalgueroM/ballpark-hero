@@ -1,0 +1,17 @@
+{
+  "about": [
+    "Round 1553 (part A). The claim ledger behind src/data/connectionsPuzzles.ts (Soccer Connections). scripts/simConnectionsFacts.mjs holds the boards to it.",
+    "lists: closed lists of winners this round verified, each on two hosts that are not wikis. The checker judges any tile on any board against a list whose label the board uses.",
+    "groups: every group this round rebuilt or stamped, word for word, with each member's claim on two hosts. A group listed here must match the board exactly.",
+    "refuted: claims two hosts show false. None may appear on any board again.",
+    "adjudicated: findings of the cross check that are wrong about the world (a namesake in the site's tables, a gap in the career tables), each with its reason.",
+    "owed: findings of the cross check on boards this round did not rebuild. Part B of the round clears them; the list may only shrink.",
+    "Wikipedia and every other wiki are never a source here."
+  ],
+  "read": "2026-10-22",
+  "lists": {},
+  "groups": [],
+  "refuted": [],
+  "adjudicated": [],
+  "owed": []
+}
