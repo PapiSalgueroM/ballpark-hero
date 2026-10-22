@@ -1,0 +1,9 @@
+tsc exit=0 88s | 
+simTycoonHelp exit=0 28s |    All 25 controls fired exactly where they should.
+simTycoonTicketPolicy-all exit=0 93s | Ticket policy: 21/21 normal outcomes; 24/24 effective copied faults, each with independent purchase baseline. Raw reports, logs, copied sources and hashes retained at /ho
+simGuideHeadings exit=0 1s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+simSiteSearch exit=0 3s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+simHarnessAnchors exit=0 86s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simTycoonPacks exit=0 307s |    All 23 controls fired exactly where they should.
+vitest exit=0 7s |    Duration  6.44s (transform 1.18s, setup 457ms, collect 2.97s, tests 7.08s, environment 2.10s, prepare 684ms)
+simTycoonScorelines exit=0 377s | simTycoonScorelines: 17 checks, 0 failed [377 s]

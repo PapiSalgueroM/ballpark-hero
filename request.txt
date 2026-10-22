@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simTycoonPacks: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonPacks.mjs
+simTycoonScorelines: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonScorelines.mjs
+simTycoonHelp: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonHelp.mjs
+simTycoonTicketPolicy-all: TYCOON_TICKET_POLICY_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonTicketPolicy.mjs
+simGuideHeadings: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simGuideHeadings.mjs
+simSiteSearch: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSiteSearch.mjs
+simHarnessAnchors: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simHarnessAnchors.mjs
+vitest: node_modules/.bin/vitest run src/test/tycoonPacks.test.tsx src/test/tycoonTicketPolicy.test.tsx src/test/tycoonHelp.test.tsx --testTimeout=300000 --hookTimeout=120000
