@@ -1,0 +1,11 @@
+#!serial
+get: mkdir -p /tmp/fl && for n in r1321-k1 r1321-k2; do git fetch -q origin "+refs/heads/rc-results/$n:refs/remotes/origin/rc-results/$n" && for f in $(git ls-tree --name-only origin/rc-results/$n:files/fleet/); do git show origin/rc-results/$n:files/fleet/$f > /tmp/fl/$f; done; done; ls /tmp/fl | wc -l; ls /tmp/fl | sed -E 's/-set[0-9]+\.json$//' | sort | uniq -c
+combine: SIM_NBA_EARNED_DRAFT_COMBINE=/tmp/fl node scripts/simNbaEarnedDraft.mjs
+fat: SIM_NBA_EARNED_DRAFT_COMBINE=/tmp/fl SIM_NBA_EARNED_DRAFT_VS=new-fatclass node scripts/simNbaEarnedDraft.mjs
+best: SIM_NBA_EARNED_DRAFT_COMBINE=/tmp/fl SIM_NBA_EARNED_DRAFT_VS=new-bestfirst node scripts/simNbaEarnedDraft.mjs
+arb: SIM_NBA_EARNED_DRAFT_COMBINE=/tmp/fl SIM_NBA_EARNED_DRAFT_VS=arb node scripts/simNbaEarnedDraft.mjs
+judgeflip-c: SIM_NBA_EARNED_DRAFT_COMBINE=/tmp/fl SIM_NBA_EARNED_DRAFT_CONTROL=judgeflip node scripts/simNbaEarnedDraft.mjs
+judgetwo-c: SIM_NBA_EARNED_DRAFT_COMBINE=/tmp/fl SIM_NBA_EARNED_DRAFT_CONTROL=judgetwo node scripts/simNbaEarnedDraft.mjs
+judgerange-c: SIM_NBA_EARNED_DRAFT_COMBINE=/tmp/fl SIM_NBA_EARNED_DRAFT_CONTROL=judgerange node scripts/simNbaEarnedDraft.mjs
+judgefloor-c: SIM_NBA_EARNED_DRAFT_COMBINE=/tmp/fl SIM_NBA_EARNED_DRAFT_CONTROL=judgefloor node scripts/simNbaEarnedDraft.mjs
+judgecap-c: SIM_NBA_EARNED_DRAFT_COMBINE=/tmp/fl SIM_NBA_EARNED_DRAFT_CONTROL=judgecap node scripts/simNbaEarnedDraft.mjs
