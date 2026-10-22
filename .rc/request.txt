@@ -1,0 +1,7 @@
+#!serial
+digest-head: node scripts/simCmLeagueRules.mjs 2>&1 | tail -14; exit ${PIPESTATUS[0]}
+digest-revert: git checkout 5dea4f042d7351ad6ccb20ed2b4a7930de286619 -- src/lib/clubManager.ts src/lib/clubManagerBoardAsks.ts src/lib/clubManagerMadeUpNations.ts && node scripts/simCmLeagueRules.mjs 2>&1 | tail -8; s=${PIPESTATUS[0]}; git checkout HEAD -- src; exit $s
+digest-revert-fin: git checkout 5dea4f042d7351ad6ccb20ed2b4a7930de286619 -- src/lib/clubManager.ts src/lib/clubManagerBoardAsks.ts src/lib/clubManagerMadeUpNations.ts src/lib/clubManagerFinances.ts && node scripts/simCmLeagueRules.mjs 2>&1 | tail -8; s=${PIPESTATUS[0]}; git checkout HEAD -- src; exit $s
+pin-head: node scripts/simManagerAppealIsolation.mjs 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+pin-revert: git checkout 5dea4f042d7351ad6ccb20ed2b4a7930de286619 -- src/lib/clubManager.ts && node scripts/simManagerAppealIsolation.mjs 2>&1 | tail -4; s=${PIPESTATUS[0]}; git checkout HEAD -- src; exit $s
+digest-write: node scripts/simCmLeagueRules.mjs --part=modern,eras,pure --write 2>&1 | tail -6; cp scripts/data/cmLeagueRulesDigest.json "$RC_OUT/cmLeagueRulesDigest.json"; node scripts/simCmLeagueRules.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
