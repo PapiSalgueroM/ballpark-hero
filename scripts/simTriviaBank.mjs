@@ -339,8 +339,12 @@ for (const n of twoMenLeftOut) fail(`${n} shows two men in one season (${twoMen.
 section('7. Face Off and the bank read one MIN_RATIO');
 const faceOff = stripComments(read('src/lib/faceOff.ts'));
 const bank = stripComments(read('src/lib/triviaQuestionBank.ts'));
-if (!/import \{ MIN_RATIO \} from '@\/lib\/clearWinner';/.test(faceOff)) fail('src/lib/faceOff.ts does not import MIN_RATIO from src/lib/clearWinner.ts');
+if (!/import \{ MIN_RATIO, clearlyAhead \} from '@\/lib\/clearWinner';/.test(faceOff)) fail('src/lib/faceOff.ts does not import MIN_RATIO and clearlyAhead from src/lib/clearWinner.ts');
 if (/const MIN_RATIO\s*=/.test(faceOff)) fail('src/lib/faceOff.ts declares a MIN_RATIO of its own');
+/* one rule, not one constant and two predicates (Round 1552 review): Face Off asks clearlyAhead and
+   compares nothing against MIN_RATIO itself */
+if (!/!clearlyAhead\(hi, lo\)/.test(faceOff)) fail('src/lib/faceOff.ts does not ask clearlyAhead whether a pair has one right answer');
+if (/[<>]=?\s*MIN_RATIO/.test(faceOff)) fail('src/lib/faceOff.ts compares against MIN_RATIO itself instead of asking clearlyAhead');
 if (!/import \{ clearlyAhead \} from '@\/lib\/clearWinner';/.test(bank)) fail('the bank does not take its tie rule from src/lib/clearWinner.ts');
 if (/1\.04/.test(bank)) fail('the bank carries a ratio literal of its own');
 console.log(`   MIN_RATIO ${MIN_RATIO}`);
