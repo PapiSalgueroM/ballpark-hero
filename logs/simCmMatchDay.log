@@ -1,0 +1,28 @@
+fleet: 25 careers, 918 matches (462 home, 448 away, 8 neutral), 0 reports with no fixture read before them, 18s
+live: 182 matches kicked off live (64 away, 8 on a neutral ground), 728 live renders
+1) One rule: the fixture's venue and the report's own order agree on every match
+   918 matches, 8 reports saying neutral; red: 0 home, 0 away, 0 neutral
+2) The report card: every two sided block in the scoreline's order
+   918 reports, 9180 stat bars read (18360 bar segments); red: 0 home, 0 away, 0 neutral
+3) The timeline: home side first, whole names, every mark right after its name
+   918 timelines, 15799 rows, 15799 names, 246 marks; red: 0 home, 0 away, 0 neutral
+4) Live and half time: the strip, the score's digits, the interval card, the stats and the line under the pitch home side first
+   364 live matches judged, 8 of them on a neutral ground (182 first, 182 interval, 182 second, 182 done; 546 frames staged with no venue field; 2548 possession bar segments, 2002 green names); red: 0 home, 0 away, 0 neutral, 0 staged with no venue field
+5) The Match Centre: the tie, the form rows and the ones to watch home side first; the odds still Win, Draw, They win
+/home/runner/work/_temp/t-simCmMatchDay/cmMatchDay.4339/bundle.cjs:81159
+  return state.clubStrengths[club] ?? eraPrior ?? STRENGTH_PRIORS[club] ?? Math.max(clubPreviewRating(club), 64);
+                            ^
+
+TypeError: Cannot read properties of undefined (reading 'Newcastle')
+    at strengthOf (/home/runner/work/_temp/t-simCmMatchDay/cmMatchDay.4339/bundle.cjs:81159:29)
+    at opponentStyle (/home/runner/work/_temp/t-simCmMatchDay/cmMatchDay.4339/bundle.cjs:90886:27)
+    at MatchCentre (/home/runner/work/_temp/t-simCmMatchDay/cmMatchDay.4339/bundle.cjs:97363:17)
+    at renderWithHooks (/home/runner/work/_temp/t-simCmMatchDay/cmMatchDay.4339/bundle.cjs:46223:24)
+    at renderIndeterminateComponent (/home/runner/work/_temp/t-simCmMatchDay/cmMatchDay.4339/bundle.cjs:46281:23)
+    at renderElement (/home/runner/work/_temp/t-simCmMatchDay/cmMatchDay.4339/bundle.cjs:46448:15)
+    at renderNodeDestructiveImpl (/home/runner/work/_temp/t-simCmMatchDay/cmMatchDay.4339/bundle.cjs:46552:17)
+    at renderNodeDestructive (/home/runner/work/_temp/t-simCmMatchDay/cmMatchDay.4339/bundle.cjs:46533:22)
+    at retryTask (/home/runner/work/_temp/t-simCmMatchDay/cmMatchDay.4339/bundle.cjs:46840:13)
+    at performWork (/home/runner/work/_temp/t-simCmMatchDay/cmMatchDay.4339/bundle.cjs:46880:15)
+
+Node.js v24.22.0

@@ -1,0 +1,10 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+weight exit=0 29s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+tsc exit=0 85s | 
+units exit=0 65s |    Duration  64.27s (transform 3.29s, setup 450ms, collect 10.21s, tests 65.70s, environment 2.23s, prepare 597ms)
+quick exit=0 12s | simCmTactics: all green (sections table, styles, balanced)
+walk exit=0 119s | playCmTactics: all green (41 checks)
+simCmMatchDay exit=1 30s | Node.js v24.22.0
+simNoRivalNames exit=0 19s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 54s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+bytes exit=0 181s | simCmDifficulty: all green (sections 2)
