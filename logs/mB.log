@@ -1,0 +1,58 @@
+MUTATION B APPLIED
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero/.mutB[39m
+
+
+[31m⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Suites 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/clubManagerTactics.test.ts[2m [ src/lib/clubManagerTactics.test.ts ][22m
+[31m[1mError[22m: Cannot find module '/home/runner/work/ballpark-hero/ballpark-hero/src/test/setup.ts'[39m
+[31m[1mCaused by: Error[22m: Failed to load url /home/runner/work/ballpark-hero/ballpark-hero/src/test/setup.ts (resolved id: /home/runner/work/ballpark-hero/ballpark-hero/src/test/setup.ts). Does the file exist?[39m
+[90m [2m❯[22m loadAndTransform ../node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:[2m51969:17[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [2mno tests[22m
+[2m   Start at [22m 00:59:12
+[2m   Duration [22m 1.24s[2m (transform 13ms, setup 0ms, collect 0ms, tests 0ms, environment 431ms, prepare 237ms)[22m
+
+
+[table] the instruction table on its own
+  ok [table]: balanced is exactly zero in all 48 reads (8 styles, both halves, three fitness levels)
+  ok [table]: 12 settings carry a label, a does line and a costs line
+  ok [table]: every setting off balanced scores less or concedes more somewhere
+    best answer to gegenpress: press- tempo+ width- line- (net 0.130)
+    best answer to possession: press+ tempo+ width- line+ (net 0.153)
+    best answer to patient: press+ tempo- width- line+ (net 0.093)
+    best answer to wingplay: press+ tempo- (net 0.013)
+    best answer to direct: press- line- (net 0.060)
+    best answer to counter: press- tempo- width- line- (net 0.100)
+    best answer to lowblock: press+ tempo- width- (net 0.053)
+    best answer to balanced: press+ tempo- width- line+ (net 0.023)
+  ok [table]: the help's worked example reads the table and its words still hold
+
+[styles] the other dugout's style
+  ok [styles]: dealing 3200 styles drew nothing from the game's stream
+  ok [styles]: the same club at the same strength is always dealt the same style
+  ok [styles]: every style is dealt at a middling strength
+    press high: strong 0.400 weak 0.049; stand off: strong 0.070 weak 0.364; high line: strong 0.400 weak 0.049
+  ok [styles]: strong sides press high 0.351 more often than weak ones
+  ok [styles]: weak sides stand off 0.294 more often
+  ok [styles]: Everton: the preview's Crystal Palace plays gegenpress, the style the engine's goal rates read
+    Everton's league: wingplay 4, patient 2, gegenpress 3, possession 2, balanced 3, counter 3, lowblock 1, direct 1
+  ok [styles]: Real Madrid: the preview's Rayo Vallecano plays direct, the style the engine's goal rates read
+    Real Madrid's league: lowblock 2, patient 3, wingplay 4, balanced 4, possession 2, gegenpress 2, direct 2
+  ok [styles]: Napoli: the preview's Cagliari plays patient, the style the engine's goal rates read
+    Napoli's league: wingplay 2, balanced 8, patient 3, counter 1, gegenpress 1, possession 3, direct 1
+
+[balanced] all four on balanced is the untouched career, to the byte
+  ok [balanced]: Everton seed 1: the same season to the byte (159964 characters, 49981 draws)
+  ok [balanced]: Everton seed 2: the same season to the byte (159067 characters, 50891 draws)
+  ok [balanced]: Barcelona seed 1: the same season to the byte (172158 characters, 57577 draws)
+  ok [balanced]: Barcelona seed 2: the same season to the byte (173615 characters, 60052 draws)
+  ok [balanced]: Brighton seed 1: the same season to the byte (126754 characters, 21395 draws)
+  ok [balanced]: Brighton seed 2: the same season to the byte (159780 characters, 44952 draws)
+simCmTactics: all green (sections table, styles, balanced)
+SUMMARY mutation B units=1 quick=0

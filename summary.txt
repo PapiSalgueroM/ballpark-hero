@@ -1,0 +1,5 @@
+mB exit=1 17s | SUMMARY mutation B units=1 quick=0
+mA exit=1 18s | SUMMARY mutation A units=1 quick=0
+mC exit=1 18s | SUMMARY mutation C units=1 quick=0
+mE exit=1 335s | SUMMARY mutation E units=1 balanced=0 bytes=0 saveSize=1
+mD exit=1 849s | SUMMARY mutation D units=1 full=0
