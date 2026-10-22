@@ -4,6 +4,7 @@ import { ChevronRight, ChevronDown } from 'lucide-react';
 import { minuteLabel } from '@/lib/clubManager';
 import { scorerLine } from '@/lib/clubManagerScorerLine';
 import type { MatchWeekReport, MatchStats } from '@/lib/clubManager';
+import { AI_STYLES, instructionsSummary, type TeamInstructions } from '@/lib/clubManagerTactics';
 import { ConfettiBurst, CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';
 import { MadeUpTag } from '@/components/club-manager/SquadScreen';
 import VictoryMoment from '@/components/game/VictoryMoment';
@@ -74,6 +75,41 @@ function StatsBlock({ stats, counts, mineFirst }: { stats: MatchStats; counts: C
           <StatBar label="Substitutions" mine={counts.subs} theirs={counts.oppSubs} mineFirst={mineFirst} />
         </>
       )}
+    </div>
+  );
+}
+
+/** Round 1522: the instructions on the day and the numbers each one moves. Only on a report where they were set. */
+function TacticsDayBlock({ tactics, myGoals, oppGoals }: { tactics: NonNullable<NonNullable<MatchWeekReport['detail']>['tactics']>; myGoals: number; oppGoals: number }) {
+  const t = tactics.stats;
+  const style = AI_STYLES[tactics.theirStyle];
+  const words = (i: TeamInstructions) => instructionsSummary(i);
+  const first = tactics.log[0];
+  const later = tactics.log.slice(first && first.minute === 0 ? 1 : 0);
+  const rows: [string, string, string][] = [
+    ['wonHigh', 'Won back in their third', String(t.wonHigh)],
+    ['crosses', 'Crosses', String(t.crosses)],
+    ['offsides', 'Caught them offside', String(t.offsides)],
+    ['wideGoals', 'Goals from wide', `${t.wideGoals} of ${myGoals}`],
+    ['breakConceded', 'Conceded on the break', `${t.breakConceded} of ${oppGoals}`],
+    ['legs', 'Legs', t.legs > 0 ? `${t.legs} fitness off each man who played` : t.legs < 0 ? `${-t.legs} fitness back for each man who played` : 'No extra cost'],
+  ];
+  return (
+    <div className="mt-3 rounded-lg border border-border/60 p-2" data-cm-report-tactics={tactics.theirStyle}>
+      <div className="text-[9px] text-muted-foreground uppercase tracking-wider mb-1">Your instructions</div>
+      <p className="text-[11px] text-foreground leading-snug">
+        {first && first.minute === 0 ? words(first.instructions) : 'Balanced on all four'}
+        {later.map((s, i) => <span key={i} className="text-muted-foreground">. {minuteLabel(s)}: {words(s.instructions)}</span>)}
+      </p>
+      <p className="text-[10px] text-muted-foreground mt-0.5">{style.emoji} In this sim they played {style.label}.</p>
+      <div className="mt-1.5 grid grid-cols-1 gap-0.5">
+        {rows.map(([key, label, value]) => (
+          <div key={key} className="flex items-center justify-between gap-2 text-[11px]" data-cm-report-tac={key}>
+            <span className="text-muted-foreground">{label}</span>
+            <span className="font-bold text-foreground tabular-nums text-right">{value}</span>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
@@ -459,6 +495,13 @@ export function MatchReportCard({ report, clubName, onContinue, noSack = false }
               {statsHeadSecond}
             </div>
             <StatsBlock stats={detail.stats} counts={detailCounts} mineFirst={mineFirst} />
+            {detail.tactics && (
+              <TacticsDayBlock
+                tactics={detail.tactics}
+                myGoals={detail.timeline.filter(e => e.kind === 'goal' && e.side === 'me').length}
+                oppGoals={detail.timeline.filter(e => e.kind === 'goal' && e.side === 'opp').length}
+              />
+            )}
             {/* Round 169: momentum as one continuous flow, us above the
                 line, them below, like his match app models draw it.
                 Round 178: possession and shots ride ON the chart now, the

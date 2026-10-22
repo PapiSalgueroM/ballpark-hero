@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 import { Pause, Play, FastForward, Users, ArrowLeft, ArrowLeftRight, Gauge, X } from 'lucide-react';
 import {
   FORMATIONS, MENTALITIES, slotPosition, pitchLineOf, resolveXI, extraTimeCall,
-  liveFeed, liveStatsAt, myOnPitchAt, oppOnPitchAt, squadNumbers, benchFor, changeRoom, liveGoneIds,
+  liveFeed, liveStatsAt, myOnPitchAt, oppOnPitchAt, squadNumbers, benchFor, changeRoom, liveGoneIds, liveShapeAt,
 } from '@/lib/clubManager';
 import type {
   CareerState, CMPlayer, LiveMatch, MatchWeekReport, MatchStats, Mentality, TalkTone,
@@ -33,6 +33,7 @@ import type { GoalMarks } from '@/lib/clubManagerScorerLine';
 import { cmVarEventWaiting, cmVarPlayWaiting, cmVarCanAnnounce, cmVarPlayedReviewIds, cmVarLabel, cmVarKindsOf } from '@/lib/clubManagerVar';
 import { ClubManagerVarReview } from '@/components/club-manager/ClubManagerVarReview';
 import { inFixtureOrder, mineFirstOfReport, myClubFirst, pitchInitials, pitchName } from '@/lib/cmMatchDisplay';
+import { LiveTacticsPanel } from '@/components/club-manager/LiveTacticsPanel';
 
 /**
  * Round 158: the Live Sim. His words, the ones he said to really pay
@@ -225,8 +226,9 @@ function menAt(career: CareerState, live: LiveMatch | null, report: MatchWeekRep
   const gone = playedBy(minute, plus);
   const mine: Man[] = [];
   const theirs: Man[] = [];
-  /* The shape the eleven kicked off in, whatever the tactics tab says now. */
-  const myFormation = FORMATIONS[live?.formationIndex ?? career.formationIndex] ?? FORMATIONS[0];
+  /* The shape the eleven kicked off in, whatever the tactics tab says now. Round 1522: or the one a change during
+     the match put them in by this minute (the order myOnPitchAt hands back reads in it). */
+  const myFormation = FORMATIONS[(live ? liveShapeAt(live, mineAt + 1).formationIndex : undefined) ?? live?.formationIndex ?? career.formationIndex] ?? FORMATIONS[0];
   if (live) {
     /* Round 548: minute + 1, so a change made AT the minute on the clock is on
        the pitch rather than one minute late. Tapping a dot pauses the clock, so
@@ -442,6 +444,7 @@ function LiveMatchHelp({ onClose, kinds = [] }: { onClose: () => void; kinds?: r
         <li>A goal marked (P) was a penalty. A goal marked (O.G) is an own goal: it counts for the club it is listed under, and the man named put it into his own net. On the pitch the ball goes in off him and he holds his head.</li>
         {reviews && <li>VAR here reviews {goals && penalties ? 'goals and penalties only' : goals ? 'goals only' : 'penalty calls only'}, and you only see a review that changed the call.{goals ? ' A goal that gets ruled out goes in first: the check opens with the ball in the net, the score does not move, and it adds no scorer or shot stats.' : ''}{penalties ? ' A foul the referee missed can become a penalty, and that kick can go in, be saved or miss.' : ''}</li>}
         <li>Tap one of your players to make a sub or change shape. Everything up to that minute stays. The rest of the half is played again with your change.</li>
+        <li>Tactics from here, in the same sheet, changes your team instructions, the formation and any duty for the rest of this match only. Your standing plan stays on the Tactics tab.</li>
         <li>Pause, pick a speed, or Skip to the whistle. Tap a goal card to move on.</li>
       </ul>
       <p className="mt-2 text-xs text-foreground">
@@ -550,6 +553,8 @@ export function LiveSimScreen({
   const openedAt = useRef(clock);
   const [speed, setSpeed] = useState<(typeof SPEEDS)[number]>(2);
   const [paused, setPaused] = useState(false);
+  /* Round 1522: the change sheet's tactics (instructions, formation, duties), folded until asked for. */
+  const [tacticsOpen, setTacticsOpen] = useState(false);
   const [finished, setFinished] = useState(false);
   /* Round 1101: match mode. One panel at a time, the kicks of a shootout open by themselves at the
      whistle, and Back folds the whole screen away to a small card in the page. */
@@ -1557,6 +1562,7 @@ export function LiveSimScreen({
           onShape={onShape}
           onTalk={onTalk}
           onSecondHalf={startSecond}
+          onChange={c => onChange(46, c)}
         />
       </div>
     );
@@ -2031,6 +2037,22 @@ export function LiveSimScreen({
                       </button>
                     ))}
                   </div>
+
+                  {/* Round 1522: instructions, formation and duties from the next minute, folded until asked for. */}
+                  <button
+                    type="button"
+                    data-cm-live-tactics-toggle="1"
+                    aria-expanded={tacticsOpen}
+                    onClick={() => setTacticsOpen(o => !o)}
+                    className="mt-2 w-full min-h-[44px] flex items-center justify-between rounded-lg border border-border px-2 text-[11px] font-bold uppercase tracking-wider text-muted-foreground hover:border-primary/40"
+                  >
+                    Tactics from here <span className="normal-case font-semibold text-primary">{tacticsOpen ? 'Hide' : 'Open'}</span>
+                  </button>
+                  {tacticsOpen && liveNow && (
+                    <div className="mt-1.5">
+                      <LiveTacticsPanel career={career} live={liveNow} onChange={c => onChange(changeMinute, c, plus)} idPrefix="sheet" minute={changeMinute} plus={plus} />
+                    </div>
+                  )}
 
                   <div className="text-[11px] text-muted-foreground uppercase tracking-wider mt-2 mb-1">Bring on for {lastName(picked.name)}</div>
                   {subsLeft === 0 || (room && !room.open) ? (

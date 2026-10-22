@@ -177,6 +177,14 @@ import {
 import { UCL_LEAGUE, drawUclLeaguePhase } from '@/lib/uclLeaguePhase';
 /* Round 781: the match clock with the board in it. The module imports nothing. */
 import { clockOrder, playedBy } from '@/lib/clubManagerClock';
+/* Round 1522: team instructions. The engine carries only the small core (clubManagerTacticsCore.ts): the types,
+   balanced, and the slot clubManagerTactics.ts fills when it loads. Every reader below is a no op on balanced
+   (it adds zero or multiplies by one), and with the slot empty plays balanced, so a career that never sets one
+   plays as it always did. */
+import {
+  BALANCED, isBalanced, logEverSet, readInstructions, tacticsImpl,
+  type AiStyleId, type InstructionStep, type TacticStats, type TeamInstructions,
+} from '@/lib/clubManagerTacticsCore';
 
 /**
  * Club Manager engine.
@@ -1971,6 +1979,10 @@ export interface MatchDetail {
    *  only when extra time was played. Absent on every other match and on
    *  every report written before this round. */
   et?: { from: number; to: number };
+  /** Round 1522: the instructions on the day, set only for a match where mine left balanced at some point: the
+   *  log, the other dugout's style, and the numbers each instruction moves (clubManagerTactics.ts). Absent on
+   *  every other report and on every report written before this round. */
+  tactics?: { log: InstructionStep[]; theirStyle: AiStyleId; stats: TacticStats };
 }
 
 export interface MatchWeekReport {
@@ -2820,6 +2832,10 @@ export interface CareerState {
   xiIds: (string | null)[];
   formationIndex: number;
   mentality: Mentality;
+  /** Round 1522: the four team instructions (clubManagerTactics.ts). Absent means balanced on all four, and a
+   *  save only carries the field while one is off balanced (setInstructions drops it), so every career that
+   *  never touches them saves exactly as before. */
+  instructions?: TeamInstructions;
   /** Round 119: set only while a match is paused at halftime. */
   live?: LiveMatch | null;
   /** The 20 league clubs in scheduling order (shuffled each season). */
@@ -3297,7 +3313,22 @@ export interface LiveMatch {
    *  stretch, so nothing that merges the second half needs to know about it.
    *  Absent means no extra time, which is every save before this round. */
   et?: { from: number; to: number };
+  /** Round 1522: the instructions over the match, kick off (minute 0) and every change on the live sheet, each
+   *  in force from the minute after its own. Absent while the match has been balanced throughout, which is every
+   *  match of a career that never sets one, so those matches save exactly as before. The last entry is what is
+   *  in force now (liveInstructions). */
+  instrLog?: InstructionStep[];
+  /** Round 1522: shape changes made during the match (a new formation, or a duty), each with the order the men
+   *  on the pitch stand in from then on (a man's index is his slot) and the duties of that shape. Absent on a
+   *  match nobody reshaped. formationIndex and duties above are always the shape in force now. */
+  formChanges?: LiveShapeChange[];
+  /** Round 1522: the shape the match kicked off in, written with the first reshape so the eleven that started
+   *  is still read in its own slots. Absent on a match nobody reshaped. */
+  kickoffShape?: { formationIndex: number; duties: (Duty | null)[] };
 }
+
+/** Round 1522: one change of shape during a match. */
+export interface LiveShapeChange { minute: number; plus?: number; formationIndex: number; order: string[]; duties: (Duty | null)[]; }
 
 /** Round 504: a stretch of a half and the full half lambdas that were in force over it. */
 export interface LamSegment { from: number; to: number; lamMine: number; lamOpp: number; }
@@ -15316,7 +15347,7 @@ function liveFormationOf(state: CareerState, live: LiveMatch): Formation {
 
 /** The duty on a live slot: the one frozen at kick off, or the tab's for a
  *  save paused before the match remembered them. */
-function liveDutyAt(state: CareerState, live: LiveMatch, slotIdx: number): Duty | null {
+export function liveDutyAt(state: CareerState, live: LiveMatch, slotIdx: number): Duty | null {
   if (live.duties) return live.duties[slotIdx] ?? null;
   return slotDuty(state, liveFormationOf(state, live), slotIdx);
 }
@@ -15328,7 +15359,16 @@ function liveDutyAt(state: CareerState, live: LiveMatch, slotIdx: number): Duty 
  * man whose id is gone from the squad is skipped, not shifted, so the men
  * after him keep their slots.
  */
-function livePairs(state: CareerState, live: LiveMatch, ids: string[] = live.onPitch): XiSlot[] {
+function livePairs(state: CareerState, live: LiveMatch, ids: string[] = live.onPitch,
+  /** Round 1522: the shape to read the ids in, for the eleven that kicked off a match reshaped since. */
+  shape?: LiveMatch['kickoffShape']): XiSlot[] {
+  if (shape) {
+    const f = FORMATIONS[shape.formationIndex] ?? FORMATIONS[0];
+    return ids.flatMap((id, i) => {
+      const p = state.squad.find(x => x.id === id);
+      return p ? [{ p, slot: f.slots[i] ?? null, duty: shape.duties[i] ?? null }] : [];
+    });
+  }
   const formation = liveFormationOf(state, live);
   const out: XiSlot[] = [];
   ids.forEach((id, i) => {
@@ -15854,10 +15894,13 @@ function drawSegmentOppCards(
 }
 
 /** One injury roll for the minutes (from, to] of a half, at the match's long standing rate. */
-function drawSegmentInjury(state: CareerState, onPitch: CMPlayer[], from: number, to: number, hi: number = to): InjuryLine | null {
+function drawSegmentInjury(state: CareerState, onPitch: CMPlayer[], from: number, to: number, hi: number = to,
+  /** Round 1522: the instructions' knock factor (a high press runs more risk); 1 reads the old line. */
+  knock = 1): InjuryLine | null {
   const len = (to - from) / 45;
   if (!onPitch.length) return null;
-  if (Math.random() >= 1 - Math.pow(1 - INJURY_PER_HALF, len)) return null;
+  const perHalf = INJURY_PER_HALF * knock;
+  if (Math.random() >= 1 - Math.pow(1 - perHalf, len)) return null;
   const victim = pick(onPitch);
   // Round 467: the medical staff read the same draw and write it shorter.
   const weeks = injurySpell(state, ri(1, 5));
@@ -16290,6 +16333,8 @@ interface SegmentPlayIn {
   oppAt: (minute: number) => OppXiLine[] | null;
   myCards: CardLine[];
   oppCards: CardLine[];
+  /** Round 1522: my shots per expected goal, times this (the tempo instruction). Absent on balanced. */
+  myShotMult?: number;
 }
 
 /**
@@ -16323,7 +16368,9 @@ function drawSegmentPlay(inp: SegmentPlayIn): PlayEvent[] {
     side: 'me' | 'opp', lam: number, goals: SegmentPlayIn['myGoals'], cards: CardLine[], pk: Pickers,
   ): void => {
     const xgSeg = Math.max(0.03, 0.55 * lam + 0.45 * goals.length + (Math.random() * 0.5 - 0.22) * len);
-    const shots = clamp(Math.round(xgSeg * 5.5) + Math.round(ri(1, 3) * len), goals.length, 14);
+    /* Round 1522: my tempo's shots for the same expected goals; absent (every balanced stretch) reads 5.5. */
+    const perXg = side === 'me' && inp.myShotMult !== undefined ? 5.5 * inp.myShotMult : 5.5;
+    const shots = clamp(Math.round(xgSeg * perXg) + Math.round(ri(1, 3) * len), goals.length, 14);
     const others = shots - goals.length;
     const onTarget = Math.round(others * 0.36);
     const chances: PlayEvent[] = goals.map(g => ({
@@ -16422,9 +16469,13 @@ function recutSegments(segs: LamSegment[] | undefined, fallback: LamSegment, min
  *  (LiveMatch.possNoise), so a change during the half moves the figure only
  *  through the football it redrew; a save from before the roll existed
  *  draws it here. */
-function possessionOf(lamMine: number, lamOpp: number, noise?: number): number {
-  return clamp(Math.round(50 + (lamMine - lamOpp) * 18 + (noise ?? ri(-3, 3))), 28, 72);
+function possessionOf(lamMine: number, lamOpp: number, noise?: number, shift = 0): number {
+  /* Round 1522: plus the instructions' share of the ball over the half (possShiftOf); adding 0 is exact. */
+  return clamp(Math.round(50 + (lamMine - lamOpp) * 18 + (noise ?? ri(-3, 3)) + shift), 28, 72);
 }
+
+/** Round 1522: the points of the ball my instructions were worth over a half, 0 with no log (or no module). */
+const possShiftOf = (live: LiveMatch, half: 1 | 2): number => (live.instrLog?.length ? tacticsImpl()?.possShift(live, half) ?? 0 : 0);
 
 /** Everyone of mine who has left the pitch for good: sent off, or limped off. */
 function offPitchIds(live: LiveMatch): Set<string> {
@@ -16466,14 +16517,27 @@ export function oppOnPitchAt(live: LiveMatch, minute: number): OppXiLine[] {
 
 /** My eleven on the pitch at a minute (ids in slot order), with my subs applied. */
 export function myOnPitchAt(live: LiveMatch, minute: number): string[] {
-  const ids = [...live.startXi];
+  /* Round 1522: from the last reshape before the minute, whose order already holds every change made before it
+     (a man's index is his slot in that shape, liveShapeAt). A match nobody reshaped starts from the kick off. */
+  const last = [...(live.formChanges ?? [])].reverse().find(f => f.minute < minute) ?? null;
+  const ids = last ? [...last.order] : [...live.startXi];
   for (const s of live.subs ?? []) {
     /* Strictly after the minute he was replaced in: he played that minute. */
     if (s.minute >= minute || !s.offId || !s.onId) continue;
+    if (last && s.minute < last.minute) continue;
     const i = ids.indexOf(s.offId);
     if (i >= 0) ids[i] = s.onId;
   }
   return ids;
+}
+
+/** Round 1522: the shape in force at a minute (myOnPitchAt's order reads in it): the last reshape before the
+ *  minute, or the kick off's. */
+export function liveShapeAt(live: LiveMatch, minute: number): { formationIndex: number | undefined; duties: (Duty | null)[] | undefined } {
+  const last = [...(live.formChanges ?? [])].reverse().find(f => f.minute < minute);
+  if (last) return { formationIndex: last.formationIndex, duties: last.duties };
+  if (live.kickoffShape) return { formationIndex: live.kickoffShape.formationIndex, duties: live.kickoffShape.duties };
+  return { formationIndex: live.formationIndex, duties: live.duties };
 }
 
 /**
@@ -16581,8 +16645,27 @@ function drawOppSubs(live: LiveMatch, from: number, to: number, oppGoalMinutes: 
   return [...made, ...subs];
 }
 
-/** The first half's lambdas, the kick off formula: the talk, the press, the shape, the venue. */
-function firstHalfLambdas(state: CareerState, fx: MyFixture, xi: XiSlot[], mentality: Mentality): { lamMine: number; lamOpp: number; mine: number; oppS: number } {
+/** Round 1522: the instructions in force in a live match now (its log's last entry), balanced when it has none. */
+export function liveInstructions(live: LiveMatch): TeamInstructions {
+  const log = live.instrLog;
+  return log && log.length ? log[log.length - 1].instructions : BALANCED;
+}
+
+/** Round 1522: the career's standing instructions, balanced when it has none (or a junk value). */
+export function instructionsOf(career: CareerState): TeamInstructions {
+  return readInstructions(career.instructions) ?? BALANCED;
+}
+
+/** Round 1522: what my instructions are worth to a half's goal rates (clubManagerTactics.ts), or null on balanced
+ *  and before that module has loaded (the early return). */
+function tacticEdge(state: CareerState, fx: MyFixture, xi: XiSlot[], instr: TeamInstructions, half: 1 | 2): { atk: number; def: number } | null {
+  return isBalanced(instr) ? null : tacticsImpl()?.edge(state, fx, xi, instr, half) ?? null;
+}
+
+/** The first half's lambdas, the kick off formula: the talk, the press, the shape, the venue. Round 1522 review:
+ *  `instr` has no default, so a caller that forgets the instructions in force fails the type gate rather than
+ *  playing balanced football while the log says otherwise. */
+function firstHalfLambdas(state: CareerState, fx: MyFixture, xi: XiSlot[], mentality: Mentality, instr: TeamInstructions): { lamMine: number; lamOpp: number; mine: number; oppS: number } {
   const talk = talkEdgeFor(state, xi, fx, state.teamTalk ?? null);
   const press = state.press;
   const mine = myMatchStrength(state, xi) + talk + (press?.nextSharpen ?? 0);
@@ -16592,7 +16675,9 @@ function firstHalfLambdas(state: CareerState, fx: MyFixture, xi: XiSlot[], menta
   const oppAtk = fx.home === true ? -0.12 : fx.home === false ? 0.28 : 0.08;
   /* Round 505: the duties, wherever the mentality is. */
   const duty = dutyBoost(xi, state);
-  const [lamMine, lamOpp] = halfLambdas(mine, oppS, ment.atk + homeAtk + duty.atk, ment.def + oppAtk + duty.def);
+  /* Round 1522: and the instructions; on balanced they add exactly zero. */
+  const tac = tacticEdge(state, fx, xi, instr, 1);
+  const [lamMine, lamOpp] = halfLambdas(mine, oppS, ment.atk + homeAtk + duty.atk + (tac ? tac.atk : 0), ment.def + oppAtk + duty.def + (tac ? tac.def : 0));
   /* Round 670: a match that can go to extra time draws at the deflator. */
   const k = etScale(fx);
   return { lamMine: lamMine * k, lamOpp: lamOpp * k, mine, oppS };
@@ -16629,7 +16714,9 @@ function secondHalfLambdas(
   const opp2 = oppositionShape(scoreOpp, scoreMine);
   /* Round 505: the duties, the same way the first half adds them. */
   const duty = dutyBoost(xi, state);
-  const [lamMine, lamOpp] = halfLambdas(mine, oppS + fire, ment2.atk + homeAtk + opp2.def + duty.atk, ment2.def + oppAtk + opp2.atk + duty.def);
+  /* Round 1522: the instructions in force now, half two's costs included; on balanced they add exactly zero. */
+  const tac = tacticEdge(state, fx, xi, liveInstructions(live), 2);
+  const [lamMine, lamOpp] = halfLambdas(mine, oppS + fire, ment2.atk + homeAtk + opp2.def + duty.atk + (tac ? tac.atk : 0), ment2.def + oppAtk + opp2.atk + duty.def + (tac ? tac.def : 0));
   /* Round 670: the same deflator as the first half, and extra time's too. */
   const k = etScale(fx);
   return { lamMine: lamMine * k, lamOpp: lamOpp * k, mine, oppS };
@@ -16643,6 +16730,8 @@ function drawMySegment(
   hi: number = to,
   /** Round 781: how busy the board is for a goal (BOARD weight). */
   board?: BoardWeight,
+  /** Round 1522: the instructions' knock factor, 1 on balanced. */
+  knock = 1,
 ): { goals: MyGoalLine[]; cards: CardLine[]; injuries: InjuryLine[] } {
   /* Round 781: the count is drawn by the caller (it sizes the board), the minutes here. */
   const goals = pickMyScorerLines(xi, goalCount, from + 1, hi, taken, dutyOf, board);
@@ -16654,7 +16743,7 @@ function drawMySegment(
   const dismissed = dismissedOf(allCards, c => c.id);
   /* The injury first, after his last goal, so the cards below can be drawn
      off whoever is still standing at the booking's minute. */
-  const inj = drawSegmentInjury(state, xi.filter(p => !dismissed.has(p.id)), from, to, hi);
+  const inj = drawSegmentInjury(state, xi.filter(p => !dismissed.has(p.id)), from, to, hi, knock);
   const injuries = inj ? [inj] : [];
   fixExits([], injuries, goals, hi);
   const onPitchAt = (m: number): CMPlayer[] => xi.filter(p => !injuries.some(x => x.id === p.id && x.minute < m));
@@ -16899,7 +16988,10 @@ function drawSegment(
   const hi = period ? to + boardOf(period, stoppagesIn(live, BOARD[period].from, to) + nMine + nOpp, roll) : to;
   /* Round 781: and how busy a minute of that board is for a goal. */
   const board: BoardWeight | undefined = period ? { to, w: BOARD[period].weight } : undefined;
-  const me = drawMySegment(state, live, xi, from, to, nMine, maxYellows, taken, dutyOf, hi, board);
+  /* Round 1522: the instructions in force over this stretch (always the latest: a stretch starts at a change). */
+  const instr = liveInstructions(live);
+  const seg = isBalanced(instr) ? null : tacticsImpl()?.segment(instr) ?? null;
+  const me = drawMySegment(state, live, xi, from, to, nMine, maxYellows, taken, dutyOf, hi, board, seg ? seg.knock : 1);
   const reviewKey = `${worldYear(state)}:${state.clubName}:${live.week}:${live.opponent}:${from}:${to}`;
   const myReview = reviewKinds.includes('goal') ? settleGoalReviews(me.goals, 'me', reviewKey) : null;
   if (myReview) me.goals = myReview.goals;
@@ -16964,6 +17056,7 @@ function drawSegment(
     myCards: me.cards, oppCards,
     setPieces: state.setPieces ?? null,
     myDuty: dutyOf,
+    ...(seg && seg.shots !== 1 ? { myShotMult: seg.shots } : {}),
   });
   if (live.varReviews) {
     const takerAt = (side: 'me' | 'opp', minute: number): { id?: string; name: string } | null => {
@@ -17041,7 +17134,7 @@ function drawSecondHalf(state: CareerState, entry: CalendarEntry, live: LiveMatc
   live.h2Play = [];
   live.oppSubs = [];
   drawSegment(state, live, fx, 2, 45, 90, lamMine, lamOpp);
-  live.possH2 = possessionOf(lamMine, lamOpp, live.possNoise?.[1]);
+  live.possH2 = possessionOf(lamMine, lamOpp, live.possNoise?.[1], possShiftOf(live, 2));
   live.h2Drawn = true;
 }
 
@@ -17136,7 +17229,7 @@ function drawExtraTime(state: CareerState, entry: CalendarEntry, live: LiveMatch
  */
 function secondPeriodPossession(live: LiveMatch): number {
   const halves = ((live.et ? live.et.to : 90) - 45) / 45;
-  return possessionOf((live.lam2Mine ?? 0) / halves, (live.lam2Opp ?? 0) / halves, live.possNoise?.[1]);
+  return possessionOf((live.lam2Mine ?? 0) / halves, (live.lam2Opp ?? 0) / halves, live.possNoise?.[1], possShiftOf(live, 2));
 }
 
 /**
@@ -17147,11 +17240,11 @@ function secondPeriodPossession(live: LiveMatch): number {
  */
 function ensureFirstHalf(state: CareerState, entry: CalendarEntry, live: LiveMatch): void {
   const fx = fixtureFor(state, entry)!;
-  const startedSlots = livePairs(state, live, live.startXi);
+  const startedSlots = livePairs(state, live, live.startXi, live.kickoffShape);
   const started = men(startedSlots);
   const dutyOf = dutyLookup(startedSlots);
   if (live.lamMine === undefined || live.lamOpp === undefined) {
-    const { lamMine, lamOpp } = firstHalfLambdas(state, fx, startedSlots, live.mentality);
+    const { lamMine, lamOpp } = firstHalfLambdas(state, fx, startedSlots, live.mentality, liveInstructions(live));
     if (live.lamMine === undefined) live.lamMine = lamMine;
     if (live.lamOpp === undefined) live.lamOpp = lamOpp;
   }
@@ -17189,7 +17282,7 @@ function ensureFirstHalf(state: CareerState, entry: CalendarEntry, live: LiveMat
       setPieces: state.setPieces ?? null,
       myDuty: dutyOf,
     });
-    live.possH1 = possessionOf(live.lamMine, live.lamOpp);
+    live.possH1 = possessionOf(live.lamMine, live.lamOpp, undefined, possShiftOf(live, 1));
   }
 }
 
@@ -17206,14 +17299,14 @@ function recutFirstHalf(state: CareerState, entry: CalendarEntry, live: LiveMatc
   live.h1Injuries = keepUpTo(live.h1Injuries, minute);
   const off = offPitchIds(live);
   const xi = livePairs(state, live).filter(x => !off.has(x.p.id));
-  const { lamMine, lamOpp, mine, oppS } = firstHalfLambdas(state, fx, xi, live.mentality);
+  const { lamMine, lamOpp, mine, oppS } = firstHalfLambdas(state, fx, xi, live.mentality, liveInstructions(live));
   const share = (45 - minute) / 45;
   live.h1Segs = recutSegments(live.h1Segs, { from: 0, to: 45, lamMine: live.lamMine ?? lamMine, lamOpp: live.lamOpp ?? lamOpp }, minute, 45, lamMine, lamOpp);
   ({ lamMine: live.lamMine, lamOpp: live.lamOpp } = effectiveLambdas(live.h1Segs));
   drawSegment(state, live, fx, 1, minute, 45, lamMine * share, lamOpp * share);
   live.myGoals = (live.h1My ?? []).length;
   live.oppGoals = (live.h1Opp ?? []).length;
-  live.possH1 = possessionOf(live.lamMine, live.lamOpp, live.possNoise?.[0]);
+  live.possH1 = possessionOf(live.lamMine, live.lamOpp, live.possNoise?.[0], possShiftOf(live, 1));
   live.read = halftimeRead(state, men(xi), live.myGoals, live.oppGoals, mine, oppS);
 }
 
@@ -17295,7 +17388,7 @@ function recutBoard(state: CareerState, entry: CalendarEntry, live: LiveMatch, p
   }
   const off = offPitchIds(live);
   const xi = livePairs(state, live).filter(x => !off.has(x.p.id));
-  const first = period === 'h1' ? firstHalfLambdas(state, fx, xi, live.mentality) : null;
+  const first = period === 'h1' ? firstHalfLambdas(state, fx, xi, live.mentality, liveInstructions(live)) : null;
   const { lamMine, lamOpp } = first
     ?? secondHalfLambdas(state, fx, live, xi, live.myGoals + (live.h2My ?? []).length, live.oppGoals + (live.h2Opp ?? []).length);
   /* A minute of the board counts `weight` times an ordinary one (see BOARD). */
@@ -17713,6 +17806,8 @@ function buildMatchDetail(args: {
    *  A period without one (a save from before this round) is rolled here
    *  the Round 472 way, as it always was. */
   added?: LiveMatch['added'];
+  /** Round 1522: the instructions on the day, for a match where mine left balanced. */
+  tactics?: MatchDetail['tactics'] | null;
 }): MatchDetail {
   const { myGoals, oppGoals, lamMine, lamOpp } = args;
   const round2 = (n: number) => Math.round(n * 100) / 100;
@@ -17964,6 +18059,7 @@ function buildMatchDetail(args: {
     oppCards: args.oppCards,
     ...(args.oppXi ? { oppXi: args.oppXi, oppFormationIndex: args.oppFormationIndex } : {}),
     ...(args.et ? { et: args.et } : {}),
+    ...(args.tactics ? { tactics: args.tactics } : {}),
   };
 }
 
@@ -18085,7 +18181,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
   const halfTone: TalkTone | null = live.talk ?? null;
   const venue = fx.home === true ? 3 : fx.home === false ? -1.5 : 0;
   /* Round 505: both elevens with their slots, the way the strength reads them now. */
-  const started = livePairs(state, live, live.startXi);
+  const started = livePairs(state, live, live.startXi, live.kickoffShape);
   const second = livePairs(state, live);
   /* Round 135: the fit of the pre match talk is judged on the eleven who
      kicked off, and the half time one on the state of the match the men still
@@ -18844,8 +18940,16 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
 
   /* Round 1510 (ruling 2b): a night is not a week. The men who played pay the match and get a midweek's
      recovery (nightSquadTick); nothing else ticks: no wage week, no knock, no countdown, no window week. */
+  /* Round 1522: the instructions on the day, only for a match where mine left balanced at some point: the
+     report's numbers (a keyed stream, never the game's), and the legs every man who played pays for them, after
+     the week's own recovery and match cost below. */
+  const tacticsDay = logEverSet(live.instrLog) ? tacticsImpl()?.day(state, fx, live, second, lastMinute) ?? null : null;
   if (entry.night) nightSquadTick(state, new Set(xi.map(p => p.id)));
   else tickWeek(state, new Set(xi.map(p => p.id)));
+  if (tacticsDay && tacticsDay.stats.legs !== 0) {
+    const played = new Set(xi.map(p => p.id));
+    state.squad = state.squad.map(p => (played.has(p.id) ? { ...p, fitness: clamp(p.fitness - tacticsDay.stats.legs, 20, 100) } : p));
+  }
   /* Round 141: a window no longer slams shut the moment you play a match,
      because real windows run through the early fixtures and because the
      instant sell is gone, so listing a man needs actual weeks for offers to
@@ -18959,6 +19063,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     oppXi: live.oppXi, oppBench: live.oppBench, oppFormationIndex: live.oppFormationIndex,
     oppSubs: live.oppSubs ?? [],
     oppCards: [...(live.h1OppCards ?? []), ...(live.h2OppCards ?? [])],
+    tactics: tacticsDay,
     et: live.et,
     etWords,
     added: live.added,
@@ -19988,7 +20093,7 @@ function kickOff(state: CareerState, entry: CalendarEntry, varReviews: CmVarAsk 
      microphone this week, is on the pitch with them for the first half.
      Round 157: keep the half's lambdas on the live match, so the full time
      xG line is read off the exact process that produced these goals. */
-  const { lamMine, lamOpp, mine, oppS } = firstHalfLambdas(state, fx, xi, state.mentality);
+  const { lamMine, lamOpp, mine, oppS } = firstHalfLambdas(state, fx, xi, state.mentality, instructionsOf(state));
   const ids = xi.map(x => x.p.id);
   /* Round 504: the other eleven, picked before anyone scores, so their
      scorers are men who are on the pitch and the report rates the same
@@ -20032,6 +20137,8 @@ function kickOff(state: CareerState, entry: CalendarEntry, varReviews: CmVarAsk 
     formationIndex: state.formationIndex,
     duties: (FORMATIONS[state.formationIndex] ?? FORMATIONS[0]).slots.map((_, i) => slotDuty(state, FORMATIONS[state.formationIndex] ?? FORMATIONS[0], i)),
     possNoise: [ri(-3, 3), ri(-3, 3)],
+    /* Round 1522: the instructions it kicks off under, only when one is off balanced. */
+    ...(isBalanced(instructionsOf(state)) ? {} : { instrLog: [{ minute: 0, instructions: instructionsOf(state) }] }),
   };
   /* Round 158: the first half's scorers, decided now so the live viewer
      shows the same football the full time report will. Stats are credited
@@ -20041,7 +20148,7 @@ function kickOff(state: CareerState, entry: CalendarEntry, varReviews: CmVarAsk 
   drawSegment(state, live, fx, 1, 0, 45, lamMine, lamOpp);
   live.myGoals = (live.h1My ?? []).length;
   live.oppGoals = (live.h1Opp ?? []).length;
-  live.possH1 = possessionOf(lamMine, lamOpp, live.possNoise?.[0]);
+  live.possH1 = possessionOf(lamMine, lamOpp, live.possNoise?.[0], possShiftOf(live, 1));
   live.read = halftimeRead(state, men(xi), live.myGoals, live.oppGoals, mine, oppS);
   return live;
 }
@@ -20231,7 +20338,23 @@ export function changeRoom(career: CareerState, live: LiveMatch, minute: number,
 
 export type LiveChange =
   | { kind: 'sub'; outId: string; inId: string }
-  | { kind: 'shape'; mentality: Mentality };
+  | { kind: 'shape'; mentality: Mentality }
+  /* Round 1522: the four instructions, a new formation (the men on the pitch carried across by carryShape's
+     rule), or one slot's duty, for tonight only: the tactics tab keeps your standing plan. */
+  | { kind: 'instructions'; instructions: TeamInstructions }
+  | { kind: 'formation'; formationIndex: number }
+  | { kind: 'duty'; slot: number; duty: Duty | null };
+
+/** Round 1522: the career's standing instructions set (between matches only, never with a match on). All four on
+ *  balanced drops the field, so the save is the one it was before anything was set. Null for a junk value. */
+export function setInstructions(career: CareerState, instructions: TeamInstructions): CareerState | null {
+  const next = readInstructions(instructions);
+  if (!next || career.live) return null;
+  const out: CareerState = { ...career };
+  if (isBalanced(next)) delete out.instructions;
+  else out.instructions = next;
+  return out;
+}
 
 /**
  * Round 504: a change at any minute. The sub or the shape is recorded at
@@ -20301,10 +20424,15 @@ export function changeLive(
       off: going?.name ?? change.outId, on: coming.name, minute: m, offId: change.outId, onId: change.inId,
       ...plusOf({ plus: p }), ...(inPlay ? { stop: true as const } : {}),
     }];
-  } else {
+  } else if (change.kind === 'shape') {
     live.mentality = change.mentality;
     state.mentality = change.mentality;
     live.shapeChanges = [...(live.shapeChanges ?? []), { minute: m, mentality: change.mentality, ...plusOf({ plus: p }) }];
+  } else {
+    /* Round 1522: an instructions, formation or duty change, made by the tactics module (it is loaded whenever
+       the screens that offer one are on), from the next minute; without it the change is refused. */
+    const T = tacticsImpl();
+    if (!T || !T.change(state, live, change, m, p)) return null;
   }
   live.minute = m;
   const entry = state.calendar[live.week];
@@ -20668,8 +20796,12 @@ export function matchFacts(career: CareerState): MatchFacts | null {
     /* Round 670: a decider draws at the extra time deflator, so its odds do too.
        They stay the odds over ninety minutes: a level decider goes on. */
     const k = etScale(fx);
-    const lamMe = clamp(1.25 + (mine - oppS) * 0.055 + ment.atk + homeAtk + duty.atk, 0.12, 4.2) * k;
-    const lamOpp = clamp(1.25 + (oppS - mine) * 0.055 + ment.def + oppAtk + duty.def, 0.12, 4.2) * k;
+    /* Round 1522: and the instructions against their style, the two halves' boosts averaged (a press pays in
+       the second); balanced adds exactly zero. */
+    const t1 = tacticEdge(career, fx, xi, instructionsOf(career), 1);
+    const t2 = tacticEdge(career, fx, xi, instructionsOf(career), 2);
+    const lamMe = clamp(1.25 + (mine - oppS) * 0.055 + ment.atk + homeAtk + duty.atk + (t1 && t2 ? (t1.atk + t2.atk) / 2 : 0), 0.12, 4.2) * k;
+    const lamOpp = clamp(1.25 + (oppS - mine) * 0.055 + ment.def + oppAtk + duty.def + (t1 && t2 ? (t1.def + t2.def) / 2 : 0), 0.12, 4.2) * k;
     let pWin = 0, pDraw = 0, pLoss = 0;
     for (let a = 0; a <= 9; a++) {
       for (let b = 0; b <= 9; b++) {
