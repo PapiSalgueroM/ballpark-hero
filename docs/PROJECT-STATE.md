@@ -18953,3 +18953,12 @@ approve the new tree. The completed combined 587 run `35001991548` failed the
 old broad SVG map guard, lazy-panel test waits and Wonderkid's 271K/270K budget.
 Its expected negative controls passed. The records below retain earlier
 verification context and do not supersede this current integration note.
+
+## Round1446 fixture-only qualification repair, 2026-10-22 UTC
+Current candidate077f49da67f461dd741dba4535c87978228448f8 holds the reviewed font-proof count correction and actual Privacy revision date. FirstGreen39718502107 remainsFAILED: actual9394unitcases9336PASS58SKIP, but13strictguard denials. Browser/readers/caps were skipped after the font receipt error, with no credit. Failed generated4path patch remains unadopted.
+
+Isolated source4674492f88860cadd49e3714c54de159035ddaef/run39726444132 completed: timer2PASS+1database denial; Shapes36PASS+6static-key denials; Skip174PASS+6static-key denials; realCollegeOffline2PASS+zero trace/guard, own fixture unchanged. Three jobs remainFAILED, OfflineSUCCESS. All four actual test files isolated, raw all21-row ZIP manifests Rootread, fullsource admission in progress. This identifies fixture boundaries, not game defects or guard exemptions.
+
+Root widens only the1446 proof scope to src/test/idleFloaterTimers.test.tsx, src/test/dailySaveShapes.test.tsx and src/test/skipTarget.test.tsx. Proposed partialmock isolates only the irrelevant completion writer; two local loader fixtures explicitly return unavailable null for DOM-only checks. All existing assertions stay exact, no shared/globalfetch or game/real-key/engine/data/save changes. Existing simIdleTimers normal/noclear/rawtimer oracles will run under the unchanged guard. OnlyGreen exactpath allowlist is widened; allOriginalguards and oldfailureartifacts are retained. No adoption or successful freshGreen yet.
+
+Clarification: Root owns the separate1447 shared pending-consent CSS fix. J owns game dialog hardening and game walks. Earlier text assigning the entire first-visit issue to the game lane was incomplete.1447 remains private source planning, no product/runtime yet.1446 remains draftPR367, unqualified/unpublished. No provider/traffic/rights/fulllegal clearance, GAactivation or old785/1441 preservation waiver.

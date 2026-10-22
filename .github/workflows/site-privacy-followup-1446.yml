@@ -81,6 +81,15 @@ jobs:
           }
           JS
           test ! -s "$SIM_OFFLINE_RECEIPT"
+      - name: Existing idle timer oracle and effective controls
+        if: env.PHASE != 'original'
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$PWD/$OUT/idle-timers.transport";: > "$SIM_OFFLINE_RECEIPT"
+          node scripts/simIdleTimers.mjs > "$OUT/idle-timers.log" 2>&1
+          IDLE_TIMERS_CONTROL=all node scripts/simIdleTimers.mjs > "$OUT/idle-timers-controls.log" 2>&1
+          test ! -s "$SIM_OFFLINE_RECEIPT"
       - name: Actual Profile boundary proof with exact original classification
         run: |
           set -euo pipefail
@@ -240,7 +249,7 @@ jobs:
           else
             test "$GITHUB_REF" = refs/heads/codex/site-privacy-followup-1446-green
             test "$PHASE" = green || test "$PHASE" = final
-            git diff --exit-code "$BASE_SOURCE" HEAD -- . ':!docs/ROUND1446.md' ':!docs/PROJECT-STATE.md' ':!docs/WORKBOARD.md' ':!.github/workflows/site-privacy-followup-1446.yml' ':!src/test/profileInitials1446.test.tsx' ':!scripts/playCookiePolicy1446.mjs' ':!src/pages/Profile.tsx' ':!src/pages/CookiePolicy.tsx' ':!src/pages/PrivacyPolicy.tsx' ':!src/App.tsx' ':!src/components/game/Footer.tsx' ':!src/lib/pageSchema.ts' ':!scripts/genSitemap.mjs' ':!scripts/simIndexNow.mjs' ':!public/llms.txt' ':!public/cookie-policy/index.html' ':!public/privacy/index.html' ':!public/sitemap.xml' ':!scripts/data/lastmod.json' > "$OUT/protected-product-hold.log"
+            git diff --exit-code "$BASE_SOURCE" HEAD -- . ':!docs/ROUND1446.md' ':!docs/PROJECT-STATE.md' ':!docs/WORKBOARD.md' ':!.github/workflows/site-privacy-followup-1446.yml' ':!src/test/profileInitials1446.test.tsx' ':!scripts/playCookiePolicy1446.mjs' ':!src/pages/Profile.tsx' ':!src/pages/CookiePolicy.tsx' ':!src/pages/PrivacyPolicy.tsx' ':!src/App.tsx' ':!src/components/game/Footer.tsx' ':!src/lib/pageSchema.ts' ':!scripts/genSitemap.mjs' ':!scripts/simIndexNow.mjs' ':!public/llms.txt' ':!public/cookie-policy/index.html' ':!public/privacy/index.html' ':!public/sitemap.xml' ':!scripts/data/lastmod.json' ':!src/test/idleFloaterTimers.test.tsx' ':!src/test/dailySaveShapes.test.tsx' ':!src/test/skipTarget.test.tsx' > "$OUT/protected-product-hold.log"
             git diff --exit-code "$BASE_SOURCE" HEAD -- public ':!public/llms.txt' ':!public/cookie-policy/index.html' ':!public/privacy/index.html' ':!public/sitemap.xml' > "$OUT/protected-public-hold.log"
           fi
           git ls-files -z -- . ':!public/**' ':!scripts/data/lastmod.json' | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
