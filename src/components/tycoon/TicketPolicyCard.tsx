@@ -53,7 +53,7 @@ export default function TicketPolicyCard({ state, onSelect, saveFailed, onRetryS
     {!saveFailed && <p className="text-muted-foreground mt-2">Active now. The offer applies to future earnings. Selling the ground resets it to Standard.</p>}
     <details className="mt-2">
       <summary className="min-h-[44px] flex items-center cursor-pointer font-bold">How ticket offers work</summary>
-      <p>These are game rates. Crowd never exceeds your supporters or seats. Only admission prices change; snacks and the shop follow the crowd. Parking and payroll keep their own rates. Goal and win bonuses follow the actual crowd. Community grows your supporter pool faster, which can fill empty seats later.</p>
+      <p>These are game rates. Crowd never exceeds your supporters or seats. Only admission prices change; snacks and the shop follow the crowd. Parking and payroll keep their own rates. Goal and win bonuses pay seconds of your income before live boosts, so they follow what the offer earns. Community grows your supporter pool faster, which can fill empty seats later.</p>
       <p className="mt-2">Example, a new 120-seat ground: {earlyStandard.supporters} supporters pay {dollars(earlyStandard.totalPerSec)}/sec on Standard. Premium draws {earlyPremium.crowd} and pays {dollars(earlyPremium.totalPerSec)}/sec. With {fullStandard.supporters} supporters, both fill {fullStandard.crowd} seats: Standard pays {dollars(fullStandard.totalPerSec)}/sec and Premium {dollars(fullPremium.totalPerSec)}/sec.</p>
       <p className="mt-2">Away income uses the saved offer at the usual reduced rate and time cap, without live boosts. Supporter growth happens while the game runs, not while away.</p>
     </details>
