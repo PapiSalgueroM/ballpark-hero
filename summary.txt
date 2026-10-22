@@ -1,0 +1,4 @@
+ctl-pageline exit=1 1s | simCareerForm: RED, 1 failure(s)
+tsc exit=0 59s | 
+ctl-double exit=1 68s | simCareerForm: RED, 3 failure(s)
+form23 exit=0 72s | simCareerForm: green

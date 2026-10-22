@@ -1,0 +1,13 @@
+3) a pinned fleet: every press played again at morale 20, at the neutral point and at 90
+   CONTROL double: calcAppearances adds his morale step a second time, past the cap
+   120 careers, 2441 presses played three ways (seed 1523)
+   league games: morale 20 20.20, 81 22.28, 90 24.26; rating 6.48, 6.78, 6.96
+   gaps: games 2.09 and 1.98, rating 0.30 and 0.18
+   exact: 0 presses moved by exactly the designed step at every pin, 2431 did not, 10 left out where 0 or 38 bit
+   at the neutral point the round's arm and the arm without the step: 2441 presses byte identical with the same draws, 0 not
+   at morale 20 the two arms made the same number of draws in 2151 presses and a different number in 290 (draws after the league games move with them)
+   FAIL only 0 of 2441 presses were checked exactly
+   FAIL 2431 presses moved league games by something other than the designed step of the morale he pressed on
+   the hub line: 7293 pinned presses read against the games they played, 2671 did not fit what the line said, 0 played fewer than "up to" (the shared cap); the cap worked out with the hub's phone would have been wrong in 4862
+   FAIL the hub line was wrong about the league games in 2671 pinned presses
+simCareerForm: RED, 3 failure(s)
