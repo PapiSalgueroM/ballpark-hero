@@ -1,0 +1,116 @@
+[
+ {
+  "tag": "puzzle-151-390-reduce",
+  "ok": true,
+  "notes": [
+   "rules dialog shown on first visit: true"
+  ],
+  "dealt": true,
+  "overflowX": 0,
+  "tileOverflow": [],
+  "afterWrong": [
+   "Lives",
+   "One away",
+   "lives",
+   "lives"
+  ],
+  "labelOverflow": [],
+  "endText": [
+   "WON THE BALLON D'OR",
+   "Solved with 3 lives remaining",
+   "Come back tomorrow for a new puzzle!",
+   "Soccer Connections: Football Player Puzzle",
+   "The connections range from friendly, like a shared club, to evil, like a common shirt number or award. Each solved group shows a difficulty color, and purple is usually the trap.",
+   "How to play Soccer Connections, a free football players grouping puzzle"
+  ],
+  "pageErrors": []
+ },
+ {
+  "tag": "puzzle-151-1280-no-preference",
+  "ok": true,
+  "notes": [
+   "rules dialog shown on first visit: true"
+  ],
+  "dealt": true,
+  "overflowX": 0,
+  "tileOverflow": [],
+  "labelOverflow": [],
+  "endText": [
+   "WON THE BALLON D'OR",
+   "Solved with 4 lives remaining",
+   "Come back tomorrow for a new puzzle!",
+   "Soccer Connections: Football Player Puzzle",
+   "The connections range from friendly, like a shared club, to evil, like a common shirt number or award. Each solved group shows a difficulty color, and purple is usually the trap.",
+   "How to play Soccer Connections, a free football players grouping puzzle"
+  ],
+  "pageErrors": []
+ },
+ {
+  "tag": "puzzle-1-390-no-preference",
+  "ok": true,
+  "notes": [],
+  "dealt": true,
+  "overflowX": 0,
+  "tileOverflow": [],
+  "afterWrong": [
+   "Lives",
+   "One away",
+   "lives",
+   "lives"
+  ],
+  "labelOverflow": [],
+  "endText": [
+   "WON THE BALLON D'OR",
+   "WON THE PREMIER LEAGUE WITH LEICESTER CITY 2015-16",
+   "Solved with 3 lives remaining",
+   "Come back tomorrow for a new puzzle!",
+   "Soccer Connections: Football Player Puzzle",
+   "The connections range from friendly, like a shared club, to evil, like a common shirt number or award. Each solved group shows a difficulty color, and purple is usually the trap."
+  ],
+  "pageErrors": []
+ },
+ {
+  "tag": "puzzle-1-1280-reduce",
+  "ok": true,
+  "notes": [],
+  "dealt": true,
+  "overflowX": 0,
+  "tileOverflow": [],
+  "labelOverflow": [],
+  "endText": [
+   "WON THE BALLON D'OR",
+   "WON THE PREMIER LEAGUE WITH LEICESTER CITY 2015-16",
+   "Solved with 4 lives remaining",
+   "Come back tomorrow for a new puzzle!",
+   "Soccer Connections: Football Player Puzzle",
+   "The connections range from friendly, like a shared club, to evil, like a common shirt number or award. Each solved group shows a difficulty color, and purple is usually the trap."
+  ],
+  "pageErrors": []
+ },
+ {
+  "tag": "puzzle-136-390-reduce",
+  "ok": true,
+  "notes": [],
+  "dealt": true,
+  "overflowX": 0,
+  "tileOverflow": [],
+  "labelOverflow": [],
+  "endText": [
+   "WON THE 2026 CHAMPIONS LEAGUE",
+   "Soccer Connections: Football Player Puzzle",
+   "The connections range from friendly, like a shared club, to evil, like a common shirt number or award. Each solved group shows a difficulty color, and purple is usually the trap.",
+   "How to play Soccer Connections, a free football players grouping puzzle",
+   "Spend a hint to reveal the category name of the easiest unsolved group.",
+   "Soccer Connections FAQ: daily puzzles, hints and your win streak"
+  ],
+  "pageErrors": []
+ },
+ {
+  "tag": "whatsnew-390",
+  "ok": true,
+  "notes": [],
+  "overflowX": 0,
+  "firstUnderOctober": true,
+  "pageErrors": []
+ }
+]
