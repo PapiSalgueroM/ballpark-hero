@@ -1,0 +1,1 @@
+SETUP exit=1 0s | the job stopped before any command ran (install or checkout failed)
