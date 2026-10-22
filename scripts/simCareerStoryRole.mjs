@@ -488,8 +488,10 @@ async function roleChecks(check, B, old, save, report) {
     for (const frozenOut of [0, 1]) for (const overall of [35, 75, 99]) {
       const c = plannedInput(); c.frozenOut = frozenOut; c.overall = overall;
       const at = B.squad.squadNow(c), trust = B.squad.managerTrust(c, at);
-      const a = Math.max(0, Math.min(38, trust.band.min + trust.swing + trust.form.swing - 4)), b = Math.max(0, Math.min(38, trust.band.max + trust.swing + trust.form.swing - 4));
-      let expected = Math.max(0, Math.min(38, (trust.band.min + trust.band.max) / 2 + trust.swing + trust.form.swing - 4));
+      /* Round 1523: what his morale is worth (moraleGames, after the cap it shares with the phone) is in the same sum */
+      const head = trust.moraleGames ?? 0;
+      const a = Math.max(0, Math.min(38, trust.band.min + trust.swing + head + trust.form.swing - 4)), b = Math.max(0, Math.min(38, trust.band.max + trust.swing + head + trust.form.swing - 4));
+      let expected = Math.max(0, Math.min(38, (trust.band.min + trust.band.max) / 2 + trust.swing + head + trust.form.swing - 4));
       if (frozenOut) expected = Math.min(8, Math.round(expected * 0.25));
       assert.equal(trust.expected, expected, 'display reads the held four-game reduction'); assert.equal(trust.roleSwing, -4, 'phone swing stays separate from role');
       assert.equal(B.sheet.planLine(trust), frozenOut ? 'The plan: frozen out, 8 league games at most.' : `The plan is about ${a} to ${b} league games.`, 'actual range respects role and existing bounds');

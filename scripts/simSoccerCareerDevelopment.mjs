@@ -250,6 +250,8 @@ if (!IMPORT_ONLY) {
   await check('form projections and actual draws', () => {
     for (const rating of [7.6, 6.4]) for (const frozenOut of [0, 1]) for (let seed = 0; seed < 4; seed++) {
       const input = developmentFixture(B, { overall: 70, frozenOut }); input.seasons.at(-1).rating = rating;
+      /* Round 1523: morale at its measured neutral point (src/lib/careerForm.ts, 81), so the draw reads the form swing alone */
+      input.morale = 81;
       const base = seeded(118500 + seed, () => old.soccer.calcAppearances(70, input.currentClubTier, input.age, structuredClone(input))).value;
       const actual = seeded(118500 + seed, () => B.soccer.calcAppearances(70, input.currentClubTier, input.age, structuredClone(input))).value;
       if (!frozenOut) assert.equal(actual.leagueApps, Math.max(0, Math.min(38, base.leagueApps + (rating >= 7.6 ? 2 : -2))), 'The actual draw applies the saved form swing');

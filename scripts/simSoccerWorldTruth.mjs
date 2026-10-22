@@ -114,6 +114,11 @@ import { fileURLToPath } from 'node:url';
 import { inverseWorldTruth, worldTruthReceiptProblem, WORLD_TRUTH_SHA256, WORLD_TRUTH_FILES, WORLD_TRUTH_ADDITIONS } from './lib/careerWorldTruth1329.mjs';
 /* Round 1334 adds three engine lines after this round: section 6 takes the ninth inverse off the tree's engine first. */
 import { inverseSoccerDeck, soccerDeckReceiptProblem, SOCCER_DECK_ADDITIONS } from './lib/careerSoccerDeck1334.mjs';
+/* Round 1523: its morale step and Puskas year move a season's league games, and with them later draws, on purpose,
+   so the head bundle that is held to the base takes that round out first (scripts/lib/careerSoccerMorale1523.mjs, an
+   attribution). SIM_WORLD_TRUTH_MORALE= (empty) keeps it in, the unattributed run, red in section 2 by design. */
+import { inverseSoccerMorale, soccerMoraleOut, soccerMoraleReceiptProblem } from './lib/careerSoccerMorale1523.mjs';
+const MORALE_OUT = soccerMoraleOut('SIM_WORLD_TRUTH_MORALE'), moraleReceipt = [];
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const require = createRequire(path.join(ROOT, 'package.json'));
@@ -244,7 +249,7 @@ function mark(source, from, to, where) {
 
 /** One CommonJS bundle of the engine, the phone, the quiz, the eras and the International panel's two
  *  renders, from the working tree or from a commit. A control replaces its file's source in this tree's bundle. */
-async function bundle(tag, ref = null) {
+async function bundle(tag, ref = null, moraleOut = false) {
   const R = ROOT.split(path.sep).join('/');
   const entry = `import * as React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
@@ -276,6 +281,7 @@ export const render = {
       else if (ref && !BASE_FROM_HEAD.has(rel)) source = execFileSync('git', ['show', `${ref}:${rel}`], { cwd: ROOT, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
       else source = fs.readFileSync(args.path, 'utf8');
       source = source.replace(/\r\n/g, '\n');
+      if (!ref && moraleOut) source = inverseSoccerMorale(rel, source, moraleReceipt);
       for (const [file, from, to] of MARKS) if (rel === file) source = mark(source, from, to, `${tag} ${file}`);
       return { contents: source, loader: rel.endsWith('.tsx') ? 'tsx' : 'ts', resolveDir: path.dirname(args.path) };
     });
@@ -298,7 +304,13 @@ globalThis.localStorage = {
   getItem: k => (store.has(k) ? store.get(k) : null), setItem: (k, v) => { store.set(k, String(v)); },
   removeItem: k => { store.delete(k); }, key: i => [...store.keys()][i] ?? null, get length() { return store.size; }, clear: () => store.clear(),
 };
+/* Round 1523's attribution belongs to the lockstep alone (section 2 holds the head's draws to the base's): every
+   other section judges the shipped engine, HEAD, with that round in (review of 2026-10-21: one head bundle with it
+   taken out left no section testing the engine that ships). */
 const HEAD = await bundle('head');
+const HEAD_LOCK = MORALE_OUT ? await bundle('head-lock', null, true) : HEAD;
+if (MORALE_OUT) { if (soccerMoraleReceiptProblem(moraleReceipt)) { console.error(`ABORT: ${soccerMoraleReceiptProblem(moraleReceipt)}`); process.exit(1); } }
+else console.log('SIM_WORLD_TRUTH_MORALE is empty: the head keeps Round 1523 in, the unattributed run');
 const BASEB = await bundle('base', BASE);
 /* The harness judges with its own copy of the boundary and the rule, written here as literals, never with the
    module's own functions alone: judging by HEAD.truth let a wrong constant or rule inside soccerWorldTruth.ts
@@ -630,7 +642,7 @@ const topDiff = (a, b) => {
 const ALLOWED_FIRST = new Set(['awards', 'events', 'phone.clubs', 'phone.world', 'phone.feed', 'pendingBallonDor']);
 
 function lockstep(c) {
-  const sides = [HEAD, BASEB].map(B => ({ M: B.engine, rand: seeded(c.seed), calls: 0, marks: [] }));
+  const sides = [HEAD_LOCK, BASEB].map(B => ({ M: B.engine, rand: seeded(c.seed), calls: 0, marks: [] }));
   const run = (side, fn) => {
     const real = Math.random;
     side.marks = [];

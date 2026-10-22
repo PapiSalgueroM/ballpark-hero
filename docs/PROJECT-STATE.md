@@ -19009,3 +19009,21 @@ The separate ordinary release branch must still pass all six jobs, existing cont
 The shared dialog CSS fix is source-qualified atd9da128d0174405ab8b63ab34bc27feb35a8f389. Matrix39769358433 covered72 contexts,144 Green/restored trusted primary passes and the nine expected old-CSS failures. Ordinary run39773713224 passed all six jobs:9,337 unit passes,58 explicit skips,0 failures across622 files;74 consent/29 account/6 Profile plus existing controls;18 readers and14 unchanged caps. Generated patch/list are empty and complete source/output/transport holds passed.
 
 I retains sole publication ownership. This update records qualification and the handoff, not publication or live verification. Game lanes, earlier failures and785/1441 preservation gaps remain held and unwaived.
+
+## Round1448 copy candidate, 2026-10-22 UTC
+
+Root's separate `codex/site-quality-disclosures-1448` branch starts at actual merged1447 source `3ee0bf6293859740a50654e299232bcd0ff701c3`. Four shared Home/hub/privacy files have nine surgical copy edits, with complete literal inverses and exact preimages preserved. The candidate clarifies factual versus fictional games and discloses the observed hosting security cookie.
+
+Generation, actual derived-output review/adoption and fresh final six-job qualification are still required. No1448 publication or AdSense clearance is claimed. I retains publication and CM/Soccer; J retains its game lanes. Round1447 is merged and publish-ready with its separate complete evidence. All prior failures and preservation gaps remain unwaived.
+
+## Round1448 generation reviewed, final pending, 2026-10-22 UTC
+
+Source7e2e060a9f6f8e1ce77ece1f5eea4e07d98280d2/run39782582624 passed all six jobs. Native review binds all6 artifacts, all5185 input rows,9,337 unit passes/58 skips/0 failures/622 files, focused74/29/6 and effective controls,4+3+3 browser outcomes,18 readers,14 unchanged caps,798 Tar bodies and exact8 generated outputs. Home/hub copy and hosting-cookie disclosures are generated consistently; unrelated generated data and sitemap rows are held.
+
+This child adopts the exact reviewed outputs and one final-phase workflow change, preserving all prior doc bytes. Final all-six qualification with0B generated patch/list/new-file list is still owed. I retains sole publication. No live, legal completeness, AdSense clearance, game-lane change or old785/1441 waiver is claimed.
+
+## Round1448 source qualified, publication pending, 2026-10-22 UTC
+
+The Home/three-hub accuracy edits and hosting-cookie disclosures are source-qualified at144557287ecfc3873a4a9563e9fe17ca62a12d8e. Final39788124277 passed all six jobs:9,337PASS/58 explicitSKIP/0FAIL/622files, focused74/29/6 and existing owned controls, browser4+3+3,18 readers,14 unchanged caps, HomeCopy/HubDepth/HomeFold and complete source/output/transport holds. All three generated delta files are present0B and four output controls pass; native798 Tar and8 adopted output identities are admitted.
+
+This child only appends qualification notes to three docs. Publication and live verification remain with I, alongside the earlier merged1447 shared-dialog fix. Analytics stays paused. Provider readiness, rights/provenance, traffic quality, AdSense review and old785/1441 preservation gaps remain separate and unwaived.
