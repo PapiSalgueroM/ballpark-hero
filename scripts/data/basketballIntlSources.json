@@ -1,0 +1,625 @@
+{
+  "note": "Round 1541. Where every fact in src/data/basketballIntl.ts was read: two reads a fact, on two hosts that are not each other, none a wiki. Every page was opened by the round's builder on the day below through a fetch tool that answers with quoted sentences, so `words` is what that answer quoted, cut where a sentence was long; where a page lists a table rather than a sentence, `words` is the rows it printed. `who` names the publisher; fiba.basketball and about.fiba.basketball are one body and never count as two. Facts are keyed by edition id and fact name; scripts/simCareerIntl.mjs section 1 holds the join to the src rows. A fact with fewer than two reads carries `short` with the reason, and its edition is listed in BASKETBALL_INTL_PARTIAL.",
+  "read": "2026-10-22",
+  "rules": {
+    "fiba-minutes": {
+      "says": "A FIBA game, the Olympics and the World Cup included, is four quarters of 10 minutes, 40 minutes.",
+      "value": 40,
+      "reads": [
+        { "url": "https://www.cbssports.com/olympics/news/nba-vs-olympics-an-idiots-guide-to-international-basketball-rules", "who": "CBS Sports, 2 August 2016", "words": "Instead of the NBA's four 12-minute quarters, international games are split up into four 10-minute quarters. So a quick 40 minutes instead of 48 minutes." },
+        { "url": "https://nba.com/news/international-basketball-101-olympic-vs-nba-rules", "who": "NBA.com, 15 July 2024", "words": "Four 10-minute quarters will be played during Olympic play versus 12 minutes in the NBA." }
+      ]
+    },
+    "nba-minutes": {
+      "says": "An NBA game is four quarters of 12 minutes, 48 minutes.",
+      "value": 48,
+      "reads": [
+        { "url": "https://official.nba.com/rule-no-5-scoring-and-timing/", "who": "the NBA rule book, rule 5", "words": "All periods of regulation play in the NBA will be twelve minutes." },
+        { "url": "https://www.cbssports.com/olympics/news/nba-vs-olympics-an-idiots-guide-to-international-basketball-rules", "who": "CBS Sports, 2 August 2016", "words": "Instead of the NBA's four 12-minute quarters ... So a quick 40 minutes instead of 48 minutes." }
+      ]
+    }
+  },
+  "notes": {
+    "team-usa-mark": "TEAM USA is a registered US mark of the US Olympic and Paralympic Committee: Justia's copy of the USPTO record 74522713 (registration 2455565, status 800 registered and renewed) and Docket Alarm's of 86505061 (registration 4773080). The USPTO's own search is a script page the fetch tool cannot read, so this is read off two mirrors of the register. The game never prints it: it says the USA or the US national team.",
+    "wc-2027-host-place": "Only one read says Qatar qualifies as host: Eurohoops, 13 May 2025, lists 'Asia (7 teams plus Qatar qualify)'. FIBA's own qualifier page (fiba.basketball, how to qualify for the World Cup) does not say it. One read is not a fact here, so a 2027 field the game draws does not force Qatar in.",
+    "la28-host-place": "Two reads say the USA has the host's place at LA 2028, both subject to a FIBA Central Board decision in 2027 (about.fiba.basketball Olympic men's page; the IOC qualification system carried by NOC*NSF, version of 12 May 2026). The game's own rule already puts the USA in every edition, so the host place changes nothing in the game.",
+    "not-opened": "olympics.com timed out on every request (as Round 660 found); eurobasket.com answered 403; usab.com was not found by search. None of them is cited."
+  },
+  "editions": {
+    "oly-2004": {
+      "calendar": {
+        "says": "The 2004 Olympics, men's basketball, in Athens, 15 to 28 August 2004.",
+        "value": { "comp": "oly", "year": 2004, "host": "Athens" },
+        "reads": [
+          { "url": "https://www.basketball-reference.com/international/mens-olympics/2004.html", "who": "Basketball Reference", "words": "Men's Olympics - 2004 Standings and Stats. Host: Athens, Greece" },
+          { "url": "https://apbr.org/olympics.html", "who": "the Association for Professional Basketball Research", "words": "2004 - Athens, Greece" },
+          { "url": "https://www.olympedia.org/results/33018", "who": "Olympedia", "words": "Basketball, Men. 15 - 28 August 2004. Olympiako Kleisto Gymnastirio, Olympiako Athletiko Kentro Athinon Spiros Loues, Maroussi" }
+        ]
+      },
+      "name": {
+        "says": "Played as the men's basketball tournament of the Olympic Games.",
+        "value": "Olympics",
+        "reads": [
+          { "url": "https://www.olympedia.org/event_names/121", "who": "Olympedia", "words": "Basketball, Men. 2004 Summer Olympics" },
+          { "url": "https://www.basketball-reference.com/international/mens-olympics/2004.html", "who": "Basketball Reference", "words": "Men's Olympics - 2004 Standings and Stats" }
+        ]
+      },
+      "shape": {
+        "says": "Twelve teams in two groups of six, the top four of each to the quarter-finals, then semi-finals, a bronze game and a final.",
+        "value": "oly-2x6",
+        "reads": [
+          { "url": "https://www.olympedia.org/results/33018", "who": "Olympedia", "words": "Round-robin pools advanced teams to classification matches. Group A and Group B of six; quarter-finals Spain 94 USA 102, Lithuania 95 China 75, Italy 83 Puerto Rico 70, Greece 64 Argentina 69; bronze USA 104 Lithuania 96" },
+          { "url": "https://www.landofbasketball.com/olympics/2004_results.htm", "who": "Land of Basketball", "words": "First Round, Group A: Argentina, China, Italy, New Zealand, Serbia and Montenegro, Spain. Group B: Angola, Australia, Greece, Lithuania, Puerto Rico, USA. 1/4 Finals ... 3rd Place Game: Lithuania 96, USA 104" }
+        ]
+      },
+      "field": {
+        "says": "The twelve nations as they played.",
+        "value": ["Argentina", "Italy", "USA", "Lithuania", "Greece", "Puerto Rico", "Spain", "China", "Australia", "New Zealand", "Serbia and Montenegro", "Angola"],
+        "reads": [
+          { "url": "https://www.olympedia.org/results/33018", "who": "Olympedia", "words": "Argentina, Italy, United States, Lithuania, Greece, Puerto Rico, Spain, People's Republic of China, Australia, New Zealand, Serbia and Montenegro, Angola" },
+          { "url": "https://www.landofbasketball.com/olympics/2004_results.htm", "who": "Land of Basketball", "words": "Group A: Argentina, China, Italy, New Zealand, Serbia and Montenegro, Spain. Group B: Angola, Australia, Greece, Lithuania, Puerto Rico, USA" },
+          { "url": "https://www.basketball-reference.com/international/mens-olympics/2004.html", "who": "Basketball Reference", "words": "Spain, Argentina, Lithuania, Italy, United States, Greece, Puerto Rico, Australia, Serbia and Montenegro, China, New Zealand, Angola" }
+        ]
+      },
+      "rungs": {
+        "says": "Gold Argentina, silver Italy, bronze the USA, fourth Lithuania; out in the quarter-finals Spain, China, Puerto Rico and Greece.",
+        "value": ["Argentina", "Italy", "USA", "Lithuania", ["Spain", "China", "Puerto Rico", "Greece"]],
+        "reads": [
+          { "url": "https://www.olympedia.org/results/33018", "who": "Olympedia", "words": "1 Argentina, 2 Italy, 3 United States, 4 Lithuania; quarter-finals Spain 94 USA 102, Lithuania 95 China 75, Italy 83 Puerto Rico 70, Greece 64 Argentina 69" },
+          { "url": "https://www.landofbasketball.com/olympics/2004_results.htm", "who": "Land of Basketball", "words": "1/4 Finals: Spain 94, USA 102; Lithuania 95, China 75; Italy 83, Puerto Rico 70; Greece 64, Argentina 69. 3rd Place Game: Lithuania 96, USA 104. Bronze: USA. Silver: Italy / Gold: Argentina" },
+          { "url": "https://apbr.org/olympics.html", "who": "the Association for Professional Basketball Research", "words": "1. Argentina 2. Italy 3. United States 4. Lithuania 5. Greece 6. Puerto Rico 7. Spain 8. China" }
+        ]
+      }
+    },
+    "oly-2008": {
+      "calendar": {
+        "says": "The 2008 Olympics, men's basketball, in Beijing, 10 to 24 August 2008.",
+        "value": { "comp": "oly", "year": 2008, "host": "Beijing" },
+        "reads": [
+          { "url": "https://www.basketball-reference.com/international/mens-olympics/2008.html", "who": "Basketball Reference", "words": "Men's Olympics - 2008 Standings and Stats. Host: Beijing, China" },
+          { "url": "https://apbr.org/olympics.html", "who": "the Association for Professional Basketball Research", "words": "2008 - Beijing, China" },
+          { "url": "https://www.olympedia.org/results/257904", "who": "Olympedia", "words": "10 - 24 August 2008. Beijing Aolinpike Lanqiuguan, Beijing" }
+        ]
+      },
+      "name": {
+        "says": "Played as the men's basketball tournament of the Olympic Games.",
+        "value": "Olympics",
+        "reads": [
+          { "url": "https://www.olympedia.org/event_names/121", "who": "Olympedia", "words": "Basketball, Men. 2008 Summer Olympics" },
+          { "url": "https://www.basketball-reference.com/international/mens-olympics/2008.html", "who": "Basketball Reference", "words": "Men's Olympics - 2008 Standings and Stats" }
+        ]
+      },
+      "shape": {
+        "says": "Twelve teams in two groups of six, the top four of each to the quarter-finals, then semi-finals, a bronze game and a final.",
+        "value": "oly-2x6",
+        "reads": [
+          { "url": "https://www.olympedia.org/results/257904", "who": "Olympedia", "words": "Group A: Lithuania 4-1, Argentina 4-1, Croatia 3-2, Australia 3-2, Russian Federation 1-4, Islamic Republic of Iran 0-5. Group B: United States 5-0, Spain 4-1, Greece 3-2, People's Republic of China 2-3, Germany 1-4, Angola 0-5. Quarter-finals (20 Aug) ... Bronze (24 Aug): Argentina 87-75 Lithuania" },
+          { "url": "https://www.landofbasketball.com/olympics/2008_results.htm", "who": "Land of Basketball", "words": "Group A: Russia, Iran, Lithuania, Australia, Croatia, Argentina. Group B: Germany, Angola, Spain, Greece, USA, China. Quarter-finals (Aug 20) ... Bronze game (Aug 24): Argentina 87, Lithuania 75" }
+        ]
+      },
+      "field": {
+        "says": "The twelve nations as they played.",
+        "value": ["USA", "Spain", "Argentina", "Lithuania", "Croatia", "China", "Australia", "Greece", "Russia", "Iran", "Germany", "Angola"],
+        "reads": [
+          { "url": "https://www.olympedia.org/results/257904", "who": "Olympedia", "words": "Group A: Lithuania, Argentina, Croatia, Australia, Russian Federation, Islamic Republic of Iran. Group B: United States, Spain, Greece, People's Republic of China, Germany, Angola" },
+          { "url": "https://www.landofbasketball.com/olympics/2008_results.htm", "who": "Land of Basketball", "words": "Group A: Russia, Iran, Lithuania, Australia, Croatia, Argentina. Group B: Germany, Angola, Spain, Greece, USA, China" },
+          { "url": "https://www.basketball-reference.com/international/mens-olympics/2008.html", "who": "Basketball Reference", "words": "United States, Argentina, Spain, Lithuania, Australia, Croatia, Greece, China, Russia, Germany, Iran, Angola" }
+        ]
+      },
+      "rungs": {
+        "says": "Gold the USA, silver Spain, bronze Argentina, fourth Lithuania; out in the quarter-finals Croatia, China, Australia and Greece.",
+        "value": ["USA", "Spain", "Argentina", "Lithuania", ["Croatia", "China", "Australia", "Greece"]],
+        "reads": [
+          { "url": "https://www.olympedia.org/results/257904", "who": "Olympedia", "words": "Quarter-finals: Spain 72-59 Croatia; Lithuania 94-68 China; United States 116-85 Australia; Argentina 80-78 Greece. Bronze: Argentina 87-75 Lithuania. Final: United States 118-107 Spain" },
+          { "url": "https://www.landofbasketball.com/olympics/2008_results.htm", "who": "Land of Basketball", "words": "Spain 72, Croatia 59; Lithuania 94, China 68; USA 116, Australia 85; Argentina 80, Greece 78. Bronze: Argentina. Silver: Spain / Gold: USA" },
+          { "url": "https://apbr.org/olympics.html", "who": "the Association for Professional Basketball Research", "words": "1. United States 2. Spain 3. Argentina 4. Lithuania 5. Greece 6. Croatia 7. Australia 8. China" }
+        ]
+      }
+    },
+    "oly-2012": {
+      "calendar": {
+        "says": "The 2012 Olympics, men's basketball, in London, 29 July to 12 August 2012.",
+        "value": { "comp": "oly", "year": 2012, "host": "London" },
+        "reads": [
+          { "url": "https://www.basketball-reference.com/international/mens-olympics/2012.html", "who": "Basketball Reference", "words": "Men's Olympics - 2012 Standings and Stats. Host: London, United Kingdom" },
+          { "url": "https://apbr.org/olympics.html", "who": "the Association for Professional Basketball Research", "words": "2012 - London, England" },
+          { "url": "https://www.olympedia.org/results/2014270", "who": "Olympedia", "words": "29 July - 12 August 2012. Basketball Arena, Olympic Park, Stratford, London / North Greenwich Arena, Greenwich, London" }
+        ]
+      },
+      "name": {
+        "says": "Played as the men's basketball tournament of the Olympic Games.",
+        "value": "Olympics",
+        "reads": [
+          { "url": "https://www.olympedia.org/event_names/121", "who": "Olympedia", "words": "Basketball, Men. 2012 Summer Olympics" },
+          { "url": "https://www.basketball-reference.com/international/mens-olympics/2012.html", "who": "Basketball Reference", "words": "Men's Olympics - 2012 Standings and Stats" }
+        ]
+      },
+      "shape": {
+        "says": "Twelve teams in two groups of six, the top four of each to the quarter-finals, then semi-finals, a bronze game and a final.",
+        "value": "oly-2x6",
+        "reads": [
+          { "url": "https://www.olympedia.org/results/2014270", "who": "Olympedia", "words": "Group A: United States (5-0), France (4-1), Argentina (3-2), Lithuania (2-3), Nigeria (1-4), Tunisia (0-5). Group B: Russia (4-1), Brazil (4-1), Spain (3-2), Australia (3-2), Great Britain (1-4), China (0-5). Quarter-finals ... Bronze medal game: Russia 81, Argentina 77" },
+          { "url": "https://www.landofbasketball.com/olympics/2012_results.htm", "who": "Land of Basketball", "words": "Group A: Nigeria, Tunisia, USA, France, Argentina, Lithuania. Group B: Brazil, Australia, Spain, China, Russia, Great Britain. 1/4 Finals ... Bronze: Russia" }
+        ]
+      },
+      "field": {
+        "says": "The twelve nations as they played.",
+        "value": ["USA", "France", "Argentina", "Lithuania", "Nigeria", "Tunisia", "Russia", "Brazil", "Spain", "Australia", "Great Britain", "China"],
+        "reads": [
+          { "url": "https://www.olympedia.org/results/2014270", "who": "Olympedia", "words": "Group A: United States, France, Argentina, Lithuania, Nigeria, Tunisia. Group B: Russia, Brazil, Spain, Australia, Great Britain, China" },
+          { "url": "https://www.landofbasketball.com/olympics/2012_results.htm", "who": "Land of Basketball", "words": "Group A: Nigeria, Tunisia, USA, France, Argentina, Lithuania. Group B: Brazil, Australia, Spain, China, Russia, Great Britain" },
+          { "url": "https://www.basketball-reference.com/international/mens-olympics/2012.html", "who": "Basketball Reference", "words": "United States, Russia, France, Brazil, Spain, Argentina, Australia, Lithuania, Nigeria, Great Britain, Tunisia, China" }
+        ]
+      },
+      "rungs": {
+        "says": "Gold the USA, silver Spain, bronze Russia, fourth Argentina; out in the quarter-finals Brazil, Australia, France and Lithuania.",
+        "value": ["USA", "Spain", "Russia", "Argentina", ["Brazil", "Australia", "France", "Lithuania"]],
+        "reads": [
+          { "url": "https://www.olympedia.org/results/2014270", "who": "Olympedia", "words": "Quarter-finals: Argentina 82, Brazil 77; United States 119, Australia 86; Spain 66, France 59; Russia 83, Lithuania 74. Bronze medal game: Russia 81, Argentina 77. Final: United States 107, Spain 100" },
+          { "url": "https://www.landofbasketball.com/olympics/2012_results.htm", "who": "Land of Basketball", "words": "Russia 83, Lithuania 74; USA 119, Australia 86; Brazil 77, Argentina 82; France 59, Spain 66. Bronze: Russia. Gold: USA / Silver: Spain" },
+          { "url": "https://apbr.org/olympics.html", "who": "the Association for Professional Basketball Research", "words": "1. United States 2. Spain 3. Russia 4. Argentina 5. Brazil 6. France 7. Australia 8. Lithuania" }
+        ]
+      }
+    },
+    "oly-2016": {
+      "calendar": {
+        "says": "The 2016 Olympics, men's basketball, in Rio de Janeiro, 6 to 21 August 2016.",
+        "value": { "comp": "oly", "year": 2016, "host": "Rio de Janeiro" },
+        "reads": [
+          { "url": "https://www.basketball-reference.com/international/mens-olympics/2016.html", "who": "Basketball Reference", "words": "Men's Olympics - 2016 Standings and Stats. Host: Rio de Janeiro, Brazil" },
+          { "url": "https://www.olympedia.org/results/359400", "who": "Olympedia", "words": "6 - 21 August 2016. Arena Carioca 1, Parque Olimpico da Barra, Barra da Tijuca, Rio de Janeiro" }
+        ]
+      },
+      "name": {
+        "says": "Played as the men's basketball tournament of the Olympic Games.",
+        "value": "Olympics",
+        "reads": [
+          { "url": "https://www.olympedia.org/event_names/121", "who": "Olympedia", "words": "Basketball, Men. 2016 Summer Olympics" },
+          { "url": "https://www.fiba.basketball/olympics/2016/standings", "who": "FIBA", "words": "Olympic Games: Tournament for Men" }
+        ]
+      },
+      "shape": {
+        "says": "Twelve teams in two groups of six, the top four of each to the quarter-finals, then semi-finals, a bronze game and a final.",
+        "value": "oly-2x6",
+        "reads": [
+          { "url": "https://www.eurohoops.net/en/national-teams/204895/the-draw-procedure-for-rio/amp/", "who": "Eurohoops, 10 March 2016", "words": "The twelve (12) teams in each tournament will be divided into two (2) groups (A and B) of six (6) teams each. The top four (4) classified teams from each group will then move on to the Final Phase" },
+          { "url": "https://www.olympedia.org/results/359400", "who": "Olympedia", "words": "Group A: United States 5-0, Australia 4-1, France 3-2, Serbia 2-3, Venezuela 1-4, China 0-5. Group B: Croatia 3-2, Spain 3-2, Lithuania 3-2, Argentina 3-2, Brazil 2-3, Nigeria 1-4. Bronze medal game: Spain 89, Australia 88" },
+          { "url": "https://africa.espn.com/olympics/summer/2016/results/_/view/medalrounds/discipline/7", "who": "ESPN", "words": "Bronze medal match (August 21 - Final): Spain 89, Australia 88. Gold medal match: United States 96, Serbia Republic 66" }
+        ]
+      },
+      "field": {
+        "says": "The twelve nations as they played.",
+        "value": ["USA", "Australia", "France", "Serbia", "Venezuela", "China", "Croatia", "Spain", "Lithuania", "Argentina", "Brazil", "Nigeria"],
+        "reads": [
+          { "url": "https://www.olympedia.org/results/359400", "who": "Olympedia", "words": "Group A: United States, Australia, France, Serbia, Venezuela, China. Group B: Croatia, Spain, Lithuania, Argentina, Brazil, Nigeria" },
+          { "url": "https://www.landofbasketball.com/olympics/2016_results.htm", "who": "Land of Basketball", "words": "First Round, Group A: Australia, China, France, Serbia, USA, Venezuela. First Round, Group B: Argentina, Brazil, Croatia, Lithuania, Nigeria, Spain" },
+          { "url": "https://www.fiba.basketball/olympics/2016/standings", "who": "FIBA", "words": "1 USA, 2 SRB, 3 ESP, 4 Australia, 5 Croatia, 6 France, 7 Lithuania, 8 Argentina, 9 Brazil, 10 Venezuela, 11 Nigeria, 12 China" }
+        ]
+      },
+      "rungs": {
+        "says": "Gold the USA, silver Serbia, bronze Spain, fourth Australia; out in the quarter-finals Croatia, France, Lithuania and Argentina.",
+        "value": ["USA", "Serbia", "Spain", "Australia", ["Croatia", "France", "Lithuania", "Argentina"]],
+        "reads": [
+          { "url": "https://www.olympedia.org/results/359400", "who": "Olympedia", "words": "Quarter-finals: Australia 90, Lithuania 64; Spain 92, France 67; United States 105, Argentina 78; Serbia 86, Croatia 83. Bronze medal game: Spain 89, Australia 88. Final: United States 96, Serbia 66" },
+          { "url": "https://www.landofbasketball.com/olympics/2016_results.htm", "who": "Land of Basketball", "words": "USA 105, Argentina 78; Australia 90, Lithuania 64; Serbia 86, Croatia 83; Spain 92, France 67. Bronze: Spain. Gold: USA, Silver: Serbia" },
+          { "url": "https://www.fiba.basketball/olympics/2016/standings", "who": "FIBA", "words": "1 USA, 2 SRB, 3 ESP, 4 Australia, 5 Croatia, 6 France, 7 Lithuania, 8 Argentina" }
+        ]
+      }
+    },
+    "oly-2021": {
+      "calendar": {
+        "says": "The Tokyo 2020 Olympics, men's basketball, played in 2021, 25 July to 7 August 2021. The id carries the year it was played, which is the summer the game looks up.",
+        "value": { "comp": "oly", "year": 2021, "host": "Tokyo", "games": 2020 },
+        "reads": [
+          { "url": "https://www.fiba.basketball/olympics/men/2020", "who": "FIBA", "words": "Tokyo 2020 Men's Olympic Basketball Tournament. Date: 25 Jul - 7 Aug 2021. Host: Japan" },
+          { "url": "https://www.basketball-reference.com/international/mens-olympics/2020.html", "who": "Basketball Reference", "words": "Men's Olympics - 2020 Standings and Stats. Host: Tokyo, Japan" },
+          { "url": "https://www.olympedia.org/results/19001250", "who": "Olympedia", "words": "25 July - 7 August 2021. Saitama Super Arena, Chuo-ku, Saitama, Saitama Prefecture, Japan" }
+        ]
+      },
+      "name": {
+        "says": "Played as the men's basketball tournament of the Olympic Games, the Games of 2020.",
+        "value": "Olympics",
+        "reads": [
+          { "url": "https://www.olympedia.org/event_names/121", "who": "Olympedia", "words": "Basketball, Men. 2020 Summer Olympics" },
+          { "url": "https://www.fiba.basketball/olympics/men/2020", "who": "FIBA", "words": "Tokyo 2020 Men's Olympic Basketball Tournament" }
+        ]
+      },
+      "shape": {
+        "says": "Twelve teams in three groups of four, the top two of each and the two best thirds to the quarter-finals, then semi-finals, a bronze game and a final.",
+        "value": "oly-3x4",
+        "reads": [
+          { "url": "https://www.olympedia.org/results/19001250", "who": "Olympedia", "words": "Group A: France 3-0, United States 2-1, Czech Republic 1-2, Iran 0-3. Group B: Australia 3-0, Italy 2-1, Germany 1-2, Nigeria 0-3. Group C: Slovenia 3-0, Spain 2-1, Argentina 1-2, Japan 0-3. Quarter-finals: Slovenia 94, Germany 70; United States 95, Spain 81; France 84, Italy 75; Australia 97, Argentina 59. Bronze medal game: Australia 107, Slovenia 93" },
+          { "url": "https://www.landofbasketball.com/olympics/2020_results.htm", "who": "Land of Basketball", "words": "First Round, Group A: Iran, Czech Republic, France, USA. Group B: Germany, Italy, Australia, Nigeria. Group C: Argentina, Japan, Spain, Slovenia. 1/4 Finals ... Bronze: Australia" }
+        ]
+      },
+      "field": {
+        "says": "The twelve nations as they played.",
+        "value": ["France", "USA", "Czech Republic", "Iran", "Australia", "Italy", "Germany", "Nigeria", "Slovenia", "Spain", "Argentina", "Japan"],
+        "reads": [
+          { "url": "https://www.olympedia.org/results/19001250", "who": "Olympedia", "words": "Group A: France, United States, Czech Republic, Iran. Group B: Australia, Italy, Germany, Nigeria. Group C: Slovenia, Spain, Argentina, Japan" },
+          { "url": "https://www.fiba.basketball/olympics/men/2020/standings", "who": "FIBA", "words": "1 USA, 2 France, 3 Australia, 4 Slovenia, 5 Italy, 6 Spain, 7 Argentina, 8 Germany, 9 Czech Republic, 10 Nigeria, 11 Japan, 12 Iran" },
+          { "url": "https://www.landofbasketball.com/olympics/2020_results.htm", "who": "Land of Basketball", "words": "Group A: Iran, Czech Republic, France, USA. Group B: Germany, Italy, Australia, Nigeria. Group C: Argentina, Japan, Spain, Slovenia" }
+        ]
+      },
+      "rungs": {
+        "says": "Gold the USA, silver France, bronze Australia, fourth Slovenia; out in the quarter-finals Germany, Spain, Italy and Argentina.",
+        "value": ["USA", "France", "Australia", "Slovenia", ["Germany", "Spain", "Italy", "Argentina"]],
+        "reads": [
+          { "url": "https://www.olympedia.org/results/19001250", "who": "Olympedia", "words": "Semi-finals: United States 97, Australia 78; France 90, Slovenia 89. Bronze medal game: Australia 107, Slovenia 93. Gold medal game: United States 87, France 82" },
+          { "url": "https://www.fiba.basketball/olympics/men/2020/standings", "who": "FIBA", "words": "1 USA, 2 France, 3 Australia, 4 Slovenia, 5 Italy, 6 Spain, 7 Argentina, 8 Germany" },
+          { "url": "https://www.landofbasketball.com/olympics/2020_results.htm", "who": "Land of Basketball", "words": "Slovenia beat Germany 94-70. France beat Italy 84-75. Australia beat Argentina 97-59. USA beat Spain 95-81. Bronze: Australia" }
+        ]
+      }
+    },
+    "oly-2024": {
+      "calendar": {
+        "says": "The 2024 Olympics, men's basketball, in Paris, 27 July to 10 August 2024 (the group games partly in Lille).",
+        "value": { "comp": "oly", "year": 2024, "host": "Paris" },
+        "reads": [
+          { "url": "https://www.basketball-reference.com/international/mens-olympics/2024.html", "who": "Basketball Reference", "words": "Men's Olympics - 2024 Standings and Stats. Host: Paris, France" },
+          { "url": "https://www.fiba.basketball/en/events/mens-olympic-basketball-tournament-paris-2024/competition-system", "who": "FIBA", "words": "Competition System - Men's Olympic Basketball Tournament Paris 2024. 27 Jul - 10 Aug 2024" },
+          { "url": "https://www.olympedia.org/results/2002000", "who": "Olympedia", "words": "27 July - 10 August 2024. Bercy Arena, Bercy, France / Pierre Mauroy Stadium, Villeneuve-d'Ascq, France" }
+        ]
+      },
+      "name": {
+        "says": "Played as the men's basketball tournament of the Olympic Games.",
+        "value": "Olympics",
+        "reads": [
+          { "url": "https://www.olympedia.org/event_names/121", "who": "Olympedia", "words": "Basketball, Men. 2024 Summer Olympics" },
+          { "url": "https://www.fiba.basketball/en/events/mens-olympic-basketball-tournament-paris-2024/competition-system", "who": "FIBA", "words": "Men's Olympic Basketball Tournament Paris 2024" }
+        ]
+      },
+      "shape": {
+        "says": "Twelve teams in three groups of four, the top two of each and the two best thirds to the quarter-finals, then semi-finals, a bronze game and a final.",
+        "value": "oly-3x4",
+        "reads": [
+          { "url": "https://www.fiba.basketball/en/events/mens-olympic-basketball-tournament-paris-2024/competition-system", "who": "FIBA", "words": "In both tournaments, the 12 teams are divided into 3 groups (A, B and C) of 4 teams each. The teams placed first and second in each group and the 2 best third-placed teams in the Group Phase qualify for the Final..." },
+          { "url": "https://www.olympedia.org/results/2002000", "who": "Olympedia", "words": "Group A: Canada 3-0, Australia 1-2, Greece 1-2, Spain 1-2. Group B: Germany 3-0, France 2-1, Brazil 1-2, Japan 0-3. Group C: United States 3-0, Serbia 2-1, South Sudan 1-2, Puerto Rico 0-3. Bronze medal game: Serbia 93-83 Germany" },
+          { "url": "https://www.landofbasketball.com/olympics/2024_results.htm", "who": "Land of Basketball", "words": "First Round, Group A: Australia, Spain, Greece, Canada. Group B: Germany, Japan, France, Brazil. Group C: South Sudan, Puerto Rico, Serbia, USA. 3rd Place Game: Germany 83, Serbia 93" }
+        ]
+      },
+      "field": {
+        "says": "The twelve nations as they played.",
+        "value": ["Canada", "Australia", "Greece", "Spain", "Germany", "France", "Brazil", "Japan", "USA", "Serbia", "South Sudan", "Puerto Rico"],
+        "reads": [
+          { "url": "https://www.olympedia.org/results/2002000", "who": "Olympedia", "words": "Group A: Canada, Australia, Greece, Spain. Group B: Germany, France, Brazil, Japan. Group C: United States, Serbia, South Sudan, Puerto Rico" },
+          { "url": "https://www.fiba.basketball/en/events/mens-olympic-basketball-tournament-paris-2024/standings", "who": "FIBA", "words": "1 USA, 2 France, 3 Serbia, 4 Germany, 5 Canada, 6 Australia, 7 Brazil, 8 Greece, 9 South Sudan, 10 Spain, 11 Japan, 12 Puerto Rico" },
+          { "url": "https://www.basketball-reference.com/international/mens-olympics/2024.html", "who": "Basketball Reference", "words": "United States, Canada, France, Germany, Serbia, Spain, South Sudan, Australia, Greece, Brazil, Japan, Puerto Rico" }
+        ]
+      },
+      "rungs": {
+        "says": "Gold the USA, silver France, bronze Serbia, fourth Germany; out in the quarter-finals Canada, Greece, Brazil and Australia.",
+        "value": ["USA", "France", "Serbia", "Germany", ["Canada", "Greece", "Brazil", "Australia"]],
+        "reads": [
+          { "url": "https://www.olympedia.org/results/2002000", "who": "Olympedia", "words": "Quarter-finals: France 82-73 Canada; Germany 76-63 Greece; United States 122-87 Brazil; Serbia 95-90 Australia. Bronze medal game: Serbia 93-83 Germany. Gold medal game: United States 98-87 France" },
+          { "url": "https://www.fiba.basketball/en/events/mens-olympic-basketball-tournament-paris-2024/standings", "who": "FIBA", "words": "1 USA, 2 France, 3 Serbia, 4 Germany, 5 Canada, 6 Australia, 7 Brazil, 8 Greece" },
+          { "url": "https://www.landofbasketball.com/olympics/2024_results.htm", "who": "Land of Basketball", "words": "Brazil 87, USA 122; Serbia 95, Australia 90 (OT); France 82, Canada 73; Germany 76, Greece 63. Bronze: Serbia. Silver: France / Gold: USA" }
+        ]
+      }
+    },
+    "wc-2006": {
+      "calendar": {
+        "says": "The 2006 World Championship in Japan, the knockout games in Saitama, final on 3 September 2006.",
+        "value": { "comp": "wc", "year": 2006, "host": "Japan" },
+        "reads": [
+          { "url": "https://globalsportsarchive.com/competition/basketball/fiba-world-championship-2006-japan/quarter-finals/31701/", "who": "Global Sports Archive", "words": "FIBA World Championship 2006 Japan. 2006-08-29: Spain 89 : 67 Lithuania" },
+          { "url": "https://www.eurohoops.net/en/fibawc/1990851/the-2006-world-champions-reunite-20-years-later-we-werent-aware-of-what-we-had-achieved/", "who": "Eurohoops, 13 July 2026", "words": "To mark the 20th anniversary of the 2006 World Cup in Japan ... That gold medal in Japan, won by defeating Greece" }
+        ]
+      },
+      "name": {
+        "says": "Played under the name World Championship.",
+        "value": "World Championship",
+        "reads": [
+          { "url": "https://globalsportsarchive.com/competition/basketball/fiba-world-championship-2006-japan/group-stage/31699/", "who": "Global Sports Archive", "words": "FIBA World Championship 2006 Japan" },
+          { "url": "https://www.landofbasketball.com/world_cup/2006_results.htm", "who": "Land of Basketball", "words": "This list has all the results from the games played in the 2006 FIBA Basketball World Championship" }
+        ]
+      },
+      "shape": {
+        "says": "Twenty four teams in four groups of six, the top four of each to a round of 16, then quarter-finals, semi-finals, a third place game and a final.",
+        "value": "wc-4x6",
+        "reads": [
+          { "url": "https://www.landofbasketball.com/world_cup/2006_results.htm", "who": "Land of Basketball", "words": "First Round Groups A to D of six. Round of 16 (Eighth-Finals): Argentina 79, New Zealand 62 ... Quarter-Finals ... 3rd Place Game: USA 96, Argentina 81" },
+          { "url": "https://globalsportsarchive.com/competition/basketball/fiba-world-championship-2006-japan/group-stage/31699/", "who": "Global Sports Archive", "words": "Group A: Argentina, France, Nigeria, Serbia and Montenegro, Lebanon, Venezuela (four groups of six); stages Round of 16, Quarter-finals, Semi-finals, 3rd Place, Final" }
+        ]
+      },
+      "field": {
+        "says": "The twenty four nations as they played.",
+        "value": ["Venezuela", "Lebanon", "Serbia and Montenegro", "Nigeria", "Argentina", "France", "Germany", "Japan", "Angola", "Panama", "Spain", "New Zealand", "Brazil", "Australia", "Greece", "Qatar", "Turkey", "Lithuania", "Puerto Rico", "USA", "Slovenia", "Senegal", "Italy", "China"],
+        "reads": [
+          { "url": "https://www.landofbasketball.com/world_cup/2006_results.htm", "who": "Land of Basketball", "words": "Group A: Venezuela, Lebanon, Serbia and Montenegro, Nigeria, Argentina, France. Group B: Germany, Japan, Angola, Panama, Spain, New Zealand. Group C: Brazil, Australia, Greece, Qatar, Turkey, Lithuania. Group D: Puerto Rico, USA, Slovenia, Senegal, Italy, China" },
+          { "url": "https://globalsportsarchive.com/competition/basketball/fiba-world-championship-2006-japan/group-stage/31699/", "who": "Global Sports Archive", "words": "Group A: Argentina, France, Nigeria, Serbia and Montenegro, Lebanon, Venezuela. Group B: Spain, Germany, Angola, New Zealand, Japan, Panama. Group C: Greece, Turkey, Lithuania, Australia, Brazil, Qatar. Group D: United States, Italy, Slovenia, China PR, Puerto Rico, Senegal" }
+        ]
+      },
+      "rungs": {
+        "says": "Gold Spain, silver Greece, bronze the USA, fourth Argentina; out in the quarter-finals Lithuania, Turkey, France and Germany.",
+        "value": ["Spain", "Greece", "USA", "Argentina", ["Lithuania", "Turkey", "France", "Germany"]],
+        "reads": [
+          { "url": "https://www.landofbasketball.com/world_cup/2006_results.htm", "who": "Land of Basketball", "words": "Quarter-Finals: Spain 89, Lithuania 67; Argentina 83, Turkey 58; Greece 73, France 56; USA 85, Germany 65. Semi-Finals: Greece 101, USA 95; Spain 75, Argentina 74. 3rd Place Game: USA 96, Argentina 81. Final: Spain 70, Greece 47" },
+          { "url": "https://globalsportsarchive.com/competition/basketball/fiba-world-championship-2006-japan/quarter-finals/31701/", "who": "Global Sports Archive", "words": "Spain 89 : 67 Lithuania; Argentina 83 : 58 Turkiye; France 56 : 73 Greece; United States 85 : 65 Germany. Previous winners: 2006 Japan, Spain first, Greece second" },
+          { "url": "https://globalsportsarchive.com/competition/basketball/fiba-world-championship-2006-japan/3rd-place/31703/", "who": "Global Sports Archive", "words": "2006-09-02: United States 96 : 81 Argentina" }
+        ]
+      }
+    },
+    "wc-2010": {
+      "calendar": {
+        "says": "The 2010 World Championship in Turkey, in Ankara, Izmir, Kayseri and Istanbul, the final in Istanbul on 12 September 2010.",
+        "value": { "comp": "wc", "year": 2010, "host": "Turkey" },
+        "reads": [
+          { "url": "https://www.fiba.basketball/en/news/basketballworldcup-2023-news-the-best-of-2010-world-cup-usa-grab-first-title-since-1994-turkey-and-lithuania-debut-on-podium", "who": "FIBA", "words": "the flagship event returned to Europe as Turkey hosted the 15th edition ... in four different cities across the country: Ankara, Izmir, Kayseri and Istanbul" },
+          { "url": "https://www.dunya.com/gundem/clinching-silver-turkey-loses-to-us-team-in-world-basketball-haberi-125492", "who": "Dunya, 13 September 2010", "words": "at the Sinan Erdem Dome in Istanbul; the coach thanked the government for giving $100 million to help organize the tournament" }
+        ]
+      },
+      "name": {
+        "says": "Played under the name World Championship.",
+        "value": "World Championship",
+        "reads": [
+          { "url": "https://www.basketball-reference.com/international/fiba-world-cup/2010.html", "who": "Basketball Reference", "words": "FIBA World Championship - 2010 Standings and Stats" },
+          { "url": "https://www.dunya.com/gundem/clinching-silver-turkey-loses-to-us-team-in-world-basketball-haberi-125492", "who": "Dunya, 13 September 2010", "words": "2010 FIBA World Basketball Championship" }
+        ]
+      },
+      "shape": {
+        "says": "Twenty four teams in four groups of six, the top four of each to a round of 16, then quarter-finals, semi-finals, a third place game and a final.",
+        "value": "wc-4x6",
+        "reads": [
+          { "url": "https://www.landofbasketball.com/world_cup/2010_results.htm", "who": "Land of Basketball", "words": "Groups A to D of six. Round of 16: Serbia 73, Croatia 72 ... Quarter-finals ... 3rd place game: Lithuania 99, Serbia 88" },
+          { "url": "https://www.fiba.basketball/en/news/basketballworldcup-2023-news-the-best-of-2010-world-cup-usa-grab-first-title-since-1994-turkey-and-lithuania-debut-on-podium", "who": "FIBA", "words": "24 countries participated in Turkey 2010 ... Lithuania got 33 points from Linas Kleiza in a 99-88 win for third place" }
+        ]
+      },
+      "field": {
+        "says": "The twenty four nations as they played.",
+        "value": ["Argentina", "Angola", "Australia", "Germany", "Jordan", "Serbia", "Brazil", "Croatia", "Iran", "Slovenia", "Tunisia", "USA", "China", "Greece", "Ivory Coast", "Puerto Rico", "Russia", "Turkey", "Canada", "France", "Lebanon", "Lithuania", "New Zealand", "Spain"],
+        "reads": [
+          { "url": "https://www.landofbasketball.com/world_cup/2010_results.htm", "who": "Land of Basketball", "words": "Group A: Argentina, Angola, Australia, Germany, Jordan, Serbia. Group B: Brazil, Croatia, Iran, Slovenia, Tunisia, USA. Group C: China, Greece, Ivory Coast, Puerto Rico, Russia, Turkey. Group D: Canada, France, Lebanon, Lithuania, New Zealand, Spain" },
+          { "url": "https://www.basketball-reference.com/international/fiba-world-cup/2010.html", "who": "Basketball Reference", "words": "United States, Lithuania, Turkey, Russia, Slovenia, Serbia, Argentina, Spain, New Zealand, France, Greece, Brazil, Australia, Croatia, Germany, Angola, Lebanon, Iran, Puerto Rico, Ivory Coast, China, Jordan, Tunisia, Canada" }
+        ]
+      },
+      "rungs": {
+        "says": "Gold the USA, silver Turkey, bronze Lithuania, fourth Serbia; out in the quarter-finals Spain, Slovenia, Russia and Argentina.",
+        "value": ["USA", "Turkey", "Lithuania", "Serbia", ["Spain", "Slovenia", "Russia", "Argentina"]],
+        "reads": [
+          { "url": "https://www.landofbasketball.com/world_cup/2010_results.htm", "who": "Land of Basketball", "words": "Quarter-finals: Serbia 92, Spain 89; Turkey 95, Slovenia 68; USA 89, Russia 79; Lithuania 104, Argentina 85. 3rd place game: Lithuania 99, Serbia 88. Final: USA 81, Turkey 64" },
+          { "url": "https://www.fiba.basketball/en/news/basketballworldcup-2023-news-the-best-of-2010-world-cup-usa-grab-first-title-since-1994-turkey-and-lithuania-debut-on-podium", "who": "FIBA", "words": "Milos Teodosic drained a long three-point at the final buzzer to give Serbia a 92-89 win over Spain; hosts Turkey thrashed Slovenia by 28 points; an 89-79 win (over Russia); Lithuania eased past Argentina 104-85; a 99-88 win for third place; an 81-64 victory for the Americans' first title since 1994" },
+          { "url": "https://www.basketball-reference.com/international/fiba-world-cup/2010.html", "who": "Basketball Reference", "words": "Gold: United States. Silver: Turkey. Bronze: Lithuania" }
+        ]
+      }
+    },
+    "wc-2014": {
+      "calendar": {
+        "says": "The 2014 Basketball World Cup in Spain, the knockout games in Barcelona and Madrid, the final in Madrid on 14 September 2014.",
+        "value": { "comp": "wc", "year": 2014, "host": "Spain" },
+        "reads": [
+          { "url": "https://www.fiba.basketball/basketballworldcup/2014", "who": "FIBA", "words": "Date: 30 Aug - 14 Sept 2014. Host: Spain" },
+          { "url": "https://hurriyetdailynews.com/dominant-us-crush-serbia-to-win-fiba-world-cup-71713", "who": "Reuters, carried by Hurriyet Daily News, 15 September 2014", "words": "MADRID - Reuters ... the 2014 FIBA World basketball championships final match USA vs Serbia ... Spain's King Felipe VI" }
+        ]
+      },
+      "name": {
+        "says": "Played under the name Basketball World Cup.",
+        "value": "Basketball World Cup",
+        "reads": [
+          { "url": "https://www.fiba.basketball/basketballworldcup/2014/standings", "who": "FIBA", "words": "FIBA Basketball World Cup 2014" },
+          { "url": "https://www.basketball-reference.com/international/fiba-world-cup/2014.html", "who": "Basketball Reference", "words": "FIBA Basketball World Cup - 2014 Standings and Stats" }
+        ]
+      },
+      "shape": {
+        "says": "Twenty four teams in four groups of six, the top four of each to a round of 16, then quarter-finals, semi-finals, a third place game and a final.",
+        "value": "wc-4x6",
+        "reads": [
+          { "url": "https://www.landofbasketball.com/world_cup/2014_results.htm", "who": "Land of Basketball", "words": "Groups A to D of six. Round of 16 ... Quarter-finals ... 3rd place game: Lithuania 93, France 95" },
+          { "url": "https://www.fiba.basketball/en/news/basketballworldcup-2023-news-the-best-of-2014-world-cup-usa-become-third-repeat-champion-france-finish-third-after-upsetting-spain", "who": "FIBA", "words": "For the third straight tournament there were 24 participating nations ... all four teams beat their opponents from Group B to reach the Quarter-Finals ... France rebounded for a 95-93 win in the third place game" }
+        ]
+      },
+      "field": {
+        "says": "The twenty four nations as they played.",
+        "value": ["Spain", "France", "Brazil", "Serbia", "Iran", "Egypt", "Greece", "Argentina", "Croatia", "Puerto Rico", "Senegal", "Philippines", "USA", "Turkey", "Ukraine", "Dominican Republic", "New Zealand", "Finland", "Lithuania", "Slovenia", "Australia", "Mexico", "Angola", "South Korea"],
+        "reads": [
+          { "url": "https://www.landofbasketball.com/world_cup/2014_results.htm", "who": "Land of Basketball", "words": "Group A: Spain, France, Brazil, Serbia, Iran, Egypt. Group B: Greece, Argentina, Croatia, Puerto Rico, Senegal, Philippines. Group C: USA, Turkey, Ukraine, Dominican Republic, New Zealand, Finland. Group D: Lithuania, Slovenia, Australia, Mexico, Angola, South Korea" },
+          { "url": "https://www.fiba.basketball/basketballworldcup/2014/standings", "who": "FIBA", "words": "1 USA, 2 Serbia, 3 France, 4 Lithuania, 5 Spain, 6 Brazil, 7 Slovenia, 8 Turkey, 9 Greece, 10 Croatia, 11 Argentina, 12 Australia, 13 Dominican Republic, 14 Mexico, 15 New Zealand, 16 Senegal, 17 Angola, 18 Ukraine, 19 Puerto Rico, 20 Islamic Republic of Iran, 21 Philippines, 22 Finland, 23 Korea, 24 Egypt" },
+          { "url": "https://www.basketball-reference.com/international/fiba-world-cup/2014.html", "who": "Basketball Reference", "words": "United States, Spain, Greece, Brazil, Slovenia, Lithuania, France, Turkey, Serbia, Argentina, Australia, Croatia, Ukraine, Angola, Dominican Republic, Mexico, New Zealand, Senegal, Philippines, Puerto Rico, Finland, Iran, Korea, Egypt" }
+        ]
+      },
+      "rungs": {
+        "says": "Gold the USA, silver Serbia, bronze France, fourth Lithuania; out in the quarter-finals Spain, Brazil, Slovenia and Turkey.",
+        "value": ["USA", "Serbia", "France", "Lithuania", ["Spain", "Brazil", "Slovenia", "Turkey"]],
+        "reads": [
+          { "url": "https://www.landofbasketball.com/world_cup/2014_results.htm", "who": "Land of Basketball", "words": "Quarter-finals: Slovenia 76, USA 119; Lithuania 73, Turkey 61; France 65, Spain 52; Serbia 84, Brazil 56. 3rd place game: Lithuania 93, France 95. Final: USA 129, Serbia 92" },
+          { "url": "https://www.fiba.basketball/basketballworldcup/2014/standings", "who": "FIBA", "words": "1 USA, 2 Serbia, 3 France, 4 Lithuania, 5 Spain, 6 Brazil, 7 Slovenia, 8 Turkey" },
+          { "url": "https://hurriyetdailynews.com/dominant-us-crush-serbia-to-win-fiba-world-cup-71713", "who": "Reuters, carried by Hurriyet Daily News, 15 September 2014", "words": "European champions France won the bronze medal with a dramatic 95-93 win over Lithuania on Sept. 13." }
+        ]
+      }
+    },
+    "wc-2019": {
+      "calendar": {
+        "says": "The 2019 Basketball World Cup in China, 31 August to 15 September 2019, the final in Beijing.",
+        "value": { "comp": "wc", "year": 2019, "host": "China" },
+        "reads": [
+          { "url": "https://www.fiba.basketball/basketballworldcup/2019", "who": "FIBA", "words": "Host: People 's Republic of China. Date: 31 Aug - 15 Sept 2019" },
+          { "url": "https://en.mercopress.com/2019/09/16/spain-wins-basketball-world-cup-crushing-argentina-95-75", "who": "MercoPress, 16 September 2019", "words": "led throughout in Beijing to win international basketball's biggest prize a second time" }
+        ]
+      },
+      "name": {
+        "says": "Played under the name Basketball World Cup.",
+        "value": "Basketball World Cup",
+        "reads": [
+          { "url": "https://www.fiba.basketball/basketballworldcup/2019/standings", "who": "FIBA", "words": "FIBA Basketball World Cup 2019" },
+          { "url": "https://www.basketball-reference.com/international/fiba-world-cup/2019.html", "who": "Basketball Reference", "words": "FIBA Basketball World Cup - 2019 Standings and Stats" }
+        ]
+      },
+      "shape": {
+        "says": "Thirty two teams in eight groups of four, the top two of each to a second group round of four groups of four, the top two of those to the quarter-finals, then semi-finals, a third place game and a final. The engine plays no second group round, so the game plays it as eight groups of four into a round of 16.",
+        "value": "wc-8x4-2r",
+        "reads": [
+          { "url": "https://www.landofbasketball.com/world_cup/2019_results.htm", "who": "Land of Basketball", "words": "First-round Groups A to H of four; second-round Group I: Poland, Russia, Venezuela, Argentina ... Group L: Australia, Dominican Republic, France, Lithuania. Quarter-finals ... 3rd place game: France 67, Australia 59" },
+          { "url": "https://www.fiba.basketball/basketballworldcup/2019/standings", "who": "FIBA", "words": "Final standings 1 Spain to 32 Philippines (thirty two teams)" },
+          { "url": "https://about.fiba.basketball/en/our-sport/basketball/national-team-competition-systems/fiba-basketball-world-cup", "who": "FIBA", "words": "to a record 32 national teams for the 2019 edition" }
+        ]
+      },
+      "field": {
+        "says": "The thirty two nations as they played.",
+        "value": ["Poland", "Venezuela", "Ivory Coast", "China", "Russia", "Nigeria", "South Korea", "Argentina", "Iran", "Puerto Rico", "Spain", "Tunisia", "Angola", "Serbia", "Philippines", "Italy", "Czech Republic", "USA", "Turkey", "Japan", "New Zealand", "Brazil", "Greece", "Montenegro", "Dominican Republic", "Jordan", "France", "Germany", "Canada", "Australia", "Senegal", "Lithuania"],
+        "reads": [
+          { "url": "https://www.landofbasketball.com/world_cup/2019_results.htm", "who": "Land of Basketball", "words": "Group A: Poland, Venezuela, Ivory Coast, China. Group B: Russia, Nigeria, South Korea, Argentina. Group C: Iran, Puerto Rico, Spain, Tunisia. Group D: Angola, Serbia, Philippines, Italy. Group E: Czech Republic, USA, Turkey, Japan. Group F: New Zealand, Brazil, Greece, Montenegro. Group G: Dominican Republic, Jordan, France, Germany. Group H: Canada, Australia, Senegal, Lithuania" },
+          { "url": "https://www.fiba.basketball/basketballworldcup/2019/standings", "who": "FIBA", "words": "Spain, Argentina, France, Australia, Serbia, Czech Republic, USA, Poland, Lithuania, Italy, Greece, Russia, Brazil, Venezuela, Puerto Rico, Dominican Republic, Nigeria, Germany, New Zealand, Tunisia, Canada, Turkey, Iran, China, Montenegro, Korea, Angola, Jordan, Cote d'Ivoire, Senegal, Japan, Philippines" },
+          { "url": "https://www.basketball-reference.com/international/fiba-world-cup/2019.html", "who": "Basketball Reference", "words": "Spain, Argentina, Australia, United States, Serbia, France, New Zealand, Nigeria, Lithuania, Russia, Italy, Greece, Germany, Tunisia, Brazil, Czech Republic, Poland, Puerto Rico, Turkey, Venezuela, Iran, Dominican Republic, China, Canada, Montenegro, Korea, Jordan, Angola, Philippines, Japan, Senegal, Ivory Coast" }
+        ]
+      },
+      "rungs": {
+        "says": "Gold Spain, silver Argentina, bronze France, fourth Australia; out in the quarter-finals Serbia, Poland, the USA and the Czech Republic.",
+        "value": ["Spain", "Argentina", "France", "Australia", ["Serbia", "Poland", "USA", "Czech Republic"]],
+        "reads": [
+          { "url": "https://www.landofbasketball.com/world_cup/2019_results.htm", "who": "Land of Basketball", "words": "Quarter-finals: Argentina 97, Serbia 87; Spain 90, Poland 78; USA 79, France 89; Australia 82, Czech Republic 70. 3rd place game: France 67, Australia 59. Final: Spain 95, Argentina 75" },
+          { "url": "https://www.fiba.basketball/basketballworldcup/2019/standings", "who": "FIBA", "words": "1 Spain, 2 Argentina, 3 France, 4 Australia, 5 Serbia, 6 Czech Republic, 7 USA, 8 Poland" },
+          { "url": "https://en.mercopress.com/2019/09/16/spain-wins-basketball-world-cup-crushing-argentina-95-75", "who": "MercoPress, 16 September 2019", "words": "Meanwhile France roared back after half-time to defeat Australia 67-59 and claim a second World Cup bronze in a row" }
+        ]
+      }
+    },
+    "wc-2023": {
+      "calendar": {
+        "says": "The 2023 Basketball World Cup in Indonesia, Japan and the Philippines, 25 August to 10 September 2023, the final in Manila.",
+        "value": { "comp": "wc", "year": 2023, "host": "Indonesia, Japan and the Philippines" },
+        "reads": [
+          { "url": "https://www.fiba.basketball/basketballworldcup/2023", "who": "FIBA", "words": "Host: Indonesia, Japan, Philippines. Date: 25 Aug - 10 Sept 2023" },
+          { "url": "https://www.eurohoops.net/en/fibawc/1086922/fiba-sets-target-for-world-cup-co-host-indonesia/", "who": "Eurohoops, 3 August 2020", "words": "The 2023 FIBA World Cup is scheduled to take place in Indonesia, Japan, and Philippines between 25 August and 10 September." }
+        ]
+      },
+      "name": {
+        "says": "Played under the name Basketball World Cup.",
+        "value": "Basketball World Cup",
+        "reads": [
+          { "url": "https://www.fiba.basketball/basketballworldcup/2023/standings", "who": "FIBA", "words": "FIBA Basketball World Cup 2023" },
+          { "url": "https://www.basketball-reference.com/international/fiba-world-cup/2023.html", "who": "Basketball Reference", "words": "FIBA Basketball World Cup - 2023 Standings and Stats" }
+        ]
+      },
+      "shape": {
+        "says": "Thirty two teams in eight groups of four, the top two of each to a second group round of four groups of four, the top two of those to the quarter-finals, then semi-finals, a third place game and a final. The game plays it as eight groups of four into a round of 16.",
+        "value": "wc-8x4-2r",
+        "reads": [
+          { "url": "https://www.landofbasketball.com/world_cup/2023_results.htm", "who": "Land of Basketball", "words": "First-round Groups A to H of four; second-round Group I: Serbia, Italy, Dominican Republic, Puerto Rico ... Group L: Spain, Latvia, Canada, Brazil. Quarter-finals ... 3rd place game: USA 118-127 Canada" },
+          { "url": "https://www.fiba.basketball/basketballworldcup/2023/standings", "who": "FIBA", "words": "Final standings 1 Germany to 32 Jordan (thirty two teams)" },
+          { "url": "https://www.aljazeera.com/sports/2023/9/10/germany-beat-serbia-to-win-first-ever-fiba-basketball-world-cup", "who": "Al Jazeera, 10 September 2023", "words": "Canada bagged their first World Cup podium finish at the expense of short-handed United States 127-118 in overtime in a riveting, record-setting bronze-medal game" }
+        ]
+      },
+      "field": {
+        "says": "The thirty two nations as they played.",
+        "value": ["Italy", "Dominican Republic", "Angola", "Philippines", "South Sudan", "Puerto Rico", "China", "Serbia", "Jordan", "Greece", "USA", "New Zealand", "Mexico", "Montenegro", "Egypt", "Lithuania", "Finland", "Australia", "Germany", "Japan", "Cape Verde", "Georgia", "Slovenia", "Venezuela", "Iran", "Brazil", "Spain", "Ivory Coast", "Latvia", "Lebanon", "Canada", "France"],
+        "reads": [
+          { "url": "https://www.landofbasketball.com/world_cup/2023_results.htm", "who": "Land of Basketball", "words": "Group A: Italy, Dominican Republic, Angola, Philippines. Group B: South Sudan, Puerto Rico, China, Serbia. Group C: Jordan, Greece, USA, New Zealand. Group D: Mexico, Montenegro, Egypt, Lithuania. Group E: Finland, Australia, Germany, Japan. Group F: Cape Verde, Georgia, Slovenia, Venezuela. Group G: Iran, Brazil, Spain, Ivory Coast. Group H: Latvia, Lebanon, Canada, France" },
+          { "url": "https://www.fiba.basketball/basketballworldcup/2023/standings", "who": "FIBA", "words": "Germany, Serbia, Canada, USA, Latvia, Lithuania, Slovenia, Italy, Spain, Australia, Montenegro, Puerto Rico, Brazil, Dominican Republic, Greece, Georgia, South Sudan, France, Japan, Egypt, Finland, New Zealand, Lebanon, Philippines, Mexico, Angola, Cote d'Ivoire, Cape Verde, China, Venezuela, Iran, Jordan" },
+          { "url": "https://www.basketball-reference.com/international/fiba-world-cup/2023.html", "who": "Basketball Reference", "words": "Lithuania, Spain, Canada, Serbia, Slovenia, Dominican Republic, United States, Germany, Japan, Italy, France, South Sudan, Egypt, Lebanon, Finland, Latvia, Georgia, Brazil, Australia, Montenegro, Greece, Puerto Rico, New Zealand, Philippines, Mexico, Angola, Ivory Coast, Cape Verde, China, Jordan, Iran, Venezuela" }
+        ]
+      },
+      "rungs": {
+        "says": "Gold Germany, silver Serbia, bronze Canada, fourth the USA; out in the quarter-finals Italy, Lithuania, Latvia and Slovenia.",
+        "value": ["Germany", "Serbia", "Canada", "USA", ["Italy", "Lithuania", "Latvia", "Slovenia"]],
+        "reads": [
+          { "url": "https://www.landofbasketball.com/world_cup/2023_results.htm", "who": "Land of Basketball", "words": "Quarter-finals: Italy 63-100 USA; Lithuania 68-87 Serbia; Germany 81-79 Latvia; Canada 100-89 Slovenia. 3rd place game: USA 118-127 Canada. Final: Germany 83-77 Serbia" },
+          { "url": "https://www.fiba.basketball/basketballworldcup/2023/standings", "who": "FIBA", "words": "1 Germany, 2 Serbia, 3 Canada, 4 USA, 5 Latvia, 6 Lithuania, 7 Slovenia, 8 Italy" },
+          { "url": "https://www.basketball-reference.com/international/fiba-world-cup/2023.html", "who": "Basketball Reference", "words": "Gold: Germany. Silver: Serbia. Bronze: Canada" }
+        ]
+      }
+    },
+    "wc-2027": {
+      "calendar": {
+        "says": "The 2027 Basketball World Cup in Qatar, all in Doha, from 27 August 2027. Still to be played on the day this was read.",
+        "value": { "comp": "wc", "year": 2027, "host": "Qatar" },
+        "reads": [
+          { "url": "https://about.fiba.basketball/en/our-sport/basketball/national-team-competition-systems/fiba-basketball-world-cup", "who": "FIBA", "words": "The 2027 edition will be hosted in Qatar and feature 32 nations." },
+          { "url": "https://wtop.com/news/2026/06/fiba-still-planning-for-basketball-world-cup-in-qatar-in-2027-as-scheduled/", "who": "The Associated Press, carried by WTOP, June 2026", "words": "The 32-team tournament is set to begin on Aug. 27, 2027, and runs for about 2 1/2 weeks, all happening in Doha." },
+          { "url": "https://www.eurohoops.net/en/fibawc/1824469/2027-fiba-world-cup-qualifiers-are-set/amp/", "who": "Eurohoops, 13 May 2025", "words": "the draw took place in Doha, Qatar, where the competition will be held" }
+        ]
+      },
+      "name": {
+        "says": "To be played under the name Basketball World Cup.",
+        "value": "Basketball World Cup",
+        "reads": [
+          { "url": "https://about.fiba.basketball/en/our-sport/basketball/national-team-competition-systems/fiba-basketball-world-cup", "who": "FIBA", "words": "FIBA Basketball World Cup ... The 2027 edition will be hosted in Qatar" },
+          { "url": "https://wtop.com/news/2026/06/fiba-still-planning-for-basketball-world-cup-in-qatar-in-2027-as-scheduled/", "who": "The Associated Press, carried by WTOP, June 2026", "words": "FIBA still planning for Basketball World Cup in Qatar in 2027 as scheduled" }
+        ]
+      },
+      "shape": {
+        "says": "Thirty two teams (two reads). How they are grouped and how many go through was not found in any read, so the game plays the last verified World Cup shape, 2023's, as the game plays it.",
+        "value": "wc-8x4-2r",
+        "short": "The 2027 competition system is not in any page read on 2026-10-22; only the team count is.",
+        "reads": [
+          { "url": "https://about.fiba.basketball/en/our-sport/basketball/national-team-competition-systems/fiba-basketball-world-cup", "who": "FIBA", "words": "The 2027 edition will be hosted in Qatar and feature 32 nations." },
+          { "url": "https://wtop.com/news/2026/06/fiba-still-planning-for-basketball-world-cup-in-qatar-in-2027-as-scheduled/", "who": "The Associated Press, carried by WTOP, June 2026", "words": "The 32-team tournament is set to begin on Aug. 27, 2027" }
+        ]
+      }
+    },
+    "oly-2028": {
+      "calendar": {
+        "says": "The 2028 Olympics in Los Angeles, the men's tournament in July 2028.",
+        "value": { "comp": "oly", "year": 2028, "host": "Los Angeles" },
+        "reads": [
+          { "url": "https://about.fiba.basketball/en/our-sport/basketball/national-team-competition-systems/olympic-mens-basketball-tournaments", "who": "FIBA", "words": "The LA 2028 Olympic Basketball Tournament will feature 12 teams and will be held in July." },
+          { "url": "https://cdn.nocnsf.nl/media/kcgkdtvi/bkb-la28-qualification-system.pdf", "who": "the IOC qualification system for LA28, carried by NOC*NSF, version of 12 May 2026", "words": "QUALIFICATION SYSTEM GAMES OF THE XXXIV OLYMPIAD - LA28 ... Host country - United States" }
+        ]
+      },
+      "name": {
+        "says": "The men's basketball tournament of the Olympic Games.",
+        "value": "Olympics",
+        "reads": [
+          { "url": "https://about.fiba.basketball/en/our-sport/basketball/national-team-competition-systems/olympic-mens-basketball-tournaments", "who": "FIBA", "words": "The LA 2028 Olympic Basketball Tournament" },
+          { "url": "https://cdn.nocnsf.nl/media/kcgkdtvi/bkb-la28-qualification-system.pdf", "who": "the IOC qualification system for LA28, carried by NOC*NSF, version of 12 May 2026", "words": "GAMES OF THE XXXIV OLYMPIAD - LA28 ... BASKETBALL" }
+        ]
+      },
+      "shape": {
+        "says": "Twelve teams (two reads). The groups and who goes through were not found in any read, so the game plays the last verified Olympic shape, 2024's.",
+        "value": "oly-3x4",
+        "short": "The LA 2028 competition system is not in any page read on 2026-10-22; only the team count is.",
+        "reads": [
+          { "url": "https://about.fiba.basketball/en/our-sport/basketball/national-team-competition-systems/olympic-mens-basketball-tournaments", "who": "FIBA", "words": "The LA 2028 Olympic Basketball Tournament will feature 12 teams" },
+          { "url": "https://cdn.nocnsf.nl/media/kcgkdtvi/bkb-la28-qualification-system.pdf", "who": "the IOC qualification system for LA28, carried by NOC*NSF, version of 12 May 2026", "words": "EVENTS MEN 12-team tournament ... TOTAL 144 (12 teams)" }
+        ]
+      }
+    },
+    "wc-2031": {
+      "calendar": {
+        "says": "The 2031 Basketball World Cup in France, in Lille, Lyon and Paris, 29 August to 14 September 2031, the final phase in Paris.",
+        "value": { "comp": "wc", "year": 2031, "host": "France" },
+        "reads": [
+          { "url": "https://www.cp24.com/news/sports/2026/04/22/france-to-host-mens-basketball-world-cup-in-2031-japan-gets-2030-womens-tournament/", "who": "The Associated Press, carried by CP24, 22 April 2026", "words": "France was awarded the hosting rights to the 2031 men's tournament ... The French cities of Lyon, Lille and Paris will organize the Aug. 29-Sept. 14 men's tournament" },
+          { "url": "https://www.eurohoops.net/en/fibawc/1959483/france-attendance-plans-victor-wembanyama-world-cup-fiba/", "who": "Eurohoops, 23 April 2026", "words": "France has been awarded the FIBA World Cup 2031 hosting rights ... August 29 to September 14, 2031" },
+          { "url": "https://about.fiba.basketball/en/our-sport/basketball/national-team-competition-systems/fiba-basketball-world-cup", "who": "FIBA", "words": "FIBA Basketball World Cup 2031, August 29-14 September, 2031" }
+        ]
+      },
+      "name": {
+        "says": "To be played under the name Basketball World Cup.",
+        "value": "Basketball World Cup",
+        "reads": [
+          { "url": "https://about.fiba.basketball/en/our-sport/basketball/national-team-competition-systems/fiba-basketball-world-cup", "who": "FIBA", "words": "FIBA Basketball World Cup 2031" },
+          { "url": "https://www.eurohoops.net/en/fibawc/1959483/france-attendance-plans-victor-wembanyama-world-cup-fiba/", "who": "Eurohoops, 23 April 2026", "words": "France has been awarded the FIBA World Cup 2031 hosting rights" }
+        ]
+      },
+      "shape": {
+        "says": "Not published. The game plays the last verified World Cup shape, 2023's, as the game plays it.",
+        "value": "wc-8x4-2r",
+        "short": "No team count or competition system for 2031 in any page read on 2026-10-22.",
+        "reads": []
+      }
+    },
+    "oly-2032": {
+      "calendar": {
+        "says": "The 2032 Olympics in Brisbane, elected by the IOC on 21 July 2021.",
+        "value": { "comp": "oly", "year": 2032, "host": "Brisbane" },
+        "reads": [
+          { "url": "https://www.worldathletics.org/competitions/olympic-games/news/brisbane-host-2032-olympic-games", "who": "World Athletics, 21 July 2021", "words": "Brisbane is to stage the Olympic Games in 2032. IOC Members voted to elect the Australian city as host of the Games of the XXXV Olympiad." },
+          { "url": "https://www.nbcnewyork.com/news/sports/brisbane-picked-host-2032-olympics-without-rival-bid/", "who": "The Associated Press, carried by NBC New York, 21 July 2021", "words": "Brisbane was picked Wednesday to host the 2032 Olympics" }
+        ]
+      },
+      "name": {
+        "says": "The men's basketball tournament of the Olympic Games.",
+        "value": "Olympics",
+        "reads": [
+          { "url": "https://www.worldathletics.org/competitions/olympic-games/news/brisbane-host-2032-olympic-games", "who": "World Athletics, 21 July 2021", "words": "Brisbane is to stage the Olympic Games in 2032." },
+          { "url": "https://www.nbcnewyork.com/news/sports/brisbane-picked-host-2032-olympics-without-rival-bid/", "who": "The Associated Press, carried by NBC New York, 21 July 2021", "words": "Brisbane was picked Wednesday to host the 2032 Olympics" }
+        ]
+      },
+      "shape": {
+        "says": "Not published. The game plays the last verified Olympic shape, 2024's.",
+        "value": "oly-3x4",
+        "short": "No team count or competition system for 2032 in any page read on 2026-10-22, and no page read names the men's basketball tournament on the Brisbane programme (the organisers' venue page answered 404); the game assumes it, as basketball has been played at every Games since 1936 (Olympedia event_names/121).",
+        "reads": []
+      }
+    }
+  }
+}
