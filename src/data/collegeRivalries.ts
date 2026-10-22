@@ -11,9 +11,9 @@
  * series. It never claims the series is played every year or in the last
  * week, and the game shows it only as "a real rivalry series". `name` is
  * shown beside it, and it is filled only where BOTH sources use that name;
- * where a name is new, disputed or not on both, it is left out (Baylor and
- * TCU formalised a new name in 2023, and the Kansas State and Iowa State
- * nickname is one the schools have pushed back on, so neither carries one).
+ * where a name is not on both, it is left out, and a row may also leave a
+ * name out by choice, as the Kansas State and Iowa State row and the Baylor
+ * and TCU row do.
  *
  * Every row was checked on 2026-10-22 on two publishers that are not a wiki
  * (the schools' own athletics sites, the NCAA, ESPN, CBS, SI, local news).
