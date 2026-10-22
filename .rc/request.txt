@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+lottery-walk: node scripts/playNbaLotteryNight.mjs
