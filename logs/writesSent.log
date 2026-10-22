@@ -1,0 +1,3 @@
+  FAIL: there is no dist to serve, so the runtime half could not run
+
+simWritesAreSent: 1 failure

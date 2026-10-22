@@ -1,0 +1,4 @@
+#!playwright
+#!serial
+writesSent: node scripts/simWritesAreSent.mjs > /tmp/s2.log 2>&1; s=$?; grep -E "FAIL|Error" /tmp/s2.log | head -8 | cut -c1-240; tail -2 /tmp/s2.log | cut -c1-200; exit $s
+resultMoment: node scripts/simResultMoment.mjs > /tmp/s3.log 2>&1; s=$?; grep -E "FAIL|Error" /tmp/s3.log | head -8 | cut -c1-240; tail -2 /tmp/s3.log | cut -c1-200; exit $s
