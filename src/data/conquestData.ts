@@ -109,6 +109,12 @@ export interface NFLTeam {
 // overall = round((offense + defense) / 2). Abbreviations normalized (LA -> LAR)
 // before joining to this table's team ids. Recompute by re-running the same
 // query/script if nflfastr_team_stats is refreshed for a new season.
+//
+// Key stats (Round 1547) are written by scripts/genConquestKeyStats.mjs, never
+// by hand: each is the man's 2025 regular season line as nflverse and ESPN both
+// print it (scripts/data/nfl2025Production.json), with the season in the text.
+// A row the two cannot back, every defender and lineman among them, prints
+// none. scripts/simConquestPeople.mjs goes red on any other key stat.
 export const NFL_TEAMS: NFLTeam[] = [
   { id: 'KC', name: 'Chiefs', city: 'Kansas City', rating: 99, color: '#E31837', secondaryColor: '#FFB81C', offense: 79, defense: 77, overall: 78, roster: [], players: [
     { name: 'Patrick Mahomes', position: 'QB', overall: 97, keyStat: '2025: 3,587 pass yds' },
