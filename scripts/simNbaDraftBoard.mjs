@@ -581,6 +581,10 @@ async function child() {
 
   localStorage.clear();
   if (save) localStorage.setItem(KEY, JSON.stringify(save));
+  /* React's act draws one number the first time it queues a task (enqueueTask names a module with Math.random). On an
+     earned night that draw is taken before the counted stream starts, so the board's stream is the board's alone and
+     the library replay can match it; section 1's old paths keep it inside, as their fixture was recorded. */
+  if (!OLD && job.mode !== 'mount') await act(async () => {});
   const draw = lehmer(job.mode === 'mount' ? 999000 + job.seed : drawSeed);
   /* SIM_NBA_DRAFT_BOARD_DEBUG: where the board drew before the open, if it did. */
   const earlyStacks = [];
