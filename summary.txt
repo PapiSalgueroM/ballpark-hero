@@ -1,0 +1,4 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+weight exit=0 29s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+walk-gate exit=1 30s | playSoccerMoraleLine: RED, 2 failed
+walk exit=0 44s | playSoccerMoraleLine: green

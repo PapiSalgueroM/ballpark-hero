@@ -1,0 +1,6 @@
+  390: morale 95 played 22 league games against 21 at 81, its line "Morale 95: up to 1 more league game, rating +0.1 this season."
+  390: morale 40 played 21 league games against 21 at 81, its line "Morale 40: up to 2 fewer league games, rating -0.2 this season."
+  1280: morale 95 played 22 league games against 21 at 81, its line "Morale 95: up to 1 more league game, rating +0.1 this season."
+  1280: morale 40 played 21 league games against 21 at 81, its line "Morale 40: up to 2 fewer league games, rating -0.2 this season."
+94 checks
+playSoccerMoraleLine: green
