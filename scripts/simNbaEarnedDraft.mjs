@@ -292,6 +292,19 @@
  *   checks; section 12 1,800 deals (46 his, 1,745 kept, 55 trimmed, 858 second rounders, 30 his); section 11 46
  *   known answers, 38 verdicts held; CONTROL=all 30 fired, the new ones summerdeal 2,075 (12), judgeres 12,
  *   judgeagree 12, judgepass 18, judgefleet 2 (11); the rest as listed for r1321-k8.
+ * MEASURED 2026-10-22, the lead's rulings E1 to E4 (lead-rulings-1321-e.md) on the SAME fleet files, no replay
+ * (r1321-fx-f1, r1321-fx-f2 and r1321-fx-fc, judged again by r1321-fe-a on 38a9129b), 12 sets, two runs, each run
+ * held to its band, the gap between the runs printed in errors of the gap:
+ *   S1 at 5 +0.27 / +0.26 (0.01), gap 0.4 errors: PASS.   S1 at 10 +0.96 / +0.98 (0.01), gap 0.022 (0.010, 2.1
+ *   errors), both runs inside -0.5 to +1.5: PASS.   S2 +2.2 / +2.3 (0.2), gap 0.5 errors: PASS.   S3 -37.7 /
+ *   -37.5: PRINTED.   S4 63.8 / 64.9 (1.0, 0.9), gap 0.8 errors: PASS.   S6 dead 2.90 / 2.92 (0.02, 0.03), gap 0.4
+ *   errors: PASS.   S6 payers -0.36 / -0.36 (0.01), gap 0.1 errors: PASS.   S5 pooled over 24 sets: pick +3.52,
+ *   +5.39, +4.54, +5.41, +5.24 (37.8 to 181.1 errors), rating -2.42, -7.39, -3.77, -0.55, -0.35 (26.6, 72.2, 43.8,
+ *   11.4, 11.9 errors): PASS; 23 of 24 sets rise at every band (printed, never asserted). The table: green, exit 0.
+ *   Fleet controls: fatclass FIRED (S1 at 5 by 2.27, 100.1 errors; S1 at 10 by 3.90; S2 by 35.7; payers by
+ *   10.33); bestfirst FIRED (S5 outside at 1-5 to 6-10, pick -9.5 and rating -12.4 errors, and at 21-25 to 26-30,
+ *   pick -30.4 and rating 0.4 errors). Section 11: 79 known answers, 71 verdicts held. The judge's controls under
+ *   that COMBINE: judgestraddle 52 (11), judgerise 4 (11), judgeflip 36 and 3 (11 and 7).
  */
 import './lib/seedRandom.mjs';
 import fs from 'node:fs';
@@ -1783,7 +1796,9 @@ function twoArmTable(table) {
   /* S5 as ruled (E2): the pooled rise at every band, each step by at least two of its own errors; the count of sets
      that rise at every band is printed beside it and never asserted. */
   const rise = judgeRise(vs, runs);
-  const stepText = rise.steps.map(s => `${s.from} to ${s.to}: pick +${fix(s.pick.m, 2)} (${fix(s.pick.se, 2)}, ${fix(s.pick.z, 1)} errors), rating -${fix(s.fall.m, 2)} (${fix(s.fall.se, 2)}, ${fix(s.fall.z, 1)} errors), ${s.n} sets`).join('; ');
+  /* the pick number's change and the true rating's change, each signed; the errors count the rise (later, worse) */
+  const signed = v => `${v > 0 ? '+' : ''}${fix(v, 2)}`;
+  const stepText = rise.steps.map(s => `${s.from} to ${s.to}: pick ${signed(s.pick.m)} (${fix(s.pick.se, 2)}, ${fix(s.pick.z, 1)} errors), rating ${signed(-s.fall.m)} (${fix(s.fall.se, 2)}, ${fix(s.fall.z, 1)} errors), ${s.n} sets`).join('; ');
   const thin = rise.steps.filter(s => !s.pick.ok || !s.fall.ok).map(s => `${s.from} to ${s.to}${s.pick.ok ? '' : ` pick ${fix(s.pick.z, 1)} errors`}${s.fall.ok ? '' : ` rating ${fix(s.fall.z, 1)} errors`}`);
   const riseSaid = rise.verdict === 'OUTSIDE' ? `OUTSIDE at ${thin.length ? thin.join(', ') : `${rise.steps.length} steps, not 5`}` : rise.verdict;
   md.push(`| S5: his first selection later and worse from each band of finish to the next, pooled over every set of both runs (ruled 2026-10-22) | flat (pick 1) | ${rise.perSet} of ${rise.sets} sets rise at every band (printed, never asserted) | ${stepText} | | each step positive by at least ${RISE_ERRORS} of its errors | ${rise.sets} | ${riseSaid} |`);
