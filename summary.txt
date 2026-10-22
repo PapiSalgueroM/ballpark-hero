@@ -1,0 +1,3 @@
+diffproof exit=0 0s | diffproof-ok
+earned exit=0 14s | simNbaEarnedDraft: green.
+anchors exit=0 41s | No rival product names found. 0 findings.
