@@ -42,7 +42,7 @@ import {
   giveWorldCupSpeech, type WorldCupSpeechChoice, manualRetire, choosePostRetirement, advanceManagerSeason, acceptManagerOffer, endManagerCareer, loadManagerMarket,
   acceptRetirementSuggestion, declineRetirementSuggestion, announceFarewellSeason,
   advancePunditSeason, endPunditCareer, punditLegacyPaid, playedSeniorSeason, POST_RETIREMENT_BONUS_CAP,
-  advanceOwnerSeason, endOwnerCareer, ownerClubsOnSale, chooseOwnerPlan, type OwnerPlan,
+  advanceOwnerSeason, endOwnerCareer, type OwnerPlan,
   dismissNewspaper, purchaseSpendingItem, SPENDING_ITEMS,
   applySocialMediaAction, handleCoverAthleteDecision, dismissSocialMediaPhase,
   applyMoralDilemmaChoice, dismissMoralDilemma, MORAL_DILEMMAS,
@@ -60,7 +60,7 @@ import {
   nextSeasonYear, managerNextSeasonYear,
 } from "@/lib/soccerCareerEngine";
 import type { FirstStageStage } from "@/lib/soccerCareerContinental";
-import { OWNER_EFFECTS, OWNER_PLANS, ownerBudget, ownerLevels, ownerPlanOpen, ownerPlanWords } from "@/lib/soccerCareerOwner";
+import { OWNER_EFFECTS, OWNER_PLANS, chooseOwnerPlan, ownerBudget, ownerClubsOnSale, ownerLevels, ownerPlanOpen, ownerPlanWords } from "@/lib/soccerCareerOwner";
 import { careerBeforeBallonDorReveal, revealBallonDorResult, ballonDorAwaitingReveal } from "@/lib/soccerAwardReveal";
 import { readLeagueWorldSeason } from "@/lib/soccerCareerLeagueWorld";
 import { soccerExtensionQuote } from "@/lib/soccerCareerContracts";

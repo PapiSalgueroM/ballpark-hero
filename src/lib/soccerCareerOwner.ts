@@ -20,7 +20,7 @@
    the save and the season, so the same save plays the same season in any tab
    and the only thing a different choice changes is the choice's own effect.
    Elite clubs (tier 1) are never for sale; a club gets there by promotion. */
-import type { ClubData, OwnerPlan, OwnerSeasonRow, OwnerState } from "./soccerCareerEngine";
+import type { CareerState, ClubData, OwnerPlan, OwnerSeasonRow, OwnerState } from "./soccerCareerEngine";
 import { adjustClubsForYear } from "./careerEras";
 import { divisionMove, finishZone, keyedStream, leagueKeyInYear, managerLeagueField, ordinal, playDugoutTable } from "./soccerCareerLeague";
 
@@ -170,6 +170,25 @@ export function ownerClubsForSale(input: { clubs: readonly ClubData[]; year: num
     }
   }
   return out;
+}
+
+/** The save's own key for the owner tail: the identity the summer deck keys on (soccerDeckIdentity in the
+ *  engine), then "owner". Here rather than in the engine so the page reaches the list and the call without a new
+ *  engine export (the history harnesses bundle the page beside an older engine). */
+export function ownerSaveKey(s: Pick<CareerState, "playerName" | "era" | "nationality" | "position">): string {
+  return `${s.playerName}|${s.era}|${s.nationality}|${s.position}|owner`;
+}
+
+/** The clubs he can buy at the end of this career, the same list on every visit. */
+export function ownerClubsOnSale(state: CareerState, clubs: readonly ClubData[]): OwnerClubForSale[] {
+  const firstYear = (state.seasons[state.seasons.length - 1]?.year ?? 2024) + 1;
+  return ownerClubsForSale({ clubs, year: firstYear, netWorth: state.netWorth, key: ownerSaveKey(state) });
+}
+
+/** Where the coming season's budget goes; a call that is not open this season changes nothing. */
+export function chooseOwnerPlan(prev: CareerState, plan: OwnerPlan): CareerState {
+  if (prev.phase !== "owner_season" || !prev.ownerState || !ownerPlanOpen(prev.ownerState, plan)) return prev;
+  return { ...prev, ownerState: { ...prev.ownerState, plan } };
 }
 
 /** A new owner's state for the club he bought. */

@@ -43,7 +43,7 @@ import type { PhoneChoiceDef } from "./careerEras";
 import type { SoccerInternationalReturn } from './soccerInternationalReturn';
 /* Round 929: every season's league finish, and the era aware elite rule. */
 import { divisionMove, drawLeagueFinish, eliteInYear, finishZone, leagueKeyInYear, managerLeagueField, MANAGER_FIELD, ordinal, playDugoutTable } from "./soccerCareerLeague";
-import { OWNER_TIERS, ownerClubsForSale, ownerPlanOpen, ownerStart, playOwnerSeason, type OwnerClubForSale } from "./soccerCareerOwner";
+import { OWNER_TIERS, ownerClubsOnSale, ownerSaveKey, ownerStart, playOwnerSeason } from "./soccerCareerOwner";
 /* Round 1012: real club rivalries, played as league derbies each season. */
 import { resolveSeasonDerbies, applySeasonDerbies, type SeasonDerby } from "./soccerCareerDerby";
 import { cupAssociation, cupChanceFor, cupFor as domesticCupFor, cupTitle, drawCupRun, readCupRun, seasonPerformanceBoost, worldLeagueOf, type CupRun } from "./soccerCareerCup";
@@ -9234,30 +9234,14 @@ export function endPunditCareer(prev: CareerState): CareerState {
 }
 
 /* ─── Club Owner Career ─── */
-/* Round 1524: the owner tail is soccerCareerOwner.ts. These are its doors:
-   the list of clubs for sale, the season's call, and the season itself. */
-function ownerKey(s: CareerState): string {
-  return `${soccerDeckIdentity(s)}|owner`;
-}
-
-/** The clubs he can buy at the end of this career, the same list on every visit. */
-export function ownerClubsOnSale(state: CareerState, clubs: readonly ClubData[]): OwnerClubForSale[] {
-  const firstYear = (state.seasons[state.seasons.length - 1]?.year ?? 2024) + 1;
-  return ownerClubsForSale({ clubs, year: firstYear, netWorth: state.netWorth, key: ownerKey(state) });
-}
-
-/** Where the coming season's budget goes; a call that is not open this season changes nothing. */
-export function chooseOwnerPlan(prev: CareerState, plan: OwnerPlan): CareerState {
-  if (prev.phase !== "owner_season" || !prev.ownerState || !ownerPlanOpen(prev.ownerState, plan)) return prev;
-  return { ...prev, ownerState: { ...prev.ownerState, plan } };
-}
-
+/* Round 1524: the owner tail is soccerCareerOwner.ts (the list of clubs for
+   sale and the season's call live there too); this is the season itself. */
 export function advanceOwnerSeason(prev: CareerState, clubs: readonly ClubData[] = []): CareerState {
   const s = { ...prev };
   if (!s.ownerState) return s;
   const season = s.ownerState.season + 1;
   const year = (s.seasons[s.seasons.length - 1]?.year ?? 2024) + season;
-  const { os, result, income } = playOwnerSeason(s.ownerState, { clubs, year, key: `${ownerKey(s)}|${s.ownerState.club}|${season}` });
+  const { os, result, income } = playOwnerSeason(s.ownerState, { clubs, year, key: `${ownerSaveKey(s)}|${s.ownerState.club}|${season}` });
   s.netWorth += income;
   s.ownerState = os;
   s.events = [...s.events, `🏟️ Owner Season ${os.season} at ${os.club}: ${result}`];

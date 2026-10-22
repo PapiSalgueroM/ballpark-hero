@@ -184,7 +184,7 @@ if (ONLY.has(1)) {
   if (c0.phase !== 'retirement_ceremony') fail(`the seeded career ended in ${c0.phase}, not at the ceremony`);
   const bands = { 49: 0, 60: 2, 200: 4, 249: 4, 250: 6, 900: 6 };
   for (const [nw, want] of Object.entries(bands)) {
-    const list = E.ownerClubsOnSale(named(c0, 0, Number(nw)), CLUBS);
+    const list = O.ownerClubsOnSale(named(c0, 0, Number(nw)), CLUBS);
     const tiers = list.map(c => c.tier).join('');
     console.log(`   at €${nw}M: ${list.length} clubs (tiers ${tiers || 'none'})`);
     if (list.length !== want) fail(`at €${nw}M the list holds ${list.length} clubs, not ${want}`);
@@ -200,8 +200,8 @@ if (ONLY.has(1)) {
   let unstable = 0;
   for (let i = 0; i < 60; i += 1) {
     const c = named(c0, i, 300);
-    const a = seeded(1, () => JSON.stringify(E.ownerClubsOnSale(c, CLUBS)));
-    const b = seeded(2, () => JSON.stringify(E.ownerClubsOnSale(c, CLUBS)));
+    const a = seeded(1, () => JSON.stringify(O.ownerClubsOnSale(c, CLUBS)));
+    const b = seeded(2, () => JSON.stringify(O.ownerClubsOnSale(c, CLUBS)));
     if (a.value !== b.value || a.draws + b.draws > 0) unstable += 1;
     for (const club of JSON.parse(a.value)) seen.add(club.name);
   }
@@ -212,7 +212,7 @@ if (ONLY.has(1)) {
   let wrong = 0, drew = 0, bought = 0;
   for (let i = 0; i < 40; i += 1) {
     const c = named(c0, i, 300);
-    const list = E.ownerClubsOnSale(c, CLUBS);
+    const list = O.ownerClubsOnSale(c, CLUBS);
     const want = list[i % list.length];
     const r = seeded(100 + i, () => E.choosePostRetirement(c, 'owner', CLUBS, want.name));
     const os = r.value.ownerState;
@@ -228,17 +228,17 @@ if (ONLY.has(1)) {
   if (wrong > 0) fail(`${wrong} of ${bought} purchases were not the club he picked at its band's price and debt`);
   if (drew > 0) fail(`${drew} purchases drew from Math.random`);
   if (refused !== notForSale) fail('a club that is not for sale was bought');
-  if (first.ownerState?.club !== E.ownerClubsOnSale(notForSale, CLUBS)[0].name) fail('a call with no club does not buy the first on the list');
+  if (first.ownerState?.club !== O.ownerClubsOnSale(notForSale, CLUBS)[0].name) fail('a call with no club does not buy the first on the list');
 }
 
 /* One owner tail through the engine: buy the i-th save's club, then H seasons, each with a call. */
 function ownerTail(i, H, check) {
   const c0 = named(ceremony(), i, 300);
-  const list = E.ownerClubsOnSale(c0, CLUBS);
+  const list = O.ownerClubsOnSale(c0, CLUBS);
   let c = E.choosePostRetirement(c0, 'owner', CLUBS, list[i % list.length].name);
   for (let k = 0; k < H; k += 1) {
     const plan = PLANS[(i + k) % 4];
-    c = E.chooseOwnerPlan(c, O.ownerPlanOpen(c.ownerState, plan) ? plan : 'squad');
+    c = O.chooseOwnerPlan(c, O.ownerPlanOpen(c.ownerState, plan) ? plan : 'squad');
     const before = c;
     c = seeded(i * 1009 + k, () => E.advanceOwnerSeason(c, CLUBS)).value;
     check?.(before, c);
@@ -290,7 +290,7 @@ if (ONLY.has(2)) {
   /* the table is the save's own: the same season under two different Math.random streams is the same season */
   let moved = 0;
   for (let i = 0; i < 30; i += 1) {
-    const c = E.chooseOwnerPlan(ownerTail(i, 2), 'squad');
+    const c = O.chooseOwnerPlan(ownerTail(i, 2), 'squad');
     const a = seeded(7, () => E.advanceOwnerSeason(c, CLUBS)).value.ownerState;
     const b = seeded(8, () => E.advanceOwnerSeason(c, CLUBS)).value.ownerState;
     if (JSON.stringify(a) !== JSON.stringify(b)) moved += 1;
@@ -421,10 +421,10 @@ if (ONLY.has(5)) {
     if ('debt' in old.ownerState || 'plan' in old.ownerState) issues.push('the base wrote a field of this round, so this is not an old save');
     const open = PLANS.filter(p => O.ownerPlanOpen(loaded.ownerState, p));
     if (open.join() !== 'squad,youth,stadium') issues.push(`an old save opens ${open.join(' ')}, not squad, youth and stadium (it has no debt)`);
-    let c = E.chooseOwnerPlan(loaded, open[i % open.length]);
+    let c = O.chooseOwnerPlan(loaded, open[i % open.length]);
     if (c.ownerState.plan !== open[i % open.length]) issues.push('the call was not saved');
     c = seeded(700 + i, () => E.advanceOwnerSeason(c, CLUBS)).value;
-    c = seeded(800 + i, () => E.advanceOwnerSeason(E.chooseOwnerPlan(c, 'squad'), CLUBS)).value;
+    c = seeded(800 + i, () => E.advanceOwnerSeason(O.chooseOwnerPlan(c, 'squad'), CLUBS)).value;
     const os = c.ownerState, rows = os.seasonResults;
     if (os.club !== old.ownerState.club) issues.push(`the club became ${os.club}`);
     if (JSON.stringify(rows.slice(0, 2)) !== oldRows) issues.push('the old rows changed');
