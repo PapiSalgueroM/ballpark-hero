@@ -1,0 +1,13 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+pf1: PLAYFIRST_SHARD=1/3 node scripts/playFirstVisitDialogs.mjs
+pf2: PLAYFIRST_SHARD=2/3 node scripts/playFirstVisitDialogs.mjs
+pf3: PLAYFIRST_SHARD=3/3 node scripts/playFirstVisitDialogs.mjs
+cover: PLAYFIRST_CONTROL=cover ONLY=/stadium-tycoon,/idle-arena,/wonderkid-factory,/build-your-xi,/soccer-conquest,/career-ladder,/football-grid,/club-manager node scripts/playFirstVisitDialogs.mjs
+ratchet: PLAYFIRST_CONTROL=ratchet ONLY=/stadium-tycoon,/idle-arena,/wonderkid-factory,/build-your-xi,/soccer-conquest,/career-ladder,/football-grid,/club-manager node scripts/playFirstVisitDialogs.mjs
+expected: PLAYFIRST_CONTROL=expected ONLY=/stadium-tycoon,/idle-arena,/wonderkid-factory,/build-your-xi,/soccer-conquest,/career-ladder,/football-grid,/club-manager node scripts/playFirstVisitDialogs.mjs
+edge: PLAYFIRST_CONTROL=edge ONLY=/stadium-tycoon,/idle-arena,/wonderkid-factory,/build-your-xi,/soccer-conquest,/career-ladder,/football-grid,/club-manager node scripts/playFirstVisitDialogs.mjs
+lift: PLAYFIRST_CONTROL=lift ONLY=/stadium-tycoon,/idle-arena,/wonderkid-factory,/build-your-xi,/soccer-conquest,/career-ladder,/football-grid,/club-manager node scripts/playFirstVisitDialogs.mjs
+nobanner: PLAYFIRST_CONTROL=nobanner ONLY=/stadium-tycoon,/idle-arena,/wonderkid-factory,/build-your-xi,/soccer-conquest,/career-ladder,/football-grid,/club-manager node scripts/playFirstVisitDialogs.mjs
+badcontrol: PLAYFIRST_CONTROL=nope node scripts/playFirstVisitDialogs.mjs
