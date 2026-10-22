@@ -1,0 +1,9 @@
+simTrustCopy exit=0 1s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+simNbaSeasonStats exit=0 19s | simNbaSeasonStats: 72 checks passed over 10 seeded franchises and 3 seasons each. Every game adds up, the box takes nothing from the league, the awards follow their rules
+simNbaLuxuryTax exit=0 23s | simNbaLuxuryTax: 347 checks passed over 10 seeded franchises and 5 seasons each. The bill is the published formula, a dollar over pays, every season tips off on fourteen 
+simPerfectSeasonOdds exit=0 6s | simPerfectSeasonOdds: green. In all four sports the odds on the card are the odds in the sim, the copy agrees with both, and the best record keeps.
+simMissingElevenSources exit=0 1s | simMissingElevenSources: green. 40 sheets, 39 of them row for row against the record.
+simCmLeagueFixtures exit=0 14s | simCmLeagueFixtures: OK, sections A to J green: 10 ledger(s), 10 frozen, 0 pending, 10 bound, 0 unbound, 3528 fixtures, 268 of 268 controls fired
+simNoRivalNames exit=0 20s | No rival product names found. 0 findings.
+simNoInventedQuotes exit=0 27s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+tsc exit=0 89s | 
