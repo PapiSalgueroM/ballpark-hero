@@ -1,0 +1,2 @@
+save: git worktree add /tmp/base 41368514 >/dev/null 2>&1; ln -sfn $PWD/node_modules /tmp/base/node_modules; node .rc/x/saveProbe.mjs
+save-n2: git worktree add /tmp/base2 41368514 >/dev/null 2>&1; ln -sfn $PWD/node_modules /tmp/base2/node_modules; BASE_ROOT=/tmp/base2 SAVE_PROBE_N=200 node .rc/x/saveProbe.mjs
