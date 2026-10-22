@@ -1,0 +1,17 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-panels: node_modules/.bin/vitest run src/lib/gmDeskHost.test.ts src/components/front-office-shared/GmCareerDesk.test.tsx src/lib/gmXp.test.ts --testTimeout=300000 --hookTimeout=120000
+vitest-board: node_modules/.bin/vitest run src/components/front-office/FrontOfficeOnePress.test.tsx src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx src/components/front-office-shared/FrontOfficeGmCareer.test.tsx --testTimeout=600000 --hookTimeout=120000
+vitest-fo-rest: node_modules/.bin/vitest run src/components/front-office/FrontOfficeGameDay.test.tsx src/components/front-office/FrontOfficeTile.test.tsx src/components/front-office/FrontOfficePostseason.test.tsx --testTimeout=600000 --hookTimeout=120000
+career: node scripts/simGmCareer.mjs
+ctl-deskoffblock: SIM_GM_CAREER_CONTROL=deskoffblock SIM_GM_CAREER_ONLY=2 node scripts/simGmCareer.mjs
+ctl-paytwice: SIM_GM_CAREER_CONTROL=paytwice SIM_GM_CAREER_ONLY=2 node scripts/simGmCareer.mjs
+ctl-lateseat: SIM_GM_CAREER_CONTROL=lateseat SIM_GM_CAREER_ONLY=2 node scripts/simGmCareer.mjs
+ctl-emptytile: SIM_GM_CAREER_CONTROL=emptytile SIM_GM_CAREER_ONLY=8 node scripts/simGmCareer.mjs
+nflgmdesk: node scripts/simNflGmDesk.mjs
+gmreload: node scripts/simGmReload.mjs
+gmxp: node scripts/simGmXp.mjs
+deskhost: node scripts/simGmDeskHost.mjs
+sessionmarks: node scripts/simSessionMarks.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+fob-check: node scripts/controlFrontOfficeBoard.mjs check
+names: grep -rlE "FrontOfficeBoard|nflGmDesk|NflGmDesk|GmXpPanel|GmXpDeskPanel|GmJobMarketPanel|GmCareerPanel|gmDeskHost" scripts/*.mjs scripts/lib/*.mjs src --include=*.mjs --include=*.test.ts --include=*.test.tsx | sort
