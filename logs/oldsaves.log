@@ -1,0 +1,42 @@
+Preparing worktree (detached HEAD 00bffb937)
+HEAD is now at 00bffb937 Round 1531: an unapplied Free Kick cap migration for the new ladder, held by simFreeKick
+old saves: 148 (base engine fleet 144, corpus 4)
+no goal path: 103 compared over 300 s, 45 skipped because a season ended inside
+  pace @5: next match win share base 96.6 96.6 96.6 96.2 96.2 96.2 | head 88 88 88 86.4 86.4 86.4 | div 0 0 0 0 0 0 | head under 25%: 0 of 6
+  pace @15: next match win share base 99.8 99.8 99.8 99.8 99.8 99.8 | head 73 73 73 68.7 68.7 66.6 | div 1 1 1 1 1 1 | head under 25%: 0 of 6
+  pace @30: next match win share base 100 100 100 100 100 100 | head 74.3 74.3 74.3 72.2 74.3 72.2 | div 2 2 2 2 2 2 | head under 25%: 0 of 6
+  pace @60: next match win share base 100 100 100 100 100 100 | head 72.2 72.2 72.2 72.2 72.2 72.2 | div 3 3 3 3 3 3 | head under 25%: 0 of 6
+  pace @120: next match win share base 96.5 96.5 96.5 96.5 96.5 96.5 | head 63.7 63.7 63.7 63.7 63.7 63.7 | div 6 6 6 6 6 6 | head under 25%: 0 of 6
+  pace @240: next match win share base 70.1 60.7 60.7 60.7 60.7 70.1 | head 58.1 54.7 54.7 57 57 58.1 | div 8 9 9 9 9 8 | head under 25%: 0 of 6
+  nosquad @5: next match win share base 57.5 57.5 57.5 57.5 57.5 57.5 | head 49 49 49 49 49 49 | div 0 0 0 0 0 0 | head under 25%: 0 of 6
+  nosquad @15: next match win share base 42.3 42.3 42.3 42.3 42.3 42.3 | head 36.9 36.9 36.9 36.9 36.9 36.9 | div 0 0 0 0 0 0 | head under 25%: 0 of 6
+  nosquad @30: next match win share base 42.3 42.3 32.6 42.3 42.3 42.3 | head 36.9 36.9 2.5 36.9 36.9 36.9 | div 0 0 1 0 0 0 | head under 25%: 1 of 6
+  nosquad @60: next match win share base 18.2 23.1 25.6 52.1 52.1 52.1 | head 1.4 1.4 1 44.9 44.9 44.9 | div 1 1 1 0 0 0 | head under 25%: 3 of 6
+  nosquad @120: next match win share base 12.1 26.1 22.6 37.8 37.8 7.1 | head 0.8 2.5 0.9 33.1 33.1 0.8 | div 1 1 1 0 0 1 | head under 25%: 4 of 6
+  nosquad @240: next match win share base 20.7 15.6 25.6 0.5 0.5 8.2 | head 2.5 0.8 1 2.5 0.9 0.9 | div 1 1 1 1 1 1 | head under 25%: 6 of 6
+  paceSell @5: next match win share base 96.6 96.6 96.6 96.2 96.2 96.2 | head 88 88 88 86.4 86.4 86.4 | div 0 0 0 0 0 0 | head under 25%: 0 of 6
+  paceSell @15: next match win share base 99.8 99.8 99.8 99.8 99.8 99.8 | head 73 73 73 68.7 68.7 66.6 | div 1 1 1 1 1 1 | head under 25%: 0 of 6
+  paceSell @30: next match win share base 99.8 99.7 99.7 99.7 99.7 99.7 | head 94.8 94.3 94.3 94.5 94.5 94.5 | div 0 0 0 0 0 0 | head under 25%: 0 of 6
+  paceSell @60: next match win share base 100 100 100 100 100 100 | head 94.5 94.5 94.2 94.5 94.5 94.5 | div 1 1 1 1 1 1 | head under 25%: 0 of 6
+  paceSell @120: next match win share base 100 100 100 100 100 100 | head 91 91 91 91 91 91 | div 3 3 3 3 3 3 | head under 25%: 0 of 6
+  paceSell @240: next match win share base 99.8 99.8 99.8 99.8 99.8 99.8 | head 89.7 89.7 89.7 89.7 89.7 89.7 | div 5 5 5 5 5 5 | head under 25%: 0 of 6
+  over4 @5: next match win share base 98 98 98 97.8 97.8 98 | head 91.2 91.2 91.2 90.8 90.8 91.2 | div 0 0 0 0 0 0 | head under 25%: 0 of 6
+  over4 @15: next match win share base 99.9 99.9 99.9 99.9 99.9 99.9 | head 80.8 80.8 80.8 78.9 78.9 80.8 | div 1 1 1 1 1 1 | head under 25%: 0 of 6
+  over4 @30: next match win share base 100 100 100 100 100 100 | head 85.4 85.4 85.4 85.4 85.4 85.4 | div 2 2 2 2 2 2 | head under 25%: 0 of 6
+  over4 @60: next match win share base 100 100 100 100 100 100 | head 85.4 85.4 85.4 85.4 85.4 85.4 | div 3 3 3 3 3 3 | head under 25%: 0 of 6
+  over4 @120: next match win share base 98.3 98.3 98.2 98.3 98.3 98.3 | head 78.3 78.3 76.4 78.3 78.3 78.3 | div 6 6 6 6 6 6 | head under 25%: 0 of 6
+  over4 @240: next match win share base 60.7 60.7 60.7 60.7 60.7 73.9 | head 70.4 70.4 70.4 72.5 72.5 73.4 | div 9 9 9 9 9 8 | head under 25%: 0 of 6
+  corpus @-1: next match win share base 42.3 56.3 56.3 30 | head 36.9 5.6 5.6 0.4 | div 0 2 2 2 | head under 25%: 3 of 4
+  FAIL: pace/1/15: no goal tick 539 events differ: base [win:5720] head [win:207331]
+  FAIL: pace/1/15: after 300 no goal seconds base {"money":1220845.0253626327,"lifetime":9142829.025362514,"fanbase":4173.936000000145,"streak":8,"levels":{"stands":62,"tickets":65,"snacks":59,"shop":43,"parking":50,"lights":38,"squad":46,"academy":3 head {"money":1422456.0253626327,"lifetime":9344440.025362514,"fanbase":4173.936000000145,"streak":8,"levels":{"stands":62,"tickets":65,"snacks":59,"shop":43,"parking":50,"lights":38,"squad":46,"academy":3
+  FAIL: pace/1/120: no goal tick 539 events differ: base [win:8536] head [win:1629415]
+  FAIL: pace/1/120: after 300 no goal seconds base {"money":16705195.855712378,"lifetime":829807963.855682,"fanbase":26746.592800004597,"streak":58,"levels":{"stands":94,"tickets":101,"snacks":94,"shop":74,"parking":83,"lights":69,"squad":77,"academy" head {"money":18326074.855712377,"lifetime":831428842.855682,"fanbase":26746.592800004597,"streak":58,"levels":{"stands":94,"tickets":101,"snacks":94,"shop":74,"parking":83,"lights":69,"squad":77,"academy"
+  FAIL: pace/2/15: no goal tick 539 events differ: base [win:5808] head [win:209546]
+  FAIL: pace/2/15: after 300 no goal seconds base {"money":1184594.6104683839,"lifetime":9160664.610468594,"fanbase":4173.480000000142,"streak":8,"levels":{"stands":63,"tickets":65,"snacks":58,"shop":43,"parking":50,"lights":38,"squad":46,"academy":3 head {"money":1388332.6104683839,"lifetime":9364402.610468594,"fanbase":4173.480000000142,"streak":8,"levels":{"stands":63,"tickets":65,"snacks":58,"shop":43,"parking":50,"lights":38,"squad":46,"academy":3
+  FAIL: pace/2/120: no goal tick 539 events differ: base [win:8448] head [win:1620755]
+  FAIL: pace/2/120: after 300 no goal seconds base {"money":16130505.75173437,"lifetime":828940551.7517215,"fanbase":26705.206200003053,"streak":58,"levels":{"stands":93,"tickets":101,"snacks":94,"shop":75,"parking":83,"lights":69,"squad":77,"academy" head {"money":17742812.75173437,"lifetime":830552858.7517215,"fanbase":26705.206200003053,"streak":58,"levels":{"stands":93,"tickets":101,"snacks":94,"shop":75,"parking":83,"lights":69,"squad":77,"academy"
+  FAIL: pace/2/240: no goal tick 449 events differ: base [win:9328] head [win:2835166]
+  FAIL: pace/2/240: after 300 no goal seconds base {"money":27255973.831666842,"lifetime":3065154232.831799,"fanbase":44627.59028001662,"streak":3,"levels":{"stands":103,"tickets":111,"snacks":104,"shop":84,"parking":93,"lights":77,"squad":86,"academy head {"money":30081811.831666842,"lifetime":3067980070.831799,"fanbase":44627.59028001662,"streak":3,"levels":{"stands":103,"tickets":111,"snacks":104,"shop":84,"parking":93,"lights":77,"squad":86,"academy
+  FAIL: pace/3/5: no goal tick 389 events differ: base [win:805] head [win:9050]
+  FAIL: pace/3/5: after 300 no goal seconds base {"money":30802.94721519999,"lifetime":167758.9472152001,"fanbase":378.8416000000035,"streak":3,"levels":{"stands":32,"tickets":35,"snacks":29,"shop":17,"parking":22,"lights":12,"squad":19,"academy":6, head {"money":39047.947215199994,"lifetime":176003.9472152001,"fanbase":378.8416000000035,"streak":3,"levels":{"stands":32,"tickets":35,"snacks":29,"shop":17,"parking":22,"lights":12,"squad":19,"academy":6
+oldsaves: 148 saves, 138 identity failures

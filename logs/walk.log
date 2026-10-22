@@ -1,0 +1,34 @@
+  FAIL: promote-390-rm: the card reads "no card", the engine paid undefined ()
+  FAIL: promote-390: the card reads "no card", the engine paid undefined ()
+  FAIL: promote-1280-rm: the card reads "no card", the engine paid undefined ()
+  FAIL: promote-1280: the card reads "no card", the engine paid undefined ()
+  FAIL: lost-390-rm: never showed /Season over/
+  FAIL: lost-390: never showed /Season over/
+  FAIL: lost-1280-rm: never showed /Season over/
+  FAIL: lost-1280: never showed /Season over/
+  FAIL: summit-390-rm: the card reads "no card", the engine paid undefined ()
+  FAIL: summit-390: the card reads "no card", the engine paid undefined ()
+  FAIL: summit-1280-rm: the card reads "no card", the engine paid undefined ()
+  FAIL: summit-1280: the card reads "no card", the engine paid undefined ()
+  rules-320: {"text":"The match on screen is real and plays like football: your Squad against today's rival decides who is favourite, but favourites drop points and plenty of matches end level. Against a rival as strong as you, you expect about 1.45 goals to their 1.17, and each Squad level adds about 0.05 of a goal a match to your side and takes as much off theirs. A goal pays 5 seconds of your income, a win 20 seconds and going up a division 2 minutes, and wins extend a streak that multiplies everything and pulls in new fans. Every division up sends stronger rivals, and they stay that strong until you wi
+  rules-390-rm: {"text":"The match on screen is real and plays like football: your Squad against today's rival decides who is favourite, but favourites drop points and plenty of matches end level. Against a rival as strong as you, you expect about 1.45 goals to their 1.17, and each Squad level adds about 0.05 of a goal a match to your side and takes as much off theirs. A goal pays 5 seconds of your income, a win 20 seconds and going up a division 2 minutes, and wins extend a streak that multiplies everything and pulls in new fans. Every division up sends stronger rivals, and they stay that strong until you wi
+  rules-390: {"text":"The match on screen is real and plays like football: your Squad against today's rival decides who is favourite, but favourites drop points and plenty of matches end level. Against a rival as strong as you, you expect about 1.45 goals to their 1.17, and each Squad level adds about 0.05 of a goal a match to your side and takes as much off theirs. A goal pays 5 seconds of your income, a win 20 seconds and going up a division 2 minutes, and wins extend a streak that multiplies everything and pulls in new fans. Every division up sends stronger rivals, and they stay that strong until you wi
+  rules-1280-rm: {"text":"The match on screen is real and plays like football: your Squad against today's rival decides who is favourite, but favourites drop points and plenty of matches end level. Against a rival as strong as you, you expect about 1.45 goals to their 1.17, and each Squad level adds about 0.05 of a goal a match to your side and takes as much off theirs. A goal pays 5 seconds of your income, a win 20 seconds and going up a division 2 minutes, and wins extend a streak that multiplies everything and pulls in new fans. Every division up sends stronger rivals, and they stay that strong until you wi
+  rules-1280: {"text":"The match on screen is real and plays like football: your Squad against today's rival decides who is favourite, but favourites drop points and plenty of matches end level. Against a rival as strong as you, you expect about 1.45 goals to their 1.17, and each Squad level adds about 0.05 of a goal a match to your side and takes as much off theirs. A goal pays 5 seconds of your income, a win 20 seconds and going up a division 2 minutes, and wins extend a streak that multiplies everything and pulls in new fans. Every division up sends stronger rivals, and they stay that strong until you wi
+  loss-390-rm: {"loaded":{"div":3,"md":0,"mine":0,"gap":-0.1},"engine":[],"seen":["full time. beaten"],"scroll":"0->0 h 10872->10872","running":0,"overflow":0}
+  loss-390: {"loaded":{"div":3,"md":0,"mine":0,"gap":-0.1},"engine":[],"seen":["full time. beaten"],"scroll":"0->0 h 10872->10872","running":29,"overflow":0}
+  loss-1280-rm: {"loaded":{"div":3,"md":0,"mine":0,"gap":-0.1},"engine":[],"seen":["full time. beaten"],"scroll":"0->0 h 7493->7493","running":0,"overflow":0}
+  loss-1280: {"loaded":{"div":3,"md":0,"mine":0,"gap":-0.1},"engine":[],"seen":["full time. beaten"],"scroll":"0->0 h 7493->7493","running":29,"overflow":0}
+  promote-390-rm: {"loaded":{"div":3,"md":0,"mine":0,"gap":-0.1},"engine":[],"seen":[],"scroll":"0->0 h 10872->10872","running":0,"overflow":0,"card":"no card","wantAmount":[],"league":"no league room on screen"}
+  promote-390: {"loaded":{"div":3,"md":0,"mine":0,"gap":-0.1},"engine":[],"seen":[],"scroll":"0->0 h 10872->10872","running":74,"overflow":0,"card":"no card","wantAmount":[],"league":"no league room on screen"}
+  promote-1280-rm: {"loaded":{"div":3,"md":0,"mine":0,"gap":-0.1},"engine":[],"seen":[],"scroll":"0->0 h 7493->7493","running":0,"overflow":0,"card":"no card","wantAmount":[],"league":"no league room on screen"}
+  promote-1280: {"loaded":{"div":3,"md":0,"mine":0,"gap":-0.1},"engine":[],"seen":[],"scroll":"0->0 h 7493->7493","running":74,"overflow":0,"card":"no card","wantAmount":[],"league":"no league room on screen"}
+  lost-390-rm: {"loaded":{"div":3,"md":0,"mine":0,"gap":-0.1},"engine":[],"seen":[],"scroll":"0->0 h 10872->10872","running":0,"overflow":0,"league":"no league room on screen"}
+  lost-390: {"loaded":{"div":3,"md":0,"mine":0,"gap":-0.1},"engine":[],"seen":[],"scroll":"0->0 h 10872->10872","running":28,"overflow":0,"league":"no league room on screen"}
+  lost-1280-rm: {"loaded":{"div":3,"md":0,"mine":0,"gap":-0.1},"engine":[],"seen":[],"scroll":"0->0 h 7493->7493","running":0,"overflow":0,"league":"no league room on screen"}
+  lost-1280: {"loaded":{"div":3,"md":0,"mine":0,"gap":-0.1},"engine":[],"seen":[],"scroll":"0->0 h 7493->7493","running":28,"overflow":0,"league":"no league room on screen"}
+  summit-390-rm: {"loaded":{"div":9,"md":0,"mine":0,"gap":-2.4},"engine":[],"seen":[],"scroll":"0->0 h 10872->10872","running":0,"overflow":0,"card":"no card","wantAmount":[]}
+  summit-390: {"loaded":{"div":9,"md":0,"mine":0,"gap":-2.4},"engine":[],"seen":[],"scroll":"0->0 h 10872->10872","running":62,"overflow":0,"card":"no card","wantAmount":[]}
+  summit-1280-rm: {"loaded":{"div":9,"md":0,"mine":0,"gap":-2.4},"engine":[],"seen":[],"scroll":"0->0 h 7493->7493","running":0,"overflow":0,"card":"no card","wantAmount":[]}
+  summit-1280: {"loaded":{"div":9,"md":0,"mine":0,"gap":-2.4},"engine":[],"seen":[],"scroll":"0->0 h 7493->7493","running":62,"overflow":0,"card":"no card","wantAmount":[]}
+review walk: 12 failures

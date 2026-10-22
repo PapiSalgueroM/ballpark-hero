@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+walk: node .rc/x/walk.mjs
+oldsaves: git worktree add --detach /tmp/rbase 00bffb937fecccf96e84e1089f6f597f235f111b && node .rc/x/oldsaves.mjs /tmp/rbase
+walk-builder: node scripts/playTycoonScorelines.mjs
