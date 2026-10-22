@@ -1,0 +1,6 @@
+nocap exit=1 simCmMadeUpNations: RED, 3 failure(s)
+freeask exit=1 simCmMadeUpNations: RED, 3 failure(s)
+leak exit=1 simCmMadeUpNations: RED, 14 failure(s)
+mainstream exit=1 simCmMadeUpNations: RED, 13 failure(s)
+awayyouth exit=1 simCmMadeUpNations: RED, 9 failure(s)
+homecountry exit=1 simWorldEditor (control homecountry): 2478 checks, 2 failures
