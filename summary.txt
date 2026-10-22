@@ -1,0 +1,2 @@
+stop-earned exit=1 14s |       1   FAIL [N]: seed N season N: Amari Okonkwo, drafted here in round N, came up at the end of his first deal and is not restricted
+full exit=0 375s | simNbaDraftBoard: green.
