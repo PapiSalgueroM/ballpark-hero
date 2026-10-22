@@ -16,6 +16,7 @@ dukb-handoff/2026-10-10/results-g/finish-1540.md.
 - STOP for the lead (critic correction 10 c): simNbaGmDesk's desk on draft night on the earned night (822bd75d) turns
   check 2 red on all three seed sets, because PART A's one season minimum deal brings a second rounder up after one
   season and gmContracts.ts nbaRestricted needs full Bird rights. Reverted by 55aa1520; the numbers are in the report.
+  Settled since by the lead's two rulings (the sections below): the replay is on the earned night and green.
 - Owed to the release, never done here: the prerendered /nba-front-office page (build:seo), simPrerender, the weight
   row (measured +13.6K on the route, no row exists), the release join (1321 first, then this round), the adversarial
   review, dukb-qa-hunter and dukb-visual-qa.
@@ -34,7 +35,8 @@ dukb-handoff/2026-10-10/results-g/finish-1540.md.
 ## The lead's ruling on the held major (second fixer, 2026-10-22)
 
 - Done on this branch: gmContracts.ts `nbaRestricted` treats a man this GM drafted, at the end of his first deal
-  whatever its length, as restricted (the full Bird tier is no longer asked; line 302, `norfa`'s anchor, unchanged),
+  whatever its length, as restricted (the full Bird tier is no longer asked; `norfa`'s anchor text is unchanged and
+  sits at line 317 now, the comment above it grew),
   with two non wiki sources read 2026-10-22 in its comment; the rules card's rookie scale line now says a second round
   pick signs a one season deal at the league minimum; nbaSignDraftee's comment says the same.
 - Proven on runners r1540-rule-a and r1540-rule-b (head 82b60919): the old draft path does not move. simNbaGmDesk as
@@ -46,13 +48,36 @@ dukb-handoff/2026-10-10/results-g/finish-1540.md.
   and control `fullbird` (115 failures, check 2 alone), waits on branch r1540-r2-earned-desk. Also found there: on
   about one stream in twenty a man let go on a sheet is at no club after the summer (the rival's waiver, likely).
 
+## The lead's second ruling, items 6 to 8 (third fixer, 2026-10-22)
+
+- Item 6, DONE: r1540-r2-earned-desk (923fbfbe) is folded in (a fast forward), so simNbaGmDesk's desk on draft night
+  is the earned night the board runs (brief 0 R2 delivered). Check 2's three sheet floors are existence floors,
+  re-banded by the ruling at half the smallest calibration set: sets 1..10 / 11..20 / 21..30 on runner r1540-f3-c
+  measured sheets 26 / 18 / 17 and gone and full draft copies 7 / 4 / 5, so minSheets 8 (old desk 34), minSheetGone 2
+  (11) and minSheetFull 2 (11); the held out set 31..40 clears all three (23, 7, 7). Check 2 prints the old floors
+  beside the new ones; the ruling is in the harness header (b6547cda). Control fullbird (the old nbaRestricted) still
+  brings the 115 failures back, in check 2 alone.
+- Item 7, STOP FOR THE LEAD with the evidence: the vanishing sheet man is older code reached by this round. Traced on
+  runner r1540-f3-a with debug prints: gmContracts.ts runDeskOffseason (Round 1018) puts a man let go on a sheet on the
+  club written down even when the draft has taken it over fifteen (every arrival logged, 18 of 18 and 8 of 8, landed on
+  a roster of 17 with him); the engine's summer (nbaFrontOffice.ts, Round 722) waives a CPU club above fifteen by its
+  lowest rated man, which was he (a one season second rounder at 66 or 67); the pool keeps its best 30, so he left the
+  league. Earned streams SIM_SEED 10..29 (runner r1540-f3-b): it happened on SIM_SEED 10 only; the old desk over
+  SIM_SEED 1..30 never lost a man. Every fix point is outside this round (the engine is must not touch, and
+  runDeskOffseason is shared by all four desks, so a fix there moves the old desk's byte equal proof), so nothing is
+  changed. The NHL desk's summer has the same waive and slice shape and its harness never checks where a let go sheet
+  man ends up: unmeasured, for the lead.
+- Item 8, the Arenas residual: reported in results-g/fix-1540.md, not changed (Round 1018's sheet rule, not this
+  round's code; no card line claims the league's limit).
+
 ## What a later session must not trust
 
 - A runner summary that says SETUP exit=1 right after a send: the request branch sometimes fires two workflow runs,
   the first is cancelled and publishes that line. Check the Actions API before reading it as a failure.
 - simNbaDraftBoard section 1's fixture is BASE's (7a8750ba). It is never recorded again on a builder's own say.
-- simNbaGmDesk measures the OLD desk on draft night (stale on purpose, until the lead re-bands the three sheet floors
-  and merges r1540-r2-earned-desk).
+- simNbaGmDesk measures the earned night since b6547cda; its green holds on its own committed stream. On about one
+  fresh stream in twenty check 2 fails on "is at no rival club" (item 7 above, older code, held for the lead): a
+  red there on a copy under another name is that, not a new defect.
 - A harness copied under another file name walks another stream: seedRandom seeds Math.random from the file name.
   Numbers from such a copy are a fresh sample, never the committed harness's own.
 
