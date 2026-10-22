@@ -1,0 +1,4 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+pf2 exit=1 246s | playFirstVisitDialogs: RED. 3 route widths: /wonderkid-factory 320x640, /wonderkid-factory 390x844, /wonderkid-factory 1280x900
+pf3 exit=0 248s | playFirstVisitDialogs: green. Every first visit dialog can be started with the cookie banner unanswered.
+pf1 exit=1 257s | playFirstVisitDialogs: RED. 6 route widths: /stadium-tycoon 320x640, /stadium-tycoon 390x844, /stadium-tycoon 1280x900, /idle-arena 320x640, /idle-arena 390x844, /idle-ar

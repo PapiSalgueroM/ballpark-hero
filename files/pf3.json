@@ -1,0 +1,2669 @@
+[
+ {
+  "route": "/dart-draft",
+  "width": 320,
+  "height": 640,
+  "key": "/dart-draft@320",
+  "banner": {
+   "top": 335,
+   "bottom": 640
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/dart-draft",
+  "width": 390,
+  "height": 844,
+  "key": "/dart-draft@390",
+  "banner": {
+   "top": 611,
+   "bottom": 844
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/dart-draft",
+  "width": 1280,
+  "height": 900,
+  "key": "/dart-draft@1280",
+  "banner": {
+   "top": 735,
+   "bottom": 900
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/club-manager",
+  "width": 320,
+  "height": 640,
+  "key": "/club-manager@320",
+  "banner": {
+   "top": 335,
+   "bottom": 640
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/club-manager",
+  "width": 390,
+  "height": 844,
+  "key": "/club-manager@390",
+  "banner": {
+   "top": 611,
+   "bottom": 844
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/club-manager",
+  "width": 1280,
+  "height": 900,
+  "key": "/club-manager@1280",
+  "banner": {
+   "top": 735,
+   "bottom": 900
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/soccer-conquest",
+  "width": 320,
+  "height": 640,
+  "key": "/soccer-conquest@320",
+  "banner": {
+   "top": 335,
+   "bottom": 640
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 2,
+  "name": "How to Play",
+  "kind": "dialog",
+  "position": "fixed",
+  "bannerInside": false,
+  "dialogBox": {
+   "top": 12,
+   "bottom": 323
+  },
+  "at": "tappable",
+  "overlap": 0,
+  "button": "Got it, let's play Soccer Conq",
+  "how": "its go label",
+  "buttonBox": {
+   "top": 254,
+   "bottom": 298
+  },
+  "cx": 160,
+  "cy": 276,
+  "whole": true,
+  "closed": true,
+  "blocker": null,
+  "state": "PASS"
+ },
+ {
+  "route": "/soccer-conquest",
+  "width": 390,
+  "height": 844,
+  "key": "/soccer-conquest@390",
+  "banner": {
+   "top": 611,
+   "bottom": 844
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 2,
+  "name": "How to Play",
+  "kind": "dialog",
+  "position": "fixed",
+  "bannerInside": false,
+  "dialogBox": {
+   "top": 12,
+   "bottom": 599
+  },
+  "at": "tappable",
+  "overlap": 0,
+  "button": "Got it, let's play Soccer Conq",
+  "how": "its go label",
+  "buttonBox": {
+   "top": 530,
+   "bottom": 574
+  },
+  "cx": 195,
+  "cy": 552,
+  "whole": true,
+  "closed": true,
+  "blocker": null,
+  "state": "PASS"
+ },
+ {
+  "route": "/soccer-conquest",
+  "width": 1280,
+  "height": 900,
+  "key": "/soccer-conquest@1280",
+  "banner": {
+   "top": 735,
+   "bottom": 900
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 2,
+  "name": "How to Play",
+  "kind": "dialog",
+  "position": "fixed",
+  "bannerInside": false,
+  "dialogBox": {
+   "top": 12,
+   "bottom": 723
+  },
+  "at": "tappable",
+  "overlap": 0,
+  "button": "Got it, let's play Soccer Conq",
+  "how": "its go label",
+  "buttonBox": {
+   "top": 654,
+   "bottom": 698
+  },
+  "cx": 640,
+  "cy": 676,
+  "whole": true,
+  "closed": true,
+  "blocker": null,
+  "state": "PASS"
+ },
+ {
+  "route": "/contract-chaos",
+  "width": 320,
+  "height": 640,
+  "key": "/contract-chaos@320",
+  "banner": {
+   "top": 49,
+   "bottom": 367
+  },
+  "bannerFixed": false,
+  "pending": null,
+  "dialogs": 2,
+  "name": "How to Play Contract Chaos",
+  "kind": "dialog",
+  "position": "fixed",
+  "bannerInside": true,
+  "dialogBox": {
+   "top": 48,
+   "bottom": 592
+  },
+  "at": "tappable",
+  "overlap": 0,
+  "button": "Let's Play!",
+  "how": "its go label",
+  "buttonBox": {
+   "top": 523,
+   "bottom": 567
+  },
+  "cx": 160,
+  "cy": 545,
+  "whole": true,
+  "closed": true,
+  "blocker": null,
+  "state": "PASS"
+ },
+ {
+  "route": "/contract-chaos",
+  "width": 390,
+  "height": 844,
+  "key": "/contract-chaos@390",
+  "banner": {
+   "top": 136,
+   "bottom": 434
+  },
+  "bannerFixed": false,
+  "pending": null,
+  "dialogs": 2,
+  "name": "How to Play Contract Chaos",
+  "kind": "dialog",
+  "position": "fixed",
+  "bannerInside": true,
+  "dialogBox": {
+   "top": 63,
+   "bottom": 781
+  },
+  "at": "tappable",
+  "overlap": 0,
+  "button": "Let's Play!",
+  "how": "its go label",
+  "buttonBox": {
+   "top": 711,
+   "bottom": 755
+  },
+  "cx": 195,
+  "cy": 733,
+  "whole": true,
+  "closed": true,
+  "blocker": null,
+  "state": "PASS"
+ },
+ {
+  "route": "/contract-chaos",
+  "width": 1280,
+  "height": 900,
+  "key": "/contract-chaos@1280",
+  "banner": {
+   "top": 141,
+   "bottom": 367
+  },
+  "bannerFixed": false,
+  "pending": null,
+  "dialogs": 2,
+  "name": "How to Play Contract Chaos",
+  "kind": "dialog",
+  "position": "fixed",
+  "bannerInside": true,
+  "dialogBox": {
+   "top": 68,
+   "bottom": 833
+  },
+  "at": "tappable",
+  "overlap": 0,
+  "button": "Let's Play!",
+  "how": "its go label",
+  "buttonBox": {
+   "top": 764,
+   "bottom": 808
+  },
+  "cx": 640,
+  "cy": 786,
+  "whole": true,
+  "closed": true,
+  "blocker": null,
+  "state": "PASS"
+ },
+ {
+  "route": "/sports-bingo",
+  "width": 320,
+  "height": 640,
+  "key": "/sports-bingo@320",
+  "banner": {
+   "top": 335,
+   "bottom": 640
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/sports-bingo",
+  "width": 390,
+  "height": 844,
+  "key": "/sports-bingo@390",
+  "banner": {
+   "top": 611,
+   "bottom": 844
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/sports-bingo",
+  "width": 1280,
+  "height": 900,
+  "key": "/sports-bingo@1280",
+  "banner": {
+   "top": 735,
+   "bottom": 900
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/rarity-round",
+  "width": 320,
+  "height": 640,
+  "key": "/rarity-round@320",
+  "banner": {
+   "top": 335,
+   "bottom": 640
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/rarity-round",
+  "width": 390,
+  "height": 844,
+  "key": "/rarity-round@390",
+  "banner": {
+   "top": 611,
+   "bottom": 844
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/rarity-round",
+  "width": 1280,
+  "height": 900,
+  "key": "/rarity-round@1280",
+  "banner": {
+   "top": 735,
+   "bottom": 900
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/footle",
+  "width": 320,
+  "height": 640,
+  "key": "/footle@320",
+  "banner": {
+   "top": 49,
+   "bottom": 367
+  },
+  "bannerFixed": false,
+  "pending": null,
+  "dialogs": 2,
+  "name": "How to Play Footle",
+  "kind": "dialog",
+  "position": "fixed",
+  "bannerInside": true,
+  "dialogBox": {
+   "top": 48,
+   "bottom": 592
+  },
+  "at": "tappable",
+  "overlap": 0,
+  "button": "Let's Play!",
+  "how": "its go label",
+  "buttonBox": {
+   "top": 523,
+   "bottom": 567
+  },
+  "cx": 160,
+  "cy": 545,
+  "whole": true,
+  "closed": true,
+  "blocker": null,
+  "state": "PASS"
+ },
+ {
+  "route": "/footle",
+  "width": 390,
+  "height": 844,
+  "key": "/footle@390",
+  "banner": {
+   "top": 136,
+   "bottom": 434
+  },
+  "bannerFixed": false,
+  "pending": null,
+  "dialogs": 2,
+  "name": "How to Play Footle",
+  "kind": "dialog",
+  "position": "fixed",
+  "bannerInside": true,
+  "dialogBox": {
+   "top": 63,
+   "bottom": 781
+  },
+  "at": "tappable",
+  "overlap": 0,
+  "button": "Let's Play!",
+  "how": "its go label",
+  "buttonBox": {
+   "top": 711,
+   "bottom": 755
+  },
+  "cx": 195,
+  "cy": 733,
+  "whole": true,
+  "closed": true,
+  "blocker": null,
+  "state": "PASS"
+ },
+ {
+  "route": "/footle",
+  "width": 1280,
+  "height": 900,
+  "key": "/footle@1280",
+  "banner": {
+   "top": 141,
+   "bottom": 367
+  },
+  "bannerFixed": false,
+  "pending": null,
+  "dialogs": 2,
+  "name": "How to Play Footle",
+  "kind": "dialog",
+  "position": "fixed",
+  "bannerInside": true,
+  "dialogBox": {
+   "top": 68,
+   "bottom": 833
+  },
+  "at": "tappable",
+  "overlap": 0,
+  "button": "Let's Play!",
+  "how": "its go label",
+  "buttonBox": {
+   "top": 764,
+   "bottom": 808
+  },
+  "cx": 640,
+  "cy": 786,
+  "whole": true,
+  "closed": true,
+  "blocker": null,
+  "state": "PASS"
+ },
+ {
+  "route": "/connections",
+  "width": 320,
+  "height": 640,
+  "key": "/connections@320",
+  "banner": {
+   "top": 335,
+   "bottom": 640
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 2,
+  "name": "How to Play",
+  "kind": "dialog",
+  "position": "fixed",
+  "bannerInside": false,
+  "dialogBox": {
+   "top": 12,
+   "bottom": 323
+  },
+  "at": "tappable",
+  "overlap": 0,
+  "button": "Close",
+  "how": "its close label",
+  "buttonBox": {
+   "top": 21,
+   "bottom": 53
+  },
+  "cx": 295,
+  "cy": 37,
+  "whole": true,
+  "closed": true,
+  "blocker": null,
+  "state": "PASS"
+ },
+ {
+  "route": "/connections",
+  "width": 390,
+  "height": 844,
+  "key": "/connections@390",
+  "banner": {
+   "top": 611,
+   "bottom": 844
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 2,
+  "name": "How to Play",
+  "kind": "dialog",
+  "position": "fixed",
+  "bannerInside": false,
+  "dialogBox": {
+   "top": 19,
+   "bottom": 593
+  },
+  "at": "tappable",
+  "overlap": 0,
+  "button": "Close",
+  "how": "its close label",
+  "buttonBox": {
+   "top": 28,
+   "bottom": 60
+  },
+  "cx": 365,
+  "cy": 44,
+  "whole": true,
+  "closed": true,
+  "blocker": null,
+  "state": "PASS"
+ },
+ {
+  "route": "/connections",
+  "width": 1280,
+  "height": 900,
+  "key": "/connections@1280",
+  "banner": {
+   "top": 735,
+   "bottom": 900
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 2,
+  "name": "How to Play",
+  "kind": "dialog",
+  "position": "fixed",
+  "bannerInside": false,
+  "dialogBox": {
+   "top": 109,
+   "bottom": 627
+  },
+  "at": "tappable",
+  "overlap": 0,
+  "button": "Close",
+  "how": "its close label",
+  "buttonBox": {
+   "top": 118,
+   "bottom": 150
+  },
+  "cx": 839,
+  "cy": 134,
+  "whole": true,
+  "closed": true,
+  "blocker": null,
+  "state": "PASS"
+ },
+ {
+  "route": "/free-kick",
+  "width": 320,
+  "height": 640,
+  "key": "/free-kick@320",
+  "banner": {
+   "top": 335,
+   "bottom": 640
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/free-kick",
+  "width": 390,
+  "height": 844,
+  "key": "/free-kick@390",
+  "banner": {
+   "top": 611,
+   "bottom": 844
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/free-kick",
+  "width": 1280,
+  "height": 900,
+  "key": "/free-kick@1280",
+  "banner": {
+   "top": 735,
+   "bottom": 900
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/soccer-career",
+  "width": 320,
+  "height": 640,
+  "key": "/soccer-career@320",
+  "banner": {
+   "top": 335,
+   "bottom": 640
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/soccer-career",
+  "width": 390,
+  "height": 844,
+  "key": "/soccer-career@390",
+  "banner": {
+   "top": 611,
+   "bottom": 844
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/soccer-career",
+  "width": 1280,
+  "height": 900,
+  "key": "/soccer-career@1280",
+  "banner": {
+   "top": 735,
+   "bottom": 900
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/squad-deal",
+  "width": 320,
+  "height": 640,
+  "key": "/squad-deal@320",
+  "banner": {
+   "top": 335,
+   "bottom": 640
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/squad-deal",
+  "width": 390,
+  "height": 844,
+  "key": "/squad-deal@390",
+  "banner": {
+   "top": 611,
+   "bottom": 844
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/squad-deal",
+  "width": 1280,
+  "height": 900,
+  "key": "/squad-deal@1280",
+  "banner": {
+   "top": 735,
+   "bottom": 900
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/player-stock-market",
+  "width": 320,
+  "height": 640,
+  "key": "/player-stock-market@320",
+  "banner": {
+   "top": 335,
+   "bottom": 640
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/player-stock-market",
+  "width": 390,
+  "height": 844,
+  "key": "/player-stock-market@390",
+  "banner": {
+   "top": 611,
+   "bottom": 844
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/player-stock-market",
+  "width": 1280,
+  "height": 900,
+  "key": "/player-stock-market@1280",
+  "banner": {
+   "top": 735,
+   "bottom": 900
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/nfl-my-career",
+  "width": 320,
+  "height": 640,
+  "key": "/nfl-my-career@320",
+  "banner": {
+   "top": 49,
+   "bottom": 367
+  },
+  "bannerFixed": false,
+  "pending": null,
+  "dialogs": 2,
+  "name": "How to play",
+  "kind": "dialog",
+  "position": "fixed",
+  "bannerInside": true,
+  "dialogBox": {
+   "top": 48,
+   "bottom": 592
+  },
+  "at": "tappable",
+  "overlap": 0,
+  "button": "Let's Play!",
+  "how": "its go label",
+  "buttonBox": {
+   "top": 523,
+   "bottom": 567
+  },
+  "cx": 160,
+  "cy": 545,
+  "whole": true,
+  "closed": true,
+  "blocker": null,
+  "state": "PASS"
+ },
+ {
+  "route": "/nfl-my-career",
+  "width": 390,
+  "height": 844,
+  "key": "/nfl-my-career@390",
+  "banner": {
+   "top": 136,
+   "bottom": 434
+  },
+  "bannerFixed": false,
+  "pending": null,
+  "dialogs": 2,
+  "name": "How to play",
+  "kind": "dialog",
+  "position": "fixed",
+  "bannerInside": true,
+  "dialogBox": {
+   "top": 63,
+   "bottom": 781
+  },
+  "at": "tappable",
+  "overlap": 0,
+  "button": "Let's Play!",
+  "how": "its go label",
+  "buttonBox": {
+   "top": 711,
+   "bottom": 755
+  },
+  "cx": 195,
+  "cy": 733,
+  "whole": true,
+  "closed": true,
+  "blocker": null,
+  "state": "PASS"
+ },
+ {
+  "route": "/nfl-my-career",
+  "width": 1280,
+  "height": 900,
+  "key": "/nfl-my-career@1280",
+  "banner": {
+   "top": 141,
+   "bottom": 367
+  },
+  "bannerFixed": false,
+  "pending": null,
+  "dialogs": 2,
+  "name": "How to play",
+  "kind": "dialog",
+  "position": "fixed",
+  "bannerInside": true,
+  "dialogBox": {
+   "top": 68,
+   "bottom": 833
+  },
+  "at": "tappable",
+  "overlap": 0,
+  "button": "Let's Play!",
+  "how": "its go label",
+  "buttonBox": {
+   "top": 764,
+   "bottom": 808
+  },
+  "cx": 640,
+  "cy": 786,
+  "whole": true,
+  "closed": true,
+  "blocker": null,
+  "state": "PASS"
+ },
+ {
+  "route": "/nfl-higher-lower",
+  "width": 320,
+  "height": 640,
+  "key": "/nfl-higher-lower@320",
+  "banner": {
+   "top": 335,
+   "bottom": 640
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/nfl-higher-lower",
+  "width": 390,
+  "height": 844,
+  "key": "/nfl-higher-lower@390",
+  "banner": {
+   "top": 611,
+   "bottom": 844
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/nfl-higher-lower",
+  "width": 1280,
+  "height": 900,
+  "key": "/nfl-higher-lower@1280",
+  "banner": {
+   "top": 735,
+   "bottom": 900
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/missing-eleven",
+  "width": 320,
+  "height": 640,
+  "key": "/missing-eleven@320",
+  "banner": {
+   "top": 335,
+   "bottom": 640
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/missing-eleven",
+  "width": 390,
+  "height": 844,
+  "key": "/missing-eleven@390",
+  "banner": {
+   "top": 611,
+   "bottom": 844
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/missing-eleven",
+  "width": 1280,
+  "height": 900,
+  "key": "/missing-eleven@1280",
+  "banner": {
+   "top": 735,
+   "bottom": 900
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/college-grid",
+  "width": 320,
+  "height": 640,
+  "key": "/college-grid@320",
+  "banner": {
+   "top": 335,
+   "bottom": 640
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 2,
+  "name": "How to Play",
+  "kind": "dialog",
+  "position": "fixed",
+  "bannerInside": false,
+  "dialogBox": {
+   "top": 12,
+   "bottom": 323
+  },
+  "at": "tappable",
+  "overlap": 0,
+  "button": "Close",
+  "how": "its close label",
+  "buttonBox": {
+   "top": 21,
+   "bottom": 53
+  },
+  "cx": 295,
+  "cy": 37,
+  "whole": true,
+  "closed": true,
+  "blocker": null,
+  "state": "PASS"
+ },
+ {
+  "route": "/college-grid",
+  "width": 390,
+  "height": 844,
+  "key": "/college-grid@390",
+  "banner": {
+   "top": 611,
+   "bottom": 844
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 2,
+  "name": "How to Play",
+  "kind": "dialog",
+  "position": "fixed",
+  "bannerInside": false,
+  "dialogBox": {
+   "top": 12,
+   "bottom": 599
+  },
+  "at": "tappable",
+  "overlap": 0,
+  "button": "Close",
+  "how": "its close label",
+  "buttonBox": {
+   "top": 21,
+   "bottom": 53
+  },
+  "cx": 365,
+  "cy": 37,
+  "whole": true,
+  "closed": true,
+  "blocker": null,
+  "state": "PASS"
+ },
+ {
+  "route": "/college-grid",
+  "width": 1280,
+  "height": 900,
+  "key": "/college-grid@1280",
+  "banner": {
+   "top": 735,
+   "bottom": 900
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 2,
+  "name": "How to Play",
+  "kind": "dialog",
+  "position": "fixed",
+  "bannerInside": false,
+  "dialogBox": {
+   "top": 63,
+   "bottom": 673
+  },
+  "at": "tappable",
+  "overlap": 0,
+  "button": "Close",
+  "how": "its close label",
+  "buttonBox": {
+   "top": 72,
+   "bottom": 104
+  },
+  "cx": 839,
+  "cy": 88,
+  "whole": true,
+  "closed": true,
+  "blocker": null,
+  "state": "PASS"
+ },
+ {
+  "route": "/cbb-grid",
+  "width": 320,
+  "height": 640,
+  "key": "/cbb-grid@320",
+  "banner": {
+   "top": 335,
+   "bottom": 640
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/cbb-grid",
+  "width": 390,
+  "height": 844,
+  "key": "/cbb-grid@390",
+  "banner": {
+   "top": 611,
+   "bottom": 844
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/cbb-grid",
+  "width": 1280,
+  "height": 900,
+  "key": "/cbb-grid@1280",
+  "banner": {
+   "top": 735,
+   "bottom": 900
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/cbb-dynasty",
+  "width": 320,
+  "height": 640,
+  "key": "/cbb-dynasty@320",
+  "banner": {
+   "top": 335,
+   "bottom": 640
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/cbb-dynasty",
+  "width": 390,
+  "height": 844,
+  "key": "/cbb-dynasty@390",
+  "banner": {
+   "top": 611,
+   "bottom": 844
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/cbb-dynasty",
+  "width": 1280,
+  "height": 900,
+  "key": "/cbb-dynasty@1280",
+  "banner": {
+   "top": 735,
+   "bottom": 900
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/stat-detective",
+  "width": 320,
+  "height": 640,
+  "key": "/stat-detective@320",
+  "banner": {
+   "top": 335,
+   "bottom": 640
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/stat-detective",
+  "width": 390,
+  "height": 844,
+  "key": "/stat-detective@390",
+  "banner": {
+   "top": 611,
+   "bottom": 844
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/stat-detective",
+  "width": 1280,
+  "height": 900,
+  "key": "/stat-detective@1280",
+  "banner": {
+   "top": 735,
+   "bottom": 900
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/nba-connect-4",
+  "width": 320,
+  "height": 640,
+  "key": "/nba-connect-4@320",
+  "banner": {
+   "top": 335,
+   "bottom": 640
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/nba-connect-4",
+  "width": 390,
+  "height": 844,
+  "key": "/nba-connect-4@390",
+  "banner": {
+   "top": 611,
+   "bottom": 844
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/nba-connect-4",
+  "width": 1280,
+  "height": 900,
+  "key": "/nba-connect-4@1280",
+  "banner": {
+   "top": 735,
+   "bottom": 900
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/nba-grid",
+  "width": 320,
+  "height": 640,
+  "key": "/nba-grid@320",
+  "banner": {
+   "top": 335,
+   "bottom": 640
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/nba-grid",
+  "width": 390,
+  "height": 844,
+  "key": "/nba-grid@390",
+  "banner": {
+   "top": 611,
+   "bottom": 844
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/nba-grid",
+  "width": 1280,
+  "height": 900,
+  "key": "/nba-grid@1280",
+  "banner": {
+   "top": 735,
+   "bottom": 900
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/missing-five",
+  "width": 320,
+  "height": 640,
+  "key": "/missing-five@320",
+  "banner": {
+   "top": 335,
+   "bottom": 640
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/missing-five",
+  "width": 390,
+  "height": 844,
+  "key": "/missing-five@390",
+  "banner": {
+   "top": 611,
+   "bottom": 844
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/missing-five",
+  "width": 1280,
+  "height": 900,
+  "key": "/missing-five@1280",
+  "banner": {
+   "top": 735,
+   "bottom": 900
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/nba-front-office",
+  "width": 320,
+  "height": 640,
+  "key": "/nba-front-office@320",
+  "banner": {
+   "top": 335,
+   "bottom": 640
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/nba-front-office",
+  "width": 390,
+  "height": 844,
+  "key": "/nba-front-office@390",
+  "banner": {
+   "top": 611,
+   "bottom": 844
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/nba-front-office",
+  "width": 1280,
+  "height": 900,
+  "key": "/nba-front-office@1280",
+  "banner": {
+   "top": 735,
+   "bottom": 900
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/perfect-season-mlb",
+  "width": 320,
+  "height": 640,
+  "key": "/perfect-season-mlb@320",
+  "banner": {
+   "top": 335,
+   "bottom": 640
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/perfect-season-mlb",
+  "width": 390,
+  "height": 844,
+  "key": "/perfect-season-mlb@390",
+  "banner": {
+   "top": 611,
+   "bottom": 844
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/perfect-season-mlb",
+  "width": 1280,
+  "height": 900,
+  "key": "/perfect-season-mlb@1280",
+  "banner": {
+   "top": 735,
+   "bottom": 900
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/mlb-grid",
+  "width": 320,
+  "height": 640,
+  "key": "/mlb-grid@320",
+  "banner": {
+   "top": 335,
+   "bottom": 640
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/mlb-grid",
+  "width": 390,
+  "height": 844,
+  "key": "/mlb-grid@390",
+  "banner": {
+   "top": 611,
+   "bottom": 844
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/mlb-grid",
+  "width": 1280,
+  "height": 900,
+  "key": "/mlb-grid@1280",
+  "banner": {
+   "top": 735,
+   "bottom": 900
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/conquest-mlb",
+  "width": 320,
+  "height": 640,
+  "key": "/conquest-mlb@320",
+  "banner": {
+   "top": 335,
+   "bottom": 640
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 2,
+  "name": "How to Play",
+  "kind": "dialog",
+  "position": "fixed",
+  "bannerInside": false,
+  "dialogBox": {
+   "top": 12,
+   "bottom": 323
+  },
+  "at": "tappable",
+  "overlap": 0,
+  "button": "Got it, let's play MLB Imperia",
+  "how": "its go label",
+  "buttonBox": {
+   "top": 254,
+   "bottom": 298
+  },
+  "cx": 160,
+  "cy": 276,
+  "whole": true,
+  "closed": true,
+  "blocker": null,
+  "state": "PASS"
+ },
+ {
+  "route": "/conquest-mlb",
+  "width": 390,
+  "height": 844,
+  "key": "/conquest-mlb@390",
+  "banner": {
+   "top": 611,
+   "bottom": 844
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 2,
+  "name": "How to Play",
+  "kind": "dialog",
+  "position": "fixed",
+  "bannerInside": false,
+  "dialogBox": {
+   "top": 12,
+   "bottom": 599
+  },
+  "at": "tappable",
+  "overlap": 0,
+  "button": "Got it, let's play MLB Imperia",
+  "how": "its go label",
+  "buttonBox": {
+   "top": 530,
+   "bottom": 574
+  },
+  "cx": 195,
+  "cy": 552,
+  "whole": true,
+  "closed": true,
+  "blocker": null,
+  "state": "PASS"
+ },
+ {
+  "route": "/conquest-mlb",
+  "width": 1280,
+  "height": 900,
+  "key": "/conquest-mlb@1280",
+  "banner": {
+   "top": 735,
+   "bottom": 900
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 2,
+  "name": "How to Play",
+  "kind": "dialog",
+  "position": "fixed",
+  "bannerInside": false,
+  "dialogBox": {
+   "top": 12,
+   "bottom": 723
+  },
+  "at": "tappable",
+  "overlap": 0,
+  "button": "Got it, let's play MLB Imperia",
+  "how": "its go label",
+  "buttonBox": {
+   "top": 654,
+   "bottom": 698
+  },
+  "cx": 640,
+  "cy": 676,
+  "whole": true,
+  "closed": true,
+  "blocker": null,
+  "state": "PASS"
+ },
+ {
+  "route": "/missing-nine",
+  "width": 320,
+  "height": 640,
+  "key": "/missing-nine@320",
+  "banner": {
+   "top": 335,
+   "bottom": 640
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/missing-nine",
+  "width": 390,
+  "height": 844,
+  "key": "/missing-nine@390",
+  "banner": {
+   "top": 611,
+   "bottom": 844
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/missing-nine",
+  "width": 1280,
+  "height": 900,
+  "key": "/missing-nine@1280",
+  "banner": {
+   "top": 735,
+   "bottom": 900
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/puck-detective",
+  "width": 320,
+  "height": 640,
+  "key": "/puck-detective@320",
+  "banner": {
+   "top": 49,
+   "bottom": 367
+  },
+  "bannerFixed": false,
+  "pending": null,
+  "dialogs": 2,
+  "name": "How to Play Puck Detective",
+  "kind": "dialog",
+  "position": "fixed",
+  "bannerInside": true,
+  "dialogBox": {
+   "top": 48,
+   "bottom": 592
+  },
+  "at": "tappable",
+  "overlap": 0,
+  "button": "Let's Play!",
+  "how": "its go label",
+  "buttonBox": {
+   "top": 523,
+   "bottom": 567
+  },
+  "cx": 160,
+  "cy": 545,
+  "whole": true,
+  "closed": true,
+  "blocker": null,
+  "state": "PASS"
+ },
+ {
+  "route": "/puck-detective",
+  "width": 390,
+  "height": 844,
+  "key": "/puck-detective@390",
+  "banner": {
+   "top": 136,
+   "bottom": 434
+  },
+  "bannerFixed": false,
+  "pending": null,
+  "dialogs": 2,
+  "name": "How to Play Puck Detective",
+  "kind": "dialog",
+  "position": "fixed",
+  "bannerInside": true,
+  "dialogBox": {
+   "top": 63,
+   "bottom": 781
+  },
+  "at": "tappable",
+  "overlap": 0,
+  "button": "Let's Play!",
+  "how": "its go label",
+  "buttonBox": {
+   "top": 711,
+   "bottom": 755
+  },
+  "cx": 195,
+  "cy": 733,
+  "whole": true,
+  "closed": true,
+  "blocker": null,
+  "state": "PASS"
+ },
+ {
+  "route": "/puck-detective",
+  "width": 1280,
+  "height": 900,
+  "key": "/puck-detective@1280",
+  "banner": {
+   "top": 141,
+   "bottom": 367
+  },
+  "bannerFixed": false,
+  "pending": null,
+  "dialogs": 2,
+  "name": "How to Play Puck Detective",
+  "kind": "dialog",
+  "position": "fixed",
+  "bannerInside": true,
+  "dialogBox": {
+   "top": 68,
+   "bottom": 833
+  },
+  "at": "tappable",
+  "overlap": 0,
+  "button": "Let's Play!",
+  "how": "its go label",
+  "buttonBox": {
+   "top": 764,
+   "bottom": 808
+  },
+  "cx": 640,
+  "cy": 786,
+  "whole": true,
+  "closed": true,
+  "blocker": null,
+  "state": "PASS"
+ },
+ {
+  "route": "/hockey-higher-lower",
+  "width": 320,
+  "height": 640,
+  "key": "/hockey-higher-lower@320",
+  "banner": {
+   "top": 335,
+   "bottom": 640
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 2,
+  "name": "🏒 How to Play",
+  "kind": "dialog",
+  "position": "fixed",
+  "bannerInside": false,
+  "dialogBox": {
+   "top": 12,
+   "bottom": 323
+  },
+  "at": "tappable",
+  "overlap": 0,
+  "button": "Close",
+  "how": "its close label",
+  "buttonBox": {
+   "top": 21,
+   "bottom": 53
+  },
+  "cx": 295,
+  "cy": 37,
+  "whole": true,
+  "closed": true,
+  "blocker": null,
+  "state": "PASS"
+ },
+ {
+  "route": "/hockey-higher-lower",
+  "width": 390,
+  "height": 844,
+  "key": "/hockey-higher-lower@390",
+  "banner": {
+   "top": 611,
+   "bottom": 844
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 2,
+  "name": "🏒 How to Play",
+  "kind": "dialog",
+  "position": "fixed",
+  "bannerInside": false,
+  "dialogBox": {
+   "top": 58,
+   "bottom": 554
+  },
+  "at": "tappable",
+  "overlap": 0,
+  "button": "Close",
+  "how": "its close label",
+  "buttonBox": {
+   "top": 67,
+   "bottom": 99
+  },
+  "cx": 365,
+  "cy": 83,
+  "whole": true,
+  "closed": true,
+  "blocker": null,
+  "state": "PASS"
+ },
+ {
+  "route": "/hockey-higher-lower",
+  "width": 1280,
+  "height": 900,
+  "key": "/hockey-higher-lower@1280",
+  "banner": {
+   "top": 735,
+   "bottom": 900
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 2,
+  "name": "🏒 How to Play",
+  "kind": "dialog",
+  "position": "fixed",
+  "bannerInside": false,
+  "dialogBox": {
+   "top": 120,
+   "bottom": 616
+  },
+  "at": "tappable",
+  "overlap": 0,
+  "button": "Close",
+  "how": "its close label",
+  "buttonBox": {
+   "top": 129,
+   "bottom": 161
+  },
+  "cx": 839,
+  "cy": 145,
+  "whole": true,
+  "closed": true,
+  "blocker": null,
+  "state": "PASS"
+ },
+ {
+  "route": "/nhl-my-career",
+  "width": 320,
+  "height": 640,
+  "key": "/nhl-my-career@320",
+  "banner": {
+   "top": 49,
+   "bottom": 367
+  },
+  "bannerFixed": false,
+  "pending": null,
+  "dialogs": 2,
+  "name": "How to play",
+  "kind": "dialog",
+  "position": "fixed",
+  "bannerInside": true,
+  "dialogBox": {
+   "top": 48,
+   "bottom": 592
+  },
+  "at": "tappable",
+  "overlap": 0,
+  "button": "Let's Play!",
+  "how": "its go label",
+  "buttonBox": {
+   "top": 523,
+   "bottom": 567
+  },
+  "cx": 160,
+  "cy": 545,
+  "whole": true,
+  "closed": true,
+  "blocker": null,
+  "state": "PASS"
+ },
+ {
+  "route": "/nhl-my-career",
+  "width": 390,
+  "height": 844,
+  "key": "/nhl-my-career@390",
+  "banner": {
+   "top": 136,
+   "bottom": 434
+  },
+  "bannerFixed": false,
+  "pending": null,
+  "dialogs": 2,
+  "name": "How to play",
+  "kind": "dialog",
+  "position": "fixed",
+  "bannerInside": true,
+  "dialogBox": {
+   "top": 63,
+   "bottom": 781
+  },
+  "at": "tappable",
+  "overlap": 0,
+  "button": "Let's Play!",
+  "how": "its go label",
+  "buttonBox": {
+   "top": 711,
+   "bottom": 755
+  },
+  "cx": 195,
+  "cy": 733,
+  "whole": true,
+  "closed": true,
+  "blocker": null,
+  "state": "PASS"
+ },
+ {
+  "route": "/nhl-my-career",
+  "width": 1280,
+  "height": 900,
+  "key": "/nhl-my-career@1280",
+  "banner": {
+   "top": 141,
+   "bottom": 367
+  },
+  "bannerFixed": false,
+  "pending": null,
+  "dialogs": 2,
+  "name": "How to play",
+  "kind": "dialog",
+  "position": "fixed",
+  "bannerInside": true,
+  "dialogBox": {
+   "top": 68,
+   "bottom": 833
+  },
+  "at": "tappable",
+  "overlap": 0,
+  "button": "Let's Play!",
+  "how": "its go label",
+  "buttonBox": {
+   "top": 764,
+   "bottom": 808
+  },
+  "cx": 640,
+  "cy": 786,
+  "whole": true,
+  "closed": true,
+  "blocker": null,
+  "state": "PASS"
+ },
+ {
+  "route": "/perfect-lineup-nhl",
+  "width": 320,
+  "height": 640,
+  "key": "/perfect-lineup-nhl@320",
+  "banner": {
+   "top": 335,
+   "bottom": 640
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/perfect-lineup-nhl",
+  "width": 390,
+  "height": 844,
+  "key": "/perfect-lineup-nhl@390",
+  "banner": {
+   "top": 611,
+   "bottom": 844
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/perfect-lineup-nhl",
+  "width": 1280,
+  "height": 900,
+  "key": "/perfect-lineup-nhl@1280",
+  "banner": {
+   "top": 735,
+   "bottom": 900
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/f1-higher-lower",
+  "width": 320,
+  "height": 640,
+  "key": "/f1-higher-lower@320",
+  "banner": {
+   "top": 335,
+   "bottom": 640
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/f1-higher-lower",
+  "width": 390,
+  "height": 844,
+  "key": "/f1-higher-lower@390",
+  "banner": {
+   "top": 611,
+   "bottom": 844
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/f1-higher-lower",
+  "width": 1280,
+  "height": 900,
+  "key": "/f1-higher-lower@1280",
+  "banner": {
+   "top": 735,
+   "bottom": 900
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/guess-tennis-player",
+  "width": 320,
+  "height": 640,
+  "key": "/guess-tennis-player@320",
+  "banner": {
+   "top": 335,
+   "bottom": 640
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/guess-tennis-player",
+  "width": 390,
+  "height": 844,
+  "key": "/guess-tennis-player@390",
+  "banner": {
+   "top": 611,
+   "bottom": 844
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/guess-tennis-player",
+  "width": 1280,
+  "height": 900,
+  "key": "/guess-tennis-player@1280",
+  "banner": {
+   "top": 735,
+   "bottom": 900
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/guess-the-golfer",
+  "width": 320,
+  "height": 640,
+  "key": "/guess-the-golfer@320",
+  "banner": {
+   "top": 49,
+   "bottom": 367
+  },
+  "bannerFixed": false,
+  "pending": null,
+  "dialogs": 2,
+  "name": "How to Play Guess The Golfer",
+  "kind": "dialog",
+  "position": "fixed",
+  "bannerInside": true,
+  "dialogBox": {
+   "top": 48,
+   "bottom": 592
+  },
+  "at": "tappable",
+  "overlap": 0,
+  "button": "Let's Play!",
+  "how": "its go label",
+  "buttonBox": {
+   "top": 523,
+   "bottom": 567
+  },
+  "cx": 160,
+  "cy": 545,
+  "whole": true,
+  "closed": true,
+  "blocker": null,
+  "state": "PASS"
+ },
+ {
+  "route": "/guess-the-golfer",
+  "width": 390,
+  "height": 844,
+  "key": "/guess-the-golfer@390",
+  "banner": {
+   "top": 139,
+   "bottom": 437
+  },
+  "bannerFixed": false,
+  "pending": null,
+  "dialogs": 2,
+  "name": "How to Play Guess The Golfer",
+  "kind": "dialog",
+  "position": "fixed",
+  "bannerInside": true,
+  "dialogBox": {
+   "top": 66,
+   "bottom": 778
+  },
+  "at": "tappable",
+  "overlap": 0,
+  "button": "Let's Play!",
+  "how": "its go label",
+  "buttonBox": {
+   "top": 709,
+   "bottom": 753
+  },
+  "cx": 195,
+  "cy": 731,
+  "whole": true,
+  "closed": true,
+  "blocker": null,
+  "state": "PASS"
+ },
+ {
+  "route": "/guess-the-golfer",
+  "width": 1280,
+  "height": 900,
+  "key": "/guess-the-golfer@1280",
+  "banner": {
+   "top": 203,
+   "bottom": 429
+  },
+  "bannerFixed": false,
+  "pending": null,
+  "dialogs": 2,
+  "name": "How to Play Guess The Golfer",
+  "kind": "dialog",
+  "position": "fixed",
+  "bannerInside": true,
+  "dialogBox": {
+   "top": 130,
+   "bottom": 770
+  },
+  "at": "tappable",
+  "overlap": 0,
+  "button": "Let's Play!",
+  "how": "its go label",
+  "buttonBox": {
+   "top": 701,
+   "bottom": 745
+  },
+  "cx": 640,
+  "cy": 723,
+  "whole": true,
+  "closed": true,
+  "blocker": null,
+  "state": "PASS"
+ },
+ {
+  "route": "/afl-higher-lower",
+  "width": 320,
+  "height": 640,
+  "key": "/afl-higher-lower@320",
+  "banner": {
+   "top": 335,
+   "bottom": 640
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/afl-higher-lower",
+  "width": 390,
+  "height": 844,
+  "key": "/afl-higher-lower@390",
+  "banner": {
+   "top": 611,
+   "bottom": 844
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/afl-higher-lower",
+  "width": 1280,
+  "height": 900,
+  "key": "/afl-higher-lower@1280",
+  "banner": {
+   "top": 735,
+   "bottom": 900
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/cage-clash",
+  "width": 320,
+  "height": 640,
+  "key": "/cage-clash@320",
+  "banner": {
+   "top": 335,
+   "bottom": 640
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/cage-clash",
+  "width": 390,
+  "height": 844,
+  "key": "/cage-clash@390",
+  "banner": {
+   "top": 611,
+   "bottom": 844
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/cage-clash",
+  "width": 1280,
+  "height": 900,
+  "key": "/cage-clash@1280",
+  "banner": {
+   "top": 735,
+   "bottom": 900
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/fight-gym",
+  "width": 320,
+  "height": 640,
+  "key": "/fight-gym@320",
+  "banner": {
+   "top": 335,
+   "bottom": 640
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/fight-gym",
+  "width": 390,
+  "height": 844,
+  "key": "/fight-gym@390",
+  "banner": {
+   "top": 611,
+   "bottom": 844
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/fight-gym",
+  "width": 1280,
+  "height": 900,
+  "key": "/fight-gym@1280",
+  "banner": {
+   "top": 735,
+   "bottom": 900
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/rank-em",
+  "width": 320,
+  "height": 640,
+  "key": "/rank-em@320",
+  "banner": {
+   "top": 335,
+   "bottom": 640
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/rank-em",
+  "width": 390,
+  "height": 844,
+  "key": "/rank-em@390",
+  "banner": {
+   "top": 611,
+   "bottom": 844
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/rank-em",
+  "width": 1280,
+  "height": 900,
+  "key": "/rank-em@1280",
+  "banner": {
+   "top": 735,
+   "bottom": 900
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/guess-the-year",
+  "width": 320,
+  "height": 640,
+  "key": "/guess-the-year@320",
+  "banner": {
+   "top": 335,
+   "bottom": 640
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/guess-the-year",
+  "width": 390,
+  "height": 844,
+  "key": "/guess-the-year@390",
+  "banner": {
+   "top": 611,
+   "bottom": 844
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/guess-the-year",
+  "width": 1280,
+  "height": 900,
+  "key": "/guess-the-year@1280",
+  "banner": {
+   "top": 735,
+   "bottom": 900
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/champ-or-not",
+  "width": 320,
+  "height": 640,
+  "key": "/champ-or-not@320",
+  "banner": {
+   "top": 49,
+   "bottom": 367
+  },
+  "bannerFixed": false,
+  "pending": null,
+  "dialogs": 2,
+  "name": "How to Play Champ or Not",
+  "kind": "dialog",
+  "position": "fixed",
+  "bannerInside": true,
+  "dialogBox": {
+   "top": 48,
+   "bottom": 592
+  },
+  "at": "tappable",
+  "overlap": 0,
+  "button": "Let's Play!",
+  "how": "its go label",
+  "buttonBox": {
+   "top": 523,
+   "bottom": 567
+  },
+  "cx": 160,
+  "cy": 545,
+  "whole": true,
+  "closed": true,
+  "blocker": null,
+  "state": "PASS"
+ },
+ {
+  "route": "/champ-or-not",
+  "width": 390,
+  "height": 844,
+  "key": "/champ-or-not@390",
+  "banner": {
+   "top": 136,
+   "bottom": 434
+  },
+  "bannerFixed": false,
+  "pending": null,
+  "dialogs": 2,
+  "name": "How to Play Champ or Not",
+  "kind": "dialog",
+  "position": "fixed",
+  "bannerInside": true,
+  "dialogBox": {
+   "top": 63,
+   "bottom": 781
+  },
+  "at": "tappable",
+  "overlap": 0,
+  "button": "Let's Play!",
+  "how": "its go label",
+  "buttonBox": {
+   "top": 711,
+   "bottom": 755
+  },
+  "cx": 195,
+  "cy": 733,
+  "whole": true,
+  "closed": true,
+  "blocker": null,
+  "state": "PASS"
+ },
+ {
+  "route": "/champ-or-not",
+  "width": 1280,
+  "height": 900,
+  "key": "/champ-or-not@1280",
+  "banner": {
+   "top": 141,
+   "bottom": 367
+  },
+  "bannerFixed": false,
+  "pending": null,
+  "dialogs": 2,
+  "name": "How to Play Champ or Not",
+  "kind": "dialog",
+  "position": "fixed",
+  "bannerInside": true,
+  "dialogBox": {
+   "top": 68,
+   "bottom": 833
+  },
+  "at": "tappable",
+  "overlap": 0,
+  "button": "Let's Play!",
+  "how": "its go label",
+  "buttonBox": {
+   "top": 764,
+   "bottom": 808
+  },
+  "cx": 640,
+  "cy": 786,
+  "whole": true,
+  "closed": true,
+  "blocker": null,
+  "state": "PASS"
+ },
+ {
+  "route": "/hall-of-champions",
+  "width": 320,
+  "height": 640,
+  "key": "/hall-of-champions@320",
+  "banner": {
+   "top": 335,
+   "bottom": 640
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/hall-of-champions",
+  "width": 390,
+  "height": 844,
+  "key": "/hall-of-champions@390",
+  "banner": {
+   "top": 611,
+   "bottom": 844
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/hall-of-champions",
+  "width": 1280,
+  "height": 900,
+  "key": "/hall-of-champions@1280",
+  "banner": {
+   "top": 735,
+   "bottom": 900
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/score-predictor",
+  "width": 320,
+  "height": 640,
+  "key": "/score-predictor@320",
+  "banner": {
+   "top": 335,
+   "bottom": 640
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/score-predictor",
+  "width": 390,
+  "height": 844,
+  "key": "/score-predictor@390",
+  "banner": {
+   "top": 611,
+   "bottom": 844
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/score-predictor",
+  "width": 1280,
+  "height": 900,
+  "key": "/score-predictor@1280",
+  "banner": {
+   "top": 735,
+   "bottom": 900
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/sports-millionaire",
+  "width": 320,
+  "height": 640,
+  "key": "/sports-millionaire@320",
+  "banner": {
+   "top": 49,
+   "bottom": 367
+  },
+  "bannerFixed": false,
+  "pending": null,
+  "dialogs": 2,
+  "name": "How to Play Sports Millionaire",
+  "kind": "dialog",
+  "position": "fixed",
+  "bannerInside": true,
+  "dialogBox": {
+   "top": 48,
+   "bottom": 592
+  },
+  "at": "tappable",
+  "overlap": 0,
+  "button": "Let's Play!",
+  "how": "its go label",
+  "buttonBox": {
+   "top": 523,
+   "bottom": 567
+  },
+  "cx": 160,
+  "cy": 545,
+  "whole": true,
+  "closed": true,
+  "blocker": null,
+  "state": "PASS"
+ },
+ {
+  "route": "/sports-millionaire",
+  "width": 390,
+  "height": 844,
+  "key": "/sports-millionaire@390",
+  "banner": {
+   "top": 136,
+   "bottom": 434
+  },
+  "bannerFixed": false,
+  "pending": null,
+  "dialogs": 2,
+  "name": "How to Play Sports Millionaire",
+  "kind": "dialog",
+  "position": "fixed",
+  "bannerInside": true,
+  "dialogBox": {
+   "top": 63,
+   "bottom": 781
+  },
+  "at": "tappable",
+  "overlap": 0,
+  "button": "Let's Play!",
+  "how": "its go label",
+  "buttonBox": {
+   "top": 711,
+   "bottom": 755
+  },
+  "cx": 195,
+  "cy": 733,
+  "whole": true,
+  "closed": true,
+  "blocker": null,
+  "state": "PASS"
+ },
+ {
+  "route": "/sports-millionaire",
+  "width": 1280,
+  "height": 900,
+  "key": "/sports-millionaire@1280",
+  "banner": {
+   "top": 141,
+   "bottom": 367
+  },
+  "bannerFixed": false,
+  "pending": null,
+  "dialogs": 2,
+  "name": "How to Play Sports Millionaire",
+  "kind": "dialog",
+  "position": "fixed",
+  "bannerInside": true,
+  "dialogBox": {
+   "top": 68,
+   "bottom": 833
+  },
+  "at": "tappable",
+  "overlap": 0,
+  "button": "Let's Play!",
+  "how": "its go label",
+  "buttonBox": {
+   "top": 764,
+   "bottom": 808
+  },
+  "cx": 640,
+  "cy": 786,
+  "whole": true,
+  "closed": true,
+  "blocker": null,
+  "state": "PASS"
+ },
+ {
+  "route": "/emoji-guess",
+  "width": 320,
+  "height": 640,
+  "key": "/emoji-guess@320",
+  "banner": {
+   "top": 335,
+   "bottom": 640
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/emoji-guess",
+  "width": 390,
+  "height": 844,
+  "key": "/emoji-guess@390",
+  "banner": {
+   "top": 611,
+   "bottom": 844
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ },
+ {
+  "route": "/emoji-guess",
+  "width": 1280,
+  "height": 900,
+  "key": "/emoji-guess@1280",
+  "banner": {
+   "top": 735,
+   "bottom": 900
+  },
+  "bannerFixed": true,
+  "pending": "1",
+  "dialogs": 0,
+  "state": "NONE"
+ }
+]
