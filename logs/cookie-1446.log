@@ -1,0 +1,5 @@
+"message": "COOKIE_BROWSER_FOOTER_NAV: trusted click reaches policy\n+ actual - expected\n\n+ '/privacy'\n- '/cookie-policy'\n
+"message": "COOKIE_BROWSER_FOOTER_NAV: trusted click reaches policy\n+ actual - expected\n\n+ '/privacy'\n- '/cookie-policy'\n
+"message": "COOKIE_BROWSER_COPY: one actual statement: Analytics is paused while we check its collection settings, so Accept all does not turn it on.\n\n0 !== 1\n
+"message": "COOKIE_BROWSER_COPY: one actual statement: Analytics is paused while we check its collection settings, so Accept all does not turn it on.\n\n0 !== 1\n
+COOKIE_POLICY_BROWSER_RESULT {"status":"PASS","phase":"green","originalOutcomes":0,"profiles":4,"faults":3,"restorations":3,"setupErrors":0,"sourceAndDistHeld":true,"actualOutbound":0}
