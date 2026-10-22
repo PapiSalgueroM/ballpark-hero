@@ -162,6 +162,15 @@ function onePressDigest(raw: string): string {
   const s = JSON.parse(raw);
   delete s.gameLog;
   if (s.gm && s.gm.blocks) { delete s.gm.blocks.seat; delete s.gm.blocks.xp; }
+  /* Round 1542, the same rule: the season's lines and award history (league.stats and league.awards) and a man's
+     sim awards and first year (awards, rookieSeason, stamped on every man the draft brings in) did not exist on the
+     base. Everything else of every man and of the league stays in the digest to the byte. */
+  if (s.league) {
+    delete s.league.stats;
+    delete s.league.awards;
+    const teams = Object.values((s.league.teams ?? {}) as Record<string, any>);
+    for (const p of [...teams.flatMap(t => [...(t.players ?? []), ...(t.practice ?? [])]), ...(s.league.freeAgents ?? [])]) { delete p.awards; delete p.rookieSeason; }
+  }
   for (const r of s.postseason?.rounds ?? []) for (const g of r.games) { g.homeScore = 0; g.awayScore = 0; }
   return sha1(JSON.stringify(s));
 }

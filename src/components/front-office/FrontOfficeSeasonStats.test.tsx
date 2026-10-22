@@ -15,7 +15,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, cleanup } from '@testing-library/react';
 import type { ComponentType } from 'react';
-import { initLeague, simGame, REGULAR_WEEKS, deepOverLimit, cutDownToMax } from '@/lib/frontOffice';
+import { initLeague, simGame, runPlayoffs, REGULAR_WEEKS, deepOverLimit, cutDownToMax } from '@/lib/frontOffice';
 import { FO_DEPTH } from '@/data/frontOfficeDepth';
 import { nflNewStats, readNflAwards, readNflStats } from '@/lib/nflSeasonStats';
 import { openNflDesk } from '@/lib/nflGmDesk';
@@ -110,10 +110,11 @@ describe('NFL front office: who scored, the press and the save', () => {
     const st = s.league.stats;
     expect(st.season).toBe(league.season);
     expect(readNflStats(st), 'the saved block reads whole').not.toBeNull();
-    /* every club played three games, and every line is a man of the pool (at most twelve a club) */
+    /* every club played three games, and every line is a man of the pool (at most twelve a club a game) */
     for (const t of Object.keys(s.league.teams)) expect(st.teams[t].g).toBe(3);
-    const perClub = Object.values(st.lines as Record<string, any>).reduce((m: Record<string, number>, l: any) => ({ ...m, [l.team]: (m[l.team] ?? 0) + 1 }), {});
-    expect(Math.max(...Object.values(perClub))).toBeLessThanOrEqual(12);
+    const gamesBy: Record<string, number> = {};
+    for (const l of Object.values(st.lines as Record<string, any>)) { gamesBy[l.team] = (gamesBy[l.team] ?? 0) + l.g; expect(l.g).toBeLessThanOrEqual(3); }
+    for (const t of Object.keys(gamesBy)) expect(gamesBy[t], `${t}: at most twelve men a game`).toBeLessThanOrEqual(36);
     /* his three games, by the keys his log holds */
     const keys = s.gameLog.games.map((g: any) => g.key);
     expect(keys).toHaveLength(3);
@@ -181,7 +182,7 @@ describe('NFL front office: who scored, the load and the close', () => {
   it('and on a bracket started again', () => {
     const { league, team } = leagueAt(REGULAR_WEEKS + 1);
     damage(league, team);
-    save(shape(league, team));
+    save(shape(league, team, { playoffs: { season: league.season, junk: true } }));
     render(<Board />);
     const s = read();
     expect(s.playoffs, 'the bracket was started again and saved at load').toBeTruthy();
@@ -289,5 +290,27 @@ describe('NFL front office: the season card and the history', () => {
     render(<Board />);
     press('Play the final week + playoffs');
     expect((await screen.findByText(/This save started before season lines were kept/)).textContent).toContain('next season\'s Week 1');
+  });
+});
+
+describe('NFL front office: the draft stamps its first year men', () => {
+  it('every man the draft brings in, his and the computer clubs\', carries next season as his first year, and nobody else does', () => {
+    const lg: any = initLeague(lehmer(7));
+    lg.week = REGULAR_WEEKS;
+    const post = runPlayoffs(lg.teams, lehmer(51));
+    lg.champions.push({ season: lg.season, team: post.champion });
+    const team = Object.keys(lg.teams)[3];
+    save({ league: lg, myTeam: team, phase: 'recap', titles: 0, seasonsPlayed: 1, draftClass: null, picksLeft: 0, postseason: post });
+    render(<Board />);
+    fireEvent.click(screen.getByRole('button', { name: 'Go to the draft' }));
+    const cls: string[] = read().draftClass.map((p: any) => p.name);
+    for (let k = 0; k < 12 && read().picksLeft > 0; k += 1) fireEvent.click(screen.getByText(read().draftClass[0].name));
+    const s = read();
+    expect(s.league.season, 'the summer ran').toBe(lg.season + 1);
+    const men = [...Object.values(s.league.teams as Record<string, any>).flatMap(t => [...t.players, ...(t.practice ?? [])]), ...s.league.freeAgents];
+    const drafted = men.filter(p => cls.includes(p.name));
+    expect(drafted.length, 'his picks and the computer clubs\' batches').toBeGreaterThan(6);
+    for (const p of drafted) expect(p.rookieSeason, p.name).toBe(lg.season + 1);
+    expect(men.filter(p => p.rookieSeason !== undefined).length).toBe(drafted.length);
   });
 });

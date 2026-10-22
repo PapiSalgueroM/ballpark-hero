@@ -226,7 +226,9 @@ describe('NFL draft capital outcomes', () => {
     const actualRandom = seeded(29), actualTape: number[] = [];
     vi.mocked(Math.random).mockImplementation(() => { const value = actualRandom(); actualTape.push(value); return value; });
     mount(originalSave); open(); pick(); pick(); pick();
-    const withoutIds = (value: unknown) => JSON.parse(JSON.stringify(value, (key, item) => key === 'id' ? undefined : item));
+    /* Round 1542: the board stamps each man drafted with his first year (rookieSeason), a key the original loop never
+       wrote; it moves no outcome and takes no draw, so it is set aside with the ids */
+    const withoutIds = (value: unknown) => JSON.parse(JSON.stringify(value, (key, item) => key === 'id' || key === 'rookieSeason' ? undefined : item));
     expect(withoutIds(read().league)).toEqual(withoutIds(reference)); expect(actualTape).toEqual(expectedTape);
   });
 
