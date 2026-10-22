@@ -1,0 +1,18 @@
+  same: src/lib/nbaEarnedDraft.ts nbaDraftSeason (9 lines)
+  same: src/lib/nbaEarnedDraft.ts nbaDraftOrder (5 lines)
+  same: src/lib/nbaEarnedDraft.ts nbaDraftNightOf (6 lines)
+  same: src/lib/nbaEarnedDraft.ts openNbaDraftNight (13 lines)
+  same: src/lib/nbaEarnedDraft.ts NBA_DRAFT_NIGHT_SUMMER (1 lines)
+  same: src/lib/nbaEarnedDraft.ts NBA_SECOND_ROUND_SEASONS (1 lines)
+  same: src/lib/nbaEarnedDraft.ts NBA_DRAFT_KNOBS (4 lines)
+  same: src/lib/nbaEarnedDraft.ts nbaDraftHost (33 lines)
+  same: src/lib/nbaEarnedDraft.ts press (16 lines)
+  same: src/lib/nbaEarnedDraft.ts nbaDraftContinue (3 lines)
+  same: src/lib/nbaEarnedDraft.ts nbaDraftPick (3 lines)
+  same: src/lib/nbaEarnedDraft.ts nbaDraftByStaff (3 lines)
+  same: src/lib/gmEarnedDraft.ts stepOf (3 lines)
+  same: src/lib/gmEarnedDraft.ts earnedContinue (3 lines)
+  same: src/lib/gmEarnedDraft.ts earnedPick (7 lines)
+  same: src/lib/gmEarnedDraft.ts earnedByStaff (3 lines)
+diffproof: green, 16 declarations byte for byte 7a8750ba's
+engine files: git diff --quiet exit 0

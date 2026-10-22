@@ -1,0 +1,12 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/nbaEarnedDraft.test.ts [2m([22m[2m21 tests[22m[2m)[22m[33m 1231[2mms[22m[39m
+ [32m✓[39m src/lib/gmEarnedDraft.test.ts [2m([22m[2m19 tests[22m[2m)[22m[33m 2133[2mms[22m[39m
+   [33m[2m✓[22m[39m lotteryChancesBefore: the lines before the draw cannot give the draw away (correction 1)[2m > [22mhis club seeded 1st, 3rd and 14th, a playoff club, a traded away first, a bought first and two bought firsts [33m 1369[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m40 passed[39m[22m[90m (40)[39m
+[2m   Start at [22m 08:21:57
+[2m   Duration [22m 4.28s[2m (transform 744ms, setup 242ms, collect 1.42s, tests 3.36s, environment 1.20s, prepare 514ms)[22m
+

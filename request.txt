@@ -1,0 +1,10 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/gmEarnedDraft.test.ts src/lib/nbaEarnedDraft.test.ts --testTimeout=300000 --hookTimeout=120000
+simNbaEarnedDraft: node scripts/simNbaEarnedDraft.mjs
+simNbaEarnedDraft-controls: SIM_NBA_EARNED_DRAFT_CONTROL=all node scripts/simNbaEarnedDraft.mjs
+simGmDraftOrder: node scripts/simGmDraftOrder.mjs
+simGmDraftOrder-controls: SIM_GM_DRAFT_ORDER_CONTROL=all node scripts/simGmDraftOrder.mjs
+diffproof: node .rc/x/diffproof.mjs 7a8750ba && git diff --quiet 7a8750ba -- src/lib/nbaFrontOffice.ts src/lib/gmDraftOrder.ts src/lib/gmDraftNight.ts src/lib/gmLotteryNight.ts src/lib/gmPicks.ts src/data/gmDraftOrder/rules.ts scripts/data/gmDraftOrderSources.json src/lib/draftNight.ts src/lib/lotteryReveal.ts src/components/lottery src/components/front-office-shared/GmLotteryCard.tsx scripts/data/nbaEarnedDraftFixture.json scripts/data/nbaGmDeskFixture.json scripts/simNbaDraftCapital.mjs && echo "engine files: git diff --quiet exit 0"
+diffproof-control: DIFFPROOF_CONTROL=1 node .rc/x/diffproof.mjs 7a8750ba
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simInventedNames: node scripts/simInventedNames.mjs
