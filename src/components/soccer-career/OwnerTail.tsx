@@ -11,7 +11,8 @@ import { DugoutTableBlock } from "./DugoutTableBlock";
 /* ─── Round 1524: the clubs for sale ───
    Two from every price band he can afford, the same list on every visit.
    The prices and the debts are the game's own tier bands, and the card says
-   so: never a real club's real valuation. */
+   so: never a real club's real valuation. A tile buys a club for good, so it
+   is cm-rise-gated: hidden, and so not pressable, until its reveal starts. */
 export function OwnerClubSale({ career, clubs, onBuy, onBack }: { career: CareerState; clubs: ClubData[]; onBuy: (club: string) => void; onBack: () => void }) {
   const forSale = ownerClubsOnSale(career, clubs);
   return (
@@ -29,7 +30,7 @@ export function OwnerClubSale({ career, clubs, onBuy, onBack }: { career: Career
             key={c.name}
             onClick={() => onBuy(c.name)}
             data-testid="owner-club-for-sale"
-            className="cm-rise min-w-0 rounded-lg border border-border bg-card hover:border-primary p-2.5 text-left transition-all"
+            className="cm-rise-gated min-w-0 rounded-lg border border-border bg-card hover:border-primary p-2.5 text-left transition-all"
             style={{ animationDelay: revealDelay(i) }}
           >
             <div className="truncate text-xs font-black">{c.name}</div>
