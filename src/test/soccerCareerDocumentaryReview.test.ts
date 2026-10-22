@@ -158,9 +158,13 @@ describe('Soccer Career recorded documentary review', () => {
     expect(catalog(before).filter(event => event.id === 631)).toHaveLength(1); effect(before, 0);
   });
   it('documentary review missing: queued family privacy survives JSON and retirement', () => {
-    const original = review(), before = reload(reload({ ...original, retired: true, age: 38, popularity: 0,
+    // Round 1519: a retired flag on a career still answering its events has nothing behind it, so the load repairs
+    // it and the career plays on (reconcileRetirement). The queued card is held on that career at 38, and the
+    // retirement is a real one: the retired screen with the legacy every retirement leaves.
+    const original = review(), before = reload(reload({ ...original, age: 38, popularity: 0,
       lifeFlags: { ...original.lifeFlags, rDocCrew: 2 }, eventLastFired: { ...original.eventLastFired, '408': year(original) + 1 } }));
-    absent({ ...before, phase: 'retired', pendingEvents: [] }); expect(catalog(before).filter(event => event.id === 631)).toHaveLength(1);
+    const gone = { ...before, phase: 'retired' as const, retired: true, pendingEvents: [] };
+    absent({ ...gone, legacy: E.calculateLegacy(gone) }); expect(catalog(before).filter(event => event.id === 631)).toHaveLength(1);
     effect(before, 1);
   });
   it('documentary review missing: both resolved choices stay once after two canonical reloads', () => {
@@ -203,7 +207,10 @@ describe('Soccer Career recorded documentary review', () => {
     const state = acquired(); absent(reload({ ...state, eventLastFired: { ...state.eventLastFired, '408': year(state) + 1 } }));
   });
   it('documentary review preservation: retired careers gain no fresh review or priority', () => {
-    const state = due(); absent(reload({ ...state, phase: 'retired', retired: true, pendingEvents: [] }));
+    // Round 1519: a retired career carries the legacy every real retirement leaves; without it the load reads the
+    // flag as a stray and the career plays on.
+    const state = due(), gone = { ...state, phase: 'retired' as const, retired: true, pendingEvents: [] };
+    absent(reload({ ...gone, legacy: E.calculateLegacy(gone) }));
   });
   it('documentary review preservation: reviewed and requested stages stay closed without another deal', () => {
     for (const stage of [2, 3]) { const state = due(); absent(reload({ ...state, lifeFlags: { ...state.lifeFlags, rDocCrew: stage } })); }
