@@ -1,0 +1,4 @@
+  FAIL: Deadline Day 2026-10-11 (Borussia Dortmund): the day differs from the base
+  FAIL: Deadline Day 2026-10-18 (Nottingham Forest): the day differs from the base
+   red per daily: Hot Seat 3 of 3, Deadline Day 3 of 3; deadlineDay.ts calls none of the match, summer, market or setup entry points
+simCmDifficulty: 6 FAILURES (sections 6)

@@ -1,0 +1,5 @@
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/soccerCareerDocumentaryReview.test.ts[2m > [22mSoccer Career recorded documentary review[2m > [22mdocumentary review missing: queued family privacy survives JSON
+[41m[1m FAIL [22m[49m src/test/soccerCareerDocumentaryReview.test.ts[2m > [22mSoccer Career recorded documentary review[2m > [22mdocumentary review preservation: retired careers gain no fresh 
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m621 passed[39m[22m[2m | [22m[33m2 skipped[39m[90m (624)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m9400 passed[39m[22m[2m | [22m[33m58 skipped[39m[90m (9460)[39m

@@ -1,0 +1,4 @@
+8) changing the level between matches
+  ok: 8a to 8e: 12 changes mid season at three clubs: nothing but the level and the mark moved, each saved and loaded back, the next match read the new edge, the leaderboard mark one way, and the refusals held
+  ok: 8f: 12 summer cheques after a change at the season's end (3 clubs, four levels) are Medium's times the new dial
+simCmDifficulty: all green (sections 1,3,7,8)
