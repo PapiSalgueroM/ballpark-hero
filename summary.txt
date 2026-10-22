@@ -1,0 +1,4 @@
+motion exit=0 92s |    Duration  90.86s (transform 3.87s, setup 192ms, collect 4.89s, tests 84.08s, environment 575ms, prepare 430ms)
+bundle exit=1 0s | simLiveSimMotion: RED. The bundle section found 1 problem.
+tsc exit=0 113s | 
+siblings exit=0 149s |    Duration  148.12s (transform 8.07s, setup 979ms, collect 16.96s, tests 183.30s, environment 4.13s, prepare 1.42s)
