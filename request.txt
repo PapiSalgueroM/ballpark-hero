@@ -1,0 +1,7 @@
+#!serial
+vitest-lazy: node_modules/.bin/vitest run src/components/front-office/FrontOfficeLazyDesk.test.tsx --testTimeout=300000 --hookTimeout=120000
+fob-askalways: node scripts/controlFrontOfficeBoard.mjs askalways
+fob-nowait: node scripts/controlFrontOfficeBoard.mjs nowait
+fob-recapnever: node scripts/controlFrontOfficeBoard.mjs recapnever
+fob-blank: node scripts/controlFrontOfficeBoard.mjs blank
+fob-lookopens: node scripts/controlFrontOfficeBoard.mjs lookopens
