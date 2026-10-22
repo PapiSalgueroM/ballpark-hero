@@ -461,8 +461,10 @@ export function pitchPlan(input: PitchInput): PitchPlan {
          line names who is the keeper fouls a forward, near his own goal. The card is the feed's own, never made. */
       let foul: Layer['foul'];
       /* With `build` it is also staged where it can be seen: inside its own minute (the clock still reads it) at the
-         first instant no chance, kick off or follow up holds the pitch, its meeting and its whistle if both fit, its
-         whistle alone if only that does, and at its place as before if neither. */
+         first instant no chance, kick off, follow up or other dead ball holds the pitch, its meeting and its whistle
+         if both fit, its whistle alone if only that does. When nothing fits, the pitch is held all through its
+         minute and the foul is not drawn on the grass at all (it is still in the list beside the pitch): it neither
+         covers what is drawn there nor holds room from the next foul. */
       let at = p;
       let meets = false;
       if (build) {
@@ -476,7 +478,8 @@ export function pitchPlan(input: PitchInput): PitchPlan {
           if (found >= 0) { meets = span > 0; break; }
         }
         if (found < 0) for (let k = 0; found < 0 && p + k * 0.02 <= latest + EPS; k++) if (!held(p + k * 0.02, p + k * 0.02 + BEAT_SPAN)) { found = p + k * 0.02; meets = false; }
-        if (found >= 0) at = Math.round(found * 1e6) / 1e6;
+        if (found < 0) return;
+        at = Math.round(found * 1e6) / 1e6;
         deadWindows.push([at - (meets ? BEAT_SPAN : 0), at + 2 * BEAT_SPAN]);
       }
       if (build) {

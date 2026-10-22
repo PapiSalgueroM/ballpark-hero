@@ -935,7 +935,7 @@ interface Tally1521 {
   shots: Record<'first' | 'second', number>; shotOffenders: number; shotExamples: string[];
   fouls: number; cues: number; waited: number; cueOffenders: number; hidden: number; hiddenOffenders: number; named: number; contacts: number; contactOffenders: number;
   cardLines: number; carded: number; cardOffenders: number; statFouls: number; statOffenders: number; foulExamples: string[];
-  arms: Record<Arm1521, BuildArm>; pressGap: number[]; calmGap: number[]; chains: number; deepChains: number; chainOffenders: number;
+  arms: Record<Arm1521, BuildArm>; pressGap: number[]; calmGap: number[]; chains: number; deepChains: number; chainOffenders: number; chainExamples: string[];
 }
 const buildArm = (): BuildArm => ({ possessions: 0, forward: 0, level: 0, back: 0, behind: 0, behindForward: 0, resets: { press: 0, switch: 0 }, unreasoned: 0, switchOffenders: 0, pressOffenders: 0 });
 const tally1521 = (): Tally1521 => ({
@@ -943,7 +943,7 @@ const tally1521 = (): Tally1521 => ({
   shots: { first: 0, second: 0 }, shotOffenders: 0, shotExamples: [],
   fouls: 0, cues: 0, waited: 0, cueOffenders: 0, hidden: 0, hiddenOffenders: 0, named: 0, contacts: 0, contactOffenders: 0,
   cardLines: 0, carded: 0, cardOffenders: 0, statFouls: 0, statOffenders: 0, foulExamples: [],
-  arms: { defensive: buildArm(), balanced: buildArm(), attacking: buildArm() }, pressGap: [], calmGap: [], chains: 0, deepChains: 0, chainOffenders: 0,
+  arms: { defensive: buildArm(), balanced: buildArm(), attacking: buildArm() }, pressGap: [], calmGap: [], chains: 0, deepChains: 0, chainOffenders: 0, chainExamples: [],
 });
 const LINE_RANK = { keeper: 0, defence: 1, midfield: 2, attack: 3 } as const;
 const apart = (a: { x: number; y: number }, b: { x: number; y: number }) => Math.hypot(a.x - b.x, a.y - b.y);
@@ -1121,11 +1121,12 @@ function replayBuild(t: Tally1521, input: PitchInput, plan: PitchPlan) {
     const feed = plan.entries[n - 1];
     if (feed?.id !== `a${order}` || Math.abs(feed.end - beat.start) > 1e-6) return;
     t.chains++;
-    if (!feed.line || feed.side !== beat.side || LINE_RANK[feed.line] > LINE_RANK[beat.line]) { t.chainOffenders++; return; }
+    const say = (why: string) => { t.chainOffenders++; if (t.chainExamples.length < 3) t.chainExamples.push(`${beat.id} at ${beat.start.toFixed(2)}, shooter ${beat.carrier} (${beat.line}): ${why}`); };
+    if (!feed.line || feed.side !== beat.side || LINE_RANK[feed.line] > LINE_RANK[beat.line]) { say(`fed by ${feed.carrier} (${feed.line}, ${feed.side})`); return; }
     const deep = plan.entries[n - 2];
     if (deep?.id !== `b${order}` || Math.abs(deep.end - feed.start) > 1e-6) return;
     t.deepChains++;
-    if (!deep.line || deep.side !== beat.side || LINE_RANK[deep.line] >= LINE_RANK[feed.line]) t.chainOffenders++;
+    if (!deep.line || deep.side !== beat.side || LINE_RANK[deep.line] >= LINE_RANK[feed.line]) say(`fed by ${feed.carrier} (${feed.line}) after ${deep.carrier} (${deep.line}, ${deep.side})`);
   });
 }
 
@@ -1535,7 +1536,7 @@ describe('Round 1521: the live match looks like football', () => {
     /* Where there is a line ahead to play into (behind the front line), the share of passes that go up it. */
     const ahead = (arm: Arm1521) => m.looks.map(t => t.arms[arm].behindForward / Math.max(1, t.arms[arm].behind));
     const resets = (arm: Arm1521) => m.looks.map(t => t.arms[arm].back / Math.max(1, t.arms[arm].possessions));
-    console.log(`[1521 R12] my possessions ${all(a => a.possessions)}; passes inside one: forward ${all(a => a.forward)}, across ${all(a => a.level)}, back ${all(a => a.back)}; forward share per seed: ${ARMS_1521.map(([arm]) => `${arm} ${fixed(per(arm, 'forward'), 3)}`).join('; ')}; back share per seed: ${ARMS_1521.map(([arm]) => `${arm} ${fixed(per(arm, 'back'), 3)}`).join('; ')}; from behind the front line ${all(a => a.behind)}, forward share per seed: ${ARMS_1521.map(([arm]) => `${arm} ${fixed(ahead(arm), 3)}`).join('; ')}; resets per possession per seed: ${ARMS_1521.map(([arm]) => `${arm} ${fixed(resets(arm), 3)}`).join('; ')}; by reason: press ${all(a => a.resets.press)}, switch ${all(a => a.resets.switch)}; back with no reason ${all(a => a.unreasoned)}, switches not across ${all(a => a.switchOffenders)}, pressure not drawn ${all(a => a.pressOffenders)}; nearest man to the ball: pressed ${median(press).toFixed(2)} (${press.length}), not pressed ${median(calm).toFixed(2)} (${calm.length}); chances with the feeder drawn ${totals1521(t => t.chains)}, with the man before him too ${totals1521(t => t.deepChains)}, out of order ${totals1521(t => t.chainOffenders)}`);
+    console.log(`[1521 R12] my possessions ${all(a => a.possessions)}; passes inside one: forward ${all(a => a.forward)}, across ${all(a => a.level)}, back ${all(a => a.back)}; forward share per seed: ${ARMS_1521.map(([arm]) => `${arm} ${fixed(per(arm, 'forward'), 3)}`).join('; ')}; back share per seed: ${ARMS_1521.map(([arm]) => `${arm} ${fixed(per(arm, 'back'), 3)}`).join('; ')}; from behind the front line ${all(a => a.behind)}, forward share per seed: ${ARMS_1521.map(([arm]) => `${arm} ${fixed(ahead(arm), 3)}`).join('; ')}; resets per possession per seed: ${ARMS_1521.map(([arm]) => `${arm} ${fixed(resets(arm), 3)}`).join('; ')}; by reason: press ${all(a => a.resets.press)}, switch ${all(a => a.resets.switch)}; back with no reason ${all(a => a.unreasoned)}, switches not across ${all(a => a.switchOffenders)}, pressure not drawn ${all(a => a.pressOffenders)}; nearest man to the ball: pressed ${median(press).toFixed(2)} (${press.length}), not pressed ${median(calm).toFixed(2)} (${calm.length}); chances with the feeder drawn ${totals1521(t => t.chains)}, with the man before him too ${totals1521(t => t.deepChains)}, out of order ${totals1521(t => t.chainOffenders)}${m.looks.flatMap(t => t.chainExamples).slice(0, 3).map(s => ` | ${s}`).join("")}`);
     for (const [arm] of ARMS_1521) {
       expect(totals1521(t => t.arms[arm].possessions), arm).toBeGreaterThan(1000);
       expect(totals1521(t => t.arms[arm].unreasoned), arm).toBe(0);
