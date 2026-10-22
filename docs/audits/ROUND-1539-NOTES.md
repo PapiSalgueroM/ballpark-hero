@@ -52,7 +52,8 @@ legacyOpponentName (the loader keeps it), the Away Day Deal at level 2 (12 hours
 totalWins and totalGoals one under the lowest milestone that counts them (found by probing MILESTONES' hit functions:
 0 and 24 today), and `ach` and `claimed` settled once with settleFirsts. Before any page opens it must round trip
 (carryover, ach, claimed kept, 18 playable) and draw the full card on 200 of 200 seeded streams in node. The page
-writes it 13 hours old and serves a seeded stream for 5,000 Math.random calls, then 0.999.
+writes it 13 hours old and serves a seeded stream until the card is in the document, then 0.999 (since the review fix
+pass; before it the switch came after 5,000 calls, which the trip never reaches).
 
 The card drew 18 results (the friendly and 17 league wins), "Milestones reached on the road: +$13.7K", "Away wins
 earned 18 gems" and "You are 1st of 10, and the final matchday is waiting for you." (screenshots looked at, r1539-c1).
@@ -80,3 +81,16 @@ simTycoonSeasonReview. Not checked: simPrerender (needs build:seo). Details: res
 Choices made: the "answered banner" line is not in the permanent walk (the walk refuses a line with no banner on screen;
 critic item 6), and Round 1536's probe measured it once. The page-must-not-jump check has its own control (jump), as
 critic item 18 asked. scripts/lib/answerConsent.mjs (Round 1535) is not in this tree, so BANNER stays.
+
+## Review fixes (2026-10-22, results-g/fix-1539.md)
+
+Two adversarial reviews (run and read lens) found no major and seven minors. Fixed, one commit each: the step 0
+merge's real second parent named above (0846f9c5); What's New now says a full night is "worth 17 matchdays, enough to
+take an 18 matchday season from its first matchday right up to its last" (true also for a migrated save whose leftover
+friendly takes one of the 17); the seeded scene's stream flips to 0.999 when the card opens (a MutationObserver), not
+after 5,000 calls; each scene names the save field it ages by (`age`); the short card abort, still exit 2 as designed,
+says it is a page defect until shown otherwise, and a seeded line that drew short no longer reads "the full card
+drawn"; simTycoonAwayMatchdays' header says S4 does not fence the friendly's slot. Not fixed: the 320 by 640 arrival
+view with the banner pending (Round 1536's card, a file this round must not touch, outside the 390 and 1280 bar).
+Re-records: none retaken, both generated records reproduce byte for byte from the head and their old versions replay
+green with only the guide line reverted (r1539-fx-ab); the saved pages stay owed to build:seo.
