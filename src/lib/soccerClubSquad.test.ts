@@ -363,8 +363,8 @@ describe('the living squad', () => {
     expect(managerTrust(happy, at)).toMatchObject({ expected: 26, moraleGames: 1 });
     expect(managerTrust(low, at)).toMatchObject({ expected: 23, moraleGames: -2 });
     expect(managerTrust(warmHappy, at)).toMatchObject({ expected: 28, swing: 3, moraleGames: 0 });
-    expect(trustLines(happy, at, managerTrust(happy, at))).toContain('Your morale is worth about 1 more league game.');
-    expect(trustLines(low, at, managerTrust(low, at))).toContain('Your morale is worth about 2 fewer league games.');
+    /* the plan line carries it (the hub's line under the Morale bar says what it is worth) */
+    expect(trustLines(low, at, managerTrust(low, at))[0]).toBe(`The plan is about ${managerTrust(low, at).band.min - 2} to ${managerTrust(low, at).band.max - 2} league games if you stay fit.`);
   });
 
   it('explains a thin season from the saved row', () => {

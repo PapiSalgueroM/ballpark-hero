@@ -38,24 +38,20 @@ export function moraleForm(career: CareerFormKey, morale: number): number {
 }
 
 /* ─── Soccer Career: morale that plays ───
-   A step from -2 to +1: zero across the middle (74 to 88), +1 from 89, -1 from 73 down to 59, -2 at 58 and below
-   (the top of the scale is 100, so +1 is as high as it goes). The step is league games (beside the dressing room's phoneAppsSwing, the two capped together at
-   plus or minus three, so a happy phone and a happy head never stack past three games) and a tenth of a rating
-   point a step on the season rating. A pure function of the save: no draw, so the season's dice are the same. */
-export const SOCCER_MORALE_STEP_MAX = 2;
-export const DRESSING_ROOM_CAP = 3;
+   A step from -2 to +1: zero across the middle (74 to 88), +1 from 89, -1 from 73 down to 59, -2 at 58 and
+   below (the scale tops out at 100, so +1 is as high as it goes). The step is league games, beside the dressing
+   room's phoneAppsSwing and capped together with it at plus or minus three (a happy phone and a happy head never
+   stack past three games), and a tenth of a rating point a step on the season rating. A pure function of the
+   save: no draw, so the season's dice are the same. Kept small on purpose: /soccer-career is at its weight cap. */
 
-/** His morale as a step from -2 to +2. Morale a save never had counts as neutral. */
+/** His morale as a step from -2 to +1 (the "|| 0" turns a minus zero into 0). Morale a save never had is neutral. */
 export function soccerMoraleStep(morale: number | undefined): number {
-  if (typeof morale !== 'number' || !Number.isFinite(morale)) return 0;
-  const step = Math.round(moraleForm('soccer', morale));
-  if (step === 0) return 0;
-  return Math.max(-SOCCER_MORALE_STEP_MAX, Math.min(SOCCER_MORALE_STEP_MAX, step));
+  return (morale ?? -1) >= 0 ? Math.max(-2, Math.min(2, Math.round(moraleForm('soccer', morale as number)) || 0)) : 0;
 }
 
 /** The league games the dressing room (phone) and his head (morale) are worth together, capped at three either way. */
 export function dressingRoomApps(phoneSwing: number, morale: number | undefined): number {
-  return Math.max(-DRESSING_ROOM_CAP, Math.min(DRESSING_ROOM_CAP, phoneSwing + soccerMoraleStep(morale)));
+  return Math.max(-3, Math.min(3, phoneSwing + soccerMoraleStep(morale)));
 }
 
 /** What his morale adds to the season rating: a tenth a step. */

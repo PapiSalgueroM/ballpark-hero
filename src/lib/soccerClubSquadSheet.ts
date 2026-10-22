@@ -58,9 +58,6 @@ export function trustLines(c: CareerState, at: SquadAt, trust: Trust, myOverall:
   } else if (trust.swing < 0) {
     lines.push(`The dressing room has gone cold on you: about ${-trust.swing} fewer league games. Your phone is where that gets fixed.`);
   }
-  /* Round 1523: his morale, after the cap it shares with the dressing room */
-  const mg = trust.moraleGames ?? 0;
-  if (mg) lines.push(`Your morale is worth about ${mg > 0 ? `${mg} more` : `${-mg} fewer`} league game${Math.abs(mg) === 1 ? '' : 's'}.`);
   if (trust.form.row) lines.push(trust.form.reason);
   if (trust.roleSwing < 0) {
     lines.push(`You accepted the new manager's smaller role: ${-trust.roleSwing} fewer planned league games for this season at ${at.club}, before selection limits, injuries and bans.`);
