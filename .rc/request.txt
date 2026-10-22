@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+weight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs > $TMP/w.log 2>&1; s=$?; grep -E "soccer-career|FAIL|whats-new" $TMP/w.log | head -20 | cut -c1-200; tail -2 $TMP/w.log; exit $s
+weight2: sleep 30; SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs > $TMP/w.log 2>&1; s=$?; grep -E "soccer-career|FAIL" $TMP/w.log | head -20 | cut -c1-200; tail -2 $TMP/w.log; exit $s
