@@ -1,0 +1,7 @@
+sa-2 exit=0 190s | simSoccerSeasonAwards: green
+st-7 exit=0 223s | simSoccerSeasonAwards: green
+st-8 exit=0 230s | simSoccerSeasonAwards: green
+st-9 exit=0 223s | simSoccerSeasonAwards: green
+st-11 exit=0 216s | simSoccerSeasonAwards: green
+st-10 exit=0 226s | simSoccerSeasonAwards: green
+st-12 exit=0 171s | simSoccerSeasonAwards: green
