@@ -1,0 +1,5 @@
+#!serial
+ctl-resetbutton: node scripts/controlFrontOfficeBoard.mjs resetbutton
+ctl-arrivaltitle: node scripts/controlFrontOfficeBoard.mjs arrivaltitle
+ctl-thirdkey: node scripts/controlFrontOfficeBoard.mjs thirdkey
+ctl-blank: node scripts/controlFrontOfficeBoard.mjs blank
