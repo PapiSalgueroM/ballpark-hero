@@ -1,0 +1,4 @@
+#!serial
+ctl-check: node scripts/controlFrontOfficeBoard.mjs check
+ctl-lookopens: node scripts/controlFrontOfficeBoard.mjs lookopens
+ctl-blank: node scripts/controlFrontOfficeBoard.mjs blank
