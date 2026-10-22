@@ -1,0 +1,4 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+owner-s1: SIM_OWNER_ONLY=1 node scripts/simSoccerOwnerTail.mjs
+owner-saleleague: SIM_OWNER_ONLY=1 SIM_OWNER_CONTROL=saleleague node scripts/simSoccerOwnerTail.mjs
+owner: node scripts/simSoccerOwnerTail.mjs

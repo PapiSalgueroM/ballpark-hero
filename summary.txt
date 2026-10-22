@@ -1,0 +1,4 @@
+owner-saleleague exit=1 1s | simSoccerOwnerTail: 1 failure(s)
+owner-s1 exit=0 1s | simSoccerOwnerTail: green. The owner picks his club, plays on the table, and every call does what it says and none is best at everything.
+owner exit=0 9s | simSoccerOwnerTail: green. The owner picks his club, plays on the table, and every call does what it says and none is best at everything.
+tsc exit=0 73s | 
