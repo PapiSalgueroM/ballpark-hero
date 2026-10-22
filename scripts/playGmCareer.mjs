@@ -277,6 +277,27 @@ async function walkA(row, w, h) {
   await screenChecks(page, `${tag} career`);
   await back(page);
   await spendAPoint(page, row, tag, w);
+  /* His new club's draft can take it past 53, and the board holds Play until he cuts (its own rule): cut through
+     the Roster box the way a player does, the biggest group's last man, two taps. */
+  for (let n = 0; n < 8; n++) {
+    const s = await readSave(page, row.key);
+    if (s.league.teams[s.myTeam].players.length <= 53) break;
+    const hub = page.locator('button:has-text("Hub")').first();
+    if (await hub.count()) { await hub.click(); await wait(300); }
+    await page.locator('button:has(div.uppercase:text-is("Roster"))').first().click();
+    await wait(400);
+    const groups = page.locator('[data-roster-group]:not([data-roster-group="practice"])');
+    const sizes = await groups.evaluateAll(gs => gs.map(g => Number((/· (\d+)/.exec(g.textContent || '') || [])[1] || 0)));
+    if (sizes.length) { await groups.nth(sizes.indexOf(Math.max(...sizes))).click(); await wait(300); }
+    const arms = page.locator('button:not([disabled])').filter({ hasText: /^Cut, \$/ });
+    if (!(await arms.count())) break;
+    await arms.last().click();
+    await wait(200);
+    await page.locator('button:has-text("Cut him")').first().click();
+    await wait(400);
+  }
+  const hubBack = page.locator('button:has-text("Hub")').first();
+  if (await hubBack.count()) { await hubBack.click(); await wait(300); }
   const before = (await readSave(page, row.key)).league.week;
   await page.locator('button:has(div.uppercase)').filter({ hasText: new RegExp(row.play, 'i') }).first().click();
   await wait(400);
