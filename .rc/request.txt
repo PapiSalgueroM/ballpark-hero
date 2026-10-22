@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-box: node_modules/.bin/vitest run src/components/nba-front-office/NbaRosterBoxTipOff.test.tsx --testTimeout=300000 --hookTimeout=120000
+playFoHub: ENGINES=chromium node scripts/playFoHub.mjs
+playFoHub-nofloor: PLAY_FO_HUB_CONTROL=nofloor ENGINES=chromium node scripts/playFoHub.mjs
+mut-everyround: bash .rc/x/mut1537.sh everyround 4191
+src-clean: git status --porcelain -- src | wc -l
