@@ -1,0 +1,8 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+shop: node scripts/simUsShopPromises.mjs
+shop-settleafter: SHOP_CONTROL=settleafter node scripts/simUsShopPromises.mjs
+shop-stakefloor: SHOP_STAKE_CAREERS=1999 node scripts/simUsShopPromises.mjs
+vitest: node_modules/.bin/vitest run src/lib/usCareerShopPromises.test.ts src/lib/usCareerAnnualBenefits.test.ts --testTimeout=300000 --hookTimeout=120000
+annual: node scripts/simUsCareerAnnualBenefits.mjs
+boardparity: node scripts/simUsBoardParity.mjs
+rival: node scripts/simNoRivalNames.mjs
