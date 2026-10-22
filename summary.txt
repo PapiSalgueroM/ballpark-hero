@@ -1,0 +1,8 @@
+cfbstaff exit=0 47s | simCfbStaff: all green
+cfbdynasty exit=0 3s | simCfbDynasty: all green
+cbbstaff exit=0 11s | simCbbStaff: all green
+savekeeper exit=0 5s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+engineids exit=0 1s | simEngineIds: an id minted in one page load cannot collide with one minted in another, in all six engines.
+seat-anchors exit=0 0s | simCollegeSeat anchors: 20 rewrites of 14 controls and 6 variants checked, 0 cannot run
+seat-noease exit=1 166s | simCollegeSeat CONTROL noease FIRED: S2 went red with 3 failures (red: S1 (456), S2 (3))
+seat exit=0 218s | simCollegeSeat: all sections green (S1 to S9 and SY)

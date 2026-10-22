@@ -1,0 +1,8 @@
+seat: node scripts/simCollegeSeat.mjs
+seat-noease: SIM_COLLEGE_SEAT_SPORTS=cfb SIM_COLLEGE_SEAT_CONTROL=noease node scripts/simCollegeSeat.mjs
+cfbstaff: node scripts/simCfbStaff.mjs
+cfbdynasty: node scripts/simCfbDynasty.mjs
+cbbstaff: node scripts/simCbbStaff.mjs
+savekeeper: node scripts/simSaveKeeper.mjs
+engineids: node scripts/simEngineIds.mjs
+seat-anchors: SIM_COLLEGE_SEAT_ANCHORS=1 node scripts/simCollegeSeat.mjs
