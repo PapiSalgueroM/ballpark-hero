@@ -1,0 +1,25 @@
+simCmNoSack: sections 7, control nofloor2
+   clubs: Arsenal, Brentford, Hull City, Real Madrid, Espanyol, Málaga, Inter Milan, Torino, Frosinone
+7) A promise to win before every match, the board planted on 2, 3.5, 5, 6.5 in turn, at Hull City, Málaga, Frosinone: 2 seeds, 36 matches each, the Normal twin played beside it (fleet seed 0)
+  FAIL (section 7): Hull City seed 0 entry 1: sacked with No sacking on (the twin went at the first check)
+  FAIL (section 7): Hull City seed 0: only 1 of 36 matches played
+  FAIL (section 7): Hull City seed 1 entry 5: sacked with No sacking on (the twin went at the first check)
+  FAIL (section 7): Hull City seed 1: only 5 of 36 matches played
+  FAIL (section 7): Málaga seed 0 entry 1: sacked with No sacking on (the twin went at the first check)
+  FAIL (section 7): Málaga seed 0: only 1 of 36 matches played
+  FAIL (section 7): Málaga seed 1 entry 3: sacked with No sacking on (the twin went at the recheck, after the broken promise)
+  FAIL (section 7): Málaga seed 1 entry 3: 0 No sacking lines in one report, one a match
+  FAIL (section 7): Málaga seed 1 entry 3: the twin went at the recheck, and the No sacking line is not after the broken promise (line -1, promise 2)
+  FAIL (section 7): Málaga seed 1: only 3 of 36 matches played
+  FAIL (section 7): Frosinone seed 0 entry 2: sacked with No sacking on (the twin went at the recheck, after the broken promise)
+  FAIL (section 7): Frosinone seed 0 entry 2: 0 No sacking lines in one report, one a match
+  FAIL (section 7): Frosinone seed 0 entry 2: the twin went at the recheck, and the No sacking line is not after the broken promise (line -1, promise 1)
+  FAIL (section 7): Frosinone seed 0: only 2 of 36 matches played
+  FAIL (section 7): Frosinone seed 1 entry 2: sacked with No sacking on (the twin went at the recheck, after the broken promise)
+  FAIL (section 7): Frosinone seed 1 entry 2: 0 No sacking lines in one report, one a match
+  FAIL (section 7): Frosinone seed 1 entry 2: the twin went at the recheck, and the No sacking line is not after the broken promise (line -1, promise 1)
+  FAIL (section 7): Frosinone seed 1: only 2 of 36 matches played
+   twins kept the job and matched to the byte: 8; twins sacked at the recheck after a broken promise: 3 (floor 36); both floors in one match: 3 (floor 28); at the first check with no promise broken: 0; 2 s
+  FAIL (section 7): only 3 twins went at the recheck (floor 36), so the second floor was not tested
+  FAIL (section 7): only 3 matches fired both floors (floor 28), so one line a match was not tested
+simCmNoSack: CONTROL nofloor2 FIRED: section 7 red (20 failures)
