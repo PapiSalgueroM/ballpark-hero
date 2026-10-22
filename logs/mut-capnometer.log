@@ -1,0 +1,17 @@
+MUTATION capnometer applied to src/lib/hallOfChampions.ts
+2) a hidden tab: 600 callbacks a minute apart
+   income 3317.25/s; ten hidden hours paid 5.9711e+7, the away rate times eight hours is 4.7768e+7 (x1.250000); meter 36000000 ms
+  FAIL: a hidden tab earned x1.2500 of the eight hour cap, so the cap leaks
+  FAIL: the absence meter stopped at 36000000 ms, the cap is 28800000
+  FAIL: three hidden hours and seven closed paid x1.2500 of one eight hour absence
+   watched minute x1.000000 of full rate; 3 h hidden then 7 h closed x1.250000 of one capped absence; 2 h asleep paid as away: true
+3) fmt past T
+   8 of 8 values exact; the longest label under 1e21 is "1.6Qa"; the last AFL exhibit reads 90Qi
+4) the real hook on fake timers
+   shipped: deep: a save holding 3.20e+16 funds and 4.10e+18 career loaded and was written back with 3.2001e+16
+   shipped: refused: the bytes were kept aside once, 286 characters
+   shipped: watched: 240 callbacks paid x1.000000000 of a minute at full rate
+  FAIL: "2 a tab hidden ten hours is paid by the away rule, stops at the cap and says so on return": failed AssertionError: the absence meter did not stop at the cap: expected 36000000 to be 28800000 // Object.is equality
+  FAIL: "3 three hidden hours and then seven closed are one absence under one eight hour cap": failed AssertionError: three hidden hours and seven closed paid x1.2500 of one eight hour absence: expected 0.2500000000000693 to be less than 0.000001
+   4 of 6 hook tests green
+simHallLongPlay: RED, 5 failures

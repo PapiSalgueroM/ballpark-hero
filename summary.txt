@@ -1,0 +1,11 @@
+mut-novis exit=0 2s | simHallLongPlay: green (sections 2,3,4 only)
+mut-noreset exit=1 2s | simHallLongPlay: RED, 3 failures
+mut-nometerload exit=1 2s | simHallLongPlay: RED, 1 failure
+mut-offlineold exit=1 2s | simHallLongPlay: RED, 2 failures
+mut-capnometer exit=1 2s | simHallLongPlay: RED, 5 failures
+mut-welcomebar exit=1 2s | simHallLongPlay: RED, 1 failure
+mut-stampnow exit=0 2s | simHallLongPlay: green (sections 2,3,4 only)
+mut-awayafter exit=0 2s | simHallLongPlay: green (sections 2,3,4 only)
+mut-keepdedupe exit=1 2s | simHallLongPlay: RED, 1 failure
+mut-nowelcome exit=1 2s | simHallLongPlay: RED, 1 failure
+clean-after exit=0 0s | 

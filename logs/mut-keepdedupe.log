@@ -1,0 +1,14 @@
+MUTATION keepdedupe applied to src/hooks/useHallOfChampions.ts
+2) a hidden tab: 600 callbacks a minute apart
+   income 3317.25/s; ten hidden hours paid 4.7768e+7, the away rate times eight hours is 4.7768e+7 (x1.000000); meter 28800000 ms
+   watched minute x1.000000 of full rate; 3 h hidden then 7 h closed x1.000000 of one capped absence; 2 h asleep paid as away: true
+3) fmt past T
+   8 of 8 values exact; the longest label under 1e21 is "1.6Qa"; the last AFL exhibit reads 90Qi
+4) the real hook on fake timers
+   shipped: deep: a save holding 3.20e+16 funds and 4.10e+18 career loaded and was written back with 3.2001e+16
+   shipped: hidden: 600 wakes a minute apart paid x1.000000 of eight hours at the away rate; meter 28800000 ms while hidden; welcome 4.7768e+7
+   shipped: reload: 3 h hidden then 7 h closed paid x1.000000 of one eight hour absence
+   shipped: watched: 240 callbacks paid x1.000000000 of a minute at full rate
+  FAIL: "4 a save the loader refuses is kept aside once before the fresh museum is written": failed AssertionError: the same refused bytes were kept aside twice: expected [ …(2) ] to deeply equal [ Array(1) ]
+   5 of 6 hook tests green
+simHallLongPlay: RED, 1 failure

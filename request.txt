@@ -1,0 +1,12 @@
+#!serial
+mut-novis: node .rc/x/r1548run_mut.mjs novis && SIM_HALL_ONLY=2,3,4 node scripts/simHallLongPlay.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-noreset: node .rc/x/r1548run_mut.mjs noreset && SIM_HALL_ONLY=2,3,4 node scripts/simHallLongPlay.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-nometerload: node .rc/x/r1548run_mut.mjs nometerload && SIM_HALL_ONLY=2,3,4 node scripts/simHallLongPlay.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-offlineold: node .rc/x/r1548run_mut.mjs offlineold && SIM_HALL_ONLY=2,3,4 node scripts/simHallLongPlay.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-capnometer: node .rc/x/r1548run_mut.mjs capnometer && SIM_HALL_ONLY=2,3,4 node scripts/simHallLongPlay.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-welcomebar: node .rc/x/r1548run_mut.mjs welcomebar && SIM_HALL_ONLY=2,3,4 node scripts/simHallLongPlay.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-stampnow: node .rc/x/r1548run_mut.mjs stampnow && SIM_HALL_ONLY=2,3,4 node scripts/simHallLongPlay.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-awayafter: node .rc/x/r1548run_mut.mjs awayafter && SIM_HALL_ONLY=2,3,4 node scripts/simHallLongPlay.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-keepdedupe: node .rc/x/r1548run_mut.mjs keepdedupe && SIM_HALL_ONLY=2,3,4 node scripts/simHallLongPlay.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-nowelcome: node .rc/x/r1548run_mut.mjs nowelcome && SIM_HALL_ONLY=2,3,4 node scripts/simHallLongPlay.mjs; s=$?; git checkout -- src scripts; exit $s
+clean-after: git status --short src scripts | head; test -z "$(git status --short src scripts)"
