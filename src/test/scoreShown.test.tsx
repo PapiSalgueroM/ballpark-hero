@@ -348,10 +348,11 @@ const roads = {
     await click(root, 'Buy a Football Club');
     /* Round 1524: he picks a club off the list for sale, and every season
        waits for the season's call */
+    await waitFor(() => !!root.querySelector('[data-testid="owner-club-for-sale"]'), 'the clubs for sale');
     const club = root.querySelector('[data-testid="owner-club-for-sale"]');
     if (!club) throw new Error('no club for sale');
     await act(async () => { fireEvent.click(club); });
-    await tick(40);
+    await waitFor(() => !!buttonWith(root, 'Sign players'), 'the owner panel');
     for (let i = 0; i < 4; i++) {
       await click(root, 'Sign players');
       await click(root, 'Next Owner Season');

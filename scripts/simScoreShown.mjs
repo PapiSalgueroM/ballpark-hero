@@ -315,6 +315,8 @@ export const engine = mod;
 `);
 await build({ entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node', outfile: BUNDLE, logLevel: 'error', alias: { '@': `${ROOT_URL}/src` }, plugins });
 const { engine: E } = await import(pathToFileURL(BUNDLE).href);
+/* Round 1524: the owner tail is a lazy chunk the page awaits before the boardroom; so does this. */
+await E.loadOwnerTail();
 if (typeof E.calculateLegacy !== 'function') abort('calculateLegacy is not exported from the engine, so section 2 cannot score a career');
 /* The rule this section holds the engine to, written here rather than read
    from the engine: a limit read from the code under test moves with the code,

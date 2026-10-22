@@ -177,6 +177,16 @@ const ceremony = () => (CEREMONY ??= playToCeremony(E, 11));
 const named = (c, i, netWorth) => ({ ...c, playerName: `Owner ${SALT}-${i}`, netWorth });
 const PLANS = ['squad', 'youth', 'stadium', 'debt'];
 
+/* The owner tail is a lazy chunk (src/lib/soccerOwnerGate.ts): nothing is bought and no season is played before it
+   lands, which is checked first; then it is loaded the way the page loads it. */
+{
+  const c = named(ceremony(), 0, 300);
+  if (E.ownerTailReady() || E.choosePostRetirement(c, 'owner', CLUBS) !== c) fail('the engine bought a club before the owner tail was loaded');
+  await E.loadOwnerTail();
+  if (!E.ownerTailReady()) fail('the owner tail did not load');
+  console.log(`0) the owner tail loads on demand: before the load nothing is bought, after it ${E.ownerTailReady() ? 'it is ready' : 'it is still missing'}`);
+}
+
 if (ONLY.has(1)) {
   console.log('1) The clubs for sale');
   const c0 = ceremony();

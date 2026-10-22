@@ -42,7 +42,7 @@ import {
   giveWorldCupSpeech, type WorldCupSpeechChoice, manualRetire, choosePostRetirement, advanceManagerSeason, acceptManagerOffer, endManagerCareer, loadManagerMarket,
   acceptRetirementSuggestion, declineRetirementSuggestion, announceFarewellSeason,
   advancePunditSeason, endPunditCareer, punditLegacyPaid, playedSeniorSeason, POST_RETIREMENT_BONUS_CAP,
-  advanceOwnerSeason, endOwnerCareer, type OwnerPlan,
+  advanceOwnerSeason, endOwnerCareer,
   dismissNewspaper, purchaseSpendingItem, SPENDING_ITEMS,
   applySocialMediaAction, handleCoverAthleteDecision, dismissSocialMediaPhase,
   applyMoralDilemmaChoice, dismissMoralDilemma, MORAL_DILEMMAS,
@@ -60,7 +60,8 @@ import {
   nextSeasonYear, managerNextSeasonYear,
 } from "@/lib/soccerCareerEngine";
 import type { FirstStageStage } from "@/lib/soccerCareerContinental";
-import { OWNER_EFFECTS, OWNER_PLANS, chooseOwnerPlan, ownerBudget, ownerClubsOnSale, ownerLevels, ownerPlanOpen, ownerPlanWords } from "@/lib/soccerCareerOwner";
+import { DugoutTableBlock } from "@/components/soccer-career/DugoutTableBlock";
+import { loadOwnerTail } from "@/lib/soccerOwnerGate";
 import { careerBeforeBallonDorReveal, revealBallonDorResult, ballonDorAwaitingReveal } from "@/lib/soccerAwardReveal";
 import { readLeagueWorldSeason } from "@/lib/soccerCareerLeagueWorld";
 import { soccerExtensionQuote } from "@/lib/soccerCareerContracts";
@@ -146,6 +147,9 @@ import { readSeasonMoments } from '@/lib/season/momentsSave';
    the Ratings dialog when it is opened (step 7 of the round: the weight it
    adds is paid here, never by a budget). */
 const SoccerSeasonCentre = lazy(() => import("@/components/soccer-career/SoccerSeasonCentre"));
+/* Round 1524: the club owner's screens ride with the owner tail in one lazy chunk (src/lib/soccerOwnerGate.ts) */
+const OwnerClubSale = lazy(() => import("@/components/soccer-career/OwnerTail").then(m => ({ default: m.OwnerClubSale })));
+const OwnerPanel = lazy(() => import("@/components/soccer-career/OwnerTail").then(m => ({ default: m.OwnerPanel })));
 const TrophyCabinet = lazy(() => import("@/components/soccer-career/TrophyCabinet"));
 const SeasonRatings = lazy(() => import("@/components/soccer-career/SeasonRatings"));
 const SoccerDerbyHistory = lazy(() => import("@/components/soccer-career/SoccerDerbyHistory"));
@@ -966,6 +970,15 @@ export default function SoccerCareer() {
     }
   }, [career?.phase]);
 
+  /* Round 1524: the owner tail (a lazy chunk) is fetched as soon as a career
+     could open it: a career at its end with the €200M to buy a club, or one
+     already in the boardroom. Buying and playing a season await it as well. */
+  const ownerWanted = career?.phase === "owner_season"
+    || ((career?.phase === "retirement_ceremony" || career?.phase === "post_retirement") && (career?.netWorth ?? 0) >= 200);
+  useEffect(() => {
+    if (ownerWanted) void loadOwnerTail().catch(() => { /* retried when he buys or plays a season */ });
+  }, [ownerWanted]);
+
   /* Round 1504: the summer cards (src/lib/soccerDeckGate.ts) are a lazy chunk,
      fetched as soon as a live career is on screen so it is usually in memory
      long before a summer's deal. Nothing waits for it at a season end: a deal
@@ -1293,6 +1306,10 @@ export default function SoccerCareer() {
     if (choice === "manager") {
       try { await loadManagerMarket(); } catch { /* the engine says so on screen and retries */ }
     }
+    /* Round 1524: the owner tail is a lazy chunk; nothing is bought before it lands */
+    if (choice === "owner") {
+      try { await loadOwnerTail(); } catch { return; }
+    }
     setCareer(choosePostRetirement(career, choice, clubs, ownerClub));
   };
 
@@ -1410,8 +1427,10 @@ export default function SoccerCareer() {
     setCareer(endPunditCareer(career));
   };
 
-  const handleAdvanceOwner = () => {
+  const handleAdvanceOwner = async () => {
     if (!career) return;
+    /* Round 1524: the season is played by the lazy owner tail */
+    try { await loadOwnerTail(); } catch { return; }
     setCareer(advanceOwnerSeason(career, clubs));
   };
 
@@ -2998,7 +3017,7 @@ function RetirementCeremonyCard({ career, clubs, totals, onPostRetirement }: { c
 
       {/* Post-retirement choices */}
       {buying ? (
-        <OwnerClubSale career={career} clubs={clubs} onBuy={name => onPostRetirement("owner", name)} onBack={() => setBuying(false)} />
+        <Suspense fallback={<div className="min-h-[14rem]" />}><OwnerClubSale career={career} clubs={clubs} onBuy={name => onPostRetirement("owner", name)} onBack={() => setBuying(false)} /></Suspense>
       ) : (
       <div className="space-y-2">
         <div className="text-xs text-center text-muted-foreground font-bold uppercase">What's Next?</div>
@@ -3029,7 +3048,7 @@ function PostRetirementCard({ career, clubs, onChoice }: { career: CareerState; 
   if (buying) {
     return (
       <div className="rounded-xl border border-border p-5">
-        <OwnerClubSale career={career} clubs={clubs} onBuy={name => onChoice("owner", name)} onBack={() => setBuying(false)} />
+        <Suspense fallback={<div className="min-h-[14rem]" />}><OwnerClubSale career={career} clubs={clubs} onBuy={name => onChoice("owner", name)} onBack={() => setBuying(false)} /></Suspense>
       </div>
     );
   }
@@ -3044,150 +3063,6 @@ function PostRetirementCard({ career, clubs, onChoice }: { career: CareerState; 
       )}
     </div>
   );
-}
-
-/* ─── Round 1524: the clubs for sale ───
-   Two from every price band he can afford, the same list on every visit.
-   The prices and the debts are the game's own tier bands, and the card says
-   so: never a real club's real valuation. */
-function OwnerClubSale({ career, clubs, onBuy, onBack }: { career: CareerState; clubs: ClubData[]; onBuy: (club: string) => void; onBack: () => void }) {
-  const forSale = ownerClubsOnSale(career, clubs);
-  return (
-    <div className="space-y-2" data-testid="owner-club-sale">
-      <div className="flex items-center justify-between gap-2">
-        <Button onClick={onBack} variant="ghost" className="h-8 px-2 text-xs font-bold">Back</Button>
-        <span className="text-xs font-bold uppercase text-muted-foreground">Clubs for sale</span>
-      </div>
-      <p className="text-[11px] text-center text-muted-foreground">
-        {money(`You have ${formatNetWorth(career.netWorth)}. Prices and debts are the game's own estimates for a club of that tier, not real figures.`)}
-      </p>
-      <div className="grid grid-cols-2 gap-2">
-        {forSale.map((c, i) => (
-          <button
-            key={c.name}
-            onClick={() => onBuy(c.name)}
-            data-testid="owner-club-for-sale"
-            className="cm-rise min-w-0 rounded-lg border border-border bg-card hover:border-primary p-2.5 text-left transition-all"
-            style={{ animationDelay: revealDelay(i) }}
-          >
-            <div className="truncate text-xs font-black">{c.name}</div>
-            <div className="truncate text-[10px] text-muted-foreground">{c.league} · Tier {c.tier}</div>
-            <div className="text-[11px] font-bold">{money(`€${c.price}M`)}</div>
-            <div className="text-[10px] text-muted-foreground">{money(`€${c.debt}M debt`)}</div>
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-/* ─── Round 1524: the club owner's panel ───
-   The season is the dugout's table (DugoutTableBlock), and before each one
-   he makes one call: where the budget goes. The call is saved with the
-   career, so a reload keeps it, and the season button waits for it. */
-function OwnerPanel({ owner, onPlan }: { owner: OwnerState; onPlan?: (plan: OwnerPlan) => void }) {
-  const lv = ownerLevels(owner);
-  const budget = ownerBudget(owner);
-  return (
-    <div className="rounded-xl border border-border bg-card p-4 space-y-3" data-testid="owner-panel">
-      <div className="text-center space-y-1">
-        <h3 className="text-lg font-black">🏟️ Club Owner</h3>
-        <p className="text-xs text-muted-foreground">Owning {owner.club} (Tier {owner.clubTier}) · Season {owner.season}</p>
-        <p className="text-[11px] text-muted-foreground">Every season is played on your league's table. Before each one, pick where the budget goes.</p>
-      </div>
-      {owner.seasonResults.length > 0 && (
-        <div className="space-y-1">
-          {owner.seasonResults.slice(-5).map((r, i) => (
-            <div key={`${r.year}-${i}`} className="cm-tick-in flex items-center justify-between gap-2 text-xs bg-muted/20 rounded-lg px-3 py-1.5" style={{ animationDelay: revealDelay(i) }}>
-              <span className="shrink-0 text-muted-foreground">S{r.year}</span>
-              <span className="truncate font-semibold">{r.club}</span>
-              <span className={`text-right text-[10px] ${r.trophy ? "text-amber-400" : "text-muted-foreground"}`}>{money(r.result)}</span>
-            </div>
-          ))}
-        </div>
-      )}
-      <DugoutTableBlock results={owner.seasonResults} />
-      <div className="grid grid-cols-3 gap-2 text-center text-xs">
-        <div className="bg-muted/20 rounded-lg p-2"><div className="font-black">{owner.trophies}</div><div className="text-[9px] text-muted-foreground">Trophies</div></div>
-        <div className="bg-muted/20 rounded-lg p-2"><div className="font-black">{owner.promotions}</div><div className="text-[9px] text-muted-foreground">Promotions</div></div>
-        <div className="bg-muted/20 rounded-lg p-2"><div className="font-black">{money(`€${lv.debt.toFixed(1)}M`)}</div><div className="text-[9px] text-muted-foreground">Debt</div></div>
-        <div className="bg-muted/20 rounded-lg p-2"><div className="font-black">{lv.squad.toFixed(1)}</div><div className="text-[9px] text-muted-foreground">Signings edge</div></div>
-        <div className="bg-muted/20 rounded-lg p-2"><div className="font-black">{lv.academy}/{OWNER_EFFECTS.maxLevel}</div><div className="text-[9px] text-muted-foreground">Academy</div></div>
-        <div className="bg-muted/20 rounded-lg p-2"><div className="font-black">{lv.stadium}/{OWNER_EFFECTS.maxLevel}</div><div className="text-[9px] text-muted-foreground">Ground</div></div>
-      </div>
-      <div className="space-y-2" data-testid="owner-plan">
-        <div className="text-xs text-center font-bold uppercase text-muted-foreground">{money(`Where does this season's €${budget}M go?`)}</div>
-        <div className="grid grid-cols-2 gap-2">
-          {OWNER_PLANS.filter(p => ownerPlanOpen(owner, p)).map(p => {
-            const w = ownerPlanWords(owner, p);
-            const on = owner.plan === p;
-            return (
-              <button
-                key={p}
-                onClick={() => onPlan?.(p)}
-                aria-pressed={on}
-                data-plan={p}
-                className={`min-w-0 rounded-lg border p-2.5 text-left transition-all ${on ? "border-primary bg-primary/15" : "border-border bg-card hover:border-primary"}`}
-              >
-                <div className="text-xs font-black">{w.title}</div>
-                <div className="text-[10px] leading-snug text-muted-foreground">{money(w.line)}</div>
-              </button>
-            );
-          })}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/* ─── Round 1524: the dugout's final table ───
-   Lifted out of the manager's panel exactly as it was, so the club owner's
-   panel shows the same table for a season played on the same engine. */
-function DugoutTableBlock({ results }: { results: ManagerState["seasonResults"] }) {
-        const last = results[results.length - 1];
-        if (!last?.table) return null;
-        const afterResults = Math.min(results.length, 5);
-        /* Round 1029: the table is his club's own league. A club of that
-           league the game does not know by name keeps its place, unnamed,
-           and a table with no rival we can name says where he finished. A
-           season before 2026-27 names no league at all: the game does not
-           know which one his club was in that year. The words come from
-           dugoutTableWords, which the harness reads too. */
-        const { header, named, sizeUnknown, note, orderNote } = dugoutTableWords(last);
-        return (
-          <div className="rounded-xl border border-border bg-muted/10 p-3 space-y-1.5">
-            <div className="flex items-center justify-between gap-2">
-              <span className="truncate text-[10px] font-bold uppercase tracking-wider text-muted-foreground">{header}</span>
-              {last.record && !sizeUnknown && <span className="shrink-0 text-[10px] text-muted-foreground">{last.record}</span>}
-            </div>
-            {note && (
-              <p className="cm-tick-in text-xs" style={{ animationDelay: revealDelay(afterResults) }}>{note}</p>
-            )}
-            {orderNote && (
-              <p className="text-[10px] text-muted-foreground">{orderNote}</p>
-            )}
-            {named && last.table.map((row, i) => (
-              <div
-                key={`${last.year}-${i}`}
-                className={`cm-tick-in flex items-center justify-between text-xs rounded px-2 py-1 ${row.you ? "bg-primary/15 font-bold" : ""}`}
-                style={{ animationDelay: revealDelay(afterResults + i) }}
-              >
-                <span className="flex items-center gap-2 min-w-0">
-                  {!sizeUnknown && <span className="w-5 shrink-0 text-right text-muted-foreground">{row.pos}</span>}
-                  {/* with no numbers, mark the clubs between the leaders and him */}
-                  {sizeUnknown && i > 0 && row.pos > last.table[i - 1].pos + 1 && <span className="shrink-0 text-muted-foreground">…</span>}
-                  {row.unnamed || !row.club
-                    ? <span className="truncate italic text-muted-foreground">another club</span>
-                    : <span className="truncate">{row.club}</span>}
-                </span>
-                {!sizeUnknown && <span className="shrink-0 tabular-nums">{row.pts} pts</span>}
-              </div>
-            ))}
-            {last.cup && (
-              <p className="pt-1 text-[10px] text-muted-foreground">Cup run: {last.cup}</p>
-            )}
-          </div>
-        );
 }
 
 /* ─── Manager Panel ─── */
@@ -4239,7 +4114,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
 
           {/* OVERLAY: Owner Season */}
           {career.phase === "owner_season" && career.ownerState && (
-            <OwnerPanel owner={career.ownerState} onPlan={onCareerPatch ? p => onCareerPatch(c => chooseOwnerPlan(c, p)) : undefined} />
+            <Suspense fallback={<div className="min-h-[24rem] rounded-xl border border-border bg-card" />}><OwnerPanel owner={career.ownerState} onCareer={onCareerPatch} /></Suspense>
           )}
           {career.phase === "ballon_dor" && career.pendingBallonDor && (
             /* Release AQ: the night's headline slams in from 1.6 times its size. On a phone that block is as

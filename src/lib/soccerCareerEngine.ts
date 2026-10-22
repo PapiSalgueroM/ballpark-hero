@@ -43,7 +43,9 @@ import type { PhoneChoiceDef } from "./careerEras";
 import type { SoccerInternationalReturn } from './soccerInternationalReturn';
 /* Round 929: every season's league finish, and the era aware elite rule. */
 import { divisionMove, drawLeagueFinish, eliteInYear, finishZone, leagueKeyInYear, managerLeagueField, MANAGER_FIELD, ordinal, playDugoutTable } from "./soccerCareerLeague";
-import { OWNER_TIERS, ownerClubsOnSale, ownerSaveKey, ownerStart, playOwnerSeason } from "./soccerCareerOwner";
+/* Round 1524: the club owner tail is a lazy chunk behind its gate (src/lib/soccerOwnerGate.ts says why). */
+import { ownerTail } from "./soccerOwnerGate";
+export { loadOwnerTail, ownerTailReady } from "./soccerOwnerGate";
 /* Round 1012: real club rivalries, played as league derbies each season. */
 import { resolveSeasonDerbies, applySeasonDerbies, type SeasonDerby } from "./soccerCareerDerby";
 import { cupAssociation, cupChanceFor, cupFor as domesticCupFor, cupTitle, drawCupRun, readCupRun, seasonPerformanceBoost, worldLeagueOf, type CupRun } from "./soccerCareerCup";
@@ -8741,14 +8743,17 @@ export function choosePostRetirement(prev: CareerState, choice: PostRetirementCh
   if (choice === "owner") {
     /* Round 1524: he buys the club he picked off the list of clubs for sale
        (ownerClubsOnSale); a caller that names none gets the list's first,
-       and a name that is not for sale buys nothing. */
-    const forSale = ownerClubsOnSale(prev, clubs);
+       and a name that is not for sale buys nothing. Nothing is bought while
+       the owner tail is not loaded (the page awaits loadOwnerTail first). */
+    const tail = ownerTail();
+    if (!tail) return prev;
+    const forSale = tail.ownerClubsOnSale(prev, clubs);
     const club = ownerClub === undefined
-      ? forSale[0] ?? { name: "Unknown FC", tier: 4, league: "", country: "", price: OWNER_TIERS[4].price, debt: 0 }
+      ? forSale[0] ?? { name: "Unknown FC", tier: 4, league: "", country: "", price: tail.OWNER_TIERS[4].price, debt: 0 }
       : forSale.find(c => c.name === ownerClub);
     if (!club) return prev;
     s.netWorth -= club.price;
-    s.ownerState = ownerStart(club);
+    s.ownerState = tail.ownerStart(club);
     s.events = [...s.events, `🏟️ Bought ${club.name} for €${club.price}M, the game's price for a Tier ${club.tier} club${club.debt > 0 ? `, with €${club.debt}M of debt` : ""}.`];
     s.phase = "owner_season";
     return s;
@@ -9235,13 +9240,16 @@ export function endPunditCareer(prev: CareerState): CareerState {
 
 /* ─── Club Owner Career ─── */
 /* Round 1524: the owner tail is soccerCareerOwner.ts (the list of clubs for
-   sale and the season's call live there too); this is the season itself. */
+   sale and the season's call live there too); this is the season itself,
+   which waits for the tail to be loaded. */
 export function advanceOwnerSeason(prev: CareerState, clubs: readonly ClubData[] = []): CareerState {
+  const tail = ownerTail();
+  if (!tail) return prev;
   const s = { ...prev };
   if (!s.ownerState) return s;
   const season = s.ownerState.season + 1;
   const year = (s.seasons[s.seasons.length - 1]?.year ?? 2024) + season;
-  const { os, result, income } = playOwnerSeason(s.ownerState, { clubs, year, key: `${ownerSaveKey(s)}|${s.ownerState.club}|${season}` });
+  const { os, result, income } = tail.playOwnerSeason(s.ownerState, { clubs, year, key: `${tail.ownerSaveKey(s)}|${s.ownerState.club}|${season}` });
   s.netWorth += income;
   s.ownerState = os;
   s.events = [...s.events, `🏟️ Owner Season ${os.season} at ${os.club}: ${result}`];

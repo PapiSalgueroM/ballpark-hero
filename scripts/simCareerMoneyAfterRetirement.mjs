@@ -108,11 +108,13 @@ const { engine, money } = await import(pathToFileURL(BUNDLE).href);
 const {
   initCareer, advanceYouthYear, advanceProSeason, applyMoneyAction,
   acceptRetirementSuggestion, choosePostRetirement, advanceManagerSeason,
-  advancePunditSeason, advanceOwnerSeason, loadManagerMarket, FALLBACK_CLUBS,
+  advancePunditSeason, advanceOwnerSeason, loadManagerMarket, loadOwnerTail, FALLBACK_CLUBS,
 } = engine;
 const { ASSETS, ensureMoney, bankSummary, investedValue, spendable, SAVINGS_RATE } = money;
 
 await loadManagerMarket();
+/* Round 1524: the owner tail is a lazy chunk the page awaits before the boardroom; so does this. */
+await loadOwnerTail();
 
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };

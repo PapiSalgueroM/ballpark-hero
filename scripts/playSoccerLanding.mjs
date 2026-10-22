@@ -162,6 +162,8 @@ if (SECTIONS.includes('bar') || SECTIONS.includes('retire')) {
       loader: { '.css': 'empty', '.png': 'empty', '.svg': 'empty', '.jpg': 'empty', '.webp': 'empty' },
     });
     const { sc } = await import(pathToFileURL(path.join(tmp, 'bundle.mjs')).href);
+    /* Round 1524: the owner tail is a lazy chunk the page awaits before the boardroom; so does this. */
+    await sc.loadOwnerTail();
     const { careerStep } = await import(pathToFileURL(path.join(ROOT, 'scripts', 'lib', 'careerStep.mjs')).href);
     const clubs = sc.FALLBACK_CLUBS;
     const flat = o => ({ pace: o, shooting: o, passing: o, dribbling: o, defending: o, physical: o, reflexes: o });
