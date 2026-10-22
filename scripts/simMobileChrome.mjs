@@ -79,6 +79,7 @@
  * line says FIRED, DID NOT FIRE or ABORTED, because all three exit non zero.
  */
 import pw from './lib/playwrightLoader.mjs';
+import { answerConsent } from './lib/answerConsent.mjs';
 const { chromium } = pw;
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
@@ -213,9 +214,10 @@ const MEASURE_NAV = `(() => {
 })()`;
 
 async function clearBanner(page) {
-  for (const name of [/^essential only$/i, /^accept all$/i]) {
-    await page.getByRole('button', { name }).first().click({ timeout: 900 }).catch(() => {});
-  }
+  /* 1800 ms is the time the two 900 ms presses this replaced spent when the banner was already answered (it
+     always is here, CONSENT_SEED), and the signed in bar's stats are measured on that clock: at 900 three
+     signed in rows read 0 games (Round 1535, r1535-fx-b). */
+  await answerConsent(page, { wait: 1800 });
 }
 
 async function measureNav(browser, { width, signedIn, route }) {

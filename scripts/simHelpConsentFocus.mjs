@@ -7,6 +7,12 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+/* Round 1537: on a GitHub runner vitest colours its failure messages, so the matcher hint arrives with
+   escape codes between its words, and the control exited 1 on healthy code. The guard
+   reads the text, never its colouring: every ANSI escape sequence comes out before a message is matched. */
+const ESC = String.fromCharCode(27);
+const ANSI = new RegExp(ESC + '[[][0-9;?]*[ -/]*[@-~]', 'g');
+const plain = text => text.replace(ANSI, '');
 const control = process.env.HELP_CONSENT_FOCUS_CONTROL || '';
 assert.ok(['', 'external'].includes(control), 'Known help consent control');
 const files = ['src/components/CookieConsent.tsx', 'src/components/game/HowToPlayPopover.tsx', 'src/lib/consentedScripts.ts'];
@@ -45,17 +51,22 @@ try {
     assert.equal(report.numFailedTests, 5);
     assert.equal(report.numPassedTests, 2);
     const intended = [
-      'Essential only receives focus inside initial rules and keeps its original consent behavior',
-      'Accept receives focus inside initial rules and keeps its original consent behavior',
+      'Reject all receives focus inside initial rules and keeps its original consent behavior',
+      'Accept all receives focus inside initial rules and keeps its original consent behavior',
       'keeps its single pending banner reachable when initial help is dismissed',
       'reuses the banner and its choices when help is reopened without a decision',
       'honors storage choices and restores pending choices within the same open rules',
     ];
+    let coloured = 0;
     for (const title of intended) {
       const row = rows.find(candidate => candidate.title === title);
       assert.equal(row?.status, 'failed');
-      assert.match(row.failureMessages.join('\n'), /expect\(element\)\.(?:toHaveFocus|toContainElement)/);
+      const message = row.failureMessages.join('\n');
+      if (message.includes(ESC)) coloured += 1;
+      assert.ok(!plain(message).includes(ESC), 'Every escape sequence comes out of the message');
+      assert.match(plain(message), /expect\(element\)\.(?:toHaveFocus|toContainElement)/);
     }
+    console.log(`simHelpConsentFocus external: ${coloured} of ${intended.length} failure messages carried colour codes, read with them taken out.`);
     assert.equal(rows.find(row => row.title.startsWith('preserves the normal modal trap'))?.status, 'passed');
     assert.equal(rows.find(row => row.title.startsWith('keeps the original focused bottom banner'))?.status, 'passed');
     console.log('simHelpConsentFocus external: five actual focus-scope assertions reject the outside portal; two independent answered-consent and ordinary-banner baselines pass.');

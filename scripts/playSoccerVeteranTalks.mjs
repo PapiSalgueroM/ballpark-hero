@@ -7,6 +7,7 @@ import { createHash } from 'node:crypto';
 import { createServer } from 'node:net';
 import { spawn, execFileSync } from 'node:child_process';
 import pw from './lib/playwrightLoader.mjs';
+import { answerConsent } from './lib/answerConsent.mjs';
 assert(process.env.CI, 'Browser proof runs only in Actions');
 const input = path.resolve(process.env.SOCCER_VETERAN_TALKS_INPUT || '.tmp-fx/soccer-veteran-talks');
 const out = path.resolve(process.env.SOCCER_VETERAN_TALKS_BROWSER_OUT || '.tmp-fx/soccer-veteran-talks-browser'); fs.mkdirSync(out, { recursive: true });
@@ -66,7 +67,7 @@ try {
       }, fixture);
       page.on('pageerror', error => row.errors.push(String(error))); page.on('requestfailed', request => { if (request.url().startsWith(base + '/assets/')) row.assetErrors.push({ url: request.url(), error: request.failure()?.errorText }); }); page.on('response', response => { if (response.url().startsWith(base + '/assets/') && response.status() >= 400) row.assetErrors.push({ url: response.url(), status: response.status() }); });
       await page.goto(base + '/soccer-career', { waitUntil: 'networkidle' });
-      const cookie = page.getByRole('region', { name: 'Cookie choices', exact: true }); await cookie.waitFor(); await measure('cookie', cookie); await cookie.getByRole('button', { name: 'Essential only', exact: true }).click(); await cookie.waitFor({ state: 'hidden' });
+      const cookie = page.getByRole('region', { name: 'Cookie choices', exact: true }); await cookie.waitFor(); await measure('cookie', cookie); await answerConsent(page); await cookie.waitFor({ state: 'hidden' });
       const initialStartup = await page.evaluate(() => ({ values: window.__talkTape, stacks: window.__talkStacks })); row.startup = write('startup-initial', initialStartup);
       check(await bytes('entry') === json(fixture.value), 'initial full old pending save held'); check(fixture.value.pendingEvents[0].choices[1].consequence === '50% chance: Wage +20% or relationship damaged', 'fixture retains historical unanswered label');
       const push = page.getByRole('button', { name: /Push for more money/ }); await push.waitFor(); await push.evaluate(e => e.scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'instant' }));

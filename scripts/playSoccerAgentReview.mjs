@@ -6,6 +6,7 @@ import path from 'node:path';
 import {createServer} from 'node:net';
 import {spawn} from 'node:child_process';
 import pw from './lib/playwrightLoader.mjs';
+import { answerConsent, storedConsent } from './lib/answerConsent.mjs';
 import {OUT,NOW,copy,sha,git,bundleAgentReview,sourceReceipt} from './qa/soccerAgentReviewKit.mjs';
 assert(process.env.CI,'Soccer agent review native proof runs remotely');
 const out=path.join(OUT,'native');fs.mkdirSync(out,{recursive:true});
@@ -72,8 +73,8 @@ try{for(const width of [320,390,1280])for(const fixture of fixtures){const id=wi
   await page.goto(base+'/soccer-career',{waitUntil:'networkidle'});
   const consent=page.getByRole('region',{name:'Cookie choices',exact:true});await consent.waitFor();await consent.scrollIntoViewIfNeeded();
   const cookie=await measure('actual-cookie-choice',consent,['[aria-label="Cookie choices"] button:first-of-type','[aria-label="Cookie choices"] button:last-of-type']);
-  await activate(consent.getByRole('button',{name:'Essential only',exact:true}));await consent.waitFor({state:'hidden'});
-  check(await page.evaluate(()=>localStorage.getItem('cookie-consent'))==='essential','Actual essential-only consent saved');
+  await answerConsent(page,{press:activate});await consent.waitFor({state:'hidden'});
+  check(await storedConsent(page)==='rejected','Actual essential-only consent saved');
   let held=await bytes();const loaded=await expected('load',fixture.input);await pair('first-load',fixture.input,loaded.value,held);await reload('initial',held);
   const initial=JSON.parse(held),sourceCount=initial.seasons.length,catalog=(await expected('read',initial)).value.agents,agent=catalog.find(a=>a.id===fixture.target);
   const helpControls=['[data-agent-review-cancel]','[data-agent-review-help-open]','[data-agent-review-choices-open]','[data-agent-review-dialog] > button:last-child'];

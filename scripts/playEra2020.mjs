@@ -18,6 +18,7 @@
  */
 import pw from './lib/playwrightLoader.mjs';
 import { ERA_CONTROL, assertDropControl, installDropControl, enterSquad, judgeDropControl, namedInGame, plantGhost, judgeGhostControl } from './lib/eraDressingRoom.mjs';
+import { answerConsent } from './lib/answerConsent.mjs';
 
 const { chromium } = pw;
 const BASE = process.env.BASE ?? process.env.SWEEP_BASE ?? 'http://localhost:4173';
@@ -77,8 +78,7 @@ async function pick(page, nation, league) {
 async function room(page, club, label) {
   await page.locator(`button:has-text("${club}")`).first().click();
   await page.waitForTimeout(500);
-  const essential = page.locator('button:has-text("Essential only")');
-  if (await essential.count()) { await essential.click(); await page.waitForTimeout(400); }
+  await answerConsent(page); await page.waitForTimeout(400);
   const r = await enterSquad(page);
   say(/2020-21 · Season 1/.test(r.hub), `the ${label} career header says 2020-21`);
   say(r.listed, `the Squad tab listed the ${label} squad`);
