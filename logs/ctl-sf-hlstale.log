@@ -1,0 +1,4 @@
+CONTROL hlstale: 1 new failure(s), 0 gone, against an untouched run with 0.
+  + [11 value] Lando Norris: the game says 11 wins, the record 13 through the 2026 Singapore Grand Prix
+
+CONTROL hlstale: section 11's "value" check caught the break (1 new) and no other section moved.

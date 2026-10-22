@@ -1,0 +1,5 @@
+CONTROL f1driver: 2 new failure(s), 0 gone, against an untouched run with 0.
+  + [5 clue] driver verstappen clue 2 ships "63 race wins through the 2025 season", verified "71 race wins through the 2025 season"
+  + [11 cross] Max Verstappen's F1 Driver clue says 63 wins through the end of 2025; the record behind his Higher or Lower card makes it 71
+
+CONTROL f1driver: expected at least 1 new "clue" failure(s) in section 5 and nothing new or gone elsewhere; got 1 aimed, 1 new and 0 gone in other sections. The control proves nothing.
