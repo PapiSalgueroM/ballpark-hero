@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+#!serial
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+ctl-playEra2005: ANSWER_CONSENT_CONTROL=none ENGINES=chromium node scripts/playEra2005.mjs
+ctl-playNationJob: ANSWER_CONSENT_CONTROL=none ENGINES=chromium node scripts/playNationJob.mjs
+ctl-playFoHub: ANSWER_CONSENT_CONTROL=none ENGINES=chromium node scripts/playFoHub.mjs
+ctl-playCmHubLanding: ANSWER_CONSENT_CONTROL=none node scripts/playCmHubLanding.mjs
+ctl-playSoccerSeasonCalendar: ANSWER_CONSENT_CONTROL=none FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerSeasonCalendar.mjs
