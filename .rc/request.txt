@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+boxing-fonts: node scripts/playBoxingShowForecast1086.mjs --prefetch-fonts-only 2>&1 | tail -3
+boxing: node scripts/playBoxingShowForecast1086.mjs > /tmp/bx.log 2>&1; s=$?; cp boxing-show-forecast-artifacts/native/report.json $RC_OUT/report.json; node -e "const r=require('./boxing-show-forecast-artifacts/native/report.json');for(const c of r.cases||[])if(!c.complete)console.log(JSON.stringify(c).slice(0,700))"; tail -1 /tmp/bx.log | cut -c1-200; exit $s
