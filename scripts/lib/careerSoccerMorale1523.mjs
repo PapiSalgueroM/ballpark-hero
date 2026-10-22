@@ -17,7 +17,15 @@
  * head pin). Every row is required exactly once at its turn. Rows are regenerated, never hand edited, after any
  * change to the engine, this round's or a merge's: from the worktree root, node .tmp-fx/x/gen-inverse-1523.mjs <base>
  * then node .tmp-fx/x/write-inverse-1523.mjs (copies in C:/Users/antho/dukb-handoff/2026-10-10/results-g/r1523-tools).
+ *
+ * Round 1525 (season awards won against a field) moved the engine after this file was written. Its rows live in
+ * their own file, scripts/lib/careerSoccerAwards1525.mjs (the eleventh inverse, with its own pins), and come off
+ * FIRST: SOCCER_MORALE_ROWS below starts with them, so every importer of this file and of the ninth takes 1525 and
+ * then 1523 out, in that order, with one receipt. This file's own rows and pins are unchanged: the eleventh gives
+ * back exactly the head pinned above.
  */
+import { SOCCER_AWARDS_ROWS } from './careerSoccerAwards1525.mjs';
+
 export const SOCCER_MORALE_BASE = '2ab9bef153009a3144970e87755225a458ef0c3b';
 export const SOCCER_MORALE_SHA256 = {
   "src/lib/soccerCareerEngine.ts": {
@@ -27,7 +35,7 @@ export const SOCCER_MORALE_SHA256 = {
 };
 
 /* The rows, in the order they must be applied: each turns one block of this round's engine back into the base's. */
-export const SOCCER_MORALE_ROWS = [
+const OWN_ROWS = [
   { name: "morale-engine-1", file: "src/lib/soccerCareerEngine.ts",
     from: "import type { PhoneState, WorldSeason } from \"./soccerPhone\";\n/* Round 1523: morale that plays (src/lib/careerForm.ts) and the first season the Puskas Award was given for. */\nimport { dressingRoomApps, soccerMoraleRating } from \"./careerForm\";\nimport { puskasAwardExists } from \"./soccerWorldTruth\";\n/* Round 134: money stops being a number that only goes up. A savings account,",
     to: "import type { PhoneState, WorldSeason } from \"./soccerPhone\";\n/* Round 134: money stops being a number that only goes up. A savings account," },
@@ -47,6 +55,8 @@ export const SOCCER_MORALE_ROWS = [
     from: "\n  /* Puskás Award (best goal of the year), random chance for high-performing attackers. Round 1523: only from the\n     season it was first given for (soccerWorldTruth.ts puskasAwardExists, with its two sources). An earlier\n     season still makes the same draw and throws it away, the Round 1329 rule, so nothing later moves. */\n  const puskasDrawn = season.goals >= 15 && s.overall >= 80 && Math.random() < 0.08;\n  if (puskasDrawn && puskasAwardExists(thisYear)) {\n    s.awards = [...s.awards, { year: thisYear, name: \"Puskás Award\", emoji: \"🎯\" }];",
     to: "\n  // Puskás Award (best goal of the year), random chance for high-performing attackers\n  if (season.goals >= 15 && s.overall >= 80 && Math.random() < 0.08) {\n    s.awards = [...s.awards, { year: thisYear, name: \"Puskás Award\", emoji: \"🎯\" }];" },
 ];
+/* Round 1525: the eleventh inverse's rows first, then this round's, every row once at its turn. */
+export const SOCCER_MORALE_ROWS = [...SOCCER_AWARDS_ROWS, ...OWN_ROWS];
 
 export const SOCCER_MORALE_FILES = Object.keys(SOCCER_MORALE_SHA256);
 
