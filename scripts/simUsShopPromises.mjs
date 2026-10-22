@@ -34,6 +34,20 @@
  *   backpay  the first settle of a save without a carry pays twice -> section 9
  *   settleafter  the settle moved below the money app's tick in all four engines -> section 4's thin buffer case only
  *
+ * Section 3's band, with its measured headroom (RULES line 7; review of 2026-10-22, read lens finding 4). The share
+ * is checked inside the printed chance plus or minus 4 binomial sd. The careers are named and seeded in a fixed
+ * order, so a given count gives the same shares on every run: the band does not guard against noise, it is what
+ * lets the check see a wrong chance (control chance, crypto 0.2 to 0.3, fires in all four sports). Measured on
+ * head 1a71de29 (runner results r1534-run-a and its 4,000 career line shop-allsets):
+ *   2,000 careers (the default; bands 0.164 to 0.236, 0.259 to 0.341, 0.307 to 0.393):
+ *     NBA restaurant 0.344, crypto 0.208; NFL wing 0.347, crypto 0.190, esports 0.294; MLB restaurant 0.358,
+ *     crypto 0.188; NHL restaurant 0.353, crypto 0.186. Closest to an edge: NHL crypto, 0.022 (2.5 sd) above 0.164.
+ *   4,000 careers (bands 0.175 to 0.225, 0.271 to 0.329, 0.320 to 0.380):
+ *     NBA 0.345, 0.205; NFL 0.346, 0.188, 0.295; MLB 0.355, 0.203; NHL 0.342, 0.194. Closest: NFL crypto, 0.013
+ *     (2.1 sd) above 0.175.
+ * A band around an expected value gets easier with less data, so SHOP_STAKE_CAREERS may raise the count and never
+ * lower it below 2,000: a smaller count is refused (exit 2).
+ *
  * Exit 0 green, 1 red or a control fired, 2 could not run, 3 a control did not fire. The last line says which.
  * Nothing here reaches the network.
  */
@@ -52,6 +66,8 @@ const CONTROL_SECTIONS = { rate: ['1', '2'], words: ['1'], camp: ['1'], nocall: 
 if (CONTROL && !CONTROL_SECTIONS[CONTROL]) { console.log(`simUsShopPromises: could not run, unknown SHOP_CONTROL ${CONTROL}`); process.exit(2); }
 const SECTIONS = (process.env.SHOP_SECTIONS || (CONTROL ? CONTROL_SECTIONS[CONTROL].join(',') : '0,1,2,3,4,5,8,9')).split(',').map(s => s.trim());
 const runs = s => SECTIONS.includes(s);
+const STAKE_CAREERS = Number(process.env.SHOP_STAKE_CAREERS || 2000);
+if (!(STAKE_CAREERS >= 2000)) { console.log(`simUsShopPromises: could not run, SHOP_STAKE_CAREERS ${process.env.SHOP_STAKE_CAREERS} is under 2000 (section 3's band only widens with fewer careers)`); process.exit(2); }
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'us-shop1534-'));
 process.on('exit', () => { try { fs.rmSync(TMP, { recursive: true, force: true }); } catch { /* best effort */ } });
 const lf = s => s.split('\r\n').join('\n');
@@ -330,7 +346,6 @@ if (runs('2')) {
 }
 
 /* ─── section 3: stakes settle once, at the printed chance, for the printed payout ─── */
-const STAKE_CAREERS = Number(process.env.SHOP_STAKE_CAREERS || 2000);
 if (runs('3')) {
   console.log(`3) stakes: ${STAKE_CAREERS} careers per gamble per sport, one season end each`);
   for (const sport of US) {
