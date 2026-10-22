@@ -1,0 +1,6 @@
+headsha exit=0 0s | 030bcb5da Release BP m13: merge origin/main again at 3ee0bf62 (the other lane's Round 1447, dialogs kept above pending cookie choices)
+wf286x exit=1 353s | wfrun career-pending-popularity-gates.yml: 8 steps ran, 1 failed: Complete build and all rebuilt-site readers
+wf302x exit=1 282s | wfrun career-pending-money-gates.yml: 13 steps ran, 3 failed: Complete build and all rebuilt-site readers | Retain generated sitemap and restore its source | Final source
+wf288 exit=1 299s | wfrun career-life-stories.yml: 10 steps ran, 1 failed: Fixed phase all fifteen rebuilt-site readers
+wf289x exit=1 366s | wfrun career-phone-season-budget.yml: 10 steps ran, 1 failed: Complete build and all rebuilt-site readers
+wf297x exit=1 370s | wfrun career-phone-state-isolation.yml: 11 steps ran, 1 failed: Complete build and all rebuilt-site readers
