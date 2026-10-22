@@ -1,0 +1,13 @@
+#!serve
+#!playwright
+#!serial
+simMobileChrome: node scripts/simMobileChrome.mjs
+playClubManagerNewCountries: ENGINES=chromium node scripts/playClubManagerNewCountries.mjs
+playClubManagerSaveLeave: ENGINES=chromium node scripts/playClubManagerSaveLeave.mjs
+playClubManagerSlots: ENGINES=chromium node scripts/playClubManagerSlots.mjs
+playCmBoardVerdict: ENGINES=chromium node scripts/playCmBoardVerdict.mjs
+playConquestScenes: ENGINES=chromium node scripts/playConquestScenes.mjs
+playDealDesk: ENGINES=chromium node scripts/playDealDesk.mjs
+playSoccerLanding: ENGINES=chromium node scripts/playSoccerLanding.mjs
+simRevealScroll: node scripts/simRevealScroll.mjs
+careerLook996: node scripts/qa/careerLook996.mjs
