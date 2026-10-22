@@ -1,0 +1,5 @@
+# Release BP triage, trP: where Round 1520 moves simCmShootoutOrder (sections 4 and 5). Each probe runs in its own throwaway worktree of this head on the runner.
+#!serial
+headsha: git log --oneline -1
+shoot-no1520: R=$PWD; git worktree add -f /tmp/wn HEAD >/dev/null 2>&1 && ln -s "$R/node_modules" /tmp/wn/node_modules && cd /tmp/wn && node "$R/.rc/x/mutNoNations1520.mjs" && node scripts/simCmShootoutOrder.mjs
+shoot-noensure: R=$PWD; git worktree add -f /tmp/we HEAD >/dev/null 2>&1 && ln -s "$R/node_modules" /tmp/we/node_modules && cd /tmp/we && node "$R/.rc/x/noEnsure1520.mjs" && node scripts/simCmShootoutOrder.mjs
