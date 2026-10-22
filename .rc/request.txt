@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+simCareerMoments: node scripts/simCareerMoments.mjs
+simMobileChrome: node scripts/simMobileChrome.mjs
+simRevealScroll: node scripts/simRevealScroll.mjs
+simSoccerOpponentLabels: node scripts/simSoccerOpponentLabels.mjs
