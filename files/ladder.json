@@ -1,0 +1,771 @@
+{
+  "dt": 0.2,
+  "minutes": 240,
+  "sets": {
+    "cal": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20
+    ],
+    "hold": [
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40
+    ],
+    "third": [
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60
+    ]
+  },
+  "streakCap": 10,
+  "table": [
+    {
+      "ids": [
+        "win1",
+        "aw1"
+      ],
+      "counter": "wins",
+      "old": 1,
+      "current": 1,
+      "base": {
+        "cal": 4.2,
+        "hold": 2.1
+      },
+      "kind": "kept",
+      "value": 1,
+      "verdict": "unchanged",
+      "minutes": {
+        "cal": {
+          "atValue": 4.2,
+          "atOld": 4.2,
+          "atCurrent": 4.2,
+          "se": 0.148
+        },
+        "hold": {
+          "atValue": 4.2,
+          "atOld": 4.2,
+          "atCurrent": 4.2,
+          "se": 1.029
+        },
+        "third": {
+          "atValue": 4.2,
+          "atOld": 4.2,
+          "atCurrent": 4.2,
+          "se": 0.694
+        }
+      }
+    },
+    {
+      "ids": [
+        "win10",
+        "aw10"
+      ],
+      "counter": "wins",
+      "old": 10,
+      "current": 10,
+      "base": {
+        "cal": 23.1,
+        "hold": 21
+      },
+      "kind": "minutes",
+      "candidates": [
+        [
+          2,
+          6.3
+        ],
+        [
+          3,
+          8.4
+        ],
+        [
+          4,
+          10.5
+        ],
+        [
+          5,
+          12.6
+        ],
+        [
+          6,
+          16.8
+        ],
+        [
+          7,
+          18.9
+        ],
+        [
+          8,
+          23.1
+        ],
+        [
+          9,
+          25.2
+        ],
+        [
+          10,
+          27.3
+        ]
+      ],
+      "value": 8,
+      "onTarget": [
+        true,
+        true,
+        true
+      ],
+      "verdict": "move 10 to 8",
+      "minutes": {
+        "cal": {
+          "atValue": 23.1,
+          "atOld": 27.3,
+          "atCurrent": 27.3,
+          "se": 0.928
+        },
+        "hold": {
+          "atValue": 21,
+          "atOld": 27.3,
+          "atCurrent": 27.3,
+          "se": 1.278
+        },
+        "third": {
+          "atValue": 21,
+          "atOld": 27.3,
+          "atCurrent": 27.3,
+          "se": 1.547
+        }
+      }
+    },
+    {
+      "ids": [
+        "win50",
+        "aw50"
+      ],
+      "counter": "wins",
+      "old": 50,
+      "current": 50,
+      "base": {
+        "cal": 107.1,
+        "hold": 105
+      },
+      "kind": "minutes",
+      "candidates": [
+        [
+          9,
+          25.2
+        ],
+        [
+          10,
+          27.3
+        ],
+        [
+          12,
+          33.6
+        ],
+        [
+          15,
+          42
+        ],
+        [
+          20,
+          58.8
+        ],
+        [
+          25,
+          75.6
+        ],
+        [
+          30,
+          94.5
+        ],
+        [
+          35,
+          111.3
+        ],
+        [
+          40,
+          128.1
+        ],
+        [
+          50,
+          161.7
+        ]
+      ],
+      "value": 35,
+      "onTarget": [
+        true,
+        true,
+        true
+      ],
+      "verdict": "move 50 to 35",
+      "minutes": {
+        "cal": {
+          "atValue": 111.3,
+          "atOld": 161.7,
+          "atCurrent": 161.7,
+          "se": 3.899
+        },
+        "hold": {
+          "atValue": 105,
+          "atOld": 155.4,
+          "atCurrent": 155.4,
+          "se": 3.986
+        },
+        "third": {
+          "atValue": 111.3,
+          "atOld": 161.7,
+          "atCurrent": 161.7,
+          "se": 1.981
+        }
+      }
+    },
+    {
+      "ids": [
+        "aw150"
+      ],
+      "counter": "wins",
+      "old": 150,
+      "current": 150,
+      "base": {
+        "cal": "later",
+        "hold": "later"
+      },
+      "kind": "matches",
+      "rates": {
+        "base": 0.8245614035087719,
+        "head": 0.631578947368421,
+        "baseHold": 0.8596491228070176,
+        "headHold": 0.6140350877192983
+      },
+      "target": 114.89361702127658,
+      "targetHold": 107.14285714285714,
+      "value": 125,
+      "verdict": "move 150 to 125",
+      "minutes": {
+        "cal": {
+          "atValue": "later",
+          "atOld": "later",
+          "atCurrent": "later",
+          "se": "later"
+        },
+        "hold": {
+          "atValue": "later",
+          "atOld": "later",
+          "atCurrent": "later",
+          "se": "later"
+        },
+        "third": {
+          "atValue": "later",
+          "atOld": "later",
+          "atCurrent": "later",
+          "se": "later"
+        }
+      }
+    },
+    {
+      "ids": [
+        "aw400"
+      ],
+      "counter": "wins",
+      "old": 400,
+      "current": 400,
+      "base": {
+        "cal": "later",
+        "hold": "later"
+      },
+      "kind": "matches",
+      "rates": {
+        "base": 0.8245614035087719,
+        "head": 0.631578947368421,
+        "baseHold": 0.8596491228070176,
+        "headHold": 0.6140350877192983
+      },
+      "target": 306.3829787234042,
+      "targetHold": 285.7142857142857,
+      "value": 300,
+      "verdict": "move 400 to 300",
+      "minutes": {
+        "cal": {
+          "atValue": "later",
+          "atOld": "later",
+          "atCurrent": "later",
+          "se": "later"
+        },
+        "hold": {
+          "atValue": "later",
+          "atOld": "later",
+          "atCurrent": "later",
+          "se": "later"
+        },
+        "third": {
+          "atValue": "later",
+          "atOld": "later",
+          "atCurrent": "later",
+          "se": "later"
+        }
+      }
+    },
+    {
+      "ids": [
+        "goals25",
+        "ag25"
+      ],
+      "counter": "goals",
+      "old": 25,
+      "current": 25,
+      "base": {
+        "cal": 9.7533,
+        "hold": 9.6133
+      },
+      "kind": "minutes",
+      "candidates": [
+        [
+          1,
+          1.447
+        ],
+        [
+          2,
+          2.707
+        ],
+        [
+          3,
+          3.687
+        ],
+        [
+          4,
+          4.223
+        ],
+        [
+          5,
+          4.923
+        ],
+        [
+          6,
+          6.393
+        ],
+        [
+          7,
+          7.63
+        ],
+        [
+          8,
+          8.213
+        ],
+        [
+          9,
+          8.68
+        ],
+        [
+          10,
+          9.52
+        ],
+        [
+          12,
+          11.433
+        ],
+        [
+          15,
+          13.16
+        ],
+        [
+          20,
+          18.363
+        ],
+        [
+          25,
+          22.447
+        ]
+      ],
+      "value": 10,
+      "onTarget": [
+        true,
+        true,
+        true
+      ],
+      "verdict": "move 25 to 10",
+      "minutes": {
+        "cal": {
+          "atValue": 9.52,
+          "atOld": 22.447,
+          "atCurrent": 22.447,
+          "se": 0.716
+        },
+        "hold": {
+          "atValue": 9.333,
+          "atOld": 21.35,
+          "atCurrent": 21.35,
+          "se": 0.974
+        },
+        "third": {
+          "atValue": 9.007,
+          "atOld": 22.843,
+          "atCurrent": 22.843,
+          "se": 0.684
+        }
+      }
+    },
+    {
+      "ids": [
+        "ag100"
+      ],
+      "counter": "goals",
+      "old": 100,
+      "current": 100,
+      "base": {
+        "cal": 27.23,
+        "hold": 25.7833
+      },
+      "kind": "minutes",
+      "candidates": [
+        [
+          12,
+          11.433
+        ],
+        [
+          15,
+          13.16
+        ],
+        [
+          20,
+          18.363
+        ],
+        [
+          25,
+          22.447
+        ],
+        [
+          30,
+          29.377
+        ],
+        [
+          35,
+          33.763
+        ],
+        [
+          40,
+          40.25
+        ],
+        [
+          50,
+          50.68
+        ],
+        [
+          60,
+          61.67
+        ],
+        [
+          75,
+          82.553
+        ],
+        [
+          100,
+          113.937
+        ]
+      ],
+      "value": 30,
+      "onTarget": [
+        true,
+        true,
+        true
+      ],
+      "verdict": "move 100 to 30",
+      "minutes": {
+        "cal": {
+          "atValue": 29.377,
+          "atOld": 113.937,
+          "atCurrent": 113.937,
+          "se": 1.344
+        },
+        "hold": {
+          "atValue": 26.227,
+          "atOld": 106.983,
+          "atCurrent": 106.983,
+          "se": 2.6
+        },
+        "third": {
+          "atValue": 28.467,
+          "atOld": 110.46,
+          "atCurrent": 110.46,
+          "se": 1.82
+        }
+      }
+    },
+    {
+      "ids": [
+        "ag500"
+      ],
+      "counter": "goals",
+      "old": 500,
+      "current": 500,
+      "base": {
+        "cal": 96.11,
+        "hold": 94.8967
+      },
+      "kind": "minutes",
+      "candidates": [
+        [
+          35,
+          33.763
+        ],
+        [
+          40,
+          40.25
+        ],
+        [
+          50,
+          50.68
+        ],
+        [
+          60,
+          61.67
+        ],
+        [
+          75,
+          82.553
+        ],
+        [
+          100,
+          113.937
+        ],
+        [
+          125,
+          140.537
+        ],
+        [
+          150,
+          168.397
+        ],
+        [
+          200,
+          228.247
+        ],
+        [
+          250,
+          "later"
+        ],
+        [
+          300,
+          "later"
+        ],
+        [
+          400,
+          "later"
+        ],
+        [
+          500,
+          "later"
+        ]
+      ],
+      "value": 75,
+      "onTarget": [
+        true,
+        true,
+        true
+      ],
+      "verdict": "move 500 to 75",
+      "minutes": {
+        "cal": {
+          "atValue": 82.553,
+          "atOld": "later",
+          "atCurrent": "later",
+          "se": 2.407
+        },
+        "hold": {
+          "atValue": 79.497,
+          "atOld": "later",
+          "atCurrent": "later",
+          "se": 3.886
+        },
+        "third": {
+          "atValue": 80.617,
+          "atOld": "later",
+          "atCurrent": "later",
+          "se": 2.486
+        }
+      }
+    },
+    {
+      "ids": [
+        "ag2000"
+      ],
+      "counter": "goals",
+      "old": 2000,
+      "current": 2000,
+      "base": {
+        "cal": "later",
+        "hold": "later"
+      },
+      "kind": "matches",
+      "rates": {
+        "base": 14.280701754385966,
+        "head": 1.8421052631578947,
+        "baseHold": 14.263157894736842,
+        "headHold": 1.7543859649122806
+      },
+      "target": 257.985257985258,
+      "targetHold": 246.00246002460023,
+      "value": 250,
+      "verdict": "move 2000 to 250",
+      "minutes": {
+        "cal": {
+          "atValue": "later",
+          "atOld": "later",
+          "atCurrent": "later",
+          "se": "later"
+        },
+        "hold": {
+          "atValue": "later",
+          "atOld": "later",
+          "atCurrent": "later",
+          "se": "later"
+        },
+        "third": {
+          "atValue": "later",
+          "atOld": "later",
+          "atCurrent": "later",
+          "se": "later"
+        }
+      }
+    },
+    {
+      "ids": [
+        "streak5",
+        "as5"
+      ],
+      "counter": "streak",
+      "old": 5,
+      "current": 5,
+      "base": {
+        "cal": 12.6,
+        "hold": 10.5
+      },
+      "kind": "fixed",
+      "value": 5,
+      "verdict": "unchanged",
+      "minutes": {
+        "cal": {
+          "atValue": 12.6,
+          "atOld": 12.6,
+          "atCurrent": 12.6,
+          "se": 1.118
+        },
+        "hold": {
+          "atValue": 14.7,
+          "atOld": 14.7,
+          "atCurrent": 14.7,
+          "se": 1.412
+        },
+        "third": {
+          "atValue": 14.7,
+          "atOld": 14.7,
+          "atCurrent": 14.7,
+          "se": 0.979
+        }
+      }
+    },
+    {
+      "ids": [
+        "as10"
+      ],
+      "counter": "streak",
+      "old": 10,
+      "current": 10,
+      "base": {
+        "cal": 23.1,
+        "hold": 21
+      },
+      "kind": "fixed",
+      "value": 10,
+      "verdict": "unchanged",
+      "minutes": {
+        "cal": {
+          "atValue": 29.4,
+          "atOld": 29.4,
+          "atCurrent": 29.4,
+          "se": 36.757
+        },
+        "hold": {
+          "atValue": 31.5,
+          "atOld": 31.5,
+          "atCurrent": 31.5,
+          "se": 26.539
+        },
+        "third": {
+          "atValue": 31.5,
+          "atOld": 31.5,
+          "atCurrent": 31.5,
+          "se": 9.657
+        }
+      }
+    }
+  ],
+  "chosen": {
+    "win1": 1,
+    "aw1": 1,
+    "win10": 8,
+    "aw10": 8,
+    "win50": 35,
+    "aw50": 35,
+    "aw150": 125,
+    "aw400": 300,
+    "goals25": 10,
+    "ag25": 10,
+    "ag100": 30,
+    "ag500": 75,
+    "ag2000": 250,
+    "streak5": 5,
+    "as5": 5,
+    "as10": 10
+  },
+  "stops": []
+}
