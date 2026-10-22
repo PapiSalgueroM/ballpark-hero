@@ -14,7 +14,7 @@
  * boxes pays for the three tiles and nothing else until one is tapped. What a
  * tile says is decided in src/lib/gmDeskHost.ts.
  *
- * Not mounted by this round: nothing imports this file but its own test.
+ * Round 1533 mounts it on the NFL board (the hub and the out of work screen).
  */
 import type { GmPanelDef } from '@/lib/gmDesk';
 import { hostCareerTile, hostMarketTile, hostXpTile, type GmCareerFacts } from '@/lib/gmDeskHost';

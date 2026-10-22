@@ -5,6 +5,7 @@ import FrontOfficeBoard from '@/components/front-office/FrontOfficeBoard';
 import { GameNav } from '@/components/game/GameNav';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
+import { hostXpHelp } from '@/lib/gmDeskHost';
 
 /* Round 1130. A page that has a guide never renders the howToPlay prop below (GameSeoContent keeps it as a
    fallback only), and this page's guide is another round's file this week. So the opening rating rule reaches
@@ -15,7 +16,22 @@ const FRONT_OFFICE_RATING_RULES = [
   'A fullback is not rated as a ball carrier, so he sits low on the running back shelf with the e for limited evidence.',
 ] as const;
 
+/* Round 1533: the career rules (fired is a chapter, not the end), beside the rating rules in the ? panel. Built inside
+   the component, never at module scope, and the worked example is the desk host's own, computed from the game's
+   functions rather than typed. */
+function frontOfficeCareerRules(): string[] {
+  const xp = hostXpHelp();
+  return [
+    'Getting fired does not end the save. Zero trust upstairs costs you the job, and See who is calling opens the job market: franchises in the same league that rate your record call with the ask they would grade you on. The club that fired you never calls.',
+    'Take a job and you move to that club\'s real roster, cap sheet and picks, meet the room and run its draft. Your record, your titles and your GM XP come with you. The old club\'s staff and re-sign desk stay behind.',
+    'If the phone can still ring next year you can sit a season out: the league plays on without you, then the market reads again. Once the phone has stopped for good the screen says so, and a new front office is the way back in.',
+    'Your GM earns XP every graded season from wins, titles, playoff rounds and the grade against the ask, and each level is a point. Ownership (a missed season costs less trust) and Media (a gamble at the podium lands more often) work now. The other trees say Not here yet.',
+    xp[xp.length - 1].replace(/^Worked example: /, 'For example: '),
+  ];
+}
+
 const FrontOffice = () => {
+  const rules = [...FRONT_OFFICE_RATING_RULES, ...frontOfficeCareerRules()];
   return (
     <>
       <PageSeo
@@ -25,7 +41,7 @@ const FrontOffice = () => {
       />
       <div className="min-h-screen bg-background text-foreground">
         <GameNavbar />
-        <div className="relative z-10 mx-auto w-full max-w-4xl"><GameHelp extraRules={FRONT_OFFICE_RATING_RULES} /></div>
+        <div className="relative z-10 mx-auto w-full max-w-4xl"><GameHelp extraRules={rules} /></div>
         <main id="dukb-main" className="container max-w-2xl mx-auto px-4 py-6 pb-20">
           <div className="text-center mb-4">
             <h1 className="text-2xl font-display font-bold text-primary">NFL Front Office</h1>

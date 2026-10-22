@@ -2,7 +2,7 @@
  * Round 1223: the NFL front office, as the GM desk host reads it. Reads only:
  * the engine is imported and never edited, and nothing here changes the
  * league it is handed (scripts/simGmDeskHost.mjs compares the league before
- * and after every read). Nothing imports this file yet; the NFL bind will.
+ * and after every read). Round 1533 bound it to the NFL board first.
  *
  * What is football in here and nowhere else: the engine's standings take the
  * teams record, not the league, and a club keeps wins and losses only (the

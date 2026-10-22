@@ -22,6 +22,7 @@
  * playwright, and runs it only with --browser.)
  */
 import pw from './lib/playwrightLoader.mjs';
+import { answerConsent } from './lib/answerConsent.mjs';
 
 const { chromium } = pw;
 const BASE = process.env.BASE ?? process.env.SWEEP_BASE ?? 'http://localhost:4173';
@@ -98,7 +99,9 @@ const browser = await chromium.launch();
   say(/Nowhere near the ask|Short of the ask/.test(recapText), 'the ownership verdict is on the recap');
   say(recapText.includes('Ownership made the call'), 'the firing block replaced the draft path');
   say(await page.locator('button:has-text("Go to the draft")').count() === 0, 'a fired GM gets no draft button');
-  say(await page.locator('button:has-text("Take another front office")').count() >= 1, 'the way out is another job');
+  /* Round 1533: fired is a chapter, not the end. No button on the recap deletes the save; it offers who is calling. */
+  say(await page.locator('button:has-text("Take another front office")').count() === 0, 'no button on the recap deletes the save');
+  say(await page.locator('button:has-text("See who is calling")').count() === 1, 'the recap offers who is calling');
   /* Round 187: the recap is the staged verdict card now, and its confetti
      rule is the harness's business: a fired GM whose team did not win the
      title gets ZERO confetti pieces, whatever else animates. */
@@ -109,11 +112,20 @@ const browser = await chromium.launch();
   await page.reload({ waitUntil: 'networkidle' });
   await page.waitForTimeout(1200);
   const firedText = await page.locator('body').innerText();
-  say(firedText.includes('Fired by'), 'the fired screen renders from the save');
+  /* Round 1533: the reload lands on the out of work screen (the save already says fired), with its three boxes. */
+  say(await page.locator('[data-gm-out-of-work]').count() === 1 && firedText.includes('Let go by the'), 'the out of work screen renders from the save');
+  say(await page.locator('[data-gm-out-of-work] [data-gm-desk="tiles"] button').count() === 3, 'the out of work screen holds the three career boxes');
   say(await page.locator('button:has-text("Play Week")').count() === 0, 'no way to keep playing a job you lost');
-  await page.locator('button:has-text("Take another front office")').first().click();
+  /* The way back to the picker is the two tap link: the first tap only arms it. */
+  /* The link sits low on a phone: the consent bar, if it is still up, is answered first so it covers nothing. */
+  await answerConsent(page);
+  const restart = page.locator('button:has-text("Start a new front office")');
+  await restart.first().click();
+  await page.waitForTimeout(300);
+  say(await page.locator('[data-gm-arm="restart"]').count() === 1 && !(await page.locator('body').innerText()).includes('Take over a front office'), 'one tap on the new front office link only arms it');
+  await restart.first().click();
   await page.waitForTimeout(900);
-  say((await page.locator('body').innerText()).includes('Take over a front office'), 'taking another job returns to the picker');
+  say((await page.locator('body').innerText()).includes('Take over a front office'), 'the second tap returns to the picker');
   say(errors.length === 0, `no page errors on the NFL walk (${errors.length ? errors[0] : 'clean'})`);
   await page.close();
 }
