@@ -67,3 +67,15 @@ new shared gmXp chunk 2.3K (clubManager 0.3K lighter), the Phone icon 0.4K. The 
 ## What a later session must not trust
 - runAllSims (r1533-s7a on fb3d5eb5) timed out on the runner (exit 124 at 4200 s, 791 harnesses, no output): not a result. The sharded release gate runs the full suite.
 - The adversarial review the brief asks for has not run.
+
+## The adversarial review and its fix pass (2026-10-22)
+The review ran (results-g/review-run-1533.md and review-read-1533.md, head fe60cd00). The fix pass, written up in
+full in C:/Users/antho/dukb-handoff/2026-10-10/results-g/fix-1533.md, fixed on the branch: the first call's words
+against the caller's rank (control onereason, simGmDeskHost minNearCalls 16), looking at a career box with the desk
+off and the final week's staff tick through the close (board test cases, controls lookopens and deskstale), the XP
+line on a season that paid nothing (control xpzero), nflSeasonCounted on every phase (simGmCareer section 7, control
+hubcounted), a refused year out in the host's words (hostAwayRefusalLine), and the two career landings brought into
+view on a phone (one useRevealScroll keyed to them alone). Re-recorded: simSeoDiscovery1444's held football.ts hash
+(db2cb828, attribution in its message). Owed to the release: public/whats-new/index.html and
+public/front-office/index.html (build:seo). Final proof on 7f6b33d8: r1533-fin-a, fin-b, fin-c, fin-w.
+- simPrerender stays red with one line (the /whats-new entry) until the release's build:seo.
