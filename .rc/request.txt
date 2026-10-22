@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+#!serial
+playStartingXi: ENGINES=chromium node scripts/playStartingXi.mjs
