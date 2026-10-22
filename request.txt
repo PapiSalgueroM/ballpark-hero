@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+mdBuilder: git checkout bc79b526 -- src/components/club-manager/HalftimeScreen.tsx src/components/club-manager/MatchCentre.tsx src/components/club-manager/LiveSimScreen.tsx src/components/club-manager/MatchReportCard.tsx && MATCHDAY_BASE=d8aaa4cb node scripts/simCmMatchDay.mjs; s=$?; git checkout HEAD -- src; exit $s
+weightHead: ENGINES=chromium SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+weightMain: git worktree add .rcmain 6d2d7a7d2cb41d25f9c71c24c848af583e804f6a >/dev/null 2>&1 && cd .rcmain && ../node_modules/.bin/vite build > /tmp/mb.log 2>&1 && (nohup node scripts/lib/hostLikeServer.mjs dist 4174 > /dev/null 2>&1 &) && sleep 4 && ENGINES=chromium SWEEP_OFFLINE=1 SWEEP_BASE=http://localhost:4174 BASE=http://localhost:4174 node scripts/sweepWeight.mjs

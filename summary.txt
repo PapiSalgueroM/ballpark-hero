@@ -1,0 +1,4 @@
+build exit=0 25s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+mdBuilder exit=0 18s | simCmMatchDay: all sections green (918 matches: 462 home, 448 away, 8 neutral)
+weightHead exit=0 29s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+weightMain exit=0 56s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
