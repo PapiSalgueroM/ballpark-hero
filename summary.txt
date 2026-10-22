@@ -1,0 +1,16 @@
+tsc exit=0 116s | 
+vitest exit=0 151s | vitest exit 0
+sa-2 exit=0 155s | simSoccerSeasonAwards: green
+sa-2-s11 exit=0 136s | simSoccerSeasonAwards: green
+sa-3 exit=0 23s | simSoccerSeasonAwards: green
+sa-4 exit=0 72s | simSoccerSeasonAwards: green
+sa-56 exit=0 3s | simSoccerSeasonAwards: green
+rival exit=0 15s | No rival product names found. 0 findings.
+sa-2-s13 exit=0 154s | simSoccerSeasonAwards: green
+storage exit=0 3s | simStorageWrites: all green (owed: 12)
+awards exit=0 5s | PASS: ALL AWARD SCARCITY CHECKS PASSED
+trust exit=0 1s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+anchors exit=0 53s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+form-15 exit=0 26s | simCareerForm: green
+worldtruth exit=0 58s | simSoccerWorldTruth: OK, every section green
+sa-1 exit=0 562s | simSoccerSeasonAwards: green
