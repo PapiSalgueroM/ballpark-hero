@@ -1,0 +1,8 @@
+#!serial
+mutA: node .rc/x/mutv1555.mjs A || exit 9; node scripts/simNbaStartingFive.mjs; a=$?; node .rc/x/probe1555.mjs 40 > /tmp/pA.log 2>&1; b=$?; tail -2 /tmp/pA.log; git checkout -- src scripts; echo "MUT-A harness=$a probe=$b"; exit $a
+mutB: node .rc/x/mutv1555.mjs B || exit 9; node scripts/simNbaStartingFive.mjs; a=$?; node .rc/x/probe1555.mjs 40 > /tmp/pB.log 2>&1; b=$?; tail -2 /tmp/pB.log; git checkout -- src scripts; echo "MUT-B harness=$a probe=$b"; exit $a
+mutC: node .rc/x/mutv1555.mjs C || exit 9; node scripts/simNbaStartingFive.mjs; a=$?; git checkout -- src scripts; echo "MUT-C harness=$a"; exit $a
+mutD: node .rc/x/mutv1555.mjs D || exit 9; node scripts/simNbaStartingFive.mjs; a=$?; git checkout -- src scripts; echo "MUT-D harness=$a"; exit $a
+mutF: node .rc/x/mutv1555.mjs F || exit 9; node scripts/simNbaStartingFive.mjs; a=$?; node .rc/x/probe1555.mjs 40 > /tmp/pF.log 2>&1; b=$?; tail -4 /tmp/pF.log; git checkout -- src scripts; echo "MUT-F harness=$a probe=$b"; exit $a
+probe-head: node .rc/x/probe1555.mjs 40 > /tmp/pH.log 2>&1; b=$?; tail -3 /tmp/pH.log; echo "PROBE-HEAD exit=$b"; exit $b
+clean: git status --short | head -5; echo "tree after mutations: $(git status --short | grep -v '^?? .rc/' | wc -l) changed paths"
