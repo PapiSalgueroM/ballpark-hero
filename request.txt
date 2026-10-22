@@ -1,0 +1,5 @@
+#!serial
+deskhost: bash .rc/x/cmp.sh deskhost 'node scripts/simGmDeskHost.mjs'
+nfldesk: bash .rc/x/cmp.sh nfldesk 'node scripts/simNflGmDesk.mjs'
+nhldesk: bash .rc/x/cmp.sh nhldesk 'node scripts/simNhlGmDesk.mjs'
+mlbdesk: bash .rc/x/cmp.sh mlbdesk 'node scripts/simMlbGmDesk.mjs'

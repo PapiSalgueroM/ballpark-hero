@@ -1,0 +1,4 @@
+deskhost exit=0 132s | cmp deskhost: BYTE EQUAL to 7a8750ba
+nfldesk exit=0 69s | cmp nfldesk: BYTE EQUAL to 7a8750ba
+nhldesk exit=0 7s | cmp nhldesk: BYTE EQUAL to 7a8750ba
+mlbdesk exit=0 12s | cmp mlbdesk: BYTE EQUAL to 7a8750ba

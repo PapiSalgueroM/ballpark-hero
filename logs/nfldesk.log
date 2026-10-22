@@ -1,0 +1,6 @@
+cmp nfldesk: exit base=0 head=0 head2=0
+  base last line: simNflGmDesk: all seven checks passed (10 seeds x 10 seasons)
+  head last line: simNflGmDesk: all seven checks passed (10 seeds x 10 seasons)
+  lines: base 21, head 21
+  sha1 base a20d993e35f5 head a20d993e35f5 head2 a20d993e35f5
+cmp nfldesk: BYTE EQUAL to 7a8750ba

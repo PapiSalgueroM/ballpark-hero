@@ -1,0 +1,6 @@
+cmp nhldesk: exit base=0 head=0 head2=0
+  base last line: simNhlGmDesk: all seven checks passed (10 seeds x 10 seasons)
+  head last line: simNhlGmDesk: all seven checks passed (10 seeds x 10 seasons)
+  lines: base 17, head 17
+  sha1 base eabf30320138 head eabf30320138 head2 eabf30320138
+cmp nhldesk: BYTE EQUAL to 7a8750ba
