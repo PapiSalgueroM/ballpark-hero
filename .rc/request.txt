@@ -1,0 +1,10 @@
+# Release BJ, Round 1340's walks on the final tree. playLiveMatchFit's two controls share a fixed port: serial.
+#!serve
+#!playwright
+#!serial
+md-walk: node scripts/playCmMatchDay.mjs
+md-walk-ctl: ok=0; r=""; for k in swap cut jump fullname; do PLAY_MATCHDAY_CONTROL=$k node scripts/playCmMatchDay.mjs > /tmp/pmd-$k.log 2>&1; e=$?; r="$r $k=$e"; [ $e = 1 ] || ok=1; echo "$k: last: $(tail -1 /tmp/pmd-$k.log | cut -c1-200)"; done; echo "controls (each must be 1):$r"; exit $ok
+livefit: node scripts/playLiveMatchFit.mjs
+livefit-ctl: ok=0; r=""; for k in widelabels digits; do LIVE_FIT_CONTROL=$k node scripts/playLiveMatchFit.mjs > /tmp/lf-$k.log 2>&1; e=$?; r="$r $k=$e"; [ $e = 1 ] || ok=1; echo "$k: last: $(tail -1 /tmp/lf-$k.log | cut -c1-200)"; done; echo "controls (each must be 1):$r"; exit $ok
+hub: node scripts/playCmHubLanding.mjs
+fixtures: node scripts/playCmLeagueFixtures.mjs
