@@ -51,7 +51,7 @@ function playWeeks(s, n) {
 }
 
 /* ---------- 1. The gate is exactly crowd times price, home only ---------- */
-console.log('1) Home gates reconcile to the pound; nobody pays for away days');
+console.log('1) Home gates reconcile after recorded shirt income; away gates stay zero');
 {
   let s = startCareer('Everton');
   let homeGates = 0;
@@ -59,20 +59,22 @@ console.log('1) Home gates reconcile to the pound; nobody pays for away days');
   while (homeGates < 8 && guard < 40) {
     guard++;
     const before = s.budget;
+    const retailBefore = s.books?.season?.shirts?.paidPence ?? 0;
     const priceBefore = gatePricePerFan(s);
     const r = playNextEntry(s, { skipHalftime: true });
     s = r.state;
     if (r.kind !== 'match' || !r.report?.detail) continue;
     const d = r.report.detail;
+    const retailPaid = ((s.books?.season?.shirts?.paidPence ?? 0) - retailBefore) / 100_000_000;
     if (d.venue === 'home') {
       homeGates++;
       const expect = Math.round((d.attendance * priceBefore) / 1e6 * 100) / 100;
-      const gained = Math.round((s.budget - before) * 100) / 100;
+      const gained = Math.round((s.budget - before - retailPaid) * 100) / 100;
       if (Math.abs(gained - expect) > 0.011) fail(`home gate paid ${gained}m for ${d.attendance} at ${priceBefore}: expected ${expect}m`);
       if (s.finance?.lastGate === null || s.finance?.lastGate === undefined) fail('no lastGate after a home match');
       else if (Math.abs(s.finance.lastGate - expect) > 0.011) fail(`lastGate reads ${s.finance.lastGate}, gate was ${expect}`);
     } else {
-      const gained = s.budget - before;
+      const gained = s.budget - before - retailPaid;
       if (gained > 0.001) fail(`an ${d.venue} match paid my till ${gained}m`);
     }
   }

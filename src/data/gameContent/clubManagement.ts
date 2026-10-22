@@ -143,7 +143,8 @@ export const CLUB_MANAGEMENT_CONTENT: GameContentMap = {
           {
             heading: "The finances desk and shirt sponsors",
             items: [
-              "The finances desk sets ticket and food prices the fans and the board react to, takes one of four shirt sponsors (three honest shapes marked local or global, or a bad brand that pays 1.35 times the safe cheque and takes 6 off the fan meter for as long as the shirt carries it), lets you push any offer for six percent more until the brand walks, and projects the season's books to the last day: tickets, food, sponsor and sales in, player wages, staff wages, travel, signings, facilities and staff fees out. Wages and travel are running costs the board covers and never leave the transfer kitty.",
+              "The finances desk sets ticket and food prices the fans and the board react to, takes one of four shirt sponsors (three honest shapes marked local or global, or a bad brand that pays 1.35 times the safe cheque and takes 6 off the fan meter for as long as the shirt carries it), lets you push any offer for six percent more until the brand walks, and projects the season's books to the last day: tickets, food, paid net shirt sales, sponsor and player sales in, player wages, staff wages, travel, signings, facilities and staff fees out. Wages and travel are running costs the board covers and never leave the transfer kitty.",
+              "Simulated shirt sales are separate from the sponsor. Club stature and your shown fan meter set the demand each club week. The desk shows gross sales, production cost, net earned, net paid and pending net, all to the smallest displayed money unit. Only net paid enters the kitty: 10,000 at a time (0.01m in your chosen display currency), with production already deducted. For example, two weeks earning 6,000 net each gives 10,000 paid and 2,000 pending. Pending carries into next season at the same club and stays behind if you leave. There is no extra midweek payment, no income just for opening or loading, and no backpay for older saves. Future shirt-sales estimates use today's demand and the club weeks left; missing or unavailable saved totals are labelled on the desk.",
             ],
           },
           {
@@ -208,7 +209,7 @@ export const CLUB_MANAGEMENT_CONTENT: GameContentMap = {
       },
       {
         q: "Do wages come out of my transfer budget?",
-        a: "No. The projected finances screen lists player wages, staff wages and travel because a club pays them, but the board covers them and holds you to a wage ceiling on the contracts desk instead. Tickets, food and drink, the sponsor, transfers, facility upgrades and the fees and pay offs on the staff desk are the lines that move the kitty.",
+        a: "No. The projected finances screen lists player wages, staff wages and travel because a club pays them, but the board covers them and holds you to a wage ceiling on the contracts desk instead. Tickets, food and drink, paid net shirt sales, the sponsor, transfers, facility upgrades and the fees and pay offs on the staff desk are the lines that move the kitty.",
       },
       {
         q: "Does quick simming a match give me a worse result than playing it?",
