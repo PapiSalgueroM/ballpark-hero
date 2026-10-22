@@ -1,0 +1,15 @@
+simCareerDecisionOutcome: timeout 1200 node scripts/simCareerDecisionOutcome.mjs
+simCareerInbox: timeout 1200 node scripts/simCareerInbox.mjs
+simCareerPressMarket: timeout 1200 node scripts/simCareerPressMarket.mjs
+simCareerSeasonReview: timeout 1200 node scripts/simCareerSeasonReview.mjs
+simFreeAgency: timeout 1200 node scripts/simFreeAgency.mjs
+simNbaAwardsSense: timeout 1200 node scripts/simNbaAwardsSense.mjs
+simNflCoachStaffRecovery: timeout 1200 node scripts/simNflCoachStaffRecovery.mjs
+simNumberFormatting: timeout 1200 node scripts/simNumberFormatting.mjs
+simSessionMarks: timeout 1200 node scripts/simSessionMarks.mjs
+simUsCareerActionConfirm: timeout 1200 node scripts/simUsCareerActionConfirm.mjs
+simUsCareerDefects: timeout 1200 node scripts/simUsCareerDefects.mjs
+simUsCareerSaveRetry: timeout 1200 node scripts/simUsCareerSaveRetry.mjs
+simUsCoachCareer: timeout 1200 node scripts/simUsCoachCareer.mjs
+simUsDirtyMoney: timeout 1200 node scripts/simUsDirtyMoney.mjs
+simUsSeasonCentre: timeout 1200 node scripts/simUsSeasonCentre.mjs
