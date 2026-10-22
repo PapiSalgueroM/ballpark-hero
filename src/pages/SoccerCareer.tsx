@@ -42,7 +42,7 @@ import {
   giveWorldCupSpeech, type WorldCupSpeechChoice, manualRetire, choosePostRetirement, advanceManagerSeason, acceptManagerOffer, endManagerCareer, loadManagerMarket,
   acceptRetirementSuggestion, declineRetirementSuggestion, announceFarewellSeason,
   advancePunditSeason, endPunditCareer, punditLegacyPaid, playedSeniorSeason, POST_RETIREMENT_BONUS_CAP,
-  advanceOwnerSeason, endOwnerCareer,
+  advanceOwnerSeason, endOwnerCareer, ownerClubsOnSale, chooseOwnerPlan, type OwnerState, type OwnerPlan,
   dismissNewspaper, purchaseSpendingItem, SPENDING_ITEMS,
   applySocialMediaAction, handleCoverAthleteDecision, dismissSocialMediaPhase,
   applyMoralDilemmaChoice, dismissMoralDilemma, MORAL_DILEMMAS,
@@ -60,6 +60,7 @@ import {
   nextSeasonYear, managerNextSeasonYear,
 } from "@/lib/soccerCareerEngine";
 import type { FirstStageStage } from "@/lib/soccerCareerContinental";
+import { OWNER_EFFECTS, OWNER_PLANS, ownerBudget, ownerLevels, ownerPlanOpen, ownerPlanWords } from "@/lib/soccerCareerOwner";
 import { careerBeforeBallonDorReveal, revealBallonDorResult, ballonDorAwaitingReveal } from "@/lib/soccerAwardReveal";
 import { readLeagueWorldSeason } from "@/lib/soccerCareerLeagueWorld";
 import { soccerExtensionQuote } from "@/lib/soccerCareerContracts";
@@ -1287,12 +1288,12 @@ export default function SoccerCareer() {
      fetched it already by the time this runs, because the retirement screen
      is a page of reading; the await is here so that a fast click on a slow
      phone still lands in a manager career with a working offer feed. */
-  const handlePostRetirement = async (choice: PostRetirementChoice) => {
+  const handlePostRetirement = async (choice: PostRetirementChoice, ownerClub?: string) => {
     if (!career) return;
     if (choice === "manager") {
       try { await loadManagerMarket(); } catch { /* the engine says so on screen and retries */ }
     }
-    setCareer(choosePostRetirement(career, choice, clubs));
+    setCareer(choosePostRetirement(career, choice, clubs, ownerClub));
   };
 
   const handleAdvanceManager = () => {
@@ -2918,7 +2919,9 @@ function BallonDorCeremonyCard({ bdor, career, onDismiss, onSpeech, onReveal }: 
 }
 
 /* ─── Retirement Ceremony Card ─── */
-function RetirementCeremonyCard({ career, totals, onPostRetirement }: { career: CareerState; totals: ReturnType<typeof getCareerTotals>; onPostRetirement: (c: PostRetirementChoice) => void }) {
+function RetirementCeremonyCard({ career, clubs, totals, onPostRetirement }: { career: CareerState; clubs: ClubData[]; totals: ReturnType<typeof getCareerTotals>; onPostRetirement: (c: PostRetirementChoice, ownerClub?: string) => void }) {
+  /* Round 1524: the club list opens in place of the four doors */
+  const [buying, setBuying] = useState(false);
   const legacy = career.legacy!;
   const tierColors: Record<LegacyTier, string> = { "GOAT": "text-amber-400", "LEGEND": "text-purple-400", "GREAT": "text-emerald-400", "SOLID PRO": "text-blue-400", "JOURNEYMAN": "text-muted-foreground" };
   const tierEmoji: Record<LegacyTier, string> = { "GOAT": "🐐", "LEGEND": "🏛️", "GREAT": "⭐", "SOLID PRO": "💪", "JOURNEYMAN": "🎒" };
@@ -2994,6 +2997,9 @@ function RetirementCeremonyCard({ career, totals, onPostRetirement }: { career: 
       </div>
 
       {/* Post-retirement choices */}
+      {buying ? (
+        <OwnerClubSale career={career} clubs={clubs} onBuy={name => onPostRetirement("owner", name)} onBack={() => setBuying(false)} />
+      ) : (
       <div className="space-y-2">
         <div className="text-xs text-center text-muted-foreground font-bold uppercase">What's Next?</div>
         <Button onClick={() => onPostRetirement("retire")} className="w-full h-11 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-black">
@@ -3006,17 +3012,27 @@ function RetirementCeremonyCard({ career, totals, onPostRetirement }: { career: 
           🎙️ Become a TV Pundit
         </Button>
         {career.netWorth >= 200 && (
-          <Button onClick={() => onPostRetirement("owner")} variant="outline" className="w-full h-11 text-sm font-bold">
+          <Button onClick={() => setBuying(true)} variant="outline" className="w-full h-11 text-sm font-bold">
             🏟️ Buy a Football Club ({formatNetWorth(career.netWorth)} net worth)
           </Button>
         )}
       </div>
+      )}
     </div>
   );
 }
 
 /* ─── Post-Retirement Card (unused since choices are in ceremony, but kept for direct phase) ─── */
-function PostRetirementCard({ career, onChoice }: { career: CareerState; onChoice: (c: PostRetirementChoice) => void }) {
+function PostRetirementCard({ career, clubs, onChoice }: { career: CareerState; clubs: ClubData[]; onChoice: (c: PostRetirementChoice, ownerClub?: string) => void }) {
+  /* Round 1524: the club list, as on the ceremony */
+  const [buying, setBuying] = useState(false);
+  if (buying) {
+    return (
+      <div className="rounded-xl border border-border p-5">
+        <OwnerClubSale career={career} clubs={clubs} onBuy={name => onChoice("owner", name)} onBack={() => setBuying(false)} />
+      </div>
+    );
+  }
   return (
     <div className="rounded-xl border border-border p-5 space-y-3 text-center">
       <h3 className="text-lg font-black">What's Next?</h3>
@@ -3024,42 +3040,113 @@ function PostRetirementCard({ career, onChoice }: { career: CareerState; onChoic
       <Button onClick={() => onChoice("manager")} variant="outline" className="w-full h-11 text-sm font-bold">📋 Become a Manager</Button>
       <Button onClick={() => onChoice("pundit")} variant="outline" className="w-full h-11 text-sm font-bold">🎙️ Become a TV Pundit</Button>
       {career.netWorth >= 200 && (
-        <Button onClick={() => onChoice("owner")} variant="outline" className="w-full h-11 text-sm font-bold">🏟️ Buy a Football Club</Button>
+        <Button onClick={() => setBuying(true)} variant="outline" className="w-full h-11 text-sm font-bold">🏟️ Buy a Football Club</Button>
       )}
     </div>
   );
 }
 
-/* ─── Manager Panel ─── */
-function ManagerPanel({ manager, career, onAdvance, onEnd, onAcceptOffer }: { manager: ManagerState; career: CareerState; onAdvance: () => void; onEnd: () => void; onAcceptOffer?: (i: number) => void }) {
+/* ─── Round 1524: the clubs for sale ───
+   Two from every price band he can afford, the same list on every visit.
+   The prices and the debts are the game's own tier bands, and the card says
+   so: never a real club's real valuation. */
+function OwnerClubSale({ career, clubs, onBuy, onBack }: { career: CareerState; clubs: ClubData[]; onBuy: (club: string) => void; onBack: () => void }) {
+  const forSale = ownerClubsOnSale(career, clubs);
   return (
-    <div className="rounded-xl border border-border bg-card p-4 space-y-3">
-      <div className="text-center space-y-1">
-        <h3 className="text-lg font-black">📋 Manager Career</h3>
-        <p className="text-xs text-muted-foreground">Managing {manager.club} (Tier {manager.clubTier}) · Season {manager.season}</p>
+    <div className="space-y-2" data-testid="owner-club-sale">
+      <div className="flex items-center justify-between gap-2">
+        <Button onClick={onBack} variant="ghost" className="h-8 px-2 text-xs font-bold">Back</Button>
+        <span className="text-xs font-bold uppercase text-muted-foreground">Clubs for sale</span>
       </div>
+      <p className="text-[11px] text-center text-muted-foreground">
+        {money(`You have ${formatNetWorth(career.netWorth)}. Prices and debts are the game's own estimates for a club of that tier, not real figures.`)}
+      </p>
+      <div className="grid grid-cols-2 gap-2">
+        {forSale.map((c, i) => (
+          <button
+            key={c.name}
+            onClick={() => onBuy(c.name)}
+            data-testid="owner-club-for-sale"
+            className="cm-rise min-w-0 rounded-lg border border-border bg-card hover:border-primary p-2.5 text-left transition-all"
+            style={{ animationDelay: revealDelay(i) }}
+          >
+            <div className="truncate text-xs font-black">{c.name}</div>
+            <div className="truncate text-[10px] text-muted-foreground">{c.league} · Tier {c.tier}</div>
+            <div className="text-[11px] font-bold">{money(`€${c.price}M`)}</div>
+            <div className="text-[10px] text-muted-foreground">{money(`€${c.debt}M debt`)}</div>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
 
-      {/* Round 530: the results, then the final table under them, tick in on
-          one clock, top to bottom. Keyed on the season plus index so a new
-          season re-runs the stagger and an unrelated re-render does not. */}
-      {manager.seasonResults.length > 0 && (
+/* ─── Round 1524: the club owner's panel ───
+   The season is the dugout's table (DugoutTableBlock), and before each one
+   he makes one call: where the budget goes. The call is saved with the
+   career, so a reload keeps it, and the season button waits for it. */
+function OwnerPanel({ owner, onPlan }: { owner: OwnerState; onPlan?: (plan: OwnerPlan) => void }) {
+  const lv = ownerLevels(owner);
+  const budget = ownerBudget(owner);
+  return (
+    <div className="rounded-xl border border-border bg-card p-4 space-y-3" data-testid="owner-panel">
+      <div className="text-center space-y-1">
+        <h3 className="text-lg font-black">🏟️ Club Owner</h3>
+        <p className="text-xs text-muted-foreground">Owning {owner.club} (Tier {owner.clubTier}) · Season {owner.season}</p>
+        <p className="text-[11px] text-muted-foreground">Every season is played on your league's table. Before each one, pick where the budget goes.</p>
+      </div>
+      {owner.seasonResults.length > 0 && (
         <div className="space-y-1">
-          {manager.seasonResults.slice(-5).map((r, i) => (
-            <div key={`${r.year}-${i}`} className="cm-tick-in flex items-center justify-between text-xs bg-muted/20 rounded-lg px-3 py-1.5" style={{ animationDelay: revealDelay(i) }}>
-              <span className="text-muted-foreground">S{r.year}</span>
-              <span className="font-semibold">{r.club}</span>
-              <span className={`text-[10px] ${r.trophy ? "text-amber-400" : "text-muted-foreground"}`}>{r.result}</span>
+          {owner.seasonResults.slice(-5).map((r, i) => (
+            <div key={`${r.year}-${i}`} className="cm-tick-in flex items-center justify-between gap-2 text-xs bg-muted/20 rounded-lg px-3 py-1.5" style={{ animationDelay: revealDelay(i) }}>
+              <span className="shrink-0 text-muted-foreground">S{r.year}</span>
+              <span className="truncate font-semibold">{r.club}</span>
+              <span className={`text-right text-[10px] ${r.trophy ? "text-amber-400" : "text-muted-foreground"}`}>{money(r.result)}</span>
             </div>
           ))}
         </div>
       )}
+      <DugoutTableBlock results={owner.seasonResults} />
+      <div className="grid grid-cols-3 gap-2 text-center text-xs">
+        <div className="bg-muted/20 rounded-lg p-2"><div className="font-black">{owner.trophies}</div><div className="text-[9px] text-muted-foreground">Trophies</div></div>
+        <div className="bg-muted/20 rounded-lg p-2"><div className="font-black">{owner.promotions}</div><div className="text-[9px] text-muted-foreground">Promotions</div></div>
+        <div className="bg-muted/20 rounded-lg p-2"><div className="font-black">{money(`€${lv.debt.toFixed(1)}M`)}</div><div className="text-[9px] text-muted-foreground">Debt</div></div>
+        <div className="bg-muted/20 rounded-lg p-2"><div className="font-black">{lv.squad.toFixed(1)}</div><div className="text-[9px] text-muted-foreground">Signings edge</div></div>
+        <div className="bg-muted/20 rounded-lg p-2"><div className="font-black">{lv.academy}/{OWNER_EFFECTS.maxLevel}</div><div className="text-[9px] text-muted-foreground">Academy</div></div>
+        <div className="bg-muted/20 rounded-lg p-2"><div className="font-black">{lv.stadium}/{OWNER_EFFECTS.maxLevel}</div><div className="text-[9px] text-muted-foreground">Ground</div></div>
+      </div>
+      <div className="space-y-2" data-testid="owner-plan">
+        <div className="text-xs text-center font-bold uppercase text-muted-foreground">{money(`Where does this season's €${budget}M go?`)}</div>
+        <div className="grid grid-cols-2 gap-2">
+          {OWNER_PLANS.filter(p => ownerPlanOpen(owner, p)).map(p => {
+            const w = ownerPlanWords(owner, p);
+            const on = owner.plan === p;
+            return (
+              <button
+                key={p}
+                onClick={() => onPlan?.(p)}
+                aria-pressed={on}
+                data-plan={p}
+                className={`min-w-0 rounded-lg border p-2.5 text-left transition-all ${on ? "border-primary bg-primary/15" : "border-border bg-card hover:border-primary"}`}
+              >
+                <div className="text-xs font-black">{w.title}</div>
+                <div className="text-[10px] leading-snug text-muted-foreground">{money(w.line)}</div>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
 
-      {/* Round 227: the season is a table now, so show it: the leaders plus
-          your own row, the W-D-L line, and how the cup run ended. */}
-      {(() => {
-        const last = manager.seasonResults[manager.seasonResults.length - 1];
+/* ─── Round 1524: the dugout's final table ───
+   Lifted out of the manager's panel exactly as it was, so the club owner's
+   panel shows the same table for a season played on the same engine. */
+function DugoutTableBlock({ results }: { results: ManagerState["seasonResults"] }) {
+        const last = results[results.length - 1];
         if (!last?.table) return null;
-        const afterResults = Math.min(manager.seasonResults.length, 5);
+        const afterResults = Math.min(results.length, 5);
         /* Round 1029: the table is his club's own league. A club of that
            league the game does not know by name keeps its place, unnamed,
            and a table with no rival we can name says where he finished. A
@@ -3101,7 +3188,36 @@ function ManagerPanel({ manager, career, onAdvance, onEnd, onAcceptOffer }: { ma
             )}
           </div>
         );
-      })()}
+}
+
+/* ─── Manager Panel ─── */
+function ManagerPanel({ manager, career, onAdvance, onEnd, onAcceptOffer }: { manager: ManagerState; career: CareerState; onAdvance: () => void; onEnd: () => void; onAcceptOffer?: (i: number) => void }) {
+  return (
+    <div className="rounded-xl border border-border bg-card p-4 space-y-3">
+      <div className="text-center space-y-1">
+        <h3 className="text-lg font-black">📋 Manager Career</h3>
+        <p className="text-xs text-muted-foreground">Managing {manager.club} (Tier {manager.clubTier}) · Season {manager.season}</p>
+      </div>
+
+      {/* Round 530: the results, then the final table under them, tick in on
+          one clock, top to bottom. Keyed on the season plus index so a new
+          season re-runs the stagger and an unrelated re-render does not. */}
+      {manager.seasonResults.length > 0 && (
+        <div className="space-y-1">
+          {manager.seasonResults.slice(-5).map((r, i) => (
+            <div key={`${r.year}-${i}`} className="cm-tick-in flex items-center justify-between text-xs bg-muted/20 rounded-lg px-3 py-1.5" style={{ animationDelay: revealDelay(i) }}>
+              <span className="text-muted-foreground">S{r.year}</span>
+              <span className="font-semibold">{r.club}</span>
+              <span className={`text-[10px] ${r.trophy ? "text-amber-400" : "text-muted-foreground"}`}>{r.result}</span>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Round 227: the season is a table now, so show it: the leaders plus
+          your own row, the W-D-L line, and how the cup run ended. Round 1524:
+          the block is DugoutTableBlock, which the owner's panel shows too. */}
+      <DugoutTableBlock results={manager.seasonResults} />
 
       {/* Round 111: out of work, with a feed you had to earn. */}
       {manager.unemployed && (
@@ -3568,7 +3684,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   onDismissBallonDor: () => void;
   onBdorSpeech: (choice: BdorSpeechChoice) => void;
   onManualRetire: () => void;
-  onPostRetirement: (choice: PostRetirementChoice) => void;
+  onPostRetirement: (choice: PostRetirementChoice, ownerClub?: string) => void;
   onAdvanceManager: () => void;
   onAcceptManagerOffer: (i: number) => void;
   onEndManager: () => void;
@@ -4046,7 +4162,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
 
           {/* OVERLAY: Retirement Ceremony */}
           {career.phase === "retirement_ceremony" && career.legacy && (
-            <RetirementCeremonyCard career={career} totals={totals} onPostRetirement={onPostRetirement} />
+            <RetirementCeremonyCard career={career} clubs={clubs} totals={totals} onPostRetirement={onPostRetirement} />
           )}
 
           {/* OVERLAY: Retirement Suggestion */}
@@ -4077,7 +4193,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
 
           {/* OVERLAY: Post-Retirement Choice */}
           {career.phase === "post_retirement" && (
-            <PostRetirementCard career={career} onChoice={onPostRetirement} />
+            <PostRetirementCard career={career} clubs={clubs} onChoice={onPostRetirement} />
           )}
 
           {/* OVERLAY: Manager Season */}
@@ -4123,28 +4239,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
 
           {/* OVERLAY: Owner Season */}
           {career.phase === "owner_season" && career.ownerState && (
-            <div className="rounded-xl border border-border bg-card p-4 space-y-3">
-              <div className="text-center space-y-1">
-                <h3 className="text-lg font-black">🏟️ Club Owner</h3>
-                <p className="text-xs text-muted-foreground">Owning {career.ownerState.club} (Tier {career.ownerState.clubTier}) · Season {career.ownerState.season}</p>
-              </div>
-              {career.ownerState.seasonResults.length > 0 && (
-                <div className="space-y-1">
-                  {career.ownerState.seasonResults.slice(-5).map((r, i) => (
-                    <div key={i} className="flex items-center justify-between text-xs bg-muted/20 rounded-lg px-3 py-1.5">
-                      <span className="text-muted-foreground">S{r.year}</span>
-                      <span className="font-semibold">{r.club}</span>
-                      <span className={`text-[10px] ${r.trophy ? "text-amber-400" : "text-muted-foreground"}`}>{r.result}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
-              <div className="grid grid-cols-3 gap-2 text-center text-xs">
-                <div className="bg-muted/20 rounded-lg p-2"><div className="font-black">{career.ownerState.trophies}</div><div className="text-[9px] text-muted-foreground">Trophies</div></div>
-                <div className="bg-muted/20 rounded-lg p-2"><div className="font-black">{career.ownerState.promotions}</div><div className="text-[9px] text-muted-foreground">Promotions</div></div>
-                <div className="bg-muted/20 rounded-lg p-2"><div className="font-black">{money(`€${career.ownerState.budget.toFixed(0)}M`)}</div><div className="text-[9px] text-muted-foreground">Budget</div></div>
-              </div>
-            </div>
+            <OwnerPanel owner={career.ownerState} onPlan={onCareerPatch ? p => onCareerPatch(c => chooseOwnerPlan(c, p)) : undefined} />
           )}
           {career.phase === "ballon_dor" && career.pendingBallonDor && (
             /* Release AQ: the night's headline slams in from 1.6 times its size. On a phone that block is as
@@ -4533,8 +4628,9 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           </div>
         ) : career.phase === "owner_season" ? (
           <div className="flex-1 flex gap-2">
-            <Button onClick={onAdvanceOwner} className="flex-1 h-12 text-base font-bold bg-emerald-600 hover:bg-emerald-500 text-black gap-2 max-[399px]:px-3 max-[399px]:text-sm">
-              Next Owner Season <ChevronRight className="w-5 h-5 max-[399px]:hidden" />
+            {/* Round 1524: the season waits for the season's call */}
+            <Button onClick={onAdvanceOwner} disabled={!career.ownerState?.plan} className="flex-1 h-12 text-base font-bold bg-emerald-600 hover:bg-emerald-500 text-black gap-2 max-[399px]:px-3 max-[399px]:text-sm">
+              {career.ownerState?.plan ? "Next Owner Season" : "Pick where the budget goes"} <ChevronRight className="w-5 h-5 max-[399px]:hidden" />
             </Button>
             <Button onClick={onEndOwner} variant="outline" className="h-12 text-sm font-bold max-[399px]:px-3">Sell Club</Button>
           </div>

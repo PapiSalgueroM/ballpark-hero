@@ -346,7 +346,16 @@ const roads = {
   },
   owner: async (root: HTMLElement) => {
     await click(root, 'Buy a Football Club');
-    for (let i = 0; i < 4; i++) await click(root, 'Next Owner Season');
+    /* Round 1524: he picks a club off the list for sale, and every season
+       waits for the season's call */
+    const club = root.querySelector('[data-testid="owner-club-for-sale"]');
+    if (!club) throw new Error('no club for sale');
+    await act(async () => { fireEvent.click(club); });
+    await tick(40);
+    for (let i = 0; i < 4; i++) {
+      await click(root, 'Sign players');
+      await click(root, 'Next Owner Season');
+    }
     await click(root, 'Sell Club');
   },
 };
