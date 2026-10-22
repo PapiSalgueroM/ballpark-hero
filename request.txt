@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+walk: node .rc/x/walkRetire.mjs
+playBoxing1086: node scripts/playBoxingShowForecast1086.mjs --prefetch-fonts-only && node scripts/playBoxingShowForecast1086.mjs

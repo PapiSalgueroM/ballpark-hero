@@ -1,0 +1,15 @@
+   ok   phone: Retire is open at 10 fights
+   ok   phone: the confirm opens inside the screen (y 474)
+   ok   phone: the verdict says he called it
+   ok   phone: no sideways scroll on the verdict (390 in 390)
+   ok   phone: one past fighter after a reload (1)
+   ok   phone: no sideways scroll on setup (390 in 390)
+   ok   phone: no page errors ()
+   ok   desktop: Retire is open at 10 fights
+   ok   desktop: the confirm opens inside the screen (y 486)
+   ok   desktop: the verdict says he called it
+   ok   desktop: no sideways scroll on the verdict (1280 in 1280)
+   ok   desktop: one past fighter after a reload (1)
+   ok   desktop: no sideways scroll on setup (1280 in 1280)
+   ok   desktop: no page errors ()
+walkRetire: all checks passed
