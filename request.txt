@@ -1,0 +1,10 @@
+field-ST: PROBE_POS=ST PROBE_N=2200 PROBE_SEED=1525 node .rc/x/fieldProbe.mjs
+field-GK: PROBE_POS=GK PROBE_N=2200 PROBE_SEED=1525 node .rc/x/fieldProbe.mjs
+field-CB: PROBE_POS=CB PROBE_N=2200 PROBE_SEED=1525 node .rc/x/fieldProbe.mjs
+field-CM: PROBE_POS=CM PROBE_N=2200 PROBE_SEED=1525 node .rc/x/fieldProbe.mjs
+field-CAM: PROBE_POS=CAM PROBE_N=2200 PROBE_SEED=1525 node .rc/x/fieldProbe.mjs
+field-LW: PROBE_POS=LW PROBE_N=2200 PROBE_SEED=1525 node .rc/x/fieldProbe.mjs
+field-CDM: PROBE_POS=CDM PROBE_N=2200 PROBE_SEED=1525 node .rc/x/fieldProbe.mjs
+field-LB: PROBE_POS=LB PROBE_N=2200 PROBE_SEED=1525 node .rc/x/fieldProbe.mjs
+field-RW: PROBE_POS=RW PROBE_N=2200 PROBE_SEED=1525 node .rc/x/fieldProbe.mjs
+field-RB: PROBE_POS=RB PROBE_N=2200 PROBE_SEED=1525 node .rc/x/fieldProbe.mjs

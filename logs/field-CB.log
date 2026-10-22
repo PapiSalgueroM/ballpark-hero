@@ -1,0 +1,11 @@
+CB tier 1 apps>=20: rating n 15817 mean 6.67 sd 0.75 p50 6.8 p90 7.5 p99 7.9
+  goals n 15817 mean 1.45 sd 1.19 p50 1 p90 3 p99 4
+  cleanSheets n 15817 mean 11.26 sd 3.83 p50 11 p90 17 p99 21
+CB tier 2 apps>=20: rating n 14188 mean 6.93 sd 0.63 p50 7 p90 7.7 p99 8.2
+  goals n 14188 mean 1.35 sd 1.08 p50 1 p90 3 p99 4
+  cleanSheets n 14188 mean 10.78 sd 3.50 p50 10 p90 16 p99 20
+CB tier 3+ apps>=20: rating n 11469 mean 7.16 sd 0.65 p50 7.2 p90 8 p99 8.6
+  goals n 11469 mean 1.32 sd 1.02 p50 1 p90 3 p99 3
+  cleanSheets n 11469 mean 10.30 sd 2.99 p50 10 p90 14 p99 18
+CB: 2200 careers, 48647 rows, 192.5 s
+fieldProbe: done

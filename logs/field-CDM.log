@@ -1,0 +1,8 @@
+CDM tier 1 apps>=20: rating n 16112 mean 6.70 sd 0.74 p50 6.8 p90 7.5 p99 8
+  goals n 16112 mean 2.34 sd 1.27 p50 2 p90 4 p99 6
+CDM tier 2 apps>=20: rating n 14176 mean 6.93 sd 0.62 p50 6.9 p90 7.7 p99 8.2
+  goals n 14176 mean 2.19 sd 1.12 p50 2 p90 4 p99 5
+CDM tier 3+ apps>=20: rating n 10825 mean 7.18 sd 0.65 p50 7.2 p90 8 p99 8.6
+  goals n 10825 mean 2.10 sd 1.00 p50 2 p90 3 p99 4
+CDM: 2200 careers, 48109 rows, 193.8 s
+fieldProbe: done

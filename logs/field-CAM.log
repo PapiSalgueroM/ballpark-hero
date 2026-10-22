@@ -1,0 +1,8 @@
+CAM tier 1 apps>=20: rating n 16042 mean 6.85 sd 0.86 p50 6.9 p90 7.9 p99 8.4
+  goals n 16042 mean 9.11 sd 5.11 p50 8 p90 17 p99 23
+CAM tier 2 apps>=20: rating n 13719 mean 7.02 sd 0.70 p50 7 p90 7.9 p99 8.5
+  goals n 13719 mean 6.98 sd 3.73 p50 6 p90 12 p99 19
+CAM tier 3+ apps>=20: rating n 11102 mean 7.18 sd 0.66 p50 7.2 p90 8 p99 8.7
+  goals n 11102 mean 5.24 sd 2.52 p50 5 p90 9 p99 13
+CAM: 2200 careers, 48051 rows, 191.4 s
+fieldProbe: done

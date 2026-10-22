@@ -1,0 +1,8 @@
+LW tier 1 apps>=20: rating n 16781 mean 6.96 sd 0.97 p50 7 p90 8.2 p99 8.8
+  goals n 16781 mean 12.71 sd 8.05 p50 11 p90 25 p99 34
+LW tier 2 apps>=20: rating n 13521 mean 7.07 sd 0.75 p50 7.1 p90 8 p99 8.8
+  goals n 13521 mean 9.40 sd 5.44 p50 8 p90 16 p99 28
+LW tier 3+ apps>=20: rating n 11130 mean 7.19 sd 0.71 p50 7.2 p90 8.1 p99 8.9
+  goals n 11130 mean 6.34 sd 3.93 p50 5 p90 12 p99 18
+LW: 2200 careers, 48369 rows, 216.8 s
+fieldProbe: done

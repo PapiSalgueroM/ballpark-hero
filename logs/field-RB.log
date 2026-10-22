@@ -1,0 +1,8 @@
+RB tier 1 apps>=20: rating n 16365 mean 6.70 sd 0.75 p50 6.8 p90 7.5 p99 8
+  goals n 16365 mean 1.41 sd 1.17 p50 1 p90 3 p99 4
+RB tier 2 apps>=20: rating n 13821 mean 6.94 sd 0.63 p50 7 p90 7.7 p99 8.2
+  goals n 13821 mean 1.33 sd 1.07 p50 1 p90 3 p99 4
+RB tier 3+ apps>=20: rating n 11062 mean 7.19 sd 0.65 p50 7.2 p90 8 p99 8.7
+  goals n 11062 mean 1.29 sd 1.00 p50 1 p90 3 p99 3
+RB: 2200 careers, 48263 rows, 143.6 s
+fieldProbe: done

@@ -1,0 +1,11 @@
+GK tier 1 apps>=20: rating n 17326 mean 6.97 sd 0.74 p50 7 p90 7.9 p99 8.5
+  goals n 17326 mean 0.00 sd 0.00 p50 0 p90 0 p99 0
+  cleanSheets n 17326 mean 10.49 sd 3.53 p50 10 p90 15 p99 19
+GK tier 2 apps>=20: rating n 13951 mean 7.16 sd 0.64 p50 7.2 p90 8 p99 8.6
+  goals n 13951 mean 0.00 sd 0.00 p50 0 p90 0 p99 0
+  cleanSheets n 13951 mean 9.90 sd 3.16 p50 10 p90 14 p99 18
+GK tier 3+ apps>=20: rating n 9419 mean 7.33 sd 0.68 p50 7.4 p90 8.2 p99 8.8
+  goals n 9419 mean 0.00 sd 0.00 p50 0 p90 0 p99 0
+  cleanSheets n 9419 mean 9.29 sd 2.66 p50 9 p90 13 p99 16
+GK: 2200 careers, 49157 rows, 225.1 s
+fieldProbe: done

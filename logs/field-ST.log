@@ -1,0 +1,8 @@
+ST tier 1 apps>=20: rating n 16511 mean 6.91 sd 0.96 p50 7 p90 8.1 p99 8.7
+  goals n 16511 mean 16.16 sd 8.78 p50 15 p90 29 p99 38
+ST tier 2 apps>=20: rating n 13879 mean 7.03 sd 0.77 p50 7 p90 8 p99 8.8
+  goals n 13879 mean 12.63 sd 6.67 p50 12 p90 22 p99 33
+ST tier 3+ apps>=20: rating n 11179 mean 7.11 sd 0.75 p50 7.1 p90 8.1 p99 8.9
+  goals n 11179 mean 8.69 sd 5.17 p50 7 p90 16 p99 24
+ST: 2200 careers, 48793 rows, 201.6 s
+fieldProbe: done

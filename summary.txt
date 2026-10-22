@@ -1,0 +1,10 @@
+field-CB exit=0 193s | fieldProbe: done
+field-ST exit=0 203s | fieldProbe: done
+field-GK exit=0 226s | fieldProbe: done
+field-CM exit=0 192s | fieldProbe: done
+field-CAM exit=0 192s | fieldProbe: done
+field-LW exit=0 217s | fieldProbe: done
+field-CDM exit=0 194s | fieldProbe: done
+field-LB exit=0 196s | fieldProbe: done
+field-RW exit=0 203s | fieldProbe: done
+field-RB exit=0 144s | fieldProbe: done
