@@ -1,0 +1,52 @@
+ran 400 careers a sport on and off in 273.9 s (seed 0)
+1) depth: cards answered per offseason
+   nfl: on median 3 mean 2.709 (6245 offseasons); off mean 1.000 (6173)
+   nba: on median 2 mean 1.996 (7348 offseasons); off mean 1.000 (7256)
+   mlb: on median 2 mean 1.809 (7557 offseasons); off mean 1.000 (7400)
+   nhl: on median 2 mean 2.205 (8137 offseasons); off mean 1.000 (8105)
+2) cooldown: an independent reading of the rule
+   nfl: 15998 cards checked, 0 inside their cooldown
+   nba: 13394 cards checked, 0 inside their cooldown
+   mlb: 11700 cards checked, 0 inside their cooldown
+   nhl: 16603 cards checked, 0 inside their cooldown
+3) story: no two cards of one offseason share a ledger key
+   nfl: 6245 summers, 1525 storied cards answered, 0 summers with a repeated key
+   nba: 7348 summers, 1205 storied cards answered, 0 summers with a repeated key
+   mlb: 7557 summers, 1017 storied cards answered, 0 summers with a repeated key
+   nhl: 8137 summers, 1199 storied cards answered, 0 summers with a repeated key
+3b) press: card 1 is a big press moment exactly when the one card draw is
+   nfl: big press in 891 of 6245 offseasons one card, 891 on the summer; 332 back to back; 0 differ; 0 later cards big
+   nba: big press in 1215 of 7348 offseasons one card, 1215 on the summer; 412 back to back; 0 differ; 0 later cards big
+   mlb: big press in 1919 of 7557 offseasons one card, 1919 on the summer; 963 back to back; 0 differ; 0 later cards big
+   nhl: big press in 1275 of 8137 offseasons one card, 1275 on the summer; 494 back to back; 0 differ; 0 later cards big
+7) coverage: distinct cards answered per career, on over off
+   nfl: 28.61 distinct cards a career on, 13.27 off, lift 2.16; 158 and 155 distinct over the fleet
+   nba: 30.50 distinct cards a career on, 14.89 off, lift 2.05; 160 and 160 distinct over the fleet
+   mlb: 24.37 distinct cards a career on, 13.66 off, lift 1.78; 151 and 149 distinct over the fleet
+   nhl: 31.88 distinct cards a career on, 16.09 off, lift 1.98; 160 and 160 distinct over the fleet
+10) later cards: no answer after card 1 moves the rating or its ceiling
+   nfl: 10675 later answers, 0 moved the rating; 89 of 17009 dealt cards skipped when shown
+   nba: 7317 later answers, 0 moved the rating; 123 of 14788 dealt cards skipped when shown
+   mlb: 6113 later answers, 0 moved the rating; 45 of 13715 dealt cards skipped when shown
+   nhl: 9805 later answers, 0 moved the rating; 77 of 18019 dealt cards skipped when shown
+11) the integrity arc stays with card 1: no corruption card after it
+   nfl: 855 corruption cards as card 1, 0 later
+   nba: 1211 corruption cards as card 1, 0 later
+   mlb: 853 corruption cards as card 1, 0 later
+   nhl: 1356 corruption cards as card 1, 0 later
+12) card 1: the one card draw, or when it rests, a fresh card of its kind
+   nfl: 5971 card 1s were the draw itself (0 were not); 274 draws were resting, 274 with a fresh card of their kind (48 rating cards), 0 redrawn in another kind
+   nba: 7208 card 1s were the draw itself (0 were not); 140 draws were resting, 140 with a fresh card of their kind (41 rating cards), 0 redrawn in another kind
+   mlb: 7351 card 1s were the draw itself (0 were not); 206 draws were resting, 206 with a fresh card of their kind (79 rating cards), 0 redrawn in another kind
+   nhl: 7522 card 1s were the draw itself (0 were not); 615 draws were resting, 615 with a fresh card of their kind (82 rating cards), 0 redrawn in another kind
+4) keyed: Math.random calls per offseason, cards 3 against cards 1, from one cloned state
+   nfl: 400 offseasons replayed, 0 differ
+   nba: 400 offseasons replayed, 0 differ
+   mlb: 400 offseasons replayed, 0 differ
+   nhl: 400 offseasons replayed, 0 differ
+5) never empty: every card in the deck stamped this season, card 1 still comes
+   nfl: 87 fully stamped offseasons, 0 dealt nothing
+   nba: 99 fully stamped offseasons, 0 dealt nothing
+   mlb: 97 fully stamped offseasons, 0 dealt nothing
+   nhl: 106 fully stamped offseasons, 0 dealt nothing
+6) balance: one child per sport, careers a seed nfl 12000, nba 8000, mlb 8000, nhl 2000, 3 seeds

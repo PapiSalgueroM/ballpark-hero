@@ -1,0 +1,13 @@
+simUsBoardParity: node scripts/simUsBoardParity.mjs
+simUsCareerWeight: node scripts/simUsCareerWeight.mjs
+simCareerParity: node scripts/simCareerParity.mjs
+simUsCareerSummer: node scripts/simUsCareerSummer.mjs
+simUsCareerSaveRetry: node scripts/simUsCareerSaveRetry.mjs
+simUsCareerSkips: node scripts/simUsCareerSkips.mjs
+simUsCareerDefects: node scripts/simUsCareerDefects.mjs
+simNbaCareer: node scripts/simNbaCareer.mjs
+simUsSeasonCentre: node scripts/simUsSeasonCentre.mjs
+simUsRivalSense: node scripts/simUsRivalSense.mjs
+simCareerHall: node scripts/simCareerHall.mjs
+simNbaAwardsSense: node scripts/simNbaAwardsSense.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
