@@ -1,0 +1,2 @@
+ls exit=0 18s | simCareerLeagueSeasons: all sections green
+ls-unattributed exit=1 34s | simCareerLeagueSeasons: 12 failures (sections c)

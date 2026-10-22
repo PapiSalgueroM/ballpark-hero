@@ -1,0 +1,5 @@
+  the tree1100out arm cannot be built on this engine, so it decides nothing (src/lib/soccerCareerEngine.ts:45:127: ERROR: No matching export in "src/lib/soccerCareerLeague.ts" for import "playDugoutTa
+  the tree1100and1052out arm cannot be built on this engine, so it decides nothing (src/lib/soccerCareerEngine.ts:45:127: ERROR: No matching export in "src/lib/soccerCareerLeague.ts" for import "playD
+  the train out arm cannot be built on this engine, so it decides nothing (node_modules/esbuild/lib/main.js:1275:27: ERROR: [plugin: soccer-train-out] train out refused: src/lib/soccerCareerEngine.ts 
+  the tree-1185+1187+1100 arm cannot be built on this engine, so it decides nothing (src/lib/soccerCareerEngine.ts:45:127: ERROR: No matching export in "src/lib/soccerCareerLeague.ts" for import "play
+simCareerLeagueSeasons: 12 failures (sections c)
