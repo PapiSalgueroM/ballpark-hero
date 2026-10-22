@@ -209,9 +209,11 @@ if (runs('1')) {
      every seed above a stale table. The table was measured again on this engine (r1525-fx-m1, seeds 101 to 106, 600
      careers a position, the strikers on 2,400), and the strikers now play four times the careers. Against the
      pooled table each seed's largest gap was 0.023 on a level mean and 0.015 on its sd, 0.042 and 0.028 on the
-     strikers' goals, 0.058 and 0.042 on the keepers' clean sheets; r1525-fx-v1 and r1525-fx-v2 (seeds 1 to 12, the
-     reviewer's) then measured it out of sample. The bounds are unchanged and sit at 2.6 times, 6 times and 3.4 times
-     those gaps, and an engine change that moves a field by a tenth of its sd fails. */
+     strikers' goals, 0.058 and 0.042 on the keepers' clean sheets. Out of sample against the new table: seeds 1 to 6
+     as committed (r1525-fx-v1, the reviewer's seeds) 0.02 and 0.02 on a level, 0.07 and 0.04 on the strikers' goals,
+     0.08 and 0.03 on the clean sheets; seeds 107 to 112 (r1525-fx-m2) 0.02 on a level mean and 0.13 on the strikers'
+     goals mean, whose sd over those twelve seeds is 0.053 at 2,400 careers. The bounds are unchanged: three times the
+     level gaps, 4.7 sd on the strikers' goals, and an engine change that moves a field by a tenth of its sd fails. */
   const BOUNDS = { level: [0.06, 0.04], goals: [0.25, 0.15], sheets: [0.2, 0.12] };
   const MEASURE = process.env.SIM_SEASON_AWARDS_MEASURE === '1';
   const check = (what, got, want, [dm, ds]) => {
