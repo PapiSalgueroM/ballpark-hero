@@ -155,6 +155,27 @@ const OwnerPanel = lazy(() => ownerScreens().then(m => ({ default: m.OwnerPanel 
 /* the sale list's placeholder keeps its Back where the list puts it, so a chunk that never lands cannot strand the doors */
 const OwnerSaleWait = ({ onBack }: { onBack: () => void }) => <div className="min-h-[14rem]"><Button onClick={onBack} variant="ghost" className="h-8 px-2 text-xs font-bold">Back</Button></div>;
 const OWNER_LOAD_FAILED = "The club owner side didn't load. Check your connection and try again.";
+/* the owner panel's placeholder: the same box while the screens load, and if their chunk cannot load it says so
+   with Retry (a reload, as the Season Centre's does: the save is already on disk), so a blank box never sits over
+   a season button that waits for the panel's call */
+const OwnerPanelWait = () => {
+  const [failed, setFailed] = useState(false);
+  useEffect(() => {
+    let live = true;
+    ownerScreens().catch(() => { if (live) setFailed(true); });
+    return () => { live = false; };
+  }, []);
+  return (
+    <div className="min-h-[24rem] rounded-xl border border-border bg-card">
+      {failed && (
+        <div className="space-y-3 p-4 text-center">
+          <p className="text-sm">Couldn't load your club's screen. Your career is safe.</p>
+          <button type="button" onClick={() => { if (!reloadToRetryChunk()) toast(OWNER_LOAD_FAILED, PAGE_TOAST); }} className="h-10 w-full rounded-lg border border-border text-sm font-semibold">↻ Retry</button>
+        </div>
+      )}
+    </div>
+  );
+};
 const TrophyCabinet = lazy(() => import("@/components/soccer-career/TrophyCabinet"));
 const SeasonRatings = lazy(() => import("@/components/soccer-career/SeasonRatings"));
 const SoccerDerbyHistory = lazy(() => import("@/components/soccer-career/SoccerDerbyHistory"));
@@ -4119,7 +4140,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
 
           {/* OVERLAY: Owner Season */}
           {career.phase === "owner_season" && career.ownerState && (
-            <Suspense fallback={<div className="min-h-[24rem] rounded-xl border border-border bg-card" />}><OwnerPanel owner={career.ownerState} onCareer={onCareerPatch} /></Suspense>
+            <Suspense fallback={<OwnerPanelWait />}><OwnerPanel owner={career.ownerState} onCareer={onCareerPatch} /></Suspense>
           )}
           {career.phase === "ballon_dor" && career.pendingBallonDor && (
             /* Release AQ: the night's headline slams in from 1.6 times its size. On a phone that block is as
