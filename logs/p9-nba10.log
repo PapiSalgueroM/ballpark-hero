@@ -1,0 +1,10 @@
+p9: two print points in gmContracts.ts
+p9 arrivals 10, over the limit 15 on arrival 10, roster sizes {"17":10}
+p9 after the engine's summer: {"ON-SHEET-CLUB":8,"ON-OTHER":0,"POOL":0,"LOST":2}
+  P9 LOST 2027 IND Cole Strother ovr 66 now -
+  P9 LOST 2027 IND Cole Strother ovr 66 now -
+harness vanish lines: 2
+    FAIL [2]: seed 10 season 2 full draft: Cole Strother let IND's sheet stand and is not there after the summer
+    FAIL [2]: seed 10 season 2: Cole Strother let his sheet stand and is at no rival club
+harness last: simNbaGmDesk: 2 failure(s) in ["2"]
+NBA earned SIM_SEED 10 (positive control for the probe): harness exit 1, src restored: 0 files dirty

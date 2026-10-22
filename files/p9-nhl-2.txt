@@ -1,0 +1,73 @@
+1) a save from before the desk plays exactly as the engine did before this round
+   9 seasons replayed against f8e6cd06
+P9 SHEET 2030 PIT Juuso Cederholm ovr 90 roster 15
+P9 ON-SHEET-CLUB 2030 PIT Juuso Cederholm ovr 90 now PIT
+P9 SHEET 2033 EDM Brady Eklund ovr 94 roster 13
+P9 ON-SHEET-CLUB 2033 EDM Brady Eklund ovr 94 now EDM
+P9 SHEET 2029 DAL Ilya Ahlberg ovr 92 roster 13
+P9 ON-SHEET-CLUB 2029 DAL Ilya Ahlberg ovr 92 now DAL
+P9 SHEET 2034 NJD Emil Jokela ovr 91 roster 12
+P9 ON-SHEET-CLUB 2034 NJD Emil Jokela ovr 91 now NJD
+P9 SHEET 2030 DAL Rasmus Jokela ovr 89 roster 14
+P9 SHEET 2030 COL Brady Ostberg ovr 90 roster 14
+P9 ON-SHEET-CLUB 2030 DAL Rasmus Jokela ovr 89 now DAL
+P9 ON-SHEET-CLUB 2030 COL Brady Ostberg ovr 90 now COL
+P9 SHEET 2033 FLA Cole Lindqvist ovr 86 roster 14
+P9 ON-SHEET-CLUB 2033 FLA Cole Lindqvist ovr 86 now FLA
+P9 SHEET 2029 EDM Valter Nyholm ovr 94 roster 15
+P9 ON-SHEET-CLUB 2029 EDM Valter Nyholm ovr 94 now EDM
+P9 SHEET 2031 TBL Valter Ranta ovr 91 roster 11
+P9 ON-SHEET-CLUB 2031 TBL Valter Ranta ovr 91 now TBL
+P9 SHEET 2034 WSH Eino Jokela ovr 91 roster 13
+P9 SHEET 2034 WPG Ulf Kovac ovr 89 roster 14
+P9 ON-SHEET-CLUB 2034 WSH Eino Jokela ovr 91 now WSH
+P9 ON-SHEET-CLUB 2034 WPG Ulf Kovac ovr 89 now WPG
+P9 SHEET 2030 PHI Rurik Brannstrom ovr 87 roster 15
+P9 ON-SHEET-CLUB 2030 PHI Rurik Brannstrom ovr 87 now PHI
+P9 SHEET 2032 MIN Nolan Novak ovr 93 roster 15
+P9 ON-SHEET-CLUB 2032 MIN Nolan Novak ovr 93 now MIN
+P9 SHEET 2034 BOS Miro Jokela ovr 93 roster 14
+P9 ON-SHEET-CLUB 2034 BOS Miro Jokela ovr 93 now BOS
+P9 SHEET 2030 TBL Nolan Kovac ovr 93 roster 13
+P9 ON-SHEET-CLUB 2030 TBL Nolan Kovac ovr 93 now TBL
+P9 SHEET 2034 CBJ Dmitri Brannstrom ovr 92 roster 12
+P9 ON-SHEET-CLUB 2034 CBJ Dmitri Brannstrom ovr 92 now CBJ
+P9 SHEET 2035 NJD Casper Palmgren ovr 91 roster 11
+P9 ON-SHEET-CLUB 2035 NJD Casper Palmgren ovr 91 now NJD
+P9 SHEET 2029 ANA Ulf Jokela ovr 92 roster 13
+P9 ON-SHEET-CLUB 2029 ANA Ulf Jokela ovr 92 now ANA
+P9 SHEET 2031 ANA Brady Dahlstrom ovr 89 roster 12
+P9 ON-SHEET-CLUB 2031 ANA Brady Dahlstrom ovr 89 now ANA
+P9 SHEET 2032 PIT Kasper Ranta ovr 87 roster 13
+P9 ON-SHEET-CLUB 2032 PIT Kasper Ranta ovr 87 now PIT
+P9 SHEET 2034 CBJ Casper Byfield ovr 90 roster 14
+P9 ON-SHEET-CLUB 2034 CBJ Casper Byfield ovr 90 now CBJ
+P9 SHEET 2030 VGK Cole Palmgren ovr 88 roster 15
+P9 ON-SHEET-CLUB 2030 VGK Cole Palmgren ovr 88 now VGK
+P9 SHEET 2029 WSH Tuukka Lehtinen ovr 94 roster 15
+P9 ON-SHEET-CLUB 2029 WSH Tuukka Lehtinen ovr 94 now WSH
+P9 SHEET 2031 DAL Emil Ranta ovr 90 roster 13
+P9 ON-SHEET-CLUB 2031 DAL Emil Ranta ovr 90 now DAL
+P9 SHEET 2030 CBJ Miro Tremblay ovr 95 roster 13
+P9 ON-SHEET-CLUB 2030 CBJ Miro Tremblay ovr 95 now CBJ
+P9 SHEET 2031 PHI Sten Lindqvist ovr 90 roster 14
+P9 ON-SHEET-CLUB 2031 PHI Sten Lindqvist ovr 90 now PHI
+P9 SHEET 2034 TBL Torsten Halonen ovr 89 roster 15
+P9 SHEET 2034 BUF Dmitri Mikkola ovr 88 roster 12
+P9 ON-SHEET-CLUB 2034 TBL Torsten Halonen ovr 89 now TBL
+P9 ON-SHEET-CLUB 2034 BUF Dmitri Mikkola ovr 88 now BUF
+2) over ten seasons a seed, no expiring man of yours leaves without a recorded decision, applied as written
+   286 expiring men: 167 decided by the GM, 119 by the staff's rule; 105 draftees came up after exactly their entry level seasons
+3) no trade lands after the deadline, and deals do land before it
+   690 deals before the deadline, 400 tries after it, 0 landed; 1988 buyer and 529 seller places at the deadline
+   2000 rounds where the trade paths' refusal matched the window; 4 of 4 board trade handlers ask the deadline first
+4) picks are conserved league wide after every deal and every summer
+   800 ledger checks, 670 deals with a pick in them, 66 with salary retained
+   offer sheets cashed in: 24 by the GM, 4 by the staff's rule; 41 picks paid, 0 owed by a club with none left
+5) the staff's effects change their consumer at every level step
+   each post alone: hc win 0.566 to 0.614; specialTeams win 0.566 to 0.590; goalie win 0.566 to 0.590; scouting miss 2.227 to 0.566; medical out 3.000 to 2.252
+   edge 0.00 to 2.40, win 0.566 to 0.660, miss 2.23 to 0.57, rounds out 3.00 to 2.25
+6) migration keeps every marker, a corrupt block resets alone, retained salary holds its figure and its limits
+7) every desk panel draws, and the re-sign desk shows a tile for every expiring man
+   4 panels drawn, 5 re-sign tiles for 5 expiring men
+simNhlGmDesk: all seven checks passed (10 seeds x 10 seasons)

@@ -1,0 +1,67 @@
+1) a save from before the desk plays exactly as the engine did before this round
+   9 seasons replayed against f8e6cd06
+P9 SHEET 2029 ANA Nikita Ranta ovr 89 roster 14
+P9 ON-SHEET-CLUB 2029 ANA Nikita Ranta ovr 89 now ANA
+P9 SHEET 2031 LAK Anders Palmgren ovr 92 roster 13
+P9 ON-SHEET-CLUB 2031 LAK Anders Palmgren ovr 92 now LAK
+P9 SHEET 2032 ANA Eino Ahlberg ovr 88 roster 15
+P9 ON-SHEET-CLUB 2032 ANA Eino Ahlberg ovr 88 now ANA
+P9 SHEET 2030 SJS Ilya Ahlberg ovr 93 roster 12
+P9 SHEET 2030 CAR Nikita Cederholm ovr 94 roster 15
+P9 ON-SHEET-CLUB 2030 SJS Ilya Ahlberg ovr 93 now SJS
+P9 ON-SHEET-CLUB 2030 CAR Nikita Cederholm ovr 94 now CAR
+P9 SHEET 2035 FLA Juuso Mikkola ovr 92 roster 11
+P9 ON-SHEET-CLUB 2035 FLA Juuso Mikkola ovr 92 now FLA
+P9 SHEET 2030 FLA Anders Nyholm ovr 87 roster 13
+P9 ON-SHEET-CLUB 2030 FLA Anders Nyholm ovr 87 now FLA
+P9 SHEET 2032 CAR Aleks Ostberg ovr 88 roster 14
+P9 ON-SHEET-CLUB 2032 CAR Aleks Ostberg ovr 88 now CAR
+P9 SHEET 2035 PIT Dmitri Nyholm ovr 88 roster 11
+P9 ON-SHEET-CLUB 2035 PIT Dmitri Nyholm ovr 88 now PIT
+P9 SHEET 2030 COL Valter Karlstrom ovr 85 roster 12
+P9 ON-SHEET-CLUB 2030 COL Valter Karlstrom ovr 85 now COL
+P9 SHEET 2034 WPG Anders Dahlstrom ovr 92 roster 14
+P9 ON-SHEET-CLUB 2034 WPG Anders Dahlstrom ovr 92 now WPG
+P9 SHEET 2029 UTA Petteri Vasko ovr 92 roster 13
+P9 ON-SHEET-CLUB 2029 UTA Petteri Vasko ovr 92 now UTA
+P9 SHEET 2033 MTL Sten Cederholm ovr 89 roster 12
+P9 ON-SHEET-CLUB 2033 MTL Sten Cederholm ovr 89 now MTL
+P9 SHEET 2030 EDM Miro Kovac ovr 92 roster 15
+P9 ON-SHEET-CLUB 2030 EDM Miro Kovac ovr 92 now EDM
+P9 SHEET 2034 NJD Juuso Lindqvist ovr 92 roster 12
+P9 ON-SHEET-CLUB 2034 NJD Juuso Lindqvist ovr 92 now NJD
+P9 SHEET 2031 DET Nolan Cederholm ovr 88 roster 15
+P9 ON-SHEET-CLUB 2031 DET Nolan Cederholm ovr 88 now DET
+P9 SHEET 2035 CBJ Oskar Mikkola ovr 91 roster 13
+P9 ON-SHEET-CLUB 2035 CBJ Oskar Mikkola ovr 91 now CBJ
+P9 SHEET 2030 BOS Casper Ivarsson ovr 91 roster 14
+P9 ON-SHEET-CLUB 2030 BOS Casper Ivarsson ovr 91 now BOS
+P9 SHEET 2031 SJS Nolan Cederholm ovr 90 roster 13
+P9 ON-SHEET-CLUB 2031 SJS Nolan Cederholm ovr 90 now SJS
+P9 SHEET 2033 ANA Oskar Ahlberg ovr 91 roster 14
+P9 ON-SHEET-CLUB 2033 ANA Oskar Ahlberg ovr 91 now ANA
+P9 SHEET 2031 DET Cole Gallagher ovr 88 roster 15
+P9 ON-SHEET-CLUB 2031 DET Cole Gallagher ovr 88 now DET
+P9 SHEET 2033 WSH Ulf Tremblay ovr 93 roster 13
+P9 ON-SHEET-CLUB 2033 WSH Ulf Tremblay ovr 93 now WSH
+P9 SHEET 2034 WSH Lucas Karlstrom ovr 92 roster 12
+P9 ON-SHEET-CLUB 2034 WSH Lucas Karlstrom ovr 92 now WSH
+P9 SHEET 2031 SJS Anders Bergeron ovr 87 roster 13
+P9 ON-SHEET-CLUB 2031 SJS Anders Bergeron ovr 87 now SJS
+P9 SHEET 2033 CBJ Lucas Dahlstrom ovr 91 roster 12
+P9 ON-SHEET-CLUB 2033 CBJ Lucas Dahlstrom ovr 91 now CBJ
+2) over ten seasons a seed, no expiring man of yours leaves without a recorded decision, applied as written
+   294 expiring men: 166 decided by the GM, 128 by the staff's rule; 96 draftees came up after exactly their entry level seasons
+3) no trade lands after the deadline, and deals do land before it
+   649 deals before the deadline, 400 tries after it, 0 landed; 1965 buyer and 532 seller places at the deadline
+   2000 rounds where the trade paths' refusal matched the window; 4 of 4 board trade handlers ask the deadline first
+4) picks are conserved league wide after every deal and every summer
+   759 ledger checks, 630 deals with a pick in them, 60 with salary retained
+   offer sheets cashed in: 20 by the GM, 5 by the staff's rule; 33 picks paid, 0 owed by a club with none left
+5) the staff's effects change their consumer at every level step
+   each post alone: hc win 0.566 to 0.614; specialTeams win 0.566 to 0.590; goalie win 0.566 to 0.590; scouting miss 2.227 to 0.566; medical out 3.000 to 2.252
+   edge 0.00 to 2.40, win 0.566 to 0.660, miss 2.23 to 0.57, rounds out 3.00 to 2.25
+6) migration keeps every marker, a corrupt block resets alone, retained salary holds its figure and its limits
+7) every desk panel draws, and the re-sign desk shows a tile for every expiring man
+   4 panels drawn, 5 re-sign tiles for 5 expiring men
+simNhlGmDesk: all seven checks passed (10 seeds x 10 seasons)
