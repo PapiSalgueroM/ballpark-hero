@@ -1,0 +1,3888 @@
+{
+ "dist": "/home/runner/work/ballpark-hero/ballpark-hero/dist-stock2",
+ "control": "stock",
+ "files": {
+  "career": "/assets/SoccerCareer-BthCT9I_.js",
+  "about": "/assets/HomeAbout-D2jkDsxz.js",
+  "part": "/assets/seoMetaPart12-BJfl671y.js",
+  "guide": "/assets/clubManagement-BlY7ARie.js"
+ },
+ "rows": [
+  {
+   "null": {
+    "row": "A",
+    "route": "/soccer-career",
+    "size": "390x844",
+    "way": "404",
+    "motion": "reduce",
+    "arm": "null",
+    "docs": [
+     {
+      "n": 1,
+      "path": "/soccer-career",
+      "at": 16
+     }
+    ],
+    "files": [],
+    "consoleErrors": [
+     {
+      "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 38
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-22T04%3A26%3A38.764Z&start_at=lte.2026-10-23T12%3A26%3A38.764Z",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 203
+     }
+    ],
+    "pageErrors": [],
+    "issues": [],
+    "navigated": [
+     {
+      "at": 28,
+      "path": "/soccer-career"
+     },
+     {
+      "at": 131,
+      "path": "/soccer-career"
+     }
+    ],
+    "stage": "settle",
+    "final": {
+     "path": "/soccer-career",
+     "broke": false,
+     "loading": false,
+     "tiles": 0,
+     "about": false,
+     "seo": "ready",
+     "h1": "⚽ Soccer Career",
+     "mainText": 490,
+     "flag": null,
+     "scrollY": 0
+    },
+    "afterShot": "shot-A-390-404-null-after.jpg",
+    "held": null
+   },
+   "fault": {
+    "row": "A",
+    "route": "/soccer-career",
+    "size": "390x844",
+    "way": "404",
+    "motion": "reduce",
+    "arm": "fault",
+    "docs": [
+     {
+      "n": 1,
+      "path": "/soccer-career",
+      "at": 11
+     },
+     {
+      "n": 2,
+      "path": "/soccer-career",
+      "at": 150,
+      "heldMs": 2501
+     }
+    ],
+    "files": [
+     {
+      "file": "/assets/SoccerCareer-BthCT9I_.js",
+      "at": 121,
+      "action": "404"
+     },
+     {
+      "file": "/assets/SoccerCareer-BthCT9I_.js",
+      "at": 2734,
+      "action": "served"
+     }
+    ],
+    "consoleErrors": [
+     {
+      "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 22
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/SoccerCareer-BthCT9I_.js",
+      "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "at": 142
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:10:3572)\n    at qb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:44434)\n    at Wb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:39727)\n    at WC (http://127.0.0.1",
+      "at": 153
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "A page failed to render: TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:10:3572)\n    at qb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:44434)\n    at Wb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:39727)\n  ",
+      "at": 153
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-22T04%3A26%3A40.054Z&start_at=lte.2026-10-23T12%3A26%3A40.054Z",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 168
+     },
+     {
+      "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 2665
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-22T04%3A26%3A42.667Z&start_at=lte.2026-10-23T12%3A26%3A42.667Z",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 2770
+     }
+    ],
+    "pageErrors": [],
+    "samples": [
+     {
+      "path": "/soccer-career",
+      "broke": true,
+      "loading": false,
+      "tiles": 0,
+      "about": false,
+      "seo": null,
+      "h1": "This page broke",
+      "mainText": 1172,
+      "flag": "1",
+      "scrollY": 0,
+      "now": 1792686400854,
+      "t": 769
+     },
+     {
+      "path": "/soccer-career",
+      "broke": true,
+      "loading": false,
+      "tiles": 0,
+      "about": false,
+      "seo": null,
+      "h1": "This page broke",
+      "mainText": 1172,
+      "flag": "1",
+      "scrollY": 0,
+      "now": 1792686401554,
+      "t": 1469
+     },
+     {
+      "path": "/soccer-career",
+      "broke": true,
+      "loading": false,
+      "tiles": 0,
+      "about": false,
+      "seo": null,
+      "h1": "This page broke",
+      "mainText": 1172,
+      "flag": "1",
+      "scrollY": 0,
+      "now": 1792686402254,
+      "t": 2169
+     }
+    ],
+    "issues": [],
+    "navigated": [
+     {
+      "at": 16,
+      "path": "/soccer-career"
+     },
+     {
+      "at": 99,
+      "path": "/soccer-career"
+     },
+     {
+      "at": 2659,
+      "path": "/soccer-career"
+     }
+    ],
+    "stage": "settle",
+    "holdShot": "shot-A-390-404-fault-hold.jpg",
+    "oldPageLastReportMs": 2469,
+    "final": {
+     "path": "/soccer-career",
+     "broke": false,
+     "loading": false,
+     "tiles": 0,
+     "about": false,
+     "seo": "ready",
+     "h1": "⚽ Soccer Career",
+     "mainText": 490,
+     "flag": "1",
+     "scrollY": 0
+    },
+    "afterShot": "shot-A-390-404-fault-after.jpg",
+    "held": {
+     "ms": 2501
+    },
+    "waitMs": 2530,
+    "extraConsole": [
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:10:3572)\n    at qb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:44434)\n    at Wb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:39727)\n    at WC (http://127.0.0.1",
+      "at": 153
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "A page failed to render: TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:10:3572)\n    at qb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:44434)\n    at Wb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:39727)\n  ",
+      "at": 153
+     }
+    ],
+    "fired": true
+   },
+   "issues": []
+  },
+  {
+   "null": {
+    "row": "A",
+    "route": "/soccer-career",
+    "size": "390x844",
+    "way": "host",
+    "motion": "no-preference",
+    "arm": "null",
+    "docs": [
+     {
+      "n": 1,
+      "path": "/soccer-career",
+      "at": 9
+     }
+    ],
+    "files": [],
+    "consoleErrors": [
+     {
+      "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 20
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-22T04%3A26%3A43.927Z&start_at=lte.2026-10-23T12%3A26%3A43.927Z",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 133
+     }
+    ],
+    "pageErrors": [],
+    "issues": [],
+    "navigated": [
+     {
+      "at": 14,
+      "path": "/soccer-career"
+     },
+     {
+      "at": 79,
+      "path": "/soccer-career"
+     }
+    ],
+    "stage": "settle",
+    "final": {
+     "path": "/soccer-career",
+     "broke": false,
+     "loading": false,
+     "tiles": 0,
+     "about": false,
+     "seo": "ready",
+     "h1": "⚽ Soccer Career",
+     "mainText": 490,
+     "flag": null,
+     "scrollY": 0
+    },
+    "afterShot": "shot-A-390-host-null-after.jpg",
+    "held": null
+   },
+   "fault": {
+    "row": "A",
+    "route": "/soccer-career",
+    "size": "390x844",
+    "way": "host",
+    "motion": "no-preference",
+    "arm": "fault",
+    "docs": [
+     {
+      "n": 1,
+      "path": "/soccer-career",
+      "at": 9
+     },
+     {
+      "n": 2,
+      "path": "/soccer-career",
+      "at": 128,
+      "heldMs": 2500
+     }
+    ],
+    "files": [
+     {
+      "file": "/assets/SoccerCareer-BthCT9I_.js",
+      "at": 107,
+      "action": "host"
+     },
+     {
+      "file": "/assets/SoccerCareer-BthCT9I_.js",
+      "at": 2686,
+      "action": "served"
+     }
+    ],
+    "consoleErrors": [
+     {
+      "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 21
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/SoccerCareer-BthCT9I_.js",
+      "text": "Failed to load module script: Expected a JavaScript-or-Wasm module script but the server responded with a MIME type of \"text/html\". Strict MIME type checking is enforced for module scripts per HTML spec.",
+      "at": 126
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:10:3572)\n    at qb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:44434)\n    at Wb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:39727)\n    at WC (http://127.0.0.1",
+      "at": 133
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "A page failed to render: TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:10:3572)\n    at qb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:44434)\n    at Wb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:39727)\n  ",
+      "at": 134
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-22T04%3A26%3A45.188Z&start_at=lte.2026-10-23T12%3A26%3A45.188Z",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 150
+     },
+     {
+      "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 2640
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-22T04%3A26%3A47.767Z&start_at=lte.2026-10-23T12%3A26%3A47.767Z",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 2711
+     }
+    ],
+    "pageErrors": [],
+    "samples": [
+     {
+      "path": "/soccer-career",
+      "broke": true,
+      "loading": false,
+      "tiles": 0,
+      "about": false,
+      "seo": null,
+      "h1": "This page broke",
+      "mainText": 1172,
+      "flag": "1",
+      "scrollY": 0,
+      "now": 1792686405999,
+      "t": 788
+     },
+     {
+      "path": "/soccer-career",
+      "broke": true,
+      "loading": false,
+      "tiles": 0,
+      "about": false,
+      "seo": null,
+      "h1": "This page broke",
+      "mainText": 1172,
+      "flag": "1",
+      "scrollY": 0,
+      "now": 1792686406699,
+      "t": 1488
+     },
+     {
+      "path": "/soccer-career",
+      "broke": true,
+      "loading": false,
+      "tiles": 0,
+      "about": false,
+      "seo": null,
+      "h1": "This page broke",
+      "mainText": 1172,
+      "flag": "1",
+      "scrollY": 0,
+      "now": 1792686407399,
+      "t": 2188
+     }
+    ],
+    "issues": [],
+    "navigated": [
+     {
+      "at": 14,
+      "path": "/soccer-career"
+     },
+     {
+      "at": 85,
+      "path": "/soccer-career"
+     },
+     {
+      "at": 2635,
+      "path": "/soccer-career"
+     }
+    ],
+    "stage": "settle",
+    "holdShot": "shot-A-390-host-fault-hold.jpg",
+    "oldPageLastReportMs": 2488,
+    "final": {
+     "path": "/soccer-career",
+     "broke": false,
+     "loading": false,
+     "tiles": 0,
+     "about": false,
+     "seo": "ready",
+     "h1": "⚽ Soccer Career",
+     "mainText": 490,
+     "flag": "1",
+     "scrollY": 0
+    },
+    "afterShot": "shot-A-390-host-fault-after.jpg",
+    "held": {
+     "ms": 2500
+    },
+    "waitMs": 2521,
+    "extraConsole": [
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:10:3572)\n    at qb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:44434)\n    at Wb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:39727)\n    at WC (http://127.0.0.1",
+      "at": 133
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "A page failed to render: TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:10:3572)\n    at qb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:44434)\n    at Wb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:39727)\n  ",
+      "at": 134
+     }
+    ],
+    "fired": true
+   },
+   "issues": []
+  },
+  {
+   "null": {
+    "row": "A",
+    "route": "/soccer-career",
+    "size": "1280x900",
+    "way": "404",
+    "motion": "reduce",
+    "arm": "null",
+    "docs": [
+     {
+      "n": 1,
+      "path": "/soccer-career",
+      "at": 9
+     }
+    ],
+    "files": [],
+    "consoleErrors": [
+     {
+      "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 19
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-22T04%3A26%3A49.034Z&start_at=lte.2026-10-23T12%3A26%3A49.034Z",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 155
+     }
+    ],
+    "pageErrors": [],
+    "issues": [],
+    "navigated": [
+     {
+      "at": 14,
+      "path": "/soccer-career"
+     },
+     {
+      "at": 99,
+      "path": "/soccer-career"
+     }
+    ],
+    "stage": "settle",
+    "final": {
+     "path": "/soccer-career",
+     "broke": false,
+     "loading": false,
+     "tiles": 0,
+     "about": false,
+     "seo": "ready",
+     "h1": "⚽ Soccer Career",
+     "mainText": 490,
+     "flag": null,
+     "scrollY": 0
+    },
+    "afterShot": "shot-A-1280-404-null-after.jpg",
+    "held": null
+   },
+   "fault": {
+    "row": "A",
+    "route": "/soccer-career",
+    "size": "1280x900",
+    "way": "404",
+    "motion": "reduce",
+    "arm": "fault",
+    "docs": [
+     {
+      "n": 1,
+      "path": "/soccer-career",
+      "at": 9
+     },
+     {
+      "n": 2,
+      "path": "/soccer-career",
+      "at": 136,
+      "heldMs": 2500
+     }
+    ],
+    "files": [
+     {
+      "file": "/assets/SoccerCareer-BthCT9I_.js",
+      "at": 119,
+      "action": "404"
+     },
+     {
+      "file": "/assets/SoccerCareer-BthCT9I_.js",
+      "at": 2703,
+      "action": "served"
+     }
+    ],
+    "consoleErrors": [
+     {
+      "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 19
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/SoccerCareer-BthCT9I_.js",
+      "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "at": 136
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:10:3572)\n    at qb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:44434)\n    at Wb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:39727)\n    at WC (http://127.0.0.1",
+      "at": 142
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "A page failed to render: TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:10:3572)\n    at qb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:44434)\n    at Wb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:39727)\n  ",
+      "at": 142
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-22T04%3A26%3A50.314Z&start_at=lte.2026-10-23T12%3A26%3A50.314Z",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 152
+     },
+     {
+      "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 2649
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-22T04%3A26%3A52.900Z&start_at=lte.2026-10-23T12%3A26%3A52.900Z",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 2736
+     }
+    ],
+    "pageErrors": [],
+    "samples": [
+     {
+      "path": "/soccer-career",
+      "broke": true,
+      "loading": false,
+      "tiles": 0,
+      "about": false,
+      "seo": null,
+      "h1": "This page broke",
+      "mainText": 1213,
+      "flag": "1",
+      "scrollY": 0,
+      "now": 1792686411116,
+      "t": 782
+     },
+     {
+      "path": "/soccer-career",
+      "broke": true,
+      "loading": false,
+      "tiles": 0,
+      "about": false,
+      "seo": null,
+      "h1": "This page broke",
+      "mainText": 1213,
+      "flag": "1",
+      "scrollY": 0,
+      "now": 1792686411816,
+      "t": 1482
+     },
+     {
+      "path": "/soccer-career",
+      "broke": true,
+      "loading": false,
+      "tiles": 0,
+      "about": false,
+      "seo": null,
+      "h1": "This page broke",
+      "mainText": 1213,
+      "flag": "1",
+      "scrollY": 0,
+      "now": 1792686412516,
+      "t": 2182
+     }
+    ],
+    "issues": [],
+    "navigated": [
+     {
+      "at": 14,
+      "path": "/soccer-career"
+     },
+     {
+      "at": 95,
+      "path": "/soccer-career"
+     },
+     {
+      "at": 2646,
+      "path": "/soccer-career"
+     }
+    ],
+    "stage": "settle",
+    "holdShot": "shot-A-1280-404-fault-hold.jpg",
+    "oldPageLastReportMs": 2482,
+    "final": {
+     "path": "/soccer-career",
+     "broke": false,
+     "loading": false,
+     "tiles": 0,
+     "about": false,
+     "seo": "ready",
+     "h1": "⚽ Soccer Career",
+     "mainText": 490,
+     "flag": "1",
+     "scrollY": 0
+    },
+    "afterShot": "shot-A-1280-404-fault-after.jpg",
+    "held": {
+     "ms": 2500
+    },
+    "waitMs": 2517,
+    "extraConsole": [
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:10:3572)\n    at qb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:44434)\n    at Wb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:39727)\n    at WC (http://127.0.0.1",
+      "at": 142
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "A page failed to render: TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:10:3572)\n    at qb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:44434)\n    at Wb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:39727)\n  ",
+      "at": 142
+     }
+    ],
+    "fired": true
+   },
+   "issues": []
+  },
+  {
+   "null": {
+    "row": "A",
+    "route": "/soccer-career",
+    "size": "1280x900",
+    "way": "host",
+    "motion": "no-preference",
+    "arm": "null",
+    "docs": [
+     {
+      "n": 1,
+      "path": "/soccer-career",
+      "at": 9
+     }
+    ],
+    "files": [],
+    "consoleErrors": [
+     {
+      "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 19
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-22T04%3A26%3A54.163Z&start_at=lte.2026-10-23T12%3A26%3A54.163Z",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 134
+     }
+    ],
+    "pageErrors": [],
+    "issues": [],
+    "navigated": [
+     {
+      "at": 13,
+      "path": "/soccer-career"
+     },
+     {
+      "at": 83,
+      "path": "/soccer-career"
+     }
+    ],
+    "stage": "settle",
+    "final": {
+     "path": "/soccer-career",
+     "broke": false,
+     "loading": false,
+     "tiles": 0,
+     "about": false,
+     "seo": "ready",
+     "h1": "⚽ Soccer Career",
+     "mainText": 490,
+     "flag": null,
+     "scrollY": 0
+    },
+    "afterShot": "shot-A-1280-host-null-after.jpg",
+    "held": null
+   },
+   "fault": {
+    "row": "A",
+    "route": "/soccer-career",
+    "size": "1280x900",
+    "way": "host",
+    "motion": "no-preference",
+    "arm": "fault",
+    "docs": [
+     {
+      "n": 1,
+      "path": "/soccer-career",
+      "at": 9
+     },
+     {
+      "n": 2,
+      "path": "/soccer-career",
+      "at": 119,
+      "heldMs": 2501
+     }
+    ],
+    "files": [
+     {
+      "file": "/assets/SoccerCareer-BthCT9I_.js",
+      "at": 104,
+      "action": "host"
+     },
+     {
+      "file": "/assets/SoccerCareer-BthCT9I_.js",
+      "at": 2678,
+      "action": "served"
+     }
+    ],
+    "consoleErrors": [
+     {
+      "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 19
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/SoccerCareer-BthCT9I_.js",
+      "text": "Failed to load module script: Expected a JavaScript-or-Wasm module script but the server responded with a MIME type of \"text/html\". Strict MIME type checking is enforced for module scripts per HTML spec.",
+      "at": 119
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:10:3572)\n    at qb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:44434)\n    at Wb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:39727)\n    at WC (http://127.0.0.1",
+      "at": 129
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "A page failed to render: TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:10:3572)\n    at qb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:44434)\n    at Wb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:39727)\n  ",
+      "at": 130
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-22T04%3A26%3A55.445Z&start_at=lte.2026-10-23T12%3A26%3A55.445Z",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 144
+     },
+     {
+      "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 2631
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-22T04%3A26%3A58.021Z&start_at=lte.2026-10-23T12%3A26%3A58.021Z",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 2706
+     }
+    ],
+    "pageErrors": [],
+    "samples": [
+     {
+      "path": "/soccer-career",
+      "broke": true,
+      "loading": false,
+      "tiles": 0,
+      "about": false,
+      "seo": null,
+      "h1": "This page broke",
+      "mainText": 1213,
+      "flag": "1",
+      "scrollY": 0,
+      "now": 1792686416261,
+      "t": 798
+     },
+     {
+      "path": "/soccer-career",
+      "broke": true,
+      "loading": false,
+      "tiles": 0,
+      "about": false,
+      "seo": null,
+      "h1": "This page broke",
+      "mainText": 1213,
+      "flag": "1",
+      "scrollY": 0,
+      "now": 1792686416961,
+      "t": 1498
+     },
+     {
+      "path": "/soccer-career",
+      "broke": true,
+      "loading": false,
+      "tiles": 0,
+      "about": false,
+      "seo": null,
+      "h1": "This page broke",
+      "mainText": 1213,
+      "flag": "1",
+      "scrollY": 0,
+      "now": 1792686417662,
+      "t": 2199
+     }
+    ],
+    "issues": [],
+    "navigated": [
+     {
+      "at": 13,
+      "path": "/soccer-career"
+     },
+     {
+      "at": 81,
+      "path": "/soccer-career"
+     },
+     {
+      "at": 2627,
+      "path": "/soccer-career"
+     }
+    ],
+    "stage": "settle",
+    "holdShot": "shot-A-1280-host-fault-hold.jpg",
+    "oldPageLastReportMs": 2498,
+    "final": {
+     "path": "/soccer-career",
+     "broke": false,
+     "loading": false,
+     "tiles": 0,
+     "about": false,
+     "seo": "ready",
+     "h1": "⚽ Soccer Career",
+     "mainText": 490,
+     "flag": "1",
+     "scrollY": 0
+    },
+    "afterShot": "shot-A-1280-host-fault-after.jpg",
+    "held": {
+     "ms": 2501
+    },
+    "waitMs": 2516,
+    "extraConsole": [
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:10:3572)\n    at qb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:44434)\n    at Wb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:39727)\n    at WC (http://127.0.0.1",
+      "at": 129
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "A page failed to render: TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:10:3572)\n    at qb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:44434)\n    at Wb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:39727)\n  ",
+      "at": 130
+     }
+    ],
+    "fired": true
+   },
+   "issues": []
+  },
+  {
+   "null": {
+    "row": "B",
+    "route": "/",
+    "size": "390x844",
+    "way": "404",
+    "motion": "reduce",
+    "arm": "null",
+    "docs": [
+     {
+      "n": 1,
+      "path": "/",
+      "at": 9
+     }
+    ],
+    "files": [],
+    "consoleErrors": [
+     {
+      "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 18
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-22T04%3A26%3A59.375Z&start_at=lte.2026-10-23T12%3A26%3A59.375Z",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 241
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/rpc/most_played_today",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 301
+     }
+    ],
+    "pageErrors": [],
+    "issues": [],
+    "navigated": [
+     {
+      "at": 13,
+      "path": "/"
+     },
+     {
+      "at": 71,
+      "path": "/"
+     }
+    ],
+    "stage": "settle",
+    "final": {
+     "path": "/",
+     "broke": false,
+     "loading": false,
+     "tiles": 13,
+     "about": true,
+     "seo": null,
+     "h1": "DoUKnowBall",
+     "mainText": 21497,
+     "flag": null,
+     "scrollY": 0
+    },
+    "afterShot": "shot-B-390-404-null-after.jpg",
+    "held": null
+   },
+   "fault": {
+    "row": "B",
+    "route": "/",
+    "size": "390x844",
+    "way": "404",
+    "motion": "reduce",
+    "arm": "fault",
+    "docs": [
+     {
+      "n": 1,
+      "path": "/",
+      "at": 9
+     },
+     {
+      "n": 2,
+      "path": "/",
+      "at": 250,
+      "heldMs": 2500
+     }
+    ],
+    "files": [
+     {
+      "file": "/assets/HomeAbout-D2jkDsxz.js",
+      "at": 197,
+      "action": "404"
+     },
+     {
+      "file": "/assets/HomeAbout-D2jkDsxz.js",
+      "at": 2909,
+      "action": "served"
+     }
+    ],
+    "consoleErrors": [
+     {
+      "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 18
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-22T04%3A27%3A00.759Z&start_at=lte.2026-10-23T12%3A27%3A00.759Z",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 244
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/HomeAbout-D2jkDsxz.js",
+      "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "at": 245
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "TypeError: Cannot read properties of undefined (reading 'HomeAbout')\n    at http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:264:54424",
+      "at": 260
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "A page failed to render: TypeError: Cannot read properties of undefined (reading 'HomeAbout')\n    at http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:264:54424 \n    at Lazy\n    at Suspense\n    at div\n    at div\n    at w6 (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:264:44977)\n    at g2 (http://12",
+      "at": 260
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/rpc/most_played_today",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 270
+     },
+     {
+      "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 2765
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-22T04%3A27%3A03.473Z&start_at=lte.2026-10-23T12%3A27%3A03.473Z",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 2953
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/rpc/most_played_today",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 3022
+     }
+    ],
+    "pageErrors": [],
+    "samples": [
+     {
+      "path": "/",
+      "broke": true,
+      "loading": false,
+      "tiles": 0,
+      "about": false,
+      "seo": null,
+      "h1": "This page broke",
+      "mainText": 1240,
+      "flag": "1",
+      "scrollY": 0,
+      "now": 1792686421588,
+      "t": 766
+     },
+     {
+      "path": "/",
+      "broke": true,
+      "loading": false,
+      "tiles": 0,
+      "about": false,
+      "seo": null,
+      "h1": "This page broke",
+      "mainText": 1240,
+      "flag": "1",
+      "scrollY": 0,
+      "now": 1792686422288,
+      "t": 1466
+     },
+     {
+      "path": "/",
+      "broke": true,
+      "loading": false,
+      "tiles": 0,
+      "about": false,
+      "seo": null,
+      "h1": "This page broke",
+      "mainText": 1240,
+      "flag": "1",
+      "scrollY": 0,
+      "now": 1792686422988,
+      "t": 2166
+     }
+    ],
+    "issues": [],
+    "navigated": [
+     {
+      "at": 13,
+      "path": "/"
+     },
+     {
+      "at": 74,
+      "path": "/"
+     },
+     {
+      "at": 2759,
+      "path": "/"
+     }
+    ],
+    "stage": "settle",
+    "holdShot": "shot-B-390-404-fault-hold.jpg",
+    "oldPageLastReportMs": 2466,
+    "final": {
+     "path": "/",
+     "broke": false,
+     "loading": false,
+     "tiles": 13,
+     "about": true,
+     "seo": null,
+     "h1": "DoUKnowBall",
+     "mainText": 21497,
+     "flag": "1",
+     "scrollY": 0
+    },
+    "afterShot": "shot-B-390-404-fault-after.jpg",
+    "held": {
+     "ms": 2500
+    },
+    "waitMs": 2553,
+    "extraConsole": [
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "TypeError: Cannot read properties of undefined (reading 'HomeAbout')\n    at http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:264:54424",
+      "at": 260
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "A page failed to render: TypeError: Cannot read properties of undefined (reading 'HomeAbout')\n    at http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:264:54424 \n    at Lazy\n    at Suspense\n    at div\n    at div\n    at w6 (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:264:44977)\n    at g2 (http://12",
+      "at": 260
+     }
+    ],
+    "fired": true
+   },
+   "issues": []
+  },
+  {
+   "null": {
+    "row": "B",
+    "route": "/",
+    "size": "390x844",
+    "way": "host",
+    "motion": "no-preference",
+    "arm": "null",
+    "docs": [
+     {
+      "n": 1,
+      "path": "/",
+      "at": 9
+     }
+    ],
+    "files": [],
+    "consoleErrors": [
+     {
+      "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 20
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-22T04%3A27%3A04.840Z&start_at=lte.2026-10-23T12%3A27%3A04.840Z",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 239
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/rpc/most_played_today",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 300
+     }
+    ],
+    "pageErrors": [],
+    "issues": [],
+    "navigated": [
+     {
+      "at": 15,
+      "path": "/"
+     },
+     {
+      "at": 76,
+      "path": "/"
+     }
+    ],
+    "stage": "settle",
+    "final": {
+     "path": "/",
+     "broke": false,
+     "loading": false,
+     "tiles": 13,
+     "about": true,
+     "seo": null,
+     "h1": "DoUKnowBall",
+     "mainText": 21497,
+     "flag": null,
+     "scrollY": 0
+    },
+    "afterShot": "shot-B-390-host-null-after.jpg",
+    "held": null
+   },
+   "fault": {
+    "row": "B",
+    "route": "/",
+    "size": "390x844",
+    "way": "host",
+    "motion": "no-preference",
+    "arm": "fault",
+    "docs": [
+     {
+      "n": 1,
+      "path": "/",
+      "at": 10
+     },
+     {
+      "n": 2,
+      "path": "/",
+      "at": 255,
+      "heldMs": 2500
+     }
+    ],
+    "files": [
+     {
+      "file": "/assets/HomeAbout-D2jkDsxz.js",
+      "at": 198,
+      "action": "host"
+     },
+     {
+      "file": "/assets/HomeAbout-D2jkDsxz.js",
+      "at": 2890,
+      "action": "served"
+     }
+    ],
+    "consoleErrors": [
+     {
+      "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 21
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-22T04%3A27%3A06.224Z&start_at=lte.2026-10-23T12%3A27%3A06.224Z",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 248
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/HomeAbout-D2jkDsxz.js",
+      "text": "Failed to load module script: Expected a JavaScript-or-Wasm module script but the server responded with a MIME type of \"text/html\". Strict MIME type checking is enforced for module scripts per HTML spec.",
+      "at": 248
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "TypeError: Cannot read properties of undefined (reading 'HomeAbout')\n    at http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:264:54424",
+      "at": 264
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "A page failed to render: TypeError: Cannot read properties of undefined (reading 'HomeAbout')\n    at http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:264:54424 \n    at Lazy\n    at Suspense\n    at div\n    at div\n    at w6 (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:264:44977)\n    at g2 (http://12",
+      "at": 264
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/rpc/most_played_today",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 274
+     },
+     {
+      "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 2768
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-22T04%3A27%3A08.917Z&start_at=lte.2026-10-23T12%3A27%3A08.917Z",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 2930
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/rpc/most_played_today",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 2996
+     }
+    ],
+    "pageErrors": [],
+    "samples": [
+     {
+      "path": "/",
+      "broke": true,
+      "loading": false,
+      "tiles": 0,
+      "about": false,
+      "seo": null,
+      "h1": "This page broke",
+      "mainText": 1240,
+      "flag": "1",
+      "scrollY": 0,
+      "now": 1792686427052,
+      "t": 762
+     },
+     {
+      "path": "/",
+      "broke": true,
+      "loading": false,
+      "tiles": 0,
+      "about": false,
+      "seo": null,
+      "h1": "This page broke",
+      "mainText": 1240,
+      "flag": "1",
+      "scrollY": 0,
+      "now": 1792686427752,
+      "t": 1462
+     },
+     {
+      "path": "/",
+      "broke": true,
+      "loading": false,
+      "tiles": 0,
+      "about": false,
+      "seo": null,
+      "h1": "This page broke",
+      "mainText": 1240,
+      "flag": "1",
+      "scrollY": 0,
+      "now": 1792686428452,
+      "t": 2162
+     }
+    ],
+    "issues": [],
+    "navigated": [
+     {
+      "at": 15,
+      "path": "/"
+     },
+     {
+      "at": 79,
+      "path": "/"
+     },
+     {
+      "at": 2764,
+      "path": "/"
+     }
+    ],
+    "stage": "settle",
+    "holdShot": "shot-B-390-host-fault-hold.jpg",
+    "oldPageLastReportMs": 2462,
+    "final": {
+     "path": "/",
+     "broke": false,
+     "loading": false,
+     "tiles": 13,
+     "about": true,
+     "seo": null,
+     "h1": "DoUKnowBall",
+     "mainText": 21497,
+     "flag": "1",
+     "scrollY": 0
+    },
+    "afterShot": "shot-B-390-host-fault-after.jpg",
+    "held": {
+     "ms": 2500
+    },
+    "waitMs": 2557,
+    "extraConsole": [
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "TypeError: Cannot read properties of undefined (reading 'HomeAbout')\n    at http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:264:54424",
+      "at": 264
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "A page failed to render: TypeError: Cannot read properties of undefined (reading 'HomeAbout')\n    at http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:264:54424 \n    at Lazy\n    at Suspense\n    at div\n    at div\n    at w6 (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:264:44977)\n    at g2 (http://12",
+      "at": 264
+     }
+    ],
+    "fired": true
+   },
+   "issues": []
+  },
+  {
+   "null": {
+    "row": "B",
+    "route": "/",
+    "size": "1280x900",
+    "way": "404",
+    "motion": "reduce",
+    "arm": "null",
+    "docs": [
+     {
+      "n": 1,
+      "path": "/",
+      "at": 10
+     }
+    ],
+    "files": [],
+    "consoleErrors": [
+     {
+      "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 21
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-22T04%3A27%3A10.306Z&start_at=lte.2026-10-23T12%3A27%3A10.306Z",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 261
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/rpc/most_played_today",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 341
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/daily_polls?select=poll_key%2Cquestion%2Coption_a%2Coption_a_emoji%2Coption_a_flag%2Coption_b%2Coption_b_emoji%2Coption_b_flag%2Coption_c%2Coption_c_emoji%2Coption_c_flag%2Coption_d%2Coption_d_emoji%2Coption_d_flag%2Csort_order&poll_date=eq.2026-10-22&order=sort_order.asc",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 341
+     }
+    ],
+    "pageErrors": [],
+    "issues": [],
+    "navigated": [
+     {
+      "at": 15,
+      "path": "/"
+     },
+     {
+      "at": 74,
+      "path": "/"
+     }
+    ],
+    "stage": "settle",
+    "final": {
+     "path": "/",
+     "broke": false,
+     "loading": false,
+     "tiles": 13,
+     "about": true,
+     "seo": null,
+     "h1": "DoUKnowBall",
+     "mainText": 21785,
+     "flag": null,
+     "scrollY": 0
+    },
+    "afterShot": "shot-B-1280-404-null-after.jpg",
+    "held": null
+   },
+   "fault": {
+    "row": "B",
+    "route": "/",
+    "size": "1280x900",
+    "way": "404",
+    "motion": "reduce",
+    "arm": "fault",
+    "docs": [
+     {
+      "n": 1,
+      "path": "/",
+      "at": 12
+     },
+     {
+      "n": 2,
+      "path": "/",
+      "at": 269,
+      "heldMs": 2500
+     }
+    ],
+    "files": [
+     {
+      "file": "/assets/HomeAbout-D2jkDsxz.js",
+      "at": 203,
+      "action": "404"
+     },
+     {
+      "file": "/assets/HomeAbout-D2jkDsxz.js",
+      "at": 2912,
+      "action": "served"
+     }
+    ],
+    "consoleErrors": [
+     {
+      "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 22
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-22T04%3A27%3A11.708Z&start_at=lte.2026-10-23T12%3A27%3A11.708Z",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 261
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/HomeAbout-D2jkDsxz.js",
+      "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "at": 261
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "TypeError: Cannot read properties of undefined (reading 'HomeAbout')\n    at http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:264:54424",
+      "at": 280
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "A page failed to render: TypeError: Cannot read properties of undefined (reading 'HomeAbout')\n    at http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:264:54424 \n    at Lazy\n    at Suspense\n    at div\n    at div\n    at w6 (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:264:44977)\n    at g2 (http://12",
+      "at": 280
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/rpc/most_played_today",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 293
+     },
+     {
+      "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 2785
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-22T04%3A27%3A14.420Z&start_at=lte.2026-10-23T12%3A27%3A14.420Z",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 2960
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/rpc/most_played_today",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 3036
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/daily_polls?select=poll_key%2Cquestion%2Coption_a%2Coption_a_emoji%2Coption_a_flag%2Coption_b%2Coption_b_emoji%2Coption_b_flag%2Coption_c%2Coption_c_emoji%2Coption_c_flag%2Coption_d%2Coption_d_emoji%2Coption_d_flag%2Csort_order&poll_date=eq.2026-10-22&order=sort_order.asc",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 3037
+     }
+    ],
+    "pageErrors": [],
+    "samples": [
+     {
+      "path": "/",
+      "broke": true,
+      "loading": false,
+      "tiles": 0,
+      "about": false,
+      "seo": null,
+      "h1": "This page broke",
+      "mainText": 1243,
+      "flag": "1",
+      "scrollY": 0,
+      "now": 1792686432535,
+      "t": 751
+     },
+     {
+      "path": "/",
+      "broke": true,
+      "loading": false,
+      "tiles": 0,
+      "about": false,
+      "seo": null,
+      "h1": "This page broke",
+      "mainText": 1243,
+      "flag": "1",
+      "scrollY": 0,
+      "now": 1792686433235,
+      "t": 1451
+     },
+     {
+      "path": "/",
+      "broke": true,
+      "loading": false,
+      "tiles": 0,
+      "about": false,
+      "seo": null,
+      "h1": "This page broke",
+      "mainText": 1243,
+      "flag": "1",
+      "scrollY": 0,
+      "now": 1792686433935,
+      "t": 2151
+     }
+    ],
+    "issues": [],
+    "navigated": [
+     {
+      "at": 17,
+      "path": "/"
+     },
+     {
+      "at": 80,
+      "path": "/"
+     },
+     {
+      "at": 2779,
+      "path": "/"
+     }
+    ],
+    "stage": "settle",
+    "holdShot": "shot-B-1280-404-fault-hold.jpg",
+    "oldPageLastReportMs": 2451,
+    "final": {
+     "path": "/",
+     "broke": false,
+     "loading": false,
+     "tiles": 13,
+     "about": true,
+     "seo": null,
+     "h1": "DoUKnowBall",
+     "mainText": 21785,
+     "flag": "1",
+     "scrollY": 0
+    },
+    "afterShot": "shot-B-1280-404-fault-after.jpg",
+    "held": {
+     "ms": 2500
+    },
+    "waitMs": 2566,
+    "extraConsole": [
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "TypeError: Cannot read properties of undefined (reading 'HomeAbout')\n    at http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:264:54424",
+      "at": 280
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "A page failed to render: TypeError: Cannot read properties of undefined (reading 'HomeAbout')\n    at http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:264:54424 \n    at Lazy\n    at Suspense\n    at div\n    at div\n    at w6 (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:264:44977)\n    at g2 (http://12",
+      "at": 280
+     }
+    ],
+    "fired": true
+   },
+   "issues": []
+  },
+  {
+   "null": {
+    "row": "B",
+    "route": "/",
+    "size": "1280x900",
+    "way": "host",
+    "motion": "no-preference",
+    "arm": "null",
+    "docs": [
+     {
+      "n": 1,
+      "path": "/",
+      "at": 8
+     }
+    ],
+    "files": [],
+    "consoleErrors": [
+     {
+      "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 18
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-22T04%3A27%3A15.800Z&start_at=lte.2026-10-23T12%3A27%3A15.800Z",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 247
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/rpc/most_played_today",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 327
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/daily_polls?select=poll_key%2Cquestion%2Coption_a%2Coption_a_emoji%2Coption_a_flag%2Coption_b%2Coption_b_emoji%2Coption_b_flag%2Coption_c%2Coption_c_emoji%2Coption_c_flag%2Coption_d%2Coption_d_emoji%2Coption_d_flag%2Csort_order&poll_date=eq.2026-10-22&order=sort_order.asc",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 327
+     }
+    ],
+    "pageErrors": [],
+    "issues": [],
+    "navigated": [
+     {
+      "at": 13,
+      "path": "/"
+     },
+     {
+      "at": 73,
+      "path": "/"
+     }
+    ],
+    "stage": "settle",
+    "final": {
+     "path": "/",
+     "broke": false,
+     "loading": false,
+     "tiles": 13,
+     "about": true,
+     "seo": null,
+     "h1": "DoUKnowBall",
+     "mainText": 21785,
+     "flag": null,
+     "scrollY": 0
+    },
+    "afterShot": "shot-B-1280-host-null-after.jpg",
+    "held": null
+   },
+   "fault": {
+    "row": "B",
+    "route": "/",
+    "size": "1280x900",
+    "way": "host",
+    "motion": "no-preference",
+    "arm": "fault",
+    "docs": [
+     {
+      "n": 1,
+      "path": "/",
+      "at": 9
+     },
+     {
+      "n": 2,
+      "path": "/",
+      "at": 260,
+      "heldMs": 2500
+     }
+    ],
+    "files": [
+     {
+      "file": "/assets/HomeAbout-D2jkDsxz.js",
+      "at": 196,
+      "action": "host"
+     },
+     {
+      "file": "/assets/HomeAbout-D2jkDsxz.js",
+      "at": 2893,
+      "action": "served"
+     }
+    ],
+    "consoleErrors": [
+     {
+      "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 19
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-22T04%3A27%3A17.205Z&start_at=lte.2026-10-23T12%3A27%3A17.205Z",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 251
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/HomeAbout-D2jkDsxz.js",
+      "text": "Failed to load module script: Expected a JavaScript-or-Wasm module script but the server responded with a MIME type of \"text/html\". Strict MIME type checking is enforced for module scripts per HTML spec.",
+      "at": 251
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "TypeError: Cannot read properties of undefined (reading 'HomeAbout')\n    at http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:264:54424",
+      "at": 271
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "A page failed to render: TypeError: Cannot read properties of undefined (reading 'HomeAbout')\n    at http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:264:54424 \n    at Lazy\n    at Suspense\n    at div\n    at div\n    at w6 (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:264:44977)\n    at g2 (http://12",
+      "at": 271
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/rpc/most_played_today",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 286
+     },
+     {
+      "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 2774
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-22T04%3A27%3A19.904Z&start_at=lte.2026-10-23T12%3A27%3A19.904Z",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 2939
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/rpc/most_played_today",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 3021
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/daily_polls?select=poll_key%2Cquestion%2Coption_a%2Coption_a_emoji%2Coption_a_flag%2Coption_b%2Coption_b_emoji%2Coption_b_flag%2Coption_c%2Coption_c_emoji%2Coption_c_flag%2Coption_d%2Coption_d_emoji%2Coption_d_flag%2Csort_order&poll_date=eq.2026-10-22&order=sort_order.asc",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 3021
+     }
+    ],
+    "pageErrors": [],
+    "samples": [
+     {
+      "path": "/",
+      "broke": true,
+      "loading": false,
+      "tiles": 0,
+      "about": false,
+      "seo": null,
+      "h1": "This page broke",
+      "mainText": 1243,
+      "flag": "1",
+      "scrollY": 0,
+      "now": 1792686438035,
+      "t": 756
+     },
+     {
+      "path": "/",
+      "broke": true,
+      "loading": false,
+      "tiles": 0,
+      "about": false,
+      "seo": null,
+      "h1": "This page broke",
+      "mainText": 1243,
+      "flag": "1",
+      "scrollY": 0,
+      "now": 1792686438735,
+      "t": 1456
+     },
+     {
+      "path": "/",
+      "broke": true,
+      "loading": false,
+      "tiles": 0,
+      "about": false,
+      "seo": null,
+      "h1": "This page broke",
+      "mainText": 1243,
+      "flag": "1",
+      "scrollY": 0,
+      "now": 1792686439435,
+      "t": 2156
+     }
+    ],
+    "issues": [],
+    "navigated": [
+     {
+      "at": 14,
+      "path": "/"
+     },
+     {
+      "at": 73,
+      "path": "/"
+     },
+     {
+      "at": 2769,
+      "path": "/"
+     }
+    ],
+    "stage": "settle",
+    "holdShot": "shot-B-1280-host-fault-hold.jpg",
+    "oldPageLastReportMs": 2456,
+    "final": {
+     "path": "/",
+     "broke": false,
+     "loading": false,
+     "tiles": 13,
+     "about": true,
+     "seo": null,
+     "h1": "DoUKnowBall",
+     "mainText": 21785,
+     "flag": "1",
+     "scrollY": 0
+    },
+    "afterShot": "shot-B-1280-host-fault-after.jpg",
+    "held": {
+     "ms": 2500
+    },
+    "waitMs": 2564,
+    "extraConsole": [
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "TypeError: Cannot read properties of undefined (reading 'HomeAbout')\n    at http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:264:54424",
+      "at": 271
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "A page failed to render: TypeError: Cannot read properties of undefined (reading 'HomeAbout')\n    at http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:264:54424 \n    at Lazy\n    at Suspense\n    at div\n    at div\n    at w6 (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:264:44977)\n    at g2 (http://12",
+      "at": 271
+     }
+    ],
+    "fired": true
+   },
+   "issues": []
+  },
+  {
+   "null": {
+    "row": "C",
+    "route": "/club-manager",
+    "size": "390x844",
+    "way": "404",
+    "motion": "reduce",
+    "arm": "null",
+    "docs": [
+     {
+      "n": 1,
+      "path": "/club-manager",
+      "at": 8
+     }
+    ],
+    "files": [],
+    "consoleErrors": [
+     {
+      "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 18
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-22T04%3A27%3A21.251Z&start_at=lte.2026-10-23T12%3A27%3A21.251Z",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 155
+     }
+    ],
+    "pageErrors": [],
+    "issues": [],
+    "navigated": [
+     {
+      "at": 13,
+      "path": "/club-manager"
+     },
+     {
+      "at": 113,
+      "path": "/club-manager"
+     }
+    ],
+    "stage": "settle",
+    "final": {
+     "path": "/club-manager",
+     "broke": false,
+     "loading": false,
+     "tiles": 0,
+     "about": false,
+     "seo": "ready",
+     "h1": "CLUB MANAGER",
+     "mainText": 39573,
+     "flag": null,
+     "scrollY": 0
+    },
+    "afterShot": "shot-C-390-404-null-after.jpg",
+    "held": null
+   },
+   "fault": {
+    "row": "C",
+    "route": "/club-manager",
+    "size": "390x844",
+    "way": "404",
+    "motion": "reduce",
+    "arm": "fault",
+    "docs": [
+     {
+      "n": 1,
+      "path": "/club-manager",
+      "at": 10
+     },
+     {
+      "n": 2,
+      "path": "/club-manager",
+      "at": 265,
+      "heldMs": 2500
+     }
+    ],
+    "files": [
+     {
+      "file": "/assets/seoMetaPart12-BJfl671y.js",
+      "at": 248,
+      "action": "404"
+     },
+     {
+      "file": "/assets/clubManagement-BlY7ARie.js",
+      "at": 249,
+      "action": "404"
+     },
+     {
+      "file": "/assets/seoMetaPart12-BJfl671y.js",
+      "at": 2923,
+      "action": "served"
+     },
+     {
+      "file": "/assets/clubManagement-BlY7ARie.js",
+      "at": 2923,
+      "action": "served"
+     }
+    ],
+    "consoleErrors": [
+     {
+      "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 20
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-22T04%3A27%3A22.539Z&start_at=lte.2026-10-23T12%3A27%3A22.539Z",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 184
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/seoMetaPart12-BJfl671y.js",
+      "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "at": 264
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/clubManagement-BlY7ARie.js",
+      "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "at": 751
+     },
+     {
+      "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 2782
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-22T04%3A27%3A25.255Z&start_at=lte.2026-10-23T12%3A27%3A25.255Z",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 2876
+     }
+    ],
+    "pageErrors": [
+     "TypeError: Cannot convert undefined or null to object"
+    ],
+    "samples": [
+     {
+      "path": "/club-manager",
+      "broke": false,
+      "loading": false,
+      "tiles": 0,
+      "about": false,
+      "seo": "loading",
+      "h1": "CLUB MANAGER",
+      "mainText": 16442,
+      "flag": "1",
+      "scrollY": 0,
+      "now": 1792686443416,
+      "t": 752
+     },
+     {
+      "path": "/club-manager",
+      "broke": false,
+      "loading": false,
+      "tiles": 0,
+      "about": false,
+      "seo": "loading",
+      "h1": "CLUB MANAGER",
+      "mainText": 16442,
+      "flag": "1",
+      "scrollY": 0,
+      "now": 1792686444117,
+      "t": 1453
+     },
+     {
+      "path": "/club-manager",
+      "broke": false,
+      "loading": false,
+      "tiles": 0,
+      "about": false,
+      "seo": "loading",
+      "h1": "CLUB MANAGER",
+      "mainText": 16442,
+      "flag": "1",
+      "scrollY": 0,
+      "now": 1792686444817,
+      "t": 2153
+     }
+    ],
+    "issues": [],
+    "navigated": [
+     {
+      "at": 15,
+      "path": "/club-manager"
+     },
+     {
+      "at": 120,
+      "path": "/club-manager"
+     },
+     {
+      "at": 2776,
+      "path": "/club-manager"
+     }
+    ],
+    "stage": "settle",
+    "holdShot": "shot-C-390-404-fault-hold.jpg",
+    "oldPageLastReportMs": 2453,
+    "final": {
+     "path": "/club-manager",
+     "broke": false,
+     "loading": false,
+     "tiles": 0,
+     "about": false,
+     "seo": "ready",
+     "h1": "CLUB MANAGER",
+     "mainText": 39573,
+     "flag": "1",
+     "scrollY": 0
+    },
+    "afterShot": "shot-C-390-404-fault-after.jpg",
+    "held": {
+     "ms": 2500
+    },
+    "waitMs": 2517,
+    "extraConsole": [],
+    "fired": true
+   },
+   "issues": []
+  },
+  {
+   "null": {
+    "row": "C",
+    "route": "/club-manager",
+    "size": "390x844",
+    "way": "host",
+    "motion": "no-preference",
+    "arm": "null",
+    "docs": [
+     {
+      "n": 1,
+      "path": "/club-manager",
+      "at": 10
+     }
+    ],
+    "files": [],
+    "consoleErrors": [
+     {
+      "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 20
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-22T04%3A27%3A26.505Z&start_at=lte.2026-10-23T12%3A27%3A26.505Z",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 127
+     }
+    ],
+    "pageErrors": [],
+    "issues": [],
+    "navigated": [
+     {
+      "at": 14,
+      "path": "/club-manager"
+     },
+     {
+      "at": 82,
+      "path": "/club-manager"
+     }
+    ],
+    "stage": "settle",
+    "final": {
+     "path": "/club-manager",
+     "broke": false,
+     "loading": false,
+     "tiles": 0,
+     "about": false,
+     "seo": "ready",
+     "h1": "CLUB MANAGER",
+     "mainText": 39573,
+     "flag": null,
+     "scrollY": 0
+    },
+    "afterShot": "shot-C-390-host-null-after.jpg",
+    "held": null
+   },
+   "fault": {
+    "row": "C",
+    "route": "/club-manager",
+    "size": "390x844",
+    "way": "host",
+    "motion": "no-preference",
+    "arm": "fault",
+    "docs": [
+     {
+      "n": 1,
+      "path": "/club-manager",
+      "at": 10
+     },
+     {
+      "n": 2,
+      "path": "/club-manager",
+      "at": 198,
+      "heldMs": 2500
+     }
+    ],
+    "files": [
+     {
+      "file": "/assets/seoMetaPart12-BJfl671y.js",
+      "at": 181,
+      "action": "host"
+     },
+     {
+      "file": "/assets/clubManagement-BlY7ARie.js",
+      "at": 182,
+      "action": "host"
+     },
+     {
+      "file": "/assets/seoMetaPart12-BJfl671y.js",
+      "at": 2826,
+      "action": "served"
+     },
+     {
+      "file": "/assets/clubManagement-BlY7ARie.js",
+      "at": 2827,
+      "action": "served"
+     }
+    ],
+    "consoleErrors": [
+     {
+      "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 21
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-22T04%3A27%3A27.755Z&start_at=lte.2026-10-23T12%3A27%3A27.755Z",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 131
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/seoMetaPart12-BJfl671y.js",
+      "text": "Failed to load module script: Expected a JavaScript-or-Wasm module script but the server responded with a MIME type of \"text/html\". Strict MIME type checking is enforced for module scripts per HTML spec.",
+      "at": 195
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/clubManagement-BlY7ARie.js",
+      "text": "Failed to load module script: Expected a JavaScript-or-Wasm module script but the server responded with a MIME type of \"text/html\". Strict MIME type checking is enforced for module scripts per HTML spec.",
+      "at": 685
+     },
+     {
+      "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 2714
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-22T04%3A27%3A30.416Z&start_at=lte.2026-10-23T12%3A27%3A30.416Z",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 2792
+     }
+    ],
+    "pageErrors": [
+     "TypeError: Cannot convert undefined or null to object"
+    ],
+    "samples": [
+     {
+      "path": "/club-manager",
+      "broke": false,
+      "loading": false,
+      "tiles": 0,
+      "about": false,
+      "seo": "loading",
+      "h1": "CLUB MANAGER",
+      "mainText": 16442,
+      "flag": "1",
+      "scrollY": 0,
+      "now": 1792686448669,
+      "t": 820
+     },
+     {
+      "path": "/club-manager",
+      "broke": false,
+      "loading": false,
+      "tiles": 0,
+      "about": false,
+      "seo": "loading",
+      "h1": "CLUB MANAGER",
+      "mainText": 16442,
+      "flag": "1",
+      "scrollY": 0,
+      "now": 1792686449368,
+      "t": 1519
+     },
+     {
+      "path": "/club-manager",
+      "broke": false,
+      "loading": false,
+      "tiles": 0,
+      "about": false,
+      "seo": "loading",
+      "h1": "CLUB MANAGER",
+      "mainText": 16442,
+      "flag": "1",
+      "scrollY": 0,
+      "now": 1792686450069,
+      "t": 2220
+     }
+    ],
+    "issues": [],
+    "navigated": [
+     {
+      "at": 15,
+      "path": "/club-manager"
+     },
+     {
+      "at": 83,
+      "path": "/club-manager"
+     },
+     {
+      "at": 2709,
+      "path": "/club-manager"
+     }
+    ],
+    "stage": "settle",
+    "holdShot": "shot-C-390-host-fault-hold.jpg",
+    "oldPageLastReportMs": 2420,
+    "final": {
+     "path": "/club-manager",
+     "broke": false,
+     "loading": false,
+     "tiles": 0,
+     "about": false,
+     "seo": "ready",
+     "h1": "CLUB MANAGER",
+     "mainText": 39573,
+     "flag": "1",
+     "scrollY": 0
+    },
+    "afterShot": "shot-C-390-host-fault-after.jpg",
+    "held": {
+     "ms": 2500
+    },
+    "waitMs": 2517,
+    "extraConsole": [],
+    "fired": true
+   },
+   "issues": []
+  },
+  {
+   "null": {
+    "row": "C",
+    "route": "/club-manager",
+    "size": "1280x900",
+    "way": "404",
+    "motion": "reduce",
+    "arm": "null",
+    "docs": [
+     {
+      "n": 1,
+      "path": "/club-manager",
+      "at": 10
+     }
+    ],
+    "files": [],
+    "consoleErrors": [
+     {
+      "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 19
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-22T04%3A27%3A31.697Z&start_at=lte.2026-10-23T12%3A27%3A31.697Z",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 154
+     }
+    ],
+    "pageErrors": [],
+    "issues": [],
+    "navigated": [
+     {
+      "at": 15,
+      "path": "/club-manager"
+     },
+     {
+      "at": 109,
+      "path": "/club-manager"
+     }
+    ],
+    "stage": "settle",
+    "final": {
+     "path": "/club-manager",
+     "broke": false,
+     "loading": false,
+     "tiles": 0,
+     "about": false,
+     "seo": "ready",
+     "h1": "CLUB MANAGER",
+     "mainText": 39589,
+     "flag": null,
+     "scrollY": 0
+    },
+    "afterShot": "shot-C-1280-404-null-after.jpg",
+    "held": null
+   },
+   "fault": {
+    "row": "C",
+    "route": "/club-manager",
+    "size": "1280x900",
+    "way": "404",
+    "motion": "reduce",
+    "arm": "fault",
+    "docs": [
+     {
+      "n": 1,
+      "path": "/club-manager",
+      "at": 9
+     },
+     {
+      "n": 2,
+      "path": "/club-manager",
+      "at": 216,
+      "heldMs": 2500
+     }
+    ],
+    "files": [
+     {
+      "file": "/assets/seoMetaPart12-BJfl671y.js",
+      "at": 213,
+      "action": "404"
+     },
+     {
+      "file": "/assets/clubManagement-BlY7ARie.js",
+      "at": 213,
+      "action": "404"
+     },
+     {
+      "file": "/assets/seoMetaPart12-BJfl671y.js",
+      "at": 2862,
+      "action": "served"
+     },
+     {
+      "file": "/assets/clubManagement-BlY7ARie.js",
+      "at": 2863,
+      "action": "served"
+     }
+    ],
+    "consoleErrors": [
+     {
+      "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 18
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-22T04%3A27%3A32.991Z&start_at=lte.2026-10-23T12%3A27%3A32.991Z",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 162
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/seoMetaPart12-BJfl671y.js",
+      "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "at": 214
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/clubManagement-BlY7ARie.js",
+      "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "at": 715
+     },
+     {
+      "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 2733
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-22T04%3A27%3A35.656Z&start_at=lte.2026-10-23T12%3A27%3A35.656Z",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 2825
+     }
+    ],
+    "pageErrors": [
+     "TypeError: Cannot convert undefined or null to object"
+    ],
+    "samples": [
+     {
+      "path": "/club-manager",
+      "broke": false,
+      "loading": false,
+      "tiles": 0,
+      "about": false,
+      "seo": "loading",
+      "h1": "CLUB MANAGER",
+      "mainText": 16458,
+      "flag": "1",
+      "scrollY": 0,
+      "now": 1792686453873,
+      "t": 801
+     },
+     {
+      "path": "/club-manager",
+      "broke": false,
+      "loading": false,
+      "tiles": 0,
+      "about": false,
+      "seo": "loading",
+      "h1": "CLUB MANAGER",
+      "mainText": 16458,
+      "flag": "1",
+      "scrollY": 0,
+      "now": 1792686454573,
+      "t": 1501
+     },
+     {
+      "path": "/club-manager",
+      "broke": false,
+      "loading": false,
+      "tiles": 0,
+      "about": false,
+      "seo": "loading",
+      "h1": "CLUB MANAGER",
+      "mainText": 16458,
+      "flag": "1",
+      "scrollY": 0,
+      "now": 1792686455273,
+      "t": 2201
+     }
+    ],
+    "issues": [],
+    "navigated": [
+     {
+      "at": 13,
+      "path": "/club-manager"
+     },
+     {
+      "at": 115,
+      "path": "/club-manager"
+     },
+     {
+      "at": 2728,
+      "path": "/club-manager"
+     }
+    ],
+    "stage": "settle",
+    "holdShot": "shot-C-1280-404-fault-hold.jpg",
+    "oldPageLastReportMs": 2401,
+    "final": {
+     "path": "/club-manager",
+     "broke": false,
+     "loading": false,
+     "tiles": 0,
+     "about": false,
+     "seo": "ready",
+     "h1": "CLUB MANAGER",
+     "mainText": 39589,
+     "flag": "1",
+     "scrollY": 0
+    },
+    "afterShot": "shot-C-1280-404-fault-after.jpg",
+    "held": {
+     "ms": 2500
+    },
+    "waitMs": 2503,
+    "extraConsole": [],
+    "fired": true
+   },
+   "issues": []
+  },
+  {
+   "null": {
+    "row": "C",
+    "route": "/club-manager",
+    "size": "1280x900",
+    "way": "host",
+    "motion": "no-preference",
+    "arm": "null",
+    "docs": [
+     {
+      "n": 1,
+      "path": "/club-manager",
+      "at": 10
+     }
+    ],
+    "files": [],
+    "consoleErrors": [
+     {
+      "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 20
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-22T04%3A27%3A36.903Z&start_at=lte.2026-10-23T12%3A27%3A36.903Z",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 128
+     }
+    ],
+    "pageErrors": [],
+    "issues": [],
+    "navigated": [
+     {
+      "at": 15,
+      "path": "/club-manager"
+     },
+     {
+      "at": 77,
+      "path": "/club-manager"
+     }
+    ],
+    "stage": "settle",
+    "final": {
+     "path": "/club-manager",
+     "broke": false,
+     "loading": false,
+     "tiles": 0,
+     "about": false,
+     "seo": "ready",
+     "h1": "CLUB MANAGER",
+     "mainText": 39589,
+     "flag": null,
+     "scrollY": 0
+    },
+    "afterShot": "shot-C-1280-host-null-after.jpg",
+    "held": null
+   },
+   "fault": {
+    "row": "C",
+    "route": "/club-manager",
+    "size": "1280x900",
+    "way": "host",
+    "motion": "no-preference",
+    "arm": "fault",
+    "docs": [
+     {
+      "n": 1,
+      "path": "/club-manager",
+      "at": 10
+     },
+     {
+      "n": 2,
+      "path": "/club-manager",
+      "at": 192,
+      "heldMs": 2500
+     }
+    ],
+    "files": [
+     {
+      "file": "/assets/seoMetaPart12-BJfl671y.js",
+      "at": 186,
+      "action": "host"
+     },
+     {
+      "file": "/assets/clubManagement-BlY7ARie.js",
+      "at": 186,
+      "action": "host"
+     },
+     {
+      "file": "/assets/seoMetaPart12-BJfl671y.js",
+      "at": 2813,
+      "action": "served"
+     },
+     {
+      "file": "/assets/clubManagement-BlY7ARie.js",
+      "at": 2814,
+      "action": "served"
+     }
+    ],
+    "consoleErrors": [
+     {
+      "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 21
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-22T04%3A27%3A38.194Z&start_at=lte.2026-10-23T12%3A27%3A38.194Z",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 135
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/seoMetaPart12-BJfl671y.js",
+      "text": "Failed to load module script: Expected a JavaScript-or-Wasm module script but the server responded with a MIME type of \"text/html\". Strict MIME type checking is enforced for module scripts per HTML spec.",
+      "at": 189
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/clubManagement-BlY7ARie.js",
+      "text": "Failed to load module script: Expected a JavaScript-or-Wasm module script but the server responded with a MIME type of \"text/html\". Strict MIME type checking is enforced for module scripts per HTML spec.",
+      "at": 688
+     },
+     {
+      "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 2707
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-22T04%3A27%3A40.833Z&start_at=lte.2026-10-23T12%3A27%3A40.833Z",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 2771
+     }
+    ],
+    "pageErrors": [
+     "TypeError: Cannot convert undefined or null to object"
+    ],
+    "samples": [
+     {
+      "path": "/club-manager",
+      "broke": false,
+      "loading": false,
+      "tiles": 0,
+      "about": false,
+      "seo": "loading",
+      "h1": "CLUB MANAGER",
+      "mainText": 16458,
+      "flag": "1",
+      "scrollY": 0,
+      "now": 1792686459101,
+      "t": 826
+     },
+     {
+      "path": "/club-manager",
+      "broke": false,
+      "loading": false,
+      "tiles": 0,
+      "about": false,
+      "seo": "loading",
+      "h1": "CLUB MANAGER",
+      "mainText": 16458,
+      "flag": "1",
+      "scrollY": 0,
+      "now": 1792686459801,
+      "t": 1526
+     },
+     {
+      "path": "/club-manager",
+      "broke": false,
+      "loading": false,
+      "tiles": 0,
+      "about": false,
+      "seo": "loading",
+      "h1": "CLUB MANAGER",
+      "mainText": 16458,
+      "flag": "1",
+      "scrollY": 0,
+      "now": 1792686460501,
+      "t": 2226
+     }
+    ],
+    "issues": [],
+    "navigated": [
+     {
+      "at": 15,
+      "path": "/club-manager"
+     },
+     {
+      "at": 88,
+      "path": "/club-manager"
+     },
+     {
+      "at": 2703,
+      "path": "/club-manager"
+     }
+    ],
+    "stage": "settle",
+    "holdShot": "shot-C-1280-host-fault-hold.jpg",
+    "oldPageLastReportMs": 2426,
+    "final": {
+     "path": "/club-manager",
+     "broke": false,
+     "loading": false,
+     "tiles": 0,
+     "about": false,
+     "seo": "ready",
+     "h1": "CLUB MANAGER",
+     "mainText": 39589,
+     "flag": "1",
+     "scrollY": 0
+    },
+    "afterShot": "shot-C-1280-host-fault-after.jpg",
+    "held": {
+     "ms": 2500
+    },
+    "waitMs": 2506,
+    "extraConsole": [],
+    "fired": true
+   },
+   "issues": []
+  },
+  {
+   "null": {
+    "row": "D",
+    "route": "/",
+    "size": "390x844",
+    "way": "404",
+    "motion": "reduce",
+    "arm": "null",
+    "docs": [
+     {
+      "n": 1,
+      "path": "/",
+      "at": 9
+     }
+    ],
+    "files": [],
+    "consoleErrors": [
+     {
+      "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 18
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-22T04%3A27%3A42.176Z&start_at=lte.2026-10-23T12%3A27%3A42.176Z",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 254
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/rpc/most_played_today",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 331
+     }
+    ],
+    "pageErrors": [],
+    "issues": [],
+    "navigated": [
+     {
+      "at": 14,
+      "path": "/"
+     },
+     {
+      "at": 75,
+      "path": "/"
+     },
+     {
+      "at": 696,
+      "path": "/soccer-career"
+     }
+    ],
+    "stage": "settle",
+    "before": {
+     "path": "/",
+     "broke": false,
+     "loading": false,
+     "tiles": 13,
+     "about": true,
+     "seo": null,
+     "h1": "DoUKnowBall",
+     "mainText": 21497,
+     "flag": null,
+     "scrollY": 6639
+    },
+    "tapDocs": 0,
+    "final": {
+     "path": "/soccer-career",
+     "broke": false,
+     "loading": false,
+     "tiles": 0,
+     "about": false,
+     "seo": "ready",
+     "h1": "⚽ Soccer Career",
+     "mainText": 490,
+     "flag": null,
+     "scrollY": 0
+    },
+    "afterShot": "shot-D-390-404-null-after.jpg",
+    "held": null
+   },
+   "fault": {
+    "row": "D",
+    "route": "/",
+    "size": "390x844",
+    "way": "404",
+    "motion": "reduce",
+    "arm": "fault",
+    "docs": [
+     {
+      "n": 1,
+      "path": "/",
+      "at": 12
+     },
+     {
+      "n": 2,
+      "path": "/soccer-career",
+      "at": 755,
+      "heldMs": 2500
+     }
+    ],
+    "files": [
+     {
+      "file": "/assets/SoccerCareer-BthCT9I_.js",
+      "at": 737,
+      "action": "404"
+     },
+     {
+      "file": "/assets/SoccerCareer-BthCT9I_.js",
+      "at": 3334,
+      "action": "served"
+     }
+    ],
+    "consoleErrors": [
+     {
+      "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 22
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-22T04%3A27%3A44.019Z&start_at=lte.2026-10-23T12%3A27%3A44.019Z",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 265
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/rpc/most_played_today",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 352
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/SoccerCareer-BthCT9I_.js",
+      "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "at": 755
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:10:3572)\n    at zg (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:39:6438)\n    at b (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:39:10693)\n    at rt (http://127.0.0.1:3",
+      "at": 777
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "A page failed to render: TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:10:3572)\n    at zg (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:39:6438)\n    at b (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:39:10693)\n    ",
+      "at": 777
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:10:3572)\n    at qb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:44434)\n    at Wb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:39727)\n    at WC (http://127.0.0.1",
+      "at": 786
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "A page failed to render: TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:10:3572)\n    at qb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:44434)\n    at Wb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:39727)\n  ",
+      "at": 786
+     },
+     {
+      "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 3270
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-22T04%3A27%3A47.152Z&start_at=lte.2026-10-23T12%3A27%3A47.152Z",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 3361
+     }
+    ],
+    "pageErrors": [],
+    "samples": [
+     {
+      "path": "/soccer-career",
+      "broke": true,
+      "loading": false,
+      "tiles": 0,
+      "about": false,
+      "seo": null,
+      "h1": "This page broke",
+      "mainText": 1172,
+      "flag": "1",
+      "scrollY": 0,
+      "now": 1792686465339,
+      "t": 764
+     },
+     {
+      "path": "/soccer-career",
+      "broke": true,
+      "loading": false,
+      "tiles": 0,
+      "about": false,
+      "seo": null,
+      "h1": "This page broke",
+      "mainText": 1172,
+      "flag": "1",
+      "scrollY": 0,
+      "now": 1792686466039,
+      "t": 1464
+     },
+     {
+      "path": "/soccer-career",
+      "broke": true,
+      "loading": false,
+      "tiles": 0,
+      "about": false,
+      "seo": null,
+      "h1": "This page broke",
+      "mainText": 1172,
+      "flag": "1",
+      "scrollY": 0,
+      "now": 1792686466739,
+      "t": 2164
+     }
+    ],
+    "issues": [],
+    "navigated": [
+     {
+      "at": 17,
+      "path": "/"
+     },
+     {
+      "at": 79,
+      "path": "/"
+     },
+     {
+      "at": 713,
+      "path": "/soccer-career"
+     },
+     {
+      "at": 3263,
+      "path": "/soccer-career"
+     }
+    ],
+    "stage": "settle",
+    "before": {
+     "path": "/",
+     "broke": false,
+     "loading": false,
+     "tiles": 13,
+     "about": true,
+     "seo": null,
+     "h1": "DoUKnowBall",
+     "mainText": 21497,
+     "flag": null,
+     "scrollY": 6639
+    },
+    "tapDocs": 0,
+    "holdShot": "shot-D-390-404-fault-hold.jpg",
+    "oldPageLastReportMs": 2464,
+    "final": {
+     "path": "/soccer-career",
+     "broke": false,
+     "loading": false,
+     "tiles": 0,
+     "about": false,
+     "seo": "ready",
+     "h1": "⚽ Soccer Career",
+     "mainText": 490,
+     "flag": "1",
+     "scrollY": 0
+    },
+    "afterShot": "shot-D-390-404-fault-after.jpg",
+    "held": {
+     "ms": 2500
+    },
+    "waitMs": 2518,
+    "extraConsole": [
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:10:3572)\n    at zg (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:39:6438)\n    at b (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:39:10693)\n    at rt (http://127.0.0.1:3",
+      "at": 777
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "A page failed to render: TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:10:3572)\n    at zg (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:39:6438)\n    at b (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:39:10693)\n    ",
+      "at": 777
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:10:3572)\n    at qb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:44434)\n    at Wb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:39727)\n    at WC (http://127.0.0.1",
+      "at": 786
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "A page failed to render: TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:10:3572)\n    at qb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:44434)\n    at Wb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:39727)\n  ",
+      "at": 786
+     }
+    ],
+    "fired": true
+   },
+   "issues": []
+  },
+  {
+   "null": {
+    "row": "D",
+    "route": "/",
+    "size": "390x844",
+    "way": "host",
+    "motion": "no-preference",
+    "arm": "null",
+    "docs": [
+     {
+      "n": 1,
+      "path": "/",
+      "at": 9
+     }
+    ],
+    "files": [],
+    "consoleErrors": [
+     {
+      "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 19
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-22T04%3A27%3A48.484Z&start_at=lte.2026-10-23T12%3A27%3A48.484Z",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 248
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/rpc/most_played_today",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 325
+     }
+    ],
+    "pageErrors": [],
+    "issues": [],
+    "navigated": [
+     {
+      "at": 14,
+      "path": "/"
+     },
+     {
+      "at": 77,
+      "path": "/"
+     },
+     {
+      "at": 1068,
+      "path": "/soccer-career"
+     }
+    ],
+    "stage": "settle",
+    "before": {
+     "path": "/",
+     "broke": false,
+     "loading": false,
+     "tiles": 13,
+     "about": true,
+     "seo": null,
+     "h1": "DoUKnowBall",
+     "mainText": 21497,
+     "flag": null,
+     "scrollY": 6639
+    },
+    "tapDocs": 0,
+    "final": {
+     "path": "/soccer-career",
+     "broke": false,
+     "loading": false,
+     "tiles": 0,
+     "about": false,
+     "seo": "ready",
+     "h1": "⚽ Soccer Career",
+     "mainText": 490,
+     "flag": null,
+     "scrollY": 0
+    },
+    "afterShot": "shot-D-390-host-null-after.jpg",
+    "held": null
+   },
+   "fault": {
+    "row": "D",
+    "route": "/",
+    "size": "390x844",
+    "way": "host",
+    "motion": "no-preference",
+    "arm": "fault",
+    "docs": [
+     {
+      "n": 1,
+      "path": "/",
+      "at": 12
+     },
+     {
+      "n": 2,
+      "path": "/soccer-career",
+      "at": 1125,
+      "heldMs": 2500
+     }
+    ],
+    "files": [
+     {
+      "file": "/assets/SoccerCareer-BthCT9I_.js",
+      "at": 1106,
+      "action": "host"
+     },
+     {
+      "file": "/assets/SoccerCareer-BthCT9I_.js",
+      "at": 3687,
+      "action": "served"
+     }
+    ],
+    "consoleErrors": [
+     {
+      "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 22
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-22T04%3A27%3A50.685Z&start_at=lte.2026-10-23T12%3A27%3A50.685Z",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 251
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/rpc/most_played_today",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 339
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/SoccerCareer-BthCT9I_.js",
+      "text": "Failed to load module script: Expected a JavaScript-or-Wasm module script but the server responded with a MIME type of \"text/html\". Strict MIME type checking is enforced for module scripts per HTML spec.",
+      "at": 1125
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:10:3572)\n    at zg (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:39:6438)\n    at b (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:39:10693)\n    at rt (http://127.0.0.1:3",
+      "at": 1154
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "A page failed to render: TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:10:3572)\n    at zg (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:39:6438)\n    at b (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:39:10693)\n    ",
+      "at": 1154
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:10:3572)\n    at qb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:44434)\n    at Wb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:39727)\n    at WC (http://127.0.0.1",
+      "at": 1165
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "A page failed to render: TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:10:3572)\n    at qb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:44434)\n    at Wb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:39727)\n  ",
+      "at": 1165
+     },
+     {
+      "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 3640
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-22T04%3A27%3A54.184Z&start_at=lte.2026-10-23T12%3A27%3A54.184Z",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 3717
+     }
+    ],
+    "pageErrors": [],
+    "samples": [
+     {
+      "path": "/soccer-career",
+      "broke": true,
+      "loading": false,
+      "tiles": 0,
+      "about": false,
+      "seo": null,
+      "h1": "This page broke",
+      "mainText": 1172,
+      "flag": "1",
+      "scrollY": 0,
+      "now": 1792686472420,
+      "t": 794
+     },
+     {
+      "path": "/soccer-career",
+      "broke": true,
+      "loading": false,
+      "tiles": 0,
+      "about": false,
+      "seo": null,
+      "h1": "This page broke",
+      "mainText": 1172,
+      "flag": "1",
+      "scrollY": 0,
+      "now": 1792686473120,
+      "t": 1494
+     },
+     {
+      "path": "/soccer-career",
+      "broke": true,
+      "loading": false,
+      "tiles": 0,
+      "about": false,
+      "seo": null,
+      "h1": "This page broke",
+      "mainText": 1172,
+      "flag": "1",
+      "scrollY": 0,
+      "now": 1792686473820,
+      "t": 2194
+     }
+    ],
+    "issues": [],
+    "navigated": [
+     {
+      "at": 16,
+      "path": "/"
+     },
+     {
+      "at": 76,
+      "path": "/"
+     },
+     {
+      "at": 1082,
+      "path": "/soccer-career"
+     },
+     {
+      "at": 3634,
+      "path": "/soccer-career"
+     }
+    ],
+    "stage": "settle",
+    "before": {
+     "path": "/",
+     "broke": false,
+     "loading": false,
+     "tiles": 13,
+     "about": true,
+     "seo": null,
+     "h1": "DoUKnowBall",
+     "mainText": 21497,
+     "flag": null,
+     "scrollY": 6639
+    },
+    "tapDocs": 0,
+    "holdShot": "shot-D-390-host-fault-hold.jpg",
+    "oldPageLastReportMs": 2494,
+    "final": {
+     "path": "/soccer-career",
+     "broke": false,
+     "loading": false,
+     "tiles": 0,
+     "about": false,
+     "seo": "ready",
+     "h1": "⚽ Soccer Career",
+     "mainText": 490,
+     "flag": "1",
+     "scrollY": 0
+    },
+    "afterShot": "shot-D-390-host-fault-after.jpg",
+    "held": {
+     "ms": 2500
+    },
+    "waitMs": 2519,
+    "extraConsole": [
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:10:3572)\n    at zg (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:39:6438)\n    at b (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:39:10693)\n    at rt (http://127.0.0.1:3",
+      "at": 1154
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "A page failed to render: TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:10:3572)\n    at zg (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:39:6438)\n    at b (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:39:10693)\n    ",
+      "at": 1154
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:10:3572)\n    at qb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:44434)\n    at Wb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:39727)\n    at WC (http://127.0.0.1",
+      "at": 1165
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "A page failed to render: TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:10:3572)\n    at qb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:44434)\n    at Wb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:39727)\n  ",
+      "at": 1165
+     }
+    ],
+    "fired": true
+   },
+   "issues": []
+  },
+  {
+   "null": {
+    "row": "D",
+    "route": "/",
+    "size": "1280x900",
+    "way": "404",
+    "motion": "reduce",
+    "arm": "null",
+    "docs": [
+     {
+      "n": 1,
+      "path": "/",
+      "at": 9
+     }
+    ],
+    "files": [],
+    "consoleErrors": [
+     {
+      "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 18
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-22T04%3A27%3A55.549Z&start_at=lte.2026-10-23T12%3A27%3A55.549Z",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 271
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/rpc/most_played_today",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 359
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/daily_polls?select=poll_key%2Cquestion%2Coption_a%2Coption_a_emoji%2Coption_a_flag%2Coption_b%2Coption_b_emoji%2Coption_b_flag%2Coption_c%2Coption_c_emoji%2Coption_c_flag%2Coption_d%2Coption_d_emoji%2Coption_d_flag%2Csort_order&poll_date=eq.2026-10-22&order=sort_order.asc",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 359
+     }
+    ],
+    "pageErrors": [],
+    "issues": [],
+    "navigated": [
+     {
+      "at": 14,
+      "path": "/"
+     },
+     {
+      "at": 77,
+      "path": "/"
+     },
+     {
+      "at": 733,
+      "path": "/soccer-career"
+     }
+    ],
+    "stage": "settle",
+    "before": {
+     "path": "/",
+     "broke": false,
+     "loading": false,
+     "tiles": 13,
+     "about": true,
+     "seo": null,
+     "h1": "DoUKnowBall",
+     "mainText": 21785,
+     "flag": null,
+     "scrollY": 2849
+    },
+    "tapDocs": 0,
+    "final": {
+     "path": "/soccer-career",
+     "broke": false,
+     "loading": false,
+     "tiles": 0,
+     "about": false,
+     "seo": "ready",
+     "h1": "⚽ Soccer Career",
+     "mainText": 490,
+     "flag": null,
+     "scrollY": 0
+    },
+    "afterShot": "shot-D-1280-404-null-after.jpg",
+    "held": null
+   },
+   "fault": {
+    "row": "D",
+    "route": "/",
+    "size": "1280x900",
+    "way": "404",
+    "motion": "reduce",
+    "arm": "fault",
+    "docs": [
+     {
+      "n": 1,
+      "path": "/",
+      "at": 12
+     },
+     {
+      "n": 2,
+      "path": "/soccer-career",
+      "at": 832,
+      "heldMs": 2500
+     }
+    ],
+    "files": [
+     {
+      "file": "/assets/SoccerCareer-BthCT9I_.js",
+      "at": 814,
+      "action": "404"
+     },
+     {
+      "file": "/assets/SoccerCareer-BthCT9I_.js",
+      "at": 3422,
+      "action": "served"
+     }
+    ],
+    "consoleErrors": [
+     {
+      "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 24
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-22T04%3A27%3A57.448Z&start_at=lte.2026-10-23T12%3A27%3A57.448Z",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 320
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/rpc/most_played_today",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 425
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/daily_polls?select=poll_key%2Cquestion%2Coption_a%2Coption_a_emoji%2Coption_a_flag%2Coption_b%2Coption_b_emoji%2Coption_b_flag%2Coption_c%2Coption_c_emoji%2Coption_c_flag%2Coption_d%2Coption_d_emoji%2Coption_d_flag%2Csort_order&poll_date=eq.2026-10-22&order=sort_order.asc",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 425
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/SoccerCareer-BthCT9I_.js",
+      "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "at": 831
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:10:3572)\n    at zg (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:39:6438)\n    at b (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:39:10693)\n    at rt (http://127.0.0.1:3",
+      "at": 857
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "A page failed to render: TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:10:3572)\n    at zg (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:39:6438)\n    at b (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:39:10693)\n    ",
+      "at": 857
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:10:3572)\n    at qb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:44434)\n    at Wb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:39727)\n    at WC (http://127.0.0.1",
+      "at": 869
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "A page failed to render: TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:10:3572)\n    at qb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:44434)\n    at Wb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:39727)\n  ",
+      "at": 869
+     },
+     {
+      "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 3347
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-22T04%3A28%3A00.652Z&start_at=lte.2026-10-23T12%3A28%3A00.652Z",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 3452
+     }
+    ],
+    "pageErrors": [],
+    "samples": [
+     {
+      "path": "/soccer-career",
+      "broke": true,
+      "loading": false,
+      "tiles": 0,
+      "about": false,
+      "seo": null,
+      "h1": "This page broke",
+      "mainText": 1213,
+      "flag": "1",
+      "scrollY": 0,
+      "now": 1792686478854,
+      "t": 791
+     },
+     {
+      "path": "/soccer-career",
+      "broke": true,
+      "loading": false,
+      "tiles": 0,
+      "about": false,
+      "seo": null,
+      "h1": "This page broke",
+      "mainText": 1213,
+      "flag": "1",
+      "scrollY": 0,
+      "now": 1792686479553,
+      "t": 1490
+     },
+     {
+      "path": "/soccer-career",
+      "broke": true,
+      "loading": false,
+      "tiles": 0,
+      "about": false,
+      "seo": null,
+      "h1": "This page broke",
+      "mainText": 1213,
+      "flag": "1",
+      "scrollY": 0,
+      "now": 1792686480253,
+      "t": 2190
+     }
+    ],
+    "issues": [],
+    "navigated": [
+     {
+      "at": 19,
+      "path": "/"
+     },
+     {
+      "at": 89,
+      "path": "/"
+     },
+     {
+      "at": 788,
+      "path": "/soccer-career"
+     },
+     {
+      "at": 3342,
+      "path": "/soccer-career"
+     }
+    ],
+    "stage": "settle",
+    "before": {
+     "path": "/",
+     "broke": false,
+     "loading": false,
+     "tiles": 13,
+     "about": true,
+     "seo": null,
+     "h1": "DoUKnowBall",
+     "mainText": 21785,
+     "flag": null,
+     "scrollY": 2849
+    },
+    "tapDocs": 0,
+    "holdShot": "shot-D-1280-404-fault-hold.jpg",
+    "oldPageLastReportMs": 2490,
+    "final": {
+     "path": "/soccer-career",
+     "broke": false,
+     "loading": false,
+     "tiles": 0,
+     "about": false,
+     "seo": "ready",
+     "h1": "⚽ Soccer Career",
+     "mainText": 490,
+     "flag": "1",
+     "scrollY": 0
+    },
+    "afterShot": "shot-D-1280-404-fault-after.jpg",
+    "held": {
+     "ms": 2500
+    },
+    "waitMs": 2518,
+    "extraConsole": [
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:10:3572)\n    at zg (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:39:6438)\n    at b (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:39:10693)\n    at rt (http://127.0.0.1:3",
+      "at": 857
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "A page failed to render: TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:10:3572)\n    at zg (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:39:6438)\n    at b (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:39:10693)\n    ",
+      "at": 857
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:10:3572)\n    at qb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:44434)\n    at Wb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:39727)\n    at WC (http://127.0.0.1",
+      "at": 869
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "A page failed to render: TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:10:3572)\n    at qb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:44434)\n    at Wb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:39727)\n  ",
+      "at": 869
+     }
+    ],
+    "fired": true
+   },
+   "issues": []
+  },
+  {
+   "null": {
+    "row": "D",
+    "route": "/",
+    "size": "1280x900",
+    "way": "host",
+    "motion": "no-preference",
+    "arm": "null",
+    "docs": [
+     {
+      "n": 1,
+      "path": "/",
+      "at": 9
+     }
+    ],
+    "files": [],
+    "consoleErrors": [
+     {
+      "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 18
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-22T04%3A28%3A02.002Z&start_at=lte.2026-10-23T12%3A28%3A02.002Z",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 261
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/rpc/most_played_today",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 358
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/daily_polls?select=poll_key%2Cquestion%2Coption_a%2Coption_a_emoji%2Coption_a_flag%2Coption_b%2Coption_b_emoji%2Coption_b_flag%2Coption_c%2Coption_c_emoji%2Coption_c_flag%2Coption_d%2Coption_d_emoji%2Coption_d_flag%2Csort_order&poll_date=eq.2026-10-22&order=sort_order.asc",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 361
+     }
+    ],
+    "pageErrors": [],
+    "issues": [],
+    "navigated": [
+     {
+      "at": 13,
+      "path": "/"
+     },
+     {
+      "at": 77,
+      "path": "/"
+     },
+     {
+      "at": 1108,
+      "path": "/soccer-career"
+     }
+    ],
+    "stage": "settle",
+    "before": {
+     "path": "/",
+     "broke": false,
+     "loading": false,
+     "tiles": 13,
+     "about": true,
+     "seo": null,
+     "h1": "DoUKnowBall",
+     "mainText": 21785,
+     "flag": null,
+     "scrollY": 2849
+    },
+    "tapDocs": 0,
+    "final": {
+     "path": "/soccer-career",
+     "broke": false,
+     "loading": false,
+     "tiles": 0,
+     "about": false,
+     "seo": "ready",
+     "h1": "⚽ Soccer Career",
+     "mainText": 490,
+     "flag": null,
+     "scrollY": 0
+    },
+    "afterShot": "shot-D-1280-host-null-after.jpg",
+    "held": null
+   },
+   "fault": {
+    "row": "D",
+    "route": "/",
+    "size": "1280x900",
+    "way": "host",
+    "motion": "no-preference",
+    "arm": "fault",
+    "docs": [
+     {
+      "n": 1,
+      "path": "/",
+      "at": 9
+     },
+     {
+      "n": 2,
+      "path": "/soccer-career",
+      "at": 1117,
+      "heldMs": 2500
+     }
+    ],
+    "files": [
+     {
+      "file": "/assets/SoccerCareer-BthCT9I_.js",
+      "at": 1100,
+      "action": "host"
+     },
+     {
+      "file": "/assets/SoccerCareer-BthCT9I_.js",
+      "at": 3686,
+      "action": "served"
+     }
+    ],
+    "consoleErrors": [
+     {
+      "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 20
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-22T04%3A28%3A04.262Z&start_at=lte.2026-10-23T12%3A28%3A04.262Z",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 253
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/rpc/most_played_today",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 356
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/daily_polls?select=poll_key%2Cquestion%2Coption_a%2Coption_a_emoji%2Coption_a_flag%2Coption_b%2Coption_b_emoji%2Coption_b_flag%2Coption_c%2Coption_c_emoji%2Coption_c_flag%2Coption_d%2Coption_d_emoji%2Coption_d_flag%2Csort_order&poll_date=eq.2026-10-22&order=sort_order.asc",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 357
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/SoccerCareer-BthCT9I_.js",
+      "text": "Failed to load module script: Expected a JavaScript-or-Wasm module script but the server responded with a MIME type of \"text/html\". Strict MIME type checking is enforced for module scripts per HTML spec.",
+      "at": 1117
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:10:3572)\n    at zg (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:39:6438)\n    at b (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:39:10693)\n    at rt (http://127.0.0.1:3",
+      "at": 1150
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "A page failed to render: TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:10:3572)\n    at zg (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:39:6438)\n    at b (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:39:10693)\n    ",
+      "at": 1150
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:10:3572)\n    at qb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:44434)\n    at Wb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:39727)\n    at WC (http://127.0.0.1",
+      "at": 1160
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "A page failed to render: TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:10:3572)\n    at qb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:44434)\n    at Wb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:39727)\n  ",
+      "at": 1160
+     },
+     {
+      "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 3634
+     },
+     {
+      "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-22T04%3A28%3A07.764Z&start_at=lte.2026-10-23T12%3A28%3A07.764Z",
+      "text": "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+      "at": 3713
+     }
+    ],
+    "pageErrors": [],
+    "samples": [
+     {
+      "path": "/soccer-career",
+      "broke": true,
+      "loading": false,
+      "tiles": 0,
+      "about": false,
+      "seo": null,
+      "h1": "This page broke",
+      "mainText": 1213,
+      "flag": "1",
+      "scrollY": 0,
+      "now": 1792686485996,
+      "t": 800
+     },
+     {
+      "path": "/soccer-career",
+      "broke": true,
+      "loading": false,
+      "tiles": 0,
+      "about": false,
+      "seo": null,
+      "h1": "This page broke",
+      "mainText": 1213,
+      "flag": "1",
+      "scrollY": 0,
+      "now": 1792686486696,
+      "t": 1500
+     },
+     {
+      "path": "/soccer-career",
+      "broke": true,
+      "loading": false,
+      "tiles": 0,
+      "about": false,
+      "seo": null,
+      "h1": "This page broke",
+      "mainText": 1213,
+      "flag": "1",
+      "scrollY": 0,
+      "now": 1792686487396,
+      "t": 2200
+     }
+    ],
+    "issues": [],
+    "navigated": [
+     {
+      "at": 14,
+      "path": "/"
+     },
+     {
+      "at": 77,
+      "path": "/"
+     },
+     {
+      "at": 1074,
+      "path": "/soccer-career"
+     },
+     {
+      "at": 3629,
+      "path": "/soccer-career"
+     }
+    ],
+    "stage": "settle",
+    "before": {
+     "path": "/",
+     "broke": false,
+     "loading": false,
+     "tiles": 13,
+     "about": true,
+     "seo": null,
+     "h1": "DoUKnowBall",
+     "mainText": 21785,
+     "flag": null,
+     "scrollY": 2849
+    },
+    "tapDocs": 0,
+    "holdShot": "shot-D-1280-host-fault-hold.jpg",
+    "oldPageLastReportMs": 2500,
+    "final": {
+     "path": "/soccer-career",
+     "broke": false,
+     "loading": false,
+     "tiles": 0,
+     "about": false,
+     "seo": "ready",
+     "h1": "⚽ Soccer Career",
+     "mainText": 490,
+     "flag": "1",
+     "scrollY": 0
+    },
+    "afterShot": "shot-D-1280-host-fault-after.jpg",
+    "held": {
+     "ms": 2500
+    },
+    "waitMs": 2517,
+    "extraConsole": [
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:10:3572)\n    at zg (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:39:6438)\n    at b (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:39:10693)\n    at rt (http://127.0.0.1:3",
+      "at": 1150
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "A page failed to render: TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:10:3572)\n    at zg (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:39:6438)\n    at b (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:39:10693)\n    ",
+      "at": 1150
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:10:3572)\n    at qb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:44434)\n    at Wb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:39727)\n    at WC (http://127.0.0.1",
+      "at": 1160
+     },
+     {
+      "url": "http://127.0.0.1:36269/assets/index-DGC7J-Ow.js",
+      "text": "A page failed to render: TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:10:3572)\n    at qb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:44434)\n    at Wb (http://127.0.0.1:36269/assets/index-DGC7J-Ow.js:41:39727)\n  ",
+      "at": 1160
+     }
+    ],
+    "fired": true
+   },
+   "issues": []
+  }
+ ]
+}
