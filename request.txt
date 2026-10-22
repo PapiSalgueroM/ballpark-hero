@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+#!serial
+walk-1523: node scripts/playSoccerMoraleLine.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+walk-gate-1523: PLAY_MORALE_LINE_CONTROL=gate node scripts/playSoccerMoraleLine.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+walk-1519: node scripts/playSoccerCareerEndings.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+weight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
