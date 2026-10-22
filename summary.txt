@@ -1,0 +1,6 @@
+tsc exit=0 121s | 
+vitest exit=0 163s |    Duration  162.35s (transform 2.59s, setup 1.46s, collect 10.44s, tests 221.60s, environment 9.28s, prepare 2.21s)
+simTycoonPackPace exit=0 21s | simTycoonPackPace: green. Both policies measured; every applied price control broke its pace check.
+simTycoonAwayMatchdays exit=0 74s |    All 6 controls fired exactly where they should, in node and in the real hook.
+simTycoonHelp exit=0 21s |    All 25 controls fired exactly where they should.
+simTycoonScorelines exit=0 327s | simTycoonScorelines: 17 checks, 0 failed [327 s]
