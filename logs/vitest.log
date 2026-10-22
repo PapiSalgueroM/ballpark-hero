@@ -1,0 +1,31 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/lib/usCareerAnnualBenefits.test.ts [2m([22m[2m28 tests[22m[2m)[22m[32m 221[2mms[22m[39m
+ [32m✓[39m src/lib/usCareerShopPromises.test.ts [2m([22m[2m32 tests[22m[2m)[22m[33m 302[2mms[22m[39m
+ [32m✓[39m src/lib/usCareerRecovery.test.ts [2m([22m[2m25 tests[22m[2m)[22m[33m 3354[2mms[22m[39m
+   [33m[2m✓[22m[39m 937 active career Recovery Suite simulation benefit[2m > [22m'nfl' reduces injury selection across every supported position and depleted through full health [33m 818[2mms[22m[39m
+   [33m[2m✓[22m[39m 937 active career Recovery Suite simulation benefit[2m > [22m'nba' reduces injury selection across every supported position and depleted through full health [33m 487[2mms[22m[39m
+   [33m[2m✓[22m[39m 937 active career Recovery Suite simulation benefit[2m > [22m'mlb' reduces injury selection across every supported position and depleted through full health [33m 1352[2mms[22m[39m
+   [33m[2m✓[22m[39m 937 active career Recovery Suite simulation benefit[2m > [22m'nhl' reduces injury selection across every supported position and depleted through full health [33m 545[2mms[22m[39m
+ [32m✓[39m src/test/usCareerSmallItems1104.test.ts [2m([22m[2m12 tests[22m[2m)[22m[33m 590[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1104: trades[2m > [22mNFL: a requested trade never lands on the club he is at, in either era [33m 314[2mms[22m[39m
+ [32m✓[39m src/test/careerDecisionOutcome.test.tsx [2m([22m[2m11 tests[22m[2m)[22m[33m 7222[2mms[22m[39m
+   [33m[2m✓[22m[39m ordinary career decision outcomes[2m > [22mapplies the real third-season NBA trade once before its quality draw and keeps the full save on return [33m 1500[2mms[22m[39m
+   [33m[2m✓[22m[39m ordinary career decision outcomes[2m > [22mshows each real sport choice as the actual capped change and saves it once [33m 922[2mms[22m[39m
+   [33m[2m✓[22m[39m ordinary career decision outcomes[2m > [22mreports negative effects and real endorsement earnings without calling them cash [33m 1152[2mms[22m[39m
+   [33m[2m✓[22m[39m ordinary career decision outcomes[2m > [22mconsumes same-frame choices once and accepts the next ordinary event [33m 427[2mms[22m[39m
+   [33m[2m✓[22m[39m ordinary career decision outcomes[2m > [22mcontinues with no extra draws writes season or completion and restores Play focus [33m 1487[2mms[22m[39m
+   [33m[2m✓[22m[39m ordinary career decision outcomes[2m > [22mreloads the applied career without replaying its transient receipt or choice [33m 1012[2mms[22m[39m
+   [33m[2m✓[22m[39m ordinary career decision outcomes[2m > [22mpreserves real ordinary engine choices and the existing rivalry receipt independently [33m 472[2mms[22m[39m
+ [32m✓[39m src/lib/careerDirtyMoney.test.ts [2m([22m[2m9 tests[22m[2m)[22m[33m 8798[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1500: every way does exactly what its button prints[2m > [22mthe preview numbers are the applied change, over a grid of money, heat, karma and cash [33m 8780[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m6 passed[39m[22m[90m (6)[39m
+[2m      Tests [22m [1m[32m117 passed[39m[22m[90m (117)[39m
+[2m   Start at [22m 12:14:52
+[2m   Duration [22m 16.00s[2m (transform 4.58s, setup 754ms, collect 12.13s, tests 20.49s, environment 4.05s, prepare 1.45s)[22m
+

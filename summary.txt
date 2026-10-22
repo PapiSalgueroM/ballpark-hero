@@ -1,0 +1,12 @@
+vitest exit=0 17s |    Duration  16.00s (transform 4.58s, setup 754ms, collect 12.13s, tests 20.49s, environment 4.05s, prepare 1.45s)
+shop-nobank exit=1 1s | simUsShopPromises: CONTROL nobank FIRED (red sections 6)
+shop-basecheck exit=0 1s | simUsShopPromises: green (sections 1)
+ann905 exit=0 5s | Career yearly support: fictional offline engine fixtures only, no native UI, full career completion or historical-data validation claim.
+shop exit=0 37s | simUsShopPromises: green (sections 0, 1, 2, 3, 4, 5, 6, 8, 9)
+press exit=0 10s | Press/Market:6 outcomes,27 full original state/RNG pairs,6 effective copied source controls,18 native fixture branches.
+tsc exit=0 110s | 
+dirty exit=0 86s | simUsDirtyMoney: all sections green
+outcome exit=0 9s | simCareerDecisionOutcome normal: intended assertions and independent ordinary/rivalry baseline passed.
+deckc exit=1 80s | simUsCareerDeckC: 4 failure(s)
+defects exit=0 15s | simUsCareerDefects: 157 tests passed across the stat lines, the era cards and the shop cap.
+board exit=0 57s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen with the proved historical main775 coaching Panel.
