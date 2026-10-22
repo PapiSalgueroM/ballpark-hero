@@ -1,0 +1,6 @@
+ease1 exit=0 238s | simCollegeSeat: all sections green (S1 to S9 and SY)
+ease2 exit=0 280s | simCollegeSeat: all sections green (S1 to S9 and SY)
+ease3 exit=0 284s | simCollegeSeat: all sections green (S1 to S9 and SY)
+anchors exit=0 0s | simCollegeSeat anchors: 19 rewrites of 13 controls and 6 variants checked, 0 cannot run
+tsc exit=0 73s | 
+ease0 exit=0 191s | simCollegeSeat: all sections green (S1 to S9 and SY)
