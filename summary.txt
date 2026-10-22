@@ -1,0 +1,2 @@
+waiver-vitest exit=0 4s |    Duration  2.91s (transform 689ms, setup 139ms, collect 872ms, tests 464ms, environment 696ms, prepare 202ms)
+wf-extra exit=1 32s | 2 harnesses not green.

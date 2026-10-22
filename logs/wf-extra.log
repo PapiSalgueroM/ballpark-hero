@@ -1,0 +1,19 @@
+Network mode: offline, loopback only, no production probe or database retries.
+Running 3 node harnesses
+  PASS  simFrontOfficeSaveRecovery.mjs    8.9s
+  FAIL  simManagerWorldContinuity.mjs   30.8s
+  EMPTY simNhlWaiverReceipt.mjs         3.3s
+        printed 3 lines, so its checks did not run
+
+----- simManagerWorldContinuity.mjs (FAIL) -----
+FAIL [healthy] inactive: Entire inactive AR result and saved bytes match
+FAIL [healthy] constructors: Fresh constructor changes only the declared held seed
+AssertionError [ERR_ASSERTION]: Healthy complete outcome groups all pass
+
+----- simNhlWaiverReceipt.mjs (EMPTY) -----
+NHL waiver normal: 8/8 passed, 0 exact outcome rejections, all eight executed.
+NHL waiver receipt: /home/runner/work/_temp/t-wf-extra/dukb-nhl970-proof-tuYTwP
+NHL waiver: exact copied targets, CRLF-safe controls, owned cleanup and offline transport verified.
+
+
+2 harnesses not green.
