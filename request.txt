@@ -1,0 +1,4 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+motion: node_modules/.bin/vitest run src/test/liveSimMotion.test.tsx --testTimeout=600000 --hookTimeout=120000
+turnback: LIVE_MOTION_CONTROL=turnback node scripts/simLiveSimMotion.mjs
+deadrestart: LIVE_MOTION_CONTROL=deadrestart node scripts/simLiveSimMotion.mjs

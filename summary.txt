@@ -1,0 +1,4 @@
+turnback exit=1 15s | simLiveSimMotion: control turnback turned "R12" red on an assertion (1 failed), as it must.
+deadrestart exit=1 14s | simLiveSimMotion: control deadrestart turned "R12" red on an assertion (1 failed), as it must.
+motion exit=0 73s |    Duration  72.88s (transform 3.39s, setup 119ms, collect 4.47s, tests 66.77s, environment 500ms, prepare 299ms)
+tsc exit=0 85s | 
