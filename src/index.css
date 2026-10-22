@@ -455,15 +455,26 @@
 }
 
 
-/* Round 117: while the cookie banner is still unanswered it sits above the
-   dialog layer, because otherwise a player can never reach Accept or
-   Essential only on any game that opens its rules on mount, which is most of
-   them. The banner is bottom anchored and a dialog is centred, so cap the
-   dialog's height while consent is pending: a centred box that is shorter
-   keeps its own bottom edge above the banner, and every control inside it
-   stays clickable. Nothing applies once consent is answered. */
+/* Keep unanswered cookie choices and dialog controls reachable together.
+   Fixed cards keep their half-height translation. Full-screen flex shells
+   reserve the banner's measured height inside their existing backdrop. */
 body[data-consent-pending] [role='dialog'] {
   max-height: calc(100dvh - var(--dukb-consent-height, 230px) - 24px);
+  overflow-y: auto;
+}
+body[data-consent-pending] [role='dialog'][class~='fixed'][class~='top-[50%]'][class~='translate-y-[-50%]'] {
   top: calc((100dvh - var(--dukb-consent-height, 230px)) / 2);
+}
+body[data-consent-pending] .fixed.inset-0.flex.items-center.justify-center[role='dialog'],
+body[data-consent-pending] .fixed.inset-0.flex.items-center.justify-center:has(> [role='dialog']) {
+  top: 0;
+  max-height: none;
+  padding-top: 12px;
+  padding-bottom: calc(var(--dukb-consent-height, 230px) + 12px);
+}
+body[data-consent-pending] .fixed.inset-0.flex.items-center.justify-center > [role='dialog'],
+body[data-consent-pending] .fixed.inset-0.flex.items-center.justify-center[role='dialog'] > div {
+  min-height: 0;
+  max-height: calc(100dvh - var(--dukb-consent-height, 230px) - 24px);
   overflow-y: auto;
 }
