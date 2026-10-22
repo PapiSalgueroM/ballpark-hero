@@ -1,0 +1,3 @@
+oldsave2 exit=0 86s | oldsave1538: green, every old save loads and answers as the round says
+oldsave2-potplus exit=1 86s | oldsave1538: RED, 59 findings
+oldsave2-clampdown exit=1 87s | oldsave1538: RED, 116 findings
