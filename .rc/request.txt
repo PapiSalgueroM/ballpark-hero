@@ -1,0 +1,19 @@
+#!serve
+#!playwright
+#!serial
+# Release BP part two (Round BPH, finish-BPH.md). ROUND 1535, part D: the F, J, K and L walks and the Club Manager fit against base builds
+# (8fea14e2 and c1b39364, 1535's own bases). Proven on adeba447 as rBPh-m7d and on the final head. Extra: basesrv1535.sh.
+# Split three ways (d, d2, d3) because the whole of part D in one request runs close to the runner job limit of 100 minutes.
+# Part D1: the walks.
+playUsRivalLines: node scripts/playUsRivalLines.mjs
+playStartingXi: ENGINES=chromium node scripts/playStartingXi.mjs
+simMobileChrome: node scripts/simMobileChrome.mjs
+playClubManagerNewCountries: ENGINES=chromium node scripts/playClubManagerNewCountries.mjs
+playClubManagerSaveLeave: ENGINES=chromium node scripts/playClubManagerSaveLeave.mjs
+playClubManagerSlots: ENGINES=chromium node scripts/playClubManagerSlots.mjs
+playCmBoardVerdict: ENGINES=chromium node scripts/playCmBoardVerdict.mjs
+playConquestScenes: ENGINES=chromium node scripts/playConquestScenes.mjs
+playDealDesk: ENGINES=chromium node scripts/playDealDesk.mjs
+playSoccerLanding: ENGINES=chromium node scripts/playSoccerLanding.mjs
+simRevealScroll: node scripts/simRevealScroll.mjs
+careerLook996: node scripts/qa/careerLook996.mjs
