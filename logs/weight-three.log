@@ -1,0 +1,24 @@
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+== MAIN (c1b39364)
+sweepWeight exit 0
+   /club-manager       630K gz over  42 files (budget 630K, 629.7K to the tenth)
+   /manager-hot-seat   644K gz over  44 files (budget 645K, 644.4K to the tenth)
+   /deadline-day       654K gz over  47 files (budget 655K, 654.3K to the tenth)
+
+sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+== PREFIX (5dea4f042d7351ad6ccb20ed2b4a7930de286619)
+sweepWeight exit 0
+   /club-manager       630K gz over  43 files (budget 630K, 630.0K to the tenth)
+   /manager-hot-seat   645K gz over  45 files (budget 645K, 645.0K to the tenth)
+   /deadline-day       655K gz over  48 files (budget 655K, 654.9K to the tenth)
+
+sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+== HEAD (HEAD)
+sweepWeight exit 1
+   /club-manager       631K gz over  42 files (budget 630K, 631.0K to the tenth)
+   /manager-hot-seat   646K gz over  44 files (budget 645K, 645.8K to the tenth)
+   /deadline-day       656K gz over  47 files (budget 655K, 655.6K to the tenth)
+
+sweepWeight: 3 failures
