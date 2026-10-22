@@ -30,7 +30,15 @@ const pinned = path.join(OUT, 'copies', 'originalHook.ts'), controlCopy = path.j
 save(pinned, old); save(controlCopy, old);
 for (const file of [HOOK, ENGINE, REWARDS, 'src/hooks/useOwnedTimeouts.ts', 'src/lib/completions.ts']) {
   const target = path.join(OUT, 'originals', file); fs.mkdirSync(path.dirname(target), { recursive: true }); fs.copyFileSync(path.join(ROOT, file), target);
-  if (file === ENGINE || file === REWARDS) assert.equal(read(path.join(ROOT, file)), git('show', `${BASE}:${file}`).replace(/\r\n/g, '\n'), 'Authoritative engine/rewards stay exact');
+  if (file === REWARDS) assert.equal(read(path.join(ROOT, file)), git('show', `${BASE}:${file}`).replace(/\r\n/g, '\n'), 'Authoritative engine/rewards stay exact');
+  // Round 1532 narrowing: this PR claims its draw branch changed no rule and moved no money. The scoring law round
+  // changes the engine's chances and bonuses on purpose, so the engine is pinned where a full time is settled (the
+  // playMinute and tick bodies, byte identical to BASE) instead of whole; the rewards ledger stays pinned whole.
+  if (file === ENGINE) for (const name of ['playMinute', 'tick']) {
+    const body = text => { const lines = text.split('\n'); const at = lines.findIndex(l => l.startsWith(`export function ${name}(`)); const end = lines.findIndex((l, i) => i > at && l === '}'); return at < 0 || end < 0 ? null : lines.slice(at, end + 1).join('\n'); };
+    const now = body(read(path.join(ROOT, file))), then = body(git('show', `${BASE}:${file}`).replace(/\r\n/g, '\n'));
+    assert(then !== null, `BASE carries ${name}`); assert.equal(now, then, `Authoritative engine ${name} stays exact`);
+  }
 }
 save(path.join(OUT, 'source-before.json'), before);
 save(path.join(OUT, 'identity.json'), { head: git('rev-parse', 'HEAD').trim(), tree: git('rev-parse', 'HEAD^{tree}').trim(), base: BASE, originalHookSha256: sha(old), currentHookSha256: sha(current) });

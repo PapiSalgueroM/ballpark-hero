@@ -87,7 +87,12 @@ try {
   const old = execFileSync('git', ['show', `${parent}:${PAGE}`], { cwd: ROOT, encoding: 'utf8' }).replace(/\r\n?/g, '\n'), current = read(path.join(ROOT, PAGE));
   const memo = `  const standBays = useMemo(() => Array.from({ length: Math.min(203, Math.floor(cap / 40)) }, (_, i) => {\n    const column = i % 20;\n    const centered = column % 2 === 0 ? 9 - Math.floor(column / 2) : 10 + Math.floor(column / 2);\n    return { x: 8 + centered * 15, y: 56 - Math.floor(i / 20) * 5 };\n  }), [cap]);\n\n`;
   const svg = `            <svg data-tycoon-terraces aria-hidden="true" viewBox="0 0 320 64" preserveAspectRatio="none" className="absolute inset-0 h-full w-full pointer-events-none text-muted-foreground/50">\n              {standBays.map((bay, i) => (\n                <rect key={i} x={bay.x} y={bay.y} width="13" height="3" rx="1" fill="currentColor" />\n              ))}\n            </svg>\n`;
-  assert.equal(current.split(memo).length - 1, 1); assert.equal(current.split(svg).length - 1, 1); assert.equal(current.replace(memo, '').replace(svg, ''), old);
+  assert.equal(current.split(memo).length - 1, 1); assert.equal(current.split(svg).length - 1, 1);
+  // Round 1532 narrowing: the PR claims its own commit changed the page by the terrace memo and svg alone. That is
+  // proved on the PR's commit; the current page must still carry both exactly once, but later rounds may edit other
+  // lines of it (Round 1532 rewrites the rules paragraph), so the whole current page is no longer pinned to the parent.
+  const prPage = execFileSync('git', ['show', `${terraces}:${PAGE}`], { cwd: ROOT, encoding: 'utf8' }).replace(/\r\n?/g, '\n');
+  assert.equal(prPage.split(memo).length - 1, 1); assert.equal(prPage.split(svg).length - 1, 1); assert.equal(prPage.replace(memo, '').replace(svg, ''), old);
   const faults = [
     { name: 'frozen', assertion: 'Visible capacity growth', stage:'first', from:'Math.min(203, Math.floor(cap / 40))', to:'Math.min(203, Math.floor(120 / 40))' },
     { name: 'attendance', assertion: 'Capacity creates structure', stage:'attendance', from:'Math.min(203, Math.floor(cap / 40))', to:'Math.min(203, Math.floor(fans / 40))' },
