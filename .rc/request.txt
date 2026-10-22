@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simBrowserHarnessDiscovery: node scripts/simBrowserHarnessDiscovery.mjs
+nodash: node -e "const fs=require('fs');const d=[String.fromCharCode(0x2013),String.fromCharCode(0x2014)];const files=require('child_process').execSync('git diff --name-only c1b39364 74630997 -- scripts').toString().trim().split('\n').filter(Boolean);let n=0;for(const f of files){for(const l of fs.readFileSync(f,'utf8').split('\n'))if(d.some(c=>l.includes(c)))n++}console.log('dash lines in the round and fixer files: '+n+' ('+files.length+' files)');process.exit(n?1:0)"
