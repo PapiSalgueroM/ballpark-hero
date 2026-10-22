@@ -1,0 +1,16 @@
+build exit=0 25s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+tsc exit=0 113s | 
+vitest-cm exit=0 155s |    Duration  153.99s (transform 7.31s, setup 4.34s, collect 37.40s, tests 295.28s, environment 27.90s, prepare 6.44s)
+nat exit=0 157s | simCmMadeUpNations: green. Made up men carry a country of their own, drawn and kept honestly.
+simManagerAppealIsolation exit=0 34s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+simNoRivalNames exit=0 12s | No rival product names found. 0 findings.
+simCmLeagueRules exit=0 63s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+simStorageWrites exit=0 3s | simStorageWrites: all green (owed: 12)
+nat-base exit=0 129s | simCmMadeUpNations: green. Made up men carry a country of their own, drawn and kept honestly.
+simHarnessAnchors exit=0 44s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simWorldEditor exit=0 8s | simWorldEditor: 2478 checks, 0 failures
+simClubManagerALeague exit=0 9s | simClubManagerALeague: all checks passed
+walk exit=0 6s | playCmMadeUpNations: green. Made up men wear their country on the squad and the market.
+simBoardAsks exit=0 47s | simBoardAsks: green. Every ask a board makes can be met, and nobody real is quoted.
+weight exit=1 27s | sweepWeight: 3 failures
+simOneOffCups exit=0 1617s | simOneOffCups: green, 270647 checks (1616 s)
