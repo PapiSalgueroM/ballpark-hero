@@ -853,7 +853,12 @@ export default function NbaFrontOfficeBoard() {
     rosterMax: NBA_ROSTER_MAX,
     /* Round 722: the tax projection and the tip off floor, so the boxes can say so. */
     tax: { bill: view.bill, over: view.over },
-    rosterFloor: NBA_TIPOFF_MIN,
+    /* Round 1537: the floor only until tip off, the same gate as tipShort below. The
+       league fills a short roster once, before round 1, and Waive stays open down to
+       NBA_ROSTER_MIN all season, so passing it every round left a man waived after tip
+       off reading "Filled on minimum deals at tip off" for the rest of the season, the
+       box lit and a hurt star never named. */
+    rosterFloor: league.round === 1 ? NBA_TIPOFF_MIN : undefined,
     wins: my.wins,
     losses: my.losses,
     period: league.round,
