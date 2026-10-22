@@ -1,0 +1,6 @@
+ctl-zero: SIM_CAREER_FORM_CONTROL=zero node scripts/simCareerForm.mjs
+ctl-posttext: SIM_CAREER_FORM_CONTROL=posttext node scripts/simCareerForm.mjs
+ctl-nogate: SIM_CAREER_FORM_CONTROL=nogate node scripts/simCareerForm.mjs
+ctl-pageline: SIM_CAREER_FORM_CONTROL=pageline node scripts/simCareerForm.mjs
+ctl-double: SIM_CAREER_FORM_CONTROL=double node scripts/simCareerForm.mjs
+ctl-divisor: SIM_CAREER_FORM_CONTROL=divisor node scripts/simCareerForm.mjs
