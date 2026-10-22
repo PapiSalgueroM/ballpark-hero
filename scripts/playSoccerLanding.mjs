@@ -74,6 +74,7 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
 import pw from './lib/playwrightLoader.mjs';
+import { answerConsent } from './lib/answerConsent.mjs';
 import { pageSeedOf, seedPages } from './lib/pageSeed.mjs';
 
 const { chromium } = pw;
@@ -299,7 +300,7 @@ async function plant(p, url, entries) {
   await p.evaluate(kv => { localStorage.clear(); for (const [k, v] of Object.entries(kv)) localStorage.setItem(k, v); }, entries);
 }
 async function clearBanner(p) {
-  await p.getByRole('button', { name: /^essential only$/i }).first().click({ timeout: 1200 }).catch(() => {});
+  await answerConsent(p, { wait: 1200 });
 }
 async function clearDialogs(p) {
   for (let i = 0; i < 3; i++) {

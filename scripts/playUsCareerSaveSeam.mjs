@@ -121,6 +121,7 @@ import path from 'node:path';
 import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import pw from './lib/playwrightLoader.mjs';
+import { answerConsent, storedConsent } from './lib/answerConsent.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = path.join(ROOT, process.env.DIST ?? 'dist');
@@ -402,7 +403,7 @@ function fillStore({ seeds, fill }) {
     if (!last || last[1] !== s) window.__seamLine.push([Math.round(performance.now() - t0), s]);
   }, 40);
 }
-const quotaState = (page, key) => page.evaluate(k => {
+const quotaState = async (page, key) => ({ ...(await page.evaluate(k => {
   const on = document.querySelector('[data-dukb-storage-notice]');
   const left = document.querySelector('[data-dukb-storage-notice-left]');
   /* is the store still full: a key it does not hold, 40 characters, taken or refused */
@@ -417,12 +418,11 @@ const quotaState = (page, key) => page.evaluate(k => {
     room, phase, saveSize: disk ? disk.length : 0,
     notice: !!document.querySelector('[data-us-career-save-error]'),
     banner: !!document.querySelector('[aria-label="Cookie choices"]'),
-    consent: localStorage.getItem('cookie-consent'),
     filled: window.__seamFilled ?? null, fillError: window.__seamFillError ?? null,
     stayed: window.__seamStayed === 1,
     broke: (document.body.textContent ?? '').includes('This page broke'),
   };
-}, key);
+}, key)), consent: await storedConsent(page) });
 /* frees one filler and puts all but about 200 characters of it back: room for a probe, not for a save */
 const leaveLittle = page => page.evaluate(() => {
   for (let i = 0; i < localStorage.length; i += 1) {
@@ -532,7 +532,7 @@ const kept = sport => quotaJourney('kept', sport, [], async ({ page, tag, key, t
   await page.goto(`${BASE}/${sport}-my-career`, { waitUntil: 'load', timeout: 45000 });
   await toBoard();
   const a = await quotaState(page, key);
-  const pressed = await clickButton(page, '^Essential only$');
+  const pressed = (await answerConsent(page, { press: b => b.evaluate(el => el.click()) })) === 'rejected';
   await page.waitForTimeout(700);
   const b = await quotaState(page, key);
   check('kept', a.banner && a.line === 'full' && pressed && !b.banner && b.consent === null && b.line === 'full',
@@ -541,7 +541,7 @@ const kept = sport => quotaJourney('kept', sport, [], async ({ page, tag, key, t
   await page.evaluate(() => document.body.click());
   const left = await lineLeaves(page);
   const c = await quotaState(page, key);
-  check('kept', left && c.line === 'left' && c.consent === 'essential' && !c.banner,
+  check('kept', left && c.line === 'left' && c.consent === 'rejected' && !c.banner,
     `${tag}: once there is room the line leaves and the choice made under it is on the device (on the store: ${c.consent ?? 'NOTHING'}, ${sayQuota(c)})`);
   return c;
 });

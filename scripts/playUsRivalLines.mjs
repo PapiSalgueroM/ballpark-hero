@@ -44,6 +44,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import pw from './lib/playwrightLoader.mjs';
+import { answerConsent } from './lib/answerConsent.mjs';
 
 const { chromium } = pw;
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -196,8 +197,7 @@ async function open(sp, width, height, reduced) {
   await page.addInitScript(route => localStorage.setItem(`rules-gate-seen:${route}`, '1'), sp.route);
   await page.goto(`${BASE}${sp.route}`, { waitUntil: 'networkidle' });
   await page.waitForTimeout(900);
-  const consent = page.locator('button:has-text("Essential only")');
-  if (await consent.count()) { await consent.first().click().catch(() => {}); await page.waitForTimeout(300); }
+  await answerConsent(page); await page.waitForTimeout(300);
   await page.locator('input[placeholder*="name"]').first().fill('Probe Player');
   await page.locator('button:has-text("Enter the draft")').click();
   await page.waitForTimeout(900);

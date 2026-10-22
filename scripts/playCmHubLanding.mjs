@@ -44,6 +44,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import pw from './lib/playwrightLoader.mjs';
+import { answerConsent } from './lib/answerConsent.mjs';
 
 const { chromium } = pw;
 const HEAD = (process.env.HEAD_URL ?? process.env.BASE ?? process.env.SWEEP_BASE ?? 'http://localhost:4173').replace(/\/$/, '');
@@ -373,8 +374,7 @@ async function calendarTaps(page, tag, { banner = false } = {}) {
    the banner's old height above it over the grid. Its own place is read by
    drawing it static for one synchronous measure, so nothing is painted. */
 async function stripAfterBannerAnswered(page, tag) {
-  await page.locator('[role="region"][aria-label="Cookie choices"] button', { hasText: 'Essential only' }).first().evaluate(b => b.click());
-  await page.waitForFunction(() => !document.body.dataset.consentPending, null, { timeout: 10000 });
+  if (await answerConsent(page, { timeout: 10000, press: b => b.evaluate(el => el.click()) }) !== 'rejected') throw new Error(`${tag}: the cookie banner was not there to answer`);
   await page.waitForTimeout(300);
   const ownPlace = () => page.evaluate(() => {
     const s = document.querySelector('[data-testid="cm-calendar-day"]');

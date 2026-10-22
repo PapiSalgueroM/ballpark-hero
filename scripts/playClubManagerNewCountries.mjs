@@ -66,6 +66,7 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
 import pw from './lib/playwrightLoader.mjs';
+import { answerConsent } from './lib/answerConsent.mjs';
 const { chromium } = pw;
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -131,7 +132,7 @@ for (const [w, h, reduced] of VIEWPORTS) {
     return { rows: new Set([...root.querySelectorAll('[data-club]')].map(e => e.getAttribute('data-club'))).size, title: heading };
   });
   const openTable = async page => { await page.getByRole('tab', { name: /^Table$/ }).first().click({ timeout: 5000 }).catch(() => {}); await page.waitForTimeout(800); return tableCard(page); };
-  const clearRoom = async page => { await page.getByRole('button', { name: /^essential only$/i }).first().click({ timeout: 1500 }).catch(() => {}); };
+  const clearRoom = async page => { await answerConsent(page, { wait: 1500 }); };
 
   for (const c of CONTROL === 'noresume' ? [] : expected) {
     const { ctx, page } = await newPage();

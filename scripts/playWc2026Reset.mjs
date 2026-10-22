@@ -18,6 +18,7 @@ import net from 'node:net';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import pw from './lib/playwrightLoader.mjs';
+import { answerConsent } from './lib/answerConsent.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 /* Round 672: this walk runs its OWN vite dev server (the control rewrites a
@@ -147,8 +148,7 @@ try {
   const pageErrors = [];
   page.on('pageerror', error => pageErrors.push(String(error)));
   const dismissConsent = async () => {
-    const choice = page.getByRole('button', { name: 'Essential only' });
-    if (await choice.count()) await choice.click().catch(() => {});
+    await answerConsent(page);
   };
   await page.goto(`${BASE}/world-cup-bracket`, { waitUntil: 'domcontentloaded', timeout: 60000 });
   await page.getByRole('button', { name: 'Auto Fill Everything' }).waitFor({ timeout: 30000 });

@@ -16,6 +16,7 @@
  * playwright, and runs it only with --browser.)
  */
 import pw from './lib/playwrightLoader.mjs';
+import { answerConsent } from './lib/answerConsent.mjs';
 
 const { chromium } = pw;
 const BASE = process.env.BASE ?? process.env.SWEEP_BASE ?? 'http://localhost:4173';
@@ -49,8 +50,7 @@ const browser = await chromium.launch();
      "Newcastle United" (probed against the real build). */
   await page.locator('button:has-text("Newcastle")').first().click();
   await page.waitForTimeout(500);
-  const essential = page.locator('button:has-text("Essential only")');
-  if (await essential.count()) { await essential.click(); await page.waitForTimeout(400); }
+  await answerConsent(page); await page.waitForTimeout(400);
   await page.locator('text=Take the job').click();
   await page.waitForTimeout(1200);
   /* Round 303 put a "who is in the dugout" step between the job and the hub.
