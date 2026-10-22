@@ -1124,7 +1124,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
   {
     id: 'puzzle-81',
     groups: [
-      { category: 'Played for Barcelona in 2025-26', players: ['Lamine Yamal', 'Pedri', 'Robert Lewandowski', 'Raphinha'], difficulty: 'easy' },
+      { category: 'Played for Barcelona in 2025-26', players: ['Lamine Yamal', 'Pedri', 'Gavi', 'Raphinha'], difficulty: 'easy' },
       { category: 'From Nigeria', players: ['Victor Osimhen', 'Jay-Jay Okocha', 'Nwankwo Kanu', 'Austin Jay-Jay'], difficulty: 'medium' },
       { category: 'Played for Porto and Benfica', players: ['Simão Sabrosa', 'Lisandro López', 'Ángel Di María', 'Enzo Pérez'], difficulty: 'hard' },
       { category: 'Won consecutive league titles in different countries', players: ['Zlatan Ibrahimović', 'Cristiano Ronaldo', 'David Beckham', 'Thierry Henry'], difficulty: 'insane' },
@@ -1214,7 +1214,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
   {
     id: 'puzzle-91',
     groups: [
-      { category: 'Played for Tottenham in 2025-26', players: ['Pedro Porro', 'Dominic Solanke', 'Micky van de Ven', 'Cristian Romero'], difficulty: 'easy' },
+      { category: 'Played for Tottenham in 2025-26', players: ['Pedro Porro', 'Dominic Solanke', 'Micky van de Ven', 'Richarlison'], difficulty: 'easy' },
       { category: 'From Croatia', players: ['Mateo Kovačić', 'Ivan Perišić', 'Luka Modrić', 'Mario Mandžukić'], difficulty: 'medium' },
       { category: 'Played in the 2022 World Cup Final', players: ['Lionel Messi', 'Kylian Mbappé', 'Ángel Di María', 'Olivier Giroud'], difficulty: 'hard' },
       { category: 'Won the Serie A Golden Boot 3+ times', players: ['Ciro Immobile', 'Gonzalo Higuaín', 'Luca Toni', 'Francesco Totti'], difficulty: 'insane' },
@@ -1655,7 +1655,7 @@ export const connectionsPuzzles: ConnectionsPuzzle[] = [
   {
     id: 'puzzle-140',
     groups: [
-      { category: 'Played for PSG in 2025-26', players: ['Ousmane Dembélé', 'Bradley Barcola', 'Nuno Mendes', 'Marquinhos'], difficulty: 'easy' },
+      { category: 'Played for PSG in 2025-26', players: ['Désiré Doué', 'Bradley Barcola', 'Nuno Mendes', 'Marquinhos'], difficulty: 'easy' },
       { category: 'From Iceland', players: ['Gylfi Sigurðsson', 'Eiður Guðjohnsen', 'Aron Gunnarsson', 'Birkir Bjarnason'], difficulty: 'medium' },
       { category: 'Won the Euros with Spain in the same year as club trophies', players: ['Fernando Torres', 'Xavi Hernández', 'Andres Iniesta', 'Cesc Fàbregas'], difficulty: 'hard' },
       { category: 'Won World Cup, Champions League, and Ballon d\'Or', players: ['Zinedine Zidane', 'Ronaldo Nazário', 'Roberto Carlos', 'Rivaldo Vítor'], difficulty: 'insane' },
