@@ -53,7 +53,8 @@
  * a tap on Clear draft lands on Clear draft. Tap target size still reads the
  * whole box, since a name scrolled into view is its full size.
  * SWEEP_PHONE_CONTROL=noclip measures raw boxes again, and ROUTE=/nba-connections
- * must then go red on "Paul Pierce over Clear draft".
+ * must then go red on "<a name> over Clear draft" (the name is the day's
+ * sixth row: Paul Pierce on 2026-10-21, Michael Jordan on 2026-10-22).
  *
  * Run: npm run build, serve dist with scripts/lib/hostLikeServer.mjs, then
  *      ENGINES=chromium node scripts/sweepPhone.mjs
