@@ -87,20 +87,33 @@
  *      nbaDraftByStaff, the class from nbaEarnedDraftClass) and arb (new, plus
  *      a FORCED swap of his first with the weakest club's on opening day
  *      every season: a CEILING on what a pick trade buys, never a price). The
- *      stop lines are the lead's of 2026-10-13 (LINES below): S1 the mean
- *      nbaStrength at seasons 5 and 10 within 0.5; S2 men rated 85 or more at
- *      season 10 within 20 percent; S3 the two weakest starts' playoff
- *      seasons, seasons 2 to 5, at most 10 points under; S4 the two strongest
- *      starts' PLAYOFF seasons, seasons 2 to 10, at most 10 points under (their
- *      title share printed, never asserted); S5 section 5's rise at every band
- *      in every set; S6 CPU dead money a season under 1.0 $M and tax payers a
- *      season within 0.5 of the old arm. The resolution rule (correction 8
- *      (b)): the per set differences are the replicates, the error of the
- *      pooled difference is their sd over root k and must be under a third
- *      of the margin, and the two runs' pooled differences within two errors
- *      of each other; else UNRESOLVED and the size the rule asks is printed.
- *      OUTSIDE is a STOP. The table prints between TABLE BEGIN and TABLE END
- *      for the notes, then what the lead reads beside it, never asserted.
+ *      stop lines are the lead's of 2026-10-13 as the lead RULED THEM AGAIN on
+ *      the step (d) table on 2026-10-21 (lead-rulings-1321-d.md; LINES below):
+ *      S1 the mean nbaStrength at season 5 within 0.5, at season 10 from -0.5
+ *      to +1.5 (the upside accepted as the cost of every club drafting every
+ *      year); S2 men rated 85 or more at season 10 within 20 percent; S3 the
+ *      two weakest starts' playoff seasons, seasons 2 to 5, PRINTED and never
+ *      asserted (it measures the old draft's gift to the GM); S4 the two
+ *      strongest starts' PLAYOFF seasons, seasons 2 to 10, the new arm's own
+ *      AT LEAST 60 percent, the old arm printed beside it (their title share
+ *      printed, never asserted); S5 section 5's rise at every band in every
+ *      set; S6 CPU dead money a season under 3.0 $M (its cause: firsts 13 to
+ *      30 on the four season deal, cut by CPU clubs; a per slot rookie scale
+ *      with team options is the fix, after which the band returns under 1.0)
+ *      and tax payers a season within 0.5 of the old arm. The resolution rule
+ *      (correction 8 (b)): the per set differences (the arm's own values for
+ *      S4 and S6 dead) are the replicates, the error of the pooled value is
+ *      their sd over root k and must be under a third of the line's `res`
+ *      (its margin, or for the widened lines the old scale: 0.5, 10 and 1.0),
+ *      and the two runs' pooled values within two errors of each other; else
+ *      UNRESOLVED and the size the rule asks is printed. OUTSIDE is a STOP.
+ *      The table prints between TABLE BEGIN and TABLE END for the notes, then
+ *      what the lead reads beside it, never asserted.
+ *  11. THE JUDGE ON KNOWN ANSWERS (every run). The verdict code the table runs
+ *      through (judgeLine and its one comparison, inBand) judges a synthetic
+ *      table whose answers are known: every asserted line inside and outside
+ *      its band on both sides of every edge, S3 never judged. Without it the
+ *      judge could only ever be seen to pass (the lead's ruling 7).
  *
  * THE FLEET. Six user clubs, the two strongest, the two middle and the two
  * weakest by opening nbaStrength, on seed sets of ten seeds: 60 careers of ten
@@ -155,6 +168,15 @@
  *   sportname    the shared half names a sport (in memory)                (10)
  *   foreignimport the shared half imports a module outside the lift      (10)
  *   elevenhead   the class's head is eleven of today's men, not twelve    (6)
+ * The judge's controls slip inBand in a COPY of this file (each target found
+ * exactly once, the copy's paths pinned to this tree) and run the copy whole
+ * with no control; section 11 must go red, and judgeflip under a COMBINE also
+ * turns the real fleet's table red (11 and 7):
+ *   judgetwo     the two sided band loses its absolute value (a sign slip) (11)
+ *   judgerange   the range's two ends joined by or (always inside)       (11)
+ *   judgefloor   the floor compared against its own negative             (11)
+ *   judgecap     the cap compared against the value's negative           (11)
+ *   judgeflip    the two sided band turned inside out                    (11; 11 and 7 under a COMBINE)
  * Two checks have no control, on purpose: section 4's JSON round trip (the
  * block is the lift's plain data, which no edit outside the lift can make
  * change under JSON) and its swapped table (no press reads the table today,
@@ -206,7 +228,7 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { execFileSync, spawnSync } from 'node:child_process';
 import { createRequire } from 'node:module';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_URL = ROOT.replaceAll('\\', '/');
@@ -253,6 +275,7 @@ const SECTION_NAMES = {
   8: 'the fallback: a block broken mid draft finishes the old way on a valid league',
   9: 'need: a club short at a position leans to it, and never past a better read by more than the weight',
   10: 'the shared half names no sport; neither library draws from Math.random or carries an address',
+  11: 'the judge on known answers: the two arm table\'s verdict on both sides of every edge of every band',
   7: 'the table: the old and new arms on the fleet, and the stop lines (FLEET=full plays, COMBINE judges)',
 };
 
@@ -315,6 +338,17 @@ const CONTROLS = {
     ['  { from: 31, to: 45, ovr: [66, 69] },', '  { from: 31, to: 45, ovr: [66, 72] },'],
     ['  { from: 46, to: 70, ovr: [66, 68] },', '  { from: 46, to: 70, ovr: [66, 72] },'],
   ] } },
+  /* THE JUDGE (the lead's ruling 7 of 2026-10-21: a judge with no control is a harness that cannot fail). The judge
+     lives in this file, not in the bundle, so each of these slips one comparison of inBand in a COPY of this file
+     and runs the copy whole with no control: section 11's known answers must go red. The first four make the judge
+     too lenient (a sign slip or an always true band), which only a known OUTSIDE answer can catch; judgeflip turns
+     the two sided band inside out, which also turns the real fleet red under a COMBINE (section 7). The targets are
+     written with escaped quotes so the line they name is in this file exactly once. */
+  judgetwo: { expect: [11], self: [['  if (line.kind === \'two\') return Math.abs(dbar) <= margin;', '  if (line.kind === \'two\') return dbar <= margin;']] },
+  judgerange: { expect: [11], self: [['  if (line.kind === \'range\') return dbar >= line.lo && dbar <= line.hi;', '  if (line.kind === \'range\') return dbar >= line.lo || dbar <= line.hi;']] },
+  judgefloor: { expect: [11], self: [['  if (line.kind === \'floor\') return dbar >= line.floor;', '  if (line.kind === \'floor\') return dbar >= -line.floor;']] },
+  judgecap: { expect: [11], self: [['  if (line.kind === \'cap\') return dbar < margin;', '  if (line.kind === \'cap\') return -dbar < margin;']] },
+  judgeflip: { expect: COMBINE ? [11, 7] : [11], self: [['  if (line.kind === \'two\') return Math.abs(dbar) <= margin;', '  if (line.kind === \'two\') return Math.abs(dbar) > margin;']] },
 };
 
 if (CONTROL === 'all') {
@@ -336,6 +370,44 @@ if (CONTROL === 'all') {
 if (CONTROL && !CONTROLS[CONTROL]) cannotRun(`${CONTROL} is not a control this harness knows (${Object.keys(CONTROLS).join(', ')}, or all)`);
 if (CONTROL && RECORD) cannotRun('a control and a recording at once');
 if (!['quick', 'full'].includes(FLEET)) cannotRun(`SIM_NBA_EARNED_DRAFT_FLEET=${FLEET} is not quick or full`);
+
+/* A JUDGE CONTROL: write a copy of this file with the control's slip (each target asserted exactly once, and the
+   copy's two paths pinned to this tree), run it whole with no control, and read which sections it turned red.
+   Nothing in the tree changes; the copy lives in a folder of this run's own and is removed after. */
+if (CONTROL && CONTROLS[CONTROL].self) {
+  let text = fs.readFileSync(fileURLToPath(import.meta.url), 'utf8').replaceAll('\r\n', '\n');
+  const pins = [
+    ['import \'./lib/seedRandom.mjs\';', `import ${J(pathToFileURL(path.join(ROOT, 'scripts', 'lib', 'seedRandom.mjs')).href)};`],
+    ['const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), \'..\');', `const ROOT = ${J(ROOT)};`],
+  ];
+  for (const [from, to] of [...pins, ...CONTROLS[CONTROL].self]) {
+    const n = text.split(from).length - 1;
+    if (n !== 1) cannotRun(`this harness holds the line ${CONTROL} rewrites ${n} times, not once (${from.slice(0, 70)})`);
+    const next = text.split(from).join(to);
+    if (next === text) cannotRun(`${CONTROL} changed nothing`);
+    text = next;
+  }
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), `${NAME}-${CONTROL}-`));
+  const copy = path.join(dir, 'judged.mjs');
+  fs.writeFileSync(copy, text);
+  console.log(`NEGATIVE CONTROL ON: ${CONTROL}, a copy of this harness with its judge slipped (${copy}). Sections ${CONTROLS[CONTROL].expect.join(' and ')} must go red and no other.`);
+  const run = spawnSync(process.execPath, [copy], { env: { ...process.env, SIM_NBA_EARNED_DRAFT_CONTROL: '' }, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
+  try { fs.rmSync(dir, { recursive: true, force: true }); } catch { /* best effort */ }
+  const out = String(run.stdout ?? '').trim().split('\n');
+  const said = out.filter(l => /^ {3}section \d+: /.test(l));
+  const red = said.filter(l => !l.endsWith(': green')).map(l => Number(l.match(/section (\d+)/)[1]));
+  const count = said.filter(l => !l.endsWith(': green')).map(l => l.split(': ')[1]);
+  const last = out[out.length - 1] ?? '';
+  console.log(said.join('\n'));
+  console.log(String(run.stderr ?? '').split('\n').filter(l => l.startsWith('  FAIL [')).slice(0, 12).join('\n'));
+  console.log(`   the copy exited ${run.status}: ${last.slice(0, 160)}`);
+  const want = CONTROLS[CONTROL].expect;
+  const exact = run.status === 1 && last.includes(`${NAME}: RED in section`) && red.length === want.length && want.every(n => red.includes(n));
+  console.log(exact
+    ? `${NAME}: CONTROL ${CONTROL} FIRED. Red in section ${red.join(' and ')} (${count.join(' and ')}).`
+    : `${NAME}: CONTROL ${CONTROL} DID NOT FIRE as expected: the copy exited ${run.status}, red in [${red.join(', ')}], expected [${want.join(', ')}].`);
+  process.exit(exact ? 1 : 2);
+}
 
 /* ---- the bundle, in a folder of this run's own so two runs cannot mix ---- */
 function modulesDir() {
@@ -1308,19 +1380,81 @@ const sdOf = a => { if (a.length < 2) return NaN; const m = mean(a); return Math
 const fix = (v, d = 2) => (Number.isFinite(v) ? v.toFixed(d) : 'n/a');
 /* The step (a) margins, the fleet rule's own (S3 and S4 in points of a rate), used only to size the fleet. */
 const MARGIN = { S3: 10, S4: 10 };
-/* THE STOP LINES, in each outcome's own unit, fixed before the new arm was measured: the brief's decision 2 as the
-   lead ruled it on 2026-10-13 (dukb-handoff/2026-10-10/briefs/lead-rulings-1319-1320-1321.md): S4 is the two
-   strongest starts' PLAYOFF seasons, their title share printed and never asserted; S6 is absolute bands. `two` is
-   |new - old| <= margin, `under` is new - old >= -margin, `abs` is the new arm's own mean under the margin. */
+/* THE STOP LINES, in each outcome's own unit. Fixed before the new arm was measured (the brief's decision 2 as the
+   lead ruled it on 2026-10-13, lead-rulings-1319-1320-1321.md), then ruled again on the step (d) table by the lead
+   on 2026-10-21 (dukb-handoff/2026-10-10/briefs/lead-rulings-1321-d.md), which is what stands here:
+   - S1 at 5 keeps its band of 0.5 either side.
+   - S1 at 10 is ACCEPTED up to +1.5 (the cost of a league where every club drafts every year instead of six); the
+     ruling widened the upper side only, so the lower side keeps the old 0.5: new minus old from -0.5 to +1.5.
+   - S3 is PRINTED, never asserted (ruling 1): it measures today's draft's gift to the GM, the artifact the round
+     exists to remove, not a level to protect.
+   - S4 is an ABSOLUTE FLOOR on the new arm's own rate (ruling 2): at least 60 percent of the two strongest starts'
+     seasons 2 to 10 are playoff seasons (contention protected, a dynasty not), the old arm printed beside it.
+   - S6 dead is under 3.0 $M a season (ruling 4). ITS CAUSE, written beside it as the lead asked: first rounders 13
+     to 30 sign the four season rookie deal and CPU clubs cut them; no allowed knob reaches that deal. The real fix
+     is a per slot rookie scale with team options (two guaranteed years and two options, so a late first rounder is
+     declined rather than cut), named for PART B or a PART C, after which this band returns under 1.0.
+   Kinds: `two` is |d| <= margin; `range` is lo <= d <= hi; `floor` is the arm's own mean >= floor; `cap` is the
+   arm's own mean < margin; `print` is computed and printed with no verdict. `res` is the scale whose third a run's
+   error must beat (the resolution rule, correction 8 (b)): the margin for `two`, the narrower side for `range`, the
+   step (a) margin of 10 points for the S4 floor (the scale the fleet was sized on) and the old band of 1.0 for the
+   S6 cap, so neither widened band made its line coarser. */
 const LINES = [
   { id: 'S1 at 5', get: L => L.S1at5, kind: 'two', margin: () => 0.5, d: 2, what: 'mean nbaStrength of the 30 clubs, season 5 tip off' },
-  { id: 'S1 at 10', get: L => L.S1at10, kind: 'two', margin: () => 0.5, d: 2, what: 'mean nbaStrength of the 30 clubs, season 10 tip off' },
+  { id: 'S1 at 10', get: L => L.S1at10, kind: 'range', lo: -0.5, hi: 1.5, margin: () => 1.5, res: () => 0.5, d: 2, what: 'mean nbaStrength of the 30 clubs, season 10 tip off (ruled 2026-10-21: up to +1.5)' },
   { id: 'S2', get: L => L.S2, kind: 'two', margin: old => 0.2 * old, d: 1, what: 'men rated 85 or more, season 10 tip off (20 percent of the old arm)' },
-  { id: 'S3', get: L => L.S3.rate, kind: 'under', margin: () => 10, d: 1, what: "two weakest starts' playoff seasons, seasons 2 to 5, per season" },
-  { id: 'S4', get: L => L.S4.rate, kind: 'under', margin: () => 10, d: 1, what: "two strongest starts' playoff seasons, seasons 2 to 10, per season" },
-  { id: 'S6 dead', get: L => L.S6dead, kind: 'abs', margin: () => 1.0, d: 2, what: 'CPU dead money a season ($M), seasons 2 to 10, under 1.0' },
+  { id: 'S3', get: L => L.S3.rate, kind: 'print', margin: () => 10, d: 1, what: "two weakest starts' playoff seasons, seasons 2 to 5, per season (ruled 2026-10-21: printed)" },
+  { id: 'S4', get: L => L.S4.rate, kind: 'floor', floor: 60, margin: () => 60, res: () => 10, d: 1, what: "two strongest starts' playoff seasons, seasons 2 to 10, per season (ruled 2026-10-21: the arm's own, at least 60)" },
+  { id: 'S6 dead', get: L => L.S6dead, kind: 'cap', margin: () => 3.0, res: () => 1.0, d: 2, what: "CPU dead money a season ($M), seasons 2 to 10 (ruled 2026-10-21: under 3.0; cause: firsts 13 to 30 on the four season deal, cut)" },
   { id: 'S6 payers', get: L => L.S6payers, kind: 'two', margin: () => 0.5, d: 2, what: 'tax payers a season, seasons 2 to 10' },
 ];
+/* The kinds whose value is the arm's own per set mean rather than its difference from the old arm. */
+const OWN = new Set(['floor', 'cap']);
+
+/** THE JUDGE'S ONE COMPARISON: is a pooled difference (or, for a floor or a cap, the arm's own pooled mean) inside its
+    line's band? Every verdict of the two arm table goes through here, and section 11 holds it to known answers.
+    Controls judgetwo, judgerange, judgefloor and judgecap each slip one of its comparisons in a copy of this file,
+    and judgeflip turns the first one inside out, so that this function can be shown to decide (lead's ruling 7). */
+function inBand(line, dbar, margin) {
+  if (line.kind === 'two') return Math.abs(dbar) <= margin;
+  if (line.kind === 'range') return dbar >= line.lo && dbar <= line.hi;
+  if (line.kind === 'floor') return dbar >= line.floor;
+  if (line.kind === 'cap') return dbar < margin;
+  throw new Error(`the judge knows no band of kind ${line.kind}`);
+}
+
+/** One line judged over the runs: old and vs map run -> set -> a set's lines. Pure: it prints and checks nothing. */
+function judgeLine(line, old, vs, runs) {
+  const perRun = runs.map(r => {
+    const sets = [...vs.get(r).keys()].filter(s => old.get(r).has(s)).sort((a, b) => a - b);
+    const o = sets.map(s => line.get(old.get(r).get(s)));
+    const v = sets.map(s => line.get(vs.get(r).get(s)));
+    const d = OWN.has(line.kind) ? v : v.map((x, i) => x - o[i]);
+    return { run: r, k: sets.length, old: mean(o), vs: mean(v), d: mean(d), sdd: sdOf(d), se: sdOf(d) / Math.sqrt(sets.length) };
+  });
+  const oldMean = mean(perRun.map(p => p.old));
+  const margin = line.margin(oldMean);
+  const res = line.res ? line.res(oldMean) : margin;
+  const dbar = mean(perRun.map(p => p.d));
+  const maxSe = Math.max(...perRun.map(p => p.se));
+  const resolved = perRun.length > 0 && perRun.every(p => Number.isFinite(p.se) && p.se < res / 3);
+  const agree = perRun.length < 2 || Math.abs(perRun[0].d - perRun[1].d) <= 2 * maxSe;
+  if (line.kind === 'print') return { perRun, margin, res, dbar, maxSe, verdict: 'PRINTED', miss: NaN, need: 0 };
+  const inside = inBand(line, dbar, margin);
+  const verdict = !inside ? 'OUTSIDE' : !resolved ? 'UNRESOLVED' : !agree ? 'RUNS DISAGREE' : 'PASS';
+  const miss = line.kind === 'two' ? Math.abs(dbar) - margin
+    : line.kind === 'range' ? (dbar > line.hi ? dbar - line.hi : line.lo - dbar)
+    : line.kind === 'floor' ? line.floor - dbar : dbar - margin;
+  let need = 0;
+  const sdd = Math.max(...perRun.map(p => p.sdd));
+  if (verdict === 'UNRESOLVED' && Number.isFinite(sdd)) { need = perRun[0].k; while (need < 24 && sdd / Math.sqrt(need) >= res / 3) need += 1; }
+  return { perRun, margin, res, dbar, maxSe, verdict, miss, need };
+}
+
+const bandText = (line, margin) => (line.kind === 'two' ? `within ${fix(margin, line.d)}`
+  : line.kind === 'range' ? `from ${fix(line.lo, line.d)} to +${fix(line.hi, line.d)}`
+  : line.kind === 'floor' ? `the arm's own at least ${fix(line.floor, line.d)}`
+  : line.kind === 'cap' ? `the arm's own under ${fix(margin, line.d)}` : 'printed, never asserted');
 
 /** One seed set's lines. S3 is playoff seasons over seasons 2 to 5 of the two weakest starts and S4 playoff seasons
     over seasons 2 to 10 of the two strongest, per season: season 1 is played before any draft and is the same in
@@ -1398,9 +1532,10 @@ const fleetMisses = [];
 /** THE TWO ARM TABLE AND ITS STOP LINES (COMBINE only). For every line and every run, the per set differences of
     the arm VS minus the old arm on the same sets are the replicates: the pooled difference is their mean and its
     error their sd over root k (correction 8 (b)). A line PASSES when the mean of the runs' pooled differences is
-    inside its band, every run's error is under a third of the margin, and the two runs' pooled differences are
-    within two errors (the larger run's) of each other. OUTSIDE is a STOP; UNRESOLVED grows the fleet once, to the
-    printed size and at most 24 sets. An `abs` line holds the arm's own per set means the same way. */
+    inside its band (inBand, the judge's one comparison), every run's error is under a third of the line's `res`,
+    and the two runs' pooled differences are within two errors (the larger run's) of each other. OUTSIDE is a STOP;
+    UNRESOLVED grows the fleet once, to the printed size and at most 24 sets. A `floor` or `cap` line holds the
+    arm's own per set means the same way; a `print` line (S3) is printed and never asserted. */
 function twoArmTable(table) {
   const old = table.get('old');
   const vs = table.get(VS);
@@ -1409,29 +1544,12 @@ function twoArmTable(table) {
   const runs = [...vs.keys()].filter(r => old.has(r)).sort((a, b) => a - b);
   const md = ['TABLE BEGIN', `| line | old | ${VS} | ${VS} minus old, run by run (error) | band | sets | verdict |`, '|---|---|---|---|---|---|---|'];
   for (const line of LINES) {
-    const perRun = runs.map(r => {
-      const sets = [...vs.get(r).keys()].filter(s => old.get(r).has(s)).sort((a, b) => a - b);
-      const o = sets.map(s => line.get(old.get(r).get(s)));
-      const v = sets.map(s => line.get(vs.get(r).get(s)));
-      const d = line.kind === 'abs' ? v : v.map((x, i) => x - o[i]);
-      return { run: r, k: sets.length, old: mean(o), vs: mean(v), d: mean(d), sdd: sdOf(d), se: sdOf(d) / Math.sqrt(sets.length) };
-    });
-    const margin = line.margin(mean(perRun.map(p => p.old)));
-    const dbar = mean(perRun.map(p => p.d));
-    const inside = line.kind === 'two' ? Math.abs(dbar) <= margin : line.kind === 'under' ? dbar >= -margin : dbar < margin;
-    const maxSe = Math.max(...perRun.map(p => p.se));
-    const resolved = perRun.length > 0 && perRun.every(p => Number.isFinite(p.se) && p.se < margin / 3);
-    const agree = perRun.length < 2 || Math.abs(perRun[0].d - perRun[1].d) <= 2 * maxSe;
-    const verdict = !inside ? 'OUTSIDE' : !resolved ? 'UNRESOLVED' : !agree ? 'RUNS DISAGREE' : 'PASS';
-    const miss = line.kind === 'two' ? Math.abs(dbar) - margin : line.kind === 'under' ? -margin - dbar : dbar - margin;
-    let need = 0;
-    const sdd = Math.max(...perRun.map(p => p.sdd));
-    if (verdict === 'UNRESOLVED' && Number.isFinite(sdd)) { need = perRun[0].k; while (need < 24 && sdd / Math.sqrt(need) >= margin / 3) need += 1; }
-    const band = line.kind === 'two' ? `within ${fix(margin, line.d)}` : line.kind === 'under' ? `at most ${fix(margin, line.d)} under` : `under ${fix(margin, line.d)}`;
+    const { perRun, margin, maxSe, verdict, miss, need } = judgeLine(line, old, vs, runs);
     const said = `${verdict}${verdict === 'OUTSIDE' ? ` by ${fix(miss, line.d)} (${fix(miss / maxSe, 1)} errors)` : ''}${need ? ` (the rule asks ${need} sets)` : ''}`;
-    md.push(`| ${line.id}: ${line.what} | ${perRun.map(p => fix(p.old, line.d)).join(' / ')} | ${perRun.map(p => fix(p.vs, line.d)).join(' / ')} | ${perRun.map(p => `${p.d >= 0 ? '+' : ''}${fix(p.d, line.d)} (${fix(p.se, line.d)})`).join(' / ')} | ${band} | ${perRun.map(p => p.k).join(' / ')} | ${said} |`);
+    const own = OWN.has(line.kind) ? "(the arm's own) " : '';
+    md.push(`| ${line.id}: ${line.what} | ${perRun.map(p => fix(p.old, line.d)).join(' / ')} | ${perRun.map(p => fix(p.vs, line.d)).join(' / ')} | ${own}${perRun.map(p => `${p.d >= 0 ? '+' : ''}${fix(p.d, line.d)} (${fix(p.se, line.d)})`).join(' / ')} | ${bandText(line, margin)} | ${perRun.map(p => p.k).join(' / ')} | ${said} |`);
     if (verdict === 'OUTSIDE') fleetMisses.push(`${line.id} by ${fix(miss, line.d)}, ${fix(miss / maxSe, 1)} errors`);
-    if (!FLEET_CONTROL) check(verdict === 'PASS', `${line.id} (${line.what}): ${said}`);
+    if (!FLEET_CONTROL && line.kind !== 'print') check(verdict === 'PASS', `${line.id} (${line.what}): ${said}`);
   }
   /* S5: in every set of every run of VS, his first selection comes later and is worse at every band of finish. */
   const s5bad = [];
@@ -1452,12 +1570,12 @@ function twoArmTable(table) {
   const pooled = (label, f) => { const m = table.get(label); if (!m) return NaN; return mean([...m.values()].flatMap(x => [...x.values()].map(f))); };
   const labels = ['old', VS, ...[...table.keys()].filter(l => l !== 'old' && l !== VS)];
   const say = (what, f, d = 1) => console.log(`   ${what}: ${labels.map(l => `${l} ${fix(pooled(l, f), d)}`).join(', ')}`);
-  console.log('   EVERY ARM ON THE LINES, minus the old arm on the same sets and runs (S6 dead is the arm\'s own), pooled:');
+  console.log('   EVERY ARM ON THE LINES, minus the old arm on the same sets and runs (S4 and S6 dead are the arm\'s own), pooled:');
   for (const l of labels.filter(x => x !== 'old')) {
     const m = table.get(l);
     const cells = LINES.map(line => {
       const d = [];
-      for (const [r, sets] of m) for (const [s, L] of sets) if (old.get(r)?.has(s)) d.push(line.kind === 'abs' ? line.get(L) : line.get(L) - line.get(old.get(r).get(s)));
+      for (const [r, sets] of m) for (const [s, L] of sets) if (old.get(r)?.has(s)) d.push(OWN.has(line.kind) ? line.get(L) : line.get(L) - line.get(old.get(r).get(s)));
       return `${line.id} ${fix(mean(d), line.d)}`;
     });
     const all = [...m.values()].flatMap(x => [...x.values()]);
@@ -1482,6 +1600,48 @@ function twoArmTable(table) {
   say('men signed on a draft night', L => L.signed);
   say('forced swaps of firsts a set (arb only)', L => L.swaps, 0);
   if (FLEET_CONTROL) console.log(`   CONTROL ${FLEET_CONTROL} on the fleet: ${fleetMisses.length ? `outside ${fleetMisses.join('; ')}` : 'inside every line'}`);
+}
+
+/* ================================================================== */
+/* 11. THE JUDGE ON KNOWN ANSWERS, in every run (the quick lane too). A synthetic table of two runs of twelve sets
+   whose answer is known: for every asserted line, a value inside and a value outside its band on BOTH sides of
+   every edge (a two sided band at half and one and a half margins, the range a tenth of its width inside and outside
+   each end, the floor and the cap five points or half a cap either side), and S3 never judged at all. The table
+   itself is judged by the same judgeLine and inBand the fleet's table goes through, so a judge that cannot say
+   OUTSIDE, or says it on the wrong side, goes red here whatever the fleet holds. The controls judge* prove it. */
+open(11);
+{
+  const base = { S1at5: 83, S1at10: 82, S2: 100, S3: { n: 80, rate: 80 }, S4: { n: 180, rate: 100 }, S6dead: 0.1, S6payers: 2.3 };
+  const field = { 'S1 at 5': 'S1at5', 'S1 at 10': 'S1at10', S2: 'S2', S3: 'S3', S4: 'S4', 'S6 dead': 'S6dead', 'S6 payers': 'S6payers' };
+  const runsOf = setL => new Map([1, 2].map(r => [r, new Map(Array.from({ length: 12 }, (_, i) => [i + 1, setL(i)]))]));
+  const old = runsOf(() => base);
+  let known = 0;
+  for (const line of LINES) {
+    const key = field[line.id];
+    check(!!key && line.get(base) !== undefined, `section 11 has no synthetic field for line ${line.id}`);
+    if (!key) continue;
+    const margin = line.margin(line.get(base));
+    const res = line.res ? line.res(line.get(base)) : margin;
+    const own = OWN.has(line.kind);
+    /* [the value the line reads in the new arm, the verdict it must get] */
+    const cases = line.kind === 'two' ? [[0.5, 'PASS'], [-0.5, 'PASS'], [1.5, 'OUTSIDE'], [-1.5, 'OUTSIDE']].map(([f, v]) => [line.get(base) + f * margin, v])
+      : line.kind === 'range' ? [[line.hi - 0.1 * (line.hi - line.lo), 'PASS'], [line.lo + 0.1 * (line.hi - line.lo), 'PASS'], [line.hi + 0.1 * (line.hi - line.lo), 'OUTSIDE'], [line.lo - 0.1 * (line.hi - line.lo), 'OUTSIDE']].map(([dv, v]) => [line.get(base) + dv, v])
+      : line.kind === 'floor' ? [[line.floor + 5, 'PASS'], [line.floor - 5, 'OUTSIDE']]
+      : line.kind === 'cap' ? [[0.5 * margin, 'PASS'], [1.5 * margin, 'OUTSIDE']]
+      : [[line.get(base) - 50, 'PRINTED'], [line.get(base), 'PRINTED']];
+    for (const [value, want] of cases) {
+      /* a small jitter set to set (a hundredth of the resolution scale, mean zero) so the errors are real */
+      const vs = runsOf(i => {
+        const v = value + (i % 2 ? 1 : -1) * res / 100;
+        return { ...base, [key]: typeof base[key] === 'object' ? { ...base[key], rate: v } : v };
+      });
+      const got = judgeLine(line, old, vs, [1, 2]).verdict;
+      known += 1;
+      check(got === want, `${line.id} (${line.kind}): the new arm at ${fix(value, line.d)}${own ? '' : ` against ${fix(line.get(base), line.d)}`} was judged ${got}, the known answer is ${want}`);
+    }
+  }
+  check(known >= 20, `section 11 judged only ${known} known answers`);
+  console.log(`   ${known} known answers judged over ${LINES.length} lines (${LINES.map(l => `${l.id} ${l.kind}`).join(', ')})`);
 }
 
 if (FLEET === 'full' || COMBINE) {
