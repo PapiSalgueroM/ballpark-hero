@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+weight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+walk: node .rc/x/walkMorale.mjs
+vitest: node_modules/.bin/vitest run src/lib/soccerClubSquad.test.ts src/test/soccerPuskasYear1523.test.ts src/test/soccerCareerDevelopment.test.ts src/test/soccerCareerStoryRole.test.ts src/test/soccerEventDeckIntegrity.test.ts --testTimeout=300000 --hookTimeout=120000
