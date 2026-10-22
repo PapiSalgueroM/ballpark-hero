@@ -1,0 +1,35 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/gmDeskHost.test.ts [2m([22m[2m42 tests[22m[2m)[22m[33m 1187[2mms[22m[39m
+   [33m[2m✓[22m[39m the record of a save older than the block[2m > [22mfills nothing in: titles out are titles in, the rest is a count, and it passes the career validator [33m 907[2mms[22m[39m
+ [32m✓[39m src/lib/nbaEarnedDraft.test.ts [2m([22m[2m22 tests[22m[2m)[22m[33m 1607[2mms[22m[39m
+   [33m[2m✓[22m[39m the "?" (correction 9)[2m > [22mprints no chance the table cannot compute [33m 327[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1540: the "?" states the league wide knobs, and the chances come before the draw[2m > [22mthe chances are the shared lines on the NBA table and labels, and land in the "?" before the worked example [33m 396[2mms[22m[39m
+ [32m✓[39m src/lib/gmEarnedDraft.test.ts [2m([22m[2m20 tests[22m[2m)[22m[33m 2477[2mms[22m[39m
+   [33m[2m✓[22m[39m lotteryChancesBefore: the lines before the draw cannot give the draw away (correction 1)[2m > [22mhis club seeded 1st, 3rd and 14th, a playoff club, a traded away first, a bought first and two bought firsts [33m 1371[2mms[22m[39m
+   [33m[2m✓[22m[39m lotteryChancesBefore: the lines before the draw cannot give the draw away (correction 1)[2m > [22mcontrol: a variant that adds where his pick landed, or lists held firsts in slot order, tells the keys apart [33m 341[2mms[22m[39m
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstdout[2m | src/components/nba-front-office/NbaDraftNightRivals.test.tsx[2m > [22m[2mNBA draft night, GM desk off: the card shows the picks the engine made[2m > [22m[2mthe rival rows are the picks the engine made, in order, each on the club its row names
+[22m[39mNBA draft night, desk off: the engine took 5 for rival clubs, the card drew 5 rival rows
+
+[90mstdout[2m | src/components/nba-front-office/NbaDraftNightRivals.test.tsx[2m > [22m[2mNBA draft night, GM desk off: the card shows the picks the engine made[2m > [22m[2mevery rival row carries the grade the draft screen printed for that prospect before the press
+[22m[39mNBA draft night, desk off: 5 of 5 rival rows were on the draft screen before the press, each grade equal
+
+[90mstdout[2m | src/components/nba-front-office/NbaDraftNightRivals.test.tsx[2m > [22m[2mNBA draft night, GM desk on: the card shows the picks the engine made[2m > [22m[2mthe rival rows are the picks the engine made, in order, each on the club its row names
+[22m[39mNBA draft night, desk on: the engine took 5 for rival clubs, the card drew 5 rival rows
+
+[90mstdout[2m | src/components/nba-front-office/NbaDraftNightRivals.test.tsx[2m > [22m[2mNBA draft night, GM desk on: the card shows the picks the engine made[2m > [22m[2mevery rival row carries the grade the draft screen printed for that prospect before the press
+[22m[39mNBA draft night, desk on: 5 of 5 rival rows were on the draft screen before the press, each grade equal
+
+ [32m✓[39m src/components/nba-front-office/NbaDraftNightRivals.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 581[2mms[22m[39m
+ [32m✓[39m src/components/mlb-front-office/MlbGmDesk.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 1029[2mms[22m[39m
+   [33m[2m✓[22m[39m 1020 MLB GM desk on the board[2m > [22ma desk save plays October with the staff edge and takes its winter through the re-sign desk [33m 403[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m5 passed[39m[22m[90m (5)[39m
+[2m      Tests [22m [1m[32m96 passed[39m[22m[90m (96)[39m
+[2m   Start at [22m 21:19:47
+[2m   Duration [22m 6.51s[2m (transform 2.02s, setup 409ms, collect 4.32s, tests 6.88s, environment 2.49s, prepare 907ms)[22m
+
