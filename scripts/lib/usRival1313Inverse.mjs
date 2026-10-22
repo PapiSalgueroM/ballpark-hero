@@ -98,12 +98,33 @@ function unlift1534(rel, text) {
   return lines.join('\n');
 }
 
+/* Round 1538 (money a line says was banked reaches the Bank; the Skill card stops at the ceiling) edits the same two
+   engines: one import line, the summer brand answer through the shared fee helper, and the summer Skill answer
+   through the shared Skill helper with its new button words. Decided again the same way: each hunk is put back
+   first, required exactly once, before the 1534 hunks and the byte check against 1313's closed head. */
+const BRAND_1538 = {
+  'src/lib/mlbMyCareer.ts': ['const fee = bankUsCareerFee(cc, 3, mlbEraById(cc.eraId).moneyScale); return `National ads all winter. ${fee}M banked.`;', "cc.earnings += 3; return 'National ads all winter. 3M banked.';"],
+  'src/lib/nhlMyCareer.ts': ['const fee = bankUsCareerFee(cc, 2, nhlEraById(cc.eraId).moneyScale); return `Golf videos and a doc crew. ${fee}M banked.`;', "cc.earnings += 2; return 'Golf videos and a doc crew. 2M banked.';"],
+};
+const LIFT_1538 = Object.fromEntries(Object.entries(BRAND_1538).map(([rel, brand]) => [rel, [
+  ["import { bankUsCareerFee, usCareerSkillSummer } from './usCareerAnnualBenefits';\n", ''],
+  brand,
+]]));
+function unlift1538(rel, text) {
+  let out = text;
+  for (const [from, to] of LIFT_1538[rel] ?? []) {
+    assert.equal(out.split(from).length, 2, 'Round 1538: ' + rel + ' must hold its hunk exactly once: ' + from.slice(0, 60));
+    out = out.replace(from, () => to);
+  }
+  return out;
+}
+
 const show = (commit, rel) => execFileSync('git', ['show', commit + ':' + rel], { maxBuffer: 64 * 1024 * 1024 }).toString('utf8').replaceAll('\r\n', '\n');
 
 /* contents: the file as read from disk (any line endings). rows: receives rel once per file inverted. */
 export function inverseUsRival1313(rel, contents, rows) {
   if (!US_RIVAL_1313_FILES.includes(rel)) return contents;
-  assert.equal(unlift1523(rel, unlift1534(rel, contents.replaceAll('\r\n', '\n'))), show(US_RIVAL_1313_HEAD, rel), 'Release BB: ' + rel + ' is no longer as Round 1313 closed it (' + US_RIVAL_1313_HEAD + '); decide its inverse again in scripts/lib/usRival1313Inverse.mjs');
+  assert.equal(unlift1523(rel, unlift1534(rel, unlift1538(rel, contents.replaceAll('\r\n', '\n')))), show(US_RIVAL_1313_HEAD, rel), 'Release BB: ' + rel + ' is no longer as Round 1313 closed it (' + US_RIVAL_1313_HEAD + '); decide its inverse again in scripts/lib/usRival1313Inverse.mjs');
   assert.notEqual(rel, 'src/lib/careerFactBeats.ts', 'Release BB: careerFactBeats.ts is new in Round 1313 and only its own files import it; something else loaded it, so the inverse of 1313 is no longer whole');
   rows.push(rel);
   return show(US_RIVAL_1313_BASE, rel);

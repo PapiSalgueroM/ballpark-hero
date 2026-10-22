@@ -150,8 +150,12 @@ describe('ordinary career decision outcomes', () => {
        ruling: the fee only ever reached career earnings while the card called it an endorsement), so in football
        the outcome carries a Cash row and that row is the truth: the bank moved by the fee. The other three
        sports' cards still pay career earnings only, and there the fee must still not be called cash. This case
-       went red on Round 1104's first cut and nobody ran it; the fix pass of 2026-10-08 found it. */
-    for (const [slug, amount, banked] of [['nba', 5, false], ['nfl', 3, true], ['mlb', 3, false], ['nhl', 2, false]] as const) {
+       went red on Round 1104's first cut and nobody ran it; the fix pass of 2026-10-08 found it.
+       Round 1538 re-pinned the other three, on purpose. Their cards said "5M endorsement banked", "3M banked" and
+       "2M banked" while the money only reached career earnings; now all four brand answers bank in full through one
+       shared helper (the lead's ruling R2 of the 1534 brief), so every sport carries the Cash row, and the balance is
+       kept to four places rather than rounded to a tenth again (critic 6 of the same brief). */
+    for (const [slug, amount, banked] of [['nba', 5, true], ['nfl', 3, true], ['mlb', 3, true], ['nhl', 2, true]] as const) {
       mounted = mountEvent(slug); expected = mounted.expected(2);
       const cash = mounted.before.c.netWorth;
       fireEvent.click(option(2));
@@ -159,7 +163,7 @@ describe('ordinary career decision outcomes', () => {
       const cashRow = rows().find(row => row.key === 'netWorth');
       if (banked) {
         const after = read(slug).c.netWorth;
-        expect(after).toBe(Math.round(((cash ?? 0) + amount) * 10) / 10);
+        expect(after).toBe(Math.round(((cash ?? 0) + amount) * 10000) / 10000);
         expect(cashRow).toEqual({ key: 'netWorth', label: 'Cash', before: `$${cash}M`, after: `$${after}M`, delta: `+$${amount}M` });
       } else {
         expect(cashRow).toBeUndefined();

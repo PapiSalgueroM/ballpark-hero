@@ -16,6 +16,8 @@
  *   4  the family office: 2 percent of Cash above zero, after the steady returns; nothing at zero or below; and the
  *      settle lands before the money app's tick, whose thin buffer rule reads Cash (a holder keeps 3 morale)
  *   5  heat: the lawyer cools a clean season twice as fast; with dirty money held nothing changes
+ *   6  paid lines (Round 1538): the four brand answers and the ten clean corruption answers bank what they say, in
+ *      both eras, from a Cash balance that holds hundredths, and the outcome card shows that Cash row
  *   8  digest: careers that hold nothing that pays replay byte identical to the base arm, draw for draw
  *   9  old saves: a base arm save that bought everything earns one season per season on the head, no back pay
  *
@@ -33,6 +35,7 @@
  *   coolall  everybody cools twice as fast                 -> section 8 (it reaches the clean heat path)
  *   backpay  the first settle of a save without a carry pays twice -> section 9
  *   settleafter  the settle moved below the money app's tick in all four engines -> section 4's thin buffer case only
+ *   nobank   the fee helper moves earnings only (Round 1538)  -> section 6, every case in all four sports
  *
  * Section 3's band, with its measured headroom (RULES line 7; review of 2026-10-22, read lens finding 4). The share
  * is checked inside the printed chance plus or minus 4 binomial sd. The careers are named and seeded in a fixed
@@ -62,9 +65,9 @@ import { build } from 'esbuild';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SHOP_BASE = process.env.SHOP_BASE || '413685149bed816a5c384242aa8c40f412b1d523';
 const CONTROL = process.env.SHOP_CONTROL || '';
-const CONTROL_SECTIONS = { rate: ['1', '2'], words: ['1'], camp: ['1'], nocall: ['2', '3', '4', '9'], chance: ['3'], twice: ['3'], office: ['4'], lawyer: ['5'], leak: ['8'], coolall: ['8'], backpay: ['9'], settleafter: ['4'] };
+const CONTROL_SECTIONS = { rate: ['1', '2'], words: ['1'], camp: ['1'], nocall: ['2', '3', '4', '9'], chance: ['3'], twice: ['3'], office: ['4'], lawyer: ['5'], leak: ['8'], coolall: ['8'], backpay: ['9'], settleafter: ['4'], nobank: ['6'] };
 if (CONTROL && !CONTROL_SECTIONS[CONTROL]) { console.log(`simUsShopPromises: could not run, unknown SHOP_CONTROL ${CONTROL}`); process.exit(2); }
-const SECTIONS = (process.env.SHOP_SECTIONS || (CONTROL ? CONTROL_SECTIONS[CONTROL].join(',') : '0,1,2,3,4,5,8,9')).split(',').map(s => s.trim());
+const SECTIONS = (process.env.SHOP_SECTIONS || (CONTROL ? CONTROL_SECTIONS[CONTROL].join(',') : '0,1,2,3,4,5,6,8,9')).split(',').map(s => s.trim());
 const runs = s => SECTIONS.includes(s);
 const STAKE_CAREERS = Number(process.env.SHOP_STAKE_CAREERS || 2000);
 if (!(STAKE_CAREERS >= 2000)) { console.log(`simUsShopPromises: could not run, SHOP_STAKE_CAREERS ${process.env.SHOP_STAKE_CAREERS} is under 2000 (section 3's band only widens with fewer careers)`); process.exit(2); }
@@ -102,7 +105,18 @@ const MODULE = 'src/lib/usCareerAnnualBenefits.ts';
 const SETTLE_LINES = S => '  /* Round 1534: the shop pays what its cards print (src/lib/usCareerAnnualBenefits.ts), straight after the pay\n'
   + '     line so Cash is in tenths, and before the money app. Stakes draw on their own keyed stream, never this rng. */\n'
   + `  for (const line of settleUsCareerShop(c, ${S}_SPEND_ITEMS)) notes.push(line);\n`;
+/* Round 1538's engine hunks come out first (the base arm is the engines as Round 1534 started from them): its import
+   line and the summer brand answer through the shared fee helper. */
+const BRAND_1538 = {
+  nba: ['const fee = bankUsCareerFee(cc, 5, nbaEraById(cc.eraId).moneyScale); return `Signature shoe talks. ${fee}M endorsement banked.`;', "cc.earnings += 5; return 'Signature shoe talks. 5M endorsement banked.';"],
+  nfl: ["/* Round 1104: the fee reaches the bank, in the era's money. Round 1538: through the helper all four sports share, which never rounds the balance again. */ cc.fanbase = Math.min(100, cc.fanbase + 12); const fee = bankUsCareerFee(cc, 3, nflEraById(cc.eraId).moneyScale);",
+    "/* Round 1104: the fee reaches the bank (it only ever reached career earnings) and is paid in the era's money. */ const fee = Math.round(3 * nflEraById(cc.eraId).moneyScale * 10) / 10; const bank = cc.netWorth ?? Math.round(cc.earnings * TAKE_HOME * 10) / 10; cc.fanbase = Math.min(100, cc.fanbase + 12); cc.earnings += fee; cc.netWorth = Math.round((bank + fee) * 10) / 10;"],
+  mlb: ['const fee = bankUsCareerFee(cc, 3, mlbEraById(cc.eraId).moneyScale); return `National ads all winter. ${fee}M banked.`;', "cc.earnings += 3; return 'National ads all winter. 3M banked.';"],
+  nhl: ['const fee = bankUsCareerFee(cc, 2, nhlEraById(cc.eraId).moneyScale); return `Golf videos and a doc crew. ${fee}M banked.`;', "cc.earnings += 2; return 'Golf videos and a doc crew. 2M banked.';"],
+};
 const unshopHunks = sport => [
+  ["import { bankUsCareerFee, usCareerSkillSummer } from './usCareerAnnualBenefits';\n", ''],
+  BRAND_1538[sport.id],
   ["import { settleUsCareerShop, usCareerSeasonCool } from './usCareerAnnualBenefits';\n", ''],
   ['const drift = dm > 0 ? Math.min(8, 2 + dm * 0.5) : -usCareerSeasonCool(c.purchased, 9);', 'const drift = dm > 0 ? Math.min(8, 2 + dm * 0.5) : -9;'],
   [SETTLE_LINES(sport.S), ''],
@@ -156,6 +170,7 @@ function headServe() {
   if (CONTROL === 'leak') mod = patchOnce(mod, '  if (!office && steady === 0 && settled.size === 0) return lines;\n', '  if (!office && steady === 0 && settled.size === 0) { c.netWorth = r1Leak((c.netWorth ?? 0) + 0.1); return lines; }\n', MODULE)
     + '\nfunction r1Leak(v: number): number { return Math.round(v * 10) / 10; }\n';
   if (CONTROL === 'backpay') mod = patchOnce(mod, '    const exact = Math.round((carry + earned) * 10000);\n', '    const exact = Math.round((carry + earned * (prior === undefined ? 2 : 1)) * 10000);\n', MODULE);
+  if (CONTROL === 'nobank') mod = patchOnce(mod, '  c.netWorth = Math.round((prior + fee) * 10000) / 10000;\n', '', MODULE);
   if (mod !== read(MODULE)) serve[MODULE] = mod;
   if (CONTROL === 'words') serve['src/lib/nbaMyCareer.ts'] = patchOnce(read('src/lib/nbaMyCareer.ts'), "minFanbase: 70, effect: 'Fanbase +12' }", "minFanbase: 70, effect: 'Fanbase +12, real royalties' }", 'nbaMyCareer.ts');
   if (CONTROL === 'camp') {
@@ -178,6 +193,11 @@ fs.writeFileSync(ENTRY, [
   `export * as shop from '${path.join(ROOT, MODULE).split(path.sep).join('/')}';`,
   `export { keyedRng } from '${path.join(ROOT, 'src/lib/keyedRng.ts').split(path.sep).join('/')}';`,
   `export { summerCareerKey } from '${path.join(ROOT, 'src/lib/usCareerSummer.ts').split(path.sep).join('/')}';`,
+  /* Round 1538: the corruption decks and the outcome card (section 6), the bindings and the summer deal (section 7). */
+  ...US.map(s => `export * as ${s.id}Corr from '${path.join(ROOT, `src/lib/${s.id}CareerCorruption.ts`).split(path.sep).join('/')}';`),
+  ...US.map(s => `export { ${s.S}_CAREER_SPORT as ${s.id}Sport } from '${path.join(ROOT, `src/lib/${s.id}CareerSport.ts`).split(path.sep).join('/')}';`),
+  `export { buildCareerDecisionOutcome } from '${path.join(ROOT, 'src/lib/usCareerDecisionOutcome.ts').split(path.sep).join('/')}';`,
+  `export { startSummer, answerSummerCard } from '${path.join(ROOT, 'src/lib/usCareerSummer.ts').split(path.sep).join('/')}';`,
 ].join('\n'));
 async function bundle(name, serve) {
   const map = new Map(Object.entries(serve).map(([rel, text]) => [norm(path.join(ROOT, rel)), text]));
@@ -464,6 +484,68 @@ if (runs('5')) {
   }
 }
 
+/* ─── section 6: a line that says money was paid puts it in the Bank (Round 1538) ───
+   The four summer brand answers pay their amount in the era's money and the ten clean corruption answers the amount
+   their button prints, flat (brief 1534 R2, critic 1). Each is played from a fixed state whose Cash holds hundredths
+   (critic 6), in 2026 and in the throwback era: earnings and Cash both move by exactly the landed tenth, the balance
+   is never rounded again, the line prints what landed, and the outcome card shows a Cash row of that delta. Every
+   amount is a literal (the card's own words), never read from the helper under test. */
+const BRAND_ANSWER = { nba: ['Build the brand', 5], nfl: ['Brand work', 3], mlb: ['The commercial circuit', 3], nhl: ['The content summer', 2] };
+const CLEAN_ANSWERS = {
+  nba: [['ncorr_sneaks', 'Tell your brand immediately', 2], ['ncorr_memorabilia', 'Sign all 5,000 yourself', 0.9], ['ncorr_sportsbook', 'Sign the cleaned up version, 2.5M', 2.5], ['ncorr_exhibition', 'Play the tour straight, 900k', 0.9]],
+  nfl: [['corr_sportsbook_ad', 'Sign the clean version, 2M', 2], ['corr_memorabilia', 'Finish all 4,000 yourself', 1]],
+  mlb: [['mcorr_sportsbook', 'Sign the clean version, 1.8M', 1.8], ['mcorr_memorabilia', 'Only authenticate the real ones', 0.4]],
+  nhl: [['hcorr_sportsbook', 'Sign the clean version, 1.5M', 1.5], ['hcorr_memorabilia', 'Only authenticate the real ones', 0.3]],
+};
+const DECK_OF = { nba: 'nbaEventDeck', nfl: 'nflEventDeck', mlb: 'mlbEventDeck', nhl: 'nhlEventDeck' };
+const CORR_OF = { nba: 'getNbaCorruptionEvents', nfl: 'getNflCorruptionEvents', mlb: 'getMlbCorruptionEvents', nhl: 'getNhlCorruptionEvents' };
+const CASH_BEFORE = 10.37, EARNED_BEFORE = 20;
+/* Three seasons in, then a fixed state every gate of the ten cards opens on (rating 85, fanbase 80, no flags). */
+function paidState(X, sport, eraIndex) {
+  const run = career(X, sport, 'Fictional paid line', 1538, eraIndex);
+  pinned(1538, () => { for (let i = 0; i < 3; i += 1) playSeason(X, sport, run); });
+  Object.assign(run.c, { age: 26, ovr: 85, fanbase: 80, health: 80, netWorth: CASH_BEFORE, earnings: EARNED_BEFORE, lifeFlags: {}, heat: 0, dirtyMoney: 0 });
+  delete run.c.summer;
+  return run.c;
+}
+function checkPaid(who, c, card, label, landed) {
+  const option = card?.options.find(o => o.label === label);
+  if (!option) { fail('6', who, `the answer '${label}' is not on the card ${card?.id ?? '(not dealt)'}`); return; }
+  const before = clone(c), after = clone(c);
+  const line = option.apply(after, () => 0.5);
+  if (!near(after.earnings, EARNED_BEFORE + landed)) fail('6', who, `earnings moved ${after.earnings - EARNED_BEFORE}, the line pays ${landed}`);
+  if (after.netWorth !== Math.round((CASH_BEFORE + landed) * 10000) / 10000) fail('6', who, `Cash went ${CASH_BEFORE} to ${after.netWorth}, not by the ${landed}M that landed`);
+  if (!String(line).includes(`${landed}M`)) fail('6', who, `the line "${line}" does not print the ${landed}M that landed`);
+  const rows = H.buildCareerDecisionOutcome({ title: card.title, choice: label, before, after, teamLabel: t => t }).changes;
+  const cashRow = rows.find(row => row.key === 'netWorth');
+  if (!cashRow || cashRow.delta !== `+$${landed}M`) fail('6', who, `the outcome card's Cash row is ${JSON.stringify(cashRow ?? null)}, not +$${landed}M`);
+  return line;
+}
+let paidCases = 0;
+if (runs('6')) {
+  console.log('6) paid lines: the four brand answers and the ten clean corruption answers bank what they say, both eras');
+  for (const sport of US) {
+    const lib = H[sport.id];
+    let cases = 0;
+    for (const eraIndex of [0, 1]) {
+      const era = lib[sport.eras][eraIndex];
+      const c = paidState(H, sport, eraIndex);
+      const [label, amount] = BRAND_ANSWER[sport.id];
+      const fee = Math.round(amount * era.moneyScale * 10) / 10;
+      const training = lib[DECK_OF[sport.id]](c, mulberry(6)).find(e => e.id === 'training');
+      const line = checkPaid(`${sport.id} ${era.id} ${label}`, c, training, label, fee);
+      cases += 1; paidCases += 1;
+      if (sport.id === 'nfl' && line !== undefined && line !== `Fanbase +12 and a ${fee}M endorsement, banked.`) fail('6', `nfl ${era.id} Brand work`, `the line Round 1104 pins changed: "${line}"`);
+      const deck = H[`${sport.id}Corr`][CORR_OF[sport.id]](c, () => 0.01);
+      for (const [id, answer, flat] of CLEAN_ANSWERS[sport.id]) {
+        checkPaid(`${sport.id} ${era.id} ${id}`, c, deck.find(e => e.id === id), answer, flat);
+        cases += 1; paidCases += 1;
+      }
+    }
+    console.log(`   ${sport.id}: ${cases} paid answers played (2026 and ${lib[sport.eras][1].id}), each banks what it says`);
+  }
+}
+
 /* ─── section 8: careers that hold nothing that pays replay byte identical to the base arm ───
    A policy both arms share: each offseason the engine's own card is answered with its first option that is not one
    of the answers Round 1538 changes (listed below, each asserted present in its source), and one affordable item is
@@ -596,6 +678,7 @@ if (CONTROL) {
   if (CONTROL === 'camp') fired = fired && [...red.get('1')].every(k => k.startsWith('nba camp'));
   if (CONTROL === 'nocall') for (const s of ['2', '4', '9']) fired = fired && US.every(sp => [...red.get(s) ?? []].some(k => k.startsWith(`${sp.id} `)));
   if (CONTROL === 'chance') fired = fired && US.every(sp => red.get('3')?.has(`${sp.id} ${byName(itemsOf(H, sp), 'Crypto Punt').id} band`));
+  if (CONTROL === 'nobank') fired = fired && paidCases > 0 && red.get('6')?.size === paidCases;
   if (CONTROL === 'leak') fired = fired && US.every(sp => [...red.get('8') ?? []].some(k => k.startsWith(`${sp.id} `)));
   if (CONTROL === 'settleafter') fired = fired && US.every(sp => red.get('4')?.has(`${sp.id} before the tick`)) && [...red.get('4') ?? []].every(k => k.endsWith(' before the tick'));
   console.log(fired ? `simUsShopPromises: CONTROL ${CONTROL} FIRED (red sections ${redSections.join(', ')})` : `simUsShopPromises: CONTROL ${CONTROL} DID NOT FIRE (red sections ${redSections.join(', ') || 'none'})`);

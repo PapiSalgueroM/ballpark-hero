@@ -47,6 +47,7 @@ import { countOf, mlbCareerStatBullet, mlbMajorAward, mlbStatLine, mlbLineAsPrin
 import { raiseWithinPotential, ratingRaiseNote } from './careerHeadroom';
 import { applyUsCareerAnnualBenefits } from './usCareerAnnualBenefits';
 import { settleUsCareerShop, usCareerSeasonCool } from './usCareerAnnualBenefits';
+import { bankUsCareerFee, usCareerSkillSummer } from './usCareerAnnualBenefits';
 import { careerRecoveryRisk } from './usCareerRecovery';
 import { hallCalibrationOf, legacyRead, type HallCalibration, type LegacyRead, type LegacyWeights } from './careerHallOfFame';
 import { moraleForm } from './careerForm';
@@ -1009,7 +1010,7 @@ function buildMlbDeck(c: MlbCareerState, rng: () => number, stopAtBig: boolean):
     options: [
       { label: c.pos === 'SP' ? 'New pitch lab' : 'Swing rebuild', effect: 'Push the ceiling', apply: (cc, r) => { if (cc.age >= 32) { cc.health = Math.min(100, cc.health + 4); return 'Veteran maintenance. Health +4.'; } const up = 1 + Math.floor(r() * 2); cc.ovr = Math.min(cc.pot + 1, cc.ovr + up); return `Rating +${up}.`; } },
       { label: 'Arm care and mobility', effect: 'Durability', apply: (cc) => { cc.health = Math.min(100, cc.health + 10); return 'Health +10. Spring training in the best shape of your life.'; } },
-      { label: 'The commercial circuit', effect: 'Fame and money', apply: (cc) => { cc.fanbase = Math.min(100, cc.fanbase + 12); cc.earnings += 3; return 'National ads all winter. 3M banked.'; } },
+      { label: 'The commercial circuit', effect: 'Fame and money', apply: (cc) => { cc.fanbase = Math.min(100, cc.fanbase + 12); const fee = bankUsCareerFee(cc, 3, mlbEraById(cc.eraId).moneyScale); return `National ads all winter. ${fee}M banked.`; } },
     ],
   });
   if (c.pos === 'SP' && c.health < 70) {
