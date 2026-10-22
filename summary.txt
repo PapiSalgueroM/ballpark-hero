@@ -1,0 +1,4 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+oldsaves exit=0 14s | oldsaves: 148 saves, 0 identity failures
+walk exit=0 68s | review walk: green
+ticketpolicy-all exit=0 101s | Ticket policy: 21/21 normal outcomes; 24/24 effective copied faults, each with independent purchase baseline. Raw reports, logs, copied sources and hashes retained at /ho
