@@ -1,0 +1,12 @@
+#!serve
+#!playwright
+#!serial
+simWritesAreSent: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simWritesAreSent.mjs
+simResultMoment: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simResultMoment.mjs
+base-build: git worktree add /tmp/b 77c00798 && ln -s "$PWD/node_modules" /tmp/b/node_modules && cd /tmp/b && npm run build > "$RC_OUT/b-build.log" 2>&1 && echo built
+base-playTycoonSaleReview1083: cd /tmp/b && NODE_OPTIONS="--require=/tmp/b/scripts/lib/offlineTransport.cjs" PORT=4191 ONLY=playTycoonSaleReview1083 node scripts/runAllSims.mjs --browser
+base-simTycoonGoalFlight: cd /tmp/b && NODE_OPTIONS="--require=/tmp/b/scripts/lib/offlineTransport.cjs" PORT=4191 ONLY=simTycoonGoalFlight node scripts/runAllSims.mjs --browser
+base-simSetPiecePresentation: cd /tmp/b && NODE_OPTIONS="--require=/tmp/b/scripts/lib/offlineTransport.cjs" PORT=4191 ONLY=simSetPiecePresentation node scripts/runAllSims.mjs --browser
+base-simWritesAreSent: cd /tmp/b && (node scripts/lib/hostLikeServer.mjs /tmp/b/dist 4192 > /dev/null 2>&1 &) && sleep 2 && BASE=http://localhost:4192 SWEEP_BASE=http://localhost:4192 NODE_OPTIONS="--require=/tmp/b/scripts/lib/offlineTransport.cjs" node scripts/simWritesAreSent.mjs
+base-simResultMoment: cd /tmp/b && BASE=http://localhost:4192 SWEEP_BASE=http://localhost:4192 NODE_OPTIONS="--require=/tmp/b/scripts/lib/offlineTransport.cjs" node scripts/simResultMoment.mjs
+base-simPrerender: cd /tmp/b && NODE_OPTIONS="--require=/tmp/b/scripts/lib/offlineTransport.cjs" node scripts/simPrerender.mjs
