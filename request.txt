@@ -1,0 +1,4 @@
+# Release BO triage: simCmLedgerBound alone, twice (section 1 is a time check)
+#!serial
+simCmLedgerBound-1: node scripts/simCmLedgerBound.mjs
+simCmLedgerBound-2: node scripts/simCmLedgerBound.mjs
