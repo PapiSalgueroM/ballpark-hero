@@ -1,0 +1,8 @@
+c-flat exit=1 183s | simCmTactics: control flat FIRED (1 failures: read 1; must turn fleet red)
+c-dominant exit=1 183s | simCmTactics: control dominant FIRED (2 failures: dominance 1, read 1; must turn fleet red)
+c-leak exit=1 17s | simCmTactics: control leak FIRED (6 failures: balanced 6; must turn balanced red)
+c-keyless exit=1 1s | simCmTactics: control keyless FIRED (5 failures: styles 5; must turn styles red)
+c-weakpress exit=1 1s | simCmTactics: control weakpress FIRED (2 failures: styles 2; must turn styles red)
+c-helpwords exit=1 0s | simCmTactics: control helpwords FIRED (1 failures: table 1; must turn table red)
+c-nolegs exit=1 147s | simCmTactics: control nolegs FIRED (1 failures: effects 1; must turn fleet red)
+simCmTactics exit=0 873s | simCmTactics: all green (sections table, styles, balanced, fleet)
