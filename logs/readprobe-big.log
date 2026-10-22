@@ -1,0 +1,8 @@
+A) 600 seasons (format on: 60 new dynasties x 10); regular season repeats 0
+A) title games 2400, of them rematches of a regular season game 1763 (73.5%); e.g. 2026 SEC Championship: TEX v UGA; 2026 ACC Championship: FSU v MIA; 2026 B12 Championship: COL v UTAH; 2027 SEC Championship: TEX v UGA
+A) Playoff games 6600, rematches 1714; my Playoff games 263, rematches 64; my seasons with any postseason rematch 127
+B) CBB: 40 schools, leagues {"ACC":6,"SEC":7,"B1G":7,"B12":7,"BE":7,"MM":6}, 20 rivalry pairs, 10 rounds
+B) all 41 schools as they are: fallback=false, 13 ms, games a school 10 to 10, league games a school 4 to 6
+B) schools with no rival: none
+B) even count (the unrivaled school dropped): fallback=false, 9 ms, games a school 10 to 10, league games a school 4 to 6
+readprobe1554: done
