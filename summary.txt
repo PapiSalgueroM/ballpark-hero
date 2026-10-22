@@ -1,0 +1,11 @@
+build exit=0 23s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+tsc exit=0 40s | 
+playClubManager exit=0 283s | Played Club Manager through its own screens. 0 findings.
+playCmFinanceDesk exit=0 26s | playCmFinanceDesk: green. The Finances desk reads at 12px, taps at 44px, cuts nothing, keeps every figure on one line and shows what the board covers and what the kitty k
+playLiveMatchFit-fresh exit=0 152s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen, an own goal drawn as one.
+playLiveMatchFit exit=0 139s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen, an own goal drawn as one.
+playSessionMarks exit=0 17s | playSessionMarks: green. Playing counts, loading does not, and nothing invented a score.
+simTactics exit=0 35s | ALL TACTICS CHECKS PASSED
+ctl-none-playClubManager exit=1 17s | Played Club Manager through its own screens. 6 findings.
+ctl-none-playCmFinanceDesk exit=2 15s | playCmFinanceDesk: could not run: no Liverpool save after taking the job (saw none). NOTHING WAS CHECKED.
+ctl-none-playLiveMatchFit-fresh exit=1 16s | playLiveMatchFit: 1 failure.
