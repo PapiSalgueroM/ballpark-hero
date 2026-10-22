@@ -1,0 +1,21 @@
+treeWithoutMerge: 951abdaab7eaee7a5bfc5c2e1a45b1fb70cd55ce, ed6ed2d6 without 48bb600a; conflicts kept from ed6ed2d6: scripts/qa/soccerNewCareerDialogBrowser.mjs
+SOCCER_NEW_CAREER_PARENT_REF 951abdaab7eaee7a5bfc5c2e1a45b1fb70cd55ce (this head without PR277s merge 48bb600a)
+FAIL 320: actual New Career dialog and Cancel
+FAIL 390: actual New Career dialog and Cancel
+FAIL 430: actual New Career dialog and Cancel
+FAIL 1440: actual New Career dialog and Cancel
+New Career dialogs: 0/4 actual Cancel flows.
+New Career controls: 0/2 effective full inverses.
+FAIL Soccer New Career dialog browser
+[
+ {
+  "width": 320,
+  "error": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-career-action-bar=\"floating\"]').getByRole('button', { name: '⚽ New Career', exact: true })\n\n    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/soccerNewCareerDialogBrowser.mjs:136:157\n    at read (/home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/soccerNewCareerDialogBrowser.mjs:110:30)\n    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/soccerNewCareerDialogBrowser.mjs:136:7"
+ },
+ {
+  "width": 390,
+  "error": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-career-action-bar=\"floating\"]').getByRole('button', { name: '⚽ New Career', exact: true })\n\n    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/soccerNewCareerDialogBrowser.mjs:136:157\n    at read (/home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/soccerNewCareerDialogBrowser.mjs:110:30)\n    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/soccerNewCareerDialogBrowser.mjs:136:7"
+ },
+ {
+  "width": 430,
+  "error": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-career-action-bar=\"floating\"]').getByRole('button', { name: '⚽ New Career', exact: true })\n\n    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/soccerNewCareerDialogBrowser.mjs:136:157\n    at read (/home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/soccerNewCa

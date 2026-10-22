@@ -1,0 +1,7 @@
+build exit=0 23s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+headsha exit=0 0s | ed6ed2d6b4 rc request rBP-trB-m1 for 25e94416ea8e941f7b72673516f5ca50e64e3c30
+playCmDataOnDemand exit=0 26s | playCmDataOnDemand: green. The manager games open without the data they never read, and a past season brings its own.
+hubgrid1089 exit=1 26s | Node.js v24.21.0
+potential-browser exit=1 32s | 1440-retired fail []
+retire exit=1 3s |   "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert(observed.controls[0].text.includes('Share Legacy'))\n\n    at requireHe
+dialog exit=1 123s |   "error": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-career-action-bar=\"floating\"]').getByRole('button', { name: '⚽ New Car
