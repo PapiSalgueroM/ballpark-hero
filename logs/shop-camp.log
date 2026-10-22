@@ -1,0 +1,9 @@
+1) words: the table against the printed cards, the reworded cards, the summer camp and the help rule
+   FAIL [1] nba camp: bought at fanbase 40 and morale 60 it lands 40 and 60, the card prints +8 and +6
+   FAIL [1] nba camp capped: at 97 and 100 it says "Bought Free Summer Camp."
+   nba: 4 paying cards match their words; the summer camp lands what it prints
+   nfl: 5 paying cards match their words
+   mlb: 4 paying cards match their words; the summer camp lands what it prints
+   nhl: 4 paying cards match their words; the summer camp lands what it prints
+   control camp: section 1 turned 2 red
+simUsShopPromises: CONTROL camp FIRED (red sections 1)

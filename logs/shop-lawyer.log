@@ -1,0 +1,11 @@
+5) heat: from 72 with no dirty money, the lawyer reaches 0 in 4 seasons and a twin in 8
+   FAIL [5] nba clean: the lawyer reached 0 in 8 seasons and the twin in 8; the card prints twice as fast (4 against 8)
+   nba: clean from 72, zero after 8 seasons with the lawyer and 8 without; dirty from 30, 33,36,39 both ways
+   FAIL [5] nfl clean: the lawyer reached 0 in 8 seasons and the twin in 8; the card prints twice as fast (4 against 8)
+   nfl: clean from 72, zero after 8 seasons with the lawyer and 8 without; dirty from 30, 33,36,39 both ways
+   FAIL [5] mlb clean: the lawyer reached 0 in 8 seasons and the twin in 8; the card prints twice as fast (4 against 8)
+   mlb: clean from 72, zero after 8 seasons with the lawyer and 8 without; dirty from 30, 33,36,39 both ways
+   FAIL [5] nhl clean: the lawyer reached 0 in 8 seasons and the twin in 8; the card prints twice as fast (4 against 8)
+   nhl: clean from 72, zero after 8 seasons with the lawyer and 8 without; dirty from 30, 33,36,39 both ways
+   control lawyer: section 5 turned 4 red
+simUsShopPromises: CONTROL lawyer FIRED (red sections 5)

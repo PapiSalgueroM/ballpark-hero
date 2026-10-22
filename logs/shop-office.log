@@ -1,0 +1,15 @@
+4) the family office: 2 percent of Cash above zero, after the steady returns
+   FAIL [4] nba office season 1: the office added 0.000000, 2 percent of 21.10 is 0.422000
+   FAIL [4] nba office season 2: the office added 0.000000, 2 percent of 22.20 is 0.444000
+   FAIL [4] nba order: the index fund and the office earned 0.140000, in the documented order 0.464800
+   nba: the office alone earned 0.0000 then 0.0000; at -4.1M nothing moved; with the index fund 0.1400 (wanted 0.4648)
+   FAIL [4] nfl office season 1: the office added 0.000000, 2 percent of 21.10 is 0.422000
+   FAIL [4] nfl office season 2: the office added 0.000000, 2 percent of 22.20 is 0.444000
+   FAIL [4] nfl order: the index fund and the office earned 0.140000, in the documented order 0.464800
+   nfl: the office alone earned 0.0000 then 0.0000; at -3.9M nothing moved; with the index fund 0.1400 (wanted 0.4648)
+   FAIL [4] mlb office season 1: the office added 0.000000, 2 percent of 20.40 is 0.408000
+   FAIL [4] mlb office season 2: the office added 0.000000, 2 percent of 20.80 is 0.416000
+   mlb: the office alone earned 0.0000 then 0.0000; at -3.4M nothing moved; with the index fund 0.1400 (wanted 0.4508)
+   nhl: the office alone earned 0.0000 then 0.0000; at -3.4M nothing moved; with the index fund 0.1400 (wanted 0.4508)
+   control office: section 4 turned 12 red
+simUsShopPromises: CONTROL office FIRED (red sections 4)
