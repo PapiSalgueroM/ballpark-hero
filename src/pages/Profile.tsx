@@ -493,8 +493,6 @@ export default function Profile() {
     [bestScores],
   );
 
-  const avatarUrl = viewingProfile?.avatar_url || user?.user_metadata?.avatar_url;
-
   /* ── WC champion ── */
   let wcChampion: string | null = null;
   if (savedBracket?.bracket_data) {
@@ -540,13 +538,9 @@ export default function Profile() {
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 {/* Avatar + info */}
                 <div className="flex items-center gap-4">
-                  {avatarUrl ? (
-                    <img src={avatarUrl} alt="Avatar" className="h-18 w-18 rounded-full object-cover border-2 border-primary/40" referrerPolicy="no-referrer" style={{ width: 72, height: 72 }} />
-                  ) : (
-                    <div className="rounded-full bg-primary text-primary-foreground flex items-center justify-center text-3xl font-bold" style={{ width: 72, height: 72 }}>
-                      {(viewingProfile.display_name || user?.email || 'U').charAt(0).toUpperCase()}
-                    </div>
-                  )}
+                  <div className="rounded-full bg-primary text-primary-foreground flex items-center justify-center text-3xl font-bold" style={{ width: 72, height: 72 }}>
+                    {(viewingProfile.display_name || viewingProfile.username || 'U').charAt(0).toUpperCase()}
+                  </div>
                   <div className="space-y-1">
                     {editing ? (
                       <div className="space-y-2">

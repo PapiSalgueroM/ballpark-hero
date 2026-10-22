@@ -44,6 +44,7 @@ const Olympics = lazy(() => import("./pages/Olympics"));
 const GuessTheCollege = lazy(() => import("./pages/GuessTheCollege"));
 import NotFound from "./pages/NotFound";
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
+const CookiePolicy = lazy(() => import("./pages/CookiePolicy"));
 const TermsOfService = lazy(() => import("./pages/TermsOfService"));
 const Accessibility = lazy(() => import("./pages/Accessibility"));
 /* Round 526. The const name has to match the file name: the hidden page
@@ -357,6 +358,7 @@ const AppContent = () => {
         <Route path="/olympics" element={<Olympics />} />
         <Route path="/guess-the-college" element={<GuessTheCollege />} />
         <Route path="/privacy" element={<PrivacyPolicy />} />
+        <Route path="/cookie-policy" element={<CookiePolicy />} />
         <Route path="/terms" element={<TermsOfService />} />
         <Route path="/accessibility" element={<Accessibility />} />
         <Route path="/search" element={<Search />} />

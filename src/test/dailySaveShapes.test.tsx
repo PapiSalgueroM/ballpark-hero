@@ -64,6 +64,13 @@ import { TooltipProvider } from '@/components/ui/tooltip';
 import { loadGameContent, peekGameContent, PATH_BUNDLE } from '@/data/gameContent/loader';
 import { resetMocks } from './dailyReload/mocks';
 
+/* These DOM checks use an unavailable optional answer key.
+   Key transport, decoding and judging stay covered by their own suites. */
+vi.mock('@/lib/collegeGrid', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('@/lib/collegeGrid')>()),
+  fetchCollegeGridData: async () => null,
+}));
+
 /* The guide loader, passed through untouched unless R848_GUIDE is set. With it
    set, a load of a route whose guide file is not held yet waits first: a real
    300 ms under slow, a gate under late and held. A file that is already held

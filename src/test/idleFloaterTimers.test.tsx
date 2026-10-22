@@ -24,6 +24,12 @@ import { act, cleanup, render } from '@testing-library/react';
 import { useStadiumTycoon } from '@/hooks/useStadiumTycoon';
 import { useIdleArena } from '@/hooks/useIdleArena';
 
+/* Completion writes are outside this timer-cleanup test. */
+vi.mock('@/lib/completions', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('@/lib/completions')>()),
+  recordCompletion: vi.fn(),
+}));
+
 const EPOCH = 1767225600000;
 
 beforeEach(() => {

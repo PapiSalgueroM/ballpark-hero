@@ -22,6 +22,7 @@
 - [About](https://douknowball.com/about): who builds the site and how it is made
 - [What's New](https://douknowball.com/whats-new): the running update log
 - [Privacy](https://douknowball.com/privacy): storage and data choices
+- [Cookie Policy](https://douknowball.com/cookie-policy): cookies, browser storage and changing optional choices
 - [Terms](https://douknowball.com/terms): site terms
 - [Contact](https://douknowball.com/contact): douknowball1@gmail.com
 

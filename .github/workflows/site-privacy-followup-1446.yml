@@ -1,0 +1,524 @@
+name: Site privacy followup1446
+
+on:
+  push:
+    branches: [codex/site-privacy-followup-1446, codex/site-privacy-followup-1446-green]
+    paths-ignore: ['docs/**']
+  workflow_dispatch:
+    inputs:
+      phase:
+        description: Original gaps, Green generated candidate, or final fixedpoint qualification
+        required: true
+        default: original
+        type: choice
+        options: [original, green, final]
+
+permissions:
+  contents: read
+concurrency:
+  group: site-privacy-followup-1446-${{ github.sha }}-${{ inputs.phase || github.ref_name }}
+  cancel-in-progress: false
+
+env:
+  BASE_SOURCE: 6d2d7a7d2cb41d25f9c71c24c848af583e804f6a
+  PHASE: ${{ inputs.phase || (github.ref == 'refs/heads/codex/site-privacy-followup-1446' && 'original' || 'final') }}
+  CI: '1'
+  SIM_NETWORK: offline
+  TZ: UTC
+
+jobs:
+  focused:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    env:
+      OUT: site-privacy-focused-artifacts
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Exact phase, original product and immutable inputs
+        run: |
+          set -euo pipefail
+          mkdir "$OUT"
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          git rev-parse HEAD > "$OUT/head.txt"
+          printf '%s\n' "$PHASE" > "$OUT/phase.txt"
+          if test "$PHASE" = original;then
+            test "$GITHUB_REF" = refs/heads/codex/site-privacy-followup-1446
+          else
+            test "$PHASE" = green || test "$PHASE" = final
+            test "$GITHUB_REF" = refs/heads/codex/site-privacy-followup-1446-green
+          fi
+          git fetch --no-tags --depth=1 origin "$BASE_SOURCE" > "$OUT/base-fetch.log" 2>&1
+          if test "$PHASE" = original;then
+            git diff --exit-code "$BASE_SOURCE" HEAD -- . ':!docs/ROUND1446.md' ':!docs/PROJECT-STATE.md' ':!docs/WORKBOARD.md' ':!.github/workflows/site-privacy-followup-1446.yml' ':!src/test/profileInitials1446.test.tsx' ':!scripts/playCookiePolicy1446.mjs' > "$OUT/original-product-hold.log"
+          fi
+          git ls-files -z -- . | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          npm ci > "$OUT/install.log" 2>&1
+      - name: Types,74 unchanged consent cases and existing account/profile suites
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$PWD/$OUT/focused.transport"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$OUT/types.log" 2>&1
+          timeout --signal=TERM --kill-after=15s 6m node_modules/.bin/vitest run src/test/consentPurposeGates.test.ts src/test/consentPrivacy1442.test.ts src/test/consentWithdrawal1442.test.ts src/test/consentSynchronization1442.test.tsx src/test/cookieConsentStorage.test.tsx src/test/helpConsentFocus.test.tsx src/test/rulesGateConsentFocus.test.tsx --maxWorkers=1 --reporter=json --outputFile="$OUT/consent.json" > "$OUT/consent.log" 2>&1
+          timeout --signal=TERM --kill-after=15s 6m node_modules/.bin/vitest run src/test/profileSecondDevice.test.tsx src/components/profile/AccountPrivacy.test.tsx src/lib/accountPrivacy.test.ts --maxWorkers=1 --reporter=json --outputFile="$OUT/account.json" > "$OUT/account.log" 2>&1
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          for(const [file,count,suites] of [['consent',74,7],['account',29,3]]){
+            const r=JSON.parse(fs.readFileSync(process.env.OUT+'/'+file+'.json','utf8'));
+            assert.equal(r.success,true);assert.equal(r.numTotalTests,count);assert.equal(r.numPassedTests,count);assert.equal(r.numFailedTests,0);assert.equal(r.numPendingTests,0);assert.equal(r.numTodoTests,0);assert.equal(r.testResults.length,suites);
+            assert.equal(r.numRuntimeErrorTestSuites??0,0);assert.equal(r.numUnhandledErrors??0,0);assert.deepEqual(r.unhandledErrors??[],[]);assert(r.testResults.every(s=>s.status==='passed'&&s.assertionResults.length>0&&s.assertionResults.every(t=>t.status==='passed')));
+          }
+          JS
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+      - name: Existing idle timer oracle and effective controls
+        if: env.PHASE != 'original'
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$PWD/$OUT/idle-timers.transport";: > "$SIM_OFFLINE_RECEIPT"
+          node scripts/simIdleTimers.mjs > "$OUT/idle-timers.log" 2>&1
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import{createHash}from'node:crypto';
+          const hash=b=>createHash('sha256').update(b).digest('hex'),source=fs.readFileSync('scripts/simIdleTimers.mjs');
+          assert.equal(source.length,7554);assert.equal(hash(source),'7a8e6f47cb47b5cb34d174fcf4b93f6678a881552ff73ad81bdf9539be8b6864');
+          const transformations=[{"before":"const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'idletimers-'));","after":"const tmp = fs.mkdtempSync(path.join(ROOT, process.env.OUT, 'idletimers-'));","occurrences":1},{"before":"  const text = (r.stdout || '') + (r.stderr || '');","after":"  const text = (r.stdout || '') + (r.stderr || '');\n  const capture = path.join(ROOT, process.env.OUT, 'idle-timers-control');\n  fs.writeFileSync(capture + '.child.log', text);\n  fs.writeFileSync(capture + '.child-process.json', JSON.stringify({status:r.status,signal:r.signal,error:r.error?String(r.error):null,reportExists:fs.existsSync(out)},null,2)+'\\n');\n  if (fs.existsSync(out)) fs.copyFileSync(out, capture + '.child-vitest.json');\n  if (env.OWNED_TIMEOUTS_HOOK) fs.copyFileSync(env.OWNED_TIMEOUTS_HOOK, capture + '.helper.ts');","occurrences":1}];
+          let copy=source.toString('utf8');for(const change of transformations){assert.equal(copy.split(change.before).length,2);copy=copy.replace(change.before,change.after);}
+          let inverse=copy;for(const change of transformations){assert.equal(inverse.split(change.after).length,2);inverse=inverse.replace(change.after,change.before);}assert(Buffer.from(inverse).equals(source));
+          assert.equal(hash(copy),'1d09893502ebc3d50f5cd916ad8c51151799ed83620868b9b008e2fdc8b352f4');assert.notEqual(hash(copy),hash(source));
+          const output=path.join(process.env.OUT,'simIdleTimers.resolution-copy.mjs');fs.writeFileSync(output,copy);assert.equal(path.dirname(path.dirname(path.resolve(output))),process.cwd());
+          fs.writeFileSync(process.env.OUT+'/idle-timers-copy-method.json',JSON.stringify({sourceBytes:source.length,sourceSha256:hash(source),copyBytes:Buffer.byteLength(copy),copySha256:hash(copy),transforms:transformations.length,wholeInverseExact:true,sourceHeld:fs.readFileSync('scripts/simIdleTimers.mjs').equals(source),conditionalCause:'External temporary importer dependency resolution, adoption requires actual prior raw child cause'},null,2)+'\n');
+          JS
+          status=0
+          IDLE_TIMERS_CONTROL=all node "$OUT/simIdleTimers.resolution-copy.mjs" > "$OUT/idle-timers-controls.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$OUT/idle-timers-controls.exit"
+          CONTROL_STATUS="$status" node --input-type=module <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import{createHash}from'node:crypto';
+          const base=process.env.OUT,read=f=>fs.readFileSync(base+'/'+f,'utf8'),hash=b=>createHash('sha256').update(b).digest('hex');
+          assert.equal(Number(process.env.CONTROL_STATUS),0);const child=JSON.parse(read('idle-timers-control.child-process.json'));assert.equal(child.status,1);assert.equal(child.signal,null);assert.equal(child.error,null);assert.equal(child.reportExists,true);
+          const report=JSON.parse(read('idle-timers-control.child-vitest.json')),rows=report.testResults.flatMap(s=>s.assertionResults??[]);
+          assert.equal(report.success,false);assert.equal(report.numTotalTests,2);assert.equal(report.numPassedTests,0);assert.equal(report.numFailedTests,2);assert.equal(report.numPendingTests,0);assert.equal(report.numTodoTests,0);assert.equal(report.numRuntimeErrorTestSuites??0,0);assert.equal(report.numUnhandledErrors??0,0);assert.deepEqual(report.unhandledErrors??[],[]);assert.equal(report.testResults.length,1);assert.equal(rows.length,2);
+          const expected=[['Stadium Tycoon clears every floater timer when the page goes away','Stadium Tycoon'],['Idle Arena clears every floater timer when the page goes away','Idle Arena']];
+          for(const[title,game]of expected){const matches=rows.filter(row=>row.fullName==='idle game floaters '+title);assert.equal(matches.length,1);const row=matches[0];assert.equal(row.status,'failed');assert.equal(row.failureMessages.length,1);assert.match(row.failureMessages[0],/AssertionError/);const leak=row.failureMessages[0].match(/(?:^|\s)([1-9]\d*) (Stadium Tycoon|Idle Arena) floater timers kept running after the page unmounted/);assert(leak);assert.equal(leak[2],game);assert.doesNotMatch(row.failureMessages[0],/Cannot find|Failed to resolve|SyntaxError|ReferenceError|TypeError/);}
+          assert.doesNotMatch(read('idle-timers-control.child.log'),/Unhandled (?:Errors?|Rejection)|Vitest caught \d+ unhandled|Cannot find|Failed to resolve/);
+          const helper=fs.readFileSync('src/hooks/useOwnedTimeouts.ts','utf8').replaceAll('\r\n','\n'),broken=read('idle-timers-control.helper.ts'),clearing='      owned.forEach(clearTimeout);\n',removed='      /* control: never cleared */\n';assert.equal(helper.split(clearing).length,2);assert.equal(broken,helper.replace(clearing,removed));assert.notEqual(hash(broken),hash(helper));assert.equal(broken.split(removed).length,2);assert.equal(broken.replace(removed,clearing),helper);
+          const log=read('idle-timers-controls.log');assert(log.includes('CONTROL FIRED: both games red on a helper that never clears'));assert(log.includes('control rawtimer: flagged [src/hooks/useIdleArena.ts]; the same text in a comment flagged []'));assert(log.includes('CONTROL FIRED: the planted raw timer was flagged and the comment was not'));assert(log.includes('simIdleTimers controls: green. Each control turned its own check red and only that one.'));
+          fs.writeFileSync(base+'/idle-timers-controls-admission.json',JSON.stringify({complete:true,source:process.env.GITHUB_SHA,outerExit:Number(process.env.CONTROL_STATUS),childExit:child.status,ownedTimerFailures:rows.map(r=>r.fullName),normalOriginalHarnessHeld:true,helperSha256:hash(helper),mutatedHelperSha256:hash(broken),changedHelper:true,wholeHelperInverseExact:true,rawTimerFlaggedExactly:true,commentOnlyClean:true},null,2)+'\n');
+          JS
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+      - name: Actual Profile boundary proof with exact original classification
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$PWD/$OUT/focused.transport"
+          status=0
+          timeout --signal=TERM --kill-after=15s 4m node_modules/.bin/vitest run src/test/profileInitials1446.test.tsx --maxWorkers=1 --reporter=json --outputFile="$OUT/profile.json" > "$OUT/profile.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$OUT/profile.exit"
+          STATUS="$status" node --input-type=module <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const r=JSON.parse(fs.readFileSync(process.env.OUT+'/profile.json','utf8')),rows=r.testResults.flatMap(s=>s.assertionResults);
+          const expected=[['keeps a stored avatar URL inert on the own profile','PROFILE_INITIALS_1446_STORED_IMAGE'],['keeps the legacy Auth metadata avatar URL inert','PROFILE_INITIALS_1446_METADATA_IMAGE'],['uses the viewed subject initial with a different signed-in viewer','PROFILE_INITIALS_1446_PUBLIC_IMAGE'],['uses the viewed username when its display name is missing','PROFILE_INITIALS_1446_USERNAME_INITIAL'],['uses U when the profile has neither public name nor username','PROFILE_INITIALS_1446_NEUTRAL_INITIAL'],['keeps the existing display-name initial without an avatar URL',null]];
+          assert.equal(r.numTotalTests,6);assert.equal(rows.length,6);assert.equal(r.testResults.length,1);assert.equal(r.numPendingTests,0);assert.equal(r.numTodoTests,0);assert.equal(r.numRuntimeErrorTestSuites??0,0);assert.equal(r.numUnhandledErrors??0,0);assert.deepEqual(r.unhandledErrors??[],[]);
+          for(const [title,marker] of expected){const found=rows.filter(row=>row.fullName==='Profile initials1446 '+title);assert.equal(found.length,1);const row=found[0];if(process.env.PHASE==='original'&&marker){assert.equal(row.status,'failed');assert.equal(row.failureMessages.length,1);assert(row.failureMessages[0].includes(marker));assert.match(row.failureMessages[0],/AssertionError|expected/);assert.doesNotMatch(row.failureMessages[0],/Cannot find|Failed to resolve|SyntaxError|ReferenceError|TypeError/);}else assert.equal(row.status,'passed');}
+          const original=process.env.PHASE==='original';assert.equal(Number(process.env.STATUS),original?1:0);assert.equal(r.success,!original);assert.equal(r.numFailedTests,original?5:0);assert.equal(r.numPassedTests,original?1:6);
+          fs.writeFileSync(process.env.OUT+'/profile-admission.json',JSON.stringify({complete:true,source:process.env.GITHUB_SHA,phase:process.env.PHASE,result:original?'INTENDED_RED':'PASS',cases:6,failed:r.numFailedTests,passed:r.numPassedTests},null,2)+'\n');
+          JS
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+      - name: Profile old-source copied control and exact restoration
+        if: env.PHASE != 'original'
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$PWD/$OUT/focused.transport"
+          git show "$BASE_SOURCE:src/pages/Profile.tsx" > "$OUT/Profile.old.tsx"
+          cmp_status=0;cmp src/pages/Profile.tsx "$OUT/Profile.old.tsx" > "$OUT/profile-control-difference.log" 2>&1 || cmp_status=$?;test "$cmp_status" -eq 1
+          export NO_DOUBLE_SWAP="$(COPY="$PWD/$OUT/Profile.old.tsx" node -e 'console.log(JSON.stringify({"@/pages/Profile":process.env.COPY}))')"
+          status=0;timeout --signal=TERM --kill-after=15s 4m node_modules/.bin/vitest run src/test/profileInitials1446.test.tsx --maxWorkers=1 --reporter=json --outputFile="$OUT/profile-fault.json" > "$OUT/profile-fault.log" 2>&1 || status=$?
+          STATUS="$status" node --input-type=module <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const r=JSON.parse(fs.readFileSync(process.env.OUT+'/profile-fault.json','utf8')),rows=r.testResults.flatMap(s=>s.assertionResults),markers=['STORED_IMAGE','METADATA_IMAGE','PUBLIC_IMAGE','USERNAME_INITIAL','NEUTRAL_INITIAL'];assert.equal(Number(process.env.STATUS),1);assert.equal(r.success,false);assert.equal(r.numTotalTests,6);assert.equal(r.numFailedTests,5);assert.equal(r.numPassedTests,1);assert.equal(r.numPendingTests,0);assert.equal(r.numTodoTests,0);assert.equal(r.numRuntimeErrorTestSuites??0,0);assert.equal(r.numUnhandledErrors??0,0);assert.deepEqual(r.unhandledErrors??[],[]);const failed=rows.filter(row=>row.status==='failed');assert.equal(failed.length,5);for(const marker of markers){const found=failed.filter(row=>row.failureMessages.length===1&&row.failureMessages[0].includes('PROFILE_INITIALS_1446_'+marker));assert.equal(found.length,1);assert.doesNotMatch(found[0].failureMessages[0],/Cannot find|Failed to resolve|SyntaxError|ReferenceError|TypeError/);}assert.equal(rows.filter(row=>row.status==='passed').length,1);
+          JS
+          unset NO_DOUBLE_SWAP
+          timeout --signal=TERM --kill-after=15s 4m node_modules/.bin/vitest run src/test/profileInitials1446.test.tsx --maxWorkers=1 --reporter=json --outputFile="$OUT/profile-restored.json" > "$OUT/profile-restored.log" 2>&1
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          const r=JSON.parse(fs.readFileSync(process.env.OUT+'/profile-restored.json','utf8'));assert.equal(r.success,true);assert.equal(r.numPassedTests,6);assert.equal(r.numTotalTests,6);assert.equal(r.numFailedTests,0);assert.equal(r.numRuntimeErrorTestSuites??0,0);assert.equal(r.numUnhandledErrors??0,0);assert.deepEqual(r.unhandledErrors??[],[]);assert(r.testResults.flatMap(s=>s.assertionResults).every(t=>t.status==='passed'));const sha=file=>createHash('sha256').update(fs.readFileSync(file)).digest('hex');fs.writeFileSync(process.env.OUT+'/profile-control-binding.json',JSON.stringify({complete:true,baseline:process.env.BASE_SOURCE,actualSha256:sha('src/pages/Profile.tsx'),copySha256:sha(process.env.OUT+'/Profile.old.tsx'),alias:'@/pages/Profile',faultCases:5,restoredCases:6,sourceNeverModified:true},null,2)+'\n');
+          JS
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+      - name: Always complete source and transport evidence
+        if: always()
+        run: |
+          set -euo pipefail
+          mkdir -p "$OUT";failed=0
+          status=0;sha256sum --check "$OUT/source-before.sha256" > "$OUT/source-hold.log" 2>&1 || status=$?;printf '%s\n' "$status" > "$OUT/source-hold.exit";test "$status" -eq 0 || failed=1
+          status=0;git diff --exit-code HEAD -- . > "$OUT/operator-source-hold.log" 2>&1 || status=$?;printf '%s\n' "$status" > "$OUT/operator-source-hold.exit";test "$status" -eq 0 || failed=1
+          test -f "$OUT/focused.transport" && test ! -s "$OUT/focused.transport" || failed=1
+          printf '%s\n' "$failed" > "$OUT/final-holds.exit"
+          (cd "$OUT";find . -type f ! -path ./evidence.sha256 -print0 | sort -z | xargs -0 sha256sum) > "$OUT/evidence.sha256"
+          exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: site-privacy1446-focused-${{ env.PHASE }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: site-privacy-focused-artifacts/
+          if-no-files-found: error
+          retention-days: 14
+
+  unit_suite:
+    needs: focused
+    if: github.ref == 'refs/heads/codex/site-privacy-followup-1446-green' && (inputs.phase == 'green' || inputs.phase == 'final' || github.event_name == 'push')
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1,2,3,4]
+    defaults:
+      run:
+        shell: bash
+    env:
+      OUT: site-privacy-unit-artifacts
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Full unit partition and literal result counts
+        run: |
+          set -euo pipefail
+          mkdir "$OUT"
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          git rev-parse HEAD > "$OUT/head.txt"
+          git ls-files -z -- . | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          npm ci > "$OUT/install.log" 2>&1
+          for anchor in 56356be9a5d4d310f1759c09ba8e3811a8a05c1b e8b39ccc39f763351d4439c833b853c2e3ed2188 6b7596d2c009802e6c011492ae1cefa8af29c62a 31a4ec01f13dde6ce5614d371f5aa135e08ef8da 2b7dda2951fb9b63e76a2af66970cb682f312105 0c66a55929dfe8d6493a86aa00a28ef0ed2db25d;do
+            git fetch --no-tags --depth=1 origin "$anchor"
+            git cat-file -e "$anchor^{commit}"
+          done > "$OUT/historical-inputs.log" 2>&1
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$PWD/$OUT/unit.transport";: > "$SIM_OFFLINE_RECEIPT"
+          status=0;timeout --signal=TERM --kill-after=15s 38m npm test -- --shard=${{ matrix.shard }}/4 --maxWorkers=2 --reporter=json --outputFile="$OUT/unit.json" > "$OUT/unit.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$OUT/unit.exit";test "$status" -eq 0
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const r=JSON.parse(fs.readFileSync(process.env.OUT+'/unit.json','utf8')),rows=r.testResults.flatMap(s=>s.assertionResults);assert.equal(r.success,true);assert.equal(r.numFailedTests,0);assert.equal(r.numRuntimeErrorTestSuites??0,0);assert.equal(r.numUnhandledErrors??0,0);assert.deepEqual(r.unhandledErrors??[],[]);assert(r.testResults.length>0&&r.numTotalTests>0);assert.equal(rows.filter(t=>t.status==='failed').length,0);assert.equal(rows.length,r.numTotalTests);assert.equal(rows.filter(t=>t.status==='passed').length,r.numPassedTests);fs.writeFileSync(process.env.OUT+'/literal-counts.json',JSON.stringify({source:process.env.GITHUB_SHA,files:r.testResults.length,cases:rows.length,passed:r.numPassedTests,pending:r.numPendingTests,todo:r.numTodoTests,failed:0},null,2)+'\n');
+          JS
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+      - name: Always retain partition source and transport evidence
+        if: always()
+        run: |
+          set -euo pipefail
+          mkdir -p "$OUT";failed=0
+          status=0;sha256sum --check "$OUT/source-before.sha256" > "$OUT/source-hold.log" 2>&1 || status=$?;printf '%s\n' "$status" > "$OUT/source-hold.exit";test "$status" -eq 0 || failed=1
+          status=0;git diff --exit-code HEAD -- . > "$OUT/operator-source-hold.log" 2>&1 || status=$?;printf '%s\n' "$status" > "$OUT/operator-source-hold.exit";test "$status" -eq 0 || failed=1
+          test -f "$OUT/unit.transport" && test ! -s "$OUT/unit.transport" || failed=1
+          printf '%s\n' "$failed" > "$OUT/final-holds.exit"
+          (cd "$OUT";find . -type f ! -path ./evidence.sha256 -print0 | sort -z | xargs -0 sha256sum) > "$OUT/evidence.sha256"
+          exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: site-privacy1446-unit-${{ matrix.shard }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: site-privacy-unit-artifacts/
+          if-no-files-found: error
+          retention-days: 14
+
+  build_browser:
+    needs: focused
+    runs-on: ubuntu-latest
+    timeout-minutes: 65
+    defaults:
+      run:
+        shell: bash
+    env:
+      ENGINES: chromium
+      PRERENDER_ONLY: /privacy,/cookie-policy
+      OUT: site-privacy-build-artifacts
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Exact source and complete original baseline protection
+        run: |
+          set -euo pipefail
+          mkdir "$OUT"
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          git rev-parse HEAD > "$OUT/head.txt"
+          printf '%s\n' "$PHASE" > "$OUT/phase.txt"
+          git fetch --no-tags --depth=1 origin "$BASE_SOURCE" > "$OUT/base-fetch.log" 2>&1
+          git diff --exit-code "$BASE_SOURCE" HEAD -- package.json package-lock.json vitest.config.ts scripts/sweepWeight.mjs scripts/lib/offlineTransport.cjs .github/workflows/consent-analytics-1445.yml .github/workflows/seo-discovery-1444.yml > "$OUT/dependency-cap-historical-hold.log"
+          if test "$PHASE" = original;then
+            test "$GITHUB_REF" = refs/heads/codex/site-privacy-followup-1446
+            git diff --exit-code "$BASE_SOURCE" HEAD -- . ':!docs/ROUND1446.md' ':!docs/PROJECT-STATE.md' ':!docs/WORKBOARD.md' ':!.github/workflows/site-privacy-followup-1446.yml' ':!src/test/profileInitials1446.test.tsx' ':!scripts/playCookiePolicy1446.mjs' > "$OUT/original-product-hold.log"
+          else
+            test "$GITHUB_REF" = refs/heads/codex/site-privacy-followup-1446-green
+            test "$PHASE" = green || test "$PHASE" = final
+            git diff --exit-code "$BASE_SOURCE" HEAD -- . ':!docs/ROUND1446.md' ':!docs/PROJECT-STATE.md' ':!docs/WORKBOARD.md' ':!.github/workflows/site-privacy-followup-1446.yml' ':!src/test/profileInitials1446.test.tsx' ':!scripts/playCookiePolicy1446.mjs' ':!src/pages/Profile.tsx' ':!src/pages/CookiePolicy.tsx' ':!src/pages/PrivacyPolicy.tsx' ':!src/App.tsx' ':!src/components/game/Footer.tsx' ':!src/lib/pageSchema.ts' ':!scripts/genSitemap.mjs' ':!scripts/simIndexNow.mjs' ':!public/llms.txt' ':!public/cookie-policy/index.html' ':!public/privacy/index.html' ':!public/sitemap.xml' ':!scripts/data/lastmod.json' ':!src/test/idleFloaterTimers.test.tsx' ':!src/test/dailySaveShapes.test.tsx' ':!src/test/skipTarget.test.tsx' > "$OUT/protected-product-hold.log"
+            git diff --exit-code "$BASE_SOURCE" HEAD -- public ':!public/llms.txt' ':!public/cookie-policy/index.html' ':!public/privacy/index.html' ':!public/sitemap.xml' > "$OUT/protected-public-hold.log"
+          fi
+          git ls-files -z -- . ':!public/**' ':!scripts/data/lastmod.json' | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          sha256sum package.json package-lock.json vitest.config.ts scripts/sweepWeight.mjs scripts/lib/offlineTransport.cjs > "$OUT/dependencies-cap-before.sha256"
+          npm ci > "$OUT/install.log" 2>&1
+      - name: Isolated Playwright1.64 and verified font cache
+        run: |
+          set -euo pipefail
+          browser_tools="$RUNNER_TEMP/site-privacy1446-browser"
+          npm install --prefix "$browser_tools" --no-save --package-lock=false playwright@1.64.0 > site-privacy-build-artifacts/browser-install.log 2>&1
+          test ! -e node_modules/playwright; test ! -e node_modules/playwright-core
+          ln -s "$browser_tools/node_modules/playwright" node_modules/playwright
+          ln -s "$browser_tools/node_modules/playwright-core" node_modules/playwright-core
+          node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium > site-privacy-build-artifacts/chromium-install.log 2>&1
+          python -m pip install fonttools pillow > site-privacy-build-artifacts/python-install.log 2>&1
+          export FREE_KICK_FONT_CACHE="$PWD/site-privacy-build-artifacts/font-cache"
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > site-privacy-build-artifacts/fonts.log 2>&1
+          echo "FREE_KICK_FONT_CACHE=$FREE_KICK_FONT_CACHE" >> "$GITHUB_ENV"
+          cat > site-privacy-build-artifacts/cached-fonts.cjs <<'JS'
+          'use strict';
+          const fs = require('node:fs');
+          const path = require('node:path');
+          const assert = require('node:assert/strict');
+          const { createHash } = require('node:crypto');
+          const hash = value => createHash('sha256').update(value).digest('hex');
+          if (path.basename(process.argv[1] || '') === 'prerender.mjs') {
+            const cache = process.env.FREE_KICK_FONT_CACHE;
+            const manifestBytes = fs.readFileSync(path.join(cache, 'manifest.json'));
+            assert.match(process.env.FONT_CACHE_MANIFEST_SHA256 || '', /^[a-f0-9]{64}$/);
+            assert.equal(hash(manifestBytes), process.env.FONT_CACHE_MANIFEST_SHA256, 'Prepared font manifest stays exact');
+            const sheet = [...fs.readFileSync('index.html', 'utf8').matchAll(/<link\s+href="(https:\/\/fonts\.googleapis\.com\/[^\"]+)"\s+rel="stylesheet"/g)].map(m => new URL(m[1]).href);
+            assert.equal(sheet.length, 1, 'Use the actual single template stylesheet');
+            const entries = JSON.parse(manifestBytes);
+            assert(Array.isArray(entries) && entries.length > 1);
+            const fonts = new Map();
+            for (const entry of entries) {
+              assert(!fonts.has(entry.url), 'No duplicate font cache URL');
+              const url = new URL(entry.url);
+              assert(['https://fonts.googleapis.com', 'https://fonts.gstatic.com'].includes(url.origin));
+              assert.equal(url.href, entry.url);
+              assert.equal(entry.file, hash(entry.url));
+              assert.match(entry.sha256, /^[a-f0-9]{64}$/);
+              assert.equal(typeof entry.contentType, 'string');
+              const body = fs.readFileSync(path.join(cache, entry.file));
+              assert.equal(hash(body), entry.sha256, 'Prepared font body stays exact');
+              fonts.set(entry.url, { ...entry, body });
+            }
+            assert(fonts.has(sheet[0]), 'Current template stylesheet is cached');
+            const css = fonts.get(sheet[0]);
+            assert.match(css.contentType, /^text\/css(?:;|$)/);
+            const declared = [...new Set([...css.body.toString('utf8').matchAll(/url\(\s*['"]?(https:\/\/[^)'"\s]+)/g)].map(m => m[1]))];
+            assert(declared.length > 0);
+            assert.deepEqual([...fonts.keys()].sort(), [sheet[0], ...declared].sort(), 'Only actual stylesheet dependencies are fulfilled');
+            for (const url of declared) assert.equal(new URL(url).origin, 'https://fonts.gstatic.com');
+            const pw = require('playwright-core');
+            let contextId = 0;
+            const originalLaunch = pw.chromium.launch.bind(pw.chromium);
+            pw.chromium.launch = async options => {
+              const browser = await originalLaunch(options);
+              const originalContext = browser.newContext.bind(browser);
+              browser.newContext = async options => {
+                const context = await originalContext(options);
+                const id = ++contextId;
+                await context.route(/^https:\/\/(?:fonts\.googleapis\.com|fonts\.gstatic\.com)\//, async route => {
+                  const request = route.request(), entry = fonts.get(request.url());
+                  if (request.method() !== 'GET' || !entry || !['stylesheet', 'font'].includes(request.resourceType())) return route.fallback();
+                  await route.fulfill({ status: 200, contentType: entry.contentType, body: entry.body });
+                  fs.appendFileSync(process.env.FONT_CACHE_USE_RECEIPT, JSON.stringify({ contextId: id, url: entry.url, sha256: entry.sha256, manifestSha256: hash(manifestBytes), resourceType: request.resourceType() }) + '\n');
+                });
+                return context;
+              };
+              return browser;
+            };
+          }
+          JS
+          sha256sum site-privacy-build-artifacts/cached-fonts.cjs > site-privacy-build-artifacts/font-inputs.sha256
+          find "$FREE_KICK_FONT_CACHE" -type f -print0 | sort -z | xargs -0 sha256sum >> site-privacy-build-artifacts/font-inputs.sha256
+          font_manifest_sha=$(sha256sum "$FREE_KICK_FONT_CACHE/manifest.json" | cut -d ' ' -f 1)
+          echo "FONT_CACHE_MANIFEST_SHA256=$font_manifest_sha" >> "$GITHUB_ENV"
+          node <<'NODE'
+          const fs=require('node:fs'),assert=require('node:assert/strict'),{createHash}=require('node:crypto');const sha=value=>createHash('sha256').update(value).digest('hex');
+          const original=fs.readFileSync('site-privacy-build-artifacts/cached-fonts.cjs','utf8');assert.equal(sha(original),'ac09f64a5d9592ec980864bf422c7f580880d9bd981adaef8c9c0e674d298fd3');assert.equal(sha(fs.readFileSync('scripts/sweepWeight.mjs')),'32263bb4028630b80358d8c8ad1da9e49660a0ecf020e08f95001d93fba462da');
+          const gate="if (path.basename(process.argv[1] || '') === 'prerender.mjs') {",newGate="if (path.basename(process.argv[1] || '') === 'sweepWeight.mjs') {",anchor='      const id = ++contextId;';assert.equal(original.split(gate).length,2);assert.equal(original.split(anchor).length,2);
+          const insert=anchor+'\n'+[
+            '      fs.appendFileSync(process.env.SWEEP_CONTEXT_RECEIPT, JSON.stringify({ contextId: id }) + "\\n");',
+            '      await context.route(url => url.origin === "https://flagcdn.com", async route => {',
+            '        const request = route.request(), url = new URL(request.url());',
+            '        const validPath = /^\\/(?:w[1-9][0-9]{0,2}\\/|h[1-9][0-9]{0,2}\\/|[1-9][0-9]{0,2}x[1-9][0-9]{0,2}\\/)?[a-z]{2}(?:-[a-z0-9]{1,8})?\\.(?:png|webp|svg)$/.test(url.pathname);',
+            '        if (url.origin !== "https://flagcdn.com" || url.username || url.password || url.search || url.hash || !validPath || request.method() !== "GET" || request.resourceType() !== "image") return route.fallback();',
+            '        await route.abort("blockedbyclient");',
+            '        fs.appendFileSync(process.env.SWEEP_FLAG_RECEIPT, JSON.stringify({ contextId: id, method: request.method(), resourceType: request.resourceType(), url: url.href, origin: url.origin, path: url.pathname, action: "LOCAL_ABORT" }) + "\\n");',
+            '      });',
+          ].join('\n');
+          const copy=original.replace(gate,newGate).replace(anchor,insert);assert.notEqual(copy,original);assert.equal(copy.replace(insert,anchor).replace(newGate,gate),original);fs.writeFileSync('site-privacy-build-artifacts/weights-cached-fonts.cjs',copy);fs.writeFileSync('site-privacy-build-artifacts/weights-preload-binding.json',JSON.stringify({complete:true,originalSha256:sha(original),copySha256:sha(copy),gateOccurrences:1,contextAnchorOccurrences:1,wholeInverseExact:true,sweepWeightSha256:'32263bb4028630b80358d8c8ad1da9e49660a0ecf020e08f95001d93fba462da',scope:'Cached known font bodies; local GET image denial for validated flagcdn paths. No outbound flag fetch.'},null,2)+'\n');
+          NODE
+          sha256sum site-privacy-build-artifacts/weights-cached-fonts.cjs >> site-privacy-build-artifacts/font-inputs.sha256
+      - name: Plain production build, scoped generation and complete output capture
+        id: build
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs --require=$PWD/$OUT/cached-fonts.cjs"
+          export SIM_OFFLINE_RECEIPT="$PWD/$OUT/build.transport"
+          export FONT_CACHE_USE_RECEIPT="$PWD/$OUT/font-cache-use.jsonl"
+          : > "$SIM_OFFLINE_RECEIPT";: > "$FONT_CACHE_USE_RECEIPT"
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$OUT/types.log" 2>&1
+          timeout --signal=TERM --kill-after=15s 8m npm run build > "$OUT/plain-build.log" 2>&1
+          if test "$PHASE" != original;then
+            timeout --signal=TERM --kill-after=15s 20m npm run build:seo > "$OUT/build.log" 2>&1
+          fi
+          git diff --binary HEAD -- public scripts/data/lastmod.json scripts/data/guideHeadingsFrozen.json src/data/searchKeywords.json > "$OUT/generated.patch"
+          git ls-files --others --exclude-standard -- public scripts/data/lastmod.json scripts/data/guideHeadingsFrozen.json src/data/searchKeywords.json > "$OUT/generated-new-files.txt"
+          while IFS= read -r file;do
+            test -f "$file" && test ! -L "$file"
+            status=0;git diff --binary --no-index /dev/null "$file" >> "$OUT/generated.patch" || status=$?;test "$status" -eq 1
+          done < "$OUT/generated-new-files.txt"
+          { git diff --name-only HEAD -- public scripts/data/lastmod.json scripts/data/guideHeadingsFrozen.json src/data/searchKeywords.json;cat "$OUT/generated-new-files.txt"; } | sort -u > "$OUT/generated-files.txt"
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const allowed=new Set(['public/cookie-policy/index.html','public/privacy/index.html','public/sitemap.xml','scripts/data/lastmod.json']),files=fs.readFileSync(process.env.OUT+'/generated-files.txt','utf8').trim().split('\n').filter(Boolean);assert.equal(files.length,new Set(files).size);assert(files.length<=4);for(const file of files)assert(allowed.has(file),'GENERATED_PATH_OUTSIDE_APPROVED_LEGAL_SCOPE: '+file);fs.writeFileSync(process.env.OUT+'/generated-scope.json',JSON.stringify({complete:true,source:process.env.GITHUB_SHA,phase:process.env.PHASE,allowed:[...allowed],actual:files,qualified:process.env.PHASE==='final'&&files.length===0},null,2)+'\n');
+          JS
+          if test "$PHASE" = original || test "$PHASE" = final;then
+            test -f "$OUT/generated.patch" && test ! -s "$OUT/generated.patch"
+            test -f "$OUT/generated-files.txt" && test ! -s "$OUT/generated-files.txt"
+            for file in generated.patch generated-files.txt;do
+              cp "$OUT/$file" "$OUT/$file.nonempty-control"
+              printf '%s\n' CONTROL_NONEMPTY_FINAL_GENERATED_OUTPUT >> "$OUT/$file.nonempty-control"
+              status=0;test ! -s "$OUT/$file.nonempty-control" || status=$?
+              printf '%s\n' "$status" > "$OUT/$file.nonempty-control.exit";test "$status" -eq 1
+            done
+          else
+            printf '%s\n' 'UNQUALIFIED_GENERATED_CANDIDATE, exact output review and a fresh final run remain required.' > "$OUT/generation-status.txt"
+          fi
+          for tree in public dist;do
+            find "$tree" ! -type d ! -type f -print > "$OUT/$tree-nonregular-before.txt";test ! -s "$OUT/$tree-nonregular-before.txt"
+          done
+          find public scripts/data/lastmod.json scripts/data/guideHeadingsFrozen.json src/data/searchKeywords.json -type f -print0 | sort -z | xargs -0 sha256sum > "$OUT/generated-source-before.sha256"
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$OUT/dist.sha256"
+          for inventory in generated-source-before.sha256 dist.sha256;do
+            test -s "$OUT/$inventory";cp "$OUT/$inventory" "$OUT/$inventory.control";printf '%s\n' CONTROL_DIFFERENT_INVENTORY_LINE >> "$OUT/$inventory.control"
+            status=0;cmp "$OUT/$inventory" "$OUT/$inventory.control" > "$OUT/$inventory.control.log" 2>&1 || status=$?;printf '%s\n' "$status" > "$OUT/$inventory.control.exit";test "$status" -eq 1
+          done
+          tar -czf "$OUT/dist.tar.gz" -C dist .
+          if test "$PHASE" != original;then
+            node --input-type=module <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          const sha=bytes=>createHash('sha256').update(bytes).digest('hex'),raw=fs.readFileSync(process.env.FREE_KICK_FONT_CACHE+'/manifest.json');assert.equal(sha(raw),process.env.FONT_CACHE_MANIFEST_SHA256);const cache=new Map(JSON.parse(raw).map(row=>[row.url,row])),rows=fs.readFileSync(process.env.FONT_CACHE_USE_RECEIPT,'utf8').trim().split('\n').filter(Boolean).map(line=>JSON.parse(line));assert.deepEqual([...new Set(rows.map(row=>row.contextId))].sort(),[1,2,3]);
+          function checkStylesheets(value){assert.deepEqual([value.filter(row=>row.resourceType==='stylesheet').length,...[1,2,3].map(id=>value.filter(row=>row.contextId===id&&row.resourceType==='stylesheet').length)],[6,2,2,2],'SITE_PRIVACY_FONT_STYLESHEETS');}
+          checkStylesheets(rows);for(const id of [1,2,3])assert(rows.some(row=>row.contextId===id&&row.resourceType==='font'));for(const row of rows){assert(cache.has(row.url));assert.equal(row.sha256,cache.get(row.url).sha256);assert.equal(row.manifestSha256,process.env.FONT_CACHE_MANIFEST_SHA256);}
+          const removedIndex=rows.findIndex(row=>row.resourceType==='stylesheet');assert(removedIndex>=0);const missingStylesheet=rows.filter((_,index)=>index!==removedIndex),beforeRecordsSha256=sha(JSON.stringify(rows)),afterRecordsSha256=sha(JSON.stringify(missingStylesheet));assert.equal(missingStylesheet.length,rows.length-1);assert.notEqual(beforeRecordsSha256,afterRecordsSha256);let actualError=null;try{checkStylesheets(missingStylesheet);}catch(error){actualError={name:error.name,message:error.message};}assert.equal(actualError?.name,'AssertionError');assert(actualError.message.startsWith('SITE_PRIVACY_FONT_STYLESHEETS'));fs.writeFileSync(process.env.OUT+'/font-cache-use.missing-stylesheet.jsonl',missingStylesheet.map(row=>JSON.stringify(row)).join('\n')+'\n');fs.writeFileSync(process.env.OUT+'/font-stylesheet-control.json',JSON.stringify({complete:true,source:process.env.GITHUB_SHA,beforeRows:rows.length,afterRows:missingStylesheet.length,beforeRecordsSha256,afterRecordsSha256,removedContext:rows[removedIndex].contextId,actualError,networkAttempted:false},null,2)+'\n');
+          fs.writeFileSync(process.env.OUT+'/font-cache-use-summary.json',JSON.stringify({complete:true,source:process.env.GITHUB_SHA,contexts:3,routes:2,stylesheetFulfillments:6,fontFulfillments:rows.filter(row=>row.resourceType==='font').length,manifestSha256:process.env.FONT_CACHE_MANIFEST_SHA256,offlinePreloadFirst:true},null,2)+'\n');
+          JS
+          fi
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+      - name: Actual Cookie Policy browser outcomes and effective controls
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$PWD/$OUT"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$out/browser-server.log" 2>&1 &
+          server=$!;trap 'kill "$server" 2>/dev/null || true' EXIT
+          ready=0;for attempt in 1 2 3 4 5;do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null;then ready=1;break;fi;sleep 1;done;test "$ready" -eq 1
+          export SIM_OFFLINE_RECEIPT="$out/browser.transport";: > "$SIM_OFFLINE_RECEIPT"
+          browser_phase=green;if test "$PHASE" = original;then browser_phase=original;fi
+          status=0;BASE=http://127.0.0.1:4173 SOURCE_SHA="$GITHUB_SHA" COOKIE_POLICY_PHASE="$browser_phase" COOKIE_POLICY_BROWSER_OUT="$out/browser" timeout --signal=TERM --kill-after=15s 10m node scripts/playCookiePolicy1446.mjs > "$out/browser.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/browser.exit"
+          STATUS="$status" node --input-type=module <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const r=JSON.parse(fs.readFileSync(process.env.OUT+'/browser/report.json','utf8'));assert.equal(r.complete,true);assert.equal(r.source,process.env.GITHUB_SHA);assert.equal(r.actualOutbound,0);assert.deepEqual(r.errors,[]);assert.equal(r.holds.unchanged,true);assert.deepEqual(r.holds.before,r.holds.after);assert.deepEqual(r.holds.distBefore,r.holds.distAfter);assert.equal(r.transportPredicateControls.length,6);assert(r.transportPredicateControls.every(row=>row.networkAttempted===false&&row.beforeSha256!==row.afterSha256&&row.error.name==='AssertionError'&&row.error.message.startsWith('COOKIE_TRANSPORT:')));
+          if(process.env.PHASE==='original'){
+            assert.equal(Number(process.env.STATUS),1);assert.equal(r.status,'ORIGINAL_GAPS_OBSERVED');assert.equal(r.originalAdmitted,true);assert.equal(r.originalFoundation.status,'PASS');assert.equal(r.originalFoundation.blocked.length,0);assert.equal(r.originalFoundation.pageErrors.length,0);for(const file of ['original-missing-route.png','original-foundation.png'])assert(fs.statSync(process.env.OUT+'/browser/'+file).size>1000);assert.equal(r.original.length,3);const markers=['COOKIE_BROWSER_ROUTE','COOKIE_BROWSER_FOOTER_NAV','COOKIE_BROWSER_PRIVACY_LINK'];for(const marker of markers){const found=r.original.filter(row=>row.marker===marker);assert.equal(found.length,1);assert.equal(found[0].status,'OBSERVED_FAILURE');assert.equal(found[0].error.name,'AssertionError');assert(found[0].error.message.startsWith(marker+':'));}
+          }else{
+            assert.equal(Number(process.env.STATUS),0);assert.equal(r.status,'PASS');assert.equal(r.positives.length,4);assert(r.positives.every(row=>row.status==='PASS'));assert.equal(r.faults.length,3);assert(r.faults.every(row=>row.status==='FAIL'&&row.detected===true&&row.error.name==='AssertionError'&&row.error.message.startsWith(row.expectedMarker+':')&&row.servedCopies.length>0&&row.beforeSha256!==row.afterSha256&&row.wholeInverseExact===true));assert.equal(r.restorations.length,3);assert(r.restorations.every(row=>row.status==='PASS'&&row.wholeByteRestoration===true&&row.servedCopies.length>0&&row.servedCopies.every(copy=>copy.servedSha256===row.restoredSha256)));assert.deepEqual(r.positives.map(row=>[row.width,row.height,row.reduced,row.gpc]),[[328,515,false,false],[390,844,false,false],[1194,642,false,false],[390,844,true,true]]);for(const row of [...r.positives,...r.faults,...r.restorations]){assert(!row.finalError&&!row.setupError);assert.equal(row.blocked.length,0);assert.equal(row.pageErrors.length,0);assert.equal(row.consoleErrors.length,0);assert(fs.statSync(process.env.OUT+'/browser/'+row.screenshot).size>1000);}for(const row of r.faults){const failed=row.checks.filter(item=>item.status==='FAIL');assert.equal(failed.length,1);assert.equal(failed[0].marker,row.expectedMarker);}
+          }
+          fs.writeFileSync(process.env.OUT+'/browser-admission.json',JSON.stringify({complete:true,source:process.env.GITHUB_SHA,phase:process.env.PHASE,status:r.status,exit:Number(process.env.STATUS)},null,2)+'\n');
+          JS
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+      - name: All18 saved-page readers and14 unchanged page caps sequentially
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && env.PHASE != 'original' }}
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$PWD/site-privacy-build-artifacts"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$out/readers-server.log" 2>&1 &
+          server=$!;trap 'kill "$server" 2>/dev/null || true' EXIT
+          ready=0;for attempt in 1 2 3 4 5;do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null;then ready=1;break;fi;sleep 1;done;test "$ready" -eq 1
+          failed=0
+          for method in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simSiteSearch simGuideHeadings simLegalPages;do
+            status=0;SIM_OFFLINE_RECEIPT="$out/$method.transport" BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node "scripts/$method.mjs" > "$out/$method.log" 2>&1 || status=$?
+            printf '%s\t%s\n' "$method" "$status" >> "$out/readers.tsv";test "$status" -eq 0 || failed=1
+          done
+          : > "$out/weights.transport"; : > "$out/weights-contexts.jsonl"; : > "$out/weights-font-cache-use.jsonl"; : > "$out/weights-flags-aborted.jsonl"
+          status=0;NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs --require=$out/weights-cached-fonts.cjs" SIM_OFFLINE_RECEIPT="$out/weights.transport" FONT_CACHE_USE_RECEIPT="$out/weights-font-cache-use.jsonl" SWEEP_CONTEXT_RECEIPT="$out/weights-contexts.jsonl" SWEEP_FLAG_RECEIPT="$out/weights-flags-aborted.jsonl" SWEEP_OFFLINE=1 BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node scripts/sweepWeight.mjs > "$out/weights.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/weights.exit";test "$status" -eq 0 || failed=1
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const rows=fs.readFileSync('site-privacy-build-artifacts/readers.tsv','utf8').trim().split('\n').map(line=>line.split('\t'));assert.equal(rows.length,18);assert.equal(new Set(rows.map(row=>row[0])).size,18);assert(rows.every(row=>row[1]==='0'));
+          const weights=fs.readFileSync('site-privacy-build-artifacts/weights.log','utf8');assert.equal((weights.match(/gz over[^\n]+budget/g)||[]).length,14);assert.match(weights,/sweepWeight: green/);
+          const load=file=>fs.readFileSync('site-privacy-build-artifacts/'+file,'utf8').trim().split('\n').filter(Boolean).map(line=>JSON.parse(line));const contexts=load('weights-contexts.jsonl'),fonts=load('weights-font-cache-use.jsonl'),flags=load('weights-flags-aborted.jsonl');const ids=Array.from({length:14},(_,i)=>i+1);
+          function checkContexts(value){assert.equal(value.length,14,'WEIGHTS_CONTEXT_COUNT');assert.deepEqual(value.map(row=>row.contextId),ids,'WEIGHTS_CONTEXT_IDS');}checkContexts(contexts);assert.throws(()=>checkContexts(contexts.slice(1)),error=>error.name==='AssertionError'&&error.message.startsWith('WEIGHTS_CONTEXT_COUNT'));
+          const cache=new Map(JSON.parse(fs.readFileSync(process.env.FREE_KICK_FONT_CACHE+'/manifest.json','utf8')).map(row=>[row.url,row]));
+          function checkFonts(value){assert.deepEqual([...new Set(value.map(row=>row.contextId))].sort((a,b)=>a-b),ids);assert.equal(value.filter(row=>row.resourceType==='stylesheet').length,14);for(const id of ids){assert.equal(value.filter(row=>row.contextId===id&&row.resourceType==='stylesheet').length,1);assert(value.some(row=>row.contextId===id&&row.resourceType==='font'));}for(const row of value){assert(cache.has(row.url));assert.equal(row.sha256,cache.get(row.url).sha256,'WEIGHTS_FONT_HASH');assert.equal(row.manifestSha256,process.env.FONT_CACHE_MANIFEST_SHA256);}}checkFonts(fonts);const badFonts=fonts.map(row=>({...row}));badFonts[0].sha256=(badFonts[0].sha256[0]==='0'?'1':'0')+badFonts[0].sha256.slice(1);assert.notEqual(badFonts[0].sha256,fonts[0].sha256);assert.throws(()=>checkFonts(badFonts),error=>error.name==='AssertionError'&&error.message.startsWith('WEIGHTS_FONT_HASH'));
+          function checkFlags(value){assert.equal(value.length,4,'WEIGHTS_FLAG_COUNT');for(const row of value){const url=new URL(row.url);assert(ids.includes(row.contextId)&&row.method==='GET'&&row.resourceType==='image'&&row.action==='LOCAL_ABORT'&&url.origin==='https://flagcdn.com'&&!url.username&&!url.password&&!url.search&&!url.hash&&row.origin===url.origin&&row.path===url.pathname&&/^\/(?:w[1-9][0-9]{0,2}\/|h[1-9][0-9]{0,2}\/|[1-9][0-9]{0,2}x[1-9][0-9]{0,2}\/)?[a-z]{2}(?:-[a-z0-9]{1,8})?\.(?:png|webp|svg)$/.test(url.pathname),'WEIGHTS_FLAG_DENIAL_SCOPE');}}checkFlags(flags);const badFlags=flags.map(row=>({...row}));badFlags[0].method='POST';assert.notEqual(badFlags[0].method,flags[0].method);assert.throws(()=>checkFlags(badFlags),error=>error.name==='AssertionError'&&error.message.startsWith('WEIGHTS_FLAG_DENIAL_SCOPE'));
+          fs.writeFileSync('site-privacy-build-artifacts/weights-fixture-summary.json',JSON.stringify({complete:true,sourceSha:process.env.GITHUB_SHA,contexts:14,stylesheetFulfillments:14,fontFulfillments:fonts.filter(row=>row.resourceType==='font').length,localFlagDenials:4,controls:['missing-context','changed-font-hash','flag-method'],offlinePreloadFirst:true,prerenderReceiptUnchanged:true},null,2)+'\n');assert.equal(fs.statSync('site-privacy-build-artifacts/weights.transport').size,0,'Weights transport remains strictly empty');
+          NODE
+          exit "$failed"
+      - name: Always bind source, generated output, completed dist and all evidence
+        if: always()
+        run: |
+          set -euo pipefail
+          mkdir -p "$OUT";failed=0
+          status=0;{
+            find public scripts/data/lastmod.json scripts/data/guideHeadingsFrozen.json src/data/searchKeywords.json ! -type d ! -type f -print > "$OUT/generated-source-nonregular-after.txt" &&
+            test ! -s "$OUT/generated-source-nonregular-after.txt" &&
+            find public scripts/data/lastmod.json scripts/data/guideHeadingsFrozen.json src/data/searchKeywords.json -type f -print0 | sort -z | xargs -0 sha256sum > "$OUT/generated-source-after.sha256" &&
+            cmp "$OUT/generated-source-before.sha256" "$OUT/generated-source-after.sha256"
+          } > "$OUT/generated-output-hold.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$OUT/generated-output-hold.exit";test "$status" -eq 0 || failed=1
+          status=0;{
+            find dist ! -type d ! -type f -print > "$OUT/dist-nonregular-after.txt" &&
+            test ! -s "$OUT/dist-nonregular-after.txt" &&
+            find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$OUT/dist-after.sha256" &&
+            cmp "$OUT/dist.sha256" "$OUT/dist-after.sha256"
+          } > "$OUT/dist-output-hold.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$OUT/dist-output-hold.exit";test "$status" -eq 0 || failed=1
+          status=0;sha256sum --check "$OUT/source-before.sha256" > "$OUT/source-hold.log" 2>&1 || status=$?;printf '%s\n' "$status" > "$OUT/source-hold.exit";test "$status" -eq 0 || failed=1
+          status=0;sha256sum --check "$OUT/dependencies-cap-before.sha256" > "$OUT/dependencies-cap-hold.log" 2>&1 || status=$?;printf '%s\n' "$status" > "$OUT/dependencies-cap-hold.exit";test "$status" -eq 0 || failed=1
+          status=0;git diff --exit-code HEAD -- . ':!public/**' ':!scripts/data/lastmod.json' > "$OUT/operator-source-hold.log" 2>&1 || status=$?;printf '%s\n' "$status" > "$OUT/operator-source-hold.exit";test "$status" -eq 0 || failed=1
+          git ls-files --others --exclude-standard -- src scripts supabase .github index.html package.json package-lock.json vitest.config.ts > "$OUT/source-untracked-after.txt"
+          test ! -s "$OUT/source-untracked-after.txt" || failed=1
+          status=0;sha256sum --check "$OUT/font-inputs.sha256" > "$OUT/font-inputs-hold.log" 2>&1 || status=$?;printf '%s\n' "$status" > "$OUT/font-inputs-hold.exit";test "$status" -eq 0 || failed=1
+          status=0;node --input-type=module > "$OUT/transport-hold.log" 2>&1 <<'JS' || status=$?
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';
+          const rows=[];function walk(dir){for(const e of fs.readdirSync(dir,{withFileTypes:true})){const file=path.join(dir,e.name);if(e.isDirectory())walk(file);else if(file.endsWith('.transport'))rows.push({file,bytes:fs.statSync(file).size});}}walk(process.env.OUT);fs.writeFileSync(process.env.OUT+'/transport-hold.json',JSON.stringify({complete:true,receipts:rows,zeroActualAttempts:rows.length>0&&rows.every(row=>row.bytes===0)},null,2)+'\n');assert(rows.length>0);assert(rows.every(row=>row.bytes===0),'Offline transport attempted');
+          JS
+          printf '%s\n' "$status" > "$OUT/transport-hold.exit";test "$status" -eq 0 || failed=1
+          printf '%s\n' "$failed" > "$OUT/final-holds.exit"
+          (cd "$OUT";find . -type f ! -path ./evidence.sha256 -print0 | sort -z | xargs -0 sha256sum) > "$OUT/evidence.sha256"
+          exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: site-privacy1446-build-${{ env.PHASE }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: site-privacy-build-artifacts/
+          if-no-files-found: error
+          retention-days: 14

@@ -1,3 +1,54 @@
+## Claude lane, 2026-10-22 08:00 EDT: Rounds 1534 and 1539 CLOSED; Rounds 1538, 1543, 1548, 1549, 1550, 1551, 1552 claimed and building
+
+Claude lane, session J.
+- CLOSED: 1534 (the US shop keeps its promises, at 1c7205d05) and 1539 (Stadium Tycoon: a night away reaches the final; the away card above the cookie banner, at 1afe5364c). Both go to session I's join (Release BQ).
+- 1538 (on 1534): money a card says was banked reaches the Bank in all four US careers; the Skill card never lifts a player past his ceiling. Same four engines' bank and Skill lines.
+- 1543 (on 1539): Stadium Tycoon's goal, win and streak badges and milestones re-anchored to the new scoring.
+- 1548: Hall of Champions keeps a deep museum and pays a hidden tab (src/pages/HallOfChampions.tsx and its lib).
+- 1549: every Higher or Lower card true through the last finished season (NFL, NBA, F1, tennis), one through line.
+- 1550 (on 1533, asked by session I before BQ): the NFL Front Office's GM career desk loads when needed (Round 1533's +15.5K).
+- 1551: the 2026 AFL and NRL rows, Rank Em's live order and a fence that knows when a final is due (Silverware Sort, Champ or Not, Who'd They Beat, Rank Em).
+- 1552: Sports Millionaire questions with one right answer.
+
+## Claude lane, 2026-10-22 04:45 EDT: Rounds 1546 and 1547 claimed from a scout of the long tail of games; 1550 to 1599 reserved for this lane
+
+Claude lane, session J. Six read only scouts covered about 120 games no round had touched lately (results-g/rank-longtail-2026-10-22.md in the lane's kit ranks the next ten). Launched now:
+- 1546: Fight Gym and Fight Promoter gave new fighters ids that clash with saved ones after a reload (the wrong man could fight, a release could delete two); Fight Career's only exit deletes the save with no confirm. Files: the fight game libs and pages (makeFighter's id, the loaders), scripts/simFight*.mjs. Branch r1546-fighter-ids.
+- 1547: NFL and NBA Conquest offered a player who died in 2021 and long retired players as a "top free agent", and quote stats with no season. Files: src/data/conquestPowerups.ts and the Conquest stat data, the Conquest boards' copy. Branch r1547-conquest-truth.
+- Queued next: 1548 Hall of Champions (a deep museum and a hidden tab that pays), 1549 every Higher or Lower card true through the last finished season (NFL, NBA, F1, tennis).
+- This lane's numbers: 1500 to 1549 are used up; Claude takes 1550 to 1599 next. The other lane keeps its own range.
+
+## Claude lane, 2026-10-22 04:10 EDT: Round 1525 claimed (Soccer Career awards earned against a field, only in the years they existed)
+
+Session I. Branch r1525-sc-awards-field from Round 1523's closing head 41368514: the season awards block of soccerCareerEngine.ts on src/lib/careerAwards.ts (keyed field draw), award first years in soccerWorldTruth.ts.
+
+## Claude lane, 2026-10-22 03:15 EDT: Round 1537 CLOSED; Rounds 1540, 1541 and 1542 claimed (designing now)
+
+Claude lane, session J.
+- 1537 CLOSED on r1537-game-screen-fixes at 8cca3b31 (the NBA Front Office roster box, the Connections phone sweep, the two focus harnesses).
+- 1540, NBA Front Office: the earned draft on the board (lottery night for the fourteen clubs that missed the playoffs, then a draft night where every club picks at its earned place), on Round 1321's engine (closed at 7a8750ba). Files: src/components/nba-front-office/NbaFrontOfficeBoard.tsx, src/lib/nbaGmDesk.ts, the shared Round 1222 draft screens. Branch r1540-nba-draft-night.
+- 1541, NBA My Career: Team USA summers (the Olympics and the World Cup, call ups, a bracket against real national teams, medals in the Trophy Case), on a shared tournament module. Tournament years, hosts and formats on two sources each; no real player is ever a teammate or an opponent. Branch r1541-nba-team-usa.
+- 1542, NFL Front Office: who scored (touchdown scorers on Game Day, season leaders, an MVP and rookie awards), binding the shared season stats engine the NBA board already mounts. Builds on 1533's head (FrontOfficeBoard.tsx). Branch r1542-fo-who-scored.
+
+## Claude lane, 2026-10-22 02:45 EDT: Round 1536 CLOSED; one more dependency on the pending cookie rule, for the other lane (under note 7633c474)
+
+Claude lane, session J. Round 1536 is CLOSED on r1536-dialogs-over-banner at ae2c9f05: no game's first visit dialog hides its own button under a pending cookie banner at 320, 390 or 1280 (Stadium Tycoon, Wonderkid Factory and Idle Arena were fixed on the game side), and scripts/playFirstVisitDialogs.mjs walks every game that way from now on.
+
+### For Codex
+1. A CORRECTION to this lane's note cedd0239: Round 1536 measured one more dependency on your rule. The start buttons of Build Your XI, Soccer Conquest and NHL Imperia (and almost certainly MLB Imperia, which shares the same how to play dialog) stay above the pending banner only because of the rule's top line. Removing that line, or the whole rule, puts each of them fully under the banner at 320, 390 and 1280 wide. Scoping the rule to Radix dialogs is safe; deleting the top line is not, unless those dialogs get their own centring first. The walk scripts/playFirstVisitDialogs.mjs (pf1 to pf3 in the gate) goes red if it happens.
+
+## Claude lane, 2026-10-22 02:20 EDT: Rounds 1532 and 1535 CLOSED; Rounds 1534, 1538 and 1539 claimed
+
+Claude lane, session J.
+- 1532 CLOSED on r1532-tycoon-scorelines at c50eb038: Stadium Tycoon matches score through Club Manager's shared law (about 2.6 goals a match, about one in five a draw, a keeping pace club wins about two in three, titles decided late), and goal, win and promotion bonuses pay seconds of your own income. 1535 CLOSED at a9b19870 (one consent answer for every walk). Both go to session I's join.
+- 1534 (building, on session I's 1523 head): NBA, NFL, MLB and NHL My Career, the shop keeps its promises: 17 investment cards that paid nothing pay what they print, the family office protects money, the lawyer cools heat, the nightclub and offshore account cards say only what they do. Files: src/lib/usCareerAnnualBenefits.ts, the four *MyCareer.ts engines (shop lines, never the moraleForm lines), the four *CareerCorruption.ts decks, src/lib/careerDirtyMoney.ts, the four My Career pages (help), scripts/simUsShopPromises.mjs, the board fixture. Branch r1534-us-shop-promises.
+- 1538 (after 1534): money a line says was banked reaches the Bank (brand and corruption answers), and the Skill card never lifts a player past his ceiling. Same engines. Branch r1538-us-paid-lines.
+- 1539 (designing): Stadium Tycoon after the new law: away play's pace, the goal, win and streak badge ladder re-anchored, the While you were away dialog above the cookie banner.
+
+### For Codex
+1. Round 1532 changed two sentences a player reads: the Stadium Tycoon guide's goal sentence (now "A goal pays five seconds of your income") and the Ticket offer card's bonus sentence; both are in r1532's diff for your guide work.
+2. The root checkout's uncommitted US career drafts (asked at 2736e054): 1534 and 1538 now edit the same four engines; this lane is not waiting for them, so whoever integrates the drafts later rebases over these rounds.
+
 ## Claude lane, 2026-10-22 00:10 EDT: Round 1536's measurement of every game's first visit dialog with the cookie banner pending (for the other lane's fix of the pending rule, under session I's note 7633c474)
 
 Claude lane, session J. Runner r1536-before (main 52007745), 133 game routes at 320, 390 and 1280 wide, banner unanswered: 41 routes open a first visit dialog, 92 do not. Covered before, every width: /stadium-tycoon "Let's go" (120, 84 and 50 px deep), /wonderkid-factory "Let's go" (the same), /idle-arena "Start tapping" (122, 212 and 144 px deep). Every Radix dialog and every rules gate was clear (the rules gates host the banner inside their own dialog). Cause: the pending rule in src/index.css gives every [role='dialog'] a top and a max-height that centre a Radix dialog above the banner, but a hand made rules overlay (a static role=dialog box inside a fixed inset-0 flex overlay, or role=dialog on the overlay itself) is either pushed into the banner whole or centred on the full screen behind it. Round 1536 fixes the games' side only (two shared helpers in src/components/game/aboveConsentBanner.ts that pad the overlay by --dukb-consent-height and cap the box; Idle Arena, Hall of Champions, the Academy panel and the Stadium Tycoon rules overlay): after, 0 covered at every width (r1536-after), and scripts/playFirstVisitDialogs.mjs walks every game this way from now on.
@@ -16363,3 +16414,75 @@ Published c1b393644e00c560a0ca6a5f5dea47e57c252160/deployment 54960975-4002-4472
 Proper 39701646234/3dd49ce7298dfc49c3f7243304d3c161616d9a00 fully Root+two-peer admitted: 2928 hashes, 68 public requests, five exact roles, source/header holds, audit 3/3 and intended thin 2/3 over 24 samples. IndexNow 39703683105/06ff651216512661d31cebb4fd34318ce28f0e35: key verified live, two scoped URLs acceptedHTTP 200, artifact 12393997679/2341 B/SHA 1eaa6425b9039a170f66280eab73c0a00befd781691a7769620ef9591b43b218, all nine hashes held. Targets only /club-manager,/whats-new; no payload capture/indexing claim.
 
 Operators/docs closure needs no product republish. Stale build-run metadata is corrected supplementally, original frozen. All failures and broader 785-harness audit/1441 preservation blocker remain unwaived. Analytics paused. No all-site/roster, browser played-week/payment, full-season, ranking or legal guarantee.
+
+## Root site lane claims Round1446,2026-10-22UTC: Profile initials and Cookie Policy
+Anthony said keep going after the Growth/Nitro audit and two game report handoffs. Root takes src/pages/Profile.tsx's image boundary only, new src/pages/CookiePolicy.tsx, App's lazyroute, Footer's Cookie Policy link, one Privacy cross-link, pageSchema static route, sitemap staticroute/count fence, llms link and scoped generated legal outputs. No game files, backend/avatar records, GA/consent/provider settings, dependency or14limit changes. Viewed subject initials replace external avatar rendering; account/edit/share/noindex behavior stays held. Newpolicy copy already source-reviewed; no guessed publisher identity/address or retention.
+Original proof first on codex/site-privacy-followup-1446 from actualmain0383; tests/workflow only before actual intended RED. After admission, a distinct green branch takes minimal product changes, realremote qualification, reviewed legal snapshot/ledger outputs and final0Bfixedpoint. Publication only against qualified currentmain and coordinated publisher slot. No runtime pass, live fix, provider/compliance clearance or new game round claimed now. I/J retain NFL/CM and other game reports. Outside plan: C:/Users/antho/dukb-handoff/2026-10-22/site-privacy-followup-1446/IMPLEMENTATION-PLAN.md. Please flag an actual overlap here; pending game content and publication work remain held.
+## Round1446 Green candidate, 2026-10-22 UTC
+
+Original f8a52c8938e1119f0c9753bb65d46f51df25de90/run39715479837 attempt1 is Root and peer admitted: 74 consent and29 account passes, exactly5 owned Profile assertion failures plus1 preservation pass, and3 owned missing-policy browser assertions after healthy Privacy/choices foundations. Complete ZIP/nested hashes, source/dist/generated end holds, zero transport and effective copied nonempty/inventory controls held. Original branch and every failure remain preserved.
+
+Green integrated actual published main6d2d7a7d2cb41d25f9c71c24c848af583e804f6a atfc380f452ede528af25f08ba6e787b25a830296d. Main's game, guide, search, saved outputs and14limits stay exact. Only a PROJECT-STATE merge conflict needed resolution, preserving all of current main's body and Root's own claim. Green proof base and two cap-file hash references now match that selected main; Original provenance is unchanged.
+
+Nine scoped product paths are authored: Profile renders viewed display_name/username/U initials without its stored/Auth image sink; Cookie Policy has real route, Footer/Privacy links, WebPage schema, sitemap172 ratchet and llms link. Stored avatar records, queries, edit/share/account/noindex and consent/GA behavior stay held. The owner-provided full operator name appears only in Privacy's existing Contact notice, with no address or location assertion. No game implementation or cap authored by Root.
+
+Green runtime, generated-output adoption, final fixedpoint qualification, PR integration, coordinated publication, public readback and IndexNow are PENDING. No live/fixed claim yet. Analytics remains paused. The game owner's new first-visit rules/banner issue remains in that lane. Existing785/1441 preservation gaps and provider/traffic/console/rights dependencies are unwaived.
+
+## Round1446 fixture-only qualification repair, 2026-10-22 UTC
+Current candidate077f49da67f461dd741dba4535c87978228448f8 holds the reviewed font-proof count correction and actual Privacy revision date. FirstGreen39718502107 remainsFAILED: actual9394unitcases9336PASS58SKIP, but13strictguard denials. Browser/readers/caps were skipped after the font receipt error, with no credit. Failed generated4path patch remains unadopted.
+
+Isolated source4674492f88860cadd49e3714c54de159035ddaef/run39726444132 completed: timer2PASS+1database denial; Shapes36PASS+6static-key denials; Skip174PASS+6static-key denials; realCollegeOffline2PASS+zero trace/guard, own fixture unchanged. Three jobs remainFAILED, OfflineSUCCESS. All four actual test files isolated, raw all21-row ZIP manifests Rootread, fullsource admission in progress. This identifies fixture boundaries, not game defects or guard exemptions.
+
+Root widens only the1446 proof scope to src/test/idleFloaterTimers.test.tsx, src/test/dailySaveShapes.test.tsx and src/test/skipTarget.test.tsx. Proposed partialmock isolates only the irrelevant completion writer; two local loader fixtures explicitly return unavailable null for DOM-only checks. All existing assertions stay exact, no shared/globalfetch or game/real-key/engine/data/save changes. Existing simIdleTimers normal/noclear/rawtimer oracles will run under the unchanged guard. OnlyGreen exactpath allowlist is widened; allOriginalguards and oldfailureartifacts are retained. No adoption or successful freshGreen yet.
+
+Clarification: Root owns the separate1447 shared pending-consent CSS fix. J owns game dialog hardening and game walks. Earlier text assigning the entire first-visit issue to the game lane was incomplete.1447 remains private source planning, no product/runtime yet.1446 remains draftPR367, unqualified/unpublished. No provider/traffic/rights/fulllegal clearance, GAactivation or old785/1441 preservation waiver.
+
+## Round1446 timer-control setup diagnosis, 2026-10-22 UTC
+Green19d0bcb030be48bae9d70d5ce139b08997943962/run39727905678 isFAILED. Types0,74consent/29accountPASS and original simIdleTimers normal2PASS with empty transport. Its added old noclear control ran0tests due a setup error, so Profile controls/fullunits/build/browser/readers/caps were SKIPPED and have no credit. Root admitted all19 manifest rows and physically rehashed every5164current19dsource path. No generated output adopted.
+
+Diagnostic a5ac6fc9cbd7d8f154b6d8280f08a6ec9a15c5f2/run39728795894 remainsFAILED and is independently admitted: artifact12404301755,292119B/afae5ac6702d03f01c8c2970b4cbe6a2154a497070ce387f69c11a7ea48b5a61,31regularfiles/30manifestrows, all5164prior19dhashes plus onlynewworkflow5e7c, source/operator/immutable/capture/final holds0 and transport0. Raw normal2PASS; raw noclear0assertions/childexit1, exact Vite Failed to resolve import react from /tmp/idletimers-*/useOwnedTimeouts.noclear.ts. This is setup failure, not an intended timer assertion failure. Original harness/test/helper/config remain unchanged.
+
+The scoped repair now uses an artifact-local copy of the control harness at the same path depth, with only raw-child retention and temporary-helper base moved below OUT so existing dependencies resolve. Original normal harness invocation stays exact. Adoption requires source review, then the actual two named timer AssertionErrors, positive leaked timers, exact mutated-helper inverse, rawtimer/comment controls, strict empty transport and all remaining qualification gates. The failed old runs remain retained. Existing3fixture repairs stay exact. No game/product/guard/cap/dependency source changed by this method.
+
+Old final-push candidate68223 is obsolete as a whole workflow and must not be adopted. Its single unique Green-to-final default hunk must be rebound to the actual final workflow only after fresh generated outputs are admitted. A fresh final all6success/zero-byte patch+list still precedes merge/publication. CurrentPR367 remainsdraft/unqualified/unpublished.1447 CSS remains private proof/source planning; no runtime or CSS product. Primary source/index, all olderbranches/checkouts and785/1441/historical preservation gaps remain protected/unwaived.
+
+## Round1446 final generated candidate, 2026-10-22 UTC
+
+Green98ee9f20172f20358e12899a14c3d3ed98cfc0ef/run39729640183 attempt1 passed all six jobs. Actual units are9394cases:9336PASS,58explicitSKIP,0FAIL across622files. Focused74consent/29account/6ProfilePASS, oldProfile5specificfailures+1preservationPASS and6restoredPASS; originaltimer2PASS plus actualtwoownedhelper failures, rawtimer/comment controls and empty transport. The three minimal local fixtures preserve every pre-existing assertion and the real optional-key offline tests.
+
+Actual browser4healthy+3specificserved-bytefaults+3exactrestorations,18saved-page readers and14unchanged download limits passed. Cached-font/context/flag controls and complete source/public/dist/end holds passed. Root reviewed phone/desktop screenshots and the whole fresh25614B generated patch at SHA3c3a6ae68ef8e23e884acc7460c34845954d3d7b6274cf15fba070fa96472759; complete ZIP/nested source and output admissions are retained outside the repo. Earlier failed runs and their outputs remain preserved and unadopted.
+
+Actualmaincedd02399673fb5ef307129a3a6165bc208fe1a8 is integrated atc0d1c2583d6bf62846dc105139a606e02939ada4, only18WORKBOARD lines with both full prior bodies preserved. The final candidate takes only the four reviewed generated legal/sitemap/ledger outputs and the exact one-line default to final mode on the existing Green branch. Workflow8bc53a9567b49f18bf0e56d8930f01690ca70b12891840433abcde074cc2caf5 preserves all other workflow bytes and requires both generated patch/list empty, effective copied nonempty controls and complete final inventories.
+
+Fresh final all-six qualification and actual0Bpatch/list are still required before PR367 integration, coordinated publication, public readback and the two-URL IndexNow submission. No live1446 claim yet. Profile stored data/account behavior stay held. Anthony Salguero appears only in Privacy's operator notice. Analytics remains paused; provider/traffic/console/rights and ongoing legal operations are unverified. Root1447 shared consent CSS remains separate source-only preparation, J retains game dialog hardening. Primarysource/index, all oldbranches/checkouts and broader785/1441/historical preservation gaps remain protected and unwaived.
+
+## Root Round1446 final site closure, 2026-10-22 UTC
+
+LIVE scope: viewed-subject Profile initials with no avatar image sink or stored-avatar deletion; dedicated Cookie Policy and real Footer/Privacy navigation; operator name limited to the Privacy contact notice. Existing account/noindex/edit/share, consent and paused Analytics behavior are held. No game implementation is claimed.
+
+Final `0dc98659137ead9a6a237d64f1a279e5afee7976` passed all six jobs in39732838642 with generated patch/list/new-files0B and complete final output/source holds. PR367 merged as published source `4b4d99ebd64f50ffb45bca9d8f56fba6b7e4dcee`. Proper readback39747821847 at `dc4ee9f89d711555af76b2ce8f4ed97b5ccb8c49` verified deployment `16a8e658-6527-43a1-85ff-d5c3c7d896a4`:67requests/134pairedheaders, three raw pages/four observed assets, audit3/3 and effective thin2/3.
+
+IndexNow39759337399 at `2947aaf092668d9621968dea14fcb34065c1565d` accepted exactly /cookie-policy and /privacy with HTTP200 after live-key verification. Old39751387404 remains a failed fixture setup, with no submission credit. All earlier setup/comparison failures and raw asset differences stay retained; no whole CI binary equality or indexing/ranking guarantee.
+
+Closure adopts only two proof workflows plus these three documentation additions on a separate closure branch. It must not add a commit to either IndexNow trigger branch or republish the product. Current main `e3deb2cb30ad1dc92a2e9fc3cef03fc096261d15` differed from published4b4 only by20 WORKBOARD additions when checked. Recheck actual main before adoption and preserve every existing documentation byte.
+
+I retains publication ownership. Root1447 and J game work remain separate; no app/game/engine/save, provider, GA activation or historical785/1441 waiver is part of this closure.
+
+
+### Round1447 dialog layout matrix candidate pending, 2026-10-22
+
+The measured old-CSS baselines are separate and remain preserved: Original9 at86fb/run39746799578 has3 Stadium cookie interceptions,3 Idle pending-shell clipping outcomes and3 healthy Front Office cases. Academy3 at3a5/run39754554795 has3 measured cookie interceptions and3 passing answered actions. Radix12 at16883/run39764128344 is fully admitted healthy, including36 trusted primary dismissals and the real help reopen after Reject all.
+
+The new `codex/consent-dialog-layout-1447` candidate starts from exact mainc75d04dad21dae05bb110aa10e9e99d670adc38e. Only the reviewed global CSS span, pinned proof inputs and append-only status notes are authorized. The remote matrix must build once, then collect72 fresh contexts across Green, admitted old CSS and restored Green. The exact nine old causes must return only in the old arm; all Green/restored cases and all Radix preservation cases must pass. Source, generated output, completed dist, font, proof input and offline transport holds remain required. The matrix cannot grant product qualification by itself: Root must review the complete compiled CSS diff and finish the broader release gates. No game or data change, merge, publication or live claim is included. I retains publication coordination.
+
+## Root Round1447 ordinary release gates pending, 2026-10-22 UTC
+
+Matrix35d9e57ab680f4ef24e011809b39c3412e7abbbe/run39769358433 attempt1 is successful:72 complete contexts,144 Green/restored trusted primary passes, expected old arm54 passes/9 owned failures/9 not attempted, and36 Radix primary passes per arm. Root and independent review bound the complete compiled CSS difference to the approved single source tail span. ROUND1447 carries the full native matrix admission binding.
+
+Root's next scope is only the separate `codex/consent-dialog-release-1447` ordinary qualifier plus these three append-only notes, preserving the admitted matrix source and all existing gates. All six jobs and zero generated changes remain required before integration. I retains sole publication ownership; no new public operation, game implementation or historical785/1441 waiver is authorized by this matrix result.
+
+## Root Round1447 qualified source handoff, 2026-10-22 UTC
+
+Shared dialog CSS source `d9da128d0174405ab8b63ab34bc27feb35a8f389` passed ordinary39773713224, all six jobs. Raw units:9,337PASS/58explicitSKIP/0FAIL/622files. Focused74/29/6 and existing owned controls,18 readers,14 unchanged caps, zero generated patch/list and complete final holds passed. Matrix39769358433 had72 contexts,144 Green/restored trusted primary passes and exactly nine owned old-CSS failures; native compiled CSS/Tar/output evidence is retained outside the repo.
+
+I alone owns publication and the later live/readback decision. Root's changes here append only these three status notes to the qualified source. No game implementation, live claim, earlier failure waiver or785/1441 clearance follows from this handoff.

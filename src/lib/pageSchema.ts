@@ -39,6 +39,7 @@ const STATIC_TYPES: Record<string, string> = {
   '/about': 'AboutPage',
   '/contact': 'ContactPage',
   '/privacy': 'WebPage',
+  '/cookie-policy': 'WebPage',
   '/terms': 'WebPage',
   '/accessibility': 'WebPage',
   '/records': 'CollectionPage',
