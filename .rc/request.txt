@@ -1,0 +1,3 @@
+# Release BP triage, trN: simHarnessAnchors with every offence printed (anchorsAll.mjs), on the head and on 212b9069.
+headsha: git log --oneline -1
+anchors-all: node .rc/x/anchorsAll.mjs && node scripts/simHarnessAnchors.mjs 2>&1 | grep -E 'offence|FAIL|green'
