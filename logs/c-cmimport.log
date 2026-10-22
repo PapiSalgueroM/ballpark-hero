@@ -1,0 +1,6 @@
+Negative control changed temporary source: cmimport
+[1101 bundle] the part alone: 333666 bytes minified, 103586 gzipped (ceiling 34965 and 14687); 7 files, 36 import specifiers read; problems 3
+  FAIL: index.ts imports @/lib/clubManager
+  FAIL: the bundle of the part carries the engine's "4-3-3 holding"
+  FAIL: the part is 333666 bytes minified and 103586 gzipped, over its ceiling of 34965 and 14687 (measured 29137 and 12239, plus a fifth)
+simLiveSimMotion: control cmimport put the engine in the part's bundle and the bundle section went red (3 problems), as it must.
