@@ -1,0 +1,8 @@
+m1-mapswap exit=0 54s |    Duration  52.83s (transform 1.80s, setup 55ms, collect 2.28s, tests 49.82s, environment 262ms, prepare 138ms)
+m2-facing exit=0 53s |    Duration  52.77s (transform 1.78s, setup 54ms, collect 2.26s, tests 49.79s, environment 242ms, prepare 56ms)
+m3-metres exit=0 53s |    Duration  53.20s (transform 1.80s, setup 56ms, collect 2.27s, tests 50.24s, environment 240ms, prepare 124ms)
+m3b-longpass exit=0 53s |    Duration  53.03s (transform 1.78s, setup 54ms, collect 2.26s, tests 50.06s, environment 241ms, prepare 55ms)
+m4-resetoff exit=1 53s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/liveSimMotion.test.tsx,title=src/test/liveSimMotion.test.tsx > Round 1521%3A the live match looks like
+m5-chain exit=1 54s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/liveSimMotion.test.tsx,title=src/test/liveSimMotion.test.tsx > Round 1521%3A the live match looks like
+m6-minute exit=1 54s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/liveSimMotion.test.tsx,title=src/test/liveSimMotion.test.tsx > Round 1521%3A the live match looks like
+m7-cardplace exit=1 54s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/liveSimMotion.test.tsx,title=src/test/liveSimMotion.test.tsx > Round 1521%3A the live match looks like
