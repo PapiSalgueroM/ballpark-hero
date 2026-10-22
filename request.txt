@@ -1,0 +1,9 @@
+#!serial
+ctl-check: node scripts/controlFrontOfficeBoard.mjs check
+ctl-lookopens: node scripts/controlFrontOfficeBoard.mjs lookopens
+ctl-deskstale: node scripts/controlFrontOfficeBoard.mjs deskstale
+ctl-xpzero: node scripts/controlFrontOfficeBoard.mjs xpzero
+ctl-resetbutton: node scripts/controlFrontOfficeBoard.mjs resetbutton
+ctl-arrivaltitle: node scripts/controlFrontOfficeBoard.mjs arrivaltitle
+ctl-thirdkey: node scripts/controlFrontOfficeBoard.mjs thirdkey
+ctl-blank: node scripts/controlFrontOfficeBoard.mjs blank
