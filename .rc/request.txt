@@ -1,0 +1,11 @@
+#!serve
+#!playwright
+#!serial
+boxing-fonts: node scripts/playBoxingShowForecast1086.mjs --prefetch-fonts-only 2>&1 | tail -3
+why-staleKey-boxing: node .rc/x/mut.mjs staleKey && node scripts/playBoxingShowForecast1086.mjs > /dev/null 2>&1; s=$?; node .rc/x/boxErr.mjs; git checkout -- scripts; exit $s
+why-swapLists-boxing: node .rc/x/mut.mjs swapLists && node scripts/playBoxingShowForecast1086.mjs > /dev/null 2>&1; s=$?; node .rc/x/boxErr.mjs; git checkout -- scripts; exit $s
+open-head: ONLY=/ PLAY_STORAGE_CONTROL=open node scripts/playStorageBlocked.mjs 2>&1 | grep -E "cookie banner OPEN|FAIL|checks" | cut -c1-220; exit ${PIPESTATUS[0]}
+open-staleKey: node .rc/x/mut.mjs staleKey && { ONLY=/ PLAY_STORAGE_CONTROL=open node scripts/playStorageBlocked.mjs 2>&1 | grep -E "real storage|FAIL|checks" | cut -c1-220; s=${PIPESTATUS[0]}; }; git checkout -- scripts; exit ${s:-3}
+bn-base: bash .rc/x/bnsrv.sh scripts/lib/answerConsent.mjs scripts/playStorageBlocked.mjs
+bn-open-ours: cd /tmp/wt-bn && BASE=http://localhost:4174 SWEEP_BASE=http://localhost:4174 ONLY=/ PLAY_STORAGE_CONTROL=open node scripts/playStorageBlocked.mjs 2>&1 | grep -E "real storage|FAIL|checks" | cut -c1-220; exit ${PIPESTATUS[0]}
+bn-open-own: git show c3309e67:scripts/playStorageBlocked.mjs > /tmp/wt-bn/scripts/playStorageBlockedBN.mjs && cd /tmp/wt-bn && BASE=http://localhost:4174 SWEEP_BASE=http://localhost:4174 ONLY=/ PLAY_STORAGE_CONTROL=open node scripts/playStorageBlockedBN.mjs 2>&1 | grep -E "real storage|FAIL|checks" | cut -c1-220; exit ${PIPESTATUS[0]}
