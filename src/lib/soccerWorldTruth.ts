@@ -111,7 +111,7 @@ export function monthYear(month: string, seasonYear: number): number {
 /* ─── The Puskas Award's first season (Round 1523) ───
    The award was first given in 2009, for a goal scored on 15 April 2009: the official Ferenc Puskas site says "The
    recipient of the first ever Puskás Award was Portugal's Cristiano Ronaldo", for his long range goal against Porto
-   in the Champions League quarter final second leg on that date (puskas.com, fifa-puskas-award page 1), and
+   in the Champions League quarter final second leg on that date (puskas.com, the page on the award's first winner), and
    topendsports.com (soccer awards, puskas-award) says it "was first awarded in 2009" and opens its winners at 2009
    with the same goal. Both read 2026-10-21. April 2009 falls in the season starting in 2008 (monthYear), so the
    2008-09 season is the first a career's row may win it in, the same line the season cards already draw for a
