@@ -1,0 +1,13 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/clubManagerTactics.test.ts [2m([22m[2m52 tests[22m[2m)[22m[33m 737[2mms[22m[39m
+ [32m✓[39m src/hooks/useClubManager.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 2519[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager completion shape[2m > [22ma played match records activity and not a completion [33m 358[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager completion shape[2m > [22ma finished season records exactly one completion [33m 2160[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m54 passed[39m[22m[90m (54)[39m
+[2m   Start at [22m 03:27:30
+[2m   Duration [22m 6.25s[2m (transform 2.84s, setup 184ms, collect 4.98s, tests 3.26s, environment 943ms, prepare 477ms)[22m
+

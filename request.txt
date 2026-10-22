@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+units: node_modules/.bin/vitest run src/lib/clubManagerTactics.test.ts src/hooks/useClubManager.test.ts --testTimeout=300000 --hookTimeout=120000
+quick: SECTION=table,styles,balanced node scripts/simCmTactics.mjs
+c-mirror: CM_TACTICS_CONTROL=mirror node scripts/simCmTactics.mjs
+walk: node scripts/playCmTactics.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs

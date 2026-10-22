@@ -1,0 +1,7 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+units exit=0 7s |    Duration  6.25s (transform 2.84s, setup 184ms, collect 4.98s, tests 3.26s, environment 943ms, prepare 477ms)
+c-mirror exit=1 1s | simCmTactics: control mirror FIRED (1 failures: table 1; must turn table red)
+quick exit=0 12s | simCmTactics: all green (sections table, styles, balanced)
+simNoRivalNames exit=0 13s | No rival product names found. 0 findings.
+tsc exit=0 61s | 
+walk exit=0 112s | playCmTactics: all green (41 checks)
