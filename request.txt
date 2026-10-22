@@ -1,0 +1,4 @@
+#!build
+#!playwright
+base-writes: git worktree add -q /tmp/base 52007745 && ln -s "$PWD/node_modules" /tmp/base/node_modules && cd /tmp/base && npm run build > /tmp/base-build.log 2>&1 && node scripts/simWritesAreSent.mjs
+head-writes: node scripts/simWritesAreSent.mjs

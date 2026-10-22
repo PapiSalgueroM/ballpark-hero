@@ -1,0 +1,3 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+head-writes exit=1 13s | simWritesAreSent: 2 failures
+base-writes exit=1 48s | simWritesAreSent: 2 failures
