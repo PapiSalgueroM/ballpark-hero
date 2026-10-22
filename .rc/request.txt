@@ -1,0 +1,3 @@
+usSummer-rest: SIM_SECTIONS=1,2,3,3b,4,5,7,8,9,10,11,12 node scripts/simUsCareerSummer.mjs
+usSummer-6nba: SIM_SECTIONS=6 SIM_SPORTS=nba node scripts/simUsCareerSummer.mjs
+usSummer-6mlbnhl: SIM_SECTIONS=6 SIM_SPORTS=mlb,nhl node scripts/simUsCareerSummer.mjs
