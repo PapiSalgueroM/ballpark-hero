@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+landing-headonly: SOCCER_LANDING_HEAD_ONLY=1 ENGINES=chromium node scripts/playSoccerLanding.mjs
+landing-headonly-ctl-none: ANSWER_CONSENT_CONTROL=none SOCCER_LANDING_HEAD_ONLY=1 ENGINES=chromium node scripts/playSoccerLanding.mjs
+landing-headonly-main: git worktree add -q --detach /tmp/wt-main cedd0239 && ln -s "$PWD/node_modules" /tmp/wt-main/node_modules && cd /tmp/wt-main && SOCCER_LANDING_HEAD_ONLY=1 ENGINES=chromium node scripts/playSoccerLanding.mjs
