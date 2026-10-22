@@ -125,7 +125,7 @@ const CFB_WORDS: CollegeSport<CfbTeam, CfbState, CfbGame, CfbRecruit, Postseason
   unitCoach: (role, c) => (c ? `${role} ${c.name}, ${c.rating}` : `${role} chair empty`),
   noStaffYet: 'Coordinators arrive when this season\'s offseason closes.',
   playIntro: (depth, st) => (st.format
-    ? 'All 12 games are set before kickoff and nobody plays the same team twice. Weeks 1-4 are out of conference, weeks 5-11 are the conference race with one non-conference date each, and week 12 is rivalry week.'
+    ? 'All 12 games are set before kickoff and nobody plays the same team twice. Weeks 1-4 are out of conference, weeks 5-11 are the conference race with a non-conference date or two mixed in, and week 12 is rivalry week.'
     : depth
       ? 'Weeks 1-4 are the non-conference gauntlet, 5-11 decide the conference race, and week 12 is rivalry week.'
       : 'Weeks 1-4 are the non-conference gauntlet, 5-12 decide the conference race.'),

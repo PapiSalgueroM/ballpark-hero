@@ -565,7 +565,8 @@ export function windowFire(st: ProgramLeague, role: StaffRole): Coordinator | nu
      2. each league's conference games fill the window rounds off the circle
         method (roundRobinCalendar, the calendar Aussie Rules binds), its
         in-league rivalry pairs held out for rivalry week, and every member
-        gets exactly one non-league date inside the window. That date is
+        gets one non-league date inside the window (an odd league's rival
+        pair sits out a round as well, so it gets two). That date is
         what makes a season possible at all: the schools outside every league
         (Notre Dame, the Group of Five bucket) need somebody to play while the
         leagues are busy, and with every league full they would have nobody

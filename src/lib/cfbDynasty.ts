@@ -26,8 +26,9 @@ import { CFB_RIVALRY_SERIES } from '@/data/collegeRivalries';
  * starts after it ships; a season already under way finishes the old way):
  *   - the whole slate is set at kickoff and no regular season pair repeats
  *     (src/lib/collegeProgram.ts collegeSlate): weeks 1 to 4 out of
- *     conference, weeks 5 to 11 six conference games and one non-conference
- *     date each, week 12 rivalry week;
+ *     conference, weeks 5 to 11 conference play with one non-conference date
+ *     (two for a school whose in-league rival sits out a round of the odd
+ *     sized ACC), week 12 rivalry week;
  *   - Notre Dame is an independent, as it really is: no conference, so no
  *     conference title game, and five ACC opponents a season, the average its
  *     ACC scheduling deal sets (ACC release 2014-10-21, theacc.com; WNDU
