@@ -1,0 +1,2 @@
+simCareerParity exit=0 8s | simCareerParity: green. One money app, one fan rule, one rival shape, one badge case, in all five careers.
+simUsRivalSense exit=0 16s | simUsRivalSense: 43 checks, 0 failed (full size)

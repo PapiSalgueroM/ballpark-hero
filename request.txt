@@ -1,0 +1,2 @@
+simCareerParity: node scripts/simCareerParity.mjs
+simUsRivalSense: node scripts/simUsRivalSense.mjs
