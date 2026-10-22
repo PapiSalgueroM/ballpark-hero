@@ -1,0 +1,4 @@
+#!playwright
+#!serial
+writes-head: node_modules/.bin/vite build > /tmp/head-build.log 2>&1 && node scripts/simWritesAreSent.mjs
+writes-base: git worktree add /tmp/base e3deb2cb >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/base/node_modules && cd /tmp/base && node_modules/.bin/vite build > /tmp/base-build.log 2>&1 && node scripts/simWritesAreSent.mjs
