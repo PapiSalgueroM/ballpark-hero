@@ -1008,7 +1008,7 @@ function buildMlbDeck(c: MlbCareerState, rng: () => number, stopAtBig: boolean):
     title: 'Winter plan',
     body: 'The offseason is long. Where do the hours go?',
     options: [
-      { label: c.pos === 'SP' ? 'New pitch lab' : 'Swing rebuild', effect: 'Push the ceiling', apply: (cc, r) => { if (cc.age >= 32) { cc.health = Math.min(100, cc.health + 4); return 'Veteran maintenance. Health +4.'; } const up = 1 + Math.floor(r() * 2); cc.ovr = Math.min(cc.pot + 1, cc.ovr + up); return `Rating +${up}.`; } },
+      { label: c.pos === 'SP' ? 'New pitch lab' : 'Swing rebuild', effect: c.age >= 32 ? 'Health +4' : 'Rating +1 or +2, up to your ceiling', apply: (cc, r) => usCareerSkillSummer(cc, r, 32, 'Veteran maintenance. Health +4.') },
       { label: 'Arm care and mobility', effect: 'Durability', apply: (cc) => { cc.health = Math.min(100, cc.health + 10); return 'Health +10. Spring training in the best shape of your life.'; } },
       { label: 'The commercial circuit', effect: 'Fame and money', apply: (cc) => { cc.fanbase = Math.min(100, cc.fanbase + 12); const fee = bankUsCareerFee(cc, 3, mlbEraById(cc.eraId).moneyScale); return `National ads all winter. ${fee}M banked.`; } },
     ],

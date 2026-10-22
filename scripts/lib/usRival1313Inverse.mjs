@@ -106,9 +106,17 @@ const BRAND_1538 = {
   'src/lib/mlbMyCareer.ts': ['const fee = bankUsCareerFee(cc, 3, mlbEraById(cc.eraId).moneyScale); return `National ads all winter. ${fee}M banked.`;', "cc.earnings += 3; return 'National ads all winter. 3M banked.';"],
   'src/lib/nhlMyCareer.ts': ['const fee = bankUsCareerFee(cc, 2, nhlEraById(cc.eraId).moneyScale); return `Golf videos and a doc crew. ${fee}M banked.`;', "cc.earnings += 2; return 'Golf videos and a doc crew. 2M banked.';"],
 };
+const SKILL_TAIL_1538 = 'const up = 1 + Math.floor(r() * 2); cc.ovr = Math.min(cc.pot + 1, cc.ovr + up); return `Rating +${up}.`; } },';
+const SKILL_1538 = {
+  'src/lib/mlbMyCareer.ts': ["effect: c.age >= 32 ? 'Health +4' : 'Rating +1 or +2, up to your ceiling', apply: (cc, r) => usCareerSkillSummer(cc, r, 32, 'Veteran maintenance. Health +4.') },",
+    "effect: 'Push the ceiling', apply: (cc, r) => { if (cc.age >= 32) { cc.health = Math.min(100, cc.health + 4); return 'Veteran maintenance. Health +4.'; } " + SKILL_TAIL_1538],
+  'src/lib/nhlMyCareer.ts': ["effect: c.age >= 31 ? 'Health +4' : 'Rating +1 or +2, up to your ceiling', apply: (cc, r) => usCareerSkillSummer(cc, r, 31, 'Maintenance summer. Health +4.') },",
+    "effect: 'Push the ceiling', apply: (cc, r) => { if (cc.age >= 31) { cc.health = Math.min(100, cc.health + 4); return 'Maintenance summer. Health +4.'; } " + SKILL_TAIL_1538],
+};
 const LIFT_1538 = Object.fromEntries(Object.entries(BRAND_1538).map(([rel, brand]) => [rel, [
   ["import { bankUsCareerFee, usCareerSkillSummer } from './usCareerAnnualBenefits';\n", ''],
   brand,
+  SKILL_1538[rel],
 ]]));
 function unlift1538(rel, text) {
   let out = text;

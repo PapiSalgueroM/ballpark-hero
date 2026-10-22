@@ -18,6 +18,8 @@
  *   5  heat: the lawyer cools a clean season twice as fast; with dirty money held nothing changes
  *   6  paid lines (Round 1538): the four brand answers and the ten clean corruption answers bank what they say, in
  *      both eras, from a Cash balance that holds hundredths, and the outcome card shows that Cash row
+ *   7  the Skill card (Round 1538): its answer stops at the ceiling and says what landed, and a summer fleet base
+ *      against head parts only where the rider acts (run after section 8, whose policy it shares)
  *   8  digest: careers that hold nothing that pays replay byte identical to the base arm, draw for draw
  *   9  old saves: a base arm save that bought everything earns one season per season on the head, no back pay
  *
@@ -36,6 +38,9 @@
  *   backpay  the first settle of a save without a carry pays twice -> section 9
  *   settleafter  the settle moved below the money app's tick in all four engines -> section 4's thin buffer case only
  *   nobank   the fee helper moves earnings only (Round 1538)  -> section 6, every case in all four sports
+ *   potplusone     the NBA Skill answer back to pot + 1       -> section 7's NBA (a) cases only
+ *   potplusoneall  all four Skill answers back to pot + 1     -> section 7's (a) cases in every sport, and the summer
+ *                  fleet parts from the base arm nowhere (which proves the fleet's attribution)
  *
  * Section 3's band, with its measured headroom (RULES line 7; review of 2026-10-22, read lens finding 4). The share
  * is checked inside the printed chance plus or minus 4 binomial sd. The careers are named and seeded in a fixed
@@ -56,6 +61,7 @@
  */
 import assert from 'node:assert/strict';
 import { execFileSync, spawnSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -65,9 +71,9 @@ import { build } from 'esbuild';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SHOP_BASE = process.env.SHOP_BASE || '413685149bed816a5c384242aa8c40f412b1d523';
 const CONTROL = process.env.SHOP_CONTROL || '';
-const CONTROL_SECTIONS = { rate: ['1', '2'], words: ['1'], camp: ['1'], nocall: ['2', '3', '4', '9'], chance: ['3'], twice: ['3'], office: ['4'], lawyer: ['5'], leak: ['8'], coolall: ['8'], backpay: ['9'], settleafter: ['4'], nobank: ['6'] };
+const CONTROL_SECTIONS = { rate: ['1', '2'], words: ['1'], camp: ['1'], nocall: ['2', '3', '4', '9'], chance: ['3'], twice: ['3'], office: ['4'], lawyer: ['5'], leak: ['8'], coolall: ['8'], backpay: ['9'], settleafter: ['4'], nobank: ['6'], potplusone: ['7'], potplusoneall: ['7'] };
 if (CONTROL && !CONTROL_SECTIONS[CONTROL]) { console.log(`simUsShopPromises: could not run, unknown SHOP_CONTROL ${CONTROL}`); process.exit(2); }
-const SECTIONS = (process.env.SHOP_SECTIONS || (CONTROL ? CONTROL_SECTIONS[CONTROL].join(',') : '0,1,2,3,4,5,6,8,9')).split(',').map(s => s.trim());
+const SECTIONS = (process.env.SHOP_SECTIONS || (CONTROL ? CONTROL_SECTIONS[CONTROL].join(',') : '0,1,2,3,4,5,6,7,8,9')).split(',').map(s => s.trim());
 const runs = s => SECTIONS.includes(s);
 const STAKE_CAREERS = Number(process.env.SHOP_STAKE_CAREERS || 2000);
 if (!(STAKE_CAREERS >= 2000)) { console.log(`simUsShopPromises: could not run, SHOP_STAKE_CAREERS ${process.env.SHOP_STAKE_CAREERS} is under 2000 (section 3's band only widens with fewer careers)`); process.exit(2); }
@@ -114,9 +120,20 @@ const BRAND_1538 = {
   mlb: ['const fee = bankUsCareerFee(cc, 3, mlbEraById(cc.eraId).moneyScale); return `National ads all winter. ${fee}M banked.`;', "cc.earnings += 3; return 'National ads all winter. 3M banked.';"],
   nhl: ['const fee = bankUsCareerFee(cc, 2, nhlEraById(cc.eraId).moneyScale); return `Golf videos and a doc crew. ${fee}M banked.`;', "cc.earnings += 2; return 'Golf videos and a doc crew. 2M banked.';"],
 };
+/* and the summer Skill answer through the shared Skill helper, with its new button words (critic 8). */
+const SKILL_TAIL_1538 = 'const up = 1 + Math.floor(r() * 2); cc.ovr = Math.min(cc.pot + 1, cc.ovr + up); return `Rating +${up}.`; } },';
+const SKILL_AGE = { nba: 31, nfl: 30, mlb: 32, nhl: 31 };
+const SKILL_SAYS = { nba: 'Maintenance year. Health +4.', nfl: 'At this age the gains are in maintenance. Health +4.', mlb: 'Veteran maintenance. Health +4.', nhl: 'Maintenance summer. Health +4.' };
+const SKILL_WAS_EFFECT = { nba: 'Push the ceiling', nfl: 'Push your ceiling', mlb: 'Push the ceiling', nhl: 'Push the ceiling' };
+const SKILL_1538 = sport => {
+  const age = SKILL_AGE[sport.id], says = SKILL_SAYS[sport.id];
+  return [`effect: c.age >= ${age} ? 'Health +4' : 'Rating +1 or +2, up to your ceiling', apply: (cc, r) => usCareerSkillSummer(cc, r, ${age}, '${says}') },`,
+    `effect: '${SKILL_WAS_EFFECT[sport.id]}', apply: (cc, r) => { if (cc.age >= ${age}) { cc.health = Math.min(100, cc.health + 4); return '${says}'; } ${SKILL_TAIL_1538}`];
+};
 const unshopHunks = sport => [
   ["import { bankUsCareerFee, usCareerSkillSummer } from './usCareerAnnualBenefits';\n", ''],
   BRAND_1538[sport.id],
+  SKILL_1538(sport),
   ["import { settleUsCareerShop, usCareerSeasonCool } from './usCareerAnnualBenefits';\n", ''],
   ['const drift = dm > 0 ? Math.min(8, 2 + dm * 0.5) : -usCareerSeasonCool(c.purchased, 9);', 'const drift = dm > 0 ? Math.min(8, 2 + dm * 0.5) : -9;'],
   [SETTLE_LINES(sport.S), ''],
@@ -179,6 +196,11 @@ function headServe() {
     serve['src/lib/nbaMyCareer.ts'] = patchOnce(nba, `${at[0]}\n`, '', 'nbaMyCareer.ts');
   }
   if (CONTROL === 'nocall') for (const sport of US) serve[sport.file] = patchOnce(read(sport.file), SETTLE_LINES(sport.S), '', sport.file);
+  if (CONTROL === 'potplusone' || CONTROL === 'potplusoneall') for (const sport of US) {
+    if (CONTROL === 'potplusone' && sport.id !== 'nba') continue;
+    const [now, was] = SKILL_1538(sport);
+    serve[sport.file] = patchOnce(read(sport.file), now, was, sport.file);
+  }
   if (CONTROL === 'settleafter') for (const sport of US) {
     const tick = `  for (const line of ${sport.id}MoneySeasonTick(c).events) notes.push(line);\n`;
     serve[sport.file] = patchOnce(patchOnce(read(sport.file), SETTLE_LINES(sport.S), '', sport.file), tick, tick + SETTLE_LINES(sport.S), sport.file);
@@ -612,6 +634,113 @@ if (runs('8')) {
   }
 }
 
+/* ─── section 7: the summer Skill card stops at the ceiling (Round 1538; never reintroduce Rounds 96 and 116) ───
+   (a) Every sport's Skill answer from a fixed state: at the ceiling the rating stays and the line says so; one
+       under it with a draw of 2 it lands one and says that is the ceiling; with room it lands the draw; under the
+       maintenance age it draws once, from that age it draws nothing and gives health +4 (critic 5), and its button
+       says what lands at each age (critic 8). Ages and words are literals.
+   (b) The summer fleet: careers through the board's own summer deal (startSummer and answerSummerCard on the sport
+       binding, the way simCareerHall sections 9 to 14 drive it), base arm against head arm, on section 8's policy
+       with the Skill answer allowed (critic 4c): nothing that pays is bought and no brand or corruption answer is
+       picked. Only each career's FIRST divergence is attributed (critic 4a: once a deal differs, the ledger stamps
+       differ and later summers may follow from it), and it must sit where the rider acts (critic 4b): a deal under the
+       maintenance age with the rating at min(99, pot) or above (there the old answer moved the rating, so the card
+       counted as a rating card; above pot + 1 it even lowered it), or the Skill answer applied under that age with
+       the rating at min(99, pot) - 1 or above. Any other first divergence is red. */
+const SKILL_LABELS = new Set(['Skill grind', 'Skill work', 'New pitch lab', 'Swing rebuild', 'Skills coach']);
+const FLEET_SETS = (process.env.SHOP_FLEET_SETS || '1538').split(',').map(Number);
+const FLEET_CAREERS = Number(process.env.SHOP_FLEET_CAREERS || 120);
+const digestOf = s => createHash('sha1').update(s).digest('base64');
+let fleetParted = 0;
+function skillCase(sport, who, over, draw, want) {
+  const run = career(H, sport, 'Fictional skill', 1538);
+  Object.assign(run.c, { age: 24, health: 70, pot: 80 }, over);
+  delete run.c.summer;
+  const card = H[sport.id][DECK_OF[sport.id]](run.c, mulberry(7)).find(e => e.id === 'training');
+  const option = card?.options[0];
+  if (!option || !SKILL_LABELS.has(option.label)) { fail('7', `${sport.id} skill ${who}`, `the training card's first answer is ${option?.label}`); return; }
+  let n = 0;
+  const c = clone(run.c);
+  const line = option.apply(c, () => { n += 1; return draw; });
+  const young = run.c.age < SKILL_AGE[sport.id];
+  if (option.effect !== (young ? 'Rating +1 or +2, up to your ceiling' : 'Health +4')) fail('7', `${sport.id} skill ${who}`, `the button says "${option.effect}" at age ${run.c.age}`);
+  if (n !== (young ? 1 : 0)) fail('7', `${sport.id} skill ${who}`, `it drew ${n} times at age ${run.c.age}`);
+  if (c.ovr !== want.ovr || (want.health !== undefined && c.health !== want.health)) fail('7', `${sport.id} skill ${who}`, `rating ${run.c.ovr} to ${c.ovr} (want ${want.ovr}), health ${c.health}`);
+  if (!String(line).includes(want.says)) fail('7', `${sport.id} skill ${who}`, `the line "${line}" does not say "${want.says}"`);
+}
+function summerLife(X, sport, set, k) {
+  const lib = X[sport.id], SB = X[`${sport.id}Sport`], allowed = policyItems(itemsOf(X, sport));
+  const paid = CHANGED_ANSWERS[sport.id].filter(label => !SKILL_LABELS.has(label));
+  const positions = Object.keys(lib[sport.arch]);
+  const pos = positions[k % positions.length], archs = lib[sport.arch][pos];
+  const arch = archs[Math.floor(k / positions.length) % archs.length], era = lib[sport.eras][k % lib[sport.eras].length].id;
+  const rng = mulberry(set * 100019 + k);
+  const trail = [];
+  const at = (kind, c, extra = {}) => ({ kind, ovr: c.ovr, pot: c.pot, age: c.age, ...extra });
+  pinned(set * 13 + k, () => {
+    let c = lib[sport.start](`Summer ${set} ${k}`, pos, arch, rng, null, era);
+    let tq = null;
+    for (let season = 0; season < 24 && !c.retired; season += 1) {
+      if ((c.suspendedSeasons ?? 0) > 0) {
+        c.suspendedSeasons -= 1; c.seasons.push(SB.suspendedLine(c)); SB.progress(c, rng);
+        trail.push({ rec: `banned ${digestOf(JSON.stringify(c))} ${rng.count()}`, ctx: at('banned', c) });
+        continue;
+      }
+      tq = SB.rollTeamQuality(tq, rng);
+      SB.campBattle(c, tq, rng);
+      SB.simSeason(c, tq, rng);
+      SB.progress(c, rng);
+      trail.push({ rec: `season ${digestOf(JSON.stringify(c))} ${rng.count()}`, ctx: at('season', c) });
+      if (SB.shouldRetire(c)) break;
+      const dealt = at('deal', c);
+      let ev = X.startSummer(c, SB, rng);
+      trail.push({ rec: `deal ${JSON.stringify(c.summer?.ids ?? null)} ${ev?.id ?? 'none'}`, ctx: dealt });
+      while (ev) {
+        const option = ev.options.find(o => !paid.includes(o.label));
+        if (!option) { trail.push({ rec: `unanswered ${ev.id}`, ctx: at('unanswered', c) }); break; }
+        const before = at('answer', c, { skill: ev.id === 'training' && SKILL_LABELS.has(option.label) });
+        const out = X.answerSummerCard(c, SB, ev, ev.options.indexOf(option), rng);
+        trail.push({ rec: `${ev.id} ${option.label} ${JSON.stringify(out.line)} ${digestOf(JSON.stringify(c))} ${rng.count()}`, ctx: before });
+        ev = out.next;
+      }
+      const open = allowed.filter(card => lib[sport.buy](c, card.id));
+      if (open.length) {
+        const pick = open[Math.floor(X.keyedRng(`shop1538|${set}|${k}|${c.year}`)() * open.length)];
+        c = lib[sport.buy](c, pick.id).state;
+        trail.push({ rec: `buy ${pick.id} ${digestOf(JSON.stringify(c))}`, ctx: at('buy', c) });
+      }
+    }
+  });
+  return trail;
+}
+if (runs('7')) {
+  console.log(`7) the Skill card: (a) its answer in every sport; (b) ${FLEET_CAREERS} careers a set on sets ${FLEET_SETS.join(' and ')} through the summer deal, base arm against head arm`);
+  for (const sport of US) {
+    const age = SKILL_AGE[sport.id];
+    skillCase(sport, 'at the ceiling', { ovr: 80 }, 0.9, { ovr: 80, says: 'already at your ceiling' });
+    skillCase(sport, 'one under', { ovr: 79 }, 0.9, { ovr: 80, says: 'and that is your ceiling' });
+    skillCase(sport, 'with room', { ovr: 70 }, 0.9, { ovr: 72, says: 'Rating +2.' });
+    skillCase(sport, 'at 99', { ovr: 99, pot: 99 }, 0.9, { ovr: 99, says: 'already at your ceiling' });
+    skillCase(sport, 'at the maintenance age', { age, ovr: 70 }, 0.9, { ovr: 70, health: 74, says: 'Health +4.' });
+    skillCase(sport, 'one year under it', { age: age - 1, ovr: 70 }, 0, { ovr: 71, says: 'Rating +1.' });
+    const kinds = { deal: 0, answer: 0 };
+    let careers = 0, offseasons = 0, parted = 0;
+    for (const set of FLEET_SETS) for (let k = 0; k < FLEET_CAREERS; k += 1) {
+      const a = summerLife(H, sport, set, k), b = summerLife(B, sport, set, k);
+      careers += 1; offseasons += a.filter(x => x.ctx.kind === 'deal').length;
+      let i = a.findIndex((x, j) => !b[j] || x.rec !== b[j].rec);
+      if (i < 0 && a.length !== b.length) i = a.length;
+      if (i < 0) continue;
+      parted += 1; fleetParted += 1;
+      const ctx = a[i]?.ctx ?? b[i]?.ctx, cap = ctx ? Math.min(99, ctx.pot) : 0;
+      const ok = ctx && ctx.age < age && ((ctx.kind === 'deal' && ctx.ovr >= cap) || (ctx.kind === 'answer' && ctx.skill && ctx.ovr >= cap - 1));
+      if (ok) kinds[ctx.kind] += 1;
+      else fail('7', `${sport.id} fleet ${set}/${k}`, `first parts at record ${i} (${ctx?.kind ?? 'end'}, rating ${ctx?.ovr} of ${ctx?.pot}, age ${ctx?.age}), where the rider does not act`);
+    }
+    console.log(`   ${sport.id}: (a) 6 cases; fleet ${careers} careers, ${offseasons} offseasons, ${parted} parted from the base arm, ${kinds.deal} first at a deal at the ceiling and ${kinds.answer} at the Skill answer`);
+  }
+}
+
 /* ─── section 9: an old save earns from its next season, one season at a time ───
    The save is built by the base arm (no rule pays there): it buys two index funds, the steady one time card, two of
    the 35 percent stakes, a crypto punt, the office and the lawyer, and plays two seasons. On the head its first
@@ -679,6 +808,8 @@ if (CONTROL) {
   if (CONTROL === 'nocall') for (const s of ['2', '4', '9']) fired = fired && US.every(sp => [...red.get(s) ?? []].some(k => k.startsWith(`${sp.id} `)));
   if (CONTROL === 'chance') fired = fired && US.every(sp => red.get('3')?.has(`${sp.id} ${byName(itemsOf(H, sp), 'Crypto Punt').id} band`));
   if (CONTROL === 'nobank') fired = fired && paidCases > 0 && red.get('6')?.size === paidCases;
+  if (CONTROL === 'potplusone') fired = fired && [...red.get('7')].every(k => k.startsWith('nba skill '));
+  if (CONTROL === 'potplusoneall') fired = fired && fleetParted === 0 && US.every(sp => [...red.get('7')].some(k => k.startsWith(`${sp.id} skill `))) && [...red.get('7')].every(k => !k.includes(' fleet '));
   if (CONTROL === 'leak') fired = fired && US.every(sp => [...red.get('8') ?? []].some(k => k.startsWith(`${sp.id} `)));
   if (CONTROL === 'settleafter') fired = fired && US.every(sp => red.get('4')?.has(`${sp.id} before the tick`)) && [...red.get('4') ?? []].every(k => k.endsWith(' before the tick'));
   console.log(fired ? `simUsShopPromises: CONTROL ${CONTROL} FIRED (red sections ${redSections.join(', ')})` : `simUsShopPromises: CONTROL ${CONTROL} DID NOT FIRE (red sections ${redSections.join(', ') || 'none'})`);

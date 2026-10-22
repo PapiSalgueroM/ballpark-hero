@@ -901,7 +901,7 @@ function buildNhlDeck(c: NhlCareerState, rng: () => number, stopAtBig: boolean):
     title: 'Summer plan',
     body: 'The lake house or the gym. Where does the summer go?',
     options: [
-      { label: 'Skills coach', effect: 'Push the ceiling', apply: (cc, r) => { if (cc.age >= 31) { cc.health = Math.min(100, cc.health + 4); return 'Maintenance summer. Health +4.'; } const up = 1 + Math.floor(r() * 2); cc.ovr = Math.min(cc.pot + 1, cc.ovr + up); return `Rating +${up}.`; } },
+      { label: 'Skills coach', effect: c.age >= 31 ? 'Health +4' : 'Rating +1 or +2, up to your ceiling', apply: (cc, r) => usCareerSkillSummer(cc, r, 31, 'Maintenance summer. Health +4.') },
       { label: 'Strength block', effect: 'Durability', apply: (cc) => { cc.health = Math.min(100, cc.health + 10); return 'Health +10. Built for April through June.'; } },
       { label: 'The content summer', effect: 'Fame', apply: (cc) => { cc.fanbase = Math.min(100, cc.fanbase + 12); const fee = bankUsCareerFee(cc, 2, nhlEraById(cc.eraId).moneyScale); return `Golf videos and a doc crew. ${fee}M banked.`; } },
     ],
