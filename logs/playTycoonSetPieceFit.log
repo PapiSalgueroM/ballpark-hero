@@ -1,0 +1,7 @@
+Network mode: offline, loopback only, no production probe or database retries.
+Running 0 node harnesses
+
+Serving dist on 4184 for 1 browser harnesses
+  PASS  playTycoonSetPieceFit.mjs      30.1s
+
+All 1 harnesses green.

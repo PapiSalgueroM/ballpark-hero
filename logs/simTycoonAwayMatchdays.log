@@ -1,0 +1,128 @@
+Round 584: the league keeps playing while you are away
+   driving tick() at the hook's cadence, dt = 0.2s
+
+A) the shipped lib
+   ok   S1: 200 of 200 matches identical between tick() at 0.2s and playAwayMatchdays on the same rolls
+   ok   S2: absences of 0s, 29s, 1,799s, 1,800s, 3h, 8h played 0, 0, 0, 1, 6, 16
+   ok   S3: 200 clubs played 2300 away matchdays; 0 moved money beyond the 2744500 their milestones paid
+   ok   S4: 278 starting points across 10 divisions (20 with a doctored match counter), up to 16 away matchdays each, and the final matchday always waited
+   ok   S5: mean 10.10 away matchdays over eight hours (fence 8); away win share 94.8% for a squad of 50 against 8.8% for 0 (fence 50 points); a club that buys nothing lost 38% of its 160 away matches
+   ok   S6: 1095 streak firsts reached away across 400 trips, 195 of them on runs that ended before home, all of them kept
+   baseline: the frozen V1 lib has no away matchday, so the old game plays 0 away matchdays
+
+A.hook) the real hook, src/test/tycoonAway.test.tsx
+   pass  1 the loop really runs at the frame cadence a browser gives it
+   pass  2 a closed tab reopened hours later settles on the load path
+   pass  3 a backgrounded tab settles the hours when it comes back
+   pass  4 the stated cap applies to a backgrounded tab exactly as to a closed one
+   pass  5 time spent playing is never billed back as time away
+   pass  6 a quick alt tab is not a trip away
+   pass  7 a closed tab plays one matchday per half hour away, and never the final one
+   pass  8 a hidden tab plays as many away matchdays as a closed one
+     away matchdays on the load path: no time: 0, 29 seconds: 0, 1,799 seconds: 0, 1,800 seconds: 1, 3 hours: 6, 8 hours: 16, 8 hours in a 14 matchday league: 13
+     3h hidden played 6 away matchdays, 3h closed played 6
+
+B.off) negative control: away matchdays never play
+   RED  S1: club 0: scorelines differ, live loss 0-5 [a18 a23 a31 a43 a50] | win 3-1 [f47 f58 f79 a87] | draw 0-0 [] | loss 1-5 [a24 f36 a39 a49 a59 a88] | loss 2-8 against away 
+   RED  S2: 1800s away played 0 matchdays (the count said 1), the rule says 1
+   RED  S3: no away matchday was played, so nothing was held still
+   ok   S4
+   RED  S5: 40 mid-season clubs away eight hours played a mean of 0.00 matchdays, under the fence of 8
+   RED  S6: no trip ended its run before coming home, so the case the review found was never exercised
+   ok   passed 1 the loop really runs at the frame cadence a browser gives it
+   ok   passed 2 a closed tab reopened hours later settles on the load path
+   ok   passed 3 a backgrounded tab settles the hours when it comes back
+   ok   passed 4 the stated cap applies to a backgrounded tab exactly as to a closed one
+   ok   passed 5 time spent playing is never billed back as time away
+   ok   passed 6 a quick alt tab is not a trip away
+   ok   failed 7 a closed tab plays one matchday per half hour away, and never the final one
+         measured: 1,800 seconds away played 0 matchdays, the rule says 1: expected +0 to be 1 // Object.is equality
+   ok   failed 8 a hidden tab plays as many away matchdays as a closed one
+         measured: three hours behind another window played no away matchdays: expected 0 to be greater than 0
+
+B.copy) negative control: the away minutes run a private loop that forgets the squad's defence
+   RED  S1: club 1: scorelines differ, live win 6-1 [f41 f44 f64 f66 a66 f78 f79] | loss 4-10 [f2 a10 a12 a14 a21 a24 a26 f41 a54 a58 a66 f68 f84 a89] | win 6-2 [f1 against away win 6-1 [f41 f44 f64 f66 a66 f78 f79] | loss 4-10 [f2 a10 a12 a14 a21 a24 a26 f41 a54 a58 a66 f68 f84 a89] | win 6-3 [f1
+   ok   S2
+   ok   S3
+   ok   S4
+   ok   S5
+   ok   S6
+   ok   passed 1 the loop really runs at the frame cadence a browser gives it
+   ok   passed 2 a closed tab reopened hours later settles on the load path
+   ok   passed 3 a backgrounded tab settles the hours when it comes back
+   ok   passed 4 the stated cap applies to a backgrounded tab exactly as to a closed one
+   ok   passed 5 time spent playing is never billed back as time away
+   ok   passed 6 a quick alt tab is not a trip away
+   ok   passed 7 a closed tab plays one matchday per half hour away, and never the final one
+   ok   passed 8 a hidden tab plays as many away matchdays as a closed one
+
+B.cash) negative control: away minutes pay their goal and win bonuses
+   ok   S1
+   ok   S2
+   RED  S3: club 0: money 1000 to 7803 with 250 of milestones, and a goal paid 240
+   ok   S4
+   ok   S5
+   ok   S6
+   ok   passed 1 the loop really runs at the frame cadence a browser gives it
+   ok   passed 2 a closed tab reopened hours later settles on the load path
+   ok   failed 3 a backgrounded tab settles the hours when it comes back
+         measured: three hours behind another window: the away total reads 24570 and the bank moved 25867, which is 11370.1s of away pay where the rules promise 10800s: expected 11260.21978021978 to be less than 10800.5
+   ok   passed 4 the stated cap applies to a backgrounded tab exactly as to a closed one
+   ok   passed 5 time spent playing is never billed back as time away
+   ok   passed 6 a quick alt tab is not a trip away
+   ok   passed 7 a closed tab plays one matchday per half hour away, and never the final one
+   ok   passed 8 a hidden tab plays as many away matchdays as a closed one
+
+B.counter) negative control: a matchday ends when the match counter moves, the review's overrun on a doctored counter
+   ok   S1
+   ok   S2
+   ok   S3
+   RED  S4: a match counter of 9007199254740992 in division 0: 5 full times for 4 listed results, and a seasonEnd
+   ok   S5
+   ok   S6
+   ok   passed 1 the loop really runs at the frame cadence a browser gives it
+   ok   passed 2 a closed tab reopened hours later settles on the load path
+   ok   passed 3 a backgrounded tab settles the hours when it comes back
+   ok   passed 4 the stated cap applies to a backgrounded tab exactly as to a closed one
+   ok   passed 5 time spent playing is never billed back as time away
+   ok   passed 6 a quick alt tab is not a trip away
+   ok   passed 7 a closed tab plays one matchday per half hour away, and never the final one
+   ok   passed 8 a hidden tab plays as many away matchdays as a closed one
+
+B.nofirsts) negative control: away matchdays leave milestones and badges for the first live tick again
+   ok   S1
+   ok   S2
+   ok   S3
+   ok   S4
+   ok   S5
+   RED  S6: trip 0: a run of 9 wins away, home on a streak of 1, and the milestone streak5 was never given
+   ok   passed 1 the loop really runs at the frame cadence a browser gives it
+   ok   passed 2 a closed tab reopened hours later settles on the load path
+   ok   passed 3 a backgrounded tab settles the hours when it comes back
+   ok   passed 4 the stated cap applies to a backgrounded tab exactly as to a closed one
+   ok   passed 5 time spent playing is never billed back as time away
+   ok   passed 6 a quick alt tab is not a trip away
+   ok   passed 7 a closed tab plays one matchday per half hour away, and never the final one
+   ok   passed 8 a hidden tab plays as many away matchdays as a closed one
+
+B.finale) negative control: the final matchday of a season may play away
+   ok   S1
+   ok   S2
+   RED  S3: club 0: money 1000 to 5335 with 250 of milestones, and a promoted paid 4085
+   RED  S4: division 0, matchday 0: a title happened away
+   ok   S5
+   ok   S6
+   ok   passed 1 the loop really runs at the frame cadence a browser gives it
+   ok   passed 2 a closed tab reopened hours later settles on the load path
+   ok   passed 3 a backgrounded tab settles the hours when it comes back
+   ok   passed 4 the stated cap applies to a backgrounded tab exactly as to a closed one
+   ok   passed 5 time spent playing is never billed back as time away
+   ok   passed 6 a quick alt tab is not a trip away
+   ok   failed 7 a closed tab plays one matchday per half hour away, and never the final one
+         measured: 8 hours in a 14 matchday league away played 14 matchdays, the rule says 13: expected 14 to be 13 // Object.is equality
+   ok   passed 8 a hidden tab plays as many away matchdays as a closed one
+
+simTycoonAwayMatchdays: green.
+   Away matchdays are the live match on the same rolls, one per half hour, hidden or closed alike.
+   They pay no goal or win bonus, keep what they reach, and the final matchday of every season waits for you.
+   All 6 controls fired exactly where they should, in node and in the real hook.

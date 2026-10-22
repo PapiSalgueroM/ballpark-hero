@@ -1,0 +1,10 @@
+Network mode: offline, loopback only, no production probe or database retries.
+Running 0 node harnesses
+
+Serving dist on 4183 for 1 browser harnesses
+  FAIL  playTycoonSaleReview1083.mjs    0.5s
+
+----- playTycoonSaleReview1083.mjs (FAIL) -----
+Error: ENOENT: no such file or directory, open '/home/runner/work/ballpark-hero/ballpark-hero/tycoon-sale-review-artifacts/font-cache/manifest.json'
+
+1 harness not green.
