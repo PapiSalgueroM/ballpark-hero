@@ -1,0 +1,11 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+tsc exit=0 69s | 
+vitest-box exit=0 3s |    Duration  1.89s (transform 628ms, setup 71ms, collect 926ms, tests 191ms, environment 314ms, prepare 116ms)
+playFoHub exit=0 61s | playFoHub: green. Four front offices, nine live boxes each, and the five the walk opens open what they name.
+playFoHub-nofloor exit=1 48s | playFoHub: 2 failures
+mut-everyround exit=0 99s | MUT1537 everyround: vitest exit=1, playFoHub exit=1
+mut-thirteen exit=0 98s | MUT1537 thirteen: vitest exit=1, playFoHub exit=1
+simNbaLuxuryTax exit=0 13s | simNbaLuxuryTax: 347 checks passed over 10 seeded franchises and 5 seasons each. The bill is the published formula, a dollar over pays, every season tips off on fourteen 
+simGmDesk exit=0 1s | simGmDesk: PASS. Four sports declare one descriptor that matches their engines and boards, a corrupt block costs that block alone, an old save opens on a fresh desk, and 
+simFoHub exit=0 0s | simFoHub: green. Four hubs, five boxes each, every one of them saying something true.
+src-clean exit=0 0s | 0

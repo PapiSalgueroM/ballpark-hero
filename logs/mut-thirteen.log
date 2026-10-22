@@ -1,0 +1,31 @@
+mut1537 thirteen: applied
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+=== vitest NbaRosterBoxTipOff on the thirteen source
+   [32m✓[39m NBA hub Roster box and the tip off floor[2m > [22mnames a hurt star on a roster one under the floor once the season has tipped off[32m 83[2mms[22m[39m
+   [32m✓[39m NBA hub Roster box and the tip off floor[2m > [22mputs the dot out for a fit roster one under the floor after tip off[32m 32[2mms[22m[39m
+   [32m✓[39m NBA hub Roster box and the tip off floor[2m > [22mstill says a roster is short of the floor before tip off, and lights the box[32m 33[2mms[22m[39m
+[31m   [31m×[31m NBA hub Roster box and the tip off floor[2m > [22mwarns a roster exactly one short before tip off, the boundary of the floor rule[39m[32m 30[2mms[22m[39m
+   [32m✓[39m NBA hub Roster box and the tip off floor[2m > [22mnames a hurt star before tip off once the roster is at the floor[32m 18[2mms[22m[39m
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/components/nba-front-office/NbaRosterBoxTipOff.test.tsx[2m > [22mNBA hub Roster box and the tip off floor[2m > [22mwarns a roster exactly one short before tip off, the boundary of the floor rule
+[31m[1mAssertionError[22m: expected '👔Roster13 under contractSimulated bo…' to contain '1 short of the 14 man floor. Filled o…'[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m4 passed[39m[22m[90m (5)[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/nba-front-office/NbaRosterBoxTipOff.test.tsx,title=src/components/nba-front-office/NbaRosterBoxTipOff.test.tsx > NBA hub Roster box and the tip off floor > warns a roster exactly one short before tip off%2C the boundary of the floor rule,line=74,column=22::AssertionError: expected '👔Roster13 under contractSimulated bo…' to contain '1 short of the 14 man floor. Filled o…'%0A%0AExpected: "1 short of the 14 man floor. Filled on minimum deals at tip off."%0AReceived: "👔Roster13 under contractSimulated box player 1 leads them at 90"%0A%0A ❯ src/components/nba-front-office/NbaRosterBoxTipOff.test.tsx:74:22%0A%0A
+=== playFoHub on the thirteen build
+  PASS  NBA: a short roster says so on the box (reads "👔 / ROSTER / 10 under contract / 4 short of the 14 man floor. Filled on minimum deals at tip off.")
+  PASS  NBA: a short roster lights the box
+  FAIL  NBA: a roster one short of the floor says so (13 men, reads "👔 / ROSTER / 13 under contract / Nikola Jokic leads them at 94")
+  FAIL  NBA: a roster one short of the floor lights the box
+  PASS  NBA: the roster is topped up to the 14 man floor (4 free agents moved, 10 before)
+  PASS  NBA: the roster box counted the injury (reads "👔 / ROSTER / 1 unavailable / Nikola Jokic is out 3 rounds")
+  PASS  NBA: the roster box names Nikola Jokic
+  PASS  NBA: an injury lights the box (1 dots)
+  PASS  NBA: a fit squad puts the dot out
+  PASS  NBA: a fit squad counts the contracts instead
+  PASS  NBA: round 1 is played at the floor (round 2, 14 men)
+  PASS  NBA: one man waived after tip off (14 Waive buttons, 13 men at round 2)
+  PASS  NBA: after tip off a roster under the floor names Nikola Jokic (reads "👔 / ROSTER / 1 unavailable / Nikola Jokic is out 3 rounds")
+  PASS  NBA: after tip off that injury lights the box
+  PASS  NBA: after tip off a fit roster under the floor puts the dot out (reads "👔 / ROSTER / 13 under contract / Nikola Jokic leads them at 94")
+playFoHub: 2 failures
+MUT1537 thirteen: vitest exit=1, playFoHub exit=1
