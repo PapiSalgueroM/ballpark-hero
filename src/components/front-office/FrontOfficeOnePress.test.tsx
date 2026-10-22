@@ -178,6 +178,9 @@ async function freshGame() {
   const { default: Board } = (override
     ? await import(/* @vite-ignore */ override)
     : await import('@/components/front-office/FrontOfficeBoard')) as { default: ComponentType };
+  /* Round 1550: the board fetches its career kit when a screen needs it (FrontOfficeLazyDesk.test.tsx drives that);
+     these cases drive the rules, so the kit is on the page before the board mounts. */
+  await (await import('@/components/front-office/nflCareerKitLoad')).loadNflCareerKit();
   return { E, FO_DEPTH, openNflDesk, Board };
 }
 

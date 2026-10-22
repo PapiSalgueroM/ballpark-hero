@@ -26,3 +26,5 @@ export { leagueTiers } from '@/lib/gmSeat';
 export { nflDeskHost } from '@/lib/gmDeskHostNfl';
 export { nflLegacy, nflTakeSeat } from '@/lib/nflGmCareer';
 export { GmOutOfWork } from '@/components/front-office-shared/GmOutOfWork';
+/* the recap's See who is calling button, the one place the board draws it */
+export { Phone } from 'lucide-react';

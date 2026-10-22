@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Briefcase, ChevronLeft, Crown, Phone, RotateCcw, ShieldHalf } from 'lucide-react';
+import { Briefcase, ChevronLeft, Crown, RotateCcw, ShieldHalf } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
 import { FO_TEAMS, FO_TEAM_MAP } from '@/data/frontOfficePlayers';
 import { DraftNightCard } from '@/components/front-office-shared/DraftNightCard';
@@ -46,7 +46,7 @@ import {
    Round 1550: the page carries only what every screen reads (src/lib/gmCareerFace.ts: the record and XP readers,
    the hub boxes, the summer's ask). The rest (the verdict, the market, a seat, the year out, the out of work
    screen) is the career kit, fetched when it is needed: nflCareerKit.ts says when, `kitNeeded` below asks. */
-import { GM_HOST_KEYS, hostSeatOf, hostSummerMandate, type HostLegacy } from '@/lib/gmCareerFace';
+import { GM_HOST_KEYS, hostBoxLegacy, hostSeatOf, hostSummerMandate } from '@/lib/gmCareerFace';
 import type { GmCareerBinding } from '@/lib/gmDeskHost';
 import type { GmSeatPack } from '@/lib/gmSeat';
 import { loadNflCareerKit, nflCareerKitNow, type NflCareerKit } from '@/components/front-office/nflCareerKitLoad';
@@ -1268,15 +1268,14 @@ export default function FrontOfficeBoard() {
   const careerOf = (lg: LeagueState): GmCareerBinding => {
     /* Round 1550: before the kit is here the binding is the hub's, and the hub reads the two boxes off it and
        nothing else. His record is the stored block when it fits the save (hostSeatOf, the same reader), else the
-       record a save older than the block stands on, built from the save alone: the tier and the last grade, the two
-       facts that need the league through the adapter, are left at 4 and none, and the boxes read neither
-       (scripts/simFoLazyDesk.mjs holds every box equal to the kit's own record's). The screens behind the boxes,
-       the only readers of the seat pack and the earn line, are drawn once the kit is here, never before. */
+       record a save older than the block stands on, built from the save alone (hostBoxLegacy says what it leaves
+       out and why the boxes never read it; scripts/simFoLazyDesk.mjs holds every box equal to the kit's own
+       record's). The screens behind the boxes, the only readers of the seat pack and the earn line, are drawn once
+       the kit is here, never before. */
     if (!kit) {
-      const seat = hostSeatOf(gm, {
-        team: myTeam, tier: 4, season: lg.season, seasonCounted: nflSeasonCounted(phase, gm),
-        seasonsPlayed, titles, fired, lastGrade: null,
-      } satisfies HostLegacy);
+      const seat = hostSeatOf(gm, hostBoxLegacy({
+        team: myTeam, season: lg.season, seasonCounted: nflSeasonCounted(phase, gm), seasonsPlayed, titles, fired,
+      }));
       return {
         get pack(): GmSeatPack { return careerKitOrThrow().nflDeskHost.pack; },
         seat, market: null, nameOf: label, live: NFL_XP_LIVE, deskOn: gm !== null,
@@ -1514,7 +1513,7 @@ export default function FrontOfficeBoard() {
        in this tab already has it (the last week's buttons waited for it); a save that loads on the recap waits in a
        holding box, then draws. */
     if (!kit) return <CareerKitHolding failed={kitFailed} onRetry={retryKit} />;
-    const { hostArrivalLine, hostArriving, nflDeskHost } = kit;
+    const { hostArrivalLine, hostArriving, nflDeskHost, Phone } = kit;
     const table = standings(league.teams);
     const myRank = table.findIndex(t => t.abbr === myTeam) + 1;
     /* Round 187: the verdict curtain. Every string below is exactly what

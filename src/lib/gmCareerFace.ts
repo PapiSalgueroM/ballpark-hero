@@ -185,6 +185,33 @@ export function hostSeatOf(desk: GmDesk | null, l: HostLegacy): GmSeatBlock {
   return gmBlock<GmSeatBlock>(desk, GM_HOST_KEYS.seat, v => isGmSeatBlock(v) && seatFitsSave(v, l), () => hostLegacySeat(l));
 }
 
+/** What a save alone knows of itself, with no league read through an adapter. */
+export interface HostBoxFacts {
+  team: string;
+  season: number;
+  seasonCounted: boolean;
+  seasonsPlayed: number;
+  titles: number;
+  fired: boolean;
+}
+
+/**
+ * Round 1550: the legacy facts a hub's two boxes are drawn from before the career kit is on the page (a board
+ * that fetches the host when it needs it, src/components/front-office/nflCareerKit.ts). Of a legacy record the
+ * boxes read the stints, their seasons, how the last one ended and the titles, which come from the save alone.
+ * The club's tier and the last grade, the two facts read off the league through the adapter, are left at the
+ * bottom tier and none: the boxes read neither (a legacy record's first tier is unknown on every screen, and a
+ * last grade that is not a title only moves a counted season into the graded ones). Every other screen reads the
+ * kit's own record (hostLegacy). scripts/simFoLazyDesk.mjs holds the boxes drawn from this equal to the boxes
+ * drawn from the kit's record, over whole leagues.
+ */
+export function hostBoxLegacy(f: HostBoxFacts): HostLegacy {
+  return {
+    team: f.team, tier: 4, season: f.season, seasonCounted: f.seasonCounted,
+    seasonsPlayed: f.seasonsPlayed, titles: f.titles, fired: f.fired, lastGrade: null,
+  };
+}
+
 /** His XP block, a fresh one when absent or mangled. Never writes. */
 export function hostXpOf(desk: GmDesk | null): GmXp {
   if (!desk) return defaultGmXp();
