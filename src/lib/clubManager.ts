@@ -16489,8 +16489,10 @@ function tacticEdge(state: CareerState, fx: MyFixture, xi: XiSlot[], instr: Team
   return isBalanced(instr) ? null : tacticsImpl()?.edge(state, fx, xi, instr, half) ?? null;
 }
 
-/** The first half's lambdas, the kick off formula: the talk, the press, the shape, the venue. */
-function firstHalfLambdas(state: CareerState, fx: MyFixture, xi: XiSlot[], mentality: Mentality, instr: TeamInstructions = BALANCED): { lamMine: number; lamOpp: number; mine: number; oppS: number } {
+/** The first half's lambdas, the kick off formula: the talk, the press, the shape, the venue. Round 1522 review:
+ *  `instr` has no default, so a caller that forgets the instructions in force fails the type gate rather than
+ *  playing balanced football while the log says otherwise. */
+function firstHalfLambdas(state: CareerState, fx: MyFixture, xi: XiSlot[], mentality: Mentality, instr: TeamInstructions): { lamMine: number; lamOpp: number; mine: number; oppS: number } {
   const talk = talkEdgeFor(state, xi, fx, state.teamTalk ?? null);
   const press = state.press;
   const mine = myMatchStrength(state, xi) + talk + (press?.nextSharpen ?? 0);

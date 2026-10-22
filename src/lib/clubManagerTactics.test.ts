@@ -11,9 +11,10 @@ import {
   startCareer, playNextEntry, resumeMatch, startSecondHalf, changeLive, setInstructions, liveInstructions,
   myOnPitchAt, liveShapeAt, matchFacts, strengthOf, FORMATIONS, dutyOptions,
 } from '@/lib/clubManager';
-import type { CareerState } from '@/lib/clubManager';
+import type { CareerState, Duty } from '@/lib/clubManager';
 import {
   AI_STYLES, BALANCED, TACTIC_TABLE, aiStyleFor, instructionsAt, isBalanced, opponentStyle, readInstructions, tacticBoost, tacticStatsOf,
+  type AiStyleId, type TeamInstructions,
 } from '@/lib/clubManagerTactics';
 import { tacticsImpl } from '@/lib/clubManagerTacticsCore';
 
@@ -142,5 +143,75 @@ describe('Round 1522: changes during a match', () => {
     const res = resumeMatch(withDuty);
     expect(res.kind).toBe('match');
     expect(settledOnce(withDuty, res.state, res.report!.competition)).toBe(true);
+  });
+});
+
+/* Round 1522 review (run lens, mutation A): an instructions change in play must reach the goal rates the engine
+   draws the rest of the match at, not only the log. Each case reads the rates of the stretch after the change
+   against the same match left alone, and the tactics module's edge must be asked about the new set. */
+describe('Round 1522 review: a change in play moves the football, not just the log', () => {
+  const NEXT = { press: 0 as const, tempo: 1 as const, width: 1 as const, line: 1 as const };
+  type Seg = { from: number; to: number; lamMine: number; lamOpp: number };
+  /** The rates in force at a minute: the last stretch that covers it (a later recut is appended or split in). */
+  const ratesAt = (segs: Seg[] | undefined, fallback: [number, number], minute: number): [number, number] => {
+    const s = [...(segs ?? [])].reverse().find(x => x.from <= minute && minute < x.to);
+    return s ? [s.lamMine, s.lamOpp] : fallback;
+  };
+  const askedFor = (calls: unknown[][], half: 1 | 2): boolean =>
+    calls.some(c => JSON.stringify(c[3]) === JSON.stringify(NEXT) && c[4] === half);
+
+  it('in the first half: the stretch from the change is drawn at new rates, the one before keeps its own', () => {
+    const ht = atHalftime();
+    const was: [number, number] = [ht.live!.lamMine!, ht.live!.lamOpp!];
+    const edge = vi.spyOn(tacticsImpl()!, 'edge');
+    const changed = changeLive(ht, 20, { kind: 'instructions', instructions: NEXT })!;
+    expect(changed.live!.instrLog).toEqual([{ minute: 20, instructions: NEXT }]);
+    expect(askedFor(edge.mock.calls, 1)).toBe(true);
+    expect(ratesAt(changed.live!.h1Segs, was, 10)).toEqual(ratesAt(ht.live!.h1Segs, was, 10));
+    expect(ratesAt(changed.live!.h1Segs, was, 30)).not.toEqual(ratesAt(ht.live!.h1Segs, was, 30));
+  });
+  it('on the board at the end of the first half: the redraw asks for the new set', () => {
+    const ht = atHalftime();
+    const edge = vi.spyOn(tacticsImpl()!, 'edge');
+    const changed = changeLive(ht, 45, { kind: 'instructions', instructions: NEXT }, 1)!;
+    expect(changed.live!.instrLog).toEqual([{ minute: 45, plus: 1, instructions: NEXT }]);
+    expect(askedFor(edge.mock.calls, 1)).toBe(true);
+  });
+  it('in the second half: the stretch from the change is drawn at new rates, the one before keeps its own', () => {
+    const second = startSecondHalf(atHalftime())!;
+    const was: [number, number] = [second.live!.lam2Mine!, second.live!.lam2Opp!];
+    const edge = vi.spyOn(tacticsImpl()!, 'edge');
+    const changed = changeLive(second, 60, { kind: 'instructions', instructions: NEXT })!;
+    expect(askedFor(edge.mock.calls, 2)).toBe(true);
+    expect(ratesAt(changed.live!.h2Segs, was, 50)).toEqual(ratesAt(second.live!.h2Segs, was, 50));
+    expect(ratesAt(changed.live!.h2Segs, was, 70)).not.toEqual(ratesAt(second.live!.h2Segs, was, 70));
+  });
+  it('a change at a minute bites from the next one, never its own (mutation B)', () => {
+    const log = [{ minute: 0, instructions: BALANCED }, { minute: 20, instructions: { ...BALANCED, press: 1 as const } }];
+    expect(instructionsAt(log, 20).press).toBe(0);
+    expect(instructionsAt(log, 21).press).toBe(1);
+    expect(instructionsAt([{ minute: 0, instructions: { ...BALANCED, line: 1 as const } }], 1).line).toBe(1);
+  });
+  it('the press costs the legs of the men who played and of nobody else (mutation C)', () => {
+    const drawn = startSecondHalf(changeLive(atHalftime(), 46, { kind: 'instructions', instructions: { ...BALANCED, press: 1 } })!)!;
+    const impl = tacticsImpl()!;
+    const realDay = impl.day;
+    const copy = (): CareerState => JSON.parse(JSON.stringify(drawn));
+    vi.mocked(Math.random).mockImplementation(seeded(77));
+    const charged = resumeMatch(copy()).state;
+    const day = vi.spyOn(impl, 'day').mockImplementation((...a: Parameters<typeof realDay>) => {
+      const d = realDay(...a);
+      return { ...d, stats: { ...d.stats, legs: 0 } };
+    });
+    vi.mocked(Math.random).mockImplementation(seeded(77));
+    const free = resumeMatch(copy()).state;
+    expect(day).toHaveBeenCalled();
+    const legs = Math.round(TACTIC_TABLE.legs.high * 44 / 90);
+    expect(legs).toBeGreaterThan(0);
+    const fitOf = (s: CareerState, id: string) => s.squad.find(p => p.id === id)!.fitness;
+    const moved = charged.squad.filter(p => p.fitness !== fitOf(free, p.id));
+    for (const id of drawn.live!.startXi) expect(fitOf(free, id) - fitOf(charged, id)).toBe(legs);
+    expect(moved.length).toBeLessThanOrEqual(drawn.live!.startXi.length + 5);
+    expect(charged.squad.length).toBeGreaterThan(moved.length);
   });
 });
