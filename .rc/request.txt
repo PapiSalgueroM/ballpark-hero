@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-nat: node_modules/.bin/vitest run src/test/cmMadeUpNations.test.ts --testTimeout=300000 --hookTimeout=120000 2>&1 | tail -8; exit ${PIPESTATUS[0]}
+nat: node scripts/simCmMadeUpNations.mjs
+nat-nocap: CM_NATIONS_CONTROL=nocap node scripts/simCmMadeUpNations.mjs 2>&1 | grep -E "FAIL|^2c|CANNOT|NEGATIVE|failure|green|red" | head -20; exit ${PIPESTATUS[0]}
+nat-awayyouth: CM_NATIONS_CONTROL=awayyouth node scripts/simCmMadeUpNations.mjs 2>&1 | grep -E "FAIL|^3\)|CANNOT|NEGATIVE|failure|green|red" | head -20; exit ${PIPESTATUS[0]}
+simBoardAsks: node scripts/simBoardAsks.mjs
+simWorldEditor: node scripts/simWorldEditor.mjs 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+we-homecountry: SIM_WORLD_EDITOR_CONTROL=homecountry node scripts/simWorldEditor.mjs 2>&1 | tail -12; exit ${PIPESTATUS[0]}
+simClubManagerALeague: node scripts/simClubManagerALeague.mjs 2>&1 | tail -6; exit ${PIPESTATUS[0]}
