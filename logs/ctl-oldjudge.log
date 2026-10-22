@@ -1,0 +1,42 @@
+CONTROL oldjudge ON: the old composite judge scores every five
+1) the wheel holds exactly the seven challenges the record can total
+   7 challenges, all 400 spins scoreable
+2) every team the game deals has franchise codes
+   30 teams, 49 codes, none shared
+3) fixed fives against hand computed numbers
+  FAIL (section 3): five A total: got NaN, hand computed 96
+  FAIL (section 3): best five total: got undefined, hand computed 119.5
+  FAIL (section 3): worst five total: got undefined, hand computed 5.5
+  FAIL (section 3): five A score, (96.0 - 5.5) / (119.5 - 5.5) = 0.794: got 99, hand computed 79
+  FAIL (section 3): five B total: got NaN, hand computed 16.5
+  FAIL (section 3): five B score, (16.5 - 5.5) / 114 = 0.096: got 83, hand computed 10
+  FAIL (section 3): best five names: got , hand computed Fixture Ace, Fixture Echo, Fixture Gust, Fixture Jolt, Fixture Mist
+  FAIL (section 3): Oath at PF, best forward on the Heat: got undefined, hand computed 19.5
+  FAIL (section 3): Oath closeness, (2 - 2) / (19.5 - 2): got undefined, hand computed 0
+   five A NaN scores 99, five B NaN scores 83, best undefined, worst undefined
+4) Lowest turns the range round
+  FAIL (section 4): five A on a Lowest spin scored 99, hand computed (119.5 - 96.0) / 114 = 21
+  FAIL (section 4): the best Lowest five totals undefined, hand computed 5.5
+  FAIL (section 4): highest plus lowest strayed 98 from 100 on a five
+   five A: highest 99, lowest 99; 40 random fives, highest plus lowest within 98 of 100
+5) separation over 300 seeded deals of real looking careers
+  FAIL (section 5): the best five allowed scored under 100 on 300 of 300 deals
+  FAIL (section 5): the worst five allowed scored over 0 on 300 of 300 deals
+   300 deals: best five 100 and worst 0 on 0; random fives average 99.0 over 300
+   the old judge on the same careers: best five average 99.0, worst five 99.0, same band on 300 of 300
+6) the best and worst five equal a brute force over every five
+   120 extremes on 60 deals (27 with a shared name) match the brute force; the shared name trap totals 100
+7) the namesake guard
+   7 roster names and 5 illegal fives behave
+8) steals and blocks only count careers that began in 1973-74 or later
+   9 cases
+9) per game rounds to one decimal, totals stay whole, nothing is invented
+   7 cases
+10) source: no model, no edge function, no NBA offline judge, points follow the score
+   hook and page call no model or edge function; the completion records the score
+11) every refusal names the player and carries no dash
+   28 refusals
+12) points are the score on the old 500 scale
+   6 cases
+
+simNbaStartingFive CONTROL oldjudge FIRED: section 3 and 5 went red as it must (red sections: 3, 4, 5)

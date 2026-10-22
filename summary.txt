@@ -1,0 +1,11 @@
+simNbaCourtSelection exit=0 3s | NBA court: CRLF executable controls bind, original bytes held, owned copies cleaned. Native keyboard/touch geometry is verified separately.
+vitest exit=0 3s |    Duration  2.68s (transform 644ms, setup 220ms, collect 1.36s, tests 928ms, environment 781ms, prepare 338ms)
+simNbaStartingFive exit=0 1s | simNbaStartingFive: green. 12 sections: every number from the record, every five scored against what its teams allowed.
+ctl-oldjudge exit=1 1s | simNbaStartingFive CONTROL oldjudge FIRED: section 3 and 5 went red as it must (red sections: 3, 4, 5)
+ctl-noinvert exit=1 2s | simNbaStartingFive CONTROL noinvert FIRED: section 4 went red as it must (red sections: 4, 5)
+ctl-greedy exit=1 1s | simNbaStartingFive CONTROL greedy FIRED: section 6 went red as it must (red sections: 6)
+ctl-nonamesake exit=1 1s | simNbaStartingFive CONTROL nonamesake FIRED: section 7 went red as it must (red sections: 7)
+ctl-pergame exit=1 1s | simNbaStartingFive CONTROL pergame FIRED: section 3 went red as it must (red sections: 3, 4, 6, 7, 8, 9)
+ctl-aiverdict exit=1 1s | simNbaStartingFive CONTROL aiverdict FIRED: section 10 went red as it must (red sections: 10)
+ctl-flatpoints exit=1 1s | simNbaStartingFive CONTROL flatpoints FIRED: section 10 went red as it must (red sections: 10)
+tsc exit=0 43s | 
