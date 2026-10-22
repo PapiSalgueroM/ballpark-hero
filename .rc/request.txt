@@ -1,0 +1,44 @@
+#!serve
+#!playwright
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+playNbaNumbers: node scripts/playNbaNumbers.mjs
+playCareerHub: node scripts/playCareerHub.mjs
+playEra2005: ENGINES=chromium node scripts/playEra2005.mjs
+playEra2010: ENGINES=chromium node scripts/playEra2010.mjs
+playEra2015: ENGINES=chromium node scripts/playEra2015.mjs
+playEra2020: ENGINES=chromium node scripts/playEra2020.mjs
+playNationalities: ENGINES=chromium node scripts/playNationalities.mjs
+playReleaseClause: ENGINES=chromium node scripts/playReleaseClause.mjs
+playSponsors: ENGINES=chromium node scripts/playSponsors.mjs
+playExtension: node scripts/playExtension.mjs
+playFrontOfficeGameDay: node scripts/playFrontOfficeGameDay.mjs
+playNationJob: ENGINES=chromium node scripts/playNationJob.mjs
+playWilderness: ENGINES=chromium node scripts/playWilderness.mjs
+playCmTablesFit: CM_FIT_PART=1 node scripts/playCmTablesFit.mjs
+playCmHubLanding: node scripts/playCmHubLanding.mjs
+playFoHub: ENGINES=chromium node scripts/playFoHub.mjs
+playFoOneRating: ENGINES=chromium node scripts/playFoOneRating.mjs
+playIphone: ENGINES=chromium node scripts/playIphone.mjs
+playCmDifficulty: node scripts/playCmDifficulty.mjs
+playCmNoSack: node scripts/playCmNoSack.mjs
+playCmSavePoints: node scripts/playCmSavePoints.mjs
+playWc2026Reset: node scripts/playWc2026Reset.mjs
+playWorldUcl: node scripts/playWorldUcl.mjs
+playAdRoutes: node scripts/playAdRoutes.mjs
+simHelpConsentFocus: node scripts/simHelpConsentFocus.mjs
+simRulesGateConsentFocus: node scripts/simRulesGateConsentFocus.mjs
+boxing-fonts: node scripts/playBoxingShowForecast1086.mjs --prefetch-fonts-only 2>&1 | tail -3
+playBoxingShowForecast1086: node scripts/playBoxingShowForecast1086.mjs
+simHelpConsentFocus-external-nocolor: NO_COLOR=1 HELP_CONSENT_FOCUS_CONTROL=external node scripts/simHelpConsentFocus.mjs
+simRulesGateConsentFocus-host-nocolor: NO_COLOR=1 RULES_GATE_FOCUS_CONTROL=host node scripts/simRulesGateConsentFocus.mjs
+simRulesGateConsentFocus-return-nocolor: NO_COLOR=1 RULES_GATE_FOCUS_CONTROL=return node scripts/simRulesGateConsentFocus.mjs
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+ctl-playEra2005: ANSWER_CONSENT_CONTROL=none ENGINES=chromium node scripts/playEra2005.mjs
+ctl-playNationJob: ANSWER_CONSENT_CONTROL=none ENGINES=chromium node scripts/playNationJob.mjs
+ctl-playCmHubLanding: ANSWER_CONSENT_CONTROL=none node scripts/playCmHubLanding.mjs
+simCareerProgramme-forwalk: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerProgramme.mjs
+ctl-playSoccerSeasonCalendar: ANSWER_CONSENT_CONTROL=none FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerSeasonCalendar.mjs 2>&1 | tail -3; s=${PIPESTATUS[0]}; node .rc/x/calErrors.mjs; exit $s
+ctl-playFrontOfficeGameDay: ANSWER_CONSENT_CONTROL=none node scripts/playFrontOfficeGameDay.mjs
+ctl-playUsCareerSaveSeam: ANSWER_CONSENT_CONTROL=none node scripts/playUsCareerSaveSeam.mjs
+ctl-playStorageBlocked: ANSWER_CONSENT_CONTROL=none node scripts/playStorageBlocked.mjs
