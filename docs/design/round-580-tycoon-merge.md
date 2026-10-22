@@ -1442,3 +1442,159 @@ with edge 0.078. A successful level-three upgrade consumes one kit and
 disables further upgrades. Six effective UI controls cover width, movement,
 double upgrades, the floor, cap and maximum. Production CSS and full page
 release checks remain required before publication.
+
+## 21. Round 1532 implementation evidence, 2026-10-21
+
+The match stops being a timer. Until this round our chance a minute was
+`0.028 + squad x 0.0016` (capped at 0.16) and a rival's `0.024 + matchNo x 0.0011 +
+oppBoost + offset` (capped at 0.14), so a club that kept buying won 95 to 99 matches in
+a hundred from minute 15, won every title it played for, and reached The Summit in
+233.1 watched minutes, the sum of every season length. Every number below was measured
+on GitHub runners; nothing heavy ran on the owner's PC.
+
+**The law.** The tycoon now scores with the law Club Manager scores with
+(`src/lib/season/law.ts`, imported, never restated). Strength is counted in law
+points: your side is `squadStrength = Squad level x SQUAD_POINTS`; a rival is
+`divisionStrength (the division's rivalStrength) + its stored offset x
+RIVAL_OFFSET_POINTS`; `matchGap` is the difference. Our expected goals are
+`goalLambda(gap, LAW.home)` (every watched match is at our ground, section 8), the
+rival's `goalLambda(-gap, LAW.away) x (1 - f)` with `f` the first team edge (no floor
+after it), and a minute's chance is the expected goals over 90, one roll a side a
+minute as before. Other fixtures play `goalLambda(their strength difference, venue) /
+90` on the matchday's own seeded stream. No chance reads the career match count any
+more; `league.baseMatchNo` is still written so an older build plays a rollback's rivals
+at the strength they were drawn at. No save field was added.
+
+**The bonuses.** A goal pays `GOAL_BONUS_SEC` (5), a win `WIN_BONUS_SEC` (20) and a
+promotion or a Summit title `PROMOTION_BONUS_SEC` (120) seconds of the club's unboosted
+income (`unboostedIncomePerSec`, the expression away pay has always used, now one
+helper that away pay calls too; away pay is `Object.is` the base on 52 inputs). The
+promotion is counted in the new division's income. Hype and the DERBY DAY frenzy never
+reach a bonus; the streak, stars, division, badges and Boardroom Sway do. At two hours
+a win paid 0.13 seconds of income on the base; it now pays 20.
+
+**The four knobs** (brief-1532 design 3.5, the lead's step 1 rulings S1 and S2):
+
+- Knob 1, `SQUAD_POINTS` 0.85. The specified overinvest bot bought what pace bought (G =
+  0), so the lead ruled that overinvest is the over4 bot (Squad priced at a quarter in
+  a queue that waits for it), whose G at 60 minutes is 7: 6 / 7 rounds to 0.85.
+- Knob 2, the ladder: `rivalStrength[d] = round(0.85 x A_d) - ARRIVAL_EDGE` for d 1 to
+  9, A_d = 34 52 59 68 73 77 81 83 86, the keeping pace bot's Squad on arrival in each
+  division on the base timer (`scripts/data/tycoonScorelineBaseline.json`, 77c00798).
+- Knob 4, division 0: R0 = 1 (ruling S2), measured on the patched engine before knob 3:
+  simTycoonLeague section 4 promotion 10.50 minutes against a first Sell up of 13.10;
+  season one won at a share of 0.90 (8 of seeds 1 to 10, 18 of 1 to 20); section 3
+  Squad 30 1.00 against Squad 0 0.20, a gap of 0.80 against the 0.476 the 0.35 fence
+  plus two standard errors needs; section 9 stuck 0 of 30 for Squad 3 and for Squad 6.
+- Knob 3, `ARRIVAL_EDGE` 4, from pace's win share over minutes 15 to 120 on seeds 1 to
+  20: -2 53.9, 0 57.5, 2 59.5, 4 64.6, 6 68.7, 8 73.6 (nearest 65, ties to the harder
+  ladder). Holdout seeds 21 to 40: 66.6 (standard error 1.45, headroom needed 4.36);
+  over4 76.4 and 78.7.
+- The table: rivalStrength 1 25 40 46 54 58 61 65 67 69, `RIVAL_OFFSET_POINTS` 500.
+  Record: `scripts/data/tycoonScorelineTuning.json`, written by
+  `scripts/tuneTycoonScorelines.mjs` (remote check r1532-s2a) on a copy of the engine
+  that `scripts/lib/tycoonLaw.mjs` patched, the same text the round then landed.
+
+**The targets of brief 1.3, against the measurement** (`scripts/simTycoonScorelines.mjs`,
+remote check r1532-b4, calibration / holdout seed means, minutes 15 to 120 unless named):
+
+| target | measured |
+|---|---|
+| pace wins 55 to 75 | 64.6 / 66.6 |
+| each window 50 to 80 (15 to 30, 30 to 60, 60 to 120) | 72.1, 67.9, 61.2 / 75.0, 67.9, 64.0 |
+| overinvest 76 to 86 and at least 4 over pace | 76.4 / 78.7, +11.8 / +12.1 |
+| overinvest under 90 in every window | at most 84.3 |
+| nosquad clearly under pace (fence half the calibration gap, 23) | 18.0 / 17.2 |
+| draws 15 to 27 | 20.9 / 20.5 |
+| goals 2.5 to 3.0 a watched league match | 2.569 / 2.600 |
+| titles a season over 15 to 240, 0.40 to 0.90 | 0.733 / 0.727 |
+| season one won at a share of 0.75 or more (critic item 8) | 36 of 40 |
+| never 99 | exact ceiling 98.19 (98.65 against a rival who never scores) |
+| a win at two hours 20 seconds of income | 20 on every seed (base 0.13) |
+
+overinvest sits 0.4 over its floor on calibration. The seeds are fixed, so the number
+does not move from run to run, but any change to the table must measure it again.
+
+**The tables of design 3.1, recomputed through the engine's own playMinute and
+playMatchday** (S5, 500 seasons a cell, title share at gap 0 / 4 / 8 / 12 / 14): six
+clubs one leg 0.232 / 0.466 / 0.654 / 0.824 / 0.908; eight clubs two legs 0.184 /
+0.562 / 0.836 / 0.946 / 0.982; ten clubs two legs 0.222 / 0.500 / 0.850 / 0.960 / 0.990.
+A club at the win band's floor (+4) takes 0.47 to 0.56 titles a season, so the 0.40
+floor is the code's, not the draft's.
+
+**LEAD RULINGS on the two fences that could not hold (brief-1532 R2, R3 and S3).** These
+are rulings, not measurements dressed as constants.
+
+- The shared fixture moved (S3). Round 586's policy and Round 587's set piece band both
+  played Squad 40 in division 3. Under the law that is 12 points under division 3's
+  rivals, a hopeless side, where the first team barely moves wins; a keeping pace club
+  measures about +7.7 over the climb. Both fixtures now play division 3's par plus 6
+  points: par is the Squad whose strength equals the rivals' (round(46 / 0.85) = 54),
+  plus ceil(6 / 0.85) = 8 levels, Squad 62.
+- R2, Round 586's wins floor (simAllPlayersValue policy-wins), re-derived by its own
+  recipe: half the calibration effect over seeds 101 x 1 to 32, the holdout 33 to 64
+  must clear it, flatedge must still give exactly zero. Measured (remote check
+  r1532-b1): calibration sell 88.3125, hold 89.375 wins, gain 1.0625, floor 0.53125
+  (it was 1.828125, measured at Squad 40 on the timer engine where every match was
+  won); holdout gain 0.8125 with a paired standard error of 0.2174, clear of the floor
+  and of the two standard error hard stop. At Squad 40 the step 1 predictor (exact
+  binomial on the fixture's own rolls) gave 24.5 against 25.6 wins, a floor of 0.55 and
+  a holdout of 0.66 +- 0.27. The cash half is untouched: its fixed seasons do not read
+  the stadium engine. Recorded in `scripts/data/allPlayersValueBaseline.json`
+  `policy.ruling1532`.
+- R3, Round 587's set piece band, re-derived by its own recipe: two 2,000 match
+  calibration batches set the centre, the band keeps its plus and minus 50 percent, the
+  holdout must land inside, `nogain` must still fire. Measured (r1532-b1): 21.40 and
+  25.05 points, centre 23.225, band 11.6125 to 34.8375 (it was 5.8125 to 17.4375,
+  centre 11.625); holdout 22.85. At Squad 40 the predictor gave 21.8 and 21.6, a band
+  of 10.8 to 32.6. Why the centre moved: one perfect goal turns exactly the matches that
+  would otherwise end level into wins, and a football match draws a fifth of the time.
+
+**What this section supersedes.** Section 5's "Match gem pace" table and "What keeps a
+ground honest"; Round 582's "the peak now comes from the division ladder and the ever
+later draws"; the `max(0.008, ...)` floor in the first team formula of section 3 (the
+opponent's chance is now `goalLambda(-gap, LAW.away) x (1 - f) / 90`, no floor); section
+8's "The ten names, emoji, incomeMult and oppBoost stay" (`oppBoost` is now
+`rivalStrength`) and its rival chance `0.024 + matchNo x 0.0011 + oppBoost + offset` (now
+the law at the two clubs' strength difference).
+
+**Where the pressure to sell up comes from now.** Rivals no longer grow with the
+club's match count, so a ground never walls; it slows. Each division's rivals stand where
+a club that kept pace arrived on the old timer (knob 2), the Squad costs 16 percent more
+each level, and seasons lengthen up the ladder (10.5, 29.4 and 37.8 watched minutes in
+the three league shapes). Measured (pace, calibration medians, S8): it reaches divisions
+1 to 7 at 10.5, 21, 42, 71.4, 121.8, 159.6 and 207.9 minutes and not 8 within four hours
+(the base timer: 10.5, 21, 31.5, 60.9, 90.3, 119.7, 157.5, 195.3, 233.1), so it spends
+10.5, 10.5, 21, 29.4, 50.4, 37.8 and 48.3 minutes in divisions 0 to 6: the climb slows,
+with noise (division 5 went quicker than 4 for this median). simTycoonLeague 9b shows the
+other half: no saved club and no club ten levels behind the ladder is walled (30 of 30
+win a title within three hours in every division). Meanwhile the Sell up bar fills
+(first Sell up 12.77 minutes, base 13.37; a seller's stars at 21, 42 and 73.5 minutes,
+as on the base), and a sale buys a star worth +50 percent income forever and legacy
+points by the division climbed, so the next ground climbs the same ladder faster: "the
+ladder is faster every run" is literally true. The signal is a title that is getting
+harder to win while the bar is full, not a title that can never be won.
+
+**Pack prices (brief 3.8 with critic item 10).** Gems follow results, and the match is
+no longer won every time, so simTycoonPackPace went red (the immediate visitor's paid
+Scout by day 2 at p90 visit 5 against the limit of 4; green on the base). The rule,
+applied once: r = the 10th percentile of earned gems at that check's limit visit on head
+(25) over the base (35), 0.714, every paid price times r rounded down: Scout 30, Club
+100 and Elite 250 became 21, 71 and 178 gems. Green after it (r1532-b4). No gem source
+was added; `GEM_PAY` is untouched.
+
+**The economy beside the base record** (S8, calibration medians). Income a second at 30 /
+60 / 120 minutes 17.9K / 25.6K / 41.7K (base 21.2K / 34.4K / 81.0K: shorter streaks,
+mean capped streak 4.1 against 9.6, and a slower climb, division 5 at two hours against
+6). First prestige still inside the 45 minute carrot (simStadiumTycoon: minute 13,
+income at 30 minutes 665 times minute one). Milestones and badges that count goals,
+wins or streaks come later: goals25 22.4 minutes (base 9.8), ag100 113.9 (27.2), ag500
+beyond four hours (96.1), win50 161.7 (107.1), as10 29.4 (23.1). Ruling S4: printed, not
+tuned here; the lead names a badge ladder round after this one.
+
+**Away play's pace is the next round (R5, Q4).** `AWAY_MATCHDAY_SEC` is 1800 and the
+away cap 8, 10 or 12 hours by the Away Day Deal perk, so a trip plays 16, 20 or 24
+matchdays and never the final one; an 18 matchday season begun at matchday 1 needs 17,
+which only a club without the perk falls one short of. Measured after this round (S3,
+pace's own state at 60 and 120 minutes, 16 away matchdays): see the S3 line of
+simTycoonScorelines for the away goals and win share.

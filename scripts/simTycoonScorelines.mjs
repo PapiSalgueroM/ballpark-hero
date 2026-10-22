@@ -334,14 +334,14 @@ function S3(E, sets) {
     const all = results(R.pace, 15, 120);
     if (!(all.goals.mean >= 2.5 && all.goals.mean <= 3.0)) out.push(`${name}: pace's watched league matches over minutes 15 to 120 held ${all.goals.mean} goals, outside 2.5 to 3.0`);
     const away = [30, 60, 120].map(c => {
-      let g = 0; let n = 0;
+      let g = 0; let n = 0; let w = 0;
       for (const run of R.pace) {
         const st = run.states?.[c];
         if (!st) continue;
         const r = E.T.playAwayMatchdays(st, 16, mulberry(run.seed * 7 + c));
-        g += r.events.filter(e => e.kind === 'goal' || e.kind === 'conceded').length; n += r.results.length;
+        g += r.events.filter(e => e.kind === 'goal' || e.kind === 'conceded').length; n += r.results.length; w += r.results.filter(x => x.result === 'W').length;
       }
-      return n ? r3(g / n) : 'none';
+      return n ? `${r3(g / n)} goals, ${r3((100 * w) / n)}% won of ${n}` : 'none (the final matchday waits)';
     });
     notes.push(`${name} ${all.goals.mean} goals a match (windows ${WINDOWS.map(([a, b]) => `${a} to ${b} ${results(R.pace, a, b).goals.mean}`).join(', ')}); away matchdays from pace at 30 / 60 / 120 minutes ${away.join(' / ')}`);
   }
