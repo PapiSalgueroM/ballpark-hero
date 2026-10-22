@@ -1797,12 +1797,21 @@ export function LiveSimScreen({
                     /* With the event pill up (top 8%, two short lines), a name high on the pitch goes under the pill, never
                        behind it: the walk at 1280 met "Booked: ..." drawn over "Foul by ..." at the top of the pitch. */
                     const underPill = !!banner && (orientation === 'landscape' ? cue.at.x : cue.at.y) < 25;
+                    /* Round 1521 review: clear of the two men. The man who fouled stands a step on from the spot in his
+                       own direction, so the other side's man is drawn just above it on screen (either way up) and mine
+                       just below, and the man fouled stands a step the other way. The name goes on the side away from
+                       the man it names, past the man fouled and his name: the walk met "Foul by Hackney" drawn over
+                       Hackney, and over the names of the men around him. */
+                    const foulerAbove = foulLine.side === 'opp';
+                    const nearBottom = (orientation === 'landscape' ? cue.at.x : cue.at.y) > 84;
+                    const below = nearTop || underPill || (foulerAbove && !nearBottom);
+                    const drop = below ? (foulerAbove ? 26 : 34) : -64;
                     return (
                       <div
                         data-cm-foul-cue={foulLine.side}
                         data-cm-foul-order={cue.order}
                         className="absolute z-20 pointer-events-none rounded-md border border-border bg-background/90 px-1.5 py-0.5 text-[10px] font-bold leading-tight text-foreground whitespace-nowrap"
-                        style={{ ...spot, ...(underPill ? { top: `max(${spot.top}, calc(8% + 32px))` } : {}), transform: `translate(-50%, ${nearTop || underPill ? 16 : -44}px)` }}
+                        style={{ ...spot, ...(underPill ? { top: `max(${spot.top}, calc(8% + 32px))` } : {}), transform: `translate(-50%, ${drop}px)` }}
                       >
                         {foulLine.text
                           ? <>Foul by {pitchName(foulLine.text)}{foulLine.side === 'opp' && oppGen(foulLine.text) && <MadeUpTag className="ml-1" />}</>
