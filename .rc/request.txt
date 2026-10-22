@@ -1,0 +1,15 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simFightIds: node scripts/simFightIds.mjs
+simFightIds-base: git worktree add /tmp/base e3deb2cb && FIGHT_IDS_BASE_DIR=/tmp/base node scripts/simFightIds.mjs
+ctl-counter: FIGHT_IDS_CONTROL=counter node scripts/simFightIds.mjs
+ctl-norepair: FIGHT_IDS_CONTROL=norepair node scripts/simFightIds.mjs
+ctl-noclass: FIGHT_IDS_CONTROL=noclass node scripts/simFightIds.mjs
+ctl-drawid: FIGHT_IDS_CONTROL=drawid node scripts/simFightIds.mjs
+ctl-startone: FIGHT_IDS_CONTROL=startone node scripts/simFightIds.mjs
+simFightGym: node scripts/simFightGym.mjs
+simFightPromoter: node scripts/simFightPromoter.mjs
+simFightCareer: node scripts/simFightCareer.mjs
+simFightCareer-godmode: FIGHT_CONTROL=godmode node scripts/simFightCareer.mjs
+vitest: node_modules/.bin/vitest run src/lib/fightGym.test.ts src/lib/fightPromoter.test.ts src/lib/fightCareerLife.test.ts src/test/boxingShowForecast.test.tsx src/test/fightCareerLifeBoard.test.tsx src/test/fightCareerRingPlayback.test.tsx --testTimeout=300000 --hookTimeout=120000
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
