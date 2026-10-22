@@ -1,0 +1,7 @@
+headsha exit=0 0s | d103d762dc rc request rBP-trA-m3 for 8cc0e7c1676aea90252718f810167a07076a2b7a
+simCmVar exit=1 0s | Node.js v24.21.0
+simCmShootoutOrder exit=1 32s | simCmShootoutOrder: 3 FAILURE(S)
+ctl-motion-whistle exit=1 0s | Node.js v24.21.0
+simLiveSimMotion exit=0 73s | simLiveSimMotion: green. 56 tests passed (the viewer on real feeds, the pitch part's rules on 200 half feeds and on feeds made by hand, the goal sequence, match mode), an
+simClubManagerSlots exit=1 97s | simClubManagerSlots: RED, sections 2 (1 failures)
+simClubManagerBudget exit=1 197s | simClubManagerBudget: 1 FAILURE(S)
