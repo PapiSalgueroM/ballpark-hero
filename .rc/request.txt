@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+probe: node .rc/x/rv-probe-focus.mjs
+gmcareer: PLAY_GM_CAREER_OUT="$RC_OUT/gmc" node scripts/playGmCareer.mjs
+ownermandate: node scripts/playOwnerMandate.mjs
+ctl-wipebutton: PLAY_GM_CAREER_CONTROL=wipebutton PLAY_GM_CAREER_WALKS=A PLAY_GM_CAREER_SIZE=390 node scripts/playGmCareer.mjs
