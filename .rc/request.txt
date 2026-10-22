@@ -1,0 +1,21 @@
+#!serve
+#!playwright
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simBrowserHarnessDiscovery: node scripts/simBrowserHarnessDiscovery.mjs
+nodash: c=$(printf '\xe2\x80\x93|\xe2\x80\x94'); git diff --name-only c1b39364 HEAD | xargs grep -lE "$c" ; n=$(git diff --name-only c1b39364 HEAD | xargs grep -cE "$c" | awk -F: '{s+=$2} END {print s+0}'); echo "dash lines in the round's 46 files: $n"; [ "$n" = 0 ]
+ctl-playEra2005: ANSWER_CONSENT_CONTROL=none ENGINES=chromium node scripts/playEra2005.mjs
+ctl-playNationJob: ANSWER_CONSENT_CONTROL=none ENGINES=chromium node scripts/playNationJob.mjs
+ctl-playWilderness: ANSWER_CONSENT_CONTROL=none ENGINES=chromium node scripts/playWilderness.mjs
+ctl-playSponsors: ANSWER_CONSENT_CONTROL=none ENGINES=chromium node scripts/playSponsors.mjs
+ctl-playExtension: ANSWER_CONSENT_CONTROL=none node scripts/playExtension.mjs
+ctl-playCmHubLanding: ANSWER_CONSENT_CONTROL=none node scripts/playCmHubLanding.mjs
+ctl-playUsCareerSaveSeam: ANSWER_CONSENT_CONTROL=none node scripts/playUsCareerSaveSeam.mjs
+ctl-playFrontOfficeGameDay: ANSWER_CONSENT_CONTROL=none node scripts/playFrontOfficeGameDay.mjs
+ctl-playStorageBlocked: ANSWER_CONSENT_CONTROL=none node scripts/playStorageBlocked.mjs
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+simCareerProgramme-forwalk: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerProgramme.mjs
+playSoccerSeasonCalendar: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerSeasonCalendar.mjs 2>&1 | tail -3; s=${PIPESTATUS[0]}; node .rc/x/calErrors.mjs; exit $s
+ctl-playSoccerSeasonCalendar: ANSWER_CONSENT_CONTROL=none FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerSeasonCalendar.mjs 2>&1 | tail -3; s=${PIPESTATUS[0]}; node .rc/x/calErrors.mjs; exit $s
