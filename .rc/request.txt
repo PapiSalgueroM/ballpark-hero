@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+guide-head: node scripts/simGuideHeadings.mjs
+guide-attr: git checkout c1b393644e00c560a0ca6a5f5dea47e57c252160 -- src/data/gameContent/soccer2.ts && node scripts/simGuideHeadings.mjs; s=$?; git checkout -- src; exit $s
+writes-rerun: node scripts/simWritesAreSent.mjs
