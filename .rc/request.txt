@@ -1,0 +1,2 @@
+simUsBoardParity: node scripts/simUsBoardParity.mjs
+fixture-replay: US_BOARD_FIXTURE=replay node_modules/.bin/vitest run src/test/usBoardFixture.test.tsx --testTimeout=600000 --hookTimeout=120000
