@@ -1,0 +1,3 @@
+# Release BP triage, trQ: bisect Round 1520's bridge edits against simCmShootoutOrder (bisect1520.mjs).
+headsha: git log --oneline -1
+bisect: node .rc/x/bisect1520.mjs
