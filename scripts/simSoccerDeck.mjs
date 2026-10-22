@@ -164,8 +164,8 @@
 
    SIM_SOCCER_DECK_SECTIONS=2,3 runs only those sections. SIM_SOCCER_DECK_BASE
    moves SC_BASE (default e814c2de, origin/main when the round started).
-   Round 1523 (morale that plays, the Puskas year) moves seeded careers on purpose, so every head bundle takes it
-   out first (scripts/lib/careerSoccerMorale1523.mjs, an attribution); SIM_SOCCER_DECK_MORALE= (empty) keeps it in,
+   Round 1523 (morale that plays, the Puskas year) moves seeded careers on purpose, so the bundle that sections 2, 4
+   and 9 hold to the base takes it out first (scripts/lib/careerSoccerMorale1523.mjs, an attribution); SIM_SOCCER_DECK_MORALE= (empty) keeps it in,
    and sections 2, 4 and 9 then go red, which shows that round is the only change.
    Runtime, measured 2026-10-16 on a GitHub runner (rc r1334-f1): the whole harness 188 s, over the 150 s an agent's
    command may take, so the gate runs it as three lines: SIM_SOCCER_DECK_SECTIONS=1,2,3,4,5 (112 s),
@@ -182,7 +182,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import * as esbuild from 'esbuild';
 import { staticClosure, codeOf } from './lib/staticClosure.mjs';
 /* Round 1523: the attribution (scripts/lib/careerSoccerMorale1523.mjs). SIM_SOCCER_DECK_MORALE unset takes that round
-   out of every head bundle; an empty value keeps it in, the unattributed arm, red in sections 2, 4 and 9 by design. */
+   out of the bundle sections 2, 4 and 9 play on (every other section plays the shipped engine); an empty value keeps it in, the unattributed arm, red in sections 2, 4 and 9 by design. */
 import { inverseSoccerMorale, soccerMoraleOut, soccerMoraleReceiptProblem } from './lib/careerSoccerMorale1523.mjs';
 const MORALE_OUT = soccerMoraleOut('SIM_SOCCER_DECK_MORALE');
 const moraleReceipt = [];
@@ -261,7 +261,7 @@ if (CONTROL) console.log(`NEGATIVE CONTROL ON: ${CONTROL} (section ${CONTROLS[CO
    the exact state each deal starts from. It must find its line once. */
 const MARK = ['export function generateRandomEvents(state: CareerState): RandomEvent[] {\n',
   'export function generateRandomEvents(state: CareerState): RandomEvent[] {\n  (globalThis as { __sdDeal?: (s: CareerState) => void }).__sdDeal?.(state);\n'];
-async function bundle(tag, { ref = null } = {}) {
+async function bundle(tag, { ref = null, moraleOut = false } = {}) {
   let marked = 0;
   const plugin = { name: 'soccer-deck-source', setup(b) {
     b.onLoad({ filter: /\.(ts|tsx)$/ }, args => {
@@ -272,7 +272,7 @@ async function bundle(tag, { ref = null } = {}) {
         : (swapped.get(rel) ?? readSrc(rel));
       /* Round 1523: its morale step and Puskas gate move seeded careers on purpose, so the head is held to
          SC_BASE with that round taken out first (its own harness, simCareerForm, proves what it changes) */
-      if (!ref && MORALE_OUT) source = inverseSoccerMorale(rel, source, moraleReceipt);
+      if (!ref && moraleOut) source = inverseSoccerMorale(rel, source, moraleReceipt);
       if (rel === ENGINE) {
         assert.equal(source.split(MARK[0]).length - 1, 1, 'the harness mark finds generateRandomEvents exactly once');
         source = source.replace(MARK[0], () => MARK[1]);
@@ -302,9 +302,13 @@ globalThis.localStorage = {
   getItem: k => (store.has(k) ? store.get(k) : null), setItem: (k, v) => { store.set(k, String(v)); },
   removeItem: k => { store.delete(k); }, key: i => [...store.keys()][i] ?? null, get length() { return store.size; }, clear: () => store.clear(),
 };
+/* Round 1523's attribution belongs to the sections that hold the head's careers to the base's (2, 4 and 9, which
+   play on HL); every other section judges the engine that ships, H, with that round in (review of 2026-10-21: one
+   head bundle with it taken out left no section testing the shipped engine). */
 const H = await bundle('head');
+const HL = MORALE_OUT ? await bundle('head-lock', { moraleOut: true }) : H;
 if (MORALE_OUT) assert.equal(soccerMoraleReceiptProblem(moraleReceipt), '', 'the head bundle took Round 1523 out of the engine, every row once, in order');
-console.log(MORALE_OUT ? `simSoccerDeck: Round 1523 taken out of the head bundles (${moraleReceipt.length} rows; SIM_SOCCER_DECK_MORALE= keeps it in)` : 'simSoccerDeck: Round 1523 kept in (SIM_SOCCER_DECK_MORALE is empty): sections 2, 4 and 9 are red by design');
+console.log(MORALE_OUT ? `simSoccerDeck: Round 1523 taken out of the bundle sections 2, 4 and 9 hold to the base (${moraleReceipt.length} rows; SIM_SOCCER_DECK_MORALE= keeps it in)` : 'simSoccerDeck: Round 1523 kept in (SIM_SOCCER_DECK_MORALE is empty): sections 2, 4 and 9 are red by design');
 const B = await bundle('base', { ref: BASE });
 const SHIPPED = H.SOCCER_DECK_PACKS.soccer;
 console.log(`simSoccerDeck: head and base ${BASE.slice(0, 8)} bundled (${secs()} s); the shipped pack holds ${SHIPPED.events.length} cards${CONTROL ? `, CONTROL=${CONTROL}` : ''}`);
@@ -332,9 +336,9 @@ if ((CONTROL === 'silent' || CONTROL === 'drop') && !PACK.events.some(e => e.cho
   console.error(`${CONTROL} control: the pack moves no outfield training key, so the control would change nothing, refusing to run`);
   process.exit(2);
 }
-const moduleFor = pack => ({ ...H.deck,
-  dealSoccerDeck: (s, season, key, taken) => H.deck.dealFromPack(pack, s, season, key, taken),
-  pendingSoccerDeck: s => H.deck.pendingFromPack(pack, s) });
+const moduleFor = (pack, X = H) => ({ ...X.deck,
+  dealSoccerDeck: (s, season, key, taken) => X.deck.dealFromPack(pack, s, season, key, taken),
+  pendingSoccerDeck: s => X.deck.pendingFromPack(pack, s) });
 
 /* ─── seeded streams and the fleet ─────────────────────────────────────── */
 
@@ -543,8 +547,9 @@ if (runs(1)) {
 SECTION = '2';
 console.log(`2) Inert: the deck not loaded, ${FLEET} careers of ${SEASONS} seasons, every save byte equal to the base's after every step and the Math.random count equal`);
 if (runs(2)) {
+  const H = HL; /* Round 1523 taken out here (SIM_SOCCER_DECK_MORALE): this section holds the head to the base */
   if (H.gate.soccerDeckReady()) fail('the deck is loaded before section 2 runs');
-  if (CONTROL === 'leak') globalThis.__sdLeak = moduleFor(FIXTURE);
+  if (CONTROL === 'leak') globalThis.__sdLeak = moduleFor(FIXTURE, H);
   let steps = 0, differ = 0, callsDiffer = 0, calls = 0;
   const firsts = [];
   for (let seed = 0; seed < FLEET; seed += 1) {
@@ -696,7 +701,8 @@ const withoutDeckStamps = json => {
   return JSON.stringify(o);
 };
 if (runs(4)) {
-  H.gate.setSoccerDeckLoader(async () => moduleFor(PACK));
+  const H = HL; /* Round 1523 taken out here (SIM_SOCCER_DECK_MORALE): this section holds the head to the base */
+  H.gate.setSoccerDeckLoader(async () => moduleFor(PACK, H));
   await H.gate.loadSoccerDeck();
   const reseed = CONTROL !== 'noreseed';
   let seasons = 0, apart = 0, deckAnswers = 0;
@@ -1173,6 +1179,7 @@ if (runs(8)) {
 SECTION = '9';
 console.log('9) Old saves: the base\'s saves load and play here as they do there; a save with a deck card pending loads on the base (skipped, its stamp handed back) and answers here');
 if (runs(9)) {
+  const H = HL; /* Round 1523 taken out here (SIM_SOCCER_DECK_MORALE): this section holds the head to the base */
   const clubs = H.engine.FALLBACK_CLUBS;
   const playSeason = (M, st, seed) => withStream(() => {
     let s = M.repairCareer(st);
@@ -1200,7 +1207,7 @@ if (runs(9)) {
   if (apartLoad || apartPlay) fail(`${apartLoad} base saves load differently here and ${apartPlay} play their season differently (the deck not loaded)`);
   else ok('every base save loads to the same JSON here and plays the same season');
   /* a head save with a deck card pending */
-  H.gate.setSoccerDeckLoader(async () => moduleFor(PACK));
+  H.gate.setSoccerDeckLoader(async () => moduleFor(PACK, H));
   await H.gate.loadSoccerDeck();
   const pending = [];
   for (let seed = 0; seed < 60 && pending.length < 60; seed += 1) {
