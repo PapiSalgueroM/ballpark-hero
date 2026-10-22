@@ -342,6 +342,69 @@ console.log('8) NBA Higher or Lower: every man who played in the latest season l
   else console.log(`   ok   ${Object.keys(teamsRec.players).length} men played in ${teamsRec.season}, and every card lists the team or teams he played for in it`);
 }
 
+/* ---------- section 9: the worked examples quote the card's own numbers ---------- */
+/* Round 1549's read review. The rules block a player reads before playing
+   said "Brady (89,216) vs Brees (80,428)" and "Hamilton (105 wins)" while the
+   cards showed 89,214, 80,358 and 106. Every "Name (number)" in a page's
+   examples is matched to the one pool player whose name holds every word of it
+   and must equal the number that player's card shows. On the NFL page the
+   example's own "Category:" prefix picks the category by its chip label. A
+   number with no name in brackets ("Frank Gore quietly sits at 16,000") is
+   not read; a bracketed number whose name or category cannot be matched fails
+   rather than passing unread. The files are read from disk, untouched by the
+   data controls above, so this section judges only the words. */
+console.log('9) every number a worked example quotes is the number the card shows');
+{
+  let bad = 0, quoted = 0;
+  const say = (m) => { console.log(`   FAIL ${m}`); bad++; };
+  const byKey = Object.fromEntries(SPORTS.map(s => [s.key, s]));
+  const catSrc = fs.readFileSync(path.join(ROOT, 'src/data/nflHLCategories.ts'), 'utf8').replaceAll('\r\n', '\n');
+  const labels = Object.fromEntries([...catSrc.matchAll(/key: '(\w+)',\s*\n\s*label: '([^']+)'/g)].map(m => [m[2], m[1]]));
+  const pools = new Map();
+  const pool = async (cfg) => {
+    if (!pools.has(cfg.key)) pools.set(cfg.key, await loadSport(ROOT, cfg));
+    return pools.get(cfg.key);
+  };
+  const nflCat = (key) => ({ key: `nflcat-${key}`, file: 'src/data/nflHLCategories.ts', exportName: 'NFL_HL_CATEGORIES', category: key, metric: 'value' });
+  const PAGE_DATA = {
+    HockeyHigherLower: () => byKey.hockey,
+    NbaHigherLower: () => byKey.nba,
+    TennisHigherLower: () => byKey.tennis,
+    F1HigherLower: () => ({ key: 'f1', file: 'src/data/f1HLDrivers.ts', exportName: 'f1HLDrivers', metric: 'careerWins' }),
+    NflHigherLower: (example) => {
+      const label = (example.match(/^([^:]+):/) || [])[1];
+      return labels[label] ? nflCat(labels[label]) : null;
+    },
+  };
+  for (const page of Object.keys(PAGES)) {
+    const rel = `src/pages/${page}.tsx`;
+    let code = strip(fs.readFileSync(path.join(ROOT, rel), 'utf8').replaceAll('\r\n', '\n'));
+    if (CONTROL === 'examplestale' && page === 'NflHigherLower') {
+      try { code = rewrite(code, 'Brady (89,214)', 'Brady (89,216)', "examplestale quotes Brady's old passing yards"); } catch (e) { stopControl(e.message); }
+    }
+    const block = (code.match(/examples=\{\[([\s\S]*?)\]\}/) || [])[1];
+    if (block === undefined) { say(`${rel} has no examples block to read`); continue; }
+    for (const lit of block.matchAll(/'((?:[^'\\\n]|\\.)*)'|"((?:[^"\\\n]|\\.)*)"/g)) {
+      const example = lit[1] ?? lit[2];
+      for (const m of example.matchAll(/([A-Z][\w.'-]*(?: [A-Z][\w.'-]*)*) \(([\d,]+)(?: [a-z]+)?\)/g)) {
+        quoted++;
+        const [, who, num] = m;
+        const cfg = PAGE_DATA[page](example);
+        if (!cfg) { say(`${rel}: "${example}" quotes ${who} but names no category the NFL game has`); continue; }
+        const words = who.split(' ');
+        const hits = ((await pool(cfg)) || []).filter(p => { const t = p.name.split(' '); return words.every(w => t.includes(w)); });
+        if (hits.length !== 1) { say(`${rel}: "${who}" in "${example}" matches ${hits.length} player(s) in the pool, so the number cannot be checked`); continue; }
+        const shown = hits[0][cfg.metric];
+        if (Number(num.replaceAll(',', '')) !== shown) say(`${rel}: "${example}" quotes ${hits[0].name} at ${num}, the card shows ${shown.toLocaleString('en-US')}`);
+      }
+    }
+  }
+  if (!quoted) say('no worked example quotes a number at all, so this section measured nothing');
+  checks++;
+  if (bad) { failures += bad; red.add(9); }
+  else console.log(`   ok   ${quoted} numbers quoted in the worked examples of ${Object.keys(PAGES).length} pages, each the number the card shows`);
+}
+
 if (CONTROL) {
   const want = EXPECT[CONTROL];
   const got = [...red].sort((a, b) => a - b);
