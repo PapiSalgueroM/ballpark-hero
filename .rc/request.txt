@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+walk: node .rc/x/walk1543.mjs
+walk-ctl: WALK_CONTROL=nobadge node .rc/x/walk1543.mjs
+oldsave: git worktree add /tmp/base bac65fb0b && ln -s "$PWD/node_modules" /tmp/base/node_modules && OLDSAVE_BASE=/tmp/base node .rc/x/oldsave1543.mjs
+oldsave-ctl: git worktree add /tmp/base2 bac65fb0b && ln -s "$PWD/node_modules" /tmp/base2/node_modules && OLDSAVE_BASE=/tmp/base2 OLDSAVE_CONTROL=table node .rc/x/oldsave1543.mjs
