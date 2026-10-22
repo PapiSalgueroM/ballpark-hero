@@ -1,0 +1,3 @@
+sitesearch exit=0 2s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+norival exit=0 11s | No rival product names found. 0 findings.
+tsc exit=0 44s | 
