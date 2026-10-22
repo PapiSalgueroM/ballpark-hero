@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+scene: ONLY=/stadium-tycoon node scripts/playFirstVisitDialogs.mjs
+stale: ONLY=/stadium-tycoon PLAYFIRST_CONTROL=stale node scripts/playFirstVisitDialogs.mjs
+jump: ONLY=/stadium-tycoon PLAYFIRST_CONTROL=jump node scripts/playFirstVisitDialogs.mjs
+simResultMoment: node scripts/simResultMoment.mjs
