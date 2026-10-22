@@ -30,7 +30,8 @@ const say = (ok, what) => {
 };
 
 const DESKS = [
-  { route: '/front-office', key: 'front-office-save-v1', name: 'NFL', play: 'This week', panel: /Play Week|Play the final week|Bye week/ },
+  /* Round 1533: the NFL hub also holds the GM's two career boxes (NFL_HUB_PANELS); the other three get theirs next round. */
+  { route: '/front-office', key: 'front-office-save-v1', name: 'NFL', play: 'This week', panel: /Play Week|Play the final week|Bye week/, career: ['Career', 'GM level'] },
   { route: '/mlb-front-office', key: 'mlb-front-office-save-v1', name: 'MLB', play: 'Play', panel: /Play Round|Final stretch/ },
   { route: '/nba-front-office', key: 'nba-front-office-save-v1', name: 'NBA', play: 'Play', panel: /Play Round|Final stretch/ },
   { route: '/nhl-front-office', key: 'nhl-front-office-save-v1', name: 'NHL', play: 'Play', panel: /Play Round|Final stretch/ },
@@ -48,7 +49,7 @@ const BOXES = [
 /* Round 1535: since the GM desks every hub has nine boxes, the five the walk opens below and the desk's own
    four (the board's Release AX note, "playFoHub nine boxes"). Each is named, so a missing or extra box fails. */
 const DESK_BOXES = ['Staff', 'Re-sign desk', 'Draft picks', 'Trade desk'];
-const hubBoxes = desk => [...BOXES.map(([word]) => word), desk.play, ...DESK_BOXES];
+const hubBoxes = desk => [...BOXES.map(([word]) => word), desk.play, ...DESK_BOXES, ...(desk.career ?? [])];
 
 /** One box on the hub, by the word on it. Boxes only: see the note below. */
 const tile = (page, word) =>

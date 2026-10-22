@@ -92,7 +92,8 @@
  *   section 4: 475 first feeds asserted, 311 straight after a badly season (floors 300, 200)
  *   section 5: 493 offers in the first feeds, 475 firings followed (floors 400, 300)
  *   section 6: 60 years out on each of three seed sets; bands beside S6_BAND
- *   section 7: 17 firings, 8 seats taken, 17 years out, 9 careers closed for good (floors 12, 5, 10)
+ *   section 7: 17 firings, 8 seats taken, 17 years out, 9 closed (8a1fdbcb); 21, 14, 15, 6 (37876c81: the id counter
+ *              moves with the sections before it) (floors 12, 5, 10)
  *   controls: firedclub 2, unkeyed 580, staffrides 503, ledgerrides 505, rostermove 934, depthstays 503,
  *   askrebuilt 326, halfseason 60, awayxp 60, lastcall 20, noawaydraft 1, overlap 55, firedlost 27,
  *   nameinline 128 failures. notrim did not fire on the roster limit alone (the old club never passed 53), so
@@ -940,8 +941,11 @@ const S6_YEARS = 3;
      seeds 41-60: away 1064, idle GM 1080, ratio 0.985; mean roster 52.26 vs 52.25
    The idle GM's rivals take exactly 18 a season (three batches of six), so 1080 is a ceiling the away path cannot
    pass (its old club picks among them): the band's top is that ceiling, its floor sits well under the lowest of
-   the three. noawaydraft measured ratio 0.000 and a roster 0.19 short. */
-const S6_BAND = { draft: [0.95, 1.01], roster: [-0.1, 0.1] };
+   the three. noawaydraft measured ratio 0.000. The mean roster after a summer is printed and NOT asserted: across
+   four runs it sat 0.05 under to 0.02 over the baseline, too near the 0.19 a skipped draft costs to hold a band
+   that is not a coin toss, so the drafted ratio carries the check (the strongest signal) and the limit of 53 is
+   asserted club by club. */
+const S6_BAND = { draft: [0.95, 1.01] };
 const S6 = {
   years: 0, stopped: 0, over: 0, minted: 0, inSeat: 0, closed: 0, lastCall: 0, shadows: 0,
   away: { drafted: 0, rosters: 0, clubSummers: 0 }, base: { drafted: 0, rosters: 0, clubSummers: 0 },
@@ -1020,11 +1024,12 @@ if (runs('6')) {
           const before = D.nflPicksOf(dk, shadow), closed = shadow.season, ids = Object.keys(shadow.teams);
           const out = away.awaySummer(lg, () => { const x = r(); draws.push(x); return x; }, dk);
           let i = 0;
-          E.runOffseason(shadow, () => (i < draws.length ? draws[i++] : NaN));
+          let threw = false;
+          try { E.runOffseason(shadow, () => { if (i >= draws.length) throw new Error("out of draws"); return draws[i++]; }); } catch { threw = true; }
           D.syncNflPicks(shadow, P.rollLedger(before, ids, closed, D.nflGamePickRules()));
           S6.shadows++;
           const noIds = v => JSON.stringify(v, (key, x) => (key === 'id' ? undefined : x)); /* the restock mints ids from a counter the copy has moved on */
-          if (i !== draws.length || noIds(shadow) !== noIds(lg)) fail(`${at}: the away summer is not the engine's offseason with no user club (${i} of ${draws.length} draws replayed)`);
+          if (threw || i !== draws.length || noIds(shadow) !== noIds(lg)) fail(`${at}: the away summer is not the engine's offseason with no user club (${i} of ${draws.length} draws replayed${threw ? ", the replay ran out" : ""})`);
           for (const [abbr, t] of Object.entries(lg.teams)) {
             if (E.deepOverLimit(t) > 0) { S6.over++; fail(`${at}: ${abbr} is over the roster limit after the summer`); }
             if (abbr !== team) { S6.away.rosters += t.players.length; S6.away.clubSummers++; }
@@ -1072,7 +1077,6 @@ if (runs('6')) {
   ok(S6.years >= 0.9 * S6_SEEDS.length * S6_YEARS && S6.shadows === S6.years, `only ${S6.years} years out played (${S6.shadows} summers replayed)`);
   ok(S6.closed >= 1 && S6.lastCall >= 1, `no closed market or no last call found to refuse (${S6.closed}, ${S6.lastCall})`);
   ok(draftRatio >= S6_BAND.draft[0] && draftRatio <= S6_BAND.draft[1], `the away draft put ${draftRatio.toFixed(3)} of the idle GM baseline's draftees on the other clubs, band ${J(S6_BAND.draft)}`);
-  ok(rosterA - rosterB >= S6_BAND.roster[0] && rosterA - rosterB <= S6_BAND.roster[1], `the mean roster after an away summer differs from the baseline by ${(rosterA - rosterB).toFixed(2)}, band ${J(S6_BAND.roster)}`);
 }
 
 /* ================================================================== */
