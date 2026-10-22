@@ -11,7 +11,7 @@
  * NODE, over the bundled libs:
  *   S1 odds: every pack's odds sum to 100, and the Packs panel's code types no
  *      percentage (its numbers are PACKS', printed as they are)
- *   S2 the draw: 200,000 seeded draws per pack land within 0.3 points of every
+ *   S2 the draw: 800,000 seeded draws per pack land within 0.3 points of every
  *      published odd, and the same count detects a one point shift (power)
  *   S3 better packs are better: the expected ceiling strictly rises, and the
  *      guarantee's mean gap between Stars equals the exact figure (6.51, 1.96)
@@ -50,7 +50,7 @@
  *
  * CONTROLS: skew, nopity, late, leak, reroll, scoutdrift, words, oddsliteral,
  * earnedleak, twowriters, panelodds, freeprice, tiercard, gemtap, wavedaway, seqreuse,
- * sameseed, forgetful, dear, rawkid, unsaveddelivery, unsaveddismiss, unsaveddebit. The review before this round shipped found the
+ * sameseed, forgetful, wall, rawkid, unsaveddelivery, unsaveddismiss, unsaveddebit. The review before this round shipped found the
  * shared seed, the kid lost to "Welcome him in" and the missing controls; S12, S13,
  * S15 and the last eight controls are its cases. Control copies go to
  * dist/.tycoon-packs-control-<name>/.
@@ -93,7 +93,13 @@ globalThis.localStorage = {
 };
 const BANNED = ['spin', 'jackpot', 'lucky', 'bet', 'loot', 'crate'];
 const TOLERANCE = 0.3;
-const DRAWS = 200000;
+/* Round 1532 review: 200,000 draws put the 0.3 point tolerance under three standard
+   errors of a 62 percent tier (0.11 points), and each pack's sample is seeded by its
+   price, so a price change redraws it: the dear control's quadrupled prices drew the
+   Scout Pack's grassroots at 62.35 against 62. By rule 8 (more careers, never a wider
+   bound) S2 draws 800,000 a pack: the tolerance is then about 5.5 standard errors and a
+   one point shift still reads about one point. */
+const DRAWS = 800000;
 
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
@@ -506,10 +512,22 @@ const CONTROLS = [
     lib: () => [REWARDS_LIB, mustReplace(read(REWARDS_LIB), '  return stored ? l : { ...l, seed: freshSeed() };', '  return stored ? l : l;', 'tycoonRewards.ts')] },
   { name: 'forgetful', why: 'a pack is dismissed whether or not its kid reached a bed', red: ['S13'],
     lib: () => [REWARDS_LIB, mustReplace(read(REWARDS_LIB), '  if (!l.pending || deliveredUpTo < l.pending.seq) return false;', '  if (!l.pending || deliveredUpTo < -1) return false;', 'tycoonRewards.ts')] },
-  { name: 'dear', why: 'every pack costs four times as much', red: ['S15'],
-    /* Round 1532: the pack price rule moved the prices (30, 100, 250 became 21, 71, 178), so the control reads
-       the three prices off the file instead of typing them; it still quadruples each one. */
-    lib: () => { const text = read(ACADEMY_LIB); const prices = [...text.matchAll(/price: (\d+), firstFree:/g)].map(m => m[1]); if (prices.length !== 3) abort(`control dear: wonderkidFactory.ts carries ${prices.length} pack prices, not 3`); return [ACADEMY_LIB, prices.reduce((t, p) => mustReplace(t, `price: ${p}, firstFree:`, `price: ${Number(p) * 4}, firstFree:`, 'wonderkidFactory.ts'), text)]; } },
+  /* Round 1532: the `dear` control (every pack four times its price, red S15) is RETIRED, and
+     `wall` takes its place as S15's control. Under the shared scoring law the stadium keeps
+     paying results and titles at a steady pace (no wall), and a title is an unlock, so the dry
+     spell bot's longest stretch is held near 75.7 minutes whatever the packs cost. Measured with
+     the S15 bot copied verbatim (remote checks fx1532-p1 and fx1532-p3, head 71c29ff2 and
+     098014fa, 50 seeds of 40 hours, p90 against the fence of 79): prices as shipped 33.7; four
+     times 75.5; six 75.7; eight 75.7; twelve 76.5 (median 75.5, 37 of 50 stretches ended in a
+     title); a thousand times, no pack ever, 95.2 with a median and p75 of 75.7, so only six of
+     fifty runs pass the fence: a coin toss, not a control. On the base engine the same four
+     times reached 149.2 because its rivals outgrew the club with the match count (the Round 582
+     wall) and results stopped paying. So the drought S15 can still see is that wall, and `wall`
+     puts it back with simTycoonScorelines' own matchno rewrite: at shipped prices p90 1386
+     minutes, p10 784 (fx1532-p3). Pack prices stay fenced by simTycoonPackPace. DRY_FENCE_MIN
+     is unchanged. */
+  { name: 'wall', why: 'rivals grow with the career match count again (the Round 582 wall), so results and titles stop', red: ['S15'],
+    stadium: () => mustReplace(read(STADIUM_LIB), '  return divisionOf(s).rivalStrength;', '  return divisionOf(s).rivalStrength + s.matchNo * 1.8;', 'stadiumTycoon.ts') },
   { name: 'rawkid', why: 'the reveal receives unvalidated kid fields from storage', red: [], vRed: [9], vitest: 'TYCOON_PACKS_REWARDS',
     lib: () => [REWARDS_LIB, mustReplace(read(REWARDS_LIB), '    const kid = cleanPackKid(p.kid, p.tier);', '    const kid = p.kid;', 'tycoonRewards.ts')] },
   { name: 'unsaveddelivery', why: 'an academy write refusal still counts the kid as delivered', red: [], vRed: [10], vitest: 'TYCOON_LOADS_ACADEMY_HOOK',
@@ -535,11 +553,18 @@ for (const control of CONTROLS) {
   } else if (control.hookFile) {
     ({ dir, target } = await libControl(control.name, STADIUM_HOOK, control.hookFile(read(STADIUM_HOOK))));
   }
+  /* Round 1532: a control may also patch the stadium engine the dry spell bot plays. */
+  let T2 = T;
+  if (control.stadium) {
+    const patched = await libControl(control.name, STADIUM_LIB, control.stadium());
+    dir = dir ?? patched.dir;
+    T2 = await bundle(patched.target, `${control.name}-stadium`);
+  }
   /* S15 takes a minute a run, so only the controls that aim at it or change a price pay for it. */
   const slow = control.red.includes('S15') || control.name === 'freeprice';
   const hookSource = control.hookFile ? control.hookFile(read(STADIUM_HOOK)) : null;
   const result = sections({
-    ...inputs, W: W2, R: R2, T: slow ? T : null,
+    ...inputs, W: W2, R: R2, T: slow ? T2 : null,
     panelSource: control.panel ? control.panel(inputs.panelSource) : control.panelFile ? control.panelFile(inputs.panelSource) : inputs.panelSource,
     sources: control.sources ? control.sources(inputs.sources)
       : hookSource ? inputs.sources.map(x => (x.rel === 'src/hooks/useStadiumTycoon.ts' ? { ...x, code: hookSource } : x)) : inputs.sources,
