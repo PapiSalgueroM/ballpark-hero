@@ -1,0 +1,5 @@
+vitest-1500 exit=0 7s |    Duration  6.85s (transform 2.88s, setup 318ms, collect 7.05s, tests 7.33s, environment 1.19s, prepare 466ms)
+truthdigest exit=0 30s |    Duration  29.54s (transform 1.09s, setup 69ms, collect 1.39s, tests 27.36s, environment 270ms, prepare 58ms)
+dirty exit=0 46s | simUsDirtyMoney: all sections green
+truthdigest-ctl exit=0 26s | the fixture before Round 1500's re-record is refused as it must
+dm-ctl exit=0 269s | controls (each must be 1): words=1 mathrandom=1 flat=1 farm=1 cap=1 cool8=1 deck=1 noop=1 nodesk=1 sentence=1 anyphase=1
