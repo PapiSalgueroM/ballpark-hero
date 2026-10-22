@@ -774,6 +774,9 @@ export function hostMarketLine(
 
 /** Why the first call came. The game's own words: no real club, no real person. */
 export const HOST_FIRST_CALL_REASON = 'Nobody else rang. They have the weakest roster in the league and they will take the chance on you.';
+/** The same call when the club that let him go is the weakest itself, or ties the caller at the bottom: the
+    caller is then not the weakest, and its own card reads its roster rank right under this line. */
+export const HOST_FIRST_CALL_REASON_NEAR = 'Nobody else rang. They have one of the weakest rosters in the league and they will take the chance on you.';
 
 /**
  * Round 1533: the first call. A firing must never open on a screen that says
@@ -794,12 +797,14 @@ function hostFirstCall(pack: GmSeatPack, teams: SeatTeam[], seat: GmSeatBlock, s
   const weakest = [...teams].sort((a, b) => a.strength - b.strength || b.id.localeCompare(a.id)).find(t => t.id !== last.team);
   if (!weakest) return null;
   const strengths = Object.fromEntries(teams.map(t => [t.id, t.strength]));
+  const rank = strengthRank(strengths, weakest.id);
   return {
     teamId: weakest.id,
     teamName: weakest.name,
     tier: leagueTiers(teams).get(weakest.id) ?? 4,
-    ask: seatMandate(pack, strengthRank(strengths, weakest.id), teams.length, champion === weakest.id, season),
-    reason: HOST_FIRST_CALL_REASON,
+    ask: seatMandate(pack, rank, teams.length, champion === weakest.id, season),
+    /* "The weakest" only when every other club is stronger: the rank the card prints under it is this one. */
+    reason: rank === teams.length ? HOST_FIRST_CALL_REASON : HOST_FIRST_CALL_REASON_NEAR,
     keenness: 5,
   };
 }
@@ -1330,7 +1335,7 @@ export function hostCareerTotalsLine(seat: GmSeatBlock): string {
 export function hostMarketHelp(pack: GmSeatPack): string[] {
   return [
     `When ${pack.upstairs} lets you go, the ${pack.seats} that rate your record can call. The ${pack.seat} that let you go never does.`,
-    `If nobody rates it, the ${pack.seat} with the weakest ${pack.roster} in the league still rings, once, the day you are let go.`,
+    `If nobody rates it, the ${pack.seat} with the weakest ${pack.roster} in the league, leaving out the one that let you go, still rings, once, the day you are let go.`,
     `Each offer shows what that ${pack.seat} asks of your first season there. That is the ask you are graded on.`,
     'No call this year? A year out lets the league play a season without you and the phone can ring next summer, but every year out makes it quieter. The screen says when the offers in front of you are the last ones and when the phone has stopped for good, and then there is no year out to take.',
     `Worked example: leave straight after a season graded nowhere near the ask and no ${HOST_TIER_WORDS[BADLY_FIRED_CEILING - 1]} ${pack.seat} calls, whatever you won before. The best that can ring is rated ${HOST_TIER_WORDS[BADLY_FIRED_CEILING]}. The tiers are the four quarters of the league by strength.`,

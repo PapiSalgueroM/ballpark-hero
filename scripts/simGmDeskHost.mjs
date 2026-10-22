@@ -218,6 +218,8 @@ const EDITS = {
   closedsit: ['10', 'host', 'Nobody called, and nobody will: the phone has stopped. A new front office is the way back in.',
     'Nobody has called yet. Sit the year out and see who remembers you.'],
   nofirstcall: ['4', 'host', '    if (call) { offers = [call]; firstCall = true; }', '    if (call && false) { offers = [call]; firstCall = true; }'],
+  /* Round 1533 fix pass: the first call always says "the weakest roster", even from the next weakest. */
+  onereason: ['4', 'host', '    reason: rank === teams.length ? HOST_FIRST_CALL_REASON : HOST_FIRST_CALL_REASON_NEAR,', '    reason: HOST_FIRST_CALL_REASON,'],
   fewseasons: ['10', 'host', '  const record = seasonsAndTitles(hostStintSeasons(seat, index), s.grades', '  const record = seasonsAndTitles(s.grades.length, s.grades'],
 };
 if (CONTROL && !EDITS[CONTROL]) {
@@ -483,7 +485,7 @@ const SPORTS = Object.keys(DRIVE);
 const PER3 = {
   minLeagues: 58, minRealSaves: 168, minOffers: 8400, minBadlyOffers: 1570, minClimb: 560, minClosed: 3300, minQuietOpen: 2300,
   minReach: 455, minVerdicts: 780, minLosing: 348, minFiredCloses: 348, minCases: 6100, minYoung: 7600, minPairs: 730000,
-  minLastCalls: 345, minPassClimb: 330, minRankApart: 7300, minFirstCalls: 445,
+  minLastCalls: 345, minPassClimb: 330, minRankApart: 7300, minFirstCalls: 445, minNearCalls: 1,
 };
 const FIXED = { minFeedsWithOffers: 23, minMen: 2290, minCuts: 200 };
 const T = { ...FIXED, ...Object.fromEntries(Object.entries(PER3).map(([k, v]) => [k, Math.floor((v * SEEDS.length) / 3)])) };
@@ -767,8 +769,11 @@ for (const sport of SPORTS) {
           M4.firstCalls++;
           const weakest = [...clubs].sort((a, b) => a.strength - b.strength || b.id.localeCompare(a.id)).find(c => c.id !== old);
           const o = m.offers[0];
-          if (m.offers.length !== 1 || o.teamId !== weakest.id || o.reason !== H.HOST_FIRST_CALL_REASON || o.ask.season !== season + 1) {
-            fail(`${at}: the first call is not one call from the weakest roster that did not let him go (${J(m.offers.map(x => x.teamId))})`);
+          /* The reason says "the weakest" only when every other club is stronger (control onereason). */
+          const rank = 1 + clubs.filter(x => x.strength > weakest.strength).length;
+          const reason = rank === clubs.length ? H.HOST_FIRST_CALL_REASON : H.HOST_FIRST_CALL_REASON_NEAR;
+          if (m.offers.length !== 1 || o.teamId !== weakest.id || o.reason !== reason || o.ask.season !== season + 1) {
+            fail(`${at}: the first call is not one call from the weakest roster that did not let him go, in words true of its rank ${rank} (${J(m.offers.map(x => [x.teamId, x.reason]))})`);
           }
           if (m.nextYear === 'shut') M4.firstLast++;
         }
@@ -804,6 +809,31 @@ for (const sport of SPORTS) {
     ok(J(lg) === before, `${sport} seed ${snap.seed}: reading the market changed the league`);
   }
 }
+/* Round 1533 fix pass: the first call when the club that let him go IS the weakest. The caller is then the next
+   weakest, its card prints "Roster ranked" its own rank right under the reason, so the reason must not call it the
+   weakest in the league (control onereason). The ladder above fires from the first club of each tier by id, which
+   is the weakest only by chance, so this walk fires from the weakest itself, on every league of the fleet. */
+let nearCalls = 0;
+for (const sport of SPORTS) {
+  const d = DRIVE[sport];
+  for (const snap of FLEET[sport].closed.filter(x => x.s === 0)) {
+    const lg = snap.lg, season = lg.season, clubs = d.host.clubs(lg), tiers = tiersOf(d, lg);
+    const order = [...clubs].sort((a, b) => a.strength - b.strength || b.id.localeCompare(a.id));
+    const old = order[0].id;
+    for (const tail of [['badly', 'badly'], ['badly', 'badly', 'badly']]) {
+      const m = H.hostMarket(d.host, lg, firedSeat(old, tiers.get(old), season, tail), nameOf);
+      if (!m || !m.firstCall) continue;
+      nearCalls++;
+      const o = m.offers[0], f = m.facts[o.teamId], at = `${sport} seed ${snap.seed}, let go by the weakest ${old} after ${tail.join(',')}`;
+      if (o.teamId !== order[1].id) fail(`${at}: the first call is from ${o.teamId}, the next weakest is ${order[1].id}`);
+      if (!f || f.strengthRank === clubs.length || o.reason !== H.HOST_FIRST_CALL_REASON_NEAR) {
+        fail(`${at}: the card reads "${o.reason}" over a roster ranked ${f ? f.strengthRank : '?'} of ${clubs.length}`);
+      }
+    }
+  }
+}
+ok(nearCalls >= T.minNearCalls, `only ${nearCalls} first calls with the weakest club the one that let him go, too few to hold the words`);
+console.log(`   first calls when the club that let him go is the weakest: ${nearCalls}, each from the next weakest and none of them called the weakest`);
 /* The ceiling again, where it bites. In a full league the engine's own ceiling hides the rule (scripts/simGmSeat.mjs
    measured a top tier call after a badly season about once in 2,800 offers), so the same real clubs are read six at
    a time through the same adapter, where the one other top tier club is always in reach, for the decorated careers

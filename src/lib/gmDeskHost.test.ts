@@ -3,7 +3,7 @@
    scripts/simGmDeskHost.mjs. This file holds the same properties small. */
 import { describe, expect, it } from 'vitest';
 import {
-  GM_HOST_KEYS, HOST_BLOCK_RULES, HOST_FIRST_CALL_REASON, HOST_TILE_SUB_MAX, HOST_TILE_VALUE_MAX, hostArriving, hostCanSitOut, hostCanSpend, hostCareerHelp, hostCareerTile, hostCloseSeason,
+  GM_HOST_KEYS, HOST_BLOCK_RULES, HOST_FIRST_CALL_REASON, HOST_FIRST_CALL_REASON_NEAR, HOST_TILE_SUB_MAX, HOST_TILE_VALUE_MAX, hostArriving, hostCanSitOut, hostCanSpend, hostCareerHelp, hostCareerTile, hostCloseSeason,
   hostCraftCut, hostCutQuote, hostDeskCases, hostEarnsLine, hostFeedKey, hostKey, hostLastGrade, hostLegacy,
   hostLegacySeat, hostMarket, hostMarketHelp, hostMarketTile, hostMoveBlocks, hostNewSeat, hostOutOfWorkCard,
   hostPressOption, hostSeasonAway, hostSeasonVerdict, hostSeasonsRecorded, hostSeatOf, hostSitArmLine, hostSitOut, hostSpendPoint,
@@ -429,6 +429,7 @@ describe('the job market', () => {
         expect(top.nextYear).toBe('shut');
         expect(top.offers).toHaveLength(1);
         expect(top.offers[0]).toMatchObject({ teamId: BOTTOM, reason: HOST_FIRST_CALL_REASON, keenness: 5 });
+        expect(top.facts[BOTTOM].strengthRank).toBe(N);
         expect(top.offers[0].ask.season).toBe(lg.season + 1);
       }
       const later = hostMarket(host, lg, firedFrom(TOP, WRECK, from, 1), nameOf)!;
@@ -439,6 +440,10 @@ describe('the job market', () => {
         /* What used to read quiet: the first call, and passing on it keeps next year open as things stand. */
         expect(mid).toMatchObject({ state: 'offers', nextYear: 'open' });
         expect(mid.offers[0].teamId).not.toBe(BOTTOM);
+        /* Let go by the weakest club, the caller is the next weakest: the card must not call it the weakest
+           right above "Roster ranked 31st". */
+        expect(mid.offers[0]).toMatchObject({ teamId: idOf(30), reason: HOST_FIRST_CALL_REASON_NEAR });
+        expect(mid.facts[idOf(30)].strengthRank).toBe(N - 1);
         expect(mid.line).toMatch(/1 franchise called\.$/);
       }
       for (const out of [1, 2]) {
@@ -458,12 +463,30 @@ describe('the job market', () => {
          rings, and a climb reopens next year if he passes. */
       const climb = hostMarket(host, lg, firedFrom(BOTTOM, ['badly', 'badly'], from), nameOf)!;
       expect(climb).toMatchObject({ state: 'offers', firstCall: true, nextYear: 'climb', climbTo: 1 });
+      expect(climb.offers[0]).toMatchObject({ teamId: idOf(30), reason: HOST_FIRST_CALL_REASON_NEAR });
       expect(climb.line).toContain('climbed into the top tier of the league');
       expect(hostMarketTile(climb)).toMatchObject({ value: '1 offer', sub: 'Next year hangs on your old club' });
     }
     expect(topClosed).toBeGreaterThan(5);
     expect(topFirst).toBeGreaterThan(5);
     expect(quiet).toBeGreaterThan(5);
+  });
+  it('calls the first caller the weakest roster only when every other club is stronger', () => {
+    /* Two clubs tied at the bottom: whoever calls, it is one of the weakest, never the weakest. */
+    const tied = league();
+    tied.clubs[30].strength = tied.clubs[31].strength;
+    let seen = 0;
+    for (let from = 2000; from < 2027; from++) {
+      for (const [team, grades] of [[TOP, WRECK], [BOTTOM, ['badly', 'badly']]] as [string, FoGradeResult[]][]) {
+        const m = hostMarket(host, tied, firedFrom(team, grades, from), nameOf)!;
+        if (!m.firstCall) continue;
+        seen += 1;
+        const o = m.offers[0];
+        expect(m.facts[o.teamId].strengthRank).toBe(N - 1);
+        expect(o.reason).toBe(HOST_FIRST_CALL_REASON_NEAR);
+      }
+    }
+    expect(seen).toBeGreaterThan(5);
   });
   it('with offers on the table says what passing costs, and takes the year out away when they are the last calls', () => {
     let last = 0;
