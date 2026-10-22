@@ -1,0 +1,4 @@
+build exit=0 35s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+landing-headonly exit=0 283s | playSoccerLanding: green at 320x640, 390x844, 1280x900 (also bar 360x780, bar 375x667, name 480x800, name 768x1024; landing, name, bar, retire, toasts, bytes), HEAD ONLY
+landing-headonly-ctl-none exit=1 248s | playSoccerLanding: RED, 1 finding(s)
+landing-headonly-main exit=1 302s | playSoccerLanding: RED, 1 finding(s)

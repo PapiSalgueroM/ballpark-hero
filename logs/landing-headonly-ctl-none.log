@@ -1,0 +1,163 @@
+seed 1987332285; arms head; sections landing, name, bar, retire, toasts, bytes; sizes 320x640, 390x844, 1280x900
+bar save youth: phase youth, age 16
+bar save playing: phase playing, age 18
+bar save manager: phase manager_season, age 18, employed
+bar save pundit: phase pundit_season, age 18
+bar save owner: phase owner_season, age 18
+bar save retired: phase retired, age 18
+bar save managerOut: phase manager_season, age 18, out of work
+== head 320x640
+   "Danny Okafor-Whitfield": from scrollY 1876 of 15148; first frame name heading 12 to 68, readable 0 to 556, scrollY 193; one second later name heading 12 to 68, readable 0 to 556, scrollY 193
+   "Danny Okafor-Whitfield": the club "QPR Youth" at 258 to 275, in the readable area: true
+   name "Danny Okafor-Whitfield": 2 line(s), scrollWidth 200 of 200
+  FAIL [walk 320x640]: threw: page.waitForSelector: Timeout 20000ms exceeded.
+== head 390x844
+   "Danny Okafor-Whitfield": from scrollY 1632 of 12793; first frame name heading 17 to 45, readable 0 to 611, scrollY 193; one second later name heading 17 to 45, readable 0 to 611, scrollY 193
+   "Danny Okafor-Whitfield": the club "QPR Youth" at 240 to 257, in the readable area: true
+   name "Danny Okafor-Whitfield": 1 line(s), scrollWidth 224 of 224
+   "Danny Okafor-Whitfield" after New Career: from scrollY 1632 of 12793; first frame name heading 17 to 45, readable 0 to 611, scrollY 193; one second later name heading 17 to 45, readable 0 to 611, scrollY 193
+   "Danny Okafor-Whitfield" after New Career: the club "Stoke City Youth" at 240 to 257, in the readable area: true
+   "Supercalifragilisticexpialidociouswinger": from scrollY 1632 of 12793; first frame name heading 12 to 68, readable 0 to 611, scrollY 193; one second later name heading 12 to 68, readable 0 to 611, scrollY 193
+   "Supercalifragilisticexpialidociouswinger": the club "QPR Youth" at 258 to 275, in the readable area: true
+   name "Supercalifragilisticexpialidociouswinger": 2 line(s), scrollWidth 270 of 270
+   bar youth (floating): ["Next Year"], AGE 353 to 373
+   bar playing (floating): ["Next Season","Week by week: watch your season match by match"], AGE 353 to 373
+   bar manager (floating): ["Next Manager Season","Retire"], AGE 353 to 373
+   bar pundit (floating): ["Next Season"], AGE 353 to 373
+   bar owner (floating): ["Next Owner Season","Sell Club"], AGE 353 to 373
+   bar retired (floating): ["📤 Share Legacy","⚽ New Career"], AGE 353 to 373
+   bar managerOut (floating): ["Sit Out A Season","Walk Away"], AGE 353 to 373
+   youth: 1 Retire control(s)
+   youth: "🚪 Retire" is 44 px tall
+   youth: "🔄 New Career" is 44 px tall
+   playing: 1 Retire control(s)
+   playing: "🚪 Retire" is 44 px tall
+   playing: "🔄 New Career" is 44 px tall
+   retired: 0 Weekly Wage tile(s)
+   30 toast sample(s) of 15 toast(s) over a drive through youth, contract_offer, playing, phone: bought Hire in 🏠Where you live17 left , newspaper, season_summary, ballon_dor, social_media_action, random_events, transfer_window, stopped with what it needed after 30 steps, 30 steps, 4 Next Year or Next Season presses (3 Next Season)
+     "Signed with QPR!" first frame at 16,-37 358x54 (scrollY 193, step 3 (contract_offer: Sign contract)): nothing under it
+     "Signed with QPR!" settled at 16,16 358x54 (scrollY 193, step 3 (contract_offer: Sign contract)): ["heading Danny Okafor-Whitfield"]
+     "🏢 Rent Apartment is yours" first frame at 16,-37 358x54 (scrollY 193, phone (bought Hire in 🏠Where you live17 left )): nothing under it
+     "🏢 Rent Apartment is yours" settled at 16,16 358x54 (scrollY 193, phone (bought Hire in 🏠Where you live17 left )): nothing under it
+     "🏋️ Post training video" first frame at 16,-37 358x54 (scrollY 193, step 8 (social_media_action: 🏋️Post training videoShow off your skil)): nothing under it
+     "🏋️ Post training video" settled at 16,16 358x54 (scrollY 193, step 8 (social_media_action: 🏋️Post training videoShow off your skil)): ["heading Danny Okafor-Whitfield"]
+     "You finish with your weaker foot every session. Shooting next season +1, Pace ne" first frame at 16,-57 358x73 (scrollY 193, step 10 (random_events: 📋Do the weaker foot workShooting next s)): nothing under it
+     "You finish with your weaker foot every session. Shooting next season +1, Pace ne" settled at 16,16 358x73 (scrollY 193, step 10 (random_events: 📋Do the weaker foot workShooting next s)): ["heading Danny Okafor-Whitfield"]
+     "Fame comes easy: followers grow 60% faster, sponsors pay 25% more, scandals stin" first frame at 16,-57 358x73 (scrollY 193, step 11 (random_events: 🎭The ShowmanFame comes easy: followers )): nothing under it
+     "Fame comes easy: followers grow 60% faster, sponsors pay 25% more, scandals stin" settled at 16,16 358x73 (scrollY 193, step 11 (random_events: 🎭The ShowmanFame comes easy: followers )): ["heading Danny Okafor-Whitfield"]
+     "Physical +3 and Pace +1 next season, Morale -6" first frame at 16,-37 358x54 (scrollY 193, step 12 (random_events: 🥦Full compliance for a seasonPhysical +)): nothing under it
+     "Physical +3 and Pace +1 next season, Morale -6" settled at 16,16 358x54 (scrollY 193, step 12 (random_events: 🥦Full compliance for a seasonPhysical +)): ["heading Danny Okafor-Whitfield"]
+     "Morale +10, now in a relationship" first frame at 16,-37 358x54 (scrollY 193, step 13 (random_events: 💕Start datingMorale +10, now in a relat)): nothing under it
+     "Morale +10, now in a relationship" settled at 16,16 358x54 (scrollY 193, step 13 (random_events: 💕Start datingMorale +10, now in a relat)): ["heading Danny Okafor-Whitfield"]
+     "Staying at QPR" first frame at 16,-37 358x54 (scrollY 193, step 14 (transfer_window: Stay and fight for place 💪)): nothing under it
+     "Staying at QPR" settled at 16,16 358x54 (scrollY 193, step 14 (transfer_window: Stay and fight for place 💪)): ["heading Danny Okafor-Whitfield"]
+     "🏋️ Post training video" first frame at 16,-37 358x54 (scrollY 397, step 8 (social_media_action: 🏋️Post training videoShow off your skil)): nothing under it
+     "🏋️ Post training video" settled at 16,16 358x54 (scrollY 397, step 8 (social_media_action: 🏋️Post training videoShow off your skil)): nothing under it
+     "You put your name down for penalties. Shooting next season +1, Dribbling next se" first frame at 16,-57 358x73 (scrollY 397, step 24 (random_events: 📋Put your name downShooting next season)): nothing under it
+     "You put your name down for penalties. Shooting next season +1, Dribbling next se" settled at 16,16 358x73 (scrollY 397, step 24 (random_events: 📋Put your name downShooting next season)): nothing under it
+     "Family rates: tiny 3% transfer cut, zero income cut, slightly weak contracts, ch" first frame at 16,-57 358x73 (scrollY 397, step 25 (random_events: 🧢Cousin RickyFamily rates: tiny 3% tran)): nothing under it
+     "Family rates: tiny 3% transfer cut, zero income cut, slightly weak contracts, ch" settled at 16,16 358x73 (scrollY 397, step 25 (random_events: 🧢Cousin RickyFamily rates: tiny 3% tran)): nothing under it
+     "Shooting +2, Dribbling +2, Morale +10" first frame at 16,-37 358x54 (scrollY 397, step 26 (random_events: 💪Wear it with prideShooting +2, Dribbli)): nothing under it
+     "Shooting +2, Dribbling +2, Morale +10" settled at 16,16 358x54 (scrollY 397, step 26 (random_events: 💪Wear it with prideShooting +2, Dribbli)): nothing under it
+     "Could go 10x (+€2M), double (+€200k) or crash (-€200k)" first frame at 16,-57 358x73 (scrollY 397, step 27 (random_events: 🪙Invest €200kCould go 10x (+€2M), doubl)): nothing under it
+     "Could go 10x (+€2M), double (+€200k) or crash (-€200k)" settled at 16,16 358x73 (scrollY 397, step 27 (random_events: 🪙Invest €200kCould go 10x (+€2M), doubl)): nothing under it
+     "Popularity +3, Followers +0.5M" first frame at 16,-37 358x54 (scrollY 531, step 28 (random_events: 😂Laugh and applaudPopularity +3, Follow)): nothing under it
+     "Popularity +3, Followers +0.5M" settled at 16,16 358x54 (scrollY 397, step 28 (random_events: 😂Laugh and applaudPopularity +3, Follow)): nothing under it
+     "Staying at QPR" first frame at 16,-37 358x54 (scrollY 397, step 14 (transfer_window: Stay and fight for place 💪)): nothing under it
+     "Staying at QPR" settled at 16,16 358x54 (scrollY 397, step 14 (transfer_window: Stay and fight for place 💪)): nothing under it
+     coverage contract signing: 1 sampled
+     coverage random event choice: 9 sampled
+     coverage transfer window choice: 2 sampled
+     coverage phone purchase: 1 sampled
+     coverage social media post: 2 sampled
+     coverage moral dilemma: 0 sampled (not raised on this career; listed, not judged)
+     coverage loan: 0 sampled (not raised on this career; listed, not judged)
+     coverage extension: 0 sampled (not raised on this career; listed, not judged)
+     coverage Week by week refusal: 0 sampled (not raised on this career; listed, not judged)
+== head 1280x900
+   "Danny Okafor-Whitfield": from scrollY 1530 of 9235; first frame name heading 23 to 55, readable 0 to 735, scrollY 101; one second later name heading 23 to 55, readable 0 to 735, scrollY 101
+   "Danny Okafor-Whitfield": the club "QPR Youth" at 221 to 236, in the readable area: true
+   name "Danny Okafor-Whitfield": 1 line(s), scrollWidth 271 of 271
+   "Danny Okafor-Whitfield" after New Career: from scrollY 1530 of 9235; first frame name heading 23 to 55, readable 0 to 735, scrollY 101; one second later name heading 23 to 55, readable 0 to 735, scrollY 101
+   "Danny Okafor-Whitfield" after New Career: the club "Stoke City Youth" at 221 to 236, in the readable area: true
+   "Supercalifragilisticexpialidociouswinger": from scrollY 1530 of 9235; first frame name heading 23 to 55, readable 0 to 735, scrollY 101; one second later name heading 23 to 55, readable 0 to 735, scrollY 101
+   "Supercalifragilisticexpialidociouswinger": the club "QPR Youth" at 221 to 236, in the readable area: true
+   name "Supercalifragilisticexpialidociouswinger": 1 line(s), scrollWidth 466 of 466
+   bar youth (floating): ["Next Year"], AGE 1099 to 1119
+   bar playing (floating): ["Next Season","Week by week: watch your season match by match"], AGE 1099 to 1119
+   bar manager (floating): ["Next Manager Season","Retire"], AGE 1099 to 1119
+   bar pundit (floating): ["Next Season"], AGE 1099 to 1119
+   bar owner (floating): ["Next Owner Season","Sell Club"], AGE 1099 to 1119
+   bar retired (floating): ["📤 Share Legacy","⚽ New Career"], AGE 1099 to 1119
+   bar managerOut (floating): ["Sit Out A Season","Walk Away"], AGE 1099 to 1119
+   youth: 1 Retire control(s)
+   youth: "🚪 Retire" is 44 px tall
+   youth: "🔄 New Career" is 44 px tall
+   playing: 1 Retire control(s)
+   playing: "🚪 Retire" is 44 px tall
+   playing: "🔄 New Career" is 44 px tall
+   retired: 0 Weekly Wage tile(s)
+   30 toast sample(s) of 15 toast(s) over a drive through youth, contract_offer, playing, phone: bought Hire in 🏠Where you live17 left , newspaper, season_summary, ballon_dor, social_media_action, random_events, transfer_window, stopped with what it needed after 30 steps, 30 steps, 4 Next Year or Next Season presses (3 Next Season)
+     "Signed with QPR!" first frame at 462,-21 356x54 (scrollY 101, step 3 (contract_offer: Sign contract)): ["heading Danny Okafor-Whitfield"]
+     "Signed with QPR!" settled at 462,32 356x54 (scrollY 101, step 3 (contract_offer: Sign contract)): ["heading Danny Okafor-Whitfield"]
+     "🏢 Rent Apartment is yours" first frame at 462,-21 356x54 (scrollY 101, phone (bought Hire in 🏠Where you live17 left )): nothing under it
+     "🏢 Rent Apartment is yours" settled at 462,32 356x54 (scrollY 101, phone (bought Hire in 🏠Where you live17 left )): nothing under it
+     "🏋️ Post training video" first frame at 462,-21 356x54 (scrollY 101, step 8 (social_media_action: 🏋️Post training videoShow off your skil)): ["heading Danny Okafor-Whitfield"]
+     "🏋️ Post training video" settled at 462,32 356x54 (scrollY 101, step 8 (social_media_action: 🏋️Post training videoShow off your skil)): ["heading Danny Okafor-Whitfield"]
+     "You finish with your weaker foot every session. Shooting next season +1, Pace ne" first frame at 462,-41 356x73 (scrollY 101, step 10 (random_events: 📋Do the weaker foot workShooting next s)): nothing under it
+     "You finish with your weaker foot every session. Shooting next season +1, Pace ne" settled at 462,32 356x73 (scrollY 101, step 10 (random_events: 📋Do the weaker foot workShooting next s)): ["heading Danny Okafor-Whitfield"]
+     "Fame comes easy: followers grow 60% faster, sponsors pay 25% more, scandals stin" first frame at 462,-41 356x73 (scrollY 101, step 11 (random_events: 🎭The ShowmanFame comes easy: followers )): nothing under it
+     "Fame comes easy: followers grow 60% faster, sponsors pay 25% more, scandals stin" settled at 462,32 356x73 (scrollY 101, step 11 (random_events: 🎭The ShowmanFame comes easy: followers )): ["heading Danny Okafor-Whitfield"]
+     "Physical +3 and Pace +1 next season, Morale -6" first frame at 462,-21 356x54 (scrollY 101, step 12 (random_events: 🥦Full compliance for a seasonPhysical +)): ["heading Danny Okafor-Whitfield"]
+     "Physical +3 and Pace +1 next season, Morale -6" settled at 462,32 356x54 (scrollY 101, step 12 (random_events: 🥦Full compliance for a seasonPhysical +)): ["heading Danny Okafor-Whitfield"]
+     "Morale +10, now in a relationship" first frame at 462,-21 356x54 (scrollY 101, step 13 (random_events: 💕Start datingMorale +10, now in a relat)): ["heading Danny Okafor-Whitfield"]
+     "Morale +10, now in a relationship" settled at 462,32 356x54 (scrollY 101, step 13 (random_events: 💕Start datingMorale +10, now in a relat)): ["heading Danny Okafor-Whitfield"]
+     "Staying at QPR" first frame at 462,-21 356x54 (scrollY 101, step 14 (transfer_window: Stay and fight for place 💪)): ["heading Danny Okafor-Whitfield"]
+     "Staying at QPR" settled at 462,32 356x54 (scrollY 101, step 14 (transfer_window: Stay and fight for place 💪)): ["heading Danny Okafor-Whitfield"]
+     "🏋️ Post training video" first frame at 462,-21 356x54 (scrollY 251, step 8 (social_media_action: 🏋️Post training videoShow off your skil)): nothing under it
+     "🏋️ Post training video" settled at 462,32 356x54 (scrollY 251, step 8 (social_media_action: 🏋️Post training videoShow off your skil)): nothing under it
+     "You put your name down for penalties. Shooting next season +1, Dribbling next se" first frame at 462,-41 356x73 (scrollY 251, step 24 (random_events: 📋Put your name downShooting next season)): nothing under it
+     "You put your name down for penalties. Shooting next season +1, Dribbling next se" settled at 462,32 356x73 (scrollY 251, step 24 (random_events: 📋Put your name downShooting next season)): nothing under it
+     "Family rates: tiny 3% transfer cut, zero income cut, slightly weak contracts, ch" first frame at 462,-41 356x73 (scrollY 251, step 25 (random_events: 🧢Cousin RickyFamily rates: tiny 3% tran)): nothing under it
+     "Family rates: tiny 3% transfer cut, zero income cut, slightly weak contracts, ch" settled at 462,32 356x73 (scrollY 251, step 25 (random_events: 🧢Cousin RickyFamily rates: tiny 3% tran)): nothing under it
+     "Shooting +2, Dribbling +2, Morale +10" first frame at 462,-21 356x54 (scrollY 251, step 26 (random_events: 💪Wear it with prideShooting +2, Dribbli)): nothing under it
+     "Shooting +2, Dribbling +2, Morale +10" settled at 462,32 356x54 (scrollY 251, step 26 (random_events: 💪Wear it with prideShooting +2, Dribbli)): nothing under it
+     "Could go 10x (+€2M), double (+€200k) or crash (-€200k)" first frame at 462,-41 356x73 (scrollY 251, step 27 (random_events: 🪙Invest €200kCould go 10x (+€2M), doubl)): nothing under it
+     "Could go 10x (+€2M), double (+€200k) or crash (-€200k)" settled at 462,32 356x73 (scrollY 251, step 27 (random_events: 🪙Invest €200kCould go 10x (+€2M), doubl)): nothing under it
+     "Popularity +3, Followers +0.5M" first frame at 462,-21 356x54 (scrollY 251, step 28 (random_events: 😂Laugh and applaudPopularity +3, Follow)): nothing under it
+     "Popularity +3, Followers +0.5M" settled at 462,32 356x54 (scrollY 251, step 28 (random_events: 😂Laugh and applaudPopularity +3, Follow)): nothing under it
+     "Staying at QPR" first frame at 462,-21 356x54 (scrollY 251, step 14 (transfer_window: Stay and fight for place 💪)): nothing under it
+     "Staying at QPR" settled at 462,32 356x54 (scrollY 251, step 14 (transfer_window: Stay and fight for place 💪)): nothing under it
+     coverage contract signing: 1 sampled
+     coverage random event choice: 9 sampled
+     coverage transfer window choice: 2 sampled
+     coverage phone purchase: 1 sampled
+     coverage social media post: 2 sampled
+     coverage moral dilemma: 0 sampled (not raised on this career; listed, not judged)
+     coverage loan: 0 sampled (not raised on this career; listed, not judged)
+     coverage extension: 0 sampled (not raised on this career; listed, not judged)
+     coverage Week by week refusal: 0 sampled (not raised on this career; listed, not judged)
+== head 360x780 (bar only)
+   bar youth (floating): ["Next Year"], AGE 323 to 343
+   bar playing (floating): ["Next Season","Week by week: watch your season match by match"], AGE 323 to 343
+   bar manager (floating): ["Next Manager Season","Retire"], AGE 323 to 343
+   bar pundit (floating): ["Next Season"], AGE 323 to 343
+   bar owner (floating): ["Next Owner Season","Sell Club"], AGE 323 to 343
+   bar retired (floating): ["📤 Share Legacy","⚽ New Career"], AGE 323 to 343
+   bar managerOut (floating): ["Sit Out A Season","Walk Away"], AGE 323 to 343
+== head 375x667 (bar only)
+   bar youth (floating): ["Next Year"], AGE 338 to 358
+   bar playing (floating): ["Next Season","Week by week: watch your season match by match"], AGE 338 to 358
+   bar manager (floating): ["Next Manager Season","Retire"], AGE 338 to 358
+   bar pundit (floating): ["Next Season"], AGE 338 to 358
+   bar owner (floating): ["Next Owner Season","Sell Club"], AGE 338 to 358
+   bar retired (floating): ["📤 Share Legacy","⚽ New Career"], AGE 338 to 358
+   bar managerOut (floating): ["Sit Out A Season","Walk Away"], AGE 338 to 358
+== head 480x800 (name only)
+   name "Danny Okafor-Whitfield": 3 line(s), scrollWidth 106 of 106
+   name "Supercalifragilisticexpialidociouswinger": 4 line(s), scrollWidth 106 of 106
+== head 768x1024 (name only)
+   name "Danny Okafor-Whitfield": 1 line(s), scrollWidth 271 of 271
+   name "Supercalifragilisticexpialidociouswinger": 2 line(s), scrollWidth 379 of 379
+  head walk: 1 finding(s)
+playSoccerLanding: RED, 1 finding(s)
