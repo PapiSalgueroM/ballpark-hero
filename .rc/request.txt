@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+#!serial
+walkOwner-head: node .rc/x/walkOwner.mjs > /tmp/wo.log 2>&1; s=$?; grep -v "^  ok:" /tmp/wo.log | tail -25 | cut -c1-240; exit $s
+walkOwner-on-1524: git worktree add -f /tmp/w24 a3ea29de6d42f2623e81a39288c2efd2553487cf > /dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/w24/node_modules && (cd /tmp/w24 && npm run build > /tmp/w24-build.log 2>&1) && (node scripts/lib/hostLikeServer.mjs /tmp/w24/dist 4174 > /tmp/w24-srv.log 2>&1 &) && sleep 4 && BASE=http://localhost:4174 node .rc/x/walkOwner.mjs > /tmp/wo24.log 2>&1; s=$?; grep -v "^  ok:" /tmp/wo24.log | tail -25 | cut -c1-240; exit $s
+cookie-1446-main: git worktree add -f /tmp/wm 0846f9c5 > /dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/wm/node_modules && cd /tmp/wm && npm run build > /tmp/wm-build.log 2>&1 && (node scripts/lib/hostLikeServer.mjs dist 4175 > /tmp/wm-srv.log 2>&1 &) && sleep 4 && BASE=http://127.0.0.1:4175 node scripts/playCookiePolicy1446.mjs > /tmp/cm.log 2>&1; s=$?; tail -15 /tmp/cm.log | cut -c1-240; exit $s
+cookie-1446-head: node scripts/playCookiePolicy1446.mjs > /tmp/ch.log 2>&1; s=$?; tail -15 /tmp/ch.log | cut -c1-240; exit $s
