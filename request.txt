@@ -1,0 +1,8 @@
+# Release BK final gate, part c (serial: the 1081 pin, the league rules digest, the golden ties, simOneOffCups controls on the small fleet, simDailyDeals controls, the keyword index freshness). Runner rBKc-c on 696b697b.
+#!serial
+appeal1081: node scripts/simManagerAppealIsolation.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+leagueRules: node scripts/simCmLeagueRules.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+golden: node scripts/recordWorldTieGolden1347.mjs --ref HEAD --check 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+ctl-light: f=0; for c in onesource wiki thinused receipt notinworld wrongyear nodouble seasononeplay tick adjacent countdown calweeks stream form participant weighs notrophy keep; do ONE_OFF_SEEDS=1,2 ONE_OFF_SEASONS=2 ONE_OFF_COACH=nocoach ONE_OFF_CONTROL=$c node scripts/simOneOffCups.mjs > /tmp/l-$c.log 2>&1; s=$?; echo "$c exit=$s | $(tail -1 /tmp/l-$c.log | cut -c1-200)"; [ $s -eq 1 ] && grep -q FIRED /tmp/l-$c.log || f=1; done; exit $f
+dd-controls: ok=0; r=""; for k in bind binddeadline seed seeddeadline ledger ledgerdeadline rulesall rulesstale world worlddeadline; do DAILY_DEALS_CONTROL=$k node scripts/simDailyDeals.mjs > /tmp/dd-$k.log 2>&1; e=$?; r="$r $k=$e"; [ $e = 1 ] || ok=1; done; echo "controls (each must be 1):$r"; exit $ok
+keywords-fresh: node scripts/genSearchKeywords.mjs > /tmp/kw.log 2>&1 && git diff --exit-code --stat -- src/data/searchKeywords.json; s=$?; tail -2 /tmp/kw.log; git checkout -- src/data/searchKeywords.json; exit $s
