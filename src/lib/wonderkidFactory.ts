@@ -161,9 +161,9 @@ export interface Pack {
  *  others, and scripts/simTycoonPacks.mjs draws against them. A better pack has
  *  strictly better odds; nothing about a pack is ever sold for money. */
 export const PACKS: Pack[] = [
-  { id: 'scout', name: 'Scout Pack', emoji: '🔭', price: 30, firstFree: true, odds: { grassroots: 62, prospect: 30, talent: 7, star: 1, phenom: 0 }, guarantee: null },
-  { id: 'club', name: 'Club Pack', emoji: '🏟️', price: 100, firstFree: false, odds: { grassroots: 0, prospect: 55, talent: 35, star: 9, phenom: 1 }, guarantee: 10 },
-  { id: 'elite', name: 'Elite Pack', emoji: '👑', price: 250, firstFree: false, odds: { grassroots: 0, prospect: 0, talent: 60, star: 34, phenom: 6 }, guarantee: 3 },
+  { id: 'scout', name: 'Scout Pack', emoji: '🔭', price: 21, firstFree: true, odds: { grassroots: 62, prospect: 30, talent: 7, star: 1, phenom: 0 }, guarantee: null },
+  { id: 'club', name: 'Club Pack', emoji: '🏟️', price: 71, firstFree: false, odds: { grassroots: 0, prospect: 55, talent: 35, star: 9, phenom: 1 }, guarantee: 10 },
+  { id: 'elite', name: 'Elite Pack', emoji: '👑', price: 178, firstFree: false, odds: { grassroots: 0, prospect: 0, talent: 60, star: 34, phenom: 6 }, guarantee: 3 },
 ];
 /** The tiers a guarantee counts: a Star or better. */
 export const GUARANTEED_TIERS: TierId[] = ['star', 'phenom'];
