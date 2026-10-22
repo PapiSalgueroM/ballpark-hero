@@ -36,7 +36,7 @@ const FightCareer = () => {
               'Pressure beats an out-boxer, boxing beats a swarmer, countering beats a slugger, brawling beats a counter-puncher.',
               'Damage never heals. It eats your chin first, and it is what decides when you are finished.',
               'Reach number one and every offer on the table is for a world title.',
-              'Retire and get the verdict: who you beat is worth far more than how many.',
+              'Retire any time after 10 fights, or when your body makes you, and get the verdict: who you beat is worth far more than how many.',
             ]}
             examples={[
               'An out-boxer who wins a belt at 27 and holds it four times',
