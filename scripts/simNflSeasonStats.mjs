@@ -99,7 +99,8 @@ const CLOSE = 'src/lib/foSeasonClose.ts';
 /* `labels`: pieces of check labels that must ALL be among the reds of the control's section. `everySet`: the
    control must turn the section's check red on every seed set run. `needs`: the sections it cannot fire without. */
 const CONTROLS = {
-  liftdrift: { section: 1, labels: ['tells the same story on this tree as on the base'], everySet: true, needs: [1], patches: [{ file: DRIVES, from: 'export const MAX_FG = 6;', to: 'export const MAX_FG = 5;' }] },
+  /* liftdrift moves the drive rule itself, so section 2's own copy of the rule goes red with it: that is the copy working */
+  liftdrift: { section: 1, labels: ['tells the same story on this tree as on the base'], everySet: true, needs: [1], elsewhere: [2], patches: [{ file: DRIVES, from: 'export const MAX_FG = 6;', to: 'export const MAX_FG = 5;' }] },
   dropone: { section: 2, labels: ["credited and unclaimed touchdowns are the story's"], everySet: true, needs: [2], patches: [{ file: STATS, from: '    for (let i = 0; i < s.tds; i += 1) {', to: '    for (let i = 0; i < s.tds - 1; i += 1) {' }] },
   nocatch: { section: 2, labels: ['thrown equals caught'], everySet: true, needs: [2], patches: [{ file: STATS, from: "        if (cr.passer) { bump(men[cr.passer.id], 'ptd'); bump(men[cr.scorer.id], 'ctd'); }", to: "        if (cr.passer) { bump(men[cr.passer.id], 'ptd'); }" }] },
   injured: { section: 2, labels: ['healthy starter of his club'], everySet: true, needs: [2], patches: [{ file: STATS, from: 'skill: unitStarters(team, SKILL_POS, SKILL_SLOTS),', to: 'skill: unitStarters({ ...team, players: team.players.map(p => ({ ...p, out: 0 })) }, SKILL_POS, SKILL_SLOTS),' }] },
