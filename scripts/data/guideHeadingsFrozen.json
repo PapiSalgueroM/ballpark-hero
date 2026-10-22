@@ -1122,7 +1122,7 @@
         "Aim with the arrow keys, or drag the pitch with a finger or the mouse.",
         "Q and E bend the flight. The slower you hit it, the more it bends.",
         "Hold space, or hold the strike button, to charge. The power bar sweeps up and down and you get the number you let go on.",
-        "Ten kicks a run, each one further out than the last, with more defenders in the wall and a better keeper."
+        "Ten kicks a run. After the opening penalty every kick comes from outside the box, and as the run goes on they move further out, with more defenders in the wall and a better keeper."
       ],
       "rules": [
         "Power beats the keeper but costs accuracy, and the cost grows faster than the power does, so a full blooded strike misses far more than it scores.",

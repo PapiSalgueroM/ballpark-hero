@@ -30,11 +30,11 @@ const FreeKick = () => (
         <GameSeoContent
           pageHasOwnH1
           title="Free Kick: The Set Piece Game | DoUKnowBall"
-          description="Ten free kicks, one run. Aim across the goal, bend the ball with the outside or inside of your foot, and time the power bar. Blast it and it sprays wide, roll it and the keeper reaches it. Every kick moves further out with more men in the wall. Plays in the browser, free, no account needed."
+          description="Ten free kicks, one run. Aim across the goal, bend the ball with the outside or inside of your foot, and time the power bar. Blast it and it sprays wide, roll it and the keeper reaches it. After the opening penalty every kick is from outside the box, and they move further out with more men in the wall as the run goes on. Plays in the browser, free, no account needed."
           howToPlay={[
             'Aim with the arrow keys or by dragging the pitch, then bend the flight with Q and E.',
             'Hold space or the strike button to charge, and release to hit it. The bar sweeps, so the power you get is the power you timed.',
-            `Ten kicks per run, each one harder: further out, more defenders, better keepers.`,
+            `Ten kicks per run, getting harder as you go: further out, more defenders, better keepers.`,
           ]}
           examples={[
             'A penalty rolled into the bottom corner beats a penalty smashed down the middle.',
