@@ -1,0 +1,6 @@
+td-plain exit=0 56s |  Test Files  1 passed (1)
+tsc exit=0 106s | 
+td-nofctl exit=1 53s | td nofctl: exit 1
+simNoRivalNames exit=0 23s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 73s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+vitest-all exit=0 597s |  Test Files  633 passed | 2 skipped (635)
