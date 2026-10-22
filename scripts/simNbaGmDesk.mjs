@@ -193,7 +193,26 @@
  *               and the club must end the summer at fifteen.
  *   minBottom   an existence floor on those copies, set by the second ruling's
  *               recipe (half the smallest calibration set, never below 1).
- * MEASURED: see the Round 1556 block just below (filled from the runners).
+ * MEASURED 2026-10-22 on runner r1556-s2d (head 5afa5a0a), sets 1..10 /
+ * 11..20 / 21..30 and the held out 31..40, under this file's own name:
+ *   the walk       byte for byte what f276b8a8 prints once the lines marked
+ *                  "(Round 1556)" are set aside (r1556-s2d walk-beq), so
+ *                  every number above still holds
+ *   census         walk and full draft copies: 107 / 104 / 105 / 107 windows,
+ *                  49482 / 47828 / 48395 / 49437 men followed, retired 1082 /
+ *                  1110 / 1153 / 1159, not kept by the pool's best 30 6378 /
+ *                  6238 / 6168 / 6190, gone 0 in every set
+ *   bottom copies  7 / 4 / 5 / 7, every one kept there with room made, none
+ *                  skipped; so minBottom 2 (half the smallest set, 4)
+ *   fresh streams  SIM_SEED 1..59: see results-g/finish-1556.md (the three
+ *                  red on f276b8a8, 6, 10 and 35, are green)
+ *   controls       dropone 20, nohandback 12, overlimit 8 failures, each red
+ *                  in check 2; sheetrepick 51 and fullbird 116 (the bottom
+ *                  copies and the census add to their old counts)
+ * A probe that made the hand back throw when it acts (runner r1556-s1c) found
+ * it never acts on this file's committed stream or on the old desk's (70593dd4,
+ * its own stream and SIM_SEED 6), and acts on SIM_SEED 10 (Cole Strother at
+ * IND) and 35 (Omari Beaudry at NYK), the two men Round 1540 measured lost.
  */
 import './lib/seedRandom.mjs';
 import fs from 'node:fs';
@@ -1358,7 +1377,7 @@ console.log('2) continued (Round 1556): a sheet let stand at the bottom of a ful
   for (const p of problems.s2.slice(from)) fail(p);
   if (stats.bottom < T.minBottom) fail(`only ${stats.bottom} sheets let stand were kept at a club whose waiver reached them first, floor ${T.minBottom}`);
   console.log(`   a sheet let stand at the bottom of a full club (Round 1556): ${stats.bottom} kept there with room made over ${stats.censusWindows - windowsBefore} copies (${stats.bottomWaived} of the club's men left in the summer), ${stats.bottomSkipped} skipped (his ceiling at 99)`);
-  console.log(`   census with those copies (Round 1556): ${censusLine()}`);
+  console.log(`   census with those copies and check 7's render season (Round 1556): ${censusLine()}`);
 }
 
 /* ================================================================== */
