@@ -1,0 +1,8 @@
+attr-base-pair exit=0 2s | NBA opening inputs normal: 0 intended failed / 10 held, full10. Receipt /home/runner/work/_temp/t-attr-base-pair/dukb-nba-opening895-azdRkc
+attr-base-pair-ratings exit=0 2s | NBA opening:normalized CRLF bindings, raw holds and owned-copy cleanup passed. These offline cases do not prove historical player ability, native UI, remote saves or all-
+attr-base-receipt-only exit=1 0s | Node.js v24.22.1
+attr-base-receipt-only-ratings exit=1 2s | Node.js v24.22.1
+attr-head-pair exit=0 1s | NBA opening inputs normal: 0 intended failed / 10 held, full10. Receipt /home/runner/work/_temp/t-attr-head-pair/dukb-nba-opening895-bfexUn
+attr-hashes exit=0 0s | base ae30e38d10cc head 7c1897437b9b receipt "sourceSha256":"7c1897437b9b2d022c2605c179fbefb6ea43f877cefe33952446af39ceaec819" 
+attr-file-diff exit=0 0s |  2 files changed, 7 insertions(+), 19 deletions(-)
+clean-after exit=0 0s | 0
