@@ -1,0 +1,16 @@
+NEGATIVE CONTROL ON: mirror (must turn table red)
+
+[table] the instruction table on its own
+  ok [table]: balanced is exactly zero in all 48 reads (8 styles, both halves, three fitness levels)
+  ok [table]: 12 settings carry a label, a does line and a costs line
+  ok [table]: every setting off balanced scores less or concedes more somewhere
+    best answer to gegenpress: press- tempo+ width- line- (net 0.130)
+    best answer to possession: press+ tempo+ width- (net 0.133)
+    best answer to patient: press+ tempo- width- line+ (net 0.093)
+    best answer to wingplay: press+ tempo- (net 0.013)
+    best answer to direct: press- line- (net 0.060)
+    best answer to counter: press- tempo- width- line- (net 0.100)
+    best answer to lowblock: press+ tempo- width- (net 0.053)
+    best answer to balanced: press+ tempo- width- line+ (net 0.023)
+  FAIL [table]: the help's worked example says the engine plays the numbers it prints against a Counter attack side (tacticBoost), and the table no longer does
+simCmTactics: control mirror FIRED (1 failures: table 1; must turn table red)
