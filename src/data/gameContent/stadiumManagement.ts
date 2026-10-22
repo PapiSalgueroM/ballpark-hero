@@ -168,7 +168,7 @@ export const STADIUM_MANAGEMENT_CONTENT: GameContentMap = {
       {
         heading: "A full ground and the Muddy Meadows title",
         paragraphs: [
-          "Once Floodlights pull your fanbase past your seats, the ground is full and Stands become the best purchase on the board. With 280 in the ground a goal pays a 70 dollar bonus before any streak, and the league's fifth matchday comes about ten minutes in: top the table then and the Muddy Meadows title lifts you into the Gravel Lane League, with a promotion bonus and a bigger multiplier on every dollar after it.",
+          "Once Floodlights pull your fanbase past your seats, the ground is full and Stands become the best purchase on the board. A goal pays five seconds of your income, and the league's fifth matchday comes about ten minutes in: top the table then and the Muddy Meadows title lifts you into the Gravel Lane League, with a promotion bonus and a bigger multiplier on every dollar after it.",
         ],
       },
       {

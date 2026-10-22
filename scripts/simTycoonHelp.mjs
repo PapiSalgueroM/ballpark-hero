@@ -606,9 +606,18 @@ const CLAIMS = [
     check: (T, m) => { const one = { ...m.fresh, levels: { ...m.fresh.levels, stands: 1 } }; return T.costOf(m.fresh, 'stands') === 30 && T.capacity(one) - T.capacity(m.fresh) === 40 ? '' : `it costs ${T.costOf(m.fresh, 'stands')} and adds ${T.capacity(one) - T.capacity(m.fresh)}`; },
   },
   {
-    /* Round 1532: a goal pays GOAL_BONUS_SEC seconds of unboosted income, no longer a crowd scaled 168. */
-    where: 'stadium', phrase: 'With 280 in the ground a goal pays a 70 dollar bonus before any streak',
-    check: (T, m) => { const s = { ...m.fresh, fanbase: 300, levels: { ...m.fresh.levels, stands: 4 } }; return T.attendance(s) === 280 && T.goalBonus(s) === 70 && T.goalBonus(s) === Math.round(T.unboostedIncomePerSec(s) * T.GOAL_BONUS_SEC) ? '' : `${T.attendance(s)} in the ground pays ${T.goalBonus(s)} a goal`; },
+    /* Round 1532: a goal pays GOAL_BONUS_SEC seconds of unboosted income, no longer a crowd scaled 168.
+       The guide names the seconds, not a dollar figure: a figure holds for one ground only (the review
+       measured 1,630 to 1,677 dollars where a greedy club first has 280 in the ground, against the 70 of
+       a club that bought nothing but Stands). Checked on a bare club, a full one and a grown one with
+       stars, a streak and every spending track. */
+    where: 'stadium', phrase: 'A goal pays five seconds of your income',
+    check: (T, m) => {
+      const grown = { ...m.crowd, rep: 2, streak: 4, levels: { ...m.crowd.levels, tickets: 30, snacks: 25, shop: 15, parking: 12 } };
+      const clubs = [m.fresh, m.crowd, grown];
+      const off = clubs.filter(s => !(T.goalBonus(s) === Math.round(T.incomePerSec(s) * 5) && T.unboostedIncomePerSec(s) === T.incomePerSec(s) && T.goalBonus(s) > 0));
+      return T.GOAL_BONUS_SEC === 5 && T.goalBonus(grown) > T.goalBonus(m.crowd) && off.length === 0 ? '' : `a goal pays ${T.GOAL_BONUS_SEC} seconds, and ${off.length} of ${clubs.length} clubs are paid something other than five seconds of their income (${clubs.map(s => `${T.goalBonus(s)} against ${T.incomePerSec(s)} a second`).join(', ')})`;
+    },
   },
   {
     where: 'stadium', phrase: "the league's fifth matchday comes about ten minutes in",
