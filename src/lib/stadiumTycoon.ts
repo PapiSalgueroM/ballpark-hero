@@ -1335,8 +1335,11 @@ export function playMinute(st: TycoonState, roll: () => number, events: TickEven
   }
 }
 
-/** Round 584: a matchday plays for every half hour you are away. */
-export const AWAY_MATCHDAY_SEC = 1800;
+/** Round 1539: a matchday plays for every 28 minutes you are away (Round 584's
+ *  was 30), the slowest whole minute at which an 8 hour night plays an 18
+ *  matchday season right up to its final, which still waits for you (contract
+ *  section 22). */
+export const AWAY_MATCHDAY_SEC = 1680;
 
 /** Round 584: a result as the away card prints it, and whether it was the
  *  leftover friendly an older save finishes outside the table. */

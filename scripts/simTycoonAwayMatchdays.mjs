@@ -2,7 +2,8 @@
  * Round 584 harness: Stadium Tycoon's league keeps playing while you are away.
  * Fifth round of the tycoon merge (docs/design/round-580-tycoon-merge.md).
  *
- * THE RULE. A matchday plays for every half hour of a trip away, on the same
+ * THE RULE. A matchday plays for every 28 minutes of a trip away (30 until Round
+ * 1539, contract section 22), on the same
  * capped clock the away pay reads (awaySecondsOf), starting by finishing the
  * match in progress. The final matchday of a season never plays away, so a title,
  * a promotion and a Summit prize always happen with you watching. Away matchdays
@@ -18,8 +19,10 @@
  *   1 Identity. 40 seeded clubs, 5 matches each through tick() at the hook's own
  *     cadence against playAwayMatchdays on the same roll stream: every scoreline,
  *     result, streak, matchNo, totalMatches and table row identical.
- *   2 Count. 0s, 29s, 1,799s, 1,800s, 3h, 8h away play 0, 0, 0, 1, 6, 16 on the
- *     hook's own formula, read out of the hook.
+ *   2 Count. 0s, 29s, 1,679s, 1,680s, 1,799s, 3h, 7h, 8h away play 0, 0, 0, 1, 1,
+ *     6, 15, 17 on the hook's own formula, read out of the hook, for a division 6
+ *     club at its first matchday (17 is the clock and the final's hold at once), and
+ *     8h plays 13 for a division 3 club there (its 14 matchday season's hold).
  *   3 No goal or win bonuses. 200 clubs away for 16 matchdays: money and lifetime
  *     move by exactly the milestones reached, and no other event pays.
  *   4 Finale waits. Every division, every matchday, with and without a leftover
@@ -37,8 +40,9 @@
  *   off     away matchdays never play                          red 1, 2, 3, 5 and vitest 7, 8
  *   copy    a private loop without the squad's defence         red 1
  *   cash    away minutes pay their bonuses                     red 3 and vitest 3
- *   finale  the final matchday may play away                   red 3, 4 and vitest 7
- *           (3 as well: a Summit title won away pays its prize, which is money)
+ *   finale  the final matchday may play away                   red 2, 3, 4 and vitest 7
+ *           (3 as well: a Summit title won away pays its prize, which is money;
+ *           2 since Round 1539: the division 3 row plays min(17, 14) = 14, not 13)
  *   counter a matchday ends when the match counter moves           red 4
  *   nofirsts milestones and badges wait for the first live tick     red 6
  * The review before this round shipped found the counter overrun and the lost
@@ -183,18 +187,27 @@ function sections(T) {
 
   /* 2 count */
   if (!hookCode.includes(HOOK_COUNT)) out.S2.push(`the hook no longer counts away matchdays as ${HOOK_COUNT}, so this section is not reading the game's rule`);
+  /* Round 1539: the clock is 28 minutes. The division 6 club starts at matchday 0 of
+     an 18 matchday season, so its 8 hour row is the clock and the final's hold at once
+     (floor(28800 / 1680) = 17 = 18 - 1). The division 3 club's 14 matchday season
+     holds at 13 under either clock, which tells the hold from the clock: the finale
+     control lets it play 14 (min(17, 14)), so that control turns this section red too. */
   const top = clubOf(T, 1, 6, { minute: 0, savedAt: 0 });
-  const absences = [[0, 0], [29, 0], [1799, 0], [1800, 1], [3 * 3600, 6], [8 * 3600, 16]];
-  const counts = absences.map(([sec]) => T.awayMatchdaysPlayable(top, Math.floor(T.awaySecondsOf(top, sec * 1000) / T.AWAY_MATCHDAY_SEC)));
-  const played = absences.map(([sec]) => {
-    const n = Math.floor(T.awaySecondsOf(top, sec * 1000) / T.AWAY_MATCHDAY_SEC);
-    const r = T.playAwayMatchdays(top, n, mulberry(sec + 1));
-    return (r.state.totalMatches ?? 0) - (top.totalMatches ?? 0);
+  const third = clubOf(T, 1, 3, { minute: 0, savedAt: 0 });
+  const absences = [
+    [0, 0, top], [29, 0, top], [1679, 0, top], [1680, 1, top], [1799, 1, top],
+    [3 * 3600, 6, top], [7 * 3600, 15, top], [8 * 3600, 17, top], [8 * 3600, 13, third],
+  ];
+  const counts = absences.map(([sec, , club]) => T.awayMatchdaysPlayable(club, Math.floor(T.awaySecondsOf(club, sec * 1000) / T.AWAY_MATCHDAY_SEC)));
+  const played = absences.map(([sec, , club]) => {
+    const n = Math.floor(T.awaySecondsOf(club, sec * 1000) / T.AWAY_MATCHDAY_SEC);
+    const r = T.playAwayMatchdays(club, n, mulberry(sec + 1));
+    return (r.state.totalMatches ?? 0) - (club.totalMatches ?? 0);
   });
-  absences.forEach(([sec, want], i) => {
-    if (played[i] !== want) out.S2.push(`${sec}s away played ${played[i]} matchdays (the count said ${counts[i]}), the rule says ${want}`);
+  absences.forEach(([sec, want, club], i) => {
+    if (played[i] !== want) out.S2.push(`${sec}s away in division ${club.league.division} played ${played[i]} matchdays (the count said ${counts[i]}), the rule says ${want}`);
   });
-  notes.S2 = `absences of 0s, 29s, 1,799s, 1,800s, 3h, 8h played ${played.join(', ')}`;
+  notes.S2 = `absences of 0s, 29s, 1,679s, 1,680s, 1,799s, 3h, 7h, 8h (division 6) and 8h (division 3) played ${played.join(', ')}`;
 
   /* 3 money: no goal or win bonus away. The only money an away matchday can move
      is a milestone it reached, exactly as that milestone pays live. */
@@ -423,7 +436,7 @@ const CONTROLS = [
     build: t => mustReplace(t, '    settleFirsts(st, events);\n    results.push(', '    results.push(', 'stadiumTycoon.ts'),
     red: ['S6'], green: ['S1', 'S2', 'S3', 'S4', 'S5'], vRed: [], vGreen: [1, 2, 3, 4, 5, 6, 7, 8],
   },
-  { name: 'finale', why: 'the final matchday of a season may play away', build: t => mustReplace(t, FINAL, '  const beforeFinal = Math.max(0, leagueShape(lg.division).matchdays - lg.matchday);', 'stadiumTycoon.ts'), red: ['S3', 'S4'], green: ['S1', 'S2', 'S5', 'S6'], vRed: [7], vGreen: [1, 2, 3, 4, 5, 6, 8] },
+  { name: 'finale', why: 'the final matchday of a season may play away', build: t => mustReplace(t, FINAL, '  const beforeFinal = Math.max(0, leagueShape(lg.division).matchdays - lg.matchday);', 'stadiumTycoon.ts'), red: ['S2', 'S3', 'S4'], green: ['S1', 'S5', 'S6'], vRed: [7], vGreen: [1, 2, 3, 4, 5, 6, 8] },
 ];
 for (const control of CONTROLS) {
   console.log('');
@@ -461,6 +474,6 @@ if (failures > 0) {
   process.exit(1);
 }
 console.log('simTycoonAwayMatchdays: green.');
-console.log('   Away matchdays are the live match on the same rolls, one per half hour, hidden or closed alike.');
+console.log('   Away matchdays are the live match on the same rolls, one per 28 minutes, hidden or closed alike.');
 console.log('   They pay no goal or win bonus, keep what they reach, and the final matchday of every season waits for you.');
 console.log(`   All ${CONTROLS.length} controls fired exactly where they should, in node and in the real hook.`);
