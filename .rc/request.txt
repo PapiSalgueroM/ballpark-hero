@@ -1,0 +1,19 @@
+# Release BQ third step (BQI): BP's triage seams proven on the joined head (sims, no build), from triage-BP's rc-trF1 lines, plus tsc, 1538's two and the fences. A wrapped ctl line exits 0 when its control FIRED.
+headsha: git log --oneline -6
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simLiveSimMotion: node scripts/simLiveSimMotion.mjs
+ctl-motion-whistle: LIVE_MOTION_CONTROL=whistle node scripts/simLiveSimMotion.mjs 2>&1 | tee "$TMPDIR/ctl.log"; s=${PIPESTATUS[0]}; [ $s -eq 1 ] && grep -qE 'simLiveSimMotion: control whistle turned ".+" red on an assertion \([1-9][0-9]* failed\), as it must\.' "$TMPDIR/ctl.log"
+ctl-motion-banner: LIVE_MOTION_CONTROL=banner node scripts/simLiveSimMotion.mjs 2>&1 | tee "$TMPDIR/ctl.log"; s=${PIPESTATUS[0]}; [ $s -eq 1 ] && grep -qE 'simLiveSimMotion: control banner turned ".+" red on an assertion \([1-9][0-9]* failed\), as it must\.' "$TMPDIR/ctl.log"
+simCmShootoutOrder: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmShootoutOrder.mjs
+ctl-shootout-unsetpath: CM_SHOOTOUT_CONTROL=unsetpath node scripts/simCmShootoutOrder.mjs 2>&1 | tee "$TMPDIR/ctl.log"; s=${PIPESTATUS[0]}; [ $s -eq 1 ] && grep -qE 'simCmShootoutOrder: [1-9][0-9]* FAILURE\(S\)' "$TMPDIR/ctl.log"
+ctl-shootout-keepleague: CM_SHOOTOUT_CONTROL=keepleague node scripts/simCmShootoutOrder.mjs 2>&1 | tee "$TMPDIR/ctl.log"; s=${PIPESTATUS[0]}; [ $s -eq 1 ] && grep -qE 'simCmShootoutOrder: [1-9][0-9]* FAILURE\(S\)' "$TMPDIR/ctl.log"
+simClubManagerSlots: node scripts/simClubManagerSlots.mjs
+slots-dupe: SLOTS_CONTROL=dupe node scripts/simClubManagerSlots.mjs 2>&1 | tee "$TMPDIR/ctl.log"; s=${PIPESTATUS[0]}; grep -E "total .* characters|CONTROL" "$TMPDIR/ctl.log" | head -3; [ $s -eq 1 ] && grep -q 'CONTROL FIRED: SLOTS_CONTROL=dupe turned section 2 red through its budget check' "$TMPDIR/ctl.log"
+appeal1081: node scripts/simManagerAppealIsolation.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+sizediag: node scripts/qa/managerWorldSizeDiagnostic.mjs
+simUsBoardParity: node scripts/simUsBoardParity.mjs
+simUsCareerDeckC: node scripts/simUsCareerDeckC.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+dashscan-bqi: B=77ff98ab; n=$(git diff $B HEAD | grep -cP '^\+(?!\+\+).*(\x{2013}|\x{2014})'); m=$(git log --format=%B $B..HEAD | grep -cP '\x{2013}|\x{2014}'); echo "since $B: added lines with an en or em dash $n, commit message lines with one $m"; [ "$n" = 0 ] && [ "$m" = 0 ]
+dashscan-bq: B=212b9069; n=$(git diff $B HEAD | grep -cP '^\+(?!\+\+).*(\x{2013}|\x{2014})'); m=$(git log --format=%B $B..HEAD | grep -cP '\x{2013}|\x{2014}'); echo "since $B: added lines with an en or em dash $n, commit message lines with one $m"; [ "$n" = 0 ] && [ "$m" = 0 ]
