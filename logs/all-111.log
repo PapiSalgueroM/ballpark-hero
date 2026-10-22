@@ -1,0 +1,14 @@
+1) the field table against the engine it was measured on
+   ST level: mean 6.56 (table 6.53), sd 0.94 (table 0.95), n 11418
+   ST goals at a top two tier club: mean 14.68 (table 14.55), sd 8.16 (table 8.08), n 8444
+   CM level: mean 6.44 (table 6.42), sd 0.75 (table 0.74), n 11294
+   CB level: mean 6.41 (table 6.41), sd 0.74 (table 0.75), n 11242
+   GK level: mean 6.71 (table 6.68), sd 0.77 (table 0.77), n 11040
+   GK clean sheets: mean 10.08 (table 10.01), sd 3.24 (table 3.26), n 11040
+   LW level: mean 6.60 (table 6.58), sd 0.95 (table 0.93), n 11440
+   CAM level: mean 6.54 (table 6.52), sd 0.85 (table 0.84), n 11358
+   CDM level: mean 6.42 (table 6.43), sd 0.74 (table 0.74), n 11386
+   RB level: mean 6.44 (table 6.44), sd 0.76 (table 0.75), n 11371
+   RW level: mean 6.60 (table 6.61), sd 0.93 (table 0.94), n 11367
+   LB level: mean 6.43 (table 6.44), sd 0.74 (table 0.75), n 11339
+simSoccerSeasonAwards: green
