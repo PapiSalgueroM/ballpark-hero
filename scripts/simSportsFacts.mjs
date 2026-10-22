@@ -149,6 +149,8 @@
  *   golf           Bobby Jones goes back to 5 majors                      section 9
  *   dupgolf        Bobby Jones is listed twice                            section 9
  *   golfdash       the Masters list reads golf_majors without onlyNames   section 10
+ *   hlonesource    Norris's count in the 2026-10 record loses its second
+ *                  source, so section 1 must be walking that record too   section 1
  *   hlstale        Norris goes back to 11 wins in F1 Higher or Lower      section 11
  *   crossclue      Norris's F1 Driver win clue says 14, in the file and
  *                  in the record alike, so only the cross file fence
@@ -208,6 +210,7 @@ const CONTROLS = {
   golf: { section: 9, tag: 'value' },
   dupgolf: { section: 9, tag: 'duplicate' },
   golfdash: { section: 10, tag: 'golfdash' },
+  hlonesource: { section: 1, tag: 'sources', count: 1 },
   hlstale: { section: 11, tag: 'value', count: 1 },
   crossclue: { section: 11, tag: 'cross', count: 1 },
   hlcutoff: { section: 11, tag: 'cutoff', count: 1 },
@@ -512,6 +515,13 @@ function applyControl(name) {
       over[LISTQUIZ] = rewrite(src(LISTQUIZ), "fetch: () => onlyNames(col('golf_majors', 'player_name', q => q.ilike('tournament', '%masters%'))),",
         "fetch: () => col('golf_majors', 'player_name', q => q.ilike('tournament', '%masters%')),", 'the Masters list fetch');
       break;
+    case 'hlonesource': {
+      /* Proves section 1 walks the 2026-10 record too, not only this one. */
+      const node = record.f1HigherLower?.drivers?.['Lando Norris']?.careerWins;
+      hasSrc(node, "Norris's Higher or Lower win count");
+      node.src = node.src.slice(0, 1);
+      break;
+    }
     case 'hlstale':
       over[F1HL] = rewrite(src(F1HL), "{ name: 'Lando Norris', careerWins: 13,", "{ name: 'Lando Norris', careerWins: 11,", "Norris's Higher or Lower row");
       break;
@@ -1078,7 +1088,8 @@ export const SUPABASE_PUBLISHABLE_KEY = 'stub';
 
       /* The cross file fence. A clue that counts a pool driver's wins is
          recomputed at the point it names, from the same record. */
-      const { f1Drivers } = await loadModule(F1D, over);
+      /* An export renamed away leaves nothing judged, which the floor below fails. */
+      const f1Drivers = (await loadModule(F1D, over)).F1_DRIVERS ?? [];
       const COUNT = /^(\d+) race wins?\b(.*)$/;
       const ANY_COUNT = /\b\d+\s+(?:race\s+|grand\s+prix\s+)?(?:wins?|victories)\b/i;
       let judged = 0;
