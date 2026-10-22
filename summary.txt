@@ -1,0 +1,13 @@
+sim exit=0 6s | simNbaStartingFive: green. 13 sections: every number from the record, every five scored against what its teams allowed.
+ctl-nodensity exit=1 6s | simNbaStartingFive CONTROL nodensity FIRED: section 7 went red as it must (red sections: 7)
+ctl-nospan exit=1 5s | simNbaStartingFive CONTROL nospan FIRED: section 7 went red as it must (red sections: 7, 13)
+ctl-notablewide exit=1 6s | simNbaStartingFive CONTROL notablewide FIRED: section 7 went red as it must (red sections: 7, 13)
+ctl-nonamesake exit=1 5s | simNbaStartingFive CONTROL nonamesake FIRED: section 7 went red as it must (red sections: 7)
+ctl-hooknocensus exit=1 5s | simNbaStartingFive CONTROL hooknocensus FIRED: section 13 went red as it must (red sections: 13)
+ctl-bogus exit=2 0s | simNbaStartingFive ABORT: NBA_FIVE_CONTROL=bogus is not a control this harness knows
+ctl-hooknoyearto exit=1 6s | simNbaStartingFive CONTROL hooknoyearto FIRED: section 13 went red as it must (red sections: 13)
+vitest exit=0 7s |    Duration  5.89s (transform 3.51s, setup 415ms, collect 5.39s, tests 1.96s, environment 1.48s, prepare 582ms)
+simNoRivalNames exit=0 17s | No rival product names found. 0 findings.
+dashes exit=0 0s | dashes in added lines 0, in commit messages 0
+simHarnessAnchors exit=0 47s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 73s | 

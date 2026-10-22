@@ -1,0 +1,13 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+sim: node scripts/simNbaStartingFive.mjs
+ctl-nodensity: NBA_FIVE_CONTROL=nodensity node scripts/simNbaStartingFive.mjs
+ctl-nospan: NBA_FIVE_CONTROL=nospan node scripts/simNbaStartingFive.mjs
+ctl-notablewide: NBA_FIVE_CONTROL=notablewide node scripts/simNbaStartingFive.mjs
+ctl-nonamesake: NBA_FIVE_CONTROL=nonamesake node scripts/simNbaStartingFive.mjs
+ctl-hooknocensus: NBA_FIVE_CONTROL=hooknocensus node scripts/simNbaStartingFive.mjs
+ctl-hooknoyearto: NBA_FIVE_CONTROL=hooknoyearto node scripts/simNbaStartingFive.mjs
+ctl-bogus: NBA_FIVE_CONTROL=bogus node scripts/simNbaStartingFive.mjs
+vitest: node_modules/.bin/vitest run src/test/nbaCourtSelection.test.tsx src/test/nbaCourtRecap1517.test.tsx src/test/lineupValidatorClient.test.tsx --testTimeout=300000 --hookTimeout=120000
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+dashes: n=$(git diff origin/main...HEAD | grep '^+' | LC_ALL=C.UTF-8 grep -cP '[\x{2013}\x{2014}]'); m=$(git log --format=%B origin/main..HEAD | LC_ALL=C.UTF-8 grep -cP '[\x{2013}\x{2014}]'); echo "dashes in added lines $n, in commit messages $m"; test "$n" = 0 && test "$m" = 0
