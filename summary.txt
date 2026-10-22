@@ -1,0 +1,12 @@
+simCfbSlate exit=0 11s | simCfbSlate: all green
+vitest exit=0 15s |    Duration  13.74s (transform 1.15s, setup 735ms, collect 4.26s, tests 24.93s, environment 4.66s, prepare 912ms)
+simGuideHeadings exit=0 2s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+simCollegeDynastyBoard exit=0 6s | simCollegeDynastyBoard: all green
+simSiteSearch exit=0 2s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+simNoRivalNames exit=0 23s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 60s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simCfbDynasty exit=0 2s | simCfbDynasty: all green
+tsc exit=0 85s | 
+simInventedNames exit=0 9s | simInventedNames: green. Every invented man on this site is invented all the way down.
+simNoInventedQuotes exit=0 23s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simGoogleOnlyReturn exit=0 86s |    8 of 8 rendered checks pass, no dash in the round's files, and all 11 controls turned exactly their own checks red.
