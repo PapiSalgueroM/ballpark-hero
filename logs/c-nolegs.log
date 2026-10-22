@@ -1,0 +1,48 @@
+NEGATIVE CONTROL ON: nolegs (must turn fleet red)
+
+[fleet] folded 1584 season rows from 4 files in /home/runner/work/_temp/t-c-nolegs/cm-tactics-fleet-KXSPyu
+
+  expected points a league game against balanced, paired (mid: pooled | block 0 to 7 | block 8 to 15; big; small) and actual points a game (mid, balanced 1.172)
+    adapt                        mid +4.76% | +3.19% | +6.33%   big +3.49%   small +6.83%   ppg 1.231   (48 mid seasons)
+    tempo+                       mid +0.72% | +1.03% | +0.41%   big -0.56%   small +1.02%   ppg 1.208   (48 mid seasons)
+    misread                      mid +0.63% | -0.29% | +1.55%   big +1.35%   small +1.63%   ppg 1.179   (48 mid seasons)
+    line-                        mid +0.45% | +1.60% | -0.69%   big +0.96%   small -1.54%   ppg 1.184   (48 mid seasons)
+    press+                       mid +0.42% | +0.76% | +0.09%   big -0.52%   small +3.71%   ppg 1.180   (48 mid seasons)
+    width-                       mid +0.36% | +0.68% | +0.05%   big +0.30%   small -1.37%   ppg 1.206   (48 mid seasons)
+    press-                       mid +0.35% | +0.21% | +0.49%   big +1.45%   small -0.01%   ppg 1.167   (48 mid seasons)
+    line+                        mid -0.15% | +0.90% | -1.20%   big -1.36%   small +1.18%   ppg 1.172   (48 mid seasons)
+    width+                       mid -2.43% | -1.94% | -2.92%   big -1.66%   small -4.60%   ppg 1.155   (48 mid seasons)
+    tempo-                       mid -2.43% | -2.08% | -2.79%   big -0.33%   small -2.53%   ppg 1.106   (48 mid seasons)
+  ok [dominance]: none of 8 fixed sets beats balanced by over +6.00% at a mid table club in either block (top tempo+)
+  ok [read]: reading the opponent beats misreading them by +4.13% at a mid table club (+3.48% | +4.79%; big +2.14%, small +5.20%)
+  ok [adapt]: the best answer to each opponent's style gains +4.76% at a mid table club (+3.19% | +6.33%; big +3.49%, small +6.83%)
+
+  per match, every competition (balanced first):
+    balanced  poss 49.6  shots 11.242  wonHigh 6.122  crosses 10.848  offsides 2.010  breakC 0.255  wideShare 0.298  fit 80.8  inj 0.247  h2Opp 0.667  myG 1.253  oppG 1.343
+    adapt     poss 51.9  shots 11.710  wonHigh 6.222  crosses 6.922  offsides 1.772  breakC 0.180  wideShare 0.176  fit 81.2  inj 0.237  h2Opp 0.629  myG 1.245  oppG 1.231
+    line+     poss 51.4  shots 11.530  wonHigh 5.892  crosses 11.185  offsides 4.645  breakC 0.469  wideShare 0.297  fit 80.8  inj 0.246  h2Opp 0.711  myG 1.301  oppG 1.423
+    line-     poss 47.8  shots 11.017  wonHigh 6.337  crosses 10.433  offsides 0.798  breakC 0.056  wideShare 0.300  fit 80.9  inj 0.246  h2Opp 0.646  myG 1.208  oppG 1.286
+    misread   poss 48.7  shots 11.200  wonHigh 5.768  crosses 6.724  offsides 1.765  breakC 0.186  wideShare 0.185  fit 81.7  inj 0.230  h2Opp 0.650  myG 1.225  oppG 1.273
+    press+    poss 53.5  shots 11.499  wonHigh 10.753  crosses 11.586  offsides 1.969  breakC 0.354  wideShare 0.301  fit 81.0  inj 0.247  h2Opp 0.732  myG 1.296  oppG 1.403
+    press-    poss 46.0  shots 10.989  wonHigh 3.280  crosses 10.041  offsides 1.996  breakC 0.241  wideShare 0.301  fit 82.7  inj 0.208  h2Opp 0.645  myG 1.195  oppG 1.285
+    tempo+    poss 43.9  shots 9.917  wonHigh 6.804  crosses 9.583  offsides 1.989  breakC 0.259  wideShare 0.310  fit 80.9  inj 0.245  h2Opp 0.683  myG 1.277  oppG 1.372
+    tempo-    poss 55.1  shots 12.438  wonHigh 5.460  crosses 12.033  offsides 2.017  breakC 0.248  wideShare 0.305  fit 80.8  inj 0.245  h2Opp 0.674  myG 1.220  oppG 1.337
+    width+    poss 49.1  shots 11.146  wonHigh 6.156  crosses 18.243  offsides 1.941  breakC 0.259  wideShare 0.475  fit 80.9  inj 0.250  h2Opp 0.689  myG 1.231  oppG 1.382
+    width-    poss 49.7  shots 11.134  wonHigh 6.107  crosses 5.495  offsides 1.965  breakC 0.248  wideShare 0.136  fit 80.9  inj 0.244  h2Opp 0.652  myG 1.234  oppG 1.313
+  ok [effects]: press+ wonHigh: ratio 1.756 (band 1.4 to Infinity)
+  FAIL [effects]: press+ fit: diff 0.225 (band -Infinity to -1)
+  ok [effects]: press- wonHigh: ratio 0.536 (band 0 to 0.7)
+  ok [effects]: press- fit: diff 1.946 (band 0.3 to Infinity)
+  ok [effects]: tempo+ poss: diff -5.700 (band -Infinity to -3)
+  ok [effects]: tempo+ shots: ratio 0.882 (band 0 to 0.93)
+  ok [effects]: tempo- poss: diff 5.522 (band 3 to Infinity)
+  ok [effects]: tempo- shots: ratio 1.106 (band 1.07 to Infinity)
+  ok [effects]: width+ crosses: ratio 1.682 (band 1.35 to Infinity)
+  ok [effects]: width+ wideShare: diff 0.177 (band 0.08 to Infinity)
+  ok [effects]: width- crosses: ratio 0.507 (band 0 to 0.7)
+  ok [effects]: width- wideShare: diff -0.163 (band -Infinity to -0.08)
+  ok [effects]: line+ offsides: ratio 2.311 (band 1.7 to Infinity)
+  ok [effects]: line+ breakC: ratio 1.836 (band 1.3 to Infinity)
+  ok [effects]: line- offsides: ratio 0.397 (band 0 to 0.6)
+  ok [effects]: line- breakC: ratio 0.220 (band 0 to 0.75)
+simCmTactics: control nolegs FIRED (1 failures: effects 1; must turn fleet red)

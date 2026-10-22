@@ -1,0 +1,6 @@
+c-nolegs exit=1 1543s | simCmTactics: control nolegs FIRED (1 failures: effects 1; must turn fleet red)
+c-flat exit=1 1548s | simCmTactics: control flat FIRED (2 failures: read 1, adapt 1; must turn fleet red)
+c-dominant exit=1 1550s | simCmTactics: control dominant FIRED (1 failures: dominance 1; must turn fleet red)
+c-nowidth exit=1 1506s | simCmTactics: control nowidth FIRED (2 failures: effects 2; must turn fleet red)
+c-noline exit=1 1506s | simCmTactics: control noline FIRED (2 failures: effects 2; must turn fleet red)
+c-notempo exit=1 1514s | simCmTactics: control notempo FIRED (2 failures: effects 2; must turn fleet red)
