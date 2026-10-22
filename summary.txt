@@ -1,0 +1,5 @@
+canon-s1 exit=1 24s | simNbaGmDesk: 3 failure(s) in ["2"]
+canon-s2 exit=1 24s | simNbaGmDesk: 3 failure(s) in ["2"]
+canon-s3 exit=1 22s | simNbaGmDesk: 3 failure(s) in ["2"]
+canon-fullbird exit=0 22s | simNbaGmDesk: control fullbird fired (115 failures, as it should)
+dbg-noinjhook exit=0 22s | control noinjhook: red in ["2","5"], wanted 5
