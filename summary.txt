@@ -1,0 +1,5 @@
+earned-head exit=1 23s | 8
+m1b-earned exit=1 22s | simNbaGmDesk: 3 failure(s) in ["2"]
+m1b-olddesk exit=0 22s | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+m1b-simGmContracts exit=0 1s | simGmContracts: PASS, 4 engines, 20 runs of 10 seasons, nobody left on a flip
+simGmContracts exit=0 1s | simGmContracts: PASS, 4 engines, 20 runs of 10 seasons, nobody left on a flip
