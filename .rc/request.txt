@@ -1,0 +1,4 @@
+hub-house: PART=hub N=150 node .rc/x/probe.mjs
+hub-engaged: PART=hub FLEET=engaged N=150 node .rc/x/probe.mjs
+save: git worktree add /tmp/base c1b393644e00c560a0ca6a5f5dea47e57c252160 > /dev/null 2>&1; PART=save N=300 node .rc/x/probe.mjs
+save-s77: git worktree add /tmp/base2 c1b393644e00c560a0ca6a5f5dea47e57c252160 > /dev/null 2>&1; BASE_ROOT=/tmp/base2 PART=save N=300 SEED=77 node .rc/x/probe.mjs
