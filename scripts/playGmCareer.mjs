@@ -440,6 +440,10 @@ async function walkE(row, w, h) {
   await wait(900);
   await answerConsent(page);
   say(kitAsked() === 0, `${tag}: the pick screen does not ask for the career kit (${kitAsked()} asks)`, aimed('eagerkit'));
+  /* Under eagerkit every later check of this walk reads the same eager fetch again (measured on r1550-s3w: four more
+     went red for it, and two more for the stylesheet the mutated chunk's bare import never waits for), so the walk
+     stops at the check aimed at it. */
+  if (CONTROL === 'eagerkit') { await ctx.close(); return; }
   await page.locator('.grid button').first().click();
   await page.waitForFunction(k => JSON.parse(localStorage.getItem(k) || '{}').phase === 'hub', row.key, { timeout: 30000 });
   await wait(600);
