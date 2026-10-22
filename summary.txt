@@ -1,0 +1,12 @@
+we-homecountry exit=1 14s | simWorldEditor (control homecountry): 2478 checks, 2 failures
+simWorldEditor exit=0 14s | simWorldEditor: 2478 checks, 0 failures
+simYouthPadding exit=0 74s | simYouthPadding: 12 checks, 0 failures
+simFreeAgents exit=0 146s | simFreeAgents: all sections passed
+simSaveFence exit=0 77s | simSaveFence: all green (tabs, source, fleet)
+simBoard exit=0 6s | ALL BOARD CHECKS PASSED
+simBoardObjectives exit=0 1s | simBoardObjectives: green. Every board talks like a board.
+simClubManagerSaveSize exit=0 99s | simClubManagerSaveSize: all sections green
+simCmOldCareersWorld exit=0 79s | simCmOldCareersWorld: green, sections 1, 2 held (79s)
+digest-main exit=1 92s | simCmLeagueRules: 47 failure(s)
+diff2-base exit=1 197s | simCmDifficulty: 88 FAILURES (sections 2)
+simAcademy exit=0 563s | ALL ACADEMY CHECKS PASSED

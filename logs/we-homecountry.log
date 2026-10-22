@@ -1,0 +1,4 @@
+  FAIL: Celtic moved by the editor are asked for players from England, not their own Scotland
+  FAIL: Brentford moved by the editor are asked for players from Scotland, not their own England
+   section 3: RED
+simWorldEditor (control homecountry): 2478 checks, 2 failures
