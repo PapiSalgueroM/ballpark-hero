@@ -1,6 +1,8 @@
 import { supabase } from '@/integrations/supabase/client';
 import { dateSeed } from '@/lib/dateUtils';
 import { flagFor, fmtCompactUsd } from '@/lib/dealPlayers';
+import { clearlyAhead } from '@/lib/clearWinner';
+import namesakeList from '@/data/marketNamesakes.json';
 
 /**
  * Shared multiple-choice question GENERATOR for game-show format games
@@ -93,6 +95,53 @@ interface ShirtRow {
 }
 
 const CURRENT_YEAR = 2026;
+
+// ---------------------------------------------------------------------------
+// Round 1552: one right answer a question
+// ---------------------------------------------------------------------------
+
+/**
+ * Three ways a question here could have two right answers, or none:
+ *
+ * 1. TIES. "Who is worth the most" drew four players and marked the first of
+ *    a sort right, with no check that the top two differ. Market values sit on
+ *    round numbers (the top band of 2026 has 109 players on 17 values), so two
+ *    of the four sharing the top value was routine, and one wrong answer ends
+ *    the climb. It now asks only when the top value beats the second by Face
+ *    Off's MIN_RATIO (src/lib/clearWinner.ts).
+ * 2. THE TENSE. "Which club does X play for?" and "right now" read a dated
+ *    snapshot (the 2026 rows), so every window since it was taken turns some of
+ *    them false. Round 661 fixed the same thing for shirt numbers. The club and
+ *    value questions now name the data they come from instead of today.
+ * 3. NAMESAKES. The pool keeps one row per name, so when two footballers share
+ *    a display name the row is one of them and the question cannot say which.
+ *    src/data/marketNamesakes.json lists those names (scripts/genMarketNamesakes.mjs
+ *    derives it from the saved raw rows) and they are left out of every
+ *    question built from the market pool, as the subject and as an option.
+ *
+ * The daily ladder is seeded by its date and is the same fifteen questions for
+ * everybody, so it switches on a day boundary: dates before ONE_ANSWER_FROM
+ * keep the rules they were dealt under (LEGACY), so a release in the middle of
+ * a day does not re-deal that day. Unlimited and Swap Question use the new
+ * rules at once. Once ONE_ANSWER_FROM is in the past on the live site, LEGACY
+ * and the date check can go.
+ */
+export const ONE_ANSWER_FROM = '2026-10-25';
+
+export interface DealRules {
+  /** false only for daily dates before ONE_ANSWER_FROM */
+  oneAnswer: boolean;
+}
+
+const ONE_ANSWER: DealRules = { oneAnswer: true };
+const LEGACY: DealRules = { oneAnswer: false };
+
+export const MARKET_NAMESAKES: ReadonlySet<string> = new Set(namesakeList.names);
+
+/** The rules a daily ladder for this ET date is dealt under. */
+export function rulesForDate(dateStr: string): DealRules {
+  return dateStr < ONE_ANSWER_FROM ? LEGACY : ONE_ANSWER;
+}
 
 /** Simple seeded RNG (mulberry32) so daily mode can produce a deterministic sequence. */
 function mulberry32(seed: number) {
@@ -238,31 +287,58 @@ function bandForDifficulty(sortedDesc: MarketRow[], difficulty: number): MarketR
   return sortedDesc.slice(start, Math.min(end, n));
 }
 
+/** Round 1552: the band with every namesake taken out, under the one answer rules. */
+function askableBand(sortedDesc: MarketRow[], difficulty: number, rules: DealRules): MarketRow[] {
+  const band = bandForDifficulty(sortedDesc, difficulty);
+  return rules.oneAnswer ? band.filter((p) => !MARKET_NAMESAKES.has(p.player_name)) : band;
+}
+
+/** Round 1552: what the club column holds when a man had no club. None of these is a
+ *  club, so none is asked as an answer or offered as a wrong one (a man released since
+ *  the snapshot would make "Without Club" a second right answer). */
+const NOT_A_CLUB = new Set(['Without Club', 'Retired', 'Career break', 'Unknown']);
+
+/** The first row of each name, in order. Round 1552 swapped a findIndex per row for a
+ *  Set (the same rows in the same order): over the deep band of about 4,400 rows the old
+ *  filter made some ten million name comparisons per question on a phone. */
+function firstOfEachName(rows: MarketRow[]): MarketRow[] {
+  const seen = new Set<string>();
+  return rows.filter((p) => {
+    if (seen.has(p.player_name)) return false;
+    seen.add(p.player_name);
+    return true;
+  });
+}
+
 // ---------------------------------------------------------------------------
-// Question type 1: "Which club does X play for?"
+// Question type 1: "Which club was X at in the 2026 market values?"
 // ---------------------------------------------------------------------------
 
 export function buildClubQuestion(
   pool: MarketRow[],
   difficulty: number,
   rng: () => number,
+  rules: DealRules = ONE_ANSWER,
 ): TriviaQuestion | null {
-  const band = bandForDifficulty(pool, difficulty);
-  const withClub = band.filter((p) => p.club);
+  const isClub = (c: string | null): c is string => !!c && !(rules.oneAnswer && NOT_A_CLUB.has(c));
+  const band = askableBand(pool, difficulty, rules);
+  const withClub = band.filter((p) => isClub(p.club));
   const correct = pickWithRng(withClub, rng);
   if (!correct) return null;
 
   // Distractor clubs: other clubs present in the full pool for this year,
   // excluding the correct player's own club.
   const otherClubs = Array.from(
-    new Set(pool.map((p) => p.club).filter((c): c is string => !!c && c !== correct.club)),
+    new Set(pool.map((p) => p.club).filter((c): c is string => isClub(c) && c !== correct.club)),
   );
   const distractors = shuffleWithRng(otherClubs, rng).slice(0, 3);
   if (distractors.length < 3) return null;
 
   const options = shuffleWithRng([correct.club as string, ...distractors], rng);
   return {
-    question: `Which club does ${correct.player_name} play for?`,
+    question: rules.oneAnswer
+      ? `Which club was ${correct.player_name} at in the 2026 market values?`
+      : `Which club does ${correct.player_name} play for?`,
     options,
     correctIndex: options.indexOf(correct.club as string),
     difficulty,
@@ -277,8 +353,9 @@ export function buildNationalityQuestion(
   pool: MarketRow[],
   difficulty: number,
   rng: () => number,
+  rules: DealRules = ONE_ANSWER,
 ): TriviaQuestion | null {
-  const band = bandForDifficulty(pool, difficulty);
+  const band = askableBand(pool, difficulty, rules);
   const withNat = band.filter((p) => p.nationality);
   const correct = pickWithRng(withNat, rng);
   if (!correct) return null;
@@ -364,16 +441,15 @@ export function buildPositionQuestion(
   pool: MarketRow[],
   difficulty: number,
   rng: () => number,
+  rules: DealRules = ONE_ANSWER,
 ): TriviaQuestion | null {
-  const band = bandForDifficulty(pool, difficulty);
+  const band = askableBand(pool, difficulty, rules);
   const withPos = band.filter((p) => p.position);
   const correct = pickWithRng(withPos, rng);
   if (!correct) return null;
 
   const others = band.filter((p) => p.position && p.position !== correct.position && p.player_name !== correct.player_name);
-  const distractors = shuffleWithRng(others, rng)
-    .filter((p, i, arr) => arr.findIndex((x) => x.player_name === p.player_name) === i)
-    .slice(0, 3);
+  const distractors = firstOfEachName(shuffleWithRng(others, rng)).slice(0, 3);
   if (distractors.length < 3) return null;
 
   const optionPlayers = shuffleWithRng([correct, ...distractors], rng);
@@ -387,29 +463,41 @@ export function buildPositionQuestion(
 }
 
 // ---------------------------------------------------------------------------
-// Question type 5: "Who is worth more?" (4-player, pick the most valuable)
+// Question type 5: "Who was worth the most?" (4-player, pick the most valuable)
 // ---------------------------------------------------------------------------
+
+/** Round 1552: how many fours a worth the most question draws before it gives up on a
+ *  clear top value. The harness measures how often the last draw is reached per band. */
+export const WORTH_MORE_DRAWS = 12;
 
 export function buildWorthMoreQuestion(
   pool: MarketRow[],
   difficulty: number,
   rng: () => number,
+  rules: DealRules = ONE_ANSWER,
 ): TriviaQuestion | null {
-  const band = bandForDifficulty(pool, difficulty);
-  const unique = band.filter((p, i, arr) => arr.findIndex((x) => x.player_name === p.player_name) === i);
+  const band = askableBand(pool, difficulty, rules);
+  const unique = firstOfEachName(band);
   if (unique.length < 4) return null;
 
-  const four = shuffleWithRng(unique, rng).slice(0, 4);
-  const sorted = [...four].sort((a, b) => b.market_value_usd - a.market_value_usd);
-  const mostValuable = sorted[0];
+  for (let draw = 0; draw < (rules.oneAnswer ? WORTH_MORE_DRAWS : 1); draw++) {
+    const four = shuffleWithRng(unique, rng).slice(0, 4);
+    const sorted = [...four].sort((a, b) => b.market_value_usd - a.market_value_usd);
+    const mostValuable = sorted[0];
+    // Round 1552: the top value must beat the second clearly, or two answers are right.
+    if (rules.oneAnswer && !clearlyAhead(sorted[0].market_value_usd, sorted[1].market_value_usd)) continue;
 
-  const options = shuffleWithRng(four.map((p) => p.player_name), rng);
-  return {
-    question: 'Who is worth more right now (highest market value)?',
-    options,
-    correctIndex: options.indexOf(mostValuable.player_name),
-    difficulty,
-  };
+    const options = shuffleWithRng(four.map((p) => p.player_name), rng);
+    return {
+      question: rules.oneAnswer
+        ? 'Who was worth the most in the 2026 market values?'
+        : 'Who is worth more right now (highest market value)?',
+      options,
+      correctIndex: options.indexOf(mostValuable.player_name),
+      difficulty,
+    };
+  }
+  return null;
 }
 
 // ---------------------------------------------------------------------------
@@ -469,19 +557,20 @@ function buildOfType(
   pool: TriviaPool,
   difficulty: number,
   rng: () => number,
+  rules: DealRules,
 ): TriviaQuestion | null {
   const sortedMarket = pool.market; // already sorted desc by fetchMarketPool
   switch (type) {
     case 'which-club':
-      return buildClubQuestion(sortedMarket, difficulty, rng);
+      return buildClubQuestion(sortedMarket, difficulty, rng, rules);
     case 'nationality':
-      return buildNationalityQuestion(sortedMarket, difficulty, rng);
+      return buildNationalityQuestion(sortedMarket, difficulty, rng, rules);
     case 'ballon-dor':
       return buildBallonDorQuestion(pool.ballonDor, difficulty, rng);
     case 'which-position':
-      return buildPositionQuestion(sortedMarket, difficulty, rng);
+      return buildPositionQuestion(sortedMarket, difficulty, rng, rules);
     case 'worth-more':
-      return buildWorthMoreQuestion(sortedMarket, difficulty, rng);
+      return buildWorthMoreQuestion(sortedMarket, difficulty, rng, rules);
     case 'shirt-number':
       return buildShirtNumberQuestion(pool.shirtNumbers, difficulty, rng);
     default:
@@ -501,13 +590,14 @@ export function generateQuestion(
   difficulty: number,
   rng: () => number,
   excludeTypes: QuestionType[] = [],
+  rules: DealRules = ONE_ANSWER,
 ): TriviaQuestion | null {
   const candidates = shuffleWithRng(
     ALL_TYPES.filter((t) => !excludeTypes.includes(t)),
     rng,
   );
   for (const type of candidates.length > 0 ? candidates : ALL_TYPES) {
-    const q = buildOfType(type, pool, difficulty, rng);
+    const q = buildOfType(type, pool, difficulty, rng, rules);
     if (q) return q;
   }
   return null;
@@ -522,6 +612,7 @@ export function generateQuestionLadder(
   pool: TriviaPool,
   count: number,
   rng: () => number,
+  rules: DealRules = ONE_ANSWER,
 ): TriviaQuestion[] {
   const ladder: TriviaQuestion[] = [];
   const seenQuestions = new Set<string>();
@@ -529,7 +620,7 @@ export function generateQuestionLadder(
     let attempts = 0;
     let q: TriviaQuestion | null = null;
     while (attempts < 8) {
-      q = generateQuestion(pool, i, rng);
+      q = generateQuestion(pool, i, rng, [], rules);
       attempts++;
       if (q && !seenQuestions.has(q.question)) break;
       q = null;
@@ -549,7 +640,7 @@ export function generateQuestionLadder(
 /** Deterministic ladder for the given ET date string, shared by every player. */
 export function generateDailyLadder(pool: TriviaPool, dateStr: string, count: number): TriviaQuestion[] {
   const rng = mulberry32(dateSeed(dateStr));
-  return generateQuestionLadder(pool, count, rng);
+  return generateQuestionLadder(pool, count, rng, rulesForDate(dateStr));
 }
 
 /** Fresh random ladder for unlimited play. */
