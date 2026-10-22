@@ -1,0 +1,7 @@
+nhl exit=0 7s | BYTE EQUAL nhl (17 lines)
+contracts exit=0 3s | BYTE EQUAL contracts (43 lines)
+desk-old exit=0 59s | BYTE EQUAL desk-old (25 lines)
+desk-def exit=0 60s | BYTE EQUAL desk-def (26 lines)
+mlb exit=0 13s | BYTE EQUAL mlb (18 lines)
+deskhost exit=0 87s | BYTE EQUAL deskhost (56 lines)
+nfl exit=0 42s | BYTE EQUAL nfl (21 lines)

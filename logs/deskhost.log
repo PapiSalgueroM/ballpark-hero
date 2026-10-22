@@ -1,0 +1,6 @@
+head 4ceb55f66f, base f276b8a8c, old harness -
+base tree f276b8a8cb
+head exit 0, base exit 0
+head last line: simGmDeskHost: all 10 checks passed on seeds 1,2,3 (4 engines, 3 seasons a seed)
+base last line: simGmDeskHost: all 10 checks passed on seeds 1,2,3 (4 engines, 3 seasons a seed)
+BYTE EQUAL deskhost (56 lines)
