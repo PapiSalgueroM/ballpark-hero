@@ -1,0 +1,17 @@
+   tags: 377 over 36 offseasons; 277 men came off a tag; the GM's club was put in front of the policy 108 times; the GM passed 18 offseasons
+   swaps: 200 in 823 tries, 119 promotions and 81 demotions
+   injury cases: 178, 19 of them at QB or OL
+   newcomers: 595 saved groups, 300 of the better arrivals moved a slot between groups
+   fixture: 960 club states, 58 of them with six or more linemen, 8160 scheduled games
+   CPU tag rate: 378 tags over 1152 club offseasons, pooled 0.328; one offseason at a time 0.094 to 0.594
+   walk rates: stars 368/2388 = 0.154 (per seed 0.133 to 0.168), role players 251/492 = 0.510
+
+ ok  [1] the tender: top five mean or 120 percent, whichever is greater: 19/19
+ ok  [2] a tagged man never reaches that year's pool: 8/8
+ ok  [3] the chart moves strength the right way: 14/14
+ ok  [4] the fixture: the pre round formula and the engine agree: 9/9
+ ok  [5] the CPU tag rate: 1/1
+ ok  [6] the engine cites the rule: 3/3
+ ok  [7] untagged men on their last year walk at the rule's rates: 8/8
+
+simNflTagDepth: 62/62 checks passed

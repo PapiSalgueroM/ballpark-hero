@@ -1,0 +1,17 @@
+vitest-new exit=0 17s |    Duration  15.86s (transform 5.62s, setup 1.22s, collect 10.61s, tests 22.11s, environment 5.99s, prepare 1.94s)
+vitest-board1 exit=0 35s |    Duration  33.59s (transform 5.15s, setup 844ms, collect 11.11s, tests 58.00s, environment 5.12s, prepare 1.69s)
+vitest-board2 exit=0 20s |    Duration  19.60s (transform 6.43s, setup 826ms, collect 16.80s, tests 28.32s, environment 5.93s, prepare 1.61s)
+tsc exit=0 119s | 
+sim-lift exit=0 88s | simNflSeasonStats: 118 checks, 0 failed
+simGmGameDay exit=0 90s | simGmGameDay: 462 checks, 0 failed
+simHarnessAnchors exit=0 69s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simGmReload exit=0 8s | simGmReload: all green. Four front offices keep a finished season through a reload, and none of them can play a closed one again.
+gmgd-statsstory exit=1 93s | simGmGameDay: 462 checks, 1 failed (control statsstory)
+simSessionMarks exit=0 0s | simSessionMarks: green. Nine games count the day you play them, none of them invented a score or a streak day to do it.
+simSaveKeeper exit=0 6s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+simNflTagDepth exit=0 3s | simNflTagDepth: 62/62 checks passed
+gmgd-unkeyed exit=1 98s | simGmGameDay: 462 checks, 10 failed (control unkeyed)
+simNbaSeasonStats exit=0 17s | simNbaSeasonStats: 72 checks passed over 10 seeded franchises and 3 seasons each. Every game adds up, the box takes nothing from the league, the awards follow their rules
+simNflFullRosters exit=0 22s | simNflFullRosters: 91 checks passed over 8 sections
+simNoRivalNames exit=0 15s | No rival product names found. 0 findings.
+simUsSeasonCentre exit=0 84s | simUsSeasonCentre: 158 checks, 0 failed
