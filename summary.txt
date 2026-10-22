@@ -1,0 +1,9 @@
+mapswap exit=1 6s | simLiveSimMotion: control mapswap turned "the viewer leans my side" red on an assertion (1 failed), as it must.
+turnback exit=1 15s | simLiveSimMotion: control turnback turned "R12" red on an assertion (1 failed), as it must.
+deadrestart exit=1 15s | simLiveSimMotion: control deadrestart turned "R12" red on an assertion (1 failed), as it must.
+feederholds exit=1 14s | simLiveSimMotion: control feederholds turned "R11" red on an assertion (1 failed), as it must.
+facing exit=1 14s | simLiveSimMotion: control facing turned "R11" red on an assertion (1 failed), as it must.
+metresswap exit=1 15s | simLiveSimMotion: control metresswap turned "R10: the ball travels" red on an assertion (1 failed), as it must.
+longpass32 exit=1 15s | simLiveSimMotion: control longpass32 turned "R10: the ball travels" red on an assertion (1 failed), as it must.
+motionfull exit=0 97s | simLiveSimMotion: green. 65 tests passed (the viewer on real feeds, the pitch part's rules on 200 half feeds and on feeds made by hand, the goal sequence, match mode), an
+tsc exit=0 106s | 
