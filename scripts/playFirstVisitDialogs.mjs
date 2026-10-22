@@ -67,6 +67,13 @@
  * fail as "opened no card". PLAYFIRST_CONTROL=jump makes the scene's button also push the page 40 px, and every tapped
  * seeded line must fail for the jump. Each says FIRED (exit 1), did NOT fire (exit 3) or ABORTED when the run holds no
  * seeded line (exit 2). The other controls take the seeded lines with every other line.
+ * Measured 2026-10-22 on runners (Round 1539, r1539-c1 to c3): 402 route widths (399 plus 3 seeded), 126 dialogs. The
+ * card at 320x640 is at its height cap (box 16 to 319, scrolling) with "Back to work" 250 to 294, 41 px above the
+ * banner from 335; at 390x844 98 px above, at 1280x900 168 px above; the page held at scrollY 0 on all three. stale
+ * fired 3 of 3, jump 3 of 3 (each height +40), and the counts rose by the seeded lines: cover 18 of 18, edge 21 of 21,
+ * lift 24 of 24, nobanner 27 of 27, expected 24 of 24. With the card's two Round 1536 props taken out (a one shot
+ * mutation leg) the seeded lines go red at 320 (the button 407 to 451 under the banner, the box 141 px under it) and
+ * 390 (18 of the button's 44 px and 43 px of the box under it), and stay green at 1280.
  *
  * Run: BASE=http://localhost:4173 node scripts/playFirstVisitDialogs.mjs   (a served build, see scripts/lib/hostLikeServer.mjs)
  *      ONLY=/stadium-tycoon,/idle-arena scopes it; PLAYFIRST_SHARD=1/3 runs a third of the routes;
