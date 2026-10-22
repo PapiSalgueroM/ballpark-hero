@@ -1,0 +1,15 @@
+simFightIds exit=0 8s | simFightIds: all sections passed
+simFightIds-base exit=0 9s | simFightIds: all sections passed
+ctl-counter exit=1 7s | simFightIds: 4 failure(s) under control counter
+ctl-norepair exit=1 7s | simFightIds: 2 failure(s) under control norepair
+ctl-noclass exit=1 6s | simFightIds: 1 failure(s) under control noclass
+ctl-drawid exit=1 7s | simFightIds: 1 failure(s) under control drawid
+simFightGym exit=0 3s | simFightGym: all sections passed
+simFightPromoter exit=0 1s | simFightPromoter: all sections passed
+ctl-startone exit=1 7s | simFightIds: 1 failure(s) under control startone
+simFightCareer-godmode exit=1 9s | simFightCareer: 21 failure(s)
+simFightCareer exit=0 11s | simFightCareer: all sections passed
+vitest exit=0 9s |    Duration  8.58s (transform 1.26s, setup 1.02s, collect 3.04s, tests 10.72s, environment 4.15s, prepare 909ms)
+simNoRivalNames exit=0 16s | No rival product names found. 0 findings.
+tsc exit=0 79s | 
+simHarnessAnchors exit=0 46s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
