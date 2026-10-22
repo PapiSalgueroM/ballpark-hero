@@ -1,0 +1,16 @@
+vitest exit=0 7s |    Duration  5.62s (transform 3.18s, setup 392ms, collect 5.76s, tests 2.08s, environment 2.88s, prepare 607ms)
+sim exit=0 7s | simNbaStartingFive: green. 13 sections: every number from the record, every five scored against what its teams allowed.
+ctl-slotflip exit=1 5s | simNbaStartingFive CONTROL slotflip FIRED: section 4 went red as it must (red sections: 4)
+ctl-gainflip exit=1 6s | simNbaStartingFive CONTROL gainflip FIRED: section 4 went red as it must (red sections: 4)
+ctl-hookhighest exit=1 5s | simNbaStartingFive CONTROL hookhighest FIRED: section 13 went red as it must (red sections: 13)
+ctl-hookleague exit=1 6s | simNbaStartingFive CONTROL hookleague FIRED: section 13 went red as it must (red sections: 13)
+ctl-hookbypass exit=1 5s | simNbaStartingFive CONTROL hookbypass FIRED: section 13 went red as it must (red sections: 13)
+ctl-notablewide exit=1 6s | simNbaStartingFive CONTROL notablewide FIRED: section 7 went red as it must (red sections: 7, 13)
+ctl-nospan exit=1 5s | simNbaStartingFive CONTROL nospan FIRED: section 7 went red as it must (red sections: 7, 13)
+ctl-hooknocensus exit=1 4s | simNbaStartingFive CONTROL hooknocensus FIRED: section 13 went red as it must (red sections: 13)
+ctl-bogus exit=2 0s | simNbaStartingFive ABORT: NBA_FIVE_CONTROL=bogus is not a control this harness knows
+ctl-hooknoyearto exit=1 5s | simNbaStartingFive CONTROL hooknoyearto FIRED: section 13 went red as it must (red sections: 13)
+simNbaCourtSelection exit=0 3s | NBA court: CRLF executable controls bind, original bytes held, owned copies cleaned. Native keyboard/touch geometry is verified separately.
+dashes exit=0 0s | dashes in added lines 0, in commit messages 0
+tsc exit=0 70s | 
+simHarnessAnchors exit=0 41s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.

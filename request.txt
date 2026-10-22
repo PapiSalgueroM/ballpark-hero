@@ -1,0 +1,16 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/nbaCourtSelection.test.tsx src/test/nbaCourtRecap1517.test.tsx src/test/lineupValidatorClient.test.tsx src/test/lineupBuilderHistoryRead.test.tsx src/test/xiSelectionHistoryRace.test.tsx --testTimeout=300000 --hookTimeout=120000
+sim: node scripts/simNbaStartingFive.mjs
+ctl-slotflip: NBA_FIVE_CONTROL=slotflip node scripts/simNbaStartingFive.mjs
+ctl-gainflip: NBA_FIVE_CONTROL=gainflip node scripts/simNbaStartingFive.mjs
+ctl-hookhighest: NBA_FIVE_CONTROL=hookhighest node scripts/simNbaStartingFive.mjs
+ctl-hookleague: NBA_FIVE_CONTROL=hookleague node scripts/simNbaStartingFive.mjs
+ctl-hookbypass: NBA_FIVE_CONTROL=hookbypass node scripts/simNbaStartingFive.mjs
+ctl-notablewide: NBA_FIVE_CONTROL=notablewide node scripts/simNbaStartingFive.mjs
+ctl-nospan: NBA_FIVE_CONTROL=nospan node scripts/simNbaStartingFive.mjs
+ctl-hooknocensus: NBA_FIVE_CONTROL=hooknocensus node scripts/simNbaStartingFive.mjs
+ctl-hooknoyearto: NBA_FIVE_CONTROL=hooknoyearto node scripts/simNbaStartingFive.mjs
+ctl-bogus: NBA_FIVE_CONTROL=bogus node scripts/simNbaStartingFive.mjs
+simNbaCourtSelection: node scripts/simNbaCourtSelection.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+dashes: n=$(git diff origin/main...HEAD | grep '^+' | LC_ALL=C.UTF-8 grep -cP '[\x{2013}\x{2014}]'); m=$(git log --format=%B origin/main..HEAD | LC_ALL=C.UTF-8 grep -cP '[\x{2013}\x{2014}]'); echo "dashes in added lines $n, in commit messages $m"; test "$n" = 0 && test "$m" = 0
