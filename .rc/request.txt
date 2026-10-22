@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+sweepPhone: ENGINES=chromium node scripts/sweepPhone.mjs
+sweepPhone-noclip-nba: SWEEP_PHONE_CONTROL=noclip ROUTE=/nba-connections ENGINES=chromium node scripts/sweepPhone.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
