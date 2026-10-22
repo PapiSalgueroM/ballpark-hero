@@ -1,0 +1,58 @@
+
+[fleet] folded 3984 season rows from 16 files in .rc/x
+
+  expected points a league game against balanced, paired (mid: pooled | block 0 to 7 | block 8 to 15; big; small) and actual points a game (mid, balanced 1.172)
+    adapt                        mid +4.42% | +3.30% | +5.54%   big NaN%   small NaN%   ppg 1.238   (48 mid seasons)
+    tempo+                       mid +0.72% | +1.03% | +0.41%   big NaN%   small NaN%   ppg 1.208   (48 mid seasons)
+    press- width- line-          mid +0.72% | -0.86% | +2.31%   big NaN%   small NaN%   ppg 1.189   (48 mid seasons)
+    press- line-                 mid +0.71% | -0.76% | +2.19%   big NaN%   small NaN%   ppg 1.175   (48 mid seasons)
+    press- tempo+ width- line-   mid +0.53% | -0.63% | +1.69%   big NaN%   small NaN%   ppg 1.178   (48 mid seasons)
+    tempo+ line-                 mid +0.48% | -0.35% | +1.32%   big NaN%   small NaN%   ppg 1.183   (48 mid seasons)
+    press- width-                mid +0.47% | -0.56% | +1.50%   big NaN%   small NaN%   ppg 1.185   (48 mid seasons)
+    line-                        mid +0.45% | +1.60% | -0.69%   big NaN%   small NaN%   ppg 1.184   (48 mid seasons)
+    width-                       mid +0.36% | +0.68% | +0.05%   big NaN%   small NaN%   ppg 1.206   (48 mid seasons)
+    press-                       mid +0.35% | +0.21% | +0.49%   big NaN%   small NaN%   ppg 1.167   (48 mid seasons)
+    width- line+                 mid +0.33% | +0.99% | -0.33%   big NaN%   small NaN%   ppg 1.209   (48 mid seasons)
+    press- tempo+                mid +0.30% | +0.05% | +0.54%   big NaN%   small NaN%   ppg 1.167   (48 mid seasons)
+    line+                        mid -0.15% | +0.90% | -1.20%   big NaN%   small NaN%   ppg 1.172   (48 mid seasons)
+    misread                      mid -0.36% | -2.18% | +1.47%   big NaN%   small NaN%   ppg 1.169   (48 mid seasons)
+    width+                       mid -2.43% | -1.94% | -2.92%   big NaN%   small NaN%   ppg 1.155   (48 mid seasons)
+    tempo-                       mid -2.43% | -2.08% | -2.79%   big NaN%   small NaN%   ppg 1.106   (48 mid seasons)
+    press+                       mid -3.73% | -1.84% | -5.62%   big NaN%   small NaN%   ppg 1.149   (48 mid seasons)
+    press+ tempo- width- line-   mid -9.00% | -8.73% | -9.28%   big NaN%   small NaN%   ppg 1.073   (48 mid seasons)
+    press+ tempo+ width+ line-   mid -9.58% | -8.73% | -10.43%   big NaN%   small NaN%   ppg 1.083   (48 mid seasons)
+    press+ width+ line-          mid -10.19% | -9.35% | -11.03%   big NaN%   small NaN%   ppg 1.064   (48 mid seasons)
+    press+ tempo- width+ line-   mid -11.95% | -11.66% | -12.24%   big NaN%   small NaN%   ppg 1.030   (48 mid seasons)
+  ok [dominance]: none of 80 fixed sets beats balanced by over +6.00% at a mid table club in either block (top tempo+)
+  ok [read]: reading the opponent beats misreading them by +4.77% at a mid table club (+5.48% | +4.06%; big NaN%, small NaN%)
+  ok [adapt]: the best answer to each opponent's style gains +4.42% at a mid table club (+3.30% | +5.54%; big NaN%, small NaN%)
+
+  per match, every competition (balanced first):
+    balanced  poss 48.4  shots 10.706  wonHigh 6.339  crosses 10.580  offsides 2.011  breakC 0.228  wideShare 0.249  fit 83.7  inj 0.250  h2Opp 0.698  myG 1.157  oppG 1.433
+    adapt     poss 50.7  shots 11.055  wonHigh 6.376  crosses 6.635  offsides 1.807  breakC 0.163  wideShare 0.155  fit 83.3  inj 0.245  h2Opp 0.661  myG 1.135  oppG 1.333
+    line+     poss 50.3  shots 11.028  wonHigh 5.959  crosses 10.932  offsides 4.647  breakC 0.413  wideShare 0.257  fit 83.7  inj 0.251  h2Opp 0.745  myG 1.203  oppG 1.512
+    line-     poss 46.5  shots 10.454  wonHigh 6.396  crosses 10.092  offsides 0.797  breakC 0.049  wideShare 0.259  fit 83.8  inj 0.241  h2Opp 0.675  myG 1.103  oppG 1.378
+    misread   poss 47.0  shots 10.552  wonHigh 5.950  crosses 6.283  offsides 1.719  breakC 0.161  wideShare 0.169  fit 83.5  inj 0.245  h2Opp 0.697  myG 1.108  oppG 1.399
+    press+    poss 51.6  shots 10.835  wonHigh 11.141  crosses 11.158  offsides 1.978  breakC 0.332  wideShare 0.258  fit 79.6  inj 0.316  h2Opp 0.790  myG 1.197  oppG 1.544
+    press-    poss 44.6  shots 10.388  wonHigh 3.332  crosses 9.686  offsides 2.010  breakC 0.229  wideShare 0.260  fit 85.5  inj 0.211  h2Opp 0.690  myG 1.081  oppG 1.395
+    tempo+    poss 42.5  shots 9.561  wonHigh 6.883  crosses 9.238  offsides 1.947  breakC 0.239  wideShare 0.268  fit 83.8  inj 0.244  h2Opp 0.703  myG 1.209  oppG 1.451
+    tempo-    poss 53.9  shots 11.757  wonHigh 5.561  crosses 11.748  offsides 2.005  breakC 0.237  wideShare 0.268  fit 83.6  inj 0.241  h2Opp 0.735  myG 1.106  oppG 1.466
+    width+    poss 47.9  shots 10.657  wonHigh 6.220  crosses 17.805  offsides 1.920  breakC 0.246  wideShare 0.412  fit 83.7  inj 0.248  h2Opp 0.723  myG 1.148  oppG 1.478
+    width-    poss 48.5  shots 10.637  wonHigh 6.155  crosses 5.354  offsides 2.021  breakC 0.225  wideShare 0.130  fit 83.7  inj 0.246  h2Opp 0.691  myG 1.148  oppG 1.404
+  ok [effects]: press+ wonHigh: ratio 1.757 (band 1.4 to Infinity)
+  ok [effects]: press+ fit: diff -4.131 (band -Infinity to -1)
+  ok [effects]: press- wonHigh: ratio 0.526 (band 0 to 0.7)
+  ok [effects]: press- fit: diff 1.801 (band 0.3 to Infinity)
+  ok [effects]: tempo+ poss: diff -5.862 (band -Infinity to -3)
+  ok [effects]: tempo+ shots: ratio 0.893 (band 0 to 0.93)
+  ok [effects]: tempo- poss: diff 5.577 (band 3 to Infinity)
+  ok [effects]: tempo- shots: ratio 1.098 (band 1.07 to Infinity)
+  ok [effects]: width+ crosses: ratio 1.683 (band 1.35 to Infinity)
+  ok [effects]: width+ wideShare: diff 0.163 (band 0.08 to Infinity)
+  ok [effects]: width- crosses: ratio 0.506 (band 0 to 0.7)
+  ok [effects]: width- wideShare: diff -0.119 (band -Infinity to -0.08)
+  ok [effects]: line+ offsides: ratio 2.311 (band 1.7 to Infinity)
+  ok [effects]: line+ breakC: ratio 1.811 (band 1.3 to Infinity)
+  ok [effects]: line- offsides: ratio 0.396 (band 0 to 0.6)
+  ok [effects]: line- breakC: ratio 0.216 (band 0 to 0.75)
+simCmTactics: all green (sections fleet)
