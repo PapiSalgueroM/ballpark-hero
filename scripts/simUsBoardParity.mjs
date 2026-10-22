@@ -340,6 +340,25 @@
  * twice and, against itself without the words, the same 55 plus one Family
  * box on the NFL path (step 354, the office card), a path the replay never
  * walks because it is the current Panel's (r1534-s3f). 2,298,731 bytes.
+ * Round 1538 (paid lines and the Skill card's ceiling) re-recorded it on
+ * purpose on 2026-10-22, by the same method, for the summer Skill answer's
+ * button alone: "Push the ceiling" now says "Rating +1 or +2, up to your
+ * ceiling" (critic 8 of the 1534 brief). Its branch head fbe4f4ed replays
+ * this recording red at exactly 5 steps (r1538-s3; the head before the
+ * Skill change, f5cc075a, replayed it green, r1538-s2). Recorded on a runner
+ * from b53b1f9c with the proved historical Panel aliased in (r1538-rec, extra
+ * file recHist.mjs), three times: with the round's three parts put back (the
+ * brand answers, the ten corruption answers and the Skill answers:
+ * rech-no1538) and with the Skill answers alone put back (rech-noskill) the
+ * recording equals the Round 1534 fixture byte for byte, header aside, in all
+ * four sports; as shipped (rech-head) exactly 5 steps differ: the NBA path's
+ * press of the Skill grind (step n 9, its action string, which carries the
+ * button) and the screen before it (its markup), the NHL fixed save
+ * "extTalk"'s press of the Skills coach (step n 4, the action string) and the
+ * screen before it, and the NFL fixed save "dirty"'s screen after "curtain:
+ * Continue" (its markup: the training card on screen). No save, text excerpt,
+ * length, coverage count or other step moved; no brand or corruption answer
+ * is pressed here. 2,298,769 bytes.
  *
  * Controls, one per run (each is a full replay, about three minutes):
  *   US_BOARD_PARITY_CONTROL=label    one label changed in a copy of the shared
