@@ -123,8 +123,10 @@ jobs:
           node --input-type=module <<'NODE'
           import fs from 'node:fs'; import assert from 'node:assert/strict'; import { execFileSync } from 'node:child_process'; import { createHash } from 'node:crypto';
           const allowed=new Set(['src/lib/wonderkidFactory.ts','src/hooks/useWonderkidFactory.ts','src/pages/StadiumTycoon.tsx','scripts/simTycoonMoneyDisplay.mjs','.github/workflows/tycoon-money-display.yml','docs/PROJECT-STATE.md']);
-          const changed=execFileSync('git',['diff','--name-only','8fe82a4dc1346f7d5b8072f387f3acb34bbaa3c8','HEAD'],{encoding:'utf8'}).trim().split('\n').filter(Boolean);
-          assert(changed.length>0); assert(changed.every(file=>allowed.has(file)),JSON.stringify(changed));
+          const ref=process.env.GITHUB_HEAD_REF||process.env.GITHUB_REF_NAME||'';
+          if(ref==='codex/tycoon-money-display-1092'){const changed=execFileSync('git',['diff','--name-only','8fe82a4dc1346f7d5b8072f387f3acb34bbaa3c8','HEAD'],{encoding:'utf8'}).trim().split('\n').filter(Boolean);
+          assert(changed.length>0); assert(changed.every(file=>allowed.has(file)),JSON.stringify(changed));}
+          else console.log('PR scope check skipped: it proves the diff of codex/tycoon-money-display-1092 from its base, and this run is '+ref+'.');
           const before=JSON.parse(fs.readFileSync('tycoon-money-display-artifacts/installed-before.json'));
           const after=before.map(row=>{const raw=fs.readFileSync(row.path+'/package.json');return{path:row.path,version:JSON.parse(raw).version,sha256:createHash('sha256').update(raw).digest('hex')};});
           fs.writeFileSync('tycoon-money-display-artifacts/installed-after.json',JSON.stringify(after,null,2)); assert.deepEqual(after,before);
