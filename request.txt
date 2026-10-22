@@ -1,0 +1,2 @@
+#!serial
+pin-revert3: git checkout 6d2d7a7d -- src/lib/clubManager.ts src/lib/clubManagerBoardAsks.ts src/lib/clubManagerEras.ts && sha256sum src/lib/clubManager.ts && node scripts/simManagerAppealIsolation.mjs; s=$?; git checkout HEAD -- src; exit $s
