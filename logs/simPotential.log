@@ -1,0 +1,11 @@
+1) Starting overall distribution (100k rolls)
+   mean=54.51 min=47 max=67 P(>=63)=7.04% P(>=66)=1.47% P(<=55)=63.5%
+2) Potential distribution (100k rolls)
+   mean=79.24 range=[70,97] P(>=93)=2.65% P(>=89)=9.28% P(>=84)=24.37%
+3) 40 full careers: overall plateaus at potential
+   worst overshoot=+0 careers reaching ceiling=19/40 crashes=0
+4) Legacy save without potential field
+   legacy career ran 29 seasons, peak 89, retired=true
+5) Ceiling floors and caps (his 99 overall, 89 ceiling screenshot)
+
+ALL POTENTIAL CHECKS PASSED

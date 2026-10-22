@@ -1,0 +1,154 @@
+✘ [ERROR] Release BB: src/lib/mlbMyCareer.ts is no longer as Round 1313 closed it (642292de); decide its inverse again in scripts/lib/usRival1313Inverse.mjs
++ actual - expected
+... Skipped lines
+
+  "import type { CareerDraftEntry, PreDraftState } from './careerPreDraft';\n" +
+    '/**\n' +
+    ' * MLB My Career engine (2026-08-05). Baseball sibling of nflMyCareer.ts:\n' +
+    ' * a fictional prospect living a whole career inside the real 30-team\n' +
+    ' * league, hitter or pitcher. Season lines (AVG/HR/RBI or W-L/ERA/K)\n' +
+...
+    "import { hallCalibrationOf, legacyRead, type HallCalibration, type LegacyRead, type LegacyWeights } from './careerHallOfFame';\n" +
++   "import { moraleForm } from './careerForm';\n" +
+    '/* Round 422: the share of gross pay that actually reaches the bank, after tax,\n' +
+    '   agent and living. It was already the number this file used to turn career\n' +
+    '   earnings into net worth; it is named here so the yearly banking and the\n' +
+    '   old save rebuild (src/lib/usCareerBank.ts keeps the same 0.45) cannot drift apart from it. */\n' +
+    'const TAKE_HOME = 0.45;\n' +
+...
+    '  ovr: number;\n' +
++   '  gam'... 70918 more characters
+-   '  games: number;\n' +
+-   '  /** Round 1226: the games his'... 70868 more characters
+ [plugin held-source]
+
+    src/lib/mlbCareerSport.ts:18:7:
+      18 │ } from '@/lib/mlbMyCareer';
+         ╵        ~~~~~~~~~~~~~~~~~~~
+
+  This error came from the "onLoad" callback registered here:
+
+    node_modules/esbuild/lib/main.js:1150:20:
+      1150 │       let promise = setup({
+           ╵                     ^
+
+    at setup (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/careerPressMarketKit.mjs:32:522)
+    at handlePlugins (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1150:21)
+    at buildOrContextImpl (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:873:5)
+    at Object.buildOrContext (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:699:5)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:2023:15
+    at new Promise (<anonymous>)
+    at Object.build (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:2022:25)
+    at build (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1873:51)
+    at bundlePressMarket (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/careerPressMarketKit.mjs:32:26)
+
+✘ [ERROR] Release BB: src/lib/nhlMyCareer.ts is no longer as Round 1313 closed it (642292de); decide its inverse again in scripts/lib/usRival1313Inverse.mjs
++ actual - expected
+... Skipped lines
+
+  "import type { CareerDraftEntry, PreDraftState } from './careerPreDraft';\n" +
+    "import { formatNumber } from './formatNumber';\n" +
+    '/**\n' +
+    ' * NHL My Career engine (2026-08-05). Hockey sibling of nflMyCareer.ts:\n' +
+    ' * a fictional prospect living a whole career inside the real 32-team\n' +
+...
+    "import { hallCalibrationOf, legacyRead, type HallCalibration, type LegacyRead, type LegacyWeights } from './careerHallOfFame';\n" +
++   "import { moraleForm } from './careerForm';\n" +
+    '/* Round 422: the share of gross pay that actually reaches the bank, after tax,\n' +
+    '   agent and living. It was already the number this file used to turn career\n' +
+    '   earnings into net worth; it is named here so the yearly banking and the\n' +
+    '   old save rebuild (src/lib/usCareerBank.ts keeps the same 0.45) cannot drift apart from it. */\n' +
+    'const TAKE_HOME = 0.45;\n' +
+...
+    '      already are: an empty inbox and a karma of 50 read the same as a save\n' +
++   '      that has neve'... 65180 more characters
+-   '      that has never opened the app. */\n' +
+-   '  phoneInbox?: InboxMe'... 65130 more characters
+ [plugin held-source]
+
+    src/lib/nhlCareerSport.ts:18:7:
+      18 │ } from '@/lib/nhlMyCareer';
+         ╵        ~~~~~~~~~~~~~~~~~~~
+
+  This error came from the "onLoad" callback registered here:
+
+    node_modules/esbuild/lib/main.js:1150:20:
+      1150 │       let promise = setup({
+           ╵                     ^
+
+    at setup (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/careerPressMarketKit.mjs:32:522)
+    at handlePlugins (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1150:21)
+    at buildOrContextImpl (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:873:5)
+    at Object.buildOrContext (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:699:5)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:2023:15
+    at new Promise (<anonymous>)
+    at Object.build (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:2022:25)
+    at build (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1873:51)
+    at bundlePressMarket (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/careerPressMarketKit.mjs:32:26)
+
+/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 2 errors:
+src/lib/mlbCareerSport.ts:18:7: ERROR: [plugin: held-source] Release BB: src/lib/mlbMyCareer.ts is no longer as Round 1313 closed it (642292de); decide its inverse again in scripts/lib/usRival1313Inverse.mjs
++ actual - expected
+... Skipped lines
+
+  "import type { CareerDraftEntry, PreDraftState } from './careerPreDraft';\n" +
+    '/**\n' +
+    ' * MLB My Career engine (2026-08-05). Baseball sibling of nflMyCareer.ts:\n' +
+    ' * a fictional prospect living a whole career inside the real 30-team\n' +
+    ' * league, hitter or pitcher. Season lines (AVG/HR/RBI or W-L/ERA/K)\n' +
+...
+    "import { hallCalibrationOf, legacyRead, type HallCalibration, type LegacyRead, type LegacyWeights } from './careerHallOfFame';\n" +
++   "import { moraleForm } from './careerForm';\n" +
+    '/* Round 422: the share of gross pay that actually reaches the bank, after tax,\n' +
+    '   agent and living. It was already the number this file used to turn career\n' +
+    '   earnings into net worth; it is named here so the yearly banking and the\n' +
+    '   old save rebuild (src/lib/usCareerBank.ts keeps the same 0.45) cannot drift apart from it. */\n' +
+    'const TAKE_HOME = 0.45;\n' +
+...
+    '  ovr: number;\n' +
++   '  gam'... 70918 more characters
+-   '  games: number;\n' +
+-   '  /** Round 1226: the games his'... 70868 more characters
+
+src/lib/nhlCareerSport.ts:18:7: ERROR: [plugin: held-source] Release BB: src/lib/nhlMyCareer.ts is no longer as Round 1313 closed it (642292de); decide its inverse again in scripts/lib/usRival1313Inverse.mjs
++ actual - expected
+... Skipped lines
+
+  "import type { CareerDraftEntry, PreDraftState } from './careerPreDraft';\n" +
+    "import { formatNumber } from './formatNumber';\n" +
+    '/**\n' +
+    ' * NHL My Career engine (2026-08-05). Hockey sibling of nflMyCareer.ts:\n' +
+    ' * a fictional prospect living a whole career inside the real 32-team\n' +
+...
+    "import { hallCalibrationOf, legacyRead, type HallCalibration, type LegacyRead, type LegacyWeights } from './careerHallOfFame';\n" +
++   "import { moraleForm } from './careerForm';\n" +
+    '/* Round 422: the share of gross pay that actually reaches the bank, after tax,\n' +
+    '   agent and living. It was already the number this file used to turn career\n' +
+    '   earnings into net worth; it is named here so the yearly banking and the\n' +
+    '   old save rebuild (src/lib/usCareerBank.ts keeps the same 0.45) cannot drift apart from it. */\n' +
+    'const TAKE_HOME = 0.45;\n' +
+...
+    '      already are: an empty inbox and a karma of 50 read the same as a save\n' +
++   '      that has neve'... 65180 more characters
+-   '      that has never opened the app. */\n' +
+-   '  phoneInbox?: InboxMe'... 65130 more characters
+
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at runOnEndCallbacks (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1315:45)
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0
