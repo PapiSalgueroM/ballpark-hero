@@ -88,7 +88,33 @@ jobs:
           export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
           export SIM_OFFLINE_RECEIPT="$PWD/$OUT/idle-timers.transport";: > "$SIM_OFFLINE_RECEIPT"
           node scripts/simIdleTimers.mjs > "$OUT/idle-timers.log" 2>&1
-          IDLE_TIMERS_CONTROL=all node scripts/simIdleTimers.mjs > "$OUT/idle-timers-controls.log" 2>&1
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import{createHash}from'node:crypto';
+          const hash=b=>createHash('sha256').update(b).digest('hex'),source=fs.readFileSync('scripts/simIdleTimers.mjs');
+          assert.equal(source.length,7554);assert.equal(hash(source),'7a8e6f47cb47b5cb34d174fcf4b93f6678a881552ff73ad81bdf9539be8b6864');
+          const transformations=[{"before":"const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'idletimers-'));","after":"const tmp = fs.mkdtempSync(path.join(ROOT, process.env.OUT, 'idletimers-'));","occurrences":1},{"before":"  const text = (r.stdout || '') + (r.stderr || '');","after":"  const text = (r.stdout || '') + (r.stderr || '');\n  const capture = path.join(ROOT, process.env.OUT, 'idle-timers-control');\n  fs.writeFileSync(capture + '.child.log', text);\n  fs.writeFileSync(capture + '.child-process.json', JSON.stringify({status:r.status,signal:r.signal,error:r.error?String(r.error):null,reportExists:fs.existsSync(out)},null,2)+'\\n');\n  if (fs.existsSync(out)) fs.copyFileSync(out, capture + '.child-vitest.json');\n  if (env.OWNED_TIMEOUTS_HOOK) fs.copyFileSync(env.OWNED_TIMEOUTS_HOOK, capture + '.helper.ts');","occurrences":1}];
+          let copy=source.toString('utf8');for(const change of transformations){assert.equal(copy.split(change.before).length,2);copy=copy.replace(change.before,change.after);}
+          let inverse=copy;for(const change of transformations){assert.equal(inverse.split(change.after).length,2);inverse=inverse.replace(change.after,change.before);}assert(Buffer.from(inverse).equals(source));
+          assert.equal(hash(copy),'1d09893502ebc3d50f5cd916ad8c51151799ed83620868b9b008e2fdc8b352f4');assert.notEqual(hash(copy),hash(source));
+          const output=path.join(process.env.OUT,'simIdleTimers.resolution-copy.mjs');fs.writeFileSync(output,copy);assert.equal(path.dirname(path.dirname(path.resolve(output))),process.cwd());
+          fs.writeFileSync(process.env.OUT+'/idle-timers-copy-method.json',JSON.stringify({sourceBytes:source.length,sourceSha256:hash(source),copyBytes:Buffer.byteLength(copy),copySha256:hash(copy),transforms:transformations.length,wholeInverseExact:true,sourceHeld:fs.readFileSync('scripts/simIdleTimers.mjs').equals(source),conditionalCause:'External temporary importer dependency resolution, adoption requires actual prior raw child cause'},null,2)+'\n');
+          JS
+          status=0
+          IDLE_TIMERS_CONTROL=all node "$OUT/simIdleTimers.resolution-copy.mjs" > "$OUT/idle-timers-controls.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$OUT/idle-timers-controls.exit"
+          CONTROL_STATUS="$status" node --input-type=module <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import{createHash}from'node:crypto';
+          const base=process.env.OUT,read=f=>fs.readFileSync(base+'/'+f,'utf8'),hash=b=>createHash('sha256').update(b).digest('hex');
+          assert.equal(Number(process.env.CONTROL_STATUS),0);const child=JSON.parse(read('idle-timers-control.child-process.json'));assert.equal(child.status,1);assert.equal(child.signal,null);assert.equal(child.error,null);assert.equal(child.reportExists,true);
+          const report=JSON.parse(read('idle-timers-control.child-vitest.json')),rows=report.testResults.flatMap(s=>s.assertionResults??[]);
+          assert.equal(report.success,false);assert.equal(report.numTotalTests,2);assert.equal(report.numPassedTests,0);assert.equal(report.numFailedTests,2);assert.equal(report.numPendingTests,0);assert.equal(report.numTodoTests,0);assert.equal(report.numRuntimeErrorTestSuites??0,0);assert.equal(report.numUnhandledErrors??0,0);assert.deepEqual(report.unhandledErrors??[],[]);assert.equal(report.testResults.length,1);assert.equal(rows.length,2);
+          const expected=[['Stadium Tycoon clears every floater timer when the page goes away','Stadium Tycoon'],['Idle Arena clears every floater timer when the page goes away','Idle Arena']];
+          for(const[title,game]of expected){const matches=rows.filter(row=>row.fullName==='idle game floaters '+title);assert.equal(matches.length,1);const row=matches[0];assert.equal(row.status,'failed');assert.equal(row.failureMessages.length,1);assert.match(row.failureMessages[0],/AssertionError/);const leak=row.failureMessages[0].match(/(?:^|\s)([1-9]\d*) (Stadium Tycoon|Idle Arena) floater timers kept running after the page unmounted/);assert(leak);assert.equal(leak[2],game);assert.doesNotMatch(row.failureMessages[0],/Cannot find|Failed to resolve|SyntaxError|ReferenceError|TypeError/);}
+          assert.doesNotMatch(read('idle-timers-control.child.log'),/Unhandled (?:Errors?|Rejection)|Vitest caught \d+ unhandled|Cannot find|Failed to resolve/);
+          const helper=fs.readFileSync('src/hooks/useOwnedTimeouts.ts','utf8').replaceAll('\r\n','\n'),broken=read('idle-timers-control.helper.ts'),clearing='      owned.forEach(clearTimeout);\n',removed='      /* control: never cleared */\n';assert.equal(helper.split(clearing).length,2);assert.equal(broken,helper.replace(clearing,removed));assert.notEqual(hash(broken),hash(helper));assert.equal(broken.split(removed).length,2);assert.equal(broken.replace(removed,clearing),helper);
+          const log=read('idle-timers-controls.log');assert(log.includes('CONTROL FIRED: both games red on a helper that never clears'));assert(log.includes('control rawtimer: flagged [src/hooks/useIdleArena.ts]; the same text in a comment flagged []'));assert(log.includes('CONTROL FIRED: the planted raw timer was flagged and the comment was not'));assert(log.includes('simIdleTimers controls: green. Each control turned its own check red and only that one.'));
+          fs.writeFileSync(base+'/idle-timers-controls-admission.json',JSON.stringify({complete:true,source:process.env.GITHUB_SHA,outerExit:Number(process.env.CONTROL_STATUS),childExit:child.status,ownedTimerFailures:rows.map(r=>r.fullName),normalOriginalHarnessHeld:true,helperSha256:hash(helper),mutatedHelperSha256:hash(broken),changedHelper:true,wholeHelperInverseExact:true,rawTimerFlaggedExactly:true,commentOnlyClean:true},null,2)+'\n');
+          JS
           test ! -s "$SIM_OFFLINE_RECEIPT"
       - name: Actual Profile boundary proof with exact original classification
         run: |
