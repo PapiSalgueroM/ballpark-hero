@@ -1,8 +1,8 @@
-name: Site privacy1446 public intake
+name: Site privacy1446 public readback
 on:
   workflow_dispatch:
   push:
-    branches: [codex/site-privacy1446-public-intake]
+    branches: [codex/site-privacy1446-public-readback]
 permissions:
   contents: read
   actions: read
@@ -11,28 +11,28 @@ concurrency:
   cancel-in-progress: false
 jobs:
   public_operator:
-    if: github.ref == 'refs/heads/codex/site-privacy1446-public-intake'
+    if: github.ref == 'refs/heads/codex/site-privacy1446-public-readback'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     defaults:
       run:
         shell: bash
     env:
-      OPERATOR_MODE: intake
+      OPERATOR_MODE: readback
       READBACK_OUT: siteprivacy1446-public-artifacts
       SOURCE_SHA: 4b4d99ebd64f50ffb45bca9d8f56fba6b7e4dcee
       QUALIFIED_BUILD_SHA: 0dc98659137ead9a6a237d64f1a279e5afee7976
       QUALIFICATION_WORKFLOW_SHA256: 8bc53a9567b49f18bf0e56d8930f01690ca70b12891840433abcde074cc2caf5
-      INPUT_RUN_ID: 39732838642
-      INPUT_OPERATOR_SHA: 0dc98659137ead9a6a237d64f1a279e5afee7976
-      INPUT_ARTIFACT_ID: 12406670154
-      INPUT_ZIP_SHA256: a903a5e5b559912d6cd5b632bc0540b9ad492d5f2d51cd6ac3bbc17f00d0be53
-      INPUT_WORKFLOW_NAME: Site privacy followup1446
+      INPUT_RUN_ID: 39746539497
+      INPUT_OPERATOR_SHA: b094e38ad374f32823d949ee816f820b79b42077
+      INPUT_ARTIFACT_ID: 12411338454
+      INPUT_ZIP_SHA256: 0374d5f8370c6244e36e0ce6e1d9fc3aa04243ddfc9b7e18a913b8959d94cfc5
+      INPUT_WORKFLOW_NAME: Site privacy1446 public intake
       EXPECTED_DEPLOYMENT: 16a8e658-6527-43a1-85ff-d5c3c7d896a4
       OBSERVED_ENTRY: /assets/index-CSqQNs4Q.js
-      ASSET_PINS_JSON: REQUIRED_OBSERVED_FOUR_ROLE_JSON_FOR_READBACK
-      ASSET_PINS_SHA256: REQUIRED_OBSERVED_FOUR_ROLE_JSON_64_HEX_FOR_READBACK
-      PUBLIC_REQUEST_LIMIT: 23
+      ASSET_PINS_JSON: '{"entry":{"path":"/assets/index-CSqQNs4Q.js","sha256":"e79de1239fbca8a6644198c1deeb7e7762f8106f13ca9c4ab33d36f2f43b5ca2"},"cookiePolicy":{"path":"/assets/CookiePolicy-Cn_v4MMa.js","sha256":"ad5a3d2bbf59a42c100e5c3e4a19141bbf955b39f8cdd35707263e77217a9355"},"privacy":{"path":"/assets/PrivacyPolicy-B8wEUBX4.js","sha256":"f6407ea15cb9d22919e02cc429e75913713181850d7457fb207990316b252496"},"profile":{"path":"/assets/Profile-k17Nxh5h.js","sha256":"9cea737b02f9b4cccf21189b77705f57be1c3b36a38d93ed9d4275f78ef40911"}}'
+      ASSET_PINS_SHA256: 5ebf1e216caa5e06181b8cc13c19516c43502ac746fff702fdbcdc5395a1248b
+      PUBLIC_REQUEST_LIMIT: 67
       OPERATOR_SHA256: 307f2c254d8ce17b37b814f235d5eed9216dc396c3acd6be30d2e57f59bebe48
     steps:
       - uses: actions/checkout@v4
@@ -636,7 +636,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: siteprivacy1446-public-intake-${{ github.run_id }}-${{ github.run_attempt }}
+          name: siteprivacy1446-public-readback-${{ github.run_id }}-${{ github.run_attempt }}
           path: siteprivacy1446-public-artifacts/
           if-no-files-found: error
           retention-days: 14
