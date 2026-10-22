@@ -1,0 +1,16 @@
+slate exit=0 12s | simCfbSlate: all green
+vitest exit=0 18s |    Duration  16.71s (transform 1.12s, setup 934ms, collect 4.99s, tests 30.72s, environment 5.89s, prepare 1.60s)
+c-window exit=1 8s | simCfbSlate: 1 failure(s)
+c-ndsix exit=1 9s | simCfbSlate: 1 failure(s)
+c-g5sort exit=1 6s | simCfbSlate: 2 failure(s)
+slate-big exit=0 31s | simCfbSlate: all green
+c-cbbzero exit=1 6s | simCfbSlate: 1 failure(s)
+c-source exit=1 7s | simCfbSlate: 1 failure(s)
+c-random exit=1 7s | simCfbSlate: 6 failure(s)
+board exit=0 5s | simCollegeDynastyBoard: all green
+rival exit=0 25s | No rival product names found. 0 findings.
+storage exit=0 4s | simStorageWrites: all green (owed: 12)
+guide exit=0 1s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+search exit=0 2s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+tsc exit=0 103s | 
+anchors exit=0 55s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
