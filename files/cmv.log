@@ -1,0 +1,39 @@
+playClubManager: seed 1542433760 (the walk's own, from its file name). Replay with PLAY_CM_SEED=1542433760
+1) Taking a job
+      pressed the 2026-27 era
+      pressed England
+      pressed Premier League
+      pressed a Premier League club
+      pressed the pinned confirm bar
+      pressed skip the dugout form, the classic career
+   in the job at Crystal Palace: Skip to main content DOUKNOWBALL Back Track stats Crystal Palace 2026-27 · Seaso
+   board confidence doctored from 69 to 100: the slot screen reads "Board 100/100"
+   back on the hub; the page has drawn 4 times since this load, before the first kick off
+2) Playing a season through the interface
+      step 0: Skip to main content DOUKNOWBALL Back Track stats Crystal Palace 2026-27 · Season 1 Season not start
+      pressed the match centre
+      pressed back out of the match centre
+      step 1: Skip to main content DOUKNOWBALL Back Track stats Crystal Palace 2026-27 · Season 1 Season not start
+      pressed the calendar tile
+      pressed back out of the calendar
+      step 2: Skip to main content DOUKNOWBALL Back Track stats Crystal Palace 2026-27 · Season 1 Season not start
+      pressed quick sim
+      step 3: Skip to main content DOUKNOWBALL Back Track stats FULL TIME PREMIER LEAGUE · ROUND 1 🏟️ Away day · 
+      pressed continue from the report
+      step 4: Skip to main content DOUKNOWBALL Back Track stats Crystal Palace 2026-27 · Season 1 #9 in league £76
+      pressed play it live
+      pressed 4x speed
+      pressed skip to the break
+      pressed second half inside the viewer
+  BROKEN   the live viewer never reached full time
+      step 5: Skip to main content DOUKNOWBALL Back Track stats MATCH LIVE PREMIER LEAGUE · ROUND 2 · HALF TIME 0 
+  STUCK    the live viewer offered neither a skip nor a way out
+   the page had drawn 2354 times since its last load when the walk ended (4 at the hub before the first kick off)
+   0 half times, 1 full times, 0 subs, 0 shape changes, 4 windows, 0 signings, 0 skips through the live viewer
+   ending: ran out of steps
+  SHALLOW  only reached 1 matches, so most of the season was never exercised
+  SHALLOW  only 1 matches were played, which is too few to have exercised much
+  BROKEN   never reached a single half time, so Round 119 is not covered by this run
+  SHALLOW  4 transfer window(s) opened and not one signing completed, so the market was not exercised either
+
+Played Club Manager through its own screens. 6 findings.
