@@ -6,7 +6,7 @@
   "nfl": {
    "Reggie Wayne": { "position": "WR", "lastSeason": "2014", "retired": "2016-01", "sources": [
     { "publisher": "RotoWire", "url": "https://www.rotowire.com/football/player.php?id=2221", "says": "2014 with the Colts was his last season; released by New England in September 2015 before a regular season snap; announced his retirement in January 2016" },
-    { "publisher": "Pro Football Rumors", "url": "https://www.profootballrumors.com/page/5862", "says": "Reggie Wayne to retire after 14 seasons" } ] },
+    { "publisher": "CBS Sports", "url": "https://www.cbssports.com/nfl/news/reggie-wayne-announces-retirement-after-14-years-in-nfl-its-just-time", "says": "dated Jan 15, 2016: announces his retirement after 14 seasons with the Colts; sat out the 2015 season after the Patriots cut him before it started" } ] },
    "Anquan Boldin": { "position": "WR", "lastSeason": "2016", "retired": "2017-08-20", "sources": [
     { "publisher": "Sports Illustrated", "url": "https://www.si.com/nfl/2017/08/20/anquan-boldin-retirement-buffalo-bills-announcement", "says": "retires after 14 seasons, days after signing with Buffalo" },
     { "publisher": "Pro Football Rumors", "url": "https://profootballrumors.com/2017/08/anquan-boldin-to-leave-bills-retire", "says": "leaves the Bills to retire; his 2016 Lions season was his 14th and last" } ] },
@@ -15,7 +15,7 @@
     { "publisher": "Washington Commanders", "url": "https://www.commanders.com/news/redskins-tight-end-vernon-davis-announces-retirement", "says": "announces his retirement after the 2019 season" } ] },
    "Calvin Johnson": { "position": "WR", "lastSeason": "2015", "retired": "2016-03-08", "sources": [
     { "publisher": "ABC7 (Associated Press)", "url": "https://abc7news.com/post/calvin-johnson-retires-i-have-played-my-last-game-of-football/1236307/", "says": "files his retirement papers after nine seasons with Detroit" },
-    { "publisher": "FOX 6", "url": "https://www.fox6now.com/sports/detroit-lions-star-wr-calvin-johnson-retires-after-9-seasons", "says": "Lions star WR Calvin Johnson retires after 9 seasons (2007 to 2015)" } ] },
+    { "publisher": "FOX 6", "url": "https://www.fox6now.com/sports/detroit-lions-star-wr-calvin-johnson-retires-after-9-seasons", "says": "dated Mar 8, 2016: Lions star WR Calvin Johnson retires after nine mostly spectacular seasons with Detroit" } ] },
    "Troy Polamalu": { "position": "S", "lastSeason": "2014", "retired": "2015-04-10", "sources": [
     { "publisher": "FOX Sports", "url": "https://www.foxsports.com/stories/nfl/steelers-great-troy-polamalu-retiring-after-12-seasons", "says": "retiring after 12 seasons with Pittsburgh (2003 to 2014)" },
     { "publisher": "ABC7 (Associated Press)", "url": "https://abc7news.com/post/steelers-troy-polamalu-is-retiring-its-all-about-family/646093/", "says": "announces his retirement in April 2015 after the 2014 season" } ] },
@@ -23,11 +23,12 @@
     { "publisher": "Las Vegas Raiders", "url": "https://raiders.com/news/highlights-from-charles-woodson-s-retirement-press-conference-16553230", "says": "retirement press conference; 2015 was his 18th and final season" },
     { "publisher": "ABC13 (Associated Press)", "url": "https://abc13.com/post/raiders-s-charles-woodson-says-hell-retire-after-season/1131460/", "says": "says he will retire after the 2015 season" } ] },
    "Tony Gonzalez": { "position": "TE", "lastSeason": "2013", "retired": "after the 2013 season", "sources": [
-    { "publisher": "Atlanta Falcons", "url": "https://www.atlantafalcons.com/news/former-falcons-great-tony-gonzalez-to-be-inducted-into-pro-football-hall-of-fame", "says": "last five seasons with Atlanta, retired after 2013; Hall of Fame class of 2019" },
-    { "publisher": "Pro Football Hall of Fame", "url": "https://profootballhof.com/blogs/2019/06/blogs-hall-of-fame-experiences-5-moments-that-defined-tony-gonzalezs-hall-of-fame-career", "says": "enshrined 2019; final season 2013 with the Falcons" } ] },
+    { "publisher": "Pro Football Hall of Fame", "url": "https://profootballhof.com/players/tony-gonzalez", "says": "Class of 2019; 17 seasons; Kansas City 1997 to 2008, Atlanta 2009 to 2013 (the career statistics table ends with Atlanta in 2013)" },
+    { "publisher": "theScore", "url": "https://www.thescore.com/news/669190", "says": "2013, Tony Gonzalez retires: after 17 seasons the Falcons tight end calls it a career, off a 4-12 Falcons season" },
+    { "publisher": "West Hawaii Today (Associated Press)", "url": "https://www.westhawaiitoday.com/2013/12/29/sports/falcons-tight-end-tony-gonzalez-taking-his-leave/", "says": "dated Dec 29, 2013, the day of the Falcons' finale: 37 years old, 17 seasons, said he would retire after 2013 and would not be on an opening day roster" } ] },
    "Darrelle Revis": { "position": "CB", "lastSeason": "2017", "retired": "2018-07-24", "sources": [
     { "publisher": "FOX 5 New York", "url": "https://www.fox5ny.com/news/darrelle-revis-signs-1-day-deal-with-jets-and-then-retires", "says": "signs a one day deal with the Jets and retires" },
-    { "publisher": "ESPN", "url": "https://africa.espn.com/nfl/story/_/id/24130233/former-pro-bowl-cornerback-darrelle-revis-announces-retirement", "says": "announces retirement; last played for Kansas City in 2017, released February 2018" } ] },
+    { "publisher": "ESPN", "url": "https://africa.espn.com/nfl/story/_/id/24130233/former-pro-bowl-cornerback-darrelle-revis-announces-retirement", "says": "dated Jul 18, 2018: announces his retirement; sat out most of last season until the Chiefs signed him on Nov. 23, played five games, released Feb. 8" } ] },
    "Luke Kuechly": { "position": "LB", "lastSeason": "2019", "retired": "2020-01-14", "sources": [
     { "publisher": "NFL.com", "url": "https://www.nfl.com/news/panthers-lb-luke-kuechly-retiring-after-eight-seasons-0ap3000001096753", "says": "retiring after eight seasons (2012 to 2019)" },
     { "publisher": "NBC News", "url": "https://nbcnews.com/news/sports/carolina-panthers-linebacker-luke-kuechly-28-says-it-s-right-n1115871", "says": "Panthers linebacker Luke Kuechly, 28, says it is the right time to retire" } ] },
