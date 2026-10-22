@@ -1580,13 +1580,17 @@ const R10_AIR = { lo: 0.18, hi: 0.245 } as const;
    under the least of the five): forward over back at least 2.14 times in every arm (defensive seed 1), all passes
    attacking over defensive 0.035 to 0.082, with a line ahead each step 0.105 to 0.157, resets per possession each
    step 0.050 to 0.110. */
-/* R11: the share of the foul lines of the span whistled on the grass, 0.508 to 0.533 per seed on a GitHub runner
-   (r1521-s6); the rest fall in minutes a chance, a kick off or another dead ball holds all through. */
-const R11_CUED = 0.45;
-/* The closing check of 2026-10-22 (provisional floors, set from the first runner measure below). */
-const R11_CHANCE_WAITS = 0;
-const R11_PREV_WAITS = 0;
-const R11_NAME_HELD = 0;
+/* R11: the share of the foul lines of the span whistled on the grass, per seed on a GitHub runner. It was 0.508 to 0.533
+   (r1521-s6); since the closing check of 2026-10-22 a chance waits inside its minute for the whistle of a foul of that
+   minute (or of the minute before, when its lead in would cover it) and two fouls in one minute are both whistled, and
+   it is 0.617 to 0.671 (r1521-f2m3: 0.650 0.668 0.671 0.645 0.617, 1,301 of 2,002). The floor sits about as far under
+   the least seed as it always did. The rest fall in minutes a chance, a kick off or another dead ball holds all through. */
+const R11_CUED = 0.56;
+/* The closing check of 2026-10-22, floors at about half of what r1521-f2m3 read: whistles a chance of the same minute
+   waited for 198, of the minute after 22; hook frames on the walk into a whistle with the name held back 4,314 of 11,693. */
+const R11_CHANCE_WAITS = 100;
+const R11_PREV_WAITS = 10;
+const R11_NAME_HELD = 2000;
 const R12_RATIO = 1.8;
 const R12_STEP = 0.02;
 const R12_AHEAD_STEP = 0.05;
