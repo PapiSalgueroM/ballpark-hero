@@ -1,0 +1,4 @@
+Negative control changed temporary source: bigpart
+[1101 bundle] the part alone: 36873 bytes minified, 18173 gzipped (ceiling 34623 and 14519); 7 files, 35 import specifiers read; problems 1
+  FAIL: the part is 36873 bytes minified and 18173 gzipped, over its ceiling of 34623 and 14519 (measured 28852 and 12099, plus a fifth)
+simLiveSimMotion: control bigpart made the part 36873 bytes and the bundle section went red on its size ceiling alone, as it must.
