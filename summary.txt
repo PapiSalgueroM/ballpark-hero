@@ -1,0 +1,1 @@
+quick exit=0 124s | simNbaDraftBoard: green.

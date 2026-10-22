@@ -1,0 +1,1 @@
+quick: SIM_NBA_DRAFT_BOARD_DEBUG=1 node scripts/simNbaDraftBoard.mjs
