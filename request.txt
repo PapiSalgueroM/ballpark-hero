@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+walk: node .rc/x/walkrun1555.mjs
+walk-mutC: mkdir -p $RC_OUT/mutc && node .rc/x/mut1555.mjs C && node_modules/.bin/vite build --outDir /tmp/mutc-dist > /tmp/mutc-build.log 2>&1; b=$?; git checkout -- src scripts; test $b = 0 || { tail -5 /tmp/mutc-build.log; exit 8; }; node scripts/lib/hostLikeServer.mjs /tmp/mutc-dist 4176 > /dev/null 2>&1 & P=$!; sleep 3; BASE=http://localhost:4176 RC_OUT=$RC_OUT/mutc node .rc/x/walkrun1555.mjs; s=$?; kill $P; echo "walk on mutation C build exit=$s"; exit $s

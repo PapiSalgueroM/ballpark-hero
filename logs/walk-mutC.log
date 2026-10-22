@@ -1,0 +1,55 @@
+MUTATION C APPLIED to src/hooks/useNbaLineup.ts: hook scores every five as Highest (swapped argument)
+   w390-rm-g1: Ghost refused (/can.t find a career line/)
+   w390-rm-g1: Twin refused (/More than one/)
+   w390-rm-g1: highest 3PM, teams Bulls/Nuggets/Rockets/Timberwolves/Warriors, expected score 19, Your five: 1886 3PM. The best five your teams allowed: 4305. The worst: 1312. grid ⬜⬜⬜⬜🟩
+   w390-rm-g2: Ghost refused (/can.t find a career line/)
+   w390-rm-g2: Twin refused (/More than one/)
+   w390-rm-g2: highest APG, teams Raptors/Magic/Bulls/Kings/Bucks, expected score 12, Your five: 18.5 APG. The best five your teams allowed: 47.5. The worst: 14.5. grid ⬜⬜⬜⬜🟩
+   w390-anim-g1: Ghost refused (/can.t find a career line/)
+   w390-anim-g1: Twin refused (/More than one/)
+   w390-anim-g1: lowest 3PM, teams Knicks/Lakers/Hornets/Nets/Pelicans, expected score 88, Your five: 1722 3PM. The best five your teams allowed: 1394. The worst: 4100. grid 🟩🟩🟩⬜⬜
+  FAIL: w390-anim-g1: stat line missing; page says "Your five: 1722 3PM. The best five your teams allowed: 4100. The worst: 1394."
+  FAIL: w390-anim-g1: score 88 not shown above the stat line
+  FAIL: w390-anim-g1: emoji grid 🟩🟩🟩⬜⬜ not on the page
+  FAIL: w390-anim-g1: PG best here 287 not on the page
+  FAIL: w390-anim-g1: SG best here 328 not on the page
+  FAIL: w390-anim-g1: SF best here 369 not on the page
+  FAIL: w390-anim-g1: PF best here 205 not on the page
+  FAIL: w390-anim-g1: C best here 246 not on the page
+   w390-anim-g2: Ghost refused (/can.t find a career line/)
+   w390-anim-g2: Twin refused (/More than one/)
+   w390-anim-g2: lowest 3PM, teams Hawks/Mavericks/Warriors/Suns/Heat, expected score 69, Your five: 1845 3PM. The best five your teams allowed: 943. The worst: 3854. grid 🟨🟩🟨⬜🟩
+  FAIL: w390-anim-g2: stat line missing; page says "Your five: 1845 3PM. The best five your teams allowed: 3854. The worst: 943."
+  FAIL: w390-anim-g2: score 69 not shown above the stat line
+  FAIL: w390-anim-g2: emoji grid 🟨🟩🟨⬜🟩 not on the page
+  FAIL: w390-anim-g2: SG best here 451 not on the page
+  FAIL: w390-anim-g2: SF best here 164 not on the page
+  FAIL: w390-anim-g2: C best here 164 not on the page
+   w1280-rm-g1: Ghost refused (/can.t find a career line/)
+   w1280-rm-g1: Twin refused (/More than one/)
+   w1280-rm-g1: highest 3PM, teams Spurs/Raptors/Hawks/Bucks/Heat, expected score 25, Your five: 1558 3PM. The best five your teams allowed: 3649. The worst: 861. grid ⬜⬜🟩🟨⬜
+   w1280-rm-g2: Ghost refused (/can.t find a career line/)
+   w1280-rm-g2: Twin refused (/More than one/)
+   w1280-rm-g2: lowest PPG, teams Lakers/Bucks/Nuggets/Spurs/Nets, expected score 64, Your five: 56 PPG. The best five your teams allowed: 31. The worst: 101. grid 🟨🟨🟩⬜⬜
+  FAIL: w1280-rm-g2: stat line missing; page says "Your five: 56 PPG. The best five your teams allowed: 101. The worst: 31."
+  FAIL: w1280-rm-g2: score 64 not shown above the stat line
+  FAIL: w1280-rm-g2: emoji grid 🟨🟨🟩⬜⬜ not on the page
+  FAIL: w1280-rm-g2: SG best here 3 not on the page
+  FAIL: w1280-rm-g2: SF best here 10 not on the page
+  FAIL: w1280-rm-g2: C best here 5 not on the page
+   w1280-anim-g1: Ghost refused (/can.t find a career line/)
+   w1280-anim-g1: Twin refused (/More than one/)
+   w1280-anim-g1: lowest 3PM, teams Hornets/Blazers/Clippers/Bulls/Pacers, expected score 66, Your five: 2378 3PM. The best five your teams allowed: 1435. The worst: 4182. grid 🟨🟩🟩⬜⬜
+  FAIL: w1280-anim-g1: stat line missing; page says "Your five: 2378 3PM. The best five your teams allowed: 4182. The worst: 1435."
+  FAIL: w1280-anim-g1: score 66 not shown above the stat line
+  FAIL: w1280-anim-g1: emoji grid 🟨🟩🟩⬜⬜ not on the page
+  FAIL: w1280-anim-g1: PG best here 410 not on the page
+  FAIL: w1280-anim-g1: SF best here 369 not on the page
+  FAIL: w1280-anim-g1: PF best here 287 not on the page
+  FAIL: w1280-anim-g1: C best here 287 not on the page
+   w1280-anim-g2: Ghost refused (/can.t find a career line/)
+   w1280-anim-g2: Twin refused (/More than one/)
+   w1280-anim-g2: highest GP, teams Rockets/Warriors/Nuggets/Cavaliers/Wizards, expected score 31, Your five: 2537 GP. The best five your teams allowed: 3319. The worst: 2180. grid ⬜⬜⬜⬜🟩
+   directions played: highest 4, lowest 4; 186 mocked reads
+walkrun1555: RED, 27 failure(s)
+walk on mutation C build exit=1
