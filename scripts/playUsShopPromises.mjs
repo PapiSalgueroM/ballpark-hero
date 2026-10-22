@@ -19,6 +19,10 @@
  * the four settle calls removed: (b) must turn red, exit 1 with "CONTROL nocall FIRED", else 3.
  * Control PLAY_SHOP_CONTROL=nobank (Round 1538) runs (c) alone against a build whose fee helper moves earnings only:
  * (c) must turn red on the Cash row, exit 1 with "CONTROL nobank FIRED", else 3.
+ * (c) also fails if scrollY moves across the outcome card's Continue (the no-scroll rule; review of 2026-10-22, read
+ * lens minor 7: it was measured and never checked). Control PLAY_SHOP_CONTROL=jump runs (c) alone on the plain dist
+ * and scrolls the page 300 px itself after Continue, the shape of a board that jumps: (c) must turn red on the
+ * scroll check alone, exit 1 with "CONTROL jump FIRED", else 3. It proves the check is read, not the board's cause.
  * Needs dist/ (a plain vite build is enough). Run: node scripts/playUsShopPromises.mjs
  */
 import fs from 'node:fs';
@@ -30,7 +34,7 @@ import { chromium } from './lib/playwrightLoader.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.PLAY_SHOP_CONTROL || '';
-if (CONTROL && CONTROL !== 'nocall' && CONTROL !== 'nobank') { console.log(`playUsShopPromises: could not run, unknown control ${CONTROL}`); process.exit(2); }
+if (CONTROL && CONTROL !== 'nocall' && CONTROL !== 'nobank' && CONTROL !== 'jump') { console.log(`playUsShopPromises: could not run, unknown control ${CONTROL}`); process.exit(2); }
 const DIST = process.env.PLAY_SHOP_DIST || 'dist';
 const OUT = path.resolve(process.env.RC_OUT || path.join(ROOT, '.tmp-fx/play-us-shop'));
 /* A control's pictures carry its name, so a control run after the walk in one request never overwrites the walk's. */
@@ -216,8 +220,13 @@ async function walkC(browser, size) {
     await check('outcome');
     await tap(page.locator('[data-decision-continue]'));
     await page.waitForTimeout(600);
+    /* Control jump: the walk scrolls the page itself here, the shape of a board that jumps on Continue. */
+    if (CONTROL === 'jump') await page.evaluate(() => window.scrollBy(0, 300));
     const m1 = await page.evaluate(() => ({ y: Math.round(scrollY), h: document.documentElement.scrollHeight }));
     notes.push(`c ${size.width}: scrollY ${m0.y} to ${m1.y}, document height ${m0.h} to ${m1.h} across the outcome card's Continue`);
+    /* The no-scroll rule (review of 2026-10-22, read lens minor 7): the page must not jump when the card closes. The
+       document grows (the News feed takes the answer's line) and that is fine; where the player is looking is not. */
+    if (m1.y !== m0.y) fail(walk, `${size.width}: the page jumped from scrollY ${m0.y} to ${m1.y} when the outcome card closed`, 'jump');
     await check('after-outcome');
   } catch (error) { fail(walk, `${size.width}: ${String(error.message || error).split('\n')[0]}`, 'crash'); } finally { await context.close(); }
 }
@@ -227,7 +236,7 @@ let walks = 0;
 try {
   for (const size of SIZES) {
     if (!CONTROL) { await walkA(browser, size); walks += 1; }
-    if (CONTROL !== 'nobank') { await walkB(browser, size); walks += 1; }
+    if (CONTROL !== 'nobank' && CONTROL !== 'jump') { await walkB(browser, size); walks += 1; }
     if (CONTROL !== 'nocall') { await walkC(browser, size); walks += 1; }
   }
 } finally {
@@ -237,9 +246,12 @@ try {
 for (const line of notes) console.log(`  ${line}`);
 console.log(`  screenshots: ${fs.readdirSync(OUT).filter(f => f.endsWith('.png')).length} in ${OUT}`);
 if (CONTROL) {
-  /* It fires only on the promise itself (no returns line, or Cash not moved by it), never on a crash or a timeout. */
-  const walked = CONTROL === 'nobank' ? 'c' : 'b';
-  const fired = red.has(walked) && why.has('promise') && !why.has('crash');
+  /* It fires only on the promise itself (no returns line, or Cash not moved by it), never on a crash or a timeout;
+     jump only on the scroll check, with every promise of (c) kept. */
+  const walked = CONTROL === 'nocall' ? 'b' : 'c';
+  const fired = CONTROL === 'jump'
+    ? red.has('c') && why.has('jump') && !why.has('promise') && !why.has('crash')
+    : red.has(walked) && why.has('promise') && !why.has('crash');
   console.log(fired ? `playUsShopPromises: CONTROL ${CONTROL} FIRED, (${walked}) red` : `playUsShopPromises: CONTROL ${CONTROL} DID NOT FIRE, (${walked}) stayed green`);
   process.exit(fired ? 1 : 3);
 }
