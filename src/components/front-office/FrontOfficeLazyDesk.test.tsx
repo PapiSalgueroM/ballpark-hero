@@ -10,7 +10,8 @@
  *   2  a career box opened asks for it: the box's header and the holding box, then the screen;
  *   3  the last week asks for it, its press buttons wait for it, and the one press then closes the season;
  *   4  a save that loads on the recap waits in a holding box, then draws the recap;
- *   5  a save that loads on the fired screen waits in a holding box, then draws the out of work screen.
+ *   5  a save that loads on the fired screen waits in a holding box, then draws the out of work screen;
+ *   6  a fetch that fails says so, and Try again asks again and draws the screen.
  */
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { render, screen, fireEvent, cleanup, waitFor, act } from '@testing-library/react';
@@ -159,5 +160,36 @@ describe('NFL front office: the GM career kit loads when it is needed', () => {
     expect(document.querySelector('[data-gm-out-of-work]')).toBeNull();
     await waitFor(() => expect(document.querySelector('[data-gm-out-of-work]')).toBeTruthy(), { timeout: 20000 });
     expect(document.querySelector('[data-gm-panel-loading]')).toBeNull();
+  });
+
+  it('a fetch that fails says so and asks again on Try again', async () => {
+    vi.resetModules();
+    let offline = true;
+    vi.doMock('@/components/front-office/nflCareerKit', async importOriginal => {
+      if (offline) throw new Error('offline');
+      return importOriginal();
+    });
+    try {
+      Math.random = lehmer(1550);
+      const E = await import('@/lib/frontOffice');
+      const { openNflDesk } = await import('@/lib/nflGmDesk');
+      const loader = await import('@/components/front-office/nflCareerKitLoad');
+      const { default: Board } = (await import('@/components/front-office/FrontOfficeBoard')) as { default: ComponentType };
+      const G = { E, openNflDesk, loader, Board } as Fresh;
+      const { save } = saveAt(G, 17, 'fired');
+      Object.assign(save, { seasonsPlayed: 1, fired: true, trust: 0 });
+      localStorage.setItem(SAVE_KEY, JSON.stringify(save));
+      render(<G.Board />);
+      await waitFor(() => expect(document.querySelector('[data-career-kit-failed]')).toBeTruthy(), { timeout: 20000 });
+      expect(screen.getByText("That screen didn't load. Check your connection and try again.")).toBeTruthy();
+      expect(G.loader.nflCareerKitState(), 'a failed fetch is forgotten, so the next ask tries again').toBe('idle');
+      offline = false;
+      vi.resetModules(); /* the module graph forgets the failed import; the board's loader keeps its own state */
+      fireEvent.click(screen.getByText('Try again'));
+      await waitFor(() => expect(document.querySelector('[data-gm-out-of-work]')).toBeTruthy(), { timeout: 20000 });
+      expect(document.querySelector('[data-career-kit-failed]')).toBeNull();
+    } finally {
+      vi.doUnmock('@/components/front-office/nflCareerKit');
+    }
   });
 });

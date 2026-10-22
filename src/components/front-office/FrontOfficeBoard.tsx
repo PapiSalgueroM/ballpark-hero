@@ -1967,6 +1967,8 @@ export default function FrontOfficeBoard() {
   return (
     <div className="space-y-4">
       <CelebrationStyles />
+      {/* Round 1550: the last week's buttons wait for the career kit; a fetch that failed says so here and asks again */}
+      {kitFailed && closeWaits && <CareerKitHolding failed onRetry={retryKit} minHeight={0} />}
       {/* status bar */}
       <div className="flex flex-wrap items-center justify-center gap-2 text-xs">
         <span className="rounded-full px-3 py-1 font-bold" style={{ background: t.color, color: '#fff' }}>{label(myTeam)}</span>
