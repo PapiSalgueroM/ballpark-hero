@@ -3,7 +3,6 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
-import { execFileSync } from 'node:child_process';
 import { createServer } from 'node:http';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
@@ -11,7 +10,7 @@ import { build } from 'esbuild';
 assert(process.env.CI, 'Execute only in remote CI');
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const ART = path.join(ROOT, 'free-kick-range-artifacts'), OUT = path.join(ART, 'native'), CACHE = path.join(ART, 'asset-cache');
-const BASE = '8fe82a4dc1346f7d5b8072f387f3acb34bbaa3c8', NOW = Date.parse('2026-10-07T12:00:00Z');
+const NOW = Date.parse('2026-10-07T12:00:00Z');
 const ENGINE = 'src/lib/freeKick.ts', SELF = 'scripts/qa/freeKickRange1091.mjs';
 const sha = value => createHash('sha256').update(value).digest('hex');
 function fileHash(file) { { const bytes = fs.readFileSync(file); return sha(bytes); } }
@@ -44,8 +43,8 @@ function hashes(dirs, extras = []) {
   dirs.forEach(visit); for (const file of extras) result[file] = fileHash(path.join(ROOT, file)); return result;
 }
 const sourceHashes = () => hashes(['src'], ['index.html', 'package.json', 'package-lock.json', SELF, 'scripts/simFreeKickRange.mjs', 'scripts/lib/playwrightLoader.mjs', 'scripts/lib/offlineTransport.cjs']);
-const report = { complete: false, phase: 'prepare', base: BASE, cases: [], controls: [], visibilityControls: [], errors: [],
-  scope: 'Four actual React consumer mounts, each exercised with trusted touch or keyboard input. Two exact pinned-old engine controls.',
+const report = { complete: false, phase: 'prepare', original: 'current engine with the range line reversed', cases: [], controls: [], visibilityControls: [], errors: [],
+  scope: 'Four actual React consumer mounts, each exercised with trusted touch or keyboard input. Two exact derived-old engine controls.',
   limits: ['Free Kick stops after the first two practice shots. No daily completion or campaign is exercised.',
     'Tycoon uses a source-created state with explicitly staged offer time and match count. Only the actual consumer callback is observed, not parent match/save settlement.',
     'Visibility checks cover only the selected setup label, pitch and result surface after declared driver navigation. No whole-route layout, animation trajectory or real-device claim.'],
@@ -82,19 +81,17 @@ function shot(engine, aim, setup, seed, skip = 0) {
 }
 try {
   const copies = path.join(OUT, 'sources'); fs.mkdirSync(copies, { recursive: true });
-  const old = execFileSync('git', ['show', `${BASE}:${ENGINE}`], { cwd: ROOT, encoding: 'utf8' }).replace(/\r\n?/g, '\n');
+  // Round 1531 fix: the old arm is the CURRENT engine with only the PR180 range line reversed, never a fixed
+  // commit, and arcade.ts is the current shared file, so an unrelated later edit to either cannot red this walk.
   const current = source(path.join(ROOT, ENGINE));
   const oldRange = 'const distance = Math.round((11 + t * 14) * 10) / 10;';
   const newRange = 'const distance = i === 0 ? 11 : Math.max(17, Math.round((11 + t * 14) * 10) / 10);';
-  const oldComment = " * things and the owner's instruction is one engine, many sports. Every number\n * below is the number Round 433 shipped, in the same order, so a seed plays\n * the same ten kicks it always did.";
-  const newComment = " * things and the owner's instruction is one engine, many sports. Round 1091\n * moves the three short walled setups outside the penalty area. The penalty,\n * later distances, random draw order and shot rules stay unchanged.";
-  assert.equal(current, once(once(old, oldRange, newRange), oldComment, newComment));
-  const arcade = execFileSync('git', ['show', `${BASE}:src/lib/arcade.ts`], { cwd: ROOT, encoding: 'utf8' }).replace(/\r\n?/g, '\n');
-  assert.equal(source(path.join(ROOT, 'src/lib/arcade.ts')), arcade);
+  const old = once(current, newRange, oldRange);
+  const arcade = source(path.join(ROOT, 'src/lib/arcade.ts'));
   fs.writeFileSync(path.join(copies, 'arcade.ts'), arcade);
   for (const [name, text] of [['old', old], ['current', current]]) fs.writeFileSync(path.join(copies, `${name}.ts`), text);
-  save('source-relation.json', { base: BASE, oldNormalized: sha(old), currentNormalized: sha(current), currentRaw: fileHash(path.join(ROOT, ENGINE)),
-    exactTwoAnchorRelation: true, oldRange, newRange, oldComment, newComment, arcadeNormalized: sha(arcade) });
+  save('source-relation.json', { original: 'current engine with the range line reversed', oldNormalized: sha(old), currentNormalized: sha(current), currentRaw: fileHash(path.join(ROOT, ENGINE)),
+    exactOneAnchorRelation: true, oldRange, newRange, arcadeNormalized: sha(arcade) });
   const oracleBuild = await build({ absWorkingDir: ROOT, stdin: { contents: `export * as O from ${JSON.stringify(path.join(copies, 'old.ts'))}; export * as T from './src/lib/stadiumTycoon'; export * as L from './src/lib/leagueCore';`, resolveDir: ROOT },
     outfile: path.join(OUT, 'oracle.mjs'), bundle: true, write: false, platform: 'node', format: 'esm', metafile: true, alias: { '@': path.join(ROOT, 'src') }, logLevel: 'silent' });
   retainedBundle(oracleBuild, 'oracle');

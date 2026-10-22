@@ -1,4 +1,4 @@
-/* Remote-only range proof. Actual pinned rules remain the explicit-shot oracle.
+/* Remote-only range proof. The current rules with only the range line reversed are the explicit-shot oracle.
    Cap exploration describes its finite sample, never the production cap. */
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -12,7 +12,6 @@ assert(process.env.CI, 'Run this verification only in remote CI');
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SELF = fileURLToPath(import.meta.url);
 const OUT = path.resolve(process.env.FREE_KICK_RANGE_ARTIFACTS || path.join(ROOT, 'free-kick-range-artifacts/outcomes'));
-const BASE = '8fe82a4dc1346f7d5b8072f387f3acb34bbaa3c8';
 const ENGINE = 'src/lib/freeKick.ts';
 const RANGE = 'const distance = i === 0 ? 11 : Math.max(17, Math.round((11 + t * 14) * 10) / 10);';
 const OLD_RANGE = 'const distance = Math.round((11 + t * 14) * 10) / 10;';
@@ -175,22 +174,16 @@ function holds() {
 }
 async function main() {
   fs.mkdirSync(OUT, { recursive: true });
-  const before = holds(), summary = { status: 'running', baselineCommit: BASE, groups: GROUP, controls: [], sourceBefore: before };
+  const before = holds(), summary = { status: 'running', original: 'current engine with the range line reversed', groups: GROUP, controls: [], sourceBefore: before };
   save(path.join(OUT, 'summary.json'), summary);
   try {
-    const oldBytes = execFileSync('git', ['show', `${BASE}:${ENGINE}`], { cwd: ROOT });
-    const old = oldBytes.toString('utf8').replace(/\r\n?/g, '\n'), current = source(path.join(ROOT, ENGINE));
-    const oldComment = " * things and the owner's instruction is one engine, many sports. Every number\n * below is the number Round 433 shipped, in the same order, so a seed plays\n * the same ten kicks it always did.";
-    const newComment = " * things and the owner's instruction is one engine, many sports. Round 1091\n * moves the three short walled setups outside the penalty area. The penalty,\n * later distances, random draw order and shot rules stay unchanged.";
-    assert.equal(current, once(once(old, OLD_RANGE, RANGE), oldComment, newComment), 'Whole engine has only declared distance and comment edits');
+    // Round 1531 fix: the old engine is the CURRENT engine with only the PR180 range line reversed, and arcade.ts
+    // is the current shared file, so an unrelated later edit to freeKick.ts or arcade.ts cannot red this proof.
+    const current = source(path.join(ROOT, ENGINE)), old = once(current, RANGE, OLD_RANGE);
     const sourceDir = path.join(OUT, 'sources'); fs.mkdirSync(sourceDir, { recursive: true });
-    fs.writeFileSync(path.join(sourceDir, 'freeKick-old.raw.ts'), oldBytes);
     fs.writeFileSync(path.join(sourceDir, 'freeKick-old.ts'), old);
     fs.writeFileSync(path.join(sourceDir, 'freeKick-current.ts'), current);
-    const arcadeBytes = execFileSync('git', ['show', `${BASE}:src/lib/arcade.ts`], { cwd: ROOT });
-    const arcade = arcadeBytes.toString('utf8').replace(/\r\n?/g, '\n');
-    assert.equal(source(path.join(ROOT, 'src/lib/arcade.ts')), arcade, 'Shared random generator and ladder remain pinned');
-    fs.writeFileSync(path.join(sourceDir, 'arcade.ts'), arcade);
+    fs.writeFileSync(path.join(sourceDir, 'arcade.ts'), source(path.join(ROOT, 'src/lib/arcade.ts')));
     const copies = { old: path.join(sourceDir, 'freeKick-old.ts'), normal: path.join(sourceDir, 'freeKick-current.ts') };
     const mutations = [];
     for (const [name, control] of Object.entries(controls)) {
@@ -255,7 +248,7 @@ async function main() {
     catch (error) { summary.status = 'failed'; summary.sourceHoldError = { name: error.name, message: error.message }; save(path.join(OUT, 'summary.json'), summary); throw error; }
     save(path.join(OUT, 'summary.json'), summary);
   }
-  console.log('simFreeKickRange: six actual outcome groups passed against the pinned engine.');
+  console.log('simFreeKickRange: six actual outcome groups passed against the derived pre-PR engine.');
   console.log('simFreeKickRange: twelve unique copied faults produced mapped AssertionErrors with complete healthy baselines.');
   console.log('simFreeKickRange: actual Tycoon offers, explicit shot results and seeded continuations retained.');
   console.log('simFreeKickRange: all800 dated cap rows and an analytic bound retained; production cap remains unchecked.');

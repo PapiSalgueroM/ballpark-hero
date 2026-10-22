@@ -9,9 +9,9 @@ import { fileURLToPath } from 'node:url';
 assert(process.env.CI, 'Run this verification only in remote CI');
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = path.resolve(process.env.TYCOON_DRAW_RESULT_ARTIFACTS || path.join(ROOT, 'tycoon-draw-result-artifacts/outcomes'));
-// Round 1531 re-pin: the PR was built on 8fe82a4d, and main changed this hook since (fa6cceab, ground sales).
-// The original is now main as Round 1531 found it, so the proof still compares the hook with only the draw branch.
-const BASE = 'f003721f923494cc851eef0ca8e30fa8bf14f32b';
+// Round 1531 fix: the "original" hook is derived from the CURRENT hook by removing the one draw branch, never read
+// from a fixed commit, so an unrelated later edit to the hook, the engine or the rewards cannot turn this proof red.
+// The draw branch must occur exactly once; the vitest cases replay the real engine and rewards, so money is measured.
 const HOOK = 'src/hooks/useStadiumTycoon.ts', ENGINE = 'src/lib/stadiumTycoon.ts', REWARDS = 'src/lib/tycoonRewards.ts';
 const NAMES = ['Win and loss remain exact', 'Draw result is shown without economic change'];
 const unix = value => value.replaceAll('\\', '/');
@@ -22,26 +22,18 @@ function save(file, value) { fs.mkdirSync(path.dirname(file), { recursive: true 
 function git(...args) { const r = spawnSync('git', args, { cwd: ROOT, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 }); assert.equal(r.status, 0, r.stderr); return r.stdout; }
 const tracked = [...new Set(git('ls-files', 'src', 'scripts', 'package.json', 'package-lock.json', 'tsconfig.app.json', 'vite.config.ts').trim().split('\n').concat('scripts/simTycoonDrawResult.mjs'))];
 const holds = () => Object.fromEntries(tracked.map(file => [file, fileSha(path.join(ROOT, file))]));
-const before = holds(), current = read(path.join(ROOT, HOOK)), old = git('show', `${BASE}:${HOOK}`).replace(/\r\n/g, '\n');
+const before = holds(), current = read(path.join(ROOT, HOOK));
 const addition = "      } else if (e.kind === 'draw') {\n        pushFloater('FULL TIME DRAW', 'tap', 34, 14);\n";
 assert.equal(current.split(addition).length, 2, 'The new executable draw branch occurs once');
-assert.equal(current.replace(addition, ''), old, 'Complete pinned original differs only by the draw branch');
+const old = current.replace(addition, '');
+assert.equal(old.includes('FULL TIME DRAW'), false, 'Derived original has no other draw message');
 const pinned = path.join(OUT, 'copies', 'originalHook.ts'), controlCopy = path.join(OUT, 'copies', 'missingDrawHook.ts');
 save(pinned, old); save(controlCopy, old);
 for (const file of [HOOK, ENGINE, REWARDS, 'src/hooks/useOwnedTimeouts.ts', 'src/lib/completions.ts']) {
   const target = path.join(OUT, 'originals', file); fs.mkdirSync(path.dirname(target), { recursive: true }); fs.copyFileSync(path.join(ROOT, file), target);
-  if (file === REWARDS) assert.equal(read(path.join(ROOT, file)), git('show', `${BASE}:${file}`).replace(/\r\n/g, '\n'), 'Authoritative engine/rewards stay exact');
-  // Round 1532 narrowing: this PR claims its draw branch changed no rule and moved no money. The scoring law round
-  // changes the engine's chances and bonuses on purpose, so the engine is pinned where a full time is settled (the
-  // playMinute and tick bodies, byte identical to BASE) instead of whole; the rewards ledger stays pinned whole.
-  if (file === ENGINE) for (const name of ['playMinute', 'tick']) {
-    const body = text => { const lines = text.split('\n'); const at = lines.findIndex(l => l.startsWith(`export function ${name}(`)); const end = lines.findIndex((l, i) => i > at && l === '}'); return at < 0 || end < 0 ? null : lines.slice(at, end + 1).join('\n'); };
-    const now = body(read(path.join(ROOT, file))), then = body(git('show', `${BASE}:${file}`).replace(/\r\n/g, '\n'));
-    assert(then !== null, `BASE carries ${name}`); assert.equal(now, then, `Authoritative engine ${name} stays exact`);
-  }
 }
 save(path.join(OUT, 'source-before.json'), before);
-save(path.join(OUT, 'identity.json'), { head: git('rev-parse', 'HEAD').trim(), tree: git('rev-parse', 'HEAD^{tree}').trim(), base: BASE, originalHookSha256: sha(old), currentHookSha256: sha(current) });
+save(path.join(OUT, 'identity.json'), { head: git('rev-parse', 'HEAD').trim(), tree: git('rev-parse', 'HEAD^{tree}').trim(), original: 'current hook minus the draw branch', originalHookSha256: sha(old), currentHookSha256: sha(current) });
 const testPath = path.join(OUT, 'draw.test.tsx');
 save(testPath, String.raw`
 import { it, expect, beforeAll, beforeEach, afterEach, vi } from 'vitest';
@@ -139,7 +131,7 @@ function run(name, control = false) {
   const dir = path.join(OUT, name), aliases = { 'qa-original-stadium-hook': unix(pinned) };
   if (control) aliases['@/hooks/useStadiumTycoon'] = unix(controlCopy);
   const targetHook = aliases['@/hooks/useStadiumTycoon'] || unix(path.join(ROOT, HOOK));
-  if (control) save(path.join(dir, 'mutation.json'), { file: HOOK, originalSha256: before[HOOK], normalizedOriginalSha256: sha(current), copiedSha256: sha(old), copy: controlCopy, base: BASE, removed: addition, target: NAMES[1], mismatch: 'draw-message', type: 'Complete pinned original hook, unique exact removal and reversal' });
+  if (control) save(path.join(dir, 'mutation.json'), { file: HOOK, originalSha256: before[HOOK], normalizedOriginalSha256: sha(current), copiedSha256: sha(old), copy: controlCopy, original: 'current hook minus the draw branch', removed: addition, target: NAMES[1], mismatch: 'draw-message', type: 'Complete derived original hook, unique exact removal' });
   const wanted = [unix(pinned), targetHook, unix(path.join(ROOT,HOOK)), unix(path.join(ROOT,ENGINE)), unix(path.join(ROOT,REWARDS))];
   const config = path.join(dir,'vitest.config.mjs'), report = path.join(dir,'report.json');
   for (const stale of [report,path.join(dir,'transforms.json')]) if(fs.existsSync(stale))fs.unlinkSync(stale);

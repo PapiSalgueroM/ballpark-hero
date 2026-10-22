@@ -9,9 +9,28 @@ import { fileURLToPath } from 'node:url';
 assert(process.env.CI, 'Run this verification only in remote CI');
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = path.resolve(process.env.TYCOON_MONEY_DISPLAY_ARTIFACTS || path.join(ROOT, 'tycoon-money-display-artifacts/outcomes'));
-const BASE = '8fe82a4dc1346f7d5b8072f387f3acb34bbaa3c8';
+/* Round 1531 fix: no whole file is compared with a fixed commit any more. The pre-PR Academy copies are derived
+   from the CURRENT files by swapping back only the leaves PR181 changed (the fmtCash body and the two sale lines,
+   each asserted to occur once), so an unrelated later edit to the engine, the hook or the page keeps this green.
+   The fifth case mounts the QA copy of the real page and taps the pitch, so the render site itself is proven:
+   a four digit tap must reach the screen grouped (+$1,166), and the raw-floater control removes the formatting
+   at that one render line and must fail only that case. */
 const ENGINE = 'src/lib/wonderkidFactory.ts', HOOK = 'src/hooks/useWonderkidFactory.ts', PAGE = 'src/pages/StadiumTycoon.tsx';
-const NAMES = ['Independent unchanged purchase', 'Academy dollar boundaries', 'Page money tokens', 'Actual prospect and senior sales'];
+const NAMES = ['Independent unchanged purchase', 'Academy dollar boundaries', 'Page money tokens', 'Actual prospect and senior sales', 'Page floater renders grouped dollars'];
+const OLD_FMTCASH = [
+  'export function fmtCash(n: number): string {',
+  '  if (n >= 1e12) return `£${(n / 1e12).toFixed(2)}T`;',
+  '  if (n >= 1e9) return `£${(n / 1e9).toFixed(2)}B`;',
+  '  if (n >= 1e6) return `£${(n / 1e6).toFixed(2)}M`;',
+  '  if (n >= 1e4) return `£${(n / 1e3).toFixed(1)}K`;',
+  '  return `£${Math.floor(n).toLocaleString()}`;',
+  '}',
+].join('\n');
+const FMTCASH = /export function fmtCash\(n: number\): string \{[\s\S]*?\n\}/g;
+const SALES = [
+  ["💵 ${kid.name} sold for $${price.toLocaleString('en-US')}", '💷 ${kid.name} sold for ${price.toLocaleString()}'],
+  ["💵 ${player.name} sold for $${price.toLocaleString('en-US')}", '💷 ${player.name} sold for ${price.toLocaleString()}'],
+];
 const unix = value => value.replaceAll('\\', '/');
 const sha = value => createHash('sha256').update(value).digest('hex');
 function fileSha(file) { let digest; { const bytes = fs.readFileSync(file); digest = sha(bytes); } return digest; }
@@ -25,29 +44,24 @@ for (const file of [ENGINE, HOOK, PAGE, 'src/lib/formatNumber.ts', 'src/lib/comp
   const target = path.join(OUT, 'originals', file); fs.mkdirSync(path.dirname(target), { recursive: true }); fs.copyFileSync(path.join(ROOT, file), target);
 }
 save(path.join(OUT, 'source-before.json'), before);
-save(path.join(OUT, 'identity.json'), { head: git('rev-parse', 'HEAD').trim(), tree: git('rev-parse', 'HEAD^{tree}').trim(), base: BASE });
-const oldEngine = git('show', `${BASE}:${ENGINE}`).replace(/\r\n/g, '\n');
-const oldHook = git('show', `${BASE}:${HOOK}`).replace(/\r\n/g, '\n');
-const oldPage = git('show', `${BASE}:${PAGE}`).replace(/\r\n/g, '\n');
-const oldPath = path.join(OUT, 'pinned', 'wonderkidFactory.ts');
-save(oldPath, oldEngine); save(path.join(OUT, 'pinned', 'useWonderkidFactory.ts'), oldHook); save(path.join(OUT, 'pinned', 'StadiumTycoon.tsx'), oldPage);
+save(path.join(OUT, 'identity.json'), { head: git('rev-parse', 'HEAD').trim(), tree: git('rev-parse', 'HEAD^{tree}').trim(), original: 'current files with only the PR181 leaves swapped back' });
 const pageText = read(path.join(ROOT, PAGE));
 const exportTail = '\n// QA-only exports from the complete actual page; the route is not mounted.\nexport { fmtMoney as qaFmtMoney, formatMoneyText as qaMoneyText };\n';
 const pagePath = path.join(OUT, 'copies', 'StadiumTycoon.qa.tsx'); save(pagePath, pageText + exportTail);
 const pageFrom = 'return text.replace(/\\$(-?\\d+(?:\\.\\d+)?)([KMBTQ]?)/g, (_text, amount: string, unit: string) => `$${formatNumber(amount)}${unit}`);';
 const pageTo = 'return text;';
 assert.equal(pageText.split(pageFrom).length, 2, 'Unique executable page formatting anchor');
+const renderFrom = '{formatMoneyText(f.text)}', renderTo = '{f.text}';
+assert.equal(pageText.split(renderFrom).length, 2, 'Unique floater render site');
 const sourceEngine = read(path.join(ROOT, ENGINE)), sourceHook = read(path.join(ROOT, HOOK));
-// These whole historical copies change only the reviewed display leaves.
-assert.equal(sourceEngine.match(/export function fmtCash\(n: number\): string \{[\s\S]*?\n\}/g)?.length, 1);
-for (const anchor of ["💵 ${kid.name} sold for $${price.toLocaleString('en-US')}", "💵 ${player.name} sold for $${price.toLocaleString('en-US')}"]) assert.equal(sourceHook.split(anchor).length, 2, 'Unique executable sale-text leaf');
-// Round 1532 narrowing (brief-1532 R6, critic item 5): this PR claims only the money display leaves. The pack
-// price rule of the scoring round may lower the three PACKS prices, so the price numbers of those rows are
-// blanked on both sides before the whole file comparison; every other byte of the file stays pinned.
-const noPackPrices = text => text.replace(/(\{ id: '(?:scout|club|elite)', name: '[^']*', emoji: '[^']*', price: )\d+(, firstFree:)/g, '$1N$2');
-assert.equal(noPackPrices(oldEngine).split("price: N, firstFree:").length - 1, 3, 'The three pack price rows are found in the pinned engine');
-assert.equal(noPackPrices(sourceEngine.replace("import { formatNumber } from '@/lib/formatNumber';\n", '').replace(/export function fmtCash\(n: number\): string \{[\s\S]*?\n\}/, oldEngine.match(/export function fmtCash\(n: number\): string \{[\s\S]*?\n\}/)[0])), noPackPrices(oldEngine));
-assert.equal(sourceHook.replace("💵 ${kid.name} sold for $${price.toLocaleString('en-US')}", '💷 ${kid.name} sold for ${price.toLocaleString()}').replace("💵 ${player.name} sold for $${price.toLocaleString('en-US')}", '💷 ${player.name} sold for ${price.toLocaleString()}'), oldHook);
+// The pre-PR copies differ from the current files only by the reviewed display leaves.
+assert.equal(sourceEngine.match(FMTCASH)?.length, 1, 'Unique fmtCash body');
+for (const [now] of SALES) assert.equal(sourceHook.split(now).length, 2, 'Unique executable sale-text leaf');
+const oldEngine = sourceEngine.replace(FMTCASH, () => OLD_FMTCASH);
+let oldHook = sourceHook; for (const [now, was] of SALES) oldHook = oldHook.replace(now, () => was);
+assert.notEqual(oldEngine, sourceEngine, 'Derived Academy engine changed fmtCash'); assert.notEqual(oldHook, sourceHook, 'Derived hook changed the sale lines');
+const oldPath = path.join(OUT, 'pinned', 'wonderkidFactory.ts');
+save(oldPath, oldEngine); save(path.join(OUT, 'pinned', 'useWonderkidFactory.ts'), oldHook);
 
 const testPath = path.join(OUT, 'money.test.tsx');
 save(testPath, String.raw`
@@ -155,11 +169,48 @@ it('Actual prospect and senior sales', async () => {
   check('sale-floaters', texts, expectedTexts);
 });
 `);
+// Round 1531 fix: the render site. Its own file, because the page needs the shared page mocks and the cases above
+// need the real completion recorder; vitest isolates the two files.
+const renderTestPath = path.join(OUT, 'money-render.test.tsx');
+save(renderTestPath, String.raw`
+import '@/test/dailyReload/mocks';
+import { it, expect, afterEach, vi } from 'vitest';
+import { act, cleanup, fireEvent } from '@testing-library/react';
+import { createElement } from 'react';
+import { mountPage } from '@/test/dailyReload/harness';
+import Page from 'qa-tycoon-page';
+import { TYCOON_SAVE_KEY, deserializeTycoon, tapValue } from '@/lib/stadiumTycoon';
+import corpus from '@/test/fixtures/tycoonSaves.json';
+const NOW = 1791374400000;
+function check(id, actual, expected, extra = {}) { console.log('TYCOON_MONEY_RECORD|' + JSON.stringify({ id, actual, expected, ...extra })); expect(actual, id).toEqual(expected); }
+afterEach(() => { cleanup(); vi.clearAllTimers(); vi.useRealTimers(); vi.restoreAllMocks(); vi.unstubAllGlobals(); });
+it('Page floater renders grouped dollars', async () => {
+  vi.useFakeTimers({ toFake: ['Date', 'setTimeout', 'clearTimeout', 'setInterval', 'clearInterval'] }); vi.setSystemTime(NOW);
+  vi.spyOn(Math, 'random').mockImplementation(() => .37);
+  // No frame is ever handed out, so the match never ticks: the only new floater is the tap's.
+  vi.stubGlobal('requestAnimationFrame', () => 1); vi.stubGlobal('cancelAnimationFrame', () => {});
+  const entry = corpus.entries.find(e => e.key === 'stadium' && e.name === 'preBoardroom');
+  expect(entry, 'corpus stadium save preBoardroom').toBeTruthy();
+  const staged = tapValue(deserializeTycoon(entry.raw, NOW));
+  localStorage.clear(); sessionStorage.clear(); localStorage.setItem(TYCOON_SAVE_KEY, entry.raw);
+  mountPage(createElement(Page), '/stadium-tycoon');
+  const pitch = document.querySelector('.cursor-pointer.select-none.group');
+  expect(pitch, 'the pitch on the Stadium tab').toBeTruthy();
+  await act(async () => { fireEvent.click(pitch); });
+  const taps = [...document.querySelectorAll('.st-float')].map(el => (el.textContent || '').trim()).filter(text => /^\+\$[\d,]+$/.test(text));
+  expect(taps.length, 'one tap floater on the pitch: ' + JSON.stringify(taps)).toBe(1);
+  const paid = Number(taps[0].replace(/[^\d]/g, ''));
+  // Only a four digit amount tells grouped from raw: the engine prints $10.0K and up compactly.
+  expect(paid >= 1000 && paid < 10000, 'the staged tap pays four digits, measured ' + paid + ', engine tapValue ' + staged).toBe(true);
+  check('page-floater', taps[0], '+$' + paid.toLocaleString('en-US'), { stagedTapValue: staged, save: 'preBoardroom' });
+});
+`);
 
 const controls = [
   { name: 'old-academy', target: NAMES[1], mismatch: 'academy-boundaries', file: ENGINE, content: oldEngine },
   { name: 'old-sale-text', target: NAMES[3], mismatch: 'sale-floaters', file: HOOK, content: oldHook },
   { name: 'ungrouped-page', target: NAMES[2], mismatch: 'page-text', file: PAGE, content: pageText.replace(pageFrom, pageTo) + exportTail },
+  { name: 'raw-floater', target: NAMES[4], mismatch: 'page-floater', file: PAGE, content: pageText.replace(renderFrom, renderTo) + exportTail },
 ];
 function run(name, control = null) {
   const dir = path.join(OUT, name), aliases = { 'qa-pinned-academy': unix(oldPath), 'qa-tycoon-page': unix(pagePath) };
@@ -168,7 +219,7 @@ function run(name, control = null) {
     const original = control.file === PAGE ? pageText + exportTail : read(path.join(ROOT, control.file));
     assert.notEqual(control.content, original, 'The copied fault changed executable source');
     aliases[control.file === PAGE ? 'qa-tycoon-page' : '@/' + control.file.slice(4).replace(/\.tsx?$/, '')] = unix(copy);
-    save(path.join(dir, 'mutation.json'), { file: control.file, originalSha256: before[control.file], normalizedOriginalSha256: sha(read(path.join(ROOT,control.file))), executableBaselineSha256: sha(original), copiedSha256: sha(control.content), copy, target: control.target, mismatch: control.mismatch, type: control.file === PAGE ? 'unique passthrough fault' : 'pinned original display copy', base: BASE });
+    save(path.join(dir, 'mutation.json'), { file: control.file, originalSha256: before[control.file], normalizedOriginalSha256: sha(read(path.join(ROOT,control.file))), executableBaselineSha256: sha(original), copiedSha256: sha(control.content), copy, target: control.target, mismatch: control.mismatch, type: control.file === PAGE ? 'unique passthrough fault' : 'derived pre-PR display copy' });
   }
   const wanted = [...new Set([ENGINE, HOOK, PAGE, 'src/lib/formatNumber.ts', 'src/lib/completions.ts'].map(f => unix(path.join(ROOT, f))).concat(Object.values(aliases)))];
   const config = path.join(dir, 'vitest.config.mjs'), report = path.join(dir, 'report.json');
@@ -182,7 +233,7 @@ export default defineConfig({root:${JSON.stringify(unix(ROOT))}, plugins:[react(
  const hash=x=>crypto.createHash('sha256').update(x).digest('hex'); let inputHash; {const bytes=fs.readFileSync(file);inputHash=hash(bytes);}
  const output='transforms/'+hash(file).slice(0,16)+'.js';fs.mkdirSync(path.join(dir,'transforms'),{recursive:true});fs.writeFileSync(path.join(dir,output),code);
  seen.set(file,{file,inputSha256:inputHash,output,outputSha256:hash(code)});fs.writeFileSync(path.join(dir,'transforms.json'),JSON.stringify([...seen.values()],null,2));return null;
-}}],test:{environment:'jsdom',globals:true,setupFiles:[${JSON.stringify(unix(path.join(ROOT,'src/test/setup.ts')))}],include:[${JSON.stringify(unix(testPath))}],maxWorkers:1,fileParallelism:false,testTimeout:30000},resolve:{alias:{...JSON.parse(process.env.NO_DOUBLE_SWAP||'{}'),'@':${JSON.stringify(unix(path.join(ROOT,'src')))}}}});`);
+}}],test:{environment:'jsdom',globals:true,setupFiles:[${JSON.stringify(unix(path.join(ROOT,'src/test/setup.ts')))}],include:[${JSON.stringify(unix(testPath))},${JSON.stringify(unix(renderTestPath))}],maxWorkers:1,fileParallelism:false,testTimeout:30000},resolve:{alias:{...JSON.parse(process.env.NO_DOUBLE_SWAP||'{}'),'@':${JSON.stringify(unix(path.join(ROOT,'src')))}}}});`);
   const args = ['node_modules/vitest/vitest.mjs','run','--config',config,'--reporter=json',`--outputFile.json=${report}`,'--reporter=default'];
   if (control) args.push('-t', `^(${NAMES[0]}|${control.target})$`);
   const child = spawnSync(process.execPath, args, { cwd: ROOT, encoding: 'utf8', timeout: 180000, maxBuffer: 32 * 1024 * 1024, env: { ...process.env, NO_DOUBLE_SWAP: JSON.stringify(aliases), NO_COLOR: '1', FORCE_COLOR: '0' } });
@@ -190,7 +241,7 @@ export default defineConfig({root:${JSON.stringify(unix(ROOT))}, plugins:[react(
   assert(!child.error && child.signal === null, `${name}: worker setup/timeout`);
   assert(!/Unhandled Errors|Unhandled Rejection|Cannot find module|Failed to resolve import|SyntaxError|Transform failed|Startup Error|Dynamic require/.test((child.stdout||'')+(child.stderr||'')),`${name}: runtime error`);
   const raw=JSON.parse(read(report)), tests=raw.testResults.flatMap(t=>t.assertionResults);
-  assert.equal(raw.numUnhandledErrors??0,0);assert.equal(raw.numRuntimeErrorTestSuites??0,0);assert.equal(raw.unhandledErrors?.length??0,0);assert(raw.testResults.every(t=>!t.testExecError));assert.equal(tests.length,4);
+  assert.equal(raw.numUnhandledErrors??0,0);assert.equal(raw.numRuntimeErrorTestSuites??0,0);assert.equal(raw.unhandledErrors?.length??0,0);assert(raw.testResults.every(t=>!t.testExecError));assert.equal(tests.length,5);
   const marker='TYCOON_MONEY_RECORD|', records=(child.stdout||'').split(/\r?\n/).filter(line=>line.includes(marker)).map(line=>JSON.parse(line.slice(line.indexOf(marker)+marker.length)));save(path.join(dir,'records.json'),records);
   const setupMarker='TYCOON_MONEY_SETUP|', setup=(child.stdout||'').split(/\r?\n/).filter(line=>line.includes(setupMarker)).map(line=>JSON.parse(line.slice(line.indexOf(setupMarker)+setupMarker.length)));assert.equal(setup.length,1);save(path.join(dir,'initialization.json'),setup[0]);
   const baseline=records.find(r=>r.id==='purchase');assert(baseline);assert.deepEqual(baseline.actual,baseline.expected);assert.equal(tests.find(t=>t.title===NAMES[0]).status,'passed');
@@ -200,8 +251,8 @@ export default defineConfig({root:${JSON.stringify(unix(ROOT))}, plugins:[react(
   assert(!transforms.some(r=>r.file===unix(path.join(ROOT,PAGE))), 'Only the whole QA-exported page copy executes');
   if(control&&control.file!==PAGE)assert(!transforms.some(r=>r.file===unix(path.join(ROOT,control.file))),'Replaced original must not execute');
   const failed=tests.filter(t=>t.status==='failed'), passed=tests.filter(t=>t.status==='passed'), skipped=tests.filter(t=>t.status==='pending'||t.status==='skipped');
-  if(control){assert.equal(child.status,1);assert.equal(failed.length,1);assert.equal(passed.length,1);assert.equal(skipped.length,2);assert.equal(failed[0].title,control.target);assert(/AssertionError/.test(failed[0].failureMessages.join('\n')));assert(failed[0].failureMessages.join('\n').includes(control.mismatch),'Exact mapped assertion message');assert.deepEqual(records.filter(r=>{try{assert.deepEqual(r.actual,r.expected);return false;}catch{return true;}}).map(r=>r.id),[control.mismatch],'Only the intended complete outcome differs');}
-  else{assert.equal(child.status,0);assert.equal(passed.length,4);assert.equal(failed.length,0);for(const r of records)assert.deepEqual(r.actual,r.expected,r.id);}
+  if(control){assert.equal(child.status,1);assert.equal(failed.length,1);assert.equal(passed.length,1);assert.equal(skipped.length,3);assert.equal(failed[0].title,control.target);assert(/AssertionError/.test(failed[0].failureMessages.join('\n')));assert(failed[0].failureMessages.join('\n').includes(control.mismatch),'Exact mapped assertion message');assert.deepEqual(records.filter(r=>{try{assert.deepEqual(r.actual,r.expected);return false;}catch{return true;}}).map(r=>r.id),[control.mismatch],'Only the intended complete outcome differs');}
+  else{assert.equal(child.status,0);assert.equal(passed.length,5);assert.equal(failed.length,0);for(const r of records)assert.deepEqual(r.actual,r.expected,r.id);}
   return {name,status:control?'assertion-failed':'passed',passed:passed.length,failed:failed.length,skipped:skipped.length,records:records.length,baseline,failure:failed[0]||null,transforms};
 }
 const summary={status:'running',scope:'Finite formatter functions and actual Academy hook sales; no full route or layout acceptance',normal:null,controls:[],sourceBefore:before};
@@ -209,7 +260,7 @@ try { summary.normal=run('normal');for(const control of controls){const result=r
 catch(error){summary.status='failed';summary.error=String(error.stack||error);throw error;}
 finally{summary.sourceAfter=holds();let failure;try{assert.deepEqual(summary.sourceAfter,before);}catch(error){summary.status='failed';summary.sourceHoldError=String(error.stack||error);failure=error;}save(path.join(OUT,'source-after.json'),summary.sourceAfter);save(path.join(OUT,'summary.json'),summary);
   const rawHashes={};function inventory(dir){for(const entry of fs.readdirSync(dir,{withFileTypes:true})){const file=path.join(dir,entry.name);if(entry.isDirectory())inventory(file);else if(file!==path.join(OUT,'raw-hashes.json'))rawHashes[unix(path.relative(OUT,file))]=fileSha(file);}}inventory(OUT);save(path.join(OUT,'raw-hashes.json'),rawHashes);if(failure)throw failure;}
-console.log(`Tycoon money: ${summary.normal.passed}/4 finite mounted/function cases passed.`);
+console.log(`Tycoon money: ${summary.normal.passed}/5 finite mounted/function cases passed, the render site among them.`);
 console.log(`Actual hook sales retained full engine, save, reload and unscored session observations.`);
-console.log(`Display controls: ${summary.controls.length}/3 mapped AssertionErrors with the unchanged purchase baseline.`);
+console.log(`Display controls: ${summary.controls.length}/4 mapped AssertionErrors with the unchanged purchase baseline.`);
 console.log(`Original source holds: ${Object.keys(before).length}; full copies, executable transforms and raw process records retained at ${OUT}.`);

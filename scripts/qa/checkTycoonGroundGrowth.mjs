@@ -1,12 +1,21 @@
-/* Remote finite page proof. The child retains actual state, pixels and copied faults. */
+/* Remote finite page proof. The child retains actual state, pixels and copied faults.
+   Round 1531: this was scripts/simTycoonGroundGrowth.mjs, so runAllSims discovered it and ran it red every time: the
+   walk needs a built dist (it serves dist/assets CSS), Chromium, and the template font cache that only
+   `node scripts/qa/tycoonGroundGrowth1094.mjs --prefetch-assets-only` writes, which fetches Google Fonts and so can
+   never run under the suite's offline transport. It lives beside its walk now and its workflow
+   (.github/workflows/tycoon-ground-growth.yml) runs the build, the prefetch and then this, in that order.
+   A missing input fails here first, by name, instead of as an ENOENT deep in the walk. */
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 assert(process.env.CI, 'Run this verification only in remote CI');
-const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const out = path.join(root, 'tycoon-ground-growth-artifacts');
+const distCss = path.join(root, 'dist/assets');
+assert(fs.existsSync(distCss) && fs.readdirSync(distCss).some(file => file.endsWith('.css')), 'No built CSS in dist/assets: run npm run build (or vite build) first');
+assert(fs.existsSync(path.join(out, 'asset-cache/manifest.json')), 'No font cache: run node scripts/qa/tycoonGroundGrowth1094.mjs --prefetch-assets-only first (it needs the network, so not under the offline transport)');
 fs.mkdirSync(out, { recursive: true });
 const run = spawnSync(process.execPath, ['scripts/qa/tycoonGroundGrowth1094.mjs'], { cwd: root, env: process.env, encoding: 'utf8', timeout: 1_140_000, maxBuffer: 32 * 1024 * 1024 });
 fs.writeFileSync(path.join(out, 'native-stdout.log'), run.stdout || '');
@@ -16,12 +25,13 @@ assert.equal(run.error, undefined); assert.equal(run.signal, null); assert.equal
 const report = JSON.parse(fs.readFileSync(path.join(out, 'native/report.json'), 'utf8'));
 assert.equal(report.complete, true); assert.equal(report.cases.length, 4); assert.equal(report.controls.length, 4);
 const initialization = report.oracleInitialization;
-assert.equal(initialization.complete, true); assert.equal(initialization.draws.length, 2);
+const epochDraws = report.epochDraws; assert(Number.isInteger(epochDraws) && epochDraws >= 1, 'The walk read the epoch draw count from source');
+assert.equal(initialization.complete, true); assert.equal(initialization.draws.length, epochDraws);
 assert(initialization.draws.every(draw => draw.caller === draw.expectedCaller));
 assert.equal(initialization.emitted.actualCode, initialization.emitted.expectedCode);
 assert.equal(initialization.source.sha256, report.sourceBefore[initialization.source.path]);
 assert.deepEqual(report.oracleInitializationControls.map(row => [row.name, row.assertion, row.receipt.draws.length]), [
-  ['extra-draw', 'Only two entity-ID epoch initialization draws', 3],
+  ['extra-draw', `Only ${epochDraws} entity-ID epoch initialization draws`, epochDraws + 1],
   ['wrong-caller', 'Initialization draw must originate at the exact emitted epoch call', 1],
 ]);
 assert(report.oracleInitializationControls.every(row => row.complete && row.receipt.complete === false && row.receipt.error.name === 'AssertionError' && row.receipt.error.message.includes(row.assertion) && row.receipt.error.stack.includes('AssertionError')));
