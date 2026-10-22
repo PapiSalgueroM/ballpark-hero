@@ -1,0 +1,10 @@
+s4-easy-2: mkdir -p "$RC_OUT/s4" && SECTION=4 LEVELS=easy SEEDS=32 SHARD=2/8 OUT_JSON="$RC_OUT/s4/easy-2.json" node scripts/simCmDifficulty.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+s4-easy-3: mkdir -p "$RC_OUT/s4" && SECTION=4 LEVELS=easy SEEDS=32 SHARD=3/8 OUT_JSON="$RC_OUT/s4/easy-3.json" node scripts/simCmDifficulty.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+s4-easy-4: mkdir -p "$RC_OUT/s4" && SECTION=4 LEVELS=easy SEEDS=32 SHARD=4/8 OUT_JSON="$RC_OUT/s4/easy-4.json" node scripts/simCmDifficulty.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+s4-easy-5: mkdir -p "$RC_OUT/s4" && SECTION=4 LEVELS=easy SEEDS=32 SHARD=5/8 OUT_JSON="$RC_OUT/s4/easy-5.json" node scripts/simCmDifficulty.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+s4-easy-6: mkdir -p "$RC_OUT/s4" && SECTION=4 LEVELS=easy SEEDS=32 SHARD=6/8 OUT_JSON="$RC_OUT/s4/easy-6.json" node scripts/simCmDifficulty.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+s4-easy-7: mkdir -p "$RC_OUT/s4" && SECTION=4 LEVELS=easy SEEDS=32 SHARD=7/8 OUT_JSON="$RC_OUT/s4/easy-7.json" node scripts/simCmDifficulty.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+s4-normal-0: mkdir -p "$RC_OUT/s4" && SECTION=4 LEVELS=normal SEEDS=32 SHARD=0/8 OUT_JSON="$RC_OUT/s4/normal-0.json" node scripts/simCmDifficulty.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+s4-normal-1: mkdir -p "$RC_OUT/s4" && SECTION=4 LEVELS=normal SEEDS=32 SHARD=1/8 OUT_JSON="$RC_OUT/s4/normal-1.json" node scripts/simCmDifficulty.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+s4-normal-2: mkdir -p "$RC_OUT/s4" && SECTION=4 LEVELS=normal SEEDS=32 SHARD=2/8 OUT_JSON="$RC_OUT/s4/normal-2.json" node scripts/simCmDifficulty.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+s4-normal-3: mkdir -p "$RC_OUT/s4" && SECTION=4 LEVELS=normal SEEDS=32 SHARD=3/8 OUT_JSON="$RC_OUT/s4/normal-3.json" node scripts/simCmDifficulty.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
