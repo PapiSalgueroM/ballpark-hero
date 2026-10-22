@@ -13,7 +13,7 @@
  *   1) no group claims the present: a dated group names a past season in
  *      the past tense ("Played for Bayern Munich in 2025-26"), and no label
  *      says Current, now or this season, because a saved board outlives it
- *   2) no refuted claim is on any board (scripts/data/connectionsVerified2026-10.json
+ *   2) no refuted claim is on any board (scripts/data/connectionsVerified2026-10/ledger.json
  *      "refuted": a claim two hosts show false, such as Wayne Rooney in a
  *      treble group)
  *   3) every group the ledger covers is held to it: each member stands on
@@ -55,7 +55,7 @@ const R = ROOT.replaceAll('\\', '/');
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'connfacts-'));
 const ENTRY = path.join(TMP, 'entry.mjs');
 const OUT = path.join(TMP, 'bundle.mjs');
-const LEDGER_PATH = path.join(ROOT, 'scripts/data/connectionsVerified2026-10.json');
+const LEDGER_DIR = path.join(ROOT, 'scripts/data/connectionsVerified2026-10');
 const CONTROL = process.env.CONN_CONTROL ?? '';
 const MEASURE = process.env.CONN_MEASURE ?? '';
 
@@ -78,7 +78,8 @@ await build({
   outfile: OUT, logLevel: 'error', alias: { '@': path.join(ROOT, 'src') },
 });
 const data = await import(pathToFileURL(OUT).href);
-const ledger = JSON.parse(fs.readFileSync(LEDGER_PATH, 'utf8'));
+const ledger = JSON.parse(fs.readFileSync(path.join(LEDGER_DIR, 'ledger.json'), 'utf8'));
+ledger.squads = JSON.parse(fs.readFileSync(path.join(LEDGER_DIR, 'squads.json'), 'utf8')).squads;
 
 /* The boards under test: the shipped file, or the lead's export of the live table. */
 let boards = data.boards.map(b => ({ id: b.id, groups: b.groups.map(g => ({ ...g, players: [...g.players] })) }));
@@ -116,6 +117,75 @@ const soccer = makeSoccerChecker({
   ledger,
 });
 
+
+/* ---- the controls: each changes the boards under test, and proves it did ---- */
+const boardById = id => boards.find(b => b.id === id);
+if (CONTROL) {
+  let changed = false;
+  if (CONTROL === 'rooney') {
+    /* the treble claim the scout found twice: put it back on a board */
+    const b = boardById('puzzle-10');
+    const g = b?.groups[2];
+    if (g && !g.players.includes('Wayne Rooney')) {
+      g.category = 'Won the Treble';
+      g.players[3] = 'Wayne Rooney';
+      changed = true;
+    }
+  } else if (CONTROL === 'zidane') {
+    /* Zidane scored in two World Cup finals and won the 1998 Ballon d'Or */
+    const b = boardById('puzzle-1');
+    const final = b?.groups.find(x => x.category === 'Scored in a World Cup Final');
+    const ballon = b?.groups.find(x => x.category === "Won the Ballon d'Or");
+    if (final && ballon && !final.players.includes('Zinedine Zidane')) {
+      final.players[1] = 'Zinedine Zidane';
+      changed = true;
+    }
+  } else if (CONTROL === 'current') {
+    const b = boardById('puzzle-76');
+    const g = b?.groups.find(x => x.category === 'Played for Arsenal in 2025-26');
+    if (g) { g.category = 'Current Arsenal stars (2025-26)'; changed = true; }
+  } else {
+    console.error(`unknown CONN_CONTROL=${CONTROL}`);
+    process.exit(2);
+  }
+  if (!changed) {
+    console.error(`CONN_CONTROL=${CONTROL} ABORTED: the input it mutates is not there, so a green run would prove nothing`);
+    process.exit(1);
+  }
+  console.log(`CONN_CONTROL=${CONTROL}: the boards were changed; this run must end red`);
+}
+
+const WIKI = /wiki/i;
+const hostsOk = sources => {
+  const hosts = new Set((sources ?? []).filter(s => !WIKI.test(String(s.host ?? '')) && !WIKI.test(String(s.url ?? ''))).map(s => String(s.host ?? '').toLowerCase()).filter(Boolean));
+  return hosts.size >= 2;
+};
+
+console.log('1) no group claims the present');
+{
+  const PRESENT = /\bcurrent\b|\bnow\b|this season|present day|\bactive\b/i;
+  let n = 0;
+  for (const b of boards) for (const g of b.groups) {
+    if (PRESENT.test(g.category)) { n += 1; fail(`${b.id}: "${g.category}" claims the present, and a saved board outlives it; stamp a past season`); }
+  }
+  console.log(`   ${n} present tense labels`);
+}
+
+console.log('2) no refuted claim is on a board');
+{
+  let n = 0;
+  for (const r of ledger.refuted ?? []) {
+    if (!hostsOk(r.sources)) fail(`refuted "${r.name}" in "${r.labels?.[0]}" does not stand on two hosts`);
+    const labels = new Set(r.labels ?? []);
+    for (const b of boards) for (const g of b.groups) {
+      if (labels.has(g.category) && g.players.some(p => fold(p) === fold(r.name))) {
+        n += 1;
+        fail(`${b.id}: ${r.name} in "${g.category}" is refuted (${r.why})`);
+      }
+    }
+  }
+  console.log(`   ${(ledger.refuted ?? []).length} refuted claims held off every board, ${n} found`);
+}
 /* ---- measurement (CONN_MEASURE=<file>): every finding, before any baseline ---- */
 const cross = crossCheckBoards(boards, soccer);
 if (MEASURE) {
@@ -129,3 +199,89 @@ if (MEASURE) {
   console.log(`measure: findings ${JSON.stringify(byKind)} on ${boardsHit.size} boards`);
   process.exit(0);
 }
+
+console.log('3) every group this round wrote stands on two hosts');
+{
+  /* the ledger's own facts first: a list, a squad, a title, a man's nation or clubs */
+  for (const [key, list] of Object.entries(ledger.lists ?? {})) if (!hostsOk(list.sources)) fail(`list ${key} does not stand on two hosts`);
+  for (const [key, sq] of Object.entries(ledger.squads ?? {})) {
+    if (!hostsOk(sq.sources)) fail(`squad ${key} does not stand on two hosts`);
+    if (sq.wonLeague && !hostsOk(sq.wonLeague)) fail(`the title of ${key} does not stand on two hosts`);
+  }
+  for (const [name, p] of Object.entries(ledger.players ?? {})) if (!hostsOk(p.sources)) fail(`${name}: the ledger's facts do not stand on two hosts`);
+  /* a group the ledger writes out member by member */
+  const ledgered = new Set();
+  for (const lg of ledger.groups ?? []) {
+    const b = boardById(lg.id);
+    const g = b?.groups.find(x => x.category === lg.category);
+    if (!g) { fail(`${lg.id}: the ledger holds "${lg.category}" and the board has no such group`); continue; }
+    ledgered.add(`${lg.id}|${lg.category}`);
+    const want = Object.keys(lg.members).map(fold).sort().join('|');
+    if (g.players.map(fold).sort().join('|') !== want) fail(`${lg.id}: "${lg.category}" on the board is not the group the ledger checked`);
+    for (const [name, sources] of Object.entries(lg.members)) if (!hostsOk(sources)) fail(`${lg.id}: ${name} in "${lg.category}" does not stand on two hosts`);
+  }
+  /* a stamped group (a season, a title) and every group of a board this round rebuilt: each member judged true */
+  const rebuilt = new Set(ledger.rebuilt ?? []);
+  let stamped = 0, members = 0;
+  for (const b of boards) for (const g of b.groups) {
+    const c = soccer.criterion(g.category);
+    const isStamp = c && (c.kind === 'clubSeason' || c.kind === 'leagueSeason');
+    if (!isStamp && !rebuilt.has(b.id)) continue;
+    if (ledgered.has(`${b.id}|${g.category}`)) continue;
+    if (isStamp) stamped += 1;
+    if (!c) { fail(`${b.id}: "${g.category}" is on a rebuilt board and nothing checks it`); continue; }
+    for (const p of g.players) {
+      members += 1;
+      const v = soccer.fits(p, c);
+      if (v !== true) fail(`${b.id}: ${p} in "${g.category}" is ${v === false ? 'contradicted' : 'not confirmed'} by the record`);
+    }
+  }
+  console.log(`   ${Object.keys(ledger.squads ?? {}).length} squads, ${Object.keys(ledger.lists ?? {}).length} lists, ${(ledger.groups ?? []).length} ledgered groups, ${stamped} stamped groups, ${members} members confirmed, ${rebuilt.size} rebuilt boards`);
+}
+
+console.log('4) one right answer: the cross check over every board');
+{
+  const rebuilt = new Set(ledger.rebuilt ?? []);
+  const adjudicated = new Map((ledger.adjudicated ?? []).map(a => [a.key, a]));
+  const owed = new Set(ledger.owed ?? []);
+  const seen = new Set();
+  let cleared = 0, carried = 0;
+  for (const f of cross.findings) {
+    const key = findingKey(f);
+    seen.add(key);
+    const adj = adjudicated.get(key);
+    if (adj) {
+      if (!hostsOk(adj.sources)) fail(`${key}: adjudicated without two hosts`);
+      cleared += 1;
+      continue;
+    }
+    if (owed.has(key) && !rebuilt.has(f.id) && !process.env.CONN_LIVE) { carried += 1; continue; }
+    fail(`${key}${f.kind === 'second-fit' ? ', so the board has two right answers' : ''}`);
+  }
+  if (!process.env.CONN_LIVE && !CONTROL) {
+    for (const key of owed) if (!seen.has(key)) fail(`owed "${key}" no longer fires: take it off the owed list so it cannot come back`);
+    for (const key of adjudicated.keys()) if (!seen.has(key)) fail(`adjudicated "${key}" no longer fires: take it off the list`);
+  }
+  console.log(`   ${cross.checked} of ${cross.groups} groups judged; members ${cross.memberChecks} judged (${cross.memberUnknown} unknown), other tiles ${cross.otherChecks} judged (${cross.otherUnknown} unknown)`);
+  console.log(`   ${cross.findings.length} findings: ${cleared} adjudicated, ${carried} owed to part B on boards not yet rebuilt`);
+}
+
+console.log('5) the groups nothing checks yet may only get fewer');
+{
+  const ledgered = new Set((ledger.groups ?? []).map(lg => `${lg.id}|${lg.category}`));
+  const n = cross.unchecked.filter(u => !ledgered.has(`${u.id}|${u.label}`)).length;
+  const ceiling = ledger.uncheckedCeiling;
+  if (!process.env.CONN_LIVE) {
+    if (typeof ceiling !== 'number') fail('the ledger has no uncheckedCeiling');
+    else if (n > ceiling) fail(`${n} groups nothing checks, over the ceiling of ${ceiling}`);
+    else if (n < ceiling) fail(`${n} groups nothing checks, under the ceiling of ${ceiling}: lower uncheckedCeiling to ${n} so they cannot come back`);
+  }
+  console.log(`   ${n} groups nothing checks yet (ceiling ${ceiling}); part B ledgers them`);
+}
+
+console.log('');
+if (failures > 0) {
+  console.error(`simConnectionsFacts: ${failures} failure${failures === 1 ? '' : 's'}`);
+  process.exit(1);
+}
+console.log('simConnectionsFacts: green. Every claim this round checked stands on two hosts and no rebuilt board has a second answer.');

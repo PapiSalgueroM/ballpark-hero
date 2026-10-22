@@ -22,7 +22,10 @@
  * The data passed in is the site's own; this file reads nothing itself.
  */
 
-export const fold = s => String(s).normalize('NFD').replace(/\p{M}/gu, '').toLowerCase().replace(/[^a-z0-9]/g, '');
+/* Letters NFD does not split into a base and a mark. */
+const PLAIN = { ı: 'i', ł: 'l', ø: 'o', đ: 'd', ð: 'd', ß: 'ss', æ: 'ae', œ: 'oe', þ: 'th' };
+export const fold = s => String(s).toLowerCase().normalize('NFD').replace(/\p{M}/gu, '')
+  .replace(/[ıłøđðßæœþ]/g, c => PLAIN[c]).replace(/[^a-z0-9]/g, '');
 
 /* Tile spellings the data writes another way. Folded on both sides. */
 const ALIASES = {
@@ -35,6 +38,9 @@ const ALIASES = {
   viniciusjr: ['viniciusjunior'],
   viniciusjunior: ['viniciusjr'],
   adrianoleite: ['adriano'],
+  alissonbecker: ['alisson'],
+  alisson: ['alissonbecker'],
+  alejandrogrimaldo: ['alexgrimaldo'],
 };
 export const keysOf = name => {
   const k = fold(name);
@@ -69,11 +75,11 @@ const CLUBS = {
 export const club = s => { const k = fold(s); return CLUBS[k] ?? k; };
 
 /** "2025-26" to the career tables' "2025-2026". */
-const longSeason = s => `${s.slice(0, 4)}-${s.slice(0, 2)}${s.slice(5, 7)}`;
+const longSeason = s => (s.length === 4 ? s : `${s.slice(0, 4)}-${s.slice(0, 2)}${s.slice(5, 7)}`);
 
 /**
  * Builds { criterion, fits } from the site's data, the award lists and the
- * round's ledger (scripts/data/connectionsVerified2026-10.json). The ledger
+ * round's ledger (scripts/data/connectionsVerified2026-10/). The ledger
  * wins over the site's tables wherever it speaks: a man's nation, the clubs
  * he played for, and whole squads for a season, each on two hosts.
  */
@@ -106,7 +112,7 @@ export function makeSoccerChecker({ careerPlayers, clubSeasonsOf, nationalityMap
   }
   const squads = new Map();
   for (const sq of Object.values(ledger.squads ?? {})) {
-    squads.set(`${club(sq.club)} ${sq.season}`, sq.sources.map(s => new Set(s.players.map(fold))));
+    squads.set(`${club(sq.club)} ${sq.season}`, { lists: sq.sources.map(s => new Set(s.players.map(fold))), wonLeague: Array.isArray(sq.wonLeague) && sq.wonLeague.length >= 2, league: fold(sq.league ?? ''), season: sq.season });
   }
 
   const lookup = (map, name) => {
@@ -121,8 +127,13 @@ export function makeSoccerChecker({ careerPlayers, clubSeasonsOf, nationalityMap
     }
     let m = t.match(/^From (?:the )?(\p{L}[\p{L} .'-]*)$/u);
     if (m) return { kind: 'nation', nation: nation(m[1]) };
-    m = t.match(/^Played for (.+) in ([0-9]{4}-[0-9]{2})$/);
+    m = t.match(/^Played for (.+) in ([0-9]{4}(?:-[0-9]{2})?)$/);
     if (m) return { kind: 'clubSeason', club: club(m[1]), season: m[2] };
+    /* a title group: he played for the club that season, and the club won the league */
+    m = t.match(/^Won the [A-Za-z ]+ with (.+?) [(]?([0-9]{4}-[0-9]{2})[)]?$/);
+    if (m) return { kind: 'clubSeason', club: club(m[1]), season: m[2], title: true };
+    m = t.match(/^Played in (?:the )?(.+) in ([0-9]{4}(?:-[0-9]{2})?)$/);
+    if (m) return { kind: 'leagueSeason', league: fold(m[1]), season: m[2] };
     m = t.match(/^Played for (?:both )?(.+)$/);
     if (m) {
       if (/[()0-9+]/.test(m[1])) return null;
@@ -153,7 +164,9 @@ export function makeSoccerChecker({ careerPlayers, clubSeasonsOf, nationalityMap
       return own?.complete || (!own && table) ? false : null;
     }
     if (c.kind === 'clubSeason') {
-      const lists = squads.get(`${c.club} ${c.season}`);
+      const sq = squads.get(`${c.club} ${c.season}`);
+      if (c.title && !sq?.wonLeague) return null;
+      const lists = sq?.lists;
       if (lists) {
         const hits = lists.filter(set => keysOf(name).some(k => set.has(k))).length;
         if (hits === lists.length) return true;
@@ -162,6 +175,14 @@ export function makeSoccerChecker({ careerPlayers, clubSeasonsOf, nationalityMap
       }
       const s = lookup(seasonsOf, name);
       return s && s.has(`${c.club}::${longSeason(c.season)}`) ? true : null;
+    }
+    if (c.kind === 'leagueSeason') {
+      /* true when both hosts of one of that league's squads that season list him; never false, since no ledger holds a whole league */
+      for (const sq of squads.values()) {
+        if (sq.league !== c.league || sq.season !== c.season) continue;
+        if (sq.lists.every(set => keysOf(name).some(k => set.has(k)))) return true;
+      }
+      return null;
     }
     return null;
   }
