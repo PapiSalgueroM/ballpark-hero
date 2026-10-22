@@ -1,0 +1,9 @@
+2) steady: two index funds and the one time steady card against a twin that bought nothing
+   FAIL [2] nba season 1: Cash plus the carry moved 0.520000 more than the twin's, the cards print 0.4800
+   FAIL [2] nba season 2: Cash plus the carry moved 0.520000 more than the twin's, the cards print 0.4800
+   nba: 2 x index_nba and wine_label print 0.4800M a season; measured 0.5200, 0.5200, 0.0000 (the third after the sale)
+   nfl: 2 x index_fund and car_dealership print 0.5500M a season; measured 0.5500, 0.5500, 0.0000 (the third after the sale)
+   mlb: 2 x index_mlb and wine_label print 0.4800M a season; measured 0.4800, 0.4800, 0.0000 (the third after the sale)
+   nhl: 2 x index_nhl and wine_label print 0.4800M a season; measured 0.4800, 0.4800, 0.0000 (the third after the sale)
+   control rate: section 2 turned 2 red
+simUsShopPromises: CONTROL rate FIRED (red sections 2)

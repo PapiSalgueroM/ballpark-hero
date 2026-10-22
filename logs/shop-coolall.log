@@ -1,0 +1,15 @@
+8) digest: 240 careers a set on sets 1534 and 2024, holding nothing that pays, base arm against head arm
+   FAIL [8] nba 1534/0: parts from the base arm at record 201 of 239
+   FAIL [8] nba 1534/4: parts from the base arm at record 123 of 229
+   FAIL [8] nba 1534/11: parts from the base arm at record 147 of 219
+   FAIL [8] nba 1534/18: parts from the base arm at record 217 of 243
+   FAIL [8] nba 1534/19: parts from the base arm at record 111 of 245
+   FAIL [8] nba 1534/20: parts from the base arm at record 207 of 221
+   FAIL [8] nba 1534/21: parts from the base arm at record 99 of 209
+   FAIL [8] nba 1534/24: parts from the base arm at record 147 of 199
+   nba: 480 careers, 9698 seasons, 6322 items bought, 705 seasons with heat and no dirty money; 219 parted
+   nfl: 480 careers, 8147 seasons, 6179 items bought, 499 seasons with heat and no dirty money; 166 parted
+   mlb: 480 careers, 9845 seasons, 3444 items bought, 858 seasons with heat and no dirty money; 189 parted
+   nhl: 480 careers, 10350 seasons, 4046 items bought, 870 seasons with heat and no dirty money; 234 parted
+   control coolall: section 8 turned 808 red
+simUsShopPromises: CONTROL coolall FIRED (red sections 8)

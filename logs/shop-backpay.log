@@ -1,0 +1,11 @@
+9) old saves: one season paid per season, each stake settled once, nothing paid back
+   FAIL [9] nba season 1: the old save earned 10.583200, one season of its cards is 9.291600
+   nba: steady 0.48M a season; the old save earned 10.5832 (stakes 8), then 1.3516 (stakes 0)
+   FAIL [9] nfl season 1: the old save earned 2.398000, one season of its cards is 1.199000
+   nfl: steady 0.55M a season; the old save earned 2.3980 (stakes 0), then 1.2550 (stakes 0)
+   FAIL [9] mlb season 1: the old save earned 5.287200, one season of its cards is 4.143600
+   mlb: steady 0.48M a season; the old save earned 5.2872 (stakes 3), then 1.1816 (stakes 0)
+   FAIL [9] nhl season 1: the old save earned 2.179200, one season of its cards is 1.089600
+   nhl: steady 0.48M a season; the old save earned 2.1792 (stakes 0), then 1.1276 (stakes 0)
+   control backpay: section 9 turned 4 red
+simUsShopPromises: CONTROL backpay FIRED (red sections 9)
