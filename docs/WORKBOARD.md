@@ -16252,3 +16252,13 @@ Merged `554a3b18641044ec5164bff9acab4d338237078c`, published `8873089e-26a7-4095
 Privacy-only IndexNow 39692127079/`e6665c9cc330c0e97d1f9f6e11a4a2701f587c62` succeeded: actual one URL, live key verified, HTTP 200 and source holds. Artifact 12388354971 SHA256 `56f87c82af2895f3b919fa80f5c8a3b7441340e2566fa7bc05e96388a9f44fc7`, all 9 hashes held. The reviewed workflow/held script bind Privacy only; no separate payload capture or indexing guarantee.
 
 No engine/shared I-lane source, sports data, dependencies or old 1441 state repaired or waived. Broader 785 audit, 1441 preservation and ongoing privacy/legal operations remain open. SEO 1444 publication follows 1445 closure; shirt 1443 is separate. Operator/docs closure requires no product republish. Record: docs/releases/2026-10-21-analytics-paused-status-live.md.
+
+
+
+## Codex Root Round 1444 product live and verified, operators/docs recorded, 2026-10-21
+
+PR 363 qualified a94c1b397b720c297600bdc5a52c7daaba375757/run 39691108696 all six jobs, final 0 B generated outputs, complete source/dist inventories, 18 readers, 14 unchanged limits and 7+3+3 browser cases. Published 529bc3c105b0d365d96961e72587bb7ab36a9a8d/deployment d8a5f804-b134-42a1-bd51-04926c0d184a observed 23:29:09 UTC. Proper 39695657018/27ab2c9ca7e76bffd5c5a823a355e4021ad95a98 admitted 2808 root hashes, 67 public requests, exact two assets/three roles, audit 2/2 and intended thin 1/2. Strict 39693963662 remains FAILED; intake 39695080560 is admitted diagnostic evidence, not binary equivalence.
+
+IndexNow 39697351266/03cee4f8474fe846c88bc8bef87a50ee5592466a: two URLs, key verified, HTTP 200 accepted, artifact 12391502150/2337 B/SHA 76607152c63af8b961ac774daa4951f4c5130cea98cc32e78b33a70aac039fac, all nine hashes held. Home and Football Grid only, no inferred payload capture or indexing guarantee.
+
+SEO operators/docs record the admitted release after shirt final run 39696453260 and PR 361 merge b0feca59983a6946142ca29f20f16f1ba1540f6c. Shirt publication/public proof remain pending. SEO closes before shirt publication. No product republish. GA paused, GSC/dashboard unverified, broader 785 audit/1441 preservation and all failures unwaived. No engine/data/dependency/cap change or I-lane claim.
