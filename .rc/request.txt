@@ -1,0 +1,10 @@
+#!serve
+#!playwright
+#!serial
+# Release BP part two (Round BPH, finish-BPH.md). ROUND 1535, part D: the F, J, K and L walks and the Club Manager fit against base builds
+# (8fea14e2 and c1b39364, 1535's own bases). Proven on adeba447 as rBPh-m7d and on the final head. Extra: basesrv1535.sh.
+# Split three ways (d, d2, d3) because the whole of part D in one request runs close to the runner job limit of 100 minutes.
+# Part D3: the Club Manager fit against base builds. Extra: basesrv1535.sh.
+cmfit-p2: bash .rc/x/basesrv1535.sh 8fea14e2 4175 && mkdir -p "$TMPDIR/out" && RC_OUT="$TMPDIR/out" CM_FIT_PART=2 CM_FIT_BASE_URL=http://localhost:4175 CM_FIT_BASE_DIST=/tmp/wt-8fea14e2/dist node scripts/playCmTablesFit.mjs
+cmfit-p2-ctl-none: bash .rc/x/basesrv1535.sh 8fea14e2 4175 && mkdir -p "$TMPDIR/out" && RC_OUT="$TMPDIR/out" ANSWER_CONSENT_CONTROL=none CM_FIT_PART=2 CM_FIT_BASE_URL=http://localhost:4175 CM_FIT_BASE_DIST=/tmp/wt-8fea14e2/dist node scripts/playCmTablesFit.mjs
+cmfit-p2-main: git worktree add -q --detach /tmp/wt-main c1b39364 && ln -s "$PWD/node_modules" /tmp/wt-main/node_modules && bash .rc/x/basesrv1535.sh 8fea14e2 4175 && cd /tmp/wt-main && mkdir -p "$TMPDIR/out2" && RC_OUT="$TMPDIR/out2" CM_FIT_PART=2 CM_FIT_BASE_URL=http://localhost:4175 CM_FIT_BASE_DIST=/tmp/wt-8fea14e2/dist node scripts/playCmTablesFit.mjs
