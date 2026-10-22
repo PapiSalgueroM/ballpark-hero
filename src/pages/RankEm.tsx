@@ -37,6 +37,12 @@ import {
 type Mode = 'daily' | 'unlimited' | 'circuit';
 type RankAction = { order: string[] };
 const SENTINEL = [{ id: 'rank-em-daily' }];
+/* A season stamp ("through 2025-26") stays on one line: at 1280 the result
+   card broke it at its hyphen, leaving "26" alone (Round 1551 review). */
+const keepSeasonWhole = (label: string) => {
+  const m = label.match(/^(.*?)(\d{4}-\d{2})(.*)$/);
+  return m ? <>{m[1]}<span className="whitespace-nowrap">{m[2]}</span>{m[3]}</> : label;
+};
 
 const RankEm = () => {
   const [mode, setMode] = useState<Mode>('daily');
@@ -327,7 +333,7 @@ const RankEm = () => {
             </>}
             {(!isCircuit || circuit.phase === 'playing' || circuit.phase === 'reveal' || reviewIndex !== null) && <>
             <div className={cn('text-center', isCircuit ? 'mb-2' : 'mb-4')}>
-              <p ref={circuitHeading} tabIndex={-1} className="text-sm font-bold text-primary">{round.sport} · {round.statLabel}</p>
+              <p ref={circuitHeading} tabIndex={-1} className="text-sm font-bold text-primary">{round.sport} · {keepSeasonWhole(round.statLabel)}</p>
               <p className="text-xs text-muted-foreground mt-0.5 inline-flex items-center gap-1">
                 Rank most <ArrowDown className="w-3 h-3" /> fewest
               </p>
@@ -413,7 +419,7 @@ const RankEm = () => {
                   scoreLabel="points"
                   outcomeEmoji={won ? '🏆' : correctCount >= 3 ? '👏' : '🙈'}
                   headline={`${correctCount} / 5 correct`}
-                  statLine={<>{round.sport} · {round.statLabel}</>}
+                  statLine={<>{round.sport} · {keepSeasonWhole(round.statLabel)}</>}
                   funFact={<>💡 Correct order: {round.items.map((it) => it.name).join(' › ')}</>}
                   statRow={[{ label: 'Score', value: <span className="inline-flex items-center gap-1"><Trophy className="w-4 h-4" />{formatNumber(score)}</span> }]}
                   emojiGrid={`📊 Rank 'Em, ${round.sport} ${round.statLabel}: ${correctCount}/5`}
