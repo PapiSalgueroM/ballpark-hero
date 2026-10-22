@@ -8,6 +8,7 @@ import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { gzipSync } from 'node:zlib';
 import { chromium } from '../lib/playwrightLoader.mjs';
+import { answerConsent } from '../lib/answerConsent.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const OUT = path.join(ROOT, 'career-look-artifacts/native');
@@ -124,7 +125,7 @@ try {
     };
     try {
       await page.goto(BASE + result.route, { waitUntil: 'domcontentloaded' });
-      await page.getByRole('button', { name: /^essential only$/i }).first().click({ timeout: 1500 }).catch(() => {});
+      await answerConsent(page, { wait: 1500 });
       const help = page.getByRole('dialog');
       if (await help.count()) await page.keyboard.press('Escape');
       const editor = sport.slug === 'soccer'

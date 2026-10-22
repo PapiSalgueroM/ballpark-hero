@@ -79,6 +79,7 @@
  * line says FIRED, DID NOT FIRE or ABORTED, because all three exit non zero.
  */
 import pw from './lib/playwrightLoader.mjs';
+import { answerConsent } from './lib/answerConsent.mjs';
 const { chromium } = pw;
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
@@ -213,9 +214,7 @@ const MEASURE_NAV = `(() => {
 })()`;
 
 async function clearBanner(page) {
-  for (const name of [/^essential only$/i, /^accept all$/i]) {
-    await page.getByRole('button', { name }).first().click({ timeout: 900 }).catch(() => {});
-  }
+  await answerConsent(page, { wait: 900 });
 }
 
 async function measureNav(browser, { width, signedIn, route }) {
