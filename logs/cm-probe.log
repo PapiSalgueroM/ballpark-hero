@@ -1,0 +1,5 @@
+mkCmProbe: scripts/zzCmProbe.mjs written
+PROBE screen: Skip to main content DOUKNOWBALL Back Track stats MATCH LIVE PREMIER LEAGUE · ROUND 2 · HALF TIME 0 - 0 Crystal Palace vs Manchester City Crystal Palace BALANCE OF PLAY Manchester City 46% 54% 2 (1) SHOTS (ON TARGET) 2 (1) 0.13 XG 0.20 1 CORNERS 1 7 FOULS 4 1 SAVES 1 1 YELLOW 0 0 RED
+PROBE buttons: ["Back","Track stats","","Back to the dressing room","Stand off","Balanced","High press","Patient","Balanced","Direct","Narrow","Balanced","Wide","Deep","Balanced","High","DUTIES","Report a problem","Cookie choices","Light mode","Sound: off","Report a problem"]
+PROBE live: {"week":1,"minute":45,"h2Drawn":false,"instrLog":0,"formChanges":0,"instructions":null,"liveKeys":["varReviews","varKinds","week","myGoals","oppGoals","startXi","onPitch","subsUsed","mentality","opponent","compLabel","home","read","talk","lamMine","lamOpp","h1My","h1Opp","oppXi","oppBenc
+  STUCK    the live viewer offered neither a skip nor a way out

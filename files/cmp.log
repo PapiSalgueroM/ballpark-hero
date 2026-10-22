@@ -1,0 +1,42 @@
+playClubManager: seed 1542433760. Replay with PLAY_CM_SEED=1542433760
+1) Taking a job
+      pressed the 2026-27 era
+      pressed England
+      pressed Premier League
+      pressed a Premier League club
+      pressed the pinned confirm bar
+      pressed skip the dugout form, the classic career
+   in the job at Crystal Palace: Skip to main content DOUKNOWBALL Back Track stats Crystal Palace 2026-27 · Seaso
+   board confidence doctored from 69 to 100: the slot screen reads "Board 100/100"
+   back on the hub; the page has drawn 4 times since this load, before the first kick off
+2) Playing a season through the interface
+      step 0: Skip to main content DOUKNOWBALL Back Track stats Crystal Palace 2026-27 · Season 1 Season not start
+      pressed the match centre
+      pressed back out of the match centre
+      step 1: Skip to main content DOUKNOWBALL Back Track stats Crystal Palace 2026-27 · Season 1 Season not start
+      pressed the calendar tile
+      pressed back out of the calendar
+      step 2: Skip to main content DOUKNOWBALL Back Track stats Crystal Palace 2026-27 · Season 1 Season not start
+      pressed quick sim
+      step 3: Skip to main content DOUKNOWBALL Back Track stats FULL TIME PREMIER LEAGUE · ROUND 1 🏟️ Away day · 
+      pressed continue from the report
+      step 4: Skip to main content DOUKNOWBALL Back Track stats Crystal Palace 2026-27 · Season 1 #9 in league £76
+      pressed play it live
+      pressed 4x speed
+      pressed skip to the break
+      pressed second half inside the viewer
+  BROKEN   the live viewer never reached full time
+      step 5: Skip to main content DOUKNOWBALL Back Track stats MATCH LIVE PREMIER LEAGUE · ROUND 2 · HALF TIME 0 
+PROBE screen: Skip to main content DOUKNOWBALL Back Track stats MATCH LIVE PREMIER LEAGUE · ROUND 2 · HALF TIME 0 - 0 Crystal Palace vs Manchester City Crystal Palace BALANCE OF PLAY Manchester City 46% 54% 2 (1) SHOTS (ON TARGET) 2 (1) 0.13 XG 0.20 1 CORNERS 1 7 FOULS 4 1 SAVES 1 1 YELLOW 0 0 RED 0 0 SUBS 0 Back to the dressing room For this match only, from the next minute. Your standing plan stays on the Tactics tab. 🪽 In this sim they play Wing play. Do not go narrow against it: your full backs get overrun. PRESSING Stand off Balanced High press Press when the moment is right. TEMPO Patient Balanced Direct Mix it up. WIDTH Narrow Balanced Wide Use the whole pitch. DEFENSIVE LINE Deep Balanced High Hold a normal line. FORMATION 4-3-3 4-4-2 4-2-3-1 4-1-2-1-2 4-5-1 3-5-2 3-4-3 5-3-2 4-4-1-1 4-3-3 holding 4-2-2-2 3-4-2-1 4-1-4-1 5-4-1 4-3-1-2 3-5-2 high wing backs 4-2-3-1 wide DUTIES Report a problem Club Manager: Free Football Management Game A full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season. Club Manager is the site's big one: a full management sim in your browser. 454 real clubs across 27 leagues in 21 countries, from the Premier League, Serie B, Ligue 2 and the Segunda División to the
+PROBE buttons: ["Back","Track stats","","Back to the dressing room","Stand off","Balanced","High press","Patient","Balanced","Direct","Narrow","Balanced","Wide","Deep","Balanced","High","DUTIES","Report a problem","Cookie choices","Light mode","Sound: off","Report a problem"]
+PROBE live: {"week":1,"minute":45,"h2Drawn":false,"instrLog":0,"formChanges":0,"instructions":null,"liveKeys":["varReviews","varKinds","week","myGoals","oppGoals","startXi","onPitch","subsUsed","mentality","opponent","compLabel","home","read","talk","lamMine","lamOpp","h1My","h1Opp","oppXi","oppBench","oppFormationIndex","h1Play","h1Cards","h1OppCards","h1Injuries","h1Segs","h2Drawn","subs","shapeChanges","minute","formationIndex","duties","possNoise","oppSubs","added","possH1"]}
+  STUCK    the live viewer offered neither a skip nor a way out
+   the page had drawn 2354 times since its last load when the walk ended (4 at the hub before the first kick off)
+   0 half times, 1 full times, 0 subs, 0 shape changes, 4 windows, 0 signings, 0 skips through the live viewer
+   ending: ran out of steps
+  SHALLOW  only reached 1 matches, so most of the season was never exercised
+  SHALLOW  only 1 matches were played, which is too few to have exercised much
+  BROKEN   never reached a single half time, so Round 119 is not covered by this run
+  SHALLOW  4 transfer window(s) opened and not one signing completed, so the market was not exercised either
+
+Played Club Manager through its own screens. 6 findings.
