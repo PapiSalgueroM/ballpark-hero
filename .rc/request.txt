@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+walkOwner-1524: node .rc/x/walkOwner.mjs > /tmp/wo.log 2>&1; s=$?; grep -E "FAIL|stopped|walkOwner:" /tmp/wo.log | head -12 | cut -c1-400; exit $s
+cookie-1446: SOURCE_SHA=$(git rev-parse HEAD) node scripts/playCookiePolicy1446.mjs > /tmp/ck.log 2>&1; s=$?; grep -iE "error|fail|setup" /tmp/ck.log | head -12 | cut -c1-400; tail -2 /tmp/ck.log | cut -c1-300; exit $s
