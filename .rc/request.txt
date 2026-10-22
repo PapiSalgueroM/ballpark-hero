@@ -1,0 +1,19 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-1524: node_modules/.bin/vitest run src/test/soccerCareerSaveRecovery.test.tsx src/test/soccerCareerDugoutTable.test.tsx src/test/scoreShown.test.tsx src/test/soccerCareerDebutLegacy.test.tsx src/test/soccerPuskasYear1523.test.ts src/test/soccerCareerRetirement1519.test.tsx src/test/soccerCareerDocumentaryReview.test.ts --testTimeout=300000 --hookTimeout=120000 2>&1 | tail -8; exit ${PIPESTATUS[0]}
+chain: node .rc/x/check-chain-bph.mjs
+owner-1524: SIM_OWNER_BASE=${B1524:-e4464a1e} node scripts/simSoccerOwnerTail.mjs > /tmp/o24.log 2>&1; s=$?; grep -E "compared|differ" /tmp/o24.log | tail -2 | cut -c1-200; tail -1 /tmp/o24.log | cut -c1-200; exit $s
+owner-mergebase: node scripts/simSoccerOwnerTail.mjs > /tmp/o24m.log 2>&1; s=$?; grep -E "base|compared|differ" /tmp/o24m.log | tail -3 | cut -c1-200; tail -1 /tmp/o24m.log | cut -c1-200; exit $s
+ctl-1524: bad=0; for c in randomclub coin mathrandom squadnoop youthnoop stadiumnoop debtnoop dominant oldsave drawshift saleleague stalekey eager bands overprice debtfree; do SIM_OWNER_BASE=${B1524:-e4464a1e} SIM_OWNER_CONTROL=$c node scripts/simSoccerOwnerTail.mjs > /tmp/c24-$c.log 2>&1; e=$?; echo "$c exit=$e $(grep -c 'FAIL:' /tmp/c24-$c.log) fails | $(tail -1 /tmp/c24-$c.log | cut -c1-120)"; [ $e -eq 1 ] || bad=1; done; exit $bad
+scoreshown: node scripts/simScoreShown.mjs
+moneyafter: node scripts/simCareerMoneyAfterRetirement.mjs
+managercareer: node scripts/simManagerCareer.mjs
+nodeadend: node scripts/simCareerNoDeadEnd.mjs
+form-1235: SIM_CAREER_FORM_SECTIONS=1,2,3,5 node scripts/simCareerForm.mjs
+endings-1519: export B1519=41368514; SC_ENDINGS_BASE=${B1519:-cedd0239} node scripts/simSoccerCareerEndings.mjs > /tmp/e19.log 2>&1; s=$?; grep -E "^  base |careers 240|alive at" /tmp/e19.log | head -3 | cut -c1-200; tail -1 /tmp/e19.log | cut -c1-200; exit $s
+norival: node scripts/simNoRivalNames.mjs
+sitesearch: node scripts/simSiteSearch.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+storage: node scripts/simStorageWrites.mjs
+vitest-1446: node_modules/.bin/vitest run src/components/profile/AccountPrivacy.test.tsx src/lib/accountPrivacy.test.ts src/test/consentPrivacy1442.test.ts src/test/consentPurposeGates.test.ts src/test/consentSynchronization1442.test.tsx src/test/consentWithdrawal1442.test.ts src/test/cookieConsentStorage.test.tsx src/test/dailySaveShapes.test.tsx src/test/helpConsentFocus.test.tsx src/test/idleFloaterTimers.test.tsx src/test/profileInitials1446.test.tsx src/test/profileSecondDevice.test.tsx src/test/rulesGateConsentFocus.test.tsx src/test/skipTarget.test.tsx --testTimeout=300000 --hookTimeout=120000 2>&1 | tail -8; exit ${PIPESTATUS[0]}
+indexnow: node scripts/simIndexNow.mjs
+sitemap: node scripts/simSitemap.mjs
