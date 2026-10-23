@@ -1,0 +1,37 @@
+1. the fixture [0.1s]
+   5496 rows of 2026, position real for 2497; easy band 109 players on 17 values (biggest tie 18), medium 990, hard 4397
+   easy: 2 listed namesakes (Gabriel, João Pedro)
+   medium: 17 listed namesakes (Wesley, Éderson, Marquinhos, Rômulo, Luis Suárez, Danilo, ...)
+   hard: 43 listed namesakes (Léo Pereira, Pedrinho, Adama Traoré, João Mário, Vitinha, Vitinho, ...)
+2. 15000 daily ladders from 2026-10-25, and the same dates under the old rules as the baseline [0.1s]
+   old rules: 15000 ladders, 225000 questions (shirt 42648, club 44306, ballon 41359, nationality 44321, worth 14214, position 38152); worth the most by band easy 9259, medium 3579, hard 1376
+   old rules: short ladders 0, ties 1593, namesakes 4643, present tense 96672, not a club offered 563, a club's own reserve side or first team offered 18, wrong answer marked 0, unknown template 0, broken options 0
+      e.g. tense: Which club does Declan Rice play for?
+      e.g. namesake: Which club does Gabriel play for?
+      e.g. notAClub: Which club does Bandile Shandu play for? [Orlando Pirates / Rhode Island FC / FK Pardubice / Unknown]
+      e.g. ties: Ibrahima Konaté 54M / Pablo Barrios 65M / Eduardo Camavinga 54M / Lennart Karl 65M
+      e.g. clubFamily: Which club does Arda Güler play for? [Monterey Bay FC / Real Madrid Castilla / Real Madrid / Hamrun Spartans]
+   new rules: 15000 ladders, 225000 questions (shirt 42595, club 44368, position 38024, nationality 44185, ballon 41689, worth 14139); worth the most by band easy 9085, medium 3647, hard 1407
+   new rules: short ladders 0, ties 0, namesakes 0, present tense 0, not a club offered 0, a club's own reserve side or first team offered 0, wrong answer marked 0, unknown template 0, broken options 0
+3. 1000 unlimited ladders, and 1000 single questions at every difficulty (what Swap Question deals) [90.7s]
+   unlimited: 1000 ladders, 15000 questions (club 2962, position 2458, nationality 2967, shirt 2828, ballon 2846, worth 939); worth the most by band easy 599, medium 246, hard 94
+   unlimited: short ladders 0, ties 0, namesakes 0, present tense 0, not a club offered 0, a club's own reserve side or first team offered 0, wrong answer marked 0, unknown template 0, broken options 0
+   swap: 0 ladders, 15000 questions (club 2473, nationality 2554, position 2522, worth 2618, ballon 2377, shirt 2456); worth the most by band easy 884, medium 889, hard 845
+   swap: short ladders 0, ties 0, namesakes 0, present tense 0, not a club offered 0, a club's own reserve side or first team offered 0, wrong answer marked 0, unknown template 0, broken options 0
+4. dates before 2026-10-25 deal exactly what the base generator dealt [97.8s]
+   2026-10-22: 36c088422c3d34a6 (base 36c088422c3d34a6)
+   2026-10-23: 94f0aa2002e3e1d9 (base 94f0aa2002e3e1d9)
+   2026-10-24: 1f6ffa5fd6af80b6 (base 1f6ffa5fd6af80b6)
+5. every band still deals every market question: 500 builds per band and type, new rules against old [97.8s]
+   easy: club 100.0% (was 100.0%), nationality 100.0% (was 100.0%), position 100.0% (was 100.0%), worth 100.0% (was 100.0%); askable names 107 of 109
+   medium: club 100.0% (was 100.0%), nationality 100.0% (was 100.0%), position 100.0% (was 100.0%), worth 100.0% (was 100.0%); askable names 973 of 990
+   hard: club 100.0% (was 100.0%), nationality 100.0% (was 100.0%), position 100.0% (was 100.0%), worth 100.0% (was 100.0%); askable names 4354 of 4397
+6. src/data/marketNamesakes.json is current with scripts/genMarketNamesakes.mjs [99.7s]
+   derived 62 from the saved rows, 0 from a live read; shipped 62
+   6b. 50 names of the 2026 slice show two men in one season of the saved rows; left off the list 0
+7. Face Off and the bank read one MIN_RATIO [99.8s]
+   MIN_RATIO 1.04
+8. a reserve side and its first team are never offered together (a planted pool) [99.8s]
+   500 club questions each: old rules offered the partner club 72 times, new rules 0 (built 500 of 500)
+
+simTriviaBank: all checks passed

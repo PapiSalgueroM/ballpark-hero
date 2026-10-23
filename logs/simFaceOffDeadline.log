@@ -1,0 +1,7 @@
+Face Off deadline: 15/15 actual hook outcomes passed.
+Face Off deadline: early correct/wrong daily and unlimited scoring passed.
+Face Off deadline: ordinary timeout and next-round clock reset passed.
+Face Off deadline: exact10s and delayed11s picks score zero in both solo modes.
+Face Off deadline: each expired chair scores zero while the other early chair keeps its own score.
+Face Off deadline: both expired chairs and coincident click/timeout settle once.
+Face Off deadline cleanup: owned copies/reports removed; production hook bytes held.
