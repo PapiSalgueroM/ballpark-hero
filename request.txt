@@ -1,0 +1,16 @@
+#!serve
+#!playwright
+#!serial
+# Release BP part two (Round BPH, finish-BPH.md). ROUND 1535, part D: the F, J, K and L walks and the Club Manager fit against base builds
+# (8fea14e2 and c1b39364, 1535's own bases). Proven on adeba447 as rBPh-m7d and on the final head. Extra: basesrv1535.sh.
+# Split three ways (d, d2, d3) because the whole of part D in one request runs close to the runner job limit of 100 minutes.
+# Part D2: their ANSWER_CONSENT_CONTROL=none lines (each must exit non zero).
+ctl-none-tt-all: ANSWER_CONSENT_CONTROL=none ENGINES=chromium node scripts/playTwoTabs.mjs
+ctl-none-NewCountries: ANSWER_CONSENT_CONTROL=none ENGINES=chromium node scripts/playClubManagerNewCountries.mjs
+ctl-none-SaveLeave: ANSWER_CONSENT_CONTROL=none ENGINES=chromium node scripts/playClubManagerSaveLeave.mjs
+ctl-none-Slots: ANSWER_CONSENT_CONTROL=none ENGINES=chromium node scripts/playClubManagerSlots.mjs
+ctl-none-BoardVerdict: ANSWER_CONSENT_CONTROL=none ENGINES=chromium node scripts/playCmBoardVerdict.mjs
+ctl-none-Conquest: ANSWER_CONSENT_CONTROL=none ENGINES=chromium node scripts/playConquestScenes.mjs
+ctl-none-DealDesk: ANSWER_CONSENT_CONTROL=none ENGINES=chromium node scripts/playDealDesk.mjs
+ctl-none-SoccerLanding: ANSWER_CONSENT_CONTROL=none ENGINES=chromium node scripts/playSoccerLanding.mjs
+ctl-none-RevealScroll: ANSWER_CONSENT_CONTROL=none node scripts/simRevealScroll.mjs
