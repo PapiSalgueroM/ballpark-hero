@@ -1,0 +1,107 @@
+name: Menu fallback Escape qualification
+
+on:
+  push:
+    branches: [codex/site-menu-escape]
+    paths-ignore: ['docs/**']
+
+permissions:
+  contents: read
+concurrency:
+  group: site-menu-escape-${{ github.sha }}
+  cancel-in-progress: false
+
+env:
+  BASE_SOURCE: b56e0798dd60f041b6965024d2b9e22bd10ebc3d
+  CI: '1'
+  SIM_NETWORK: offline
+  TZ: UTC
+
+jobs:
+  original:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 16
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Exact original source and complete inventory
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/site-menu-escape";test ! -e "$out";mkdir "$out"
+          echo "MENU_ESCAPE_OUT=$out" >> "$GITHUB_ENV"
+          test "$GITHUB_REPOSITORY" = PapiSalgueroM/ballpark-hero
+          test "$GITHUB_REPOSITORY_ID" = 1195729679
+          test "$GITHUB_REF" = refs/heads/codex/site-menu-escape
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          git fetch --no-tags --depth=1 origin "$BASE_SOURCE" > "$out/base-fetch.log" 2>&1
+          git merge-base --is-ancestor "$BASE_SOURCE" "$GITHUB_SHA"
+          git diff --exit-code "$BASE_SOURCE" HEAD -- . ':!docs/**' ':!src/test/SiteMenu.escape-loading.test.tsx' ':!src/test/SiteMenu.escape-failure.test.tsx' ':!.github/workflows/site-menu-escape.yml' > "$out/protected-source.log"
+          test "$(git hash-object src/components/layout/SiteMenu.tsx)" = 779bde56b1dbf347dd53873f8c89edef1c82117f
+          node <<'NODE'
+          const fs=require('node:fs'),assert=require('node:assert/strict'),crypto=require('node:crypto');
+          const pins={"src/test/SiteMenu.escape-loading.test.tsx":"94eac04381b75522fec07a905cd21b6358e3d35d22909d4e1871d62be1e4101c","src/test/SiteMenu.escape-failure.test.tsx":"eefd09f4ec92c6105cea3eae2cfc1fe4c09a271d97c54afc92a0086bd7c13202"};
+          for(const [file,expected]of Object.entries(pins))assert.equal(crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex'),expected,file);
+          fs.writeFileSync(process.env.RUNNER_TEMP+'/site-menu-escape/source-binding.json',JSON.stringify({source:process.env.GITHUB_SHA,base:process.env.BASE_SOURCE,originalMenuBlob:'779bde56b1dbf347dd53873f8c89edef1c82117f',pins},null,2)+'\n',{flag:'wx'});
+          NODE
+          git rev-parse HEAD > "$out/head.txt"
+          git ls-files -z | sort -z > "$out/source-members.before"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$out/source-before.sha256"
+          git diff --exit-code HEAD > "$out/source-clean-before.log"
+          test -z "$(git status --porcelain --untracked-files=all)"
+      - name: Locked installation
+        run: |
+          set -euo pipefail
+          out="$MENU_ESCAPE_OUT"
+          npm ci > "$out/install.log" 2>&1
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$out/dependency-members.before"
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dependencies.sha256"
+      - name: Actual types and causal baseline
+        run: |
+          set -euo pipefail
+          out="$MENU_ESCAPE_OUT";export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          : > "$out/types.transport";: > "$out/tests.transport"
+          SIM_OFFLINE_RECEIPT="$out/types.transport" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$out/types.log" 2>&1
+          status=0
+          SIM_OFFLINE_RECEIPT="$out/tests.transport" timeout --signal=TERM --kill-after=15s 6m node_modules/.bin/vitest run src/test/SiteMenu.test.tsx src/test/SiteMenu.lazy-loading.test.tsx src/test/SiteMenu.load-failure.test.tsx src/test/Search.navigation.test.tsx src/test/SiteMenu.escape-loading.test.tsx src/test/SiteMenu.escape-failure.test.tsx --maxWorkers=1 --no-file-parallelism --reporter=json --outputFile="$out/tests.json" > "$out/tests.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/tests.exit";test "$status" -eq 1
+          node <<'NODE'
+          const fs=require('node:fs'),assert=require('node:assert/strict'),out=process.env.MENU_ESCAPE_OUT,r=JSON.parse(fs.readFileSync(out+'/tests.json','utf8'));
+          assert.equal(r.success,false);assert.equal(r.testResults.length,6);assert.equal(r.numTotalTests,19);assert.equal(r.numPassedTests,17);assert.equal(r.numFailedTests,2);assert.equal(r.numPendingTests,0);assert.equal(r.numTodoTests,0);
+          const failures=new Map([['SiteMenu.escape-loading.test.tsx',{marker:'SITE_MENU_LOADING_ESCAPE_TRIGGER_CLOSED',title:'dismisses a pending real menu import with Escape from the trigger and each fallback control, without a late dialog'}],['SiteMenu.escape-failure.test.tsx',{marker:'SITE_MENU_FAILURE_ESCAPE_TRIGGER_CLOSED',title:'dismisses an honest menu load failure with Escape from the trigger and each fallback control, without an automatic retry'}]]);
+          assert.deepEqual(r.testResults.map(s=>s.name.replaceAll('\\','/').split('/').pop()).sort(),['SiteMenu.test.tsx','SiteMenu.lazy-loading.test.tsx','SiteMenu.load-failure.test.tsx','Search.navigation.test.tsx','SiteMenu.escape-loading.test.tsx','SiteMenu.escape-failure.test.tsx'].sort());
+          for(const suite of r.testResults){const name=suite.name.replaceAll('\\','/').split('/').pop(),owned=failures.get(name);if(owned){assert.equal(suite.status,'failed');assert.equal(suite.assertionResults.length,1);const row=suite.assertionResults[0];assert.equal(row.status,'failed');assert.equal(row.fullName.trim(),owned.title);assert.equal(row.title,owned.title);assert.equal(row.failureMessages.length,1);assert.match(row.failureMessages[0],/AssertionError:/);assert(row.failureMessages[0].includes(owned.marker));}else{assert.equal(suite.status,'passed');assert(suite.assertionResults.every(x=>x.status==='passed'&&x.failureMessages.length===0));}}
+          for(const key of ['numRuntimeErrorTestSuites','numUnhandledErrors'])if(key in r)assert.equal(r[key],0);if('unhandledErrors'in r)assert.deepEqual(r.unhandledErrors,[]);
+          assert.doesNotMatch(fs.readFileSync(out+'/tests.log','utf8'),/Unhandled\s+(?:Errors?|Rejections?)|Uncaught\s+Exceptions?/i);
+          fs.writeFileSync(out+'/baseline-admission.json',JSON.stringify({source:process.env.GITHUB_SHA,ownedFailures:2,preservedPasses:17,markers:[...failures.values()].map(x=>x.marker),rawAbsentRuntimeCountersRemainUnknown:true},null,2)+'\n',{flag:'wx'});
+          NODE
+          test ! -s "$out/types.transport";test ! -s "$out/tests.transport"
+      - name: Always retain complete source and dependency holds
+        if: always()
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/site-menu-escape";mkdir -p "$out";failed=0
+          for manifest in source-before dependencies;do if test -f "$out/$manifest.sha256";then sha256sum --check "$out/$manifest.sha256" > "$out/final-$manifest-hold.log" 2>&1 || failed=1;else failed=1;fi;done
+          git ls-files -z | sort -z > "$out/source-members.after";cmp "$out/source-members.before" "$out/source-members.after" || failed=1
+          if test -f "$out/dependency-members.before";then find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$out/dependency-members.after";cmp "$out/dependency-members.before" "$out/dependency-members.after" || failed=1;fi
+          git diff --exit-code HEAD > "$out/final-source-diff.log" || failed=1
+          git status --porcelain --untracked-files=all > "$out/final-status.txt";test ! -s "$out/final-status.txt" || failed=1
+          while IFS= read -r -d '' file;do test ! -s "$file" || failed=1;done < <(find "$out" -type f -name '*.transport' -print0)
+          printf '%s\n' "$failed" > "$out/final-holds.exit"
+          (cd "$out";find . -type f ! -path ./evidence.sha256 -print0 | sort -z | xargs -0 sha256sum) > "$out/evidence.sha256"
+          exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: site-menu-escape-original-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/site-menu-escape/
+          if-no-files-found: error
+          retention-days: 14
