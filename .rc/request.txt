@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+#!serial
+walk: ENGINES=chromium node scripts/playNflSeasonStats.mjs
+playGmPress-head: ENGINES=chromium node scripts/playGmPress.mjs
+playGmPress-base: git worktree add -f /tmp/wbase 4a0b39ab1062ac798ce6b5377a9c99c0d4ebe19a > /dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/wbase/node_modules && (cd /tmp/wbase && npx vite build --outDir /tmp/dist-base --logLevel error) && (node scripts/lib/hostLikeServer.mjs /tmp/dist-base 4182 > /dev/null 2>&1 &) && sleep 3 && cd /tmp/wbase && BASE=http://localhost:4182 SWEEP_BASE=http://localhost:4182 ENGINES=chromium node scripts/playGmPress.mjs
+walk-nonames: node .rc/x/mut-nonames.mjs && npx vite build --outDir /tmp/dist-nonames --logLevel error && (node scripts/lib/hostLikeServer.mjs /tmp/dist-nonames 4183 > /dev/null 2>&1 &) && sleep 3 && BASE=http://localhost:4183 PLAY_NFL_STATS_CONTROL=nonames ENGINES=chromium node scripts/playNflSeasonStats.mjs; s=$?; git checkout -- src; exit $s
+walk-nocard: node .rc/x/mut-nocard.mjs && npx vite build --outDir /tmp/dist-nocard --logLevel error && (node scripts/lib/hostLikeServer.mjs /tmp/dist-nocard 4184 > /dev/null 2>&1 &) && sleep 3 && BASE=http://localhost:4184 PLAY_NFL_STATS_CONTROL=nocard ENGINES=chromium node scripts/playNflSeasonStats.mjs; s=$?; git checkout -- src; exit $s
