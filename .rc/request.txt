@@ -1,0 +1,10 @@
+#!serve
+#!playwright
+#!serial
+# Release BQ triage: playSeasonCentreMotion with node's oracle reading the page's verified membership labels (seam candidate psc1525.mjs), twice on its own search, once on each hub save, and its controls.
+psc-a: cp .rc/x/psc1525.mjs scripts/playSeasonCentreMotion.mjs && node scripts/playSeasonCentreMotion.mjs
+psc-b: cp .rc/x/psc1525.mjs scripts/playSeasonCentreMotion.mjs && node scripts/playSeasonCentreMotion.mjs
+psc-bqhub: cp .rc/x/pscFixDiag.mjs scripts/playSeasonCentreMotion.mjs && HUB_SAVE_IN="$PWD/.rc/x/hubBQ.json" node scripts/playSeasonCentreMotion.mjs
+psc-mainhub: cp .rc/x/pscFixDiag.mjs scripts/playSeasonCentreMotion.mjs && HUB_SAVE_IN="$PWD/.rc/x/hubMain.json" node scripts/playSeasonCentreMotion.mjs
+psc-ctl-tableview: cp .rc/x/psc1525.mjs scripts/playSeasonCentreMotion.mjs && SEASON_MOTION_CONTROL=tableview node scripts/playSeasonCentreMotion.mjs
+psc-ctl-otherplace: cp .rc/x/psc1525.mjs scripts/playSeasonCentreMotion.mjs && SEASON_MOTION_CONTROL=otherplace node scripts/playSeasonCentreMotion.mjs
