@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+gd-head: node scripts/playFrontOfficeGameDay.mjs
+gd-1562: git worktree add /tmp/t1562 bc856874 >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/t1562/node_modules && (cd /tmp/t1562 && node_modules/.bin/vite build --outDir /tmp/d1562 --logLevel error) && (node scripts/lib/hostLikeServer.mjs /tmp/d1562 4181 > /dev/null 2>&1 &) && sleep 4 && BASE=http://localhost:4181 node scripts/playFrontOfficeGameDay.mjs
+gd-m6: git worktree add /tmp/tm6 d72ab46c >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/tm6/node_modules && (cd /tmp/tm6 && node_modules/.bin/vite build --outDir /tmp/dm6 --logLevel error) && (node scripts/lib/hostLikeServer.mjs /tmp/dm6 4182 > /dev/null 2>&1 &) && sleep 4 && BASE=http://localhost:4182 node scripts/playFrontOfficeGameDay.mjs
+gd-m1: git worktree add /tmp/tm1 51cdca23 >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/tm1/node_modules && (cd /tmp/tm1 && node_modules/.bin/vite build --outDir /tmp/dm1 --logLevel error) && (node scripts/lib/hostLikeServer.mjs /tmp/dm1 4183 > /dev/null 2>&1 &) && sleep 4 && BASE=http://localhost:4183 node scripts/playFrontOfficeGameDay.mjs
+gd-base: git worktree add /tmp/tbase d3a334f6f >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/tbase/node_modules && (cd /tmp/tbase && node_modules/.bin/vite build --outDir /tmp/dbase --logLevel error) && (node scripts/lib/hostLikeServer.mjs /tmp/dbase 4184 > /dev/null 2>&1 &) && sleep 4 && BASE=http://localhost:4184 node scripts/playFrontOfficeGameDay.mjs
