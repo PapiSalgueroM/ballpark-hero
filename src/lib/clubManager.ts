@@ -38,6 +38,7 @@ import type { Player, Position } from '@/types/game';
 import { FORMATIONS as SHARED_FORMATIONS, SLOT_ALLOWED, playerRating } from '@/lib/squadShape';
 import { CAPTAIN_MIN_AGE, CAPTAIN_MIN_RATING } from '@/lib/captaincy';
 import type { Formation, FormationSlot } from '@/lib/squadShape';
+import { readCustomShape, customShapeProfile, type CustomShape, type CustomShapePoint } from '@/lib/clubManagerPositions';
 /* Round 505: the one position rule the lineup games share, so an out of
    position man here is graded by the same family table World XI uses.
    positionFit imports nothing but types, so there is no cycle. */
@@ -2831,6 +2832,7 @@ export interface CareerState {
   /** One id (or null) per formation slot. */
   xiIds: (string | null)[];
   formationIndex: number;
+  customShape?: unknown;
   mentality: Mentality;
   /** Round 1522: the four team instructions (clubManagerTactics.ts). Absent means balanced on all four, and a
    *  save only carries the field while one is off balanced (setInstructions drops it), so every career that
@@ -3214,6 +3216,8 @@ export type NextFixtureInfo =
  * halftime and picked back up.
  */
 export interface LiveMatch {
+  positionRules?: number;
+  customShape?: unknown;
   /** Simplified reviews enabled only by a new modern Club Manager kickoff. */
   varReviews?: true;
   /** Round 1303: the kinds of review this match was kicked off with (a goal ruled out, a penalty given), so a
@@ -3324,11 +3328,11 @@ export interface LiveMatch {
   formChanges?: LiveShapeChange[];
   /** Round 1522: the shape the match kicked off in, written with the first reshape so the eleven that started
    *  is still read in its own slots. Absent on a match nobody reshaped. */
-  kickoffShape?: { formationIndex: number; duties: (Duty | null)[] };
+  kickoffShape?: { formationIndex: number; duties: (Duty | null)[]; customShape?: unknown };
 }
 
 /** Round 1522: one change of shape during a match. */
-export interface LiveShapeChange { minute: number; plus?: number; formationIndex: number; order: string[]; duties: (Duty | null)[]; }
+export interface LiveShapeChange { minute: number; plus?: number; formationIndex: number; order: string[]; duties: (Duty | null)[]; customShape?: unknown; }
 
 /** Round 504: a stretch of a half and the full half lambdas that were in force over it. */
 export interface LamSegment { from: number; to: number; lamMine: number; lamOpp: number; }
@@ -3338,6 +3342,7 @@ export interface PlayResult {
   /** Round 466: 'reached' only ever comes back to a caller that passed
    *  untilWeek, when the week pointer got there without a match to play. */
   kind: 'window' | 'match' | 'seasonOver' | 'halftime' | 'reached';
+  blocked?: 'position-state-invalid';
   report?: MatchWeekReport;
   live?: LiveMatch;
 }
@@ -3410,7 +3415,7 @@ export function pitchLineOf(slot: FormationSlot): PitchLine {
   return 'attack';
 }
 
-export function mentalityShift(slot: FormationSlot, m: Mentality): PitchShift {
+export function mentalityShift(slot: FormationSlot, m: Mentality, x = slot.x): PitchShift {
   if (m === 'balanced') return { dx: 0, dy: 0 };
   const line = pitchLineOf(slot);
   const up = m === 'attacking';
@@ -3420,12 +3425,16 @@ export function mentalityShift(slot: FormationSlot, m: Mentality): PitchShift {
   const BACK: Record<PitchLine, number> = { keeper: 1, defence: 4, midfield: 7.5, attack: 11 };
   const dy = up ? UP[line] : BACK[line];
   const spread = line === 'keeper' ? 0 : up ? 0.12 : -0.16;
-  return { dx: (slot.x - 50) * spread, dy };
+  return { dx: (x - 50) * spread, dy };
 }
 
 /** Final spot for a slot under a mentality, clamped so nobody leaves the grass. */
-export function slotPosition(slot: FormationSlot, m: Mentality): { x: number; y: number } {
-  const sh = mentalityShift(slot, m);
+export function slotPosition(slot: FormationSlot, m: Mentality, base?: CustomShapePoint): { x: number; y: number } {
+  const sh = mentalityShift(slot, m, base ? base.x : slot.x);
+  if (base) return {
+    x: Math.max(6, Math.min(94, base.x + sh.dx)),
+    y: Math.max(6, Math.min(94, base.y + sh.dy)),
+  };
   return {
     x: Math.max(6, Math.min(94, slot.x + sh.dx)),
     y: Math.max(6, Math.min(94, slot.y + sh.dy)),
@@ -9248,6 +9257,7 @@ export function setTeamTalk(career: CareerState, tone: TalkTone | null): CareerS
 
 /** Say something at the interval. Tap it again and you said nothing. */
 export function giveHalftimeTalk(career: CareerState, tone: TalkTone | null): CareerState {
+  if (!livePositionsValid(career.live)) return career;
   const state: CareerState = JSON.parse(JSON.stringify(career));
   if (state.live) state.live.talk = state.live.talk === tone ? null : tone;
   return state;
@@ -16533,11 +16543,11 @@ export function myOnPitchAt(live: LiveMatch, minute: number): string[] {
 
 /** Round 1522: the shape in force at a minute (myOnPitchAt's order reads in it): the last reshape before the
  *  minute, or the kick off's. */
-export function liveShapeAt(live: LiveMatch, minute: number): { formationIndex: number | undefined; duties: (Duty | null)[] | undefined } {
+export function liveShapeAt(live: LiveMatch, minute: number): { formationIndex: number | undefined; duties: (Duty | null)[] | undefined; customShape?: unknown } {
   const last = [...(live.formChanges ?? [])].reverse().find(f => f.minute < minute);
-  if (last) return { formationIndex: last.formationIndex, duties: last.duties };
-  if (live.kickoffShape) return { formationIndex: live.kickoffShape.formationIndex, duties: live.kickoffShape.duties };
-  return { formationIndex: live.formationIndex, duties: live.duties };
+  const shape = last ?? live.kickoffShape ?? live;
+  return { formationIndex: shape.formationIndex, duties: shape.duties,
+    ...(live.positionRules === 1 && Object.prototype.hasOwnProperty.call(shape, 'customShape') ? { customShape: shape.customShape } : {}) };
 }
 
 /**
@@ -16662,10 +16672,68 @@ function tacticEdge(state: CareerState, fx: MyFixture, xi: XiSlot[], instr: Team
   return isBalanced(instr) ? null : tacticsImpl()?.edge(state, fx, xi, instr, half) ?? null;
 }
 
+type PositionSnapshot = { formationIndex: number; customShape?: unknown };
+
+function copyCustomShape(shape: CustomShape): CustomShape {
+  return { v: 1, formationIndex: shape.formationIndex, points: shape.points.map(p => ({ x: p.x, y: p.y })) };
+}
+
+function livePositionSnapshot(live: LiveMatch): PositionSnapshot | null {
+  return live.positionRules === 1 && live.formationIndex !== undefined
+    ? { formationIndex: live.formationIndex, ...(Object.prototype.hasOwnProperty.call(live, 'customShape') ? { customShape: live.customShape } : {}) }
+    : null;
+}
+
+function positionSnapshotValid(shape: { formationIndex?: number; duties?: (Duty | null)[]; customShape?: unknown } | undefined): boolean {
+  if (!shape || typeof shape.formationIndex !== 'number' || !Number.isInteger(shape.formationIndex)) return false;
+  const formation = FORMATIONS[shape.formationIndex];
+  if (!formation || formation.slots.length !== 11 || !Array.isArray(shape.duties)
+    || Object.getPrototypeOf(shape.duties) !== Array.prototype || shape.duties.length !== 11 || Object.keys(shape.duties).length !== 11) return false;
+  for (let i = 0; i < 11; i++) {
+    if (!Object.prototype.hasOwnProperty.call(shape.duties, i)) return false;
+    const duty = shape.duties[i];
+    if (duty !== null && !dutyOptions(formation.slots[i]).includes(duty)) return false;
+  }
+  return !Object.prototype.hasOwnProperty.call(shape, 'customShape')
+    || readCustomShape(shape.customShape, shape.formationIndex, formation.slots) !== null;
+}
+
+function livePositionsValid(live: LiveMatch | null | undefined): boolean {
+  if (!live || !Object.prototype.hasOwnProperty.call(live, 'positionRules')) return true;
+  if (live.positionRules !== 1 || !positionSnapshotValid(live) || !positionSnapshotValid(live.kickoffShape)) return false;
+  if (live.formChanges !== undefined) {
+    if (!Array.isArray(live.formChanges) || Object.getPrototypeOf(live.formChanges) !== Array.prototype
+      || Object.keys(live.formChanges).length !== live.formChanges.length) return false;
+    let previous = -1;
+    for (let i = 0; i < live.formChanges.length; i++) {
+      if (!Object.prototype.hasOwnProperty.call(live.formChanges, i)) return false;
+      const step = live.formChanges[i];
+      if (!step || !Number.isFinite(step.minute) || step.minute < previous || step.minute < 0
+        || !positionSnapshotValid(step) || !Array.isArray(step.order)
+        || Object.getPrototypeOf(step.order) !== Array.prototype || step.order.length > 11
+        || Object.keys(step.order).length !== step.order.length) return false;
+      for (let j = 0; j < step.order.length; j++) if (!Object.prototype.hasOwnProperty.call(step.order, j) || typeof step.order[j] !== 'string') return false;
+      previous = step.minute;
+    }
+  }
+  return true;
+}
+
+function positionEdge(xi: XiSlot[], mentality: Mentality, snapshot: PositionSnapshot | null) {
+  if (!snapshot || !Object.prototype.hasOwnProperty.call(snapshot, 'customShape')) return null;
+  const formation = FORMATIONS[snapshot.formationIndex];
+  if (!formation) return null;
+  const custom = readCustomShape(snapshot.customShape, snapshot.formationIndex, formation.slots);
+  if (!custom) return null;
+  return customShapeProfile(formation.slots, xi,
+    formation.slots.map(slot => slotPosition(slot, mentality)),
+    formation.slots.map((slot, i) => slotPosition(slot, mentality, custom.points[i])));
+}
+
 /** The first half's lambdas, the kick off formula: the talk, the press, the shape, the venue. Round 1522 review:
  *  `instr` has no default, so a caller that forgets the instructions in force fails the type gate rather than
  *  playing balanced football while the log says otherwise. */
-function firstHalfLambdas(state: CareerState, fx: MyFixture, xi: XiSlot[], mentality: Mentality, instr: TeamInstructions): { lamMine: number; lamOpp: number; mine: number; oppS: number } {
+function firstHalfLambdas(state: CareerState, fx: MyFixture, xi: XiSlot[], mentality: Mentality, instr: TeamInstructions, snapshot: PositionSnapshot | null): { lamMine: number; lamOpp: number; mine: number; oppS: number } {
   const talk = talkEdgeFor(state, xi, fx, state.teamTalk ?? null);
   const press = state.press;
   const mine = myMatchStrength(state, xi) + talk + (press?.nextSharpen ?? 0);
@@ -16677,7 +16745,10 @@ function firstHalfLambdas(state: CareerState, fx: MyFixture, xi: XiSlot[], menta
   const duty = dutyBoost(xi, state);
   /* Round 1522: and the instructions; on balanced they add exactly zero. */
   const tac = tacticEdge(state, fx, xi, instr, 1);
-  const [lamMine, lamOpp] = halfLambdas(mine, oppS, ment.atk + homeAtk + duty.atk + (tac ? tac.atk : 0), ment.def + oppAtk + duty.def + (tac ? tac.def : 0));
+  const geometry = positionEdge(xi, mentality, snapshot);
+  const [lamMine, lamOpp] = geometry
+    ? halfLambdas(mine, oppS, ment.atk + homeAtk + duty.atk + (tac ? tac.atk : 0) + geometry.atk, ment.def + oppAtk + duty.def + (tac ? tac.def : 0) + geometry.conceded)
+    : halfLambdas(mine, oppS, ment.atk + homeAtk + duty.atk + (tac ? tac.atk : 0), ment.def + oppAtk + duty.def + (tac ? tac.def : 0));
   /* Round 670: a match that can go to extra time draws at the deflator. */
   const k = etScale(fx);
   return { lamMine: lamMine * k, lamOpp: lamOpp * k, mine, oppS };
@@ -16716,7 +16787,10 @@ function secondHalfLambdas(
   const duty = dutyBoost(xi, state);
   /* Round 1522: the instructions in force now, half two's costs included; on balanced they add exactly zero. */
   const tac = tacticEdge(state, fx, xi, liveInstructions(live), 2);
-  const [lamMine, lamOpp] = halfLambdas(mine, oppS + fire, ment2.atk + homeAtk + opp2.def + duty.atk + (tac ? tac.atk : 0), ment2.def + oppAtk + opp2.atk + duty.def + (tac ? tac.def : 0));
+  const geometry = positionEdge(xi, live.mentality, livePositionSnapshot(live));
+  const [lamMine, lamOpp] = geometry
+    ? halfLambdas(mine, oppS + fire, ment2.atk + homeAtk + opp2.def + duty.atk + (tac ? tac.atk : 0) + geometry.atk, ment2.def + oppAtk + opp2.atk + duty.def + (tac ? tac.def : 0) + geometry.conceded)
+    : halfLambdas(mine, oppS + fire, ment2.atk + homeAtk + opp2.def + duty.atk + (tac ? tac.atk : 0), ment2.def + oppAtk + opp2.atk + duty.def + (tac ? tac.def : 0));
   /* Round 670: the same deflator as the first half, and extra time's too. */
   const k = etScale(fx);
   return { lamMine: lamMine * k, lamOpp: lamOpp * k, mine, oppS };
@@ -17244,7 +17318,7 @@ function ensureFirstHalf(state: CareerState, entry: CalendarEntry, live: LiveMat
   const started = men(startedSlots);
   const dutyOf = dutyLookup(startedSlots);
   if (live.lamMine === undefined || live.lamOpp === undefined) {
-    const { lamMine, lamOpp } = firstHalfLambdas(state, fx, startedSlots, live.mentality, liveInstructions(live));
+    const { lamMine, lamOpp } = firstHalfLambdas(state, fx, startedSlots, live.mentality, liveInstructions(live), live.positionRules === 1 ? live.kickoffShape ?? null : null);
     if (live.lamMine === undefined) live.lamMine = lamMine;
     if (live.lamOpp === undefined) live.lamOpp = lamOpp;
   }
@@ -17299,7 +17373,7 @@ function recutFirstHalf(state: CareerState, entry: CalendarEntry, live: LiveMatc
   live.h1Injuries = keepUpTo(live.h1Injuries, minute);
   const off = offPitchIds(live);
   const xi = livePairs(state, live).filter(x => !off.has(x.p.id));
-  const { lamMine, lamOpp, mine, oppS } = firstHalfLambdas(state, fx, xi, live.mentality, liveInstructions(live));
+  const { lamMine, lamOpp, mine, oppS } = firstHalfLambdas(state, fx, xi, live.mentality, liveInstructions(live), livePositionSnapshot(live));
   const share = (45 - minute) / 45;
   live.h1Segs = recutSegments(live.h1Segs, { from: 0, to: 45, lamMine: live.lamMine ?? lamMine, lamOpp: live.lamOpp ?? lamOpp }, minute, 45, lamMine, lamOpp);
   ({ lamMine: live.lamMine, lamOpp: live.lamOpp } = effectiveLambdas(live.h1Segs));
@@ -17388,7 +17462,7 @@ function recutBoard(state: CareerState, entry: CalendarEntry, live: LiveMatch, p
   }
   const off = offPitchIds(live);
   const xi = livePairs(state, live).filter(x => !off.has(x.p.id));
-  const first = period === 'h1' ? firstHalfLambdas(state, fx, xi, live.mentality, liveInstructions(live)) : null;
+  const first = period === 'h1' ? firstHalfLambdas(state, fx, xi, live.mentality, liveInstructions(live), livePositionSnapshot(live)) : null;
   const { lamMine, lamOpp } = first
     ?? secondHalfLambdas(state, fx, live, xi, live.myGoals + (live.h2My ?? []).length, live.oppGoals + (live.h2Opp ?? []).length);
   /* A minute of the board counts `weight` times an ordinary one (see BOARD). */
@@ -19914,6 +19988,7 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
  * Never mutates the input state.
  */
 export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boolean; untilWeek?: number; noCoach?: boolean; varReviews?: CmVarAsk; noBook?: boolean }): PlayResult {
+  if (career.live && !livePositionsValid(career.live)) return { state: career, kind: 'halftime', live: career.live, blocked: 'position-state-invalid' };
   const state: CareerState = JSON.parse(JSON.stringify(career));
   /* Release AL: `noCoach` plays a quick sim the way it was played before
      Round 1072, with nobody making changes. Manager Hot Seat passes it: its
@@ -20089,11 +20164,17 @@ function kickOff(state: CareerState, entry: CalendarEntry, varReviews: CmVarAsk 
   /* Round 505: the eleven WITH their slots, because the strength reads a
      man in his slot now. */
   const xi = effectiveXIWithSlots(state);
+  const positionFormation = Number.isSafeInteger(state.formationIndex) && state.formationIndex >= 0
+    ? FORMATIONS[state.formationIndex] : undefined;
+  const readPosition = positionFormation
+    ? readCustomShape(state.customShape, state.formationIndex, positionFormation.slots) : null;
+  const customShape = readPosition ? copyCustomShape(readPosition) : null;
+  const positionSnapshot = customShape ? { formationIndex: state.formationIndex, customShape } : null;
   /* Round 135: whatever you said before kick off, and whatever you said into a
      microphone this week, is on the pitch with them for the first half.
      Round 157: keep the half's lambdas on the live match, so the full time
      xG line is read off the exact process that produced these goals. */
-  const { lamMine, lamOpp, mine, oppS } = firstHalfLambdas(state, fx, xi, state.mentality, instructionsOf(state));
+  const { lamMine, lamOpp, mine, oppS } = firstHalfLambdas(state, fx, xi, state.mentality, instructionsOf(state), positionSnapshot);
   const ids = xi.map(x => x.p.id);
   /* Round 504: the other eleven, picked before anyone scores, so their
      scorers are men who are on the pitch and the report rates the same
@@ -20136,6 +20217,11 @@ function kickOff(state: CareerState, entry: CalendarEntry, varReviews: CmVarAsk 
     minute: 0,
     formationIndex: state.formationIndex,
     duties: (FORMATIONS[state.formationIndex] ?? FORMATIONS[0]).slots.map((_, i) => slotDuty(state, FORMATIONS[state.formationIndex] ?? FORMATIONS[0], i)),
+    ...(customShape ? { positionRules: 1, customShape, kickoffShape: {
+      formationIndex: state.formationIndex,
+      duties: positionFormation.slots.map((_, i) => slotDuty(state, positionFormation, i)),
+      customShape: copyCustomShape(customShape),
+    } } : {}),
     possNoise: [ri(-3, 3), ri(-3, 3)],
     /* Round 1522: the instructions it kicks off under, only when one is off balanced. */
     ...(isBalanced(instructionsOf(state)) ? {} : { instrLog: [{ minute: 0, instructions: instructionsOf(state) }] }),
@@ -20201,7 +20287,7 @@ export function liveGoneIds(
  *  reload picks the match up there rather than at kick off. */
 export function markLiveMinute(career: CareerState, minute: number): CareerState {
   const live = career.live;
-  if (!live || !Number.isFinite(minute)) return career;
+  if (!live || !livePositionsValid(live) || !Number.isFinite(minute)) return career;
   const m = Math.floor(Math.max(0, Math.min(live.et ? live.et.to : 90, minute)));
   if (m <= (live.minute ?? 0)) return career;
   const state: CareerState = JSON.parse(JSON.stringify(career));
@@ -20379,6 +20465,7 @@ export function changeLive(
    *  off the change (recutBoard). Ignored outside a board. */
   plus?: number,
 ): CareerState | null {
+  if (!livePositionsValid(career.live)) return null;
   const state: CareerState = JSON.parse(JSON.stringify(career));
   const live = state.live;
   if (!live) return null;
@@ -20433,7 +20520,17 @@ export function changeLive(
        the screens that offer one are on), from the next minute; without it the change is refused. */
     const T = tacticsImpl();
     if (!T || !T.change(state, live, change, m, p)) return null;
+    if (live.positionRules === 1 && (change.kind === 'formation' || change.kind === 'duty')) {
+      if (change.kind === 'formation') delete live.customShape;
+      const step = live.formChanges?.[live.formChanges.length - 1];
+      if (step && Object.prototype.hasOwnProperty.call(live, 'customShape')) {
+        const shape = readCustomShape(live.customShape, live.formationIndex!, FORMATIONS[live.formationIndex!].slots);
+        if (!shape) return null;
+        step.customShape = copyCustomShape(shape);
+      }
+    }
   }
+  if (!livePositionsValid(live)) return null;
   live.minute = m;
   const entry = state.calendar[live.week];
   if (entry && m < 45) recutFirstHalf(state, entry, live, m);
@@ -20450,6 +20547,7 @@ export function changeLive(
  * whistle draws the half itself, by the same function.
  */
 export function startSecondHalf(career: CareerState): CareerState | null {
+  if (!livePositionsValid(career.live)) return null;
   const state: CareerState = JSON.parse(JSON.stringify(career));
   const live = state.live;
   if (!live) return null;
@@ -20486,7 +20584,7 @@ export function isExtraTimeDue(career: CareerState): boolean {
  * the whistle draws the same stretch itself, by the same function.
  */
 export function startExtraTime(career: CareerState): CareerState | null {
-  if (!isExtraTimeDue(career)) return null;
+  if (!livePositionsValid(career.live) || !isExtraTimeDue(career)) return null;
   const state: CareerState = JSON.parse(JSON.stringify(career));
   const live = state.live!;
   drawExtraTime(state, state.calendar[live.week], live);
@@ -20583,7 +20681,7 @@ export function quickLegsMinutes(state: CareerState, live: LiveMatch): number[] 
 
 /** Quick sim coaching uses the real clock and changes, without settling the match. */
 export function coachQuickMatch(career: CareerState): CareerState {
-  if (!career.live) return career;
+  if (!career.live || !livePositionsValid(career.live)) return career;
   let state: CareerState = JSON.parse(JSON.stringify(career));
   const entry = state.calendar[state.live!.week];
   const savedMinute = state.live!.minute ?? 46;
@@ -20696,6 +20794,7 @@ export function coachQuickMatch(career: CareerState): CareerState {
 
 /** Play the second half and finish the match. */
 export function resumeMatch(career: CareerState): PlayResult {
+  if (career.live && !livePositionsValid(career.live)) return { state: career, kind: 'halftime', live: career.live, blocked: 'position-state-invalid' };
   const state: CareerState = JSON.parse(JSON.stringify(career));
   const live = state.live;
   if (!live) return playNextEntry(state);
