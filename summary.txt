@@ -1,0 +1,7 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+psc-a exit=0 135s | playSeasonCentreMotion: 80 checks, 0 failed
+psc-b exit=0 135s | playSeasonCentreMotion: 80 checks, 0 failed
+psc-bqhub exit=0 136s | playSeasonCentreMotion: 80 checks, 0 failed
+psc-mainhub exit=0 136s | playSeasonCentreMotion: 80 checks, 0 failed
+psc-ctl-tableview exit=1 135s | playSeasonCentreMotion: 80 checks, 1 failed (control tableview)
+psc-ctl-otherplace exit=1 68s | Node.js v24.21.0
