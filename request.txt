@@ -1,0 +1,3 @@
+s4-clean: NFL_STATS_SECTIONS=4 node scripts/simNflSeasonStats.mjs
+s4-passflip: NFL_STATS_SECTIONS=4 NFL_STATS_CONTROL=passflip node scripts/simNflSeasonStats.mjs
+s4-sackswap: NFL_STATS_SECTIONS=4 NFL_STATS_CONTROL=sackswap node scripts/simNflSeasonStats.mjs

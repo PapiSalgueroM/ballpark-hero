@@ -1,0 +1,3 @@
+s4-passflip exit=1 27s | simNflSeasonStats: 20 checks, 5 failed (control passflip)
+s4-clean exit=0 29s | simNflSeasonStats: 20 checks, 0 failed
+s4-sackswap exit=1 31s | simNflSeasonStats: 20 checks, 5 failed (control sackswap)
