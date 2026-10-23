@@ -1,0 +1,9 @@
+n-nosecond-fair exit=1 1s | simFairPuzzles: 1 failure
+n-fair-ctl exit=1 0s | simFairPuzzles: 2 failures
+n-identity exit=0 1s | simUsConnectionsFacts: green. Every Baseball, NFL and NHL Connections group is held to the record, and every board has one right answer.
+n-identity-twice exit=1 1s | simUsConnectionsFacts: 1 failure
+n-bellheld exit=1 1s | simUsConnectionsFacts: 1 failure
+n-bellheld-nosecond exit=0 1s | simUsConnectionsFacts: green. Every Baseball, NFL and NHL Connections group is held to the record, and every board has one right answer.
+n-karlheld exit=1 1s | simUsConnectionsFacts: 1 failure
+n-karlheld-reach exit=0 1s | simUsConnectionsFacts: green. Every Baseball, NFL and NHL Connections group is held to the record, and every board has one right answer.
+n-clean exit=0 1s | simUsConnectionsFacts: green. Every Baseball, NFL and NHL Connections group is held to the record, and every board has one right answer.
