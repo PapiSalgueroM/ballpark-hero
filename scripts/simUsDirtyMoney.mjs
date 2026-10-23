@@ -49,6 +49,8 @@
  *   farm        Give it away pays up to 12 karma                              -> section 7
  *   cap         Come clean cools up to 6 (one point more)                     -> section 7, red on the cousin (heat 8), no corruption card
  *   cool8       the desk's copy of the season end cools 8, the engines cool 9 -> section 9
+ *   lawyerdesk  Round 1534: the desk ignores the lawyer (cools 9), the engines -> section 9, the lawyer cases only
+ *               cool 18 with one
  *   deck        launderEffectText draws one Math.random                       -> section 5
  *   noop        one sport's launder apply put back to the flag and heat +10   -> section 4, naming that sport only
  *               (US_DIRTY_MONEY_SPORT=nba|nfl|mlb|nhl, default nba; run once per sport)
@@ -81,6 +83,7 @@ const CONTROLS = {
   farm: ['export const GIVE_KARMA_CAP = 6;', 'export const GIVE_KARMA_CAP = 12;', [7]],
   cap: ['export const CLEAN_HEAT_CAP = 5;', 'export const CLEAN_HEAT_CAP = 6;', [7]],
   cool8: ['const SEASON_COOL = 9;', 'const SEASON_COOL = 8;', [9]],
+  lawyerdesk: ['const cool = usCareerSeasonCool(c.purchased, SEASON_COOL);', 'const cool = SEASON_COOL;', [9]],
   deck: ['export function launderEffectText(c: DirtyMoneyHost): string {\n  const n = wayNumbers(c, \'wash\');', 'export function launderEffectText(c: DirtyMoneyHost): string {\n  Math.random();\n  const n = wayNumbers(c, \'wash\');', [5]],
 };
 /* Controls that edit another file: noop edits one deck (US_DIRTY_MONEY_SPORT, default nba) in the head bundle,
@@ -611,17 +614,24 @@ try {
    dealt each way and then played six season ends the board's way (a banned year takes one off first, then
    sport.progress runs the meter): the seasons served, and how many suspensions started at a season end, must be
    the numbers the way printed (Keep it quiet: whether the first season end suspends). The method is the run
-   reviewer's probe (2,304 of 2,304 matched, and 80 went red with the cooling off by one). */
+   reviewer's probe (2,304 of 2,304 matched, and 80 went red with the cooling off by one).
+   Round 1534: the Shady aisle's lawyer makes a clean season cool twice as fast in the engines and on the desk
+   (src/lib/usCareerAnnualBenefits.ts usCareerSeasonCool), so the grid is played again with each sport's lawyer
+   held: 4,608 cases, and control lawyerdesk (the desk back on 9 alone) must turn only lawyer cases red. */
 console.log('9) the printed bans against the four engines\' season end');
 const FIXTURE = JSON.parse(read('scripts/data/usBoardFixture.json'));
 const BAN_HEATS = [0, 40, 70, 75, 79, 80, 81, 84, 85, 88, 89, 89.5, 90, 91, 95, 98, 99, 100];
+const LAWYER = { nba: 'nshady_lawyer', nfl: 'shady_lawyer', mlb: 'mshady_lawyer', nhl: 'hshady_lawyer' };
 let banCases = 0;
+let lawyerCases = 0;
 const served = new Map();
 for (const slug of SPORTS) {
   const sport = BIND[slug];
   const recorded = JSON.parse(FIXTURE.sports[slug].saves.dirty).c;
-  for (const heat of BAN_HEATS) for (const pending of [0, 1]) for (const dirty of [0.4, 1.1, 6, 20]) for (const way of DM.DIRTY_WAYS) {
+  if (!sport.shopItems.some(item => item.id === LAWYER[slug])) fail(9, slug, `the shop has no ${LAWYER[slug]}`);
+  for (const lawyer of [false, true]) for (const heat of BAN_HEATS) for (const pending of [0, 1]) for (const dirty of [0.4, 1.1, 6, 20]) for (const way of DM.DIRTY_WAYS) {
     const c = { ...clone(recorded), heat, dirtyMoney: dirty, suspendedSeasons: pending, retired: false };
+    if (lawyer) c.purchased = [...(c.purchased ?? []), LAWYER[slug]];
     const n = DM.wayNumbers(c, way);
     const r = way === 'quiet' ? { state: clone(c), caught: null } : DM.dealWithDirtyMoney(c, way);
     const s = clone(r.state);
@@ -638,7 +648,8 @@ for (const slug of SPORTS) {
     banCases += 1;
     const k = `${way}:${banned}`;
     served.set(k, (served.get(k) ?? 0) + 1);
-    const who = `${slug} ${way}${way === 'wash' ? (r.caught ? ' caught' : ' clean') : ''} at heat ${heat}, ${pending} pending, ${dirty}M`;
+    const who = `${slug} ${way}${way === 'wash' ? (r.caught ? ' caught' : ' clean') : ''} at heat ${heat}, ${pending} pending, ${dirty}M${lawyer ? ', with the lawyer' : ''}`;
+    if (lawyer) lawyerCases += 1;
     if (way === 'quiet') {
       if (n.burnsToBan !== firstEndBan) fail(9, who, `prints burnsToBan ${n.burnsToBan}, the engine's first season end ${firstEndBan ? 'suspends' : 'does not'}`);
     } else if (way === 'wash' && r.caught) {
@@ -648,7 +659,7 @@ for (const slug of SPORTS) {
     }
   }
 }
-console.log(`   ${banCases} cases; seasons the engines served by way: ${[...served].sort().map(([k, v]) => `${k}=${v}`).join(' ')}`);
+console.log(`   ${banCases} cases (${lawyerCases} with the lawyer held); seasons the engines served by way: ${[...served].sort().map(([k, v]) => `${k}=${v}`).join(' ')}`);
 for (const k of ['clean:1', 'give:1', 'quiet:2', 'wash:2']) if (!served.has(k)) fail(9, 'coverage', `no case served ${k}: the grid no longer reaches a ban`);
 
 /* ---------- section 8: the help line holds ---------- */
@@ -679,6 +690,14 @@ if (control) {
     console.log(`   control cap: section 7 red on ${reds.join('; ') || 'nothing'}`);
     if (!reds.some(k => k.startsWith('nfl ') && k.includes('cousin')) || !reds.every(k => table.get(k)?.life)) {
       console.log('CONTROL cap DID NOT FIRE on the life cards alone');
+      process.exit(2);
+    }
+  }
+  if (control === 'lawyerdesk') {
+    const reds = [...(red.get(9) ?? [])];
+    console.log(`   control lawyerdesk: section 9 red on ${reds.length} cases, ${reds.filter(k => k.endsWith('with the lawyer')).length} of them with the lawyer`);
+    if (!reds.length || !reds.every(k => k.endsWith('with the lawyer'))) {
+      console.log('CONTROL lawyerdesk DID NOT FIRE on the lawyer cases alone');
       process.exit(2);
     }
   }

@@ -28,6 +28,7 @@
 import type { NbaCareerState, NbaCareerEvent } from './nbaMyCareer';
 import { nbaTeamLabelOf, NBA_SPEND_ITEMS } from './nbaMyCareer';
 import { liquidateUsCareerPurchases } from './usCareerAnnualBenefits';
+import { bankUsCareerFee } from './usCareerAnnualBenefits';
 import { launderDirtyMoney, launderEffectText } from './careerDirtyMoney';
 
 type DirtyState = NbaCareerState & {
@@ -129,7 +130,7 @@ export function getNbaCorruptionEvents(c: NbaCareerState, rng: () => number): Nb
         { label: 'Take the cut, 1.6M a year', effect: '1.6M dirty, heat +16',
           apply: (cc) => { setFlag(cc, 'sneaks', 1); dirty(cc, 1.6); heatUp(cc, 16); return 'You stopped asking about inventory. Roughly a fifth of your shoes in the world are not really yours. Heat +16.'; } },
         { label: 'Tell your brand immediately', effect: 'Fanbase +6, contract bonus',
-          apply: (cc) => { setFlag(cc, 'sneaks', -1); cc.earnings += 2; cc.fanbase = clamp(cc.fanbase + 6, 0, 100); return 'You told the brand and they shut the factory down. They added two million to your deal for the loyalty.'; } },
+          apply: (cc) => { setFlag(cc, 'sneaks', -1); const paid = bankUsCareerFee(cc, 2, 1); cc.fanbase = clamp(cc.fanbase + 6, 0, 100); return `You told the brand and they shut the factory down. They paid you a ${paid}M loyalty bonus, banked.`; } },
       ],
     });
   }
@@ -198,7 +199,7 @@ export function getNbaCorruptionEvents(c: NbaCareerState, rng: () => number): Nb
         { label: 'Let the assistant sign', effect: '1.1M dirty, heat +10',
           apply: (cc) => { dirty(cc, 1.1); heatUp(cc, 10); return 'About 2,000 of your autographs in the world were signed by a man named Devon. Heat +10.'; } },
         { label: 'Sign all 5,000 yourself', effect: '900k clean, health -3',
-          apply: (cc) => { cc.earnings += 0.9; cc.health = clamp(cc.health - 3, 0, 100); return 'You signed every one. Your shooting hand was numb for a week and every signature is real.'; } },
+          apply: (cc) => { const paid = bankUsCareerFee(cc, 0.9, 1); cc.health = clamp(cc.health - 3, 0, 100); return `You signed every one. Your shooting hand was numb for a week, every signature is real, and ${paid}M is banked.`; } },
       ],
     });
   }
@@ -212,7 +213,7 @@ export function getNbaCorruptionEvents(c: NbaCareerState, rng: () => number): Nb
         { label: 'Sign it, 7M', effect: '7M dirty, heat +20',
           apply: (cc) => { dirty(cc, 7); heatUp(cc, 20); cc.fanbase = clamp(cc.fanbase + 4, 0, 100); return 'You signed. Seven million and your face on a parlay slip in every bar in the state. Heat +20.'; } },
         { label: 'Sign the cleaned up version, 2.5M', effect: '2.5M clean',
-          apply: (cc) => { cc.earnings += 2.5; return 'Your lawyer stripped the illegal clauses and the number fell to 2.5M. Still 2.5M.'; } },
+          apply: (cc) => { const paid = bankUsCareerFee(cc, 2.5, 1); return `Your lawyer stripped the illegal clauses and the number fell to ${paid}M. Still ${paid}M, banked.`; } },
         { label: 'Turn it down entirely', effect: 'Fanbase +8',
           apply: (cc) => { cc.fanbase = clamp(cc.fanbase + 8, 0, 100); cc.morale = clamp(cc.morale + 5, 0, 100); return 'You turned down sportsbook money out loud, and people who never liked you started to.'; } },
       ],
@@ -479,7 +480,7 @@ export function getNbaCorruptionEvents(c: NbaCareerState, rng: () => number): Nb
         { label: 'Play the tour their way, 2.2M', effect: '2.2M dirty, heat +18',
           apply: (cc) => { setFlag(cc, 'summerLeagueFix', 1); dirty(cc, 2.2); heatUp(cc, 18); return 'You played four exhibition games to a script. Nobody at home saw a minute of it. Heat +18.'; } },
         { label: 'Play the tour straight, 900k', effect: '900k clean',
-          apply: (cc) => { setFlag(cc, 'summerLeagueFix', -1); cc.earnings += 0.9; return 'You played it straight, took the smaller fee and went home. The promoter never called again.'; } },
+          apply: (cc) => { setFlag(cc, 'summerLeagueFix', -1); const paid = bankUsCareerFee(cc, 0.9, 1); return `You played it straight, banked the smaller fee (${paid}M) and went home. The promoter never called again.`; } },
       ],
     });
   }

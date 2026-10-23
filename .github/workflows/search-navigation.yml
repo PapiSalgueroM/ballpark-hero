@@ -12,7 +12,7 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  BASE_SOURCE: 0ca8c1fc065f1ca282c9454683dca31911852638
+  BASE_SOURCE: d3a334f6feeead4da1845736cb73df1d0b0bea06
   FIXED_SEARCH_BLOB: 2bcfb9dfc8a540c69bd4d5a59815f48aa0c2565b
   SEARCH_TEST_SHA256: c5fcbc9bc0b721e3e83ff0dcfcacc0162aeb3f3ee0381806de73477f156c6224
   SEARCH_PRIMARY_CASE: 'Search URL navigation ownership clears a pending draft when the real Search games link opens the same URL'

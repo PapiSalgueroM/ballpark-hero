@@ -24,6 +24,7 @@
 import type { CareerState, CareerEvent } from './nflMyCareer';
 import { nflEraById, teamLabelOf, NFL_TEAM_NAMES, NFL_SPEND_ITEMS } from './nflMyCareer';
 import { liquidateUsCareerPurchases } from './usCareerAnnualBenefits';
+import { bankUsCareerFee } from './usCareerAnnualBenefits';
 import { launderDirtyMoney, launderEffectText } from './careerDirtyMoney';
 
 /* CIRCULAR IMPORT GOTCHA (caught by scripts/simNflCareer.mjs, invisible to tsc):
@@ -261,7 +262,7 @@ export function getNflCorruptionEvents(c: CareerState, rng: () => number): Caree
         },
         {
           label: 'Sign the clean version, 2M', effect: '2M legit, no heat',
-          apply: (cc) => { cc.earnings += 2; return 'Your lawyer stripped the illegal clauses and the number dropped to two million. Still two million.'; },
+          apply: (cc) => { const paid = bankUsCareerFee(cc, 2, 1); return `Your lawyer stripped the illegal clauses and the number dropped to ${paid}M. Still ${paid}M, banked.`; },
         },
         {
           label: 'Turn it down entirely', effect: 'Fanbase +8, integrity',
@@ -378,7 +379,7 @@ export function getNflCorruptionEvents(c: CareerState, rng: () => number): Caree
         { label: 'Let the assistant sign', effect: '1.2M dirty, heat +10',
           apply: (cc) => { dirty(cc, 1.2); heatUp(cc, 10); return 'Roughly 1,800 of your autographs in the world were signed by a man named Devon. Heat +10.'; } },
         { label: 'Finish all 4,000 yourself', effect: '1M clean, health -3',
-          apply: (cc) => { cc.earnings += 1; cc.health = clamp(cc.health - 3, 0, 100); return 'You signed every one of them. Your hand did not work right for a week and every signature is real.'; } },
+          apply: (cc) => { const paid = bankUsCareerFee(cc, 1, 1); cc.health = clamp(cc.health - 3, 0, 100); return `You signed every one of them. Your hand did not work right for a week, every signature is real, and ${paid}M is banked.`; } },
       ],
     });
   }

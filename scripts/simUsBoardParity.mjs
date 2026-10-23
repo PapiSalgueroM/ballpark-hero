@@ -318,6 +318,58 @@
  * with it every later save hash of that career and the markup of the screens
  * that show his avatar. No other click, no text excerpt, no length, no
  * coverage count and none of the 76 fixed saves moved. 2,298,731 bytes.
+ * Round 1534 (the US shop keeps its promises) re-recorded it on purpose on
+ * 2026-10-22, by the Round 988 method, for the card words alone: the family
+ * office's effect line prints its 2 percent, the minority stake and the shoe
+ * line lose "The retirement plan" and "real royalties", and the nightclub and
+ * the offshore account (never opened here) lose their unkept promises. The
+ * branch head 3c62e88c replays the Release BL recording red at exactly 55
+ * steps, each the markup after a press on the Invest or Flex aisle (r1534-s3a).
+ * Recorded on a runner from the branch head 07686793, with the proved
+ * historical Panel aliased in exactly as this replay runs since Round 1424,
+ * twice: with the five card lines of each sport put back (r1534-s3g
+ * rech-unwords) the recording equals the Release BL fixture byte for byte,
+ * header aside, in all four sports; with them as shipped (rech-head) exactly
+ * 55 steps differ, each in its markup hash alone: 45 presses of the Invest
+ * aisle (every fixed save of all four sports that opens the shop: 11 each in
+ * the NFL, the MLB and the NHL, 12 in the NBA, whose "rookie" save opens it
+ * too), the NBA's 9 presses of the Flex aisle, which shows the signature shoe,
+ * and the NHL's one Invest box (its fixed save "faTalk", step 29). No click,
+ * save, text excerpt, length, coverage count or fixed save moved, and no path
+ * step. A plain recordUsBoardFixture run (no Panel alias) gives the same bytes
+ * twice and, against itself without the words, the same 55 plus one Family
+ * box on the NFL path (step 354, the office card), a path the replay never
+ * walks because it is the current Panel's (r1534-s3f). 2,298,731 bytes.
+ * Round 1538 (paid lines and the Skill card's ceiling) re-recorded it on
+ * purpose on 2026-10-22, by the same method, for the summer Skill answer's
+ * button alone: "Push the ceiling" now says "Rating +1 or +2, up to your
+ * ceiling" (critic 8 of the 1534 brief). Its branch head fbe4f4ed replays
+ * this recording red at exactly 5 steps (r1538-s3; the head before the
+ * Skill change, f5cc075a, replayed it green, r1538-s2). Recorded on a runner
+ * from b53b1f9c with the proved historical Panel aliased in (r1538-rec, extra
+ * file recHist.mjs), three times: with the round's three parts put back (the
+ * brand answers, the ten corruption answers and the Skill answers:
+ * rech-no1538) and with the Skill answers alone put back (rech-noskill) the
+ * recording equals the Round 1534 fixture byte for byte, header aside, in all
+ * four sports; as shipped (rech-head) exactly 5 steps differ: the NBA path's
+ * press of the Skill grind (step n 9, its action string, which carries the
+ * button) and the screen before it (its markup), the NHL fixed save
+ * "extTalk"'s press of the Skills coach (step n 4, the action string) and the
+ * screen before it, and the NFL fixed save "dirty"'s screen after "curtain:
+ * Continue" (its markup: the training card on screen). No save, text excerpt,
+ * length, coverage count or other step moved; no brand or corruption answer
+ * is pressed here. 2,298,769 bytes.
+ * Re-recorded on purpose once more in Round 1538's fix pass, on 2026-10-22,
+ * by the same method, from fb4ba543 (r1538x-rrb, rech-head): the review found
+ * the maintenance Skill button said "Health +4" at full health, and commit
+ * c85ccd6a makes it "Health +4, up to 100". With that commit's five source
+ * files put back (the four engines and usCareerAnnualBenefits.ts) the head
+ * replays the recording before it green (board-nof1) and records it byte
+ * for byte, header aside (rech-nof1); as shipped the replay is red at exactly
+ * 1 step (board-head), the NFL fixed save "dirty"'s screen after "curtain:
+ * Continue" at age 31 (its markup: the training card on screen, where the
+ * button is the maintenance one). No save, text excerpt, length or coverage
+ * count moved. 2,298,769 bytes.
  *
  * Controls, one per run (each is a full replay, about three minutes):
  *   US_BOARD_PARITY_CONTROL=label    one label changed in a copy of the shared

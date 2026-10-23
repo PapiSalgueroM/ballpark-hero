@@ -1,6 +1,6 @@
 import type { PitchEvent, PitchFigure, PitchInput, PitchLine, PitchPoint, PitchSide } from '@/components/pitch-motion/contract';
 import { ACTION_SPAN, BEAT_SPAN } from '@/components/pitch-motion/contract';
-import type { MotionPlayer, MotionScene } from '@/components/pitch-motion/motion';
+import type { BallFlight, MotionPlayer, MotionScene } from '@/components/pitch-motion/motion';
 import { keyedRng } from '@/lib/keyedRng';
 
 /** Round 1101: where everybody stands between the lines of a feed. Pure functions of (input, clock):
@@ -53,6 +53,15 @@ export interface PitchBeat {
   dead: boolean;
   /** Keys the drift, and tells two stretches apart when they are merged. */
   id: string;
+  /** Round 1521, a plan built with `build` only: the line of the man on the ball in open play, */
+  line?: PitchLine;
+  /** why the ball went back a line inside one possession (it never goes back without one), */
+  reset?: 'press' | 'switch';
+  /** that the man on the ball is closed down, the stretch before a reset that pressure forced, */
+  pressed?: boolean;
+  /** and a foul: the line of the feed it is, the man it names (by), the man it was on (on), the card the feed
+   *  books that man on it at that place, and `contact` on the stretch the two meet in, before the whistle. */
+  foul?: { order: number; at: number; by: string | null; on: string | null; card?: 'yellow' | 'red'; contact?: boolean };
 }
 /** A goal, a shot or a save the plan staged, and the instant its action starts. */
 export interface PitchStagedAction { event: PitchEvent; at: number }
@@ -63,7 +72,29 @@ export interface PitchPlan {
   readonly seed: number;
   readonly entries: PitchBeat[];
   readonly actions: PitchStagedAction[];
+  /** Round 1521: the input's `build`, when it had one. */
+  readonly build?: { me: number; opp: number };
 }
+/** Round 1521: the lines in order up the pitch. */
+const LINES: PitchLine[] = ['keeper', 'defence', 'midfield', 'attack'];
+const rank = (line: PitchLine) => LINES.indexOf(line);
+/** Round 1521, a plan built with `build`: of a possession on the ball behind the front line, how its next pass goes.
+ *  `forward` is the share that goes up a line and `reset` the share that goes back, each at a push of 0 (balanced)
+ *  and moved by its `push` per unit of push, so a side that plays directly goes forward more and back less; the
+ *  rest goes across the same line. From the front line there is no further line: the ball is kept among the
+ *  forwards (`keep`) or it goes back. */
+const BUILD = { forward: 0.6, forwardPush: 0.15, reset: 0.08, resetPush: -0.04, keep: 0.65, keepPush: 0.2 };
+/** A pass that goes further than this many metres arrives in the air: a long ball. The pitch's units are a hundredth
+ *  of its length one way and of its width the other, 105 by 68 metres, so a unit across is shorter than one along.
+ *  One drawn pass joins two spells of play a beat apart, so it runs longer than a real one (a median of 31 metres on
+ *  the 200 half feeds, p90 54): at 45 the ball goes up on 22 per cent of them (at 32 it was 48, at 50 it is 17,
+ *  r1521-s10). The 45 was picked by eye, for how the picture reads, and is no real match's share: a real match
+ *  plays far more short passes than this picture draws, so its share of long balls is lower. R10 holds the share
+ *  this line gives in a band, so a change to it (or to METRES) is seen. */
+const LONG_PASS = 45;
+const METRES = { x: 0.68, y: 1.05 };
+/** A reset that goes back and this far across is a switch of play; a shorter one is pressure. */
+const SWITCH_ACROSS = 30;
 
 /** Who gets the ball: the front men most, the keeper hardly ever. */
 const CARRY: Record<PitchLine, number> = { attack: 3, midfield: 2.6, defence: 1.2, keeper: 0.25 };
@@ -117,6 +148,9 @@ interface Layer extends Omit<PitchBeat, 'start' | 'end' | 'anchor'> {
   anchor: PitchPoint | ((before: PitchPoint) => PitchPoint);
   arcFrom?: (before: PitchPoint, anchor: PitchPoint) => PitchPoint;
   carrierFrom?: (anchor: PitchPoint) => string | null;
+  /** Round 1521 review, a plan built with `build`: the stretch as it is drawn after the one drawn before it (null:
+   *  not drawn at all). Worked out once, when the one timeline reaches it. */
+  resolve?: (previous: Layer | null) => Layer | null;
 }
 
 /** Cuts the stretch into its plan: open play on a grid, and every chance and dead ball of the feed over it. */
@@ -135,7 +169,78 @@ export function pitchPlan(input: PitchInput): PitchPlan {
     const [lo, hi] = ZONE[figure.line];
     return turn(side, { x: clamp(figure.slot.x + (rng() * 2 - 1) * 6, 6, 94), y: lo + rng() * (hi - lo) });
   };
-  const open = (i: number): Layer => {
+  /* Round 1521: with `build`, open play is a possession built by lines. Each grid stretch is worked out once, in
+     time order, from the stretch drawn just before it: the same side's open play carries on (forward a line,
+     across the same line, or back as a reset with its reason), anything else starts a new possession deep. Every
+     roll is the stretch's own keyed stream, so no stretch depends on how many draws another made. */
+  const build = input.build;
+  /* Round 1521 review: the same side's open play drawn just before a stretch, whatever drew it (the grid, a chance's
+     build up, the man a throw in, a free kick or a corner is played to): a man of a line on the ball, with nothing
+     dead in between. Open play carries on from the grid's own stretches; after anything else it starts a new
+     possession deep, as it always did, and when that is behind the man a dead ball was just played to, he is closed
+     down and it goes back from him (drawn so), never as a turn for nothing. */
+  const joinedOpen = (prev: Layer | null, side: PitchSide): Layer | null =>
+    (prev && !prev.dead && prev.state === 'open' && prev.side === side && prev.line && prev.carrier !== null ? prev : null);
+  /** The same, read by a chance's build up and its shooter (see where a chance is staged). */
+  const leadIn = (prev: Layer | null, side: PitchSide): Layer | null => joinedOpen(prev, side);
+  const built = new Map<number, Layer>();
+  const open = (i: number, previous: Layer | null): Layer => {
+    if (!build) return rawOpen(i);
+    const known = built.get(i);
+    if (known) return known;
+    const joined = joinedOpen(previous, spell(i));
+    const layer = builtOpen(i, joined?.via === 'grid' ? joined : null, build, joined?.via === 'grid' ? null : joined);
+    built.set(i, layer);
+    return layer;
+  };
+  const builtOpen = (i: number, last: Layer | null, push: { me: number; opp: number }, came: Layer | null): Layer => {
+    const side = spell(i);
+    const list = lists[side];
+    const rng = keyedRng(`${seed}:b:${i}`);
+    const lean = clamp(side === 'me' ? push.me : push.opp, -1, 1);
+    const roll = rng();
+    const prior = last?.line ? last : null;
+    const priorRank = prior?.line ? rank(prior.line) : -1;
+    let want: number;
+    let reset: Layer['reset'];
+    /* A new possession starts deep: at the back mostly, in midfield otherwise, now and then with the keeper. */
+    if (!prior) want = roll < 0.06 ? 0 : roll < 0.6 - 0.15 * lean ? 1 : 2;
+    else if (priorRank === 0) want = roll < 0.7 ? 1 : 2;
+    else if (priorRank < 3) {
+      const forward = BUILD.forward + BUILD.forwardPush * lean;
+      want = roll < forward ? priorRank + 1 : roll < 1 - (BUILD.reset + BUILD.resetPush * lean) ? priorRank : priorRank - 1;
+    } else want = roll < BUILD.keep + BUILD.keepPush * lean ? 3 : 2;
+    /* Who he is: a man of that line other than the man who has it now; with nobody else there, the next line up
+       (or, going back, the next line back), and failing all of that anybody else outfield. */
+    const others = list.filter(f => f.key !== prior?.carrier);
+    const backward = !!prior && want < priorRank;
+    let men: PitchFigure[] = [];
+    for (let step = 0; step < 4 && !men.length; step++) {
+      const r = backward ? want - step : want + (want + step <= 3 ? step : -step);
+      if (r >= 0 && r <= 3) men = others.filter(f => f.line === LINES[r]);
+    }
+    if (!men.length) men = others.filter(f => f.line !== 'keeper');
+    if (!men.length) men = list;
+    let figure: PitchFigure | null = men.length ? men[pickIndex(men, rng())] : null;
+    let anchor: PitchPoint = figure ? zoneAnchor(side, figure, rng) : { x: 50, y: 50 };
+    const at = prior && typeof prior.anchor !== 'function' ? prior.anchor : null;
+    if (figure && prior && rank(figure.line) < priorRank && at) {
+      /* A reset, never a turn for nothing: across to the far side when a man of that line is out there (a switch
+         of play), else back because the man on the ball was closed down (his stretch is marked, and drawn so). */
+      const far = [...men].sort((a, b) => Math.abs(turn(side, b.slot).x - at.x) - Math.abs(turn(side, a.slot).x - at.x))[0];
+      const farAnchor = zoneAnchor(side, far, rng);
+      if (rng() < 0.5 && Math.abs(farAnchor.x - at.x) >= SWITCH_ACROSS) { figure = far; anchor = farAnchor; reset = 'switch'; }
+      else { reset = 'press'; prior.pressed = true; }
+    } else if (figure && !prior && came?.line && rank(figure.line) < rank(came.line)) { reset = 'press'; came.pressed = true; }
+    const layer: Layer = {
+      start: from + i * BEAT_SPAN, end: from + (i + 1) * BEAT_SPAN, priority: 0, order: i,
+      state: 'open', via: 'grid', side, carrier: figure?.key ?? null, dead: false, id: `o${i}`, anchor,
+    };
+    if (figure) layer.line = figure.line;
+    if (reset) layer.reset = reset;
+    return layer;
+  };
+  const rawOpen = (i: number): Layer => {
     const side = spell(i);
     const list = lists[side];
     const rng = keyedRng(`${seed}:${i}`);
@@ -176,7 +281,7 @@ export function pitchPlan(input: PitchInput): PitchPlan {
     /* Of two at one place the later line of the feed is the one played. */
     picked.set(c.place, { event: c.event, order: c.order, place: c.place, at: c.place });
   }
-  const queue = [...picked.values()].sort((a, b) => a.place - b.place).map(c => ({ ...c, floor: c.place }));
+  const queue = [...picked.values()].sort((a, b) => a.place - b.place).map(c => ({ ...c, floor: c.place, whistle: undefined as number | undefined }));
   /* ONE ACTION AT A TIME (the header says why). A chance that comes too soon after the action or the kick
      off before it waits for its turn. It never waits more than PITCH_LATE, and never so long that it would
      still be playing at the last kick's wind up or more than today's 0.05 past the whistle (`held`).
@@ -191,6 +296,10 @@ export function pitchPlan(input: PitchInput): PitchPlan {
   const whole = (c: { event: PitchEvent }) => (c.event.kind === 'goal' ? PITCH_KICKOFF : 0);
   const waitedFor = (c: { event: PitchEvent }) => (c.event.kind === 'goal' ? PITCH_HELD : 0);
   const held = (c: { place: number }, wanted: number) => Math.max(c.place, Math.min(wanted, c.place + PITCH_LATE, Math.max(c.place, ceiling)));
+  /* Round 1521 closing check, with `build`: the places of the feed's fouls, and of its corners and throw ins (each
+     two beats from its own place), read by a chance that waits for a foul of its own minute (below). */
+  const foulPlaces = new Set(build ? input.feed.filter(e => e.kind === 'foul' && e.side !== 'none').map(placeOf) : []);
+  const setPieces = build ? input.feed.filter(e => (e.kind === 'corner' || e.kind === 'throwin') && e.side !== 'none').map(placeOf) : [];
   queue.forEach((c, n) => {
     let floor = c.place;
     let wanted = c.place;
@@ -198,6 +307,30 @@ export function pitchPlan(input: PitchInput): PitchPlan {
     for (const k of opening) if (k.at <= c.place + EPS) { floor = Math.max(floor, k.at + PITCH_RESTART); wanted = Math.max(wanted, k.at + PITCH_RESTART + PITCH_SQUEEZE); }
     const before = queue[n - 1];
     if (before) { floor = Math.max(floor, before.floor + ACTION_SPAN + restart(before)); wanted = Math.max(wanted, before.at + ACTION_SPAN + waitedFor(before) + PITCH_SQUEEZE); }
+    /* Round 1521 closing check, with `build`: a foul of the very same minute is whistled before the chance, which
+       waits for it inside its minute (the clock still reads it), as a chance already waits for the action before it;
+       failing one, so is a foul of the minute before, whose whistle the chance's lead in would otherwise cover. The
+       whistle goes at the first instant of the foul's minute that the action before, what follows it, the period's
+       kick off and the feed's corners and throw ins leave free, on the grid the foul is looked for on; the chance
+       waits for that whistle and then a lead in (the whole of it if it fits, else PITCH_SQUEEZE). When even that does
+       not fit inside the chance's own minute nothing waits, and the foul is not drawn, as before. */
+    for (const minute of build ? [c.place, c.place - 1] : []) {
+      if (c.whistle !== undefined || minute < from - EPS || !foulPlaces.has(minute)) continue;
+      const cap = Math.min(c.place + PITCH_LATE, Math.max(c.place, ceiling));
+      let clear = minute;
+      for (const k of opening) if (k.at <= minute + EPS) clear = Math.max(clear, k.at + PITCH_KICKOFF);
+      if (before) clear = Math.max(clear, before.at + ACTION_SPAN + Math.max(whole(before), BEAT_SPAN));
+      const latestWhistle = Math.min(minute + 1 - BEAT_SPAN, to - BEAT_SPAN);
+      for (let k = Math.max(0, Math.ceil((clear - minute) / 0.02 - 1e-6)); minute + k * 0.02 <= latestWhistle + EPS; k++) {
+        const w = minute + k * 0.02;
+        if (setPieces.some(q => q < w + BEAT_SPAN - EPS && w < q + 2 * BEAT_SPAN - EPS)) continue;
+        const lead = w + BEAT_SPAN + PITCH_LEAD <= cap + EPS ? PITCH_LEAD : PITCH_SQUEEZE;
+        if (w + BEAT_SPAN + lead > cap + EPS) break;
+        c.whistle = w + BEAT_SPAN;
+        wanted = Math.max(wanted, w + BEAT_SPAN + lead);
+        break;
+      }
+    }
     c.floor = held(c, floor);
     c.at = held(c, wanted);
   });
@@ -215,7 +348,7 @@ export function pitchPlan(input: PitchInput): PitchPlan {
   for (let n = queue.length - 2; n >= 0; n--) {
     if (queue[n].at + ACTION_SPAN > queue[n + 1].at + EPS) queue[n].at = Math.max(queue[n].place, queue[n + 1].at - ACTION_SPAN);
   }
-  const actions: { event: PitchEvent; order: number; at: number; last?: boolean }[] = queue.map(c => ({ event: c.event, order: c.order, at: c.at }));
+  const actions: { event: PitchEvent; order: number; at: number; last?: boolean; whistle?: number }[] = queue.map(c => ({ event: c.event, order: c.order, at: c.at, ...(c.whistle !== undefined ? { whistle: c.whistle } : {}) }));
   if (last) actions.push({ event: last.event, order: last.order, at: to - ACTION_SPAN, last: true });
 
   /* ---- a chance: the approach, the carrier stretch and what follows it ---- */
@@ -225,10 +358,16 @@ export function pitchPlan(input: PitchInput): PitchPlan {
     const shooter = shooterOf(side, a.event);
     const rng = keyedRng(`${seed}:a:${a.order}`);
     const mates = lists[side].filter(f => f.key !== shooter?.key && f.line !== 'keeper');
-    const feeder = mates.length ? mates[pickIndex(mates, rng())] : shooter;
-    if (feeder) layers.push({
+    /* Round 1521: with `build`, the man who feeds the shooter plays no further up than he does (a midfielder
+       first), on the same roll, so the chance itself is struck from where it always was. */
+    const roll = mates.length ? rng() : 0;
+    const behind = build && shooter ? mates.filter(f => rank(f.line) <= rank(shooter.line)) : [];
+    const feedPool = behind.filter(f => f.line === 'midfield').length ? behind.filter(f => f.line === 'midfield') : behind.length ? behind : mates;
+    const feeder = mates.length ? feedPool[pickIndex(feedPool, roll)] : shooter;
+    const feederAnchor = feeder ? zoneAnchor(side, feeder, rng) : null;
+    if (feeder && feederAnchor && !build) layers.push({
       start: a.at - PITCH_LEAD - BEAT_SPAN, end: a.at - PITCH_LEAD, priority: 2, order: n, state: 'open', via: 'approach', side,
-      carrier: feeder.key, dead: false, id: `a${a.order}`, anchor: zoneAnchor(side, feeder, rng),
+      carrier: feeder.key, dead: false, id: `a${a.order}`, anchor: feederAnchor,
     });
     /* From the spot (12 from the goal line) or a direct free kick (30 from it) the ball is dead: it sits on its
        spot with the taker a step behind it. From open play the shooter has it at his feet, 22 to 30 out. */
@@ -246,12 +385,72 @@ export function pitchPlan(input: PitchInput): PitchPlan {
        over the last kick's wind up: it is the only stretch above a kick off. */
     const before = n > 0 ? actions[n - 1] : null;
     const room = before ? a.at - before.at - ACTION_SPAN : Infinity;
-    const led = before ? Math.max(0, Math.min(PITCH_LEAD, Math.max(room - whole(before), Math.min(PITCH_SQUEEZE, room - restart(before))))) : PITCH_LEAD;
+    const ledIn = before ? Math.max(0, Math.min(PITCH_LEAD, Math.max(room - whole(before), Math.min(PITCH_SQUEEZE, room - restart(before))))) : PITCH_LEAD;
+    /* Round 1521 closing check: a chance that waited for a foul of its own minute is led in after that whistle, never
+       over it. When the chance after it could not wait and this one had to start sooner, the whistle has no room left
+       and the lead is as it always was. */
+    const led = a.whistle !== undefined && a.at - a.whistle >= PITCH_SQUEEZE - EPS ? Math.min(ledIn, a.at - a.whistle) : ledIn;
     const lead = a.at - led;
-    layers.push({
+    const shooting: Layer = {
       start: lead, end: a.at + ACTION_SPAN, priority: a.last ? 6 : 4, order: n, state: set ? 'freekick' : 'open', via: 'carrier', side,
       carrier: shooter?.key ?? null, dead: set, id: `c${a.order}`, anchor: turn(side, shot),
-    });
+      ...(build && shooter ? { line: shooter.line } : {}),
+    };
+    layers.push(shooting);
+    /* Round 1521: with `build`, the chance is reached by a build up that ends at the shooter: a man deeper than the
+       feeder, then the feeder, then the shooter, each stretch running straight into the next. A shooter with nobody
+       at or behind his line (the keeper, now and then the man a line names) is not built up to: he just has it.
+       Round 1521 review: and it carries on from where the ball already is. When the same side has the ball just
+       before, the man before the feeder is no deeper than the man on it (or he is left out), the feeder is no deeper
+       either while there is a man up there to feed the shooter (the man on the ball himself, failing anybody else),
+       and when there is nobody, the ball goes back to him because the man on it is closed down, drawn so. The same
+       holds for a shooter who gets the ball with no feeder drawn. Every roll is still its own keyed stream. */
+    if (build && shooter && !set) shooting.resolve = prev => {
+      const p = leadIn(prev, side);
+      if (!p?.line || !shooting.line || rank(p.line) <= rank(shooting.line)) return shooting;
+      p.pressed = true;
+      return { ...shooting, reset: 'press' };
+    };
+    if (build && feeder && feederAnchor && behind.length) {
+      const feed: Layer = {
+        start: lead - BEAT_SPAN, end: lead, priority: 2, order: n, state: 'open', via: 'approach', side,
+        carrier: feeder.key, dead: false, id: `a${a.order}`, anchor: feederAnchor, line: feeder.line,
+      };
+      feed.resolve = prev => {
+        const p = leadIn(prev, side);
+        if (!p?.line || rank(p.line) <= rank(feeder.line)) return feed;
+        const up = behind.filter(f => rank(f.line) >= rank(p.line!));
+        const fresh = up.filter(f => f.key !== p.carrier);
+        const men = fresh.length ? fresh : up;
+        if (men.length) {
+          const again = keyedRng(`${seed}:af:${a.order}`);
+          const man = men[pickIndex(men, again())];
+          return { ...feed, carrier: man.key, anchor: zoneAnchor(side, man, again), line: man.line };
+        }
+        p.pressed = true;
+        return { ...feed, reset: 'press' };
+      };
+      layers.push(feed);
+      const deeper = lists[side].filter(f => f.key !== shooter?.key && f.key !== feeder.key && rank(f.line) < rank(feeder.line));
+      const pool = deeper.filter(f => f.line !== 'keeper').length ? deeper.filter(f => f.line !== 'keeper') : deeper;
+      if (pool.length) {
+        /* Under every dead ball (0.5): a corner or a free kick in the minute before the chance is how it came about,
+           and is drawn as that, not covered by the build up. */
+        const first: Layer = {
+          start: lead - 2 * BEAT_SPAN, end: lead - BEAT_SPAN, priority: 0.5, order: n, state: 'open', via: 'approach', side,
+          carrier: null, dead: false, id: `b${a.order}`, anchor: { x: 50, y: 50 },
+        };
+        first.resolve = prev => {
+          const p = leadIn(prev, side);
+          const fit = p?.line ? pool.filter(f => rank(f.line) >= rank(p.line!)) : pool;
+          if (!fit.length) return null;
+          const deep = keyedRng(`${seed}:ab:${a.order}`);
+          const man = fit[pickIndex(fit, deep())];
+          return { ...first, carrier: man.key, anchor: zoneAnchor(side, man, deep), line: man.line };
+        };
+        layers.push(first);
+      }
+    }
     const after = a.at + ACTION_SPAN;
     if (after >= to - EPS) return;
     const defending = present(other(side));
@@ -274,6 +473,20 @@ export function pitchPlan(input: PitchInput): PitchPlan {
     }
   });
 
+  /* Round 1521: a card of the feed belongs to the first foul line of that side, that man and that place (the
+     binder books a man for a foul at the foul's own place). Each card goes to one foul and no foul gets two. */
+  const cards = new Map<number, 'yellow' | 'red'>();
+  if (build) for (const card of input.feed) {
+    if (card.kind !== 'yellow' && card.kind !== 'red') continue;
+    const at = input.feed.findIndex((e, i) => e.kind === 'foul' && !cards.has(i) && e.side === card.side && e.text === card.text && placeOf(e) === placeOf(card));
+    if (at >= 0) cards.set(at, card.kind);
+  }
+  /* Round 1521: where the dead balls of the feed already are (a corner's and a throw in's two beats, from their own
+     places), so a foul staged with `build` waits for them rather than stepping on them; each foul adds its own. */
+  const deadWindows: { from: number; to: number; order: number; foul: boolean }[] = [];
+  if (build) input.feed.forEach((e, order) => {
+    if ((e.kind === 'corner' || e.kind === 'throwin') && e.side !== 'none') deadWindows.push({ from: placeOf(e), to: placeOf(e) + 2 * BEAT_SPAN, order, foul: false });
+  });
   /* ---- corners, throw ins and fouls, each staged from its own place ---- */
   const nearest = (side: PitchSide, spot: PitchPoint, skipKeeper: boolean): PitchFigure | null => {
     let best: PitchFigure | null = null;
@@ -304,7 +517,7 @@ export function pitchPlan(input: PitchInput): PitchPlan {
       const header = mostAdvanced(lists[side]);
       layers.push({
         start: p + BEAT_SPAN, end: p + 2 * BEAT_SPAN, priority: 1, order, state: 'open', via: 'dead', side,
-        carrier: header?.key ?? null, dead: false, id: `d${order}`, anchor: target,
+        carrier: header?.key ?? null, dead: false, id: `d${order}`, anchor: target, ...(build && header ? { line: header.line } : {}),
         /* The midpoint pulled 10 toward the centre of the pitch and 4 away from the goal. */
         arcFrom: (before, anchor) => {
           const mid = { x: (before.x + anchor.x) / 2, y: (before.y + anchor.y) / 2 };
@@ -323,23 +536,116 @@ export function pitchPlan(input: PitchInput): PitchPlan {
       const receiver = list.length ? list[pickIndex(list, rng())] : null;
       layers.push({
         start: p + BEAT_SPAN, end: p + 2 * BEAT_SPAN, priority: 1, order, state: 'open', via: 'dead', side,
-        carrier: receiver?.key ?? null, dead: false, id: `u${order}`,
+        carrier: receiver?.key ?? null, dead: false, id: `u${order}`, ...(build && receiver ? { line: receiver.line } : {}),
         anchor: receiver ? (before: PitchPoint) => { const own = zoneAnchor(side, receiver, rng); return { x: (own.x + before.x) / 2, y: own.y }; } : { x: 50, y: 50 },
       });
     } else if (event.kind === 'foul') {
       /* The line names the man who fouled, so the free kick is the other side's. */
       const side = present(other(event.side));
+      /* Round 1521: with `build`, the foul is seen. The stretch before its whistle has a man of the fouled side on
+         the ball and the man the line names coming in on him (anybody of that side when its figures carry no
+         names); the whistle stops play there, with its cue, and the man it was on takes the free kick. A man the
+         line names who is the keeper fouls a forward, near his own goal. The card is the feed's own, never made. */
+      let foul: Layer['foul'];
+      /* With `build` it is also staged where it can be seen: inside its own minute (the clock still reads it) at the
+         first instant nothing else holds the pitch (a chance, a kick off, a follow up, a corner's or a throw in's two
+         beats, another foul's), its meeting and its whistle if both fit, its whistle alone if only that does. Failing
+         that, at its own place as every dead ball always was (of two at one place the later line is drawn), when its
+         whistle is still what is drawn at that instant and it takes no room from another foul. Failing that too, the
+         pitch is held all through its minute and the foul is not drawn on the grass at all (it is still in the match's
+         lines): it neither covers what is drawn there nor holds room from the next foul.
+         Round 1521 review: a chance's build up (the feeder and the man before him) is only how the picture gets the
+         ball to the shooter, nothing the engine decided, so it never holds the pitch from a foul. A foul staged over a
+         feeder takes the build up's place: the foul, its free kick, and then the shooter has the ball. */
+      let at = p;
+      let meets = false;
+      /* Where the two meet: the fouled man's own zone, and the free kick is taken from there. */
+      let spot: PitchPoint | null = null;
+      if (build) {
+        const meet = keyedRng(`${seed}:w:${order}`);
+        const by = lists[event.side].find(f => f.name !== undefined && f.name === event.text) ?? null;
+        const outfield = lists[side].filter(f => f.line !== 'keeper');
+        /* The man he fouls is one he would meet: a defender (or the keeper) fouls a forward, a midfielder a midfielder,
+           a forward a defender, so nobody runs the length of the pitch to give a foul away (the walk at 1280 met a
+           centre back fouling at the other side's six yard box). */
+        const facing: Record<PitchLine, PitchLine> = { keeper: 'attack', defence: 'attack', midfield: 'midfield', attack: 'defence' };
+        const facingMen = by ? outfield.filter(f => f.line === facing[by.line]) : [];
+        const pool = facingMen.length ? facingMen : outfield;
+        const victim = pool.length ? pool[pickIndex(pool, meet())] : null;
+        const over = (a: number, b: number, s: number, e: number) => a < e - EPS && s < b - EPS;
+        const holds = (l: Layer) => l.priority >= 2 && l.via !== 'approach';
+        const latest = Math.min(p + 1 - BEAT_SPAN, to - BEAT_SPAN);
+        let found = -1;
+        /* Where the foul needs the pitch to itself: through its free kick, or through its whistle alone. */
+        let need = 0;
+        /* Round 1521 closing check: another foul of the feed later in this same minute. */
+        const crowded = input.feed.some((x, i) => i > order && x.kind === 'foul' && x.side !== 'none' && placeOf(x) === p);
+        const search = (holding: (l: Layer) => boolean) => {
+          const held = (s: number, e: number) => layers.some(l => holding(l) && over(l.start, l.end, s, e)) || deadWindows.some(w => over(w.from, w.to, s, e));
+          /* Round 1521 closing check: with another foul later in the same minute, this one is whistled at the first
+             instant it fits with no free kick (and met before it when that beat is free too), so the later one has
+             room for its own whistle inside the minute (r1521-f2m2: 161 fouls hidden by another foul's two beats). */
+          if (crowded) {
+            for (let k = 0; found < 0 && p + k * 0.02 <= latest + EPS; k++) if (!held(p + k * 0.02, p + k * 0.02 + BEAT_SPAN)) found = p + k * 0.02;
+            if (found >= 0) { meets = !!victim && !held(found - BEAT_SPAN, found); need = found + BEAT_SPAN; }
+            return;
+          }
+          /* Round 1521 closing check: the two meeting and the free kick taken, then the free kick with no meeting seen,
+             then (new) the two meeting and the whistle alone, and last the whistle alone, so a whistle with no room for
+             its free kick (one a chance of its own minute waits for, above) still has the man who fouled get there
+             before it rather than walk in under his own name. */
+          const forms: [number, number][] = victim ? [[BEAT_SPAN, 2 * BEAT_SPAN], [0, 2 * BEAT_SPAN], [BEAT_SPAN, BEAT_SPAN], [0, BEAT_SPAN]] : [[0, 2 * BEAT_SPAN], [0, BEAT_SPAN]];
+          for (const [span, length] of forms) {
+            for (let k = 0; found < 0 && p + k * 0.02 <= latest + EPS; k++) if (!held(p + k * 0.02 - span, p + k * 0.02 + length)) found = p + k * 0.02;
+            if (found >= 0) { meets = span > 0; need = found + length; return; }
+          }
+        };
+        const here = (holding: (l: Layer) => boolean) => {
+          const drawnHere = !layers.some(l => holding(l) && over(l.start, l.end, p, p + 1e-6))
+            && !deadWindows.some(w => (w.foul ? over(w.from, w.to, p, p + 2 * BEAT_SPAN) : w.order > order && over(w.from, w.to, p, p + 1e-6)));
+          if (drawnHere) { found = p; need = p + BEAT_SPAN; }
+        };
+        /* In this order, so every foul is staged at the instant it was before a build up could give way: room no build
+           up has to give, then its own place with no build up on it, and only then room a chance's build up gives, then
+           its own place over one. A build up that the foul's whistle or free kick runs into gives way to them, so a
+           whistle is never cut short by one (r1521-fx9: 1,295 build ups drawn against 1,483, every whistle held over its
+           spot through the free kick, 1,043 of 1,043 against 855 of 1,039, and four more fouls seen). */
+        const firm = (l: Layer) => l.priority >= 2;
+        search(firm);
+        if (found < 0) here(firm);
+        if (found < 0) search(holds);
+        if (found < 0) here(holds);
+        if (found < 0) return;
+        at = Math.round(found * 1e6) / 1e6;
+        /* Round 1521 closing check: it keeps the pitch for as long as it needs it (its whistle, or its whistle and free
+           kick), so a foul after it whose minute has no other room may step on a free kick the first had no room for. */
+        deadWindows.push({ from: at - (meets ? BEAT_SPAN : 0), to: need, order, foul: true });
+        const taken = new Set(layers.filter(l => l.via === 'approach' && l.id.startsWith('a') && over(l.start, l.end, at - (meets ? BEAT_SPAN : 0), need)).map(l => l.id.slice(1)));
+        for (let k = layers.length - 1; k >= 0; k--) if (layers[k].via === 'approach' && taken.has(layers[k].id.slice(1))) layers.splice(k, 1);
+        foul = { order, at, by: by?.key ?? null, on: victim?.key ?? null };
+        const card = cards.get(order);
+        if (card) foul.card = card;
+        spot = victim ? zoneAnchor(side, victim, meet) : null;
+        if (victim && spot && meets) layers.push({
+          start: at - BEAT_SPAN, end: at, priority: 1, order, state: 'open', via: 'dead', side, carrier: victim.key, dead: false,
+          id: `w${order}`, anchor: spot, line: victim.line, foul: { ...foul, contact: true },
+        });
+      }
+      const fouled = foul?.on ?? null;
       layers.push({
-        start: p, end: p + BEAT_SPAN, priority: 1, order, state: 'freekick', via: 'dead', side, carrier: null,
-        carrierFrom: anchor => nearest(side, anchor, true)?.key ?? null, dead: true, id: `x${order}`,
-        anchor: before => ({ x: clamp(before.x, 6, 94), y: clamp(before.y, 8, 92) }),
+        start: at, end: at + BEAT_SPAN, priority: 1, order, state: 'freekick', via: 'dead', side, carrier: null,
+        carrierFrom: anchor => fouled ?? nearest(side, anchor, true)?.key ?? null, dead: true, id: `x${order}`,
+        anchor: before => { const where = spot ?? before; return { x: clamp(where.x, 6, 94), y: clamp(where.y, 8, 92) }; },
+        ...(foul ? { foul } : {}),
       });
       const rng = keyedRng(`${seed}:x:${order}`);
       const list = lists[side];
       const receiver = list.length ? list[pickIndex(list, rng())] : null;
       layers.push({
-        start: p + BEAT_SPAN, end: p + 2 * BEAT_SPAN, priority: 1, order, state: 'open', via: 'dead', side,
+        start: at + BEAT_SPAN, end: at + 2 * BEAT_SPAN, priority: 1, order, state: 'open', via: 'dead', side,
         carrier: receiver?.key ?? null, dead: false, id: `y${order}`, anchor: receiver ? zoneAnchor(side, receiver, rng) : { x: 50, y: 50 },
+        /* Round 1521 review: the line of the man a dead ball is played to, so the possession carries on from him. */
+        ...(build && receiver ? { line: receiver.line } : {}),
       });
     }
   });
@@ -352,21 +658,31 @@ export function pitchPlan(input: PitchInput): PitchPlan {
   for (const layer of layers) { cut(layer.start); cut(layer.end); }
   const marks = [...cuts].sort((a, b) => a - b);
   const pieces: { start: number; end: number; layer: Layer }[] = [];
+  /* Round 1521 review: a stretch that is worked out from the one before it is worked out once, the first time it is
+     on top; one that comes out as not drawn is passed over for whatever lies under it. */
+  const settled = new Map<Layer, Layer | null>();
   for (let k = 0; k + 1 < marks.length; k++) {
     const mid = (marks[k] + marks[k + 1]) / 2;
+    const prior = pieces[pieces.length - 1]?.layer ?? null;
     let top: Layer | null = null;
-    for (const layer of layers) {
-      if (layer.start > mid || mid >= layer.end) continue;
-      if (!top || layer.priority > top.priority || (layer.priority === top.priority && layer.order > top.order)) top = layer;
+    for (let looking = true; looking;) {
+      top = null;
+      for (const layer of layers) {
+        if (layer.start > mid || mid >= layer.end || settled.get(layer) === null) continue;
+        if (!top || layer.priority > top.priority || (layer.priority === top.priority && layer.order > top.order)) top = layer;
+      }
+      looking = false;
+      if (top?.resolve && !settled.has(top)) { settled.set(top, top.resolve(prior)); looking = settled.get(top) === null; }
     }
-    const layer = top ?? open(Math.min(beats - 1, Math.floor((mid - from) / BEAT_SPAN)));
+    if (top && settled.has(top)) top = settled.get(top)!;
+    const layer = top ?? open(Math.min(beats - 1, Math.floor((mid - from) / BEAT_SPAN)), prior);
     const previous = pieces[pieces.length - 1];
     /* A scrap of open play shorter than half a beat is not worth a pass: the stretch before it runs on. */
     const scrap = layer.via === 'grid' && marks[k + 1] - marks[k] < BEAT_SPAN / 2 - EPS && !!previous;
     if (previous && (scrap || previous.layer.id === layer.id)) previous.end = marks[k + 1];
     else pieces.push({ start: marks[k], end: marks[k + 1], layer });
   }
-  if (!pieces.length) pieces.push({ start: from, end: to, layer: open(0) });
+  if (!pieces.length) pieces.push({ start: from, end: to, layer: open(0, null) });
 
   const entries: PitchBeat[] = [];
   let before: PitchPoint = { x: 50, y: 50 };
@@ -378,10 +694,14 @@ export function pitchPlan(input: PitchInput): PitchPlan {
       carrier: layer.carrierFrom ? layer.carrierFrom(anchor) : layer.carrier, anchor, dead: layer.dead, id: layer.id,
     };
     if (layer.arcFrom) beat.arc = layer.arcFrom(before, anchor);
+    if (layer.line) beat.line = layer.line;
+    if (layer.reset) beat.reset = layer.reset;
+    if (layer.pressed) beat.pressed = true;
+    if (layer.foul) beat.foul = layer.foul;
     entries.push(beat);
     before = anchor;
   }
-  return { mine: input.mine, theirs: input.theirs, seed, entries, actions: actions.map(a => ({ event: a.event, at: a.at })) };
+  return { mine: input.mine, theirs: input.theirs, seed, entries, actions: actions.map(a => ({ event: a.event, at: a.at })), ...(build ? { build } : {}) };
 }
 
 function entryIndex(plan: PitchPlan, clock: number): number {
@@ -417,7 +737,7 @@ function rowFor(beat: PitchBeat, side: PitchSide, b: PitchPoint): Row {
 }
 
 interface Own { figure: PitchFigure; x: number; y: number }
-function blockOf(plan: PitchPlan, beat: PitchBeat, side: PitchSide): Own[] {
+function blockOf(plan: PitchPlan, beat: PitchBeat, side: PitchSide, pin?: Own): Own[] {
   const list = side === 'me' ? plan.mine : plan.theirs;
   const b = turn(side, beat.anchor);
   const row = rowFor(beat, side, b);
@@ -441,26 +761,47 @@ function blockOf(plan: PitchPlan, beat: PitchBeat, side: PitchSide): Own[] {
     } else {
       /* A man with the ball goes most of the way to where it is wanted. The shooter of a chance is all the
          way there before his line fires, so his plant is a step and not a run through his own team. */
-      const pull = beat.via === 'carrier' ? 1 : 0.6;
+      /* Round 1521: and the man a foul is on is all the way there too, so the man who fouls him meets him. */
+      const pull = beat.via === 'carrier' || beat.foul?.contact || beat.pressed ? 1 : 0.6;
       carrier.x += (b.x - carrier.x) * pull;
       carrier.y += (b.y - carrier.y) * pull;
     }
   }
+  const nearestTo = (spot: PitchPoint): Own | null => {
+    let best: Own | null = null;
+    for (const p of placed) if (p.figure.line !== 'keeper' && (!best || Math.hypot(p.x - spot.x, p.y - spot.y) < Math.hypot(best.x - spot.x, best.y - spot.y))) best = p;
+    return best;
+  };
+  /* Round 1521: a foul. The man the line names (the nearest outfield man when this side's figures carry no names)
+     is at the ball, on his own goal side of it: as it happens (the ball at the other man's foot, which is drawn
+     1.6 across and 2.2 on from him) and while the whistle stops play (the ball on its spot, he a step off it). */
+  const tackler = beat.foul && !hasBall ? placed.find(p => p.figure.key === beat.foul!.by) ?? nearestTo(b) ?? undefined : undefined;
+  if (tackler) {
+    if (beat.foul!.contact) { tackler.x = b.x + (side === 'opp' ? -1.6 : 1.6); tackler.y = b.y + 3.4; }
+    else { tackler.x = b.x + 2.2; tackler.y = b.y + 2.6; }
+  }
   if (!beat.dead) {
-    if (!hasBall) {
-      /* The press: the nearest outfield man goes part of the way to the ball. */
-      let presser: Own | null = null;
-      for (const p of placed) if (p.figure.line !== 'keeper' && (!presser || Math.hypot(p.x - b.x, p.y - b.y) < Math.hypot(presser.x - b.x, presser.y - b.y))) presser = p;
-      if (presser) { presser.x += (b.x - presser.x) * 0.35; presser.y += (b.y - presser.y) * 0.35; }
+    if (!hasBall && !tackler) {
+      /* The press: the nearest outfield man goes part of the way to the ball. Round 1521: when the man on the ball is
+         being closed down (the stretch before the reset that pressure forces) he is right on him, a step goal side of
+         the ball, which is drawn 1.6 across and 2.2 on from the man who has it. */
+      const presser = nearestTo(b);
+      if (presser && beat.pressed) { presser.x = b.x + (side === 'opp' ? -1.6 : 1.6); presser.y = b.y + 4.6; }
+      else if (presser) { presser.x += (b.x - presser.x) * 0.35; presser.y += (b.y - presser.y) * 0.35; }
     }
     for (const p of placed) {
-      if (p.figure.line === 'keeper' || p === carrier) continue;
+      if (p.figure.line === 'keeper' || p === carrier || p === tackler) continue;
       const rng = keyedRng(`${plan.seed}:d:${beat.id}:${p.figure.key}`);
       p.x += (rng() * 2 - 1) * 1.2;
       p.y += (rng() * 2 - 1) * 1.2;
     }
   }
-  /* Separation, last: nobody of one side stands on a team mate. The man on the ball is never the one moved. */
+  /* Round 1521 review: a man held where he stood on another stretch (the man who fouled, through the free kick). */
+  const pinned = pin ? placed.find(p => p.figure.key === pin.figure.key) : undefined;
+  if (pinned && pin) { pinned.x = pin.x; pinned.y = pin.y; }
+  /* Separation, last: nobody of one side stands on a team mate. The man on the ball is never the one moved, nor
+     (Round 1521) the man who fouls him. */
+  const held = carrier ?? tackler ?? pinned;
   for (let pass = 0; pass < 3; pass++) {
     for (let i = 0; i < placed.length; i++) for (let j = i + 1; j < placed.length; j++) {
       const a = placed[i], c = placed[j];
@@ -468,8 +809,8 @@ function blockOf(plan: PitchPlan, beat: PitchBeat, side: PitchSide): Own[] {
       if (Math.abs(dx) >= 5 || Math.abs(c.y - a.y) >= 4) continue;
       const short = 5 - Math.abs(dx);
       const dir = dx >= 0 ? 1 : -1;
-      if (a === carrier) c.x += dir * short;
-      else if (c === carrier) a.x -= dir * short;
+      if (a === held) c.x += dir * short;
+      else if (c === held) a.x -= dir * short;
       else { a.x -= dir * short / 2; c.x += dir * short / 2; }
     }
   }
@@ -479,8 +820,21 @@ function blockOf(plan: PitchPlan, beat: PitchBeat, side: PitchSide): Own[] {
 
 /** Both sides and the ball for the stretch the clock is in. */
 export function pitchScene(plan: PitchPlan, clock: number): MotionScene<PitchPlaced> {
-  const beat = plan.entries[entryIndex(plan, clock)];
-  const place = (side: PitchSide): PitchPlaced[] => blockOf(plan, beat, side).map(own => {
+  const index = entryIndex(plan, clock);
+  const beat = plan.entries[index];
+  /* The whistle is drawn only on the stretch that starts at the instant the foul was staged: one cut short at its
+     start by something that outranks it is that foul played through, never a whistle late. It stays over the spot
+     while the free kick is taken (the stretch straight after it), so the moment is there long enough to read: the
+     walk at 390 met the whistle up while the two men were still walking in. */
+  const whistled = (b: PitchBeat | undefined) => (b?.foul && b.dead && Math.abs(b.start - b.foul.at) < 1e-6 ? b : null);
+  const prior = plan.entries[index - 1];
+  const whistle = plan.build ? whistled(beat) ?? (prior && whistled(prior) && beat.id === `y${prior.foul!.order}` && Math.abs(prior.end - beat.start) < 1e-6 ? prior : null) : null;
+  /* Round 1521 review: and through that free kick the man who fouled stays where he stood at the whistle, by the spot
+     his name is over, rather than walking back into his shape under a label that names him (the walk at 844 by 390). */
+  const by = whistle && whistle !== beat ? whistle.foul?.by ?? null : null;
+  const pinSide: PitchSide | null = by ? (plan.mine.some(f => f.key === by) ? 'me' : 'opp') : null;
+  const pin = by && pinSide && whistle ? blockOf(plan, whistle, pinSide).find(o => o.figure.key === by) : undefined;
+  const place = (side: PitchSide): PitchPlaced[] => blockOf(plan, beat, side, side === pinSide ? pin : undefined).map(own => {
     const at = turn(side, own);
     const placed: PitchPlaced = { key: own.figure.key, keeper: own.figure.line === 'keeper', line: own.figure.line, x: at.x, y: at.y };
     if (own.figure.name !== undefined) placed.name = own.figure.name;
@@ -496,5 +850,35 @@ export function pitchScene(plan: PitchPlan, clock: number): MotionScene<PitchPla
   else ball = { x: clamp(holder.x + 1.6, 3, 97), y: clamp(holder.y + (beat.side === 'me' ? -2.2 : 2.2), 3, 97) };
   const scene: MotionScene<PitchPlaced> = { mine, theirs, ball, holderKey: holder?.key ?? null };
   if (beat.arc) scene.arc = beat.arc;
+  if (plan.build) {
+    const flight = flightInto(plan.entries[index - 1], beat);
+    if (flight) scene.flight = flight;
+    if (whistle?.foul) {
+      scene.cue = { kind: 'foul', at: { x: whistle.anchor.x, y: whistle.anchor.y }, order: whistle.foul.order, by: whistle.foul.by, on: whistle.foul.on };
+      if (whistle.foul.card) scene.cue.card = whistle.foul.card;
+    }
+  }
   return scene;
+}
+
+/** Round 1521 closing check: whether the man a foul's cue names stands by its spot (within 6) in this scene or in a
+ *  frame on the way to it, so a binder puts his name up only once he is there. A cue that names nobody on the grass
+ *  is ready at once. */
+export function cueManThere<T extends MotionPlayer>(scene: MotionScene<T>): boolean {
+  const cue = scene.cue;
+  if (!cue?.by) return true;
+  const man = [...scene.mine, ...scene.theirs].find(p => p.key === cue.by);
+  return !man || Math.hypot(man.x - cue.at.x, man.y - cue.at.y) <= 6;
+}
+
+/** Round 1521: how the ball travels into a stretch from the one before it. A dead ball is fetched or placed (no
+ *  flight); a corner's delivery is a cross; out of a throw in it is thrown; out of a goal kick, and any pass longer
+ *  than LONG_PASS metres (a keeper's kick, a long switch, a ball over the top), it goes in the air; every other pass is
+ *  on the grass. */
+export function flightInto(before: PitchBeat | undefined, beat: PitchBeat): BallFlight | undefined {
+  if (beat.dead || !before) return undefined;
+  if (beat.arc) return 'cross';
+  if (before.state === 'throwin') return 'throw';
+  if (before.state === 'goalkick') return 'air';
+  return Math.hypot((beat.anchor.x - before.anchor.x) * METRES.x, (beat.anchor.y - before.anchor.y) * METRES.y) > LONG_PASS ? 'air' : 'ground';
 }
