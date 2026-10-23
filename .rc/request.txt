@@ -1,0 +1,16 @@
+# Release BQ, Round 1538 (US My Career paid lines, closing head 32e8f7da): fix-1538.md's r1538x-fina (rc-fin-a.txt).
+# The shop- controls (earnround, clampdown, nobank, pp1, ppall) must exit 1 with a FIRED line; the rest exit 0.
+# shop-basecheck forms: the four US engines and simUsShopPromises.mjs on this head are 1538's blobs byte for byte.
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+shop: node scripts/simUsShopPromises.mjs
+shop-basecheck: SHOP_BASE_CHECK=1 node scripts/simUsShopPromises.mjs
+shop-earnround: SHOP_CONTROL=earnround node scripts/simUsShopPromises.mjs
+shop-clampdown: SHOP_CONTROL=clampdown node scripts/simUsShopPromises.mjs
+shop-nobank: SHOP_CONTROL=nobank node scripts/simUsShopPromises.mjs
+shop-pp1: SHOP_CONTROL=potplusone node scripts/simUsShopPromises.mjs
+shop-ppall: SHOP_CONTROL=potplusoneall node scripts/simUsShopPromises.mjs
+deckc: node scripts/simUsCareerDeckC.mjs
+board: node scripts/simUsBoardParity.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+rival: node scripts/simNoRivalNames.mjs
+storage: node scripts/simStorageWrites.mjs
