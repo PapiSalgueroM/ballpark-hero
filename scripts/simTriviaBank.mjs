@@ -360,10 +360,13 @@ for (const [season, rows] of Object.entries(stock.pools)) {
   }
   for (const [name, s] of shapes) if (s.size > 1 && !twoMen.has(name)) twoMen.set(name, `${season}: ${[...s].join(' and ')}`);
 }
-const twoMenLeftOut = [...twoMen.keys()].filter(n => !expected.has(n) || !NAMESAKES.has(n));
+/* Release BR triage: the generator's own output, not the union with the live read. Once the lead's live
+   read (scripts/data/marketNamesakesLive.json, 548 names on 2026-10-23) holds these names, the union
+   hides a generator that lost rule C, and TRIVIA_CONTROL=rulec stopped firing. */
+const twoMenLeftOut = [...twoMen.keys()].filter(n => !derived.has(n) || !NAMESAKES.has(n));
 console.log(`   6b. ${twoMen.size} names of the 2026 slice show two men in one season of the saved rows; left off the list ${twoMenLeftOut.length}`);
 if (twoMen.size === 0) fail('the saved rows show no name with two men in one season, so section 6b could not see one left out');
-for (const n of twoMenLeftOut) fail(`${n} shows two men in one season (${twoMen.get(n)}) but the namesake list leaves it out`);
+for (const n of twoMenLeftOut) fail(`${n} shows two men in one season (${twoMen.get(n)}) but ${derived.has(n) ? 'the shipped namesake list' : "the generator's output"} leaves it out`);
 
 /* ---------------- 7. one no tie rule ---------------- */
 section('7. Face Off and the bank read one MIN_RATIO');
