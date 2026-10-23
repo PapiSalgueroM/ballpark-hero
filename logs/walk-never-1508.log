@@ -1,0 +1,5 @@
+playCmOldCareersWorld: the old Arsenal career (pre), seed 1, season 2: the summer's Arda Güler from Real Madrid to Tottenham; adopted false
+ok   (a) the old career, a summer on, resumes to the hub
+FAIL (b) Tottenham's club page lists Arda Güler
+ok   (errors) no page error on any page
+playCmOldCareersWorld: control never FIRED: (b) red
