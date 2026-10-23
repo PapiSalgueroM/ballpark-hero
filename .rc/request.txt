@@ -1,0 +1,35 @@
+# REBOUND AT RELEASE BQ (triage-BQ.md): Round 1525 moves 15 of the owner tail's 16 careers against e4464a1e on purpose,
+# and main now holds 1524, so the walk's merge base has the owner tail. B1524 defaults to THIS TREE WITH ROUND 1524 TAKEN
+# OUT of the two files the harness and the walk read from their base (filesWithoutMerge.mjs 86b94e557 e4464a1e0 HEAD
+# soccerCareerEngine.ts soccerCareerLeague.ts: BP m6b and its first parent; the whole tree form refuses on two src files
+# neither reads). walkFix1524.mjs takes it as WALK_BASE. chain-1524 runs check-chain-bq.mjs (as chain-1523).
+# Release BP part two (Round BPH): ROUND 1524's own proof lines (Soccer Career: the owner tail, a club for sale, the
+# real table, one budget call a season), from finish-1524.md, fix-1524.md, fix2-1524.md and verify2-1524.md as the
+# round's runners ran them (r1524-fa, fb, fc, fw, f2final, vf2-s, vf2-w), proven on the release head by rBPh-m6ba and
+# rBPh-m6bb (merge m6b) and again on the final head. Extras on its send line: check-chain-bph.mjs, walkOwner.mjs (the
+# builder's walk, r1524-tools), walkFix1524.mjs (the run reviewer's walk the fixer kept), probeOwnerPanelFail.mjs.
+# BINDING. B1524 is the head of release-bp-gate before the merge m6b brought 1524 in, its first parent: e4464a1e (the
+# release after Rounds 1519 and 1523). simSoccerOwnerTail sections 5 and 6 hold old owner saves and every career that
+# never buys a club to SIM_OWNER_BASE; left alone it takes git merge-base HEAD origin/main, which on this branch is a
+# main WITHOUT 1519 and 1523 (both move a career on purpose, 1523 on every default path), so the line pins it.
+# CONTROLS. ctl-1524 exits 0 only when each of the sixteen named controls exits 1 (counts on rBPh-m6ba in finish-BPH.md).
+#!serve
+#!playwright
+chain-1524: node .rc/x/check-chain-bq.mjs
+units-1524: node_modules/.bin/vitest run src/test/soccerCareerSaveRecovery.test.tsx src/test/soccerCareerDugoutTable.test.tsx src/test/scoreShown.test.tsx src/test/soccerCareerDebutLegacy.test.tsx --testTimeout=300000 --hookTimeout=120000 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+owner-1524: B1524=${B1524:-$(node .rc/x/filesWithoutMerge.mjs 86b94e557 e4464a1e0 HEAD src/lib/soccerCareerEngine.ts src/lib/soccerCareerLeague.ts)}; [ -n "$B1524" ] || exit 2; SIM_OWNER_BASE=$B1524 node scripts/simSoccerOwnerTail.mjs > /tmp/o24.log 2>&1; s=$?; grep -E "compared|differ" /tmp/o24.log | tail -2 | cut -c1-200; tail -1 /tmp/o24.log | cut -c1-200; exit $s
+ctl-1524: B1524=${B1524:-$(node .rc/x/filesWithoutMerge.mjs 86b94e557 e4464a1e0 HEAD src/lib/soccerCareerEngine.ts src/lib/soccerCareerLeague.ts)}; [ -n "$B1524" ] || exit 2; bad=0; for c in randomclub coin mathrandom squadnoop youthnoop stadiumnoop debtnoop dominant oldsave drawshift saleleague stalekey eager bands overprice debtfree; do SIM_OWNER_BASE=$B1524 SIM_OWNER_CONTROL=$c node scripts/simSoccerOwnerTail.mjs > /tmp/c24-$c.log 2>&1; e=$?; echo "$c exit=$e $(grep -c 'FAIL:' /tmp/c24-$c.log) fails | $(tail -1 /tmp/c24-$c.log | cut -c1-120)"; [ $e -eq 1 ] || bad=1; done; exit $bad
+scoreshown-1524: node scripts/simScoreShown.mjs
+moneyafter-1524: node scripts/simCareerMoneyAfterRetirement.mjs
+managercareer-1524: node scripts/simManagerCareer.mjs
+nodeadend-1524: node scripts/simCareerNoDeadEnd.mjs
+awardsnight-1524: node scripts/simCareerAwardsNight.mjs
+leaguefinish-1524: node scripts/simCareerLeagueFinish.mjs
+socialbrands-1524: node scripts/simCareerSocialBrands.mjs
+programme-1524: node scripts/simCareerProgramme.mjs
+trophyruns-1524: node scripts/simCareerTrophyRuns.mjs
+walkOwner-1524: node .rc/x/walkOwner.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+walkRun-1524: B1524=${B1524:-$(node .rc/x/filesWithoutMerge.mjs 86b94e557 e4464a1e0 HEAD src/lib/soccerCareerEngine.ts src/lib/soccerCareerLeague.ts)}; [ -n "$B1524" ] || exit 2; WALK_BASE=$B1524 node .rc/x/walkFix1524.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+probe-1524: node .rc/x/probeOwnerPanelFail.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+landing-bar-1524: SOCCER_LANDING_HEAD_ONLY=1 SECTIONS=bar node scripts/playSoccerLanding.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+flagship-1524: node scripts/simFlagshipWeight.mjs
