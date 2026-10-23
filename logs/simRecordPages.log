@@ -1,0 +1,24 @@
+1) every section has a slug, a route, a sitemap entry, a type and a saved page
+   13 slugs; 13 routes, 13 sitemap entries, 13 typed, 13 saved pages (comments stripped before reading)
+2) every row in recordBooks.json is in its saved page, under its own decade, and nothing else is
+   1163 of 1163 rows checked cell for cell
+3) the most titles table matches a recount of the JSON, per name as written
+   13 of 13 tables match the recount
+4) the derived facts are span bound and the ones the rows give
+   13 of 13 pages state their facts as the rows give them, rule above the leaders
+5) one h1, the promised h2s, one h3 per decade in the data
+   13 of 13 pages have the heading structure
+6) the head: title, description, canonical and breadcrumb
+   13 of 13 heads are right
+7) /records links all twelve pages, and each page links the others and /records from its own body
+   /records links 13 of 13; 13 pages link all the others and /records from their own body
+8) /records shows the newest ten seasons of each section, links each page by its span, and names the right leaders
+   13 of 13 sections show exactly their newest ten seasons, a span bound link and the right leaders
+9) links in src: no old /records#key anchor, no unknown page, and every labelled record link worded by its span
+   2326 source files, 40 literal record page links (13 labelled in objects, 1 with inline JSX words, 0 worded wrong), 0 old anchors, 0 unknown pages
+10) blurbs and notes carry no counts next to a name, and every "since" year is where the rows start
+   27 sentences read, 9 "since" years checked against the rows
+11) every MVP column is counted into its own table, per name as written, span bound to the column
+   3 of 3 sections with an MVP column carry a table that matches the recount
+
+simRecordPages: green. 13 record pages, registered everywhere, span bound, carrying every row and a recount that agrees.
