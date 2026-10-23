@@ -280,7 +280,7 @@ export const baseballConnectionsPuzzles: BaseballConnectionsPuzzle[] = [
   {
     id: 'bconn-029',
     groups: [
-      { theme: 'Oakland Athletics legends', players: ['Rickey Henderson', 'Reggie Jackson', 'Rollie Fingers', 'Mark McGwire', 'Dennis Eckersley'], difficulty: 'yellow' },
+      { theme: 'Oakland Athletics legends', players: ['Rickey Henderson', 'Reggie Jackson', 'Jose Canseco', 'Mark McGwire', 'Dennis Eckersley'], difficulty: 'yellow' },
       { theme: 'Kansas City Royals legends', players: ['George Brett', 'Bret Saberhagen', 'Frank White', 'Salvador Perez', 'Zack Greinke'], difficulty: 'green' },
       { theme: 'Milwaukee Brewers legends', players: ['Robin Yount', 'Paul Molitor', 'Ryan Braun', 'Prince Fielder', 'Cecil Cooper'], difficulty: 'blue' },
       { theme: 'Cleveland Guardians legends', players: ['Bob Feller', 'Jim Thome', 'Omar Vizquel', 'Kenny Lofton', 'Manny Ramirez'], difficulty: 'purple' },

@@ -27,6 +27,7 @@
   "bconn-019",
   "bconn-020",
   "bconn-028",
+  "bconn-029",
   "bconn-031",
   "bconn-035",
   "bconn-038",
@@ -398,6 +399,10 @@
   [
    "bconn-059",
    "Hall of Fame left-handed pitchers"
+  ],
+  [
+   "bconn-029",
+   "Oakland Athletics legends"
   ]
  ],
  "fixed": [
@@ -10720,6 +10725,121 @@
      "host": "baseball-reference.com",
      "url": "https://www.baseball-reference.com/players/p/perezsa02.shtml",
      "says": "Silver Slugger seasons, with that season's most played position: 2016 C, 2018 C, 2020 C, 2021 C, 2024 C"
+    }
+   ]
+  },
+  {
+   "id": "bconn-029",
+   "label": "Oakland Athletics legends",
+   "name": "Rickey Henderson",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/115749",
+     "says": "seasons with club 133: 14"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/h/henderi01.shtml",
+     "says": "seasons with the club: 14 (1979 to 1998)"
+    }
+   ]
+  },
+  {
+   "id": "bconn-029",
+   "label": "Oakland Athletics legends",
+   "name": "Reggie Jackson",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/116439",
+     "says": "seasons with club 133: 10"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/j/jacksre01.shtml",
+     "says": "seasons with the club: 10 (1967 to 1987)"
+    }
+   ]
+  },
+  {
+   "id": "bconn-029",
+   "label": "Oakland Athletics legends",
+   "name": "Jose Canseco",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/111962",
+     "says": "seasons with club 133: 9"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/c/cansejo01.shtml",
+     "says": "seasons with the club: 9 (1985 to 1997)"
+    }
+   ]
+  },
+  {
+   "id": "bconn-029",
+   "label": "Oakland Athletics legends",
+   "name": "Mark McGwire",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/118743",
+     "says": "seasons with club 133: 12"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/m/mcgwima01.shtml",
+     "says": "seasons with the club: 12 (1986 to 1997)"
+    }
+   ]
+  },
+  {
+   "id": "bconn-029",
+   "label": "Oakland Athletics legends",
+   "name": "Dennis Eckersley",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/113726",
+     "says": "seasons with club 133: 9"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/e/eckerde01.shtml",
+     "says": "seasons with the club: 9 (1987 to 1995)"
+    }
+   ]
+  },
+  {
+   "id": "bconn-029",
+   "label": "Milwaukee Brewers legends",
+   "name": "Rollie Fingers",
+   "holds": true,
+   "why": "second-fit",
+   "note": "Found by the round review, not by the checker: the record gives him 4 Brewers seasons, which the legend rule leaves unknown, but the Brewers retired his 34 (and he won the 1981 AL MVP and Cy Young there), so a player who puts him with the Brewers names a true group. He left bconn-029 for Jose Canseco.",
+   "sources": [
+    {
+     "host": "baseball-almanac.com",
+     "url": "https://www.baseball-almanac.com/teams/brewers.shtml",
+     "says": "Brewers Retired Numbers (6): 1 Bud Selig, 4 Paul Molitor, 19 Robin Yount, 34 Rollie Fingers P, 42 Jackie Robinson, 44 Hank Aaron"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/teams/MIL/",
+     "says": "Retired Numbers: BU 1 4 19 34 44 42, the 34 linked to /players/f/fingero01.shtml (Rollie Fingers)"
     }
    ]
   }

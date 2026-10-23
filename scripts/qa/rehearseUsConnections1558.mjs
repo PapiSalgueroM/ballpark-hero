@@ -75,7 +75,7 @@ const fail = s => { failures += 1; console.error('  FAIL: ' + s); };
 const canon = v => Array.isArray(v) ? v.map(canon) : v && typeof v === 'object' ? Object.fromEntries(Object.keys(v).sort().map(k => [k, canon(v[k])])) : v;
 const same = (a, b) => JSON.stringify(canon(a)) === JSON.stringify(canon(b));
 const ids = s => [...new Set(rows[s].map(r => r.id))];
-if (ids('baseball').length !== 33 || ids('nfl').length !== 1 || ids('nhl').length !== 1) fail(`the migration names ${ids('baseball').length} baseball, ${ids('nfl').length} NFL and ${ids('nhl').length} NHL boards; this round rewrites 33, 1 and 1`);
+if (ids('baseball').length !== 34 || ids('nfl').length !== 1 || ids('nhl').length !== 1) fail(`the migration names ${ids('baseball').length} baseball, ${ids('nfl').length} NFL and ${ids('nhl').length} NHL boards; this round rewrites 34, 1 and 1`);
 
 /* 0. every new board in the migration is the shipped file's board, word for word */
 const files = {};
