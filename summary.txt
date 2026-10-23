@@ -1,0 +1,4 @@
+gmc-full-head exit=0 19s |    Duration  18.93s (transform 1.35s, setup 73ms, collect 177ms, tests 17.90s, environment 314ms, prepare 153ms)
+gmc-partial-head exit=1 19s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/FrontOfficeGmCareer.test.tsx,title=src/components/front-office-shared/FrontO
+gmc-full-base exit=0 19s |    Duration  18.10s (transform 1.57s, setup 67ms, collect 172ms, tests 17.14s, environment 292ms, prepare 130ms)
+gmc-clean exit=1 19s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/FrontOfficeGmCareer.test.tsx,title=src/components/front-office-shared/FrontO

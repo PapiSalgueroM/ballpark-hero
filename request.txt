@@ -1,0 +1,5 @@
+#!serial
+gmc-full-head: node .rc/x/mutGmc.mjs full && node_modules/.bin/vitest run src/components/front-office-shared/FrontOfficeGmCareer.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src; exit $s
+gmc-partial-head: node .rc/x/mutGmc.mjs partial && node_modules/.bin/vitest run src/components/front-office-shared/FrontOfficeGmCareer.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src; exit $s
+gmc-full-base: X=$PWD/.rc/x && git worktree add /tmp/gb d3a334f6f >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/gb/node_modules && cd /tmp/gb && node $X/mutGmc.mjs full && node_modules/.bin/vitest run src/components/front-office-shared/FrontOfficeGmCareer.test.tsx --testTimeout=300000 --hookTimeout=120000
+gmc-clean: git diff --exit-code src && node_modules/.bin/vitest run src/components/front-office-shared/FrontOfficeGmCareer.test.tsx --testTimeout=300000 --hookTimeout=120000
