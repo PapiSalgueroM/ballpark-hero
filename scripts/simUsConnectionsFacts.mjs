@@ -29,7 +29,11 @@
  *   6) no man is dealt twice on one board under two names (bconn-049 held
  *      "Goose Gossage" and "Rich Gossage", and the game's own check compares
  *      spellings)
- *   7) the groups and members the record cannot judge may only get fewer
+ *   7) the groups, members and other tiles the record cannot judge may only get
+ *      fewer (each count has its ceiling in the sport's ledger). Section 4's
+ *      "one right answer" holds as far as the record judges: an other tile it
+ *      cannot judge (a gray position share, one to four seasons with a legends
+ *      club) is counted, held at its ceiling and said aloud, never called fine
  *
  * Live rows: players are dealt from the tables baseball_connections_puzzles,
  * nfl_connections_puzzles and nhl_connections_puzzles. This harness never reads
@@ -50,6 +54,8 @@
  *                             (must raise: twice, for him)
  *   US_CONN_CONTROL=onehost   one ledger fact loses its second host (must raise: one-host, for that fact)
  *   US_CONN_CONTROL=unjudged  "Played in Japan before MLB" back on bconn-002 (must raise: unjudged, for it)
+ *   US_CONN_CONTROL=fingers   Rollie Fingers back among bconn-029's A's legends, beside the Brewers who
+ *                             retired his 34 (must raise: other-unknown, for baseball's ceiling)
  * A control is red only when the rule it names fires for the man or group it
  * moved. Any other failure in a control run (a moved man has no two host fact
  * in section 3, say) is printed but never turns the run red on its own, so
@@ -156,6 +162,15 @@ if (CONTROL) {
       changed = true;
       own = { kinds: ['one-host'], subject: `${f.name} | ${f.label}` };
     }
+  } else if (CONTROL === 'fingers') {
+    /* the review's second answer: Rollie Fingers (his 34 retired by the Brewers) back among bconn-029's A's legends */
+    const b = boardOf('baseball', 'bconn-029');
+    const g = b?.groups.find(x => x.theme === 'Oakland Athletics legends');
+    if (g && b.groups.some(x => x.theme === 'Milwaukee Brewers legends') && g.players.includes('Jose Canseco')) {
+      g.players[g.players.indexOf('Jose Canseco')] = 'Rollie Fingers';
+      changed = true;
+      own = { kinds: ['other-unknown'], subject: 'baseball' };
+    }
   } else if (CONTROL === 'unjudged') {
     const b = boardOf('baseball', 'bconn-002');
     const g = b?.groups.find(x => x.theme === 'Born in Japan');
@@ -248,6 +263,7 @@ for (const s of SPORTS) {
 console.log('4) one right answer: the shared cross check over every board');
 const unchecked = {};
 const memberUnknown = {};
+const otherUnknown = {};
 for (const s of SPORTS) {
   const cross = crossCheckBoards(boards[s], { ...sports[s].checker, labelOf });
   for (const f of cross.findings) {
@@ -256,6 +272,7 @@ for (const s of SPORTS) {
   }
   unchecked[s] = cross.unchecked;
   memberUnknown[s] = cross.memberUnknown;
+  otherUnknown[s] = cross.otherUnknown;
   if (live.has(s)) {
     const off = [...new Set(boards[s].flatMap(b => b.groups.flatMap(g => g.players)).filter(p => !sports[s].checker.has(p)))];
     if (off.length) console.log(`   ${s}: ${off.length} MEN ON THE LIVE ROWS ARE NOT IN THE RECORD, SO THEIR GROUPS ARE NOT FULLY CHECKED. Extend the record with NAMES_FROM=<export> (scripts/usConnections/fetch*Record.mjs) and run again. First of them: ${off.slice(0, 8).join(', ')}`);
@@ -298,11 +315,20 @@ for (const s of SPORTS) {
   const L = ledgerOf(s);
   const n = unchecked[s].length;
   const u = memberUnknown[s];
+  /* the third count: a tile from another group the record cannot judge against a group beside it (a man with
+     15 percent of his games at a position, or three seasons with a legends club). That is exactly where a second
+     right answer hides (Rollie Fingers, four Brewers seasons and his 34 retired there, sat beside "Milwaukee
+     Brewers legends" on bconn-029 until the review found him), so it is fenced like the other two */
+  const o = otherUnknown[s];
   if (!live.has(s) && !CONTROL) {
     if (n !== (L.uncheckedCeiling ?? -1)) fail(`${s}: ${n} groups nothing judges, the ledger's uncheckedCeiling says ${L.uncheckedCeiling}: ${n > L.uncheckedCeiling ? 'one came back' : 'lower the ceiling'}`);
     if (u !== (L.memberUnknownCeiling ?? -1)) fail(`${s}: ${u} members the record cannot place, the ledger's memberUnknownCeiling says ${L.memberUnknownCeiling}: ${u > L.memberUnknownCeiling ? 'one came back' : 'lower the ceiling'}`);
-  } else if (CONTROL && n > (L.uncheckedCeiling ?? 0)) { for (const x of unchecked[s]) fire('unjudged', x.label); fail(`${s}: ${n} groups nothing judges, over the ceiling of ${L.uncheckedCeiling}`); }
-  console.log(`   ${s}: ${n} groups nothing judges (ceiling ${L.uncheckedCeiling}), ${u} members the record cannot place (ceiling ${L.memberUnknownCeiling})${n ? `: ${unchecked[s].map(x => `${x.id} "${x.label}"`).join(', ')}` : ''}`);
+    if (o !== (L.otherUnknownCeiling ?? -1)) fail(`${s}: ${o} other tiles the record cannot judge against a group beside them, the ledger's otherUnknownCeiling says ${L.otherUnknownCeiling}: ${o > L.otherUnknownCeiling ? 'one came back, and it may be a second right answer' : 'lower the ceiling'}`);
+  } else if (CONTROL) {
+    if (n > (L.uncheckedCeiling ?? 0)) { for (const x of unchecked[s]) fire('unjudged', x.label); fail(`${s}: ${n} groups nothing judges, over the ceiling of ${L.uncheckedCeiling}`); }
+    if (o > (L.otherUnknownCeiling ?? 0)) { fire('other-unknown', s); fail(`${s}: ${o} other tiles the record cannot judge, over the ceiling of ${L.otherUnknownCeiling}`); }
+  }
+  console.log(`   ${s}: ${n} groups nothing judges (ceiling ${L.uncheckedCeiling}), ${u} members the record cannot place (ceiling ${L.memberUnknownCeiling}), ${o} other tiles it cannot judge (ceiling ${L.otherUnknownCeiling})${n ? `: ${unchecked[s].map(x => `${x.id} "${x.label}"`).join(', ')}` : ''}`);
 }
 
 console.log('');
@@ -324,4 +350,5 @@ if (failures > 0) {
   console.error(`simUsConnectionsFacts: ${failures} failure${failures === 1 ? '' : 's'}`);
   process.exit(1);
 }
-console.log('simUsConnectionsFacts: green. Every Baseball, NFL and NHL Connections group is held to the record, and every board has one right answer.');
+const gray = SPORTS.map(s => `${otherUnknown[s]} ${s}`).join(', ');
+console.log(`simUsConnectionsFacts: green. Every Baseball, NFL and NHL Connections group is held to the record, and no board has a second right answer the record can see (other tiles it cannot judge, each at its ceiling: ${gray}).`);

@@ -5,7 +5,7 @@
   "A fact names a man, a group label and whether he fits it (holds), and carries two sources on two different hosts, neither a wiki: the record first, the second host after it.",
   "Every member of a group the checker flagged before the round holds his group on two hosts (flaggedGroups lists those groups under their labels after the round).",
   "Every finding the checker made before the round (fixed) has the fact behind it on two hosts: the member who did not fit, or the man from another group who did.",
-  "uncheckedCeiling and memberUnknownCeiling may only fall: a label or a member the record cannot judge must not come back."
+  "uncheckedCeiling, memberUnknownCeiling and otherUnknownCeiling may only fall: a label, a member or another tile the record cannot judge must not come back."
  ],
  "boardsChanged": [
   "nflconn-004"
@@ -236,5 +236,7 @@
   }
  ],
  "uncheckedCeiling": 0,
- "memberUnknownCeiling": 0
+ "memberUnknownCeiling": 0,
+ "otherUnknownCeiling": 1,
+ "otherUnknownNote": "Other tiles the record cannot judge against a group beside them, 1 pair on the head: Ed Reed against \"Played college ball at Clemson\" on nflconn-004 (the record lacks his college; he played at Miami, so it is not a second answer). The count may only fall."
 }

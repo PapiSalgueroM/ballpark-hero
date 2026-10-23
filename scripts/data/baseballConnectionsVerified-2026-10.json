@@ -5,7 +5,7 @@
   "A fact names a man, a group label and whether he fits it (holds), and carries two sources on two different hosts, neither a wiki: the record first, the second host after it.",
   "Every member of a group the checker flagged before the round holds his group on two hosts (flaggedGroups lists those groups under their labels after the round).",
   "Every finding the checker made before the round (fixed) has the fact behind it on two hosts: the member who did not fit, or the man from another group who did.",
-  "uncheckedCeiling and memberUnknownCeiling may only fall: a label or a member the record cannot judge must not come back."
+  "uncheckedCeiling, memberUnknownCeiling and otherUnknownCeiling may only fall: a label, a member or another tile the record cannot judge must not come back."
  ],
  "boardsChanged": [
   "bconn-001",
@@ -10887,5 +10887,7 @@
  ],
  "uncheckedCeiling": 0,
  "memberUnknownCeiling": 2,
+ "otherUnknownCeiling": 53,
+ "otherUnknownNote": "Other tiles the record cannot judge against a group beside them, 53 pairs on the head: position groups where a man has between 10 and 30 percent of his games at the position (Frank Robinson against \"Hall of Fame left fielders\", 29.4 percent), legends groups where a man has one to four seasons with the club (Max Scherzer against \"Texas Rangers legends\"), and Dennis Eckersley (361 starts in 1071 games) against \"Hall of Fame right-handed starting pitchers\". These are exactly where a second right answer could hide, so the count may only fall. Rollie Fingers against \"Milwaukee Brewers legends\" on bconn-029 was one (the Brewers retired his 34) and left the board.",
  "memberUnknownNote": "Curt Schilling in \"Arizona Diamondbacks legends\" (four seasons there: the legend rule says five fit, none does not, one to four is unknown) and Paul Molitor in \"Hall of Fame third basemen\" (29.7 per cent of his games at third: the share rule says a third fits, under a tenth does not). Neither is contradicted; neither board was flagged."
 }
