@@ -1093,7 +1093,7 @@ export default function NbaFrontOfficeBoard() {
             }))}
           />
         ) : (
-          <p data-season-stats-pending className="rounded-2xl border border-border bg-card p-3 text-center text-[11px] text-muted-foreground">
+          <p data-season-stats-pending className="rounded-2xl border border-border bg-card p-3 text-center text-xs text-muted-foreground">
             This save started before season lines were kept, so this season has none. Lines and awards start with next season's tip off.
           </p>
         )}

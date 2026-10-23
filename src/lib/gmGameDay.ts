@@ -17,6 +17,8 @@
    middle give the same game, no engine generator and no Math.random moves,
    and nothing but a game's final has to be saved to tell it again. TEAM
    LEVEL ONLY: a line names a club, never a man, and there is no speaker.
+   (Since Round 1542 a card may name who scored beside the story, from the
+   board's own credits: src/lib/gmGameDayView.ts, `scorers`.)
 
    FAILS CLOSED: a final with no winner, a final with a side above the
    sport's own `maxScore` or above GM_SCORE_CEILING (src/lib/gmGameScore.ts
@@ -32,7 +34,7 @@
    path in src/lib/gmGameScore.ts and this file rides with a card alone.
    `gameStory` takes what `readGmLastGame` hands back as it is. */
 import { keyedRng } from './keyedRng';
-import { isGmScore, quickGame, type GameDayFixture, type ToldGame } from './gmGameScore';
+import { gmStoryKey, isGmScore, quickGame, type GameDayFixture, type ToldGame } from './gmGameScore';
 import type { DerivedGame, SeasonEvent } from './season/core';
 import type { ScoreLaw, StoryLaw } from './gameLaws/types';
 
@@ -49,6 +51,10 @@ export interface GameDayLaw {
   periods: { count: number; regulation?: number; of(minute: number): number; name(i: number): string };
   /** THIS SIM'S OWN: the margin that makes a rout, the deficit that makes a comeback, and the sentence for each shape. */
   shape: { rout: number; comeback: number; say(shape: StoryShape, winner: string, loser: string): string };
+  /** Round 1542: the kind of play a board credits to a man (the NFL's 'td'), and the words for one credit; both absent
+   *  in a sport whose board credits nobody. The names come from the board's credits, never from the story law. */
+  credited?: string;
+  creditWords?(passer: string | null, scorer: string): string;
 }
 
 export interface GameStory {
@@ -109,7 +115,7 @@ function storyOf(law: GameDayLaw, g: ToldGame, viewAs: 'home' | 'away', md: numb
   if (typeof law.maxScore !== 'number' || !(g.homeScore <= law.maxScore) || !(g.awayScore <= law.maxScore)) return null;
   const past = g.beyond === true;
   if (past && typeof law.storyBeyond !== 'function') return null;
-  const rng = keyedRng(`${g.key}|story|${g.homeScore}-${g.awayScore}`);
+  const rng = keyedRng(gmStoryKey(g));
   const raw = past ? law.storyBeyond!(g.homeScore, g.awayScore, rng) : law.story.events(g.homeScore, g.awayScore, rng);
   if (!Array.isArray(raw)) return null;
   const length = law.story.clock.length;

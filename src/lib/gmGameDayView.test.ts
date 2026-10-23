@@ -153,3 +153,60 @@ describe('the fixed patterns', () => {
     expect(gameDayClock(NFL_GAME_DAY).short).toBeUndefined();
   });
 });
+
+describe('Round 1542: who scored', () => {
+  const games = finals();
+  /** Credits by hand, as many as each side's touchdowns in the story: passes and runs in turn. */
+  const creditsFor = (g: GmLastGame) => {
+    const st = gameStory(NFL_GAME_DAY, g, 'home')!;
+    const n = (side: 'us' | 'them') => st.game.events.filter(e => e.kind === 'td' && e.side === side).length;
+    const make = (club: string, k: number) => Array.from({ length: k }, (_, i): [string | null, string] => (i % 2 ? [null, `${club} back ${i}`] : [`${club} qb`, `${club} catch ${i}`]));
+    return { home: make(g.home, n('us')), away: make(g.away, n('them')) };
+  };
+  const words = (club: string, [passer, scorer]: [string | null, string]) => `${club} ${passer ? `${passer} to ${scorer}` : `${scorer} runs it in`}`;
+
+  it('with no credits the view is the view it was, with an empty list', () => {
+    for (const g of games.slice(0, 120)) for (const club of ['SEA', 'ARI']) {
+      const v = gameDayView(NFL_GAME_DAY, g, club, name);
+      expect(v.scorers).toEqual([]);
+      expect('creditsMissing' in v).toBe(false);
+    }
+  });
+
+  it('lists every touchdown of both sides in minute order, each side\'s credits in their order, and changes nothing else', () => {
+    let listed = 0;
+    for (const g of games) for (const club of ['SEA', 'ARI']) {
+      const c = creditsFor(g);
+      const v = gameDayView(NFL_GAME_DAY, g, club, name, c);
+      const st = gameStory(NFL_GAME_DAY, g, club === g.home ? 'home' : 'away')!;
+      expect(v.scorers.map(p => p.clock)).toEqual(st.game.events.filter(e => e.kind === 'td').map(e => nflClockLabel(e.min)));
+      for (const [side, list] of [[g.home, c.home], [g.away, c.away]] as const) {
+        expect(v.scorers.filter(p => p.text.startsWith(`${side} `)).map(p => p.text)).toEqual(list.map(x => words(side, x)));
+      }
+      expect(v.creditsMissing).toBeUndefined();
+      expect({ ...v, scorers: [] }).toEqual(gameDayView(NFL_GAME_DAY, g, club, name));
+      listed += v.scorers.length;
+    }
+    expect(listed).toBeGreaterThan(1000);
+  });
+
+  it('a side whose credits do not number its touchdowns names nobody at all, and a game with none kept says so', () => {
+    const g = games.find(x => creditsFor(x).home.length > 1)!;
+    const c = creditsFor(g);
+    const v = gameDayView(NFL_GAME_DAY, g, 'SEA', name, { home: c.home.slice(1), away: c.away });
+    expect([v.scorers, v.creditsMissing]).toEqual([[], true]);
+    const none = gameDayView(NFL_GAME_DAY, g, 'SEA', name, null);
+    expect([none.scorers, none.creditsMissing]).toEqual([[], true]);
+    expect(none.deciding).toEqual(gameDayView(NFL_GAME_DAY, g, 'SEA', name).deciding);
+  });
+
+  it('credits kept that do not number the touchdowns (one nobody could take) are told apart from credits not kept', () => {
+    const g = games.find(x => creditsFor(x).home.length > 1)!;
+    const c = creditsFor(g);
+    const short = gameDayView(NFL_GAME_DAY, g, 'SEA', name, { home: c.home.slice(1), away: c.away });
+    expect([short.scorers, short.creditsMissing, short.creditsShort]).toEqual([[], true, true]);
+    expect(gameDayView(NFL_GAME_DAY, g, 'SEA', name, null).creditsShort).toBeUndefined();
+    expect('creditsShort' in gameDayView(NFL_GAME_DAY, g, 'SEA', name, c)).toBe(false);
+    expect('creditsShort' in gameDayView(NFL_GAME_DAY, g, 'SEA', name)).toBe(false);
+  });
+});

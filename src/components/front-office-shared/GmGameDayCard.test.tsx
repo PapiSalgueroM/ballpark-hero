@@ -240,3 +240,43 @@ describe('GmGameDayCard', () => {
     expect(nflWhereLabel('AFC Wild Card')).toBe('AFC Wild Card');
   });
 });
+
+describe('Round 1542: the Touchdowns list', () => {
+  const last = LOG[2];
+  /* as many credits a side as the game's touchdowns, through the view's own count */
+  const story = gameDayView(NFL_GAME_DAY, last, 'SEA', name, { home: [], away: [] });
+  const tds = (side: string) => {
+    const v = gameDayView(NFL_GAME_DAY, last, side, name);
+    return (v.game?.events ?? []).filter(e => e.kind === 'td' && e.side === 'us').length;
+  };
+  const credits = { home: Array.from({ length: tds(last.home) }, (_, i): [string | null, string] => [`${last.home} qb`, `${last.home} end ${i}`]), away: Array.from({ length: tds(last.away) }, (_, i): [string | null, string] => [null, `${last.away} back ${i}`]) };
+
+  it('names every touchdown of the game under the plays, in the scroll part, under a heading that says it is this save\'s game', () => {
+    expect(story.creditsMissing).toBe(credits.home.length + credits.away.length > 0 ? true : undefined);
+    render(<NflGameDay {...base({ credits: key => (key === last.key ? credits : null) })} />);
+    const list = q('[data-gameday-scorers]')!;
+    expect(list, 'the list is drawn').toBeTruthy();
+    expect(list.closest('[data-gameday-scroll]'), 'inside the one part that scrolls').toBeTruthy();
+    expect(list.textContent).toContain("Touchdowns in this save's game");
+    const rows = [...list.querySelectorAll('[data-gameday-scorer]')].map(r => r.textContent ?? '');
+    expect(rows).toHaveLength(credits.home.length + credits.away.length);
+    for (const [, s] of credits.home) expect(rows.some(r => r.includes(`${last.home} qb to ${s}`))).toBe(true);
+    for (const [, s] of credits.away) expect(rows.some(r => r.includes(`${s} runs it in`))).toBe(true);
+  });
+
+  it('a game the board kept no credits for says so in one line, and a board that keeps none draws the tile as it was', () => {
+    render(<NflGameDay {...base({ credits: () => null })} />);
+    expect(q('[data-gameday-scorers-missing]')!.textContent).toBe('Who scored was not kept for this game.');
+    cleanup();
+    render(<NflGameDay {...base()} />);
+    expect(q('[data-gameday-scorers]')).toBeNull();
+  });
+
+  it('credits kept that do not number the touchdowns say so, and never claim who scored was not kept', () => {
+    expect(credits.home.length + credits.away.length, 'the game has a touchdown to leave out').toBeGreaterThan(0);
+    const short = { home: credits.home.length ? credits.home.slice(1) : credits.home, away: credits.home.length ? credits.away : credits.away.slice(1) };
+    render(<NflGameDay {...base({ credits: key => (key === last.key ? short : null) })} />);
+    expect(q('[data-gameday-scorer]')).toBeNull();
+    expect(q('[data-gameday-scorers-missing]')!.textContent).toBe("The names kept don't line up with this game's touchdowns, so none are listed.");
+  });
+});

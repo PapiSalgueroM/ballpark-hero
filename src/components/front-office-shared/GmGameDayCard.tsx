@@ -50,7 +50,7 @@ const reducedMotion = () =>
 const SPEEDS: { speed: ClockSpeed; text: string }[] = [{ speed: 1, text: '1x' }, { speed: 3, text: '3x' }, { speed: 'results', text: 'Results' }];
 const ROUND_BUTTON = 'inline-flex h-11 shrink-0 items-center justify-center rounded-full border border-border bg-card text-xs font-bold text-foreground hover:bg-muted/40';
 
-export function GmGameDayCard({ law, help, whereLabel, log, my, name, short, next, nextNote, mode, onWatched, standing, helpHost }: GmGameDayProps) {
+export function GmGameDayCard({ law, help, whereLabel, log, my, name, short, next, nextNote, mode, onWatched, standing, helpHost, credits }: GmGameDayProps) {
   /* which game is open (null: the last one), whether he asked to watch an open game again, the clock's speed, the "?" */
   const [open, setOpen] = useState<number | null>(null);
   const [again, setAgain] = useState(false);
@@ -77,7 +77,8 @@ export function GmGameDayCard({ law, help, whereLabel, log, my, name, short, nex
 
   const index = open !== null && open < log.length ? open : log.length - 1;
   const last = index >= 0 ? log[index] : null;
-  const view = last ? gameDayView(law, last, my, name) : null;
+  /* Round 1542: who scored, when the board keeps it (absent: the tile as it was) */
+  const view = last ? gameDayView(law, last, my, name, credits ? credits(last.key) : undefined) : null;
   const canWatch = !!view?.game && !reduced;
   const asked = mode === 'watch' || again;
   const watching = asked && canWatch;
@@ -179,6 +180,28 @@ export function GmGameDayCard({ law, help, whereLabel, log, my, name, short, nex
                   </li>
                 ))}
               </ol>
+            )}
+            {/* Round 1542: every touchdown of the game with who scored it, in the same scroll part (the box never grows).
+                The names are real men of this save's rosters, so the list's own heading says it is this save's game. */}
+            {(view.scorers.length > 0 || view.creditsMissing) && (
+              <div className="space-y-1 pt-1" data-gameday-scorers>
+                <p className="font-bold text-muted-foreground">Touchdowns in this save's game</p>
+                {view.creditsMissing ? (
+                  <p className="text-muted-foreground" data-gameday-scorers-missing>
+                    {view.creditsShort ? "The names kept don't line up with this game's touchdowns, so none are listed." : 'Who scored was not kept for this game.'}
+                  </p>
+                ) : (
+                  <ol className="space-y-1">
+                    {view.scorers.map(p => (
+                      <li key={`${p.clock}-${p.after}`} className="flex gap-2" data-gameday-scorer>
+                        <span className={`${law.story.clock.labelClass ?? 'w-8'} shrink-0 tabular-nums text-muted-foreground`}>{p.clock}</span>
+                        <span className="min-w-0 flex-1 text-foreground">{p.text}</span>
+                        <span className="shrink-0 tabular-nums text-foreground">{p.after}</span>
+                      </li>
+                    ))}
+                  </ol>
+                )}
+              </div>
             )}
           </div>
           {standing && <p className="shrink-0 text-xs text-muted-foreground" data-gameday-standing>{standingLine(standing)}</p>}

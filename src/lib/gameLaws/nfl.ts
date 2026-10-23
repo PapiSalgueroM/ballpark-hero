@@ -14,61 +14,24 @@
    THIS SIM'S OWN: which drive list tells a score, the most field goals a
    side is given, how far apart the minutes sit, and every sentence.
 
-   It imports ../keyedShuffle and types, nothing else: not the season core,
+   It imports ./nflDrives and types, nothing else: not the season core,
    not the ledger, not an engine. So it can sit in any chunk. No React, no
-   Math.random. */
-import { shuffled } from '../keyedShuffle';
+   Math.random.
+
+   Round 1542: the drive arithmetic (MAX_FG, NflDrives, nflDriveCost,
+   nflDrives) moved to ./nflDrives.ts with every body unchanged, because the
+   NFL Front Office's press now splits a told final into drives and may not
+   reach this file. It is imported back and exported from here as before,
+   and the story's first two calls are nflDrivePair's. */
 import type { SeasonEvent } from '../season/core';
 import type { Rng, StoryLaw } from './types';
+import { MAX_FG, nflDriveCost, nflDrivePair, nflDrives, type NflDrives } from './nflDrives';
 
-/** The most field goals one side is given in a game. */
-export const MAX_FG = 6;
+export { MAX_FG, nflDriveCost, nflDrives };
+export type { NflDrives };
+
 /** The length of a game in minutes: the ledger's four quarters of 15. */
 export const NFL_GAME_MINUTES = 60;
-
-/** The scoring drives of one side: touchdowns worth 6, 7 or 8, field goals, safeties. */
-export interface NflDrives { tds: number[]; fgs: number; safeties: number }
-
-/** How far a list is from plain football: every touchdown that is not a
- *  seven costs one, a safety four. */
-function driveOptions(points: number, minTd: number, exactFg: number | null): { t: number; f: number; s: number; cost: number }[] {
-  const out: { t: number; f: number; s: number; cost: number }[] = [];
-  if (!Number.isInteger(points) || points < 0 || minTd < 0) return out;
-  for (let s = 0; s <= 1; s += 1) {
-    for (let f = exactFg ?? 0; f <= (exactFg ?? MAX_FG); f += 1) {
-      const rest = points - 3 * f - 2 * s;
-      if (rest < 0) break;
-      for (let t = minTd; 6 * t <= rest; t += 1) {
-        if (rest > 8 * t) continue;
-        out.push({ t, f, s, cost: Math.abs(rest - 7 * t) + 4 * s });
-      }
-    }
-  }
-  return out;
-}
-
-/** The least a drive list for that score strays from sevens and threes; null: no list makes it. */
-export function nflDriveCost(points: number, minTd: number, exactFg: number | null): number | null {
-  const opts = driveOptions(points, minTd, exactFg);
-  return opts.length ? Math.min(...opts.map(o => o.cost)) : null;
-}
-
-/** The scoring drives of one side that make `points`, with at least `minTd`
- *  touchdowns (his) and, for a kicker's own side, exactly `exactFg` field
- *  goals. Sevens and threes first; a 6 (the kick after is missed), an 8 (a
- *  two point try) and at most one safety only when the sum needs it. Every
- *  whole number has a list except 1 and 4; null when there is none. */
-export function nflDrives(points: number, minTd: number, exactFg: number | null, rng: Rng): NflDrives | null {
-  const opts = driveOptions(points, minTd, exactFg);
-  const u = rng();
-  if (opts.length === 0) return null;
-  const least = Math.min(...opts.map(o => o.cost));
-  const best = opts.filter(o => o.cost === least);
-  const pick = best[Math.floor(u * best.length)];
-  const off = points - 3 * pick.f - 2 * pick.s - 7 * pick.t;
-  const tds = shuffled(Array.from({ length: pick.t }, (_, i) => (i < Math.abs(off) ? 7 + Math.sign(off) : 7)), rng);
-  return { tds, fgs: pick.f, safeties: pick.s };
-}
 
 /** A side's scoring drives sit at least this many minutes apart where the hour has room. */
 const DRIVE_GAP = 3;
@@ -129,9 +92,9 @@ export function nflClubLine(e: SeasonEvent, club: string, sixIsATry = false): st
 export const NFL_STORY_LAW: StoryLaw = {
   id: 'nfl',
   events: (home, away, rng) => {
-    const us = nflDrives(home, 0, null, rng);
-    const them = nflDrives(away, 0, null, rng);
-    if (!us || !them) return null;
+    const pair = nflDrivePair(home, away, rng);
+    if (!pair) return null;
+    const [us, them] = pair;
     const minute = nflMinutePicker(rng);
     const ev: SeasonEvent[] = [];
     for (const [side, d] of [['us', us], ['them', them]] as const) {

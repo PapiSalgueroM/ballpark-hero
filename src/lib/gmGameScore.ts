@@ -89,6 +89,14 @@ export function quickGame(law: ScoreLaw, f: GameDayFixture): ToldGame | null {
   return s ? { key: f.key, home: f.home, away: f.away, homeScore: s.home, awayScore: s.away, ...(f.decided.beyond === true ? { beyond: true } : {}) } : null;
 }
 
+/** Round 1542: the key of a told final's STORY stream (src/lib/gmGameDay.ts
+ *  tells the story on it). Here, beside the quick path, because the NFL
+ *  Front Office's press splits a final into drives on the same stream
+ *  (src/lib/nflSeasonStats.ts) and may not import the told path. */
+export function gmStoryKey(g: Pick<ToldGame, 'key' | 'homeScore' | 'awayScore'>): string {
+  return `${g.key}|story|${g.homeScore}-${g.awayScore}`;
+}
+
 /** Who won a told final: the club on the higher score, or null for a level one. */
 export function toldWinner(g: ToldGame): string | null {
   return g.homeScore === g.awayScore ? null : g.homeScore > g.awayScore ? g.home : g.away;

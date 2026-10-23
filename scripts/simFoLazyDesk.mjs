@@ -13,7 +13,10 @@
  *      import() is an edge to a chunk fetched later and is not followed). Not one of the kit's modules may be in
  *      it, and the face, the loader and the board must be (so a walker that reaches nothing cannot pass), and the
  *      loader must hold the one dynamic edge to the kit. Stricter than the bundler where it differs (an import
- *      the compiler would drop as unused still counts here), never looser.
+ *      the compiler would drop as unused still counts here), never looser. Round 1542 (its closing check of
+ *      2026-10-22, the page had grown 5.8K): the season's awards (src/lib/nflSeasonAwards.ts, named in the press
+ *      that already waits for the kit), the shared ranking they call (foSeasonStats.ts) and the season card with
+ *      its words are not in it either, while the recorder (nflSeasonStats.ts) must be.
  *   2  The hub's Career box before the kit equals the box after it. Before the kit is here the board builds a
  *      save older than the record from the save alone (hostBoxLegacy: the tier and the last grade left out);
  *      after, from the league through the adapter (nflLegacy). Over three NFL leagues (two of fifteen men, one
@@ -31,6 +34,7 @@
  *   hostimport  the career boxes take their words from the whole host again                  section 1
  *   tiertile    the Career box prints the stint's tier, which the hub's record leaves out    section 2
  *   boxseasons  the hub's record counts one season more than the save                        section 2
+ *   closestatic the board imports the season's awards statically again (Round 1542)          section 1
  *
  * Run: node scripts/simFoLazyDesk.mjs   (SIM_FO_LAZY_DESK_CONTROL=<name> for a control)
  * Reads no database and no network: the bundle is refused if it names the database host.
@@ -62,6 +66,9 @@ const CONTROLS = {
   boxseasons: ['2', src('lib', 'gmCareerFace.ts'),
     '    seasonsPlayed: f.seasonsPlayed, titles: f.titles, fired: f.fired, lastGrade: null,',
     '    seasonsPlayed: f.seasonsPlayed + 1, titles: f.titles, fired: f.fired, lastGrade: null,'],
+  closestatic: ['1', src('components', 'front-office', 'FrontOfficeBoard.tsx'),
+    "import { FoAwardBadge } from '@/components/front-office-shared/FoAwardBadge';",
+    "import { FoAwardBadge } from '@/components/front-office-shared/FoAwardBadge';\nimport '@/lib/nflSeasonAwards';"],
 };
 if (CONTROL && !CONTROLS[CONTROL]) {
   console.error(`SIM_FO_LAZY_DESK_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(CONTROLS).join(', ')})`);
@@ -177,10 +184,17 @@ const KIT_ONLY = [
   'src/components/front-office-shared/GmOutOfWork.tsx', 'src/components/front-office-shared/GmJobMarketPanel.tsx',
   'src/components/front-office-shared/GmCareerPanel.tsx', 'src/components/front-office-shared/GmXpDeskPanel.tsx',
 ];
+/* Round 1542: the season's awards and the shared ranking ride in the kit (the close is in the press that waits for
+   it), the season card, its words and the shared card in the card's own chunk: the page carries none of them. */
+const SEASON_LAZY = [
+  'src/lib/nflSeasonAwards.ts', 'src/lib/foSeasonStats.ts', 'src/lib/nflSeasonView.ts',
+  'src/components/front-office/NflSeasonStats.tsx', 'src/components/front-office-shared/FoSeasonStatsCard.tsx',
+];
 /* What the page must carry, so a walker that reaches nothing cannot pass. */
 const PAGE_MUST = [
   'src/components/front-office/FrontOfficeBoard.tsx', 'src/lib/gmCareerFace.ts', 'src/lib/gmSeatRecord.ts',
   'src/components/front-office/nflCareerKitLoad.ts', 'src/components/front-office-shared/gmCareerDesk.tsx', 'src/lib/nflGmDesk.ts',
+  'src/lib/nflSeasonStats.ts',
 ];
 
 begin('1', 'the page carries the boxes and the loader, and not one module of the career kit');
@@ -210,9 +224,10 @@ begin('1', 'the page carries the boxes and the loader, and not one module of the
   ok(files.size >= 80, `the walk reached ${files.size} files from the page, fewer than the 80 a page of this site imports`);
   for (const m of PAGE_MUST) ok(files.has(m), `the walk never reached ${m}, which the page imports: the walker is blind`);
   for (const k of KIT_ONLY) ok(!files.has(k), () => `the page carries ${k}, which is the kit's: ${chain(k)}`);
+  for (const k of SEASON_LAZY) ok(!files.has(k), () => `the page carries ${k}, which rides in the kit or the season card's chunk: ${chain(k)}`);
   ok(dynamicEdges.some(([a, b]) => a === 'src/components/front-office/nflCareerKitLoad.ts' && b === 'src/components/front-office/nflCareerKit.ts'),
     'the loader does not fetch the kit with a dynamic import');
-  console.log(`   ${files.size} files reached from the page, ${dynamicEdges.length} dynamic edges seen, ${KIT_ONLY.length} kit modules checked absent`);
+  console.log(`   ${files.size} files reached from the page, ${dynamicEdges.length} dynamic edges seen, ${KIT_ONLY.length} kit modules and ${SEASON_LAZY.length} season modules checked absent`);
 }
 
 /* ================================================================== */

@@ -28,5 +28,8 @@ export { leagueTiers } from '@/lib/gmSeat';
 export { nflDeskHost } from '@/lib/gmDeskHostNfl';
 export { nflAwayHost, nflLegacy, nflOutcome, nflTakeSeat } from '@/lib/nflGmCareer';
 export { GmOutOfWork } from '@/components/front-office-shared/GmOutOfWork';
+/* Round 1542: the season's awards, named in closeSeason beside the verdict (the same press, which waits for this
+   kit), so the close and the shared ranking it calls are not in the page */
+export { nflCloseSeasonStats } from '@/lib/nflSeasonAwards';
 /* the recap's See who is calling button, the one place the board draws it */
 export { Phone } from 'lucide-react';

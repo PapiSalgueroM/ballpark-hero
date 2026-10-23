@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Briefcase, ChevronLeft, Crown, RotateCcw, ShieldHalf } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
 import { FO_TEAMS, FO_TEAM_MAP } from '@/data/frontOfficePlayers';
@@ -96,6 +96,13 @@ import { NFL_POSTSEASON, nflPlayTie, nflRoundsOf } from '@/lib/frontOfficePostse
 import {
   bracketChampion, bracketPairings, bracketWeek, openBracket, playBracketAll, playBracketWeek, type BracketFormat, type GmBracketSave,
 } from '@/lib/gmBracket';
+/* Round 1542: who scored, the recorder and the readers (static), the roster badge, the season card's props. The close
+   (nflCloseSeasonStats) comes with the career kit, in the press that already waits for it. */
+import {
+  nflAwardList, nflAwardsOf, nflCleanSave, nflMarkRookies, nflPlaysFor, nflRecordGame, nflRecordWeek, NFL_AWARD_LABEL,
+} from '@/lib/nflSeasonStats';
+import { FoAwardBadge } from '@/components/front-office-shared/FoAwardBadge';
+import type { NflSeasonCardProps } from '@/components/front-office/NflSeasonStats';
 /* Round 1307: the Game Day tile of the week box. The card, the story of a
    game, the match clock and the "?" are one chunk the week box asks for
    when it opens; the press never waits on it. Made here, at module level:
@@ -107,6 +114,19 @@ const NflGameDay = lazyPart<GmGameDayMount>(() => import('@/components/front-off
    one chunk the week box asks for. (Round 1307's note that the final week has
    no Watch is gone: Week 17 has Watch now, and its press opens the bracket.) */
 const NflBracket = lazyPart<GmBracketMount>(() => import('@/components/front-office/NflBracket'));
+/* Round 1542: who scored. The press credits every touchdown and sack and keeps the season's lines (the recorder and
+   the readers are static: they run in the press's own tick and at load; the close is the career kit's); the season card, its leaders, its
+   words and the award history are one chunk the recap and Standings ask for. Their imports sit with the others above.
+   The card has its own holding box, not the desk's (data-gm-panel-loading means the career kit is on its way, FrontOfficeLazyDesk.test.tsx):
+   the same fixed height, so the recap and Standings do not jump when the card lands */
+const NflSeasonCardChunk = lazy(() => import('@/components/front-office/NflSeasonStats'));
+function NflSeasonCard(props: NflSeasonCardProps) {
+  return (
+    <Suspense fallback={<div role="status" data-season-stats-loading style={{ minHeight: 260 }} className="rounded-2xl border border-border bg-card p-3 text-xs text-muted-foreground">One moment</div>}>
+      <NflSeasonCardChunk {...props} />
+    </Suspense>
+  );
+}
 /* Round 1550: the two binding fields only the screens behind the career boxes read (the seat pack, the earn line).
    Those screens are drawn once the kit is here and never before, so a read without it is a bug and says so. */
 const careerKitOrThrow = (): NflCareerKit => {
@@ -252,6 +272,8 @@ export default function FrontOfficeBoard() {
      filter by group. Both transient. starting holds the club whose league is
      loading its bench, startError says the load failed. */
   const [rosterGroup, setRosterGroup] = useState<DepthPos | 'practice' | null>(null);
+  /* Round 1542: the Standings box's two faces, the table and the season in numbers (transient, opens on the table) */
+  const [standingsFace, setStandingsFace] = useState<'table' | 'season'>('table');
   const [tradeGroup, setTradeGroup] = useState<DepthPos | 'starters'>('starters');
   const [starting, setStarting] = useState<string | null>(null);
   const [startError, setStartError] = useState(false);
@@ -406,6 +428,10 @@ export default function FrontOfficeBoard() {
          id fix can hold two men under one. The draft class is passed too: it
          is minted from the same counter, so it shares the id space. */
       ensureFoLeagueIds(s.league, s.draftClass);
+      /* Round 1542: a season block, an award history, a man's awards or first year that does not read whole is
+         deleted from the stored league ITSELF, here, before any restore path below hands the stored save back to
+         persist (openDraft's restore and a rebuilt bracket both do): the save then loads as it would without it. */
+      nflCleanSave(s.league);
       /* Round 1309: a save in the playoffs (a hub save at Week 18 with no
          champion for its season) plays on the bracket it holds, or on one
          started again unplayed when it does not read (the feed says so).
@@ -641,8 +667,14 @@ export default function FrontOfficeBoard() {
     /* Round 1550: the verdict is the career kit's. Every press that can reach here is made in the last week or the
        playoffs, where the buttons wait for the kit (closeWaits), so it is here; the guard is for the type alone. */
     if (!kit) return;
-    const { hostSeasonVerdict, hostXpRecapLine, nflDeskHost, nflOutcome } = kit;
+    const { hostSeasonVerdict, hostXpRecapLine, nflDeskHost, nflOutcome, nflCloseSeasonStats } = kit;
     lg.champions.push({ season: lg.season, team: champ });
+    /* Round 1542: the season's awards, named once from its regular season lines and written on the winners' cards
+       (src/lib/foSeasonClose.ts: a second close changes nothing). The feed says so when one of his men won. */
+    const closedStats = nflCloseSeasonStats(lg);
+    const awardFeed = closedStats ? nflAwardList(closedStats).filter(([, m]) => m.team === myTeam)
+      .map(([k, m]) => `🏅 ${m.name} takes ${NFL_AWARD_LABEL[k]} in this save's ${closedStats.season} season.`) : [];
+    if (awardFeed.length > 0) setNewsFeed(f => [...awardFeed, ...f].slice(0, 8));
     setPlayoffRounds(rounds);
     setChampion(champ);
     const won = champ === myTeam;
@@ -710,6 +742,8 @@ export default function FrontOfficeBoard() {
     const told: GmGameLog['games'] = [];
     const play = nflPlayTie(lg.teams, Math.random, lg.season, gm ? nflDeskEdges(gm, lg, myTeam) : undefined, told);
     const after = all ? playBracketAll(format, before, play) : playBracketWeek(format, before, play);
+    /* Round 1542: his playoff games are credited for the tile (the season's lines are the regular season's) */
+    for (const g of told) if (g.home === myTeam || g.away === myTeam) nflRecordGame(lg, g, myTeam, false);
     setGameLog(addToGmGameLog(gameLogLive.current, lg.season, told.filter(g => g.home === myTeam || g.away === myTeam)));
     setWeekResults([]);
     setFeedSlam(null);
@@ -761,6 +795,9 @@ export default function FrontOfficeBoard() {
        with the edges it was played with, and his own game goes into the
        season's log. Nothing is drawn here and no record moves. */
     const told = games.map(g => nflTell(g, lg.teams, lg.season, nflWhere(lg.week), deskWeek?.edges));
+    /* Round 1542: who scored, read off the rosters the week was played with (before the desk's tick). Week 1 opens
+       the season's lines; a save from before season lines keeps none until then. Nothing is drawn. */
+    nflRecordWeek(lg, told.flatMap(t => (t.last ? [t.last] : [])), myTeam);
     const mine = told.find(t => t.game.home === myTeam || t.game.away === myTeam);
     let log = addToGmGameLog(gameLogLive.current, lg.season, mine?.last ? [mine.last] : []);
     let nextGm = gm;
@@ -812,6 +849,8 @@ export default function FrontOfficeBoard() {
       const playoffEdges = nextGm ? nflDeskEdges(nextGm, lg, myTeam) : undefined;
       const toldPlayoffs = rounds.map(r => ({ name: r.name, told: r.games.map(g => nflTell(g, lg.teams, lg.season, r.name, playoffEdges)) }));
       const toldRounds: PlayoffRound[] = toldPlayoffs.map(r => ({ name: r.name, games: r.told.map(t => t.game) }));
+      /* Round 1542: his playoff games are credited for the tile, the same as a round at a time */
+      for (const t of toldPlayoffs.flatMap(r => r.told)) if (t.last && (t.game.home === myTeam || t.game.away === myTeam)) nflRecordGame(lg, t.last, myTeam, false);
       log = addToGmGameLog(log, lg.season, toldPlayoffs.flatMap(r => r.told)
         .filter(t => t.game.home === myTeam || t.game.away === myTeam).flatMap(t => (t.last ? [t.last] : [])));
       setGameLog(log);
@@ -882,6 +921,8 @@ export default function FrontOfficeBoard() {
          deal, and the re-sign desk learns he is a draft pick and his round. */
       if (pl && gm) nflSignDraftee(pl);
       if (pl) lg.teams[myTeam].players.push(pl);
+      /* Round 1542: a man drafted here is a first year man next season (the draft runs before the summer rolls it) */
+      if (pl) nflMarkRookies(lg, [{ team: myTeam, playerName: pr.name }], lg.season + 1);
       if (pl && gm) deskNow = nflNoteArrivals(gm, lg, myTeam, [pl.id], 'draft', pickRound);
       note = `📥 Drafted ${pr.name} (${pl ? pl.pos : pr.pos}), true rating ${pr.trueOvr} vs scouted ${gradeOf(pr)}.`;
     }
@@ -896,6 +937,7 @@ export default function FrontOfficeBoard() {
     const rivalPicks: { team: string; playerName: string; pos: string; grade: number }[] = [];
     for (let i = 0; i < batches; i++) {
       const resolved = nflAiDraftPicks(lg, nextClass, myTeam, Math.random);
+      nflMarkRookies(lg, resolved.picks, lg.season + 1);
       nextClass = resolved.remaining;
       rivalPicks.push(...resolved.picks);
     }
@@ -997,6 +1039,7 @@ export default function FrontOfficeBoard() {
     const batches = draftBatchesLeft ?? Math.min(3, picksLeft);
     for (let i = 0; i < batches; i++) {
       const resolved = nflAiDraftPicks(lg, remaining, myTeam, Math.random);
+      nflMarkRookies(lg, resolved.picks, lg.season + 1);
       remaining = resolved.remaining;
       rivalPicks.push(...resolved.picks);
     }
@@ -1617,6 +1660,9 @@ export default function FrontOfficeBoard() {
             </div>
           )}
         </div>
+        {/* Round 1542: the season in numbers, the season he ran (not on the day he takes another club's seat: the
+            season on this screen was not his, and Standings carries it) */}
+        {!arriving && <NflSeasonCard league={league} myTeam={myTeam} label={label} mode="close" />}
         {gm && recapDesk && (
           <GmDeskMount sport="nfl" desk={gm} facts={recapDesk} panels={NFL_RECAP_PANELS} open={gmOpen} onOpen={openDesk} onDesk={changeDesk} />
         )}
@@ -1744,7 +1790,7 @@ export default function FrontOfficeBoard() {
   /* Round 1019: the desk's boxes sit under the board's own; a desk panel open hides the board's boxes. */
   const hubDesk = deskFacts(hubFacts);
   const deskPanelOpen = gmPanelFor(NFL_HUB_PANELS, gmOpen) !== null;
-  const openPanel = (key: FoPanelKey) => { setCutArmed(null); setDepthView(null); setDepthPick(null); setRosterGroup(null); setGmOpen(null); setTab(key === 'play' ? 'week' : key); };
+  const openPanel = (key: FoPanelKey) => { setCutArmed(null); setDepthView(null); setDepthPick(null); setRosterGroup(null); setGmOpen(null); setStandingsFace('table'); setTab(key === 'play' ? 'week' : key); };
   /* Round 723: the chart the sim reads, and who it counts as starting today. */
   const chart = chartNow;
   const starters = starterIds(my);
@@ -1849,6 +1895,8 @@ export default function FrontOfficeBoard() {
           {p.name} {p.out > 0 ? (league.week > REGULAR_WEEKS ? '(out for the playoffs)' : `(out ${p.out}w)`) : ''}
         </span>
         <span className="block text-[10px] text-muted-foreground">{p.pos} · {p.age}y · ${p.salary}M x{p.years}{p.tagSeason === league.season ? ' · 🏷️ tagged' : ''}{noTape(p)}</span>
+        {/* Round 1542: this save's sim awards on his card, read through a guard */}
+        <FoAwardBadge awards={nflAwardsOf(p)} league="NFL" />
       </span>
       <span className="ml-2 flex shrink-0 items-center gap-1.5">
         <b className="text-primary">{p.ovr}{draftMark(p)}</b>
@@ -2517,6 +2565,9 @@ export default function FrontOfficeBoard() {
                 onWatched={() => setHeld(null)}
                 standing={bracketRow ? null : { table: conf, seed: seedsNow.includes(myTeam) ? seedsNow.indexOf(myTeam) + 1 : null, seeds: seedsNow.length }}
                 helpHost={helpHost}
+                /* Round 1542: who scored, read from the CURRENT league (a held league would not yet hold the game being
+                   watched, and the card draws nothing of a result while the clock runs) */
+                credits={key => nflPlaysFor(league, key)}
               />
               )}
             </div>
@@ -2542,6 +2593,23 @@ export default function FrontOfficeBoard() {
 
       {tab === 'standings' && (
         <div className="rounded-2xl border border-border bg-card p-3">
+          {/* Round 1542: two small tiles, so the season in numbers is a face of the box and never stacked under the table */}
+          <div className="mb-3 grid grid-cols-2 gap-2" role="tablist" data-standings-faces>
+            {([['table', 'Table'], ['season', 'This season']] as const).map(([face, text]) => (
+              <button
+                key={face}
+                role="tab"
+                aria-selected={standingsFace === face}
+                onClick={() => setStandingsFace(face)}
+                className={cn('min-h-[44px] rounded-xl border px-3 text-sm font-bold', standingsFace === face ? 'border-gold bg-gold/10 text-foreground' : 'border-border text-muted-foreground hover:text-foreground')}
+              >
+                {text}
+              </button>
+            ))}
+          </div>
+          {standingsFace === 'season' ? (
+            <NflSeasonCard league={league} myTeam={myTeam} label={label} mode="live" />
+          ) : (
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             {['AFC East', 'AFC North', 'AFC South', 'AFC West', 'NFC East', 'NFC North', 'NFC South', 'NFC West'].map(div => (
               <div key={div}>
@@ -2555,6 +2623,7 @@ export default function FrontOfficeBoard() {
               </div>
             ))}
           </div>
+          )}
         </div>
       )}
 

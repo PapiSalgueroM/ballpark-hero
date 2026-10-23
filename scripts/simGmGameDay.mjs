@@ -186,6 +186,8 @@
  *               (the engine forgets the desk in the playoffs)         edge moved: none)
  *   storyleak   an import of the bracket's view lib planted in memory section 6 (the boards' static chain: the press
  *               in frontOfficePostseason.ts                           half reaches a story file; the mount list allows it)
+ *   statsstory  an import of the NFL's story law planted in memory     section 6 (Round 1542: the board's static chain
+ *               in nflSeasonStats.ts                                  reaches the story through the season lines)
  *   inseason    loadGmPostseason loses its "not in the postseason"    section 12 (outside the postseason the load
  *               line                                                  is null); a sound block stays green
  *   byeplays    the NFL data's first Wild Card tie made seed 1        section 13 (no entry in a week he has the
@@ -313,7 +315,7 @@ const CONTROLS = {
   enginedrift: { section: 4, labels: ['is the recorded one'], clean: ['playBracketAll gives', 'four presses of playBracketWeek'], patches: [{ file: 'src/lib/frontOffice.ts', from: 'const margin = 1 + Math.floor(rng() * 17);', to: 'const margin = 1 + Math.floor(rng() * 16);' }] },
   random: { section: 5, labels: ['holds no Math.random', 'takes no draw from Math.random'], patches: [{ file: DAY, from: "const flip = viewAs === 'away';", to: "const flip = viewAs === 'away'; Math.random();" }] },
   stream: { section: 5, labels: ['holds no Math.random', 'takes no draw from Math.random', 'moves none of its 272 winners'], patches: [{ file: SCORE, from: 'let first: [number, number] | null = null;', to: 'let first: [number, number] | null = null; Math.random();' }] },
-  unkeyed: { section: 5, labels: ['the same story twice', 'through JSON, tells the same story'], patches: [{ file: DAY, from: 'keyedRng(`${g.key}|story|${g.homeScore}-${g.awayScore}`)', to: 'keyedRng(`${g.key}|story|${(globalThis.__gmDayCalls = (globalThis.__gmDayCalls ?? 0) + 1)}`)' }] },
+  unkeyed: { section: 5, labels: ['the same story twice', 'through JSON, tells the same story'], patches: [{ file: DAY, from: 'keyedRng(gmStoryKey(g))', to:'keyedRng(`${g.key}|story|${(globalThis.__gmDayCalls = (globalThis.__gmDayCalls ?? 0) + 1)}`)' }] },
   ceiling: { section: 5, labels: ['the save guards refuse a score above the ceiling', 'a final above the ceiling is told nothing'], patches: [{ file: SCORE, from: 'export const GM_SCORE_CEILING = 999;', to: 'export const GM_SCORE_CEILING = 100000;' }] },
   lawmax: { section: 5, labels: ["tells no final above the sport's own top score"], patches: [{ file: NFL_DAY, from: 'maxScore: NFL_MAX_SCORE,', to: 'maxScore: 999,' }] },
   lowmax: { section: 1, labels: ["has a side above the sport's own top score"], elsewhere: ['every told final has a story'], patches: [{ file: NFL_DAY, from: 'export const NFL_MAX_SCORE = 7 * DRIVES + 3;', to: 'export const NFL_MAX_SCORE = 30;' }] },
@@ -337,6 +339,8 @@ const CONTROLS = {
   logplayoff: { section: 13, labels: ["deep equal the one press path's", 'his playoff record in the log is his record in nflRoundsOf'], patches: [{ file: NFL_POST, from: 'if (t.last) told.push(t.last);', to: '' }] },
   /* Round 1308's review: a control for each check that had none (s12.outside, s13.when and the desk's count) */
   storyleak: { section: 6, labels: ['import no story law'], patches: [], plant: { file: NFL_POST, text: "\nimport { gmBracketPlace } from '@/lib/gmBracketView';\n" } },
+  /* Round 1542: the season lines are a static import of the NFL board and read the drive arithmetic, never the story */
+  statsstory: { section: 6, labels: ['import no story law'], patches: [], plant: { file: 'src/lib/nflSeasonStats.ts', text: "\nimport { NFL_STORY_LAW } from './gameLaws/nfl';\n" } },
   inseason: { section: 12, labels: ['outside the postseason the load is null'], clean: ['comes back as it is'], patches: [{ file: POST, from: 'if (!inPostseason) return null;', to: '' }] },
   byeplays: { section: 13, labels: ['no log entry in a week he has the bye'], patches: [{ file: NFL_DATA, from: 'home: { seed: top + 1 }, away: { seed: top + 6 }', to: 'home: { seed: top }, away: { seed: top + 6 }' }] },
   deskless: { section: 11, labels: ['so the desk on checks hold something'], patches: [{ file: 'src/lib/frontOffice.ts', from: "const games = pairs.map(([h, a]) => simGame({ week: 0, home: h, away: a, homeScore: 0, awayScore: 0, winner: '' }, teams, rng, edges));", to: "const games = pairs.map(([h, a]) => simGame({ week: 0, home: h, away: a, homeScore: 0, awayScore: 0, winner: '' }, teams, rng));" }] },
@@ -1136,6 +1140,9 @@ for (const set of SEEDSETS) {
     /* its board tests read the log, the bind's words for a week and the quick path's final */
     ['src/components/front-office/FrontOfficeGameDay.test.tsx', new Set([noExt(LOG), noExt(BIND), noExt(SCORE)])],
     ['src/components/front-office/FrontOfficeOnePress.test.tsx', new Set([noExt(LOG)])],
+    /* Round 1542, who scored: the season lines split a told final into drives on the story's own stream, so they read
+       the quick path's key (gmStoryKey) and its saved shape, and nothing else of Game Day */
+    ['src/lib/nflSeasonStats.ts', new Set([noExt(SCORE)])],
   ]);
   /* an import's path from the repo root: the alias, or a path from the importing file; a package is nobody's */
   const target = (from, spec) => {
