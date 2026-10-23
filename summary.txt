@@ -1,0 +1,7 @@
+ctl-sf-hlstale exit=1 1s | CONTROL hlstale: section 11's "value" check caught the break (1 new) and no other section moved.
+ctl-sf-hlonesource exit=1 1s | CONTROL hlonesource: section 1's "sources" check caught the break (1 new) and no other section moved.
+ctl-sf-crossclue exit=1 1s | CONTROL crossclue: section 11's "cross" check caught the break (1 new) and no other section moved.
+ctl-sf-hlcutoff exit=1 1s | CONTROL hlcutoff: section 11's "cutoff" check caught the break (1 new) and no other section moved.
+ctl-sf-tennisstale exit=1 1s | CONTROL tennisstale: section 12's "value" check caught the break (2 new) and no other section moved.
+ctl-sf-f1driver exit=1 1s | CONTROL f1driver: section 5's "clue" check caught the break (1 new) and no other section moved.
+ctl-f1-wins exit=1 0s | simF1Champions control wins: fired as it must. Sections 1 and 4 went red (2 and 1 finding(s)) and nothing else did. Exit 1 is the control working.

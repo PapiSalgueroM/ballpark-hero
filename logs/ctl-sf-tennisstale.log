@@ -1,0 +1,5 @@
+CONTROL tennisstale: 2 new failure(s), 0 gone, against an untouched run with 0.
+  + [12 value] Jannik Sinner: the game says 4 slams, the record 5 through the 2026 US Open
+  + [12 value] Jannik Sinner: the card says titles from 2024 to 2025, the record 2024 to 2026
+
+CONTROL tennisstale: section 12's "value" check caught the break (2 new) and no other section moved.
