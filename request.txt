@@ -1,0 +1,30 @@
+#!build
+# Release BQ, Round 1547 (closing head 8206759e): fix-1547.md's gate (rc-fixb.txt). Every ctl- line must exit 1. Left out: rc-fixc.txt (attributions against e3deb2cb, measured once).
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+people: node scripts/simConquestPeople.mjs
+vitest-conquest: node_modules/.bin/vitest run src/hooks/useConquestNba.test.tsx src/test/conquestExplore.test.tsx src/test/conquestRegionDetails.test.tsx --testTimeout=300000 --hookTimeout=120000
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simNbaOpeningRatings: node scripts/simNbaOpeningRatings.mjs
+simNbaOpeningRatingInputs: node scripts/simNbaOpeningRatingInputs.mjs
+simPrerender: node scripts/simPrerender.mjs
+gen-check: node scripts/genConquestKeyStats.mjs --check
+simFoRatingOrder: node scripts/simFoRatingOrder.mjs
+simConquestNbaArcade: node scripts/simConquestNbaArcade.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+ctl-dt: CONQUEST_PEOPLE_CONTROL=dt node scripts/simConquestPeople.mjs
+ctl-market: CONQUEST_PEOPLE_CONTROL=market node scripts/simConquestPeople.mjs
+ctl-nflnba: CONQUEST_PEOPLE_CONTROL=nflnba node scripts/simConquestPeople.mjs
+ctl-label: CONQUEST_PEOPLE_CONTROL=label node scripts/simConquestPeople.mjs
+ctl-season: CONQUEST_PEOPLE_CONTROL=season node scripts/simConquestPeople.mjs
+ctl-greatsSet: CONQUEST_PEOPLE_CONTROL=greatsSet node scripts/simConquestPeople.mjs
+ctl-hookPred: CONQUEST_PEOPLE_CONTROL=hookPred node scripts/simConquestPeople.mjs
+ctl-hookPredNba: CONQUEST_PEOPLE_CONTROL=hookPredNba node scripts/simConquestPeople.mjs
+ctl-greatsCap: CONQUEST_PEOPLE_CONTROL=greatsCap node scripts/simConquestPeople.mjs
+ctl-taken: CONQUEST_PEOPLE_CONTROL=taken node scripts/simConquestPeople.mjs
+ctl-greatsTaken: CONQUEST_PEOPLE_CONTROL=greatsTaken node scripts/simConquestPeople.mjs
+ctl-sortAsc: CONQUEST_PEOPLE_CONTROL=sortAsc node scripts/simConquestPeople.mjs
+ctl-pickWorst: CONQUEST_PEOPLE_CONTROL=pickWorst node scripts/simConquestPeople.mjs
+ctl-marketAsc: CONQUEST_PEOPLE_CONTROL=marketAsc node scripts/simConquestPeople.mjs
+ctl-bogus: CONQUEST_PEOPLE_CONTROL=bogus node scripts/simConquestPeople.mjs
