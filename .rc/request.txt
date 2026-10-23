@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+walk: ENGINES=chromium node scripts/playFoSeasonCard.mjs
+playNflSeasonStats: ENGINES=chromium node scripts/playNflSeasonStats.mjs
+playFrontOfficeGameDay: ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs
+nfl-on-base: git worktree add -f /tmp/wbase ab162ea8a3a1aeecdd430e4c5b1a69725202ea69 > /dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/wbase/node_modules && (cd /tmp/wbase && npx vite build --outDir /tmp/dist-base --logLevel error) && (node scripts/lib/hostLikeServer.mjs /tmp/dist-base 4182 > /dev/null 2>&1 &) && sleep 3 && RC_OUT="$RC_OUT/base" BASE=http://localhost:4182 ENGINES=chromium node scripts/playNflSeasonStats.mjs
