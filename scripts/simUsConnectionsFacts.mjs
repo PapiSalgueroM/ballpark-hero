@@ -41,11 +41,21 @@
  * Controls (each must exit 1; the harness first asserts the control changed
  * its input, else it prints ABORTED and exits 2; each prints how often it fired):
  *   US_CONN_CONTROL=arod      Alex Rodriguez back in "Won MVP in both leagues" on bconn-001
+ *                             (must raise: refuted and not-a-member, for him)
  *   US_CONN_CONTROL=bell      Le'Veon Bell back in nflconn-004's Steelers group, beside its Ravens
+ *                             (must raise: second-fit, for him)
  *   US_CONN_CONTROL=karlsson  Erik Karlsson back in nhlconn-004's Sharks group, beside 1,000 points
+ *                             (must raise: watch, for him)
  *   US_CONN_CONTROL=twice     "Rich Gossage" back beside "Goose Gossage" on bconn-049
- *   US_CONN_CONTROL=onehost   one ledger fact loses its second host
- *   US_CONN_CONTROL=unjudged  "Played in Japan before MLB" back on bconn-002
+ *                             (must raise: twice, for him)
+ *   US_CONN_CONTROL=onehost   one ledger fact loses its second host (must raise: one-host, for that fact)
+ *   US_CONN_CONTROL=unjudged  "Played in Japan before MLB" back on bconn-002 (must raise: unjudged, for it)
+ * A control is red only when the rule it names fires for the man or group it
+ * moved. Any other failure in a control run (a moved man has no two host fact
+ * in section 3, say) is printed but never turns the run red on its own, so
+ * deleting or loosening the rule a control names turns that control green
+ * (Round 1558's review found bell, karlsson and twice red through section 3
+ * alone with their rules removed).
  *
  * Run: node scripts/simUsConnectionsFacts.mjs   (light: about two seconds, no network)
  */
@@ -65,8 +75,12 @@ const LIVE = process.env.US_CONN_LIVE ?? '';
 const SPORTS = ['baseball', 'nfl', 'nhl'];
 
 let failures = 0;
-const fired = { count: 0 };
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
+/* every finding by its kind and the man (or group) it is about, so a control can ask whether ITS rule fired */
+const fires = [];
+const fire = (kind, subject) => fires.push({ kind, subject: fold(subject) });
+/* the rule each control must raise, and for whom; set by the control below */
+let own = null;
 
 fs.writeFileSync(path.join(TMP, 'entry.mjs'), `
 export const baseball = (await import('${R}/src/data/baseballConnectionsPuzzles.ts')).baseballConnectionsPuzzles;
@@ -108,6 +122,7 @@ if (CONTROL) {
       hr.players[hr.players.indexOf('Alex Rodriguez')] = g.players[0];
       g.players[0] = 'Alex Rodriguez';
       changed = true;
+      own = { kinds: ['refuted', 'not-a-member'], subject: 'Alex Rodriguez' };
     }
   } else if (CONTROL === 'bell') {
     const b = boardOf('nfl', 'nflconn-004');
@@ -115,6 +130,7 @@ if (CONTROL) {
     if (g && b.groups.some(x => x.theme === 'Played for the Ravens') && g.players.includes('Ben Roethlisberger')) {
       g.players[g.players.indexOf('Ben Roethlisberger')] = "Le'Veon Bell";
       changed = true;
+      own = { kinds: ['second-fit'], subject: "Le'Veon Bell" };
     }
   } else if (CONTROL === 'karlsson') {
     const b = boardOf('nhl', 'nhlconn-004');
@@ -122,18 +138,32 @@ if (CONTROL) {
     if (g && b.groups.some(x => x.theme === '1,000+ career points') && g.players.includes('Marc-Edouard Vlasic')) {
       g.players[g.players.indexOf('Marc-Edouard Vlasic')] = 'Erik Karlsson';
       changed = true;
+      own = { kinds: ['watch'], subject: 'Erik Karlsson' };
     }
   } else if (CONTROL === 'twice') {
     const b = boardOf('baseball', 'bconn-049');
     const g = b?.groups.find(x => x.players.includes('Goose Gossage'));
-    if (g && g.players.includes('Bruce Sutter')) { g.players[g.players.indexOf('Bruce Sutter')] = 'Rich Gossage'; changed = true; }
+    if (g && g.players.includes('Bruce Sutter')) {
+      g.players[g.players.indexOf('Bruce Sutter')] = 'Rich Gossage';
+      changed = true;
+      own = { kinds: ['twice'], subject: 'Rich Gossage' };
+    }
   } else if (CONTROL === 'onehost') {
     const f = (ledgerOf('baseball').facts ?? []).find(x => x.sources?.length === 2);
-    if (f) { console.log(`US_CONN_CONTROL=onehost: ${f.name} in "${f.label}" keeps only ${f.sources[0].host}`); f.sources = [f.sources[0]]; changed = true; }
+    if (f) {
+      console.log(`US_CONN_CONTROL=onehost: ${f.name} in "${f.label}" keeps only ${f.sources[0].host}`);
+      f.sources = [f.sources[0]];
+      changed = true;
+      own = { kinds: ['one-host'], subject: `${f.name} | ${f.label}` };
+    }
   } else if (CONTROL === 'unjudged') {
     const b = boardOf('baseball', 'bconn-002');
     const g = b?.groups.find(x => x.theme === 'Born in Japan');
-    if (g) { g.theme = 'Played in Japan before MLB'; changed = true; }
+    if (g) {
+      g.theme = 'Played in Japan before MLB';
+      changed = true;
+      own = { kinds: ['unjudged'], subject: 'Played in Japan before MLB' };
+    }
   } else {
     console.error(`unknown US_CONN_CONTROL=${CONTROL}`);
     process.exit(2);
@@ -170,7 +200,7 @@ for (const s of SPORTS) {
     for (const b of boards[s]) for (const g of b.groups) {
       if (fold(g.theme) === fold(r.label) && g.players.some(p => fold(p) === fold(r.name))) {
         n += 1;
-        fired.count += 1;
+        fire('refuted', r.name);
         fail(`${s} ${b.id}: ${r.name} in "${g.theme}" is refuted on two hosts (${r.sources.map(x => x.says).join(' / ')})`);
       }
     }
@@ -183,7 +213,7 @@ for (const s of SPORTS) {
   const L = ledgerOf(s);
   const facts = L.facts ?? [];
   let bad = 0;
-  for (const f of facts) if (!hostsOk(f.sources)) { bad += 1; fired.count += 1; fail(`${s}: ${f.name} in "${f.label}" (${f.holds ? 'fits' : 'does not fit'}) does not stand on two hosts`); }
+  for (const f of facts) if (!hostsOk(f.sources)) { bad += 1; fire('one-host', `${f.name} | ${f.label}`); fail(`${s}: ${f.name} in "${f.label}" (${f.holds ? 'fits' : 'does not fit'}) does not stand on two hosts`); }
   for (const [k, w] of Object.entries(L.watchLines ?? {})) if (!hostsOk(w.sources)) fail(`${s}: the line ${k} does not stand on two hosts`);
   if (live.has(s)) { console.log(`   ${s}: ${facts.length} facts (the flagged groups are the file's, not checked against a live export)`); continue; }
   /* every member of a group the round flagged is held to it by a fact */
@@ -196,7 +226,7 @@ for (const s of SPORTS) {
     if (!g) { fail(`${s} ${id}: the ledger flags "${label}" and the board has no such group`); continue; }
     for (const p of g.players) {
       members += 1;
-      if (!holding.has(`${fold(label)}|${fold(p)}`)) { fired.count += 1; fail(`${s} ${id}: ${p} in "${label}" has no two host fact`); }
+      if (!holding.has(`${fold(label)}|${fold(p)}`)) { fire('no-fact', p); fail(`${s} ${id}: ${p} in "${label}" has no two host fact`); }
     }
   }
   /* every finding the round fixed has the fact behind it: the man, the label and the verdict the finding
@@ -210,7 +240,7 @@ for (const s of SPORTS) {
     const want = watch
       ? `${fold(p[1].replace(/ \(.+\)$/, ''))}|${fold(p[2])}|false`
       : `${fold(p[2])}|${fold(p[3])}|${p[1] === 'second-fit'}`;
-    if (!behind.has(want) && !behind.has(k)) { fired.count += 1; fail(`${s}: the fixed finding "${k}" has no fact`); }
+    if (!behind.has(want) && !behind.has(k)) { fire('fixed-no-fact', k); fail(`${s}: the fixed finding "${k}" has no fact`); }
   }
   console.log(`   ${s}: ${facts.length} facts, ${bad} on one host; ${(L.flaggedGroups ?? []).length} flagged groups, ${members} members held; ${(L.fixed ?? []).length} fixed findings`);
 }
@@ -221,7 +251,7 @@ const memberUnknown = {};
 for (const s of SPORTS) {
   const cross = crossCheckBoards(boards[s], { ...sports[s].checker, labelOf });
   for (const f of cross.findings) {
-    fired.count += 1;
+    fire(f.kind, f.name);
     fail(`${s} ${findingKey(f)}${f.kind === 'second-fit' ? ', so the board has two right answers' : ''}`);
   }
   unchecked[s] = cross.unchecked;
@@ -241,7 +271,7 @@ for (const s of SPORTS) {
     if (!c) continue;
     for (const o of b.groups) if (o !== g) for (const p of o.players) {
       const why = sports[s].checker.watch(p, c);
-      if (why) { n += 1; fired.count += 1; fail(`${s} ${b.id}: ${p} ("${o.theme}") may join "${g.theme}": ${why}`); }
+      if (why) { n += 1; fire('watch', p); fail(`${s} ${b.id}: ${p} ("${o.theme}") may join "${g.theme}": ${why}`); }
     }
   }
   console.log(`   ${s}: ${n} watched men beside a group they may join`);
@@ -255,7 +285,7 @@ for (const s of SPORTS) {
     const seen = new Map();
     for (const p of b.groups.flatMap(g => g.players)) {
       const id = sports[s].checker.identity?.(p) ?? fold(p);
-      if (seen.has(id)) { n += 1; fired.count += 1; fail(`${s} ${b.id}: "${seen.get(id)}" and "${p}" are the same man`); }
+      if (seen.has(id)) { n += 1; fire('twice', p); fail(`${s} ${b.id}: "${seen.get(id)}" and "${p}" are the same man`); }
       seen.set(id, p);
     }
   }
@@ -271,12 +301,25 @@ for (const s of SPORTS) {
   if (!live.has(s) && !CONTROL) {
     if (n !== (L.uncheckedCeiling ?? -1)) fail(`${s}: ${n} groups nothing judges, the ledger's uncheckedCeiling says ${L.uncheckedCeiling}: ${n > L.uncheckedCeiling ? 'one came back' : 'lower the ceiling'}`);
     if (u !== (L.memberUnknownCeiling ?? -1)) fail(`${s}: ${u} members the record cannot place, the ledger's memberUnknownCeiling says ${L.memberUnknownCeiling}: ${u > L.memberUnknownCeiling ? 'one came back' : 'lower the ceiling'}`);
-  } else if (CONTROL && n > (L.uncheckedCeiling ?? 0)) { fired.count += 1; fail(`${s}: ${n} groups nothing judges, over the ceiling of ${L.uncheckedCeiling}`); }
+  } else if (CONTROL && n > (L.uncheckedCeiling ?? 0)) { for (const x of unchecked[s]) fire('unjudged', x.label); fail(`${s}: ${n} groups nothing judges, over the ceiling of ${L.uncheckedCeiling}`); }
   console.log(`   ${s}: ${n} groups nothing judges (ceiling ${L.uncheckedCeiling}), ${u} members the record cannot place (ceiling ${L.memberUnknownCeiling})${n ? `: ${unchecked[s].map(x => `${x.id} "${x.label}"`).join(', ')}` : ''}`);
 }
 
 console.log('');
-if (CONTROL) console.log(`US_CONN_CONTROL=${CONTROL} fired ${fired.count} time${fired.count === 1 ? '' : 's'}`);
+if (CONTROL) {
+  /* red only when the rule this control names fired for the man or group it moved: every other failure is noise
+     here, so a control whose own rule is deleted goes green and says so */
+  const tally = {};
+  for (const f of fires) tally[f.kind] = (tally[f.kind] ?? 0) + 1;
+  const hits = own.kinds.map(k => fires.filter(f => f.kind === k && f.subject === fold(own.subject)).length);
+  const by = Object.entries(tally).map(([k, n]) => `${k} ${n}`).join(', ') || 'nothing';
+  if (hits.every(n => n > 0)) {
+    console.error(`US_CONN_CONTROL=${CONTROL} fired its own rule ${hits.reduce((a, b) => a + b, 0)} time(s): ${own.kinds.map((k, i) => `${k} x${hits[i]}`).join(', ')} for ${own.subject} (all findings: ${by}; ${failures} failures in all)`);
+    process.exit(1);
+  }
+  console.log(`US_CONN_CONTROL=${CONTROL} did NOT fire its own rule (${own.kinds.map((k, i) => `${k} x${hits[i]}`).join(', ')} for ${own.subject}); the ${failures} other failures do not count for it (findings: ${by}). This control proves nothing as the code stands.`);
+  process.exit(0);
+}
 if (failures > 0) {
   console.error(`simUsConnectionsFacts: ${failures} failure${failures === 1 ? '' : 's'}`);
   process.exit(1);
