@@ -1,0 +1,847 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/nflSeasonStats.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 170[2mms[22m[39m
+ [32m✓[39m src/lib/gmGameDay.test.ts [2m([22m[2m31 tests[22m[2m)[22m[33m 532[2mms[22m[39m
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+ [32m✓[39m src/test/usSeasonNfl.test.ts [2m([22m[2m35 tests[22m[2m)[22m[33m 1426[2mms[22m[39m
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+ [32m✓[39m src/components/front-office-shared/GmGameDayCard.test.tsx [2m([22m[2m14 tests[22m[2m)[22m[33m 1851[2mms[22m[39m
+   [33m[2m✓[22m[39m GmGameDayCard[2m > [22mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on [33m 1639[2mms[22m[39m
+[90mstdout[2m | src/components/front-office/FrontOfficeSeasonStats.test.tsx[2m > [22m[2mNFL front office: who scored, the load and the close[2m > [22m[2ma whole season on full rosters with lines and the desk on: the save it writes, measured
+[22m[39mMEASURED: the persisted save on full rosters with the desk on: 651697 characters at Week 1, 682949 after Week 16, 685422 on the recap (655785 without the block and the history); the block 29442, 456 lines, the history 176
+
+ [32m✓[39m src/test/gameLawNfl.test.ts [2m([22m[2m19 tests[22m[2m)[22m[33m 1045[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL_SCORE_LAW: the law for a game outside the Season Center[2m > [22mnever ends level, stays under the cap, and the home side wins about as often as it was told to [33m 397[2mms[22m[39m
+   [33m[2m✓[22m[39m nflMinutePicker[2m > [22mwhere the hour has room, keeps lines out of back to back minutes and a side's drives three minutes apart [33m 469[2mms[22m[39m
+ [32m✓[39m src/components/front-office/FrontOfficeSeasonStats.test.tsx [2m([22m[2m11 tests[22m[2m)[22m[33m 2423[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office: who scored, the load and the close[2m > [22ma whole season on full rosters with lines and the desk on: the save it writes, measured [33m 783[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office: the season card and the history[2m > [22mStandings opens on the table, and its This season face draws the season so far and the award history [33m 358[2mms[22m[39m
+[90mstdout[2m | src/lib/gmGameDayView.test.ts[2m > [22m[2mgameDayView[2m > [22m[2mevery sentence is the law's own for the story the told path tells
+[22m[39mgmGameDayView: shapes over 600 finals: trade 201, wire 132, rout 73, comeback 82, late 112; 1481 deciding plays read
+
+ [32m✓[39m src/lib/gmGameDayView.test.ts [2m([22m[2m11 tests[22m[2m)[22m[33m 928[2mms[22m[39m
+   [33m[2m✓[22m[39m gameDayView[2m > [22mprints the saved final from his side, and the periods add up to it, from both sides [33m 367[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m7 passed[39m[22m[90m (7)[39m
+[2m      Tests [22m [1m[32m134 passed[39m[22m[90m (134)[39m
+[2m   Start at [22m 00:42:39
+[2m   Duration [22m 6.64s[2m (transform 2.58s, setup 718ms, collect 4.39s, tests 8.38s, environment 2.61s, prepare 522ms)[22m
+
