@@ -273,6 +273,7 @@ export interface TycoonAchievement {
  *  forever. Forty seven of them: the long game's long game. */
 export const ACH_BONUS = 0.02;
 
+// Round 1543: ids are save keys and never change; a threshold may only go down, so every saved badge stays true (contract section 23).
 export const ACHIEVEMENTS: TycoonAchievement[] = [
   // The fanbase.
   { id: 'af500', label: '500 fans', emoji: '👥', hit: s => s.fanbase >= 500 },
@@ -287,15 +288,15 @@ export const ACHIEVEMENTS: TycoonAchievement[] = [
   { id: 'ac8000', label: '8,000 seats', emoji: '🏟️', hit: s => capacity(s) >= 8000 },
   // Wins, career.
   { id: 'aw1', label: 'First career win', emoji: '🏁', hit: s => s.totalWins >= 1 },
-  { id: 'aw10', label: '10 career wins', emoji: '🏁', hit: s => s.totalWins >= 10 },
-  { id: 'aw50', label: '50 career wins', emoji: '🏁', hit: s => s.totalWins >= 50 },
-  { id: 'aw150', label: '150 career wins', emoji: '🏆', hit: s => s.totalWins >= 150 },
-  { id: 'aw400', label: '400 career wins', emoji: '🏆', hit: s => s.totalWins >= 400 },
+  { id: 'aw10', label: '8 career wins', emoji: '🏁', hit: s => s.totalWins >= 8 },
+  { id: 'aw50', label: '35 career wins', emoji: '🏁', hit: s => s.totalWins >= 35 },
+  { id: 'aw150', label: '125 career wins', emoji: '🏆', hit: s => s.totalWins >= 125 },
+  { id: 'aw400', label: '300 career wins', emoji: '🏆', hit: s => s.totalWins >= 300 },
   // Goals.
-  { id: 'ag25', label: '25 goals', emoji: '⚽', hit: s => s.totalGoals >= 25 },
-  { id: 'ag100', label: '100 goals', emoji: '⚽', hit: s => s.totalGoals >= 100 },
-  { id: 'ag500', label: '500 goals', emoji: '⚽', hit: s => s.totalGoals >= 500 },
-  { id: 'ag2000', label: '2,000 goals', emoji: '🥅', hit: s => s.totalGoals >= 2000 },
+  { id: 'ag25', label: '10 goals', emoji: '⚽', hit: s => s.totalGoals >= 10 },
+  { id: 'ag100', label: '30 goals', emoji: '⚽', hit: s => s.totalGoals >= 30 },
+  { id: 'ag500', label: '75 goals', emoji: '⚽', hit: s => s.totalGoals >= 75 },
+  { id: 'ag2000', label: '250 goals', emoji: '🥅', hit: s => s.totalGoals >= 250 },
   // Streaks.
   { id: 'as5', label: 'Five straight wins', emoji: '🔥', hit: s => s.streak >= 5 },
   { id: 'as10', label: 'Ten straight wins', emoji: '🔥', hit: s => s.streak >= 10 },
@@ -603,15 +604,16 @@ export interface TycoonMilestone {
   hit: (s: TycoonState) => boolean;
 }
 
+// Round 1543: ids are save keys and never change; a threshold may only go down, so every saved badge stays true (contract section 23).
 export const MILESTONES: TycoonMilestone[] = [
   { id: 'fans500', label: '500 fans follow the club', pay: 400, hit: s => s.fanbase >= 500 },
   { id: 'fans2k', label: '2,000 fans follow the club', pay: 2500, hit: s => s.fanbase >= 2000 },
   { id: 'fans10k', label: '10,000 fans follow the club', pay: 20000, hit: s => s.fanbase >= 10000 },
   { id: 'full', label: 'First full house', pay: 600, hit: s => capacity(s) > 120 && attendance(s) >= capacity(s) },
   { id: 'win1', label: 'First win', pay: 250, hit: s => s.totalWins >= 1 },
-  { id: 'win10', label: '10 wins', pay: 3000, hit: s => s.totalWins >= 10 },
-  { id: 'win50', label: '50 wins', pay: 30000, hit: s => s.totalWins >= 50 },
-  { id: 'goals25', label: '25 goals scored', pay: 4000, hit: s => s.totalGoals >= 25 },
+  { id: 'win10', label: '8 wins', pay: 3000, hit: s => s.totalWins >= 8 },
+  { id: 'win50', label: '35 wins', pay: 30000, hit: s => s.totalWins >= 35 },
+  { id: 'goals25', label: '10 goals scored', pay: 4000, hit: s => s.totalGoals >= 10 },
   { id: 'streak5', label: 'Five wins in a row', pay: 6000, hit: s => s.streak >= 5 },
   { id: 'allTracks', label: 'Every upgrade owned at least once', pay: 8000, hit: s => TRACKS.every(t => (s.levels[t.id] ?? 0) >= 1) },
 ];

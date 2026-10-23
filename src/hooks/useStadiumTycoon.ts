@@ -43,6 +43,13 @@ export interface Floater {
 }
 
 let floaterSeq = 1;
+/** How long a floater is on the pitch: the page's 1.8 s rise plus a frame. */
+const FLOATER_LIFE_MS = 1900;
+/** Round 1543: the one spot a milestone or badge floater takes (the
+ *  milestone's old height). It clears the FULL TIME line at 12 and ends above
+ *  the badge line even when that wraps to two lines on a phone, which a second
+ *  row lower down did not (the fix walk measured it 73 percent covered). */
+const ANNOUNCE_Y = 30;
 
 /** Round 530: the two loudest events, held for the page's cards. The label
  *  and the bonus are the engine's own event fields, printed as they came. */
@@ -87,7 +94,10 @@ export function useStadiumTycoon(getEdge?: () => number) {
   const [gearSaveBlocked, setGearSaveBlocked] = useState(false);
   const [ticketSaveFailed, setTicketSaveFailed] = useState(false);
   const [promotion, setPromotion] = useState<Promotion | null>(null);
-  const [badge, setBadge] = useState<BadgeEarned | null>(null);
+  /* Round 1543: badges earned together each get their own turn on the badge
+     line. It used to hold one, so the last of a tick's badges wiped the rest. */
+  const [badgeQueue, setBadgeQueue] = useState<BadgeEarned[]>([]);
+  const badge = badgeQueue[0] ?? null;
   const [lastSeason, setLastSeason] = useState<LastSeason | null>(null);
   /* Round 583: goals waiting for the pitch. Queued only while the pitch is on
      screen: a goal scored while you are in another room is on the scoreboard
@@ -124,7 +134,9 @@ export function useStadiumTycoon(getEdge?: () => number) {
      with it (see useOwnedTimeouts). */
   const later = useOwnedTimeouts();
 
-  const pushFloater = useCallback((text: string, kind: Floater['kind'], x?: number, y?: number) => {
+  /* Round 1543: `replaces` takes a floater off in the same update that puts
+     this one up, so the two are never on screen together. */
+  const pushFloater = useCallback((text: string, kind: Floater['kind'], x?: number, y?: number, replaces?: number) => {
     const f: Floater = {
       id: floaterSeq++,
       text,
@@ -132,9 +144,10 @@ export function useStadiumTycoon(getEdge?: () => number) {
       x: x ?? 20 + Math.random() * 60,
       y: y ?? 30 + Math.random() * 40,
     };
-    setFloaters(cur => [...cur.slice(-14), f]);
+    setFloaters(cur => [...(replaces === undefined ? cur : cur.filter(g => g.id !== replaces)).slice(-14), f]);
     // Floaters clean themselves up after the animation finishes.
-    later(() => setFloaters(cur => cur.filter(g => g.id !== f.id)), 1900);
+    later(() => setFloaters(cur => cur.filter(g => g.id !== f.id)), FLOATER_LIFE_MS);
+    return f.id;
   }, [later]);
 
   /* Round 439: away earnings settle from the wall clock the ground has not
@@ -202,7 +215,29 @@ export function useStadiumTycoon(getEdge?: () => number) {
     let last = performance.now();
     let acc = 0;
     let sinceSave = 0;
+    /* Round 1543: milestones and badges take turns on one spot. Each waits in
+       this queue until the one before it has had its full floater life, and
+       the frame that shows it takes the old one off in the same update, so no
+       frame ever draws two (reduced motion included, where the floater does
+       not fade and the sitewide rule zeroes any CSS delay). The frame loop
+       releases them, not a timer, so the queue runs on the loop's own clock.
+       Before this an old save that crossed three lowered rungs in its first
+       tick drew them all on one spot for 1.9 s, unreadable. */
+    const waiting: { text: string; x: number }[] = [];
+    let onSpot = { id: -1, until: 0 };
+    const release = () => {
+      const now = performance.now();
+      if (!waiting.length || now < onSpot.until) return;
+      const next = waiting.shift();
+      if (!next) return;
+      onSpot = { id: pushFloater(next.text, 'win', next.x, ANNOUNCE_Y, onSpot.id), until: now + FLOATER_LIFE_MS };
+    };
+    const announce = (text: string, x: number) => {
+      waiting.push({ text, x });
+      release();
+    };
     const step = (t: number) => {
+      release();
       const dt = Math.min(2, (t - last) / 1000);
       last = t;
       acc += dt;
@@ -273,7 +308,7 @@ export function useStadiumTycoon(getEdge?: () => number) {
         pushFloater(`FULL TIME WIN +${fmtMoney(e.amount ?? 0)}`, 'win', 32, 12);
         setConfetti(c => c + 1);
       } else if (e.kind === 'milestone') {
-        pushFloater(`🏁 ${e.label} +${fmtMoney(e.amount ?? 0)}`, 'win', 18, 30);
+        announce(`🏁 ${e.label} +${fmtMoney(e.amount ?? 0)}`, 18);
         setConfetti(c => c + 1);
       } else if (e.kind === 'promoted') {
         // Round 162: the loudest moment the game has. Round 530: it also
@@ -293,9 +328,10 @@ export function useStadiumTycoon(getEdge?: () => number) {
       } else if (e.kind === 'ach') {
         /* Round 530 review: the lib's own bonus, so a retune cannot leave
            the floater announcing a number the game no longer pays. */
-        pushFloater(`${e.label}: +${Math.round(ACH_BONUS * 100)}% forever`, 'win', 22, 36);
+        announce(`${e.label}: +${Math.round(ACH_BONUS * 100)}% forever`, 22);
         setConfetti(c => c + 1);
-        setBadge({ label: e.label, seq: floaterSeq++ });
+        const earned: BadgeEarned = { label: e.label, seq: floaterSeq++ };
+        setBadgeQueue(q => [...q, earned]);
       } else if (e.kind === 'conceded') {
         pushFloater(`${e.minute}' they score`, 'bad', 25 + Math.random() * 50, 55 + Math.random() * 25);
       } else if (e.kind === 'loss') {
@@ -465,7 +501,7 @@ export function useStadiumTycoon(getEdge?: () => number) {
 
   const dismissAway = useCallback(() => { setAwayPay(null); setAwayTrip(null); }, []);
   const dismissPromotion = useCallback(() => setPromotion(null), []);
-  const dismissBadge = useCallback(() => setBadge(null), []);
+  const dismissBadge = useCallback(() => setBadgeQueue(q => q.slice(1)), []);
   /* Round 583: the pitch says when a replay has finished, and whether it is on
      screen at all. Turning it on or off drops anything queued. */
   const endReplay = useCallback((id: number) => setReplays(q => q.filter(r => r.id !== id)), []);
