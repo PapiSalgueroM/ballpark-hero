@@ -1,0 +1,6 @@
+ctl-staticledger: INTL_CONTROL=staticledger INTL_SECTIONS=12 node scripts/simCareerIntl.mjs
+ctl-gateyear: INTL_CONTROL=gateyear INTL_SECTIONS=2 INTL_FLEET=60 node scripts/simCareerIntl.mjs
+ctl-lowbar: INTL_CONTROL=lowbar INTL_SECTIONS=4 node scripts/simCareerIntl.mjs
+ctl-easyfuture: INTL_CONTROL=easyfuture INTL_SECTIONS=5 node scripts/simCareerIntl.mjs
+ctl-norepair: INTL_CONTROL=norepair INTL_SECTIONS=8 node scripts/simCareerIntl.mjs
+ctl-restwrites: git -c user.email=rc@x -c user.name=rc worktree add -q /tmp/bsw 32e8f7da1 && git -C /tmp/bsw -c user.email=rc@x -c user.name=rc merge -q --no-edit 705f576c2 && mkdir -p /tmp/bs && git -C /tmp/bsw archive HEAD | tar -x -C /tmp/bs && INTL_BASE_DIR=/tmp/bs INTL_CONTROL=restwrites INTL_SECTIONS=7 node scripts/simCareerIntl.mjs
