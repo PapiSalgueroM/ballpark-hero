@@ -1,0 +1,19 @@
+#!serial
+m-share: node .rc/x/mut.mjs share && node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+m-espn: node .rc/x/mut.mjs espn && node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+m-espn-bell: node .rc/x/mut.mjs espn && US_CONN_CONTROL=bell node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+m-nosecond: node .rc/x/mut.mjs nosecond && node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+m-nosecond-bell: node .rc/x/mut.mjs nosecond && US_CONN_CONTROL=bell node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+m-nosecond-arod: node .rc/x/mut.mjs nosecond && US_CONN_CONTROL=arod node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+m-nosecond-zidane: node .rc/x/mut.mjs nosecond && CONN_CONTROL=zidane node scripts/simConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+m-reach: node .rc/x/mut.mjs reach && node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+m-reach-karlsson: node .rc/x/mut.mjs reach && US_CONN_CONTROL=karlsson node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+m-legend: node .rc/x/mut.mjs legend && node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+m-legendloose: node .rc/x/mut.mjs legendloose && node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+m-vladjr: node .rc/x/mut.mjs vladjr && node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+m-mussina: node .rc/x/mut.mjs mussina && node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+m-burns: node .rc/x/mut.mjs burns && node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+base-baseball: git show eccb77b18:src/data/baseballConnectionsPuzzles.ts > src/data/baseballConnectionsPuzzles.ts && node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+base-nfl: git show eccb77b18:src/data/nflConnectionsPuzzles.ts > src/data/nflConnectionsPuzzles.ts && node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+base-nhl: git show eccb77b18:src/data/nhlConnectionsPuzzles.ts > src/data/nhlConnectionsPuzzles.ts && node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+after-clean: git status --short && node scripts/simUsConnectionsFacts.mjs

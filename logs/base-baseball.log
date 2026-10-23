@@ -1,0 +1,287 @@
+1) no group claims the present, and every recent year label is one the record judges
+   baseball: 0 present tense or unheld recent year labels
+   nfl: 0 present tense or unheld recent year labels
+   nhl: 0 present tense or unheld recent year labels
+2) no refuted claim is on a board
+  FAIL: baseball bconn-001: Alex Rodriguez in "Won MVP in both leagues" is refuted on two hosts (ALMVP 2003 2005 2007; NLMVP none / mvp list: AL 2007, AL 2005, AL 2003)
+  FAIL: baseball bconn-001: Barry Bonds in "Won MVP in both leagues" is refuted on two hosts (ALMVP none; NLMVP 1990 1992 1993 2001 2002 2003 2004 / mvp list: NL 2004, NL 2003, NL 2002, NL 2001, NL 1993, NL 1992, NL 1990)
+  FAIL: baseball bconn-001: Albert Pujols in "Won MVP in both leagues" is refuted on two hosts (ALMVP none; NLMVP 2005 2008 2009 / mvp list: NL 2009, NL 2008, NL 2005)
+  FAIL: baseball bconn-001: Vladimir Guerrero Jr. in "Born in the Dominican Republic" is refuted on two hosts (birthCountry Canada / Born: March 16 , 1999 in Montreal, QC, Canada ca)
+  FAIL: baseball bconn-001: Manny Machado in "Born in the Dominican Republic" is refuted on two hosts (birthCountry USA / Born: July 6 , 1992 in Hialeah, FL us)
+  FAIL: baseball bconn-004: Mike Mussina in "300+ career wins" is refuted on two hosts (career W 270 / career W 270)
+  FAIL: baseball bconn-006: DJ LeMahieu in "Career .300+ hitters (21st century)" is refuted on two hosts (career AVG .289 in 6822 PA, last 2025-07-06 / career .289 in 6822 PA, last game 2025)
+  FAIL: baseball bconn-007: Carlos Correa in "Silver Slugger at shortstop" is refuted on two hosts (ALSS none; NLSS none; most played position those seasons: none / no Silver Slugger)
+  FAIL: baseball bconn-007: Jose Bautista in "Undrafted players" is refuted on two hosts (drafts 2003 RV round 1 pick 6; 2000 JR round 20 pick 599 / Draft: 2000 round 20, Pittsburgh Pirates)
+  FAIL: baseball bconn-007: Russell Martin in "Undrafted players" is refuted on two hosts (drafts 2002 JR round 17 pick 511 / Draft: 2000 round 35, Montreal Expos)
+  FAIL: baseball bconn-008: Mike Trout in "Won back-to-back MVPs" is refuted on two hosts (ALMVP 2014 2016 2019; NLMVP none / mvp list: AL 2019, AL 2016, AL 2014)
+  FAIL: baseball bconn-009: Aaron Judge in "All-Star Game MVPs (2010s-2020s)" is refuted on two hosts (ASMVP none / not on the asmvp list)
+  FAIL: baseball bconn-009: Shohei Ohtani in "All-Star Game MVPs (2010s-2020s)" is refuted on two hosts (ASMVP none / not on the asmvp list)
+  FAIL: baseball bconn-011: Mike Trout in "Won Gold Glove at outfield" is refuted on two hosts (ALGG none; NLGG none; most played position those seasons: none / no Gold Glove)
+  FAIL: baseball bconn-014: Manny Ramirez in "Won World Series with multiple teams" is refuted on two hosts (WSCHAMP 2004 club 111, 2007 club 111 / won the World Series 2004 BOS, 2007 BOS)
+  FAIL: baseball bconn-014: CC Sabathia in "Won World Series with multiple teams" is refuted on two hosts (WSCHAMP 2009 club 147 / won the World Series 2009 NYY)
+  FAIL: baseball bconn-014: Kenny Lofton in "Won World Series with multiple teams" is refuted on two hosts (WSCHAMP none / never on a World Series winner in a World Series game)
+  FAIL: baseball bconn-014: Buster Posey in "Catchers who hit 30+ HR in a season" is refuted on two hosts (seasons at 30+: none / no season of 30 hr at C)
+  FAIL: baseball bconn-014: J.T. Realmuto in "Catchers who hit 30+ HR in a season" is refuted on two hosts (seasons at 30+: none / no season of 30 hr at C)
+  FAIL: baseball bconn-015: Carlos Correa in "Switch-hitting shortstops" is refuted on two hosts (batSide R; games by position {"SS":1220,"DH":7,"3B":62} / Bats: Right; Positions: Shortstop and Third Baseman)
+  FAIL: baseball bconn-015: Tim Anderson in "Switch-hitting shortstops" is refuted on two hosts (batSide R; games by position {"SS":963,"DH":1,"2B":18} / Bats: Right; Positions: Shortstop)
+  FAIL: baseball bconn-015: Jose Bautista in "Went undrafted then became All-Stars" is refuted on two hosts (drafts 2003 RV round 1 pick 6; 2000 JR round 20 pick 599; All-Star ALAS 2010 2011 2012 2013 2014 2015; NLAS none / Draft: 2000 round 20, Pittsburgh Pirates)
+  FAIL: baseball bconn-015: Justin Turner in "Went undrafted then became All-Stars" is refuted on two hosts (drafts 2005 JR round 29 pick 889; 2006 JR round 7 pick 204; All-Star ALAS none; NLAS 2017 2021 / Draft: 2005 round 29, New York Yankees)
+  FAIL: baseball bconn-015: Paul Goldschmidt in "Went undrafted then became All-Stars" is refuted on two hosts (drafts 2006 JR round 49 pick 1453; 2009 JR round 8 pick 246; All-Star ALAS none; NLAS 2013 2014 2015 2016 2017 2018 2022 / Draft: 2006 round 49, Los Angeles Dodgers)
+  FAIL: baseball bconn-015: Max Muncy in "Went undrafted then became All-Stars" is refuted on two hosts (drafts 2009 JR round 41 pick 1235; 2012 JR round 5 pick 169; All-Star ALAS none; NLAS 2019 2021 2026 / Draft: 2009 round 41, Cleveland Indians)
+  FAIL: baseball bconn-015: J.D. Martinez in "Went undrafted then became All-Stars" is refuted on two hosts (drafts 2009 JR round 20 pick 611; 2006 JR round 36 pick 1086; All-Star ALAS 2015 2018 2019 2021 2022; NLAS 2023 / Draft: 2006 round 36, Minnesota Twins)
+  FAIL: baseball bconn-020: Adrian Gonzalez in "Born in Mexico" is refuted on two hosts (birthCountry USA / Born: May 8 , 1982 in San Diego, CA us)
+  FAIL: baseball bconn-044: Adrian Gonzalez in "Born in Mexico" is refuted on two hosts (birthCountry USA / Born: May 8 , 1982 in San Diego, CA us)
+  FAIL: baseball bconn-058: Adrian Gonzalez in "Born in Mexico" is refuted on two hosts (birthCountry USA / Born: May 8 , 1982 in San Diego, CA us)
+  FAIL: baseball bconn-040: Nomar Garciaparra in "Won a Gold Glove at shortstop" is refuted on two hosts (ALGG none; NLGG none; most played position those seasons: none / no Gold Glove)
+  FAIL: baseball bconn-049: Roger Clemens in "Hall of Fame starting pitchers" is refuted on two hosts (MLBHOF none; pitchHand R; 707 starts in 709 games, 0 saves / not in the Hall of Fame; Throws: Right; 707 starts in 709 games, 0 saves)
+  FAIL: baseball bconn-050: Edgar Martinez in "Born in Puerto Rico" is refuted on two hosts (birthCountry USA / Born: January 2 , 1963 in New York, NY us)
+  FAIL: baseball bconn-051: Will Smith in "Won a Silver Slugger at catcher" is refuted on two hosts (ALSS none; NLSS none; most played position those seasons: none / no Silver Slugger)
+   baseball: 31 refuted claims held off every board, 33 found
+   nfl: 0 refuted claims held off every board, 0 found
+   nhl: 0 refuted claims held off every board, 0 found
+3) the ledger stands on two hosts
+  FAIL: baseball bconn-001: the ledger flags "Won Rookie of the Year" and the board has no such group
+  FAIL: baseball bconn-001: David Ortiz in "Played for the Boston Red Sox" has no two host fact
+  FAIL: baseball bconn-001: Pedro Martinez in "Played for the Boston Red Sox" has no two host fact
+  FAIL: baseball bconn-001: Ted Williams in "Played for the Boston Red Sox" has no two host fact
+  FAIL: baseball bconn-001: Sammy Sosa in "Hit 500+ career home runs" has no two host fact
+  FAIL: baseball bconn-001: Manny Ramirez in "Hit 500+ career home runs" has no two host fact
+  FAIL: baseball bconn-001: Vladimir Guerrero Jr. in "Born in the Dominican Republic" has no two host fact
+  FAIL: baseball bconn-001: Manny Machado in "Born in the Dominican Republic" has no two host fact
+  FAIL: baseball bconn-002: Corey Kluber in "Won Cy Young Award" has no two host fact
+  FAIL: baseball bconn-002: Alex Rodriguez in "Played for the New York Yankees" has no two host fact
+  FAIL: baseball bconn-002: CC Sabathia in "Played for the New York Yankees" has no two host fact
+  FAIL: baseball bconn-002: the ledger flags "Born in Japan" and the board has no such group
+  FAIL: baseball bconn-003: Ben Zobrist in "World Series MVP winners" has no two host fact
+  FAIL: baseball bconn-003: Freddie Freeman in "Played for the Los Angeles Dodgers" has no two host fact
+  FAIL: baseball bconn-003: Corey Seager in "Played for the Los Angeles Dodgers" has no two host fact
+  FAIL: baseball bconn-003: Rickey Henderson in "Stole 50+ bases in a season" has no two host fact
+  FAIL: baseball bconn-003: Tim Raines in "Stole 50+ bases in a season" has no two host fact
+  FAIL: baseball bconn-003: Jose Reyes in "Stole 50+ bases in a season" has no two host fact
+  FAIL: baseball bconn-003: Dee Gordon in "Stole 50+ bases in a season" has no two host fact
+  FAIL: baseball bconn-003: Billy Hamilton in "Stole 50+ bases in a season" has no two host fact
+  FAIL: baseball bconn-004: Kris Bryant in "Played for the Chicago Cubs" has no two host fact
+  FAIL: baseball bconn-004: Ronald Acuna Jr. in "Born in Venezuela" has no two host fact
+  FAIL: baseball bconn-004: Greg Maddux in "300+ career wins" has no two host fact
+  FAIL: baseball bconn-004: Mike Mussina in "300+ career wins" has no two host fact
+  FAIL: baseball bconn-005: the ledger flags "Won the batting Triple Crown" and the board has no such group
+  FAIL: baseball bconn-005: Justin Verlander in "Played for the Houston Astros" has no two host fact
+  FAIL: baseball bconn-005: Nolan Ryan in "Threw a no-hitter" has no two host fact
+  FAIL: baseball bconn-005: Ivan Rodriguez in "Gold Glove winning catchers" has no two host fact
+  FAIL: baseball bconn-006: Yordan Alvarez in "Born in Cuba" has no two host fact
+  FAIL: baseball bconn-006: DJ LeMahieu in "Career .300+ hitters (21st century)" has no two host fact
+  FAIL: baseball bconn-006: Buster Posey in "Played for the San Francisco Giants" has no two host fact
+  FAIL: baseball bconn-007: Carlos Correa in "Silver Slugger at shortstop" has no two host fact
+  FAIL: baseball bconn-007: Xander Bogaerts in "Silver Slugger at shortstop" has no two host fact
+  FAIL: baseball bconn-007: Mookie Betts in "2024 World Series champion Dodgers" has no two host fact
+  FAIL: baseball bconn-007: Shohei Ohtani in "2024 World Series champion Dodgers" has no two host fact
+  FAIL: baseball bconn-007: Teoscar Hernandez in "2024 World Series champion Dodgers" has no two host fact
+  FAIL: baseball bconn-007: Jose Bautista in "Undrafted players" has no two host fact
+  FAIL: baseball bconn-007: Russell Martin in "Undrafted players" has no two host fact
+  FAIL: baseball bconn-008: Mike Trout in "Won back-to-back MVPs" has no two host fact
+  FAIL: baseball bconn-008: Dale Murphy in "Won back-to-back MVPs" has no two host fact
+  FAIL: baseball bconn-009: Aaron Judge in "All-Star Game MVPs (2010s-2020s)" has no two host fact
+  FAIL: baseball bconn-009: Shohei Ohtani in "All-Star Game MVPs (2010s-2020s)" has no two host fact
+  FAIL: baseball bconn-009: Cole Hamels in "Left-handed starting pitchers" has no two host fact
+  FAIL: baseball bconn-010: Adrian Beltre in "3,000+ career hits" has no two host fact
+  FAIL: baseball bconn-010: Alex Rodriguez in "Played for the Texas Rangers" has no two host fact
+  FAIL: baseball bconn-010: Aroldis Chapman in "Closers with 300+ saves" has no two host fact
+  FAIL: baseball bconn-010: Kumar Rocker in "Went to the same college (Vanderbilt)" has no two host fact
+  FAIL: baseball bconn-011: Aaron Judge in "50+ HR in a single season" has no two host fact
+  FAIL: baseball bconn-011: Jim Thome in "Played for the Cleveland Guardians/Indians" has no two host fact
+  FAIL: baseball bconn-011: Mike Trout in "Won Gold Glove at outfield" has no two host fact
+  FAIL: baseball bconn-012: Justin Morneau in "Played for the Minnesota Twins" has no two host fact
+  FAIL: baseball bconn-012: Luis Arraez in "Won batting title (2010s-2020s)" has no two host fact
+  FAIL: baseball bconn-012: DJ LeMahieu in "Played college baseball at LSU" has no two host fact
+  FAIL: baseball bconn-013: Manny Ramirez in "Multiple 100+ RBI seasons" has no two host fact
+  FAIL: baseball bconn-013: Evan Longoria in "Played for the Tampa Bay Rays" has no two host fact
+  FAIL: baseball bconn-013: Robinson Cano in "Second basemen (21st century stars)" has no two host fact
+  FAIL: baseball bconn-013: Chase Utley in "Second basemen (21st century stars)" has no two host fact
+  FAIL: baseball bconn-014: Manny Ramirez in "Won World Series with multiple teams" has no two host fact
+  FAIL: baseball bconn-014: CC Sabathia in "Won World Series with multiple teams" has no two host fact
+  FAIL: baseball bconn-014: Kenny Lofton in "Won World Series with multiple teams" has no two host fact
+  FAIL: baseball bconn-014: Jake Peavy in "Played for the San Diego Padres" has no two host fact
+  FAIL: baseball bconn-014: Mike Piazza in "Catchers who hit 30+ HR in a season" has no two host fact
+  FAIL: baseball bconn-014: Buster Posey in "Catchers who hit 30+ HR in a season" has no two host fact
+  FAIL: baseball bconn-014: J.T. Realmuto in "Catchers who hit 30+ HR in a season" has no two host fact
+  FAIL: baseball bconn-014: Yu Darvish in "Played in the 2023 World Baseball Classic final" has no two host fact
+  FAIL: baseball bconn-015: the ledger flags "Closers with 300+ saves" and the board has no such group
+  FAIL: baseball bconn-015: Carlos Correa in "Switch-hitting shortstops" has no two host fact
+  FAIL: baseball bconn-015: Tim Anderson in "Switch-hitting shortstops" has no two host fact
+  FAIL: baseball bconn-016: Ivan Rodriguez in "Born in Puerto Rico" has no two host fact
+  FAIL: baseball bconn-016: Roberto Alomar in "Born in Puerto Rico" has no two host fact
+  FAIL: baseball bconn-019: Babe Ruth in "New York Yankees legends" has no two host fact
+  FAIL: baseball bconn-020: Adrian Gonzalez in "Born in Mexico" has no two host fact
+  FAIL: baseball bconn-031: Nolan Ryan in "Texas Rangers legends" has no two host fact
+  FAIL: baseball bconn-038: the ledger flags "Hall of Fame right-handed starting pitchers" and the board has no such group
+  FAIL: baseball bconn-040: Nomar Garciaparra in "Won a Gold Glove at shortstop" has no two host fact
+  FAIL: baseball bconn-043: Alex Rodriguez in "Won a Silver Slugger at shortstop" has no two host fact
+  FAIL: baseball bconn-044: Adrian Gonzalez in "Born in Mexico" has no two host fact
+  FAIL: baseball bconn-045: Andre Dawson in "Hall of Fame center fielders" has no two host fact
+  FAIL: baseball bconn-045: Willie Stargell in "Hall of Fame left fielders" has no two host fact
+  FAIL: baseball bconn-045: Al Simmons in "Hall of Fame left fielders" has no two host fact
+  FAIL: baseball bconn-049: Roger Clemens in "Hall of Fame starting pitchers" has no two host fact
+  FAIL: baseball bconn-049: John Smoltz in "Hall of Fame starting pitchers" has no two host fact
+  FAIL: baseball bconn-049: Rich Gossage in "Hall of Fame relief pitchers" has no two host fact
+  FAIL: baseball bconn-050: Edgar Martinez in "Born in Puerto Rico" has no two host fact
+  FAIL: baseball bconn-051: Vladimir Guerrero in "Won a Silver Slugger in the outfield" has no two host fact
+  FAIL: baseball bconn-051: Albert Pujols in "Won a Silver Slugger at first base" has no two host fact
+  FAIL: baseball bconn-051: Frank Thomas in "Won a Silver Slugger at designated hitter" has no two host fact
+  FAIL: baseball bconn-051: Nelson Cruz in "Won a Silver Slugger at designated hitter" has no two host fact
+  FAIL: baseball bconn-051: Salvador Perez in "Won a Silver Slugger at catcher" has no two host fact
+  FAIL: baseball bconn-051: Will Smith in "Won a Silver Slugger at catcher" has no two host fact
+  FAIL: baseball bconn-053: Ernie Banks in "Hall of Fame shortstops" has no two host fact
+  FAIL: baseball bconn-057: Babe Ruth in "Hall of Fame right fielders" has no two host fact
+  FAIL: baseball bconn-058: Adrian Gonzalez in "Born in Mexico" has no two host fact
+  FAIL: baseball bconn-059: the ledger flags "Hall of Fame right-handed starting pitchers" and the board has no such group
+   baseball: 530 facts, 0 on one host; 89 flagged groups, 415 members held; 130 fixed findings
+   nfl: 11 facts, 0 on one host; 2 flagged groups, 10 members held; 1 fixed findings
+   nhl: 12 facts, 0 on one host; 2 flagged groups, 10 members held; 2 fixed findings
+4) one right answer: the shared cross check over every board
+  FAIL: baseball bconn-001 | not-a-member | Alex Rodriguez | Won MVP in both leagues
+  FAIL: baseball bconn-001 | not-a-member | Barry Bonds | Won MVP in both leagues
+  FAIL: baseball bconn-001 | not-a-member | Albert Pujols | Won MVP in both leagues
+  FAIL: baseball bconn-001 | second-fit | Manny Ramirez | Played for the Boston Red Sox | listed under Hit 500+ career home runs, so the board has two right answers
+  FAIL: baseball bconn-001 | second-fit | Frank Robinson | Hit 500+ career home runs | listed under Won MVP in both leagues, so the board has two right answers
+  FAIL: baseball bconn-001 | second-fit | Alex Rodriguez | Hit 500+ career home runs | listed under Won MVP in both leagues, so the board has two right answers
+  FAIL: baseball bconn-001 | second-fit | Barry Bonds | Hit 500+ career home runs | listed under Won MVP in both leagues, so the board has two right answers
+  FAIL: baseball bconn-001 | second-fit | Albert Pujols | Hit 500+ career home runs | listed under Won MVP in both leagues, so the board has two right answers
+  FAIL: baseball bconn-001 | second-fit | David Ortiz | Hit 500+ career home runs | listed under Played for the Boston Red Sox, so the board has two right answers
+  FAIL: baseball bconn-001 | second-fit | Ted Williams | Hit 500+ career home runs | listed under Played for the Boston Red Sox, so the board has two right answers
+  FAIL: baseball bconn-001 | not-a-member | Vladimir Guerrero Jr. | Born in the Dominican Republic
+  FAIL: baseball bconn-001 | not-a-member | Manny Machado | Born in the Dominican Republic
+  FAIL: baseball bconn-001 | second-fit | Albert Pujols | Born in the Dominican Republic | listed under Won MVP in both leagues, so the board has two right answers
+  FAIL: baseball bconn-001 | second-fit | David Ortiz | Born in the Dominican Republic | listed under Played for the Boston Red Sox, so the board has two right answers
+  FAIL: baseball bconn-001 | second-fit | Pedro Martinez | Born in the Dominican Republic | listed under Played for the Boston Red Sox, so the board has two right answers
+  FAIL: baseball bconn-001 | second-fit | Sammy Sosa | Born in the Dominican Republic | listed under Hit 500+ career home runs, so the board has two right answers
+  FAIL: baseball bconn-001 | second-fit | Manny Ramirez | Born in the Dominican Republic | listed under Hit 500+ career home runs, so the board has two right answers
+  FAIL: baseball bconn-002 | second-fit | CC Sabathia | Won Cy Young Award | listed under Played for the New York Yankees, so the board has two right answers
+  FAIL: baseball bconn-002 | second-fit | Corey Kluber | Played for the New York Yankees | listed under Won Cy Young Award, so the board has two right answers
+  FAIL: baseball bconn-002 | second-fit | Ichiro Suzuki | Played for the New York Yankees | listed under Played in Japan before MLB, so the board has two right answers
+  FAIL: baseball bconn-002 | second-fit | Hideki Matsui | Played for the New York Yankees | listed under Played in Japan before MLB, so the board has two right answers
+  FAIL: baseball bconn-002 | second-fit | Masahiro Tanaka | Played for the New York Yankees | listed under Played in Japan before MLB, so the board has two right answers
+  FAIL: baseball bconn-002 | second-fit | Alex Rodriguez | First overall draft pick | listed under Played for the New York Yankees, so the board has two right answers
+  FAIL: baseball bconn-003 | second-fit | Freddie Freeman | World Series MVP winners | listed under Played for the Los Angeles Dodgers, so the board has two right answers
+  FAIL: baseball bconn-003 | second-fit | Corey Seager | World Series MVP winners | listed under Played for the Los Angeles Dodgers, so the board has two right answers
+  FAIL: baseball bconn-003 | second-fit | Rickey Henderson | Played for the Los Angeles Dodgers | listed under Stole 50+ bases in a season, so the board has two right answers
+  FAIL: baseball bconn-003 | second-fit | Dee Gordon | Played for the Los Angeles Dodgers | listed under Stole 50+ bases in a season, so the board has two right answers
+  FAIL: baseball bconn-003 | second-fit | Ben Zobrist | Switch hitters | listed under World Series MVP winners, so the board has two right answers
+  FAIL: baseball bconn-003 | second-fit | Tim Raines | Switch hitters | listed under Stole 50+ bases in a season, so the board has two right answers
+  FAIL: baseball bconn-003 | second-fit | Jose Reyes | Switch hitters | listed under Stole 50+ bases in a season, so the board has two right answers
+  FAIL: baseball bconn-003 | second-fit | Billy Hamilton | Switch hitters | listed under Stole 50+ bases in a season, so the board has two right answers
+  FAIL: baseball bconn-004 | second-fit | Kris Bryant | Won Rookie of the Year | listed under Played for the Chicago Cubs, so the board has two right answers
+  FAIL: baseball bconn-004 | second-fit | Ronald Acuna Jr. | Won Rookie of the Year | listed under Born in Venezuela, so the board has two right answers
+  FAIL: baseball bconn-004 | second-fit | Greg Maddux | Played for the Chicago Cubs | listed under 300+ career wins, so the board has two right answers
+  FAIL: baseball bconn-004 | not-a-member | Mike Mussina | 300+ career wins
+  FAIL: baseball bconn-005 | second-fit | Justin Verlander | Triple Crown winners | listed under Played for the Houston Astros, so the board has two right answers
+  FAIL: baseball bconn-005 | second-fit | Clayton Kershaw | Triple Crown winners | listed under Threw a no-hitter, so the board has two right answers
+  FAIL: baseball bconn-005 | second-fit | Nolan Ryan | Played for the Houston Astros | listed under Threw a no-hitter, so the board has two right answers
+  FAIL: baseball bconn-005 | second-fit | Ivan Rodriguez | Played for the Houston Astros | listed under Gold Glove winning catchers, so the board has two right answers
+  FAIL: baseball bconn-005 | second-fit | Justin Verlander | Threw a no-hitter | listed under Played for the Houston Astros, so the board has two right answers
+  FAIL: baseball bconn-006 | second-fit | Yordan Alvarez | Hit 40+ HR in a season (2020s) | listed under Born in Cuba, so the board has two right answers
+  FAIL: baseball bconn-006 | not-a-member | DJ LeMahieu | Career .300+ hitters (21st century)
+  FAIL: baseball bconn-006 | second-fit | Buster Posey | Career .300+ hitters (21st century) | listed under Played for the San Francisco Giants, so the board has two right answers
+  FAIL: baseball bconn-006 | second-fit | Yordan Alvarez | Career .300+ hitters (21st century) | listed under Born in Cuba, so the board has two right answers
+  FAIL: baseball bconn-007 | not-a-member | Carlos Correa | Silver Slugger at shortstop
+  FAIL: baseball bconn-007 | second-fit | Mookie Betts | Silver Slugger at shortstop | listed under 2024 World Series champion Dodgers, so the board has two right answers
+  FAIL: baseball bconn-007 | not-a-member | Jose Bautista | Undrafted players
+  FAIL: baseball bconn-007 | not-a-member | Russell Martin | Undrafted players
+  FAIL: baseball bconn-007 | second-fit | Shohei Ohtani | Undrafted players | listed under 2024 World Series champion Dodgers, so the board has two right answers
+  FAIL: baseball bconn-007 | second-fit | Teoscar Hernandez | Undrafted players | listed under 2024 World Series champion Dodgers, so the board has two right answers
+  FAIL: baseball bconn-007 | second-fit | Xander Bogaerts | Undrafted players | listed under Silver Slugger at shortstop, so the board has two right answers
+  FAIL: baseball bconn-008 | not-a-member | Mike Trout | Won back-to-back MVPs
+  FAIL: baseball bconn-008 | second-fit | Shohei Ohtani | Won back-to-back MVPs | listed under Born in Japan, so the board has two right answers
+  FAIL: baseball bconn-008 | second-fit | Dale Murphy | Played for the Atlanta Braves | listed under Won back-to-back MVPs, so the board has two right answers
+  FAIL: baseball bconn-009 | not-a-member | Aaron Judge | All-Star Game MVPs (2010s-2020s)
+  FAIL: baseball bconn-009 | not-a-member | Shohei Ohtani | All-Star Game MVPs (2010s-2020s)
+  FAIL: baseball bconn-009 | second-fit | Cole Hamels | Played for the Philadelphia Phillies | listed under Left-handed starting pitchers, so the board has two right answers
+  FAIL: baseball bconn-010 | second-fit | Alex Rodriguez | 3,000+ career hits | listed under Played for the Texas Rangers, so the board has two right answers
+  FAIL: baseball bconn-010 | second-fit | Adrian Beltre | Played for the Texas Rangers | listed under 3,000+ career hits, so the board has two right answers
+  FAIL: baseball bconn-010 | second-fit | Aroldis Chapman | Played for the Texas Rangers | listed under Closers with 300+ saves, so the board has two right answers
+  FAIL: baseball bconn-010 | second-fit | Kumar Rocker | Played for the Texas Rangers | listed under Went to the same college (Vanderbilt), so the board has two right answers
+  FAIL: baseball bconn-011 | second-fit | Jim Thome | 50+ HR in a single season | listed under Played for the Cleveland Guardians/Indians, so the board has two right answers
+  FAIL: baseball bconn-011 | not-a-member | Mike Trout | Won Gold Glove at outfield
+  FAIL: baseball bconn-012 | second-fit | Luis Arraez | Played for the Minnesota Twins | listed under Won batting title (2010s-2020s), so the board has two right answers
+  FAIL: baseball bconn-012 | second-fit | Justin Morneau | Won batting title (2010s-2020s) | listed under Played for the Minnesota Twins, so the board has two right answers
+  FAIL: baseball bconn-012 | second-fit | DJ LeMahieu | Won batting title (2010s-2020s) | listed under Played college baseball at LSU, so the board has two right answers
+  FAIL: baseball bconn-013 | second-fit | Evan Longoria | Multiple 100+ RBI seasons | listed under Played for the Tampa Bay Rays, so the board has two right answers
+  FAIL: baseball bconn-013 | second-fit | Robinson Cano | Multiple 100+ RBI seasons | listed under Second basemen (21st century stars), so the board has two right answers
+  FAIL: baseball bconn-013 | second-fit | Chase Utley | Multiple 100+ RBI seasons | listed under Second basemen (21st century stars), so the board has two right answers
+  FAIL: baseball bconn-013 | second-fit | Manny Ramirez | Played for the Tampa Bay Rays | listed under Multiple 100+ RBI seasons, so the board has two right answers
+  FAIL: baseball bconn-014 | not-a-member | Manny Ramirez | Won World Series with multiple teams
+  FAIL: baseball bconn-014 | not-a-member | CC Sabathia | Won World Series with multiple teams
+  FAIL: baseball bconn-014 | not-a-member | Kenny Lofton | Won World Series with multiple teams
+  FAIL: baseball bconn-014 | second-fit | Jake Peavy | Won World Series with multiple teams | listed under Played for the San Diego Padres, so the board has two right answers
+  FAIL: baseball bconn-014 | second-fit | Mike Piazza | Played for the San Diego Padres | listed under Catchers who hit 30+ HR in a season, so the board has two right answers
+  FAIL: baseball bconn-014 | second-fit | Yu Darvish | Played for the San Diego Padres | listed under Played in the 2023 World Baseball Classic final, so the board has two right answers
+  FAIL: baseball bconn-014 | not-a-member | Buster Posey | Catchers who hit 30+ HR in a season
+  FAIL: baseball bconn-014 | not-a-member | J.T. Realmuto | Catchers who hit 30+ HR in a season
+  FAIL: baseball bconn-014 | second-fit | J.T. Realmuto | Played in the 2023 World Baseball Classic final | listed under Catchers who hit 30+ HR in a season, so the board has two right answers
+  FAIL: baseball bconn-015 | second-fit | Paul Goldschmidt | NL MVP winners (2015-2025) | listed under Went undrafted then became All-Stars, so the board has two right answers
+  FAIL: baseball bconn-015 | second-fit | J.D. Martinez | Played for the Detroit Tigers | listed under Went undrafted then became All-Stars, so the board has two right answers
+  FAIL: baseball bconn-015 | not-a-member | Carlos Correa | Switch-hitting shortstops
+  FAIL: baseball bconn-015 | not-a-member | Tim Anderson | Switch-hitting shortstops
+  FAIL: baseball bconn-015 | not-a-member | Jose Bautista | Went undrafted then became All-Stars
+  FAIL: baseball bconn-015 | not-a-member | Justin Turner | Went undrafted then became All-Stars
+  FAIL: baseball bconn-015 | not-a-member | Paul Goldschmidt | Went undrafted then became All-Stars
+  FAIL: baseball bconn-015 | not-a-member | Max Muncy | Went undrafted then became All-Stars
+  FAIL: baseball bconn-015 | not-a-member | J.D. Martinez | Went undrafted then became All-Stars
+  FAIL: baseball bconn-015 | second-fit | Shohei Ohtani | Went undrafted then became All-Stars | listed under NL MVP winners (2015-2025), so the board has two right answers
+  FAIL: baseball bconn-015 | second-fit | Miguel Cabrera | Went undrafted then became All-Stars | listed under Played for the Detroit Tigers, so the board has two right answers
+  FAIL: baseball bconn-015 | second-fit | Jose Reyes | Went undrafted then became All-Stars | listed under Switch-hitting shortstops, so the board has two right answers
+  FAIL: baseball bconn-016 | second-fit | Ivan Rodriguez | Father-son MLB players | listed under Born in Puerto Rico, so the board has two right answers
+  FAIL: baseball bconn-016 | second-fit | Roberto Alomar | Father-son MLB players | listed under Born in Puerto Rico, so the board has two right answers
+  FAIL: baseball bconn-019 | second-fit | Babe Ruth | Boston Red Sox legends | listed under New York Yankees legends, so the board has two right answers
+  FAIL: baseball bconn-020 | not-a-member | Adrian Gonzalez | Born in Mexico
+  FAIL: baseball bconn-028 | second-fit | Stan Musial | Hall of Fame first basemen | listed under Hall of Fame left fielders, so the board has two right answers
+  FAIL: baseball bconn-031 | second-fit | Nolan Ryan | New York Mets legends | listed under Texas Rangers legends, so the board has two right answers
+  FAIL: baseball bconn-035 | second-fit | Stan Musial | Hall of Fame first basemen | listed under Hall of Fame left fielders, so the board has two right answers
+  FAIL: baseball bconn-038 | second-fit | Sandy Koufax | Hall of Fame starting pitchers | listed under Hall of Fame left-handed pitchers, so the board has two right answers
+  FAIL: baseball bconn-038 | second-fit | Steve Carlton | Hall of Fame starting pitchers | listed under Hall of Fame left-handed pitchers, so the board has two right answers
+  FAIL: baseball bconn-038 | second-fit | Warren Spahn | Hall of Fame starting pitchers | listed under Hall of Fame left-handed pitchers, so the board has two right answers
+  FAIL: baseball bconn-038 | second-fit | Whitey Ford | Hall of Fame starting pitchers | listed under Hall of Fame left-handed pitchers, so the board has two right answers
+  FAIL: baseball bconn-038 | second-fit | Lefty Grove | Hall of Fame starting pitchers | listed under Hall of Fame left-handed pitchers, so the board has two right answers
+  FAIL: baseball bconn-040 | not-a-member | Nomar Garciaparra | Won a Gold Glove at shortstop
+  FAIL: baseball bconn-043 | second-fit | Alex Rodriguez | Won a Silver Slugger at third base | listed under Won a Silver Slugger at shortstop, so the board has two right answers
+  FAIL: baseball bconn-044 | not-a-member | Adrian Gonzalez | Born in Mexico
+  FAIL: baseball bconn-045 | second-fit | Andre Dawson | Hall of Fame right fielders | listed under Hall of Fame center fielders, so the board has two right answers
+  FAIL: baseball bconn-045 | second-fit | Willie Stargell | Hall of Fame first basemen | listed under Hall of Fame left fielders, so the board has two right answers
+  FAIL: baseball bconn-045 | second-fit | Al Simmons | Hall of Fame center fielders | listed under Hall of Fame left fielders, so the board has two right answers
+  FAIL: baseball bconn-049 | not-a-member | Roger Clemens | Hall of Fame starting pitchers
+  FAIL: baseball bconn-049 | second-fit | John Smoltz | Hall of Fame relief pitchers | listed under Hall of Fame starting pitchers, so the board has two right answers
+  FAIL: baseball bconn-050 | not-a-member | Edgar Martinez | Born in Puerto Rico
+  FAIL: baseball bconn-051 | second-fit | Albert Pujols | Won a Silver Slugger in the outfield | listed under Won a Silver Slugger at first base, so the board has two right answers
+  FAIL: baseball bconn-051 | second-fit | Nelson Cruz | Won a Silver Slugger in the outfield | listed under Won a Silver Slugger at designated hitter, so the board has two right answers
+  FAIL: baseball bconn-051 | second-fit | Frank Thomas | Won a Silver Slugger at first base | listed under Won a Silver Slugger at designated hitter, so the board has two right answers
+  FAIL: baseball bconn-051 | second-fit | Vladimir Guerrero | Won a Silver Slugger at designated hitter | listed under Won a Silver Slugger in the outfield, so the board has two right answers
+  FAIL: baseball bconn-051 | not-a-member | Will Smith | Won a Silver Slugger at catcher
+  FAIL: baseball bconn-053 | second-fit | Ernie Banks | Hall of Fame first basemen | listed under Hall of Fame shortstops, so the board has two right answers
+  FAIL: baseball bconn-057 | second-fit | Babe Ruth | Hall of Fame left fielders | listed under Hall of Fame right fielders, so the board has two right answers
+  FAIL: baseball bconn-058 | not-a-member | Adrian Gonzalez | Born in Mexico
+  FAIL: baseball bconn-059 | second-fit | Lefty Grove | Hall of Fame starting pitchers | listed under Hall of Fame left-handed pitchers, so the board has two right answers
+  FAIL: baseball bconn-059 | second-fit | Sandy Koufax | Hall of Fame starting pitchers | listed under Hall of Fame left-handed pitchers, so the board has two right answers
+  FAIL: baseball bconn-059 | second-fit | Steve Carlton | Hall of Fame starting pitchers | listed under Hall of Fame left-handed pitchers, so the board has two right answers
+  FAIL: baseball bconn-059 | second-fit | Warren Spahn | Hall of Fame starting pitchers | listed under Hall of Fame left-handed pitchers, so the board has two right answers
+  FAIL: baseball bconn-059 | second-fit | Tom Glavine | Hall of Fame starting pitchers | listed under Hall of Fame left-handed pitchers, so the board has two right answers
+   baseball: 60 boards, 239 of 240 groups judged; members 1193 judged (2 unknown), other tiles 3528 judged (57 unknown); 125 findings
+   nfl: 4 boards, 16 of 16 groups judged; members 80 judged (0 unknown), other tiles 239 judged (1 unknown); 0 findings
+   nhl: 4 boards, 16 of 16 groups judged; members 80 judged (0 unknown), other tiles 240 judged (0 unknown); 0 findings
+5) no man is a season from joining a group beside him
+  FAIL: baseball bconn-001: Mookie Betts ("Played for the Boston Red Sox") may join "Won MVP in both leagues": played in 2026 with an MVP in one league; the 2026 votes are named in November
+  FAIL: baseball bconn-011: Aaron Judge ("50+ HR in a single season") may join "Won Gold Glove at outfield": played most of 2026 at RF; the 2026 ALGG/NLGG is still to be named
+  FAIL: baseball bconn-051: Salvador Perez ("Won a Silver Slugger at catcher") may join "Won a Silver Slugger at designated hitter": played most of 2026 at DH; the 2026 ALSS/NLSS is still to be named
+   baseball: 3 watched men beside a group they may join
+   nfl: 0 watched men beside a group they may join
+   nhl: 0 watched men beside a group they may join
+6) no man is dealt twice on one board
+  FAIL: baseball bconn-049: "Goose Gossage" and "Rich Gossage" are the same man
+   baseball: 1 men dealt twice
+   nfl: 0 men dealt twice
+   nhl: 0 men dealt twice
+7) what the record cannot judge may only get fewer
+  FAIL: baseball: 1 groups nothing judges, the ledger's uncheckedCeiling says 0: one came back
+   baseball: 1 groups nothing judges (ceiling 0), 2 members the record cannot place (ceiling 2): bconn-002 "Played in Japan before MLB"
+   nfl: 0 groups nothing judges (ceiling 0), 0 members the record cannot place (ceiling 0)
+   nhl: 0 groups nothing judges (ceiling 0), 0 members the record cannot place (ceiling 0)
+
+simUsConnectionsFacts: 257 failures
