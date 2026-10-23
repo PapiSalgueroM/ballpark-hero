@@ -1,0 +1,11 @@
+build exit=0 35s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+dashscan-1516 exit=0 1s | since B1516: added lines with an en or em dash 0, commit message lines with one 0
+units-1516 exit=0 10s |    Duration  8.55s (transform 3.59s, setup 460ms, collect 6.89s, tests 6.82s, environment 1.83s, prepare 441ms)
+simAccountPrivacy-1442 exit=0 12s | Account privacy: PASS, actual security cases and all copied faults verified.
+simConsentWithdrawal1442 exit=0 39s | Consent withdrawal: PASS, 6 actual outcomes and 6 effective copied faults.
+simHeaderAccountLoading1442 exit=1 0s | Node.js v24.21.0
+simAuthModalLoading1442 exit=0 51s | Auth modal loading: PASS, 7 actual outcomes and 7 effective copied faults.
+simNbaCourtRecap-1517 exit=0 25s | NBA court: PASS, 19 actual outcomes and three effective copied faults.
+consent-walk-1442 exit=0 9s | Consent browser: PASS, 8 cases. Every external request was fulfilled locally; no live provider requests.
+ctl-1516 exit=0 93s | nouscrow exit=1 simOneOffCups: control nouscrow FIRED (74 failures, all its own: 1 usc season one: a new career at PSG holds noWinner, not the seasonOne stub)
+simFightRingPlayback-1518 exit=0 38s | simFightRingPlayback: 7 actual/fault runs verified; 14 source inputs held byte for byte.
