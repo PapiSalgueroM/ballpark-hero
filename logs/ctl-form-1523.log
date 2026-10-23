@@ -1,0 +1,6 @@
+divisor exit=1 simCareerForm: RED, 1 failure(s)
+zero exit=1 simCareerForm: RED, 4 failure(s)
+posttext exit=1 simCareerForm: RED, 4 failure(s)
+nogate exit=1 simCareerForm: RED, 1 failure(s)
+pageline exit=1 simCareerForm: RED, 1 failure(s)
+double exit=1 simCareerForm: RED, 3 failure(s)
