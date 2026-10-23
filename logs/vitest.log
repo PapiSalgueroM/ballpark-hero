@@ -1,0 +1,36 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/saveKeeper.test.ts [2m([22m[2m35 tests[22m[2m)[22m[32m 123[2mms[22m[39m
+[90mstdout[2m | src/test/hallOfChampionsLongPlay.test.tsx[2m > [22m[2mHall of Champions long play[2m > [22m[2m1 a museum past both old ceilings loads and is written back, not replaced
+[22m[39mHALL| deep: a save holding 3.20e+16 funds and 4.10e+18 career loaded and was written back with 3.2001e+16
+
+[90mstdout[2m | src/test/hallOfChampionsLongPlay.test.tsx[2m > [22m[2mHall of Champions long play[2m > [22m[2m2 a tab hidden ten hours is paid by the away rule, stops at the cap and says so on return
+[22m[39mHALL| hidden: 600 wakes a minute apart paid x1.000000 of eight hours at the away rate; meter 28800000 ms while hidden; welcome 4.7768e+7
+
+[90mstdout[2m | src/test/hallOfChampionsLongPlay.test.tsx[2m > [22m[2mHall of Champions long play[2m > [22m[2m3 three hidden hours and then seven closed are one absence under one eight hour cap
+[22m[39mHALL| reload: 3 h hidden then 7 h closed paid x1.000000 of one eight hour absence; the note says x1.000000 of it
+
+[90mstdout[2m | src/test/hallOfChampionsLongPlay.test.tsx[2m > [22m[2mHall of Champions long play[2m > [22m[2m4 a save the loader refuses is kept aside once before the fresh museum is written
+[22m[39mHALL| refused: the bytes were kept aside once, 286 characters
+
+[90mstdout[2m | src/test/hallOfChampionsLongPlay.test.tsx[2m > [22m[2mHall of Champions long play[2m > [22m[2m5 a watched minute is paid at full rate and closes an absence
+[22m[39mHALL| watched: 240 callbacks paid x1.000000000 of a minute at full rate
+
+[90mstdout[2m | src/test/hallOfChampionsLongPlay.test.tsx[2m > [22m[2mHall of Champions long play[2m > [22m[2m6 half a minute in another tab pays as away time and shows no welcome
+[22m[39mHALL| glance: 30 hidden wakes a second apart paid x0.500000 of 30 watched seconds; meter 30000 ms while hidden
+
+[90mstdout[2m | src/test/hallOfChampionsLongPlay.test.tsx[2m > [22m[2mHall of Champions long play[2m > [22m[2m7 nine hidden hours and then two closed days still leave a note that says what the hall took
+[22m[39mHALL| closed after hidden: 9 h hidden then 48 h closed paid x1.000000 of one eight hour absence; the note says x1.000000 of it
+
+[90mstdout[2m | src/test/hallOfChampionsLongPlay.test.tsx[2m > [22m[2mHall of Champions long play[2m > [22m[2m8 a save is stamped with the time the museum was paid through, so a reload pays the rest
+[22m[39mHALL| stamp: a save written 40 s after the last callback carries lastSeen 0 ms from it; the reload paid the away rule exactly
+
+ [32m✓[39m src/test/hallOfChampionsLongPlay.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 427[2mms[22m[39m
+ [32m✓[39m src/lib/brokenSaveRecovery.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[32m50 passed[39m[22m[90m (50)[39m
+[2m   Start at [22m 14:31:34
+[2m   Duration [22m 5.90s[2m (transform 3.57s, setup 559ms, collect 6.12s, tests 562ms, environment 2.84s, prepare 844ms)[22m
+
