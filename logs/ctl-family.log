@@ -1,0 +1,45 @@
+NEGATIVE CONTROL ON: a reserve side and its first team can be offered together again
+1. the fixture [0.1s]
+   5496 rows of 2026, position real for 2497; easy band 109 players on 17 values (biggest tie 18), medium 990, hard 4397
+   easy: 6 listed namesakes (Rodri, Gabriel, João Pedro, Luis Díaz, Matheus Cunha, Reece James)
+   medium: 49 listed namesakes (Antony, Diogo Costa, Wesley, Éderson, Rodrigo Mora, Evanilson, ...)
+   hard: 490 listed namesakes (Christian, Diego Costa, Emerson, Ephron Mason-Clark, Facundo Torres, Gilberto Mora, ...)
+2. 5000 daily ladders from 2026-10-25, and the same dates under the old rules as the baseline [0.1s]
+   old rules: 5000 ladders, 75000 questions (shirt 14232, club 14741, ballon 13823, nationality 14783, worth 4731, position 12690); worth the most by band easy 3100, medium 1176, hard 455
+   old rules: short ladders 0, ties 557, namesakes 6489, present tense 32162, not a club offered 169, a club's own reserve side or first team offered 6, wrong answer marked 0, unknown template 0, broken options 0
+      e.g. tense: Which club does Declan Rice play for?
+      e.g. namesake: Which club does Gabriel play for?
+      e.g. notAClub: Which club does Bandile Shandu play for? [Orlando Pirates / Rhode Island FC / FK Pardubice / Unknown]
+      e.g. ties: Ibrahima Konaté 54M / Pablo Barrios 65M / Eduardo Camavinga 54M / Lennart Karl 65M
+      e.g. clubFamily: Which club does Arda Güler play for? [Monterey Bay FC / Real Madrid Castilla / Real Madrid / Hamrun Spartans]
+   new rules: 5000 ladders, 75000 questions (shirt 14305, club 14725, worth 4737, position 12709, nationality 14718, ballon 13806); worth the most by band easy 3109, medium 1178, hard 450
+   new rules: short ladders 0, ties 0, namesakes 0, present tense 0, not a club offered 0, a club's own reserve side or first team offered 6, wrong answer marked 0, unknown template 0, broken options 0
+      e.g. clubFamily: Which club was Yan Diomande at in the 2026 market values? [St. Louis CITY SC / Real Madrid Castilla / Vanraure Hachinohe / Real Madrid]
+  FAIL: daily: 6 clubFamily
+3. 1000 unlimited ladders, and 1000 single questions at every difficulty (what Swap Question deals) [60.3s]
+   unlimited: 1000 ladders, 15000 questions (nationality 2939, shirt 2892, worth 937, position 2541, club 2903, ballon 2788); worth the most by band easy 619, medium 246, hard 72
+   unlimited: short ladders 0, ties 0, namesakes 0, present tense 0, not a club offered 0, a club's own reserve side or first team offered 1, wrong answer marked 0, unknown template 0, broken options 0
+      e.g. clubFamily: Which club was Jamal Musiala at in the 2026 market values? [FC Bayern Munich II / Livyi Bereg Kyiv / Bayern Munich / CSC Dumbravita]
+   swap: 0 ladders, 15000 questions (position 2508, worth 2583, nationality 2533, shirt 2534, club 2468, ballon 2374); worth the most by band easy 877, medium 855, hard 851
+   swap: short ladders 0, ties 0, namesakes 0, present tense 0, not a club offered 0, a club's own reserve side or first team offered 3, wrong answer marked 0, unknown template 0, broken options 0
+      e.g. clubFamily: Which club was Pedro Neto at in the 2026 market values? [Chelsea FC U21 / Genclerbirligi Ankara / Chelsea FC / Tekstilshchik Ivanovo]
+  FAIL: unlimited: 1 clubFamily
+  FAIL: swap: 3 clubFamily
+4. dates before 2026-10-25 deal exactly what the base generator dealt [70.7s]
+   2026-10-22: 36c088422c3d34a6 (base 36c088422c3d34a6)
+   2026-10-23: 94f0aa2002e3e1d9 (base 94f0aa2002e3e1d9)
+   2026-10-24: 1f6ffa5fd6af80b6 (base 1f6ffa5fd6af80b6)
+5. every band still deals every market question: 500 builds per band and type, new rules against old [70.8s]
+   easy: club 100.0% (was 100.0%), nationality 100.0% (was 100.0%), position 100.0% (was 100.0%), worth 100.0% (was 100.0%); askable names 103 of 109
+   medium: club 100.0% (was 100.0%), nationality 100.0% (was 100.0%), position 100.0% (was 100.0%), worth 100.0% (was 100.0%); askable names 941 of 990
+   hard: club 100.0% (was 100.0%), nationality 100.0% (was 100.0%), position 100.0% (was 100.0%), worth 100.0% (was 100.0%); askable names 3907 of 4397
+6. src/data/marketNamesakes.json is current with scripts/genMarketNamesakes.mjs [76.0s]
+   derived 62 from the saved rows, 548 from a live read; shipped 548
+   6b. 50 names of the 2026 slice show two men in one season of the saved rows; left off the list 0
+7. Face Off and the bank read one MIN_RATIO [76.0s]
+   MIN_RATIO 1.04
+8. a reserve side and its first team are never offered together (a planted pool) [76.0s]
+   500 club questions each: old rules offered the partner club 72 times, new rules 81 (built 500 of 500)
+  FAIL: the new rules offered a reserve side beside its first team 81 times
+
+simTriviaBank: 4 failure(s) (NEGATIVE CONTROL family ON)

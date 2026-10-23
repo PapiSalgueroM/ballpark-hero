@@ -1,0 +1,11 @@
+simTriviaBank exit=0 80s | simTriviaBank: all checks passed
+seed-b exit=1 102s | simTriviaBank: 1 failure(s)
+ctl-ties exit=1 77s | simTriviaBank: 3 failure(s) (NEGATIVE CONTROL ties ON)
+ctl-namesake exit=1 73s | simTriviaBank: 3 failure(s) (NEGATIVE CONTROL namesake ON)
+seed-c exit=0 193s | simTriviaBank: all checks passed
+ctl-tense exit=1 78s | simTriviaBank: 3 failure(s) (NEGATIVE CONTROL tense ON)
+ctl-postense exit=1 76s | simTriviaBank: 3 failure(s) (NEGATIVE CONTROL postense ON)
+ctl-family exit=1 76s | simTriviaBank: 4 failure(s) (NEGATIVE CONTROL family ON)
+namesakes-check exit=0 0s | src/data/marketNamesakes.json is current: 548 names
+ctl-legacy exit=1 68s | simTriviaBank: 4 failure(s) (NEGATIVE CONTROL legacy ON)
+ctl-rulec exit=1 67s | simTriviaBank: 8 failure(s) (NEGATIVE CONTROL rulec ON)
