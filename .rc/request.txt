@@ -1,0 +1,12 @@
+# Release BQ publish prep 3: build:seo on the merged head m18 (origin/main 0ca8c1fc, the other lane's Round 1451 site menu, plus the release), its changed files exported, then the readers of the saved pages and the weight on that runner.
+#!buildseo
+#!export
+#!serve
+#!serial
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simPrerender: node scripts/simPrerender.mjs
+simSitemap: node scripts/simSitemap.mjs
+simIndexNow: node scripts/simIndexNow.mjs
+simHeadTags: node scripts/simHeadTags.mjs
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
