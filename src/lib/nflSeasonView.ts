@@ -22,7 +22,10 @@ export const NFL_STAT_HEADS = ['PTD', 'RTD', 'CTD', 'SK'] as const;
 export const NFL_LEADER_TABLES: readonly [string, NflStatCol][] = [['TD passes', 'ptd'], ['Rushing TDs', 'rtd'], ['Sacks', 'sk']];
 export const NFL_EMPTY_AWARDS = 'Awards are named when the season closes, after the playoffs. Leaders has the season so far.';
 export const NFL_NO_CLASS = 'rookie awards start with the first class drafted in this save';
-export const NFL_HISTORY_GAP = 'Seasons with no awards here were played before lines were kept, or sat out.';
+/** Under the history when the save holds seasons from before its first lined one. */
+export const NFL_HISTORY_GAP = 'Seasons before the first one here were played before lines were kept.';
+/** The row of a season sat out (the brief's ruling R1: it keeps no lines and its row says so). */
+export const NFL_SAT_OUT = 'No lines were kept for a season you sat out.';
 
 export interface NflLeaderRow { id: string; name: string; team: string; g: number; value: number }
 
@@ -78,12 +81,18 @@ export function nflAwardBoxes(a: NflSeasonAwards, myTeam: string): { label: stri
 /** The season's awards when it has closed, from the history. */
 export const nflClosedAwards = (lg: Pick<LeagueState, 'awards' | 'season'>): NflSeasonAwards | null => foClosedSeason(lg.awards, lg.season);
 
-/** The award history, newest first, as one line a season, and how many awards his club won in it. */
-export function nflHistoryRows(lg: Pick<LeagueState, 'awards' | 'champions'>, myTeam: string): { rows: { season: number; text: string }[]; ours: number } {
-  const history = [...(lg.awards ?? [])].reverse();
+/**
+ * The award history, newest first, as one line a season, and how many awards his club won in it. A season the league
+ * closed (it has a champion) after the first season here, with no awards of its own, is a season sat out: lines open
+ * only at a Week 1 press and every lined season closes with an entry, while a year hosted away pushes its champion
+ * and keeps no lines. Its row says so. `before` is whether the save holds closed seasons from before the first one here.
+ */
+export function nflHistoryRows(lg: Pick<LeagueState, 'awards' | 'champions'>, myTeam: string): { rows: { season: number; text: string }[]; ours: number; before: boolean } {
+  const history = lg.awards ?? [];
+  const champOf = (season: number) => lg.champions.find(c => c.season === season)?.team;
   let ours = 0;
   const rows = history.map(a => {
-    const champ = lg.champions.find(c => c.season === a.season)?.team;
+    const champ = champOf(a.season);
     const bits = [champ ? `Champions ${champ}` : null];
     for (const k of NFL_AWARD_KEYS) {
       const m = a[k];
@@ -92,5 +101,10 @@ export function nflHistoryRows(lg: Pick<LeagueState, 'awards' | 'champions'>, my
     }
     return { season: a.season, text: bits.filter(Boolean).join(' · ') };
   });
-  return { rows, ours };
+  const first = history.length ? Math.min(...history.map(a => a.season)) : Infinity;
+  const named = new Set(history.map(a => a.season));
+  const away = [...new Set(lg.champions.map(c => c.season))].filter(s => s > first && !named.has(s));
+  for (const season of away) rows.push({ season, text: [`Champions ${champOf(season)}`, NFL_SAT_OUT].join(' · ') });
+  rows.sort((a, b) => b.season - a.season);
+  return { rows, ours, before: lg.champions.some(c => c.season < first) };
 }

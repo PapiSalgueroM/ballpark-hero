@@ -306,6 +306,27 @@ describe('NFL front office: the season card and the history', () => {
     expect(document.querySelector('[data-sim-note]')!.textContent).toBe("Sim season: every line and award here comes from this save's games, not real NFL stats.");
   });
 
+  it('a season sat out between two lined ones has its own history row saying so', async () => {
+    const { league, team } = leagueAt(1);
+    const hand = { id: 'x1', name: 'Old Hand', team, pos: 'QB', g: 17, ptd: 30, rtd: 2, ctd: 0, sk: 0 };
+    /* lined two seasons ago, sat out last season (its champion pushed by the year hosted away, no awards entry) */
+    league.awards = [{ season: league.season - 2, mvp: hand, oroy: null, droy: null, rookies: false }];
+    league.champions.push({ season: league.season - 2, team }, { season: league.season - 1, team });
+    save(shape(league, team));
+    render(<Board />);
+    press('Play Week 1');
+    { const hub = screen.queryByText('Hub'); if (hub) fireEvent.click(hub); }
+    fireEvent.click(screen.getByText('Standings'));
+    fireEvent.click(screen.getByText('This season'));
+    const box = (await screen.findByText(/Award history, this save/)).closest('[data-award-history]')!;
+    const rows = [...box.querySelectorAll('[data-award-history-row]')].map(r => r.textContent);
+    expect(rows).toEqual([
+      `${league.season - 1} · Champions ${team} · No lines were kept for a season you sat out.`,
+      `${league.season - 2} · Champions ${team} · MVP Old Hand (${team})`,
+    ]);
+    expect(box.textContent, 'no season was played before lines here').not.toContain('played before lines were kept');
+  });
+
   it('the recap draws the closed season with its three award boxes, and a save with no lines says so', async () => {
     const { league, team } = leagueAt(REGULAR_WEEKS);
     league.stats = nflNewStats(league.season);

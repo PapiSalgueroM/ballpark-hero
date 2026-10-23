@@ -12,6 +12,7 @@ import {
   nflFoStats, nflNewStats, nflPassChance, nflPlaysFor, nflPool, nflPoolMen, nflRecordGame, nflRecordWeek, nflSackChance, nflSeasonAwards,
   nflStatsHelp, nflUsage, readNflAwards, readNflStats, type NflSeasonAwards, type NflSeasonStats, type NflToldGame,
 } from '@/lib/nflSeasonStats';
+import { NFL_SAT_OUT, nflHistoryRows } from '@/lib/nflSeasonView';
 
 let n = 0;
 const P = (pos: GmPlayer['pos'], ovr: number, extra: Partial<GmPlayer> = {}): GmPlayer => {
@@ -269,5 +270,26 @@ describe('the awards and the close', () => {
     expect(nflLiveStats(none)).toBeNull();
     expect(nflCloseSeasonStats(none)).toBeNull();
     expect(none.awards).toBeUndefined();
+  });
+});
+
+describe('the award history', () => {
+  const entry = (season: number, mvp: NflSeasonAwards['mvp'] = null): NflSeasonAwards => ({ season, mvp, oroy: null, droy: null, rookies: false });
+  it('a closed season after the first lined one with no awards of its own is a season sat out, and its row says so', () => {
+    const hand = { id: 'q1', name: 'Old Hand', team: 'AAA', pos: 'QB', g: 17, ptd: 30, rtd: 2, ctd: 0, sk: 0 };
+    const lg = {
+      awards: [entry(2027, hand), entry(2029)],
+      champions: [2025, 2026, 2027, 2028, 2029].map((season, i) => ({ season, team: i % 2 ? 'BBB' : 'CCC' })),
+    };
+    const h = nflHistoryRows(lg, 'AAA');
+    expect(h.rows.map(r => r.season), 'newest first, the sat out 2028 between its neighbours, nothing before 2027').toEqual([2029, 2028, 2027]);
+    expect(h.rows[1].text).toBe(`Champions BBB · ${NFL_SAT_OUT}`);
+    expect(h.rows[2].text).toBe('Champions CCC · MVP Old Hand (AAA)');
+    expect(h.ours).toBe(1);
+    expect(h.before, '2025 and 2026 were played before lines were kept').toBe(true);
+    /* a save whose first lined season is its first season has nothing before it, and no season sat out */
+    const fresh = nflHistoryRows({ awards: [entry(2027)], champions: [{ season: 2027, team: 'AAA' }] }, 'AAA');
+    expect([fresh.rows.length, fresh.before]).toEqual([1, false]);
+    expect(fresh.rows[0].text).not.toContain(NFL_SAT_OUT);
   });
 });

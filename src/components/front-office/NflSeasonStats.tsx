@@ -55,7 +55,7 @@ export default function NflSeasonStats({ league, myTeam, label, mode }: NflSeaso
       ) : (
         <p data-season-stats-pending className="rounded-2xl border border-border bg-card p-3 text-center text-xs text-muted-foreground">{pending}</p>
       )}
-      {history && <FoAwardHistory rows={history.rows} ours={history.ours} league="NFL" gap={history.rows.length > 0 ? NFL_HISTORY_GAP : undefined} />}
+      {history && <FoAwardHistory rows={history.rows} ours={history.ours} league="NFL" gap={history.rows.length > 0 && history.before ? NFL_HISTORY_GAP : undefined} />}
     </div>
   );
 }
