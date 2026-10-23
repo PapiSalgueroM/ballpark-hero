@@ -1,0 +1,2 @@
+# Release BQ triage: rehearse the lead verify SELECTs for 1553 and 1551 in PGlite (in memory, never production).
+verify: npm install --prefix /tmp/pglv @electric-sql/pglite >/dev/null 2>&1 && node .rc/x/testVerify.mjs /tmp/pglv .rc/x/verify-1553.sql .rc/x/verify-1551.sql
