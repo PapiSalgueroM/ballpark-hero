@@ -1,0 +1,18 @@
+#!serve
+#!playwright
+careerMatchVisuals1517: ENGINES=chromium node scripts/qa/careerMatchVisuals1517.mjs
+managerMatchPlans1079: ENGINES=chromium node scripts/qa/managerMatchPlans1079.mjs
+numberFormatting1085: ENGINES=chromium node scripts/qa/numberFormatting1085.mjs
+playAppearanceCategoryScroll: ENGINES=chromium node scripts/qa/playAppearanceCategoryScroll.mjs
+playAppearanceSelectedContrast: ENGINES=chromium node scripts/qa/playAppearanceSelectedContrast.mjs
+simNbaAwardsSense: node scripts/simNbaAwardsSense.mjs
+simNbaSeasonStats: node scripts/simNbaSeasonStats.mjs
+simUsCoachRetirement: node scripts/simUsCoachRetirement.mjs
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+simCareerEntryGuide: node scripts/simCareerEntryGuide.mjs
+simUsCareerSaveRetry: node scripts/simUsCareerSaveRetry.mjs
+simUsCareerSkips: node scripts/simUsCareerSkips.mjs
+simCompletionOnce: node scripts/simCompletionOnce.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+simUsDirtyMoney: node scripts/simUsDirtyMoney.mjs
+simUsSeasonCentre: node scripts/simUsSeasonCentre.mjs
