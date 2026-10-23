@@ -1,0 +1,18 @@
+   baseball file: 36 of 36 new boards in the migration equal the shipped file's boards
+   nfl file: 1 of 1 new boards in the migration equal the shipped file's boards
+   nhl file: 1 of 1 new boards in the migration equal the shipped file's boards
+  FAIL: baseball seed: the dealt pool went from 59 valid boards to 60, so every daily would reshuffle
+  FAIL: baseball seed: bconn-016 had drifted and was overwritten anyway
+   baseball seed: 60 rows, 59 valid before and 60 after; 32 rewritten in place; bconn-016 drifted on purpose and OVERWRITTEN
+  FAIL: baseball file: the dealt pool went from 59 valid boards to 60, so every daily would reshuffle
+  FAIL: baseball file: bconn-016 had drifted and was overwritten anyway
+   baseball file: 60 rows, 59 valid before and 60 after; 32 rewritten in place; bconn-016 drifted on purpose and OVERWRITTEN
+   nfl file: 4 rows, 4 valid before and 4 after; 1 rewritten in place
+  FAIL: nfl drift: the dealt pool went from 3 valid boards to 4, so every daily would reshuffle
+  FAIL: nfl drift: nflconn-004 had drifted and was overwritten anyway
+   nfl drift: 4 rows, 3 valid before and 4 after; 0 rewritten in place; nflconn-004 drifted on purpose and OVERWRITTEN
+   nhl file: 4 rows, 4 valid before and 4 after; 1 rewritten in place
+  FAIL: nhl drift: the dealt pool went from 3 valid boards to 4, so every daily would reshuffle
+  FAIL: nhl drift: nhlconn-004 had drifted and was overwritten anyway
+   nhl drift: 4 rows, 3 valid before and 4 after; 0 rewritten in place; nhlconn-004 drifted on purpose and OVERWRITTEN
+rehearseUsConnections1558: 8 failures

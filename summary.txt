@@ -1,0 +1,17 @@
+ctl-arod exit=1 0s | simUsConnectionsFacts: 11 failures
+facts exit=0 0s | simUsConnectionsFacts: green. Every Baseball, NFL and NHL Connections group is held to the record, and every board has one right answer.
+ctl-karlsson exit=1 0s | simUsConnectionsFacts: 2 failures
+ctl-bell exit=1 0s | simUsConnectionsFacts: 2 failures
+ctl-onehost exit=1 0s | simUsConnectionsFacts: 1 failure
+ctl-twice exit=1 0s | simUsConnectionsFacts: 2 failures
+ctl-unjudged exit=1 0s | simUsConnectionsFacts: 2 failures
+conn1553 exit=0 1s | simConnectionsFacts: green. Every claim this round checked stands on two hosts and no rebuilt board has a second answer.
+fair exit=0 0s | simFairPuzzles: green. No board has a new second right answer; only the soccer findings the ledger owes to part B remain.
+rehearse-noguard exit=1 8s | rehearseUsConnections1558: 8 failures
+rehearse-drift exit=1 6s | rehearseUsConnections1558: 1 failure
+dealt exit=1 0s | 2026-12-01: baseball bconn-019 of 60 REWRITTEN; nfl nflconn-004 of 4 REWRITTEN; nhl nhlconn-004 of 4 REWRITTEN: a board the 1558 migration rewrites is dealt: not this day
+rehearse exit=0 19s | rehearseUsConnections1558: green. The rows land in place, a drifted row is left alone, and a second run is a no-op.
+nhlBench exit=0 5s | simNhlPlanningBench normal: exact expected assertions and independent Daily restore passed.
+storage exit=0 3s | simStorageWrites: all green (owed: 12)
+vitest exit=0 19s |    Duration  18.55s (transform 3.66s, setup 256ms, collect 4.06s, tests 21.61s, environment 1.34s, prepare 330ms)
+tsc exit=0 52s | 
