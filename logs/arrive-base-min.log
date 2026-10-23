@@ -1,0 +1,9 @@
+base-minimal-390-mo-0: curtain h 387 at top 197; curtain (Continue tapped at scrollY 0) -> "DOUKNOWBALL Back Track stats NBA My Career Draft night to jersey retir" (Continue tapped at scrollY 0); arrived summer card top 327 h 352 scrollY 0 in 844
+base-minimal-390-mo-1: curtain h 463 at top 197; curtain (Continue tapped at scrollY 0) -> "DOUKNOWBALL Back Track stats NBA My Career Draft night to jersey retir" (Continue tapped at scrollY 0); arrived summer card top 327 h 368 scrollY 0 in 844
+base-minimal-390-mo-2: curtain h 484 at top 197; curtain (Continue tapped at scrollY 0) -> "DOUKNOWBALL Back Track stats NBA My Career Draft night to jersey retir" (Continue tapped at scrollY 0); arrived summer card top 327 h 348 scrollY 0 in 844
+base-minimal-390-mo-3: curtain h 452 at top 197; curtain (Continue tapped at scrollY 0); arrived none top null h null scrollY 0 in 844  OFF SCREEN
+base-minimal-320-mo-0: curtain h 420 at top 197; curtain (Continue tapped at scrollY 0) -> "DOUKNOWBALL Back Track stats NBA My Career Draft night to jersey retir" (Continue tapped at scrollY 0); arrived summer card top 361 h 368 scrollY 0 in 640
+base-minimal-320-mo-1: curtain h 496 at top 197; curtain (Continue tapped at scrollY 52) -> "DOUKNOWBALL Back Track stats NBA My Career Draft night to jersey retir" (Continue tapped at scrollY 52); arrived summer card top 309 h 404 scrollY 52 in 640
+base-minimal-390-rm-0: curtain h 387 at top 197; curtain (Continue tapped at scrollY 0) -> "DOUKNOWBALL Back Track stats NBA My Career Draft night to jersey retir" (Continue tapped at scrollY 0); arrived summer card top 327 h 352 scrollY 0 in 844
+base-minimal-390-rm-1: curtain h 463 at top 197; curtain (Continue tapped at scrollY 0) -> "DOUKNOWBALL Back Track stats NBA My Career Draft night to jersey retir" (Continue tapped at scrollY 0); arrived summer card top 327 h 368 scrollY 0 in 844
+review-run-arrive base: 1 of 8 arrivals off screen

@@ -1,0 +1,3 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+arrive-head-min exit=1 61s | review-run-arrive head: 1 of 8 arrivals off screen
+arrive-base-min exit=1 99s | review-run-arrive base: 1 of 8 arrivals off screen
