@@ -49,7 +49,8 @@ function model() {
   const career = freeze({ name: 'Fixture Guest', position: 'ST', overall: 70, potential: 80, potentialEarned: 0,
     seasons: [{ year: 2026 }], trainingSeasonYear: 2025, statBoostNextSeason: {}, morale: 60, events: [] }) as unknown as CareerState;
   // Select a real dealt first round with space on both sides, without changing its geometry.
-  for (let seed = 1; seed <= 256; seed += 1) {
+  for (let index = 1; index <= 256; index += 1) {
+    const seed = index * 7919 + 1454;
     const raw = buildWallShotRun(seed)[0], wall = wallShotGeometry(raw);
     if (Math.abs((wall.lo + wall.hi) / 2) <= 0.08) return { career, seed, round: 0, setup: freeze({ ...raw, wallShotRules: 2 as const }), streamSeed: seed ^ 0x5eed1234 };
   }
