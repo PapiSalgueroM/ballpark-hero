@@ -1,0 +1,9 @@
+# Release BQ, Round 1548 (closing head 9b125c0a): fix-1548.md's gate (rc-fix-a.txt).
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/hallOfChampionsLongPlay.test.tsx src/test/saveKeeper.test.ts src/lib/brokenSaveRecovery.test.ts --testTimeout=300000 --hookTimeout=120000
+simHallLongPlay: node scripts/simHallLongPlay.mjs
+probeOld: git worktree add /tmp/base 7f99c27ee691df6f31d143847554f7071a421cfa && node .rc/x/r1548fix_probeOld.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simSaveKeeper: node scripts/simSaveKeeper.mjs
