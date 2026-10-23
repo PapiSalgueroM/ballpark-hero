@@ -1,0 +1,6 @@
+#!build
+#!playwright
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simWritesAreSent: node scripts/simWritesAreSent.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+ctl-anyyear: INTL_CONTROL=anyyear INTL_SECTIONS=4 node scripts/simCareerIntl.mjs
