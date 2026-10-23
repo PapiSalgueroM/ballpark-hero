@@ -1,0 +1,6 @@
+headsha exit=0 0s | 53cb0a1d42 Release BR triage: simTriviaBank section 6b reads the generator's own output, so TRIVIA_CONTROL=rulec fires again
+wf286x exit=0 258s | wfrun career-pending-popularity-gates.yml: 8 steps ran, 0 failed
+wf302x exit=0 263s | wfrun career-pending-money-gates.yml: 13 steps ran, 0 failed
+wf288 exit=0 308s | wfrun career-life-stories.yml: 10 steps ran, 0 failed
+wf289x exit=0 382s | wfrun career-phone-season-budget.yml: 10 steps ran, 0 failed
+wf297x exit=0 382s | wfrun career-phone-state-isolation.yml: 11 steps ran, 0 failed
