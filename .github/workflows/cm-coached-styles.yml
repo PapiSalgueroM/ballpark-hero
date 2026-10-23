@@ -1,0 +1,125 @@
+name: Club Manager coached styles original growth baseline
+on:
+  push:
+    branches: [codex/cm-coached-styles-20261023]
+    paths-ignore: ['docs/**']
+permissions:
+  contents: read
+concurrency:
+  group: cm-coached-styles-${{ github.sha }}
+  cancel-in-progress: false
+env:
+  BASE_SOURCE: 3e95583fd8131f3704591cd566677f8774a8e4c3
+  CI: '1'
+  SIM_NETWORK: offline
+  TZ: UTC
+jobs:
+  original_growth:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 16
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Original application and exact new regression source
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/cm-coached-styles-original";test ! -e "$out";mkdir "$out"
+          echo "CM_STYLE_OUT=$out" >> "$GITHUB_ENV"
+          test "$GITHUB_REPOSITORY" = PapiSalgueroM/ballpark-hero
+          test "$GITHUB_REPOSITORY_ID" = 1195729679
+          test "$GITHUB_REF" = refs/heads/codex/cm-coached-styles-20261023
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          git fetch --no-tags --depth=1 origin "$BASE_SOURCE" > "$out/base-fetch.log" 2>&1
+          git merge-base --is-ancestor "$BASE_SOURCE" "$GITHUB_SHA"
+          git diff --exit-code "$BASE_SOURCE" HEAD -- . ':!docs/**' ':!.github/workflows/cm-coached-styles.yml' ':!src/test/clubManagerTraitGrowth.test.ts' > "$out/original-application.log"
+          test "$(git rev-parse HEAD:src/lib/clubManager.ts)" = a505743537b383bc7885bb81f5a72c11e154b566
+          printf '%s  %s\n' a9f1de88051bb1a6c423f52a1633e8a9015cae111d7f1575de6c645f24a55989 src/test/clubManagerTraitGrowth.test.ts | sha256sum --check > "$out/test-pin.log"
+          git rev-parse HEAD > "$out/head.txt";git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
+          git rev-parse HEAD:src/lib/clubManager.ts > "$out/original-engine-blob.txt"
+          git ls-files -z | sort -z > "$out/source-members.before"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$out/source-before.sha256"
+          git diff --exit-code HEAD > "$out/source-clean-before.log"
+          test -z "$(git status --porcelain --untracked-files=all)"
+      - name: Locked installation and full dependency inventory
+        run: |
+          set -euo pipefail
+          out="$CM_STYLE_OUT"
+          npm ci > "$out/install.log" 2>&1
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$out/dependency-members.before"
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dependencies.sha256"
+      - name: Actual app types and original growth outcomes
+        run: |
+          set -euo pipefail
+          out="$CM_STYLE_OUT"
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          : > "$out/types.transport";: > "$out/tests.transport";status=0
+          SIM_OFFLINE_RECEIPT="$out/types.transport" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$out/types.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/types.exit";test "$status" -eq 0
+          status=0
+          SIM_OFFLINE_RECEIPT="$out/tests.transport" timeout --signal=TERM --kill-after=15s 5m node_modules/.bin/vitest run src/test/clubManagerTraitGrowth.test.ts --maxWorkers=1 --no-file-parallelism --reporter=json --outputFile="$out/tests.json" > "$out/tests.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/tests.exit";test "$status" -eq 1
+          node <<'NODE'
+          const fs=require('node:fs'),assert=require('node:assert/strict'),path=require('node:path'),out=process.env.CM_STYLE_OUT,r=JSON.parse(fs.readFileSync(out+'/tests.json','utf8'));
+          const owned=new Map([
+            ['uses the press coached style at double intensity','CM_STYLE_PRESS_MATCHING_GROWTH'],
+            ['uses the link coached style at normal intensity','CM_STYLE_LINK_MATCHING_GROWTH'],
+            ['uses the runner coached style at light intensity','CM_STYLE_RUNNER_MATCHING_GROWTH'],
+          ]);
+          const preserves=new Set([
+            'keeps press neutral at nonmatching normal intensity',
+            'keeps link neutral at nonmatching light intensity',
+            'keeps runner neutral at nonmatching double intensity',
+            'keeps unknown and malformed saved styles neutral without changing their data',
+            'keeps the existing development ceiling with a matching learned style',
+          ]);
+          assert.equal(r.success,false);assert.equal(r.testResults.length,1);
+          assert.equal(r.numTotalTests,8);assert.equal(r.numPassedTests,5);assert.equal(r.numFailedTests,3);assert.equal(r.numPendingTests,0);assert.equal(r.numTodoTests,0);
+          const suite=r.testResults[0];assert.equal(path.resolve(suite.name),path.resolve('src/test/clubManagerTraitGrowth.test.ts'));assert.equal(suite.status,'failed');assert.equal(suite.assertionResults.length,8);
+          const seen=new Set(),failures=[];
+          for(const row of suite.assertionResults){
+            assert(!seen.has(row.title));seen.add(row.title);
+            if(preserves.has(row.title)){assert.equal(row.status,'passed',row.fullName);assert.deepEqual(row.failureMessages,[]);continue;}
+            const marker=owned.get(row.title);assert(marker,row.fullName);assert.equal(row.status,'failed');assert.equal(row.failureMessages.length,1);
+            const message=row.failureMessages[0].replace(/\x1b\[[0-?]*[ -/]*[@-~]/g,'');
+            assert.match(message,/^\s*AssertionError:/);assert(message.includes(marker));assert.doesNotMatch(message,/\b(?:TypeError|ReferenceError|SyntaxError|RangeError)\s*:/);
+            failures.push({title:row.title,marker});
+          }
+          assert.equal(seen.size,8);assert.equal(failures.length,3);
+          const runtime=['numRuntimeErrorTestSuites','numUnhandledErrors'];for(const key of runtime)if(key in r)assert.equal(r[key],0);if('unhandledErrors'in r)assert.deepEqual(r.unhandledErrors,[]);
+          assert.doesNotMatch(fs.readFileSync(out+'/tests.log','utf8'),/Unhandled\s+(?:Errors?|Rejections?)|Uncaught\s+Exceptions?/i);
+          fs.writeFileSync(out+'/original-red-admission.json',JSON.stringify({phase:'original-growth-baseline',source:process.env.GITHUB_SHA,expectedOwnedFailures:failures,preservedPasses:5,observedRuntimeCounters:Object.fromEntries(runtime.filter(k=>k in r).map(k=>[k,r[k]])),absentRuntimeCountersUnknown:runtime.filter(k=>!(k in r)),applicationQualified:false},null,2)+'\n',{flag:'wx'});
+          NODE
+          test ! -s "$out/types.transport";test ! -s "$out/tests.transport"
+      - name: Always preserve all raw results and physical holds
+        if: always()
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/cm-coached-styles-original";mkdir -p "$out";failed=0
+          for manifest in source-before dependencies;do
+            if test -f "$out/$manifest.sha256";then sha256sum --check "$out/$manifest.sha256" > "$out/final-$manifest-hold.log" 2>&1 || failed=1;else failed=1;fi
+          done
+          git ls-files -z | sort -z > "$out/source-members.after"
+          if test -f "$out/source-members.before";then cmp "$out/source-members.before" "$out/source-members.after" || failed=1;else failed=1;fi
+          if test -f "$out/dependency-members.before";then find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$out/dependency-members.after";cmp "$out/dependency-members.before" "$out/dependency-members.after" || failed=1;else failed=1;fi
+          git diff --exit-code HEAD > "$out/final-source-diff.log" || failed=1
+          git status --porcelain --untracked-files=all > "$out/final-status.txt";test ! -s "$out/final-status.txt" || failed=1
+          while IFS= read -r -d '' file;do test ! -s "$file" || failed=1;done < <(find "$out" -type f -name '*.transport' -print0)
+          printf '%s\n' "$failed" > "$out/final-holds.exit"
+          (cd "$out";find . -type f ! -path ./evidence.sha256 -print0 | sort -z | xargs -0 sha256sum) > "$out/evidence.sha256"
+          exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cm-coached-styles-original-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/cm-coached-styles-original/
+          if-no-files-found: error
+          retention-days: 14
