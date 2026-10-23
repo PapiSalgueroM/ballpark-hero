@@ -1,0 +1,54 @@
+mut-nonames: the board hands the tile no credits
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+[1m[33mwarn[39m[22m - The class `duration-[800ms]` is ambiguous and matches multiple utilities.
+[1m[33mwarn[39m[22m - If this is content and not a class, replace it with `duration-&lsqb;800ms&rsqb;` to silence this warning.
+[dukb] preload wrapper: a cancelled chunk error waits for the reload (vite 5.4.21)
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+  FAIL (c) the planted second season has its first season's awards and a winner still on a roster (none)
+
+320 by 640
+  FAIL (a) 320, Week 1: a row for every touchdown of the saved game's story (0 rows, the story 5)
+  ok   (a) 320, Week 1: every row names a man
+  ok   (a) 320, Week 1: the save keeps his game's credits under its key
+  ok   (a) 320, Week 1: the Game Day box keeps its height (400 then 400)
+  (printed) 320, Week 1: scrollY 603 then 1080, page height 12247 then 12471
+  FAIL (a) 320, Week 2: a row for every touchdown of the saved game's story (0 rows, the story 3)
+  ok   (a) 320, Week 2: every row names a man
+  ok   (a) 320, Week 2: the save keeps his game's credits under its key
+  ok   (a) 320, Week 2: the Game Day box keeps its height (400 then 400)
+  (printed) 320, Week 2: scrollY 1080 then 686, page height 12471 then 12397
+  FAIL (a) 320, Week 3: a row for every touchdown of the saved game's story (0 rows, the story 5)
+  ok   (a) 320, Week 3: every row names a man
+  ok   (a) 320, Week 3: the save keeps his game's credits under its key
+  ok   (a) 320, Week 3: the Game Day box keeps its height (400 then 400)
+  (printed) 320, Week 3: scrollY 686 then 686, page height 12397 then 12397
+  FAIL (a) 320: the three games named 0 scorers
+  ok   (e) 320, the tile: no horizontal overflow (0 px)
+  ok   (e) 320, the tile: every button this round adds is 44 px high
+  ok   (e) 320, the tile: every text this round adds is 12 px or more
+  ok   (e) 320, the tile: nothing this round adds is cut
+  ok   (e) 320, a: no page error
+  ok   (b) 320: the recap draws the season card
+  ok   (b) 320: the awards tab names three awards, each a winner or nobody, with its rule (MVPJared Goff (DET) 41 TD th | Offensive Rookie of the Year | Defensive Rookie of the Year)
+  ok   (b) 320: the sim note is on the Awards tab
+  ok   (b) 320: the sim note is on the Leaders tab
+  ok   (b) 320: the sim note is on the Your lines tab
+  ok   (e) 320, the recap card: no horizontal overflow (0 px)
+  ok   (e) 320, the recap card: every button this round adds is 44 px high
+  ok   (e) 320, the recap card: every text this round adds is 12 px or more
+  ok   (e) 320, the recap card: nothing this round adds is cut
+  (open question 5, printed) 320, the recap card: 89 texts under 12 px in the shared card or the badge, e.g. Sim season: every line and awa 10px; Awards 11px
+  ok   (e) 320, b: no page error
+  ok   (c) 320: Standings opens on the table, with its two faces
+  ok   (c) 320: This season draws the season so far
+  ok   (c) 320: the award history holds the first season's line (Award history, this saveYour club has not won an award here yet. Sim seasons, not real NFL)
+  ok   (e) 320, Standings: no horizontal overflow (0 px)
+  ok   (e) 320, Standings: every button this round adds is 44 px high
+  ok   (e) 320, Standings: every text this round adds is 12 px or more
+  ok   (e) 320, Standings: nothing this round adds is cut
+playNflSeasonStats: the walk broke: TypeError: Cannot read properties of null (reading 'id')
+    at pointCD (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playNflSeasonStats.mjs:281:68)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playNflSeasonStats.mjs:303:5
