@@ -1,0 +1,6 @@
+  FAIL: unlimited: 1 short
+   unlimited: 15000 ladders, 224999 questions (worth 14140, club 44226, ballon 41904, position 37965, nationality 44203, shirt 42561); worth the most by band easy 9254, medium 3546, hard 1340
+   unlimited: short ladders 1, ties 0, namesakes 0, present tense 0, not a club offered 0, a club's own reserve side or first team offered 0, wrong answer marked 0, unknown template 0, broken options 0
+   swap: 0 ladders, 225000 questions (club 37329, ballon 36432, worth 37780, shirt 37655, nationality 37899, position 37905); worth the most by band easy 12651, medium 12558, hard 12571
+   swap: short ladders 0, ties 0, namesakes 0, present tense 0, not a club offered 0, a club's own reserve side or first team offered 0, wrong answer marked 0, unknown template 0, broken options 0
+simTriviaBank: 1 failure(s)
