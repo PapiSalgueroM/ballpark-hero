@@ -1,0 +1,3 @@
+simCareerForm exit=0 1633s | All 1 harnesses green.
+simCareerHall exit=0 2553s | All 1 harnesses green.
+simUsCareerSummer exit=124 4200s | Running 1 node harness
