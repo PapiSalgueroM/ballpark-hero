@@ -1,0 +1,156 @@
+name: Pitch flight feedback original animation baseline
+on:
+  push:
+    branches: [codex/pitch-flight-feedback-20261023]
+    paths-ignore: ['docs/**']
+permissions:
+  contents: read
+concurrency:
+  group: pitch-flight-feedback-${{ github.sha }}
+  cancel-in-progress: false
+env:
+  BASE_SOURCE: 3e95583fd8131f3704591cd566677f8774a8e4c3
+  CI: '1'
+  SIM_NETWORK: offline
+  TZ: UTC
+jobs:
+  original_animation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 16
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Original components and exact two animation regression inputs
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/pitch-flight-original";test ! -e "$out";mkdir "$out"
+          echo "PITCH_FLIGHT_OUT=$out" >> "$GITHUB_ENV"
+          test "$GITHUB_REPOSITORY" = PapiSalgueroM/ballpark-hero
+          test "$GITHUB_REPOSITORY_ID" = 1195729679
+          test "$GITHUB_REF" = refs/heads/codex/pitch-flight-feedback-20261023
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          git fetch --no-tags --depth=1 origin "$BASE_SOURCE" > "$out/base-fetch.log" 2>&1
+          git merge-base --is-ancestor "$BASE_SOURCE" "$GITHUB_SHA"
+          git diff --exit-code "$BASE_SOURCE" HEAD -- . ':!docs/**' ':!.github/workflows/pitch-flight-feedback.yml' ':!src/test/PitchMotion.build.test.tsx' ':!src/test/MiniPitch.height.test.tsx' > "$out/original-application.log"
+          test "$(git rev-parse HEAD:src/components/pitch-motion/PitchMotion.tsx)" = 8a907fc247670f7f94276c4174e992643ebf6877
+          test "$(git rev-parse HEAD:src/components/season-centre/MiniPitch.tsx)" = 51cbfc3100c6ebdcbdac7a6608a5ec68154362b0
+          printf '%s  %s\n' \
+            a6c276772b439e684f13b8e859eb584e8f0d3c569c4091cabf74d9f214157e38 src/components/pitch-motion/PitchMotion.tsx \
+            4b54b4e812f57fbea5cf2e66a7415a0f79ccbbabe4583f39aa8e69ccce8ab97a src/components/season-centre/MiniPitch.tsx \
+            a7784c4de034f629baeaccffa7f8db1aa66043fda08b9980acf55f7a18609775 src/test/PitchMotion.build.test.tsx \
+            2e7c3d5c14cee4911631b72dfb6af23f2848ec4c960ac4c461c0ea61b140def5 src/test/MiniPitch.height.test.tsx > "$out/input-pins.sha256"
+          sha256sum --check "$out/input-pins.sha256" > "$out/input-pins.log"
+          git rev-parse HEAD > "$out/head.txt";git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
+          git rev-parse HEAD:src/components/pitch-motion/PitchMotion.tsx > "$out/original-pitch-motion-blob.txt"
+          git rev-parse HEAD:src/components/season-centre/MiniPitch.tsx > "$out/original-mini-pitch-blob.txt"
+          git rev-parse HEAD:.github/workflows/pitch-flight-feedback.yml > "$out/workflow-blob.txt"
+          sha256sum .github/workflows/pitch-flight-feedback.yml > "$out/workflow.sha256"
+          git ls-files -z | sort -z > "$out/source-members.before"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$out/source-before.sha256"
+          git diff --exit-code HEAD > "$out/source-clean-before.log"
+          test -z "$(git status --porcelain --untracked-files=all)"
+      - name: Locked installation and full dependency inventory
+        run: |
+          set -euo pipefail
+          out="$PITCH_FLIGHT_OUT"
+          npm ci > "$out/install.log" 2>&1
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$out/dependency-members.before"
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dependencies.sha256"
+      - name: Actual app types and exact original nine-case outcomes
+        id: baseline
+        run: |
+          set -euo pipefail
+          out="$PITCH_FLIGHT_OUT"
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          : > "$out/types.transport";: > "$out/tests.transport";: > "$out/classifier.transport";status=0
+          SIM_OFFLINE_RECEIPT="$out/types.transport" timeout --signal=TERM --kill-after=15s 5m node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$out/types.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/types.exit";test "$status" -eq 0
+          status=0
+          SIM_OFFLINE_RECEIPT="$out/tests.transport" timeout --signal=TERM --kill-after=15s 5m node_modules/.bin/vitest run src/test/PitchMotion.build.test.tsx src/test/MiniPitch.height.test.tsx --maxWorkers=1 --no-file-parallelism --reporter=json --outputFile="$out/tests.json" > "$out/tests.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/tests.exit";test "$status" -eq 1
+          SIM_OFFLINE_RECEIPT="$out/classifier.transport" node <<'NODE'
+          const fs=require('node:fs'),assert=require('node:assert/strict'),path=require('node:path'),out=process.env.PITCH_FLIGHT_OUT,r=JSON.parse(fs.readFileSync(out+'/tests.json','utf8'));
+          const expected=new Map([
+            ['src/test/PitchMotion.build.test.tsx',{ancestor:'Generic PitchMotion optional build wiring',count:6,owned:new Map([
+              ['renders the supplied build plan in actual ball and figure positions','PITCH_ROOT_BUILD_REACHES_BALL'],
+              ['replans when only build changes while all other prop references and the clock stay held','PITCH_ROOT_BUILD_ONLY_INVALIDATES_MEMO'],
+              ['draws the real full-motion free-kick lift when build is supplied','PITCH_ROOT_BUILD_FLIGHT_LIFT'],
+            ]),preserves:new Set([
+              'keeps a full-motion legacy free kick and a reduced-motion built free kick flat',
+              'preserves omitted-build legacy positions across multiple real scene changes',
+              'freezes the displayed frame while stopped and resumes on the supplied clock without changing inputs or drawing RNG',
+            ])}],
+            ['src/test/MiniPitch.height.test.tsx',{ancestor:'Career mini pitch ball height',count:3,owned:new Map([
+              ['draws the actual flight height and ground shadow for goals at either end','MINI_REAL_FLIGHT_HEIGHT_VISIBLE'],
+            ]),preserves:new Set([
+              'keeps instant results and goals already present at mount on a flat terminal frame',
+              'holds the exact displayed goal frame while paused and resumes that committed goal',
+            ])}],
+          ].map(([file,spec])=>[path.resolve(file),spec]));
+          assert.equal(r.success,false);assert.equal(r.testResults.length,2);
+          assert.equal(r.numTotalTests,9);assert.equal(r.numPassedTests,5);assert.equal(r.numFailedTests,4);assert.equal(r.numPendingTests,0);assert.equal(r.numTodoTests,0);
+          const files=new Set(),failures=[],passes=[];
+          for(const suite of r.testResults){
+            assert.equal(typeof suite.name,'string');const file=path.resolve(suite.name),spec=expected.get(file);
+            assert(spec,'Unexpected actual suite '+file);assert(!files.has(file));files.add(file);
+            assert.equal(suite.status,'failed');assert.equal(suite.assertionResults.length,spec.count);if('message'in suite)assert.equal(suite.message,'');
+            const seen=new Set();
+            for(const row of suite.assertionResults){
+              assert.equal(typeof row.title,'string');assert(!seen.has(row.title));seen.add(row.title);
+              assert.equal(row.fullName,spec.ancestor+' '+row.title);
+              if(spec.preserves.has(row.title)){assert.equal(row.status,'passed',row.fullName);assert.deepEqual(row.failureMessages,[]);passes.push({file,title:row.title});continue;}
+              const marker=spec.owned.get(row.title);assert(marker,row.fullName);assert.equal(row.status,'failed');assert.equal(row.failureMessages.length,1);
+              const message=row.failureMessages[0].replace(/\x1b\[[0-?]*[ -/]*[@-~]/g,'');
+              assert.match(message,/^\s*AssertionError:/);assert(message.includes(marker));assert.doesNotMatch(message,/\b(?:TypeError|ReferenceError|SyntaxError|RangeError)\s*:/);
+              failures.push({file,title:row.title,marker});
+            }
+            assert.equal(seen.size,spec.count);for(const title of [...spec.owned.keys(),...spec.preserves])assert(seen.has(title));
+          }
+          assert.equal(files.size,2);assert.equal(failures.length,4);assert.equal(passes.length,5);
+          const runtime=['numRuntimeErrorTestSuites','numUnhandledErrors'];for(const key of runtime)if(key in r)assert.equal(r[key],0);if('unhandledErrors'in r)assert.deepEqual(r.unhandledErrors,[]);
+          assert.doesNotMatch(fs.readFileSync(out+'/tests.log','utf8'),/Unhandled\s+(?:Errors?|Rejections?)|Uncaught\s+Exceptions?/i);
+          fs.writeFileSync(out+'/original-red-admission.json',JSON.stringify({phase:'original-pitch-flight-baseline',source:process.env.GITHUB_SHA,runId:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,expectedOwnedFailures:failures,preservedPasses:passes,observedRuntimeCounters:Object.fromEntries(runtime.filter(k=>k in r).map(k=>[k,r[k]])),absentRuntimeCountersUnknown:runtime.filter(k=>!(k in r)),unhandledErrors:'unhandledErrors'in r?r.unhandledErrors:'UNKNOWN_ABSENT',applicationQualified:false},null,2)+'\n',{flag:'wx'});
+          NODE
+          test ! -s "$out/types.transport";test ! -s "$out/tests.transport";test ! -s "$out/classifier.transport"
+      - name: Always preserve all raw results and physical holds
+        if: always()
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/pitch-flight-original";mkdir -p "$out";failed=0
+          for manifest in source-before dependencies;do
+            if test -f "$out/$manifest.sha256";then sha256sum --check "$out/$manifest.sha256" > "$out/final-$manifest-hold.log" 2>&1 || failed=1;else failed=1;fi
+          done
+          git ls-files -z | sort -z > "$out/source-members.after" || failed=1
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$out/source-after.sha256" || failed=1
+          if test -f "$out/source-members.before";then cmp "$out/source-members.before" "$out/source-members.after" || failed=1;else failed=1;fi
+          if test -f "$out/source-before.sha256";then cmp "$out/source-before.sha256" "$out/source-after.sha256" || failed=1;else failed=1;fi
+          if test -d node_modules;then
+            find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$out/dependency-members.after" || failed=1
+            find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dependencies-end.sha256" || failed=1
+          else failed=1;fi
+          if test -f "$out/dependency-members.before";then cmp "$out/dependency-members.before" "$out/dependency-members.after" || failed=1;else failed=1;fi
+          if test -f "$out/dependencies.sha256";then cmp "$out/dependencies.sha256" "$out/dependencies-end.sha256" || failed=1;else failed=1;fi
+          git rev-parse HEAD > "$out/head-after.txt" || failed=1
+          if test -f "$out/head.txt";then cmp "$out/head.txt" "$out/head-after.txt" || failed=1;else failed=1;fi
+          git diff --exit-code HEAD > "$out/final-source-diff.log" || failed=1
+          git status --porcelain --untracked-files=all > "$out/final-status.txt";test ! -s "$out/final-status.txt" || failed=1
+          while IFS= read -r -d '' file;do test ! -s "$file" || failed=1;done < <(find "$out" -type f -name '*.transport' -print0)
+          printf '%s\n' "$failed" > "$out/final-holds.exit"
+          (cd "$out";find . -type f ! -path ./evidence.sha256 -print0 | sort -z | xargs -0 sha256sum) > "$out/evidence.sha256"
+          exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: pitch-flight-original-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/pitch-flight-original/
+          if-no-files-found: error
+          retention-days: 14
