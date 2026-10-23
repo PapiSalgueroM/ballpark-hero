@@ -1,0 +1,110 @@
+FAIL [2] nfl Demaryius Thomas: not in the sources ledger
+FAIL [2] nfl Demaryius Thomas: on the deceased list
+FAIL [3] nfl: retiredNames gives 43 names, the ledger and the legends tables give 42
+FAIL [3] nfl: the hook's never on market set holds 43 names, the ledger and the legends tables give 42
+FAIL [3] nfl kick off: the power up deals Demaryius Thomas, who is on the deceased list
+FAIL [3] nfl early KC+BUF+PHI: deals Demaryius Thomas, who is on the deceased list
+FAIL [3] nfl early KC+BUF+PHI: the market deals 30 men, expected the 31 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early KC+BUF+PHI: Demaryius Thomas labelled last played 2019, ledger undefined
+FAIL [3] nfl early NYG+WAS+KC: deals Demaryius Thomas, who is on the deceased list
+FAIL [3] nfl early NYG+WAS+KC: the market deals 30 men, expected the 31 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early NYG+WAS+KC: Demaryius Thomas labelled last played 2019, ledger undefined
+FAIL [3] nfl early WAS+KC+BUF: deals Demaryius Thomas, who is on the deceased list
+FAIL [3] nfl early WAS+KC+BUF: the market deals 30 men, expected the 31 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl early WAS+KC+BUF: Demaryius Thomas labelled last played 2019, ledger undefined
+FAIL [3] nfl end BUF: deals Demaryius Thomas, who is on the deceased list
+FAIL [3] nfl end BUF: the market deals 310 men, expected the 311 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end BUF: Demaryius Thomas labelled last played 2019, ledger undefined
+FAIL [3] nfl end PHI: deals Demaryius Thomas, who is on the deceased list
+FAIL [3] nfl end PHI: the market deals 310 men, expected the 311 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end PHI: Demaryius Thomas labelled last played 2019, ledger undefined
+FAIL [3] nfl end BAL: deals Demaryius Thomas, who is on the deceased list
+FAIL [3] nfl end BAL: the market deals 310 men, expected the 311 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end BAL: Demaryius Thomas labelled last played 2019, ledger undefined
+FAIL [3] nfl end SF: deals Demaryius Thomas, who is on the deceased list
+FAIL [3] nfl end SF: the market deals 310 men, expected the 311 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end SF: Demaryius Thomas labelled last played 2019, ledger undefined
+FAIL [3] nfl end DAL: deals Demaryius Thomas, who is on the deceased list
+FAIL [3] nfl end DAL: the market deals 310 men, expected the 311 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end DAL: Demaryius Thomas labelled last played 2019, ledger undefined
+FAIL [3] nfl end DET: deals Demaryius Thomas, who is on the deceased list
+FAIL [3] nfl end DET: the market deals 310 men, expected the 311 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end DET: Demaryius Thomas labelled last played 2019, ledger undefined
+FAIL [3] nfl end CIN: deals Demaryius Thomas, who is on the deceased list
+FAIL [3] nfl end CIN: the market deals 310 men, expected the 311 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end CIN: Demaryius Thomas labelled last played 2019, ledger undefined
+FAIL [3] nfl end MIA: deals Demaryius Thomas, who is on the deceased list
+FAIL [3] nfl end MIA: the market deals 310 men, expected the 311 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end MIA: Demaryius Thomas labelled last played 2019, ledger undefined
+FAIL [3] nfl end NYJ: deals Demaryius Thomas, who is on the deceased list
+FAIL [3] nfl end NYJ: the market deals 310 men, expected the 311 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end NYJ: Demaryius Thomas labelled last played 2019, ledger undefined
+FAIL [3] nfl end CLE: deals Demaryius Thomas, who is on the deceased list
+FAIL [3] nfl end CLE: the market deals 310 men, expected the 311 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end CLE: Demaryius Thomas labelled last played 2019, ledger undefined
+FAIL [3] nfl end PIT: deals Demaryius Thomas, who is on the deceased list
+FAIL [3] nfl end PIT: the market deals 310 men, expected the 311 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end PIT: Demaryius Thomas labelled last played 2019, ledger undefined
+FAIL [3] nfl end HOU: deals Demaryius Thomas, who is on the deceased list
+FAIL [3] nfl end HOU: the market deals 310 men, expected the 311 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end HOU: Demaryius Thomas labelled last played 2019, ledger undefined
+FAIL [3] nfl end JAX: deals Demaryius Thomas, who is on the deceased list
+FAIL [3] nfl end JAX: the market deals 310 men, expected the 311 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end JAX: Demaryius Thomas labelled last played 2019, ledger undefined
+FAIL [3] nfl end TEN: deals Demaryius Thomas, who is on the deceased list
+FAIL [3] nfl end TEN: the market deals 310 men, expected the 311 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end TEN: Demaryius Thomas labelled last played 2019, ledger undefined
+FAIL [3] nfl end IND: deals Demaryius Thomas, who is on the deceased list
+FAIL [3] nfl end IND: the market deals 310 men, expected the 311 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end IND: Demaryius Thomas labelled last played 2019, ledger undefined
+FAIL [3] nfl end NE: deals Demaryius Thomas, who is on the deceased list
+FAIL [3] nfl end NE: the market deals 310 men, expected the 311 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end NE: Demaryius Thomas labelled last played 2019, ledger undefined
+FAIL [3] nfl end LV: deals Demaryius Thomas, who is on the deceased list
+FAIL [3] nfl end LV: the market deals 310 men, expected the 311 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end LV: Demaryius Thomas labelled last played 2019, ledger undefined
+FAIL [3] nfl end DEN: deals Demaryius Thomas, who is on the deceased list
+FAIL [3] nfl end DEN: the market deals 310 men, expected the 311 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end DEN: Demaryius Thomas labelled last played 2019, ledger undefined
+FAIL [3] nfl end LAC: deals Demaryius Thomas, who is on the deceased list
+FAIL [3] nfl end LAC: the market deals 310 men, expected the 311 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end LAC: Demaryius Thomas labelled last played 2019, ledger undefined
+FAIL [3] nfl end GB: deals Demaryius Thomas, who is on the deceased list
+FAIL [3] nfl end GB: the market deals 310 men, expected the 311 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end GB: Demaryius Thomas labelled last played 2019, ledger undefined
+FAIL [3] nfl end CHI: deals Demaryius Thomas, who is on the deceased list
+FAIL [3] nfl end CHI: the market deals 310 men, expected the 311 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end CHI: Demaryius Thomas labelled last played 2019, ledger undefined
+FAIL [3] nfl end MIN: deals Demaryius Thomas, who is on the deceased list
+FAIL [3] nfl end MIN: the market deals 310 men, expected the 311 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end MIN: Demaryius Thomas labelled last played 2019, ledger undefined
+FAIL [3] nfl end LAR: deals Demaryius Thomas, who is on the deceased list
+FAIL [3] nfl end LAR: the market deals 310 men, expected the 311 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end LAR: Demaryius Thomas labelled last played 2019, ledger undefined
+FAIL [3] nfl end SEA: deals Demaryius Thomas, who is on the deceased list
+FAIL [3] nfl end SEA: the market deals 310 men, expected the 311 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end SEA: Demaryius Thomas labelled last played 2019, ledger undefined
+FAIL [3] nfl end ARI: deals Demaryius Thomas, who is on the deceased list
+FAIL [3] nfl end ARI: the market deals 310 men, expected the 311 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end ARI: Demaryius Thomas labelled last played 2019, ledger undefined
+FAIL [3] nfl end NO: deals Demaryius Thomas, who is on the deceased list
+FAIL [3] nfl end NO: the market deals 310 men, expected the 311 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end NO: Demaryius Thomas labelled last played 2019, ledger undefined
+FAIL [3] nfl end TB: deals Demaryius Thomas, who is on the deceased list
+FAIL [3] nfl end TB: the market deals 310 men, expected the 311 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end TB: Demaryius Thomas labelled last played 2019, ledger undefined
+FAIL [3] nfl end ATL: deals Demaryius Thomas, who is on the deceased list
+FAIL [3] nfl end ATL: the market deals 310 men, expected the 311 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end ATL: Demaryius Thomas labelled last played 2019, ledger undefined
+FAIL [3] nfl end CAR: deals Demaryius Thomas, who is on the deceased list
+FAIL [3] nfl end CAR: the market deals 310 men, expected the 311 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end CAR: Demaryius Thomas labelled last played 2019, ledger undefined
+FAIL [3] nfl end NYG: deals Demaryius Thomas, who is on the deceased list
+FAIL [3] nfl end NYG: the market deals 310 men, expected the 311 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end NYG: Demaryius Thomas labelled last played 2019, ledger undefined
+FAIL [3] nfl end WAS: deals Demaryius Thomas, who is on the deceased list
+FAIL [3] nfl end WAS: the market deals 310 men, expected the 311 fallen men on no standing roster, each once, with his first fallen club
+FAIL [3] nfl end WAS: Demaryius Thomas labelled last played 2019, ledger undefined
+FAIL [4] src/data/conquestPowerups.ts: names Demaryius Thomas, who is on the deceased list
+measured: {"nflGreats":11,"nbaGreats":9,"nflRetired":42,"nflStates":64,"nflDealt":1920,"nflMarket":10880,"nflLabelled":374,"nbaRetired":37,"nbaStates":60,"nbaDealt":1800,"nbaMarket":9596,"nbaLabelled":288,"conquestFilesScanned":32,"nflKeyStats":320,"nflPrinted":146,"nbaKeyStats":300}
+simConquestPeople: FAIL, 108 of 75170 checks red (control dt fired)
