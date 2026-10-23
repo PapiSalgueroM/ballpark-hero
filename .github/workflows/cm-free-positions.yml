@@ -1,4 +1,4 @@
-name: Club Manager custom positions fixed core and source controls
+name: Club Manager custom positions core controls and old compatibility
 on:
   push:
     branches: [codex/cm-free-positions-20261023]
@@ -10,7 +10,7 @@ concurrency:
   cancel-in-progress: false
 env:
   BASE_SOURCE: 3e95583fd8131f3704591cd566677f8774a8e4c3
-  EXPECTED_PARENT: 31c9239f54eaf8fb4d3d7133ff86ac3450151a2a
+  EXPECTED_PARENT: 669bc74b0df5f8000d15703efd7ff6bb8a80a749
   CI: '1'
   SIM_NETWORK: offline
   TZ: UTC
@@ -43,8 +43,8 @@ jobs:
           git merge-base --is-ancestor "$BASE_SOURCE" "$GITHUB_SHA"
           git show -s --format=%P HEAD > "$out/parents.txt"
           test "$(cat "$out/parents.txt")" = "$EXPECTED_PARENT"
-          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!docs/**' ':!.github/workflows/cm-free-positions.yml' ':!src/lib/clubManager.ts' ':!src/test/clubManagerPositionLive.test.ts' ':!scripts/qa/cmPosition.controls.json' ':!scripts/qa/runCmPositionControls.mjs' > "$out/direct-child-scope.log"
-          git diff --exit-code "$BASE_SOURCE" HEAD -- . ':!docs/**' ':!.github/workflows/cm-free-positions.yml' ':!src/lib/clubManager.ts' ':!src/test/clubManagerPositionIntegration.test.ts' ':!src/lib/clubManagerPositions.ts' ':!src/test/clubManagerPositions.test.ts' ':!src/test/TacticsScreen.freePositions.test.tsx' ':!src/test/clubManagerPositionLive.test.ts' ':!scripts/qa/cmPosition.controls.json' ':!scripts/qa/runCmPositionControls.mjs' > "$out/original-application.log"
+          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!docs/**' ':!.github/workflows/cm-free-positions.yml' ':!src/test/clubManagerPositionOldParity.test.ts' ':!scripts/qa/runClubManagerPositionOldParity.mjs' > "$out/direct-child-scope.log"
+          git diff --exit-code "$BASE_SOURCE" HEAD -- . ':!docs/**' ':!.github/workflows/cm-free-positions.yml' ':!src/lib/clubManager.ts' ':!src/test/clubManagerPositionIntegration.test.ts' ':!src/lib/clubManagerPositions.ts' ':!src/test/clubManagerPositions.test.ts' ':!src/test/TacticsScreen.freePositions.test.tsx' ':!src/test/clubManagerPositionLive.test.ts' ':!scripts/qa/cmPosition.controls.json' ':!scripts/qa/runCmPositionControls.mjs' ':!src/test/clubManagerPositionOldParity.test.ts' ':!scripts/qa/runClubManagerPositionOldParity.mjs' > "$out/original-application.log"
           test "$(git rev-parse HEAD:src/lib/clubManager.ts)" = 5a2f1b3bcc52c2e4f8008859b699fe80d35ed223
           test "$(git rev-parse HEAD:src/components/club-manager/TacticsScreen.tsx)" = 233cd8d7430147fd66182269859548ffe5fdce4f
           test "$(git rev-parse HEAD:src/hooks/useClubManager.ts)" = 65bc9bbb622c67fbbcb25c949038571bbdc8600a
@@ -58,7 +58,9 @@ jobs:
             1107a1ec8a496c65fd4c8653ccd239aa2cda2190945c56c6129d3985e59ed97d src/test/TacticsScreen.freePositions.test.tsx \
             f9fdacec90b4190da5405f72524c91f45ad1449ca78e0d0535225638af5d7b00 src/test/clubManagerPositionLive.test.ts \
             2143e57f69c57d32ed2c501408dcdb9ecc4b85b061df67a79540a1a0b45cac55 scripts/qa/cmPosition.controls.json \
-            9980a421c1cb74580cb127732c534aac26abc3e20fc11f23bd4c94883cf60e96 scripts/qa/runCmPositionControls.mjs > "$out/input-pins.sha256"
+            9980a421c1cb74580cb127732c534aac26abc3e20fc11f23bd4c94883cf60e96 scripts/qa/runCmPositionControls.mjs \
+            590c31f4339f8fc5a0c340a9df6da4592670eef3d06c345996cba97b529b2613 src/test/clubManagerPositionOldParity.test.ts \
+            6f1b0a7e07bdb4383324f61d0a79ac5c2e6d39887bb09d6ba1147ee63a2e1421 scripts/qa/runClubManagerPositionOldParity.mjs > "$out/input-pins.sha256"
           sha256sum --check "$out/input-pins.sha256" > "$out/input-pins.log"
           git rev-parse HEAD > "$out/head.txt";git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
           printf '%s\n' "$GITHUB_RUN_ID" > "$out/run-id.txt"
@@ -252,6 +254,35 @@ jobs:
           NODE
           printf '%s\n' "$classifier" > "$out/controls-classifier.exit";test "$classifier" -eq 0
           test ! -s "$out/controls.transport";test ! -s "$out/controls-classifier.transport"
+      - name: Four old unmarked paths with complete states and random draw tapes
+        timeout-minutes: 22
+        run: |
+          set -euo pipefail
+          out="$CM_POSITION_OUT"
+          git show "$BASE_SOURCE:src/lib/clubManager.ts" > "$out/frozen-original-engine.ts"
+          printf '%s  %s\n' 05de3cfca8d978e6117979fb29b82b2ece7b9fb6ee1f2ce3c051e379e36de86e "$out/frozen-original-engine.ts" > "$out/frozen-original.sha256"
+          sha256sum --check "$out/frozen-original.sha256" > "$out/frozen-original.log"
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          : > "$out/old-parity.transport";: > "$out/old-parity-classifier.transport";status=0
+          CM_POSITION_ORIGINAL_SOURCE="$out/frozen-original-engine.ts" CM_POSITION_PARITY_OUT="$out/old-parity" SIM_OFFLINE_RECEIPT="$out/old-parity.transport" timeout --signal=TERM --kill-after=15s 21m node scripts/qa/runClubManagerPositionOldParity.mjs > "$out/old-parity.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/old-parity.exit";test "$status" -eq 0
+          classifier=0
+          SIM_OFFLINE_RECEIPT="$out/old-parity-classifier.transport" node <<'NODE' || classifier=$?
+          const fs=require('node:fs'),assert=require('node:assert/strict'),out=process.env.CM_POSITION_OUT;
+          const r=JSON.parse(fs.readFileSync(out+'/old-parity/parity.json','utf8'));
+          assert.equal(r.status,'ACTUAL_OLD_ENGINE_PARITY_AND_TWO_EFFECTIVE_CONTROLS_PASS');
+          assert.equal(r.applicationQualified,false);
+          assert.equal(r.runs.length,4);assert.equal(r.controls.length,2);
+          assert.deepEqual(r.runs.map(row=>row.label),['candidate','frozen-original','extra-resume-draw','changed-resume-budget']);
+          for(const row of r.runs){assert.equal(row.exit,0);assert.equal(row.cases,4);}
+          assert.deepEqual(r.controls.map(row=>row.ownedAssertionMarker),['CM_POSITION_OLD_PARITY_ALL_RNG_DRAWS','CM_POSITION_OLD_PARITY_FULL_STATE']);
+          const held=JSON.parse(fs.readFileSync(out+'/old-parity/input-holds.json','utf8'));
+          const copies=JSON.parse(fs.readFileSync(out+'/old-parity/copy-holds.json','utf8'));
+          assert.equal(held.allEqual,true);assert.equal(copies.allEqual,true);assert.equal(copies.copies.length,3);
+          fs.writeFileSync(out+'/old-parity-admission.json',JSON.stringify({source:process.env.GITHUB_SHA,parent:process.env.EXPECTED_PARENT,runId:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,declaredPaths:4,independentProcesses:4,healthyPassOccurrences:16,effectiveControls:2,completeFramesAndDrawTapes:true,applicationQualified:false,editorAdopted:false,buildQualified:false},null,2)+'\n',{flag:'wx'});
+          NODE
+          printf '%s\n' "$classifier" > "$out/old-parity-classifier.exit";test "$classifier" -eq 0
+          test ! -s "$out/old-parity.transport";test ! -s "$out/old-parity-classifier.transport"
       - name: Always preserve all raw results and physical holds
         if: always()
         run: |
@@ -274,7 +305,7 @@ jobs:
           if test -f "$out/head.txt";then cmp "$out/head.txt" "$out/head-after.txt" || failed=1;else failed=1;fi
           git diff --exit-code HEAD > "$out/final-source-diff.log" || failed=1
           git status --porcelain --untracked-files=all > "$out/final-status.txt";test ! -s "$out/final-status.txt" || failed=1
-          for transport in types tests tests-classifier profile profile-classifier live live-classifier ui ui-classifier controls controls-classifier;do test -f "$out/$transport.transport" && test ! -s "$out/$transport.transport" || failed=1;done
+          for transport in types tests tests-classifier profile profile-classifier live live-classifier ui ui-classifier controls controls-classifier old-parity old-parity-classifier;do test -f "$out/$transport.transport" && test ! -s "$out/$transport.transport" || failed=1;done
           while IFS= read -r -d '' file;do test ! -s "$file" || failed=1;done < <(find "$out" -type f -name '*.transport' -print0)
           printf '%s\n' "$failed" > "$out/final-holds.exit"
           (cd "$out";find . -type f ! -path ./evidence.sha256 -print0 | sort -z | xargs -0 sha256sum) > "$out/evidence.sha256"
