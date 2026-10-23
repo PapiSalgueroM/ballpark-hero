@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+walk: node .rc/x/review-run-walk.mjs
+arrive-head: LABEL=head node .rc/x/review-run-arrive.mjs
+arrive-base: git worktree add -q /tmp/ab 33d435858 && ln -s "$PWD/node_modules" /tmp/ab/node_modules && (cd /tmp/ab && node_modules/.bin/vite build > /tmp/ab-build.log 2>&1) && (node scripts/lib/hostLikeServer.mjs /tmp/ab/dist 4185 > /tmp/ab.log 2>&1 &) && sleep 4 && BASE=http://localhost:4185 LABEL=base node .rc/x/review-run-arrive.mjs
