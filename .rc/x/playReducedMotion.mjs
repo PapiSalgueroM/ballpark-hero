@@ -1,0 +1,602 @@
+/**
+ * Round 423 harness: the site's celebration respects prefers-reduced-motion.
+ *
+ * WHY. src/components/club-manager/Celebration.tsx is the site's celebration
+ * layer. ResultScreen mounts it and 75 files end on ResultScreen, so a visitor
+ * who asked their operating system for less motion was getting 28 pieces of
+ * confetti and a slamming emoji from most of the site. Two components in this
+ * repo (TacticsScreen, ConquestMap) already honoured the setting, so the
+ * convention existed and the shared kit was the one place missing it.
+ *
+ * WHAT IT CHECKS, in a real browser with the preference really set, because a
+ * rule like this cannot be verified by reading the file:
+ *   1. under reduce, nothing animates,
+ *   2. under reduce, anything that animates IN is still VISIBLE. Several of
+ *      these keyframes start at opacity 0, so a guard that merely cancelled
+ *      them would leave the headline and the stat row invisible, which is a
+ *      worse bug than the one being fixed,
+ *   3. under reduce, the confetti does not fall (decoration, aria-hidden, no
+ *      content, so it is the one thing that fully stops),
+ *   4. with no preference set, every one of those still animates, so the guard
+ *      cannot quietly turn the celebration off for everybody.
+ *
+ * The CSS under test is LIFTED FROM THE COMPONENT rather than retyped here, so
+ * this cannot drift into testing a copy of a rule the site no longer ships.
+ *
+ * NEGATIVE CONTROL: REDUCED_MOTION_CONTROL=noguard strips the media queries out
+ * of that lifted CSS and the run must go red. It asserts the queries were there
+ * before removing them, because a control that deletes something absent changes
+ * nothing and is green for the wrong reason.
+ *
+ * RELEASE AU FIX PASS (2026-10-10). The two Soccer Career scenes are reached
+ * through a save that holds an unseen chance wheel, so the walk answers the
+ * wheel as a player does (scripts/lib/chanceWheelWalk.mjs) and holds the wheel
+ * itself to three things: under reduce it does not spin; its result line, the
+ * one line it exists to show, is whole on the screen at 320 by 568, 375 by
+ * 667, 390 by 664 and 390 by 844, before and after the reveal; and it can
+ * always be answered (Spin and Show result, then Continue, each whole and at
+ * least 44 px tall). A picture of each size goes to RC_OUT (or a temp folder).
+ * REDUCED_MOTION_CONTROL=wheelcut pushes the result line under the fold of
+ * its dialog, where a short phone had it before the fix, and the wheel stage
+ * must then go red while every other stage stays green.
+ *
+ * Run: node scripts/playReducedMotion.mjs
+ */
+import pw from './lib/playwrightLoader.mjs';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { spawn } from 'node:child_process';
+import os from 'node:os';
+import { WHEEL, WHEEL_WAITING, answerChanceWheel, wheelBoxes } from './lib/chanceWheelWalk.mjs';
+const { chromium } = pw;
+
+/* Relative to this file, not a hardcoded checkout. It used to read
+   C:/Users/antho/ballpark-hero, so any other clone tested that folder's
+   source (which could be weeks behind) against its own build, and on any
+   other machine it could not start at all. */
+const KIT_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const kitPath = path.join(KIT_ROOT, 'src', 'components', 'club-manager', 'Celebration.tsx');
+const src = [kitPath, path.join(path.dirname(kitPath), 'CelebrationStyles.tsx')].map(file => fs.readFileSync(file, 'utf8')).join('\n');
+const blocks = [...src.matchAll(/<style>\{`([\s\S]*?)`\}<\/style>/g)].map(m => m[1]);
+if (blocks.length !== 2) { console.error(`expected 2 style blocks, found ${blocks.length}`); process.exit(1); }
+const css = blocks.join('\n');
+if (!/prefers-reduced-motion/.test(css)) {
+  console.error('FAIL: the celebration styles carry no reduced motion rule at all');
+  process.exit(1);
+}
+
+/* Round 635 adds a third stage and a second control. The site now carries one
+   blanket rule under reduce (src/index.css) that shortens every transition and
+   animation, because the named list before it missed width transitions on the
+   fight bars and could not know about the next new class. The route walk
+   measures every element's COMPUTED durations under reduce, so it checks the
+   behaviour rather than the rule's text, and it proves the measurement can see
+   a duration at all by finding some on the same routes with no preference set.
+   REDUCED_MOTION_CONTROL=noblanket rewrites the blanket rule's transition
+   duration out of the served stylesheets and documents, and that stage must
+   then go red; it refuses if it rewrote nothing. */
+const CONTROL = process.env.REDUCED_MOTION_CONTROL || '';
+if (CONTROL && CONTROL !== 'noguard' && CONTROL !== 'noblanket' && CONTROL !== 'wheelcut') {
+  console.error(`REDUCED_MOTION_CONTROL=${CONTROL} is not a control this harness knows`);
+  process.exit(1);
+}
+let cssUnderTest = css;
+if (CONTROL === 'noguard') {
+  const before = cssUnderTest;
+  /* Disable the guard by making its condition unmatchable, rather than trying
+     to cut the block out with a regex. Same effect, nothing to get wrong about
+     brace matching, and it fails loudly below if the condition was not there. */
+  cssUnderTest = cssUnderTest.split('prefers-reduced-motion: reduce').join('prefers-reduced-motion: no-such-preference');
+  if (cssUnderTest === before) {
+    console.error('control noguard: no reduced motion block was removed, so this control would prove nothing');
+    process.exit(1);
+  }
+  console.log('   NEGATIVE CONTROL ON: the guards are stripped, this run must go red');
+}
+
+const html = `<!doctype html><html><head><style>${cssUnderTest}</style></head><body>
+  <div class="cm-rise" id="rise">headline</div>
+  <div class="cm-slam" id="slam">emoji</div>
+  <div class="cm-gold-glow" id="glow">glow</div>
+  <span class="cm-confetti" id="confetti"></span>
+</body></html>`;
+
+/** answerChanceWheel, with a picture of the revealed wheel taken before Continue is pressed. */
+async function answerChanceWheelKeeping(page, how, shot) {
+  const dialog = page.locator(WHEEL);
+  const started = Date.now();
+  await dialog.locator(how === 'spin' ? '[data-wheel-spin]' : '[data-wheel-skip]').click();
+  await page.waitForFunction(waiting => { const r = document.querySelector('[data-wheel-result]'); return !!r && r.textContent !== waiting && !!document.querySelector('[data-wheel-continue]'); }, WHEEL_WAITING, { timeout: 10000 });
+  const revealMs = Date.now() - started;
+  const after = await wheelBoxes(page);
+  await page.screenshot({ path: shot });
+  await dialog.locator('[data-wheel-continue]').click();
+  await dialog.waitFor({ state: 'hidden', timeout: 10000 });
+  return { after, revealMs };
+}
+const browser = await chromium.launch({ args: ['--no-sandbox'] });
+let bad = 0;
+for (const pref of ['no-preference', 'reduce']) {
+  const ctx = await browser.newContext({ reducedMotion: pref === 'reduce' ? 'reduce' : 'no-preference' });
+  const page = await ctx.newPage();
+  await page.setContent(html);
+  const got = await page.evaluate(() => {
+    const g = id => {
+      const el = document.getElementById(id);
+      const s = getComputedStyle(el);
+      return { anim: s.animationName, opacity: s.opacity, display: s.display };
+    };
+    return { rise: g('rise'), slam: g('slam'), glow: g('glow'), confetti: g('confetti') };
+  });
+  console.log(`\nprefers-reduced-motion: ${pref}`);
+  for (const [k, v] of Object.entries(got)) console.log(`   ${k.padEnd(9)} animation=${String(v.anim).padEnd(14)} opacity=${v.opacity} display=${v.display}`);
+
+  if (pref === 'reduce') {
+    /* THE POINT: nothing animates, and content that animates IN must still be
+       visible rather than stuck at the opacity 0 its keyframes start from. */
+    if (got.rise.anim !== 'none') { console.error('  FAIL: cm-rise still animates under reduce'); bad += 1; }
+    if (got.slam.anim !== 'none') { console.error('  FAIL: cm-slam still animates under reduce'); bad += 1; }
+    if (got.glow.anim !== 'none') { console.error('  FAIL: cm-gold-glow still animates under reduce'); bad += 1; }
+    if (got.rise.opacity !== '1') { console.error(`  FAIL: cm-rise left invisible at opacity ${got.rise.opacity}, worse than the bug`); bad += 1; }
+    if (got.slam.opacity !== '1') { console.error(`  FAIL: cm-slam left invisible at opacity ${got.slam.opacity}`); bad += 1; }
+    if (got.confetti.display !== 'none') { console.error('  FAIL: confetti still falls under reduce'); bad += 1; }
+  } else {
+    /* and the guard must not have killed the animation for everyone else */
+    if (got.rise.anim === 'none') { console.error('  FAIL: cm-rise no longer animates for normal visitors'); bad += 1; }
+    if (got.confetti.display === 'none') { console.error('  FAIL: confetti gone for normal visitors'); bad += 1; }
+  }
+  await ctx.close();
+}
+/* ---------- Round 530: the touched routes, in a real browser, under reduce ----------
+   The synthetic page above proves the kit's CSS in isolation. This walks the
+   routes Round 530 animated, served from dist the way the live host serves
+   them, with the preference set, and holds three things on each first screen:
+   every <style> block on the page that declares a keyframe also declares the
+   reduced motion rule; every element wearing one of the site's reveal classes
+   has no running animation and is not invisible (the final frame, never
+   display:none or opacity 0); and the page really rendered, so a blank route
+   cannot pass. It needs dist/ from npm run build and fails closed without it.
+   Under the noguard control the served bundles have the rule rewritten in
+   flight, so the same routes must then report unguarded keyframes or reveal
+   elements still animating; the control refuses if no bundle was rewritten. */
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const ROUTES = [
+  /* Round 658: the home page, for the Main Event band's entrance. */
+  '/',
+  '/cfb-dynasty', '/cbb-dynasty',
+  '/front-office', '/nba-front-office', '/mlb-front-office', '/nhl-front-office',
+  '/nfl-my-career', '/nba-my-career', '/mlb-my-career', '/nhl-my-career',
+  '/club-manager', '/soccer-career', '/rebuild',
+  '/idle-arena', '/stadium-tycoon', '/wonderkid-factory',
+  '/fight-career', '/fight-gym', '/fight-promoter',
+];
+/* Round 635: the longest transition or animation an element may carry under
+   reduce. The blanket rule sets 0.001ms; normal site values are 150ms and up,
+   so 10ms separates the two by four orders of magnitude on one side and more
+   than an order on the other. */
+const SLOW_MS = 10;
+let slowRoutes = 0;
+let rewrittenCss = 0;
+const REVEAL_CLASSES = ['cm-rise', 'cm-slam', 'cm-tick-in', 'cm-gold-glow', 'cm-win-pulse', 'cm-loss-shake', 'fo-draft-row', 'fo-draft-head', 'fo-draft-continue', 'hf-art', 'hf-cone', 'hf-ball'];
+let badRoutes = 0;
+/* Release AU fix pass: the chance wheel's own findings, kept apart so each control can name its stage. */
+let wheelBad = 0;
+let wheelsAnswered = 0;
+let wheelSizes = 0;
+let routesWithOurCss = 0;
+if (!fs.existsSync(path.join(ROOT, 'dist', 'index.html'))) {
+  console.error('  FAIL: dist/index.html is missing, so the route stage cannot run; build first (npm run build)');
+  badRoutes += 1;
+} else {
+  /* Serve dist the way the live host serves it (see hostLikeServer's header).
+     The port dodges 4173 and the other harnesses' ports. */
+  const PORT = 4189;
+  const server = spawn(process.execPath, [path.join(ROOT, 'scripts', 'lib', 'hostLikeServer.mjs'), path.join(ROOT, 'dist'), String(PORT)], { stdio: 'ignore' });
+  await new Promise(r => setTimeout(r, 800));
+  const base = `http://127.0.0.1:${PORT}`;
+  const ctx = await browser.newContext({ reducedMotion: 'reduce', viewport: { width: 390, height: 844 } });
+  /* The cookie banner is a fixed overlay; answer it the privacy-preserving
+     way before any page loads, as the other route walkers do. */
+  await ctx.addInitScript(() => {
+    try { localStorage.setItem('cookie-consent', 'essential'); } catch { /* ignored */ }
+  });
+  let rewritten = 0;
+  if (CONTROL === 'noguard') {
+    await ctx.route('**/assets/*.js', async route => {
+      const res = await route.fetch();
+      const body = await res.text();
+      const swapped = body.split('prefers-reduced-motion: reduce').join('prefers-no-such-preference: reduce');
+      if (swapped !== body) rewritten += 1;
+      await route.fulfill({ response: res, body: swapped });
+    });
+  }
+  if (CONTROL === 'noblanket') {
+    /* The stylesheet ships as an asset and is also inlined into every saved
+       page, so both kinds of response are rewritten. Only the blanket rule
+       sets a transition duration under reduce, so this token is its alone. */
+    await ctx.route('**/*', async route => {
+      const type = route.request().resourceType();
+      if (type !== 'document' && type !== 'stylesheet') return route.continue();
+      const res = await route.fetch();
+      const body = await res.text();
+      /* Deleted, not replaced: an empty declaration is valid CSS, and a
+         replacement value such as inherit would spread durations to children
+         and measure something the site never shipped. */
+      const swapped = body.replace(/transition-duration:\s*0?\.001ms\s*!important/g, '');
+      if (swapped !== body) rewrittenCss += 1;
+      await route.fulfill({ response: res, body: swapped });
+    });
+  }
+  /* Round 635: every element's longest transition or animation, in ms, and
+     how many exceed slowMs. Third party toasts are skipped for the reason the
+     keyframe check above gives. */
+  const measure = slowMs => {
+    const ms = v => Math.max(0, ...String(v).split(',').map(x => { x = x.trim(); return x.endsWith('ms') ? parseFloat(x) : parseFloat(x) * 1000; }).filter(n => Number.isFinite(n)));
+    let slow = 0, measured = 0;
+    const sample = [];
+    for (const el of document.querySelectorAll('body *')) {
+      if (el.closest('[data-sonner-toaster]')) continue;
+      const s = getComputedStyle(el);
+      const t = ms(s.transitionDuration);
+      const a = s.animationName !== 'none' ? ms(s.animationDuration) : 0;
+      measured += 1;
+      if (t > slowMs || a > slowMs) {
+        slow += 1;
+        if (sample.length < 3) sample.push(el.tagName.toLowerCase() + '.' + String(el.className).split(' ').filter(Boolean).slice(0, 2).join('.') + ' t=' + t + ' a=' + a);
+      }
+    }
+    return { slow, measured, sample };
+  };
+  console.log(`\nRound 530 routes under prefers-reduced-motion: reduce, ${ROUTES.length} routes served from dist`);
+  for (const route of ROUTES) {
+    const p = await ctx.newPage();
+    await p.goto(base + route, { waitUntil: 'networkidle' });
+    await p.waitForTimeout(400);
+    const got = await p.evaluate(classes => {
+      const styles = [...document.querySelectorAll('style')].map(s => s.textContent || '');
+      const withKeyframes = styles.filter(t => /@keyframes\s+[\w-]+/.test(t));
+      /* THE RULE IS ABOUT THIS SITE'S OWN ANIMATIONS, and the first run of this
+         stage proved why that has to be said out loud. It reported one
+         unguarded block on all sixteen routes, and the block was the toast
+         library's, which splits its stylesheet and carries the reduced motion
+         rule in a DIFFERENT element: the very same keyframe names came back in
+         the guarded list on the same page. A rule that says every block
+         carrying a keyframe must itself carry the guard cannot be satisfied by
+         a third party that chose to split, and failing sixteen routes on it
+         buries the two checks below that actually measure behaviour.
+         Third party blocks are identified by a marker of their own and skipped
+         here, and the run refuses if the skip leaves nothing to check, so this
+         can never quietly become a check of no blocks at all. */
+      const THIRD_PARTY = [/data-sonner-toaster/];
+      const ours = withKeyframes.filter(t => !THIRD_PARTY.some(rx => rx.test(t)));
+      const unguarded = ours.filter(t => !/@media\s*\(\s*prefers-reduced-motion\s*:\s*reduce\s*\)/.test(t)).length;
+      const skipped = withKeyframes.length - ours.length;
+      let reveal = 0;
+      let animating = 0;
+      let invisible = 0;
+      for (const el of document.querySelectorAll(classes.map(c => '.' + c).join(','))) {
+        reveal += 1;
+        const s = getComputedStyle(el);
+        if (s.animationName !== 'none') animating += 1;
+        if (s.display === 'none' || Number(s.opacity) === 0) invisible += 1;
+      }
+      return { text: (document.body.innerText || '').length, blocks: withKeyframes.length, ourBlocks: ours.length, skipped, unguarded, reveal, animating, invisible };
+    }, REVEAL_CLASSES);
+    const dur = await p.evaluate(measure, SLOW_MS);
+    await p.close();
+    console.log(`   ${route.padEnd(19)} text=${got.text} keyframeBlocks=${got.blocks} ours=${got.ourBlocks} thirdParty=${got.skipped} unguarded=${got.unguarded} reveal=${got.reveal} animating=${got.animating} invisible=${got.invisible} slowMotion=${dur.slow}/${dur.measured}`);
+    if (dur.slow > 0) { console.error(`  FAIL: ${route}: ${dur.slow} element(s) still move for more than ${SLOW_MS}ms under reduce (${dur.sample.join(', ')})`); slowRoutes += 1; }
+    if (got.text < 200) { console.error(`  FAIL: ${route} rendered almost nothing (${got.text} chars of text), so nothing here was checked`); badRoutes += 1; continue; }
+    /* Our keyframe CSS rides in with a reveal, so a first screen that has not
+       reached one legitimately carries none of it: measured here, 13 of the 16
+       routes are in that state on arrival and only the idle games mount theirs
+       immediately. So this is NOT a per route requirement. What must hold is
+       that the stage saw our CSS somewhere, which is asserted once after the
+       loop, and that wherever it IS present it carries the rule. */
+    if (got.ourBlocks > 0) routesWithOurCss += 1;
+    if (got.unguarded > 0) { console.error(`  FAIL: ${route} mounts ${got.unguarded} <style> block(s) of our own with a keyframe and no reduced motion rule`); badRoutes += 1; }
+    if (got.animating > 0) { console.error(`  FAIL: ${route}: ${got.animating} reveal element(s) still animate under reduce`); badRoutes += 1; }
+    if (got.invisible > 0) { console.error(`  FAIL: ${route}: ${got.invisible} reveal element(s) are invisible under reduce, worse than the motion`); badRoutes += 1; }
+  }
+  /* Round 1045: the Season Centre overlay is a surface of its own (critic
+     C11). A route walk never opens it, so a career the engine itself played
+     is handed to the page at its season summary, the overlay is opened from
+     the card, and the kick off card, a matchday and the review are each
+     measured the way the routes are: no reveal still animating, none
+     invisible, nothing inside the overlay moving for more than SLOW_MS. */
+  {
+    const { bundleAwardsNight } = await import('./lib/careerAwardsNightBundle.mjs');
+    const { mulberry32 } = await import('./lib/careerAwardsNightProbe.mjs');
+    const SB = await bundleAwardsNight(ROOT);
+    const sc = SB.soccer;
+    const clubs = sc.FALLBACK_CLUBS;
+    const real = Math.random;
+    Math.random = mulberry32(1045);
+    let save = null;
+    try {
+      const o = 76;
+      let st = sc.initCareer('Motion', 'England', 'ST', '2010-14', { pace: o, shooting: o, passing: o, dribbling: o, defending: o, physical: o, reflexes: o }, o, 2010, clubs, null, 92);
+      for (let g = 0; g < 400 && !save; g += 1) {
+        if (st.phase === 'season_summary' && st.pendingSummary?.type === 'playing' && st.pendingSummary.apps > 0 && st.seasons.length >= 2) { save = JSON.stringify(st); break; }
+        const ph = st.phase;
+        st = ph === 'youth' ? sc.advanceYouthYear(st, clubs)
+          : ph === 'contract_offer' ? ((st.pendingOffers || []).length ? sc.acceptOffer(st, st.pendingOffers[0]) : { ...st, phase: 'playing' })
+          : ph === 'playing' ? sc.advanceProSeason(st, clubs)
+          : ph === 'newspaper' ? sc.dismissNewspaper(st)
+          : ph === 'season_summary' ? sc.dismissSummary(st, clubs)
+          : ph === 'ballon_dor' ? sc.dismissBallonDor(st, clubs)
+          : ph === 'international_debut' ? sc.dismissDebut(st, clubs)
+          : ph === 'world_cup' ? sc.dismissWorldCup(st, clubs)
+          : ph === 'rivalry_event' ? sc.dismissRivalryEvent(st, clubs)
+          : ph === 'social_media_action' ? sc.dismissSocialMediaPhase(st, clubs)
+          : ph === 'random_events' ? ((st.pendingEvents || [])[0]?.choices?.length ? sc.applyEventChoice(st, 0, clubs) : { ...st, phase: 'playing', pendingEvents: [] })
+          : ph === 'moral_dilemma' ? sc.dismissMoralDilemma(sc.applyMoralDilemmaChoice(st, 0), clubs)
+          : ph === 'red_card_appeal_result' ? sc.dismissAppealResult(st, clubs)
+          : ph === 'rehab_choice' ? sc.applyRehabChoice(st, 0)
+          : ph === 'transfer_window' ? sc.stayAtClub(st)
+          : ph === 'retirement_suggestion' ? sc.declineRetirementSuggestion(st, clubs)
+          : null;
+        if (!st) break;
+      }
+    } finally { Math.random = real; }
+    if (!save) { console.error('  FAIL: Season Centre surface: the engine gave no season summary to open'); badRoutes += 1; }
+    else {
+      const p = await ctx.newPage();
+      await p.addInitScript(v => { try { if (!sessionStorage.getItem('rm-centre')) { sessionStorage.setItem('rm-centre', '1'); localStorage.setItem('soccerCareerSave', v); localStorage.setItem('seasonCentre:help', '1'); } } catch { /* ignored */ } }, save);
+      await p.route('**://*.supabase.co/**', r => r.abort());
+      await p.goto(base + '/soccer-career', { waitUntil: 'networkidle' });
+      await p.waitForTimeout(600);
+      const press = label => p.evaluate(t => { const b = [...document.querySelectorAll('button')].find(x => x.textContent.trim().startsWith(t)); if (b) b.click(); return !!b; }, label);
+      const opened = await press('📺 Watch it week by week');
+      await p.waitForSelector('[data-season-centre] [role="dialog"]', { timeout: 20000 }).catch(() => {});
+      const screens = [];
+      const look = async name => {
+        await p.waitForTimeout(400);
+        const r = await p.evaluate(([classes, slowMs]) => {
+          const root = document.querySelector('[data-season-centre]');
+          if (!root) return null;
+          const ms = v => Math.max(0, ...String(v).split(',').map(x => { x = x.trim(); return x.endsWith('ms') ? parseFloat(x) : parseFloat(x) * 1000; }).filter(n => Number.isFinite(n)));
+          let reveal = 0, animating = 0, invisible = 0, slow = 0;
+          for (const el of root.querySelectorAll(classes.map(c => '.' + c).join(','))) {
+            reveal += 1;
+            const cs = getComputedStyle(el);
+            if (cs.animationName !== 'none') animating += 1;
+            if (cs.display === 'none' || Number(cs.opacity) === 0) invisible += 1;
+          }
+          for (const el of root.querySelectorAll('*')) {
+            const cs = getComputedStyle(el);
+            if (ms(cs.transitionDuration) > slowMs || (cs.animationName !== 'none' && ms(cs.animationDuration) > slowMs)) slow += 1;
+          }
+          return { reveal, animating, invisible, slow, text: (root.innerText || '').length };
+        }, [REVEAL_CLASSES, SLOW_MS]);
+        screens.push(name);
+        console.log(`   Season Centre ${name.padEnd(9)} ${r ? `text=${r.text} reveal=${r.reveal} animating=${r.animating} invisible=${r.invisible} slow=${r.slow}` : 'not open'}`);
+        if (!r || r.text < 80) { console.error(`  FAIL: Season Centre ${name}: the overlay did not draw`); badRoutes += 1; return; }
+        if (r.animating > 0) { console.error(`  FAIL: Season Centre ${name}: ${r.animating} reveal element(s) still animate under reduce`); badRoutes += 1; }
+        if (r.invisible > 0) { console.error(`  FAIL: Season Centre ${name}: ${r.invisible} reveal element(s) are invisible under reduce`); badRoutes += 1; }
+        if (r.slow > 0) { console.error(`  FAIL: Season Centre ${name}: ${r.slow} element(s) still move for more than ${SLOW_MS}ms under reduce`); slowRoutes += 1; }
+      };
+      if (!opened) { console.error('  FAIL: Season Centre surface: no "📺 Watch it week by week" on the summary card'); badRoutes += 1; }
+      await look('kick off');
+      await press('▶ Kick off');
+      if (await p.$('[data-poster]')) await press('▶ Matchday 1');
+      await look('matchday');
+      await press('⏭ Sim the rest');
+      await look('review');
+      await p.close();
+    }
+  }
+  /* Round 1107: two career scenes are surfaces of their own. The signing
+     scene (the slip under a new deal) and the cup lift on a won tournament
+     card only exist once a career has reached them, so no route's first
+     screen shows either. The two saves come from the real engine
+     (scripts/lib/careerMomentSaves.mjs, the saves scripts/playCareerMoments.mjs
+     walks with motion on) and the presses are that walk's. Held under reduce:
+     R1 the scene drew (it is there and holds at least 40 characters);
+     R2 nothing in its card wearing a reveal class or one of the scene's own
+        animated classes has an animation name other than none;
+     R3 none of those is invisible, except the old number and the ring, which
+        must be display none;
+     R4 nothing inside its card moves for longer than SLOW_MS;
+     R5 no confetti falls.
+     The class list is local to this block on purpose: REVEAL_CLASSES above
+     belongs to the routes, and the Season Centre block above is another
+     round's to edit. */
+  {
+    const { loadEngine, signingSave, wonTournamentSave } = await import('./lib/careerMomentSaves.mjs');
+    const engine = await loadEngine(ROOT);
+    const signing = signingSave(engine);
+    /* Release BQ: the wheel section below measures the chance wheel this save holds, so the search asks for one
+       (Round 1525 moved seed 3's events and its save stopped holding one; the search used to give it by chance). */
+    const won = wonTournamentSave(engine, { unseenWheel: true });
+    const SCENE_CLASSES = ['cmo-num-new', 'cmo-num-old', 'cmo-ink', 'cmo-ring', 'victory-cup', 'victory-rays', 'victory-ribbons'];
+    const GONE_CLASSES = ['cmo-num-old', 'cmo-ring'];
+    const surfaces = [
+      { name: 'signing scene', save: signing?.save, scene: '[data-signed-slip] [data-career-moment="signing"]', card: '[data-signed-slip]',
+        reach: async p => {
+          await p.getByRole('button', { name: `Review contract with ${signing.club}`, exact: true }).click();
+          await p.getByRole('button', { name: 'Sign contract', exact: true }).click();
+        } },
+      { name: 'trophy scene', save: won?.save, scene: '[data-intl-moment] [data-career-moment="trophy"]', card: '[data-intl-moment]',
+        reach: async p => { await p.getByRole('button', { name: 'Continue →', exact: true }).click(); } },
+    ];
+    for (const s of surfaces) {
+      if (!s.save) { console.error(`  FAIL: ${s.name}: the engine gave no save to open`); badRoutes += 1; continue; }
+      const p = await ctx.newPage();
+      await p.addInitScript(([flag, v]) => { try { if (!sessionStorage.getItem(flag)) { sessionStorage.setItem(flag, '1'); localStorage.setItem('soccerCareerSave', v); } } catch { /* ignored */ } }, [`rm-1107-${s.name}`, s.save]);
+      await p.route('**://*.supabase.co/**', r => r.abort());
+      await p.goto(base + '/soccer-career', { waitUntil: 'networkidle' });
+      await p.waitForTimeout(600);
+      /* Release AU fix pass (ruling R2). The helper makes these saves through
+         an event choice, and since Rounds 1197 to 1208 such a save holds a
+         chance wheel nobody has seen, which opens over the screen. A player is
+         not stuck behind it (it always carries Spin and Show result, then
+         Continue), so the walk answers it as he would, measures the wheel
+         itself under reduce on the way, and goes on to the scene. */
+      try {
+        await p.waitForSelector(WHEEL, { timeout: 2500 }).catch(() => {});
+        const wheel = await answerChanceWheel(p, 'spin');
+        if (wheel) {
+          wheelsAnswered += 1;
+          const canAnswer = wheel.before.buttons.filter(b => b.enabled && b.whole && b.height >= 44).length;
+          console.log(`   Release AU    ${s.name.padEnd(13)} a chance wheel was open: ${canAnswer} button(s) to answer it, result ${wheel.revealMs}ms after Spin, disk transition ${wheel.after.disk?.transitionMs}ms, result line ${wheel.after.result?.whole ? 'whole' : 'CUT'} at ${wheel.after.viewport}`);
+          if (canAnswer < 2) { console.error(`  FAIL: ${s.name}: the chance wheel over it shows ${canAnswer} whole, enabled button(s) of at least 44px; a player needs Spin and Show result`); wheelBad += 1; }
+          if (wheel.revealMs > 1500 || !(wheel.after.disk?.transitionMs <= SLOW_MS)) { console.error(`  FAIL: ${s.name}: under reduce the wheel still spins (result after ${wheel.revealMs}ms, disk transition ${wheel.after.disk?.transitionMs}ms)`); wheelBad += 1; }
+          if (!wheel.after.result?.whole) { console.error(`  FAIL: ${s.name}: the wheel's result line is not whole on the screen at ${wheel.after.viewport}`); wheelBad += 1; }
+        }
+      } catch (err) { console.error(`  FAIL: ${s.name}: a chance wheel was open and could not be answered: ${String(err?.message || err).split('\n')[0]}`); wheelBad += 1; }
+      let reached = true;
+      try { await s.reach(p); await p.waitForSelector(s.scene, { timeout: 20000 }); } catch { reached = false; }
+      await p.waitForTimeout(700);
+      const r = !reached ? null : await p.evaluate(([sceneSel, cardSel, classes, gone, slowMs]) => {
+        const scene = document.querySelector(sceneSel);
+        const card = document.querySelector(cardSel);
+        if (!scene || !card) return null;
+        const ms = v => Math.max(0, ...String(v).split(',').map(x => { x = x.trim(); return x.endsWith('ms') ? parseFloat(x) : parseFloat(x) * 1000; }).filter(n => Number.isFinite(n)));
+        let checked = 0, animating = 0, invisible = 0, notGone = 0, slow = 0;
+        for (const el of card.querySelectorAll(classes.map(c => '.' + c).join(','))) {
+          checked += 1;
+          const cs = getComputedStyle(el);
+          if (cs.animationName !== 'none') animating += 1;
+          if (gone.some(c => el.classList.contains(c))) { if (cs.display !== 'none') notGone += 1; }
+          else if (cs.display === 'none' || Number(cs.opacity) === 0) invisible += 1;
+        }
+        for (const el of [card, ...card.querySelectorAll('*')]) {
+          const cs = getComputedStyle(el);
+          if (ms(cs.transitionDuration) > slowMs || (cs.animationName !== 'none' && ms(cs.animationDuration) > slowMs)) slow += 1;
+        }
+        return { text: (scene.innerText || '').length, checked, animating, invisible, notGone, slow, confetti: document.querySelectorAll('.animate-confetti-fall').length };
+      }, [s.scene, s.card, [...REVEAL_CLASSES, ...SCENE_CLASSES], GONE_CLASSES, SLOW_MS]);
+      await p.close();
+      console.log(`   Round 1107 ${s.name.padEnd(13)} ${r ? `text=${r.text} checked=${r.checked} animating=${r.animating} invisible=${r.invisible} notGone=${r.notGone} slow=${r.slow} confetti=${r.confetti}` : 'not reached'}`);
+      if (!r || r.text < 40) { console.error(`  FAIL: ${s.name}: the scene did not draw`); badRoutes += 1; continue; }
+      if (r.checked < 3) { console.error(`  FAIL: ${s.name}: only ${r.checked} animated element(s) were found in its card, so nothing here was measured`); badRoutes += 1; }
+      if (r.animating > 0) { console.error(`  FAIL: ${s.name}: ${r.animating} element(s) still animate under reduce`); badRoutes += 1; }
+      if (r.invisible > 0) { console.error(`  FAIL: ${s.name}: ${r.invisible} element(s) are invisible under reduce`); badRoutes += 1; }
+      if (r.notGone > 0) { console.error(`  FAIL: ${s.name}: ${r.notGone} old number or ring layer(s) are still drawn under reduce`); badRoutes += 1; }
+      if (r.confetti > 0) { console.error(`  FAIL: ${s.name}: ${r.confetti} confetti piece(s) fall under reduce`); badRoutes += 1; }
+      if (r.slow > 0) { console.error(`  FAIL: ${s.name}: ${r.slow} element(s) in its card still move for more than ${SLOW_MS}ms under reduce`); slowRoutes += 1; }
+    }
+    /* Release AU fix pass (ruling R4): the wheel on the phones that cut it. The
+       dialog needed 608 px and a short phone gives it less, so the result line
+       sat under the fold of a panel nothing said could scroll. It is outside
+       that panel now. Each size opens the same save, reads the line before the
+       reveal, answers the wheel, reads the line again, and keeps a picture. */
+    {
+      const held = (() => { try { return JSON.parse(won?.save ?? 'null')?.chanceWheel ?? null; } catch { return null; } })();
+      const SHOTS = process.env.RC_OUT || fs.mkdtempSync(path.join(os.tmpdir(), 'playReducedMotion-'));
+      if (!held || held.seen) {
+        console.error('  FAIL: chance wheel: the trophy save holds no unseen wheel, so nothing about the wheel was measured');
+        wheelBad += 1;
+      } else for (const [width, height, motion] of [[320, 568, 'reduce'], [375, 667, 'no-preference'], [390, 664, 'no-preference'], [390, 844, 'no-preference']]) {
+        const wctx = await browser.newContext({ reducedMotion: motion, viewport: { width, height } });
+        await wctx.addInitScript(() => { try { localStorage.setItem('cookie-consent', 'essential'); } catch { /* ignored */ } });
+        const p = await wctx.newPage();
+        await p.addInitScript(([flag, v]) => { try { if (!sessionStorage.getItem(flag)) { sessionStorage.setItem(flag, '1'); localStorage.setItem('soccerCareerSave', v); } } catch { /* ignored */ } }, [`rm-wheel-${width}`, won.save]);
+        await p.route('**://*.supabase.co/**', r => r.abort());
+        const where = `chance wheel at ${width} by ${height}${motion === 'reduce' ? ' under reduce' : ''}`;
+        try {
+          await p.goto(base + '/soccer-career', { waitUntil: 'networkidle' });
+          await p.waitForSelector(WHEEL, { timeout: 20000 });
+          await p.waitForTimeout(400);
+          if (CONTROL === 'wheelcut') await p.addStyleTag({ content: '[data-wheel-result]{margin-top:120vh !important}' });
+          const before = await wheelBoxes(p);
+          const answered = await answerChanceWheelKeeping(p, motion === 'reduce' ? 'spin' : 'skip', path.join(SHOTS, `wheel-${width}x${height}.png`));
+          const after = answered.after;
+          wheelSizes += 1;
+          const want = held.result ? held.hit : held.miss;
+          const answerable = before.buttons.filter(b => b.enabled && b.whole && b.height >= 44).length;
+          const cont = after.buttons.find(b => b.name === 'Continue');
+          console.log(`   Release AU    ${where}: result line ${before.result?.top} to ${before.result?.bottom} before (${before.result?.whole ? 'whole' : 'CUT'}), ${after.result?.top} to ${after.result?.bottom} after (${after.result?.whole ? 'whole' : 'CUT'}), dialog ${after.dialog.top} to ${after.dialog.bottom} of ${height}, disk ${after.disk?.height}px ${after.disk?.whole ? 'whole' : 'partly scrolled'}, ${answerable} button(s) before, reveal ${answered.revealMs}ms`);
+          if (!before.result?.whole || before.result.text !== WHEEL_WAITING) { console.error(`  FAIL: ${where}: before the reveal the result line is not whole on the screen (${JSON.stringify(before.result)})`); wheelBad += 1; }
+          if (!after.result?.whole) { console.error(`  FAIL: ${where}: after the reveal the result line is not whole on the screen (${JSON.stringify(after.result)})`); wheelBad += 1; }
+          if (after.result?.text !== want) { console.error(`  FAIL: ${where}: the wheel shows "${after.result?.text}" and the save holds "${want}"`); wheelBad += 1; }
+          if (answerable < 2) { console.error(`  FAIL: ${where}: ${answerable} whole, enabled button(s) of at least 44px before the reveal; a player needs Spin and Show result`); wheelBad += 1; }
+          if (!cont || !cont.whole || cont.height < 44) { console.error(`  FAIL: ${where}: Continue is not a whole 44px button after the reveal (${JSON.stringify(cont ?? null)})`); wheelBad += 1; }
+          if (motion === 'reduce' && (answered.revealMs > 1500 || !(after.disk?.transitionMs <= SLOW_MS))) { console.error(`  FAIL: ${where}: the wheel still spins under reduce (result after ${answered.revealMs}ms, disk transition ${after.disk?.transitionMs}ms)`); wheelBad += 1; }
+          const seen = await p.evaluate(() => { try { return JSON.parse(localStorage.getItem('soccerCareerSave') ?? 'null')?.chanceWheel?.seen === true; } catch { return false; } });
+          if (!seen) { console.error(`  FAIL: ${where}: Continue closed the wheel and the save does not hold it as seen`); wheelBad += 1; }
+        } catch (err) { console.error(`  FAIL: ${where}: ${String(err?.message || err).split('\n')[0]}`); wheelBad += 1; }
+        await wctx.close();
+      }
+      console.log(`   Release AU    chance wheel pictures: ${SHOTS}`);
+    }
+  }
+  /* The stage has to have seen our own keyframe CSS somewhere, or it proved
+     nothing about this site and only that a toast library exists. Asserted
+     once across the walk rather than per route, because our CSS rides in with
+     a reveal and most first screens have not reached one. */
+  if (routesWithOurCss === 0) {
+    console.error(`  FAIL: not one of the ${ROUTES.length} routes mounted a keyframe block of our own, so this stage checked nothing about this site`);
+    badRoutes += 1;
+  } else {
+    console.log(`   our own keyframe CSS was present and guarded on ${routesWithOurCss} of ${ROUTES.length} routes; the rest had not reached a reveal yet`);
+  }
+  await ctx.close();
+  /* Round 635: the measurement has to be able to see a duration at all, or a
+     count of zero slow elements under reduce proves nothing. The same routes
+     with no preference set must carry real transitions (buttons, tiles and
+     bars all do). */
+  const normal = await browser.newContext({ reducedMotion: 'no-preference', viewport: { width: 390, height: 844 } });
+  await normal.addInitScript(() => {
+    try { localStorage.setItem('cookie-consent', 'essential'); } catch { /* ignored */ }
+  });
+  let movingForEveryone = 0;
+  for (const route of ['/front-office', '/fight-career', '/stadium-tycoon']) {
+    const p = await normal.newPage();
+    await p.goto(base + route, { waitUntil: 'networkidle' });
+    await p.waitForTimeout(400);
+    const dur = await p.evaluate(measure, SLOW_MS);
+    await p.close();
+    console.log(`   no preference ${route.padEnd(16)} elements that move for more than ${SLOW_MS}ms: ${dur.slow} of ${dur.measured}`);
+    movingForEveryone += dur.slow;
+  }
+  await normal.close();
+  if (movingForEveryone === 0) {
+    console.error('  FAIL: with no preference set nothing on these routes has a transition, so the reduce count of zero measured nothing');
+    slowRoutes += 1;
+  }
+  server.kill();
+  if (CONTROL === 'noblanket' && rewrittenCss === 0) {
+    console.error('control noblanket: no served stylesheet or document carried the blanket rule to rewrite, so this control would prove nothing');
+    await browser.close();
+    process.exit(1);
+  }
+  if (CONTROL === 'noguard' && rewritten === 0) {
+    console.error('control noguard: no served bundle carried a reduced motion rule to rewrite, so the route stage of this control would prove nothing');
+    await browser.close();
+    process.exit(1);
+  }
+}
+await browser.close();
+console.log('');
+if (CONTROL === 'noguard') {
+  if (bad > 0 && badRoutes > 0) {
+    console.log(`playReducedMotion control: green. The stripped guard was reported on the synthetic page (${bad} finding${bad === 1 ? '' : 's'}) and on the routes (${badRoutes}), so both stages work.`);
+    process.exit(0);
+  }
+  console.error(`playReducedMotion control: RED. The guards were removed and ${bad === 0 ? 'the synthetic page' : 'the routes'} stayed green, so that stage proves nothing.`);
+  process.exit(1);
+}
+if (CONTROL === 'wheelcut') {
+  if (wheelBad > 0 && wheelSizes > 0 && bad + badRoutes + slowRoutes === 0) {
+    console.log(`playReducedMotion control: green. With the wheel's result line pushed under the fold of its dialog the wheel stage went red (${wheelBad} finding${wheelBad === 1 ? '' : 's'} over ${wheelSizes} screen size(s)) and nothing else moved.`);
+    process.exit(0);
+  }
+  console.error(`playReducedMotion control: RED. The wheel's result line was pushed out of sight and the wheel stage reported ${wheelBad} finding(s) over ${wheelSizes} size(s) while the other stages reported ${bad + badRoutes + slowRoutes}, so it is not the stage that caught it.`);
+  process.exit(1);
+}
+if (CONTROL === 'noblanket') {
+  if (slowRoutes > 0 && bad + badRoutes === 0) {
+    console.log(`playReducedMotion control: green. With the blanket rule's transition duration rewritten out of ${rewrittenCss} served file(s), the duration stage went red on ${slowRoutes} route(s) and nothing else moved.`);
+    process.exit(0);
+  }
+  console.error(`playReducedMotion control: RED. The blanket rule was rewritten and the duration stage reported ${slowRoutes} route(s) while the other stages reported ${bad + badRoutes}, so it is not the stage that caught it.`);
+  process.exit(1);
+}
+if (bad + badRoutes + slowRoutes + wheelBad > 0) {
+  console.error(`playReducedMotion: ${bad + badRoutes + slowRoutes + wheelBad} problem(s)${wheelBad ? ` (${wheelBad} of them the chance wheel's)` : ''}`);
+  process.exit(1);
+}
+console.log(`playReducedMotion: green. Motion stops for a visitor who asked for less, content stays visible, every Round 530 route lands its reveals on the final frame, and everyone else keeps the celebration. The chance wheel was answered ${wheelsAnswered} time(s) on the way to a scene and its result line is whole on ${wheelSizes} screen size(s).`);
