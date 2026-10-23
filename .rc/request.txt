@@ -1,0 +1,4 @@
+# Release BR triage: how often an unlimited Sports Millionaire ladder runs short (the error screen), with and without the live namesakes.
+u777: export TMPDIR=$(mktemp -d); SIM_SEED=777 TRIVIA_UNLIMITED=15000 node scripts/simTriviaBank.mjs | grep -E 'unlimited:|swap:|FAIL|simTriviaBank:'; exit ${PIPESTATUS[0]}
+u11: export TMPDIR=$(mktemp -d); SIM_SEED=11 TRIVIA_UNLIMITED=15000 node scripts/simTriviaBank.mjs | grep -E 'unlimited:|swap:|FAIL|simTriviaBank:'; exit ${PIPESTATUS[0]}
+u12345: export TMPDIR=$(mktemp -d); SIM_SEED=12345 TRIVIA_UNLIMITED=15000 node scripts/simTriviaBank.mjs | grep -E 'unlimited:|swap:|FAIL|simTriviaBank:'; exit ${PIPESTATUS[0]}
