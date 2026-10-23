@@ -27,6 +27,8 @@ import type { MatchFacts, LiveChange, Duty, SetPieceKey, Formation } from '@/lib
 import { tacticsImpl, type TeamInstructions } from '@/lib/clubManagerTacticsCore';
 import { carryShape } from '@/lib/clubManagerCarry';
 import type { Position } from '@/types/game';
+import { startCoachedStyle as startCoachedStyleForPlayer, cancelCoachedStyle as cancelCoachedStyleForPlayer } from '@/lib/clubManagerTraits';
+import type { CoachedStyleId } from '@/lib/clubManagerTraits';
 import type { TransferStatus, FacilityKind, TrainingPlan, SquadRole, TalkTone, DealExtras } from '@/lib/clubManager';
 import type { NextFixtureInfo, TableRow, CustomClubSpec, ManagerSpec, ManagerEdit, BoardObjective } from '@/lib/clubManager';
 import { simToWeek as runSimToWeek, startMidSeason, joinClubNow } from '@/lib/clubManagerCalendar';
@@ -258,11 +260,13 @@ export function useClubManager() {
      2026-09-13). True from the first refused write until one succeeds, and
      the page shows a plain banner while it is true. */
   const [saveFailed, setSaveFailed] = useState(false);
+  const [lastSuccessfulCareer, setLastSuccessfulCareer] = useState<CareerState | null>(null);
   const note = useCallback((ok: boolean) => setSaveFailed(!ok), []);
   /* Round 1323: the write, reported: a refusal because another tab moved the
      career on raises the notice and leaves saveFailed as it was. */
   const persist = useCallback((c: CareerState): boolean => {
     const ok = saveCareer(c);
+    if (ok) setLastSuccessfulCareer(previous => previous === c ? previous : c);
     if (ok || !movedOn()) note(ok);
     return ok;
   }, [note, movedOn]);
@@ -802,6 +806,42 @@ export function useClubManager() {
   const stopRetrain = useCallback((playerId: string) => {
     setCareer(prev => (prev ? stopRetraining(prev, playerId) : prev));
   }, []);
+
+  const startCoachedStyle = useCallback((playerId: string, style: CoachedStyleId): boolean => {
+    const now = careerRef.current;
+    if (!now || !holdsActiveSlot()) return false;
+    const player = now.squad.find(candidate => candidate.id === playerId);
+    if (!player) return false;
+    const edit = startCoachedStyleForPlayer(player, style, {
+      owned: !player.onLoan,
+      awayOnLoan: (now.loanedOut ?? []).some(row => row.player.id === playerId),
+      live: !!now.live,
+    });
+    if (!edit.ok) return false;
+    const next = { ...now, squad: now.squad.map(candidate => candidate.id === playerId ? edit.player : candidate) };
+    if (!persist(next)) return false;
+    careerRef.current = next;
+    setCareer(next);
+    return true;
+  }, [holdsActiveSlot, persist]);
+
+  const cancelCoachedStyle = useCallback((playerId: string): boolean => {
+    const now = careerRef.current;
+    if (!now || !holdsActiveSlot()) return false;
+    const player = now.squad.find(candidate => candidate.id === playerId);
+    if (!player) return false;
+    const edit = cancelCoachedStyleForPlayer(player, {
+      owned: !player.onLoan,
+      awayOnLoan: (now.loanedOut ?? []).some(row => row.player.id === playerId),
+      live: !!now.live,
+    });
+    if (!edit.ok) return false;
+    const next = { ...now, squad: now.squad.map(candidate => candidate.id === playerId ? edit.player : candidate) };
+    if (!persist(next)) return false;
+    careerRef.current = next;
+    setCareer(next);
+    return true;
+  }, [holdsActiveSlot, persist]);
 
   const setMentality = useCallback((m: Mentality) => {
     setCareer(prev => (prev ? { ...prev, mentality: m } : prev));
@@ -1345,9 +1385,13 @@ export function useClubManager() {
     setCareer(prev => (prev ? joinClubNow(prev) ?? prev : prev));
   }, []);
 
+  const coachedStyleSaveState: 'saved' | 'blocked' | 'waiting' = saveMoved || saveFailed
+    ? 'blocked'
+    : career !== null && lastSuccessfulCareer === career ? 'saved' : 'waiting';
+
   return {
     simToWeek,
-    saveFailed, saveMoved, deskNote, clearDeskNote: () => setDeskNote(null),
+    saveFailed, saveMoved, coachedStyleSaveState, deskNote, clearDeskNote: () => setDeskNote(null),
     tacticsFailed, retryTactics: () => { reloadToRetryChunk(); },
     bootError, bootNoun, retryBoot,
     startWait, retryStart, startWithoutList,
@@ -1359,7 +1403,7 @@ export function useClubManager() {
     resume, startNew, retire, chooseClub, confirmClub, confirmCustomClub,
     setFormationIndex, setMentality, setTeamInstructions, setXiSlot, swapXiSlots, autoPick,
     saveMatchPlan, applyMatchPlan, deleteMatchPlan,
-    setSlotDuty, assignSetPiece, autoPickSetPieces, setShootoutOrder: setShootoutOrderIds, retrain, stopRetrain,
+    setSlotDuty, assignSetPiece, autoPickSetPieces, setShootoutOrder: setShootoutOrderIds, retrain, stopRetrain, startCoachedStyle, cancelCoachedStyle,
     play, quickPlay, continueFromReport, nextSeason,
     buy,
     negotiate, offer, walk, proposeTerms, buyLoanee, endLoanEarly, recallLoanee, answerApproach, setTickets, setConcessions, expandStadium, takeSponsor, pushSponsorOffer, buyFacility, waitAWeek, takeJob, acceptNation, resignNation, dismissNegotiation, clause, loan,

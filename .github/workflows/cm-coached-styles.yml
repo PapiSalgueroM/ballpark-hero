@@ -1,4 +1,4 @@
-name: Club Manager coached styles engine functional pilot
+name: Club Manager coached styles UI and old-engine compatibility functional pilot
 on:
   push:
     branches: [codex/cm-coached-styles-20261023]
@@ -10,14 +10,14 @@ concurrency:
   cancel-in-progress: false
 env:
   BASE_SOURCE: 3e95583fd8131f3704591cd566677f8774a8e4c3
-  EXPECTED_PARENT: b3f8a9b35cd0d3c8a51a471fa13d01f0c947c3d7
+  EXPECTED_PARENT: efe44aa9efd4f4c947474dd0a64fd4a7654cf1a8
   CI: '1'
   SIM_NETWORK: offline
   TZ: UTC
 jobs:
   engine_pilot:
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 55
     defaults:
       run:
         shell: bash
@@ -33,7 +33,7 @@ jobs:
       - name: Exact engine pilot inputs and protected application source
         run: |
           set -euo pipefail
-          out="$RUNNER_TEMP/cm-coached-styles-engine-pilot";test ! -e "$out";mkdir "$out"
+          out="$RUNNER_TEMP/cm-coached-styles-ui-pilot";test ! -e "$out";mkdir "$out"
           echo "CM_STYLE_OUT=$out" >> "$GITHUB_ENV"
           test "$GITHUB_REPOSITORY" = PapiSalgueroM/ballpark-hero
           test "$GITHUB_REPOSITORY_ID" = 1195729679
@@ -42,7 +42,7 @@ jobs:
           git fetch --no-tags --depth=1 origin "$BASE_SOURCE" > "$out/base-fetch.log" 2>&1
           git merge-base --is-ancestor "$BASE_SOURCE" "$GITHUB_SHA"
           test "$(git rev-parse HEAD^)" = "$EXPECTED_PARENT"
-          git diff --exit-code "$BASE_SOURCE" HEAD -- . ':!docs/**' ':!.github/workflows/cm-coached-styles.yml' ':!src/lib/clubManager.ts' ':!src/lib/clubManagerTraits.ts' ':!src/test/clubManagerTraitGrowth.test.ts' ':!src/test/clubManagerTraits.test.ts' ':!src/test/clubManagerTraitCourseConflict.test.ts' ':!src/test/clubManagerTraitIntegration.test.ts' > "$out/protected-application.log"
+          git diff --exit-code "$BASE_SOURCE" HEAD -- . ':!docs/**' ':!.github/workflows/cm-coached-styles.yml' ':!src/lib/clubManager.ts' ':!src/lib/clubManagerTraits.ts' ':!src/test/clubManagerTraitGrowth.test.ts' ':!src/test/clubManagerTraits.test.ts' ':!src/test/clubManagerTraitCourseConflict.test.ts' ':!src/test/clubManagerTraitIntegration.test.ts' ':!src/components/club-manager/CoachedStyleCard.tsx' ':!src/components/club-manager/TrainingScreen.tsx' ':!src/components/club-manager/SquadScreen.tsx' ':!src/components/club-manager/TacticsScreen.tsx' ':!src/hooks/useClubManager.ts' ':!src/pages/ClubManager.tsx' ':!src/test/clubManagerCoachedStyleHook.test.tsx' ':!src/test/TacticsScreen.coachedStyle.test.tsx' ':!src/test/clubManagerTraitOldParity.test.ts' ':!scripts/qa/runClubManagerTraitOldParity.mjs' > "$out/protected-application.log"
           test "$(git rev-parse HEAD:src/lib/clubManager.ts)" = 1047f11b210b0910ab9470579a63713f57e2134a
           test "$(git rev-parse HEAD:src/test/clubManagerTraitGrowth.test.ts)" = ca894eb2d6b12ad009907e25cbb2759a7a9b9816
           printf '%s  %s\n' \
@@ -51,10 +51,22 @@ jobs:
             a9f1de88051bb1a6c423f52a1633e8a9015cae111d7f1575de6c645f24a55989 src/test/clubManagerTraitGrowth.test.ts \
             66f1e50ee609f0eda255d92c0c1b857cc0297573b579a82c0ec6d3541dda397c src/test/clubManagerTraits.test.ts \
             a891a2b3d7a3f092b5431771435feca53ab8880575122e0be8e4d37459f64eaf src/test/clubManagerTraitCourseConflict.test.ts \
-            12d5942859f90e23fc67121da977095a6f58413d33cac4ea2028519bd8d66ddf src/test/clubManagerTraitIntegration.test.ts > "$out/input-pins.sha256"
+            12d5942859f90e23fc67121da977095a6f58413d33cac4ea2028519bd8d66ddf src/test/clubManagerTraitIntegration.test.ts \
+            5c08f58715d3ec7378dd422c6765be74af0435e9548323c11eff029de36854f1 src/components/club-manager/CoachedStyleCard.tsx \
+            7796b1a6560be8ad0fbcd7c16bc16c46194f0be8d3b93cabfe2e2d3cfb972fbb src/components/club-manager/TrainingScreen.tsx \
+            fbb0cb94e6b2ab740e404e1e85a4f5388bed29927967d09259cafc230f84040c src/components/club-manager/SquadScreen.tsx \
+            3802cc0c2146c292a6a9d6fefac5334295360632bab66d9ec6b7b1e9fca896fd src/components/club-manager/TacticsScreen.tsx \
+            e5688986ce44d684a9e612ebc1ce0648793eeb15db53775fb9cf2587def44fb4 src/hooks/useClubManager.ts \
+            02a2f30ec37cbc8a8ef41b3dc42799456623b68411afaf80f54925cb6f80b2bb src/pages/ClubManager.tsx \
+            24fc12a2ab1706a2d68c5c71028f5eb5d135f23c4c7f3e1f65f202c9c82f684f src/test/clubManagerCoachedStyleHook.test.tsx \
+            ed8d6dae8518ccc39f63d3bb87d9980e7045275babdd88876449fd2cb771557e src/test/TacticsScreen.coachedStyle.test.tsx \
+            384242306f55ceeaff77e9003f0b0c40829c82584e2378eb0b81a56376aa2d24 src/test/clubManagerTraitOldParity.test.ts \
+            e00eb2b66463edbeaede9926507af6e1f0ba4e282c723cc61c728828663700f0 scripts/qa/runClubManagerTraitOldParity.mjs > "$out/input-pins.sha256"
           sha256sum --check "$out/input-pins.sha256" > "$out/input-pins.log"
           git rev-parse HEAD > "$out/head.txt";git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
           git rev-parse HEAD:src/lib/clubManager.ts > "$out/engine-blob.txt"
+          git rev-parse HEAD:.github/workflows/cm-coached-styles.yml > "$out/workflow-blob.txt"
+          sha256sum .github/workflows/cm-coached-styles.yml > "$out/workflow.sha256"
           git ls-files -z | sort -z > "$out/source-members.before"
           git ls-files -z | sort -z | xargs -0 sha256sum > "$out/source-before.sha256"
           git diff --exit-code HEAD > "$out/source-clean-before.log"
@@ -76,14 +88,14 @@ jobs:
           SIM_OFFLINE_RECEIPT="$out/types.transport" timeout --signal=TERM --kill-after=15s 5m node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$out/types.log" 2>&1 || status=$?
           printf '%s\n' "$status" > "$out/types.exit"
           test "$status" -eq 0;test ! -s "$out/types.transport"
-      - name: Four actual suites and exactly 29 healthy cases
+      - name: Six actual suites and exactly 37 healthy cases
         id: units
         run: |
           set -euo pipefail
           out="$CM_STYLE_OUT"
           export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
           : > "$out/tests.transport";: > "$out/unit-classifier.transport";status=0
-          SIM_OFFLINE_RECEIPT="$out/tests.transport" timeout --signal=TERM --kill-after=15s 5m node_modules/.bin/vitest run src/test/clubManagerTraitGrowth.test.ts src/test/clubManagerTraits.test.ts src/test/clubManagerTraitCourseConflict.test.ts src/test/clubManagerTraitIntegration.test.ts --maxWorkers=1 --no-file-parallelism --reporter=json --outputFile="$out/tests.json" > "$out/tests.log" 2>&1 || status=$?
+          SIM_OFFLINE_RECEIPT="$out/tests.transport" timeout --signal=TERM --kill-after=15s 5m node_modules/.bin/vitest run src/test/clubManagerTraitGrowth.test.ts src/test/clubManagerTraits.test.ts src/test/clubManagerTraitCourseConflict.test.ts src/test/clubManagerTraitIntegration.test.ts src/test/clubManagerCoachedStyleHook.test.tsx src/test/TacticsScreen.coachedStyle.test.tsx --maxWorkers=1 --no-file-parallelism --reporter=json --outputFile="$out/tests.json" > "$out/tests.log" 2>&1 || status=$?
           printf '%s\n' "$status" > "$out/tests.exit";test "$status" -eq 0
           SIM_OFFLINE_RECEIPT="$out/unit-classifier.transport" node <<'NODE'
           const fs=require('node:fs'),assert=require('node:assert/strict'),path=require('node:path'),out=process.env.CM_STYLE_OUT,r=JSON.parse(fs.readFileSync(out+'/tests.json','utf8'));
@@ -92,9 +104,11 @@ jobs:
             ['src/test/clubManagerTraits.test.ts',10],
             ['src/test/clubManagerTraitCourseConflict.test.ts',3],
             ['src/test/clubManagerTraitIntegration.test.ts',8],
+            ['src/test/clubManagerCoachedStyleHook.test.tsx',4],
+            ['src/test/TacticsScreen.coachedStyle.test.tsx',4],
           ].map(([file,count])=>[path.resolve(file),count]));
-          assert.equal(r.success,true);assert.equal(r.testResults.length,4);
-          assert.equal(r.numTotalTests,29);assert.equal(r.numPassedTests,29);assert.equal(r.numFailedTests,0);assert.equal(r.numPendingTests,0);assert.equal(r.numTodoTests,0);
+          assert.equal(r.success,true);assert.equal(r.testResults.length,6);
+          assert.equal(r.numTotalTests,37);assert.equal(r.numPassedTests,37);assert.equal(r.numFailedTests,0);assert.equal(r.numPendingTests,0);assert.equal(r.numTodoTests,0);
           const files=new Set(),cases=[];
           for(const suite of r.testResults){
             assert.equal(typeof suite.name,'string');const file=path.resolve(suite.name),count=expected.get(file);assert(count,'Unexpected suite '+file);assert(!files.has(file));files.add(file);
@@ -103,12 +117,61 @@ jobs:
               assert.equal(row.status,'passed');assert.deepEqual(row.failureMessages,[]);assert.equal(typeof row.title,'string');assert(row.title.trim());assert.equal(typeof row.fullName,'string');assert(row.fullName.trim());assert(!names.has(row.fullName));names.add(row.fullName);cases.push({file,title:row.title,fullName:row.fullName,status:row.status});
             }
           }
-          assert.equal(files.size,4);assert.equal(cases.length,29);
+          assert.equal(files.size,6);assert.equal(cases.length,37);
           const runtime=['numRuntimeErrorTestSuites','numUnhandledErrors'];for(const key of runtime)if(key in r)assert.equal(r[key],0);if('unhandledErrors'in r)assert.deepEqual(r.unhandledErrors,[]);
           assert.doesNotMatch(fs.readFileSync(out+'/tests.log','utf8'),/Unhandled\s+(?:Errors?|Rejections?)|Uncaught\s+Exceptions?/i);
-          fs.writeFileSync(out+'/unit-outcomes.json',JSON.stringify({phase:'cm-coached-styles-engine-pilot',source:process.env.GITHUB_SHA,runId:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,expectedSuites:4,passedCases:cases,observedRuntimeCounters:Object.fromEntries(runtime.filter(k=>k in r).map(k=>[k,r[k]])),absentRuntimeCountersUnknown:runtime.filter(k=>!(k in r)),unhandledErrors:'unhandledErrors'in r?r.unhandledErrors:'UNKNOWN_ABSENT',applicationQualified:false,uiIntegrated:false,balanceQualified:false,oldWholeEngineParity:'OWED'},null,2)+'\n',{flag:'wx'});
+          fs.writeFileSync(out+'/unit-outcomes.json',JSON.stringify({phase:'cm-coached-styles-ui-pilot',source:process.env.GITHUB_SHA,runId:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,expectedSuites:6,passedCases:cases,observedRuntimeCounters:Object.fromEntries(runtime.filter(k=>k in r).map(k=>[k,r[k]])),absentRuntimeCountersUnknown:runtime.filter(k=>!(k in r)),unhandledErrors:'unhandledErrors'in r?r.unhandledErrors:'UNKNOWN_ABSENT',applicationQualified:false,uiIntegrated:false,balanceQualified:false,oldWholeEngineParity:'OWED'},null,2)+'\n',{flag:'wx'});
           NODE
           test ! -s "$out/tests.transport";test ! -s "$out/unit-classifier.transport"
+      - name: Separate frozen-old-engine three-path parity and two owned comparator controls
+        id: old_parity
+        if: ${{ !cancelled() && steps.app_types.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          out="$CM_STYLE_OUT"
+          original=b3f8a9b35cd0d3c8a51a471fa13d01f0c947c3d7
+          git fetch --no-tags --depth=1 origin "$original" > "$out/parity-base-fetch.log" 2>&1
+          test "$(git rev-parse "$original:src/lib/clubManager.ts")" = a505743537b383bc7885bb81f5a72c11e154b566
+          git show "$original:src/lib/clubManager.ts" > "$out/frozen-original-engine.ts"
+          printf '%s  %s\n' 05de3cfca8d978e6117979fb29b82b2ece7b9fb6ee1f2ce3c051e379e36de86e "$out/frozen-original-engine.ts" | sha256sum --check > "$out/parity-original-pin.log"
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          export CM_STYLE_ORIGINAL_SOURCE="$out/frozen-original-engine.ts"
+          export CM_STYLE_PARITY_OUT="$out/old-engine-parity"
+          : > "$out/parity-runner.transport";status=0
+          SIM_OFFLINE_RECEIPT="$out/parity-runner.transport" timeout --signal=TERM --kill-after=15s 22m node scripts/qa/runClubManagerTraitOldParity.mjs > "$out/parity-runner.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/parity-runner.exit"
+          test "$status" -eq 0;test ! -s "$out/parity-runner.transport"
+          : > "$out/parity-classifier.transport"
+          SIM_OFFLINE_RECEIPT="$out/parity-classifier.transport" node <<'NODE'
+          const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),crypto=require('node:crypto');
+          const out=process.env.CM_STYLE_PARITY_OUT,hash=b=>crypto.createHash('sha256').update(b).digest('hex');
+          const r=JSON.parse(fs.readFileSync(path.join(out,'parity.json'),'utf8'));
+          const holds=JSON.parse(fs.readFileSync(path.join(out,'input-holds.json'),'utf8'));
+          assert.equal(r.status,'ACTUAL_OLD_ENGINE_PARITY_AND_TWO_EFFECTIVE_CONTROLS_PASS');
+          assert.equal(r.originalSha256,'05de3cfca8d978e6117979fb29b82b2ece7b9fb6ee1f2ce3c051e379e36de86e');
+          assert.equal(r.applicationQualified,false);assert.equal(r.runs.length,4);assert.equal(r.controls.length,2);
+          const labels=['candidate','frozen-original','extra-resume-draw','changed-resume-budget'];
+          for(let i=0;i<labels.length;i++){
+            const row=r.runs[i],label=labels[i];assert.equal(row.label,label);assert.equal(row.exit,0);assert.equal(row.cases,3);
+            const snapshots=fs.readFileSync(path.join(out,label+'.snapshots.json'));assert.equal(hash(snapshots),row.snapshotSha256);assert.equal(JSON.parse(snapshots).length,3);
+            assert.equal(fs.statSync(path.join(out,label+'.transport')).size,0);
+            const processResult=JSON.parse(fs.readFileSync(path.join(out,label+'.exit.json'),'utf8'));
+            assert.equal(processResult.status,0);assert.equal(processResult.signal,null);assert.equal(processResult.error,null);
+          }
+          const expected=[
+            ['extra-resume-draw','CM_STYLE_OLD_PARITY_ALL_RNG_DRAWS','77efc75498bb37d1b9ea598798395d2c6b6786e203dcb0786bbc1bab1e419946'],
+            ['changed-resume-budget','CM_STYLE_OLD_PARITY_FULL_STATE','2d94dfe47274100f4fe15d14fbd4e633bc93e3de891f37fc6f6870ff4cdf0d2f'],
+          ];
+          for(let i=0;i<expected.length;i++){
+            const [id,marker,changed]=expected[i],row=r.controls[i];assert.equal(row.id,id);assert.equal(row.ownedAssertionMarker,marker);
+            assert.equal(row.sourceSha256,r.originalSha256);assert.equal(row.wholeInverseSha256,r.originalSha256);assert.equal(row.changedSha256,changed);
+            assert.equal(hash(fs.readFileSync(path.join(out,id+'.ts'))),changed);assert.equal(typeof row.actualMessage,'string');assert(row.actualMessage.includes(marker));
+          }
+          assert.equal(holds.allEqual,true);assert.equal(holds.files.length,5);
+          for(const row of holds.files)assert.equal(hash(fs.readFileSync(row.file)),row.sha256);
+          fs.writeFileSync(path.join(process.env.CM_STYLE_OUT,'parity-stage-outcome.json'),JSON.stringify({source:process.env.GITHUB_SHA,runId:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,actualProcesses:4,passedProbeCasesPerProcess:3,effectiveOwnedComparatorControls:2,scope:'Three declared no-style/old-unmarked-live paths only',fullOldEngineEquivalence:false,applicationQualified:false},null,2)+'\n',{flag:'wx'});
+          NODE
+          test ! -s "$out/parity-classifier.transport"
       - name: Original Club Manager sim
         id: sim_core
         if: ${{ !cancelled() && steps.app_types.outcome == 'success' }}
@@ -149,7 +212,7 @@ jobs:
         if: always()
         run: |
           set -euo pipefail
-          out="$RUNNER_TEMP/cm-coached-styles-engine-pilot";mkdir -p "$out";failed=0
+          out="$RUNNER_TEMP/cm-coached-styles-ui-pilot";mkdir -p "$out";failed=0
           for manifest in source-before dependencies;do
             if test -f "$out/$manifest.sha256";then sha256sum --check "$out/$manifest.sha256" > "$out/final-$manifest-hold.log" 2>&1 || failed=1;else failed=1;fi
           done
@@ -169,13 +232,13 @@ jobs:
           git status --porcelain --untracked-files=all > "$out/final-status.txt";test ! -s "$out/final-status.txt" || failed=1
           while IFS= read -r -d '' file;do test ! -s "$file" || failed=1;done < <(find "$out" -type f -name '*.transport' -print0)
           printf '%s\n' "$failed" > "$out/final-holds.exit"
-          printf '%s\n' '{"types":"${{ steps.app_types.outcome }}","units":"${{ steps.units.outcome }}","simClubManager":"${{ steps.sim_core.outcome }}","simClubManagerFacilities":"${{ steps.sim_facilities.outcome }}","simClubManagerSave":"${{ steps.sim_save.outcome }}","applicationQualified":false,"uiIntegrated":false,"balanceQualified":false,"oldWholeEngineParity":"OWED"}' > "$out/stage-outcomes.json"
+          printf '%s\n' '{"types":"${{ steps.app_types.outcome }}","units":"${{ steps.units.outcome }}","declaredOldParity":"${{ steps.old_parity.outcome }}","simClubManager":"${{ steps.sim_core.outcome }}","simClubManagerFacilities":"${{ steps.sim_facilities.outcome }}","simClubManagerSave":"${{ steps.sim_save.outcome }}","applicationQualified":false,"uiIntegrated":false,"balanceQualified":false,"oldWholeEngineParity":"OWED"}' > "$out/stage-outcomes.json"
           (cd "$out";find . -type f ! -path ./evidence.sha256 -print0 | sort -z | xargs -0 sha256sum) > "$out/evidence.sha256"
           exit "$failed"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: cm-coached-styles-engine-pilot-${{ github.run_id }}-${{ github.run_attempt }}
-          path: ${{ runner.temp }}/cm-coached-styles-engine-pilot/
+          name: cm-coached-styles-ui-pilot-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/cm-coached-styles-ui-pilot/
           if-no-files-found: error
           retention-days: 14

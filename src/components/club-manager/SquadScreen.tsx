@@ -15,6 +15,10 @@ import { backFromDuty, restingIds } from '@/lib/clubManagerInternationals';
 import type { IntlCallUp } from '@/lib/clubManagerInternationals';
 import { ALL_POSITIONS } from '@/lib/positionFit';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
+import { COACHED_STYLES, readCoachedStyle, readCoachedStyleCourse } from '@/lib/clubManagerTraits';
+import type { CoachedStylePlayer } from '@/lib/clubManagerTraits';
+
+type CoachedStyleSaveState = 'saved' | 'blocked' | 'waiting';
 
 /**
  * Round 132: the one label this round is really about.
@@ -286,7 +290,7 @@ function interestOf(p: CMPlayer, bids: IncomingBid[], money: Money): { value: st
 }
 
 /** Round 715: the whole picture on one man, opened by a tap on his row. */
-export function SquadRowDetail({ p, career, scoutLevel, money }: { p: CMPlayer; career: CareerState; scoutLevel: number; money: Money }) {
+export function SquadRowDetail({ p, career, scoutLevel, money, coachedStyleSaveState = 'waiting' }: { p: CMPlayer; career: CareerState; scoutLevel: number; money: Money; coachedStyleSaveState?: CoachedStyleSaveState }) {
   const band = scoutBand(p, scoutLevel);
   const mood = promiseMood(p);
   const share = playingShare(p);
@@ -300,6 +304,12 @@ export function SquadRowDetail({ p, career, scoutLevel, money }: { p: CMPlayer; 
   const years = p.contractYears;
   const next = p.onLoan ? null : renewalTerms(p);
   const isBack = p.position === 'GK' || ['CB', 'LB', 'RB', 'LWB', 'RWB'].includes(p.position);
+  const coachedPlayer: CoachedStylePlayer = p;
+  const learnedStyle = readCoachedStyle(coachedPlayer);
+  const styleCourse = readCoachedStyleCourse(coachedPlayer);
+  const styleUnavailable = (coachedPlayer.coachedStyle !== undefined && learnedStyle === null)
+    || (coachedPlayer.coachedStyleCourse !== undefined && styleCourse === null);
+  const styleSaveWords = coachedStyleSaveState === 'saved' ? 'Saved' : coachedStyleSaveState === 'blocked' ? 'Not saved' : 'Waiting for save';
   const availability = p.injuryWeeks > 0
     ? `Injured, ${p.injuryWeeks} week${p.injuryWeeks === 1 ? '' : 's'}`
     : p.suspendedMatches > 0
@@ -361,6 +371,12 @@ export function SquadRowDetail({ p, career, scoutLevel, money }: { p: CMPlayer; 
         value={`${p.apps ?? 0} apps, ${p.seasonGoals}g ${p.seasonAssists}a`}
         sub={`${form === null ? 'No rating yet' : `Averaging ${form.toFixed(1)}`}${isBack ? `, ${p.cleanSheets ?? 0} clean sheets` : ''}${(p.seasonYellows ?? 0) > 0 ? `, ${p.seasonYellows} yellow` : ''}${(p.seasonReds ?? 0) > 0 ? `, ${p.seasonReds} red` : ''}`}
       />
+      <div className="col-span-2 space-y-1 rounded-lg border border-border/50 p-2 text-xs md:col-span-4" data-cm-coached-style={p.id}>
+        <p><span className="font-bold">Coached style: </span>{styleUnavailable ? 'Stored style data needs review. No coached edge is used.' : learnedStyle ? COACHED_STYLES[learnedStyle.id].label : 'No coached style yet'}</p>
+        {learnedStyle && !styleUnavailable && coachedStyleSaveState === 'saved' && <p className="text-muted-foreground">Learned in this career.</p>}
+        {styleCourse && !styleUnavailable && <p className="text-muted-foreground">Learning {COACHED_STYLES[styleCourse.to].label}: {styleCourse.weeksLeft} of {styleCourse.weeksTotal} weeks left.</p>}
+        {(learnedStyle || styleCourse || styleUnavailable) && <p data-cm-coached-save={coachedStyleSaveState} className="text-muted-foreground">{styleSaveWords}</p>}
+      </div>
       {/* Round 1325: a line under the tiles, never a ninth tile. */}
       {isRealPlayer(p) && (
         <p data-cm-deal-label className="col-span-2 md:col-span-4 text-xs text-muted-foreground">
@@ -376,6 +392,7 @@ export function SquadRowDetail({ p, career, scoutLevel, money }: { p: CMPlayer; 
 interface SquadRowProps {
   p: CMPlayer;
   career: CareerState;
+  coachedStyleSaveState?: CoachedStyleSaveState;
   eraId?: string;
   inXI: boolean;
   isCaptain: boolean;
@@ -388,7 +405,7 @@ interface SquadRowProps {
   duty?: { call: IntlCallUp; resting: boolean } | null;
 }
 
-function SquadRow({ p, career, eraId, inXI, isCaptain, isOpen, onToggle, sortKey, scoutLevel, money, duty = null }: SquadRowProps) {
+function SquadRow({ p, career, eraId, inXI, isCaptain, isOpen, onToggle, sortKey, scoutLevel, money, duty = null, coachedStyleSaveState = 'waiting' }: SquadRowProps) {
   /* The no scroll rule: rows open independently, so opening one never closes
      another above it and pulls the one you tapped out from under your thumb.
      If the row sits so low that its detail would open below the fold, the
@@ -480,7 +497,7 @@ function SquadRow({ p, career, eraId, inXI, isCaptain, isOpen, onToggle, sortKey
           className={cn('w-3.5 h-3.5 shrink-0 text-muted-foreground', isOpen && 'rotate-180')}
         />
       </button>
-      {isOpen && <SquadRowDetail p={p} career={career} scoutLevel={scoutLevel} money={money} />}
+      {isOpen && <SquadRowDetail p={p} career={career} scoutLevel={scoutLevel} money={money} coachedStyleSaveState={coachedStyleSaveState} />}
     </div>
   );
 }
@@ -495,6 +512,7 @@ interface SquadScreenProps {
   /* Round 715: the save, for the money symbol, the lead scout, the bids on
      the table and where each man ranks in the dressing room. */
   career: CareerState;
+  coachedStyleSaveState?: CoachedStyleSaveState;
 }
 
 /**
@@ -505,7 +523,7 @@ interface SquadScreenProps {
  * column sorts, and a tap on a row opens the whole picture on him in small
  * tiles, so the phone list stays one short line a man.
  */
-export function SquadScreen({ squad, xiIds, eraId, captainId = null, career }: SquadScreenProps) {
+export function SquadScreen({ squad, xiIds, eraId, captainId = null, career, coachedStyleSaveState = 'waiting' }: SquadScreenProps) {
   const inXI = new Set(xiIds.filter((id): id is string => !!id));
   const [sort, setSort] = useState<{ key: SquadSortKey; dir: SortDir }>({ key: 'ovr', dir: 'desc' });
   const [openIds, setOpenIds] = useState<ReadonlySet<string>>(() => new Set());
@@ -601,6 +619,7 @@ export function SquadScreen({ squad, xiIds, eraId, captainId = null, career }: S
           key={p.id}
           p={p}
           career={career}
+          coachedStyleSaveState={coachedStyleSaveState}
           eraId={eraId}
           inXI={inXI.has(p.id)}
           isCaptain={captainId === p.id}
