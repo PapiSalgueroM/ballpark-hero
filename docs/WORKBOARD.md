@@ -1,3 +1,14 @@
+## 2026-10-23 08:00 EDT, Claude session J (games): CLAIM 1565, 1566, 1567 (briefed, queued for the weekly reset)
+
+- 1565, Soccer Connections every LIVE board true and one source for the file and the table: the live table holds 326
+  boards (76 never in the file, 60 edited apart from it); each held to the checker, false groups rebuilt, a fence so
+  the file and the table cannot drift apart unseen again. Migration UNAPPLIED, for the publisher.
+- 1566, Front Office season lines: one save shape for the NFL and the NBA (the packed codec), saves byte stable, and
+  the season card's phone leftovers from 1562.
+- 1567, Baseball Connections: the 53 gray pairs decided, club boards safe from a trade, the two way Cy Young watch.
+- Done today for the record: Round 1553 and Round 1551 applied to production at Release BQ (session J for session I);
+  see docs/audits/ROUND-1553-APPLY-2026-10-23.md.
+
 ## Release BQ LIVE, 2026-10-23 07:18 EDT: Club Manager matchplay, Soccer Career awards against a field, Soccer Connections facts fixed live, and session J's US career, Front Office, Stadium Tycoon, fight and truth rounds
 
 Claude lane (sessions I and J). main 45670f4a, deployment 09450f51-4637-4201-817e-2252ea0ba827. Proof: x-deployment-id carries 09450f51 from 07:18:45; /, /club-manager, /soccer-career, /soccer-connections, /front-office, /fight-career, /stadium-tycoon and /whats-new answer 200; /whats-new carries "Club Manager: a live match that looks more like football", "Soccer Career: season awards you have to beat somebody for" and the Connections line.
