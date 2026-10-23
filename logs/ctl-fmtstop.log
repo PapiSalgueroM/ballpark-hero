@@ -1,0 +1,9 @@
+control fmtstop: the lib is a copy with one rewrite
+3) fmt past T
+  FAIL: fmt(1000000000000000) printed "1000T", want 1.0Qa
+  FAIL: fmt(145000000000000000) printed "145000T", want 145Qa
+  FAIL: fmt(2490000000000000000) printed "2490000T", want 2.5Qi
+  FAIL: fmt(90000000000000000000) printed "90000000T", want 90Qi
+  FAIL: fmt printed "111958265T" for a price under 1e21
+   4 of 8 values exact; the longest label under 1e21 is "111958265T"; the last AFL exhibit reads 90000000T
+simHallLongPlay control fmtstop: FIRED, 5 failures in section 3 (red is the right answer)

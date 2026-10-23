@@ -1,0 +1,12 @@
+4) the real hook on fake timers
+control hookfixed: the hook is a copy with one rewrite
+   hookfixed: deep: a save holding 3.20e+16 funds and 4.10e+18 career loaded and was written back with 3.2001e+16
+   hookfixed: refused: the bytes were kept aside once, 286 characters
+   hookfixed: watched: 240 callbacks paid x1.000000000 of a minute at full rate
+  FAIL: "2 a tab hidden ten hours is paid by the away rule, stops at the cap and says so on return" (red under the control, as it must be): AssertionError: ten hidden hours paid 497588, eight hours at the away rate is 47768430: expected 497587.81196224684 to be greater than or equal to 47720661.51842704
+  FAIL: "3 three hidden hours and then seven closed are one absence under one eight hour cap" (red under the control, as it must be): AssertionError: three hidden hours and seven closed paid x0.8781 of one eight hour absence: expected 0.12187500000002194 to be less than 0.000001
+  FAIL: "6 half a minute in another tab pays as away time and shows no welcome" (red under the control, as it must be): AssertionError: thirty hidden seconds paid x0.2500 of thirty watched ones, not the away rule: expected 29196.64267786047 to be 54076.03327597265 // Object.is equality
+  FAIL: "7 nine hidden hours and then two closed days still leave a note that says what the hall took" (red under the control, as it must be): AssertionError: nine hidden hours and two closed days paid x1.0094 of one eight hour absence: expected 0.009375000000010347 to be less than 0.000001
+  FAIL: "8 a save is stamped with the time the museum was paid through, so a reload pays the rest" (red under the control, as it must be): AssertionError: the reload did not pay the time between the last callback and the save: expected 6045862.6023213975 to be 6539303.849183966 // Object.is equality
+   3 of 8 hook tests green
+simHallLongPlay control hookfixed: FIRED, 5 failures in section 4 (red is the right answer)
