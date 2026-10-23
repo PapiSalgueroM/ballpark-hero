@@ -1,0 +1,52 @@
+import { useEffect, useId, useRef, useState, type ComponentType } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { Menu } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import type { SiteMenuPanelProps } from './SiteMenuPanel';
+
+export function SiteMenu() {
+  const [open, setOpen] = useState(false);
+  const [Panel, setPanel] = useState<ComponentType<SiteMenuPanelProps> | null>(null);
+  const [failed, setFailed] = useState(false);
+  const trigger = useRef<HTMLButtonElement>(null);
+  const id = useId();
+  const { key } = useLocation();
+
+  useEffect(() => { setOpen(false); }, [key]);
+  useEffect(() => {
+    if (!open || Panel || failed) return;
+    let active = true;
+    import('./SiteMenuPanel').then(
+      module => { if (active) setPanel(() => module.SiteMenuPanel); },
+      () => { if (active) setFailed(true); },
+    );
+    return () => { active = false; };
+  }, [open, Panel, failed]);
+
+  const close = () => {
+    setOpen(false);
+    trigger.current?.focus({ preventScroll: true });
+  };
+
+  return <>
+    <Button ref={trigger} type="button" variant="ghost" aria-label="Open site menu"
+      aria-haspopup="dialog" aria-expanded={open} aria-controls={open && Panel ? id : undefined}
+      aria-busy={open && !Panel && !failed ? true : undefined}
+      onClick={() => setOpen(true)} className="h-11 min-h-11 shrink-0 gap-2 rounded-none px-3 text-sm">
+      <Menu className="h-5 w-5" aria-hidden="true" />
+      Menu
+    </Button>
+    {Panel ? <Panel open={open} onOpenChange={setOpen} returnFocusRef={trigger} id={id} /> : open && (
+      <div role="region" aria-label="Site menu loading" data-site-chrome=""
+        className="fixed left-3 right-3 top-14 z-50 max-w-sm rounded-xl border border-border bg-card p-4 shadow-lg">
+        <p role={failed ? 'alert' : 'status'} className="text-sm text-muted-foreground">
+          {failed ? 'Menu could not load. Use Search Games, or refresh to try again.' : 'Loading menu...'}
+        </p>
+        <div className="mt-3 flex flex-wrap gap-2">
+          <Link to="/search" onClick={close} className="inline-flex min-h-11 items-center rounded-lg border border-border px-3 text-sm">Search Games</Link>
+          <button type="button" onClick={close} className="min-h-11 rounded-lg border border-border px-3 text-sm">Cancel</button>
+        </div>
+      </div>
+    )}
+  </>;
+}
