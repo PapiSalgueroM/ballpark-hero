@@ -1,0 +1,23 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: guest-import actual source hash
++ actual - expected
+
++ 'bf484294e23423739029fffdb013e7bb2f8d8d3848a7ac246384ecf8efb14030'
+- '245e4a9b90851de13f90442786d24be06c9a2da5f939b1bfcc21e170b6ce4639'
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simHeaderAccountLoading1442.mjs:14:10
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 'bf484294e23423739029fffdb013e7bb2f8d8d3848a7ac246384ecf8efb14030',
+  expected: '245e4a9b90851de13f90442786d24be06c9a2da5f939b1bfcc21e170b6ce4639',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

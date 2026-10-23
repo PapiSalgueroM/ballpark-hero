@@ -1,0 +1,9 @@
+build exit=0 37s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+playLiveMatchFit exit=1 156s | playLiveMatchFit: 6 failures.
+playLiveMatchFit-fresh exit=1 162s | playLiveMatchFit: 6 failures.
+livefit-ctl exit=1 206s | controls (each must be 1): widelabels=3 digits=3
+corrupt exit=1 130s | playCorruptSaves: 1 broken save(s) trap the player: /hall-of-champions all
+playConquestScenes exit=1 73s |   - 5. release returns the map to now (/soccer-conquest @430)
+ctl-none-Conquest exit=1 64s |   - 5. release returns the map to now (/soccer-conquest @430)
+walk exit=1 605s | walkrun: RED, 1 failures
+simHeaderAccountLoading1442 exit=1 0s | Node.js v24.21.0
