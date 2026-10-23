@@ -92,6 +92,11 @@ const readSave = (row: BoardRow): any => {
 function digest(row: BoardRow, epoch: string): string {
   const s = readSave(row);
   if (s?.gm?.blocks) { delete s.gm.blocks.seat; delete s.gm.blocks.xp; }
+  /* Release BR seam: Round 1542's additions are set aside the same way, the season's lines and award history on the
+     league and every man's first year stamp and awards anywhere in it (all absent on every save before 1542). With
+     them set aside every checkpoint is still the record taken before this round (rBRg-gmc2, all 15 green; on the
+     base all 15 green too); with the league's two alone it is not (6 red), so the stamps on the men are real. */
+  { const lg = s?.league; if (lg) { delete lg.stats; delete lg.awards; const strip = (o: any): void => { if (!o || typeof o !== 'object') return; delete o.rookieSeason; delete o.awards; for (const v of Object.values(o)) strip(v); }; strip(lg); } }
   return sha1(JSON.stringify(s).split(epoch).join('E'));
 }
 
