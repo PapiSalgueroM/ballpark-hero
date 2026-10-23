@@ -1,0 +1,6 @@
+ctl-staticledger exit=1 1s | simCareerIntl: control staticledger FIRED (section 12, 2 failures)
+ctl-gateyear exit=1 18s | simCareerIntl: control gateyear FIRED (section 2, 3 failures)
+ctl-easyfuture exit=1 20s | simCareerIntl: control easyfuture FIRED (section 5, 40 failures)
+ctl-restwrites exit=1 2s | Automatic merge failed; fix conflicts and then commit the result.
+ctl-norepair exit=1 13s | simCareerIntl: control norepair FIRED (section 8, 62 failures)
+ctl-lowbar exit=1 74s | simCareerIntl: control lowbar FIRED (section 4, 6450 failures)
