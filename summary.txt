@@ -1,0 +1,14 @@
+vitest-new exit=0 18s |    Duration  16.84s (transform 7.34s, setup 1.08s, collect 11.77s, tests 23.83s, environment 6.65s, prepare 2.01s)
+vitest-board1 exit=0 34s |    Duration  33.29s (transform 5.65s, setup 639ms, collect 10.06s, tests 58.18s, environment 4.09s, prepare 1.64s)
+vitest-board2 exit=0 21s |    Duration  19.58s (transform 6.19s, setup 1.06s, collect 16.76s, tests 27.68s, environment 5.88s, prepare 1.71s)
+engine-bytes exit=0 0s | engine-bytes: frontOffice.ts with its types stripped is the same JavaScript on this head as on c9d18897201aae8528e635f03a877e78eb02ed5c
+tsc exit=0 122s | 
+sim-lift exit=0 87s | simNflSeasonStats: 129 checks, 0 failed
+simGmGameDay exit=0 101s | simGmGameDay: 462 checks, 0 failed
+simGmReload exit=0 9s | simGmReload: all green. Four front offices keep a finished season through a reload, and none of them can play a closed one again.
+simSaveKeeper exit=0 7s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+simHarnessAnchors exit=0 72s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simNoRivalNames exit=0 20s | No rival product names found. 0 findings.
+gmgd-statsstory exit=1 95s | simGmGameDay: 462 checks, 1 failed (control statsstory)
+simStorageWrites exit=0 4s | simStorageWrites: all green (owed: 12)
+simUsSeasonCentre exit=0 99s | simUsSeasonCentre: 158 checks, 0 failed

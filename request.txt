@@ -1,0 +1,14 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-new: node_modules/.bin/vitest run src/components/front-office/FrontOfficeSeasonStats.test.tsx src/lib/nflSeasonStats.test.ts src/lib/gmGameDayView.test.ts src/components/front-office-shared/GmGameDayCard.test.tsx src/lib/gmGameDay.test.ts src/test/gameLawNfl.test.ts src/test/usSeasonNfl.test.ts --testTimeout=300000 --hookTimeout=120000
+vitest-board1: node_modules/.bin/vitest run src/components/front-office/FrontOfficeTile.test.tsx src/components/front-office/FrontOfficeGameDay.test.tsx src/components/front-office/FrontOfficeOnePress.test.tsx src/components/front-office/FrontOfficePostseason.test.tsx src/test/frontOfficeSaveRecovery.test.tsx --testTimeout=300000 --hookTimeout=120000
+vitest-board2: node_modules/.bin/vitest run src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx src/components/front-office/FrontOfficeLazyDesk.test.tsx src/components/front-office/FrontOfficeCuts.test.tsx src/components/front-office/FrontOfficeFullRoster.test.tsx src/components/front-office/FrontOfficeDraftCapital.test.tsx src/components/front-office/FrontOfficePromotion.test.tsx src/components/front-office/FrontOfficeTagDepth.test.tsx src/components/front-office/FrontOfficeRatingEvidence.test.tsx --testTimeout=300000 --hookTimeout=120000
+sim-lift: mkdir -p /tmp/lb1 && git archive c9d18897201aae8528e635f03a877e78eb02ed5c src | tar -x -C /tmp/lb1 && LIFT_BASE=/tmp/lb1 node scripts/simNflSeasonStats.mjs
+engine-bytes: mkdir -p /tmp/eb && git archive c9d18897201aae8528e635f03a877e78eb02ed5c src | tar -x -C /tmp/eb && node_modules/.bin/esbuild src/lib/frontOffice.ts --format=esm --log-level=error > /tmp/head.js && node_modules/.bin/esbuild /tmp/eb/src/lib/frontOffice.ts --format=esm --log-level=error > /tmp/base.js && sha1sum /tmp/head.js /tmp/base.js && cmp /tmp/head.js /tmp/base.js && echo "engine-bytes: frontOffice.ts with its types stripped is the same JavaScript on this head as on c9d18897201aae8528e635f03a877e78eb02ed5c"
+simGmGameDay: node scripts/simGmGameDay.mjs
+gmgd-statsstory: GM_GAMEDAY_CONTROL=statsstory node scripts/simGmGameDay.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simGmReload: node scripts/simGmReload.mjs
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+simUsSeasonCentre: node scripts/simUsSeasonCentre.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
