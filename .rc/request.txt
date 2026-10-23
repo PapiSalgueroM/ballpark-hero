@@ -1,0 +1,10 @@
+#!serve
+#!playwright
+# Release BR, Round 1555: r1555-last (rc-last.txt), extra walk1555.mjs (mocked reads, the database blocked).
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/nbaCourtSelection.test.tsx src/test/lineupValidatorClient.test.tsx --testTimeout=300000 --hookTimeout=120000
+walk: node .rc/x/walk1555.mjs
+simNbaStartingFive: node scripts/simNbaStartingFive.mjs
+simNbaCourtSelection: node scripts/simNbaCourtSelection.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
