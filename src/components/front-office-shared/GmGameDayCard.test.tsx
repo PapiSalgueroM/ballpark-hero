@@ -271,4 +271,12 @@ describe('Round 1542: the Touchdowns list', () => {
     render(<NflGameDay {...base()} />);
     expect(q('[data-gameday-scorers]')).toBeNull();
   });
+
+  it('credits kept that do not number the touchdowns say so, and never claim who scored was not kept', () => {
+    expect(credits.home.length + credits.away.length, 'the game has a touchdown to leave out').toBeGreaterThan(0);
+    const short = { home: credits.home.length ? credits.home.slice(1) : credits.home, away: credits.home.length ? credits.away : credits.away.slice(1) };
+    render(<NflGameDay {...base({ credits: key => (key === last.key ? short : null) })} />);
+    expect(q('[data-gameday-scorer]')).toBeNull();
+    expect(q('[data-gameday-scorers-missing]')!.textContent).toBe("The names kept don't line up with this game's touchdowns, so none are listed.");
+  });
 });

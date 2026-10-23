@@ -68,6 +68,9 @@ export interface GameDayView {
   /** Round 1542: the board keeps credits but has none that match this game's plays (a game played before it kept
    *  them, or a list that does not number the plays). Absent otherwise. */
   creditsMissing?: true;
+  /** Round 1542 fix: credits were kept for this game but do not number its plays (a touchdown nobody on the field
+   *  could take is the one way the board makes that). `creditsMissing` is set as well, so no name is guessed at. */
+  creditsShort?: true;
 }
 
 /** Round 1542: who scored in one game, each side's [passer or null, scorer] in the order the board credited them. */
@@ -107,13 +110,14 @@ export function gameDayView(law: GameDayLaw, last: GmLastGame, club: string, nam
      whose credits do not number its plays is never guessed at: the whole list goes, and the card says so */
   let scorers: GameDayPlay[] = [];
   let unmatched = credits === null;
+  let short = false;
   if (credits && law.credited && law.creditWords) {
     const mine = home ? credits.home : credits.away;
     const theirs = home ? credits.away : credits.home;
     const plays = story.game.events.filter(e => e.kind === law.credited);
     const ours = plays.filter(e => e.side === 'us');
     const others = plays.filter(e => e.side === 'them');
-    if (ours.length !== mine.length || others.length !== theirs.length) unmatched = true;
+    if (ours.length !== mine.length || others.length !== theirs.length) { unmatched = true; short = true; }
     else {
       scorers = plays.map(e => {
         const list = e.side === 'us' ? mine : theirs;
@@ -131,6 +135,7 @@ export function gameDayView(law: GameDayLaw, last: GmLastGame, club: string, nam
     game: story.game,
     scorers,
     ...(unmatched ? { creditsMissing: true as const } : {}),
+    ...(short ? { creditsShort: true as const } : {}),
   };
 }
 

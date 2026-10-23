@@ -199,4 +199,14 @@ describe('Round 1542: who scored', () => {
     expect([none.scorers, none.creditsMissing]).toEqual([[], true]);
     expect(none.deciding).toEqual(gameDayView(NFL_GAME_DAY, g, 'SEA', name).deciding);
   });
+
+  it('credits kept that do not number the touchdowns (one nobody could take) are told apart from credits not kept', () => {
+    const g = games.find(x => creditsFor(x).home.length > 1)!;
+    const c = creditsFor(g);
+    const short = gameDayView(NFL_GAME_DAY, g, 'SEA', name, { home: c.home.slice(1), away: c.away });
+    expect([short.scorers, short.creditsMissing, short.creditsShort]).toEqual([[], true, true]);
+    expect(gameDayView(NFL_GAME_DAY, g, 'SEA', name, null).creditsShort).toBeUndefined();
+    expect('creditsShort' in gameDayView(NFL_GAME_DAY, g, 'SEA', name, c)).toBe(false);
+    expect('creditsShort' in gameDayView(NFL_GAME_DAY, g, 'SEA', name)).toBe(false);
+  });
 });

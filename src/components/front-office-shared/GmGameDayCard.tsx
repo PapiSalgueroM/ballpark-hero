@@ -187,7 +187,9 @@ export function GmGameDayCard({ law, help, whereLabel, log, my, name, short, nex
               <div className="space-y-1 pt-1" data-gameday-scorers>
                 <p className="font-bold text-muted-foreground">Touchdowns in this save's game</p>
                 {view.creditsMissing ? (
-                  <p className="text-muted-foreground" data-gameday-scorers-missing>Who scored was not kept for this game.</p>
+                  <p className="text-muted-foreground" data-gameday-scorers-missing>
+                    {view.creditsShort ? "The names kept don't line up with this game's touchdowns, so none are listed." : 'Who scored was not kept for this game.'}
+                  </p>
                 ) : (
                   <ol className="space-y-1">
                     {view.scorers.map(p => (
