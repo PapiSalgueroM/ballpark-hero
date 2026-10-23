@@ -490,7 +490,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       {
         heading: "Spinning the stat challenge",
         items: [
-          "Spin the stat challenge. It might be highest career PPG, lowest career fouls, most championships, tallest lineup, anything from a pool of 13 stats.",
+          "Spin the stat challenge. It might be highest career PPG, lowest career blocks per game, most threes made, anything from a pool of 7 career stats.",
         ],
       },
       {
@@ -514,7 +514,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       {
         heading: "Submitting the lineup for a verdict",
         items: [
-          "Submit the lineup for a verdict: a rating, a headline and a short breakdown.",
+          "Submit the lineup for a score out of 100 against the best five your teams allowed.",
         ],
       },
     ],
@@ -562,7 +562,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       {
         heading: "Two tougher franchises and a rough verdict",
         paragraphs: [
-          "Then it gets rude: PF from the Grizzlies, C from the Hornets. You dig up the best scorers you can remember, submit a total in the high 90s, and the verdict roasts your weakest link.",
+          "Then it gets rude: PF from the Grizzlies, C from the Hornets. You dig up the best scorers you can remember, submit a total in the high 90s, and the score shows how far each pick fell short of the best his team allowed.",
         ],
       },
     ],
@@ -587,9 +587,9 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       },
     ],
     faqs: [
-      { q: "Do the players have to be current?", a: "No. The pool spans thousands of players across NBA history, as long as they played for the shown franchise." },
+      { q: "Do the players have to be current?", a: "No. The pool spans thousands of players across NBA history, as long as they played for the shown franchise and have a career line in our stat table, which starts with careers from 1965-66." },
       { q: "Why will the game not accept my guy at point guard?", a: "Position data is coarse: guards fit either guard slot, forwards fit either forward slot, and centers fit center. If a player is listed as a forward, he cannot fill your PG hole." },
-      { q: "How is my lineup judged?", a: "Each pick gets a value for the challenge stat, then the game writes a short verdict with a rating and headline you can share." },
+      { q: "How is my lineup judged?", a: "Each pick shows his real career number for the challenge, and your five is scored out of 100: the best five your teams allowed scores 100, the worst scores 0." },
     ],
   },
 
