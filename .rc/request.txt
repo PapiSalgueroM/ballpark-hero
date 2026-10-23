@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+#!serial
+walk: ENGINES=chromium node scripts/playNflSeasonStats.mjs
+playFrontOfficeGameDay: ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs
+weight-head: LABEL=head BASE=http://localhost:4173 node .rc/x/weightFo.mjs
+weight-base: git worktree add -f /tmp/wbase 4a0b39ab1062ac798ce6b5377a9c99c0d4ebe19a > /dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/wbase/node_modules && (cd /tmp/wbase && npx vite build --outDir /tmp/dist-base --logLevel error) && (node scripts/lib/hostLikeServer.mjs /tmp/dist-base 4182 > /dev/null 2>&1 &) && sleep 3 && LABEL=base BASE=http://localhost:4182 node .rc/x/weightFo.mjs
+mutH: node .rc/x/mutH.mjs && node_modules/.bin/vitest run src/components/front-office/FrontOfficeSeasonStats.test.tsx -t "bracket path" --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
+playGmCareer: ENGINES=chromium node scripts/playGmCareer.mjs
