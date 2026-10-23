@@ -6,8 +6,9 @@ import { keyedRng } from '@/lib/keyedRng';
 import {
   INTL_CALL_UP_OVR, INTL_KNOCK_BASE, INTL_LIFT_CAP, INTL_LIFT_PER_POINT, INTL_MAX_AGE, INTL_MIN_HEALTH,
   NBA_CAREER_INTL, NBA_INTL_CALENDAR, nbaIntlCallOf, nbaIntlEditionLabel, nbaIntlHelpRules, nbaIntlLift,
-  nbaIntlLine, nbaIntlPlay, nbaIntlStrength, nbaIntlSummerOf,
+  nbaIntlLine, nbaIntlPlay, nbaIntlStrength, nbaIntlSummerOf, INTL_RUNG_STRENGTH,
 } from '@/lib/nbaCareerIntl';
+import { intlRungHistory } from '@/lib/careerIntl';
 import { NBA_CAREER_SPORT } from '@/lib/nbaCareerSport';
 import { NBA_CAREER_INTL_LAZY } from '@/lib/nbaCareerIntlGate';
 import { NFL_CAREER_SPORT } from '@/lib/nflCareerSport';
@@ -147,6 +148,28 @@ describe('the game', () => {
     expect(nbaIntlLift(INTL_CALL_UP_OVR)).toBe(0);
     expect(nbaIntlLift(INTL_CALL_UP_OVR + 2)).toBe(1);
     expect(nbaIntlLift(99)).toBe(INTL_LIFT_CAP);
+  });
+  it('can draw every finish a nation really had before a summer to come, its latest one too (review of Round 1544, M5)', () => {
+    const qatar = NBA_INTL_CALENDAR.editionFor(2027);
+    if (!qatar) throw new Error('no 2027');
+    const nations = new Set<string>();
+    for (const e of NBA_INTL_CALENDAR.played()) for (const n of e.field ?? []) nations.add(n);
+    let checked = 0;
+    let teeth = 0;
+    for (const nation of nations) {
+      const past = intlRungHistory(NBA_INTL_CALENDAR, nation);
+      if (past.length < 2) continue;
+      /* a stream that lands in the middle of slot i must give the i-th finish, the last slot included */
+      past.forEach((rung, i) => {
+        expect(nbaIntlStrength(qatar, nation, () => (i + 0.5) / past.length)).toBe(INTL_RUNG_STRENGTH[rung]);
+        checked += 1;
+      });
+      if (INTL_RUNG_STRENGTH[past[past.length - 1]] !== INTL_RUNG_STRENGTH[past[past.length - 2]]) teeth += 1;
+    }
+    /* measured on the ledger as it stands: 39 nations with two finishes or more, 200 slots, 15 whose latest finish
+       differs from the one before (those are what catch a draw that never reaches the last slot: 44 slots go wrong) */
+    expect(checked).toBeGreaterThan(50);
+    expect(teeth).toBeGreaterThan(5);
   });
 });
 
