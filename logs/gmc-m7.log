@@ -1,0 +1,516 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/tmp/gm7[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 1|desk on: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nfl|seed 1|desk on|15 checkpoints|start,presser,cut,sign,week 1,week 9,recap,draft,summer,week 1,week 9,recap,answered,draft,summer
+
+[90mstderr[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 1|desk off: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 1|desk off: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 1|desk off: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nfl|seed 1|desk off|14 checkpoints|start,cut,sign,week 1,week 9,recap,answered,draft,summer,week 1,week 9,recap,draft,summer
+
+[90mstderr[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 2|desk on: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 2|desk on: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 2|desk on: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nfl|seed 2|desk on|15 checkpoints|start,presser,cut,sign,week 1,week 9,recap,answered,draft,summer,week 1,week 9,recap,draft,summer
+
+[90mstderr[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 2|desk off: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 2|desk off: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 2|desk off: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nfl|seed 2|desk off|13 checkpoints|start,cut,sign,week 1,week 9,recap,draft,summer,week 1,week 9,recap,draft,summer
+
+[90mstderr[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 3|desk on: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 3|desk on: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 3|desk on: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nfl|seed 3|desk on|15 checkpoints|start,presser,cut,sign,week 1,week 9,recap,draft,summer,week 1,week 9,recap,answered,draft,summer
+
+[90mstderr[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 3|desk off: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 3|desk off: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 3|desk off: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nfl|seed 3|desk off|14 checkpoints|start,cut,sign,week 1,week 9,recap,answered,draft,summer,week 1,week 9,recap,draft,summer
+
+[90mstderr[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the career[2m > [22m[2mfired: the recap offers who is calling and keeps the save; a remount opens the out of work screen with three boxes
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the career[2m > [22m[2mfired: the recap offers who is calling and keeps the save; a remount opens the out of work screen with three boxes
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the career[2m > [22m[2mfired: the recap offers who is calling and keeps the save; a remount opens the out of work screen with three boxes
+[22m[39mFO_GM_CAREER|fired recap|season paid 0 XP
+
+[90mstderr[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the career[2m > [22m[2ma point spent in Ownership survives a remount, and a tree off the live list sells nothing
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the career[2m > [22m[2ma point spent in Ownership survives a remount, and a tree off the live list sells nothing
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the career[2m > [22m[2mlooking at Career and GM level on the hub of a save whose desk is off writes nothing
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the career[2m > [22m[2mlooking at Career and GM level on the hub of a save whose desk is off writes nothing
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+ [31m❯[39m src/components/front-office-shared/FrontOfficeGmCareer.test.tsx [2m([22m[2m15 tests[22m[2m | [22m[31m6 failed[39m[2m)[22m[33m 17473[2mms[22m[39m
+[31m   [31m×[31m nfl board: the default path[2m > [22mseed 1|desk on: every checkpoint of two seasons is the base's[39m[33m 3569[2mms[22m[39m
+[31m     → expected [ …(15) ] to deeply equal [ …(15) ][39m
+[31m   [31m×[31m nfl board: the default path[2m > [22mseed 1|desk off: every checkpoint of two seasons is the base's[39m[33m 1900[2mms[22m[39m
+[31m     → expected [ …(14) ] to deeply equal [ …(14) ][39m
+[31m   [31m×[31m nfl board: the default path[2m > [22mseed 2|desk on: every checkpoint of two seasons is the base's[39m[33m 2029[2mms[22m[39m
+[31m     → expected [ …(15) ] to deeply equal [ …(15) ][39m
+[31m   [31m×[31m nfl board: the default path[2m > [22mseed 2|desk off: every checkpoint of two seasons is the base's[39m[33m 1719[2mms[22m[39m
+[31m     → expected [ …(13) ] to deeply equal [ …(13) ][39m
+[31m   [31m×[31m nfl board: the default path[2m > [22mseed 3|desk on: every checkpoint of two seasons is the base's[39m[33m 1957[2mms[22m[39m
+[31m     → expected [ …(15) ] to deeply equal [ …(15) ][39m
+[31m   [31m×[31m nfl board: the default path[2m > [22mseed 3|desk off: every checkpoint of two seasons is the base's[39m[33m 1783[2mms[22m[39m
+[31m     → expected [ …(14) ] to deeply equal [ …(14) ][39m
+   [32m✓[39m nfl board: the default path[2m > [22mthe record is written once, from the base[32m 1[2mms[22m[39m
+   [33m[2m✓[22m[39m nfl board: the career[2m > [22mfired: the recap offers who is calling and keeps the save; a remount opens the out of work screen with three boxes [33m 441[2mms[22m[39m
+   [33m[2m✓[22m[39m nfl board: the career[2m > [22mtaking an offer takes two taps, never the club that let him go, and the arrival stages no title even at the champion [33m 1512[2mms[22m[39m
+   [33m[2m✓[22m[39m nfl board: the career[2m > [22ma year out: two taps, the league a season on with one more champion, his counters as they were [33m 530[2mms[22m[39m
+   [33m[2m✓[22m[39m nfl board: the career[2m > [22ma point spent in Ownership survives a remount, and a tree off the live list sells nothing [33m 314[2mms[22m[39m
+   [33m[2m✓[22m[39m nfl board: the career[2m > [22ma closed market draws no stay out button, and the new front office link deletes the save on the second tap only [33m 539[2mms[22m[39m
+   [32m✓[39m nfl board: the career[2m > [22mlooking at Career and GM level on the hub of a save whose desk is off writes nothing[32m 282[2mms[22m[39m
+   [33m[2m✓[22m[39m nfl board: the career[2m > [22mlooking at all three boxes out of work, desk off, writes nothing [33m 528[2mms[22m[39m
+   [33m[2m✓[22m[39m nfl board: the career[2m > [22ma staff approach that runs out in the final week is still settled after the close [33m 368[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 6 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22mnfl board: the default path[2m > [22mseed 1|desk on: every checkpoint of two seasons is the base's
+[41m[1m FAIL [22m[49m src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22mnfl board: the default path[2m > [22mseed 2|desk on: every checkpoint of two seasons is the base's
+[41m[1m FAIL [22m[49m src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22mnfl board: the default path[2m > [22mseed 3|desk on: every checkpoint of two seasons is the base's
+[31m[1mAssertionError[22m: expected [ …(15) ] to deeply equal [ …(15) ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  [[22m
+[2m    "start:6e74c4693758e1d9247da8fbf67962f4d39c9a57",[22m
+[2m    "presser:9299054ed3d85d1e45e51a25c02b899f6be3229e",[22m
+[2m    "cut:72eaaf83e6dfa2a581aaed40abb43f4aeaa9b55f",[22m
+[2m    "sign:5d9ac608c1105764e564de1e332ae21766672508",[22m
+[32m-   "week 1:c9233c665091cc6c63664d742ae3fc0aa07ddcf1",[39m
+[32m-   "week 9:a72e70697926b7fcdeb8a85615450ba5d4f5b3f1",[39m
+[32m-   "recap:962f20abe3789c70aa698f369c99de7ce55f4c71",[39m
+[32m-   "draft:649377bd07865d66e2f1e5a0ab2d67a8b4a2cba9",[39m
+[32m-   "summer:7440fde0b8519c36fdcf73bc3a825447e47c41a6",[39m
+[32m-   "week 1:2c6e19a3f77cda65a0f78291553480feb265ba57",[39m
+[32m-   "week 9:c17588b530c69e9b1191545a25ac5b8b5a6f396b",[39m
+[32m-   "recap:e9e03c00c67f0bf1639c344eb6c22aefb5a69cda",[39m
+[32m-   "answered:d820157edce71ee525c111ddbbdc03d4fc53f238",[39m
+[32m-   "draft:ec3f6809c8f32a87e1fad21d2018d326c1a704ef",[39m
+[32m-   "summer:ae0589a95f65aa7b8c1dced3ee44c8187a448120",[39m
+[31m+   "week 1:0e85905441ab75160151fb0ed0220b03a9bd23af",[39m
+[31m+   "week 9:dd9394e30709c01cc541440f22733ccb9c067fa6",[39m
+[31m+   "recap:797641593dff711fc2cc336b77c331f34c366f31",[39m
+[31m+   "draft:64ab4263b7ff6cff32f449ce90863edaac3a47fd",[39m
+[31m+   "summer:9caf48c452ace921ad58230c65779d5b5c451fba",[39m
+[31m+   "week 1:b3dfcd1ed64251aa8261cd83664b7f9f0f35668b",[39m
+[31m+   "week 9:2baee18dd15119d841df33ec955a0be81d3fdc4c",[39m
+[31m+   "recap:4d96955acf12284acfa09b45bf66060e5a0669e6",[39m
+[31m+   "answered:03ff308a838cfdcc1b183ab85c444147f98fec0f",[39m
+[31m+   "draft:504feb01104b289f0b0f4e5d0b2328afbe57ca23",[39m
+[31m+   "summer:2fdb655adf79322c50db3b8f8d82a18622887ad3",[39m
+[2m  ][22m
+
+[36m [2m❯[22m src/components/front-office-shared/FrontOfficeGmCareer.test.tsx:[2m225:23[22m[39m
+    [90m223| [39m          [35mif[39m ([33mRECORDING[39m) { printed[id] [33m=[39m got[33m;[39m [35mreturn[39m[33m;[39m }
+    [90m224| [39m          expect(recorded?.cases?.[id], `nothing is recorded for ${row…
+    [90m225| [39m          [34mexpect[39m(got)[33m.[39m[34mtoEqual[39m(recorded[33m.[39mcases[id])[33m;[39m
+    [90m   | [39m                      [31m^[39m
+    [90m226| [39m        })[33m;[39m
+    [90m227| [39m      }
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22mnfl board: the default path[2m > [22mseed 1|desk off: every checkpoint of two seasons is the base's
+[41m[1m FAIL [22m[49m src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22mnfl board: the default path[2m > [22mseed 3|desk off: every checkpoint of two seasons is the base's
+[31m[1mAssertionError[22m: expected [ …(14) ] to deeply equal [ …(14) ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  [[22m
+[2m    "start:6e74c4693758e1d9247da8fbf67962f4d39c9a57",[22m
+[2m    "cut:21ef9f01766eaef59f0005d56a09afe8b944bb7c",[22m
+[2m    "sign:7de3f8c19e5714046889b8be104f9e3d91d17a9a",[22m
+[32m-   "week 1:eaa25f9a2e387573097628f9265ee489c0febd4e",[39m
+[32m-   "week 9:b2e28a406b0bdf27909dacb84a922b1c3d515fc9",[39m
+[32m-   "recap:8b1cc2df5a1764d86eadd3978b19142b3f8a7536",[39m
+[32m-   "answered:835da887fd8f235fa69f84f2c0994eca9cd5008d",[39m
+[32m-   "draft:dba3a6c7ea49e32b18491cabc07b2be29deab1a5",[39m
+[32m-   "summer:cb26d5e0bafe9ce551195911013aa9ced4801f06",[39m
+[32m-   "week 1:2d67836811cf926e74c9850cd0543fa54450cb7e",[39m
+[32m-   "week 9:1935f9545d01cfbd3682590517c4f841731d717f",[39m
+[32m-   "recap:ed7746a337fb73bac4ce380a5e65035644dd7189",[39m
+[32m-   "draft:637d9f77e46b60241787df509612463422245ee8",[39m
+[32m-   "summer:7e401539b3db9abc0f98942bd645f65f2814ef00",[39m
+[31m+   "week 1:494d812186da78b05d7027753e746236ab6d4a03",[39m
+[31m+   "week 9:d4a4243fa7d59d33730337495c1d7b5d4efdd02d",[39m
+[31m+   "recap:4436dbfec685131b929b9b451bc8fc8c0d73f838",[39m
+[31m+   "answered:61ead3854a8d9a3827bc40f09bcac8d1cbed0504",[39m
+[31m+   "draft:c0db2956449dcd6e87ad8df2d88ff8a7e7ea92f2",[39m
+[31m+   "summer:ca55b9a1f75cad8c58b86daff681a0d8519a4a89",[39m
+[31m+   "week 1:0c232e1450a6d0e9961e3188d1792bb22ea1248f",[39m
+[31m+   "week 9:e12d5328a869f7d08b347d55dc4f9cb6c2585ecb",[39m
+[31m+   "recap:0d85bab59a538ac29a195e8cadeebd9db1aea2f2",[39m
+[31m+   "draft:59319d681cf6c309ab4ca809ae415ac5c70df8ea",[39m
+[31m+   "summer:a07b7aa65b80571a07830d49d985498600f509aa",[39m
+[2m  ][22m
+
+[36m [2m❯[22m src/components/front-office-shared/FrontOfficeGmCareer.test.tsx:[2m225:23[22m[39m
+    [90m223| [39m          [35mif[39m ([33mRECORDING[39m) { printed[id] [33m=[39m got[33m;[39m [35mreturn[39m[33m;[39m }
+    [90m224| [39m          expect(recorded?.cases?.[id], `nothing is recorded for ${row…
+    [90m225| [39m          [34mexpect[39m(got)[33m.[39m[34mtoEqual[39m(recorded[33m.[39mcases[id])[33m;[39m
+    [90m   | [39m                      [31m^[39m
+    [90m226| [39m        })[33m;[39m
+    [90m227| [39m      }
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/6]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22mnfl board: the default path[2m > [22mseed 2|desk off: every checkpoint of two seasons is the base's
+[31m[1mAssertionError[22m: expected [ …(13) ] to deeply equal [ …(13) ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  [[22m
+[2m    "start:42068e82caf10ff2e19a69901d8d5faf9f041e8a",[22m
+[2m    "cut:bf789a937de07eaab64a0b6ff82e845f077076e3",[22m
+[2m    "sign:3135449a44c9d9d093e0423db6ad4fbfaacc76e3",[22m
+[32m-   "week 1:c1918049173e15270719aff626387efc7be71a50",[39m
+[32m-   "week 9:2f125414dd07d30ecff54e0b87109597cf8a5593",[39m
+[32m-   "recap:5b2ad9354fb39eeac2667383e98436d902c30a88",[39m
+[32m-   "draft:145a575d66795d6d01b833a500ec970ef04d1cc4",[39m
+[32m-   "summer:231dbe0b29527d330e073ebdf8187fa7d2670abe",[39m
+[32m-   "week 1:a8079cb917be5b8da2598ebfdf16277a9863e973",[39m
+[32m-   "week 9:9b1c6b5c32303623fc7079fefa6bbcb7a326e6d0",[39m
+[32m-   "recap:85e29a9c08524191d1f858da7017a95acbb64e1d",[39m
+[32m-   "draft:edd673bd044ce84672ab1fe0573114c02dc18b58",[39m
+[32m-   "summer:6a7a04628b81f2c49c9436228651089e1ed071cd",[39m
+[31m+   "week 1:ea14d9efe9f885d5bde3c5715de093e585133862",[39m
+[31m+   "week 9:52e0c5d52334a436c616fe52758bea36b8063218",[39m
+[31m+   "recap:cb09a1384444dec00321acc0406a6617c96c68e6",[39m
+[31m+   "draft:deb5dcdd9d91ee6518c53c5ae83c6327ecb4d55d",[39m
+[31m+   "summer:e2a882a217b5ae37374bb154250fc91662aa3a29",[39m
+[31m+   "week 1:76a2078785f0eee753b88f46384aaf8120153647",[39m
+[31m+   "week 9:8a3c8375a248b7cc629ecf34589fab7441b99459",[39m
+[31m+   "recap:6a83e2a76c5c6b0de2eeea6940dba5f4c6b646c0",[39m
+[31m+   "draft:f00fd53791ea1b6b9e7407e480503b2fb6f41e75",[39m
+[31m+   "summer:cdfa45fe195c6934f098a9b4ea1a5a4174ecf34f",[39m
+[2m  ][22m
+
+[36m [2m❯[22m src/components/front-office-shared/FrontOfficeGmCareer.test.tsx:[2m225:23[22m[39m
+    [90m223| [39m          [35mif[39m ([33mRECORDING[39m) { printed[id] [33m=[39m got[33m;[39m [35mreturn[39m[33m;[39m }
+    [90m224| [39m          expect(recorded?.cases?.[id], `nothing is recorded for ${row…
+    [90m225| [39m          [34mexpect[39m(got)[33m.[39m[34mtoEqual[39m(recorded[33m.[39mcases[id])[33m;[39m
+    [90m   | [39m                      [31m^[39m
+    [90m226| [39m        })[33m;[39m
+    [90m227| [39m      }
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/6]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m6 failed[39m[22m[2m | [22m[1m[32m9 passed[39m[22m[90m (15)[39m
+[2m   Start at [22m 12:18:30
+[2m   Duration [22m 18.46s[2m (transform 1.62s, setup 68ms, collect 170ms, tests 17.47s, environment 294ms, prepare 66ms)[22m
+
+
+::error file=/tmp/gm7/src/components/front-office-shared/FrontOfficeGmCareer.test.tsx,title=src/components/front-office-shared/FrontOfficeGmCareer.test.tsx > nfl board%3A the default path > seed 1|desk on%3A every checkpoint of two seasons is the base's,line=225,column=23::AssertionError: expected [ …(15) ] to deeply equal [ …(15) ]%0A%0A- Expected%0A+ Received%0A%0A  [%0A    "start:6e74c4693758e1d9247da8fbf67962f4d39c9a57",%0A    "presser:9299054ed3d85d1e45e51a25c02b899f6be3229e",%0A    "cut:72eaaf83e6dfa2a581aaed40abb43f4aeaa9b55f",%0A    "sign:5d9ac608c1105764e564de1e332ae21766672508",%0A-   "week 1:c9233c665091cc6c63664d742ae3fc0aa07ddcf1",%0A-   "week 9:a72e70697926b7fcdeb8a85615450ba5d4f5b3f1",%0A-   "recap:962f20abe3789c70aa698f369c99de7ce55f4c71",%0A-   "draft:649377bd07865d66e2f1e5a0ab2d67a8b4a2cba9",%0A-   "summer:7440fde0b8519c36fdcf73bc3a825447e47c41a6",%0A-   "week 1:2c6e19a3f77cda65a0f78291553480feb265ba57",%0A-   "week 9:c17588b530c69e9b1191545a25ac5b8b5a6f396b",%0A-   "recap:e9e03c00c67f0bf1639c344eb6c22aefb5a69cda",%0A-   "answered:d820157edce71ee525c111ddbbdc03d4fc53f238",%0A-   "draft:ec3f6809c8f32a87e1fad21d2018d326c1a704ef",%0A-   "summer:ae0589a95f65aa7b8c1dced3ee44c8187a448120",%0A+   "week 1:0e85905441ab75160151fb0ed0220b03a9bd23af",%0A+   "week 9:dd9394e30709c01cc541440f22733ccb9c067fa6",%0A+   "recap:797641593dff711fc2cc336b77c331f34c366f31",%0A+   "draft:64ab4263b7ff6cff32f449ce90863edaac3a47fd",%0A+   "summer:9caf48c452ace921ad58230c65779d5b5c451fba",%0A+   "week 1:b3dfcd1ed64251aa8261cd83664b7f9f0f35668b",%0A+   "week 9:2baee18dd15119d841df33ec955a0be81d3fdc4c",%0A+   "recap:4d96955acf12284acfa09b45bf66060e5a0669e6",%0A+   "answered:03ff308a838cfdcc1b183ab85c444147f98fec0f",%0A+   "draft:504feb01104b289f0b0f4e5d0b2328afbe57ca23",%0A+   "summer:2fdb655adf79322c50db3b8f8d82a18622887ad3",%0A  ]%0A%0A ❯ src/components/front-office-shared/FrontOfficeGmCareer.test.tsx:225:23%0A%0A
+
+::error file=/tmp/gm7/src/components/front-office-shared/FrontOfficeGmCareer.test.tsx,title=src/components/front-office-shared/FrontOfficeGmCareer.test.tsx > nfl board%3A the default path > seed 1|desk off%3A every checkpoint of two seasons is the base's,line=225,column=23::AssertionError: expected [ …(14) ] to deeply equal [ …(14) ]%0A%0A- Expected%0A+ Received%0A%0A  [%0A    "start:6e74c4693758e1d9247da8fbf67962f4d39c9a57",%0A    "cut:21ef9f01766eaef59f0005d56a09afe8b944bb7c",%0A    "sign:7de3f8c19e5714046889b8be104f9e3d91d17a9a",%0A-   "week 1:eaa25f9a2e387573097628f9265ee489c0febd4e",%0A-   "week 9:b2e28a406b0bdf27909dacb84a922b1c3d515fc9",%0A-   "recap:8b1cc2df5a1764d86eadd3978b19142b3f8a7536",%0A-   "answered:835da887fd8f235fa69f84f2c0994eca9cd5008d",%0A-   "draft:dba3a6c7ea49e32b18491cabc07b2be29deab1a5",%0A-   "summer:cb26d5e0bafe9ce551195911013aa9ced4801f06",%0A-   "week 1:2d67836811cf926e74c9850cd0543fa54450cb7e",%0A-   "week 9:1935f9545d01cfbd3682590517c4f841731d717f",%0A-   "recap:ed7746a337fb73bac4ce380a5e65035644dd7189",%0A-   "draft:637d9f77e46b60241787df509612463422245ee8",%0A-   "summer:7e401539b3db9abc0f98942bd645f65f2814ef00",%0A+   "week 1:494d812186da78b05d7027753e746236ab6d4a03",%0A+   "week 9:d4a4243fa7d59d33730337495c1d7b5d4efdd02d",%0A+   "recap:4436dbfec685131b929b9b451bc8fc8c0d73f838",%0A+   "answered:61ead3854a8d9a3827bc40f09bcac8d1cbed0504",%0A+   "draft:c0db2956449dcd6e87ad8df2d88ff8a7e7ea92f2",%0A+   "summer:ca55b9a1f75cad8c58b86daff681a0d8519a4a89",%0A+   "week 1:0c232e1450a6d0e9961e3188d1792bb22ea1248f",%0A+   "week 9:e12d5328a869f7d08b347d55dc4f9cb6c2585ecb",%0A+   "recap:0d85bab59a538ac29a195e8cadeebd9db1aea2f2",%0A+   "draft:59319d681cf6c309ab4ca809ae415ac5c70df8ea",%0A+   "summer:a07b7aa65b80571a07830d49d985498600f509aa",%0A  ]%0A%0A ❯ src/components/front-office-shared/FrontOfficeGmCareer.test.tsx:225:23%0A%0A
+
+::error file=/tmp/gm7/src/components/front-office-shared/FrontOfficeGmCareer.test.tsx,title=src/components/front-office-shared/FrontOfficeGmCareer.test.tsx > nfl board%3A the default path > seed 2|desk on%3A every checkpoint of two seasons is the base's,line=225,column=23::AssertionError: expected [ …(15) ] to deeply equal [ …(15) ]%0A%0A- Expected%0A+ Received%0A%0A  [%0A    "start:42068e82caf10ff2e19a69901d8d5faf9f041e8a",%0A    "presser:11952660a1e27b5e73fd59270765a57f38ed3d91",%0A    "cut:9080c31069a108e05d3e2923a1b88475816e19de",%0A    "sign:c88b696fba1cb88f4b77d119cbd8655413dba2ec",%0A-   "week 1:12d6f7e738ba3340ad761a0a92db0d1e395e677b",%0A-   "week 9:14dea2a34a766297d6df9ea51bd3c51effcea448",%0A-   "recap:7cd151e9aa1e810bb79522c466a2e971523fd39b",%0A-   "answered:7cd151e9aa1e810bb79522c466a2e971523fd39b",%0A-   "draft:0592654d3068207673d02e9122893e5e795830e4",%0A-   "summer:8ca762d299c0ca6ca1e68c6eb91ff35f9eaf0fdb",%0A-   "week 1:d1dd4b492bc146694989bd0f3ad1e78cf17f7ba0",%0A-   "week 9:439465b38fd22d604fb5301172a5848fd5d0c99f",%0A-   "recap:9ccd075e9119c35f4f7c9502f3222f272100d6cc",%0A-   "draft:fa926c42bdfa2bcb1f9796549bf42bc95da8bee1",%0A-   "summer:e8bc75b3b2e91702294a6e6c17df8b2ba79b364f",%0A+   "week 1:77dcc43f4a68b3c2ef195145f1fe0ec8498fbd97",%0A+   "week 9:59c3f5fd2941e78610afac09ce0945cbd1dec37d",%0A+   "recap:eddc4426afd3c799e1e461b833d4424bc6354250",%0A+   "answered:eddc4426afd3c799e1e461b833d4424bc6354250",%0A+   "draft:b1a1fa7e7b6bfb90f8db5f3c5ca84110db380011",%0A+   "summer:d45de0dea61a6de96d37cad2082c4b4dead16834",%0A+   "week 1:2c2332d724e3a972bb6b19e9359dfce0f93dfee3",%0A+   "week 9:e17b39e1ca3cd9af78550096009fc48ae63fd44a",%0A+   "recap:7ffbea69bd3e0566e9424636a42c03708eb924db",%0A+   "draft:987944f7b87ca38080fbed57f74b4dba75b42730",%0A+   "summer:ad4bedcd7ff42859db0dc0693d6bcc8185366c61",%0A  ]%0A%0A ❯ src/components/front-office-shared/FrontOfficeGmCareer.test.tsx:225:23%0A%0A
+
+::error file=/tmp/gm7/src/components/front-office-shared/FrontOfficeGmCareer.test.tsx,title=src/components/front-office-shared/FrontOfficeGmCareer.test.tsx > nfl board%3A the default path > seed 2|desk off%3A every checkpoint of two seasons is the base's,line=225,column=23::AssertionError: expected [ …(13) ] to deeply equal [ …(13) ]%0A%0A- Expected%0A+ Received%0A%0A  [%0A    "start:42068e82caf10ff2e19a69901d8d5faf9f041e8a",%0A    "cut:bf789a937de07eaab64a0b6ff82e845f077076e3",%0A    "sign:3135449a44c9d9d093e0423db6ad4fbfaacc76e3",%0A-   "week 1:c1918049173e15270719aff626387efc7be71a50",%0A-   "week 9:2f125414dd07d30ecff54e0b87109597cf8a5593",%0A-   "recap:5b2ad9354fb39eeac2667383e98436d902c30a88",%0A-   "draft:145a575d66795d6d01b833a500ec970ef04d1cc4",%0A-   "summer:231dbe0b29527d330e073ebdf8187fa7d2670abe",%0A-   "week 1:a8079cb917be5b8da2598ebfdf16277a9863e973",%0A-   "week 9:9b1c6b5c32303623fc7079fefa6bbcb7a326e6d0",%0A-   "recap:85e29a9c08524191d1f858da7017a95acbb64e1d",%0A-   "draft:edd673bd044ce84672ab1fe0573114c02dc18b58",%0A-   "summer:6a7a04628b81f2c49c9436228651089e1ed071cd",%0A+   "week 1:ea14d9efe9f885d5bde3c5715de093e585133862",%0A+   "week 9:52e0c5d52334a436c616fe52758bea36b8063218",%0A+   "recap:cb09a1384444dec00321acc0406a6617c96c68e6",%0A+   "draft:deb5dcdd9d91ee6518c53c5ae83c6327ecb4d55d",%0A+   "summer:e2a882a217b5ae37374bb154250fc91662aa3a29",%0A+   "week 1:76a2078785f0eee753b88f46384aaf8120153647",%0A+   "week 9:8a3c8375a248b7cc629ecf34589fab7441b99459",%0A+   "recap:6a83e2a76c5c6b0de2eeea6940dba5f4c6b646c0",%0A+   "draft:f00fd53791ea1b6b9e7407e480503b2fb6f41e75",%0A+   "summer:cdfa45fe195c6934f098a9b4ea1a5a4174ecf34f",%0A  ]%0A%0A ❯ src/components/front-office-shared/FrontOfficeGmCareer.test.tsx:225:23%0A%0A
+
+::error file=/tmp/gm7/src/components/front-office-shared/FrontOfficeGmCareer.test.tsx,title=src/components/front-office-shared/FrontOfficeGmCareer.test.tsx > nfl board%3A the default path > seed 3|desk on%3A every checkpoint of two seasons is the base's,line=225,column=23::AssertionError: expected [ …(15) ] to deeply equal [ …(15) ]%0A%0A- Expected%0A+ Received%0A%0A  [%0A    "start:adcc48217a40186aafb7b1bd45214a38cfcd8cdf",%0A    "presser:77969076e4e9c254fd27001b346eeef6514be38a",%0A    "cut:d451b75507520519c968153837d429cdb6e94d37",%0A    "sign:e0ab095a3e6a45f2e87c2e647d197c503b7948d2",%0A-   "week 1:a686cfffad605272e4621167507d5c1e3c4ce9fd",%0A-   "week 9:e53c40d5e94107dfb1069e3ad44a55f133d53298",%0A-   "recap:b23eaf5e98dc899ddbd3ca743432a28ed7cb77f7",%0A-   "draft:fc8349506d3708dfbf94f64f73a64bd52d2ea581",%0A-   "summer:093946642adb04631157557c2d90e0795eb6ce88",%0A-   "week 1:d31852f89d4e528e140f8afc4dd663f0c014cb67",%0A-   "week 9:6fb6359d2c190b9200e44e13514a12dc9e7994a6",%0A-   "recap:a51e1b531127b704d06dccd284e58c60fadcbd11",%0A-   "answered:796006a00181faba03ae863fb8bd9bcf842f38eb",%0A-   "draft:88e4bf40f08096c549fd93861adf4b3e9d877903",%0A-   "summer:46ae9a66a6255421d23a27efae51eb98302c78d3",%0A+   "week 1:f229a73250414be0bb90ab2b70fdfbf933dc583b",%0A+   "week 9:32be29068db238a5aa45c255708492007103ce33",%0A+   "recap:27e3ac67922df441ceb0ccecdf45d919e43be5b9",%0A+   "draft:a699825f08fbf3990f52e25362e669ef642a0e2b",%0A+   "summer:ac065b564c63eac6aa8945ddd982ac5d99c4c8d5",%0A+   "week 1:e5a1013118c5c23df3cee4b77626cca019de978d",%0A+   "week 9:da0e86fb96f6fbe42f5842b3543705735b83b9e8",%0A+   "recap:9012b4ae16be821df7804e4d86a8550bbe515cab",%0A+   "answered:084c69a83e028d40b2b559f774ef201379af37b7",%0A+   "draft:a9e6d68e3233070fce7a79ef59c81853bf0d6746",%0A+   "summer:7c293b0b4a33b17c264393517ff48f5d04b2dc9e",%0A  ]%0A%0A ❯ src/components/front-office-shared/FrontOfficeGmCareer.test.tsx:225:23%0A%0A
+
+::error file=/tmp/gm7/src/components/front-office-shared/FrontOfficeGmCareer.test.tsx,title=src/components/front-office-shared/FrontOfficeGmCareer.test.tsx > nfl board%3A the default path > seed 3|desk off%3A every checkpoint of two seasons is the base's,line=225,column=23::AssertionError: expected [ …(14) ] to deeply equal [ …(14) ]%0A%0A- Expected%0A+ Received%0A%0A  [%0A    "start:adcc48217a40186aafb7b1bd45214a38cfcd8cdf",%0A    "cut:a14ec62124f706e6b2535636f3ab7c111d9e49a2",%0A    "sign:879f1f95c065f6a50e58a5051e8c8cfb07f1fc32",%0A-   "week 1:3af29c1b55173e2441b92573550f42d3d8340ce2",%0A-   "week 9:dcd9852301e36d5d525d828c0da28997e21efbdb",%0A-   "recap:3aa1fabeecec2ff5dbbbae1e04cb304b4ca97e7f",%0A-   "answered:2eb160181378e0d5376ab92d780d8d9ac2e6abaf",%0A-   "draft:33b7b32e38199dc0d9b797024c86258607066e65",%0A-   "summer:549f257866b269ad964c2fe68a0e637a0c8b2f6b",%0A-   "week 1:b64bfb0ce4b48401c8634f07d4c78fe1220c816d",%0A-   "week 9:6ec41ede2cae42de73cff4b1f388f93366c2a2ec",%0A-   "recap:3478081e3af01b3a22cbdf8d225b31c2e866f2b0",%0A-   "draft:240e58afa24cdbd650576022c6f438c7099b2466",%0A-   "summer:9839472d2e7b46b668664db15c87236879f40f53",%0A+   "week 1:b07c45437c6e60c6991ce3370367f9720101bb79",%0A+   "week 9:57e7920596ccdeab99967964edcbb1dbd39cafcf",%0A+   "recap:27e5cee0810fc64351b5097e5969e71f5c68b865",%0A+   "answered:502435b150eb1ce7902b068cfd88a11e46e47c37",%0A+   "draft:23119eaf8ecdc43cd719d4da832977b8ec3f379e",%0A+   "summer:456bcabe5da8922377ba4a496ea9af16587192c3",%0A+   "week 1:0351dbbdca146779eec62ab23776548d8527f19f",%0A+   "week 9:014b572c9e89d21c2aa4a7ec38a98d429a5f21c4",%0A+   "recap:e02edb8b55661193e064447b51d371f394a7c9b8",%0A+   "draft:81d4c446c0918621d7bb1d75e179269f371b7905",%0A+   "summer:9c9d02ff558d9474d2988dafb0d1fe49211e212b",%0A  ]%0A%0A ❯ src/components/front-office-shared/FrontOfficeGmCareer.test.tsx:225:23%0A%0A

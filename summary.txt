@@ -1,0 +1,6 @@
+gmc-head exit=1 19s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/FrontOfficeGmCareer.test.tsx,title=src/components/front-office-shared/FrontO
+gmc-1542 exit=1 19s | ::error file=/tmp/g1542/src/components/front-office-shared/FrontOfficeGmCareer.test.tsx,title=src/components/front-office-shared/FrontOfficeGmCareer.test.tsx > nfl board%
+gmc-1562 exit=1 19s | ::error file=/tmp/g1562/src/components/front-office-shared/FrontOfficeGmCareer.test.tsx,title=src/components/front-office-shared/FrontOfficeGmCareer.test.tsx > nfl board%
+gmc-m6 exit=0 19s |    Duration  17.67s (transform 1.25s, setup 65ms, collect 169ms, tests 16.73s, environment 291ms, prepare 143ms)
+gmc-m7 exit=1 19s | ::error file=/tmp/gm7/src/components/front-office-shared/FrontOfficeGmCareer.test.tsx,title=src/components/front-office-shared/FrontOfficeGmCareer.test.tsx > nfl board%3A
+gmc-base exit=0 19s |    Duration  17.63s (transform 1.55s, setup 66ms, collect 170ms, tests 16.67s, environment 293ms, prepare 65ms)
