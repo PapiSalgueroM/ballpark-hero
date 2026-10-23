@@ -1,0 +1,19 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ ✓ src/test/extensionResponseMotion.test.tsx > extension response motion > keeps the opening offer reply quiet and the exact market comparison available 210ms
+ ✓ src/test/extensionResponseMotion.test.tsx > extension response motion > keeps a genuine no-offer opening quiet with only the play-out action 22ms
+ ✓ src/test/extensionResponseMotion.test.tsx > extension response motion > reveals the exact 'improved' engine reply without replacing remaining controls 202ms
+ ✓ src/test/extensionResponseMotion.test.tsx > extension response motion > reveals the exact 'held' engine reply without replacing remaining controls 119ms
+ ✓ src/test/extensionResponseMotion.test.tsx > extension response motion > reveals the exact 'pulled' engine reply without replacing remaining controls 44ms
+
+ Test Files  1 passed (1)
+      Tests  5 passed (5)
+   Start at  15:20:09
+   Duration  2.61s (transform 526ms, setup 106ms, collect 827ms, tests 599ms, environment 522ms, prepare 202ms)
+
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+simExtensionResponseMotion: five actual-card opening, engine-response, exact-terms, one-use-push, callback, stable-node and focus checks passed.
