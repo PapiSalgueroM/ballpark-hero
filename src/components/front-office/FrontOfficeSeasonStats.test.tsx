@@ -210,6 +210,40 @@ describe('NFL front office: who scored, the load and the close', () => {
     expect(card(again).awards).toEqual([`${league.season} MVP`]);
   });
 
+  it('the bracket path ("Play Week 17", a round, then "Sim the rest") keeps his playoff games out of the lines, credits them for the tile, and closes once', () => {
+    const { league } = leagueAt(REGULAR_WEEKS);
+    /* his club is the best record after sixteen weeks, so he is in the bracket and plays at least one playoff game */
+    const team = Object.keys(league.teams).sort((x, y) => league.teams[y].wins - league.teams[x].wins || x.localeCompare(y))[0];
+    league.stats = nflNewStats(league.season); /* as if the block had opened at Week 1 */
+    save(shape(league, team));
+    render(<Board />);
+    press('Play Week 17');
+    const opened = read();
+    expect([opened.league.week, 'playoffs' in opened], '"Play Week 17" opens the bracket').toEqual([REGULAR_WEEKS + 1, true]);
+    const pressOn = (sel: string) => { const b = document.querySelector(sel) as HTMLButtonElement | null; expect(b, `the button ${sel}`).toBeTruthy(); fireEvent.click(b!); };
+    pressOn('[data-press="round"]');
+    expect('playoffs' in read(), 'one round played, the bracket still open').toBe(true);
+    pressOn('[data-press="rest"]');
+    const s = read();
+    expect([s.phase, 'playoffs' in s], 'Sim the rest closed the season').toEqual(['recap', false]);
+    const st = s.league.stats;
+    expect(readNflStats(st), 'the block reads whole on the recap').not.toBeNull();
+    /* the lines are the regular season's: every club on its seventeen games, no man past them */
+    for (const t of Object.keys(s.league.teams)) expect(st.clubs[t][0], `${t}: the club line holds the regular season only`).toBe(REGULAR_WEEKS);
+    for (const [t, men] of Object.entries(st.lines as Record<string, Record<string, any[]>>)) for (const l of Object.values(men)) expect(l[2], `${t}: a man's games`).toBeLessThanOrEqual(REGULAR_WEEKS);
+    /* his games, Week 17 and every playoff game, keep their credits under the keys his log holds */
+    const keys: string[] = s.gameLog.games.map((g: any) => g.key);
+    expect(keys.length, 'Week 17 and at least one playoff game of his').toBeGreaterThanOrEqual(2);
+    expect(Object.keys(st.plays).sort()).toEqual([...keys].sort());
+    /* the close ran once: one history entry, each winner's card carries its award once */
+    const history = readNflAwards(s.league.awards)!;
+    expect(history).toHaveLength(1);
+    expect(history[0].season).toBe(league.season);
+    const mvp = history[0].mvp!;
+    const card = [...Object.values(s.league.teams as Record<string, any>).flatMap(t => [...t.players, ...(t.practice ?? [])]), ...s.league.freeAgents].find(p => p.id === mvp.id);
+    expect(card.awards).toEqual([`${league.season} MVP`]);
+  });
+
   it('a winner\'s roster row carries the sim badge, and a card that does not read shows none', () => {
     const { league, team } = leagueAt(3);
     const [a, b] = league.teams[team].players;
