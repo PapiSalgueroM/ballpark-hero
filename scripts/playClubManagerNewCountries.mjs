@@ -66,6 +66,7 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
 import pw from './lib/playwrightLoader.mjs';
+import { answerConsent } from './lib/answerConsent.mjs';
 const { chromium } = pw;
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -131,7 +132,7 @@ for (const [w, h, reduced] of VIEWPORTS) {
     return { rows: new Set([...root.querySelectorAll('[data-club]')].map(e => e.getAttribute('data-club'))).size, title: heading };
   });
   const openTable = async page => { await page.getByRole('tab', { name: /^Table$/ }).first().click({ timeout: 5000 }).catch(() => {}); await page.waitForTimeout(800); return tableCard(page); };
-  const clearRoom = async page => { await page.getByRole('button', { name: /^essential only$/i }).first().click({ timeout: 1500 }).catch(() => {}); };
+  const clearRoom = async page => { await answerConsent(page, { wait: 1500 }); };
 
   for (const c of CONTROL === 'noresume' ? [] : expected) {
     const { ctx, page } = await newPage();
@@ -214,7 +215,8 @@ for (const [w, h, reduced] of VIEWPORTS) {
         if ((await heading()) === 'FULL TIME') { finished = true; break; }
         if (await press(page, /full report/i, 600)) { await page.waitForTimeout(700); continue; }
         await press(page, /^\s*4x\s*$/, 600);
-        if (await press(page, /second half/i, 600)) { await page.waitForTimeout(500); continue; }
+        /* Release BP seam: the name exactly, because Round 1522's dressing room Tactics tile mentions the second half. */
+        if (await press(page, /^\s*Second half\s*$/i, 600)) { await page.waitForTimeout(500); continue; }
         if (await press(page, /skip/i, 600)) { await page.waitForTimeout(600); continue; }
         if (await press(page, /take the pens|penalt|continue|carry on|next/i, 600)) { await page.waitForTimeout(500); continue; }
         await page.waitForTimeout(1200);

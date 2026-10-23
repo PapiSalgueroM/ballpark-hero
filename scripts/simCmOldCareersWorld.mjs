@@ -44,6 +44,7 @@ import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
 import { withoutAiMoves, BRIDGE_FILES } from './lib/cmNoAiMoves1344.mjs';
+import { withoutMadeUpNations } from './lib/cmNoMadeUpNations1520.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ENGINE = 'src/lib/clubManager.ts';
@@ -84,6 +85,10 @@ async function engine(label, { base = false, edit = null, bridge = false } = {})
         if (!rel.startsWith('src/')) return null;
         let text = base ? lf(execFileSync('git', ['show', `${BASE}:${rel}`], { cwd: ROOT, encoding: 'utf8', maxBuffer: 1 << 26 }))
           : lf(fs.readFileSync(args.path, 'utf8'));
+        /* Round 1520: BASE predates made up men's countries, so every head plays with them taken out
+           (scripts/lib/cmNoMadeUpNations1520.mjs, fail closed); simCmMadeUpNations section 7 proves that cut plays
+           as its base. */
+        if (!base) { try { text = withoutMadeUpNations(text, rel); } catch (e) { cannot(e.message); } }
         if (edit && rel === ENGINE) { text = edit(text); edited = true; }
         if (bridge) { const out = withoutAiMoves(text, rel); if (out !== text) { text = out; bridged.add(rel); } }
         return { contents: text, loader: path.extname(args.path).slice(1), resolveDir: path.dirname(args.path) };

@@ -31,6 +31,7 @@ import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
 import pw from './lib/playwrightLoader.mjs';
+import { answerConsent } from './lib/answerConsent.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = path.resolve(ROOT, process.env.DIST || 'dist');
@@ -132,7 +133,7 @@ const shot = (page, name) => page.screenshot({ path: path.join(OUT, `board-${nam
 async function open(page, ready) {
   await page.goto(`${BASE}/club-manager`, { waitUntil: 'domcontentloaded' });
   await page.waitForLoadState('networkidle', { timeout: 8000 }).catch(() => {});
-  await page.getByRole('button', { name: /^essential only$/i }).first().click({ timeout: 1200 }).catch(() => {});
+  await answerConsent(page, { wait: 1200 });
   for (let i = 0; i < 12; i++) {
     if (await page.locator(ready).count().catch(() => 0)) return true;
     const resume = page.getByRole('button', { name: /Resume Career|Continue career|Resume/i }).first();

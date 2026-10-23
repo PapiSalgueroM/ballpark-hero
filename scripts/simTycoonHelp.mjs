@@ -238,7 +238,6 @@ const IDIOMS = [
   { where: 'stadium', phrase: 'and once you have opened it', why: '"once" as "as soon as"' },
   { where: 'stadium', phrase: 'Once Floodlights pull', why: '"once" as "as soon as"' },
   { where: 'stadium', phrase: 'Staff are the idle half of the build', why: 'half as in one of two ways to build, not a share' },
-  { where: 'modal', phrase: 'each new one is', why: '"one" standing for a division' },
   { where: 'modal', phrase: 'each one earned', why: '"one" standing for a badge' },
   { where: 'modal', phrase: 'to catch it, for one of', why: 'a catch pays a single prize; how many prizes there are is computed' },
   { where: 'screen', phrase: 'matchday 1 of', why: 'the first matchday of a season is matchday one' },
@@ -456,7 +455,9 @@ const CLAIMS = [
     check: (T, m, W) => W.PROMOTE_AGE === 18 && W.LEAVE_AGE === 24 && W.FIRST_TEAM_SLOTS === 5 ? '' : 'the promotion ages or team capacity changed',
   },
   {
-    where: 'stadium', phrase: 'Each rating point above 60 adds to its defensive edge. With five players rated 80, opponents get twenty percent fewer chances before the minimum chance is applied',
+    /* Round 1532: the old floor on the opponent's chance is gone (the guide said "before the minimum chance is
+       applied"), so the claim now also reads the engine: the edge takes exactly its share off the chance. */
+    where: 'stadium', phrase: 'Each rating point above 60 adds to its defensive edge. With five players rated 80, opponents get twenty percent fewer chances.',
     check: (T, m, W) => {
       const s = W.newFactory(0, 7);
       s.firstTeam = Array.from({ length: 5 }, () => ({ rating: 80 }));
@@ -464,7 +465,9 @@ const CLAIMS = [
       s.firstTeam[0].rating = 81;
       const after = W.squadEdge(s);
       s.firstTeam = [{ rating: 60 }];
-      return near(before, 0.20) && near(after - before, 0.002) && W.squadEdge(s) === 0 ? '' : `five 80s give ${before}, an extra point gives ${after - before}`;
+      const ground = { ...m.fresh, levels: { ...m.fresh.levels, squad: 30 } };
+      const cut = 1 - T.oppChancePerMin(ground, before) / T.oppChancePerMin(ground, 0);
+      return near(before, 0.20) && near(after - before, 0.002) && W.squadEdge(s) === 0 && near(cut, 0.20) ? '' : `five 80s give ${before}, an extra point gives ${after - before}, and the opponent's chance falls by ${cut}`;
     },
   },
   {
@@ -603,8 +606,18 @@ const CLAIMS = [
     check: (T, m) => { const one = { ...m.fresh, levels: { ...m.fresh.levels, stands: 1 } }; return T.costOf(m.fresh, 'stands') === 30 && T.capacity(one) - T.capacity(m.fresh) === 40 ? '' : `it costs ${T.costOf(m.fresh, 'stands')} and adds ${T.capacity(one) - T.capacity(m.fresh)}`; },
   },
   {
-    where: 'stadium', phrase: 'With 280 in the ground a goal pays a 168 dollar bonus before any streak',
-    check: (T, m) => { const s = { ...m.fresh, fanbase: 300, levels: { ...m.fresh.levels, stands: 4 } }; return T.attendance(s) === 280 && T.goalBonus(s) === 168 ? '' : `${T.attendance(s)} in the ground pays ${T.goalBonus(s)} a goal`; },
+    /* Round 1532: a goal pays GOAL_BONUS_SEC seconds of unboosted income, no longer a crowd scaled 168.
+       The guide names the seconds, not a dollar figure: a figure holds for one ground only (the review
+       measured 1,630 to 1,677 dollars where a greedy club first has 280 in the ground, against the 70 of
+       a club that bought nothing but Stands). Checked on a bare club, a full one and a grown one with
+       stars, a streak and every spending track. */
+    where: 'stadium', phrase: 'A goal pays five seconds of your income',
+    check: (T, m) => {
+      const grown = { ...m.crowd, rep: 2, streak: 4, levels: { ...m.crowd.levels, tickets: 30, snacks: 25, shop: 15, parking: 12 } };
+      const clubs = [m.fresh, m.crowd, grown];
+      const off = clubs.filter(s => !(T.goalBonus(s) === Math.round(T.incomePerSec(s) * 5) && T.unboostedIncomePerSec(s) === T.incomePerSec(s) && T.goalBonus(s) > 0));
+      return T.GOAL_BONUS_SEC === 5 && T.goalBonus(grown) > T.goalBonus(m.crowd) && off.length === 0 ? '' : `a goal pays ${T.GOAL_BONUS_SEC} seconds, and ${off.length} of ${clubs.length} clubs are paid something other than five seconds of their income (${clubs.map(s => `${T.goalBonus(s)} against ${T.incomePerSec(s)} a second`).join(', ')})`;
+    },
   },
   {
     where: 'stadium', phrase: "the league's fifth matchday comes about ten minutes in",

@@ -63,6 +63,7 @@
  */
 import pw from './lib/playwrightLoader.mjs';
 import { installServedCodeControl, controlledChecks } from './lib/servedCodeControl.mjs';
+import { answerConsent } from './lib/answerConsent.mjs';
 
 const { chromium } = pw;
 const BASE = process.env.BASE ?? process.env.SWEEP_BASE ?? 'http://localhost:4173';
@@ -137,8 +138,7 @@ async function walkGame(game) {
   await page.addInitScript(route => localStorage.setItem(`rules-gate-seen:${route}`, '1'), game.path);
   await page.goto(`${BASE}${game.path}`, { waitUntil: 'networkidle' });
   await page.waitForTimeout(1100);
-  const consent = page.locator('button:has-text("Essential only")');
-  if (await consent.count()) { await consent.first().click().catch(() => {}); await page.waitForTimeout(300); }
+  await answerConsent(page); await page.waitForTimeout(300);
   await page.locator('input[placeholder*="name"]').first().fill('Probe Player');
   await page.locator('button:has-text("Enter the draft")').click();
   await page.waitForTimeout(1000);

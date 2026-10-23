@@ -62,6 +62,7 @@ import path from 'node:path';
 import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import pw from './lib/playwrightLoader.mjs';
+import { answerConsent } from './lib/answerConsent.mjs';
 
 const { chromium } = pw;
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -234,7 +235,7 @@ async function bringIntoReach(page, locator) {
 }
 
 async function clearRoom(page) {
-  await page.getByRole('button', { name: /^essential only$/i }).first().click({ timeout: 1500 }).catch(() => {});
+  await answerConsent(page, { wait: 1500 });
 }
 
 async function walk(route, width) {

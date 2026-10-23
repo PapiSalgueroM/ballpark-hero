@@ -86,6 +86,7 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
 import pw from './lib/playwrightLoader.mjs';
+import { answerConsent } from './lib/answerConsent.mjs';
 import { seedPages } from './lib/pageSeed.mjs';
 
 const { chromium } = pw;
@@ -218,7 +219,7 @@ const onHub = p => p.locator('[data-cm-way="quick"]').first().isVisible().catch(
 const onSlots = p => p.locator('[data-testid="cm-slots"]').isVisible().catch(() => false);
 const text = async p => (await p.locator('body').innerText().catch(() => '')).replace(/\s+/g, ' ');
 async function clearBanner(p) {
-  await p.getByRole('button', { name: /^essential only$/i }).first().click({ timeout: 1200 }).catch(() => {});
+  await answerConsent(p, { wait: 1200 });
 }
 /** A game's rules open by themselves on a first visit: closed the way a player closes them. */
 async function clearDialogs(p) {

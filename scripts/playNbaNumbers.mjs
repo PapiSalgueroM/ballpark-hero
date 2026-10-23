@@ -34,6 +34,7 @@
         ENGINES=chromium node scripts/playNbaNumbers.mjs */
 import { readFileSync } from 'node:fs';
 import pw from './lib/playwrightLoader.mjs';
+import { answerConsent } from './lib/answerConsent.mjs';
 
 const { chromium } = pw;
 const BASE = process.env.BASE ?? process.env.SWEEP_BASE ?? 'http://localhost:4173';
@@ -71,8 +72,7 @@ async function open(width, height, reduced) {
   await page.addInitScript(route => localStorage.setItem(`rules-gate-seen:${route}`, '1'), ROUTE);
   await page.goto(`${BASE}${ROUTE}`, { waitUntil: 'networkidle' });
   await page.waitForTimeout(900);
-  const consent = page.locator('button:has-text("Essential only")');
-  if (await consent.count()) { await consent.first().click().catch(() => {}); await page.waitForTimeout(300); }
+  await answerConsent(page); await page.waitForTimeout(300);
   await page.locator('input[placeholder*="name"]').first().fill('Probe Player');
   await page.locator('button:has-text("Enter the draft")').click();
   await page.waitForTimeout(900);

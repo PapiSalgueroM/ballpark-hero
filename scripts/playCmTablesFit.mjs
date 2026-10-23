@@ -47,6 +47,7 @@ import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
 import { chromium } from './lib/playwrightLoader.mjs';
+import { answerConsent } from './lib/answerConsent.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CM_DIR = 'src/components/club-manager';
@@ -659,7 +660,7 @@ const tab = async (page, name) => page.getByRole('tab', { name, exact: true }).f
 async function playThrough(page, which, tag, reads) {
   const steps = [];
   const step = (ok, what) => { steps.push(`${ok ? 'ok' : 'MISSED'} ${what}`); };
-  await pressText(page, /^Essential only$/i, 1500);
+  await answerConsent(page, { wait: 1500 });
   step(await tab(page, 'Squad'), 'the Squad tab');
   await page.waitForTimeout(900);
   const picker = page.locator('select[aria-label="Sort squad"]:visible');
@@ -733,7 +734,7 @@ async function playThrough(page, which, tag, reads) {
   return { save, draws, steps };
 }
 async function newLiverpool(page) {
-  await pressText(page, /^Essential only$/i, 1500);
+  await answerConsent(page, { wait: 1500 });
   if (await page.locator('text=Start Fresh').count()) { await page.locator('text=Start Fresh').first().click(); await page.waitForTimeout(800); }
   await page.locator('button:has-text("2026-27")').first().click({ timeout: 10000 });
   await page.waitForTimeout(700);
@@ -743,14 +744,14 @@ async function newLiverpool(page) {
   await page.waitForTimeout(700);
   await page.locator('button:has-text("Liverpool")').first().click({ timeout: 5000 });
   await page.waitForTimeout(500);
-  await pressText(page, /^Essential only$/i, 1000);
+  await answerConsent(page, { wait: 1000 });
   await page.locator('text=Take the job').first().click({ timeout: 5000 });
   await page.waitForTimeout(1200);
   await pressText(page, /^Skip: just manage$/i, 3000);
   await page.waitForTimeout(2000);
 }
 async function resume(page) {
-  await pressText(page, /^Essential only$/i, 1500);
+  await answerConsent(page, { wait: 1500 });
   await pressText(page, /Resume Career/i, 8000);
   await page.waitForTimeout(1800);
 }

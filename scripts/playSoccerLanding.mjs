@@ -74,6 +74,7 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
 import pw from './lib/playwrightLoader.mjs';
+import { answerConsent } from './lib/answerConsent.mjs';
 import { pageSeedOf, seedPages } from './lib/pageSeed.mjs';
 
 const { chromium } = pw;
@@ -162,6 +163,8 @@ if (SECTIONS.includes('bar') || SECTIONS.includes('retire')) {
       loader: { '.css': 'empty', '.png': 'empty', '.svg': 'empty', '.jpg': 'empty', '.webp': 'empty' },
     });
     const { sc } = await import(pathToFileURL(path.join(tmp, 'bundle.mjs')).href);
+    /* Round 1524: the owner tail is a lazy chunk the page awaits before the boardroom; so does this. */
+    await sc.loadOwnerTail();
     const { careerStep } = await import(pathToFileURL(path.join(ROOT, 'scripts', 'lib', 'careerStep.mjs')).href);
     const clubs = sc.FALLBACK_CLUBS;
     const flat = o => ({ pace: o, shooting: o, passing: o, dribbling: o, defending: o, physical: o, reflexes: o });
@@ -297,7 +300,7 @@ async function plant(p, url, entries) {
   await p.evaluate(kv => { localStorage.clear(); for (const [k, v] of Object.entries(kv)) localStorage.setItem(k, v); }, entries);
 }
 async function clearBanner(p) {
-  await p.getByRole('button', { name: /^essential only$/i }).first().click({ timeout: 1200 }).catch(() => {});
+  await answerConsent(p, { wait: 1200 });
 }
 async function clearDialogs(p) {
   for (let i = 0; i < 3; i++) {

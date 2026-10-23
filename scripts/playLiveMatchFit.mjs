@@ -141,6 +141,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import pw from './lib/playwrightLoader.mjs';
+import { answerConsent } from './lib/answerConsent.mjs';
 import { hashName, pageDraws, pageSeedOf, seedPages } from './lib/pageSeed.mjs';
 
 const { chromium } = pw;
@@ -289,7 +290,7 @@ const tapText = async (page, rx, what) => {
   return b.click({ timeout: 4000 }).then(() => true).catch(() => false);
 };
 async function clearRoom(page) {
-  await page.getByRole('button', { name: /^essential only$/i }).first().click({ timeout: 1200 }).catch(() => {});
+  await answerConsent(page, { wait: 1200 });
   for (let i = 0; i < 3; i++) {
     if (await page.locator('[role="dialog"][data-state="open"]').count().catch(() => 0) === 0) break;
     await page.keyboard.press('Escape').catch(() => {});

@@ -38,6 +38,7 @@ import path from 'node:path';
 import pw from './lib/playwrightLoader.mjs';
 import { installServedCodeControl, controlledChecks } from './lib/servedCodeControl.mjs';
 import { pageSeedOf, seedPages } from './lib/pageSeed.mjs';
+import { answerConsent } from './lib/answerConsent.mjs';
 
 const { chromium } = pw;
 const BASE = process.env.BASE ?? process.env.SWEEP_BASE ?? 'http://localhost:4173';
@@ -133,8 +134,7 @@ async function openPicker(ctx) {
   await pause(page, 700);
   await page.locator('button:has-text("Premier League")').first().click();
   await pause(page, 700);
-  const essential = page.locator('button:has-text("Essential only")');
-  if (await essential.count()) { await essential.click(); await pause(page, 400); }
+  await answerConsent(page); await pause(page, 400);
   return page;
 }
 /** Brentford, Take the job, to the Dugout step. */

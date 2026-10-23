@@ -68,6 +68,8 @@ try {
   }
   await E.loadManagerMarket();
   assert(E.managerMarketReady(), 'same loaded job market as actual manager choice');
+  /* Round 1524: the owner tail is a lazy chunk the page awaits before the boardroom */
+  await E.loadOwnerTail();
   const home = H.CONTINUE_SAVES.find(row => row.path === '/soccer-career');
   assert(home);
   const tails = ['manager', 'pundit', 'owner'];
@@ -98,7 +100,7 @@ try {
           return E.advanceManagerSeason(current, E.FALLBACK_CLUBS);
         }
         if (tail === 'pundit') return E.advancePunditSeason(current, 'bold_prediction');
-        return E.advanceOwnerSeason(current);
+        return E.advanceOwnerSeason(current, E.FALLBACK_CLUBS);
       };
       let firstFailure = null;
       for (let year = 0; year <= 100; year += 1) {

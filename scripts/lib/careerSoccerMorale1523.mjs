@@ -11,18 +11,18 @@
  * untouched (never squashed into one). Applied IN ORDER to this round's engine they give the ninth's head byte for
  * byte (LF):
  *   src/lib/soccerCareerEngine.ts
- *     head sha256 41e017d973ddbff539d6752313ca068cec04a08dbc671a7698728f1d7961650f
- *     base sha256 0b3d35bc584867da38ced517c5d2ed9c2507fbced8c200c916f5b830ed39d5a1
- * (base: git show 2ab9bef1:<file>, origin/main when the round started, whose engine is the ninth inverse's
- * head pin). Every row is required exactly once at its turn. Rows are regenerated, never hand edited, after any
+ *     head sha256 5619bf28ceb3fa07561d0c667a09de411439c488acb0170b45dae2fbc49bf990
+ *     base sha256 90e8fc573532e8388b7d3a745e88550031ceca990e1717b43651ec281ace115a
+ * (base: git show 6c63ce98:<file>, the Release BP head the round was merged onto, after Round 1519, whose
+ * engine is the ninth inverse's head pin; regenerated at that merge). Every row is required exactly once at its turn. Rows are regenerated, never hand edited, after any
  * change to the engine, this round's or a merge's: from the worktree root, node .tmp-fx/x/gen-inverse-1523.mjs <base>
  * then node .tmp-fx/x/write-inverse-1523.mjs (copies in C:/Users/antho/dukb-handoff/2026-10-10/results-g/r1523-tools).
  */
-export const SOCCER_MORALE_BASE = '2ab9bef153009a3144970e87755225a458ef0c3b';
+export const SOCCER_MORALE_BASE = '6c63ce989fc6fe1e46c91b3ec5bc63a484b56717';
 export const SOCCER_MORALE_SHA256 = {
   "src/lib/soccerCareerEngine.ts": {
-    "head": "41e017d973ddbff539d6752313ca068cec04a08dbc671a7698728f1d7961650f",
-    "base": "0b3d35bc584867da38ced517c5d2ed9c2507fbced8c200c916f5b830ed39d5a1"
+    "head": "5619bf28ceb3fa07561d0c667a09de411439c488acb0170b45dae2fbc49bf990",
+    "base": "90e8fc573532e8388b7d3a745e88550031ceca990e1717b43651ec281ace115a"
   }
 };
 

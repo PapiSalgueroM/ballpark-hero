@@ -43,6 +43,31 @@
  * is merely small still fails. SWEEP_PHONE_CONTROL=counthidden turns the
  * exclusion off, and ROUTE=/stadium-tycoon must then go red on the 1px twin.
  *
+ * Round 1537: a control inside a scroll box, checked against a control
+ * outside that box, is measured on the part of it the box leaves showing. The
+ * case that found it is the NBA and NHL Connections planning bench, whose
+ * twenty names sit in a 272px scrolling box (Rounds 1002 and 1003, on purpose,
+ * so the receipt and Submit five stay beside the names). The sixth row of
+ * names, scrolled out of that box, sat geometrically under Clear draft and
+ * Submit five, and the sweep failed both routes on two names nobody can touch
+ * there: a tap on Clear draft lands on Clear draft. The cut is per PAIR: each
+ * control is cut only by the clipping ancestors the other one does not share.
+ * Two controls inside one scroll box move together when it scrolls, so they
+ * are compared on their whole boxes wherever the box sits, exactly as before
+ * this round, and two names stacked on each other below the box's window still
+ * fail. (The round's first version cut every control by every clipping
+ * ancestor and dropped the ones none of which showed, which stopped comparing
+ * 317 controls on 17 routes with anything; the review caught it.) Every pair
+ * the cut settles is printed as a NOTE and counted in the closing lines, so a
+ * widening of the exception shows. Tap target size still reads the whole box,
+ * since a name scrolled into view is its full size.
+ * Two controls: SWEEP_PHONE_CONTROL=noclip measures whole boxes again, and
+ * ROUTE=/nba-connections must then go red on "<a name> over Clear draft" (the
+ * name is the day's sixth row: Paul Pierce on 2026-10-21, Michael Jordan on
+ * 2026-10-22). SWEEP_PHONE_CONTROL=stackhidden plants two buttons stacked on
+ * each other inside a 60px scroll box, below its window, into every page it
+ * opens, and must go red on "Planted one over Planted two".
+ *
  * Run: npm run build, serve dist with scripts/lib/hostLikeServer.mjs, then
  *      ENGINES=chromium node scripts/sweepPhone.mjs
  * A single route can be checked with ROUTE=/club-manager.
@@ -51,17 +76,20 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import pw from './lib/playwrightLoader.mjs';
+import { answerConsent } from './lib/answerConsent.mjs';
 
 const { chromium, devices } = pw;
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BASE = process.env.BASE ?? process.env.SWEEP_BASE ?? 'http://localhost:4173';
 
 const CONTROL = process.env.SWEEP_PHONE_CONTROL ?? '';
-if (CONTROL && CONTROL !== 'counthidden') {
-  console.error(`SWEEP_PHONE_CONTROL=${CONTROL} is not a control this sweep knows (counthidden)`);
+if (CONTROL && CONTROL !== 'counthidden' && CONTROL !== 'noclip' && CONTROL !== 'stackhidden') {
+  console.error(`SWEEP_PHONE_CONTROL=${CONTROL} is not a control this sweep knows (counthidden, noclip, stackhidden)`);
   process.exit(2);
 }
-if (CONTROL) console.log(`CONTROL ${CONTROL} is on: visually hidden controls are measured like visible ones, so the sweep is SUPPOSED to fail.`);
+if (CONTROL === 'counthidden') console.log(`CONTROL ${CONTROL} is on: visually hidden controls are measured like visible ones, so the sweep is SUPPOSED to fail.`);
+if (CONTROL === 'noclip') console.log(`CONTROL ${CONTROL} is on: controls scrolled out of their box are measured where they would sit, so the sweep is SUPPOSED to fail.`);
+if (CONTROL === 'stackhidden') console.log(`CONTROL ${CONTROL} is on: every page gets two buttons stacked inside a scroll box, below its window, so the sweep is SUPPOSED to fail.`);
 
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
@@ -123,13 +151,14 @@ await wirePage();
    with once rather than on every page. */
 await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded', timeout: 20000 });
 await page.waitForTimeout(600);
-const consent = page.locator('button:has-text("Essential only")');
-if (await consent.count()) { await consent.first().click().catch(() => {}); await page.waitForTimeout(300); }
+await answerConsent(page); await page.waitForTimeout(300);
 
 console.log(`Sweeping ${ROUTES.length} routes at 390x844 with touch`);
 
 const worst = { overflow: 0, route: '' };
 let smallTargets = 0, tinyText = 0, overlaps = 0, checked = 0;
+/* Round 1537: pairs whose whole boxes collide but whose seen parts do not, and the routes they sit on. */
+let hiddenPairs = 0, hiddenRoutes = 0;
 
 let sinceRecycle = 0;
 for (const route of ROUTES) {
@@ -140,8 +169,7 @@ for (const route of ROUTES) {
     page = await ctx.newPage();
     await wirePage();
     await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded', timeout: 20000 }).catch(() => {});
-    const c = page.locator('button:has-text("Essential only")');
-    if (await c.count()) { await c.first().click().catch(() => {}); await page.waitForTimeout(300); }
+    await answerConsent(page); await page.waitForTimeout(300);
     sinceRecycle = 0;
   }
   sinceRecycle += 1;
@@ -149,9 +177,20 @@ for (const route of ROUTES) {
   try {
     await page.goto(`${BASE}${route}`, { waitUntil: 'domcontentloaded', timeout: 20000 });
     await page.waitForTimeout(500);
-    metrics = await page.evaluate((countHidden) => {
+    metrics = await page.evaluate(({ countHidden, noClip, plant }) => {
       const doc = document.documentElement;
       const main = document.querySelector('main') ?? document.body;
+      /* Round 1537, the control SWEEP_PHONE_CONTROL=stackhidden: two buttons
+         stacked on each other inside one scroll box, below its window, the
+         collision a finger meets after one scroll. Must go red on every page. */
+      if (plant) {
+        const box = document.createElement('div');
+        box.style.cssText = 'height:60px;overflow-y:auto;';
+        box.innerHTML = '<div style="height:200px"></div>'
+          + '<button type="button" style="display:block;width:160px;height:44px">Planted one</button>'
+          + '<button type="button" style="display:block;width:160px;height:44px;margin-top:-44px">Planted two</button>';
+        main.appendChild(box);
+      }
       const skip = el => el.closest('.dukb-ticker-track') || el.closest('footer') || el.closest('nav');
       /* Round 635: invisible to every finger, so not a tap target. The shape,
          not a class name: at most 1 by 1 with overflow hidden, or clipped to
@@ -161,6 +200,47 @@ for (const route of ROUTES) {
         const cs = getComputedStyle(el);
         if (r.width <= 1 && r.height <= 1 && cs.overflow === 'hidden') return true;
         return cs.clip === 'rect(0px, 0px, 0px, 0px)' || cs.clipPath === 'inset(50%)';
+      };
+      /* Round 1537: the ancestors that clip a control's overflow, nearest
+         first, each with the window it leaves open (per axis, at its padding
+         box). A fixed box escapes its ancestors, and an absolute one escapes
+         the static ancestors below its containing block (transforms aside);
+         an inline box clips nothing. See the header. */
+      const clipChain = el => {
+        const chain = [];
+        let pos = getComputedStyle(el).position;
+        for (let a = el.parentElement; a && a !== document.body && a !== doc; a = a.parentElement) {
+          if (pos === 'fixed') break;
+          const cs = getComputedStyle(a);
+          if (pos === 'absolute' && cs.position === 'static') continue;
+          const cx = cs.overflowX !== 'visible', cy = cs.overflowY !== 'visible';
+          if (cs.display !== 'inline' && cs.display !== 'contents' && (cx || cy)) {
+            const b = a.getBoundingClientRect();
+            const cl = b.left + a.clientLeft, ct = b.top + a.clientTop;
+            chain.push({
+              el: a,
+              l: cx ? cl : -Infinity, r: cx ? cl + a.clientWidth : Infinity,
+              t: cy ? ct : -Infinity, b: cy ? ct + a.clientHeight : Infinity,
+            });
+          }
+          pos = cs.position;
+        }
+        return chain;
+      };
+      /* One control as another sees it: its box cut only by the clipping
+         ancestors the other does not share, or null when none of it shows.
+         Two controls inside one scroll box move together, so wherever the box
+         is scrolled to an overlap between them is real, and they are compared
+         on their whole boxes, as before this round. A control inside a scroll
+         box against one outside it is compared on what the box leaves
+         showing. */
+      const seenFrom = (a, other) => {
+        let l = a.x, t = a.y, r = a.x + a.w, b = a.y + a.h;
+        for (const c of a.clips) {
+          if (other.clips.some(o => o.el === c.el)) continue;
+          l = Math.max(l, c.l); r = Math.min(r, c.r); t = Math.max(t, c.t); b = Math.min(b, c.b);
+        }
+        return r > l && b > t ? { x: l, y: t, w: r - l, h: b - t } : null;
       };
 
       /* 1. sideways scroll on the document itself */
@@ -203,7 +283,7 @@ for (const route of ROUTES) {
         if (visuallyHidden(el, r)) continue;
         const label = (el.textContent ?? '').trim().slice(0, 22);
         if (r.height < 30 && label.length > 2 && !isProseLink(el)) small.push(`${label} (${Math.round(r.height)}px)`);
-        boxes.push({ label, x: r.x, y: r.y, w: r.width, h: r.height });
+        boxes.push({ label, x: r.x, y: r.y, w: r.width, h: r.height, clips: noClip ? [] : clipChain(el) });
       }
       for (const el of Array.from(main.querySelectorAll('p, span, div, li, td, th, label'))) {
         if (skip(el)) continue;
@@ -215,22 +295,31 @@ for (const route of ROUTES) {
 
       /* 4. controls stacked on top of each other. Only counts when the
          overlap is most of both, so a button inside a card does not
-         register and a genuine collision does. */
+         register and a genuine collision does. Round 1537: each pair is
+         compared as seenFrom draws it, and a pair whose whole boxes collide
+         but whose seen parts do not is counted in `hidden`, so the sweep says
+         how many pairs a scroll box settles (see the header). */
+      const stacked = (a, b) => {
+        const ox = Math.min(a.x + a.w, b.x + b.w) - Math.max(a.x, b.x);
+        const oy = Math.min(a.y + a.h, b.y + b.h) - Math.max(a.y, b.y);
+        if (ox <= 0 || oy <= 0) return false;
+        const area = ox * oy;
+        return area > 0.7 * a.w * a.h && area > 0.7 * b.w * b.h;
+      };
       const hits = [];
+      const hidden = [];
       for (let i = 0; i < boxes.length && hits.length < 3; i++) {
         for (let j = i + 1; j < boxes.length && hits.length < 3; j++) {
           const a = boxes[i], b = boxes[j];
-          const ox = Math.min(a.x + a.w, b.x + b.w) - Math.max(a.x, b.x);
-          const oy = Math.min(a.y + a.h, b.y + b.h) - Math.max(a.y, b.y);
-          if (ox <= 0 || oy <= 0) continue;
-          const area = ox * oy;
-          if (area > 0.7 * a.w * a.h && area > 0.7 * b.w * b.h) {
-            hits.push(`${a.label || '(icon)'} over ${b.label || '(icon)'}`);
-          }
+          /* Seen parts lie inside the whole boxes, so whole boxes apart are done. */
+          if (Math.min(a.x + a.w, b.x + b.w) <= Math.max(a.x, b.x) || Math.min(a.y + a.h, b.y + b.h) <= Math.max(a.y, b.y)) continue;
+          const sa = seenFrom(a, b), sb = seenFrom(b, a);
+          if (sa && sb && stacked(sa, sb)) hits.push(`${a.label || '(icon)'} over ${b.label || '(icon)'}`);
+          else if (stacked(a, b)) hidden.push(`${a.label || '(icon)'} over ${b.label || '(icon)'}`);
         }
       }
-      return { overflow, culprit, small, tiny, hits, controls: boxes.length };
-    }, CONTROL === 'counthidden');
+      return { overflow, culprit, small, tiny, hits, hidden, controls: boxes.length };
+    }, { countHidden: CONTROL === 'counthidden', noClip: CONTROL === 'noclip', plant: CONTROL === 'stackhidden' });
   } catch (e) {
     fail(`${route}: would not load (${String(e).split('\n')[0].slice(0, 90)})`);
     continue;
@@ -252,6 +341,11 @@ for (const route of ROUTES) {
     overlaps += metrics.hits.length;
     fail(`${route}: controls sitting on top of each other: ${metrics.hits.join(', ')}`);
   }
+  if (metrics.hidden.length) {
+    hiddenPairs += metrics.hidden.length;
+    hiddenRoutes += 1;
+    console.log(`  NOTE: ${route}: ${metrics.hidden.length} pair${metrics.hidden.length === 1 ? '' : 's'} collide only where a scroll box hides one of the two: ${metrics.hidden.slice(0, 3).join(', ')}`);
+  }
 }
 
 const real = pageErrors.filter(e => !/supabase|Failed to fetch|CORS|ResizeObserver/i.test(e));
@@ -260,6 +354,7 @@ if (real.length) fail(`${real.length} page error${real.length === 1 ? '' : 's'} 
 console.log('');
 console.log(`   ${checked} routes swept, worst overflow ${worst.overflow}px${worst.route ? ` (${worst.route})` : ''}`);
 console.log(`   ${smallTargets} small tap targets, ${tinyText} runs of tiny text, ${overlaps} overlapping controls`);
+console.log(`   ${hiddenPairs} pair${hiddenPairs === 1 ? '' : 's'} on ${hiddenRoutes} route${hiddenRoutes === 1 ? '' : 's'} collide only where a scroll box hides one of the two (not failures, see the header)`);
 await ctx.close();
 await browser.close();
 if (failures > 0) {

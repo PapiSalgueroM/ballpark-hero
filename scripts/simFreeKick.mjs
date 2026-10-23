@@ -20,6 +20,10 @@
         scored by some legal aim, and none of them can be scored by every aim.
      5) THE WALL AND THE KEEPER BOTH MATTER: shots into the wall's span are
         blocked, and a keeper with a high read saves more than a poor one.
+     6) THE CAP FITS THE LADDER (Round 1531): the free-kick cap in the committed
+        migration is at least the best flawless daily run of 2026 to 2028 and
+        no more than 15 percent above it. SIM_FREE_KICK_CONTROL=lowcap reads
+        the old 3424 instead and section 6 must go red.
 
    Negative control (house rule: prove the check can fail), and it reproduces
    the defect this harness actually caught rather than an invented one:
@@ -48,7 +52,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_URL = ROOT.replaceAll('\\', '/');
 const CONTROL = process.env.SIM_FREE_KICK_CONTROL || '';
-if (CONTROL && CONTROL !== 'nospray') { console.error(`SIM_FREE_KICK_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
+if (CONTROL && CONTROL !== 'nospray' && CONTROL !== 'lowcap') { console.error(`SIM_FREE_KICK_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
 
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
@@ -221,6 +225,37 @@ console.log('5) the wall and the keeper both matter');
   const great = rate(0.8);
   console.log(`   a 0.2 keeper saves ${(poor * 100).toFixed(0)}% of what reaches him, a 0.8 keeper ${(great * 100).toFixed(0)}%`);
   if (!(great > poor + 0.08)) fail(`the good keeper saves ${(great * 100).toFixed(0)}% against the poor keeper's ${(poor * 100).toFixed(0)}%, so keeper quality does nothing`);
+}
+
+console.log('6) a flawless daily run is worth what the committed leaderboard cap says it is');
+{
+  /* Round 1531. PR180 moved the walled kicks outside the area, so a flawless run pays
+     more, while the production cap stayed at Round 433's 3424. The cap is a database
+     fact, so this holds the number in the committed migration that carries it against
+     the ladder, measured the way Rounds 433 and 445 measured theirs: the highest
+     flawless run over the real daily seeds, here every date of 2026 to 2028. Too low
+     clips the best runs in silence; far too high and nobody ranks near it. SQL
+     comments are stripped first, so the prose quoting old numbers cannot satisfy it. */
+  let hi = -Infinity;
+  const day = new Date(Date.UTC(2026, 0, 1));
+  for (let i = 0; i < 1096; i += 1) {
+    hi = Math.max(hi, fk.maxRunScore(buildRun(fk.daySeed(day.toISOString().slice(0, 10)))));
+    day.setUTCDate(day.getUTCDate() + 1);
+  }
+  const sql = fs.readdirSync(path.join(ROOT, 'supabase/migrations'))
+    .filter(f => /free_kick_cap/.test(f))
+    .map(f => fs.readFileSync(path.join(ROOT, 'supabase/migrations', f), 'utf8').replace(/--[^\n]*/g, ''))
+    .join('\n');
+  let capped = Math.max(0, ...[...sql.matchAll(/'free-kick',\s*(\d+)/g)].map(m => Number(m[1])));
+  if (CONTROL === 'lowcap') {
+    if (!capped) { console.error('control cannot run: no committed free-kick cap to replace'); process.exit(1); }
+    capped = 3424;
+    console.log('NEGATIVE CONTROL ON: the cap is the 3424 the production table held before this round');
+  }
+  console.log(`   over 1096 real dates a flawless run pays up to ${hi}; the committed cap is ${capped || 'MISSING'}`);
+  if (!capped) fail('no committed migration puts free-kick in game_score_caps with a measured cap');
+  else if (capped < hi) fail(`the cap is ${capped} but a flawless run can pay ${hi}, so the best runs would be clipped`);
+  else if (capped > hi * 1.15) fail(`the cap is ${capped} against a real ceiling of ${hi}, which is high enough that nobody can rank near it`);
 }
 
 if (CONTROL) {

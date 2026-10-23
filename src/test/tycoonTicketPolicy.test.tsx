@@ -97,22 +97,34 @@ describe('Stadium ticket policy', () => {
   });
 
   it('Standard keeps exact original trajectories events and random draws', () => {
+    /* Round 1532 bridge: the Round 1080 engine scores on the old lines and this one
+       on the shared scoring law, so both arms read the same stream lifted to at least
+       0.2, where neither side can score in either engine (the old cap is 0.16 a
+       minute, the law's 4.2 / 90), and the rivals' own rows are dropped: their
+       fixtures play the league's seeded stream at the law's chances on purpose. What
+       Round 1080 claimed still holds: a Standard club's money, crowd, taps, boost
+       and its own row are the pre 1080 game. 374 seconds is under three matches, so
+       no season ends inside the run (asserted). */
+    const ownRow = (state: TycoonState) => (state.league ? { ...state, league: { ...state.league, clubs: state.league.clubs.slice(0, 1) } } : state);
     for (const seed of [1, 29, 901, 8117]) {
       let live = engine.newTycoon(EPOCH);
       let old = original.newTycoon(EPOCH);
       const a = stream(seed), b = stream(seed);
+      const quietA = () => Math.max(a.next(), 0.2), quietB = () => Math.max(b.next(), 0.2);
       for (let i = 0; i < 1800; i += 1) {
         if (i % 5 === 0) { live = engine.tap(live); old = original.tap(old); }
         if (i % 37 === 0) { live = engine.buy(live, 'tickets'); old = original.buy(old, 'tickets'); }
         if (i % 61 === 0) { live = engine.buy(live, 'lights'); old = original.buy(old, 'lights'); }
         if (i % 97 === 0) { live = engine.activateBoost(live); old = original.activateBoost(old); }
-        const current = engine.tick(live, 0.208, a.next), baseline = original.tick(old, 0.208, b.next);
-        expect(current).toEqual(baseline);
+        const current = engine.tick(live, 0.208, quietA), baseline = original.tick(old, 0.208, quietB);
+        expect(current.events.some(e => e.kind === 'title' || e.kind === 'seasonEnd')).toBe(false);
+        expect({ ...current, state: ownRow(current.state) }).toEqual({ ...baseline, state: ownRow(baseline.state as TycoonState) });
         live = current.state; old = baseline.state;
       }
       expect(a.draws).toBe(b.draws);
       expect(a.draws).toBeGreaterThan(0);
-      expect(engine.serializeTycoon(live, EPOCH)).toBe(original.serializeTycoon(old, EPOCH));
+      const saved = (text: string) => ownRow(JSON.parse(text));
+      expect(saved(engine.serializeTycoon(live, EPOCH))).toEqual(saved(original.serializeTycoon(old, EPOCH)));
       expect(engine.offlineEarnings(live, EPOCH + 36_000_000)).toBe(original.offlineEarnings(old, EPOCH + 36_000_000));
     }
   });
@@ -192,7 +204,7 @@ describe('Stadium ticket policy', () => {
       expect(engine.setTicketPolicy(active, 'standard')).toEqual(state);
       const expectedTap = Math.max(1, Math.round(engine.incomePerSec(active) * 0.7));
       expect(engine.tap(active).money - active.money).toBe(expectedTap);
-      expect(engine.goalBonus(active)).toBe(Math.round(engine.attendance(active) * 0.6));
+      expect(engine.goalBonus(active)).toBe(Math.round(engine.unboostedIncomePerSec(active) * engine.GOAL_BONUS_SEC));
     }
   });
 

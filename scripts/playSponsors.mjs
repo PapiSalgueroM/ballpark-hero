@@ -12,6 +12,7 @@
  * playwright, and runs it only with --browser.)
  */
 import pw from './lib/playwrightLoader.mjs';
+import { answerConsent } from './lib/answerConsent.mjs';
 
 const { chromium } = pw;
 const BASE = process.env.BASE ?? process.env.SWEEP_BASE ?? 'http://localhost:4173';
@@ -42,8 +43,7 @@ await page.locator('button:has-text("Premier League")').first().click();
 await page.waitForTimeout(700);
 await page.locator('button:has-text("Newcastle")').first().click();
 await page.waitForTimeout(500);
-const essential = page.locator('button:has-text("Essential only")');
-if (await essential.count()) { await essential.click(); await page.waitForTimeout(400); }
+await answerConsent(page); await page.waitForTimeout(400);
 await page.locator('text=Take the job').first().click();
 await page.waitForTimeout(1200);
 /* Round 467: Round 303 put the manager picker behind the club card, with its

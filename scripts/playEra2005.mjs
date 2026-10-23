@@ -15,6 +15,7 @@
  */
 import pw from './lib/playwrightLoader.mjs';
 import { ERA_CONTROL, assertDropControl, installDropControl, enterSquad, judgeDropControl, namedInGame, plantGhost, judgeGhostControl } from './lib/eraDressingRoom.mjs';
+import { answerConsent } from './lib/answerConsent.mjs';
 
 const { chromium } = pw;
 const BASE = process.env.BASE ?? process.env.SWEEP_BASE ?? 'http://localhost:4173';
@@ -124,8 +125,7 @@ const browser = await chromium.launch();
   console.log('4) Into the 2005 dressing room');
   await page.locator('button:has-text("Newcastle")').first().click();
   await page.waitForTimeout(500);
-  const essential = page.locator('button:has-text("Essential only")');
-  if (await essential.count()) { await essential.click(); await page.waitForTimeout(400); }
+  await answerConsent(page); await page.waitForTimeout(400);
   /* Round 672: through the dugout step (Round 303) to the Squad tab, and the
      squad claims read off that tab's own panel rather than the whole page,
      whose guide copy names players of its own. See scripts/lib/eraDressingRoom. */

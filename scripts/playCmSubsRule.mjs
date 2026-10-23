@@ -30,6 +30,7 @@ import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
 import pw from './lib/playwrightLoader.mjs';
+import { answerConsent } from './lib/answerConsent.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = path.resolve(ROOT, process.env.DIST || 'dist');
@@ -128,7 +129,7 @@ const shot = (page, name) => page.screenshot({ path: path.join(OUT, `subs-${name
 async function openMatch(page) {
   await page.goto(`${BASE}/club-manager`, { waitUntil: 'domcontentloaded' });
   await page.waitForLoadState('networkidle', { timeout: 8000 }).catch(() => {});
-  await page.getByRole('button', { name: /^essential only$/i }).first().click({ timeout: 1200 }).catch(() => {});
+  await answerConsent(page, { wait: 1200 });
   const resume = page.getByRole('button', { name: /Resume Career/i }).first();
   if (await resume.count().catch(() => 0)) await resume.click({ timeout: 6000 }).catch(() => {});
   for (let i = 0; i < 10; i++) {
@@ -213,7 +214,7 @@ for (const profile of PROFILES) {
     const { context, page } = await pageWith(profile, { [FREE_KEY]: JSON.stringify(free) });
     const read = async () => {
       await page.goto(`${BASE}/manager-hot-seat`, { waitUntil: 'domcontentloaded' });
-      await page.getByRole('button', { name: /^essential only$/i }).first().click({ timeout: 1200 }).catch(() => {});
+      await answerConsent(page, { wait: 1200 });
       /* The rules open on a first visit: close them the way a visitor does. */
       await page.getByRole('dialog').first().waitFor({ timeout: 4000 }).catch(() => {});
       for (let i = 0; i < 3 && await page.getByRole('dialog').count().catch(() => 0); i++) { await page.keyboard.press('Escape').catch(() => {}); await page.waitForTimeout(300); }

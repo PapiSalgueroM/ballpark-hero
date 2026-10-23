@@ -61,6 +61,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import pw from './lib/playwrightLoader.mjs';
+import { answerConsent } from './lib/answerConsent.mjs';
 
 const { chromium } = pw;
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -128,7 +129,7 @@ async function tapText(rx) {
   return b.click({ timeout: 4000 }).then(() => true).catch(() => false);
 }
 async function clearRoom() {
-  await page.getByRole('button', { name: /^essential only$/i }).first().click({ timeout: 1200 }).catch(() => {});
+  await answerConsent(page, { wait: 1200 });
   for (let i = 0; i < 3; i++) {
     if (await page.locator('[role="dialog"][data-state="open"]').count().catch(() => 0) === 0) break;
     await page.keyboard.press('Escape').catch(() => {});
@@ -160,7 +161,8 @@ async function playTen() {
   for (let step = 0; step < 140; step++) {
     const where = await heading();
     if (where === 'FULL TIME') { await tap(/continue|next|carry on|ok/i); await page.waitForTimeout(400); continue; }
-    if (where === 'HALF TIME' || where === 'MATCH LIVE') { await tap(/second half|skip|full report/i); await page.waitForTimeout(400); continue; }
+    /* Release BP seam: Second half by its exact name (Round 1522's Tactics tile mentions the second half). */
+    if (where === 'HALF TIME' || where === 'MATCH LIVE') { await tap(/^\s*Second half\s*$|skip|full report/i); await page.waitForTimeout(400); continue; }
     if (((await saved())?.week ?? 0) >= WEEKS) break;
     if (await tapText(/Quick Sim/i)) { await page.waitForTimeout(700); continue; }
     await clearRoom();

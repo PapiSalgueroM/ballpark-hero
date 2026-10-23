@@ -36,6 +36,11 @@
  * Zenit and CSKA Moscow in 2015-16, Lokomotiv Moscow, Krasnodar and Zenit in 2020-21); the plain run
  * passed 6 of 6 in two seconds; the control failed 1 of 6, "clubs whose digest moved: Sevilla", and
  * the other five stayed green, vitest exit 1.
+ * Round 1520's review fix (2026-10-21) gave three rules rows a clubCountry entry on purpose (the Welsh clubs of the
+ * Championship, the Canadian clubs of MLS East and West), so those three rules digests, and nothing else, were taken
+ * again from the head's recording (runner r1520-fx-i: with the four rows taken out the fixture before that passed 6
+ * of 6, line id-norows; among the fixture's own 26 leagues the head's recording differed from it in those three
+ * rules digests only, line id-record). The rest of the photograph is the base's, as recorded.
  */
 import { describe, it, expect, vi, beforeAll } from 'vitest';
 import { createHash } from 'node:crypto';

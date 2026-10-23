@@ -161,6 +161,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import pw from './lib/playwrightLoader.mjs';
+import { answerConsent, storedConsent } from './lib/answerConsent.mjs';
 
 const { chromium } = pw;
 const BASE = (process.env.BASE ?? process.env.SWEEP_BASE ?? 'http://localhost:4173').replace(/\/$/, '');
@@ -644,8 +645,7 @@ async function narrowCheck(browser, { width, mode, raw, expectNotice }) {
 /** The cookie banner, one choice, one mode, in a fresh context on a phone. */
 async function bannerCheck(browser, { mode, raw, choice }) {
   const { ctx, page, seen } = await openPage(browser, { view: VIEWS[0], mode, raw });
-  const button = choice === 'accept' ? 'Accept' : 'Essential only';
-  const name = `cookie banner ${mode.toUpperCase()} "${button}"`;
+  const name = `cookie banner ${mode.toUpperCase()} "${choice}"`;
   try {
     await page.goto(BASE + '/', { waitUntil: 'load', timeout: 45000 });
     await settle(page);
@@ -654,7 +654,7 @@ async function bannerCheck(browser, { mode, raw, choice }) {
     say(shown === 1, `${name}: the banner is up on a first visit`);
     say(seen.thirdParty.length === 0, `${name}: ${seen.thirdParty.length} analytics or ad requests before any choice`);
     if (shown === 1) {
-      await banner.getByRole('button', { name: button, exact: true }).click({ timeout: 5000 });
+      await answerConsent(page, { choice, timeout: 5000 });
       await page.waitForTimeout(800);
     }
     say((await banner.count()) === 0, `${name}: the banner left`);
@@ -698,10 +698,8 @@ async function bannerCheck(browser, { mode, raw, choice }) {
     const errors = [...seen.pageErrors, ...seen.storageConsole];
     say(errors.length === 0, `${name}: no uncaught error${errors.length ? ': ' + errors[0] : ''}`);
     if (mode === 'open') {
-      const held = await page.evaluate(() => {
-        try { return window.__harnessRealLocal ? window.__harnessRealLocal.getItem('cookie-consent') : null; } catch (e) { return 'threw'; }
-      });
-      const answer = choice === 'accept' ? 'accepted' : 'essential';
+      const held = await storedConsent(page, { store: '__harnessRealLocal' });
+      const answer = choice === 'accept' ? 'accepted' : 'rejected';
       say(held === answer, `${name}: the answer is in the browser's real storage (${held})`);
     }
   } catch (e) {
@@ -772,9 +770,9 @@ async function nativeArm(baselines) {
       if (route === '/') {
         const banner = page.locator('[role="region"][aria-label="Cookie choices"]');
         const up = await banner.count();
-        if (up === 1) await banner.getByRole('button', { name: 'Essential only', exact: true }).click({ timeout: 5000 });
+        if (up === 1) await answerConsent(page, { timeout: 5000 });
         await page.waitForTimeout(600);
-        say(up === 1 && (await banner.count()) === 0 && errors.length === 0, `${name}: the cookie banner came up and "Essential only" dismissed it`);
+        say(up === 1 && (await banner.count()) === 0 && errors.length === 0, `${name}: the cookie banner came up and its reject button dismissed it`);
       }
     } catch (e) {
       say(false, `${name}: ${String(e && e.message ? e.message : e).split('\n')[0].slice(0, 160)}`);
@@ -848,7 +846,7 @@ for (const w of walked) {
 console.log('\nthe cookie banner');
 for (const arm of ARMS) {
   const mode = CONTROL === 'open' ? 'open' : arm;
-  for (const choice of ['essential', 'accept']) await bannerCheck(browser, { mode, raw, choice });
+  for (const choice of ['reject', 'accept']) await bannerCheck(browser, { mode, raw, choice });
   if (CONTROL === 'open') break;
 }
 

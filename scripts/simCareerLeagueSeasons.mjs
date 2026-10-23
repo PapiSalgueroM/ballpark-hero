@@ -864,6 +864,20 @@ async function trainOutArm(plugin) {
     return false;
   }
 }
+/* Release BP: Round 1524 lifted the dugout's table into soccerCareerLeague.ts (playDugoutTable, keyedStream) and the
+   engine imports it, so an arm that reads that file from a base without the lift (Round 1100's, alone or in a
+   combination) cannot be built until the base holds 1524 (main after the release). Like the train out arm's refusal,
+   that known gap decides nothing: the arm says so and the career falls through to the arms and checks below. Any
+   other build failure is a defect and stops the run. */
+async function leagueArm(name, plugins) {
+  try { return await bundle(ROOT, name, plugins); }
+  catch (e) {
+    const why = String(e?.message ?? e).split('\n').find(l => l.includes('No matching export in "src/lib/soccerCareerLeague.ts"'));
+    if (!why) throw e;
+    console.log(`  the ${name} arm cannot be built on this engine, so it decides nothing (${why.trim()})`);
+    return false;
+  }
+}
 async function tree1523Out() {
   r1523Seen.length = 0;
   const bundled = await bundle(ROOT, 'tree1523out', [r1523Out]);
@@ -972,6 +986,7 @@ if (baseRoot) {
     const receipt = { seed, current: retainReplay(seed, 'current', mine), baseReleased: retainReplay(seed, 'base-released', base), baseKept: retainReplay(seed, 'base-kept', kept), attempts: [], acceptedArm: null };
     replayReceipt.cases.push(receipt);
     const tryArm = async (name, T) => {
+      if (!T) return false; /* an arm that could not be built (leagueArm) decides nothing */
       const value = await replay(T, seed);
       const equal = value === base;
       receipt.attempts.push({ arm: name, ...retainReplay(seed, name, value), equal });
@@ -986,7 +1001,7 @@ if (baseRoot) {
           if (others.includes('1041')) plugins.push(r1041Out);
           if (others.includes('1100')) plugins.push(r1100Out);
           if (others.includes('1052')) plugins.push(r1052Out);
-          formBundles.set(name, await bundle(ROOT, `tree-${name}`, plugins));
+          formBundles.set(name, others.includes('1100') ? await leagueArm(`tree-${name}`, plugins) : await bundle(ROOT, `tree-${name}`, plugins));
         }
         if (await tryArm(name, formBundles.get(name))) return true;
       }
@@ -999,12 +1014,12 @@ if (baseRoot) {
     else if (await tryArm('1327', Mout1327 ??= await tree1327Out())) { same += 1; by1327 += 1; }
     else if (await tryArm('1318', Mout1318 ??= await bundle(ROOT, 'tree1318out', [r1318Out]))) { same += 1; by1318 += 1; console.log(`  career ${seed}: moved by the saved Ballon d'Or rivals of Rounds 1280 to 1282 and 1318 (equal to the base with them taken out)`); }
     else if (await tryArm('1041', Mout ??= await bundle(ROOT, 'tree1041out', [r1041Out]))) { same += 1; by1041 += 1; console.log(`  career ${seed}: moved by Round 1041's two truth fixes (equal to the base with them taken out)`); }
-    else if (await tryArm('1100', Mout1100 ??= await bundle(ROOT, 'tree1100out', [r1100Out, ...futurePlugins]))) { same += 1; by1100 += 1; }
+    else if (await tryArm('1100', Mout1100 ??= await leagueArm('tree1100out', [r1100Out, ...futurePlugins]))) { same += 1; by1100 += 1; }
     else if (await tryArm('1052', Mout1052 ??= await bundle(ROOT, 'tree1052out', [r1052Out, ...futurePlugins]))) { same += 1; by1052 += 1; console.log(`  career ${seed}: moved by Round 1052's new league in the dugout's job market (equal to the base with the league taken out)`); }
     /* Release AO: a tree that holds both rounds over a base that holds neither. A career whose playing years met
        Round 1100's bigger pool AND whose dugout years met Round 1052's league equals the base only with both taken
        out at once (the two arms read different files: clubManager.ts is not one of Round 1100's seven). */
-    else if (await tryArm('1100+1052', MoutBoth ??= await bundle(ROOT, 'tree1100and1052out', [r1100Out, r1052Out, ...futurePlugins]))) { same += 1; byBoth += 1; console.log(`  career ${seed}: moved by Rounds 1100 and 1052 together (equal to the base only with both taken out)`); }
+    else if (await tryArm('1100+1052', MoutBoth ??= await leagueArm('tree1100and1052out', [r1100Out, r1052Out, ...futurePlugins]))) { same += 1; byBoth += 1; console.log(`  career ${seed}: moved by Rounds 1100 and 1052 together (equal to the base only with both taken out)`); }
     else if (CONTROL !== 'future' && (MoutTrain ??= await trainOutArm(trainOut.plugin)) && trainStrip(await replay(MoutTrain, seed)) === trainStrip(base)) { same += 1; byTrain += 1; receipt.acceptedArm = 'train1178'; }
     else if (await tryFormArms()) { same += 1; by1185 += 1; console.log(`  career ${seed}: moved by Rounds 1185 and 1187's form selection and Youth Mentor catalog (${receipt.acceptedArm}; complete replay equals the base only after the declared copied inverses)`); }
     else {
