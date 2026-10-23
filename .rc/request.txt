@@ -1,0 +1,6 @@
+# Release BP part two (Round BPH, finish-BPH.md). ROUND 1321 (the NBA Front Office earned draft, part A, engine only and dark): results-g/rc-1321.txt,
+# plus its two unit files and the four GM season close test. Proven on the merge m9 (29189bd7) as rBPh-m9 and on the final head.
+simNbaEarnedDraft: node scripts/simNbaEarnedDraft.mjs
+simNbaEarnedDraft-controls: SIM_NBA_EARNED_DRAFT_CONTROL=all node scripts/simNbaEarnedDraft.mjs
+vitest-1321: node_modules/.bin/vitest run src/lib/gmEarnedDraft.test.ts src/lib/nbaEarnedDraft.test.ts src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx --testTimeout=300000 --hookTimeout=120000
+simGmDraftOrder: node scripts/simGmDraftOrder.mjs
