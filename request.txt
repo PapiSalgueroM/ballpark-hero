@@ -1,0 +1,15 @@
+# Release BR, Round 1558: the second fix's closing check run-1792726567/rc-fix2-a.txt (on 478112b6's code).
+# Nothing dropped; its threshold moves (rc-fix2-b.txt) were a one time measure and are left out.
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+facts: node scripts/simUsConnectionsFacts.mjs
+ctl-arod: US_CONN_CONTROL=arod node scripts/simUsConnectionsFacts.mjs
+ctl-bell: US_CONN_CONTROL=bell node scripts/simUsConnectionsFacts.mjs
+ctl-karlsson: US_CONN_CONTROL=karlsson node scripts/simUsConnectionsFacts.mjs
+ctl-twice: US_CONN_CONTROL=twice node scripts/simUsConnectionsFacts.mjs
+ctl-onehost: US_CONN_CONTROL=onehost node scripts/simUsConnectionsFacts.mjs
+ctl-unjudged: US_CONN_CONTROL=unjudged node scripts/simUsConnectionsFacts.mjs
+ctl-fingers: US_CONN_CONTROL=fingers node scripts/simUsConnectionsFacts.mjs
+syntax: node --check scripts/usConnections/verifyMlbFacts.mjs && node --check scripts/lib/usConnectionsCheck.mjs && echo "syntax ok"
+rival: node scripts/simNoRivalNames.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+storage: node scripts/simStorageWrites.mjs
