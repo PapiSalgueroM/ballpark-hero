@@ -1,0 +1,16 @@
+320x640 /connections: raw 0/0 [], reachable 0/0, clipped share ; taps 
+320x640 /baseball-connections: raw 0/0 [], reachable 0/0, clipped share ; taps 
+320x640 /nba-connections: raw 2/2 [Paul Pierce over Clear draft | Kevin McHale over Submit five], reachable 0/0, clipped share Paul Pierce 0%, Kevin McHale 0%; taps Clear draft->itself; Submit five->itself; Paul Pierce->itself; Kevin McHale->itself
+320x640 /nfl-connections: raw 0/0 [], reachable 0/0, clipped share ; taps 
+320x640 /nhl-connections: raw 2/2 [Brendan Gallagher over Clear draft | Shea Weber over Submit five], reachable 0/0, clipped share Brendan Gallagher 0%, Shea Weber 0%; taps Clear draft->itself; Submit five->itself; Brendan Gallagher->itself; Shea Weber->itself
+375x812 /connections: raw 0/0 [], reachable 0/0, clipped share ; taps 
+375x812 /baseball-connections: raw 0/0 [], reachable 0/0, clipped share ; taps 
+375x812 /nba-connections: raw 2/2 [Paul Pierce over Clear draft | Kevin McHale over Submit five], reachable 0/0, clipped share Paul Pierce 0%, Kevin McHale 0%; taps Clear draft->itself; Submit five->itself; Paul Pierce->itself; Kevin McHale->itself
+375x812 /nfl-connections: raw 0/0 [], reachable 0/0, clipped share ; taps 
+375x812 /nhl-connections: raw 2/2 [Brendan Gallagher over Clear draft | Shea Weber over Submit five], reachable 0/0, clipped share Brendan Gallagher 0%, Shea Weber 0%; taps Clear draft->itself; Submit five->itself; Brendan Gallagher->itself; Shea Weber->itself
+390x844 /connections: raw 0/0 [], reachable 0/0, clipped share ; taps 
+390x844 /baseball-connections: raw 0/0 [], reachable 0/0, clipped share ; taps 
+390x844 /nba-connections: raw 2/2 [Paul Pierce over Clear draft | Kevin McHale over Submit five], reachable 0/0, clipped share Paul Pierce 0%, Kevin McHale 0%; taps Clear draft->itself; Submit five->itself; Paul Pierce->itself; Kevin McHale->itself
+390x844 /nfl-connections: raw 0/0 [], reachable 0/0, clipped share ; taps 
+390x844 /nhl-connections: raw 2/2 [Brendan Gallagher over Clear draft | Shea Weber over Submit five], reachable 0/0, clipped share Brendan Gallagher 0%, Shea Weber 0%; taps Clear draft->itself; Submit five->itself; Brendan Gallagher->itself; Shea Weber->itself
+connProbe: no reachable overlap anywhere, and every tap lands on the control it aims at

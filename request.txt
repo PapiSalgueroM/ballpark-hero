@@ -1,0 +1,20 @@
+#!serve
+#!playwright
+#!serial
+# Release BP part two (Round BPH, finish-BPH.md). ROUND 1537 (Connections on a phone, the NBA roster box injury line, two focus harnesses):
+# results-g/rc-1537.txt as is. The controls sweepPhone-noclip-nba, -noclip-nhl, -counthidden and playFoHub-nofloor exit 1.
+# Proven on the merge m11 (8d4d119e) as rBPh-m11 and on the final head. Extra: connProbe-1537.mjs.
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+connProbe: ENGINES=chromium node .rc/x/connProbe-1537.mjs
+sweepPhone: ENGINES=chromium node scripts/sweepPhone.mjs
+sweepPhone-noclip-nba: SWEEP_PHONE_CONTROL=noclip ROUTE=/nba-connections ENGINES=chromium node scripts/sweepPhone.mjs
+sweepPhone-noclip-nhl: SWEEP_PHONE_CONTROL=noclip ROUTE=/nhl-connections ENGINES=chromium node scripts/sweepPhone.mjs
+sweepPhone-counthidden: SWEEP_PHONE_CONTROL=counthidden ROUTE=/stadium-tycoon ENGINES=chromium node scripts/sweepPhone.mjs
+playFoHub: ENGINES=chromium node scripts/playFoHub.mjs
+playFoHub-nofloor: PLAY_FO_HUB_CONTROL=nofloor ENGINES=chromium node scripts/playFoHub.mjs
+help: env -u NO_COLOR node scripts/simHelpConsentFocus.mjs
+help-external: env -u NO_COLOR HELP_CONSENT_FOCUS_CONTROL=external node scripts/simHelpConsentFocus.mjs
+rules: env -u NO_COLOR node scripts/simRulesGateConsentFocus.mjs
+rules-host: env -u NO_COLOR RULES_GATE_FOCUS_CONTROL=host node scripts/simRulesGateConsentFocus.mjs
+rules-return: env -u NO_COLOR RULES_GATE_FOCUS_CONTROL=return node scripts/simRulesGateConsentFocus.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
