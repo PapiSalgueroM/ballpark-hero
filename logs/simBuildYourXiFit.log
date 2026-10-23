@@ -1,0 +1,17 @@
+1) the same eleven in its natural slots against shuffled, 300 elevens, BYXI_SEED 0
+   300 of 300 shuffled elevens put somebody outside his slot's set; natural minus shuffled points, mean: role fit only 10.42 (floor 6), all three 11.80 (floor 7), keeper kept and outfield shuffled 6.58 (floor 4)
+2) a chemistry link exists only between neighbours the data says share a club or a country
+   one club under two stored names: 5 of 5 clubs link their two spellings
+   5642 links over 1027 elevens (2646 club), every one between neighbours who share what it says, none missing; 129 neighbour pairs over 6 shapes, the same as this file's own reading
+3) every bonus and penalty inside its stated bound
+   material: 696 elevens with no holding midfielder, 640 with a narrow flank, 233 with somebody next door
+   one club, one country: links raw 18.4, paid 2 (cap 2)
+   601 of 601 elevens: the three tiles show exactly the three numbers the season played
+   600 seasons replayed factor by factor, 527 of them moved by at least one; stated: role fit 2/6/14 on the man, chemistry x0.2 up to 2, holding 1, width 0.5 a flank
+   through the slot check: 740 natural, 266 next door, 0 wrong line, 0 keeper
+4) World XI's seasons are the ones it played before this round (240 squads)
+   digest 2f8cca6578202d4b1ccf3dbc45be0908cef51bf5be50b91a6ff2365722ea6c6c
+   60 of 60 Build Your XI elevens play the same season with a zero breakdown as with none
+5) old reports render, and the new tiles render for full and half built elevens
+   worth tiles, report tabs, breakdown and its three details rendered for old, full and half built
+simBuildYourXiFit: all checks green

@@ -1,0 +1,5 @@
+ok   saved domestic and club cup names, opponents, leg scores and decisions
+ok   historical bindings, unknown old campaigns, first-stage exits and read-only saves
+ok   saved two-leg final labels, grounds and aggregate, neutral one-match final and unchanged records
+ok   actual engine campaign binds its club and year, clones the saved matches and preserves them after later changes
+simSoccerSeasonCompetitions: saved names, exact outcomes, no historical leakage and independent engine snapshots passed
