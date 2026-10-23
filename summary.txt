@@ -1,0 +1,5 @@
+simHarnessAnchors exit=0 101s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simNoRivalNames exit=0 29s | No rival product names found. 0 findings.
+dashscan-delta exit=0 1s | commit messages ca0648c9615e922cc01001908a5537a79305a6ac..HEAD: 0 lines with an en or em dash
+tsc exit=0 166s | 
+vitest-all exit=0 902s |  Test Files  646 passed | 2 skipped (648)
