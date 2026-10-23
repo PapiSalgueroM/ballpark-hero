@@ -1,0 +1,6 @@
+#!build
+#!playwright
+# Release BQ, Round 1534 (US My Career shop promises, closing head 1c7205d0): rc-1534.txt rc-fd.txt.
+# Left out of 1534's file: rc-step3g (a fixture re-record) and rc-weight-base (base 41368514's weight).
+fences: pip3 install --quiet fonttools pillow && ONLY=simLiveScores,simNoRivalNames,simInventedNames,simHarnessAnchors,simNoInventedQuotes,simNoInventedConduct,simLegalPages,simSingleFooter,simCompletionSlugs,simCompletionOnce,simNoDoubleRecord,simDailyPuzzleContract,simDailySaveHardening,simWritesAreSent,simSchemaNames,simFetchRetry,simGoogleOnlyReturn,simReportRelay,simNavbarStatsReads,simLeaderboardCaps,simScoringCoverage,simSiteSearch,simResultMoment,simGuideHeadings,simStorageWrites node scripts/runAllSims.mjs --browser
+dist: pip3 install --quiet fonttools pillow && ONLY=simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets node scripts/runAllSims.mjs --browser
