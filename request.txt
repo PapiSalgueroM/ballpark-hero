@@ -1,0 +1,7 @@
+#!serial
+probe: mkdir -p /tmp/sp && node .rc/x/shareProbe.mjs "$PWD" /tmp/sp
+move-hi25: node .rc/x/moveLine.mjs scripts/lib/usConnectionsCheck.mjs hi 0.25 && node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- scripts; exit $s
+move-hi35: node .rc/x/moveLine.mjs scripts/lib/usConnectionsCheck.mjs hi 0.35 && node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- scripts; exit $s
+move-lo05: node .rc/x/moveLine.mjs scripts/lib/usConnectionsCheck.mjs lo 0.05 && node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- scripts; exit $s
+move-lo15: node .rc/x/moveLine.mjs scripts/lib/usConnectionsCheck.mjs lo 0.15 && node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- scripts; exit $s
+after-clean: git diff --exit-code scripts && node scripts/simUsConnectionsFacts.mjs
