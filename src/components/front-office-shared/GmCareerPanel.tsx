@@ -34,7 +34,7 @@ export default function GmCareerPanel({ facts }: GmPanelProps<GmCareerFacts>) {
           </button>
         </div>
         {help && (
-          <div className="mt-2 space-y-1 rounded-lg border border-border bg-secondary/30 p-2 text-[10px] text-muted-foreground" data-gm-career-help>
+          <div className="mt-2 space-y-1 rounded-lg border border-border bg-secondary/30 p-2 text-[11px] text-muted-foreground" data-gm-career-help>
             {hostCareerHelp(pack).map(line => <p key={line}>{line}</p>)}
           </div>
         )}
@@ -48,12 +48,12 @@ export default function GmCareerPanel({ facts }: GmPanelProps<GmCareerFacts>) {
             className={cn('rounded-lg border p-2', s.ended === 'Still here' ? 'border-gold/50 bg-gold/5' : 'border-border bg-secondary/20')}
           >
             <div className="truncate text-xs font-bold text-foreground">{s.name}</div>
-            <div className="text-[9px] text-muted-foreground">{s.arrival}</div>
+            <div className="text-[11px] text-muted-foreground">{s.arrival}</div>
             <div className="mt-1 min-h-[14px] break-words text-[11px] leading-none text-foreground" data-gm-marks>
               {s.marks.length > 0 ? s.marks.join(' ') : 'No graded season yet'}
             </div>
-            {s.earlier && <div className="mt-1 text-[9px] text-muted-foreground" data-gm-earlier>{s.earlier}</div>}
-            <div className="mt-1 text-[9px] uppercase tracking-wider text-muted-foreground">{s.ended}</div>
+            {s.earlier && <div className="mt-1 text-[11px] text-muted-foreground" data-gm-earlier>{s.earlier}</div>}
+            <div className="mt-1 text-[11px] uppercase tracking-wider text-muted-foreground">{s.ended}</div>
           </div>
         ))}
       </div>

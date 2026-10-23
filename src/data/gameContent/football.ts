@@ -253,7 +253,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       {
         heading: "Trust upstairs and getting fired",
         items: [
-          "Trust upstairs runs 0 to 100. Beating the mandate raises it, missing it drops it, a championship fixes almost anything, and at zero you are fired and the save ends. A fresh GM always survives one bad year, never three.",
+          "Trust upstairs runs 0 to 100. Beating the mandate raises it, missing it drops it, a championship fixes almost anything, and at zero you are fired, though the save goes on: franchises that rate your record can call, and you can usually sit a season out. A fresh GM always survives one bad year, and only a full Ownership tree gets him through three.",
         ],
       },
     ],
@@ -298,7 +298,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       },
       {
         q: "Can I get fired?",
-        a: "Yes. Ownership sets a mandate from your roster's honest strength, grades it every season, and tracks trust from 0 to 100. Miss badly enough for long enough and the seat goes, the save ends, and you take another front office.",
+        a: "Yes. Ownership sets a mandate from your roster's honest strength, grades it every season, and tracks trust from 0 to 100. Miss badly enough for long enough and the seat goes, but the save does not: franchises that rate your record can call, and you can usually sit a season out instead.",
       },
       {
         q: "Does my franchise save?",

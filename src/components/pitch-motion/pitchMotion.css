@@ -27,3 +27,15 @@
 .cm-live-net-bulge{position:absolute;left:50%;top:50%;width:30%;height:220%;border-radius:50%;background:#ffffff59;pointer-events:none}
 .pm-surface[data-pm-orient="landscape"] .cm-live-net-bulge{width:220%;height:30%}
 .pm-figure{position:absolute;display:flex;flex-direction:column;align-items:center;pointer-events:none;transform:translate(-50%,-24px)}
+/* Round 1521: a ball off the grass (a surface drawn with lift). Its own element keeps its place on the grass and goes
+   clear; inside it the shadow falls further off the ball the higher it is, and the ball grows a little. */
+.cm-live-ball[data-cm-ball-lift]{background:none;box-shadow:none}
+.cm-live-ball-air,.cm-live-ball-shadow{position:absolute;inset:0;border-radius:50%}
+.cm-live-ball-air{background:radial-gradient(circle at 60% 35%,#fff 0 27%,#17394c 29% 42%,#f7efde 44%);box-shadow:0 1px 1px #06242b66}
+.cm-live-ball-shadow{background:#06242b73}
+/* Round 1521: a foul's whistle, and its card when the feed gave one, just above where the free kick is taken. */
+.pm-cue{position:absolute;display:flex;align-items:center;gap:2px;transform:translate(-50%,-190%);pointer-events:none;z-index:12}
+.pm-whistle{display:block;width:20px;height:12px}
+.pm-card{display:block;width:7px;height:10px;border-radius:1.5px;box-shadow:0 1px 2px #0008}
+.pm-card--yellow{background:#facc15}
+.pm-card--red{background:#ef4444}

@@ -123,6 +123,11 @@ import { inverseSoccerDeck, soccerDeckReceiptProblem } from './lib/careerSoccerD
    alone taken out of the engine the tree is origin/main's again (the 1523 arm). SIM_LEAGUE_SEASONS_MORALE= (empty)
    drops the arm, the unattributed run, red by design. */
 import { inverseSoccerMorale, soccerMoraleOut, soccerMoraleReceiptProblem } from './lib/careerSoccerMorale1523.mjs';
+/* Release BQ: Round 1525's season awards move a career against origin/main on purpose too, and since Release BP put
+   Round 1523 on main the 1523 arm (1525's rows, then 1523's) leaves an engine without 1523 that main's can no longer
+   equal. The 1525 arm takes that round ALONE out (scripts/lib/careerSoccerAwards1525.mjs, every row once, in order),
+   which gives Release BP's engine. SIM_LEAGUE_SEASONS_AWARDS= (empty) drops the arm, the unattributed run. */
+import { inverseSoccerAwards, soccerAwardsOut, soccerAwardsReceiptProblem } from './lib/careerSoccerAwards1525.mjs';
 import { AWARD_GENERATIONS_FILE, inverseAwardGenerations } from './lib/careerAwardGenerations1318.mjs';
 import { readLedgers, buildSeasons, render, identityKey as genIdentity, OUT as GEN_OUT } from './genCareerLeagueSeasons.mjs';
 import { soccerTrainOutPlugin, withoutTrainFields } from './lib/soccerTrain1178.mjs';
@@ -885,6 +890,23 @@ async function tree1523Out() {
   if (problem) { console.error(`Round 1523 arm: ${problem}`); process.exit(2); }
   return bundled;
 }
+const AWARDS_ARM = soccerAwardsOut('SIM_LEAGUE_SEASONS_AWARDS');
+const r1525Seen = [];
+const r1525Out = { name: 'r1525out', setup(b) {
+  b.onLoad({ filter: /soccerCareerEngine\.ts$/ }, args => {
+    if (!path.resolve(args.path).toLowerCase().startsWith(path.resolve(ROOT, 'src').toLowerCase())) return undefined;
+    let src = fs.readFileSync(args.path, 'utf8').replaceAll('\r\n', '\n');
+    if (CONTROL === 'future') { src = controlEdit(src); controlFired = true; }
+    return { contents: inverseSoccerAwards('src/lib/soccerCareerEngine.ts', src, r1525Seen), loader: 'ts' };
+  });
+} };
+async function tree1525Out() {
+  r1525Seen.length = 0;
+  const bundled = await bundle(ROOT, 'tree1525out', [r1525Out]);
+  const problem = soccerAwardsReceiptProblem(r1525Seen);
+  if (problem) { console.error(`Round 1525 arm: ${problem}`); process.exit(2); }
+  return bundled;
+}
 /* Round 1327: the event deck draws on a keyed stream and the paper picks by weight, which moves a career from its
    first deck or paper on, against a base that has neither. This arm reads the engine as the tree's own bundle does
    (any control's edit included, through readSrc and controlPlugin, so an arm without the fault can never call a
@@ -954,7 +976,7 @@ if (baseRoot) {
   const B = await bundle(baseRoot, 'base', [releasePins(true)], false);
   const Bkeep = await bundle(baseRoot, 'basekeep', [releasePins(false)], false);
   let by1327 = 0; let Mout1327 = null; let by1329 = 0; let Mout1329 = null;
-  let by1523 = 0; let Mout1523 = null;
+  let by1523 = 0; let Mout1523 = null; let by1525 = 0; let Mout1525 = null;
   let same = 0; let differ = 0; let pinsMove = 0; let rows = 0; let by1041 = 0; let by1100 = 0; let by1052 = 0; let byBoth = 0; let by1185 = 0; let by1318 = 0;
   let Mout = null; let Mout1100 = null; let Mout1052 = null; let MoutBoth = null; let Mout1318 = null;
   /* Release AQ: the Soccer Career train (Rounds 1169 to 1178) moves a career
@@ -1009,6 +1031,7 @@ if (baseRoot) {
     };
     rows += JSON.parse(mine).seasons.length + JSON.parse(mine).dug.length;
     if (mine === base) { same += 1; receipt.acceptedArm = 'raw'; }
+    else if (AWARDS_ARM && await tryArm('1525', Mout1525 ??= await tree1525Out())) { same += 1; by1525 += 1; }
     else if (MORALE_ARM && await tryArm('1523', Mout1523 ??= await tree1523Out())) { same += 1; by1523 += 1; }
     else if (await tryArm('1329', Mout1329 ??= await tree1329Out())) { same += 1; by1329 += 1; }
     else if (await tryArm('1327', Mout1327 ??= await tree1327Out())) { same += 1; by1327 += 1; }
@@ -1033,6 +1056,8 @@ if (baseRoot) {
   console.log(`  ${same} of ${BASELINE_CAREERS} careers from 2025 identical from 2026-27 on (${rows} seasons and dugout rows compared); releasing the seven pins alone moves ${pinsMove} of them (attributed to the release, not the binds); ${by1041} of the identical ones only once Round 1041's two truth fixes are taken out, ${by1100} only once Round 1100's seven files are read from the base (the pool, the rows and the band moved them, on purpose)`);
   if (by1523) console.log(`  ${by1523} of the identical careers are identical only with Round 1523's morale step and Puskas year taken out`);
   if (!MORALE_ARM) console.log('  SIM_LEAGUE_SEASONS_MORALE is empty: the Round 1523 arm is off, the unattributed run');
+  if (by1525) console.log(`  ${by1525} of the identical careers are identical only with Round 1525's season awards taken out`);
+  if (!AWARDS_ARM) console.log('  SIM_LEAGUE_SEASONS_AWARDS is empty: the Round 1525 arm is off, the unattributed run');
   if (by1329) console.log(`  ${by1329} of the identical careers are identical only with Round 1329's world truth taken out`);
   if (by1327) console.log(`  ${by1327} of the identical careers are identical only with Round 1329's world truth and Round 1327's keyed deck and weighted paper taken out`);
   if (by1052) console.log(`  ${by1052} of the identical careers are identical only with Round 1052's league taken out of the dugout's job market`);
@@ -1040,7 +1065,7 @@ if (baseRoot) {
   if (byTrain) console.log(`  ${byTrain} of the identical careers are identical only with the Soccer Career train (Rounds 1169 to 1178) taken out (${trainOut.seen().join(', ')} rewritten in memory)`);
   if (by1185) console.log(`  ${by1185} complete replays equal the historical base only with Rounds 1185 and 1187's form adjustment and whole Youth Mentor catalog restored, plus any explicitly named earlier inverse arms`);
   if (by1318) console.log(`  ${by1318} of them equal the base only with the saved Ballon d'Or rivals of Rounds 1280 to 1282 and 1318 taken out`);
-  replayReceipt.baseline = { careers: BASELINE_CAREERS, same, differ, rows, pinsMove, by1329, by1327, by1318, by1041, by1100, by1052, byBoth, byTrain, by1185 };
+  replayReceipt.baseline = { careers: BASELINE_CAREERS, same, differ, rows, pinsMove, by1525, by1329, by1327, by1318, by1041, by1100, by1052, byBoth, byTrain, by1185 };
   /* 430, 428 and 431 rows over seeds 1 to 3 */
   ok(rows >= BASELINE_CAREERS * 25, `only ${rows} rows compared over ${BASELINE_CAREERS} careers (floor ${BASELINE_CAREERS * 25})`);
 }

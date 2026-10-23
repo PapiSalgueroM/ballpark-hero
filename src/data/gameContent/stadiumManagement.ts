@@ -120,7 +120,7 @@ export const STADIUM_MANAGEMENT_CONTENT: GameContentMap = {
             heading: "What the ground earns while you are away",
             items: [
               "Away earnings run at half your unboosted income rate, with hype and golden whistles excluded, capped at eight hours, and only count after you have been gone at least thirty seconds.",
-              "Matchdays keep playing while you are away, one for every half hour of the trip and inside the same cap. They pay no goal or win bonuses, and the final matchday of a season always waits for you, so every title is won with you watching.",
+              "Matchdays keep playing while you are away, one for every 28 minutes of the trip and inside the same cap. They pay no goal or win bonuses, and the final matchday of a season always waits for you, so every title is won with you watching.",
             ],
           },
         ],

@@ -112,6 +112,15 @@ describe('GmXpPanel', () => {
     for (const b of off) expect((b as HTMLButtonElement).disabled).toBe(true);
     fireEvent.click(screen.getByRole('button', { name: 'Spend a point (0/5)' }));
     expect(spend).toHaveBeenCalledWith('ownership');
+    /* No `earns` handed in: the panel prints the sentence it always has. */
+    expect(screen.getByText(/finishing higher than anyone expected/)).toBeTruthy();
+  });
+
+  it('prints no source sentence of its own when the desk hands in what it pays for (Round 1533)', () => {
+    const { container } = render(createElement(GmXpPanel, { block: rich, onSpendPoint: () => {}, live: ['ownership'], earns: 'You earn XP for wins.' }));
+    expect(container.textContent).not.toContain('finishing higher than anyone expected');
+    expect(container.textContent).not.toContain('bringing a prospect through');
+    expect(container.querySelector('[data-gm-xp-sources]')).toBeNull();
   });
 
   it('says nothing is full at the top level while points sit unspent', () => {

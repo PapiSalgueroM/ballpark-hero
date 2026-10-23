@@ -1,5 +1,6 @@
 import { supabase } from '@/integrations/supabase/client';
-import { dailyDraw, shuffledRange } from '@/lib/dateUtils';
+import { dailyDraw, getTodayET, shuffledRange } from '@/lib/dateUtils';
+import { seasonCounts } from '@/lib/seasonCalendar';
 
 /**
  * Who'd They Beat? (Round 242): the champion is given, you name the team
@@ -99,7 +100,9 @@ export interface BeatQuestion {
   detail: string;
 }
 
-export async function fetchFinalsRows(def: FinalsCompDef): Promise<FinalsRow[]> {
+/* `today` is the board's day, read before the network wait unless the hook
+   passes its mount day (the same rule as fetchCompetitionRows). */
+export async function fetchFinalsRows(def: FinalsCompDef, today: string = getTodayET()): Promise<FinalsRow[]> {
   const cols = [def.yearCol, def.winCol, def.loseCol, def.seriesCol, ...(def.extraCols ?? [])];
   /* ROUND 366: see the note in champOrNot.ts, this is the identical shape and
      the identical positional read. Ordering by id, verified present on every
@@ -111,12 +114,15 @@ export async function fetchFinalsRows(def: FinalsCompDef): Promise<FinalsRow[]> 
   const { data, error } = await (q as unknown as { limit: (n: number) => PromiseLike<{ data: unknown; error: unknown }> }).limit(5000);
   if (error || !Array.isArray(data)) throw new Error(`${def.table} unavailable`);
   const out: FinalsRow[] = [];
+  /* Round 1551: a season that just landed counts from a day boundary
+     (seasonCalendar.ts), the same rule Champ or Not reads. */
   for (const r of data as Record<string, unknown>[]) {
     const year = r[def.yearCol];
     const winner = r[def.winCol];
     const loser = r[def.loseCol];
     const series = r[def.seriesCol];
     if (typeof year !== 'number' || typeof winner !== 'string' || typeof loser !== 'string') continue;
+    if (!seasonCounts(def.table, year, today)) continue;
     if (!winner.trim() || !loser.trim()) continue;
     const row: FinalsRow = { year, winner: winner.trim(), loser: loser.trim(), series: typeof series === 'string' ? series.trim() : '' };
     if (def.extraCols) {

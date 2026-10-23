@@ -184,24 +184,34 @@ if (!reachable && listsById.size === 0) {
   await yearPin("cfb_heisman_winners", "year", 2025, "winner", "mendoza");
   await yearPin("afl_premiers", "year", 2025, "premier", "brisbane");
   await yearPin("nrl_premiers", "year", 2025, "premier", "brisbane broncos");
+  /* Round 1551: the 2026 Australian seasons, each two-source verified on
+     2026-10-22 (the sources sit in the header of
+     supabase/migrations/20261022120000_round_1551_2026_season_rows.sql). */
+  await yearPin("afl_premiers", "year", 2026, "premier", "brisbane lions");
+  await yearPin("nrl_premiers", "year", 2026, "premier", "sydney roosters");
+  await yearPin("afl_brownlow", "year", 2026, "winner", "nick daicos");
+  await yearPin("nrl_dally_m", "year", 2026, "winner", "nathan cleary");
   console.log("   pins done");
 
   /* the NRL premiers roll is a Round 236 build, two-source verified
      (Wikipedia's premiers roll against Topend Sports, 2026-08-20,
-     agreeing on every year). Exact ratchet: 117 rows covering 1908 to
-     2025, with 1997 twice (ARL and Super League premiers are both
+     agreeing on every year). Exact ratchet: 118 rows covering 1908 to
+     2026, with 1997 twice (ARL and Super League premiers are both
      real), 2007 and 2009 ABSENT FOREVER (Melbourne's stripped titles
      stay vacant, so the table must never teach them), 20 canonical
-     names, and the famous counts. When the 2026 grand final is played,
-     the new row and these numbers move together, on purpose. */
+     names, and the famous counts. Round 1551 moved it to 2026 (Sydney
+     Roosters 19 d Newcastle 18, 4 October 2026: SBS News and AFP), the
+     Roosters to five. When the 2027 grand final is played, the new row
+     and these numbers move together, on purpose; simSeasonDue goes red
+     when that row is due and missing. */
   try {
     const { data, error } = await supabase.from("nrl_premiers").select("year, premier");
     if (error) throw new Error(error.message);
     const rows = data ?? [];
-    if (rows.length !== 117) fail(`nrl_premiers: ${rows.length} rows, the verified roll is exactly 117`);
+    if (rows.length !== 118) fail(`nrl_premiers: ${rows.length} rows, the verified roll is exactly 118`);
     const byYear = new Map();
     for (const r of rows) byYear.set(r.year, (byYear.get(r.year) ?? 0) + 1);
-    for (let y = 1908; y <= 2025; y++) {
+    for (let y = 1908; y <= 2026; y++) {
       const want = y === 1997 ? 2 : (y === 2007 || y === 2009 ? 0 : 1);
       if ((byYear.get(y) ?? 0) !== want) {
         fail(`nrl_premiers: season ${y} has ${byYear.get(y) ?? 0} rows, the record says ${want}${want === 0 ? " (stripped title, must stay vacant)" : ""}`);
@@ -215,13 +225,13 @@ if (!reachable && listsById.size === 0) {
       ["Eastern Suburbs", 11], ["Balmain", 11],
       ["Canterbury-Bankstown Bulldogs", 8], ["Manly-Warringah Sea Eagles", 8],
       ["Brisbane Broncos", 7], ["Penrith Panthers", 6],
-      ["Melbourne Storm", 4], ["Sydney Roosters", 4],
+      ["Melbourne Storm", 4], ["Sydney Roosters", 5],
       ["North Sydney", 2], ["St George Illawarra Dragons", 1],
     ];
     for (const [club, n] of FLAGS) {
       if ((counts.get(club) ?? 0) !== n) fail(`nrl_premiers: ${club} shows ${counts.get(club) ?? 0} premierships, the record says ${n}`);
     }
-    console.log("   nrl_premiers: 117 rows, 20 names, stripped years vacant, famous counts hold");
+    console.log("   nrl_premiers: 118 rows, 20 names, stripped years vacant, famous counts hold");
   } catch {
     console.log("   nrl_premiers: UNREACHABLE, NOT CHECKED.");
     reachable = false;
@@ -229,30 +239,33 @@ if (!reachable && listsById.size === 0) {
 
   /* the AFL premiers roll is a Round 234 build, two-source verified
      (afl.com.au against aflonline.com.au, 2026-08-20, agreeing on every
-     year). Exact ratchet: 129 seasons 1897 through 2025, each year once,
+     year). Exact ratchet: 130 seasons 1897 through 2026, each year once,
      18 names because clubs are recorded as they were at the time, and
-     the famous flag counts. When the 2026 grand final is played, the new
-     row and these numbers move together, on purpose. */
+     the famous flag counts. Round 1551 moved it to 2026 (Brisbane Lions
+     96 d Fremantle 89, 26 September 2026: afl.com.au and Reuters), the
+     Lions to six. When the 2027 grand final is played, the new row and
+     these numbers move together, on purpose; simSeasonDue goes red when
+     that row is due and missing. */
   try {
     const { data, error } = await supabase.from("afl_premiers").select("year, premier");
     if (error) throw new Error(error.message);
     const rows = data ?? [];
-    if (rows.length !== 129) fail(`afl_premiers: ${rows.length} rows, the verified roll is exactly 129 (1897 to 2025)`);
+    if (rows.length !== 130) fail(`afl_premiers: ${rows.length} rows, the verified roll is exactly 130 (1897 to 2026)`);
     const years = new Set(rows.map(r => r.year));
     if (years.size !== rows.length) fail("afl_premiers: a season appears twice");
-    for (let y = 1897; y <= 2025; y++) if (!years.has(y)) fail(`afl_premiers: season ${y} is missing`);
+    for (let y = 1897; y <= 2026; y++) if (!years.has(y)) fail(`afl_premiers: season ${y} is missing`);
     const counts = new Map();
     for (const r of rows) counts.set(r.premier, (counts.get(r.premier) ?? 0) + 1);
     if (counts.size !== 18) fail(`afl_premiers: ${counts.size} distinct names, the roll has 18`);
     const FLAGS = [
       ["Essendon", 16], ["Carlton", 16], ["Collingwood", 16],
       ["Richmond", 13], ["Hawthorn", 13], ["Melbourne", 13],
-      ["Geelong", 10], ["Fitzroy", 8], ["St Kilda", 1], ["Western Bulldogs", 1],
+      ["Geelong", 10], ["Fitzroy", 8], ["Brisbane Lions", 6], ["St Kilda", 1], ["Western Bulldogs", 1],
     ];
     for (const [club, n] of FLAGS) {
       if ((counts.get(club) ?? 0) !== n) fail(`afl_premiers: ${club} shows ${counts.get(club) ?? 0} flags, the record says ${n}`);
     }
-    console.log("   afl_premiers: 129 seasons, 18 names, famous counts hold");
+    console.log("   afl_premiers: 130 seasons, 18 names, famous counts hold");
   } catch {
     console.log("   afl_premiers: UNREACHABLE, NOT CHECKED.");
     reachable = false;
@@ -262,17 +275,19 @@ if (!reachable && listsById.size === 0) {
      (afl.com.au/brownlow-medal/history against afltables.com, 2026-08-25;
      the afltables index carried two vote counts wrong, 1935 and 1958, and
      its own detail pages settled both in favour of afl.com.au). Exact
-     ratchet: 112 medals to 91 players, 1924 to 2025 with 1942 to 1945
-     vacant, the twelve tie years, and the four triple winners. When the
-     2026 count is held, the new row and these numbers move together. */
+     ratchet: 113 medals to 92 players, 1924 to 2026 with 1942 to 1945
+     vacant, the twelve tie years, and the four triple winners. Round 1551
+     added 2026 (Nick Daicos, Collingwood, 47 votes, his first: afl.com.au
+     and SEN). When the 2027 count is held, the new row and these numbers
+     move together. */
   try {
     const { data, error } = await supabase.from("afl_brownlow").select("year, winner, club, votes");
     if (error) throw new Error(error.message);
     const rows = data ?? [];
-    if (rows.length !== 112) fail(`afl_brownlow: ${rows.length} rows, the verified roll is exactly 112`);
+    if (rows.length !== 113) fail(`afl_brownlow: ${rows.length} rows, the verified roll is exactly 113`);
     const byYear = new Map();
     for (const r of rows) byYear.set(r.year, (byYear.get(r.year) ?? 0) + 1);
-    for (let y = 1924; y <= 2025; y++) {
+    for (let y = 1924; y <= 2026; y++) {
       const vacant = y >= 1942 && y <= 1945;
       if (vacant && byYear.has(y)) fail(`afl_brownlow: ${y} has a medal and none was awarded in the war years`);
       if (!vacant && !byYear.has(y)) fail(`afl_brownlow: ${y} is missing`);
@@ -282,7 +297,7 @@ if (!reachable && listsById.size === 0) {
     if (ties.join() !== WANT_TIES.join()) fail(`afl_brownlow: tie years are ${ties.join(", ")}, the record has ${WANT_TIES.join(", ")}`);
     const counts = new Map();
     for (const r of rows) counts.set(r.winner, (counts.get(r.winner) ?? 0) + 1);
-    if (counts.size !== 91) fail(`afl_brownlow: ${counts.size} distinct medallists, the roll has 91`);
+    if (counts.size !== 92) fail(`afl_brownlow: ${counts.size} distinct medallists, the roll has 92`);
     for (const name of ["Haydn Bunton", "Dick Reynolds", "Bob Skilton", "Ian Stewart"]) {
       if ((counts.get(name) ?? 0) !== 3) fail(`afl_brownlow: ${name} shows ${counts.get(name) ?? 0} medals, the record says 3`);
     }
@@ -292,7 +307,7 @@ if (!reachable && listsById.size === 0) {
     }
     const voss = rows.find(r => r.year === 1996 && r.winner === "Michael Voss");
     if (!voss || voss.club !== "Brisbane Bears") fail("afl_brownlow: 1996 Voss should be a Brisbane Bear, the club he actually played for that year");
-    console.log("   afl_brownlow: 112 medals, 91 players, the twelve ties and the four triples hold");
+    console.log("   afl_brownlow: 113 medals, 92 players, the twelve ties and the four triples hold");
   } catch {
     console.log("   afl_brownlow: UNREACHABLE, NOT CHECKED.");
     reachable = false;
@@ -300,17 +315,18 @@ if (!reachable && listsById.size === 0) {
 
   /* the Dally M roll is a Round 291 build, two-source verified
      (rugbyleagueproject.org against topendsports.com, 2026-08-25, agreeing
-     on every year). Exact ratchet: 47 medals to 34 players, 1979 to 2025,
+     on every year). Exact ratchet: 48 medals to 35 players, 1979 to 2026,
      1997 and 2003 vacant, 2014 and 2016 shared, Thurston four and Johns
-     three. When the 2026 medal is awarded, the row and these move together. */
+     three. Round 1551 added 2026 (Nathan Cleary, his first: SEN and AAP).
+     When the 2027 medal is awarded, the row and these move together. */
   try {
     const { data, error } = await supabase.from("nrl_dally_m").select("year, winner");
     if (error) throw new Error(error.message);
     const rows = data ?? [];
-    if (rows.length !== 47) fail(`nrl_dally_m: ${rows.length} rows, the verified roll is exactly 47`);
+    if (rows.length !== 48) fail(`nrl_dally_m: ${rows.length} rows, the verified roll is exactly 48`);
     const byYear = new Map();
     for (const r of rows) byYear.set(r.year, (byYear.get(r.year) ?? 0) + 1);
-    for (let y = 1979; y <= 2025; y++) {
+    for (let y = 1979; y <= 2026; y++) {
       const vacant = y === 1997 || y === 2003;
       if (vacant && byYear.has(y)) fail(`nrl_dally_m: ${y} has a medal and none was awarded`);
       if (!vacant && !byYear.has(y)) fail(`nrl_dally_m: ${y} is missing`);
@@ -319,10 +335,10 @@ if (!reachable && listsById.size === 0) {
     if (ties.join() !== "2014,2016") fail(`nrl_dally_m: shared years are ${ties.join(", ")}, the record has 2014 and 2016`);
     const counts = new Map();
     for (const r of rows) counts.set(r.winner, (counts.get(r.winner) ?? 0) + 1);
-    if (counts.size !== 34) fail(`nrl_dally_m: ${counts.size} distinct medallists, the roll has 34`);
+    if (counts.size !== 35) fail(`nrl_dally_m: ${counts.size} distinct medallists, the roll has 35`);
     if ((counts.get("Johnathan Thurston") ?? 0) !== 4) fail("nrl_dally_m: Thurston should show four medals");
     if ((counts.get("Andrew Johns") ?? 0) !== 3) fail("nrl_dally_m: Johns should show three medals");
-    console.log("   nrl_dally_m: 47 medals, 34 players, the two shared years and the two vacant ones hold");
+    console.log("   nrl_dally_m: 48 medals, 35 players, the two shared years and the two vacant ones hold");
   } catch {
     console.log("   nrl_dally_m: UNREACHABLE, NOT CHECKED.");
     reachable = false;
