@@ -1,4 +1,4 @@
-name: Club Manager custom positions original-engine baseline
+name: Club Manager custom positions baseline and pure foundations
 on:
   push:
     branches: [codex/cm-free-positions-20261023]
@@ -10,13 +10,14 @@ concurrency:
   cancel-in-progress: false
 env:
   BASE_SOURCE: 3e95583fd8131f3704591cd566677f8774a8e4c3
+  EXPECTED_PARENT: d29b941d48e7372239f9a9baa28471dd9ff66d9a
   CI: '1'
   SIM_NETWORK: offline
   TZ: UTC
 jobs:
   original_positions:
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 55
     defaults:
       run:
         shell: bash
@@ -29,10 +30,10 @@ jobs:
         with:
           node-version: 24
           cache: npm
-      - name: Original engine and exact nine-case regression source
+      - name: Original engine, pure helper and UI baseline source
         run: |
           set -euo pipefail
-          out="$RUNNER_TEMP/cm-free-positions-original";test ! -e "$out";mkdir "$out"
+          out="$RUNNER_TEMP/cm-free-positions-foundations";test ! -e "$out";mkdir "$out"
           echo "CM_POSITION_OUT=$out" >> "$GITHUB_ENV"
           test "$GITHUB_REPOSITORY" = PapiSalgueroM/ballpark-hero
           test "$GITHUB_REPOSITORY_ID" = 1195729679
@@ -41,12 +42,20 @@ jobs:
           git fetch --no-tags --depth=1 origin "$BASE_SOURCE" > "$out/base-fetch.log" 2>&1
           git merge-base --is-ancestor "$BASE_SOURCE" "$GITHUB_SHA"
           git show -s --format=%P HEAD > "$out/parents.txt"
-          test "$(cat "$out/parents.txt")" = "$BASE_SOURCE"
-          git diff --exit-code "$BASE_SOURCE" HEAD -- . ':!docs/**' ':!.github/workflows/cm-free-positions.yml' ':!src/test/clubManagerPositionIntegration.test.ts' > "$out/original-application.log"
+          test "$(cat "$out/parents.txt")" = "$EXPECTED_PARENT"
+          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!docs/**' ':!.github/workflows/cm-free-positions.yml' ':!src/lib/clubManagerPositions.ts' ':!src/test/clubManagerPositions.test.ts' ':!src/test/TacticsScreen.freePositions.test.tsx' > "$out/direct-child-scope.log"
+          git diff --exit-code "$BASE_SOURCE" HEAD -- . ':!docs/**' ':!.github/workflows/cm-free-positions.yml' ':!src/test/clubManagerPositionIntegration.test.ts' ':!src/lib/clubManagerPositions.ts' ':!src/test/clubManagerPositions.test.ts' ':!src/test/TacticsScreen.freePositions.test.tsx' > "$out/original-application.log"
           test "$(git rev-parse HEAD:src/lib/clubManager.ts)" = a505743537b383bc7885bb81f5a72c11e154b566
+          test "$(git rev-parse HEAD:src/components/club-manager/TacticsScreen.tsx)" = 233cd8d7430147fd66182269859548ffe5fdce4f
+          test "$(git rev-parse HEAD:src/hooks/useClubManager.ts)" = 65bc9bbb622c67fbbcb25c949038571bbdc8600a
           printf '%s  %s\n' \
             05de3cfca8d978e6117979fb29b82b2ece7b9fb6ee1f2ce3c051e379e36de86e src/lib/clubManager.ts \
-            d6a8abf9ba8793ba0e87148dc9bf90e3892b4c9055e2820688bcbe9a35b64d77 src/test/clubManagerPositionIntegration.test.ts > "$out/input-pins.sha256"
+            494b50ff2e32fb0862340374f3f6182000f44c9aefbea9920b63531e7009a4fa src/components/club-manager/TacticsScreen.tsx \
+            5eeafbeaf296adce0343d101d4c5213d12d6550e181a9af55a5dbd154452632c src/hooks/useClubManager.ts \
+            d6a8abf9ba8793ba0e87148dc9bf90e3892b4c9055e2820688bcbe9a35b64d77 src/test/clubManagerPositionIntegration.test.ts \
+            ba6a2ab6f4a220439dec9373ba3655c7a962abaa640cc8f47c206644df0407a7 src/lib/clubManagerPositions.ts \
+            625ee402d0d506d82f03c7f8bb7b8f524b2a7b5a2bf3b83254607b2b6aec6ed3 src/test/clubManagerPositions.test.ts \
+            1107a1ec8a496c65fd4c8653ccd239aa2cda2190945c56c6129d3985e59ed97d src/test/TacticsScreen.freePositions.test.tsx > "$out/input-pins.sha256"
           sha256sum --check "$out/input-pins.sha256" > "$out/input-pins.log"
           git rev-parse HEAD > "$out/head.txt";git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
           printf '%s\n' "$GITHUB_RUN_ID" > "$out/run-id.txt"
@@ -119,11 +128,89 @@ jobs:
           NODE
           printf '%s\n' "$classifier" > "$out/classifier.exit";test "$classifier" -eq 0
           test ! -s "$out/types.transport";test ! -s "$out/tests.transport";test ! -s "$out/classifier.transport"
+      - name: Exact twenty-five pure geometry outcomes
+        run: |
+          set -euo pipefail
+          out="$CM_POSITION_OUT"
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          : > "$out/profile.transport";: > "$out/profile-classifier.transport";status=0
+          SIM_OFFLINE_RECEIPT="$out/profile.transport" timeout --signal=TERM --kill-after=15s 5m node_modules/.bin/vitest run src/test/clubManagerPositions.test.ts --maxWorkers=1 --no-file-parallelism --reporter=default --reporter=json --outputFile="$out/profile.json" > "$out/profile.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/profile.exit";test "$status" -eq 0
+          classifier=0
+          SIM_OFFLINE_RECEIPT="$out/profile-classifier.transport" node <<'NODE' || classifier=$?
+          const fs=require('node:fs'),assert=require('node:assert/strict'),path=require('node:path'),out=process.env.CM_POSITION_OUT,r=JSON.parse(fs.readFileSync(out+'/profile.json','utf8'));
+          const ancestor='Custom position geometry is a pure provisional game policy';
+          const inactive=['absent','null','future-version','wrong-formation','fractional-formation','unsafe-formation','ten-points','twelve-points','sparse','missing-x','string-x','nan','infinity','left-outside','bottom-outside','extra-shape-field','extra-point-field'];
+          const titles=new Set([
+            'reads a dense valid shape without repairing its body or canonical slots',
+            ...inactive.map(fault=>'keeps '+fault+' raw data inactive instead of generating a replacement'),
+            'returns exact zero for canonical-equivalent points and draws no randomness',
+            'gives all-forward access and exposure, and all-deep fewer outlets with less exposure',
+            'matches the worked advance and width examples on the same two actual canonical outfield slots',
+            'charges crowded players instead of treating an overlapping stack as a free narrow block',
+            'charges assigned-keeper vertical and lateral exposure without attacking credit or a backwards bonus',
+            'looks up actual canonical slot identities without compacting missing rows or adding inactive slots',
+            'refuses duplicate or foreign slot identities before returning any effect and keeps an empty XI neutral',
+          ]);
+          assert.equal(titles.size,25);assert.equal(r.success,true);assert.equal(r.testResults.length,1);
+          assert.equal(r.numTotalTests,25);assert.equal(r.numPassedTests,25);assert.equal(r.numFailedTests,0);assert.equal(r.numPendingTests,0);assert.equal(r.numTodoTests,0);
+          const suite=r.testResults[0],seen=new Set();
+          assert.equal(path.resolve(suite.name),path.resolve('src/test/clubManagerPositions.test.ts'));
+          assert.equal(suite.status,'passed');assert.equal(suite.assertionResults.length,25);if('message'in suite)assert.equal(suite.message,'');
+          for(const row of suite.assertionResults){
+            assert.equal(typeof row.title,'string');assert(titles.has(row.title),row.title);assert(!seen.has(row.title));seen.add(row.title);
+            assert.equal(row.fullName,ancestor+' '+row.title);assert.equal(row.status,'passed',row.fullName);assert.deepEqual(row.failureMessages,[]);
+          }
+          assert.equal(seen.size,25);for(const title of titles)assert(seen.has(title));
+          const runtime=['numRuntimeErrorTestSuites','numUnhandledErrors'];for(const key of runtime)if(key in r)assert.equal(r[key],0);if('unhandledErrors'in r)assert.deepEqual(r.unhandledErrors,[]);
+          assert.doesNotMatch(fs.readFileSync(out+'/profile.log','utf8'),/Unhandled\s+(?:Errors?|Rejections?)|Uncaught\s+Exceptions?|Failed to resolve import|Cannot find (?:module|package)|No test files found/i);
+          fs.writeFileSync(out+'/pure-profile-admission.json',JSON.stringify({phase:'pure-geometry-foundations',source:process.env.GITHUB_SHA,parent:process.env.EXPECTED_PARENT,runId:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,passed:[...seen],observedRuntimeCounters:Object.fromEntries(runtime.filter(k=>k in r).map(k=>[k,r[k]])),absentRuntimeCountersUnknown:runtime.filter(k=>!(k in r)),unhandledErrors:'unhandledErrors'in r?r.unhandledErrors:'UNKNOWN_ABSENT',applicationQualified:false,balanceQualified:false,uiIntegrated:false},null,2)+'\n',{flag:'wx'});
+          NODE
+          printf '%s\n' "$classifier" > "$out/profile-classifier.exit";test "$classifier" -eq 0
+          test ! -s "$out/profile.transport";test ! -s "$out/profile-classifier.transport"
+      - name: Exact three-case UI baseline with one owned Move-mode failure
+        run: |
+          set -euo pipefail
+          out="$CM_POSITION_OUT"
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          : > "$out/ui.transport";: > "$out/ui-classifier.transport";status=0
+          SIM_OFFLINE_RECEIPT="$out/ui.transport" timeout --signal=TERM --kill-after=15s 8m node_modules/.bin/vitest run src/test/TacticsScreen.freePositions.test.tsx --maxWorkers=1 --no-file-parallelism --reporter=default --reporter=json --outputFile="$out/ui.json" > "$out/ui.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/ui.exit";test "$status" -eq 1
+          classifier=0
+          SIM_OFFLINE_RECEIPT="$out/ui-classifier.transport" node <<'NODE' || classifier=$?
+          const fs=require('node:fs'),assert=require('node:assert/strict'),path=require('node:path'),out=process.env.CM_POSITION_OUT,r=JSON.parse(fs.readFileSync(out+'/ui.json','utf8'));
+          const ancestor='Club Manager tactics position modes',owned='offers a separate Move players mode with all eleven numbered position slots',marker='CM_POSITION_MOVE_MODE_AVAILABLE';
+          const preserves=new Set([
+            'keeps a default-mode token tap opening the real slot picker without saving a shape',
+            'keeps default-mode dragging as one XI swap and discards a cancelled drag',
+          ]);
+          assert.equal(r.success,false);assert.equal(r.testResults.length,1);
+          assert.equal(r.numTotalTests,3);assert.equal(r.numPassedTests,2);assert.equal(r.numFailedTests,1);assert.equal(r.numPendingTests,0);assert.equal(r.numTodoTests,0);
+          const suite=r.testResults[0],seen=new Set(),failures=[],passes=[];
+          assert.equal(path.resolve(suite.name),path.resolve('src/test/TacticsScreen.freePositions.test.tsx'));
+          assert.equal(suite.status,'failed');assert.equal(suite.assertionResults.length,3);if('message'in suite)assert.equal(suite.message,'');
+          for(const row of suite.assertionResults){
+            assert.equal(typeof row.title,'string');assert(!seen.has(row.title));seen.add(row.title);
+            assert.equal(row.fullName,ancestor+' '+row.title);
+            if(preserves.has(row.title)){assert.equal(row.status,'passed',row.fullName);assert.deepEqual(row.failureMessages,[]);passes.push({title:row.title});continue;}
+            assert.equal(row.title,owned);assert.equal(row.status,'failed');assert.equal(row.failureMessages.length,1);
+            const message=row.failureMessages[0].replace(/\x1b\[[0-?]*[ -/]*[@-~]/g,'');
+            assert.match(message,/^\s*AssertionError:/);assert(message.includes(marker));
+            assert.doesNotMatch(message,/\b(?:TypeError|ReferenceError|SyntaxError|RangeError|TimeoutError)\s*:|\b(?:timed out|test timeout|hook timeout)\b/i);
+            failures.push({title:row.title,fullName:row.fullName,marker});
+          }
+          assert.equal(seen.size,3);for(const title of [owned,...preserves])assert(seen.has(title));assert.equal(failures.length,1);assert.equal(passes.length,2);
+          const runtime=['numRuntimeErrorTestSuites','numUnhandledErrors'];for(const key of runtime)if(key in r)assert.equal(r[key],0);if('unhandledErrors'in r)assert.deepEqual(r.unhandledErrors,[]);
+          assert.doesNotMatch(fs.readFileSync(out+'/ui.log','utf8'),/Unhandled\s+(?:Errors?|Rejections?)|Uncaught\s+Exceptions?|Failed to resolve import|Cannot find (?:module|package)|No test files found/i);
+          fs.writeFileSync(out+'/ui-red-admission.json',JSON.stringify({phase:'original-position-mode-ui-baseline',source:process.env.GITHUB_SHA,parent:process.env.EXPECTED_PARENT,runId:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,expectedOwnedFailures:failures,preservedPasses:passes,observedRuntimeCounters:Object.fromEntries(runtime.filter(k=>k in r).map(k=>[k,r[k]])),absentRuntimeCountersUnknown:runtime.filter(k=>!(k in r)),unhandledErrors:'unhandledErrors'in r?r.unhandledErrors:'UNKNOWN_ABSENT',applicationQualified:false,balanceQualified:false,uiIntegrated:false},null,2)+'\n',{flag:'wx'});
+          NODE
+          printf '%s\n' "$classifier" > "$out/ui-classifier.exit";test "$classifier" -eq 0
+          test ! -s "$out/ui.transport";test ! -s "$out/ui-classifier.transport"
       - name: Always preserve all raw results and physical holds
         if: always()
         run: |
           set -euo pipefail
-          out="$RUNNER_TEMP/cm-free-positions-original";mkdir -p "$out";failed=0
+          out="$RUNNER_TEMP/cm-free-positions-foundations";mkdir -p "$out";failed=0
           for manifest in source-before dependencies;do
             if test -f "$out/$manifest.sha256";then sha256sum --check "$out/$manifest.sha256" > "$out/final-$manifest-hold.log" 2>&1 || failed=1;else failed=1;fi
           done
@@ -141,7 +228,7 @@ jobs:
           if test -f "$out/head.txt";then cmp "$out/head.txt" "$out/head-after.txt" || failed=1;else failed=1;fi
           git diff --exit-code HEAD > "$out/final-source-diff.log" || failed=1
           git status --porcelain --untracked-files=all > "$out/final-status.txt";test ! -s "$out/final-status.txt" || failed=1
-          for transport in types tests classifier;do test -f "$out/$transport.transport" && test ! -s "$out/$transport.transport" || failed=1;done
+          for transport in types tests classifier profile profile-classifier ui ui-classifier;do test -f "$out/$transport.transport" && test ! -s "$out/$transport.transport" || failed=1;done
           while IFS= read -r -d '' file;do test ! -s "$file" || failed=1;done < <(find "$out" -type f -name '*.transport' -print0)
           printf '%s\n' "$failed" > "$out/final-holds.exit"
           (cd "$out";find . -type f ! -path ./evidence.sha256 -print0 | sort -z | xargs -0 sha256sum) > "$out/evidence.sha256"
@@ -149,7 +236,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: cm-free-positions-original-${{ github.run_id }}-${{ github.run_attempt }}
-          path: ${{ runner.temp }}/cm-free-positions-original/
+          name: cm-free-positions-foundations-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/cm-free-positions-foundations/
           if-no-files-found: error
           retention-days: 14
