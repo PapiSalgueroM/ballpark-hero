@@ -1,0 +1,4 @@
+dm-ctl exit=0 474s | controls (each must be 1): words=1 mathrandom=1 flat=1 farm=1 cap=1 cool8=1 deck=1 noop=1 nodesk=1 sentence=1 anyphase=1
+vitest-1500 exit=0 7s |    Duration  6.87s (transform 2.74s, setup 255ms, collect 5.83s, tests 7.77s, environment 1.33s, prepare 279ms)
+truthdigest exit=0 37s |    Duration  37.05s (transform 997ms, setup 68ms, collect 1.26s, tests 35.00s, environment 298ms, prepare 155ms)
+truthdigest-ctl exit=0 37s | the fixture before Round 1500's re-record is refused as it must

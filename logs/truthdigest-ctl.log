@@ -1,0 +1,185 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/usCareerTruthDigest.test.ts[2m > [22m[2mRound 1104: the US career truth digest[2m > [22m[2mevery key equals the committed fixture, or moved only where this step is allowed to move it
+[22m[39mdigest: 53 of 58 keys moved (148 of 464 careers; 0 careers were below zero on the committed code); allow=none; outside the allow list: 148
+digest moved: nfl|now|QB nfl|now|RB nfl|now|WR nfl|now|TE nfl|now|CB nfl|now|EDGE nfl|now|K nfl|y2005|QB nfl|y2005|RB nfl|y2005|EDGE nfl|y2005|K nba|now|PG nba|now|SG nba|now|SF nba|now|PF nba|now|C nba|y2004|PG nba|y2004|SG nba|y2004|SF nba|y2004|PF nba|y2004|C mlb|now|SP mlb|now|RP mlb|now|C mlb|now|1B mlb|now|2B mlb|now|3B mlb|now|SS mlb|now|LF mlb|now|CF mlb|now|RF mlb|now|DH mlb|y2004|SP mlb|y2004|RP mlb|y2004|C mlb|y2004|1B mlb|y2004|2B mlb|y2004|3B mlb|y2004|SS mlb|y2004|LF mlb|y2004|CF mlb|y2004|RF mlb|y2004|DH nhl|now|C nhl|now|LW nhl|now|RW nhl|now|D nhl|now|G nhl|y2006|C nhl|y2006|LW nhl|y2006|RW nhl|y2006|D nhl|y2006|G
+
+ [31m❯[39m src/test/usCareerTruthDigest.test.ts [2m([22m[2m1 test[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 34509[2mms[22m[39m
+[31m   [31m×[31m Round 1104: the US career truth digest[2m > [22mevery key equals the committed fixture, or moved only where this step is allowed to move it[39m[33m 34508[2mms[22m[39m
+[31m     → careers that moved outside DIGEST_ALLOW=none: expected [ 'nfl|now|QB#7', …(147) ] to deeply equal [][39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/usCareerTruthDigest.test.ts[2m > [22mRound 1104: the US career truth digest[2m > [22mevery key equals the committed fixture, or moved only where this step is allowed to move it
+[31m[1mAssertionError[22m: careers that moved outside DIGEST_ALLOW=none: expected [ 'nfl|now|QB#7', …(147) ] to deeply equal [][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- [][39m
+[31m+ [[39m
+[31m+   "nfl|now|QB#7",[39m
+[31m+   "nfl|now|RB#0",[39m
+[31m+   "nfl|now|WR#2",[39m
+[31m+   "nfl|now|TE#3",[39m
+[31m+   "nfl|now|CB#6",[39m
+[31m+   "nfl|now|CB#7",[39m
+[31m+   "nfl|now|EDGE#7",[39m
+[31m+   "nfl|now|K#2",[39m
+[31m+   "nfl|now|K#5",[39m
+[31m+   "nfl|now|K#6",[39m
+[31m+   "nfl|y2005|QB#7",[39m
+[31m+   "nfl|y2005|RB#0",[39m
+[31m+   "nfl|y2005|EDGE#1",[39m
+[31m+   "nfl|y2005|K#1",[39m
+[31m+   "nba|now|PG#2",[39m
+[31m+   "nba|now|PG#4",[39m
+[31m+   "nba|now|PG#5",[39m
+[31m+   "nba|now|PG#6",[39m
+[31m+   "nba|now|PG#7",[39m
+[31m+   "nba|now|SG#3",[39m
+[31m+   "nba|now|SG#5",[39m
+[31m+   "nba|now|SF#0",[39m
+[31m+   "nba|now|SF#1",[39m
+[31m+   "nba|now|SF#3",[39m
+[31m+   "nba|now|SF#6",[39m
+[31m+   "nba|now|PF#2",[39m
+[31m+   "nba|now|PF#4",[39m
+[31m+   "nba|now|PF#6",[39m
+[31m+   "nba|now|PF#7",[39m
+[31m+   "nba|now|C#0",[39m
+[31m+   "nba|now|C#2",[39m
+[31m+   "nba|now|C#4",[39m
+[31m+   "nba|now|C#5",[39m
+[31m+   "nba|y2004|PG#3",[39m
+[31m+   "nba|y2004|PG#4",[39m
+[31m+   "nba|y2004|PG#5",[39m
+[31m+   "nba|y2004|PG#7",[39m
+[31m+   "nba|y2004|SG#2",[39m
+[31m+   "nba|y2004|SG#5",[39m
+[31m+   "nba|y2004|SG#6",[39m
+[31m+   "nba|y2004|SF#1",[39m
+[31m+   "nba|y2004|SF#3",[39m
+[31m+   "nba|y2004|SF#5",[39m
+[31m+   "nba|y2004|SF#7",[39m
+[31m+   "nba|y2004|PF#1",[39m
+[31m+   "nba|y2004|PF#4",[39m
+[31m+   "nba|y2004|PF#7",[39m
+[31m+   "nba|y2004|C#0",[39m
+[31m+   "nba|y2004|C#2",[39m
+[31m+   "nba|y2004|C#4",[39m
+[31m+   "nba|y2004|C#6",[39m
+[31m+   "mlb|now|SP#6",[39m
+[31m+   "mlb|now|RP#1",[39m
+[31m+   "mlb|now|RP#4",[39m
+[31m+   "mlb|now|RP#6",[39m
+[31m+   "mlb|now|C#1",[39m
+[31m+   "mlb|now|C#2",[39m
+[31m+   "mlb|now|C#4",[39m
+[31m+   "mlb|now|C#5",[39m
+[31m+   "mlb|now|1B#0",[39m
+[31m+   "mlb|now|1B#6",[39m
+[31m+   "mlb|now|2B#0",[39m
+[31m+   "mlb|now|2B#1",[39m
+[31m+   "mlb|now|2B#4",[39m
+[31m+   "mlb|now|2B#7",[39m
+[31m+   "mlb|now|3B#1",[39m
+[31m+   "mlb|now|3B#3",[39m
+[31m+   "mlb|now|SS#0",[39m
+[31m+   "mlb|now|SS#1",[39m
+[31m+   "mlb|now|SS#2",[39m
+[31m+   "mlb|now|SS#3",[39m
+[31m+   "mlb|now|SS#4",[39m
+[31m+   "mlb|now|SS#6",[39m
+[31m+   "mlb|now|LF#0",[39m
+[31m+   "mlb|now|LF#2",[39m
+[31m+   "mlb|now|LF#5",[39m
+[31m+   "mlb|now|LF#7",[39m
+[31m+   "mlb|now|CF#1",[39m
+[31m+   "mlb|now|CF#6",[39m
+[31m+   "mlb|now|CF#7",[39m
+[31m+   "mlb|now|RF#1",[39m
+[31m+   "mlb|now|RF#5",[39m
+[31m+   "mlb|now|RF#6",[39m
+[31m+   "mlb|now|DH#6",[39m
+[31m+   "mlb|y2004|SP#1",[39m
+[31m+   "mlb|y2004|SP#2",[39m
+[31m+   "mlb|y2004|SP#3",[39m
+[31m+   "mlb|y2004|SP#5",[39m
+[31m+   "mlb|y2004|SP#6",[39m
+[31m+   "mlb|y2004|RP#1",[39m
+[31m+   "mlb|y2004|RP#2",[39m
+[31m+   "mlb|y2004|RP#5",[39m
+[31m+   "mlb|y2004|RP#7",[39m
+[31m+   "mlb|y2004|C#2",[39m
+[31m+   "mlb|y2004|C#5",[39m
+[31m+   "mlb|y2004|C#6",[39m
+[31m+   "mlb|y2004|C#7",[39m
+[31m+   "mlb|y2004|1B#0",[39m
+[31m+   "mlb|y2004|1B#2",[39m
+[31m+   "mlb|y2004|1B#5",[39m
+[31m+   "mlb|y2004|2B#1",[39m
+[31m+   "mlb|y2004|2B#3",[39m
+[31m+   "mlb|y2004|2B#6",[39m
+[31m+   "mlb|y2004|3B#5",[39m
+[31m+   "mlb|y2004|3B#7",[39m
+[31m+   "mlb|y2004|SS#0",[39m
+[31m+   "mlb|y2004|SS#2",[39m
+[31m+   "mlb|y2004|SS#5",[39m
+[31m+   "mlb|y2004|SS#6",[39m
+[31m+   "mlb|y2004|LF#3",[39m
+[31m+   "mlb|y2004|LF#4",[39m
+[31m+   "mlb|y2004|CF#0",[39m
+[31m+   "mlb|y2004|CF#2",[39m
+[31m+   "mlb|y2004|CF#4",[39m
+[31m+   "mlb|y2004|CF#6",[39m
+[31m+   "mlb|y2004|RF#0",[39m
+[31m+   "mlb|y2004|RF#1",[39m
+[31m+   "mlb|y2004|RF#2",[39m
+[31m+   "mlb|y2004|RF#4",[39m
+[31m+   "mlb|y2004|DH#0",[39m
+[31m+   "mlb|y2004|DH#1",[39m
+[31m+   "mlb|y2004|DH#4",[39m
+[31m+   "nhl|now|C#1",[39m
+[31m+   "nhl|now|C#2",[39m
+[31m+   "nhl|now|C#3",[39m
+[31m+   "nhl|now|LW#1",[39m
+[31m+   "nhl|now|LW#2",[39m
+[31m+   "nhl|now|RW#1",[39m
+[31m+   "nhl|now|RW#4",[39m
+[31m+   "nhl|now|RW#5",[39m
+[31m+   "nhl|now|RW#7",[39m
+[31m+   "nhl|now|D#1",[39m
+[31m+   "nhl|now|D#2",[39m
+[31m+   "nhl|now|D#6",[39m
+[31m+   "nhl|now|D#7",[39m
+[31m+   "nhl|now|G#0",[39m
+[31m+   "nhl|now|G#7",[39m
+[31m+   "nhl|y2006|C#4",[39m
+[31m+   "nhl|y2006|C#5",[39m
+[31m+   "nhl|y2006|C#6",[39m
+[31m+   "nhl|y2006|LW#4",[39m
+[31m+   "nhl|y2006|LW#5",[39m
+[31m+   "nhl|y2006|RW#0",[39m
+[31m+   "nhl|y2006|RW#1",[39m
+[31m+   "nhl|y2006|RW#3",[39m
+[31m+   "nhl|y2006|D#0",[39m
+[31m+   "nhl|y2006|G#0",[39m
+[31m+   "nhl|y2006|G#2",[39m
+[31m+ ][39m
+
+[36m [2m❯[22m src/test/usCareerTruthDigest.test.ts:[2m136:86[22m[39m
+
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m   Start at [22m 14:38:23
+[2m   Duration [22m 36.63s[2m (transform 1.03s, setup 68ms, collect 1.32s, tests 34.51s, environment 295ms, prepare 67ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerTruthDigest.test.ts,title=src/test/usCareerTruthDigest.test.ts > Round 1104%3A the US career truth digest > every key equals the committed fixture%2C or moved only where this step is allowed to move it,line=136,column=86::AssertionError: careers that moved outside DIGEST_ALLOW=none: expected [ 'nfl|now|QB#7', …(147) ] to deeply equal []%0A%0A- Expected%0A+ Received%0A%0A- []%0A+ [%0A+   "nfl|now|QB#7",%0A+   "nfl|now|RB#0",%0A+   "nfl|now|WR#2",%0A+   "nfl|now|TE#3",%0A+   "nfl|now|CB#6",%0A+   "nfl|now|CB#7",%0A+   "nfl|now|EDGE#7",%0A+   "nfl|now|K#2",%0A+   "nfl|now|K#5",%0A+   "nfl|now|K#6",%0A+   "nfl|y2005|QB#7",%0A+   "nfl|y2005|RB#0",%0A+   "nfl|y2005|EDGE#1",%0A+   "nfl|y2005|K#1",%0A+   "nba|now|PG#2",%0A+   "nba|now|PG#4",%0A+   "nba|now|PG#5",%0A+   "nba|now|PG#6",%0A+   "nba|now|PG#7",%0A+   "nba|now|SG#3",%0A+   "nba|now|SG#5",%0A+   "nba|now|SF#0",%0A+   "nba|now|SF#1",%0A+   "nba|now|SF#3",%0A+   "nba|now|SF#6",%0A+   "nba|now|PF#2",%0A+   "nba|now|PF#4",%0A+   "nba|now|PF#6",%0A+   "nba|now|PF#7",%0A+   "nba|now|C#0",%0A+   "nba|now|C#2",%0A+   "nba|now|C#4",%0A+   "nba|now|C#5",%0A+   "nba|y2004|PG#3",%0A+   "nba|y2004|PG#4",%0A+   "nba|y2004|PG#5",%0A+   "nba|y2004|PG#7",%0A+   "nba|y2004|SG#2",%0A+   "nba|y2004|SG#5",%0A+   "nba|y2004|SG#6",%0A+   "nba|y2004|SF#1",%0A+   "nba|y2004|SF#3",%0A+   "nba|y2004|SF#5",%0A+   "nba|y2004|SF#7",%0A+   "nba|y2004|PF#1",%0A+   "nba|y2004|PF#4",%0A+   "nba|y2004|PF#7",%0A+   "nba|y2004|C#0",%0A+   "nba|y2004|C#2",%0A+   "nba|y2004|C#4",%0A+   "nba|y2004|C#6",%0A+   "mlb|now|SP#6",%0A+   "mlb|now|RP#1",%0A+   "mlb|now|RP#4",%0A+   "mlb|now|RP#6",%0A+   "mlb|now|C#1",%0A+   "mlb|now|C#2",%0A+   "mlb|now|C#4",%0A+   "mlb|now|C#5",%0A+   "mlb|now|1B#0",%0A+   "mlb|now|1B#6",%0A+   "mlb|now|2B#0",%0A+   "mlb|now|2B#1",%0A+   "mlb|now|2B#4",%0A+   "mlb|now|2B#7",%0A+   "mlb|now|3B#1",%0A+   "mlb|now|3B#3",%0A+   "mlb|now|SS#0",%0A+   "mlb|now|SS#1",%0A+   "mlb|now|SS#2",%0A+   "mlb|now|SS#3",%0A+   "mlb|now|SS#4",%0A+   "mlb|now|SS#6",%0A+   "mlb|now|LF#0",%0A+   "mlb|now|LF#2",%0A+   "mlb|now|LF#5",%0A+   "mlb|now|LF#7",%0A+   "mlb|now|CF#1",%0A+   "mlb|now|CF#6",%0A+   "mlb|now|CF#7",%0A+   "mlb|now|RF#1",%0A+   "mlb|now|RF#5",%0A+   "mlb|now|RF#6",%0A+   "mlb|now|DH#6",%0A+   "mlb|y2004|SP#1",%0A+   "mlb|y2004|SP#2",%0A+   "mlb|y2004|SP#3",%0A+   "mlb|y2004|SP#5",%0A+   "mlb|y2004|SP#6",%0A+   "mlb|y2004|RP#1",%0A+   "mlb|y2004|RP#2",%0A+   "mlb|y2004|RP#5",%0A+   "mlb|y2004|RP#7",%0A+   "mlb|y2004|C#2",%0A+   "mlb|y2004|C#5",%0A+   "mlb|y2004|C#6",%0A+   "mlb|y2004|C#7",%0A+   "mlb|y2004|1B#0",%0A+   "mlb|y2004|1B#2",%0A+   "mlb|y2004|1B#5",%0A+   "mlb|y2004|2B#1",%0A+   "mlb|y2004|2B#3",%0A+   "mlb|y2004|2B#6",%0A+   "mlb|y2004|3B#5",%0A+   "mlb|y2004|3B#7",%0A+   "mlb|y2004|SS#0",%0A+   "mlb|y2004|SS#2",%0A+   "mlb|y2004|SS#5",%0A+   "mlb|y2004|SS#6",%0A+   "mlb|y2004|LF#3",%0A+   "mlb|y2004|LF#4",%0A+   "mlb|y2004|CF#0",%0A+   "mlb|y2004|CF#2",%0A+   "mlb|y2004|CF#4",%0A+   "mlb|y2004|CF#6",%0A+   "mlb|y2004|RF#0",%0A+   "mlb|y2004|RF#1",%0A+   "mlb|y2004|RF#2",%0A+   "mlb|y2004|RF#4",%0A+   "mlb|y2004|DH#0",%0A+   "mlb|y2004|DH#1",%0A+   "mlb|y2004|DH#4",%0A+   "nhl|now|C#1",%0A+   "nhl|now|C#2",%0A+   "nhl|now|C#3",%0A+   "nhl|now|LW#1",%0A+   "nhl|now|LW#2",%0A+   "nhl|now|RW#1",%0A+   "nhl|now|RW#4",%0A+   "nhl|now|RW#5",%0A+   "nhl|now|RW#7",%0A+   "nhl|now|D#1",%0A+   "nhl|now|D#2",%0A+   "nhl|now|D#6",%0A+   "nhl|now|D#7",%0A+   "nhl|now|G#0",%0A+   "nhl|now|G#7",%0A+   "nhl|y2006|C#4",%0A+   "nhl|y2006|C#5",%0A+   "nhl|y2006|C#6",%0A+   "nhl|y2006|LW#4",%0A+   "nhl|y2006|LW#5",%0A+   "nhl|y2006|RW#0",%0A+   "nhl|y2006|RW#1",%0A+   "nhl|y2006|RW#3",%0A+   "nhl|y2006|D#0",%0A+   "nhl|y2006|G#0",%0A+   "nhl|y2006|G#2",%0A+ ]%0A%0A ❯ src/test/usCareerTruthDigest.test.ts:136:86%0A%0A
+the fixture before Round 1500's re-record is refused as it must
