@@ -1,0 +1,3 @@
+6) the board test under the board controls: nodesk
+   control nodesk: 16 cases, 12 failed (12 named), 4 passed, vitest exit 1
+CONTROL nodesk FIRED (red sections 6)
