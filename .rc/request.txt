@@ -1,0 +1,10 @@
+#!serve
+#!playwright
+#!serial
+# Release BR, Round 1542 (NFL Front Office who scored, carried by 1562 at bc856874; its head ab162ea8 has the tree of 8fda1d1b2):
+# r1542-fx2-c (rc-fx2-c.txt), extra mutH.mjs (mutH exits 1, red at
+# the bracket path case). DROPPED: weight-head and weight-base (base 4a0b39ab, before Release BQ; the join weighs).
+walk: ENGINES=chromium node scripts/playNflSeasonStats.mjs
+playFrontOfficeGameDay: ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs
+mutH: node .rc/x/mutH.mjs && node_modules/.bin/vitest run src/components/front-office/FrontOfficeSeasonStats.test.tsx -t "bracket path" --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
+playGmCareer: ENGINES=chromium node scripts/playGmCareer.mjs
