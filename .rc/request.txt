@@ -1,0 +1,17 @@
+#!serve
+#!playwright
+playCareerHub: ENGINES=chromium node scripts/playCareerHub.mjs
+playDepthChart: ENGINES=chromium node scripts/playDepthChart.mjs
+playDraftNight: ENGINES=chromium node scripts/playDraftNight.mjs
+playExtension: ENGINES=chromium node scripts/playExtension.mjs
+playReducedMotion: ENGINES=chromium node scripts/playReducedMotion.mjs
+playSeasonReveal: ENGINES=chromium node scripts/playSeasonReveal.mjs
+playStorageBlocked: ENGINES=chromium node scripts/playStorageBlocked.mjs
+playTranslatedPage: ENGINES=chromium node scripts/playTranslatedPage.mjs
+playUsCareerReports: ENGINES=chromium node scripts/playUsCareerReports.mjs
+playUsCareerSaveSeam: ENGINES=chromium node scripts/playUsCareerSaveSeam.mjs
+playUsDirtyMoney: ENGINES=chromium node scripts/playUsDirtyMoney.mjs
+playUsMarketTalk: ENGINES=chromium node scripts/playUsMarketTalk.mjs
+playUsSeasonCentre: ENGINES=chromium node scripts/playUsSeasonCentre.mjs
+playUsShopPromises: ENGINES=chromium node scripts/playUsShopPromises.mjs
+playNbaNumbers: ENGINES=chromium node scripts/playNbaNumbers.mjs
