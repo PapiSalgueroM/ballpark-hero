@@ -1,0 +1,14 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+ctl-eagerkit exit=0 3s | playGmCareer control eagerkit: all 1 guarded checks fired (mutations landed: {"eagerkit":4})
+ctl-wipebutton exit=0 13s | playGmCareer control wipebutton: all 1 guarded checks fired (mutations landed: {"wipebutton":2})
+ctl-nofallback exit=0 33s | playGmCareer control nofallback: all 1 guarded checks fired (mutations landed: {"nofallback":4})
+ctl-eagerpanel exit=0 33s | playGmCareer control eagerpanel: all 1 guarded checks fired (mutations landed: {"eagerpanel":16})
+ownermandate exit=0 26s | ALL OWNER MANDATE WALK CHECKS PASSED
+fohub exit=0 61s | playFoHub: green. Four front offices, nine live boxes each, and the five the walk opens open what they name.
+gmpress exit=1 86s | playGmPress: 2 failures
+draftnight exit=0 216s | playDraftNight: ALL GREEN, 49 nights walked
+fogameday exit=0 359s | playFrontOfficeGameDay: 386 checks, 0 failed
+weight-head exit=0 30s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+gmstaff exit=1 3s | GM STAFF: 40 failure(s)
+gmcareer exit=0 482s | playGmCareer: green. 1 board, 3 sizes, four walks each and the slow kit walk at 390 and 1280.
+sweep exit=0 903s | Swept 184 routes across 1 engines and 3 viewports (552 checks). 0 findings.
