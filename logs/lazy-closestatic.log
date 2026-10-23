@@ -1,0 +1,8 @@
+NEGATIVE CONTROL ON: closestatic; section 1 must go red
+1) the page carries the boxes and the loader, and not one module of the career kit
+   FAIL the page carries src/lib/nflSeasonAwards.ts, which rides in the kit or the season card's chunk: src/pages/FrontOffice.tsx > src/components/front-office/FrontOfficeBoard.tsx > src/lib/nflSeasonAwards.ts
+   FAIL the page carries src/lib/foSeasonStats.ts, which rides in the kit or the season card's chunk: src/pages/FrontOffice.tsx > src/components/front-office/FrontOfficeBoard.tsx > src/lib/nflSeasonAwards.ts > src/lib/foSeasonStats.ts
+   110 files reached from the page, 56 dynamic edges seen, 11 kit modules and 5 season modules checked absent
+2) the Career box drawn before the kit is the box drawn with it, save by save (the GM level box reads the desk alone, the same on both)
+   55296 saves over 3 leagues: the records differ in 30348, the kit's tier is not the bottom one in 39744, a last grade in 9216, a stored record read as itself in 13824
+simFoLazyDesk CONTROL closestatic FIRED: section 1 went red with 2 failures (red sections 1)
