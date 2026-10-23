@@ -963,7 +963,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
   '/nfl-connections': {
     intro: [
       "Twenty pro football players sit in a grid, hiding four groups of five that share something: a franchise, a college, a draft slot, a milestone. Find all four groups before four wrong guesses find you.",
-      "The cruelty is the overlap. That quarterback fits the LSU group and the number one picks group, but he only belongs to one.",
+      "The cruelty is the overlap. That quarterback looks like he fits the LSU group and the number one picks group, but only one of them is really his.",
     ],
     headings: {
       howToPlay: "How to play NFL Connections, a free online NFL grouping puzzle",
@@ -1030,7 +1030,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       {
         heading: "Locking an easy shared team group",
         paragraphs: [
-          "You spot five players who all wore a Patriots uniform and lock the yellow group. Then an LSU group looks obvious, except six names fit, which means one of them belongs somewhere else.",
+          "You spot five players who all wore a Patriots uniform and lock the yellow group. Then an LSU group looks obvious, except six names seem to fit, which means one of them belongs somewhere else.",
         ],
       },
       {

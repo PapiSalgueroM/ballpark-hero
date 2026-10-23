@@ -1,0 +1,242 @@
+{
+ "about": "Round 1558. The two host proof behind nflconn-004, the one NFL Connections board the checker flagged: Le'Veon Bell, listed with the Steelers, also played five games for Baltimore in 2021, beside the board's Ravens group. The record (nflConnectionsRecord-2026-10.json, ESPN's athlete service) is one host; nfl.com's career page is the second (statmuse.com for a kicker, whose nfl.com page carries no table). Wikis are never a source.",
+ "read": "2026-10-22",
+ "rules": [
+  "A fact names a man, a group label and whether he fits it (holds), and carries two sources on two different hosts, neither a wiki: the record first, the second host after it.",
+  "Every member of a group the checker flagged before the round holds his group on two hosts (flaggedGroups lists those groups under their labels after the round).",
+  "Every finding the checker made before the round (fixed) has the fact behind it on two hosts: the member who did not fit, or the man from another group who did.",
+  "uncheckedCeiling, memberUnknownCeiling and otherUnknownCeiling may only fall: a label, a member or another tile the record cannot judge must not come back."
+ ],
+ "boardsChanged": [
+  "nflconn-004"
+ ],
+ "flaggedGroups": [
+  [
+   "nflconn-004",
+   "Played for the Ravens"
+  ],
+  [
+   "nflconn-004",
+   "Played for the Steelers"
+  ]
+ ],
+ "fixed": [
+  "nflconn-004 | second-fit | Le'Veon Bell | Played for the Ravens | listed under Played for the Steelers"
+ ],
+ "facts": [
+  {
+   "id": "nflconn-004",
+   "label": "Played for the Ravens",
+   "name": "Ray Lewis",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/football/nfl/athletes/964/stats",
+     "says": "seasons with clubs: 1996 BAL, 1997 BAL, 1998 BAL, 1999 BAL, 2000 BAL, 2001 BAL, 2002 BAL, 2003 BAL, 2004 BAL, 2005 BAL, 2006 BAL, 2007 BAL, 2008 BAL, 2009 BAL, 2010 BAL, 2011 BAL, 2012 BAL"
+    },
+    {
+     "host": "nfl.com",
+     "url": "https://www.nfl.com/players/ray-lewis/stats/career",
+     "says": "Baltimore Ravens: 2012 (6 games), 2011 (12 games), 2010 (16 games), 2009 (16 games), 2008 (16 games), 2007 (14 games), 2006 (14 games), 2005 (6 games), 2004 (15 games), 2003 (16 games), 2002 (5 games), 2001 (16 games), 2000 (16 games), 1999 (16 games), 1998 (14 games), 1997 (16 games), 1996 (14 games)"
+    }
+   ]
+  },
+  {
+   "id": "nflconn-004",
+   "label": "Played for the Ravens",
+   "name": "Ed Reed",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/football/nfl/athletes/3552/stats",
+     "says": "seasons with clubs: 2002 BAL, 2003 BAL, 2004 BAL, 2005 BAL, 2006 BAL, 2007 BAL, 2008 BAL, 2009 BAL, 2010 BAL, 2011 BAL, 2012 BAL, 2013 HOU/NYJ"
+    },
+    {
+     "host": "nfl.com",
+     "url": "https://www.nfl.com/players/ed-reed/stats/career",
+     "says": "Baltimore Ravens: 2012 (16 games), 2011 (16 games), 2010 (10 games), 2009 (12 games), 2008 (16 games), 2007 (16 games), 2006 (16 games), 2005 (10 games), 2004 (16 games), 2003 (16 games), 2002 (16 games)"
+    }
+   ]
+  },
+  {
+   "id": "nflconn-004",
+   "label": "Played for the Ravens",
+   "name": "Lamar Jackson",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/football/nfl/athletes/3916387/stats",
+     "says": "seasons with clubs: 2018 BAL, 2019 BAL, 2020 BAL, 2021 BAL, 2022 BAL, 2023 BAL, 2024 BAL, 2025 BAL, 2026 BAL"
+    },
+    {
+     "host": "nfl.com",
+     "url": "https://www.nfl.com/players/lamar-jackson/stats/career",
+     "says": "Baltimore Ravens: 2026 (4 games), 2025 (13 games), 2024 (17 games), 2023 (16 games), 2022 (12 games), 2021 (12 games), 2020 (15 games), 2019 (15 games), 2018 (16 games)"
+    }
+   ]
+  },
+  {
+   "id": "nflconn-004",
+   "label": "Played for the Ravens",
+   "name": "Justin Tucker",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/football/nfl/athletes/15683/stats",
+     "says": "seasons with clubs: 2012 BAL, 2013 BAL, 2014 BAL, 2015 BAL, 2016 BAL, 2017 BAL, 2018 BAL, 2019 BAL, 2020 BAL, 2021 BAL, 2022 BAL, 2023 BAL, 2024 BAL"
+    },
+    {
+     "host": "statmuse.com",
+     "url": "https://www.statmuse.com/nfl/ask/justin-tucker-career-stats-by-season",
+     "says": "regular season rows 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 and 2024, every one BAL (read 2026-10-22)"
+    }
+   ]
+  },
+  {
+   "id": "nflconn-004",
+   "label": "Played for the Ravens",
+   "name": "Terrell Suggs",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/football/nfl/athletes/4468/stats",
+     "says": "seasons with clubs: 2003 BAL, 2004 BAL, 2005 BAL, 2006 BAL, 2007 BAL, 2008 BAL, 2009 BAL, 2010 BAL, 2011 BAL, 2012 BAL, 2013 BAL, 2014 BAL, 2016 BAL, 2017 BAL, 2018 BAL, 2019 ARI/KC"
+    },
+    {
+     "host": "nfl.com",
+     "url": "https://www.nfl.com/players/terrell-suggs/stats/career",
+     "says": "Baltimore Ravens: 2018 (16 games), 2017 (16 games), 2016 (15 games), 2015 (1 games), 2014 (16 games), 2013 (16 games), 2012 (8 games), 2011 (16 games), 2010 (16 games), 2009 (13 games), 2008 (16 games), 2007 (16 games), 2006 (16 games), 2005 (16 games), 2004 (16 games), 2003 (16 games)"
+    }
+   ]
+  },
+  {
+   "id": "nflconn-004",
+   "label": "Played for the Steelers",
+   "name": "T.J. Watt",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/football/nfl/athletes/3045282/stats",
+     "says": "seasons with clubs: 2017 PIT, 2018 PIT, 2019 PIT, 2020 PIT, 2021 PIT, 2022 PIT, 2023 PIT, 2024 PIT, 2025 PIT, 2026 PIT"
+    },
+    {
+     "host": "nfl.com",
+     "url": "https://www.nfl.com/players/t-j-watt/stats/career",
+     "says": "Pittsburgh Steelers: 2026 (6 games), 2025 (14 games), 2024 (17 games), 2023 (17 games), 2022 (10 games), 2021 (15 games), 2020 (15 games), 2019 (16 games), 2018 (16 games), 2017 (15 games)"
+    }
+   ]
+  },
+  {
+   "id": "nflconn-004",
+   "label": "Played for the Steelers",
+   "name": "Cam Heyward",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/football/nfl/athletes/13977/stats",
+     "says": "seasons with clubs: 2011 PIT, 2012 PIT, 2013 PIT, 2014 PIT, 2015 PIT, 2016 PIT, 2017 PIT, 2018 PIT, 2019 PIT, 2020 PIT, 2021 PIT, 2022 PIT, 2023 PIT, 2024 PIT, 2025 PIT, 2026 PIT"
+    },
+    {
+     "host": "nfl.com",
+     "url": "https://www.nfl.com/players/cameron-heyward/stats/career",
+     "says": "Pittsburgh Steelers: 2026 (6 games), 2025 (17 games), 2024 (17 games), 2023 (11 games), 2022 (17 games), 2021 (17 games), 2020 (15 games), 2019 (16 games), 2018 (16 games), 2017 (15 games), 2016 (7 games), 2015 (16 games), 2014 (16 games), 2013 (16 games), 2012 (16 games), 2011 (16 games)"
+    }
+   ]
+  },
+  {
+   "id": "nflconn-004",
+   "label": "Played for the Steelers",
+   "name": "Ben Roethlisberger",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/football/nfl/athletes/5536/stats",
+     "says": "seasons with clubs: 2004 PIT, 2005 PIT, 2006 PIT, 2007 PIT, 2008 PIT, 2009 PIT, 2010 PIT, 2011 PIT, 2012 PIT, 2013 PIT, 2014 PIT, 2015 PIT, 2016 PIT, 2017 PIT, 2018 PIT, 2019 PIT, 2020 PIT, 2021 PIT"
+    },
+    {
+     "host": "nfl.com",
+     "url": "https://www.nfl.com/players/ben-roethlisberger/stats/career",
+     "says": "Pittsburgh Steelers: 2021 (16 games), 2020 (15 games), 2019 (2 games), 2018 (16 games), 2017 (15 games), 2016 (14 games), 2015 (12 games), 2014 (16 games), 2013 (16 games), 2012 (13 games), 2011 (15 games), 2010 (12 games), 2009 (15 games), 2008 (16 games), 2007 (15 games), 2006 (15 games), 2005 (12 games), 2004 (14 games)"
+    }
+   ]
+  },
+  {
+   "id": "nflconn-004",
+   "label": "Played for the Steelers",
+   "name": "Troy Polamalu",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/football/nfl/athletes/4474/stats",
+     "says": "seasons with clubs: 2003 PIT, 2004 PIT, 2005 PIT, 2006 PIT, 2007 PIT, 2008 PIT, 2009 PIT, 2010 PIT, 2011 PIT, 2012 PIT, 2013 PIT, 2014 PIT"
+    },
+    {
+     "host": "nfl.com",
+     "url": "https://www.nfl.com/players/troy-polamalu/stats/career",
+     "says": "Pittsburgh Steelers: 2014 (12 games), 2013 (16 games), 2012 (7 games), 2011 (16 games), 2010 (14 games), 2009 (5 games), 2008 (16 games), 2007 (11 games), 2006 (13 games), 2005 (16 games), 2004 (16 games), 2003 (16 games)"
+    }
+   ]
+  },
+  {
+   "id": "nflconn-004",
+   "label": "Played for the Steelers",
+   "name": "James Harrison",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/football/nfl/athletes/4433/stats",
+     "says": "seasons with clubs: 2004 PIT, 2005 PIT, 2006 PIT, 2007 PIT, 2008 PIT, 2009 PIT, 2010 PIT, 2011 PIT, 2012 PIT, 2013 CIN, 2014 PIT, 2015 PIT, 2016 PIT, 2017 NE/PIT"
+    },
+    {
+     "host": "nfl.com",
+     "url": "https://www.nfl.com/players/james-harrison/stats/career",
+     "says": "Pittsburgh Steelers: 2017 (5 games), 2016 (15 games), 2015 (15 games), 2014 (11 games), 2012 (13 games), 2011 (11 games), 2010 (16 games), 2009 (16 games), 2008 (15 games), 2007 (16 games), 2006 (11 games), 2005 (16 games), 2004 (16 games), 2002 (1 games)"
+    }
+   ]
+  },
+  {
+   "id": "nflconn-004",
+   "label": "Played for the Ravens",
+   "name": "Le'Veon Bell",
+   "holds": true,
+   "why": "second-fit",
+   "finding": "nflconn-004 | second-fit | Le'Veon Bell | Played for the Ravens | listed under Played for the Steelers",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/football/nfl/athletes/15825/stats",
+     "says": "seasons with clubs: 2013 PIT, 2014 PIT, 2015 PIT, 2016 PIT, 2017 PIT, 2019 NYJ, 2020 KC/NYJ, 2021 BAL/TB"
+    },
+    {
+     "host": "nfl.com",
+     "url": "https://www.nfl.com/players/le-veon-bell/stats/career",
+     "says": "Baltimore Ravens: 2021 (5 games)"
+    }
+   ]
+  }
+ ],
+ "uncheckedCeiling": 0,
+ "memberUnknownCeiling": 0,
+ "otherUnknownCeiling": 1,
+ "otherUnknownNote": "Other tiles the record cannot judge against a group beside them, 1 pair on the head: Ed Reed against \"Played college ball at Clemson\" on nflconn-004 (the record lacks his college; he played at Miami, so it is not a second answer). The count may only fall."
+}

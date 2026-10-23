@@ -39,6 +39,12 @@ export interface NflConnectionsPuzzle {
  * play for Denver (2017) and Denver is the same puzzle's green group.
  * Within a puzzle, no player satisfies another group's criterion, the
  * partition is unique. Cross-puzzle reuse is fine.
+ *
+ * Round 1558: that last rule had one miss. Le'Veon Bell sat in nflconn-004's
+ * Steelers group beside its Ravens group, and he played five games for
+ * Baltimore in 2021 (a season the roster table above never saw). Ben
+ * Roethlisberger, a Steeler only, took his place. Every board is now held
+ * to the record by scripts/simUsConnectionsFacts.mjs.
  */
 export const nflConnectionsPuzzles: NflConnectionsPuzzle[] = [
   {
@@ -71,7 +77,7 @@ export const nflConnectionsPuzzles: NflConnectionsPuzzle[] = [
   {
     id: 'nflconn-004',
     groups: [
-      { theme: 'Played for the Steelers', players: ['T.J. Watt', 'Cam Heyward', "Le'Veon Bell", 'Troy Polamalu', 'James Harrison'], difficulty: 'yellow' },
+      { theme: 'Played for the Steelers', players: ['T.J. Watt', 'Cam Heyward', 'Ben Roethlisberger', 'Troy Polamalu', 'James Harrison'], difficulty: 'yellow' },
       { theme: 'Played for the Ravens', players: ['Ray Lewis', 'Ed Reed', 'Lamar Jackson', 'Justin Tucker', 'Terrell Suggs'], difficulty: 'green' },
       { theme: '10,000+ career receiving yards', players: ['Larry Fitzgerald', 'Andre Johnson', 'Calvin Johnson', 'A.J. Green', 'Mike Evans'], difficulty: 'blue' },
       { theme: 'Played college ball at Clemson', players: ['Trevor Lawrence', 'Deshaun Watson', 'Travis Etienne', 'Tee Higgins', 'Hunter Renfrow'], difficulty: 'purple' },
