@@ -1,0 +1,2 @@
+# Release BQ triage: the trophy save playReducedMotion opens, and its chance wheel.
+probe: node .rc/x/wheelProbe.mjs
