@@ -1,3 +1,4 @@
+import { transferableAbortController } from 'node:util';
 import { act, cleanup, createEvent, fireEvent, render } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createMemoryRouter, Link, Outlet, RouterProvider } from 'react-router-dom';
@@ -48,6 +49,11 @@ async function external(router: Router, to: string, replace = false) {
 const queryOf = (router: Router) => new URLSearchParams(router.state.location.search).get('q');
 
 beforeEach(() => {
+  // The real router creates Node Requests, so its AbortSignal must share that realm.
+  const nativeController = transferableAbortController();
+  vi.stubGlobal('AbortController', nativeController.constructor);
+  vi.stubGlobal('AbortSignal', nativeController.signal.constructor);
+  expect(new Request('http://localhost/search', { signal: new AbortController().signal }).signal.aborted, 'SEARCH_NATIVE_ABORT_SIGNAL_COMPATIBLE').toBe(false);
   localStorage.clear();
   vi.useFakeTimers();
 });
@@ -59,6 +65,7 @@ afterEach(() => {
   }
   vi.clearAllTimers();
   vi.useRealTimers();
+  vi.unstubAllGlobals();
   localStorage.clear();
 });
 
