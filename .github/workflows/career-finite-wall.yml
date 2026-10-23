@@ -44,12 +44,13 @@ jobs:
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
           git fetch --no-tags --depth=1 origin "$BASE_SOURCE" > "$out/base-fetch.log" 2>&1
           git merge-base --is-ancestor "$BASE_SOURCE" "$GITHUB_SHA"
-          git diff --exit-code "$BASE_SOURCE" HEAD -- . ':!docs/**' ':!src/test/careerWallShot.test.ts' ':!.github/workflows/career-finite-wall.yml' > "$out/protected-source.log"
+          git diff --exit-code "$BASE_SOURCE" HEAD -- . ':!docs/**' ':!src/test/careerWallShot.test.ts' ':!src/test/soccerMomentWallRules.test.ts' ':!.github/workflows/career-finite-wall.yml' > "$out/protected-source.log"
           test "$(git hash-object src/lib/careerDrills.ts)" = 6125570ccdf2f037a7debeaa7ad14815e9ed860e
           test "$(git hash-object src/components/soccer-career/DrillBoard.tsx)" = c3c6500b976bce912d3626643269fb1b5388234b
+          test "$(git hash-object src/lib/season/momentsSave.ts)" = c1ee578f855d29a107f8d69b71eb1258ed166ca9
           node <<'NODE'
           const fs=require('node:fs'),assert=require('node:assert/strict'),crypto=require('node:crypto');
-          const pins={"src/test/careerWallShot.test.ts":"b75993336f618d9dc0322756dd021d71b4a412109bbe0be72f71208b464e54bb"};
+          const pins={"src/test/careerWallShot.test.ts":"b75993336f618d9dc0322756dd021d71b4a412109bbe0be72f71208b464e54bb","src/test/soccerMomentWallRules.test.ts":"e5e8ca9ffc26e15bdaf51b057e55d34f4bd738c0325f7440f3df71fe8809605d"};
           for(const [file,expected]of Object.entries(pins))assert.equal(crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex'),expected,file);
           fs.writeFileSync(process.env.RUNNER_TEMP+'/career-finite-wall/source-binding.json',JSON.stringify({source:process.env.GITHUB_SHA,base:process.env.BASE_SOURCE,originalCoreBlob:'6125570ccdf2f037a7debeaa7ad14815e9ed860e',originalBoardBlob:'c3c6500b976bce912d3626643269fb1b5388234b',pins},null,2)+'\n',{flag:'wx'});
           NODE
@@ -93,6 +94,25 @@ jobs:
           fs.writeFileSync(out+'/baseline-admission.json',JSON.stringify({source:process.env.GITHUB_SHA,ownedFailures:2,preservedPasses:4,markers:[...failures.values()],rawAbsentRuntimeCountersRemainUnknown:true},null,2)+'\n',{flag:'wx'});
           NODE
           test ! -s "$out/types.transport";test ! -s "$out/tests.transport"
+      - name: Actual old ledger persistence baseline
+        run: |
+          set -euo pipefail
+          out="$CAREER_WALL_OUT";export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          : > "$out/moment-tests.transport"
+          status=0
+          SIM_OFFLINE_RECEIPT="$out/moment-tests.transport" timeout --signal=TERM --kill-after=15s 6m node_modules/.bin/vitest run src/test/soccerMomentWallRules.test.ts --maxWorkers=1 --no-file-parallelism --reporter=json --outputFile="$out/moment-tests.json" > "$out/moment-tests.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/moment-tests.exit";test "$status" -eq 1
+          node <<'NODE'
+          const fs=require('node:fs'),assert=require('node:assert/strict'),out=process.env.CAREER_WALL_OUT,r=JSON.parse(fs.readFileSync(out+'/moment-tests.json','utf8'));
+          assert.equal(r.success,false);assert.equal(r.testResults.length,1);assert.equal(r.numTotalTests,7);assert.equal(r.numPassedTests,3);assert.equal(r.numFailedTests,4);assert.equal(r.numPendingTests,0);assert.equal(r.numTodoTests,0);
+          const failures=new Map([['retains every positive safe rule marker with used, settled and banked data on reload','MOMENT_WALL_RULE_READER_RETAINS'],['refuses invalid rule markers instead of silently treating their ledger as legacy','MOMENT_WALL_RULE_READER_REFUSES'],['stamps rule two atomically with a genuinely new used attempt','MOMENT_WALL_NEW_LEDGER_PINNED'],['stamps only the fresh rollover ledger while folding the exact previous tally','MOMENT_WALL_ROLLOVER_PINNED']]);
+          const suite=r.testResults[0];assert.equal(suite.name.replaceAll('\\','/').split('/').pop(),'soccerMomentWallRules.test.ts');assert.equal(suite.status,'failed');assert.equal(suite.assertionResults.length,7);
+          for(const row of suite.assertionResults){const marker=failures.get(row.title);if(marker){assert.equal(row.status,'failed');assert.equal(row.fullName.trim(),'Soccer moment wall rule persistence '+row.title);assert.equal(row.failureMessages.length,1);assert.match(row.failureMessages[0],/AssertionError:/);assert(row.failureMessages[0].includes(marker));}else{assert.equal(row.status,'passed');assert.deepEqual(row.failureMessages,[]);}}
+          for(const key of ['numRuntimeErrorTestSuites','numUnhandledErrors'])if(key in r)assert.equal(r[key],0);if('unhandledErrors'in r)assert.deepEqual(r.unhandledErrors,[]);
+          assert.doesNotMatch(fs.readFileSync(out+'/moment-tests.log','utf8'),/Unhandled\s+(?:Errors?|Rejections?)|Uncaught\s+Exceptions?/i);
+          fs.writeFileSync(out+'/moment-baseline-admission.json',JSON.stringify({source:process.env.GITHUB_SHA,ownedFailures:4,preservedPasses:3,markers:[...failures.values()],rawAbsentRuntimeCountersRemainUnknown:true},null,2)+'\n',{flag:'wx'});
+          NODE
+          test ! -s "$out/moment-tests.transport"
       - name: Always retain complete source and dependency holds
         if: always()
         run: |
