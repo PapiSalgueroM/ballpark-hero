@@ -34,7 +34,10 @@ writes the row and goes on. A reload mid beat asks again; a reload after it asks
 
 "the USA" and "the US national team" only; nobody speaks. A drawn field says "This field is the game's own."
 and a projected edition "Host and field are the game's own." (critic advice 15: nothing about the real world
-that goes false on a date). A played summer says its groups and results are this career's own.
+that goes false on a date). A played summer says its groups and results are this career's own. The line "The
+game plays its two group rounds as one, into a round of 16." shows only on a World Cup really played with two
+group rounds (2019, 2023): no page read on 2026-10-22 holds the format of 2027 or 2031, and a projected World Cup
+has none (the review of Round 1544). src/test/nbaIntlResultLines.test.tsx holds every one of these lines.
 
 ## Owed, not this round's
 
@@ -45,3 +48,10 @@ that goes false on a date). A played summer says its groups and results are this
 - Critic advice 23: a summer card that narrates a quiet summer at home can follow an Olympic summer; a later
   filter can read the summer's row.
 - The /nba-my-career weight row and the /nfl-my-career budget (the shared board grew) are the lead's (L7).
+- From the review, left for Round 1557 or later: in a group or round list his own game reads "W 78-74 v Turkey"
+  beside "Spain 104-62 Montenegro" (GameLine could draw his game the neutral way when `bare`); critic correction
+  9's print line in each walk and test that plants a high NBA season; a retry in the holding box if the face's
+  chunk fails twice; an old save already inside its summer cards meets the call once, after them.
+- The replay is derived on read (L4), so src/lib/careerIntl.test.ts pins three literal toy summers (the key, the
+  draw order, the generated field). A round that moves those numbers changes what every live save's past summers
+  show: it must mean to, and say what happens to the saves already written.
