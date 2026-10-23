@@ -1,0 +1,8 @@
+ok   1553 before: {"present":57,"now_new":0,"still_old":57,"drifted":0,"won_2026_ucl":1}
+ok   1553 before, one drifted: {"present":57,"now_new":0,"still_old":56,"drifted":1,"won_2026_ucl":1}
+ok   1553 after (puzzle-80 left alone by the guard): {"present":57,"now_new":56,"still_old":0,"drifted":1,"won_2026_ucl":0}
+ok   1553 after a second run (a no-op): {"present":57,"now_new":56,"still_old":0,"drifted":1,"won_2026_ucl":0}
+ok   1551 before: [["afl_premiers",129,0],["nrl_premiers",117,0],["afl_brownlow",112,0],["nrl_dally_m",47,0]]
+ok   1551 after: [["afl_premiers",130,1],["nrl_premiers",118,1],["afl_brownlow",113,1],["nrl_dally_m",48,1]]
+ok   1551 after a second run (a no-op): [["afl_premiers",130,1],["nrl_premiers",118,1],["afl_brownlow",113,1],["nrl_dally_m",48,1]]
+testVerify: every verify SELECT reads what the rehearsal holds
