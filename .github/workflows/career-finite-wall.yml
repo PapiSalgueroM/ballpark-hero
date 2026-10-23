@@ -38,9 +38,6 @@ jobs:
         with:
           node-version: 24
           cache: npm
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
       - name: Frozen candidate source and thirteen browser inputs
         run: |
           set -euo pipefail
@@ -84,35 +81,16 @@ jobs:
           git ls-files -z | sort -z | xargs -0 sha256sum > "$out/source-before.sha256"
           git diff --exit-code HEAD > "$out/source-clean-before.log"
           test -z "$(git status --porcelain --untracked-files=all)"
-      - name: Locked installation and isolated browser tools
+      - name: Locked application installation and full dependency inventory
+        id: app_dependencies
         timeout-minutes: 10
         run: |
           set -euo pipefail
           out="$WALL_SHOT_PILOT_OUT"
           printf '%s %s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" 'setup npm-ci' | tee -a "$out/setup-progress.log"
           npm ci > "$out/install.log" 2>&1
-          browser_tools="$RUNNER_TEMP/wall-shot-browser-tools"; test ! -e "$browser_tools"
-          printf '%s %s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" 'setup playwright-install' | tee -a "$out/setup-progress.log"
-          npm install --prefix "$browser_tools" --no-save --package-lock=false playwright@1.64.0 > "$out/browser-install.log" 2>&1
-          test ! -e node_modules/playwright; test ! -e node_modules/playwright-core
-          ln -s "$browser_tools/node_modules/playwright" node_modules/playwright
-          ln -s "$browser_tools/node_modules/playwright-core" node_modules/playwright-core
-          printf '%s %s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" 'setup chromium-install' | tee -a "$out/setup-progress.log"
-          node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium > "$out/chromium-install.log" 2>&1
-          printf '%s %s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" 'setup python-font-tools' | tee -a "$out/setup-progress.log"
-          python -m pip install fonttools pillow > "$out/python-install.log" 2>&1
-          printf '%s %s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" 'setup font-prefetch' | tee -a "$out/setup-progress.log"
-          FREE_KICK_FONT_CACHE="$out/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > "$out/font-prefetch.log" 2>&1
-          manifest_sha=$(sha256sum "$out/font-cache/manifest.json" | cut -d ' ' -f 1)
-          echo "FONT_CACHE_MANIFEST_SHA256=$manifest_sha" >> "$GITHUB_ENV"
-          printf '%s %s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" 'setup inventories' | tee -a "$out/setup-progress.log"
           find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dependencies.sha256"
-          find "$browser_tools/node_modules" -type f -print0 | sort -z | xargs -0 sha256sum > "$out/browser-tools.sha256"
-          find "$out/font-cache" -type f -print0 | sort -z | xargs -0 sha256sum > "$out/font-cache.sha256"
           find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$out/dependency-members.before"
-          find "$browser_tools/node_modules" -type f -print0 | sort -z > "$out/browser-members.before"
-          find "$out/font-cache" -type f -print0 | sort -z > "$out/font-members.before"
-          printf '%s %s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" 'setup complete' | tee -a "$out/setup-progress.log"
       - name: Actual app types
         id: types
         run: |
@@ -174,9 +152,68 @@ jobs:
           const fs=require('node:fs'),assert=require('node:assert/strict'),r=JSON.parse(fs.readFileSync(process.env.WALL_SHOT_PILOT_OUT+'/copied-source/report.json','utf8'));
           assert.equal(r.status,'WALL_COPIED_SOURCE_CONTROLS_ADMITTED');assert.equal(r.complete,true);assert.equal(r.source,process.env.GITHUB_SHA);assert.equal(r.controlCount,25);assert.equal(r.observedRunCount,77);assert.deepEqual(r.errors,[]);assert.equal(r.applicationQualified,false);
           NODE
+      - name: Freeze game-gate feedback before browser provisioning
+        id: functional_feedback
+        if: ${{ !cancelled() && steps.app_dependencies.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          out="$WALL_SHOT_PILOT_OUT";snapshot="$RUNNER_TEMP/wall-shot-functional-feedback"
+          test ! -e "$snapshot";mkdir "$snapshot";failed=0
+          for file in source-binding.json browser-binding.json head.txt base-ancestry.log protected-functional-source.log source-clean-before.log source-before.sha256 source-members.before dependencies.sha256 dependency-members.before install.log setup-progress.log types.log types.exit types.transport legacy-drills.log legacy-moments.log legacy-drills.transport legacy-moments.transport pilot-manifest.json tests.log tests.json tests.exit tests-process.json tests.transport functional-pilot-admission.json copied-controls.log copied-controls.exit copied-controls.transport control-core.original.ts;do
+            if test -f "$out/$file";then cp -- "$out/$file" "$snapshot/$file";fi
+          done
+          if test -f "$out/copied-source/report.json";then cp -- "$out/copied-source/report.json" "$snapshot/copied-source-report.json";fi
+          sha256sum --check "$out/source-before.sha256" > "$snapshot/source-hold.log" 2>&1 || failed=1
+          sha256sum --check "$out/dependencies.sha256" > "$snapshot/dependency-hold.log" 2>&1 || failed=1
+          git ls-files -z | sort -z > "$snapshot/source-members.after"
+          cmp "$out/source-members.before" "$snapshot/source-members.after" || failed=1
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$snapshot/dependency-members.after"
+          cmp "$out/dependency-members.before" "$snapshot/dependency-members.after" || failed=1
+          printf 'phase=functional-feedback-only\napplicationQualified=false\nsource=%s\ntypes=%s\nlegacy=%s\nfunctional=%s\nsourceControls=%s\nsnapshotHoldsExit=%s\ncopiedControlData=summary-only-full-raw-remains-in-final-artifact\n' "$GITHUB_SHA" '${{ steps.types.outcome }}' '${{ steps.legacy.outcome }}' '${{ steps.functional.outcome }}' '${{ steps.source_controls.outcome }}' "$failed" > "$snapshot/feedback.txt"
+          (cd "$snapshot";find . -type f ! -path ./evidence.sha256 -print0 | sort -z | xargs -0 sha256sum) > "$snapshot/evidence.sha256"
+          exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() && (steps.functional_feedback.outcome == 'success' || steps.functional_feedback.outcome == 'failure') }}
+        with:
+          name: career-finite-wall-functional-feedback-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/wall-shot-functional-feedback/
+          if-no-files-found: error
+          retention-days: 14
+      - uses: actions/setup-python@v5
+        id: browser_python
+        if: ${{ !cancelled() && steps.types.outcome == 'success' }}
+        with:
+          python-version: '3.12'
+      - name: Isolated browser tools and font provisioning
+        id: browser_provision
+        if: ${{ !cancelled() && steps.types.outcome == 'success' && steps.browser_python.outcome == 'success' }}
+        timeout-minutes: 10
+        run: |
+          set -euo pipefail
+          out="$WALL_SHOT_PILOT_OUT"
+          browser_tools="$RUNNER_TEMP/wall-shot-browser-tools"; test ! -e "$browser_tools"
+          printf '%s %s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" 'setup playwright-install' | tee -a "$out/setup-progress.log"
+          npm install --prefix "$browser_tools" --no-save --package-lock=false playwright@1.64.0 > "$out/browser-install.log" 2>&1
+          test ! -e node_modules/playwright; test ! -e node_modules/playwright-core
+          ln -s "$browser_tools/node_modules/playwright" node_modules/playwright
+          ln -s "$browser_tools/node_modules/playwright-core" node_modules/playwright-core
+          printf '%s %s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" 'setup chromium-install' | tee -a "$out/setup-progress.log"
+          node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium > "$out/chromium-install.log" 2>&1
+          printf '%s %s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" 'setup python-font-tools' | tee -a "$out/setup-progress.log"
+          python -m pip install fonttools pillow > "$out/python-install.log" 2>&1
+          printf '%s %s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" 'setup font-prefetch' | tee -a "$out/setup-progress.log"
+          FREE_KICK_FONT_CACHE="$out/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > "$out/font-prefetch.log" 2>&1
+          manifest_sha=$(sha256sum "$out/font-cache/manifest.json" | cut -d ' ' -f 1)
+          echo "FONT_CACHE_MANIFEST_SHA256=$manifest_sha" >> "$GITHUB_ENV"
+          printf '%s %s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" 'setup inventories' | tee -a "$out/setup-progress.log"
+          find "$browser_tools/node_modules" -type f -print0 | sort -z | xargs -0 sha256sum > "$out/browser-tools.sha256"
+          find "$out/font-cache" -type f -print0 | sort -z | xargs -0 sha256sum > "$out/font-cache.sha256"
+          find "$browser_tools/node_modules" -type f -print0 | sort -z > "$out/browser-members.before"
+          find "$out/font-cache" -type f -print0 | sort -z > "$out/font-members.before"
+          printf '%s %s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" 'setup complete' | tee -a "$out/setup-progress.log"
       - name: Serial plain production build
         id: build
-        if: ${{ !cancelled() && steps.types.outcome == 'success' }}
+        if: ${{ !cancelled() && steps.types.outcome == 'success' && steps.browser_provision.outcome == 'success' }}
         run: |
           set -euo pipefail
           out="$WALL_SHOT_PILOT_OUT"
@@ -191,7 +228,7 @@ jobs:
           tar -cf "$out/dist.tar" -C dist .
       - name: Build the styled actual TrainingPanel fixture
         id: fixture
-        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        if: ${{ !cancelled() && steps.types.outcome == 'success' && steps.browser_provision.outcome == 'success' && steps.build.outcome == 'success' }}
         run: |
           set -euo pipefail
           out="$WALL_SHOT_PILOT_OUT";export WALL_SHOT_OUT="$out/wall-shot"
@@ -208,7 +245,7 @@ jobs:
           tar -cf "$out/fixture-dist.tar" -C "$WALL_SHOT_OUT/fixture-dist" .
       - name: Six real browser contexts and twenty-four Wall Shot attempts
         id: browser
-        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.fixture.outcome == 'success' }}
+        if: ${{ !cancelled() && steps.types.outcome == 'success' && steps.browser_provision.outcome == 'success' && steps.build.outcome == 'success' && steps.fixture.outcome == 'success' }}
         run: |
           set -euo pipefail
           out="$WALL_SHOT_PILOT_OUT"
@@ -229,7 +266,7 @@ jobs:
           test ! -s "$out/wall-browser.transport"
       - name: Unchanged HomeFold oracle and all eighteen built-site readers
         id: readers
-        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        if: ${{ !cancelled() && steps.types.outcome == 'success' && steps.browser_provision.outcome == 'success' && steps.build.outcome == 'success' }}
         run: |
           set -euo pipefail
           out="$WALL_SHOT_PILOT_OUT"
@@ -250,7 +287,7 @@ jobs:
           exit "$failed"
       - name: All fifteen current unchanged fatal page caps
         id: caps
-        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        if: ${{ !cancelled() && steps.types.outcome == 'success' && steps.browser_provision.outcome == 'success' && steps.build.outcome == 'success' }}
         run: |
           set -euo pipefail
           out="$WALL_SHOT_PILOT_OUT"
@@ -296,16 +333,25 @@ jobs:
         run: |
           set -euo pipefail
           out="$RUNNER_TEMP/wall-shot-browser-pilot";mkdir -p "$out";failed=0
-          for manifest in source-before dependencies browser-tools font-cache;do
+          for manifest in source-before dependencies;do
             if test -f "$out/$manifest.sha256";then sha256sum --check "$out/$manifest.sha256" > "$out/final-$manifest-hold.log" 2>&1 || failed=1;else failed=1;fi
           done
+          browser_attempt='${{ steps.browser_python.outcome }}'
+          if test "$browser_attempt" != skipped;then
+            case "$browser_attempt" in success|failure|cancelled) ;; *) failed=1;;esac
+            for manifest in browser-tools font-cache;do
+              if test -f "$out/$manifest.sha256";then sha256sum --check "$out/$manifest.sha256" > "$out/final-$manifest-hold.log" 2>&1 || failed=1;else failed=1;fi
+            done
+          else printf '%s\n' 'NOT_ATTEMPTED' > "$out/browser-provisioning-holds.txt";fi
           git ls-files -z | sort -z > "$out/source-members.after"
           if test -f "$out/source-members.before";then cmp "$out/source-members.before" "$out/source-members.after" || failed=1;else failed=1;fi
           git diff --exit-code HEAD > "$out/final-source-diff.log" || failed=1
           git status --porcelain --untracked-files=all > "$out/final-status.txt";test ! -s "$out/final-status.txt" || failed=1
-          if test -f "$out/dependency-members.before";then find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$out/dependency-members.after";cmp "$out/dependency-members.before" "$out/dependency-members.after" || failed=1;fi
-          if test -f "$out/browser-members.before";then find "$RUNNER_TEMP/wall-shot-browser-tools/node_modules" -type f -print0 | sort -z > "$out/browser-members.after";cmp "$out/browser-members.before" "$out/browser-members.after" || failed=1;fi
-          if test -f "$out/font-members.before";then find "$out/font-cache" -type f -print0 | sort -z > "$out/font-members.after";cmp "$out/font-members.before" "$out/font-members.after" || failed=1;fi
+          if test -f "$out/dependency-members.before";then find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$out/dependency-members.after";cmp "$out/dependency-members.before" "$out/dependency-members.after" || failed=1;else failed=1;fi
+          if test "$browser_attempt" != skipped;then
+            if test -f "$out/browser-members.before";then find "$RUNNER_TEMP/wall-shot-browser-tools/node_modules" -type f -print0 | sort -z > "$out/browser-members.after";cmp "$out/browser-members.before" "$out/browser-members.after" || failed=1;else failed=1;fi
+            if test -f "$out/font-members.before";then find "$out/font-cache" -type f -print0 | sort -z > "$out/font-members.after";cmp "$out/font-members.before" "$out/font-members.after" || failed=1;else failed=1;fi
+          fi
           if test -f "$out/weights-preload-binding.json";then node -e 'const f=require("node:fs"),a=require("node:assert/strict"),h=require("node:crypto").createHash("sha256").update(f.readFileSync(process.env.WALL_SHOT_PILOT_OUT+"/weights-cached-fonts.cjs")).digest("hex");a.equal(h,JSON.parse(f.readFileSync(process.env.WALL_SHOT_PILOT_OUT+"/weights-preload-binding.json")).copySha256)' > "$out/final-weights-preload-hold.log" 2>&1 || failed=1;fi
           if test -f "$out/dist.sha256";then
             find dist ! -type d ! -type f -print > "$out/dist-nonregular.after";test ! -s "$out/dist-nonregular.after" || failed=1
@@ -319,7 +365,7 @@ jobs:
           fi
           if test -f "$out/browser-binding.json";then node -e 'const f=require("node:fs"),a=require("node:assert/strict"),h=b=>require("node:crypto").createHash("sha256").update(b).digest("hex"),p=process.env.WALL_SHOT_PILOT_OUT,r=JSON.parse(f.readFileSync(p+"/source-binding.json"));a.equal(h(f.readFileSync(p+"/browser-binding.json")),r.bindingSha256)' > "$out/final-binding-hold.log" 2>&1 || failed=1;fi
           while IFS= read -r -d '' file;do test ! -s "$file" || failed=1;done < <(find "$out" -type f -name '*.transport' -print0)
-          printf 'phase=browser-pilot\napplicationQualified=false\nsource=%s\ntypes=%s\nlegacy=%s\nfunctional=%s\nsourceControls=%s\nbuild=%s\nfixture=%s\nbrowser=%s\nreaders=%s\ncaps=%s\nfinalHoldsExit=%s\n' "$GITHUB_SHA" '${{ steps.types.outcome }}' '${{ steps.legacy.outcome }}' '${{ steps.functional.outcome }}' '${{ steps.source_controls.outcome }}' '${{ steps.build.outcome }}' '${{ steps.fixture.outcome }}' '${{ steps.browser.outcome }}' '${{ steps.readers.outcome }}' '${{ steps.caps.outcome }}' "$failed" > "$out/stages.txt"
+          printf 'phase=browser-pilot\napplicationQualified=false\nsource=%s\nappDependencies=%s\ntypes=%s\nlegacy=%s\nfunctional=%s\nsourceControls=%s\nfunctionalFeedback=%s\nbrowserPython=%s\nbrowserProvision=%s\nbuild=%s\nfixture=%s\nbrowser=%s\nreaders=%s\ncaps=%s\nfinalHoldsExit=%s\n' "$GITHUB_SHA" '${{ steps.app_dependencies.outcome }}' '${{ steps.types.outcome }}' '${{ steps.legacy.outcome }}' '${{ steps.functional.outcome }}' '${{ steps.source_controls.outcome }}' '${{ steps.functional_feedback.outcome }}' '${{ steps.browser_python.outcome }}' '${{ steps.browser_provision.outcome }}' '${{ steps.build.outcome }}' '${{ steps.fixture.outcome }}' '${{ steps.browser.outcome }}' '${{ steps.readers.outcome }}' '${{ steps.caps.outcome }}' "$failed" > "$out/stages.txt"
           (cd "$out";find . -type f ! -path ./evidence.sha256 -print0 | sort -z | xargs -0 sha256sum) > "$out/evidence.sha256"
           exit "$failed"
       - uses: actions/upload-artifact@v4
