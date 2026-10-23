@@ -1,0 +1,12 @@
+# Release BP part two (Round BPH): ROUND 1523's own proof lines (Soccer Career: morale that plays, the Puskas year),
+# from finish-1523.md, fix2-1523.md and verify2-1523.md as the round's runners ran them (r1523-final-a, a2, b,
+# vf-a, vf-b), proven on the release head by rBPh-m6a and rBPh-m6b (merge m6 e4464a1e) and again on the final head.
+# The tenth inverse (scripts/lib/careerSoccerMorale1523.mjs) was regenerated at m6 against 6c63ce98 and chained behind
+# Round 1524's rows at m6b; chain: node .rc/x/check-chain-bph.mjs (sent on this line). The *-unattributed lines are
+# the attribution's own controls: each must exit 1 (the harness red by design with Round 1523 left in).
+# The simCareerForm ctl-* lines are controls: each must exit 1 with "simCareerForm: RED, N failure(s)" on its last
+# line (counts on r1523-final-a2: divisor 1, zero 4, posttext 4, nogate 1, per10 1; vf-a: pageline 1, double 3).
+# FILE 1 OF 2 for Round 1523 (the long simCareerForm runs: about 47 minutes three at a time on rBPh-m6a; the runner job stops at 100). File 2 is rc-BPf2.txt.
+form-4-house-1523: SIM_CAREER_FORM_SECTIONS=4 node scripts/simCareerForm.mjs
+form-4-engaged-1523: SIM_CAREER_FORM_FLEET_KIND=engaged SIM_CAREER_FORM_SECTIONS=4 node scripts/simCareerForm.mjs
+ctl-per10-1523: SIM_CAREER_FORM_CONTROL=per10 node scripts/simCareerForm.mjs > /tmp/f23-per10.log 2>&1; e=$?; tail -1 /tmp/f23-per10.log | cut -c1-120; [ $e -eq 1 ] && tail -1 /tmp/f23-per10.log | grep -q "RED, "
