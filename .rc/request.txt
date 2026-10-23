@@ -1,0 +1,7 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-search: node_modules/.bin/vitest run src/test/Search.navigation.test.tsx src/test/SiteMenu.test.tsx src/test/SiteMenu.lazy-loading.test.tsx src/test/SiteMenu.load-failure.test.tsx --maxWorkers=1 --no-file-parallelism --testTimeout=300000 --hookTimeout=120000
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000 > /tmp/va.log 2>&1; s=$?; grep -E "FAIL|Test Files|Tests  " /tmp/va.log | head -30 | cut -c1-250; exit $s
+simSiteSearch: node scripts/simSiteSearch.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
