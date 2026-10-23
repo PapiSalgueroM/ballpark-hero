@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+#!serial
+# Release BQ triage: playReducedMotion with the trophy save asked to hold an unseen chance wheel (seam candidate), twice, its wheelcut control, and playCareerMoments (the other user of the helper, default search) to show it unchanged.
+prm-a: cp .rc/x/careerMomentSaves.mjs scripts/lib/careerMomentSaves.mjs && cp .rc/x/playReducedMotion.mjs scripts/playReducedMotion.mjs && node scripts/playReducedMotion.mjs
+prm-b: cp .rc/x/careerMomentSaves.mjs scripts/lib/careerMomentSaves.mjs && cp .rc/x/playReducedMotion.mjs scripts/playReducedMotion.mjs && node scripts/playReducedMotion.mjs
+prm-wheelcut: cp .rc/x/careerMomentSaves.mjs scripts/lib/careerMomentSaves.mjs && cp .rc/x/playReducedMotion.mjs scripts/playReducedMotion.mjs && REDUCED_MOTION_CONTROL=wheelcut node scripts/playReducedMotion.mjs
+moments: cp .rc/x/careerMomentSaves.mjs scripts/lib/careerMomentSaves.mjs && node scripts/playCareerMoments.mjs
+probe: cp .rc/x/careerMomentSaves.mjs scripts/lib/careerMomentSaves.mjs && node .rc/x/wheelProbe2.mjs
