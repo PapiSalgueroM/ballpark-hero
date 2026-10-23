@@ -1,0 +1,6 @@
+NBA court:14/14 actual component/page cases passed, none skipped or unhandled; hook and heavy presentation are explicit offline fixtures.
+NBA court: native empty buttons dispatch original position indices, expose selected state and leave filled/read-only cards inert.
+NBA court: court and existing row share the original page handler, disable during team spin and player validation, and clear old position input.
+NBA court: court selection keeps its opener focus while row selection retains existing player-input autofocus.
+NBA court: player names, integer/decimal/string/zero stats and units remain exact; challenge/review/result phases stay free of court controls.
+NBA court: CRLF executable controls bind, original bytes held, owned copies cleaned. Native keyboard/touch geometry is verified separately.
