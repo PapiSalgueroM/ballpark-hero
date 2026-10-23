@@ -1,0 +1,2 @@
+c-smalltext exit=1 71s | playFoSeasonCard: 120 checks, 18 failed (control smalltext)
+c-truncate exit=1 68s | playFoSeasonCard: 120 checks, 12 failed (control truncate)
