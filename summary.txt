@@ -1,0 +1,9 @@
+board exit=0 9s | simCollegeDynastyBoard: all green
+vitest exit=0 14s |    Duration  13.59s (transform 994ms, setup 723ms, collect 3.91s, tests 23.78s, environment 4.03s, prepare 1.03s)
+slate exit=0 8s | simCfbSlate: all green
+c-oldrivals exit=1 6s | simCfbSlate: 4 failure(s)
+old exit=0 16s | oldsave1554: no break
+rival exit=0 16s | No rival product names found. 0 findings.
+storage exit=0 5s | simStorageWrites: all green (owed: 12)
+tsc exit=0 75s | 
+anchors exit=0 61s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
