@@ -1,0 +1,19 @@
+#!serial
+plain: node scripts/simUsConnectionsFacts.mjs
+ctl-arod: US_CONN_CONTROL=arod node scripts/simUsConnectionsFacts.mjs
+ctl-bell: US_CONN_CONTROL=bell node scripts/simUsConnectionsFacts.mjs
+ctl-karlsson: US_CONN_CONTROL=karlsson node scripts/simUsConnectionsFacts.mjs
+ctl-twice: US_CONN_CONTROL=twice node scripts/simUsConnectionsFacts.mjs
+ctl-onehost: US_CONN_CONTROL=onehost node scripts/simUsConnectionsFacts.mjs
+ctl-unjudged: US_CONN_CONTROL=unjudged node scripts/simUsConnectionsFacts.mjs
+ctl-bogus: US_CONN_CONTROL=nosuch node scripts/simUsConnectionsFacts.mjs
+m-nosecond: node .rc/x/mut.mjs nosecond && node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+m-nosecond-bell: node .rc/x/mut.mjs nosecond && US_CONN_CONTROL=bell node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+m-reach: node .rc/x/mut.mjs reach && node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+m-reach-karlsson: node .rc/x/mut.mjs reach && US_CONN_CONTROL=karlsson node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+m-identity: node .rc/x/mut.mjs identity && node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+m-identity-twice: node .rc/x/mut.mjs identity && US_CONN_CONTROL=twice node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+m-nomember-arod: node .rc/x/mut.mjs nomember && US_CONN_CONTROL=arod node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+m-norefuted-arod: node .rc/x/mut.mjs norefuted && US_CONN_CONTROL=arod node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+m-onehostok-onehost: node .rc/x/mut.mjs onehostok && US_CONN_CONTROL=onehost node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+after-clean: git status --short scripts src && node scripts/simUsConnectionsFacts.mjs
