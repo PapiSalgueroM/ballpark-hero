@@ -1,0 +1,23 @@
+1) Take the Newcastle job and reach the market
+  PASS  the summer window is open at the season start (the market renders its filters)
+2) The nation dropdown sits among the deep filters
+  PASS  the nationality filter is on the market
+  PASS  the dropdown offers real nations with counts (130 nations)
+  PASS  England is offered with its player count
+  PASS  Brazil is offered with its player count
+3) Picking a nation narrows the list to that flag
+  PASS  the open market lists players (50 rows before filtering)
+  PASS  filtering to Spain still shows players (50 rows)
+  PASS  the filter narrows the list, never grows it
+  PASS  every visible flag is Spain's (0 strays)
+  PASS  clearing the filter restores the full list
+  PASS  flag probe completed
+4) The squad wears its flags too
+  PASS  the squad screen shows real flags (15 flag images)
+  PASS  no real page errors on the walk (clean)
+5) The 2010 market resolves its own men, not their namesakes
+  PASS  the 2010 market carries the filter too
+  PASS  the 2010 Aaron Ramsey wears the Welsh flag (got Wales)
+  PASS  no real page errors on the 2010 walk (clean)
+
+playNationalities: green. The filter narrows to real nations and every flag is the right man's.

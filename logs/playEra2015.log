@@ -1,0 +1,50 @@
+1) The era step now holds three real seasons
+  PASS  the 2015-16 era tile is on the menu
+  PASS  the 2010-11 tile survived the addition
+  PASS  all three eras carry the REAL DATA badge
+  PASS  the 2015-16 tile sells the Leicester season
+2) Spain in 2015
+  PASS  England and Spain offered in 2015
+  PASS  Germany and France offered in 2015 (Round 899)
+  PASS  the Netherlands correctly absent from 2015
+  PASS  the 2015 La Liga is offered
+  PASS  2015 Eibar is a pickable club
+  PASS  Girona correctly absent from 2015 La Liga
+  PASS  the thin-squad marker shows for Las Palmas
+  PASS  the Barcelona tile demands the title
+  PASS  the Barcelona tile never says "the La Liga"
+  PASS  no real page errors on the Spain walk (clean)
+3) The 2015 Premier League
+  PASS  the 2015 Premier League is offered
+  PASS  2015 Leicester are a pickable club
+  PASS  2015 Norwich are a pickable club
+  PASS  Barcelona is not in the English league
+  PASS  August 2015 Leicester are NOT told to win the league
+  PASS  no Top N phrasing on the Leicester tile
+4) Into the 2015 dressing room
+  PASS  the career header says 2015-16
+  PASS  the Squad tab listed the Leicester squad
+  PASS  Jamie Vardy is in the 2015 Leicester squad
+  PASS  Kasper Schmeichel is in goal
+  PASS  no 2026 player leaked into 2015
+  PASS  no real page errors on the England walk (clean)
+5) Italy in 2015
+  PASS  Italy joined the 2015 nations
+  PASS  the 2015 Serie A is offered
+  PASS  2015 Juventus are a pickable club
+  PASS  2015 Carpi are a pickable club (their one top flight season)
+  PASS  2015 Chievo are a pickable club
+  PASS  2026 Como correctly absent from 2015 Serie A
+  PASS  the thin-squad marker shows for Frosinone
+  PASS  the Juventus tile demands the title
+  PASS  the Juventus tile never says "the Serie A"
+6) Into the 2015 Turin dressing room
+  PASS  the career header says 2015-16
+  PASS  the Squad tab listed the Juventus squad
+  PASS  Dybala arrived from Palermo, the window correction landed
+  PASS  Buffon is in goal
+  PASS  Pogba stayed for 2015-16, exactly as in real life
+  PASS  Vidal is gone to a league outside this world
+  PASS  no real page errors on the Italy walk (clean)
+
+playEra2015: green. The 2015-16 branch plays like a person would find it.
