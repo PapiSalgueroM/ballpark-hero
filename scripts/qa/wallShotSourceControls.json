@@ -1,0 +1,351 @@
+{
+  "status": "SOURCE_RECIPES_ONLY_NOT_RUNTIME_CREDIT",
+  "controls": [
+    {
+      "id": "finite-horizontal-bounds",
+      "sourcePath": "C:\\Users\\antho\\dukb-handoff\\2026-10-23\\football-improvements\\wall-shot-proposal-v1\\careerDrills.candidate.ts",
+      "sourceSha256": "a5a66ed166667051d24e0d737f47941587b28edd633a7823c6e6741172db3c74",
+      "before": "  const hitWall = rules === 2 ? wallShotBlocked(setup, path)\n    : Math.abs(atWall.x - setup.gapCentre) >= setup.gapMax * open;",
+      "after": "  const hitWall = Math.abs(atWall.x - setup.gapCentre) >= setup.gapMax * open;",
+      "forwardCount": 1,
+      "inverseCount": 1,
+      "changedSha256": "b9ccc5f9315f947b4d86d98f3935efc049bec3dee0803f3a4f210a6123366408",
+      "wholeInverseSha256": "a5a66ed166667051d24e0d737f47941587b28edd633a7823c6e6741172db3c74",
+      "testPath": "src/test/careerWallShot.test.ts",
+      "caseTitle": "allows a low shot around either end of the rules-2 wall",
+      "expectedAssertionMarkers": [
+        "WALL_V2_FINITE_WINGS_CLEAR"
+      ],
+      "expectedExit": 1,
+      "actualNativeTextChanged": true,
+      "runtimeExecuted": false,
+      "runtimeFailureObserved": false
+    },
+    {
+      "id": "above-wall-clearance",
+      "sourcePath": "C:\\Users\\antho\\dukb-handoff\\2026-10-23\\football-improvements\\wall-shot-proposal-v1\\careerDrills.candidate.ts",
+      "sourceSha256": "a5a66ed166667051d24e0d737f47941587b28edd633a7823c6e6741172db3c74",
+      "before": "  return contact.y < wall.top && contact.x > wall.lo && contact.x < wall.hi;",
+      "after": "  return contact.x > wall.lo && contact.x < wall.hi;",
+      "forwardCount": 1,
+      "inverseCount": 1,
+      "changedSha256": "0ba6b32ce041f84b894cef254b121a0732ae9a4c3f071a2108f3c384e4e10dfc",
+      "wholeInverseSha256": "a5a66ed166667051d24e0d737f47941587b28edd633a7823c6e6741172db3c74",
+      "testPath": "src/test/careerWallShot.test.ts",
+      "caseTitle": "allows a high shot above the rules-2 wall even when the old gap is closed",
+      "expectedAssertionMarkers": [
+        "WALL_V2_ABOVE_WALL_CLEAR"
+      ],
+      "expectedExit": 1,
+      "actualNativeTextChanged": true,
+      "runtimeExecuted": false,
+      "runtimeFailureObserved": false
+    },
+    {
+      "id": "left-exact-boundary",
+      "sourcePath": "C:\\Users\\antho\\dukb-handoff\\2026-10-23\\football-improvements\\wall-shot-proposal-v1\\careerDrills.candidate.ts",
+      "sourceSha256": "a5a66ed166667051d24e0d737f47941587b28edd633a7823c6e6741172db3c74",
+      "before": "  return contact.y < wall.top && contact.x > wall.lo && contact.x < wall.hi;",
+      "after": "  return contact.y < wall.top && contact.x >= wall.lo && contact.x < wall.hi;",
+      "forwardCount": 1,
+      "inverseCount": 1,
+      "changedSha256": "c08dd32e454ffe2448d41e73a0c072d9925dba9cec683e9c50b0d9c596ced02c",
+      "wholeInverseSha256": "a5a66ed166667051d24e0d737f47941587b28edd633a7823c6e6741172db3c74",
+      "testPath": "src/test/careerWallShot.boundaries.test.ts",
+      "caseTitle": "keeps the left edge open and blocks only contacts inside it",
+      "expectedAssertionMarkers": [
+        "WALL_BOUNDARY_LEFT_EXACT"
+      ],
+      "expectedExit": 1,
+      "actualNativeTextChanged": true,
+      "runtimeExecuted": false,
+      "runtimeFailureObserved": false
+    },
+    {
+      "id": "right-exact-boundary",
+      "sourcePath": "C:\\Users\\antho\\dukb-handoff\\2026-10-23\\football-improvements\\wall-shot-proposal-v1\\careerDrills.candidate.ts",
+      "sourceSha256": "a5a66ed166667051d24e0d737f47941587b28edd633a7823c6e6741172db3c74",
+      "before": "  return contact.y < wall.top && contact.x > wall.lo && contact.x < wall.hi;",
+      "after": "  return contact.y < wall.top && contact.x > wall.lo && contact.x <= wall.hi;",
+      "forwardCount": 1,
+      "inverseCount": 1,
+      "changedSha256": "d0b06fc77d11d11120aeb4a3a044f679d48f3ae9ec65f4e47452fa6959ba4683",
+      "wholeInverseSha256": "a5a66ed166667051d24e0d737f47941587b28edd633a7823c6e6741172db3c74",
+      "testPath": "src/test/careerWallShot.boundaries.test.ts",
+      "caseTitle": "keeps the right edge open and blocks only contacts inside it",
+      "expectedAssertionMarkers": [
+        "WALL_BOUNDARY_RIGHT_EXACT"
+      ],
+      "expectedExit": 1,
+      "actualNativeTextChanged": true,
+      "runtimeExecuted": false,
+      "runtimeFailureObserved": false
+    },
+    {
+      "id": "top-exact-boundary",
+      "sourcePath": "C:\\Users\\antho\\dukb-handoff\\2026-10-23\\football-improvements\\wall-shot-proposal-v1\\careerDrills.candidate.ts",
+      "sourceSha256": "a5a66ed166667051d24e0d737f47941587b28edd633a7823c6e6741172db3c74",
+      "before": "  return contact.y < wall.top && contact.x > wall.lo && contact.x < wall.hi;",
+      "after": "  return contact.y <= wall.top && contact.x > wall.lo && contact.x < wall.hi;",
+      "forwardCount": 1,
+      "inverseCount": 1,
+      "changedSha256": "5245dc00e8612ce6bc24eebf79dae7b6e61591239dc34e96f690da5f4c80ce1b",
+      "wholeInverseSha256": "a5a66ed166667051d24e0d737f47941587b28edd633a7823c6e6741172db3c74",
+      "testPath": "src/test/careerWallShot.boundaries.test.ts",
+      "caseTitle": "clears the exact top and above it while blocking immediately below",
+      "expectedAssertionMarkers": [
+        "WALL_BOUNDARY_TOP_EXACT"
+      ],
+      "expectedExit": 1,
+      "actualNativeTextChanged": true,
+      "runtimeExecuted": false,
+      "runtimeFailureObserved": false
+    },
+    {
+      "id": "exactly-five-rendered-defenders",
+      "sourcePath": "C:\\Users\\antho\\dukb-handoff\\2026-10-23\\football-improvements\\wall-shot-proposal-v4\\DrillBoard.candidate.tsx",
+      "sourceSha256": "38bda7385c551ea0ae36e81355baa406b6a26cd7b0d59a8444710567aa2fd6e8",
+      "before": "          const men: number[] = geometry ? geometry.centres : [];",
+      "after": "          const men: number[] = geometry ? [...geometry.centres, geometry.centres[0]] : [];",
+      "forwardCount": 1,
+      "inverseCount": 1,
+      "changedSha256": "e5b3d6ae791d77e4b8689aefaff853a8f09b51f52455ded668b42aecabfb8300",
+      "wholeInverseSha256": "38bda7385c551ea0ae36e81355baa406b6a26cd7b0d59a8444710567aa2fd6e8",
+      "testPath": "src/test/DrillBoard.wall.test.tsx",
+      "caseTitle": "draws five fitted defenders from the exact engine bounds",
+      "expectedAssertionMarkers": [
+        "WALL_UI_EXACT_FIVE"
+      ],
+      "expectedExit": 1,
+      "actualNativeTextChanged": true,
+      "runtimeExecuted": false,
+      "runtimeFailureObserved": false
+    },
+    {
+      "id": "paint-fits-physics-cell",
+      "sourcePath": "C:\\Users\\antho\\dukb-handoff\\2026-10-23\\football-improvements\\wall-shot-proposal-v4\\DrillBoard.candidate.tsx",
+      "sourceSha256": "38bda7385c551ea0ae36e81355baa406b6a26cd7b0d59a8444710567aa2fd6e8",
+      "before": "const WALL_FIGURE_HALF = 10;",
+      "after": "const WALL_FIGURE_HALF = 8;",
+      "forwardCount": 1,
+      "inverseCount": 1,
+      "changedSha256": "4fec65bc45c4ae678308ca92d59fd931c9e37ba7b37d59be16136b6cc252b184",
+      "wholeInverseSha256": "38bda7385c551ea0ae36e81355baa406b6a26cd7b0d59a8444710567aa2fd6e8",
+      "testPath": "src/test/DrillBoard.wall.test.tsx",
+      "caseTitle": "draws five fitted defenders from the exact engine bounds",
+      "expectedAssertionMarkers": [
+        "WALL_UI_SHADOW_AND_BOOTS_FIT_CELL"
+      ],
+      "expectedExit": 1,
+      "actualNativeTextChanged": true,
+      "runtimeExecuted": false,
+      "runtimeFailureObserved": false
+    },
+    {
+      "id": "real-wall-plane-height",
+      "sourcePath": "C:\\Users\\antho\\dukb-handoff\\2026-10-23\\football-improvements\\wall-shot-proposal-v4\\DrillBoard.candidate.tsx",
+      "sourceSha256": "38bda7385c551ea0ae36e81355baa406b6a26cd7b0d59a8444710567aa2fd6e8",
+      "before": "          const ball = r && phase !== 'playing' ? modernWall ? finiteWallShotBall(r, w, drawFlight) : wallShotBall(r, drawFlight) : null;",
+      "after": "          const ball = r && phase !== 'playing' ? wallShotBall(r, drawFlight) : null;",
+      "forwardCount": 1,
+      "inverseCount": 1,
+      "changedSha256": "fe854d5bed3d4f8e878daa65cd478bada1a96bb7452caedce5aaf191cd468936",
+      "wholeInverseSha256": "38bda7385c551ea0ae36e81355baa406b6a26cd7b0d59a8444710567aa2fd6e8",
+      "testPath": "src/test/DrillBoard.wall.flight.test.tsx",
+      "caseTitle": "draws a real high shot above the painted heads while it crosses the finite wall",
+      "expectedAssertionMarkers": [
+        "WALL_FLIGHT_OVER_PAINTED_HEADS"
+      ],
+      "expectedExit": 1,
+      "actualNativeTextChanged": true,
+      "runtimeExecuted": false,
+      "runtimeFailureObserved": false
+    },
+    {
+      "id": "cue-owns-current-aim-and-power",
+      "sourcePath": "C:\\Users\\antho\\dukb-handoff\\2026-10-23\\football-improvements\\wall-shot-proposal-v4\\DrillBoard.candidate.tsx",
+      "sourceSha256": "38bda7385c551ea0ae36e81355baa406b6a26cd7b0d59a8444710567aa2fd6e8",
+      "before": "              const preview = wallShotPreview({ x: aimX, y: aimY, power, press: now }, setup as WallShotSetup);",
+      "after": "              const preview = wallShotPreview({ x: 0, y: 0.9, power: 0.65, press: now }, setup as WallShotSetup);",
+      "forwardCount": 1,
+      "inverseCount": 1,
+      "changedSha256": "9e80fe4c626340d94a520acef414c3219530c923aab6af6ec3615aa3ea116d31",
+      "wholeInverseSha256": "38bda7385c551ea0ae36e81355baa406b6a26cd7b0d59a8444710567aa2fd6e8",
+      "testPath": "src/test/DrillBoard.wall.test.tsx",
+      "caseTitle": "updates advice for aim and power, and reopens instructions without consuming an outcome",
+      "expectedAssertionMarkers": [
+        "WALL_UI_BLOCKED_AIM_NOT_GREEN"
+      ],
+      "expectedExit": 1,
+      "actualNativeTextChanged": true,
+      "runtimeExecuted": false,
+      "runtimeFailureObserved": false
+    },
+    {
+      "id": "aim-release-is-not-shoot",
+      "sourcePath": "C:\\Users\\antho\\dukb-handoff\\2026-10-23\\football-improvements\\wall-shot-proposal-v4\\DrillBoard.candidate.tsx",
+      "sourceSha256": "38bda7385c551ea0ae36e81355baa406b6a26cd7b0d59a8444710567aa2fd6e8",
+      "before": "    setDragging(false);\n    if (modernWall) releaseAim(e);\n    else if (kind === 'wallshot') strike();",
+      "after": "    setDragging(false);\n    if (modernWall) { releaseAim(e); strike(); }\n    else if (kind === 'wallshot') strike();",
+      "forwardCount": 1,
+      "inverseCount": 1,
+      "changedSha256": "6741aba95ca3a884841b826d7c83eb1b2b707894f70048b2089fe9aa08ae1551",
+      "wholeInverseSha256": "38bda7385c551ea0ae36e81355baa406b6a26cd7b0d59a8444710567aa2fd6e8",
+      "testPath": "src/test/DrillBoard.wall.test.tsx",
+      "caseTitle": "captures aim without shooting on release, then settles one actual shot despite same-batch clicks",
+      "expectedAssertionMarkers": [
+        "WALL_UI_AIM_RELEASE_NOT_SHOT"
+      ],
+      "expectedExit": 1,
+      "actualNativeTextChanged": true,
+      "runtimeExecuted": false,
+      "runtimeFailureObserved": false
+    },
+    {
+      "id": "one-actual-shot-before-publish",
+      "sourcePath": "C:\\Users\\antho\\dukb-handoff\\2026-10-23\\football-improvements\\wall-shot-proposal-v4\\DrillBoard.candidate.tsx",
+      "sourceSha256": "38bda7385c551ea0ae36e81355baa406b6a26cd7b0d59a8444710567aa2fd6e8",
+      "before": "    if (phase !== 'playing' || !setup || (modernWall && shotInFlight.current)) return;",
+      "after": "    if (phase !== 'playing' || !setup || (modernWall && false)) return;",
+      "forwardCount": 1,
+      "inverseCount": 1,
+      "changedSha256": "ac619ec6a3e056d4306021c7f6fe0b28ff43cd4fb24f846ebbd90d6e7a50c8eb",
+      "wholeInverseSha256": "38bda7385c551ea0ae36e81355baa406b6a26cd7b0d59a8444710567aa2fd6e8",
+      "testPath": "src/test/DrillBoard.wall.test.tsx",
+      "caseTitle": "captures aim without shooting on release, then settles one actual shot despite same-batch clicks",
+      "expectedAssertionMarkers": [
+        "WALL_UI_SHOOT_ONCE_BEFORE_PUBLISH"
+      ],
+      "expectedExit": 1,
+      "actualNativeTextChanged": true,
+      "runtimeExecuted": false,
+      "runtimeFailureObserved": false
+    },
+    {
+      "id": "resume-the-real-outcome-stream",
+      "sourcePath": "C:\\Users\\antho\\dukb-handoff\\2026-10-23\\football-improvements\\wall-shot-proposal-v4\\DrillBoard.candidate.tsx",
+      "sourceSha256": "38bda7385c551ea0ae36e81355baa406b6a26cd7b0d59a8444710567aa2fd6e8",
+      "before": "      if (kind === 'wallshot' && rules === 2) for (let n = 0; n < record.rounds * 4; n += 1) rngRef.current();",
+      "after": "      if (kind === 'wallshot' && rules === 2) for (let n = 0; n < record.rounds * 0; n += 1) rngRef.current();",
+      "forwardCount": 1,
+      "inverseCount": 1,
+      "changedSha256": "e26c7d9259636c79d94c80af8a94a27092772f63715b9d53eb54ce5747e2f0f1",
+      "wholeInverseSha256": "38bda7385c551ea0ae36e81355baa406b6a26cd7b0d59a8444710567aa2fd6e8",
+      "testPath": "src/test/DrillBoard.wall.test.tsx",
+      "caseTitle": "pins new daily rules and resumes the exact next four outcome draws",
+      "expectedAssertionMarkers": [
+        "WALL_UI_RESUME_EXACT_STREAM_POINTS",
+        "WALL_UI_RESUME_EXACT_STREAM_GOALS",
+        "WALL_UI_RESUME_ACTUAL_NEXT_FLIGHT"
+      ],
+      "expectedExit": 1,
+      "actualNativeTextChanged": true,
+      "runtimeExecuted": false,
+      "runtimeFailureObserved": false
+    },
+    {
+      "id": "pin-new-daily-rule-before-play",
+      "sourcePath": "C:\\Users\\antho\\dukb-handoff\\2026-10-23\\football-improvements\\wall-shot-proposal-v4\\DrillBoard.candidate.tsx",
+      "sourceSha256": "38bda7385c551ea0ae36e81355baa406b6a26cd7b0d59a8444710567aa2fd6e8",
+      "before": "      const rec: DrillRecord = { score: 0, count: 0, banked: false, rounds: 0, wallShotRules: 2 };",
+      "after": "      const rec: DrillRecord = { score: 0, count: 0, banked: false, rounds: 0, wallShotRules: 1 };",
+      "forwardCount": 1,
+      "inverseCount": 1,
+      "changedSha256": "ca74551346bc1eca06d20cde4b51d0ab9dd89ecce236d13ae17f972def8a6da7",
+      "wholeInverseSha256": "38bda7385c551ea0ae36e81355baa406b6a26cd7b0d59a8444710567aa2fd6e8",
+      "testPath": "src/test/DrillBoard.wall.test.tsx",
+      "caseTitle": "pins new daily rules and resumes the exact next four outcome draws",
+      "expectedAssertionMarkers": [
+        "WALL_UI_DAILY_RULE_PINNED_BEFORE_SHOT"
+      ],
+      "expectedExit": 1,
+      "actualNativeTextChanged": true,
+      "runtimeExecuted": false,
+      "runtimeFailureObserved": false
+    },
+    {
+      "id": "legacy-default-stays-legacy",
+      "sourcePath": "C:\\Users\\antho\\dukb-handoff\\2026-10-23\\football-improvements\\wall-shot-proposal-v1\\careerDrills.candidate.ts",
+      "sourceSha256": "a5a66ed166667051d24e0d737f47941587b28edd633a7823c6e6741172db3c74",
+      "before": "  const rules = setup.wallShotRules ?? 1;",
+      "after": "  const rules = setup.wallShotRules ?? 2;",
+      "forwardCount": 1,
+      "inverseCount": 1,
+      "changedSha256": "94062f22d152a4f53a49cc64b7676a81f31f92522fdb9d0148b596ff1821b068",
+      "wholeInverseSha256": "a5a66ed166667051d24e0d737f47941587b28edd633a7823c6e6741172db3c74",
+      "testPath": "src/test/careerWallShot.test.ts",
+      "caseTitle": "keeps a missing rules marker identical to explicit legacy rules",
+      "expectedAssertionMarkers": [
+        "WALL_V1_MISSING_MARKER_IS_LEGACY"
+      ],
+      "expectedExit": 1,
+      "actualNativeTextChanged": true,
+      "runtimeExecuted": false,
+      "runtimeFailureObserved": false
+    },
+    {
+      "id": "preview-consumes-no-randomness",
+      "sourcePath": "C:\\Users\\antho\\dukb-handoff\\2026-10-23\\football-improvements\\wall-shot-proposal-v1\\careerDrills.candidate.ts",
+      "sourceSha256": "a5a66ed166667051d24e0d737f47941587b28edd633a7823c6e6741172db3c74",
+      "before": "  const path = flightPath(aim, kick);\n  const end = path[path.length - 1];",
+      "after": "  Math.random();\n  const path = flightPath(aim, kick);\n  const end = path[path.length - 1];",
+      "forwardCount": 1,
+      "inverseCount": 1,
+      "changedSha256": "51af01089966888bb006b3a40b664cb942dc6216a4c4d9b3152ba45a640e0fd9",
+      "wholeInverseSha256": "a5a66ed166667051d24e0d737f47941587b28edd633a7823c6e6741172db3c74",
+      "testPath": "src/test/careerWallShot.geometry.test.ts",
+      "caseTitle": "reports the actual no-spray clear route without a random draw",
+      "expectedAssertionMarkers": [
+        "WALL_PREVIEW_NO_GLOBAL_RANDOM"
+      ],
+      "expectedExit": 1,
+      "actualNativeTextChanged": true,
+      "runtimeExecuted": false,
+      "runtimeFailureObserved": false
+    },
+    {
+      "id": "unsupported-rule-does-not-default",
+      "sourcePath": "C:\\Users\\antho\\dukb-handoff\\2026-10-23\\football-improvements\\wall-shot-proposal-v1\\careerDrills.candidate.ts",
+      "sourceSha256": "a5a66ed166667051d24e0d737f47941587b28edd633a7823c6e6741172db3c74",
+      "before": "  if (rules !== 1 && rules !== 2) throw new Error('Unsupported Wall Shot rules');",
+      "after": "  if (rules !== 1 && rules !== 2) return 1;",
+      "forwardCount": 1,
+      "inverseCount": 1,
+      "changedSha256": "3e773cda4f1729ceb334a9ab04764e710ffa50239eb5bccbf50529b06ec52dea",
+      "wholeInverseSha256": "a5a66ed166667051d24e0d737f47941587b28edd633a7823c6e6741172db3c74",
+      "testPath": "src/test/careerWallShot.geometry.test.ts",
+      "caseTitle": "refuses an unsupported explicit rule without consuming a shot",
+      "expectedAssertionMarkers": [
+        "WALL_UNKNOWN_RULE_REFUSED"
+      ],
+      "expectedExit": 1,
+      "actualNativeTextChanged": true,
+      "runtimeExecuted": false,
+      "runtimeFailureObserved": false
+    },
+    {
+      "id": "preserve-four-outcome-draws",
+      "sourcePath": "C:\\Users\\antho\\dukb-handoff\\2026-10-23\\football-improvements\\wall-shot-proposal-v1\\careerDrills.candidate.ts",
+      "sourceSha256": "a5a66ed166667051d24e0d737f47941587b28edd633a7823c6e6741172db3c74",
+      "before": "export function takeWallShot(input: WallShotInput, setup: WallShotSetup, rng: () => number): WallShotResult {\n  const rules = wallShotRules(setup);",
+      "after": "export function takeWallShot(input: WallShotInput, setup: WallShotSetup, rng: () => number): WallShotResult {\n  const rules = wallShotRules(setup);\n  if (rules === 2) rng();",
+      "forwardCount": 1,
+      "inverseCount": 1,
+      "changedSha256": "8852351f99151f99da5c2abbde7383be88731018a395eca299245515c437e1d5",
+      "wholeInverseSha256": "a5a66ed166667051d24e0d737f47941587b28edd633a7823c6e6741172db3c74",
+      "testPath": "src/test/careerWallShot.test.ts",
+      "caseTitle": "allows a low shot around either end of the rules-2 wall",
+      "expectedAssertionMarkers": [
+        "WALL_V2_WINGS_FOUR_DRAWS"
+      ],
+      "expectedExit": 1,
+      "actualNativeTextChanged": true,
+      "runtimeExecuted": false,
+      "runtimeFailureObserved": false
+    }
+  ],
+  "count": 17,
+  "policy": "Each future fault must execute the actual imported case and fail a listed exact owned assertion. Setup/import/type/timeout/fixture or unrelated failures cannot qualify. Restore exact source and rerun healthy. No mutated product bodies were written.",
+  "preservedPrepRefusal": "An earlier in-memory once-guard recipe had a nonunique inverse string and refused before any output write. Current recipe retains a unique false branch; all17 complete native changes/inverses now checked.",
+  "runtimeTestsRun": 0
+}

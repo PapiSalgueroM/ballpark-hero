@@ -1,6 +1,6 @@
 # Browser pilot bound to the frozen functional candidate, whose separate ordinary run is retained.
 # A completed pilot is styled fixture evidence, not release qualification.
-name: Career finite wall browser pilot
+name: Career finite wall full candidate
 
 on:
   push:
@@ -15,7 +15,8 @@ concurrency:
 
 env:
   BASE_SOURCE: 3affaf38991afd3544e7f0f8c810527596185a2f
-  WALL_SHOT_EXPECTED_PINS_JSON: '{"src/components/soccer-career/TrainingPanel.tsx":"725e95d14cee44b459fe5c19662ad8b1dc69364d69289b46527081a1c0ab2e61","src/index.css":"ada9cc819db63d0e2eb013bd3c29eec16877e2a30166c390b81901142369fef3","src/hooks/useArcadeFlight.ts":"b622bd7973bdbf59196c580902d1e949c1552ed1724159898c0ccc523c29c465","src/hooks/useRevealScroll.ts":"42ee464df372437ff934b2f6a2b4acafc25493eb4062e0602166bfdd2e7479cd","scripts/qa/siteMenuNavigationSupport.mjs":"c70e3ecc412f16d3322047b13205716c644495f8c74b76eed83852c87f35d303","scripts/lib/hostLikeServer.mjs":"3958c9a3b4d9e49bb60a3b7dd72d81a997bd1caed56e82e4c3bae07e1a918ef0","scripts/lib/playwrightLoader.mjs":"94a07179be7ca6b9562d118b52c2d5d0dff0b6b2e29e49e4fea16fa2defb5a93","src/lib/careerDrills.ts":"a5a66ed166667051d24e0d737f47941587b28edd633a7823c6e6741172db3c74","src/components/soccer-career/DrillBoard.tsx":"b7f50364498e5713559c906e9c963f0ea9c72aeb22ecacc0398e68c595b7992b","scripts/qa/fixtures/wallShotModern.entry.tsx":"e662600d695312373c11e5f7b18f3e333f0afce880b5f85ba46238f479b58fbc","scripts/qa/fixtures/wallShotModern.html":"d2e143920ee39761667b1d488b97d3aa671b980f34e5d7f64a65743bac291b9e","scripts/qa/fixtures/wallShotModern.vite.mjs":"a4e7bb8b09c9210a29e137f3378936a215f27c4ee538fcd23985efbb432bead4","scripts/qa/playWallShotModern.mjs":"8863670b44aed6dd9a0614c65df2e32c3c07653850e97ecf2e5586a7c4c7d7af"}'
+  ORIGINAL_BASELINE_SOURCE: 223e1cbe3eef07ace8497c3137744418c6b9c5d0
+  WALL_SHOT_EXPECTED_PINS_JSON: '{"src/components/soccer-career/TrainingPanel.tsx":"725e95d14cee44b459fe5c19662ad8b1dc69364d69289b46527081a1c0ab2e61","src/index.css":"ada9cc819db63d0e2eb013bd3c29eec16877e2a30166c390b81901142369fef3","src/hooks/useArcadeFlight.ts":"b622bd7973bdbf59196c580902d1e949c1552ed1724159898c0ccc523c29c465","src/hooks/useRevealScroll.ts":"42ee464df372437ff934b2f6a2b4acafc25493eb4062e0602166bfdd2e7479cd","scripts/qa/siteMenuNavigationSupport.mjs":"c70e3ecc412f16d3322047b13205716c644495f8c74b76eed83852c87f35d303","scripts/lib/hostLikeServer.mjs":"3958c9a3b4d9e49bb60a3b7dd72d81a997bd1caed56e82e4c3bae07e1a918ef0","scripts/lib/playwrightLoader.mjs":"94a07179be7ca6b9562d118b52c2d5d0dff0b6b2e29e49e4fea16fa2defb5a93","src/lib/careerDrills.ts":"a5a66ed166667051d24e0d737f47941587b28edd633a7823c6e6741172db3c74","src/components/soccer-career/DrillBoard.tsx":"38bda7385c551ea0ae36e81355baa406b6a26cd7b0d59a8444710567aa2fd6e8","scripts/qa/fixtures/wallShotModern.entry.tsx":"e662600d695312373c11e5f7b18f3e333f0afce880b5f85ba46238f479b58fbc","scripts/qa/fixtures/wallShotModern.html":"d2e143920ee39761667b1d488b97d3aa671b980f34e5d7f64a65743bac291b9e","scripts/qa/fixtures/wallShotModern.vite.mjs":"a4e7bb8b09c9210a29e137f3378936a215f27c4ee538fcd23985efbb432bead4","scripts/qa/playWallShotModern.mjs":"8863670b44aed6dd9a0614c65df2e32c3c07653850e97ecf2e5586a7c4c7d7af"}'
   CI: '1'
   SIM_NETWORK: offline
   ENGINES: chromium
@@ -24,7 +25,7 @@ env:
 jobs:
   browser_pilot:
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 55
     defaults:
       run:
         shell: bash
@@ -55,7 +56,7 @@ jobs:
           [[ "$BASE_SOURCE" =~ ^[a-f0-9]{40}$ ]]
           git fetch --no-tags --depth=1 origin "$BASE_SOURCE" > "$out/base-fetch.log" 2>&1
           git merge-base --is-ancestor "$BASE_SOURCE" "$GITHUB_SHA" > "$out/base-ancestry.log" 2>&1
-          git diff --exit-code "$BASE_SOURCE" HEAD -- . ':!docs/**' ':!.github/workflows/career-finite-wall.yml' ':!scripts/qa/playWallShotModern.mjs' ':!scripts/qa/fixtures/wallShotModern.entry.tsx' ':!scripts/qa/fixtures/wallShotModern.html' ':!scripts/qa/fixtures/wallShotModern.vite.mjs' > "$out/protected-functional-source.log"
+          git diff --exit-code "$BASE_SOURCE" HEAD -- . ':!docs/**' ':!.github/workflows/career-finite-wall.yml' ':!scripts/qa/playWallShotModern.mjs' ':!scripts/qa/fixtures/wallShotModern.entry.tsx' ':!scripts/qa/fixtures/wallShotModern.html' ':!scripts/qa/fixtures/wallShotModern.vite.mjs' ':!src/components/soccer-career/DrillBoard.tsx' ':!scripts/qa/runWallShotSourceControls.mjs' ':!scripts/qa/wallShot.manifest.json' ':!scripts/qa/wallShotSourceControls.json' ':!scripts/qa/wallShotMomentControls.json' > "$out/protected-functional-source.log"
           for file in package.json package-lock.json vitest.config.ts scripts/lib/offlineTransport.cjs scripts/lib/playwrightLoader.mjs scripts/lib/hostLikeServer.mjs scripts/qa/siteMenuNavigationSupport.mjs scripts/qa/freeKickLab1070.mjs scripts/sweepWeight.mjs scripts/playHomeFold.mjs;do
             git show "$BASE_SOURCE:$file" | cmp "$file" -
           done
@@ -71,6 +72,12 @@ jobs:
           const workflow='.github/workflows/career-finite-wall.yml',blob=cp.execFileSync('git',['rev-parse','HEAD:'+workflow],{encoding:'utf8'}).trim();
           assert.equal(cp.execFileSync('git',['hash-object',workflow],{encoding:'utf8'}).trim(),blob);
           fs.writeFileSync(out+'/source-binding.json',JSON.stringify({phase:'browser-pilot',applicationQualified:false,source:process.env.GITHUB_SHA,base:process.env.BASE_SOURCE,tree:cp.execFileSync('git',['rev-parse','HEAD^{tree}'],{encoding:'utf8'}).trim(),workflow:{file:workflow,gitBlobSha1:blob,sha256:hash(fs.readFileSync(workflow))},requiredInputs:13,bindingSha256:hash(fs.readFileSync(out+'/browser-binding.json'))},null,2)+'\n',{flag:'wx'});
+          NODE
+          node <<'NODE'
+          const fs=require('node:fs'),assert=require('node:assert/strict'),crypto=require('node:crypto');
+          const proofPins={"scripts/qa/runWallShotSourceControls.mjs":"6e2fd6607ddc59881ba6864ff2b4dd78f17b9aed460a57af1e795967069ecf65","scripts/qa/wallShot.manifest.json":"c73a42149a09b46785d823f0668f1e9df5e45024e29bcaacffb04b5d379091f6","scripts/qa/wallShotSourceControls.json":"93cb6d5fb68da12366671c79917c95a7052f3c8755d66657a7ae6297517cc02b","scripts/qa/wallShotMomentControls.json":"b04ba053ceed1854dafab35e27f0b81bf7212b9993d2b93fcfdf0a91e4e72eb1"},manifest=JSON.parse(fs.readFileSync('scripts/qa/wallShot.manifest.json','utf8')),hash=b=>crypto.createHash('sha256').update(b).digest('hex');
+          assert.equal(manifest.suites.length,12);assert.equal(manifest.suites.reduce((n,s)=>n+s.tests,0),84);assert.equal(Object.keys(manifest.pins).length,18);
+          for(const [file,pin] of Object.entries({...proofPins,...manifest.pins}))assert.equal(hash(fs.readFileSync(file)),pin,'WALL_FULL_INPUT '+file);
           NODE
           git rev-parse HEAD > "$out/head.txt"
           git ls-files -z | sort -z > "$out/source-members.before"
@@ -116,8 +123,60 @@ jobs:
           SIM_OFFLINE_RECEIPT="$out/types.transport" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$out/types.log" 2>&1 || status=$?
           printf '%s\n' "$status" > "$out/types.exit";test "$status" -eq 0
           test ! -s "$out/types.transport"
+      - name: Existing legacy drill and moment outcome evidence
+        id: legacy
+        run: |
+          set -euo pipefail
+          out="$WALL_SHOT_PILOT_OUT";export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          : > "$out/legacy-drills.transport";: > "$out/legacy-moments.transport"
+          SIM_OFFLINE_RECEIPT="$out/legacy-drills.transport" timeout --signal=TERM --kill-after=15s 6m node scripts/simCareerDrills.mjs > "$out/legacy-drills.log" 2>&1
+          SIM_OFFLINE_RECEIPT="$out/legacy-moments.transport" timeout --signal=TERM --kill-after=15s 6m node scripts/simSeasonMoments.mjs > "$out/legacy-moments.log" 2>&1
+          test ! -s "$out/legacy-drills.transport";test ! -s "$out/legacy-moments.transport"
+      - name: Exact twelve functional suites and 84 registered cases
+        id: functional
+        run: |
+          set -euo pipefail
+          out="$WALL_SHOT_PILOT_OUT";export CAREER_WALL_OUT="$out"
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          cp scripts/qa/wallShot.manifest.json "$out/pilot-manifest.json"
+          : > "$out/tests.transport"
+          SIM_OFFLINE_RECEIPT="$out/tests.transport" timeout --signal=TERM --kill-after=15s 8m node <<'NODE'
+          const fs=require('node:fs'),assert=require('node:assert/strict'),path=require('node:path'),{spawnSync}=require('node:child_process'),out=process.env.CAREER_WALL_OUT;
+          const manifest=JSON.parse(fs.readFileSync(out+'/pilot-manifest.json','utf8')),files=manifest.suites.map(s=>s.file);
+          const log=fs.openSync(out+'/tests.log','wx');
+          let run;try{run=spawnSync('node_modules/.bin/vitest',['run',...files,'--maxWorkers=1','--no-file-parallelism','--reporter=json','--outputFile='+out+'/tests.json'],{stdio:['ignore',log,log],env:process.env,timeout:360000,killSignal:'SIGTERM'});}finally{fs.closeSync(log);}
+          fs.writeFileSync(out+'/tests.exit',run.status===null?'NO_EXIT_CODE\n':String(run.status)+'\n',{flag:'wx'});
+          fs.writeFileSync(out+'/tests-process.json',JSON.stringify({status:run.status,signal:run.signal,error:run.error?{name:run.error.name,message:run.error.message,code:run.error.code}:null},null,2)+'\n',{flag:'wx'});
+          assert.equal(run.error,undefined,'actual Vitest spawn/timeout error');assert.equal(run.signal,null);assert.equal(run.status,0);
+          const r=JSON.parse(fs.readFileSync(out+'/tests.json','utf8')),expected=new Map(manifest.suites.map(s=>[path.resolve(s.file),s.tests])),total=manifest.suites.reduce((n,s)=>n+s.tests,0);
+          assert.equal(r.success,true);assert.equal(r.testResults.length,expected.size);assert.equal(r.numTotalTests,total);assert.equal(r.numPassedTests,total);assert.equal(r.numFailedTests,0);assert.equal(r.numPendingTests,0);assert.equal(r.numTodoTests,0);
+          const seen=new Set();
+          for(const suite of r.testResults){const file=path.resolve(suite.name);assert(expected.has(file),file);assert(!seen.has(file),file);seen.add(file);assert.equal(suite.status,'passed');assert.equal(suite.assertionResults.length,expected.get(file));for(const row of suite.assertionResults){assert.equal(row.status,'passed',row.fullName);assert.deepEqual(row.failureMessages,[]);}}
+          assert.equal(seen.size,expected.size);
+          const runtimeKeys=['numRuntimeErrorTestSuites','numUnhandledErrors'];for(const key of runtimeKeys)if(key in r)assert.equal(r[key],0);if('unhandledErrors'in r)assert.deepEqual(r.unhandledErrors,[]);
+          assert.doesNotMatch(fs.readFileSync(out+'/tests.log','utf8'),/Unhandled\s+(?:Errors?|Rejections?)|Uncaught\s+Exceptions?/i);
+          fs.writeFileSync(out+'/functional-pilot-admission.json',JSON.stringify({status:'FUNCTIONAL_PILOT_ONLY',source:process.env.GITHUB_SHA,suites:manifest.suites,passed:total,observedRuntimeCounters:Object.fromEntries(runtimeKeys.filter(k=>k in r).map(k=>[k,r[k]])),absentRuntimeCountersUnknown:runtimeKeys.filter(k=>!(k in r)),applicationQualified:false,scope:'Functional suite step only. Build, browser and copied controls have separate results.'},null,2)+'\n',{flag:'wx'});
+          NODE
+          test ! -s "$out/tests.transport"
+      - name: Twenty-five actual copied-source faults with healthy and restored runs
+        id: source_controls
+        if: ${{ !cancelled() && steps.functional.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          out="$WALL_SHOT_PILOT_OUT"
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          git show "$ORIGINAL_BASELINE_SOURCE:src/lib/careerDrills.ts" > "$out/control-core.original.ts"
+          : > "$out/copied-controls.transport";status=0
+          SIM_OFFLINE_RECEIPT="$out/copied-controls.transport" timeout --signal=TERM --kill-after=15s 19m node scripts/qa/runWallShotSourceControls.mjs --manifest scripts/qa/wallShot.manifest.json --recipes scripts/qa/wallShotSourceControls.json --moment-recipes scripts/qa/wallShotMomentControls.json --core-original "$out/control-core.original.ts" --out "$out/copied-source" > "$out/copied-controls.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/copied-controls.exit";test "$status" -eq 0
+          test ! -s "$out/copied-controls.transport"
+          node <<'NODE'
+          const fs=require('node:fs'),assert=require('node:assert/strict'),r=JSON.parse(fs.readFileSync(process.env.WALL_SHOT_PILOT_OUT+'/copied-source/report.json','utf8'));
+          assert.equal(r.status,'WALL_COPIED_SOURCE_CONTROLS_ADMITTED');assert.equal(r.complete,true);assert.equal(r.source,process.env.GITHUB_SHA);assert.equal(r.controlCount,25);assert.equal(r.observedRunCount,77);assert.deepEqual(r.errors,[]);assert.equal(r.applicationQualified,false);
+          NODE
       - name: Serial plain production build
         id: build
+        if: ${{ !cancelled() && steps.types.outcome == 'success' }}
         run: |
           set -euo pipefail
           out="$WALL_SHOT_PILOT_OUT"
@@ -165,7 +224,7 @@ jobs:
           assert.equal(r.contexts.length,6);let shots=0;
           for(let i=0;i<expected.length;i++){const c=r.contexts[i];assert.deepEqual([c.id,c.width,c.height,c.theme,c.reduced],expected[i]);assert.equal(c.complete,true);assert.equal(c.shots.length,4);assert.deepEqual(c.errors,[]);assert.deepEqual(c.blocked,[]);shots+=c.shots.length;}
           assert.equal(shots,24);assert.equal(r.controls.length,8);assert(r.controls.every(c=>c.changed===true&&c.passed===true&&c.scope==='copied actual browser record only'));assert.equal(r.tools.playwright,binding.playwrightVersion);
-          fs.writeFileSync(process.env.WALL_SHOT_PILOT_OUT+'/pilot-browser-summary.json',JSON.stringify({phase:'browser-pilot',source:process.env.GITHUB_SHA,complete:true,contexts:6,shots:24,copiedRecordControls:8,applicationQualified:false,changedSourceControls:'separate obligation, not executed by this workflow'},null,2)+'\n',{flag:'wx'});
+          fs.writeFileSync(process.env.WALL_SHOT_PILOT_OUT+'/pilot-browser-summary.json',JSON.stringify({phase:'browser-pilot',source:process.env.GITHUB_SHA,complete:true,contexts:6,shots:24,copiedRecordControls:8,applicationQualified:false,changedSourceControls:'separate source_controls step; see copied-source/report.json'},null,2)+'\n',{flag:'wx'});
           NODE
           test ! -s "$out/wall-browser.transport"
       - name: Unchanged HomeFold oracle and all eighteen built-site readers
@@ -260,7 +319,7 @@ jobs:
           fi
           if test -f "$out/browser-binding.json";then node -e 'const f=require("node:fs"),a=require("node:assert/strict"),h=b=>require("node:crypto").createHash("sha256").update(b).digest("hex"),p=process.env.WALL_SHOT_PILOT_OUT,r=JSON.parse(f.readFileSync(p+"/source-binding.json"));a.equal(h(f.readFileSync(p+"/browser-binding.json")),r.bindingSha256)' > "$out/final-binding-hold.log" 2>&1 || failed=1;fi
           while IFS= read -r -d '' file;do test ! -s "$file" || failed=1;done < <(find "$out" -type f -name '*.transport' -print0)
-          printf 'phase=browser-pilot\napplicationQualified=false\nsource=%s\ntypes=%s\nbuild=%s\nfixture=%s\nbrowser=%s\nreaders=%s\ncaps=%s\nfinalHoldsExit=%s\n' "$GITHUB_SHA" '${{ steps.types.outcome }}' '${{ steps.build.outcome }}' '${{ steps.fixture.outcome }}' '${{ steps.browser.outcome }}' '${{ steps.readers.outcome }}' '${{ steps.caps.outcome }}' "$failed" > "$out/stages.txt"
+          printf 'phase=browser-pilot\napplicationQualified=false\nsource=%s\ntypes=%s\nlegacy=%s\nfunctional=%s\nsourceControls=%s\nbuild=%s\nfixture=%s\nbrowser=%s\nreaders=%s\ncaps=%s\nfinalHoldsExit=%s\n' "$GITHUB_SHA" '${{ steps.types.outcome }}' '${{ steps.legacy.outcome }}' '${{ steps.functional.outcome }}' '${{ steps.source_controls.outcome }}' '${{ steps.build.outcome }}' '${{ steps.fixture.outcome }}' '${{ steps.browser.outcome }}' '${{ steps.readers.outcome }}' '${{ steps.caps.outcome }}' "$failed" > "$out/stages.txt"
           (cd "$out";find . -type f ! -path ./evidence.sha256 -print0 | sort -z | xargs -0 sha256sum) > "$out/evidence.sha256"
           exit "$failed"
       - uses: actions/upload-artifact@v4

@@ -555,8 +555,26 @@ export default function DrillBoard({ career, canBank, onBank, onBack, match, wal
   }
 
   return (
-    <div className="p-4 space-y-3">
-      {match ? (
+    <div className={modernWall ? 'p-2 space-y-2' : 'p-4 space-y-3'}>
+      {modernWall ? (
+        <div className="flex min-h-11 items-center justify-between gap-2 text-xs font-bold">
+          {match ? (
+            <div className="min-w-0 flex-1" data-drill-match={kind}>
+              <p>{meta.emoji} {meta.name}: one go</p>
+              {setup && <p className="text-[11px] leading-4 text-muted-foreground">{setup.label}</p>}
+            </div>
+          ) : (
+            <>
+              <button onClick={() => { resetFlight(); setPhase('intro'); }} className="min-h-11 shrink-0 text-muted-foreground hover:text-foreground">‹ {meta.name}</button>
+              <div className="min-w-0 flex-1 text-right text-[11px] leading-4">
+                <p>Round {Math.min(idx + 1, ROUNDS_PER_RUN)}/{ROUNDS_PER_RUN} <span className="text-emerald-400">{count} {meta.verb}</span> <span className="text-amber-300 tabular-nums">{score} pts</span></p>
+                {setup && <p className="text-muted-foreground">{setup.label}</p>}
+              </div>
+            </>
+          )}
+          <Button variant="outline" className="min-h-11 min-w-11 shrink-0" aria-label="Wall Shot rules" aria-expanded={wallHelp} onClick={() => setWallHelp(v => !v)}>?</Button>
+        </div>
+      ) : match ? (
         <div className="text-center text-xs font-bold" data-drill-match={kind}>{meta.emoji} {meta.name}: one go</div>
       ) : (
       <div className="flex items-center justify-between text-xs font-bold">
@@ -566,13 +584,10 @@ export default function DrillBoard({ career, canBank, onBank, onBack, match, wal
         <span className="text-amber-300 tabular-nums">{score} pts</span>
       </div>
       )}
-      {setup && <p className="text-center text-[11px] text-muted-foreground">{setup.label}</p>}
-      {modernWall && <div className="space-y-2">
-        <div className="flex justify-end"><Button variant="outline" className="min-h-11 min-w-11" aria-label="Wall Shot rules" aria-expanded={wallHelp} onClick={() => setWallHelp(v => !v)}>?</Button></div>
-        {wallHelp && setup && <div className="rounded-xl border border-border p-3 text-sm" aria-label="Wall Shot instructions">
-          <p>{WALL_SHOT_HOW}</p>
-          <p className="mt-2">From {(setup as WallShotSetup).distance} m, try 65 power and aim high above the defenders. The preview checks the wall, but spread and the keeper still matter. Release your aim, then press Shoot.</p>
-        </div>}
+      {setup && !modernWall && <p className="text-center text-[11px] text-muted-foreground">{setup.label}</p>}
+      {modernWall && wallHelp && setup && <div className="rounded-xl border border-border p-3 text-sm" aria-label="Wall Shot instructions">
+        <p>{WALL_SHOT_HOW}</p>
+        <p className="mt-2">From {(setup as WallShotSetup).distance} m, try 65 power and aim high above the defenders. The preview checks the wall, but spread and the keeper still matter. Release your aim, then press Shoot.</p>
       </div>}
 
       <svg
@@ -584,7 +599,7 @@ export default function DrillBoard({ career, canBank, onBank, onBack, match, wal
         onLostPointerCapture={modernWall ? onCancel : undefined}
         ref={boardRef}
         viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
-        className={cn('w-full touch-none select-none rounded-2xl border border-border', kind === 'tackle' ? 'bg-[hsl(140_35%_20%)]' : 'bg-[hsl(140_35%_18%)]')}
+        className={cn('w-full touch-none select-none rounded-2xl border border-border', modernWall && '[@media(max-height:560px)]:mx-auto [@media(max-height:560px)]:max-w-[240px]', kind === 'tackle' ? 'bg-[hsl(140_35%_20%)]' : 'bg-[hsl(140_35%_18%)]')}
         role="img"
         aria-label={setup ? `${meta.name}: ${setup.label}` : meta.name}
         onPointerDown={onDown}
@@ -755,21 +770,21 @@ export default function DrillBoard({ career, canBank, onBank, onBack, match, wal
           2026-09-05 at 390 wide. A timing drill cannot have its board move
           under the thumb that just pressed Start. 132 covers the tallest
           ready card (the wall shot's, three lines at 390 wide). */}
-      <div ref={revealRef} className={modernWall ? 'min-h-[220px]' : 'min-h-[132px]'}>
+      <div ref={revealRef} className={modernWall ? 'min-h-[164px]' : 'min-h-[132px]'}>
         {phase === 'ready' && (
-          <div className="rounded-2xl border border-border bg-card p-3 text-center">
-            <p className="text-[12px] text-muted-foreground">
-              {kind === 'wallshot' && (modernWall ? 'Drag the goal to aim, then release your aim and press Shoot. Aim over the heads or past an end. Arrows aim, W and S set power, space shoots.' : 'Drag the goal to aim, let go to shoot as the gap opens. Arrow keys aim, W and S set power, space shoots.')}
+          <div className={modernWall ? 'rounded-2xl border border-border bg-card p-2 text-center' : 'rounded-2xl border border-border bg-card p-3 text-center'}>
+            {!modernWall && <p className="text-[12px] text-muted-foreground">
+              {kind === 'wallshot' && 'Drag the goal to aim, let go to shoot as the gap opens. Arrow keys aim, W and S set power, space shoots.'}
               {kind === 'tackle' && 'Tap the ball while it is off his feet. Arrow keys move the marker, space goes in.'}
               {kind === 'gloves' && 'Hold and drag to set the dive, let go to go. Arrow keys set it, space dives.'}
-            </p>
+            </p>}
             <Button className={cn('mt-2', modernWall && 'min-h-11')} onClick={beginRound}>{idx === 0 || match ? 'Start' : 'Next one'}</Button>
           </div>
         )}
 
         {phase === 'playing' && kind === 'wallshot' && (
-          <div className="space-y-2 rounded-2xl border border-border bg-card p-3">
-            <p className="text-xs text-muted-foreground">{modernWall ? 'Aim over the heads or past an end. Medium power gives you more control.' : 'Aim high through the gap. Medium power gives you more control.'}</p>
+          <div className={modernWall ? 'space-y-2 rounded-2xl border border-border bg-card p-2' : 'space-y-2 rounded-2xl border border-border bg-card p-3'}>
+            {!modernWall && <p className="text-xs text-muted-foreground">Aim high through the gap. Medium power gives you more control.</p>}
             {setup && modernWall && (() => {
               const preview = wallShotPreview({ x: aimX, y: aimY, power, press: now }, setup as WallShotSetup);
               const words = { wall: 'Hits the wall. Aim higher or past an end.', weak: 'Too soft from here. Add a little power.', 'off-target': 'Off target. Bring the marker inside the posts.', clear: 'Clear path, but the keeper can still save it.' };

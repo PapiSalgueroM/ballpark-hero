@@ -1,0 +1,72 @@
+{
+  "pins": {
+    "src/lib/careerDrills.ts": "a5a66ed166667051d24e0d737f47941587b28edd633a7823c6e6741172db3c74",
+    "src/components/soccer-career/DrillBoard.tsx": "38bda7385c551ea0ae36e81355baa406b6a26cd7b0d59a8444710567aa2fd6e8",
+    "src/lib/season/momentsSave.ts": "2dfaf3a4e1300668e656f487befeb8fe50f76821d382262cf5b45a8c4f4218ab",
+    "src/components/soccer-career/SoccerMomentBoard.tsx": "a0e2c186cb8000d2ef687566749c27a6167d95af771f94a5164dc70fcbdbef7d",
+    "src/components/soccer-career/useSoccerMoments.tsx": "cf22ab07c57f6ccc707dfe0a21d2f5d46d1a495de94740c9d3eab674dd69c65e",
+    "src/test/drillBoardMarkup.test.tsx": "b21d91fac27944e0540879f2e22bfc2e11254d1aa4ef92e5582358e1936f5e91",
+    "src/test/careerWallShot.geometry.test.ts": "51ee1ed522169c337c64bf23f3a2c9f5edfbfbe895e5de7d42ddd3a267b8b027",
+    "src/test/careerWallShot.boundaries.test.ts": "a133c49c10ab112b49f711d6151ad9fa7b060b242b720d93e9a24d6b9631f2a3",
+    "src/test/DrillBoard.wall.test.tsx": "0a54cde76fa5bb7f3aaa22afec43dfa4800f95a87e8fadef70c8f1f4cd5a1d9e",
+    "src/test/careerWallShot.cohort.test.ts": "f6210dba5466647e4ceadc64b51e1fdbf9478821895d849ce7db00ea96bb4e56",
+    "src/test/soccerMomentWallIntegration.test.tsx": "c0c83f259f474a5ee4fb7f27fe8507669a0d1a65fcbc5f390fe72ab5fed6f527",
+    "src/test/DrillBoard.wall.flight.test.tsx": "a4445c4a499ffaf75970c1931962ddbdcbdbdffb1be5f9cc4409bcec72d18f0b",
+    "src/test/careerWallShot.moments.test.ts": "94fd30343abf144411f09f04b836fb0c073bbbf35147cb8df45447a679b355c4",
+    "src/test/drillKeyboardRouting.test.tsx": "4b9920639f57b50598c48da579e4d40f2104f9cd15fd16353f8b23f06e7b76ba",
+    "src/components/soccer-career/SoccerSeasonCentre.tsx": "5e0db02a60d0b5e630b501bb76b472d861a9b8e909fa9d1a6409e57eed1dc87a",
+    "src/test/careerWallShot.test.ts": "b75993336f618d9dc0322756dd021d71b4a412109bbe0be72f71208b464e54bb",
+    "src/test/soccerMomentWallRules.test.ts": "e5e8ca9ffc26e15bdaf51b057e55d34f4bd738c0325f7440f3df71fe8809605d",
+    "src/test/drillBoardMatch.test.tsx": "3641efe7c96f24e6500745940ce8957f2e9f686fe3bc2c739d189f4af7727c42"
+  },
+  "suites": [
+    {
+      "file": "src/test/careerWallShot.test.ts",
+      "tests": 6
+    },
+    {
+      "file": "src/test/soccerMomentWallRules.test.ts",
+      "tests": 7
+    },
+    {
+      "file": "src/test/careerWallShot.geometry.test.ts",
+      "tests": 7
+    },
+    {
+      "file": "src/test/careerWallShot.boundaries.test.ts",
+      "tests": 3
+    },
+    {
+      "file": "src/test/DrillBoard.wall.test.tsx",
+      "tests": 7
+    },
+    {
+      "file": "src/test/DrillBoard.wall.flight.test.tsx",
+      "tests": 1
+    },
+    {
+      "file": "src/test/careerWallShot.cohort.test.ts",
+      "tests": 1
+    },
+    {
+      "file": "src/test/careerWallShot.moments.test.ts",
+      "tests": 1
+    },
+    {
+      "file": "src/test/soccerMomentWallIntegration.test.tsx",
+      "tests": 5
+    },
+    {
+      "file": "src/test/drillBoardMarkup.test.tsx",
+      "tests": 5
+    },
+    {
+      "file": "src/test/drillBoardMatch.test.tsx",
+      "tests": 6
+    },
+    {
+      "file": "src/test/drillKeyboardRouting.test.tsx",
+      "tests": 35
+    }
+  ]
+}
