@@ -1,0 +1,1 @@
+vitest-intl: node_modules/.bin/vitest run src/test/usCareerIntlBoard.test.tsx src/test/nbaCareerIntl.test.ts src/lib/careerIntl.test.ts src/test/careerSeasonReview.test.tsx --testTimeout=300000 --hookTimeout=120000
