@@ -1,0 +1,16 @@
+head: git log --oneline -2
+desk-def: node scripts/simNbaGmDesk.mjs
+set-11: SIM_NBA_GM_DESK_SEEDS=11,12,13,14,15,16,17,18,19,20 node scripts/simNbaGmDesk.mjs
+set-21: SIM_NBA_GM_DESK_SEEDS=21,22,23,24,25,26,27,28,29,30 node scripts/simNbaGmDesk.mjs
+set-31: SIM_NBA_GM_DESK_SEEDS=31,32,33,34,35,36,37,38,39,40 node scripts/simNbaGmDesk.mjs
+ctl-deadoff: SIM_NBA_GM_DESK_CONTROL=deadoff node scripts/simNbaGmDesk.mjs
+ctl-noroll: SIM_NBA_GM_DESK_CONTROL=noroll node scripts/simNbaGmDesk.mjs
+ctl-poolline: SIM_NBA_GM_DESK_CONTROL=poolline node scripts/simNbaGmDesk.mjs
+ctl-poolbest: SIM_NBA_GM_DESK_CONTROL=poolbest node scripts/simNbaGmDesk.mjs
+ctl-overcut: SIM_NBA_GM_DESK_CONTROL=overcut node scripts/simNbaGmDesk.mjs
+ctl-onlyself: SIM_NBA_GM_DESK_CONTROL=onlyself node scripts/simNbaGmDesk.mjs
+ctl-dropone: SIM_NBA_GM_DESK_CONTROL=dropone node scripts/simNbaGmDesk.mjs
+ctl-nohandback: SIM_NBA_GM_DESK_CONTROL=nohandback node scripts/simNbaGmDesk.mjs
+ctl-overlimit: SIM_NBA_GM_DESK_CONTROL=overlimit node scripts/simNbaGmDesk.mjs
+seed-10: SIM_SEED=10 node scripts/simNbaGmDesk.mjs
+seed-35: SIM_SEED=35 node scripts/simNbaGmDesk.mjs

@@ -1,0 +1,2 @@
+7651c9859e rc request r1556-fx2 for 168dfb381122106ccdf0b7111221808ebf82f250
+168dfb3811 Round 1556: simNbaGmDesk checks the hand back against the engine alone (dead money ledger, the man waived, his pool line), finds a man in two places, and books a pool cut by what the cut's slice dropped; controls deadoff, noroll, poolline, poolbest
