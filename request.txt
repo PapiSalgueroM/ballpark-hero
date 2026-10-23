@@ -1,0 +1,2 @@
+#!playwright
+writes-main: git worktree add -q .wt-main origin/main && cd .wt-main && npm run build >/dev/null 2>&1 && node scripts/simWritesAreSent.mjs
