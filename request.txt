@@ -1,0 +1,5 @@
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+gmcareer: node_modules/.bin/vitest run src/components/front-office-shared/FrontOfficeGmCareer.test.tsx --testTimeout=300000 --hookTimeout=120000
+ctl-nostrip: test "$(grep -c " strip(lg);" src/components/front-office-shared/FrontOfficeGmCareer.test.tsx)" = 1 && sed -i "s/ strip(lg);//" src/components/front-office-shared/FrontOfficeGmCareer.test.tsx && node_modules/.bin/vitest run src/components/front-office-shared/FrontOfficeGmCareer.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src; exit $s
+vitest-fo: node_modules/.bin/vitest run src/components/front-office-shared src/components/front-office --testTimeout=300000 --hookTimeout=120000 > /tmp/vf.log 2>&1; s=$?; grep -E "FAIL|Test Files|Tests  " /tmp/vf.log | head -20 | cut -c1-200; exit $s

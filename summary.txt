@@ -1,0 +1,4 @@
+tsc exit=0 68s | 
+gmcareer exit=0 19s |    Duration  18.86s (transform 1.68s, setup 72ms, collect 175ms, tests 17.88s, environment 311ms, prepare 123ms)
+ctl-nostrip exit=1 20s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/FrontOfficeGmCareer.test.tsx,title=src/components/front-office-shared/FrontO
+vitest-fo exit=0 36s |  Test Files  26 passed (26)
