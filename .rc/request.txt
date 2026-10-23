@@ -1,0 +1,5 @@
+#!build
+#!playwright
+#!serial
+wrs-head: node scripts/simWritesAreSent.mjs
+wrs-base: git worktree add -f /tmp/wb2 ab162ea8a3a1aeecdd430e4c5b1a69725202ea69 > /dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/wb2/node_modules && cd /tmp/wb2 && npx vite build --logLevel error && node scripts/simWritesAreSent.mjs
