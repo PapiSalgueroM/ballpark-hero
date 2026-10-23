@@ -1,0 +1,7 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+vitest-intl exit=0 16s |    Duration  14.58s (transform 4.46s, setup 918ms, collect 12.52s, tests 14.25s, environment 4.18s, prepare 1.14s)
+treeq exit=1 0s | files=5
+sweepWeight exit=1 32s | sweepWeight: 1 failure
+weight-head exit=0 8s |   AppearanceBuilder:14.9 Celebration:0.8 CelebrationStyles:0.7 Confetti:0.6 GameHelp:0.8 GameNav:1.7 GameNavbar:3.7 GameReportContext:3.0 GameSeoContent:2.4 HowToPlayPopo
+fences exit=0 80s | rival=0 anchors=0 storage=0
+tsc exit=0 91s | 
