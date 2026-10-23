@@ -1,0 +1,31 @@
+1. every storage write is caught, uses the unshadowed safe seam, or is allowed with a reason that still holds
+   ok    139 .setItem calls in 96 files: 134 inside a try of their own function, 3 through the unshadowed safe seam, 2 allowed, 0 that can throw
+2. the storage seam is the first thing src/main.tsx imports
+   ok    main.tsx starts with import "./lib/safeStorage"
+3. the Supabase client takes its auth storage from the seam
+   ok    auth.storage is safeLocalStorage and the file never names localStorage
+4. the storage seam only READS as it loads: no write, remove or clear at module scope or in what module scope calls
+   ok    14 write, remove or clear calls in the seam, 0 of them at module scope or in rawRequested, resolve, standInForLocks
+5. the seam writes its probe only under the once flag (the first probe) or while it already says full (the recheck)
+   ok    4 probe writes: 2 in probeStorageWrites under "!probedWrites", 2 in recheckStorageWrites under "refusedWrite"
+6. "full" is taken back in one place, the recheck, and never while a game holds a refused save
+   ok    1 place takes "full" back, in recheckStorageWrites (line 339), behind the held save's guard (line 333)
+7. a save a game remembers was refused is named to the seam, or listed with the reason it need not be
+node:fs:483
+    return binding.readFileUtf8(path, stringToFlags(options.flag));
+                   ^
+
+Error: ENOENT: no such file or directory, open '/home/runner/work/ballpark-hero/ballpark-hero/src/.google-paused-control-reauth-WSzm0Y/ResetPassword.tsx'
+    at Object.readFileSync (node:fs:483:20)
+    at read (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simStorageWrites.mjs:253:48)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simStorageWrites.mjs:769:18
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/runner/work/ballpark-hero/ballpark-hero/src/.google-paused-control-reauth-WSzm0Y/ResetPassword.tsx'
+}
+
+Node.js v24.21.0
