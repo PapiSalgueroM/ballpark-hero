@@ -1,0 +1,15 @@
+1) seeded: the same seed is the same game, different days differ
+   0 replays of 400 differed; 60 distinct deals over 60 days
+2) generated only: every club and every player comes from a generated bank
+   0 club names and 0 player names outside the generated banks
+3) the market is honest: chasers pay least, rebuilds most, chasers are stronger
+   salary over market: chasers 0.857, top half 1.011, rebuild 1.162; strength 90.1, 79.5, 68.5
+4) potential is a ceiling: no season ends above it
+   0 seasons above potential, 10023 seasons of growth
+5) the role is real: starters play more than rotation, rotation more than squad
+   mean minutes: starter 0.806 (18978), rotation 0.513 (4031), squad 0.206 (436)
+6) the choice matters and no rule of thumb always wins
+   mean best to worst gap 14.7 over 1500 deals; the best offer was the most money 46%, the strongest club 29%, staying 23%
+7) the score: whole, inside 0 to 100, parts capped, every daily winnable
+   0 bad scores; over 365 dailies the best offer scores 40 at the lowest, 54 at the 10th percentile, 0 days under 40; 0 days with one offer
+simContractChaos: all 7 sections green

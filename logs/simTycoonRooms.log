@@ -1,0 +1,137 @@
+Round 580: Stadium Tycoon rooms, over the REAL page at the REAL frame cadence
+   suite: src/test/tycoonRooms.test.tsx
+
+A) the shipped page
+   pass  1 rig alive: the Stadium tab alone runs the real clock and starts no academy
+   pass  2 the stadium never stops while you are in the Academy
+   pass  3 the Academy tab is the same academy as the Wonderkid Factory page
+   pass  4 the academy keeps its watched clock under the Stadium tab once opened
+   pass  5 each room marks its own game once per sitting, with no score
+   pass  6 a kid about to walk lights the Academy tab while you are at the ground
+   pass  7 a promotion earned while you are in the Academy waits for you
+   pass  8 the League tab shows the table, and a picked club name survives a reload
+   what it measured:
+     rig: 90s on the Stadium tab moved the match clock 89.856s; no academy panel, no academy save
+     continuity: Stadium, Academy, Stadium moved the clock 179.920s; 180s straight moved it 179.920s; drift 0.000s, margin 0.5s
+     parity: 60s on the Academy tab and 60s on /wonderkid-factory wrote byte identical saves (1693 bytes)
+     watched clock: the first kid's age clock moved 180.00s over 180s, 120 of them with the Stadium tab showing; save identical to the standalone page
+     marks: one tap marked /stadium-tycoon once, one sale on the Academy tab marked /wonderkid-factory once, neither carried a score
+     accent: Academy tab false at 5s, true at 12s, false at 75s after the kid walked (leftFree +1)
+     unseen promotion: Stadium tab lit for all 11 samples from 4s to 14s; card waiting on return, gone 5s later
+     league tab: 6 rows, three names offered, "Northquay Swifts" picked, saved and still there after a reload
+
+A.remount) negative control: the stadium's hook lives in the room, so opening the Academy unmounts it
+   ok   passed 1 rig alive: the Stadium tab alone runs the real clock and starts no academy
+   ok   failed 2 the stadium never stops while you are in the Academy
+         measured: AssertionError: 60s Stadium, 60s Academy, 60s Stadium moved the match clock 119.808s against 179.920s for 180s on the Stadium tab: the stadium lost 60.112s while the Academy was open: expected 60.11200000000008 to be less than or equal to 0
+   ok   passed 3 the Academy tab is the same academy as the Wonderkid Factory page
+   ok   passed 4 the academy keeps its watched clock under the Stadium tab once opened
+   ok   passed 5 each room marks its own game once per sitting, with no score
+   ok   passed 6 a kid about to walk lights the Academy tab while you are at the ground
+   --   failed 7 a promotion earned while you are in the Academy waits for you
+   --   failed 8 the League tab shows the table, and a picked club name survives a reload
+
+A.unmountacademy) negative control: the academy panel is only mounted while its tab is showing
+   ok   passed 1 rig alive: the Stadium tab alone runs the real clock and starts no academy
+   ok   passed 2 the stadium never stops while you are in the Academy
+   ok   passed 3 the Academy tab is the same academy as the Wonderkid Factory page
+   ok   failed 4 the academy keeps its watched clock under the Stadium tab once opened
+         measured: AssertionError: an academy opened, left under the Stadium tab for two minutes and reopened is not the academy that was watched for three: expected '{"v":1,"seed":-767294357,"cash":5000,…' to be '{"v":1,"seed":-1463071224,"cash":5000…' // Ob
+   ok   passed 5 each room marks its own game once per sitting, with no score
+   ok   failed 6 a kid about to walk lights the Academy tab while you are at the ground
+         measured: AssertionError: the Academy tab stayed dark at 12s with a kid 58 seconds from walking out on a free: expected 'false' to be 'true' // Object.is equality
+   --   passed 7 a promotion earned while you are in the Academy waits for you
+   --   passed 8 the League tab shows the table, and a picked club name survives a reload
+
+A.doublemount) negative control: a second academy hook runs on the page itself
+   ok   failed 1 rig alive: the Stadium tab alone runs the real clock and starts no academy
+         measured: AssertionError: an academy save was written by a page where nobody opened the Academy: expected '{"v":1,"seed":1866159772,"cash":0,"li…' to be null
+   ok   passed 2 the stadium never stops while you are in the Academy
+   --   passed 3 the Academy tab is the same academy as the Wonderkid Factory page
+   --   passed 4 the academy keeps its watched clock under the Stadium tab once opened
+   ok   passed 5 each room marks its own game once per sitting, with no score
+   --   passed 6 a kid about to walk lights the Academy tab while you are at the ground
+   --   passed 7 a promotion earned while you are in the Academy waits for you
+   --   passed 8 the League tab shows the table, and a picked club name survives a reload
+
+A.noaccent) negative control: the academy panel's status never reaches the tab
+   ok   passed 1 rig alive: the Stadium tab alone runs the real clock and starts no academy
+   ok   passed 2 the stadium never stops while you are in the Academy
+   ok   passed 3 the Academy tab is the same academy as the Wonderkid Factory page
+   ok   passed 4 the academy keeps its watched clock under the Stadium tab once opened
+   ok   passed 5 each room marks its own game once per sitting, with no score
+   ok   failed 6 a kid about to walk lights the Academy tab while you are at the ground
+         measured: AssertionError: the Academy tab stayed dark at 12s with a kid 58 seconds from walking out on a free: expected 'false' to be 'true' // Object.is equality
+   --   passed 7 a promotion earned while you are in the Academy waits for you
+   --   passed 8 the League tab shows the table, and a picked club name survives a reload
+
+A.unseentimer) negative control: the promotion card's four second timer runs while the Academy is showing
+   ok   passed 1 rig alive: the Stadium tab alone runs the real clock and starts no academy
+   ok   passed 2 the stadium never stops while you are in the Academy
+   ok   passed 3 the Academy tab is the same academy as the Wonderkid Factory page
+   ok   passed 4 the academy keeps its watched clock under the Stadium tab once opened
+   ok   passed 5 each room marks its own game once per sitting, with no score
+   ok   passed 6 a kid about to walk lights the Academy tab while you are at the ground
+   ok   failed 7 a promotion earned while you are in the Academy waits for you
+         measured: AssertionError: the promotion earned while the Academy was open was gone by the time the player came back: expected false to be true // Object.is equality
+   ok   passed 8 the League tab shows the table, and a picked club name survives a reload
+
+A.noleague) negative control: the League room is never mounted (Round 582)
+   ok   passed 1 rig alive: the Stadium tab alone runs the real clock and starts no academy
+   ok   passed 2 the stadium never stops while you are in the Academy
+   ok   passed 3 the Academy tab is the same academy as the Wonderkid Factory page
+   ok   passed 4 the academy keeps its watched clock under the Stadium tab once opened
+   ok   passed 5 each room marks its own game once per sitting, with no score
+   ok   passed 6 a kid about to walk lights the Academy tab while you are at the ground
+   ok   passed 7 a promotion earned while you are in the Academy waits for you
+   ok   failed 8 the League tab shows the table, and a picked club name survives a reload
+         measured: AssertionError: the League tab opened no league room: expected null not to be null
+
+B) the saves: keys, the corpus, the frozen V1 libs, the rival name, the corpus shape
+   ok   B1
+   ok   B2
+   ok   B3
+   ok   B4
+   ok   B5
+   9 saves reproduced by today's loaders and by the V1 libs frozen at 2ccf2938
+
+B.bump) negative control
+   ok   B1 (bump)
+   RED  B2 (bump): the current loaders no longer give the recorded answer for stadium/fresh, stadium/midGame, stadium/preBoardroom, stadium/doctored, academy/fresh, academy/midAcademy, academy/duplicateIds, academy/awayMeter, academy/doctoredKids
+   ok   B3 (bump)
+   ok   B4 (bump)
+   ok   B5 (bump)
+
+B.rename) negative control
+   RED  B1 (rename): the stadium save key is "stadiumTycoonSave", and every existing save lives under stadiumTycoonSaveV1
+   ok   B2 (rename)
+   ok   B3 (rename)
+   ok   B4 (rename)
+   ok   B5 (rename)
+
+B.tamper) negative control
+   ok   B1 (tamper)
+   ok   B2 (tamper)
+   RED  B3 (tamper): frozen wonderkidFactory.ts no longer matches its pin, so it is not the V1 lib any more
+   ok   B4 (tamper)
+   ok   B5 (tamper)
+
+B.shortname) negative control
+   ok   B1 (shortname)
+   ok   B2 (shortname)
+   ok   B3 (shortname)
+   RED  B4 (shortname): the entry /\bsports ?star/ also matches ordinary copy in src/lib/nhlCareerLifeA.ts, so it would fail the build on a sentence about hockey
+   ok   B5 (shortname)
+
+B.thin) negative control
+   ok   B1 (thin)
+   ok   B2 (thin)
+   ok   B3 (thin)
+   ok   B4 (thin)
+   RED  B5 (thin): the corpus holds 2 stadium and 3 academy saves, under four of each
+
+simTycoonRooms: green.
+   The stadium clock runs the same whether or not the Academy tab was open, to the thousandth of a second.
+   The Academy tab and the Wonderkid Factory page leave byte identical academies, and the academy keeps its watched clock under the Stadium tab.
+   Today's loaders and the frozen V1 libs give the recorded answer for every save in the corpus.
+   All eleven controls fired exactly where they should.
