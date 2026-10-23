@@ -2,6 +2,7 @@
 // Remote browser I/O boundary. Original game and harness predicates stay untouched.
 const fs = require('node:fs');
 const path = require('node:path');
+const crypto = require('node:crypto');
 const assert = require('node:assert/strict');
 const { pathToFileURL } = require('node:url');
 const pw = require(path.join(process.cwd(), 'node_modules/playwright-core'));
@@ -26,6 +27,40 @@ pw.chromium.launch = async options => {
       if (font && request.method() === 'GET' && ['font', 'stylesheet'].includes(request.resourceType())) {
         emit({ kind: 'prepared-font', url: url.href, sha256: font.sha256 });
         return route.fulfill({ status: 200, contentType: font.contentType, body: font.body });
+      }
+      // Only the two source-owned Conquest completion requests receive an explicit offline refusal.
+      if (directory && path.basename(directory) === 'conquest-hit' && url.origin === 'https://flawuiqbvjobmkfkauhw.supabase.co'
+        && !url.username && !url.password && !url.hash && url.pathname === '/rest/v1/game_completions' && request.resourceType() === 'fetch') {
+        let frameUrl, guest;
+        try {
+          const frame = request.frame(); frameUrl = new URL(frame.url());
+          if (frameUrl.origin === 'http://127.0.0.1:4173' && !frameUrl.search && !frameUrl.hash && ['/conquest', '/soccer-conquest'].includes(frameUrl.pathname))
+            guest = await frame.evaluate(() => localStorage.getItem('dukb-guest-handle'));
+        } catch { /* An unavailable same-context identity remains an unknown request. */ }
+        const slug = frameUrl?.pathname === '/conquest' ? 'conquest-imperialism' : frameUrl?.pathname === '/soccer-conquest' ? 'conquest-soccer-imperialism' : null;
+        let proof = null;
+        if (typeof guest === 'string' && guest.length > 0 && slug) {
+          if (request.method() === 'POST' && !url.search) {
+            const raw = request.postData();
+            try {
+              const body = JSON.parse(raw);
+              if (raw !== null && body && !Array.isArray(body) && Object.keys(body).sort().join(',') === 'game,player_name,score'
+                && body.game === slug && body.player_name === guest && typeof body.score === 'number' && Number.isFinite(body.score))
+                proof = { body, rawBody: raw, bodyBytes: Buffer.byteLength(raw), bodySha256: crypto.createHash('sha256').update(raw).digest('hex') };
+            } catch { /* Malformed payloads fall through to the unchanged unknown refusal. */ }
+          } else if (request.method() === 'GET' && request.postData() === null) {
+            const entries = [...url.searchParams.entries()];
+            if (entries.length === 4 && new Set(entries.map(([key]) => key)).size === 4
+              && url.searchParams.get('select') === 'game,completed_on' && url.searchParams.get('player_name') === 'eq.' + guest
+              && url.searchParams.get('order') === 'completed_on.desc' && url.searchParams.get('limit') === '500')
+              proof = { query: entries };
+          }
+        }
+        if (proof) {
+          emit({ kind: 'source-conquest-completion-refusal', method: request.method(), url: url.href, pagePath: frameUrl.pathname, slug, guest, status: 403, ...proof });
+          return route.fulfill({ status: 403, headers: { 'access-control-allow-origin': '*', 'access-control-allow-headers': '*', 'content-type': 'application/json', 'cache-control': 'no-store' },
+            body: JSON.stringify({ code: '42501', message: 'Offline qualification does not save or read completions.', details: null, hint: null }) });
+        }
       }
       const shell = support.shellFixture(request, url);
       if (shell) {

@@ -27,7 +27,7 @@ async function main() {
     await menu.waitFor();
     await page.screenshot({ path: path.join(out, 'pending-route-menu.png') });
     release(); done = true;
-    await page.locator('nav button[aria-label="Go back"]').waitFor({ state: 'visible' });
+    await page.locator('main#dukb-main h1').filter({ hasText: /^Search every game$/ }).waitFor({ state: 'visible' });
     await page.keyboard.press('Escape');
     await menu.waitFor({ state: 'hidden' });
     const releaseObserved = await page.waitForFunction(expected => {
