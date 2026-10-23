@@ -1,0 +1,3 @@
+ctl-restwrites exit=1 431s | simCareerIntl: control restwrites FIRED (section 7, 374 failures)
+ctl-legacyreads exit=1 440s | simCareerIntl: control legacyreads FIRED (section 7, 360 failures)
+intl-7 exit=0 449s | simCareerIntl: GREEN, 2706 checks over sections 7
