@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+# Release BR, Round 1554's walk (r1554/.tmp-fx/rc-walk.txt), extra walk1554.mjs (blocks the database host).
+walk1554: node .rc/x/walk1554.mjs
+playCollegeSeat: node scripts/playCollegeSeat.mjs
