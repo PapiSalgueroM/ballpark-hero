@@ -1,0 +1,12 @@
+vitest-a exit=0 60s |    Duration  59.37s (transform 11.05s, setup 4.16s, collect 39.32s, tests 93.44s, environment 21.10s, prepare 4.71s)
+tsc exit=0 113s | 
+td-seam exit=0 53s |    Duration  51.27s (transform 2.30s, setup 113ms, collect 3.13s, tests 46.86s, environment 386ms, prepare 109ms)
+vitest-b exit=1 120s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerTruthDigest.test.ts,title=src/test/usCareerTruthDigest.test.ts > Round 1104%3A the US career t
+vitest-intl exit=1 11s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerIntlBoard.test.tsx,title=src/test/usCareerIntlBoard.test.tsx > the board fixture's fixed NBA s
+intl-8 exit=0 38s | simCareerIntl: GREEN, 569 checks over sections 8
+simUsCareerWeight exit=0 0s | simUsCareerWeight: green. 31 checks: the four wrappers hand the board their own binding, no shared file or binding imports another sport, and every control fired.
+simUsCareerDeckC exit=0 44s | simUsCareerDeckC: all checks passed
+simUsBoardParity exit=0 60s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen with the proved historical main775 coaching Panel.
+intl-7 exit=1 1s | Automatic merge failed; fix conflicts and then commit the result.
+intl-5 exit=0 18s | simCareerIntl: GREEN, 720087 checks over sections 5
+intl-default exit=0 78s | simCareerIntl: GREEN, 52755 checks over sections 1,2,3,4,6,12
