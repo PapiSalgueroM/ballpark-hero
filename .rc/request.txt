@@ -1,0 +1,29 @@
+# REBOUND AT RELEASE BQ (triage-BQ.md): Round 1525 (BQ m2) moves fleet careers on purpose (61 of 240 against 41368514,
+# rBQ-trA end41), so section D against 41368514 is red by 1525's design and every control would "fire" on it. B1519 now
+# defaults to THIS TREE WITH ROUND 1519 TAKEN OUT (scripts/lib/treeWithoutMerge.mjs 25e94416 cedd0239, BP m1 and its first
+# parent), which holds 1519 alone whatever else merges: green on 3cca8400 (rBQ-trA end-no1519). Override with B1519=<sha>.
+# Release BP (Round BPG): ROUND 1519's own proof lines (Soccer Career: no career ends at 26 without a reason and a
+# choice), from finish-1519.md, fix-1519.md, fix2-1519.md and verify2-1519.md as the round's runners ran them
+# (r1519-g1, g2, g4w, h1, vv2a, vv2b), proven on the release head by rBPg-m1 (merge m1) and again on the final head.
+# REBOUND IN PART TWO (finish-BPH.md): B1519 now defaults to 41368514, Round 1523's closed head (main cedd0239 plus
+# 1523, without 1519). Round 1523 (merge m6 e4464a1e) moves every fleet career on purpose (league games from morale),
+# so section D against cedd0239 is red by 1523's design (rBPh-m6a endings-oldbase: 240 of 240 differ); against
+# 41368514 it holds 1519 alone again (rBPh-m6a endings-1519: 0 of 240 differ; ctl-1519 early 249, noreconcile 17,
+# summary 2, noreason 4). Part one's text, kept below:
+# BINDING. B1519 is the head of release-bp-gate before the merge m1 (25e94416) brought 1519 in, its first parent:
+# cedd0239 (origin/main, Release BO as published plus the board). simSoccerCareerEndings section D holds every fleet
+# career byte for byte to SC_ENDINGS_BASE; left alone it takes git merge-base HEAD origin/main, which on main after
+# the merge is the engine itself, so the line pins it. Override with B1519=<sha> in front of a line.
+# CONTROLS. ctl-1519 exits 0 only when each of the four controls the finish names (early: the 45 rule moved to 26;
+# noreconcile: repairCareer's reconcile line taken out; summary; noreason) exits 1, prints its "CONTROL <name>: ...
+# is mutated" line, carries no ABORT and closes on "FAIL: N check(s) failed". Counts on rBPg-m1: early 249,
+# noreconcile 17, summary 2, noreason 3 (fix-1519.md r1519-g2 the same).
+#!serve
+#!playwright
+units-1519: node_modules/.bin/vitest run src/test/soccerCareerRetirement1519.test.tsx src/test/soccerCareerSaveRecovery.test.tsx --testTimeout=300000 --hookTimeout=120000 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+endings-1519: B1519=${B1519:-$(node scripts/lib/treeWithoutMerge.mjs 25e94416 cedd0239)}; [ -n "$B1519" ] || exit 2; SC_ENDINGS_BASE=$B1519 node scripts/simSoccerCareerEndings.mjs > /tmp/e19.log 2>&1; s=$?; grep -E "^  base |careers 240|alive at" /tmp/e19.log | head -3 | cut -c1-200; tail -1 /tmp/e19.log | cut -c1-200; exit $s
+ctl-1519: B1519=${B1519:-$(node scripts/lib/treeWithoutMerge.mjs 25e94416 cedd0239)}; [ -n "$B1519" ] || exit 2; bad=0; for c in early noreconcile summary noreason; do SC_ENDINGS_BASE=$B1519 SC_ENDINGS_CONTROL=$c node scripts/simSoccerCareerEndings.mjs > /tmp/c19-$c.log 2>&1; e=$?; echo "$c exit=$e $(tail -1 /tmp/c19-$c.log | cut -c1-160)"; if [ $e -ne 1 ] || ! grep -q "CONTROL $c: .* is mutated" /tmp/c19-$c.log || grep -q ABORT /tmp/c19-$c.log || ! tail -1 /tmp/c19-$c.log | grep -q '^FAIL: '; then bad=1; fi; done; exit $bad
+walk-1519: node scripts/playSoccerCareerEndings.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+deck-1519: node scripts/simSoccerDeckFairness.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+truth-1519: node scripts/simSoccerWorldTruth.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+awards-1519: node scripts/simCareerAwardsNight.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
