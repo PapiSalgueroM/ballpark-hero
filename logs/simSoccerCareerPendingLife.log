@@ -1,0 +1,7 @@
+Actual physical unit files: 1; 40 exact completed outcomes.
+Saved Life cases: 15; 15 actual passes; 0 exact intended faults.
+Invalid-context and preservation cases: 25; 25 actual passes; pending 0.
+Actual child exit: 0; file message empty; raw setup and unhandled markers absent.
+Source receipts held: 9; parent app bindings, actual copies and complete raw JSON/log retained.
+Actual picker deliveries: 15/15; normal-only source-bound browser fixtures sha256=5059beb31c38572e6e5ccd49b7100a7bb726f27824240d22f1bb3b7b21aba2e1.
+simSoccerCareerPendingLife normal: green. Exact source and outcome guards passed.
