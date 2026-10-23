@@ -74,6 +74,12 @@
  *   dropone     the desk's summer drops the first man it lets walk, if he is the first decision (Round 1556) (2)
  *   nohandback  the NBA host's summer never hands a waived sheet arrival back to his club     (2)
  *   overlimit   it hands him back, but the club never makes room and ends the summer over fifteen (2)
+ *   overcut     it makes room with one man too many, so the club ends the summer at fourteen (Round 1556 review) (2)
+ *   onlyself    the room making cut spares only the arrival being handed back, so a second one can go (2)
+ *   deadoff     the arrival's own dead money survives when it is the first entry after those carried in (2)
+ *   noroll      the man waived in his place is billed without the summer's roll   (2)
+ *   poolline    the arrival's line stays in the pool while he is back on his club (2)
+ *   poolbest    the hand back also takes the pool's best man out, a man the summer's cut kept (2)
  * Recording the fixture: SIM_NBA_GM_DESK_RECORD=<git ref of the engine before
  * this round> rewrites scripts/data/nbaGmDeskFixture.json from that engine.
  *
@@ -213,6 +219,39 @@
  * it never acts on this file's committed stream or on the old desk's (70593dd4,
  * its own stream and SIM_SEED 6), and acts on SIM_SEED 10 (Cole Strother at
  * IND) and 35 (Omari Beaudry at NYK), the two men Round 1540 measured lost.
+ * ROUND 1556 REVIEW FIX (runner r1556-run-b found four one token breaks of the
+ * hand back that left this file green). Check 2 gained:
+ *   exact fifteen  a bottom copy's club must end the summer at exactly
+ *                  fifteen (fourteen used to pass and count as kept), with no
+ *                  dead money for a man on its roster
+ *   pair copies    for every sheet let stand, a copy where a second expiring
+ *                  man of the GM's (34 or under, so he cannot retire) lets the
+ *                  same club's sheet stand on the same terms: both kept, the
+ *                  club at fifteen. Played after the single copies.
+ *   the oracle     the hand back against the engine alone on 150 fresh leagues
+ *                  (one or two arrivals at a club, sixteen men above them and
+ *                  two dead money entries carried in, in two leagues of three):
+ *                  quiet leagues byte equal to the engine's summer; otherwise
+ *                  the engine's summer plus exactly the hand back (terms, the
+ *                  club's count, one own man waived per arrival and he the
+ *                  lowest rated, his pool line, the dead money ledger by the
+ *                  shared cut and roll, nothing else moved). Played last.
+ *   the census     fails a man in two places at once, and books the pool cut
+ *                  by what the summer's slice of the sorted pool dropped, so a
+ *                  man the cut kept and something later took out is gone
+ *   and the census problems of check 7's render season, pushed after check
+ *   2's flush, used to be dropped; they fail in the last block now.
+ * MEASURED 2026-10-22 (EDT) on runner r1556-fx2 (head 168dfb38), sets 1..10 /
+ * 11..20 / 21..30 / 31..40: walk census unchanged to the man (107 / 104 /
+ * 105 / 107 windows, 0 gone); single copies 7 / 4 / 5 / 7 and pair copies
+ * 7 / 4 / 5 / 7, every one kept, none skipped, so minBottomPair 2 (half of
+ * 4); the oracle 150 leagues, 50 quiet (50 byte equal), 100 acted (120
+ * arrivals, 20 with two at one club) on every set and on SIM_SEED 10 and 35,
+ * so its floors are half of those: 25, 50, 10. Controls, each red in check 2
+ * only: overcut 216, onlyself 88, deadoff 74, noroll 100, poolline 131,
+ * poolbest 121 (its lines are the census's "the summer cut kept his line"),
+ * dropone 21 (one more than before: the render season's census now counts),
+ * nohandback 473 and overlimit 216 (the oracle adds to both).
  */
 import './lib/seedRandom.mjs';
 import fs from 'node:fs';
