@@ -1,0 +1,7 @@
+tsc exit=0 172s | 
+simDailyDeals exit=0 8s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+dashscan exit=0 2s | commit message lines with one: 0
+keywords-fresh exit=0 1s |   guide source hash 122e30fdab39828a
+fences exit=1 562s |   FAIL: /nba-higher-lower: the saved page's guide headings differ from the render at h3 "Remembering who is still adding points" (saved h3 "Reading the final season for c
+vitest-all exit=0 1151s |  Test Files  646 passed | 2 skipped (648)
+existing exit=0 1044s | simReportContext exit=0 | simReportContext: all green
