@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+#!serial
+# Release BQ, Round 1538: fix-1538.md's r1538x-finc (rc-fin-c.txt), the walks; walk-jump and walk-nobank must exit 1 FIRED.
+walk: node scripts/playUsShopPromises.mjs
+walk-jump: PLAY_SHOP_CONTROL=jump node scripts/playUsShopPromises.mjs
+walk-nobank: node .rc/x/nobank.mjs && node_modules/.bin/vite build --outDir dist-nobank --emptyOutDir > /dev/null; git checkout -- src; PLAY_SHOP_DIST=dist-nobank PLAY_SHOP_CONTROL=nobank node scripts/playUsShopPromises.mjs
