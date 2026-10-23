@@ -1,0 +1,51 @@
+NEGATIVE CONTROL ON (nobutton): the fresh start button is hidden on every page, every route that needs the button must fail
+  PASS  /soccer-career shell: coped without the button, 0 click(s), buttons: Menu | Delete unusable save | Choose nationality
+  PASS  /soccer-career wrongtype: coped without the button, 0 click(s), buttons: Menu | Delete unusable save | Choose nationality
+  PASS  /club-manager shell: coped without the button, 0 click(s), buttons: Menu | Clear it, new manager | New manager
+  PASS  /club-manager wrongtype: coped without the button, 0 click(s), buttons: Menu | Clear it, new manager | New manager
+  PASS  /stadium-tycoon shell: coped without the button, 0 click(s), buttons: Menu | 🏟️ Stadium | 🎓 Academy
+  PASS  /stadium-tycoon wrongtype: coped without the button, 0 click(s), buttons: Menu | 🏟️ Stadium | 🎓 Academy
+  PASS  /wonderkid-factory shell: coped without the button, 0 click(s), buttons: Menu | How it works | 🎪 SHOWCASE DAY READY: p
+  PASS  /wonderkid-factory wrongtype: coped without the button, 0 click(s), buttons: Menu | How it works | 🎪 SHOWCASE DAY READY: p
+  PASS  /rebuild shell: coped without the button, 0 click(s), buttons: Menu | Just me | 2 players
+  PASS  /rebuild wrongtype: coped without the button, 0 click(s), buttons: Menu | Just me | 2 players
+  PASS  /front-office shell: coped without the button, 0 click(s), buttons: Menu | Delete unusable save | Arizona CardinalsNFC Wes
+  PASS  /front-office wrongtype: coped without the button, 0 click(s), buttons: Menu | Delete unusable save | Arizona CardinalsNFC Wes
+  FAIL  /nfl-my-career shell: the error page showed and offered no fresh start (needed the button)
+  FAIL  /nfl-my-career wrongtype: the error page showed and offered no fresh start (needed the button)
+  FAIL  /nfl-my-career summer: the error page showed and offered no fresh start (needed the button)
+  PASS  /cfb-dynasty shell: coped without the button, 0 click(s), buttons: Menu | AlabamaPrestige 95 | GeorgiaPrestige 96
+  PASS  /cfb-dynasty wrongtype: coped without the button, 0 click(s), buttons: Menu | AlabamaPrestige 95 | GeorgiaPrestige 96
+  PASS  /cbb-dynasty shell: coped without the button, 0 click(s), buttons: Menu | DukePrestige 95 | North CarolinaPrestige 9
+  PASS  /cbb-dynasty wrongtype: coped without the button, 0 click(s), buttons: Menu | DukePrestige 95 | North CarolinaPrestige 9
+  PASS  /nba-front-office shell: coped without the button, 0 click(s), buttons: Menu | Denver NuggetsWest | Oklahoma City ThunderWes
+  PASS  /nba-front-office wrongtype: coped without the button, 0 click(s), buttons: Menu | Denver NuggetsWest | Oklahoma City ThunderWes
+  FAIL  /nba-my-career shell: the error page showed and offered no fresh start (needed the button)
+  FAIL  /nba-my-career wrongtype: the error page showed and offered no fresh start (needed the button)
+  FAIL  /nba-my-career summer: the error page showed and offered no fresh start (needed the button)
+  FAIL  /mlb-my-career shell: the error page showed and offered no fresh start (needed the button)
+  FAIL  /mlb-my-career wrongtype: the error page showed and offered no fresh start (needed the button)
+  FAIL  /mlb-my-career summer: the error page showed and offered no fresh start (needed the button)
+  PASS  /mlb-front-office shell: coped without the button, 0 click(s), buttons: Menu | Delete this save and cho | Report a problem
+  PASS  /mlb-front-office wrongtype: coped without the button, 0 click(s), buttons: Menu | Delete this save and cho | Report a problem
+  FAIL  /nhl-my-career shell: the error page showed and offered no fresh start (needed the button)
+  FAIL  /nhl-my-career wrongtype: the error page showed and offered no fresh start (needed the button)
+  FAIL  /nhl-my-career summer: the error page showed and offered no fresh start (needed the button)
+  PASS  /nhl-front-office shell: coped without the button, 0 click(s), buttons: Menu | Delete unusable save | Boston BruinsEastern
+  PASS  /nhl-front-office wrongtype: coped without the button, 0 click(s), buttons: Menu | Delete unusable save | Boston BruinsEastern
+  PASS  /aussie-rules-manager shell: coped without the button, 1 click(s), buttons: Menu | Caldermere CometsControl | Hollowmere PloversDirect
+  PASS  /aussie-rules-manager wrongtype: coped without the button, 1 click(s), buttons: Menu | Caldermere CometsControl | Hollowmere PloversDirect
+  PASS  /fight-career shell: coped without the button, 0 click(s), buttons: Menu | Flyweight112 lbs | Bantamweight118 lbs
+  FAIL  /fight-career wrongtype: the error page showed and offered no fresh start (needed the button)
+  FAIL  /fight-promoter shell: the error page showed and offered no fresh start (needed the button)
+  FAIL  /fight-promoter wrongtype: the error page showed and offered no fresh start (needed the button)
+  FAIL  /fight-gym shell: the error page showed and offered no fresh start (needed the button)
+  FAIL  /fight-gym wrongtype: the error page showed and offered no fresh start (needed the button)
+  PASS  /hall-of-champions shell: coped without the button, 0 click(s), buttons: Menu | Try again | Report a problem
+  PASS  /hall-of-champions wrongtype: coped without the button, 0 click(s), buttons: Menu | Try again | Report a problem
+  PASS  /idle-arena shell: coped without the button, 0 click(s), buttons: Menu | ⚽TAP TO SCORE | x1
+  PASS  /idle-arena wrongtype: coped without the button, 0 click(s), buttons: Menu | ⚽TAP TO SCORE | x1
+  FAIL  /hall-of-champions: excused in OFFLINE_ONLY but judged offline now, remove the excuse
+
+46 broken saves over 21 long games: 17 reached the error page and needed the button, 29 were coped with by the game, 0 drew the broken save without throwing, 0 could not be judged offline, 18 trapped
+playCorruptSaves control: FIRED. With the button hidden, 18 of 17 routes that need it are trapped.

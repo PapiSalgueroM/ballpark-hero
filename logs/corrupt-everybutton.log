@@ -1,0 +1,51 @@
+NEGATIVE CONTROL ON (everybutton): the offline reading counts the report affordance as a game action again, so /hall-of-champions must read as coped and its excuse be called stale
+  PASS  /soccer-career shell: coped without the button, 0 click(s), buttons: Menu | Delete unusable save | Choose nationality
+  PASS  /soccer-career wrongtype: coped without the button, 0 click(s), buttons: Menu | Delete unusable save | Choose nationality
+  PASS  /club-manager shell: coped without the button, 0 click(s), buttons: Menu | Clear it, new manager | New manager
+  PASS  /club-manager wrongtype: coped without the button, 0 click(s), buttons: Menu | Clear it, new manager | New manager
+  PASS  /stadium-tycoon shell: coped without the button, 0 click(s), buttons: Menu | 🏟️ Stadium | 🎓 Academy
+  PASS  /stadium-tycoon wrongtype: coped without the button, 0 click(s), buttons: Menu | 🏟️ Stadium | 🎓 Academy
+  PASS  /wonderkid-factory shell: coped without the button, 0 click(s), buttons: Menu | How it works | 🎪 SHOWCASE DAY READY: p
+  PASS  /wonderkid-factory wrongtype: coped without the button, 0 click(s), buttons: Menu | How it works | 🎪 SHOWCASE DAY READY: p
+  PASS  /rebuild shell: coped without the button, 0 click(s), buttons: Menu | Just me | 2 players
+  PASS  /rebuild wrongtype: coped without the button, 0 click(s), buttons: Menu | Just me | 2 players
+  PASS  /front-office shell: coped without the button, 0 click(s), buttons: Menu | Delete unusable save | Arizona CardinalsNFC Wes
+  PASS  /front-office wrongtype: coped without the button, 0 click(s), buttons: Menu | Delete unusable save | Arizona CardinalsNFC Wes
+  PASS  /nfl-my-career shell: needed the button, 2 click(s), buttons: Menu | 🏈 2026The league as it  | ⏪ 2005 throwbackThe 2005
+  PASS  /nfl-my-career wrongtype: needed the button, 2 click(s), buttons: Menu | 🏈 2026The league as it  | ⏪ 2005 throwbackThe 2005
+  PASS  /nfl-my-career summer: needed the button, 2 click(s), buttons: Menu | 🏈 2026The league as it  | ⏪ 2005 throwbackThe 2005
+  PASS  /cfb-dynasty shell: coped without the button, 0 click(s), buttons: Menu | AlabamaPrestige 95 | GeorgiaPrestige 96
+  PASS  /cfb-dynasty wrongtype: coped without the button, 0 click(s), buttons: Menu | AlabamaPrestige 95 | GeorgiaPrestige 96
+  PASS  /cbb-dynasty shell: coped without the button, 0 click(s), buttons: Menu | DukePrestige 95 | North CarolinaPrestige 9
+  PASS  /cbb-dynasty wrongtype: coped without the button, 0 click(s), buttons: Menu | DukePrestige 95 | North CarolinaPrestige 9
+  PASS  /nba-front-office shell: coped without the button, 0 click(s), buttons: Menu | Denver NuggetsWest | Oklahoma City ThunderWes
+  PASS  /nba-front-office wrongtype: coped without the button, 0 click(s), buttons: Menu | Denver NuggetsWest | Oklahoma City ThunderWes
+  PASS  /nba-my-career shell: needed the button, 2 click(s), buttons: Menu | 🏀 2026The league as it  | ⏪ 2003-04 throwbackThe 2
+  PASS  /nba-my-career wrongtype: needed the button, 2 click(s), buttons: Menu | 🏀 2026The league as it  | ⏪ 2003-04 throwbackThe 2
+  PASS  /nba-my-career summer: needed the button, 2 click(s), buttons: Menu | 🏀 2026The league as it  | ⏪ 2003-04 throwbackThe 2
+  PASS  /mlb-my-career shell: needed the button, 2 click(s), buttons: Menu | ⚾ 2026The league as it i | ⏪ 2004 throwbackThe 2004
+  PASS  /mlb-my-career wrongtype: needed the button, 2 click(s), buttons: Menu | ⚾ 2026The league as it i | ⏪ 2004 throwbackThe 2004
+  PASS  /mlb-my-career summer: needed the button, 2 click(s), buttons: Menu | ⚾ 2026The league as it i | ⏪ 2004 throwbackThe 2004
+  PASS  /mlb-front-office shell: coped without the button, 0 click(s), buttons: Menu | Delete this save and cho | Report a problem
+  PASS  /mlb-front-office wrongtype: coped without the button, 0 click(s), buttons: Menu | Delete this save and cho | Report a problem
+  PASS  /nhl-my-career shell: needed the button, 2 click(s), buttons: Menu | 🏒 2026The league as it  | ⏪ 2006-07 throwbackThe 3
+  PASS  /nhl-my-career wrongtype: needed the button, 2 click(s), buttons: Menu | 🏒 2026The league as it  | ⏪ 2006-07 throwbackThe 3
+  PASS  /nhl-my-career summer: needed the button, 2 click(s), buttons: Menu | 🏒 2026The league as it  | ⏪ 2006-07 throwbackThe 3
+  PASS  /nhl-front-office shell: coped without the button, 0 click(s), buttons: Menu | Delete unusable save | Boston BruinsEastern
+  PASS  /nhl-front-office wrongtype: coped without the button, 0 click(s), buttons: Menu | Delete unusable save | Boston BruinsEastern
+  PASS  /aussie-rules-manager shell: coped without the button, 1 click(s), buttons: Menu | Caldermere CometsControl | Hollowmere PloversDirect
+  PASS  /aussie-rules-manager wrongtype: coped without the button, 1 click(s), buttons: Menu | Caldermere CometsControl | Hollowmere PloversDirect
+  PASS  /fight-career shell: coped without the button, 0 click(s), buttons: Menu | Flyweight112 lbs | Bantamweight118 lbs
+  PASS  /fight-career wrongtype: needed the button, 1 click(s), buttons: Menu | Flyweight112 lbs | Bantamweight118 lbs
+  PASS  /fight-promoter shell: needed the button, 1 click(s), buttons: Menu | MMABuild your organizati | BoxingMake the fights, s
+  PASS  /fight-promoter wrongtype: needed the button, 1 click(s), buttons: Menu | MMABuild your organizati | BoxingMake the fights, s
+  PASS  /fight-gym shell: needed the button, 1 click(s), buttons: Menu | Open the doors | Report a problem
+  PASS  /fight-gym wrongtype: needed the button, 1 click(s), buttons: Menu | Open the doors | Report a problem
+  PASS  /hall-of-champions shell: coped without the button, 0 click(s), buttons: Menu | Try again | Report a problem
+  PASS  /hall-of-champions wrongtype: coped without the button, 0 click(s), buttons: Menu | Try again | Report a problem
+  PASS  /idle-arena shell: coped without the button, 0 click(s), buttons: Menu | ⚽TAP TO SCORE | x1
+  PASS  /idle-arena wrongtype: coped without the button, 0 click(s), buttons: Menu | ⚽TAP TO SCORE | x1
+  FAIL  /hall-of-champions: excused in OFFLINE_ONLY but judged offline now, remove the excuse
+
+46 broken saves over 21 long games: 17 reached the error page and needed the button, 29 were coped with by the game, 0 drew the broken save without throwing, 0 could not be judged offline, 1 trapped
+playCorruptSaves control everybutton: FIRED. With the report affordance counted as a game action, /hall-of-champions reads as coped and its OFFLINE_ONLY excuse is called stale.
