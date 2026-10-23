@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+#!serial
+w-m1: git worktree add /tmp/m1 51cdca23 >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/m1/node_modules && (cd /tmp/m1 && node_modules/.bin/vite build > /tmp/m1-build.log 2>&1) && (node scripts/lib/hostLikeServer.mjs /tmp/m1/dist 4175 > /tmp/m1-server.log 2>&1 &) && sleep 4 && X=$PWD/.rc/x && cd /tmp/m1 && BASE=http://localhost:4175 node $X/weighBR.mjs m1
+w-m2: git worktree add /tmp/m2 d1b1e030 >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/m2/node_modules && (cd /tmp/m2 && node_modules/.bin/vite build > /tmp/m2-build.log 2>&1) && (node scripts/lib/hostLikeServer.mjs /tmp/m2/dist 4176 > /tmp/m2-server.log 2>&1 &) && sleep 4 && X=$PWD/.rc/x && cd /tmp/m2 && BASE=http://localhost:4176 node $X/weighBR.mjs m2
+w-m6: git worktree add /tmp/m6 d72ab46c >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/m6/node_modules && (cd /tmp/m6 && node_modules/.bin/vite build > /tmp/m6-build.log 2>&1) && (node scripts/lib/hostLikeServer.mjs /tmp/m6/dist 4177 > /tmp/m6-server.log 2>&1 &) && sleep 4 && X=$PWD/.rc/x && cd /tmp/m6 && BASE=http://localhost:4177 node $X/weighBR.mjs m6
+w-m7: git worktree add /tmp/m7 f80edfb3 >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/m7/node_modules && (cd /tmp/m7 && node_modules/.bin/vite build > /tmp/m7-build.log 2>&1) && (node scripts/lib/hostLikeServer.mjs /tmp/m7/dist 4178 > /tmp/m7-server.log 2>&1 &) && sleep 4 && X=$PWD/.rc/x && cd /tmp/m7 && BASE=http://localhost:4178 node $X/weighBR.mjs m7
