@@ -1,0 +1,9 @@
+head-390-mo-0: curtain h 436 at top 197; curtain (Continue tapped at scrollY 0) -> NBA My Career: Basketball Career Simulat (Continue tapped at scrollY 497); arrived call top -300 h 416 scrollY 497 in 844  OFF SCREEN
+head-390-mo-1: curtain h 512 at top 197; curtain (Continue tapped at scrollY 0) -> NBA My Career: Basketball Career Simulat (Continue tapped at scrollY 516); arrived call top -319 h 416 scrollY 516 in 844  OFF SCREEN
+head-390-mo-2: curtain h 533 at top 197; curtain (Continue tapped at scrollY 0) -> NBA My Career: Basketball Career Simulat (Continue tapped at scrollY 516); arrived call top -319 h 416 scrollY 516 in 844  OFF SCREEN
+head-390-mo-3: curtain h 501 at top 197; curtain (Continue tapped at scrollY 0); arrived none top null h null scrollY 0 in 844  OFF SCREEN
+head-320-mo-0: curtain h 469 at top 197; curtain (Continue tapped at scrollY 9) -> NBA My Career: Basketball Career Simulat (Continue tapped at scrollY 516); arrived call top -319 h 476 scrollY 516 in 640  OFF SCREEN
+head-320-mo-1: curtain h 545 at top 197; curtain (Continue tapped at scrollY 383) -> NBA My Career: Basketball Career Simulat (Continue tapped at scrollY 535); arrived call top -338 h 476 scrollY 535 in 640  OFF SCREEN
+head-390-rm-0: curtain h 436 at top 197; curtain (Continue tapped at scrollY 0) -> NBA My Career: Basketball Career Simulat (Continue tapped at scrollY 0); arrived call top 197 h 416 scrollY 0 in 844
+head-390-rm-1: curtain h 512 at top 197; curtain (Continue tapped at scrollY 0) -> NBA My Career: Basketball Career Simulat (Continue tapped at scrollY 0); arrived call top 197 h 416 scrollY 0 in 844
+review-run-arrive head: 6 of 8 arrivals off screen

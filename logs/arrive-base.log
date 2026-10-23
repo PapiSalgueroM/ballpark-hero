@@ -1,0 +1,9 @@
+base-390-mo-0: curtain h 387 at top 197; curtain (Continue tapped at scrollY 0) -> NBA My Career: Basketball Career Simulat (Continue tapped at scrollY 497); arrived summer card top -170 h 352 scrollY 497 in 844  OFF SCREEN
+base-390-mo-1: curtain h 463 at top 197; curtain (Continue tapped at scrollY 0) -> NBA My Career: Basketball Career Simulat (Continue tapped at scrollY 516); arrived summer card top -189 h 368 scrollY 516 in 844  OFF SCREEN
+base-390-mo-2: curtain h 484 at top 197; curtain (Continue tapped at scrollY 0) -> NBA My Career: Basketball Career Simulat (Continue tapped at scrollY 516); arrived summer card top -189 h 348 scrollY 516 in 844  OFF SCREEN
+base-390-mo-3: curtain h 452 at top 197; curtain (Continue tapped at scrollY 0); arrived none top null h null scrollY 0 in 844  OFF SCREEN
+base-320-mo-0: curtain h 420 at top 197; curtain (Continue tapped at scrollY 0) -> NBA My Career: Basketball Career Simulat (Continue tapped at scrollY 516); arrived summer card top -155 h 368 scrollY 516 in 640  OFF SCREEN
+base-320-mo-1: curtain h 496 at top 197; curtain (Continue tapped at scrollY 36) -> NBA My Career: Basketball Career Simulat (Continue tapped at scrollY 535); arrived summer card top -174 h 404 scrollY 535 in 640  OFF SCREEN
+base-390-rm-0: curtain h 387 at top 197; curtain (Continue tapped at scrollY 0) -> NBA My Career: Basketball Career Simulat (Continue tapped at scrollY 0); arrived summer card top 327 h 352 scrollY 0 in 844
+base-390-rm-1: curtain h 463 at top 197; curtain (Continue tapped at scrollY 0) -> NBA My Career: Basketball Career Simulat (Continue tapped at scrollY 0); arrived summer card top 327 h 368 scrollY 0 in 844
+review-run-arrive base: 6 of 8 arrivals off screen

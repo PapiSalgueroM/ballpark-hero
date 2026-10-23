@@ -1,0 +1,85 @@
+W2 save: last season 2018, the gate's call 2019
+  FAIL w1-390-rm-go: 1-curtain: text under 12 px: p 10px "The 2026 season"
+  w1-390-rm-go: 1-curtain top 197 h 561 scrollY 0
+  w1-390-rm-go: 2-call top 197 h 416 scrollY 0
+  w1-390-rm-go: at the call: phase event, summer dealt yes, intl null
+  w1-390-rm-go: after go: phase event, intl {"v":1,"summers":[{"year":2027,"edition":"wc-2027","went":true,"age":25,"place":"gold","games":7,"wins":7,"avg":{"pts":20.3,"reb":4.3,"ast":3.4},"hurt":false}]}
+  w1-390-rm-go: 3-result top 197 h 366 scrollY 0
+  w1-390-rm-go: result text: 🥇 Gold The 2027 Basketball World Cup in Qatar Record 7-0. You averaged 20.3 points, 4.3 rebounds and 3.4 assists a game. You came home healthy. This field is the game's own. The game plays its two group rounds as one, into a round of 16. Your games 7 games The bracket 8 groups Continue
+  w1-390-rm-go: 4-games top 197 h 486 scrollY 0
+  w1-390-rm-go: 5-bracket top 197 h 765 scrollY 0
+  w1-390-rm-go: bracket tiles: group-0 group-1 group-2 group-3 group-4 group-5 group-7 round-R16 round-QF round-SF round-bronze round-final
+  w1-390-rm-go: 6-group-0 top 197 h 433 scrollY 0
+  w1-390-rm-go: after the beat: summer card
+  FAIL w1-390-mo-go: 1-curtain: text under 12 px: p 10px "The 2026 season"
+  w1-390-mo-go: 1-curtain top 197 h 484 scrollY 0
+  w1-390-mo-go: 2-call top 197 h 416 scrollY 0
+  w1-390-mo-go: at the call: phase event, summer dealt yes, intl null
+  w1-390-mo-go: after go: phase event, intl {"v":1,"summers":[{"year":2027,"edition":"wc-2027","went":true,"age":25,"place":"gold","games":7,"wins":7,"avg":{"pts":19.3,"reb":4,"ast":3.4},"hurt":false}]}
+  w1-390-mo-go: 3-result top 197 h 366 scrollY 0
+  w1-390-mo-go: result text: 🥇 Gold The 2027 Basketball World Cup in Qatar Record 7-0. You averaged 19.3 points, 4 rebounds and 3.4 assists a game. You came home healthy. This field is the game's own. The game plays its two group rounds as one, into a round of 16. Your games 7 games The bracket 8 groups Continue
+  w1-390-mo-go: 4-games top 197 h 486 scrollY 0
+  w1-390-mo-go: 5-bracket top 197 h 765 scrollY 0
+  w1-390-mo-go: bracket tiles: group-0 group-1 group-2 group-3 group-4 group-5 group-7 round-R16 round-QF round-SF round-bronze round-final
+  w1-390-mo-go: 6-group-0 top 197 h 433 scrollY 0
+  w1-390-mo-go: after the beat: summer card
+  FAIL w1-1280-mo-go: 1-curtain: text under 12 px: p 10px "The 2026 season"
+  w1-1280-mo-go: 1-curtain top 177 h 451 scrollY 0
+  w1-1280-mo-go: 2-call top 177 h 348 scrollY 0
+  w1-1280-mo-go: at the call: phase event, summer dealt yes, intl null
+  w1-1280-mo-go: after go: phase event, intl {"v":1,"summers":[{"year":2027,"edition":"wc-2027","went":true,"age":25,"place":"gold","games":7,"wins":7,"avg":{"pts":17.6,"reb":4.3,"ast":3},"hurt":false}]}
+  w1-1280-mo-go: 3-result top 177 h 330 scrollY 0
+  w1-1280-mo-go: result text: 🥇 Gold The 2027 Basketball World Cup in Qatar Record 7-0. You averaged 17.6 points, 4.3 rebounds and 3 assists a game. You came home healthy. This field is the game's own. The game plays its two group rounds as one, into a round of 16. Your games 7 games The bracket 8 groups Continue
+  w1-1280-mo-go: 4-games top 177 h 486 scrollY 0
+  w1-1280-mo-go: 5-bracket top 177 h 765 scrollY 0
+  w1-1280-mo-go: bracket tiles: group-0 group-1 group-2 group-3 group-4 group-5 group-7 round-R16 round-QF round-SF round-bronze round-final
+  w1-1280-mo-go: 6-group-0 top 177 h 433 scrollY 0
+  w1-1280-mo-go: after the beat: summer card
+  FAIL w1-390-mo-rest: 1-curtain: text under 12 px: p 10px "The 2026 season"
+  w1-390-mo-rest: 1-curtain top 197 h 594 scrollY 0
+  w1-390-mo-rest: 2-call top 197 h 416 scrollY 0
+  w1-390-mo-rest: at the call: phase event, summer dealt yes, intl null
+  w1-390-mo-rest: after rest: phase event, intl {"v":1,"summers":[{"year":2027,"edition":"wc-2027","went":false}]}
+  w1-390-mo-rest: after the beat: summer card
+  FAIL w1-320-mo-go: 1-curtain: text under 12 px: p 10px "The 2026 season"
+  w1-320-mo-go: 1-curtain top 197 h 610 scrollY 0
+  FAIL w1-320-mo-go: 2-call: the screen's top arrived at -251 in a 640 view
+  w1-320-mo-go: 2-call top -251 h 476 scrollY 448
+  w1-320-mo-go: at the call: phase event, summer dealt yes, intl null
+  w1-320-mo-go: after go: phase event, intl {"v":1,"summers":[{"year":2027,"edition":"wc-2027","went":true,"age":25,"place":"gold","games":7,"wins":7,"avg":{"pts":23,"reb":4.9,"ast":4},"hurt":false}]}
+  w1-320-mo-go: 3-result top 12 h 406 scrollY 185
+  w1-320-mo-go: result text: 🥇 Gold The 2027 Basketball World Cup in Qatar Record 7-0. You averaged 23 points, 4.9 rebounds and 4 assists a game. You came home healthy. This field is the game's own. The game plays its two group rounds as one, into a round of 16. Your games 7 games The bracket 8 groups Continue
+  w1-320-mo-go: 4-games top 12 h 502 scrollY 185
+  w1-320-mo-go: 5-bracket top 12 h 809 scrollY 185
+  w1-320-mo-go: bracket tiles: group-0 group-1 group-2 group-3 group-4 group-5 group-7 round-R16 round-QF round-SF round-bronze round-final
+  w1-320-mo-go: 6-group-0 top 98 h 433 scrollY 99
+  w1-320-mo-go: after the beat: summer card
+  w2-390: 2-call top 197 h 396 scrollY 0
+  w2-390: call text: 🌍 The national team is calling The US national team wants you for the 2019 Basketball World Cup in China. You're 34 that summer. The game plays its two group rounds as one, into a round of 16. ✈️ Go and play Groups, then a knockout. A medal goes in your Trophy Case. The chance you come home hurt: 1
+  w2-390: 3-result top 197 h 382 scrollY 0
+  w2-390: result text: 🥇 Gold The 2019 Basketball World Cup in China Record 7-0. You averaged 7.1 points, 3.4 rebounds and 2.1 assists a game. You came home healthy. The real tournament was played, but these groups and results are this career's own. The game plays its two group rounds as one, into a round of 16. Your games 7 games The bracket 8 groups Continue
+  w2-390: 4-games top 197 h 486 scrollY 0
+  w2-390: 5-bracket top 197 h 765 scrollY 0
+  w2-390: bracket tiles: group-0 group-2 group-3 group-4 group-5 group-6 group-7 round-R16 round-QF round-SF round-bronze round-final
+  w2-390: 6-group-0 top 197 h 433 scrollY 0
+  w2-390: 6-round-R16 top 197 h 410 scrollY 0
+  w2-390: 6-round-QF top 197 h 264 scrollY 0
+  w2-390: 6-round-SF top 197 h 191 scrollY 0
+  w2-390: 6-round-bronze top 153 h 155 scrollY 44
+  w2-390: 6-round-final top 153 h 155 scrollY 44
+  w2-1280: 2-call top 177 h 328 scrollY 0
+  w2-1280: call text: 🌍 The national team is calling The US national team wants you for the 2019 Basketball World Cup in China. You're 34 that summer. The game plays its two group rounds as one, into a round of 16. ✈️ Go and play Groups, then a knockout. A medal goes in your Trophy Case. The chance you come home hurt: 1
+  w2-1280: 3-result top 177 h 330 scrollY 0
+  w2-1280: result text: 🥇 Gold The 2019 Basketball World Cup in China Record 7-0. You averaged 7.1 points, 3.4 rebounds and 2.1 assists a game. You came home healthy. The real tournament was played, but these groups and results are this career's own. The game plays its two group rounds as one, into a round of 16. Your games 7 games The bracket 8 groups Continue
+  w2-1280: 4-games top 177 h 486 scrollY 0
+  w2-1280: 5-bracket top 177 h 765 scrollY 0
+  w2-1280: bracket tiles: group-0 group-2 group-3 group-4 group-5 group-6 group-7 round-R16 round-QF round-SF round-bronze round-final
+  w2-1280: 6-group-0 top 177 h 433 scrollY 0
+  w2-1280: 6-round-R16 top 177 h 410 scrollY 0
+  w2-1280: 6-round-QF top 177 h 264 scrollY 0
+  w2-1280: 6-round-SF top 177 h 191 scrollY 0
+  w2-1280: 6-round-bronze top 177 h 155 scrollY 0
+  w2-1280: 6-round-final top 177 h 155 scrollY 0
+  w3-390: rows after a double Go and a Rest: [[2019,true]]
+  screenshots: base-320-mo-0.jpg base-320-mo-1.jpg base-390-mo-0.jpg base-390-mo-1.jpg base-390-mo-2.jpg base-390-mo-3.jpg head-320-mo-0.jpg head-320-mo-1.jpg head-390-mo-0.jpg head-390-mo-1.jpg head-390-mo-2.jpg head-390-mo-3.jpg head-390-rm-0.jpg head-390-rm-1.jpg w1-1280-mo-go-1-curtain.jpg w1-1280-mo-go-2-call.jpg w1-1280-mo-go-3-result.jpg w1-1280-mo-go-4-games.jpg w1-1280-mo-go-5-bracket.jpg w1-1280-mo-go-6-group-0.jpg w1-1280-mo-go-8-next.jpg w1-1280-mo-go-9-reload.jpg w1-320-mo-go-1-curtain.jpg w1-320-mo-go-2-call.jpg w1-320-mo-go-3-result.jpg w1-320-mo-go-4-games.jpg w1-320-mo-go-5-bracket.jpg w1-320-mo-go-6-group-0.jpg w1-320-mo-go-8-next.jpg w1-320-mo-go-9-reload.jpg w1-390-mo-go-1-curtain.jpg w1-390-mo-go-2-call.jpg w1-390-mo-go-3-result.jpg w1-390-mo-go-4-games.jpg w1-390-mo-go-5-bracket.jpg w1-390-mo-go-6-group-0.jpg w1-390-mo-go-8-next.jpg w1-390-mo-go-9-reload.jpg w1-390-mo-rest-1-curtain.jpg w1-390-mo-rest-2-call.jpg w1-390-mo-rest-8-next.jpg w1-390-mo-rest-9-reload.jpg w1-390-rm-go-1-curtain.jpg w1-390-rm-go-2-call.jpg w1-390-rm-go-3-result.jpg w1-390-rm-go-4-games.jpg w1-390-rm-go-5-bracket.jpg w1-390-rm-go-6-group-0.jpg w1-390-rm-go-8-next.jpg w1-390-rm-go-9-reload.jpg w2-1280-2-call.jpg w2-1280-3-result.jpg w2-1280-4-games.jpg w2-1280-5-bracket.jpg w2-1280-6-group-0.jpg w2-1280-6-round-QF.jpg w2-1280-6-round-R16.jpg w2-1280-6-round-SF.jpg w2-1280-6-round-bronze.jpg w2-1280-6-round-final.jpg w2-390-2-call.jpg w2-390-3-result.jpg w2-390-4-games.jpg w2-390-5-bracket.jpg w2-390-6-group-0.jpg w2-390-6-round-QF.jpg w2-390-6-round-R16.jpg w2-390-6-round-SF.jpg w2-390-6-round-bronze.jpg w2-390-6-round-final.jpg
+review-run-walk: RED, 6 failures
