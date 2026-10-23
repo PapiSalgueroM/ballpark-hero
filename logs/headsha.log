@@ -1,0 +1,3 @@
+e68df799b2 rc request rBR-fBIi for 2b3985d1eab8dd3bb8dea87ca00868d15aab9ac6
+2b3985d1ea Release BR build output: build:seo on a runner (rcg rBR-seo on 070dec3c), 17 saved pages, the sitemap and the lastmod ledger
+53cb0a1d42 Release BR triage: simTriviaBank section 6b reads the generator's own output, so TRIVIA_CONTROL=rulec fires again
