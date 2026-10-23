@@ -1,0 +1,8 @@
+1) every registry game reaches the scoring pipeline from its routed page
+   145 registry paths: 138 wired for credit, 7 retired redirects exempt by shape
+2) one recordCompletion call feeds all three pipelines, with the right numbers
+   2 calls: 2 anonymous rows, 2 plays and 140 points on the streak record, 140 signed in points, 2 atomic save calls
+   1 activity ping: anonymous rows 3, plays still 2, ranked rows still 2
+   teeth: four hop import walk, redirects derived from App.tsx, floors on both reads
+
+simScoringCoverage: all green
