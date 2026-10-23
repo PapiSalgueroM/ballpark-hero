@@ -1,0 +1,4 @@
+# Release BQ, Round 1534 (US My Career shop promises, closing head 1c7205d0): rc-1534.txt rc-fc.txt.
+simCareerHall: ONLY=simCareerHall node scripts/runAllSims.mjs
+simCareerForm: ONLY=simCareerForm node scripts/runAllSims.mjs
+simUsCareerSummer: ONLY=simUsCareerSummer node scripts/runAllSims.mjs
