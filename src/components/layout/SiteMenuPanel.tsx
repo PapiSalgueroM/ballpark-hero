@@ -29,7 +29,7 @@ export function SiteMenuPanel({ open, onOpenChange, returnFocusRef, id }: SiteMe
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent side="left" id={id} data-site-chrome=""
         onCloseAutoFocus={event => { event.preventDefault(); returnFocusRef.current?.focus({ preventScroll: true }); }}
-        className="flex h-[100dvh] w-[calc(100vw_-_1rem)] max-w-sm flex-col gap-0 p-0 motion-reduce:animate-none motion-reduce:transition-none [&>button]:inline-flex [&>button]:h-11 [&>button]:w-11 [&>button]:items-center [&>button]:justify-center">
+        className="flex h-[100dvh] w-[calc(100vw_-_1rem)] max-w-sm flex-col gap-0 p-0 motion-reduce:!animate-none motion-reduce:!transition-none [&>button]:inline-flex [&>button]:h-11 [&>button]:w-11 [&>button]:items-center [&>button]:justify-center">
         <SheetHeader className="shrink-0 p-5 pr-16 text-left">
           <SheetTitle>Menu</SheetTitle>
           <SheetDescription>Find games, sports and site links.</SheetDescription>

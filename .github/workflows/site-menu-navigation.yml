@@ -56,7 +56,7 @@ jobs:
           done
           node <<'NODE'
           const fs=require('node:fs'),assert=require('node:assert/strict'),cp=require('node:child_process');
-          const pins={"src/components/layout/SiteMenu.tsx":"4be075ccb62378e951fc864dfe34784a0620e7bd","src/components/layout/SiteMenuPanel.tsx":"d321ff49b9d2a03e0bb1dfc745a86a47861118cd","src/App.tsx":"b988c18c60d3fd7e1a010cb277a39736d07135e8","src/components/layout/Header.tsx":"ea73eb5c4c6652c2684ab302a18381b78ad9cc4d","src/test/SiteMenu.test.tsx":"4523ed1fa241b765d6cbe4f71f5eb14a14db89ad","src/test/SiteMenu.lazy-loading.test.tsx":"ed251b20e28a40fe041f00515c70cbb554968814","src/test/SiteMenu.load-failure.test.tsx":"623c8ebb1839a4f3e21d9520daf5effaee83610a"};
+          const pins={"src/components/layout/SiteMenu.tsx":"4be075ccb62378e951fc864dfe34784a0620e7bd","src/components/layout/SiteMenuPanel.tsx":"a044e17ea18bc87ea64f88569e17340099aad5c0","src/App.tsx":"b988c18c60d3fd7e1a010cb277a39736d07135e8","src/components/layout/Header.tsx":"ea73eb5c4c6652c2684ab302a18381b78ad9cc4d","src/test/SiteMenu.test.tsx":"4523ed1fa241b765d6cbe4f71f5eb14a14db89ad","src/test/SiteMenu.lazy-loading.test.tsx":"ed251b20e28a40fe041f00515c70cbb554968814","src/test/SiteMenu.load-failure.test.tsx":"623c8ebb1839a4f3e21d9520daf5effaee83610a"};
           for(const [file,expected] of Object.entries(pins))assert.equal(cp.execFileSync('git',['hash-object',file],{encoding:'utf8'}).trim(),expected,file);
           fs.writeFileSync(process.env.RUNNER_TEMP+'/site-menu-navigation/source-binding.json',JSON.stringify({source:process.env.GITHUB_SHA,base:process.env.BASE_SOURCE,pins},null,2)+'\n');
           NODE
