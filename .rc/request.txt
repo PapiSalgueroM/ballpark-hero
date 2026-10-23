@@ -1,0 +1,11 @@
+simTriviaBank: export TMPDIR=$(mktemp -d); node scripts/simTriviaBank.mjs
+seed-b: export TMPDIR=$(mktemp -d); SIM_SEED=777 TRIVIA_UNLIMITED=3000 node scripts/simTriviaBank.mjs
+seed-c: export TMPDIR=$(mktemp -d); SIM_SEED=4242 TRIVIA_LADDERS=15000 node scripts/simTriviaBank.mjs
+ctl-ties: export TMPDIR=$(mktemp -d); TRIVIA_CONTROL=ties node scripts/simTriviaBank.mjs
+ctl-namesake: export TMPDIR=$(mktemp -d); TRIVIA_CONTROL=namesake node scripts/simTriviaBank.mjs
+ctl-tense: export TMPDIR=$(mktemp -d); TRIVIA_CONTROL=tense node scripts/simTriviaBank.mjs
+ctl-postense: export TMPDIR=$(mktemp -d); TRIVIA_CONTROL=postense node scripts/simTriviaBank.mjs
+ctl-family: export TMPDIR=$(mktemp -d); TRIVIA_CONTROL=family node scripts/simTriviaBank.mjs
+ctl-legacy: export TMPDIR=$(mktemp -d); TRIVIA_CONTROL=legacy node scripts/simTriviaBank.mjs
+ctl-rulec: export TMPDIR=$(mktemp -d); TRIVIA_CONTROL=rulec node scripts/simTriviaBank.mjs
+namesakes-check: node scripts/genMarketNamesakes.mjs --check
