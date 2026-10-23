@@ -1,0 +1,16 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+playDepthChart exit=0 23s | ALL DEPTH CHART WALK CHECKS PASSED
+playCareerHub exit=0 50s | playCareerHub: green. Four career games on live boxes, and every award on the screen has a year on it.
+playExtension exit=0 41s | playExtension: green. The last year of a deal is a real fork in all four games.
+playSeasonReveal exit=0 21s | ALL SEASON REVEAL WALK CHECKS PASSED
+playReducedMotion exit=0 54s | playReducedMotion: green. Motion stops for a visitor who asked for less, content stays visible, every Round 530 route lands its reveals on the final frame, and everyone e
+playDraftNight exit=0 229s | playDraftNight: ALL GREEN, 49 nights walked
+playTranslatedPage exit=0 143s | playTranslatedPage: 447 checks, 0 failed
+playUsCareerSaveSeam exit=1 35s | playUsCareerSaveSeam: 15 journeys, 67 checks, 2 failed
+playUsDirtyMoney exit=0 34s | playUsDirtyMoney: ALL GREEN, 4 walks
+playUsCareerReports exit=0 132s | playUsCareerReports: ALL GREEN, 22 walks
+playUsMarketTalk exit=0 51s | playUsMarketTalk: 40 checks, 0 failed
+playStorageBlocked exit=1 289s | playStorageBlocked: 806 checks, 5 failed
+playUsShopPromises exit=0 30s | playUsShopPromises: green, 9 walks
+playNbaNumbers exit=0 60s | playNbaNumbers: 85 checks, 0 failed
+playUsSeasonCentre exit=0 230s | playUsSeasonCentre: 217 checks, 0 failed
