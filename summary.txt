@@ -1,0 +1,9 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+vitest exit=0 11s |    Duration  10.38s (transform 3.47s, setup 717ms, collect 8.41s, tests 10.83s, environment 3.18s, prepare 856ms)
+walk exit=0 36s | playFoSeasonCard: 120 checks, 0 failed
+playNflSeasonStats exit=0 51s | playNflSeasonStats: 112 checks, 0 failed
+simNoRivalNames exit=0 22s | No rival product names found. 0 findings.
+tsc exit=0 94s | 
+simHarnessAnchors exit=0 63s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+rwalk exit=0 52s | rwalk: 168 checks, 0 failed
+hashcmp exit=0 101s | hashcmp: SAME, 18 tab texts identical base vs head

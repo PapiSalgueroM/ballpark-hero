@@ -1,0 +1,178 @@
+planted: nfl club WAS, nba club MEM
+  ok   nfl 390 reduce: the close draws the card
+  ok   nfl 390 reduce, Awards: smallest text 12 px
+  ok   nfl 390 reduce, Awards: nothing overlaps
+  ok   nfl 390 reduce, Awards: leader values right aligned
+  ok   nfl 390 reduce, Awards: club line numbers sit under their heads
+  ok   nfl 390 reduce, Awards: no horizontal page scroll (0)
+  ok   nfl 390 reduce: a pointer press on Leaders holds the page (scrollY 1144 to 1144, card top 70 to 70)
+  ok   nfl 390 reduce, Leaders: smallest text 12 px
+  ok   nfl 390 reduce, Leaders: nothing overlaps
+  ok   nfl 390 reduce, Leaders: leader values right aligned
+  ok   nfl 390 reduce, Leaders: club line numbers sit under their heads
+  ok   nfl 390 reduce, Leaders: no horizontal page scroll (0)
+  ok   nfl 390 reduce: a pointer press on Your lines holds the page (scrollY 1144 to 1144, card top 70 to 70)
+  ok   nfl 390 reduce, Your lines: smallest text 12 px
+  ok   nfl 390 reduce, Your lines: nothing overlaps
+  ok   nfl 390 reduce, Your lines: leader values right aligned
+  ok   nfl 390 reduce, Your lines: club line numbers sit under their heads
+  ok   nfl 390 reduce, Your lines: no horizontal page scroll (0)
+  (printed) nfl 390 reduce, Your lines: Your lines box shows 222 of 428 px, 12 men, a row 32 px
+  ok   nfl 390 reduce: no page error
+  ok   nba 390 reduce: the close draws the card
+  ok   nba 390 reduce, Awards: smallest text 12 px
+  ok   nba 390 reduce, Awards: nothing overlaps
+  ok   nba 390 reduce, Awards: leader values right aligned
+  ok   nba 390 reduce, Awards: club line numbers sit under their heads
+  ok   nba 390 reduce, Awards: no horizontal page scroll (0)
+  ok   nba 390 reduce: a pointer press on Leaders holds the page (scrollY 1067 to 1067, card top 70 to 70)
+  ok   nba 390 reduce, Leaders: smallest text 12 px
+  ok   nba 390 reduce, Leaders: nothing overlaps
+  ok   nba 390 reduce, Leaders: leader values right aligned
+  ok   nba 390 reduce, Leaders: club line numbers sit under their heads
+  ok   nba 390 reduce, Leaders: no horizontal page scroll (0)
+  ok   nba 390 reduce: a pointer press on Your lines holds the page (scrollY 1067 to 1067, card top 70 to 70)
+  ok   nba 390 reduce, Your lines: smallest text 12 px
+  ok   nba 390 reduce, Your lines: nothing overlaps
+  ok   nba 390 reduce, Your lines: leader values right aligned
+  ok   nba 390 reduce, Your lines: club line numbers sit under their heads
+  ok   nba 390 reduce, Your lines: no horizontal page scroll (0)
+  (printed) nba 390 reduce, Your lines: Your lines box shows 222 of 332 px, 9 men, a row 32 px
+  ok   nba 390 reduce: no page error
+  ok   nfl 390 no-preference: the close draws the card
+  ok   nfl 390 no-preference, Awards: smallest text 12 px
+  ok   nfl 390 no-preference, Awards: nothing overlaps
+  ok   nfl 390 no-preference, Awards: leader values right aligned
+  ok   nfl 390 no-preference, Awards: club line numbers sit under their heads
+  ok   nfl 390 no-preference, Awards: no horizontal page scroll (0)
+  ok   nfl 390 no-preference: a pointer press on Leaders holds the page (scrollY 1144 to 1144, card top 70 to 70)
+  ok   nfl 390 no-preference, Leaders: smallest text 12 px
+  ok   nfl 390 no-preference, Leaders: nothing overlaps
+  ok   nfl 390 no-preference, Leaders: leader values right aligned
+  ok   nfl 390 no-preference, Leaders: club line numbers sit under their heads
+  ok   nfl 390 no-preference, Leaders: no horizontal page scroll (0)
+  ok   nfl 390 no-preference: a pointer press on Your lines holds the page (scrollY 1144 to 1144, card top 70 to 70)
+  ok   nfl 390 no-preference, Your lines: smallest text 12 px
+  ok   nfl 390 no-preference, Your lines: nothing overlaps
+  ok   nfl 390 no-preference, Your lines: leader values right aligned
+  ok   nfl 390 no-preference, Your lines: club line numbers sit under their heads
+  ok   nfl 390 no-preference, Your lines: no horizontal page scroll (0)
+  (printed) nfl 390 no-preference, Your lines: Your lines box shows 222 of 428 px, 12 men, a row 32 px
+  ok   nfl 390 no-preference: no page error
+  ok   nba 390 no-preference: the close draws the card
+  ok   nba 390 no-preference, Awards: smallest text 12 px
+  ok   nba 390 no-preference, Awards: nothing overlaps
+  ok   nba 390 no-preference, Awards: leader values right aligned
+  ok   nba 390 no-preference, Awards: club line numbers sit under their heads
+  ok   nba 390 no-preference, Awards: no horizontal page scroll (0)
+  ok   nba 390 no-preference: a pointer press on Leaders holds the page (scrollY 1067 to 1067, card top 70 to 70)
+  ok   nba 390 no-preference, Leaders: smallest text 12 px
+  ok   nba 390 no-preference, Leaders: nothing overlaps
+  ok   nba 390 no-preference, Leaders: leader values right aligned
+  ok   nba 390 no-preference, Leaders: club line numbers sit under their heads
+  ok   nba 390 no-preference, Leaders: no horizontal page scroll (0)
+  ok   nba 390 no-preference: a pointer press on Your lines holds the page (scrollY 1067 to 1067, card top 70 to 70)
+  ok   nba 390 no-preference, Your lines: smallest text 12 px
+  ok   nba 390 no-preference, Your lines: nothing overlaps
+  ok   nba 390 no-preference, Your lines: leader values right aligned
+  ok   nba 390 no-preference, Your lines: club line numbers sit under their heads
+  ok   nba 390 no-preference, Your lines: no horizontal page scroll (0)
+  (printed) nba 390 no-preference, Your lines: Your lines box shows 222 of 332 px, 9 men, a row 32 px
+  ok   nba 390 no-preference: no page error
+  ok   nba 390 old save: the close draws the pending line (12 px: This save started before season lines were kept, so this season has none. Lines and awards)
+  ok   nba 390 old save: the pending line is 12 px
+  ok   nba 390 old save: no page error
+  ok   nfl 390 roster: row p911xf81km13l5-467 draws the badge "🏅 Sim 2025 MVP, Sim 2024 MVP +1 more" on 2 line(s), 12 px (the line above it 10 px)
+  ok   nfl 390 roster: the badge is 12 px or more, not cut, overlaps nothing (px 12, cut false, overlap false)
+  ok   nfl 390 roster: row p911xf81km13l5-474 draws the badge "🏅 Sim 2025 Defensive Rookie of the Year" on 2 line(s), 12 px (the line above it 10 px)
+  ok   nfl 390 roster: the badge is 12 px or more, not cut, overlaps nothing (px 12, cut false, overlap false)
+  ok   nfl 390 roster: no page error
+  ok   nfl 1280 reduce: the close draws the card
+  ok   nfl 1280 reduce, Awards: smallest text 12 px
+  ok   nfl 1280 reduce, Awards: nothing overlaps
+  ok   nfl 1280 reduce, Awards: leader values right aligned
+  ok   nfl 1280 reduce, Awards: club line numbers sit under their heads
+  ok   nfl 1280 reduce, Awards: no horizontal page scroll (0)
+  ok   nfl 1280 reduce: a pointer press on Leaders holds the page (scrollY 790 to 790, card top 70 to 70)
+  ok   nfl 1280 reduce, Leaders: smallest text 12 px
+  ok   nfl 1280 reduce, Leaders: nothing overlaps
+  ok   nfl 1280 reduce, Leaders: leader values right aligned
+  ok   nfl 1280 reduce, Leaders: club line numbers sit under their heads
+  ok   nfl 1280 reduce, Leaders: no horizontal page scroll (0)
+  ok   nfl 1280 reduce: a pointer press on Your lines holds the page (scrollY 790 to 790, card top 70 to 70)
+  ok   nfl 1280 reduce, Your lines: smallest text 12 px
+  ok   nfl 1280 reduce, Your lines: nothing overlaps
+  ok   nfl 1280 reduce, Your lines: leader values right aligned
+  ok   nfl 1280 reduce, Your lines: club line numbers sit under their heads
+  ok   nfl 1280 reduce, Your lines: no horizontal page scroll (0)
+  (printed) nfl 1280 reduce, Your lines: Your lines box shows 220 of 220 px, 12 men, a row 16 px
+  ok   nfl 1280 reduce: no page error
+  ok   nba 1280 reduce: the close draws the card
+  ok   nba 1280 reduce, Awards: smallest text 12 px
+  ok   nba 1280 reduce, Awards: nothing overlaps
+  ok   nba 1280 reduce, Awards: leader values right aligned
+  ok   nba 1280 reduce, Awards: club line numbers sit under their heads
+  ok   nba 1280 reduce, Awards: no horizontal page scroll (0)
+  ok   nba 1280 reduce: a pointer press on Leaders holds the page (scrollY 901 to 901, card top 70 to 70)
+  ok   nba 1280 reduce, Leaders: smallest text 12 px
+  ok   nba 1280 reduce, Leaders: nothing overlaps
+  ok   nba 1280 reduce, Leaders: leader values right aligned
+  ok   nba 1280 reduce, Leaders: club line numbers sit under their heads
+  ok   nba 1280 reduce, Leaders: no horizontal page scroll (0)
+  ok   nba 1280 reduce: a pointer press on Your lines holds the page (scrollY 901 to 901, card top 70 to 70)
+  ok   nba 1280 reduce, Your lines: smallest text 12 px
+  ok   nba 1280 reduce, Your lines: nothing overlaps
+  ok   nba 1280 reduce, Your lines: leader values right aligned
+  ok   nba 1280 reduce, Your lines: club line numbers sit under their heads
+  ok   nba 1280 reduce, Your lines: no horizontal page scroll (0)
+  (printed) nba 1280 reduce, Your lines: Your lines box shows 172 of 172 px, 9 men, a row 16 px
+  ok   nba 1280 reduce: no page error
+  ok   nfl 1280 no-preference: the close draws the card
+  ok   nfl 1280 no-preference, Awards: smallest text 12 px
+  ok   nfl 1280 no-preference, Awards: nothing overlaps
+  ok   nfl 1280 no-preference, Awards: leader values right aligned
+  ok   nfl 1280 no-preference, Awards: club line numbers sit under their heads
+  ok   nfl 1280 no-preference, Awards: no horizontal page scroll (0)
+  ok   nfl 1280 no-preference: a pointer press on Leaders holds the page (scrollY 790 to 790, card top 70 to 70)
+  ok   nfl 1280 no-preference, Leaders: smallest text 12 px
+  ok   nfl 1280 no-preference, Leaders: nothing overlaps
+  ok   nfl 1280 no-preference, Leaders: leader values right aligned
+  ok   nfl 1280 no-preference, Leaders: club line numbers sit under their heads
+  ok   nfl 1280 no-preference, Leaders: no horizontal page scroll (0)
+  ok   nfl 1280 no-preference: a pointer press on Your lines holds the page (scrollY 790 to 790, card top 70 to 70)
+  ok   nfl 1280 no-preference, Your lines: smallest text 12 px
+  ok   nfl 1280 no-preference, Your lines: nothing overlaps
+  ok   nfl 1280 no-preference, Your lines: leader values right aligned
+  ok   nfl 1280 no-preference, Your lines: club line numbers sit under their heads
+  ok   nfl 1280 no-preference, Your lines: no horizontal page scroll (0)
+  (printed) nfl 1280 no-preference, Your lines: Your lines box shows 220 of 220 px, 12 men, a row 16 px
+  ok   nfl 1280 no-preference: no page error
+  ok   nba 1280 no-preference: the close draws the card
+  ok   nba 1280 no-preference, Awards: smallest text 12 px
+  ok   nba 1280 no-preference, Awards: nothing overlaps
+  ok   nba 1280 no-preference, Awards: leader values right aligned
+  ok   nba 1280 no-preference, Awards: club line numbers sit under their heads
+  ok   nba 1280 no-preference, Awards: no horizontal page scroll (0)
+  ok   nba 1280 no-preference: a pointer press on Leaders holds the page (scrollY 901 to 901, card top 70 to 70)
+  ok   nba 1280 no-preference, Leaders: smallest text 12 px
+  ok   nba 1280 no-preference, Leaders: nothing overlaps
+  ok   nba 1280 no-preference, Leaders: leader values right aligned
+  ok   nba 1280 no-preference, Leaders: club line numbers sit under their heads
+  ok   nba 1280 no-preference, Leaders: no horizontal page scroll (0)
+  ok   nba 1280 no-preference: a pointer press on Your lines holds the page (scrollY 901 to 901, card top 70 to 70)
+  ok   nba 1280 no-preference, Your lines: smallest text 12 px
+  ok   nba 1280 no-preference, Your lines: nothing overlaps
+  ok   nba 1280 no-preference, Your lines: leader values right aligned
+  ok   nba 1280 no-preference, Your lines: club line numbers sit under their heads
+  ok   nba 1280 no-preference, Your lines: no horizontal page scroll (0)
+  (printed) nba 1280 no-preference, Your lines: Your lines box shows 172 of 172 px, 9 men, a row 16 px
+  ok   nba 1280 no-preference: no page error
+  ok   nba 1280 old save: the close draws the pending line (12 px: This save started before season lines were kept, so this season has none. Lines and awards)
+  ok   nba 1280 old save: the pending line is 12 px
+  ok   nba 1280 old save: no page error
+  ok   nfl 1280 roster: row p911xf81km13l5-467 draws the badge "🏅 Sim 2025 MVP, Sim 2024 MVP +1 more" on 2 line(s), 12 px (the line above it 10 px)
+  ok   nfl 1280 roster: the badge is 12 px or more, not cut, overlaps nothing (px 12, cut false, overlap false)
+  ok   nfl 1280 roster: row p911xf81km13l5-474 draws the badge "🏅 Sim 2025 Defensive Rookie of the Year" on 2 line(s), 12 px (the line above it 10 px)
+  ok   nfl 1280 roster: the badge is 12 px or more, not cut, overlaps nothing (px 12, cut false, overlap false)
+  ok   nfl 1280 roster: no page error
+rwalk: 168 checks, 0 failed

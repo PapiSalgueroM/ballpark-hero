@@ -1,0 +1,17 @@
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+[1m[33mwarn[39m[22m - The class `duration-[800ms]` is ambiguous and matches multiple utilities.
+[1m[33mwarn[39m[22m - If this is content and not a class, replace it with `duration-&lsqb;800ms&rsqb;` to silence this warning.
+[dukb] preload wrapper: a cancelled chunk error waits for the reload (vite 5.4.21)
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+base walk exit 1: playFoSeasonCard: 120 checks, 60 failed (points red: cut, size, tab)
+head walk exit 0: playFoSeasonCard: 120 checks, 0 failed
+  (printed) text nfl 320 awards 1194a78ee459 890 chars; the card 568 px tall
+  (printed) text nfl 320 leaders 0f27714918c1 611 chars; the card 488 px tall
+  (printed) text nfl 320 lines 97d246d39b35 659 chars; the card 466 px tall
+  (printed) text nba 320 awards 80133824d97d 1218 chars; the card 880 px tall
+  (printed) text nba 320 leaders 36cfad3f5cc8 491 chars; the card 440 px tall
+  (printed) text nba 320 lines f3db3e69a703 515 chars; the card 418 px tall
+hashcmp: SAME, 18 tab texts identical base vs head
