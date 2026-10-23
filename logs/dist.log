@@ -1,0 +1,29 @@
+Network mode: offline, loopback only, no production probe or database retries.
+Running 13 node harnesses
+  PASS  simAdsense.mjs                  1.9s
+  PASS  simBrand.mjs                    1.2s
+  PASS  simHeadTags.mjs                 0.8s
+  PASS  simHiddenPages.mjs              0.7s
+  PASS  simHubs.mjs                     1.1s
+  PASS  simIndexing.mjs                 1.2s
+  PASS  simIndexNow.mjs                 0.9s
+  PASS  simInternalLinks.mjs            1.6s
+  FAIL  simPrerender.mjs                3.4s
+  PASS  simRetiredRoutes.mjs            1.1s
+  PASS  simSchema.mjs                   1.9s
+  PASS  simSitemap.mjs                  1.4s
+  PASS  simSnapshotAssets.mjs           1.5s
+
+Serving dist on 4173 for 1 browser harnesses
+  PASS  simPrerenderBoot.mjs           32.4s
+
+----- simPrerender.mjs (FAIL) -----
+  FAIL: /whats-new drops the entry "The 2026 grand finals reach the champion games on November 1.", which means the extractor is throwing away real content again
+  FAIL: /whats-new drops the entry "NBA, NFL, MLB and NHL My Career: paydays land in your Bank, and summer skill work stops at your ceiling.", which means the extractor is throwing away real content again
+  FAIL: /whats-new drops the entry "Soccer Connections: every group we rebuilt is checked against two sources, and the rebuilt boards have one right answer each.", which means the extractor is throwing away real content again
+  FAIL: /whats-new drops the entry "Hall of Champions: big museums stay saved, and an open tab pays the night.", which means the extractor is throwing away real content again
+  FAIL: /whats-new drops the entry "Conquest stops selling retired players as free agents.", which means the extractor is throwing away real content again
+  FAIL: /whats-new drops the entry "Fight Career, Fight Gym and Fight Promoter: fighters stay who they are, and you can retire.", which means the extractor is throwing away real content again
+  FAIL: /whats-new drops 11 entries in total
+
+1 harness not green.
