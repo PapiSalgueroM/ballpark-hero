@@ -1,0 +1,317 @@
+{
+ "results": [
+  {
+   "ok": true,
+   "label": "the fixture reached a playing hub (phase playing)"
+  },
+  {
+   "ok": true,
+   "label": "390 morale 100: one morale line on the hub (found 1)"
+  },
+  {
+   "ok": true,
+   "label": "390 morale 100: the line reads \"Morale 100: up to 1 more league game, rating +0.1 this season.\", the helper says \"Morale 100: up to 1 more league game, rating +0.1 this season.\""
+  },
+  {
+   "ok": true,
+   "label": "390 morale 100: no sideways scroll (0px)"
+  },
+  {
+   "ok": true,
+   "label": "390 morale 100: the line sits inside the viewport"
+  },
+  {
+   "ok": true,
+   "label": "390 morale 95: one morale line on the hub (found 1)"
+  },
+  {
+   "ok": true,
+   "label": "390 morale 95: the line reads \"Morale 95: up to 1 more league game, rating +0.1 this season.\", the helper says \"Morale 95: up to 1 more league game, rating +0.1 this season.\""
+  },
+  {
+   "ok": true,
+   "label": "390 morale 95: no sideways scroll (0px)"
+  },
+  {
+   "ok": true,
+   "label": "390 morale 95: the line sits inside the viewport"
+  },
+  {
+   "ok": true,
+   "label": "390 morale 89: one morale line on the hub (found 1)"
+  },
+  {
+   "ok": true,
+   "label": "390 morale 89: the line reads \"Morale 89: up to 1 more league game, rating +0.1 this season.\", the helper says \"Morale 89: up to 1 more league game, rating +0.1 this season.\""
+  },
+  {
+   "ok": true,
+   "label": "390 morale 89: no sideways scroll (0px)"
+  },
+  {
+   "ok": true,
+   "label": "390 morale 89: the line sits inside the viewport"
+  },
+  {
+   "ok": true,
+   "label": "390 morale 88: one morale line on the hub (found 1)"
+  },
+  {
+   "ok": true,
+   "label": "390 morale 88: the line reads \"Morale 88: no swing this season.\", the helper says \"Morale 88: no swing this season.\""
+  },
+  {
+   "ok": true,
+   "label": "390 morale 88: no sideways scroll (0px)"
+  },
+  {
+   "ok": true,
+   "label": "390 morale 88: the line sits inside the viewport"
+  },
+  {
+   "ok": true,
+   "label": "390 morale 81: one morale line on the hub (found 1)"
+  },
+  {
+   "ok": true,
+   "label": "390 morale 81: the line reads \"Morale 81: no swing this season.\", the helper says \"Morale 81: no swing this season.\""
+  },
+  {
+   "ok": true,
+   "label": "390 morale 81: no sideways scroll (0px)"
+  },
+  {
+   "ok": true,
+   "label": "390 morale 81: the line sits inside the viewport"
+  },
+  {
+   "ok": true,
+   "label": "390 morale 74: one morale line on the hub (found 1)"
+  },
+  {
+   "ok": true,
+   "label": "390 morale 74: the line reads \"Morale 74: no swing this season.\", the helper says \"Morale 74: no swing this season.\""
+  },
+  {
+   "ok": true,
+   "label": "390 morale 74: no sideways scroll (0px)"
+  },
+  {
+   "ok": true,
+   "label": "390 morale 74: the line sits inside the viewport"
+  },
+  {
+   "ok": true,
+   "label": "390 morale 73: one morale line on the hub (found 1)"
+  },
+  {
+   "ok": true,
+   "label": "390 morale 73: the line reads \"Morale 73: up to 1 fewer league game, rating -0.1 this season.\", the helper says \"Morale 73: up to 1 fewer league game, rating -0.1 this season.\""
+  },
+  {
+   "ok": true,
+   "label": "390 morale 73: no sideways scroll (0px)"
+  },
+  {
+   "ok": true,
+   "label": "390 morale 73: the line sits inside the viewport"
+  },
+  {
+   "ok": true,
+   "label": "390 morale 58: one morale line on the hub (found 1)"
+  },
+  {
+   "ok": true,
+   "label": "390 morale 58: the line reads \"Morale 58: up to 2 fewer league games, rating -0.2 this season.\", the helper says \"Morale 58: up to 2 fewer league games, rating -0.2 this season.\""
+  },
+  {
+   "ok": true,
+   "label": "390 morale 58: no sideways scroll (0px)"
+  },
+  {
+   "ok": true,
+   "label": "390 morale 58: the line sits inside the viewport"
+  },
+  {
+   "ok": true,
+   "label": "390 morale 40: one morale line on the hub (found 1)"
+  },
+  {
+   "ok": true,
+   "label": "390 morale 40: the line reads \"Morale 40: up to 2 fewer league games, rating -0.2 this season.\", the helper says \"Morale 40: up to 2 fewer league games, rating -0.2 this season.\""
+  },
+  {
+   "ok": true,
+   "label": "390 morale 40: no sideways scroll (0px)"
+  },
+  {
+   "ok": true,
+   "label": "390 morale 40: the line sits inside the viewport"
+  },
+  {
+   "ok": false,
+   "label": "390 ban: no morale line before a season that is not played (found 1, Morale bar 9)"
+  },
+  {
+   "ok": true,
+   "label": "390 prison: no morale line before a season that is not played (found 0, Morale bar 8)"
+  },
+  {
+   "ok": true,
+   "label": "1280 morale 100: one morale line on the hub (found 1)"
+  },
+  {
+   "ok": true,
+   "label": "1280 morale 100: the line reads \"Morale 100: up to 1 more league game, rating +0.1 this season.\", the helper says \"Morale 100: up to 1 more league game, rating +0.1 this season.\""
+  },
+  {
+   "ok": true,
+   "label": "1280 morale 100: no sideways scroll (0px)"
+  },
+  {
+   "ok": true,
+   "label": "1280 morale 100: the line sits inside the viewport"
+  },
+  {
+   "ok": true,
+   "label": "1280 morale 95: one morale line on the hub (found 1)"
+  },
+  {
+   "ok": true,
+   "label": "1280 morale 95: the line reads \"Morale 95: up to 1 more league game, rating +0.1 this season.\", the helper says \"Morale 95: up to 1 more league game, rating +0.1 this season.\""
+  },
+  {
+   "ok": true,
+   "label": "1280 morale 95: no sideways scroll (0px)"
+  },
+  {
+   "ok": true,
+   "label": "1280 morale 95: the line sits inside the viewport"
+  },
+  {
+   "ok": true,
+   "label": "1280 morale 89: one morale line on the hub (found 1)"
+  },
+  {
+   "ok": true,
+   "label": "1280 morale 89: the line reads \"Morale 89: up to 1 more league game, rating +0.1 this season.\", the helper says \"Morale 89: up to 1 more league game, rating +0.1 this season.\""
+  },
+  {
+   "ok": true,
+   "label": "1280 morale 89: no sideways scroll (0px)"
+  },
+  {
+   "ok": true,
+   "label": "1280 morale 89: the line sits inside the viewport"
+  },
+  {
+   "ok": true,
+   "label": "1280 morale 88: one morale line on the hub (found 1)"
+  },
+  {
+   "ok": true,
+   "label": "1280 morale 88: the line reads \"Morale 88: no swing this season.\", the helper says \"Morale 88: no swing this season.\""
+  },
+  {
+   "ok": true,
+   "label": "1280 morale 88: no sideways scroll (0px)"
+  },
+  {
+   "ok": true,
+   "label": "1280 morale 88: the line sits inside the viewport"
+  },
+  {
+   "ok": true,
+   "label": "1280 morale 81: one morale line on the hub (found 1)"
+  },
+  {
+   "ok": true,
+   "label": "1280 morale 81: the line reads \"Morale 81: no swing this season.\", the helper says \"Morale 81: no swing this season.\""
+  },
+  {
+   "ok": true,
+   "label": "1280 morale 81: no sideways scroll (0px)"
+  },
+  {
+   "ok": true,
+   "label": "1280 morale 81: the line sits inside the viewport"
+  },
+  {
+   "ok": true,
+   "label": "1280 morale 74: one morale line on the hub (found 1)"
+  },
+  {
+   "ok": true,
+   "label": "1280 morale 74: the line reads \"Morale 74: no swing this season.\", the helper says \"Morale 74: no swing this season.\""
+  },
+  {
+   "ok": true,
+   "label": "1280 morale 74: no sideways scroll (0px)"
+  },
+  {
+   "ok": true,
+   "label": "1280 morale 74: the line sits inside the viewport"
+  },
+  {
+   "ok": true,
+   "label": "1280 morale 73: one morale line on the hub (found 1)"
+  },
+  {
+   "ok": true,
+   "label": "1280 morale 73: the line reads \"Morale 73: up to 1 fewer league game, rating -0.1 this season.\", the helper says \"Morale 73: up to 1 fewer league game, rating -0.1 this season.\""
+  },
+  {
+   "ok": true,
+   "label": "1280 morale 73: no sideways scroll (0px)"
+  },
+  {
+   "ok": true,
+   "label": "1280 morale 73: the line sits inside the viewport"
+  },
+  {
+   "ok": true,
+   "label": "1280 morale 58: one morale line on the hub (found 1)"
+  },
+  {
+   "ok": true,
+   "label": "1280 morale 58: the line reads \"Morale 58: up to 2 fewer league games, rating -0.2 this season.\", the helper says \"Morale 58: up to 2 fewer league games, rating -0.2 this season.\""
+  },
+  {
+   "ok": true,
+   "label": "1280 morale 58: no sideways scroll (0px)"
+  },
+  {
+   "ok": true,
+   "label": "1280 morale 58: the line sits inside the viewport"
+  },
+  {
+   "ok": true,
+   "label": "1280 morale 40: one morale line on the hub (found 1)"
+  },
+  {
+   "ok": true,
+   "label": "1280 morale 40: the line reads \"Morale 40: up to 2 fewer league games, rating -0.2 this season.\", the helper says \"Morale 40: up to 2 fewer league games, rating -0.2 this season.\""
+  },
+  {
+   "ok": true,
+   "label": "1280 morale 40: no sideways scroll (0px)"
+  },
+  {
+   "ok": true,
+   "label": "1280 morale 40: the line sits inside the viewport"
+  },
+  {
+   "ok": false,
+   "label": "1280 ban: no morale line before a season that is not played (found 1, Morale bar 9)"
+  },
+  {
+   "ok": true,
+   "label": "1280 prison: no morale line before a season that is not played (found 0, Morale bar 8)"
+  },
+  {
+   "ok": true,
+   "label": "no page errors ()"
+  }
+ ],
+ "notes": []
+}
