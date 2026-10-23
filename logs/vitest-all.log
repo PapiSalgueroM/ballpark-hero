@@ -1,0 +1,10 @@
+[22m[39mCGFAILCLOSED| board cg611-004: yes Levon Kirkland, no Tom Brady
+[22m[39mCGFAILCLOSED| fail closed: 5 of 5 failure worlds left the pick unverified and judged it after the network healed
+[22m[39mCGFAILCLOSED| decoder: 44 of 44 damaged pairs refused
+[41m[1m FAIL [22m[49m src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22mnfl board: the default path[2m > [22mseed 1|desk on: every checkpoint of two seasons is the base's
+[41m[1m FAIL [22m[49m src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22mnfl board: the default path[2m > [22mseed 2|desk on: every checkpoint of two seasons is the base's
+[41m[1m FAIL [22m[49m src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22mnfl board: the default path[2m > [22mseed 3|desk on: every checkpoint of two seasons is the base's
+[41m[1m FAIL [22m[49m src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22mnfl board: the default path[2m > [22mseed 1|desk off: every checkpoint of two seasons is the base's
+[41m[1m FAIL [22m[49m src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22mnfl board: the default path[2m > [22mseed 3|desk off: every checkpoint of two seasons is the base's
+[41m[1m FAIL [22m[49m src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22mnfl board: the default path[2m > [22mseed 2|desk off: every checkpoint of two seasons is the base's
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m642 passed[39m[22m[2m | [22m[33m2 skipped[39m[90m (645)[39m
