@@ -1,0 +1,14 @@
+decision exit=0 19s | simCareerDecisionOutcome normal: intended assertions and independent ordinary/rivalry baseline passed.
+vitest-a exit=0 31s |    Duration  30.24s (transform 5.76s, setup 1.91s, collect 18.97s, tests 43.57s, environment 12.03s, prepare 3.11s)
+decision-direction exit=0 12s | simCareerDecisionOutcome direction: intended assertions and independent ordinary/rivalry baseline passed.
+press exit=0 16s | Press/Market:6 outcomes,27 full original state/RNG pairs,6 effective copied source controls,18 native fixture branches.
+ann exit=0 7s | Career yearly support: fictional offline engine fixtures only, no native UI, full career completion or historical-data validation claim.
+vitest-b exit=0 58s |    Duration  56.59s (transform 13.19s, setup 2.38s, collect 33.08s, tests 101.17s, environment 14.02s, prepare 3.64s)
+defects exit=0 26s | simUsCareerDefects: 157 tests passed across the stat lines, the era cards and the shop cap.
+dirty exit=0 88s | simUsDirtyMoney: all sections green
+hall-nfl exit=0 294s | simCareerHall nfl: all 34 checks green
+hall-nba exit=0 388s | simCareerHall nba: all 34 checks green
+summer89 exit=0 8s | simUsCareerSummer: green. Sections 8, 9 held.
+hall-mlb exit=0 484s | simCareerHall mlb: all 34 checks green
+summer-rest exit=0 283s | simUsCareerSummer: green. Sections 1, 2, 3, 3b, 4, 5, 7, 10, 11, 12 held over 400 careers a sport.
+hall-nhl exit=0 553s | simCareerHall nhl: all 35 checks green
