@@ -1,0 +1,14 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-intl: node_modules/.bin/vitest run src/test/usCareerIntlBoard.test.tsx src/test/nbaCareerIntl.test.ts src/lib/careerIntl.test.ts src/test/nbaIntlResultLines.test.tsx src/test/careerSeasonReview.test.tsx src/test/usBoardFixture.test.tsx --testTimeout=300000 --hookTimeout=120000
+playNbaIntl: node scripts/playNbaIntl.mjs
+simCareerIntl: node scripts/simCareerIntl.mjs
+fences: node scripts/simNoRivalNames.mjs > /tmp/rn.log 2>&1; a=$?; tail -2 /tmp/rn.log; node scripts/simHarnessAnchors.mjs > /tmp/ha.log 2>&1; b=$?; tail -2 /tmp/ha.log; node scripts/simStorageWrites.mjs > /tmp/sw.log 2>&1; c=$?; tail -2 /tmp/sw.log; echo "rival=$a anchors=$b storage=$c"; [ $a -eq 0 ] && [ $b -eq 0 ] && [ $c -eq 0 ]
+mut-FMT: bash .rc/x/fix-mutrun.sh FMT walk
+mut-N1: bash .rc/x/fix-mutrun.sh N1
+mut-N2: bash .rc/x/fix-mutrun.sh N2
+mut-N2b: bash .rc/x/fix-mutrun.sh N2b
+mut-N4: bash .rc/x/fix-mutrun.sh N4
+mut-N5: bash .rc/x/fix-mutrun.sh N5
+mut-N9: bash .rc/x/fix-mutrun.sh N9
