@@ -1,0 +1,38 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/tmp/nb[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [31m❯[39m src/test/usBoardFixture.test.tsx [2m([22m[2m4 tests[22m[2m | [22m[31m1 failed[39m[2m | [22m[33m3 skipped[39m[2m)[22m[33m 2792[2mms[22m[39m
+   [2m[90m↓[39m[22m the four US career boards against the recorded fixture[2m > [22mnfl
+[31m   [31m×[31m the four US career boards against the recorded fixture[2m > [22mnba[39m[33m 2789[2mms[22m[39m
+[31m     → walker is lost: "One moment"[39m
+   [2m[90m↓[39m[22m the four US career boards against the recorded fixture[2m > [22mmlb
+   [2m[90m↓[39m[22m the four US career boards against the recorded fixture[2m > [22mnhl
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/usBoardFixture.test.tsx[2m > [22mthe four US career boards against the recorded fixture[2m > [22mnba
+[31m[1mError[22m: walker is lost: "One moment"[39m
+[36m [2m❯[22m Walker.next src/test/usBoardFixture.test.tsx:[2m452:34[22m[39m
+    [90m450| [39m      /* No Play button and nothing above matched: the crossroads card…
+    [90m451| [39m      const options = all.filter(b => b.className.includes('bg-backgro…
+    [90m452| [39m      if (!options.length) throw new Error(`walker is lost: "${squash(…
+    [90m   | [39m                                 [31m^[39m
+    [90m453| [39m      /* Now and then the page is reloaded on the card, which drops it…
+    [90m454| [39m         known weakness the brief says to keep, so it is on the record…
+[90m [2m❯[22m walkPath src/test/usBoardFixture.test.tsx:[2m547:19[22m[39m
+[90m [2m❯[22m buildSport src/test/usBoardFixture.test.tsx:[2m613:13[22m[39m
+[90m [2m❯[22m src/test/usBoardFixture.test.tsx:[2m707:17[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[33m3 skipped[39m[90m (4)[39m
+[2m   Start at [22m 00:00:42
+[2m   Duration [22m 10.30s[2m (transform 4.23s, setup 117ms, collect 5.92s, tests 2.79s, environment 504ms, prepare 251ms)[22m
+
+
+::error file=/tmp/nb/src/test/usBoardFixture.test.tsx,title=src/test/usBoardFixture.test.tsx > the four US career boards against the recorded fixture > nba,line=452,column=34::Error: walker is lost: "One moment"%0A ❯ Walker.next src/test/usBoardFixture.test.tsx:452:34%0A ❯ walkPath src/test/usBoardFixture.test.tsx:547:19%0A ❯ buildSport src/test/usBoardFixture.test.tsx:613:13%0A ❯ src/test/usBoardFixture.test.tsx:707:17%0A%0A

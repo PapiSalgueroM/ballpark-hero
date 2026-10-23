@@ -1,0 +1,9 @@
+1
+replay exit 1
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/usBoardFixture.test.tsx[2m > [22mthe four US career boards against the recorded fixture[2m > [22mnba
+[31m[1mError[22m: walker is lost: "One moment"[39m
+    [90m452| [39m      if (!options.length) throw new Error(`walker is lost: "${squash(…
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[33m3 skipped[39m[90m (4)[39m
+::error file=/tmp/nb/src/test/usBoardFixture.test.tsx,title=src/test/usBoardFixture.test.tsx > the four US career boards against the recorded fixture > nba,line=452,column=34::Error: walker is lost: "One moment"%0A ❯ Walker.next src/test/usBoardFixture.test.tsx:452:34%0A ❯ walkPath src/test/usBoardFixture.test.tsx:547:19%0A ❯ buildSport src/test/usBoardFixture.test.tsx:613:13%0A ❯ src/test/usBoardFixture.test.tsx:707:17%0A%0A
+head: cannot open '/home/runner/work/_temp/rc-out/files/nobridge-problems.txt' for reading: No such file or directory

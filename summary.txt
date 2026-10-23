@@ -1,0 +1,4 @@
+vitest-a exit=0 72s |    Duration  71.80s (transform 12.00s, setup 4.52s, collect 43.60s, tests 119.17s, environment 25.83s, prepare 6.31s)
+nobridge exit=1 13s | head: cannot open '/home/runner/work/_temp/rc-out/files/nobridge-problems.txt' for reading: No such file or directory
+simUsBoardParity exit=0 116s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen with the proved historical main775 coaching Panel.
+vitest-b exit=1 129s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerTruthDigest.test.ts,title=src/test/usCareerTruthDigest.test.ts > Round 1104%3A the US career t
