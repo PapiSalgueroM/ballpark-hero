@@ -1,0 +1,4 @@
+# Release BQ, Round 1538: the US career truth digest the join re-recorded (seam 74521bbf, finish-BQH.md). truthdigest
+# must exit 0; truthdigest-nof1538 must exit 1 with 'digest: 53 of 58 keys moved (147 of 464 careers' in its log.
+truthdigest: node_modules/.bin/vitest run src/test/usCareerTruthDigest.test.ts --testTimeout=1800000 --hookTimeout=120000
+truthdigest-nof1538: bash .rc/x/td1538.sh nof1538 HEAD none revert
