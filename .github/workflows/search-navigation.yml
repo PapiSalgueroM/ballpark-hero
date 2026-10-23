@@ -1,0 +1,120 @@
+name: Search navigation baseline
+
+on:
+  push:
+    branches: [codex/search-navigation]
+    paths-ignore: ['docs/**']
+
+permissions:
+  contents: read
+concurrency:
+  group: search-navigation-${{ github.sha }}
+  cancel-in-progress: false
+
+env:
+  BASE_SOURCE: 0ca8c1fc065f1ca282c9454683dca31911852638
+  SEARCH_TEST_SHA256: 963cd1d5bf6ed8ac77b74e55c005bd8918449ede79b0cd27936aca5571063abe
+  SEARCH_PRIMARY_CASE: 'Search URL navigation ownership clears a pending draft when the real Search games link opens the same URL'
+  SEARCH_PRIMARY_PATTERN: '^Search URL navigation ownership clears a pending draft when the real Search games link opens the same URL$'
+  SEARCH_PRIMARY_MARKER: SEARCH_SAME_URL_LINK_CLEARS_DRAFT
+  CI: '1'
+  SIM_NETWORK: offline
+  TZ: UTC
+
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 32
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Unchanged application and exact baseline inputs
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/search-navigation-baseline";test ! -e "$out";mkdir "$out"
+          echo "SEARCH_BASELINE_OUT=$out" >> "$GITHUB_ENV"
+          test "$GITHUB_REPOSITORY" = PapiSalgueroM/ballpark-hero
+          test "$GITHUB_REPOSITORY_ID" = 1195729679
+          test "$GITHUB_REF" = refs/heads/codex/search-navigation
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test -z "${NO_DOUBLE_SWAP:-}"
+          git fetch --no-tags --depth=1 origin "$BASE_SOURCE" > "$out/base-fetch.log" 2>&1
+          git merge-base --is-ancestor "$BASE_SOURCE" "$GITHUB_SHA" > "$out/base-ancestry.log" 2>&1
+          git diff --exit-code "$BASE_SOURCE" HEAD -- . ':!src/test/Search.navigation.test.tsx' ':!scripts/qa/playSearchNavigation.mjs' ':!.github/workflows/search-navigation.yml' ':!docs/**' > "$out/protected-application.log"
+          test "$(git hash-object src/pages/Search.tsx)" = 0c79c181d9637c2cadd374d61c00a782163b2f50
+          printf '%s  %s\n' "$SEARCH_TEST_SHA256" src/test/Search.navigation.test.tsx > "$out/test-input.sha256"
+          sha256sum --check "$out/test-input.sha256" > "$out/test-input-hold.log"
+          git ls-files -z | sort -z > "$out/source-members.before"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$out/source-before.sha256"
+          git rev-parse HEAD > "$out/head.txt"
+          git diff --exit-code HEAD > "$out/source-clean-before.log"
+          test -z "$(git status --porcelain --untracked-files=all)"
+      - name: Locked installation only
+        timeout-minutes: 10
+        run: |
+          set -euo pipefail
+          out="$SEARCH_BASELINE_OUT"
+          printf '%s npm-ci\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" | tee "$out/setup-progress.log"
+          npm ci > "$out/install.log" 2>&1
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dependencies.sha256"
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$out/dependency-members.before"
+          printf '%s setup-complete\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" | tee -a "$out/setup-progress.log"
+      - name: Actual app types then one intended baseline failure
+        id: red
+        timeout-minutes: 7
+        run: |
+          set -euo pipefail
+          out="$SEARCH_BASELINE_OUT"
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          : > "$out/types.transport";: > "$out/primary.transport";: > "$out/admission.transport"
+          SIM_OFFLINE_RECEIPT="$out/types.transport" timeout --signal=TERM --kill-after=15s 3m node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$out/types.log" 2>&1
+          status=0
+          SIM_OFFLINE_RECEIPT="$out/primary.transport" timeout --signal=TERM --kill-after=15s 3m node_modules/.bin/vitest run src/test/Search.navigation.test.tsx --testNamePattern "$SEARCH_PRIMARY_PATTERN" --maxWorkers=1 --no-file-parallelism --reporter=json --outputFile="$out/primary.json" > "$out/primary.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/primary.exit"
+          ACTUAL_TEST_EXIT="$status" SIM_OFFLINE_RECEIPT="$out/admission.transport" node <<'NODE'
+          const fs=require('node:fs'),assert=require('node:assert/strict'),out=process.env.SEARCH_BASELINE_OUT,r=JSON.parse(fs.readFileSync(out+'/primary.json','utf8'));
+          assert.equal(Number(process.env.ACTUAL_TEST_EXIT),1,'SEARCH_BASELINE_EXIT');
+          assert.equal(r.success,false);assert.equal(r.numTotalTests,9);assert.equal(r.numPassedTests,0);assert.equal(r.numFailedTests,1);assert.equal(r.numPendingTests,8);assert.equal(r.numTodoTests,0);assert.equal(r.testResults.length,1);
+          const suite=r.testResults[0],rows=suite.assertionResults;assert.equal(suite.status,'failed');assert(suite.name.replaceAll('\\','/').endsWith('/src/test/Search.navigation.test.tsx'));assert.equal(rows.length,9);assert.equal(new Set(rows.map(x=>x.fullName)).size,9);
+          const owned=rows.filter(x=>x.fullName===process.env.SEARCH_PRIMARY_CASE);assert.equal(owned.length,1);assert.equal(owned[0].status,'failed');assert.equal(owned[0].failureMessages.length,1);
+          const message=owned[0].failureMessages[0];assert.match(message,/\bAssertionError\b/);assert(message.includes(process.env.SEARCH_PRIMARY_MARKER),'SEARCH_BASELINE_OWNED_MARKER');assert.doesNotMatch(message,/Cannot find (?:module|package)|Failed to resolve import|SyntaxError|ReferenceError|TypeError|TestingLibraryElementError|Unable to find|Found multiple|Test timed out|Unhandled/i);
+          assert(rows.filter(x=>x!==owned[0]).every(x=>x.status==='pending'||x.status==='skipped'),'Only the primary case executes');
+          const observedErrors={};for(const key of ['numRuntimeErrorTestSuites','numUnhandledErrors'])if(key in r){assert.equal(r[key],0);observedErrors[key]=r[key];}if('unhandledErrors'in r){assert.deepEqual(r.unhandledErrors,[]);observedErrors.unhandledErrors=r.unhandledErrors;}
+          const log=fs.readFileSync(out+'/primary.log','utf8');assert.doesNotMatch(log,/Unhandled\s+(?:Errors?|Rejections?)|Uncaught\s+Exceptions?|Cannot find (?:module|package)|Failed to resolve import|SyntaxError:|ReferenceError:|TypeError:/i);
+          for(const name of ['types.transport','primary.transport','admission.transport']){assert(fs.existsSync(out+'/'+name));assert.equal(fs.statSync(out+'/'+name).size,0);}
+          fs.writeFileSync(out+'/baseline-admission.json',JSON.stringify({status:'EXPECTED_BASELINE_RED',complete:true,source:process.env.GITHUB_SHA,base:process.env.BASE_SOURCE,runId:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,phase:'baseline',testFile:'src/test/Search.navigation.test.tsx',primaryCase:owned[0].fullName,marker:process.env.SEARCH_PRIMARY_MARKER,testExit:1,casesDiscovered:9,ownedFailed:1,passed:0,unrun:8,observedErrors,productFixed:false,applicationQualified:false},null,2)+'\n',{flag:'wx'});
+          NODE
+      - name: Always hold source dependencies and transport, retain all evidence
+        if: always()
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/search-navigation-baseline";mkdir -p "$out";failed=0
+          for manifest in source-before dependencies;do
+            if test -f "$out/$manifest.sha256";then sha256sum --check "$out/$manifest.sha256" > "$out/final-$manifest-hold.log" 2>&1 || failed=1;else failed=1;fi
+          done
+          git ls-files -z | sort -z > "$out/source-members.after";cmp "$out/source-members.before" "$out/source-members.after" || failed=1
+          git diff --exit-code HEAD > "$out/final-source-diff.log" || failed=1
+          git status --porcelain --untracked-files=all > "$out/final-status.txt";test ! -s "$out/final-status.txt" || failed=1
+          if test -f "$out/dependency-members.before";then
+            find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$out/dependency-members.after";cmp "$out/dependency-members.before" "$out/dependency-members.after" || failed=1
+          else failed=1;fi
+          for receipt in types primary admission;do test -f "$out/$receipt.transport" && test ! -s "$out/$receipt.transport" || failed=1;done
+          printf 'source=%s\nphase=baseline\nexpectedRedStep=%s\nfinalHoldsExit=%s\n' "$GITHUB_SHA" '${{ steps.red.outcome }}' "$failed" > "$out/stages.txt"
+          (cd "$out";find . -type f ! -path ./evidence.sha256 -print0 | sort -z | xargs -0 sha256sum) > "$out/evidence.sha256"
+          exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: search-navigation-baseline-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/search-navigation-baseline/
+          if-no-files-found: error
+          retention-days: 14
