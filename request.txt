@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+# Release BQ triage: the Season Centre walk on a hub save made elsewhere (hubBQ.json: the one the head's run used; hubMain.json: main's).
+withBQhub: cp .rc/x/pscDiag.mjs scripts/playSeasonCentreMotion.mjs && HUB_SAVE_IN="$PWD/.rc/x/hubBQ.json" node scripts/playSeasonCentreMotion.mjs
+withMainhub: cp .rc/x/pscDiag.mjs scripts/playSeasonCentreMotion.mjs && HUB_SAVE_IN="$PWD/.rc/x/hubMain.json" node scripts/playSeasonCentreMotion.mjs
