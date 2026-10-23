@@ -1,0 +1,16 @@
+MUTATION poolcopy applied to src/lib/gmContractsHostNba.ts
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+desk last: simNbaGmDesk: 132 failure(s) in ["2"]
+  FAIL [2]: seed 3 season 10 bottom: Vontae Isley is at UTA on 1y at 107.3, the sheet said 4y at 80.8
+  FAIL [2]: seed 4 season 10 bottom: Omari Fairweather is at ORL on 1y at 90.9, the sheet said 4y at 80.8
+  FAIL [2]: seed 7 season 9 bottom: Tyrese Danforth is at SAS on 1y at 84.9, the sheet said 4y at 75.5
+  FAIL [2]: seed 2 season 8 bottom pair: Paul George is at PHX on 1y at 32.7, the sheet said 4y at 8.3
+  FAIL [2]: seed 3 season 10 bottom pair: Vontae Isley is at UTA on 1y at 107.3, the sheet said 4y at 80.8
+probe:
+hbprobe: 300 trials (40 with two arrivals at one club); quiet 100 (100 byte equal to the engine alone); hand back acted in 200 (240 arrivals)
+  FAIL terms: 240
+    seed 1 HOU (bottom): Ochai Agbaji 1y 4.7 age 24, sheet 2y 3.3 age 23
+    seed 2 MIN (bottom): Jordan Walsh 1y 4.7 age 24, sheet 3y 3.3 age 23
+    seed 4 BKN (bottom): Patrick Williams 1y 2.1 age 24, sheet 1y 3.3 age 23
+hbprobe: RED, 240 failures in terms
+MUT poolcopy: simNbaGmDesk exit 1 | hbprobe exit 1

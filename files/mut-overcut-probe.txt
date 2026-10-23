@@ -1,0 +1,10 @@
+hbprobe: 300 trials (40 with two arrivals at one club); quiet 100 (100 byte equal to the engine alone); hand back acted in 200 (240 arrivals)
+  FAIL count: 200
+    seed 1 HOU (bottom): club ends at 14, the engine ended it at 15
+    seed 2 MIN (bottom): club ends at 14, the engine ended it at 15
+    seed 4 BKN (bottom): club ends at 14, the engine ended it at 15
+  FAIL waived: 200
+    seed 1 HOU (bottom): 2 men waived for 1 arrivals
+    seed 2 MIN (bottom): 2 men waived for 1 arrivals
+    seed 4 BKN (bottom): 2 men waived for 1 arrivals
+hbprobe: RED, 400 failures in count, waived

@@ -1,0 +1,18 @@
+MUTATION overcut applied to src/lib/gmContractsHostNba.ts
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+desk last: simNbaGmDesk: 216 failure(s) in ["2"]
+  FAIL [2]: seed 2 season 8 bottom: PHX ends the summer with 14, under 15: it waived more of its own men than Rondell Halverson needed
+  FAIL [2]: seed 3 season 10 bottom: UTA ends the summer with 14, under 15: it waived more of its own men than Vontae Isley needed
+  FAIL [2]: seed 4 season 10 bottom: ORL ends the summer with 14, under 15: it waived more of its own men than Omari Fairweather needed
+  FAIL [2]: seed 6 season 9 bottom: OKC ends the summer with 14, under 15: it waived more of its own men than Jalen Whitmore needed
+  FAIL [2]: seed 7 season 9 bottom: SAS ends the summer with 14, under 15: it waived more of its own men than Tyrese Danforth needed
+probe:
+    seed 1 HOU (bottom): club ends at 14, the engine ended it at 15
+    seed 2 MIN (bottom): club ends at 14, the engine ended it at 15
+    seed 4 BKN (bottom): club ends at 14, the engine ended it at 15
+  FAIL waived: 200
+    seed 1 HOU (bottom): 2 men waived for 1 arrivals
+    seed 2 MIN (bottom): 2 men waived for 1 arrivals
+    seed 4 BKN (bottom): 2 men waived for 1 arrivals
+hbprobe: RED, 400 failures in count, waived
+MUT overcut: simNbaGmDesk exit 1 | hbprobe exit 1

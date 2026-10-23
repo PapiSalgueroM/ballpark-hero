@@ -1,0 +1,6 @@
+hbprobe: 300 trials (40 with two arrivals at one club); quiet 100 (100 byte equal to the engine alone); hand back acted in 200 (240 arrivals)
+  FAIL terms: 240
+    seed 1 HOU (bottom): Ochai Agbaji 1y 4.7 age 24, sheet 2y 3.3 age 23
+    seed 2 MIN (bottom): Jordan Walsh 1y 4.7 age 24, sheet 3y 3.3 age 23
+    seed 4 BKN (bottom): Patrick Williams 1y 2.1 age 24, sheet 1y 3.3 age 23
+hbprobe: RED, 240 failures in terms

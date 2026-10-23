@@ -1,0 +1,10 @@
+#!serial
+head: git rev-parse HEAD~1
+probe: node .rc/x/hbprobe.mjs 300
+desk: node scripts/simNbaGmDesk.mjs
+mut-overcut: node .rc/x/mut.mjs overcut && bash .rc/x/mutrun.sh overcut; s=$?; git checkout -- src scripts; exit $s
+mut-onlyself: node .rc/x/mut.mjs onlyself && bash .rc/x/mutrun.sh onlyself; s=$?; git checkout -- src scripts; exit $s
+mut-deadoff: node .rc/x/mut.mjs deadoff && bash .rc/x/mutrun.sh deadoff; s=$?; git checkout -- src scripts; exit $s
+mut-noroll: node .rc/x/mut.mjs noroll && bash .rc/x/mutrun.sh noroll; s=$?; git checkout -- src scripts; exit $s
+mut-poolcopy: node .rc/x/mut.mjs poolcopy && bash .rc/x/mutrun.sh poolcopy; s=$?; git checkout -- src scripts; exit $s
+clean: git status --short | head -5; git diff --quiet -- src scripts && echo "tree restored"

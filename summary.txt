@@ -1,0 +1,9 @@
+head exit=0 0s | 289b92479e0f9ccc8bddd25b436f9d2f6c481f13
+probe exit=0 4s | hbprobe: green, every invariant held
+desk exit=0 25s | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+mut-overcut exit=1 30s | MUT overcut: simNbaGmDesk exit 1 | hbprobe exit 1
+mut-onlyself exit=1 29s | MUT onlyself: simNbaGmDesk exit 1 | hbprobe exit 1
+mut-deadoff exit=1 30s | MUT deadoff: simNbaGmDesk exit 1 | hbprobe exit 1
+mut-noroll exit=1 29s | MUT noroll: simNbaGmDesk exit 1 | hbprobe exit 1
+mut-poolcopy exit=1 30s | MUT poolcopy: simNbaGmDesk exit 1 | hbprobe exit 1
+clean exit=0 0s | tree restored
