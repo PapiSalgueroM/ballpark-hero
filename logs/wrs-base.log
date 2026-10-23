@@ -1,0 +1,16 @@
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+[1m[33mwarn[39m[22m - The class `duration-[800ms]` is ambiguous and matches multiple utilities.
+[1m[33mwarn[39m[22m - If this is content and not a class, replace it with `duration-&lsqb;800ms&rsqb;` to silence this warning.
+[dukb] preload wrapper: a cancelled chunk error waits for the reload (vite 5.4.21)
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+1) no database write in src is built and then dropped on the floor
+   22 write calls in src, 0 never sent
+2) a finished round really does put a request on the wire
+  FAIL: the harness could not drive Guess the Nation to a finish: TimeoutError: locator.click: Timeout 8000ms exceeded.
+   played=false, POSTs to guess_nation_scores seen: 0
+  FAIL: no guess was ever submitted, so this section proved nothing about the write
+
+simWritesAreSent: 2 failures
