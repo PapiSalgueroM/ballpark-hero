@@ -42,7 +42,7 @@ import type { Formation, FormationSlot } from '@/lib/squadShape';
    position man here is graded by the same family table World XI uses.
    positionFit imports nothing but types, so there is no cycle. */
 import { ALL_POSITIONS, eligiblePositions, FIT_PENALTY, gradeFit, type FitGrade } from '@/lib/positionFit';
-import { readCoachedStyle, tickCoachedStyle, coachedStyleXi, coachedTrainingMultiplier, type CoachedStyle, type CoachedStyleCourse } from '@/lib/clubManagerTraits';
+import { readCoachedStyle, tickCoachedStyle, coachedStyleAttack, coachedTrainingMultiplier, type CoachedStyle, type CoachedStyleCourse } from '@/lib/clubManagerTraitRuntime';
 /* Round 1146: the own goal rule the Soccer Career Season Centre reads too.
    It imports only the keyed generator, so there is no cycle. */
 import { ownGoalRole, ownGoalTagged } from '@/lib/ownGoalRule';
@@ -16701,7 +16701,7 @@ function firstHalfLambdas(state: CareerState, fx: MyFixture, xi: XiSlot[], menta
   const duty = dutyBoost(xi, state);
   /* Round 1522: and the instructions; on balanced they add exactly zero. */
   const tac = tacticEdge(state, fx, xi, instr, 1);
-  const styleAttack = coachedRules ? coachedStyleXi(xi, instr).attack : 0;
+  const styleAttack = coachedRules ? coachedStyleAttack(xi, instr) : 0;
   const attack = ment.atk + homeAtk + duty.atk + (tac ? tac.atk : 0);
   const [lamMine, lamOpp] = halfLambdas(mine, oppS, styleAttack ? attack + styleAttack : attack, ment.def + oppAtk + duty.def + (tac ? tac.def : 0));
   /* Round 670: a match that can go to extra time draws at the deflator. */
@@ -16742,7 +16742,7 @@ function secondHalfLambdas(
   const duty = dutyBoost(xi, state);
   /* Round 1522: the instructions in force now, half two's costs included; on balanced they add exactly zero. */
   const tac = tacticEdge(state, fx, xi, liveInstructions(live), 2);
-  const styleAttack = live.coachedStyleRules === 1 ? coachedStyleXi(xi, liveInstructions(live)).attack : 0;
+  const styleAttack = live.coachedStyleRules === 1 ? coachedStyleAttack(xi, liveInstructions(live)) : 0;
   const attack = ment2.atk + homeAtk + opp2.def + duty.atk + (tac ? tac.atk : 0);
   const [lamMine, lamOpp] = halfLambdas(mine, oppS + fire, styleAttack ? attack + styleAttack : attack, ment2.def + oppAtk + opp2.atk + duty.def + (tac ? tac.def : 0));
   /* Round 670: the same deflator as the first half, and extra time's too. */

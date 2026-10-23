@@ -10,12 +10,12 @@ concurrency:
   cancel-in-progress: false
 env:
   BASE_SOURCE: 3e95583fd8131f3704591cd566677f8774a8e4c3
-  EXPECTED_PARENT: 45ebbdb681b9d887a42c10e8e05bef25c49d3224
+  EXPECTED_PARENT: 656a175e7a9b30621c270ffe54b2c7448ccedb0f
   CI: '1'
   SIM_NETWORK: offline
   TZ: UTC
   ENGINES: chromium
-  CM_COACHED_EXPECTED_PINS_JSON: '{"src/lib/clubManager.ts":"abae93ec4a9db43242098c5a233164288e0b733b9f09f657c672f7ba1bae21c5","src/lib/clubManagerTraits.ts":"8d75b2dac8fadfa2487c2e9d260f8e7bcc966827a8d04c0f7c5d3ec9253b9ea8","src/hooks/useClubManager.ts":"e5688986ce44d684a9e612ebc1ce0648793eeb15db53775fb9cf2587def44fb4","src/components/club-manager/CoachedStyleCard.tsx":"5c08f58715d3ec7378dd422c6765be74af0435e9548323c11eff029de36854f1","src/components/club-manager/TrainingScreen.tsx":"7796b1a6560be8ad0fbcd7c16bc16c46194f0be8d3b93cabfe2e2d3cfb972fbb","src/components/club-manager/SquadScreen.tsx":"fbb0cb94e6b2ab740e404e1e85a4f5388bed29927967d09259cafc230f84040c","src/components/club-manager/TacticsScreen.tsx":"3802cc0c2146c292a6a9d6fefac5334295360632bab66d9ec6b7b1e9fca896fd","src/pages/ClubManager.tsx":"02a2f30ec37cbc8a8ef41b3dc42799456623b68411afaf80f54925cb6f80b2bb","src/index.css":"ada9cc819db63d0e2eb013bd3c29eec16877e2a30166c390b81901142369fef3","scripts/qa/fixtures/cmCoachedStyles.entry.tsx":"679219b7b9b070bd20d9c12382f681e76bbc993f9014f3118feb6305e3979be7","scripts/qa/fixtures/cmCoachedStyles.html":"35490024a1a9928a5563d6d41b428e11e6d3bcdc7ff53f9ce30bdd292e9ea805","scripts/qa/fixtures/cmCoachedStyles.vite.mjs":"3b2b00987d188893717cbe30728317cd703bbb3a94080a81556888c0fb03fe6b","scripts/qa/playCmCoachedStyles.mjs":"5dfe1160d54a95e2f797f054a9fdca10b85a2ef6bde1bf028a5aabf07c6f67dd","scripts/qa/siteMenuNavigationSupport.mjs":"c70e3ecc412f16d3322047b13205716c644495f8c74b76eed83852c87f35d303","scripts/lib/hostLikeServer.mjs":"3958c9a3b4d9e49bb60a3b7dd72d81a997bd1caed56e82e4c3bae07e1a918ef0","scripts/lib/playwrightLoader.mjs":"94a07179be7ca6b9562d118b52c2d5d0dff0b6b2e29e49e4fea16fa2defb5a93"}'
+  CM_COACHED_EXPECTED_PINS_JSON: '{"src/lib/clubManager.ts":"29d7ec57f331816e241b1c05f66a7540403bff7e72a8a33d4bd6838c24664690","src/lib/clubManagerTraitRuntime.ts":"911e1963f9d42aca9952cf278c1910d81ab02c675831566f81527c5fccdeb84e","src/lib/clubManagerTraitEdits.ts":"ed3062bd840d94186e9a48016958aa24cd9fc02d1e73a08c6b908327d1625938","src/lib/clubManagerTraits.ts":"98ad358a0a7ea906a38101073fdfe7970e665b114e6a064ca864a7d37055ba47","src/hooks/useClubManager.ts":"75ecbf9905572fbb8ed00f5c7e6c2b49250bc309aee352ff386ba478fccce42d","src/components/club-manager/CoachedStyleCard.tsx":"5c08f58715d3ec7378dd422c6765be74af0435e9548323c11eff029de36854f1","src/components/club-manager/TrainingScreen.tsx":"7796b1a6560be8ad0fbcd7c16bc16c46194f0be8d3b93cabfe2e2d3cfb972fbb","src/components/club-manager/SquadScreen.tsx":"fbb0cb94e6b2ab740e404e1e85a4f5388bed29927967d09259cafc230f84040c","src/components/club-manager/TacticsScreen.tsx":"3802cc0c2146c292a6a9d6fefac5334295360632bab66d9ec6b7b1e9fca896fd","src/pages/ClubManager.tsx":"02a2f30ec37cbc8a8ef41b3dc42799456623b68411afaf80f54925cb6f80b2bb","src/index.css":"ada9cc819db63d0e2eb013bd3c29eec16877e2a30166c390b81901142369fef3","scripts/qa/fixtures/cmCoachedStyles.entry.tsx":"679219b7b9b070bd20d9c12382f681e76bbc993f9014f3118feb6305e3979be7","scripts/qa/fixtures/cmCoachedStyles.html":"35490024a1a9928a5563d6d41b428e11e6d3bcdc7ff53f9ce30bdd292e9ea805","scripts/qa/fixtures/cmCoachedStyles.vite.mjs":"3b2b00987d188893717cbe30728317cd703bbb3a94080a81556888c0fb03fe6b","scripts/qa/playCmCoachedStyles.mjs":"ed389cca7d89d28dd388b8d92a6987bc7419c7059061341e142bd1c0ed97ce42","scripts/qa/siteMenuNavigationSupport.mjs":"c70e3ecc412f16d3322047b13205716c644495f8c74b76eed83852c87f35d303","scripts/lib/hostLikeServer.mjs":"3958c9a3b4d9e49bb60a3b7dd72d81a997bd1caed56e82e4c3bae07e1a918ef0","scripts/lib/playwrightLoader.mjs":"94a07179be7ca6b9562d118b52c2d5d0dff0b6b2e29e49e4fea16fa2defb5a93"}'
 jobs:
   engine_pilot:
     runs-on: ubuntu-latest
@@ -44,12 +44,14 @@ jobs:
           git fetch --no-tags --depth=1 origin "$BASE_SOURCE" > "$out/base-fetch.log" 2>&1
           git merge-base --is-ancestor "$BASE_SOURCE" "$GITHUB_SHA"
           test "$(git rev-parse HEAD^)" = "$EXPECTED_PARENT"
-          git diff --exit-code "$BASE_SOURCE" HEAD -- . ':!docs/**' ':!.github/workflows/cm-coached-styles.yml' ':!src/lib/clubManager.ts' ':!src/lib/clubManagerTraits.ts' ':!src/test/clubManagerTraitGrowth.test.ts' ':!src/test/clubManagerTraits.test.ts' ':!src/test/clubManagerTraitCourseConflict.test.ts' ':!src/test/clubManagerTraitIntegration.test.ts' ':!src/components/club-manager/CoachedStyleCard.tsx' ':!src/components/club-manager/TrainingScreen.tsx' ':!src/components/club-manager/SquadScreen.tsx' ':!src/components/club-manager/TacticsScreen.tsx' ':!src/hooks/useClubManager.ts' ':!src/pages/ClubManager.tsx' ':!src/test/clubManagerCoachedStyleHook.test.tsx' ':!src/test/TacticsScreen.coachedStyle.test.tsx' ':!src/test/clubManagerTraitOldParity.test.ts' ':!scripts/qa/runClubManagerTraitOldParity.mjs' ':!scripts/qa/fixtures/cmCoachedStyles.entry.tsx' ':!scripts/qa/fixtures/cmCoachedStyles.html' ':!scripts/qa/fixtures/cmCoachedStyles.vite.mjs' ':!scripts/qa/playCmCoachedStyles.mjs' > "$out/protected-application.log"
-          test "$(git rev-parse HEAD:src/lib/clubManager.ts)" = 1047f11b210b0910ab9470579a63713f57e2134a
+          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!docs/**' ':!.github/workflows/cm-coached-styles.yml' ':!src/lib/clubManager.ts' ':!src/lib/clubManagerTraits.ts' ':!src/lib/clubManagerTraitRuntime.ts' ':!src/lib/clubManagerTraitEdits.ts' ':!src/hooks/useClubManager.ts' ':!scripts/qa/runClubManagerTraitOldParity.mjs' ':!scripts/qa/playCmCoachedStyles.mjs' > "$out/protected-application.log"
+          test "$(git rev-parse HEAD:src/lib/clubManager.ts)" = 2c48e94a7455860dd03efc8368a2029a3bf459cd
           test "$(git rev-parse HEAD:src/test/clubManagerTraitGrowth.test.ts)" = ca894eb2d6b12ad009907e25cbb2759a7a9b9816
           printf '%s  %s\n' \
-            abae93ec4a9db43242098c5a233164288e0b733b9f09f657c672f7ba1bae21c5 src/lib/clubManager.ts \
-            8d75b2dac8fadfa2487c2e9d260f8e7bcc966827a8d04c0f7c5d3ec9253b9ea8 src/lib/clubManagerTraits.ts \
+            29d7ec57f331816e241b1c05f66a7540403bff7e72a8a33d4bd6838c24664690 src/lib/clubManager.ts \
+            98ad358a0a7ea906a38101073fdfe7970e665b114e6a064ca864a7d37055ba47 src/lib/clubManagerTraits.ts \
+            911e1963f9d42aca9952cf278c1910d81ab02c675831566f81527c5fccdeb84e src/lib/clubManagerTraitRuntime.ts \
+            ed3062bd840d94186e9a48016958aa24cd9fc02d1e73a08c6b908327d1625938 src/lib/clubManagerTraitEdits.ts \
             a9f1de88051bb1a6c423f52a1633e8a9015cae111d7f1575de6c645f24a55989 src/test/clubManagerTraitGrowth.test.ts \
             66f1e50ee609f0eda255d92c0c1b857cc0297573b579a82c0ec6d3541dda397c src/test/clubManagerTraits.test.ts \
             a891a2b3d7a3f092b5431771435feca53ab8880575122e0be8e4d37459f64eaf src/test/clubManagerTraitCourseConflict.test.ts \
@@ -58,16 +60,16 @@ jobs:
             7796b1a6560be8ad0fbcd7c16bc16c46194f0be8d3b93cabfe2e2d3cfb972fbb src/components/club-manager/TrainingScreen.tsx \
             fbb0cb94e6b2ab740e404e1e85a4f5388bed29927967d09259cafc230f84040c src/components/club-manager/SquadScreen.tsx \
             3802cc0c2146c292a6a9d6fefac5334295360632bab66d9ec6b7b1e9fca896fd src/components/club-manager/TacticsScreen.tsx \
-            e5688986ce44d684a9e612ebc1ce0648793eeb15db53775fb9cf2587def44fb4 src/hooks/useClubManager.ts \
+            75ecbf9905572fbb8ed00f5c7e6c2b49250bc309aee352ff386ba478fccce42d src/hooks/useClubManager.ts \
             02a2f30ec37cbc8a8ef41b3dc42799456623b68411afaf80f54925cb6f80b2bb src/pages/ClubManager.tsx \
             24fc12a2ab1706a2d68c5c71028f5eb5d135f23c4c7f3e1f65f202c9c82f684f src/test/clubManagerCoachedStyleHook.test.tsx \
             ed8d6dae8518ccc39f63d3bb87d9980e7045275babdd88876449fd2cb771557e src/test/TacticsScreen.coachedStyle.test.tsx \
             384242306f55ceeaff77e9003f0b0c40829c82584e2378eb0b81a56376aa2d24 src/test/clubManagerTraitOldParity.test.ts \
-            e00eb2b66463edbeaede9926507af6e1f0ba4e282c723cc61c728828663700f0 scripts/qa/runClubManagerTraitOldParity.mjs \
+            ea91d69cd12e6bcc00b3bfb018765992fec9fece4c4452f7169fefdb257d4ef0 scripts/qa/runClubManagerTraitOldParity.mjs \
             679219b7b9b070bd20d9c12382f681e76bbc993f9014f3118feb6305e3979be7 scripts/qa/fixtures/cmCoachedStyles.entry.tsx \
             35490024a1a9928a5563d6d41b428e11e6d3bcdc7ff53f9ce30bdd292e9ea805 scripts/qa/fixtures/cmCoachedStyles.html \
             3b2b00987d188893717cbe30728317cd703bbb3a94080a81556888c0fb03fe6b scripts/qa/fixtures/cmCoachedStyles.vite.mjs \
-            5dfe1160d54a95e2f797f054a9fdca10b85a2ef6bde1bf028a5aabf07c6f67dd scripts/qa/playCmCoachedStyles.mjs > "$out/input-pins.sha256"
+            ed389cca7d89d28dd388b8d92a6987bc7419c7059061341e142bd1c0ed97ce42 scripts/qa/playCmCoachedStyles.mjs > "$out/input-pins.sha256"
           sha256sum --check "$out/input-pins.sha256" > "$out/input-pins.log"
           git rev-parse HEAD > "$out/head.txt";git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
           git rev-parse HEAD:src/lib/clubManager.ts > "$out/engine-blob.txt"
@@ -173,7 +175,7 @@ jobs:
             assert.equal(row.sourceSha256,r.originalSha256);assert.equal(row.wholeInverseSha256,r.originalSha256);assert.equal(row.changedSha256,changed);
             assert.equal(hash(fs.readFileSync(path.join(out,id+'.ts'))),changed);assert.equal(typeof row.actualMessage,'string');assert(row.actualMessage.includes(marker));
           }
-          assert.equal(holds.allEqual,true);assert.equal(holds.files.length,5);
+          assert.equal(holds.allEqual,true);assert.equal(holds.files.length,9);
           for(const row of holds.files)assert.equal(hash(fs.readFileSync(row.file)),row.sha256);
           fs.writeFileSync(path.join(process.env.CM_STYLE_OUT,'parity-stage-outcome.json'),JSON.stringify({source:process.env.GITHUB_SHA,runId:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,actualProcesses:4,passedProbeCasesPerProcess:3,effectiveOwnedComparatorControls:2,scope:'Three declared no-style/old-unmarked-live paths only',fullOldEngineEquivalence:false,applicationQualified:false},null,2)+'\n',{flag:'wx'});
           NODE
@@ -264,7 +266,7 @@ jobs:
         with:
           node-version: 24
           cache: npm
-      - name: Exact current source and sixteen styled browser inputs
+      - name: Exact current source and eighteen styled browser inputs
         run: |
           set -euo pipefail
           out="$RUNNER_TEMP/cm-coached-styles-browser-pilot";test ! -e "$out";mkdir "$out"
@@ -278,20 +280,20 @@ jobs:
           test "$(git rev-parse HEAD^)" = "$EXPECTED_PARENT"
           git fetch --no-tags --depth=1 origin "$EXPECTED_PARENT" > "$out/parent-fetch.log" 2>&1
           git merge-base --is-ancestor "$EXPECTED_PARENT" "$GITHUB_SHA" > "$out/parent-ancestry.log" 2>&1
-          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!docs/**' ':!.github/workflows/cm-coached-styles.yml' ':!scripts/qa/fixtures/cmCoachedStyles.entry.tsx' ':!scripts/qa/fixtures/cmCoachedStyles.html' ':!scripts/qa/fixtures/cmCoachedStyles.vite.mjs' ':!scripts/qa/playCmCoachedStyles.mjs' > "$out/protected-current-source.log"
+          git diff --exit-code "$EXPECTED_PARENT" HEAD -- . ':!docs/**' ':!.github/workflows/cm-coached-styles.yml' ':!src/lib/clubManager.ts' ':!src/lib/clubManagerTraits.ts' ':!src/lib/clubManagerTraitRuntime.ts' ':!src/lib/clubManagerTraitEdits.ts' ':!src/hooks/useClubManager.ts' ':!scripts/qa/runClubManagerTraitOldParity.mjs' ':!scripts/qa/playCmCoachedStyles.mjs' > "$out/protected-current-source.log"
           for file in package.json package-lock.json vitest.config.ts scripts/lib/offlineTransport.cjs scripts/lib/playwrightLoader.mjs scripts/lib/hostLikeServer.mjs scripts/qa/siteMenuNavigationSupport.mjs scripts/qa/freeKickLab1070.mjs scripts/sweepWeight.mjs scripts/playHomeFold.mjs;do
             git show "$EXPECTED_PARENT:$file" | cmp "$file" -
           done
           node <<'NODE'
           const fs=require('node:fs'),assert=require('node:assert/strict'),crypto=require('node:crypto'),cp=require('node:child_process');
-          const required=["src/lib/clubManager.ts","src/lib/clubManagerTraits.ts","src/hooks/useClubManager.ts","src/components/club-manager/CoachedStyleCard.tsx","src/components/club-manager/TrainingScreen.tsx","src/components/club-manager/SquadScreen.tsx","src/components/club-manager/TacticsScreen.tsx","src/pages/ClubManager.tsx","src/index.css","scripts/qa/fixtures/cmCoachedStyles.entry.tsx","scripts/qa/fixtures/cmCoachedStyles.html","scripts/qa/fixtures/cmCoachedStyles.vite.mjs","scripts/qa/playCmCoachedStyles.mjs","scripts/qa/siteMenuNavigationSupport.mjs","scripts/lib/hostLikeServer.mjs","scripts/lib/playwrightLoader.mjs"],pins=JSON.parse(process.env.CM_COACHED_EXPECTED_PINS_JSON),hash=b=>crypto.createHash('sha256').update(b).digest('hex'),out=process.env.CM_COACHED_PILOT_OUT;
-          assert.deepEqual(Object.keys(pins).sort(),[...required].sort());assert.equal(required.length,16);
+          const required=["src/lib/clubManager.ts","src/lib/clubManagerTraitRuntime.ts","src/lib/clubManagerTraitEdits.ts","src/lib/clubManagerTraits.ts","src/hooks/useClubManager.ts","src/components/club-manager/CoachedStyleCard.tsx","src/components/club-manager/TrainingScreen.tsx","src/components/club-manager/SquadScreen.tsx","src/components/club-manager/TacticsScreen.tsx","src/pages/ClubManager.tsx","src/index.css","scripts/qa/fixtures/cmCoachedStyles.entry.tsx","scripts/qa/fixtures/cmCoachedStyles.html","scripts/qa/fixtures/cmCoachedStyles.vite.mjs","scripts/qa/playCmCoachedStyles.mjs","scripts/qa/siteMenuNavigationSupport.mjs","scripts/lib/hostLikeServer.mjs","scripts/lib/playwrightLoader.mjs"],pins=JSON.parse(process.env.CM_COACHED_EXPECTED_PINS_JSON),hash=b=>crypto.createHash('sha256').update(b).digest('hex'),out=process.env.CM_COACHED_PILOT_OUT;
+          assert.deepEqual(Object.keys(pins).sort(),[...required].sort());assert.equal(required.length,18);
           for(const file of required){assert.match(pins[file],/^[a-f0-9]{64}$/);assert.equal(hash(fs.readFileSync(file)),pins[file],'CM_BROWSER_INPUT '+file);}
           const names=cp.execFileSync('git',['ls-files','-z'],{encoding:'utf8'}).split('\0');assert.equal(names.pop(),'');assert(names.length>0);assert.equal(new Set(names).size,names.length);
           fs.writeFileSync(out+'/browser-binding.json',JSON.stringify({sourceHead:process.env.GITHUB_SHA,trackedCount:names.length,playwrightVersion:'1.64.0',pins},null,2)+'\n',{flag:'wx'});
           const workflow='.github/workflows/cm-coached-styles.yml',blob=cp.execFileSync('git',['rev-parse','HEAD:'+workflow],{encoding:'utf8'}).trim();
           assert.equal(cp.execFileSync('git',['hash-object',workflow],{encoding:'utf8'}).trim(),blob);
-          fs.writeFileSync(out+'/source-binding.json',JSON.stringify({phase:'styled-component-browser',applicationQualified:false,source:process.env.GITHUB_SHA,parent:process.env.EXPECTED_PARENT,run:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,tree:cp.execFileSync('git',['rev-parse','HEAD^{tree}'],{encoding:'utf8'}).trim(),workflow:{file:workflow,gitBlobSha1:blob,sha256:hash(fs.readFileSync(workflow))},requiredInputs:16,bindingSha256:hash(fs.readFileSync(out+'/browser-binding.json'))},null,2)+'\n',{flag:'wx'});
+          fs.writeFileSync(out+'/source-binding.json',JSON.stringify({phase:'styled-component-browser',applicationQualified:false,source:process.env.GITHUB_SHA,parent:process.env.EXPECTED_PARENT,run:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,tree:cp.execFileSync('git',['rev-parse','HEAD^{tree}'],{encoding:'utf8'}).trim(),workflow:{file:workflow,gitBlobSha1:blob,sha256:hash(fs.readFileSync(workflow))},requiredInputs:18,bindingSha256:hash(fs.readFileSync(out+'/browser-binding.json'))},null,2)+'\n',{flag:'wx'});
           NODE
           git rev-parse HEAD > "$out/head.txt"
           git ls-files -z | sort -z > "$out/source-members.before"
@@ -399,8 +401,8 @@ jobs:
           const expected=[['328-light-full',328,515,'light',false],['328-dark-reduced',328,515,'dark',true],['390-light-full',390,844,'light',false],['390-dark-reduced',390,844,'dark',true],['1280-light-full',1280,800,'light',false],['1280-dark-reduced',1280,800,'dark',true]];
           assert.equal(r.contexts.length,6);let snapshots=0;
           for(let i=0;i<expected.length;i++){const c=r.contexts[i];assert.deepEqual([c.id,c.width,c.height,c.theme,c.reduced],expected[i]);assert.equal(c.complete,true);assert.equal(c.faults.length,2);assert.equal(c.readouts.length,4);assert.equal(c.snapshots.length,11);assert.deepEqual(c.errors,[]);assert.deepEqual(c.blocked,[]);snapshots+=c.snapshots.length;}
-          assert.equal(snapshots,66);assert.equal(r.controls.length,8);assert(r.controls.every(c=>c.changed===true&&c.passed===true&&c.scope==='copied actual browser data only'));assert.equal(r.tools.playwright,binding.playwrightVersion);
-          fs.writeFileSync(process.env.CM_COACHED_PILOT_OUT+'/browser-summary.json',JSON.stringify({phase:'styled-component-browser',source:process.env.GITHUB_SHA,complete:true,contexts:6,snapshots:66,copiedRecordControls:8,applicationQualified:false,scope:'Declared real-hook component fixture, not complete route geometry or balance.'},null,2)+'\n',{flag:'wx'});
+          assert.equal(snapshots,66);assert.equal(r.controls.length,9);assert(r.controls.every(c=>c.changed===true&&c.passed===true&&c.scope==='copied actual browser data only'));assert.equal(r.tools.playwright,binding.playwrightVersion);
+          fs.writeFileSync(process.env.CM_COACHED_PILOT_OUT+'/browser-summary.json',JSON.stringify({phase:'styled-component-browser',source:process.env.GITHUB_SHA,complete:true,contexts:6,snapshots:66,copiedRecordControls:9,applicationQualified:false,scope:'Declared real-hook component fixture, not complete route geometry or balance.'},null,2)+'\n',{flag:'wx'});
           NODE
           test ! -s "$out/cm-browser.transport"
       - name: Unchanged HomeFold oracle and all eighteen built-site readers

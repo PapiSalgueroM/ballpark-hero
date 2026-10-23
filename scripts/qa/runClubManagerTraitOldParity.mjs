@@ -22,7 +22,11 @@ for (const key of ['US_BOARD_CONTROL_ALIAS', 'US_BOARD_CONTROL_FILE', 'NO_DOUBLE
 fs.mkdirSync(out);
 const testFile = 'src/test/clubManagerTraitOldParity.test.ts';
 const inputs = [
-  ['src/lib/clubManager.ts', 1242762, 'abae93ec4a9db43242098c5a233164288e0b733b9f09f657c672f7ba1bae21c5'],
+  ['src/lib/clubManager.ts', 1242766, '29d7ec57f331816e241b1c05f66a7540403bff7e72a8a33d4bd6838c24664690'],
+  ['src/lib/clubManagerTraitRuntime.ts', 6674, '911e1963f9d42aca9952cf278c1910d81ab02c675831566f81527c5fccdeb84e'],
+  ['src/lib/clubManagerTraitEdits.ts', 2279, 'ed3062bd840d94186e9a48016958aa24cd9fc02d1e73a08c6b908327d1625938'],
+  ['src/lib/clubManagerTraits.ts', 3857, '98ad358a0a7ea906a38101073fdfe7970e665b114e6a064ca864a7d37055ba47'],
+  ['src/hooks/useClubManager.ts', 71584, '75ecbf9905572fbb8ed00f5c7e6c2b49250bc309aee352ff386ba478fccce42d'],
   [testFile, 6098, '384242306f55ceeaff77e9003f0b0c40829c82584e2378eb0b81a56376aa2d24'],
 ];
 for (const [file, bytes, sha] of inputs) {

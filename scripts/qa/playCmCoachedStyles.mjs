@@ -22,7 +22,8 @@ assert.match(binding.sourceHead || '', /^[a-f0-9]{40}$/);
 assert.equal(binding.sourceHead, process.env.GITHUB_SHA);
 assert.equal(execFileSync('git', ['rev-parse', 'HEAD'], { cwd: ROOT }).toString().trim(), binding.sourceHead);
 assert(Number.isSafeInteger(binding.trackedCount) && binding.trackedCount > 0);
-const required = ['src/lib/clubManager.ts', 'src/lib/clubManagerTraits.ts', 'src/hooks/useClubManager.ts',
+const required = ['src/lib/clubManager.ts', 'src/lib/clubManagerTraitRuntime.ts', 'src/lib/clubManagerTraitEdits.ts',
+  'src/lib/clubManagerTraits.ts', 'src/hooks/useClubManager.ts',
   'src/components/club-manager/CoachedStyleCard.tsx', 'src/components/club-manager/TrainingScreen.tsx',
   'src/components/club-manager/SquadScreen.tsx', 'src/components/club-manager/TacticsScreen.tsx',
   'src/pages/ClubManager.tsx', 'src/index.css', 'scripts/qa/fixtures/cmCoachedStyles.entry.tsx',
@@ -159,8 +160,34 @@ function checkReadout(row, healthy) {
   if (!healthy) assert(used.text.includes('This player is not in the current available XI for this slot.'), 'CM_UI_SELECTED_INACTIVE_EXPLANATION');
   else assert(s.expected.activeCount > 0, 'CM_UI_POSITIVE_ACTIVE_WITNESS');
 }
+function checkFlagFailures(row) {
+  const errorTexts = ['net::ERR_BLOCKED_BY_CLIENT', 'net::ERR_BLOCKED_BY_CLIENT.Inspector'];
+  const consoleTexts = errorTexts.map(text => 'Failed to load resource: ' + text);
+  const exactFlag = item => {
+    const url = new URL(item.url);
+    assert.equal(url.origin, 'https://flagcdn.com', 'CM_UI_FAILED_REQUESTS_ARE_EXACT_FLAGS');
+    assert(!url.username && !url.password && !url.search && !url.hash, 'CM_UI_FAILED_REQUESTS_ARE_EXACT_FLAGS');
+    assert(/^\/w(?:20|40|80|160|320)\/[a-z]{2}(?:-[a-z]+)?\.png$/.test(url.pathname), 'CM_UI_FAILED_REQUESTS_ARE_EXACT_FLAGS');
+    assert.equal(item.method, 'GET', 'CM_UI_FAILED_REQUESTS_ARE_EXACT_FLAGS');
+    assert.equal(item.type, 'image', 'CM_UI_FAILED_REQUESTS_ARE_EXACT_FLAGS');
+  };
+  row.flagFallbacks.forEach(exactFlag);
+  row.requestFailures.forEach(item => {
+    exactFlag(item);
+    assert(errorTexts.includes(item.errorText), 'CM_UI_FAILED_REQUESTS_ARE_EXACT_FLAGS');
+  });
+  const requestKey = item => JSON.stringify([item.url, item.method, item.type]);
+  assert.deepEqual(row.requestFailures.map(requestKey).sort(), row.flagFallbacks.map(requestKey).sort(), 'CM_UI_FAILED_REQUESTS_ARE_EXACT_FLAGS');
+  const errors = row.consoleMessages.filter(item => item.type === 'error');
+  for (const item of errors) {
+    assert(consoleTexts.includes(item.text), 'CM_UI_ONLY_EXPECTED_FLAG_CONSOLE');
+    assert.equal(typeof item.location.url, 'string', 'CM_UI_ONLY_EXPECTED_FLAG_CONSOLE');
+  }
+  assert.deepEqual(errors.map(item => item.location.url).sort(), row.flagFallbacks.map(item => item.url).sort(), 'CM_UI_ONLY_EXPECTED_FLAG_CONSOLE');
+}
 let browser, server, timer;
 const serverOut = fs.openSync(path.join(BROWSER, 'server.stdout'), 'wx'), serverErr = fs.openSync(path.join(BROWSER, 'server.stderr'), 'wx');
+fs.writeFileSync(path.join(BROWSER, 'server.transport'), '', { flag: 'wx' });
 async function snapshot(page, row, stage) {
   await idle(page);
   const sample = await page.evaluate(collect), fixture = await read(page);
@@ -201,7 +228,7 @@ try {
   browser = await pw.chromium.launch({ executablePath: executable, headless: true, args: ['--no-sandbox'] });
   report.chromium = browser.version();
   for (const spec of specs) {
-    const row = { ...spec, complete: false, requests: [], flagFallbacks: [], blocked: [], errors: [], snapshots: [], beforeInputs: [], faults: [], readouts: [] };
+    const row = { ...spec, complete: false, requests: [], flagFallbacks: [], requestFailures: [], consoleMessages: [], blocked: [], errors: [], snapshots: [], beforeInputs: [], faults: [], readouts: [] };
     report.contexts.push(row);
     const context = await browser.newContext({ viewport: { width: spec.width, height: spec.height }, deviceScaleFactor: 1,
       hasTouch: spec.width < 600, isMobile: spec.width < 600, colorScheme: spec.theme, reducedMotion: spec.reduced ? 'reduce' : 'no-preference', serviceWorkers: 'block', locale: 'en-US' });
@@ -242,9 +269,13 @@ try {
     try {
       page = await context.newPage();
       page.on('pageerror', error => row.errors.push('pageerror: ' + error.message));
+      page.on('requestfailed', request => {
+        row.requestFailures.push({ url: request.url(), method: request.method(), type: request.resourceType(), errorText: request.failure()?.errorText ?? null });
+      });
       page.on('console', message => {
-        const text = message.text();
-        if (message.type() === 'error' && text !== 'Failed to load resource: net::ERR_BLOCKED_BY_CLIENT') row.errors.push('console: ' + text);
+        const text = message.text(), type = message.type(), location = message.location();
+        row.consoleMessages.push({ type, text, location });
+        if (type === 'error' && !['Failed to load resource: net::ERR_BLOCKED_BY_CLIENT', 'Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector'].includes(text)) row.errors.push('console: ' + text);
       });
       await page.goto(BASE + '/cmCoachedStyles.html?case=actions&theme=' + spec.theme, { waitUntil: 'networkidle' });
       await page.waitForFunction(() => window.__CM_COACHED_FIXTURE__?.read().phase === 'clubSelect');
@@ -318,6 +349,7 @@ try {
     } catch (error) { row.errors.push(String(error.stack || error)); }
     finally {
       await context.close(); await Promise.allSettled([...pending]);
+      try { checkFlagFailures(row); } catch (error) { row.errors.push(String(error.stack || error)); }
       save(spec.id + '.json', row);
     }
     assert.deepEqual(row.blocked, [], 'CM_UI_NO_UNKNOWN_NETWORK_AFTER_CLOSE');
@@ -333,6 +365,7 @@ try {
     ['injured-labelled-active', first.readouts[1], c => { c.sample.selected[0].used = '1'; }, c => checkReadout(c, false), 'CM_UI_SELECTED_EFFECTIVE_SLOT'],
     ['missing-inactive-reason', first.readouts[2], c => { c.sample.selected[0].text = 'Active'; }, c => checkReadout(c, false), 'CM_UI_SELECTED_INACTIVE_EXPLANATION'],
     ['short-new-target', first.snapshots[0].sample, c => { c.targets[0].rect.height = 43; }, layout, 'CM_UI_NEW_TARGET_44'],
+    ['unexpected-failed-request', first, c => { c.requestFailures.push({ url: BASE + '/unexpected-failed.js', method: 'GET', type: 'script', errorText: 'net::ERR_FAILED' }); }, checkFlagFailures, 'CM_UI_FAILED_REQUESTS_ARE_EXACT_FLAGS'],
   ];
   for (const [id, actual, mutate, check, marker] of recipes) {
     const copy = JSON.parse(JSON.stringify(actual)), original = JSON.stringify(copy); mutate(copy);
@@ -341,15 +374,28 @@ try {
     report.controls.push({ id, changed: true, marker, passed: true, scope: 'copied actual browser data only' });
   }
   assert.equal(report.contexts.length, 6); assert(report.contexts.every(row => row.complete));
+  assert.equal(report.controls.length, 9, 'CM_UI_NINE_EFFECTIVE_RECORD_CONTROLS');
   report.status = 'CM_COACHED_BROWSER_COMPLETE'; report.complete = true;
 } catch (error) { report.errors.push(String(error.stack || error)); report.status = 'failed'; }
 finally {
   clearTimeout(timer);
   try { if (browser) await browser.close(); } catch (error) { report.errors.push(String(error)); }
   if (server) {
-    server.kill('SIGTERM');
-    await Promise.race([new Promise(resolve => server.exitCode !== null ? resolve() : server.once('exit', resolve)), new Promise(resolve => setTimeout(resolve, 5000))]);
-    if (server.exitCode === null) { server.kill('SIGKILL'); report.errors.push('CM_SERVER_CLEANUP_TIMEOUT'); }
+    const running = () => server.exitCode === null && server.signalCode === null;
+    let cleanupTimer;
+    const exited = new Promise(resolve => {
+      if (!running()) resolve({ code: server.exitCode, signal: server.signalCode });
+      else server.once('exit', (code, signal) => resolve({ code, signal }));
+    });
+    const requested = running() ? server.kill('SIGTERM') : false;
+    const outcome = await Promise.race([
+      exited.then(actual => ({ deadlineReached: false, ...actual })),
+      new Promise(resolve => { cleanupTimer = setTimeout(() => resolve({ deadlineReached: true }), 5000); }),
+    ]);
+    clearTimeout(cleanupTimer);
+    const timedOut = outcome.deadlineReached && running();
+    if (timedOut) { server.kill('SIGKILL'); report.errors.push('CM_SERVER_CLEANUP_TIMEOUT'); }
+    report.serverShutdown = { requested, ...outcome, exitCode: server.exitCode, signalCode: server.signalCode, timedOut };
   }
   fs.closeSync(serverOut); fs.closeSync(serverErr);
   try {
@@ -368,5 +414,5 @@ finally {
   save('report.json', report);
   fs.writeFileSync(path.join(BROWSER, 'evidence.sha256'), inventory(BROWSER).map(row => row.sha256 + '  ' + row.file).join('\n') + '\n', { flag: 'wx' });
 }
-console.log('Coached-style styled fixture: ' + report.status + ', ' + report.contexts.filter(row => row.complete).length + '/6 contexts, ' + report.controls.length + '/8 copied-record controls.');
+console.log('Coached-style styled fixture: ' + report.status + ', ' + report.contexts.filter(row => row.complete).length + '/6 contexts, ' + report.controls.length + '/9 copied-record controls.');
 if (!report.complete) process.exitCode = 1;
