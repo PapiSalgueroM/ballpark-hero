@@ -1,0 +1,22 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/nhlPlanningBench.test.tsx[2m > [22mNHL planning bench[2m > [22mmoves canonical notes without duplication and rejects malformed or stale documents[32m 7[2mms[22m[39m
+ [32m✓[39m src/test/nhlPlanningBench.test.tsx[2m > [22mNHL planning bench[2m > [22mplans four drafts freely and never submits the fifth selection[33m 527[2mms[22m[39m
+ [32m✓[39m src/test/nhlPlanningBench.test.tsx[2m > [22mNHL planning bench[2m > [22mrevises a wrong draft then finds four groups for exactly the original 750 points[33m 1049[2mms[22m[39m
+ [32m✓[39m src/test/nhlPlanningBench.test.tsx[2m > [22mNHL planning bench[2m > [22mcharges one life for same-frame submissions and rejects solved-name reuse[32m 10[2mms[22m[39m
+ [32m✓[39m src/test/nhlPlanningBench.test.tsx[2m > [22mNHL planning bench[2m > [22mwaits for the real loaded pool and restores mode notes with daily bytes held[33m 316[2mms[22m[39m
+ [32m✓[39m src/test/nhlPlanningBench.test.tsx[2m > [22mNHL planning bench[2m > [22mreopens the saved Unlimited puzzle despite a new random draw and resets to the new scope[32m 20[2mms[22m[39m
+ [32m✓[39m src/test/nhlPlanningBench.test.tsx[2m > [22mNHL planning bench[2m > [22mrejects a same-id changed roster and foreign saved names without overwriting during load[32m 130[2mms[22m[39m
+ [32m✓[39m src/test/nhlPlanningBench.test.tsx[2m > [22mNHL planning bench[2m > [22mshows worked help and blocks background submission while its rules are open[32m 287[2mms[22m[39m
+ [32m✓[39m src/test/nhlPlanningBench.test.tsx[2m > [22mNHL planning bench[2m > [22mkeeps live notes usable and warns when browser persistence fails[32m 87[2mms[22m[39m
+ [32m✓[39m src/test/nhlPlanningBench.test.tsx[2m > [22mNHL planning bench[2m > [22mrestores the original completed Daily payload quietly and keeps its exact bytes[32m 41[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m10 passed[39m[22m[90m (10)[39m
+[2m   Start at [22m 15:40:40
+[2m   Duration [22m 3.88s[2m (transform 306ms, setup 64ms, collect 603ms, tests 2.48s, environment 336ms, prepare 122ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/nhl-planning-artifacts/mounted/normal-report.json
+
+simNhlPlanningBench normal: exact expected assertions and independent Daily restore passed.
