@@ -258,9 +258,9 @@
       "howToPlay": [
         "Pick one of 40 programs. Prestige sets your pipeline and NIL power.",
         "Play 10 rounds of two games each, one league matchup and one cross-country test.",
-        "Round 10's league night is rivalry night, and every program plays its rival, even one from another league. Your rival is a school from your own state when one is free to pair with you, otherwise a pairing the game made, and the game tells you which. Duke and North Carolina, Kentucky and Louisville, and Purdue and Indiana are in-state games; UConn has no state on file here, so its rival is a pairing the game made.",
+        "Round 10's league night is rivalry night, and every program plays its rival, even one from another league. Your rival is your real rivalry series when both schools are on the board (Duke and North Carolina, Kentucky and Louisville, Indiana and Purdue), otherwise a school from your own state, otherwise a pairing the game made, and the game tells you which. UConn has no series or state on file here, so its rival is a pairing the game made.",
         "The rivalry winner carries 0.5 to 1.5 points of extra strength into the conference tournament and March, the loser drops the same, and a margin of 25 or more swings the full 1.5.",
-        "Finish top four in your league for the conference tournament; win it and you dance automatically.",
+        "Finish top four in your league table, which goes by league record, for the conference tournament; win it and you dance automatically.",
         "Survive March: 32 teams, single elimination, five rounds from the Round of 32 to the title game.",
         "Recruit each spring from a 14-player high school board and a 7-player portal, then run it back.",
         "The same offseason screen holds your two assistant coaches, one for the offense and one for the defense. Each moves his end of the floor by up to 3 rating points either way: 70 is neutral, 95 is the full plus 3, 45 the full minus 3, and an empty chair is covered by a grad assistant who counts as a 50.",
@@ -319,8 +319,8 @@
     "/cfb-dynasty": {
       "howToPlay": [
         "Pick a program. Its prestige rating drives your talent pipeline and NIL budget.",
-        "Play one week at a time: 12 games, weeks 1 to 4 out of conference, weeks 5 to 11 in it, and week 12 is rivalry week.",
-        "Week 12 is rivalry week, and every program plays its rival, even one from another conference. Your rival is a school from your own state when one is free to pair with you, otherwise a pairing the game made, and the game tells you which. Florida has three schools on the board, so Florida and Miami get each other and Florida State gets a pairing the game made.",
+        "Play one week at a time: 12 games, all set before kickoff and never the same opponent twice. Weeks 1 to 4 are out of conference, weeks 5 to 11 are conference play with a non-conference date or two mixed in, and week 12 is rivalry week. Notre Dame and the Group of Five schools have no conference games.",
+        "Week 12 is rivalry week, and every program plays its rival, even one from another conference. Your rival is your real rivalry series when both schools are on the board (Ohio State and Michigan, Alabama and Auburn, Florida and Florida State), otherwise a school from your own state, otherwise a pairing the game made, and the game tells you which.",
         "The rivalry winner carries 0.5 to 1.5 points of extra strength into the title games and the Playoff, the loser drops the same, and a margin of 21 or more swings the full 1.5.",
         "Finish top two in your conference to reach its title game; win it for an automatic Playoff bid.",
         "The conference table goes by conference winning percentage, not raw wins, because not everyone plays the same number of league games: a program whose rival is in another conference spends week 12 outside the league.",
@@ -332,8 +332,9 @@
         "A coordinator rated 85 or better can be hired away as a head coach after any season, and his chair stays empty until you fill it."
       ],
       "rules": [
-        "The Playoff field is 12: the 5 conference champions plus 7 at-larges, seeded by ranking, byes for the top four.",
-        "On the same record the better resume ranks higher: strength of schedule, the average strength of every opponent actually played, title game included, plus the team's own strength. The 7 at-large spots and the seeds come off that ranking, and the Schedule tab shows your number and where it ranks.",
+        "The Playoff field is 12: the 4 conference champions, the best ranked Group of Five school, Notre Dame if it ranks in the top 12, and at-larges to fill it, seeded by ranking, byes for the top four.",
+        "Notre Dame plays as an independent, the way it really does, so it has no conference title game; here it meets five ACC teams a season, the average its real ACC deal sets. The four Group of Five schools are not one conference, so they play no title game either.",
+        "On the same record the better resume ranks higher: strength of schedule, the average strength of every opponent actually played, title game included, plus the team's own strength. The at-large spots and the seeds come off that ranking, and the Schedule tab shows your number and where it ranks.",
         "High school grades carry scouting error of up to 4 points either way. Portal transfers show true ratings and arrive as sophomores.",
         "NIL resets each offseason from prestige plus wins, and every signing spends against it.",
         "Rivalry week moves that budget: a win adds 3 to 8 points and a loss takes 3 to 8 away, with a margin of 21 or more swinging the full 8.",
@@ -341,8 +342,8 @@
         "Seniors graduate and juniors rated 88 or higher often declare early."
       ],
       "example": [
-        "You take Boise State, prestige 78. One September loss, then you run the league, finish 11-1, and win the conference title game for the automatic bid.",
-        "Week 12 is rivalry week against Tulane, a pairing the game made because no other Idaho school is on the board. You win it by 24, so Boise State carries 1.5 extra points of strength into the title game and the Playoff, and the trail opens with 8 more budget points.",
+        "You take Boise State, prestige 78. One September loss, then you win out: 11-1 is the best record of the four Group of Five schools, so you rank highest of them and take the fifth automatic spot.",
+        "Week 12 is rivalry week against Tulane, a pairing the game made because no other Idaho school is on the board. You win it by 24, so Boise State carries 1.5 extra points of strength into the Playoff, and the trail opens with 8 more budget points.",
         "You win a first-round game, stun a bye team in the quarterfinals, and lose the semifinal. Then your 89-rated junior quarterback declares, so you sign a portal passer rated exactly 81 and roll the dice on a 5-star scouted at 83 who might really be a 79. Or an 87."
       ],
       "tips": [

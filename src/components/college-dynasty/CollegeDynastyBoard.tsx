@@ -20,7 +20,7 @@ import ShareButtons from '@/components/game/ShareButtons';
 import { ConfettiBurst, CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';
 import {
   coordinatorEdge, VACANT_RATING, STAFF_ROLES,
-  type Coordinator, type ProgramStaff, type RivalKind, type RivalryResult, type SlateGame, type StaffRole, type StaffWindow,
+  type Coordinator, type ProgramStaff, type RivalKind, type RivalryResult, type RivalrySeason, type SlateGame, type StaffRole, type StaffWindow,
 } from '@/lib/collegeProgram';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { cn } from '@/lib/utils';
@@ -51,10 +51,14 @@ export interface CollegeState<T extends CollegeTeam> {
   depth?: number; lastRivalry?: RivalryResult | null; mySlate?: SlateGame[]; staffWindow?: StaffWindow | null;
   /** Round 1320: the athletic director's block. Absent on every save that never took him. */
   seat?: CollegeSeatBlock;
+  /** Round 1554: set once a season starts under the sport's real format (seasonRivalries). */
+  format?: number;
 }
 export interface CollegeGame { home: string; away: string; hs: number; as: number; winner: string }
 export interface CollegeRecruit { id: string; name: string; pos: string; stars: number; grade: number; nilAsk: number }
 export interface CollegeSchool { id: string; name: string; color: string; prestige: number; conf: string }
+/** Round 1554: one game of my schedule not yet played. */
+export interface CollegeFixture { round: number; opp: string; home: boolean; conference: boolean; rivalry: boolean }
 
 /** What a sport's words get to read: a school's name and the rivalry line. */
 export interface CollegeWordsContext { label: (id: string) => string; rivalry: (id: string) => string }
@@ -82,8 +86,11 @@ export interface CollegeSport<T extends CollegeTeam, S extends CollegeState<T>, 
   confLabel: (conf: string) => string;
   rounds: number;
   rivalryRound: number;
-  rivalOf: (id: string) => { rival: string; kind: RivalKind; state?: string } | null;
+  /** Round 1554: handed the season, the rival that season plays (an old season keeps its old pairs). */
+  rivalOf: (id: string, st?: RivalrySeason) => { rival: string; kind: RivalKind; state?: string; name?: string } | null;
   positions: readonly string[];
+  /** Round 1554: the weeks of my schedule still to play, when the sport fixes its slate at kickoff. */
+  fixtures?: (st: S) => CollegeFixture[];
 
   init: (id: string, rng: () => number, opts: { depth: boolean }) => S;
   ensureIds: (st: S, recruits: Rc[] | null | undefined, portal: Rc[] | null | undefined) => void;
@@ -108,7 +115,8 @@ export interface CollegeSport<T extends CollegeTeam, S extends CollegeState<T>, 
   units: (team: T) => { off: number; def: number; offEdge: number; defEdge: number };
   rankings: (st: S) => T[];
   sosTable: (st: S) => Map<string, { sos: number; rank: number }>;
-  standings: (st: S, conf: string) => { id: string; record: string }[];
+  /** Round 1554: `mark`, when given, replaces the top-of-table mark for that row (a group with no title game). */
+  standings: (st: S, conf: string) => { id: string; record: string; mark?: string }[];
 
   /** The recap between the headline and the ledger's end. */
   RecapBody: (view: CollegeRecapView<T, S, R>) => ReactNode;
@@ -148,10 +156,11 @@ export interface CollegeWords<T extends CollegeTeam, S extends CollegeState<T>, 
   depthChart: string;
   unitCoach: (role: StaffRole, c: Coordinator | null) => string;
   noStaffYet: string;
-  playIntro: (depth: boolean) => string;
+  playIntro: (depth: boolean, st: S) => string;
   rivalryNow: (isRivalryRound: boolean) => string;
   playButton: (round: number, final: boolean) => string;
-  playFootnote: string;
+  /** Round 1554: a function when the line depends on the season's format. */
+  playFootnote: string | ((st: S) => string);
   sosPending: string;
   slateTag: string;
   nonConf: string;
@@ -163,7 +172,7 @@ export interface CollegeWords<T extends CollegeTeam, S extends CollegeState<T>, 
   rankingsNote: (depth: boolean) => string;
   standingsCut: number;
   standingsMark: string;
-  standingsNote: (depth: boolean) => string;
+  standingsNote: (depth: boolean, st: S) => string;
 }
 
 /** Class names one board grew and the other did not, held as they were. */
@@ -185,15 +194,17 @@ const END_NAME: Record<StaffRole, string> = { OC: 'Offense', DC: 'Defense' };
 /* Round 728, Round 823: how rivalry week (or night) names the pairing. An
    in-state pair is a fact the data holds (both schools' state); anything else
    the game paired, and it says so rather than implying a history nobody has
-   checked. */
+   checked. Round 1554: a real series (src/data/collegeRivalries.ts, two
+   sources a row) comes first and says so, with its name where it has one. */
 function rivalryNoteFor(
-  rivalOf: (id: string) => { rival: string; kind: RivalKind; state?: string } | null,
+  rivalOf: (id: string) => { rival: string; kind: RivalKind; state?: string; name?: string } | null,
   schoolMap: Map<string, CollegeSchool>,
   myTeam: string,
 ): string {
   const r = rivalOf(myTeam);
   if (!r) return '';
   const opp = schoolMap.get(r.rival)?.name ?? r.rival;
+  if (r.kind === 'series') return `${opp}, a real rivalry series${r.name ? ` (${r.name})` : ''}`;
   return r.kind === 'in-state'
     ? `${opp}, the in-state game (both in ${r.state})`
     : `${opp}, a pairing the game made (no series history on file)`;
@@ -302,8 +313,13 @@ export default function CollegeDynastyBoard<
   }, [openRecruiting, sport]);
 
   const label = (id: string) => sport.schoolMap.get(id)?.name ?? id;
-  const rivalry = (id: string) => rivalryNoteFor(sport.rivalOf, sport.schoolMap, id);
-  const ctx: CollegeWordsContext = { label, rivalry };
+  /* Round 1554: the rival the season in hand plays, so an old season's note names its old rival and a
+     note written about a season just made (a new dynasty, the layer arriving) names that season's. */
+  const ctxFor = (s: S | null): CollegeWordsContext => ({
+    label,
+    rivalry: (id: string) => rivalryNoteFor(x => sport.rivalOf(x, s ?? undefined), sport.schoolMap, id),
+  });
+  const rivalry = ctxFor(st).rivalry;
 
   const start = (id: string) => {
     const state = sport.init(id, Math.random, { depth: true });
@@ -311,7 +327,7 @@ export default function CollegeDynastyBoard<
     /* A new dynasty can meet a market or a bid with the same key as the last one's: it starts unacted. */
     marketActed.current = '';
     setSt(state); setPhase('season'); setTab('team'); setSeatOpen(false);
-    setFeed(w.welcome(state, id, ctx));
+    setFeed(w.welcome(state, id, ctxFor(state)));
     setRecap(null); setWonNow(false);
     persist(state, 'season', null, null);
   };
@@ -327,7 +343,7 @@ export default function CollegeDynastyBoard<
     if (sport.closedBeforeRound(st)) return;
     const state: S = JSON.parse(JSON.stringify(st));
     if (sport.seat) collegeSeatFirstPress(state, sport.seat);
-    const { games, lines } = sport.playRound(state, Math.random, ctx);
+    const { games, lines } = sport.playRound(state, Math.random, ctxFor(state));
     setLastGames(games);
     if (state.round >= sport.rounds) {
       if (sport.closedAtFinal(state)) return;
@@ -451,7 +467,7 @@ export default function CollegeDynastyBoard<
        them now, at the turn of a season, so nothing it already played changes. */
     if (!state.depth) {
       sport.enableDepth(state, Math.random);
-      notes.unshift(...w.depthArrives(state, ctx));
+      notes.unshift(...w.depthArrives(state, ctxFor(state)));
     }
     setSt(state); setPhase('season'); setTab('team');
     setRecruits(null); setPortal(null); setRecap(null); setWonNow(false);
@@ -776,7 +792,16 @@ export default function CollegeDynastyBoard<
       {!seatCard && tab === 'play' && (
         <div className="space-y-3">
           <div className="rounded-2xl border border-gold/40 bg-card p-4 text-center">
-            <p className="mb-2 text-sm text-foreground">{w.playIntro(!!st.depth)}</p>
+            <p className="mb-2 text-sm text-foreground">{w.playIntro(!!st.depth, st)}</p>
+            {(() => {
+              /* Round 1554: a slate set at kickoff knows this week's opponent. */
+              const now = sport.fixtures?.(st).find(f => f.round === st.round);
+              return now ? (
+                <p className="mb-2 text-xs font-semibold text-foreground">
+                  This week: {now.home ? 'vs' : 'at'} {label(now.opp)}{now.rivalry ? ' 🔥' : now.conference ? '' : w.nonConf}
+                </p>
+              ) : null;
+            })()}
             {st.depth && (
               <p className={cn('mb-2 text-xs', st.round === sport.rivalryRound ? 'font-bold text-amber-300' : 'text-muted-foreground')}>
                 🔥 {w.rivalryNow(st.round === sport.rivalryRound)}: {rivalry(st.myTeam)}.
@@ -785,7 +810,7 @@ export default function CollegeDynastyBoard<
             <button onClick={playRound} className="inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90">
               <ShieldHalf className="h-4 w-4" /> {w.playButton(st.round, st.round >= sport.rounds)}
             </button>
-            <p className="mt-2 text-[10px] text-muted-foreground">{w.playFootnote}</p>
+            <p className="mt-2 text-[10px] text-muted-foreground">{typeof w.playFootnote === 'function' ? w.playFootnote(st) : w.playFootnote}</p>
           </div>
           {lastGames.length > 0 && (
             <div ref={revealRef} className="rounded-2xl border border-border bg-card p-3">
@@ -814,6 +839,7 @@ export default function CollegeDynastyBoard<
             const sos = sport.sosTable(st).get(st.myTeam);
             const slate = st.mySlate ?? [];
             const next = w.upNext(st, rivalry(st.myTeam));
+            const fixtures = sport.fixtures?.(st) ?? [];
             return (
               <>
                 <p className="mb-2 text-center text-xs text-muted-foreground">
@@ -828,7 +854,17 @@ export default function CollegeDynastyBoard<
                       <span className={cn('ml-2 shrink-0 font-semibold', g.won ? 'text-primary' : 'text-destructive')}>{g.won ? 'W' : 'L'} {g.us}-{g.them}</span>
                     </div>
                   ))}
-                  {next !== null && <p className="rounded px-2 py-0.5 text-[11px] text-muted-foreground">{next}</p>}
+                  {/* Round 1554: the rest of a slate set at kickoff, in order; the
+                      one line about the next game only where there is no slate. */}
+                  {fixtures.map(f => (
+                    <div key={`fx:${f.round}`} className={cn('flex items-center justify-between rounded px-2 py-0.5 text-[11px] text-muted-foreground', f.rivalry ? 'bg-amber-300/10' : '')}>
+                      <span className="min-w-0 truncate">
+                        {w.slateTag}{f.round} {f.home ? 'vs' : 'at'} {label(f.opp)}{f.rivalry ? ' 🔥' : f.conference ? '' : w.nonConf}
+                      </span>
+                      <span className="ml-2 shrink-0">{f.round === st.round ? 'next' : ''}</span>
+                    </div>
+                  ))}
+                  {fixtures.length === 0 && next !== null && <p className="rounded px-2 py-0.5 text-[11px] text-muted-foreground">{next}</p>}
                 </div>
                 <p className="mt-2 text-center text-[10px] text-muted-foreground">{w.scheduleNote}</p>
               </>
@@ -863,21 +899,31 @@ export default function CollegeDynastyBoard<
       {!seatCard && tab === 'standings' && (
         <div className="rounded-2xl border border-border bg-card p-3">
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            {sport.confs.map(conf => (
-              <div key={conf}>
-                <p className="mb-1 text-center text-[10px] font-bold uppercase tracking-wider text-muted-foreground">{sport.confLabel(conf)}</p>
-                {sport.standings(st, conf).map((t, i) => (
-                  <div key={t.id} className={cn('flex items-center justify-between rounded px-2 py-0.5 text-[11px]', t.id === st.myTeam ? 'bg-gold/10' : '')}>
-                    <span className={cn(i < w.standingsCut ? 'font-semibold text-foreground' : 'text-muted-foreground')}>
-                      {i + 1}. {label(t.id)}{i < w.standingsCut ? w.standingsMark : ''}
-                    </span>
-                    <span className="text-muted-foreground">{t.record}</span>
-                  </div>
-                ))}
-              </div>
-            ))}
+            {sport.confs.map(conf => {
+              /* Round 1554: a group with nobody in it this season (Notre Dame's,
+                 on a season still played the old way) is not drawn. */
+              const rows = sport.standings(st, conf);
+              if (rows.length === 0) return null;
+              return (
+                <div key={conf}>
+                  <p className="mb-1 text-center text-[10px] font-bold uppercase tracking-wider text-muted-foreground">{sport.confLabel(conf)}</p>
+                  {rows.map((t, i) => {
+                    const top = t.mark !== undefined ? t.mark !== '' : i < w.standingsCut;
+                    const mark = t.mark ?? (i < w.standingsCut ? w.standingsMark : '');
+                    return (
+                      <div key={t.id} className={cn('flex items-center justify-between rounded px-2 py-0.5 text-[11px]', t.id === st.myTeam ? 'bg-gold/10' : '')}>
+                        <span className={cn(top ? 'font-semibold text-foreground' : 'text-muted-foreground')}>
+                          {i + 1}. {label(t.id)}{mark}
+                        </span>
+                        <span className="text-muted-foreground">{t.record}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            })}
           </div>
-          <p className="mt-2 text-center text-[10px] text-muted-foreground">{w.standingsNote(!!st.depth)}</p>
+          <p className="mt-2 text-center text-[10px] text-muted-foreground">{w.standingsNote(!!st.depth, st)}</p>
         </div>
       )}
 

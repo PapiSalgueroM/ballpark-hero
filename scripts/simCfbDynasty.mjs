@@ -99,7 +99,11 @@ console.log('1) structure: 44 schools, twelve players each with a quarterback, a
   const { CFB_SCHOOLS, CFB_SCHOOL_MAP, CFB_CONFS, CFB_ROUNDS, initCfb, simCfbRound, runCfbPostseason } = cfb;
   if (CFB_SCHOOLS.length !== 44) fail(`schools ${CFB_SCHOOLS.length}, expected 44`);
   if (new Set(CFB_SCHOOLS.map(s => s.id)).size !== CFB_SCHOOLS.length) fail('duplicate school ids');
-  for (const conf of CFB_CONFS) if (CFB_SCHOOLS.filter(s => s.conf === conf).length < 2) fail(`${conf} is too small for a title game`);
+  /* Round 1554: Notre Dame is listed as an independent ('IND', one school,
+     no title game). A season before the real format (this section's legacy
+     start) still counts it in the ACC, so the five groups that play a title
+     game there are the others, each with two or more schools. */
+  for (const conf of CFB_CONFS.filter(c => c !== 'IND')) if (CFB_SCHOOLS.filter(s => s.conf === conf).length < 2) fail(`${conf} is too small for a title game`);
   const rng = lehmer(42);
   const st = initCfb('UGA', rng);
   for (const t of Object.values(st.teams)) {
@@ -112,7 +116,8 @@ console.log('1) structure: 44 schools, twelve players each with a quarterback, a
     if (!myGame) fail(`round ${r}: my team idle`);
     for (const g of games) {
       if (g.hs === g.as) fail('a tie in college football');
-      const sameConf = CFB_SCHOOL_MAP.get(g.home).conf === CFB_SCHOOL_MAP.get(g.away).conf;
+      /* Round 1554: the conference a school counts in this season (Notre Dame in the ACC on a legacy season). */
+      const sameConf = cfb.cfbConfOf(st, g.home) === cfb.cfbConfOf(st, g.away);
       if (g.conference !== sameConf) fail('conference flag wrong');
     }
     st.round += 1;

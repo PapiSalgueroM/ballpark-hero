@@ -139,7 +139,8 @@ const CBB_WORDS: CollegeSport<CbbTeam, CbbState, CbbGame, CbbRecruit, Recap>['wo
     : 'Record rules the committee room, but the eye test counts too.'),
   standingsCut: 4,
   standingsMark: ' •',
-  standingsNote: () => '• top four make the conference tournament; win it and you dance no matter what.',
+  /* Round 1554: the table goes by league record from the first season that keeps one. */
+  standingsNote: (_depth, st) => `${st.format ? 'Ranked by league record, overall record in brackets. ' : ''}• top four make the conference tournament; win it and you dance no matter what.`,
 };
 
 /* Built on first use rather than at import, so nothing imported is read
@@ -207,7 +208,10 @@ function cbbSport(): CollegeSport<CbbTeam, CbbState, CbbGame, CbbRecruit, Recap>
     units: t => cbbUnits(t),
     rankings: st => cbbRankings(st),
     sosTable: st => cbbSosTable(st),
-    standings: (st, conf) => cbbConfStandings(st, conf).map(t => ({ id: t.id, record: `${t.wins}-${t.losses}` })),
+    standings: (st, conf) => cbbConfStandings(st, conf).map(t => ({
+      id: t.id,
+      record: st.format ? `${t.confWins ?? 0}-${t.confLosses ?? 0} (${t.wins}-${t.losses})` : `${t.wins}-${t.losses}`,
+    })),
 
     RecapBody: MarchRecap,
     recapTitles: 'Titles',
