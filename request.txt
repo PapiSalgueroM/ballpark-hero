@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+sweepWeight: SWEEP_OFFLINE=1 SWEEP_BASE=$BASE node scripts/sweepWeight.mjs
+weight-head: node .rc/x/weightNba.mjs $BASE dist head /nba-my-career /nfl-my-career /mlb-my-career /nhl-my-career
+weight-base: git worktree add -q /tmp/wbase 32e8f7da1 && git -C /tmp/wbase -c user.email=rc@x -c user.name=rc merge -q --no-edit adb715be3 && ln -s "$PWD/node_modules" /tmp/wbase/node_modules && (cd /tmp/wbase && node_modules/.bin/vite build > /tmp/wbase-build.log 2>&1) && (node scripts/lib/hostLikeServer.mjs /tmp/wbase/dist 4181 > /tmp/wb.log 2>&1 &) && sleep 4 && node .rc/x/weightNba.mjs http://localhost:4181 /tmp/wbase/dist base /nba-my-career /nfl-my-career /mlb-my-career /nhl-my-career
+playNbaIntl: node scripts/playNbaIntl.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simUsCareerDeckC: node scripts/simUsCareerDeckC.mjs

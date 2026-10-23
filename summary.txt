@@ -1,0 +1,8 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+weight-head exit=0 8s |   AppearanceBuilder:14.9 Celebration:0.8 CelebrationStyles:0.7 Confetti:0.6 GameHelp:0.8 GameNav:1.7 GameNavbar:3.7 GameReportContext:3.0 GameSeoContent:2.4 HowToPlayPopo
+sweepWeight exit=1 31s | sweepWeight: 1 failure
+simGuideHeadings exit=0 1s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+simSiteSearch exit=0 3s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+playNbaIntl exit=0 43s | playNbaIntl: green. The call, Go and its result's views, Rest, a reload mid beat, the 2027 World Cup's lines and no call at 80 or in 2005, at 320, 390 and 1280; 24 screen
+weight-base exit=0 53s |   AppearanceBuilder:14.9 Celebration:0.8 CelebrationStyles:0.7 Confetti:0.6 GameHelp:0.8 GameNav:1.7 GameNavbar:3.7 GameReportContext:3.0 GameSeoContent:2.4 HowToPlayPopo
+simUsCareerDeckC exit=0 50s | simUsCareerDeckC: all checks passed
