@@ -1,0 +1,80 @@
+1) a stored Accept starts exactly one deliberate game ad
+  FAIL  /footle made exactly one AdSense request (0)
+  FAIL  /footle kept exactly one AdSense script (0)
+  FAIL  /footle queued exactly one manual slot (0)
+  FAIL  /footle reserved a usable mobile slot width (0px)
+  FAIL  /footle reserved a usable desktop slot width (0px)
+
+2) screens without deliberate inventory make no ad request
+  PASS  /about (trust page) made zero requests (0)
+  PASS  /about kept the AdSense script out (0)
+  PASS  /privacy (legal) made zero requests (0)
+  PASS  /privacy kept the AdSense script out (0)
+  PASS  /terms (legal) made zero requests (0)
+  PASS  /terms kept the AdSense script out (0)
+  PASS  /accessibility (legal) made zero requests (0)
+  PASS  /accessibility kept the AdSense script out (0)
+  PASS  /contact (legal) made zero requests (0)
+  PASS  /contact kept the AdSense script out (0)
+  PASS  /reset-password (private reset) made zero requests (0)
+  PASS  /reset-password kept the AdSense script out (0)
+  PASS  /admin/login (private admin) made zero requests (0)
+  PASS  /admin/login kept the AdSense script out (0)
+  PASS  /admin/reports (private admin) made zero requests (0)
+  PASS  /admin/reports kept the AdSense script out (0)
+  PASS  /profile/test-user (private account) made zero requests (0)
+  PASS  /profile/test-user kept the AdSense script out (0)
+  PASS  /football-timeline (retired game) made zero requests (0)
+  PASS  /football-timeline kept the AdSense script out (0)
+  PASS  /guess-nfl-team (retired game) made zero requests (0)
+  PASS  /guess-nfl-team kept the AdSense script out (0)
+  PASS  /higher-lower-transfers (retired game) made zero requests (0)
+  PASS  /higher-lower-transfers kept the AdSense script out (0)
+  PASS  /pack-battle (retired game) made zero requests (0)
+  PASS  /pack-battle kept the AdSense script out (0)
+  PASS  /shirt-number (retired game) made zero requests (0)
+  PASS  /shirt-number kept the AdSense script out (0)
+  PASS  /world-cup (redirect stub) made zero requests (0)
+  PASS  /world-cup kept the AdSense script out (0)
+  PASS  /this-address-does-not-exist-ad-routes (fallback 404) made zero requests (0)
+  PASS  /this-address-does-not-exist-ad-routes kept the AdSense script out (0)
+
+3) Accept still wakes the slot after more than eight seconds
+  PASS  before delayed Accept made zero AdSense requests (0)
+  PASS  before delayed Accept kept the AdSense script out (0)
+  PASS  before delayed Accept queued no manual slot (0)
+  PASS  before delayed Accept rendered no manual slot (0)
+  PASS  fresh choice stored accepted (accepted)
+  PASS  delayed Accept made exactly one AdSense request (1)
+  PASS  delayed Accept kept exactly one AdSense script (1)
+  PASS  delayed Accept queued exactly one manual slot (1)
+
+4) Essential only never starts ads
+  PASS  fresh choice stored essential (rejected)
+  PASS  Essential only made zero AdSense requests (0)
+  PASS  Essential only kept the AdSense script out (0)
+  PASS  Essential only queued no manual slot (0)
+
+5) SPA transitions create no new ad inventory
+  FAIL  game to legal to noindex made no extra AdSense request (0)
+  PASS  privacy rendered no manual slot (0)
+  PASS  privacy left the manual queue unchanged (0)
+  PASS  reset-password rendered no manual slot (0)
+  PASS  reset-password left the manual queue unchanged (0)
+
+6) withdrawing consent reloads another open tab clean
+node:internal/process/promises:394
+    triggerUncaughtException(err, true /* fromPromise */);
+    ^
+
+page.waitForNavigation: Timeout 10000ms exceeded.
+=========================== logs ===========================
+waiting for navigation until "domcontentloaded"
+============================================================
+    at crossTabWithdrawalVisit (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playAdRoutes.mjs:440:31)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playAdRoutes.mjs:674:23 {
+  log: [],
+  name: 'TimeoutError'
+}
+
+Node.js v24.21.0

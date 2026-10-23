@@ -1,0 +1,195 @@
+NFL My Career
+  PASS  NFL: wrote a known three season history onto the save
+  PASS  NFL: the hub opens on 6 boxes (saw 6)
+  PASS  NFL: the hub names "My Player"
+  PASS  NFL: the hub names "The Bank"
+  PASS  NFL: the hub names "Career Log"
+  PASS  NFL: the hub names "Trophy Case"
+  PASS  NFL: the hub names "News"
+  PASS  NFL: the hub names "Inbox"
+  PASS  NFL: the log box survived the reload (reads "📜 / CAREER LOG / 3 seasons / No stats recorded")
+  PASS  NFL: the log box is not pretending the career is empty
+  PASS  NFL: the player box names the meter that is down
+  PASS  NFL: low morale lights the box
+  PASS  NFL: the hub fits the phone (0px of overflow)
+  PASS  NFL: "My Player" opened the screen it names
+  PASS  NFL: opening "My Player" replaced the grid
+  PASS  NFL: "My Player" has its way back, one button named "Hub" (saw 1)
+  PASS  NFL: back from "My Player" returned to all 6 boxes
+  PASS  NFL: "The Bank" opened the screen it names
+  PASS  NFL: opening "The Bank" replaced the grid
+  PASS  NFL: "The Bank" has its way back, one button named "Hub" (saw 1)
+  PASS  NFL: back from "The Bank" returned to all 6 boxes
+  PASS  NFL: "Career Log" opened the screen it names
+  PASS  NFL: opening "Career Log" replaced the grid
+  PASS  NFL: the Career Log shows the 3 seasons on the save as 3 season tiles (saw 3)
+  PASS  NFL: "Career Log" has its way back, one button named "Back to career" (saw 1)
+  PASS  NFL: back from "Career Log" returned to all 6 boxes
+  PASS  NFL: coming back from the Career Log put focus on its own box (focus is on "📜 / CAREER LOG / 3 seasons / No stats recorded")
+  PASS  NFL: "Trophy Case" opened the screen it names
+  PASS  NFL: opening "Trophy Case" replaced the grid
+  PASS  NFL: "Trophy Case" has its way back, one button named "Hub" (saw 1)
+  PASS  NFL: back from "Trophy Case" returned to all 6 boxes
+  PASS  NFL: "News" opened the screen it names
+  PASS  NFL: opening "News" replaced the grid
+  PASS  NFL: "News" has its way back, one button named "Hub" (saw 1)
+  PASS  NFL: back from "News" returned to all 6 boxes
+  PASS  NFL: "Inbox" opened the screen it names
+  PASS  NFL: opening "Inbox" replaced the grid
+  PASS  NFL: "Inbox" has its way back, one button named "Hub" (saw 1)
+  PASS  NFL: back from "Inbox" returned to all 6 boxes
+  PASS  NFL: the trophy case is its own screen
+  PASS  NFL: the case names the award that was won
+  PASS  NFL: the case counted the award won twice
+  PASS  NFL: the case dated both wins
+  PASS  NFL: the case lists the second award too
+  PASS  NFL: the case totalled the honours (reads "")
+  PASS  NFL: the case uses the sport's own word for a title
+  PASS  NFL: no page errors (clean)
+NBA My Career
+  PASS  NBA: wrote a known three season history onto the save
+  PASS  NBA: the hub opens on 6 boxes (saw 6)
+  PASS  NBA: the hub names "My Player"
+  PASS  NBA: the hub names "The Bank"
+  PASS  NBA: the hub names "Career Log"
+  PASS  NBA: the hub names "Trophy Case"
+  PASS  NBA: the hub names "News"
+  PASS  NBA: the hub names "Inbox"
+  PASS  NBA: the log box survived the reload (reads "📜 / CAREER LOG / 3 seasons / No stats recorded")
+  PASS  NBA: the log box is not pretending the career is empty
+  PASS  NBA: the player box names the meter that is down
+  PASS  NBA: low morale lights the box
+  PASS  NBA: the hub fits the phone (0px of overflow)
+  PASS  NBA: "My Player" opened the screen it names
+  PASS  NBA: opening "My Player" replaced the grid
+  PASS  NBA: "My Player" has its way back, one button named "Hub" (saw 1)
+  PASS  NBA: back from "My Player" returned to all 6 boxes
+  PASS  NBA: "The Bank" opened the screen it names
+  PASS  NBA: opening "The Bank" replaced the grid
+  PASS  NBA: "The Bank" has its way back, one button named "Hub" (saw 1)
+  PASS  NBA: back from "The Bank" returned to all 6 boxes
+  PASS  NBA: "Career Log" opened the screen it names
+  PASS  NBA: opening "Career Log" replaced the grid
+  PASS  NBA: the Career Log shows the 3 seasons on the save as 3 season tiles (saw 3)
+  PASS  NBA: "Career Log" has its way back, one button named "Back to career" (saw 1)
+  PASS  NBA: back from "Career Log" returned to all 6 boxes
+  PASS  NBA: coming back from the Career Log put focus on its own box (focus is on "📜 / CAREER LOG / 3 seasons / No stats recorded")
+  PASS  NBA: "Trophy Case" opened the screen it names
+  PASS  NBA: opening "Trophy Case" replaced the grid
+  PASS  NBA: "Trophy Case" has its way back, one button named "Hub" (saw 1)
+  PASS  NBA: back from "Trophy Case" returned to all 6 boxes
+  PASS  NBA: "News" opened the screen it names
+  PASS  NBA: opening "News" replaced the grid
+  PASS  NBA: "News" has its way back, one button named "Hub" (saw 1)
+  PASS  NBA: back from "News" returned to all 6 boxes
+  PASS  NBA: "Inbox" opened the screen it names
+  PASS  NBA: opening "Inbox" replaced the grid
+  PASS  NBA: "Inbox" has its way back, one button named "Hub" (saw 1)
+  PASS  NBA: back from "Inbox" returned to all 6 boxes
+  PASS  NBA: the trophy case is its own screen
+  PASS  NBA: the case names the award that was won
+  PASS  NBA: the case counted the award won twice
+  PASS  NBA: the case dated both wins
+  PASS  NBA: the case lists the second award too
+  PASS  NBA: the case totalled the honours (reads "")
+  PASS  NBA: the case uses the sport's own word for a title
+  PASS  NBA: no page errors (clean)
+MLB My Career
+  PASS  MLB: wrote a known three season history onto the save
+  PASS  MLB: the hub opens on 6 boxes (saw 6)
+  PASS  MLB: the hub names "My Player"
+  PASS  MLB: the hub names "The Bank"
+  PASS  MLB: the hub names "Career Log"
+  PASS  MLB: the hub names "Trophy Case"
+  PASS  MLB: the hub names "News"
+  PASS  MLB: the hub names "Inbox"
+  PASS  MLB: the log box survived the reload (reads "📜 / CAREER LOG / 3 seasons / No stats recorded")
+  PASS  MLB: the log box is not pretending the career is empty
+  PASS  MLB: the player box names the meter that is down
+  PASS  MLB: low morale lights the box
+  PASS  MLB: the hub fits the phone (0px of overflow)
+  PASS  MLB: "My Player" opened the screen it names
+  PASS  MLB: opening "My Player" replaced the grid
+  PASS  MLB: "My Player" has its way back, one button named "Hub" (saw 1)
+  PASS  MLB: back from "My Player" returned to all 6 boxes
+  PASS  MLB: "The Bank" opened the screen it names
+  PASS  MLB: opening "The Bank" replaced the grid
+  PASS  MLB: "The Bank" has its way back, one button named "Hub" (saw 1)
+  PASS  MLB: back from "The Bank" returned to all 6 boxes
+  PASS  MLB: "Career Log" opened the screen it names
+  PASS  MLB: opening "Career Log" replaced the grid
+  PASS  MLB: the Career Log shows the 3 seasons on the save as 3 season tiles (saw 3)
+  PASS  MLB: "Career Log" has its way back, one button named "Back to career" (saw 1)
+  PASS  MLB: back from "Career Log" returned to all 6 boxes
+  PASS  MLB: coming back from the Career Log put focus on its own box (focus is on "📜 / CAREER LOG / 3 seasons / No stats recorded")
+  PASS  MLB: "Trophy Case" opened the screen it names
+  PASS  MLB: opening "Trophy Case" replaced the grid
+  PASS  MLB: "Trophy Case" has its way back, one button named "Hub" (saw 1)
+  PASS  MLB: back from "Trophy Case" returned to all 6 boxes
+  PASS  MLB: "News" opened the screen it names
+  PASS  MLB: opening "News" replaced the grid
+  PASS  MLB: "News" has its way back, one button named "Hub" (saw 1)
+  PASS  MLB: back from "News" returned to all 6 boxes
+  PASS  MLB: "Inbox" opened the screen it names
+  PASS  MLB: opening "Inbox" replaced the grid
+  PASS  MLB: "Inbox" has its way back, one button named "Hub" (saw 1)
+  PASS  MLB: back from "Inbox" returned to all 6 boxes
+  PASS  MLB: the trophy case is its own screen
+  PASS  MLB: the case names the award that was won
+  PASS  MLB: the case counted the award won twice
+  PASS  MLB: the case dated both wins
+  PASS  MLB: the case lists the second award too
+  PASS  MLB: the case totalled the honours (reads "")
+  PASS  MLB: the case uses the sport's own word for a title
+  PASS  MLB: no page errors (clean)
+NHL My Career
+  PASS  NHL: wrote a known three season history onto the save
+  PASS  NHL: the hub opens on 6 boxes (saw 6)
+  PASS  NHL: the hub names "My Player"
+  PASS  NHL: the hub names "The Bank"
+  PASS  NHL: the hub names "Career Log"
+  PASS  NHL: the hub names "Trophy Case"
+  PASS  NHL: the hub names "News"
+  PASS  NHL: the hub names "Inbox"
+  PASS  NHL: the log box survived the reload (reads "📜 / CAREER LOG / 3 seasons / No stats recorded")
+  PASS  NHL: the log box is not pretending the career is empty
+  PASS  NHL: the player box names the meter that is down
+  PASS  NHL: low morale lights the box
+  PASS  NHL: the hub fits the phone (0px of overflow)
+  PASS  NHL: "My Player" opened the screen it names
+  PASS  NHL: opening "My Player" replaced the grid
+  PASS  NHL: "My Player" has its way back, one button named "Hub" (saw 1)
+  PASS  NHL: back from "My Player" returned to all 6 boxes
+  PASS  NHL: "The Bank" opened the screen it names
+  PASS  NHL: opening "The Bank" replaced the grid
+  PASS  NHL: "The Bank" has its way back, one button named "Hub" (saw 1)
+  PASS  NHL: back from "The Bank" returned to all 6 boxes
+  PASS  NHL: "Career Log" opened the screen it names
+  PASS  NHL: opening "Career Log" replaced the grid
+  PASS  NHL: the Career Log shows the 3 seasons on the save as 3 season tiles (saw 3)
+  PASS  NHL: "Career Log" has its way back, one button named "Back to career" (saw 1)
+  PASS  NHL: back from "Career Log" returned to all 6 boxes
+  PASS  NHL: coming back from the Career Log put focus on its own box (focus is on "📜 / CAREER LOG / 3 seasons / No stats recorded")
+  PASS  NHL: "Trophy Case" opened the screen it names
+  PASS  NHL: opening "Trophy Case" replaced the grid
+  PASS  NHL: "Trophy Case" has its way back, one button named "Hub" (saw 1)
+  PASS  NHL: back from "Trophy Case" returned to all 6 boxes
+  PASS  NHL: "News" opened the screen it names
+  PASS  NHL: opening "News" replaced the grid
+  PASS  NHL: "News" has its way back, one button named "Hub" (saw 1)
+  PASS  NHL: back from "News" returned to all 6 boxes
+  PASS  NHL: "Inbox" opened the screen it names
+  PASS  NHL: opening "Inbox" replaced the grid
+  PASS  NHL: "Inbox" has its way back, one button named "Hub" (saw 1)
+  PASS  NHL: back from "Inbox" returned to all 6 boxes
+  PASS  NHL: the trophy case is its own screen
+  PASS  NHL: the case names the award that was won
+  PASS  NHL: the case counted the award won twice
+  PASS  NHL: the case dated both wins
+  PASS  NHL: the case lists the second award too
+  PASS  NHL: the case totalled the honours (reads "")
+  PASS  NHL: the case uses the sport's own word for a title
+  PASS  NHL: no page errors (clean)
+  PASS  the walk finished all 4 games (finished 4)
+
+playCareerHub: green. Four career games on live boxes, and every award on the screen has a year on it.
