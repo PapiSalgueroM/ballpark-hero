@@ -1,0 +1,12 @@
+ok   [errors] nba quota little: no page error
+FAIL [kept] nba quota kept: the cookie choice is taken while the store is full and the line still says full (banner up then STILL UP, on the store: nothing, line full (none@56 full@157), a new key is refused, Retry notice none, on the store: nothing)
+FAIL [kept] nba quota kept: once there is room the line leaves and the choice made under it is on the device (on the store: NOTHING, line left (none@56 full@157), a new key is taken, Retry notice none, on the store: nothing)
+ok   [errors] nba quota kept: no page error
+requests to supabase.co aborted: 15
+playUsCareerSaveSeam: 15 journeys, 67 checks, 2 failed
+  FAIL  cookie banner BLOCKED "Essential only": locator.click: Timeout 5000ms exceeded.
+  FAIL  cookie banner BLOCKED "Accept": locator.click: Timeout 5000ms exceeded.
+  FAIL  cookie banner FULL "Essential only": locator.click: Timeout 5000ms exceeded.
+  FAIL  cookie banner FULL "Accept": locator.click: Timeout 5000ms exceeded.
+  FAIL  / phone NATIVE: locator.click: Timeout 5000ms exceeded.
+playStorageBlocked: 806 checks, 5 failed
