@@ -1,0 +1,6 @@
+build exit=0 36s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+walk exit=0 45s | playNflSeasonStats: 112 checks, 0 failed
+playFrontOfficeGameDay exit=0 355s | playFrontOfficeGameDay: 386 checks, 0 failed
+weight-head exit=0 15s | weightFo head: /front-office load 387.6K gz over 43 files
+weight-base exit=0 81s | weightFo base: /front-office load 381.8K gz over 41 files
+mutH exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeSeasonStats.test.tsx,title=src/components/front-office/FrontOfficeSeason
