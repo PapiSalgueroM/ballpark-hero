@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+walk: node .rc/x/walk1555.mjs
+walk-twice: WALK1555_CONTROL=twice node .rc/x/walk1555.mjs
