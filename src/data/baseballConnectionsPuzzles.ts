@@ -208,7 +208,7 @@ export const baseballConnectionsPuzzles: BaseballConnectionsPuzzle[] = [
   {
     id: 'bconn-021',
     groups: [
-      { theme: 'Los Angeles Dodgers legends', players: ['Sandy Koufax', 'Clayton Kershaw', 'Jackie Robinson', 'Don Drysdale', 'Fernando Valenzuela'], difficulty: 'yellow' },
+      { theme: 'Dodgers legends', players: ['Sandy Koufax', 'Clayton Kershaw', 'Jackie Robinson', 'Don Drysdale', 'Fernando Valenzuela'], difficulty: 'yellow' },
       { theme: 'Chicago Cubs legends', players: ['Ernie Banks', 'Ron Santo', 'Ryne Sandberg', 'Sammy Sosa', 'Billy Williams'], difficulty: 'green' },
       { theme: 'Detroit Tigers legends', players: ['Ty Cobb', 'Al Kaline', 'Miguel Cabrera', 'Alan Trammell', 'Justin Verlander'], difficulty: 'blue' },
       { theme: 'Cincinnati Reds legends', players: ['Johnny Bench', 'Pete Rose', 'Joe Morgan', 'Barry Larkin', 'Tony Perez'], difficulty: 'purple' },

@@ -26,6 +26,7 @@
   "bconn-016",
   "bconn-019",
   "bconn-020",
+  "bconn-021",
   "bconn-028",
   "bconn-029",
   "bconn-031",
@@ -403,6 +404,10 @@
   [
    "bconn-029",
    "Oakland Athletics legends"
+  ],
+  [
+   "bconn-021",
+   "Dodgers legends"
   ]
  ],
  "fixed": [
@@ -10840,6 +10845,121 @@
      "host": "baseball-reference.com",
      "url": "https://www.baseball-reference.com/teams/MIL/",
      "says": "Retired Numbers: BU 1 4 19 34 44 42, the 34 linked to /players/f/fingero01.shtml (Rollie Fingers)"
+    }
+   ]
+  },
+  {
+   "id": "bconn-021",
+   "label": "Dodgers legends",
+   "name": "Sandy Koufax",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/117277",
+     "says": "seasons with club 119: 12"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/k/koufasa01.shtml",
+     "says": "seasons with the club: 12 (1955 to 1966)"
+    }
+   ]
+  },
+  {
+   "id": "bconn-021",
+   "label": "Dodgers legends",
+   "name": "Clayton Kershaw",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/477132",
+     "says": "seasons with club 119: 18"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/k/kershcl01.shtml",
+     "says": "seasons with the club: 18 (2008 to 2025)"
+    }
+   ]
+  },
+  {
+   "id": "bconn-021",
+   "label": "Dodgers legends",
+   "name": "Jackie Robinson",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/121314",
+     "says": "seasons with club 119: 10"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/r/robinja02.shtml",
+     "says": "seasons with the club: 10 (1947 to 1956)"
+    }
+   ]
+  },
+  {
+   "id": "bconn-021",
+   "label": "Dodgers legends",
+   "name": "Don Drysdale",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/113581",
+     "says": "seasons with club 119: 14"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/d/drysddo01.shtml",
+     "says": "seasons with the club: 14 (1956 to 1969)"
+    }
+   ]
+  },
+  {
+   "id": "bconn-021",
+   "label": "Dodgers legends",
+   "name": "Fernando Valenzuela",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "statsapi.mlb.com",
+     "url": "https://statsapi.mlb.com/api/v1/people/123619",
+     "says": "seasons with club 119: 11"
+    },
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/v/valenfe01.shtml",
+     "says": "seasons with the club: 11 (1980 to 1990)"
+    }
+   ]
+  },
+  {
+   "id": "bconn-021",
+   "label": "Los Angeles Dodgers legends",
+   "name": "Jackie Robinson",
+   "holds": false,
+   "why": "not-a-member",
+   "note": "Found by the round review, not by the checker: the checker folds every relocated franchise into one club, so a city in a label is never judged. Jackie Robinson played all ten of his seasons in Brooklyn (1947 to 1956); the club moved to Los Angeles in 1958. The group is now \"Dodgers legends\", true of all five.",
+   "sources": [
+    {
+     "host": "baseball-reference.com",
+     "url": "https://www.baseball-reference.com/players/r/robinja02.shtml",
+     "says": "team column BRO on every major league season, 1947 to 1956; no Los Angeles season"
+    },
+    {
+     "host": "baseball-almanac.com",
+     "url": "https://www.baseball-almanac.com/players/player.php?p=robinja02",
+     "says": "a Major League Baseball player for the Brooklyn Dodgers (1947 - 1956); Teams Played For: Brooklyn Dodgers 1947 to 1956"
     }
    ]
   }
