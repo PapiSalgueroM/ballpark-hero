@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+# Release BQ triage: playSeasonCentreMotion with a diagnostic copy (prints the page's and node's table on a mismatch, writes the hub save it used).
+diag: cp .rc/x/pscDiag.mjs scripts/playSeasonCentreMotion.mjs && HUB_SAVE_OUT="$RC_OUT/hub.json" node scripts/playSeasonCentreMotion.mjs
