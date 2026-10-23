@@ -1,0 +1,15 @@
+# Release BR, Round 1540 (NBA Front Office draft night and the offer sheet, carried by 1556 at 289b9247):
+# results-g/rc-1540.txt's request lines as written. Read it for the exits: a simNbaGmDesk control exits 0 when it
+# fired ("control X fired"), a GM_CONTRACTS_CONTROL line exits 1 when it fired. Nothing dropped.
+simNbaDraftBoard: node scripts/simNbaDraftBoard.mjs
+simNbaDraftBoard-full: SIM_NBA_DRAFT_BOARD_FLEET=full node scripts/simNbaDraftBoard.mjs
+simNbaDraftBoard-controls: SIM_NBA_DRAFT_BOARD_CONTROL=all node scripts/simNbaDraftBoard.mjs
+vitest-1540: node_modules/.bin/vitest run src/components/nba-front-office/NbaEarnedDraft.test.tsx src/lib/nbaEarnedDraft.test.ts src/lib/gmEarnedDraft.test.ts src/components/front-office-shared/GmEarnedDraftScreen.test.tsx src/components/front-office-shared/useGmEarnedDraft.test.tsx src/components/front-office-shared/DraftNightCard.test.tsx --testTimeout=300000 --hookTimeout=120000
+simNbaGmDesk: node scripts/simNbaGmDesk.mjs
+simNbaGmDesk-held: SIM_NBA_GM_DESK_SEEDS=31,32,33,34,35,36,37,38,39,40 node scripts/simNbaGmDesk.mjs
+simNbaGmDesk-norfa: SIM_NBA_GM_DESK_CONTROL=norfa node scripts/simNbaGmDesk.mjs
+simNbaGmDesk-fullbird: SIM_NBA_GM_DESK_CONTROL=fullbird node scripts/simNbaGmDesk.mjs
+simGmContracts: node scripts/simGmContracts.mjs
+simGmContracts-nobird: GM_CONTRACTS_CONTROL=nobird node scripts/simGmContracts.mjs
+simGmDeskHost: node scripts/simGmDeskHost.mjs
+vitest-contracts: node_modules/.bin/vitest run src/lib/gmContracts.test.ts src/components/nba-front-office/NbaGmDeskBoard.test.tsx src/lib/gmDeskHost.test.ts --testTimeout=300000 --hookTimeout=120000
