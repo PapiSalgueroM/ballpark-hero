@@ -1,0 +1,4 @@
+dashscan-tr exit=0 0s | since 3cca8400: added lines with an en or em dash 0, commit message lines with one 0
+simNoRivalNames exit=0 26s | No rival product names found. 0 findings.
+simCareerLeagueSeasons exit=0 32s | simCareerLeagueSeasons: all sections green
+simHarnessAnchors exit=0 57s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
