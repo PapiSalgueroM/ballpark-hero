@@ -1,0 +1,2 @@
+gmcareer exit=0 19s |    Duration  18.61s (transform 1.67s, setup 67ms, collect 177ms, tests 17.60s, environment 319ms, prepare 137ms)
+ctl-nostrip exit=1 19s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/FrontOfficeGmCareer.test.tsx,title=src/components/front-office-shared/FrontO

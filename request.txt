@@ -1,0 +1,6 @@
+#!serial
+# Release BR: the join's own seam (caa026c3): Round 1533's FrontOfficeGmCareer.test.tsx sets aside Round 1542's save additions in
+# its digest (finish-BRG.md). gmcareer 0 with 15 passed; ctl-nostrip takes the men's strip out on the runner and must
+# exit 1 with 6 failed (then restores src).
+gmcareer: node_modules/.bin/vitest run src/components/front-office-shared/FrontOfficeGmCareer.test.tsx --testTimeout=300000 --hookTimeout=120000
+ctl-nostrip: test "$(grep -c " strip(lg);" src/components/front-office-shared/FrontOfficeGmCareer.test.tsx)" = 1 && sed -i "s/ strip(lg);//" src/components/front-office-shared/FrontOfficeGmCareer.test.tsx && node_modules/.bin/vitest run src/components/front-office-shared/FrontOfficeGmCareer.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src; exit $s
