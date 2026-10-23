@@ -5988,6 +5988,11 @@
   ],
   "afl": [
    {
+    "year": 2026,
+    "champion": "Brisbane Lions",
+    "extra": {}
+   },
+   {
     "year": 2025,
     "champion": "Brisbane Lions",
     "extra": {}
@@ -6634,6 +6639,14 @@
    }
   ],
   "brownlow": [
+   {
+    "year": 2026,
+    "champion": "Nick Daicos",
+    "extra": {
+     "club": "Collingwood",
+     "votes": "47"
+    }
+   },
    {
     "year": 2025,
     "champion": "Matt Rowell",
@@ -7533,6 +7546,11 @@
   ],
   "dallym": [
    {
+    "year": 2026,
+    "champion": "Nathan Cleary",
+    "extra": {}
+   },
+   {
     "year": 2025,
     "champion": "James Tedesco",
     "extra": {}
@@ -7769,6 +7787,13 @@
    }
   ],
   "nrl": [
+   {
+    "year": 2026,
+    "champion": "Sydney Roosters",
+    "extra": {
+     "competition": "NRL"
+    }
+   },
    {
     "year": 2025,
     "champion": "Brisbane Broncos",
