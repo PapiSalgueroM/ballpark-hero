@@ -1,0 +1,7 @@
+build exit=0 25s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+walk exit=0 42s | playNflSeasonStats: 112 checks, 0 failed
+playFrontOfficeGameDay exit=0 349s | playFrontOfficeGameDay: 386 checks, 0 failed
+weight-head exit=0 14s | weightFo head: /front-office load 386.6K gz over 42 files
+weight-base exit=0 70s | weightFo base: /front-office load 381.8K gz over 41 files
+mutH exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeSeasonStats.test.tsx,title=src/components/front-office/FrontOfficeSeason
+playGmCareer exit=0 454s | playGmCareer: green. 1 board, 3 sizes, four walks each and the slow kit walk at 390 and 1280.
