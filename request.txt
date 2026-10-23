@@ -1,0 +1,20 @@
+# Release BR, Round 1542 (NFL Front Office who scored, carried by 1562 at bc856874; its head ab162ea8 has the tree of 8fda1d1b2):
+# r1542-fx2-b (rc-fx2-b.txt). sim-lift keeps its archive of c9d18897: the NFL law files the lift bundles
+# (gmGameDay, nflGameDay, gmGameDayView and the season files) are the same on ab162ea8 and on the joined head. gmgd-statsstory,
+# lazy-closestatic and lazy-eager exit 1 FIRED. Nothing dropped.
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-new: node_modules/.bin/vitest run src/components/front-office/FrontOfficeSeasonStats.test.tsx src/lib/nflSeasonStats.test.ts src/lib/gmGameDayView.test.ts src/components/front-office-shared/GmGameDayCard.test.tsx src/lib/gmGameDay.test.ts src/test/gameLawNfl.test.ts src/test/usSeasonNfl.test.ts --testTimeout=300000 --hookTimeout=120000
+vitest-board1: node_modules/.bin/vitest run src/components/front-office/FrontOfficeTile.test.tsx src/components/front-office/FrontOfficeGameDay.test.tsx src/components/front-office/FrontOfficeOnePress.test.tsx src/components/front-office/FrontOfficePostseason.test.tsx src/test/frontOfficeSaveRecovery.test.tsx --testTimeout=300000 --hookTimeout=120000
+vitest-board2: node_modules/.bin/vitest run src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx src/components/front-office/FrontOfficeLazyDesk.test.tsx src/components/front-office/FrontOfficeCuts.test.tsx src/components/front-office/FrontOfficeFullRoster.test.tsx src/components/front-office/FrontOfficeDraftCapital.test.tsx src/components/front-office/FrontOfficePromotion.test.tsx src/components/front-office/FrontOfficeTagDepth.test.tsx src/components/front-office/FrontOfficeRatingEvidence.test.tsx --testTimeout=300000 --hookTimeout=120000
+sim-lift: mkdir -p /tmp/lb1 && git archive c9d18897201aae8528e635f03a877e78eb02ed5c src | tar -x -C /tmp/lb1 && LIFT_BASE=/tmp/lb1 node scripts/simNflSeasonStats.mjs
+simGmGameDay: node scripts/simGmGameDay.mjs
+gmgd-statsstory: GM_GAMEDAY_CONTROL=statsstory node scripts/simGmGameDay.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simGmReload: node scripts/simGmReload.mjs
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+simUsSeasonCentre: node scripts/simUsSeasonCentre.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simFoLazyDesk: node scripts/simFoLazyDesk.mjs
+lazy-closestatic: SIM_FO_LAZY_DESK_CONTROL=closestatic node scripts/simFoLazyDesk.mjs
+lazy-eager: SIM_FO_LAZY_DESK_CONTROL=eager node scripts/simFoLazyDesk.mjs

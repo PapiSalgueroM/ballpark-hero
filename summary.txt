@@ -1,0 +1,16 @@
+vitest-new exit=0 11s |    Duration  10.80s (transform 4.69s, setup 676ms, collect 7.97s, tests 13.97s, environment 3.72s, prepare 1.39s)
+vitest-board1 exit=0 21s |    Duration  20.92s (transform 3.94s, setup 647ms, collect 7.42s, tests 35.56s, environment 2.76s, prepare 983ms)
+vitest-board2 exit=0 12s |    Duration  11.98s (transform 3.84s, setup 542ms, collect 11.32s, tests 16.47s, environment 3.46s, prepare 945ms)
+tsc exit=0 75s | 
+sim-lift exit=0 56s | simNflSeasonStats: 130 checks, 0 failed
+simGmGameDay exit=0 56s | simGmGameDay: 462 checks, 0 failed
+simGmReload exit=0 10s | simGmReload: all green. Four front offices keep a finished season through a reload, and none of them can play a closed one again.
+simSaveKeeper exit=0 5s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+simHarnessAnchors exit=0 49s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+gmgd-statsstory exit=1 57s | simGmGameDay: 462 checks, 1 failed (control statsstory)
+simStorageWrites exit=0 3s | simStorageWrites: all green (owed: 12)
+simNoRivalNames exit=0 12s | No rival product names found. 0 findings.
+simUsSeasonCentre exit=0 61s | simUsSeasonCentre: 158 checks, 0 failed
+simFoLazyDesk exit=0 25s | simFoLazyDesk: all checks passed
+lazy-closestatic exit=1 23s | simFoLazyDesk CONTROL closestatic FIRED: section 1 went red with 2 failures (red sections 1)
+lazy-eager exit=1 16s | simFoLazyDesk CONTROL eager FIRED: section 1 went red with 10 failures (red sections 1)
