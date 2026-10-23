@@ -96,6 +96,12 @@ import { NFL_POSTSEASON, nflPlayTie, nflRoundsOf } from '@/lib/frontOfficePostse
 import {
   bracketChampion, bracketPairings, bracketWeek, openBracket, playBracketAll, playBracketWeek, type BracketFormat, type GmBracketSave,
 } from '@/lib/gmBracket';
+/* Round 1542: who scored, the recorder, the close and the readers (static), the roster badge, the season card's props */
+import {
+  nflAwardList, nflAwardsOf, nflCleanSave, nflCloseSeasonStats, nflMarkRookies, nflPlaysFor, nflRecordGame, nflRecordWeek, NFL_AWARD_LABEL,
+} from '@/lib/nflSeasonStats';
+import { FoAwardBadge } from '@/components/front-office-shared/FoAwardBadge';
+import type { NflSeasonCardProps } from '@/components/front-office/NflSeasonStats';
 /* Round 1307: the Game Day tile of the week box. The card, the story of a
    game, the match clock and the "?" are one chunk the week box asks for
    when it opens; the press never waits on it. Made here, at module level:
@@ -109,13 +115,8 @@ const NflGameDay = lazyPart<GmGameDayMount>(() => import('@/components/front-off
 const NflBracket = lazyPart<GmBracketMount>(() => import('@/components/front-office/NflBracket'));
 /* Round 1542: who scored. The press credits every touchdown and sack and keeps the season's lines (the recorder, the
    close and the readers are static: they run in the press's own tick and at load); the season card, its leaders, its
-   words and the award history are one chunk the recap and Standings ask for. */
-import {
-  nflAwardList, nflAwardsOf, nflCleanSave, nflCloseSeasonStats, nflMarkRookies, nflPlaysFor, nflRecordGame, nflRecordWeek, NFL_AWARD_LABEL,
-} from '@/lib/nflSeasonStats';
-import { FoAwardBadge } from '@/components/front-office-shared/FoAwardBadge';
-import type { NflSeasonCardProps } from '@/components/front-office/NflSeasonStats';
-/* its own holding box, not the desk's (data-gm-panel-loading means the career kit is on its way, FrontOfficeLazyDesk.test.tsx):
+   words and the award history are one chunk the recap and Standings ask for. Their imports sit with the others above.
+   The card has its own holding box, not the desk's (data-gm-panel-loading means the career kit is on its way, FrontOfficeLazyDesk.test.tsx):
    the same fixed height, so the recap and Standings do not jump when the card lands */
 const NflSeasonCardChunk = lazy(() => import('@/components/front-office/NflSeasonStats'));
 function NflSeasonCard(props: NflSeasonCardProps) {
