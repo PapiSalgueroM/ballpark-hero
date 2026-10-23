@@ -1,0 +1,9 @@
+#!serial
+# Release BQ triage: the new sim reds of the gate, alone, with full output (truthdigest twice: it ran beside its own control there).
+td1: node_modules/.bin/vitest run src/test/usCareerTruthDigest.test.ts --testTimeout=600000
+td2: node_modules/.bin/vitest run src/test/usCareerTruthDigest.test.ts --testTimeout=600000
+cls: node scripts/simCareerLeagueSeasons.mjs
+cls-premain: SIM_LEAGUE_SEASONS_BASE=3ee0bf62 node scripts/simCareerLeagueSeasons.mjs
+end41: SC_ENDINGS_BASE=41368514 node scripts/simSoccerCareerEndings.mjs
+end-no1519: B=$(node scripts/lib/treeWithoutMerge.mjs 25e94416 cedd0239) || exit 2; SC_ENDINGS_BASE=$B node scripts/simSoccerCareerEndings.mjs
+dirty-plain: node scripts/simUsDirtyMoney.mjs

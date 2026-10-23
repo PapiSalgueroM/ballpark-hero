@@ -1,0 +1,7 @@
+td1 exit=0 20s |    Duration  19.54s (transform 601ms, setup 37ms, collect 773ms, tests 18.33s, environment 162ms, prepare 63ms)
+td2 exit=0 20s |    Duration  19.75s (transform 583ms, setup 35ms, collect 750ms, tests 18.58s, environment 147ms, prepare 74ms)
+cls exit=1 20s | simCareerLeagueSeasons: 3 failures (sections c)
+cls-premain exit=0 11s | simCareerLeagueSeasons: all sections green
+end41 exit=1 32s | FAIL: 1 check(s) failed
+end-no1519 exit=0 33s | PASS: no career ends before the age rules without the player, and the pair is reconciled
+dirty-plain exit=0 29s | simUsDirtyMoney: all sections green
