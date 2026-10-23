@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+# Release BQ, Round 1521: the walk (fix2-1521.md, r1521-f2W, rc-walk.txt), the database host blocked by the walk.
+walk: node .rc/x/walkrun1521.mjs
