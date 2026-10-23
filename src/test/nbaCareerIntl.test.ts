@@ -179,6 +179,17 @@ describe('the game', () => {
     expect(checked).toBeGreaterThan(50);
     expect(teeth).toBeGreaterThan(5);
   });
+  it('reads every played summer of a nation\'s history, written out here rather than taken from the helper (review of Round 1544, N1)', () => {
+    /* The USA's real finishes, Athens 2004 to Paris 2024: bronze 2004 and 2006, gold 2008 to 2016, out in the
+       quarter-finals 2019, gold 2021, fourth 2023, gold 2024. A history cut short (Paris never seen) fails here. */
+    const usa = ['bronze', 'bronze', 'gold', 'gold', 'gold', 'gold', 'gold', 'quarter', 'gold', 'fourth', 'gold'] as const;
+    expect(intlRungHistory(NBA_INTL_CALENDAR, 'USA')).toEqual([...usa]);
+    const qatar = NBA_INTL_CALENDAR.editionFor(2027);
+    if (!qatar) throw new Error('no 2027');
+    usa.forEach((rung, i) => {
+      expect(nbaIntlStrength(qatar, 'USA', () => (i + 0.5) / usa.length)).toBe(INTL_RUNG_STRENGTH[rung]);
+    });
+  });
 });
 
 describe('his line and his medals', () => {
