@@ -1,0 +1,4 @@
+#!serial
+#!playwright
+m-jump: node .rc/x/mutR.mjs jump && npx vite build --outDir /tmp/dist-m7 --logLevel error && (node scripts/lib/hostLikeServer.mjs /tmp/dist-m7 4197 > /dev/null 2>&1 &) && sleep 3 && BASE=http://localhost:4197 ENGINES=chromium node scripts/playFoSeasonCard.mjs; s=$?; git checkout -- src; exit $s
+m-wide: node .rc/x/mutR.mjs wide && npx vite build --outDir /tmp/dist-m8 --logLevel error && (node scripts/lib/hostLikeServer.mjs /tmp/dist-m8 4198 > /dev/null 2>&1 &) && sleep 3 && BASE=http://localhost:4198 ENGINES=chromium node scripts/playFoSeasonCard.mjs; s=$?; git checkout -- src; exit $s
