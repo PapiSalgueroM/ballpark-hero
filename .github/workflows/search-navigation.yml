@@ -13,7 +13,7 @@ concurrency:
 
 env:
   BASE_SOURCE: 0ca8c1fc065f1ca282c9454683dca31911852638
-  SEARCH_TEST_SHA256: 963cd1d5bf6ed8ac77b74e55c005bd8918449ede79b0cd27936aca5571063abe
+  SEARCH_TEST_SHA256: 3135e87c884c354b3c0f81fdb84440daf84d07d609c70f3fd9fef51377c8fcb8
   SEARCH_PRIMARY_CASE: 'Search URL navigation ownership clears a pending draft when the real Search games link opens the same URL'
   SEARCH_PRIMARY_PATTERN: '^Search URL navigation ownership clears a pending draft when the real Search games link opens the same URL$'
   SEARCH_PRIMARY_MARKER: SEARCH_SAME_URL_LINK_CLEARS_DRAFT

@@ -1,4 +1,4 @@
-import { act, cleanup, fireEvent, render } from '@testing-library/react';
+import { act, cleanup, createEvent, fireEvent, render } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createMemoryRouter, Link, Outlet, RouterProvider } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
@@ -71,9 +71,47 @@ describe('Search URL navigation ownership', () => {
 
     const beforeKey = view.router.state.location.key;
     const beforeField = view.field();
-    await act(async () => {
-      fireEvent.click(view.getByRole('link', { name: 'Search games again' }));
+    const link = view.getByRole('link', { name: 'Search games again' });
+    const click = createEvent.click(link) as MouseEvent;
+    const actualNavigate = vi.spyOn(view.router, 'navigate');
+    let dispatchReturned: boolean | null = null;
+    let navigationAwaitCompleted = false;
+    const eventFields = () => ({
+      type: click.type, constructor: click.constructor.name, isMouseEvent: click instanceof window.MouseEvent,
+      button: click.button, buttons: click.buttons, altKey: click.altKey, ctrlKey: click.ctrlKey,
+      metaKey: click.metaKey, shiftKey: click.shiftKey, bubbles: click.bubbles, cancelable: click.cancelable,
+      composed: click.composed, defaultPrevented: click.defaultPrevented, isTrusted: click.isTrusted,
+      targetHref: click.target instanceof HTMLAnchorElement ? click.target.getAttribute('href') : null,
     });
+    const diagnostic = (stage: string) => {
+      const current = view.queryByRole('textbox', { name: 'Search games' }) as HTMLInputElement | null;
+      const state = view.router.state;
+      console.log('SEARCH_LINK_DIAGNOSTIC|' + JSON.stringify({
+        stage, unitSyntheticEvent: true, event: eventFields(), dispatchReturned, navigationAwaitCompleted,
+        currentInput: current?.value ?? null, sameInput: current === beforeField, linkHref: link.getAttribute('href'),
+        router: { location: state.location, historyAction: state.historyAction, initialized: state.initialized,
+          navigation: state.navigation, errors: state.errors },
+        navigate: { totalCalls: actualNavigate.mock.calls.length, maximumLoggedCalls: 8,
+          callsTruncated: actualNavigate.mock.calls.length > 8, calls: actualNavigate.mock.calls.slice(0, 8),
+          results: actualNavigate.mock.results.slice(0, 8).map(result => ({
+            type: result.type,
+            thenable: result.type === 'return' && result.value != null && typeof result.value.then === 'function',
+          })) },
+      }));
+    };
+    diagnostic('before-dispatch');
+    try {
+      await act(async () => {
+        dispatchReturned = fireEvent(link, click);
+        diagnostic('after-dispatch-before-navigation-await');
+        const returned = actualNavigate.mock.results.filter(result => result.type === 'return').map(result => result.value);
+        await Promise.all(returned);
+        navigationAwaitCompleted = true;
+      });
+    } finally {
+      try { diagnostic('finally-after-navigation-await'); }
+      finally { actualNavigate.mockRestore(); }
+    }
     expect(view.router.state.location.key, 'SEARCH_REAL_LINK_COMMITTED_LOCATION').not.toBe(beforeKey);
     expect(view.field(), 'SEARCH_REAL_LINK_KEEPS_MOUNTED_INPUT').toBe(beforeField);
 
