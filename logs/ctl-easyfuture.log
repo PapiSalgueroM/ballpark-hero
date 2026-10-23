@@ -1,0 +1,68 @@
+NEGATIVE CONTROL easyfuture: a summer still to come gives each nation the mean of its rungs again (Round 1541's field) (section 5 must fail)
+section 5: the tournament, 8000 tournaments an edition kind, ten seed sets
+  played (gold/medal percent by tier 87-89, 90-92, 93-95, 96-99):
+    set 1: 47.8/78.0  56.1/84.0  64.0/88.1  65.7/90.9
+    set 2: 47.6/79.4  54.3/84.0  62.4/89.3  64.2/90.5
+    set 3: 46.9/78.7  55.8/84.2  65.0/88.7  66.3/89.8
+    set 4: 46.6/78.5  54.6/84.2  63.5/88.0  65.3/89.7
+    set 5: 47.3/78.5  57.1/84.4  62.8/89.3  66.7/90.5
+    set 6 (held out): 46.1/77.8  54.5/84.2  64.2/88.6  65.0/89.0
+    set 7 (held out): 47.8/79.0  55.0/83.3  63.7/87.8  66.5/89.9
+    set 8 (held out): 47.7/78.2  57.0/84.5  64.0/88.0  65.0/90.3
+    set 9 (held out): 48.0/78.0  55.8/83.7  64.6/89.0  65.8/90.2
+    set 10 (held out): 47.4/78.7  56.1/84.5  64.6/89.4  65.0/90.2
+    sets 1 to 5 gold range by tier: 46.6 to 47.8, 54.3 to 57.1, 62.4 to 65.0, 64.2 to 66.7
+    held out pooled gold by tier: 47.4, 55.7, 64.2, 65.5; rises 8.3, 8.5, 1.3
+  future (gold/medal percent by tier 87-89, 90-92, 93-95, 96-99):
+    set 1: 67.7/91.7  79.5/94.9  88.8/97.8  89.8/98.1
+    set 2: 68.8/92.5  78.4/95.2  88.3/97.6  90.1/98.2
+    set 3: 71.7/92.5  81.5/95.3  87.7/97.8  90.8/98.5
+    set 4: 70.8/92.8  80.5/95.0  87.0/97.1  90.2/98.5
+    set 5: 68.8/91.3  82.0/95.7  88.3/97.8  91.1/98.8
+    set 6 (held out): 66.7/91.7  78.6/94.2  90.0/97.9  90.7/98.2
+    set 7 (held out): 69.6/91.7  77.5/94.8  89.4/98.0  90.2/98.2
+    set 8 (held out): 70.8/92.4  79.5/95.3  86.3/97.0  89.8/98.2
+    set 9 (held out): 70.3/91.1  81.5/95.7  88.4/97.9  90.3/98.3
+    set 10 (held out): 70.3/92.0  80.5/95.0  88.6/98.1  89.3/97.5
+    sets 1 to 5 gold range by tier: 67.7 to 71.7, 78.4 to 82.0, 87.0 to 88.8, 89.8 to 91.1
+    held out pooled gold by tier: 69.5, 79.5, 88.5, 90.1; rises 10.0, 9.0, 1.5
+  FAIL [5] future set 6 tier 87-89: gold 66.7 medal 91.7 outside the played band 39-55.4 / 71.8-86.4
+  FAIL [5] future set 6 tier 90-92: gold 78.6 medal 94.2 outside the played band 47.6-65.8 / 76-91.4
+  FAIL [5] future set 6 tier 93-95: gold 90.0 medal 97.9 outside the played band 54.8-70 / 82.2-95.2
+  FAIL [5] future set 6 tier 96-99: gold 90.7 medal 98.2 outside the played band 57-72.2 / 84.2-97
+  FAIL [5] future set 7 tier 87-89: gold 69.6 medal 91.7 outside the played band 39-55.4 / 71.8-86.4
+  FAIL [5] future set 7 tier 90-92: gold 77.5 medal 94.8 outside the played band 47.6-65.8 / 76-91.4
+  FAIL [5] future set 7 tier 93-95: gold 89.4 medal 98.0 outside the played band 54.8-70 / 82.2-95.2
+  FAIL [5] future set 7 tier 96-99: gold 90.2 medal 98.2 outside the played band 57-72.2 / 84.2-97
+  FAIL [5] future set 8 tier 87-89: gold 70.8 medal 92.4 outside the played band 39-55.4 / 71.8-86.4
+  FAIL [5] future set 8 tier 90-92: gold 79.5 medal 95.3 outside the played band 47.6-65.8 / 76-91.4
+  FAIL [5] future set 8 tier 93-95: gold 86.3 medal 97.0 outside the played band 54.8-70 / 82.2-95.2
+  FAIL [5] future set 8 tier 96-99: gold 89.8 medal 98.2 outside the played band 57-72.2 / 84.2-97
+  projected (gold/medal percent by tier 87-89, 90-92, 93-95, 96-99):
+    set 1: 70.5/92.0  80.4/96.2  88.7/98.0  91.1/98.5
+    set 2: 70.8/93.8  80.5/95.6  90.2/97.8  90.8/98.3
+    set 3: 70.0/92.4  80.7/95.8  89.0/97.8  90.1/97.8
+    set 4: 70.1/91.0  81.7/95.7  89.2/97.7  90.3/98.3
+    set 5: 71.8/92.1  81.4/96.2  88.2/98.2  91.5/98.3
+    set 6 (held out): 70.3/92.5  81.6/96.2  89.3/98.1  91.3/98.5
+    set 7 (held out): 71.5/92.0  83.5/96.4  89.3/98.0  91.1/98.0
+    set 8 (held out): 69.5/91.3  81.7/96.4  88.8/98.4  90.8/98.3
+    set 9 (held out): 70.3/92.8  80.5/95.1  88.8/98.1  90.5/98.4
+    set 10 (held out): 69.2/91.8  80.9/95.8  88.5/98.2  90.8/98.0
+    sets 1 to 5 gold range by tier: 70.0 to 71.8, 80.4 to 81.7, 88.2 to 90.2, 90.1 to 91.5
+    held out pooled gold by tier: 70.1, 81.6, 88.9, 90.9; rises 11.5, 7.3, 1.9
+  the knock (hurt percent by age 26, 30, 33, 36; the rule says 8, 8, 11, 14):
+    set 1: 7.4 of 6040  8.0 of 6032  10.7 of 5964  13.6 of 5964
+    set 2: 7.7 of 6040  8.4 of 6032  10.9 of 5964  13.7 of 5964
+    set 3: 8.4 of 6040  8.2 of 6032  10.9 of 5964  14.8 of 5964
+    set 4: 8.2 of 6040  8.1 of 6032  10.7 of 5964  13.5 of 5964
+    set 5: 8.2 of 6040  8.1 of 6032  11.0 of 5964  14.6 of 5964
+    set 6 (held out): 7.5 of 6040  8.0 of 6032  11.4 of 5964  13.7 of 5964
+    set 7 (held out): 8.6 of 6040  8.3 of 6032  11.3 of 5964  13.0 of 5964
+    set 8 (held out): 7.9 of 6040  8.3 of 6032  11.3 of 5964  14.2 of 5964
+    set 9 (held out): 8.0 of 6040  7.9 of 6032  10.8 of 5964  13.8 of 5964
+    set 10 (held out): 7.6 of 6040  7.9 of 6032  11.1 of 5964  14.1 of 5964
+    sets 1 to 5 range by age: 7.4 to 8.4, 8.0 to 8.4, 10.7 to 11.0, 13.5 to 14.8; pooled 8.0, 8.2, 10.9, 14.0
+    held out pooled by age: 7.9, 8.1, 11.2, 13.8; rise from 26 to 36: 5.9
+  240000 tournaments held to the invariants
+simCareerIntl: control easyfuture FIRED (section 5, 40 failures)

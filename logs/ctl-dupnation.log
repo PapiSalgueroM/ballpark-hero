@@ -1,0 +1,6 @@
+NEGATIVE CONTROL dupnation: oly-2012's field holds Spain twice (section 3 must fail)
+section 3: the fields
+  FAIL [3] oly-2012 field holds a nation twice
+  11 played fields, 46 nations, no flag: Puerto Rico, Serbia and Montenegro
+  12 summers 2025 to 2050 draw their field (the same for every career)
+simCareerIntl: control dupnation FIRED (section 3, 1 failures)

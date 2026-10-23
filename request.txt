@@ -1,0 +1,31 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-intl: node_modules/.bin/vitest run src/test/usCareerIntlBoard.test.tsx src/test/nbaCareerIntl.test.ts src/lib/careerIntl.test.ts src/test/careerSeasonReview.test.tsx src/test/usBoardFixture.test.tsx --testTimeout=300000 --hookTimeout=120000
+intl-default: node scripts/simCareerIntl.mjs
+intl-5: INTL_SECTIONS=5 node scripts/simCareerIntl.mjs
+intl-8: mkdir -p /tmp/old && git archive 74ece9992 | tar -x -C /tmp/old && INTL_OLD_DIR=/tmp/old INTL_SECTIONS=8 node scripts/simCareerIntl.mjs
+intl-7-b33: mkdir -p /tmp/b33 && git archive 33d435858 | tar -x -C /tmp/b33 && INTL_BASE_DIR=/tmp/b33 INTL_SECTIONS=7 node scripts/simCareerIntl.mjs
+ctl-restwrites-b33: mkdir -p /tmp/b33r && git archive 33d435858 | tar -x -C /tmp/b33r && INTL_BASE_DIR=/tmp/b33r INTL_CONTROL=restwrites INTL_SECTIONS=7 node scripts/simCareerIntl.mjs
+ctl-legacyreads-b33: mkdir -p /tmp/b33l && git archive 33d435858 | tar -x -C /tmp/b33l && INTL_BASE_DIR=/tmp/b33l INTL_CONTROL=legacyreads INTL_SECTIONS=7 node scripts/simCareerIntl.mjs
+ctl-staticledger: INTL_CONTROL=staticledger INTL_SECTIONS=12 node scripts/simCareerIntl.mjs
+ctl-gateyear: INTL_CONTROL=gateyear INTL_SECTIONS=2 node scripts/simCareerIntl.mjs
+ctl-shiftyear: INTL_CONTROL=shiftyear INTL_SECTIONS=2 node scripts/simCareerIntl.mjs
+ctl-seasonyear: INTL_CONTROL=seasonyear INTL_SECTIONS=2 node scripts/simCareerIntl.mjs
+ctl-lowbar: INTL_CONTROL=lowbar INTL_SECTIONS=4 node scripts/simCareerIntl.mjs
+ctl-anyyear: INTL_CONTROL=anyyear INTL_SECTIONS=4 node scripts/simCareerIntl.mjs
+ctl-endcall: INTL_CONTROL=endcall INTL_SECTIONS=4 node scripts/simCareerIntl.mjs
+ctl-easyfuture: INTL_CONTROL=easyfuture INTL_SECTIONS=5 node scripts/simCareerIntl.mjs
+ctl-nolift: INTL_CONTROL=nolift INTL_SECTIONS=5 node scripts/simCareerIntl.mjs
+ctl-nobronze: INTL_CONTROL=nobronze INTL_SECTIONS=5 node scripts/simCareerIntl.mjs
+ctl-knockflip: INTL_CONTROL=knockflip INTL_SECTIONS=5 node scripts/simCareerIntl.mjs
+ctl-knockage: INTL_CONTROL=knockage INTL_SECTIONS=5 node scripts/simCareerIntl.mjs
+ctl-norepair: INTL_CONTROL=norepair INTL_SECTIONS=8 node scripts/simCareerIntl.mjs
+ctl-onesource: INTL_CONTROL=onesource INTL_SECTIONS=1 node scripts/simCareerIntl.mjs
+ctl-dupnation: INTL_CONTROL=dupnation INTL_SECTIONS=3 node scripts/simCareerIntl.mjs
+ctl-fieldsize: INTL_CONTROL=fieldsize INTL_SECTIONS=3 node scripts/simCareerIntl.mjs
+ctl-genfield: INTL_CONTROL=genfield INTL_SECTIONS=3 node scripts/simCareerIntl.mjs
+ctl-copy: INTL_CONTROL=copy INTL_SECTIONS=6 node scripts/simCareerIntl.mjs
+ctl-mathrandom: INTL_CONTROL=mathrandom INTL_SECTIONS=6 node scripts/simCareerIntl.mjs
+simUsBoardParity: node scripts/simUsBoardParity.mjs
+simUsCareerWeight: node scripts/simUsCareerWeight.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
