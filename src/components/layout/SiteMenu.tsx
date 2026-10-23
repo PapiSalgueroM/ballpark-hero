@@ -32,7 +32,7 @@ export function SiteMenu() {
     <Button ref={trigger} type="button" variant="ghost" aria-label="Open site menu"
       aria-haspopup="dialog" aria-expanded={open} aria-controls={open && Panel ? id : undefined}
       aria-busy={open && !Panel && !failed ? true : undefined}
-      onClick={() => setOpen(true)} className="h-11 min-h-11 shrink-0 gap-2 rounded-none px-3 text-sm">
+      onClick={() => setOpen(true)} className="h-11 min-h-11 shrink-0 self-start gap-2 rounded-none px-3 text-sm">
       <Menu className="h-5 w-5" aria-hidden="true" />
       Menu
     </Button>

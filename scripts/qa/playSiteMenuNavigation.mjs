@@ -181,7 +181,7 @@ async function walk(spec) {
     consoleErrors: [], pageErrors: [], http: [], responseErrors: [], documents: [], panelRequests: [], expectedFaultErrors: [] };
   report.cases.push(row);
   let context, page, releaseGate, routeMode = 'healthy';
-  const reads = [], gate = new Promise(resolve => { releaseGate = resolve; });
+  const gate = new Promise(resolve => { releaseGate = resolve; });
   const fault = { get mode() { return routeMode; }, set mode(value) { routeMode = value; }, release: releaseGate };
   const day = pollDay(Date.now());
   try {
@@ -198,6 +198,17 @@ async function walk(spec) {
             const mode = fault.mode; row.panelRequests.push({ path: panelPath, mode, method: request.method() });
             if (mode === 'delay') await gate;
             if (mode === 'failure') return await route.fulfill({ status: 503, contentType: 'text/javascript', body: '/* Controlled panel transport failure. */' });
+          }
+          if (request.method() === 'GET' && /\.(?:css|js)$/.test(url.pathname)) {
+            const response = await route.fetch({ url: BASE + url.pathname, maxRedirects: 0, maxRetries: 0, timeout: timeout() });
+            try {
+              assert.equal(response.url(), BASE + url.pathname, 'MENU_SERVED_BODY: exact loopback response URL');
+              assert.equal(response.status(), 200, 'MENU_SERVED_BODY: actual asset response200');
+              const body = await response.body(), expected = staticFiles.get(url.pathname);
+              assert(expected && body.length === expected.bytes && sha(body) === expected.sha256, 'MENU_SERVED_BODY: actual JS/CSS equals completed dist');
+              (row.servedBodies ||= []).push({ path: url.pathname, bytes: body.length, sha256: sha(body), capturedBeforeFulfill: true });
+              return await route.fulfill({ response, body });
+            } finally { await response.dispose(); }
           }
           return await route.continue();
         }
@@ -224,12 +235,7 @@ async function walk(spec) {
     page.on('response', response => {
       const url = new URL(response.url()); if (url.origin !== BASE) return;
       const status = response.status(); row.http.push({ path: url.pathname, status, method: response.request().method() });
-      if (/\.(?:css|js)$/.test(url.pathname) && status < 400) reads.push((async () => {
-        const body = await response.body(), expected = staticFiles.get(url.pathname);
-        assert(expected && sha(body) === expected.sha256, 'MENU_SERVED_BODY: actual JS/CSS equals completed dist');
-        row.http[row.http.length - 1]; // Body evidence is keyed by exact asset path below.
-        (row.servedBodies ||= []).push({ path: url.pathname, bytes: body.length, sha256: sha(body) });
-      })().catch(error => row.responseErrors.push(failure(error))));
+
     });
     await page.goto(BASE + spec.route, { waitUntil: 'load', timeout: timeout(12000) }); await ready(page);
     assert.equal(row.panelRequests.length, 0, 'MENU_LAZY: built panel absent from cold page requests');
@@ -241,7 +247,7 @@ async function walk(spec) {
     if (page && !page.isClosed()) try { await page.screenshot({ path: path.join(OUT, row.id + '-failure.png'), fullPage: false, timeout: 3000 }); } catch (captureError) { row.captureError = failure(captureError); }
   } finally {
     releaseGate();
-    try { await Promise.all(reads); if (context) await context.close(); await Promise.all(reads); } catch (error) { row.responseErrors.push(failure(error)); }
+    try { if (context) await context.close(); } catch (error) { row.responseErrors.push(failure(error)); }
     try {
       assert.deepEqual(row.blocked, [], 'MENU_SETUP: no unknown/denied request or socket');
       assert.deepEqual(row.pageErrors, [], 'MENU_SETUP: no actual page error');
