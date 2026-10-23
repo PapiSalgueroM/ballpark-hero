@@ -1,0 +1,8 @@
+c-smalltext exit=1 57s | playFoSeasonCard: 120 checks, 18 failed (control smalltext)
+c-truncate exit=1 56s | playFoSeasonCard: 120 checks, 12 failed (control truncate)
+m-tabs44 exit=1 56s | playFoSeasonCard: 120 checks, 18 failed (points red: tab)
+m-rulesmall exit=1 57s | playFoSeasonCard: 120 checks, 6 failed (points red: size)
+m-nostack exit=1 57s | playFoSeasonCard: 120 checks, 2 failed (points red: cut)
+m-nowrap exit=1 57s | playFoSeasonCard: 120 checks, 3 failed (points red: cut)
+m-badge-nflwalk exit=0 67s | playNflSeasonStats: 112 checks, 0 failed
+m-qualsmall exit=1 56s | playFoSeasonCard: 120 checks, 18 failed (points red: size)
