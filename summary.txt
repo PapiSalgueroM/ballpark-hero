@@ -1,0 +1,3 @@
+vitest-more exit=0 5s |    Duration  4.71s (transform 1.49s, setup 338ms, collect 3.39s, tests 4.58s, environment 1.78s, prepare 560ms)
+simGmDraftOrder exit=0 7s | simGmDraftOrder: green. 603488 checks over 10 sections: the order is the league's, the lottery is drawn once on its own stream and saved, and nothing mounts the lift yet.
+simNbaEarnedDraft exit=0 13s | simNbaEarnedDraft: green.

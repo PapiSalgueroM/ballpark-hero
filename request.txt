@@ -1,0 +1,5 @@
+# Release BR, Round 1556's r1556-more (r1556/.tmp-fx/rc-more.txt). DROPPED: simNbaDraftBoard, the same
+# line as rc-BRa.txt's.
+simGmDraftOrder: node scripts/simGmDraftOrder.mjs
+simNbaEarnedDraft: node scripts/simNbaEarnedDraft.mjs
+vitest-more: node_modules/.bin/vitest run src/lib/gmDeskHost.test.ts src/lib/gmEarnedDraft.test.ts src/lib/nbaEarnedDraft.test.ts src/components/nba-front-office/NbaDraftNightRivals.test.tsx src/components/mlb-front-office/MlbGmDesk.test.tsx --testTimeout=300000 --hookTimeout=120000
