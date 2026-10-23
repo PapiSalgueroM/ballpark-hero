@@ -1,0 +1,398 @@
+[
+ {
+  "id": "baseball-390",
+  "shots": [
+   "baseball-390-board",
+   "baseball-390-solved1",
+   "baseball-390-final"
+  ],
+  "notes": [],
+  "rulesText": "⚾ How to Play\n\nBaseball Connections\n\nGoal\n\nFind four groups of 5 baseball players who share a connection.\n\nHow it works\n\nSelect 5 players you think belong together\nTap \"Submit\" to check your guess\nCorrect groups lock in and reveal their connection\nWrong guesses cost a life. You get 4 total\n\nDifficulty\n\n🟡 Yellow: Easiest\n\n🟢 Green: Medium\n\n🔵 Blue: Hard\n\n🟣 Purple: Hardest\n\nConnections can include\n\nSame team, same draft class, same country, same award, same position, same era, and more.\n\nClose",
+  "tilesAtStart": 20,
+  "save": "{\"v\":1,\"date\":\"2026-12-15\",\"puzzleIndex\":14,\"puzzleId\":\"bconn-015\",\"guesses\":[{\"t\":\"ok\",\"theme\":\"NL MVP winners (2015-2025)\",\"players\":[\"Bryce Harper\",\"Kris Bryant\",\"Cody Bellinger\",\"Freddie Freeman\",\"Shohei Ohtani\"],\"diff\":\"yellow\"}],\"gameStatus\":\"playing\"}",
+  "after1": "Groups found: 1/4",
+  "after2": "Groups found: 2/4",
+  "after3": "Groups found: 3/4",
+  "after4": "Groups found: 4/4",
+  "overflow": {
+   "doc": 390,
+   "vw": 390
+  },
+  "finalText": "DOUKNOWBALL\nBack\nTrack stats\n⚾ MLB CONNECTIONS\n\nFind four groups of 5 baseball players that share a connection\n\n📅 Daily\n∞ Unlimited\nGroups found: 4/4\nLives: ❤️❤️❤️❤️\nHow to play\n\nNL MVP WINNERS (2015-2025)\n\nBryce Harper\nKris Bryant\nCody Bellinger\nFreddie Freeman\nShohei Ohtani\n\nPLAYED FOR THE DETROIT TIGERS\n\nMiguel Cabrera\nJustin Verlander\nPrince Fielder\nMax Scherzer\nCurtis Granderson\n\nSWITCH-HITTING SHORTSTOPS\n\nFrancisco Lindor\nJose Reyes\nJimmy Rollins\nOzzie Smith\nOmar Vizquel\n\nCLOSERS WITH 300+ SAVES\n\nMariano Rivera\nTrevor Hoffman\nLee Smith\nBilly Wagner\nRollie Fingers\n\nMLB\n·\nNAILED IT\n\n🏆\nAll Groups Found!\n\nFound 4/4 groups with 4 lives remaining\n\n🏆 Baseball Connections: all 4 groups, 4 lives left\n⚾\nBaseball Connections\nDec 15, 2026\n🏆 Baseball Connections: all 4 groups, 4 lives left\nRESULT\nall 4 groups with 4 lives left on today's Baseball Connections\nDoUKnowBall\ndouknowball.com/base",
+  "errors": []
+ },
+ {
+  "id": "baseball-390-rm",
+  "shots": [
+   "baseball-390-rm-board",
+   "baseball-390-rm-solved1",
+   "baseball-390-rm-final"
+  ],
+  "notes": [],
+  "rulesText": "⚾ How to Play\n\nBaseball Connections\n\nGoal\n\nFind four groups of 5 baseball players who share a connection.\n\nHow it works\n\nSelect 5 players you think belong together\nTap \"Submit\" to check your guess\nCorrect groups lock in and reveal their connection\nWrong guesses cost a life. You get 4 total\n\nDifficulty\n\n🟡 Yellow: Easiest\n\n🟢 Green: Medium\n\n🔵 Blue: Hard\n\n🟣 Purple: Hardest\n\nConnections can include\n\nSame team, same draft class, same country, same award, same position, same era, and more.\n\nClose",
+  "tilesAtStart": 20,
+  "save": "{\"v\":1,\"date\":\"2026-12-15\",\"puzzleIndex\":14,\"puzzleId\":\"bconn-015\",\"guesses\":[{\"t\":\"ok\",\"theme\":\"NL MVP winners (2015-2025)\",\"players\":[\"Bryce Harper\",\"Kris Bryant\",\"Cody Bellinger\",\"Freddie Freeman\",\"Shohei Ohtani\"],\"diff\":\"yellow\"}],\"gameStatus\":\"playing\"}",
+  "after1": "Groups found: 1/4",
+  "after2": "Groups found: 2/4",
+  "after3": "Groups found: 3/4",
+  "after4": "Groups found: 4/4",
+  "overflow": {
+   "doc": 390,
+   "vw": 390
+  },
+  "finalText": "DOUKNOWBALL\nBack\nTrack stats\n⚾ MLB CONNECTIONS\n\nFind four groups of 5 baseball players that share a connection\n\n📅 Daily\n∞ Unlimited\nGroups found: 4/4\nLives: ❤️❤️❤️❤️\nHow to play\n\nNL MVP WINNERS (2015-2025)\n\nBryce Harper\nKris Bryant\nCody Bellinger\nFreddie Freeman\nShohei Ohtani\n\nPLAYED FOR THE DETROIT TIGERS\n\nMiguel Cabrera\nJustin Verlander\nPrince Fielder\nMax Scherzer\nCurtis Granderson\n\nSWITCH-HITTING SHORTSTOPS\n\nFrancisco Lindor\nJose Reyes\nJimmy Rollins\nOzzie Smith\nOmar Vizquel\n\nCLOSERS WITH 300+ SAVES\n\nMariano Rivera\nTrevor Hoffman\nLee Smith\nBilly Wagner\nRollie Fingers\n\nMLB\n·\nNAILED IT\n\n🏆\nAll Groups Found!\n\nFound 4/4 groups with 4 lives remaining\n\n🏆 Baseball Connections: all 4 groups, 4 lives left\n⚾\nBaseball Connections\nDec 15, 2026\n🏆 Baseball Connections: all 4 groups, 4 lives left\nRESULT\nall 4 groups with 4 lives left on today's Baseball Connections\nDoUKnowBall\ndouknowball.com/base",
+  "errors": []
+ },
+ {
+  "id": "baseball-1280",
+  "shots": [
+   "baseball-1280-board",
+   "baseball-1280-solved1",
+   "baseball-1280-final"
+  ],
+  "notes": [],
+  "rulesText": "⚾ How to Play\n\nBaseball Connections\n\nGoal\n\nFind four groups of 5 baseball players who share a connection.\n\nHow it works\n\nSelect 5 players you think belong together\nTap \"Submit\" to check your guess\nCorrect groups lock in and reveal their connection\nWrong guesses cost a life. You get 4 total\n\nDifficulty\n\n🟡 Yellow: Easiest\n\n🟢 Green: Medium\n\n🔵 Blue: Hard\n\n🟣 Purple: Hardest\n\nConnections can include\n\nSame team, same draft class, same country, same award, same position, same era, and more.\n\nClose",
+  "tilesAtStart": 20,
+  "save": "{\"v\":1,\"date\":\"2026-12-15\",\"puzzleIndex\":14,\"puzzleId\":\"bconn-015\",\"guesses\":[{\"t\":\"ok\",\"theme\":\"NL MVP winners (2015-2025)\",\"players\":[\"Bryce Harper\",\"Kris Bryant\",\"Cody Bellinger\",\"Freddie Freeman\",\"Shohei Ohtani\"],\"diff\":\"yellow\"}],\"gameStatus\":\"playing\"}",
+  "after1": "Groups found: 1/4",
+  "after2": "Groups found: 2/4",
+  "after3": "Groups found: 3/4",
+  "after4": "Groups found: 4/4",
+  "overflow": {
+   "doc": 1280,
+   "vw": 1280
+  },
+  "finalText": "DOUKNOWBALL\nBack\nSign up to track your stats\n⚾ MLB CONNECTIONS\n\nFind four groups of 5 baseball players that share a connection\n\n📅 Daily\n∞ Unlimited\nGroups found: 4/4\nLives: ❤️❤️❤️❤️\nHow to play\n\nNL MVP WINNERS (2015-2025)\n\nBryce Harper\nKris Bryant\nCody Bellinger\nFreddie Freeman\nShohei Ohtani\n\nPLAYED FOR THE DETROIT TIGERS\n\nMiguel Cabrera\nJustin Verlander\nPrince Fielder\nMax Scherzer\nCurtis Granderson\n\nSWITCH-HITTING SHORTSTOPS\n\nFrancisco Lindor\nJose Reyes\nJimmy Rollins\nOzzie Smith\nOmar Vizquel\n\nCLOSERS WITH 300+ SAVES\n\nMariano Rivera\nTrevor Hoffman\nLee Smith\nBilly Wagner\nRollie Fingers\n\nMLB\n·\nNAILED IT\n\n🏆\nAll Groups Found!\n\nFound 4/4 groups with 4 lives remaining\n\n🏆 Baseball Connections: all 4 groups, 4 lives left\n⚾\nBaseball Connections\nDec 15, 2026\n🏆 Baseball Connections: all 4 groups, 4 lives left\nRESULT\nall 4 groups with 4 lives left on today's Baseball Connections\nDoUKnowBall\ndouk",
+  "errors": []
+ },
+ {
+  "id": "baseball-1280-rm",
+  "shots": [
+   "baseball-1280-rm-board",
+   "baseball-1280-rm-solved1",
+   "baseball-1280-rm-final"
+  ],
+  "notes": [],
+  "rulesText": "⚾ How to Play\n\nBaseball Connections\n\nGoal\n\nFind four groups of 5 baseball players who share a connection.\n\nHow it works\n\nSelect 5 players you think belong together\nTap \"Submit\" to check your guess\nCorrect groups lock in and reveal their connection\nWrong guesses cost a life. You get 4 total\n\nDifficulty\n\n🟡 Yellow: Easiest\n\n🟢 Green: Medium\n\n🔵 Blue: Hard\n\n🟣 Purple: Hardest\n\nConnections can include\n\nSame team, same draft class, same country, same award, same position, same era, and more.\n\nClose",
+  "tilesAtStart": 20,
+  "save": "{\"v\":1,\"date\":\"2026-12-15\",\"puzzleIndex\":14,\"puzzleId\":\"bconn-015\",\"guesses\":[{\"t\":\"ok\",\"theme\":\"NL MVP winners (2015-2025)\",\"players\":[\"Bryce Harper\",\"Kris Bryant\",\"Cody Bellinger\",\"Freddie Freeman\",\"Shohei Ohtani\"],\"diff\":\"yellow\"}],\"gameStatus\":\"playing\"}",
+  "after1": "Groups found: 1/4",
+  "after2": "Groups found: 2/4",
+  "after3": "Groups found: 3/4",
+  "after4": "Groups found: 4/4",
+  "overflow": {
+   "doc": 1280,
+   "vw": 1280
+  },
+  "finalText": "DOUKNOWBALL\nBack\nSign up to track your stats\n⚾ MLB CONNECTIONS\n\nFind four groups of 5 baseball players that share a connection\n\n📅 Daily\n∞ Unlimited\nGroups found: 4/4\nLives: ❤️❤️❤️❤️\nHow to play\n\nNL MVP WINNERS (2015-2025)\n\nBryce Harper\nKris Bryant\nCody Bellinger\nFreddie Freeman\nShohei Ohtani\n\nPLAYED FOR THE DETROIT TIGERS\n\nMiguel Cabrera\nJustin Verlander\nPrince Fielder\nMax Scherzer\nCurtis Granderson\n\nSWITCH-HITTING SHORTSTOPS\n\nFrancisco Lindor\nJose Reyes\nJimmy Rollins\nOzzie Smith\nOmar Vizquel\n\nCLOSERS WITH 300+ SAVES\n\nMariano Rivera\nTrevor Hoffman\nLee Smith\nBilly Wagner\nRollie Fingers\n\nMLB\n·\nNAILED IT\n\n🏆\nAll Groups Found!\n\nFound 4/4 groups with 4 lives remaining\n\n🏆 Baseball Connections: all 4 groups, 4 lives left\n⚾\nBaseball Connections\nDec 15, 2026\n🏆 Baseball Connections: all 4 groups, 4 lives left\nRESULT\nall 4 groups with 4 lives left on today's Baseball Connections\nDoUKnowBall\ndouk",
+  "errors": []
+ },
+ {
+  "id": "nfl-390",
+  "shots": [
+   "nfl-390-board",
+   "nfl-390-solved1",
+   "nfl-390-final"
+  ],
+  "notes": [],
+  "rulesText": "🏈 How to Play\n\nNFL Connections\n\nGoal\n\nFind four groups of 5 NFL players who share a connection.\n\nHow it works\n\nSelect 5 players you think belong together\nTap \"Submit\" to check your guess\nCorrect groups lock in and reveal their connection\nWrong guesses cost a life. You get 4 total\n\nDifficulty\n\n🟡 Yellow: Easiest\n\n🟢 Green: Medium\n\n🔵 Blue: Hard\n\n🟣 Purple: Hardest\n\nConnections can include\n\nSame franchise, same college, same draft slot, career milestones, and more.\n\nClose",
+  "tilesAtStart": 20,
+  "save": "{\"v\":1,\"date\":\"2026-12-15\",\"puzzleIndex\":3,\"puzzleId\":\"nflconn-004\",\"guesses\":[{\"t\":\"ok\",\"theme\":\"Played for the Steelers\",\"players\":[\"T.J. Watt\",\"Cam Heyward\",\"Ben Roethlisberger\",\"Troy Polamalu\",\"James Harrison\"],\"diff\":\"yellow\"}],\"gameStatus\":\"playing\"}",
+  "after1": "Groups found: 1/4",
+  "after2": "Groups found: 2/4",
+  "after3": "Groups found: 3/4",
+  "after4": "Groups found: 4/4",
+  "overflow": {
+   "doc": 390,
+   "vw": 390
+  },
+  "finalText": "DOUKNOWBALL\nBack\nTrack stats\n🏈 NFL CONNECTIONS\n\nFind four groups of 5 NFL players that share a connection\n\n📅 Daily\n∞ Unlimited\nGroups found: 4/4\nLives: ❤️❤️❤️❤️\nHow to play\n\nPLAYED FOR THE STEELERS\n\nT.J. Watt\nCam Heyward\nBen Roethlisberger\nTroy Polamalu\nJames Harrison\n\nPLAYED FOR THE RAVENS\n\nRay Lewis\nEd Reed\nLamar Jackson\nJustin Tucker\nTerrell Suggs\n\n10,000+ CAREER RECEIVING YARDS\n\nLarry Fitzgerald\nAndre Johnson\nCalvin Johnson\nA.J. Green\nMike Evans\n\nPLAYED COLLEGE BALL AT CLEMSON\n\nTrevor Lawrence\nDeshaun Watson\nTravis Etienne\nTee Higgins\nHunter Renfrow\n\nNFL\n·\nNAILED IT\n\n🏆\nAll Groups Found!\n\nFound 4/4 groups with 4 lives remaining\n\n🏆 NFL Connections: all 4 groups, 4 lives left\n🧩\nNFL Connections\nDec 15, 2026\n🏆 NFL Connections: all 4 groups, 4 lives left\nRESULT\nall 4 groups with 4 lives left on today's NFL Connections\nDoUKnowBall\ndouknowball.com/nfl-connections\nShare result\nCopy chal",
+  "errors": []
+ },
+ {
+  "id": "nfl-390-rm",
+  "shots": [
+   "nfl-390-rm-board",
+   "nfl-390-rm-solved1",
+   "nfl-390-rm-final"
+  ],
+  "notes": [],
+  "rulesText": "🏈 How to Play\n\nNFL Connections\n\nGoal\n\nFind four groups of 5 NFL players who share a connection.\n\nHow it works\n\nSelect 5 players you think belong together\nTap \"Submit\" to check your guess\nCorrect groups lock in and reveal their connection\nWrong guesses cost a life. You get 4 total\n\nDifficulty\n\n🟡 Yellow: Easiest\n\n🟢 Green: Medium\n\n🔵 Blue: Hard\n\n🟣 Purple: Hardest\n\nConnections can include\n\nSame franchise, same college, same draft slot, career milestones, and more.\n\nClose",
+  "tilesAtStart": 20,
+  "save": "{\"v\":1,\"date\":\"2026-12-15\",\"puzzleIndex\":3,\"puzzleId\":\"nflconn-004\",\"guesses\":[{\"t\":\"ok\",\"theme\":\"Played for the Steelers\",\"players\":[\"T.J. Watt\",\"Cam Heyward\",\"Ben Roethlisberger\",\"Troy Polamalu\",\"James Harrison\"],\"diff\":\"yellow\"}],\"gameStatus\":\"playing\"}",
+  "after1": "Groups found: 1/4",
+  "after2": "Groups found: 2/4",
+  "after3": "Groups found: 3/4",
+  "after4": "Groups found: 4/4",
+  "overflow": {
+   "doc": 390,
+   "vw": 390
+  },
+  "finalText": "DOUKNOWBALL\nBack\nTrack stats\n🏈 NFL CONNECTIONS\n\nFind four groups of 5 NFL players that share a connection\n\n📅 Daily\n∞ Unlimited\nGroups found: 4/4\nLives: ❤️❤️❤️❤️\nHow to play\n\nPLAYED FOR THE STEELERS\n\nT.J. Watt\nCam Heyward\nBen Roethlisberger\nTroy Polamalu\nJames Harrison\n\nPLAYED FOR THE RAVENS\n\nRay Lewis\nEd Reed\nLamar Jackson\nJustin Tucker\nTerrell Suggs\n\n10,000+ CAREER RECEIVING YARDS\n\nLarry Fitzgerald\nAndre Johnson\nCalvin Johnson\nA.J. Green\nMike Evans\n\nPLAYED COLLEGE BALL AT CLEMSON\n\nTrevor Lawrence\nDeshaun Watson\nTravis Etienne\nTee Higgins\nHunter Renfrow\n\nNFL\n·\nNAILED IT\n\n🏆\nAll Groups Found!\n\nFound 4/4 groups with 4 lives remaining\n\n🏆 NFL Connections: all 4 groups, 4 lives left\n🧩\nNFL Connections\nDec 15, 2026\n🏆 NFL Connections: all 4 groups, 4 lives left\nRESULT\nall 4 groups with 4 lives left on today's NFL Connections\nDoUKnowBall\ndouknowball.com/nfl-connections\nShare result\nCopy chal",
+  "errors": []
+ },
+ {
+  "id": "nfl-1280",
+  "shots": [
+   "nfl-1280-board",
+   "nfl-1280-solved1",
+   "nfl-1280-final"
+  ],
+  "notes": [],
+  "rulesText": "🏈 How to Play\n\nNFL Connections\n\nGoal\n\nFind four groups of 5 NFL players who share a connection.\n\nHow it works\n\nSelect 5 players you think belong together\nTap \"Submit\" to check your guess\nCorrect groups lock in and reveal their connection\nWrong guesses cost a life. You get 4 total\n\nDifficulty\n\n🟡 Yellow: Easiest\n\n🟢 Green: Medium\n\n🔵 Blue: Hard\n\n🟣 Purple: Hardest\n\nConnections can include\n\nSame franchise, same college, same draft slot, career milestones, and more.\n\nClose",
+  "tilesAtStart": 20,
+  "save": "{\"v\":1,\"date\":\"2026-12-15\",\"puzzleIndex\":3,\"puzzleId\":\"nflconn-004\",\"guesses\":[{\"t\":\"ok\",\"theme\":\"Played for the Steelers\",\"players\":[\"T.J. Watt\",\"Cam Heyward\",\"Ben Roethlisberger\",\"Troy Polamalu\",\"James Harrison\"],\"diff\":\"yellow\"}],\"gameStatus\":\"playing\"}",
+  "after1": "Groups found: 1/4",
+  "after2": "Groups found: 2/4",
+  "after3": "Groups found: 3/4",
+  "after4": "Groups found: 4/4",
+  "overflow": {
+   "doc": 1280,
+   "vw": 1280
+  },
+  "finalText": "DOUKNOWBALL\nBack\nSign up to track your stats\n🏈 NFL CONNECTIONS\n\nFind four groups of 5 NFL players that share a connection\n\n📅 Daily\n∞ Unlimited\nGroups found: 4/4\nLives: ❤️❤️❤️❤️\nHow to play\n\nPLAYED FOR THE STEELERS\n\nT.J. Watt\nCam Heyward\nBen Roethlisberger\nTroy Polamalu\nJames Harrison\n\nPLAYED FOR THE RAVENS\n\nRay Lewis\nEd Reed\nLamar Jackson\nJustin Tucker\nTerrell Suggs\n\n10,000+ CAREER RECEIVING YARDS\n\nLarry Fitzgerald\nAndre Johnson\nCalvin Johnson\nA.J. Green\nMike Evans\n\nPLAYED COLLEGE BALL AT CLEMSON\n\nTrevor Lawrence\nDeshaun Watson\nTravis Etienne\nTee Higgins\nHunter Renfrow\n\nNFL\n·\nNAILED IT\n\n🏆\nAll Groups Found!\n\nFound 4/4 groups with 4 lives remaining\n\n🏆 NFL Connections: all 4 groups, 4 lives left\n🧩\nNFL Connections\nDec 15, 2026\n🏆 NFL Connections: all 4 groups, 4 lives left\nRESULT\nall 4 groups with 4 lives left on today's NFL Connections\nDoUKnowBall\ndouknowball.com/nfl-connections\nShare ",
+  "errors": []
+ },
+ {
+  "id": "nfl-1280-rm",
+  "shots": [
+   "nfl-1280-rm-board",
+   "nfl-1280-rm-solved1",
+   "nfl-1280-rm-final"
+  ],
+  "notes": [],
+  "rulesText": "🏈 How to Play\n\nNFL Connections\n\nGoal\n\nFind four groups of 5 NFL players who share a connection.\n\nHow it works\n\nSelect 5 players you think belong together\nTap \"Submit\" to check your guess\nCorrect groups lock in and reveal their connection\nWrong guesses cost a life. You get 4 total\n\nDifficulty\n\n🟡 Yellow: Easiest\n\n🟢 Green: Medium\n\n🔵 Blue: Hard\n\n🟣 Purple: Hardest\n\nConnections can include\n\nSame franchise, same college, same draft slot, career milestones, and more.\n\nClose",
+  "tilesAtStart": 20,
+  "save": "{\"v\":1,\"date\":\"2026-12-15\",\"puzzleIndex\":3,\"puzzleId\":\"nflconn-004\",\"guesses\":[{\"t\":\"ok\",\"theme\":\"Played for the Steelers\",\"players\":[\"T.J. Watt\",\"Cam Heyward\",\"Ben Roethlisberger\",\"Troy Polamalu\",\"James Harrison\"],\"diff\":\"yellow\"}],\"gameStatus\":\"playing\"}",
+  "after1": "Groups found: 1/4",
+  "after2": "Groups found: 2/4",
+  "after3": "Groups found: 3/4",
+  "after4": "Groups found: 4/4",
+  "overflow": {
+   "doc": 1280,
+   "vw": 1280
+  },
+  "finalText": "DOUKNOWBALL\nBack\nSign up to track your stats\n🏈 NFL CONNECTIONS\n\nFind four groups of 5 NFL players that share a connection\n\n📅 Daily\n∞ Unlimited\nGroups found: 4/4\nLives: ❤️❤️❤️❤️\nHow to play\n\nPLAYED FOR THE STEELERS\n\nT.J. Watt\nCam Heyward\nBen Roethlisberger\nTroy Polamalu\nJames Harrison\n\nPLAYED FOR THE RAVENS\n\nRay Lewis\nEd Reed\nLamar Jackson\nJustin Tucker\nTerrell Suggs\n\n10,000+ CAREER RECEIVING YARDS\n\nLarry Fitzgerald\nAndre Johnson\nCalvin Johnson\nA.J. Green\nMike Evans\n\nPLAYED COLLEGE BALL AT CLEMSON\n\nTrevor Lawrence\nDeshaun Watson\nTravis Etienne\nTee Higgins\nHunter Renfrow\n\nNFL\n·\nNAILED IT\n\n🏆\nAll Groups Found!\n\nFound 4/4 groups with 4 lives remaining\n\n🏆 NFL Connections: all 4 groups, 4 lives left\n🧩\nNFL Connections\nDec 15, 2026\n🏆 NFL Connections: all 4 groups, 4 lives left\nRESULT\nall 4 groups with 4 lives left on today's NFL Connections\nDoUKnowBall\ndouknowball.com/nfl-connections\nShare ",
+  "errors": []
+ },
+ {
+  "id": "nhl-390",
+  "shots": [
+   "nhl-390-board",
+   "nhl-390-solved1",
+   "nhl-390-final"
+  ],
+  "notes": [],
+  "rulesText": "🏒 How to Play\n\nNHL Connections\n\nGoal\n\nFind four groups of 5 NHL players who share a connection.\n\nHow it works\n\nOpen draft A, B, C or D, then tap names to plan a group\nNames move between drafts. Tap a name in its current draft to remove it\nPlanning is free. Tap \"Submit five\" to check only the open draft\nCorrect groups lock in and reveal their connection\nWrong guesses cost a life. You get 4 total\n\nTry this example\n\nPark four names in A while you think about the fifth. Keep another idea in B. When A has five, submit it. A wrong group costs one life and stays editable; B stays where you left it.\n",
+  "tilesAtStart": 20,
+  "save": "{\"v\":1,\"date\":\"2026-12-15\",\"puzzleIndex\":3,\"puzzleId\":\"nhlconn-004\",\"guesses\":[{\"t\":\"ok\",\"theme\":\"Played for the Canadiens\",\"players\":[\"P.K. Subban\",\"Shea Weber\",\"Brendan Gallagher\",\"Nick Suzuki\",\"Cole Caufield\"],\"diff\":\"yellow\"}],\"gameStatus\":\"playing\"}",
+  "after1": "Groups found: 1/4",
+  "after2": "Groups found: 2/4",
+  "after3": "Groups found: 3/4",
+  "after4": "Groups found: 4/4",
+  "overflow": {
+   "doc": 390,
+   "vw": 390
+  },
+  "finalText": "DOUKNOWBALL\nBack\nTrack stats\n🏒 NHL CONNECTIONS\n\nFind four groups of 5 NHL players that share a connection\n\n📅 Daily\n∞ Unlimited\nGroups found: 4/4\nLives: 4/4\nHow to play\n\nNHL\n·\nNAILED IT\n\n🏆\nAll Groups Found!\n\nFound 4/4 groups with 4 lives remaining\n\n🏆 NHL Connections: all 4 groups, 4 lives left\n🧩\nNHL Connections\nDec 15, 2026\n🏆 NHL Connections: all 4 groups, 4 lives left\nRESULT\nall 4 groups with 4 lives left on today's NHL Connections\nDoUKnowBall\ndouknowball.com/nhl-connections\nShare result\nCopy challenge\n📋 Copy Score Card\n🖼️ Save Image\n\nSHARE YOUR RESULT\n\nCome back tomorrow for a new puzzle!\n\nPlayed for the Canadiens\nPlayed for the Panthers\nPlayed for the Sharks\n1,000+ career points\nReport a problem\nNHL Connections: Hockey Grouping Puzzle\n\nA daily puzzle where you group NHL players by what connects them: same franchise or same career milestone.\n\nTwenty NHL players, four hidden grou",
+  "errors": []
+ },
+ {
+  "id": "nhl-390-rm",
+  "shots": [
+   "nhl-390-rm-board",
+   "nhl-390-rm-solved1",
+   "nhl-390-rm-final"
+  ],
+  "notes": [],
+  "rulesText": "🏒 How to Play\n\nNHL Connections\n\nGoal\n\nFind four groups of 5 NHL players who share a connection.\n\nHow it works\n\nOpen draft A, B, C or D, then tap names to plan a group\nNames move between drafts. Tap a name in its current draft to remove it\nPlanning is free. Tap \"Submit five\" to check only the open draft\nCorrect groups lock in and reveal their connection\nWrong guesses cost a life. You get 4 total\n\nTry this example\n\nPark four names in A while you think about the fifth. Keep another idea in B. When A has five, submit it. A wrong group costs one life and stays editable; B stays where you left it.\n",
+  "tilesAtStart": 20,
+  "save": "{\"v\":1,\"date\":\"2026-12-15\",\"puzzleIndex\":3,\"puzzleId\":\"nhlconn-004\",\"guesses\":[{\"t\":\"ok\",\"theme\":\"Played for the Canadiens\",\"players\":[\"P.K. Subban\",\"Shea Weber\",\"Brendan Gallagher\",\"Nick Suzuki\",\"Cole Caufield\"],\"diff\":\"yellow\"}],\"gameStatus\":\"playing\"}",
+  "after1": "Groups found: 1/4",
+  "after2": "Groups found: 2/4",
+  "after3": "Groups found: 3/4",
+  "after4": "Groups found: 4/4",
+  "overflow": {
+   "doc": 390,
+   "vw": 390
+  },
+  "finalText": "DOUKNOWBALL\nBack\nTrack stats\n🏒 NHL CONNECTIONS\n\nFind four groups of 5 NHL players that share a connection\n\n📅 Daily\n∞ Unlimited\nGroups found: 4/4\nLives: 4/4\nHow to play\n\nNHL\n·\nNAILED IT\n\n🏆\nAll Groups Found!\n\nFound 4/4 groups with 4 lives remaining\n\n🏆 NHL Connections: all 4 groups, 4 lives left\n🧩\nNHL Connections\nDec 15, 2026\n🏆 NHL Connections: all 4 groups, 4 lives left\nRESULT\nall 4 groups with 4 lives left on today's NHL Connections\nDoUKnowBall\ndouknowball.com/nhl-connections\nShare result\nCopy challenge\n📋 Copy Score Card\n🖼️ Save Image\n\nSHARE YOUR RESULT\n\nCome back tomorrow for a new puzzle!\n\nPlayed for the Canadiens\nPlayed for the Panthers\nPlayed for the Sharks\n1,000+ career points\nReport a problem\nNHL Connections: Hockey Grouping Puzzle\n\nA daily puzzle where you group NHL players by what connects them: same franchise or same career milestone.\n\nTwenty NHL players, four hidden grou",
+  "errors": []
+ },
+ {
+  "id": "nhl-1280",
+  "shots": [
+   "nhl-1280-board",
+   "nhl-1280-solved1",
+   "nhl-1280-final"
+  ],
+  "notes": [],
+  "rulesText": "🏒 How to Play\n\nNHL Connections\n\nGoal\n\nFind four groups of 5 NHL players who share a connection.\n\nHow it works\n\nOpen draft A, B, C or D, then tap names to plan a group\nNames move between drafts. Tap a name in its current draft to remove it\nPlanning is free. Tap \"Submit five\" to check only the open draft\nCorrect groups lock in and reveal their connection\nWrong guesses cost a life. You get 4 total\n\nTry this example\n\nPark four names in A while you think about the fifth. Keep another idea in B. When A has five, submit it. A wrong group costs one life and stays editable; B stays where you left it.\n",
+  "tilesAtStart": 20,
+  "save": "{\"v\":1,\"date\":\"2026-12-15\",\"puzzleIndex\":3,\"puzzleId\":\"nhlconn-004\",\"guesses\":[{\"t\":\"ok\",\"theme\":\"Played for the Canadiens\",\"players\":[\"P.K. Subban\",\"Shea Weber\",\"Brendan Gallagher\",\"Nick Suzuki\",\"Cole Caufield\"],\"diff\":\"yellow\"}],\"gameStatus\":\"playing\"}",
+  "after1": "Groups found: 1/4",
+  "after2": "Groups found: 2/4",
+  "after3": "Groups found: 3/4",
+  "after4": "Groups found: 4/4",
+  "overflow": {
+   "doc": 1280,
+   "vw": 1280
+  },
+  "finalText": "DOUKNOWBALL\nBack\nSign up to track your stats\n🏒 NHL CONNECTIONS\n\nFind four groups of 5 NHL players that share a connection\n\n📅 Daily\n∞ Unlimited\nGroups found: 4/4\nLives: 4/4\nHow to play\n\nNHL\n·\nNAILED IT\n\n🏆\nAll Groups Found!\n\nFound 4/4 groups with 4 lives remaining\n\n🏆 NHL Connections: all 4 groups, 4 lives left\n🧩\nNHL Connections\nDec 15, 2026\n🏆 NHL Connections: all 4 groups, 4 lives left\nRESULT\nall 4 groups with 4 lives left on today's NHL Connections\nDoUKnowBall\ndouknowball.com/nhl-connections\nShare result\nCopy challenge\n📋 Copy Score Card\n🖼️ Save Image\n\nSHARE YOUR RESULT\n\nCome back tomorrow for a new puzzle!\n\nPlayed for the Canadiens\nPlayed for the Panthers\nPlayed for the Sharks\n1,000+ career points\nReport a problem\nNHL Connections: Hockey Grouping Puzzle\n\nA daily puzzle where you group NHL players by what connects them: same franchise or same career milestone.\n\nTwenty NHL players, ",
+  "errors": []
+ },
+ {
+  "id": "nhl-1280-rm",
+  "shots": [
+   "nhl-1280-rm-board",
+   "nhl-1280-rm-solved1",
+   "nhl-1280-rm-final"
+  ],
+  "notes": [],
+  "rulesText": "🏒 How to Play\n\nNHL Connections\n\nGoal\n\nFind four groups of 5 NHL players who share a connection.\n\nHow it works\n\nOpen draft A, B, C or D, then tap names to plan a group\nNames move between drafts. Tap a name in its current draft to remove it\nPlanning is free. Tap \"Submit five\" to check only the open draft\nCorrect groups lock in and reveal their connection\nWrong guesses cost a life. You get 4 total\n\nTry this example\n\nPark four names in A while you think about the fifth. Keep another idea in B. When A has five, submit it. A wrong group costs one life and stays editable; B stays where you left it.\n",
+  "tilesAtStart": 20,
+  "save": "{\"v\":1,\"date\":\"2026-12-15\",\"puzzleIndex\":3,\"puzzleId\":\"nhlconn-004\",\"guesses\":[{\"t\":\"ok\",\"theme\":\"Played for the Canadiens\",\"players\":[\"P.K. Subban\",\"Shea Weber\",\"Brendan Gallagher\",\"Nick Suzuki\",\"Cole Caufield\"],\"diff\":\"yellow\"}],\"gameStatus\":\"playing\"}",
+  "after1": "Groups found: 1/4",
+  "after2": "Groups found: 2/4",
+  "after3": "Groups found: 3/4",
+  "after4": "Groups found: 4/4",
+  "overflow": {
+   "doc": 1280,
+   "vw": 1280
+  },
+  "finalText": "DOUKNOWBALL\nBack\nSign up to track your stats\n🏒 NHL CONNECTIONS\n\nFind four groups of 5 NHL players that share a connection\n\n📅 Daily\n∞ Unlimited\nGroups found: 4/4\nLives: 4/4\nHow to play\n\nNHL\n·\nNAILED IT\n\n🏆\nAll Groups Found!\n\nFound 4/4 groups with 4 lives remaining\n\n🏆 NHL Connections: all 4 groups, 4 lives left\n🧩\nNHL Connections\nDec 15, 2026\n🏆 NHL Connections: all 4 groups, 4 lives left\nRESULT\nall 4 groups with 4 lives left on today's NHL Connections\nDoUKnowBall\ndouknowball.com/nhl-connections\nShare result\nCopy challenge\n📋 Copy Score Card\n🖼️ Save Image\n\nSHARE YOUR RESULT\n\nCome back tomorrow for a new puzzle!\n\nPlayed for the Canadiens\nPlayed for the Panthers\nPlayed for the Sharks\n1,000+ career points\nReport a problem\nNHL Connections: Hockey Grouping Puzzle\n\nA daily puzzle where you group NHL players by what connects them: same franchise or same career milestone.\n\nTwenty NHL players, ",
+  "errors": []
+ },
+ {
+  "id": "baseball-390-oldsave",
+  "shots": [
+   "baseball-390-oldsave-loaded",
+   "baseball-390-oldsave-final"
+  ],
+  "notes": [
+   "group 1 submitted: Groups found: 2/4",
+   "group 2 submitted: Groups found: 3/4",
+   "group 3 submitted: Groups found: 4/4",
+   "group 4: only 0 of its 5 tiles on the board, cannot be submitted"
+  ],
+  "loaded": "Groups found: 1/4",
+  "tilesPerGroup": [
+   5,
+   5,
+   5,
+   5
+  ],
+  "finalText": "DOUKNOWBALL\nBack\nTrack stats\n⚾ MLB CONNECTIONS\n\nFind four groups of 5 baseball players that share a connection\n\n📅 Daily\n∞ Unlimited\nGroups found: 4/4\nLives: ❤️❤️❤️❤️\nHow to play\n\nWENT UNDRAFTED THEN BECAME ALL-STARS\n\nJose Bautista\nJustin Turner\nPaul Goldschmidt\nMax Muncy\nJ.D. Martinez\n\nNL MVP WINNERS (2015-2025)\n\nBryce Harper\nKris Bryant\nCody Bellinger\nFreddie Freeman\nShohei Ohtani\n\nPLAYED FOR THE DETROIT TIGERS\n\nMiguel Cabrera\nJustin Verlander\nPrince Fielder\nMax Scherzer\nCurtis Granderson\n\nSWITCH-HITTING SHORTSTOPS\n\nFrancisco Lindor\nJose Reyes\nJimmy Rollins\nOzzie Smith\nOmar Vizquel\n\nMLB\n·\nNAILED IT\n\n🏆\nAll Groups Found!\n\nFound 4/4 groups with 4 lives remaining\n\n🏆 Baseball Connections: all 4 groups, 4 lives left\n⚾\nBaseball Connections\nDec 15, 2026\n🏆 Baseball Connections: all 4 groups, 4 lives left\nRESULT\nall 4 groups with 4 lives left on today's Baseball Connections\nDoUKnowBall\ndoukno",
+  "errors": []
+ },
+ {
+  "id": "baseball-1280-oldsave",
+  "shots": [
+   "baseball-1280-oldsave-loaded",
+   "baseball-1280-oldsave-final"
+  ],
+  "notes": [
+   "group 1 submitted: Groups found: 2/4",
+   "group 2 submitted: Groups found: 3/4",
+   "group 3 submitted: Groups found: 4/4",
+   "group 4: only 0 of its 5 tiles on the board, cannot be submitted"
+  ],
+  "loaded": "Groups found: 1/4",
+  "tilesPerGroup": [
+   5,
+   5,
+   5,
+   5
+  ],
+  "finalText": "DOUKNOWBALL\nBack\nSign up to track your stats\n⚾ MLB CONNECTIONS\n\nFind four groups of 5 baseball players that share a connection\n\n📅 Daily\n∞ Unlimited\nGroups found: 4/4\nLives: ❤️❤️❤️❤️\nHow to play\n\nWENT UNDRAFTED THEN BECAME ALL-STARS\n\nJose Bautista\nJustin Turner\nPaul Goldschmidt\nMax Muncy\nJ.D. Martinez\n\nNL MVP WINNERS (2015-2025)\n\nBryce Harper\nKris Bryant\nCody Bellinger\nFreddie Freeman\nShohei Ohtani\n\nPLAYED FOR THE DETROIT TIGERS\n\nMiguel Cabrera\nJustin Verlander\nPrince Fielder\nMax Scherzer\nCurtis Granderson\n\nSWITCH-HITTING SHORTSTOPS\n\nFrancisco Lindor\nJose Reyes\nJimmy Rollins\nOzzie Smith\nOmar Vizquel\n\nMLB\n·\nNAILED IT\n\n🏆\nAll Groups Found!\n\nFound 4/4 groups with 4 lives remaining\n\n🏆 Baseball Connections: all 4 groups, 4 lives left\n⚾\nBaseball Connections\nDec 15, 2026\n🏆 Baseball Connections: all 4 groups, 4 lives left\nRESULT\nall 4 groups with 4 lives left on today's Baseball Connections\nDo",
+  "errors": []
+ },
+ {
+  "id": "nfl-390-oldsave",
+  "shots": [
+   "nfl-390-oldsave-loaded",
+   "nfl-390-oldsave-final"
+  ],
+  "notes": [
+   "group 1: only 1 of its 5 tiles on the board, cannot be submitted",
+   "group 2 submitted: Groups found: 2/4",
+   "group 3 submitted: Groups found: 3/4",
+   "group 4 submitted: Groups found: 4/4"
+  ],
+  "loaded": "Groups found: 1/4",
+  "tilesPerGroup": [
+   1,
+   5,
+   5,
+   5
+  ],
+  "finalText": "DOUKNOWBALL\nBack\nTrack stats\n🏈 NFL CONNECTIONS\n\nFind four groups of 5 NFL players that share a connection\n\n📅 Daily\n∞ Unlimited\nGroups found: 4/4\nLives: ❤️❤️❤️❤️\nHow to play\n\nPLAYED FOR THE STEELERS\n\nT.J. Watt\nCam Heyward\nLe'Veon Bell\nTroy Polamalu\nJames Harrison\n\nPLAYED FOR THE RAVENS\n\nRay Lewis\nEd Reed\nLamar Jackson\nJustin Tucker\nTerrell Suggs\n\n10,000+ CAREER RECEIVING YARDS\n\nLarry Fitzgerald\nAndre Johnson\nCalvin Johnson\nA.J. Green\nMike Evans\n\nPLAYED COLLEGE BALL AT CLEMSON\n\nTrevor Lawrence\nDeshaun Watson\nTravis Etienne\nTee Higgins\nHunter Renfrow\n\nNFL\n·\nNAILED IT\n\n🏆\nAll Groups Found!\n\nFound 4/4 groups with 4 lives remaining\n\n🏆 NFL Connections: all 4 groups, 4 lives left\n🧩\nNFL Connections\nDec 15, 2026\n🏆 NFL Connections: all 4 groups, 4 lives left\nRESULT\nall 4 groups with 4 lives left on today's NFL Connections\nDoUKnowBall\ndouknowball.com/nfl-connections\nShare result\nCopy challenge\n",
+  "errors": []
+ },
+ {
+  "id": "nfl-1280-oldsave",
+  "shots": [
+   "nfl-1280-oldsave-loaded",
+   "nfl-1280-oldsave-final"
+  ],
+  "notes": [
+   "group 1: only 1 of its 5 tiles on the board, cannot be submitted",
+   "group 2 submitted: Groups found: 2/4",
+   "group 3 submitted: Groups found: 3/4",
+   "group 4 submitted: Groups found: 4/4"
+  ],
+  "loaded": "Groups found: 1/4",
+  "tilesPerGroup": [
+   1,
+   5,
+   5,
+   5
+  ],
+  "finalText": "DOUKNOWBALL\nBack\nSign up to track your stats\n🏈 NFL CONNECTIONS\n\nFind four groups of 5 NFL players that share a connection\n\n📅 Daily\n∞ Unlimited\nGroups found: 4/4\nLives: ❤️❤️❤️❤️\nHow to play\n\nPLAYED FOR THE STEELERS\n\nT.J. Watt\nCam Heyward\nLe'Veon Bell\nTroy Polamalu\nJames Harrison\n\nPLAYED FOR THE RAVENS\n\nRay Lewis\nEd Reed\nLamar Jackson\nJustin Tucker\nTerrell Suggs\n\n10,000+ CAREER RECEIVING YARDS\n\nLarry Fitzgerald\nAndre Johnson\nCalvin Johnson\nA.J. Green\nMike Evans\n\nPLAYED COLLEGE BALL AT CLEMSON\n\nTrevor Lawrence\nDeshaun Watson\nTravis Etienne\nTee Higgins\nHunter Renfrow\n\nNFL\n·\nNAILED IT\n\n🏆\nAll Groups Found!\n\nFound 4/4 groups with 4 lives remaining\n\n🏆 NFL Connections: all 4 groups, 4 lives left\n🧩\nNFL Connections\nDec 15, 2026\n🏆 NFL Connections: all 4 groups, 4 lives left\nRESULT\nall 4 groups with 4 lives left on today's NFL Connections\nDoUKnowBall\ndouknowball.com/nfl-connections\nShare result",
+  "errors": []
+ },
+ {
+  "id": "nhl-390-oldsave",
+  "shots": [
+   "nhl-390-oldsave-loaded",
+   "nhl-390-oldsave-final"
+  ],
+  "notes": [
+   "group 1 submitted: Groups found: 2/4",
+   "group 2 submitted: Groups found: 3/4",
+   "group 3: only 2 of its 5 tiles on the board, cannot be submitted",
+   "group 4 submitted: Groups found: 4/4"
+  ],
+  "loaded": "Groups found: 1/4",
+  "tilesPerGroup": [
+   5,
+   5,
+   2,
+   5
+  ],
+  "finalText": "DOUKNOWBALL\nBack\nTrack stats\n🏒 NHL CONNECTIONS\n\nFind four groups of 5 NHL players that share a connection\n\n📅 Daily\n∞ Unlimited\nGroups found: 4/4\nLives: 4/4\nHow to play\n\nNHL\n·\nNAILED IT\n\n🏆\nAll Groups Found!\n\nFound 4/4 groups with 4 lives remaining\n\n🏆 NHL Connections: all 4 groups, 4 lives left\n🧩\nNHL Connections\nDec 15, 2026\n🏆 NHL Connections: all 4 groups, 4 lives left\nRESULT\nall 4 groups with 4 lives left on today's NHL Connections\nDoUKnowBall\ndouknowball.com/nhl-connections\nShare result\nCopy challenge\n📋 Copy Score Card\n🖼️ Save Image\n\nSHARE YOUR RESULT\n\nCome back tomorrow for a new puzzle!\n\nPlayed for the Sharks\nPlayed for the Canadiens\nPlayed for the Panthers\n1,000+ career points\nReport a problem\nNHL Connections: Hockey Grouping Puzzle\n\nA daily puzzle where you group NHL players by what connects them: same franchise or same career milestone.\n\nTwenty NHL players, four hidden grou",
+  "errors": []
+ },
+ {
+  "id": "nhl-1280-oldsave",
+  "shots": [
+   "nhl-1280-oldsave-loaded",
+   "nhl-1280-oldsave-final"
+  ],
+  "notes": [
+   "group 1 submitted: Groups found: 2/4",
+   "group 2 submitted: Groups found: 3/4",
+   "group 3: only 2 of its 5 tiles on the board, cannot be submitted",
+   "group 4 submitted: Groups found: 4/4"
+  ],
+  "loaded": "Groups found: 1/4",
+  "tilesPerGroup": [
+   5,
+   5,
+   2,
+   5
+  ],
+  "finalText": "DOUKNOWBALL\nBack\nSign up to track your stats\n🏒 NHL CONNECTIONS\n\nFind four groups of 5 NHL players that share a connection\n\n📅 Daily\n∞ Unlimited\nGroups found: 4/4\nLives: 4/4\nHow to play\n\nNHL\n·\nNAILED IT\n\n🏆\nAll Groups Found!\n\nFound 4/4 groups with 4 lives remaining\n\n🏆 NHL Connections: all 4 groups, 4 lives left\n🧩\nNHL Connections\nDec 15, 2026\n🏆 NHL Connections: all 4 groups, 4 lives left\nRESULT\nall 4 groups with 4 lives left on today's NHL Connections\nDoUKnowBall\ndouknowball.com/nhl-connections\nShare result\nCopy challenge\n📋 Copy Score Card\n🖼️ Save Image\n\nSHARE YOUR RESULT\n\nCome back tomorrow for a new puzzle!\n\nPlayed for the Sharks\nPlayed for the Canadiens\nPlayed for the Panthers\n1,000+ career points\nReport a problem\nNHL Connections: Hockey Grouping Puzzle\n\nA daily puzzle where you group NHL players by what connects them: same franchise or same career milestone.\n\nTwenty NHL players, ",
+  "errors": []
+ }
+]
