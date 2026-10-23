@@ -1,0 +1,2 @@
+simNoRivalNames exit=0 13s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 34s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
