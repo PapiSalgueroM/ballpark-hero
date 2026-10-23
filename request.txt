@@ -1,0 +1,8 @@
+facts: node scripts/simUsConnectionsFacts.mjs
+rehearse: npm install --prefix /tmp/pgl @electric-sql/pglite >/dev/null 2>&1 && PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseUsConnections1558.mjs
+rehearse-noguard: npm install --prefix /tmp/pgl2 @electric-sql/pglite >/dev/null 2>&1 && REHEARSE_CONTROL=noguard PGLITE_DIR=/tmp/pgl2 node scripts/qa/rehearseUsConnections1558.mjs
+rehearse-oldvalue: npm install --prefix /tmp/pgl4 @electric-sql/pglite >/dev/null 2>&1 && REHEARSE_CONTROL=oldvalue PGLITE_DIR=/tmp/pgl4 node scripts/qa/rehearseUsConnections1558.mjs
+dealt: node scripts/qa/connectionsDealtDay1558.mjs file 2026-10-23 +40
+rival: node scripts/simNoRivalNames.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+storage: node scripts/simStorageWrites.mjs
