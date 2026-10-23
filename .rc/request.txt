@@ -1,0 +1,8 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx src/components/nba-front-office/NbaSeasonStats.test.tsx src/components/front-office/FrontOfficeSeasonStats.test.tsx src/lib/nflSeasonStats.test.ts --testTimeout=300000 --hookTimeout=120000
+simNbaSeasonStats: node scripts/simNbaSeasonStats.mjs
+simNflSeasonStats: node scripts/simNflSeasonStats.mjs
+simFoLazyDesk: node scripts/simFoLazyDesk.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
