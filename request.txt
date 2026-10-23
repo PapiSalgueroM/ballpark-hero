@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+# Release BQ triage: rgBPi-c saleReview alone twice (its timing assertion on the paused clock).
+sr1: node scripts/playTycoonSaleReview1083.mjs --prefetch-fonts-only && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" PORT=4193 ONLY=playTycoonSaleReview1083 node scripts/runAllSims.mjs --browser
+sr2: node scripts/playTycoonSaleReview1083.mjs --prefetch-fonts-only && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" PORT=4193 ONLY=playTycoonSaleReview1083 node scripts/runAllSims.mjs --browser
