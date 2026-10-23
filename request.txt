@@ -1,0 +1,5 @@
+#!serial
+red-before: node scripts/simGuideHeadings.mjs
+revert-green: git checkout HEAD~1 -- src/data/gameContent/hockey.ts && node scripts/simGuideHeadings.mjs; s=$?; git checkout HEAD -- src/data/gameContent/hockey.ts; exit $s
+refresh: node scripts/simGuideHeadings.mjs --refresh /nhl-connections && cp scripts/data/guideHeadingsFrozen.json "$RC_OUT/" && node scripts/simGuideHeadings.mjs
+kw: node scripts/genSearchKeywords.mjs && cp src/data/searchKeywords.json "$RC_OUT/" && git diff --stat -- src/data/searchKeywords.json
