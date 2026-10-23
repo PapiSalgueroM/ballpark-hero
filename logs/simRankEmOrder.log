@@ -1,0 +1,28 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/rankEmOrder.test.tsx[2m > [22mRank Em editable order[2m > [22mholds the original helper and daily-hook 1000 600 and zero score save baseline[32m 42[2mms[22m[39m
+ [32m✓[39m src/test/rankEmOrder.test.tsx[2m > [22mRank Em editable order[2m > [22mkeeps five picks editable and quiet until an exact corrected perfect order is locked[32m 298[2mms[22m[39m
+ [32m✓[39m src/test/rankEmOrder.test.tsx[2m > [22mRank Em editable order[2m > [22mswaps removes and undoes without replacing original choices or fixed rung nodes[32m 107[2mms[22m[39m
+ [32m✓[39m src/test/rankEmOrder.test.tsx[2m > [22mRank Em editable order[2m > [22mkeeps incomplete disabled duplicate and boundary edits out of the actual daily action[32m 68[2mms[22m[39m
+ [32m✓[39m src/test/rankEmOrder.test.tsx[2m > [22mRank Em editable order[2m > [22mlocks exact partial and zero daily orders with the original share and one completion[33m 442[2mms[22m[39m
+ [32m✓[39m src/test/rankEmOrder.test.tsx[2m > [22mRank Em editable order[2m > [22mhands focus to enabled neighbors lock and result and guards owned held keys[33m 305[2mms[22m[39m
+ [32m✓[39m src/test/rankEmOrder.test.tsx[2m > [22mRank Em editable order[2m > [22mallows only one same-frame unlimited lock and never books draft or unlimited edits[32m 72[2mms[22m[39m
+ [32m✓[39m src/test/rankEmOrder.test.tsx[2m > [22mRank Em editable order[2m > [22mrestores finished orders and mode round trips quietly without rebooking[32m 198[2mms[22m[39m
+ [32m✓[39m src/test/rankEmOrder.test.tsx[2m > [22mRank Em editable order[2m > [22mreveals only an actual committed result and retains clone identity through finite cleanup[32m 180[2mms[22m[39m
+ [32m✓[39m src/test/rankEmOrder.test.tsx[2m > [22mRank Em editable order[2m > [22mkeeps complete names targets and finite reduced-motion styles bound to the actual page[32m 111[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m10 passed[39m[22m[90m (10)[39m
+[2m   Start at [22m 06:27:18
+[2m   Duration [22m 3.65s[2m (transform 626ms, setup 81ms, collect 959ms, tests 1.87s, environment 323ms, prepare 135ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.sim-control/rank-order-cG1oqN/report.json
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+simRankEmOrder: ten actual Page/hook outcomes pass.
+simRankEmOrder: original helper1000/600/0, exact daily v/date/puzzleIndex/order/status and original share.
+simRankEmOrder: quiet editable draft, one lock/completion, strict choices/rungs and finite/static feedback verified.
+simRankEmOrder: source bytes held, owned copies and report cleaned.
