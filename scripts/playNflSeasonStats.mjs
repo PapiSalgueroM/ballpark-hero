@@ -30,9 +30,8 @@
  *   d its Roster box: a first season winner's row carries the sim badge;
  *   e on every face above: no horizontal overflow; every button this round
  *     adds is 44 px high or more; every text this round adds is 12 px or more
- *     and is not cut (the shared season card's own classes and the badge,
- *     which matches the roster row's 10 px line, are the brief's open
- *     question 5: measured and printed, not held).
+ *     and is not cut (since Round 1562 the shared season card is held too; it
+ *     was Round 1542's open question 5, printed only).
  *
  * CONTROLS (a second build of a mutated copy, served on another port; the
  * request line makes it): PLAY_NFL_STATS_CONTROL=nonames (the board hands the
@@ -201,7 +200,10 @@ function sayLayout(size, face, f) {
   say('e', f.cut.length === 0, `${size.w}, ${face}: nothing this round adds is cut${f.cut.length ? `: ${f.cut.slice(0, 3).join('; ')}` : ''}`);
   if (f.exemptSmall.length) console.log(`  (open question 5, printed) ${size.w}, ${face}: ${f.exemptSmall.length} texts under 12 px in the shared card or the badge, e.g. ${f.exemptSmall.slice(0, 2).join('; ')}`);
 }
-const EXEMPT = '[data-season-stats], [data-award-badge]';
+/* Round 1562: the shared season card (and the badge, wherever a face here draws it) is held like everything else (it
+   was exempt, printed and not held, while its size was Round 1542's open question 5; scripts/playFoSeasonCard.mjs
+   holds the card on both boards). ':not(*)' matches no element, so nothing is exempt. */
+const EXEMPT = ':not(*)';
 
 const box = page => page.evaluate(() => ({ y: Math.round(window.scrollY), h: document.documentElement.scrollHeight, box: Math.round(document.querySelector('[data-gameday-box]')?.getBoundingClientRect().height ?? -1) }));
 
