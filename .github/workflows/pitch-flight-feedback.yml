@@ -1,4 +1,4 @@
-name: Pitch flight feedback original animation baseline
+name: Pitch flight fixed nine and copied-source functional proof
 on:
   push:
     branches: [codex/pitch-flight-feedback-20261023]
@@ -9,14 +9,14 @@ concurrency:
   group: pitch-flight-feedback-${{ github.sha }}
   cancel-in-progress: false
 env:
-  BASE_SOURCE: 3e95583fd8131f3704591cd566677f8774a8e4c3
+  BASE_SOURCE: 4d276143a74f00d1783ca100b98c987bd3fa5f5b
   CI: '1'
   SIM_NETWORK: offline
   TZ: UTC
 jobs:
-  original_animation:
+  fixed_animation:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 35
     defaults:
       run:
         shell: bash
@@ -29,10 +29,10 @@ jobs:
         with:
           node-version: 24
           cache: npm
-      - name: Original components and exact two animation regression inputs
+      - name: Exact two fixed components and frozen regression inputs
         run: |
           set -euo pipefail
-          out="$RUNNER_TEMP/pitch-flight-original";test ! -e "$out";mkdir "$out"
+          out="$RUNNER_TEMP/pitch-flight-fixed";test ! -e "$out";mkdir "$out"
           echo "PITCH_FLIGHT_OUT=$out" >> "$GITHUB_ENV"
           test "$GITHUB_REPOSITORY" = PapiSalgueroM/ballpark-hero
           test "$GITHUB_REPOSITORY_ID" = 1195729679
@@ -40,18 +40,24 @@ jobs:
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
           git fetch --no-tags --depth=1 origin "$BASE_SOURCE" > "$out/base-fetch.log" 2>&1
           git merge-base --is-ancestor "$BASE_SOURCE" "$GITHUB_SHA"
-          git diff --exit-code "$BASE_SOURCE" HEAD -- . ':!docs/**' ':!.github/workflows/pitch-flight-feedback.yml' ':!src/test/PitchMotion.build.test.tsx' ':!src/test/MiniPitch.height.test.tsx' > "$out/original-application.log"
-          test "$(git rev-parse HEAD:src/components/pitch-motion/PitchMotion.tsx)" = 8a907fc247670f7f94276c4174e992643ebf6877
-          test "$(git rev-parse HEAD:src/components/season-centre/MiniPitch.tsx)" = 51cbfc3100c6ebdcbdac7a6608a5ec68154362b0
+          git diff --exit-code "$BASE_SOURCE" HEAD -- . ':!docs/**' ':!.github/workflows/pitch-flight-feedback.yml' ':!src/components/pitch-motion/PitchMotion.tsx' ':!src/components/season-centre/MiniPitch.tsx' ':!scripts/qa/runPitchFlightControls.mjs' ':!scripts/qa/pitchFlight.controls.json' > "$out/protected-application.log"
+          test "$(git rev-parse "$BASE_SOURCE:src/components/pitch-motion/PitchMotion.tsx")" = 8a907fc247670f7f94276c4174e992643ebf6877
+          test "$(git rev-parse "$BASE_SOURCE:src/components/season-centre/MiniPitch.tsx")" = 51cbfc3100c6ebdcbdac7a6608a5ec68154362b0
+          for file in src/test/PitchMotion.build.test.tsx src/test/MiniPitch.height.test.tsx vitest.config.ts scripts/lib/offlineTransport.cjs package.json package-lock.json;do
+            git show "$BASE_SOURCE:$file" | cmp "$file" -
+          done
+          test "$(git rev-parse HEAD:vitest.config.ts)" = ed2a9dc677f77dfe95c061064eeff5782b856864
           printf '%s  %s\n' \
-            a6c276772b439e684f13b8e859eb584e8f0d3c569c4091cabf74d9f214157e38 src/components/pitch-motion/PitchMotion.tsx \
-            4b54b4e812f57fbea5cf2e66a7415a0f79ccbbabe4583f39aa8e69ccce8ab97a src/components/season-centre/MiniPitch.tsx \
+            53c4983e70cd48dafd66d5379937e98515288521ff9cdcb618e62cbbd5d2ad30 src/components/pitch-motion/PitchMotion.tsx \
+            34b6b132c6ebaf4f2b91e8e28c7e0ec82fed3db74e6a0a2e0a07cbda7f297994 src/components/season-centre/MiniPitch.tsx \
             a7784c4de034f629baeaccffa7f8db1aa66043fda08b9980acf55f7a18609775 src/test/PitchMotion.build.test.tsx \
-            2e7c3d5c14cee4911631b72dfb6af23f2848ec4c960ac4c461c0ea61b140def5 src/test/MiniPitch.height.test.tsx > "$out/input-pins.sha256"
+            2e7c3d5c14cee4911631b72dfb6af23f2848ec4c960ac4c461c0ea61b140def5 src/test/MiniPitch.height.test.tsx \
+            dd23cf43eba645920fbc20e5c2c53fbe14dbeb7d37b5aa4a048076a88e7fd0fb scripts/qa/runPitchFlightControls.mjs \
+            3ce14ccf7152988b2afe728ca9b6ef0fd0f2ec2a9a593cc0ecaa3daa3c394d3e scripts/qa/pitchFlight.controls.json > "$out/input-pins.sha256"
           sha256sum --check "$out/input-pins.sha256" > "$out/input-pins.log"
           git rev-parse HEAD > "$out/head.txt";git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
-          git rev-parse HEAD:src/components/pitch-motion/PitchMotion.tsx > "$out/original-pitch-motion-blob.txt"
-          git rev-parse HEAD:src/components/season-centre/MiniPitch.tsx > "$out/original-mini-pitch-blob.txt"
+          git rev-parse HEAD:src/components/pitch-motion/PitchMotion.tsx > "$out/candidate-pitch-motion-blob.txt"
+          git rev-parse HEAD:src/components/season-centre/MiniPitch.tsx > "$out/candidate-mini-pitch-blob.txt"
           git rev-parse HEAD:.github/workflows/pitch-flight-feedback.yml > "$out/workflow-blob.txt"
           sha256sum .github/workflows/pitch-flight-feedback.yml > "$out/workflow.sha256"
           git ls-files -z | sort -z > "$out/source-members.before"
@@ -65,8 +71,8 @@ jobs:
           npm ci > "$out/install.log" 2>&1
           find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$out/dependency-members.before"
           find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dependencies.sha256"
-      - name: Actual app types and exact original nine-case outcomes
-        id: baseline
+      - name: Actual app types and exact fixed nine-case outcomes
+        id: units
         run: |
           set -euo pipefail
           out="$PITCH_FLIGHT_OUT"
@@ -76,7 +82,7 @@ jobs:
           printf '%s\n' "$status" > "$out/types.exit";test "$status" -eq 0
           status=0
           SIM_OFFLINE_RECEIPT="$out/tests.transport" timeout --signal=TERM --kill-after=15s 5m node_modules/.bin/vitest run src/test/PitchMotion.build.test.tsx src/test/MiniPitch.height.test.tsx --maxWorkers=1 --no-file-parallelism --reporter=json --outputFile="$out/tests.json" > "$out/tests.log" 2>&1 || status=$?
-          printf '%s\n' "$status" > "$out/tests.exit";test "$status" -eq 1
+          printf '%s\n' "$status" > "$out/tests.exit";test "$status" -eq 0
           SIM_OFFLINE_RECEIPT="$out/classifier.transport" node <<'NODE'
           const fs=require('node:fs'),assert=require('node:assert/strict'),path=require('node:path'),out=process.env.PITCH_FLIGHT_OUT,r=JSON.parse(fs.readFileSync(out+'/tests.json','utf8'));
           const expected=new Map([
@@ -96,36 +102,49 @@ jobs:
               'holds the exact displayed goal frame while paused and resumes that committed goal',
             ])}],
           ].map(([file,spec])=>[path.resolve(file),spec]));
-          assert.equal(r.success,false);assert.equal(r.testResults.length,2);
-          assert.equal(r.numTotalTests,9);assert.equal(r.numPassedTests,5);assert.equal(r.numFailedTests,4);assert.equal(r.numPendingTests,0);assert.equal(r.numTodoTests,0);
-          const files=new Set(),failures=[],passes=[];
+          assert.equal(r.success,true);assert.equal(r.testResults.length,2);
+          assert.equal(r.numTotalTests,9);assert.equal(r.numPassedTests,9);assert.equal(r.numFailedTests,0);assert.equal(r.numPendingTests,0);assert.equal(r.numTodoTests,0);
+          const files=new Set(),passes=[];
           for(const suite of r.testResults){
             assert.equal(typeof suite.name,'string');const file=path.resolve(suite.name),spec=expected.get(file);
             assert(spec,'Unexpected actual suite '+file);assert(!files.has(file));files.add(file);
-            assert.equal(suite.status,'failed');assert.equal(suite.assertionResults.length,spec.count);if('message'in suite)assert.equal(suite.message,'');
-            const seen=new Set();
+            assert.equal(suite.status,'passed');assert.equal(suite.assertionResults.length,spec.count);if('message'in suite)assert.equal(suite.message,'');
+            const titles=new Set([...spec.owned.keys(),...spec.preserves]),seen=new Set();
             for(const row of suite.assertionResults){
-              assert.equal(typeof row.title,'string');assert(!seen.has(row.title));seen.add(row.title);
-              assert.equal(row.fullName,spec.ancestor+' '+row.title);
-              if(spec.preserves.has(row.title)){assert.equal(row.status,'passed',row.fullName);assert.deepEqual(row.failureMessages,[]);passes.push({file,title:row.title});continue;}
-              const marker=spec.owned.get(row.title);assert(marker,row.fullName);assert.equal(row.status,'failed');assert.equal(row.failureMessages.length,1);
-              const message=row.failureMessages[0].replace(/\x1b\[[0-?]*[ -/]*[@-~]/g,'');
-              assert.match(message,/^\s*AssertionError:/);assert(message.includes(marker));assert.doesNotMatch(message,/\b(?:TypeError|ReferenceError|SyntaxError|RangeError)\s*:/);
-              failures.push({file,title:row.title,marker});
+              assert(titles.has(row.title)&&!seen.has(row.title));seen.add(row.title);
+              assert.equal(row.fullName,spec.ancestor+' '+row.title);assert.equal(row.status,'passed');assert.deepEqual(row.failureMessages,[]);
+              passes.push({file,title:row.title,fullName:row.fullName,status:row.status});
             }
-            assert.equal(seen.size,spec.count);for(const title of [...spec.owned.keys(),...spec.preserves])assert(seen.has(title));
+            assert.equal(seen.size,spec.count);
           }
-          assert.equal(files.size,2);assert.equal(failures.length,4);assert.equal(passes.length,5);
+          assert.equal(files.size,2);assert.equal(passes.length,9);
           const runtime=['numRuntimeErrorTestSuites','numUnhandledErrors'];for(const key of runtime)if(key in r)assert.equal(r[key],0);if('unhandledErrors'in r)assert.deepEqual(r.unhandledErrors,[]);
           assert.doesNotMatch(fs.readFileSync(out+'/tests.log','utf8'),/Unhandled\s+(?:Errors?|Rejections?)|Uncaught\s+Exceptions?/i);
-          fs.writeFileSync(out+'/original-red-admission.json',JSON.stringify({phase:'original-pitch-flight-baseline',source:process.env.GITHUB_SHA,runId:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,expectedOwnedFailures:failures,preservedPasses:passes,observedRuntimeCounters:Object.fromEntries(runtime.filter(k=>k in r).map(k=>[k,r[k]])),absentRuntimeCountersUnknown:runtime.filter(k=>!(k in r)),unhandledErrors:'unhandledErrors'in r?r.unhandledErrors:'UNKNOWN_ABSENT',applicationQualified:false},null,2)+'\n',{flag:'wx'});
+          fs.writeFileSync(out+'/fixed-nine-admission.json',JSON.stringify({phase:'fixed-pitch-flight-functional',source:process.env.GITHUB_SHA,runId:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,passedCases:passes,observedRuntimeCounters:Object.fromEntries(runtime.filter(k=>k in r).map(k=>[k,r[k]])),absentRuntimeCountersUnknown:runtime.filter(k=>!(k in r)),unhandledErrors:'unhandledErrors'in r?r.unhandledErrors:'UNKNOWN_ABSENT',applicationQualified:false,browserQualification:'OWED'},null,2)+'\n',{flag:'wx'});
           NODE
           test ! -s "$out/types.transport";test ! -s "$out/tests.transport";test ! -s "$out/classifier.transport"
+      - name: Four real copied-source healthy fault restored controls
+        id: controls
+        if: ${{ !cancelled() && steps.units.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          out="$PITCH_FLIGHT_OUT"
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          : > "$out/controls.transport";: > "$out/controls-classifier.transport";status=0
+          SIM_OFFLINE_RECEIPT="$out/controls.transport" timeout --signal=TERM --kill-after=15s 18m node scripts/qa/runPitchFlightControls.mjs --out "$out/copied-controls" > "$out/controls.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/controls.exit";test "$status" -eq 0
+          SIM_OFFLINE_RECEIPT="$out/controls-classifier.transport" node <<'NODE'
+          const fs=require('node:fs'),assert=require('node:assert/strict'),out=process.env.PITCH_FLIGHT_OUT,p=JSON.parse(fs.readFileSync(out+'/copied-controls/proof.json','utf8')),holds=JSON.parse(fs.readFileSync(out+'/copied-controls/input-holds.json','utf8'));
+          assert.equal(p.status,'ACTUAL_FIXED_NINE_AND_FOUR_COPIED_SOURCE_CONTROLS_PASS');assert.equal(p.complete,true);assert.equal(p.source,process.env.GITHUB_SHA);assert.equal(p.runId,process.env.GITHUB_RUN_ID);assert.equal(p.attempt,process.env.GITHUB_RUN_ATTEMPT);
+          assert.equal(p.runs.length,14);assert.equal(p.controls.length,4);assert.deepEqual(p.errors,[]);assert(p.controls.every(c=>c.healthy&&c.fault&&c.restored&&!c.errors.length));assert.equal(holds.allEqual,true);
+          for(const label of ['all-nine-healthy','all-nine-restored']){const row=p.runs.find(x=>x.label===label);assert(row);assert.equal(row.registered,9);assert.equal(row.passed,9);assert.equal(row.failed,0);assert.equal(row.pending,0);}
+          NODE
+          test ! -s "$out/controls.transport";test ! -s "$out/controls-classifier.transport"
       - name: Always preserve all raw results and physical holds
         if: always()
         run: |
           set -euo pipefail
-          out="$RUNNER_TEMP/pitch-flight-original";mkdir -p "$out";failed=0
+          out="$RUNNER_TEMP/pitch-flight-fixed";mkdir -p "$out";failed=0
           for manifest in source-before dependencies;do
             if test -f "$out/$manifest.sha256";then sha256sum --check "$out/$manifest.sha256" > "$out/final-$manifest-hold.log" 2>&1 || failed=1;else failed=1;fi
           done
@@ -150,7 +169,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: pitch-flight-original-${{ github.run_id }}-${{ github.run_attempt }}
-          path: ${{ runner.temp }}/pitch-flight-original/
+          name: pitch-flight-fixed-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/pitch-flight-fixed/
           if-no-files-found: error
           retention-days: 14
