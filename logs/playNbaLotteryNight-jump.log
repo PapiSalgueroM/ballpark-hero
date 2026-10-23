@@ -1,0 +1,7 @@
+   J 320: the lazy box 100.0 px, the card's first frame 589.0 px, a jump of 489.0 px
+   J 390: the lazy box 100.0 px, the card's first frame 553.0 px, a jump of 453.0 px
+  FAIL J: 390: the card's first frame (553) is within 8 px of the box it replaces (100)
+   J 1280: the lazy box 100.0 px, the card's first frame 537.0 px, a jump of 437.0 px
+  section J: 3 passed, 1 failed
+  3 screenshots in /home/runner/work/_temp/rc-out/files
+playNbaLotteryNight control jump: FIRED, section J red, the others green.
