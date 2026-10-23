@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+#!serial
+# Release BQ triage: rgH2 lines the seams fixed, as rgH2 sends them, on the merged head.
+playReducedMotion: node scripts/playReducedMotion.mjs
+playSeasonCentreMotion: node scripts/playSeasonCentreMotion.mjs
+playCareerMoments: node scripts/playCareerMoments.mjs
