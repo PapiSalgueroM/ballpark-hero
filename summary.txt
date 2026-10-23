@@ -1,0 +1,1 @@
+tsc exit=2 92s |                   Type '{ error: true; } & String' is missing the following properties from type 'PoolRow': player_name, nationality, position, club, and 3 more.
