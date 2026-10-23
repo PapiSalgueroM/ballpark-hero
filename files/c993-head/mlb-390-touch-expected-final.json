@@ -1,0 +1,345 @@
+{
+  "c": {
+    "name": "Native Prospect",
+    "pos": "CF",
+    "archetype": {
+      "id": "fivetool",
+      "label": "Five-Tool Freak",
+      "desc": "Does everything, the face of the game",
+      "ovrBoost": 3,
+      "potBoost": 5,
+      "durability": 0.9
+    },
+    "team": "CIN",
+    "year": 2029,
+    "age": 21,
+    "ovr": 78,
+    "pot": 95,
+    "morale": 67,
+    "fanbase": 42,
+    "health": 100,
+    "salary": 0.8,
+    "contractYears": 5,
+    "seasons": [
+      {
+        "year": 2028,
+        "team": "CIN",
+        "age": 20,
+        "ovr": 77,
+        "games": 77,
+        "awards": [],
+        "teamResult": "WON THE WORLD SERIES",
+        "salary": 0.8,
+        "avg": 0.259,
+        "hr": 9,
+        "rbi": 26,
+        "sb": 3,
+        "doubles": 14,
+        "obp": 0.334,
+        "poGames": 19,
+        "poLine": "18 for 76 (.237), 1 HR"
+      }
+    ],
+    "rings": 1,
+    "mvpCys": 0,
+    "allStars": 0,
+    "retired": false,
+    "draftPick": 315,
+    "earnings": 0.8,
+    "netWorth": 0.8,
+    "dirtyMoney": 0,
+    "heat": 0,
+    "suspendedSeasons": 0,
+    "purchased": [],
+    "lifeFlags": {},
+    "appearance": {
+      "skinTone": "olive",
+      "hairstyle": "fade",
+      "hairColor": "black",
+      "facialHair": "none",
+      "celebration": "knee_slide",
+      "boots": "vortex_strike",
+      "accessory": "none"
+    },
+    "yearlyCosts": 0,
+    "rival": {
+      "name": "Theo Castellanos",
+      "pos": "CF",
+      "team": "CIN",
+      "ovr": 76,
+      "pot": 92,
+      "age": 21,
+      "rings": 0,
+      "hisYears": 1,
+      "myYears": 0,
+      "retired": false,
+      "lastLine": ".248, 13 HR, 54 RBI",
+      "lastScore": 41.36,
+      "lastYear": 2028,
+      "lastAllStar": false
+    },
+    "prospect": {
+      "v": 1,
+      "sport": "mlb",
+      "eraId": "now",
+      "seed": "mlb:seuf6u",
+      "routeId": "hs",
+      "pos": "CF",
+      "rating": 72,
+      "pot": 95,
+      "stock": 41,
+      "health": 90,
+      "age": 18,
+      "seasonsDone": 1,
+      "lines": [
+        {
+          "age": 17,
+          "level": "High school, senior year",
+          "perf": 39,
+          "stockDelta": -2,
+          "stats": [
+            {
+              "label": "AVG",
+              "value": ".284"
+            },
+            {
+              "label": "OBP",
+              "value": ".353"
+            },
+            {
+              "label": "SLG",
+              "value": ".436"
+            }
+          ]
+        }
+      ],
+      "pendingChoice": null,
+      "choicesSeen": [
+        "mlb_summer_league"
+      ],
+      "showcase": {
+        "approach": "steady",
+        "drill": "Live batting practice",
+        "grade": "A",
+        "stockDelta": 5
+      },
+      "draft": {
+        "pick": 315,
+        "round": 11,
+        "pickInRound": 15,
+        "team": "CIN",
+        "ageAtDraft": 18,
+        "draftYear": 2026,
+        "slotValue": null,
+        "devSeasons": [
+          {
+            "age": 18,
+            "level": "Double-A",
+            "perf": 49,
+            "stockDelta": 0,
+            "stats": [
+              {
+                "label": "AVG",
+                "value": ".297"
+              },
+              {
+                "label": "OBP",
+                "value": ".371"
+              },
+              {
+                "label": "SLG",
+                "value": ".480"
+              }
+            ]
+          },
+          {
+            "age": 19,
+            "level": "Triple-A",
+            "perf": 82,
+            "stockDelta": 0,
+            "stats": [
+              {
+                "label": "AVG",
+                "value": ".345"
+              },
+              {
+                "label": "OBP",
+                "value": ".450"
+              },
+              {
+                "label": "SLG",
+                "value": ".582"
+              }
+            ]
+          }
+        ],
+        "ratingAfter": 77,
+        "ageAfter": 20
+      },
+      "phase": "done"
+    },
+    "role": "backup",
+    "summerSalt": "1a4slrk",
+    "pendingRivalryEvent": {
+      "id": 209,
+      "emoji": "😬",
+      "title": "Rival Becomes Teammate",
+      "description": "Theo Castellanos just signed with your team. The clubhouse just got a lot more interesting.",
+      "consequence": "The feud cools, Morale +3, Fanbase +5"
+    },
+    "money": {
+      "seed": 2947111344,
+      "vault": 0,
+      "hold": {
+        "ladder": 0,
+        "bricks": 0,
+        "cleats": 0,
+        "screens": 0,
+        "spark": 0
+      },
+      "cost": {
+        "ladder": 0,
+        "bricks": 0,
+        "cleats": 0,
+        "screens": 0,
+        "spark": 0
+      },
+      "price": {
+        "ladder": 102.24,
+        "bricks": 94.25,
+        "cleats": 108.46,
+        "screens": 118.88,
+        "spark": 109.1
+      },
+      "hist": {
+        "ladder": [
+          100,
+          102.24
+        ],
+        "bricks": [
+          100,
+          94.25
+        ],
+        "cleats": [
+          100,
+          108.46
+        ],
+        "screens": [
+          100,
+          118.88
+        ],
+        "spark": [
+          100,
+          109.1
+        ]
+      },
+      "log": [],
+      "year": 2028,
+      "age": 1,
+      "won": 0,
+      "lost": 0,
+      "cPlays": 0,
+      "cNet": 0,
+      "cYear": 0,
+      "cShut": false,
+      "aYear": 0,
+      "aBest": 0,
+      "aPlays": 0
+    },
+    "karma": 50,
+    "phoneInbox": [
+      {
+        "id": "old_coach-2028",
+        "defId": "old_coach",
+        "from": "High school coach",
+        "emoji": "👴",
+        "text": "Watched you on TV last night. Still remember you at 14 refusing to leave the cage after closing. Proud of you kid.",
+        "year": 2028,
+        "choices": [
+          {
+            "label": "Thank him properly",
+            "reply": "Everything started with you coach. Tickets for you whenever you want, for life",
+            "karma": 8,
+            "morale": 5
+          },
+          {
+            "label": "Thumbs up emoji",
+            "reply": "👍",
+            "karma": -3
+          }
+        ],
+        "beat": "allstar"
+      },
+      {
+        "id": "sept_stretch-2028",
+        "defId": "sept_stretch",
+        "from": "Manager",
+        "emoji": "🧢",
+        "text": "Last month of the season. I want you in there every night. How's the body holding up, honestly?",
+        "year": 2028,
+        "choices": [
+          {
+            "label": "Play me every day",
+            "reply": "Write me in every day. I'll rest in October",
+            "karma": 3,
+            "morale": 3
+          },
+          {
+            "label": "I need a day here and there",
+            "reply": "Honestly a day here and there would help",
+            "karma": 3,
+            "morale": -1
+          }
+        ],
+        "beat": "september"
+      },
+      {
+        "id": "oct_tickets-2028",
+        "defId": "oct_tickets",
+        "from": "Mom",
+        "emoji": "🎟️",
+        "text": "The whole family wants playoff tickets. All fourteen of us. Your uncle says he's bringing a sign.",
+        "year": 2028,
+        "choices": [
+          {
+            "label": "Buy them all",
+            "reply": "Fourteen tickets, done. Tell him to make the sign big",
+            "karma": 7,
+            "morale": 3,
+            "cash": -0.1
+          },
+          {
+            "label": "Four tickets, that's it",
+            "reply": "Four. Everybody else watches at the house",
+            "karma": -2
+          }
+        ],
+        "beat": "october"
+      }
+    ],
+    "phoneUsedIds": [
+      "old_coach",
+      "sept_stretch",
+      "oct_tickets"
+    ],
+    "headlines": [
+      "Native Prospect spends another year off the everyday lineup card",
+      "Cincinnati Reds win the World Series. Native Prospect has a ring",
+      "Native Prospect hits .259 with 9 home runs and 26 driven in"
+    ],
+    "eventLastFired": {
+      "mlbC_of_wall": 2028
+    },
+    "summer": {
+      "year": 2028,
+      "ids": [
+        "pressTitle",
+        "mlbC_of_wall"
+      ],
+      "at": 0
+    }
+  },
+  "phase": "event",
+  "teamQuality": 84,
+  "coach": null
+}

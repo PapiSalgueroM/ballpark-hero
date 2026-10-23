@@ -1,0 +1,318 @@
+{
+  "c": {
+    "name": "Native Prospect",
+    "pos": "PG",
+    "archetype": {
+      "id": "pointgod",
+      "label": "Point God",
+      "desc": "The offense runs through you",
+      "ovrBoost": 1,
+      "potBoost": 5,
+      "durability": 0.95,
+      "scoring": 0.85,
+      "playmaking": 1.55,
+      "rebounding": 0.55
+    },
+    "team": "DET",
+    "year": 2027,
+    "age": 20,
+    "ovr": 80,
+    "pot": 97,
+    "morale": 80,
+    "fanbase": 75,
+    "health": 100,
+    "salary": 7.4,
+    "contractYears": 3,
+    "seasons": [
+      {
+        "year": 2026,
+        "team": "DET",
+        "age": 19,
+        "ovr": 79,
+        "games": 80,
+        "ppg": 7.5,
+        "rpg": 2.3,
+        "apg": 4,
+        "awards": [],
+        "teamResult": "WON THE NBA FINALS",
+        "salary": 7.4,
+        "mpg": 23.9,
+        "spg": 0.8,
+        "bpg": 0.1,
+        "clubWins": 61,
+        "clubLosses": 21,
+        "poGames": 27,
+        "poPpg": 5.7,
+        "poRpg": 1.9,
+        "poApg": 2.8
+      }
+    ],
+    "rings": 1,
+    "mvps": 0,
+    "allNbas": 0,
+    "finalsMvps": 0,
+    "retired": false,
+    "draftPick": 14,
+    "earnings": 7.4,
+    "netWorth": 4.5,
+    "dirtyMoney": 0,
+    "heat": 0,
+    "suspendedSeasons": 0,
+    "purchased": [],
+    "lifeFlags": {},
+    "appearance": {
+      "skinTone": "olive",
+      "hairstyle": "fade",
+      "hairColor": "black",
+      "facialHair": "none",
+      "celebration": "knee_slide",
+      "boots": "vortex_strike",
+      "accessory": "none"
+    },
+    "yearlyCosts": 0,
+    "rival": {
+      "name": "Nico Rylander",
+      "pos": "PG",
+      "team": "DET",
+      "ovr": 82,
+      "pot": 96,
+      "age": 20,
+      "rings": 0,
+      "hisYears": 1,
+      "myYears": 0,
+      "retired": false,
+      "lastLine": "8.1 ppg, 2.8 rpg, 3.1 apg",
+      "lastScore": 22.15,
+      "lastYear": 2026,
+      "lastAllStar": false
+    },
+    "prospect": {
+      "v": 1,
+      "sport": "nba",
+      "eraId": "now",
+      "seed": "nba:seuf6u",
+      "routeId": "one",
+      "pos": "PG",
+      "rating": 79,
+      "pot": 97,
+      "stock": 61,
+      "health": 100,
+      "age": 19,
+      "seasonsDone": 1,
+      "lines": [
+        {
+          "age": 18,
+          "level": "College basketball",
+          "perf": 85,
+          "stockDelta": 7,
+          "stats": [
+            {
+              "label": "Games",
+              "value": "33"
+            },
+            {
+              "label": "PPG",
+              "value": "17.8"
+            },
+            {
+              "label": "RPG",
+              "value": "4.3"
+            },
+            {
+              "label": "APG",
+              "value": "7.4"
+            }
+          ]
+        }
+      ],
+      "pendingChoice": null,
+      "choicesSeen": [
+        "summer"
+      ],
+      "showcase": {
+        "approach": "steady",
+        "drill": "Three on three",
+        "grade": "C",
+        "stockDelta": -1
+      },
+      "draft": {
+        "pick": 14,
+        "round": 1,
+        "pickInRound": 14,
+        "team": "DET",
+        "ageAtDraft": 19,
+        "draftYear": 2026,
+        "slotValue": null,
+        "devSeasons": [],
+        "ratingAfter": 79,
+        "ageAfter": 19
+      },
+      "phase": "done"
+    },
+    "role": "starter",
+    "summerSalt": "184v3cg",
+    "phoneInbox": [
+      {
+        "id": "draft_gm-2026",
+        "defId": "draft_gm",
+        "from": "GM",
+        "emoji": "📋",
+        "text": "We had you at the top of our board for months. A lot of people in this building put their names on that pick. Make us look smart.",
+        "year": 2026,
+        "choices": [
+          {
+            "label": "You won't regret it",
+            "reply": "You'll never regret it. Promise",
+            "karma": 4,
+            "morale": 3
+          },
+          {
+            "label": "Then pay me like it",
+            "reply": "Then the second contract better reflect it",
+            "karma": -5,
+            "morale": 1,
+            "popularity": 1
+          }
+        ],
+        "beat": "draft"
+      },
+      {
+        "id": "summer_tryout-2026",
+        "defId": "summer_tryout",
+        "from": "Summer league teammate",
+        "emoji": "🙏",
+        "text": "I don't have a contract, this week is the whole thing for me. If you see me open in the corner, please.",
+        "year": 2026,
+        "choices": [
+          {
+            "label": "Find him every time",
+            "reply": "Be ready. It's coming to you every time you're open",
+            "karma": 7,
+            "morale": 2
+          },
+          {
+            "label": "If you're open",
+            "reply": "If you're open you'll get it",
+            "karma": 2
+          },
+          {
+            "label": "I'm getting mine first",
+            "reply": "We're all out here trying to eat",
+            "karma": -5,
+            "popularity": 1
+          }
+        ],
+        "beat": "summer"
+      },
+      {
+        "id": "playoffs_sleep-2026",
+        "defId": "playoffs_sleep",
+        "from": "Performance staff",
+        "emoji": "😴",
+        "text": "Your sleep numbers are a mess this series. Phone off at eleven, no exceptions. Deal?",
+        "year": 2026,
+        "choices": [
+          {
+            "label": "Deal",
+            "reply": "Phone's in the drawer at eleven. Promise",
+            "karma": 3,
+            "morale": 2
+          },
+          {
+            "label": "No promises",
+            "reply": "I'll try. No promises",
+            "karma": -2
+          }
+        ],
+        "beat": "playoffs"
+      }
+    ],
+    "phoneUsedIds": [
+      "draft_gm",
+      "summer_tryout",
+      "playoffs_sleep"
+    ],
+    "pendingRivalryEvent": {
+      "id": 309,
+      "emoji": "😬",
+      "title": "Rival Becomes Teammate",
+      "description": "Nico Rylander just signed with your team. The locker room just got a lot more interesting.",
+      "consequence": "The feud cools, Morale +3, Fanbase +5"
+    },
+    "money": {
+      "seed": 2947111344,
+      "vault": 0,
+      "hold": {
+        "ladder": 0,
+        "bricks": 0,
+        "cleats": 0,
+        "screens": 0,
+        "spark": 0
+      },
+      "cost": {
+        "ladder": 0,
+        "bricks": 0,
+        "cleats": 0,
+        "screens": 0,
+        "spark": 0
+      },
+      "price": {
+        "ladder": 102.24,
+        "bricks": 94.25,
+        "cleats": 108.46,
+        "screens": 118.88,
+        "spark": 109.1
+      },
+      "hist": {
+        "ladder": [
+          100,
+          102.24
+        ],
+        "bricks": [
+          100,
+          94.25
+        ],
+        "cleats": [
+          100,
+          108.46
+        ],
+        "screens": [
+          100,
+          118.88
+        ],
+        "spark": [
+          100,
+          109.1
+        ]
+      },
+      "log": [],
+      "year": 2026,
+      "age": 1,
+      "won": 0,
+      "lost": 0,
+      "cPlays": 0,
+      "cNet": 0,
+      "cYear": 0,
+      "cShut": false,
+      "aYear": 0,
+      "aBest": 0,
+      "aPlays": 0
+    },
+    "karma": 50,
+    "headlines": [
+      "Detroit Pistons win the title. Native Prospect has a ring",
+      "Native Prospect averages 7.5 points and 4 assists a night"
+    ],
+    "eventLastFired": {},
+    "summer": {
+      "year": 2026,
+      "ids": [
+        "pressTitle"
+      ],
+      "at": 0
+    }
+  },
+  "phase": "event",
+  "teamQuality": 83,
+  "coach": null
+}
