@@ -1,0 +1,12 @@
+simNbaDraftBoard exit=0 186s | simNbaDraftBoard: green.
+vitest-1540 exit=0 9s |    Duration  8.01s (transform 1.88s, setup 811ms, collect 4.05s, tests 8.65s, environment 4.21s, prepare 1.17s)
+simNbaGmDesk exit=0 41s | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+simNbaGmDesk-held exit=0 43s | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+simNbaGmDesk-norfa exit=0 42s | simNbaGmDesk: control norfa fired (178 failures, as it should)
+simNbaGmDesk-fullbird exit=0 41s | simNbaGmDesk: control fullbird fired (117 failures, as it should)
+simGmContracts exit=0 1s | simGmContracts: PASS, 4 engines, 20 runs of 10 seasons, nobody left on a flip
+simGmContracts-nobird exit=1 1s | simGmContracts: CONTROL nobird FIRED, section 4 went red as it must (22 findings, exit 1)
+simGmDeskHost exit=0 69s | simGmDeskHost: all 10 checks passed on seeds 1,2,3 (4 engines, 3 seasons a seed)
+vitest-contracts exit=0 5s |    Duration  4.39s (transform 2.08s, setup 473ms, collect 3.56s, tests 2.23s, environment 2.13s, prepare 410ms)
+simNbaDraftBoard-full exit=0 806s | simNbaDraftBoard: green.
+simNbaDraftBoard-controls exit=0 1855s | simNbaDraftBoard controls: all 12 fired, each in exactly its own section.
