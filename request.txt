@@ -1,0 +1,6 @@
+#!serial
+#!playwright
+# Release BR, Round 1562: the card controls of r1562-s2b (rc-s2b.txt), extras mut-smalltext.mjs
+# and mut-truncate.mjs: c-smalltext and c-truncate each exit 1 "FIRED at point size" or "at point cut".
+c-smalltext: node .rc/x/mut-smalltext.mjs && npx vite build --outDir /tmp/dist-small --logLevel error && (node scripts/lib/hostLikeServer.mjs /tmp/dist-small 4183 > /dev/null 2>&1 &) && sleep 3 && BASE=http://localhost:4183 PLAY_FO_CARD_CONTROL=smalltext ENGINES=chromium node scripts/playFoSeasonCard.mjs; s=$?; git checkout -- src; exit $s
+c-truncate: node .rc/x/mut-truncate.mjs && npx vite build --outDir /tmp/dist-trunc --logLevel error && (node scripts/lib/hostLikeServer.mjs /tmp/dist-trunc 4184 > /dev/null 2>&1 &) && sleep 3 && BASE=http://localhost:4184 PLAY_FO_CARD_CONTROL=truncate ENGINES=chromium node scripts/playFoSeasonCard.mjs; s=$?; git checkout -- src; exit $s
