@@ -1,0 +1,26 @@
+# Release BR, Round 1552 (Sports Millionaire one right answer): r1552/.tmp-fx/rc-fix-a.txt, extra
+# fix-fofleet.mjs. ctl-* exit 1 FIRED ("NEGATIVE CONTROL"), fofleet-control exit 1. Nothing dropped.
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simTriviaBank: export TMPDIR=$(mktemp -d); node scripts/simTriviaBank.mjs
+seed-b: export TMPDIR=$(mktemp -d); SIM_SEED=777 TRIVIA_UNLIMITED=3000 node scripts/simTriviaBank.mjs
+seed-c: export TMPDIR=$(mktemp -d); SIM_SEED=4242 TRIVIA_LADDERS=15000 node scripts/simTriviaBank.mjs
+ctl-ties: export TMPDIR=$(mktemp -d); TRIVIA_CONTROL=ties node scripts/simTriviaBank.mjs
+ctl-namesake: export TMPDIR=$(mktemp -d); TRIVIA_CONTROL=namesake node scripts/simTriviaBank.mjs
+ctl-tense: export TMPDIR=$(mktemp -d); TRIVIA_CONTROL=tense node scripts/simTriviaBank.mjs
+ctl-postense: export TMPDIR=$(mktemp -d); TRIVIA_CONTROL=postense node scripts/simTriviaBank.mjs
+ctl-family: export TMPDIR=$(mktemp -d); TRIVIA_CONTROL=family node scripts/simTriviaBank.mjs
+ctl-legacy: export TMPDIR=$(mktemp -d); TRIVIA_CONTROL=legacy node scripts/simTriviaBank.mjs
+ctl-rulec: export TMPDIR=$(mktemp -d); TRIVIA_CONTROL=rulec node scripts/simTriviaBank.mjs
+namesakes-check: node scripts/genMarketNamesakes.mjs --check
+fofleet: export TMPDIR=$(mktemp -d); node .rc/x/fix-fofleet.mjs
+fofleet-control: export TMPDIR=$(mktemp -d); FOFLEET_CONTROL=1 node .rc/x/fix-fofleet.mjs
+simFaceOff: export TMPDIR=$(mktemp -d); node scripts/simFaceOff.mjs
+simFaceOffDeadline: export TMPDIR=$(mktemp -d); node scripts/simFaceOffDeadline.mjs
+simHigherLower: export TMPDIR=$(mktemp -d); node scripts/simHigherLower.mjs
+vitest-faceoff: node_modules/.bin/vitest run src/test/faceOffDeadline.test.tsx src/test/resultScorePillComparison.test.tsx --testTimeout=300000 --hookTimeout=120000
+dailyReload: ONLY=sports-millionaire node_modules/.bin/vitest run src/test/dailyReload.test.tsx --testTimeout=300000 --hookTimeout=120000
+simTrustCopy: export TMPDIR=$(mktemp -d); node scripts/simTrustCopy.mjs
+simAccessibility: export TMPDIR=$(mktemp -d); node scripts/simAccessibility.mjs
+simStorageWrites: export TMPDIR=$(mktemp -d); node scripts/simStorageWrites.mjs
+simNoRivalNames: export TMPDIR=$(mktemp -d); node scripts/simNoRivalNames.mjs
+simHarnessAnchors: export TMPDIR=$(mktemp -d); node scripts/simHarnessAnchors.mjs
