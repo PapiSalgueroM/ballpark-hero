@@ -1,0 +1,9 @@
+before2 exit=0 5s |    Duration  4.48s (transform 1.69s, setup 84ms, collect 2.15s, tests 1.15s, environment 386ms, prepare 205ms)
+before1 exit=0 5s |    Duration  4.55s (transform 1.80s, setup 107ms, collect 2.31s, tests 1.09s, environment 416ms, prepare 126ms)
+before3 exit=0 5s |    Duration  4.38s (transform 1.66s, setup 88ms, collect 2.18s, tests 1.12s, environment 350ms, prepare 156ms)
+after1 exit=0 5s |    Duration  4.50s (transform 1.77s, setup 65ms, collect 2.18s, tests 1.21s, environment 349ms, prepare 191ms)
+after2 exit=0 5s |    Duration  4.05s (transform 1.73s, setup 67ms, collect 2.30s, tests 982ms, environment 282ms, prepare 113ms)
+after3 exit=0 5s |    Duration  4.08s (transform 1.61s, setup 90ms, collect 2.08s, tests 918ms, environment 419ms, prepare 156ms)
+c-tight exit=1 5s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeSeasonStats.test.tsx,title=src/components/front-office/FrontOfficeSeason
+vitest-sstats exit=0 6s |    Duration  5.06s (transform 1.79s, setup 181ms, collect 2.36s, tests 2.21s, environment 894ms, prepare 221ms)
+tsc exit=0 61s | 
