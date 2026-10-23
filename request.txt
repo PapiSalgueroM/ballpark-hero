@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+# Release BR, Round 1562: r1562-f2 (rc-f2.txt), the walk playFoSeasonCard. DROPPED: nfl-on-base (the
+# head's walk on a build of 1542's head ab162ea8, exit 1 by design, an attribution measured once).
+walk: ENGINES=chromium node scripts/playFoSeasonCard.mjs
+playNflSeasonStats: ENGINES=chromium node scripts/playNflSeasonStats.mjs
+playFrontOfficeGameDay: ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs
