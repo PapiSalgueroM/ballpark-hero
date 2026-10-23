@@ -1,0 +1,4 @@
+headsha exit=0 0s | ab485d7dee Release BQ m17: merge origin/main at 46f7f3f6 (the lead's revert 570bb87a of the Lovable editor's types.ts, tree equal to 705f576c, and two board commits), aft
+wf285 exit=0 233s | wfrun club-detail-fixtures.yml: 8 steps ran, 0 failed
+wf287x exit=0 322s | wfrun manager-handover-desk.yml: 9 steps ran, 0 failed
+wf301x exit=0 886s | wfrun manager-decision-method.yml: 5 steps ran, 0 failed
