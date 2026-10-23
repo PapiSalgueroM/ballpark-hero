@@ -1,0 +1,5 @@
+#!serial
+# Release BQ triage: simCareerLeagueSeasons with a Round 1525 arm (the scratch seam cls1525.mjs put over the harness), its two unattributed controls.
+cls-arm: cp .rc/x/cls1525.mjs scripts/simCareerLeagueSeasons.mjs && node scripts/simCareerLeagueSeasons.mjs
+cls-arm-noawards: cp .rc/x/cls1525.mjs scripts/simCareerLeagueSeasons.mjs && SIM_LEAGUE_SEASONS_AWARDS= node scripts/simCareerLeagueSeasons.mjs
+cls-arm-unattr: cp .rc/x/cls1525.mjs scripts/simCareerLeagueSeasons.mjs && SIM_LEAGUE_SEASONS_AWARDS= SIM_LEAGUE_SEASONS_MORALE= node scripts/simCareerLeagueSeasons.mjs
