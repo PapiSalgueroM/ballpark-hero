@@ -309,7 +309,7 @@ export default function DrillBoard({ career, canBank, onBank, onBack, match, wal
     setActiveWallRules(rules);
     setSetups(buildRun(kind, seed, rules));
     if (m === 'daily' && kind === 'wallshot' && rules === 2) {
-      const rec: DrillRecord = { score: 0, count: 0, banked: false, rounds: 0, wallShotRules: 2 };
+      const rec = { score: 0, count: 0, banked: false, rounds: 0, wallShotRules: 2 };
       writeDailyRecord(meta.slug, todayStr, rec);
       setRecord(rec);
     }

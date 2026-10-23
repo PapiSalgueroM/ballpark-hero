@@ -6,8 +6,8 @@ import { fileURLToPath } from 'node:url';
 import { execFileSync, spawnSync } from 'node:child_process';
 
 // Remote-only actual-import controls. This file does not change product sources.
-const MANIFEST_SHA = 'c73a42149a09b46785d823f0668f1e9df5e45024e29bcaacffb04b5d379091f6';
-const RECIPES_SHA = '93cb6d5fb68da12366671c79917c95a7052f3c8755d66657a7ae6297517cc02b';
+const MANIFEST_SHA = '527c4596526e778c5bf8f777fa016d5da4147a03421ecec2c724558c4dfbda6c';
+const RECIPES_SHA = '2d7199f2a86efa12b618a7f16b4f944b3ed936fa45de558e45acd8c5ca2d1493';
 const CONFIG_BLOB = 'ed2a9dc677f77dfe95c061064eeff5782b856864';
 const MOMENT_RECIPES_SHA = 'b04ba053ceed1854dafab35e27f0b81bf7212b9993d2b93fcfdf0a91e4e72eb1';
 const OLD_CORE_SHA = '66acef16d52f023fcb73ec7fb18a626f44c372bbfc182ca355681ac65f17caec';
@@ -16,7 +16,7 @@ const HOOK = 'src/components/soccer-career/useSoccerMoments.tsx';
 const CORE = 'src/lib/careerDrills.ts';
 const BOARD = 'src/components/soccer-career/DrillBoard.tsx';
 const CORE_SHA = 'a5a66ed166667051d24e0d737f47941587b28edd633a7823c6e6741172db3c74';
-const BOARD_SHA = '38bda7385c551ea0ae36e81355baa406b6a26cd7b0d59a8444710567aa2fd6e8';
+const BOARD_SHA = '23294f3ccbf23a10753c076ea040998565adeaa2ac8a9661c52d20999e8d3f87';
 const configAliases = { [CORE]: '@/lib/careerDrills', [BOARD]: '@/components/soccer-career/DrillBoard', [LEDGER]: '@/lib/season/momentsSave', [HOOK]: '@/components/soccer-career/useSoccerMoments' };
 const sourcePins = { [CORE]: CORE_SHA, [BOARD]: BOARD_SHA, [LEDGER]: '2dfaf3a4e1300668e656f487befeb8fe50f76821d382262cf5b45a8c4f4218ab', [HOOK]: 'cf22ab07c57f6ccc707dfe0a21d2f5d46d1a495de94740c9d3eab674dd69c65e' };
 const hookAdapters = [[" from './SoccerMomentBoard';", " from '@/components/soccer-career/SoccerMomentBoard';"]];
