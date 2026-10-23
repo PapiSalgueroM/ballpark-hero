@@ -1,0 +1,43 @@
+#!serve
+#!playwright
+#!serial
+# Release BR triage (rBR-tr): #!serial, because simGoogleOnlyReturn writes temporary folders into src while
+# simStorageWrites reads src (rBR-rgBPi-b: ENOENT on src/.google-paused-control-reauth-*/ResetPassword.tsx), the race
+# Release BQ's triage met in rc-BQe3.txt with simHomeSearchRecovery.
+# Release BP part two (Round BPH, finish-BPH.md). ROUND 1532 (Stadium Tycoon scorelines), results-g/rc-1532.txt split three ways by .tmp-fx/x/split1532.mjs (job limit). Part B: the rest of the plain sims, vitest and tsc, on a plain build.
+# Expected reds (finish-1532.md): simSchemaNames, simLeaderboardCaps (database blocked), simWritesAreSent (red on base),
+# simPrerender (/whats-new, build:seo), simTycoonGoalFlight, simSetPiecePresentation, simTycoonSeasonReview (red on base).
+# simGuideHeadings is left out on purpose: it runs alone (rgBLgh). Proven on 43459fec as rBPh-m8b.
+simNoRivalNames: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simNoRivalNames.mjs
+simInventedNames: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simInventedNames.mjs
+simHarnessAnchors: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simHarnessAnchors.mjs
+simNoInventedQuotes: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simNoInventedQuotes.mjs
+simNoInventedConduct: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simNoInventedConduct.mjs
+simLegalPages: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simLegalPages.mjs
+simSingleFooter: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSingleFooter.mjs
+simCompletionSlugs: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCompletionSlugs.mjs
+simCompletionOnce: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCompletionOnce.mjs
+simNoDoubleRecord: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simNoDoubleRecord.mjs
+simDailyPuzzleContract: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simDailyPuzzleContract.mjs
+simDailySaveHardening: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simDailySaveHardening.mjs
+simSchemaNames: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSchemaNames.mjs
+simFetchRetry: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simFetchRetry.mjs
+simGoogleOnlyReturn: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simGoogleOnlyReturn.mjs
+simReportRelay: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simReportRelay.mjs
+simNavbarStatsReads: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simNavbarStatsReads.mjs
+simLeaderboardCaps: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simLeaderboardCaps.mjs
+simScoringCoverage: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simScoringCoverage.mjs
+simSiteSearch: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSiteSearch.mjs
+simStorageWrites: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simStorageWrites.mjs
+simAccessibility: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simAccessibility.mjs
+simCmLeagueFixtures: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmLeagueFixtures.mjs
+simMissingElevenSources: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simMissingElevenSources.mjs
+simNbaLuxuryTax: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simNbaLuxuryTax.mjs
+simNbaSeasonStats: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simNbaSeasonStats.mjs
+simPerfectSeasonOdds: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPerfectSeasonOdds.mjs
+simPrerender: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPrerender.mjs
+simTrustCopy: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTrustCopy.mjs
+vitest: node_modules/.bin/vitest run src/test/firstTeam.test.tsx src/test/idleFloaterTimers.test.tsx src/test/saveKeeper.test.ts src/test/tycoonAway.test.tsx src/test/tycoonGear.test.tsx src/test/tycoonHelp.test.tsx src/test/tycoonLatestSeason.test.tsx src/test/tycoonLoads.test.tsx src/test/tycoonPacks.test.tsx src/test/tycoonPitch.test.tsx src/test/tycoonRooms.test.tsx src/test/tycoonSaleReview.test.tsx src/test/tycoonSetPieceBoard.test.tsx src/test/tycoonSetPiecePage.test.tsx src/test/tycoonTicketPolicy.test.tsx --testTimeout=300000 --hookTimeout=120000
+simWritesAreSent: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simWritesAreSent.mjs
+simResultMoment: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simResultMoment.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
