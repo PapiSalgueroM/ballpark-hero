@@ -1,0 +1,26 @@
+# Release BR, Round 1556 (the NBA GM desk's offer sheet man): its closing gate r1556-fxg (r1556/.tmp-fx/rc-fxg.txt),
+# extra sweep.sh. Each ctl line exits 0 when the control is red in its wanted check ("control X fired"), 1 if not;
+# the brief's three: dropone, nohandback, overlimit, each red in check 2. DROPPED (cannot form on a joined head):
+# head (prints HEAD~1, which is the request commit's parent, not the round), src-same (src against 378d6047 differs
+# by every merged round) and dashes (counts from f276b8a8 through every round merged since; the join scans dashes).
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+desk-def: node scripts/simNbaGmDesk.mjs
+sweep-1: bash .rc/x/sweep.sh 1 20
+sweep-2: bash .rc/x/sweep.sh 21 40
+sweep-3: bash .rc/x/sweep.sh 41 59
+ctl-overcut: SIM_NBA_GM_DESK_CONTROL=overcut node scripts/simNbaGmDesk.mjs
+ctl-onlyself: SIM_NBA_GM_DESK_CONTROL=onlyself node scripts/simNbaGmDesk.mjs
+ctl-deadoff: SIM_NBA_GM_DESK_CONTROL=deadoff node scripts/simNbaGmDesk.mjs
+ctl-noroll: SIM_NBA_GM_DESK_CONTROL=noroll node scripts/simNbaGmDesk.mjs
+ctl-poolline: SIM_NBA_GM_DESK_CONTROL=poolline node scripts/simNbaGmDesk.mjs
+ctl-poolbest: SIM_NBA_GM_DESK_CONTROL=poolbest node scripts/simNbaGmDesk.mjs
+ctl-dropone: SIM_NBA_GM_DESK_CONTROL=dropone node scripts/simNbaGmDesk.mjs
+ctl-nohandback: SIM_NBA_GM_DESK_CONTROL=nohandback node scripts/simNbaGmDesk.mjs
+ctl-overlimit: SIM_NBA_GM_DESK_CONTROL=overlimit node scripts/simNbaGmDesk.mjs
+ctl-sheetrepick: SIM_NBA_GM_DESK_CONTROL=sheetrepick node scripts/simNbaGmDesk.mjs
+ctl-fullbird: SIM_NBA_GM_DESK_CONTROL=fullbird node scripts/simNbaGmDesk.mjs
+ctl-coinflip: SIM_NBA_GM_DESK_CONTROL=coinflip node scripts/simNbaGmDesk.mjs
+ctl-norfa: SIM_NBA_GM_DESK_CONTROL=norfa node scripts/simNbaGmDesk.mjs
+norival: node scripts/simNoRivalNames.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+storage: node scripts/simStorageWrites.mjs
