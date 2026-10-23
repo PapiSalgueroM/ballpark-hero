@@ -1,0 +1,8 @@
+vitest-intl exit=0 16s |    Duration  16.01s (transform 5.59s, setup 615ms, collect 15.23s, tests 14.42s, environment 3.62s, prepare 1.39s)
+M5 exit=1 41s | MUTATION M5 CAUGHT (vitest=1 sim=0)
+N1 exit=0 38s | MUTATION N1 NOT CAUGHT (vitest=0 sim=0)
+tsc exit=0 106s | 
+N5 exit=0 67s | MUTATION N5 NOT CAUGHT (vitest=0 sim=0)
+N2 exit=0 96s | MUTATION N2 NOT CAUGHT (vitest=0 sim=0)
+N4 exit=0 188s | MUTATION N4 NOT CAUGHT (vitest=0 sim=0 walk=0)
+N9 exit=0 182s | MUTATION N9 NOT CAUGHT (vitest=0 sim=0 walk=0)

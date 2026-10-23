@@ -1,0 +1,6 @@
+mutation N1 applied to src/lib/careerIntl.ts
+[2m      Tests [22m [1m[32m44 passed[39m[22m[90m (44)[39m
+    held out pooled by age: 8.1, 8.1, 11.2, 14.1; rise from 26 to 36: 6.0
+  240000 tournaments held to the invariants
+simCareerIntl: GREEN, 720087 checks over sections 5
+MUTATION N1 NOT CAUGHT (vitest=0 sim=0)

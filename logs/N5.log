@@ -1,0 +1,6 @@
+mutation N5 applied to src/lib/careerIntl.ts
+[2m      Tests [22m [1m[32m44 passed[39m[22m[90m (44)[39m
+  200 tournaments of 60 go careers an era played again from the final save, byte identical; planted lasts: 59 equal to the replay dropped, 59 unequal kept
+  8c, 63 saves Round 1541's code wrote with a stored last, repaired here: projected rated under 95: 0 dropped, 29 kept; played rated under 95: 7 dropped, 27 kept
+simCareerIntl: GREEN, 569 checks over sections 8
+MUTATION N5 NOT CAUGHT (vitest=0 sim=0)

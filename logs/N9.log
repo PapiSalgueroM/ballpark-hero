@@ -1,0 +1,8 @@
+mutation N9 applied to src/lib/nbaCareerIntl.ts
+[2m      Tests [22m [1m[32m49 passed[39m[22m[90m (49)[39m
+  22 static outputs (281 modules) of 90; ledger static: false, bracket runner static: false, gate static: true
+simCareerIntl: GREEN, 52755 checks over sections 1,2,3,4,6,12
+save D2: last season 2004, phase season, the gate's call none
+  screenshots in /tmp/n9shots: a-320-1-holding.png a-320-2-call.png a-320-3-result.png a-320-4-games.png a-320-5-bracket.png a-320-6-group-or-round.png a-320-7-summer-card.png a-390-1-holding.png a-390-2-call.png a-390-3-result.png a-390-4-games.png a-390-5-bracket.png a-390-6-group-or-round.png a-3
+playNbaIntl: green. The call, Go and its result's views, Rest, a reload mid beat, the 2027 World Cup's lines and no call at 80 or in 2005, at 320, 390 and 1280; 24 screenshots to look at.
+MUTATION N9 NOT CAUGHT (vitest=0 sim=0 walk=0)

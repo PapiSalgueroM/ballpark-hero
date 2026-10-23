@@ -1,0 +1,11 @@
+mutation M5 applied to src/lib/nbaCareerIntl.ts
+[31m     → expected 85 to be 76 // Object.is equality[39m
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/nbaCareerIntl.test.ts[2m > [22mthe game[2m > [22mcan draw every finish a nation really had before a summer to come, its latest one too (review of Round 1544, M5)
+[31m[1mAssertionError[22m: expected 85 to be 76 // Object.is equality[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m43 passed[39m[22m[90m (44)[39m
+::error file=/tmp/m5/src/test/nbaCareerIntl.test.ts,title=src/test/nbaCareerIntl.test.ts > the game > can draw every finish a nation really had before a summer to come%2C its latest one too (review of Round 1544%2C M5),line=164,column=79::AssertionError: expected 85 to be 76 // Object.is equality%0A
+    held out pooled by age: 8.1, 8.1, 11.1, 14.2; rise from 26 to 36: 6.1
+  240000 tournaments held to the invariants
+simCareerIntl: GREEN, 720087 checks over sections 5
+MUTATION M5 CAUGHT (vitest=1 sim=0)
