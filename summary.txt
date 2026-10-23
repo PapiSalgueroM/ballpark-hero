@@ -1,0 +1,11 @@
+m-nosecond-bell exit=0 1s | US_CONN_CONTROL=bell did NOT fire its own rule (second-fit x0 for Le'Veon Bell); the 1 other failures do not count for it (findings: no-fact 1). This control proves nothi
+m-reach-karlsson exit=0 0s | US_CONN_CONTROL=karlsson did NOT fire its own rule (watch x0 for Erik Karlsson); the 1 other failures do not count for it (findings: no-fact 1). This control proves nothi
+m-identity-twice exit=0 0s | US_CONN_CONTROL=twice did NOT fire its own rule (twice x0 for Rich Gossage); the 1 other failures do not count for it (findings: no-fact 1). This control proves nothing a
+m-nomember-arod exit=0 0s | US_CONN_CONTROL=arod did NOT fire its own rule (refuted x1, not-a-member x0 for Alex Rodriguez); the 5 other failures do not count for it (findings: refuted 1, no-fact 1,
+m-norefuted-arod exit=0 0s | US_CONN_CONTROL=arod did NOT fire its own rule (refuted x0, not-a-member x1 for Alex Rodriguez); the 10 other failures do not count for it (findings: no-fact 1, not-a-mem
+m-onehostok-onehost exit=0 0s | US_CONN_CONTROL=onehost did NOT fire its own rule (one-host x0 for Derek Jeter | Won Rookie of the Year); the 0 other failures do not count for it (findings: nothing). Th
+m-fingersdata exit=1 0s | simUsConnectionsFacts: 2 failures
+m-jackiedata exit=1 0s | simUsConnectionsFacts: 2 failures
+guides-revert-green exit=0 1s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+guides-oldrec-red exit=1 1s | simGuideHeadings: RED, 2 failures in section 1
+after-clean exit=0 1s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.

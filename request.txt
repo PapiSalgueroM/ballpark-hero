@@ -1,0 +1,17 @@
+#!serial
+# Release BR triage (rBR-tr): the two guide lines restore with "git checkout HEAD -- src scripts" (a checkout from a
+# commit writes the index, so the old restore left the files in place for after-clean) and take out Round 1558's one
+# record refresh cb5ce01ce instead of the whole record at da48e36c1 (which lacks Rounds 1549, 1554 and 1555).
+# Release BR, Round 1558: the mutation replays fix-1/rc-final-b.txt, extra mut.mjs; each restores and
+# after-clean proves it. Nothing dropped.
+m-nosecond-bell: node .rc/x/mut.mjs nosecond && US_CONN_CONTROL=bell node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+m-reach-karlsson: node .rc/x/mut.mjs reach && US_CONN_CONTROL=karlsson node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+m-identity-twice: node .rc/x/mut.mjs identity && US_CONN_CONTROL=twice node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+m-nomember-arod: node .rc/x/mut.mjs nomember && US_CONN_CONTROL=arod node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+m-norefuted-arod: node .rc/x/mut.mjs norefuted && US_CONN_CONTROL=arod node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+m-onehostok-onehost: node .rc/x/mut.mjs onehostok && US_CONN_CONTROL=onehost node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+m-fingersdata: node .rc/x/mut.mjs fingersdata && node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+m-jackiedata: node .rc/x/mut.mjs jackiedata && node scripts/simUsConnectionsFacts.mjs; s=$?; git checkout -- src scripts; exit $s
+guides-revert-green: git checkout 8b1a8fe01 -- src/data/gameContent/hockey.ts && git show cb5ce01ce -- scripts/data/guideHeadingsFrozen.json | git apply -R && node scripts/simGuideHeadings.mjs; s=$?; git checkout HEAD -- src scripts; exit $s
+guides-oldrec-red: git show cb5ce01ce -- scripts/data/guideHeadingsFrozen.json | git apply -R && node scripts/simGuideHeadings.mjs; s=$?; git checkout HEAD -- src scripts; exit $s
+after-clean: git status --short scripts src && node scripts/simUsConnectionsFacts.mjs && node scripts/simGuideHeadings.mjs
