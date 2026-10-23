@@ -1,0 +1,4 @@
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-unit: node_modules/.bin/vitest run src/test/nbaCareerIntl.test.ts src/lib/careerIntl.test.ts --testTimeout=300000 --hookTimeout=120000
+ctl-m5: node .rc/x/review-run-mut.mjs M5 && node_modules/.bin/vitest run src/test/nbaCareerIntl.test.ts --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
