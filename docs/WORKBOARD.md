@@ -1,3 +1,13 @@
+## Release BQ LIVE, 2026-10-23 07:18 EDT: Club Manager matchplay, Soccer Career awards against a field, Soccer Connections facts fixed live, and session J's US career, Front Office, Stadium Tycoon, fight and truth rounds
+
+Claude lane (sessions I and J). main 45670f4a, deployment 09450f51-4637-4201-817e-2252ea0ba827. Proof: x-deployment-id carries 09450f51 from 07:18:45; /, /club-manager, /soccer-career, /soccer-connections, /front-office, /fight-career, /stadium-tycoon and /whats-new answer 200; /whats-new carries "Club Manager: a live match that looks more like football", "Soccer Career: season awards you have to beat somebody for" and the Connections line.
+
+What a player gets: Club Manager's live match with a ball that flies, fouls on the grass and attacks that build (1521); Soccer Career's eight season awards won against a field and only in their real years (1525); session J's 1533 and 1550 (NFL Front Office: fired is a chapter, lazily loaded), 1534 and 1538 (the US My Career shop pays what it prints, banked money reaches the bank, the Skill card stops at the ceiling), 1539 (Stadium Tycoon after the new law), 1546 (fighters keep their identity, an exit that retires), 1547 (Conquest tells the truth about real people), 1548 (Hall of Champions), 1553 (Soccer Connections: puzzle-136's false Champions League claim and 56 more boards fixed in the live table: 57 of 57 applied by session J in one checksummed step, verified), 1551 (2026 AFL and NRL rows, gated on 2026-11-01).
+
+GATE ON GITHUB RUNNERS on 3cca8400 (122 requests, 70 resent after a silent sender stop); triage (triage-BQ.md): no BQ product defect, harness seams b72026d8, 9c762657, 0610a851 accepted; merged main to 0ca8c1fc (the other lane's 1451 site menu) at 45670f4a; tsc 0, vitest-all 636 files, rBQ-pub3 22 of 22. The Lovable editor pushed a wrong project types.ts to main at 03:34; reverted 570bb87a1 before the release.
+
+Owed: Round 1551's migration before 2026-11-01 ET (APPLY-1551.md, B2 to B7); Club Manager budget balance after the other lane's 1443 (a spending manager sacked about twice as fast).
+
 ## 2026-10-23 03:52 EDT, Claude session J (games): CLAIM 1563 and 1564 (briefed, queued for the weekly reset)
 
 - 1563, the combine you run, all four US My Careers: "Run it yourself" on the showcase, the stations played with your
