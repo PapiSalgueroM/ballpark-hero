@@ -237,7 +237,7 @@ const CONTROLS = {
   noedgeround: '5', noedgepo: '5', noinjhook: '5', nomirror: '4', nostepien: '4', noruleblock: '3',
   sheetrepick: '2', dayonestature: '5', fullbird: '2',
   dropone: '2', nohandback: '2', overlimit: '2',
-  overcut: '2', onlyself: '2',
+  overcut: '2', onlyself: '2', deadoff: '2', noroll: '2', poolline: '2', poolbest: '2',
 };
 if (CONTROL && !CONTROLS[CONTROL]) {
   console.error(`SIM_NBA_GM_DESK_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(CONTROLS).join(', ')})`);
@@ -253,6 +253,7 @@ const T = {
   minDecisions: 288, minGm: 160, minAuto: 126, minEarlyDeals: 163, minLateTries: 490, minPickMoves: 162,
   minScaleUp: 42, minSecondUp: 44, minRestricted: 86, minSheets: 8, minSheetGone: 2,
   minOldDeals: 42, minSheetFull: 2, minBottom: 2, minBottomPair: 2,
+  minHandBackQuiet: 25, minHandBackActed: 50, minHandBackTwo: 10,
 };
 const OLD_SHEET_FLOORS = { minSheets: 34, minSheetGone: 11, minSheetFull: 11 };
 
@@ -338,6 +339,15 @@ const EDITS = {
   /* The room making cut spares only the arrival being handed back, so a second arrival at that club can be cut. */
   onlyself: ['host', '    const worst = [...club.players].filter(p => !kept.has(p.id)).sort((a, b) => a.ovr - b.ovr)[0];',
     '    const worst = [...club.players].filter(p => p.id !== h.man.id).sort((a, b) => a.ovr - b.ovr)[0];'],
+  /* The arrival's own dead money survives when it is the first entry after the ones carried in. */
+  deadoff: ['host', '  club.deadCap = (club.deadCap ?? []).filter((d, i) => i < carried || d.playerId !== h.man.id);',
+    '  club.deadCap = (club.deadCap ?? []).filter((d, i) => i <= carried || d.playerId !== h.man.id);'],
+  /* The man waived in his place is billed without the summer's roll. */
+  noroll: ['host', '    rollDeadCap(cut);', '    /* the cut is not rolled */'],
+  /* The arrival's line stays in the pool while he is back on his club. */
+  poolline: ['host', '  if (line >= 0) league.freeAgents.splice(line, 1);', '  if (line >= 0) void line;'],
+  /* The hand back also takes the pool's best man out: the census must see a man the summer's cut kept go missing. */
+  poolbest: ['host', '  if (line >= 0) league.freeAgents.splice(line, 1);', '  if (line >= 0) league.freeAgents.splice(line, 1);\n  league.freeAgents.splice(0, 1);'],
 };
 const overrides = new Map();
 if (CONTROL) {
@@ -375,7 +385,8 @@ export * as G from '${ROOT_URL}/src/lib/gmDesk.ts';
 export * as F from '${ROOT_URL}/src/lib/tradeFinder.ts';
 export { nbaCloseSeasonStats } from '${ROOT_URL}/src/lib/nbaSeasonStats.ts';
 export { NBA_STAFF_PACK } from '${ROOT_URL}/src/data/gmStaff/packs.ts';
-export { nbaContractHost } from '${ROOT_URL}/src/lib/gmContractsHostNba.ts';
+export { nbaContractHost, nbaSummerKeepingSheets } from '${ROOT_URL}/src/lib/gmContractsHostNba.ts';
+export { cutPlayer, rollDeadCap } from '${ROOT_URL}/src/lib/frontOfficeCuts.ts';
 export { leagueNames } from '${ROOT_URL}/src/lib/foNames.ts';
 export { NBA_OPENING_RATINGS } from '${ROOT_URL}/src/data/nbaOpeningRatings.ts';
 export { NBA_DESK_PANELS, NBA_RECAP_PANELS } from '${ROOT_URL}/src/components/nba-front-office/NbaGmDesk.tsx';
@@ -407,6 +418,7 @@ await esbuild.build({
 }
 const M = createRequire(import.meta.url)(BUNDLE);
 const { E, D, N, C, P, S, G, F, NBA_STAFF_PACK, nbaContractHost: HOST, leagueNames, NBA_OPENING_RATINGS, nbaCloseSeasonStats } = M;
+const { nbaSummerKeepingSheets, cutPlayer, rollDeadCap } = M;
 
 /* ---- seeded draws and the board's own call order ---- */
 function mulberry32(seed) {
@@ -724,12 +736,31 @@ function everyMan(lg) {
     sees it, and Array.prototype.sort does the sorting, so the summer is the same summer) writes down every man the
     pool held when it was cut. */
 function watchPoolCut(lg) {
-  const seen = { ids: null };
+  const seen = { ids: null, kept: null };
   Object.defineProperty(lg.freeAgents, 'sort', {
-    value(cmp) { seen.ids = new Set(this.map(p => p.id)); return Array.prototype.sort.call(this, cmp); },
+    value(cmp) {
+      seen.ids = new Set(this.map(p => p.id));
+      seen.kept = null;
+      const out = Array.prototype.sort.call(this, cmp);
+      /* Round 1556 review fix: the men the cut kept, read off the slice it takes of the sorted pool, so a man the
+         cut kept and something after it took out is not booked as cut by it. */
+      Object.defineProperty(this, 'slice', {
+        value(...args) { const part = Array.prototype.slice.apply(this, args); seen.kept = new Set(part.map(p => p.id)); return part; },
+        enumerable: false, configurable: true, writable: true,
+      });
+      return out;
+    },
     enumerable: false, configurable: true, writable: true,
   });
   return seen;
+}
+
+/** Round 1556 review fix: every id that is in two places at once (two clubs, or a club and the pool). */
+function doubles(lg) {
+  const at = new Map();
+  for (const [k, t] of Object.entries(lg.teams)) for (const p of t.players) at.set(p.id, [...(at.get(p.id) ?? []), k]);
+  for (const p of lg.freeAgents) at.set(p.id, [...(at.get(p.id) ?? []), 'the pool']);
+  return [...at].filter(([, places]) => places.length > 1);
 }
 
 /** The count check (the lead's brief for Round 1556): every man in the league when the window opened is in it when
@@ -738,16 +769,20 @@ function watchPoolCut(lg) {
     kept. A man who let a sheet stand in the window has neither: retired or not, the pool's cut is never his way out. */
 function census(before, lg, notes, seen, sheetMen, where) {
   stats.censusWindows++;
-  if (!seen.ids) { problems.s2.push(`${where}: the census never saw the summer cut the pool`); return; }
+  if (!seen.ids || !seen.kept) { problems.s2.push(`${where}: the census never saw the summer cut the pool`); return; }
   const after = everyMan(lg);
+  for (const [id, places] of doubles(lg)) problems.s2.push(`${where}: ${after.get(id).name} is in two places at once after the summer: ${places.join(' and ')}`);
   for (const [id, m] of before) {
     stats.censusMen++;
     const now = after.get(id);
     if (now) { if (now.where === 'pool') stats.censusPool++; else stats.censusClub++; continue; }
     if (notes.some(n => n.includes(`${m.name} retires`))) { stats.censusRetired++; continue; }
-    if (seen.ids.has(id) && !sheetMen.has(id)) { stats.censusPoolCut++; continue; }
+    const cut = seen.ids.has(id) && !seen.kept.has(id);
+    if (cut && !sheetMen.has(id)) { stats.censusPoolCut++; continue; }
     stats.censusGone++;
-    problems.s2.push(`${where}: ${m.name} (${m.where === 'pool' ? 'in the pool' : `at ${m.where}`} when the window opened) is gone from the league: ${sheetMen.has(id) ? 'he let a sheet stand and the pool cut him' : 'on no club, not in the pool, not retired, and not in the pool the summer cut'}`);
+    const why = seen.kept.has(id) ? 'the summer cut kept his line in the pool and something after it took him out'
+      : cut ? 'he let a sheet stand and the pool cut him' : 'on no club, not in the pool, not retired, and not in the pool the summer cut';
+    problems.s2.push(`${where}: ${m.name} (${m.where === 'pool' ? 'in the pool' : `at ${m.where}`} when the window opened) is gone from the league: ${why}`);
   }
 }
 
@@ -850,6 +885,125 @@ function playBottomPair({ lg: lgJson, desk: deskJson, team, where }) {
     stats.bottomPairCopies++;
     if (r.kept) stats.bottomPair++;
   }
+}
+
+/**
+ * Round 1556 review fix: the hand back against the engine alone (the run
+ * reviewer's oracle, made part of check 2). Fresh leagues; a CPU club gets one
+ * or two arrivals on sheets and, in two leagues of three, sixteen men rated
+ * above every arrival's ceiling plus two dead money entries carried in (one
+ * outlives the summer's roll, one does not). Each league is copied twice and
+ * run on one seeded draw: A is the engine's summer alone, B the host's
+ * (nbaSummerKeepingSheets). Where the hand back has nothing to do, B is A
+ * byte for byte. Where it acts, B is A plus exactly the hand back: each
+ * arrival on his club on his sheet's terms and not in the pool, the club at
+ * A's count, one of its own men waived per arrival and nobody kept rated
+ * below him, that man in the pool on the summer's free agent terms, the
+ * ledger A's without the arrivals' entries plus each waived man's, cut and
+ * rolled by the shared cut, no dead money for a man on the roster, and every
+ * other club, the rest of the pool and the notes A's. Played last: it mints ids.
+ */
+const HAND_BACK_LEAGUES = 150;
+function handBackOracle() {
+  const n = { leagues: 0, quiet: 0, quietEqual: 0, acted: 0, arrivals: 0, twoActed: 0 };
+  const round1 = x => Math.round(x * 10) / 10;
+  for (let seed = 1; seed <= HAND_BACK_LEAGUES; seed++) {
+    const lg = E.initNbaLeague(mulberry32(60000 + seed), NBA_OPENING_RATINGS);
+    const ids = Object.keys(lg.teams).sort();
+    const team = ids[seed % ids.length];
+    let at = ids[(seed * 7 + 3) % ids.length];
+    if (at === team) at = ids[(seed * 7 + 4) % ids.length];
+    const club = lg.teams[at];
+    const mode = seed % 3 === 0 ? 'quiet' : seed % 5 === 0 ? 'two' : 'bottom';
+    const arrivals = [];
+    const terms = new Map();
+    for (let k = 0; k < (mode === 'two' ? 2 : 1); k++) {
+      const mine = lg.teams[team].players;
+      const src = [...mine].sort((a, b) => a.ovr - b.ovr)[0];
+      mine.splice(mine.indexOf(src), 1);
+      /* A sheet is never one season (offerSheetFor), and the summer takes one off. */
+      const years = 2 + ((seed + k) % 3);
+      const salary = round1(src.salary * 1.3 + 0.7);
+      const man = { ...src, age: 22, pot: Math.min(98, src.ovr + 6), years: years + 1, salary };
+      club.players.push(man);
+      arrivals.push({ id: man.id, club: at });
+      terms.set(man.id, { years, salary, age: 23, name: man.name });
+    }
+    if (mode !== 'quiet') {
+      const top = Math.max(...arrivals.map(a => club.players.find(p => p.id === a.id).pot)) + 1;
+      for (let i = 0; i < 16; i++) club.players.push({ ...club.players[0], id: `top-${at}-${i}`, name: `Topper ${at} ${i}`, age: 27, ovr: top, pot: top, years: 3, out: 0 });
+      club.deadCap = [...(club.deadCap ?? []), { playerId: 'old-a', name: 'Old A', amount: 4, seasonsLeft: 2 }, { playerId: 'old-b', name: 'Old B', amount: 2, seasonsLeft: 1 }];
+    }
+    n.leagues++;
+    /* The engine mints ids from a module counter, so the second summer's minimum men carry other ids: each id the
+       summer minted is named by its order of appearance before the two are compared. */
+    const known = new Set([...Object.values(lg.teams).flatMap(t => t.players.map(p => p.id)), ...lg.freeAgents.map(p => p.id)]);
+    const norm = L => {
+      let s = J(L);
+      const minted = [];
+      for (const k of Object.keys(L.teams).sort()) for (const p of L.teams[k].players) if (!known.has(p.id)) minted.push(p.id);
+      for (const p of L.freeAgents) if (!known.has(p.id) && !minted.includes(p.id)) minted.push(p.id);
+      minted.forEach((id, i) => { s = s.split(`"${id}"`).join(`"minted-${i}"`); });
+      return JSON.parse(s);
+    };
+    const A0 = JSON.parse(J(lg));
+    const B0 = JSON.parse(J(lg));
+    const nA = E.nbaOffseason(A0, mulberry32(61000 + seed), team);
+    const nB = nbaSummerKeepingSheets(B0, mulberry32(61000 + seed), team, arrivals);
+    const A = norm(A0);
+    const B = norm(B0);
+    const where = `hand back, league ${seed} ${at} (${mode})`;
+    const taken = arrivals.filter(a => !A.teams[at].players.some(p => p.id === a.id) && !nA.some(x => x.endsWith(`${terms.get(a.id).name} retires.`)));
+    if (!taken.length) {
+      n.quiet++;
+      if (J(A) === J(B) && J(nA) === J(nB)) n.quietEqual++;
+      else fail(`${where}: the hand back had nothing to do and the summer differs from the engine's`);
+      continue;
+    }
+    n.acted++;
+    n.arrivals += taken.length;
+    if (taken.length > 1) n.twoActed++;
+    const cA = A.teams[at];
+    const cB = B.teams[at];
+    const arrived = new Set(arrivals.map(a => a.id));
+    for (const a of taken) {
+      const t = terms.get(a.id);
+      const p = cB.players.find(x => x.id === a.id);
+      if (!p) fail(`${where}: ${t.name} let its sheet stand and is not on its roster after the summer`);
+      else if (p.years !== t.years || p.salary !== t.salary || p.age !== t.age) fail(`${where}: ${t.name} is on ${p.years}y at ${p.salary}, age ${p.age}; his sheet says ${t.years}y at ${t.salary}, age ${t.age}`);
+      if (B.freeAgents.some(x => x.id === a.id)) fail(`${where}: ${t.name} is on the club and in the pool at once`);
+    }
+    if (cB.players.length !== cA.players.length) fail(`${where}: the club ends the summer with ${cB.players.length}, the engine alone ended it with ${cA.players.length}`);
+    const onB = new Set(cB.players.map(p => p.id));
+    for (const e of cB.deadCap ?? []) if (onB.has(e.playerId)) fail(`${where}: dead money ${e.amount} for ${e.name}, who is on the roster`);
+    const W = cA.players.filter(p => !onB.has(p.id));
+    if (W.length !== taken.length) fail(`${where}: ${W.length} of the club's own men waived for ${taken.length} arrivals handed back`);
+    for (const w of W) {
+      const below = cB.players.filter(p => !arrived.has(p.id) && p.ovr < w.ovr);
+      if (below.length) fail(`${where}: ${w.name} (${w.ovr}) was waived while ${below[0].name} (${below[0].ovr}) stayed`);
+      const age = w.age + 1;
+      const ovr = age >= 32 ? Math.max(64, w.ovr - 1) : w.ovr;
+      const fa = B.freeAgents.find(x => x.id === w.id);
+      if (!fa) fail(`${where}: ${w.name} was waived and is not in the pool`);
+      else if (fa.years !== 1 || fa.age !== age || fa.ovr !== ovr || fa.salary !== E.nbaSalaryFor(ovr, B.cap)) {
+        fail(`${where}: ${w.name} is in the pool on ${fa.years}y, age ${fa.age}, ${fa.ovr}, ${fa.salary}; the summer's terms are 1y, age ${age}, ${ovr}, ${E.nbaSalaryFor(ovr, B.cap)}`);
+      }
+    }
+    const want = (cA.deadCap ?? []).filter(e => !taken.some(a => a.id === e.playerId));
+    for (const w of W) {
+      const cut = { players: [{ ...w }], deadCap: [], releasedThisSeason: [] };
+      cutPlayer(cut, [], w.id, 0);
+      rollDeadCap(cut);
+      want.push(...cut.deadCap);
+    }
+    const key = l => J([...l].map(e => J(e)).sort());
+    if (key(want) !== key(cB.deadCap ?? [])) fail(`${where}: the club's dead money is ${J(cB.deadCap)}, the engine's plus the rolled cut is ${J(want)}`);
+    for (const k of ids) if (k !== at && J(A.teams[k]) !== J(B.teams[k])) fail(`${where}: ${k} differs from the engine's summer`);
+    const moved = new Set([...arrived, ...W.map(w => w.id)]);
+    if (J(A.freeAgents.filter(p => !moved.has(p.id))) !== J(B.freeAgents.filter(p => !moved.has(p.id)))) fail(`${where}: the rest of the pool differs from the engine's summer`);
+    if (J(nA) !== J(nB)) fail(`${where}: the summer's notes differ from the engine's`);
+  }
+  return n;
 }
 
 /**
@@ -1444,6 +1598,11 @@ console.log('2) continued (Round 1556): a sheet let stand at the bottom of a ful
   console.log(`   a sheet let stand at the bottom of a full club (Round 1556): ${stats.bottom} kept there with room made over ${singles} copies (${stats.bottomWaived} of the club's men left in the summer), ${skippedSingles} skipped (his ceiling at 99)`);
   console.log(`   two sheets let stand at one full club (Round 1556): ${stats.bottomPair} pairs kept there, the club at ${E.NBA_ROSTER_MAX}, over ${stats.bottomPairCopies} copies, ${stats.bottomPairSkipped} skipped (no second man, or a ceiling at 99)`);
   console.log(`   census with those copies and check 7's render season (Round 1556): ${censusLine()}`);
+  const hb = handBackOracle();
+  if (hb.quiet < T.minHandBackQuiet) fail(`the hand back had nothing to do in only ${hb.quiet} leagues, floor ${T.minHandBackQuiet}`);
+  if (hb.acted < T.minHandBackActed) fail(`the hand back acted in only ${hb.acted} leagues, floor ${T.minHandBackActed}`);
+  if (hb.twoActed < T.minHandBackTwo) fail(`the hand back took two arrivals at one club in only ${hb.twoActed} leagues, floor ${T.minHandBackTwo}`);
+  console.log(`   the hand back against the engine alone (Round 1556): ${hb.leagues} leagues, ${hb.quiet} where it had nothing to do (${hb.quietEqual} byte equal to the engine's summer), ${hb.acted} where it acted (${hb.arrivals} arrivals, ${hb.twoActed} leagues with two at one club)`);
 }
 
 /* ================================================================== */
