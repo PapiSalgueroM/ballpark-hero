@@ -1,0 +1,16 @@
+   challenge: 🎯 Find the ⬆️ HIGHEST Career Assists Per Game (APG)
+  FAIL: a pick with no record was not refused with the reason
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+locator.click: Timeout 20000ms exceeded.
+Call log:
+  - waiting for getByRole('button', { name: /Submit Lineup/ })
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/.rc/x/walk1555.mjs:82:59 {
+  log: [ "  - waiting for getByRole('button', { name: /Submit Lineup/ })" ],
+  name: 'TimeoutError'
+}
+
+Node.js v24.21.0
