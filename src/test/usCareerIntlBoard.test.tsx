@@ -210,9 +210,14 @@ describe('the board fixture\'s fixed NBA saves with the bind mounted', () => {
     for (const [k, raw] of Object.entries(fx)) {
       const c = JSON.parse(raw).c;
       if (c && sport.intl?.pendingYear(c) !== null) { met += 1; continue; }
+      /* A first mount loads the board's own lazy parts, so the two compared mounts both find them loaded. */
+      await shot(bare, raw);
       const a = await shot(sport, raw);
       const b = await shot(bare, raw);
-      expect(a, `fixture save ${k}`).toEqual(b);
+      expect(a.bytes, `fixture save ${k}: the save`).toBe(b.bytes);
+      const at = [...a.html].findIndex((ch, i) => ch !== b.html[i]);
+      const where = a.html === b.html ? '' : `${a.html.slice(Math.max(0, at - 80), at + 120)} VERSUS ${b.html.slice(Math.max(0, at - 80), at + 120)}`;
+      expect(where, `fixture save ${k}: the board`).toBe('');
       same += 1;
     }
     console.log(`usCareerIntlBoard: ${same} fixed NBA fixture saves meet no call and draw the same board; ${met} meet one`);
@@ -221,6 +226,7 @@ describe('the board fixture\'s fixed NBA saves with the bind mounted', () => {
     mid.c.seasons[mid.c.seasons.length - 1].ovr = 90;
     expect(sport.intl?.pendingYear(mid.c)).toBe(2031);
     const raised = JSON.stringify(mid);
+    await shot(bare, raised);
     const a = await shot(sport, raised);
     const b = await shot(bare, raised);
     expect(a.html).not.toBe(b.html);
