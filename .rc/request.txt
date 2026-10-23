@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+# Release BR, Round 1540's browser block of results-g/rc-1540.txt, uncommented: playNbaLotteryNight 0, its
+# controls nocard, spoil, jump and fold each exit 1 FIRED in its own section.
+playNbaLotteryNight: node scripts/playNbaLotteryNight.mjs
+playNbaLotteryNight-nocard: PLAY_NBA_LOTTERY_CONTROL=nocard node scripts/playNbaLotteryNight.mjs
+playNbaLotteryNight-spoil: PLAY_NBA_LOTTERY_CONTROL=spoil node scripts/playNbaLotteryNight.mjs
+playNbaLotteryNight-jump: PLAY_NBA_LOTTERY_CONTROL=jump node scripts/playNbaLotteryNight.mjs
+playNbaLotteryNight-fold: PLAY_NBA_LOTTERY_CONTROL=fold node scripts/playNbaLotteryNight.mjs
