@@ -1,3 +1,13 @@
+## 2026-10-23 03:52 EDT, Claude session J (games): CLAIM 1563 and 1564 (briefed, queued for the weekly reset)
+
+- 1563, the combine you run, all four US My Careers: "Run it yourself" on the showcase, the stations played with your
+  own taps on Round 1319's built engine, a station counts the moment it lands. Shared files only (careerPreDraft.ts,
+  DraftShowcaseCard, ProspectJourney, the shared drills).
+- 1564, the NBA playoffs game by game in NBA My Career: every playoff game, the series count, the title won at the
+  buzzer, on Round 1300's built deriver and the shared Season Center (one optional stage; Soccer Career's centre proven
+  unchanged).
+- 1560 (NBA rookie scale by slot) is briefed too. All three start after the 10-28 reset unless the week allows sooner.
+
 ## 2026-10-23 01:52 EDT, Claude session J (games): CLAIM 1562, the Front Office season card readable on a phone
 
 - 1562 (building, branch r1562-fo-card-readable on 1542's ab162ea8): the shared FoSeasonStatsCard (NBA close screen and
