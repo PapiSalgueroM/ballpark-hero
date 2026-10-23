@@ -847,7 +847,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       {
         heading: "Reading the two player cards",
         items: [
-          "Look at the two player cards: name, position, franchises and final season.",
+          "Look at the two player cards: name, position and franchises.",
         ],
       },
       {
@@ -931,9 +931,9 @@ export const BASKETBALL_CONTENT: GameContentMap = {
         ],
       },
       {
-        heading: "Reading the final season for career length",
+        heading: "Remembering who is still adding points",
         items: [
-          "Check the final season on the card. It quietly tells you how long the career ran.",
+          "Remember who is still playing. An active star's total keeps growing, so a ranking you learned a while ago can already be out of date.",
         ],
       },
       {

@@ -19,6 +19,9 @@
  *   unverifiedMarker  the asOf value meaning "nobody could check this"
  *   cannotBeChecked   (player) => boolean, the sport's own rule for a row its
  *                     source cannot cover, for example a goalie in a skater table
+ *   twoSources   optional: 'all' (every verified row names two source URLs on
+ *                two hosts, no wiki) or 'latest' (only the men of the latest
+ *                season in the record, the rows a web read refreshed)
  *
  * THE CHECK THAT MATTERS IS ORDERING, not the values. A wrong number is only
  * harmful in this game when it reorders a pair, so section 3 counts inverted
@@ -40,18 +43,31 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { build } from 'esbuild';
 
-/** Load the shipped module the way the game reads it, not as text. */
+/**
+ * Load the shipped module the way the game reads it, not as text. A sport with
+ * a category (Round 1549: the NFL's five stat categories live in one module
+ * that imports the touchdown pool) resolves its '@/' imports for real and
+ * returns that category's players.
+ */
+let loadNo = 0;
 export async function loadSport(root, cfg, sourceOverride) {
   const source = sourceOverride ?? fs.readFileSync(path.join(root, cfg.file), 'utf8').replaceAll('\r\n', '\n');
-  const tmp = path.join(process.env.TEMP || process.env.TMP || root, `hlfence-${cfg.key}-${process.pid}`);
+  /* A fresh path every call: import() caches by URL, so a second load of the
+     same sport into the same file would hand back the first bundle and a
+     control's edit would never be seen (Round 1549 found this). */
+  const tmp = path.join(process.env.TEMP || process.env.TMP || root, `hlfence-${cfg.key}-${process.pid}-${++loadNo}`);
   fs.mkdirSync(tmp, { recursive: true });
   const entry = path.join(tmp, 'entry.ts');
-  fs.writeFileSync(entry, source.replace(/from '@\/[^']*'/g, "from './missing'"), 'utf8');
+  fs.writeFileSync(entry, cfg.category ? source : source.replace(/from '@\/[^']*'/g, "from './missing'"), 'utf8');
   const outfile = path.join(tmp, 'bundle.cjs');
-  await build({ entryPoints: [entry], bundle: true, format: 'cjs', platform: 'node', outfile, logLevel: 'error' });
+  await build({
+    entryPoints: [entry], bundle: true, format: 'cjs', platform: 'node', outfile, logLevel: 'error',
+    ...(cfg.category ? { alias: { '@': path.join(root, 'src') } } : {}),
+  });
   const mod = await import(`file://${outfile}`).then(m => m.default ?? m);
   fs.rmSync(tmp, { recursive: true, force: true });
-  return mod[cfg.exportName];
+  const value = mod[cfg.exportName];
+  return cfg.category ? value?.find(c => c.key === cfg.category)?.players : value;
 }
 
 export function readSource(root, cfg) {
@@ -106,7 +122,27 @@ export function checkSport(cfg, players, record) {
     const overlap = Object.keys(verified).filter(n => UNV.has(n) || n in held);
     if (overlap.length) { fail(`${overlap.join(', ')} is both verified and not`); bad++; }
     if (!record.read || !record.source) { fail('the record does not say when it was read or what from'); bad++; }
-    if (!bad) ok(`${Object.keys(verified).length} verified, ${Object.keys(held).length} held from the file, ${unverified.length} unverified, together exactly the ${names.size} shipped players, read ${record.read} from ${record.source}`);
+    /* Round 1549: a record read from the web names two sources per player, on
+       two different hosts, neither of them a wiki. WHICH rows must is the
+       sport's config (twoSources: 'all', or 'latest' for every man of the
+       latest season in the record), not a flag in the record under test: a
+       record that drops its own flag must not stop being checked. */
+    const latest = Object.values(verified).map(v => String(v.lastSeason)).filter(s => /^\d{4}/.test(s)).sort().pop();
+    const mustCarryTwo = (v) => cfg.twoSources === 'all' || record.perPlayerSources
+      || (cfg.twoSources === 'latest' && String(v.lastSeason) === latest);
+    let onTwo = 0;
+    if (cfg.twoSources || record.perPlayerSources) {
+      for (const [name, v] of Object.entries(verified)) {
+        if (!mustCarryTwo(v)) continue;
+        onTwo++;
+        const hosts = (v.src || []).map((u) => { try { return new URL(u).hostname.replace(/^www\./, ''); } catch { return null; } });
+        if (hosts.length < 2 || hosts.some(h => !h)) { fail(`${name} carries ${hosts.length} usable source(s), two are required`); bad++; continue; }
+        if (new Set(hosts).size < 2) { fail(`${name}: every source is on ${hosts[0]}, which is one source twice`); bad++; }
+        if (hosts.some(h => /wiki/.test(h))) { fail(`${name}: a source is Wikipedia or a copy of it`); bad++; }
+      }
+      if (!onTwo) { fail(`the rule says rows must carry two sources (${cfg.twoSources || 'the record flag'}) and it matched none, so it checked nothing`); bad++; }
+    }
+    if (!bad) ok(`${Object.keys(verified).length} verified, ${Object.keys(held).length} held from the file, ${unverified.length} unverified, together exactly the ${names.size} shipped players, read ${record.read} from ${record.source}${onTwo ? `; ${onTwo} of them each on two sources on two hosts` : ''}`);
   }
 
   section = 2;

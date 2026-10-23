@@ -2,6 +2,7 @@ import { useNflHL } from '@/hooks/useNflHL';
 import { GameNav } from '@/components/game/GameNav';
 import { GameShell } from '@/components/game/GameShell';
 import { ResultScreen } from '@/components/game/ResultScreen';
+import { HigherLowerThrough } from '@/components/game/HigherLowerThrough';
 import PostGameStats from '@/components/game/PostGameStats';
 import { HIGHER_LOWER_SCORE_BUCKETS } from '@/lib/higherLowerScore';
 import AdBanner from '@/components/ads/AdBanner';
@@ -14,8 +15,9 @@ import { cn } from '@/lib/utils';
 /**
  * Multi-stat edition (owner 2026-08-05). Every round rotates through a stat
  * category: TDs scored, passing yards, passing TDs, rushing yards, receiving
- * yards, receptions. All values baked from nflfastr with careers starting
- * 2000+ so nothing is silently truncated.
+ * yards, receptions. Careers start 2000+ so nothing is silently truncated,
+ * and since Round 1549 every value is the official total through the 2025
+ * season, which the card says under the number.
  */
 const NflHigherLower = () => {
   const {
@@ -104,12 +106,15 @@ const NflHigherLower = () => {
                   >
                     <span className="text-3xl">🏈</span>
                     <span className="text-lg font-bold text-foreground font-display">{player.name}</span>
-                    <span className="text-xs text-muted-foreground">{player.position} · played until {player.lastSeason}</span>
+                    <span className="text-xs text-muted-foreground">{player.position}</span>
                     <span className="text-xs text-muted-foreground">{player.teams}</span>
 
                     {showingResult ? (
-                      <span className="text-2xl font-bold text-gold animate-cell-reveal">
-                        {player.value.toLocaleString()} {activeRound.category.unit}
+                      <span className="flex flex-col items-center animate-cell-reveal">
+                        <span className="text-2xl font-bold text-gold">
+                          {player.value.toLocaleString()} {activeRound.category.unit}
+                        </span>
+                        <HigherLowerThrough through={player.lastSeason} />
                       </span>
                     ) : (
                       <span className="flex items-center gap-1 text-sm font-semibold text-primary">
@@ -159,15 +164,15 @@ const NflHigherLower = () => {
           description="A different stat every round: passing yards, passing TDs, rushing yards, receiving yards, receptions and touchdowns scored. Which NFL star has the bigger career number?"
           howToPlay={[
             'Every round names a stat category at the top of the board',
-            'Two players shown side by side with position, era, and teams',
+            'Two players shown side by side with position and teams',
             'Tap the player you think has the BIGGER career number in that stat',
             '10 rounds per game: 10 points per correct answer, +5 per streak step',
             'Daily challenge (same rounds for everyone) or unlimited random mode',
           ]}
           examples={[
-            'Passing yards: Brady (89,216) vs Brees (80,428), closer than you think',
+            'Passing yards: Brady (89,214) vs Brees (80,358), closer than you think',
             'TDs scored: LaDainian Tomlinson (162) vs Adrian Peterson (126)',
-            'Receptions: Fitzgerald (1,430) vs Jason Witten (1,228)',
+            'Receptions: Fitzgerald (1,432) vs Jason Witten (1,228)',
             'Rushing yards: Frank Gore quietly sits at 16,000',
           ]}
         />

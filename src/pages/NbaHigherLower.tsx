@@ -2,6 +2,7 @@ import { useNbaHL } from '@/hooks/useNbaHL';
 import { GameNav } from '@/components/game/GameNav';
 import { GameShell } from '@/components/game/GameShell';
 import { ResultScreen } from '@/components/game/ResultScreen';
+import { HigherLowerThrough } from '@/components/game/HigherLowerThrough';
 import PostGameStats from '@/components/game/PostGameStats';
 import { HIGHER_LOWER_SCORE_BUCKETS } from '@/lib/higherLowerScore';
 import AdBanner from '@/components/ads/AdBanner';
@@ -14,7 +15,7 @@ import { cn } from '@/lib/utils';
 /**
  * Direct port of HockeyHigherLower (task #23). Two intentional deltas:
  * no flag (the bref source carries no nationality, the card leads with
- * position + final season instead), and no separate how-to-play modal
+ * position and franchises instead), and no separate how-to-play modal
  * (the rules fit in one subtitle line; GameSeoContent documents the rest).
  */
 const NbaHigherLower = () => {
@@ -98,12 +99,15 @@ const NbaHigherLower = () => {
                 >
                   <span className="text-3xl">🏀</span>
                   <span className="text-lg font-bold text-foreground font-display">{player.name}</span>
-                  <span className="text-xs text-muted-foreground">{player.position} · played until {player.lastSeason}</span>
+                  <span className="text-xs text-muted-foreground">{player.position}</span>
                   <span className="text-xs text-muted-foreground">{player.teams}</span>
 
                   {showingResult ? (
-                    <span className="text-2xl font-bold text-gold animate-cell-reveal">
-                      {player.careerPoints.toLocaleString()} pts
+                    <span className="flex flex-col items-center animate-cell-reveal">
+                      <span className="text-2xl font-bold text-gold">
+                        {player.careerPoints.toLocaleString()} pts
+                      </span>
+                      <HigherLowerThrough through={player.lastSeason} />
                     </span>
                   ) : (
                     <span className="flex items-center gap-1 text-sm font-semibold text-primary">
@@ -151,14 +155,14 @@ const NbaHigherLower = () => {
           title="NBA Higher or Lower | DoUKnowBall"
           description="Two NBA players, side by side. Which one scored more career points? Daily challenge and unlimited mode with streak bonuses, drawn from the all-time top 80 scorers."
           howToPlay={[
-            'Two players shown side by side with position, era, and franchises',
+            'Two players shown side by side with position and franchises',
             'Tap the player you think scored MORE career points',
             '10 rounds per game: 10 points per correct answer',
             'Build a streak for bonus points (+5 per consecutive correct)',
             'Daily challenge (same pairs for everyone) or unlimited random mode',
           ]}
           examples={[
-            'LeBron (42,184 pts) vs Kareem (38,387 pts)',
+            'LeBron (43,440 pts) vs Kareem (38,387 pts)',
             'Jordan vs Kobe: who finished with more?',
             'Curry vs Durant: closer than you think?',
             'Oscar Robertson vs Jerry West, the 60s showdown',

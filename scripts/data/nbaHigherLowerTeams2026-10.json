@@ -1,0 +1,108 @@
+{
+ "about": "Round 1549. The 2025-26 team or teams of every NBA Higher or Lower man who played in 2025-26, read on 2026-10-22 from StatMuse (the season by team) and ESPN (the player's season rows), the two agreeing every time. scripts/simHigherLowerFacts.mjs section 8 requires each man's card to list them and every man the points record says played in 2025-26 to be here. Moves made for 2026-27 are not counted: the totals run through 2025-26.",
+ "read": "2026-10-22",
+ "season": "2025-26",
+ "players": {
+  "LeBron James": {
+   "teams2025_26": [
+    "LAL"
+   ],
+   "src": [
+    "https://www.statmuse.com/nba/ask/lebron-james-2025-26-stats-by-team",
+    "https://www.espn.com/nba/player/stats/_/id/1966/lebron-james"
+   ],
+   "note": "60 games with the Lakers"
+  },
+  "Kevin Durant": {
+   "teams2025_26": [
+    "HOU"
+   ],
+   "src": [
+    "https://www.statmuse.com/nba/ask/kevin-durant-2025-26-stats-by-team",
+    "https://www.espn.com/nba/player/stats/_/id/3202/kevin-durant"
+   ],
+   "note": "78 games with the Rockets"
+  },
+  "James Harden": {
+   "teams2025_26": [
+    "LAC",
+    "CLE"
+   ],
+   "src": [
+    "https://www.statmuse.com/nba/ask/james-harden-2025-26-stats-by-team",
+    "https://www.espn.com/nba/player/stats/_/id/3992/james-harden"
+   ],
+   "note": "44 games with the Clippers, 26 with the Cavaliers"
+  },
+  "Russell Westbrook": {
+   "teams2025_26": [
+    "SAC"
+   ],
+   "src": [
+    "https://www.statmuse.com/nba/ask/russell-westbrook-2025-26-stats-by-team",
+    "https://www.espn.com/nba/player/stats/_/id/3468/russell-westbrook"
+   ],
+   "note": "64 games with the Kings; both pages list his Washington season of 2020-21"
+  },
+  "Stephen Curry": {
+   "teams2025_26": [
+    "GSW"
+   ],
+   "src": [
+    "https://www.statmuse.com/nba/ask/stephen-curry-2025-26-stats-by-team",
+    "https://www.espn.com/nba/player/stats/_/id/3975/stephen-curry"
+   ],
+   "note": "43 games with the Warriors"
+  },
+  "DeMar DeRozan": {
+   "teams2025_26": [
+    "SAC"
+   ],
+   "src": [
+    "https://www.statmuse.com/nba/ask/demar-derozan-2025-26-stats-by-team",
+    "https://www.espn.com/nba/player/stats/_/id/3978/demar-derozan"
+   ],
+   "note": "77 games with the Kings"
+  },
+  "Chris Paul": {
+   "teams2025_26": [
+    "LAC"
+   ],
+   "src": [
+    "https://www.statmuse.com/nba/ask/chris-paul-2025-26-stats-by-team",
+    "https://www.espn.com/nba/player/stats/_/id/2779/chris-paul"
+   ],
+   "note": "16 games with the Clippers; both pages list Oklahoma City 2019-20, Phoenix 2020-23 and San Antonio 2024-25"
+  },
+  "Giannis Antetokounmpo": {
+   "teams2025_26": [
+    "MIL"
+   ],
+   "src": [
+    "https://www.statmuse.com/nba/ask/giannis-antetokounmpo-2025-26-stats-by-team",
+    "https://www.espn.com/nba/player/stats/_/id/3032977/giannis-antetokounmpo"
+   ],
+   "note": "36 games with the Bucks"
+  },
+  "Anthony Davis": {
+   "teams2025_26": [
+    "DAL"
+   ],
+   "src": [
+    "https://www.statmuse.com/nba/ask/anthony-davis-2025-26-stats-by-team",
+    "https://www.espn.com/nba/player/stats/_/id/6583/anthony-davis"
+   ],
+   "note": "20 games with the Mavericks"
+  },
+  "Paul George": {
+   "teams2025_26": [
+    "PHI"
+   ],
+   "src": [
+    "https://www.statmuse.com/nba/ask/paul-george-2025-26-stats-by-team",
+    "https://www.espn.com/nba/player/stats/_/id/4251/paul-george"
+   ],
+   "note": "37 games with the 76ers"
+  }
+ }
+}
