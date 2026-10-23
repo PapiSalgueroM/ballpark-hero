@@ -156,6 +156,47 @@ async function readableNotice(page, row, role) {
   }
   row.actions.push({ name: 'actual-readable-notice', role, passed: true, measurement: sample });
 }
+async function fallbackEscapes(page, row, role) {
+  const region = page.getByRole('region', { name: 'Site menu loading', exact: true });
+  const requests = row.panelRequests.length, documents = row.documents.length;
+  for (const from of ['trigger', 'Search Games', 'Cancel']) {
+    await opener(page).evaluate(node => { if (node !== document.activeElement) throw new Error('MENU_ESCAPE: fallback starts with actual trigger focus'); });
+    const tabs = from === 'trigger' ? 0 : from === 'Search Games' ? 1 : 2;
+    for (let index = 0; index < tabs; index++) await page.keyboard.press('Tab');
+    const target = from === 'trigger' ? opener(page) : region.getByRole(from === 'Search Games' ? 'link' : 'button', { name: from, exact: true });
+    await target.evaluate(node => { if (node !== document.activeElement) throw new Error('MENU_ESCAPE: actual focused fallback control before Escape'); });
+    await page.evaluate(() => {
+      window.__siteMenuFallbackEscape = null;
+      document.addEventListener('keydown', event => {
+        const target = event.target instanceof Element ? event.target.closest('a,button') : null;
+        window.__siteMenuFallbackEscape = { key: event.key, code: event.code, trusted: event.isTrusted, targetText: target?.textContent.trim() ?? null };
+      }, { capture: true, once: true });
+    });
+    await page.keyboard.press('Escape');
+    const escaped = await page.evaluate(() => {
+      const value = window.__siteMenuFallbackEscape;
+      delete window.__siteMenuFallbackEscape;
+      return value;
+    });
+    assert(escaped?.trusted === true && escaped.key === 'Escape' && escaped.code === 'Escape', 'MENU_ESCAPE: actual trusted Escape key');
+    await region.waitFor({ state: 'hidden', timeout: timeout() }); await waitClosed(page);
+    assert.equal(await region.count(), 0, 'MENU_ESCAPE: fallback removed');
+    assert.equal(await opener(page).getAttribute('aria-expanded'), 'false', 'MENU_ESCAPE: actual closed trigger');
+    assert.notEqual(await opener(page).getAttribute('aria-busy'), 'true', 'MENU_ESCAPE: closed trigger is not busy');
+    assert.equal(await menu(page).count(), 0, 'MENU_ESCAPE: no dialog after fallback dismissal');
+    assert.equal(row.panelRequests.length, requests, 'MENU_ESCAPE: no additional chunk fetch while dismissing');
+    assert.equal(row.documents.length, documents, 'MENU_ESCAPE: dismissal does not reload');
+    row.actions.push({ name: 'fallback-Escape-and-focus-return', role, from, event: escaped, passed: true });
+
+    await opener(page).click();
+    await region.getByRole(role).waitFor({ state: 'visible', timeout: timeout() });
+    assert.equal(await opener(page).getAttribute('aria-expanded'), 'true', 'MENU_ESCAPE: explicit reopen');
+    assert.equal(await opener(page).getAttribute('aria-busy'), role === 'status' ? 'true' : null, 'MENU_ESCAPE: original pending or failed state retained');
+    assert.equal(await region.getByRole('link', { name: 'Search Games', exact: true }).getAttribute('href'), '/search');
+    assert.equal(row.panelRequests.length, requests, 'MENU_ESCAPE: reopening reuses the same pending or failed import');
+    assert.equal(row.documents.length, documents, 'MENU_ESCAPE: reopening does not reload');
+  }
+}
 async function cold(page, row, spec, fault) {
   assert.equal(row.panelRequests.length, 0, 'MENU_LAZY: no panel request before actual first opening');
   if (spec.kind === 'delay') {
@@ -163,6 +204,7 @@ async function cold(page, row, spec, fault) {
     await page.getByRole('status').filter({ hasText: 'Loading menu...' }).waitFor({ state: 'visible', timeout: timeout() });
     assert.equal(await opener(page).getAttribute('aria-busy'), 'true'); assert.equal(row.panelRequests.length, 1);
     await readableNotice(page, row, 'status');
+    await fallbackEscapes(page, row, 'status');
     await mark(page, row, 'held-loading'); await page.getByRole('region', { name: 'Site menu loading', exact: true }).getByRole('button', { name: 'Cancel', exact: true }).click();
     await opener(page).evaluate(node => { if (document.activeElement !== node) throw new Error('MENU_CANCEL: actual focus'); });
     fault.release(); await page.waitForTimeout(650);
@@ -182,6 +224,7 @@ async function cold(page, row, spec, fault) {
     const region = page.getByRole('region', { name: 'Site menu loading', exact: true });
     assert.equal(await region.getByRole('link', { name: 'Search Games', exact: true }).getAttribute('href'), '/search');
     await readableNotice(page, row, 'alert');
+    await fallbackEscapes(page, row, 'alert');
     await mark(page, row, 'second-failure-alert');
     await region.getByRole('button', { name: 'Cancel', exact: true }).click(); await opener(page).evaluate(node => { if (document.activeElement !== node) throw new Error('MENU_CHUNK: fault Cancel focus'); });
     fault.mode = 'healthy'; await page.reload({ waitUntil: 'load', timeout: timeout(9000) }); await ready(page);
