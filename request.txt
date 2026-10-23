@@ -1,0 +1,15 @@
+#!serial
+# Release BQ, Rounds 1550 and 1533: their board and career controls (rc-1550.txt rc-final-c). Each must fire.
+fob-askalways: node scripts/controlFrontOfficeBoard.mjs askalways
+fob-nowait: node scripts/controlFrontOfficeBoard.mjs nowait
+fob-recapnever: node scripts/controlFrontOfficeBoard.mjs recapnever
+fob-blank: node scripts/controlFrontOfficeBoard.mjs blank
+ctl-staffrides: SIM_GM_CAREER_CONTROL=staffrides SIM_GM_CAREER_ONLY=5 node scripts/simGmCareer.mjs
+ctl-rostermove: SIM_GM_CAREER_CONTROL=rostermove SIM_GM_CAREER_ONLY=5 node scripts/simGmCareer.mjs
+ctl-askrebuilt: SIM_GM_CAREER_CONTROL=askrebuilt SIM_GM_CAREER_ONLY=5 node scripts/simGmCareer.mjs
+ctl-notrim: SIM_GM_CAREER_CONTROL=notrim SIM_GM_CAREER_ONLY=6 node scripts/simGmCareer.mjs
+ctl-halfseason: SIM_GM_CAREER_CONTROL=halfseason SIM_GM_CAREER_ONLY=6 node scripts/simGmCareer.mjs
+ctl-noawaydraft: SIM_GM_CAREER_CONTROL=noawaydraft SIM_GM_CAREER_ONLY=6 node scripts/simGmCareer.mjs
+ctl-emptytile: SIM_GM_CAREER_CONTROL=emptytile SIM_GM_CAREER_ONLY=8 node scripts/simGmCareer.mjs
+ctl-flatmedia: SIM_GM_CAREER_CONTROL=flatmedia SIM_GM_CAREER_ONLY=3 node scripts/simGmCareer.mjs
+ctl-extradraw: SIM_GM_CAREER_CONTROL=extradraw SIM_GM_CAREER_ONLY=3 node scripts/simGmCareer.mjs
