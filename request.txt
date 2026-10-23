@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
