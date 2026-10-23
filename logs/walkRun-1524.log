@@ -1,0 +1,4 @@
+filesWithoutMerge: dddc5ba2ad96ef33774c77f7e850b8993db93868, 8ae62d73 without 86b94e55 in src/lib/soccerCareerEngine.ts, src/lib/soccerCareerLeague.ts
+  ok: 1280x900-mo-old: the old club and its old rows are kept byte for byte
+  ok: 1280x900-mo-old: no page errors ()
+walkRun1524: green, 388 checks

@@ -1,0 +1,3 @@
+  ok   head 1280x900: the debt call names its fee ("Pay down the debt €4M off the €8M owed: less interest and less pressure to sell, but the lenders take €0.4M for paying early.")
+  ok   head 1280x900: no sideways scroll with the panel up (0 px over)
+probeOwnerPanelFail (head): green
