@@ -1,0 +1,12 @@
+#!serve
+#!playwright
+#!serial
+# Release BQ triage: Round 1524's lines rebound for Round 1525 (Release BQ). The base is this tree with Round 1524 taken back out of the
+# two files the harness and the walk read from their base (filesWithoutMerge.mjs, git objects only, refuses on a conflict).
+fwm: node .rc/x/filesWithoutMerge.mjs 86b94e557 e4464a1e0 HEAD src/lib/soccerCareerEngine.ts src/lib/soccerCareerLeague.ts
+fwm-ctl: node .rc/x/filesWithoutMerge.mjs 86b94e557 e4464a1e0 HEAD src/pages/WhatsNew.tsx; s=$?; echo "exit $s (must be 2)"; [ $s = 2 ]
+owner-fwm: B=$(node .rc/x/filesWithoutMerge.mjs 86b94e557 e4464a1e0 HEAD src/lib/soccerCareerEngine.ts src/lib/soccerCareerLeague.ts) || exit 2; SIM_OWNER_BASE=$B node scripts/simSoccerOwnerTail.mjs
+owner-e44: SIM_OWNER_BASE=e4464a1e node scripts/simSoccerOwnerTail.mjs
+ctl-1524-fwm: B1524=$(node .rc/x/filesWithoutMerge.mjs 86b94e557 e4464a1e0 HEAD src/lib/soccerCareerEngine.ts src/lib/soccerCareerLeague.ts) || exit 2; export B1524; bash .rc/x/ctl1524.sh
+walk-fwm: WALK_BASE=$(node .rc/x/filesWithoutMerge.mjs 86b94e557 e4464a1e0 HEAD src/lib/soccerCareerEngine.ts src/lib/soccerCareerLeague.ts) || exit 2; export WALK_BASE; node .rc/x/walkFix1524.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+chain-bq: node .rc/x/check-chain-bq.mjs

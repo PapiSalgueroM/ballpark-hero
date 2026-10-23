@@ -1,0 +1,78 @@
+Author identity unknown
+
+*** Please tell me who you are.
+
+Run
+
+  git config --global user.email "you@example.com"
+  git config --global user.name "Your Name"
+
+to set your account's default identity.
+Omit --global to set the identity only in this repository.
+
+fatal: empty ident name (for <runner@runnervm8k3b6.jmhn0wqfkjtehmf45kke2dh3lh.bx.internal.cloudapp.net>) not allowed
+node:internal/errors:986
+  const err = new Error(message);
+              ^
+
+Error: Command failed: git commit-tree dfacd81c04d6dfb717289a5434f051dc54d98b25 -p f61b5c14d424c8df04f0dde4fca0ecfb73849441 -m f61b5c14 without 86b94e55 in src/lib/soccerCareerEngine.ts, src/lib/soccerCareerLeague.ts
+Author identity unknown
+
+*** Please tell me who you are.
+
+Run
+
+  git config --global user.email "you@example.com"
+  git config --global user.name "Your Name"
+
+to set your account's default identity.
+Omit --global to set the identity only in this repository.
+
+fatal: empty ident name (for <runner@runnervm8k3b6.jmhn0wqfkjtehmf45kke2dh3lh.bx.internal.cloudapp.net>) not allowed
+
+    at genericNodeError (node:internal/errors:986:15)
+    at wrappedFn (node:internal/errors:540:14)
+    at checkExecSyncError (node:child_process:942:11)
+    at execFileSync (node:child_process:978:15)
+    at git (file:///home/runner/work/ballpark-hero/ballpark-hero/.rc/x/filesWithoutMerge.mjs:22:35)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/.rc/x/filesWithoutMerge.mjs:44:18
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  status: 128,
+  signal: null,
+  output: [
+    null,
+    '',
+    'Author identity unknown\n' +
+      '\n' +
+      '*** Please tell me who you are.\n' +
+      '\n' +
+      'Run\n' +
+      '\n' +
+      '  git config --global user.email "you@example.com"\n' +
+      '  git config --global user.name "Your Name"\n' +
+      '\n' +
+      "to set your account's default identity.\n" +
+      'Omit --global to set the identity only in this repository.\n' +
+      '\n' +
+      'fatal: empty ident name (for <runner@runnervm8k3b6.jmhn0wqfkjtehmf45kke2dh3lh.bx.internal.cloudapp.net>) not allowed\n'
+  ],
+  pid: 3362,
+  stdout: '',
+  stderr: 'Author identity unknown\n' +
+    '\n' +
+    '*** Please tell me who you are.\n' +
+    '\n' +
+    'Run\n' +
+    '\n' +
+    '  git config --global user.email "you@example.com"\n' +
+    '  git config --global user.name "Your Name"\n' +
+    '\n' +
+    "to set your account's default identity.\n" +
+    'Omit --global to set the identity only in this repository.\n' +
+    '\n' +
+    'fatal: empty ident name (for <runner@runnervm8k3b6.jmhn0wqfkjtehmf45kke2dh3lh.bx.internal.cloudapp.net>) not allowed\n'
+}
+
+Node.js v24.21.0
