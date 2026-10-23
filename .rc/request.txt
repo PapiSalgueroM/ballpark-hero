@@ -1,0 +1,36 @@
+# Release BK (Round BKG, finish-BKG.md section 3): the other lane's packets, each proven by ITS OWN prover
+# (scripts/qa/prove*.mjs, the core of its own workflow: fixed arm, original source control with its exact named faults,
+# removal controls, restored arm, raw pins) on the joined tree, at its own merge commit, with the prover's pinned base
+# bound to the tree before that merge. One line per round of every packet (PR331 carries Round 1400 under 1414, PR329
+# carries 1407 under 1412, PR332 carries 1411 under 1415). Send with:
+#   bash rc.sh <name> rc-BKb.txt minusRange.sh bindAt.sh runProver.sh withFiles.sh
+# How a line binds (all three helpers fail closed, fixed author and date, so the same input gives the same sha):
+#   minusRange.sh <at> <from> <to>: <at> with the non docs diff <from>..<to> reversed (a round taken back out).
+#   bindAt.sh <head> <old40>=<ref>,...: <head> with the prover's pinned sha replaced by <ref>, <ref> made a parent.
+#   runProver.sh <commit> <label> <OUT var> [K=V]... -- cmd: the prover in a fresh worktree /tmp/rp-wt-<label> with the
+#   workflow's env (CI=1, SIM_NETWORK=offline, TZ=UTC, GITHUB_SHA, the offline preload) and OUT outside it.
+# Merge commits: m3 5ada8244 (PR331, before 9a705e19), m4 4d7797c0 (PR310, before 5ada8244), m5 c1c99347 (PR329, before
+# 4d7797c0), m6 1e479534 (PR330, before c1c99347), m7 52419816 (PR332, before 1e479534), 99154ea3 (PR333, before
+# 52419816), 406c3c0a (PR334), 561ab227 (PR335), 22695d7a (PR336). No packet file moved after its merge on this branch
+# except src/hooks/useSoccerGrid.ts, moved by PR330 (1413) on top of PR329 (1412), as built.
+# TWO RAW PINS ARE REBOUND, each attributed in finish-BKG.md section 3:
+#   p310: the packet's baseline raw c0b46dd0 holds a whole engine career (careerBefore/careerAfter) from its old base
+#     6465d9ae; on the joined tree that JSON differs only there (boardConfidence 60 to 69, worldComps, worldRoster:
+#     main's engine since 6465d9ae plus 1509 and 1510), so the line binds the joined tree's own original raw 1aff5e67
+#     (no path in it, stable); every case assertion and the 2 named faults are the packet's.
+#   p1411: the raw holds console stack traces with the ABSOLUTE checkout path, so it depends on where it runs; at
+#     /tmp/rp-wt-p1411 on the joined tree it is 87378295 (rBKb4 and rBKb6). Keep the label p1411.
+# p1414 runs on a proof tree with PR331's own saved /club-manager page (withFiles.sh): with main's stale saved page only
+# simGuideHeadings section 4 is red (Round 1400's "How do I retire?" h3), which the release build redraws.
+#!serial
+p1414: M=$(bash .rc/x/minusRange.sh 5ada8244 e32dd9facafcf43f4a4ddbafeae1a8baa6732aff fcaeee96ea8c0b70b06597fa469e283b3b8f359e) && C=$(bash .rc/x/bindAt.sh 5ada8244 e32dd9facafcf43f4a4ddbafeae1a8baa6732aff=$M scripts/qa/proveCareerReleaseGuides.mjs) && C2=$(bash .rc/x/withFiles.sh $C fcaeee96ea8c0b70b06597fa469e283b3b8f359e public/club-manager/index.html) && bash .rc/x/runProver.sh $C2 p1414 CAREER_RELEASE_GUIDES_OUT -- node scripts/qa/proveCareerReleaseGuides.mjs
+p310: BL=$(bash .rc/x/minusRange.sh 4d7797c0 5eb5e035832d81a84c2dc02727fdd096de44952d 0186218ef64743446d32ca8aa839507e8e4e44a4) && C=$(bash .rc/x/bindAt.sh 4d7797c0 5eb5e035832d81a84c2dc02727fdd096de44952d=$BL,6465d9aeac1bc10f37d08fcb1a41b7521a886a1a=5ada8244 scripts/qa/proveManagerSavedDealsPagingFixed.mjs) && bash .rc/x/runProver.sh $C p310 MSDL_OUT MSDL_BASELINE_RAW_SHA256=1aff5e675804ce64a10e20c7c6374256797aaa7b4f4b9f1fb59d8c2996f71789 -- node scripts/qa/proveManagerSavedDealsPagingFixed.mjs
+p1407: M=$(bash .rc/x/minusRange.sh c1c99347 f17130e8fc0694ac459e89270dc3baa66685bb35 cba9081632e5755adbbf732ac2b9a7978b835238) && C=$(bash .rc/x/bindAt.sh $M 8293c758f4284d21baaa2320383cfd5cb5bd4944=4d7797c0 scripts/qa/proveSoccerGridDeadline.mjs) && bash .rc/x/runProver.sh $C p1407 SC_GRID_DEADLINE_OUT SC_GRID_DEADLINE_BASELINE_RAW_SHA256=b7b4f989b7582a03def7a24633fb37b9532099b9011df9369fc5c6b099bc692e -- node scripts/qa/proveSoccerGridDeadline.mjs fixed
+p1412: M=$(bash .rc/x/minusRange.sh c1c99347 f17130e8fc0694ac459e89270dc3baa66685bb35 cba9081632e5755adbbf732ac2b9a7978b835238) && C=$(bash .rc/x/bindAt.sh c1c99347 f17130e8fc0694ac459e89270dc3baa66685bb35=$M scripts/qa/proveSoccerGridSettingsRace.mjs) && bash .rc/x/runProver.sh $C p1412 GRID_SETTINGS_RACE_OUT GRID_SETTINGS_RACE_BASELINE_RAW_SHA256=17553d180d3772633008f882b6d5198abb585b9b17ba9dfd89d8b700b54cd400 -- node scripts/qa/proveSoccerGridSettingsRace.mjs fixed
+p1413: C=$(bash .rc/x/bindAt.sh 1e479534 cba9081632e5755adbbf732ac2b9a7978b835238=c1c99347 scripts/qa/proveSoccerGridInitialTimer.mjs) && bash .rc/x/runProver.sh $C p1413 GRID_INITIAL_TIMER_OUT GRID_INITIAL_TIMER_BASELINE_RAW_SHA256=af59d793214400ecb928a4214774640c1f4659cc99710ad3399f442b40965434 -- node scripts/qa/proveSoccerGridInitialTimer.mjs fixed
+p1411: M=$(bash .rc/x/minusRange.sh 52419816 cc6605203b00b06ed994cf321fff5eea3060f708 85a13119a18a8cbabdfabeedae3324a33b707f77) && C=$(bash .rc/x/bindAt.sh $M 8293c758f4284d21baaa2320383cfd5cb5bd4944=1e479534 scripts/qa/proveSoccerPressRoomFailure.mjs) && bash .rc/x/runProver.sh $C p1411 PRESS_ROOM_FAILURE_OUT PRESS_ROOM_FAILURE_BASELINE_RAW_SHA256=873782955dbd5d0f190d84d6ddfa8bee56ccd0f33832b91fda22190dc8e6e93e -- node scripts/qa/proveSoccerPressRoomFailure.mjs fixed
+p1415: M=$(bash .rc/x/minusRange.sh 52419816 cc6605203b00b06ed994cf321fff5eea3060f708 85a13119a18a8cbabdfabeedae3324a33b707f77) && C=$(bash .rc/x/bindAt.sh 52419816 cc6605203b00b06ed994cf321fff5eea3060f708=$M scripts/qa/provePressRoomLoadingKeyboard.mjs) && bash .rc/x/runProver.sh $C p1415 PRESS_LOADING_KEYBOARD_OUT PRESS_LOADING_KEYBOARD_BASELINE_RAW_SHA256=7189d876eb4cb9c26267f766ec92912c9b315c79c83748e605778a33d4c4439e -- node scripts/qa/provePressRoomLoadingKeyboard.mjs fixed
+p333: C=$(bash .rc/x/bindAt.sh 99154ea3 775564305e9da84dab59f2b9fe246d044a3cc8e9=52419816 scripts/qa/proveCareerAppearanceSelection.mjs) && bash .rc/x/runProver.sh $C p333 APPEARANCE_SELECTION_OUT APPEARANCE_SELECTION_BASELINE_SHA=d174571a9c9706dba869e683a3d86d0cf5d090b37b7aaeac9dc2664b494e52db -- node scripts/qa/proveCareerAppearanceSelection.mjs fixed
+p334: C=$(bash .rc/x/bindAt.sh 406c3c0a 775564305e9da84dab59f2b9fe246d044a3cc8e9=99154ea3 scripts/qa/proveDrillKeyboardRouting.mjs) && bash .rc/x/runProver.sh $C p334 DRILL_KEYBOARD_OUT DRILL_KEYBOARD_BASELINE_RAW_SHA=e7f7d8f130cd2594a1b589d4e17966155a78182b5e1cd633b8de0ab3435ee238 -- node scripts/qa/proveDrillKeyboardRouting.mjs fixed
+p335: C=$(bash .rc/x/bindAt.sh 561ab227 775564305e9da84dab59f2b9fe246d044a3cc8e9=406c3c0a scripts/qa/proveXiQueryOwnership.mjs) && bash .rc/x/runProver.sh $C p335 XI_QUERY_OUT XI_QUERY_BASELINE_RAW_SHA=8507cb631c0020babdd9cf66a3d45ff000ce0a847e08d9823789a6ec2f0c5aab -- node scripts/qa/proveXiQueryOwnership.mjs fixed
+p336: C=$(bash .rc/x/bindAt.sh 22695d7a 775564305e9da84dab59f2b9fe246d044a3cc8e9=561ab227 scripts/qa/proveTrophyHelpReturn.mjs) && bash .rc/x/runProver.sh $C p336 TROPHY_HELP_OUT -- node scripts/qa/proveTrophyHelpReturn.mjs fixed
