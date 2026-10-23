@@ -1,0 +1,1 @@
+vitest-intl exit=0 8s |    Duration  8.01s (transform 2.37s, setup 421ms, collect 5.66s, tests 7.72s, environment 1.75s, prepare 522ms)
