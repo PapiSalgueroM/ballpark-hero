@@ -1,0 +1,4 @@
+NBA rotation reset: 3/3 actual Board lifecycle outcomes passed, zero skipped cases.
+NBA rotation reset: opening a saved manual rotation, abandoning it and choosing another franchise returns to that franchise roster list.
+NBA rotation reset: old restored save stays unchanged, restart deletes only the own key, and a new rotation starts without an old receipt or old player ID.
+NBA rotation reset: normalized control binding, raw source holds and owned cleanup verified. Component fixtures do not prove native play, live data or real roster accuracy.
