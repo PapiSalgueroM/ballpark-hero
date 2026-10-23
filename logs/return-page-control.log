@@ -1,0 +1,6 @@
+PASS page actual healthy baseline:10 cases.
+CONTROL FIRED page-double-callback:2 actual invocation assertions,8 unrelated cases pass.
+PASS component actual healthy baseline:21 cases.
+CONTROL FIRED component-double-confirm:1 actual invocation assertions,20 unrelated cases pass.
+PASS actual page/component source held and exact evidence retained.
+PASS international return page-control: {"mode":"page-control","pageBaseline":10,"componentBaseline":21,"sourceControls":2,"intendedFailures":[{"id":"page-double-callback","failed":["executes the real comeback mutation once for two captured same-render page callbacks","rejects a never-used stale eligible callback after the actual next season without invoking the mutation"],"unrelatedPassed":8},{"id":"component-double-confirm","failed":["confirms once for two captured rapid confirmation clicks through the real component guard"],"unrelatedPassed":20}]}
