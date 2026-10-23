@@ -40,19 +40,21 @@ jobs:
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
           git fetch --no-tags --depth=1 origin "$BASE_SOURCE" > "$out/base-fetch.log" 2>&1
           git merge-base --is-ancestor "$BASE_SOURCE" "$GITHUB_SHA"
-          git diff --exit-code "$BASE_SOURCE" HEAD -- . ':!docs/**' ':!.github/workflows/pitch-flight-feedback.yml' ':!src/components/pitch-motion/PitchMotion.tsx' ':!src/components/season-centre/MiniPitch.tsx' ':!scripts/qa/runPitchFlightControls.mjs' ':!scripts/qa/pitchFlight.controls.json' > "$out/protected-application.log"
+          test "$(git rev-parse HEAD^)" = 37635c0a4a14dd07a3e8859dc341d14d6b9d58ea
+          git diff --exit-code 37635c0a4a14dd07a3e8859dc341d14d6b9d58ea HEAD -- . ':!docs/**' ':!.github/workflows/pitch-flight-feedback.yml' ':!scripts/qa/runPitchFlightControls.mjs' ':!src/test/PitchMotion.build.test.tsx' > "$out/precision-child-scope.log"
+          git diff --exit-code "$BASE_SOURCE" HEAD -- . ':!docs/**' ':!.github/workflows/pitch-flight-feedback.yml' ':!src/components/pitch-motion/PitchMotion.tsx' ':!src/components/season-centre/MiniPitch.tsx' ':!scripts/qa/runPitchFlightControls.mjs' ':!scripts/qa/pitchFlight.controls.json' ':!src/test/PitchMotion.build.test.tsx' > "$out/protected-application.log"
           test "$(git rev-parse "$BASE_SOURCE:src/components/pitch-motion/PitchMotion.tsx")" = 8a907fc247670f7f94276c4174e992643ebf6877
           test "$(git rev-parse "$BASE_SOURCE:src/components/season-centre/MiniPitch.tsx")" = 51cbfc3100c6ebdcbdac7a6608a5ec68154362b0
-          for file in src/test/PitchMotion.build.test.tsx src/test/MiniPitch.height.test.tsx vitest.config.ts scripts/lib/offlineTransport.cjs package.json package-lock.json;do
+          for file in src/test/MiniPitch.height.test.tsx vitest.config.ts scripts/lib/offlineTransport.cjs package.json package-lock.json;do
             git show "$BASE_SOURCE:$file" | cmp "$file" -
           done
           test "$(git rev-parse HEAD:vitest.config.ts)" = ed2a9dc677f77dfe95c061064eeff5782b856864
           printf '%s  %s\n' \
             53c4983e70cd48dafd66d5379937e98515288521ff9cdcb618e62cbbd5d2ad30 src/components/pitch-motion/PitchMotion.tsx \
             34b6b132c6ebaf4f2b91e8e28c7e0ec82fed3db74e6a0a2e0a07cbda7f297994 src/components/season-centre/MiniPitch.tsx \
-            a7784c4de034f629baeaccffa7f8db1aa66043fda08b9980acf55f7a18609775 src/test/PitchMotion.build.test.tsx \
+            0696faed3bbcc2f764602e4bb0416db262fe3f3dbbfd87680df81862858e0294 src/test/PitchMotion.build.test.tsx \
             2e7c3d5c14cee4911631b72dfb6af23f2848ec4c960ac4c461c0ea61b140def5 src/test/MiniPitch.height.test.tsx \
-            dd23cf43eba645920fbc20e5c2c53fbe14dbeb7d37b5aa4a048076a88e7fd0fb scripts/qa/runPitchFlightControls.mjs \
+            3b9728bb065a0f075a4a81dda2fda263cff4b0f63fc5c0344e447cfaa95a5d24 scripts/qa/runPitchFlightControls.mjs \
             3ce14ccf7152988b2afe728ca9b6ef0fd0f2ec2a9a593cc0ecaa3daa3c394d3e scripts/qa/pitchFlight.controls.json > "$out/input-pins.sha256"
           sha256sum --check "$out/input-pins.sha256" > "$out/input-pins.log"
           git rev-parse HEAD > "$out/head.txt";git rev-parse 'HEAD^{tree}' > "$out/tree.txt"

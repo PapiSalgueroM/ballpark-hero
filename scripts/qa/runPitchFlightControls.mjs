@@ -27,7 +27,7 @@ const productPins = {
   [MINI]: '34b6b132c6ebaf4f2b91e8e28c7e0ec82fed3db74e6a0a2e0a07cbda7f297994',
 };
 const testPins = {
-  'src/test/PitchMotion.build.test.tsx': 'a7784c4de034f629baeaccffa7f8db1aa66043fda08b9980acf55f7a18609775',
+  'src/test/PitchMotion.build.test.tsx': '0696faed3bbcc2f764602e4bb0416db262fe3f3dbbfd87680df81862858e0294',
   'src/test/MiniPitch.height.test.tsx': '2e7c3d5c14cee4911631b72dfb6af23f2848ec4c960ac4c461c0ea61b140def5',
 };
 const inputPins = { ...productPins, ...testPins,

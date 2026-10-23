@@ -120,7 +120,10 @@ describe('Generic PitchMotion optional build wiring', () => {
     expect(view.container.querySelector('[data-cm-live-pitch]')).toHaveAttribute('data-cm-motion-phase', 'flight');
     const ball = view.container.querySelector<HTMLElement>('[data-cm-ball="1"]')!;
     expect(ball.getAttribute('data-cm-ball-lift'), 'PITCH_ROOT_BUILD_FLIGHT_LIFT').toBe(oracle.lift!.toFixed(2));
-    expect(point(ball)).toEqual(oracle.ball);
+    // CSSOM serializes percentages. Twelve decimals bound this check within 0.0000000000005 percentage points.
+    const actual = point(ball);
+    expect(actual.x, 'PITCH_ROOT_FLIGHT_X_CSS_SERIALIZATION').toBeCloseTo(oracle.ball.x, 12);
+    expect(actual.y, 'PITCH_ROOT_FLIGHT_Y_CSS_SERIALIZATION').toBeCloseTo(oracle.ball.y, 12);
     expect(ball.querySelector('.cm-live-ball-shadow')).not.toBeNull();
     expect(ball.querySelector('.cm-live-ball-air')).not.toBeNull();
     expect(ball.style.transform).toBe('');
