@@ -1,0 +1,5 @@
+# Release BQ triage: the gate lines the triage seams fixed, as the kit sends them, on the merged head, plus the harness fences and the dash scan since the gate head.
+dashscan-tr: B=3cca8400; n=$(git diff $B HEAD | grep -cP '^\+(?!\+\+).*(\x{2013}|\x{2014})'); m=$(git log --format=%B $B..HEAD | grep -cP '\x{2013}|\x{2014}'); echo "since $B: added lines with an en or em dash $n, commit message lines with one $m"; [ "$n" = 0 ] && [ "$m" = 0 ]
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simCareerLeagueSeasons: node scripts/simCareerLeagueSeasons.mjs
