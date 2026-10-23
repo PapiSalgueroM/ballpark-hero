@@ -1,0 +1,10 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-intl: node_modules/.bin/vitest run src/test/usCareerIntlBoard.test.tsx src/test/nbaCareerIntl.test.ts src/lib/careerIntl.test.ts src/test/nbaIntlResultLines.test.tsx src/test/careerSeasonReview.test.tsx src/test/usBoardFixture.test.tsx --testTimeout=300000 --hookTimeout=120000
+playNbaIntl: node scripts/playNbaIntl.mjs
+sweepWeight: SWEEP_OFFLINE=1 SWEEP_BASE=$BASE node scripts/sweepWeight.mjs
+weight-head: node .rc/x/weightNba.mjs $BASE dist head /nba-my-career /nfl-my-career /mlb-my-career /nhl-my-career
+fences: node scripts/simNoRivalNames.mjs > /tmp/rn.log 2>&1; a=$?; tail -2 /tmp/rn.log; node scripts/simHarnessAnchors.mjs > /tmp/ha.log 2>&1; b=$?; tail -2 /tmp/ha.log; node scripts/simStorageWrites.mjs > /tmp/sw.log 2>&1; c=$?; tail -2 /tmp/sw.log; echo "rival=$a anchors=$b storage=$c"; [ $a -eq 0 ] && [ $b -eq 0 ] && [ $c -eq 0 ]
+copy: node scripts/simTrustCopy.mjs > /tmp/tc.log 2>&1; a=$?; tail -2 /tmp/tc.log; node scripts/simAccessibility.mjs > /tmp/ac.log 2>&1; b=$?; tail -2 /tmp/ac.log; echo "trust=$a access=$b"; [ $a -eq 0 ] && [ $b -eq 0 ]
+simCareerIntl: node scripts/simCareerIntl.mjs
