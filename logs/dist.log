@@ -1,0 +1,29 @@
+Network mode: offline, loopback only, no production probe or database retries.
+Running 13 node harnesses
+  PASS  simAdsense.mjs                  1.7s
+  PASS  simBrand.mjs                    1.3s
+  PASS  simHeadTags.mjs                 1.3s
+  PASS  simHiddenPages.mjs              0.7s
+  PASS  simHubs.mjs                     1.0s
+  PASS  simIndexing.mjs                 1.7s
+  PASS  simIndexNow.mjs                 0.7s
+  PASS  simInternalLinks.mjs            1.6s
+  FAIL  simPrerender.mjs                2.4s
+  PASS  simRetiredRoutes.mjs            1.1s
+  PASS  simSchema.mjs                   1.4s
+  PASS  simSitemap.mjs                  1.5s
+  PASS  simSnapshotAssets.mjs           1.5s
+
+Serving dist on 4173 for 1 browser harnesses
+  PASS  simPrerenderBoot.mjs           28.4s
+
+----- simPrerender.mjs (FAIL) -----
+  FAIL: /whats-new drops the entry "Baseball, NFL and NHL Connections: the boards we fixed now have one right answer.", which means the extractor is throwing away real content again
+  FAIL: /whats-new drops the entry "The Front Office season card is easier to read on a phone.", which means the extractor is throwing away real content again
+  FAIL: /whats-new drops the entry "NFL Front Office: who scored, season leaders and awards.", which means the extractor is throwing away real content again
+  FAIL: /whats-new drops the entry "NBA Starting 5: scored from the real numbers.", which means the extractor is throwing away real content again
+  FAIL: /whats-new drops the entry "Higher or Lower: the numbers are current again.", which means the extractor is throwing away real content again
+  FAIL: /whats-new drops the entry "CFB Dynasty plays a real season.", which means the extractor is throwing away real content again
+  FAIL: /whats-new drops 9 entries in total
+
+1 harness not green.
