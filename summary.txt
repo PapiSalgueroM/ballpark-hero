@@ -1,0 +1,2 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+walk exit=0 29s | review-run2-walk: 0 failure(s), 23 pictures: p35-390-rm-1-call.jpg p35-390-rm-2-result.jpg p35-390-rm-3-bracket.jpg p35-390-rm-4-other.jpg p35-390-rm-5-after.jpg p35-1280
