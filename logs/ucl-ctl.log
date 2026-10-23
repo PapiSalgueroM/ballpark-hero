@@ -1,0 +1,10 @@
+notile: last: playWorldUcl control notile: FIRED, "no Champions League tile" reported 1 time(s) (1 findings in all)
+ahead: last: playWorldUcl control ahead: FIRED, "matchday 5 shows" reported 1 time(s) (3 findings in all)
+oldcols: last: playWorldUcl control oldcols: FIRED, "breaks in the middle of the word" reported 1 time(s) (1 findings in all)
+legflip: last: playWorldUcl control legflip: FIRED, "card not as the engine played it" reported 11 time(s) (11 findings in all)
+swapfinal: last: playWorldUcl control swapfinal: FIRED, "the season review does not name the final" reported 1 time(s) (1 findings in all)
+r16help: last: playWorldUcl control r16help: FIRED, "the ? for the club in it" reported 1 time(s) (1 findings in all)
+instandin: last: playWorldUcl control instandin: FIRED, "the club in it from outside the real 32" reported 2 time(s) (2 findings in all)
+inswap: last: playWorldUcl control inswap: FIRED, "the club in it from outside the real 32" reported 1 time(s) (1 findings in all)
+legturn: last: playWorldUcl control legturn: FIRED, "knockout night not as the bracket holds it" reported 3 time(s) (3 findings in all)
+controls (each must be 1): notile=1 ahead=1 oldcols=1 legflip=1 swapfinal=1 r16help=1 instandin=1 inswap=1 legturn=1
