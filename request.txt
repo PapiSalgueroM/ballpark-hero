@@ -1,0 +1,17 @@
+# Release BQ, Round 1538: fix-1538.md's r1538x-finb (rc-fin-b.txt) with its summer line DROPPED (it ran out the
+# runner's 4200 s inside section 6) and r1538x-sum's two lines (rc-sum.txt) in its place. decision-direction exits 0
+# when its control is effective (read the log). hall-nfl is RED on 1538's base and head alike (TE median base credit 108.8).
+vitest-a: node_modules/.bin/vitest run src/lib/usCareerShopPromises.test.ts src/lib/usCareerAnnualBenefits.test.ts src/lib/careerDirtyMoney.test.ts src/lib/usCareerRecovery.test.ts src/lib/mlbCareerLifeC.test.ts src/lib/nbaCareerLifeC.test.ts src/lib/nhlCareerLifeC.test.ts src/test/careerDecisionOutcome.test.tsx src/test/usCareerSmallItems1104.test.ts src/test/usCareerShopCap.test.ts src/test/usBoardFixture.test.tsx src/test/usCareerDirtyMoney.test.tsx src/test/careerEntryGuide.test.tsx src/test/usCareerHelpRules1104.test.tsx --testTimeout=300000 --hookTimeout=120000
+vitest-b: node_modules/.bin/vitest run src/test/careerHall.test.tsx src/test/careerHallSaves1301.test.ts src/test/careerHallV1Replay.test.ts src/test/myCareerRestore.test.tsx src/test/nbaOldSaveLines.test.ts src/test/nflTruthRules1104.test.ts src/test/noDoubleRecord.test.tsx src/test/usCareerActionConfirm.test.tsx src/test/usCareerEraLifeMoney.test.ts src/test/usCareerReveals.test.tsx src/test/usSeason.test.ts src/test/usSeasonCentre.test.tsx src/test/nflCoachStaffRecovery.test.tsx src/test/usCareerReports1346.test.tsx src/test/usCareerEraCards.test.ts src/test/usCareerRookieDeal.test.ts src/test/usCareerStatLines.test.tsx src/test/usRivalLine.test.ts src/test/usRivalOldSaves.test.ts src/test/usPlayoffs.test.ts --testTimeout=300000 --hookTimeout=120000
+decision: node scripts/simCareerDecisionOutcome.mjs
+decision-direction: CAREER_DECISION_OUTCOME_CONTROL=direction node scripts/simCareerDecisionOutcome.mjs
+press: node scripts/simCareerPressMarket.mjs
+defects: node scripts/simUsCareerDefects.mjs
+ann: node scripts/simUsCareerAnnualBenefits.mjs
+dirty: node scripts/simUsDirtyMoney.mjs
+hall-nba: node scripts/simCareerHall.mjs nba
+hall-nfl: node scripts/simCareerHall.mjs nfl
+hall-mlb: node scripts/simCareerHall.mjs mlb
+hall-nhl: node scripts/simCareerHall.mjs nhl
+summer89: SIM_SECTIONS=8,9 node scripts/simUsCareerSummer.mjs
+summer-rest: SIM_SECTIONS=1,2,3,3b,4,5,7,10,11,12 node scripts/simUsCareerSummer.mjs
