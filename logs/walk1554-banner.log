@@ -1,0 +1,157 @@
+  ok: 390: the Play tab names this week's opponent
+  ok: 390: the Play tab says the slate is set before kickoff
+  ok: 390: the footnote states the top 12 rule
+  ok: 390: no horizontal scroll on Play
+  ok: 390: the Schedule tab lists all twelve games before kickoff (found 12)
+  ok: 390: no horizontal scroll on Schedule
+  ok: 390: the Conferences tab has an Independent table
+  ok: 390: the Group of Five leader carries the auto spot mark
+  ok: 390: no horizontal scroll on Conferences
+  ok: 390: the recap ledger names the Group of Five spot
+  ok: 390: no Group of Five title game in the recap
+  ok: 390: Notre Dame did not win an ACC title game
+  ok: 390: no horizontal scroll on the recap
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('button', { name: /Notre Dame/ }).first()
+    - locator resolved to <button class="rounded-lg border border-border bg-card px-2 py-2 text-left transition-all hover:scale-[1.02] hover:border-primary/60">…</button>
+  - attempting click action
+    - waiting for element to be visible, enabled and stable
+    - element is visible, enabled and stable
+    - scrolling into view if needed
+    - done scrolling
+    - <p>…</p> from <div role="region" tabindex="-1" data-site-chrome="" data-dukb-focused="1" aria-label="Cookie choices" class="fixed bottom-0 left-0 right-0 z-[60] pointer-events-auto max-h-[60dvh] overflow-y-auto p-4 bg-card border-t border-border shadow-lg">…</div> subtree intercepts pointer events
+  - retrying click action
+    - waiting for element to be visible, enabled and stable
+    - element is visible, enabled and stable
+    - scrolling into view if needed
+    - done scrolling
+    - <button type="button" class="min-h-11 px-4 py-2 rounded-lg bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-opacity">Save choices</button> from <div role="region" tabindex="-1" data-site-chrome="" data-dukb-focused="1" aria-label="Cookie choices" class="fixed bottom-0 left-0 right-0 z-[60] pointer-events-auto max-h-[60dvh] overflow-y-auto p-4 bg-card border-t border-border shadow-lg">…</div> subtree intercepts pointer events
+  - retrying click action
+    - waiting 20ms
+    - waiting for element to be visible, enabled and stable
+    - element is visible, enabled and stable
+    - scrolling into view if needed
+    - done scrolling
+    - <p>…</p> from <div role="region" tabindex="-1" data-site-chrome="" data-dukb-focused="1" aria-label="Cookie choices" class="fixed bottom-0 left-0 right-0 z-[60] pointer-events-auto max-h-[60dvh] overflow-y-auto p-4 bg-card border-t border-border shadow-lg">…</div> subtree intercepts pointer events
+  2 × retrying click action
+      - waiting 100ms
+      - waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - <div data-site-chrome="" class="sticky top-0 z-50 flex h-11 items-center border-b border-border/40 bg-background">…</div> intercepts pointer events
+  14 × retrying click action
+       - waiting 500ms
+       - waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - <button type="button" class="min-h-11 px-4 py-2 rounded-lg bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-opacity">Save choices</button> from <div role="region" tabindex="-1" data-site-chrome="" data-dukb-focused="1" aria-label="Cookie choices" class="fixed bottom-0 left-0 right-0 z-[60] pointer-events-auto max-h-[60dvh] overflow-y-auto p-4 bg-card border-t border-border shadow-lg">…</div> subtree intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+       - waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - <p>…</p> from <div role="region" tabindex="-1" data-site-chrome="" data-dukb-focused="1" aria-label="Cookie choices" class="fixed bottom-0 left-0 right-0 z-[60] pointer-events-auto max-h-[60dvh] overflow-y-auto p-4 bg-card border-t border-border shadow-lg">…</div> subtree intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+       - waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - <div data-site-chrome="" class="sticky top-0 z-50 flex h-11 items-center border-b border-border/40 bg-background">…</div> intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+       - waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - <div data-site-chrome="" class="sticky top-0 z-50 flex h-11 items-center border-b border-border/40 bg-background">…</div> intercepts pointer events
+  - retrying click action
+    - waiting 500ms
+    - waiting for element to be visible, enabled and stable
+    - element is visible, enabled and stable
+    - scrolling into view if needed
+    - done scrolling
+    - <button type="button" class="min-h-11 px-4 py-2 rounded-lg bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-opacity">Save choices</button> from <div role="region" tabindex="-1" data-site-chrome="" data-dukb-focused="1" aria-label="Cookie choices" class="fixed bottom-0 left-0 right-0 z-[60] pointer-events-auto max-h-[60dvh] overflow-y-auto p-4 bg-card border-t border-border shadow-lg">…</div> subtree intercepts pointer events
+  - retrying click action
+    - waiting 500ms
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/.rc/x/walk1554.mjs:27:66 {
+  log: [
+    "  - waiting for getByRole('button', { name: /Notre Dame/ }).first()",
+    '    - locator resolved to <button class="rounded-lg border border-border bg-card px-2 py-2 text-left transition-all hover:scale-[1.02] hover:border-primary/60">…</button>',
+    '  - attempting click action',
+    '    - waiting for element to be visible, enabled and stable',
+    '    - element is visible, enabled and stable',
+    '    - scrolling into view if needed',
+    '    - done scrolling',
+    '    - <p>…</p> from <div role="region" tabindex="-1" data-site-chrome="" data-dukb-focused="1" aria-label="Cookie choices" class="fixed bottom-0 left-0 right-0 z-[60] pointer-events-auto max-h-[60dvh] overflow-y-auto p-4 bg-card border-t border-border shadow-lg">…</div> subtree intercepts pointer events',
+    '  - retrying click action',
+    '    - waiting for element to be visible, enabled and stable',
+    '    - element is visible, enabled and stable',
+    '    - scrolling into view if needed',
+    '    - done scrolling',
+    '    - <button type="button" class="min-h-11 px-4 py-2 rounded-lg bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-opacity">Save choices</button> from <div role="region" tabindex="-1" data-site-chrome="" data-dukb-focused="1" aria-label="Cookie choices" class="fixed bottom-0 left-0 right-0 z-[60] pointer-events-auto max-h-[60dvh] overflow-y-auto p-4 bg-card border-t border-border shadow-lg">…</div> subtree intercepts pointer events',
+    '  - retrying click action',
+    '    - waiting 20ms',
+    '    - waiting for element to be visible, enabled and stable',
+    '    - element is visible, enabled and stable',
+    '    - scrolling into view if needed',
+    '    - done scrolling',
+    '    - <p>…</p> from <div role="region" tabindex="-1" data-site-chrome="" data-dukb-focused="1" aria-label="Cookie choices" class="fixed bottom-0 left-0 right-0 z-[60] pointer-events-auto max-h-[60dvh] overflow-y-auto p-4 bg-card border-t border-border shadow-lg">…</div> subtree intercepts pointer events',
+    '  2 × retrying click action',
+    '      - waiting 100ms',
+    '      - waiting for element to be visible, enabled and stable',
+    '      - element is visible, enabled and stable',
+    '      - scrolling into view if needed',
+    '      - done scrolling',
+    '      - <div data-site-chrome="" class="sticky top-0 z-50 flex h-11 items-center border-b border-border/40 bg-background">…</div> intercepts pointer events',
+    '  14 × retrying click action',
+    '       - waiting 500ms',
+    '       - waiting for element to be visible, enabled and stable',
+    '       - element is visible, enabled and stable',
+    '       - scrolling into view if needed',
+    '       - done scrolling',
+    '       - <button type="button" class="min-h-11 px-4 py-2 rounded-lg bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-opacity">Save choices</button> from <div role="region" tabindex="-1" data-site-chrome="" data-dukb-focused="1" aria-label="Cookie choices" class="fixed bottom-0 left-0 right-0 z-[60] pointer-events-auto max-h-[60dvh] overflow-y-auto p-4 bg-card border-t border-border shadow-lg">…</div> subtree intercepts pointer events',
+    '     - retrying click action',
+    '       - waiting 500ms',
+    '       - waiting for element to be visible, enabled and stable',
+    '       - element is visible, enabled and stable',
+    '       - scrolling into view if needed',
+    '       - done scrolling',
+    '       - <p>…</p> from <div role="region" tabindex="-1" data-site-chrome="" data-dukb-focused="1" aria-label="Cookie choices" class="fixed bottom-0 left-0 right-0 z-[60] pointer-events-auto max-h-[60dvh] overflow-y-auto p-4 bg-card border-t border-border shadow-lg">…</div> subtree intercepts pointer events',
+    '     - retrying click action',
+    '       - waiting 500ms',
+    '       - waiting for element to be visible, enabled and stable',
+    '       - element is visible, enabled and stable',
+    '       - scrolling into view if needed',
+    '       - done scrolling',
+    '       - <div data-site-chrome="" class="sticky top-0 z-50 flex h-11 items-center border-b border-border/40 bg-background">…</div> intercepts pointer events',
+    '     - retrying click action',
+    '       - waiting 500ms',
+    '       - waiting for element to be visible, enabled and stable',
+    '       - element is visible, enabled and stable',
+    '       - scrolling into view if needed',
+    '       - done scrolling',
+    '       - <div data-site-chrome="" class="sticky top-0 z-50 flex h-11 items-center border-b border-border/40 bg-background">…</div> intercepts pointer events',
+    '  - retrying click action',
+    '    - waiting 500ms',
+    '    - waiting for element to be visible, enabled and stable',
+    '    - element is visible, enabled and stable',
+    '    - scrolling into view if needed',
+    '    - done scrolling',
+    '    - <button type="button" class="min-h-11 px-4 py-2 rounded-lg bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-opacity">Save choices</button> from <div role="region" tabindex="-1" data-site-chrome="" data-dukb-focused="1" aria-label="Cookie choices" class="fixed bottom-0 left-0 right-0 z-[60] pointer-events-auto max-h-[60dvh] overflow-y-auto p-4 bg-card border-t border-border shadow-lg">…</div> subtree intercepts pointer events',
+    '  - retrying click action',
+    '    - waiting 500ms'
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v24.21.0

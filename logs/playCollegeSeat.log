@@ -1,0 +1,79 @@
+   cfb-dynasty-320: navigations after load ["http://localhost:4173/cfb-dynasty","http://localhost:4173/cfb-dynasty"]
+   cfb-dynasty-320 station 1: 1 seat nodes, smallest seat button 144 px
+   cfb-dynasty-320 station 1, the longest ask: 1 seat nodes, smallest seat button 144 px
+   cfb-dynasty-320 station 2 card: 2 seat nodes, smallest seat button 44 px
+   cfb-dynasty-320 station 2 rules: 2 seat nodes, smallest seat button 44 px
+   cfb-dynasty-320 first press: tile top 351 to 351, slot 144 to 144, tabs under it 511 to 511, the feed's bottom above the Play card 563 to 621, Play top 808 to 866, scrollY 72 to 947 (the scoreboard's reveal, useRevealScroll, is the board's)
+   cfb-dynasty-320 station 3 offer: 1 seat nodes, smallest seat button 44 px
+   cfb-dynasty-320 older save: slot 144 / 144 / 144, Play top 808 / 808 / 808, scrollY across Not now 0 to 0, across Take the ask 0 to 0
+   cfb-dynasty-320 station 4: 1 seat nodes, smallest seat button none px
+   cfb-dynasty-320 station 5: 2 seat nodes, smallest seat button 44 px
+   cfb-dynasty-320 station 6: 1 seat nodes, smallest seat button 44 px
+   cfb-dynasty-320 station 8: 2 seat nodes, smallest seat button 44 px
+   cfb-dynasty-390: navigations after load ["http://localhost:4173/cfb-dynasty","http://localhost:4173/cfb-dynasty"]
+   cfb-dynasty-390 station 1: 1 seat nodes, smallest seat button 144 px
+   cfb-dynasty-390 station 1, the longest ask: 1 seat nodes, smallest seat button 144 px
+   cfb-dynasty-390 station 2 card: 2 seat nodes, smallest seat button 44 px
+   cfb-dynasty-390 station 2 rules: 2 seat nodes, smallest seat button 44 px
+   cfb-dynasty-390 first press: tile top 317 to 317, slot 144 to 144, tabs under it 477 to 477, the feed's bottom above the Play card 513 to 571, Play top 718 to 776, scrollY 0 to 842 (the scoreboard's reveal, useRevealScroll, is the board's)
+   cfb-dynasty-390 station 3 offer: 1 seat nodes, smallest seat button 44 px
+   cfb-dynasty-390 older save: slot 144 / 144 / 144, Play top 718 / 718 / 718, scrollY across Not now 0 to 0, across Take the ask 0 to 0
+   cfb-dynasty-390 station 4: 1 seat nodes, smallest seat button none px
+   cfb-dynasty-390 station 5: 2 seat nodes, smallest seat button 44 px
+   cfb-dynasty-390 station 6: 1 seat nodes, smallest seat button 44 px
+   cfb-dynasty-390 station 8: 2 seat nodes, smallest seat button 44 px
+   cfb-dynasty-1280: navigations after load ["http://localhost:4173/cfb-dynasty","http://localhost:4173/cfb-dynasty"]
+   cfb-dynasty-1280 station 1: 1 seat nodes, smallest seat button 144 px
+   cfb-dynasty-1280 station 1, the longest ask: 1 seat nodes, smallest seat button 144 px
+   cfb-dynasty-1280 station 2 card: 2 seat nodes, smallest seat button 44 px
+   cfb-dynasty-1280 station 2 rules: 2 seat nodes, smallest seat button 44 px
+   cfb-dynasty-1280 first press: tile top 231 to 231, slot 144 to 144, tabs under it 391 to 391, the feed's bottom above the Play card 427 to 485, Play top 576 to 634, scrollY 0 to 685 (the scoreboard's reveal, useRevealScroll, is the board's)
+   cfb-dynasty-1280 station 3 offer: 1 seat nodes, smallest seat button 44 px
+   cfb-dynasty-1280 older save: slot 144 / 144 / 144, Play top 576 / 576 / 576, scrollY across Not now 0 to 0, across Take the ask 0 to 0
+   cfb-dynasty-1280 station 4: 1 seat nodes, smallest seat button none px
+   cfb-dynasty-1280 station 5: 2 seat nodes, smallest seat button 60 px
+   cfb-dynasty-1280 station 6: 1 seat nodes, smallest seat button 44 px
+   cfb-dynasty-1280 station 8: 2 seat nodes, smallest seat button 44 px
+   cbb-dynasty-320: navigations after load ["http://localhost:4173/cbb-dynasty","http://localhost:4173/cbb-dynasty"]
+   cbb-dynasty-320 station 1: 1 seat nodes, smallest seat button 144 px
+   cbb-dynasty-320 station 1, the longest ask: 1 seat nodes, smallest seat button 144 px
+   cbb-dynasty-320 station 2 card: 2 seat nodes, smallest seat button 44 px
+   cbb-dynasty-320 station 2 rules: 2 seat nodes, smallest seat button 44 px
+   cbb-dynasty-320 first press: tile top 301 to 301, slot 144 to 144, tabs under it 461 to 461, the feed's bottom above the Play card 497 to 571, Play top 634 to 708, scrollY 6 to 759 (the scoreboard's reveal, useRevealScroll, is the board's)
+   cbb-dynasty-320 station 3 offer: 1 seat nodes, smallest seat button 44 px
+   cbb-dynasty-320 older save: slot 144 / 144 / 144, Play top 634 / 634 / 634, scrollY across Not now 0 to 0, across Take the ask 0 to 0
+   cbb-dynasty-320 station 4: 1 seat nodes, smallest seat button none px
+   cbb-dynasty-320 station 5: 2 seat nodes, smallest seat button 44 px
+   cbb-dynasty-320 station 6: 1 seat nodes, smallest seat button 44 px
+   cbb-dynasty-320 station 8: 2 seat nodes, smallest seat button 44 px
+   cbb-dynasty-390: navigations after load ["http://localhost:4173/cbb-dynasty","http://localhost:4173/cbb-dynasty"]
+   cbb-dynasty-390 station 1: 1 seat nodes, smallest seat button 144 px
+   cbb-dynasty-390 station 1, the longest ask: 1 seat nodes, smallest seat button 144 px
+   cbb-dynasty-390 station 2 card: 2 seat nodes, smallest seat button 44 px
+   cbb-dynasty-390 station 2 rules: 2 seat nodes, smallest seat button 44 px
+   cbb-dynasty-390 first press: tile top 301 to 301, slot 144 to 144, tabs under it 461 to 461, the feed's bottom above the Play card 497 to 571, Play top 618 to 692, scrollY 0 to 743 (the scoreboard's reveal, useRevealScroll, is the board's)
+   cbb-dynasty-390 station 3 offer: 1 seat nodes, smallest seat button 44 px
+   cbb-dynasty-390 older save: slot 144 / 144 / 144, Play top 618 / 618 / 618, scrollY across Not now 0 to 0, across Take the ask 0 to 0
+   cbb-dynasty-390 station 4: 1 seat nodes, smallest seat button none px
+   cbb-dynasty-390 station 5: 2 seat nodes, smallest seat button 44 px
+   cbb-dynasty-390 station 6: 1 seat nodes, smallest seat button 44 px
+   cbb-dynasty-390 station 8: 2 seat nodes, smallest seat button 44 px
+   cbb-dynasty-1280: navigations after load ["http://localhost:4173/cbb-dynasty","http://localhost:4173/cbb-dynasty"]
+   cbb-dynasty-1280 station 1: 1 seat nodes, smallest seat button 144 px
+   cbb-dynasty-1280 station 1, the longest ask: 1 seat nodes, smallest seat button 144 px
+   cbb-dynasty-1280 station 2 card: 2 seat nodes, smallest seat button 44 px
+   cbb-dynasty-1280 station 2 rules: 2 seat nodes, smallest seat button 44 px
+   cbb-dynasty-1280 first press: tile top 231 to 231, slot 144 to 144, tabs under it 391 to 391, the feed's bottom above the Play card 427 to 501, Play top 512 to 586, scrollY 0 to 622 (the scoreboard's reveal, useRevealScroll, is the board's)
+   cbb-dynasty-1280 station 3 offer: 1 seat nodes, smallest seat button 44 px
+   cbb-dynasty-1280 older save: slot 144 / 144 / 144, Play top 512 / 512 / 512, scrollY across Not now 0 to 0, across Take the ask 0 to 0
+   cbb-dynasty-1280 station 4: 1 seat nodes, smallest seat button none px
+   cbb-dynasty-1280 station 5: 2 seat nodes, smallest seat button 60 px
+   cbb-dynasty-1280 station 6: 1 seat nodes, smallest seat button 44 px
+   cbb-dynasty-1280 station 8: 2 seat nodes, smallest seat button 44 px
+   /cfb-dynasty reduced motion: {"opacity":"1","transform":"none","running":0}
+   /cbb-dynasty reduced motion: {"opacity":"1","transform":"none","running":0}
+   /cfb-dynasty reduced motion, fired recap: [{"o":"1","t":"none","v":"visible","r":0},{"o":"1","t":"none","v":"visible","r":0},{"o":"1","t":"none","v":"visible","r":0},{"o":"1","t":"none","v":"visible","r":0}]
+   /cfb-dynasty reduced motion, market: [{"o":"1","t":"none","v":"visible","r":0},{"o":"1","t":"none","v":"visible","r":0},{"o":"1","t":"none","v":"visible","r":0}]
+   /cbb-dynasty reduced motion, fired recap: [{"o":"1","t":"none","v":"visible","r":0},{"o":"1","t":"none","v":"visible","r":0},{"o":"1","t":"none","v":"visible","r":0},{"o":"1","t":"none","v":"visible","r":0}]
+   /cbb-dynasty reduced motion, market: [{"o":"1","t":"none","v":"visible","r":0}]
+playCollegeSeat: all stations green at 320, 390 and 1280 on both routes
