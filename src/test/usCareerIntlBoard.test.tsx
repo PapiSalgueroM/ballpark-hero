@@ -201,7 +201,9 @@ describe('the board fixture\'s fixed NBA saves with the bind mounted', () => {
       vi.spyOn(Math, 'random').mockImplementation(mulberry32(7));
       const v = render(<MemoryRouter><UsCareerBoard sport={s} /></MemoryRouter>);
       await new Promise(r => setTimeout(r, 0));
-      const out = { html: v.container.innerHTML, bytes: localStorage.getItem(sport.saveKey) };
+      /* React numbers useId's ids from one counter for every client root, so two mounts of the same board
+         differ only there: the ids are read as one placeholder. */
+      const out = { html: v.container.innerHTML.replace(/:r[0-9a-z]+:/g, ':r:'), bytes: localStorage.getItem(sport.saveKey) };
       cleanup();
       return out;
     };
@@ -215,7 +217,8 @@ describe('the board fixture\'s fixed NBA saves with the bind mounted', () => {
       const a = await shot(sport, raw);
       const b = await shot(bare, raw);
       expect(a.bytes, `fixture save ${k}: the save`).toBe(b.bytes);
-      const at = [...a.html].findIndex((ch, i) => ch !== b.html[i]);
+      let at = 0;
+      while (at < a.html.length && a.html[at] === b.html[at]) at += 1;
       const where = a.html === b.html ? '' : `${a.html.slice(Math.max(0, at - 80), at + 120)} VERSUS ${b.html.slice(Math.max(0, at - 80), at + 120)}`;
       expect(where, `fixture save ${k}: the board`).toBe('');
       same += 1;
