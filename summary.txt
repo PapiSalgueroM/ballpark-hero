@@ -1,0 +1,7 @@
+head exit=0 0s | 2c2c394127 Round 1556: simNbaGmDesk's bottom copies hold the club to exactly fifteen, carry no dead money for a man on the roster, and add a pair copy with two sheets let
+set-21 exit=0 29s | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+desk-def exit=0 35s | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+set-11 exit=0 36s | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+ctl-overcut exit=0 30s | simNbaGmDesk: control overcut fired (16 failures, as it should)
+set-31 exit=0 37s | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+ctl-onlyself exit=0 32s | simNbaGmDesk: control onlyself fired (8 failures, as it should)
