@@ -1,0 +1,8 @@
+mutation N4 applied to src/lib/nbaCareerIntl.ts
+[31m     → wc-2035: expected '🥉 BronzeThe 2035 Basketball World Cu…' to contain 'Host and field are the game\'s own.'[39m
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/nbaIntlResultLines.test.tsx[2m > [22mthe result screen says only what is true of its summer[2m > [22ma projected summer: never played, host and field are the game's own
+[31m[1mAssertionError[22m: wc-2035: expected '🥉 BronzeThe 2035 Basketball World Cu…' to contain 'Host and field are the game\'s own.'[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m51 passed[39m[22m[90m (52)[39m
+::error file=/tmp/fx-N4/src/test/nbaIntlResultLines.test.tsx,title=src/test/nbaIntlResultLines.test.tsx > the result screen says only what is true of its summer > a projected summer%3A never played%2C host and field are the game's own,line=56,column=21::AssertionError: wc-2035: expected '🥉 Bronze
+MUTATION N4 CAUGHT (vitest=1 walk=0)

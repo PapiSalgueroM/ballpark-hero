@@ -1,0 +1,13 @@
+build exit=0 35s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+vitest-intl exit=0 14s |    Duration  13.20s (transform 3.91s, setup 891ms, collect 12.18s, tests 11.98s, environment 3.67s, prepare 933ms)
+playNbaIntl exit=0 44s | playNbaIntl: green. The call, Go and its result's views, Rest, a reload mid beat, the 2027 World Cup's lines and no call at 80 or in 2005, at 320, 390 and 1280; 24 screen
+tsc exit=0 104s | 
+simCareerIntl exit=0 129s | simCareerIntl: GREEN, 52755 checks over sections 1,2,3,4,6,12
+fences exit=0 102s | rival=0 anchors=0 storage=0
+mut-N1 exit=1 7s | MUTATION N1 CAUGHT (vitest=1 walk=0)
+mut-N2 exit=1 8s | MUTATION N2 CAUGHT (vitest=1 walk=0)
+mut-N2b exit=1 9s | MUTATION N2b CAUGHT (vitest=1 walk=0)
+mut-N4 exit=1 11s | MUTATION N4 CAUGHT (vitest=1 walk=0)
+mut-N5 exit=1 9s | MUTATION N5 CAUGHT (vitest=1 walk=0)
+mut-N9 exit=1 6s | MUTATION N9 CAUGHT (vitest=1 walk=0)
+mut-FMT exit=1 102s | MUTATION FMT CAUGHT (vitest=1 walk=1)

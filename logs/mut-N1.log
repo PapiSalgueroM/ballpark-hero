@@ -1,0 +1,8 @@
+mutation N1 applied to src/lib/careerIntl.ts
+[31m     → expected [ 'bronze', 'bronze', 'gold', …(7) ] to deeply equal [ 'bronze', 'bronze', 'gold', …(8) ][39m
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/nbaCareerIntl.test.ts[2m > [22mthe game[2m > [22mreads every played summer of a nation's history, written out here rather than taken from the helper (review of Round 1544, N1)
+[31m[1mAssertionError[22m: expected [ 'bronze', 'bronze', 'gold', …(7) ] to deeply equal [ 'bronze', 'bronze', 'gold', …(8) ][39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m51 passed[39m[22m[90m (52)[39m
+::error file=/tmp/fx-N1/src/test/nbaCareerIntl.test.ts,title=src/test/nbaCareerIntl.test.ts > the game > reads every played summer of a nation's history%2C written out here rather than taken from the helper (review of Round 1544%2C N1),line=186,column=55::AssertionError: expected [ 'bronze', 'bronze
+MUTATION N1 CAUGHT (vitest=1 walk=0)

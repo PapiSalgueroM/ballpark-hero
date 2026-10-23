@@ -1,0 +1,8 @@
+mutation N5 applied to src/lib/careerIntl.ts
+[31m     → hurt: expected { v: 1, edition: 'oly-2004', …(9) } to be null[39m
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/lib/careerIntl.test.ts[2m > [22mrepair on load[2m > [22mshows no replay when the row disagrees on any one thing it records (review of Round 1544, N5)
+[31m[1mAssertionError[22m: hurt: expected { v: 1, edition: 'oly-2004', …(9) } to be null[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m51 passed[39m[22m[90m (52)[39m
+::error file=/tmp/fx-N5/src/lib/careerIntl.test.ts,title=src/lib/careerIntl.test.ts > repair on load > shows no replay when the row disagrees on any one thing it records (review of Round 1544%2C N5),line=366,column=54::AssertionError: hurt: expected { v: 1, edition: 'oly-2004', …(9) } to be null%0
+MUTATION N5 CAUGHT (vitest=1 walk=0)

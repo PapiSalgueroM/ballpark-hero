@@ -1,0 +1,8 @@
+mutation N2 applied to src/lib/careerIntl.ts
+[31m     → expected 'intl:toy:Toy' to be 'intl:toy:Toy:oly-2004' // Object.is equality[39m
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/lib/careerIntl.test.ts[2m > [22mrepair on load[2m > [22mplays a summer again exactly as Round 1544 played it: the key, the draw order and the generated field (review of Round 1544, N2)
+[31m[1mAssertionError[22m: expected 'intl:toy:Toy' to be 'intl:toy:Toy:oly-2004' // Object.is equality[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m51 passed[39m[22m[90m (52)[39m
+::error file=/tmp/fx-N2/src/lib/careerIntl.test.ts,title=src/lib/careerIntl.test.ts > repair on load > plays a summer again exactly as Round 1544 played it%3A the key%2C the draw order and the generated field (review of Round 1544%2C N2),line=374,column=53::AssertionError: expected 'intl:toy:Toy' to
+MUTATION N2 CAUGHT (vitest=1 walk=0)
