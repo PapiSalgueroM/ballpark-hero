@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useConnections } from '@/hooks/useConnections';
-import { ConnectionsBoard } from '@/components/connections/ConnectionsBoard';
+import { ConnectionsBoard, GroupLabel } from '@/components/connections/ConnectionsBoard';
 import { ConnectionsHowToPlay } from '@/components/connections/ConnectionsHowToPlay';
 import { GameNav } from '@/components/game/GameNav';
 import { GiveUpButton } from '@/components/game/GiveUpButton';
@@ -256,7 +256,7 @@ const Connections = () => {
                                 : 'text-close-foreground',
                             )}
                           >
-                            <p className="font-bold text-xs uppercase">{g.category}</p>
+                            <p className="font-bold text-xs uppercase"><GroupLabel text={g.category} /></p>
                             <p className="text-xs mt-0.5 opacity-90">{g.players.join(', ')}</p>
                           </div>
                         ))}

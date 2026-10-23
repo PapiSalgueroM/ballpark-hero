@@ -46,6 +46,8 @@ import type { RivalryChoiceCard } from './careerRivalryChoices';
 import { countOf, mlbCareerStatBullet, mlbMajorAward, mlbStatLine, mlbLineAsPrinted, type MlbCareerSums } from './usCareerStatLine';
 import { raiseWithinPotential, ratingRaiseNote } from './careerHeadroom';
 import { applyUsCareerAnnualBenefits } from './usCareerAnnualBenefits';
+import { settleUsCareerShop, usCareerSeasonCool } from './usCareerAnnualBenefits';
+import { bankUsCareerFee, usCareerSkillSummer } from './usCareerAnnualBenefits';
 import { careerRecoveryRisk } from './usCareerRecovery';
 import { hallCalibrationOf, legacyRead, type HallCalibration, type LegacyRead, type LegacyWeights } from './careerHallOfFame';
 import { moraleForm } from './careerForm';
@@ -865,7 +867,7 @@ export function mlbProgress(c: MlbCareerState, rng: () => number): string[] {
   const heat = c.heat ?? 0;
   if (heat > 0) {
     const dm = c.dirtyMoney ?? 0;
-    const drift = dm > 0 ? Math.min(8, 2 + dm * 0.5) : -9;
+    const drift = dm > 0 ? Math.min(8, 2 + dm * 0.5) : -usCareerSeasonCool(c.purchased, 9);
     c.heat = Math.max(0, Math.min(100, heat + drift));
     if ((c.heat ?? 0) >= 90 && (c.suspendedSeasons ?? 0) === 0) {
       c.suspendedSeasons = 1;
@@ -896,6 +898,9 @@ export function mlbProgress(c: MlbCareerState, rng: () => number): string[] {
   const upkeep = c.yearlyCosts ?? 0;
   const priorNet = c.netWorth ?? Math.round(Math.max(0, c.earnings - c.salary) * TAKE_HOME * 10) / 10;
   c.netWorth = Math.round((priorNet + c.salary * TAKE_HOME - upkeep) * 10) / 10;
+  /* Round 1534: the shop pays what its cards print (src/lib/usCareerAnnualBenefits.ts), straight after the pay
+     line so Cash is in tenths, and before the money app. Stakes draw on their own keyed stream, never this rng. */
+  for (const line of settleUsCareerShop(c, MLB_SPEND_ITEMS)) notes.push(line);
   /* Round 470: the money app's season, after the pay and the upkeep have
      landed, the same place in the loop Soccer Career and the NFL career run
      it. Savings pays, every price moves, and a balance the upkeep has pushed
@@ -1003,9 +1008,9 @@ function buildMlbDeck(c: MlbCareerState, rng: () => number, stopAtBig: boolean):
     title: 'Winter plan',
     body: 'The offseason is long. Where do the hours go?',
     options: [
-      { label: c.pos === 'SP' ? 'New pitch lab' : 'Swing rebuild', effect: 'Push the ceiling', apply: (cc, r) => { if (cc.age >= 32) { cc.health = Math.min(100, cc.health + 4); return 'Veteran maintenance. Health +4.'; } const up = 1 + Math.floor(r() * 2); cc.ovr = Math.min(cc.pot + 1, cc.ovr + up); return `Rating +${up}.`; } },
+      { label: c.pos === 'SP' ? 'New pitch lab' : 'Swing rebuild', effect: c.age >= 32 ? 'Health +4, up to 100' : 'Rating +1 or +2, up to your ceiling', apply: (cc, r) => usCareerSkillSummer(cc, r, 32, 'Veteran maintenance.') },
       { label: 'Arm care and mobility', effect: 'Durability', apply: (cc) => { cc.health = Math.min(100, cc.health + 10); return 'Health +10. Spring training in the best shape of your life.'; } },
-      { label: 'The commercial circuit', effect: 'Fame and money', apply: (cc) => { cc.fanbase = Math.min(100, cc.fanbase + 12); cc.earnings += 3; return 'National ads all winter. 3M banked.'; } },
+      { label: 'The commercial circuit', effect: 'Fame and money', apply: (cc) => { cc.fanbase = Math.min(100, cc.fanbase + 12); const fee = bankUsCareerFee(cc, 3, mlbEraById(cc.eraId).moneyScale); return `National ads all winter. ${fee}M banked.`; } },
     ],
   });
   if (c.pos === 'SP' && c.health < 70) {
@@ -1241,7 +1246,7 @@ export const MLB_SPEND_ITEMS: MlbSpendItem[] = [
   { id: 'youth_academy_mlb', name: 'Youth Academy', emoji: '🎓', category: 'invest', cost: 2.5, yearly: 0.1, desc: 'Where the next you comes from, 2.5M', oneTime: true, minNetWorth: 4, effect: 'Fanbase +8' },
   { id: 'crypto_mlb', name: 'Crypto Punt', emoji: '🪙', category: 'invest', cost: 1, desc: '20 percent chance of 5x, 80 percent chance of a lesson', oneTime: false },
   { id: 'wine_label', name: 'Wine Label', emoji: '🍷', category: 'invest', cost: 2, desc: 'Steady 10 percent and very good dinners', oneTime: true, minNetWorth: 4 },
-  { id: 'team_stake', name: 'Minority Stake In A Franchise', emoji: '🏆', category: 'invest', cost: 40, desc: 'A real piece of a real team, 40M', oneTime: true, minNetWorth: 70, effect: 'The retirement plan, fanbase +10' },
+  { id: 'team_stake', name: 'Minority Stake In A Franchise', emoji: '🏆', category: 'invest', cost: 40, desc: 'A real piece of a real team, 40M', oneTime: true, minNetWorth: 70, effect: 'Fanbase +10' },
   // Body
   { id: 'chef_mlb', name: 'Private Chef', emoji: '👨‍🍳', category: 'body', cost: 0, yearly: 0.15, desc: 'Every meal built for a baseball season, 150k a year', oneTime: true, effect: 'Health +4 a year' },
   { id: 'recovery_mlb', name: 'Recovery Suite', emoji: '🧊', category: 'body', cost: 2, yearly: 0.12, desc: 'Cryo, compression, the whole circus, 2M. Injuries can still happen.', oneTime: true, minNetWorth: 3, effect: '25% lower simulated injury risk' },
@@ -1254,23 +1259,23 @@ export const MLB_SPEND_ITEMS: MlbSpendItem[] = [
   { id: 'tunnel_fits', name: 'A Stylist And A Tunnel Budget', emoji: '🕶️', category: 'flex', cost: 0, yearly: 0.3, desc: 'The tunnel is a runway now, 300k a year', oneTime: true, minFanbase: 45, effect: 'Fanbase +5 a year' },
   { id: 'watch_mlb', name: 'Watch Collection', emoji: '⌚', category: 'flex', cost: 2, desc: 'Six figures on each wrist, 2M', oneTime: true, minNetWorth: 5 },
   { id: 'album', name: 'Fund Your Own Album', emoji: '🎤', category: 'flex', cost: 1, desc: 'You cannot rap. You are doing it anyway, 1M', oneTime: true, minFanbase: 55, effect: 'Fanbase +10 and endless jokes' },
-  { id: 'signature_shoe', name: 'Signature Shoe Line', emoji: '👟', category: 'flex', cost: 2.5, desc: 'Your silhouette on a shoe, 2.5M', oneTime: true, minFanbase: 70, effect: 'Fanbase +12, real royalties' },
+  { id: 'signature_shoe', name: 'Signature Shoe Line', emoji: '👟', category: 'flex', cost: 2.5, desc: 'Your silhouette on a shoe, 2.5M', oneTime: true, minFanbase: 70, effect: 'Fanbase +12' },
   { id: 'court_mural', name: 'Mural On Your Old Field', emoji: '🎨', category: 'flex', cost: 0.3, desc: 'Twenty feet of you where you learned, 300k', oneTime: true, minFanbase: 55 },
   { id: 'ring_copy_mlb', name: 'Second Ring, Bigger', emoji: '💍', category: 'flex', cost: 0.5, desc: 'A custom copy with more diamonds than the real one, 500k', oneTime: true, minNetWorth: 8 },
   // Family
   { id: 'mom_house_mlb', name: 'Buy Your Mother A House', emoji: '❤️', category: 'family', cost: 2, desc: 'The reason most people do any of this, 2M', oneTime: true, minNetWorth: 2.5, effect: 'Morale +15' },
   { id: 'siblings_mlb', name: 'Pay For Your Siblings College', emoji: '🎓', category: 'family', cost: 0.7, desc: 'All of them, all four years, 700k', oneTime: true, effect: 'Morale +10' },
-  { id: 'family_office_mlb', name: 'Family Office', emoji: '🏦', category: 'family', cost: 0, yearly: 0.18, desc: 'Professionals so relatives stop asking you directly, 180k a year', oneTime: true, effect: 'Protects your money' },
+  { id: 'family_office_mlb', name: 'Family Office', emoji: '🏦', category: 'family', cost: 0, yearly: 0.18, desc: 'Professionals so relatives stop asking you directly, 180k a year', oneTime: true, effect: 'Adds 2 percent to your cash every season' },
   { id: 'foundation_mlb', name: 'Start A Foundation', emoji: '🤝', category: 'family', cost: 3.5, yearly: 0.25, desc: 'Your name doing good in your city, 3.5M', oneTime: true, minNetWorth: 7, effect: 'Fanbase +10 a year' },
   { id: 'road_family', name: 'Fly Your Family To Every Road Game', emoji: '🛫', category: 'family', cost: 0, yearly: 0.2, desc: 'Somebody in the stands every night, 200k a year', oneTime: true, effect: 'Morale +6 a year' },
   { id: 'trust_mlb', name: 'Set Up Trusts For Your Kids', emoji: '🧸', category: 'family', cost: 6, desc: 'They will never have to do this, 6M', oneTime: true, minNetWorth: 14 },
   // Shady
   { id: 'mshady_laundromats', name: 'Laundromat Chain', emoji: '🧼', category: 'shady', cost: 1, desc: 'Remarkable revenue for the foot traffic, 1M', oneTime: true, requiresDirty: true, effect: 'Washes 2M of dirty money' },
   { id: 'mshady_barbers', name: 'Barbershop Chain', emoji: '💈', category: 'shady', cost: 0.8, desc: 'Nine chairs, three customers, endless cash, 800k', oneTime: true, requiresDirty: true, effect: 'Washes 1.5M of dirty money' },
-  { id: 'mshady_club', name: 'The Nightclub', emoji: '🍾', category: 'shady', cost: 3, yearly: 0.25, desc: 'Bottle service and a flexible ledger, 3M', oneTime: true, requiresDirty: true, effect: 'Washes 4M, heat +3 a year' },
+  { id: 'mshady_club', name: 'The Nightclub', emoji: '🍾', category: 'shady', cost: 3, yearly: 0.25, desc: 'Bottle service and a flexible ledger, 3M', oneTime: true, requiresDirty: true, effect: 'Washes 4M, heat +3' },
   { id: 'mshady_lawyer', name: 'The Lawyer Who Never Loses', emoji: '⚖️', category: 'shady', cost: 0, yearly: 0.45, desc: 'On retainer, answers at 3am, 450k a year', oneTime: true, effect: 'Heat cools twice as fast' },
   { id: 'mshady_fixer', name: 'A Guy Who Handles Things', emoji: '🤐', category: 'shady', cost: 0, yearly: 0.3, desc: 'You do not ask how, 300k a year', oneTime: true, effect: 'Heat -8 immediately' },
-  { id: 'mshady_offshore', name: 'Offshore Account', emoji: '🏝️', category: 'shady', cost: 0.5, desc: 'An island, a bank, a form nobody files, 500k', oneTime: true, requiresDirty: true, effect: 'Hides money, heat +6' },
+  { id: 'mshady_offshore', name: 'Offshore Account', emoji: '🏝️', category: 'shady', cost: 0.5, desc: 'An island, a bank, a form nobody files, 500k', oneTime: true, requiresDirty: true, effect: 'Heat +6' },
   // Round 58 second wave
   { id: 'barber_chair', name: 'A Barber On Retainer', emoji: '💇', category: 'body', cost: 0, yearly: 0.06, desc: 'Flies to every road city. The line has to be right, 60k a year', oneTime: true, effect: 'Morale +4 a year' },
   { id: 'film_room', name: 'Personal Film Analyst', emoji: '🎞️', category: 'body', cost: 0, yearly: 0.14, desc: 'Cuts your plate appearances and pitching outings by 6am, 140k a year', oneTime: true, effect: 'Rating +1 a year' },
@@ -1318,6 +1323,7 @@ export function buyMlbItem(c: MlbCareerState, itemId: string): { state: MlbCaree
     case 'mshady_club': { const w = Math.min(4, c.dirtyMoney ?? 0); s.dirtyMoney = Math.max(0, Math.round(((s.dirtyMoney ?? 0) - 4) * 10) / 10); s.netWorth = Math.round((s.netWorth + w) * 10) / 10; s.heat = Math.min(100, (s.heat ?? 0) + 3); log = 'The club opened. Four million cleaned and a line around the block.'; break; }
     case 'mshady_fixer': s.heat = Math.max(0, (s.heat ?? 0) - 8); log = 'You have a guy now. Heat -8, and you genuinely do not want to know how.'; break;
     case 'mshady_offshore': s.heat = Math.min(100, (s.heat ?? 0) + 6); log = 'The account is open. An island, a bank, and a form nobody will ever file. Heat +6.'; break;
+    case 'summer_camp': { const fans = Math.max(0, Math.min(100, s.fanbase + 8) - s.fanbase); const mood = Math.max(0, Math.min(100, s.morale + 6) - s.morale); s.fanbase += fans; s.morale += mood; log = `Two weeks, 400 kids, no fee. Fanbase +${fans}, morale +${mood}.`; break; }
     default: break;
   }
   return { state: s, log };

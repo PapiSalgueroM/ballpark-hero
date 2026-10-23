@@ -11,7 +11,7 @@ const card = 'src/components/us-career/CareerDecisionOutcome.tsx', testFile = 's
 const titles = {
   trade: 'applies the real third-season NBA trade once before its quality draw and keeps the full save on return',
   capped: 'shows each real sport choice as the actual capped change and saves it once',
-  signs: 'reports negative effects and real endorsement earnings without calling them cash',
+  signs: 'reports negative effects and real endorsement earnings with the Cash a banked fee adds',
   rapid: 'consumes same-frame choices once and accepts the next ordinary event',
   continue: 'continues with no extra draws writes season or completion and restores Play focus',
   reload: 'reloads the applied career without replaying its transient receipt or choice',

@@ -59,6 +59,9 @@ const override = process.env.FO_BOARD_NFL;
 const { default: Board } = (override
   ? await import(/* @vite-ignore */ override)
   : await import('@/components/front-office/FrontOfficeBoard')) as { default: ComponentType };
+/* Round 1550: the board fetches its career kit when a screen needs it (FrontOfficeLazyDesk.test.tsx drives that);
+   these cases drive the rules, so the kit is on the page before the board mounts. */
+await (await import('@/components/front-office/nflCareerKitLoad')).loadNflCareerKit();
 
 /** A fifteen man league on the morning of `week`, with the club the GM runs. */
 function leagueAt(week: number) {

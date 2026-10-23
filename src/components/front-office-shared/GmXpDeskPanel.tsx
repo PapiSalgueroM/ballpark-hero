@@ -9,16 +9,7 @@
  * and the "?" under it holds the rules, without saying that line a second
  * time.
  *
- * OWED BY THE BIND (Round M1), AND A CONDITION OF MOUNTING THIS PANEL: the
- * wrapped GmXpPanel (Round 942, not a file of this round, which is new files
- * only) still prints its own fixed sentence, which names six sources of XP.
- * A desk that feeds four therefore shows the honest line above and, right
- * under it, a sentence that promises two sources that pay nothing. The brief
- * gives GmXpPanel an optional `earns` prop in M1: pass it, and keep one copy
- * of the sentence on the screen. On a phone the same panel is seven tree
- * cards in one column with the live trees last and 25 px buttons; M1 owns
- * that layout too. Nothing may mount GM_CAREER_PANELS before both are done.
- * Not mounted by this round.
+ * Round 1533 met the two conditions Round 1223 left on mounting it: GmXpPanel takes `earns`, so one honest sentence is on the screen, and its phone layout is tiles with the live trees first.
  */
 import { useState } from 'react';
 import type { GmPanelProps } from '@/lib/gmDesk';
@@ -47,13 +38,13 @@ export default function GmXpDeskPanel({ desk, facts }: GmPanelProps<GmCareerFact
           </button>
         </div>
         {help && (
-          <div className="mt-2 space-y-1 rounded-lg border border-border bg-secondary/30 p-2 text-[10px] text-muted-foreground" data-gm-xp-help>
+          <div className="mt-2 space-y-1 rounded-lg border border-border bg-secondary/30 p-2 text-[11px] text-muted-foreground" data-gm-xp-help>
             {/* The earn line is already on the screen above while the desk is on: the help adds it only when it is not. */}
             {(deskOn ? hostXpHelp() : [earns, ...hostXpHelp()]).map(line => <p key={line}>{line}</p>)}
           </div>
         )}
       </div>
-      <GmXpPanel block={hostXpOf(desk)} live={live} onSpendPoint={spend} />
+      <GmXpPanel block={hostXpOf(desk)} live={live} onSpendPoint={spend} earns={earns} />
     </div>
   );
 }

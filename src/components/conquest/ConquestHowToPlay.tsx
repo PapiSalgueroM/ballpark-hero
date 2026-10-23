@@ -48,7 +48,7 @@ export function ConquestHowToPlay({ open, onOpenChange }: ConquestHowToPlayProps
             <h3 className="font-bold text-foreground mb-2">⚡ Power-Ups</h3>
             <ul className="space-y-1.5 text-muted-foreground">
               <li>🛡️ <span className="text-foreground">Invincibility:</span> Survive one loss without losing territory</li>
-              <li>✍️ <span className="text-foreground">Free Agent:</span> Sign a top available player</li>
+              <li>✍️ <span className="text-foreground">Sign a Player:</span> Take someone a fallen team left behind, or call a retired great back</li>
               <li>⬆️ <span className="text-foreground">Upgrade:</span> Boost a random player to 99 OVR</li>
               <li>🐐 <span className="text-foreground">Legend:</span> Add a franchise legend to the roster</li>
               <li>🗺️ <span className="text-foreground">Territory Steal:</span> Claim a bordering enemy state for free</li>

@@ -2,11 +2,21 @@ import type { PitchEvent } from '@/components/pitch-motion/contract';
 import './pitchMotion.css';
 import { useEffect, useRef, useState } from 'react';
 import { ACTION_SPAN, NET_AT } from '@/components/pitch-motion/contract';
+import type { FigureLook } from '@/components/pitch-motion/look';
 
 interface Point { x: number; y: number; }
 export interface MotionPlayer extends Point { key: string; name?: string; keeper: boolean; }
-/** `arc` is optional: a control point, and the ball arrives at this scene along a curve through it. */
-export interface MotionScene<T extends MotionPlayer> { mine: T[]; theirs: T[]; ball: Point; holderKey: string | null; arc?: Point; }
+/** Round 1521: how the ball travels into a scene: along the grass, in the air (a long ball, a clearance, a
+ *  switch), as a cross, or thrown. */
+export type BallFlight = 'ground' | 'air' | 'cross' | 'throw';
+/** Round 1521: a foul's whistle, which the plan stages at the foul's own place. `order` is the line of the
+ *  binder's feed it is; `by` the key of the man it names (null when that side's figures carry no names), `on`
+ *  the key of the man it was on; `card` only when the binder's feed books that same man at that same place. */
+export interface PitchCue { kind: 'foul'; at: Point; order: number; by: string | null; on: string | null; card?: 'yellow' | 'red' }
+/** `arc` is optional: a control point, and the ball arrives at this scene along a curve through it.
+ *  Round 1521, all optional: `flight` is how the ball arrives here, `lift` how high it is off the grass (pitch
+ *  units, on a frame between two scenes or in an action), `cue` a foul's whistle on this scene. */
+export interface MotionScene<T extends MotionPlayer> { mine: T[]; theirs: T[]; ball: Point; holderKey: string | null; arc?: Point; flight?: BallFlight; lift?: number; cue?: PitchCue; }
 export interface MotionEvent { event: PitchEvent; key: string; at: number; }
 export interface Pose { kick?: number; dive?: number; catching?: number; celebrate?: number; hop?: number; rue?: number; }
 export interface MotionFrame<T extends MotionPlayer> extends MotionScene<T> {
@@ -97,12 +107,39 @@ export function actionFrame<T extends MotionPlayer>(scene: MotionScene<T>, actio
     poses[striker.key] = { ...poses[striker.key], celebrate: celebration, hop: Math.sin(resolve * Math.PI) * 4 };
     for (const teammate of teammates) poses[teammate.key] = { celebrate: celebration };
   }
-  return {
+  const frame: MotionFrame<T> = {
     ...scene, mine: patch(scene.mine), theirs: patch(scene.theirs), ball, holderKey: flight === 0 ? striker?.key ?? null : null,
     poses, action: event.kind, net: event.kind === 'goal' && flight === 1 ? (mine ? 'opp' : 'me') : null,
     netPulse: event.kind === 'goal' ? Math.sin(resolve * Math.PI) : 0,
     phase: flight === 0 ? 'plant' : flight < 1 ? 'flight' : event.kind === 'save' ? 'caught' : event.kind === 'goal' ? 'net' : 'wide',
+    lift: shotLift(event, Math.hypot(end.x - spot.x, end.y - spot.y), flight, resolve),
   };
+  delete frame.cue;
+  delete frame.flight;
+  return frame;
+}
+
+/** Round 1521: how high a shot is off the grass. On the foot at the plant, then it rises with its power (the
+ *  further out it is struck the higher it carries) to the height it meets the net, the gloves or the hoardings
+ *  at, and it is back on the grass at the end of the action, so the still form (reduced motion) has none.
+ *  Where it is struck, low or high, is read off the line's own minute: a keyed look, never a draw. */
+export function shotLift(event: PitchEvent, reach: number, flight: number, resolve: number): number {
+  if (flight <= 0) return 0;
+  const spread = ((event.minute * 7 + (event.plus ?? 0) * 3) % 10) / 10;
+  /* Under the bar for a goal and a save (the bar is about 2.3 of these units), anywhere up to well over it for a miss. */
+  const top = event.kind === 'goal' ? 0.4 + 1.4 * spread : event.kind === 'save' ? 0.6 + 1.2 * spread : 1.2 + 2.2 * spread + reach * 0.02;
+  /* A direct free kick goes up over the wall and dips; a penalty is driven flat. */
+  const bow = event.freeKick ? 3.6 : event.penalty ? 0.3 : Math.min(2, reach * 0.045);
+  if (flight < 1) return top * flight + bow * Math.sin(flight * Math.PI);
+  return top * (1 - smooth(resolve / (event.kind === 'goal' ? 0.5 : 1)));
+}
+
+/** Round 1521: how high a ball that arrives along `flight` peaks, by how far it goes. On the ground it has none. */
+export function flightPeak(flight: BallFlight | undefined, distance: number): number {
+  if (!flight || flight === 'ground') return 0;
+  if (flight === 'throw') return Math.min(3, 1.2 + distance * 0.06);
+  if (flight === 'cross') return Math.max(3, Math.min(7, distance * 0.14));
+  return Math.max(2.5, Math.min(9, distance * 0.18));
 }
 
 /** Round 1101: two men of one side are never drawn on top of each other mid stride. When their straight
@@ -140,7 +177,12 @@ export function between<T extends MotionPlayer>(from: MotionScene<T>, to: Motion
   const players = (before: T[], after: T[]) => passing(before, after, after.map(player => ({ ...player, ...point(before.find(p => p.key === player.key && p.name === player.name) ?? player, player, t) })), t);
   // Round 1101: a scene that carries an arc is reached along a quadratic curve (a corner's delivery), any other along a line.
   const ball = to.arc ? point(point(from.ball, to.arc, t), point(to.arc, to.ball, t), t) : point(from.ball, to.ball, t);
-  return { ...to, mine: players(from.mine, to.mine), theirs: players(from.theirs, to.theirs), ball };
+  const scene: MotionScene<T> = { ...to, mine: players(from.mine, to.mine), theirs: players(from.theirs, to.theirs), ball };
+  /* Round 1521: a ball that arrives in the air rises and drops back on to the grass at the man it is played to.
+     It starts at whatever height the frame it leaves has, so a pass cut short in the air never drops in a frame. */
+  const lift = (from.lift ?? 0) * (1 - t) + flightPeak(to.flight, Math.hypot(to.ball.x - from.ball.x, to.ball.y - from.ball.y)) * 4 * t * (1 - t);
+  if (lift > 1e-6) scene.lift = lift; else delete scene.lift;
+  return scene;
 }
 
 /** Round 1216: how far into the ball's flight an own goal's ball meets the man it goes in off. */
@@ -212,7 +254,9 @@ function ownGoalFrame<T extends MotionPlayer>(scene: MotionScene<T>, action: Mot
     /* A keeper who let it in gets up as it goes in, so that he ends on his feet with his hands at his head. */
     poses[man.key] = man.keeper ? { ...poses[man.key], dive: (poses[man.key]?.dive ?? 0) * (1 - smooth(since)) || 0, catching: reach * .6, rue } : { kick: reach, rue };
   }
-  return { ...whole, mine: place(stood.mine, !mine), theirs: place(stood.theirs, mine), ball, poses, ownGoalBy: man?.key ?? null };
+  /* Round 1521: a ball played across low, which comes off him at knee height and is on the grass again in the net. */
+  const lift = whole.phase === 'flight' ? 0.9 * Math.sin(Math.PI * flight) : 0;
+  return { ...whole, mine: place(stood.mine, !mine), theirs: place(stood.theirs, mine), ball, poses, ownGoalBy: man?.key ?? null, lift };
 }
 
 /** Uses the viewer's clock, so pausing freezes players, ball and action poses. */
@@ -261,14 +305,35 @@ export function useLiveSimMotion<T extends MotionPlayer>(scene: MotionScene<T>, 
      to the shooter's foot during his plant, from where it was on the frame the action started from. */
   if (inAction && !reduced) {
     const planted = (clock - action.event.at) / PLANT_SPAN;
-    if (planted < 1) frame.ball = point(action.scene.ball, frame.ball, smooth(planted));
+    if (planted < 1) {
+      frame.ball = point(action.scene.ball, frame.ball, smooth(planted));
+      /* Round 1521: and down from the height it had there, on to his foot. */
+      if (action.scene.lift) frame.lift = action.scene.lift * (1 - smooth(planted));
+    }
   }
   useEffect(() => { current.current = frame; });
   return frame;
 }
 
-/** Original figures, with no external image or club artwork. */
-export function LivePitchPlayer({ color, keeper, pose, selected }: { color: string; keeper: boolean; pose?: Pose; selected?: boolean }) {
+/** Round 1521: the hair of a figure with a look, by style: crop, buzz, curls (drawn behind the head), long, shaved,
+ *  quiff, tied up. `behind` asks for the part drawn before the head. */
+function hairOf(style: number, colour: string, behind: boolean) {
+  if (behind) return style === 2 ? <circle cy="-21.5" r="6.4" fill={colour} /> : null;
+  if (style === 1) return <path d="M-4.4-22Q0-26.2 4.4-22" fill="none" stroke={colour} strokeWidth="1.4" />;
+  if (style === 2 || style === 4) return null;
+  if (style === 3) return <path d="M-4.6-22Q0-27.4 4.6-22M-4.8-21Q-6-15-4.6-12.5M4.8-21Q6-15 4.6-12.5" fill="none" stroke={colour} strokeWidth="2.2" />;
+  if (style === 5) return <path d="M-4-23Q-2-29.5 4.5-24.5" fill={colour} stroke={colour} strokeWidth="2" />;
+  return <>
+    <path d="M-4-23Q0-27 4-23" fill={colour} stroke={colour} strokeWidth="2" />
+    {style === 6 && <circle cy="-27" r="2" fill={colour} />}
+  </>;
+}
+
+/** Original figures, with no external image or club artwork.
+ *  Round 1521: `look` (optional) makes him one generic person (figureLook in look.ts): his skin, his hair, his
+ *  boots and his height. Left out, the figure is drawn exactly as it always was. `keeperColor` is the shirt a
+ *  keeper wears, so a binder can tell the two keepers apart; left out it is the gold every keeper wore. */
+export function LivePitchPlayer({ color, keeper, pose, selected, look, keeperColor = '#f0b34b' }: { color: string; keeper: boolean; pose?: Pose; selected?: boolean; look?: FigureLook; keeperColor?: string }) {
   const kick = pose?.kick ?? 0;
   const dive = pose?.dive ?? 0;
   const catching = pose?.catching ?? 0;
@@ -282,17 +347,21 @@ export function LivePitchPlayer({ color, keeper, pose, selected }: { color: stri
   const handY = dive ? -20 : -3 - celebrate * 19 - rue * 17;
   const handX = dive ? 5 : 11 + celebrate * 2 - rue * 5;
   const armX = dive ? 5 : 10 + celebrate * 3 - rue * 3;
-  return <svg className="cm-pitch-player" viewBox="-18 -26 36 44" aria-hidden="true" focusable="false" data-cm-actor-pose={celebrate ? 'celebrate' : dive ? 'dive' : kick ? 'strike' : 'stand'} data-pm-rue={rue ? '1' : undefined}>
+  const skin = look?.skin ?? '#bb8669';
+  /* Round 1521: his height, scaled about his feet; a keeper keeps his size, so his gloves still meet the ball. */
+  const tall = look && !keeper && look.tall !== 1 ? ` translate(0 11) scale(${look.tall}) translate(0 -11)` : '';
+  return <svg className="cm-pitch-player" viewBox="-18 -26 36 44" aria-hidden="true" focusable="false" data-cm-actor-pose={celebrate ? 'celebrate' : dive ? 'dive' : kick ? 'strike' : 'stand'} data-pm-rue={rue ? '1' : undefined} data-pm-look={look ? `${look.style}` : undefined}>
     <ellipse cy="12" rx="10" ry="3" fill="#072d3470" />
     {selected && <ellipse cy="11" rx="14" ry="5" fill="none" stroke="#fff" strokeWidth="1.5" />}
-    <g transform={`translate(${reachX} ${reachY - hop}) rotate(${dive} 0 5)`} strokeLinecap="round" strokeLinejoin="round">
+    <g transform={`translate(${reachX} ${reachY - hop}) rotate(${dive} 0 5)${tall}`} strokeLinecap="round" strokeLinejoin="round">
       <path d={`M-4 0-6 10M4 0 ${5 + kick * 10} ${10 - kick * 15}`} fill="none" stroke="#142b40" strokeWidth="5" />
-      <path d={`M-6 10-9 11M${5 + kick * 10} ${10 - kick * 15} ${8 + kick * 10} ${11 - kick * 15}`} stroke="#e8eef2" strokeWidth="3" />
-      <path d="M0-13V0" stroke={keeper ? '#f0b34b' : color} strokeWidth="12" />
-      <path d={`M-5-12 ${-armX} ${handY}M5-12 ${armX} ${handY}`} fill="none" stroke={keeper ? '#f0b34b' : color} strokeWidth="4" />
-      <circle data-cm-glove={keeper && catching ? '1' : undefined} cx={-handX} cy={handY} r="2.6" fill={keeper ? '#fff2d3' : '#bb8669'} />
-      <circle data-cm-glove={keeper && catching ? '1' : undefined} cx={handX} cy={handY} r="2.6" fill={keeper ? '#fff2d3' : '#bb8669'} />
-      <ellipse cy="-20" rx="5" ry="5.5" fill="#bb8669" /><path d="M-4-23Q0-27 4-23" fill="#23313c" stroke="#23313c" strokeWidth="2" />
+      <path d={`M-6 10-9 11M${5 + kick * 10} ${10 - kick * 15} ${8 + kick * 10} ${11 - kick * 15}`} stroke={look?.boots ?? '#e8eef2'} strokeWidth="3" />
+      <path d="M0-13V0" stroke={keeper ? keeperColor : color} strokeWidth="12" />
+      <path d={`M-5-12 ${-armX} ${handY}M5-12 ${armX} ${handY}`} fill="none" stroke={keeper ? keeperColor : color} strokeWidth="4" />
+      <circle data-cm-glove={keeper && catching ? '1' : undefined} cx={-handX} cy={handY} r="2.6" fill={keeper ? '#fff2d3' : skin} />
+      <circle data-cm-glove={keeper && catching ? '1' : undefined} cx={handX} cy={handY} r="2.6" fill={keeper ? '#fff2d3' : skin} />
+      {look && hairOf(look.style, look.hair, true)}
+      <ellipse cy="-20" rx="5" ry="5.5" fill={skin} />{look ? hairOf(look.style, look.hair, false) : <path d="M-4-23Q0-27 4-23" fill="#23313c" stroke="#23313c" strokeWidth="2" />}
     </g>
   </svg>;
 }
