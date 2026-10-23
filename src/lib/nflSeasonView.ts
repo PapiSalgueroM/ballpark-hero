@@ -21,7 +21,11 @@ export const NFL_SIM_NOTE = "Sim season: every line and award here comes from th
 export const NFL_STAT_HEADS = ['PTD', 'RTD', 'CTD', 'SK'] as const;
 export const NFL_LEADER_TABLES: readonly [string, NflStatCol][] = [['TD passes', 'ptd'], ['Rushing TDs', 'rtd'], ['Sacks', 'sk']];
 export const NFL_EMPTY_AWARDS = 'Awards are named when the season closes, after the playoffs. Leaders has the season so far.';
+/** A rookie box with nobody to name, in a save's first season (no class drafted in it yet). */
 export const NFL_NO_CLASS = 'rookie awards start with the first class drafted in this save';
+/** A rookie box with nobody to name in any later season: what the code knows, since a class drafted before this save
+ *  kept lines (a save that took them between its draft and Week 1) carries no first year mark. */
+export const NFL_NO_ROOKIES = 'no first year man this season was drafted while this save kept lines';
 /** Under the history when the save holds seasons from before its first lined one. */
 export const NFL_HISTORY_GAP = 'Seasons before the first one here were played before lines were kept.';
 /** The row of a season sat out (the brief's ruling R1: it keeps no lines and its row says so). */
@@ -65,14 +69,16 @@ export function nflAwardDetail(p: NflAwardPick): string {
   return bits.length ? bits.join(', ') : `${p.g} games`;
 }
 
-/** The three award boxes of a season: its winners, or none, each with its stated rule. */
-export function nflAwardBoxes(a: NflSeasonAwards, myTeam: string): { label: string; rule: string; winners: { id: string; name: string; team: string; detail: string; mine: boolean }[] }[] {
+/** The three award boxes of a season: its winners, or none, each with its stated rule. `champions`: the league's, to
+ *  tell a save's first season (no season closed before it, so no class drafted yet) from a later one. */
+export function nflAwardBoxes(a: NflSeasonAwards, myTeam: string, champions: readonly { season: number }[] = []): { label: string; rule: string; winners: { id: string; name: string; team: string; detail: string; mine: boolean }[] }[] {
+  const none = champions.some(c => c.season < a.season) ? NFL_NO_ROOKIES : NFL_NO_CLASS;
   return NFL_AWARD_KEYS.map(k => {
     const m = a[k];
     const rookie = k !== 'mvp';
     return {
       label: NFL_AWARD_LABEL[k],
-      rule: rookie && !a.rookies ? `${NFL_AWARD_RULE[k]}; ${NFL_NO_CLASS}` : NFL_AWARD_RULE[k],
+      rule: rookie && !a.rookies ? `${NFL_AWARD_RULE[k]}; ${none}` : NFL_AWARD_RULE[k],
       winners: m ? [{ id: m.id, name: m.name, team: m.team, detail: nflAwardDetail(m), mine: m.team === myTeam }] : [],
     };
   });

@@ -42,7 +42,7 @@ export default function NflSeasonStats({ league, myTeam, label, mode }: NflSeaso
           season={league.season}
           note={NFL_SIM_NOTE}
           qualifyLine={`Season totals, regular season only. PTD thrown, RTD run in, CTD caught, SK sacks. Field goals and safeties count for the club, since kickers and punters are not on these rosters: ${label(myTeam)} kicked ${kicks?.fg ?? 0} field goal${kicks?.fg === 1 ? '' : 's'} and scored ${kicks?.sf ?? 0} safet${kicks?.sf === 1 ? 'y' : 'ies'}.`}
-          awards={closed ? nflAwardBoxes(closed, myTeam) : []}
+          awards={closed ? nflAwardBoxes(closed, myTeam, league.champions) : []}
           emptyAwards={NFL_EMPTY_AWARDS}
           leaders={NFL_LEADER_TABLES.map(([text, col]) => ({
             label: text,

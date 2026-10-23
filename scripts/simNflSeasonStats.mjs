@@ -762,7 +762,7 @@ if (SECTIONS.includes(8)) {
   const pick = { id: 'p1', name: 'A Man', team: 'AAA', pos: 'QB', g: 17, ptd: 31, rtd: 3, ctd: 0, sk: 0 };
   const fixture = { season: 2027, awards: [{ season: 2027, mvp: pick, oroy: null, droy: { ...pick, pos: 'DL', ptd: 0, rtd: 0, sk: 9 }, rookies: true }], champions: [{ season: 2027, team: 'AAA' }] };
   const cardWords = [
-    V.NFL_SIM_NOTE, V.NFL_EMPTY_AWARDS, V.NFL_NO_CLASS, V.NFL_HISTORY_GAP, V.NFL_SAT_OUT, ...V.NFL_STAT_HEADS, ...V.NFL_LEADER_TABLES.map(t => t[0]),
+    V.NFL_SIM_NOTE, V.NFL_EMPTY_AWARDS, V.NFL_NO_CLASS, V.NFL_NO_ROOKIES, V.NFL_HISTORY_GAP, V.NFL_SAT_OUT, ...V.NFL_STAT_HEADS, ...V.NFL_LEADER_TABLES.map(t => t[0]),
     V.nflAwardDetail(pick), ...V.nflAwardBoxes(fixture.awards[0], 'AAA').flatMap(b => [b.label, b.rule, ...b.winners.map(w => w.detail)]),
     ...V.nflHistoryRows(fixture, 'AAA').rows.map(r => r.text),
     /* a season sat out between two lined ones has a row of its own */

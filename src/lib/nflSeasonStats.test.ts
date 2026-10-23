@@ -12,7 +12,7 @@ import {
   nflFoStats, nflNewStats, nflPassChance, nflPlaysFor, nflPool, nflPoolMen, nflRecordGame, nflRecordWeek, nflSackChance, nflSeasonAwards,
   nflStatsHelp, nflUsage, readNflAwards, readNflStats, type NflSeasonAwards, type NflSeasonStats, type NflToldGame,
 } from '@/lib/nflSeasonStats';
-import { NFL_SAT_OUT, nflHistoryRows } from '@/lib/nflSeasonView';
+import { NFL_NO_CLASS, NFL_NO_ROOKIES, NFL_SAT_OUT, nflAwardBoxes, nflHistoryRows } from '@/lib/nflSeasonView';
 
 let n = 0;
 const P = (pos: GmPlayer['pos'], ovr: number, extra: Partial<GmPlayer> = {}): GmPlayer => {
@@ -291,5 +291,16 @@ describe('the award history', () => {
     const fresh = nflHistoryRows({ awards: [entry(2027)], champions: [{ season: 2027, team: 'AAA' }] }, 'AAA');
     expect([fresh.rows.length, fresh.before]).toEqual([1, false]);
     expect(fresh.rows[0].text).not.toContain(NFL_SAT_OUT);
+  });
+  it('an empty rookie box says the first class is still to come only in a save\'s first season, and what the code knows after it', () => {
+    const rule = (champions: { season: number }[]) => nflAwardBoxes(entry(2027), 'AAA', champions).map(b => b.rule);
+    const first = rule([{ season: 2027 }]);
+    expect(first[0]).not.toContain(';');
+    expect(first.slice(1).every(r => r.endsWith(`; ${NFL_NO_CLASS}`))).toBe(true);
+    /* a save that closed seasons before this one drafted at least once, perhaps before it kept lines: never "start with the first class" */
+    const later = rule([{ season: 2026 }, { season: 2027 }]);
+    expect(later.slice(1).every(r => r.endsWith(`; ${NFL_NO_ROOKIES}`))).toBe(true);
+    /* a season with first year men states the rule alone */
+    expect(nflAwardBoxes({ ...entry(2027), rookies: true }, 'AAA', [{ season: 2026 }]).every(b => !b.rule.includes(';'))).toBe(true);
   });
 });
