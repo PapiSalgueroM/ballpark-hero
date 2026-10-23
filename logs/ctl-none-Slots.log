@@ -1,0 +1,5 @@
+1) The first manager takes a job
+  FAIL: could not take the first job, so nothing below ran
+   database requests blocked: 1
+
+playClubManagerSlots: RED, 1 failures
