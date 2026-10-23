@@ -1,0 +1,33 @@
+# Release BP part two (Round BPH): ROUND 1523's own proof lines (Soccer Career: morale that plays, the Puskas year),
+# from finish-1523.md, fix2-1523.md and verify2-1523.md as the round's runners ran them (r1523-final-a, a2, b,
+# vf-a, vf-b), proven on the release head by rBPh-m6a and rBPh-m6b (merge m6 e4464a1e) and again on the final head.
+# The tenth inverse (scripts/lib/careerSoccerMorale1523.mjs) was regenerated at m6 against 6c63ce98 and chained behind
+# Round 1524's rows at m6b; chain: node .rc/x/check-chain-bph.mjs (sent on this line). The *-unattributed lines are
+# the attribution's own controls: each must exit 1 (the harness red by design with Round 1523 left in).
+# The simCareerForm ctl-* lines are controls: each must exit 1 with "simCareerForm: RED, N failure(s)" on its last
+# line (counts on r1523-final-a2: divisor 1, zero 4, posttext 4, nogate 1, per10 1; vf-a: pageline 1, double 3).
+# FILE 2 OF 2 for Round 1523 (rc-BPf.txt holds the two section 4 fleets and the per10 control).
+#!serve
+#!playwright
+chain-1523: node .rc/x/check-chain-bph.mjs
+units-1523: node_modules/.bin/vitest run src/lib/soccerClubSquad.test.ts src/test/soccerPuskasYear1523.test.ts src/test/soccerCareerDevelopment.test.ts src/test/soccerCareerStoryRole.test.ts src/test/soccerEventDeckIntegrity.test.ts src/lib/usCareerAnnualBenefits.test.ts src/lib/usCareerRecovery.test.ts src/test/nbaOldSaveLines.test.ts src/test/nbaStatLineColumns.test.ts src/test/myCareerRestore.test.tsx src/test/careerHall.test.tsx --testTimeout=300000 --hookTimeout=120000 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+form-1235-1523: SIM_CAREER_FORM_SECTIONS=1,2,3,5 node scripts/simCareerForm.mjs
+beats-1523: node scripts/simCareerInboxBeats.mjs
+beats-flatnba-1523: BEATS_CONTROL=flatnba node scripts/simCareerInboxBeats.mjs
+squad-1523: node scripts/simCareerSquad.mjs
+deck-a-1523: SIM_SOCCER_DECK_SECTIONS=1,2,3,4,5 node scripts/simSoccerDeck.mjs
+deck-b-1523: SIM_SOCCER_DECK_SECTIONS=6,7,9,10 node scripts/simSoccerDeck.mjs
+deck-c-1523: SIM_SOCCER_DECK_SECTIONS=8 node scripts/simSoccerDeck.mjs
+deck-unattributed-1523: SIM_SOCCER_DECK_MORALE= SIM_SOCCER_DECK_SECTIONS=2 node scripts/simSoccerDeck.mjs
+ls-1523: node scripts/simCareerLeagueSeasons.mjs
+ls-unattributed-1523: SIM_LEAGUE_SEASONS_MORALE= node scripts/simCareerLeagueSeasons.mjs
+fair-1523: node scripts/simSoccerDeckFairness.mjs
+fair-unattributed-1523: SIM_DECK_FAIRNESS_MORALE= node scripts/simSoccerDeckFairness.mjs
+truth-1523: node scripts/simSoccerWorldTruth.mjs
+truth-unattributed-1523: SIM_WORLD_TRUTH_MORALE= node scripts/simSoccerWorldTruth.mjs
+dev-1523: node scripts/simSoccerCareerDevelopment.mjs
+storyrole-1523: node scripts/simCareerStoryRole.mjs
+pressmarket-1523: node scripts/simCareerPressMarket.mjs
+walk-1523: node scripts/playSoccerMoraleLine.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+walk-gate-1523: PLAY_MORALE_LINE_CONTROL=gate node scripts/playSoccerMoraleLine.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+ctl-form-1523: bad=0; for c in divisor zero posttext nogate pageline double; do SIM_CAREER_FORM_CONTROL=$c node scripts/simCareerForm.mjs > /tmp/f23-$c.log 2>&1; e=$?; echo "$c exit=$e $(tail -1 /tmp/f23-$c.log | cut -c1-120)"; if [ $e -ne 1 ] || ! tail -1 /tmp/f23-$c.log | grep -q 'RED, '; then bad=1; fi; done; exit $bad
