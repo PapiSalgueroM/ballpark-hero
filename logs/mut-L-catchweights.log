@@ -1,0 +1,9 @@
+rvmut L: applied
+ src/lib/nflSeasonStats.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+--- sim reds:
+  FAIL set 0: the WR1's lift over a rating blind credit climbs with his rating (gap 0.2590, margin 0.27)
+ran in 45.9 s, seed sets 0, 1, 2, 3, 4, sections 1, 2, 3, 4, 5, 6, 7, 8
+simNflSeasonStats: 103 checks, 1 failed; section 1 skipped: LIFT_BASE is not set
+--- vitest:
+MUT L: CAUGHT (sim exit=1, vitest exit=0)

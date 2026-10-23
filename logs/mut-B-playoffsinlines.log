@@ -1,0 +1,14 @@
+rvmut B: applied
+ src/lib/nflSeasonStats.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+--- sim reds:
+  FAIL set 0: per club and season, the told points sit between six and eight a touchdown plus the kicks, over 17 games (2560 looked at): 88 broke it, the first: set 0 fifteen 1 BUF
+  FAIL set 1: per club and season, the told points sit between six and eight a touchdown plus the kicks, over 17 games (2560 looked at): 91 broke it, the first: set 1 fifteen 1 DET
+  FAIL set 2: per club and season, the told points sit between six and eight a touchdown plus the kicks, over 17 games (2560 looked at): 92 broke it, the first: set 2 fifteen 0 BAL
+  FAIL set 3: per club and season, the told points sit between six and eight a touchdown plus the kicks, over 17 games (2560 looked at): 111 broke it, the first: set 3 fifteen 0 BAL
+  FAIL set 4: per club and season, the told points sit between six and eight a touchdown plus the kicks, over 17 games (2560 looked at): 102 broke it, the first: set 4 fifteen 0 GB
+ran in 45.0 s, seed sets 0, 1, 2, 3, 4, sections 1, 2, 3, 4, 5, 6, 7, 8
+simNflSeasonStats: 103 checks, 5 failed; section 1 skipped: LIFT_BASE is not set
+--- vitest:
+[41m[1m FAIL [22m[49m src/lib/nflSeasonStats.test.ts[2m > [22mthe block and his games[2m > [22mopens at Week 1 only, drops last season's lines and keeps the history; his games keep their credits
+MUT B: CAUGHT (sim exit=1, vitest exit=1)

@@ -1,0 +1,9 @@
+rvmut E: applied
+ src/lib/gmGameDayView.ts | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+--- sim reds:
+ran in 45.3 s, seed sets 0, 1, 2, 3, 4, sections 1, 2, 3, 4, 5, 6, 7, 8
+simNflSeasonStats: 103 checks, 0 failed; section 1 skipped: LIFT_BASE is not set
+--- vitest:
+[41m[1m FAIL [22m[49m src/lib/gmGameDayView.test.ts[2m > [22mRound 1542: who scored[2m > [22mlists every touchdown of both sides in minute order, each side's credits in their order, and changes nothing else
+MUT E: CAUGHT (sim exit=0, vitest exit=1)

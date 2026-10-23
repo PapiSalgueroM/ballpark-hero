@@ -1,0 +1,2083 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstdout[2m | src/components/front-office/FrontOfficeGameDay.test.tsx[2m > [22m[2mNFL front office: a press tells his game and keeps it[2m > [22m[2mhis game of the week is in the save, and the grid shows that very score, a football score
+[22m[39mFO_GAMEDAY week 6: his game SEA 37, ARI 6 (the engine's own 32-20); the law told 16 of the sixteen another score than the engine's
+
+[90mstdout[2m | src/components/front-office/FrontOfficeGameDay.test.tsx[2m > [22m[2mNFL front office: a press tells his game and keeps it[2m > [22m[2ma save from before the round adopts the log at the week it is first played here: it starts at week 9 and is not his record
+[22m[39mFO_GAMEDAY adopted at week 9: the log reads 1-1, the league's record is 3-7
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mordinary: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mordinary: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mordinary: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mordinary: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mordinary: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mordinary: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mordinary: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstdout[2m | src/components/front-office/FrontOfficeGameDay.test.tsx[2m > [22m[2mNFL front office: the one press finish[2m > [22m[2mthe told scores are the saved scores, with the GM desk off: the rounds of the recap hold what the bind answered for the games the engine played, and the log holds his
+[22m[39mFO_GAMEDAY one press: his club ARI played 1 playoff games; the log holds w17, NFC Divisional
+FO_GAMEDAY one press, the desk off: the law told 13 of the thirteen playoff games another score than the engine's
+
+[90mstdout[2m | src/components/front-office/FrontOfficeGameDay.test.tsx[2m > [22m[2mNFL front office: the one press finish[2m > [22m[2mthe told scores are the saved scores, with the GM desk on: the rounds of the recap hold what the bind answered for the games the engine played, and the log holds his
+[22m[39mFO_GAMEDAY one press: his club ARI played 3 playoff games; the log holds w17, NFC Divisional, NFC Championship, Super Bowl
+FO_GAMEDAY one press, the desk on: the law told 13 of the thirteen playoff games another score than the engine's
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mtitle: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mtitle: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstdout[2m | src/components/front-office/FrontOfficeGameDay.test.tsx[2m > [22m[2mNFL front office: the one press finish[2m > [22m[2mwith the GM desk on, his game is told at the chance it was played at, the edge of his staff included
+[22m[39mFO_GAMEDAY desk on: the edge of his staff is 1.0266666666666666; told with it 37-6, without it 37-6; the log holds 37-6
+
+ [32m✓[39m src/components/front-office/FrontOfficeGameDay.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[33m 2321[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office: a log that does not read whole is absent, and never refuses the save[2m > [22ma damaged log, a log of another season or another club, an empty one or junk: the save loads, plays on, and the next press starts a fresh log [33m 808[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office: the log does not follow a GM into his next franchise[2m > [22mabandon in the middle of a season and start again: the new save holds no log, and its first press logs one game of the new club [33m 506[2mms[22m[39m
+[90mstdout[2m | src/components/front-office/FrontOfficeSeasonStats.test.tsx[2m > [22m[2mNFL front office: who scored, the load and the close[2m > [22m[2ma whole season on full rosters with lines and the desk on: the save it writes, measured
+[22m[39mMEASURED: the persisted save on full rosters with the desk on: 651697 characters at Week 1, 682949 after Week 16, 685422 on the recap (655785 without the block and the history); the block 29442, 456 lines, the history 176
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mtitle: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mtitle: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mtitle: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mtitle: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mtitle: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+ [32m✓[39m src/components/front-office/FrontOfficeSeasonStats.test.tsx [2m([22m[2m11 tests[22m[2m)[22m[33m 2946[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office: who scored, the press and the save[2m > [22mthree presses from Week 1 record every game of each week, his games keep their credits, and the block reads back whole [33m 420[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office: who scored, the press and the save[2m > [22mthe recorder takes no draw: with it switched off the same presses draw the same numbers and save the same league [33m 359[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office: who scored, the load and the close[2m > [22ma whole season on full rosters with lines and the desk on: the save it writes, measured [33m 1183[2mms[22m[39m
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mfired: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mfired: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mfired: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mfired: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mfired: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mfired: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk on: the bracket a round at a time is the one press[2m > [22m[2mordinary: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk on: the bracket a round at a time is the one press[2m > [22m[2mordinary: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk on: the bracket a round at a time is the one press[2m > [22m[2mordinary: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk on: the bracket a round at a time is the one press[2m > [22m[2mordinary: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk on: the bracket a round at a time is the one press[2m > [22m[2mordinary: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk on: the bracket a round at a time is the one press[2m > [22m[2mordinary: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk on: the bracket a round at a time is the one press[2m > [22m[2mtitle: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk on: the bracket a round at a time is the one press[2m > [22m[2mtitle: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk on: the bracket a round at a time is the one press[2m > [22m[2mtitle: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk on: the bracket a round at a time is the one press[2m > [22m[2mtitle: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk on: the bracket a round at a time is the one press[2m > [22m[2mtitle: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk on: the bracket a round at a time is the one press[2m > [22m[2mtitle: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstdout[2m | src/lib/gmGameDayView.test.ts[2m > [22m[2mgameDayView[2m > [22m[2mevery sentence is the law's own for the story the told path tells
+[22m[39mgmGameDayView: shapes over 600 finals: trade 201, wire 132, rout 73, comeback 82, late 112; 1481 deciding plays read
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk on: the bracket a round at a time is the one press[2m > [22m[2mfired: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk on: the bracket a round at a time is the one press[2m > [22m[2mfired: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk on: the bracket a round at a time is the one press[2m > [22m[2mfired: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk on: the bracket a round at a time is the one press[2m > [22m[2mfired: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk on: the bracket a round at a time is the one press[2m > [22m[2mfired: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, fifteen league, GM desk on: the bracket a round at a time is the one press[2m > [22m[2mfired: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+ [32m✓[39m src/lib/gmGameDayView.test.ts [2m([22m[2m11 tests[22m[2m)[22m[33m 784[2mms[22m[39m
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mordinary: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mordinary: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office-shared/GmGameDayCard.test.tsx[2m > [22m[2mGmGameDayCard[2m > [22m[2mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on
+[22m[39mWarning: An update to MatchClock inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MatchClock (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/MatchClock.tsx:40:23)
+    at div
+    at GmGameDayCard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.tsx:59:26)
+    at NflGameDay
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmGameDayCard.test.tsx:109:122)
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mordinary: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mordinary: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mordinary: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+ [32m✓[39m src/components/front-office-shared/GmGameDayCard.test.tsx [2m([22m[2m14 tests[22m[2m)[22m[33m 1903[2mms[22m[39m
+   [33m[2m✓[22m[39m GmGameDayCard[2m > [22mthe "?" opened in the middle of a watch stops the clock, and closing it lets the game run on [33m 1639[2mms[22m[39m
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mordinary: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+ [31m❯[39m src/lib/nflSeasonStats.test.ts [2m([22m[2m13 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 191[2mms[22m[39m
+   [32m✓[39m the pool and the credit[2m > [22mreads the engine's own starters, and a lineman, a bench man, a practice squad man and an injured starter record nothing[32m 86[2mms[22m[39m
+   [32m✓[39m the credit adds up[2m > [22ma side's credited and unclaimed touchdowns are its drive split, thrown equals caught, and the club line is the split[32m 35[2mms[22m[39m
+   [32m✓[39m the credit adds up[2m > [22mwith no healthy quarterback every touchdown is a run, and a side with nobody to take one leaves it unclaimed[32m 12[2mms[22m[39m
+   [32m✓[39m the credit adds up[2m > [22mthe same game credits the same men, twice and through JSON, and a final with no list records nothing[32m 21[2mms[22m[39m
+   [32m✓[39m the credit adds up[2m > [22mthe rules' numbers: the pass chance, the usage and the sack chance stay in their ranges[32m 1[2mms[22m[39m
+[31m   [31m×[31m the block and his games[2m > [22mopens at Week 1 only, drops last season's lines and keeps the history; his games keep their credits[39m[32m 13[2mms[22m[39m
+[31m     → expected '{"AAA":{"t132":["Man 132","QB",4,3,1,…' to be '{"AAA":{"t132":["Man 132","QB",3,2,1,…' // Object.is equality[39m
+   [32m✓[39m rookies, readers and the clean load[2m > [22mstamps the man of each pick on his club once, and counts what it found[32m 1[2mms[22m[39m
+   [32m✓[39m rookies, readers and the clean load[2m > [22mreads a whole block and history, refuses a damaged one, and the clean load deletes the bad keys in place[32m 6[2mms[22m[39m
+   [32m✓[39m the awards and the close[2m > [22mMVP is the argmax of the stated rule: a bigger line on a losing club beats a smaller one on a winner only when it outscores the win share[32m 1[2mms[22m[39m
+   [32m✓[39m the awards and the close[2m > [22man exact tie goes to more games, then to the id, whatever order the lines are in[32m 9[2mms[22m[39m
+   [32m✓[39m the awards and the close[2m > [22mrookie awards: first year men drafted in this save only, at least one apiece; a save's first season has no class[32m 1[2mms[22m[39m
+   [32m✓[39m the awards and the close[2m > [22ma man traded in mid season is summed onto the club he played most for[32m 1[2mms[22m[39m
+   [32m✓[39m the awards and the close[2m > [22mcloses once, marks the winners on a roster, a practice squad and the free agent pool, and keeps 40 seasons[32m 1[2mms[22m[39m
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mtitle: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mtitle: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mtitle: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mtitle: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mtitle: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mtitle: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mfired: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mfired: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mfired: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mfired: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk off: the bracket a round at a time is the one press[2m > [22m[2mfired: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk on: the bracket a round at a time is the one press[2m > [22m[2mordinary: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk on: the bracket a round at a time is the one press[2m > [22m[2mordinary: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk on: the bracket a round at a time is the one press[2m > [22m[2mordinary: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk on: the bracket a round at a time is the one press[2m > [22m[2mordinary: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk on: the bracket a round at a time is the one press[2m > [22m[2mordinary: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk on: the bracket a round at a time is the one press[2m > [22m[2mordinary: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk on: the bracket a round at a time is the one press[2m > [22m[2mtitle: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk on: the bracket a round at a time is the one press[2m > [22m[2mtitle: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk on: the bracket a round at a time is the one press[2m > [22m[2mtitle: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk on: the bracket a round at a time is the one press[2m > [22m[2mtitle: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk on: the bracket a round at a time is the one press[2m > [22m[2mtitle: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk on: the bracket a round at a time is the one press[2m > [22m[2mtitle: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk on: the bracket a round at a time is the one press[2m > [22m[2mfired: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk on: the bracket a round at a time is the one press[2m > [22m[2mfired: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk on: the bracket a round at a time is the one press[2m > [22m[2mfired: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk on: the bracket a round at a time is the one press[2m > [22m[2mfired: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk on: the bracket a round at a time is the one press[2m > [22m[2mfired: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office, deep league, GM desk on: the bracket a round at a time is the one press[2m > [22m[2mfired: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office: Sim the rest from any round[2m > [22m[2mafter one, two or three rounds a press, "Sim the rest" leaves the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office: Sim the rest from any round[2m > [22m[2mafter one, two or three rounds a press, "Sim the rest" leaves the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office: Sim the rest from any round[2m > [22m[2mafter one, two or three rounds a press, "Sim the rest" leaves the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office: Sim the rest from any round[2m > [22m[2mafter one, two or three rounds a press, "Sim the rest" leaves the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office: Sim the rest from any round[2m > [22m[2mafter one, two or three rounds a press, "Sim the rest" leaves the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office: Sim the rest from any round[2m > [22m[2mafter one, two or three rounds a press, "Sim the rest" leaves the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office: Sim the rest from any round[2m > [22m[2mafter one, two or three rounds a press, "Sim the rest" leaves the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficePostseason.test.tsx[2m > [22m[2mNFL front office: Sim the rest from any round[2m > [22m[2mafter one, two or three rounds a press, "Sim the rest" leaves the one press save after the same draws
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+ [32m✓[39m src/components/front-office/FrontOfficePostseason.test.tsx [2m([22m[2m38 tests[22m[2m)[22m[33m 10792[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office: a save in the playoffs[2m > [22mloads with its bracket, draws nothing on the way, and every save after it holds the bracket [33m 341[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office: the bracket does not follow a GM into his next franchise[2m > [22mabandon in the playoffs and start again: the new save holds no bracket, and Play Week 1 plays Week 1 [33m 548[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press[2m > [22mordinary: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws [33m 770[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press[2m > [22mtitle: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws [33m 786[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press[2m > [22mfired: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws [33m 506[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office, fifteen league, GM desk on: the bracket a round at a time is the one press[2m > [22mordinary: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws [33m 474[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office, fifteen league, GM desk on: the bracket a round at a time is the one press[2m > [22mtitle: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws [33m 425[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office, fifteen league, GM desk on: the bracket a round at a time is the one press[2m > [22mfired: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws [33m 398[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office, deep league, GM desk off: the bracket a round at a time is the one press[2m > [22mordinary: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws [33m 815[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office, deep league, GM desk off: the bracket a round at a time is the one press[2m > [22mtitle: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws [33m 660[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office, deep league, GM desk off: the bracket a round at a time is the one press[2m > [22mfired: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws [33m 593[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office, deep league, GM desk on: the bracket a round at a time is the one press[2m > [22mordinary: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws [33m 662[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office, deep league, GM desk on: the bracket a round at a time is the one press[2m > [22mtitle: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws [33m 675[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office, deep league, GM desk on: the bracket a round at a time is the one press[2m > [22mfired: "Play Week 17" then a press a round, and then "Sim the rest", leave the one press save after the same draws [33m 654[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office: Sim the rest from any round[2m > [22mafter one, two or three rounds a press, "Sim the rest" leaves the one press save after the same draws [33m 476[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office: Week 18 reads as the playoffs[2m > [22ma man of his hurt on "Play Week 17" is out for the playoffs in the feed, never out a count of weeks [33m 582[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/nflSeasonStats.test.ts[2m > [22mthe block and his games[2m > [22mopens at Week 1 only, drops last season's lines and keeps the history; his games keep their credits
+[31m[1mAssertionError[22m: expected '{"AAA":{"t132":["Man 132","QB",4,3,1,…' to be '{"AAA":{"t132":["Man 132","QB",3,2,1,…' // Object.is equality[39m
+
+Expected: [32m"{"AAA":{"t132":["Man 132","QB",[7m3,2[27m,1,0,0],"t133":["Man 133","RB",[7m3[27m,0,[7m2[27m,0,0],"t135":["Man 135","WR",[7m3[27m,0,[7m1[27m,1,0],"t136":["Man 136","WR",[7m3[27m,0,0,0,0],"t137":["Man 137","WR",[7m3[27m,0,0,[7m1[27m,0],"t138":["Man 138","TE",[7m3[27m,0,0,0,0],"t141":["Man 141","DL",[7m3[27m,0,0,0,[7m2[27m],"t142":["Man 142","DL",[7m3[27m,0,0,0,[7m3[27m],"t143":["Man 143","LB",[7m3[27m,0,0,0,0],"t144":["Man 144","LB",[7m3[27m,0,0,0,[7m4[27m],"t145":["Man 145","DB",[7m3[27m,0,0,0,0],"t146":["Man 146","DB",[7m3[27m,0,0,0,0]},"BBB":{"t147":["Man 147","QB",[7m3,0[27m,2,0,0],"t148":["Man 148","RB",[7m3[27m,0,[7m2,0[27m,0],"t150":["Man 150","WR",[7m3[27m,0,0,0,0],"t151":["Man 151","WR",[7m3[27m,0,0,0,0],"t152":["Man 152","WR",[7m3[27m,0,0,0,0],"t153":["Man 153","TE",[7m3[27m,0,0,0,0],"t156":["Man 156","DL",[7m3[27m,0,0,0,1],"t157":["Man 157","DL",[7m3[27m,0,0,0,[7m2[27m],"t158":["Man 158","LB",[7m3[27m,0,0,0,[7m3[27m],"t159":["Man 159","LB",[7m3[27m,0,0,0,[7m0[27m],"t160":["Man 160","DB",[7m3[27m,0,0,0,1],"t161":["Man 161","DB",[7m3[27m,0,0,0,[7m0[27m]}}"[39m
+Received: [31m"{"AAA":{"t132":["Man 132","QB",[7m4,3[27m,1,0,0],"t133":["Man 133","RB",[7m4[27m,0,[7m3[27m,0,0],"t135":["Man 135","WR",[7m4[27m,0,[7m2[27m,1,0],"t136":["Man 136","WR",[7m4[27m,0,0,0,0],"t137":["Man 137","WR",[7m4[27m,0,0,[7m2[27m,0],"t138":["Man 138","TE",[7m4[27m,0,0,0,0],"t141":["Man 141","DL",[7m4[27m,0,0,0,[7m3[27m],"t142":["Man 142","DL",[7m4[27m,0,0,0,[7m5[27m],"t143":["Man 143","LB",[7m4[27m,0,0,0,0],"t144":["Man 144","LB",[7m4[27m,0,0,0,[7m5[27m],"t145":["Man 145","DB",[7m4[27m,0,0,0,0],"t146":["Man 146","DB",[7m4[27m,0,0,0,0]},"BBB":{"t147":["Man 147","QB",[7m4,1[27m,2,0,0],"t148":["Man 148","RB",[7m4[27m,0,[7m3,1[27m,0],"t150":["Man 150","WR",[7m4[27m,0,0,0,0],"t151":["Man 151","WR",[7m4[27m,0,0,0,0],"t152":["Man 152","WR",[7m4[27m,0,0,0,0],"t153":["Man 153","TE",[7m4[27m,0,0,0,0],"t156":["Man 156","DL",[7m4[27m,0,0,0,1],"t157":["Man 157","DL",[7m4[27m,0,0,0,[7m4[27m],"t158":["Man 158","LB",[7m4[27m,0,0,0,[7m4[27m],"t159":["Man 159","LB",[7m4[27m,0,0,0,[7m1[27m],"t160":["Man 160","DB",[7m4[27m,0,0,0,1],"t161":["Man 161","DB",[7m4[27m,0,0,0,[7m1[27m]}}"[39m
+
+[36m [2m❯[22m src/lib/nflSeasonStats.test.ts:[2m143:45[22m[39m
+    [90m141| [39m    const po: NflToldGame = { key: '2027|Wild Card|AAA|BBB|x', home: '…
+    [90m142| [39m    [34mexpect[39m([34mnflRecordGame[39m(lg[33m,[39m po[33m,[39m [32m'AAA'[39m[33m,[39m [35mfalse[39m))[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m143| [39m    [34mexpect[39m([33mJSON[39m[33m.[39m[34mstringify[39m(lg[33m.[39mstats[33m![39m[33m.[39mlines))[33m.[39m[34mtoBe[39m(before)[33m;[39m
+    [90m   | [39m                                            [31m^[39m
+    [90m144| [39m    expect(nflPlaysFor(lg, po.key)!.home.length + nflPlaysFor(lg, po.k…
+    [90m145| [39m    [90m/* a game that is not his keeps no credits */[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m5 passed[39m[22m[90m (6)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m95 passed[39m[22m[90m (96)[39m
+[2m   Start at [22m 00:47:12
+[2m   Duration [22m 13.47s[2m (transform 1.88s, setup 507ms, collect 5.14s, tests 18.94s, environment 2.50s, prepare 533ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/nflSeasonStats.test.ts,title=src/lib/nflSeasonStats.test.ts > the block and his games > opens at Week 1 only%2C drops last season's lines and keeps the history; his games keep their credits,line=143,column=45::AssertionError: expected '{"AAA":{"t132":["Man 132","QB",4,3,1,…' to be '{"AAA":{"t132":["Man 132","QB",3,2,1,…' // Object.is equality%0A%0AExpected: "{"AAA":{"t132":["Man 132","QB",3,2,1,0,0],"t133":["Man 133","RB",3,0,2,0,0],"t135":["Man 135","WR",3,0,1,1,0],"t136":["Man 136","WR",3,0,0,0,0],"t137":["Man 137","WR",3,0,0,1,0],"t138":["Man 138","TE",3,0,0,0,0],"t141":["Man 141","DL",3,0,0,0,2],"t142":["Man 142","DL",3,0,0,0,3],"t143":["Man 143","LB",3,0,0,0,0],"t144":["Man 144","LB",3,0,0,0,4],"t145":["Man 145","DB",3,0,0,0,0],"t146":["Man 146","DB",3,0,0,0,0]},"BBB":{"t147":["Man 147","QB",3,0,2,0,0],"t148":["Man 148","RB",3,0,2,0,0],"t150":["Man 150","WR",3,0,0,0,0],"t151":["Man 151","WR",3,0,0,0,0],"t152":["Man 152","WR",3,0,0,0,0],"t153":["Man 153","TE",3,0,0,0,0],"t156":["Man 156","DL",3,0,0,0,1],"t157":["Man 157","DL",3,0,0,0,2],"t158":["Man 158","LB",3,0,0,0,3],"t159":["Man 159","LB",3,0,0,0,0],"t160":["Man 160","DB",3,0,0,0,1],"t161":["Man 161","DB",3,0,0,0,0]}}"%0AReceived: "{"AAA":{"t132":["Man 132","QB",4,3,1,0,0],"t133":["Man 133","RB",4,0,3,0,0],"t135":["Man 135","WR",4,0,2,1,0],"t136":["Man 136","WR",4,0,0,0,0],"t137":["Man 137","WR",4,0,0,2,0],"t138":["Man 138","TE",4,0,0,0,0],"t141":["Man 141","DL",4,0,0,0,3],"t142":["Man 142","DL",4,0,0,0,5],"t143":["Man 143","LB",4,0,0,0,0],"t144":["Man 144","LB",4,0,0,0,5],"t145":["Man 145","DB",4,0,0,0,0],"t146":["Man 146","DB",4,0,0,0,0]},"BBB":{"t147":["Man 147","QB",4,1,2,0,0],"t148":["Man 148","RB",4,0,3,1,0],"t150":["Man 150","WR",4,0,0,0,0],"t151":["Man 151","WR",4,0,0,0,0],"t152":["Man 152","WR",4,0,0,0,0],"t153":["Man 153","TE",4,0,0,0,0],"t156":["Man 156","DL",4,0,0,0,1],"t157":["Man 157","DL",4,0,0,0,4],"t158":["Man 158","LB",4,0,0,0,4],"t159":["Man 159","LB",4,0,0,0,1],"t160":["Man 160","DB",4,0,0,0,1],"t161":["Man 161","DB",4,0,0,0,1]}}"%0A%0A ❯ src/lib/nflSeasonStats.test.ts:143:45%0A%0A

@@ -1,0 +1,8 @@
+rvmut A: applied
+ src/lib/nflSeasonStats.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+--- sim reds:
+ran in 44.2 s, seed sets 0, 1, 2, 3, 4, sections 1, 2, 3, 4, 5, 6, 7, 8
+simNflSeasonStats: 103 checks, 0 failed; section 1 skipped: LIFT_BASE is not set
+--- vitest:
+MUT A: SURVIVED (sim exit=0, vitest exit=0)

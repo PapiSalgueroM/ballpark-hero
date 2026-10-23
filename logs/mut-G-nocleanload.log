@@ -1,0 +1,10 @@
+rvmut G: applied
+ src/components/front-office/FrontOfficeBoard.tsx | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+--- sim reds:
+ran in 45.8 s, seed sets 0, 1, 2, 3, 4, sections 1, 2, 3, 4, 5, 6, 7, 8
+simNflSeasonStats: 103 checks, 0 failed; section 1 skipped: LIFT_BASE is not set
+--- vitest:
+[41m[1m FAIL [22m[49m src/components/front-office/FrontOfficeSeasonStats.test.tsx[2m > [22mNFL front office: who scored, the load and the close[2m > [22ma damaged block is deleted from the stored league on the dr
+[41m[1m FAIL [22m[49m src/components/front-office/FrontOfficeSeasonStats.test.tsx[2m > [22mNFL front office: who scored, the load and the close[2m > [22mand on a bracket started again
+MUT G: CAUGHT (sim exit=0, vitest exit=1)

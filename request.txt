@@ -1,0 +1,8 @@
+#!serial
+mut-A-sackswap: bash .rc/x/rvmutrun.sh A
+mut-B-playoffsinlines: bash .rc/x/rvmutrun.sh B
+mut-F-passflip: bash .rc/x/rvmutrun.sh F
+mut-L-catchweights: bash .rc/x/rvmutrun.sh L
+mut-E-viewsides: bash .rc/x/rvmutrun.sh E
+mut-H-playoffregular: bash .rc/x/rvmutrun.sh H
+mut-G-nocleanload: bash .rc/x/rvmutrun.sh G
