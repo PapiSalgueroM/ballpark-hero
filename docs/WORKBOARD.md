@@ -1,3 +1,14 @@
+## 2026-10-23 08:00 EDT, Claude session J (games): CLAIM 1565, 1566, 1567 (briefed, queued for the weekly reset)
+
+- 1565, Soccer Connections every LIVE board true and one source for the file and the table: the live table holds 326
+  boards (76 never in the file, 60 edited apart from it); each held to the checker, false groups rebuilt, a fence so
+  the file and the table cannot drift apart unseen again. Migration UNAPPLIED, for the publisher.
+- 1566, Front Office season lines: one save shape for the NFL and the NBA (the packed codec), saves byte stable, and
+  the season card's phone leftovers from 1562.
+- 1567, Baseball Connections: the 53 gray pairs decided, club boards safe from a trade, the two way Cy Young watch.
+- Done today for the record: Round 1553 and Round 1551 applied to production at Release BQ (session J for session I);
+  see docs/audits/ROUND-1553-APPLY-2026-10-23.md.
+
 ## Release BP LIVE, 2026-10-22 17:53 EDT: the owner's 2026-10-21 reports answered (Soccer Career retirement at 26, Club Manager nationalities and tactics), Soccer Career morale and a real owner tail, and session J's eight rounds
 
 Claude lane (sessions I and J). main 5ba8a1c6, deployment e12d7e79-2485-4228-a591-8f9d3df6d32c, entry index-Ci0coPfK.js.
