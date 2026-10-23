@@ -5,9 +5,9 @@
    take a sport it was not written for. */
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
-  answerCallUp, intlCalendar, intlFieldOf, intlGeneratedField, intlSeedOrder, intlStatsOf, intlTournamentOf, parseIntlId,
+  answerCallUp, intlCalendar, intlFieldOf, intlGeneratedField, intlSeedOrder, intlStatsOf, intlStreamKey, intlTournamentOf, parseIntlId,
   pendingCallUp, repairIntlOnLoad, runIntlTournament,
-  type IntlCareer, type IntlEdition, type IntlLedger, type IntlSportBind, type IntlTableRow, type IntlTournament, type Rng,
+  type IntlCareer, type IntlEdition, type IntlLedger, type IntlSportBind, type IntlSummerEntry, type IntlTableRow, type IntlTournament, type Rng,
 } from './careerIntl';
 import { keyedRng } from './keyedRng';
 
@@ -347,6 +347,51 @@ describe('repair on load', () => {
     if (!row || !row.went) throw new Error('no row');
     row.wins = row.wins === 0 ? 1 : row.wins - 1;
     expect(intlTournamentOf(c, HOOPS, 2004)).toBeNull();
+  });
+  it('shows no replay when the row disagrees on any one thing it records (review of Round 1544, N5)', () => {
+    type Went = Extract<IntlSummerEntry, { went: true }>;
+    const flips: [string, (r: Went) => void][] = [
+      ['place', r => { r.place = r.place === 'gold' ? 'silver' : 'gold'; }],
+      ['games', r => { r.games += 1; }],
+      ['wins', r => { r.wins = r.wins === 0 ? 1 : r.wins - 1; }],
+      ['hurt', r => { r.hurt = !r.hurt; }],
+      ['avg', r => { const k = Object.keys(r.avg)[0]; r.avg[k] += 0.1; }],
+    ];
+    for (const [what, flip] of flips) {
+      const c = played();
+      const row = c.intl?.summers[0];
+      if (!row || !row.went) throw new Error('no row');
+      expect(intlTournamentOf(c, HOOPS, 2004)?.edition, `${what}, before the flip`).toBe('oly-2004');
+      flip(row);
+      expect(intlTournamentOf(c, HOOPS, 2004), what).toBeNull();
+    }
+  });
+  /* Round 1544's review (N2): `last` is derived on read (L4), so a live save's past summers are only as stable as
+     the key and the draw. These are the replays as Round 1544 plays them, from literal toy careers: a change to the
+     stream key, the draw order or the generated field turns a live save's Your games and The bracket into the row
+     alone, so a round that moves these numbers must mean to, and say what it does for saves already written. */
+  it('plays a summer again exactly as Round 1544 played it: the key, the draw order and the generated field (review of Round 1544, N2)', () => {
+    expect(intlStreamKey('toy', 'Toy', 'oly-2004')).toBe('intl:toy:Toy:oly-2004');
+    const mine = (t: IntlTournament) => t.games.filter(g => g.a === t.nation || g.b === t.nation).map(g => `${g.round} ${g.a} ${g.sa}-${g.sb} ${g.b}`);
+    const golden: [string, IntlSportBind<Toy>, number, Record<string, unknown>, string[], string, string[] | null][] = [
+      ['HOOPS 2004', HOOPS, 2003, { place: 'group', games: 5, wins: 2, avg: { pts: 18.2 }, hurt: false },
+        ['group Germany 97-80 USA', 'group USA 75-92 Lithuania', 'group USA 102-84 Australia', 'group Argentina 84-88 USA', 'group Italy 83-76 USA'], 'Greece', null],
+      ['SOCCER 2004', SOCCER, 2003, { place: 'bronze', games: 8, wins: 4, avg: { pts: 18.4 }, hurt: false },
+        ['group Canada 3-0 USA', 'group USA 0-1 Lithuania', 'group USA 1-1 Australia', 'group Argentina 2-3 USA', 'group France 2-3 USA', 'QF Lithuania 0-1 USA', 'SF USA 1-3 Germany', 'bronze Greece 0-1 USA'], 'Germany', null],
+      ['HOOPS 2020 projected', HOOPS, 2019, { place: 'quarter', games: 4, wins: 2, avg: { pts: 19.5 }, hurt: true },
+        ['group Canada 82-100 USA', 'group Serbia 79-75 USA', 'group Italy 81-82 USA', 'QF USA 75-97 Slovenia'], 'France',
+        ['USA', 'Australia', 'Italy', 'Spain', 'Germany', 'Serbia', 'France', 'Greece', 'Argentina', 'Japan', 'Canada', 'Slovenia']],
+    ];
+    for (const [name, bind, year, row, games, champion, field] of golden) {
+      const c = toy({ year });
+      answerCallUp(c, bind, 'go');
+      expect(c.intl?.summers[0], name).toMatchObject({ year: year + 1, went: true, age: 26, ...row });
+      const t = intlTournamentOf(c, bind, year + 1);
+      if (!t) throw new Error(`${name}: no replay`);
+      expect(mine(t), name).toEqual(games);
+      expect(t.champion, name).toBe(champion);
+      if (field) expect(t.field, name).toEqual(field);
+    }
   });
   it('drops a broken block alone', () => {
     const c = toy();
